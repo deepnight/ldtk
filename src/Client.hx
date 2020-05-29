@@ -14,5 +14,9 @@ class Client extends dn.Process {
 		win.maximize();
 		var e = new js.jquery.JQuery("<div class='pouet'>aaaa</div>");
 		e.css("background","red");
+
+		var p = new data.Project();
+		p.createLevel();
+		trace(p);
 	}
 }
