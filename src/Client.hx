@@ -17,7 +17,7 @@ class Client extends dn.Process {
 		var e = new js.jquery.JQuery("<div class='pouet'>aaaa</div>");
 		e.css("background","red");
 
-		var p = new data.Project();
+		var p = new data.ProjectData();
 		p.createLevel();
 		p.levels[0].layers[0].setIntGrid(0,0, 1);
 		p.levels[0].layers[0].setIntGrid(5,5, 0);

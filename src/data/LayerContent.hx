@@ -1,8 +1,8 @@
 package data;
 
 class LayerContent implements IData {
-	var project(get,never) : Project; inline function get_project() return level.project;
-	var level : Level;
+	var project(get,never) : ProjectData; inline function get_project() return level.project;
+	var level : LevelData;
 
 	public var def : data.def.LayerDef;
 
@@ -11,7 +11,7 @@ class LayerContent implements IData {
 
 	var intGrid : Map<Int,Int> = new Map();
 
-	public function new(l:Level, def:LayerDef) {
+	public function new(l:LevelData, def:LayerDef) {
 		level = l;
 		this.def = def;
 	}

@@ -1,14 +1,15 @@
 package data;
 
-class Level implements data.IData {
-	public var project(default,null) : Project;
+class LevelData implements data.IData {
+	public var project(default,null) : ProjectData;
 	public var layers : Array<LayerContent> = [];
 
 	public var pxWid : Int = 256;
 	public var pxHei : Int = 256;
 
-	@:allow(data.Project)
-	private function new(p:data.Project) {
+
+	@:allow(data.ProjectData)
+	private function new(p:data.ProjectData) {
 		project = p;
 
 		for(def in project.layerDefs)
@@ -20,7 +21,7 @@ class Level implements data.IData {
 	}
 
 	public function clone() {
-		var e = new Level(project);
+		var e = new LevelData(project);
 		return e;
 	}
 

@@ -1,8 +1,8 @@
 package data;
 
-class Project implements data.IData {
+class ProjectData implements data.IData {
 	var nextUniqId = 0;
-	public var levels : Array<Level> = [];
+	public var levels : Array<LevelData> = [];
 	public var layerDefs : Array<data.def.LayerDef> = [];
 
 	public function new() {
@@ -16,7 +16,7 @@ class Project implements data.IData {
 	}
 
 	public function clone() {
-		var e = new Project();
+		var e = new ProjectData();
 		for(l in levels)
 			e.levels.push( l.clone() );
 		e.nextUniqId = nextUniqId;
@@ -31,12 +31,12 @@ class Project implements data.IData {
 	}
 
 	public function createLevel() {
-		var l = new Level(this);
+		var l = new LevelData(this);
 		levels.push(l);
 		return l;
 	}
 
-	public function removeLevel(l:Level) {
+	public function removeLevel(l:LevelData) {
 		if( !levels.remove(l) )
 			throw "Level not found in this Project";
 	}

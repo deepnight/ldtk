@@ -5,10 +5,10 @@ class LevelRender {
 
 	public var root : h2d.Layers;
 
-	public var data : data.Level;
+	public var data : data.LevelData;
 	var layers : Array<render.LayerRender> = [];
 
-	public function new(d:Level) {
+	public function new(d:LevelData) {
 		data = d;
 
 		root = new h2d.Layers();
