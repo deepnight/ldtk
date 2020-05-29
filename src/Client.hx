@@ -18,5 +18,7 @@ class Client extends dn.Process {
 		var p = new data.Project();
 		p.createLevel();
 		trace(p);
+
+		var lr = new render.LevelRender(p.levels[0]);
 	}
 }

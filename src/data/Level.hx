@@ -2,7 +2,7 @@ package data;
 
 class Level implements data.IData {
 	public var project(default,null) : Project;
-	var layers : Array<LayerContent> = [];
+	public var layers : Array<LayerContent> = [];
 
 	public var pxWid : Int = 256;
 	public var pxHei : Int = 256;
