@@ -466,7 +466,7 @@ dn_Process.prototype = {
 var Client = function() {
 	dn_Process.call(this);
 	this.createRoot(Boot.ME.s2d);
-	nw.Window.get().title = "title test";
+	nw.Window.get().title = "LEd v" + Const.APP_VERSION;
 	nw.Window.get().maximize();
 	var e = $("<div class='pouet'>aaaa</div>");
 	e.css("background","red");
@@ -477,6 +477,9 @@ Client.__super__ = dn_Process;
 Client.prototype = $extend(dn_Process.prototype,{
 	__class__: Client
 });
+var Const = function() { };
+$hxClasses["Const"] = Const;
+Const.__name__ = "Const";
 var EReg = function(r,opt) {
 	this.r = new RegExp(r,opt.split("u").join(""));
 };
@@ -40855,6 +40858,7 @@ if(ArrayBuffer.prototype.slice == null) {
 }
 dn_Process.UNIQ_ID = 0;
 dn_Process.ROOTS = [];
+Const.APP_VERSION = "0.01";
 Lang._initDone = false;
 Lang.DEFAULT = "en";
 Lang.CUR = "??";

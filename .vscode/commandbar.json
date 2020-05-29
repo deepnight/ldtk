@@ -4,18 +4,18 @@
 	"skipErrorMessage": true,
 	"commands": [
 		{
-			"text": "🍊 Build",
+			"text": "⚙ Build debug",
 			"color": "orange",
 			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|JS",
+			"command": "workbench.action.tasks.runTask|JS debug",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -10
 		},
 		{
-			"text": "Run NWJS",
+			"text": "💻 Run NWJS",
 			"color": "yellow",
-			"command": "start nwjs/nw app",
+			"command": "start nw.exe",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -21

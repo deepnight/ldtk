@@ -2,7 +2,6 @@
 -cp externs
 -main Boot
 -dce full
--debug
 
 -lib heaps
 -lib castle

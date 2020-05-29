@@ -10,7 +10,7 @@ class Client extends dn.Process {
 
 		createRoot(Boot.ME.s2d);
 
-		win.title = "title test";
+		win.title = "LEd v"+Const.APP_VERSION;
 		win.maximize();
 		var e = new js.jquery.JQuery("<div class='pouet'>aaaa</div>");
 		e.css("background","red");

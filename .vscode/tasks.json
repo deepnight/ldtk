@@ -2,8 +2,9 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "JS debug",
 			"type": "hxml",
-			"file": "nwjs.hxml",
+			"file": "app.debug.hxml",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",
@@ -22,8 +23,32 @@
 			"group": {
 				"kind": "build",
 				"isDefault": true
+			}
+		},
+
+
+		{
+			"label": "JS release",
+			"type": "hxml",
+			"file": "app.hxml",
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "never",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false,
+				"revealProblems": "onProblem"
 			},
-			"label": "JS"
+			"group": {
+				"kind": "build",
+			}
 		}
 	]
 }
