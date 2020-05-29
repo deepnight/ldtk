@@ -1,0 +1,12 @@
+{
+	"name" : "LEd",
+	"window" : {
+		"title" : "LEd",
+		"width" : 800,
+		"height" : 600,
+		"show" : true
+	},
+	"main" : "app.html",
+	"chromium-args":"--enable-spell-checking",
+	"js-flags": "--expose-gc"
+}

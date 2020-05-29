@@ -1,0 +1,29 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "hxml",
+			"file": "nwjs.hxml",
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "never",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": false,
+				"clear": false,
+				"revealProblems": "onProblem"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"label": "JS"
+		}
+	]
+}

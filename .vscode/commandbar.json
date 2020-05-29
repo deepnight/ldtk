@@ -1,0 +1,41 @@
+{
+	"skipTerminateQuickPick": true,
+	"skipSwitchToOutput": false,
+	"skipErrorMessage": true,
+	"commands": [
+		{
+			"text": "🍊 Build",
+			"color": "orange",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|JS",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -10
+		},
+		{
+			"text": "Run NWJS",
+			"color": "yellow",
+			"command": "start nwjs/nw app",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -21
+		},
+		{
+			"text": "🅰️ Build POT",
+			"color": "white",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|Lang",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -40
+		},
+		{
+			"text": "📦 Redist",
+			"color": "lightgreen",
+			"command": "haxelib run redistHelper hl.dx.hxml hl.sdl.hxml js.hxml swf.hxml -o redist.$ -P MyGame",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -50
+		}
+	]
+}

@@ -1,0 +1,13 @@
+-cp src
+-cp externs
+-main Boot
+-dce full
+-debug
+
+-lib heaps
+-lib castle
+-lib deepnightLibs
+-lib hxnodejs
+# -lib domkit
+
+-js app/app.js
