@@ -5,7 +5,7 @@
 	"commands": [
 		{
 			"text": "⚙ Build debug",
-			"color": "orange",
+			"color": "yellow",
 			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|JS debug",
 			"alignment": "right",
@@ -13,8 +13,17 @@
 			"priority": -10
 		},
 		{
+			"text": "⚙ Build release",
+			"color": "cyan",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|JS release",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -11
+		},
+		{
 			"text": "💻 Run NWJS",
-			"color": "yellow",
+			"color": "white",
 			"command": "run.cmd",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
