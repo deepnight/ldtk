@@ -1,0 +1,26 @@
+body {
+	margin: 0;
+	padding: 0;
+	background: blue;
+}
+
+canvas#webgl {
+	width: 100%;
+	height: 100%;
+}
+
+.panel {
+	position: absolute;
+	right: 0px;
+	height: 100%;
+	width: 100px;
+	padding: 5px;
+	background: black;
+	z-index: 1;
+	box-sizing: border-box;
+}
+
+input[type=text] {
+	display: block;
+	width: 100%;
+}
