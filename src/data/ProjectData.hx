@@ -6,7 +6,6 @@ class ProjectData implements data.IData {
 	public var layerDefs : Array<data.def.LayerDef> = [];
 
 	public function new() {
-		layerDefs.push( new LayerDef(IntGrid) );
 	}
 
 	public function getNextUniqId() return nextUniqId++;
@@ -28,6 +27,14 @@ class ProjectData implements data.IData {
 			nextUniqId: nextUniqId,
 			levels: levels.map( function(l) return l.toJson() ),
 		}
+	}
+
+	public function createLayerDef(type:LayerType, ?name:String) : LayerDef {
+		var l = new LayerDef(type);
+		if( name!=null )
+			l.name = name;
+		layerDefs.push(l);
+		return l;
 	}
 
 	public function createLevel() {

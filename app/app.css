@@ -1,26 +1,69 @@
 body {
   margin: 0;
   padding: 0;
-  background: blue;
+  background: #2e333f;
+  color: white;
+  font-family: "Arial";
+  font-size: 11pt;
 }
 
 canvas#webgl {
-  width: 100%;
-  height: 100%;
+  width: 70% !important;
+  height: 100% !important;
+  position: absolute;
+  left: 15%;
 }
 
 .panel {
   position: absolute;
-  right: 0px;
   height: 100%;
-  width: 100px;
+  width: 15%;
   padding: 5px;
-  background: black;
+  background: #1e2229;
+  border-color: #545d73;
+  border-style: solid;
+  box-shadow: 0px 0px 16px black inset;
   z-index: 1;
   box-sizing: border-box;
+}
+
+.panel.left {
+  left: 0px;
+  border-right-width: 1px;
+}
+
+.panel.right {
+  right: 0px;
+  border-left-width: 1px;
 }
 
 input[type=text] {
   display: block;
   width: 100%;
+}
+
+.layers ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.layers ul li {
+  margin: 0;
+  padding: 0;
+  background-color: #2e333f;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #1e2229;
+}
+
+.layers ul li.active {
+  color: black;
+  background-color: #ffcc00;
+  box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
+}
+
+.layers ul li:not(.active):hover {
+  outline: 1px solid #586279;
+  outline-offset: -1px;
 }
