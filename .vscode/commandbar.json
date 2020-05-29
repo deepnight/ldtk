@@ -15,7 +15,7 @@
 		{
 			"text": "💻 Run NWJS",
 			"color": "yellow",
-			"command": "start nw.exe",
+			"command": "run.cmd",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -21
