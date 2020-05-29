@@ -2,7 +2,7 @@ package render;
 
 class LayerRender {
 	public var root : h2d.Object;
-	var data : LayerContent;
+	public var data : LayerContent;
 
 	var gridSize(get,never) : Int; inline function get_gridSize() return data.def.gridSize;
 

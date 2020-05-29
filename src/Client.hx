@@ -8,8 +8,9 @@ class Client extends dn.Process {
 	public var doc(get,never) : js.html.Document; inline function get_doc() return js.Browser.document;
 
 	public var project : ProjectData;
-	public var curLevel : Null<LevelData>;
-	public var curLayer : Null<LayerContent>;
+	public var curLevel : LevelData;
+	public var curLayer : LayerContent;
+	var levelRender : render.LevelRender;
 
 	public function new() {
 		super();
@@ -18,12 +19,6 @@ class Client extends dn.Process {
 		createRoot(Boot.ME.s2d);
 
 		win.title = "LEd v"+Const.APP_VERSION;
-		win.maximize();
-		var e = new J('<div class="panel right"/>');
-		jBody.prepend(e);
-		e.append( new J('<input type="text"/>') );
-		e.append( new J('<input type="text"/>') );
-		e.append( new J('<input type="text"/>') );
 
 		project = new data.ProjectData();
 		project.createLayerDef(IntGrid,"First layer");
@@ -31,33 +26,45 @@ class Client extends dn.Process {
 		project.createLayerDef(IntGrid,"Last one");
 		curLevel = project.createLevel();
 		curLayer = curLevel.layers[0];
-
 		curLayer.setIntGrid(0,0, 1);
 		curLayer.setIntGrid(2,4, 0);
 		curLayer.setIntGrid(5,5, 0);
 		curLayer.setIntGrid(6,6, 0);
 
-		var lr = new render.LevelRender(curLevel);
-		lr.render();
+		levelRender = new render.LevelRender(curLevel);
 
 		updateLayerList();
 	}
 
 	function updateLayerList() {
-		jLayers.empty();
-		var list = new J("<ul/>");
+		var list = jLayers.find("ul");
+		list.empty();
+
 		for(layer in curLevel.layers) {
 			var e = new J("<li/>");
+			list.append(e);
+
 			if( layer==curLayer )
 				e.addClass("active");
-			e.append(layer.def.name+" ("+layer.def.type+")");
-			e.click( function(_) {
+
+			if( !levelRender.isLayerVisible(layer) )
+				e.addClass("hidden");
+
+			var vis = new J('<span class="vis"/>');
+			e.append(vis);
+			vis.click( function(_) {
+				levelRender.toggleLayer(layer);
+				updateLayerList();
+			});
+
+			var name = new J('<span class="name">'+layer.def.name+'</span>');
+			e.append(name);
+			name.click( function(_) {
 				curLayer = layer;
 				updateLayerList();
 			});
-			list.append(e);
+
 		}
-		jLayers.append(list);
 	}
 
 	override function onDispose() {

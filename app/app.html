@@ -11,9 +11,29 @@
 	<script type="text/javascript" src="app.js"></script>
 
 	<div class="panel left">
-		<div class="toolBar"></div>
-		<div class="layers"></div>
+		<div class="toolBar">
+			<button class="editLayers">Edit project</button>
+			<button class="editLayers">Save level</button>
+		</div>
+		<div class="layers">
+			<ul></ul>
+			<button class="editLayers">Edit layers</button>
+		</div>
 	</div>
+
+	<script type="text/javascript">
+		var path = './';
+		var fs = require('fs');
+		var reloadWatcher = fs.watch(path, function(_,file) {
+		var ext = file.split(".").pop().toLowerCase();
+		if( ext!="js" && ext!="css" && ext!="html" )
+			return;
+		reloadWatcher.close();
+		setTimeout(function() {
+			window.location.reload();
+		},2000);
+		});
+	  </script>
 
 </body>
 </html>
