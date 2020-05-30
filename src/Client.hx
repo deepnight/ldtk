@@ -17,8 +17,9 @@ class Client extends dn.Process {
 
 		ME = this;
 		createRoot(Boot.ME.s2d);
-
 		win.title = "LEd v"+Const.APP_VERSION;
+
+		Boot.ME.s2d.addEventListener( onEvent );
 
 		project = new data.ProjectData();
 		project.createLayerDef(IntGrid,"First layer");
@@ -35,6 +36,28 @@ class Client extends dn.Process {
 
 		updateLayerList();
 	}
+
+	function onEvent(e:hxd.Event) {
+		switch e.kind {
+			case EPush: onMouseDown(e);
+			case ERelease: onMouseUp(e);
+			case EMove: onMouseMove(e);
+			case EOver:
+			case EOut:
+			case EWheel:
+			case EFocus:
+			case EFocusLost:
+			case EKeyDown:
+			case EKeyUp:
+			case EReleaseOutside:
+			case ETextInput:
+			case ECheck:
+		}
+	}
+
+	function onMouseDown(e:hxd.Event) {}
+	function onMouseUp(e:hxd.Event) {}
+	function onMouseMove(e:hxd.Event) {}
 
 	function updateLayerList() {
 		var list = jLayers.find("ul");
@@ -67,9 +90,23 @@ class Client extends dn.Process {
 		}
 	}
 
+	public function getMouse() {
+		var gx = Boot.ME.s2d.mouseX;
+		var gy = Boot.ME.s2d.mouseY;
+		return {
+			gx : gx,
+			gy : gy,
+			x : Std.int(gx/Const.SCALE),
+			y : Std.int(gy/Const.SCALE),
+		}
+	}
+
 	override function onDispose() {
 		super.onDispose();
+
 		if( ME==this )
 			ME = null;
+
+		Boot.ME.s2d.removeEventListener(onEvent);
 	}
 }
