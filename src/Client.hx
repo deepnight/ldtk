@@ -18,6 +18,7 @@ class Client extends dn.Process {
 		ME = this;
 		createRoot(Boot.ME.s2d);
 		win.title = "LEd v"+Const.APP_VERSION;
+		win.maximize();
 
 		Boot.ME.s2d.addEventListener( onEvent );
 

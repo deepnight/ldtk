@@ -9,4 +9,4 @@
 -lib hxnodejs
 # -lib domkit
 
--js app/app.js
+-js app/js/app.js

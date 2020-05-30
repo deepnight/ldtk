@@ -7,40 +7,6 @@ body {
   font-size: 11pt;
 }
 
-canvas#webgl {
-  height: 100% !important;
-  position: absolute;
-  left: 200px;
-}
-
-.panel {
-  position: absolute;
-  height: 100%;
-  width: 200px;
-  padding: 5px;
-  background: #1e2229;
-  border-color: #545d73;
-  border-style: solid;
-  box-shadow: 0px 0px 16px black inset;
-  z-index: 1;
-  box-sizing: border-box;
-}
-
-.panel.left {
-  left: 0px;
-  border-right-width: 1px;
-}
-
-.panel.right {
-  right: 0px;
-  border-left-width: 1px;
-}
-
-input[type=text] {
-  display: block;
-  width: 100%;
-}
-
 button {
   width: 100%;
   background-color: #e34d00;
@@ -60,23 +26,73 @@ button:hover {
   background-color: #ff5d4a;
 }
 
-.toolbar {
+.window {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+}
+
+.window .mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.editor canvas#webgl {
+  height: 100% !important;
+  position: absolute;
+  left: 200px;
+}
+
+.editor .panel {
+  position: absolute;
+  height: 100%;
+  width: 200px;
+  padding: 5px;
+  background: #1e2229;
+  border-color: #545d73;
+  border-style: solid;
+  box-shadow: 0px 0px 16px black inset;
+  z-index: 1;
+  box-sizing: border-box;
+}
+
+.editor .panel.left {
+  left: 0px;
+  border-right-width: 1px;
+}
+
+.editor .panel.right {
+  right: 0px;
+  border-left-width: 1px;
+}
+
+.editor input[type=text] {
+  display: block;
+  width: 100%;
+}
+
+.editor .toolbar {
   margin-bottom: 8px;
 }
 
-.layers ul {
+.editor .layers ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.layers ul li {
+.editor .layers ul li {
   margin: 0;
   padding: 0;
   display: flex;
 }
 
-.layers ul li .name {
+.editor .layers ul li .name {
   display: block;
   padding: 10px;
   flex-grow: 1;
@@ -85,31 +101,31 @@ button:hover {
   border-bottom: 1px solid #1e2229;
 }
 
-.layers ul li .vis {
+.editor .layers ul li .vis {
   display: block;
   width: 24px;
   background-color: black;
 }
 
-.layers ul li .vis.off {
+.editor .layers ul li .vis.off {
   background-color: red;
 }
 
-.layers ul li.active .name {
+.editor .layers ul li.active .name {
   color: black;
   background-color: #ffcc00;
   box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
 }
 
-.layers ul li.hidden {
+.editor .layers ul li.hidden {
   opacity: 0.4;
 }
 
-.layers ul li.hidden .vis {
+.editor .layers ul li.hidden .vis {
   background: transparent;
 }
 
-.layers ul li:not(.active) .name:hover {
+.editor .layers ul li:not(.active) .name:hover {
   outline: 1px solid #586279;
   outline-offset: -1px;
 }

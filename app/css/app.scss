@@ -1,0 +1,141 @@
+$panelWid: 200px;
+
+@mixin clearMargin() {
+	margin: 0;
+	padding: 0;
+}
+
+
+body {
+	margin: 0;
+	padding: 0;
+	background: #2e333f;
+	color: white;
+	font-family: "Arial";
+	font-size: 11pt;
+}
+
+
+
+button {
+	width: 100%;
+	background-color: #e34d00;
+	color: white;
+	text-transform: uppercase;
+	padding: 10px;
+	border: 1px solid #ff5d4a;
+	box-shadow: 0px 2px 0px #b53d00;
+	// box-shadow: 0px 2px 0px #b53d00, 0px 0px 8px black;
+	cursor: pointer;
+}
+button+button {
+	margin-top: 2px;
+}
+button:hover {
+	background-color: #ff5d4a;
+}
+
+
+.window {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 99;
+
+	.mask {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0,0,0,0.5);
+	}
+}
+
+
+.editor {
+
+	canvas#webgl {
+		// width: calc( 100% - $panelWid ) !important;  // TODO
+		height: 100% !important;
+		position: absolute;
+		left: $panelWid;
+	}
+
+	.panel {
+		position: absolute;
+		height: 100%;
+		width: $panelWid;
+		padding: 5px;
+		background: #1e2229;
+		border-color: #545d73;
+		border-style: solid;
+		box-shadow: 0px 0px 16px black inset;
+		z-index: 1;
+		box-sizing: border-box;
+	}
+	.panel.left {
+		left: 0px;
+		border-right-width: 1px;
+	}
+	.panel.right {
+		right: 0px;
+		border-left-width: 1px;
+	}
+
+	input[type=text] {
+		display: block;
+		width: 100%;
+	}
+	.toolbar {
+		margin-bottom: 8px;
+	}
+
+	.layers {
+		ul {
+			@include clearMargin();
+			list-style: none;
+			li {
+				@include clearMargin();
+				display: flex;
+
+				.name {
+					display: block;
+					padding: 10px;
+					flex-grow: 1;
+
+					background-color: #2e333f;
+					cursor: pointer;
+					border-bottom: 1px solid #1e2229;
+				}
+				.vis {
+					display: block;
+					width: 24px;
+					background-color: black;
+				}
+				.vis.off {
+					background-color: red;
+				}
+			}
+
+			li.active .name {
+				color: black;
+				background-color: #ffcc00;
+				box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
+			}
+			li.hidden {
+				opacity: 0.4;
+				.vis {
+					background: transparent;
+				}
+			}
+			li:not(.active) .name:hover {
+				outline: 1px solid #586279;
+				outline-offset: -1px;
+			}
+			// li:hover {
+				// background-color: #ffcc00;
+			// }
+		}
+	}
+}
