@@ -7,8 +7,6 @@ class EnumSelect<T> extends form.Input<T> {
 	public function new(j:js.jquery.JQuery, e:Enum<T>, getter:Void->T, setter:T->Void) {
 		super(j, getter, setter);
 		enumRef = e;
-		trace(enumRef);
-		trace(getter());
 
 		input.empty();
 		for(k in Type.getEnumConstructs(enumRef)) {
