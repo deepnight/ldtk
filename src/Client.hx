@@ -20,12 +20,19 @@ class Client extends dn.Process {
 		win.title = "LEd v"+Const.APP_VERSION;
 		win.maximize();
 
+		new J(".projectSettings").click( function(_) {
+			loadTemplateInWindow( hxd.Res.tpl.projectSettings );
+		});
+
+		new J(".editLayers").click( function(_) new ui.EditLayers() );
+
 		Boot.ME.s2d.addEventListener( onEvent );
 
 		project = new data.ProjectData();
 		project.createLayerDef(IntGrid,"First layer");
 		project.createLayerDef(IntGrid,"Other");
-		project.createLayerDef(IntGrid,"Last one");
+		var l = project.createLayerDef(IntGrid,"Last one");
+		l.gridSize = 8;
 		curLevel = project.createLevel();
 		curLayer = curLevel.layers[0];
 		curLayer.setIntGrid(0,0, 1);
@@ -60,7 +67,7 @@ class Client extends dn.Process {
 	function onMouseUp(e:hxd.Event) {}
 	function onMouseMove(e:hxd.Event) {}
 
-	function updateLayerList() {
+	public function updateLayerList() {
 		var list = jLayers.find("ul");
 		list.empty();
 
@@ -89,6 +96,14 @@ class Client extends dn.Process {
 			});
 
 		}
+	}
+
+
+	public function loadTemplateInWindow(tpl:hxd.res.Resource) {
+		var html = new J( tpl.entry.getText() );
+		var win = new J(".window");
+		win.show();
+		win.find(".content").append(html);
 	}
 
 	public function getMouse() {

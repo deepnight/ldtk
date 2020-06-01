@@ -26,6 +26,49 @@ button:hover {
   background-color: #ff5d4a;
 }
 
+form {
+  max-width: 400px;
+}
+
+form ul {
+  list-style: none;
+}
+
+form ul li {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+form ul li + li {
+  margin-top: 8px;
+}
+
+form ul label {
+  flex: 0 0 150px;
+}
+
+form ul .suffix {
+  flex: 0 0 20px;
+  opacity: 0.5;
+}
+
+form input[type=text],
+form input[type=number] {
+  display: block;
+  width: 100%;
+  padding: 3px;
+  color: white;
+  background-color: #1e2229;
+  border: 1px solid #545d73;
+}
+
+form input[type=text]:focus,
+form input[type=number]:focus {
+  border-color: #ffcc00;
+  box-shadow: 0px 0px 4px #e34d00;
+  outline: none;
+}
+
 .window {
   display: none;
   position: absolute;
@@ -38,12 +81,13 @@ button:hover {
 }
 
 .window .content {
-  display: inline-block;
+  display: block;
   padding: 20px;
   margin-top: 50px;
   margin-left: auto;
   margin-right: auto;
   max-width: 80%;
+  background: #2e333f;
 }
 
 .editor canvas#webgl {
@@ -73,11 +117,6 @@ button:hover {
 .editor .panel.right {
   right: 0px;
   border-left-width: 1px;
-}
-
-.editor input[type=text] {
-  display: block;
-  width: 100%;
 }
 
 .editor .toolbar {
@@ -132,4 +171,16 @@ button:hover {
 .editor .layers ul li:not(.active) .name:hover {
   outline: 1px solid #586279;
   outline-offset: -1px;
+}
+
+.window .editLayers {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  gap: 10px;
+}
+
+.window .editLayers select[size] {
+  width: 100%;
+  min-height: 100px;
+  overflow: auto;
 }

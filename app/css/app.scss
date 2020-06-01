@@ -2,7 +2,11 @@
 $panelWid: 200px;
 
 // Colors
+$bgDark: #1e2229;
 $bgMed: #2e333f;
+$bgLight: #545d73;
+$red: #e34d00;
+$orange: #ffcc00;
 
 // Shortcuts
 @mixin clearMargin() {
@@ -26,7 +30,7 @@ body {
 
 button {
 	width: 100%;
-	background-color: #e34d00;
+	background-color: $red;
 	color: white;
 	text-transform: uppercase;
 	padding: 10px;
@@ -43,6 +47,46 @@ button:hover {
 }
 
 
+form {
+	max-width: 400px;
+	ul {
+		list-style: none;
+		li {
+			display: flex;
+			flex: 1 1 auto;
+		}
+		li+li {
+			margin-top: 8px;
+		}
+		label {
+			flex: 0 0 150px;
+		}
+		.suffix {
+			flex: 0 0 20px;
+			opacity: 0.5;
+		}
+
+	}
+
+
+	input[type=text],
+	input[type=number] {
+		display: block;
+		width: 100%;
+		padding: 3px;
+		color: white;
+		background-color: $bgDark;
+		border: 1px solid $bgLight;
+	}
+
+	input[type=text]:focus,
+	input[type=number]:focus {
+		border-color: $orange;
+		box-shadow: 0px 0px 4px $red;
+		outline: none;
+	}
+}
+
 .window {
 	display: none;
 	position: absolute;
@@ -54,13 +98,13 @@ button:hover {
 	background-color: rgba(0,0,0,0.5);
 
 	.content {
-		// position: absolute;
-		display: inline-block;
+		display: block;
 		padding: 20px;
 		margin-top: 50px;
 		margin-left: auto;
 		margin-right: auto;
 		max-width: 80%;
+		background: $bgMed;
 	}
 }
 
@@ -79,8 +123,8 @@ button:hover {
 		height: 100%;
 		width: $panelWid;
 		padding: 5px;
-		background: #1e2229;
-		border-color: #545d73;
+		background: $bgDark;
+		border-color: $bgLight;
 		border-style: solid;
 		box-shadow: 0px 0px 16px black inset;
 		z-index: 1;
@@ -95,10 +139,7 @@ button:hover {
 		border-left-width: 1px;
 	}
 
-	input[type=text] {
-		display: block;
-		width: 100%;
-	}
+
 	.toolbar {
 		margin-bottom: 8px;
 	}
@@ -118,7 +159,7 @@ button:hover {
 
 					background-color: $bgMed;
 					cursor: pointer;
-					border-bottom: 1px solid #1e2229;
+					border-bottom: 1px solid $bgDark;
 				}
 				.vis {
 					display: block;
@@ -132,7 +173,7 @@ button:hover {
 
 			li.active .name {
 				color: black;
-				background-color: #ffcc00;
+				background-color: $orange;
 				box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
 			}
 			li.hidden {
@@ -150,4 +191,19 @@ button:hover {
 			// }
 		}
 	}
+}
+
+
+.window .editLayers {
+	display: grid;
+	grid-template-columns: 20% 80%;
+	gap: 10px;
+
+	select[size] {
+		width: 100%;
+		min-height: 100px;
+		overflow: auto;
+	}
+	// form {
+	// }
 }
