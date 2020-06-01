@@ -31,10 +31,14 @@ form {
 }
 
 form ul {
+  margin: 0;
+  padding: 0;
   list-style: none;
 }
 
 form ul li {
+  margin: 0;
+  padding: 0;
   display: flex;
   flex: 1 1 auto;
 }
@@ -52,8 +56,14 @@ form ul .suffix {
   opacity: 0.5;
 }
 
-form input[type=text],
-form input[type=number] {
+select {
+  display: block;
+  width: 100%;
+  padding: 3px;
+}
+
+input[type=text],
+input[type=number] {
   display: block;
   width: 100%;
   padding: 3px;
@@ -62,8 +72,8 @@ form input[type=number] {
   border: 1px solid #545d73;
 }
 
-form input[type=text]:focus,
-form input[type=number]:focus {
+input[type=text]:focus,
+input[type=number]:focus {
   border-color: #ffcc00;
   box-shadow: 0px 0px 4px #e34d00;
   outline: none;
@@ -179,8 +189,37 @@ form input[type=number]:focus {
   gap: 10px;
 }
 
-.window .editLayers select[size] {
-  width: 100%;
-  min-height: 100px;
-  overflow: auto;
+.window .editLayers ul.layers {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: #1e2229;
+  border: 1px solid #545d73;
+}
+
+.window .editLayers ul.layers li {
+  margin: 0;
+  padding: 0;
+  padding: 8px;
+  color: white;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.window .editLayers ul.layers li.selected {
+  opacity: 1;
+  color: black;
+  background: #ffcc00;
+}
+
+.window .editLayers ul.layers li:not(.selected):hover {
+  opacity: 1;
+}
+
+.window .editLayers form:not(.type-IntGrid) .IntGrid {
+  display: none;
+}
+
+.window .editLayers form:not(.type-Entities) .Entities {
+  display: none;
 }

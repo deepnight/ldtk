@@ -1,10 +1,6 @@
 <div class="editLayers">
 	<div class="layersList">
-		<select name="curLayer" class="layers" size="2">
-			<option value="pouet">Pouet</option>
-			<option value="B">B</option>
-			<option value="C">C</option>
-		</select>
+		<ul class="layers"></ul>
 		<button class="addLayer">Create layer</button>
 	</div>
 
@@ -16,9 +12,20 @@
 		</li>
 
 		<li>
+			<label for="type">Type</label>
+			<select name="type">
+			</select>
+		</li>
+
+		<li>
 			<label for="name">Grid size</label>
 			<input type="text" name="gridSize"/>
 			<span class="suffix">px</span>
+		</li>
+
+		<li class="IntGrid">
+			<label>Intgrid specific</label>
+			<input type="text"/>
 		</li>
 		</ul>
 	</form>

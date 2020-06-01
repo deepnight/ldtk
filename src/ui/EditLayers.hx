@@ -11,19 +11,21 @@ class EditLayers extends dn.Process {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
 
+	var pouet : Float = 5;
+
 	public function new() {
 		super(Client.ME);
 		Client.ME.loadTemplateInWindow( hxd.Res.tpl.editLayers );
 		jWin = new J(".window .content");
 		jWin.find("*").off(); // Cleanup events
 
-		jList = jWin.find("select.layers");
+		jList = jWin.find("ul.layers");
 		jForm = jWin.find("form");
 
-		// Select layer
-		jList.change( function(ev) {
-			selectLayer( project.layerDefs[ jList.val() ] );
-		});
+		// // Select layer
+		// jList.change( function(ev) {
+		// 	selectLayer( project.layerDefs[ jList.val() ] );
+		// });
 
 		// Add layer button
 		jWin.find(".addLayer").click( function(_) {
@@ -38,41 +40,34 @@ class EditLayers extends dn.Process {
 	function selectLayer(ld:LayerDef) {
 		curLayer = ld;
 
-		var i = FormInput.linkToField( jForm.find("input[name='name']"), ld.name );
+		for(k in Type.getEnumConstructs(LayerType))
+			jForm.removeClass("type-"+k);
+		jForm.addClass("type-"+ld.type);
+
+		var i = form.Input.linkToField( jForm.find("input[name='name']"), ld.name );
 		i.onChange = updateLayerList;
 
+		var i = form.Input.linkToField( jForm.find("input[name='gridSize']"), ld.gridSize );
+		i.setBounds(1,32);
 
-		var i = FormInput.linkToField( jForm.find("input[name='gridSize']"), ld.gridSize );
-		i.setIntBounds(1, 256);
-		i.onChange = updateLayerList;
-
-		// var input = jForm.find("input[name='name']");
-		// input.val( curLayer.name );
-		// input.off().change( function(ev) {
-		// 	ld.name = input.val();
-		// 	updateLayerList();
-		// });
-
-		// var input = jForm.find("input[name='gridSize']");
-		// input.off().change( function(_) {
-		// 	ld.gridSize = Std.parseInt( input.val() );
-		// });
-		// input.val( curLayer.gridSize );
+		var i = form.Input.linkToField( jForm.find("select[name='type']"), ld.type );
+		i.onChange = selectLayer.bind(ld);
 
 		updateLayerList();
 	}
 
+
 	function updateLayerList() {
 		jList.empty();
 
-		var idx = 0;
 		for(l in project.layerDefs) {
-			var e = new J("<option/>");
+			var e = new J("<li/>");
 			jList.append(e);
 			e.text(l.name+" ("+l.type+")");
-			e.attr("value", idx++);
 			if( curLayer==l )
-				e.attr("selected","selected");
+				e.addClass("selected");
+
+			e.click( function(_) selectLayer(l) );
 		}
 
 		client.updateLayerList();

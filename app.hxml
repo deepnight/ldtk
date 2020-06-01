@@ -9,4 +9,6 @@
 -lib hxnodejs
 # -lib domkit
 
+# -D dump=pretty
+
 -js app/js/app.js

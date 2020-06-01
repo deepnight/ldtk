@@ -50,8 +50,10 @@ button:hover {
 form {
 	max-width: 400px;
 	ul {
+		@include clearMargin();
 		list-style: none;
 		li {
+			@include clearMargin();
 			display: flex;
 			flex: 1 1 auto;
 		}
@@ -68,23 +70,29 @@ form {
 
 	}
 
+}
 
-	input[type=text],
-	input[type=number] {
-		display: block;
-		width: 100%;
-		padding: 3px;
-		color: white;
-		background-color: $bgDark;
-		border: 1px solid $bgLight;
-	}
+select {
+	display: block;
+	width: 100%;
+	padding: 3px;
+}
 
-	input[type=text]:focus,
-	input[type=number]:focus {
-		border-color: $orange;
-		box-shadow: 0px 0px 4px $red;
-		outline: none;
-	}
+input[type=text],
+input[type=number] {
+	display: block;
+	width: 100%;
+	padding: 3px;
+	color: white;
+	background-color: $bgDark;
+	border: 1px solid $bgLight;
+}
+
+input[type=text]:focus,
+input[type=number]:focus {
+	border-color: $orange;
+	box-shadow: 0px 0px 4px $red;
+	outline: none;
 }
 
 .window {
@@ -199,11 +207,33 @@ form {
 	grid-template-columns: 20% 80%;
 	gap: 10px;
 
-	select[size] {
-		width: 100%;
-		min-height: 100px;
-		overflow: auto;
+	ul.layers {
+		@include clearMargin();
+		list-style: none;
+		background: $bgDark;
+		border: 1px solid $bgLight;
+		li {
+			@include clearMargin();
+			padding: 8px;
+			color: white;
+			cursor: pointer;
+			opacity: 0.8;
+		}
+		li.selected {
+			opacity: 1;
+			color: black;
+			background: $orange;
+		}
+		li:not(.selected):hover {
+			opacity: 1;
+		}
 	}
-	// form {
-	// }
+
+	form:not(.type-IntGrid) .IntGrid {
+		display: none;
+	}
+
+	form:not(.type-Entities) .Entities {
+		display: none;
+	}
 }
