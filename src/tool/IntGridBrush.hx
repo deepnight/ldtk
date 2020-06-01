@@ -10,6 +10,5 @@ class IntGridBrush extends Tool {
 		var m = getMouse();
 		curLayer.setIntGrid(m.cx, m.cy, 1);
 		client.levelRender.invalidate();
-		trace(m.cx+","+m.cy);
 	}
 }

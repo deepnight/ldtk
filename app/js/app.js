@@ -44060,7 +44060,6 @@ tool_IntGridBrush.prototype = $extend(Tool.prototype,{
 		var m = this.getMouse();
 		Client.ME.curLayer.setIntGrid(m.cx,m.cy,1);
 		Client.ME.levelRender.invalidated = true;
-		haxe_Log.trace(m.cx + "," + m.cy,{ fileName : "src/tool/IntGridBrush.hx", lineNumber : 13, className : "tool.IntGridBrush", methodName : "use"});
 	}
 	,__class__: tool_IntGridBrush
 });
