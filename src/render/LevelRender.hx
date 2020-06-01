@@ -8,11 +8,19 @@ class LevelRender extends dn.Process {
 	var layerVis : Map<LayerContent,Bool> = new Map();
 	var invalidated = true;
 
+	var grid : h2d.Graphics;
+
+	public var focusX : Float = 0.;
+	public var focusY : Float = 0.;
+	public var zoom : Float = 3.0;
+
 	public function new(d:LevelData) {
 		super(client);
 
 		data = d;
 		createRootInLayers(client.root, Const.DP_MAIN);
+
+		grid = new h2d.Graphics(root);
 
 		for(d in data.layers) {
 			var r = new LayerRender(d);
@@ -41,12 +49,28 @@ class LevelRender extends dn.Process {
 		invalidate();
 	}
 
+	public function renderGrid() {
+		var l = client.curLayer;
+		grid.clear();
+		grid.lineStyle(1, 0x0, 0.2);
+		for( cx in 0...client.curLayer.cWid+1 ) {
+			grid.moveTo(cx*l.def.gridSize, 0);
+			grid.lineTo(cx*l.def.gridSize, l.cHei*l.def.gridSize);
+		}
+		for( cy in 0...client.curLayer.cHei+1 ) {
+			grid.moveTo(0, cy*l.def.gridSize);
+			grid.lineTo(l.cWid*l.def.gridSize, cy*l.def.gridSize);
+		}
+	}
+
 	public function render() {
 		for(l in layers) {
 			l.root.visible = isLayerVisible(l.data);
 			if( isLayerVisible(l.data) )
 				l.render();
 		}
+
+		renderGrid();
 	}
 
 
@@ -56,6 +80,10 @@ class LevelRender extends dn.Process {
 
 	override function postUpdate() {
 		super.postUpdate();
+
+		root.setScale(zoom);
+		root.x = w()*0.5 - focusX * zoom;
+		root.y = h()*0.5 - focusY * zoom;
 
 		if( invalidated ) {
 			invalidated = false;

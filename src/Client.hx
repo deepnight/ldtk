@@ -10,7 +10,8 @@ class Client extends dn.Process {
 	public var project : ProjectData;
 	public var curLevel : LevelData;
 	public var curLayer : LayerContent;
-	var levelRender : render.LevelRender;
+	public var levelRender : render.LevelRender;
+	var curTool : Tool;
 
 	public function new() {
 		super();
@@ -40,6 +41,8 @@ class Client extends dn.Process {
 		curLayer.setIntGrid(5,5, 0);
 		curLayer.setIntGrid(6,6, 0);
 
+		curTool = new tool.IntGridBrush();
+
 		levelRender = new render.LevelRender(curLevel);
 
 		updateLayerList();
@@ -51,21 +54,35 @@ class Client extends dn.Process {
 			case ERelease: onMouseUp(e);
 			case EMove: onMouseMove(e);
 			case EOver:
-			case EOut:
+			case EOut: onMouseUp(e);
 			case EWheel:
 			case EFocus:
-			case EFocusLost:
+			case EFocusLost: onMouseUp(e);
 			case EKeyDown:
 			case EKeyUp:
-			case EReleaseOutside:
+			case EReleaseOutside: onMouseUp(e);
 			case ETextInput:
 			case ECheck:
 		}
 	}
 
-	function onMouseDown(e:hxd.Event) {}
-	function onMouseUp(e:hxd.Event) {}
-	function onMouseMove(e:hxd.Event) {}
+	function onMouseDown(e:hxd.Event) {
+		curTool.startUsing();
+	}
+	function onMouseUp(e:hxd.Event) {
+		curTool.stopUsing();
+	}
+	function onMouseMove(e:hxd.Event) {
+		if( curTool.isRunning() )
+			curTool.use();
+	}
+
+	public function selectLayer(l:LayerContent) {
+		curLayer = l;
+		levelRender.renderGrid();
+		updateLayerList();
+
+	}
 
 	public function updateLayerList() {
 		var list = jLayers.find("ul");
@@ -91,8 +108,7 @@ class Client extends dn.Process {
 			var name = new J('<span class="name">'+layer.def.name+'</span>');
 			e.append(name);
 			name.click( function(_) {
-				curLayer = layer;
-				updateLayerList();
+				selectLayer(layer);
 			});
 
 		}
@@ -109,11 +125,17 @@ class Client extends dn.Process {
 	public function getMouse() {
 		var gx = Boot.ME.s2d.mouseX;
 		var gy = Boot.ME.s2d.mouseY;
+
+		var x = Std.int( ( gx/Const.SCALE - levelRender.root.x ) / levelRender.zoom );
+		var y = Std.int( ( gy/Const.SCALE - levelRender.root.y ) / levelRender.zoom );
+
 		return {
 			gx : gx,
 			gy : gy,
-			x : Std.int(gx/Const.SCALE),
-			y : Std.int(gy/Const.SCALE),
+			x : x,
+			y : y,
+			cx : Std.int(x/curLayer.def.gridSize),
+			cy : Std.int(y/curLayer.def.gridSize),
 		}
 	}
 
