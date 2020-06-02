@@ -45,7 +45,7 @@ class Client extends dn.Process {
 
 		curTool = new tool.IntGridBrush();
 
-		levelRender = new render.LevelRender(curLevel);
+		levelRender = new render.LevelRender();
 
 		updateLayerList();
 	}

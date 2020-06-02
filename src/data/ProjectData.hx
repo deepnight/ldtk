@@ -33,7 +33,6 @@ class ProjectData implements data.IData {
 		for(l in levels)
 			if( l.uid==uid )
 				return l;
-		throw "null";
 		return null;
 	}
 
@@ -41,7 +40,6 @@ class ProjectData implements data.IData {
 		for(ld in layerDefs)
 			if( ld.uid==uid )
 				return ld;
-		throw "null";
 		return null;
 	}
 
@@ -76,7 +74,7 @@ class ProjectData implements data.IData {
 
 	public function checkDataIntegrity() {
 		for(level in levels) {
-			// Drop lost layers
+			// Remove layerContents without layerDefs
 			var i = 0;
 			while( i<level.layerContents.length ) {
 				if( level.layerContents[i].def==null )
@@ -85,7 +83,12 @@ class ProjectData implements data.IData {
 					i++;
 			}
 
-			// Cleanup level layers
+			// Add missing layerContents
+			for(ld in layerDefs)
+				if( level.getLayerContent(ld.uid)==null )
+					level.layerContents.push( new LayerContent(level, ld) );
+
+			// Cleanup layer values
 			for(lc in level.layerContents)
 				switch lc.def.type {
 					case IntGrid:

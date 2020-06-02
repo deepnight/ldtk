@@ -17,7 +17,8 @@ class EditLayers extends ui.Window {
 		// Create layer
 		jWin.find(".addLayer").click( function(_) {
 			var ld = project.createLayerDef(IntGrid, "New layer");
-			updateForm();
+			selectLayer(ld);
+			client.onLayerDefChange();
 			jForm.find("input").first().focus().select();
 		});
 
@@ -26,6 +27,8 @@ class EditLayers extends ui.Window {
 
 	function selectLayer(ld:LayerDef) {
 		curLayer = ld;
+
+		jForm.find("*").off();
 
 		for(k in Type.getEnumConstructs(LayerType))
 			jForm.removeClass("type-"+k);
@@ -55,6 +58,12 @@ class EditLayers extends ui.Window {
 		i.onChange = function() {
 			client.onLayerDefChange();
 		}
+
+		jForm.find(".deleteLayer").click( function(_) {
+			project.removeLayerDef(ld);
+			selectLayer(project.layerDefs[0]);
+			client.onLayerDefChange();
+		});
 
 		switch ld.type {
 			case IntGrid:
@@ -88,7 +97,7 @@ class EditLayers extends ui.Window {
 						val.name = nameInput.val();
 					});
 
-					if( idx==ld.intGridValues.length-1 )
+					if( ld.intGridValues.length>1 && idx==ld.intGridValues.length-1 )
 						e.addClass("removable");
 
 					// Edit color

@@ -21,7 +21,6 @@ class Tool<T> extends dn.Process {
 
 	function selectValue(v:T) {
 		SELECTED_VALUES.set(curLayer.def, v);
-			// M.iclamp(v, 0, curLayer.def.intGridValues.length-1)
 	}
 	function getSelectedValue() : T {
 		return SELECTED_VALUES.exists(curLayer.def)

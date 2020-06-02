@@ -3,9 +3,8 @@ package render;
 class LevelRender extends dn.Process {
 	public var client(get,never) : Client; inline function get_client() return Client.ME;
 
-	public var data : data.LevelData;
-	var layers : Array<render.LayerRender> = [];
-	var layerVis : Map<LayerContent,Bool> = new Map();
+	var layerVis : Map<Int,Bool> = new Map();
+	var layerWrappers : Map<Int,h2d.Object> = new Map();
 	var invalidated = true;
 
 	var grid : h2d.Graphics;
@@ -14,38 +13,29 @@ class LevelRender extends dn.Process {
 	public var focusY : Float = 0.;
 	public var zoom : Float = 3.0;
 
-	public function new(d:LevelData) {
+	public function new() {
 		super(client);
 
-		data = d;
 		createRootInLayers(client.root, Const.DP_MAIN);
-
 		grid = new h2d.Graphics(root);
-
-		for(lc in data.layerContents) {
-			var r = new LayerRender(lc);
-			root.addChild(r.root);
-			layers.push(r);
-			showLayer(lc);
-		}
 	}
 
 	public inline function isLayerVisible(l:LayerContent) {
-		return !layerVis.exists(l) || layerVis.get(l)==true;
+		return !layerVis.exists(l.layerDefId) || layerVis.get(l.layerDefId)==true;
 	}
 
 	public function toggleLayer(l:LayerContent) {
-		layerVis.set(l, !isLayerVisible(l));
+		layerVis.set(l.layerDefId, !isLayerVisible(l));
 		invalidate();
 	}
 
 	public function showLayer(l:LayerContent) {
-		layerVis.set(l, true);
+		layerVis.set(l.layerDefId, true);
 		invalidate();
 	}
 
 	public function hideLayer(l:LayerContent) {
-		layerVis.set(l, false);
+		layerVis.set(l.layerDefId, false);
 		invalidate();
 	}
 
@@ -63,19 +53,50 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	public function render() {
-		for(lr in layers)
-			if( isLayerVisible(lr.data) )
-				lr.render();
+	public function renderAll() {
+		renderGrid();
+		renderLayers();
+	}
+
+	public function renderLayers() {
+		for(e in layerWrappers)
+			e.remove();
+		layerWrappers = new Map();
+
+		for(lc in client.curLevel.layerContents) {
+			var wrapper = new h2d.Object(root);
+			layerWrappers.set(lc.layerDefId, wrapper);
+
+			if( !isLayerVisible(lc) )
+				continue;
+
+			var grid = lc.def.gridSize;
+			switch lc.def.type {
+				case IntGrid:
+					var g = new h2d.Graphics(wrapper);
+					for(cy in 0...lc.cHei)
+					for(cx in 0...lc.cWid) {
+						var id = lc.getIntGrid(cx,cy);
+						if( id<0 )
+							continue;
+
+						g.beginFill(lc.def.intGridValues[id].color);
+						g.drawRect(cx*grid, cy*grid, grid, grid);
+					}
+
+				case Entities:
+					// TODO
+			}
+		}
 
 		updateLayersVisibility();
-		renderGrid();
 	}
 
 	function updateLayersVisibility() {
-		for(lr in layers) {
-			lr.root.visible = isLayerVisible(lr.data);
-			lr.root.alpha = lr.data.def.displayOpacity * ( lr.data==client.curLayerContent ? 1 : 0.4 );
+		for(lid in layerWrappers.keys()) {
+			var wrapper = layerWrappers.get(lid);
+			// wrapper.visible = isLayerVisible(def);
+			// wrapper.alpha = lr.data.def.displayOpacity * ( lr.data==client.curLayerContent ? 1 : 0.4 );
 		}
 	}
 
@@ -98,7 +119,7 @@ class LevelRender extends dn.Process {
 
 		if( invalidated ) {
 			invalidated = false;
-			render();
+			renderAll();
 		}
 	}
 

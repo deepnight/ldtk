@@ -5,10 +5,10 @@ class IntGridBrush extends Tool<Int> {
 		super();
 	}
 
-	override function selectValue(v:Int) {
-		v = M.iclamp(v, 0, curLayer.def.intGridValues.length-1);
-		super.selectValue(v);
-	}
+	// override function selectValue(v:Int) {
+	// 	v = M.iclamp(v, 0, curLayer.def.intGridValues.length-1);
+	// 	super.selectValue(v);
+	// }
 
 	override function getDefaultValue():Int {
 		return 0;

@@ -31,4 +31,11 @@ class LevelData implements data.IData {
 		return {
 		}
 	}
+
+	public function getLayerContent(layerDefId:Int) : Null<LayerContent> {
+		for(lc in layerContents)
+			if( lc.layerDefId==layerDefId )
+				return lc;
+		return null;
+	}
 }
