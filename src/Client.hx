@@ -4,6 +4,7 @@ class Client extends dn.Process {
 	public var win(get,never) : nw.Window; inline function get_win() return nw.Window.get();
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J(".panel .layersList");
+	public var jToolBar(get,never) : J; inline function get_jToolBar() return new J("#toolBar ul");
 	// public var win(get,never) : js.html.Window; inline function get_win() return js.Browser.window;
 	public var doc(get,never) : js.html.Document; inline function get_doc() return js.Browser.document;
 
@@ -11,7 +12,7 @@ class Client extends dn.Process {
 	public var curLevel : LevelData;
 	public var curLayer : LayerContent;
 	public var levelRender : render.LevelRender;
-	var curTool : Tool;
+	public var curTool : Tool;
 
 	public function new() {
 		super();
@@ -71,7 +72,7 @@ class Client extends dn.Process {
 	}
 
 	function onMouseDown(e:hxd.Event) {
-		curTool.startUsing( getMouse() );
+		curTool.startUsing( getMouse(), e.button );
 	}
 	function onMouseUp() {
 		if( curTool.isRunning() )
@@ -84,8 +85,14 @@ class Client extends dn.Process {
 	public function selectLayer(l:LayerContent) {
 		curLayer = l;
 		levelRender.onCurrentLayerChange(curLayer);
+		curTool.updateToolBar();
 		updateLayerList();
+	}
 
+	public function onLayerDefChange() {
+		levelRender.onCurrentLayerChange(curLayer);
+		curTool.updateToolBar();
+		updateLayerList();
 	}
 
 	public function updateLayerList() {

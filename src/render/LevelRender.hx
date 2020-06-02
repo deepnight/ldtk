@@ -75,7 +75,7 @@ class LevelRender extends dn.Process {
 	function updateLayersVisibility() {
 		for(lr in layers) {
 			lr.root.visible = isLayerVisible(lr.data);
-			lr.root.alpha = lr.data==client.curLayer ? 1 : 0.4;
+			lr.root.alpha = lr.data.def.displayOpacity/100 * ( lr.data==client.curLayer ? 1 : 0.4 );
 		}
 	}
 

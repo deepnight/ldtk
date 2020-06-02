@@ -32,16 +32,28 @@ class EditLayers extends ui.Window {
 		jForm.addClass("type-"+ld.type);
 
 		var i = form.Input.linkToField( jForm.find("input[name='name']"), ld.name );
-		i.onChange = updateLayerList;
+		i.onChange = function() {
+			client.onLayerDefChange();
+			updateLayerList();
+		};
+
+		var i = form.Input.linkToField( jForm.find("select[name='type']"), ld.type );
+		i.onChange = function() {
+			client.onLayerDefChange();
+			updateForm();
+		};
 
 		var i = form.Input.linkToField( jForm.find("input[name='gridSize']"), ld.gridSize );
 		i.setBounds(1,32);
 		i.onChange = function() {
-			client.levelRender.invalidate();
+			client.onLayerDefChange();
 		}
 
-		var i = form.Input.linkToField( jForm.find("select[name='type']"), ld.type );
-		i.onChange = updateForm;
+		var i = form.Input.linkToField( jForm.find("input[name='displayOpacity']"), ld.displayOpacity );
+		i.setBounds(10,100);
+		i.onChange = function() {
+			client.onLayerDefChange();
+		}
 
 		switch ld.type {
 			case IntGrid:
@@ -52,8 +64,9 @@ class EditLayers extends ui.Window {
 				var addButton = valuesList.find("li.add");
 				addButton.find("button").off().click( function(ev) {
 					ld.intGridValues.push(0xff0000);
+					client.onLayerDefChange();
 					updateForm();
-					ev.preventDefault();
+					// jForm.find("li.value:last input[type=color]").click(); // TODO need proper user-triggered event
 				});
 
 				// Existing values
@@ -73,15 +86,15 @@ class EditLayers extends ui.Window {
 					col.val( C.intToHex(c) );
 					col.change( function(ev) {
 						ld.intGridValues[curIdx] = C.hexToInt( col.val() );
+						client.onLayerDefChange();
 						updateForm();
 					});
 
 					// Remove
 					e.find("a.remove").click( function(ev) {
-						trace("remove "+curIdx);
 						ld.intGridValues.splice(curIdx,1);
+						client.onLayerDefChange();
 						updateForm();
-						ev.preventDefault();
 					});
 					idx++;
 				}

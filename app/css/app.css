@@ -152,8 +152,42 @@ input[type=number]:focus {
   position: absolute;
   top: 0px;
   left: 200px;
-  padding: 4px;
   background-color: #2e333f;
+}
+
+.editor #toolBar ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  padding: 4px;
+}
+
+.editor #toolBar ul li {
+  margin: 0;
+  padding: 0;
+}
+
+.editor #toolBar ul > li {
+  display: inline-block;
+  min-width: 32px;
+  height: 32px;
+}
+
+.editor #toolBar ul > li:hover {
+  outline: 1px solid white;
+  outline-offset: -1px;
+}
+
+.editor #toolBar ul > li + li {
+  margin-left: 2px;
+}
+
+.editor #toolBar ul li.color {
+  box-shadow: 0px -2px 0px rgba(0, 0, 0, 0.3) inset;
+}
+
+.editor #toolBar ul li.color.active {
+  outline: 2px solid white !important;
 }
 
 .layersList ul {
