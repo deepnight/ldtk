@@ -109,27 +109,30 @@ class Client extends dn.Process {
 		var list = jLayers.find("ul");
 		list.empty();
 
-		for(layer in curLevel.layerContents) {
-			var e = new J("<li/>");
+		for(lc in curLevel.layerContents) {
+			var e = jLayers.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			list.append(e);
 
-			if( layer==curLayerContent )
+			if( lc==curLayerContent )
 				e.addClass("active");
 
-			if( !levelRender.isLayerVisible(layer) )
+			if( !levelRender.isLayerVisible(lc) )
 				e.addClass("hidden");
 
-			var vis = new J('<span class="vis"/>');
-			e.append(vis);
+			var vis = e.find(".vis");
+			if( levelRender.isLayerVisible(lc) )
+				vis.find(".off").hide();
+			else
+				vis.find(".on").hide();
 			vis.click( function(_) {
-				levelRender.toggleLayer(layer);
+				levelRender.toggleLayer(lc);
 				updateLayerList();
 			});
 
-			var name = new J('<span class="name">'+layer.def.name+'</span>');
-			e.append(name);
+			var name = e.find(".name");
+			name.text(lc.def.name);
 			name.click( function(_) {
-				selectLayer(layer);
+				selectLayer(lc);
 			});
 
 		}
