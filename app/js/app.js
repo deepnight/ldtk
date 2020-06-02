@@ -1757,7 +1757,7 @@ data_ProjectData.prototype = {
 	,__class__: data_ProjectData
 };
 var data_def_LayerDef = function(t) {
-	this.displayOpacity = 100;
+	this.displayOpacity = 1.0;
 	this.gridSize = Const.GRID;
 	this.name = "Unknown";
 	this.type = t;
@@ -2253,6 +2253,56 @@ form_input_EnumSelect.prototype = $extend(form_Input.prototype,{
 	}
 	,__class__: form_input_EnumSelect
 });
+var form_input_FloatInput = function(j,getter,setter) {
+	this.max = 32767;
+	this.min = -32768;
+	var _g = $bind(this,this.floatGetter);
+	var def = getter;
+	var _g1 = $bind(this,this.floatSetter);
+	var def1 = setter;
+	form_Input.call(this,j,function() {
+		return _g(def);
+	},function(v) {
+		_g1(def1,v);
+	});
+	this.set_displayAsPct(false);
+};
+$hxClasses["form.input.FloatInput"] = form_input_FloatInput;
+form_input_FloatInput.__name__ = "form.input.FloatInput";
+form_input_FloatInput.__super__ = form_Input;
+form_input_FloatInput.prototype = $extend(form_Input.prototype,{
+	set_displayAsPct: function(v) {
+		this.displayAsPct = v;
+		this.input.val(Std.string(this.getter()));
+		return this.displayAsPct;
+	}
+	,floatGetter: function(def) {
+		return def() * (this.displayAsPct ? 100 : 1);
+	}
+	,floatSetter: function(def,v) {
+		def(v / (this.displayAsPct ? 100 : 1));
+	}
+	,setBounds: function(min,max) {
+		this.min = min;
+		this.max = max;
+	}
+	,parseFormValue: function() {
+		var v = parseFloat(this.input.val());
+		if(isNaN(v) || !isFinite(v) || v == null) {
+			v = 0;
+		}
+		var min = this.min * (this.displayAsPct ? 100 : 1);
+		var max = this.max * (this.displayAsPct ? 100 : 1);
+		if(v < min) {
+			return min;
+		} else if(v > max) {
+			return max;
+		} else {
+			return v;
+		}
+	}
+	,__class__: form_input_FloatInput
+});
 var form_input_IntInput = function(j,getter,setter) {
 	this.max = 32767;
 	this.min = -32768;
@@ -2269,17 +2319,16 @@ form_input_IntInput.prototype = $extend(form_Input.prototype,{
 	,parseFormValue: function() {
 		var v = Std.parseInt(this.input.val());
 		if(isNaN(v) || !isFinite(v) || v == null) {
-			return 0;
+			v = 0;
+		}
+		var min = this.min;
+		var max = this.max;
+		if(v < min) {
+			return min;
+		} else if(v > max) {
+			return max;
 		} else {
-			var min = this.min;
-			var max = this.max;
-			if(v < min) {
-				return min;
-			} else if(v > max) {
-				return max;
-			} else {
-				return v;
-			}
+			return v;
 		}
 	}
 	,__class__: form_input_IntInput
@@ -44068,7 +44117,7 @@ render_LevelRender.prototype = $extend(dn_Process.prototype,{
 			++_g;
 			var l = lr.data;
 			lr.root.set_visible(this.layerVis.h.__keys__[l.__id__] == null || this.layerVis.h[l.__id__] == true);
-			lr.root.alpha = lr.data.def.displayOpacity / 100 * (lr.data == Client.ME.curLayer ? 1 : 0.4);
+			lr.root.alpha = lr.data.def.displayOpacity * (lr.data == Client.ME.curLayer ? 1 : 0.4);
 		}
 	}
 	,onCurrentLayerChange: function(cur) {
@@ -44330,12 +44379,13 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 		i.onChange = function() {
 			Client.ME.onLayerDefChange();
 		};
-		var i = new form_input_IntInput(this.jForm.find("input[name='displayOpacity']"),function() {
+		var i = new form_input_FloatInput(this.jForm.find("input[name='displayOpacity']"),function() {
 			return ld.displayOpacity;
 		},function(v) {
 			ld.displayOpacity = v;
 		});
-		i.setBounds(10,100);
+		i.set_displayAsPct(true);
+		i.setBounds(0.1,1);
 		i.onChange = function() {
 			Client.ME.onLayerDefChange();
 		};

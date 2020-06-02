@@ -15,8 +15,9 @@ class IntInput extends form.Input<Int> {
 
 	override function parseFormValue() : Int {
 		var v = Std.parseInt( input.val() );
-		return Math.isNaN(v) || !Math.isFinite(v) || v==null
-			? 0
-			: M.iclamp(v, min, max);
+		if( Math.isNaN(v) || !Math.isFinite(v) || v==null )
+			v = 0;
+
+		return M.iclamp(v, min, max);
 	}
 }
