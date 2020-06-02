@@ -483,7 +483,10 @@ var Client = function() {
 		_gthis.onMouseUp();
 	});
 	$(".projectSettings").click(function(_) {
-		ui_Notification.msg("Not implemented yet");
+		ui_Notification.notImplemented();
+	});
+	$(".saveLevel").click(function(_) {
+		ui_Notification.notImplemented();
 	});
 	$("button.editLayers").click(function(_) {
 		new ui_win_EditLayers();
@@ -44510,6 +44513,9 @@ ui_Notification.msg = function(str) {
 };
 ui_Notification.error = function(str) {
 	return new ui_Notification(str,16711680);
+};
+ui_Notification.notImplemented = function() {
+	return ui_Notification.msg("Feature not implemented yet.");
 };
 ui_Notification.__super__ = dn_Process;
 ui_Notification.prototype = $extend(dn_Process.prototype,{

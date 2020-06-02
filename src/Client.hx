@@ -33,7 +33,8 @@ class Client extends dn.Process {
 			onMouseUp();
 		});
 
-		new J(".projectSettings").click( function(_) { N.msg("Not implemented yet"); } );
+		new J(".projectSettings").click( function(_) { N.notImplemented(); } );
+		new J(".saveLevel").click( function(_) { N.notImplemented(); } );
 		new J("button.editLayers").click( function(_) new ui.win.EditLayers() );
 
 		Boot.ME.s2d.addEventListener( onEvent );

@@ -26,6 +26,10 @@ class Notification extends dn.Process {
 		return new Notification(str, 0xff0000);
 	}
 
+	public static function notImplemented() {
+		return msg("Feature not implemented yet.");
+	}
+
 	public function hide() {
 		if( destroyed || cd.hasSetS("hideOnce",Const.INFINITE) )
 			return;

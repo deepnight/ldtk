@@ -226,8 +226,8 @@ input[type=number]:focus {
 
 			>li {
 				display: block;
-				// min-width: 32px;
 				min-height: 16px;
+				cursor: pointer;
 			}
 			>li:hover {
 				outline: 1px solid white;

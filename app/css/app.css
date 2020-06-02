@@ -219,6 +219,7 @@ input[type=number]:focus {
 .editor #palette ul > li {
   display: block;
   min-height: 16px;
+  cursor: pointer;
 }
 
 .editor #palette ul > li:hover {
