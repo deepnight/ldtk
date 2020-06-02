@@ -63,6 +63,9 @@ class EditLayers extends ui.Window {
 
 		// Delete layer button
 		jForm.find(".deleteLayer").click( function(_) {
+			if( project.layerDefs.length==1 )
+				return;
+
 			project.removeLayerDef(ld);
 			selectLayer(project.layerDefs[0]);
 			client.onLayerDefChange();

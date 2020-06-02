@@ -96,6 +96,8 @@ class Client extends dn.Process {
 
 	public function onLayerDefChange() {
 		project.checkDataIntegrity();
+		if( curLayerContent==null )
+			selectLayer(curLevel.layerContents[0]);
 		levelRender.invalidate();
 		curTool.updatePalette();
 		updateLayerList();
