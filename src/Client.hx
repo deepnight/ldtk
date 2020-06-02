@@ -22,10 +22,10 @@ class Client extends dn.Process {
 		win.maximize();
 
 		new J(".projectSettings").click( function(_) {
-			loadTemplateInWindow( hxd.Res.tpl.projectSettings );
+			// loadTemplateInWindow( hxd.Res.tpl.projectSettings );
 		});
 
-		new J(".editLayers").click( function(_) new ui.EditLayers() );
+		new J(".editLayers").click( function(_) new ui.win.EditLayers() );
 
 		Boot.ME.s2d.addEventListener( onEvent );
 
@@ -115,15 +115,12 @@ class Client extends dn.Process {
 	}
 
 
-	public function loadTemplateInWindow(tpl:hxd.res.Resource) {
-		var html = new J( tpl.entry.getText() );
-		var win = new J(".window");
-		win.show();
-		win.find(".content").append(html);
-	}
-
-	public function closeWindow() {
-	}
+	// public function loadTemplateInWindow(tpl:hxd.res.Resource) {
+	// 	var html = new J( tpl.entry.getText() );
+	// 	var win = new J(".window");
+	// 	win.show();
+	// 	win.find(".content").append(html);
+	// }
 
 	public function getMouse() {
 		var gx = Boot.ME.s2d.mouseX;

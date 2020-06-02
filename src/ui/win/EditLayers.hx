@@ -1,24 +1,16 @@
-package ui;
+package ui.win;
 
-class EditLayers extends dn.Process {
-	public var client(get,never) : Client; inline function get_client() return Client.ME;
-	public var project(get,never) : ProjectData; inline function get_project() return Client.ME.project;
-	public var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
-
-	public var curLayer : Null<LayerDef>;
-
-	var jWin : js.jquery.JQuery;
+class EditLayers extends ui.Window {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
+	public var curLayer : Null<LayerDef>;
 
 	var pouet : Float = 5;
 
 	public function new() {
-		super(Client.ME);
-		Client.ME.loadTemplateInWindow( hxd.Res.tpl.editLayers );
-		jWin = new J(".window .content");
-		jWin.find("*").off(); // Cleanup events
+		super();
 
+		loadTemplate( hxd.Res.tpl.editLayers );
 		jList = jWin.find("ul.layers");
 		jForm = jWin.find("form");
 
@@ -29,7 +21,7 @@ class EditLayers extends dn.Process {
 			jForm.find("input").first().focus().select();
 		});
 
-		selectLayer( project.layerDefs[0] );
+		selectLayer(client.curLayer.def);
 	}
 
 	function selectLayer(ld:LayerDef) {
