@@ -10,12 +10,14 @@ class Notification extends dn.Process {
 		elem.prependTo( new J("#notificationList") );
 
 		elem.find(".content").text(str);
-		if( col!=null )
+		if( col!=null ) {
 			elem.css("border-color", C.intToHex(col));
+			// elem.find(".content").css("background-color", C.intToHex(col));
+		}
 
 		elem.hide().slideDown(100);
 		elem.click( function(_) hide() );
-		delayer.addS(hide, 2 + str.length*0.05);
+		delayer.addS(hide, 3 + str.length*0.04);
 	}
 
 	public static function msg(str:String) {
@@ -28,6 +30,12 @@ class Notification extends dn.Process {
 
 	public static function notImplemented() {
 		return msg("Feature not implemented yet.");
+	}
+
+	public static inline function debug(str:Dynamic) {
+		#if debug
+		new Notification(Std.string(str), 0xff00ff);
+		#end
 	}
 
 	public function hide() {

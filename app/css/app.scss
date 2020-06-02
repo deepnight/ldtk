@@ -133,13 +133,16 @@ input[type=number]:focus {
 	.notification {
 		min-width: 150px;
 		max-width: 300px;
-		padding: 20px;
-		padding-right: 80px;
 		margin-bottom: 8px;
 
 		background-color: $bgMed;
-		border-left: 4px solid $orange;
+		border-left: 8px solid $orange;
 		box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+
+		.content {
+			padding: 20px;
+			padding-right: 80px;
+		}
 	}
 }
 

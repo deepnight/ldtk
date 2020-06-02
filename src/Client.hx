@@ -33,7 +33,8 @@ class Client extends dn.Process {
 			onMouseUp();
 		});
 
-		new J(".projectSettings").click( function(_) { N.notImplemented(); } );
+		new J(".projectSettings").click( function(_) { N.debug("test"); } );
+		// new J(".projectSettings").click( function(_) { N.notImplemented(); } );
 		new J(".saveLevel").click( function(_) { N.notImplemented(); } );
 		new J("button.editLayers").click( function(_) new ui.win.EditLayers() );
 
