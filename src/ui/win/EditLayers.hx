@@ -99,8 +99,15 @@ class EditLayers extends ui.Window {
 					// Edit value name
 					var nameInput = e.find("input.name");
 					nameInput.val(val.name);
+					var oldName = nameInput.val();
 					nameInput.change( function(_) {
-						val.name = nameInput.val();
+						var newName = StringTools.trim( nameInput.val() );
+						for(val in ld.getAllIntGridValues())
+							if( val.name==newName ) {
+								nameInput.val(oldName);
+								return;
+							}
+						val.name = newName;
 						client.onLayerDefChange();
 					});
 

@@ -25,10 +25,10 @@ class LayerDef implements IData {
 		return {} // TODO
 	}
 
-	public function addIntGridValue(col:UInt, name="Unknown") {
+	public function addIntGridValue(col:UInt, ?name:String) {
 		intGridValues.push({
 			color: col,
-			name: name,
+			name: name==null ? "Unknown"+countIntGridValues() : name,
 		});
 	}
 
