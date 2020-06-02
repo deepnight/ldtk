@@ -28,12 +28,14 @@ class EditLayers extends ui.Window {
 	function selectLayer(ld:LayerDef) {
 		curLayer = ld;
 
-		jForm.find("*").off();
+		jForm.find("*").off(); // cleanup event listeners
 
+		// Set form class
 		for(k in Type.getEnumConstructs(LayerType))
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+ld.type);
 
+		// Fields
 		var i = form.Input.linkToField( jForm.find("input[name='name']"), ld.name );
 		i.onChange = function() {
 			client.onLayerDefChange();
@@ -59,18 +61,22 @@ class EditLayers extends ui.Window {
 			client.onLayerDefChange();
 		}
 
+		// Delete layer button
 		jForm.find(".deleteLayer").click( function(_) {
 			project.removeLayerDef(ld);
 			selectLayer(project.layerDefs[0]);
 			client.onLayerDefChange();
 		});
 
+
+		// Layer-type specific inits
 		switch ld.type {
+
 			case IntGrid:
 				var valuesList = jForm.find("ul.intGridValues");
 				valuesList.find("li.value").remove();
 
-				// Add value button
+				// Add intGrid value button
 				var addButton = valuesList.find("li.add");
 				addButton.find("button").off().click( function(ev) {
 					ld.intGridValues.push({
