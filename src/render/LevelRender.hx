@@ -93,8 +93,8 @@ class LevelRender extends dn.Process {
 		super.postUpdate();
 
 		root.setScale(zoom);
-		root.x = w()*0.5 - focusX * zoom;
-		root.y = h()*0.5 - focusY * zoom;
+		// root.x = w()*0.5 - focusX * zoom;
+		// root.y = h()*0.5 - focusY * zoom;
 
 		if( invalidated ) {
 			invalidated = false;

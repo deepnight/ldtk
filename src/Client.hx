@@ -28,11 +28,8 @@ class Client extends dn.Process {
 			onMouseUp();
 		});
 
-		// new J(".projectSettings").click( function(_) {
-			// loadTemplateInWindow( hxd.Res.tpl.projectSettings );
-		// });
-
-		new J(".editLayers").click( function(_) new ui.win.EditLayers() );
+		// new J(".projectSettings").click( function(_) {} );
+		new J("button.editLayers").click( function(_) new ui.win.EditLayers() );
 
 		Boot.ME.s2d.addEventListener( onEvent );
 
@@ -45,7 +42,7 @@ class Client extends dn.Process {
 		curLayer = curLevel.layers[0];
 		curLayer.setIntGrid(0,0, 1);
 		curLayer.setIntGrid(2,4, 0);
-		curLayer.setIntGrid(5,5, 0);
+		curLayer.setIntGrid(5,5, 1);
 		curLayer.setIntGrid(6,6, 0);
 
 		curTool = new tool.IntGridBrush();
@@ -74,15 +71,14 @@ class Client extends dn.Process {
 	}
 
 	function onMouseDown(e:hxd.Event) {
-		curTool.startUsing();
+		curTool.startUsing( getMouse() );
 	}
 	function onMouseUp() {
 		if( curTool.isRunning() )
-			curTool.stopUsing();
+			curTool.stopUsing( getMouse() );
 	}
 	function onMouseMove(e:hxd.Event) {
-		if( curTool.isRunning() )
-			curTool.use();
+		curTool.onMouseMove( getMouse() );
 	}
 
 	public function selectLayer(l:LayerContent) {
@@ -123,28 +119,8 @@ class Client extends dn.Process {
 	}
 
 
-	// public function loadTemplateInWindow(tpl:hxd.res.Resource) {
-	// 	var html = new J( tpl.entry.getText() );
-	// 	var win = new J(".window");
-	// 	win.show();
-	// 	win.find(".content").append(html);
-	// }
-
-	public function getMouse() {
-		var gx = Boot.ME.s2d.mouseX;
-		var gy = Boot.ME.s2d.mouseY;
-
-		var x = Std.int( ( gx/Const.SCALE - levelRender.root.x ) / levelRender.zoom );
-		var y = Std.int( ( gy/Const.SCALE - levelRender.root.y ) / levelRender.zoom );
-
-		return {
-			gx : gx,
-			gy : gy,
-			x : x,
-			y : y,
-			cx : Std.int(x/curLayer.def.gridSize),
-			cy : Std.int(y/curLayer.def.gridSize),
-		}
+	public inline function getMouse() : MouseCoords {
+		return new MouseCoords(Boot.ME.s2d.mouseX, Boot.ME.s2d.mouseY);
 	}
 
 	override function onDispose() {

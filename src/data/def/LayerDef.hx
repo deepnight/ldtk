@@ -5,8 +5,11 @@ class LayerDef implements IData {
 	public var name : String = "Unknown";
 	public var gridSize : Int = Const.GRID;
 
+	public var intGridValues : Array<UInt>;
+
 	public function new(t:LayerType) {
 		type = t;
+		intGridValues = [0xff00ff, 0x00ff00];
 	}
 
 	public function clone() {
@@ -16,6 +19,6 @@ class LayerDef implements IData {
 	}
 
 	public function toJson() {
-		return {}
+		return {} // TODO
 	}
 }

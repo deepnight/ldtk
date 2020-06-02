@@ -5,10 +5,13 @@ class IntGridBrush extends Tool {
 		super();
 	}
 
-	override function use() {
-		super.use();
-		var m = getMouse();
-		curLayer.setIntGrid(m.cx, m.cy, 1);
+	override function useAt(m:MouseCoords) {
+		super.useAt(m);
+
+		var last = lastMouse==null ? m : lastMouse;
+		dn.Bresenham.iterateThinLine(last.cx, last.cy, m.cx, m.cy, function(cx,cy) {
+			curLayer.setIntGrid(cx, cy, 0);
+		});
 		client.levelRender.invalidate();
 	}
 }

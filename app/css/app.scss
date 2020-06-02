@@ -9,9 +9,16 @@ $red: #e34d00;
 $orange: #ffcc00;
 
 // Shortcuts
-@mixin clearMargin() {
+@mixin resetMargin() {
 	margin: 0;
 	padding: 0;
+}
+@mixin resetList() {
+	@include resetMargin();
+	list-style: none;
+	li {
+		@include resetMargin();
+	}
 }
 
 
@@ -49,27 +56,22 @@ button:hover {
 }
 
 
-form {
-	ul {
-		@include clearMargin();
-		list-style: none;
-		li {
-			@include clearMargin();
-			display: flex;
-			flex: 1 1 auto;
-		}
-		li+li {
-			margin-top: 8px;
-		}
-		label {
-			flex: 0 0 150px;
-		}
-		.suffix {
-			flex: 0 0 20px;
-			padding-left: 8px;
-			opacity: 0.5;
-		}
-
+form>ul {
+	@include resetList();
+	>li {
+		display: flex;
+		flex: 1 1 auto;
+	}
+	>li+li {
+		margin-top: 8px;
+	}
+	label {
+		flex: 0 0 150px;
+	}
+	.suffix {
+		flex: 0 0 20px;
+		padding-left: 8px;
+		opacity: 0.5;
 	}
 
 }
@@ -168,10 +170,8 @@ input[type=number]:focus {
 
 .layersList {
 	ul {
-		@include clearMargin();
-		list-style: none;
+		@include resetList();
 		li {
-			@include clearMargin();
 			display: flex;
 
 			.name {
@@ -225,6 +225,57 @@ input[type=number]:focus {
 
 	form {
 		flex: 1 1 auto;
+
+		ul.intGridValues {
+			@include resetList();
+			display: grid;
+			width: 100%;
+			grid-template-columns: repeat(4, 1fr);
+			grid-template-rows: calc( 64px + 1.2em );
+			gap: 8px;
+
+			li {
+				position: relative;
+			}
+
+			li.value {
+				input[type=color] {
+					width: 100%;
+					height: 64px;
+				}
+
+				span.id {
+					display: block;
+					text-align: center;
+					font-weight: bold;
+				}
+				a.remove {
+					display: none;
+					position: absolute;
+					top: 0px;
+					right: 0px;
+					background: black;
+					color: white;
+					padding: 3px;
+					text-decoration: none;
+				}
+			}
+			li.value.removable a.remove {
+				display: block;
+			}
+
+			li.add button {
+				width: 100%;
+				height: 64px;
+				padding: 0;
+
+				line-height: 64px;
+				text-align: center;
+				font-size: 300%;
+				text-decoration: none;
+				color: white;
+			}
+		}
 	}
 
 

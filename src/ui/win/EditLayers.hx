@@ -40,6 +40,54 @@ class EditLayers extends ui.Window {
 		var i = form.Input.linkToField( jForm.find("select[name='type']"), ld.type );
 		i.onChange = selectLayer.bind(ld);
 
+		switch ld.type {
+			case IntGrid:
+				var valuesList = jForm.find("ul.intGridValues");
+				valuesList.find("li.value").remove();
+
+				// Add value button
+				var addButton = valuesList.find("li.add");
+				addButton.find("button").off().click( function(ev) {
+					ld.intGridValues.push(0x0);
+					selectLayer(ld);
+					ev.preventDefault();
+				});
+
+				// Existing values
+				var idx = 0;
+				for(c in ld.intGridValues) {
+					var curIdx = idx;
+					var e = jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
+					e.addClass("value");
+					e.insertBefore(addButton);
+					e.find(".id").html("#"+idx);
+
+					if( idx==ld.intGridValues.length-1 )
+						e.addClass("removable");
+
+					// Edit color
+					var col = e.find("input[type=color]");
+					col.val( C.intToHex(c) );
+					col.change( function(ev) {
+						ld.intGridValues[curIdx] = C.hexToInt( col.val() );
+						selectLayer(ld);
+					});
+
+					// Remove
+					e.find("a.remove").click( function(ev) {
+						trace("remove "+curIdx);
+						ld.intGridValues.splice(curIdx,1);
+						selectLayer(ld);
+						ev.preventDefault();
+					});
+					idx++;
+				}
+
+
+
+			case Entities:
+		}
+
 		updateLayerList();
 	}
 
