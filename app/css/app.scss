@@ -54,6 +54,14 @@ h2 {
 	font-family: Roboto;
 }
 
+hr {
+	@include resetMargin();
+	border: none;
+	background: transparent;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	border-bottom: 1px solid $bgLight;
+}
 
 button {
 	width: 100%;
@@ -191,9 +199,6 @@ input[type=number]:focus {
 	}
 
 	#palette {
-		// position: absolute;
-		// top: 0px;
-		// left: $panelWid;
 		background-color: $bgDark;
 
 		ul {
@@ -232,38 +237,40 @@ input[type=number]:focus {
 		@include resetList();
 		li {
 			display: flex;
+			border-bottom: 1px solid $bgDark;
 
 			.name {
+				flex: 1 1 auto;
+				order: 1;
 				display: block;
 				padding: 10px;
-				flex-grow: 1;
-
-				background-color: $bgMed;
 				cursor: pointer;
-				border-bottom: 1px solid $bgDark;
 			}
 			.vis {
+				flex: 0 0 24px;
+				order: 2;
 				display: block;
-				width: 24px;
-				background-color: black;
-			}
-			.vis.off {
-				background-color: red;
+				cursor: zoom-out;
 			}
 		}
 
-		li.active .name {
-			color: black;
+		li.active {
 			background-color: $orange;
 			box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
+
+			.name {
+				color: black;
+			}
 		}
+
 		li.hidden {
 			opacity: 0.4;
 			.vis {
 				background: transparent;
+				cursor: zoom-in;
 			}
 		}
-		li:not(.active) .name:hover {
+		li:not(.active):hover {
 			outline: 1px solid #586279;
 			outline-offset: -2px;
 		}

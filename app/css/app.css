@@ -32,6 +32,16 @@ h2 {
   font-family: Roboto;
 }
 
+hr {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #545d73;
+}
+
 button {
   width: 100%;
   background-color: #e34d00;
@@ -222,31 +232,31 @@ input[type=number]:focus {
 
 .layersList ul li {
   display: flex;
-}
-
-.layersList ul li .name {
-  display: block;
-  padding: 10px;
-  flex-grow: 1;
-  background-color: #2e333f;
-  cursor: pointer;
   border-bottom: 1px solid #1e2229;
 }
 
-.layersList ul li .vis {
+.layersList ul li .name {
+  flex: 1 1 auto;
+  order: 1;
   display: block;
-  width: 24px;
-  background-color: black;
+  padding: 10px;
+  cursor: pointer;
 }
 
-.layersList ul li .vis.off {
-  background-color: red;
+.layersList ul li .vis {
+  flex: 0 0 24px;
+  order: 2;
+  display: block;
+  cursor: zoom-out;
+}
+
+.layersList ul li.active {
+  background-color: #ffcc00;
+  box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
 }
 
 .layersList ul li.active .name {
   color: black;
-  background-color: #ffcc00;
-  box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
 }
 
 .layersList ul li.hidden {
@@ -255,9 +265,10 @@ input[type=number]:focus {
 
 .layersList ul li.hidden .vis {
   background: transparent;
+  cursor: zoom-in;
 }
 
-.layersList ul li:not(.active) .name:hover {
+.layersList ul li:not(.active):hover {
   outline: 1px solid #586279;
   outline-offset: -2px;
 }
