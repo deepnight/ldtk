@@ -50,4 +50,9 @@ class LayerContent implements IData {
 		if( isValid(cx,cy) )
 			intGrid.set( coordId(cx,cy), v );
 	}
+	public function removeIntGrid(cx:Int, cy:Int) {
+		requireType(IntGrid);
+		if( isValid(cx,cy) )
+			intGrid.remove( coordId(cx,cy) );
+	}
 }

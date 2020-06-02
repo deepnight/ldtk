@@ -23,6 +23,9 @@ class Tool extends dn.Process {
 
 	public function isRunning() return running;
 
+	inline function isAdding() return running && button==0;
+	inline function isRemoving() return running && button==1;
+
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		running = true;
 		button = buttonId;

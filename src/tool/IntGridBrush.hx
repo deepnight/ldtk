@@ -33,9 +33,11 @@ class IntGridBrush extends Tool {
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
 
-		var last = lastMouse==null ? m : lastMouse;
-		dn.Bresenham.iterateThinLine(last.cx, last.cy, m.cx, m.cy, function(cx,cy) {
-			curLayer.setIntGrid(cx, cy, curValue);
+		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
+			if( isAdding() )
+				curLayer.setIntGrid(cx, cy, curValue);
+			else if( isRemoving() )
+				curLayer.removeIntGrid(cx, cy);
 		});
 		client.levelRender.invalidate();
 	}

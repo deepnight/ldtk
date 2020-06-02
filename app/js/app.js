@@ -1645,6 +1645,60 @@ data_LayerContent.prototype = {
 			this.intGrid.h[cx + cy * key] = v;
 		}
 	}
+	,removeIntGrid: function(cx,cy) {
+		var t = LayerType.IntGrid;
+		if(this.def.type != t) {
+			throw haxe_Exception.thrown("Only works on " + Std.string(t) + " layer!");
+		}
+		var tmp;
+		var tmp1;
+		if(cx >= 0) {
+			var x = this.level.pxWid / this.def.gridSize;
+			var tmp2;
+			if(x > .0) {
+				var t = x + .5 | 0;
+				tmp2 = t < x ? t + 1 : t;
+			} else if(x < .0) {
+				var t = x - .5 | 0;
+				tmp2 = t < x ? t + 1 : t;
+			} else {
+				tmp2 = 0;
+			}
+			tmp1 = cx < tmp2;
+		} else {
+			tmp1 = false;
+		}
+		if(tmp1 && cy >= 0) {
+			var x = this.level.pxHei / this.def.gridSize;
+			var tmp1;
+			if(x > .0) {
+				var t = x + .5 | 0;
+				tmp1 = t < x ? t + 1 : t;
+			} else if(x < .0) {
+				var t = x - .5 | 0;
+				tmp1 = t < x ? t + 1 : t;
+			} else {
+				tmp1 = 0;
+			}
+			tmp = cy < tmp1;
+		} else {
+			tmp = false;
+		}
+		if(tmp) {
+			var x = this.level.pxWid / this.def.gridSize;
+			var key;
+			if(x > .0) {
+				var t = x + .5 | 0;
+				key = t < x ? t + 1 : t;
+			} else if(x < .0) {
+				var t = x - .5 | 0;
+				key = t < x ? t + 1 : t;
+			} else {
+				key = 0;
+			}
+			this.intGrid.remove(cx + cy * key);
+		}
+	}
 	,__class__: data_LayerContent
 };
 var data_LevelData = function(p) {
@@ -44112,9 +44166,8 @@ tool_IntGridBrush.prototype = $extend(Tool.prototype,{
 	,useAt: function(m) {
 		var _gthis = this;
 		Tool.prototype.useAt.call(this,m);
-		var last = this.lastMouse == null ? m : this.lastMouse;
-		var x0 = ((last.gx / Const.SCALE - Client.ME.levelRender.root.x) / Client.ME.levelRender.zoom | 0) / Client.ME.curLayer.def.gridSize | 0;
-		var y0 = ((last.gy / Const.SCALE - Client.ME.levelRender.root.y) / Client.ME.levelRender.zoom | 0) / Client.ME.curLayer.def.gridSize | 0;
+		var x0 = ((this.lastMouse.gx / Const.SCALE - Client.ME.levelRender.root.x) / Client.ME.levelRender.zoom | 0) / Client.ME.curLayer.def.gridSize | 0;
+		var y0 = ((this.lastMouse.gy / Const.SCALE - Client.ME.levelRender.root.y) / Client.ME.levelRender.zoom | 0) / Client.ME.curLayer.def.gridSize | 0;
 		var x1 = ((m.gx / Const.SCALE - Client.ME.levelRender.root.x) / Client.ME.levelRender.zoom | 0) / Client.ME.curLayer.def.gridSize | 0;
 		var y1 = ((m.gy / Const.SCALE - Client.ME.levelRender.root.y) / Client.ME.levelRender.zoom | 0) / Client.ME.curLayer.def.gridSize | 0;
 		var x = y1 - y0;
@@ -44148,9 +44201,15 @@ tool_IntGridBrush.prototype = $extend(Tool.prototype,{
 		while(_g < _g1) {
 			var x = _g++;
 			if(swapXY) {
-				Client.ME.curLayer.setIntGrid(y,x,_gthis.curValue);
-			} else {
+				if(_gthis.button == 0) {
+					Client.ME.curLayer.setIntGrid(y,x,_gthis.curValue);
+				} else if(_gthis.button == 1) {
+					Client.ME.curLayer.removeIntGrid(y,x);
+				}
+			} else if(_gthis.button == 0) {
 				Client.ME.curLayer.setIntGrid(x,y,_gthis.curValue);
+			} else if(_gthis.button == 1) {
+				Client.ME.curLayer.removeIntGrid(x,y);
 			}
 			error -= deltay;
 			if(error < 0) {
