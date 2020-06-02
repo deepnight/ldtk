@@ -161,55 +161,53 @@ input[type=number]:focus {
 	}
 
 
-	.toolbar {
+	.mainToolbar {
 		margin-bottom: 8px;
 	}
+}
 
-	.layers {
-		ul {
+
+.layersList {
+	ul {
+		@include clearMargin();
+		list-style: none;
+		li {
 			@include clearMargin();
-			list-style: none;
-			li {
-				@include clearMargin();
-				display: flex;
+			display: flex;
 
-				.name {
-					display: block;
-					padding: 10px;
-					flex-grow: 1;
+			.name {
+				display: block;
+				padding: 10px;
+				flex-grow: 1;
 
-					background-color: $bgMed;
-					cursor: pointer;
-					border-bottom: 1px solid $bgDark;
-				}
-				.vis {
-					display: block;
-					width: 24px;
-					background-color: black;
-				}
-				.vis.off {
-					background-color: red;
-				}
+				background-color: $bgMed;
+				cursor: pointer;
+				border-bottom: 1px solid $bgDark;
 			}
+			.vis {
+				display: block;
+				width: 24px;
+				background-color: black;
+			}
+			.vis.off {
+				background-color: red;
+			}
+		}
 
-			li.active .name {
-				color: black;
-				background-color: $orange;
-				box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
+		li.active .name {
+			color: black;
+			background-color: $orange;
+			box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
+		}
+		li.hidden {
+			opacity: 0.4;
+			.vis {
+				background: transparent;
 			}
-			li.hidden {
-				opacity: 0.4;
-				.vis {
-					background: transparent;
-				}
-			}
-			li:not(.active) .name:hover {
-				outline: 1px solid #586279;
-				outline-offset: -1px;
-			}
-			// li:hover {
-				// background-color: #ffcc00;
-			// }
+		}
+		li:not(.active) .name:hover {
+			outline: 1px solid #586279;
+			outline-offset: -2px;
 		}
 	}
 }
@@ -221,27 +219,8 @@ input[type=number]:focus {
 	.layersList {
 		flex: 0 0 200px;
 		margin-right: 10px;
-
-		ul.layers {
-			@include clearMargin();
-			list-style: none;
-			background: $bgDark;
+		ul {
 			border: 1px solid $bgLight;
-			li {
-				@include clearMargin();
-				padding: 8px;
-				color: white;
-				cursor: pointer;
-				opacity: 0.8;
-			}
-			li.selected {
-				opacity: 1;
-				color: black;
-				background: $orange;
-			}
-			li:not(.selected):hover {
-				opacity: 1;
-			}
 		}
 	}
 

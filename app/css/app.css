@@ -141,23 +141,23 @@ input[type=number]:focus {
   border-left-width: 1px;
 }
 
-.editor .toolbar {
+.editor .mainToolbar {
   margin-bottom: 8px;
 }
 
-.editor .layers ul {
+.layersList ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.editor .layers ul li {
+.layersList ul li {
   margin: 0;
   padding: 0;
   display: flex;
 }
 
-.editor .layers ul li .name {
+.layersList ul li .name {
   display: block;
   padding: 10px;
   flex-grow: 1;
@@ -166,33 +166,33 @@ input[type=number]:focus {
   border-bottom: 1px solid #1e2229;
 }
 
-.editor .layers ul li .vis {
+.layersList ul li .vis {
   display: block;
   width: 24px;
   background-color: black;
 }
 
-.editor .layers ul li .vis.off {
+.layersList ul li .vis.off {
   background-color: red;
 }
 
-.editor .layers ul li.active .name {
+.layersList ul li.active .name {
   color: black;
   background-color: #ffcc00;
   box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
 }
 
-.editor .layers ul li.hidden {
+.layersList ul li.hidden {
   opacity: 0.4;
 }
 
-.editor .layers ul li.hidden .vis {
+.layersList ul li.hidden .vis {
   background: transparent;
 }
 
-.editor .layers ul li:not(.active) .name:hover {
+.layersList ul li:not(.active) .name:hover {
   outline: 1px solid #586279;
-  outline-offset: -1px;
+  outline-offset: -2px;
 }
 
 .window .editLayers {
@@ -204,31 +204,8 @@ input[type=number]:focus {
   margin-right: 10px;
 }
 
-.window .editLayers .layersList ul.layers {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  background: #1e2229;
+.window .editLayers .layersList ul {
   border: 1px solid #545d73;
-}
-
-.window .editLayers .layersList ul.layers li {
-  margin: 0;
-  padding: 0;
-  padding: 8px;
-  color: white;
-  cursor: pointer;
-  opacity: 0.8;
-}
-
-.window .editLayers .layersList ul.layers li.selected {
-  opacity: 1;
-  color: black;
-  background: #ffcc00;
-}
-
-.window .editLayers .layersList ul.layers li:not(.selected):hover {
-  opacity: 1;
 }
 
 .window .editLayers form {

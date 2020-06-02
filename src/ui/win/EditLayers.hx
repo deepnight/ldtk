@@ -11,7 +11,7 @@ class EditLayers extends ui.Window {
 		super();
 
 		loadTemplate( hxd.Res.tpl.editLayers );
-		jList = jWin.find("ul.layers");
+		jList = jWin.find(".layersList ul");
 		jForm = jWin.find("form");
 
 		// Create layer
@@ -50,9 +50,9 @@ class EditLayers extends ui.Window {
 		for(l in project.layerDefs) {
 			var e = new J("<li/>");
 			jList.append(e);
-			e.text(l.name+" ("+l.type+")");
+			e.append('<span class="name">'+l.name+'</span>');
 			if( curLayer==l )
-				e.addClass("selected");
+				e.addClass("active");
 
 			e.click( function(_) selectLayer(l) );
 		}

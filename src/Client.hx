@@ -3,7 +3,7 @@ class Client extends dn.Process {
 
 	public var win(get,never) : nw.Window; inline function get_win() return nw.Window.get();
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
-	public var jLayers(get,never) : J; inline function get_jLayers() return new J(".layers");
+	public var jLayers(get,never) : J; inline function get_jLayers() return new J(".panel .layersList");
 	// public var win(get,never) : js.html.Window; inline function get_win() return js.Browser.window;
 	public var doc(get,never) : js.html.Document; inline function get_doc() return js.Browser.document;
 
