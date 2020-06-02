@@ -14,15 +14,21 @@ class LayerRender {
 	public function render() {
 		root.removeChildren();
 
-		var g = new h2d.Graphics(root);
-		for(cy in 0...data.cHei)
-		for(cx in 0...data.cWid) {
-			var id = data.getIntGrid(cx,cy);
-			if( id<0 )
-				continue;
+		switch data.def.type {
+			case IntGrid:
+				var g = new h2d.Graphics(root);
+				for(cy in 0...data.cHei)
+				for(cx in 0...data.cWid) {
+					var id = data.getIntGrid(cx,cy);
+					if( id<0 )
+						continue;
 
-			g.beginFill(data.def.intGridValues[id]);
-			g.drawRect(cx*gridSize, cy*gridSize, gridSize, gridSize);
+					g.beginFill(data.def.intGridValues[id]);
+					g.drawRect(cx*gridSize, cy*gridSize, gridSize, gridSize);
+				}
+
+			case Entities:
+				// TODO
 		}
 	}
 }
