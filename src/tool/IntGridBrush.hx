@@ -23,7 +23,7 @@ class IntGridBrush extends Tool<Int> {
 			else if( isRemoving() )
 				curLayer.removeIntGrid(cx, cy);
 		});
-		client.levelRender.invalidate();
+		client.ge.emit(LayerContentChanged);
 	}
 
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
@@ -36,7 +36,7 @@ class IntGridBrush extends Tool<Int> {
 			else
 				curLayer.removeIntGrid(cx,cy);
 
-		client.levelRender.invalidate();
+		client.ge.emit(LayerContentChanged);
 	}
 
 

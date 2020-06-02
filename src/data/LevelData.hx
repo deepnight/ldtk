@@ -5,7 +5,7 @@ class LevelData implements data.IData {
 	public var layerContents : Array<LayerContent> = [];
 
 	public var uid : Int;
-	public var pxWid : Int = 256;
+	public var pxWid : Int = 512;
 	public var pxHei : Int = 256;
 
 

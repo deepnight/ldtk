@@ -16,8 +16,22 @@ class LevelRender extends dn.Process {
 	public function new() {
 		super(client);
 
+		client.ge.watchAny(onGlobalEvent);
+
 		createRootInLayers(client.root, Const.DP_MAIN);
 		grid = new h2d.Graphics(root);
+	}
+
+	override function onDispose() {
+		super.onDispose();
+		client.ge.remove(onGlobalEvent);
+	}
+
+	function onGlobalEvent(e:GlobalEvent) {
+		switch e {
+			case LayerDefChanged: invalidate();
+			case LayerContentChanged: invalidate();
+		}
 	}
 
 	public inline function isLayerVisible(l:LayerContent) {

@@ -7,6 +7,7 @@ class Client extends dn.Process {
 	public var jMainBar(get,never) : J; inline function get_jMainBar() return new J("#mainBar");
 	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette ul");
 
+	public var ge : GlobalEventDispatcher;
 	public var project : ProjectData;
 	var curLevelId : Int;
 	var curLayerId : Int;
@@ -25,6 +26,9 @@ class Client extends dn.Process {
 		createRoot(Boot.ME.s2d);
 		appWin.title = "LEd v"+Const.APP_VERSION;
 		// appWin.maximize();
+
+		ge = new GlobalEventDispatcher();
+		ge.watchAny( onGlobalEvent );
 
 		jBody.mouseup(function(_) {
 			onMouseUp();
@@ -98,13 +102,17 @@ class Client extends dn.Process {
 		updateLayerList();
 	}
 
-	public function onLayerDefChange() {
-		project.checkDataIntegrity();
-		if( curLayerContent==null )
-			selectLayer(curLevel.layerContents[0]);
-		levelRender.invalidate();
-		initTool();
-		updateLayerList();
+	function onGlobalEvent(e:GlobalEvent) {
+		switch e {
+			case LayerDefChanged:
+				project.checkDataIntegrity();
+				if( curLayerContent==null )
+					selectLayer(curLevel.layerContents[0]);
+				initTool();
+				updateLayerList();
+
+			case LayerContentChanged:
+		}
 	}
 
 	public function updateLayerList() {
@@ -151,6 +159,7 @@ class Client extends dn.Process {
 		if( ME==this )
 			ME = null;
 
+		ge.dispose();
 		Boot.ME.s2d.removeEventListener(onEvent);
 	}
 }

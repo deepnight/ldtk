@@ -476,6 +476,8 @@ var Client = function() {
 	Client.ME = this;
 	this.createRoot(Boot.ME.s2d);
 	nw.Window.get().title = "LEd v" + Const.APP_VERSION;
+	this.ge = new GlobalEventDispatcher();
+	this.ge.watchAny($bind(this,this.onGlobalEvent));
 	$("body").mouseup(function(_) {
 		_gthis.onMouseUp();
 	});
@@ -570,14 +572,19 @@ Client.prototype = $extend(dn_Process.prototype,{
 		this.curTool.updatePalette();
 		this.updateLayerList();
 	}
-	,onLayerDefChange: function() {
-		this.project.checkDataIntegrity();
-		if(this.project.getLevel(this.curLevelId).getLayerContent(this.curLayerId) == null) {
-			this.selectLayer(this.project.getLevel(this.curLevelId).layerContents[0]);
+	,onGlobalEvent: function(e) {
+		switch(e._hx_index) {
+		case 0:
+			this.project.checkDataIntegrity();
+			if(this.project.getLevel(this.curLevelId).getLayerContent(this.curLayerId) == null) {
+				this.selectLayer(this.project.getLevel(this.curLevelId).layerContents[0]);
+			}
+			this.initTool();
+			this.updateLayerList();
+			break;
+		case 1:
+			break;
 		}
-		this.levelRender.invalidated = true;
-		this.initTool();
-		this.updateLayerList();
 	}
 	,updateLayerList: function() {
 		var _gthis = this;
@@ -624,6 +631,7 @@ Client.prototype = $extend(dn_Process.prototype,{
 		if(Client.ME == this) {
 			Client.ME = null;
 		}
+		this.ge.dispose();
 		Boot.ME.s2d.removeEventListener($bind(this,this.onEvent));
 	}
 	,__class__: Client
@@ -680,6 +688,57 @@ EReg.prototype = {
 		}
 	}
 	,__class__: EReg
+};
+var GlobalEventDispatcher = function() {
+	this.specificListeners = [];
+	this.anyListeners = [];
+};
+$hxClasses["GlobalEventDispatcher"] = GlobalEventDispatcher;
+GlobalEventDispatcher.__name__ = "GlobalEventDispatcher";
+GlobalEventDispatcher.prototype = {
+	watchAny: function(onEvent) {
+		this.anyListeners.push(onEvent);
+	}
+	,remove: function(any,specific) {
+		if(any != null) {
+			HxOverrides.remove(this.anyListeners,any);
+		}
+		if(specific != null) {
+			var _g = 0;
+			var _g1 = this.specificListeners;
+			while(_g < _g1.length) {
+				var l = _g1[_g];
+				++_g;
+				if(l.cb == specific) {
+					HxOverrides.remove(this.specificListeners,l);
+					break;
+				}
+			}
+		}
+		haxe_Log.trace("remove: " + Std.string(this.specificListeners),{ fileName : "src/GlobalEventDispatcher.hx", lineNumber : 28, className : "GlobalEventDispatcher", methodName : "remove"});
+	}
+	,emit: function(e) {
+		var _g = 0;
+		var _g1 = this.anyListeners;
+		while(_g < _g1.length) {
+			var ev = _g1[_g];
+			++_g;
+			ev(e);
+		}
+		var _g = 0;
+		var _g1 = this.specificListeners;
+		while(_g < _g1.length) {
+			var l = _g1[_g];
+			++_g;
+			if(l.e == e) {
+				l.cb();
+			}
+		}
+	}
+	,dispose: function() {
+		this.anyListeners = null;
+	}
+	,__class__: GlobalEventDispatcher
 };
 var HxOverrides = function() { };
 $hxClasses["HxOverrides"] = HxOverrides;
@@ -1378,6 +1437,11 @@ var LayerType = $hxEnums["LayerType"] = { __ename__ : true, __constructs__ : ["I
 	,Entities: {_hx_index:1,__enum__:"LayerType",toString:$estr}
 };
 LayerType.__empty_constructs__ = [LayerType.IntGrid,LayerType.Entities];
+var GlobalEvent = $hxEnums["GlobalEvent"] = { __ename__ : true, __constructs__ : ["LayerDefChanged","LayerContentChanged"]
+	,LayerDefChanged: {_hx_index:0,__enum__:"GlobalEvent",toString:$estr}
+	,LayerContentChanged: {_hx_index:1,__enum__:"GlobalEvent",toString:$estr}
+};
+GlobalEvent.__empty_constructs__ = [GlobalEvent.LayerDefChanged,GlobalEvent.LayerContentChanged];
 var UInt = {};
 UInt.gt = function(a,b) {
 	var aNeg = a < 0;
@@ -1792,7 +1856,7 @@ data_LayerContent.prototype = {
 };
 var data_LevelData = function(p) {
 	this.pxHei = 256;
-	this.pxWid = 256;
+	this.pxWid = 512;
 	this.layerContents = [];
 	this.project = p;
 	this.uid = this.project.makeUniqId();
@@ -44201,6 +44265,7 @@ var render_LevelRender = function() {
 	this.layerWrappers = new haxe_ds_IntMap();
 	this.layerVis = new haxe_ds_IntMap();
 	dn_Process.call(this,Client.ME);
+	Client.ME.ge.watchAny($bind(this,this.onGlobalEvent));
 	this.createRootInLayers(Client.ME.root,Const.DP_MAIN);
 	this.grid = new h2d_Graphics(this.root);
 };
@@ -44208,7 +44273,21 @@ $hxClasses["render.LevelRender"] = render_LevelRender;
 render_LevelRender.__name__ = "render.LevelRender";
 render_LevelRender.__super__ = dn_Process;
 render_LevelRender.prototype = $extend(dn_Process.prototype,{
-	toggleLayer: function(l) {
+	onDispose: function() {
+		dn_Process.prototype.onDispose.call(this);
+		Client.ME.ge.remove($bind(this,this.onGlobalEvent));
+	}
+	,onGlobalEvent: function(e) {
+		switch(e._hx_index) {
+		case 0:
+			this.invalidated = true;
+			break;
+		case 1:
+			this.invalidated = true;
+			break;
+		}
+	}
+	,toggleLayer: function(l) {
 		var this1 = this.layerVis;
 		var key = l.layerDefId;
 		var value = !this.layerVis.h.hasOwnProperty(l.layerDefId) || this.layerVis.h[l.layerDefId] == true;
@@ -44535,7 +44614,7 @@ tool_IntGridBrush.prototype = $extend(Tool.prototype,{
 				error += deltax;
 			}
 		}
-		Client.ME.levelRender.invalidated = true;
+		Client.ME.ge.emit(GlobalEvent.LayerContentChanged);
 	}
 	,useOnRectangle: function(left,right,top,bottom) {
 		Tool.prototype.useOnRectangle.call(this,left,right,top,bottom);
@@ -44556,7 +44635,7 @@ tool_IntGridBrush.prototype = $extend(Tool.prototype,{
 				}
 			}
 		}
-		Client.ME.levelRender.invalidated = true;
+		Client.ME.ge.emit(GlobalEvent.LayerContentChanged);
 	}
 	,updatePalette: function() {
 		var _gthis = this;
@@ -44723,7 +44802,7 @@ var ui_win_EditLayers = function() {
 	this.jWin.find(".addLayer").click(function(_) {
 		var ld = Client.ME.project.createLayerDef(LayerType.IntGrid);
 		_gthis.selectLayer(ld);
-		Client.ME.onLayerDefChange();
+		Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
 		_gthis.jForm.find("input").first().focus().select();
 	});
 	var _this = Client.ME;
@@ -44753,7 +44832,7 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 		});
 		i.unicityCheck = ($_=Client.ME.project,$bind($_,$_.isLayerNameUnique));
 		i.onChange = function() {
-			Client.ME.onLayerDefChange();
+			Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
 			_gthis.updateLayerList();
 		};
 		var i = new form_input_EnumSelect(this.jForm.find("select[name='type']"),LayerType,function() {
@@ -44762,7 +44841,7 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 			ld.type = v;
 		});
 		i.onChange = function() {
-			Client.ME.onLayerDefChange();
+			Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
 			_gthis.updateForm();
 		};
 		var i = new form_input_IntInput(this.jForm.find("input[name='gridSize']"),function() {
@@ -44772,7 +44851,7 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 		});
 		i.setBounds(1,32);
 		i.onChange = function() {
-			Client.ME.onLayerDefChange();
+			Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
 		};
 		var i = new form_input_FloatInput(this.jForm.find("input[name='displayOpacity']"),function() {
 			return ld.displayOpacity;
@@ -44782,7 +44861,7 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 		i.set_displayAsPct(true);
 		i.setBounds(0.1,1);
 		i.onChange = function() {
-			Client.ME.onLayerDefChange();
+			Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
 		};
 		this.jForm.find(".deleteLayer").click(function(_) {
 			if(Client.ME.project.layerDefs.length == 1) {
@@ -44791,7 +44870,7 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 			}
 			Client.ME.project.removeLayerDef(ld);
 			_gthis.selectLayer(Client.ME.project.layerDefs[0]);
-			Client.ME.onLayerDefChange();
+			Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
 		});
 		switch(ld.type._hx_index) {
 		case 0:
@@ -44800,7 +44879,7 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 			var addButton = valuesList.find("li.add");
 			addButton.find("button").off().click(function(ev) {
 				ld.addIntGridValue(16711680);
-				Client.ME.onLayerDefChange();
+				Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
 				_gthis.updateForm();
 			});
 			var idx = 0;
@@ -44829,7 +44908,11 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 						return ui_Notification.error(str[0]);
 					};
 				})(["This value name is already used."]);
-				i.onChange = ($_=Client.ME,$bind($_,$_.onLayerDefChange));
+				i.onChange = (function(e,_g) {
+					return function() {
+						_g[0](e[0]);
+					};
+				})([GlobalEvent.LayerDefChanged],[($_=Client.ME.ge,$bind($_,$_.emit))]);
 				if(ld.intGridValues.length > 1 && idx == ld.intGridValues.length - 1) {
 					e.addClass("removable");
 				}
@@ -44844,14 +44927,14 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 						var curIdx1 = curIdx[0];
 						var tmp = Std.parseInt("0x" + HxOverrides.substr(col[0].val(),1,999));
 						ld1.getIntGridValue(curIdx1).color = tmp;
-						Client.ME.onLayerDefChange();
+						Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
 						_gthis.updateForm();
 					};
 				})(col,curIdx));
 				e.find("a.remove").click((function(curIdx) {
 					return function(ev) {
 						ld.intGridValues.splice(curIdx[0],1);
-						Client.ME.onLayerDefChange();
+						Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
 						_gthis.updateForm();
 					};
 				})(curIdx));

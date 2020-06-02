@@ -18,7 +18,7 @@ class EditLayers extends ui.Window {
 		jWin.find(".addLayer").click( function(_) {
 			var ld = project.createLayerDef(IntGrid);
 			selectLayer(ld);
-			client.onLayerDefChange();
+			client.ge.emit(LayerDefChanged);
 			jForm.find("input").first().focus().select();
 		});
 
@@ -39,27 +39,27 @@ class EditLayers extends ui.Window {
 		var i = Input.linkToField( jForm.find("input[name='name']"), ld.name );
 		i.unicityCheck = project.isLayerNameUnique;
 		i.onChange = function() {
-			client.onLayerDefChange();
+			client.ge.emit(LayerDefChanged);
 			updateLayerList();
 		};
 
 		var i = Input.linkToField( jForm.find("select[name='type']"), ld.type );
 		i.onChange = function() {
-			client.onLayerDefChange();
+			client.ge.emit(LayerDefChanged);
 			updateForm();
 		};
 
 		var i = Input.linkToField( jForm.find("input[name='gridSize']"), ld.gridSize );
 		i.setBounds(1,32);
 		i.onChange = function() {
-			client.onLayerDefChange();
+			client.ge.emit(LayerDefChanged);
 		}
 
 		var i = Input.linkToField( jForm.find("input[name='displayOpacity']"), ld.displayOpacity );
 		i.displayAsPct = true;
 		i.setBounds(0.1, 1);
 		i.onChange = function() {
-			client.onLayerDefChange();
+			client.ge.emit(LayerDefChanged);
 		}
 
 		// Delete layer button
@@ -71,7 +71,7 @@ class EditLayers extends ui.Window {
 
 			project.removeLayerDef(ld);
 			selectLayer(project.layerDefs[0]);
-			client.onLayerDefChange();
+			client.ge.emit(LayerDefChanged);
 		});
 
 
@@ -86,7 +86,7 @@ class EditLayers extends ui.Window {
 				var addButton = valuesList.find("li.add");
 				addButton.find("button").off().click( function(ev) {
 					ld.addIntGridValue(0xff0000);
-					client.onLayerDefChange();
+					client.ge.emit(LayerDefChanged);
 					updateForm();
 				});
 
@@ -103,7 +103,7 @@ class EditLayers extends ui.Window {
 					var i = Input.linkToField(e.find("input.name"), val.name);
 					i.unicityCheck = ld.isIntGridValueNameUnique;
 					i.unicityError = N.error.bind("This value name is already used.");
-					i.onChange = client.onLayerDefChange;
+					i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 					if( ld.countIntGridValues()>1 && idx==ld.countIntGridValues()-1 )
 						e.addClass("removable");
@@ -113,14 +113,14 @@ class EditLayers extends ui.Window {
 					col.val( C.intToHex(val.color) );
 					col.change( function(ev) {
 						ld.getIntGridValue(curIdx).color = C.hexToInt( col.val() );
-						client.onLayerDefChange();
+						client.ge.emit(LayerDefChanged);
 						updateForm();
 					});
 
 					// Remove
 					e.find("a.remove").click( function(ev) {
 						ld.getAllIntGridValues().splice(curIdx,1);
-						client.onLayerDefChange();
+						client.ge.emit(LayerDefChanged);
 						updateForm();
 					});
 					idx++;
