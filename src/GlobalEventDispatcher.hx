@@ -24,8 +24,6 @@ class GlobalEventDispatcher {
 					break;
 				}
 		}
-
-		trace("remove: "+specificListeners);
 	}
 
 	public function emit(e:GlobalEvent) {
