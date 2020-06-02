@@ -100,10 +100,10 @@ class EditLayers extends ui.Window {
 					e.find(".id").html("#"+idx);
 
 					// Edit value name
-					var nameInput = Input.linkToField(e.find("input.name"), val.name);
-					nameInput.unicityCheck = ld.isIntGridValueNameUnique;
-					nameInput.unicityError = N.error.bind("This value name is already used.");
-					nameInput.onChange = client.onLayerDefChange;
+					var i = Input.linkToField(e.find("input.name"), val.name);
+					i.unicityCheck = ld.isIntGridValueNameUnique;
+					i.unicityError = N.error.bind("This value name is already used.");
+					i.onChange = client.onLayerDefChange;
 
 					if( ld.countIntGridValues()>1 && idx==ld.countIntGridValues()-1 )
 						e.addClass("removable");

@@ -11,8 +11,10 @@ class Tool<T> extends dn.Process {
 	var jPalette(get,never) : J; inline function get_jPalette() return client.jPalette;
 
 	var running = false;
+	var origin : MouseCoords;
 	var lastMouse : Null<MouseCoords>;
 	var button = 0;
+	var rectangle = false;
 
 	private function new() {
 		super(Client.ME);
@@ -43,8 +45,31 @@ class Tool<T> extends dn.Process {
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		running = true;
 		button = buttonId;
+		rectangle = hxd.Key.isDown(hxd.Key.SHIFT);
+		origin = m;
 		lastMouse = m;
-		useAt(m);
+		if( !rectangle )
+			useAt(m);
+	}
+
+	function useAt(m:MouseCoords) {}
+
+	function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {}
+
+	public function stopUsing(m:MouseCoords) {
+		if( isRunning() )
+			if( !rectangle )
+				useAt(m);
+			else {
+				useOnRectangle(
+					M.imin(origin.cx, m.cx),
+					M.imax(origin.cx, m.cx),
+					M.imin(origin.cy, m.cy),
+					M.imax(origin.cy, m.cy)
+				);
+			}
+
+		running = false;
 	}
 
 	public function onMouseMove(m:MouseCoords) {
@@ -53,11 +78,4 @@ class Tool<T> extends dn.Process {
 		lastMouse = m;
 	}
 
-	function useAt(m:MouseCoords) {}
-
-	public function stopUsing(m:MouseCoords) {
-		if( isRunning() )
-			useAt(m);
-		running = false;
-	}
 }

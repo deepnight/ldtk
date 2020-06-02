@@ -1195,6 +1195,7 @@ haxe_io_Input.prototype = {
 	,__class__: haxe_io_Input
 };
 var Tool = function() {
+	this.rectangle = false;
 	this.button = 0;
 	this.running = false;
 	dn_Process.call(this,Client.ME);
@@ -1236,22 +1237,64 @@ Tool.prototype = $extend(dn_Process.prototype,{
 	,startUsing: function(m,buttonId) {
 		this.running = true;
 		this.button = buttonId;
+		this.rectangle = hxd_Key.isDown(16);
+		this.origin = m;
 		this.lastMouse = m;
-		this.useAt(m);
+		if(!this.rectangle) {
+			this.useAt(m);
+		}
+	}
+	,useAt: function(m) {
+	}
+	,useOnRectangle: function(left,right,top,bottom) {
+	}
+	,stopUsing: function(m) {
+		if(this.isRunning()) {
+			if(!this.rectangle) {
+				this.useAt(m);
+			} else {
+				var x = (this.origin.gx / Const.SCALE - Client.ME.levelRender.root.x) / Client.ME.levelRender.zoom | 0;
+				var _this = Client.ME;
+				var _this1 = _this.project.getLevel(_this.curLevelId).getLayerContent(_this.curLayerId);
+				var x1 = x / Client.ME.project.getLayerDef(_this1.layerDefId).gridSize | 0;
+				var x = (m.gx / Const.SCALE - Client.ME.levelRender.root.x) / Client.ME.levelRender.zoom | 0;
+				var _this = Client.ME;
+				var _this1 = _this.project.getLevel(_this.curLevelId).getLayerContent(_this.curLayerId);
+				var y = x / Client.ME.project.getLayerDef(_this1.layerDefId).gridSize | 0;
+				var x = (this.origin.gx / Const.SCALE - Client.ME.levelRender.root.x) / Client.ME.levelRender.zoom | 0;
+				var _this = Client.ME;
+				var _this1 = _this.project.getLevel(_this.curLevelId).getLayerContent(_this.curLayerId);
+				var x2 = x / Client.ME.project.getLayerDef(_this1.layerDefId).gridSize | 0;
+				var x = (m.gx / Const.SCALE - Client.ME.levelRender.root.x) / Client.ME.levelRender.zoom | 0;
+				var _this = Client.ME;
+				var _this1 = _this.project.getLevel(_this.curLevelId).getLayerContent(_this.curLayerId);
+				var y1 = x / Client.ME.project.getLayerDef(_this1.layerDefId).gridSize | 0;
+				var x = (this.origin.gy / Const.SCALE - Client.ME.levelRender.root.y) / Client.ME.levelRender.zoom | 0;
+				var _this = Client.ME;
+				var _this1 = _this.project.getLevel(_this.curLevelId).getLayerContent(_this.curLayerId);
+				var x3 = x / Client.ME.project.getLayerDef(_this1.layerDefId).gridSize | 0;
+				var x = (m.gy / Const.SCALE - Client.ME.levelRender.root.y) / Client.ME.levelRender.zoom | 0;
+				var _this = Client.ME;
+				var _this1 = _this.project.getLevel(_this.curLevelId).getLayerContent(_this.curLayerId);
+				var y2 = x / Client.ME.project.getLayerDef(_this1.layerDefId).gridSize | 0;
+				var x = (this.origin.gy / Const.SCALE - Client.ME.levelRender.root.y) / Client.ME.levelRender.zoom | 0;
+				var _this = Client.ME;
+				var _this1 = _this.project.getLevel(_this.curLevelId).getLayerContent(_this.curLayerId);
+				var x4 = x / Client.ME.project.getLayerDef(_this1.layerDefId).gridSize | 0;
+				var x = (m.gy / Const.SCALE - Client.ME.levelRender.root.y) / Client.ME.levelRender.zoom | 0;
+				var _this = Client.ME;
+				var _this1 = _this.project.getLevel(_this.curLevelId).getLayerContent(_this.curLayerId);
+				var y3 = x / Client.ME.project.getLayerDef(_this1.layerDefId).gridSize | 0;
+				this.useOnRectangle(x1 < y ? x1 : y,x2 > y1 ? x2 : y1,x3 < y2 ? x3 : y2,x4 > y3 ? x4 : y3);
+			}
+		}
+		this.running = false;
 	}
 	,onMouseMove: function(m) {
 		if(this.isRunning()) {
 			this.useAt(m);
 		}
 		this.lastMouse = m;
-	}
-	,useAt: function(m) {
-	}
-	,stopUsing: function(m) {
-		if(this.isRunning()) {
-			this.useAt(m);
-		}
-		this.running = false;
 	}
 	,__class__: Tool
 });
@@ -24640,6 +24683,9 @@ hxd__$FloatBuffer_Float32Expand._new = function(length) {
 var hxd_Key = function() { };
 $hxClasses["hxd.Key"] = hxd_Key;
 hxd_Key.__name__ = "hxd.Key";
+hxd_Key.isDown = function(code) {
+	return hxd_Key.keyPressed[code] > 0;
+};
 hxd_Key.initialize = function() {
 	if(hxd_Key.initDone) {
 		hxd_Key.dispose();
@@ -44419,43 +44465,6 @@ tool_IntGridBrush.prototype = $extend(Tool.prototype,{
 	,getDefaultValue: function() {
 		return 0;
 	}
-	,updatePalette: function() {
-		var _gthis = this;
-		Tool.prototype.updatePalette.call(this);
-		this.selectValue(this.getSelectedValue());
-		var idx = 0;
-		var _g = 0;
-		var _this = Client.ME;
-		var _this1 = _this.project.getLevel(_this.curLevelId).getLayerContent(_this.curLayerId);
-		var _g1 = Client.ME.project.getLayerDef(_this1.layerDefId).intGridValues;
-		while(_g < _g1.length) {
-			var val = _g1[_g];
-			++_g;
-			var e = $("<li/>");
-			var _this = Client.ME;
-			$("#palette ul").append(e);
-			e.addClass("color");
-			if(idx == this.getSelectedValue()) {
-				e.addClass("active");
-			}
-			e.text("#" + idx + " - " + val.name);
-			var c = val.color;
-			var h = StringTools.hex(Math.sqrt(dn_Color.RED_LUMA * ((c >> 16 & 255) / 255 * ((c >> 16 & 255) / 255)) + dn_Color.GREEN_LUMA * ((c >> 8 & 255) / 255 * ((c >> 8 & 255) / 255)) + dn_Color.BLUE_LUMA * ((c & 255) / 255 * ((c & 255) / 255))) >= 0.5 ? 0 : 16777215);
-			while(h.length < 6) h = "0" + h;
-			e.css("color","#" + h);
-			var h1 = StringTools.hex(val.color);
-			while(h1.length < 6) h1 = "0" + h1;
-			e.css("background-color","#" + h1);
-			var curIdx = [idx];
-			e.click((function(curIdx) {
-				return function(_) {
-					_gthis.selectValue(curIdx[0]);
-					_gthis.updatePalette();
-				};
-			})(curIdx));
-			++idx;
-		}
-	}
 	,useAt: function(m) {
 		var _gthis = this;
 		Tool.prototype.useAt.call(this,m);
@@ -44527,6 +44536,64 @@ tool_IntGridBrush.prototype = $extend(Tool.prototype,{
 			}
 		}
 		Client.ME.levelRender.invalidated = true;
+	}
+	,useOnRectangle: function(left,right,top,bottom) {
+		Tool.prototype.useOnRectangle.call(this,left,right,top,bottom);
+		var _g = left;
+		var _g1 = right + 1;
+		while(_g < _g1) {
+			var cx = _g++;
+			var _g2 = top;
+			var _g3 = bottom + 1;
+			while(_g2 < _g3) {
+				var cy = _g2++;
+				if(this.running && this.button == 0) {
+					var _this = Client.ME;
+					_this.project.getLevel(_this.curLevelId).getLayerContent(_this.curLayerId).setIntGrid(cx,cy,this.getSelectedValue());
+				} else {
+					var _this1 = Client.ME;
+					_this1.project.getLevel(_this1.curLevelId).getLayerContent(_this1.curLayerId).removeIntGrid(cx,cy);
+				}
+			}
+		}
+		Client.ME.levelRender.invalidated = true;
+	}
+	,updatePalette: function() {
+		var _gthis = this;
+		Tool.prototype.updatePalette.call(this);
+		this.selectValue(this.getSelectedValue());
+		var idx = 0;
+		var _g = 0;
+		var _this = Client.ME;
+		var _this1 = _this.project.getLevel(_this.curLevelId).getLayerContent(_this.curLayerId);
+		var _g1 = Client.ME.project.getLayerDef(_this1.layerDefId).intGridValues;
+		while(_g < _g1.length) {
+			var val = _g1[_g];
+			++_g;
+			var e = $("<li/>");
+			var _this = Client.ME;
+			$("#palette ul").append(e);
+			e.addClass("color");
+			if(idx == this.getSelectedValue()) {
+				e.addClass("active");
+			}
+			e.text("#" + idx + " - " + val.name);
+			var c = val.color;
+			var h = StringTools.hex(Math.sqrt(dn_Color.RED_LUMA * ((c >> 16 & 255) / 255 * ((c >> 16 & 255) / 255)) + dn_Color.GREEN_LUMA * ((c >> 8 & 255) / 255 * ((c >> 8 & 255) / 255)) + dn_Color.BLUE_LUMA * ((c & 255) / 255 * ((c & 255) / 255))) >= 0.5 ? 0 : 16777215);
+			while(h.length < 6) h = "0" + h;
+			e.css("color","#" + h);
+			var h1 = StringTools.hex(val.color);
+			while(h1.length < 6) h1 = "0" + h1;
+			e.css("background-color","#" + h1);
+			var curIdx = [idx];
+			e.click((function(curIdx) {
+				return function(_) {
+					_gthis.selectValue(curIdx[0]);
+					_gthis.updatePalette();
+				};
+			})(curIdx));
+			++idx;
+		}
 	}
 	,__class__: tool_IntGridBrush
 });
@@ -44747,7 +44814,7 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 				e.addClass("value");
 				e.insertBefore(addButton);
 				e.find(".id").html("#" + idx);
-				var nameInput = new form_input_StringInput(e.find("input.name"),(function(val) {
+				var i = new form_input_StringInput(e.find("input.name"),(function(val) {
 					return function() {
 						return val[0].name;
 					};
@@ -44756,13 +44823,13 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 						val[0].name = v;
 					};
 				})(val));
-				nameInput.unicityCheck = $bind(ld,ld.isIntGridValueNameUnique);
-				nameInput.unicityError = (function(str) {
+				i.unicityCheck = $bind(ld,ld.isIntGridValueNameUnique);
+				i.unicityError = (function(str) {
 					return function() {
 						return ui_Notification.error(str[0]);
 					};
 				})(["This value name is already used."]);
-				nameInput.onChange = ($_=Client.ME,$bind($_,$_.onLayerDefChange));
+				i.onChange = ($_=Client.ME,$bind($_,$_.onLayerDefChange));
 				if(ld.intGridValues.length > 1 && idx == ld.intGridValues.length - 1) {
 					e.addClass("removable");
 				}

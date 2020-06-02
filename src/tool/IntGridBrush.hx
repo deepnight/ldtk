@@ -14,6 +14,33 @@ class IntGridBrush extends Tool<Int> {
 		return 0;
 	}
 
+	override function useAt(m:MouseCoords) {
+		super.useAt(m);
+
+		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
+			if( isAdding() )
+				curLayer.setIntGrid(cx, cy, getSelectedValue());
+			else if( isRemoving() )
+				curLayer.removeIntGrid(cx, cy);
+		});
+		client.levelRender.invalidate();
+	}
+
+	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
+		super.useOnRectangle(left, right, top, bottom);
+
+		for(cx in left...right+1)
+		for(cy in top...bottom+1)
+			if( isAdding() )
+				curLayer.setIntGrid(cx,cy, getSelectedValue());
+			else
+				curLayer.removeIntGrid(cx,cy);
+
+		client.levelRender.invalidate();
+	}
+
+
+
 	override function updatePalette() {
 		super.updatePalette();
 
@@ -38,17 +65,5 @@ class IntGridBrush extends Tool<Int> {
 			});
 			idx++;
 		}
-	}
-
-	override function useAt(m:MouseCoords) {
-		super.useAt(m);
-
-		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
-			if( isAdding() )
-				curLayer.setIntGrid(cx, cy, getSelectedValue());
-			else if( isRemoving() )
-				curLayer.removeIntGrid(cx, cy);
-		});
-		client.levelRender.invalidate();
 	}
 }
