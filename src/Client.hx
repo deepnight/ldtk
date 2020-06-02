@@ -79,7 +79,7 @@ class Client extends dn.Process {
 
 	public function selectLayer(l:LayerContent) {
 		curLayer = l;
-		levelRender.renderGrid();
+		levelRender.onCurrentLayerChange(curLayer);
 		updateLayerList();
 
 	}
@@ -120,6 +120,9 @@ class Client extends dn.Process {
 		var win = new J(".window");
 		win.show();
 		win.find(".content").append(html);
+	}
+
+	public function closeWindow() {
 	}
 
 	public function getMouse() {

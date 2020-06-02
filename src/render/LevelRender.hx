@@ -64,12 +64,23 @@ class LevelRender extends dn.Process {
 	}
 
 	public function render() {
-		for(l in layers) {
-			l.root.visible = isLayerVisible(l.data);
-			if( isLayerVisible(l.data) )
-				l.render();
-		}
+		for(lr in layers)
+			if( isLayerVisible(lr.data) )
+				lr.render();
 
+		updateLayersVisibility();
+		renderGrid();
+	}
+
+	function updateLayersVisibility() {
+		for(lr in layers) {
+			lr.root.visible = isLayerVisible(lr.data);
+			lr.root.alpha = lr.data==client.curLayer ? 1 : 0.4;
+		}
+	}
+
+	public function onCurrentLayerChange(cur:LayerContent) {
+		updateLayersVisibility();
 		renderGrid();
 	}
 

@@ -22,12 +22,7 @@ class EditLayers extends dn.Process {
 		jList = jWin.find("ul.layers");
 		jForm = jWin.find("form");
 
-		// // Select layer
-		// jList.change( function(ev) {
-		// 	selectLayer( project.layerDefs[ jList.val() ] );
-		// });
-
-		// Add layer button
+		// Create layer
 		jWin.find(".addLayer").click( function(_) {
 			var ld = project.createLayerDef(IntGrid, "New layer");
 			selectLayer(ld);
