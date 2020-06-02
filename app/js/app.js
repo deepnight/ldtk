@@ -560,7 +560,7 @@ Client.prototype = $extend(dn_Process.prototype,{
 		this.updateLayerList();
 	}
 	,onLayerDefChange: function() {
-		this.levelRender.onCurrentLayerChange(this.curLayer);
+		this.levelRender.invalidated = true;
 		this.curTool.updateToolBar();
 		this.updateLayerList();
 	}
@@ -1184,7 +1184,20 @@ $hxClasses["Tool"] = Tool;
 Tool.__name__ = "Tool";
 Tool.__super__ = dn_Process;
 Tool.prototype = $extend(dn_Process.prototype,{
-	updateToolBar: function() {
+	selectValue: function(v) {
+		Tool.SELECTED_VALUES.set(Client.ME.curLayer.def,v);
+	}
+	,getSelectedValue: function() {
+		if(Tool.SELECTED_VALUES.h.__keys__[Client.ME.curLayer.def.__id__] != null) {
+			return Tool.SELECTED_VALUES.h[Client.ME.curLayer.def.__id__];
+		} else {
+			return this.getDefaultValue();
+		}
+	}
+	,getDefaultValue: function() {
+		return null;
+	}
+	,updateToolBar: function() {
 		var _this = Client.ME;
 		$("#toolBar ul").empty();
 	}
@@ -43876,44 +43889,50 @@ render_LayerRender.__name__ = "render.LayerRender";
 render_LayerRender.prototype = {
 	render: function() {
 		this.root.removeChildren();
-		var g = new h2d_Graphics(this.root);
-		var _g = 0;
-		var _this = this.data;
-		var x = _this.level.pxHei / _this.def.gridSize;
-		var _g1;
-		if(x > .0) {
-			var t = x + .5 | 0;
-			_g1 = t < x ? t + 1 : t;
-		} else if(x < .0) {
-			var t = x - .5 | 0;
-			_g1 = t < x ? t + 1 : t;
-		} else {
-			_g1 = 0;
-		}
-		while(_g < _g1) {
-			var cy = _g++;
-			var _g2 = 0;
+		switch(this.data.def.type._hx_index) {
+		case 0:
+			var g = new h2d_Graphics(this.root);
+			var _g = 0;
 			var _this = this.data;
-			var x = _this.level.pxWid / _this.def.gridSize;
-			var _g3;
+			var x = _this.level.pxHei / _this.def.gridSize;
+			var _g1;
 			if(x > .0) {
 				var t = x + .5 | 0;
-				_g3 = t < x ? t + 1 : t;
+				_g1 = t < x ? t + 1 : t;
 			} else if(x < .0) {
-				var t1 = x - .5 | 0;
-				_g3 = t1 < x ? t1 + 1 : t1;
+				var t = x - .5 | 0;
+				_g1 = t < x ? t + 1 : t;
 			} else {
-				_g3 = 0;
+				_g1 = 0;
 			}
-			while(_g2 < _g3) {
-				var cx = _g2++;
-				var id = this.data.getIntGrid(cx,cy);
-				if(id < 0) {
-					continue;
+			while(_g < _g1) {
+				var cy = _g++;
+				var _g2 = 0;
+				var _this = this.data;
+				var x = _this.level.pxWid / _this.def.gridSize;
+				var _g3;
+				if(x > .0) {
+					var t = x + .5 | 0;
+					_g3 = t < x ? t + 1 : t;
+				} else if(x < .0) {
+					var t1 = x - .5 | 0;
+					_g3 = t1 < x ? t1 + 1 : t1;
+				} else {
+					_g3 = 0;
 				}
-				g.beginFill(this.data.def.intGridValues[id]);
-				g.drawRect(cx * this.data.def.gridSize,cy * this.data.def.gridSize,this.data.def.gridSize,this.data.def.gridSize);
+				while(_g2 < _g3) {
+					var cx = _g2++;
+					var id = this.data.getIntGrid(cx,cy);
+					if(id < 0) {
+						continue;
+					}
+					g.beginFill(this.data.def.intGridValues[id]);
+					g.drawRect(cx * this.data.def.gridSize,cy * this.data.def.gridSize,this.data.def.gridSize,this.data.def.gridSize);
+				}
 			}
+			break;
+		case 1:
+			break;
 		}
 	}
 	,__class__: render_LayerRender
@@ -44124,19 +44143,28 @@ sys_io_FileInput.prototype = $extend(haxe_io_Input.prototype,{
 	,__class__: sys_io_FileInput
 });
 var tool_IntGridBrush = function() {
-	this.curValue = 0;
 	Tool.call(this);
 };
 $hxClasses["tool.IntGridBrush"] = tool_IntGridBrush;
 tool_IntGridBrush.__name__ = "tool.IntGridBrush";
 tool_IntGridBrush.__super__ = Tool;
 tool_IntGridBrush.prototype = $extend(Tool.prototype,{
-	updateToolBar: function() {
+	selectValue: function(v) {
+		var max = Client.ME.curLayer.def.intGridValues.length - 1;
+		if(v < 0) {
+			v = 0;
+		} else if(v > max) {
+			v = max;
+		}
+		Tool.prototype.selectValue.call(this,v);
+	}
+	,getDefaultValue: function() {
+		return 0;
+	}
+	,updateToolBar: function() {
 		var _gthis = this;
 		Tool.prototype.updateToolBar.call(this);
-		var x = this.curValue;
-		var max = Client.ME.curLayer.def.intGridValues.length - 1;
-		this.curValue = x < 0 ? 0 : x > max ? max : x;
+		this.selectValue(this.getSelectedValue());
 		var idx = 0;
 		var _g = 0;
 		var _g1 = Client.ME.curLayer.def.intGridValues;
@@ -44147,7 +44175,7 @@ tool_IntGridBrush.prototype = $extend(Tool.prototype,{
 			var _this = Client.ME;
 			$("#toolBar ul").append(e);
 			e.addClass("color");
-			if(idx == this.curValue) {
+			if(idx == this.getSelectedValue()) {
 				e.addClass("active");
 			}
 			var h = StringTools.hex(c);
@@ -44156,7 +44184,7 @@ tool_IntGridBrush.prototype = $extend(Tool.prototype,{
 			var curIdx = [idx];
 			e.click((function(curIdx) {
 				return function(_) {
-					_gthis.curValue = curIdx[0];
+					_gthis.selectValue(curIdx[0]);
 					_gthis.updateToolBar();
 				};
 			})(curIdx));
@@ -44201,14 +44229,14 @@ tool_IntGridBrush.prototype = $extend(Tool.prototype,{
 		while(_g < _g1) {
 			var x = _g++;
 			if(swapXY) {
-				if(_gthis.button == 0) {
-					Client.ME.curLayer.setIntGrid(y,x,_gthis.curValue);
-				} else if(_gthis.button == 1) {
+				if(_gthis.running && _gthis.button == 0) {
+					Client.ME.curLayer.setIntGrid(y,x,_gthis.getSelectedValue());
+				} else if(_gthis.running && _gthis.button == 1) {
 					Client.ME.curLayer.removeIntGrid(y,x);
 				}
-			} else if(_gthis.button == 0) {
-				Client.ME.curLayer.setIntGrid(x,y,_gthis.curValue);
-			} else if(_gthis.button == 1) {
+			} else if(_gthis.running && _gthis.button == 0) {
+				Client.ME.curLayer.setIntGrid(x,y,_gthis.getSelectedValue());
+			} else if(_gthis.running && _gthis.button == 1) {
 				Client.ME.curLayer.removeIntGrid(x,y);
 			}
 			error -= deltay;
@@ -44420,6 +44448,7 @@ Const.DP_MAIN = Const._inc++;
 Lang._initDone = false;
 Lang.DEFAULT = "en";
 Lang.CUR = "??";
+Tool.SELECTED_VALUES = new haxe_ds_ObjectMap();
 Xml.Element = 0;
 Xml.PCData = 1;
 Xml.CData = 2;

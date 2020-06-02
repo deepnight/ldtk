@@ -1,6 +1,8 @@
 import dn.Bresenham;
 
-class Tool extends dn.Process {
+class Tool<T> extends dn.Process {
+	static var SELECTED_VALUES : Map<LayerDef, Dynamic> = new Map();
+
 	var client(get,never) : Client; inline function get_client() return Client.ME;
 	var project(get,never) : ProjectData; inline function get_project() return Client.ME.project;
 	var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
@@ -15,6 +17,19 @@ class Tool extends dn.Process {
 	private function new() {
 		super(Client.ME);
 		updateToolBar();
+	}
+
+	function selectValue(v:T) {
+		SELECTED_VALUES.set(curLayer.def, v);
+			// M.iclamp(v, 0, curLayer.def.intGridValues.length-1)
+	}
+	function getSelectedValue() : T {
+		return SELECTED_VALUES.exists(curLayer.def)
+			? SELECTED_VALUES.get(curLayer.def)
+			: getDefaultValue();
+	}
+	function getDefaultValue() : T {
+		return null;
 	}
 
 	public function updateToolBar() {

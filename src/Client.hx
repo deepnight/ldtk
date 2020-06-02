@@ -12,7 +12,7 @@ class Client extends dn.Process {
 	public var curLevel : LevelData;
 	public var curLayer : LayerContent;
 	public var levelRender : render.LevelRender;
-	public var curTool : Tool;
+	public var curTool : Tool<Dynamic>;
 
 	public function new() {
 		super();

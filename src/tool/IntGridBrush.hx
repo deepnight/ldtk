@@ -1,22 +1,17 @@
 package tool;
 
-class IntGridBrush extends Tool {
-	static var SELECTED_VALUES : Map<LayerDef, Int> = new Map();
-
+class IntGridBrush extends Tool<Int> {
 	public function new() {
 		super();
 	}
 
-	function selectValue(v:Int) {
-		SELECTED_VALUES.set(
-			curLayer.def,
-			M.iclamp(v, 0, curLayer.def.intGridValues.length-1)
-		);
+	override function selectValue(v:Int) {
+		v = M.iclamp(v, 0, curLayer.def.intGridValues.length-1);
+		super.selectValue(v);
 	}
-	function getSelectedValue() {
-		return SELECTED_VALUES.exists(curLayer.def)
-			? SELECTED_VALUES.get(curLayer.def)
-			: 0;
+
+	override function getDefaultValue():Int {
+		return 0;
 	}
 
 	override function updateToolBar() {
