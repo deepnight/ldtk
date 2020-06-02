@@ -21,7 +21,10 @@ $orange: #ffcc00;
 	}
 }
 
-
+@font-face {
+	font-family: Roboto;
+	src: url("../fonts/RobotoCondensed-Light.ttf");
+}
 
 
 body {
@@ -35,6 +38,20 @@ body {
 
 xml {
 	display: none;
+}
+
+h1 { color: magenta; } // should not be used
+
+h2 {
+	@include resetMargin();
+	margin-bottom: 32px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid $orange;
+
+	color: $orange;
+	text-transform: uppercase;
+	font-size: 18pt;
+	font-family: Roboto;
 }
 
 
@@ -106,6 +123,7 @@ input[type=number]:focus {
 	width: 100%;
 	height: 100%;
 	z-index: 99;
+
 	.mask {
 		position: absolute;
 		z-index: 1;
@@ -113,18 +131,21 @@ input[type=number]:focus {
 		left: 0px;
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0,0,0,0.5);
+		background-color: rgba(0,0,0,0.35);
 	}
 
 	.content {
 		position: absolute;
 		z-index: 2;
+		box-sizing: border-box;
 		display: block;
 		padding: 20px;
-		padding-left: 50px;
+		top: 0px;
+		left: 0px;
+		height: 100%;
+		// padding-left: 50px;
 
-		width: 500px;
-		margin-top: 50px;
+		width: 700px;
 		background: $bgMed;
 		border: 1px solid $bgLight;
 		border-left: none;
