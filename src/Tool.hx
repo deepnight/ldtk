@@ -8,7 +8,7 @@ class Tool<T> extends dn.Process {
 	var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
 	var curLayer(get,never) : LayerContent; inline function get_curLayer() return Client.ME.curLayer;
 
-	var jToolBar(get,never) : J; inline function get_jToolBar() return client.jToolBar;
+	var jPalette(get,never) : J; inline function get_jPalette() return client.jPalette;
 
 	var running = false;
 	var lastMouse : Null<MouseCoords>;
@@ -16,7 +16,7 @@ class Tool<T> extends dn.Process {
 
 	private function new() {
 		super(Client.ME);
-		updateToolBar();
+		updatePalette();
 	}
 
 	function selectValue(v:T) {
@@ -32,8 +32,8 @@ class Tool<T> extends dn.Process {
 		return null;
 	}
 
-	public function updateToolBar() {
-		jToolBar.empty();
+	public function updatePalette() {
+		jPalette.empty();
 	}
 
 	public function isRunning() return running;

@@ -121,11 +121,14 @@ input[type=number]:focus {
 		z-index: 2;
 		display: block;
 		padding: 20px;
-		width: 50%;
+		padding-left: 50px;
+
+		width: 500px;
 		margin-top: 50px;
-		margin-left: 25%;
 		background: $bgMed;
 		border: 1px solid $bgLight;
+		border-left: none;
+
 		box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
 	}
 }
@@ -166,31 +169,34 @@ input[type=number]:focus {
 		margin-bottom: 8px;
 	}
 
-	#toolBar {
-		position: absolute;
-		top: 0px;
-		left: $panelWid;
-		background-color: $bgMed;
+	#palette {
+		// position: absolute;
+		// top: 0px;
+		// left: $panelWid;
+		background-color: $bgDark;
 
 		ul {
 			@include resetList();
 			padding: 4px;
 
 			>li {
-				display: inline-block;
-				min-width: 32px;
-				height: 32px;
+				display: block;
+				// min-width: 32px;
+				min-height: 16px;
 			}
 			>li:hover {
 				outline: 1px solid white;
 				outline-offset: -1px;
 			}
-			>li+li {
-				margin-left: 2px;
-			}
+			// >li+li {
+				// margin-left: 2px;
+			// }
 
 			li.color {
-				box-shadow: 0px -2px 0px rgba(0, 0, 0, 0.3) inset;
+				padding-left: 10px;
+				overflow: hidden;
+				line-height: 32px;
+				box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
 			}
 			li.color.active {
 				outline: 2px solid white !important;

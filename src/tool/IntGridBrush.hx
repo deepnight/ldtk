@@ -14,24 +14,27 @@ class IntGridBrush extends Tool<Int> {
 		return 0;
 	}
 
-	override function updateToolBar() {
-		super.updateToolBar();
+	override function updatePalette() {
+		super.updatePalette();
 
 		selectValue( getSelectedValue() );
 
 		var idx = 0;
 		for(val in curLayer.def.intGridValues) {
 			var e = new J("<li/>");
-			jToolBar.append(e);
+			jPalette.append(e);
 			e.addClass("color");
 			if( idx==getSelectedValue() )
 				e.addClass("active");
 
+			e.text("#"+idx+" - "+val.name);
+
+			e.css("color", C.intToHex( C.autoContrast(val.color) ));
 			e.css("background-color", C.intToHex(val.color));
 			var curIdx = idx;
 			e.click( function(_) {
 				selectValue(curIdx);
-				updateToolBar();
+				updatePalette();
 			});
 			idx++;
 		}
