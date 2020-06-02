@@ -10,8 +10,13 @@ class Client extends dn.Process {
 	public var doc(get,never) : js.html.Document; inline function get_doc() return js.Browser.document;
 
 	public var project : ProjectData;
-	public var curLevel : LevelData;
-	public var curLayerContent : LayerContent;
+	var curLevelId : Int;
+	var curLayerId : Int;
+
+	public var curLevel(get,never) : LevelData; inline function get_curLevel() return project.getLevel(curLevelId);
+	public var curLayerDef(get,never) : LayerDef; inline function get_curLayerDef() return project.getLayerDef(curLayerId);
+	public var curLayerContent(get,never) : LayerContent; inline function get_curLayerContent() return curLevel.getLayerContent(curLayerId);
+
 	public var levelRender : render.LevelRender;
 	public var curTool : Tool<Dynamic>;
 
@@ -40,8 +45,11 @@ class Client extends dn.Process {
 		project.createLayerDef(IntGrid,"Other");
 		var l = project.createLayerDef(IntGrid,"Last one");
 		l.gridSize = 8;
-		curLevel = project.createLevel();
-		curLayerContent = curLevel.layerContents[0];
+
+		project.createLevel();
+
+		curLevelId = project.levels[0].uid;
+		curLayerId = project.layerDefs[0].uid;
 
 		curTool = new tool.IntGridBrush();
 
@@ -80,7 +88,7 @@ class Client extends dn.Process {
 	}
 
 	public function selectLayer(l:LayerContent) {
-		curLayerContent = l;
+		curLayerId = l.def.uid;
 		levelRender.onCurrentLayerChange(curLayerContent);
 		curTool.updatePalette();
 		updateLayerList();
