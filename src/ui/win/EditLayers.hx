@@ -96,10 +96,12 @@ class EditLayers extends ui.Window {
 					e.insertBefore(addButton);
 					e.find(".id").html("#"+idx);
 
+					// Edit value name
 					var nameInput = e.find("input.name");
 					nameInput.val(val.name);
 					nameInput.change( function(_) {
 						val.name = nameInput.val();
+						client.onLayerDefChange();
 					});
 
 					if( ld.countIntGridValues()>1 && idx==ld.countIntGridValues()-1 )

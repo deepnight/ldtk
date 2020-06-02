@@ -39,10 +39,9 @@ class Client extends dn.Process {
 		Boot.ME.s2d.addEventListener( onEvent );
 
 		project = new data.ProjectData();
-		// project.createLayerDef(IntGrid,"First layer");
-		// project.createLayerDef(IntGrid,"Other");
-		// var l = project.createLayerDef(IntGrid,"Last one");
-		// l.gridSize = 8;
+		project.layerDefs[0].name = "Collisions";
+		var ld = project.createLayerDef(IntGrid,"Decorations");
+		ld.gridSize = 8;
 
 		project.createLevel();
 
@@ -56,6 +55,8 @@ class Client extends dn.Process {
 	}
 
 	function initTool() {
+		if( curTool!=null )
+			curTool.destroy();
 		curTool = new tool.IntGridBrush();
 	}
 
