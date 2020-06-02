@@ -6,6 +6,7 @@ class ProjectData implements data.IData {
 	public var layerDefs : Array<data.def.LayerDef> = [];
 
 	public function new() {
+		createLayerDef(IntGrid, "Unknown layer");
 	}
 
 	public function makeUniqId() return nextUniqId++;
@@ -95,7 +96,7 @@ class ProjectData implements data.IData {
 						// Remove lost intGrid values
 						for(cy in 0...lc.cHei)
 						for(cx in 0...lc.cWid) {
-							if( lc.getIntGrid(cx,cy) >= lc.def.intGridValues.length )
+							if( lc.getIntGrid(cx,cy) >= lc.def.countIntGridValues() )
 								lc.removeIntGrid(cx,cy);
 						}
 					case Entities:
