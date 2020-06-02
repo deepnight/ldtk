@@ -21,9 +21,16 @@ class Client extends dn.Process {
 		win.title = "LEd v"+Const.APP_VERSION;
 		win.maximize();
 
-		new J(".projectSettings").click( function(_) {
-			// loadTemplateInWindow( hxd.Res.tpl.projectSettings );
+		jBody.mouseup(function(_) {
+			onMouseUp();
 		});
+		jBody.mouseleave(function(_) {
+			onMouseUp();
+		});
+
+		// new J(".projectSettings").click( function(_) {
+			// loadTemplateInWindow( hxd.Res.tpl.projectSettings );
+		// });
 
 		new J(".editLayers").click( function(_) new ui.win.EditLayers() );
 
@@ -51,16 +58,16 @@ class Client extends dn.Process {
 	function onEvent(e:hxd.Event) {
 		switch e.kind {
 			case EPush: onMouseDown(e);
-			case ERelease: onMouseUp(e);
+			case ERelease: onMouseUp();
 			case EMove: onMouseMove(e);
 			case EOver:
-			case EOut: onMouseUp(e);
+			case EOut: onMouseUp();
 			case EWheel:
 			case EFocus:
-			case EFocusLost: onMouseUp(e);
+			case EFocusLost: onMouseUp();
 			case EKeyDown:
 			case EKeyUp:
-			case EReleaseOutside: onMouseUp(e);
+			case EReleaseOutside: onMouseUp();
 			case ETextInput:
 			case ECheck:
 		}
@@ -69,8 +76,9 @@ class Client extends dn.Process {
 	function onMouseDown(e:hxd.Event) {
 		curTool.startUsing();
 	}
-	function onMouseUp(e:hxd.Event) {
-		curTool.stopUsing();
+	function onMouseUp() {
+		if( curTool.isRunning() )
+			curTool.stopUsing();
 	}
 	function onMouseMove(e:hxd.Event) {
 		if( curTool.isRunning() )
