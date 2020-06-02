@@ -52,6 +52,13 @@ class ProjectData implements data.IData {
 		return l;
 	}
 
+	public function isLayerNameUnique(name:String) {
+		for(ld in layerDefs)
+			if( ld.name==name )
+				return false;
+		return true;
+	}
+
 	public function removeLayerDef(ld:LayerDef) {
 		if( !layerDefs.remove(ld) )
 			throw "Unknown layerDef";

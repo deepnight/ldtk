@@ -13,7 +13,7 @@ class IntInput extends form.Input<Int> {
 		this.max = max;
 	}
 
-	override function parseFormValue() : Int {
+	override function parseInputValue() : Int {
 		var v = Std.parseInt( input.val() );
 		if( Math.isNaN(v) || !Math.isFinite(v) || v==null )
 			v = 0;

@@ -483,7 +483,7 @@ var Client = function() {
 		_gthis.onMouseUp();
 	});
 	$(".projectSettings").click(function(_) {
-		new ui_Notification("test",16711935);
+		ui_Notification.notImplemented();
 	});
 	$(".saveLevel").click(function(_) {
 		ui_Notification.notImplemented();
@@ -550,7 +550,11 @@ Client.prototype = $extend(dn_Process.prototype,{
 		}
 	}
 	,onMouseDown: function(e) {
-		this.curTool.startUsing(new MouseCoords(Boot.ME.s2d.get_mouseX(),Boot.ME.s2d.get_mouseY()),e.button);
+		var _this = this.levelRender;
+		var l = this.project.getLevel(this.curLevelId).getLayerContent(this.curLayerId);
+		if(!_this.layerVis.h.hasOwnProperty(l.layerDefId) || _this.layerVis.h[l.layerDefId] == true) {
+			this.curTool.startUsing(new MouseCoords(Boot.ME.s2d.get_mouseX(),Boot.ME.s2d.get_mouseY()),e.button);
+		}
 	}
 	,onMouseUp: function() {
 		if(this.curTool.isRunning()) {
@@ -1820,6 +1824,18 @@ data_ProjectData.prototype = {
 		this.layerDefs.push(l);
 		return l;
 	}
+	,isLayerNameUnique: function(name) {
+		var _g = 0;
+		var _g1 = this.layerDefs;
+		while(_g < _g1.length) {
+			var ld = _g1[_g];
+			++_g;
+			if(ld.name == name) {
+				return false;
+			}
+		}
+		return true;
+	}
 	,removeLayerDef: function(ld) {
 		if(!HxOverrides.remove(this.layerDefs,ld)) {
 			throw haxe_Exception.thrown("Unknown layerDef");
@@ -1905,8 +1921,8 @@ var data_def_LayerDef = function(uid,t) {
 	this.intGridValues = [];
 	this.displayOpacity = 1.0;
 	this.gridSize = Const.GRID;
-	this.name = "Unknown";
 	this.uid = uid;
+	this.name = "New layer " + uid;
 	this.type = t;
 	this.addIntGridValue(16711680);
 };
@@ -1919,6 +1935,18 @@ data_def_LayerDef.prototype = {
 	}
 	,getIntGridValue: function(idx) {
 		return this.intGridValues[idx];
+	}
+	,isIntGridValueNameUnique: function(name) {
+		var _g = 0;
+		var _g1 = this.intGridValues;
+		while(_g < _g1.length) {
+			var v = _g1[_g];
+			++_g;
+			if(v.name == name) {
+				return false;
+			}
+		}
+		return true;
 	}
 	,__class__: data_def_LayerDef
 };
@@ -2391,7 +2419,7 @@ $hxClasses["form.Input"] = form_Input;
 form_Input.__name__ = "form.Input";
 form_Input.prototype = {
 	onInputChange: function() {
-		this.setter(this.parseFormValue());
+		this.setter(this.parseInputValue());
 		this.input.val(Std.string(this.getter()));
 		this.onChange();
 		this.onValueChange(this.getter());
@@ -2400,7 +2428,7 @@ form_Input.prototype = {
 	}
 	,onValueChange: function(v) {
 	}
-	,parseFormValue: function() {
+	,parseInputValue: function() {
 		return null;
 	}
 	,__class__: form_Input
@@ -2428,7 +2456,7 @@ $hxClasses["form.input.EnumSelect"] = form_input_EnumSelect;
 form_input_EnumSelect.__name__ = "form.input.EnumSelect";
 form_input_EnumSelect.__super__ = form_Input;
 form_input_EnumSelect.prototype = $extend(form_Input.prototype,{
-	parseFormValue: function() {
+	parseInputValue: function() {
 		var v = this.input.val();
 		return Type.createEnum(this.enumRef,this.input.val(),null);
 	}
@@ -2467,7 +2495,7 @@ form_input_FloatInput.prototype = $extend(form_Input.prototype,{
 		this.min = min;
 		this.max = max;
 	}
-	,parseFormValue: function() {
+	,parseInputValue: function() {
 		var v = parseFloat(this.input.val());
 		if(isNaN(v) || !isFinite(v) || v == null) {
 			v = 0;
@@ -2497,7 +2525,7 @@ form_input_IntInput.prototype = $extend(form_Input.prototype,{
 		this.min = min;
 		this.max = max;
 	}
-	,parseFormValue: function() {
+	,parseInputValue: function() {
 		var v = Std.parseInt(this.input.val());
 		if(isNaN(v) || !isFinite(v) || v == null) {
 			v = 0;
@@ -2517,12 +2545,26 @@ form_input_IntInput.prototype = $extend(form_Input.prototype,{
 var form_input_StringInput = function(j,getter,setter) {
 	this.trimSpaces = true;
 	form_Input.call(this,j,getter,setter);
+	this.oldInputValue = this.parseInputValue();
 };
 $hxClasses["form.input.StringInput"] = form_input_StringInput;
 form_input_StringInput.__name__ = "form.input.StringInput";
 form_input_StringInput.__super__ = form_Input;
 form_input_StringInput.prototype = $extend(form_Input.prototype,{
-	parseFormValue: function() {
+	onInputChange: function() {
+		if(this.unicityCheck != null && !this.unicityCheck(this.parseInputValue())) {
+			this.input.val(this.oldInputValue);
+			if(this.unicityError == null) {
+				ui_Notification.error("This value is already used.");
+			} else {
+				this.unicityError();
+			}
+			return;
+		}
+		form_Input.prototype.onInputChange.call(this);
+		this.oldInputValue = this.parseInputValue();
+	}
+	,parseInputValue: function() {
 		var v = this.input.val();
 		if(this.trimSpaces) {
 			return StringTools.trim(v);
@@ -44612,7 +44654,7 @@ var ui_win_EditLayers = function() {
 	this.jList = this.jWin.find(".layersList ul");
 	this.jForm = this.jWin.find("form");
 	this.jWin.find(".addLayer").click(function(_) {
-		var ld = Client.ME.project.createLayerDef(LayerType.IntGrid,"New layer");
+		var ld = Client.ME.project.createLayerDef(LayerType.IntGrid);
 		_gthis.selectLayer(ld);
 		Client.ME.onLayerDefChange();
 		_gthis.jForm.find("input").first().focus().select();
@@ -44642,6 +44684,7 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 		},function(v) {
 			ld.name = v;
 		});
+		i.unicityCheck = ($_=Client.ME.project,$bind($_,$_.isLayerNameUnique));
 		i.onChange = function() {
 			Client.ME.onLayerDefChange();
 			_gthis.updateLayerList();
@@ -44704,28 +44747,22 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 				e.addClass("value");
 				e.insertBefore(addButton);
 				e.find(".id").html("#" + idx);
-				var nameInput = [e.find("input.name")];
-				nameInput[0].val(val[0].name);
-				var oldName = [nameInput[0].val()];
-				nameInput[0].change((function(oldName,nameInput,val) {
-					return function(_) {
-						var newName = StringTools.trim(nameInput[0].val());
-						var _g = 0;
-						var _g1 = ld.intGridValues;
-						while(_g < _g1.length) {
-							var val1 = _g1[_g];
-							++_g;
-							if(val1.name == newName) {
-								ui_Notification.error("The name \"" + newName + "\" is already used.");
-								nameInput[0].val(oldName[0]);
-								return;
-							}
-						}
-						val[0].name = newName;
-						oldName[0] = newName;
-						Client.ME.onLayerDefChange();
+				var nameInput = new form_input_StringInput(e.find("input.name"),(function(val) {
+					return function() {
+						return val[0].name;
 					};
-				})(oldName,nameInput,val));
+				})(val),(function(val) {
+					return function(v) {
+						val[0].name = v;
+					};
+				})(val));
+				nameInput.unicityCheck = $bind(ld,ld.isIntGridValueNameUnique);
+				nameInput.unicityError = (function(str) {
+					return function() {
+						return ui_Notification.error(str[0]);
+					};
+				})(["This value name is already used."]);
+				nameInput.onChange = ($_=Client.ME,$bind($_,$_.onLayerDefChange));
 				if(ld.intGridValues.length > 1 && idx == ld.intGridValues.length - 1) {
 					e.addClass("removable");
 				}

@@ -16,7 +16,7 @@ class EditLayers extends ui.Window {
 
 		// Create layer
 		jWin.find(".addLayer").click( function(_) {
-			var ld = project.createLayerDef(IntGrid, "New layer");
+			var ld = project.createLayerDef(IntGrid);
 			selectLayer(ld);
 			client.onLayerDefChange();
 			jForm.find("input").first().focus().select();
@@ -36,25 +36,26 @@ class EditLayers extends ui.Window {
 		jForm.addClass("type-"+ld.type);
 
 		// Fields
-		var i = form.Input.linkToField( jForm.find("input[name='name']"), ld.name );
+		var i = Input.linkToField( jForm.find("input[name='name']"), ld.name );
+		i.unicityCheck = project.isLayerNameUnique;
 		i.onChange = function() {
 			client.onLayerDefChange();
 			updateLayerList();
 		};
 
-		var i = form.Input.linkToField( jForm.find("select[name='type']"), ld.type );
+		var i = Input.linkToField( jForm.find("select[name='type']"), ld.type );
 		i.onChange = function() {
 			client.onLayerDefChange();
 			updateForm();
 		};
 
-		var i = form.Input.linkToField( jForm.find("input[name='gridSize']"), ld.gridSize );
+		var i = Input.linkToField( jForm.find("input[name='gridSize']"), ld.gridSize );
 		i.setBounds(1,32);
 		i.onChange = function() {
 			client.onLayerDefChange();
 		}
 
-		var i = form.Input.linkToField( jForm.find("input[name='displayOpacity']"), ld.displayOpacity );
+		var i = Input.linkToField( jForm.find("input[name='displayOpacity']"), ld.displayOpacity );
 		i.displayAsPct = true;
 		i.setBounds(0.1, 1);
 		i.onChange = function() {
@@ -99,20 +100,10 @@ class EditLayers extends ui.Window {
 					e.find(".id").html("#"+idx);
 
 					// Edit value name
-					var nameInput = e.find("input.name");
-					nameInput.val(val.name);
-					var oldName = nameInput.val();
-					nameInput.change( function(_) {
-						var newName = StringTools.trim( nameInput.val() );
-						if( !ld.isIntGridValueNameUnique(newName) ) {
-							Notification.error("The name \""+newName+"\" is already used.");
-							nameInput.val(oldName);
-							return;
-						}
-						val.name = newName;
-						oldName = newName;
-						client.onLayerDefChange();
-					});
+					var nameInput = Input.linkToField(e.find("input.name"), val.name);
+					nameInput.unicityCheck = ld.isIntGridValueNameUnique;
+					nameInput.unicityError = N.error.bind("This value name is already used.");
+					nameInput.onChange = client.onLayerDefChange;
 
 					if( ld.countIntGridValues()>1 && idx==ld.countIntGridValues()-1 )
 						e.addClass("removable");

@@ -27,7 +27,7 @@ class Input<T> {
 	}
 
 	function onInputChange() {
-		setter( parseFormValue() );
+		setter( parseInputValue() );
 		input.val( Std.string( getter() ) );
 		onChange();
 		onValueChange( getter() );
@@ -36,7 +36,7 @@ class Input<T> {
 	public dynamic function onChange() {}
 	public dynamic function onValueChange(v:T) {}
 
-	function parseFormValue() : T {
+	function parseInputValue() : T {
 		return null;
 	}
 

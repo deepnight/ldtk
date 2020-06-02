@@ -29,7 +29,7 @@ class FloatInput extends form.Input<Float> {
 		this.max = max;
 	}
 
-	override function parseFormValue() : Float {
+	override function parseInputValue() : Float {
 		var v = Std.parseFloat( input.val() );
 		if( Math.isNaN(v) || !Math.isFinite(v) || v==null )
 			v = 0;

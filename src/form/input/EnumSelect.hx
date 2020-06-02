@@ -20,7 +20,7 @@ class EnumSelect<T> extends form.Input<T> {
 	}
 	}
 
-	override function parseFormValue() : T {
+	override function parseInputValue() : T {
 		var v = input.val();
 		return enumRef.createByName( input.val() );
 	}
