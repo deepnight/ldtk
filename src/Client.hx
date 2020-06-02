@@ -33,8 +33,7 @@ class Client extends dn.Process {
 			onMouseUp();
 		});
 
-		new J(".projectSettings").click( function(_) { N.debug("test"); } );
-		// new J(".projectSettings").click( function(_) { N.notImplemented(); } );
+		new J(".projectSettings").click( function(_) { N.notImplemented(); } );
 		new J(".saveLevel").click( function(_) { N.notImplemented(); } );
 		new J("button.editLayers").click( function(_) new ui.win.EditLayers() );
 
@@ -81,7 +80,8 @@ class Client extends dn.Process {
 	}
 
 	function onMouseDown(e:hxd.Event) {
-		curTool.startUsing( getMouse(), e.button );
+		if( levelRender.isLayerVisible(curLayerContent) )
+			curTool.startUsing( getMouse(), e.button );
 	}
 	function onMouseUp() {
 		if( curTool.isRunning() )
