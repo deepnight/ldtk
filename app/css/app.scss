@@ -124,6 +124,22 @@ input[type=number]:focus {
 	outline: none;
 }
 
+#notificationList {
+	position: absolute;
+	top: 30px;
+	right: 0px;
+
+	.notification {
+		min-width: 150px;
+		max-width: 300px;
+		margin-bottom: 8px;
+		background-color: $bgLight;
+		border-left: 4px solid $orange;
+		padding: 20px;
+		box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+	}
+}
+
 .window {
 	position: absolute;
 	top: 0px;
