@@ -2,8 +2,9 @@ package data;
 
 class LevelData implements data.IData {
 	public var project(default,null) : ProjectData;
-	public var layers : Array<LayerContent> = [];
+	public var layerContents : Array<LayerContent> = [];
 
+	public var uid : Int;
 	public var pxWid : Int = 256;
 	public var pxHei : Int = 256;
 
@@ -11,9 +12,10 @@ class LevelData implements data.IData {
 	@:allow(data.ProjectData)
 	private function new(p:data.ProjectData) {
 		project = p;
+		uid = project.makeUniqId();
 
 		for(def in project.layerDefs)
-			layers.push( new LayerContent(this, def) );
+			layerContents.push( new LayerContent(this, def) );
 	}
 
 	public function toString() {

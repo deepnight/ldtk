@@ -21,7 +21,7 @@ class EditLayers extends ui.Window {
 			jForm.find("input").first().focus().select();
 		});
 
-		selectLayer(client.curLayer.def);
+		selectLayer(client.curLayerContent.def);
 	}
 
 	function selectLayer(ld:LayerDef) {

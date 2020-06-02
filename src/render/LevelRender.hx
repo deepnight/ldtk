@@ -22,11 +22,11 @@ class LevelRender extends dn.Process {
 
 		grid = new h2d.Graphics(root);
 
-		for(d in data.layers) {
-			var r = new LayerRender(d);
+		for(lc in data.layerContents) {
+			var r = new LayerRender(lc);
 			root.addChild(r.root);
 			layers.push(r);
-			showLayer(d);
+			showLayer(lc);
 		}
 	}
 
@@ -50,14 +50,14 @@ class LevelRender extends dn.Process {
 	}
 
 	public function renderGrid() {
-		var l = client.curLayer;
+		var l = client.curLayerContent;
 		grid.clear();
 		grid.lineStyle(1, 0x0, 0.2);
-		for( cx in 0...client.curLayer.cWid+1 ) {
+		for( cx in 0...client.curLayerContent.cWid+1 ) {
 			grid.moveTo(cx*l.def.gridSize, 0);
 			grid.lineTo(cx*l.def.gridSize, l.cHei*l.def.gridSize);
 		}
-		for( cy in 0...client.curLayer.cHei+1 ) {
+		for( cy in 0...client.curLayerContent.cHei+1 ) {
 			grid.moveTo(0, cy*l.def.gridSize);
 			grid.lineTo(l.cWid*l.def.gridSize, cy*l.def.gridSize);
 		}
@@ -75,7 +75,7 @@ class LevelRender extends dn.Process {
 	function updateLayersVisibility() {
 		for(lr in layers) {
 			lr.root.visible = isLayerVisible(lr.data);
-			lr.root.alpha = lr.data.def.displayOpacity * ( lr.data==client.curLayer ? 1 : 0.4 );
+			lr.root.alpha = lr.data.def.displayOpacity * ( lr.data==client.curLayerContent ? 1 : 0.4 );
 		}
 	}
 

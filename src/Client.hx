@@ -11,7 +11,7 @@ class Client extends dn.Process {
 
 	public var project : ProjectData;
 	public var curLevel : LevelData;
-	public var curLayer : LayerContent;
+	public var curLayerContent : LayerContent;
 	public var levelRender : render.LevelRender;
 	public var curTool : Tool<Dynamic>;
 
@@ -41,11 +41,7 @@ class Client extends dn.Process {
 		var l = project.createLayerDef(IntGrid,"Last one");
 		l.gridSize = 8;
 		curLevel = project.createLevel();
-		curLayer = curLevel.layers[0];
-		curLayer.setIntGrid(0,0, 1);
-		curLayer.setIntGrid(2,4, 0);
-		curLayer.setIntGrid(5,5, 1);
-		curLayer.setIntGrid(6,6, 0);
+		curLayerContent = curLevel.layerContents[0];
 
 		curTool = new tool.IntGridBrush();
 
@@ -84,13 +80,14 @@ class Client extends dn.Process {
 	}
 
 	public function selectLayer(l:LayerContent) {
-		curLayer = l;
-		levelRender.onCurrentLayerChange(curLayer);
+		curLayerContent = l;
+		levelRender.onCurrentLayerChange(curLayerContent);
 		curTool.updatePalette();
 		updateLayerList();
 	}
 
 	public function onLayerDefChange() {
+		project.checkDataIntegrity();
 		levelRender.invalidate();
 		curTool.updatePalette();
 		updateLayerList();
@@ -100,11 +97,11 @@ class Client extends dn.Process {
 		var list = jLayers.find("ul");
 		list.empty();
 
-		for(layer in curLevel.layers) {
+		for(layer in curLevel.layerContents) {
 			var e = new J("<li/>");
 			list.append(e);
 
-			if( layer==curLayer )
+			if( layer==curLayerContent )
 				e.addClass("active");
 
 			if( !levelRender.isLayerVisible(layer) )

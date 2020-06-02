@@ -8,7 +8,7 @@ class ProjectData implements data.IData {
 	public function new() {
 	}
 
-	public function getNextUniqId() return nextUniqId++;
+	public function makeUniqId() return nextUniqId++;
 
 	public function toString() {
 		return Type.getClassName(Type.getClass(this));
@@ -29,12 +29,35 @@ class ProjectData implements data.IData {
 		}
 	}
 
+	public function getLevel(uid:Int) : Null<LevelData> {
+		for(l in levels)
+			if( l.uid==uid )
+				return l;
+		throw "null";
+		return null;
+	}
+
+	public function getLayerDef(uid:Int) : Null<LayerDef> {
+		for(ld in layerDefs)
+			if( ld.uid==uid )
+				return ld;
+		throw "null";
+		return null;
+	}
+
 	public function createLayerDef(type:LayerType, ?name:String) : LayerDef {
-		var l = new LayerDef(type);
+		var l = new LayerDef(makeUniqId(), type);
 		if( name!=null )
 			l.name = name;
 		layerDefs.push(l);
 		return l;
+	}
+
+	public function removeLayerDef(ld:LayerDef) {
+		if( !layerDefs.remove(ld) )
+			throw "Unknown layerDef";
+
+		checkDataIntegrity();
 	}
 
 	public function createLevel() {
@@ -46,6 +69,34 @@ class ProjectData implements data.IData {
 	public function removeLevel(l:LevelData) {
 		if( !levels.remove(l) )
 			throw "Level not found in this Project";
+
+		checkDataIntegrity();
 	}
 
+
+	public function checkDataIntegrity() {
+		for(level in levels) {
+			// Drop lost layers
+			var i = 0;
+			while( i<level.layerContents.length ) {
+				if( level.layerContents[i].def==null )
+					level.layerContents.splice(i,1);
+				else
+					i++;
+			}
+
+			// Cleanup level layers
+			for(lc in level.layerContents)
+				switch lc.def.type {
+					case IntGrid:
+						// Remove lost intGrid values
+						for(cy in 0...lc.cHei)
+						for(cx in 0...lc.cWid) {
+							if( lc.getIntGrid(cx,cy) >= lc.def.intGridValues.length )
+								lc.removeIntGrid(cx,cy);
+						}
+					case Entities:
+				}
+		}
+	}
 }

@@ -1,6 +1,7 @@
 package data.def;
 
 class LayerDef implements IData {
+	public var uid : Int;
 	public var type : LayerType;
 	public var name : String = "Unknown";
 	public var gridSize : Int = Const.GRID;
@@ -8,7 +9,8 @@ class LayerDef implements IData {
 
 	public var intGridValues : Array<IntGridValue>;
 
-	public function new(t:LayerType) {
+	public function new(uid:Int, t:LayerType) {
+		this.uid = uid;
 		type = t;
 		intGridValues = [
 			{ name:"walls", color:0xaac2ff },
@@ -17,7 +19,7 @@ class LayerDef implements IData {
 	}
 
 	public function clone() {
-		var e = new LayerDef(type);
+		var e = new LayerDef(uid, type);
 		// TODO
 		return e;
 	}
