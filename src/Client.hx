@@ -90,7 +90,7 @@ class Client extends dn.Process {
 	}
 
 	public function onLayerDefChange() {
-		levelRender.onCurrentLayerChange(curLayer);
+		levelRender.invalidate();
 		curTool.updateToolBar();
 		updateLayerList();
 	}
