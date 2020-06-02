@@ -7,15 +7,12 @@ class LayerDef implements IData {
 	public var gridSize : Int = Const.GRID;
 	public var displayOpacity : Float = 1.0;
 
-	var intGridValues : Array<IntGridValue>;
+	var intGridValues : Array<IntGridValue> = [];
 
 	public function new(uid:Int, t:LayerType) {
 		this.uid = uid;
 		type = t;
-		intGridValues = [
-			{ name:"walls", color:0xaac2ff },
-			{ name:"ladders", color:0xbd935a },
-		];
+		addIntGridValue(0xff0000);
 	}
 
 	public function clone() {
