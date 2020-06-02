@@ -1,13 +1,11 @@
 class Client extends dn.Process {
 	public static var ME : Client;
 
-	public var win(get,never) : nw.Window; inline function get_win() return nw.Window.get();
+	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J(".panel .layersList");
 	public var jMainBar(get,never) : J; inline function get_jMainBar() return new J("#mainBar");
 	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette ul");
-	// public var win(get,never) : js.html.Window; inline function get_win() return js.Browser.window;
-	public var doc(get,never) : js.html.Document; inline function get_doc() return js.Browser.document;
 
 	public var project : ProjectData;
 	var curLevelId : Int;
@@ -25,8 +23,8 @@ class Client extends dn.Process {
 
 		ME = this;
 		createRoot(Boot.ME.s2d);
-		win.title = "LEd v"+Const.APP_VERSION;
-		// win.maximize();
+		appWin.title = "LEd v"+Const.APP_VERSION;
+		// appWin.maximize();
 
 		jBody.mouseup(function(_) {
 			onMouseUp();
