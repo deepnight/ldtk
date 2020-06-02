@@ -17,7 +17,7 @@ class EditLayers extends ui.Window {
 		// Create layer
 		jWin.find(".addLayer").click( function(_) {
 			var ld = project.createLayerDef(IntGrid, "New layer");
-			selectLayer(ld);
+			updateForm();
 			jForm.find("input").first().focus().select();
 		});
 
@@ -36,9 +36,12 @@ class EditLayers extends ui.Window {
 
 		var i = form.Input.linkToField( jForm.find("input[name='gridSize']"), ld.gridSize );
 		i.setBounds(1,32);
+		i.onChange = function() {
+			client.levelRender.invalidate();
+		}
 
 		var i = form.Input.linkToField( jForm.find("select[name='type']"), ld.type );
-		i.onChange = selectLayer.bind(ld);
+		i.onChange = updateForm;
 
 		switch ld.type {
 			case IntGrid:
@@ -48,8 +51,8 @@ class EditLayers extends ui.Window {
 				// Add value button
 				var addButton = valuesList.find("li.add");
 				addButton.find("button").off().click( function(ev) {
-					ld.intGridValues.push(0x0);
-					selectLayer(ld);
+					ld.intGridValues.push(0xff0000);
+					updateForm();
 					ev.preventDefault();
 				});
 
@@ -70,25 +73,30 @@ class EditLayers extends ui.Window {
 					col.val( C.intToHex(c) );
 					col.change( function(ev) {
 						ld.intGridValues[curIdx] = C.hexToInt( col.val() );
-						selectLayer(ld);
+						updateForm();
 					});
 
 					// Remove
 					e.find("a.remove").click( function(ev) {
 						trace("remove "+curIdx);
 						ld.intGridValues.splice(curIdx,1);
-						selectLayer(ld);
+						updateForm();
 						ev.preventDefault();
 					});
 					idx++;
 				}
 
 
-
 			case Entities:
+				// TODO
 		}
 
 		updateLayerList();
+	}
+
+
+	function updateForm() {
+		selectLayer(curLayer);
 	}
 
 

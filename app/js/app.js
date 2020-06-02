@@ -44149,7 +44149,7 @@ var ui_win_EditLayers = function() {
 	this.jForm = this.jWin.find("form");
 	this.jWin.find(".addLayer").click(function(_) {
 		var ld = Client.ME.project.createLayerDef(LayerType.IntGrid,"New layer");
-		_gthis.selectLayer(ld);
+		_gthis.updateForm();
 		_gthis.jForm.find("input").first().focus().select();
 	});
 	this.selectLayer(Client.ME.curLayer.def);
@@ -44181,32 +44181,31 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 			ld.gridSize = v;
 		});
 		i.setBounds(1,32);
+		i.onChange = function() {
+			Client.ME.levelRender.invalidated = true;
+		};
 		var i = new form_input_EnumSelect(this.jForm.find("select[name='type']"),LayerType,function() {
 			return ld.type;
 		},function(v) {
 			ld.type = v;
 		});
-		var _g = $bind(this,this.selectLayer);
-		var ld1 = ld;
-		i.onChange = function() {
-			_g(ld1);
-		};
+		i.onChange = $bind(this,this.updateForm);
 		switch(ld.type._hx_index) {
 		case 0:
 			var valuesList = this.jForm.find("ul.intGridValues");
 			valuesList.find("li.value").remove();
 			var addButton = valuesList.find("li.add");
 			addButton.find("button").off().click(function(ev) {
-				ld.intGridValues.push(0);
-				_gthis.selectLayer(ld);
+				ld.intGridValues.push(16711680);
+				_gthis.updateForm();
 				ev.preventDefault();
 			});
 			var idx = 0;
-			var _g1 = 0;
-			var _g2 = ld.intGridValues;
-			while(_g1 < _g2.length) {
-				var c = _g2[_g1];
-				++_g1;
+			var _g = 0;
+			var _g1 = ld.intGridValues;
+			while(_g < _g1.length) {
+				var c = _g1[_g];
+				++_g;
 				var curIdx = [idx];
 				var e = this.jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
 				e.addClass("value");
@@ -44223,14 +44222,14 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 				col[0].change((function(col,curIdx) {
 					return function(ev) {
 						ld.intGridValues[curIdx[0]] = Std.parseInt("0x" + HxOverrides.substr(col[0].val(),1,999));
-						_gthis.selectLayer(ld);
+						_gthis.updateForm();
 					};
 				})(col,curIdx));
 				e.find("a.remove").click((function(curIdx) {
 					return function(ev) {
-						haxe_Log.trace("remove " + curIdx[0],{ fileName : "src/ui/win/EditLayers.hx", lineNumber : 78, className : "ui.win.EditLayers", methodName : "selectLayer"});
+						haxe_Log.trace("remove " + curIdx[0],{ fileName : "src/ui/win/EditLayers.hx", lineNumber : 81, className : "ui.win.EditLayers", methodName : "selectLayer"});
 						ld.intGridValues.splice(curIdx[0],1);
-						_gthis.selectLayer(ld);
+						_gthis.updateForm();
 						ev.preventDefault();
 					};
 				})(curIdx));
@@ -44241,6 +44240,9 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 			break;
 		}
 		this.updateLayerList();
+	}
+	,updateForm: function() {
+		this.selectLayer(this.curLayer);
 	}
 	,updateLayerList: function() {
 		var _gthis = this;

@@ -162,8 +162,16 @@ input[type=number]:focus {
 	}
 
 
-	.mainToolbar {
+	#mainBar {
 		margin-bottom: 8px;
+	}
+
+	#toolBar {
+		position: absolute;
+		top: 0px;
+		left: $panelWid;
+		padding: 4px;
+		background-color: $bgMed;
 	}
 }
 

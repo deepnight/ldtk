@@ -144,8 +144,16 @@ input[type=number]:focus {
   border-left-width: 1px;
 }
 
-.editor .mainToolbar {
+.editor #mainBar {
   margin-bottom: 8px;
+}
+
+.editor #toolBar {
+  position: absolute;
+  top: 0px;
+  left: 200px;
+  padding: 4px;
+  background-color: #2e333f;
 }
 
 .layersList ul {
