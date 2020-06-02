@@ -50,7 +50,8 @@ class EditLayers extends ui.Window {
 		}
 
 		var i = form.Input.linkToField( jForm.find("input[name='displayOpacity']"), ld.displayOpacity );
-		i.setBounds(10,100);
+		i.displayAsPct = true;
+		i.setBounds(0.1, 1);
 		i.onChange = function() {
 			client.onLayerDefChange();
 		}

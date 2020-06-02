@@ -87,6 +87,15 @@ class Input<T> {
 							);
 						}
 
+					case "Float":
+						return macro {
+							new form.input.FloatInput(
+								$jQuery,
+								function() return $field,
+								function(v) $field = v
+							);
+						}
+
 					case _:
 						Context.fatalError("Unsupported type "+t, field.pos);
 				}
