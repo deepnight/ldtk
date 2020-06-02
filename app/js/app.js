@@ -483,7 +483,7 @@ var Client = function() {
 		_gthis.onMouseUp();
 	});
 	$(".projectSettings").click(function(_) {
-		new ui_Notification("test",16711680);
+		ui_Notification.msg("Not implemented yet");
 	});
 	$("button.editLayers").click(function(_) {
 		new ui_win_EditLayers();
@@ -44489,7 +44489,7 @@ var ui_Notification = function(str,col) {
 	var _gthis = this;
 	dn_Process.call(this,Client.ME);
 	this.elem = $("xml#notification").clone().children().first();
-	$("#notificationList").prepend(this.elem);
+	this.elem.prependTo($("#notificationList"));
 	this.elem.find(".content").text(str);
 	if(col != null) {
 		var tmp = this.elem;
@@ -44505,6 +44505,12 @@ var ui_Notification = function(str,col) {
 };
 $hxClasses["ui.Notification"] = ui_Notification;
 ui_Notification.__name__ = "ui.Notification";
+ui_Notification.msg = function(str) {
+	return new ui_Notification(str);
+};
+ui_Notification.error = function(str) {
+	return new ui_Notification(str,16711680);
+};
 ui_Notification.__super__ = dn_Process;
 ui_Notification.prototype = $extend(dn_Process.prototype,{
 	hide: function() {
@@ -44664,6 +44670,7 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 		};
 		this.jForm.find(".deleteLayer").click(function(_) {
 			if(Client.ME.project.layerDefs.length == 1) {
+				ui_Notification.error("Cannot delete the last layer.");
 				return;
 			}
 			Client.ME.project.removeLayerDef(ld);
@@ -44703,11 +44710,13 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 							var val1 = _g1[_g];
 							++_g;
 							if(val1.name == newName) {
+								ui_Notification.error("The name \"" + newName + "\" is already used.");
 								nameInput[0].val(oldName[0]);
 								return;
 							}
 						}
 						val[0].name = newName;
+						oldName[0] = newName;
 						Client.ME.onLayerDefChange();
 					};
 				})(oldName,nameInput,val));
@@ -44814,6 +44823,7 @@ Xml.Document = 6;
 dn_Color.RED_LUMA = 0.299;
 dn_Color.GREEN_LUMA = 0.587;
 dn_Color.BLUE_LUMA = 0.114;
+dn_Cooldown.__meta__ = { obj : { indexes : ["hideOnce"]}};
 dn_data_GetText.CONTEXT = "||";
 dn_data_MoReader.MAGIC = -1794895138;
 dn_data_MoReader.MAGIC2 = -569244523;

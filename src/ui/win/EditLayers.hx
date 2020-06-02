@@ -63,8 +63,10 @@ class EditLayers extends ui.Window {
 
 		// Delete layer button
 		jForm.find(".deleteLayer").click( function(_) {
-			if( project.layerDefs.length==1 )
+			if( project.layerDefs.length==1 ) {
+				N.error("Cannot delete the last layer.");
 				return;
+			}
 
 			project.removeLayerDef(ld);
 			selectLayer(project.layerDefs[0]);
@@ -104,10 +106,12 @@ class EditLayers extends ui.Window {
 						var newName = StringTools.trim( nameInput.val() );
 						for(val in ld.getAllIntGridValues())
 							if( val.name==newName ) {
+								Notification.error("The name \""+newName+"\" is already used.");
 								nameInput.val(oldName);
 								return;
 							}
 						val.name = newName;
+						oldName = newName;
 						client.onLayerDefChange();
 					});
 

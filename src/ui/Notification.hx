@@ -3,11 +3,12 @@ package ui;
 class Notification extends dn.Process {
 	var elem : js.jquery.JQuery;
 
-	public function new(str:String, ?col:UInt) {
+	private function new(str:String, ?col:UInt) {
 		super(Client.ME);
 
 		elem = new J("xml#notification").clone().children().first();
-		new J("#notificationList").prepend(elem);
+		elem.prependTo( new J("#notificationList") );
+
 		elem.find(".content").text(str);
 		if( col!=null )
 			elem.css("border-color", C.intToHex(col));
@@ -15,6 +16,14 @@ class Notification extends dn.Process {
 		elem.hide().slideDown(100);
 		elem.click( function(_) hide() );
 		delayer.addS(hide, 2 + str.length*0.05);
+	}
+
+	public static function msg(str:String) {
+		return new Notification(str);
+	}
+
+	public static function error(str:String) {
+		return new Notification(str, 0xff0000);
 	}
 
 	public function hide() {
