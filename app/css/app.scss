@@ -263,7 +263,7 @@ input[type=number]:focus {
 			display: grid;
 			width: 100%;
 			grid-template-columns: repeat(4, 1fr);
-			grid-template-rows: calc( 64px + 1.2em );
+			grid-template-rows: calc( 64px + 2 * 1.2em );
 			gap: 8px;
 
 			li {
@@ -276,11 +276,18 @@ input[type=number]:focus {
 					height: 64px;
 				}
 
+				input.name {
+					display: block;
+					text-align: center;
+					font-style: italic;
+				}
+
 				span.id {
 					display: block;
 					text-align: center;
 					font-weight: bold;
 				}
+
 				a.remove {
 					display: none;
 					position: absolute;

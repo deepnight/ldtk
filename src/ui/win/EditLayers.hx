@@ -64,7 +64,10 @@ class EditLayers extends ui.Window {
 				// Add value button
 				var addButton = valuesList.find("li.add");
 				addButton.find("button").off().click( function(ev) {
-					ld.intGridValues.push(0xff0000);
+					ld.intGridValues.push({
+						name: "Unknown",
+						color: 0xff0000,
+					});
 					client.onLayerDefChange();
 					updateForm();
 					// jForm.find("li.value:last input[type=color]").click(); // TODO need proper user-triggered event
@@ -72,21 +75,27 @@ class EditLayers extends ui.Window {
 
 				// Existing values
 				var idx = 0;
-				for(c in ld.intGridValues) {
+				for(val in ld.intGridValues) {
 					var curIdx = idx;
 					var e = jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
 					e.addClass("value");
 					e.insertBefore(addButton);
 					e.find(".id").html("#"+idx);
 
+					var nameInput = e.find("input.name");
+					nameInput.val(val.name);
+					nameInput.change( function(_) {
+						val.name = nameInput.val();
+					});
+
 					if( idx==ld.intGridValues.length-1 )
 						e.addClass("removable");
 
 					// Edit color
 					var col = e.find("input[type=color]");
-					col.val( C.intToHex(c) );
+					col.val( C.intToHex(val.color) );
 					col.change( function(ev) {
-						ld.intGridValues[curIdx] = C.hexToInt( col.val() );
+						ld.intGridValues[curIdx].color = C.hexToInt( col.val() );
 						client.onLayerDefChange();
 						updateForm();
 					});

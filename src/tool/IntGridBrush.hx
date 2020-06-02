@@ -20,14 +20,14 @@ class IntGridBrush extends Tool<Int> {
 		selectValue( getSelectedValue() );
 
 		var idx = 0;
-		for(c in curLayer.def.intGridValues) {
+		for(val in curLayer.def.intGridValues) {
 			var e = new J("<li/>");
 			jToolBar.append(e);
 			e.addClass("color");
 			if( idx==getSelectedValue() )
 				e.addClass("active");
 
-			e.css("background-color", C.intToHex(c));
+			e.css("background-color", C.intToHex(val.color));
 			var curIdx = idx;
 			e.click( function(_) {
 				selectValue(curIdx);

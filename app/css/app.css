@@ -267,7 +267,7 @@ input[type=number]:focus {
   display: grid;
   width: 100%;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: calc( 64px + 1.2em);
+  grid-template-rows: calc( 64px + 2 * 1.2em);
   gap: 8px;
 }
 
@@ -283,6 +283,12 @@ input[type=number]:focus {
 .window .editLayers form ul.intGridValues li.value input[type=color] {
   width: 100%;
   height: 64px;
+}
+
+.window .editLayers form ul.intGridValues li.value input.name {
+  display: block;
+  text-align: center;
+  font-style: italic;
 }
 
 .window .editLayers form ul.intGridValues li.value span.id {

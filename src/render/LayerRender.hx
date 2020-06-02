@@ -23,7 +23,7 @@ class LayerRender {
 					if( id<0 )
 						continue;
 
-					g.beginFill(data.def.intGridValues[id]);
+					g.beginFill(data.def.intGridValues[id].color);
 					g.drawRect(cx*gridSize, cy*gridSize, gridSize, gridSize);
 				}
 
