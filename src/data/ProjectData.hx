@@ -89,6 +89,8 @@ class ProjectData implements data.IData {
 				if( level.getLayerContent(ld.uid)==null )
 					level.layerContents.push( new LayerContent(level, ld) );
 
+			// TODO: remove useless layerContent data (ex: when layer type changed from Entity to IntGrid)
+
 			// Cleanup layer values
 			for(lc in level.layerContents)
 				switch lc.def.type {

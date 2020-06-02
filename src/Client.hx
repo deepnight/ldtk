@@ -39,21 +39,24 @@ class Client extends dn.Process {
 		Boot.ME.s2d.addEventListener( onEvent );
 
 		project = new data.ProjectData();
-		project.createLayerDef(IntGrid,"First layer");
-		project.createLayerDef(IntGrid,"Other");
-		var l = project.createLayerDef(IntGrid,"Last one");
-		l.gridSize = 8;
+		// project.createLayerDef(IntGrid,"First layer");
+		// project.createLayerDef(IntGrid,"Other");
+		// var l = project.createLayerDef(IntGrid,"Last one");
+		// l.gridSize = 8;
 
 		project.createLevel();
 
 		curLevelId = project.levels[0].uid;
 		curLayerId = project.layerDefs[0].uid;
 
-		curTool = new tool.IntGridBrush();
-
+		initTool();
 		levelRender = new render.LevelRender();
 
 		updateLayerList();
+	}
+
+	function initTool() {
+		curTool = new tool.IntGridBrush();
 	}
 
 	function onEvent(e:hxd.Event) {
@@ -97,7 +100,7 @@ class Client extends dn.Process {
 		if( curLayerContent==null )
 			selectLayer(curLevel.layerContents[0]);
 		levelRender.invalidate();
-		curTool.updatePalette();
+		initTool();
 		updateLayerList();
 	}
 
