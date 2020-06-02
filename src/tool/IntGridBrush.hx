@@ -20,7 +20,7 @@ class IntGridBrush extends Tool<Int> {
 		selectValue( getSelectedValue() );
 
 		var idx = 0;
-		for(val in curLayer.def.intGridValues) {
+		for( val in curLayer.def.getAllIntGridValues() ) {
 			var e = new J("<li/>");
 			jPalette.append(e);
 			e.addClass("color");
