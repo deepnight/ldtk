@@ -38,4 +38,13 @@ class LayerDef implements IData {
 
 	public inline function getAllIntGridValues() return intGridValues;
 	public inline function countIntGridValues() return intGridValues.length;
+
+
+	public function isIntGridValueNameUnique(name:String) {
+		for(v in intGridValues)
+			if( v.name==name )
+				return false;
+		return true;
+	}
+
 }

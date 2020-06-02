@@ -104,12 +104,11 @@ class EditLayers extends ui.Window {
 					var oldName = nameInput.val();
 					nameInput.change( function(_) {
 						var newName = StringTools.trim( nameInput.val() );
-						for(val in ld.getAllIntGridValues())
-							if( val.name==newName ) {
-								Notification.error("The name \""+newName+"\" is already used.");
-								nameInput.val(oldName);
-								return;
-							}
+						if( !ld.isIntGridValueNameUnique(newName) ) {
+							Notification.error("The name \""+newName+"\" is already used.");
+							nameInput.val(oldName);
+							return;
+						}
 						val.name = newName;
 						oldName = newName;
 						client.onLayerDefChange();
