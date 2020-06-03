@@ -13,7 +13,7 @@
 	</div>
 
 	<form>
-		<ul>
+		<ul class="entityDef">
 
 		<li>
 			<label for="name">Entity name</label>
@@ -22,30 +22,30 @@
 
 		<li>
 			<label for="width">Width</label>
-			<input type="text" name="width"/>
-			x
-			<input type="text" name="height"/>
-			<span class="suffix">px</span>
-		</li>
-
-		<li class="fields">
-			<div class="cols">
-				<div class="fieldList">
-					<ul class="niceList"></ul>
-					<div class="buttons">
-						<button type="button" class="add">+</button>
-						<button type="button" class="delete">🗑️</button>
-					</div>
-				</div>
-
-				<ul>
-				<li>
-					<label for="fName">Field name</label>
-					<input type="text" name="fName"/>
-				</li>
-				</ul>
-			</div>
+			<input type="text" name="width" class="small"/>
+			<span>x</span>
+			<input type="text" name="height" class="small"/>
+			<span>px</span>
 		</li>
 		</ul>
+
+
+		<div class="cols fields">
+			<div class="fieldList">
+				<ul class="niceList"></ul>
+				<div class="buttons">
+					<button type="button" class="add">+</button>
+					<button type="button" class="delete">🗑️</button>
+				</div>
+			</div>
+
+			<ul>
+			<li>
+				<label for="fName">Field name</label>
+				<input type="text" name="fName"/>
+			</li>
+			</ul>
+		</div>
+
 	</form>
 </div>

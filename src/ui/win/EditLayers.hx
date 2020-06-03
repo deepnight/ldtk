@@ -67,10 +67,8 @@ class EditLayers extends ui.Window {
 
 		// Fields
 		var i = Input.linkToField( jForm.find("input[name='name']"), ld.name );
-		i.unicityCheck = project.isLayerNameUnique;
-		i.onChange = function() {
-			client.ge.emit(LayerDefChanged);
-		};
+		i.validityCheck = project.isLayerNameValid;
+		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToField( jForm.find("select[name='type']"), ld.type );
 		i.onChange = function() {
@@ -116,8 +114,8 @@ class EditLayers extends ui.Window {
 
 					// Edit value name
 					var i = Input.linkToField(e.find("input.name"), val.name);
-					i.unicityCheck = ld.isIntGridValueNameUnique;
-					i.unicityError = N.error.bind("This value name is already used.");
+					i.validityCheck = ld.isIntGridValueNameUnique;
+					i.validityError = N.error.bind("This value name is already used.");
 					i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 					if( ld.countIntGridValues()>1 && idx==ld.countIntGridValues()-1 )

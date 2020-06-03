@@ -8,7 +8,6 @@ class ProjectData implements data.IData {
 
 	public function new() {
 		createLayerDef(IntGrid);
-		createEntityDef();
 	}
 
 	public function makeUniqId() return nextUniqId++;
@@ -77,13 +76,13 @@ class ProjectData implements data.IData {
 
 	public function createLayerDef(type:LayerType, ?name:String) : LayerDef {
 		var l = new LayerDef(makeUniqId(), type);
-		if( name!=null && isLayerNameUnique(name) )
+		if( name!=null && isLayerNameValid(name) )
 			l.name = name;
 		layerDefs.push(l);
 		return l;
 	}
 
-	public function isLayerNameUnique(name:String) {
+	public function isLayerNameValid(name:String) {
 		for(ld in layerDefs)
 			if( ld.name==name )
 				return false;
@@ -127,6 +126,11 @@ class ProjectData implements data.IData {
 		if( isEntityNameValid(name) )
 			ed.name = name;
 		return ed;
+	}
+
+	public function removeEntityDef(ed:EntityDef) {
+		entityDefs.remove(ed);
+		checkDataIntegrity();
 	}
 
 	public function isEntityNameValid(name:String) {

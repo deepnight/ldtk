@@ -2,7 +2,7 @@ package ui.win;
 
 class EditEntities extends ui.Window {
 	var jList : js.jquery.JQuery;
-	var jForm : js.jquery.JQuery;
+	var jEntityForm : js.jquery.JQuery;
 
 	public var cur : Null<EntityDef>;
 
@@ -12,15 +12,14 @@ class EditEntities extends ui.Window {
 		loadTemplate( hxd.Res.tpl.editEntities, "defEditor entityDefs" );
 		jList = jWin.find(".mainList ul");
 
-		jForm = jWin.find("form");
-		jForm.submit( function(ev) ev.preventDefault() );
+		jEntityForm = jWin.find(".entityDef");
 
 		// Create
 		jWin.find(".mainList button.create").click( function(_) {
 			var ed = project.createEntityDef();
 			select(ed);
 			// client.ge.emit(LayerDefChanged);
-			jForm.find("input").first().focus().select();
+			jEntityForm.find("input").first().focus().select();
 		});
 
 		// Delete
@@ -29,7 +28,12 @@ class EditEntities extends ui.Window {
 				N.error("No entity selected.");
 				return;
 			}
-			N.notImplemented();
+			project.removeEntityDef(cur);
+			client.ge.emit(EntityDefChanged);
+			if( project.entityDefs.length>0 )
+				select(project.entityDefs[0]);
+			else
+				select(null);
 		});
 
 		select(project.entityDefs[0]);
@@ -43,25 +47,40 @@ class EditEntities extends ui.Window {
 			case LayerContentChanged:
 
 			case EntityDefChanged:
-				updateForm();
-				updateList();
+				updateEntityForm();
+				updateLists();
 
 			case EntityDefSorted:
-				updateList();
+				updateLists();
 		}
 	}
 
-	function select(ed:EntityDef) {
+	function select(ed:Null<EntityDef>) {
 		cur = ed;
+		jEntityForm.find("*").off(); // cleanup event listeners
 
-		jForm.find("*").off(); // cleanup event listeners
+		if( cur==null ) {
+			jEntityForm.css("visibility","hidden");
+			return;
+		}
+		jEntityForm.css("visibility","visible");
 
-		// Fields
-		var i = Input.linkToField( jForm.find("input[name='name']"), ed.name );
-		i.unicityCheck = project.isEntityNameValid;
+
+		// Name
+		var i = Input.linkToField( jEntityForm.find("input[name='name']"), ed.name );
+		i.validityCheck = project.isEntityNameValid;
 		i.onChange = function() {
 			client.ge.emit(EntityDefChanged);
 		};
+
+		// Dimensions
+		var i = Input.linkToField( jEntityForm.find("input[name='width']"), ed.width);
+		i.setBounds(1,256);
+		i.onChange = client.ge.emit.bind(EntityDefChanged);
+
+		var i = Input.linkToField( jEntityForm.find("input[name='height']"), ed.height);
+		i.setBounds(1,256);
+		i.onChange = client.ge.emit.bind(EntityDefChanged);
 
 		// 	new ui.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
 		// 		project.removeLayerDef(ld);
@@ -70,16 +89,20 @@ class EditEntities extends ui.Window {
 		// 	});
 		// });
 
-		updateList();
+		updateLists();
 	}
 
 
-	function updateForm() {
+	function updateEntityForm() {
 		select(cur);
 	}
 
+	function updateFieldForm() {
 
-	function updateList() {
+	}
+
+
+	function updateLists() {
 		jList.empty();
 
 		for(ed in project.entityDefs) {

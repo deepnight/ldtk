@@ -126,6 +126,10 @@ form > ul > li {
   flex: 1 1 auto;
 }
 
+form > ul > li .small {
+  flex: 0 1 60px;
+}
+
 form > ul > li + li {
   margin-top: 8px;
 }
@@ -134,10 +138,15 @@ form > ul label {
   flex: 0 0 150px;
 }
 
-form > ul .suffix {
+form > ul li > span {
   flex: 0 0 20px;
-  padding-left: 8px;
   opacity: 0.5;
+  padding: 8px;
+  text-align: center;
+}
+
+form > ul li > span:last-child {
+  text-align: left;
 }
 
 select {
