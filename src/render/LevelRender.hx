@@ -19,7 +19,9 @@ class LevelRender extends dn.Process {
 		client.ge.watchAny(onGlobalEvent);
 
 		createRootInLayers(client.root, Const.DP_MAIN);
-		grid = new h2d.Graphics(root);
+
+		grid = new h2d.Graphics();
+		root.add(grid, 0);
 	}
 
 	override function onDispose() {
@@ -79,7 +81,9 @@ class LevelRender extends dn.Process {
 		layerWrappers = new Map();
 
 		for(lc in client.curLevel.layerContents) {
-			var wrapper = new h2d.Object(root);
+			var wrapper = new h2d.Object();
+			root.add(wrapper,1);
+			root.under(wrapper);
 			layerWrappers.set(lc.layerDefId, wrapper);
 
 			if( !isLayerVisible(lc) )
