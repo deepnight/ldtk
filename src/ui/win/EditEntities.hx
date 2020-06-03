@@ -25,10 +25,10 @@ class EditEntities extends ui.Window {
 
 		// Delete
 		jWin.find(".mainList button.delete").click( function(ev) {
-			// if( project.layerDefs.length==1 ) {
-			// 	N.error("Cannot delete the last layer.");
-			// 	return;
-			// }
+			if( cur==null ) {
+				N.error("No entity selected.");
+				return;
+			}
 			N.notImplemented();
 		});
 

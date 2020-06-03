@@ -385,6 +385,7 @@ ul.niceList {
   list-style: none;
   padding: 4px;
   margin-top: 4px;
+  min-height: 200px;
   margin-bottom: 4px;
   border: 1px solid #545d73;
   background-color: #1e2229;
@@ -540,4 +541,27 @@ ul.niceList li:not(.active):hover {
 
 .window.layerDefs form:not(.type-Entities) .Entities {
   display: none;
+}
+
+.window.entityDefs .content {
+  width: 900px;
+}
+
+.window.entityDefs .fields {
+  margin-top: 20px;
+}
+
+.window.entityDefs .fields ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.window.entityDefs .fields ul li {
+  margin: 0;
+  padding: 0;
+}
+
+.window.entityDefs .fields .cols {
+  grid-template-columns: 0.8fr 1fr;
 }

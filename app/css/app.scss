@@ -397,6 +397,7 @@ ul.niceList {
 	@include resetList();
 	padding: 4px;
 	margin-top: 4px;
+	min-height: 200px;
 	margin-bottom: 4px;
 	border: 1px solid $bgLight;
 	background-color: $bgDark;
@@ -538,5 +539,19 @@ ul.niceList {
 	}
 }
 
-// .window.entityDefs {
-// }
+.window.entityDefs {
+	.content {
+		width: 900px;
+	}
+
+	.fields {
+		margin-top: 20px;
+
+		ul {
+			@include resetList();
+		}
+		.cols {
+			grid-template-columns: 0.8fr 1fr;
+		}
+	}
+}
