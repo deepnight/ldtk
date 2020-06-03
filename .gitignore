@@ -1,3 +1,4 @@
 app/app.js
 app/*.map
 dump/
+res/.tmp
