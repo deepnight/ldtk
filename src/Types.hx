@@ -16,8 +16,10 @@ enum GlobalEvent {
 
 	EntityDefChanged;
 	EntityDefSorted;
+	EntityFieldChanged;
 }
 
 enum FieldType {
 	F_Int;
+	F_String;
 }

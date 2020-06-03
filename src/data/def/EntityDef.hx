@@ -6,7 +6,7 @@ class EntityDef implements IData {
 	public var width : Int;
 	public var height : Int;
 	public var color : UInt;
-	public var fields : Array<data.Field> = [];
+	public var fieldDefs : Array<data.def.FieldDef> = [];
 
 	public function new(uid:Int) {
 		this.uid = uid;
@@ -26,9 +26,9 @@ class EntityDef implements IData {
 	}
 
 
-	public function createField(project:ProjectData) : Field {
-		var f = new Field(project.makeUniqId(), F_Int);
-		fields.push(f);
+	public function createField(project:ProjectData) : FieldDef {
+		var f = new FieldDef(project.makeUniqId(), F_Int);
+		fieldDefs.push(f);
 		return f;
 	}
 

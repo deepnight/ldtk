@@ -52,6 +52,7 @@ class EditLayers extends ui.Window {
 
 			case EntityDefChanged:
 			case EntityDefSorted:
+			case EntityFieldChanged:
 		}
 	}
 

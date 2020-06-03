@@ -1,22 +1,28 @@
 package ui.win;
 
 class EditEntities extends ui.Window {
-	var jList : js.jquery.JQuery;
-	var jEntityForm : js.jquery.JQuery;
-	var jFieldsForm : js.jquery.JQuery;
+	var jEntityList : js.jquery.JQuery;
+	var jFieldList : js.jquery.JQuery;
 
-	public var curEntity : Null<EntityDef>;
+	var jAllForms : js.jquery.JQuery;
+	var jEntityForm : js.jquery.JQuery;
+	var jFieldForm : js.jquery.JQuery;
+
+	var curEntity : Null<EntityDef>;
+	var curField : Null<FieldDef>;
 
 	public function new() {
 		super();
 
 		loadTemplate( hxd.Res.tpl.editEntities, "defEditor entityDefs" );
-		jList = jWin.find(".mainList ul");
+		jEntityList = jWin.find(".mainList ul");
+		jFieldList = jWin.find(".fieldList ul");
 
+		jAllForms = jWin.find(".formsWrapper");
 		jEntityForm = jWin.find("ul.form.entityDef");
-		jFieldsForm = jWin.find(".fields ul.form");
+		jFieldForm = jWin.find(".fields ul.form");
 
-		// Create
+		// Create entity
 		jWin.find(".mainList button.create").click( function(_) {
 			var ed = project.createEntityDef();
 			selectEntity(ed);
@@ -24,7 +30,7 @@ class EditEntities extends ui.Window {
 			jEntityForm.find("input").first().focus().select();
 		});
 
-		// Delete
+		// Delete entity
 		jWin.find(".mainList button.delete").click( function(ev) {
 			if( curEntity==null ) {
 				N.error("No entity selected.");
@@ -36,6 +42,19 @@ class EditEntities extends ui.Window {
 				selectEntity(project.entityDefs[0]);
 			else
 				selectEntity(null);
+		});
+
+		// Create field
+		jWin.find(".fields button.create").click( function(_) {
+			var f = curEntity.createField(project);
+			client.ge.emit(EntityFieldChanged);
+			selectField(f);
+			jFieldForm.find("input:first").focus().select();
+		});
+
+		// Delete field
+		jWin.find(".fields button.delete").click( function(_) {
+			N.notImplemented();
 		});
 
 		selectEntity(project.entityDefs[0]);
@@ -54,42 +73,60 @@ class EditEntities extends ui.Window {
 
 			case EntityDefSorted:
 				updateLists();
+
+			case EntityFieldChanged:
+				updateLists();
+				updateFieldForm();
 		}
 	}
 
 	function selectEntity(ed:Null<EntityDef>) {
 		curEntity = ed;
+		curField = ed==null ? null : ed.fieldDefs[0];
+		updateEntityForm();
+		updateFieldForm();
+		updateLists();
+	}
+
+	function selectField(fd:FieldDef) {
+		curField = fd;
+		updateFieldForm();
+		updateLists();
+	}
+
+
+	function updateEntityForm() {
 		jEntityForm.find("*").off(); // cleanup event listeners
 
 		if( curEntity==null ) {
-			new J(".formsWrapper").css("visibility","hidden");
+			jAllForms.css("visibility","hidden");
 			return;
 		}
 		else
-			new J(".formsWrapper").css("visibility","visible");
+			jAllForms.css("visibility","visible");
 
 
 		// Name
-		var i = Input.linkToField( jEntityForm.find("input[name='name']"), ed.name );
+		var i = Input.linkToField( jEntityForm.find("input[name='name']"), curEntity.name );
 		i.validityCheck = project.isEntityNameValid;
 		i.onChange = function() {
 			client.ge.emit(EntityDefChanged);
 		};
 
 		// Dimensions
-		var i = Input.linkToField( jEntityForm.find("input[name='width']"), ed.width);
+		var i = Input.linkToField( jEntityForm.find("input[name='width']"), curEntity.width);
 		i.setBounds(1,256);
 		i.onChange = client.ge.emit.bind(EntityDefChanged);
 
-		var i = Input.linkToField( jEntityForm.find("input[name='height']"), ed.height);
+		var i = Input.linkToField( jEntityForm.find("input[name='height']"), curEntity.height);
 		i.setBounds(1,256);
 		i.onChange = client.ge.emit.bind(EntityDefChanged);
 
 		// Color
 		var col = jEntityForm.find("input[name=color]");
-		col.val( C.intToHex(ed.color) );
+		col.val( C.intToHex(curEntity.color) );
 		col.change( function(ev) {
-			ed.color = C.hexToInt( col.val() );
+			curEntity.color = C.hexToInt( col.val() );
 			client.ge.emit(EntityDefChanged);
 			updateEntityForm();
 		});
@@ -100,30 +137,68 @@ class EditEntities extends ui.Window {
 		// 		client.ge.emit(LayerDefChanged);
 		// 	});
 		// });
-
-		updateLists();
 	}
 
-
-	function updateEntityForm() {
-		selectEntity(curEntity);
-	}
 
 	function updateFieldForm() {
+		if( curField==null ) {
+			jFieldForm.css("visibility","hidden");
+			return;
+		}
+		else
+			jFieldForm.css("visibility","visible");
+
+		// Set form class
+		for(k in Type.getEnumConstructs(FieldType))
+			jFieldForm.removeClass("type-"+k);
+		jFieldForm.addClass("type-"+curField.type);
+
+		var i = Input.linkToField(jFieldForm.find("input[name=name]"), curField.name);
+		i.onChange = client.ge.emit.bind(EntityFieldChanged);
+
+		var i = Input.linkToField(jFieldForm.find("select[name=type]"), curField.type);
+		i.onChange = function() {
+			client.ge.emit(EntityFieldChanged);
+			updateFieldForm();
+		}
+
+		if( !curField.canBeNull )
+			jFieldForm.find("input[name=def]").attr("placeholder", curField.getDefault());
+
+		jFieldForm.find("input[name=def]").val( curField.getString() );
+		// switch curField.type {
+		// 	case F_Int:
+		// 	case F_String:
+		// }
 	}
 
 
 	function updateLists() {
-		jList.empty();
+		jEntityList.empty();
+		jFieldList.empty();
 
+		// Entities
 		for(ed in project.entityDefs) {
 			var elem = new J("<li/>");
-			jList.append(elem);
+			jEntityList.append(elem);
 			elem.append('<span class="name">'+ed.name+'</span>');
 			if( curEntity==ed )
 				elem.addClass("active");
 
 			elem.click( function(_) selectEntity(ed) );
+		}
+
+		// Fields
+		if( curEntity!=null ) {
+			for(f in curEntity.fieldDefs) {
+				var elem = new J("<li/>");
+				jFieldList.append(elem);
+				elem.append('<span class="name">'+f.name+'</span>');
+				if( curField==f )
+					elem.addClass("active");
+
+				elem.click( function(_) selectField(f) );
+			}
 		}
 
 		// Make layer list sortable

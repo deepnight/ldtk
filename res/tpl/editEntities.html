@@ -38,15 +38,25 @@
 			<div class="fieldList">
 				<ul class="niceList"></ul>
 				<div class="buttons">
-					<button type="button" class="add">+</button>
+					<button type="button" class="create">+</button>
 					<button type="button" class="delete">🗑️</button>
 				</div>
 			</div>
 
 			<ul class="form">
 			<li>
-				<label for="fName">Field name</label>
-				<input type="text" name="fName"/>
+				<label for="name">Field name</label>
+				<input type="text" name="name"/>
+			</li>
+
+			<li>
+				<label for="type">Value type</label>
+				<select name="type"></select>
+			</li>
+
+			<li>
+				<label for="name">Default value</label>
+				<input type="text" name="def" placeholder=""/>
 			</li>
 			</ul>
 		</div>

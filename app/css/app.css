@@ -220,13 +220,14 @@ input[type=number]:focus {
 }
 
 .window .content {
-  position: absolute;
-  z-index: 2;
-  box-sizing: border-box;
   display: block;
-  padding: 20px;
+  position: absolute;
+  overflow: auto;
+  z-index: 2;
   top: 0px;
   left: 0px;
+  box-sizing: border-box;
+  padding: 20px;
   height: 100%;
   width: 700px;
   background: #2e333f;
@@ -569,17 +570,6 @@ ul.niceList li:not(.active):hover {
 
 .window.entityDefs .fields {
   margin-top: 20px;
-}
-
-.window.entityDefs .fields ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.window.entityDefs .fields ul li {
-  margin: 0;
-  padding: 0;
 }
 
 .window.entityDefs .fields .cols {

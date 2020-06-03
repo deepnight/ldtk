@@ -229,15 +229,16 @@ input[type=number]:focus {
 	}
 
 	.content {
-		position: absolute;
-		z-index: 2;
-		box-sizing: border-box;
 		display: block;
-		padding: 20px;
+		position: absolute;
+		overflow: auto;
+		z-index: 2;
 		top: 0px;
 		left: 0px;
+
+		box-sizing: border-box;
+		padding: 20px;
 		height: 100%;
-		// padding-left: 50px;
 
 		width: 700px;
 		background: $bgMed;
@@ -567,9 +568,6 @@ ul.niceList {
 	.fields {
 		margin-top: 20px;
 
-		ul {
-			@include resetList();
-		}
 		.cols {
 			grid-template-columns: 0.8fr 1fr;
 		}

@@ -106,7 +106,7 @@ class Client extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
-			case LayerDefChanged, LayerDefSorted, EntityDefChanged, EntityDefSorted :
+			case LayerDefChanged, LayerDefSorted, EntityDefChanged, EntityDefSorted, EntityFieldChanged :
 				project.checkDataIntegrity();
 				if( curLayerContent==null )
 					selectLayer(curLevel.layerContents[0]);
