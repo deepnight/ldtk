@@ -3,7 +3,7 @@ class Client extends dn.Process {
 
 	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
-	public var jLayers(get,never) : J; inline function get_jLayers() return new J(".panel .layersList");
+	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
 	public var jMainBar(get,never) : J; inline function get_jMainBar() return new J("#mainBar");
 	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette ul");
 
@@ -136,14 +136,15 @@ class Client extends dn.Process {
 				vis.find(".off").hide();
 			else
 				vis.find(".on").hide();
-			vis.click( function(_) {
+			vis.click( function(ev) {
+				ev.stopPropagation();
 				levelRender.toggleLayer(lc);
 				updateLayerList();
 			});
 
 			var name = e.find(".name");
 			name.text(lc.def.name);
-			name.click( function(_) {
+			e.click( function(_) {
 				selectLayer(lc);
 			});
 

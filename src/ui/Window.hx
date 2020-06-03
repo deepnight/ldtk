@@ -6,6 +6,7 @@ class Window extends dn.Process {
 	public var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
 
 	var jWin: js.jquery.JQuery;
+	var jContent : js.jquery.JQuery;
 	var jMask: js.jquery.JQuery;
 
 	public function new() {
@@ -13,6 +14,10 @@ class Window extends dn.Process {
 
 		jWin = new J("xml#window").children().first().clone();
 		new J("body").append(jWin);
+
+		jContent = jWin.find(".content");
+		jContent.hide().animate({width:'toggle'}, 100);
+		// jContent.hide().slideDown(100);
 
 		jMask = jWin.find(".mask");
 		jMask.click( function(_) close() );
@@ -23,21 +28,27 @@ class Window extends dn.Process {
 
 	override function onDispose() {
 		super.onDispose();
+
 		client.ge.remove(onGlobalEvent);
+		jWin = null;
+		jMask = null;
+		jContent = null;
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
 	}
 
 	public function close() {
-		jWin.remove();
-		jWin = null;
-		destroy();
+		jWin.find("*").off();
+		jMask.fadeOut(50);
+		jContent.stop(true,false).animate({ width:"toggle" }, 100, function(_) {
+			jWin.remove();
+			destroy();
+		});
 	}
 
 	public function loadTemplate(tpl:hxd.res.Resource) {
 		var content = new J( tpl.entry.getText() );
-
-		jWin.find(".content").append(content);
+		jContent.empty().append(content);
 	}
 }

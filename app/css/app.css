@@ -232,7 +232,7 @@ div.confirm .wrapper .buttons button + button {
 }
 
 .sortable-placeholder {
-  min-height: 32px;
+  min-height: 1.3em;
   outline: 1px dashed #ffcc00;
   outline-offset: -2px;
   background-color: #1e2229;
@@ -276,6 +276,29 @@ div.confirm .wrapper .buttons button + button {
 
 .editor #mainBar {
   margin-bottom: 8px;
+}
+
+.editor #layers ul.niceList li .name {
+  flex: 1 1 auto;
+  order: 1;
+  display: block;
+  cursor: pointer;
+}
+
+.editor #layers ul.niceList li .vis {
+  flex: 0 0 auto;
+  padding: 10px;
+  margin: -10px;
+  color: white;
+  text-shadow: 0px 0px 4px black;
+  order: 2;
+  display: block;
+  cursor: zoom-out;
+}
+
+.editor #layers ul.niceList li .vis:hover {
+  outline: 1px solid white;
+  outline-offset: -4px;
 }
 
 .editor #palette {
@@ -334,41 +357,17 @@ ul.niceList li {
 
 ul.niceList li {
   display: flex;
+  padding: 10px;
   border-top: 1px solid #1e2229;
   border-bottom: 1px solid #1e2229;
   background-color: #2e333f;
-}
-
-ul.niceList li .name {
-  flex: 1 1 auto;
-  order: 1;
-  display: block;
-  padding: 10px;
   cursor: pointer;
-}
-
-ul.niceList li .vis {
-  flex: 0 0 auto;
-  padding: 10px;
-  color: white;
-  text-shadow: 0px 0px 4px black;
-  order: 2;
-  display: block;
-  cursor: zoom-out;
-}
-
-ul.niceList li .vis:hover {
-  outline: 1px solid white;
-  outline-offset: -4px;
 }
 
 ul.niceList li.active {
   background-color: #ffcc00;
-  box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
-}
-
-ul.niceList li.active .name {
   color: black;
+  box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
 }
 
 ul.niceList li.hidden {

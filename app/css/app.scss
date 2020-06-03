@@ -254,7 +254,7 @@ div.confirm {
 
 
 .sortable-placeholder {
-	min-height: 32px;
+	min-height: 1.3em;
 	outline: 1px dashed $orange;
 	outline-offset: -2px;
 	background-color: $bgDark;
@@ -302,6 +302,34 @@ div.confirm {
 		margin-bottom: 8px;
 	}
 
+	#layers {
+		ul.niceList {
+			li {
+				.name {
+					flex: 1 1 auto;
+					order: 1;
+					display: block;
+					cursor: pointer;
+				}
+				.vis { // TODO move away
+					flex: 0 0 auto;
+					padding: 10px;
+					margin: -10px;
+					color: white;
+					text-shadow: 0px 0px 4px black;
+					order: 2;
+					display: block;
+					cursor: zoom-out;
+				}
+				.vis:hover {
+					outline: 1px solid white;
+					outline-offset: -4px;
+				}
+			}
+		}
+
+	}
+
 	#palette {
 		background-color: $bgDark;
 
@@ -345,39 +373,17 @@ ul.niceList {
 	background-color: $bgDark;
 	li {
 		display: flex;
+		padding: 10px;
 		border-top: 1px solid $bgDark;
 		border-bottom: 1px solid $bgDark;
 		background-color: $bgMed;
-
-		.name {
-			flex: 1 1 auto;
-			order: 1;
-			display: block;
-			padding: 10px;
-			cursor: pointer;
-		}
-		.vis { // TODO move away
-			flex: 0 0 auto;
-			padding: 10px;
-			color: white;
-			text-shadow: 0px 0px 4px black;
-			order: 2;
-			display: block;
-			cursor: zoom-out;
-		}
-		.vis:hover {
-			outline: 1px solid white;
-			outline-offset: -4px;
-		}
+		cursor: pointer;
 	}
 
 	li.active {
 		background-color: $orange;
+		color: black;
 		box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
-
-		.name {
-			color: black;
-		}
 	}
 
 	li.hidden {
