@@ -499,6 +499,7 @@ var Client = function() {
 	this.project.layerDefs[0].name = "Collisions";
 	var ld = this.project.createLayerDef(LayerType.IntGrid,"Decorations");
 	ld.gridSize = 8;
+	ld.getIntGridValue(0).color = 65280;
 	this.project.createLevel();
 	this.curLevelId = this.project.levels[0].uid;
 	this.curLayerId = this.project.layerDefs[0].uid;
@@ -1969,10 +1970,10 @@ data_ProjectData.prototype = {
 	}
 	,sortLayerDef: function(from,to) {
 		if(from < 0 || from >= this.layerDefs.length || from == to) {
-			return false;
+			return null;
 		}
 		if(to < 0 || to >= this.layerDefs.length) {
-			return false;
+			return null;
 		}
 		this.checkDataIntegrity();
 		var moved = this.layerDefs.splice(from,1)[0];
@@ -1982,10 +1983,10 @@ data_ProjectData.prototype = {
 		while(_g < _g1.length) {
 			var l = _g1[_g];
 			++_g;
-			var moved = l.layerContents.splice(from,1)[0];
-			l.layerContents.splice(to,0,moved);
+			var moved1 = l.layerContents.splice(from,1)[0];
+			l.layerContents.splice(to,0,moved1);
 		}
-		return true;
+		return moved;
 	}
 	,createLevel: function() {
 		var l = new data_LevelData(this.makeUniqId());
@@ -7508,6 +7509,37 @@ h2d_Layers.prototype = $extend(h2d_Object.prototype,{
 					this.parentContainer.contentChanged(this);
 				}
 				break;
+			}
+		}
+	}
+	,under: function(s) {
+		var _g = 0;
+		var _g1 = this.children.length;
+		while(_g < _g1) {
+			var i = _g++;
+			if(this.children[i] == s) {
+				var pos = 0;
+				var _g2 = 0;
+				var _g3 = this.layersIndexes;
+				while(_g2 < _g3.length) {
+					var l = _g3[_g2];
+					++_g2;
+					if(l > i) {
+						break;
+					} else {
+						pos = l;
+					}
+				}
+				var p = i;
+				while(p > pos) {
+					this.children[p] = this.children[p - 1];
+					--p;
+				}
+				this.children[pos] = s;
+				if(s.allocated) {
+					s.onHierarchyMoved(false);
+				}
+				return;
 			}
 		}
 	}
@@ -44380,7 +44412,8 @@ var render_LevelRender = function() {
 	dn_Process.call(this,Client.ME);
 	Client.ME.ge.watchAny($bind(this,this.onGlobalEvent));
 	this.createRootInLayers(Client.ME.root,Const.DP_MAIN);
-	this.grid = new h2d_Graphics(this.root);
+	this.grid = new h2d_Graphics();
+	this.root.addChildAt(this.grid,0);
 };
 $hxClasses["render.LevelRender"] = render_LevelRender;
 render_LevelRender.__name__ = "render.LevelRender";
@@ -44509,7 +44542,9 @@ render_LevelRender.prototype = $extend(dn_Process.prototype,{
 		while(_g < _g1.length) {
 			var lc = _g1[_g];
 			++_g;
-			var wrapper = new h2d_Object(this.root);
+			var wrapper = new h2d_Object();
+			this.root.addChildAt(wrapper,1);
+			this.root.under(wrapper);
 			this.layerWrappers.h[lc.layerDefId] = wrapper;
 			if(!(!this.layerVis.h.hasOwnProperty(lc.layerDefId) || this.layerVis.h[lc.layerDefId] == true)) {
 				continue;
@@ -45208,11 +45243,12 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 				};
 			})(l));
 		}
-		var out = eval("sortable(\".layersList ul\")");
+		var out = eval("sortable(\".window .layersList ul\")");
 		$(".layersList ul").off("sortupdate").on("sortupdate",null,function(ev) {
 			var from = ev.detail.origin.index;
 			var to = ev.detail.destination.index;
-			Client.ME.project.sortLayerDef(from,to);
+			var moved = Client.ME.project.sortLayerDef(from,to);
+			_gthis.selectLayer(moved);
 			Client.ME.ge.emit(GlobalEvent.LayerDefSorted);
 		});
 	}

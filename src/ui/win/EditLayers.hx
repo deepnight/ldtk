@@ -176,11 +176,12 @@ class EditLayers extends ui.Window {
 		}
 
 		// Make layer list sortable
-		var out = js.Lib.eval('sortable(".layersList ul")');
+		var out = js.Lib.eval('sortable(".window .layersList ul")');
 		new J(".layersList ul").off("sortupdate").on("sortupdate", function(ev) {
 			var from : Int = ev.detail.origin.index;
 			var to : Int = ev.detail.destination.index;
-			project.sortLayerDef(from,to);
+			var moved = project.sortLayerDef(from,to);
+			selectLayer(moved);
 			client.ge.emit(LayerDefSorted);
 		});
 	}

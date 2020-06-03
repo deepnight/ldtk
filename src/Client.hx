@@ -47,6 +47,8 @@ class Client extends dn.Process {
 		project.layerDefs[0].name = "Collisions";
 		var ld = project.createLayerDef(IntGrid,"Decorations");
 		ld.gridSize = 8;
+		ld.getIntGridValue(0).color = 0x00ff00;
+
 
 		project.createLevel();
 

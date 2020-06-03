@@ -66,12 +66,12 @@ class ProjectData implements data.IData {
 		checkDataIntegrity();
 	}
 
-	public function sortLayerDef(from:Int, to:Int) {
+	public function sortLayerDef(from:Int, to:Int) : Null<LayerDef> {
 		if( from<0 || from>=layerDefs.length || from==to )
-			return false;
+			return null;
 
 		if( to<0 || to>=layerDefs.length )
-			return false;
+			return null;
 
 		checkDataIntegrity();
 
@@ -84,7 +84,7 @@ class ProjectData implements data.IData {
 			l.layerContents.insert(to, moved);
 		}
 
-		return true;
+		return moved;
 	}
 
 	public function createLevel() {

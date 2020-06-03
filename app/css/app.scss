@@ -260,6 +260,13 @@ div.confirm {
 	background-color: $bgDark;
 }
 
+*[draggable=true] {
+	background: url("/img/icons/drag.png") no-repeat;
+	background-position: right center;
+	background-size: contain;
+	padding-right: 35px !important;
+}
+
 .editor {
 
 	canvas#webgl {
