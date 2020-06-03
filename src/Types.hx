@@ -21,5 +21,6 @@ enum GlobalEvent {
 
 enum FieldType {
 	F_Int;
+	F_Float;
 	F_String;
 }

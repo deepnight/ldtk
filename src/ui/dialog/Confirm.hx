@@ -6,7 +6,7 @@ class Confirm extends ui.Dialog {
 
 		if( str==null )
 			str = L.t._("Confirm this action?");
-		elem.find(".content").text(str);
+		jContent.text(str);
 
 		addConfirm(onConfirm);
 		addCancel();

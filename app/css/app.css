@@ -95,6 +95,18 @@ button.cancel:hover {
   background-color: #545d73;
 }
 
+button.fieldType {
+  font-family: Roboto;
+  font-size: 16pt;
+}
+
+button.fieldType em {
+  font-style: normal;
+  opacity: 0.8;
+  display: block;
+  font-size: 60%;
+}
+
 .buttons {
   display: flex;
   margin-top: 2px;
@@ -286,6 +298,16 @@ input[type=number]:focus {
 
 .dialog .wrapper .buttons button.confirm {
   flex-grow: 2;
+}
+
+.dialog.fieldTypes .content {
+  display: grid;
+  gap: 2px;
+  grid-template-columns: repeat(4, auto);
+}
+
+.dialog.fieldTypes .content button {
+  margin: 0;
 }
 
 .sortable-placeholder {

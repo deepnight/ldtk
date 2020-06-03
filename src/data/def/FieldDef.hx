@@ -30,6 +30,7 @@ class FieldDef { // TODO implements serialization
 	public function getDefault() : Dynamic {
 		return switch type {
 			case F_Int: !canBeNull && intDefault==null ? 0 : intDefault;
+			case F_Float: !canBeNull && intDefault==null ? 0 : intDefault; // TODO
 
 			case F_String: null; // TODO
 		}

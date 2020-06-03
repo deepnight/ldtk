@@ -2,15 +2,18 @@ package ui;
 
 class Dialog extends dn.Process {
 	var elem : js.jquery.JQuery;
+	public var jContent(get,never) : js.jquery.JQuery; inline function get_jContent() return elem.find(".content");
 	var jButtons(get,never) : js.jquery.JQuery; inline function get_jButtons() return elem.find(".buttons");
 
-	public function new(?target:js.jquery.JQuery) {
+	public function new(?target:js.jquery.JQuery, ?className:String) {
 		super(Client.ME);
 
 		// Init
 		elem = new J("xml#dialog").clone().children().first();
 		elem.appendTo( new J("body") );
 		elem.find(".mask").click( function(_) close() );
+		if( className!=null )
+			elem.addClass(className);
 		removeButtons();
 
 		// Position
