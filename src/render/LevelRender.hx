@@ -39,7 +39,7 @@ class LevelRender extends dn.Process {
 
 	public function toggleLayer(l:LayerContent) {
 		layerVis.set(l.layerDefId, !isLayerVisible(l));
-		invalidate();
+		updateLayersVisibility();
 	}
 
 	public function showLayer(l:LayerContent) {
@@ -109,9 +109,11 @@ class LevelRender extends dn.Process {
 
 	function updateLayersVisibility() {
 		for(lid in layerWrappers.keys()) {
+			var lc = client.curLevel.getLayerContent(lid);
 			var wrapper = layerWrappers.get(lid);
-			// wrapper.visible = isLayerVisible(def);
-			// wrapper.alpha = lr.data.def.displayOpacity * ( lr.data==client.curLayerContent ? 1 : 0.4 );
+			wrapper.visible = isLayerVisible(lc);
+			wrapper.alpha = lc.def.displayOpacity;
+			// wrapper.alpha = lc.def.displayOpacity * ( lc==client.curLayerContent ? 1 : 0.25 );
 		}
 	}
 
