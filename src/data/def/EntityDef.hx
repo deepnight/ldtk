@@ -26,8 +26,8 @@ class EntityDef implements IData {
 	}
 
 
-	public function createField(project:ProjectData) : FieldDef {
-		var f = new FieldDef(project.makeUniqId(), F_Int);
+	public function createField(project:ProjectData, type:FieldType) : FieldDef {
+		var f = new FieldDef(project.makeUniqId(), type);
 		fieldDefs.push(f);
 		return f;
 	}

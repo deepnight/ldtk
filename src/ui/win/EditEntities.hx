@@ -45,8 +45,10 @@ class EditEntities extends ui.Window {
 		});
 
 		// Create field
-		jWin.find(".fields button.create").click( function(_) {
-			var f = curEntity.createField(project);
+		jWin.find(".fields button.create").click( function(ev) {
+			var w = new ui.Dialog(ev.getThis());
+			var type = F_Int; // TODO: pop up to pick type once
+			var f = curEntity.createField(project, type);
 			client.ge.emit(EntityFieldChanged);
 			selectField(f);
 			jFieldForm.find("input:first").focus().select();
@@ -156,11 +158,11 @@ class EditEntities extends ui.Window {
 		var i = Input.linkToField(jFieldForm.find("input[name=name]"), curField.name);
 		i.onChange = client.ge.emit.bind(EntityFieldChanged);
 
-		var i = Input.linkToField(jFieldForm.find("select[name=type]"), curField.type);
-		i.onChange = function() {
-			client.ge.emit(EntityFieldChanged);
-			updateFieldForm();
-		}
+		// var i = Input.linkToField(jFieldForm.find("select[name=type]"), curField.type);
+		// i.onChange = function() {
+		// 	client.ge.emit(EntityFieldChanged);
+		// 	updateFieldForm();
+		// }
 
 		if( !curField.canBeNull )
 			jFieldForm.find("input[name=def]").attr("placeholder", curField.getDefault());

@@ -3,8 +3,8 @@ package data.def;
 class FieldDef { // TODO implements serialization
 	var internalVal : Null<String>;
 
+	public var type(default,null) : FieldType;
 	public var name : String;
-	public var type : FieldType;
 	public var canBeNull = false;
 
 	var intDefault : Null<Int>;
