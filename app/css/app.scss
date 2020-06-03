@@ -36,11 +36,28 @@ body {
 	font-size: 11pt;
 }
 
+img {
+	vertical-align: middle;
+}
+
 xml {
 	display: none;
 }
 
 h1 { color: magenta; } // should not be used
+
+h2, h3, h4, h5 {
+	.icon {
+		vertical-align: bottom;
+		width: 2em;
+		height: 2em;
+	}
+
+	.icon,
+	img {
+		margin-right: 4px;
+	}
+}
 
 h2 {
 	@include resetMargin();
@@ -72,6 +89,12 @@ button {
 	border: 1px solid #ff5d4a;
 	box-shadow: 0px 2px 0px #b53d00;
 	cursor: pointer;
+
+	.icon {
+		margin: -4px;
+		width: 1.7em;
+		height: 1.7em;
+	}
 }
 button+button {
 	margin-top: 2px;
@@ -88,6 +111,20 @@ button.cancel {
 button.cancel:hover {
 	background-color: $bgLight;
 }
+
+.buttons {
+	display: flex;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	button {
+		flex: 1 1 0;
+	}
+	button+button {
+		margin-top: 0;
+		margin-left: 2px;
+	}
+}
+
 
 form>ul {
 	@include resetList();
@@ -192,6 +229,14 @@ input[type=number]:focus {
 	}
 }
 
+
+.cols {
+	display: grid;
+	width: 100%;
+	gap: 16px;
+	grid-template-columns: 0.4fr 1fr;
+}
+
 div.confirm {
 	position: absolute;
 	top: 0px;
@@ -210,16 +255,6 @@ div.confirm {
 		background-color: rgba(0,0,0,0.35);
 	}
 
-	// .wrapper {
-	// 	position: absolute;
-	// 	z-index: 1;
-	// 	top: 0px;
-	// 	left: 0px;
-	// 	width: 100%;
-	// 	height: 100%;
-	// 	background-color: rgba(0,0,0,0.35);
-	// }
-
 	.wrapper {
 		position: absolute;
 		z-index: 2;
@@ -236,17 +271,12 @@ div.confirm {
 		box-shadow: 0px 0px 16px $red, 0px 8px 32px rgba(0, 0, 0, 0.3);
 
 		.buttons {
-			display: flex;
 			margin-top: 30px;
 			button {
 				flex: 1 1 0;
 			}
 			button.confirm {
 				flex-grow: 2;
-			}
-			button+button {
-				margin-top: 0;
-				margin-left: 2px;
 			}
 		}
 	}
@@ -311,7 +341,7 @@ div.confirm {
 					display: block;
 					cursor: pointer;
 				}
-				.vis { // TODO move away
+				.vis {
 					flex: 0 0 auto;
 					padding: 10px;
 					margin: -10px;
@@ -327,7 +357,6 @@ div.confirm {
 				}
 			}
 		}
-
 	}
 
 	#palette {
@@ -371,13 +400,22 @@ ul.niceList {
 	margin-bottom: 4px;
 	border: 1px solid $bgLight;
 	background-color: $bgDark;
+
+	:first-child {
+		margin-top: 0;
+	}
+
 	li {
 		display: flex;
+		align-items: center;
 		padding: 10px;
 		border-top: 1px solid $bgDark;
 		border-bottom: 1px solid $bgDark;
 		background-color: $bgMed;
 		cursor: pointer;
+		.icon {
+			margin-right: 8px;
+		}
 	}
 
 	li.active {
@@ -399,21 +437,38 @@ ul.niceList {
 	}
 }
 
+.icon {
+	display: inline-block;
+	vertical-align: middle;
+	width: 1.3em;
+	height: 1.3em;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+.icon.entity	{ background-image: url("/img/icons/entity.png"); }
+.icon.layer		{ background-image: url("/img/icons/layer.png"); }
+.icon.intGrid	{ background-image: url("/img/icons/intGrid.png"); }
 
-.window .editLayers {
-	display: flex;
+.black		{ filter: brightness(0);}
+.orange		{ filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10); }
 
+
+
+.window.defEditor {
 	.mainList {
-		flex: 0 0 200px;
-		margin-right: 10px;
 		ul {
 			border: 1px solid $bgLight;
 		}
+
+		button.delete {
+			flex: 0 0 32px;
+		}
 	}
+}
 
+.window.layerDefs {
 	form {
-		flex: 1 1 auto;
-
 		ul.intGridValues {
 			@include resetList();
 			display: grid;
@@ -482,3 +537,6 @@ ul.niceList {
 		display: none;
 	}
 }
+
+// .window.entityDefs {
+// }

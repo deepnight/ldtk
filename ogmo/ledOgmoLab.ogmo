@@ -18,6 +18,14 @@
   "entityTags": [],
   "layers": [
     {
+      "definition": "entity",
+      "name": "entities",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "18755497",
+      "requiredTags": [],
+      "excludedTags": []
+    },
+    {
       "definition": "grid",
       "name": "grid",
       "gridSize": {"x": 16, "y": 16},
@@ -26,6 +34,43 @@
       "legend": {"0": "#00000000", "1": "#000000ff"}
     }
   ],
-  "entities": [],
+  "entities": [
+    {
+      "exportID": "18755476",
+      "name": "Hero",
+      "limit": -1,
+      "size": {"x": 16, "y": 16},
+      "origin": {"x": 0, "y": 0},
+      "originAnchored": true,
+      "shape": {
+        "label": "Rectangle",
+        "points": [
+          {"x": -1, "y": -1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": 1}
+        ]
+      },
+      "color": "#0bff00ff",
+      "tileX": false,
+      "tileY": false,
+      "tileSize": {"x": 16, "y": 16},
+      "resizeableX": false,
+      "resizeableY": false,
+      "rotatable": false,
+      "rotationDegrees": 360,
+      "canFlipX": false,
+      "canFlipY": false,
+      "canSetColor": false,
+      "hasNodes": false,
+      "nodeLimit": 0,
+      "nodeDisplay": 0,
+      "nodeGhost": true,
+      "tags": [],
+      "values": []
+    }
+  ],
   "tilesets": []
 }

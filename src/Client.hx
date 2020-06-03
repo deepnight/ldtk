@@ -131,6 +131,21 @@ class Client extends dn.Process {
 			if( !levelRender.isLayerVisible(lc) )
 				e.addClass("hidden");
 
+			// Icon
+			var icon = e.find(".icon");
+			switch lc.def.type {
+				case IntGrid: icon.addClass("intGrid");
+				case Entities: icon.addClass("entity");
+			}
+
+			// Name
+			var name = e.find(".name");
+			name.text(lc.def.name);
+			e.click( function(_) {
+				selectLayer(lc);
+			});
+
+			// Visibility button
 			var vis = e.find(".vis");
 			if( levelRender.isLayerVisible(lc) )
 				vis.find(".off").hide();
@@ -140,12 +155,6 @@ class Client extends dn.Process {
 				ev.stopPropagation();
 				levelRender.toggleLayer(lc);
 				updateLayerList();
-			});
-
-			var name = e.find(".name");
-			name.text(lc.def.name);
-			e.click( function(_) {
-				selectLayer(lc);
 			});
 
 		}

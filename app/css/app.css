@@ -12,12 +12,30 @@ body {
   font-size: 11pt;
 }
 
+img {
+  vertical-align: middle;
+}
+
 xml {
   display: none;
 }
 
 h1 {
   color: magenta;
+}
+
+h2 .icon, h3 .icon, h4 .icon, h5 .icon {
+  vertical-align: bottom;
+  width: 2em;
+  height: 2em;
+}
+
+h2 .icon,
+h2 img, h3 .icon,
+h3 img, h4 .icon,
+h4 img, h5 .icon,
+h5 img {
+  margin-right: 4px;
 }
 
 h2 {
@@ -53,6 +71,12 @@ button {
   cursor: pointer;
 }
 
+button .icon {
+  margin: -4px;
+  width: 1.7em;
+  height: 1.7em;
+}
+
 button + button {
   margin-top: 2px;
 }
@@ -69,6 +93,21 @@ button.cancel {
 
 button.cancel:hover {
   background-color: #545d73;
+}
+
+.buttons {
+  display: flex;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.buttons button {
+  flex: 1 1 0;
+}
+
+.buttons button + button {
+  margin-top: 0;
+  margin-left: 2px;
 }
 
 form > ul {
@@ -180,6 +219,13 @@ input[type=number]:focus {
   box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
 }
 
+.cols {
+  display: grid;
+  width: 100%;
+  gap: 16px;
+  grid-template-columns: 0.4fr 1fr;
+}
+
 div.confirm {
   position: absolute;
   top: 0px;
@@ -214,7 +260,6 @@ div.confirm .wrapper {
 }
 
 div.confirm .wrapper .buttons {
-  display: flex;
   margin-top: 30px;
 }
 
@@ -224,11 +269,6 @@ div.confirm .wrapper .buttons button {
 
 div.confirm .wrapper .buttons button.confirm {
   flex-grow: 2;
-}
-
-div.confirm .wrapper .buttons button + button {
-  margin-top: 0;
-  margin-left: 2px;
 }
 
 .sortable-placeholder {
@@ -355,13 +395,22 @@ ul.niceList li {
   padding: 0;
 }
 
+ul.niceList :first-child {
+  margin-top: 0;
+}
+
 ul.niceList li {
   display: flex;
+  align-items: center;
   padding: 10px;
   border-top: 1px solid #1e2229;
   border-bottom: 1px solid #1e2229;
   background-color: #2e333f;
   cursor: pointer;
+}
+
+ul.niceList li .icon {
+  margin-right: 8px;
 }
 
 ul.niceList li.active {
@@ -384,24 +433,45 @@ ul.niceList li:not(.active):hover {
   outline-offset: -1px;
 }
 
-.window .editLayers {
-  display: flex;
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.3em;
+  height: 1.3em;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
-.window .editLayers .mainList {
-  flex: 0 0 200px;
-  margin-right: 10px;
+.icon.entity {
+  background-image: url("/img/icons/entity.png");
 }
 
-.window .editLayers .mainList ul {
+.icon.layer {
+  background-image: url("/img/icons/layer.png");
+}
+
+.icon.intGrid {
+  background-image: url("/img/icons/intGrid.png");
+}
+
+.black {
+  filter: brightness(0);
+}
+
+.orange {
+  filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);
+}
+
+.window.defEditor .mainList ul {
   border: 1px solid #545d73;
 }
 
-.window .editLayers form {
-  flex: 1 1 auto;
+.window.defEditor .mainList button.delete {
+  flex: 0 0 32px;
 }
 
-.window .editLayers form ul.intGridValues {
+.window.layerDefs form ul.intGridValues {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -412,33 +482,33 @@ ul.niceList li:not(.active):hover {
   gap: 8px;
 }
 
-.window .editLayers form ul.intGridValues li {
+.window.layerDefs form ul.intGridValues li {
   margin: 0;
   padding: 0;
 }
 
-.window .editLayers form ul.intGridValues li {
+.window.layerDefs form ul.intGridValues li {
   position: relative;
 }
 
-.window .editLayers form ul.intGridValues li.value input[type=color] {
+.window.layerDefs form ul.intGridValues li.value input[type=color] {
   width: 100%;
   height: 64px;
 }
 
-.window .editLayers form ul.intGridValues li.value input.name {
+.window.layerDefs form ul.intGridValues li.value input.name {
   display: block;
   text-align: center;
   font-style: italic;
 }
 
-.window .editLayers form ul.intGridValues li.value span.id {
+.window.layerDefs form ul.intGridValues li.value span.id {
   display: block;
   text-align: center;
   font-weight: bold;
 }
 
-.window .editLayers form ul.intGridValues li.value a.remove {
+.window.layerDefs form ul.intGridValues li.value a.remove {
   display: none;
   position: absolute;
   top: 0px;
@@ -449,11 +519,11 @@ ul.niceList li:not(.active):hover {
   text-decoration: none;
 }
 
-.window .editLayers form ul.intGridValues li.value.removable a.remove {
+.window.layerDefs form ul.intGridValues li.value.removable a.remove {
   display: block;
 }
 
-.window .editLayers form ul.intGridValues li.add button {
+.window.layerDefs form ul.intGridValues li.add button {
   width: 100%;
   height: 64px;
   padding: 0;
@@ -464,10 +534,10 @@ ul.niceList li:not(.active):hover {
   color: white;
 }
 
-.window .editLayers form:not(.type-IntGrid) .IntGrid {
+.window.layerDefs form:not(.type-IntGrid) .IntGrid {
   display: none;
 }
 
-.window .editLayers form:not(.type-Entities) .Entities {
+.window.layerDefs form:not(.type-Entities) .Entities {
   display: none;
 }

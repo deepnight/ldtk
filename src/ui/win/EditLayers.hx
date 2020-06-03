@@ -8,17 +8,32 @@ class EditLayers extends ui.Window {
 	public function new() {
 		super();
 
-		loadTemplate( hxd.Res.tpl.editLayers );
+		loadTemplate( hxd.Res.tpl.editLayers, "defEditor layerDefs" );
 		jList = jWin.find(".mainList ul");
 		jForm = jWin.find("form");
 
 		// Create layer
-		jWin.find(".createLayer").click( function(_) {
+		jWin.find(".mainList button.create").click( function(_) {
 			var ld = project.createLayerDef(IntGrid);
 			select(ld);
 			client.ge.emit(LayerDefChanged);
 			jForm.find("input").first().focus().select();
 		});
+
+		// Delete layer
+		jWin.find(".mainList button.delete").click( function(ev) {
+			if( project.layerDefs.length==1 ) {
+				N.error("Cannot delete the last layer.");
+				return;
+			}
+
+			new ui.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
+				project.removeLayerDef(cur);
+				select(project.layerDefs[0]);
+				client.ge.emit(LayerDefChanged);
+			});
+		});
+
 
 		select(client.curLayerContent.def);
 	}
@@ -74,21 +89,6 @@ class EditLayers extends ui.Window {
 		i.onChange = function() {
 			client.ge.emit(LayerDefChanged);
 		}
-
-		// Delete layer button
-		jForm.find(".deleteLayer").click( function(ev) {
-			if( project.layerDefs.length==1 ) {
-				N.error("Cannot delete the last layer.");
-				return;
-			}
-
-			new ui.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
-				project.removeLayerDef(ld);
-				select(project.layerDefs[0]);
-				client.ge.emit(LayerDefChanged);
-			});
-		});
-
 
 		// Layer-type specific inits
 		switch ld.type {
@@ -166,14 +166,22 @@ class EditLayers extends ui.Window {
 	function updateList() {
 		jList.empty();
 
-		for(l in project.layerDefs) {
+		for(ld in project.layerDefs) {
 			var e = new J("<li/>");
 			jList.append(e);
-			e.append('<span class="name">'+l.name+'</span>');
-			if( cur==l )
+
+			var icon = new J('<div class="icon"/>');
+			e.append(icon);
+			switch ld.type {
+				case IntGrid: icon.addClass("intGrid");
+				case Entities: icon.addClass("entity");
+			}
+
+			e.append('<span class="name">'+ld.name+'</span>');
+			if( cur==ld )
 				e.addClass("active");
 
-			e.click( function(_) select(l) );
+			e.click( function(_) select(ld) );
 		}
 
 		// Make layer list sortable

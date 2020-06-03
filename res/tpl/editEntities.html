@@ -1,20 +1,45 @@
-<h2>Project entities</h2>
+<h2>
+	<div class="icon entity orange"></div>
+	Project entities
+</h2>
 
-<div class="editLayers">
-
+<div class="cols">
 	<div class="mainList">
 		<ul class="niceList"></ul>
-		<button class="createEntity">Create entity</button>
+		<div class="buttons">
+			<button class="create">Create entity</button>
+			<button class="delete
+			">🗑️</button>
+		</div>
 	</div>
 
 	<form>
 		<ul>
+
 		<li>
 			<label for="name">Entity name</label>
 			<input type="text" name="name"/>
 		</li>
+
 		<li>
-			<label for="fields">Fields</label>
+			<label for="width">Width</label>
+			<input type="text" name="width"/>
+			x
+			<input type="text" name="height"/>
+			<span class="suffix">px</span>
+		</li>
+
+		<li>
+			<div class="cols">
+				<ul class="niceList fields"></ul>
+
+				<ul>
+				<li>
+					<label for="fName">Field name</label>
+					<input type="text" name="fName"/>
+				</li>
+				</ul>
+			</div>
 		</li>
 		</ul>
 	</form>

@@ -16,12 +16,10 @@ class Window extends dn.Process {
 		new J("body").append(jWin);
 
 		jContent = jWin.find(".content");
-		jContent.hide().animate({width:'toggle'}, 100);
-		// jContent.hide().slideDown(100);
 
 		jMask = jWin.find(".mask");
 		jMask.click( function(_) close() );
-		jMask.hide().fadeIn(200);
+		jMask.hide().fadeIn(100);
 
 		client.ge.watchAny(onGlobalEvent);
 	}
@@ -47,7 +45,8 @@ class Window extends dn.Process {
 		});
 	}
 
-	public function loadTemplate(tpl:hxd.res.Resource) {
+	public function loadTemplate(tpl:hxd.res.Resource, className:String) {
+		jWin.addClass(className);
 		var content = new J( tpl.entry.getText() );
 		jContent.empty().append(content);
 	}

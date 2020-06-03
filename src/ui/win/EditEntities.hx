@@ -9,18 +9,27 @@ class EditEntities extends ui.Window {
 	public function new() {
 		super();
 
-		loadTemplate( hxd.Res.tpl.editEntities );
+		loadTemplate( hxd.Res.tpl.editEntities, "defEditor entityDefs" );
 		jList = jWin.find(".mainList ul");
 
 		jForm = jWin.find("form");
 		jForm.submit( function(ev) ev.preventDefault() );
 
-		// Create layer
-		jWin.find(".createEntity").click( function(_) {
+		// Create
+		jWin.find(".mainList button.create").click( function(_) {
 			var ed = project.createEntityDef();
 			select(ed);
 			// client.ge.emit(LayerDefChanged);
 			jForm.find("input").first().focus().select();
+		});
+
+		// Delete
+		jWin.find(".mainList button.delete").click( function(ev) {
+			// if( project.layerDefs.length==1 ) {
+			// 	N.error("Cannot delete the last layer.");
+			// 	return;
+			// }
+			N.notImplemented();
 		});
 
 		select(project.entityDefs[0]);
@@ -53,13 +62,6 @@ class EditEntities extends ui.Window {
 		i.onChange = function() {
 			client.ge.emit(EntityDefChanged);
 		};
-
-		// Delete layer button
-		// jForm.find(".deleteLayer").click( function(ev) {
-		// 	if( project.layerDefs.length==1 ) {
-		// 		N.error("Cannot delete the last layer.");
-		// 		return;
-		// 	}
 
 		// 	new ui.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
 		// 		project.removeLayerDef(ld);
