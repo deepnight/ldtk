@@ -476,6 +476,7 @@ var Client = function() {
 	Client.ME = this;
 	this.createRoot(Boot.ME.s2d);
 	nw.Window.get().title = "LEd v" + Const.APP_VERSION;
+	nw.Window.get().maximize();
 	this.ge = new GlobalEventDispatcher();
 	this.ge.watchAny($bind(this,this.onGlobalEvent));
 	$("body").mouseup(function(_) {
@@ -574,7 +575,7 @@ Client.prototype = $extend(dn_Process.prototype,{
 	}
 	,onGlobalEvent: function(e) {
 		switch(e._hx_index) {
-		case 0:
+		case 0:case 1:
 			this.project.checkDataIntegrity();
 			if(this.project.getLevel(this.curLevelId).getLayerContent(this.curLayerId) == null) {
 				this.selectLayer(this.project.getLevel(this.curLevelId).layerContents[0]);
@@ -582,7 +583,7 @@ Client.prototype = $extend(dn_Process.prototype,{
 			this.initTool();
 			this.updateLayerList();
 			break;
-		case 1:
+		case 2:
 			break;
 		}
 	}
@@ -1451,11 +1452,12 @@ var LayerType = $hxEnums["LayerType"] = { __ename__ : true, __constructs__ : ["I
 	,Entities: {_hx_index:1,__enum__:"LayerType",toString:$estr}
 };
 LayerType.__empty_constructs__ = [LayerType.IntGrid,LayerType.Entities];
-var GlobalEvent = $hxEnums["GlobalEvent"] = { __ename__ : true, __constructs__ : ["LayerDefChanged","LayerContentChanged"]
+var GlobalEvent = $hxEnums["GlobalEvent"] = { __ename__ : true, __constructs__ : ["LayerDefChanged","LayerDefSorted","LayerContentChanged"]
 	,LayerDefChanged: {_hx_index:0,__enum__:"GlobalEvent",toString:$estr}
-	,LayerContentChanged: {_hx_index:1,__enum__:"GlobalEvent",toString:$estr}
+	,LayerDefSorted: {_hx_index:1,__enum__:"GlobalEvent",toString:$estr}
+	,LayerContentChanged: {_hx_index:2,__enum__:"GlobalEvent",toString:$estr}
 };
-GlobalEvent.__empty_constructs__ = [GlobalEvent.LayerDefChanged,GlobalEvent.LayerContentChanged];
+GlobalEvent.__empty_constructs__ = [GlobalEvent.LayerDefChanged,GlobalEvent.LayerDefSorted,GlobalEvent.LayerContentChanged];
 var UInt = {};
 UInt.gt = function(a,b) {
 	var aNeg = a < 0;
@@ -1964,6 +1966,26 @@ data_ProjectData.prototype = {
 			throw haxe_Exception.thrown("Unknown layerDef");
 		}
 		this.checkDataIntegrity();
+	}
+	,sortLayerDef: function(from,to) {
+		if(from < 0 || from >= this.layerDefs.length || from == to) {
+			return false;
+		}
+		if(to < 0 || to >= this.layerDefs.length) {
+			return false;
+		}
+		this.checkDataIntegrity();
+		var moved = this.layerDefs.splice(from,1)[0];
+		this.layerDefs.splice(to,0,moved);
+		var _g = 0;
+		var _g1 = this.levels;
+		while(_g < _g1.length) {
+			var l = _g1[_g];
+			++_g;
+			var moved = l.layerContents.splice(from,1)[0];
+			l.layerContents.splice(to,0,moved);
+		}
+		return true;
 	}
 	,createLevel: function() {
 		var l = new data_LevelData(this.makeUniqId());
@@ -44376,6 +44398,9 @@ render_LevelRender.prototype = $extend(dn_Process.prototype,{
 		case 1:
 			this.invalidated = true;
 			break;
+		case 2:
+			this.invalidated = true;
+			break;
 		}
 	}
 	,toggleLayer: function(l) {
@@ -44959,12 +44984,19 @@ var ui_Window = function() {
 		_gthis.close();
 	});
 	this.jMask.hide().fadeIn(200);
+	Client.ME.ge.watchAny($bind(this,this.onGlobalEvent));
 };
 $hxClasses["ui.Window"] = ui_Window;
 ui_Window.__name__ = "ui.Window";
 ui_Window.__super__ = dn_Process;
 ui_Window.prototype = $extend(dn_Process.prototype,{
-	close: function() {
+	onDispose: function() {
+		dn_Process.prototype.onDispose.call(this);
+		Client.ME.ge.remove($bind(this,this.onGlobalEvent));
+	}
+	,onGlobalEvent: function(e) {
+	}
+	,close: function() {
 		this.jWin.remove();
 		this.jWin = null;
 		this.destroyed = true;
@@ -44996,7 +45028,21 @@ $hxClasses["ui.win.EditLayers"] = ui_win_EditLayers;
 ui_win_EditLayers.__name__ = "ui.win.EditLayers";
 ui_win_EditLayers.__super__ = ui_Window;
 ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
-	selectLayer: function(ld) {
+	onGlobalEvent: function(e) {
+		ui_Window.prototype.onGlobalEvent.call(this,e);
+		switch(e._hx_index) {
+		case 0:
+			this.updateForm();
+			this.updateLayerList();
+			break;
+		case 1:
+			this.updateLayerList();
+			break;
+		case 2:
+			break;
+		}
+	}
+	,selectLayer: function(ld) {
 		var _gthis = this;
 		this.curLayer = ld;
 		this.jForm.find("*").off();
@@ -45016,7 +45062,6 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 		i.unicityCheck = ($_=Client.ME.project,$bind($_,$_.isLayerNameUnique));
 		i.onChange = function() {
 			Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
-			_gthis.updateLayerList();
 		};
 		var i = new form_input_EnumSelect(this.jForm.find("select[name='type']"),LayerType,function() {
 			return ld.type;
@@ -45025,7 +45070,6 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 		});
 		i.onChange = function() {
 			Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
-			_gthis.updateForm();
 		};
 		var i = new form_input_IntInput(this.jForm.find("input[name='gridSize']"),function() {
 			return ld.gridSize;
@@ -45164,7 +45208,13 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 				};
 			})(l));
 		}
-		Client.ME.updateLayerList();
+		var out = eval("sortable(\".layersList ul\")");
+		$(".layersList ul").off("sortupdate").on("sortupdate",null,function(ev) {
+			var from = ev.detail.origin.index;
+			var to = ev.detail.destination.index;
+			Client.ME.project.sortLayerDef(from,to);
+			Client.ME.ge.emit(GlobalEvent.LayerDefSorted);
+		});
 	}
 	,__class__: ui_win_EditLayers
 });

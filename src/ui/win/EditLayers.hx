@@ -25,6 +25,20 @@ class EditLayers extends ui.Window {
 		selectLayer(client.curLayerContent.def);
 	}
 
+	override function onGlobalEvent(e:GlobalEvent) {
+		super.onGlobalEvent(e);
+		switch e {
+			case LayerDefChanged:
+				updateForm();
+				updateLayerList();
+
+			case LayerDefSorted:
+				updateLayerList();
+
+			case LayerContentChanged:
+		}
+	}
+
 	function selectLayer(ld:LayerDef) {
 		curLayer = ld;
 
@@ -40,13 +54,11 @@ class EditLayers extends ui.Window {
 		i.unicityCheck = project.isLayerNameUnique;
 		i.onChange = function() {
 			client.ge.emit(LayerDefChanged);
-			updateLayerList();
 		};
 
 		var i = Input.linkToField( jForm.find("select[name='type']"), ld.type );
 		i.onChange = function() {
 			client.ge.emit(LayerDefChanged);
-			updateForm();
 		};
 
 		var i = Input.linkToField( jForm.find("input[name='gridSize']"), ld.gridSize );
@@ -163,6 +175,13 @@ class EditLayers extends ui.Window {
 			e.click( function(_) selectLayer(l) );
 		}
 
-		client.updateLayerList();
+		// Make layer list sortable
+		var out = js.Lib.eval('sortable(".layersList ul")');
+		new J(".layersList ul").off("sortupdate").on("sortupdate", function(ev) {
+			var from : Int = ev.detail.origin.index;
+			var to : Int = ev.detail.destination.index;
+			project.sortLayerDef(from,to);
+			client.ge.emit(LayerDefSorted);
+		});
 	}
 }

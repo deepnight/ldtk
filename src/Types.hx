@@ -11,5 +11,6 @@ typedef IntGridValue = {
 
 enum GlobalEvent {
 	LayerDefChanged;
+	LayerDefSorted;
 	LayerContentChanged;
 }

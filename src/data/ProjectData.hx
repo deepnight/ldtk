@@ -66,6 +66,27 @@ class ProjectData implements data.IData {
 		checkDataIntegrity();
 	}
 
+	public function sortLayerDef(from:Int, to:Int) {
+		if( from<0 || from>=layerDefs.length || from==to )
+			return false;
+
+		if( to<0 || to>=layerDefs.length )
+			return false;
+
+		checkDataIntegrity();
+
+		var moved = layerDefs.splice(from,1)[0];
+		layerDefs.insert(to, moved);
+
+		// Also sort level layerContents
+		for(l in levels) {
+			var moved = l.layerContents.splice(from,1)[0];
+			l.layerContents.insert(to, moved);
+		}
+
+		return true;
+	}
+
 	public function createLevel() {
 		var l = new LevelData(makeUniqId());
 		l.initLayersUsingProject(this);

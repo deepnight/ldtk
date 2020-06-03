@@ -31,6 +31,7 @@ class LevelRender extends dn.Process {
 		switch e {
 			case LayerDefChanged: invalidate();
 			case LayerContentChanged: invalidate();
+			case LayerDefSorted: invalidate();
 		}
 	}
 

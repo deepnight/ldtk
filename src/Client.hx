@@ -25,7 +25,7 @@ class Client extends dn.Process {
 		ME = this;
 		createRoot(Boot.ME.s2d);
 		appWin.title = "LEd v"+Const.APP_VERSION;
-		// appWin.maximize();
+		appWin.maximize();
 
 		ge = new GlobalEventDispatcher();
 		ge.watchAny( onGlobalEvent );
@@ -104,7 +104,7 @@ class Client extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
-			case LayerDefChanged:
+			case LayerDefChanged, LayerDefSorted :
 				project.checkDataIntegrity();
 				if( curLayerContent==null )
 					selectLayer(curLevel.layerContents[0]);

@@ -17,6 +17,16 @@ class Window extends dn.Process {
 		jMask = jWin.find(".mask");
 		jMask.click( function(_) close() );
 		jMask.hide().fadeIn(200);
+
+		client.ge.watchAny(onGlobalEvent);
+	}
+
+	override function onDispose() {
+		super.onDispose();
+		client.ge.remove(onGlobalEvent);
+	}
+
+	function onGlobalEvent(e:GlobalEvent) {
 	}
 
 	public function close() {
