@@ -796,6 +796,17 @@ HxOverrides.remove = function(a,obj) {
 HxOverrides.now = function() {
 	return Date.now();
 };
+var JsTools = function() { };
+$hxClasses["JsTools"] = JsTools;
+JsTools.__name__ = "JsTools";
+JsTools.makeSortable = function(selector,onSort) {
+	eval("sortable(\"" + selector + "\")");
+	$(selector).off("sortupdate").on("sortupdate",null,function(ev) {
+		var from = ev.detail.origin.index;
+		var to = ev.detail.destination.index;
+		onSort(from,to);
+	});
+};
 var Lambda = function() { };
 $hxClasses["Lambda"] = Lambda;
 Lambda.__name__ = "Lambda";
@@ -12086,30 +12097,6 @@ var h3d_impl_RenderFlag = $hxEnums["h3d.impl.RenderFlag"] = { __ename__ : true, 
 	,CameraHandness: {_hx_index:0,__enum__:"h3d.impl.RenderFlag",toString:$estr}
 };
 h3d_impl_RenderFlag.__empty_constructs__ = [h3d_impl_RenderFlag.CameraHandness];
-var haxe_IMap = function() { };
-$hxClasses["haxe.IMap"] = haxe_IMap;
-haxe_IMap.__name__ = "haxe.IMap";
-haxe_IMap.__isInterface__ = true;
-var haxe_ds_StringMap = function() {
-	this.h = Object.create(null);
-};
-$hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
-haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
-haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
-haxe_ds_StringMap.keysIterator = function(h) {
-	var keys = Object.keys(h);
-	var len = keys.length;
-	var idx = 0;
-	return { hasNext : function() {
-		return idx < len;
-	}, next : function() {
-		idx += 1;
-		return keys[idx - 1];
-	}};
-};
-haxe_ds_StringMap.prototype = {
-	__class__: haxe_ds_StringMap
-};
 var h3d_impl_InputNames = function(names) {
 	this.id = h3d_impl_InputNames.UID++;
 	this.names = names;
@@ -14859,35 +14846,6 @@ h3d_mat_Stencil.prototype = {
 		return this.backDPfail = v;
 	}
 	,__class__: h3d_mat_Stencil
-};
-var haxe_ds_IntMap = function() {
-	this.h = { };
-};
-$hxClasses["haxe.ds.IntMap"] = haxe_ds_IntMap;
-haxe_ds_IntMap.__name__ = "haxe.ds.IntMap";
-haxe_ds_IntMap.__interfaces__ = [haxe_IMap];
-haxe_ds_IntMap.prototype = {
-	remove: function(key) {
-		if(!this.h.hasOwnProperty(key)) {
-			return false;
-		}
-		delete(this.h[key]);
-		return true;
-	}
-	,keys: function() {
-		var a = [];
-		for( var key in this.h ) if(this.h.hasOwnProperty(key)) a.push(key | 0);
-		return new haxe_iterators_ArrayIterator(a);
-	}
-	,iterator: function() {
-		return { ref : this.h, it : this.keys(), hasNext : function() {
-			return this.it.hasNext();
-		}, next : function() {
-			var i = this.it.next();
-			return this.ref[i];
-		}};
-	}
-	,__class__: haxe_ds_IntMap
 };
 var hxd_PixelFormat = $hxEnums["hxd.PixelFormat"] = { __ename__ : true, __constructs__ : ["ARGB","BGRA","RGBA","RGBA16F","RGBA32F","R8","R16F","R32F","RG8","RG16F","RG32F","RGB8","RGB16F","RGB32F","SRGB","SRGB_ALPHA","RGB10A2","RG11B10UF","S3TC"]
 	,ARGB: {_hx_index:0,__enum__:"hxd.PixelFormat",toString:$estr}
@@ -22194,6 +22152,10 @@ h3d_shader_VolumeDecal.prototype = $extend(hxsl_Shader.prototype,{
 	}
 	,__class__: h3d_shader_VolumeDecal
 });
+var haxe_IMap = function() { };
+$hxClasses["haxe.IMap"] = haxe_IMap;
+haxe_IMap.__name__ = "haxe.IMap";
+haxe_IMap.__isInterface__ = true;
 var haxe_EntryPoint = function() { };
 $hxClasses["haxe.EntryPoint"] = haxe_EntryPoint;
 haxe_EntryPoint.__name__ = "haxe.EntryPoint";
@@ -23507,6 +23469,35 @@ haxe_ds_EnumValueMap.prototype = $extend(haxe_ds_BalancedTree.prototype,{
 	}
 	,__class__: haxe_ds_EnumValueMap
 });
+var haxe_ds_IntMap = function() {
+	this.h = { };
+};
+$hxClasses["haxe.ds.IntMap"] = haxe_ds_IntMap;
+haxe_ds_IntMap.__name__ = "haxe.ds.IntMap";
+haxe_ds_IntMap.__interfaces__ = [haxe_IMap];
+haxe_ds_IntMap.prototype = {
+	remove: function(key) {
+		if(!this.h.hasOwnProperty(key)) {
+			return false;
+		}
+		delete(this.h[key]);
+		return true;
+	}
+	,keys: function() {
+		var a = [];
+		for( var key in this.h ) if(this.h.hasOwnProperty(key)) a.push(key | 0);
+		return new haxe_iterators_ArrayIterator(a);
+	}
+	,iterator: function() {
+		return { ref : this.h, it : this.keys(), hasNext : function() {
+			return this.it.hasNext();
+		}, next : function() {
+			var i = this.it.next();
+			return this.ref[i];
+		}};
+	}
+	,__class__: haxe_ds_IntMap
+};
 var haxe_ds_List = function() {
 	this.length = 0;
 };
@@ -23597,6 +23588,26 @@ haxe_ds_ObjectMap.prototype = {
 		return new haxe_iterators_ArrayIterator(a);
 	}
 	,__class__: haxe_ds_ObjectMap
+};
+var haxe_ds_StringMap = function() {
+	this.h = Object.create(null);
+};
+$hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
+haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
+haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
+haxe_ds_StringMap.keysIterator = function(h) {
+	var keys = Object.keys(h);
+	var len = keys.length;
+	var idx = 0;
+	return { hasNext : function() {
+		return idx < len;
+	}, next : function() {
+		idx += 1;
+		return keys[idx - 1];
+	}};
+};
+haxe_ds_StringMap.prototype = {
+	__class__: haxe_ds_StringMap
 };
 var haxe_io_BytesBuffer = function() {
 	this.pos = 0;
@@ -45243,10 +45254,7 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 				};
 			})(l));
 		}
-		var out = eval("sortable(\".window .layersList ul\")");
-		$(".layersList ul").off("sortupdate").on("sortupdate",null,function(ev) {
-			var from = ev.detail.origin.index;
-			var to = ev.detail.destination.index;
+		JsTools.makeSortable(".window .layersList ul",function(from,to) {
 			var moved = Client.ME.project.sortLayerDef(from,to);
 			_gthis.selectLayer(moved);
 			Client.ME.ge.emit(GlobalEvent.LayerDefSorted);
