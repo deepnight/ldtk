@@ -126,30 +126,39 @@ button.cancel:hover {
 }
 
 
-form>ul {
+ul.form {
 	@include resetList();
 	>li {
 		display: flex;
-		flex: 1 1 auto;
+		align-items: center;
 
 		.small {
 			flex: 0 1 60px;
 		}
-	}
-	>li+li {
-		margin-top: 8px;
-	}
-	label {
-		flex: 0 0 150px;
-	}
-	li>span {
-		flex: 0 0 20px;
-		opacity: 0.5;
-		padding: 8px;
-		text-align: center;
-	}
-	li>span:last-child {
-		text-align: left;
+
+		label {
+			flex: 0 0 150px;
+			padding-right: 16px;
+			font-weight: bold;
+			text-transform: uppercase;
+			text-align: right;
+			font-size: 80%;
+		}
+
+		> span {
+			flex: 0 0 20px;
+			opacity: 0.5;
+			padding: 8px;
+			text-align: center;
+		}
+
+		> span:last-child {
+			text-align: left;
+		}
+
+		+li {
+			margin-top: 8px;
+		}
 	}
 }
 
@@ -241,7 +250,7 @@ input[type=number]:focus {
 	display: grid;
 	width: 100%;
 	gap: 16px;
-	grid-template-columns: 0.4fr 1fr;
+	grid-template-columns: 0.55fr 1fr;
 }
 
 div.confirm {
@@ -476,72 +485,70 @@ ul.niceList {
 }
 
 .window.layerDefs {
-	form {
-		ul.intGridValues {
-			@include resetList();
-			display: grid;
-			width: 100%;
-			grid-template-columns: repeat(4, 1fr);
-			grid-template-rows: calc( 64px + 2 * 1.2em );
-			gap: 8px;
+	ul.intGridValues {
+		@include resetList();
+		display: grid;
+		width: 100%;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: calc( 64px + 2 * 1.2em );
+		gap: 8px;
 
-			li {
-				position: relative;
-			}
+		li {
+			position: relative;
+		}
 
-			li.value {
-				input[type=color] {
-					width: 100%;
-					height: 64px;
-				}
-
-				input.name {
-					display: block;
-					text-align: center;
-					font-style: italic;
-				}
-
-				span.id {
-					display: block;
-					text-align: center;
-					font-weight: bold;
-				}
-
-				a.remove {
-					display: none;
-					position: absolute;
-					top: 0px;
-					right: 0px;
-					background: black;
-					color: white;
-					padding: 3px;
-					text-decoration: none;
-				}
-			}
-			li.value.removable a.remove {
-				display: block;
-			}
-
-			li.add button {
+		li.value {
+			input[type=color] {
 				width: 100%;
 				height: 64px;
-				padding: 0;
-
-				line-height: 64px;
-				text-align: center;
-				font-size: 300%;
-				text-decoration: none;
-				color: white;
 			}
+
+			input.name {
+				display: block;
+				text-align: center;
+				font-style: italic;
+			}
+
+			span.id {
+				display: block;
+				text-align: center;
+				font-weight: bold;
+			}
+
+			a.remove {
+				display: none;
+				position: absolute;
+				top: 0px;
+				right: 0px;
+				background: black;
+				color: white;
+				padding: 3px;
+				text-decoration: none;
+			}
+		}
+		li.value.removable a.remove {
+			display: block;
+		}
+
+		li.add button {
+			width: 100%;
+			height: 64px;
+			padding: 0;
+
+			line-height: 64px;
+			text-align: center;
+			font-size: 300%;
+			text-decoration: none;
+			color: white;
 		}
 	}
 
 
-	form:not(.type-IntGrid) .IntGrid {
+	ul.form:not(.type-IntGrid) .IntGrid {
 		display: none;
 	}
 
-	form:not(.type-Entities) .Entities {
+	ul.form:not(.type-Entities) .Entities {
 		display: none;
 	}
 }
@@ -549,6 +556,10 @@ ul.niceList {
 .window.entityDefs {
 	.content {
 		width: 900px;
+	}
+
+	input[type=color] {
+		min-height: 32px;
 	}
 
 	.fields {

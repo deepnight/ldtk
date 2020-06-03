@@ -110,43 +110,48 @@ button.cancel:hover {
   margin-left: 2px;
 }
 
-form > ul {
+ul.form {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-form > ul li {
+ul.form li {
   margin: 0;
   padding: 0;
 }
 
-form > ul > li {
+ul.form > li {
   display: flex;
-  flex: 1 1 auto;
+  align-items: center;
 }
 
-form > ul > li .small {
+ul.form > li .small {
   flex: 0 1 60px;
 }
 
-form > ul > li + li {
-  margin-top: 8px;
-}
-
-form > ul label {
+ul.form > li label {
   flex: 0 0 150px;
+  padding-right: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: right;
+  font-size: 80%;
 }
 
-form > ul li > span {
+ul.form > li > span {
   flex: 0 0 20px;
   opacity: 0.5;
   padding: 8px;
   text-align: center;
 }
 
-form > ul li > span:last-child {
+ul.form > li > span:last-child {
   text-align: left;
+}
+
+ul.form > li + li {
+  margin-top: 8px;
 }
 
 select {
@@ -232,7 +237,7 @@ input[type=number]:focus {
   display: grid;
   width: 100%;
   gap: 16px;
-  grid-template-columns: 0.4fr 1fr;
+  grid-template-columns: 0.55fr 1fr;
 }
 
 div.confirm {
@@ -481,7 +486,7 @@ ul.niceList li:not(.active):hover {
   flex: 0 0 32px;
 }
 
-.window.layerDefs form ul.intGridValues {
+.window.layerDefs ul.intGridValues {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -492,33 +497,33 @@ ul.niceList li:not(.active):hover {
   gap: 8px;
 }
 
-.window.layerDefs form ul.intGridValues li {
+.window.layerDefs ul.intGridValues li {
   margin: 0;
   padding: 0;
 }
 
-.window.layerDefs form ul.intGridValues li {
+.window.layerDefs ul.intGridValues li {
   position: relative;
 }
 
-.window.layerDefs form ul.intGridValues li.value input[type=color] {
+.window.layerDefs ul.intGridValues li.value input[type=color] {
   width: 100%;
   height: 64px;
 }
 
-.window.layerDefs form ul.intGridValues li.value input.name {
+.window.layerDefs ul.intGridValues li.value input.name {
   display: block;
   text-align: center;
   font-style: italic;
 }
 
-.window.layerDefs form ul.intGridValues li.value span.id {
+.window.layerDefs ul.intGridValues li.value span.id {
   display: block;
   text-align: center;
   font-weight: bold;
 }
 
-.window.layerDefs form ul.intGridValues li.value a.remove {
+.window.layerDefs ul.intGridValues li.value a.remove {
   display: none;
   position: absolute;
   top: 0px;
@@ -529,11 +534,11 @@ ul.niceList li:not(.active):hover {
   text-decoration: none;
 }
 
-.window.layerDefs form ul.intGridValues li.value.removable a.remove {
+.window.layerDefs ul.intGridValues li.value.removable a.remove {
   display: block;
 }
 
-.window.layerDefs form ul.intGridValues li.add button {
+.window.layerDefs ul.intGridValues li.add button {
   width: 100%;
   height: 64px;
   padding: 0;
@@ -544,16 +549,20 @@ ul.niceList li:not(.active):hover {
   color: white;
 }
 
-.window.layerDefs form:not(.type-IntGrid) .IntGrid {
+.window.layerDefs ul.form:not(.type-IntGrid) .IntGrid {
   display: none;
 }
 
-.window.layerDefs form:not(.type-Entities) .Entities {
+.window.layerDefs ul.form:not(.type-Entities) .Entities {
   display: none;
 }
 
 .window.entityDefs .content {
   width: 900px;
+}
+
+.window.entityDefs input[type=color] {
+  min-height: 32px;
 }
 
 .window.entityDefs .fields {

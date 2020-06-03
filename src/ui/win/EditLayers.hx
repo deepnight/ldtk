@@ -10,7 +10,7 @@ class EditLayers extends ui.Window {
 
 		loadTemplate( hxd.Res.tpl.editLayers, "defEditor layerDefs" );
 		jList = jWin.find(".mainList ul");
-		jForm = jWin.find("form");
+		jForm = jWin.find("ul.form");
 
 		// Create layer
 		jWin.find(".mainList button.create").click( function(_) {
@@ -71,22 +71,16 @@ class EditLayers extends ui.Window {
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToField( jForm.find("select[name='type']"), ld.type );
-		i.onChange = function() {
-			client.ge.emit(LayerDefChanged);
-		};
+		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToField( jForm.find("input[name='gridSize']"), ld.gridSize );
 		i.setBounds(1,32);
-		i.onChange = function() {
-			client.ge.emit(LayerDefChanged);
-		}
+		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToField( jForm.find("input[name='displayOpacity']"), ld.displayOpacity );
 		i.displayAsPct = true;
 		i.setBounds(0.1, 1);
-		i.onChange = function() {
-			client.ge.emit(LayerDefChanged);
-		}
+		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 		// Layer-type specific inits
 		switch ld.type {

@@ -12,21 +12,25 @@
 		</div>
 	</div>
 
-	<form>
-		<ul class="entityDef">
+	<div class="formsWrapper">
+		<ul class="form entityDef">
+			<li>
+				<label for="name">Entity name</label>
+				<input type="text" name="name"/>
+			</li>
 
-		<li>
-			<label for="name">Entity name</label>
-			<input type="text" name="name"/>
-		</li>
+			<li>
+				<label for="width">Width</label>
+				<input type="text" name="width" class="small"/>
+				<span>x</span>
+				<input type="text" name="height" class="small"/>
+				<span>px</span>
+			</li>
 
-		<li>
-			<label for="width">Width</label>
-			<input type="text" name="width" class="small"/>
-			<span>x</span>
-			<input type="text" name="height" class="small"/>
-			<span>px</span>
-		</li>
+			<li>
+				<label for="color">Color</label>
+				<input type="color" name="color"/>
+			</li>
 		</ul>
 
 
@@ -39,13 +43,12 @@
 				</div>
 			</div>
 
-			<ul>
+			<ul class="form">
 			<li>
 				<label for="fName">Field name</label>
 				<input type="text" name="fName"/>
 			</li>
 			</ul>
 		</div>
-
-	</form>
+	</div>
 </div>

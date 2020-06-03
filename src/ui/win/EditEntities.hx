@@ -3,6 +3,7 @@ package ui.win;
 class EditEntities extends ui.Window {
 	var jList : js.jquery.JQuery;
 	var jEntityForm : js.jquery.JQuery;
+	var jFieldsForm : js.jquery.JQuery;
 
 	public var cur : Null<EntityDef>;
 
@@ -12,7 +13,8 @@ class EditEntities extends ui.Window {
 		loadTemplate( hxd.Res.tpl.editEntities, "defEditor entityDefs" );
 		jList = jWin.find(".mainList ul");
 
-		jEntityForm = jWin.find(".entityDef");
+		jEntityForm = jWin.find("ul.form.entityDef");
+		jFieldsForm = jWin.find(".fields ul.form");
 
 		// Create
 		jWin.find(".mainList button.create").click( function(_) {
@@ -60,10 +62,11 @@ class EditEntities extends ui.Window {
 		jEntityForm.find("*").off(); // cleanup event listeners
 
 		if( cur==null ) {
-			jEntityForm.css("visibility","hidden");
+			new J(".formsWrapper").css("visibility","hidden");
 			return;
 		}
-		jEntityForm.css("visibility","visible");
+		else
+			new J(".formsWrapper").css("visibility","visible");
 
 
 		// Name
@@ -81,6 +84,15 @@ class EditEntities extends ui.Window {
 		var i = Input.linkToField( jEntityForm.find("input[name='height']"), ed.height);
 		i.setBounds(1,256);
 		i.onChange = client.ge.emit.bind(EntityDefChanged);
+
+		// Color
+		var col = jEntityForm.find("input[name=color]");
+		col.val( C.intToHex(ed.color) );
+		col.change( function(ev) {
+			ed.color = C.hexToInt( col.val() );
+			client.ge.emit(EntityDefChanged);
+			updateEntityForm();
+		});
 
 		// 	new ui.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
 		// 		project.removeLayerDef(ld);
