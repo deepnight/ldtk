@@ -128,6 +128,9 @@ button.cancel:hover {
 
 ul.form {
 	@include resetList();
+	padding: 8px;
+	border: 1px solid $bgLight;
+
 	>li {
 		display: flex;
 		align-items: center;
@@ -409,6 +412,9 @@ div.confirm {
 }
 
 
+ul.niceList:first-child {
+	margin-top: 0;
+}
 ul.niceList {
 	@include resetList();
 	padding: 4px;
@@ -417,10 +423,6 @@ ul.niceList {
 	margin-bottom: 4px;
 	border: 1px solid $bgLight;
 	background-color: $bgDark;
-
-	:first-child {
-		margin-top: 0;
-	}
 
 	li {
 		display: flex;

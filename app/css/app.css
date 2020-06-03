@@ -114,6 +114,8 @@ ul.form {
   margin: 0;
   padding: 0;
   list-style: none;
+  padding: 8px;
+  border: 1px solid #545d73;
 }
 
 ul.form li {
@@ -393,6 +395,10 @@ div.confirm .wrapper .buttons button.confirm {
   outline: 2px solid white !important;
 }
 
+ul.niceList:first-child {
+  margin-top: 0;
+}
+
 ul.niceList {
   margin: 0;
   padding: 0;
@@ -408,10 +414,6 @@ ul.niceList {
 ul.niceList li {
   margin: 0;
   padding: 0;
-}
-
-ul.niceList :first-child {
-  margin-top: 0;
 }
 
 ul.niceList li {
