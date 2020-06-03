@@ -9,7 +9,7 @@ class EditLayers extends ui.Window {
 		super();
 
 		loadTemplate( hxd.Res.tpl.editLayers );
-		jList = jWin.find(".layersList ul");
+		jList = jWin.find(".mainList ul");
 		jForm = jWin.find("form");
 
 		// Create layer
@@ -177,7 +177,7 @@ class EditLayers extends ui.Window {
 		}
 
 		// Make layer list sortable
-		JsTools.makeSortable(".window .layersList ul", function(from, to) {
+		JsTools.makeSortable(".window .mainList ul", function(from, to) {
 			var moved = project.sortLayerDef(from,to);
 			select(moved);
 			client.ge.emit(LayerDefSorted);

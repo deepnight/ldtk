@@ -336,55 +336,60 @@ div.confirm {
 }
 
 
-.layersList {
-	ul {
-		@include resetList();
-		li {
-			display: flex;
-			border-bottom: 1px solid $bgDark;
+ul.niceList {
+	@include resetList();
+	padding: 4px;
+	margin-top: 4px;
+	margin-bottom: 4px;
+	border: 1px solid $bgLight;
+	background-color: $bgDark;
+	li {
+		display: flex;
+		border-top: 1px solid $bgDark;
+		border-bottom: 1px solid $bgDark;
+		background-color: $bgMed;
 
-			.name {
-				flex: 1 1 auto;
-				order: 1;
-				display: block;
-				padding: 10px;
-				cursor: pointer;
-			}
-			.vis {
-				flex: 0 0 auto;
-				padding: 10px;
-				color: white;
-				text-shadow: 0px 0px 4px black;
-				order: 2;
-				display: block;
-				cursor: zoom-out;
-			}
-			.vis:hover {
-				outline: 1px solid white;
-				outline-offset: -4px;
-			}
+		.name {
+			flex: 1 1 auto;
+			order: 1;
+			display: block;
+			padding: 10px;
+			cursor: pointer;
 		}
+		.vis { // TODO move away
+			flex: 0 0 auto;
+			padding: 10px;
+			color: white;
+			text-shadow: 0px 0px 4px black;
+			order: 2;
+			display: block;
+			cursor: zoom-out;
+		}
+		.vis:hover {
+			outline: 1px solid white;
+			outline-offset: -4px;
+		}
+	}
 
-		li.active {
-			background-color: $orange;
-			box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
+	li.active {
+		background-color: $orange;
+		box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
 
-			.name {
-				color: black;
-			}
+		.name {
+			color: black;
 		}
+	}
 
-		li.hidden {
-			opacity: 0.4;
-			.vis {
-				background: transparent;
-				cursor: zoom-in;
-			}
+	li.hidden {
+		opacity: 0.4;
+		.vis {
+			background: transparent;
+			cursor: zoom-in;
 		}
-		li:not(.active):hover {
-			outline: 1px solid #586279;
-			outline-offset: -2px;
-		}
+	}
+	li:not(.active):hover {
+		outline: 1px solid #586279;
+		outline-offset: -1px;
 	}
 }
 
@@ -392,7 +397,7 @@ div.confirm {
 .window .editLayers {
 	display: flex;
 
-	.layersList {
+	.mainList {
 		flex: 0 0 200px;
 		margin-right: 10px;
 		ul {

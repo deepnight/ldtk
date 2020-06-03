@@ -316,23 +316,30 @@ div.confirm .wrapper .buttons button + button {
   outline: 2px solid white !important;
 }
 
-.layersList ul {
+ul.niceList {
   margin: 0;
   padding: 0;
   list-style: none;
+  padding: 4px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border: 1px solid #545d73;
+  background-color: #1e2229;
 }
 
-.layersList ul li {
+ul.niceList li {
   margin: 0;
   padding: 0;
 }
 
-.layersList ul li {
+ul.niceList li {
   display: flex;
+  border-top: 1px solid #1e2229;
   border-bottom: 1px solid #1e2229;
+  background-color: #2e333f;
 }
 
-.layersList ul li .name {
+ul.niceList li .name {
   flex: 1 1 auto;
   order: 1;
   display: block;
@@ -340,7 +347,7 @@ div.confirm .wrapper .buttons button + button {
   cursor: pointer;
 }
 
-.layersList ul li .vis {
+ul.niceList li .vis {
   flex: 0 0 auto;
   padding: 10px;
   color: white;
@@ -350,44 +357,44 @@ div.confirm .wrapper .buttons button + button {
   cursor: zoom-out;
 }
 
-.layersList ul li .vis:hover {
+ul.niceList li .vis:hover {
   outline: 1px solid white;
   outline-offset: -4px;
 }
 
-.layersList ul li.active {
+ul.niceList li.active {
   background-color: #ffcc00;
   box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
 }
 
-.layersList ul li.active .name {
+ul.niceList li.active .name {
   color: black;
 }
 
-.layersList ul li.hidden {
+ul.niceList li.hidden {
   opacity: 0.4;
 }
 
-.layersList ul li.hidden .vis {
+ul.niceList li.hidden .vis {
   background: transparent;
   cursor: zoom-in;
 }
 
-.layersList ul li:not(.active):hover {
+ul.niceList li:not(.active):hover {
   outline: 1px solid #586279;
-  outline-offset: -2px;
+  outline-offset: -1px;
 }
 
 .window .editLayers {
   display: flex;
 }
 
-.window .editLayers .layersList {
+.window .editLayers .mainList {
   flex: 0 0 200px;
   margin-right: 10px;
 }
 
-.window .editLayers .layersList ul {
+.window .editLayers .mainList ul {
   border: 1px solid #545d73;
 }
 

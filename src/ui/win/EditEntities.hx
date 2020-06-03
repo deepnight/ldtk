@@ -10,7 +10,7 @@ class EditEntities extends ui.Window {
 		super();
 
 		loadTemplate( hxd.Res.tpl.editEntities );
-		jList = jWin.find(".layersList ul");
+		jList = jWin.find(".mainList ul");
 
 		jForm = jWin.find("form");
 		jForm.submit( function(ev) ev.preventDefault() );
@@ -91,7 +91,7 @@ class EditEntities extends ui.Window {
 		}
 
 		// Make layer list sortable
-		JsTools.makeSortable(".window .layersList ul", function(from, to) {
+		JsTools.makeSortable(".window .mainList ul", function(from, to) {
 			N.notImplemented();
 			// var moved = project.sortLayerDef(from,to);
 			// select(moved);
