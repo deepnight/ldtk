@@ -231,6 +231,13 @@ div.confirm .wrapper .buttons button + button {
   margin-left: 2px;
 }
 
+.sortable-placeholder {
+  min-height: 32px;
+  outline: 1px dashed #ffcc00;
+  outline-offset: -2px;
+  background-color: #1e2229;
+}
+
 .editor canvas#webgl {
   height: 100% !important;
   position: absolute;

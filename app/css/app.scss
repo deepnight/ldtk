@@ -253,6 +253,13 @@ div.confirm {
 }
 
 
+.sortable-placeholder {
+	min-height: 32px;
+	outline: 1px dashed $orange;
+	outline-offset: -2px;
+	background-color: $bgDark;
+}
+
 .editor {
 
 	canvas#webgl {
