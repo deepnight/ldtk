@@ -1,7 +1,6 @@
 package data;
 
 class LevelData implements data.IData {
-	public var project(default,null) : ProjectData;
 	public var layerContents : Array<LayerContent> = [];
 
 	public var uid : Int;
@@ -10,11 +9,14 @@ class LevelData implements data.IData {
 
 
 	@:allow(data.ProjectData)
-	private function new(p:data.ProjectData) {
-		project = p;
-		uid = project.makeUniqId();
+	private function new(uid:Int) {
+		this.uid = uid;
+	}
 
-		for(def in project.layerDefs)
+	@:allow(data.ProjectData)
+	function initLayersUsingProject(p:ProjectData) {
+		layerContents = [];
+		for(def in p.layerDefs)
 			layerContents.push( new LayerContent(this, def) );
 	}
 
@@ -23,7 +25,7 @@ class LevelData implements data.IData {
 	}
 
 	public function clone() {
-		var e = new LevelData(project);
+		var e = new LevelData(uid);
 		return e;
 	}
 

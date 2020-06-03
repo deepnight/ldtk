@@ -67,7 +67,8 @@ class ProjectData implements data.IData {
 	}
 
 	public function createLevel() {
-		var l = new LevelData(this);
+		var l = new LevelData(makeUniqId());
+		l.initLayersUsingProject(this);
 		levels.push(l);
 		return l;
 	}
