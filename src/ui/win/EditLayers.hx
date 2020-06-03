@@ -3,9 +3,7 @@ package ui.win;
 class EditLayers extends ui.Window {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
-	public var curLayer : Null<LayerDef>;
-
-	var pouet : Float = 5;
+	public var cur : Null<LayerDef>;
 
 	public function new() {
 		super();
@@ -15,14 +13,14 @@ class EditLayers extends ui.Window {
 		jForm = jWin.find("form");
 
 		// Create layer
-		jWin.find(".addLayer").click( function(_) {
+		jWin.find(".createLayer").click( function(_) {
 			var ld = project.createLayerDef(IntGrid);
-			selectLayer(ld);
+			select(ld);
 			client.ge.emit(LayerDefChanged);
 			jForm.find("input").first().focus().select();
 		});
 
-		selectLayer(client.curLayerContent.def);
+		select(client.curLayerContent.def);
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -30,17 +28,20 @@ class EditLayers extends ui.Window {
 		switch e {
 			case LayerDefChanged:
 				updateForm();
-				updateLayerList();
+				updateList();
 
 			case LayerDefSorted:
-				updateLayerList();
+				updateList();
 
 			case LayerContentChanged:
+
+			case EntityDefChanged:
+			case EntityDefSorted:
 		}
 	}
 
-	function selectLayer(ld:LayerDef) {
-		curLayer = ld;
+	function select(ld:LayerDef) {
+		cur = ld;
 
 		jForm.find("*").off(); // cleanup event listeners
 
@@ -83,7 +84,7 @@ class EditLayers extends ui.Window {
 
 			new ui.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
 				project.removeLayerDef(ld);
-				selectLayer(project.layerDefs[0]);
+				select(project.layerDefs[0]);
 				client.ge.emit(LayerDefChanged);
 			});
 		});
@@ -153,32 +154,32 @@ class EditLayers extends ui.Window {
 				// TODO
 		}
 
-		updateLayerList();
+		updateList();
 	}
 
 
 	function updateForm() {
-		selectLayer(curLayer);
+		select(cur);
 	}
 
 
-	function updateLayerList() {
+	function updateList() {
 		jList.empty();
 
 		for(l in project.layerDefs) {
 			var e = new J("<li/>");
 			jList.append(e);
 			e.append('<span class="name">'+l.name+'</span>');
-			if( curLayer==l )
+			if( cur==l )
 				e.addClass("active");
 
-			e.click( function(_) selectLayer(l) );
+			e.click( function(_) select(l) );
 		}
 
 		// Make layer list sortable
 		JsTools.makeSortable(".window .layersList ul", function(from, to) {
 			var moved = project.sortLayerDef(from,to);
-			selectLayer(moved);
+			select(moved);
 			client.ge.emit(LayerDefSorted);
 		});
 	}
