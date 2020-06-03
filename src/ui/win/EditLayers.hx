@@ -121,9 +121,17 @@ class EditLayers extends ui.Window {
 
 					// Remove
 					e.find("a.remove").click( function(ev) {
-						ld.getAllIntGridValues().splice(curIdx,1);
-						client.ge.emit(LayerDefChanged);
-						updateForm();
+						function run() {
+							ld.getAllIntGridValues().splice(curIdx,1);
+							client.ge.emit(LayerDefChanged);
+							updateForm();
+						}
+						if( ld.isIntGridValueUsedInProject(project, curIdx) ) {
+							new ui.Confirm(e.find("a.remove"), L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"), run);
+							return;
+						}
+						else
+							run();
 					});
 					idx++;
 				}

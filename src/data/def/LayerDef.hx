@@ -41,6 +41,19 @@ class LayerDef implements IData {
 	public inline function countIntGridValues() return intGridValues.length;
 
 
+	public function isIntGridValueUsedInProject(p:ProjectData, idx:Int) {
+		for(level in p.levels) {
+			var lc = level.getLayerContent(uid);
+			if( lc!=null ) {
+				for(cx in 0...lc.cWid)
+				for(cy in 0...lc.cHei)
+					if( lc.getIntGrid(cx,cy)==idx )
+						return true;
+			}
+		}
+		return false;
+	}
+
 	public function isIntGridValueNameUnique(name:String) {
 		for(v in intGridValues)
 			if( v.name==name )

@@ -1868,25 +1868,27 @@ data_LayerContent.prototype = {
 	}
 	,__class__: data_LayerContent
 };
-var data_LevelData = function(p) {
+var data_LevelData = function(uid) {
 	this.pxHei = 256;
 	this.pxWid = 512;
 	this.layerContents = [];
-	this.project = p;
-	this.uid = this.project.makeUniqId();
-	var _g = 0;
-	var _g1 = this.project.layerDefs;
-	while(_g < _g1.length) {
-		var def = _g1[_g];
-		++_g;
-		this.layerContents.push(new data_LayerContent(this,def));
-	}
+	this.uid = uid;
 };
 $hxClasses["data.LevelData"] = data_LevelData;
 data_LevelData.__name__ = "data.LevelData";
 data_LevelData.__interfaces__ = [data_IData];
 data_LevelData.prototype = {
-	getLayerContent: function(layerDefId) {
+	initLayersUsingProject: function(p) {
+		this.layerContents = [];
+		var _g = 0;
+		var _g1 = p.layerDefs;
+		while(_g < _g1.length) {
+			var def = _g1[_g];
+			++_g;
+			this.layerContents.push(new data_LayerContent(this,def));
+		}
+	}
+	,getLayerContent: function(layerDefId) {
 		var _g = 0;
 		var _g1 = this.layerContents;
 		while(_g < _g1.length) {
@@ -1964,7 +1966,8 @@ data_ProjectData.prototype = {
 		this.checkDataIntegrity();
 	}
 	,createLevel: function() {
-		var l = new data_LevelData(this);
+		var l = new data_LevelData(this.makeUniqId());
+		l.initLayersUsingProject(this);
 		this.levels.push(l);
 		return l;
 	}
@@ -2056,6 +2059,51 @@ data_def_LayerDef.prototype = {
 	}
 	,getIntGridValue: function(idx) {
 		return this.intGridValues[idx];
+	}
+	,isIntGridValueUsedInProject: function(p,idx) {
+		var _g = 0;
+		var _g1 = p.levels;
+		while(_g < _g1.length) {
+			var level = _g1[_g];
+			++_g;
+			var lc = level.getLayerContent(this.uid);
+			if(lc != null) {
+				var _g2 = 0;
+				var x = Client.ME.project.getLevel(lc.levelId).pxWid / Client.ME.project.getLayerDef(lc.layerDefId).gridSize;
+				var _g3;
+				if(x > .0) {
+					var t = x + .5 | 0;
+					_g3 = t < x ? t + 1 : t;
+				} else if(x < .0) {
+					var t1 = x - .5 | 0;
+					_g3 = t1 < x ? t1 + 1 : t1;
+				} else {
+					_g3 = 0;
+				}
+				while(_g2 < _g3) {
+					var cx = _g2++;
+					var _g4 = 0;
+					var x1 = Client.ME.project.getLevel(lc.levelId).pxHei / Client.ME.project.getLayerDef(lc.layerDefId).gridSize;
+					var _g5;
+					if(x1 > .0) {
+						var t2 = x1 + .5 | 0;
+						_g5 = t2 < x1 ? t2 + 1 : t2;
+					} else if(x1 < .0) {
+						var t3 = x1 - .5 | 0;
+						_g5 = t3 < x1 ? t3 + 1 : t3;
+					} else {
+						_g5 = 0;
+					}
+					while(_g4 < _g5) {
+						var cy = _g4++;
+						if(lc.getIntGrid(cx,cy) == idx) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 	,isIntGridValueNameUnique: function(name) {
 		var _g = 0;
@@ -45026,11 +45074,11 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 				var val = [_g1[_g]];
 				++_g;
 				var curIdx = [idx];
-				var e = this.jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
-				e.addClass("value");
-				e.insertBefore(addButton);
-				e.find(".id").html("#" + idx);
-				var i = new form_input_StringInput(e.find("input.name"),(function(val) {
+				var e = [this.jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent()];
+				e[0].addClass("value");
+				e[0].insertBefore(addButton);
+				e[0].find(".id").html("#" + idx);
+				var i = new form_input_StringInput(e[0].find("input.name"),(function(val) {
 					return function() {
 						return val[0].name;
 					};
@@ -45051,9 +45099,9 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 					};
 				})([GlobalEvent.LayerDefChanged],[($_=Client.ME.ge,$bind($_,$_.emit))]);
 				if(ld.intGridValues.length > 1 && idx == ld.intGridValues.length - 1) {
-					e.addClass("removable");
+					e[0].addClass("removable");
 				}
-				var col = [e.find("input[type=color]")];
+				var col = [e[0].find("input[type=color]")];
 				var col1 = col[0];
 				var h = StringTools.hex(val[0].color);
 				while(h.length < 6) h = "0" + h;
@@ -45068,13 +45116,23 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 						_gthis.updateForm();
 					};
 				})(col,curIdx));
-				e.find("a.remove").click((function(curIdx) {
+				e[0].find("a.remove").click((function(e,curIdx) {
 					return function(ev) {
-						ld.intGridValues.splice(curIdx[0],1);
-						Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
-						_gthis.updateForm();
+						var run = (function(curIdx) {
+							return function() {
+								ld.intGridValues.splice(curIdx[0],1);
+								Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
+								_gthis.updateForm();
+							};
+						})(curIdx);
+						if(ld.isIntGridValueUsedInProject(Client.ME.project,curIdx[0])) {
+							new ui_Confirm(e[0].find("a.remove"),Lang.t.get("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?",null),run);
+							return;
+						} else {
+							run();
+						}
 					};
-				})(curIdx));
+				})(e,curIdx));
 				++idx;
 			}
 			break;

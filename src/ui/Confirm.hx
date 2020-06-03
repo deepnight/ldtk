@@ -3,7 +3,7 @@ package ui;
 class Confirm extends dn.Process {
 	var elem : js.jquery.JQuery;
 
-	private function new(?target:js.jquery.JQuery, ?str:String, onConfirm:Void->Void) {
+	public function new(?target:js.jquery.JQuery, ?str:String, onConfirm:Void->Void) {
 		super(Client.ME);
 
 		if( str==null )
