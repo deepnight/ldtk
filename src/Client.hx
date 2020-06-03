@@ -37,6 +37,14 @@ class Client extends dn.Process {
 			onMouseUp();
 		});
 
+		new J("button.debug1").click( function(ev) {
+			var w = new ui.Dialog(ev.getThis());
+			w.addButton("btA", function() N.debug("A"));
+			w.addButton("btB", function() N.debug("B"));
+			w.addButton("btC", function() N.debug("C"));
+		} );
+		new J("button.debug2").click( function(ev) { new ui.dialog.Confirm(ev.getThis(), function() N.debug("ok")); } );
+
 		new J("button.save").click( function(_) { N.notImplemented(); } );
 		new J("button.editLayers").click( function(_) new ui.win.EditLayers() );
 		new J("button.editEntities").click( function(_) new ui.win.EditEntities() );

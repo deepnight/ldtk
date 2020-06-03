@@ -27,7 +27,7 @@ class EditLayers extends ui.Window {
 				return;
 			}
 
-			new ui.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
+			new ui.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
 				project.removeLayerDef(cur);
 				select(project.layerDefs[0]);
 				client.ge.emit(LayerDefChanged);
@@ -133,7 +133,7 @@ class EditLayers extends ui.Window {
 							updateForm();
 						}
 						if( ld.isIntGridValueUsedInProject(project, curIdx) ) {
-							new ui.Confirm(e.find("a.remove"), L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"), run);
+							new ui.dialog.Confirm(e.find("a.remove"), L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"), run);
 							return;
 						}
 						else
