@@ -5,7 +5,7 @@ class EditEntities extends ui.Window {
 	var jEntityForm : js.jquery.JQuery;
 	var jFieldsForm : js.jquery.JQuery;
 
-	public var cur : Null<EntityDef>;
+	public var curEntity : Null<EntityDef>;
 
 	public function new() {
 		super();
@@ -19,26 +19,26 @@ class EditEntities extends ui.Window {
 		// Create
 		jWin.find(".mainList button.create").click( function(_) {
 			var ed = project.createEntityDef();
-			select(ed);
+			selectEntity(ed);
 			// client.ge.emit(LayerDefChanged);
 			jEntityForm.find("input").first().focus().select();
 		});
 
 		// Delete
 		jWin.find(".mainList button.delete").click( function(ev) {
-			if( cur==null ) {
+			if( curEntity==null ) {
 				N.error("No entity selected.");
 				return;
 			}
-			project.removeEntityDef(cur);
+			project.removeEntityDef(curEntity);
 			client.ge.emit(EntityDefChanged);
 			if( project.entityDefs.length>0 )
-				select(project.entityDefs[0]);
+				selectEntity(project.entityDefs[0]);
 			else
-				select(null);
+				selectEntity(null);
 		});
 
-		select(project.entityDefs[0]);
+		selectEntity(project.entityDefs[0]);
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -57,11 +57,11 @@ class EditEntities extends ui.Window {
 		}
 	}
 
-	function select(ed:Null<EntityDef>) {
-		cur = ed;
+	function selectEntity(ed:Null<EntityDef>) {
+		curEntity = ed;
 		jEntityForm.find("*").off(); // cleanup event listeners
 
-		if( cur==null ) {
+		if( curEntity==null ) {
 			new J(".formsWrapper").css("visibility","hidden");
 			return;
 		}
@@ -106,11 +106,10 @@ class EditEntities extends ui.Window {
 
 
 	function updateEntityForm() {
-		select(cur);
+		selectEntity(curEntity);
 	}
 
 	function updateFieldForm() {
-
 	}
 
 
@@ -121,10 +120,10 @@ class EditEntities extends ui.Window {
 			var elem = new J("<li/>");
 			jList.append(elem);
 			elem.append('<span class="name">'+ed.name+'</span>');
-			if( cur==ed )
+			if( curEntity==ed )
 				elem.addClass("active");
 
-			elem.click( function(_) select(ed) );
+			elem.click( function(_) selectEntity(ed) );
 		}
 
 		// Make layer list sortable
