@@ -37,9 +37,9 @@ class Client extends dn.Process {
 			onMouseUp();
 		});
 
-		new J(".projectSettings").click( function(_) { N.notImplemented(); } );
-		new J(".saveLevel").click( function(_) { N.notImplemented(); } );
+		new J("button.save").click( function(_) { N.notImplemented(); } );
 		new J("button.editLayers").click( function(_) new ui.win.EditLayers() );
+		new J("button.editEntities").click( function(_) new ui.win.EditEntities() );
 
 		Boot.ME.s2d.addEventListener( onEvent );
 
@@ -106,7 +106,7 @@ class Client extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
-			case LayerDefChanged, LayerDefSorted :
+			case LayerDefChanged, LayerDefSorted, EntityDefChanged, EntityDefSorted :
 				project.checkDataIntegrity();
 				if( curLayerContent==null )
 					selectLayer(curLevel.layerContents[0]);

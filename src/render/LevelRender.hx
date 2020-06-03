@@ -30,11 +30,7 @@ class LevelRender extends dn.Process {
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
-		switch e {
-			case LayerDefChanged: invalidate();
-			case LayerContentChanged: invalidate();
-			case LayerDefSorted: invalidate();
-		}
+		invalidate();
 	}
 
 	public inline function isLayerVisible(l:LayerContent) {
