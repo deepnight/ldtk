@@ -63,15 +63,17 @@ class EditLayers extends ui.Window {
 		}
 
 		// Delete layer button
-		jForm.find(".deleteLayer").click( function(_) {
+		jForm.find(".deleteLayer").click( function(ev) {
 			if( project.layerDefs.length==1 ) {
 				N.error("Cannot delete the last layer.");
 				return;
 			}
 
-			project.removeLayerDef(ld);
-			selectLayer(project.layerDefs[0]);
-			client.ge.emit(LayerDefChanged);
+			new ui.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
+				project.removeLayerDef(ld);
+				selectLayer(project.layerDefs[0]);
+				client.ge.emit(LayerDefChanged);
+			});
 		});
 
 

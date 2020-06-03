@@ -715,7 +715,6 @@ GlobalEventDispatcher.prototype = {
 				}
 			}
 		}
-		haxe_Log.trace("remove: " + Std.string(this.specificListeners),{ fileName : "src/GlobalEventDispatcher.hx", lineNumber : 28, className : "GlobalEventDispatcher", methodName : "remove"});
 	}
 	,emit: function(e) {
 		var _g = 0;
@@ -838,6 +837,18 @@ Reflect.field = function(o,field) {
 	} catch( _g ) {
 		return null;
 	}
+};
+Reflect.fields = function(o) {
+	var a = [];
+	if(o != null) {
+		var hasOwnProperty = Object.prototype.hasOwnProperty;
+		for( var f in o ) {
+		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) {
+			a.push(f);
+		}
+		}
+	}
+	return a;
 };
 Reflect.isFunction = function(f) {
 	if(typeof(f) == "function") {
@@ -1011,6 +1022,9 @@ StringTools.rtrim = function(s) {
 };
 StringTools.trim = function(s) {
 	return StringTools.ltrim(StringTools.rtrim(s));
+};
+StringTools.replace = function(s,sub,by) {
+	return s.split(sub).join(by);
 };
 StringTools.hex = function(n,digits) {
 	var s = "";
@@ -2444,7 +2458,36 @@ var dn_data_GetText = function() {
 $hxClasses["dn.data.GetText"] = dn_data_GetText;
 dn_data_GetText.__name__ = "dn.data.GetText";
 dn_data_GetText.prototype = {
-	readMo: function(data) {
+	get: function(str,params) {
+		if(this.texts == null) {
+			throw haxe_Exception.thrown("no data in dictionnary");
+		}
+		if(str == null) {
+			return null;
+		}
+		if(Object.prototype.hasOwnProperty.call(this.texts.h,str)) {
+			str = this.texts.h[str];
+		} else {
+			var str2 = StringTools.rtrim(str.split(dn_data_GetText.CONTEXT)[0]);
+			if(Object.prototype.hasOwnProperty.call(this.texts.h,str2)) {
+				str = this.texts.h[str2];
+			}
+		}
+		str = StringTools.rtrim(str.split(dn_data_GetText.CONTEXT)[0]);
+		var list = str.split("::");
+		var n = 0;
+		if(params != null) {
+			var _g = 0;
+			var _g1 = Reflect.fields(params);
+			while(_g < _g1.length) {
+				var k = _g1[_g];
+				++_g;
+				str = StringTools.replace(str,"::" + (k.charAt(0) == "_" ? HxOverrides.substr(k,1,null) : k) + "::",Reflect.field(params,k));
+			}
+		}
+		return new String(str);
+	}
+	,readMo: function(data) {
 		var r = new dn_data_MoReader(data);
 		this.texts = r.parse();
 	}
@@ -44676,6 +44719,97 @@ tool_IntGridBrush.prototype = $extend(Tool.prototype,{
 	}
 	,__class__: tool_IntGridBrush
 });
+var ui_Confirm = function(target,str,onConfirm) {
+	var _gthis = this;
+	dn_Process.call(this,Client.ME);
+	if(str == null) {
+		str = Lang.t.get("Confirm this action?",null);
+	}
+	this.elem = $("xml#confirm").clone().children().first();
+	this.elem.appendTo($("body"));
+	this.elem.find(".content").text(str);
+	this.elem.find("button.confirm").click(function(_) {
+		_gthis.close();
+		onConfirm();
+	});
+	this.elem.find("button.cancel").click(function(_) {
+		_gthis.close();
+	});
+	this.elem.find(".mask").click(function(_) {
+		_gthis.close();
+	});
+	if(target != null) {
+		var off = target.offset();
+		this.elem.find(".wrapper").offset({ left : off.left, top : off.top + target.outerHeight()});
+	}
+	this.elem.find(".mask").hide().fadeIn(200);
+	this.elem.find(".wrapper").hide().slideDown(100);
+};
+$hxClasses["ui.Confirm"] = ui_Confirm;
+ui_Confirm.__name__ = "ui.Confirm";
+ui_Confirm.__super__ = dn_Process;
+ui_Confirm.prototype = $extend(dn_Process.prototype,{
+	close: function() {
+		var _gthis = this;
+		var tmp;
+		if(!this.destroyed) {
+			var _this = this.cd;
+			var frames = Const.INFINITE * this.cd.baseFps;
+			if(_this.fastCheck.h.hasOwnProperty(0)) {
+				tmp = true;
+			} else {
+				var frames1 = frames;
+				var onComplete = null;
+				frames1 = Math.floor(frames1 * 1000) / 1000;
+				var cur = _this._getCdObject(0);
+				if(!(cur != null && frames1 < cur.frames && false)) {
+					if(frames1 <= 0) {
+						if(cur != null) {
+							HxOverrides.remove(_this.cdList,cur);
+							cur.frames = 0;
+							cur.cb = null;
+							_this.fastCheck.remove(cur.k);
+						}
+					} else {
+						_this.fastCheck.h[0] = true;
+						if(cur != null) {
+							cur.frames = frames1;
+						} else {
+							_this.cdList.push(new dn__$Cooldown_CdInst(0,frames1));
+						}
+					}
+					if(onComplete != null) {
+						if(frames1 <= 0) {
+							onComplete();
+						} else {
+							var cd = _this._getCdObject(0);
+							if(cd == null) {
+								throw haxe_Exception.thrown("cannot bind onComplete(" + 0 + "): cooldown " + 0 + " isn't running");
+							}
+							cd.cb = onComplete;
+						}
+					}
+				}
+				tmp = false;
+			}
+		} else {
+			tmp = true;
+		}
+		if(tmp) {
+			return;
+		}
+		this.elem.find(".mask").stop(true,false).fadeOut(100);
+		this.elem.find(".wrapper").slideUp(100,function(_) {
+			_gthis.destroyed = true;
+		});
+	}
+	,onDispose: function() {
+		dn_Process.prototype.onDispose.call(this);
+		this.elem.remove();
+		this.elem = null;
+	}
+	,__class__: ui_Confirm
+});
 var ui_Notification = function(str,col) {
 	var _gthis = this;
 	dn_Process.call(this,Client.ME);
@@ -44776,6 +44910,7 @@ var ui_Window = function() {
 	this.jMask.click(function(_) {
 		_gthis.close();
 	});
+	this.jMask.hide().fadeIn(200);
 };
 $hxClasses["ui.Window"] = ui_Window;
 ui_Window.__name__ = "ui.Window";
@@ -44863,14 +44998,16 @@ ui_win_EditLayers.prototype = $extend(ui_Window.prototype,{
 		i.onChange = function() {
 			Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
 		};
-		this.jForm.find(".deleteLayer").click(function(_) {
+		this.jForm.find(".deleteLayer").click(function(ev) {
 			if(Client.ME.project.layerDefs.length == 1) {
 				ui_Notification.error("Cannot delete the last layer.");
 				return;
 			}
-			Client.ME.project.removeLayerDef(ld);
-			_gthis.selectLayer(Client.ME.project.layerDefs[0]);
-			Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
+			new ui_Confirm($(this),"If you delete this layer, it will be deleted in all levels as well. Are you sure?",function() {
+				Client.ME.project.removeLayerDef(ld);
+				_gthis.selectLayer(Client.ME.project.layerDefs[0]);
+				Client.ME.ge.emit(GlobalEvent.LayerDefChanged);
+			});
 		});
 		switch(ld.type._hx_index) {
 		case 0:

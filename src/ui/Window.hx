@@ -16,6 +16,7 @@ class Window extends dn.Process {
 
 		jMask = jWin.find(".mask");
 		jMask.click( function(_) close() );
+		jMask.hide().fadeIn(200);
 	}
 
 	public function close() {
