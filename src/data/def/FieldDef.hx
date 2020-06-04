@@ -17,6 +17,10 @@ class FieldDef { // TODO implements serialization
 		canBeNull = type==F_String;
 	}
 
+	public function toString() {
+		return '$name($type)[${getDefault()}]';
+	}
+
 	inline function require(type:FieldType) {
 		if( this.type!=type )
 			throw "Only available on "+type+" fields";
@@ -27,6 +31,17 @@ class FieldDef { // TODO implements serialization
 			!canBeNull && defaultOverride==null ? 0 :
 			defaultOverride==null ? null :
 			Std.parseInt(defaultOverride);
+	}
+
+	public function getFloatDefault() : Null<Float> {
+		return
+			!canBeNull && defaultOverride==null ? 0. :
+			defaultOverride==null ? null :
+			Std.parseFloat(defaultOverride);
+	}
+
+	public function getStringDefault() : Null<String> {
+		return !canBeNull && defaultOverride==null ? "" : defaultOverride;
 	}
 
 	public function restoreDefault() {
@@ -40,6 +55,9 @@ class FieldDef { // TODO implements serialization
 				defaultOverride = !M.isValidNumber(def) ? null : Std.string(def);
 
 			case F_Float:
+				var def = rawDef==null ? null : Std.parseFloat(rawDef);
+				defaultOverride = !M.isValidNumber(def) ? null : Std.string(def);
+
 			case F_String:
 				if( rawDef!=null )
 					rawDef = StringTools.trim(rawDef);
@@ -50,9 +68,8 @@ class FieldDef { // TODO implements serialization
 	public function getDefault() : Dynamic {
 		return switch type {
 			case F_Int: getIntDefault();
-			case F_Float: getIntDefault();
-
-			case F_String: null; // TODO
+			case F_Float: getFloatDefault();
+			case F_String: getStringDefault();
 		}
 	}
 }
