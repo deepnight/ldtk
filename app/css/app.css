@@ -613,3 +613,15 @@ ul.niceList li:not(.active):hover {
 .window.entityDefs .fields ul.form label {
   flex: 0 0 100px;
 }
+
+.window.entityDefs .fields ul.form li.F_Int,
+.window.entityDefs .fields ul.form li.F_Float,
+.window.entityDefs .fields ul.form li.F_String {
+  display: none;
+}
+
+.window.entityDefs .fields ul.form.type-F_Int li.F_int,
+.window.entityDefs .fields ul.form.type-F_Float li.F_Float,
+.window.entityDefs .fields ul.form.type-F_String li.F_String {
+  display: flex;
+}

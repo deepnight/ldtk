@@ -9,6 +9,9 @@ class FieldDef { // TODO implements serialization
 	@:allow(ui.win.EditEntities)
 	var defaultOverride : Null<String>;
 
+	public var min : Null<Float>;
+	public var max : Null<Float>;
+
 	@:allow(data.def.EntityDef)
 	private function new(uid:Int, t:FieldType) {
 		this.uid = uid;
@@ -18,7 +21,7 @@ class FieldDef { // TODO implements serialization
 	}
 
 	public function toString() {
-		return '$name($type)[${getDefault()}]';
+		return '$name($type=${getDefault()})[$min-$max]';
 	}
 
 	inline function require(type:FieldType) {
@@ -26,18 +29,46 @@ class FieldDef { // TODO implements serialization
 			throw "Only available on "+type+" fields";
 	}
 
+	public function iClamp(v:Null<Int>) {
+		if( v==null )
+			return v;
+
+		if( min!=null )
+			v = M.imax(v, M.round(min));
+
+		if( max!=null )
+			v = M.imin(v, M.round(max));
+
+		return v;
+	}
+
+	public function fClamp(v:Null<Float>) {
+		if( v==null )
+			return v;
+
+		if( min!=null )
+			v = M.fmax(v, min);
+
+		if( max!=null )
+			v = M.fmin(v, max);
+
+		return v;
+	}
+
 	public function getIntDefault() : Null<Int> {
-		return
+		return iClamp(
 			!canBeNull && defaultOverride==null ? 0 :
 			defaultOverride==null ? null :
-			Std.parseInt(defaultOverride);
+			Std.parseInt(defaultOverride)
+		);
 	}
 
 	public function getFloatDefault() : Null<Float> {
-		return
+		return fClamp(
 			!canBeNull && defaultOverride==null ? 0. :
 			defaultOverride==null ? null :
-			Std.parseFloat(defaultOverride);
+			Std.parseFloat(defaultOverride)
+		);
 	}
 
 	public function getStringDefault() : Null<String> {
@@ -52,11 +83,11 @@ class FieldDef { // TODO implements serialization
 		switch type {
 			case F_Int:
 				var def = rawDef==null ? null : Std.parseInt(rawDef);
-				defaultOverride = !M.isValidNumber(def) ? null : Std.string(def);
+				defaultOverride = !M.isValidNumber(def) ? null : Std.string( iClamp(def) );
 
 			case F_Float:
 				var def = rawDef==null ? null : Std.parseFloat(rawDef);
-				defaultOverride = !M.isValidNumber(def) ? null : Std.string(def);
+				defaultOverride = !M.isValidNumber(def) ? null : Std.string( fClamp(def) );
 
 			case F_String:
 				if( rawDef!=null )
@@ -71,5 +102,76 @@ class FieldDef { // TODO implements serialization
 			case F_Float: getFloatDefault();
 			case F_String: getStringDefault();
 		}
+	}
+
+
+	public function setMin(raw:Null<String>) {
+		if( raw==null )
+			min = null;
+		else {
+			switch type {
+				case F_Int:
+					var v = Std.parseInt(raw);
+					if( !M.isValidNumber(v) )
+						min = null;
+					else
+						min = v;
+
+				case F_Float:
+					var v = Std.parseFloat(raw);
+					if( !M.isValidNumber(v) )
+						min = null;
+					else
+						min = v;
+
+				case F_String: // N/A
+			}
+		}
+		checkMinMax();
+	}
+
+	public function setMax(raw:Null<String>) {
+		if( raw==null )
+			max = null;
+		else {
+			switch type {
+				case F_Int:
+					var v = Std.parseInt(raw);
+					if( !M.isValidNumber(v) )
+						max = null;
+					else
+						max = v;
+
+				case F_Float:
+					var v = Std.parseFloat(raw);
+					if( !M.isValidNumber(v) )
+						max = null;
+					else
+						max = v;
+
+				case F_String: // N/A
+			}
+		}
+		checkMinMax();
+	}
+
+	function checkMinMax() {
+		if( type!=F_Int && type!=F_Float )
+			return;
+
+		// Swap reversed min/max
+		if( min!=null && max!=null && max<min ) {
+			var tmp = max;
+			max = min;
+			min = tmp;
+		}
+
+		// Update existing default if needed
+		if( defaultOverride!=null )
+			switch type {
+				case F_Int: defaultOverride = Std.string( getIntDefault() );
+				case F_Float:
+				case F_String: // N/A
+			}
 	}
 }

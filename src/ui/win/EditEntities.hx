@@ -191,8 +191,8 @@ class EditEntities extends ui.Window {
 			defInput.attr("placeholder", "(null)");
 		else
 			defInput.attr("placeholder", switch curField.type {
-				case F_Int: "0";
-				case F_Float: "0";
+				case F_Int: Std.string( curField.iClamp(0) );
+				case F_Float: Std.string( curField.getFloatDefault() );
 				case F_String: "";
 			});
 
@@ -206,6 +206,23 @@ class EditEntities extends ui.Window {
 		// Nullable
 		var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
 		i.onChange = client.ge.emit.bind(EntityFieldChanged);
+
+		// Min
+		var input = jFieldForm.find("input[name=min]");
+		input.val( curField.min==null ? "" : curField.min );
+		input.change( function(ev) {
+			curField.setMin( input.val() );
+			client.ge.emit(EntityFieldChanged);
+		});
+
+		// Max
+		var input = jFieldForm.find("input[name=max]");
+		input.val( curField.max==null ? "" : curField.max );
+		input.change( function(ev) {
+			curField.setMax( input.val() );
+			client.ge.emit(EntityFieldChanged);
+		});
+		N.debug(curField.toString());
 	}
 
 
