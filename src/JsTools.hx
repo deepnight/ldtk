@@ -27,4 +27,13 @@ class JsTools {
 
 		return icon;
 	}
+
+
+	public static function createEntity(ed:EntityDef) {
+		var ent = new J('<div class="entity"/>');
+		ent.css("width", ed.width);
+		ent.css("height", ed.height);
+		ent.css("background-color", C.intToHex(ed.color));
+		return ent;
+	}
 }

@@ -156,6 +156,7 @@ class Client extends dn.Process {
 				selectLayer(lc);
 			});
 
+
 			// Visibility button
 			var vis = e.find(".vis");
 			if( levelRender.isLayerVisible(lc) )

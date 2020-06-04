@@ -615,6 +615,30 @@ ul.niceList li:not(.active):hover {
   width: 900px;
 }
 
+.window.entityDefs .preview {
+  position: relative;
+  float: right;
+  margin: 8px;
+  min-width: 64px;
+  padding: 16px;
+  border: 1px solid #545d73;
+  background-image: url("/img/grid.png");
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
+}
+
+.window.entityDefs .preview .render {
+  display: grid;
+  justify-items: center;
+}
+
+.window.entityDefs .preview .label {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  font-size: 7pt;
+  text-transform: uppercase;
+}
+
 .window.entityDefs input[type=color] {
   min-height: 32px;
 }

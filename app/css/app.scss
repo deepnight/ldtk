@@ -611,6 +611,30 @@ ul.niceList {
 		width: 900px;
 	}
 
+	.preview {
+		position: relative;
+		float: right;
+		margin: 8px;
+		min-width: 64px;
+		padding: 16px;
+		border: 1px solid $bgLight;
+		background-image: url("/img/grid.png");
+		box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
+
+		.render {
+			display: grid;
+			justify-items: center;
+		}
+
+		.label {
+			position: absolute;
+			bottom: 0px;
+			right: 0px;
+			font-size: 7pt;
+			text-transform: uppercase;
+		}
+	}
+
 	input[type=color] {
 		min-height: 32px;
 	}

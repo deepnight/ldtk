@@ -1,12 +1,13 @@
 package ui.win;
 
 class EditEntities extends ui.Window {
-	var jEntityList : js.jquery.JQuery;
-	var jFieldList : js.jquery.JQuery;
+	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jWin.find(".entityList ul");
+	var jFieldList(get,never) : js.jquery.JQuery; inline function get_jFieldList() return jWin.find(".fieldList ul");
 
-	var jAllForms : js.jquery.JQuery;
-	var jEntityForm : js.jquery.JQuery;
-	var jFieldForm : js.jquery.JQuery;
+	var jAllForms(get,never) : js.jquery.JQuery; inline function get_jAllForms() return jWin.find(".formsWrapper");
+	var jEntityForm(get,never) : js.jquery.JQuery; inline function get_jEntityForm() return jWin.find("ul.form.entityDef");
+	var jFieldForm(get,never) : js.jquery.JQuery; inline function get_jFieldForm() return jWin.find(".fields ul.form");
+	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jWin.find(".preview");
 
 	var curEntity : Null<EntityDef>;
 	var curField : Null<FieldDef>;
@@ -15,15 +16,10 @@ class EditEntities extends ui.Window {
 		super();
 
 		loadTemplate( hxd.Res.tpl.editEntities, "defEditor entityDefs" );
-		jEntityList = jWin.find(".mainList ul");
-		jFieldList = jWin.find(".fieldList ul");
 
-		jAllForms = jWin.find(".formsWrapper");
-		jEntityForm = jWin.find("ul.form.entityDef");
-		jFieldForm = jWin.find(".fields ul.form");
 
 		// Create entity
-		jWin.find(".mainList button.create").click( function(_) {
+		jWin.find(".entityList button.create").click( function(_) {
 			var ed = project.createEntityDef();
 			selectEntity(ed);
 			// client.ge.emit(LayerDefChanged);
@@ -31,7 +27,7 @@ class EditEntities extends ui.Window {
 		});
 
 		// Delete entity
-		jWin.find(".mainList button.delete").click( function(ev) {
+		jWin.find(".entityList button.delete").click( function(ev) {
 			if( curEntity==null ) {
 				N.error("No entity selected.");
 				return;
@@ -88,6 +84,7 @@ class EditEntities extends ui.Window {
 			case LayerContentChanged:
 
 			case EntityDefChanged:
+				updatePreview();
 				updateEntityForm();
 				updateLists();
 
@@ -103,6 +100,7 @@ class EditEntities extends ui.Window {
 	function selectEntity(ed:Null<EntityDef>) {
 		curEntity = ed;
 		curField = ed==null ? null : ed.fieldDefs[0];
+		updatePreview();
 		updateEntityForm();
 		updateFieldForm();
 		updateLists();
@@ -258,7 +256,7 @@ class EditEntities extends ui.Window {
 		}
 
 		// Make layer list sortable
-		JsTools.makeSortable(".window .mainList ul", function(from, to) {
+		JsTools.makeSortable(".window .entityList ul", function(from, to) {
 			var moved = project.sortEntityDef(from,to);
 			selectEntity(moved);
 			client.ge.emit(EntityDefSorted);
@@ -287,5 +285,17 @@ class EditEntities extends ui.Window {
 			selectField(moved);
 			client.ge.emit(EntityDefSorted);
 		});
+	}
+
+
+	function updatePreview() {
+		if( curEntity==null )
+			return;
+
+		jPreview.children(".render")
+			.empty()
+			.append( JsTools.createEntity(curEntity) );
+
+		jPreview.children(".label").text(curEntity.name);
 	}
 }
