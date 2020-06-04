@@ -11,6 +11,10 @@ class Input<T> {
 	var getter : Void->T;
 	var setter : T->Void;
 
+	var oldInputValue : String;
+	public var validityCheck : Null<T->Bool>;
+	public var validityError : Null<Void->Void>;
+
 	public function new(jElement:js.jquery.JQuery, getter, setter) {
 		if( jElement.length==0 )
 			trace("Empty jQuery object");
@@ -26,7 +30,30 @@ class Input<T> {
 		});
 	}
 
+	// override function onInputChange() {
+	// 	if( validityCheck!=null && !validityCheck(parseInputValue()) ) {
+	// 		input.val( oldInputValue );
+	// 		if( validityError==null )
+	// 			N.error("This value is already used.");
+	// 		else
+	// 			validityError();
+	// 		return;
+	// 	}
+
+	// 	super.onInputChange();
+
+	// }
+
 	function onInputChange() {
+		if( validityCheck!=null && !validityCheck(parseInputValue()) ) {
+			input.val(oldInputValue);
+			if( validityError==null )
+				N.error("This value isn't valid.");
+			else
+				validityError();
+			return;
+		}
+
 		setter( parseInputValue() );
 		writeValueToInput();
 		onChange();
@@ -37,11 +64,16 @@ class Input<T> {
 	public dynamic function onValueChange(v:T) {}
 
 	function parseInputValue() : T {
-		return null;
+		return input.val();
 	}
 
 	function writeValueToInput() {
-		input.val( Std.string( getter() ) );
+		var v = getter();
+		if( v==null )
+			input.val("");
+		else
+			input.val( Std.string( getter() ) );
+		oldInputValue = input.val();
 	}
 
 	#end
@@ -109,6 +141,10 @@ class Input<T> {
 								function(v) $variable = v
 							);
 						}
+
+					case "Null":
+						Context.fatalError("Unsupported nullable "+params, variable.pos);
+						return macro {}
 
 					case _:
 						Context.fatalError("Unsupported abstract type "+t, variable.pos);
