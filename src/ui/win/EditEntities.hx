@@ -72,7 +72,12 @@ class EditEntities extends ui.Window {
 
 		// Delete field
 		jWin.find(".fields button.delete").click( function(_) {
-			N.notImplemented();
+			if( curField==null ) {
+				N.error("No field selected.");
+				return;
+			}
+			curEntity.removeField(project, curField);
+			client.ge.emit(EntityFieldChanged);
 		});
 
 		selectEntity(project.entityDefs[0]);

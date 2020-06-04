@@ -32,6 +32,13 @@ class EntityDef implements IData {
 		return f;
 	}
 
+	public function removeField(project:ProjectData, fd:FieldDef) {
+		if( !fieldDefs.remove(fd) )
+			throw "Unknown fieldDef";
+
+		project.checkDataIntegrity();
+	}
+
 	public function sortField(from:Int, to:Int) : Null<FieldDef> {
 		if( from<0 || from>=fieldDefs.length || from==to )
 			return null;
