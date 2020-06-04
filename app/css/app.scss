@@ -611,7 +611,25 @@ ul.niceList {
 		width: 900px;
 	}
 
-	.preview {
+	.entityList ul.niceList .preview {
+		width: 32px;
+		height: 32px;
+		overflow: hidden;
+		padding: 8px;
+		// border: 1px solid $bgLight;
+		margin-right: 8px;
+		background-image: url("/img/grid.png");
+		box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
+
+			display: grid;
+			justify-items: center;
+	}
+
+	button.delete {
+		flex: 0 1 0;
+	}
+
+	.formsWrapper .preview {
 		position: relative;
 		float: right;
 		margin: 8px;

@@ -615,7 +615,23 @@ ul.niceList li:not(.active):hover {
   width: 900px;
 }
 
-.window.entityDefs .preview {
+.window.entityDefs .entityList ul.niceList .preview {
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  padding: 8px;
+  margin-right: 8px;
+  background-image: url("/img/grid.png");
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
+  display: grid;
+  justify-items: center;
+}
+
+.window.entityDefs button.delete {
+  flex: 0 1 0;
+}
+
+.window.entityDefs .formsWrapper .preview {
   position: relative;
   float: right;
   margin: 8px;
@@ -626,12 +642,12 @@ ul.niceList li:not(.active):hover {
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
 }
 
-.window.entityDefs .preview .render {
+.window.entityDefs .formsWrapper .preview .render {
   display: grid;
   justify-items: center;
 }
 
-.window.entityDefs .preview .label {
+.window.entityDefs .formsWrapper .preview .label {
   position: absolute;
   bottom: 0px;
   right: 0px;

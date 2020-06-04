@@ -149,12 +149,10 @@ class EditEntities extends ui.Window {
 			updateEntityForm();
 		});
 
-		// 	new ui.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
-		// 		project.removeLayerDef(ld);
-		// 		select(project.layerDefs[0]);
-		// 		client.ge.emit(LayerDefChanged);
-		// 	});
-		// });
+		// Max per level
+		var i = Input.linkToHtmlInput(curEntity.maxPerLevel, jEntityForm.find("input[name='maxPerLevel']") );
+		i.setBounds(0,1024);
+		i.onChange = client.ge.emit.bind(EntityDefChanged);
 	}
 
 
@@ -248,6 +246,11 @@ class EditEntities extends ui.Window {
 		for(ed in project.entityDefs) {
 			var elem = new J("<li/>");
 			jEntityList.append(elem);
+
+			var preview = new J('<div class="preview"/>');
+			preview.appendTo(elem);
+			preview.append( JsTools.createEntity(ed, 0.5) );
+
 			elem.append('<span class="name">'+ed.name+'</span>');
 			if( curEntity==ed )
 				elem.addClass("active");

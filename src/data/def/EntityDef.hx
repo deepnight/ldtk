@@ -6,12 +6,14 @@ class EntityDef implements IData {
 	public var width : Int;
 	public var height : Int;
 	public var color : UInt;
+	public var maxPerLevel : Int;
 	public var fieldDefs : Array<data.def.FieldDef> = [];
 
 	public function new(uid:Int) {
 		this.uid = uid;
 		color = 0xff0000;
 		width = height = 16;
+		maxPerLevel = 0;
 		name = "New entity "+uid;
 	}
 

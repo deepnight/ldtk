@@ -29,10 +29,10 @@ class JsTools {
 	}
 
 
-	public static function createEntity(ed:EntityDef) {
+	public static function createEntity(ed:EntityDef, scale=1.0) {
 		var ent = new J('<div class="entity"/>');
-		ent.css("width", ed.width);
-		ent.css("height", ed.height);
+		ent.css("width", ed.width*scale);
+		ent.css("height", ed.height*scale);
 		ent.css("background-color", C.intToHex(ed.color));
 		return ent;
 	}
