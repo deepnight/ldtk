@@ -125,18 +125,18 @@ class EditEntities extends ui.Window {
 
 
 		// Name
-		var i = Input.linkToField( jEntityForm.find("input[name='name']"), curEntity.name );
+		var i = Input.linkToHtmlInput(curEntity.name, jEntityForm.find("input[name='name']") );
 		i.validityCheck = project.isEntityNameValid;
 		i.onChange = function() {
 			client.ge.emit(EntityDefChanged);
 		};
 
 		// Dimensions
-		var i = Input.linkToField( jEntityForm.find("input[name='width']"), curEntity.width);
+		var i = Input.linkToHtmlInput( curEntity.width, jEntityForm.find("input[name='width']") );
 		i.setBounds(1,256);
 		i.onChange = client.ge.emit.bind(EntityDefChanged);
 
-		var i = Input.linkToField( jEntityForm.find("input[name='height']"), curEntity.height);
+		var i = Input.linkToHtmlInput( curEntity.height, jEntityForm.find("input[name='height']") );
 		i.setBounds(1,256);
 		i.onChange = client.ge.emit.bind(EntityDefChanged);
 
@@ -173,16 +173,12 @@ class EditEntities extends ui.Window {
 
 		jFieldForm.find(".type").text( L.getFieldType(curField.type) );
 
-		var i = Input.linkToField(jFieldForm.find("input[name=name]"), curField.name);
+		var i = Input.linkToHtmlInput( curField.name, jFieldForm.find("input[name=name]") );
 		i.onChange = client.ge.emit.bind(EntityFieldChanged);
 
 		jFieldForm.find("input[name=def]").attr("placeholder", !curField.canBeNull ? curField.getDefault() : "(null)");
 
-		// jFieldForm.find("input[name=def]").val( curField.getString() );
-		// switch curField.type {
-		// 	case F_Int:
-		// 	case F_String:
-		// }
+		// var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
 	}
 
 

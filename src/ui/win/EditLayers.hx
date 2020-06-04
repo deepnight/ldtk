@@ -67,18 +67,18 @@ class EditLayers extends ui.Window {
 		jForm.addClass("type-"+ld.type);
 
 		// Fields
-		var i = Input.linkToField( jForm.find("input[name='name']"), ld.name );
+		var i = Input.linkToHtmlInput( ld.name, jForm.find("input[name='name']") );
 		i.validityCheck = project.isLayerNameValid;
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
-		var i = Input.linkToField( jForm.find("select[name='type']"), ld.type );
+		var i = Input.linkToHtmlInput( ld.type, jForm.find("select[name='type']") );
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
-		var i = Input.linkToField( jForm.find("input[name='gridSize']"), ld.gridSize );
+		var i = Input.linkToHtmlInput( ld.gridSize, jForm.find("input[name='gridSize']") );
 		i.setBounds(1,32);
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
-		var i = Input.linkToField( jForm.find("input[name='displayOpacity']"), ld.displayOpacity );
+		var i = Input.linkToHtmlInput( ld.displayOpacity, jForm.find("input[name='displayOpacity']") );
 		i.displayAsPct = true;
 		i.setBounds(0.1, 1);
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
@@ -100,7 +100,7 @@ class EditLayers extends ui.Window {
 
 				// Existing values
 				var idx = 0;
-				for( val in ld.getAllIntGridValues() ) {
+				for( intGridVal in ld.getAllIntGridValues() ) {
 					var curIdx = idx;
 					var e = jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
 					e.addClass("value");
@@ -108,7 +108,7 @@ class EditLayers extends ui.Window {
 					e.find(".id").html("#"+idx);
 
 					// Edit value name
-					var i = Input.linkToField(e.find("input.name"), val.name);
+					var i = Input.linkToHtmlInput( intGridVal.name, e.find("input.name") );
 					i.validityCheck = ld.isIntGridValueNameUnique;
 					i.validityError = N.error.bind("This value name is already used.");
 					i.onChange = client.ge.emit.bind(LayerDefChanged);
@@ -118,7 +118,7 @@ class EditLayers extends ui.Window {
 
 					// Edit color
 					var col = e.find("input[type=color]");
-					col.val( C.intToHex(val.color) );
+					col.val( C.intToHex(intGridVal.color) );
 					col.change( function(ev) {
 						ld.getIntGridValue(curIdx).color = C.hexToInt( col.val() );
 						client.ge.emit(LayerDefChanged);

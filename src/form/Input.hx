@@ -42,22 +42,23 @@ class Input<T> {
 
 	#end
 
-
-
-	public static macro function linkToField(jQuery:ExprOf<js.jquery.JQuery>, field:Expr) {
-		var t = Context.typeof(field);
+	/**
+		Test
+	**/
+	public static macro function linkToHtmlInput(variable:Expr, formInput:ExprOf<js.jquery.JQuery>) {
+		var t = Context.typeof(variable);
 		switch t {
 			case TInst(t, params):
 				switch t.toString() {
 					case "String":
 						return macro {
 							new form.input.StringInput(
-								$jQuery,
-								function() return $field,
-								function(v) $field = v
+								$formInput,
+								function() return $variable,
+								function(v) $variable = v
 							);
 						}
-					case _: Context.fatalError("Unsupported type "+t, field.pos);
+					case _: Context.fatalError("Unsupported instance type "+t, variable.pos);
 				}
 
 			case TEnum(eRef,_):
@@ -69,10 +70,10 @@ class Input<T> {
 
 				return macro {
 					new form.input.EnumSelect(
-						$jQuery,
+						$formInput,
 						$enumExpr,
-						function() return cast $field,
-						function(v) $field = cast v
+						function() return cast $variable,
+						function(v) $variable = cast v
 					);
 				}
 
@@ -81,35 +82,28 @@ class Input<T> {
 					case "Int":
 						return macro {
 							new form.input.IntInput(
-								$jQuery,
-								function() return $field,
-								function(v) $field = v
+								$formInput,
+								function() return $variable,
+								function(v) $variable = v
 							);
 						}
 
 					case "Float":
 						return macro {
 							new form.input.FloatInput(
-								$jQuery,
-								function() return $field,
-								function(v) $field = v
+								$formInput,
+								function() return $variable,
+								function(v) $variable = v
 							);
 						}
 
 					case _:
-						Context.fatalError("Unsupported type "+t, field.pos);
+						Context.fatalError("Unsupported abstract type "+t, variable.pos);
 				}
 
 			case _ :
-				Context.fatalError("Unsupported type "+t, field.pos);
+				Context.fatalError("Unsupported type "+t, variable.pos);
 		}
 		return macro {}
-		// return macro {
-		// 	var i = @:privateAccess new FormInput( $jQuery );
-		// 	// @:privateAccess i.realValueSetter = function(v:Dynamic) {
-		// 		// $field = v;
-		// 	// }
-		// 	i;
-		// }
 	}
 }
