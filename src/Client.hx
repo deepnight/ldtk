@@ -1,3 +1,5 @@
+import hxd.Key;
+
 class Client extends dn.Process {
 	public static var ME : Client;
 
@@ -21,6 +23,8 @@ class Client extends dn.Process {
 
 	public var cursor : ui.Cursor;
 
+	var toggleKeys : Map<Int,Bool> = new Map();
+
 	public function new() {
 		super();
 
@@ -28,6 +32,11 @@ class Client extends dn.Process {
 		createRoot(Boot.ME.s2d);
 		appWin.title = "LEd v"+Const.APP_VERSION;
 		appWin.maximize();
+
+		new J("body")
+			.on("keypress.client", onJsKeyPress )
+			.on("keydown.client", onJsKeyDown )
+			.on("keyup.client", onJsKeyUp );
 
 		cursor = new ui.Cursor();
 
@@ -74,6 +83,24 @@ class Client extends dn.Process {
 		levelRender = new render.LevelRender();
 
 		updateLayerList();
+	}
+
+	function onJsKeyDown(ev:js.jquery.Event) {
+		if( ev.shiftKey ) toggleKeys.set(Key.SHIFT, true);
+		if( ev.ctrlKey ) toggleKeys.set(Key.CTRL, true);
+		if( ev.altKey ) toggleKeys.set(Key.ALT, true);
+		N.debug("down: "+ev.key+" "+ev.shiftKey);
+	}
+
+	function onJsKeyUp(ev:js.jquery.Event) {
+		if( ev.shiftKey ) toggleKeys.set(Key.SHIFT, false);
+		if( ev.ctrlKey ) toggleKeys.set(Key.CTRL, false);
+		if( ev.altKey ) toggleKeys.set(Key.ALT, false);
+		N.debug("up: "+ev.key+" "+ev.shiftKey);
+	}
+
+	function onJsKeyPress(ev:js.jquery.Event) {
+		N.debug("press: "+ev.key+" "+ev.shiftKey);
 	}
 
 	function initTool() {
@@ -178,6 +205,10 @@ class Client extends dn.Process {
 	}
 
 
+	public inline function isShiftDown() return toggleKeys.get(Key.SHIFT)==true;
+	public inline function isCtrlDown() return toggleKeys.get(Key.CTRL)==true;
+
+
 	public inline function getMouse() : MouseCoords {
 		return new MouseCoords(Boot.ME.s2d.mouseX, Boot.ME.s2d.mouseY);
 	}
@@ -190,5 +221,7 @@ class Client extends dn.Process {
 
 		ge.dispose();
 		Boot.ME.s2d.removeEventListener(onEvent);
+
+		new J("body").off(".client");
 	}
 }

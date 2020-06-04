@@ -45,7 +45,7 @@ class Tool<T> extends dn.Process {
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		running = true;
 		button = buttonId;
-		rectangle = hxd.Key.isDown(hxd.Key.SHIFT);
+		rectangle = client.isShiftDown();
 		origin = m;
 		lastMouse = m;
 		if( !rectangle )
@@ -73,7 +73,7 @@ class Tool<T> extends dn.Process {
 	}
 
 	public function onMouseMove(m:MouseCoords) {
-		if( isRunning() )
+		if( isRunning() && !rectangle )
 			useAt(m);
 		lastMouse = m;
 	}
