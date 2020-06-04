@@ -159,6 +159,8 @@ class EditEntities extends ui.Window {
 
 
 	function updateFieldForm() {
+		jFieldForm.find("*").off(); // cleanup events
+
 		if( curField==null ) {
 			jFieldForm.css("visibility","hidden");
 			return;
@@ -193,7 +195,6 @@ class EditEntities extends ui.Window {
 				case F_Float: "0";
 				case F_String: "";
 			});
-			// defInput.attr("placeholder", !curField.canBeNull ? curField.getDefault() : "(null)");
 
 		defInput.change( function(ev) {
 			curField.setDefault( defInput.val() );
