@@ -21,7 +21,10 @@ class FieldDef { // TODO implements serialization
 	}
 
 	public function toString() {
-		return '$name($type=${getDefault()})[$min-$max]';
+		return '$name('
+			+ ( canBeNull ? 'Null<$type>' : '$type' )
+			+ '=${getDefault()})'
+			+ ( type==F_Int || type==F_Float ? '[$min-$max]' : "" );
 	}
 
 	inline function require(type:FieldType) {
@@ -104,6 +107,7 @@ class FieldDef { // TODO implements serialization
 			case F_Bool:
 				if( rawDef!=null )
 					rawDef = StringTools.trim(rawDef).toLowerCase();
+
 				if( rawDef=="true" ) defaultOverride = "true";
 				else if( rawDef=="false" ) defaultOverride = "false";
 				else defaultOverride = null;
