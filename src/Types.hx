@@ -5,7 +5,7 @@ enum LayerType {
 
 
 typedef IntGridValue = {
-	var name : String;
+	var name : Null<String>;
 	var color : UInt;
 }
 

@@ -108,8 +108,12 @@ class EditLayers extends ui.Window {
 					e.find(".id").html("#"+idx);
 
 					// Edit value name
-					var i = Input.linkToHtmlInput( intGridVal.name, e.find("input.name") );
-					i.validityCheck = ld.isIntGridValueNameUnique;
+					var i = new Input(
+						e.find("input.name"),
+						function() return intGridVal.name,
+						function(v) intGridVal.name = v
+					);
+					i.validityCheck = ld.isIntGridValueNameValid;
 					i.validityError = N.error.bind("This value name is already used.");
 					i.onChange = client.ge.emit.bind(LayerDefChanged);
 

@@ -27,9 +27,11 @@ class LayerDef implements IData {
 	}
 
 	public function addIntGridValue(col:UInt, ?name:String) {
+		if( !isIntGridValueNameValid(name) )
+			throw "Invalid intGrid value name "+name;
 		intGridValues.push({
 			color: col,
-			name: name==null ? "Unknown"+countIntGridValues() : name,
+			name: name,
 		});
 	}
 
@@ -54,10 +56,14 @@ class LayerDef implements IData {
 		return false;
 	}
 
-	public function isIntGridValueNameUnique(name:String) {
+	public function isIntGridValueNameValid(name:Null<String>) {
+		if( name==null )
+			return true;
+
 		for(v in intGridValues)
 			if( v.name==name )
 				return false;
+
 		return true;
 	}
 

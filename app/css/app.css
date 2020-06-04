@@ -137,7 +137,7 @@ ul.form li {
 
 ul.form > li {
   display: flex;
-  align-items: center;
+  align-items: baseline;
 }
 
 ul.form > li .small {
