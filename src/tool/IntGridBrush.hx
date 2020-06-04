@@ -20,7 +20,10 @@ class IntGridBrush extends Tool<Int> {
 
 	override function onMouseMove(m:MouseCoords) {
 		super.onMouseMove(m);
-		client.cursor.set( GridCell(m.cx, m.cy, getIntGridColor() ) );
+		if( curLayer.isValid(m.cx,m.cy) )
+			client.cursor.set( GridCell(m.cx, m.cy, getIntGridColor() ) );
+		else
+			client.cursor.set(None);
 	}
 
 	override function useAt(m:MouseCoords) {
