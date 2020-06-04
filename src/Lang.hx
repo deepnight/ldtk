@@ -21,4 +21,12 @@ class Lang {
         init();
         return t.untranslated(str);
     }
+
+    public static function getFieldType(type:FieldType) : LocaleString {
+        return switch type {
+            case F_Int: t._("Integer");
+            case F_Float: t._("Float");
+            case F_String: t._("String");
+        }
+    }
 }

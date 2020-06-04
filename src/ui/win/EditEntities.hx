@@ -46,28 +46,32 @@ class EditEntities extends ui.Window {
 
 		// Create field
 		jWin.find(".fields button.create").click( function(ev) {
+			function _create(type:FieldType) {
+				var f = curEntity.createField(project, type);
+				client.ge.emit(EntityFieldChanged);
+				selectField(f);
+				jFieldForm.find("input:first").focus().select();
+			}
+
+			// Type picker
 			var w = new ui.Dialog(ev.getThis(),"fieldTypes");
 			for(k in FieldType.getConstructors()) {
-				var e = FieldType.createByName(k);
+				var type = FieldType.createByName(k);
 				var b = new J("<button/>");
 				w.jContent.append(b);
 				b.addClass("fieldType");
 				b.addClass(k);
 				b.click( function(_) {
-					N.notImplemented();
+					_create(type);
 					w.close();
 				});
-				switch e {
-					case F_Int: b.html("123 <em>Integer</em>");
-					case F_Float: b.html("0.50 <em>Float</em>");
-					case F_String: b.html("\"Abc\" <em>String</em>");
+				switch type {
+					case F_Int: b.html("123");
+					case F_Float: b.html("0.50");
+					case F_String: b.html("\"Abc\"");
 				}
+				b.append('<em>'+L.getFieldType(type)+'</em>');
 			}
-			// var type = F_Int; // TODO: pop up to pick type once
-			// var f = curEntity.createField(project, type);
-			// client.ge.emit(EntityFieldChanged);
-			// selectField(f);
-			// jFieldForm.find("input:first").focus().select();
 		});
 
 		// Delete field
@@ -170,6 +174,8 @@ class EditEntities extends ui.Window {
 		for(k in Type.getEnumConstructs(FieldType))
 			jFieldForm.removeClass("type-"+k);
 		jFieldForm.addClass("type-"+curField.type);
+
+		jFieldForm.find(".type").text( L.getFieldType(curField.type) );
 
 		var i = Input.linkToField(jFieldForm.find("input[name=name]"), curField.name);
 		i.onChange = client.ge.emit.bind(EntityFieldChanged);
