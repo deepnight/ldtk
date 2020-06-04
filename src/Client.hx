@@ -23,7 +23,7 @@ class Client extends dn.Process {
 
 	public var cursor : ui.Cursor;
 
-	var toggleKeys : Map<Int,Bool> = new Map();
+	var keyDowns : Map<Int,Bool> = new Map();
 
 	public function new() {
 		super();
@@ -86,18 +86,22 @@ class Client extends dn.Process {
 	}
 
 	function onJsKeyDown(ev:js.jquery.Event) {
-		if( ev.shiftKey ) toggleKeys.set(Key.SHIFT, true);
-		if( ev.ctrlKey ) toggleKeys.set(Key.CTRL, true);
-		if( ev.altKey ) toggleKeys.set(Key.ALT, true);
+		keyDowns.set(ev.keyCode, true);
 	}
 
 	function onJsKeyUp(ev:js.jquery.Event) {
-		if( ev.shiftKey ) toggleKeys.set(Key.SHIFT, false);
-		if( ev.ctrlKey ) toggleKeys.set(Key.CTRL, false);
-		if( ev.altKey ) toggleKeys.set(Key.ALT, false);
+		keyDowns.remove(ev.keyCode);
 	}
 
 	function onJsKeyPress(ev:js.jquery.Event) {
+	}
+
+	function onHeapsKeyDown(ev:hxd.Event) {
+		keyDowns.set(ev.keyCode, true);
+	}
+
+	function onHeapsKeyUp(ev:hxd.Event) {
+		keyDowns.remove(ev.keyCode);
 	}
 
 	function initTool() {
@@ -116,8 +120,8 @@ class Client extends dn.Process {
 			case EWheel:
 			case EFocus:
 			case EFocusLost: onMouseUp();
-			case EKeyDown:
-			case EKeyUp:
+			case EKeyDown: onHeapsKeyDown(e);
+			case EKeyUp: onHeapsKeyUp(e);
 			case EReleaseOutside: onMouseUp();
 			case ETextInput:
 			case ECheck:
@@ -202,8 +206,8 @@ class Client extends dn.Process {
 	}
 
 
-	public inline function isShiftDown() return toggleKeys.get(Key.SHIFT)==true;
-	public inline function isCtrlDown() return toggleKeys.get(Key.CTRL)==true;
+	public inline function isShiftDown() return keyDowns.get(Key.SHIFT)==true;
+	public inline function isCtrlDown() return keyDowns.get(Key.CTRL)==true;
 
 
 	public inline function getMouse() : MouseCoords {
@@ -220,5 +224,10 @@ class Client extends dn.Process {
 		Boot.ME.s2d.removeEventListener(onEvent);
 
 		new J("body").off(".client");
+	}
+
+	override function update() {
+		super.update();
+		new J(".debug1").text( isShiftDown() );
 	}
 }
