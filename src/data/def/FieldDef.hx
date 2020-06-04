@@ -55,6 +55,13 @@ class FieldDef { // TODO implements serialization
 		return v;
 	}
 
+	public function getBoolDefault() : Null<Bool> {
+		return
+			!canBeNull && defaultOverride==null ? false :
+			defaultOverride==null ? null :
+			defaultOverride=="true";
+	}
+
 	public function getIntDefault() : Null<Int> {
 		return iClamp(
 			!canBeNull && defaultOverride==null ? 0 :
@@ -93,6 +100,14 @@ class FieldDef { // TODO implements serialization
 				if( rawDef!=null )
 					rawDef = StringTools.trim(rawDef);
 				defaultOverride = rawDef=="" && canBeNull ? null : rawDef;
+
+			case F_Bool:
+				if( rawDef!=null )
+					rawDef = StringTools.trim(rawDef).toLowerCase();
+				if( rawDef=="true" ) defaultOverride = "true";
+				else if( rawDef=="false" ) defaultOverride = "false";
+				else defaultOverride = null;
+
 		}
 	}
 
@@ -101,6 +116,7 @@ class FieldDef { // TODO implements serialization
 			case F_Int: getIntDefault();
 			case F_Float: getFloatDefault();
 			case F_String: getStringDefault();
+			case F_Bool: getBoolDefault();
 		}
 	}
 
@@ -124,7 +140,7 @@ class FieldDef { // TODO implements serialization
 					else
 						min = v;
 
-				case F_String: // N/A
+				case _:
 			}
 		}
 		checkMinMax();
@@ -149,7 +165,7 @@ class FieldDef { // TODO implements serialization
 					else
 						max = v;
 
-				case F_String: // N/A
+				case _:
 			}
 		}
 		checkMinMax();
@@ -170,8 +186,8 @@ class FieldDef { // TODO implements serialization
 		if( defaultOverride!=null )
 			switch type {
 				case F_Int: defaultOverride = Std.string( getIntDefault() );
-				case F_Float:
-				case F_String: // N/A
+				case F_Float: defaultOverride = Std.string( getFloatDefault() );
+				case _:
 			}
 	}
 }

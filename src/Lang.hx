@@ -27,6 +27,7 @@ class Lang {
             case F_Int: t._("Integer");
             case F_Float: t._("Float");
             case F_String: t._("String");
+            case F_Bool: t._("Boolean");
         }
     }
 
@@ -35,6 +36,7 @@ class Lang {
             case F_Int: t._("123");
             case F_Float: t._("0.5");
             case F_String: t._("Abc");
+            case F_Bool: t._("TRUE");
         }
     }
 }

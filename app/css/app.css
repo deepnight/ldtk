@@ -614,14 +614,13 @@ ul.niceList li:not(.active):hover {
   flex: 0 0 100px;
 }
 
-.window.entityDefs .fields ul.form li.F_Int,
-.window.entityDefs .fields ul.form li.F_Float,
-.window.entityDefs .fields ul.form li.F_String {
+.window.entityDefs .fields ul.form li[class^="F_"] {
   display: none;
 }
 
 .window.entityDefs .fields ul.form.type-F_Int li.F_int,
 .window.entityDefs .fields ul.form.type-F_Float li.F_Float,
+.window.entityDefs .fields ul.form.type-F_Bool li.F_Bool,
 .window.entityDefs .fields ul.form.type-F_String li.F_String {
   display: flex;
 }

@@ -179,29 +179,35 @@ class EditEntities extends ui.Window {
 		i.onChange = client.ge.emit.bind(EntityFieldChanged);
 
 		// Default value
-		var defInput = jFieldForm.find("input[name=def]");
-		if( curField.defaultOverride != null )
-			defInput.val( curField.defaultOverride );
-		else
-			defInput.val("");
+		switch curField.type {
+			case F_Int, F_Float, F_String:
+				var defInput = jFieldForm.find("input[name=def]");
+				if( curField.defaultOverride != null )
+					defInput.val( curField.defaultOverride );
+				else
+					defInput.val("");
 
-		if( curField.type==F_String && !curField.canBeNull )
-			defInput.attr("placeholder", "(empty string)");
-		else if( curField.canBeNull )
-			defInput.attr("placeholder", "(null)");
-		else
-			defInput.attr("placeholder", switch curField.type {
-				case F_Int: Std.string( curField.iClamp(0) );
-				case F_Float: Std.string( curField.getFloatDefault() );
-				case F_String: "";
-			});
+				if( curField.type==F_String && !curField.canBeNull )
+					defInput.attr("placeholder", "(empty string)");
+				else if( curField.canBeNull )
+					defInput.attr("placeholder", "(null)");
+				else
+					defInput.attr("placeholder", switch curField.type {
+						case F_Int: Std.string( curField.iClamp(0) );
+						case F_Float: Std.string( curField.fClamp(0) );
+						case F_Bool: "false";
+						case F_String: "";
+					});
 
-		defInput.change( function(ev) {
-			curField.setDefault( defInput.val() );
-			client.ge.emit(EntityFieldChanged);
-			defInput.val(curField.defaultOverride==null ? "" : curField.defaultOverride);
-		});
+				defInput.change( function(ev) {
+					curField.setDefault( defInput.val() );
+					client.ge.emit(EntityFieldChanged);
+					defInput.val(curField.defaultOverride==null ? "" : curField.defaultOverride);
+				});
 
+			case F_Bool:
+				var defInput = jFieldForm.find("select[name=def]");
+		}
 
 		// Nullable
 		var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );

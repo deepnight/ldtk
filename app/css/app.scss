@@ -609,13 +609,12 @@ ul.niceList {
 			flex: 0 0 100px;
 		}
 
-		ul.form li.F_Int,
-		ul.form li.F_Float,
-		ul.form li.F_String {
+		ul.form li[class^="F_"] {
 			display: none;
 		}
 		ul.form.type-F_Int li.F_int,
 		ul.form.type-F_Float li.F_Float,
+		ul.form.type-F_Bool li.F_Bool,
 		ul.form.type-F_String li.F_String {
 			display: flex;
 		}
