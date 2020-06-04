@@ -4,20 +4,17 @@ class FieldDef { // TODO implements serialization
 	public var uid(default,null) : Int;
 	public var type(default,null) : FieldType;
 	public var name : String;
-	public var canBeNull = false;
+	public var canBeNull : Bool;
 
-	var defaultValue : Null<String>;
+	@:allow(ui.win.EditEntities)
+	var defaultOverride : Null<String>;
 
 	@:allow(data.def.EntityDef)
 	private function new(uid:Int, t:FieldType) {
 		this.uid = uid;
 		type = t;
 		name = "New field "+uid;
-		defaultValue = switch type {
-			case F_Int: "0";
-			case F_Float: "0";
-			case F_String: null;
-		}
+		canBeNull = type==F_String;
 	}
 
 	inline function require(type:FieldType) {
@@ -27,9 +24,27 @@ class FieldDef { // TODO implements serialization
 
 	public function getIntDefault() : Null<Int> {
 		return
-			!canBeNull && defaultValue==null ? 0 :
-			defaultValue==null ? null :
-			Std.parseInt(defaultValue);
+			!canBeNull && defaultOverride==null ? 0 :
+			defaultOverride==null ? null :
+			Std.parseInt(defaultOverride);
+	}
+
+	public function restoreDefault() {
+		defaultOverride = null;
+	}
+
+	public function setDefault(rawDef:Null<String>) {
+		switch type {
+			case F_Int:
+				var def = rawDef==null ? null : Std.parseInt(rawDef);
+				defaultOverride = !M.isValidNumber(def) ? null : Std.string(def);
+
+			case F_Float:
+			case F_String:
+				if( rawDef!=null )
+					rawDef = StringTools.trim(rawDef);
+				defaultOverride = rawDef=="" && canBeNull ? null : rawDef;
+		}
 	}
 
 	public function getDefault() : Dynamic {

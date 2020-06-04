@@ -52,10 +52,13 @@ class Client extends dn.Process {
 		Boot.ME.s2d.addEventListener( onEvent );
 
 		project = new data.ProjectData();
-		project.layerDefs[0].name = "Collisions";
+		var ed = project.createEntityDef("Hero");
+		ed.color = 0x00ff00;
+		var ld = project.createLayerDef(Entities,"Entities");
 		var ld = project.createLayerDef(IntGrid,"Decorations");
 		ld.gridSize = 8;
 		ld.getIntGridValue(0).color = 0x00ff00;
+		project.layerDefs[0].name = "Collisions";
 
 
 		project.createLevel();

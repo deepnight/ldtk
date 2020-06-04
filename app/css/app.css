@@ -153,6 +153,13 @@ ul.form > li label {
   font-size: 80%;
 }
 
+ul.form > li input[type=checkbox] + label {
+  flex: 1 1 auto;
+  padding-right: 20px;
+  white-space: nowrap;
+  text-align: left;
+}
+
 ul.form > li > span {
   flex: 0 0 20px;
   opacity: 0.5;
@@ -178,7 +185,7 @@ input[type=text],
 input[type=number] {
   display: block;
   width: 100%;
-  padding: 3px;
+  padding: 8px;
   color: white;
   background-color: #1e2229;
   border: 1px solid #545d73;
@@ -300,10 +307,15 @@ input[type=number]:focus {
   flex-grow: 2;
 }
 
+.dialog.fieldTypes .wrapper {
+  width: auto;
+  padding: 4px;
+}
+
 .dialog.fieldTypes .content {
   display: grid;
   gap: 2px;
-  grid-template-columns: repeat(4, auto);
+  grid-template-columns: repeat(3, 80px);
 }
 
 .dialog.fieldTypes .content button {
@@ -596,4 +608,8 @@ ul.niceList li:not(.active):hover {
 
 .window.entityDefs .fields .cols {
   grid-template-columns: 0.8fr 1fr;
+}
+
+.window.entityDefs .fields ul.form label {
+  flex: 0 0 100px;
 }

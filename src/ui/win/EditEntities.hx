@@ -176,9 +176,35 @@ class EditEntities extends ui.Window {
 		var i = Input.linkToHtmlInput( curField.name, jFieldForm.find("input[name=name]") );
 		i.onChange = client.ge.emit.bind(EntityFieldChanged);
 
-		jFieldForm.find("input[name=def]").attr("placeholder", !curField.canBeNull ? curField.getDefault() : "(null)");
+		// Default value
+		var defInput = jFieldForm.find("input[name=def]");
+		if( curField.defaultOverride != null )
+			defInput.val( curField.defaultOverride );
+		else
+			defInput.val("");
 
-		// var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
+		if( curField.type==F_String && !curField.canBeNull )
+			defInput.attr("placeholder", "(empty string)");
+		else if( curField.canBeNull )
+			defInput.attr("placeholder", "(null)");
+		else
+			defInput.attr("placeholder", switch curField.type {
+				case F_Int: "0";
+				case F_Float: "0";
+				case F_String: "";
+			});
+			// defInput.attr("placeholder", !curField.canBeNull ? curField.getDefault() : "(null)");
+
+		defInput.change( function(ev) {
+			curField.setDefault( defInput.val() );
+			client.ge.emit(EntityFieldChanged);
+			defInput.val(curField.defaultOverride==null ? "" : curField.defaultOverride);
+		});
+
+
+		// Nullable
+		var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
+		i.onChange = client.ge.emit.bind(EntityFieldChanged);
 	}
 
 
@@ -197,6 +223,13 @@ class EditEntities extends ui.Window {
 			elem.click( function(_) selectEntity(ed) );
 		}
 
+		// Make layer list sortable
+		JsTools.makeSortable(".window .mainList ul", function(from, to) {
+			var moved = project.sortEntityDef(from,to);
+			selectEntity(moved);
+			client.ge.emit(EntityDefSorted);
+		});
+
 		// Fields
 		if( curEntity!=null ) {
 			for(f in curEntity.fieldDefs) {
@@ -210,12 +243,11 @@ class EditEntities extends ui.Window {
 			}
 		}
 
-		// Make layer list sortable
-		JsTools.makeSortable(".window .mainList ul", function(from, to) {
-			N.notImplemented();
-			// var moved = project.sortLayerDef(from,to);
-			// select(moved);
-			// client.ge.emit(LayerDefSorted);
+		// Make fields list sortable
+		JsTools.makeSortable(".window .fieldList ul", function(from, to) {
+			var moved = curEntity.sortField(from,to);
+			selectField(moved);
+			client.ge.emit(EntityDefSorted);
 		});
 	}
 }

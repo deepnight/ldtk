@@ -32,4 +32,17 @@ class EntityDef implements IData {
 		return f;
 	}
 
+	public function sortField(from:Int, to:Int) : Null<FieldDef> {
+		if( from<0 || from>=fieldDefs.length || from==to )
+			return null;
+
+		if( to<0 || to>=fieldDefs.length )
+			return null;
+
+		var moved = fieldDefs.splice(from,1)[0];
+		fieldDefs.insert(to, moved);
+
+		return moved;
+	}
+
 }

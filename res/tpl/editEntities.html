@@ -15,21 +15,21 @@
 	<div class="formsWrapper">
 		<ul class="form entityDef">
 			<li>
-				<label for="name">Entity name</label>
-				<input type="text" name="name"/>
+				<label for="eName">Entity name</label>
+				<input type="text" name="name" id="eName"/>
 			</li>
 
 			<li>
 				<label for="width">Width</label>
-				<input type="text" name="width" class="small"/>
+				<input type="text" name="width" class="small" id="width"/>
 				<span>x</span>
 				<input type="text" name="height" class="small"/>
 				<span>px</span>
 			</li>
 
 			<li>
-				<label for="color">Color</label>
-				<input type="color" name="color"/>
+				<label for="eColor">Color</label>
+				<input type="color" name="color" id="eColor"/>
 			</li>
 		</ul>
 
@@ -49,18 +49,18 @@
 				<div class="type"></div>
 			</li>
 			<li>
-				<label for="name">Field name</label>
-				<input type="text" name="name"/>
+				<label for="fName">Field name</label>
+				<input type="text" name="name" id="fName"/>
 			</li>
 
-			<!-- <li>
-				<label for="type">Value type</label>
-				<select name="type"></select>
-			</li> -->
+			<li>
+				<label for="fDef">Default value</label>
+				<input type="text" name="def" placeholder="" id="fDef"/>
+			</li>
 
 			<li>
-				<label for="name">Default value</label>
-				<input type="text" name="def" placeholder=""/>
+				<label for="canBeNull">Can be null</label>
+				<input type="checkbox" name="canBeNull" id="canBeNull"/>
 			</li>
 			</ul>
 		</div>

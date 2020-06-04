@@ -143,6 +143,21 @@ class ProjectData implements data.IData {
 		return true;
 	}
 
+	public function sortEntityDef(from:Int, to:Int) : Null<EntityDef> {
+		if( from<0 || from>=entityDefs.length || from==to )
+			return null;
+
+		if( to<0 || to>=entityDefs.length )
+			return null;
+
+		checkDataIntegrity();
+
+		var moved = entityDefs.splice(from,1)[0];
+		entityDefs.insert(to, moved);
+
+		return moved;
+	}
+
 
 
 	/**  LEVELS  *****************************************/
