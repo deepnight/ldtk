@@ -8,14 +8,14 @@ class Cursor extends dn.Process {
 
 	var type : CursorType = None;
 
-	var renderWrapper : h2d.Object;
+	var wrapper : h2d.Object;
 	var graphics : h2d.Graphics;
 
 	public function new() {
 		super(Client.ME);
 		createRootInLayers(Client.ME.root, Const.DP_UI);
-		renderWrapper = new h2d.Object(root);
-		graphics = new h2d.Graphics(renderWrapper);
+		wrapper = new h2d.Object(root);
+		graphics = new h2d.Graphics(root);
 	}
 
 	override function onResize() {
@@ -23,17 +23,30 @@ class Cursor extends dn.Process {
 	}
 
 	function render() {
+		wrapper.removeChildren();
 		graphics.clear();
+		graphics.lineStyle(0);
+		graphics.endFill();
+
 		root.visible = type!=None;
 
 		switch type {
 			case None:
 
 			case GridCell(cx, cy, col):
+				var col = col==null ? 0x0 : col;
+				graphics.beginFill(C.toBlack(col,0.6), 0.35);
+				graphics.drawRect(-2, -2, curLayer.def.gridSize+4, curLayer.def.gridSize+4);
+				graphics.endFill();
+
 				graphics.lineStyle(1, col==null ? 0x0 : col);
 				graphics.drawRect(0, 0, curLayer.def.gridSize, curLayer.def.gridSize);
 
 			case GridRect(cx, cy, wid, hei, col):
+				graphics.beginFill(C.toBlack(col,0.6), 0.35);
+				graphics.drawRect(-2, -2, curLayer.def.gridSize*wid+4, curLayer.def.gridSize*hei+4);
+				graphics.endFill();
+
 				graphics.lineStyle(1, col==null ? 0x0 : col);
 				graphics.drawRect(0, 0, curLayer.def.gridSize*wid, curLayer.def.gridSize*hei);
 		}
@@ -57,8 +70,10 @@ class Cursor extends dn.Process {
 			case None:
 
 			case GridCell(cx, cy), GridRect(cx,cy, _):
-				renderWrapper.setPosition( cx*curLayer.def.gridSize, cy*curLayer.def.gridSize );
+				wrapper.setPosition( cx*curLayer.def.gridSize, cy*curLayer.def.gridSize );
 		}
+
+		graphics.setPosition(wrapper.x, wrapper.y);
 	}
 
 	override function postUpdate() {
