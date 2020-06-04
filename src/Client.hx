@@ -30,7 +30,7 @@ class Client extends dn.Process {
 
 		ME = this;
 		createRoot(Boot.ME.s2d);
-		appWin.title = "LEd v"+Const.APP_VERSION;
+		appWin.title = "L-Ed v"+Const.APP_VERSION;
 		appWin.maximize();
 
 		new J("body")
