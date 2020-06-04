@@ -120,6 +120,13 @@ class ProjectData implements data.IData {
 
 	/**  ENTITY DEFS  *****************************************/
 
+	public function getEntityDef(uid:Int) : Null<EntityDef> {
+		for(ed in entityDefs)
+			if( ed.uid==uid )
+				return ed;
+		return null;
+	}
+
 	public function createEntityDef(?name:String) : EntityDef {
 		var ed = new EntityDef(makeUniqId());
 		entityDefs.push(ed);

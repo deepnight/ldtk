@@ -107,7 +107,12 @@ class Client extends dn.Process {
 	function initTool() {
 		if( curTool!=null )
 			curTool.destroy();
-		curTool = new tool.IntGridBrush();
+
+		cursor.set(None);
+		curTool = switch curLayerDef.type {
+			case IntGrid: new tool.IntGridTool();
+			case Entities: new tool.EntityTool();
+		}
 	}
 
 	function onEvent(e:hxd.Event) {
@@ -146,6 +151,7 @@ class Client extends dn.Process {
 		levelRender.onCurrentLayerChange(curLayerContent);
 		curTool.updatePalette();
 		updateLayerList();
+		initTool();
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {

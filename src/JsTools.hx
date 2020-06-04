@@ -34,6 +34,13 @@ class JsTools {
 		ent.css("width", ed.width*scale);
 		ent.css("height", ed.height*scale);
 		ent.css("background-color", C.intToHex(ed.color));
-		return ent;
+
+		var wrapper = ent.wrap("<div/>").parent();
+		wrapper.addClass("entityPreview");
+
+		if( scale!=1 )
+			wrapper.css("transform","scale("+scale+")");
+
+		return wrapper;
 	}
 }

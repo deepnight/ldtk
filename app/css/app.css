@@ -416,7 +416,7 @@ input[type=number]:focus {
 }
 
 .editor #palette ul > li {
-  display: block;
+  display: flex;
   min-height: 16px;
   cursor: pointer;
 }
@@ -424,6 +424,15 @@ input[type=number]:focus {
 .editor #palette ul > li:hover {
   outline: 1px solid white;
   outline-offset: -1px;
+}
+
+.editor #palette ul li.entity {
+  padding: 10px;
+  overflow: hidden;
+}
+
+.editor #palette ul li.entity .entityPreview {
+  margin-right: 8px;
 }
 
 .editor #palette ul li.color {
@@ -531,6 +540,18 @@ ul.niceList li:not(.active):hover {
   filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);
 }
 
+.entityPreview {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  padding: 8px;
+  background-image: url("/img/grid.png");
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
+}
+
 .window.defEditor .mainList ul {
   border: 1px solid #545d73;
 }
@@ -615,40 +636,25 @@ ul.niceList li:not(.active):hover {
   width: 900px;
 }
 
-.window.entityDefs .entityList ul.niceList .preview {
-  width: 32px;
-  height: 32px;
-  overflow: hidden;
-  padding: 8px;
-  margin-right: 8px;
-  background-image: url("/img/grid.png");
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
-  display: grid;
-  justify-items: center;
-}
-
 .window.entityDefs button.delete {
   flex: 0 1 0;
 }
 
-.window.entityDefs .formsWrapper .preview {
+.window.entityDefs .formsWrapper .previewWrapper {
   position: relative;
   float: right;
   margin: 8px;
-  min-width: 64px;
-  padding: 16px;
   border: 1px solid #545d73;
-  background-image: url("/img/grid.png");
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
 }
 
-.window.entityDefs .formsWrapper .preview .render {
-  display: grid;
-  justify-items: center;
+.window.entityDefs .formsWrapper .previewWrapper .entityPreview {
+  width: 64px;
+  height: 64px;
 }
 
-.window.entityDefs .formsWrapper .preview .label {
+.window.entityDefs .formsWrapper .previewWrapper .label {
   position: absolute;
+  z-index: 1;
   bottom: 0px;
   right: 0px;
   font-size: 7pt;

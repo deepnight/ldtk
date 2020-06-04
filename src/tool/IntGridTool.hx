@@ -1,6 +1,6 @@
 package tool;
 
-class IntGridBrush extends Tool<Int> {
+class IntGridTool extends Tool<Int> {
 	public function new() {
 		super();
 	}

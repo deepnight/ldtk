@@ -12,6 +12,7 @@ class LayerContent implements IData {
 	public var cHei(get,never) : Int; inline function get_cHei() return M.ceil( level.pxHei / def.gridSize );
 
 	var intGrid : Map<Int,Int> = new Map();
+	var entities : Array<EntityInstance> = [];
 
 	public function new(l:LevelData, def:LayerDef) {
 		levelId = l.uid;

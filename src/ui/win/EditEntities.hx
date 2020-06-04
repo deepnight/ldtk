@@ -7,7 +7,7 @@ class EditEntities extends ui.Window {
 	var jAllForms(get,never) : js.jquery.JQuery; inline function get_jAllForms() return jWin.find(".formsWrapper");
 	var jEntityForm(get,never) : js.jquery.JQuery; inline function get_jEntityForm() return jWin.find("ul.form.entityDef");
 	var jFieldForm(get,never) : js.jquery.JQuery; inline function get_jFieldForm() return jWin.find(".fields ul.form");
-	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jWin.find(".preview");
+	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jWin.find(".previewWrapper");
 
 	var curEntity : Null<EntityDef>;
 	var curField : Null<FieldDef>;
@@ -249,7 +249,7 @@ class EditEntities extends ui.Window {
 
 			var preview = new J('<div class="preview"/>');
 			preview.appendTo(elem);
-			preview.append( JsTools.createEntity(ed, 0.5) );
+			preview.append( JsTools.createEntity(ed, 0.75) );
 
 			elem.append('<span class="name">'+ed.name+'</span>');
 			if( curEntity==ed )
@@ -295,10 +295,7 @@ class EditEntities extends ui.Window {
 		if( curEntity==null )
 			return;
 
-		jPreview.children(".render")
-			.empty()
-			.append( JsTools.createEntity(curEntity) );
-
-		jPreview.children(".label").text(curEntity.name);
+		jPreview.children(".entityPreview").remove();
+		jPreview.append( JsTools.createEntity(curEntity) );
 	}
 }

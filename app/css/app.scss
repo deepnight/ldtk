@@ -427,7 +427,7 @@ input[type=number]:focus {
 			padding: 4px;
 
 			>li {
-				display: block;
+				display: flex;
 				min-height: 16px;
 				cursor: pointer;
 			}
@@ -435,9 +435,14 @@ input[type=number]:focus {
 				outline: 1px solid white;
 				outline-offset: -1px;
 			}
-			// >li+li {
-				// margin-left: 2px;
-			// }
+
+			li.entity {
+				padding: 10px;
+				overflow: hidden;
+				.entityPreview {
+					margin-right: 8px;
+				}
+			}
 
 			li.color {
 				padding-left: 10px;
@@ -445,6 +450,7 @@ input[type=number]:focus {
 				line-height: 32px;
 				box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
 			}
+
 			li.color.active {
 				outline: 2px solid white !important;
 			}
@@ -524,6 +530,19 @@ ul.niceList {
 .black		{ filter: brightness(0);}
 .orange		{ filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10); }
 
+
+.entityPreview {
+	display: grid;
+	justify-items: center;
+	align-items: center;
+
+	width: 32px;
+	height: 32px;
+	overflow: hidden;
+	padding: 8px;
+	background-image: url("/img/grid.png");
+	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
+}
 
 
 .window.defEditor {
@@ -606,46 +625,30 @@ ul.niceList {
 	}
 }
 
+
 .window.entityDefs {
 	.content {
 		width: 900px;
-	}
-
-	.entityList ul.niceList .preview {
-		width: 32px;
-		height: 32px;
-		overflow: hidden;
-		padding: 8px;
-		// border: 1px solid $bgLight;
-		margin-right: 8px;
-		background-image: url("/img/grid.png");
-		box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
-
-			display: grid;
-			justify-items: center;
 	}
 
 	button.delete {
 		flex: 0 1 0;
 	}
 
-	.formsWrapper .preview {
+	.formsWrapper .previewWrapper {
 		position: relative;
 		float: right;
 		margin: 8px;
-		min-width: 64px;
-		padding: 16px;
 		border: 1px solid $bgLight;
-		background-image: url("/img/grid.png");
-		box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
 
-		.render {
-			display: grid;
-			justify-items: center;
+		.entityPreview {
+			width: 64px;
+			height: 64px;
 		}
 
 		.label {
 			position: absolute;
+			z-index: 1;
 			bottom: 0px;
 			right: 0px;
 			font-size: 7pt;
