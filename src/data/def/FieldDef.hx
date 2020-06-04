@@ -1,18 +1,23 @@
 package data.def;
 
 class FieldDef { // TODO implements serialization
-	var internalVal : Null<String>;
-
+	public var uid(default,null) : Int;
 	public var type(default,null) : FieldType;
 	public var name : String;
 	public var canBeNull = false;
 
-	var intDefault : Null<Int>;
+	var defaultValue : Null<String>;
 
 	@:allow(data.def.EntityDef)
 	private function new(uid:Int, t:FieldType) {
+		this.uid = uid;
 		type = t;
 		name = "New field "+uid;
+		defaultValue = switch type {
+			case F_Int: "0";
+			case F_Float: "0";
+			case F_String: null;
+		}
 	}
 
 	inline function require(type:FieldType) {
@@ -20,41 +25,19 @@ class FieldDef { // TODO implements serialization
 			throw "Only available on "+type+" fields";
 	}
 
-	function setInternal(v:Dynamic) {
-		if( v==null )
-			v = getDefault();
-		internalVal = Std.string(v);
+	public function getIntDefault() : Null<Int> {
+		return
+			!canBeNull && defaultValue==null ? 0 :
+			defaultValue==null ? null :
+			Std.parseInt(defaultValue);
 	}
-
 
 	public function getDefault() : Dynamic {
 		return switch type {
-			case F_Int: !canBeNull && intDefault==null ? 0 : intDefault;
-			case F_Float: !canBeNull && intDefault==null ? 0 : intDefault; // TODO
+			case F_Int: getIntDefault();
+			case F_Float: getIntDefault();
 
 			case F_String: null; // TODO
 		}
-	}
-
-
-	public function setInt(v:Int) {
-		setInternal(v);
-	}
-	public function getInt() : Int {
-		if( internalVal==null )
-			return getDefault();
-		else
-			return Std.parseInt(internalVal);
-	}
-	public function setIntDefault(v:Null<Int>) {
-		intDefault = v;
-	}
-
-
-	public function setString(v:String) {
-		setInternal(v);
-	}
-	public function getString() : String {
-		return internalVal;
 	}
 }

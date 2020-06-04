@@ -65,11 +65,7 @@ class EditEntities extends ui.Window {
 					_create(type);
 					w.close();
 				});
-				switch type {
-					case F_Int: b.html("123");
-					case F_Float: b.html("0.50");
-					case F_String: b.html("\"Abc\"");
-				}
+				b.text( L.getFieldTypeShortName(type) );
 				b.append('<em>'+L.getFieldType(type)+'</em>');
 			}
 		});
@@ -180,16 +176,9 @@ class EditEntities extends ui.Window {
 		var i = Input.linkToField(jFieldForm.find("input[name=name]"), curField.name);
 		i.onChange = client.ge.emit.bind(EntityFieldChanged);
 
-		// var i = Input.linkToField(jFieldForm.find("select[name=type]"), curField.type);
-		// i.onChange = function() {
-		// 	client.ge.emit(EntityFieldChanged);
-		// 	updateFieldForm();
-		// }
+		jFieldForm.find("input[name=def]").attr("placeholder", !curField.canBeNull ? curField.getDefault() : "(null)");
 
-		if( !curField.canBeNull )
-			jFieldForm.find("input[name=def]").attr("placeholder", curField.getDefault());
-
-		jFieldForm.find("input[name=def]").val( curField.getString() );
+		// jFieldForm.find("input[name=def]").val( curField.getString() );
 		// switch curField.type {
 		// 	case F_Int:
 		// 	case F_String:

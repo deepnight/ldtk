@@ -1,7 +1,7 @@
 package data.def;
 
 class LayerDef implements IData {
-	public var uid : Int;
+	public var uid(default,null) : Int;
 	public var type : LayerType;
 	public var name : String;
 	public var gridSize : Int = Const.GRID;

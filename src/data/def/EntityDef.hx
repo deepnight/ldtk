@@ -1,7 +1,7 @@
 package data.def;
 
 class EntityDef implements IData {
-	public var uid : Int;
+	public var uid(default,null) : Int;
 	public var name : String;
 	public var width : Int;
 	public var height : Int;

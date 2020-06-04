@@ -29,4 +29,12 @@ class Lang {
             case F_String: t._("String");
         }
     }
+
+    public static function getFieldTypeShortName(type:FieldType) : LocaleString {
+        return switch type {
+            case F_Int: t._("123");
+            case F_Float: t._("0.5");
+            case F_String: t._("Abc");
+        }
+    }
 }
