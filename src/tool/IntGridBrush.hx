@@ -14,6 +14,15 @@ class IntGridBrush extends Tool<Int> {
 		return 0;
 	}
 
+	inline function getIntGridColor() {
+		return curLayer.def.getIntGridValue( getSelectedValue() ).color;
+	}
+
+	override function onMouseMove(m:MouseCoords) {
+		super.onMouseMove(m);
+		client.cursor.set( GridCell(m.cx, m.cy, getIntGridColor() ) );
+	}
+
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
 

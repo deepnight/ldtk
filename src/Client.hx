@@ -19,6 +19,8 @@ class Client extends dn.Process {
 	public var levelRender : render.LevelRender;
 	public var curTool : Tool<Dynamic>;
 
+	public var cursor : ui.Cursor;
+
 	public function new() {
 		super();
 
@@ -26,6 +28,8 @@ class Client extends dn.Process {
 		createRoot(Boot.ME.s2d);
 		appWin.title = "LEd v"+Const.APP_VERSION;
 		appWin.maximize();
+
+		cursor = new ui.Cursor();
 
 		ge = new GlobalEventDispatcher();
 		ge.watchAny( onGlobalEvent );
@@ -105,7 +109,8 @@ class Client extends dn.Process {
 			curTool.stopUsing( getMouse() );
 	}
 	function onMouseMove(e:hxd.Event) {
-		curTool.onMouseMove( getMouse() );
+		var m = getMouse();
+		curTool.onMouseMove(m);
 	}
 
 	public function selectLayer(l:LayerContent) {

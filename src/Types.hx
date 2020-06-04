@@ -25,3 +25,9 @@ enum FieldType {
 	F_String;
 	F_Bool;
 }
+
+enum CursorType {
+	None;
+	GridCell(cx:Int, cy:Int, ?col:UInt);
+	GridRect(cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
+}
