@@ -11,7 +11,7 @@ class Input<T> {
 	var getter : Void->T;
 	var setter : T->Void;
 
-	private function new(jElement:js.jquery.JQuery, getter, setter) {
+	public function new(jElement:js.jquery.JQuery, getter, setter) {
 		if( jElement.length==0 )
 			trace("Empty jQuery object");
 
@@ -19,7 +19,7 @@ class Input<T> {
 		this.setter = setter;
 		input = jElement;
 		input.off();
-		input.val( Std.string( getter() ) );
+		writeValueToInput();
 
 		input.change( function(_) {
 			onInputChange();
@@ -28,7 +28,7 @@ class Input<T> {
 
 	function onInputChange() {
 		setter( parseInputValue() );
-		input.val( Std.string( getter() ) );
+		writeValueToInput();
 		onChange();
 		onValueChange( getter() );
 	}
@@ -38,6 +38,10 @@ class Input<T> {
 
 	function parseInputValue() : T {
 		return null;
+	}
+
+	function writeValueToInput() {
+		input.val( Std.string( getter() ) );
 	}
 
 	#end
@@ -91,6 +95,15 @@ class Input<T> {
 					case "Float":
 						return macro {
 							new form.input.FloatInput(
+								$formInput,
+								function() return $variable,
+								function(v) $variable = v
+							);
+						}
+
+					case "Bool":
+						return macro {
+							new form.input.BoolInput(
 								$formInput,
 								function() return $variable,
 								function(v) $variable = v
