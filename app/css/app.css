@@ -453,6 +453,7 @@ ul.niceList li {
 
 ul.niceList li {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   padding: 10px;
   border-top: 1px solid #1e2229;
@@ -463,6 +464,13 @@ ul.niceList li {
 
 ul.niceList li .icon {
   margin-right: 8px;
+}
+
+ul.niceList li .sub {
+  flex: 0 0 100%;
+  font-size: 70%;
+  opacity: 0.65;
+  padding-left: 8px;
 }
 
 ul.niceList li.active {

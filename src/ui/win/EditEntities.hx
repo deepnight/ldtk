@@ -267,13 +267,17 @@ class EditEntities extends ui.Window {
 		// Fields
 		if( curEntity!=null ) {
 			for(f in curEntity.fieldDefs) {
-				var elem = new J("<li/>");
-				jFieldList.append(elem);
-				elem.append('<span class="name">'+f.name+'</span>');
+				var li = new J("<li/>");
+				li.appendTo(jFieldList);
+				li.append('<span class="name">'+f.name+'</span>');
 				if( curField==f )
-					elem.addClass("active");
+					li.addClass("active");
 
-				elem.click( function(_) selectField(f) );
+				var sub = new J('<span class="sub"></span>');
+				sub.appendTo(li);
+				sub.text( f.getDescription() );
+
+				li.click( function(_) selectField(f) );
 			}
 		}
 

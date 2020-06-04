@@ -18,6 +18,8 @@ class FieldDef { // TODO implements serialization
 		type = t;
 		name = "New field "+uid;
 		canBeNull = type==F_String;
+		min = max = null;
+		defaultOverride = null;
 	}
 
 	public function toString() {
@@ -25,6 +27,17 @@ class FieldDef { // TODO implements serialization
 			+ ( canBeNull ? 'Null<$type>' : '$type' )
 			+ '=${getDefault()})'
 			+ ( type==F_Int || type==F_Float ? '[$min-$max]' : "" );
+	}
+
+	public function getDescription() {
+		var infinity = "∞";
+		return L.getFieldType(type)
+			+ ( canBeNull ? " nullable" : "" )
+			+ "=" + ( type==F_String && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
+			+ ( min==null && max==null ? "" :
+				( type==F_Int ? " ["+(min==null?"-"+infinity:""+M.round(min))+";"+(max==null?"+"+infinity:""+M.round(max))+"]" : "" )
+				+ ( type==F_Float ? " ["+(min==null?"-"+infinity:""+min)+";"+(max==null?infinity:""+max)+"]" : "" )
+			);
 	}
 
 	inline function require(type:FieldType) {

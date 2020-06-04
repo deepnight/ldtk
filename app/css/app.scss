@@ -461,6 +461,7 @@ ul.niceList {
 
 	li {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		padding: 10px;
 		border-top: 1px solid $bgDark;
@@ -469,6 +470,12 @@ ul.niceList {
 		cursor: pointer;
 		.icon {
 			margin-right: 8px;
+		}
+		.sub {
+			flex: 0 0 100%;
+			font-size: 70%;
+			opacity: 0.65;
+			padding-left: 8px;
 		}
 	}
 
