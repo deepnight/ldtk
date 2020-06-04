@@ -173,7 +173,10 @@ class EditEntities extends ui.Window {
 			jFieldForm.removeClass("type-"+k);
 		jFieldForm.addClass("type-"+curField.type);
 
-		jFieldForm.find(".type").text( L.getFieldType(curField.type) );
+		jFieldForm.find(".type").empty().append( Std.string(L.getFieldType(curField.type)) );
+		#if debug
+		jFieldForm.find(".type").append("<p>"+curField.toString()+"</p>");
+		#end
 
 		var i = Input.linkToHtmlInput( curField.name, jFieldForm.find("input[name=name]") );
 		i.onChange = client.ge.emit.bind(EntityFieldChanged);
@@ -181,7 +184,7 @@ class EditEntities extends ui.Window {
 		// Default value
 		switch curField.type {
 			case F_Int, F_Float, F_String:
-				var defInput = jFieldForm.find("input[name=def]");
+				var defInput = jFieldForm.find("input[name=fDef]");
 				if( curField.defaultOverride != null )
 					defInput.val( curField.defaultOverride );
 				else
@@ -206,7 +209,13 @@ class EditEntities extends ui.Window {
 				});
 
 			case F_Bool:
-				var defInput = jFieldForm.find("select[name=def]");
+				var defInput = jFieldForm.find("input[name=bDef]");
+				defInput.prop("checked", curField.getBoolDefault());
+				defInput.change( function(ev) {
+					var checked = defInput.prop("checked") == true;
+					curField.setDefault( Std.string(checked) );
+					client.ge.emit(EntityFieldChanged);
+				});
 		}
 
 		// Nullable
@@ -228,6 +237,7 @@ class EditEntities extends ui.Window {
 			curField.setMax( input.val() );
 			client.ge.emit(EntityFieldChanged);
 		});
+
 		N.debug(curField.toString());
 	}
 
