@@ -242,8 +242,6 @@ class EditEntities extends ui.Window {
 			curField.setMax( input.val() );
 			client.ge.emit(EntityFieldChanged);
 		});
-
-		N.debug(curField.toString());
 	}
 
 
