@@ -89,18 +89,15 @@ class Client extends dn.Process {
 		if( ev.shiftKey ) toggleKeys.set(Key.SHIFT, true);
 		if( ev.ctrlKey ) toggleKeys.set(Key.CTRL, true);
 		if( ev.altKey ) toggleKeys.set(Key.ALT, true);
-		N.debug("down: "+ev.key+" "+ev.shiftKey);
 	}
 
 	function onJsKeyUp(ev:js.jquery.Event) {
 		if( ev.shiftKey ) toggleKeys.set(Key.SHIFT, false);
 		if( ev.ctrlKey ) toggleKeys.set(Key.CTRL, false);
 		if( ev.altKey ) toggleKeys.set(Key.ALT, false);
-		N.debug("up: "+ev.key+" "+ev.shiftKey);
 	}
 
 	function onJsKeyPress(ev:js.jquery.Event) {
-		N.debug("press: "+ev.key+" "+ev.shiftKey);
 	}
 
 	function initTool() {
