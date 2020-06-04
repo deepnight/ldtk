@@ -87,7 +87,7 @@ button {
 	box-shadow: 0px 2px 0px #b53d00;
 	cursor: pointer;
 
-	.icon {
+	>.icon {
 		margin: -4px;
 		width: 1.7em;
 		height: 1.7em;
@@ -109,17 +109,6 @@ button.cancel:hover {
 	background-color: $bgLight;
 }
 
-button.fieldType {
-	font-family: Roboto;
-	font-size: 16pt;
-	em {
-		font-style: normal;
-		opacity: 0.8;
-		display: block;
-		font-size: 60%;
-	}
-}
-
 .buttons {
 	display: flex;
 	margin-top: 2px;
@@ -130,6 +119,34 @@ button.fieldType {
 	button+button {
 		margin-top: 0;
 		margin-left: 2px;
+	}
+}
+
+
+
+.fieldTypeIcon {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 64px;
+	height: 64px;
+	overflow: hidden;
+	box-sizing: border-box;
+
+	font-family: Roboto;
+	border: 1px dashed rgba(255, 255, 255, 0.8);
+
+	.typeName {
+		font-style: normal;
+		font-size: 9pt;
+		opacity: 0.7;
+	}
+
+	.typeIcon {
+		font-size: 21pt;
+		opacity: 0.8;
+		text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
 	}
 }
 
@@ -324,8 +341,9 @@ input[type=number]:focus {
 	}
 	.content {
 		display: grid;
+		width: 100%;
 		gap: 2px;
-		grid-template-columns: repeat(3,80px);
+		grid-template-columns: repeat(3,auto);
 
 		button {
 			margin: 0;
@@ -344,7 +362,6 @@ input[type=number]:focus {
 *[draggable=true] {
 	background: url("/img/icons/drag.png") no-repeat;
 	background-position: right center;
-	background-size: contain;
 	padding-right: 35px !important;
 }
 
@@ -378,6 +395,7 @@ input[type=number]:focus {
 		ul.niceList {
 			li {
 				.name {
+					font-size: 10pt;
 					flex: 1 1 auto;
 					order: 1;
 					display: block;
@@ -452,10 +470,14 @@ ul.niceList {
 		flex-wrap: wrap;
 		align-items: center;
 		padding: 10px;
+
+		font-size: 14pt;
+
 		border-top: 1px solid $bgDark;
 		border-bottom: 1px solid $bgDark;
 		background-color: $bgMed;
 		cursor: pointer;
+
 		.icon {
 			margin-right: 8px;
 		}

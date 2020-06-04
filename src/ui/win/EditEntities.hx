@@ -59,14 +59,11 @@ class EditEntities extends ui.Window {
 				var type = FieldType.createByName(k);
 				var b = new J("<button/>");
 				w.jContent.append(b);
-				b.addClass("fieldType");
-				b.addClass(k);
+				JsTools.createFieldTypeIcon(type, b);
 				b.click( function(_) {
 					_create(type);
 					w.close();
 				});
-				b.text( L.getFieldTypeShortName(type) );
-				b.append('<em>'+L.getFieldType(type)+'</em>');
 			}
 		});
 

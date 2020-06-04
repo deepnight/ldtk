@@ -71,7 +71,7 @@ button {
   cursor: pointer;
 }
 
-button .icon {
+button > .icon {
   margin: -4px;
   width: 1.7em;
   height: 1.7em;
@@ -95,18 +95,6 @@ button.cancel:hover {
   background-color: #545d73;
 }
 
-button.fieldType {
-  font-family: Roboto;
-  font-size: 16pt;
-}
-
-button.fieldType em {
-  font-style: normal;
-  opacity: 0.8;
-  display: block;
-  font-size: 60%;
-}
-
 .buttons {
   display: flex;
   margin-top: 2px;
@@ -120,6 +108,31 @@ button.fieldType em {
 .buttons button + button {
   margin-top: 0;
   margin-left: 2px;
+}
+
+.fieldTypeIcon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-family: Roboto;
+  border: 1px dashed rgba(255, 255, 255, 0.8);
+}
+
+.fieldTypeIcon .typeName {
+  font-style: normal;
+  font-size: 9pt;
+  opacity: 0.7;
+}
+
+.fieldTypeIcon .typeIcon {
+  font-size: 21pt;
+  opacity: 0.8;
+  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
 }
 
 ul.form {
@@ -314,8 +327,9 @@ input[type=number]:focus {
 
 .dialog.fieldTypes .content {
   display: grid;
+  width: 100%;
   gap: 2px;
-  grid-template-columns: repeat(3, 80px);
+  grid-template-columns: repeat(3, auto);
 }
 
 .dialog.fieldTypes .content button {
@@ -332,7 +346,6 @@ input[type=number]:focus {
 *[draggable=true] {
   background: url("/img/icons/drag.png") no-repeat;
   background-position: right center;
-  background-size: contain;
   padding-right: 35px !important;
 }
 
@@ -363,6 +376,7 @@ input[type=number]:focus {
 }
 
 .editor #layers ul.niceList li .name {
+  font-size: 10pt;
   flex: 1 1 auto;
   order: 1;
   display: block;
@@ -449,6 +463,7 @@ ul.niceList li {
   flex-wrap: wrap;
   align-items: center;
   padding: 10px;
+  font-size: 14pt;
   border-top: 1px solid #1e2229;
   border-bottom: 1px solid #1e2229;
   background-color: #2e333f;

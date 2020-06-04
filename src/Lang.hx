@@ -34,9 +34,9 @@ class Lang {
     public static function getFieldTypeShortName(type:FieldType) : LocaleString {
         return switch type {
             case F_Int: t._("123");
-            case F_Float: t._("0.5");
-            case F_String: t._("Abc");
-            case F_Bool: t._("TRUE");
+            case F_Float: t._("1.0");
+            case F_String: t._("\"Ab\"");
+            case F_Bool: t._("✔");
         }
     }
 }
