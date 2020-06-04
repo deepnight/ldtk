@@ -58,4 +58,11 @@ class LayerContent implements IData {
 		if( isValid(cx,cy) )
 			intGrid.remove( coordId(cx,cy) );
 	}
+
+
+	public function createEntityInstance(ed:EntityDef) : EntityInstance {
+		var ei = new EntityInstance(ed);
+		entities.push(ei);
+		return ei;
+	}
 }
