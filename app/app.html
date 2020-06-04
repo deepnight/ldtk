@@ -10,10 +10,7 @@
 
 	<div class="editor">
 
-		<canvas id="webgl"></canvas>
-		<script type="text/javascript" src="js/app.js"></script>
-
-		<div class="panel left">
+		<div id="mainPanel">
 			<div id="mainBar">
 				<div class="buttons">
 					<button class="debug1">Debug1</button>
@@ -49,9 +46,12 @@
 			</div>
 		</div>
 
+		<canvas id="webgl"></canvas>
+
 	</div>
 
 
+	<!-- Templates -->
 
 	<xml id="window">
 		<div class="window">
@@ -80,6 +80,7 @@
 	</xml>
 
 
+	<!-- Hot reloader -->
 	<!-- <script type="text/javascript">
 		var path = './';
 		var fs = require('fs');
@@ -93,6 +94,9 @@
 		},2000);
 		});
 	</script> -->
+
+	<!-- App boot -->
+	<script type="text/javascript" src="js/app.js"></script>
 
 </body>
 </html>
