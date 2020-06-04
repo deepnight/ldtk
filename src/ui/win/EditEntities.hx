@@ -249,7 +249,7 @@ class EditEntities extends ui.Window {
 
 			var preview = new J('<div class="preview"/>');
 			preview.appendTo(elem);
-			preview.append( JsTools.createEntity(ed, 0.75) );
+			preview.append( JsTools.createEntityPreview(ed, 0.75) );
 
 			elem.append('<span class="name">'+ed.name+'</span>');
 			if( curEntity==ed )
@@ -296,6 +296,6 @@ class EditEntities extends ui.Window {
 			return;
 
 		jPreview.children(".entityPreview").remove();
-		jPreview.append( JsTools.createEntity(curEntity) );
+		jPreview.append( JsTools.createEntityPreview(curEntity) );
 	}
 }

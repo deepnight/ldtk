@@ -23,6 +23,7 @@ class Tool<T> extends dn.Process {
 
 	function selectValue(v:T) {
 		SELECTED_VALUES.set(curLayer.layerDefId, v);
+		updatePalette();
 	}
 	function getSelectedValue() : T {
 		return SELECTED_VALUES.exists(curLayer.layerDefId)

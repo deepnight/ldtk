@@ -29,7 +29,7 @@ class JsTools {
 	}
 
 
-	public static function createEntity(ed:EntityDef, scale=1.0) {
+	public static function createEntityPreview(ed:EntityDef, scale=1.0) {
 		var ent = new J('<div class="entity"/>');
 		ent.css("width", ed.width*scale);
 		ent.css("height", ed.height*scale);

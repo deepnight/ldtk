@@ -427,7 +427,6 @@ input[type=number]:focus {
 }
 
 .editor #palette ul li.entity {
-  padding: 10px;
   overflow: hidden;
 }
 

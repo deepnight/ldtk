@@ -1,16 +1,26 @@
 package tool;
 
-class EntityTool extends Tool<EntityDef> {
+class EntityTool extends Tool<Int> {
+	var curEntityDef(get,never) : Null<EntityDef>;
+
 	public function new() {
 		super();
+
+		if( curEntityDef==null && project.entityDefs.length>0 )
+			selectValue( project.entityDefs[0].uid );
 	}
 
-	override function selectValue(v:EntityDef) {
+	inline function get_curEntityDef() return project.getEntityDef(getSelectedValue());
+
+	override function selectValue(v:Int) {
 		super.selectValue(v);
 	}
 
-	override function getDefaultValue():EntityDef {
-		return null; // TODO
+	override function getDefaultValue():Int{
+		if( project.entityDefs.length>0 )
+			return project.entityDefs[0].uid;
+		else
+			return -1;
 	}
 
 	override function onMouseMove(m:MouseCoords) {
@@ -33,20 +43,18 @@ class EntityTool extends Tool<EntityDef> {
 	override function updatePalette() {
 		super.updatePalette();
 
-		selectValue( getSelectedValue() );
-
 		for(ed in project.entityDefs) {
 			var e = new J("<li/>");
 			jPalette.append(e);
 			e.addClass("entity");
-			if( ed==getSelectedValue() )
+			if( ed==curEntityDef )
 				e.addClass("active");
 
-			e.append( JsTools.createEntity(ed, 1) );
+			e.append( JsTools.createEntityPreview(ed, 0.75) );
 			e.append(ed.name);
 
 			e.click( function(_) {
-				selectValue(ed);
+				selectValue(ed.uid);
 				updatePalette();
 			});
 		}

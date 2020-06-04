@@ -58,8 +58,6 @@ class IntGridTool extends Tool<Int> {
 	override function updatePalette() {
 		super.updatePalette();
 
-		selectValue( getSelectedValue() );
-
 		var idx = 0;
 		for( intGridVal in curLayer.def.getAllIntGridValues() ) {
 			var e = new J("<li/>");
