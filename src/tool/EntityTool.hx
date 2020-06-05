@@ -29,6 +29,11 @@ class EntityTool extends Tool<Int> {
 
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
+		var ei = curLayer.createEntityInstance(curEntityDef);
+		ei.x = m.levelX;
+		ei.y = m.levelY;
+		// ei.x = m.cx * curLayer.def.gridSize;
+		// ei.y = m.cy * curLayer.def.gridSize;
 		client.ge.emit(LayerContentChanged);
 	}
 
