@@ -110,7 +110,118 @@ button.cancel:hover {
   margin-left: 2px;
 }
 
-.fieldTypeIcon {
+ul.niceList:first-child {
+  margin-top: 0;
+}
+
+ul.niceList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  padding: 4px;
+  margin-top: 4px;
+  min-height: 200px;
+  margin-bottom: 4px;
+  border: 1px solid #545d73;
+  background-color: #1e2229;
+}
+
+ul.niceList li {
+  margin: 0;
+  padding: 0;
+}
+
+ul.niceList li {
+  display: grid;
+  justify-items: left;
+  align-items: center;
+  grid-template-columns: auto auto;
+  gap: 0px 8px;
+  padding: 10px;
+  font-size: 14pt;
+  border-top: 1px solid #1e2229;
+  border-bottom: 1px solid #1e2229;
+  background-color: #2e333f;
+  cursor: pointer;
+}
+
+ul.niceList li .sub {
+  grid-column: 1/3;
+  grid-row: 2/3;
+  font-size: 70%;
+  opacity: 0.65;
+  padding-left: 8px;
+}
+
+ul.niceList li.iconLeft {
+  grid-template-columns: min-content auto;
+}
+
+ul.niceList li.iconLeft .icon,
+ul.niceList li.iconLeft .entityPreview {
+  order: 0;
+}
+
+ul.niceList li.iconRight {
+  grid-template-columns: auto min-content;
+}
+
+ul.niceList li.iconRight .icon,
+ul.niceList li.iconRight .entityPreview {
+  order: 1;
+}
+
+ul.niceList li.active {
+  background-color: #ffcc00;
+  color: black;
+  box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
+}
+
+ul.niceList li.hidden {
+  opacity: 0.4;
+}
+
+ul.niceList li.hidden .vis {
+  background: transparent;
+  cursor: zoom-in;
+}
+
+ul.niceList li:not(.active):hover {
+  outline: 1px solid #586279;
+  outline-offset: -1px;
+}
+
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.3em;
+  height: 1.3em;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.icon.entity {
+  background-image: url("/img/icons/entity.png");
+}
+
+.icon.layer {
+  background-image: url("/img/icons/layer.png");
+}
+
+.icon.intGrid {
+  background-image: url("/img/icons/intGrid.png");
+}
+
+.black {
+  filter: brightness(0);
+}
+
+.orange {
+  filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);
+}
+
+.icon.fieldType {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -123,16 +234,29 @@ button.cancel:hover {
   border: 1px dashed rgba(255, 255, 255, 0.8);
 }
 
-.fieldTypeIcon .typeName {
+.icon.fieldType .typeName {
   font-style: normal;
   font-size: 9pt;
   opacity: 0.7;
 }
 
-.fieldTypeIcon .typeIcon {
+.icon.fieldType .typeIcon {
   font-size: 21pt;
   opacity: 0.8;
   text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
+}
+
+.icon.entityPreview {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  width: auto;
+  height: auto;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 8px;
+  background-image: url("/img/grid.png");
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
 }
 
 ul.form {
@@ -178,6 +302,7 @@ ul.form > li > span {
   opacity: 0.5;
   padding: 8px;
   text-align: center;
+  white-space: nowrap;
 }
 
 ul.form > li > span:last-child {
@@ -395,6 +520,10 @@ input[type=number]:focus {
   margin-bottom: 8px;
 }
 
+.editor #layers ul.niceList li {
+  grid-template-columns: min-content auto min-content;
+}
+
 .editor #layers ul.niceList li .name {
   font-size: 10pt;
   flex: 1 1 auto;
@@ -463,112 +592,6 @@ input[type=number]:focus {
 
 .editor #palette ul li.color.active {
   outline: 2px solid white !important;
-}
-
-ul.niceList:first-child {
-  margin-top: 0;
-}
-
-ul.niceList {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  padding: 4px;
-  margin-top: 4px;
-  min-height: 200px;
-  margin-bottom: 4px;
-  border: 1px solid #545d73;
-  background-color: #1e2229;
-}
-
-ul.niceList li {
-  margin: 0;
-  padding: 0;
-}
-
-ul.niceList li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  padding: 10px;
-  font-size: 14pt;
-  border-top: 1px solid #1e2229;
-  border-bottom: 1px solid #1e2229;
-  background-color: #2e333f;
-  cursor: pointer;
-}
-
-ul.niceList li .icon {
-  margin-right: 8px;
-}
-
-ul.niceList li .sub {
-  flex: 0 0 100%;
-  font-size: 70%;
-  opacity: 0.65;
-  padding-left: 8px;
-}
-
-ul.niceList li.active {
-  background-color: #ffcc00;
-  color: black;
-  box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
-}
-
-ul.niceList li.hidden {
-  opacity: 0.4;
-}
-
-ul.niceList li.hidden .vis {
-  background: transparent;
-  cursor: zoom-in;
-}
-
-ul.niceList li:not(.active):hover {
-  outline: 1px solid #586279;
-  outline-offset: -1px;
-}
-
-.icon {
-  display: inline-block;
-  vertical-align: middle;
-  width: 1.3em;
-  height: 1.3em;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-.icon.entity {
-  background-image: url("/img/icons/entity.png");
-}
-
-.icon.layer {
-  background-image: url("/img/icons/layer.png");
-}
-
-.icon.intGrid {
-  background-image: url("/img/icons/intGrid.png");
-}
-
-.black {
-  filter: brightness(0);
-}
-
-.orange {
-  filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);
-}
-
-.entityPreview {
-  display: grid;
-  justify-items: center;
-  align-items: center;
-  width: 32px;
-  height: 32px;
-  overflow: hidden;
-  padding: 8px;
-  background-image: url("/img/grid.png");
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
 }
 
 .window.defEditor .mainList ul {

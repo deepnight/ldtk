@@ -68,7 +68,7 @@ class EntityTool extends Tool<Int> {
 			if( ed==curEntityDef )
 				e.addClass("active");
 
-			e.append( JsTools.createEntityPreview(ed, 0.75) );
+			e.append( JsTools.createEntityPreview(ed, 32) );
 			e.append(ed.name);
 
 			e.click( function(_) {

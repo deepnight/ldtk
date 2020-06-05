@@ -18,7 +18,7 @@ class JsTools {
 
 	public static function createFieldTypeIcon(type:FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
 		var icon = new J("<span/>");
-		icon.addClass("fieldTypeIcon");
+		icon.addClass("icon fieldType");
 		icon.addClass(type.getName());
 		if( withName )
 			icon.append('<span class="typeName">'+L.getFieldType(type)+'</span>');
@@ -31,17 +31,21 @@ class JsTools {
 	}
 
 
-	public static function createEntityPreview(ed:EntityDef, scale=1.0) {
-		var ent = new J('<div class="entity"/>');
+	public static function createEntityPreview(ed:EntityDef, sizePx=64) {
+		var scale = sizePx/64;
+		var ent = new J('<div/>');
+		ent.addClass("entity");
 		ent.css("width", ed.width*scale);
 		ent.css("height", ed.height*scale);
 		ent.css("background-color", C.intToHex(ed.color));
 
 		var wrapper = ent.wrap("<div/>").parent();
-		wrapper.addClass("entityPreview");
+		wrapper.addClass("icon entityPreview");
+		wrapper.width(sizePx);
+		wrapper.height(sizePx);
 
-		if( scale!=1 )
-			wrapper.css("transform","scale("+scale+")");
+		// if( scale!=1 )
+			// wrapper.css("transform","scale("+scale+")");
 
 		return wrapper;
 	}

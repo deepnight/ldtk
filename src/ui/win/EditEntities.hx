@@ -71,6 +71,7 @@ class EditEntities extends ui.Window {
 			}
 			curEntity.removeField(project, curField);
 			client.ge.emit(EntityFieldChanged);
+			selectField( curEntity.fieldDefs[0] );
 		});
 
 		selectEntity(project.entityDefs[0]);
@@ -246,10 +247,10 @@ class EditEntities extends ui.Window {
 		for(ed in project.entityDefs) {
 			var elem = new J("<li/>");
 			jEntityList.append(elem);
+			elem.addClass("iconLeft");
 
-			var preview = new J('<div class="preview"/>');
+			var preview = JsTools.createEntityPreview(ed, 32);
 			preview.appendTo(elem);
-			preview.append( JsTools.createEntityPreview(ed, 0.75) );
 
 			elem.append('<span class="name">'+ed.name+'</span>');
 			if( curEntity==ed )
