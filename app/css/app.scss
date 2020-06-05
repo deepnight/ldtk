@@ -365,6 +365,24 @@ input[type=number]:focus {
 	padding-right: 35px !important;
 }
 
+
+#debug {
+	position: absolute;
+	padding: 8px;
+	right: 0px;
+	top: 0px;
+	font-size: 9pt;
+	color:white;
+	text-shadow: 0px 1px 3px black;
+	background-color: rgba(0, 0, 0, 0.4);
+	p {
+		@include resetMargin()
+	}
+	p+p {
+		margin-top: 8px;
+	}
+}
+
 .editor {
 	display: grid;
 	grid-template-columns: 200px auto;

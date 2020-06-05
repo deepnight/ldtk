@@ -146,6 +146,16 @@ class Client extends dn.Process {
 		curTool.onMouseMove(m);
 	}
 
+	public function debug(msg:Dynamic, clear=true) {
+		var e = new J("#debug");
+		if( clear )
+			e.empty();
+
+		var line = new J("<p/>");
+		line.append( Std.string(msg) );
+		line.appendTo(e);
+	}
+
 	public function selectLayer(l:LayerContent) {
 		curLayerId = l.def.uid;
 		levelRender.onCurrentLayerChange(curLayerContent);

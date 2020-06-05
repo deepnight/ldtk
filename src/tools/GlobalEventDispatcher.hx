@@ -1,3 +1,4 @@
+package tools;
 class GlobalEventDispatcher {
 	var anyListeners : Array<GlobalEvent->Void> = [];
 	var specificListeners : Array<{ e:GlobalEvent, cb:Void->Void }> = [];

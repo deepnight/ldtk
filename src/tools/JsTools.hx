@@ -1,3 +1,5 @@
+package tools;
+
 class JsTools {
 	public static function makeSortable(selector:String, onSort:(from:Int, to:Int)->Void) {
 		js.Lib.eval('sortable("$selector")');

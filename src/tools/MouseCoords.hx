@@ -1,3 +1,5 @@
+package tools;
+
 class MouseCoords {
 	public var gx : Float;
 	public var gy : Float;
@@ -22,4 +24,9 @@ class MouseCoords {
 		this.gx = gx;
 		this.gy = gy;
 	}
+
+	public inline function getRect(to:MouseCoords) : Rect {
+		return Rect.fromMouseCoords(this, to);
+	}
 }
+
