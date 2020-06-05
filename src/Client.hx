@@ -134,7 +134,7 @@ class Client extends dn.Process {
 	}
 
 	function onMouseDown(e:hxd.Event) {
-		if( levelRender.isLayerVisible(curLayerContent) )
+		if( levelRender.isLayerVisible(curLayerContent) && curTool.canBeUsed() )
 			curTool.startUsing( getMouse(), e.button );
 	}
 	function onMouseUp() {

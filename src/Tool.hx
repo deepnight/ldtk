@@ -38,10 +38,11 @@ class Tool<T> extends dn.Process {
 		jPalette.empty();
 	}
 
+	public function canBeUsed() return getSelectedValue()!=null;
 	public function isRunning() return running;
 
-	inline function isAdding() return running && button==0;
-	inline function isRemoving() return running && button==1;
+	inline function isAdding() return isRunning() && button==0;
+	inline function isRemoving() return isRunning() && button==1;
 
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		running = true;
