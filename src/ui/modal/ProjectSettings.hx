@@ -1,6 +1,6 @@
-package ui.win;
+package ui.modal;
 
-class ProjectSettings extends ui.Window {
+class ProjectSettings extends ui.Modal {
 	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jWin.find("ul.form:first");
 
 	public function new() {

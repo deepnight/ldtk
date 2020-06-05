@@ -391,9 +391,9 @@ input[type=number]:focus {
 
 .window {
 	position: absolute;
+	left: 200px;
 	top: 0px;
-	left: 0px;
-	width: 100%;
+	width: calc( 100% - 200px );
 	height: 100%;
 	z-index: 98;
 
@@ -426,6 +426,13 @@ input[type=number]:focus {
 
 		box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
 	}
+}
+
+.panelMask {
+	position: absolute;
+	background-color: rgba(0,0,0,0.75);
+	opacity: 0.5;
+	z-index: 99;
 }
 
 
@@ -530,7 +537,7 @@ input[type=number]:focus {
 	}
 }
 
-.editor {
+#editor {
 	display: grid;
 	grid-template-columns: 200px auto;
 	width: 100%;
@@ -542,6 +549,7 @@ input[type=number]:focus {
 	}
 
 	#mainPanel {
+		position: relative;
 		padding: 5px;
 		background: $bgDark;
 		border-color: $bgLight;
@@ -549,11 +557,12 @@ input[type=number]:focus {
 		box-shadow: 0px 0px 16px black inset;
 		z-index: 1;
 		box-sizing: border-box;
-	}
 
+	}
 
 	#mainBar {
 		margin-bottom: 8px;
+		z-index: 100;
 	}
 
 	#layers {

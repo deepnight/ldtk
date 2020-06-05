@@ -51,9 +51,31 @@ class Client extends dn.Process {
 		});
 
 		new J("button.save").click( function(_) N.notImplemented() );
-		new J("button.editProject").click( function(_) new ui.win.ProjectSettings() );
-		new J("button.editLayers").click( function(_) new ui.win.EditLayers() );
-		new J("button.editEntities").click( function(_) new ui.win.EditEntities() );
+		new J("button.editProject").click( function(_) {
+			if( ui.Modal.isOpen(ui.modal.ProjectSettings) )
+				ui.Modal.closeAll();
+			else
+				new ui.modal.ProjectSettings();
+		});
+		new J("button.editLayers").click( function(_) {
+			if( ui.Modal.isOpen(ui.modal.EditLayers) )
+				ui.Modal.closeAll();
+			else
+				new ui.modal.EditLayers();
+		});
+		new J("button.editEntities").click( function(_) {
+			if( ui.Modal.isOpen(ui.modal.EditEntities) )
+				ui.Modal.closeAll();
+			else
+				new ui.modal.EditEntities();
+		});
+
+		// new J("#layers, #palette").click( function(ev) {
+		// 	if( ui.Window.hasAnyOpen() ) {
+		// 		ui.Window.closeAll();
+		// 		ev.stopPropagation();
+		// 	}
+		// });
 
 		Boot.ME.s2d.addEventListener( onEvent );
 
@@ -244,6 +266,8 @@ class Client extends dn.Process {
 			else
 				vis.find(".on").hide();
 			vis.click( function(ev) {
+				if( ui.Modal.closeAll() )
+					return;
 				ev.stopPropagation();
 				levelRender.toggleLayer(lc);
 				updateLayerList();

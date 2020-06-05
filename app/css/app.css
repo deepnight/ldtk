@@ -405,9 +405,9 @@ input[type=number]:focus {
 
 .window {
   position: absolute;
+  left: 200px;
   top: 0px;
-  left: 0px;
-  width: 100%;
+  width: calc( 100% - 200px);
   height: 100%;
   z-index: 98;
 }
@@ -437,6 +437,13 @@ input[type=number]:focus {
   border: 1px solid #545d73;
   border-left: none;
   box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.panelMask {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.75);
+  opacity: 0.5;
+  z-index: 99;
 }
 
 .cols {
@@ -540,19 +547,20 @@ input[type=number]:focus {
   margin-top: 8px;
 }
 
-.editor {
+#editor {
   display: grid;
   grid-template-columns: 200px auto;
   width: 100%;
   height: 100%;
 }
 
-.editor canvas#webgl {
+#editor canvas#webgl {
   width: 100% !important;
   height: 100% !important;
 }
 
-.editor #mainPanel {
+#editor #mainPanel {
+  position: relative;
   padding: 5px;
   background: #1e2229;
   border-color: #545d73;
@@ -562,15 +570,16 @@ input[type=number]:focus {
   box-sizing: border-box;
 }
 
-.editor #mainBar {
+#editor #mainBar {
   margin-bottom: 8px;
+  z-index: 100;
 }
 
-.editor #layers ul.niceList li {
+#editor #layers ul.niceList li {
   grid-template-columns: min-content auto min-content;
 }
 
-.editor #layers ul.niceList li .name {
+#editor #layers ul.niceList li .name {
   font-size: 10pt;
   flex: 1 1 auto;
   order: 1;
@@ -578,7 +587,7 @@ input[type=number]:focus {
   cursor: pointer;
 }
 
-.editor #layers ul.niceList li .vis {
+#editor #layers ul.niceList li .vis {
   flex: 0 0 auto;
   padding: 10px;
   margin: -10px;
@@ -589,54 +598,54 @@ input[type=number]:focus {
   cursor: zoom-out;
 }
 
-.editor #layers ul.niceList li .vis:hover {
+#editor #layers ul.niceList li .vis:hover {
   outline: 1px solid white;
   outline-offset: -4px;
 }
 
-.editor #palette {
+#editor #palette {
   background-color: #1e2229;
 }
 
-.editor #palette ul {
+#editor #palette ul {
   margin: 0;
   padding: 0;
   list-style: none;
   padding: 4px;
 }
 
-.editor #palette ul li {
+#editor #palette ul li {
   margin: 0;
   padding: 0;
 }
 
-.editor #palette ul > li {
+#editor #palette ul > li {
   display: flex;
   min-height: 16px;
   cursor: pointer;
 }
 
-.editor #palette ul > li:hover {
+#editor #palette ul > li:hover {
   outline: 1px solid white;
   outline-offset: -1px;
 }
 
-.editor #palette ul li.entity {
+#editor #palette ul li.entity {
   overflow: hidden;
 }
 
-.editor #palette ul li.entity .entityPreview {
+#editor #palette ul li.entity .entityPreview {
   margin-right: 8px;
 }
 
-.editor #palette ul li.color {
+#editor #palette ul li.color {
   padding-left: 10px;
   overflow: hidden;
   line-height: 32px;
   box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
 }
 
-.editor #palette ul li.color.active {
+#editor #palette ul li.color.active {
   outline: 2px solid white !important;
 }
 

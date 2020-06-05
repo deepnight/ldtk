@@ -28,7 +28,7 @@ class Cursor extends dn.Process {
 		graphics.lineStyle(0);
 		graphics.endFill();
 
-		root.visible = type!=None && !Window.hasAnyOpen();
+		root.visible = type!=None && !Modal.hasAnyOpen();
 
 		var pad = 2;
 

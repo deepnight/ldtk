@@ -1,6 +1,6 @@
-package ui.win;
+package ui.modal;
 
-class EditLayers extends ui.Window {
+class EditLayers extends ui.Modal {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
 	public var cur : Null<LayerDef>;
