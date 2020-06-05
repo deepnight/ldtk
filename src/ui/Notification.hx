@@ -34,7 +34,8 @@ class Notification extends dn.Process {
 
 	public static inline function debug(str:Dynamic) {
 		#if debug
-		new Notification(Std.string(str), 0xff00ff);
+		var str = StringTools.replace( Std.string(str), ",", ", " );
+		new Notification(str, 0xff00ff);
 		#end
 	}
 
