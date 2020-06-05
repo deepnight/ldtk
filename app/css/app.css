@@ -213,6 +213,10 @@ ul.niceList li:not(.active):hover {
   background-image: url("/img/icons/intGrid.png");
 }
 
+.icon.project {
+  background-image: url("/img/icons/projectSettings.png");
+}
+
 .black {
   filter: brightness(0);
 }
