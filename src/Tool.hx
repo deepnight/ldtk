@@ -47,7 +47,6 @@ class Tool<T> extends dn.Process {
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		if( client.isAltDown() ) {
 			var ge = getGenericLevelElementAt(m);
-			N.debug(ge);
 			client.pickGenericLevelElement(ge);
 			return;
 		}
