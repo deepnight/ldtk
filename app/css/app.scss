@@ -270,7 +270,7 @@ ul.form {
 			flex: 0 1 60px;
 		}
 
-		label {
+		>label {
 			flex: 0 0 150px;
 			padding-right: 16px;
 			font-weight: bold;
@@ -697,6 +697,38 @@ input[type=number]:focus {
 		}
 	}
 
+	.pivots {
+		display: grid;
+		align-items: stretch;
+		justify-items: stretch;
+		grid-template-columns: repeat(3, 32px);
+		grid-template-rows: repeat(3, 32px);
+
+		.bg {
+			position: absolute;
+			margin-top: 16px;
+			margin-left: 16px;
+			width: 64px;
+			height: 64px;
+			border: 1px dashed white;
+			z-index: -1;
+		}
+
+		label {
+			display: grid;
+			align-items: center;
+			justify-items: center;
+		}
+		label:hover {
+			outline: 1px dashed white;
+			outline-offset: -1px;
+		}
+		label input[type=radio] {
+			width: 60%;
+			height: 60%;
+		}
+	}
+
 	input[type=color] {
 		min-height: 32px;
 	}
@@ -707,7 +739,7 @@ input[type=number]:focus {
 		.cols {
 			grid-template-columns: 0.8fr 1fr;
 		}
-		ul.form label {
+		ul.form li>label {
 			flex: 0 0 100px;
 		}
 
