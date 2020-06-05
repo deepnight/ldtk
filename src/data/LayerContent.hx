@@ -20,6 +20,11 @@ class LayerContent implements IData {
 	}
 
 
+	@:keep public function toString() {
+		return 'LayerContent<${def.name}:${def.type}>';
+	}
+
+
 	public function clone() {
 		var e = new LayerContent(level, def);
 		// TODO
@@ -46,6 +51,11 @@ class LayerContent implements IData {
 	public function getIntGrid(cx:Int, cy:Int) : Int {
 		requireType(IntGrid);
 		return !isValid(cx,cy) || !intGrid.exists( coordId(cx,cy) ) ? -1 : intGrid.get( coordId(cx,cy) );
+	}
+
+	public function getIntGridColor(cx:Int, cy:Int) : Null<UInt> {
+		var v = def.getIntGridValue( getIntGrid(cx,cy) );
+		return v==null ? null : v.color;
 	}
 
 	public function setIntGrid(cx:Int, cy:Int, v:Int) {

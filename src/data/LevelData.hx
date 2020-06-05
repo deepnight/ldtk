@@ -20,7 +20,7 @@ class LevelData implements data.IData {
 			layerContents.push( new LayerContent(this, def) );
 	}
 
-	public function toString() {
+	@:keep public function toString() {
 		return Type.getClassName(Type.getClass(this));
 	}
 

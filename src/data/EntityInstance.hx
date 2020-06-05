@@ -14,6 +14,10 @@ class EntityInstance {
 		defId = def.uid;
 	}
 
+	@:keep public function toString() {
+		return 'Instance<${def.name}>@$x,$y';
+	}
+
 	public function getCx(ld:LayerDef) {
 		return Std.int( ( x + (def.pivotX==1 ? -1 : 0) ) / ld.gridSize );
 	}
@@ -46,6 +50,17 @@ class EntityInstance {
 		bmp.tile.setCenterRatio(def.pivotX, def.pivotY);
 
 		return bmp;
+	}
+
+	public function isOver(levelX:Int, levelY:Int) {
+		var left = x - def.width*def.pivotX;
+		var top = y - def.height*def.pivotY;
+
+		return
+			levelX >= left
+			&& levelX < left + def.width
+			&& levelY >= top
+			&& levelY < top + def.height;
 	}
 
 	public static function invalidateRenderCache() {

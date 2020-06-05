@@ -18,7 +18,7 @@ class ProjectData implements data.IData {
 
 	public function makeUniqId() return nextUniqId++;
 
-	public function toString() {
+	@:keep public function toString() {
 		return '$name(levels=${levels.length}, layerDefs=${layerDefs.length}, entDefs=${entityDefs.length})';
 	}
 

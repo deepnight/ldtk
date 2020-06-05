@@ -22,7 +22,7 @@ class FieldDef { // TODO implements serialization
 		defaultOverride = null;
 	}
 
-	public function toString() {
+	@:keep public function toString() {
 		return '$name('
 			+ ( canBeNull ? 'Null<$type>' : '$type' )
 			+ '=${getDefault()})'
