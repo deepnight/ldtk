@@ -58,16 +58,21 @@ class Client extends dn.Process {
 		Boot.ME.s2d.addEventListener( onEvent );
 
 		project = new data.ProjectData();
+
+		// Placeholder data
 		var ed = project.createEntityDef("Hero");
 		ed.color = 0x00ff00;
 		ed.width = 24;
 		ed.height = 32;
 		ed.setPivot(0.5,1);
+		var ld = project.layerDefs[0];
+		ld.name = "Collisions";
+		ld.addIntGridValue(0x00ff00);
+		ld.addIntGridValue(0x0000ff);
 		var ld = project.createLayerDef(Entities,"Entities");
 		var ld = project.createLayerDef(IntGrid,"Decorations");
 		ld.gridSize = 8;
 		ld.getIntGridValue(0).color = 0x00ff00;
-		project.layerDefs[0].name = "Collisions";
 
 
 		project.createLevel();
@@ -109,6 +114,33 @@ class Client extends dn.Process {
 			case IntGrid: new tool.IntGridTool();
 			case Entities: new tool.EntityTool();
 		}
+	}
+
+	public function pickGenericLevelElement(ge:Null<GenericLevelElement>) {
+		switch ge {
+			case null:
+
+			case IntGrid(lc, cx, cy):
+				selectLayer(lc);
+				var v = lc.getIntGrid(cx,cy);
+				curTool.selectValue(v);
+				return true;
+
+			case Entity(instance):
+				for(lc in curLevel.layerContents) {
+					if( lc.def.type!=Entities )
+						continue;
+
+					for(e in lc.entities)
+						if( e==instance ) {
+							selectLayer(lc);
+							curTool.selectValue(instance.defId);
+							return true;
+						}
+				}
+		}
+
+		return false;
 	}
 
 	function onEvent(e:hxd.Event) {

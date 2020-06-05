@@ -21,7 +21,7 @@ class Tool<T> extends dn.Process {
 		updatePalette();
 	}
 
-	function selectValue(v:T) {
+	public function selectValue(v:T) {
 		SELECTED_VALUES.set(curLayer.layerDefId, v);
 		updatePalette();
 	}
@@ -48,8 +48,10 @@ class Tool<T> extends dn.Process {
 		if( client.isAltDown() ) {
 			var ge = getGenericLevelElementAt(m);
 			N.debug(ge);
+			client.pickGenericLevelElement(ge);
 			return;
 		}
+
 		running = true;
 		button = buttonId;
 		rectangle = client.isShiftDown();
