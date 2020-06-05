@@ -52,8 +52,8 @@ class Cursor extends dn.Process {
 				graphics.drawRect(0, 0, curLayer.def.gridSize*wid, curLayer.def.gridSize*hei);
 
 			case Entity(def, x, y):
-				var g = EntityInstance.createRender(def, wrapper);
-				g.alpha = 0.4;
+				var o = EntityInstance.createRender(def, wrapper);
+				o.alpha = 0.4;
 		}
 
 		graphics.endFill();

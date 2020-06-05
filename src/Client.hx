@@ -175,6 +175,9 @@ class Client extends dn.Process {
 
 			case LayerContentChanged:
 		}
+
+		if( e==EntityDefChanged )
+			EntityInstance.invalidateRenderCache();
 	}
 
 	public function updateLayerList() {
