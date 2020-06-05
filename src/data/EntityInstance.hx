@@ -23,11 +23,11 @@ class EntityInstance {
 			var tex = new h3d.mat.Texture(def.width, def.height, [Target]);
 			g.drawTo(tex);
 			_renderCache.set(def.uid, tex);
-			N.debug(tex.width+"x"+tex.height);
 		}
 
 		var bmp = new h2d.Bitmap(parent);
 		bmp.tile = h2d.Tile.fromTexture( _renderCache.get(def.uid) );
+		bmp.tile.setCenterRatio(def.pivotX, def.pivotY);
 		return bmp;
 	}
 

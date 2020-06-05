@@ -8,6 +8,8 @@ class EntityDef implements IData {
 	public var color : UInt;
 	public var maxPerLevel : Int;
 	public var fieldDefs : Array<data.def.FieldDef> = [];
+	public var pivotX : Float;
+	public var pivotY : Float;
 
 	public function new(uid:Int) {
 		this.uid = uid;
@@ -15,6 +17,12 @@ class EntityDef implements IData {
 		width = height = 16;
 		maxPerLevel = 0;
 		name = "New entity "+uid;
+		setPivot(0.5,1);
+	}
+
+	public inline function setPivot(x,y) {
+		pivotX = x;
+		pivotY = y;
 	}
 
 	public function clone() {
