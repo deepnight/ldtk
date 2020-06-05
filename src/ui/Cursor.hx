@@ -50,6 +50,10 @@ class Cursor extends dn.Process {
 
 				graphics.lineStyle(1, col==null ? 0x0 : col);
 				graphics.drawRect(0, 0, curLayer.def.gridSize*wid, curLayer.def.gridSize*hei);
+
+			case Entity(def, x, y):
+				var g = EntityInstance.createRender(def, wrapper);
+				g.alpha = 0.4;
 		}
 
 		graphics.endFill();
@@ -72,6 +76,9 @@ class Cursor extends dn.Process {
 
 			case GridCell(cx, cy), GridRect(cx,cy, _):
 				wrapper.setPosition( cx*curLayer.def.gridSize, cy*curLayer.def.gridSize );
+
+			case Entity(def, x,y):
+				wrapper.setPosition(x,y);
 		}
 
 		graphics.setPosition(wrapper.x, wrapper.y);

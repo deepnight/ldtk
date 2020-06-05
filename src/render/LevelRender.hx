@@ -101,7 +101,7 @@ class LevelRender extends dn.Process {
 
 				case Entities:
 					for(ei in lc.entities) {
-						var g = ei.createRender(wrapper);
+						var g = EntityInstance.createRender(ei.def, wrapper);
 						g.setPosition(ei.x, ei.y);
 					}
 			}

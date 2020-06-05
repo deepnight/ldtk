@@ -12,7 +12,7 @@ class EntityInstance {
 		defId = def.uid;
 	}
 
-	public function createRender(?parent:h2d.Object) {
+	public static function createRender(def:EntityDef, ?parent:h2d.Object) {
 		var g = new h2d.Graphics(parent);
 		g.beginFill(def.color);
 		g.drawRect(0, 0, def.width, def.height);

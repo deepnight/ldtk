@@ -25,16 +25,29 @@ class EntityTool extends Tool<Int> {
 
 	override function onMouseMove(m:MouseCoords) {
 		super.onMouseMove(m);
+
+		if( curEntityDef==null )
+			client.cursor.set(None);
+		else
+			client.cursor.set( Entity(curEntityDef, m.levelX, m.levelY) );
+	}
+
+
+	override function startUsing(m:MouseCoords, buttonId:Int) {
+		super.startUsing(m, buttonId);
+
+		if( isAdding() ) {
+			var ei = curLayer.createEntityInstance(curEntityDef);
+			ei.x = m.levelX;
+			ei.y = m.levelY;
+			// ei.x = m.cx * curLayer.def.gridSize;
+			// ei.y = m.cy * curLayer.def.gridSize;
+			client.ge.emit(LayerContentChanged);
+		}
 	}
 
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
-		var ei = curLayer.createEntityInstance(curEntityDef);
-		ei.x = m.levelX;
-		ei.y = m.levelY;
-		// ei.x = m.cx * curLayer.def.gridSize;
-		// ei.y = m.cy * curLayer.def.gridSize;
-		client.ge.emit(LayerContentChanged);
 	}
 
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
