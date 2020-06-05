@@ -14,11 +14,27 @@ class EntityInstance {
 		defId = def.uid;
 	}
 
+	public function getCx(ld:LayerDef) {
+		return Std.int( ( x + (def.pivotX==1 ? -1 : 0) ) / ld.gridSize );
+	}
+
+	public function getCy(ld:LayerDef) {
+		return Std.int( ( y + (def.pivotY==1 ? -1 : 0) ) / ld.gridSize );
+	}
+
 	public static function createRender(def:EntityDef, ?parent:h2d.Object) {
 		if( !_renderCache.exists(def.uid) ) {
 			var g = new h2d.Graphics();
 			g.beginFill(def.color);
 			g.drawRect(0, 0, def.width, def.height);
+
+			g.lineStyle(1, 0x0, 0.5);
+			var pivotSize = 3;
+			g.drawRect(
+				Std.int((def.width-pivotSize)*def.pivotX),
+				Std.int((def.height-pivotSize)*def.pivotY),
+				pivotSize, pivotSize
+			);
 
 			var tex = new h3d.mat.Texture(def.width, def.height, [Target]);
 			g.drawTo(tex);
@@ -28,6 +44,9 @@ class EntityInstance {
 		var bmp = new h2d.Bitmap(parent);
 		bmp.tile = h2d.Tile.fromTexture( _renderCache.get(def.uid) );
 		bmp.tile.setCenterRatio(def.pivotX, def.pivotY);
+
+		// if( def.pivotY==1 )
+		// 	bmp.tile.dy++;
 		return bmp;
 	}
 

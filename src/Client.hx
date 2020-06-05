@@ -60,6 +60,9 @@ class Client extends dn.Process {
 		project = new data.ProjectData();
 		var ed = project.createEntityDef("Hero");
 		ed.color = 0x00ff00;
+		ed.width = 24;
+		ed.height = 32;
+		ed.setPivot(0.5,1);
 		var ld = project.createLayerDef(Entities,"Entities");
 		var ld = project.createLayerDef(IntGrid,"Decorations");
 		ld.gridSize = 8;

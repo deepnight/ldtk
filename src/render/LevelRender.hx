@@ -103,6 +103,8 @@ class LevelRender extends dn.Process {
 					for(ei in lc.entities) {
 						var o = EntityInstance.createRender(ei.def, wrapper);
 						o.setPosition(ei.x, ei.y);
+						var tf = new h2d.Text(Assets.fontSmall, o);
+						tf.text = ""+ei.getCy(lc.def);
 					}
 			}
 		}

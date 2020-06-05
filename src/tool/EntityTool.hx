@@ -10,6 +10,8 @@ class EntityTool extends Tool<Int> {
 			selectValue( project.entityDefs[0].uid );
 	}
 
+	function snapToGrid() return !client.isCtrlDown();
+
 	inline function get_curEntityDef() return project.getEntityDef(getSelectedValue());
 
 	override function selectValue(v:Int) {
@@ -27,11 +29,27 @@ class EntityTool extends Tool<Int> {
 			return -1;
 	}
 
+	function getPlacementX(m:MouseCoords) {
+		return snapToGrid()
+			? M.round( ( m.cx + curEntityDef.pivotX ) * curLayer.def.gridSize )
+			// ? M.round( ( m.cx + curEntityDef.pivotX ) * curLayer.def.gridSize ) + ( curEntityDef.pivotX==1 ? -1 : 0 )
+			: m.levelX;
+	}
+
+	function getPlacementY(m:MouseCoords) {
+		return snapToGrid()
+			? M.round( ( m.cy + curEntityDef.pivotY ) * curLayer.def.gridSize )
+			// ? M.round( ( m.cy + curEntityDef.pivotY ) * curLayer.def.gridSize ) + ( curEntityDef.pivotY==1 ? -1 : 0 )
+			: m.levelY;
+	}
+
 	override function onMouseMove(m:MouseCoords) {
 		super.onMouseMove(m);
 
 		if( curEntityDef==null )
 			client.cursor.set(None);
+		else if( snapToGrid() )
+			client.cursor.set( Entity(curEntityDef, getPlacementX(m), getPlacementY(m)) );
 		else
 			client.cursor.set( Entity(curEntityDef, m.levelX, m.levelY) );
 	}
@@ -42,10 +60,9 @@ class EntityTool extends Tool<Int> {
 
 		if( isAdding() ) {
 			var ei = curLayer.createEntityInstance(curEntityDef);
-			ei.x = m.levelX;
-			ei.y = m.levelY;
-			// ei.x = m.cx * curLayer.def.gridSize;
-			// ei.y = m.cy * curLayer.def.gridSize;
+			ei.x = getPlacementX(m);
+			ei.y = getPlacementY(m);
+			N.debug( ei.getCy(curLayer.def) );
 			client.ge.emit(LayerContentChanged);
 		}
 	}
