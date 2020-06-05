@@ -158,19 +158,14 @@ class EditEntities extends ui.Window {
 		i.onChange = client.ge.emit.bind(EntityDefChanged);
 
 		// Pivot
-		var jPivots = jEntityForm.find(".pivots");
-		jPivots.find(".bg").css( "background-color", C.intToHex(curEntity.color) );
-		jPivots.find("input[type=radio][value='"+curEntity.pivotX+" "+curEntity.pivotY+"']").prop("checked",true);
-
-		jPivots.find("input[type=radio]").each( function(idx:Int, elem) {
-			var r = new J(elem);
-			r.change( function(ev) {
-				var rawPivots = r.val().split(" ");
-				curEntity.pivotX = Std.parseFloat( rawPivots[0] );
-				curEntity.pivotY = Std.parseFloat( rawPivots[1] );
-				client.ge.emit(EntityDefChanged);
-			});
+		var jPivots = jEntityForm.find(".pivot");
+		jPivots.empty();
+		var p = JsTools.createPivotEditor(curEntity.pivotX, curEntity.pivotY, curEntity.color, function(x,y) {
+			curEntity.pivotX = x;
+			curEntity.pivotY = y;
+			client.ge.emit(EntityDefChanged);
 		});
+		jPivots.append(p);
 	}
 
 

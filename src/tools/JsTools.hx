@@ -49,4 +49,29 @@ class JsTools {
 
 		return wrapper;
 	}
+
+
+	public static function createPivotEditor( curPivotX:Float, curPivotY:Float, ?inputName:String, ?bgColor:UInt, onPivotChange:(pivotX:Float, pivotY:Float)->Void ) {
+		var pivots = new J("xml#pivotEditor").children().first().clone();
+
+		pivots.find("input[type=radio]").attr("name", inputName==null ? "pivot" : inputName);
+
+		if( bgColor!=null )
+			pivots.find(".bg").css( "background-color", C.intToHex(bgColor) );
+		else
+			pivots.find(".bg").hide();
+
+		pivots.find("input[type=radio][value='"+curPivotX+" "+curPivotY+"']").prop("checked",true);
+
+		pivots.find("input[type=radio]").each( function(idx:Int, elem) {
+			var r = new J(elem);
+			r.change( function(ev) {
+				var rawPivots = r.val().split(" ");
+				onPivotChange( Std.parseFloat( rawPivots[0] ), Std.parseFloat( rawPivots[1] ) );
+			});
+		});
+
+		return pivots;
+
+	}
 }

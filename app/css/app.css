@@ -707,7 +707,8 @@ input[type=number]:focus {
   text-transform: uppercase;
 }
 
-.window.entityDefs .pivots {
+.window.entityDefs .pivotEditor {
+  position: relative;
   display: grid;
   align-items: stretch;
   justify-items: stretch;
@@ -715,30 +716,35 @@ input[type=number]:focus {
   grid-template-rows: repeat(3, 32px);
 }
 
-.window.entityDefs .pivots .bg {
+.window.entityDefs .pivotEditor .bg {
   position: absolute;
-  margin-top: 16px;
-  margin-left: 16px;
-  width: 64px;
-  height: 64px;
+  margin-top: calc( 33.33% / 2);
+  margin-left: calc( 33.33% / 2);
+  width: 66.66%;
+  height: 66.66%;
   border: 1px dashed white;
   z-index: -1;
 }
 
-.window.entityDefs .pivots label {
+.window.entityDefs .pivotEditor label {
   display: grid;
   align-items: center;
   justify-items: center;
 }
 
-.window.entityDefs .pivots label:hover {
+.window.entityDefs .pivotEditor label:hover {
   outline: 1px dashed white;
   outline-offset: -1px;
 }
 
-.window.entityDefs .pivots label input[type=radio] {
-  width: 60%;
-  height: 60%;
+.window.entityDefs .pivotEditor label input[type=radio] {
+  width: 50%;
+  height: 50%;
+  opacity: 0.7;
+}
+
+.window.entityDefs .pivotEditor label input[type=radio]:checked {
+  opacity: 1;
 }
 
 .window.entityDefs input[type=color] {
