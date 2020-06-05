@@ -201,10 +201,11 @@ class Client extends dn.Process {
 		var e = new J("#debug");
 		if( clear )
 			e.empty();
+		e.show();
 
 		var line = new J("<p/>");
 		line.append( Std.string(msg) );
-		line.appendTo(e);
+		line.prependTo(e);
 	}
 
 	public function selectLayer(l:LayerContent) {
@@ -301,6 +302,5 @@ class Client extends dn.Process {
 
 	override function update() {
 		super.update();
-		new J(".debug1").text( isShiftDown() );
 	}
 }

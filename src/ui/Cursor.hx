@@ -50,7 +50,6 @@ class Cursor extends dn.Process {
 				graphics.drawRect(0, 0, curLayer.def.gridSize, curLayer.def.gridSize);
 
 			case GridRect(cx, cy, wid, hei, col):
-				client.debug(wid+"x"+hei);
 				graphics.lineStyle(1, getOpposite(col), 0.8);
 				graphics.drawRect(-2, -2, curLayer.def.gridSize*wid+4, curLayer.def.gridSize*hei+4);
 
