@@ -14,8 +14,8 @@ class Cursor extends dn.Process {
 	public function new() {
 		super(Client.ME);
 		createRootInLayers(Client.ME.root, Const.DP_UI);
-		wrapper = new h2d.Object(root);
 		graphics = new h2d.Graphics(root);
+		wrapper = new h2d.Object(root);
 	}
 
 	override function onResize() {
@@ -30,13 +30,15 @@ class Cursor extends dn.Process {
 
 		root.visible = type!=None && !Window.hasAnyOpen();
 
+		var pad = 2;
+
 		switch type {
 			case None:
 
 			case GridCell(cx, cy, col):
 				var col = col==null ? 0x0 : col;
 				graphics.beginFill(C.toBlack(col,0.6), 0.35);
-				graphics.drawRect(-2, -2, curLayer.def.gridSize+4, curLayer.def.gridSize+4);
+				graphics.drawRect(-pad, -pad, curLayer.def.gridSize+pad*2, curLayer.def.gridSize+pad*2);
 				graphics.endFill();
 
 				graphics.lineStyle(1, col==null ? 0x0 : col);
@@ -52,6 +54,14 @@ class Cursor extends dn.Process {
 				graphics.drawRect(0, 0, curLayer.def.gridSize*wid, curLayer.def.gridSize*hei);
 
 			case Entity(def, x, y):
+				graphics.lineStyle(1, C.toBlack(def.color,0.2), 0.6);
+				graphics.drawRect(
+					-pad -def.width*def.pivotX,
+					-pad -def.height*def.pivotY,
+					def.width + pad*2,
+					def.height + pad*2
+				);
+
 				var o = EntityInstance.createRender(def, wrapper);
 				o.alpha = 0.4;
 		}

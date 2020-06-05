@@ -43,8 +43,8 @@ class EntityTool extends Tool<Int> {
 			: m.levelY;
 	}
 
-	override function onMouseMove(m:MouseCoords) {
-		super.onMouseMove(m);
+	override function updateCursor(m:MouseCoords) {
+		super.updateCursor(m);
 
 		if( curEntityDef==null )
 			client.cursor.set(None);
@@ -62,7 +62,6 @@ class EntityTool extends Tool<Int> {
 			var ei = curLayer.createEntityInstance(curEntityDef);
 			ei.x = getPlacementX(m);
 			ei.y = getPlacementY(m);
-			N.debug( ei.getCy(curLayer.def) );
 			client.ge.emit(LayerContentChanged);
 		}
 	}

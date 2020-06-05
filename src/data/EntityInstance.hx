@@ -9,6 +9,12 @@ class EntityInstance {
 	public var x : Int;
 	public var y : Int;
 
+	public var left(get,never) : Int; inline function get_left() return Std.int( x - def.width*def.pivotX );
+	public var right(get,never) : Int; inline function get_right() return left + def.width-1;
+
+	public var top(get,never) : Int; inline function get_top() return Std.int( y - def.height*def.pivotY );
+	public var bottom(get,never) : Int; inline function get_bottom() return top + def.height-1;
+
 
 	public function new(def:EntityDef) {
 		defId = def.uid;
@@ -30,6 +36,7 @@ class EntityInstance {
 		if( !_renderCache.exists(def.uid) ) {
 			var g = new h2d.Graphics();
 			g.beginFill(def.color);
+			g.lineStyle(1, 0x0, 0.25);
 			g.drawRect(0, 0, def.width, def.height);
 
 			g.lineStyle(1, 0x0, 0.5);
@@ -53,14 +60,7 @@ class EntityInstance {
 	}
 
 	public function isOver(levelX:Int, levelY:Int) {
-		var left = x - def.width*def.pivotX;
-		var top = y - def.height*def.pivotY;
-
-		return
-			levelX >= left
-			&& levelX < left + def.width
-			&& levelY >= top
-			&& levelY < top + def.height;
+		return levelX >= left && levelX <= right && levelY >= top && levelY <= bottom;
 	}
 
 	public static function invalidateRenderCache() {

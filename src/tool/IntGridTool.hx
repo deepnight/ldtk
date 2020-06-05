@@ -18,8 +18,9 @@ class IntGridTool extends Tool<Int> {
 		return curLayer.def.getIntGridValue( getSelectedValue() ).color;
 	}
 
-	override function onMouseMove(m:MouseCoords) {
-		super.onMouseMove(m);
+
+	override function updateCursor(m:MouseCoords) {
+		super.updateCursor(m);
 
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromMouseCoords(origin, m);
@@ -29,6 +30,10 @@ class IntGridTool extends Tool<Int> {
 			client.cursor.set( GridCell(m.cx, m.cy, getIntGridColor() ) );
 		else
 			client.cursor.set(None);
+	}
+
+	override function onMouseMove(m:MouseCoords) {
+		super.onMouseMove(m);
 	}
 
 	override function useAt(m:MouseCoords) {

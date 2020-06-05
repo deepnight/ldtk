@@ -34,3 +34,8 @@ enum CursorType {
 	GridRect(cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
 	Entity(def:EntityDef, x:Int, y:Int);
 }
+
+enum GenericLevelElement {
+	IntGrid(lc:LayerContent, cx:Int, cy:Int);
+	Entity(instance:EntityInstance);
+}
