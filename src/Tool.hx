@@ -45,7 +45,7 @@ class Tool<T> extends dn.Process {
 	inline function isRemoving() return isRunning() && button==1;
 
 	public function startUsing(m:MouseCoords, buttonId:Int) {
-		if( client.isAltDown() ) {
+		if( client.isAltDown() && buttonId==0 ) {
 			var ge = getGenericLevelElementAt(m);
 			client.pickGenericLevelElement(ge);
 			return;

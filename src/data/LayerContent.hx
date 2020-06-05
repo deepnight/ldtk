@@ -48,6 +48,8 @@ class LayerContent implements IData {
 		return cx + cy*cWid;
 	}
 
+	/** INT GRID *******************/
+
 	public function getIntGrid(cx:Int, cy:Int) : Int {
 		requireType(IntGrid);
 		return !isValid(cx,cy) || !intGrid.exists( coordId(cx,cy) ) ? -1 : intGrid.get( coordId(cx,cy) );
@@ -70,9 +72,16 @@ class LayerContent implements IData {
 	}
 
 
+	/** ENTITY INSTANCE *******************/
+
 	public function createEntityInstance(ed:EntityDef) : EntityInstance {
 		var ei = new EntityInstance(ed);
 		entities.push(ei);
 		return ei;
+	}
+
+	public function removeEntityInstance(e:EntityInstance) {
+		if( !entities.remove(e) )
+			throw "Unknown instance "+e;
 	}
 }

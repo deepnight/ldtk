@@ -35,6 +35,12 @@ class Cursor extends dn.Process {
 		switch type {
 			case None:
 
+			case Eraser(x, y):
+				graphics.lineStyle(1, 0xff0000, 1);
+				graphics.drawCircle(0,0, 6);
+				graphics.lineStyle(1, 0x880000, 1);
+				graphics.drawCircle(0,0, 8);
+
 			case GridCell(cx, cy, col):
 				var col = col==null ? 0x0 : col;
 				graphics.lineStyle(1, getOpposite(col), 0.8);
@@ -85,6 +91,9 @@ class Cursor extends dn.Process {
 
 		switch type {
 			case None:
+
+			case Eraser(x, y):
+				wrapper.setPosition(x,y);
 
 			case GridCell(cx, cy), GridRect(cx,cy, _):
 				wrapper.setPosition( cx*curLayer.def.gridSize, cy*curLayer.def.gridSize );
