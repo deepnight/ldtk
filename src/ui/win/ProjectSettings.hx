@@ -28,5 +28,17 @@ class ProjectSettings extends ui.Window {
 	function updateForm() {
 		var i = Input.linkToHtmlInput( project.name, jForm.find("[name=pName]") );
 		i.onChange = client.ge.emit.bind(ProjectChanged);
+
+		var pivot = jForm.find(".pivot");
+		pivot.empty();
+		pivot.append( JsTools.createPivotEditor(
+			project.defaultPivotX, project.defaultPivotY,
+			0x0,
+			function(x,y) {
+				project.defaultPivotX = x;
+				project.defaultPivotY = y;
+				client.ge.emit(ProjectChanged);
+			}
+		));
 	}
 }

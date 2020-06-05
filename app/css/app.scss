@@ -257,6 +257,46 @@ ul.niceList {
 }
 
 
+.pivotEditor {
+	position: relative;
+	display: grid;
+	align-items: stretch;
+	justify-items: stretch;
+	grid-template-columns: repeat(3, 32px);
+	grid-template-rows: repeat(3, 32px);
+
+	.bg {
+		position: absolute;
+		margin-top: calc( 33.33% / 2 );
+		margin-left: calc( 33.33% / 2 );
+		width: 66.66%;
+		height: 66.66%;
+		border: 1px dashed white;
+		z-index: -1;
+	}
+
+	label {
+		display: grid;
+		align-items: center;
+		justify-items: center;
+	}
+	label:hover {
+		outline: 1px dashed white;
+		outline-offset: -1px;
+	}
+	label input[type=radio] {
+		width: 45%;
+		height: 45%;
+		opacity: 0.7;
+	}
+	label input[type=radio]:checked {
+		width: 80%;
+		height: 80%;
+		opacity: 1;
+	}
+}
+
+
 ul.form {
 	@include resetList();
 	padding: 8px;
@@ -694,43 +734,6 @@ input[type=number]:focus {
 			right: 0px;
 			font-size: 7pt;
 			text-transform: uppercase;
-		}
-	}
-
-	.pivotEditor {
-		position: relative;
-		display: grid;
-		align-items: stretch;
-		justify-items: stretch;
-		grid-template-columns: repeat(3, 32px);
-		grid-template-rows: repeat(3, 32px);
-
-		.bg {
-			position: absolute;
-			margin-top: calc( 33.33% / 2 );
-			margin-left: calc( 33.33% / 2 );
-			width: 66.66%;
-			height: 66.66%;
-			border: 1px dashed white;
-			z-index: -1;
-		}
-
-		label {
-			display: grid;
-			align-items: center;
-			justify-items: center;
-		}
-		label:hover {
-			outline: 1px dashed white;
-			outline-offset: -1px;
-		}
-		label input[type=radio] {
-			width: 50%;
-			height: 50%;
-			opacity: 0.7;
-		}
-		label input[type=radio]:checked {
-			opacity: 1;
 		}
 	}
 

@@ -2,14 +2,18 @@ package data;
 
 class ProjectData implements data.IData {
 	var nextUniqId = 0;
-	public var name : String;
 	public var levels : Array<LevelData> = [];
 	public var layerDefs : Array<data.def.LayerDef> = [];
 	public var entityDefs : Array<data.def.EntityDef> = [];
 
+	public var name : String;
+	public var defaultPivotX : Float;
+	public var defaultPivotY : Float;
+
 	public function new() {
 		createLayerDef(IntGrid);
 		name = "New project";
+		defaultPivotX = defaultPivotY = 0;
 	}
 
 	public function makeUniqId() return nextUniqId++;
@@ -132,8 +136,12 @@ class ProjectData implements data.IData {
 	public function createEntityDef(?name:String) : EntityDef {
 		var ed = new EntityDef(makeUniqId());
 		entityDefs.push(ed);
+
+		ed.setPivot( defaultPivotX, defaultPivotY );
+
 		if( isEntityNameValid(name) )
 			ed.name = name;
+
 		return ed;
 	}
 
