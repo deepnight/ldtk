@@ -2,18 +2,20 @@ package data;
 
 class ProjectData implements data.IData {
 	var nextUniqId = 0;
+	public var name : String;
 	public var levels : Array<LevelData> = [];
 	public var layerDefs : Array<data.def.LayerDef> = [];
 	public var entityDefs : Array<data.def.EntityDef> = [];
 
 	public function new() {
 		createLayerDef(IntGrid);
+		name = "New project";
 	}
 
 	public function makeUniqId() return nextUniqId++;
 
 	public function toString() {
-		return Type.getClassName(Type.getClass(this));
+		return '$name(levels=${levels.length}, layerDefs=${layerDefs.length}, entDefs=${entityDefs.length})';
 	}
 
 	public function clone() {

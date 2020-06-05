@@ -17,7 +17,7 @@ class Input<T> {
 
 	public function new(jElement:js.jquery.JQuery, getter, setter) {
 		if( jElement.length==0 )
-			trace("Empty jQuery object");
+			throw "Empty jQuery object";
 
 		this.getter = getter;
 		this.setter = setter;

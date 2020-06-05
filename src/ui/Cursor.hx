@@ -28,7 +28,7 @@ class Cursor extends dn.Process {
 		graphics.lineStyle(0);
 		graphics.endFill();
 
-		root.visible = type!=None;
+		root.visible = type!=None && !Window.hasAnyOpen();
 
 		switch type {
 			case None:

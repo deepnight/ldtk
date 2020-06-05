@@ -80,6 +80,8 @@ class EditEntities extends ui.Window {
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
+			case ProjectChanged: close();
+
 			case LayerDefChanged:
 			case LayerDefSorted:
 			case LayerContentChanged:

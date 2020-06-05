@@ -1,6 +1,8 @@
 package ui;
 
 class Window extends dn.Process {
+	static var ALL : Array<Window> = [];
+
 	public var client(get,never) : Client; inline function get_client() return Client.ME;
 	public var project(get,never) : ProjectData; inline function get_project() return Client.ME.project;
 	public var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
@@ -11,6 +13,8 @@ class Window extends dn.Process {
 
 	public function new() {
 		super(Client.ME);
+
+		ALL.push(this);
 
 		jWin = new J("xml#window").children().first().clone();
 		new J("body").append(jWin);
@@ -27,10 +31,19 @@ class Window extends dn.Process {
 	override function onDispose() {
 		super.onDispose();
 
+		ALL.remove(this);
+
 		client.ge.remove(onGlobalEvent);
 		jWin = null;
 		jMask = null;
 		jContent = null;
+	}
+
+	public static function hasAnyOpen() {
+		for(e in ALL)
+			if( !e.destroyed)
+				return true;
+		return false;
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
