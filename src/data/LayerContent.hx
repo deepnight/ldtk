@@ -75,6 +75,12 @@ class LayerContent implements IData {
 	/** ENTITY INSTANCE *******************/
 
 	public function createEntityInstance(ed:EntityDef) : EntityInstance {
+		if( ed.maxPerLevel>0 ) {
+			var all = entities.filter( function(ei) return ei.defId==ed.uid );
+			while( all.length>=ed.maxPerLevel )
+				removeEntityInstance( all.shift() );
+		}
+
 		var ei = new EntityInstance(ed);
 		entities.push(ei);
 		return ei;
