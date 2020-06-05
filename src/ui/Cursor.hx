@@ -37,24 +37,22 @@ class Cursor extends dn.Process {
 
 			case GridCell(cx, cy, col):
 				var col = col==null ? 0x0 : col;
-				graphics.beginFill(C.toBlack(col,0.6), 0.35);
+				graphics.lineStyle(1, getOpposite(col), 0.8);
 				graphics.drawRect(-pad, -pad, curLayer.def.gridSize+pad*2, curLayer.def.gridSize+pad*2);
-				graphics.endFill();
 
 				graphics.lineStyle(1, col==null ? 0x0 : col);
 				graphics.drawRect(0, 0, curLayer.def.gridSize, curLayer.def.gridSize);
 
 			case GridRect(cx, cy, wid, hei, col):
 				client.debug(wid+"x"+hei);
-				graphics.beginFill(C.toBlack(col,0.6), 0.35);
+				graphics.lineStyle(1, getOpposite(col), 0.8);
 				graphics.drawRect(-2, -2, curLayer.def.gridSize*wid+4, curLayer.def.gridSize*hei+4);
-				graphics.endFill();
 
 				graphics.lineStyle(1, col==null ? 0x0 : col);
 				graphics.drawRect(0, 0, curLayer.def.gridSize*wid, curLayer.def.gridSize*hei);
 
 			case Entity(def, x, y):
-				graphics.lineStyle(1, C.toBlack(def.color,0.2), 0.6);
+				graphics.lineStyle(1, getOpposite(def.color), 0.8);
 				graphics.drawRect(
 					-pad -def.width*def.pivotX,
 					-pad -def.height*def.pivotY,
@@ -68,6 +66,10 @@ class Cursor extends dn.Process {
 
 		graphics.endFill();
 		updatePosition();
+	}
+
+	function getOpposite(c:UInt) { // black or white
+		return C.interpolateInt(c, C.getPerceivedLuminosityInt(c)>=0.7 ? 0x0 : 0xffffff, 0.5);
 	}
 
 	public function set(t:CursorType) {
