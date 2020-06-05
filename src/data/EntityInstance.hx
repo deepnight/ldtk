@@ -45,8 +45,6 @@ class EntityInstance {
 		bmp.tile = h2d.Tile.fromTexture( _renderCache.get(def.uid) );
 		bmp.tile.setCenterRatio(def.pivotX, def.pivotY);
 
-		// if( def.pivotY==1 )
-		// 	bmp.tile.dy++;
 		return bmp;
 	}
 
