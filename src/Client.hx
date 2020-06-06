@@ -146,7 +146,7 @@ class Client extends dn.Process {
 			case IntGrid(lc, cx, cy):
 				selectLayer(lc);
 				var v = lc.getIntGrid(cx,cy);
-				curTool.selectValue(v);
+				curTool.as(tool.IntGridTool).selectValue(v);
 				return true;
 
 			case Entity(instance):
@@ -157,7 +157,7 @@ class Client extends dn.Process {
 					for(e in lc.entities)
 						if( e==instance ) {
 							selectLayer(lc);
-							curTool.selectValue(instance.defId);
+							curTool.as(tool.EntityTool).selectValue(instance.defId);
 							return true;
 						}
 				}
@@ -209,6 +209,9 @@ class Client extends dn.Process {
 	}
 
 	public function selectLayer(l:LayerContent) {
+		if( curLayerId==l.def.uid )
+			return;
+
 		curLayerId = l.def.uid;
 		levelRender.onCurrentLayerChange(curLayerContent);
 		curTool.updatePalette();

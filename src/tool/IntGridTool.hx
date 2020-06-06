@@ -36,14 +36,21 @@ class IntGridTool extends Tool<Int> {
 		super.onMouseMove(m);
 	}
 
+	public function ok() {}
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
 
 		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
-			if( isAdding() )
-				curLayer.setIntGrid(cx, cy, getSelectedValue());
-			else if( isRemoving() )
-				curLayer.removeIntGrid(cx, cy);
+			switch curMode {
+				case null:
+				case Add:
+					curLayer.setIntGrid(cx, cy, getSelectedValue());
+
+				case Remove:
+					curLayer.removeIntGrid(cx, cy);
+
+				case Move:
+			}
 		});
 		client.ge.emit(LayerContentChanged);
 	}
@@ -52,11 +59,18 @@ class IntGridTool extends Tool<Int> {
 		super.useOnRectangle(left, right, top, bottom);
 
 		for(cx in left...right+1)
-		for(cy in top...bottom+1)
-			if( isAdding() )
-				curLayer.setIntGrid(cx,cy, getSelectedValue());
-			else
-				curLayer.removeIntGrid(cx,cy);
+		for(cy in top...bottom+1) {
+			switch curMode {
+				case null:
+				case Add:
+					curLayer.setIntGrid(cx,cy, getSelectedValue());
+
+				case Remove:
+					curLayer.removeIntGrid(cx,cy);
+
+				case Move:
+			}
+		}
 
 		client.ge.emit(LayerContentChanged);
 	}

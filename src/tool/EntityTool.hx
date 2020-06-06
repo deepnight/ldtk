@@ -46,7 +46,7 @@ class EntityTool extends Tool<Int> {
 
 		if( curEntityDef==null )
 			client.cursor.set(None);
-		else if( isRunning() && isRemoving() )
+		else if( isRunning() && curMode==Remove )
 			client.cursor.set( Eraser(m.levelX,m.levelY) );
 		else if( snapToGrid() )
 			client.cursor.set( Entity(curEntityDef, getPlacementX(m), getPlacementY(m)) );
@@ -58,14 +58,19 @@ class EntityTool extends Tool<Int> {
 	override function startUsing(m:MouseCoords, buttonId:Int) {
 		super.startUsing(m, buttonId);
 
-		if( isAdding() ) {
-			var ei = curLayer.createEntityInstance(curEntityDef);
-			ei.x = getPlacementX(m);
-			ei.y = getPlacementY(m);
-			client.ge.emit(LayerContentChanged);
+		switch curMode {
+			case null:
+			case Add:
+				var ei = curLayer.createEntityInstance(curEntityDef);
+				ei.x = getPlacementX(m);
+				ei.y = getPlacementY(m);
+				client.ge.emit(LayerContentChanged);
+
+			case Remove:
+				removeAnyEntityAt(m);
+
+			case Move:
 		}
-		else if( isRemoving() )
-			removeAnyEntityAt(m);
 	}
 
 	function removeAnyEntityAt(m:MouseCoords) {
@@ -85,7 +90,7 @@ class EntityTool extends Tool<Int> {
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
 
-		if( isRemoving() )
+		if( curMode==Remove )
 			removeAnyEntityAt(m);
 	}
 

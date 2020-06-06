@@ -10,16 +10,26 @@ class Tool<T> extends dn.Process {
 
 	var jPalette(get,never) : J; inline function get_jPalette() return client.jPalette;
 
-	var running = false;
+	var curMode : Null<ToolEditMode> = null;
 	var origin : MouseCoords;
 	var lastMouse : Null<MouseCoords>;
-	var button = 0;
+	var button = -1;
 	var rectangle = false;
 
 	private function new() {
 		super(Client.ME);
 		updatePalette();
 	}
+
+	override function toString():String {
+		return Type.getClassName(Type.getClass(this))
+			+ "[" + ( curMode==null ? "--" : curMode.getName() ) + "]";
+	}
+
+	public function updatePalette() {
+		jPalette.empty();
+	}
+
 
 	public function selectValue(v:T) {
 		SELECTED_VALUES.set(curLayer.layerDefId, v);
@@ -34,30 +44,41 @@ class Tool<T> extends dn.Process {
 		return null;
 	}
 
-	public function updatePalette() {
-		jPalette.empty();
-	}
+	public function as<E:Tool<X>,X>(c:Class<E>) : E return cast this;
 
 	public function canBeUsed() return getSelectedValue()!=null;
-	public function isRunning() return running;
-
-	inline function isAdding() return isRunning() && button==0;
-	inline function isRemoving() return isRunning() && button==1;
+	public function isRunning() return curMode!=null;
 
 	public function startUsing(m:MouseCoords, buttonId:Int) {
+		curMode = null;
+
+		// Picking an existing element
 		if( client.isAltDown() && buttonId==0 ) {
 			var ge = getGenericLevelElementAt(m);
+
+			if( ge==null )
+				return;
+
 			client.pickGenericLevelElement(ge);
-			return;
+
+			// If layer changed, client curTool was re-created
+			if( client.curTool!=this) {
+				client.curTool.startUsing(m,buttonId);
+				return;
+			}
 		}
 
-		running = true;
+
+		// Start tool
+		curMode = buttonId==0 ? ( client.isAltDown() ? Move : Add ) : Remove;
 		button = buttonId;
 		rectangle = client.isShiftDown();
 		origin = m;
 		lastMouse = m;
 		if( !rectangle )
 			useAt(m);
+
+		N.debug(this);
 	}
 
 	function getGenericLevelElementAt(m:MouseCoords, ?limitToLayer:LayerContent) : Null<GenericLevelElement> {
@@ -95,7 +116,8 @@ class Tool<T> extends dn.Process {
 	function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {}
 
 	public function stopUsing(m:MouseCoords) {
-		if( isRunning() )
+		if( isRunning() ) {
+			N.debug("Stopped: "+this);
 			if( !rectangle )
 				useAt(m);
 			else {
@@ -106,8 +128,9 @@ class Tool<T> extends dn.Process {
 					M.imax(origin.cy, m.cy)
 				);
 			}
+		}
 
-		running = false;
+		curMode = null;
 	}
 
 	public function onMouseMove(m:MouseCoords) {
@@ -124,6 +147,8 @@ class Tool<T> extends dn.Process {
 				case Entity(instance): client.cursor.set( Entity(instance.def, instance.x, instance.y) );
 			}
 		}
+		else if( isRunning() && curMode==Move )
+			client.cursor.set(None);
 		else
 			updateCursor(m);
 

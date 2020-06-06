@@ -40,3 +40,9 @@ enum GenericLevelElement {
 	IntGrid(lc:LayerContent, cx:Int, cy:Int);
 	Entity(instance:EntityInstance);
 }
+
+enum ToolEditMode {
+	Add;
+	Remove;
+	Move;
+}
