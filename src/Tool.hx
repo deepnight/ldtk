@@ -95,7 +95,7 @@ class Tool<T> extends dn.Process {
 						ge = GenericLevelElement.IntGrid( layer, m.cx, m.cy );
 
 				case Entities:
-					for(ei in layer.entities)
+					for(ei in layer.entityInstances)
 						if( ei.isOver(m.levelX, m.levelY) )
 							ge = GenericLevelElement.Entity(ei);
 			}

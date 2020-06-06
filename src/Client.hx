@@ -154,7 +154,7 @@ class Client extends dn.Process {
 					if( lc.def.type!=Entities )
 						continue;
 
-					for(e in lc.entities)
+					for(e in lc.entityInstances)
 						if( e==instance ) {
 							selectLayer(lc);
 							curTool.as(tool.EntityTool).selectValue(instance.defId);

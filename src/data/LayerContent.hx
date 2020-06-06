@@ -4,15 +4,14 @@ class LayerContent implements IData {
 	var project(get,never) : ProjectData; inline function get_project() return Client.ME.project; // TODO
 	public var def(get,never) : data.def.LayerDef; inline function get_def() return project.getLayerDef(layerDefId);
 	public var level(get,never) : LevelData; inline function get_level() return project.getLevel(levelId);
+	public var cWid(get,never) : Int; inline function get_cWid() return M.ceil( level.pxWid / def.gridSize );
+	public var cHei(get,never) : Int; inline function get_cHei() return M.ceil( level.pxHei / def.gridSize );
 
 	public var levelId : Int;
 	public var layerDefId : Int;
 
-	public var cWid(get,never) : Int; inline function get_cWid() return M.ceil( level.pxWid / def.gridSize );
-	public var cHei(get,never) : Int; inline function get_cHei() return M.ceil( level.pxHei / def.gridSize );
-
 	var intGrid : Map<Int,Int> = new Map();
-	public var entities : Array<EntityInstance> = [];
+	public var entityInstances : Array<EntityInstance> = [];
 
 	public function new(l:LevelData, def:LayerDef) {
 		levelId = l.uid;
@@ -76,18 +75,18 @@ class LayerContent implements IData {
 
 	public function createEntityInstance(ed:EntityDef) : EntityInstance {
 		if( ed.maxPerLevel>0 ) {
-			var all = entities.filter( function(ei) return ei.defId==ed.uid );
+			var all = entityInstances.filter( function(ei) return ei.defId==ed.uid );
 			while( all.length>=ed.maxPerLevel )
 				removeEntityInstance( all.shift() );
 		}
 
 		var ei = new EntityInstance(ed);
-		entities.push(ei);
+		entityInstances.push(ei);
 		return ei;
 	}
 
 	public function removeEntityInstance(e:EntityInstance) {
-		if( !entities.remove(e) )
+		if( !entityInstances.remove(e) )
 			throw "Unknown instance "+e;
 	}
 }
