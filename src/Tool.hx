@@ -15,6 +15,7 @@ class Tool<T> extends dn.Process {
 	var lastMouse : Null<MouseCoords>;
 	var button = -1;
 	var rectangle = false;
+	var movedValue : Null<T>;
 
 	private function new() {
 		super(Client.ME);
@@ -51,6 +52,7 @@ class Tool<T> extends dn.Process {
 
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		curMode = null;
+		movedValue = null;
 
 		// Picking an existing element
 		if( client.isAltDown() && buttonId==0 ) {
@@ -66,6 +68,9 @@ class Tool<T> extends dn.Process {
 				client.curTool.startUsing(m,buttonId);
 				return;
 			}
+
+			// Start moving an existing value
+			// onStartMoving(ge);
 		}
 
 
