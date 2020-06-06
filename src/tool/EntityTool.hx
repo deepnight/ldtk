@@ -48,10 +48,8 @@ class EntityTool extends Tool<Int> {
 			client.cursor.set(None);
 		else if( isRunning() && curMode==Remove )
 			client.cursor.set( Eraser(m.levelX,m.levelY) );
-		else if( snapToGrid() )
-			client.cursor.set( Entity(curEntityDef, getPlacementX(m), getPlacementY(m)) );
 		else
-			client.cursor.set( Entity(curEntityDef, m.levelX, m.levelY) );
+			client.cursor.set( Entity(curEntityDef, getPlacementX(m), getPlacementY(m)) );
 	}
 
 
@@ -87,11 +85,32 @@ class EntityTool extends Tool<Int> {
 		return false;
 	}
 
+	function getPickedEntityInstance() : Null<EntityInstance> {
+		switch pickedElement {
+			case null, IntGrid(_):
+				return null;
+
+			case Entity(instance):
+				return instance;
+		}
+	}
+
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
 
-		if( curMode==Remove )
-			removeAnyEntityAt(m);
+		switch curMode {
+			case null:
+			case Add:
+
+			case Remove:
+				removeAnyEntityAt(m);
+
+			case Move:
+				var ei = getPickedEntityInstance();
+				ei.x = getPlacementX(m);
+				ei.y = getPlacementY(m);
+				client.ge.emit(LayerContentChanged);
+		}
 	}
 
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {

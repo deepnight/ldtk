@@ -15,7 +15,7 @@ class Tool<T> extends dn.Process {
 	var lastMouse : Null<MouseCoords>;
 	var button = -1;
 	var rectangle = false;
-	var movedValue : Null<T>;
+	var pickedElement : Null<GenericLevelElement>;
 
 	private function new() {
 		super(Client.ME);
@@ -52,7 +52,7 @@ class Tool<T> extends dn.Process {
 
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		curMode = null;
-		movedValue = null;
+		pickedElement = null;
 
 		// Picking an existing element
 		if( client.isAltDown() && buttonId==0 ) {
@@ -62,15 +62,13 @@ class Tool<T> extends dn.Process {
 				return;
 
 			client.pickGenericLevelElement(ge);
+			pickedElement = ge;
 
 			// If layer changed, client curTool was re-created
 			if( client.curTool!=this) {
 				client.curTool.startUsing(m,buttonId);
 				return;
 			}
-
-			// Start moving an existing value
-			// onStartMoving(ge);
 		}
 
 
@@ -82,8 +80,9 @@ class Tool<T> extends dn.Process {
 		lastMouse = m;
 		if( !rectangle )
 			useAt(m);
+	}
 
-		N.debug(this);
+	function startMoving(ge:GenericLevelElement) {
 	}
 
 	function getGenericLevelElementAt(m:MouseCoords, ?limitToLayer:LayerContent) : Null<GenericLevelElement> {
@@ -122,7 +121,6 @@ class Tool<T> extends dn.Process {
 
 	public function stopUsing(m:MouseCoords) {
 		if( isRunning() ) {
-			N.debug("Stopped: "+this);
 			if( !rectangle )
 				useAt(m);
 			else {
