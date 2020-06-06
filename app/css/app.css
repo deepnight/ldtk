@@ -384,9 +384,13 @@ input[type=number]:focus {
 
 #notificationList {
   position: absolute;
+  box-sizing: border-box;
   z-index: 99;
-  top: 30px;
+  top: 0px;
   right: 0px;
+  height: 100%;
+  padding-top: 30px;
+  overflow: hidden;
 }
 
 #notificationList .notification {
