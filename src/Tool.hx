@@ -62,6 +62,8 @@ class Tool<T> extends dn.Process {
 				return;
 
 			client.pickGenericLevelElement(ge);
+			if( client.isCtrlDown() )
+				ge = duplicateElement(ge);
 			pickedElement = ge;
 
 			// If layer changed, client curTool was re-created
@@ -82,7 +84,17 @@ class Tool<T> extends dn.Process {
 			useAt(m);
 	}
 
-	function startMoving(ge:GenericLevelElement) {
+	function duplicateElement(ge:GenericLevelElement) : GenericLevelElement {
+		switch ge {
+			case IntGrid(lc, cx, cy):
+				throw "Unsupported";
+
+			case Entity(instance):
+				var ei = curLayerContent.createEntityInstance(instance.def); // HACK TODO use clone
+				ei.x = instance.x;
+				ei.y = instance.y;
+				return GenericLevelElement.Entity(ei);
+		}
 	}
 
 	function getGenericLevelElementAt(m:MouseCoords, ?limitToLayer:LayerContent) : Null<GenericLevelElement> {
