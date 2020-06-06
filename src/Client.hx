@@ -95,7 +95,7 @@ class Client extends dn.Process {
 		var ld = project.createLayerDef(Entities,"Entities");
 		var ld = project.createLayerDef(IntGrid,"Decorations");
 		ld.gridSize = 8;
-		ld.getIntGridValue(0).color = 0x00ff00;
+		ld.getIntGridValueDef(0).color = 0x00ff00;
 
 
 		project.createLevel();

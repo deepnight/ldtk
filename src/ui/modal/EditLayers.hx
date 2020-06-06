@@ -126,7 +126,7 @@ class EditLayers extends ui.Modal {
 					var col = e.find("input[type=color]");
 					col.val( C.intToHex(intGridVal.color) );
 					col.change( function(ev) {
-						ld.getIntGridValue(curIdx).color = C.hexToInt( col.val() );
+						ld.getIntGridValueDef(curIdx).color = C.hexToInt( col.val() );
 						client.ge.emit(LayerDefChanged);
 						updateForm();
 					});

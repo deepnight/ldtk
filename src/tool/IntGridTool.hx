@@ -6,7 +6,7 @@ class IntGridTool extends Tool<Int> {
 	}
 
 	override function selectValue(v:Int) {
-		v = M.iclamp(v, 0, curLayer.def.countIntGridValues()-1);
+		v = M.iclamp(v, 0, curLayerContent.def.countIntGridValues()-1);
 		super.selectValue(v);
 	}
 
@@ -15,7 +15,7 @@ class IntGridTool extends Tool<Int> {
 	}
 
 	inline function getIntGridColor() {
-		return curLayer.def.getIntGridValue( getSelectedValue() ).color;
+		return curLayerContent.def.getIntGridValueDef( getSelectedValue() ).color;
 	}
 
 
@@ -26,7 +26,7 @@ class IntGridTool extends Tool<Int> {
 			var r = Rect.fromMouseCoords(origin, m);
 			client.cursor.set( GridRect(r.left, r.top, r.wid, r.hei, getIntGridColor()) );
 		}
-		else if( curLayer.isValid(m.cx,m.cy) )
+		else if( curLayerContent.isValid(m.cx,m.cy) )
 			client.cursor.set( GridCell(m.cx, m.cy, getIntGridColor() ) );
 		else
 			client.cursor.set(None);
@@ -44,10 +44,10 @@ class IntGridTool extends Tool<Int> {
 			switch curMode {
 				case null:
 				case Add:
-					curLayer.setIntGrid(cx, cy, getSelectedValue());
+					curLayerContent.setIntGrid(cx, cy, getSelectedValue());
 
 				case Remove:
-					curLayer.removeIntGrid(cx, cy);
+					curLayerContent.removeIntGrid(cx, cy);
 
 				case Move:
 			}
@@ -63,10 +63,10 @@ class IntGridTool extends Tool<Int> {
 			switch curMode {
 				case null:
 				case Add:
-					curLayer.setIntGrid(cx,cy, getSelectedValue());
+					curLayerContent.setIntGrid(cx,cy, getSelectedValue());
 
 				case Remove:
-					curLayer.removeIntGrid(cx,cy);
+					curLayerContent.removeIntGrid(cx,cy);
 
 				case Move:
 			}
@@ -81,7 +81,7 @@ class IntGridTool extends Tool<Int> {
 		super.updatePalette();
 
 		var idx = 0;
-		for( intGridVal in curLayer.def.getAllIntGridValues() ) {
+		for( intGridVal in curLayerContent.def.getAllIntGridValues() ) {
 			var e = new J("<li/>");
 			jPalette.append(e);
 			e.addClass("color");

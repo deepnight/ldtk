@@ -31,13 +31,13 @@ class EntityTool extends Tool<Int> {
 
 	function getPlacementX(m:MouseCoords) {
 		return snapToGrid()
-			? M.round( ( m.cx + curEntityDef.pivotX ) * curLayer.def.gridSize )
+			? M.round( ( m.cx + curEntityDef.pivotX ) * curLayerContent.def.gridSize )
 			: m.levelX;
 	}
 
 	function getPlacementY(m:MouseCoords) {
 		return snapToGrid()
-			? M.round( ( m.cy + curEntityDef.pivotY ) * curLayer.def.gridSize )
+			? M.round( ( m.cy + curEntityDef.pivotY ) * curLayerContent.def.gridSize )
 			: m.levelY;
 	}
 
@@ -59,7 +59,7 @@ class EntityTool extends Tool<Int> {
 		switch curMode {
 			case null:
 			case Add:
-				var ei = curLayer.createEntityInstance(curEntityDef);
+				var ei = curLayerContent.createEntityInstance(curEntityDef);
 				ei.x = getPlacementX(m);
 				ei.y = getPlacementY(m);
 				client.ge.emit(LayerContentChanged);
@@ -72,10 +72,10 @@ class EntityTool extends Tool<Int> {
 	}
 
 	function removeAnyEntityAt(m:MouseCoords) {
-		var ge = getGenericLevelElementAt(m, curLayer);
+		var ge = getGenericLevelElementAt(m, curLayerContent);
 		switch ge {
 			case Entity(instance):
-				curLayer.removeEntityInstance(instance);
+				curLayerContent.removeEntityInstance(instance);
 				client.ge.emit(LayerContentChanged);
 				return true;
 

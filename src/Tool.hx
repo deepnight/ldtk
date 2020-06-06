@@ -6,7 +6,7 @@ class Tool<T> extends dn.Process {
 	var client(get,never) : Client; inline function get_client() return Client.ME;
 	var project(get,never) : ProjectData; inline function get_project() return Client.ME.project;
 	var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
-	var curLayer(get,never) : LayerContent; inline function get_curLayer() return Client.ME.curLayerContent;
+	var curLayerContent(get,never) : LayerContent; inline function get_curLayerContent() return Client.ME.curLayerContent;
 
 	var jPalette(get,never) : J; inline function get_jPalette() return client.jPalette;
 
@@ -33,12 +33,12 @@ class Tool<T> extends dn.Process {
 
 
 	public function selectValue(v:T) {
-		SELECTED_VALUES.set(curLayer.layerDefId, v);
+		SELECTED_VALUES.set(curLayerContent.layerDefId, v);
 		updatePalette();
 	}
 	function getSelectedValue() : T {
-		return SELECTED_VALUES.exists(curLayer.layerDefId)
-			? SELECTED_VALUES.get(curLayer.layerDefId)
+		return SELECTED_VALUES.exists(curLayerContent.layerDefId)
+			? SELECTED_VALUES.get(curLayerContent.layerDefId)
 			: getDefaultValue();
 	}
 	function getDefaultValue() : T {
@@ -146,7 +146,7 @@ class Tool<T> extends dn.Process {
 			var ge = getGenericLevelElementAt(m);
 			switch ge {
 				case null: client.cursor.set(None);
-				case IntGrid(lc, cx, cy): client.cursor.set( GridCell( cx, cy, lc.getIntGridColor(cx,cy) ) );
+				case IntGrid(lc, cx, cy): client.cursor.set( GridCell( cx, cy, lc.getIntGridColorAt(cx,cy) ) );
 				case Entity(instance): client.cursor.set( Entity(instance.def, instance.x, instance.y) );
 			}
 		}

@@ -95,7 +95,7 @@ class LevelRender extends dn.Process {
 						if( id<0 )
 							continue;
 
-						g.beginFill(lc.def.getIntGridValue(id).color);
+						g.beginFill( lc.getIntGridColorAt(cx,cy) );
 						g.drawRect(cx*grid, cy*grid, grid, grid);
 					}
 

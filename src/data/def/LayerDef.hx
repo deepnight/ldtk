@@ -7,7 +7,7 @@ class LayerDef implements IData {
 	public var gridSize : Int = Const.GRID;
 	public var displayOpacity : Float = 1.0;
 
-	var intGridValues : Array<IntGridValue> = [];
+	var intGridValues : Array<IntGridValueDef> = [];
 
 	public function new(uid:Int, t:LayerType) {
 		this.uid = uid;
@@ -35,7 +35,7 @@ class LayerDef implements IData {
 		});
 	}
 
-	public function getIntGridValue(idx:Int) : Null<IntGridValue> {
+	public function getIntGridValueDef(idx:Int) : Null<IntGridValueDef> {
 		return intGridValues[idx];
 	}
 

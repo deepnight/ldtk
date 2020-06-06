@@ -54,8 +54,8 @@ class LayerContent implements IData {
 		return !isValid(cx,cy) || !intGrid.exists( coordId(cx,cy) ) ? -1 : intGrid.get( coordId(cx,cy) );
 	}
 
-	public function getIntGridColor(cx:Int, cy:Int) : Null<UInt> {
-		var v = def.getIntGridValue( getIntGrid(cx,cy) );
+	public function getIntGridColorAt(cx:Int, cy:Int) : Null<UInt> {
+		var v = def.getIntGridValueDef( getIntGrid(cx,cy) );
 		return v==null ? null : v.color;
 	}
 
