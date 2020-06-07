@@ -65,7 +65,15 @@ class ProjectData implements data.IData {
 							if( lc.getIntGrid(cx,cy) >= lc.def.countIntGridValues() )
 								lc.removeIntGrid(cx,cy);
 						}
+
 					case Entities:
+						var i = 0;
+						while( i<lc.entityInstances.length ) {
+							if( lc.entityInstances[i].def==null )
+								lc.entityInstances.splice(i,1);
+							else
+								i++;
+						}
 				}
 		}
 	}
