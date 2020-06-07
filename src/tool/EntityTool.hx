@@ -10,7 +10,7 @@ class EntityTool extends Tool<Int> {
 			selectValue( project.entityDefs[0].uid );
 	}
 
-	function snapToGrid() return !client.isCtrlDown();
+	function snapToGrid() return !client.isCtrlDown() || cd.has("requireCtrlRelease");
 
 	inline function get_curEntityDef() return project.getEntityDef(getSelectedValue());
 
@@ -54,6 +54,8 @@ class EntityTool extends Tool<Int> {
 
 
 	override function startUsing(m:MouseCoords, buttonId:Int) {
+		cd.unset("requireCtrlRelease");
+
 		super.startUsing(m, buttonId);
 
 		switch curMode {
@@ -68,6 +70,8 @@ class EntityTool extends Tool<Int> {
 				removeAnyEntityAt(m);
 
 			case Move:
+				if( client.isCtrlDown() )
+					cd.setS("requireCtrlRelease", Const.INFINITE);
 		}
 	}
 
@@ -139,5 +143,11 @@ class EntityTool extends Tool<Int> {
 				updatePalette();
 			});
 		}
+	}
+
+	override function update() {
+		super.update();
+		if( !client.isCtrlDown() && cd.has("requireCtrlRelease") )
+			cd.unset("requireCtrlRelease");
 	}
 }
