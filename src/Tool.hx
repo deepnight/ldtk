@@ -32,6 +32,7 @@ class Tool<T> extends dn.Process {
 	}
 
 
+
 	public function selectValue(v:T) {
 		SELECTED_VALUES.set(curLayerContent.layerDefId, v);
 		updatePalette();
@@ -45,6 +46,10 @@ class Tool<T> extends dn.Process {
 		return null;
 	}
 
+
+	function snapToGrid() return !client.isCtrlDown() || cd.has("requireCtrlRelease");
+
+
 	public function as<E:Tool<X>,X>(c:Class<E>) : E return cast this;
 
 	public function canBeUsed() return getSelectedValue()!=null;
@@ -53,6 +58,7 @@ class Tool<T> extends dn.Process {
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		curMode = null;
 		pickedElement = null;
+		cd.unset("requireCtrlRelease");
 
 		// Picking an existing element
 		if( client.isAltDown() && buttonId==0 ) {
@@ -62,8 +68,10 @@ class Tool<T> extends dn.Process {
 				return;
 
 			client.pickGenericLevelElement(ge);
-			if( client.isCtrlDown() )
+			if( client.isCtrlDown() ) {
 				ge = duplicateElement(ge);
+				cd.setS("requireCtrlRelease", Const.INFINITE);
+			}
 			pickedElement = ge;
 
 			// If layer changed, client curTool was re-created
@@ -97,30 +105,32 @@ class Tool<T> extends dn.Process {
 		}
 	}
 
-	function getGenericLevelElementAt(m:MouseCoords, ?limitToLayer:LayerContent) : Null<GenericLevelElement> {
+	function getGenericLevelElementAt(m:MouseCoords, ?limitToLayerContent:LayerContent) : Null<GenericLevelElement> {
 		var ge : GenericLevelElement = null;
 
-		function getElement(layer:LayerContent) {
-			switch layer.def.type {
+		function getElement(lc:LayerContent) {
+			var cx = m.getLayerCx(lc.def);
+			var cy = m.getLayerCy(lc.def);
+			switch lc.def.type {
 				case IntGrid:
-					if( layer.getIntGrid(m.cx,m.cy)>=0 )
-						ge = GenericLevelElement.IntGrid( layer, m.cx, m.cy );
+					if( lc.getIntGrid(cx,cy)>=0 )
+						ge = GenericLevelElement.IntGrid( lc, cx, cy );
 
 				case Entities:
-					for(ei in layer.entityInstances)
+					for(ei in lc.entityInstances)
 						if( ei.isOver(m.levelX, m.levelY) )
 							ge = GenericLevelElement.Entity(ei);
 			}
 		}
 
-		if( limitToLayer==null ) {
+		if( limitToLayerContent==null ) {
 			var all = curLevel.layerContents.copy();
 			all.reverse();
 			for(lc in all)
 				getElement(lc);
 		}
 		else
-			getElement(limitToLayer);
+			getElement(limitToLayerContent);
 
 		return ge;
 	}
@@ -158,7 +168,7 @@ class Tool<T> extends dn.Process {
 			var ge = getGenericLevelElementAt(m);
 			switch ge {
 				case null: client.cursor.set(None);
-				case IntGrid(lc, cx, cy): client.cursor.set( GridCell( cx, cy, lc.getIntGridColorAt(cx,cy) ) );
+				case IntGrid(lc, cx, cy): client.cursor.set( GridCell( lc, cx, cy ) );
 				case Entity(instance): client.cursor.set( Entity(instance.def, instance.x, instance.y) );
 			}
 		}
@@ -168,6 +178,14 @@ class Tool<T> extends dn.Process {
 			updateCursor(m);
 
 		lastMouse = m;
+	}
+
+
+	override function update() {
+		super.update();
+
+		if( !client.isCtrlDown() && cd.has("requireCtrlRelease") )
+			cd.unset("requireCtrlRelease");
 	}
 
 }

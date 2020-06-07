@@ -24,10 +24,10 @@ class IntGridTool extends Tool<Int> {
 
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromMouseCoords(origin, m);
-			client.cursor.set( GridRect(r.left, r.top, r.wid, r.hei, getIntGridColor()) );
+			client.cursor.set( GridRect(curLayerContent, r.left, r.top, r.wid, r.hei) );
 		}
 		else if( curLayerContent.isValid(m.cx,m.cy) )
-			client.cursor.set( GridCell(m.cx, m.cy, getIntGridColor() ) );
+			client.cursor.set( GridCell(curLayerContent, m.cx, m.cy) );
 		else
 			client.cursor.set(None);
 	}
