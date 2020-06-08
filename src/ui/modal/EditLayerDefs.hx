@@ -8,7 +8,7 @@ class EditLayerDefs extends ui.Modal {
 	public function new() {
 		super();
 
-		loadTemplate( hxd.Res.tpl.editLayerDefs, "defEditor layerDefs" );
+		loadTemplate( "editLayerDefs", "defEditor layerDefs" );
 		jList = jWin.find(".mainList ul");
 		jForm = jWin.find("ul.form");
 

@@ -1,6 +1,10 @@
 package tools;
 
 class JsTools {
+	public static function init() {
+		js.node.Require.require("fs");
+	}
+
 	public static function makeSortable(selector:String, onSort:(from:Int, to:Int)->Void) {
 		js.Lib.eval('sortable("$selector")');
 		new J(selector)
@@ -72,6 +76,26 @@ class JsTools {
 		});
 
 		return pivots;
+	}
 
+
+	static var _fileCache : Map<String,String> = new Map();
+	public static function clearFileCache() {
+		_fileCache = new Map();
+	}
+
+	public static function getHtmlTemplate(name:String) : Null<String> {
+		if( !_fileCache.exists(name) ) {
+			var path = dn.FilePath.fromFile("tpl/"+name);
+			path.extension = "html";
+
+			if( !js.node.Fs.existsSync(path.full) )
+				throw "File not found "+path.full;
+
+			var buffer = js.node.Fs.readFileSync(path.full);
+			_fileCache.set( name, buffer.toString() );
+		}
+
+		return _fileCache.get(name);
 	}
 }

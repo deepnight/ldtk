@@ -6,7 +6,7 @@ class ProjectSettings extends ui.Modal {
 	public function new() {
 		super();
 
-		loadTemplate( hxd.Res.tpl.projectSettings, "projectSettings" );
+		loadTemplate( "projectSettings", "projectSettings" );
 		updateForm();
 	}
 

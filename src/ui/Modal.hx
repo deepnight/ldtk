@@ -100,9 +100,9 @@ class Modal extends dn.Process {
 		});
 	}
 
-	public function loadTemplate(tpl:hxd.res.Resource, className:String) {
+	public function loadTemplate(tplName:String, className:String) {
 		jWin.addClass(className);
-		var content = new J( tpl.entry.getText() );
-		jContent.empty().append(content);
+		var html = JsTools.getHtmlTemplate(tplName);
+		jContent.empty().append( html );
 	}
 }

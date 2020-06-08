@@ -15,7 +15,7 @@ class EditEntityDefs extends ui.Modal {
 	public function new() {
 		super();
 
-		loadTemplate( hxd.Res.tpl.editEntityDefs, "defEditor entityDefs" );
+		loadTemplate( "editEntityDefs", "defEditor entityDefs" );
 
 
 		// Create entity
