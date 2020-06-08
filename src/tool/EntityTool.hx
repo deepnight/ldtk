@@ -126,6 +126,8 @@ class EntityTool extends Tool<Int> {
 	}
 
 	function hideInstanceEditor() {
+		var panel = client.jSubPanel;
+		panel.empty();
 	}
 
 	function showInstanceEditor(ei:EntityInstance) {
@@ -133,20 +135,24 @@ class EntityTool extends Tool<Int> {
 		panel.empty();
 		panel.append("<p>"+ei.def.name+"</p>");
 
+		var form = new J('<ul class="form"/>');
+		form.appendTo(panel);
 		for(fv in ei.fieldInstances) {
-			panel.append("<p>"+fv+"</p>");
+			var li = new J("<li/>");
+			li.appendTo(form);
+			li.append('<label>${fv.def.name}</label>');
 
 			switch fv.def.type {
 				case F_Int:
 					var input = new J("<input/>");
+					input.appendTo(li);
 					input.attr("type","text");
-					input.appendTo(panel);
 					input.attr("placeholder", fv.def.getDefault());
 					if( !fv.isUsingDefault() )
 						input.val( Std.string(fv.getInt()) );
 					input.change( function(ev) {
 						fv.parseInt( input.val() );
-						input.val( fv.isUsingDefault() ? "" : fv.getInt() );
+						showInstanceEditor(ei);
 					});
 
 				case F_Float:

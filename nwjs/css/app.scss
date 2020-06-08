@@ -580,6 +580,16 @@ input[type=number]:focus {
 		box-sizing: border-box;
 	}
 
+	#subPanel {
+		box-sizing: border-box;
+		padding: 5px;
+		ul.form {
+			label {
+				flex: 1 1 auto;
+			}
+		}
+	}
+
 	#mainBar {
 		margin-bottom: 8px;
 		z-index: 100;
