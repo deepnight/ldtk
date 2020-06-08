@@ -7,7 +7,7 @@ class Client extends dn.Process {
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
 	public var jMainBar(get,never) : J; inline function get_jMainBar() return new J("#mainBar");
-	public var jSubPanel(get,never) : J; inline function get_jSubPanel() return new J("#subPanel");
+	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette ul");
 
 	public var ge : GlobalEventDispatcher;

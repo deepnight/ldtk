@@ -21,6 +21,7 @@ class Tool<T> extends dn.Process {
 	private function new() {
 		super(Client.ME);
 		updatePalette();
+		ui.InstanceEditor.closeAll();
 	}
 
 	override function toString():String {
@@ -38,7 +39,7 @@ class Tool<T> extends dn.Process {
 		SELECTED_VALUES.set(curLayerContent.layerDefId, v);
 		updatePalette();
 	}
-	function getSelectedValue() : T {
+	public function getSelectedValue() : T {
 		return SELECTED_VALUES.exists(curLayerContent.layerDefId)
 			? SELECTED_VALUES.get(curLayerContent.layerDefId)
 			: getDefaultValue();

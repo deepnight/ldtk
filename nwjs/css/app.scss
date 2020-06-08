@@ -560,14 +560,9 @@ input[type=number]:focus {
 
 #editor {
 	display: grid;
-	grid-template-columns: 200px auto 200px;
+	grid-template-columns: 200px auto;
 	width: 100%;
 	height: 100%;
-
-	canvas#webgl {
-		width: 100% !important;
-		height: 100% !important;
-	}
 
 	#mainPanel {
 		position: relative;
@@ -580,14 +575,9 @@ input[type=number]:focus {
 		box-sizing: border-box;
 	}
 
-	#subPanel {
-		box-sizing: border-box;
-		padding: 5px;
-		ul.form {
-			label {
-				flex: 1 1 auto;
-			}
-		}
+	canvas {
+		width: 100% !important;
+		height: 100% !important;
 	}
 
 	#mainBar {
@@ -662,6 +652,24 @@ input[type=number]:focus {
 	}
 }
 
+
+.instanceEditor {
+	position: absolute;
+	z-index: 10;
+	top: 0px;
+	right: 0px;
+	width: 200px;
+	height: 100%;
+	box-sizing: border-box;
+	padding: 5px;
+	background-color: $bgDark;
+
+	ul.form {
+		label {
+			flex: 1 1 auto;
+		}
+	}
+}
 
 
 .window.defEditor {
