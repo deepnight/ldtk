@@ -1,6 +1,8 @@
-package render;
+package display;
 
 class LevelRender extends dn.Process {
+	static var _entityRenderCache : Map<Int, h3d.mat.Texture> = new Map();
+
 	public var client(get,never) : Client; inline function get_client() return Client.ME;
 
 	var layerVis : Map<Int,Bool> = new Map();
@@ -108,13 +110,48 @@ class LevelRender extends dn.Process {
 
 				case Entities:
 					for(ei in lc.entityInstances) {
-						var o = EntityInstance.createRender(ei.def, wrapper);
+						var o = createEntityRender(ei.def, wrapper);
 						o.setPosition(ei.x, ei.y);
 					}
 			}
 		}
 
 		updateLayersVisibility();
+	}
+
+
+	public static function invalidateCaches() {
+		for(tex in _entityRenderCache)
+			tex.dispose();
+		_entityRenderCache = new Map();
+	}
+
+
+	public static function createEntityRender(def:EntityDef, ?parent:h2d.Object) {
+		if( !_entityRenderCache.exists(def.uid) ) {
+			var g = new h2d.Graphics();
+			g.beginFill(def.color);
+			g.lineStyle(1, 0x0, 0.25);
+			g.drawRect(0, 0, def.width, def.height);
+
+			g.lineStyle(1, 0x0, 0.5);
+			var pivotSize = 3;
+			g.drawRect(
+				Std.int((def.width-pivotSize)*def.pivotX),
+				Std.int((def.height-pivotSize)*def.pivotY),
+				pivotSize, pivotSize
+			);
+
+			var tex = new h3d.mat.Texture(def.width, def.height, [Target]);
+			g.drawTo(tex);
+			_entityRenderCache.set(def.uid, tex);
+		}
+
+		var bmp = new h2d.Bitmap(parent);
+		bmp.tile = h2d.Tile.fromTexture( _entityRenderCache.get(def.uid) );
+		bmp.tile.setCenterRatio(def.pivotX, def.pivotY);
+
+		return bmp;
 	}
 
 	function updateLayersVisibility() {

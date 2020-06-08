@@ -19,7 +19,7 @@ class Client extends dn.Process {
 	public var curLayerDef(get,never) : LayerDef; inline function get_curLayerDef() return project.getLayerDef(curLayerId);
 	public var curLayerContent(get,never) : LayerContent; inline function get_curLayerContent() return curLevel.getLayerContent(curLayerId);
 
-	public var levelRender : render.LevelRender;
+	public var levelRender : display.LevelRender;
 	public var curTool : Tool<Dynamic>;
 
 	public var cursor : ui.Cursor;
@@ -110,7 +110,7 @@ class Client extends dn.Process {
 		curLayerId = project.layerDefs[0].uid;
 
 		initTool();
-		levelRender = new render.LevelRender();
+		levelRender = new display.LevelRender();
 
 		updateLayerList();
 	}
@@ -242,7 +242,7 @@ class Client extends dn.Process {
 		}
 
 		if( e==EntityDefChanged )
-			EntityInstance.invalidateRenderCache();
+			display.LevelRender.invalidateCaches();
 	}
 
 	public function updateLayerList() {

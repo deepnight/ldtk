@@ -72,7 +72,7 @@ class Cursor extends dn.Process {
 					def.height + pad*2
 				);
 
-				var o = EntityInstance.createRender(def, wrapper);
+				var o = display.LevelRender.createEntityRender(def, wrapper);
 				o.alpha = 0.4;
 		}
 

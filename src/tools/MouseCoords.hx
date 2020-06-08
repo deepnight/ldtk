@@ -18,7 +18,7 @@ class MouseCoords {
 
 
 	var client(get,never) : Client; inline function get_client() return Client.ME;
-	var levelRender(get,never) : render.LevelRender; inline function get_levelRender() return Client.ME.levelRender;
+	var levelRender(get,never) : display.LevelRender; inline function get_levelRender() return Client.ME.levelRender;
 
 	public function new(gx:Float,gy:Float) {
 		this.gx = gx;

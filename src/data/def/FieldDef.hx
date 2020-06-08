@@ -5,6 +5,7 @@ class FieldDef { // TODO implements serialization
 	public var type(default,null) : FieldType;
 	public var name : String;
 	public var canBeNull : Bool;
+	public var editorDisplay = false;
 
 	@:allow(ui.modal.EditEntityDefs)
 	var defaultOverride : Null<ValueWrapper>;
