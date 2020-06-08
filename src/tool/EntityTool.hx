@@ -151,7 +151,7 @@ class EntityTool extends Tool<Int> {
 					if( !fv.isUsingDefault() )
 						input.val( Std.string(fv.getInt()) );
 					input.change( function(ev) {
-						fv.parseInt( input.val() );
+						fv.parseValue( input.val() );
 						showInstanceEditor(ei);
 					});
 

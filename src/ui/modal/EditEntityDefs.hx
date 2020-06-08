@@ -197,7 +197,7 @@ class EditEntityDefs extends ui.Modal {
 			case F_Int, F_Float, F_String:
 				var defInput = jFieldForm.find("input[name=fDef]");
 				if( curField.defaultOverride != null )
-					defInput.val( curField.defaultOverride );
+					defInput.val( Std.string( curField.getUntypedDefault() ) );
 				else
 					defInput.val("");
 
@@ -216,7 +216,7 @@ class EditEntityDefs extends ui.Modal {
 				defInput.change( function(ev) {
 					curField.setDefault( defInput.val() );
 					client.ge.emit(EntityFieldChanged);
-					defInput.val(curField.defaultOverride==null ? "" : curField.defaultOverride);
+					defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
 				});
 
 			case F_Bool:

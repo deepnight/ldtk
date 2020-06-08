@@ -7,7 +7,7 @@ class FieldDef { // TODO implements serialization
 	public var canBeNull : Bool;
 
 	@:allow(ui.modal.EditEntityDefs)
-	var defaultOverride : Null<String>;
+	var defaultOverride : Null<ValueWrapper>;
 
 	public var min : Null<Float>;
 	public var max : Null<Float>;
@@ -25,7 +25,7 @@ class FieldDef { // TODO implements serialization
 	@:keep public function toString() {
 		return '$name('
 			+ ( canBeNull ? 'Null<$type>' : '$type' )
-			+ '=${getDefault()})'
+			+ ', default=${getDefault()})'
 			+ ( type==F_Int || type==F_Float ? '[$min-$max]' : "" );
 	}
 
@@ -71,31 +71,50 @@ class FieldDef { // TODO implements serialization
 		return v;
 	}
 
+	public function getUntypedDefault() : Dynamic {
+		return switch defaultOverride {
+			case null: null;
+			case V_Int(v): v;
+			case V_Float(v): v;
+			case V_Bool(v): v;
+			case V_String(v): v;
+		}
+	}
+
 	public function getBoolDefault() : Null<Bool> {
-		return
-			!canBeNull && defaultOverride==null ? false :
-			defaultOverride==null ? null :
-			defaultOverride=="true";
+		require(F_Bool);
+		return switch defaultOverride {
+			case null: canBeNull ? null : false;
+			case V_Bool(v): v;
+			case _: null;
+		}
 	}
 
 	public function getIntDefault() : Null<Int> {
-		return iClamp(
-			!canBeNull && defaultOverride==null ? 0 :
-			defaultOverride==null ? null :
-			Std.parseInt(defaultOverride)
-		);
+		require(F_Int);
+		return iClamp(switch defaultOverride {
+			case null: canBeNull ? null : 0;
+			case V_Int(v): v;
+			case _: null;
+		});
 	}
 
 	public function getFloatDefault() : Null<Float> {
-		return fClamp(
-			!canBeNull && defaultOverride==null ? 0. :
-			defaultOverride==null ? null :
-			Std.parseFloat(defaultOverride)
-		);
+		require(F_Float);
+		return fClamp( switch defaultOverride {
+			case null: canBeNull ? null : 0.;
+			case V_Float(v): v;
+			case _: null;
+		});
 	}
 
 	public function getStringDefault() : Null<String> {
-		return !canBeNull && defaultOverride==null ? "" : defaultOverride;
+		require(F_String);
+		return switch defaultOverride {
+			case null: canBeNull ? null : "";
+			case V_String(v): v;
+			case _: null;
+		}
 	}
 
 	public function restoreDefault() {
@@ -103,26 +122,25 @@ class FieldDef { // TODO implements serialization
 	}
 
 	public function setDefault(rawDef:Null<String>) {
-		switch type {
+		if( rawDef==null )
+			defaultOverride = null;
+		else switch type {
 			case F_Int:
-				var def = rawDef==null ? null : Std.parseInt(rawDef);
-				defaultOverride = !M.isValidNumber(def) ? null : Std.string( iClamp(def) );
+				var def = Std.parseInt(rawDef);
+				defaultOverride = !M.isValidNumber(def) ? null : V_Int( iClamp(def) );
 
 			case F_Float:
-				var def = rawDef==null ? null : Std.parseFloat(rawDef);
-				defaultOverride = !M.isValidNumber(def) ? null : Std.string( fClamp(def) );
+				var def = Std.parseFloat(rawDef);
+				defaultOverride = !M.isValidNumber(def) ? null : V_Float( fClamp(def) );
 
 			case F_String:
-				if( rawDef!=null )
-					rawDef = StringTools.trim(rawDef);
-				defaultOverride = rawDef=="" && canBeNull ? null : rawDef;
+				rawDef = StringTools.trim(rawDef);
+				defaultOverride = rawDef=="" ? null : V_String(rawDef);
 
 			case F_Bool:
-				if( rawDef!=null )
-					rawDef = StringTools.trim(rawDef).toLowerCase();
-
-				if( rawDef=="true" ) defaultOverride = "true";
-				else if( rawDef=="false" ) defaultOverride = "false";
+				rawDef = StringTools.trim(rawDef).toLowerCase();
+				if( rawDef=="true" ) defaultOverride = V_Bool(true);
+				else if( rawDef=="false" ) defaultOverride = V_Bool(false);
 				else defaultOverride = null;
 
 		}
@@ -199,12 +217,17 @@ class FieldDef { // TODO implements serialization
 			min = tmp;
 		}
 
-		// Update existing default if needed
-		if( defaultOverride!=null )
-			switch type {
-				case F_Int: defaultOverride = Std.string( getIntDefault() );
-				case F_Float: defaultOverride = Std.string( getFloatDefault() );
-				case _:
-			}
+		// Clamp existing default if needed
+		switch defaultOverride {
+			case V_Int(v): defaultOverride = V_Int( iClamp(v) );
+			case V_Float(v): defaultOverride = V_Float( fClamp(v) );
+			case _:
+		}
+		// if( defaultOverride!=null )
+		// 	switch type {
+		// 		case F_Int: defaultOverride = Std.string( getIntDefault() );
+		// 		case F_Float: defaultOverride = Std.string( getFloatDefault() );
+		// 		case _:
+		// 	}
 	}
 }

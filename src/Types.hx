@@ -29,7 +29,10 @@ enum FieldType {
 }
 
 enum ValueWrapper {
-	V_Int(v:Null<Int>);
+	V_Int(v:Int);
+	V_Float(v:Float);
+	V_Bool(v:Bool);
+	V_String(v:String);
 }
 
 enum CursorType {
