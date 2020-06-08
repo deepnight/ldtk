@@ -7,8 +7,5 @@
 -lib castle
 -lib deepnightLibs
 -lib hxnodejs
-# -lib domkit
-
-# -D dump=pretty
 
 -js nwjs/js/app.js
