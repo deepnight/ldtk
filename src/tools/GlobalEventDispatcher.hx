@@ -6,15 +6,15 @@ class GlobalEventDispatcher {
 	public function new() {
 	}
 
-	public function watch(e:GlobalEvent, onEvent:Void->Void) {
+	public function listenOnly(e:GlobalEvent, onEvent:Void->Void) {
 		specificListeners.push({ e:e, cb:onEvent });
 	}
 
-	public function watchAny(onEvent:GlobalEvent->Void) {
+	public function listenAll(onEvent:GlobalEvent->Void) {
 		anyListeners.push(onEvent);
 	}
 
-	public function remove(?any:GlobalEvent->Void, ?specific:Void->Void) {
+	public function stopListening(?any:GlobalEvent->Void, ?specific:Void->Void) {
 		if( any!=null )
 			anyListeners.remove(any);
 

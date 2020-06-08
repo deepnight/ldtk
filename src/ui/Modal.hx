@@ -35,7 +35,7 @@ class Modal extends dn.Process {
 		jPanelMask.height( mainPanel.outerHeight() - jPanelMask.offset().top );
 		jPanelMask.click( function(_) close() );
 
-		client.ge.watchAny(onGlobalEvent);
+		client.ge.listenAll(onGlobalEvent);
 
 		closeAll(this);
 	}
@@ -44,7 +44,7 @@ class Modal extends dn.Process {
 		super.onDispose();
 
 		ALL.remove(this);
-		client.ge.remove(onGlobalEvent);
+		client.ge.stopListening(onGlobalEvent);
 
 		jWin.remove();
 		jWin = null;

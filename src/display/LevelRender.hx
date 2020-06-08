@@ -18,7 +18,7 @@ class LevelRender extends dn.Process {
 	public function new() {
 		super(client);
 
-		client.ge.watchAny(onGlobalEvent);
+		client.ge.listenAll(onGlobalEvent);
 
 		createRootInLayers(client.root, Const.DP_MAIN);
 
@@ -35,7 +35,7 @@ class LevelRender extends dn.Process {
 
 	override function onDispose() {
 		super.onDispose();
-		client.ge.remove(onGlobalEvent);
+		client.ge.stopListening(onGlobalEvent);
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {

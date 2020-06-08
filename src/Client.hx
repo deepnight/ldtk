@@ -47,7 +47,7 @@ class Client extends dn.Process {
 		selectionCursor.highlight();
 
 		ge = new GlobalEventDispatcher();
-		ge.watchAny( onGlobalEvent );
+		ge.listenAll( onGlobalEvent );
 
 		jBody.mouseup(function(_) {
 			onMouseUp();
