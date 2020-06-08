@@ -29,13 +29,13 @@ class EntityTool extends Tool<Int> {
 
 	function getPlacementX(m:MouseCoords) {
 		return snapToGrid()
-			? M.round( ( m.cx + curEntityDef.pivotX ) * curLayerContent.def.gridSize )
+			? M.round( ( m.cx + curEntityDef.pivotX ) * curLayerInstance.def.gridSize )
 			: m.levelX;
 	}
 
 	function getPlacementY(m:MouseCoords) {
 		return snapToGrid()
-			? M.round( ( m.cy + curEntityDef.pivotY ) * curLayerContent.def.gridSize )
+			? M.round( ( m.cy + curEntityDef.pivotY ) * curLayerInstance.def.gridSize )
 			: m.levelY;
 	}
 
@@ -57,10 +57,10 @@ class EntityTool extends Tool<Int> {
 		switch curMode {
 			case null, PanView:
 			case Add:
-				var ei = curLayerContent.createEntityInstance(curEntityDef);
+				var ei = curLayerInstance.createEntityInstance(curEntityDef);
 				ei.x = getPlacementX(m);
 				ei.y = getPlacementY(m);
-				client.ge.emit(LayerContentChanged);
+				client.ge.emit(LayerInstanceChanged);
 				client.setSelection( Entity(ei) );
 
 			case Remove:
@@ -71,11 +71,11 @@ class EntityTool extends Tool<Int> {
 	}
 
 	function removeAnyEntityAt(m:MouseCoords) {
-		var ge = getGenericLevelElementAt(m, curLayerContent);
+		var ge = getGenericLevelElementAt(m, curLayerInstance);
 		switch ge {
 			case Entity(instance):
-				curLayerContent.removeEntityInstance(instance);
-				client.ge.emit(LayerContentChanged);
+				curLayerInstance.removeEntityInstance(instance);
+				client.ge.emit(LayerInstanceChanged);
 				return true;
 
 			case _:
@@ -109,7 +109,7 @@ class EntityTool extends Tool<Int> {
 					var ei = getPickedEntityInstance();
 					ei.x = getPlacementX(m);
 					ei.y = getPlacementY(m);
-					client.ge.emit(LayerContentChanged);
+					client.ge.emit(LayerInstanceChanged);
 					client.setSelection( Entity(ei) );
 				}
 		}
@@ -119,7 +119,7 @@ class EntityTool extends Tool<Int> {
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(left, right, top, bottom);
 
-		client.ge.emit(LayerContentChanged);
+		client.ge.emit(LayerInstanceChanged);
 	}
 
 

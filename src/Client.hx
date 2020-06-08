@@ -17,7 +17,7 @@ class Client extends dn.Process {
 
 	public var curLevel(get,never) : LevelData; inline function get_curLevel() return project.getLevel(curLevelId);
 	public var curLayerDef(get,never) : LayerDef; inline function get_curLayerDef() return project.getLayerDef(curLayerId);
-	public var curLayerContent(get,never) : LayerInstance; inline function get_curLayerContent() return curLevel.getLayerContent(curLayerId);
+	public var curLayerInstance(get,never) : LayerInstance; inline function get_curLayerInstance() return curLevel.getLayerInstance(curLayerId);
 
 	public var levelRender : display.LevelRender;
 	public var curTool : Tool<Dynamic>;
@@ -133,14 +133,14 @@ class Client extends dn.Process {
 	public function setSelection(ge:GenericLevelElement) {
 		selection = ge;
 		selectionCursor.set(switch selection {
-			case IntGrid(lc, cx, cy): GridCell(lc, cx,cy);
+			case IntGrid(li, cx, cy): GridCell(li, cx,cy);
 			case Entity(instance): Entity(instance.def, instance.x, instance.y);
 		});
 
 		ui.InstanceEditor.closeAll();
 		switch selection {
 			case null:
-			case IntGrid(lc, cx, cy):
+			case IntGrid(li, cx, cy):
 
 			case Entity(instance):
 				new ui.InstanceEditor(instance);
@@ -168,20 +168,20 @@ class Client extends dn.Process {
 		switch ge {
 			case null:
 
-			case IntGrid(lc, cx, cy):
-				selectLayer(lc);
-				var v = lc.getIntGrid(cx,cy);
+			case IntGrid(li, cx, cy):
+				selectLayerInstance(li);
+				var v = li.getIntGrid(cx,cy);
 				curTool.as(tool.IntGridTool).selectValue(v);
 				return true;
 
 			case Entity(instance):
-				for(lc in curLevel.layerContents) {
-					if( lc.def.type!=Entities )
+				for(li in curLevel.layerInstances) {
+					if( li.def.type!=Entities )
 						continue;
 
-					for(e in lc.entityInstances)
+					for(e in li.entityInstances)
 						if( e==instance ) {
-							selectLayer(lc);
+							selectLayerInstance(li);
 							curTool.as(tool.EntityTool).selectValue(instance.defId);
 							return true;
 						}
@@ -210,7 +210,7 @@ class Client extends dn.Process {
 	}
 
 	function onMouseDown(e:hxd.Event) {
-		if( levelRender.isLayerVisible(curLayerContent) && curTool.canBeUsed() )
+		if( levelRender.isLayerVisible(curLayerInstance) && curTool.canBeUsed() )
 			curTool.startUsing( getMouse(), e.button );
 	}
 	function onMouseUp() {
@@ -237,13 +237,13 @@ class Client extends dn.Process {
 		line.prependTo(e);
 	}
 
-	public function selectLayer(l:LayerInstance) {
+	public function selectLayerInstance(l:LayerInstance) {
 		if( curLayerId==l.def.uid )
 			return;
 
 		clearSelection();
 		curLayerId = l.def.uid;
-		levelRender.onCurrentLayerChange(curLayerContent);
+		levelRender.onCurrentLayerChange(curLayerInstance);
 		curTool.updatePalette();
 		updateLayerList();
 		initTool();
@@ -251,12 +251,12 @@ class Client extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
-			case LayerContentChanged:
+			case LayerInstanceChanged:
 
 			case _:
 				project.checkDataIntegrity();
-				if( curLayerContent==null )
-					selectLayer(curLevel.layerContents[0]);
+				if( curLayerInstance==null )
+					selectLayerInstance(curLevel.layerInstances[0]);
 				initTool();
 				updateLayerList();
 		}
@@ -269,34 +269,34 @@ class Client extends dn.Process {
 		var list = jLayers.find("ul");
 		list.empty();
 
-		for(lc in curLevel.layerContents) {
+		for(li in curLevel.layerInstances) {
 			var e = jLayers.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			list.append(e);
 
-			if( lc==curLayerContent )
+			if( li==curLayerInstance )
 				e.addClass("active");
 
-			if( !levelRender.isLayerVisible(lc) )
+			if( !levelRender.isLayerVisible(li) )
 				e.addClass("hidden");
 
 			// Icon
 			var icon = e.find(".icon");
-			switch lc.def.type {
+			switch li.def.type {
 				case IntGrid: icon.addClass("intGrid");
 				case Entities: icon.addClass("entity");
 			}
 
 			// Name
 			var name = e.find(".name");
-			name.text(lc.def.name);
+			name.text(li.def.name);
 			e.click( function(_) {
-				selectLayer(lc);
+				selectLayerInstance(li);
 			});
 
 
 			// Visibility button
 			var vis = e.find(".vis");
-			if( levelRender.isLayerVisible(lc) )
+			if( levelRender.isLayerVisible(li) )
 				vis.find(".off").hide();
 			else
 				vis.find(".on").hide();
@@ -304,7 +304,7 @@ class Client extends dn.Process {
 				if( ui.Modal.closeAll() )
 					return;
 				ev.stopPropagation();
-				levelRender.toggleLayer(lc);
+				levelRender.toggleLayer(li);
 				clearSelection();
 				updateLayerList();
 			});

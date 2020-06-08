@@ -45,11 +45,11 @@ class LayerDef implements IData {
 
 	public function isIntGridValueUsedInProject(p:ProjectData, idx:Int) {
 		for(level in p.levels) {
-			var lc = level.getLayerContent(uid);
-			if( lc!=null ) {
-				for(cx in 0...lc.cWid)
-				for(cy in 0...lc.cHei)
-					if( lc.getIntGrid(cx,cy)==idx )
+			var li = level.getLayerInstance(uid);
+			if( li!=null ) {
+				for(cx in 0...li.cWid)
+				for(cy in 0...li.cHei)
+					if( li.getIntGrid(cx,cy)==idx )
 						return true;
 			}
 		}

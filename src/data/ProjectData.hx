@@ -41,36 +41,36 @@ class ProjectData implements data.IData {
 		for(level in levels) {
 			// Remove layerContents without layerDefs
 			var i = 0;
-			while( i<level.layerContents.length ) {
-				if( level.layerContents[i].def==null )
-					level.layerContents.splice(i,1);
+			while( i<level.layerInstances.length ) {
+				if( level.layerInstances[i].def==null )
+					level.layerInstances.splice(i,1);
 				else
 					i++;
 			}
 
 			// Add missing layerContents
 			for(ld in layerDefs)
-				if( level.getLayerContent(ld.uid)==null )
-					level.layerContents.push( new LayerInstance(level, ld) );
+				if( level.getLayerInstance(ld.uid)==null )
+					level.layerInstances.push( new LayerInstance(level, ld) );
 
 			// TODO: remove useless layerContent data (ex: when layer type changed from Entity to IntGrid)
 
 			// Cleanup layer values
-			for(lc in level.layerContents)
-				switch lc.def.type {
+			for(li in level.layerInstances)
+				switch li.def.type {
 					case IntGrid:
 						// Remove lost intGrid values
-						for(cy in 0...lc.cHei)
-						for(cx in 0...lc.cWid) {
-							if( lc.getIntGrid(cx,cy) >= lc.def.countIntGridValues() )
-								lc.removeIntGrid(cx,cy);
+						for(cy in 0...li.cHei)
+						for(cx in 0...li.cWid) {
+							if( li.getIntGrid(cx,cy) >= li.def.countIntGridValues() )
+								li.removeIntGrid(cx,cy);
 						}
 
 					case Entities:
 						var i = 0;
-						while( i<lc.entityInstances.length ) {
-							if( lc.entityInstances[i].def==null )
-								lc.entityInstances.splice(i,1);
+						while( i<li.entityInstances.length ) {
+							if( li.entityInstances[i].def==null )
+								li.entityInstances.splice(i,1);
 							else
 								i++;
 						}
@@ -124,8 +124,8 @@ class ProjectData implements data.IData {
 
 		// Also sort level layerContents
 		for(l in levels) {
-			var moved = l.layerContents.splice(from,1)[0];
-			l.layerContents.insert(to, moved);
+			var moved = l.layerInstances.splice(from,1)[0];
+			l.layerInstances.insert(to, moved);
 		}
 
 		return moved;

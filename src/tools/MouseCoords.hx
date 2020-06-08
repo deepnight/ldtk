@@ -11,10 +11,10 @@ class MouseCoords {
 	inline function get_levelY() return Std.int( ( gy/Const.SCALE - levelRender.root.y ) / levelRender.zoom );
 
 	public var cx(get,never) : Int;
-	inline function get_cx() return Std.int( levelX / client.curLayerContent.def.gridSize );
+	inline function get_cx() return Std.int( levelX / client.curLayerInstance.def.gridSize );
 
 	public var cy(get,never) : Int;
-	inline function get_cy() return Std.int( levelY / client.curLayerContent.def.gridSize );
+	inline function get_cy() return Std.int( levelY / client.curLayerInstance.def.gridSize );
 
 
 	var client(get,never) : Client; inline function get_client() return Client.ME;

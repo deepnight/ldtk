@@ -35,7 +35,7 @@ class EditLayerDefs extends ui.Modal {
 		});
 
 
-		select(client.curLayerContent.def);
+		select(client.curLayerInstance.def);
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -50,7 +50,7 @@ class EditLayerDefs extends ui.Modal {
 			case LayerDefSorted:
 				updateList();
 
-			case LayerContentChanged:
+			case LayerInstanceChanged:
 
 			case EntityDefChanged:
 			case EntityDefSorted:

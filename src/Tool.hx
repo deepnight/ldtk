@@ -6,7 +6,7 @@ class Tool<T> extends dn.Process {
 	var client(get,never) : Client; inline function get_client() return Client.ME;
 	var project(get,never) : ProjectData; inline function get_project() return Client.ME.project;
 	var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
-	var curLayerContent(get,never) : LayerInstance; inline function get_curLayerContent() return Client.ME.curLayerContent;
+	var curLayerInstance(get,never) : LayerInstance; inline function get_curLayerInstance() return Client.ME.curLayerInstance;
 
 	var jPalette(get,never) : J; inline function get_jPalette() return client.jPalette;
 
@@ -34,12 +34,12 @@ class Tool<T> extends dn.Process {
 
 
 	public function selectValue(v:T) {
-		SELECTED_VALUES.set(curLayerContent.layerDefId, v);
+		SELECTED_VALUES.set(curLayerInstance.layerDefId, v);
 		updatePalette();
 	}
 	public function getSelectedValue() : T {
-		return SELECTED_VALUES.exists(curLayerContent.layerDefId)
-			? SELECTED_VALUES.get(curLayerContent.layerDefId)
+		return SELECTED_VALUES.exists(curLayerInstance.layerDefId)
+			? SELECTED_VALUES.get(curLayerInstance.layerDefId)
 			: getDefaultValue();
 	}
 	function getDefaultValue() : T {
@@ -105,11 +105,11 @@ class Tool<T> extends dn.Process {
 
 	function duplicateElement(ge:GenericLevelElement) : GenericLevelElement {
 		switch ge {
-			case IntGrid(lc, cx, cy):
+			case IntGrid(li, cx, cy):
 				throw "Unsupported";
 
 			case Entity(instance):
-				var ei = curLayerContent.createEntityInstance(instance.def); // HACK TODO use clone
+				var ei = curLayerInstance.createEntityInstance(instance.def); // HACK TODO use clone
 				ei.x = instance.x;
 				ei.y = instance.y;
 				return GenericLevelElement.Entity(ei);
@@ -119,26 +119,26 @@ class Tool<T> extends dn.Process {
 	function getGenericLevelElementAt(m:MouseCoords, ?limitToLayerContent:LayerInstance) : Null<GenericLevelElement> {
 		var ge : GenericLevelElement = null;
 
-		function getElement(lc:LayerInstance) {
-			var cx = m.getLayerCx(lc.def);
-			var cy = m.getLayerCy(lc.def);
-			switch lc.def.type {
+		function getElement(li:LayerInstance) {
+			var cx = m.getLayerCx(li.def);
+			var cy = m.getLayerCy(li.def);
+			switch li.def.type {
 				case IntGrid:
-					if( lc.getIntGrid(cx,cy)>=0 )
-						ge = GenericLevelElement.IntGrid( lc, cx, cy );
+					if( li.getIntGrid(cx,cy)>=0 )
+						ge = GenericLevelElement.IntGrid( li, cx, cy );
 
 				case Entities:
-					for(ei in lc.entityInstances)
+					for(ei in li.entityInstances)
 						if( ei.isOver(m.levelX, m.levelY) )
 							ge = GenericLevelElement.Entity(ei);
 			}
 		}
 
 		if( limitToLayerContent==null ) {
-			var all = curLevel.layerContents.copy();
+			var all = curLevel.layerInstances.copy();
 			all.reverse();
-			for(lc in all)
-				getElement(lc);
+			for(li in all)
+				getElement(li);
 		}
 		else
 			getElement(limitToLayerContent);
@@ -195,7 +195,7 @@ class Tool<T> extends dn.Process {
 			var ge = getGenericLevelElementAt(m);
 			switch ge {
 				case null: client.cursor.set(None);
-				case IntGrid(lc, cx, cy): client.cursor.set( GridCell( lc, cx, cy, lc.getIntGridColorAt(cx,cy) ) );
+				case IntGrid(li, cx, cy): client.cursor.set( GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ) );
 				case Entity(instance): client.cursor.set( Entity(instance.def, instance.x, instance.y) );
 			}
 		}

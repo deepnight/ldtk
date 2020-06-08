@@ -62,14 +62,14 @@ class LevelRender extends dn.Process {
 	}
 
 	public function renderGrid() {
-		var l = client.curLayerContent;
+		var l = client.curLayerInstance;
 		grid.clear();
 		grid.lineStyle(1, 0x0, 0.2);
-		for( cx in 0...client.curLayerContent.cWid+1 ) {
+		for( cx in 0...client.curLayerInstance.cWid+1 ) {
 			grid.moveTo(cx*l.def.gridSize, 0);
 			grid.lineTo(cx*l.def.gridSize, l.cHei*l.def.gridSize);
 		}
-		for( cy in 0...client.curLayerContent.cHei+1 ) {
+		for( cy in 0...client.curLayerInstance.cHei+1 ) {
 			grid.moveTo(0, cy*l.def.gridSize);
 			grid.lineTo(l.cWid*l.def.gridSize, cy*l.def.gridSize);
 		}
@@ -85,31 +85,31 @@ class LevelRender extends dn.Process {
 			e.remove();
 		layerWrappers = new Map();
 
-		for(lc in client.curLevel.layerContents) {
+		for(li in client.curLevel.layerInstances) {
 			var wrapper = new h2d.Object();
 			root.add(wrapper,1);
 			root.under(wrapper);
-			layerWrappers.set(lc.layerDefId, wrapper);
+			layerWrappers.set(li.layerDefId, wrapper);
 
-			if( !isLayerVisible(lc) )
+			if( !isLayerVisible(li) )
 				continue;
 
-			var grid = lc.def.gridSize;
-			switch lc.def.type {
+			var grid = li.def.gridSize;
+			switch li.def.type {
 				case IntGrid:
 					var g = new h2d.Graphics(wrapper);
-					for(cy in 0...lc.cHei)
-					for(cx in 0...lc.cWid) {
-						var id = lc.getIntGrid(cx,cy);
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid) {
+						var id = li.getIntGrid(cx,cy);
 						if( id<0 )
 							continue;
 
-						g.beginFill( lc.getIntGridColorAt(cx,cy) );
+						g.beginFill( li.getIntGridColorAt(cx,cy) );
 						g.drawRect(cx*grid, cy*grid, grid, grid);
 					}
 
 				case Entities:
-					for(ei in lc.entityInstances) {
+					for(ei in li.entityInstances) {
 						var o = createEntityRender(ei.def, wrapper);
 						o.setPosition(ei.x, ei.y);
 					}
@@ -156,11 +156,11 @@ class LevelRender extends dn.Process {
 
 	function updateLayersVisibility() {
 		for(lid in layerWrappers.keys()) {
-			var lc = client.curLevel.getLayerContent(lid);
+			var li = client.curLevel.getLayerInstance(lid);
 			var wrapper = layerWrappers.get(lid);
-			wrapper.visible = isLayerVisible(lc);
-			wrapper.alpha = lc.def.displayOpacity;
-			// wrapper.alpha = lc.def.displayOpacity * ( lc==client.curLayerContent ? 1 : 0.25 );
+			wrapper.visible = isLayerVisible(li);
+			wrapper.alpha = li.def.displayOpacity;
+			// wrapper.alpha = li.def.displayOpacity * ( li==client.curLayerInstance ? 1 : 0.25 );
 		}
 	}
 

@@ -14,7 +14,7 @@ enum GlobalEvent {
 
 	LayerDefChanged;
 	LayerDefSorted;
-	LayerContentChanged;
+	LayerInstanceChanged;
 
 	EntityDefChanged;
 	EntityDefSorted;
@@ -39,13 +39,13 @@ enum CursorType {
 	None;
 	Move;
 	Eraser(x:Int,y:Int);
-	GridCell(lc:LayerInstance, cx:Int, cy:Int, ?col:UInt);
-	GridRect(lc:LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
+	GridCell(li:LayerInstance, cx:Int, cy:Int, ?col:UInt);
+	GridRect(li:LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
 	Entity(def:EntityDef, x:Int, y:Int);
 }
 
 enum GenericLevelElement {
-	IntGrid(lc:LayerInstance, cx:Int, cy:Int);
+	IntGrid(li:LayerInstance, cx:Int, cy:Int);
 	Entity(instance:EntityInstance);
 }
 

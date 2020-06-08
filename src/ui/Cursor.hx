@@ -4,7 +4,7 @@ class Cursor extends dn.Process {
 	var client(get,never) : Client; inline function get_client() return Client.ME;
 	var project(get,never) : ProjectData; inline function get_project() return Client.ME.project;
 	var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
-	// var curLayer(get,never) : LayerInstance; inline function get_curLayer() return Client.ME.curLayerContent;
+	// var curLayer(get,never) : LayerInstance; inline function get_curLayer() return Client.ME.curLayerInstance;
 
 	var type : CursorType = None;
 
@@ -45,23 +45,23 @@ class Cursor extends dn.Process {
 				graphics.lineStyle(1, 0x880000, 1);
 				graphics.drawCircle(0,0, 8);
 
-			case GridCell(lc, cx, cy, col):
+			case GridCell(li, cx, cy, col):
 				if( col==null )
 					col = 0x0;
 				graphics.lineStyle(1, getOpposite(col), 0.8);
-				graphics.drawRect(-pad, -pad, lc.def.gridSize+pad*2, lc.def.gridSize+pad*2);
+				graphics.drawRect(-pad, -pad, li.def.gridSize+pad*2, li.def.gridSize+pad*2);
 
 				graphics.lineStyle(1, col==null ? 0x0 : col);
-				graphics.drawRect(0, 0, lc.def.gridSize, lc.def.gridSize);
+				graphics.drawRect(0, 0, li.def.gridSize, li.def.gridSize);
 
-			case GridRect(lc, cx, cy, wid, hei, col):
+			case GridRect(li, cx, cy, wid, hei, col):
 				if( col==null )
 					col = 0x0;
 				graphics.lineStyle(1, getOpposite(col), 0.8);
-				graphics.drawRect(-2, -2, lc.def.gridSize*wid+4, lc.def.gridSize*hei+4);
+				graphics.drawRect(-2, -2, li.def.gridSize*wid+4, li.def.gridSize*hei+4);
 
 				graphics.lineStyle(1, col==null ? 0x0 : col);
-				graphics.drawRect(0, 0, lc.def.gridSize*wid, lc.def.gridSize*hei);
+				graphics.drawRect(0, 0, li.def.gridSize*wid, li.def.gridSize*hei);
 
 			case Entity(def, x, y):
 				graphics.lineStyle(1, getOpposite(def.color), 0.8);
@@ -104,8 +104,8 @@ class Cursor extends dn.Process {
 			case Eraser(x, y):
 				wrapper.setPosition(x,y);
 
-			case GridCell(lc, cx, cy), GridRect(lc, cx,cy, _):
-				wrapper.setPosition( cx*lc.def.gridSize, cy*lc.def.gridSize );
+			case GridCell(li, cx, cy), GridRect(li, cx,cy, _):
+				wrapper.setPosition( cx*li.def.gridSize, cy*li.def.gridSize );
 
 			case Entity(def, x,y):
 				wrapper.setPosition(x,y);
