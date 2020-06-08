@@ -77,8 +77,11 @@ class Cursor extends dn.Process {
 		}
 
 		graphics.endFill();
+		customRender();
 		updatePosition();
 	}
+
+	public dynamic function customRender() {}
 
 	function getOpposite(c:UInt) { // black or white
 		return C.interpolateInt(c, C.getPerceivedLuminosityInt(c)>=0.7 ? 0x0 : 0xffffff, 0.5);

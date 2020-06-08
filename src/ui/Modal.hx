@@ -16,7 +16,6 @@ class Modal extends dn.Process {
 		super(Client.ME);
 
 		ALL.push(this);
-		ui.InstanceEditor.closeAll();
 
 		jWin = new J("xml#window").children().first().clone();
 		new J("body").append(jWin).addClass("hasModal");

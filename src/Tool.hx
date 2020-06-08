@@ -15,13 +15,11 @@ class Tool<T> extends dn.Process {
 	var lastMouse : Null<MouseCoords>;
 	var button = -1;
 	var rectangle = false;
-	var pickedElement : Null<GenericLevelElement>;
 	var moveStarted = false;
 
 	private function new() {
 		super(Client.ME);
 		updatePalette();
-		ui.InstanceEditor.closeAll();
 	}
 
 	override function toString():String {
@@ -59,7 +57,7 @@ class Tool<T> extends dn.Process {
 
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		curMode = null;
-		pickedElement = null;
+		client.clearSelection();
 		moveStarted = false;
 		cd.unset("requireCtrlRelease");
 
@@ -71,15 +69,13 @@ class Tool<T> extends dn.Process {
 				return;
 
 			client.pickGenericLevelElement(ge);
-			pickedElement = ge;
+			client.setSelection(ge);
 
 			// If layer changed, client curTool was re-created
 			if( client.curTool!=this) {
 				client.curTool.startUsing(m,buttonId);
 				return;
 			}
-
-			onPick();
 		}
 
 		// Start tool
@@ -106,7 +102,6 @@ class Tool<T> extends dn.Process {
 			useAt(m);
 	}
 
-	function onPick() {}
 
 	function duplicateElement(ge:GenericLevelElement) : GenericLevelElement {
 		switch ge {
@@ -184,9 +179,9 @@ class Tool<T> extends dn.Process {
 		if( curMode==Move && !moveStarted && M.dist(origin.gx,origin.gy, m.gx,m.gy)>=10*Const.SCALE ) {
 			moveStarted = true;
 			if( client.isCtrlDown() ) {
-				pickedElement = duplicateElement(pickedElement);
+				var copy = duplicateElement(client.selection);
+				client.setSelection(copy);
 				cd.setS("requireCtrlRelease", Const.INFINITE);
-				onPick();
 			}
 		}
 

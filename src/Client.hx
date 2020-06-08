@@ -23,6 +23,8 @@ class Client extends dn.Process {
 	public var curTool : Tool<Dynamic>;
 
 	public var cursor : ui.Cursor;
+	public var selection : Null<GenericLevelElement>;
+	var selectionCursor : ui.Cursor;
 
 	var keyDowns : Map<Int,Bool> = new Map();
 
@@ -40,6 +42,13 @@ class Client extends dn.Process {
 			.on("keyup.client", onJsKeyUp );
 
 		cursor = new ui.Cursor();
+
+		selectionCursor = new ui.Cursor();
+		selectionCursor.customRender = function() {
+			var g = @:privateAccess selectionCursor.graphics;
+			g.lineStyle(2, 0xffcc00, 0.7);
+			g.drawCircle(0, 0, 20);
+		}
 
 		ge = new GlobalEventDispatcher();
 		ge.watchAny( onGlobalEvent );
@@ -134,6 +143,30 @@ class Client extends dn.Process {
 		keyDowns.remove(ev.keyCode);
 	}
 
+
+	public function setSelection(ge:GenericLevelElement) {
+		selection = ge;
+		selectionCursor.set(switch selection {
+			case IntGrid(lc, cx, cy): GridCell(lc, cx,cy);
+			case Entity(instance): Entity(instance.def, instance.x, instance.y);
+		});
+
+		ui.InstanceEditor.closeAll();
+		switch selection {
+			case null:
+			case IntGrid(lc, cx, cy):
+
+			case Entity(instance):
+				new ui.InstanceEditor(instance);
+		}
+	}
+
+	public function clearSelection() {
+		selection = null;
+		selectionCursor.set(None);
+		ui.InstanceEditor.closeAll();
+	}
+
 	function initTool() {
 		if( curTool!=null )
 			curTool.destroy();
@@ -222,6 +255,7 @@ class Client extends dn.Process {
 		if( curLayerId==l.def.uid )
 			return;
 
+		clearSelection();
 		curLayerId = l.def.uid;
 		levelRender.onCurrentLayerChange(curLayerContent);
 		curTool.updatePalette();
