@@ -70,10 +70,6 @@ class Tool<T> extends dn.Process {
 				return;
 
 			client.pickGenericLevelElement(ge);
-			if( client.isCtrlDown() ) {
-				ge = duplicateElement(ge);
-				cd.setS("requireCtrlRelease", Const.INFINITE);
-			}
 			pickedElement = ge;
 
 			// If layer changed, client curTool was re-created
@@ -162,10 +158,15 @@ class Tool<T> extends dn.Process {
 
 	public function onMouseMove(m:MouseCoords) {
 		// Start moving elements only after a small elapsed mouse distance
-		if( curMode==Move && !moveStarted && M.dist(origin.gx,origin.gy, m.gx,m.gy)>=10*Const.SCALE )
+		if( curMode==Move && !moveStarted && M.dist(origin.gx,origin.gy, m.gx,m.gy)>=10*Const.SCALE ) {
 			moveStarted = true;
+			if( client.isCtrlDown() ) {
+				pickedElement = duplicateElement(pickedElement);
+				cd.setS("requireCtrlRelease", Const.INFINITE);
+			}
+		}
 
-		// Use the tool
+		// Execute the tool
 		if( isRunning() && !rectangle )
 			useAt(m);
 
