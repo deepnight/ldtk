@@ -137,25 +137,36 @@ class EntityTool extends Tool<Int> {
 
 		var form = new J('<ul class="form"/>');
 		form.appendTo(panel);
-		for(fv in ei.fieldInstances) {
+		for(fi in ei.fieldInstances) {
 			var li = new J("<li/>");
 			li.appendTo(form);
-			li.append('<label>${fv.def.name}</label>');
+			li.append('<label>${fi.def.name}</label>');
 
-			switch fv.def.type {
+			switch fi.def.type {
 				case F_Int:
 					var input = new J("<input/>");
 					input.appendTo(li);
 					input.attr("type","text");
-					input.attr("placeholder", fv.def.getDefault()==null ? "(null)" : fv.def.getDefault());
-					if( !fv.isUsingDefault() )
-						input.val( Std.string(fv.getInt()) );
+					input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
+					if( !fi.isUsingDefault() )
+						input.val( Std.string(fi.getInt()) );
 					input.change( function(ev) {
-						fv.parseValue( input.val() );
+						fi.parseValue( input.val() );
 						showInstanceEditor(ei);
 					});
 
 				case F_Float:
+					var input = new J("<input/>");
+					input.appendTo(li);
+					input.attr("type","text");
+					input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
+					if( !fi.isUsingDefault() )
+						input.val( Std.string(fi.getFloat()) );
+					input.change( function(ev) {
+						fi.parseValue( input.val() );
+						showInstanceEditor(ei);
+					});
+
 				case F_String:
 				case F_Bool:
 			}

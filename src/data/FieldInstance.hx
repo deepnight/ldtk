@@ -53,6 +53,14 @@ class FieldInstance { // TODO implements serialization
 				}
 
 			case F_Float:
+				var v = Std.parseFloat(raw);
+				if( !M.isValidNumber(v) )
+					setInternal(null);
+				else {
+					v = def.fClamp(v);
+					setInternal( V_Float(v) );
+				}
+
 			case F_String:
 			case F_Bool:
 		}
@@ -62,6 +70,14 @@ class FieldInstance { // TODO implements serialization
 		require(F_Int);
 		return isUsingDefault() ? def.getIntDefault() : switch internalValue {
 			case V_Int(v): v;
+			case _: throw "unexpected";
+		}
+	}
+
+	public function getFloat() : Null<Float> {
+		require(F_Float);
+		return isUsingDefault() ? def.getFloatDefault() : switch internalValue {
+			case V_Float(v): v;
 			case _: throw "unexpected";
 		}
 	}
