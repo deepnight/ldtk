@@ -159,12 +159,13 @@ class Tool<T> extends dn.Process {
 	}
 
 	public function onMouseMove(m:MouseCoords) {
-		// Drawing
+		// Use the tool
 		if( isRunning() && !rectangle )
 			useAt(m);
 
-		// Cursor
+		// Render cursor
 		if( !isRunning() && client.isAltDown() ) {
+			// Preview picking
 			var ge = getGenericLevelElementAt(m);
 			switch ge {
 				case null: client.cursor.set(None);
@@ -172,12 +173,13 @@ class Tool<T> extends dn.Process {
 				case Entity(instance): client.cursor.set( Entity(instance.def, instance.x, instance.y) );
 			}
 		}
-		else if( isRunning() && curMode==Move )
-			client.cursor.set(Move);
-		else if( isRunning() && curMode==PanView )
-			client.cursor.set(Move);
-		else
-			updateCursor(m);
+		else switch curMode {
+			case PanView, Move:
+				client.cursor.set(Move);
+
+			case null, Add, Remove:
+				updateCursor(m);
+		}
 
 		lastMouse = m;
 	}
