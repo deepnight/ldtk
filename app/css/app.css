@@ -12,6 +12,17 @@ body {
   font-size: 11pt;
 }
 
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+ul li {
+  margin: 0;
+  padding: 0;
+}
+
 * {
   user-select: none;
 }
@@ -25,26 +36,39 @@ xml {
 }
 
 h1 {
-  color: magenta;
+  color: yellow;
+  background: red;
 }
 
-h2 .icon, h3 .icon, h4 .icon, h5 .icon {
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+  padding: 0;
+}
+
+h2 .icon,
+h3 .icon,
+h4 .icon,
+h5 .icon {
   vertical-align: bottom;
   width: 2em;
   height: 2em;
 }
 
 h2 .icon,
-h2 img, h3 .icon,
-h3 img, h4 .icon,
-h4 img, h5 .icon,
+h2 img,
+h3 .icon,
+h3 img,
+h4 .icon,
+h4 img,
+h5 .icon,
 h5 img {
   margin-right: 4px;
 }
 
 h2 {
-  margin: 0;
-  padding: 0;
   margin-bottom: 32px;
   padding-bottom: 8px;
   border-bottom: 1px solid #ffcc00;
@@ -119,20 +143,12 @@ ul.niceList:first-child {
 }
 
 ul.niceList {
-  margin: 0;
-  padding: 0;
-  list-style: none;
   padding: 4px;
   margin-top: 4px;
   min-height: 200px;
   margin-bottom: 4px;
   border: 1px solid #545d73;
   background-color: #1e2229;
-}
-
-ul.niceList li {
-  margin: 0;
-  padding: 0;
 }
 
 ul.niceList li {
@@ -310,16 +326,8 @@ ul.niceList li:not(.active):hover {
 }
 
 ul.form {
-  margin: 0;
-  padding: 0;
-  list-style: none;
   padding: 8px;
   border: 1px solid #545d73;
-}
-
-ul.form li {
-  margin: 0;
-  padding: 0;
 }
 
 ul.form > li {
@@ -626,15 +634,7 @@ input[type=number]:focus {
 }
 
 #editor #palette ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
   padding: 4px;
-}
-
-#editor #palette ul li {
-  margin: 0;
-  padding: 0;
 }
 
 #editor #palette ul > li {
@@ -673,17 +673,6 @@ input[type=number]:focus {
 
 .window.defEditor .mainList button.delete {
   flex: 0 0 32px;
-}
-
-.window.layerDefs ul.intGridValues {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.window.layerDefs ul.intGridValues li {
-  margin: 0;
-  padding: 0;
 }
 
 .window.layerDefs ul.intGridValues li {

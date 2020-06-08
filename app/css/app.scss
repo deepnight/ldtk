@@ -10,13 +10,6 @@ $orange: #ffcc00;
 	margin: 0;
 	padding: 0;
 }
-@mixin resetList() {
-	@include resetMargin();
-	list-style: none;
-	li {
-		@include resetMargin();
-	}
-}
 
 @font-face {
 	font-family: Roboto;
@@ -33,6 +26,16 @@ body {
 	font-size: 11pt;
 }
 
+ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	li {
+		margin: 0;
+		padding: 0;
+	}
+}
+
 * {
 	user-select: none;
 }
@@ -45,9 +48,14 @@ xml {
 	display: none;
 }
 
-h1 { color: magenta; } // should not be used
+h1 { color: yellow; background: red;} // should not be used
 
-h2, h3, h4, h5 {
+h2,
+h3,
+h4,
+h5 {
+	@include resetMargin();
+
 	.icon {
 		vertical-align: bottom;
 		width: 2em;
@@ -61,7 +69,6 @@ h2, h3, h4, h5 {
 }
 
 h2 {
-	@include resetMargin();
 	margin-bottom: 32px;
 	padding-bottom: 8px;
 	border-bottom: 1px solid $orange;
@@ -133,7 +140,6 @@ ul.niceList:first-child {
 	margin-top: 0;
 }
 ul.niceList {
-	@include resetList();
 	padding: 4px;
 	margin-top: 4px;
 	min-height: 200px;
@@ -302,7 +308,6 @@ ul.niceList {
 
 
 ul.form {
-	@include resetList();
 	padding: 8px;
 	border: 1px solid $bgLight;
 
@@ -614,7 +619,6 @@ input[type=number]:focus {
 		background-color: $bgDark;
 
 		ul {
-			@include resetList();
 			padding: 4px;
 
 			>li {
@@ -664,8 +668,6 @@ input[type=number]:focus {
 
 .window.layerDefs {
 	ul.intGridValues {
-		@include resetList();
-
 		li {
 			position: relative;
 		}
