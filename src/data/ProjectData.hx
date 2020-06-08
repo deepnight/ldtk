@@ -67,6 +67,7 @@ class ProjectData implements data.IData {
 						}
 
 					case Entities:
+						// Remove lost entities (def removed)
 						var i = 0;
 						while( i<li.entityInstances.length ) {
 							if( li.entityInstances[i].def==null )
@@ -74,7 +75,18 @@ class ProjectData implements data.IData {
 							else
 								i++;
 						}
+
+						for(ei in li.entityInstances) {
+							// Remove fields whose def was removed
+							var i = 0;
+							while( i<ei.fieldInstances.length )
+								if( ei.fieldInstances[i].def==null )
+									ei.fieldInstances.splice(i,1);
+								else
+									i++;
+						}
 				}
+
 		}
 	}
 
