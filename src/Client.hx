@@ -315,6 +315,7 @@ class Client extends dn.Process {
 					return;
 				ev.stopPropagation();
 				levelRender.toggleLayer(lc);
+				clearSelection();
 				updateLayerList();
 			});
 
