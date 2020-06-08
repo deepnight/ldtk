@@ -11,6 +11,7 @@ class InstanceEditor extends dn.Process {
 
 		ALL.push(this);
 		this.ei = ei;
+		Client.ME.ge.watchAny(onGlobalEvent);
 
 		jPanel = new J('<div class="instanceEditor"/>');
 		Client.ME.jBody.append(jPanel);
@@ -26,6 +27,16 @@ class InstanceEditor extends dn.Process {
 		ei = null;
 
 		ALL.remove(this);
+		Client.ME.ge.remove(onGlobalEvent);
+	}
+
+	function onGlobalEvent(ge:GlobalEvent) {
+		switch ge {
+			case ProjectChanged, EntityDefChanged, EntityFieldChanged:
+				updateForm();
+
+			case _:
+		}
 	}
 
 	public static function closeAll() {
@@ -35,7 +46,7 @@ class InstanceEditor extends dn.Process {
 
 	function updateForm() {
 		jPanel.empty();
-		jPanel.append("<p>"+ei.def.name+"</p>");
+		jPanel.append("<h2>"+ei.def.name+"</h2>");
 
 		var form = new J('<ul class="form"/>');
 		form.appendTo(jPanel);
