@@ -110,6 +110,7 @@ class EntityTool extends Tool<Int> {
 					ei.x = getPlacementX(m);
 					ei.y = getPlacementY(m);
 					client.ge.emit(LayerContentChanged);
+					client.setSelection( Entity(ei) );
 				}
 		}
 	}

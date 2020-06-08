@@ -114,6 +114,13 @@ class Cursor extends dn.Process {
 		graphics.setPosition(wrapper.x, wrapper.y);
 	}
 
+	public function highlight() {
+		root.filter = new h2d.filter.Group([
+			new h2d.filter.Glow(0x8effcb,1, 4, 2, 2, true),
+			new h2d.filter.Glow(0x6296ff,0.6, 8, 1, 2, true),
+		]);
+	}
+
 	override function postUpdate() {
 		super.postUpdate();
 

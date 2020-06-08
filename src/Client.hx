@@ -44,11 +44,7 @@ class Client extends dn.Process {
 		cursor = new ui.Cursor();
 
 		selectionCursor = new ui.Cursor();
-		selectionCursor.customRender = function() {
-			var g = @:privateAccess selectionCursor.graphics;
-			g.lineStyle(2, 0xffcc00, 0.7);
-			g.drawCircle(0, 0, 20);
-		}
+		selectionCursor.highlight();
 
 		ge = new GlobalEventDispatcher();
 		ge.watchAny( onGlobalEvent );
