@@ -45,16 +45,18 @@ class Cursor extends dn.Process {
 				graphics.lineStyle(1, 0x880000, 1);
 				graphics.drawCircle(0,0, 8);
 
-			case GridCell(lc, cx, cy):
-				var col = 0x0; // TODO
+			case GridCell(lc, cx, cy, col):
+				if( col==null )
+					col = 0x0;
 				graphics.lineStyle(1, getOpposite(col), 0.8);
 				graphics.drawRect(-pad, -pad, lc.def.gridSize+pad*2, lc.def.gridSize+pad*2);
 
 				graphics.lineStyle(1, col==null ? 0x0 : col);
 				graphics.drawRect(0, 0, lc.def.gridSize, lc.def.gridSize);
 
-			case GridRect(lc, cx, cy, wid, hei):
-				var col = 0x0; // TODO
+			case GridRect(lc, cx, cy, wid, hei, col):
+				if( col==null )
+					col = 0x0;
 				graphics.lineStyle(1, getOpposite(col), 0.8);
 				graphics.drawRect(-2, -2, lc.def.gridSize*wid+4, lc.def.gridSize*hei+4);
 

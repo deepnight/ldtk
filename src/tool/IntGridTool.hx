@@ -14,7 +14,7 @@ class IntGridTool extends Tool<Int> {
 		return 0;
 	}
 
-	inline function getIntGridColor() {
+	inline function getSelectedColor() {
 		return curLayerContent.def.getIntGridValueDef( getSelectedValue() ).color;
 	}
 
@@ -24,10 +24,10 @@ class IntGridTool extends Tool<Int> {
 
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromMouseCoords(origin, m);
-			client.cursor.set( GridRect(curLayerContent, r.left, r.top, r.wid, r.hei) );
+			client.cursor.set( GridRect(curLayerContent, r.left, r.top, r.wid, r.hei, getSelectedColor()) );
 		}
 		else if( curLayerContent.isValid(m.cx,m.cy) )
-			client.cursor.set( GridCell(curLayerContent, m.cx, m.cy) );
+			client.cursor.set( GridCell(curLayerContent, m.cx, m.cy, getSelectedColor()) );
 		else
 			client.cursor.set(None);
 	}

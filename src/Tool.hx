@@ -168,7 +168,7 @@ class Tool<T> extends dn.Process {
 			var ge = getGenericLevelElementAt(m);
 			switch ge {
 				case null: client.cursor.set(None);
-				case IntGrid(lc, cx, cy): client.cursor.set( GridCell( lc, cx, cy ) );
+				case IntGrid(lc, cx, cy): client.cursor.set( GridCell( lc, cx, cy, lc.getIntGridColorAt(cx,cy) ) );
 				case Entity(instance): client.cursor.set( Entity(instance.def, instance.x, instance.y) );
 			}
 		}

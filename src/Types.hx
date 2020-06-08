@@ -32,8 +32,8 @@ enum CursorType {
 	None;
 	Move;
 	Eraser(x:Int,y:Int);
-	GridCell(lc:LayerContent, cx:Int, cy:Int);
-	GridRect(lc:LayerContent, cx:Int, cy:Int, wid:Int, hei:Int);
+	GridCell(lc:LayerContent, cx:Int, cy:Int, ?col:UInt);
+	GridRect(lc:LayerContent, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
 	Entity(def:EntityDef, x:Int, y:Int);
 }
 
