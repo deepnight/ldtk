@@ -147,7 +147,7 @@ class EntityTool extends Tool<Int> {
 					var input = new J("<input/>");
 					input.appendTo(li);
 					input.attr("type","text");
-					input.attr("placeholder", fv.def.getDefault());
+					input.attr("placeholder", fv.def.getDefault()==null ? "(null)" : fv.def.getDefault());
 					if( !fv.isUsingDefault() )
 						input.val( Std.string(fv.getInt()) );
 					input.change( function(ev) {
