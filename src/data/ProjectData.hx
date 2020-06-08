@@ -51,7 +51,7 @@ class ProjectData implements data.IData {
 			// Add missing layerContents
 			for(ld in layerDefs)
 				if( level.getLayerContent(ld.uid)==null )
-					level.layerContents.push( new LayerContent(level, ld) );
+					level.layerContents.push( new LayerInstance(level, ld) );
 
 			// TODO: remove useless layerContent data (ex: when layer type changed from Entity to IntGrid)
 

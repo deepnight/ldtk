@@ -39,13 +39,13 @@ enum CursorType {
 	None;
 	Move;
 	Eraser(x:Int,y:Int);
-	GridCell(lc:LayerContent, cx:Int, cy:Int, ?col:UInt);
-	GridRect(lc:LayerContent, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
+	GridCell(lc:LayerInstance, cx:Int, cy:Int, ?col:UInt);
+	GridRect(lc:LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
 	Entity(def:EntityDef, x:Int, y:Int);
 }
 
 enum GenericLevelElement {
-	IntGrid(lc:LayerContent, cx:Int, cy:Int);
+	IntGrid(lc:LayerInstance, cx:Int, cy:Int);
 	Entity(instance:EntityInstance);
 }
 

@@ -6,7 +6,7 @@ class Client extends dn.Process {
 	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
-	public var jMainBar(get,never) : J; inline function get_jMainBar() return new J("#mainBar");
+	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette ul");
 
@@ -17,7 +17,7 @@ class Client extends dn.Process {
 
 	public var curLevel(get,never) : LevelData; inline function get_curLevel() return project.getLevel(curLevelId);
 	public var curLayerDef(get,never) : LayerDef; inline function get_curLayerDef() return project.getLayerDef(curLayerId);
-	public var curLayerContent(get,never) : LayerContent; inline function get_curLayerContent() return curLevel.getLayerContent(curLayerId);
+	public var curLayerContent(get,never) : LayerInstance; inline function get_curLayerContent() return curLevel.getLayerContent(curLayerId);
 
 	public var levelRender : display.LevelRender;
 	public var curTool : Tool<Dynamic>;
@@ -36,25 +36,22 @@ class Client extends dn.Process {
 		appWin.title = "L-Ed v"+Const.APP_VERSION;
 		appWin.maximize();
 
+		// Events
 		new J("body")
-			.on("keypress.client", onJsKeyPress )
 			.on("keydown.client", onJsKeyDown )
-			.on("keyup.client", onJsKeyUp );
+			.on("keyup.client", onJsKeyUp )
+			.mouseup( function(_) onMouseUp() )
+			.mouseleave(function(_) onMouseUp() );
 
-		cursor = new ui.Cursor();
-
-		selectionCursor = new ui.Cursor();
-		selectionCursor.highlight();
+		Boot.ME.s2d.addEventListener( onEvent );
 
 		ge = new GlobalEventDispatcher();
 		ge.listenAll( onGlobalEvent );
 
-		jBody.mouseup(function(_) {
-			onMouseUp();
-		});
-		jBody.mouseleave(function(_) {
-			onMouseUp();
-		});
+
+		cursor = new ui.Cursor();
+		selectionCursor = new ui.Cursor();
+		selectionCursor.highlight();
 
 		new J("button.save").click( function(_) N.notImplemented() );
 		new J("button.editProject").click( function(_) {
@@ -83,7 +80,6 @@ class Client extends dn.Process {
 		// 	}
 		// });
 
-		Boot.ME.s2d.addEventListener( onEvent );
 
 		project = new data.ProjectData();
 
@@ -122,21 +118,25 @@ class Client extends dn.Process {
 
 	function onJsKeyDown(ev:js.jquery.Event) {
 		keyDowns.set(ev.keyCode, true);
+		onKeyDown(ev.keyCode);
 	}
 
 	function onJsKeyUp(ev:js.jquery.Event) {
 		keyDowns.remove(ev.keyCode);
 	}
 
-	function onJsKeyPress(ev:js.jquery.Event) {
-	}
-
 	function onHeapsKeyDown(ev:hxd.Event) {
 		keyDowns.set(ev.keyCode, true);
+		onKeyDown(ev.keyCode);
 	}
 
 	function onHeapsKeyUp(ev:hxd.Event) {
 		keyDowns.remove(ev.keyCode);
+	}
+
+	function onKeyDown(keyId:Int) {
+		if( keyId==K.ESCAPE )
+			clearSelection();
 	}
 
 
@@ -247,7 +247,7 @@ class Client extends dn.Process {
 		line.prependTo(e);
 	}
 
-	public function selectLayer(l:LayerContent) {
+	public function selectLayer(l:LayerInstance) {
 		if( curLayerId==l.def.uid )
 			return;
 

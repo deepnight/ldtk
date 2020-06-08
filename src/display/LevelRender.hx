@@ -42,21 +42,21 @@ class LevelRender extends dn.Process {
 		invalidate();
 	}
 
-	public inline function isLayerVisible(l:LayerContent) {
+	public inline function isLayerVisible(l:LayerInstance) {
 		return !layerVis.exists(l.layerDefId) || layerVis.get(l.layerDefId)==true;
 	}
 
-	public function toggleLayer(l:LayerContent) {
+	public function toggleLayer(l:LayerInstance) {
 		layerVis.set(l.layerDefId, !isLayerVisible(l));
 		updateLayersVisibility();
 	}
 
-	public function showLayer(l:LayerContent) {
+	public function showLayer(l:LayerInstance) {
 		layerVis.set(l.layerDefId, true);
 		invalidate();
 	}
 
-	public function hideLayer(l:LayerContent) {
+	public function hideLayer(l:LayerInstance) {
 		layerVis.set(l.layerDefId, false);
 		invalidate();
 	}
@@ -164,7 +164,7 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	public function onCurrentLayerChange(cur:LayerContent) {
+	public function onCurrentLayerChange(cur:LayerInstance) {
 		updateLayersVisibility();
 		renderGrid();
 	}

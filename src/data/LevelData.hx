@@ -1,7 +1,7 @@
 package data;
 
 class LevelData implements data.IData {
-	public var layerContents : Array<LayerContent> = [];
+	public var layerContents : Array<LayerInstance> = [];
 
 	public var uid(default,null) : Int;
 	public var pxWid : Int = 512;
@@ -17,7 +17,7 @@ class LevelData implements data.IData {
 	function initLayersUsingProject(p:ProjectData) {
 		layerContents = [];
 		for(def in p.layerDefs)
-			layerContents.push( new LayerContent(this, def) );
+			layerContents.push( new LayerInstance(this, def) );
 	}
 
 	@:keep public function toString() {
@@ -34,7 +34,7 @@ class LevelData implements data.IData {
 		}
 	}
 
-	public function getLayerContent(layerDefId:Int) : Null<LayerContent> {
+	public function getLayerContent(layerDefId:Int) : Null<LayerInstance> {
 		for(lc in layerContents)
 			if( lc.layerDefId==layerDefId )
 				return lc;

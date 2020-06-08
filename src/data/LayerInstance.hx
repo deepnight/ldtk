@@ -1,6 +1,6 @@
 package data;
 
-class LayerContent implements IData {
+class LayerInstance implements IData { // TODO rename: LayerInstance
 	var project(get,never) : ProjectData; inline function get_project() return Client.ME.project; // TODO
 	public var def(get,never) : data.def.LayerDef; inline function get_def() return project.getLayerDef(layerDefId); // TODO
 	public var level(get,never) : LevelData; inline function get_level() return project.getLevel(levelId);
@@ -20,12 +20,12 @@ class LayerContent implements IData {
 
 
 	@:keep public function toString() {
-		return 'LayerContent<${def.name}:${def.type}>';
+		return 'LayerInstance<${def.name}:${def.type}>';
 	}
 
 
 	public function clone() {
-		var e = new LayerContent(level, def);
+		var e = new LayerInstance(level, def);
 		// TODO
 		return e;
 	}
