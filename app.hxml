@@ -11,4 +11,4 @@
 
 # -D dump=pretty
 
--js app/js/app.js
+-js nwjs/js/app.js

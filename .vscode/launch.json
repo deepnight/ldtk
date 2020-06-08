@@ -8,7 +8,7 @@
 			"name": "Debug NWJS",
 			"type": "nwjs",
 			"request": "launch",
-			"webRoot":"${workspaceFolder}/app",
+			"webRoot":"${workspaceFolder}/nwjs",
 			"preLaunchTask": "JS debug"
 		}
 	]

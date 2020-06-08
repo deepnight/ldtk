@@ -1,1 +1,1 @@
-@start nw app
+@start nw nwjs/
