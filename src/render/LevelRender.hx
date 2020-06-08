@@ -9,9 +9,9 @@ class LevelRender extends dn.Process {
 
 	var grid : h2d.Graphics;
 
-	public var focusX : Float = 0.;
-	public var focusY : Float = 0.;
-	public var zoom : Float = 3.0;
+	public var focusLevelX : Float = 0.;
+	public var focusLevelY : Float = 0.;
+	public var zoom(default,set) : Float = 3.0;
 
 	public function new() {
 		super(client);
@@ -22,6 +22,13 @@ class LevelRender extends dn.Process {
 
 		grid = new h2d.Graphics();
 		root.add(grid, 0);
+
+		focusLevelX = client.curLevel.pxWid*0.5;
+		focusLevelY = client.curLevel.pxHei*0.5;
+	}
+
+	function set_zoom(v) {
+		return zoom = M.fclamp(v, 0.1, 16);
 	}
 
 	override function onDispose() {
@@ -134,8 +141,8 @@ class LevelRender extends dn.Process {
 		super.postUpdate();
 
 		root.setScale(zoom);
-		// root.x = w()*0.5 - focusX * zoom;
-		// root.y = h()*0.5 - focusY * zoom;
+		root.x = w()*0.5 - focusLevelX * zoom;
+		root.y = h()*0.5 - focusLevelY * zoom;
 
 		if( invalidated ) {
 			invalidated = false;

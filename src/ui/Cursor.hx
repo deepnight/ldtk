@@ -91,7 +91,7 @@ class Cursor extends dn.Process {
 			render();
 	}
 
-	function updatePosition() {
+	public function updatePosition() {
 		if( type==None )
 			return;
 

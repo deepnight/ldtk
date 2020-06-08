@@ -79,10 +79,23 @@ class Tool<T> extends dn.Process {
 			}
 		}
 
-
 		// Start tool
 		button = buttonId;
-		curMode = button==0 ? ( client.isAltDown() ? Move : Add ) : button==1 ? Remove : PanView;
+		switch button {
+			case 0:
+				if( client.isKeyDown(K.SPACE) )
+					curMode = PanView;
+				else if( client.isAltDown() )
+					curMode = Move;
+				else
+					curMode = Add;
+
+			case 1:
+				curMode = Remove;
+
+			case 2:
+				curMode = PanView;
+		}
 		rectangle = client.isShiftDown();
 		origin = m;
 		lastMouse = m;
@@ -135,7 +148,12 @@ class Tool<T> extends dn.Process {
 
 	function updateCursor(m:MouseCoords) {}
 
-	function useAt(m:MouseCoords) {}
+	function useAt(m:MouseCoords) {
+		if( curMode==PanView ) {
+			client.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
+			client.levelRender.focusLevelY -= m.levelY-lastMouse.levelY;
+		}
+	}
 
 	function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {}
 
@@ -180,6 +198,8 @@ class Tool<T> extends dn.Process {
 				case Entity(instance): client.cursor.set( Entity(instance.def, instance.x, instance.y) );
 			}
 		}
+		else if( client.isKeyDown(K.SPACE) )
+			client.cursor.set(Move);
 		else switch curMode {
 			case PanView, Move:
 				client.cursor.set(Move);

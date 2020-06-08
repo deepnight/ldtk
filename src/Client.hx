@@ -173,7 +173,7 @@ class Client extends dn.Process {
 			case EMove: onMouseMove(e);
 			case EOver:
 			case EOut: onMouseUp();
-			case EWheel:
+			case EWheel: onMouseWheel(e);
 			case EFocus:
 			case EFocusLost: onMouseUp();
 			case EKeyDown: onHeapsKeyDown(e);
@@ -195,6 +195,10 @@ class Client extends dn.Process {
 	function onMouseMove(e:hxd.Event) {
 		var m = getMouse();
 		curTool.onMouseMove(m);
+	}
+
+	function onMouseWheel(e:hxd.Event) {
+		levelRender.zoom += -e.wheelDelta*0.2;
 	}
 
 	public function debug(msg:Dynamic, clear=true) {
@@ -282,6 +286,7 @@ class Client extends dn.Process {
 	}
 
 
+	public inline function isKeyDown(keyId:Int) return keyDowns.get(keyId)==true;
 	public inline function isShiftDown() return keyDowns.get(Key.SHIFT)==true;
 	public inline function isCtrlDown() return keyDowns.get(Key.CTRL)==true;
 	public inline function isAltDown() return keyDowns.get(Key.ALT)==true;
