@@ -104,10 +104,12 @@ class EntityTool extends Tool<Int> {
 				removeAnyEntityAt(m);
 
 			case Move:
-				var ei = getPickedEntityInstance();
-				ei.x = getPlacementX(m);
-				ei.y = getPlacementY(m);
-				client.ge.emit(LayerContentChanged);
+				if( moveStarted ) {
+					var ei = getPickedEntityInstance();
+					ei.x = getPlacementX(m);
+					ei.y = getPlacementY(m);
+					client.ge.emit(LayerContentChanged);
+				}
 		}
 	}
 

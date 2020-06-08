@@ -16,6 +16,7 @@ class Tool<T> extends dn.Process {
 	var button = -1;
 	var rectangle = false;
 	var pickedElement : Null<GenericLevelElement>;
+	var moveStarted = false;
 
 	private function new() {
 		super(Client.ME);
@@ -58,6 +59,7 @@ class Tool<T> extends dn.Process {
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		curMode = null;
 		pickedElement = null;
+		moveStarted = false;
 		cd.unset("requireCtrlRelease");
 
 		// Picking an existing element
@@ -159,6 +161,10 @@ class Tool<T> extends dn.Process {
 	}
 
 	public function onMouseMove(m:MouseCoords) {
+		// Start moving elements only after a small elapsed mouse distance
+		if( curMode==Move && !moveStarted && M.dist(origin.gx,origin.gy, m.gx,m.gy)>=10*Const.SCALE )
+			moveStarted = true;
+
 		// Use the tool
 		if( isRunning() && !rectangle )
 			useAt(m);
