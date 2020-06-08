@@ -186,7 +186,7 @@ class EditEntityDefs extends ui.Modal {
 
 		jFieldForm.find(".type").empty().append( Std.string(L.getFieldType(curField.type)) );
 		#if debug
-		jFieldForm.find(".type").append("<p>"+curField.toString()+"</p>");
+		jFieldForm.find(".type").append("<p>"+StringTools.htmlEscape(curField.toString())+"</p>");
 		#end
 
 		var i = Input.linkToHtmlInput( curField.name, jFieldForm.find("input[name=name]") );
