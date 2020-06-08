@@ -2,7 +2,7 @@ package data;
 
 class LayerContent implements IData {
 	var project(get,never) : ProjectData; inline function get_project() return Client.ME.project; // TODO
-	public var def(get,never) : data.def.LayerDef; inline function get_def() return project.getLayerDef(layerDefId);
+	public var def(get,never) : data.def.LayerDef; inline function get_def() return project.getLayerDef(layerDefId); // TODO
 	public var level(get,never) : LevelData; inline function get_level() return project.getLevel(levelId);
 	public var cWid(get,never) : Int; inline function get_cWid() return M.ceil( level.pxWid / def.gridSize );
 	public var cHei(get,never) : Int; inline function get_cHei() return M.ceil( level.pxHei / def.gridSize );

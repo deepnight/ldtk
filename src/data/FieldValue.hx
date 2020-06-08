@@ -3,7 +3,7 @@ package data;
 class FieldValue { // TODO implements serialization
 	var internalVal : Null<String>;
 
-	public var def(get,never) : FieldDef; inline function get_def() return Client.ME.project.getFieldDef(defId);
+	public var def(get,never) : FieldDef; inline function get_def() return Client.ME.project.getFieldDef(defId); // TODO
 	public var defId: Int;
 
 	@:allow(data.EntityInstance)

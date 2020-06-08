@@ -4,7 +4,7 @@ class EntityInstance {
 	static var _renderCache : Map<Int, h3d.mat.Texture> = new Map();
 
 	public var defId(default,null) : Int;
-	public var def(get,never) : EntityDef; inline function get_def() return Client.ME.project.getEntityDef(defId);
+	public var def(get,never) : EntityDef; inline function get_def() return Client.ME.project.getEntityDef(defId); // TODO
 
 	public var x : Int;
 	public var y : Int;
