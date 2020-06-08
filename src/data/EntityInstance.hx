@@ -15,9 +15,13 @@ class EntityInstance {
 	public var top(get,never) : Int; inline function get_top() return Std.int( y - def.height*def.pivotY );
 	public var bottom(get,never) : Int; inline function get_bottom() return top + def.height-1;
 
+	public var fieldValues : Array<data.FieldValue> = [];
+
 
 	public function new(def:EntityDef) {
 		defId = def.uid;
+		for(fd in def.fieldDefs)
+			fieldValues.push( new data.FieldValue(fd) );
 	}
 
 	@:keep public function toString() {

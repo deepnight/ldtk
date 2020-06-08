@@ -1,24 +1,46 @@
-package data.def;
+package data;
 
 class FieldValue { // TODO implements serialization
 	var internalVal : Null<String>;
 
-	public var def(get,never) : FieldDef; inline function get_def() return null;
+	public var def(get,never) : FieldDef; inline function get_def() return Client.ME.project.getFieldDef(defId);
+	public var defId: Int;
 
-	@:allow(data.def.EntityDef)
+	@:allow(data.EntityInstance)
 	private function new(fd:FieldDef) {
+		defId = fd.uid;
 		internalVal = null;
 	}
 
+	@:keep
+	public function toString() {
+		return
+			'${def.name} = ${getInternalWithDefault()}'
+			+' (internal='+(internalVal==null?'null':'"$internalVal"') + ')';
+	}
+
 	inline function require(type:FieldType) {
-		if( this.type!=type )
+		if( def.type!=type )
 			throw "Only available on "+type+" fields";
 	}
 
 	function setInternal(v:Dynamic) {
 		if( v==null )
-			v = getDefault();
-		internalVal = Std.string(v);
+			v = def.getDefault();
+
+		switch def.type {
+			case F_Int:
+				var v = Std.parseInt(v);
+				internalVal = Std.string( def.iClamp(v) );
+
+			case F_Float:
+			case F_String:
+			case F_Bool:
+		}
+	}
+
+	function getInternalWithDefault() : String {
+		return internalVal==null ? def.getDefault() : internalVal;
 	}
 
 
@@ -31,15 +53,4 @@ class FieldValue { // TODO implements serialization
 		else
 			return Std.parseInt(internalVal);
 	}
-	public function setIntDefault(v:Null<Int>) {
-		intDefault = v;
-	}
-
-
-	// public function setString(v:String) {
-	// 	setInternal(v);
-	// }
-	// public function getString() : String {
-	// 	return internalVal;
-	// }
 }

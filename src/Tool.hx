@@ -77,6 +77,8 @@ class Tool<T> extends dn.Process {
 				client.curTool.startUsing(m,buttonId);
 				return;
 			}
+
+			onPick();
 		}
 
 		// Start tool
@@ -102,6 +104,8 @@ class Tool<T> extends dn.Process {
 		if( !rectangle )
 			useAt(m);
 	}
+
+	function onPick() {}
 
 	function duplicateElement(ge:GenericLevelElement) : GenericLevelElement {
 		switch ge {
@@ -181,6 +185,7 @@ class Tool<T> extends dn.Process {
 			if( client.isCtrlDown() ) {
 				pickedElement = duplicateElement(pickedElement);
 				cd.setS("requireCtrlRelease", Const.INFINITE);
+				onPick();
 			}
 		}
 

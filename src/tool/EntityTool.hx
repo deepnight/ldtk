@@ -51,6 +51,17 @@ class EntityTool extends Tool<Int> {
 	}
 
 
+	override function onPick() {
+		super.onPick();
+
+		switch pickedElement {
+			case null:
+			case IntGrid(lc, cx, cy):
+			case Entity(instance):
+				showInstanceEditor(instance);
+		}
+	}
+
 	override function startUsing(m:MouseCoords, buttonId:Int) {
 		super.startUsing(m, buttonId);
 
@@ -61,6 +72,7 @@ class EntityTool extends Tool<Int> {
 				ei.x = getPlacementX(m);
 				ei.y = getPlacementY(m);
 				client.ge.emit(LayerContentChanged);
+				showInstanceEditor(ei);
 
 			case Remove:
 				removeAnyEntityAt(m);
@@ -110,6 +122,19 @@ class EntityTool extends Tool<Int> {
 					ei.y = getPlacementY(m);
 					client.ge.emit(LayerContentChanged);
 				}
+		}
+	}
+
+	function hideInstanceEditor() {
+	}
+
+	function showInstanceEditor(ei:EntityInstance) {
+		var panel = client.jSubPanel;
+		panel.empty();
+		panel.append("<p>"+ei.def.name+"</p>");
+
+		for(fv in ei.fieldValues) {
+			panel.append("<p>"+fv+"</p>");
 		}
 	}
 

@@ -184,6 +184,15 @@ class ProjectData implements data.IData {
 	}
 
 
+	/**  FIELD DEFS  *****************************************/
+	public function getFieldDef(id:Int) : Null<FieldDef> {
+		for(ed in entityDefs)
+		for(fd in ed.fieldDefs)
+			if( fd.uid==id )
+				return fd;
+		return null;
+	}
+
 
 	/**  LEVELS  *****************************************/
 

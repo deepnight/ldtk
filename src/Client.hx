@@ -7,6 +7,7 @@ class Client extends dn.Process {
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
 	public var jMainBar(get,never) : J; inline function get_jMainBar() return new J("#mainBar");
+	public var jSubPanel(get,never) : J; inline function get_jSubPanel() return new J("#subPanel");
 	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette ul");
 
 	public var ge : GlobalEventDispatcher;
@@ -88,6 +89,11 @@ class Client extends dn.Process {
 		ed.height = 32;
 		ed.maxPerLevel = 1;
 		ed.setPivot(0.5,1);
+		var fd = ed.createField(project, F_Int);
+		fd.name = "life";
+		fd.setDefault(Std.string(3));
+		fd.setMin("1");
+		fd.setMax("10");
 		var ld = project.layerDefs[0];
 		ld.name = "Collisions";
 		ld.addIntGridValue(0x00ff00);
