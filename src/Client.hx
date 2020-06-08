@@ -53,32 +53,25 @@ class Client extends dn.Process {
 		selectionCursor = new ui.Cursor();
 		selectionCursor.highlight();
 
-		new J("button.save").click( function(_) N.notImplemented() );
-		new J("button.editProject").click( function(_) {
+		jMainPanel.find("button.save").click( function(_) N.notImplemented() );
+		jMainPanel.find("button.editProject").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.ProjectSettings) )
 				ui.Modal.closeAll();
 			else
 				new ui.modal.ProjectSettings();
 		});
-		new J("button.editLayers").click( function(_) {
+		jMainPanel.find("button.editLayers").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.EditLayerDefs) )
 				ui.Modal.closeAll();
 			else
 				new ui.modal.EditLayerDefs();
 		});
-		new J("button.editEntities").click( function(_) {
+		jMainPanel.find("button.editEntities").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.EditEntityDefs) )
 				ui.Modal.closeAll();
 			else
 				new ui.modal.EditEntityDefs();
 		});
-
-		// new J("#layers, #palette").click( function(ev) {
-		// 	if( ui.Window.hasAnyOpen() ) {
-		// 		ui.Window.closeAll();
-		// 		ev.stopPropagation();
-		// 	}
-		// });
 
 
 		project = new data.ProjectData();
@@ -104,15 +97,12 @@ class Client extends dn.Process {
 		ld.gridSize = 8;
 		ld.getIntGridValueDef(0).color = 0x00ff00;
 
-
 		project.createLevel();
-
 		curLevelId = project.levels[0].uid;
 		curLayerId = project.layerDefs[0].uid;
 
-		initTool();
 		levelRender = new display.LevelRender();
-
+		initTool();
 		updateLayerList();
 	}
 
