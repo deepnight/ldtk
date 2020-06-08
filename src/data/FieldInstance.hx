@@ -1,7 +1,7 @@
 package data;
 
 class FieldInstance { // TODO implements serialization
-	var internalVal : Null<String>;
+	var internalVal : FieldValue;
 
 	public var def(get,never) : FieldDef; inline function get_def() return Client.ME.project.getFieldDef(defId); // TODO
 	public var defId: Int;
@@ -9,14 +9,24 @@ class FieldInstance { // TODO implements serialization
 	@:allow(data.EntityInstance)
 	private function new(fd:FieldDef) {
 		defId = fd.uid;
-		internalVal = null;
+		internalVal = switch fd.type {
+			case F_Int: V_Int(null);
+			case F_Float: null; // TODO
+			case F_String: null; // TODO
+			case F_Bool: null; // TODO
+		};
 	}
 
 	@:keep
 	public function toString() {
-		return
-			'${def.name} = ${getInternalWithDefault()}'
-			+' (internal='+(internalVal==null?'null':'"$internalVal"') + ')';
+		return '${def.name} = '
+			+ Std.string(switch def.type {
+				case F_Int: getInt();
+				case F_Float: null; // TODO
+				case F_String: null;
+				case F_Bool: null;
+			})
+			+ ' [ $internalVal ]';
 	}
 
 	inline function require(type:FieldType) {
@@ -24,33 +34,29 @@ class FieldInstance { // TODO implements serialization
 			throw "Only available on "+type+" fields";
 	}
 
-	function setInternal(v:Dynamic) {
-		if( v==null )
-			v = def.getDefault();
+	function setInternal(fv:FieldValue) {
+		internalVal = fv;
+	}
 
-		switch def.type {
-			case F_Int:
-				var v = Std.parseInt(v);
-				internalVal = Std.string( def.iClamp(v) );
-
-			case F_Float:
-			case F_String:
-			case F_Bool:
+	public function isUsingDefault() {
+		return switch internalVal {
+			case V_Int(v): v==null;
 		}
 	}
 
-	function getInternalWithDefault() : String {
-		return internalVal==null ? def.getDefault() : internalVal;
-	}
 
 
-	public function setInt(v:Int) {
-		setInternal(v);
+	public function parseInt(raw:Null<String>) {
+		require(F_Int);
+		var v : Null<Int> = raw==null ? null : Std.parseInt(raw);
+		if( !M.isValidNumber(v) )
+			v = null;
+		v = def.iClamp(v);
+		setInternal( V_Int(v) );
 	}
-	public function getInt() : Int {
-		if( internalVal==null )
-			return def.getDefault();
-		else
-			return Std.parseInt(internalVal);
+	public function getInt() : Null<Int> {
+		switch internalVal {
+			case V_Int(v):  return v==null ? def.getIntDefault() : v;
+		}
 	}
 }

@@ -28,6 +28,10 @@ enum FieldType {
 	F_Bool;
 }
 
+enum FieldValue {
+	V_Int(v:Null<Int>);
+}
+
 enum CursorType {
 	None;
 	Move;

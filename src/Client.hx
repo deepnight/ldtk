@@ -87,7 +87,7 @@ class Client extends dn.Process {
 		ed.color = 0x00ff00;
 		ed.width = 24;
 		ed.height = 32;
-		ed.maxPerLevel = 1;
+		// ed.maxPerLevel = 1;
 		ed.setPivot(0.5,1);
 		var fd = ed.createField(project, F_Int);
 		fd.name = "life";
