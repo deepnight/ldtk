@@ -1,7 +1,7 @@
 package data;
 
 class FieldInstance { // TODO implements serialization
-	var internalVal : FieldValue;
+	var internalValue : ValueWrapper;
 
 	public var def(get,never) : FieldDef; inline function get_def() return Client.ME.project.getFieldDef(defId); // TODO
 	public var defId: Int;
@@ -9,7 +9,7 @@ class FieldInstance { // TODO implements serialization
 	@:allow(data.EntityInstance)
 	private function new(fd:FieldDef) {
 		defId = fd.uid;
-		internalVal = switch fd.type {
+		internalValue = switch fd.type {
 			case F_Int: V_Int(null);
 			case F_Float: null; // TODO
 			case F_String: null; // TODO
@@ -26,7 +26,7 @@ class FieldInstance { // TODO implements serialization
 				case F_String: null;
 				case F_Bool: null;
 			})
-			+ ' [ $internalVal ]';
+			+ ' [ $internalValue ]';
 	}
 
 	inline function require(type:FieldType) {
@@ -34,12 +34,12 @@ class FieldInstance { // TODO implements serialization
 			throw "Only available on "+type+" fields";
 	}
 
-	function setInternal(fv:FieldValue) {
-		internalVal = fv;
+	function setInternal(fv:ValueWrapper) {
+		internalValue = fv;
 	}
 
 	public function isUsingDefault() {
-		return switch internalVal {
+		return switch internalValue {
 			case V_Int(v): v==null;
 		}
 	}
@@ -55,7 +55,7 @@ class FieldInstance { // TODO implements serialization
 		setInternal( V_Int(v) );
 	}
 	public function getInt() : Null<Int> {
-		switch internalVal {
+		switch internalValue {
 			case V_Int(v):  return v==null ? def.getIntDefault() : v;
 		}
 	}

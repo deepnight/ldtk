@@ -28,7 +28,7 @@ enum FieldType {
 	F_Bool;
 }
 
-enum FieldValue {
+enum ValueWrapper {
 	V_Int(v:Null<Int>);
 }
 
