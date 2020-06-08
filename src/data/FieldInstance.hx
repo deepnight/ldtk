@@ -62,7 +62,17 @@ class FieldInstance { // TODO implements serialization
 				}
 
 			case F_String:
+				raw = StringTools.trim(raw);
+				if( raw.length==0 )
+					setInternal(null);
+				else
+					setInternal(V_String(raw) );
+
 			case F_Bool:
+				raw = StringTools.trim(raw).toLowerCase();
+				if( raw=="true" ) setInternal( V_Bool(true) );
+				else if( raw=="false" ) setInternal( V_Bool(false) );
+				else setInternal(null);
 		}
 	}
 
@@ -78,6 +88,22 @@ class FieldInstance { // TODO implements serialization
 		require(F_Float);
 		return isUsingDefault() ? def.getFloatDefault() : switch internalValue {
 			case V_Float(v): v;
+			case _: throw "unexpected";
+		}
+	}
+
+	public function getBool() : Bool {
+		require(F_Bool);
+		return isUsingDefault() ? def.getBoolDefault() : switch internalValue {
+			case V_Bool(v): v;
+			case _: throw "unexpected";
+		}
+	}
+
+	public function getString() : String {
+		require(F_String);
+		return isUsingDefault() ? def.getStringDefault() : switch internalValue {
+			case V_String(v): v;
 			case _: throw "unexpected";
 		}
 	}

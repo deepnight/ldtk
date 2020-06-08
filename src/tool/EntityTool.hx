@@ -168,7 +168,27 @@ class EntityTool extends Tool<Int> {
 					});
 
 				case F_String:
+					var input = new J("<input/>");
+					input.appendTo(li);
+					input.attr("type","text");
+					var def = fi.def.getStringDefault();
+					input.attr("placeholder", def==null ? "(null)" : def=="" ? "(empty string)" : def);
+					if( !fi.isUsingDefault() )
+						input.val( fi.getString() );
+					input.change( function(ev) {
+						fi.parseValue( input.val() );
+						showInstanceEditor(ei);
+					});
+
 				case F_Bool:
+					var input = new J("<input/>");
+					input.appendTo(li);
+					input.attr("type","checkbox");
+					input.prop("checked",fi.getBool());
+					input.change( function(ev) {
+						fi.parseValue( Std.string( input.prop("checked") ) );
+						showInstanceEditor(ei);
+					});
 			}
 		}
 	}
