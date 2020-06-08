@@ -133,7 +133,7 @@ class EntityTool extends Tool<Int> {
 		panel.empty();
 		panel.append("<p>"+ei.def.name+"</p>");
 
-		for(fv in ei.fieldValues) {
+		for(fv in ei.fieldInstances) {
 			panel.append("<p>"+fv+"</p>");
 		}
 	}
