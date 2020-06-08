@@ -1,6 +1,6 @@
 package ui.modal;
 
-class EditEntities extends ui.Modal {
+class EditEntityDefs extends ui.Modal {
 	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jWin.find(".entityList ul");
 	var jFieldList(get,never) : js.jquery.JQuery; inline function get_jFieldList() return jWin.find(".fieldList ul");
 
@@ -15,7 +15,7 @@ class EditEntities extends ui.Modal {
 	public function new() {
 		super();
 
-		loadTemplate( hxd.Res.tpl.editEntities, "defEditor entityDefs" );
+		loadTemplate( hxd.Res.tpl.editEntityDefs, "defEditor entityDefs" );
 
 
 		// Create entity

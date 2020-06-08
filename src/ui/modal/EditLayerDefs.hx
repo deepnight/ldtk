@@ -1,6 +1,6 @@
 package ui.modal;
 
-class EditLayers extends ui.Modal {
+class EditLayerDefs extends ui.Modal {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
 	public var cur : Null<LayerDef>;
@@ -8,7 +8,7 @@ class EditLayers extends ui.Modal {
 	public function new() {
 		super();
 
-		loadTemplate( hxd.Res.tpl.editLayers, "defEditor layerDefs" );
+		loadTemplate( hxd.Res.tpl.editLayerDefs, "defEditor layerDefs" );
 		jList = jWin.find(".mainList ul");
 		jForm = jWin.find("ul.form");
 

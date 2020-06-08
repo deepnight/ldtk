@@ -58,16 +58,16 @@ class Client extends dn.Process {
 				new ui.modal.ProjectSettings();
 		});
 		new J("button.editLayers").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.EditLayers) )
+			if( ui.Modal.isOpen(ui.modal.EditLayerDefs) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.EditLayers();
+				new ui.modal.EditLayerDefs();
 		});
 		new J("button.editEntities").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.EditEntities) )
+			if( ui.Modal.isOpen(ui.modal.EditEntityDefs) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.EditEntities();
+				new ui.modal.EditEntityDefs();
 		});
 
 		// new J("#layers, #palette").click( function(ev) {
