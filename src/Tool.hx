@@ -83,8 +83,8 @@ class Tool<T> extends dn.Process {
 
 
 		// Start tool
-		curMode = buttonId==0 ? ( client.isAltDown() ? Move : Add ) : Remove;
 		button = buttonId;
+		curMode = button==0 ? ( client.isAltDown() ? Move : Add ) : button==1 ? Remove : PanView;
 		rectangle = client.isShiftDown();
 		origin = m;
 		lastMouse = m;
@@ -173,7 +173,9 @@ class Tool<T> extends dn.Process {
 			}
 		}
 		else if( isRunning() && curMode==Move )
-			client.cursor.set(None);
+			client.cursor.set(Move);
+		else if( isRunning() && curMode==PanView )
+			client.cursor.set(Move);
 		else
 			updateCursor(m);
 

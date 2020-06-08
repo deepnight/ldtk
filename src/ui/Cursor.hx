@@ -29,11 +29,15 @@ class Cursor extends dn.Process {
 		graphics.endFill();
 
 		root.visible = type!=None && !Modal.hasAnyOpen();
+		hxd.System.setCursor(Default);
 
 		var pad = 2;
 
 		switch type {
 			case None:
+
+			case Move:
+				hxd.System.setCursor(Move);
 
 			case Eraser(x, y):
 				graphics.lineStyle(1, 0xff0000, 1);
@@ -90,7 +94,7 @@ class Cursor extends dn.Process {
 			return;
 
 		switch type {
-			case None:
+			case None, Move:
 
 			case Eraser(x, y):
 				wrapper.setPosition(x,y);

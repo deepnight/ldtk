@@ -42,7 +42,7 @@ class IntGridTool extends Tool<Int> {
 
 		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
 			switch curMode {
-				case null:
+				case null, PanView:
 				case Add:
 					curLayerContent.setIntGrid(cx, cy, getSelectedValue());
 
@@ -61,7 +61,7 @@ class IntGridTool extends Tool<Int> {
 		for(cx in left...right+1)
 		for(cy in top...bottom+1) {
 			switch curMode {
-				case null:
+				case null, PanView:
 				case Add:
 					curLayerContent.setIntGrid(cx,cy, getSelectedValue());
 

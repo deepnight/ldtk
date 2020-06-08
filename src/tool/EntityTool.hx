@@ -55,7 +55,7 @@ class EntityTool extends Tool<Int> {
 		super.startUsing(m, buttonId);
 
 		switch curMode {
-			case null:
+			case null, PanView:
 			case Add:
 				var ei = curLayerContent.createEntityInstance(curEntityDef);
 				ei.x = getPlacementX(m);
@@ -97,7 +97,7 @@ class EntityTool extends Tool<Int> {
 		super.useAt(m);
 
 		switch curMode {
-			case null:
+			case null, PanView:
 			case Add:
 
 			case Remove:

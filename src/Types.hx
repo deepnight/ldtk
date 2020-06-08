@@ -30,6 +30,7 @@ enum FieldType {
 
 enum CursorType {
 	None;
+	Move;
 	Eraser(x:Int,y:Int);
 	GridCell(lc:LayerContent, cx:Int, cy:Int);
 	GridRect(lc:LayerContent, cx:Int, cy:Int, wid:Int, hei:Int);
@@ -42,6 +43,7 @@ enum GenericLevelElement {
 }
 
 enum ToolEditMode {
+	PanView;
 	Add;
 	Remove;
 	Move;
