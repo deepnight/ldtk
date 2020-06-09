@@ -1,6 +1,6 @@
 package data;
 
-class FieldInstance { // TODO implements serialization
+class FieldInstance implements IData {
 	var internalValue : Null<ValueWrapper>;
 
 	public var def(get,never) : FieldDef; inline function get_def() return Client.ME.project.getFieldDef(defId); // TODO
@@ -23,6 +23,23 @@ class FieldInstance { // TODO implements serialization
 				case V_String(_): getString();
 			})
 			+ ' [ $internalValue ]';
+	}
+
+	public function clone() {
+		return fromJson( toJson() );
+	}
+
+	public static function fromJson(json:Dynamic) {
+		var o = new FieldInstance( Client.ME.project.getFieldDef(JsonTools.readInt(json.defId)) ); // HACK
+		o.internalValue = json.internalValue==null ? null : JsonTools.readEnum(ValueWrapper, json.internalValue);
+		return o;
+	}
+
+	public function toJson() {
+		return {
+			defId: defId,
+			internalValue: JsonTools.writeEnum(internalValue),
+		}
 	}
 
 	inline function require(type:FieldType) {
