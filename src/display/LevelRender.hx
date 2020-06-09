@@ -62,9 +62,11 @@ class LevelRender extends dn.Process {
 	}
 
 	public function renderGrid() {
+		var col = C.autoContrast(client.project.bgColor);
+
 		var l = client.curLayerInstance;
 		grid.clear();
-		grid.lineStyle(1, 0x0, 0.2);
+		grid.lineStyle(1, col, 0.2);
 		for( cx in 0...client.curLayerInstance.cWid+1 ) {
 			grid.moveTo(cx*l.def.gridSize, 0);
 			grid.lineTo(cx*l.def.gridSize, l.cHei*l.def.gridSize);

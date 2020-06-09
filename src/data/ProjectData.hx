@@ -9,10 +9,12 @@ class ProjectData implements data.IData {
 	public var name : String;
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
+	public var bgColor : UInt;
 
 	public function new() {
 		createLayerDef(IntGrid);
 		name = "New project";
+		bgColor = 0xffffff;
 		defaultPivotX = defaultPivotY = 0;
 	}
 

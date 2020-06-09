@@ -10,16 +10,17 @@ class Client extends dn.Process {
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette ul");
 
+	public var curLevel(get,never) : LevelData; inline function get_curLevel() return project.getLevel(curLevelId);
+	public var curLayerDef(get,never) : LayerDef; inline function get_curLayerDef() return project.getLayerDef(curLayerId);
+	public var curLayerInstance(get,never) : LayerInstance; inline function get_curLayerInstance() return curLevel.getLayerInstance(curLayerDef);
+
 	public var ge : GlobalEventDispatcher;
 	public var project : ProjectData;
 	var curLevelId : Int;
 	var curLayerId : Int;
 
-	public var curLevel(get,never) : LevelData; inline function get_curLevel() return project.getLevel(curLevelId);
-	public var curLayerDef(get,never) : LayerDef; inline function get_curLayerDef() return project.getLayerDef(curLayerId);
-	public var curLayerInstance(get,never) : LayerInstance; inline function get_curLayerInstance() return curLevel.getLayerInstance(curLayerDef);
-
 	public var levelRender : display.LevelRender;
+	var bg : h2d.Bitmap;
 	public var curTool : Tool<Dynamic>;
 
 	public var cursor : ui.Cursor;
@@ -102,6 +103,7 @@ class Client extends dn.Process {
 
 		levelRender = new display.LevelRender();
 		initTool();
+		updateBg();
 		updateProjectTitle();
 		updateLayerList();
 	}
@@ -126,7 +128,10 @@ class Client extends dn.Process {
 
 	function onKeyDown(keyId:Int) {
 		if( keyId==K.ESCAPE )
-			clearSelection();
+			if( ui.Modal.hasAnyOpen() )
+				ui.Modal.closeAll();
+			else
+				clearSelection();
 	}
 
 
@@ -263,17 +268,39 @@ class Client extends dn.Process {
 			case LayerInstanceChanged:
 			case EntityFieldChanged:
 			case EntityFieldSorted:
+			case EntityDefSorted:
 
-			case _:
+			case EntityDefChanged :
+				display.LevelRender.invalidateCaches();
+
+			case ProjectChanged:
+				updateBg();
+				updateProjectTitle();
+
+			case LayerDefChanged, LayerDefSorted:
 				if( curLayerDef==null )
 					selectLayerInstance( curLevel.getLayerInstance(project.layerDefs[0]) );
 				initTool();
-				updateProjectTitle();
 				updateLayerList();
-		}
 
-		if( e==EntityDefChanged )
-			display.LevelRender.invalidateCaches();
+		}
+	}
+
+	function updateBg() {
+		if( bg!=null )
+			bg.remove();
+
+		bg = new h2d.Bitmap( h2d.Tile.fromColor(project.bgColor) );
+		root.add(bg, Const.DP_BG);
+		onResize();
+	}
+
+	override function onResize() {
+		super.onResize();
+		if( bg!=null ) {
+			bg.scaleX = w();
+			bg.scaleY = h();
+		}
 	}
 
 	function updateProjectTitle() {
