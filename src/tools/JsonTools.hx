@@ -3,6 +3,9 @@ package tools;
 class JsonTools {
 
 	public static function writeEnum(e:EnumValue) {
+		if( e==null )
+			return null;
+
 		return { id:e.getIndex(), p:e.getParameters() }
 	}
 
