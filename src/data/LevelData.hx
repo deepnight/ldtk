@@ -40,4 +40,24 @@ class LevelData implements data.IData {
 				return li;
 		return null;
 	}
+
+	public function tidy(project:ProjectData) {
+		// Remove layerInstances without layerDefs
+		var i = 0;
+		while( i<layerInstances.length ) {
+			if( layerInstances[i].def==null )
+				layerInstances.splice(i,1);
+			else
+				i++;
+		}
+
+		// Add missing layerInstances
+		for(ld in project.layerDefs)
+			if( getLayerInstance(ld.uid)==null )
+				layerInstances.push( new LayerInstance(this, ld) );
+
+		// Layer instances content
+		for(li in layerInstances)
+			li.tidy(project);
+	}
 }

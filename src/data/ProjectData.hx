@@ -37,26 +37,9 @@ class ProjectData implements data.IData {
 		}
 	}
 
-	public function checkDataIntegrity() {
-		for(level in levels) {
-			// Remove layerContents without layerDefs
-			var i = 0;
-			while( i<level.layerInstances.length ) {
-				if( level.layerInstances[i].def==null )
-					level.layerInstances.splice(i,1);
-				else
-					i++;
-			}
-
-			// Add missing layerContents
-			for(ld in layerDefs)
-				if( level.getLayerInstance(ld.uid)==null )
-					level.layerInstances.push( new LayerInstance(level, ld) );
-
-			// Layers
-			for(li in level.layerInstances)
-				li.checkIntegrity(this);
-		}
+	public function tidy() {
+		for(level in levels)
+			level.tidy(this);
 	}
 
 
@@ -88,7 +71,7 @@ class ProjectData implements data.IData {
 		if( !layerDefs.remove(ld) )
 			throw "Unknown layerDef";
 
-		checkDataIntegrity();
+		tidy();
 	}
 
 	public function sortLayerDef(from:Int, to:Int) : Null<LayerDef> {
@@ -98,7 +81,7 @@ class ProjectData implements data.IData {
 		if( to<0 || to>=layerDefs.length )
 			return null;
 
-		checkDataIntegrity();
+		tidy();
 
 		var moved = layerDefs.splice(from,1)[0];
 		layerDefs.insert(to, moved);
@@ -136,7 +119,7 @@ class ProjectData implements data.IData {
 
 	public function removeEntityDef(ed:EntityDef) {
 		entityDefs.remove(ed);
-		checkDataIntegrity();
+		tidy();
 	}
 
 	public function isEntityNameValid(name:String) {
@@ -156,7 +139,7 @@ class ProjectData implements data.IData {
 		if( to<0 || to>=entityDefs.length )
 			return null;
 
-		checkDataIntegrity();
+		tidy();
 
 		var moved = entityDefs.splice(from,1)[0];
 		entityDefs.insert(to, moved);
@@ -188,7 +171,7 @@ class ProjectData implements data.IData {
 		if( !levels.remove(l) )
 			throw "Level not found in this Project";
 
-		checkDataIntegrity();
+		tidy();
 	}
 
 	public function getLevel(uid:Int) : Null<LevelData> {

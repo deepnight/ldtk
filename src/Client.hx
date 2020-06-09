@@ -254,7 +254,6 @@ class Client extends dn.Process {
 			case LayerInstanceChanged:
 
 			case _:
-				project.checkDataIntegrity();
 				if( curLayerInstance==null )
 					selectLayerInstance(curLevel.layerInstances[0]);
 				initTool();

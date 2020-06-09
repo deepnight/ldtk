@@ -34,7 +34,7 @@ class EntityInstance {
 		return levelX >= left && levelX <= right && levelY >= top && levelY <= bottom;
 	}
 
-	public function checkIntegrity(project:ProjectData) {
+	public function tidy(project:ProjectData) {
 		// Remove field instances whose def was removed
 		for(e in fieldInstances.keyValueIterator())
 			if( e.value.def==null )

@@ -47,7 +47,7 @@ class LayerInstance implements IData { // TODO rename: LayerInstance
 		return cx + cy*cWid;
 	}
 
-	public function checkIntegrity(project:ProjectData) {
+	public function tidy(project:ProjectData) {
 		switch def.type {
 			case IntGrid:
 				// Remove lost intGrid values
@@ -69,7 +69,7 @@ class LayerInstance implements IData { // TODO rename: LayerInstance
 
 				// Cleanup field instances
 				for(ei in entityInstances)
-					ei.checkIntegrity(project);
+					ei.tidy(project);
 		}
 }
 
