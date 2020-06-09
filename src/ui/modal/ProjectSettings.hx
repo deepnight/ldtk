@@ -19,6 +19,7 @@ class ProjectSettings extends ui.Modal {
 		i.linkEvent(ProjectChanged);
 
 		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
+		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.linkEvent(ProjectChanged);
 
 		var i = Input.linkToHtmlInput( project.bgColor, jForm.find("[name=color]"));

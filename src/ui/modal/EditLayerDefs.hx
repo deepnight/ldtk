@@ -75,7 +75,7 @@ class EditLayerDefs extends ui.Modal {
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( ld.gridSize, jForm.find("input[name='gridSize']") );
-		i.setBounds(1,32);
+		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( ld.displayOpacity, jForm.find("input[name='displayOpacity']") );
