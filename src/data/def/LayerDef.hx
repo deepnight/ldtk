@@ -4,7 +4,7 @@ class LayerDef implements IData {
 	public var uid(default,null) : Int;
 	public var type : LayerType;
 	public var name : String;
-	public var gridSize : Int = Const.GRID;
+	public var gridSize : Int = 16;
 	public var displayOpacity : Float = 1.0;
 
 	var intGridValues : Array<IntGridValueDef> = [];

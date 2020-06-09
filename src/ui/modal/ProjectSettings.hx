@@ -16,11 +16,14 @@ class ProjectSettings extends ui.Modal {
 
 	function updateForm() {
 		var i = Input.linkToHtmlInput( project.name, jForm.find("[name=pName]") );
-		i.onChange = client.ge.emit.bind(ProjectChanged);
+		i.linkEvent(ProjectChanged);
+
+		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
+		i.linkEvent(ProjectChanged);
 
 		var i = Input.linkToHtmlInput( project.bgColor, jForm.find("[name=color]"));
 		i.isColorCode = true;
-		i.onChange = client.ge.emit.bind(ProjectChanged);
+		i.linkEvent(ProjectChanged);
 
 		var pivot = jForm.find(".pivot");
 		pivot.empty();

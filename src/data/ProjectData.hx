@@ -10,12 +10,15 @@ class ProjectData implements data.IData {
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
 	public var bgColor : UInt;
+	public var defaultGridSize : Int;
 
 	public function new() {
-		createLayerDef(IntGrid);
 		name = "New project";
+		defaultGridSize = 16;
 		bgColor = 0xffffff;
 		defaultPivotX = defaultPivotY = 0;
+
+		createLayerDef(IntGrid);
 	}
 
 	public function makeUniqId() return nextUniqId++;
@@ -58,6 +61,7 @@ class ProjectData implements data.IData {
 		var l = new LayerDef(makeUniqId(), type);
 		if( name!=null && isLayerNameValid(name) )
 			l.name = name;
+		l.gridSize = defaultGridSize;
 		layerDefs.push(l);
 		tidy();
 		return l;

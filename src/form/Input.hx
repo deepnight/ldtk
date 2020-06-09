@@ -14,6 +14,7 @@ class Input<T> {
 	var lastValidValue : T;
 	public var validityCheck : Null<T->Bool>;
 	public var validityError : Null<Void->Void>;
+	var linkedEvents : Map<GlobalEvent,Bool> = new Map();
 
 	public function new(jElement:js.jquery.JQuery, getter, setter) {
 		if( jElement.length==0 )
@@ -45,8 +46,14 @@ class Input<T> {
 		setter( parseInputValue() );
 		writeValueToInput();
 		lastValidValue = getter();
+		for(e in linkedEvents.keys())
+			Client.ME.ge.emit(e);
 		onChange();
 		onValueChange( getter() );
+	}
+
+	public function linkEvent(eid:GlobalEvent) {
+		linkedEvents.set(eid,true);
 	}
 
 	public dynamic function onChange() {}
