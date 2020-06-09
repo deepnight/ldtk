@@ -29,10 +29,10 @@ class LayerDef implements IData {
 		o.gridSize = JsonTools.readInt(json.gridSize, Const.DEFAULT_GRID_SIZE);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
 
-		var intGridValueDefs : Array<IntGridValueDef> = cast json.intGridValues;
 		o.intGridValues = [];
-		for(v in intGridValueDefs)
+		for( v in JsonTools.readArray(json.intGridValues) )
 			o.intGridValues.push(v);
+		N.debug(Type.typeof(json.intGridValues));
 
 		return o;
 	}

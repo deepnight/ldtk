@@ -58,8 +58,6 @@ class Client extends dn.Process {
 			N.debug( curLayerDef.toJson() );
 			var ld = curLayerDef.clone();
 			N.debug(ld);
-			for(v in ld.getAllIntGridValues())
-				N.debug(v);
 		});
 		#end
 

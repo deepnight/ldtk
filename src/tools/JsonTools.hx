@@ -80,6 +80,14 @@ class JsonTools {
 		return M.round(v*p)/p;
 	}
 
+	public static function readArray(arr:Dynamic) : Array<Dynamic> {
+		switch Type.typeof(arr) {
+			case TClass(Array):
+			case _: throw "Not an array ("+Type.typeof(arr)+")";
+		}
+		return arr;
+	}
+
 	// public static function addJsonHeader(json:String, fileType:String, fileVersion:Int, prettify:Bool) {
 	// 	// Add header
 	// 	var header = {
