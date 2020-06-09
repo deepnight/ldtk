@@ -43,6 +43,8 @@ class ProjectData implements data.ISerializable {
 	}
 
 	public function tidy() {
+		// TODO ensure .project references
+
 		for(level in levels)
 			level.tidy(this);
 	}

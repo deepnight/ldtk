@@ -1,19 +1,21 @@
 package data;
 
 class LayerInstance implements ISerializable {
-	var project(get,never) : ProjectData; inline function get_project() return Client.ME.project; // TODO
-	public var def(get,never) : data.def.LayerDef; inline function get_def() return project.getLayerDef(layerDefId); // TODO
+	var project : ProjectData;
+	public var def(get,never) : data.def.LayerDef; inline function get_def() return project.getLayerDef(layerDefId);
 	public var level(get,never) : LevelData; function get_level() return project.getLevel(levelId);
-	public var cWid(get,never) : Int; inline function get_cWid() return M.ceil( level.pxWid / def.gridSize );
-	public var cHei(get,never) : Int; function get_cHei() return M.ceil( level.pxHei / def.gridSize );
 
 	public var levelId : Int;
 	public var layerDefId : Int;
-
 	var intGrid : Map<Int,Int> = new Map();
 	public var entityInstances : Array<EntityInstance> = [];
 
-	public function new(l:LevelData, def:LayerDef) {
+	public var cWid(get,never) : Int; inline function get_cWid() return M.ceil( level.pxWid / def.gridSize );
+	public var cHei(get,never) : Int; function get_cHei() return M.ceil( level.pxHei / def.gridSize );
+
+
+	public function new(p:ProjectData, l:LevelData, def:LayerDef) {
+		project = p;
 		levelId = l.uid;
 		layerDefId = def.uid;
 	}
@@ -25,7 +27,7 @@ class LayerInstance implements ISerializable {
 
 
 	public function clone() {
-		var e = new LayerInstance(level, def);
+		var e = new LayerInstance(project, level, def);
 		// TODO
 		return e;
 	}

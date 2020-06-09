@@ -1,7 +1,7 @@
 package data;
 
 class LevelData implements data.ISerializable {
-	var layerInstances : Map<Int,LayerInstance> = new Map();
+	public var layerInstances : Map<Int,LayerInstance> = new Map();
 
 	public var uid(default,null) : Int;
 	public var pxWid : Int = 512;
@@ -42,10 +42,12 @@ class LevelData implements data.ISerializable {
 		// Add missing layerInstances
 		for(ld in project.layerDefs)
 			if( !layerInstances.exists(ld.uid) )
-				layerInstances.set( ld.uid, new LayerInstance(this, ld) );
+				layerInstances.set( ld.uid, new LayerInstance(project, this, ld) );
 
 		// Layer instances content
 		for(li in layerInstances)
 			li.tidy(project);
+
 	}
+
 }
