@@ -18,9 +18,9 @@ class FieldInstance { // TODO implements serialization
 			+ Std.string(switch internalValue {
 				case null: null;
 				case V_Int(_): getInt();
-				case V_Float(_): null; // TODO
-				case V_Bool(_): null; // TODO
-				case V_String(_): null; // TODO
+				case V_Float(_): getFloat();
+				case V_Bool(_): getBool();
+				case V_String(_): getString();
 			})
 			+ ' [ $internalValue ]';
 	}
