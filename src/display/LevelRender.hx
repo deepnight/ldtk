@@ -9,6 +9,7 @@ class LevelRender extends dn.Process {
 	var layerWrappers : Map<Int,h2d.Object> = new Map();
 	var invalidated = true;
 
+	var bg : h2d.Graphics;
 	var grid : h2d.Graphics;
 
 	public var focusLevelX : Float = 0.;
@@ -22,8 +23,12 @@ class LevelRender extends dn.Process {
 
 		createRootInLayers(client.root, Const.DP_MAIN);
 
+		bg = new h2d.Graphics();
+		root.add(bg, Const.DP_BG);
+		bg.filter = new h2d.filter.DropShadow(0, 0, 0x0,0.3, 32, true);
+
 		grid = new h2d.Graphics();
-		root.add(grid, 0);
+		root.add(grid, Const.DP_BG);
 
 		focusLevelX = client.curLevel.pxWid*0.5;
 		focusLevelY = client.curLevel.pxHei*0.5;
@@ -61,7 +66,13 @@ class LevelRender extends dn.Process {
 		invalidate();
 	}
 
-	public function renderGrid() {
+	public function renderBg() {
+		// Bg
+		bg.clear();
+		bg.beginFill(client.project.bgColor);
+		bg.drawRect(0, 0, client.curLevel.pxWid, client.curLevel.pxHei);
+
+		// Grid
 		var col = C.autoContrast(client.project.bgColor);
 
 		var l = client.curLayerInstance;
@@ -78,7 +89,7 @@ class LevelRender extends dn.Process {
 	}
 
 	public function renderAll() {
-		renderGrid();
+		renderBg();
 		renderLayers();
 	}
 
@@ -90,7 +101,7 @@ class LevelRender extends dn.Process {
 		for(ld in client.project.layerDefs) {
 			var li = client.curLevel.getLayerInstance(ld);
 			var wrapper = new h2d.Object();
-			root.add(wrapper,1);
+			root.add(wrapper,Const.DP_MAIN);
 			root.under(wrapper);
 			layerWrappers.set(li.layerDefId, wrapper);
 
@@ -167,9 +178,9 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	public function onCurrentLayerChange(cur:LayerInstance) {
+	public function onCurrentLayerChange(cur:LayerInstance) { // TODO use global event
 		updateLayersVisibility();
-		renderGrid();
+		renderBg();
 	}
 
 
