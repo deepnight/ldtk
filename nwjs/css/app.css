@@ -309,7 +309,7 @@ ul.niceList li:not(.active):hover {
 }
 
 .pivotEditor label:hover {
-  outline: 1px dashed white;
+  outline: 1px dashed #ffcc00;
   outline-offset: -1px;
 }
 
@@ -348,11 +348,24 @@ ul.form > li > label {
   font-size: 80%;
 }
 
+ul.form > li input[type=text]:hover {
+  outline: 1px solid #ffcc00;
+}
+
 ul.form > li input[type=checkbox] + label {
   flex: 1 1 auto;
   padding-right: 20px;
   white-space: nowrap;
   text-align: left;
+}
+
+ul.form > li input[type=color] {
+  height: 32px;
+  cursor: pointer;
+}
+
+ul.form > li input[type=color]:hover {
+  outline: 1px solid #ffcc00;
 }
 
 ul.form > li > span {

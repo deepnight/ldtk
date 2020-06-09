@@ -291,7 +291,7 @@ ul.niceList {
 		justify-items: center;
 	}
 	label:hover {
-		outline: 1px dashed white;
+		outline: 1px dashed $orange;
 		outline-offset: -1px;
 	}
 	label input[type=radio] {
@@ -328,11 +328,23 @@ ul.form {
 			font-size: 80%;
 		}
 
+		input[type=text]:hover {
+			outline: 1px solid $orange;
+		}
+
 		input[type=checkbox]+label {
 			flex: 1 1 auto;
 			padding-right: 20px;
 			white-space: nowrap;
 			text-align: left;
+		}
+
+		input[type=color] {
+			height: 32px;
+			cursor: pointer;
+		}
+		input[type=color]:hover {
+			outline: 1px solid $orange;
 		}
 
 		> span {
