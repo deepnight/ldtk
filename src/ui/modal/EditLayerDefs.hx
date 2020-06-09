@@ -11,6 +11,7 @@ class EditLayerDefs extends ui.Modal {
 		loadTemplate( "editLayerDefs", "defEditor layerDefs" );
 		jList = jWin.find(".mainList ul");
 		jForm = jWin.find("ul.form");
+		linkToButton("button.editLayers");
 
 		// Create layer
 		jWin.find(".mainList button.create").click( function(_) {

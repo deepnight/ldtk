@@ -113,6 +113,15 @@ button:hover {
   background-color: #ff5d4a;
 }
 
+button:focus {
+  outline: inherit;
+}
+
+button.active {
+  background-color: #ffcc00;
+  border-color: #ffff00;
+}
+
 button.cancel {
   background-color: #2e333f;
   border-color: #545d73;

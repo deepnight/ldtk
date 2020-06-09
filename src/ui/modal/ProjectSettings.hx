@@ -7,6 +7,7 @@ class ProjectSettings extends ui.Modal {
 		super();
 
 		loadTemplate( "projectSettings", "projectSettings" );
+		linkToButton("button.editProject");
 		updateForm();
 	}
 

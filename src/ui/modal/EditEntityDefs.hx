@@ -16,7 +16,7 @@ class EditEntityDefs extends ui.Modal {
 		super();
 
 		loadTemplate( "editEntityDefs", "defEditor entityDefs" );
-
+		linkToButton("button.editEntities");
 
 		// Create entity
 		jWin.find(".entityList button.create").click( function(_) {

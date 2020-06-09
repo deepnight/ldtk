@@ -110,6 +110,13 @@ button+button {
 button:hover {
 	background-color: #ff5d4a;
 }
+button:focus {
+	outline: inherit;
+}
+button.active {
+	background-color: $orange;
+	border-color: #ffff00;
+}
 
 button.cancel {
 	background-color: $bgMed;

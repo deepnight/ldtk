@@ -11,6 +11,7 @@ class Modal extends dn.Process {
 	var jContent : js.jquery.JQuery;
 	var jMask: js.jquery.JQuery;
 	var jPanelMask: js.jquery.JQuery;
+	var jLinkedButton : Null<js.jquery.JQuery>;
 
 	public function new() {
 		super(Client.ME);
@@ -40,11 +41,21 @@ class Modal extends dn.Process {
 		closeAll(this);
 	}
 
+	function linkToButton(selector:String) {
+		jLinkedButton = new J(selector);
+		jLinkedButton.addClass("active");
+		return jLinkedButton.length>0;
+	}
+
 	override function onDispose() {
 		super.onDispose();
 
 		ALL.remove(this);
 		client.ge.stopListening(onGlobalEvent);
+
+		if( jLinkedButton!=null )
+			jLinkedButton.removeClass("active");
+		jLinkedButton = null;
 
 		jWin.remove();
 		jWin = null;
@@ -92,6 +103,10 @@ class Modal extends dn.Process {
 	public function close() {
 		if( cd.hasSetS("closing",Const.INFINITE) )
 			return;
+
+		if( jLinkedButton!=null )
+			jLinkedButton.removeClass("active");
+
 		jWin.find("*").off();
 		jMask.fadeOut(50);
 		jPanelMask.remove();
