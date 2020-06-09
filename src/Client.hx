@@ -33,7 +33,6 @@ class Client extends dn.Process {
 
 		ME = this;
 		createRoot(Boot.ME.s2d);
-		appWin.title = "L-Ed v"+Const.APP_VERSION;
 		appWin.maximize();
 
 		// Events
@@ -103,6 +102,7 @@ class Client extends dn.Process {
 
 		levelRender = new display.LevelRender();
 		initTool();
+		updateProjectTitle();
 		updateLayerList();
 	}
 
@@ -131,6 +131,14 @@ class Client extends dn.Process {
 
 
 	public function setSelection(ge:GenericLevelElement) {
+		switch ge {
+			case IntGrid(_):
+				clearSelection();
+				return;
+
+			case Entity(_):
+		}
+
 		selection = ge;
 		selectionCursor.set(switch selection {
 			case IntGrid(li, cx, cy): GridCell(li, cx,cy);
@@ -253,16 +261,24 @@ class Client extends dn.Process {
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case LayerInstanceChanged:
+			case EntityFieldChanged:
+			case EntityFieldSorted:
 
 			case _:
 				if( curLayerDef==null )
 					selectLayerInstance( curLevel.getLayerInstance(project.layerDefs[0]) );
 				initTool();
+				updateProjectTitle();
 				updateLayerList();
 		}
 
 		if( e==EntityDefChanged )
 			display.LevelRender.invalidateCaches();
+	}
+
+	function updateProjectTitle() {
+		appWin.title = project.name+" -- L-Ed v"+Const.APP_VERSION;
+		jBody.find("h2#projectTitle").text( project.name );
 	}
 
 	public function updateLayerList() {

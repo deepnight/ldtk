@@ -591,6 +591,11 @@ input[type=number]:focus {
   box-sizing: border-box;
 }
 
+#editor #mainPanel h2#projectTitle {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 #editor canvas {
   width: 100% !important;
   height: 100% !important;
