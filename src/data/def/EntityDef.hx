@@ -1,6 +1,6 @@
 package data.def;
 
-class EntityDef implements IData {
+class EntityDef implements ISerializable {
 	public var uid(default,null) : Int;
 	public var name : String;
 	public var width : Int;

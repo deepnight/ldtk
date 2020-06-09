@@ -1,6 +1,6 @@
 package data.def;
 
-class FieldDef implements IData {
+class FieldDef implements ISerializable {
 	public var uid(default,null) : Int;
 	public var type(default,null) : FieldType;
 	public var name : String;

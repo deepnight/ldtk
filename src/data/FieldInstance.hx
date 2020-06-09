@@ -1,6 +1,6 @@
 package data;
 
-class FieldInstance implements IData {
+class FieldInstance implements ISerializable {
 	var internalValue : Null<ValueWrapper>;
 
 	public var def(get,never) : FieldDef; inline function get_def() return Client.ME.project.getFieldDef(defId); // TODO

@@ -1,6 +1,6 @@
 package data.def;
 
-class LayerDef implements IData {
+class LayerDef implements ISerializable {
 	public var uid(default,null) : Int;
 	public var type : LayerType;
 	public var name : String;

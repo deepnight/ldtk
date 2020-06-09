@@ -1,6 +1,6 @@
 package data;
 
-class LevelData implements data.IData {
+class LevelData implements data.ISerializable {
 	var layerInstances : Map<Int,LayerInstance> = new Map();
 
 	public var uid(default,null) : Int;

@@ -1,6 +1,6 @@
 package data;
 
-class ProjectData implements data.IData {
+class ProjectData implements data.ISerializable {
 	var nextUniqId = 0;
 	public var levels : Array<LevelData> = [];
 	public var layerDefs : Array<data.def.LayerDef> = [];

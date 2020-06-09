@@ -1,6 +1,6 @@
 package data;
 
-class LayerInstance implements IData { // TODO rename: LayerInstance
+class LayerInstance implements ISerializable {
 	var project(get,never) : ProjectData; inline function get_project() return Client.ME.project; // TODO
 	public var def(get,never) : data.def.LayerDef; inline function get_def() return project.getLayerDef(layerDefId); // TODO
 	public var level(get,never) : LevelData; function get_level() return project.getLevel(levelId);
