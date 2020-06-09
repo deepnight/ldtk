@@ -1,20 +1,23 @@
 package data;
 
 class FieldInstance implements ISerializable {
+	public var project : ProjectData;
+	public var def(get,never) : FieldDef; inline function get_def() return project.getFieldDef(defId);
+
+	public var defId: Int;
 	var internalValue : Null<ValueWrapper>;
 
-	public var def(get,never) : FieldDef; inline function get_def() return Client.ME.project.getFieldDef(defId); // TODO
-	public var defId: Int;
-
 	@:allow(data.EntityInstance)
-	private function new(fd:FieldDef) {
+	private function new(p:ProjectData, fd:FieldDef) {
+		project = p;
 		defId = fd.uid;
 		internalValue = null;
 	}
 
 	@:keep
 	public function toString() {
-		return '${def.name} = '
+		return
+			'${def.name} = '
 			+ Std.string(switch internalValue {
 				case null: null;
 				case V_Int(_): getInt();
@@ -30,7 +33,7 @@ class FieldInstance implements ISerializable {
 	}
 
 	public static function fromJson(json:Dynamic) {
-		var o = new FieldInstance( Client.ME.project.getFieldDef(JsonTools.readInt(json.defId)) ); // HACK
+		var o = new FieldInstance( Client.ME.project, Client.ME.project.getFieldDef(JsonTools.readInt(json.defId)) ); // HACK
 		o.internalValue = json.internalValue==null ? null : JsonTools.readEnum(ValueWrapper, json.internalValue);
 		return o;
 	}

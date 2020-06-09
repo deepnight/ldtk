@@ -2,9 +2,9 @@ package data;
 
 class EntityInstance {
 	public var project : ProjectData;
-	public var defId(default,null) : Int;
 	public var def(get,never) : EntityDef; inline function get_def() return project.getEntityDef(defId);
 
+	public var defId(default,null) : Int;
 	public var x : Int;
 	public var y : Int;
 	var fieldInstances : Map<Int, data.FieldInstance> = new Map();
@@ -45,7 +45,7 @@ class EntityInstance {
 
 	public function getFieldInstance(fieldDef:FieldDef) {
 		if( !fieldInstances.exists(fieldDef.uid) )
-			fieldInstances.set(fieldDef.uid, new data.FieldInstance(fieldDef));
+			fieldInstances.set(fieldDef.uid, new data.FieldInstance(project, fieldDef));
 		return fieldInstances.get( fieldDef.uid );
 	}
 

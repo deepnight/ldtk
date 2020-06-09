@@ -5,8 +5,8 @@ class LayerInstance implements ISerializable {
 	public var def(get,never) : data.def.LayerDef; inline function get_def() return project.getLayerDef(layerDefId);
 	public var level(get,never) : LevelData; function get_level() return project.getLevel(levelId);
 
-	public var levelId : Int;
 	public var layerDefId : Int;
+	public var levelId : Int;
 	var intGrid : Map<Int,Int> = new Map();
 	public var entityInstances : Array<EntityInstance> = [];
 
