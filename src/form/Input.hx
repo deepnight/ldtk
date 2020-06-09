@@ -11,7 +11,7 @@ class Input<T> {
 	var getter : Void->T;
 	var setter : T->Void;
 
-	var oldInputValue : String;
+	var lastValidValue : T;
 	public var validityCheck : Null<T->Bool>;
 	public var validityError : Null<Void->Void>;
 
@@ -24,29 +24,17 @@ class Input<T> {
 		input = jElement;
 		input.off();
 		writeValueToInput();
+		lastValidValue = getter();
 
 		input.change( function(_) {
 			onInputChange();
 		});
 	}
 
-	// override function onInputChange() {
-	// 	if( validityCheck!=null && !validityCheck(parseInputValue()) ) {
-	// 		input.val( oldInputValue );
-	// 		if( validityError==null )
-	// 			N.error("This value is already used.");
-	// 		else
-	// 			validityError();
-	// 		return;
-	// 	}
-
-	// 	super.onInputChange();
-
-	// }
-
 	function onInputChange() {
 		if( validityCheck!=null && !validityCheck(parseInputValue()) ) {
-			input.val(oldInputValue);
+			setter( lastValidValue );
+			writeValueToInput();
 			if( validityError==null )
 				N.error("This value isn't valid.");
 			else
@@ -56,6 +44,7 @@ class Input<T> {
 
 		setter( parseInputValue() );
 		writeValueToInput();
+		lastValidValue = getter();
 		onChange();
 		onValueChange( getter() );
 	}
@@ -73,7 +62,6 @@ class Input<T> {
 			input.val("");
 		else
 			input.val( Std.string( getter() ) );
-		oldInputValue = input.val();
 	}
 
 	#end
@@ -115,7 +103,7 @@ class Input<T> {
 
 			case TAbstract(t, params):
 				switch t.toString() {
-					case "Int":
+					case "Int", "UInt":
 						return macro {
 							new form.input.IntInput(
 								$formInput,
