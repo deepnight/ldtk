@@ -45,7 +45,10 @@ class Dialog extends dn.Process {
 	}
 
 	public function addConfirm(cb:Void->Void) {
-		var b = addButton("Confirm", "confirm", cb);
+		var b = addButton("Confirm", "confirm", function() {
+			cb();
+			close();
+		});
 		b.detach();
 		jButtons.prepend(b);
 	}
@@ -61,6 +64,7 @@ class Dialog extends dn.Process {
 	public function close() {
 		if( destroyed || cd.hasSetS("hideOnce",Const.INFINITE) )
 			return;
+		elem.find("*").off();
 		elem.find(".mask").stop(true,false).fadeOut(100);
 		elem.find(".wrapper").slideUp(100, function(_) destroy());
 	}
