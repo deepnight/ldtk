@@ -604,12 +604,14 @@ input[type=number]:focus {
 
 #editor #mainPanel {
   position: relative;
+  display: grid;
+  grid-template-rows: min-content 1fr 2fr;
   padding: 5px;
+  gap: 5px;
   background: #1e2229;
   border-color: #545d73;
   border-style: solid;
   box-shadow: 0px 0px 16px black inset;
-  z-index: 1;
   box-sizing: border-box;
 }
 
@@ -618,21 +620,16 @@ input[type=number]:focus {
   overflow: hidden;
 }
 
-#editor canvas {
-  width: 100% !important;
-  height: 100% !important;
+#editor #mainPanel ul#layers {
+  overflow: auto;
+  margin: 0;
 }
 
-#editor #mainBar {
-  margin-bottom: 8px;
-  z-index: 100;
-}
-
-#editor #layers ul.niceList li {
+#editor #mainPanel ul#layers li {
   grid-template-columns: min-content auto min-content;
 }
 
-#editor #layers ul.niceList li .name {
+#editor #mainPanel ul#layers li .name {
   font-size: 10pt;
   flex: 1 1 auto;
   order: 1;
@@ -640,7 +637,7 @@ input[type=number]:focus {
   cursor: pointer;
 }
 
-#editor #layers ul.niceList li .vis {
+#editor #mainPanel ul#layers li .vis {
   flex: 0 0 auto;
   padding: 10px;
   margin: -10px;
@@ -651,47 +648,50 @@ input[type=number]:focus {
   cursor: zoom-out;
 }
 
-#editor #layers ul.niceList li .vis:hover {
+#editor #mainPanel ul#layers li .vis:hover {
   outline: 1px solid white;
   outline-offset: -4px;
 }
 
-#editor #palette {
+#editor #mainPanel ul#palette {
   background-color: #1e2229;
-}
-
-#editor #palette ul {
+  margin: 0;
   padding: 4px;
 }
 
-#editor #palette ul > li {
+#editor #mainPanel ul#palette > li {
   display: flex;
   min-height: 16px;
   cursor: pointer;
 }
 
-#editor #palette ul > li:hover {
+#editor #mainPanel ul#palette > li:hover {
   outline: 1px solid white;
   outline-offset: -1px;
 }
 
-#editor #palette ul li.entity {
+#editor #mainPanel ul#palette li.entity {
   overflow: hidden;
 }
 
-#editor #palette ul li.entity .entityPreview {
+#editor #mainPanel ul#palette li.entity .entityPreview {
   margin-right: 8px;
 }
 
-#editor #palette ul li.color {
+#editor #mainPanel ul#palette li.color {
   padding-left: 10px;
   overflow: hidden;
   line-height: 32px;
   box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
 }
 
-#editor #palette ul li.color.active {
+#editor #mainPanel ul#palette li.color.active {
   outline: 2px solid white !important;
+}
+
+#editor canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .instanceEditor {

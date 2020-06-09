@@ -585,32 +585,25 @@ input[type=number]:focus {
 
 	#mainPanel {
 		position: relative;
+		display: grid;
+		grid-template-rows: min-content 1fr 2fr;
 		padding: 5px;
+		gap: 5px;
 		background: $bgDark;
 		border-color: $bgLight;
 		border-style: solid;
 		box-shadow: 0px 0px 16px black inset;
-		z-index: 1;
 		box-sizing: border-box;
 
 		h2#projectTitle {
 			white-space: nowrap;
 			overflow: hidden;
 		}
-	}
 
-	canvas {
-		width: 100% !important;
-		height: 100% !important;
-	}
+		ul#layers {
+			overflow: auto;
+			margin: 0;
 
-	#mainBar {
-		margin-bottom: 8px;
-		z-index: 100;
-	}
-
-	#layers {
-		ul.niceList {
 			li {
 				grid-template-columns: min-content auto min-content;
 
@@ -637,12 +630,10 @@ input[type=number]:focus {
 				}
 			}
 		}
-	}
 
-	#palette {
-		background-color: $bgDark;
-
-		ul {
+		ul#palette {
+			background-color: $bgDark;
+			margin: 0;
 			padding: 4px;
 
 			>li {
@@ -673,6 +664,11 @@ input[type=number]:focus {
 				outline: 2px solid white !important;
 			}
 		}
+	}
+
+	canvas {
+		width: 100% !important;
+		height: 100% !important;
 	}
 }
 

@@ -13,8 +13,8 @@
 	<div id="editor">
 
 		<div id="mainPanel">
-			<h2 id="projectTitle">Project</h2>
 			<div id="mainBar">
+				<h2 id="projectTitle">Project</h2>
 				<button class="save">Save</button>
 				<div class="buttons">
 					<button class="editProject"><div class="icon project"></div></button>
@@ -24,27 +24,13 @@
 				</div>
 			</div>
 
-			<hr/>
+			<!-- <hr/> -->
 
-			<div id="layers">
-				<ul class="niceList"></ul>
+			<ul id="layers" class="niceList"></ul>
 
-				<xml class="layer">
-					<span class="icon"></span>
-					<span class="name"></span>
-					<span class="vis">
-						<span class="on">👁️</span>
-						<span class="off">❌</span>
-				 	</span>
-				</xml>
+			<!-- <hr/> -->
 
-			</div>
-
-			<hr/>
-
-			<div id="palette">
-				<ul class="niceList"></ul>
-			</div>
+			<ul id="palette" class="niceList"></ul>
 		</div>
 
 		<canvas id="webgl"></canvas>
@@ -52,6 +38,15 @@
 
 
 	<!-- Templates -->
+
+	<xml class="layer">
+		<span class="icon"></span>
+		<span class="name"></span>
+		<span class="vis">
+			<span class="on">👁️</span>
+			<span class="off">❌</span>
+		 </span>
+	</xml>
 
 	<xml id="window">
 		<div class="window">

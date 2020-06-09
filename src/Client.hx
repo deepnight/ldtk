@@ -8,7 +8,7 @@ class Client extends dn.Process {
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
-	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette ul");
+	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette");
 
 	public var curLevel(get,never) : LevelData; inline function get_curLevel() return project.getLevel(curLevelId);
 	public var curLayerDef(get,never) : LayerDef; inline function get_curLayerDef() return project.getLayerDef(curLayerId);
@@ -321,12 +321,12 @@ class Client extends dn.Process {
 	}
 
 	public function updateLayerList() {
-		var list = jLayers.find("ul");
+		var list = jLayers;
 		list.empty();
 
 		for(ld in project.layerDefs) {
 			var li = curLevel.getLayerInstance(ld);
-			var e = jLayers.find("xml.layer").clone().children().wrapAll("<li/>").parent();
+			var e = jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			list.append(e);
 
 			if( li==curLayerInstance )
