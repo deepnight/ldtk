@@ -14,7 +14,7 @@ class ProjectData implements data.IData {
 
 	public function new() {
 		name = "New project";
-		defaultGridSize = 16;
+		defaultGridSize = Const.DEFAULT_GRID_SIZE;
 		bgColor = 0xffffff;
 		defaultPivotX = defaultPivotY = 0;
 
