@@ -20,6 +20,12 @@ class EntityDef implements IData {
 		setPivot(0.5,1);
 	}
 
+	@:keep public function toString() {
+		return '$name($width x $height)['
+			+ fieldDefs.map( function(fd) return fd.name+":"+fd.type ).join(",")
+			+ "]";
+	}
+
 	public inline function setPivot(x,y) {
 		pivotX = x;
 		pivotY = y;
@@ -29,13 +35,37 @@ class EntityDef implements IData {
 	inline function set_pivotY(v) return pivotY = M.fclamp(v, 0, 1);
 
 	public function clone() {
-		var e = new EntityDef(uid);
-		// TODO
-		return e;
+		return fromJson( toJson() );
+	}
+
+	public static function fromJson(json:Dynamic) {
+		var o = new EntityDef( JsonTools.readInt(json.uid) );
+		o.name = JsonTools.readString( json.name );
+		o.width = JsonTools.readInt( json.width, 16 );
+		o.height = JsonTools.readInt( json.height, 16 );
+		o.color = JsonTools.readInt( json.color, 0x0 );
+		o.maxPerLevel = JsonTools.readInt( json.maxPerLevel, 0 );
+		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
+		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
+
+		for(defJson in JsonTools.readArray(json.fieldDefs) )
+			o.fieldDefs.push( FieldDef.fromJson(defJson) );
+		return o;
 	}
 
 	public function toJson() {
-		return {} // TODO
+		return {
+			uid: uid,
+			name: name,
+			width: width,
+			height: height,
+			color: color,
+			maxPerLevel: maxPerLevel,
+			pivotX: JsonTools.clampFloatPrecision( pivotX ),
+			pivotY: JsonTools.clampFloatPrecision( pivotY ),
+
+			fieldDefs: fieldDefs.map( function(fd) return fd.toJson() ),
+		}
 	}
 
 

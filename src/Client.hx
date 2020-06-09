@@ -55,9 +55,11 @@ class Client extends dn.Process {
 
 		#if debug
 		jMainPanel.find("button.debug").click( function(_) {
-			N.debug( curLayerDef.toJson() );
-			var ld = curLayerDef.clone();
-			N.debug(ld);
+			var ed = project.entityDefs[0];
+			N.debug( ed.toJson() );
+			var copy = ed.clone();
+			N.debug(ed);
+			N.debug(copy);
 		});
 		#end
 
