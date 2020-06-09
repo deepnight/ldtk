@@ -1,6 +1,7 @@
 enum LayerType {
 	IntGrid;
-	Entities; // TODO temp
+	Entities;
+	// WARNING: field is serialized (do not remove values, add new ones at the end!)
 }
 
 

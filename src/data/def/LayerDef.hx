@@ -4,9 +4,8 @@ class LayerDef implements IData {
 	public var uid(default,null) : Int;
 	public var type : LayerType;
 	public var name : String;
-	public var gridSize : Int = 16;
+	public var gridSize : Int = Const.DEFAULT_GRID_SIZE;
 	public var displayOpacity : Float = 1.0;
-
 	var intGridValues : Array<IntGridValueDef> = [];
 
 	public function new(uid:Int, t:LayerType) {
@@ -16,14 +15,37 @@ class LayerDef implements IData {
 		addIntGridValue(0x0);
 	}
 
+	@:keep public function toString() {
+		return '$name($type, ${gridSize}px)';
+	}
+
 	public function clone() {
-		var e = new LayerDef(uid, type);
-		// TODO
-		return e;
+		return fromJson( toJson() );
+	}
+
+	public static function fromJson(json:Dynamic) {
+		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type));
+		o.name = JsonTools.readString(json.name);
+		o.gridSize = JsonTools.readInt(json.gridSize, Const.DEFAULT_GRID_SIZE);
+		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
+
+		var intGridValueDefs : Array<IntGridValueDef> = cast json.intGridValues;
+		o.intGridValues = [];
+		for(v in intGridValueDefs)
+			o.intGridValues.push(v);
+
+		return o;
 	}
 
 	public function toJson() {
-		return {} // TODO
+		return {
+			uid: uid,
+			type: JsonTools.writeEnum(type),
+			name: name,
+			gridSize: gridSize,
+			displaydisplayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
+			intGridValues: intGridValues,
+		}
 	}
 
 	public function addIntGridValue(col:UInt, ?name:String) {

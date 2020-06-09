@@ -53,6 +53,16 @@ class Client extends dn.Process {
 		selectionCursor = new ui.Cursor();
 		selectionCursor.highlight();
 
+		#if debug
+		jMainPanel.find("button.debug").click( function(_) {
+			N.debug( curLayerDef.toJson() );
+			var ld = curLayerDef.clone();
+			N.debug(ld);
+			for(v in ld.getAllIntGridValues())
+				N.debug(v);
+		});
+		#end
+
 		jMainPanel.find("button.save").click( function(_) N.notImplemented() );
 		jMainPanel.find("button.editProject").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.ProjectSettings) )
@@ -90,8 +100,9 @@ class Client extends dn.Process {
 		fd.setMax("10");
 		var ld = project.layerDefs[0];
 		ld.name = "Collisions";
-		ld.addIntGridValue(0x00ff00);
-		ld.addIntGridValue(0x0000ff);
+		ld.getIntGridValueDef(0).name = "walls";
+		ld.addIntGridValue(0x00ff00, "grass");
+		ld.addIntGridValue(0x0000ff, "water");
 		var ld = project.createLayerDef(Entities,"Entities");
 		var ld = project.createLayerDef(IntGrid,"Decorations");
 		ld.gridSize = 8;
