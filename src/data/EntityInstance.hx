@@ -1,8 +1,9 @@
 package data;
 
 class EntityInstance {
+	public var project : ProjectData;
 	public var defId(default,null) : Int;
-	public var def(get,never) : EntityDef; inline function get_def() return Client.ME.project.getEntityDef(defId); // TODO
+	public var def(get,never) : EntityDef; inline function get_def() return project.getEntityDef(defId);
 
 	public var x : Int;
 	public var y : Int;
@@ -14,7 +15,8 @@ class EntityInstance {
 	public var bottom(get,never) : Int; inline function get_bottom() return top + def.height-1;
 
 
-	public function new(def:EntityDef) {
+	public function new(p:ProjectData, def:EntityDef) {
+		project = p;
 		defId = def.uid;
 	}
 

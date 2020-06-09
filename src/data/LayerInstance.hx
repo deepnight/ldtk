@@ -109,7 +109,7 @@ class LayerInstance implements ISerializable {
 				removeEntityInstance( all.shift() );
 		}
 
-		var ei = new EntityInstance(ed);
+		var ei = new EntityInstance(project, ed);
 		entityInstances.push(ei);
 		return ei;
 	}
