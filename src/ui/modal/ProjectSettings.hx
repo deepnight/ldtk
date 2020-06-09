@@ -12,17 +12,6 @@ class ProjectSettings extends ui.Modal {
 
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
-		switch e {
-			case ProjectChanged:
-
-			case LayerDefChanged:
-			case LayerDefSorted:
-			case LayerInstanceChanged:
-
-			case EntityDefChanged:
-			case EntityDefSorted:
-			case EntityFieldChanged:
-		}
 	}
 
 	function updateForm() {

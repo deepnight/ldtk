@@ -32,7 +32,7 @@ class InstanceEditor extends dn.Process {
 
 	function onGlobalEvent(ge:GlobalEvent) {
 		switch ge {
-			case ProjectChanged, EntityDefChanged, EntityFieldChanged:
+			case ProjectChanged, EntityDefChanged, EntityFieldChanged, EntityFieldSorted:
 				updateForm();
 
 			case _:
@@ -50,7 +50,8 @@ class InstanceEditor extends dn.Process {
 
 		var form = new J('<ul class="form"/>');
 		form.appendTo(jPanel);
-		for(fi in ei.fieldInstances) {
+		for(fd in ei.def.fieldDefs) {
+			var fi = ei.getFieldInstance(fd);
 			var li = new J("<li/>");
 			li.appendTo(form);
 			li.append('<label>${fi.def.name}</label>');

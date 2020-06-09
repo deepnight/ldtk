@@ -6,7 +6,7 @@ class EntityInstance {
 
 	public var x : Int;
 	public var y : Int;
-	public var fieldInstances : Array<data.FieldInstance> = [];
+	var fieldInstances : Map<Int, data.FieldInstance> = new Map();
 
 	public var left(get,never) : Int; inline function get_left() return Std.int( x - def.width*def.pivotX );
 	public var right(get,never) : Int; inline function get_right() return left + def.width-1;
@@ -16,8 +16,6 @@ class EntityInstance {
 
 	public function new(def:EntityDef) {
 		defId = def.uid;
-		for(fd in def.fieldDefs)
-			fieldInstances.push( new data.FieldInstance(fd) );
 	}
 
 	@:keep public function toString() {
@@ -34,6 +32,19 @@ class EntityInstance {
 
 	public function isOver(levelX:Int, levelY:Int) {
 		return levelX >= left && levelX <= right && levelY >= top && levelY <= bottom;
+	}
+
+	public function checkIntegrity(project:ProjectData) {
+		// Remove field instances whose def was removed
+		for(e in fieldInstances.keyValueIterator())
+			if( e.value.def==null )
+				fieldInstances.remove(e.key);
+	}
+
+	public function getFieldInstance(fieldDef:FieldDef) {
+		if( !fieldInstances.exists(fieldDef.uid) )
+			fieldInstances.set(fieldDef.uid, new data.FieldInstance(fieldDef));
+		return fieldInstances.get( fieldDef.uid );
 	}
 
 }

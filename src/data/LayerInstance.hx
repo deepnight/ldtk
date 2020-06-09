@@ -47,6 +47,32 @@ class LayerInstance implements IData { // TODO rename: LayerInstance
 		return cx + cy*cWid;
 	}
 
+	public function checkIntegrity(project:ProjectData) {
+		switch def.type {
+			case IntGrid:
+				// Remove lost intGrid values
+				for(cy in 0...cHei)
+				for(cx in 0...cWid) {
+					if( getIntGrid(cx,cy) >= def.countIntGridValues() )
+						removeIntGrid(cx,cy);
+				}
+
+			case Entities:
+				// Remove lost entities (def removed)
+				var i = 0;
+				while( i<entityInstances.length ) {
+					if( entityInstances[i].def==null )
+						entityInstances.splice(i,1);
+					else
+						i++;
+				}
+
+				// Cleanup field instances
+				for(ei in entityInstances)
+					ei.checkIntegrity(project);
+		}
+}
+
 	/** INT GRID *******************/
 
 	public function getIntGrid(cx:Int, cy:Int) : Int {

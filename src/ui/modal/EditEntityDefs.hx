@@ -91,7 +91,7 @@ class EditEntityDefs extends ui.Modal {
 				updateEntityForm();
 				updateLists();
 
-			case EntityDefSorted:
+			case EntityDefSorted, EntityFieldSorted:
 				updateLists();
 
 			case EntityFieldChanged:
@@ -299,7 +299,7 @@ class EditEntityDefs extends ui.Modal {
 		JsTools.makeSortable(".window .fieldList ul", function(from, to) {
 			var moved = curEntity.sortField(from,to);
 			selectField(moved);
-			client.ge.emit(EntityDefSorted);
+			client.ge.emit(EntityFieldSorted);
 		});
 	}
 

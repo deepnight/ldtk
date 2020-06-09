@@ -52,9 +52,7 @@ class EditLayerDefs extends ui.Modal {
 
 			case LayerInstanceChanged:
 
-			case EntityDefChanged:
-			case EntityDefSorted:
-			case EntityFieldChanged:
+			case EntityDefChanged, EntityDefSorted, EntityFieldChanged, EntityFieldSorted:
 		}
 	}
 

@@ -18,7 +18,9 @@ enum GlobalEvent {
 
 	EntityDefChanged;
 	EntityDefSorted;
+
 	EntityFieldChanged;
+	EntityFieldSorted;
 }
 
 enum FieldType {

@@ -53,40 +53,9 @@ class ProjectData implements data.IData {
 				if( level.getLayerInstance(ld.uid)==null )
 					level.layerInstances.push( new LayerInstance(level, ld) );
 
-			// TODO: remove useless layerContent data (ex: when layer type changed from Entity to IntGrid)
-
-			// Cleanup layer values
+			// Layers
 			for(li in level.layerInstances)
-				switch li.def.type {
-					case IntGrid:
-						// Remove lost intGrid values
-						for(cy in 0...li.cHei)
-						for(cx in 0...li.cWid) {
-							if( li.getIntGrid(cx,cy) >= li.def.countIntGridValues() )
-								li.removeIntGrid(cx,cy);
-						}
-
-					case Entities:
-						// Remove lost entities (def removed)
-						var i = 0;
-						while( i<li.entityInstances.length ) {
-							if( li.entityInstances[i].def==null )
-								li.entityInstances.splice(i,1);
-							else
-								i++;
-						}
-
-						for(ei in li.entityInstances) {
-							// Remove fields whose def was removed
-							var i = 0;
-							while( i<ei.fieldInstances.length )
-								if( ei.fieldInstances[i].def==null )
-									ei.fieldInstances.splice(i,1);
-								else
-									i++;
-						}
-				}
-
+				li.checkIntegrity(this);
 		}
 	}
 
