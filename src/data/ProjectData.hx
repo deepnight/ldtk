@@ -57,6 +57,7 @@ class ProjectData implements data.IData {
 		if( name!=null && isLayerNameValid(name) )
 			l.name = name;
 		layerDefs.push(l);
+		tidy();
 		return l;
 	}
 
@@ -85,13 +86,6 @@ class ProjectData implements data.IData {
 
 		var moved = layerDefs.splice(from,1)[0];
 		layerDefs.insert(to, moved);
-
-		// Also sort level layerContents
-		for(l in levels) {
-			var moved = l.layerInstances.splice(from,1)[0];
-			l.layerInstances.insert(to, moved);
-		}
-
 		return moved;
 	}
 
@@ -162,8 +156,8 @@ class ProjectData implements data.IData {
 
 	public function createLevel() {
 		var l = new LevelData(makeUniqId());
-		l.initLayersUsingProject(this);
 		levels.push(l);
+		tidy(); // will create layer instances
 		return l;
 	}
 

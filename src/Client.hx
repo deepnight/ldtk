@@ -17,7 +17,7 @@ class Client extends dn.Process {
 
 	public var curLevel(get,never) : LevelData; inline function get_curLevel() return project.getLevel(curLevelId);
 	public var curLayerDef(get,never) : LayerDef; inline function get_curLayerDef() return project.getLayerDef(curLayerId);
-	public var curLayerInstance(get,never) : LayerInstance; inline function get_curLayerInstance() return curLevel.getLayerInstance(curLayerId);
+	public var curLayerInstance(get,never) : LayerInstance; inline function get_curLayerInstance() return curLevel.getLayerInstance(curLayerDef);
 
 	public var levelRender : display.LevelRender;
 	public var curTool : Tool<Dynamic>;
@@ -175,7 +175,8 @@ class Client extends dn.Process {
 				return true;
 
 			case Entity(instance):
-				for(li in curLevel.layerInstances) {
+				for(ld in project.layerDefs) {
+					var li = curLevel.getLayerInstance(ld);
 					if( li.def.type!=Entities )
 						continue;
 
@@ -254,8 +255,8 @@ class Client extends dn.Process {
 			case LayerInstanceChanged:
 
 			case _:
-				if( curLayerInstance==null )
-					selectLayerInstance(curLevel.layerInstances[0]);
+				if( curLayerDef==null )
+					selectLayerInstance( curLevel.getLayerInstance(project.layerDefs[0]) );
 				initTool();
 				updateLayerList();
 		}
@@ -268,7 +269,8 @@ class Client extends dn.Process {
 		var list = jLayers.find("ul");
 		list.empty();
 
-		for(li in curLevel.layerInstances) {
+		for(ld in project.layerDefs) {
+			var li = curLevel.getLayerInstance(ld);
 			var e = jLayers.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			list.append(e);
 

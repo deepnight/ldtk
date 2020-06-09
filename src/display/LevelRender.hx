@@ -85,7 +85,8 @@ class LevelRender extends dn.Process {
 			e.remove();
 		layerWrappers = new Map();
 
-		for(li in client.curLevel.layerInstances) {
+		for(ld in client.project.layerDefs) {
+			var li = client.curLevel.getLayerInstance(ld);
 			var wrapper = new h2d.Object();
 			root.add(wrapper,1);
 			root.under(wrapper);
@@ -155,9 +156,9 @@ class LevelRender extends dn.Process {
 	}
 
 	function updateLayersVisibility() {
-		for(lid in layerWrappers.keys()) {
-			var li = client.curLevel.getLayerInstance(lid);
-			var wrapper = layerWrappers.get(lid);
+		for(ld in client.project.layerDefs) {
+			var li = client.curLevel.getLayerInstance(ld);
+			var wrapper = layerWrappers.get(ld.uid);
 			wrapper.visible = isLayerVisible(li);
 			wrapper.alpha = li.def.displayOpacity;
 			// wrapper.alpha = li.def.displayOpacity * ( li==client.curLayerInstance ? 1 : 0.25 );

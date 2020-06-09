@@ -1,7 +1,7 @@
 package data;
 
 class LevelData implements data.IData {
-	public var layerInstances : Array<LayerInstance> = [];
+	var layerInstances : Map<Int,LayerInstance> = new Map();
 
 	public var uid(default,null) : Int;
 	public var pxWid : Int = 512;
@@ -11,13 +11,6 @@ class LevelData implements data.IData {
 	@:allow(data.ProjectData)
 	private function new(uid:Int) {
 		this.uid = uid;
-	}
-
-	@:allow(data.ProjectData)
-	function initLayersUsingProject(p:ProjectData) {
-		layerInstances = [];
-		for(def in p.layerDefs)
-			layerInstances.push( new LayerInstance(this, def) );
 	}
 
 	@:keep public function toString() {
@@ -34,27 +27,22 @@ class LevelData implements data.IData {
 		}
 	}
 
-	public function getLayerInstance(layerDefId:Int) : Null<LayerInstance> {
-		for(li in layerInstances)
-			if( li.layerDefId==layerDefId )
-				return li;
-		return null;
+	public function getLayerInstance(layerDef:LayerDef) : LayerInstance {
+		if( !layerInstances.exists(layerDef.uid) )
+			throw "Missing layer instance for "+layerDef.name;
+		return layerInstances.get( layerDef.uid );
 	}
 
 	public function tidy(project:ProjectData) {
 		// Remove layerInstances without layerDefs
-		var i = 0;
-		while( i<layerInstances.length ) {
-			if( layerInstances[i].def==null )
-				layerInstances.splice(i,1);
-			else
-				i++;
-		}
+		for(e in layerInstances.keyValueIterator())
+			if( e.value.def==null )
+				layerInstances.remove(e.key);
 
 		// Add missing layerInstances
 		for(ld in project.layerDefs)
-			if( getLayerInstance(ld.uid)==null )
-				layerInstances.push( new LayerInstance(this, ld) );
+			if( !layerInstances.exists(ld.uid) )
+				layerInstances.set( ld.uid, new LayerInstance(this, ld) );
 
 		// Layer instances content
 		for(li in layerInstances)

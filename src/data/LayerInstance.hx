@@ -3,9 +3,9 @@ package data;
 class LayerInstance implements IData { // TODO rename: LayerInstance
 	var project(get,never) : ProjectData; inline function get_project() return Client.ME.project; // TODO
 	public var def(get,never) : data.def.LayerDef; inline function get_def() return project.getLayerDef(layerDefId); // TODO
-	public var level(get,never) : LevelData; inline function get_level() return project.getLevel(levelId);
+	public var level(get,never) : LevelData; function get_level() return project.getLevel(levelId);
 	public var cWid(get,never) : Int; inline function get_cWid() return M.ceil( level.pxWid / def.gridSize );
-	public var cHei(get,never) : Int; inline function get_cHei() return M.ceil( level.pxHei / def.gridSize );
+	public var cHei(get,never) : Int; function get_cHei() return M.ceil( level.pxHei / def.gridSize );
 
 	public var levelId : Int;
 	public var layerDefId : Int;
@@ -20,7 +20,7 @@ class LayerInstance implements IData { // TODO rename: LayerInstance
 
 
 	@:keep public function toString() {
-		return 'LayerInstance<${def.name}:${def.type}>';
+		return 'LayerInstance#<${def.name}:${def.type}>';
 	}
 
 

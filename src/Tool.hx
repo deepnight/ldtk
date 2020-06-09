@@ -116,7 +116,7 @@ class Tool<T> extends dn.Process {
 		}
 	}
 
-	function getGenericLevelElementAt(m:MouseCoords, ?limitToLayerContent:LayerInstance) : Null<GenericLevelElement> {
+	function getGenericLevelElementAt(m:MouseCoords, ?limitToLayerInstance:LayerInstance) : Null<GenericLevelElement> {
 		var ge : GenericLevelElement = null;
 
 		function getElement(li:LayerInstance) {
@@ -134,14 +134,15 @@ class Tool<T> extends dn.Process {
 			}
 		}
 
-		if( limitToLayerContent==null ) {
-			var all = curLevel.layerInstances.copy();
+		if( limitToLayerInstance==null ) {
+			// Search in all layers
+			var all = project.layerDefs.copy();
 			all.reverse();
-			for(li in all)
-				getElement(li);
+			for(ld in all)
+				getElement( curLevel.getLayerInstance(ld) );
 		}
 		else
-			getElement(limitToLayerContent);
+			getElement(limitToLayerInstance);
 
 		return ge;
 	}
