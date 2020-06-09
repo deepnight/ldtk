@@ -13,7 +13,7 @@ class LayerDef implements IData {
 		this.uid = uid;
 		name = "New layer "+uid;
 		type = t;
-		addIntGridValue(0xff0000);
+		addIntGridValue(0x0);
 	}
 
 	public function clone() {
