@@ -66,6 +66,30 @@ class Client extends dn.Process {
 			w.addButton("Definitions", function() test( project.defs.toJson() ));
 			w.addButton("Current level", function() test( curLevel.toJson() ));
 			w.addButton("Current layer", function() test( curLayerInstance.toJson() ));
+
+			w.addButton("Clone: FieldDef", function() {
+				var fd = project.defs.entities[0].fieldDefs[0];
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(fd.toJson()) ) );
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(fd.clone().toJson()) ) );
+			});
+
+			w.addButton("Clone: LayerDef", function() {
+				var ld = project.defs.layers[0];
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(ld.toJson()) ) );
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(ld.clone().toJson()) ) );
+			});
+
+			w.addButton("Clone: EntityDef", function() {
+				var ed = project.defs.entities[0];
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(ed.toJson()) ) );
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(ed.clone().toJson()) ) );
+			});
+
+			w.addButton("Clone: Defs", function() {
+				var defs = project.defs;
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(defs.toJson()) ) );
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(defs.clone().toJson()) ) );
+			});
 		});
 		#end
 

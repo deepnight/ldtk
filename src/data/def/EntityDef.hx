@@ -44,6 +44,7 @@ class EntityDef implements ISerializable {
 
 		for(defJson in JsonTools.readArray(json.fieldDefs) )
 			o.fieldDefs.push( FieldDef.fromJson(defJson) );
+
 		return o;
 	}
 
