@@ -24,6 +24,13 @@ class Definitions implements ISerializable {
 
 	public static function fromJson(p:ProjectData, json:Dynamic) {
 		var d = new Definitions(p);
+
+		for( layerJson in JsonTools.readArray(json.layers) )
+			d.layers.push( LayerDef.fromJson(layerJson) );
+
+		for( entityJson in JsonTools.readArray(json.entities) )
+			d.entities.push( EntityDef.fromJson(entityJson) );
+
 		return d;
 	}
 
