@@ -61,6 +61,31 @@ class JsonTools {
 		return Std.int(v);
 	}
 
+	public static function readFloat(v:Dynamic, ?defaultIfNull:Float) : Float {
+		if( v==null && defaultIfNull!=null )
+			return defaultIfNull;
+
+		if( v==null || Type.typeof(v)!=TInt && Type.typeof(v)!=TFloat )
+			throw "Couldn't read Float "+v;
+
+		return v*1.0;
+	}
+
+	public static function readNullableFloat(v:Dynamic) : Null<Float> {
+		if( v==null )
+			return null;
+
+		if( Type.typeof(v)!=TInt && Type.typeof(v)!=TFloat )
+			throw "Couldn't read Float "+v;
+
+		return v*1.0;
+	}
+
+	public static function clampFloatPrecision(v:Float, precision=3) {
+		var p = Math.pow(10, precision);
+		return M.round(v*p)/p;
+	}
+
 	public static function readBool(v:Dynamic, ?defaultIfNull:Bool) : Bool {
 		if( v==null && defaultIfNull!=null )
 			return defaultIfNull;
@@ -69,21 +94,6 @@ class JsonTools {
 			throw "Couldn't read Bool "+v;
 
 		return v==true;
-	}
-
-	public static function readFloat(v:Dynamic, ?defaultIfNull:Float) : Float {
-		if( v==null && defaultIfNull!=null )
-			return defaultIfNull;
-
-		if( v==null || Type.typeof(v)!=TInt && Type.typeof(v)!=TFloat )
-			throw "Couldn't read Float "+v;
-
-		return cast v;
-	}
-
-	public static function clampFloatPrecision(v:Float, precision=3) {
-		var p = Math.pow(10, precision);
-		return M.round(v*p)/p;
 	}
 
 	public static function readArray(arr:Dynamic) : Array<Dynamic> {

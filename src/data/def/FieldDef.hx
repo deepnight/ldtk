@@ -39,8 +39,8 @@ class FieldDef implements ISerializable {
 		o.name = JsonTools.readString(json.name);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.editorDisplay = JsonTools.readBool(json.editorDisplay);
-		o.min = JsonTools.readFloat(json.min);
-		o.max = JsonTools.readFloat(json.max);
+		o.min = JsonTools.readNullableFloat(json.min);
+		o.max = JsonTools.readNullableFloat(json.max);
 		o.defaultOverride = JsonTools.readEnum(ValueWrapper, json.defaultOverride, true);
 		return o;
 	}
@@ -52,8 +52,8 @@ class FieldDef implements ISerializable {
 			name: name,
 			canBeNull: canBeNull,
 			editorDisplay: editorDisplay,
-			min: JsonTools.clampFloatPrecision(min),
-			max: JsonTools.clampFloatPrecision(max),
+			min: min==null ? null : JsonTools.clampFloatPrecision(min),
+			max: max==null ? null : JsonTools.clampFloatPrecision(max),
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
 		}
 	}
