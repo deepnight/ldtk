@@ -147,6 +147,10 @@ button.cancel:hover {
   margin-left: 2px;
 }
 
+.buttons button.debug {
+  flex: 0 0 0;
+}
+
 ul.niceList:first-child {
   margin-top: 0;
 }
