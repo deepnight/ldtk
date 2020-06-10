@@ -2,7 +2,7 @@ package data;
 
 class LayerInstance implements ISerializable {
 	var project : ProjectData;
-	public var def(get,never) : data.def.LayerDef; inline function get_def() return project.getLayerDef(layerDefId);
+	public var def(get,never) : data.def.LayerDef; inline function get_def() return project.defs.getLayerDef(layerDefId);
 	public var level(get,never) : LevelData; function get_level() return project.getLevel(levelId);
 
 	public var layerDefId : Int;

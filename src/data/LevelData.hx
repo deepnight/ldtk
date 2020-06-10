@@ -40,7 +40,7 @@ class LevelData implements data.ISerializable {
 				layerInstances.remove(e.key);
 
 		// Add missing layerInstances
-		for(ld in project.layerDefs)
+		for(ld in project.defs.layers)
 			if( !layerInstances.exists(ld.uid) )
 				layerInstances.set( ld.uid, new LayerInstance(project, this, ld) );
 

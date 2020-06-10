@@ -24,7 +24,7 @@ class ProjectData implements data.ISerializable {
 	public function makeUniqId() return nextUniqId++;
 
 	@:keep public function toString() {
-		return '$name(levels=${levels.length}, layerDefs=${layerDefs.length}, entDefs=${entityDefs.length})';
+		return '$name(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
 	}
 
 	public function clone() {

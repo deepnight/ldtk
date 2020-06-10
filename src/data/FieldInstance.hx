@@ -2,7 +2,7 @@ package data;
 
 class FieldInstance implements ISerializable {
 	public var project : ProjectData;
-	public var def(get,never) : FieldDef; inline function get_def() return project.getFieldDef(defId);
+	public var def(get,never) : FieldDef; inline function get_def() return project.defs.getFieldDef(defId);
 
 	public var defId: Int;
 	var internalValue : Null<ValueWrapper>;
@@ -33,7 +33,7 @@ class FieldInstance implements ISerializable {
 	}
 
 	public static function fromJson(json:Dynamic) {
-		var o = new FieldInstance( Client.ME.project, Client.ME.project.getFieldDef(JsonTools.readInt(json.defId)) ); // HACK
+		var o = new FieldInstance( Client.ME.project, Client.ME.project.defs.getFieldDef(JsonTools.readInt(json.defId)) ); // HACK
 		o.internalValue = json.internalValue==null ? null : JsonTools.readEnum(ValueWrapper, json.internalValue);
 		return o;
 	}

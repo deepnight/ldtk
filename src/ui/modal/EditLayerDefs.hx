@@ -15,7 +15,7 @@ class EditLayerDefs extends ui.Modal {
 
 		// Create layer
 		jWin.find(".mainList button.create").click( function(_) {
-			var ld = project.createLayerDef(IntGrid);
+			var ld = project.defs.createLayerDef(IntGrid);
 			select(ld);
 			client.ge.emit(LayerDefChanged);
 			jForm.find("input").first().focus().select();
@@ -23,14 +23,14 @@ class EditLayerDefs extends ui.Modal {
 
 		// Delete layer
 		jWin.find(".mainList button.delete").click( function(ev) {
-			if( project.layerDefs.length==1 ) {
+			if( project.defs.layers.length==1 ) {
 				N.error("Cannot delete the last layer.");
 				return;
 			}
 
 			new ui.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
-				project.removeLayerDef(cur);
-				select(project.layerDefs[0]);
+				project.defs.removeLayerDef(cur);
+				select(project.defs.layers[0]);
 				client.ge.emit(LayerDefChanged);
 			});
 		});
@@ -69,7 +69,7 @@ class EditLayerDefs extends ui.Modal {
 
 		// Fields
 		var i = Input.linkToHtmlInput( ld.name, jForm.find("input[name='name']") );
-		i.validityCheck = project.isLayerNameValid;
+		i.validityCheck = project.defs.isLayerNameValid;
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( ld.type, jForm.find("select[name='type']") );
@@ -164,7 +164,7 @@ class EditLayerDefs extends ui.Modal {
 	function updateList() {
 		jList.empty();
 
-		for(ld in project.layerDefs) {
+		for(ld in project.defs.layers) {
 			var e = new J("<li/>");
 			jList.append(e);
 
@@ -184,7 +184,7 @@ class EditLayerDefs extends ui.Modal {
 
 		// Make layer list sortable
 		JsTools.makeSortable(".window .mainList ul", function(from, to) {
-			var moved = project.sortLayerDef(from,to);
+			var moved = project.defs.sortLayerDef(from,to);
 			select(moved);
 			client.ge.emit(LayerDefSorted);
 		});

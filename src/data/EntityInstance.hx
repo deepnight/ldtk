@@ -2,7 +2,7 @@ package data;
 
 class EntityInstance {
 	public var project : ProjectData;
-	public var def(get,never) : EntityDef; inline function get_def() return project.getEntityDef(defId);
+	public var def(get,never) : EntityDef; inline function get_def() return project.defs.getEntityDef(defId);
 
 	public var defId(default,null) : Int;
 	public var x : Int;

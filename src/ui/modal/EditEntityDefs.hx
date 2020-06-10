@@ -20,7 +20,7 @@ class EditEntityDefs extends ui.Modal {
 
 		// Create entity
 		jWin.find(".entityList button.create").click( function(_) {
-			var ed = project.createEntityDef();
+			var ed = project.defs.createEntityDef();
 			selectEntity(ed);
 			// client.ge.emit(LayerDefChanged);
 			jEntityForm.find("input").first().focus().select();
@@ -32,10 +32,10 @@ class EditEntityDefs extends ui.Modal {
 				N.error("No entity selected.");
 				return;
 			}
-			project.removeEntityDef(curEntity);
+			project.defs.removeEntityDef(curEntity);
 			client.ge.emit(EntityDefChanged);
-			if( project.entityDefs.length>0 )
-				selectEntity(project.entityDefs[0]);
+			if( project.defs.entities.length>0 )
+				selectEntity(project.defs.entities[0]);
 			else
 				selectEntity(null);
 		});
@@ -74,7 +74,7 @@ class EditEntityDefs extends ui.Modal {
 			selectField( curEntity.fieldDefs[0] );
 		});
 
-		selectEntity(project.entityDefs[0]);
+		selectEntity(project.defs.entities[0]);
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -129,7 +129,7 @@ class EditEntityDefs extends ui.Modal {
 
 		// Name
 		var i = Input.linkToHtmlInput(curEntity.name, jEntityForm.find("input[name='name']") );
-		i.validityCheck = project.isEntityNameValid;
+		i.validityCheck = project.defs.isEntityNameValid;
 		i.onChange = function() {
 			client.ge.emit(EntityDefChanged);
 		};
@@ -256,7 +256,7 @@ class EditEntityDefs extends ui.Modal {
 		jFieldList.empty();
 
 		// Entities
-		for(ed in project.entityDefs) {
+		for(ed in project.defs.entities) {
 			var elem = new J("<li/>");
 			jEntityList.append(elem);
 			elem.addClass("iconLeft");
@@ -273,7 +273,7 @@ class EditEntityDefs extends ui.Modal {
 
 		// Make layer list sortable
 		JsTools.makeSortable(".window .entityList ul", function(from, to) {
-			var moved = project.sortEntityDef(from,to);
+			var moved = project.defs.sortEntityDef(from,to);
 			selectEntity(moved);
 			client.ge.emit(EntityDefSorted);
 		});

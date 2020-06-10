@@ -11,7 +11,7 @@ class Client extends dn.Process {
 	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette");
 
 	public var curLevel(get,never) : LevelData; inline function get_curLevel() return project.getLevel(curLevelId);
-	public var curLayerDef(get,never) : LayerDef; inline function get_curLayerDef() return project.getLayerDef(curLayerId);
+	public var curLayerDef(get,never) : LayerDef; inline function get_curLayerDef() return project.defs.getLayerDef(curLayerId);
 	public var curLayerInstance(get,never) : LayerInstance; inline function get_curLayerInstance() return curLevel.getLayerInstance(curLayerDef);
 
 	public var ge : GlobalEventDispatcher;
@@ -55,7 +55,7 @@ class Client extends dn.Process {
 
 		#if debug
 		jMainPanel.find("button.debug").click( function(_) {
-			var ed = project.entityDefs[0];
+			var ed = project.defs.entities[0];
 			N.debug( ed.toJson() );
 			var copy = ed.clone();
 			N.debug(ed);
@@ -87,7 +87,7 @@ class Client extends dn.Process {
 		project = new data.ProjectData();
 
 		// Placeholder data
-		var ed = project.createEntityDef("Hero");
+		var ed = project.defs.createEntityDef("Hero");
 		ed.color = 0x00ff00;
 		ed.width = 24;
 		ed.height = 32;
@@ -98,20 +98,20 @@ class Client extends dn.Process {
 		fd.setDefault(Std.string(3));
 		fd.setMin("1");
 		fd.setMax("10");
-		var ld = project.layerDefs[0];
+		var ld = project.defs.layers[0];
 		ld.name = "Collisions";
 		ld.getIntGridValueDef(0).name = "walls";
 		ld.addIntGridValue(0x00ff00, "grass");
 		ld.addIntGridValue(0x0000ff, "water");
-		var ld = project.createLayerDef(Entities,"Entities");
-		var ld = project.createLayerDef(IntGrid,"Decorations");
+		var ld = project.defs.createLayerDef(Entities,"Entities");
+		var ld = project.defs.createLayerDef(IntGrid,"Decorations");
 		ld.gridSize = 8;
 		ld.displayOpacity = 0.7;
 		ld.getIntGridValueDef(0).color = 0x00ff00;
 
 		project.createLevel();
 		curLevelId = project.levels[0].uid;
-		curLayerId = project.layerDefs[0].uid;
+		curLayerId = project.defs.layers[0].uid;
 
 		levelRender = new display.LevelRender();
 		initTool();
@@ -200,7 +200,7 @@ class Client extends dn.Process {
 				return true;
 
 			case Entity(instance):
-				for(ld in project.layerDefs) {
+				for(ld in project.defs.layers) {
 					var li = curLevel.getLayerInstance(ld);
 					if( li.def.type!=Entities )
 						continue;
@@ -291,7 +291,7 @@ class Client extends dn.Process {
 
 			case LayerDefChanged, LayerDefSorted:
 				if( curLayerDef==null )
-					selectLayerInstance( curLevel.getLayerInstance(project.layerDefs[0]) );
+					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
 				initTool();
 				updateLayerList();
 
@@ -324,7 +324,7 @@ class Client extends dn.Process {
 		var list = jLayers;
 		list.empty();
 
-		for(ld in project.layerDefs) {
+		for(ld in project.defs.layers) {
 			var li = curLevel.getLayerInstance(ld);
 			var e = jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			list.append(e);

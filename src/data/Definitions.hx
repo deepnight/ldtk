@@ -127,7 +127,7 @@ class Definitions implements ISerializable {
 	/**  FIELD DEFS  *****************************************/
 
 	public function getFieldDef(id:Int) : Null<FieldDef> {
-		for(ed in entityDefs)
+		for(ed in entities)
 		for(fd in ed.fieldDefs)
 			if( fd.uid==id )
 				return fd;
