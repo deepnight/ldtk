@@ -8,9 +8,9 @@ class FieldInstance implements ISerializable {
 	var internalValue : Null<ValueWrapper>;
 
 	@:allow(data.EntityInstance)
-	private function new(p:ProjectData, fd:FieldDef) {
+	private function new(p:ProjectData, fieldDefId:Int) {
 		_project = p;
-		defId = fd.uid;
+		defId = fieldDefId;
 		internalValue = null;
 	}
 
@@ -29,11 +29,11 @@ class FieldInstance implements ISerializable {
 	}
 
 	public function clone() {
-		return fromJson( toJson() );
+		return fromJson( _project, toJson() );
 	}
 
-	public static function fromJson(json:Dynamic) {
-		var o = new FieldInstance( Client.ME.project, Client.ME.project.defs.getFieldDef(JsonTools.readInt(json.defId)) ); // HACK
+	public static function fromJson(project:ProjectData, json:Dynamic) {
+		var o = new FieldInstance( project, JsonTools.readInt(json.defId) );
 		o.internalValue = JsonTools.readEnum(ValueWrapper, json.internalValue, true);
 		return o;
 	}
