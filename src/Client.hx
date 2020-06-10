@@ -102,8 +102,10 @@ class Client extends dn.Process {
 			});
 
 			w.addButton("Clone: project", function() {
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(project.toJson()) ) );
 				trace( dn.HaxeJson.prettify( haxe.Json.stringify(project.clone().toJson()) ) );
+				project = project.clone();
+				levelRender.invalidate();
+				N.debug("Replaced with a copy");
 			});
 		});
 		#end
