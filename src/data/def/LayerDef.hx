@@ -24,7 +24,7 @@ class LayerDef implements ISerializable {
 	}
 
 	public static function fromJson(json:Dynamic) {
-		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type));
+		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type, false));
 		o.name = JsonTools.readString(json.name);
 		o.gridSize = JsonTools.readInt(json.gridSize, Const.DEFAULT_GRID_SIZE);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
@@ -32,7 +32,6 @@ class LayerDef implements ISerializable {
 		o.intGridValues = [];
 		for( v in JsonTools.readArray(json.intGridValues) )
 			o.intGridValues.push(v);
-		N.debug(Type.typeof(json.intGridValues));
 
 		return o;
 	}
@@ -40,7 +39,7 @@ class LayerDef implements ISerializable {
 	public function toJson() {
 		return {
 			uid: uid,
-			type: JsonTools.writeEnum(type),
+			type: JsonTools.writeEnum(type, false),
 			name: name,
 			gridSize: gridSize,
 			displaydisplayOpacity: JsonTools.clampFloatPrecision(displayOpacity),

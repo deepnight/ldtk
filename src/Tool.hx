@@ -136,7 +136,7 @@ class Tool<T> extends dn.Process {
 
 		if( limitToLayerInstance==null ) {
 			// Search in all layers
-			var all = project.layerDefs.copy();
+			var all = project.defs.layers.copy();
 			all.reverse();
 			for(ld in all)
 				getElement( curLevel.getLayerInstance(ld) );

@@ -513,8 +513,10 @@ input[type=number]:focus {
 
 		.buttons {
 			margin-top: 30px;
+			flex-wrap: wrap;
 			button {
 				flex: 1 1 0;
+				margin: 1px;
 			}
 			button.confirm {
 				flex-grow: 2;

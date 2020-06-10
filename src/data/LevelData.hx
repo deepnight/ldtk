@@ -1,16 +1,23 @@
 package data;
 
 class LevelData implements data.ISerializable {
-	public var layerInstances : Map<Int,LayerInstance> = new Map();
+	var _project : ProjectData;
 
 	public var uid(default,null) : Int;
-	public var pxWid : Int = 512;
-	public var pxHei : Int = 256;
+	public var pxWid : Int;
+	public var pxHei : Int;
+	public var layerInstances : Map<Int,LayerInstance> = new Map();
 
 
 	@:allow(data.ProjectData)
-	private function new(uid:Int) {
+	private function new(project:ProjectData, uid:Int) {
 		this.uid = uid;
+		pxWid = Const.DEFAULT_LEVEL_WIDTH;
+		pxHei = Const.DEFAULT_LEVEL_HEIGHT;
+		this._project = project;
+
+		for(ld in _project.defs.layers)
+			layerInstances.set( ld.uid, new LayerInstance(_project, uid, ld.uid) );
 	}
 
 	@:keep public function toString() {
@@ -18,13 +25,33 @@ class LevelData implements data.ISerializable {
 	}
 
 	public function clone() {
-		var e = new LevelData(uid);
-		return e;
+		return fromJson( _project, toJson() );
 	}
 
 	public function toJson() {
+		var layersJson = [];
+		for(li in layerInstances)
+			layersJson.push( li.toJson() );
+
 		return {
+			uid: uid,
+			pxWid: pxWid,
+			pxHei: pxHei,
+			layerInstances : layersJson,
 		}
+	}
+
+	public static function fromJson(p:ProjectData, json:Dynamic) {
+		var l = new LevelData( p, JsonTools.readInt(json.uid) );
+		l.pxWid = JsonTools.readInt( json.pxWid, Const.DEFAULT_LEVEL_WIDTH );
+		l.pxHei = JsonTools.readInt( json.pxHei, Const.DEFAULT_LEVEL_HEIGHT );
+
+		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
+			var li = LayerInstance.fromJson(p, layerJson);
+			l.layerInstances.set(li.layerDefId, li);
+		}
+
+		return l;
 	}
 
 	public function getLayerInstance(layerDef:LayerDef) : LayerInstance {
@@ -33,20 +60,21 @@ class LevelData implements data.ISerializable {
 		return layerInstances.get( layerDef.uid );
 	}
 
-	public function tidy(project:ProjectData) {
+	public function tidy(p:ProjectData) {
+		_project = p;
 		// Remove layerInstances without layerDefs
 		for(e in layerInstances.keyValueIterator())
 			if( e.value.def==null )
 				layerInstances.remove(e.key);
 
-		// Add missing layerInstances
-		for(ld in project.layerDefs)
+		// Create missing layerInstances
+		for(ld in _project.defs.layers)
 			if( !layerInstances.exists(ld.uid) )
-				layerInstances.set( ld.uid, new LayerInstance(project, this, ld) );
+				layerInstances.set( ld.uid, new LayerInstance(_project, uid, ld.uid) );
 
 		// Layer instances content
 		for(li in layerInstances)
-			li.tidy(project);
+			li.tidy(_project);
 
 	}
 

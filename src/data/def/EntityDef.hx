@@ -7,9 +7,11 @@ class EntityDef implements ISerializable {
 	public var height : Int;
 	public var color : UInt;
 	public var maxPerLevel : Int;
-	public var fieldDefs : Array<data.def.FieldDef> = [];
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
+
+	public var fieldDefs : Array<data.def.FieldDef> = [];
+
 
 	public function new(uid:Int) {
 		this.uid = uid;
@@ -25,14 +27,6 @@ class EntityDef implements ISerializable {
 			+ fieldDefs.map( function(fd) return fd.name+":"+fd.type ).join(",")
 			+ "]";
 	}
-
-	public inline function setPivot(x,y) {
-		pivotX = x;
-		pivotY = y;
-	}
-
-	inline function set_pivotX(v) return pivotX = M.fclamp(v, 0, 1);
-	inline function set_pivotY(v) return pivotY = M.fclamp(v, 0, 1);
 
 	public function clone() {
 		return fromJson( toJson() );
@@ -50,6 +44,7 @@ class EntityDef implements ISerializable {
 
 		for(defJson in JsonTools.readArray(json.fieldDefs) )
 			o.fieldDefs.push( FieldDef.fromJson(defJson) );
+
 		return o;
 	}
 
@@ -67,6 +62,15 @@ class EntityDef implements ISerializable {
 			fieldDefs: fieldDefs.map( function(fd) return fd.toJson() ),
 		}
 	}
+
+
+	public inline function setPivot(x,y) {
+		pivotX = x;
+		pivotY = y;
+	}
+
+	inline function set_pivotX(v) return pivotX = M.fclamp(v, 0, 1);
+	inline function set_pivotY(v) return pivotY = M.fclamp(v, 0, 1);
 
 
 	public function createField(project:ProjectData, type:FieldType) : FieldDef {

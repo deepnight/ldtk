@@ -35,26 +35,26 @@ class FieldDef implements ISerializable {
 	}
 
 	public static function fromJson(json:Dynamic) {
-		var o = new FieldDef( JsonTools.readInt(json.uid), JsonTools.readEnum(FieldType, json.type) );
+		var o = new FieldDef( JsonTools.readInt(json.uid), JsonTools.readEnum(FieldType, json.type, false) );
 		o.name = JsonTools.readString(json.name);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.editorDisplay = JsonTools.readBool(json.editorDisplay);
-		o.min = JsonTools.readFloat(json.min);
-		o.max = JsonTools.readFloat(json.max);
-		o.defaultOverride = json.defaultOverride==null ? null : JsonTools.readEnum(ValueWrapper, json.defaultOverride);
+		o.min = JsonTools.readNullableFloat(json.min);
+		o.max = JsonTools.readNullableFloat(json.max);
+		o.defaultOverride = JsonTools.readEnum(ValueWrapper, json.defaultOverride, true);
 		return o;
 	}
 
 	public function toJson() {
 		return {
 			uid: uid,
-			type: JsonTools.writeEnum(type),
+			type: JsonTools.writeEnum(type, false),
 			name: name,
 			canBeNull: canBeNull,
 			editorDisplay: editorDisplay,
-			min: JsonTools.clampFloatPrecision(min),
-			max: JsonTools.clampFloatPrecision(max),
-			defaultOverride: JsonTools.writeEnum(defaultOverride),
+			min: min==null ? null : JsonTools.clampFloatPrecision(min),
+			max: max==null ? null : JsonTools.clampFloatPrecision(max),
+			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
 		}
 	}
 

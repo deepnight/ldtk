@@ -6,11 +6,11 @@ class EntityTool extends Tool<Int> {
 	public function new() {
 		super();
 
-		if( curEntityDef==null && project.entityDefs.length>0 )
-			selectValue( project.entityDefs[0].uid );
+		if( curEntityDef==null && project.defs.entities.length>0 )
+			selectValue( project.defs.entities[0].uid );
 	}
 
-	inline function get_curEntityDef() return project.getEntityDef(getSelectedValue());
+	inline function get_curEntityDef() return project.defs.getEntityDef(getSelectedValue());
 
 	override function selectValue(v:Int) {
 		super.selectValue(v);
@@ -21,8 +21,8 @@ class EntityTool extends Tool<Int> {
 	}
 
 	override function getDefaultValue():Int{
-		if( project.entityDefs.length>0 )
-			return project.entityDefs[0].uid;
+		if( project.defs.entities.length>0 )
+			return project.defs.entities[0].uid;
 		else
 			return -1;
 	}
@@ -127,7 +127,7 @@ class EntityTool extends Tool<Int> {
 	override function updatePalette() {
 		super.updatePalette();
 
-		for(ed in project.entityDefs) {
+		for(ed in project.defs.entities) {
 			var e = new J("<li/>");
 			jPalette.append(e);
 			e.addClass("entity");
