@@ -60,20 +60,21 @@ class LevelData implements data.ISerializable {
 		return layerInstances.get( layerDef.uid );
 	}
 
-	public function tidy(project:ProjectData) {
+	public function tidy(p:ProjectData) {
+		_project = p;
 		// Remove layerInstances without layerDefs
 		for(e in layerInstances.keyValueIterator())
 			if( e.value.def==null )
 				layerInstances.remove(e.key);
 
 		// Create missing layerInstances
-		for(ld in project.defs.layers)
+		for(ld in _project.defs.layers)
 			if( !layerInstances.exists(ld.uid) )
-				layerInstances.set( ld.uid, new LayerInstance(project, uid, ld.uid) );
+				layerInstances.set( ld.uid, new LayerInstance(_project, uid, ld.uid) );
 
 		// Layer instances content
 		for(li in layerInstances)
-			li.tidy(project);
+			li.tidy(_project);
 
 	}
 

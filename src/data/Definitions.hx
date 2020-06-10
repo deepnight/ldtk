@@ -34,6 +34,10 @@ class Definitions implements ISerializable {
 		return d;
 	}
 
+	public function tidy(p:ProjectData) {
+		_project = p;
+	}
+
 	/**  LAYER DEFS  *****************************************/
 
 	public function getLayerDef(uid:Int) : Null<LayerDef> {

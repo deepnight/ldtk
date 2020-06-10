@@ -66,13 +66,16 @@ class EntityInstance implements ISerializable {
 		return levelX >= left && levelX <= right && levelY >= top && levelY <= bottom;
 	}
 
-	public function tidy(project:ProjectData) {
+	public function tidy(p:ProjectData) {
+		_project = p;
+
 		// Remove field instances whose def was removed
 		for(e in fieldInstances.keyValueIterator())
 			if( e.value.def==null )
 				fieldInstances.remove(e.key);
 
-		// TODO create missing instances
+		for(fi in fieldInstances)
+			fi.tidy(_project);
 	}
 
 	public function getFieldInstance(fieldDef:FieldDef) {

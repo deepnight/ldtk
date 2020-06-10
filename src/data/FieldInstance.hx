@@ -127,4 +127,8 @@ class FieldInstance implements ISerializable {
 			case _: throw "unexpected";
 		}
 	}
+
+	public function tidy(p:ProjectData) {
+		_project = p;
+	}
 }

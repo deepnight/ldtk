@@ -71,7 +71,9 @@ class LayerInstance implements ISerializable {
 		return cx + cy*cWid;
 	}
 
-	public function tidy(project:ProjectData) {
+	public function tidy(p:ProjectData) {
+		_project = p;
+
 		switch def.type {
 			case IntGrid:
 				// Remove lost intGrid values
@@ -93,7 +95,7 @@ class LayerInstance implements ISerializable {
 
 				// Cleanup field instances
 				for(ei in entityInstances)
-					ei.tidy(project);
+					ei.tidy(_project);
 		}
 }
 
