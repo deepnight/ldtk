@@ -12,6 +12,8 @@ class Const {
 	public static var DP_MAIN = _inc++;
 	public static var DP_UI = _inc++;
 
+	public static var DEFAULT_LEVEL_WIDTH = 512;
+	public static var DEFAULT_LEVEL_HEIGHT = 256;
 	public static var DEFAULT_GRID_SIZE = 16;
 	public static var MAX_GRID_SIZE = 256;
 }

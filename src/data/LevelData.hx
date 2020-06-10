@@ -4,14 +4,16 @@ class LevelData implements data.ISerializable {
 	var _project : ProjectData;
 
 	public var uid(default,null) : Int;
-	public var pxWid : Int = 512;
-	public var pxHei : Int = 256;
+	public var pxWid : Int;
+	public var pxHei : Int;
 	public var layerInstances : Map<Int,LayerInstance> = new Map();
 
 
 	@:allow(data.ProjectData)
 	private function new(project:ProjectData, uid:Int) {
 		this.uid = uid;
+		pxWid = Const.DEFAULT_LEVEL_WIDTH;
+		pxHei = Const.DEFAULT_LEVEL_HEIGHT;
 		this._project = project;
 
 		for(ld in _project.defs.layers)
@@ -39,8 +41,16 @@ class LevelData implements data.ISerializable {
 		}
 	}
 
-	public static function fromJson(project:ProjectData, json:Dynamic) {
-		var l = new LevelData( project, JsonTools.readInt(json.uid) );
+	public static function fromJson(p:ProjectData, json:Dynamic) {
+		var l = new LevelData( p, JsonTools.readInt(json.uid) );
+		l.pxWid = JsonTools.readInt( json.pxWid, Const.DEFAULT_LEVEL_WIDTH );
+		l.pxHei = JsonTools.readInt( json.pxHei, Const.DEFAULT_LEVEL_HEIGHT );
+
+		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
+			var li = LayerInstance.fromJson(p, layerJson);
+			l.layerInstances.set(li.layerDefId, li);
+		}
+
 		return l;
 	}
 
