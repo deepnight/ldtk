@@ -3,8 +3,7 @@ package data;
 class ProjectData implements data.ISerializable {
 	var nextUniqId = 0;
 	public var levels : Array<LevelData> = [];
-	public var layerDefs : Array<data.def.LayerDef> = [];
-	public var entityDefs : Array<data.def.EntityDef> = [];
+	public var defs : Definitions;
 
 	public var name : String;
 	public var defaultPivotX : Float;
@@ -18,7 +17,8 @@ class ProjectData implements data.ISerializable {
 		bgColor = 0xffffff;
 		defaultPivotX = defaultPivotY = 0;
 
-		createLayerDef(IntGrid);
+		defs = new Definitions(this);
+		defs.createLayerDef(IntGrid);
 	}
 
 	public function makeUniqId() return nextUniqId++;
@@ -47,116 +47,6 @@ class ProjectData implements data.ISerializable {
 
 		for(level in levels)
 			level.tidy(this);
-	}
-
-
-	/**  LAYER DEFS  *****************************************/
-
-	public function getLayerDef(uid:Int) : Null<LayerDef> {
-		for(ld in layerDefs)
-			if( ld.uid==uid )
-				return ld;
-		return null;
-	}
-
-	public function createLayerDef(type:LayerType, ?name:String) : LayerDef {
-		var l = new LayerDef(makeUniqId(), type);
-		if( name!=null && isLayerNameValid(name) )
-			l.name = name;
-		l.gridSize = defaultGridSize;
-		layerDefs.push(l);
-		tidy();
-		return l;
-	}
-
-	public function isLayerNameValid(name:String) {
-		for(ld in layerDefs)
-			if( ld.name==name )
-				return false;
-		return true;
-	}
-
-	public function removeLayerDef(ld:LayerDef) {
-		if( !layerDefs.remove(ld) )
-			throw "Unknown layerDef";
-
-		tidy();
-	}
-
-	public function sortLayerDef(from:Int, to:Int) : Null<LayerDef> {
-		if( from<0 || from>=layerDefs.length || from==to )
-			return null;
-
-		if( to<0 || to>=layerDefs.length )
-			return null;
-
-		tidy();
-
-		var moved = layerDefs.splice(from,1)[0];
-		layerDefs.insert(to, moved);
-		return moved;
-	}
-
-
-	/**  ENTITY DEFS  *****************************************/
-
-	public function getEntityDef(uid:Int) : Null<EntityDef> {
-		for(ed in entityDefs)
-			if( ed.uid==uid )
-				return ed;
-		return null;
-	}
-
-	public function createEntityDef(?name:String) : EntityDef {
-		var ed = new EntityDef(makeUniqId());
-		entityDefs.push(ed);
-
-		ed.setPivot( defaultPivotX, defaultPivotY );
-
-		if( isEntityNameValid(name) )
-			ed.name = name;
-
-		return ed;
-	}
-
-	public function removeEntityDef(ed:EntityDef) {
-		entityDefs.remove(ed);
-		tidy();
-	}
-
-	public function isEntityNameValid(name:String) {
-		if( name==null || name.length==0 )
-			return false;
-
-		for(ed in entityDefs)
-			if( ed.name==name )
-				return false;
-		return true;
-	}
-
-	public function sortEntityDef(from:Int, to:Int) : Null<EntityDef> {
-		if( from<0 || from>=entityDefs.length || from==to )
-			return null;
-
-		if( to<0 || to>=entityDefs.length )
-			return null;
-
-		tidy();
-
-		var moved = entityDefs.splice(from,1)[0];
-		entityDefs.insert(to, moved);
-
-		return moved;
-	}
-
-
-	/**  FIELD DEFS  *****************************************/
-	public function getFieldDef(id:Int) : Null<FieldDef> {
-		for(ed in entityDefs)
-		for(fd in ed.fieldDefs)
-			if( fd.uid==id )
-				return fd;
-		return null;
 	}
 
 
