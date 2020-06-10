@@ -1,23 +1,23 @@
 package data;
 
 class LayerInstance implements ISerializable {
-	var project : ProjectData;
-	public var def(get,never) : data.def.LayerDef; inline function get_def() return project.defs.getLayerDef(layerDefId);
-	public var level(get,never) : LevelData; function get_level() return project.getLevel(levelId);
+	var _project : ProjectData;
+	public var def(get,never) : data.def.LayerDef; inline function get_def() return _project.defs.getLayerDef(layerDefId);
+	public var level(get,never) : LevelData; function get_level() return _project.getLevel(levelId);
 
-	public var layerDefId : Int;
 	public var levelId : Int;
-	var intGrid : Map<Int,Int> = new Map();
+	public var layerDefId : Int;
+	var intGrid : Map<Int,Int> = new Map(); // <coordId,value>
 	public var entityInstances : Array<EntityInstance> = [];
 
 	public var cWid(get,never) : Int; inline function get_cWid() return M.ceil( level.pxWid / def.gridSize );
 	public var cHei(get,never) : Int; function get_cHei() return M.ceil( level.pxHei / def.gridSize );
 
 
-	public function new(p:ProjectData, l:LevelData, def:LayerDef) {
-		project = p;
-		levelId = l.uid;
-		layerDefId = def.uid;
+	public function new(p:ProjectData, levelId:Int, layerDefId:Int) {
+		_project = p;
+		this.levelId = levelId;
+		this.layerDefId = layerDefId;
 	}
 
 
@@ -27,13 +27,28 @@ class LayerInstance implements ISerializable {
 
 
 	public function clone() {
-		var e = new LayerInstance(project, level, def);
-		// TODO
-		return e;
+		return fromJson( _project, toJson() );
 	}
 
 	public function toJson() {
-		return {}
+		var intGridJson = [];
+		for(e in intGrid.keyValueIterator())
+			intGridJson.push({
+				coordId: e.key,
+				v: e.value,
+			});
+
+		return {
+			levelId: levelId,
+			layerDefId: layerDefId,
+			intGrid: intGridJson,
+			entityInstances: entityInstances.map( function(ei) return ei.toJson() ),
+		}
+	}
+
+	public static function fromJson(p:ProjectData, json:Dynamic) {
+		var li = new LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefId) );
+		return li;
 	}
 
 	inline function requireType(t:LayerType) {
@@ -109,7 +124,7 @@ class LayerInstance implements ISerializable {
 				removeEntityInstance( all.shift() );
 		}
 
-		var ei = new EntityInstance(project, ed);
+		var ei = new EntityInstance(_project, ed.uid);
 		entityInstances.push(ei);
 		return ei;
 	}

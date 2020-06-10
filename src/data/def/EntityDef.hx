@@ -28,14 +28,6 @@ class EntityDef implements ISerializable {
 			+ "]";
 	}
 
-	public inline function setPivot(x,y) {
-		pivotX = x;
-		pivotY = y;
-	}
-
-	inline function set_pivotX(v) return pivotX = M.fclamp(v, 0, 1);
-	inline function set_pivotY(v) return pivotY = M.fclamp(v, 0, 1);
-
 	public function clone() {
 		return fromJson( toJson() );
 	}
@@ -69,6 +61,15 @@ class EntityDef implements ISerializable {
 			fieldDefs: fieldDefs.map( function(fd) return fd.toJson() ),
 		}
 	}
+
+
+	public inline function setPivot(x,y) {
+		pivotX = x;
+		pivotY = y;
+	}
+
+	inline function set_pivotX(v) return pivotX = M.fclamp(v, 0, 1);
+	inline function set_pivotY(v) return pivotY = M.fclamp(v, 0, 1);
 
 
 	public function createField(project:ProjectData, type:FieldType) : FieldDef {

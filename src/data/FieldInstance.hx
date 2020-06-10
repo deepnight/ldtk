@@ -1,15 +1,15 @@
 package data;
 
 class FieldInstance implements ISerializable {
-	public var project : ProjectData;
-	public var def(get,never) : FieldDef; inline function get_def() return project.defs.getFieldDef(defId);
+	public var _project : ProjectData;
+	public var def(get,never) : FieldDef; inline function get_def() return _project.defs.getFieldDef(defId);
 
 	public var defId: Int;
 	var internalValue : Null<ValueWrapper>;
 
 	@:allow(data.EntityInstance)
 	private function new(p:ProjectData, fd:FieldDef) {
-		project = p;
+		_project = p;
 		defId = fd.uid;
 		internalValue = null;
 	}
@@ -41,7 +41,7 @@ class FieldInstance implements ISerializable {
 	public function toJson() {
 		return {
 			defId: defId,
-			internalValue: JsonTools.writeEnum(internalValue),
+			internalValue: JsonTools.writeEnum(internalValue,true),
 		}
 	}
 

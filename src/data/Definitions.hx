@@ -1,20 +1,25 @@
 package data;
 
 class Definitions implements ISerializable {
+	var _project : ProjectData;
+
 	public var layers: Array<LayerDef> = [];
 	public var entities: Array<EntityDef> = [];
-	var project : ProjectData;
+
 
 	public function new(project:ProjectData) {
-		this.project = project;
+		this._project = project;
 	}
 
 	public function clone() {
-		return fromJson( project, toJson() );
+		return fromJson( _project, toJson() );
 	}
 
 	public function toJson() : Dynamic {
-		return {} // TODO
+		return {
+			layers: layers.map( function(ld) return ld.toJson() ),
+			entities: entities.map( function(ed) return ed.toJson() ),
+		}
 	}
 
 	public static function fromJson(p:ProjectData, json:Dynamic) {
@@ -32,12 +37,12 @@ class Definitions implements ISerializable {
 	}
 
 	public function createLayerDef(type:LayerType, ?name:String) : LayerDef {
-		var l = new LayerDef(project.makeUniqId(), type);
+		var l = new LayerDef(_project.makeUniqId(), type);
 		if( name!=null && isLayerNameValid(name) )
 			l.name = name;
-		l.gridSize = project.defaultGridSize;
+		l.gridSize = _project.defaultGridSize;
 		layers.push(l);
-		project.tidy();
+		_project.tidy();
 		return l;
 	}
 
@@ -52,7 +57,7 @@ class Definitions implements ISerializable {
 		if( !layers.remove(ld) )
 			throw "Unknown layerDef";
 
-		project.tidy();
+		_project.tidy();
 	}
 
 	public function sortLayerDef(from:Int, to:Int) : Null<LayerDef> {
@@ -62,7 +67,7 @@ class Definitions implements ISerializable {
 		if( to<0 || to>=layers.length )
 			return null;
 
-		project.tidy();
+		_project.tidy();
 
 		var moved = layers.splice(from,1)[0];
 		layers.insert(to, moved);
@@ -81,10 +86,10 @@ class Definitions implements ISerializable {
 	}
 
 	public function createEntityDef(?name:String) : EntityDef {
-		var ed = new EntityDef(project.makeUniqId());
+		var ed = new EntityDef(_project.makeUniqId());
 		entities.push(ed);
 
-		ed.setPivot( project.defaultPivotX, project.defaultPivotY );
+		ed.setPivot( _project.defaultPivotX, _project.defaultPivotY );
 
 		if( isEntityNameValid(name) )
 			ed.name = name;
@@ -94,7 +99,7 @@ class Definitions implements ISerializable {
 
 	public function removeEntityDef(ed:EntityDef) {
 		entities.remove(ed);
-		project.tidy();
+		_project.tidy();
 	}
 
 	public function isEntityNameValid(name:String) {
@@ -114,7 +119,7 @@ class Definitions implements ISerializable {
 		if( to<0 || to>=entities.length )
 			return null;
 
-		project.tidy();
+		_project.tidy();
 
 		var moved = entities.splice(from,1)[0];
 		entities.insert(to, moved);

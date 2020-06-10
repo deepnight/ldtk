@@ -48,13 +48,13 @@ class FieldDef implements ISerializable {
 	public function toJson() {
 		return {
 			uid: uid,
-			type: JsonTools.writeEnum(type),
+			type: JsonTools.writeEnum(type, false),
 			name: name,
 			canBeNull: canBeNull,
 			editorDisplay: editorDisplay,
 			min: JsonTools.clampFloatPrecision(min),
 			max: JsonTools.clampFloatPrecision(max),
-			defaultOverride: JsonTools.writeEnum(defaultOverride),
+			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
 		}
 	}
 

@@ -40,7 +40,7 @@ class LayerDef implements ISerializable {
 	public function toJson() {
 		return {
 			uid: uid,
-			type: JsonTools.writeEnum(type),
+			type: JsonTools.writeEnum(type, false),
 			name: name,
 			gridSize: gridSize,
 			displaydisplayOpacity: JsonTools.clampFloatPrecision(displayOpacity),

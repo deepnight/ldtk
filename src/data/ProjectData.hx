@@ -2,14 +2,14 @@ package data;
 
 class ProjectData implements data.ISerializable {
 	var nextUniqId = 0;
-	public var levels : Array<LevelData> = [];
 	public var defs : Definitions;
+	public var levels : Array<LevelData> = [];
 
 	public var name : String;
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
-	public var bgColor : UInt;
 	public var defaultGridSize : Int;
+	public var bgColor : UInt;
 
 	public function new() {
 		name = "New project";
@@ -28,17 +28,36 @@ class ProjectData implements data.ISerializable {
 	}
 
 	public function clone() {
-		var e = new ProjectData();
-		for(l in levels)
-			e.levels.push( l.clone() );
-		e.nextUniqId = nextUniqId;
-		return e;
+		return fromJson( toJson() );
+	}
+
+	public static function fromJson(json:Dynamic) {
+		var p = new ProjectData();
+		p.nextUniqId = JsonTools.readInt( json.nextUniqId, 0 );
+		p.defs = Definitions.fromJson(p, json.defs);
+
+		for( lvlJson in JsonTools.readArray(json.levels) )
+			p.levels.push( LevelData.fromJson(p, lvlJson) );
+
+		p.name = JsonTools.readString( json.name );
+		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
+		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
+		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Const.DEFAULT_GRID_SIZE );
+		p.bgColor = JsonTools.readInt( json.bgColor, 0xffffff );
+		return p;
 	}
 
 	public function toJson() {
 		return {
 			nextUniqId: nextUniqId,
+			defs: defs.toJson(),
 			levels: levels.map( function(l) return l.toJson() ),
+
+			name: name,
+			defaultPivotX: JsonTools.clampFloatPrecision( defaultPivotX ),
+			defaultPivotY: JsonTools.clampFloatPrecision( defaultPivotY ),
+			defaultGridSize: defaultGridSize,
+			bgColor: bgColor,
 		}
 	}
 
@@ -53,7 +72,7 @@ class ProjectData implements data.ISerializable {
 	/**  LEVELS  *****************************************/
 
 	public function createLevel() {
-		var l = new LevelData(makeUniqId());
+		var l = new LevelData(this, makeUniqId());
 		levels.push(l);
 		tidy(); // will create layer instances
 		return l;

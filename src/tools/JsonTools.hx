@@ -2,9 +2,12 @@ package tools;
 
 class JsonTools {
 
-	public static function writeEnum(e:EnumValue) {
+	public static function writeEnum(e:EnumValue, canBeNull:Bool) {
 		if( e==null )
-			return null;
+			if( canBeNull )
+				return null;
+			else
+				throw "Enum is null";
 
 		return { id:e.getIndex(), p:e.getParameters() }
 	}
