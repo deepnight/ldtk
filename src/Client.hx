@@ -90,6 +90,21 @@ class Client extends dn.Process {
 				trace( dn.HaxeJson.prettify( haxe.Json.stringify(defs.toJson()) ) );
 				trace( dn.HaxeJson.prettify( haxe.Json.stringify(defs.clone().toJson()) ) );
 			});
+
+			w.addButton("Clone: curLevel", function() {
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(curLevel.toJson()) ) );
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(curLevel.clone().toJson()) ) );
+			});
+
+			w.addButton("Clone: curLayerInstance", function() {
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(curLayerInstance.toJson()) ) );
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(curLayerInstance.clone().toJson()) ) );
+			});
+
+			w.addButton("Clone: project", function() {
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(project.toJson()) ) );
+				trace( dn.HaxeJson.prettify( haxe.Json.stringify(project.clone().toJson()) ) );
+			});
 		});
 		#end
 
