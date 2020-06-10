@@ -530,10 +530,12 @@ input[type=number]:focus {
 
 .dialog .wrapper .buttons {
   margin-top: 30px;
+  flex-wrap: wrap;
 }
 
 .dialog .wrapper .buttons button {
   flex: 1 1 0;
+  margin: 1px;
 }
 
 .dialog .wrapper .buttons button.confirm {

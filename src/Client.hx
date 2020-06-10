@@ -54,12 +54,18 @@ class Client extends dn.Process {
 		selectionCursor.highlight();
 
 		#if debug
-		jMainPanel.find("button.debug").click( function(_) {
-			var ed = project.defs.entities[0];
-			N.debug( ed.toJson() );
-			var copy = ed.clone();
-			N.debug(ed);
-			N.debug(copy);
+		jMainPanel.find("button.debug").click( function(ev) {
+			var w = new ui.Dialog( ev.getThis() );
+			function test(json:Dynamic) {
+				trace( dn.HaxeJson.stringify(json,true) );
+				N.debug("Done");
+			}
+
+			w.jContent.append('<p>Serialization tests</p>');
+			w.addButton("Project", function() test( project.toJson() ));
+			w.addButton("Definitions", function() test( project.defs.toJson() ));
+			w.addButton("Current level", function() test( curLevel.toJson() ));
+			w.addButton("Current layer", function() test( curLayerInstance.toJson() ));
 		});
 		#end
 
