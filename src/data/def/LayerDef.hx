@@ -32,7 +32,6 @@ class LayerDef implements ISerializable {
 		o.intGridValues = [];
 		for( v in JsonTools.readArray(json.intGridValues) )
 			o.intGridValues.push(v);
-		N.debug(Type.typeof(json.intGridValues));
 
 		return o;
 	}
