@@ -7,9 +7,11 @@ class EntityDef implements ISerializable {
 	public var height : Int;
 	public var color : UInt;
 	public var maxPerLevel : Int;
-	public var fieldDefs : Array<data.def.FieldDef> = [];
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
+
+	public var fieldDefs : Array<data.def.FieldDef> = [];
+
 
 	public function new(uid:Int) {
 		this.uid = uid;
