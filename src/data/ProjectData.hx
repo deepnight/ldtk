@@ -34,16 +34,17 @@ class ProjectData implements data.ISerializable {
 	public static function fromJson(json:Dynamic) {
 		var p = new ProjectData();
 		p.nextUniqId = JsonTools.readInt( json.nextUniqId, 0 );
-		p.defs = Definitions.fromJson(p, json.defs);
-
-		for( lvlJson in JsonTools.readArray(json.levels) )
-			p.levels.push( LevelData.fromJson(p, lvlJson) );
-
 		p.name = JsonTools.readString( json.name );
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Const.DEFAULT_GRID_SIZE );
 		p.bgColor = JsonTools.readInt( json.bgColor, 0xffffff );
+
+		p.defs = Definitions.fromJson(p, json.defs);
+
+		for( lvlJson in JsonTools.readArray(json.levels) )
+			p.levels.push( LevelData.fromJson(p, lvlJson) );
+
 		return p;
 	}
 
