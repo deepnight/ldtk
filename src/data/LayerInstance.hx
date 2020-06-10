@@ -48,6 +48,13 @@ class LayerInstance implements ISerializable {
 
 	public static function fromJson(p:ProjectData, json:Dynamic) {
 		var li = new LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefId) );
+
+		for( intGridJson in JsonTools.readArray(json.intGrid) )
+			li.intGrid.set( intGridJson.coordId, intGridJson.v );
+
+		for( entityJson in JsonTools.readArray(json.entityInstances) )
+			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
+
 		return li;
 	}
 
