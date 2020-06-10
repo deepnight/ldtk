@@ -34,7 +34,7 @@ class FieldInstance implements ISerializable {
 
 	public static function fromJson(json:Dynamic) {
 		var o = new FieldInstance( Client.ME.project, Client.ME.project.defs.getFieldDef(JsonTools.readInt(json.defId)) ); // HACK
-		o.internalValue = json.internalValue==null ? null : JsonTools.readEnum(ValueWrapper, json.internalValue);
+		o.internalValue = JsonTools.readEnum(ValueWrapper, json.internalValue, true);
 		return o;
 	}
 

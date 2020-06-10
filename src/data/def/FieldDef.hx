@@ -35,13 +35,13 @@ class FieldDef implements ISerializable {
 	}
 
 	public static function fromJson(json:Dynamic) {
-		var o = new FieldDef( JsonTools.readInt(json.uid), JsonTools.readEnum(FieldType, json.type) );
+		var o = new FieldDef( JsonTools.readInt(json.uid), JsonTools.readEnum(FieldType, json.type, false) );
 		o.name = JsonTools.readString(json.name);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.editorDisplay = JsonTools.readBool(json.editorDisplay);
 		o.min = JsonTools.readFloat(json.min);
 		o.max = JsonTools.readFloat(json.max);
-		o.defaultOverride = json.defaultOverride==null ? null : JsonTools.readEnum(ValueWrapper, json.defaultOverride);
+		o.defaultOverride = JsonTools.readEnum(ValueWrapper, json.defaultOverride, true);
 		return o;
 	}
 
