@@ -43,6 +43,14 @@ class EntityInstance implements ISerializable {
 
 	public static function fromJson(project:ProjectData, json:Dynamic) {
 		var ei = new EntityInstance(project, JsonTools.readInt(json.defId));
+		ei.x = JsonTools.readInt( json.x, 0 );
+		ei.y = JsonTools.readInt( json.y, 0 );
+
+		for( fieldJson in JsonTools.readArray(json.fieldInstances) ) {
+			var fi = FieldInstance.fromJson(project, fieldJson);
+			ei.fieldInstances.set(fi.defId, fi);
+		}
+
 		return ei;
 	}
 
@@ -69,7 +77,7 @@ class EntityInstance implements ISerializable {
 
 	public function getFieldInstance(fieldDef:FieldDef) {
 		if( !fieldInstances.exists(fieldDef.uid) )
-			fieldInstances.set(fieldDef.uid, new data.FieldInstance(_project, fieldDef));
+			fieldInstances.set(fieldDef.uid, new data.FieldInstance(_project, fieldDef.uid));
 		return fieldInstances.get( fieldDef.uid );
 	}
 
