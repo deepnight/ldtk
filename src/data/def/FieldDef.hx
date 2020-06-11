@@ -125,6 +125,15 @@ class FieldDef implements ISerializable {
 		}
 	}
 
+	public function getColorDefault() : Null<Int> {
+		require(F_Color);
+		return switch defaultOverride {
+			case null: canBeNull ? null : 0x0;
+			case V_Int(v): v;
+			case _: null;
+		}
+	}
+
 	public function getIntDefault() : Null<Int> {
 		require(F_Int);
 		return iClamp(switch defaultOverride {
@@ -164,6 +173,10 @@ class FieldDef implements ISerializable {
 				var def = Std.parseInt(rawDef);
 				defaultOverride = !M.isValidNumber(def) ? null : V_Int( iClamp(def) );
 
+			case F_Color:
+				var def = C.hexToInt(rawDef);
+				defaultOverride = !M.isValidNumber(def) ? null : V_Int(def);
+
 			case F_Float:
 				var def = Std.parseFloat(rawDef);
 				defaultOverride = !M.isValidNumber(def) ? null : V_Float( fClamp(def) );
@@ -184,6 +197,7 @@ class FieldDef implements ISerializable {
 	public function getDefault() : Dynamic {
 		return switch type {
 			case F_Int: getIntDefault();
+			case F_Color: getColorDefault();
 			case F_Float: getFloatDefault();
 			case F_String: getStringDefault();
 			case F_Bool: getBoolDefault();

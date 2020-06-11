@@ -825,6 +825,7 @@ input[type=number]:focus {
 		ul.form.type-F_Int li.F_int,
 		ul.form.type-F_Float li.F_Float,
 		ul.form.type-F_Bool li.F_Bool,
+		ul.form.type-F_Color li.F_Color,
 		ul.form.type-F_String li.F_String {
 			display: flex;
 		}

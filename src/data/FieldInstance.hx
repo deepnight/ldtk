@@ -66,6 +66,9 @@ class FieldInstance implements ISerializable {
 					setInternal( V_Int(v) );
 				}
 
+			case F_Color:
+				setInternal( raw==null ? null : V_Int(C.hexToInt(raw)) );
+
 			case F_Float:
 				var v = Std.parseFloat(raw);
 				if( !M.isValidNumber(v) )
@@ -93,6 +96,7 @@ class FieldInstance implements ISerializable {
 	public function valueIsNull() {
 		var v : Dynamic = switch def.type {
 			case F_Int: getInt();
+			case F_Color: getColorAsInt();
 			case F_Float: getFloat();
 			case F_String: getString();
 			case F_Bool: getBool();
@@ -103,30 +107,49 @@ class FieldInstance implements ISerializable {
 	public function getForDisplay() : String {
 		var v : Dynamic = switch def.type {
 			case F_Int: getInt();
+			case F_Color: getColorAsHexStr();
 			case F_Float: getFloat();
 			case F_String: getString();
 			case F_Bool: getBool();
 		}
 		if( v==null )
 			return "null";
-		else if( def.type==F_String )
-			return '"$v"';
-		else
-			return Std.string(v);
+		else switch def.type {
+			case F_Int, F_Float, F_Bool, F_Color: return Std.string(v);
+			case F_String: return '"$v"';
+		}
 	}
 
 	public function getInt() : Null<Int> {
 		require(F_Int);
 		return isUsingDefault() ? def.getIntDefault() : switch internalValue {
+			case V_Int(v): def.iClamp(v);
+			case _: throw "unexpected";
+		}
+	}
+
+	public function getColorAsInt() : Null<Int> {
+		require(F_Color);
+		return isUsingDefault() ? def.getColorDefault() : switch internalValue {
 			case V_Int(v): v;
 			case _: throw "unexpected";
 		}
 	}
 
+	public function getColorAsHexStr() : Null<String> {
+		require(F_Color);
+		return isUsingDefault()
+			? def.getColorDefault()==null ? null : C.intToHex(def.getColorDefault())
+			: switch internalValue {
+				case V_Int(v): C.intToHex(v);
+				case _: throw "unexpected";
+			}
+	}
+
 	public function getFloat() : Null<Float> {
 		require(F_Float);
 		return isUsingDefault() ? def.getFloatDefault() : switch internalValue {
-			case V_Float(v): v;
+			case V_Float(v): def.fClamp(v);
 			case _: throw "unexpected";
 		}
 	}

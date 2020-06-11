@@ -25,6 +25,7 @@ class Lang {
     public static function getFieldType(type:FieldType) : LocaleString {
         return switch type {
             case F_Int: t._("Integer");
+            case F_Color: t._("Color");
             case F_Float: t._("Float");
             case F_String: t._("String");
             case F_Bool: t._("Boolean");
@@ -34,6 +35,7 @@ class Lang {
     public static function getFieldTypeShortName(type:FieldType) : LocaleString {
         return switch type {
             case F_Int: t._("123");
+            case F_Color: t._("Red");
             case F_Float: t._("1.0");
             case F_String: t._("\"Ab\"");
             case F_Bool: t._("✔");

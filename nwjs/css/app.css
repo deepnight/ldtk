@@ -832,6 +832,7 @@ input[type=number]:focus {
 .window.entityDefs .fields ul.form.type-F_Int li.F_int,
 .window.entityDefs .fields ul.form.type-F_Float li.F_Float,
 .window.entityDefs .fields ul.form.type-F_Bool li.F_Bool,
+.window.entityDefs .fields ul.form.type-F_Color li.F_Color,
 .window.entityDefs .fields ul.form.type-F_String li.F_String {
   display: flex;
 }

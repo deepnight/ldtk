@@ -77,6 +77,17 @@ class InstanceEditor extends dn.Process {
 						onFieldChange();
 					});
 
+				case F_Color:
+					var input = new J("<input/>");
+					input.appendTo(li);
+					input.attr("type","color");
+					input.val( fi.getColorAsHexStr() );
+					input.change( function(ev) {
+						N.debug(input.val());
+						fi.parseValue( input.val() );
+						onFieldChange();
+					});
+
 				case F_Float:
 					var input = new J("<input/>");
 					input.appendTo(li);

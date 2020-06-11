@@ -235,13 +235,22 @@ class LevelRender extends dn.Process {
 
 					case ValueOnly:
 						if( !fi.valueIsNull() && !( fd.type==F_Bool && fi.getBool()==false ) ) {
-							var tf = new h2d.Text(Assets.fontSmall, fieldWrapper);
-							tf.textColor = C.toWhite(ei.def.color, 0.6);
-							var v = fi.getForDisplay();
-							if( fd.type==F_Bool )
-								tf.text = '[${fd.name}]';
-							else
-								tf.text = v;
+							if( fd.type==F_Color ) {
+								var g = new h2d.Graphics(fieldWrapper);
+								var r = 4;
+								g.beginFill(fi.getColorAsInt());
+								g.lineStyle(1, 0x0, 0.8);
+								g.drawCircle(r,r,r, 16);
+							}
+							else {
+								var tf = new h2d.Text(Assets.fontSmall, fieldWrapper);
+								tf.textColor = C.toWhite(ei.def.color, 0.6);
+								var v = fi.getForDisplay();
+								if( fd.type==F_Bool )
+									tf.text = '[${fd.name}]';
+								else
+									tf.text = v;
+							}
 						}
 				}
 			}

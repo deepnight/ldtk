@@ -29,6 +29,7 @@ enum FieldType {
 	F_Float;
 	F_String;
 	F_Bool;
+	F_Color;
 }
 
 enum ValueWrapper {

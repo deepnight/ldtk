@@ -225,14 +225,22 @@ class EditEntityDefs extends ui.Modal {
 					defInput.attr("placeholder", switch curField.type {
 						case F_Int: Std.string( curField.iClamp(0) );
 						case F_Float: Std.string( curField.fClamp(0) );
-						case F_Bool: "false";
 						case F_String: "";
+						case F_Bool, F_Color: "N/A";
 					});
 
 				defInput.change( function(ev) {
 					curField.setDefault( defInput.val() );
 					client.ge.emit(EntityFieldChanged);
 					defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
+				});
+
+			case F_Color:
+				var defInput = jFieldForm.find("input[name=cDef]");
+				defInput.val( C.intToHex(curField.getColorDefault()) );
+				defInput.change( function(ev) {
+					curField.setDefault( defInput.val() );
+					client.ge.emit(EntityFieldChanged);
 				});
 
 			case F_Bool:
