@@ -407,6 +407,7 @@ input[type=number]:focus {
 	height: 100%;
 	padding-top: 30px;
 	overflow: hidden;
+	pointer-events: none;
 
 	.notification {
 		min-width: 150px;

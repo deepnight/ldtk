@@ -429,6 +429,7 @@ input[type=number]:focus {
   height: 100%;
   padding-top: 30px;
   overflow: hidden;
+  pointer-events: none;
 }
 
 #notificationList .notification {
