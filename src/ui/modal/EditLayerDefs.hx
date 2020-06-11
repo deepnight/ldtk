@@ -115,7 +115,7 @@ class EditLayerDefs extends ui.Modal {
 					e.find(".id").html("#"+idx);
 
 					// Edit value name
-					var i = new Input(
+					var i = new form.input.StringInput(
 						e.find("input.name"),
 						function() return intGridVal.name,
 						function(v) intGridVal.name = v
