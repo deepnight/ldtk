@@ -156,7 +156,8 @@ class Client extends dn.Process {
 		});
 
 
-		project = ProjectData.createPlaceholder();
+		project = new ProjectData();
+		project.createLevel();
 		levelRender = new display.LevelRender();
 		useProject(project);
 	}
@@ -165,7 +166,7 @@ class Client extends dn.Process {
 		project = p;
 		project.tidy();
 		curLevelId = project.levels[0].uid;
-		curLayerId = curLevel.layerInstances[0].layerDefId;
+		curLayerId = curLevel.layerInstances[0]==null ? -1 : curLevel.layerInstances[0].layerDefId;
 
 		Tool.clearSelectionMemory();
 		display.LevelRender.invalidateCaches();
