@@ -209,6 +209,8 @@ class LevelRender extends dn.Process {
 			above.horizontalAlign = Middle;
 
 			var beneath = new h2d.Flow(wrapper);
+			beneath.layout = Vertical;
+			beneath.horizontalAlign = Middle;
 
 			// Attach fields
 			for(fd in ei.def.fieldDefs) {
