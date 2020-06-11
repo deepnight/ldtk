@@ -115,6 +115,13 @@ class Client extends dn.Process {
 		});
 		#end
 
+		jMainPanel.find("button.new").click( function(ev) {
+			new ui.dialog.Confirm(ev.getThis(), function() {
+				useProject( ProjectData.createEmpty() );
+				N.msg("New project.");
+			});
+		});
+
 		jMainPanel.find("button.load").click( function(_) {
 			var raw = LocalStorage.read("test");
 			if( raw==null ) {
@@ -156,8 +163,7 @@ class Client extends dn.Process {
 		});
 
 
-		project = new ProjectData();
-		project.createLevel();
+		project = ProjectData.createEmpty();
 		levelRender = new display.LevelRender();
 		useProject(project);
 	}

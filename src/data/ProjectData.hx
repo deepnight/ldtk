@@ -11,13 +11,19 @@ class ProjectData implements data.ISerializable {
 	public var defaultGridSize : Int;
 	public var bgColor : UInt;
 
-	public function new() {
+	private function new() {
 		name = "New project";
 		defaultGridSize = Const.DEFAULT_GRID_SIZE;
 		bgColor = 0xffffff;
 		defaultPivotX = defaultPivotY = 0;
 
 		defs = new Definitions(this);
+	}
+
+	public static function createEmpty() {
+		var p = new ProjectData();
+		p.createLevel();
+		return p;
 	}
 
 	public function makeUniqId() return nextUniqId++;
@@ -93,7 +99,7 @@ class ProjectData implements data.ISerializable {
 	}
 
 
-	public static function createPlaceholder() : ProjectData {
+	public static function createTest() : ProjectData {
 		var p = new ProjectData();
 
 		// Hero
