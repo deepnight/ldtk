@@ -5,9 +5,9 @@ class Client extends dn.Process {
 
 	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
-	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
+	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
 	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette");
 
 	public var curLevel(get,never) : LevelData;
@@ -57,6 +57,70 @@ class Client extends dn.Process {
 		cursor = new ui.Cursor();
 		selectionCursor = new ui.Cursor();
 		selectionCursor.highlight();
+
+		initUI();
+
+		project = ProjectData.createEmpty();
+		levelRender = new display.LevelRender();
+		useProject(project);
+	}
+
+	public function initUI() {
+		jMainPanel.find("*").off();
+
+		// Main file actions
+		jMainPanel.find("button.new").click( function(ev) {
+			ui.Modal.closeAll();
+			new ui.dialog.Confirm(ev.getThis(), function() {
+				useProject( ProjectData.createEmpty() );
+				N.msg("New project.");
+			});
+		});
+
+		jMainPanel.find("button.load").click( function(_) {
+			ui.Modal.closeAll();
+			var raw = LocalStorage.read("test");
+			if( raw==null ) {
+				N.error("No data found.");
+				return;
+			}
+			var json = try haxe.Json.parse(raw) catch(e:Dynamic) null;
+			if( json==null ) {
+				N.error("Invalid JSON!");
+				return;
+			}
+			useProject( ProjectData.fromJson(json) );
+			N.msg("Loaded from local storage.");
+		});
+
+		jMainPanel.find("button.save").click( function(_) {
+			ui.Modal.closeAll();
+			LocalStorage.write("test", dn.HaxeJson.prettify( haxe.Json.stringify( project.toJson() ) ) );
+			N.msg("Saved to local storage.");
+		});
+
+
+		// Edit buttons
+		jMainPanel.find("button.editProject").click( function(_) {
+			if( ui.Modal.isOpen(ui.modal.ProjectSettings) )
+				ui.Modal.closeAll();
+			else
+				new ui.modal.ProjectSettings();
+		});
+		jMainPanel.find("button.editLayers").click( function(_) {
+			if( ui.Modal.isOpen(ui.modal.EditLayerDefs) )
+				ui.Modal.closeAll();
+			else
+				new ui.modal.EditLayerDefs();
+		});
+		jMainPanel.find("button.editEntities").click( function(_) {
+			if( ui.Modal.isOpen(ui.modal.EditEntityDefs) )
+				ui.Modal.closeAll();
+			else
+				new ui.modal.EditEntityDefs();
+		});
+
+
 
 		#if debug
 		jMainPanel.find("button.debug").click( function(ev) {
@@ -114,58 +178,6 @@ class Client extends dn.Process {
 			});
 		});
 		#end
-
-		jMainPanel.find("button.new").click( function(ev) {
-			new ui.dialog.Confirm(ev.getThis(), function() {
-				useProject( ProjectData.createEmpty() );
-				N.msg("New project.");
-			});
-		});
-
-		jMainPanel.find("button.load").click( function(_) {
-			var raw = LocalStorage.read("test");
-			if( raw==null ) {
-				N.error("No data found.");
-				return;
-			}
-			var json = try haxe.Json.parse(raw) catch(e:Dynamic) null;
-			if( json==null ) {
-				N.error("Invalid JSON!");
-				return;
-			}
-			useProject( ProjectData.fromJson(json) );
-			N.msg("Loaded from local storage.");
-		});
-
-		jMainPanel.find("button.save").click( function(_) {
-			LocalStorage.write("test", dn.HaxeJson.prettify( haxe.Json.stringify( project.toJson() ) ) );
-			N.msg("Saved to local storage.");
-		});
-
-		// jMainPanel.find("button.save").click( function(_) N.notImplemented() );
-		jMainPanel.find("button.editProject").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.ProjectSettings) )
-				ui.Modal.closeAll();
-			else
-				new ui.modal.ProjectSettings();
-		});
-		jMainPanel.find("button.editLayers").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.EditLayerDefs) )
-				ui.Modal.closeAll();
-			else
-				new ui.modal.EditLayerDefs();
-		});
-		jMainPanel.find("button.editEntities").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.EditEntityDefs) )
-				ui.Modal.closeAll();
-			else
-				new ui.modal.EditEntityDefs();
-		});
-
-
-		project = ProjectData.createEmpty();
-		levelRender = new display.LevelRender();
-		useProject(project);
 	}
 
 	public function useProject(p:ProjectData) {
