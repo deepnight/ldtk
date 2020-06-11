@@ -98,23 +98,32 @@ class ProjectData implements data.ISerializable {
 		var p = new ProjectData();
 		p.createLevel();
 
+		// Hero
 		var ed = p.defs.createEntityDef("Hero");
 		ed.color = 0x00ff00;
 		ed.width = 24;
 		ed.height = 32;
-		// ed.maxPerLevel = 1;
+		ed.maxPerLevel = 1;
 		ed.setPivot(0.5,1);
+
+		// Hero.life
 		var fd = ed.createField(p, F_Int);
 		fd.name = "life";
 		fd.setDefault(Std.string(3));
 		fd.setMin("1");
 		fd.setMax("10");
+
+		// Collision layer
 		var ld = p.defs.layers[0];
 		ld.name = "Collisions";
 		ld.getIntGridValueDef(0).name = "walls";
 		ld.addIntGridValue(0x00ff00, "grass");
 		ld.addIntGridValue(0x0000ff, "water");
+
+		// Entity layer
 		var ld = p.defs.createLayerDef(Entities,"Entities");
+
+		// Decoration layer
 		var ld = p.defs.createLayerDef(IntGrid,"Decorations");
 		ld.gridSize = 8;
 		ld.displayOpacity = 0.7;
