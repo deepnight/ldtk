@@ -73,7 +73,7 @@ class Client extends dn.Process {
 			ui.Modal.closeAll();
 			new ui.dialog.Confirm(ev.getThis(), function() {
 				useProject( ProjectData.createEmpty() );
-				N.msg("New project.");
+				N.msg("New project created.");
 			});
 		});
 
