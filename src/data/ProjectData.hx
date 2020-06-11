@@ -92,4 +92,36 @@ class ProjectData implements data.ISerializable {
 				return l;
 		return null;
 	}
+
+
+	public static function createPlaceholder() : ProjectData {
+		var p = new ProjectData();
+		p.createLevel();
+
+		var ed = p.defs.createEntityDef("Hero");
+		ed.color = 0x00ff00;
+		ed.width = 24;
+		ed.height = 32;
+		// ed.maxPerLevel = 1;
+		ed.setPivot(0.5,1);
+		var fd = ed.createField(p, F_Int);
+		fd.name = "life";
+		fd.setDefault(Std.string(3));
+		fd.setMin("1");
+		fd.setMax("10");
+		var ld = p.defs.layers[0];
+		ld.name = "Collisions";
+		ld.getIntGridValueDef(0).name = "walls";
+		ld.addIntGridValue(0x00ff00, "grass");
+		ld.addIntGridValue(0x0000ff, "water");
+		var ld = p.defs.createLayerDef(Entities,"Entities");
+		var ld = p.defs.createLayerDef(IntGrid,"Decorations");
+		ld.gridSize = 8;
+		ld.displayOpacity = 0.7;
+		ld.getIntGridValueDef(0).color = 0x00ff00;
+
+		p.tidy();
+
+		return p;
+	}
 }

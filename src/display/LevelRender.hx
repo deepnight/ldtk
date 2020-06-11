@@ -30,8 +30,8 @@ class LevelRender extends dn.Process {
 		grid = new h2d.Graphics();
 		root.add(grid, Const.DP_BG);
 
-		focusLevelX = client.curLevel.pxWid*0.5;
-		focusLevelY = client.curLevel.pxHei*0.5;
+		focusLevelX = 0;
+		focusLevelY = 0;
 	}
 
 	function set_zoom(v) {

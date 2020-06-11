@@ -110,7 +110,27 @@ class Client extends dn.Process {
 		});
 		#end
 
-		jMainPanel.find("button.save").click( function(_) N.notImplemented() );
+		jMainPanel.find("button.load").click( function(_) {
+			var raw = LocalStorage.read("test");
+			if( raw==null ) {
+				N.error("No data found.");
+				return;
+			}
+			var json = try haxe.Json.parse(raw) catch(e:Dynamic) null;
+			if( json==null ) {
+				N.error("Invalid JSON!");
+				return;
+			}
+			useProject( ProjectData.fromJson(json) );
+			N.msg("Loaded from local storage.");
+		});
+
+		jMainPanel.find("button.save").click( function(_) {
+			LocalStorage.write("test", dn.HaxeJson.prettify( haxe.Json.stringify( project.toJson() ) ) );
+			N.msg("Saved to local storage.");
+		});
+
+		// jMainPanel.find("button.save").click( function(_) N.notImplemented() );
 		jMainPanel.find("button.editProject").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.ProjectSettings) )
 				ui.Modal.closeAll();
@@ -131,40 +151,22 @@ class Client extends dn.Process {
 		});
 
 
-		project = new data.ProjectData();
-
-		// Placeholder data
-		var ed = project.defs.createEntityDef("Hero");
-		ed.color = 0x00ff00;
-		ed.width = 24;
-		ed.height = 32;
-		// ed.maxPerLevel = 1;
-		ed.setPivot(0.5,1);
-		var fd = ed.createField(project, F_Int);
-		fd.name = "life";
-		fd.setDefault(Std.string(3));
-		fd.setMin("1");
-		fd.setMax("10");
-		var ld = project.defs.layers[0];
-		ld.name = "Collisions";
-		ld.getIntGridValueDef(0).name = "walls";
-		ld.addIntGridValue(0x00ff00, "grass");
-		ld.addIntGridValue(0x0000ff, "water");
-		var ld = project.defs.createLayerDef(Entities,"Entities");
-		var ld = project.defs.createLayerDef(IntGrid,"Decorations");
-		ld.gridSize = 8;
-		ld.displayOpacity = 0.7;
-		ld.getIntGridValueDef(0).color = 0x00ff00;
-
-		project.createLevel();
-		curLevelId = project.levels[0].uid;
-		curLayerId = project.defs.layers[0].uid;
-
+		project = ProjectData.createPlaceholder();
 		levelRender = new display.LevelRender();
-		initTool();
+		useProject(project);
+	}
+
+	public function useProject(p:ProjectData) {
+		project = p;
+		project.tidy();
+		curLevelId = project.levels[0].uid;
+		curLayerId = curLevel.layerInstances[0].layerDefId;
+
+		levelRender.invalidate();
 		updateBg();
-		updateProjectTitle();
 		updateLayerList();
+		updateProjectTitle();
+		initTool();
 	}
 
 	function onJsKeyDown(ev:js.jquery.Event) {
