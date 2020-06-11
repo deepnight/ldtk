@@ -197,8 +197,14 @@ class EditEntityDefs extends ui.Modal {
 		jFieldForm.find(".type").append("<p>"+StringTools.htmlEscape(curField.toString())+"</p>");
 		#end
 
+		var i = Input.linkToHtmlInput( curField.editorDisplayMode, jFieldForm.find("select[name=editorDisplayMode]") );
+		i.linkEvent(EntityFieldChanged);
+
+		var i = Input.linkToHtmlInput( curField.editorDisplayPos, jFieldForm.find("select[name=editorDisplayPos]") );
+		i.linkEvent(EntityFieldChanged);
+
 		var i = Input.linkToHtmlInput( curField.name, jFieldForm.find("input[name=name]") );
-		i.onChange = client.ge.emit.bind(EntityFieldChanged);
+		i.linkEvent(EntityFieldChanged);
 
 		// Default value
 		switch curField.type {

@@ -151,7 +151,7 @@ class LevelRender extends dn.Process {
 
 				case Entities:
 					for(ei in li.entityInstances) {
-						var o = createEntityRender(ei.def, wrapper);
+						var o = createEntityRender(ei, wrapper);
 						o.setPosition(ei.x, ei.y);
 					}
 			}
@@ -168,7 +168,13 @@ class LevelRender extends dn.Process {
 	}
 
 
-	public static function createEntityRender(def:EntityDef, ?parent:h2d.Object) {
+	public static function createEntityRender(?ei:EntityInstance, ?def:EntityDef, ?parent:h2d.Object) {
+		if( def==null && ei==null )
+			throw "Need at least 1 parameter";
+
+		if( def==null )
+			def = ei.def;
+
 		if( !_entityRenderCache.exists(def.uid) ) {
 			var g = new h2d.Graphics();
 			g.beginFill(def.color);
@@ -188,11 +194,58 @@ class LevelRender extends dn.Process {
 			_entityRenderCache.set(def.uid, tex);
 		}
 
-		var bmp = new h2d.Bitmap(parent);
+		var wrapper = new h2d.Object(parent);
+
+		// Entity base render
+		var bmp = new h2d.Bitmap(wrapper);
 		bmp.tile = h2d.Tile.fromTexture( _entityRenderCache.get(def.uid) );
 		bmp.tile.setCenterRatio(def.pivotX, def.pivotY);
 
-		return bmp;
+		// Instance fields marked as "editorDisplay"
+		if( ei!=null ) {
+			var above = new h2d.Flow(wrapper);
+			above.layout = Vertical;
+			above.horizontalAlign = Middle;
+			var beneath = new h2d.Flow(wrapper);
+			for(fd in ei.def.fieldDefs) {
+				if( fd.editorDisplayMode==Hidden )
+					continue;
+
+				var fi = ei.getFieldInstance(fd);
+				var tf = new h2d.Text(Assets.fontSmall);
+
+				switch fd.editorDisplayMode {
+					case Hidden: // N/A
+
+					case NameAndValue:
+						var v = fi.getForDisplay();
+						tf.text = fd.name+" = "+v;
+
+					case ValueOnly:
+						var v = fi.getForDisplay();
+						if( fi.valueIsNull() )
+							tf.visible = false;
+						else if( fd.type==F_Bool ) {
+							if( fi.getBool()==true )
+								tf.text = '[${fd.name}]';
+							else
+								tf.visible = false;
+						}
+						else
+							tf.text = v;
+				}
+
+				switch fd.editorDisplayPos {
+					case Above: above.addChild(tf);
+					case Beneath: beneath.addChild(tf);
+				}
+			}
+			above.x = Std.int( -above.outerWidth*0.5 );
+			above.y = Std.int( -above.outerHeight - bmp.tile.height );
+			beneath.x = Std.int( -beneath.outerWidth*0.5 );
+		}
+
+		return wrapper;
 	}
 
 	function updateLayersVisibility() {

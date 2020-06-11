@@ -5,7 +5,8 @@ class FieldDef implements ISerializable {
 	public var type(default,null) : FieldType;
 	public var name : String;
 	public var canBeNull : Bool;
-	public var editorDisplay = false;
+	public var editorDisplayMode : FieldDisplayMode;
+	public var editorDisplayPos : FieldDisplayPosition;
 
 	@:allow(ui.modal.EditEntityDefs)
 	var defaultOverride : Null<ValueWrapper>;
@@ -17,6 +18,8 @@ class FieldDef implements ISerializable {
 	private function new(uid:Int, t:FieldType) {
 		this.uid = uid;
 		type = t;
+		editorDisplayMode = Hidden;
+		editorDisplayPos = Above;
 		name = "New field "+uid;
 		canBeNull = type==F_String;
 		min = max = null;
@@ -38,7 +41,8 @@ class FieldDef implements ISerializable {
 		var o = new FieldDef( JsonTools.readInt(json.uid), JsonTools.readEnum(FieldType, json.type, false) );
 		o.name = JsonTools.readString(json.name);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
-		o.editorDisplay = JsonTools.readBool(json.editorDisplay);
+		o.editorDisplayMode = JsonTools.readEnum(FieldDisplayMode, json.editorDisplayMode, false, Hidden);
+		o.editorDisplayPos = JsonTools.readEnum(FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);
 		o.defaultOverride = JsonTools.readEnum(ValueWrapper, json.defaultOverride, true);
@@ -51,7 +55,8 @@ class FieldDef implements ISerializable {
 			type: JsonTools.writeEnum(type, false),
 			name: name,
 			canBeNull: canBeNull,
-			editorDisplay: editorDisplay,
+			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
+			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
 			min: min==null ? null : JsonTools.clampFloatPrecision(min),
 			max: max==null ? null : JsonTools.clampFloatPrecision(max),
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),

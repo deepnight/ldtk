@@ -18,13 +18,7 @@ class FieldInstance implements ISerializable {
 	public function toString() {
 		return
 			'${def.name} = '
-			+ Std.string(switch internalValue {
-				case null: null;
-				case V_Int(_): getInt();
-				case V_Float(_): getFloat();
-				case V_Bool(_): getBool();
-				case V_String(_): getString();
-			})
+			+ getForDisplay()
 			+ ' [ $internalValue ]';
 	}
 
@@ -94,6 +88,31 @@ class FieldInstance implements ISerializable {
 				else if( raw=="false" ) setInternal( V_Bool(false) );
 				else setInternal(null);
 		}
+	}
+
+	public function valueIsNull() {
+		var v : Dynamic = switch def.type {
+			case F_Int: getInt();
+			case F_Float: getFloat();
+			case F_String: getString();
+			case F_Bool: getBool();
+		}
+		return v == null;
+	}
+
+	public function getForDisplay() : String {
+		var v : Dynamic = switch def.type {
+			case F_Int: getInt();
+			case F_Float: getFloat();
+			case F_String: getString();
+			case F_Bool: getBool();
+		}
+		if( v==null )
+			return "null";
+		else if( def.type==F_String )
+			return '"$v"';
+		else
+			return Std.string(v);
 	}
 
 	public function getInt() : Null<Int> {

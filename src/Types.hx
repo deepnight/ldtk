@@ -58,3 +58,14 @@ enum ToolEditMode {
 	Remove;
 	Move;
 }
+
+enum FieldDisplayMode {
+	Hidden;
+	ValueOnly;
+	NameAndValue;
+}
+
+enum FieldDisplayPosition {
+	Above;
+	Beneath;
+}

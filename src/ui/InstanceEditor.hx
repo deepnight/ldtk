@@ -47,6 +47,11 @@ class InstanceEditor extends dn.Process {
 			e.destroy();
 	}
 
+	function onFieldChange() {
+		updateForm();
+		Client.ME.ge.emit(EntityFieldChanged);
+	}
+
 	function updateForm() {
 		jPanel.empty();
 		jPanel.append("<h2>"+ei.def.name+"</h2>");
@@ -69,7 +74,7 @@ class InstanceEditor extends dn.Process {
 						input.val( Std.string(fi.getInt()) );
 					input.change( function(ev) {
 						fi.parseValue( input.val() );
-						updateForm();
+						onFieldChange();
 					});
 
 				case F_Float:
@@ -81,7 +86,7 @@ class InstanceEditor extends dn.Process {
 						input.val( Std.string(fi.getFloat()) );
 					input.change( function(ev) {
 						fi.parseValue( input.val() );
-						updateForm();
+						onFieldChange();
 					});
 
 				case F_String:
@@ -94,7 +99,7 @@ class InstanceEditor extends dn.Process {
 						input.val( fi.getString() );
 					input.change( function(ev) {
 						fi.parseValue( input.val() );
-						updateForm();
+						onFieldChange();
 					});
 
 				case F_Bool:
@@ -104,7 +109,7 @@ class InstanceEditor extends dn.Process {
 					input.prop("checked",fi.getBool());
 					input.change( function(ev) {
 						fi.parseValue( Std.string( input.prop("checked") ) );
-						updateForm();
+						onFieldChange();
 					});
 			}
 		}
