@@ -34,6 +34,17 @@ class LevelRender extends dn.Process {
 		focusLevelY = 0;
 	}
 
+	public function setFocus(x,y) {
+		focusLevelX = x;
+		focusLevelY = y;
+	}
+
+	public function fit() {
+		focusLevelX = client.curLevel.pxWid*0.5;
+		focusLevelY = client.curLevel.pxHei*0.5;
+		zoom = 1;
+	}
+
 	function set_zoom(v) {
 		return zoom = M.fclamp(v, 0.1, 16);
 	}

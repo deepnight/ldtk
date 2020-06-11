@@ -170,6 +170,7 @@ class Client extends dn.Process {
 		Tool.clearSelectionMemory();
 		display.LevelRender.invalidateCaches();
 
+		levelRender.fit();
 		levelRender.invalidate();
 		updateBg();
 		updateLayerList();
