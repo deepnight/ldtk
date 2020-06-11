@@ -163,6 +163,7 @@ class EditEntityDefs extends ui.Modal {
 			function() return curEntity.discardExcess,
 			function(v) curEntity.discardExcess = v
 		);
+		i.setEnabled( curEntity.maxPerLevel>0 );
 		i.linkEvent(EntityDefChanged);
 
 		// Pivot
