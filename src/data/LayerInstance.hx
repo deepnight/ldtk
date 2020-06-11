@@ -125,12 +125,15 @@ class LayerInstance implements ISerializable {
 
 	/** ENTITY INSTANCE *******************/
 
-	public function createEntityInstance(ed:EntityDef) : EntityInstance {
+	public function createEntityInstance(ed:EntityDef) : Null<EntityInstance> {
 		requireType(Entities);
 		if( ed.maxPerLevel>0 ) {
 			var all = entityInstances.filter( function(ei) return ei.defId==ed.uid );
-			while( all.length>=ed.maxPerLevel )
-				removeEntityInstance( all.shift() );
+			if( ed.discardExcess )
+				while( all.length>=ed.maxPerLevel )
+					removeEntityInstance( all.shift() );
+			else if( all.length>=ed.maxPerLevel )
+				return null;
 		}
 
 		var ei = new EntityInstance(_project, ed.uid);

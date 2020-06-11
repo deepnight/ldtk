@@ -7,6 +7,7 @@ class EntityDef implements ISerializable {
 	public var height : Int;
 	public var color : UInt;
 	public var maxPerLevel : Int;
+	public var discardExcess : Bool; // what to do when maxPerLevel is reached
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
 
@@ -18,6 +19,7 @@ class EntityDef implements ISerializable {
 		color = 0xff0000;
 		width = height = 16;
 		maxPerLevel = 0;
+		discardExcess = true;
 		name = "New entity "+uid;
 		setPivot(0.5,1);
 	}
@@ -41,6 +43,7 @@ class EntityDef implements ISerializable {
 		o.maxPerLevel = JsonTools.readInt( json.maxPerLevel, 0 );
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
 		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
+		o.discardExcess = JsonTools.readBool( json.discardExcess, true );
 
 		for(defJson in JsonTools.readArray(json.fieldDefs) )
 			o.fieldDefs.push( FieldDef.fromJson(dataVersion, defJson) );
@@ -56,6 +59,7 @@ class EntityDef implements ISerializable {
 			height: height,
 			color: color,
 			maxPerLevel: maxPerLevel,
+			discardExcess: discardExcess,
 			pivotX: JsonTools.clampFloatPrecision( pivotX ),
 			pivotY: JsonTools.clampFloatPrecision( pivotY ),
 

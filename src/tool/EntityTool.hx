@@ -58,10 +58,14 @@ class EntityTool extends Tool<Int> {
 			case null, PanView:
 			case Add:
 				var ei = curLayerInstance.createEntityInstance(curEntityDef);
-				ei.x = getPlacementX(m);
-				ei.y = getPlacementY(m);
-				client.ge.emit(LayerInstanceChanged);
-				client.setSelection( Entity(ei) );
+				if( ei==null )
+					N.error("Max per level reached!");
+				else {
+					ei.x = getPlacementX(m);
+					ei.y = getPlacementY(m);
+					client.ge.emit(LayerInstanceChanged);
+					client.setSelection( Entity(ei) );
+				}
 
 			case Remove:
 				removeAnyEntityAt(m);

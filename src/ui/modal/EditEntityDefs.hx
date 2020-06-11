@@ -157,6 +157,14 @@ class EditEntityDefs extends ui.Modal {
 		i.setBounds(0,1024);
 		i.onChange = client.ge.emit.bind(EntityDefChanged);
 
+		// Behavior when max is reached
+		var i = new form.input.BoolInput(
+			jEntityForm.find("select[name=discardExcess"),
+			function() return curEntity.discardExcess,
+			function(v) curEntity.discardExcess = v
+		);
+		i.linkEvent(EntityDefChanged);
+
 		// Pivot
 		var jPivots = jEntityForm.find(".pivot");
 		jPivots.empty();
