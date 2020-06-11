@@ -34,13 +34,17 @@ class Tool<T> extends dn.Process {
 
 
 	public function selectValue(v:T) {
-		SELECTED_VALUES.set(curLayerInstance.layerDefId, v);
+		if( curLayerInstance!=null )
+			SELECTED_VALUES.set(curLayerInstance.layerDefId, v);
 		updatePalette();
 	}
 	public function getSelectedValue() : T {
-		return SELECTED_VALUES.exists(curLayerInstance.layerDefId)
-			? SELECTED_VALUES.get(curLayerInstance.layerDefId)
-			: getDefaultValue();
+		return
+			curLayerInstance==null
+			? getDefaultValue()
+			: SELECTED_VALUES.exists(curLayerInstance.layerDefId)
+				? SELECTED_VALUES.get(curLayerInstance.layerDefId)
+				: getDefaultValue();
 	}
 	function getDefaultValue() : T {
 		return null;
@@ -56,7 +60,7 @@ class Tool<T> extends dn.Process {
 
 	public function as<E:Tool<X>,X>(c:Class<E>) : E return cast this;
 
-	public function canBeUsed() return getSelectedValue()!=null;
+	public function canEdit() return getSelectedValue()!=null;
 	public function isRunning() return curMode!=null;
 
 	public function startUsing(m:MouseCoords, buttonId:Int) {
@@ -99,6 +103,12 @@ class Tool<T> extends dn.Process {
 			case 2:
 				curMode = PanView;
 		}
+
+		if( !canEdit() && ( curMode==Add || curMode==Remove ) ) {
+			curMode = null;
+			return;
+		}
+
 		rectangle = client.isShiftDown();
 		origin = m;
 		lastMouse = m;

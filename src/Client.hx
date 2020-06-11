@@ -297,8 +297,7 @@ class Client extends dn.Process {
 	}
 
 	function onMouseDown(e:hxd.Event) {
-		if( curTool.canBeUsed() )
-			curTool.startUsing( getMouse(), e.button );
+		curTool.startUsing( getMouse(), e.button );
 	}
 	function onMouseUp() {
 		if( curTool.isRunning() )
@@ -312,9 +311,9 @@ class Client extends dn.Process {
 		levelRender.zoom += -e.wheelDelta*0.2;
 	}
 
-	public function debug(msg:Dynamic, clear=true) {
+	public function debug(msg:Dynamic, append=false) {
 		var e = new J("#debug");
-		if( clear )
+		if( !append )
 			e.empty();
 		e.show();
 
@@ -343,6 +342,7 @@ class Client extends dn.Process {
 			case EntityDefSorted:
 
 			case EntityDefChanged :
+				initTool();
 				display.LevelRender.invalidateCaches();
 
 			case ProjectChanged:

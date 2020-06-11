@@ -16,8 +16,8 @@ class EntityTool extends Tool<Int> {
 		super.selectValue(v);
 	}
 
-	override function canBeUsed():Bool {
-		return super.canBeUsed() && getSelectedValue()>=0;
+	override function canEdit():Bool {
+		return super.canEdit() && getSelectedValue()>=0;
 	}
 
 	override function getDefaultValue():Int{
