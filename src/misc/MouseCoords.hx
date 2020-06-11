@@ -1,4 +1,4 @@
-package tools;
+package misc;
 
 class MouseCoords {
 	public var gx : Float;

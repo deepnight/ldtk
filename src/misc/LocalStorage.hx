@@ -1,4 +1,4 @@
-package tools;
+package misc;
 
 class LocalStorage {
 	#if debug

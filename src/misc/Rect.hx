@@ -1,4 +1,4 @@
-package tools;
+package misc;
 
 class Rect {
 	public var cx : Int;

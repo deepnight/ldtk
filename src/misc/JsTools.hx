@@ -1,4 +1,4 @@
-package tools;
+package misc;
 
 class JsTools {
 	public static function init() {
