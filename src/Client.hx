@@ -162,6 +162,9 @@ class Client extends dn.Process {
 		curLevelId = project.levels[0].uid;
 		curLayerId = curLevel.layerInstances[0].layerDefId;
 
+		Tool.clearSelectionMemory();
+		display.LevelRender.invalidateCaches();
+
 		levelRender.invalidate();
 		updateBg();
 		updateLayerList();
@@ -231,6 +234,7 @@ class Client extends dn.Process {
 		if( curTool!=null )
 			curTool.destroy();
 
+		clearSelection();
 		cursor.set(None);
 		curTool = switch curLayerDef.type {
 			case IntGrid: new tool.IntGridTool();

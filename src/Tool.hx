@@ -46,6 +46,10 @@ class Tool<T> extends dn.Process {
 		return null;
 	}
 
+	public static function clearSelectionMemory() {
+		SELECTED_VALUES = new Map();
+	}
+
 
 	function snapToGrid() return !client.isCtrlDown() || cd.has("requireCtrlRelease");
 
