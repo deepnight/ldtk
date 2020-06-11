@@ -1,7 +1,6 @@
 package form.input;
 
 class EnumSelect<T> extends form.Input<T> {
-	public var trimSpaces = true;
 	var enumRef : Enum<T>;
 
 	public function new(j:js.jquery.JQuery, e:Enum<T>, getter:Void->T, setter:T->Void) {
