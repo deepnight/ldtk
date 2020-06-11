@@ -34,6 +34,8 @@ class Client extends dn.Process {
 
 	var keyDowns : Map<Int,Bool> = new Map();
 
+
+
 	public function new() {
 		super();
 
@@ -60,10 +62,16 @@ class Client extends dn.Process {
 
 		initUI();
 
-		project = ProjectData.createEmpty();
+		var raw = dn.LocalStorage.read("test");
+		var json = try haxe.Json.parse(raw) catch(e:Dynamic) null;
+		project = json==null ? ProjectData.createEmpty() : ProjectData.fromJson(json);
+
 		levelRender = new display.LevelRender();
 		useProject(project);
+		dn.Process.resizeAll();
 	}
+
+
 
 	public function initUI() {
 		jMainPanel.find("*").off();
