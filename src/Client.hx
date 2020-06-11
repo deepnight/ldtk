@@ -79,7 +79,7 @@ class Client extends dn.Process {
 
 		jMainPanel.find("button.load").click( function(_) {
 			ui.Modal.closeAll();
-			var raw = LocalStorage.read("test");
+			var raw = dn.LocalStorage.read("test");
 			if( raw==null ) {
 				N.error("No data found.");
 				return;
@@ -95,7 +95,7 @@ class Client extends dn.Process {
 
 		jMainPanel.find("button.save").click( function(_) {
 			ui.Modal.closeAll();
-			LocalStorage.write("test", dn.HaxeJson.prettify( haxe.Json.stringify( project.toJson() ) ) );
+			dn.LocalStorage.write("test", dn.HaxeJson.prettify( haxe.Json.stringify( project.toJson() ) ) );
 			N.msg("Saved to local storage.");
 		});
 
@@ -332,7 +332,7 @@ class Client extends dn.Process {
 		var mouseX = m.levelX;
 		var mouseY = m.levelY;
 		levelRender.zoom += -e.wheelDelta*0.1 * levelRender.zoom;
-		var panRatio = e.wheelDelta < 0 ? 0.1 : 0.03;
+		var panRatio = e.wheelDelta < 0 ? 0.15 : 0.05;
 		levelRender.focusLevelX = levelRender.focusLevelX*(1-panRatio) + mouseX*panRatio;
 		levelRender.focusLevelY = levelRender.focusLevelY*(1-panRatio) + mouseY*panRatio;
 	}
