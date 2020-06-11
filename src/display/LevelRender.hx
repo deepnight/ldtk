@@ -1,6 +1,7 @@
 package display;
 
 class LevelRender extends dn.Process {
+	static var MAX_FOCUS_PADDING = 200;
 	static var _entityRenderCache : Map<Int, h3d.mat.Texture> = new Map();
 
 	public var client(get,never) : Client; inline function get_client() return Client.ME;
@@ -12,8 +13,8 @@ class LevelRender extends dn.Process {
 	var bg : h2d.Graphics;
 	var grid : h2d.Graphics;
 
-	public var focusLevelX : Float = 0.;
-	public var focusLevelY : Float = 0.;
+	public var focusLevelX(default,set) : Float = 0.;
+	public var focusLevelY(default,set) : Float = 0.;
 	public var zoom(default,set) : Float = 3.0;
 
 	public function new() {
@@ -45,8 +46,20 @@ class LevelRender extends dn.Process {
 		zoom = 1;
 	}
 
+	inline function set_focusLevelX(v) {
+		return focusLevelX = client.curLevel==null
+			? v
+			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, client.curLevel.pxWid+MAX_FOCUS_PADDING/zoom );
+	}
+
+	inline function set_focusLevelY(v) {
+		return focusLevelY = client.curLevel==null
+			? v
+			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, client.curLevel.pxHei+MAX_FOCUS_PADDING/zoom );
+	}
+
 	function set_zoom(v) {
-		return zoom = M.fclamp(v, 0.1, 16);
+		return zoom = M.fclamp(v, 0.2, 16);
 	}
 
 	override function onDispose() {
