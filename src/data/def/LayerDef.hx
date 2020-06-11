@@ -20,10 +20,10 @@ class LayerDef implements ISerializable {
 	}
 
 	public function clone() {
-		return fromJson( toJson() );
+		return fromJson( Const.DATA_VERSION, toJson() );
 	}
 
-	public static function fromJson(json:Dynamic) {
+	public static function fromJson(dataVersion:Int, json:Dynamic) {
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type, false));
 		o.name = JsonTools.readString(json.name);
 		o.gridSize = JsonTools.readInt(json.gridSize, Const.DEFAULT_GRID_SIZE);

@@ -31,10 +31,10 @@ class FieldDef implements ISerializable {
 	}
 
 	public function clone() {
-		return fromJson( toJson() );
+		return fromJson( Const.DATA_VERSION, toJson() );
 	}
 
-	public static function fromJson(json:Dynamic) {
+	public static function fromJson(dataVersion:Int, json:Dynamic) {
 		var o = new FieldDef( JsonTools.readInt(json.uid), JsonTools.readEnum(FieldType, json.type, false) );
 		o.name = JsonTools.readString(json.name);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);

@@ -5,6 +5,7 @@ class ProjectData implements data.ISerializable {
 	public var defs : Definitions;
 	public var levels : Array<LevelData> = [];
 
+	public var dataVersion : Int;
 	public var name : String;
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
@@ -13,6 +14,7 @@ class ProjectData implements data.ISerializable {
 
 	private function new() {
 		name = "New project";
+		dataVersion = Const.DATA_VERSION;
 		defaultGridSize = Const.DEFAULT_GRID_SIZE;
 		bgColor = 0xffffff;
 		defaultPivotX = defaultPivotY = 0;
@@ -38,6 +40,7 @@ class ProjectData implements data.ISerializable {
 
 	public static function fromJson(json:Dynamic) {
 		var p = new ProjectData();
+		p.dataVersion = JsonTools.readInt(json.dataVersion, 0);
 		p.nextUniqId = JsonTools.readInt( json.nextUniqId, 0 );
 		p.name = JsonTools.readString( json.name );
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
@@ -50,11 +53,13 @@ class ProjectData implements data.ISerializable {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( LevelData.fromJson(p, lvlJson) );
 
+		p.dataVersion = Const.DATA_VERSION; // updated
 		return p;
 	}
 
 	public function toJson() {
 		return {
+			dataVersion: dataVersion,
 			nextUniqId: nextUniqId,
 			defs: defs.toJson(),
 			levels: levels.map( function(l) return l.toJson() ),

@@ -26,10 +26,10 @@ class Definitions implements ISerializable {
 		var d = new Definitions(p);
 
 		for( layerJson in JsonTools.readArray(json.layers) )
-			d.layers.push( LayerDef.fromJson(layerJson) );
+			d.layers.push( LayerDef.fromJson(p.dataVersion, layerJson) );
 
 		for( entityJson in JsonTools.readArray(json.entities) )
-			d.entities.push( EntityDef.fromJson(entityJson) );
+			d.entities.push( EntityDef.fromJson(p.dataVersion, entityJson) );
 
 		return d;
 	}

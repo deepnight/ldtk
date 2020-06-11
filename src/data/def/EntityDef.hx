@@ -29,10 +29,10 @@ class EntityDef implements ISerializable {
 	}
 
 	public function clone() {
-		return fromJson( toJson() );
+		return fromJson( Const.DATA_VERSION, toJson() );
 	}
 
-	public static function fromJson(json:Dynamic) {
+	public static function fromJson(dataVersion:Int, json:Dynamic) {
 		var o = new EntityDef( JsonTools.readInt(json.uid) );
 		o.name = JsonTools.readString( json.name );
 		o.width = JsonTools.readInt( json.width, 16 );
@@ -43,7 +43,7 @@ class EntityDef implements ISerializable {
 		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
 
 		for(defJson in JsonTools.readArray(json.fieldDefs) )
-			o.fieldDefs.push( FieldDef.fromJson(defJson) );
+			o.fieldDefs.push( FieldDef.fromJson(dataVersion, defJson) );
 
 		return o;
 	}
