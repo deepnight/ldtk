@@ -201,48 +201,55 @@ class LevelRender extends dn.Process {
 		bmp.tile = h2d.Tile.fromTexture( _entityRenderCache.get(def.uid) );
 		bmp.tile.setCenterRatio(def.pivotX, def.pivotY);
 
-		// Instance fields marked as "editorDisplay"
+		// Display fields not marked as "Hidden"
 		if( ei!=null ) {
+			// Init field wrappers
 			var above = new h2d.Flow(wrapper);
 			above.layout = Vertical;
 			above.horizontalAlign = Middle;
+
 			var beneath = new h2d.Flow(wrapper);
+
+			// Attach fields
 			for(fd in ei.def.fieldDefs) {
 				if( fd.editorDisplayMode==Hidden )
 					continue;
 
 				var fi = ei.getFieldInstance(fd);
-				var tf = new h2d.Text(Assets.fontSmall);
+				var fieldWrapper = new h2d.Object();
+				switch fd.editorDisplayPos {
+					case Above: above.addChild(fieldWrapper);
+					case Beneath: beneath.addChild(fieldWrapper);
+				}
 
 				switch fd.editorDisplayMode {
 					case Hidden: // N/A
 
 					case NameAndValue:
+						var tf = new h2d.Text(Assets.fontSmall, fieldWrapper);
+						tf.textColor = C.toWhite(ei.def.color, 0.6);
 						var v = fi.getForDisplay();
 						tf.text = fd.name+" = "+v;
 
 					case ValueOnly:
-						var v = fi.getForDisplay();
-						if( fi.valueIsNull() )
-							tf.visible = false;
-						else if( fd.type==F_Bool ) {
-							if( fi.getBool()==true )
+						if( !fi.valueIsNull() && !( fd.type==F_Bool && fi.getBool()==false ) ) {
+							var tf = new h2d.Text(Assets.fontSmall, fieldWrapper);
+							tf.textColor = C.toWhite(ei.def.color, 0.6);
+							var v = fi.getForDisplay();
+							if( fd.type==F_Bool )
 								tf.text = '[${fd.name}]';
 							else
-								tf.visible = false;
+								tf.text = v;
 						}
-						else
-							tf.text = v;
-				}
-
-				switch fd.editorDisplayPos {
-					case Above: above.addChild(tf);
-					case Beneath: beneath.addChild(tf);
 				}
 			}
+
+			// Update wrappers pos
 			above.x = Std.int( -above.outerWidth*0.5 );
-			above.y = Std.int( -above.outerHeight - bmp.tile.height );
+			above.y = Std.int( -above.outerHeight - bmp.tile.height*def.pivotY );
+
 			beneath.x = Std.int( -beneath.outerWidth*0.5 );
+			beneath.y = Std.int( bmp.tile.height*(1-def.pivotY) );
 		}
 
 		return wrapper;
