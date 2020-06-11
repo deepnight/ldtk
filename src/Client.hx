@@ -310,7 +310,13 @@ class Client extends dn.Process {
 	}
 
 	function onMouseWheel(e:hxd.Event) {
-		levelRender.zoom += -e.wheelDelta*0.2;
+		var m = getMouse();
+		var mouseX = m.levelX;
+		var mouseY = m.levelY;
+		levelRender.zoom += -e.wheelDelta*0.1 * levelRender.zoom;
+		var panRatio = e.wheelDelta < 0 ? 0.1 : 0.03;
+		levelRender.focusLevelX = levelRender.focusLevelX*(1-panRatio) + mouseX*panRatio;
+		levelRender.focusLevelY = levelRender.focusLevelY*(1-panRatio) + mouseY*panRatio;
 	}
 
 	public function debug(msg:Dynamic, append=false) {
