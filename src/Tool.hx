@@ -76,7 +76,7 @@ class Tool<T> extends dn.Process {
 			client.setSelection(ge);
 
 			// If layer changed, client curTool was re-created
-			if( client.curTool!=this) {
+			if( client.curTool!=this ) {
 				client.curTool.startUsing(m,buttonId);
 				return;
 			}

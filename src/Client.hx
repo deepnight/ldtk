@@ -10,9 +10,14 @@ class Client extends dn.Process {
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette");
 
-	public var curLevel(get,never) : LevelData; inline function get_curLevel() return project.getLevel(curLevelId);
-	public var curLayerDef(get,never) : LayerDef; inline function get_curLayerDef() return project.defs.getLayerDef(curLayerId);
-	public var curLayerInstance(get,never) : LayerInstance; inline function get_curLayerInstance() return curLevel.getLayerInstance(curLayerDef);
+	public var curLevel(get,never) : LevelData;
+	inline function get_curLevel() return project.getLevel(curLevelId);
+
+	public var curLayerDef(get,never) : Null<LayerDef>;
+	inline function get_curLayerDef() return project.defs.getLayerDef(curLayerId);
+
+	public var curLayerInstance(get,never) : Null<LayerInstance>;
+	function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
 
 	public var ge : GlobalEventDispatcher;
 	public var project : ProjectData;
@@ -236,10 +241,13 @@ class Client extends dn.Process {
 
 		clearSelection();
 		cursor.set(None);
-		curTool = switch curLayerDef.type {
-			case IntGrid: new tool.IntGridTool();
-			case Entities: new tool.EntityTool();
-		}
+		if( curLayerDef==null )
+			curTool = new tool.EmptyTool();
+		else
+			curTool = switch curLayerDef.type {
+				case IntGrid: new tool.IntGridTool();
+				case Entities: new tool.EntityTool();
+			}
 	}
 
 	public function pickGenericLevelElement(ge:Null<GenericLevelElement>) {
@@ -289,16 +297,15 @@ class Client extends dn.Process {
 	}
 
 	function onMouseDown(e:hxd.Event) {
-		if( levelRender.isLayerVisible(curLayerInstance) && curTool.canBeUsed() )
+		if( curTool.canBeUsed() )
 			curTool.startUsing( getMouse(), e.button );
 	}
 	function onMouseUp() {
-		if( curTool!=null && curTool.isRunning() )
+		if( curTool.isRunning() )
 			curTool.stopUsing( getMouse() );
 	}
 	function onMouseMove(e:hxd.Event) {
-		var m = getMouse();
-		curTool.onMouseMove(m);
+		curTool.onMouseMove( getMouse() );
 	}
 
 	function onMouseWheel(e:hxd.Event) {
@@ -343,7 +350,7 @@ class Client extends dn.Process {
 				updateProjectTitle();
 
 			case LayerDefChanged, LayerDefSorted:
-				if( curLayerDef==null )
+				if( curLayerDef==null && project.defs.layers.length>0 )
 					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
 				initTool();
 				updateLayerList();

@@ -48,7 +48,7 @@ class LevelRender extends dn.Process {
 	}
 
 	public inline function isLayerVisible(l:LayerInstance) {
-		return !layerVis.exists(l.layerDefId) || layerVis.get(l.layerDefId)==true;
+		return l!=null && ( !layerVis.exists(l.layerDefId) || layerVis.get(l.layerDefId)==true );
 	}
 
 	public function toggleLayer(l:LayerInstance) {
@@ -75,8 +75,11 @@ class LevelRender extends dn.Process {
 		// Grid
 		var col = C.autoContrast(client.project.bgColor);
 
-		var l = client.curLayerInstance;
 		grid.clear();
+		if( client.curLayerInstance==null )
+			return;
+
+		var l = client.curLayerInstance;
 		grid.lineStyle(1, col, 0.2);
 		for( cx in 0...client.curLayerInstance.cWid+1 ) {
 			grid.moveTo(cx*l.def.gridSize, 0);
@@ -172,6 +175,9 @@ class LevelRender extends dn.Process {
 		for(ld in client.project.defs.layers) {
 			var li = client.curLevel.getLayerInstance(ld);
 			var wrapper = layerWrappers.get(ld.uid);
+			if( wrapper==null )
+				continue;
+
 			wrapper.visible = isLayerVisible(li);
 			wrapper.alpha = li.def.displayOpacity;
 			// wrapper.alpha = li.def.displayOpacity * ( li==client.curLayerInstance ? 1 : 0.25 );

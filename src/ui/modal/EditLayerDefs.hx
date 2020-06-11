@@ -23,10 +23,10 @@ class EditLayerDefs extends ui.Modal {
 
 		// Delete layer
 		jWin.find(".mainList button.delete").click( function(ev) {
-			if( project.defs.layers.length==1 ) {
-				N.error("Cannot delete the last layer.");
-				return;
-			}
+			// if( project.defs.layers.length==1 ) {
+			// 	N.error("Cannot delete the last layer.");
+			// 	return;
+			// }
 
 			new ui.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
 				project.defs.removeLayerDef(cur);
@@ -36,7 +36,7 @@ class EditLayerDefs extends ui.Modal {
 		});
 
 
-		select(client.curLayerInstance.def);
+		select(client.curLayerDef);
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -59,8 +59,14 @@ class EditLayerDefs extends ui.Modal {
 
 	function select(ld:LayerDef) {
 		cur = ld;
-
 		jForm.find("*").off(); // cleanup event listeners
+
+		if( cur==null ) {
+			jForm.hide();
+			return;
+		}
+
+		jForm.show();
 
 		// Set form class
 		for(k in Type.getEnumConstructs(LayerType))
