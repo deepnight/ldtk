@@ -4,12 +4,11 @@ class BoolInput extends form.Input<Bool> {
 	var isCheckBox : Bool;
 
 	public function new(j:js.jquery.JQuery, getter:Void->Bool, setter:Bool->Void) {
-		super(j, getter, setter);
-
 		if( !j.is("[type=checkbox], select") )
 			throw "Only CHECKBOXEs and SELECTs are supported here";
-
 		isCheckBox = j.is("[type=checkbox]");
+
+		super(j, getter, setter);
 	}
 
 	override function parseInputValue() : Bool {
