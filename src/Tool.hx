@@ -123,9 +123,7 @@ class Tool<T> extends dn.Process {
 				throw "Unsupported";
 
 			case Entity(instance):
-				var ei = curLayerInstance.createEntityInstance(instance.def); // HACK TODO use clone
-				ei.x = instance.x;
-				ei.y = instance.y;
+				var ei = curLayerInstance.duplicateEntityInstance( instance );
 				return GenericLevelElement.Entity(ei);
 		}
 	}

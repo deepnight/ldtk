@@ -138,6 +138,12 @@ class LayerInstance implements ISerializable {
 		return ei;
 	}
 
+	public function duplicateEntityInstance(ei:EntityInstance) : EntityInstance {
+		var copy = ei.clone();
+		entityInstances.push(copy);
+		return copy;
+	}
+
 	public function removeEntityInstance(e:EntityInstance) {
 		requireType(Entities);
 		if( !entityInstances.remove(e) )
