@@ -71,6 +71,19 @@ class Input<T> {
 			input.val( Std.string( getter() ) );
 	}
 
+
+	public function setEnabled(v:Bool) {
+		input.prop("disabled", !v);
+	}
+
+	public function enable() {
+		input.prop("disabled",false);
+	}
+
+	public function disable() {
+		input.prop("disabled",true);
+	}
+
 	#end
 
 

@@ -201,6 +201,7 @@ class EditEntityDefs extends ui.Modal {
 		i.linkEvent(EntityFieldChanged);
 
 		var i = Input.linkToHtmlInput( curField.editorDisplayPos, jFieldForm.find("select[name=editorDisplayPos]") );
+		i.setEnabled( curField.editorDisplayMode!=Hidden );
 		i.linkEvent(EntityFieldChanged);
 
 		var i = Input.linkToHtmlInput( curField.name, jFieldForm.find("input[name=name]") );
