@@ -590,7 +590,7 @@ input[type=number]:focus {
 	#mainPanel {
 		position: relative;
 		display: grid;
-		grid-template-rows: min-content 1fr 2fr;
+		grid-template-rows: min-content 0.6fr 1fr;
 		padding: 5px;
 		gap: 5px;
 		background: $bgDark;
@@ -602,6 +602,10 @@ input[type=number]:focus {
 		h2#projectTitle {
 			white-space: nowrap;
 			overflow: hidden;
+		}
+
+		ul.niceList {
+			min-height: auto;
 		}
 
 		ul#layers {
@@ -679,6 +683,7 @@ input[type=number]:focus {
 
 .instanceEditor {
 	position: absolute;
+	overflow: auto;
 	z-index: 10;
 	top: 0px;
 	right: 0px;
