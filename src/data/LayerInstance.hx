@@ -11,7 +11,7 @@ class LayerInstance implements ISerializable {
 	public var entityInstances : Array<EntityInstance> = [];
 
 	public var cWid(get,never) : Int; inline function get_cWid() return M.ceil( level.pxWid / def.gridSize );
-	public var cHei(get,never) : Int; function get_cHei() return M.ceil( level.pxHei / def.gridSize );
+	public var cHei(get,never) : Int; inline function get_cHei() return M.ceil( level.pxHei / def.gridSize );
 
 
 	public function new(p:ProjectData, levelId:Int, layerDefId:Int) {
@@ -69,6 +69,14 @@ class LayerInstance implements ISerializable {
 
 	public inline function coordId(cx:Int, cy:Int) {
 		return cx + cy*cWid;
+	}
+
+	public function getCx(coordId:Int) {
+		return coordId - Std.int(coordId/cWid)*cWid;
+	}
+
+	public inline function getCy(coordId:Int) {
+		return Std.int(coordId/cWid);
 	}
 
 	public function tidy(p:ProjectData) {
