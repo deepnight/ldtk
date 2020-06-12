@@ -161,6 +161,14 @@ class EditLayerDefs extends ui.Modal {
 				uploader.change( function(ev) {
 					N.debug(ev.data);
 				});
+
+				var i = Input.linkToHtmlInput( ld.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
+				i.linkEvent(LayerDefChanged);
+				i.setBounds(2, 512);
+
+				var i = Input.linkToHtmlInput( ld.tileGridSpacing, jForm.find("input[name=tilesetGridSpacing]") );
+				i.linkEvent(LayerDefChanged);
+				i.setBounds(0, 512);
 		}
 
 		updateList();

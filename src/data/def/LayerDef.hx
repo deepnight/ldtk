@@ -12,6 +12,8 @@ class LayerDef implements ISerializable {
 
 	// Tileset
 	var tilePath : Null<String>;
+	public var tileGridSize : Int = Const.DEFAULT_GRID_SIZE;
+	public var tileGridSpacing : Int = 0;
 
 	public function new(uid:Int, t:LayerType) {
 		this.uid = uid;
