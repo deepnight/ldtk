@@ -32,6 +32,7 @@ class EditLayerDefs extends ui.Modal {
 				icon.addClass( switch type {
 					case IntGrid: "intGrid";
 					case Entities: "entity";
+					case Tiles: "tile";
 				});
 				b.append(icon);
 				b.append( Lang.getLayerType(type) );
