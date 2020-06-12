@@ -87,7 +87,6 @@ class EditEntityDefs extends ui.Modal {
 			selectEntity(project.defs.entities[0]);
 
 		// Re-select last field
-		N.debug(lastFieldId);
 		if( lastFieldId>=0 && curEntity!=null && curEntity.getFieldDef(lastFieldId)!=null )
 			selectField( curEntity.getFieldDef(lastFieldId) );
 	}
