@@ -708,7 +708,7 @@ input[type=number]:focus {
 }
 
 .instanceEditor ul.form label {
-  flex: 1 1 auto;
+  flex: 0 0 60px;
 }
 
 .window.defEditor .mainList ul {
