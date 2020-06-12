@@ -1,6 +1,9 @@
 package ui.modal;
 
 class EditEntityDefs extends ui.Modal {
+	static var LAST_ENTITY_ID = -1;
+	static var LAST_FIELD_ID = -1;
+
 	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jWin.find(".entityList ul");
 	var jFieldList(get,never) : js.jquery.JQuery; inline function get_jFieldList() return jWin.find(".fieldList ul");
 
@@ -64,7 +67,7 @@ class EditEntityDefs extends ui.Modal {
 		});
 
 		// Delete field
-		jWin.find(".fields button.delete").click( function(_) {
+		jWin.find(".fields button.delete").click( function(ev) {
 			if( curField==null ) {
 				N.error("No field selected.");
 				return;
@@ -74,7 +77,19 @@ class EditEntityDefs extends ui.Modal {
 			selectField( curEntity.fieldDefs[0] );
 		});
 
-		selectEntity(project.defs.entities[0]);
+		// Select same entity as current client selection
+		var lastFieldId = LAST_FIELD_ID; // because selectEntity changes it
+		if( client.curLayerDef!=null && client.curLayerDef.type==Entities )
+			selectEntity( project.defs.getEntityDef(client.curTool.getSelectedValue()) );
+		else if( LAST_ENTITY_ID>=0 && project.defs.getEntityDef(LAST_ENTITY_ID)!=null )
+			selectEntity( project.defs.getEntityDef(LAST_ENTITY_ID) );
+		else
+			selectEntity(project.defs.entities[0]);
+
+		// Re-select last field
+		N.debug(lastFieldId);
+		if( lastFieldId>=0 && curEntity!=null && curEntity.getFieldDef(lastFieldId)!=null )
+			selectField( curEntity.getFieldDef(lastFieldId) );
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -101,8 +116,13 @@ class EditEntityDefs extends ui.Modal {
 	}
 
 	function selectEntity(ed:Null<EntityDef>) {
+		if( ed==null )
+			ed = client.project.defs.entities[0];
+
 		curEntity = ed;
 		curField = ed==null ? null : ed.fieldDefs[0];
+		LAST_ENTITY_ID = curEntity==null ? -1 : curEntity.uid;
+		LAST_FIELD_ID = curField==null ? -1 : curField.uid;
 		updatePreview();
 		updateEntityForm();
 		updateFieldForm();
@@ -111,6 +131,7 @@ class EditEntityDefs extends ui.Modal {
 
 	function selectField(fd:FieldDef) {
 		curField = fd;
+		LAST_FIELD_ID = curField==null ? -1 : curField.uid;
 		updateFieldForm();
 		updateLists();
 	}

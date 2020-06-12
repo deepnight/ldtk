@@ -103,4 +103,11 @@ class EntityDef implements ISerializable {
 		return moved;
 	}
 
+	public function getFieldDef(id:Int) : Null<FieldDef> {
+		for(fd in fieldDefs)
+			if( fd.uid==id )
+				return fd;
+		return null;
+	}
+
 }
