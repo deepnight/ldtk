@@ -524,7 +524,8 @@ input[type=number]:focus {
 	}
 }
 
-.dialog.fieldTypes {
+.dialog.fieldTypes,
+.dialog.layerTypes {
 	.wrapper {
 		width: auto;
 		padding: 4px;
@@ -538,6 +539,16 @@ input[type=number]:focus {
 		button {
 			margin: 0;
 		}
+	}
+}
+
+.dialog.layerTypes {
+	.icon {
+		display: block;
+		width: 3em;
+		height: 3em;
+		margin: auto;
+		margin-bottom: 4px;
 	}
 }
 

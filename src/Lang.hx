@@ -22,6 +22,13 @@ class Lang {
         return t.untranslated(str);
     }
 
+    public static function getLayerType(type:LayerType) : LocaleString {
+        return switch type {
+            case IntGrid: Lang.t._("Integer grid");
+            case Entities: Lang.t._("Entities");
+        }
+    }
+
     public static function getFieldType(type:FieldType) : LocaleString {
         return switch type {
             case F_Int: t._("Integer");

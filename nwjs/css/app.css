@@ -537,20 +537,31 @@ input[type=number]:focus {
   flex-grow: 2;
 }
 
-.dialog.fieldTypes .wrapper {
+.dialog.fieldTypes .wrapper,
+.dialog.layerTypes .wrapper {
   width: auto;
   padding: 4px;
 }
 
-.dialog.fieldTypes .content {
+.dialog.fieldTypes .content,
+.dialog.layerTypes .content {
   display: grid;
   width: 100%;
   gap: 2px;
   grid-template-columns: repeat(3, auto);
 }
 
-.dialog.fieldTypes .content button {
+.dialog.fieldTypes .content button,
+.dialog.layerTypes .content button {
   margin: 0;
+}
+
+.dialog.layerTypes .icon {
+  display: block;
+  width: 3em;
+  height: 3em;
+  margin: auto;
+  margin-bottom: 4px;
 }
 
 .sortable-placeholder {
