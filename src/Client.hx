@@ -275,6 +275,7 @@ class Client extends dn.Process {
 			curTool = switch curLayerDef.type {
 				case IntGrid: new tool.IntGridTool();
 				case Entities: new tool.EntityTool();
+				case Tiles: new tool.EmptyTool(); // TODO
 			}
 	}
 
@@ -434,6 +435,7 @@ class Client extends dn.Process {
 			switch li.def.type {
 				case IntGrid: icon.addClass("intGrid");
 				case Entities: icon.addClass("entity");
+				case Tiles: icon.addClass("tile");
 			}
 
 			// Name

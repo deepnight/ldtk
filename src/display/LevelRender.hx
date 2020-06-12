@@ -154,6 +154,9 @@ class LevelRender extends dn.Process {
 						var o = createEntityRender(ei, wrapper);
 						o.setPosition(ei.x, ei.y);
 					}
+
+				case Tiles:
+					// TODO
 			}
 		}
 

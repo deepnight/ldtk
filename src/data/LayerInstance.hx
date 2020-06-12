@@ -7,6 +7,8 @@ class LayerInstance implements ISerializable {
 
 	public var levelId : Int;
 	public var layerDefId : Int;
+
+	// Content
 	var intGrid : Map<Int,Int> = new Map(); // <coordId,value>
 	public var entityInstances : Array<EntityInstance> = [];
 
@@ -104,6 +106,9 @@ class LayerInstance implements ISerializable {
 				// Cleanup field instances
 				for(ei in entityInstances)
 					ei.tidy(_project);
+
+			case Tiles:
+				// TODO
 		}
 }
 

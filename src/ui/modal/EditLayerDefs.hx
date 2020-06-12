@@ -155,6 +155,8 @@ class EditLayerDefs extends ui.Modal {
 
 
 			case Entities:
+
+			case Tiles:
 				// TODO
 		}
 
@@ -179,6 +181,7 @@ class EditLayerDefs extends ui.Modal {
 			switch ld.type {
 				case IntGrid: icon.addClass("intGrid");
 				case Entities: icon.addClass("entity");
+				case Tiles: icon.addClass("tile");
 			}
 
 			e.append('<span class="name">'+ld.name+'</span>');

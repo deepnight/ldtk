@@ -143,6 +143,9 @@ class Tool<T> extends dn.Process {
 					for(ei in li.entityInstances)
 						if( ei.isOver(m.levelX, m.levelY) )
 							ge = GenericLevelElement.Entity(ei);
+
+				case Tiles:
+					// TODO
 			}
 		}
 

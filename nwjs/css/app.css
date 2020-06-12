@@ -232,6 +232,10 @@ ul.niceList li:not(.active):hover {
   background-image: url("/img/icons/entity.png");
 }
 
+.icon.tile {
+  background-image: url("/img/icons/tile.png");
+}
+
 .icon.layer {
   background-image: url("/img/icons/layer.png");
 }
