@@ -525,7 +525,7 @@ label.file {
 			button {
 				flex: 1 1 0;
 				margin: 1px;
-			}
+			} 
 			button.confirm {
 				flex-grow: 2;
 			}
@@ -533,7 +533,8 @@ label.file {
 	}
 }
 
-.dialog.fieldTypes {
+.dialog.fieldTypes,
+.dialog.layerTypes {
 	.wrapper {
 		width: auto;
 		padding: 4px;
@@ -547,6 +548,16 @@ label.file {
 		button {
 			margin: 0;
 		}
+	}
+}
+
+.dialog.layerTypes {
+	.icon {
+		display: block;
+		width: 3em;
+		height: 3em;
+		margin: auto;
+		margin-bottom: 4px;
 	}
 }
 

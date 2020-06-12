@@ -14,20 +14,37 @@ class EditLayerDefs extends ui.Modal {
 		linkToButton("button.editLayers");
 
 		// Create layer
-		jWin.find(".mainList button.create").click( function(_) {
-			var ld = project.defs.createLayerDef(IntGrid);
-			select(ld);
-			client.ge.emit(LayerDefChanged);
-			jForm.find("input").first().focus().select();
+		jWin.find(".mainList button.create").click( function(ev) {
+			function _create(type:LayerType) {
+				var ld = project.defs.createLayerDef(type);
+				select(ld);
+				client.ge.emit(LayerDefChanged);
+				jForm.find("input").first().focus().select();
+			}
+
+			// Type picker
+			var w = new ui.Dialog(ev.getThis(),"layerTypes");
+			for(k in LayerType.getConstructors()) {
+				var type = LayerType.createByName(k);
+				var b = new J("<button/>");
+				b.appendTo( w.jContent );
+				var icon = new J('<div class="icon"/>');
+				icon.addClass( switch type {
+					case IntGrid: "intGrid";
+					case Entities: "entity";
+				});
+				b.append(icon);
+				b.append( Lang.getLayerType(type) );
+				b.click( function(_) {
+					_create(type);
+					w.close();
+				});
+			}
+
 		});
 
 		// Delete layer
 		jWin.find(".mainList button.delete").click( function(ev) {
-			// if( project.defs.layers.length==1 ) {
-			// 	N.error("Cannot delete the last layer.");
-			// 	return;
-			// }
-
 			new ui.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
 				project.defs.removeLayerDef(cur);
 				select(project.defs.layers[0]);

@@ -62,9 +62,14 @@ class Client extends dn.Process {
 
 		initUI();
 
-		var raw = dn.LocalStorage.read("test");
-		var json = try haxe.Json.parse(raw) catch(e:Dynamic) null;
-		project = json==null ? ProjectData.createEmpty() : ProjectData.fromJson(json);
+		project = try {
+			var raw = dn.LocalStorage.read("test");
+			var json = haxe.Json.parse(raw);
+			ProjectData.fromJson(json);
+		}
+		catch( e:Dynamic ) {
+			ProjectData.createEmpty();
+		}
 
 		levelRender = new display.LevelRender();
 		useProject(project);
