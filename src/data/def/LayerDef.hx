@@ -6,7 +6,12 @@ class LayerDef implements ISerializable {
 	public var name : String;
 	public var gridSize : Int = Const.DEFAULT_GRID_SIZE;
 	public var displayOpacity : Float = 1.0;
+
+	// IntGrid
 	var intGridValues : Array<IntGridValueDef> = [];
+
+	// Tileset
+	var tilePath : Null<String>;
 
 	public function new(uid:Int, t:LayerType) {
 		this.uid = uid;
@@ -86,6 +91,11 @@ class LayerDef implements ISerializable {
 				return false;
 
 		return true;
+	}
+
+
+	public function loadTileset(filePath:String) {
+		tilePath = filePath;
 	}
 
 }

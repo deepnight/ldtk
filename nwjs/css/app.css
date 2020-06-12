@@ -88,44 +88,45 @@ hr {
   border-bottom: 1px solid #545d73;
 }
 
-button {
+button, label.file {
   width: 100%;
   margin: 1px;
   padding: 10px;
   color: white;
   text-transform: uppercase;
+  text-align: center;
   border: 1px solid #ff5d4a;
   box-shadow: 0px 2px 0px #b53d00;
   background-color: #e34d00;
   cursor: pointer;
 }
 
-button > .icon {
+button > .icon, label.file > .icon {
   margin: -4px;
   width: 1.7em;
   height: 1.7em;
 }
 
-button:hover {
+button:hover, label.file:hover {
   background-color: #ff5d4a;
 }
 
-button:focus {
+button:focus, label.file:focus {
   outline: inherit;
 }
 
-button.active {
+button.active, label.active.file {
   background-color: #ffcc00;
   border-color: #ffff00;
 }
 
-button.cancel {
+button.cancel, label.cancel.file {
   background-color: #2e333f;
   border-color: #545d73;
   box-shadow: 0px 2px 0px #2e333f;
 }
 
-button.cancel:hover {
+button.cancel:hover, label.cancel.file:hover {
   background-color: #545d73;
 }
 
@@ -136,11 +137,11 @@ button.cancel:hover {
   margin-bottom: 2px;
 }
 
-.buttons button {
+.buttons button, .buttons label.file {
   flex: 1 1 0;
 }
 
-.buttons button.debug {
+.buttons button.debug, .buttons label.debug.file {
   flex: 0 0 0;
   display: none;
 }
@@ -350,7 +351,7 @@ ul.form > li .small {
   flex: 0 1 60px;
 }
 
-ul.form > li > label {
+ul.form > li > label:first-of-type {
   flex: 0 0 150px;
   padding-right: 16px;
   font-weight: bold;
@@ -416,6 +417,10 @@ input[type=number]:focus {
   border-color: #ffcc00;
   box-shadow: 0px 0px 4px #e34d00;
   outline: none;
+}
+
+input[type="file"] {
+  display: none;
 }
 
 #notificationList {
@@ -532,12 +537,12 @@ input[type=number]:focus {
   flex-wrap: wrap;
 }
 
-.dialog .wrapper .buttons button {
+.dialog .wrapper .buttons button, .dialog .wrapper .buttons label.file {
   flex: 1 1 0;
   margin: 1px;
 }
 
-.dialog .wrapper .buttons button.confirm {
+.dialog .wrapper .buttons button.confirm, .dialog .wrapper .buttons label.confirm.file {
   flex-grow: 2;
 }
 
@@ -553,7 +558,7 @@ input[type=number]:focus {
   grid-template-columns: repeat(3, auto);
 }
 
-.dialog.fieldTypes .content button {
+.dialog.fieldTypes .content button, .dialog.fieldTypes .content label.file {
   margin: 0;
 }
 
@@ -724,7 +729,7 @@ input[type=number]:focus {
   border: 1px solid #545d73;
 }
 
-.window.defEditor .mainList button.delete {
+.window.defEditor .mainList button.delete, .window.defEditor .mainList label.delete.file {
   flex: 0 0 32px;
 }
 
@@ -772,7 +777,7 @@ input[type=number]:focus {
   display: block;
 }
 
-.window.layerDefs ul.intGridValues li.add button {
+.window.layerDefs ul.intGridValues li.add button, .window.layerDefs ul.intGridValues li.add label.file {
   padding: 0px;
   text-align: center;
   font-weight: bold;
@@ -781,10 +786,8 @@ input[type=number]:focus {
   color: white;
 }
 
-.window.layerDefs ul.form:not(.type-IntGrid) .IntGrid {
-  display: none;
-}
-
+.window.layerDefs ul.form:not(.type-IntGrid) .IntGrid,
+.window.layerDefs ul.form:not(.type-Tiles) .Tiles,
 .window.layerDefs ul.form:not(.type-Entities) .Entities {
   display: none;
 }
@@ -793,7 +796,7 @@ input[type=number]:focus {
   width: 900px;
 }
 
-.window.entityDefs button.delete {
+.window.entityDefs button.delete, .window.entityDefs label.delete.file {
   flex: 0 1 0;
 }
 

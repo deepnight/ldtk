@@ -157,7 +157,10 @@ class EditLayerDefs extends ui.Modal {
 			case Entities:
 
 			case Tiles:
-				// TODO
+				var uploader = jForm.find("input[name=tilesetFile]");
+				uploader.change( function(ev) {
+					N.debug(ev.data);
+				});
 		}
 
 		updateList();

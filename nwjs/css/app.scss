@@ -95,6 +95,7 @@ button {
 
 	color: white;
 	text-transform: uppercase;
+	text-align: center;
 
 	border: 1px solid #ff5d4a;
 	box-shadow: 0px 2px 0px #b53d00;
@@ -328,7 +329,7 @@ ul.form {
 			flex: 0 1 60px;
 		}
 
-		>label {
+		>label:first-of-type {
 			flex: 0 0 150px;
 			padding-right: 16px;
 			font-weight: bold;
@@ -395,6 +396,13 @@ input[type=number]:focus {
 	border-color: $orange;
 	box-shadow: 0px 0px 4px $red;
 	outline: none;
+}
+
+input[type="file"] {
+	display: none;
+}
+label.file {
+	@extend button;
 }
 
 #notificationList {
@@ -771,10 +779,8 @@ input[type=number]:focus {
 	}
 
 
-	ul.form:not(.type-IntGrid) .IntGrid {
-		display: none;
-	}
-
+	ul.form:not(.type-IntGrid) .IntGrid,
+	ul.form:not(.type-Tiles) .Tiles,
 	ul.form:not(.type-Entities) .Entities {
 		display: none;
 	}
