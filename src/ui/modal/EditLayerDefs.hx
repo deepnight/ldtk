@@ -28,14 +28,7 @@ class EditLayerDefs extends ui.Modal {
 				var type = LayerType.createByName(k);
 				var b = new J("<button/>");
 				b.appendTo( w.jContent );
-				var icon = new J('<div class="icon"/>');
-				icon.addClass( switch type {
-					case IntGrid: "intGrid";
-					case Entities: "entity";
-					case Tiles: "tile";
-				});
-				b.append(icon);
-				b.append( Lang.getLayerType(type) );
+				JsTools.createLayerTypeIcon(type, b);
 				b.click( function(_) {
 					_create(type);
 					w.close();
@@ -91,13 +84,17 @@ class EditLayerDefs extends ui.Modal {
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+ld.type);
 
+		jForm.find("span.type").text( Lang.getLayerType(ld.type) );
+		jForm.find("span.typeIcon").empty().append( JsTools.createLayerTypeIcon(ld.type,false) );
+
+
 		// Fields
 		var i = Input.linkToHtmlInput( ld.name, jForm.find("input[name='name']") );
 		i.validityCheck = project.defs.isLayerNameValid;
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
-		var i = Input.linkToHtmlInput( ld.type, jForm.find("select[name='type']") );
-		i.onChange = client.ge.emit.bind(LayerDefChanged);
+		// var i = Input.linkToHtmlInput( ld.type, jForm.find("select[name='type']") );
+		// i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( ld.gridSize, jForm.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
