@@ -17,7 +17,7 @@ enum GlobalEvent {
 	LayerDefChanged;
 	LayerDefSorted;
 	LayerInstanceChanged;
-	
+
 	TilesetDefChanged;
 
 	EntityDefChanged;
@@ -72,4 +72,9 @@ enum FieldDisplayMode {
 enum FieldDisplayPosition {
 	Above;
 	Beneath;
+}
+
+enum TileSelection {
+	Single(tcx:Int, tcy:Int);
+	Multiple(tiles:Array<{tcx:Int, tcy:Int}>);
 }

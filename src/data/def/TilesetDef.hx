@@ -1,7 +1,6 @@
 package data.def;
 
 class TilesetDef implements ISerializable {
-
 	var texture : Null<h3d.mat.Texture>;
 	var pixels : Null<hxd.Pixels>;
 	public var tileGridSize : Int = Const.DEFAULT_GRID_SIZE;

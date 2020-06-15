@@ -11,6 +11,7 @@ class LayerInstance implements ISerializable {
 	// Content
 	var intGrid : Map<Int,Int> = new Map(); // <coordId,value>
 	public var entityInstances : Array<EntityInstance> = [];
+	public var tiles : Array<Int> = [];
 
 	public var cWid(get,never) : Int; inline function get_cWid() return M.ceil( level.pxWid / def.gridSize );
 	public var cHei(get,never) : Int; inline function get_cHei() return M.ceil( level.pxHei / def.gridSize );
@@ -164,5 +165,20 @@ class LayerInstance implements ISerializable {
 		requireType(Entities);
 		if( !entityInstances.remove(e) )
 			throw "Unknown instance "+e;
+	}
+
+
+
+	/** TILES *******************/
+	public function setTile(cx:Int, cy:Int, tileId:Int) {
+		tiles[ coordId(cx,cy) ] = tileId;
+	}
+
+	public function removeTile(cx:Int, cy:Int) {
+		tiles[ coordId(cx,cy) ] = null;
+	}
+
+	public function getTile(cx:Int, cy:Int) : Null<Int> {
+		return tiles[ coordId(cx,cy) ];
 	}
 }
