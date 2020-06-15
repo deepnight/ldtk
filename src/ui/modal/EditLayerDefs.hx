@@ -217,7 +217,7 @@ class EditLayerDefs extends ui.Modal {
 			return;
 
 		// Main tileset view
-		cur.tilesetDef.drawFullTileToCanvas( jForm.find(".tileset canvas.fullPreview") );
+		cur.tilesetDef.drawAtlasToCanvas( jForm.find(".tileset canvas.fullPreview") );
 
 		// Demo tiles
 		var padding = 8;
@@ -229,7 +229,7 @@ class EditLayerDefs extends ui.Modal {
 
 		var idx = 0;
 		function renderDemoTile(tcx,tcy) {
-			cur.tilesetDef.drawSubTileToCanvas(jDemo, tcx, tcy, (idx++)*(cur.tilesetDef.tileGridSize+padding), 0);
+			cur.tilesetDef.drawTileToCanvas(jDemo, tcx, tcy, (idx++)*(cur.tilesetDef.tileGridSize+padding), 0);
 		}
 		renderDemoTile(0,0);
 		renderDemoTile(1,0);

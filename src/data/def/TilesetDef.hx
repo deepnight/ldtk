@@ -89,24 +89,23 @@ class TilesetDef implements ISerializable {
 		return true;
 	}
 
-
-	public inline function getSubTileX(tcx:Int) {
+	inline function getTileSourceX(tcx:Int) {
 		return tcx*(tileGridSize+tileGridSpacing);
 	}
 
-	public inline function getSubTileY(tcy:Int) {
+	inline function getTileSourceY(tcy:Int) {
 		return tcy*(tileGridSize+tileGridSpacing);
 	}
 
-	public inline function getFullTile() : Null<h2d.Tile> {
+	public inline function getAtlasTile() : Null<h2d.Tile> {
 		return texture==null ? null : h2d.Tile.fromTexture(texture);
 	}
 
-	public inline function getSubTile(cx:Int, cy:Int) {
-		return getFullTile().sub(getSubTileX(cx), getSubTileY(cy), tileGridSize, tileGridSize);
+	public inline function getTile(tcx:Int, tcy:Int) {
+		return getAtlasTile().sub( getTileSourceX(tcx), getTileSourceY(tcy), tileGridSize, tileGridSize );
 	}
 
-	public function drawFullTileToCanvas(canvas:js.jquery.JQuery) {
+	public function drawAtlasToCanvas(canvas:js.jquery.JQuery) {
 		if( !canvas.is("canvas") )
 			throw "Not a canvas";
 
@@ -124,7 +123,7 @@ class TilesetDef implements ISerializable {
 		}
 	}
 
-	public function drawSubTileToCanvas(canvas:js.jquery.JQuery, tcx:Int, tcy:Int, toX:Int, toY:Int) {
+	public function drawTileToCanvas(canvas:js.jquery.JQuery, tcx:Int, tcy:Int, toX:Int, toY:Int) {
 		if( pixels==null )
 			return;
 
@@ -134,7 +133,7 @@ class TilesetDef implements ISerializable {
 		if( tcx>=M.ceil(pixels.width/tileGridSize) || tcy>=M.ceil(pixels.height/tileGridSize) )
 			return;
 
-		var subPixels = pixels.sub(getSubTileX(tcx), getSubTileY(tcy), tileGridSize, tileGridSize);
+		var subPixels = pixels.sub(getTileSourceX(tcx), getTileSourceY(tcy), tileGridSize, tileGridSize);
 		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
 		var ctx = canvas.getContext2d();
 		var img = new js.html.Image(subPixels.width, subPixels.height);
