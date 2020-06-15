@@ -174,12 +174,12 @@ class EditLayerDefs extends ui.Modal {
 
 			case Tiles:
 				var uploader = jForm.find("input[name=tilesetFile]");
-				uploader.attr("nwworkingdir",client.getCwd()+"\\img\\imgFormatTests");
+				uploader.attr("nwworkingdir",client.getCwd()+"\\tilesetTestImages");
 				uploader.change( function(ev) {
 					var path = uploader.val();
 					var buffer = js.node.Fs.readFileSync(path);
 					var bytes = buffer.hxToBytes();
-					if( !ld.readTileset(bytes) ) {
+					if( !ld.tilesetDef.importImage(bytes) ) {
 						switch dn.Identify.getType(bytes) {
 							case Unknown:
 							case Png, Gif:
@@ -196,36 +196,38 @@ class EditLayerDefs extends ui.Modal {
 					updateTilesetPreview();
 				});
 
-				var i = Input.linkToHtmlInput( ld.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
+				var i = Input.linkToHtmlInput( ld.tilesetDef.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
 				i.linkEvent(LayerDefChanged);
 				i.setBounds(2, 512);
 
-				var i = Input.linkToHtmlInput( ld.tileGridSpacing, jForm.find("input[name=tilesetGridSpacing]") );
+				var i = Input.linkToHtmlInput( ld.tilesetDef.tileGridSpacing, jForm.find("input[name=tilesetGridSpacing]") );
 				i.linkEvent(LayerDefChanged);
 				i.setBounds(0, 512);
 		}
 
 		updateList();
+		updateTilesetPreview();
 	}
 
 	function updateTilesetPreview() {
-		if( !cur.hasTilesetTexture() )
+		if( cur.type!=Tiles || !cur.tilesetDef.hasTexture() )
 			return;
 
-		cur.drawTileToCanvas( jForm.find(".tileset canvas.fullPreview") );
+		// Main tileset view
+		cur.tilesetDef.drawFullTileToCanvas( jForm.find(".tileset canvas.fullPreview") );
 
+		// Demo tiles
 		var padding = 8;
-
 		var jDemo = jForm.find(".tileset canvas.demo");
-		jDemo.attr("width", cur.tileGridSize*4 + padding*3);
-		jDemo.attr("height", cur.tileGridSize);
+		jDemo.attr("width", cur.tilesetDef.tileGridSize*4 + padding*3);
+		jDemo.attr("height", cur.tilesetDef.tileGridSize);
 		var cnv = Std.downcast( jDemo.get(0), js.html.CanvasElement );
 		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
 
 		var idx = 0;
 		for(cy in 0...2)
 		for(cx in 0...2)
-			cur.drawSubTileToCanvas(jDemo, cx,cy, (idx++)*(cur.tileGridSize+padding), 0);
+			cur.tilesetDef.drawSubTileToCanvas(jDemo, cx,cy, (idx++)*(cur.tilesetDef.tileGridSize+padding), 0);
 	}
 
 
