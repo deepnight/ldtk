@@ -210,6 +210,10 @@ class Client extends dn.Process {
 		initTool();
 	}
 
+	public function getCwd() {
+		return js.Node.process.cwd();
+	}
+
 	function onJsKeyDown(ev:js.jquery.Event) {
 		keyDowns.set(ev.keyCode, true);
 		onKeyDown(ev.keyCode);

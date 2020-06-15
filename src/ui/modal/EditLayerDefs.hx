@@ -58,6 +58,7 @@ class EditLayerDefs extends ui.Modal {
 			case LayerDefChanged:
 				updateForm();
 				updateList();
+				updateTilesetPreview();
 
 			case LayerDefSorted:
 				updateList();
@@ -173,8 +174,26 @@ class EditLayerDefs extends ui.Modal {
 
 			case Tiles:
 				var uploader = jForm.find("input[name=tilesetFile]");
+				uploader.attr("nwworkingdir",client.getCwd()+"\\img\\imgFormatTests");
 				uploader.change( function(ev) {
-					N.debug(ev.data);
+					var path = uploader.val();
+					var buffer = js.node.Fs.readFileSync(path);
+					var bytes = buffer.hxToBytes();
+					if( !ld.readTileset(bytes) ) {
+						switch dn.Identify.getType(bytes) {
+							case Unknown:
+							case Png, Gif:
+								N.error("Couldn't read this image: maybe the data is corrupted or the format special?");
+
+							case Jpeg:
+								N.error("Sorry, JPEG is not yet supported, please use PNG instead.");
+
+							case Bmp:
+								N.error("Sorry, BMP is not supported, please use PNG instead.");
+						}
+						return;
+					}
+					updateTilesetPreview();
 				});
 
 				var i = Input.linkToHtmlInput( ld.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
@@ -187,6 +206,26 @@ class EditLayerDefs extends ui.Modal {
 		}
 
 		updateList();
+	}
+
+	function updateTilesetPreview() {
+		if( !cur.hasTilesetTexture() )
+			return;
+
+		cur.drawTileToCanvas( jForm.find(".tileset canvas.fullPreview") );
+
+		var padding = 8;
+
+		var jDemo = jForm.find(".tileset canvas.demo");
+		jDemo.attr("width", cur.tileGridSize*4 + padding*3);
+		jDemo.attr("height", cur.tileGridSize);
+		var cnv = Std.downcast( jDemo.get(0), js.html.CanvasElement );
+		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
+
+		var idx = 0;
+		for(cy in 0...2)
+		for(cx in 0...2)
+			cur.drawSubTileToCanvas(jDemo, cx,cy, (idx++)*(cur.tileGridSize+padding), 0);
 	}
 
 

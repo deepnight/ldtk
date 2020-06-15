@@ -72,10 +72,21 @@ h2 {
   margin-bottom: 32px;
   padding-bottom: 8px;
   border-bottom: 1px solid #ffcc00;
+  font-family: Roboto;
+  font-size: 18pt;
   color: #ffcc00;
   text-transform: uppercase;
-  font-size: 18pt;
+}
+
+h3 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #ffcc00;
   font-family: Roboto;
+  font-size: 13pt;
+  color: #ffcc00;
+  text-transform: uppercase;
 }
 
 hr {
@@ -796,6 +807,22 @@ input[type="file"] {
   font-size: 200%;
   text-decoration: none;
   color: white;
+}
+
+.window.layerDefs li.tileset {
+  display: block;
+}
+
+.window.layerDefs li.tileset canvas.demo,
+.window.layerDefs li.tileset canvas.fullPreview {
+  display: block;
+  width: 100%;
+  image-rendering: pixelated;
+}
+
+.window.layerDefs li.tileset canvas.fullPreview {
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .window.layerDefs ul.form:not(.type-IntGrid) .IntGrid,

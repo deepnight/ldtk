@@ -73,10 +73,22 @@ h2 {
 	padding-bottom: 8px;
 	border-bottom: 1px solid $orange;
 
+	font-family: Roboto;
+	font-size: 18pt;
 	color: $orange;
 	text-transform: uppercase;
-	font-size: 18pt;
+}
+
+h3 {
+	margin-top: 16px;
+	margin-bottom: 8px;
+	padding-bottom: 2px;
+	border-bottom: 1px solid $orange;
+
 	font-family: Roboto;
+	font-size: 13pt;
+	color: $orange;
+	text-transform: uppercase;
 }
 
 hr {
@@ -525,7 +537,7 @@ label.file {
 			button {
 				flex: 1 1 0;
 				margin: 1px;
-			} 
+			}
 			button.confirm {
 				flex-grow: 2;
 			}
@@ -789,6 +801,21 @@ label.file {
 		}
 	}
 
+	li.tileset {
+		display: block;
+
+		canvas.demo,
+		canvas.fullPreview {
+			display: block;
+			width: 100%;
+			image-rendering: pixelated;
+		}
+
+		canvas.fullPreview {
+			box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
+			background-color: rgba(0, 0, 0, 0.4);
+		}
+	}
 
 	ul.form:not(.type-IntGrid) .IntGrid,
 	ul.form:not(.type-Tiles) .Tiles,
