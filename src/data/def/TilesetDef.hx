@@ -1,16 +1,39 @@
 package data.def;
 
 class TilesetDef implements ISerializable {
-	var texture : Null<h3d.mat.Texture>;
 	var pixels : Null<hxd.Pixels>;
 	public var tileGridSize : Int = Const.DEFAULT_GRID_SIZE;
 	public var tileGridSpacing : Int = 0;
 
+	var texture(get,never) : Null<h3d.mat.Texture>;
+	var _textureCache : Null<h3d.mat.Texture>;
+
+	var base64(get,never) : Null<String>;
+	var _base64Cache : Null<String>;
+
 	public function new() {
 	}
 
+	public function invalidateCache() {
+		if( _textureCache!=null )
+			_textureCache.dispose();
+		_textureCache = null;
+		_base64Cache = null;
+	}
 
-	public inline function hasTexture() return texture!=null;
+	function get_texture() {
+		if( _textureCache==null && pixels!=null )
+			_textureCache = h3d.mat.Texture.fromPixels(pixels);
+		return _textureCache;
+	}
+
+	function get_base64() {
+		if( _base64Cache==null && pixels!=null )
+			_base64Cache = haxe.crypto.Base64.encode( pixels.toPNG() );
+		return _base64Cache;
+	}
+
+	public inline function isEmpty() return pixels==null;
 
 
 	public function clone() {
@@ -38,13 +61,14 @@ class TilesetDef implements ISerializable {
 			var w = JsonTools.readInt(json.width);
 			var h = JsonTools.readInt(json.height);
 			td.pixels = new hxd.Pixels(w, h, bytes, BGRA);
-			td.texture = h3d.mat.Texture.fromPixels(td.pixels);
 		}
 		return td;
 	}
 
 	public function importImage(bytes:haxe.io.Bytes) : Bool {
-		disposeTexture();
+		invalidateCache();
+		if( pixels!=null )
+			pixels.dispose();
 
 		pixels = dn.heaps.ImageDecoder.getPixels(bytes);
 		if( pixels==null ) {
@@ -62,17 +86,16 @@ class TilesetDef implements ISerializable {
 			return false;
 		}
 
-		texture = h3d.mat.Texture.fromPixels(pixels);
 		return true;
 	}
 
 
-	public inline function getSubTileX(cx:Int) {
-		return cx*(tileGridSize+tileGridSpacing);
+	public inline function getSubTileX(tcx:Int) {
+		return tcx*(tileGridSize+tileGridSpacing);
 	}
 
-	public inline function getSubTileY(cy:Int) {
-		return cy*(tileGridSize+tileGridSpacing);
+	public inline function getSubTileY(tcy:Int) {
+		return tcy*(tileGridSize+tileGridSpacing);
 	}
 
 	public inline function getFullTile() : Null<h2d.Tile> {
@@ -83,58 +106,53 @@ class TilesetDef implements ISerializable {
 		return getFullTile().sub(getSubTileX(cx), getSubTileY(cy), tileGridSize, tileGridSize);
 	}
 
-	function pixelsToImageElement(source:hxd.Pixels) : Null<js.html.Image> {
-		if( texture==null )
-			return null;
-
-		var img = new js.html.Image(source.width, source.height);
-		var b64 = haxe.crypto.Base64.encode( source.toPNG() );
-		img.src = 'data:image/png;base64,$b64';
-		return img;
-	}
-
 	public function drawFullTileToCanvas(canvas:js.jquery.JQuery) {
 		if( !canvas.is("canvas") )
 			throw "Not a canvas";
+
+		if( isEmpty() )
+			return;
 
 		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
 		var ctx = canvas.getContext2d();
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		var img = pixelsToImageElement(pixels);
+		var img = new js.html.Image(pixels.width, pixels.height);
+		img.src = 'data:image/png;base64,$base64';
 		img.onload = function() {
 			ctx.drawImage(img, 0, 0);
 		}
 	}
 
-	public function drawSubTileToCanvas(canvas:js.jquery.JQuery, cx:Int, cy:Int, toX:Int, toY:Int) {
+	public function drawSubTileToCanvas(canvas:js.jquery.JQuery, tcx:Int, tcy:Int, toX:Int, toY:Int) {
 		if( pixels==null )
 			return;
 
 		if( !canvas.is("canvas") )
 			throw "Not a canvas";
 
-		if( cx>=M.ceil(pixels.width/tileGridSize) || cy>=M.ceil(pixels.height/tileGridSize) )
+		if( tcx>=M.ceil(pixels.width/tileGridSize) || tcy>=M.ceil(pixels.height/tileGridSize) )
 			return;
 
-		var subPixels = pixels.sub(getSubTileX(cx), getSubTileY(cy), tileGridSize, tileGridSize);
+		var subPixels = pixels.sub(getSubTileX(tcx), getSubTileY(tcy), tileGridSize, tileGridSize);
 		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
 		var ctx = canvas.getContext2d();
-		var img = pixelsToImageElement(subPixels);
+		var img = new js.html.Image(subPixels.width, subPixels.height);
+		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+		img.src = 'data:image/png;base64,$b64';
 		img.onload = function() {
 			ctx.drawImage(img, toX, toY);
 		}
 	}
 
 
-	public function disposeTexture() {
-		if( texture!=null )
-			texture.dispose();
+	public function dispose() {
+		if( _textureCache!=null )
+			_textureCache.dispose();
+		_textureCache = null;
 
 		if( pixels!=null )
 			pixels.dispose();
-
-		texture = null;
 		pixels = null;
 	}
 

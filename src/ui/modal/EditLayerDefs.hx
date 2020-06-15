@@ -213,7 +213,7 @@ class EditLayerDefs extends ui.Modal {
 	}
 
 	function updateTilesetPreview() {
-		if( cur.type!=Tiles || !cur.tilesetDef.hasTexture() )
+		if( cur.type!=Tiles || cur.tilesetDef.isEmpty() )
 			return;
 
 		// Main tileset view
@@ -222,15 +222,20 @@ class EditLayerDefs extends ui.Modal {
 		// Demo tiles
 		var padding = 8;
 		var jDemo = jForm.find(".tileset canvas.demo");
-		jDemo.attr("width", cur.tilesetDef.tileGridSize*4 + padding*3);
+		jDemo.attr("width", cur.tilesetDef.tileGridSize*6 + padding*5);
 		jDemo.attr("height", cur.tilesetDef.tileGridSize);
 		var cnv = Std.downcast( jDemo.get(0), js.html.CanvasElement );
 		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
 
 		var idx = 0;
-		for(cy in 0...2)
-		for(cx in 0...2)
-			cur.tilesetDef.drawSubTileToCanvas(jDemo, cx,cy, (idx++)*(cur.tilesetDef.tileGridSize+padding), 0);
+		function renderDemoTile(tcx,tcy) {
+			cur.tilesetDef.drawSubTileToCanvas(jDemo, tcx, tcy, (idx++)*(cur.tilesetDef.tileGridSize+padding), 0);
+		}
+		renderDemoTile(0,0);
+		renderDemoTile(1,0);
+		renderDemoTile(2,0);
+		renderDemoTile(0,1);
+		renderDemoTile(0,2);
 	}
 
 
