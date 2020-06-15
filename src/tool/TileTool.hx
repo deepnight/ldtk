@@ -1,6 +1,8 @@
 package tool;
 
 class TileTool extends Tool<TileSelection> {
+	var randomMode = true;
+
 	public function new() {
 		super();
 	}
@@ -14,7 +16,12 @@ class TileTool extends Tool<TileSelection> {
 	// }
 
 	override function getDefaultValue():TileSelection{
-		return Single(0,0);
+		return Multiple([
+			{ tcx:0, tcy:0 },
+			{ tcx:1, tcy:0 },
+			{ tcx:2, tcy:0 },
+		]);
+		// return Single(0,0);
 	}
 
 	override function useAt(m:MouseCoords) {
@@ -65,8 +72,19 @@ class TileTool extends Tool<TileSelection> {
 				client.curLayerInstance.setTile(cx,cy, 0); // TODO
 
 			case Multiple(tiles):
-				for(t in tiles)
-					client.curLayerInstance.setTile(cx,cy, 0); // TODO
+				if( randomMode ) {
+					// TODO
+				}
+				else {
+					var left = Const.INFINITE;
+					var top = Const.INFINITE;
+					for(t in tiles) {
+						left = M.imin(t.tcx, left);
+						top = M.imin(t.tcy, top);
+					}
+					for(t in tiles)
+						client.curLayerInstance.setTile(cx+t.tcx-left, cy+t.tcy-top, 0); // TODO
+				}
 		}
 	}
 
@@ -76,7 +94,14 @@ class TileTool extends Tool<TileSelection> {
 				client.curLayerInstance.removeTile(cx,cy);
 
 			case Multiple(tiles):
-				// TODO
+				var left = Const.INFINITE;
+				var top = Const.INFINITE;
+				for(t in tiles) {
+					left = M.imin(t.tcx, left);
+					top = M.imin(t.tcy, top);
+				}
+				for(t in tiles)
+					client.curLayerInstance.removeTile(cx+t.tcx-left, cy+t.tcy-top);
 		}
 	}
 
