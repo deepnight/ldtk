@@ -58,6 +58,9 @@ class EditLayerDefs extends ui.Modal {
 			case LayerDefChanged:
 				updateForm();
 				updateList();
+
+			case TilesetDefChanged:
+				updateForm();
 				updateTilesetPreview();
 
 			case LayerDefSorted:

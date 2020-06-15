@@ -99,6 +99,7 @@ class EditEntityDefs extends ui.Modal {
 			case LayerDefChanged:
 			case LayerDefSorted:
 			case LayerInstanceChanged:
+			case TilesetDefChanged:
 
 			case EntityDefChanged:
 				updatePreview();

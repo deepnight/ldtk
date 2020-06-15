@@ -17,6 +17,8 @@ enum GlobalEvent {
 	LayerDefChanged;
 	LayerDefSorted;
 	LayerInstanceChanged;
+	
+	TilesetDefChanged;
 
 	EntityDefChanged;
 	EntityDefSorted;

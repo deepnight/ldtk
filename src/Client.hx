@@ -385,7 +385,7 @@ class Client extends dn.Process {
 			case EntityFieldSorted:
 			case EntityDefSorted:
 
-			case EntityDefChanged :
+			case TilesetDefChanged, EntityDefChanged :
 				initTool();
 				display.LevelRender.invalidateCaches();
 
