@@ -170,7 +170,8 @@ class LayerInstance implements ISerializable {
 
 
 	/** TILES *******************/
-	public function setTile(cx:Int, cy:Int, tileId:Int) {
+
+	public function setTile(cx:Int, cy:Int, tileId:Int) { // TODO support free positioning
 		tiles[ coordId(cx,cy) ] = tileId;
 	}
 
