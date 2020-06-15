@@ -198,7 +198,7 @@ class EditLayerDefs extends ui.Modal {
 
 				var i = Input.linkToHtmlInput( ld.tilesetDef.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
 				i.linkEvent(LayerDefChanged);
-				i.setBounds(2, 512);
+				i.setBounds(2, 512); // TODO cap to texture width
 
 				var i = Input.linkToHtmlInput( ld.tilesetDef.tileGridSpacing, jForm.find("input[name=tilesetGridSpacing]") );
 				i.linkEvent(LayerDefChanged);
