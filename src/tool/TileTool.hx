@@ -1,7 +1,7 @@
 package tool;
 
 class TileTool extends Tool<TileSelection> {
-	var randomMode = true;
+	var randomMode = false;
 
 	public function new() {
 		super();
