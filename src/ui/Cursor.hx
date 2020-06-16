@@ -74,6 +74,21 @@ class Cursor extends dn.Process {
 
 				var o = display.LevelRender.createEntityRender(def, wrapper);
 				o.alpha = 0.4;
+
+			case Tiles(li, td, tileIds, cx, cy):
+				var left = Const.INFINITE;
+				var top = Const.INFINITE;
+				for(tid in tileIds) {
+					left = M.imin( left, td.getTileCx(tid) );
+					top = M.imin( top, td.getTileCy(tid) );
+				}
+				for(tid in tileIds) {
+					var cx = td.getTileCx(tid);
+					var cy = td.getTileCy(tid);
+					var bmp = new h2d.Bitmap( td.getTile(tid), wrapper );
+					bmp.x = (cx-left) * li.def.gridSize;
+					bmp.y = (cy-top) * li.def.gridSize;
+				}
 		}
 
 		graphics.endFill();
@@ -109,6 +124,9 @@ class Cursor extends dn.Process {
 
 			case Entity(def, x,y):
 				wrapper.setPosition(x,y);
+
+			case Tiles(li, td, tileIds, cx, cy):
+				wrapper.setPosition(cx*li.def.gridSize, cy*li.def.gridSize);
 		}
 
 		graphics.setPosition(wrapper.x, wrapper.y);

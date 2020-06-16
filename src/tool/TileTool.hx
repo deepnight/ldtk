@@ -109,8 +109,13 @@ class TileTool extends Tool<Array<Int>> {
 			var r = Rect.fromMouseCoords(origin, m);
 			client.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei) );
 		}
-		else if( curLayerInstance.isValid(m.cx,m.cy) )
-			client.cursor.set( GridCell(curLayerInstance, m.cx, m.cy) );
+		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
+			var tileIds = getSelectedValue();
+			if( isRandomMode() )
+				client.cursor.set( Tiles(curLayerInstance, curTilesetDef, [ tileIds[Std.random(tileIds.length)] ], m.cx, m.cy) );
+			else
+				client.cursor.set( Tiles(curLayerInstance, curTilesetDef, tileIds, m.cx, m.cy) );
+		}
 		else
 			client.cursor.set(None);
 	}
