@@ -1,7 +1,9 @@
 package ui;
 
 class TilesetPicker {
+	var jDoc(get,never) : js.jquery.JQuery; inline function get_jDoc() return new J(js.Browser.document);
 	var wrapper : js.jquery.JQuery;
+
 	var tool : tool.TileTool;
 	var zoom = 2.0;
 	var curSelection : Array<js.jquery.JQuery> = [];
@@ -12,6 +14,7 @@ class TilesetPicker {
 	public function new(target:js.jquery.JQuery, tool:tool.TileTool) {
 		this.tool = tool;
 
+		// Create picker elements
 		wrapper = new J("<div/>");
 		wrapper.appendTo(target);
 		wrapper.css("zoom",zoom);
@@ -19,37 +22,21 @@ class TilesetPicker {
 		cursor = new J('<div class="tileCursor"/>');
 		cursor.prependTo(wrapper);
 
-		// Init events
-		var doc = new J(js.Browser.document);
 		var img = new J( tool.curTilesetDef.createAtlasHtmlImage() );
 		img.appendTo(wrapper);
 
+		// Init events
 		img.mousedown( function(ev) {
+			N.debug("down");
 			ev.preventDefault();
-			onMouseDown(ev);
-			// doc.off(".tilePicker").on("mouseup.tilePicker", function(ev) {
-			// 	img.mouseup();
-			// });
+			onPickerMouseDown(ev);
+			jDoc
+				.off(".pickerEvent")
+				.on("mouseup.pickerEvent", onDocMouseUp)
+				.on("mousemove.pickerEvent", onDocMouseMove);
 		});
 
-		img.mouseup( function(ev) {
-			onMouseUp(ev);
-			// doc.off(".tilePicker");
-		});
-
-		img.mousemove( function(ev) {
-			onMouseMove(ev);
-		});
-
-		img.mouseleave( function(_) {
-			if( dragStart==null )
-				cursor.hide();
-		});
-		cursor.hide();
-
-		img.mouseover( function(_) {
-			cursor.show();
-		});
+		img.mousemove( onPickerMouseMove );
 
 		renderSelection();
 	}
@@ -83,17 +70,24 @@ class TilesetPicker {
 		e.css("height", tool.curTilesetDef.tileGridSize+"px");
 	}
 
-
-	function onMouseDown(ev:js.jquery.Event) {
-		dragStart = {
-			x: Std.int( ev.offsetX / zoom ),
-			y: Std.int( ev.offsetY / zoom ),
-		}
+	function updateCursor(pageX:Float, pageY:Float) {
+		var grid = tool.curTilesetDef.tileGridSize;
+		var r = getCursorRect(pageX, pageY);
+		cursor.css("margin-left", r.cx*grid + "px");
+		cursor.css("margin-top", r.cy*grid + "px");
+		cursor.css("width", r.wid*grid + "px");
+		cursor.css("height", r.hei*grid + "px");
 	}
 
-	function onMouseUp(ev:js.jquery.Event) {
+	function onDocMouseMove(ev:js.jquery.Event) {
+		updateCursor(ev.pageX, ev.pageY);
+	}
+
+	function onDocMouseUp(ev:js.jquery.Event) {
+		jDoc.off(".pickerEvent");
+
 		if( dragStart!=null ) {
-			var r = getCursorRect(ev.offsetX, ev.offsetY);
+			var r = getCursorRect(ev.pageX, ev.pageY);
 
 			// Apply selection
 			if( r.wid==1 && r.hei==1 )
@@ -110,16 +104,23 @@ class TilesetPicker {
 		dragStart = null;
 	}
 
-	function onMouseMove(ev:js.jquery.Event) {
-		var grid = tool.curTilesetDef.tileGridSize;
-		var r = getCursorRect(ev.offsetX, ev.offsetY);
-		cursor.css("margin-left", r.cx*grid + "px");
-		cursor.css("margin-top", r.cy*grid + "px");
-		cursor.css("width", r.wid*grid + "px");
-		cursor.css("height", r.hei*grid + "px");
+
+	function onPickerMouseDown(ev:js.jquery.Event) {
+		dragStart = {
+			x: Std.int( ev.offsetX / zoom ),
+			y: Std.int( ev.offsetY / zoom ),
+		}
 	}
 
-	function getCursorRect(curX:Int, curY:Int) {
+	function onPickerMouseMove(ev:js.jquery.Event) {
+		if( dragStart==null )
+			updateCursor(ev.pageX, ev.pageY);
+	}
+
+	function getCursorRect(pageX:Float, pageY:Float) {
+		var curX = pageX - wrapper.offset().left * zoom;
+		var curY = pageY - wrapper.offset().top * zoom;
+
 		var grid = tool.curTilesetDef.tileGridSize;
 		var curCx = Std.int( curX / grid / zoom );
 		var curCy = Std.int( curY / grid / zoom );
