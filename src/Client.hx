@@ -5,10 +5,11 @@ class Client extends dn.Process {
 
 	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
+	public var jCanvas(get,never) : J; inline function get_jCanvas() return new J("#webgl");
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
-	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette");
+	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find(".palette");
 
 	public var curLevel(get,never) : LevelData;
 	inline function get_curLevel() return project.getLevel(curLevelId);

@@ -178,7 +178,6 @@ ul.niceList {
 
 		font-size: 14pt;
 
-		border-top: 1px solid $bgDark;
 		border-bottom: 1px solid $bgDark;
 		background-color: $bgMed;
 		cursor: pointer;
@@ -547,6 +546,23 @@ label.file {
 	}
 }
 
+.window.palette {
+	.wrapper {
+		padding: 0;
+		border: none;
+
+		.content {
+			min-width: 200px;
+
+			ul.niceList {
+				padding: 0;
+				margin: 0;
+				min-height: auto;
+			}
+		}
+	}
+}
+
 
 .panelMask {
 	position: absolute;
@@ -659,40 +675,6 @@ label.file {
 				}
 			}
 		}
-
-		ul#palette {
-			background-color: $bgDark;
-			margin: 0;
-			padding: 4px;
-
-			>li {
-				display: flex;
-				min-height: 16px;
-				cursor: pointer;
-			}
-			>li:hover {
-				outline: 1px solid white;
-				outline-offset: -1px;
-			}
-
-			li.entity {
-				overflow: hidden;
-				.entityPreview {
-					margin-right: 8px;
-				}
-			}
-
-			li.color {
-				padding-left: 10px;
-				overflow: hidden;
-				line-height: 32px;
-				box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
-			}
-
-			li.color.active {
-				outline: 2px solid white !important;
-			}
-		}
 	}
 
 	canvas {
@@ -701,6 +683,40 @@ label.file {
 	}
 }
 
+
+ul.palette {
+	background-color: $bgDark;
+	margin: 0;
+	padding: 4px;
+
+	>li {
+		display: flex;
+		min-height: 16px;
+		cursor: pointer;
+	}
+	>li:hover {
+		outline: 1px solid white;
+		outline-offset: -1px;
+	}
+
+	li.entity {
+		overflow: hidden;
+		.entityPreview {
+			margin-right: 8px;
+		}
+	}
+
+	li.color {
+		padding-left: 10px;
+		overflow: hidden;
+		line-height: 32px;
+		box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
+	}
+
+	li.color.active {
+		outline: 2px solid white !important;
+	}
+}
 
 .instanceEditor {
 	position: absolute;

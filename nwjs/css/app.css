@@ -178,7 +178,6 @@ ul.niceList li {
   gap: 0px 8px;
   padding: 10px;
   font-size: 14pt;
-  border-top: 1px solid #1e2229;
   border-bottom: 1px solid #1e2229;
   background-color: #2e333f;
   cursor: pointer;
@@ -559,6 +558,21 @@ input[type="file"] {
   margin-bottom: 4px;
 }
 
+.window.palette .wrapper {
+  padding: 0;
+  border: none;
+}
+
+.window.palette .wrapper .content {
+  min-width: 200px;
+}
+
+.window.palette .wrapper .content ul.niceList {
+  padding: 0;
+  margin: 0;
+  min-height: auto;
+}
+
 .panelMask {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.75);
@@ -678,45 +692,45 @@ input[type="file"] {
   outline-offset: -4px;
 }
 
-#editor #mainPanel ul#palette {
+#editor canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+ul.palette {
   background-color: #1e2229;
   margin: 0;
   padding: 4px;
 }
 
-#editor #mainPanel ul#palette > li {
+ul.palette > li {
   display: flex;
   min-height: 16px;
   cursor: pointer;
 }
 
-#editor #mainPanel ul#palette > li:hover {
+ul.palette > li:hover {
   outline: 1px solid white;
   outline-offset: -1px;
 }
 
-#editor #mainPanel ul#palette li.entity {
+ul.palette li.entity {
   overflow: hidden;
 }
 
-#editor #mainPanel ul#palette li.entity .entityPreview {
+ul.palette li.entity .entityPreview {
   margin-right: 8px;
 }
 
-#editor #mainPanel ul#palette li.color {
+ul.palette li.color {
   padding-left: 10px;
   overflow: hidden;
   line-height: 32px;
   box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
 }
 
-#editor #mainPanel ul#palette li.color.active {
+ul.palette li.color.active {
   outline: 2px solid white !important;
-}
-
-#editor canvas {
-  width: 100% !important;
-  height: 100% !important;
 }
 
 .instanceEditor {
