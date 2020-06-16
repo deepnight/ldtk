@@ -73,8 +73,3 @@ enum FieldDisplayPosition {
 	Above;
 	Beneath;
 }
-
-enum TileSelection {
-	Single(tileId:Int);
-	Multiple(tiles:Array<Int>);
-}

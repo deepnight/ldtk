@@ -46,14 +46,8 @@ class TilesetPicker {
 			e.remove();
 		curSelection = [];
 
-		switch tool.getSelectedValue() {
-			case Single(tileId):
-				createSelectionCursor(tileId);
-
-			case Multiple(tiles):
-				for(tileId in tiles)
-					createSelectionCursor(tileId);
-		}
+		for(tileId in tool.getSelectedValue())
+			createSelectionCursor(tileId);
 	}
 
 
@@ -107,23 +101,19 @@ class TilesetPicker {
 		var cur = tool.getSelectedValue();
 		N.debug(cur+" + "+sel);
 		if( !Client.ME.isShiftDown() && !Client.ME.isCtrlDown() )
-			tool.selectValue( sel.length<=1 ? Single(sel[0]) : Multiple(sel) );
+			tool.selectValue(sel);
 		else {
 			// Add selection
 			var idMap = new Map();
-			switch cur {
-				case Single(tileId): idMap.set(tileId,true);
-				case Multiple(tiles): for(tid in tiles) idMap.set(tid,true);
-			}
-			for(tid in sel) idMap.set(tid,true);
+			for(tid in tool.getSelectedValue())
+				idMap.set(tid,true);
+			for(tid in sel)
+				idMap.set(tid,true);
 
 			var arr = [];
 			for(tid in idMap.keys())
 				arr.push(tid);
-			if( arr.length==1 )
-				tool.selectValue( Single(arr[0]) );
-			else
-				tool.selectValue( Multiple(arr) );
+			tool.selectValue(arr);
 		}
 	}
 
