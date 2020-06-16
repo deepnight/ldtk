@@ -84,7 +84,7 @@ class Client extends dn.Process {
 		// Main file actions
 		jMainPanel.find("button.new").click( function(ev) {
 			ui.Modal.closeAll();
-			new ui.dialog.Confirm(ev.getThis(), function() {
+			new ui.modal.dialog.Confirm(ev.getThis(), function() {
 				useProject( ProjectData.createEmpty() );
 				N.msg("New project created.");
 			});
@@ -115,29 +115,29 @@ class Client extends dn.Process {
 
 		// Edit buttons
 		jMainPanel.find("button.editProject").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.ProjectSettings) )
+			if( ui.Modal.isOpen(ui.modal.panel.ProjectSettings) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.ProjectSettings();
+				new ui.modal.panel.ProjectSettings();
 		});
 		jMainPanel.find("button.editLayers").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.EditLayerDefs) )
+			if( ui.Modal.isOpen(ui.modal.panel.EditLayerDefs) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.EditLayerDefs();
+				new ui.modal.panel.EditLayerDefs();
 		});
 		jMainPanel.find("button.editEntities").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.EditEntityDefs) )
+			if( ui.Modal.isOpen(ui.modal.panel.EditEntityDefs) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.EditEntityDefs();
+				new ui.modal.panel.EditEntityDefs();
 		});
 
 
 
 		#if debug
 		jMainPanel.find("button.debug").click( function(ev) {
-			var w = new ui.Dialog( ev.getThis() );
+			var w = new ui.modal.Dialog( ev.getThis() );
 			function test(json:Dynamic) {
 				trace( dn.HaxeJson.stringify(json,true) );
 				N.debug("Done");

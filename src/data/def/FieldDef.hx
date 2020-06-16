@@ -8,7 +8,7 @@ class FieldDef implements ISerializable {
 	public var editorDisplayMode : FieldDisplayMode;
 	public var editorDisplayPos : FieldDisplayPosition;
 
-	@:allow(ui.modal.EditEntityDefs)
+	@:allow(ui.modal.panel.EditEntityDefs)
 	var defaultOverride : Null<ValueWrapper>;
 
 	public var min : Null<Float>;

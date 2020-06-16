@@ -1,6 +1,6 @@
-package ui.modal;
+package ui.modal.panel;
 
-class EditLayerDefs extends ui.Modal {
+class EditLayerDefs extends ui.modal.Panel {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
 	public var cur : Null<LayerDef>;
@@ -9,12 +9,12 @@ class EditLayerDefs extends ui.Modal {
 		super();
 
 		loadTemplate( "editLayerDefs", "defEditor layerDefs" );
-		jList = jWin.find(".mainList ul");
-		jForm = jWin.find("ul.form");
+		jList = jModalAndMask.find(".mainList ul");
+		jForm = jModalAndMask.find("ul.form");
 		linkToButton("button.editLayers");
 
 		// Create layer
-		jWin.find(".mainList button.create").click( function(ev) {
+		jModalAndMask.find(".mainList button.create").click( function(ev) {
 			function _create(type:LayerType) {
 				var ld = project.defs.createLayerDef(type);
 				select(ld);
@@ -23,7 +23,7 @@ class EditLayerDefs extends ui.Modal {
 			}
 
 			// Type picker
-			var w = new ui.Dialog(ev.getThis(),"layerTypes");
+			var w = new ui.modal.Dialog(ev.getThis(),"layerTypes");
 			for(k in LayerType.getConstructors()) {
 				var type = LayerType.createByName(k);
 				var b = new J("<button/>");
@@ -38,8 +38,8 @@ class EditLayerDefs extends ui.Modal {
 		});
 
 		// Delete layer
-		jWin.find(".mainList button.delete").click( function(ev) {
-			new ui.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
+		jModalAndMask.find(".mainList button.delete").click( function(ev) {
+			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
 				project.defs.removeLayerDef(cur);
 				select(project.defs.layers[0]);
 				client.ge.emit(LayerDefChanged);
@@ -163,7 +163,7 @@ class EditLayerDefs extends ui.Modal {
 							updateForm();
 						}
 						if( ld.isIntGridValueUsedInProject(project, curIdx) ) {
-							new ui.dialog.Confirm(e.find("a.remove"), L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"), run);
+							new ui.modal.dialog.Confirm(e.find("a.remove"), L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"), run);
 							return;
 						}
 						else

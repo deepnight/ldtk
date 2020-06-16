@@ -446,62 +446,8 @@ label.file {
 
 .window {
 	position: absolute;
-	left: 200px;
-	top: 0px;
-	width: calc( 100% - 200px );
-	height: 100%;
-	z-index: 98;
-
-	.mask {
-		position: absolute;
-		z-index: 1;
-		top: 0px;
-		left: 0px;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(0,0,0,0.35);
-	}
-
-	.content {
-		display: block;
-		position: absolute;
-		overflow: auto;
-		z-index: 2;
-		top: 0px;
-		left: 0px;
-
-		box-sizing: border-box;
-		padding: 20px;
-		height: 100%;
-
-		width: 700px;
-		background: $bgMed;
-		border: 1px solid $bgLight;
-		border-left: none;
-
-		box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
-	}
-}
-
-.panelMask {
-	position: absolute;
-	background-color: rgba(0,0,0,0.75);
-	opacity: 0.5;
-	z-index: 99;
-}
-
-
-.cols {
-	display: grid;
-	width: 100%;
-	gap: 16px;
-	grid-template-columns: 200px auto;
-}
-
-.dialog {
-	position: absolute;
-	top: 0px;
 	left: 0px;
+	top: 0px;
 	width: 100%;
 	height: 100%;
 	z-index: 98;
@@ -517,36 +463,55 @@ label.file {
 	}
 
 	.wrapper {
-		position: absolute;
-		z-index: 2;
-		box-sizing: border-box;
 		display: block;
+		position: absolute;
+		overflow: auto;
+		z-index: 2;
+		top: 50px;
+		left: 50px;
+
+		box-sizing: border-box;
 		padding: 20px;
-		top: 200px;
-		left: calc( 50% - 150px );
-		width: 300px;
 
-		background: $bgDark;
-		border: 1px solid $orange;
+		background: $bgMed;
+		border: 1px solid $bgLight;
+		border-left: none;
 
-		box-shadow: 0px 0px 16px $red, 0px 8px 32px rgba(0, 0, 0, 0.3);
+		box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
+	}
+}
 
-		.buttons {
-			margin-top: 30px;
-			flex-wrap: wrap;
-			button {
-				flex: 1 1 0;
-				margin: 1px;
-			}
-			button.confirm {
-				flex-grow: 2;
-			}
+.window.panel {
+	left: 200px;
+	width: calc( 100% - 200px );
+	.wrapper {
+		top: 0px;
+		left: 0px;
+		height: 100%;
+		.content {
+			width: 700px;
 		}
 	}
 }
 
-.dialog.fieldTypes,
-.dialog.layerTypes {
+.window.dialog {
+	.content .buttons {
+		margin-top: 30px;
+		flex-wrap: wrap;
+
+		button {
+			flex: 1 1 0;
+			margin: 1px;
+		}
+
+		button.confirm {
+			flex-grow: 2;
+		}
+	}
+}
+
+.window.dialog.fieldTypes,
+.window.dialog.layerTypes {
 	.wrapper {
 		width: auto;
 		padding: 4px;
@@ -563,7 +528,7 @@ label.file {
 	}
 }
 
-.dialog.layerTypes {
+.window.dialog.layerTypes {
 	.icon {
 		display: block;
 		width: 3em;
@@ -573,6 +538,21 @@ label.file {
 	}
 }
 
+
+.panelMask {
+	position: absolute;
+	background-color: rgba(0,0,0,0.75);
+	opacity: 0.5;
+	z-index: 97;
+}
+
+
+.cols {
+	display: grid;
+	width: 100%;
+	gap: 16px;
+	grid-template-columns: 200px auto;
+}
 
 .sortable-placeholder {
 	min-height: 1.3em;
@@ -733,7 +713,7 @@ label.file {
 }
 
 
-.window.defEditor {
+.window.panel.defEditor {
 	.mainList {
 		ul {
 			border: 1px solid $bgLight;
@@ -745,7 +725,7 @@ label.file {
 	}
 }
 
-.window.layerDefs {
+.window.panel.layerDefs {
 	ul.intGridValues {
 		li {
 			position: relative;
@@ -825,7 +805,7 @@ label.file {
 }
 
 
-.window.entityDefs {
+.window.panel.entityDefs {
 	.content {
 		width: 900px;
 	}

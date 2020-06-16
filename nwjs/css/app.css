@@ -462,9 +462,9 @@ input[type="file"] {
 
 .window {
   position: absolute;
-  left: 200px;
+  left: 0px;
   top: 0px;
-  width: calc( 100% - 200px);
+  width: 100%;
   height: 100%;
   z-index: 98;
 }
@@ -479,28 +479,83 @@ input[type="file"] {
   background-color: rgba(0, 0, 0, 0.35);
 }
 
-.window .content {
+.window .wrapper {
   display: block;
   position: absolute;
   overflow: auto;
   z-index: 2;
-  top: 0px;
-  left: 0px;
+  top: 50px;
+  left: 50px;
   box-sizing: border-box;
   padding: 20px;
-  height: 100%;
-  width: 700px;
   background: #2e333f;
   border: 1px solid #545d73;
   border-left: none;
   box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
 }
 
+.window.panel {
+  left: 200px;
+  width: calc( 100% - 200px);
+}
+
+.window.panel .wrapper {
+  top: 0px;
+  left: 0px;
+  height: 100%;
+}
+
+.window.panel .wrapper .content {
+  width: 700px;
+}
+
+.window.dialog .content .buttons {
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.window.dialog .content .buttons button, .window.dialog .content .buttons label.file {
+  flex: 1 1 0;
+  margin: 1px;
+}
+
+.window.dialog .content .buttons button.confirm, .window.dialog .content .buttons label.confirm.file {
+  flex-grow: 2;
+}
+
+.window.dialog.fieldTypes .wrapper,
+.window.dialog.layerTypes .wrapper {
+  width: auto;
+  padding: 4px;
+}
+
+.window.dialog.fieldTypes .content,
+.window.dialog.layerTypes .content {
+  display: grid;
+  width: 100%;
+  gap: 2px;
+  grid-template-columns: repeat(3, auto);
+}
+
+.window.dialog.fieldTypes .content button, .window.dialog.fieldTypes .content label.file,
+.window.dialog.layerTypes .content button,
+.window.dialog.layerTypes .content label.file {
+  margin: 0;
+}
+
+.window.dialog.layerTypes .icon {
+  display: block;
+  width: 3em;
+  height: 3em;
+  margin: auto;
+  margin-bottom: 4px;
+}
+
 .panelMask {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.75);
   opacity: 0.5;
-  z-index: 99;
+  z-index: 97;
 }
 
 .cols {
@@ -508,81 +563,6 @@ input[type="file"] {
   width: 100%;
   gap: 16px;
   grid-template-columns: 200px auto;
-}
-
-.dialog {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  z-index: 98;
-}
-
-.dialog .mask {
-  position: absolute;
-  z-index: 1;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.35);
-}
-
-.dialog .wrapper {
-  position: absolute;
-  z-index: 2;
-  box-sizing: border-box;
-  display: block;
-  padding: 20px;
-  top: 200px;
-  left: calc( 50% - 150px);
-  width: 300px;
-  background: #1e2229;
-  border: 1px solid #ffcc00;
-  box-shadow: 0px 0px 16px #e34d00, 0px 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.dialog .wrapper .buttons {
-  margin-top: 30px;
-  flex-wrap: wrap;
-}
-
-.dialog .wrapper .buttons button, .dialog .wrapper .buttons label.file {
-  flex: 1 1 0;
-  margin: 1px;
-}
-
-.dialog .wrapper .buttons button.confirm, .dialog .wrapper .buttons label.confirm.file {
-  flex-grow: 2;
-}
-
-.dialog.fieldTypes .wrapper,
-.dialog.layerTypes .wrapper {
-  width: auto;
-  padding: 4px;
-}
-
-.dialog.fieldTypes .content,
-.dialog.layerTypes .content {
-  display: grid;
-  width: 100%;
-  gap: 2px;
-  grid-template-columns: repeat(3, auto);
-}
-
-.dialog.fieldTypes .content button, .dialog.fieldTypes .content label.file,
-.dialog.layerTypes .content button,
-.dialog.layerTypes .content label.file {
-  margin: 0;
-}
-
-.dialog.layerTypes .icon {
-  display: block;
-  width: 3em;
-  height: 3em;
-  margin: auto;
-  margin-bottom: 4px;
 }
 
 .sortable-placeholder {
@@ -748,44 +728,44 @@ input[type="file"] {
   flex: 0 0 60px;
 }
 
-.window.defEditor .mainList ul {
+.window.panel.defEditor .mainList ul {
   border: 1px solid #545d73;
 }
 
-.window.defEditor .mainList button.delete, .window.defEditor .mainList label.delete.file {
+.window.panel.defEditor .mainList button.delete, .window.panel.defEditor .mainList label.delete.file {
   flex: 0 0 32px;
 }
 
-.window.layerDefs ul.intGridValues li {
+.window.panel.layerDefs ul.intGridValues li {
   position: relative;
 }
 
-.window.layerDefs ul.intGridValues li + li {
+.window.panel.layerDefs ul.intGridValues li + li {
   margin-top: 8px;
 }
 
-.window.layerDefs ul.intGridValues li.value {
+.window.panel.layerDefs ul.intGridValues li.value {
   display: grid;
   align-items: center;
   grid-template-columns: 64px 2em auto;
 }
 
-.window.layerDefs ul.intGridValues li.value input[type=color] {
+.window.panel.layerDefs ul.intGridValues li.value input[type=color] {
   width: 100%;
   height: 100%;
 }
 
-.window.layerDefs ul.intGridValues li.value input.name {
+.window.panel.layerDefs ul.intGridValues li.value input.name {
   text-align: center;
   font-style: italic;
 }
 
-.window.layerDefs ul.intGridValues li.value span.id {
+.window.panel.layerDefs ul.intGridValues li.value span.id {
   text-align: center;
   font-weight: bold;
 }
 
-.window.layerDefs ul.intGridValues li.value a.remove {
+.window.panel.layerDefs ul.intGridValues li.value a.remove {
   display: none;
   position: absolute;
   top: 0px;
@@ -796,11 +776,11 @@ input[type="file"] {
   text-decoration: none;
 }
 
-.window.layerDefs ul.intGridValues li.value.removable a.remove {
+.window.panel.layerDefs ul.intGridValues li.value.removable a.remove {
   display: block;
 }
 
-.window.layerDefs ul.intGridValues li.add button, .window.layerDefs ul.intGridValues li.add label.file {
+.window.panel.layerDefs ul.intGridValues li.add button, .window.panel.layerDefs ul.intGridValues li.add label.file {
   padding: 0px;
   text-align: center;
   font-weight: bold;
@@ -809,49 +789,49 @@ input[type="file"] {
   color: white;
 }
 
-.window.layerDefs li.tileset {
+.window.panel.layerDefs li.tileset {
   display: block;
 }
 
-.window.layerDefs li.tileset canvas.demo,
-.window.layerDefs li.tileset canvas.fullPreview {
+.window.panel.layerDefs li.tileset canvas.demo,
+.window.panel.layerDefs li.tileset canvas.fullPreview {
   display: block;
   width: 100%;
   image-rendering: pixelated;
 }
 
-.window.layerDefs li.tileset canvas.fullPreview {
+.window.panel.layerDefs li.tileset canvas.fullPreview {
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.window.layerDefs ul.form:not(.type-IntGrid) .IntGrid,
-.window.layerDefs ul.form:not(.type-Tiles) .Tiles,
-.window.layerDefs ul.form:not(.type-Entities) .Entities {
+.window.panel.layerDefs ul.form:not(.type-IntGrid) .IntGrid,
+.window.panel.layerDefs ul.form:not(.type-Tiles) .Tiles,
+.window.panel.layerDefs ul.form:not(.type-Entities) .Entities {
   display: none;
 }
 
-.window.entityDefs .content {
+.window.panel.entityDefs .content {
   width: 900px;
 }
 
-.window.entityDefs button.delete, .window.entityDefs label.delete.file {
+.window.panel.entityDefs button.delete, .window.panel.entityDefs label.delete.file {
   flex: 0 1 0;
 }
 
-.window.entityDefs .formsWrapper .previewWrapper {
+.window.panel.entityDefs .formsWrapper .previewWrapper {
   position: relative;
   float: right;
   margin: 8px;
   border: 1px solid #545d73;
 }
 
-.window.entityDefs .formsWrapper .previewWrapper .entityPreview {
+.window.panel.entityDefs .formsWrapper .previewWrapper .entityPreview {
   width: 64px;
   height: 64px;
 }
 
-.window.entityDefs .formsWrapper .previewWrapper .label {
+.window.panel.entityDefs .formsWrapper .previewWrapper .label {
   position: absolute;
   z-index: 1;
   bottom: 0px;
@@ -860,30 +840,30 @@ input[type="file"] {
   text-transform: uppercase;
 }
 
-.window.entityDefs input[type=color] {
+.window.panel.entityDefs input[type=color] {
   min-height: 32px;
 }
 
-.window.entityDefs .fields {
+.window.panel.entityDefs .fields {
   margin-top: 20px;
 }
 
-.window.entityDefs .fields .cols {
+.window.panel.entityDefs .fields .cols {
   grid-template-columns: 0.8fr 1fr;
 }
 
-.window.entityDefs .fields ul.form li > label {
+.window.panel.entityDefs .fields ul.form li > label {
   flex: 0 0 100px;
 }
 
-.window.entityDefs .fields ul.form li[class^="F_"] {
+.window.panel.entityDefs .fields ul.form li[class^="F_"] {
   display: none;
 }
 
-.window.entityDefs .fields ul.form.type-F_Int li.F_int,
-.window.entityDefs .fields ul.form.type-F_Float li.F_Float,
-.window.entityDefs .fields ul.form.type-F_Bool li.F_Bool,
-.window.entityDefs .fields ul.form.type-F_Color li.F_Color,
-.window.entityDefs .fields ul.form.type-F_String li.F_String {
+.window.panel.entityDefs .fields ul.form.type-F_Int li.F_int,
+.window.panel.entityDefs .fields ul.form.type-F_Float li.F_Float,
+.window.panel.entityDefs .fields ul.form.type-F_Bool li.F_Bool,
+.window.panel.entityDefs .fields ul.form.type-F_Color li.F_Color,
+.window.panel.entityDefs .fields ul.form.type-F_String li.F_String {
   display: flex;
 }
