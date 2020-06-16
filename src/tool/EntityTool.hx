@@ -131,9 +131,12 @@ class EntityTool extends Tool<Int> {
 	override function updatePalette() {
 		super.updatePalette();
 
+		var list = new J('<ul class="niceList"/>');
+		list.appendTo(jPalette);
+
 		for(ed in project.defs.entities) {
 			var e = new J("<li/>");
-			jPalette.append(e);
+			list.append(e);
 			e.addClass("entity");
 			if( ed==curEntityDef )
 				e.addClass("active");

@@ -2,6 +2,7 @@ package tool;
 
 class TileTool extends Tool<TileSelection> {
 	var randomMode = false;
+	var curTilesetDef(get,never) : TilesetDef; inline function get_curTilesetDef() return client.curLayerInstance.def.tilesetDef;
 
 	public function new() {
 		super();
@@ -121,5 +122,7 @@ class TileTool extends Tool<TileSelection> {
 
 	override function updatePalette() {
 		super.updatePalette();
+
+		jPalette.append( curTilesetDef.createAtlasHtmlImage() );
 	}
 }

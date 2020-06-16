@@ -105,6 +105,13 @@ class TilesetDef implements ISerializable {
 		return getAtlasTile().sub( getTileSourceX(tcx), getTileSourceY(tcy), tileGridSize, tileGridSize );
 	}
 
+	public function createAtlasHtmlImage() : js.html.Image {
+		var img = new js.html.Image();
+		if( !isEmpty() )
+			img.src = 'data:image/png;base64,$base64';
+		return img;
+	}
+
 	public function drawAtlasToCanvas(canvas:js.jquery.JQuery) {
 		if( !canvas.is("canvas") )
 			throw "Not a canvas";

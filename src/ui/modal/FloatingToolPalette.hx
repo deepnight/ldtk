@@ -8,9 +8,9 @@ class FloatingToolPalette extends ui.Modal {
 		super();
 
 		ME = this;
-		jModalAndMask.addClass("palette");
+		jModalAndMask.addClass("floatingPalette");
 
-		jPalette = t.jPalette.clone(true,true);
+		jPalette = client.jPalette.clone(true,true);
 		jPalette.appendTo( jContent );
 		jPalette.click( function(_) {
 			close();

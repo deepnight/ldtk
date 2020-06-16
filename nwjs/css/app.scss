@@ -546,7 +546,7 @@ label.file {
 	}
 }
 
-.window.palette {
+.window.floatingPalette {
 	.wrapper {
 		padding: 0;
 		border: none;
@@ -627,6 +627,7 @@ label.file {
 	#mainPanel {
 		position: relative;
 		display: grid;
+		overflow: hidden;
 		grid-template-rows: min-content 0.6fr 1fr;
 		padding: 5px;
 		gap: 5px;
@@ -684,37 +685,41 @@ label.file {
 }
 
 
-ul.palette {
+.palette {
 	background-color: $bgDark;
-	margin: 0;
-	padding: 4px;
+	overflow: auto;
 
-	>li {
-		display: flex;
-		min-height: 16px;
-		cursor: pointer;
-	}
-	>li:hover {
-		outline: 1px solid white;
-		outline-offset: -1px;
-	}
+	ul.niceList {
+		margin: 0;
+		padding: 4px;
 
-	li.entity {
-		overflow: hidden;
-		.entityPreview {
-			margin-right: 8px;
+		>li {
+			display: flex;
+			min-height: 16px;
+			cursor: pointer;
 		}
-	}
+		>li:hover {
+			outline: 1px solid white;
+			outline-offset: -1px;
+		}
 
-	li.color {
-		padding-left: 10px;
-		overflow: hidden;
-		line-height: 32px;
-		box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
-	}
+		li.entity {
+			overflow: hidden;
+			.entityPreview {
+				margin-right: 8px;
+			}
+		}
 
-	li.color.active {
-		outline: 2px solid white !important;
+		li.color {
+			padding-left: 10px;
+			overflow: hidden;
+			line-height: 32px;
+			box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
+		}
+
+		li.color.active {
+			outline: 2px solid white !important;
+		}
 	}
 }
 
