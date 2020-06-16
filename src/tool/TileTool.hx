@@ -1,7 +1,6 @@
 package tool;
 
 class TileTool extends Tool<Array<Int>> {
-	var randomMode = false;
 	public var curTilesetDef(get,never) : TilesetDef; inline function get_curTilesetDef() return client.curLayerInstance.def.tilesetDef;
 
 	public function new() {
@@ -9,9 +8,10 @@ class TileTool extends Tool<Array<Int>> {
 	}
 
 	override function getDefaultValue():Array<Int> {
-		// return Multiple([0,1,2,19]);
 		return [0];
 	}
+
+	function isRandomMode() return Client.ME.isCtrlDown();
 
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
@@ -57,38 +57,49 @@ class TileTool extends Tool<Array<Int>> {
 
 	function drawSelectionAt(cx:Int, cy:Int) {
 		var tileIds = getSelectedValue();
-		var left = Const.INFINITE;
-		var top = Const.INFINITE;
 
-		for(tid in tileIds) {
-			left = M.imin(left, curTilesetDef.getTileCx(tid));
-			top = M.imin(top, curTilesetDef.getTileCy(tid));
+		if( isRandomMode() ) {
+			client.curLayerInstance.setGridTile(cx,cy, tileIds[Std.random(tileIds.length)]);
 		}
+		else {
+			var left = Const.INFINITE;
+			var top = Const.INFINITE;
 
-		for(tid in tileIds)
-			client.curLayerInstance.setGridTile(
-				cx+curTilesetDef.getTileCx(tid)-left,
-				cy+curTilesetDef.getTileCy(tid)-top,
-				tid
-			);
+			for(tid in tileIds) {
+				left = M.imin(left, curTilesetDef.getTileCx(tid));
+				top = M.imin(top, curTilesetDef.getTileCy(tid));
+			}
+
+			for(tid in tileIds)
+				client.curLayerInstance.setGridTile(
+					cx+curTilesetDef.getTileCx(tid)-left,
+					cy+curTilesetDef.getTileCy(tid)-top,
+					tid
+				);
+		}
 	}
 
 
 	function removeSelectedTileAt(cx:Int, cy:Int) {
 		var tileIds = getSelectedValue();
-		var left = Const.INFINITE;
-		var top = Const.INFINITE;
 
-		for(tid in tileIds) {
-			left = M.imin(left, curTilesetDef.getTileCx(tid));
-			top = M.imin(top, curTilesetDef.getTileCy(tid));
+		if( isRandomMode() )
+			client.curLayerInstance.removeGridTile(cx,cy);
+		else {
+			var left = Const.INFINITE;
+			var top = Const.INFINITE;
+
+			for(tid in tileIds) {
+				left = M.imin(left, curTilesetDef.getTileCx(tid));
+				top = M.imin(top, curTilesetDef.getTileCy(tid));
+			}
+
+			for(tid in tileIds)
+				client.curLayerInstance.removeGridTile(
+					cx+curTilesetDef.getTileCx(tid)-left,
+					cy+curTilesetDef.getTileCy(tid)-top
+				);
 		}
-
-		for(tid in tileIds)
-			client.curLayerInstance.removeGridTile(
-				cx+curTilesetDef.getTileCx(tid)-left,
-				cy+curTilesetDef.getTileCy(tid)-top
-			);
 	}
 
 	override function updateCursor(m:MouseCoords) {
