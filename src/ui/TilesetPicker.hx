@@ -87,21 +87,44 @@ class TilesetPicker {
 		jDoc.off(".pickerEvent");
 
 		if( dragStart!=null ) {
-			var r = getCursorRect(ev.pageX, ev.pageY);
-
 			// Apply selection
+			var r = getCursorRect(ev.pageX, ev.pageY);
 			if( r.wid==1 && r.hei==1 )
-				tool.selectValue( Single( tool.curTilesetDef.coordId(r.cx,r.cy) ) );
+				onSelect([ tool.curTilesetDef.coordId(r.cx,r.cy) ]);
 			else {
 				var tileIds = [];
 				for(cx in r.cx...r.cx+r.wid)
 				for(cy in r.cy...r.cy+r.hei)
 					tileIds.push( tool.curTilesetDef.coordId(cx,cy) );
-				tool.selectValue( Multiple(tileIds) );
+				onSelect(tileIds);
 			}
 		}
 
 		dragStart = null;
+	}
+
+	function onSelect(sel:Array<Int>) {
+		var cur = tool.getSelectedValue();
+		N.debug(cur+" + "+sel);
+		if( !Client.ME.isShiftDown() && !Client.ME.isCtrlDown() )
+			tool.selectValue( sel.length<=1 ? Single(sel[0]) : Multiple(sel) );
+		else {
+			// Add selection
+			var idMap = new Map();
+			switch cur {
+				case Single(tileId): idMap.set(tileId,true);
+				case Multiple(tiles): for(tid in tiles) idMap.set(tid,true);
+			}
+			for(tid in sel) idMap.set(tid,true);
+
+			var arr = [];
+			for(tid in idMap.keys())
+				arr.push(tid);
+			if( arr.length==1 )
+				tool.selectValue( Single(arr[0]) );
+			else
+				tool.selectValue( Multiple(arr) );
+		}
 	}
 
 
