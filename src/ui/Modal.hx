@@ -8,7 +8,7 @@ class Modal extends dn.Process {
 	public var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
 
 	var jWin: js.jquery.JQuery;
-	var jContent : js.jquery.JQuery;
+	public var jContent : js.jquery.JQuery;
 	var jMask: js.jquery.JQuery;
 	var jPanelMask: js.jquery.JQuery;
 	var jLinkedButton : Null<js.jquery.JQuery>;

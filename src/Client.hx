@@ -215,8 +215,11 @@ class Client extends dn.Process {
 	}
 
 	function onJsKeyDown(ev:js.jquery.Event) {
+		if( ev.keyCode==K.TAB && !ui.Modal.hasAnyOpen() )
+			ev.preventDefault();
+
 		keyDowns.set(ev.keyCode, true);
-		onKeyDown(ev.keyCode);
+		onKeyPress(ev.keyCode);
 	}
 
 	function onJsKeyUp(ev:js.jquery.Event) {
@@ -225,19 +228,27 @@ class Client extends dn.Process {
 
 	function onHeapsKeyDown(ev:hxd.Event) {
 		keyDowns.set(ev.keyCode, true);
-		onKeyDown(ev.keyCode);
+		onKeyPress(ev.keyCode);
 	}
 
 	function onHeapsKeyUp(ev:hxd.Event) {
 		keyDowns.remove(ev.keyCode);
 	}
 
-	function onKeyDown(keyId:Int) {
-		if( keyId==K.ESCAPE )
-			if( ui.Modal.hasAnyOpen() )
-				ui.Modal.closeAll();
-			else
-				clearSelection();
+	function onKeyPress(keyId:Int) {
+		switch keyId {
+			case K.ESCAPE:
+				if( ui.Modal.hasAnyOpen() )
+					ui.Modal.closeAll();
+				else
+					clearSelection();
+
+			case K.TAB:
+				if( ui.modal.FloatingToolPalette.isOpen() )
+					ui.modal.FloatingToolPalette.ME.close();
+				else if( !ui.Modal.hasAnyOpen() )
+					curTool.popOutPalette();
+		}
 	}
 
 
@@ -284,7 +295,7 @@ class Client extends dn.Process {
 			curTool = switch curLayerDef.type {
 				case IntGrid: new tool.IntGridTool();
 				case Entities: new tool.EntityTool();
-				case Tiles: new tool.TileTool(); 
+				case Tiles: new tool.TileTool();
 			}
 	}
 
