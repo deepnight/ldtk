@@ -31,7 +31,7 @@ class TileTool extends Tool<TileSelection> {
 			case null, PanView:
 			case Add:
 				dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
-					drawSelectedTileAt(cx, cy);
+					drawSelectionAt(cx, cy);
 				});
 				client.ge.emit(LayerInstanceChanged);
 
@@ -53,7 +53,7 @@ class TileTool extends Tool<TileSelection> {
 			switch curMode {
 				case null, PanView:
 				case Add:
-					drawSelectedTileAt(cx,cy);
+					drawSelectionAt(cx,cy);
 
 				case Remove:
 					removeSelectedTileAt(cx,cy);
@@ -66,7 +66,7 @@ class TileTool extends Tool<TileSelection> {
 	}
 
 
-	function drawSelectedTileAt(cx:Int, cy:Int) {
+	function drawSelectionAt(cx:Int, cy:Int) {
 		switch getSelectedValue() {
 			case Single(tcx, tcy):
 				client.curLayerInstance.setGridTile(cx,cy, 0); // TODO
