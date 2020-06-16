@@ -72,10 +72,21 @@ h2 {
   margin-bottom: 32px;
   padding-bottom: 8px;
   border-bottom: 1px solid #ffcc00;
+  font-family: Roboto;
+  font-size: 18pt;
   color: #ffcc00;
   text-transform: uppercase;
-  font-size: 18pt;
+}
+
+h3 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #ffcc00;
   font-family: Roboto;
+  font-size: 13pt;
+  color: #ffcc00;
+  text-transform: uppercase;
 }
 
 hr {
@@ -88,44 +99,45 @@ hr {
   border-bottom: 1px solid #545d73;
 }
 
-button {
+button, label.file {
   width: 100%;
   margin: 1px;
   padding: 10px;
   color: white;
   text-transform: uppercase;
+  text-align: center;
   border: 1px solid #ff5d4a;
   box-shadow: 0px 2px 0px #b53d00;
   background-color: #e34d00;
   cursor: pointer;
 }
 
-button > .icon {
+button > .icon, label.file > .icon {
   margin: -4px;
   width: 1.7em;
   height: 1.7em;
 }
 
-button:hover {
+button:hover, label.file:hover {
   background-color: #ff5d4a;
 }
 
-button:focus {
+button:focus, label.file:focus {
   outline: inherit;
 }
 
-button.active {
+button.active, label.active.file {
   background-color: #ffcc00;
   border-color: #ffff00;
 }
 
-button.cancel {
+button.cancel, label.cancel.file {
   background-color: #2e333f;
   border-color: #545d73;
   box-shadow: 0px 2px 0px #2e333f;
 }
 
-button.cancel:hover {
+button.cancel:hover, label.cancel.file:hover {
   background-color: #545d73;
 }
 
@@ -136,11 +148,11 @@ button.cancel:hover {
   margin-bottom: 2px;
 }
 
-.buttons button {
+.buttons button, .buttons label.file {
   flex: 1 1 0;
 }
 
-.buttons button.debug {
+.buttons button.debug, .buttons label.debug.file {
   flex: 0 0 0;
   display: none;
 }
@@ -166,7 +178,6 @@ ul.niceList li {
   gap: 0px 8px;
   padding: 10px;
   font-size: 14pt;
-  border-top: 1px solid #1e2229;
   border-bottom: 1px solid #1e2229;
   background-color: #2e333f;
   cursor: pointer;
@@ -230,6 +241,10 @@ ul.niceList li:not(.active):hover {
 
 .icon.entity {
   background-image: url("/img/icons/entity.png");
+}
+
+.icon.tile {
+  background-image: url("/img/icons/tile.png");
 }
 
 .icon.layer {
@@ -346,7 +361,7 @@ ul.form > li .small {
   flex: 0 1 60px;
 }
 
-ul.form > li > label {
+ul.form > li > label:first-of-type {
   flex: 0 0 150px;
   padding-right: 16px;
   font-weight: bold;
@@ -414,6 +429,10 @@ input[type=number]:focus {
   outline: none;
 }
 
+input[type="file"] {
+  display: none;
+}
+
 #notificationList {
   position: absolute;
   box-sizing: border-box;
@@ -442,9 +461,9 @@ input[type=number]:focus {
 
 .window {
   position: absolute;
-  left: 200px;
+  left: 0px;
   top: 0px;
-  width: calc( 100% - 200px);
+  width: 100%;
   height: 100%;
   z-index: 98;
 }
@@ -459,28 +478,101 @@ input[type=number]:focus {
   background-color: rgba(0, 0, 0, 0.35);
 }
 
-.window .content {
+.window .wrapper {
   display: block;
   position: absolute;
   overflow: auto;
   z-index: 2;
-  top: 0px;
-  left: 0px;
+  top: 50px;
+  left: 50px;
   box-sizing: border-box;
   padding: 20px;
-  height: 100%;
-  width: 700px;
   background: #2e333f;
   border: 1px solid #545d73;
-  border-left: none;
   box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.window.panel {
+  left: 200px;
+  width: calc( 100% - 200px);
+}
+
+.window.panel .wrapper {
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  border-left: none;
+}
+
+.window.panel .wrapper .content {
+  width: 700px;
+}
+
+.window.dialog .wrapper {
+  padding: 16px;
+}
+
+.window.dialog .wrapper .content {
+  max-width: 260px;
+}
+
+.window.dialog .wrapper .buttons {
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.window.dialog .wrapper .buttons button, .window.dialog .wrapper .buttons label.file {
+  flex: 1 1 0;
+  margin: 1px;
+}
+
+.window.dialog .wrapper .buttons button.confirm, .window.dialog .wrapper .buttons label.confirm.file {
+  flex-grow: 2;
+}
+
+.window.dialog.fieldTypes .wrapper,
+.window.dialog.layerTypes .wrapper {
+  width: auto;
+  padding: 4px;
+}
+
+.window.dialog.fieldTypes .content,
+.window.dialog.layerTypes .content {
+  display: grid;
+  width: 100%;
+  gap: 2px;
+  grid-template-columns: repeat(3, auto);
+}
+
+.window.dialog.fieldTypes .content button, .window.dialog.fieldTypes .content label.file,
+.window.dialog.layerTypes .content button,
+.window.dialog.layerTypes .content label.file {
+  margin: 0;
+}
+
+.window.dialog.layerTypes .icon {
+  display: block;
+  width: 3em;
+  height: 3em;
+  margin: auto;
+  margin-bottom: 4px;
+}
+
+.window.floatingPalette .wrapper {
+  padding: 0;
+  border: none;
+  border: 2px solid black;
+}
+
+.window.floatingPalette .wrapper .content {
+  max-height: 600px;
 }
 
 .panelMask {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.75);
   opacity: 0.5;
-  z-index: 99;
+  z-index: 97;
 }
 
 .cols {
@@ -488,80 +580,6 @@ input[type=number]:focus {
   width: 100%;
   gap: 16px;
   grid-template-columns: 200px auto;
-}
-
-.dialog {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  z-index: 98;
-}
-
-.dialog .mask {
-  position: absolute;
-  z-index: 1;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.35);
-}
-
-.dialog .wrapper {
-  position: absolute;
-  z-index: 2;
-  box-sizing: border-box;
-  display: block;
-  padding: 20px;
-  top: 200px;
-  left: calc( 50% - 150px);
-  width: 300px;
-  background: #1e2229;
-  border: 1px solid #ffcc00;
-  box-shadow: 0px 0px 16px #e34d00, 0px 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.dialog .wrapper .buttons {
-  margin-top: 30px;
-  flex-wrap: wrap;
-}
-
-.dialog .wrapper .buttons button {
-  flex: 1 1 0;
-  margin: 1px;
-}
-
-.dialog .wrapper .buttons button.confirm {
-  flex-grow: 2;
-}
-
-.dialog.fieldTypes .wrapper,
-.dialog.layerTypes .wrapper {
-  width: auto;
-  padding: 4px;
-}
-
-.dialog.fieldTypes .content,
-.dialog.layerTypes .content {
-  display: grid;
-  width: 100%;
-  gap: 2px;
-  grid-template-columns: repeat(3, auto);
-}
-
-.dialog.fieldTypes .content button,
-.dialog.layerTypes .content button {
-  margin: 0;
-}
-
-.dialog.layerTypes .icon {
-  display: block;
-  width: 3em;
-  height: 3em;
-  margin: auto;
-  margin-bottom: 4px;
 }
 
 .sortable-placeholder {
@@ -617,6 +635,7 @@ input[type=number]:focus {
 #editor #mainPanel {
   position: relative;
   display: grid;
+  overflow: hidden;
   grid-template-rows: min-content 0.6fr 1fr;
   padding: 5px;
   gap: 5px;
@@ -669,45 +688,77 @@ input[type=number]:focus {
   outline-offset: -4px;
 }
 
-#editor #mainPanel ul#palette {
-  background-color: #1e2229;
-  margin: 0;
-  padding: 4px;
+#editor #mainPanel #mainPaletteWrapper {
+  overflow: auto;
 }
 
-#editor #mainPanel ul#palette > li {
+#editor #mainPanel #mainPaletteWrapper ul.niceList {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#editor canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.palette {
+  position: relative;
+  background-color: #1e2229;
+  image-rendering: pixelated;
+}
+
+.palette ul.niceList {
+  margin: 0;
+  padding: 4px;
+  height: 100%;
+}
+
+.palette ul.niceList > li {
   display: flex;
   min-height: 16px;
   cursor: pointer;
 }
 
-#editor #mainPanel ul#palette > li:hover {
+.palette ul.niceList > li:hover {
   outline: 1px solid white;
   outline-offset: -1px;
 }
 
-#editor #mainPanel ul#palette li.entity {
+.palette ul.niceList li.entity {
   overflow: hidden;
 }
 
-#editor #mainPanel ul#palette li.entity .entityPreview {
+.palette ul.niceList li.entity .entityPreview {
   margin-right: 8px;
 }
 
-#editor #mainPanel ul#palette li.color {
+.palette ul.niceList li.color {
   padding-left: 10px;
   overflow: hidden;
   line-height: 32px;
   box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
 }
 
-#editor #mainPanel ul#palette li.color.active {
+.palette ul.niceList li.color.active {
   outline: 2px solid white !important;
 }
 
-#editor canvas {
-  width: 100% !important;
-  height: 100% !important;
+.palette .tileCursor {
+  position: absolute;
+  z-index: 1;
+  min-width: 1px;
+  min-height: 1px;
+  box-sizing: border-box;
+  outline: 1px dotted white;
+  outline-offset: -1px;
+  box-shadow: 0px 0px 1px black, 0px 0px 8px black;
+  pointer-events: none;
+}
+
+.palette .tileCursor.selection {
+  outline: 1px solid #f3e4a4;
+  box-shadow: 0px 0px 4px #ffcc00, 0px 0px 16px #e34d00;
 }
 
 .instanceEditor {
@@ -727,44 +778,44 @@ input[type=number]:focus {
   flex: 0 0 60px;
 }
 
-.window.defEditor .mainList ul {
+.window.panel.defEditor .mainList ul {
   border: 1px solid #545d73;
 }
 
-.window.defEditor .mainList button.delete {
+.window.panel.defEditor .mainList button.delete, .window.panel.defEditor .mainList label.delete.file {
   flex: 0 0 32px;
 }
 
-.window.layerDefs ul.intGridValues li {
+.window.panel.layerDefs ul.intGridValues li {
   position: relative;
 }
 
-.window.layerDefs ul.intGridValues li + li {
+.window.panel.layerDefs ul.intGridValues li + li {
   margin-top: 8px;
 }
 
-.window.layerDefs ul.intGridValues li.value {
+.window.panel.layerDefs ul.intGridValues li.value {
   display: grid;
   align-items: center;
   grid-template-columns: 64px 2em auto;
 }
 
-.window.layerDefs ul.intGridValues li.value input[type=color] {
+.window.panel.layerDefs ul.intGridValues li.value input[type=color] {
   width: 100%;
   height: 100%;
 }
 
-.window.layerDefs ul.intGridValues li.value input.name {
+.window.panel.layerDefs ul.intGridValues li.value input.name {
   text-align: center;
   font-style: italic;
 }
 
-.window.layerDefs ul.intGridValues li.value span.id {
+.window.panel.layerDefs ul.intGridValues li.value span.id {
   text-align: center;
   font-weight: bold;
 }
 
-.window.layerDefs ul.intGridValues li.value a.remove {
+.window.panel.layerDefs ul.intGridValues li.value a.remove {
   display: none;
   position: absolute;
   top: 0px;
@@ -775,11 +826,11 @@ input[type=number]:focus {
   text-decoration: none;
 }
 
-.window.layerDefs ul.intGridValues li.value.removable a.remove {
+.window.panel.layerDefs ul.intGridValues li.value.removable a.remove {
   display: block;
 }
 
-.window.layerDefs ul.intGridValues li.add button {
+.window.panel.layerDefs ul.intGridValues li.add button, .window.panel.layerDefs ul.intGridValues li.add label.file {
   padding: 0px;
   text-align: center;
   font-weight: bold;
@@ -788,35 +839,49 @@ input[type=number]:focus {
   color: white;
 }
 
-.window.layerDefs ul.form:not(.type-IntGrid) .IntGrid {
+.window.panel.layerDefs li.tileset {
+  display: block;
+}
+
+.window.panel.layerDefs li.tileset canvas.demo,
+.window.panel.layerDefs li.tileset canvas.fullPreview {
+  display: block;
+  width: 100%;
+  image-rendering: pixelated;
+}
+
+.window.panel.layerDefs li.tileset canvas.fullPreview {
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.window.panel.layerDefs ul.form:not(.type-IntGrid) .IntGrid,
+.window.panel.layerDefs ul.form:not(.type-Tiles) .Tiles,
+.window.panel.layerDefs ul.form:not(.type-Entities) .Entities {
   display: none;
 }
 
-.window.layerDefs ul.form:not(.type-Entities) .Entities {
-  display: none;
-}
-
-.window.entityDefs .content {
+.window.panel.entityDefs .content {
   width: 900px;
 }
 
-.window.entityDefs button.delete {
+.window.panel.entityDefs button.delete, .window.panel.entityDefs label.delete.file {
   flex: 0 1 0;
 }
 
-.window.entityDefs .formsWrapper .previewWrapper {
+.window.panel.entityDefs .formsWrapper .previewWrapper {
   position: relative;
   float: right;
   margin: 8px;
   border: 1px solid #545d73;
 }
 
-.window.entityDefs .formsWrapper .previewWrapper .entityPreview {
+.window.panel.entityDefs .formsWrapper .previewWrapper .entityPreview {
   width: 64px;
   height: 64px;
 }
 
-.window.entityDefs .formsWrapper .previewWrapper .label {
+.window.panel.entityDefs .formsWrapper .previewWrapper .label {
   position: absolute;
   z-index: 1;
   bottom: 0px;
@@ -825,30 +890,30 @@ input[type=number]:focus {
   text-transform: uppercase;
 }
 
-.window.entityDefs input[type=color] {
+.window.panel.entityDefs input[type=color] {
   min-height: 32px;
 }
 
-.window.entityDefs .fields {
+.window.panel.entityDefs .fields {
   margin-top: 20px;
 }
 
-.window.entityDefs .fields .cols {
+.window.panel.entityDefs .fields .cols {
   grid-template-columns: 0.8fr 1fr;
 }
 
-.window.entityDefs .fields ul.form li > label {
+.window.panel.entityDefs .fields ul.form li > label {
   flex: 0 0 100px;
 }
 
-.window.entityDefs .fields ul.form li[class^="F_"] {
+.window.panel.entityDefs .fields ul.form li[class^="F_"] {
   display: none;
 }
 
-.window.entityDefs .fields ul.form.type-F_Int li.F_int,
-.window.entityDefs .fields ul.form.type-F_Float li.F_Float,
-.window.entityDefs .fields ul.form.type-F_Bool li.F_Bool,
-.window.entityDefs .fields ul.form.type-F_Color li.F_Color,
-.window.entityDefs .fields ul.form.type-F_String li.F_String {
+.window.panel.entityDefs .fields ul.form.type-F_Int li.F_int,
+.window.panel.entityDefs .fields ul.form.type-F_Float li.F_Float,
+.window.panel.entityDefs .fields ul.form.type-F_Bool li.F_Bool,
+.window.panel.entityDefs .fields ul.form.type-F_Color li.F_Color,
+.window.panel.entityDefs .fields ul.form.type-F_String li.F_String {
   display: flex;
 }

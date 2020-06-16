@@ -1,16 +1,16 @@
-package ui.modal;
+package ui.modal.panel;
 
-class EditEntityDefs extends ui.Modal {
+class EditEntityDefs extends ui.modal.Panel {
 	static var LAST_ENTITY_ID = -1;
 	static var LAST_FIELD_ID = -1;
 
-	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jWin.find(".entityList ul");
-	var jFieldList(get,never) : js.jquery.JQuery; inline function get_jFieldList() return jWin.find(".fieldList ul");
+	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jModalAndMask.find(".entityList ul");
+	var jFieldList(get,never) : js.jquery.JQuery; inline function get_jFieldList() return jModalAndMask.find(".fieldList ul");
 
-	var jAllForms(get,never) : js.jquery.JQuery; inline function get_jAllForms() return jWin.find(".formsWrapper");
-	var jEntityForm(get,never) : js.jquery.JQuery; inline function get_jEntityForm() return jWin.find("ul.form.entityDef");
-	var jFieldForm(get,never) : js.jquery.JQuery; inline function get_jFieldForm() return jWin.find(".fields ul.form");
-	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jWin.find(".previewWrapper");
+	var jAllForms(get,never) : js.jquery.JQuery; inline function get_jAllForms() return jModalAndMask.find(".formsWrapper");
+	var jEntityForm(get,never) : js.jquery.JQuery; inline function get_jEntityForm() return jModalAndMask.find("ul.form.entityDef");
+	var jFieldForm(get,never) : js.jquery.JQuery; inline function get_jFieldForm() return jModalAndMask.find(".fields ul.form");
+	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jModalAndMask.find(".previewWrapper");
 
 	var curEntity : Null<EntityDef>;
 	var curField : Null<FieldDef>;
@@ -22,7 +22,7 @@ class EditEntityDefs extends ui.Modal {
 		linkToButton("button.editEntities");
 
 		// Create entity
-		jWin.find(".entityList button.create").click( function(_) {
+		jModalAndMask.find(".entityList button.create").click( function(_) {
 			var ed = project.defs.createEntityDef();
 			selectEntity(ed);
 			// client.ge.emit(LayerDefChanged);
@@ -30,7 +30,7 @@ class EditEntityDefs extends ui.Modal {
 		});
 
 		// Delete entity
-		jWin.find(".entityList button.delete").click( function(ev) {
+		jModalAndMask.find(".entityList button.delete").click( function(ev) {
 			if( curEntity==null ) {
 				N.error("No entity selected.");
 				return;
@@ -44,7 +44,7 @@ class EditEntityDefs extends ui.Modal {
 		});
 
 		// Create field
-		jWin.find(".fields button.create").click( function(ev) {
+		jModalAndMask.find(".fields button.create").click( function(ev) {
 			function _create(type:FieldType) {
 				var f = curEntity.createField(project, type);
 				client.ge.emit(EntityFieldChanged);
@@ -53,7 +53,7 @@ class EditEntityDefs extends ui.Modal {
 			}
 
 			// Type picker
-			var w = new ui.Dialog(ev.getThis(),"fieldTypes");
+			var w = new ui.modal.Dialog(ev.getThis(),"fieldTypes");
 			for(k in FieldType.getConstructors()) {
 				var type = FieldType.createByName(k);
 				var b = new J("<button/>");
@@ -67,7 +67,7 @@ class EditEntityDefs extends ui.Modal {
 		});
 
 		// Delete field
-		jWin.find(".fields button.delete").click( function(ev) {
+		jModalAndMask.find(".fields button.delete").click( function(ev) {
 			if( curField==null ) {
 				N.error("No field selected.");
 				return;
@@ -99,6 +99,7 @@ class EditEntityDefs extends ui.Modal {
 			case LayerDefChanged:
 			case LayerDefSorted:
 			case LayerInstanceChanged:
+			case TilesetDefChanged:
 
 			case EntityDefChanged:
 				updatePreview();

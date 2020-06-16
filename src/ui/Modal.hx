@@ -7,44 +7,27 @@ class Modal extends dn.Process {
 	public var project(get,never) : ProjectData; inline function get_project() return Client.ME.project;
 	public var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
 
-	var jWin: js.jquery.JQuery;
-	var jContent : js.jquery.JQuery;
+	var jModalAndMask: js.jquery.JQuery;
+	var jWrapper: js.jquery.JQuery;
+	public var jContent : js.jquery.JQuery;
 	var jMask: js.jquery.JQuery;
-	var jPanelMask: js.jquery.JQuery;
-	var jLinkedButton : Null<js.jquery.JQuery>;
 
 	public function new() {
 		super(Client.ME);
 
 		ALL.push(this);
 
-		jWin = new J("xml#window").children().first().clone();
-		new J("body").append(jWin).addClass("hasModal");
+		jModalAndMask = new J("xml#window").children().first().clone();
+		new J("body").append(jModalAndMask).addClass("hasModal");
 
-		jContent = jWin.find(".content");
+		jWrapper = jModalAndMask.find(".wrapper");
+		jContent = jModalAndMask.find(".content");
 
-		jMask = jWin.find(".mask");
+		jMask = jModalAndMask.find(".mask");
 		jMask.click( function(_) close() );
 		jMask.hide().fadeIn(100);
 
-		var mainPanel = new J("#mainPanel");
-		jPanelMask = new J("<div/>");
-		jPanelMask.addClass("panelMask");
-		jPanelMask.prependTo("body");
-		jPanelMask.offset({ top:mainPanel.find("#layers").offset().top, left:0 });
-		jPanelMask.width(mainPanel.outerWidth());
-		jPanelMask.height( mainPanel.outerHeight() - jPanelMask.offset().top );
-		jPanelMask.click( function(_) close() );
-
 		client.ge.listenAll(onGlobalEvent);
-
-		closeAll(this);
-	}
-
-	function linkToButton(selector:String) {
-		jLinkedButton = new J(selector);
-		jLinkedButton.addClass("active");
-		return jLinkedButton.length>0;
 	}
 
 	override function onDispose() {
@@ -53,17 +36,10 @@ class Modal extends dn.Process {
 		ALL.remove(this);
 		client.ge.stopListening(onGlobalEvent);
 
-		if( jLinkedButton!=null )
-			jLinkedButton.removeClass("active");
-		jLinkedButton = null;
-
-		jWin.remove();
-		jWin = null;
+		jModalAndMask.remove();
+		jModalAndMask = null;
 		jMask = null;
 		jContent = null;
-
-		jPanelMask.remove();
-		jPanelMask = null;
 
 		if( !hasAnyOpen() )
 			new J("body").removeClass("hasModal");
@@ -104,19 +80,19 @@ class Modal extends dn.Process {
 		if( cd.hasSetS("closing",Const.INFINITE) )
 			return;
 
-		if( jLinkedButton!=null )
-			jLinkedButton.removeClass("active");
-
-		jWin.find("*").off();
-		jMask.fadeOut(50);
-		jPanelMask.remove();
-		jContent.stop(true,false).animate({ width:"toggle" }, 100, function(_) {
-			destroy();
-		});
+		jModalAndMask.find("*").off();
+		onClose();
+		doCloseAnimation();
 	}
 
+	function doCloseAnimation() {
+		destroy();
+	}
+
+	function onClose() {}
+
 	public function loadTemplate(tplName:String, className:String) {
-		jWin.addClass(className);
+		jModalAndMask.addClass(className);
 		var html = JsTools.getHtmlTemplate(tplName);
 		jContent.empty().append( html );
 	}

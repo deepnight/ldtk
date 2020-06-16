@@ -16,6 +16,12 @@ class MouseCoords {
 	public var cy(get,never) : Int;
 	inline function get_cy() return Std.int( levelY / client.curLayerInstance.def.gridSize );
 
+	public var htmlX(get,never) : Int;
+	inline function get_htmlX() return Std.int( gx / js.Browser.window.devicePixelRatio + new J("#webgl").offset().left );
+
+	public var htmlY(get,never) : Int;
+	inline function get_htmlY() return Std.int( gy / js.Browser.window.devicePixelRatio + new J("#webgl").offset().top );
+
 
 	var client(get,never) : Client; inline function get_client() return Client.ME;
 	var levelRender(get,never) : display.LevelRender; inline function get_levelRender() return Client.ME.levelRender;

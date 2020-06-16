@@ -7,8 +7,12 @@ class LayerInstance implements ISerializable {
 
 	public var levelId : Int;
 	public var layerDefId : Int;
-	var intGrid : Map<Int,Int> = new Map(); // <coordId,value>
+
+	// Layer content
+	var intGrid : Map<Int,Int> = new Map(); // <coordId, value>
 	public var entityInstances : Array<EntityInstance> = [];
+	public var gridTiles : Map<Int,Int> = []; // <coordId, tileId>
+	// public var tiles : Array<{ x:Int, y:Int, tileId:Int }> = [];
 
 	public var cWid(get,never) : Int; inline function get_cWid() return M.ceil( level.pxWid / def.gridSize );
 	public var cHei(get,never) : Int; inline function get_cHei() return M.ceil( level.pxHei / def.gridSize );
@@ -104,6 +108,9 @@ class LayerInstance implements ISerializable {
 				// Cleanup field instances
 				for(ei in entityInstances)
 					ei.tidy(_project);
+
+			case Tiles:
+				// TODO
 		}
 }
 
@@ -159,5 +166,24 @@ class LayerInstance implements ISerializable {
 		requireType(Entities);
 		if( !entityInstances.remove(e) )
 			throw "Unknown instance "+e;
+	}
+
+
+
+	/** TILES *******************/
+
+	public function setGridTile(cx:Int, cy:Int, tileId:Int) { // TODO support free positioning
+		// tiles.push({ x:cx*def.gridSize, y:cy*def.gridSize, tileId:tileId });
+		if( isValid(cx,cy) )
+			gridTiles.set( coordId(cx,cy), tileId );
+	}
+
+	public function removeGridTile(cx:Int, cy:Int) {
+		if( isValid(cx,cy) )
+			gridTiles.remove( coordId(cx,cy) );
+	}
+
+	public function getGridTile(cx:Int, cy:Int) : Null<Int> {
+		return !isValid(cx,cy) || !gridTiles.exists( coordId(cx,cy) ) ? null : gridTiles.get( coordId(cx,cy) );
 	}
 }

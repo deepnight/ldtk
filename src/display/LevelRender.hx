@@ -154,7 +154,18 @@ class LevelRender extends dn.Process {
 						var o = createEntityRender(ei, wrapper);
 						o.setPosition(ei.x, ei.y);
 					}
-			}
+
+				case Tiles:
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid) {
+						if( li.getGridTile(cx,cy)==null )
+							continue;
+						var t = li.def.tilesetDef.getTile( li.getGridTile(cx,cy) );
+						var bmp = new h2d.Bitmap(t, wrapper);
+						bmp.x = cx * li.def.gridSize;
+						bmp.y = cy * li.def.gridSize;
+					}
+				}
 		}
 
 		updateLayersVisibility();

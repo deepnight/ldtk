@@ -1,6 +1,6 @@
-package ui.dialog;
+package ui.modal.dialog;
 
-class Confirm extends ui.Dialog {
+class Confirm extends ui.modal.Dialog {
 	public function new(?target:js.jquery.JQuery, ?str:String, onConfirm:Void->Void) {
 		super(target);
 

@@ -5,10 +5,11 @@ class Client extends dn.Process {
 
 	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
+	public var jCanvas(get,never) : J; inline function get_jCanvas() return new J("#webgl");
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
-	public var jPalette(get,never) : J; inline function get_jPalette() return new J("#palette");
+	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 
 	public var curLevel(get,never) : LevelData;
 	inline function get_curLevel() return project.getLevel(curLevelId);
@@ -84,7 +85,7 @@ class Client extends dn.Process {
 		// Main file actions
 		jMainPanel.find("button.new").click( function(ev) {
 			ui.Modal.closeAll();
-			new ui.dialog.Confirm(ev.getThis(), function() {
+			new ui.modal.dialog.Confirm(ev.getThis(), function() {
 				useProject( ProjectData.createEmpty() );
 				N.msg("New project created.");
 			});
@@ -115,29 +116,29 @@ class Client extends dn.Process {
 
 		// Edit buttons
 		jMainPanel.find("button.editProject").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.ProjectSettings) )
+			if( ui.Modal.isOpen(ui.modal.panel.ProjectSettings) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.ProjectSettings();
+				new ui.modal.panel.ProjectSettings();
 		});
 		jMainPanel.find("button.editLayers").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.EditLayerDefs) )
+			if( ui.Modal.isOpen(ui.modal.panel.EditLayerDefs) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.EditLayerDefs();
+				new ui.modal.panel.EditLayerDefs();
 		});
 		jMainPanel.find("button.editEntities").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.EditEntityDefs) )
+			if( ui.Modal.isOpen(ui.modal.panel.EditEntityDefs) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.EditEntityDefs();
+				new ui.modal.panel.EditEntityDefs();
 		});
 
 
 
 		#if debug
 		jMainPanel.find("button.debug").click( function(ev) {
-			var w = new ui.Dialog( ev.getThis() );
+			var w = new ui.modal.Dialog( ev.getThis() );
 			function test(json:Dynamic) {
 				trace( dn.HaxeJson.stringify(json,true) );
 				N.debug("Done");
@@ -210,9 +211,16 @@ class Client extends dn.Process {
 		initTool();
 	}
 
+	public function getCwd() {
+		return js.Node.process.cwd();
+	}
+
 	function onJsKeyDown(ev:js.jquery.Event) {
+		if( ev.keyCode==K.TAB && !ui.Modal.hasAnyOpen() )
+			ev.preventDefault();
+
 		keyDowns.set(ev.keyCode, true);
-		onKeyDown(ev.keyCode);
+		onKeyPress(ev.keyCode);
 	}
 
 	function onJsKeyUp(ev:js.jquery.Event) {
@@ -221,19 +229,27 @@ class Client extends dn.Process {
 
 	function onHeapsKeyDown(ev:hxd.Event) {
 		keyDowns.set(ev.keyCode, true);
-		onKeyDown(ev.keyCode);
+		onKeyPress(ev.keyCode);
 	}
 
 	function onHeapsKeyUp(ev:hxd.Event) {
 		keyDowns.remove(ev.keyCode);
 	}
 
-	function onKeyDown(keyId:Int) {
-		if( keyId==K.ESCAPE )
-			if( ui.Modal.hasAnyOpen() )
-				ui.Modal.closeAll();
-			else
-				clearSelection();
+	function onKeyPress(keyId:Int) {
+		switch keyId {
+			case K.ESCAPE:
+				if( ui.Modal.hasAnyOpen() )
+					ui.Modal.closeAll();
+				else
+					clearSelection();
+
+			case K.TAB:
+				if( ui.modal.FloatingToolPalette.isOpen() )
+					ui.modal.FloatingToolPalette.ME.close();
+				else if( !ui.Modal.hasAnyOpen() )
+					curTool.popOutPalette();
+		}
 	}
 
 
@@ -280,6 +296,7 @@ class Client extends dn.Process {
 			curTool = switch curLayerDef.type {
 				case IntGrid: new tool.IntGridTool();
 				case Entities: new tool.EntityTool();
+				case Tiles: new tool.TileTool();
 			}
 	}
 
@@ -368,7 +385,6 @@ class Client extends dn.Process {
 		clearSelection();
 		curLayerId = l.def.uid;
 		levelRender.onCurrentLayerChange(curLayerInstance);
-		curTool.updatePalette();
 		updateLayerList();
 		initTool();
 	}
@@ -380,7 +396,7 @@ class Client extends dn.Process {
 			case EntityFieldSorted:
 			case EntityDefSorted:
 
-			case EntityDefChanged :
+			case TilesetDefChanged, EntityDefChanged :
 				initTool();
 				display.LevelRender.invalidateCaches();
 
@@ -439,6 +455,7 @@ class Client extends dn.Process {
 			switch li.def.type {
 				case IntGrid: icon.addClass("intGrid");
 				case Entities: icon.addClass("entity");
+				case Tiles: icon.addClass("tile");
 			}
 
 			// Name

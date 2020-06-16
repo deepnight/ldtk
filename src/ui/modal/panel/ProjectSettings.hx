@@ -1,7 +1,7 @@
-package ui.modal;
+package ui.modal.panel;
 
-class ProjectSettings extends ui.Modal {
-	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jWin.find("ul.form:first");
+class ProjectSettings extends ui.modal.Panel {
+	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jModalAndMask.find("ul.form:first");
 
 	public function new() {
 		super();

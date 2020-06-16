@@ -84,6 +84,12 @@ class Input<T> {
 		input.prop("disabled",true);
 	}
 
+	public function setPlaceholder(v:T) {
+		if( !input.is("[type=text]") )
+			throw "Not compatible with this input type";
+		input.attr("placeholder", Std.string(v));
+	}
+
 	#end
 
 

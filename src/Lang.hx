@@ -26,6 +26,7 @@ class Lang {
         return switch type {
             case IntGrid: Lang.t._("Integer grid");
             case Entities: Lang.t._("Entities");
+            case Tiles: Lang.t._("Tiles");
         }
     }
 

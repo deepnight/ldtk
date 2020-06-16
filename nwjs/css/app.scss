@@ -73,10 +73,22 @@ h2 {
 	padding-bottom: 8px;
 	border-bottom: 1px solid $orange;
 
+	font-family: Roboto;
+	font-size: 18pt;
 	color: $orange;
 	text-transform: uppercase;
-	font-size: 18pt;
+}
+
+h3 {
+	margin-top: 16px;
+	margin-bottom: 8px;
+	padding-bottom: 2px;
+	border-bottom: 1px solid $orange;
+
 	font-family: Roboto;
+	font-size: 13pt;
+	color: $orange;
+	text-transform: uppercase;
 }
 
 hr {
@@ -95,6 +107,7 @@ button {
 
 	color: white;
 	text-transform: uppercase;
+	text-align: center;
 
 	border: 1px solid #ff5d4a;
 	box-shadow: 0px 2px 0px #b53d00;
@@ -165,7 +178,6 @@ ul.niceList {
 
 		font-size: 14pt;
 
-		border-top: 1px solid $bgDark;
 		border-bottom: 1px solid $bgDark;
 		background-color: $bgMed;
 		cursor: pointer;
@@ -224,6 +236,7 @@ ul.niceList {
 	background-size: contain;
 }
 .icon.entity	{ background-image: url("/img/icons/entity.png"); }
+.icon.tile		{ background-image: url("/img/icons/tile.png"); }
 .icon.layer		{ background-image: url("/img/icons/layer.png"); }
 .icon.intGrid	{ background-image: url("/img/icons/intGrid.png"); }
 .icon.project	{ background-image: url("/img/icons/projectSettings.png"); }
@@ -327,7 +340,7 @@ ul.form {
 			flex: 0 1 60px;
 		}
 
-		>label {
+		>label:first-of-type {
 			flex: 0 0 150px;
 			padding-right: 16px;
 			font-weight: bold;
@@ -396,6 +409,13 @@ input[type=number]:focus {
 	outline: none;
 }
 
+input[type="file"] {
+	display: none;
+}
+label.file {
+	@extend button;
+}
+
 #notificationList {
 	position: absolute;
 	box-sizing: border-box;
@@ -425,62 +445,8 @@ input[type=number]:focus {
 
 .window {
 	position: absolute;
-	left: 200px;
-	top: 0px;
-	width: calc( 100% - 200px );
-	height: 100%;
-	z-index: 98;
-
-	.mask {
-		position: absolute;
-		z-index: 1;
-		top: 0px;
-		left: 0px;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(0,0,0,0.35);
-	}
-
-	.content {
-		display: block;
-		position: absolute;
-		overflow: auto;
-		z-index: 2;
-		top: 0px;
-		left: 0px;
-
-		box-sizing: border-box;
-		padding: 20px;
-		height: 100%;
-
-		width: 700px;
-		background: $bgMed;
-		border: 1px solid $bgLight;
-		border-left: none;
-
-		box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
-	}
-}
-
-.panelMask {
-	position: absolute;
-	background-color: rgba(0,0,0,0.75);
-	opacity: 0.5;
-	z-index: 99;
-}
-
-
-.cols {
-	display: grid;
-	width: 100%;
-	gap: 16px;
-	grid-template-columns: 200px auto;
-}
-
-.dialog {
-	position: absolute;
-	top: 0px;
 	left: 0px;
+	top: 0px;
 	width: 100%;
 	height: 100%;
 	z-index: 98;
@@ -496,27 +462,55 @@ input[type=number]:focus {
 	}
 
 	.wrapper {
-		position: absolute;
-		z-index: 2;
-		box-sizing: border-box;
 		display: block;
+		position: absolute;
+		overflow: auto;
+		z-index: 2;
+		top: 50px;
+		left: 50px;
+
+		box-sizing: border-box;
 		padding: 20px;
-		top: 200px;
-		left: calc( 50% - 150px );
-		width: 300px;
 
-		background: $bgDark;
-		border: 1px solid $orange;
+		background: $bgMed;
+		border: 1px solid $bgLight;
 
-		box-shadow: 0px 0px 16px $red, 0px 8px 32px rgba(0, 0, 0, 0.3);
+		box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
+	}
+}
+
+.window.panel {
+	left: 200px;
+	width: calc( 100% - 200px );
+	.wrapper {
+		top: 0px;
+		left: 0px;
+		height: 100%;
+		border-left: none;
+
+		.content {
+			width: 700px;
+		}
+	}
+}
+
+.window.dialog {
+	.wrapper {
+		padding: 16px;
+
+		.content {
+			max-width: 260px;
+		}
 
 		.buttons {
-			margin-top: 30px;
+			margin-top: 16px;
 			flex-wrap: wrap;
+
 			button {
 				flex: 1 1 0;
 				margin: 1px;
 			}
+
 			button.confirm {
 				flex-grow: 2;
 			}
@@ -524,8 +518,8 @@ input[type=number]:focus {
 	}
 }
 
-.dialog.fieldTypes,
-.dialog.layerTypes {
+.window.dialog.fieldTypes,
+.window.dialog.layerTypes {
 	.wrapper {
 		width: auto;
 		padding: 4px;
@@ -542,7 +536,7 @@ input[type=number]:focus {
 	}
 }
 
-.dialog.layerTypes {
+.window.dialog.layerTypes {
 	.icon {
 		display: block;
 		width: 3em;
@@ -552,6 +546,33 @@ input[type=number]:focus {
 	}
 }
 
+.window.floatingPalette {
+	.wrapper {
+		padding: 0;
+		border: none;
+		border: 2px solid black;
+
+		.content {
+			max-height: 600px;
+		}
+	}
+}
+
+
+.panelMask {
+	position: absolute;
+	background-color: rgba(0,0,0,0.75);
+	opacity: 0.5;
+	z-index: 97;
+}
+
+
+.cols {
+	display: grid;
+	width: 100%;
+	gap: 16px;
+	grid-template-columns: 200px auto;
+}
 
 .sortable-placeholder {
 	min-height: 1.3em;
@@ -601,6 +622,7 @@ input[type=number]:focus {
 	#mainPanel {
 		position: relative;
 		display: grid;
+		overflow: hidden;
 		grid-template-rows: min-content 0.6fr 1fr;
 		padding: 5px;
 		gap: 5px;
@@ -650,37 +672,12 @@ input[type=number]:focus {
 			}
 		}
 
-		ul#palette {
-			background-color: $bgDark;
-			margin: 0;
-			padding: 4px;
+		#mainPaletteWrapper {
+			overflow: auto;
 
-			>li {
-				display: flex;
-				min-height: 16px;
-				cursor: pointer;
-			}
-			>li:hover {
-				outline: 1px solid white;
-				outline-offset: -1px;
-			}
-
-			li.entity {
-				overflow: hidden;
-				.entityPreview {
-					margin-right: 8px;
-				}
-			}
-
-			li.color {
-				padding-left: 10px;
-				overflow: hidden;
-				line-height: 32px;
-				box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
-			}
-
-			li.color.active {
-				outline: 2px solid white !important;
+			ul.niceList {
+				height: 100%;
+				box-sizing: border-box;
 			}
 		}
 	}
@@ -691,6 +688,64 @@ input[type=number]:focus {
 	}
 }
 
+
+.palette {
+	position: relative;
+	background-color: $bgDark;
+	image-rendering: pixelated;
+
+	ul.niceList {
+		margin: 0;
+		padding: 4px;
+		height: 100%;
+
+		>li {
+			display: flex;
+			min-height: 16px;
+			cursor: pointer;
+		}
+		>li:hover {
+			outline: 1px solid white;
+			outline-offset: -1px;
+		}
+
+		li.entity {
+			overflow: hidden;
+			.entityPreview {
+				margin-right: 8px;
+			}
+		}
+
+		li.color {
+			padding-left: 10px;
+			overflow: hidden;
+			line-height: 32px;
+			box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
+		}
+
+		li.color.active {
+			outline: 2px solid white !important;
+		}
+	}
+
+	.tileCursor {
+		position: absolute;
+		z-index: 1;
+		min-width: 1px;
+		min-height: 1px;
+		box-sizing: border-box;
+		outline: 1px dotted white;
+		outline-offset: -1px;
+		box-shadow: 0px 0px 1px black, 0px 0px 8px black;
+		pointer-events: none;
+
+		&.selection {
+			outline: 1px solid #f3e4a4;
+			box-shadow: 0px 0px 4px $orange, 0px 0px 16px $red;
+		}
+	}
+
+}
 
 .instanceEditor {
 	position: absolute;
@@ -712,7 +767,7 @@ input[type=number]:focus {
 }
 
 
-.window.defEditor {
+.window.panel.defEditor {
 	.mainList {
 		ul {
 			border: 1px solid $bgLight;
@@ -724,7 +779,7 @@ input[type=number]:focus {
 	}
 }
 
-.window.layerDefs {
+.window.panel.layerDefs {
 	ul.intGridValues {
 		li {
 			position: relative;
@@ -780,18 +835,31 @@ input[type=number]:focus {
 		}
 	}
 
+	li.tileset {
+		display: block;
 
-	ul.form:not(.type-IntGrid) .IntGrid {
-		display: none;
+		canvas.demo,
+		canvas.fullPreview {
+			display: block;
+			width: 100%;
+			image-rendering: pixelated;
+		}
+
+		canvas.fullPreview {
+			box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
+			background-color: rgba(0, 0, 0, 0.4);
+		}
 	}
 
+	ul.form:not(.type-IntGrid) .IntGrid,
+	ul.form:not(.type-Tiles) .Tiles,
 	ul.form:not(.type-Entities) .Entities {
 		display: none;
 	}
 }
 
 
-.window.entityDefs {
+.window.panel.entityDefs {
 	.content {
 		width: 900px;
 	}

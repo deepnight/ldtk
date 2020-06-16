@@ -14,13 +14,14 @@
 
 	<ul class="form">
 		<li>
-			<label for="lName">Layer name</label>
-			<input type="text" name="name" id="lName"/>
+			<label for="type">Type</label>
+			<span class="typeIcon"></span>
+			<span class="type"></span>
 		</li>
 
 		<li>
-			<label for="type">Type</label>
-			<select name="type"></select>
+			<label for="lName">Layer name</label>
+			<input type="text" name="name" id="lName"/>
 		</li>
 
 		<li>
@@ -49,6 +50,28 @@
 				<input type="text" class="name" placeholder="Value name"/>
 				<a href="#" class="remove">X</a>
 			</xml>
+		</li>
+
+		<li class="Tiles">
+			<label>Tileset image</label>
+			<label for="tilesetFile" class="file">Select an image file</label>
+			<input type="file" id="tilesetFile" name="tilesetFile"/>
+		</li>
+
+		<li class="Tiles">
+			<label for="tilesetGridSize">Tileset grid</label>
+			<input type="text" id="tilesetGridSize" name="tilesetGridSize"/>
+			<span>px, spaced by</span>
+			<input type="text" id="tilesetGridSpacing" name="tilesetGridSpacing"/>
+			<span>px</span>
+		</li>
+
+		<li class="Tiles tileset">
+			<h3>Tiles examples</h3>
+			<canvas class="demo" width="512" height="16"></canvas>
+
+			<h3>Tileset</h3>
+			<canvas class="fullPreview" width="512" height="512"></canvas>
 		</li>
 	</ul>
 </div>

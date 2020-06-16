@@ -29,7 +29,7 @@
 			</div>
 
 			<ul id="layers" class="niceList"></ul>
-			<ul id="palette" class="niceList"></ul>
+			<div id="mainPaletteWrapper"></div>
 		</div>
 
 		<canvas id="webgl"></canvas>
@@ -51,7 +51,9 @@
 	<xml id="window">
 		<div class="window">
 			<div class="mask"></div>
-			<div class="content"></div>
+			<div class="wrapper">
+				<div class="content"></div>
+			</div>
 		</div>
 	</xml>
 
@@ -63,16 +65,6 @@
 	</xml>
 	<div id="notificationList"></div>
 
-
-	<xml id="dialog">
-		<div class="dialog">
-			<div class="mask"></div>
-			<div class="wrapper">
-				<div class="content"></div>
-				<div class="buttons"></div>
-			</div>
-		</div>
-	</xml>
 
 	<xml id="pivotEditor">
 		<div class="pivotEditor">
