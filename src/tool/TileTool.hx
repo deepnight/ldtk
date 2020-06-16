@@ -123,6 +123,51 @@ class TileTool extends Tool<TileSelection> {
 	override function updatePalette() {
 		super.updatePalette();
 
-		jPalette.append( curTilesetDef.createAtlasHtmlImage() );
+		var cursor = new J('<div class="tileCursor"/>');
+		cursor.prependTo( jPalette );
+
+		var img = new J( curTilesetDef.createAtlasHtmlImage() );
+		img.appendTo(jPalette);
+
+
+		function onMouseDown(ev:js.jquery.Event) {
+			var cx = Std.int( ev.offsetX / curTilesetDef.tileGridSize );
+			var cy = Std.int( ev.offsetY / curTilesetDef.tileGridSize );
+			if( ev.button==0 ) {
+				selectValue( Single(cx,cy) );
+				N.debug( getSelectedValue() );
+			}
+		}
+
+		function onMouseUp(ev:js.jquery.Event) {
+		}
+
+		function onMouseMove(ev:js.jquery.Event) {
+			var cx = Std.int( ev.offsetX / curTilesetDef.tileGridSize );
+			var cy = Std.int( ev.offsetY / curTilesetDef.tileGridSize );
+
+			cursor.css("margin-left", (cx*curTilesetDef.tileGridSize)+"px");
+			cursor.css("margin-top", (cy*curTilesetDef.tileGridSize)+"px");
+			cursor.css("width", curTilesetDef.tileGridSize+"px");
+			cursor.css("height", curTilesetDef.tileGridSize+"px");
+		}
+
+		img.mousedown( function(ev) {
+			ev.preventDefault();
+			onMouseDown(ev);
+		});
+
+		img.mouseup( function(ev) {
+			onMouseUp(ev);
+		});
+
+		img.mousemove( function(ev) {
+			onMouseMove(ev);
+		});
+
+		var doc = new J(js.Browser.document);
+		doc.on("mouseup", function(ev) {
+			onMouseUp(ev);
+		});
 	}
 }

@@ -89,6 +89,10 @@ class TilesetDef implements ISerializable {
 		return true;
 	}
 
+	public function coordId(tcx,tcy) {
+		return tcx + tcy * M.ceil( pixels.width / tileGridSize );
+	}
+
 	inline function getTileSourceX(tcx:Int) {
 		return tcx*(tileGridSize+tileGridSpacing);
 	}

@@ -552,12 +552,10 @@ label.file {
 		border: none;
 
 		.content {
-			min-width: 200px;
-
-			ul.niceList {
-				padding: 0;
-				margin: 0;
-				min-height: auto;
+			.palette {
+				max-height: 300px;
+				zoom: 2;
+				image-rendering: pixelated;
 			}
 		}
 	}
@@ -686,8 +684,9 @@ label.file {
 
 
 .palette {
-	background-color: $bgDark;
+	position: relative;
 	overflow: auto;
+	background-color: $bgDark;
 
 	ul.niceList {
 		margin: 0;
@@ -721,6 +720,19 @@ label.file {
 			outline: 2px solid white !important;
 		}
 	}
+
+	.tileCursor {
+		position: absolute;
+		z-index: 1;
+		min-width: 1px;
+		min-height: 1px;
+		box-sizing: border-box;
+		outline: 1px dotted white;
+		outline-offset: -1px;
+		box-shadow: 0px 0px 1px black, 0px 0px 8px black;
+		pointer-events: none;
+	}
+
 }
 
 .instanceEditor {
