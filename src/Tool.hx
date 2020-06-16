@@ -235,8 +235,7 @@ class Tool<T> extends dn.Process {
 	}
 
 	public function createPalette() : js.jquery.JQuery {
-		var e = new J('<div class="palette"/>');
-		return e;
+		return new J('<div class="palette"/>');
 	}
 
 

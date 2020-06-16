@@ -561,11 +561,11 @@ input[type="file"] {
 .window.floatingPalette .wrapper {
   padding: 0;
   border: none;
+  border: 2px solid black;
 }
 
-.window.floatingPalette .wrapper .content .palette {
-  max-height: 300px;
-  image-rendering: pixelated;
+.window.floatingPalette .wrapper .content {
+  max-height: 600px;
 }
 
 .panelMask {
@@ -688,7 +688,11 @@ input[type="file"] {
   outline-offset: -4px;
 }
 
-#editor #mainPanel #mainPalette ul.niceList {
+#editor #mainPanel #mainPaletteWrapper {
+  overflow: auto;
+}
+
+#editor #mainPanel #mainPaletteWrapper ul.niceList {
   height: 100%;
   box-sizing: border-box;
 }
@@ -700,8 +704,8 @@ input[type="file"] {
 
 .palette {
   position: relative;
-  overflow: auto;
   background-color: #1e2229;
+  image-rendering: pixelated;
 }
 
 .palette ul.niceList {

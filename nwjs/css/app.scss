@@ -550,12 +550,10 @@ label.file {
 	.wrapper {
 		padding: 0;
 		border: none;
+		border: 2px solid black;
 
 		.content {
-			.palette {
-				max-height: 300px;
-				image-rendering: pixelated;
-			}
+			max-height: 600px;
 		}
 	}
 }
@@ -674,7 +672,9 @@ label.file {
 			}
 		}
 
-		#mainPalette {
+		#mainPaletteWrapper {
+			overflow: auto;
+
 			ul.niceList {
 				height: 100%;
 				box-sizing: border-box;
@@ -691,8 +691,8 @@ label.file {
 
 .palette {
 	position: relative;
-	overflow: auto;
 	background-color: $bgDark;
+	image-rendering: pixelated;
 
 	ul.niceList {
 		margin: 0;
