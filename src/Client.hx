@@ -385,7 +385,6 @@ class Client extends dn.Process {
 		clearSelection();
 		curLayerId = l.def.uid;
 		levelRender.onCurrentLayerChange(curLayerInstance);
-		curTool.updatePalette();
 		updateLayerList();
 		initTool();
 	}
