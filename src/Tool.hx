@@ -27,22 +27,6 @@ class Tool<T> extends dn.Process {
 			+ "[" + ( curMode==null ? "--" : curMode.getName() ) + "]";
 	}
 
-	public function popOutPalette() {
-		updatePalette();
-		new ui.modal.FloatingToolPalette(this);
-	}
-
-	public final function updatePalette() {
-		jPalette.empty();
-		jPalette.append( createPalette() );
-	}
-
-	public function createPalette() : js.jquery.JQuery {
-		var e = new J('<div class="palette"/>');
-		return e;
-	}
-
-
 
 	public function selectValue(v:T) {
 		if( curLayerInstance!=null )
@@ -237,6 +221,22 @@ class Tool<T> extends dn.Process {
 		}
 
 		lastMouse = m;
+	}
+
+
+	public function popOutPalette() {
+		updatePalette();
+		new ui.modal.FloatingToolPalette(this);
+	}
+
+	public final function updatePalette() {
+		jPalette.empty();
+		jPalette.append( createPalette() );
+	}
+
+	public function createPalette() : js.jquery.JQuery {
+		var e = new J('<div class="palette"/>');
+		return e;
 	}
 
 
