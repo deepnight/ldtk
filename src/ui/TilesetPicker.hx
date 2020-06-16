@@ -34,6 +34,15 @@ class TilesetPicker {
 			onMouseMove(ev);
 		});
 
+		img.mouseleave( function(_) {
+			cursor.hide();
+		});
+		cursor.hide();
+
+		img.mouseover( function(_) {
+			cursor.show();
+		});
+
 		var doc = new J(js.Browser.document);
 		doc.on("mouseup", function(ev) { // HACK need to be removed!
 			onMouseUp(ev);
@@ -51,8 +60,9 @@ class TilesetPicker {
 			case Single(tileId):
 				createSelectionCursor(tileId);
 
-
-				case Multiple(tiles):
+			case Multiple(tiles):
+				for(tileId in tiles)
+					createSelectionCursor(tileId);
 		}
 	}
 

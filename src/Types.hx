@@ -76,5 +76,5 @@ enum FieldDisplayPosition {
 
 enum TileSelection {
 	Single(tileId:Int);
-	Multiple(tiles:Array<{tcx:Int, tcy:Int}>);
+	Multiple(tiles:Array<Int>);
 }

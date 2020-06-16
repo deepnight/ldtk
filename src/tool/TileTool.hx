@@ -17,11 +17,7 @@ class TileTool extends Tool<TileSelection> {
 	// }
 
 	override function getDefaultValue():TileSelection{
-		// return Multiple([
-		// 	{ tcx:0, tcy:0 },
-		// 	{ tcx:1, tcy:0 },
-		// 	{ tcx:2, tcy:0 },
-		// ]);
+		// return Multiple([0,1,2,19]);
 		return Single(0);
 	}
 
@@ -79,12 +75,16 @@ class TileTool extends Tool<TileSelection> {
 				else {
 					var left = Const.INFINITE;
 					var top = Const.INFINITE;
-					for(t in tiles) {
-						left = M.imin(t.tcx, left);
-						top = M.imin(t.tcy, top);
+					for(tid in tiles) {
+						left = M.imin(left, curTilesetDef.getTileCx(tid));
+						top = M.imin(top, curTilesetDef.getTileCy(tid));
 					}
-					for(t in tiles)
-						client.curLayerInstance.setGridTile(cx+t.tcx-left, cy+t.tcy-top, 0); // TODO
+					for(tid in tiles)
+						client.curLayerInstance.setGridTile(
+							cx+curTilesetDef.getTileCx(tid)-left,
+							cy+curTilesetDef.getTileCy(tid)-top,
+							tid
+						);
 				}
 		}
 	}
@@ -97,12 +97,15 @@ class TileTool extends Tool<TileSelection> {
 			case Multiple(tiles):
 				var left = Const.INFINITE;
 				var top = Const.INFINITE;
-				for(t in tiles) {
-					left = M.imin(t.tcx, left);
-					top = M.imin(t.tcy, top);
-				}
-				for(t in tiles)
-					client.curLayerInstance.removeGridTile(cx+t.tcx-left, cy+t.tcy-top);
+				for(tid in tiles) {
+					left = M.imin(left, curTilesetDef.getTileCx(tid));
+					top = M.imin(top, curTilesetDef.getTileCy(tid));
+			}
+				for(tid in tiles)
+					client.curLayerInstance.removeGridTile(
+						cx+curTilesetDef.getTileCx(tid)-left,
+						cy+curTilesetDef.getTileCy(tid)-top
+					);
 		}
 	}
 
