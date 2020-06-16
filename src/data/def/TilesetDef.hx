@@ -95,14 +95,16 @@ class TilesetDef implements ISerializable {
 		return tcx + tcy * cWid;
 	}
 
-	inline function getTileSourceX(tileId:Int) {
-		var tcx = tileId - cWid * Std.int( tileId / cWid );
-		return tcx * ( tileGridSize + tileGridSpacing );
+	public inline function getTileSourceX(tileId:Int) {
+		return
+			( tileId - cWid * Std.int( tileId / cWid ) )
+			* ( tileGridSize + tileGridSpacing );
 	}
 
-	inline function getTileSourceY(tileId:Int) {
-		var tcy = Std.int( tileId / cWid );
-		return tcy * ( tileGridSize + tileGridSpacing );
+	public inline function getTileSourceY(tileId:Int) {
+		return
+			Std.int( tileId / cWid )
+			* ( tileGridSize + tileGridSpacing );
 	}
 
 	public inline function getAtlasTile() : Null<h2d.Tile> {

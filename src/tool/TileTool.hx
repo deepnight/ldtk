@@ -2,7 +2,7 @@ package tool;
 
 class TileTool extends Tool<TileSelection> {
 	var randomMode = false;
-	var curTilesetDef(get,never) : TilesetDef; inline function get_curTilesetDef() return client.curLayerInstance.def.tilesetDef;
+	public var curTilesetDef(get,never) : TilesetDef; inline function get_curTilesetDef() return client.curLayerInstance.def.tilesetDef;
 
 	public function new() {
 		super();
@@ -121,7 +121,7 @@ class TileTool extends Tool<TileSelection> {
 
 	override function createPalette() {
 		var target = super.createPalette();
-		new ui.TilesetPicker(target, curTilesetDef, selectValue);
+		new ui.TilesetPicker(target, this);
 		return target;
 	}
 }

@@ -738,6 +738,12 @@ label.file {
 		outline-offset: -1px;
 		box-shadow: 0px 0px 1px black, 0px 0px 8px black;
 		pointer-events: none;
+
+		&.selection {
+			outline: 1px solid #f3e4a4;
+			outline-offset: 1px;
+			box-shadow: 0px 0px 4px $orange, 0px 0px 16px $red;
+		}
 	}
 
 }
