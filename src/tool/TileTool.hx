@@ -1,6 +1,6 @@
 package tool;
 
-class TileTool extends Tool<Array<Int>> {
+class TileTool extends Tool< Array<Int> > {
 	public var curTilesetDef(get,never) : TilesetDef; inline function get_curTilesetDef() return client.curLayerInstance.def.tilesetDef;
 
 	public function new() {
