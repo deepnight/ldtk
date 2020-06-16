@@ -39,6 +39,10 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		// Delete layer
 		jModalAndMask.find(".mainList button.delete").click( function(ev) {
+			if( cur==null ) {
+				N.error("No layer selected.");
+				return;
+			}
 			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
 				project.defs.removeLayerDef(cur);
 				select(project.defs.layers[0]);
