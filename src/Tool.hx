@@ -1,7 +1,7 @@
 import dn.Bresenham;
 
 class Tool<T> extends dn.Process {
-	static var SELECTED_VALUES : Map<Int, Dynamic> = new Map();
+	static var SELECTION_MEMORY : Map<Int, Dynamic> = new Map();
 
 	var client(get,never) : Client; inline function get_client() return Client.ME;
 	var project(get,never) : ProjectData; inline function get_project() return Client.ME.project;
@@ -30,15 +30,15 @@ class Tool<T> extends dn.Process {
 
 	public function selectValue(v:T) {
 		if( curLayerInstance!=null )
-			SELECTED_VALUES.set(curLayerInstance.layerDefId, v);
+			SELECTION_MEMORY.set(curLayerInstance.layerDefId, v);
 		updatePalette();
 	}
 	public function getSelectedValue() : T {
 		return
 			curLayerInstance==null
 			? getDefaultValue()
-			: SELECTED_VALUES.exists(curLayerInstance.layerDefId)
-				? SELECTED_VALUES.get(curLayerInstance.layerDefId)
+			: SELECTION_MEMORY.exists(curLayerInstance.layerDefId)
+				? SELECTION_MEMORY.get(curLayerInstance.layerDefId)
 				: getDefaultValue();
 	}
 	function getDefaultValue() : T {
@@ -46,7 +46,7 @@ class Tool<T> extends dn.Process {
 	}
 
 	public static function clearSelectionMemory() {
-		SELECTED_VALUES = new Map();
+		SELECTION_MEMORY = new Map();
 	}
 
 
