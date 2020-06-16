@@ -565,7 +565,6 @@ input[type="file"] {
 
 .window.floatingPalette .wrapper .content .palette {
   max-height: 300px;
-  zoom: 2;
   image-rendering: pixelated;
 }
 
@@ -689,6 +688,11 @@ input[type="file"] {
   outline-offset: -4px;
 }
 
+#editor #mainPanel #mainPalette ul.niceList {
+  height: 100%;
+  box-sizing: border-box;
+}
+
 #editor canvas {
   width: 100% !important;
   height: 100% !important;
@@ -703,6 +707,7 @@ input[type="file"] {
 .palette ul.niceList {
   margin: 0;
   padding: 4px;
+  height: 100%;
 }
 
 .palette ul.niceList > li {

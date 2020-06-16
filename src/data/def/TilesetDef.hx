@@ -11,6 +11,8 @@ class TilesetDef implements ISerializable {
 	var base64(get,never) : Null<String>;
 	var _base64Cache : Null<String>;
 
+	var cWid(get,never) : Int; inline function get_cWid() return isEmpty() ? 0 : M.ceil( pixels.width / tileGridSize );
+
 	public function new() {
 	}
 
@@ -90,23 +92,25 @@ class TilesetDef implements ISerializable {
 	}
 
 	public function coordId(tcx,tcy) {
-		return tcx + tcy * M.ceil( pixels.width / tileGridSize );
+		return tcx + tcy * cWid;
 	}
 
-	inline function getTileSourceX(tcx:Int) {
-		return tcx*(tileGridSize+tileGridSpacing);
+	inline function getTileSourceX(tileId:Int) {
+		var tcx = tileId - cWid * Std.int( tileId / cWid );
+		return tcx * ( tileGridSize + tileGridSpacing );
 	}
 
-	inline function getTileSourceY(tcy:Int) {
-		return tcy*(tileGridSize+tileGridSpacing);
+	inline function getTileSourceY(tileId:Int) {
+		var tcy = Std.int( tileId / cWid );
+		return tcy * ( tileGridSize + tileGridSpacing );
 	}
 
 	public inline function getAtlasTile() : Null<h2d.Tile> {
 		return texture==null ? null : h2d.Tile.fromTexture(texture);
 	}
 
-	public inline function getTile(tcx:Int, tcy:Int) {
-		return getAtlasTile().sub( getTileSourceX(tcx), getTileSourceY(tcy), tileGridSize, tileGridSize );
+public inline function getTile(tileId:Int) {
+		return getAtlasTile().sub( getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize );
 	}
 
 	public function createAtlasHtmlImage() : js.html.Image {
@@ -134,17 +138,16 @@ class TilesetDef implements ISerializable {
 		}
 	}
 
-	public function drawTileToCanvas(canvas:js.jquery.JQuery, tcx:Int, tcy:Int, toX:Int, toY:Int) {
+	public function drawTileToCanvas(canvas:js.jquery.JQuery, tileId:Int, toX:Int, toY:Int) {
 		if( pixels==null )
 			return;
 
 		if( !canvas.is("canvas") )
 			throw "Not a canvas";
 
-		if( tcx>=M.ceil(pixels.width/tileGridSize) || tcy>=M.ceil(pixels.height/tileGridSize) )
-			return;
+		// TODO check image bounds limits
 
-		var subPixels = pixels.sub(getTileSourceX(tcx), getTileSourceY(tcy), tileGridSize, tileGridSize);
+		var subPixels = pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
 		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
 		var ctx = canvas.getContext2d();
 		var img = new js.html.Image(subPixels.width, subPixels.height);

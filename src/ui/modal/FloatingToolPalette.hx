@@ -3,16 +3,14 @@ package ui.modal;
 class FloatingToolPalette extends ui.Modal {
 	public static var ME : Null<FloatingToolPalette>;
 
-	var jPalette : js.jquery.JQuery;
 	public function new(t:Tool<Dynamic>) {
 		super();
 
 		ME = this;
 		jModalAndMask.addClass("floatingPalette");
 
-		jPalette = client.jPalette.clone(true,true);
-		jPalette.appendTo( jContent );
-		jPalette.click( function(_) {
+		jContent.append( t.createPalette() );
+		jWrapper.click( function(_) {
 			close();
 		});
 

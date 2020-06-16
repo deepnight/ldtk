@@ -554,7 +554,6 @@ label.file {
 		.content {
 			.palette {
 				max-height: 300px;
-				zoom: 2;
 				image-rendering: pixelated;
 			}
 		}
@@ -674,6 +673,13 @@ label.file {
 				}
 			}
 		}
+
+		#mainPalette {
+			ul.niceList {
+				height: 100%;
+				box-sizing: border-box;
+			}
+		}
 	}
 
 	canvas {
@@ -691,6 +697,7 @@ label.file {
 	ul.niceList {
 		margin: 0;
 		padding: 4px;
+		height: 100%;
 
 		>li {
 			display: flex;

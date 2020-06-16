@@ -77,11 +77,11 @@ class IntGridTool extends Tool<Int> {
 
 
 
-	override function updatePalette() {
-		super.updatePalette();
+	override function createPalette() {
+		var target = super.createPalette();
 
 		var list = new J('<ul class="niceList"/>');
-		list.appendTo(jPalette);
+		list.appendTo(target);
 
 		var idx = 0;
 		for( intGridVal in curLayerInstance.def.getAllIntGridValues() ) {
@@ -105,5 +105,7 @@ class IntGridTool extends Tool<Int> {
 			});
 			idx++;
 		}
+
+		return target;
 	}
 }

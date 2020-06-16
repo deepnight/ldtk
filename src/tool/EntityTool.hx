@@ -127,12 +127,11 @@ class EntityTool extends Tool<Int> {
 	}
 
 
-
-	override function updatePalette() {
-		super.updatePalette();
+	override function createPalette() {
+		var target = super.createPalette();
 
 		var list = new J('<ul class="niceList"/>');
-		list.appendTo(jPalette);
+		list.appendTo(target);
 
 		for(ed in project.defs.entities) {
 			var e = new J("<li/>");
@@ -149,5 +148,8 @@ class EntityTool extends Tool<Int> {
 				updatePalette();
 			});
 		}
+
+		return target;
 	}
+
 }

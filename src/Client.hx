@@ -9,7 +9,7 @@ class Client extends dn.Process {
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
-	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find(".palette");
+	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPalette");
 
 	public var curLevel(get,never) : LevelData;
 	inline function get_curLevel() return project.getLevel(curLevelId);

@@ -32,8 +32,14 @@ class Tool<T> extends dn.Process {
 		new ui.modal.FloatingToolPalette(this);
 	}
 
-	public function updatePalette() {
+	public final function updatePalette() {
 		jPalette.empty();
+		jPalette.append( createPalette() );
+	}
+
+	public function createPalette() : js.jquery.JQuery {
+		var e = new J('<div class="palette"/>');
+		return e;
 	}
 
 

@@ -22,7 +22,7 @@ class TileTool extends Tool<TileSelection> {
 		// 	{ tcx:1, tcy:0 },
 		// 	{ tcx:2, tcy:0 },
 		// ]);
-		return Single(0,0);
+		return Single(0);
 	}
 
 	override function useAt(m:MouseCoords) {
@@ -69,8 +69,8 @@ class TileTool extends Tool<TileSelection> {
 
 	function drawSelectionAt(cx:Int, cy:Int) {
 		switch getSelectedValue() {
-			case Single(tcx, tcy):
-				client.curLayerInstance.setGridTile(cx,cy, 0); // TODO
+			case Single(tileId):
+				client.curLayerInstance.setGridTile(cx,cy, tileId);
 
 			case Multiple(tiles):
 				if( randomMode ) {
@@ -91,7 +91,7 @@ class TileTool extends Tool<TileSelection> {
 
 	function removeSelectedTileAt(cx:Int, cy:Int) {
 		switch getSelectedValue() {
-			case Single(tcx, tcy):
+			case Single(tileId):
 				client.curLayerInstance.removeGridTile(cx,cy);
 
 			case Multiple(tiles):
@@ -119,55 +119,58 @@ class TileTool extends Tool<TileSelection> {
 			client.cursor.set(None);
 	}
 
+	override function createPalette() {
+		var target = super.createPalette();
 
-	override function updatePalette() {
-		super.updatePalette();
+		var picker = new ui.TilesetPicker(target, curTilesetDef, selectValue);
 
-		var cursor = new J('<div class="tileCursor"/>');
-		cursor.prependTo( jPalette );
+		// var cursor = new J('<div class="tileCursor"/>');
+		// cursor.prependTo( jPalette );
 
-		var img = new J( curTilesetDef.createAtlasHtmlImage() );
-		img.appendTo(jPalette);
+		// var img = new J( curTilesetDef.createAtlasHtmlImage() );
+		// img.appendTo(jPalette);
 
 
-		function onMouseDown(ev:js.jquery.Event) {
-			var cx = Std.int( ev.offsetX / curTilesetDef.tileGridSize );
-			var cy = Std.int( ev.offsetY / curTilesetDef.tileGridSize );
-			if( ev.button==0 ) {
-				selectValue( Single(cx,cy) );
-				N.debug( getSelectedValue() );
-			}
-		}
+		// function onMouseDown(ev:js.jquery.Event) {
+		// 	var cx = Std.int( ev.offsetX / curTilesetDef.tileGridSize );
+		// 	var cy = Std.int( ev.offsetY / curTilesetDef.tileGridSize );
+		// 	if( ev.button==0 ) {
+		// 		selectValue( Single(curTilesetDef.coordId(cx,cy)) );
+		// 		N.debug( getSelectedValue() );
+		// 	}
+		// }
 
-		function onMouseUp(ev:js.jquery.Event) {
-		}
+		// function onMouseUp(ev:js.jquery.Event) {
+		// }
 
-		function onMouseMove(ev:js.jquery.Event) {
-			var cx = Std.int( ev.offsetX / curTilesetDef.tileGridSize );
-			var cy = Std.int( ev.offsetY / curTilesetDef.tileGridSize );
+		// function onMouseMove(ev:js.jquery.Event) {
+		// 	var cx = Std.int( ev.offsetX / curTilesetDef.tileGridSize );
+		// 	var cy = Std.int( ev.offsetY / curTilesetDef.tileGridSize );
 
-			cursor.css("margin-left", (cx*curTilesetDef.tileGridSize)+"px");
-			cursor.css("margin-top", (cy*curTilesetDef.tileGridSize)+"px");
-			cursor.css("width", curTilesetDef.tileGridSize+"px");
-			cursor.css("height", curTilesetDef.tileGridSize+"px");
-		}
+		// 	cursor.css("margin-left", (cx*curTilesetDef.tileGridSize)+"px");
+		// 	cursor.css("margin-top", (cy*curTilesetDef.tileGridSize)+"px");
+		// 	cursor.css("width", curTilesetDef.tileGridSize+"px");
+		// 	cursor.css("height", curTilesetDef.tileGridSize+"px");
+		// }
 
-		img.mousedown( function(ev) {
-			ev.preventDefault();
-			onMouseDown(ev);
-		});
+		// img.mousedown( function(ev) {
+		// 	ev.preventDefault();
+		// 	onMouseDown(ev);
+		// });
 
-		img.mouseup( function(ev) {
-			onMouseUp(ev);
-		});
+		// img.mouseup( function(ev) {
+		// 	onMouseUp(ev);
+		// });
 
-		img.mousemove( function(ev) {
-			onMouseMove(ev);
-		});
+		// img.mousemove( function(ev) {
+		// 	onMouseMove(ev);
+		// });
 
-		var doc = new J(js.Browser.document);
-		doc.on("mouseup", function(ev) {
-			onMouseUp(ev);
-		});
+		// var doc = new J(js.Browser.document);
+		// doc.on("mouseup", function(ev) {
+		// 	onMouseUp(ev);
+		// });
+
+		return target;
 	}
 }

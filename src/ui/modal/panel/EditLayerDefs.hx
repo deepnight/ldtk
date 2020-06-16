@@ -233,7 +233,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		var idx = 0;
 		function renderDemoTile(tcx,tcy) {
-			cur.tilesetDef.drawTileToCanvas(jDemo, tcx, tcy, (idx++)*(cur.tilesetDef.tileGridSize+padding), 0);
+			cur.tilesetDef.drawTileToCanvas(jDemo, cur.tilesetDef.coordId(tcx,tcy), (idx++)*(cur.tilesetDef.tileGridSize+padding), 0);
 		}
 		renderDemoTile(0,0);
 		renderDemoTile(1,0);
