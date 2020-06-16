@@ -16,12 +16,12 @@ class TileTool extends Tool<TileSelection> {
 	// }
 
 	override function getDefaultValue():TileSelection{
-		return Multiple([
-			{ tcx:0, tcy:0 },
-			{ tcx:1, tcy:0 },
-			{ tcx:2, tcy:0 },
-		]);
-		// return Single(0,0);
+		// return Multiple([
+		// 	{ tcx:0, tcy:0 },
+		// 	{ tcx:1, tcy:0 },
+		// 	{ tcx:2, tcy:0 },
+		// ]);
+		return Single(0,0);
 	}
 
 	override function useAt(m:MouseCoords) {
@@ -69,7 +69,7 @@ class TileTool extends Tool<TileSelection> {
 	function drawSelectedTileAt(cx:Int, cy:Int) {
 		switch getSelectedValue() {
 			case Single(tcx, tcy):
-				client.curLayerInstance.setTile(cx,cy, 0); // TODO
+				client.curLayerInstance.setGridTile(cx,cy, 0); // TODO
 
 			case Multiple(tiles):
 				if( randomMode ) {
@@ -83,7 +83,7 @@ class TileTool extends Tool<TileSelection> {
 						top = M.imin(t.tcy, top);
 					}
 					for(t in tiles)
-						client.curLayerInstance.setTile(cx+t.tcx-left, cy+t.tcy-top, 0); // TODO
+						client.curLayerInstance.setGridTile(cx+t.tcx-left, cy+t.tcy-top, 0); // TODO
 				}
 		}
 	}
@@ -91,7 +91,7 @@ class TileTool extends Tool<TileSelection> {
 	function removeSelectedTileAt(cx:Int, cy:Int) {
 		switch getSelectedValue() {
 			case Single(tcx, tcy):
-				client.curLayerInstance.removeTile(cx,cy);
+				client.curLayerInstance.removeGridTile(cx,cy);
 
 			case Multiple(tiles):
 				var left = Const.INFINITE;
@@ -101,7 +101,7 @@ class TileTool extends Tool<TileSelection> {
 					top = M.imin(t.tcy, top);
 				}
 				for(t in tiles)
-					client.curLayerInstance.removeTile(cx+t.tcx-left, cy+t.tcy-top);
+					client.curLayerInstance.removeGridTile(cx+t.tcx-left, cy+t.tcy-top);
 		}
 	}
 
