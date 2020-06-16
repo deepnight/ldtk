@@ -14,8 +14,11 @@ class Cursor extends dn.Process {
 	public function new() {
 		super(Client.ME);
 		createRootInLayers(Client.ME.root, Const.DP_UI);
+
 		graphics = new h2d.Graphics(root);
+
 		wrapper = new h2d.Object(root);
+		wrapper.alpha = 0.4;
 	}
 
 	override function onResize() {
@@ -73,7 +76,6 @@ class Cursor extends dn.Process {
 				);
 
 				var o = display.LevelRender.createEntityRender(def, wrapper);
-				o.alpha = 0.4;
 
 			case Tiles(li, td, tileIds, cx, cy):
 				var left = Const.INFINITE;

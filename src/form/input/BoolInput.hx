@@ -15,7 +15,6 @@ class BoolInput extends form.Input<Bool> {
 		if( isCheckBox )
 			return input.prop("checked")==true;
 		else {
-			N.debug(input.val());
 			var v = StringTools.trim( Std.string( input.val() ) ).toLowerCase();
 			return v=="true";
 		}

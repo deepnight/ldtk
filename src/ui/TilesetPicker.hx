@@ -27,7 +27,6 @@ class TilesetPicker {
 
 		// Init events
 		img.mousedown( function(ev) {
-			N.debug("down");
 			ev.preventDefault();
 			onPickerMouseDown(ev);
 			jDoc
@@ -99,7 +98,6 @@ class TilesetPicker {
 
 	function onSelect(sel:Array<Int>) {
 		var cur = tool.getSelectedValue();
-		N.debug(cur+" + "+sel);
 		if( !Client.ME.isShiftDown() && !Client.ME.isCtrlDown() )
 			tool.selectValue(sel);
 		else {
