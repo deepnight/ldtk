@@ -475,7 +475,6 @@ label.file {
 
 		background: $bgMed;
 		border: 1px solid $bgLight;
-		border-left: none;
 
 		box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
 	}
@@ -488,6 +487,8 @@ label.file {
 		top: 0px;
 		left: 0px;
 		height: 100%;
+		border-left: none;
+
 		.content {
 			width: 700px;
 		}
@@ -495,17 +496,25 @@ label.file {
 }
 
 .window.dialog {
-	.content .buttons {
-		margin-top: 30px;
-		flex-wrap: wrap;
+	.wrapper {
+		padding: 16px;
 
-		button {
-			flex: 1 1 0;
-			margin: 1px;
+		.content {
+			max-width: 260px;
 		}
 
-		button.confirm {
-			flex-grow: 2;
+		.buttons {
+			margin-top: 16px;
+			flex-wrap: wrap;
+
+			button {
+				flex: 1 1 0;
+				margin: 1px;
+			}
+
+			button.confirm {
+				flex-grow: 2;
+			}
 		}
 	}
 }

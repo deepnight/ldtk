@@ -11,7 +11,6 @@ class Dialog extends ui.Modal {
 			jModalAndMask.addClass(className);
 
 		// Buttons
-		var jWrapper = jModalAndMask.find(".wrapper");
 		jButtons = new J('<div class="buttons"/>');
 		jButtons.appendTo(jWrapper);
 		jButtons.hide();

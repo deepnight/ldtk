@@ -8,6 +8,7 @@ class Modal extends dn.Process {
 	public var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
 
 	var jModalAndMask: js.jquery.JQuery;
+	var jWrapper: js.jquery.JQuery;
 	public var jContent : js.jquery.JQuery;
 	var jMask: js.jquery.JQuery;
 
@@ -19,6 +20,7 @@ class Modal extends dn.Process {
 		jModalAndMask = new J("xml#window").children().first().clone();
 		new J("body").append(jModalAndMask).addClass("hasModal");
 
+		jWrapper = jModalAndMask.find(".wrapper");
 		jContent = jModalAndMask.find(".content");
 
 		jMask = jModalAndMask.find(".mask");
