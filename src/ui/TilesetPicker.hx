@@ -7,6 +7,8 @@ class TilesetPicker {
 	var curSelection : Array<js.jquery.JQuery> = [];
 	var cursor : js.jquery.JQuery;
 
+	var dragStart : Null<{ x:Int, y:Int }>;
+
 	public function new(target:js.jquery.JQuery, tool:tool.TileTool) {
 		this.tool = tool;
 
@@ -18,16 +20,21 @@ class TilesetPicker {
 		cursor.prependTo(wrapper);
 
 		// Init events
+		var doc = new J(js.Browser.document);
 		var img = new J( tool.curTilesetDef.createAtlasHtmlImage() );
 		img.appendTo(wrapper);
 
 		img.mousedown( function(ev) {
 			ev.preventDefault();
 			onMouseDown(ev);
+			// doc.off(".tilePicker").on("mouseup.tilePicker", function(ev) {
+			// 	img.mouseup();
+			// });
 		});
 
 		img.mouseup( function(ev) {
 			onMouseUp(ev);
+			// doc.off(".tilePicker");
 		});
 
 		img.mousemove( function(ev) {
@@ -35,17 +42,13 @@ class TilesetPicker {
 		});
 
 		img.mouseleave( function(_) {
-			cursor.hide();
+			if( dragStart==null )
+				cursor.hide();
 		});
 		cursor.hide();
 
 		img.mouseover( function(_) {
 			cursor.show();
-		});
-
-		var doc = new J(js.Browser.document);
-		doc.on("mouseup", function(ev) { // HACK need to be removed!
-			onMouseUp(ev);
 		});
 
 		renderSelection();
@@ -82,22 +85,61 @@ class TilesetPicker {
 
 
 	function onMouseDown(ev:js.jquery.Event) {
-		var cx = Std.int( ev.offsetX / tool.curTilesetDef.tileGridSize / zoom );
-		var cy = Std.int( ev.offsetY / tool.curTilesetDef.tileGridSize / zoom );
-		if( ev.button==0 )
-			tool.selectValue( Single(tool.curTilesetDef.coordId(cx,cy)) );
+		dragStart = {
+			x: Std.int( ev.offsetX / zoom ),
+			y: Std.int( ev.offsetY / zoom ),
+		}
 	}
 
-	function onMouseUp(ev:js.jquery.Event) {}
+	function onMouseUp(ev:js.jquery.Event) {
+		if( dragStart!=null ) {
+			var r = getCursorRect(ev.offsetX, ev.offsetY);
+
+			// Apply selection
+			if( r.wid==1 && r.hei==1 )
+				tool.selectValue( Single( tool.curTilesetDef.coordId(r.cx,r.cy) ) );
+			else {
+				var tileIds = [];
+				for(cx in r.cx...r.cx+r.wid)
+				for(cy in r.cy...r.cy+r.hei)
+					tileIds.push( tool.curTilesetDef.coordId(cx,cy) );
+				tool.selectValue( Multiple(tileIds) );
+			}
+		}
+
+		dragStart = null;
+	}
 
 	function onMouseMove(ev:js.jquery.Event) {
 		var grid = tool.curTilesetDef.tileGridSize;
-		var cx = Std.int( ev.offsetX / grid / zoom );
-		var cy = Std.int( ev.offsetY / grid / zoom );
+		var r = getCursorRect(ev.offsetX, ev.offsetY);
+		cursor.css("margin-left", r.cx*grid + "px");
+		cursor.css("margin-top", r.cy*grid + "px");
+		cursor.css("width", r.wid*grid + "px");
+		cursor.css("height", r.hei*grid + "px");
+	}
 
-		cursor.css("margin-left", (cx*grid)+"px");
-		cursor.css("margin-top", (cy*grid)+"px");
-		cursor.css("width", grid+"px");
-		cursor.css("height", grid+"px");
+	function getCursorRect(curX:Int, curY:Int) {
+		var grid = tool.curTilesetDef.tileGridSize;
+		var curCx = Std.int( curX / grid / zoom );
+		var curCy = Std.int( curY / grid / zoom );
+
+		if( dragStart==null )
+			return {
+				cx: curCx,
+				cy: curCy,
+				wid: 1,
+				hei: 1,
+			}
+		else {
+			var startCx = Std.int(dragStart.x/grid);
+			var startCy = Std.int(dragStart.y/grid);
+			return {
+				cx: M.imin(curCx,startCx),
+				cy: M.imin(curCy,startCy),
+				wid: M.iabs(curCx-startCx) + 1,
+				hei: M.iabs(curCy-startCy) + 1,
+			}
+		}
 	}
 }
