@@ -105,6 +105,11 @@ class TileTool extends Tool< Array<Int> > {
 	override function updateCursor(m:MouseCoords) {
 		super.updateCursor(m);
 
+		if( curTilesetDef.isEmpty() ) {
+			client.cursor.set(None);
+			return;
+		}
+
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromMouseCoords(origin, m);
 			client.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei) );
