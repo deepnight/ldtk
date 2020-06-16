@@ -493,8 +493,8 @@ input[type="file"] {
 }
 
 .window.panel {
-  left: 200px;
-  width: calc( 100% - 200px);
+  left: 300px;
+  width: calc( 100% - $mainPanelWid);
 }
 
 .window.panel .wrapper {
@@ -627,7 +627,7 @@ input[type="file"] {
 
 #editor {
   display: grid;
-  grid-template-columns: 200px auto;
+  grid-template-columns: 300px auto;
   width: 100%;
   height: 100%;
 }
