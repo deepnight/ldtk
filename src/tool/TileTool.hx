@@ -12,6 +12,10 @@ class TileTool extends Tool< Array<Int> > {
 		return [0];
 	}
 
+	override function canEdit():Bool {
+		return super.canEdit() && curTilesetDef!=null;
+	}
+
 	function isRandomMode() return Client.ME.isCtrlDown();
 
 	override function useAt(m:MouseCoords) {
