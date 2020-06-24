@@ -46,6 +46,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 
 			case TilesetDefChanged:
+				updateList();
 				updateForm();
 				updateTilesetPreview();
 
