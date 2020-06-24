@@ -120,4 +120,60 @@ class JsTools {
 
 		return _fileCache.get(name);
 	}
+
+
+	static function getTmpFileInput() {
+		var input = new J("input#tmpFileInput");
+		if( input.length==0 ) {
+			input = new J("<input/>");
+			input.attr("type","file");
+			input.attr("id","tmpFileInput");
+			input.appendTo( new J("body") );
+			input.hide();
+		}
+		input.off();
+		input.removeAttr("accept");
+		input.removeAttr("nwsaveas");
+
+		input.click( function(ev) {
+			input.val("");
+		});
+
+		return input;
+	}
+
+	public static function loadDialog(?fileTypes:Array<String>, onLoad:(path:String, bytes:haxe.io.Bytes)->Void) {
+		var input = getTmpFileInput();
+
+		if( fileTypes==null || fileTypes.length==0 )
+			fileTypes = [".*"];
+		input.attr("accept", fileTypes.join(","));
+
+		input.change( function(ev) {
+			var path = input.val();
+			var buffer = js.node.Fs.readFileSync(path);
+			var bytes = buffer.hxToBytes();
+			input.remove();
+			onLoad(path, bytes);
+		});
+		input.click();
+	}
+
+	public static function saveAsDialog(bytes:haxe.io.Bytes, ?fileTypes:Array<String>, onSave:String->Void) {
+		var input = getTmpFileInput();
+
+		if( fileTypes==null || fileTypes.length==0 )
+			fileTypes = [".*"];
+		input.attr("accept", fileTypes.join(","));
+		input.attr("nwsaveas","nwsaveas");
+
+		input.change( function(ev) {
+			var path = input.val();
+			var buffer = js.node.Buffer.hxFromBytes(bytes);
+			js.node.Fs.writeFileSync(path, buffer);
+			input.remove();
+			onSave(path);
+		});
+		input.click();
+	}
 }

@@ -91,27 +91,13 @@ class Client extends dn.Process {
 			});
 		});
 
-		jMainPanel.find("button.load").click( function(_) {
-			ui.Modal.closeAll();
-			var raw = dn.LocalStorage.read("test");
-			if( raw==null ) {
-				N.error("No data found.");
-				return;
-			}
-			var json = try haxe.Json.parse(raw) catch(e:Dynamic) null;
-			if( json==null ) {
-				N.error("Invalid JSON!");
-				return;
-			}
-			useProject( ProjectData.fromJson(json) );
-			N.msg("Loaded from local storage.");
-		});
+		jMainPanel.find("button.load").click( function(_) onLoad() );
 
-		jMainPanel.find("button.save").click( function(_) {
-			ui.Modal.closeAll();
-			dn.LocalStorage.write("test", dn.HaxeJson.prettify( haxe.Json.stringify( project.toJson() ) ) );
-			N.msg("Saved to local storage.");
-		});
+		jMainPanel.find("button.save").click( function(_) onSave() );
+			// ui.Modal.closeAll();
+			// dn.LocalStorage.write("test", dn.HaxeJson.prettify( haxe.Json.stringify( project.toJson() ) ) );
+			// N.msg("Saved to local storage.");
+		// });
 
 
 		// Edit buttons
@@ -401,6 +387,50 @@ class Client extends dn.Process {
 		initTool();
 	}
 
+
+	function onSave() {
+		ui.Modal.closeAll();
+
+		var obj = project.toJson();
+		var json = haxe.Json.stringify(obj);
+		json = dn.HaxeJson.prettify(json);
+		var bytes = haxe.io.Bytes.ofString(json);
+
+		JsTools.saveAsDialog(bytes, [".json"], function(path) {
+			N.msg("Saved to "+path);
+		});
+	}
+
+	function onLoad() {
+		ui.Modal.closeAll();
+		JsTools.loadDialog([".json"], function(path,bytes) {
+			try {
+				var json = haxe.Json.parse( bytes.toString() );
+				var p = ProjectData.fromJson(json);
+				useProject( p );
+				N.msg("Loaded project.");
+			} catch( err:Dynamic ) {
+				N.error("Couldn't read this project file: "+err);
+			}
+		});
+		// hxd.File.browse( function(sel) {
+			// N.debug(sel);
+		// });
+		// var raw = dn.LocalStorage.read("test");
+		// if( raw==null ) {
+		// 	N.error("No data found.");
+		// 	return;
+		// }
+		// var json = try haxe.Json.parse(raw) catch(e:Dynamic) null;
+		// if( json==null ) {
+		// 	N.error("Invalid JSON!");
+		// 	return;
+		// }
+		// useProject( ProjectData.fromJson(json) );
+		// N.msg("Loaded from local storage.");
+	}
+
+
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case LayerInstanceChanged:
@@ -412,7 +442,7 @@ class Client extends dn.Process {
 				initTool();
 				display.LevelRender.invalidateCaches();
 
-			case ProjectChanged:
+			case ProjectSettingsChanged:
 				updateBg();
 				updateProjectTitle();
 
