@@ -80,6 +80,8 @@ class TilesetDef implements ISerializable {
 		return {
 			uid: uid,
 			base64: base64,
+			path: path,
+			customName: customName,
 			pxWid: pxWid,
 			pxHei: pxHei,
 			tileGridSize: tileGridSize,
@@ -95,6 +97,8 @@ class TilesetDef implements ISerializable {
 		td.pxWid = JsonTools.readInt( json.pxWid );
 		td.pxHei = JsonTools.readInt( json.pxHei );
 		td.base64 = json.base64;
+		td.path = json.path;
+		td.customName = json.customName;
 		return td;
 	}
 

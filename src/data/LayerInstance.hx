@@ -12,7 +12,6 @@ class LayerInstance implements ISerializable {
 	var intGrid : Map<Int,Int> = new Map(); // <coordId, value>
 	public var entityInstances : Array<EntityInstance> = [];
 	public var gridTiles : Map<Int,Int> = []; // <coordId, tileId>
-	// public var tiles : Array<{ x:Int, y:Int, tileId:Int }> = [];
 
 	public var cWid(get,never) : Int; inline function get_cWid() return M.ceil( level.pxWid / def.gridSize );
 	public var cHei(get,never) : Int; inline function get_cHei() return M.ceil( level.pxHei / def.gridSize );
@@ -35,17 +34,27 @@ class LayerInstance implements ISerializable {
 	}
 
 	public function toJson() {
-		var intGridJson = [];
-		for(e in intGrid.keyValueIterator())
-			intGridJson.push({
-				coordId: e.key,
-				v: e.value,
-			});
-
 		return {
 			levelId: levelId,
 			layerDefId: layerDefId,
-			intGrid: intGridJson,
+			intGrid: {
+				var arr = [];
+				for(e in intGrid.keyValueIterator())
+					arr.push({
+						coordId: e.key,
+						v: e.value,
+					});
+				arr;
+			},
+			gridTiles: {
+				var arr = [];
+				for(e in gridTiles.keyValueIterator())
+					arr.push({
+						coordId: e.key,
+						v: e.value,
+					});
+				arr;
+			},
 			entityInstances: entityInstances.map( function(ei) return ei.toJson() ),
 		}
 	}
@@ -55,6 +64,9 @@ class LayerInstance implements ISerializable {
 
 		for( intGridJson in JsonTools.readArray(json.intGrid) )
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );
+
+		for( gridTilesJson in JsonTools.readArray(json.gridTiles) )
+			li.gridTiles.set( gridTilesJson.coordId, gridTilesJson.v );
 
 		for( entityJson in JsonTools.readArray(json.entityInstances) )
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
