@@ -1,26 +1,37 @@
 package data.def;
 
 class TilesetDef implements ISerializable {
-	var pixels : Null<hxd.Pixels>;
+	var base64(default,set): Null<String>;
+	public var pxWid = 0;
+	public var pxHei = 0;
 	public var tileGridSize : Int = Const.DEFAULT_GRID_SIZE;
 	public var tileGridSpacing : Int = 0;
 
 	var texture(get,never) : Null<h3d.mat.Texture>;
 	var _textureCache : Null<h3d.mat.Texture>;
 
-	var base64(get,never) : Null<String>;
-	var _base64Cache : Null<String>;
+	var pixels(get,never) : Null<hxd.Pixels>;
+	var _pixelsCache : Null<hxd.Pixels>;
 
-	var cWid(get,never) : Int; inline function get_cWid() return isEmpty() ? 0 : M.ceil( pixels.width / tileGridSize );
+	var cWid(get,never) : Int; inline function get_cWid() return isEmpty() ? 0 : M.ceil( pxWid / tileGridSize );
+	var cHei(get,never) : Int; inline function get_cHei() return isEmpty() ? 0 : M.ceil( pxHei / tileGridSize );
 
 	public function new() {
 	}
 
-	public function invalidateCache() {
+	function set_base64(str:String) {
+		disposeCache();
+		return base64 = str;
+	}
+
+	public function disposeCache() {
 		if( _textureCache!=null )
 			_textureCache.dispose();
 		_textureCache = null;
-		_base64Cache = null;
+
+		if( _pixelsCache!=null )
+			_pixelsCache.dispose();
+		_pixelsCache = null;
 	}
 
 	function get_texture() {
@@ -29,10 +40,12 @@ class TilesetDef implements ISerializable {
 		return _textureCache;
 	}
 
-	function get_base64() {
-		if( _base64Cache==null && pixels!=null )
-			_base64Cache = haxe.crypto.Base64.encode( pixels.toPNG() );
-		return _base64Cache;
+	function get_pixels() {
+		if( _pixelsCache==null && base64!=null ) {
+			var bytes = haxe.crypto.Base64.decode( base64 );
+			_pixelsCache = dn.heaps.ImageDecoder.getPixels(bytes);
+		}
+		return _pixelsCache;
 	}
 
 	public inline function isEmpty() return pixels==null;
@@ -43,11 +56,10 @@ class TilesetDef implements ISerializable {
 	}
 
 	public function toJson() {
-		var b64 = pixels==null ? null : haxe.crypto.Base64.encode( pixels.bytes );
 		return {
-			b64: b64,
-			width: pixels==null ? 0 : pixels.width,
-			height: pixels==null ? 0 : pixels.height,
+			base64: base64,
+			pxWid: pxWid,
+			pxHei: pxHei,
 			tileGridSize: tileGridSize,
 			tileGridSpacing: tileGridSpacing,
 		}
@@ -58,21 +70,15 @@ class TilesetDef implements ISerializable {
 		var td = new TilesetDef();
 		td.tileGridSize = JsonTools.readInt(json.tileGridSize, Const.DEFAULT_GRID_SIZE);
 		td.tileGridSpacing = JsonTools.readInt(json.tileGridSpacing, 0);
-		if( json.b64!=null ) {
-			var bytes = haxe.crypto.Base64.decode(json.b64);
-			var w = JsonTools.readInt(json.width);
-			var h = JsonTools.readInt(json.height);
-			td.pixels = new hxd.Pixels(w, h, bytes, BGRA);
-		}
+		td.pxWid = JsonTools.readInt( json.pxWid );
+		td.pxHei = JsonTools.readInt( json.pxHei );
+		td.base64 = json.base64;
 		return td;
 	}
 
 	public function importImage(bytes:haxe.io.Bytes) : Bool {
-		invalidateCache();
-		if( pixels!=null )
-			pixels.dispose();
+		base64 = haxe.crypto.Base64.encode(bytes);
 
-		pixels = dn.heaps.ImageDecoder.getPixels(bytes);
 		if( pixels==null ) {
 			switch dn.Identify.getType(bytes) {
 				case Unknown:
@@ -87,6 +93,9 @@ class TilesetDef implements ISerializable {
 			}
 			return false;
 		}
+
+		pxWid = pixels.width;
+		pxHei = pixels.height;
 
 		return true;
 	}
@@ -166,13 +175,8 @@ public inline function getTile(tileId:Int) {
 
 
 	public function dispose() {
-		if( _textureCache!=null )
-			_textureCache.dispose();
-		_textureCache = null;
-
-		if( pixels!=null )
-			pixels.dispose();
-		pixels = null;
+		disposeCache();
+		base64 = null;
 	}
 
 }
