@@ -32,7 +32,7 @@ class InstanceEditor extends dn.Process {
 
 	function onGlobalEvent(ge:GlobalEvent) {
 		switch ge {
-			case ProjectChanged, EntityDefChanged, EntityFieldChanged, EntityFieldSorted:
+			case ProjectSettingsChanged, EntityDefChanged, EntityFieldChanged, EntityFieldSorted:
 				if( ei==null || ei.def==null )
 					destroy();
 				else

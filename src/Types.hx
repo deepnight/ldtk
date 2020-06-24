@@ -12,7 +12,7 @@ typedef IntGridValueDef = {
 }
 
 enum GlobalEvent {
-	ProjectChanged;
+	ProjectSettingsChanged;
 
 	LayerDefChanged;
 	LayerDefSorted;

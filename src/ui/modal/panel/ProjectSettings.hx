@@ -17,15 +17,15 @@ class ProjectSettings extends ui.modal.Panel {
 
 	function updateForm() {
 		var i = Input.linkToHtmlInput( project.name, jForm.find("[name=pName]") );
-		i.linkEvent(ProjectChanged);
+		i.linkEvent(ProjectSettingsChanged);
 
 		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
-		i.linkEvent(ProjectChanged);
+		i.linkEvent(ProjectSettingsChanged);
 
 		var i = Input.linkToHtmlInput( project.bgColor, jForm.find("[name=color]"));
 		i.isColorCode = true;
-		i.linkEvent(ProjectChanged);
+		i.linkEvent(ProjectSettingsChanged);
 
 		var pivot = jForm.find(".pivot");
 		pivot.empty();
@@ -35,7 +35,7 @@ class ProjectSettings extends ui.modal.Panel {
 			function(x,y) {
 				project.defaultPivotX = x;
 				project.defaultPivotY = y;
-				client.ge.emit(ProjectChanged);
+				client.ge.emit(ProjectSettingsChanged);
 			}
 		));
 	}
