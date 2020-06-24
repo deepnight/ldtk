@@ -838,6 +838,15 @@ label.file {
 		}
 	}
 
+	ul.form:not(.type-IntGrid) .IntGrid,
+	ul.form:not(.type-Tiles) .Tiles,
+	ul.form:not(.type-Entities) .Entities {
+		display: none;
+	}
+}
+
+
+.window.panel.tilesetDefs {
 	li.tileset {
 		display: block;
 
@@ -853,14 +862,7 @@ label.file {
 			background-color: rgba(0, 0, 0, 0.4);
 		}
 	}
-
-	ul.form:not(.type-IntGrid) .IntGrid,
-	ul.form:not(.type-Tiles) .Tiles,
-	ul.form:not(.type-Entities) .Entities {
-		display: none;
-	}
 }
-
 
 .window.panel.entityDefs {
 	.content {

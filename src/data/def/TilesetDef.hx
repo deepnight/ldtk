@@ -2,7 +2,9 @@ package data.def;
 
 class TilesetDef implements ISerializable {
 	public var uid : Int;
-	var base64(default,set): Null<String>;
+	public var base64(default,set) : Null<String>;
+	public var path : Null<String>;
+	public var customName : Null<String>;
 	public var pxWid = 0;
 	public var pxHei = 0;
 	public var tileGridSize : Int = Const.DEFAULT_GRID_SIZE;
@@ -21,6 +23,14 @@ class TilesetDef implements ISerializable {
 
 	public function new(uid:Int) {
 		this.uid = uid;
+	}
+
+	public function getName() {
+		return customName!=null ? customName : getDefaultName();
+	}
+
+	public function getDefaultName() {
+		return path!=null ? dn.FilePath.extractFileWithExt(path) : "Empty tileset "+uid;
 	}
 
 	function set_base64(str:String) {
@@ -81,7 +91,8 @@ class TilesetDef implements ISerializable {
 		return td;
 	}
 
-	public function importImage(bytes:haxe.io.Bytes) : Bool {
+	public function importImage(filePath:String, bytes:haxe.io.Bytes) : Bool {
+		path = dn.FilePath.fromFile(filePath).full;
 		base64 = haxe.crypto.Base64.encode(bytes);
 
 		if( pixels==null ) {

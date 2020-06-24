@@ -1,0 +1,164 @@
+package ui.modal.panel;
+
+class EditTilesetDefs extends ui.modal.Panel {
+	var jList : js.jquery.JQuery;
+	var jForm : js.jquery.JQuery;
+	public var cur : Null<TilesetDef>;
+
+	public function new() {
+		super();
+
+		loadTemplate( "editTilesetDefs", "defEditor tilesetDefs" );
+		jList = jModalAndMask.find(".mainList ul");
+		jForm = jModalAndMask.find("ul.form");
+		linkToButton("button.editTilesets");
+
+		// Create tileset
+		jModalAndMask.find(".mainList button.create").click( function(ev) {
+			var td = project.defs.createTilesetDef();
+			select(td);
+			client.ge.emit(TilesetDefChanged);
+			jForm.find("input").first().focus().select();
+		});
+
+		// Delete tileset
+		jModalAndMask.find(".mainList button.delete").click( function(ev) {
+			if( cur==null ) {
+				N.error("No tileset selected.");
+				return;
+			}
+			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this tileset, it will be deleted in all levels and corresponding layers as well. Are you sure?", function() {
+				N.notImplemented();
+				// project.defs.removeLayerDef(cur);
+				// select(project.defs.layers[0]);
+				// client.ge.emit(TilesetDefChanged);
+			});
+		});
+
+
+		select(project.defs.tilesets[0]);
+	}
+
+	override function onGlobalEvent(e:GlobalEvent) {
+		super.onGlobalEvent(e);
+		switch e {
+			case ProjectChanged: close();
+
+
+			case TilesetDefChanged:
+				updateForm();
+				updateTilesetPreview();
+
+			case LayerDefChanged, LayerDefSorted, LayerInstanceChanged:
+			case EntityDefChanged, EntityDefSorted, EntityFieldChanged, EntityFieldSorted:
+		}
+	}
+
+	function select(td:TilesetDef) {
+		cur = td;
+		jForm.find("*").off(); // cleanup event listeners
+
+		if( cur==null ) {
+			jForm.hide();
+			return;
+		}
+
+		jForm.show();
+		jForm.find(".path").text(td.path);
+
+		// Fields
+		var i = Input.linkToHtmlInput(cur.customName, jForm.find("input[name='name']") );
+		// i.validityCheck = project.defs.isLayerNameValid;
+		i.onChange = client.ge.emit.bind(TilesetDefChanged);
+		i.setPlaceholder( cur.getDefaultName() );
+
+		var uploader = jForm.find("input[name=tilesetFile]");
+		uploader.attr("nwworkingdir",client.getCwd()+"\\tilesetTestImages");
+		uploader.change( function(ev) {
+			var path = uploader.val();
+			var buffer = js.node.Fs.readFileSync(path);
+			var bytes = buffer.hxToBytes();
+			if( !cur.importImage(path, bytes) ) {
+				switch dn.Identify.getType(bytes) {
+					case Unknown:
+					case Png, Gif:
+						N.error("Couldn't read this image: maybe the data is corrupted or the format special?");
+
+					case Jpeg:
+						N.error("Sorry, JPEG is not yet supported, please use PNG instead.");
+
+					case Bmp:
+						N.error("Sorry, BMP is not supported, please use PNG instead.");
+				}
+				return;
+			}
+			updateTilesetPreview();
+			client.ge.emit(TilesetDefChanged);
+		});
+
+		var i = Input.linkToHtmlInput( cur.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
+		i.linkEvent(TilesetDefChanged);
+		i.setBounds(2, 512); // TODO cap to texture width
+
+		var i = Input.linkToHtmlInput( cur.tileGridSpacing, jForm.find("input[name=tilesetGridSpacing]") );
+		i.linkEvent(TilesetDefChanged);
+		i.setBounds(0, 512);
+
+		updateList();
+		updateTilesetPreview();
+	}
+
+	function updateTilesetPreview() {
+		if( cur==null || cur.isEmpty() )
+			return;
+
+		// Main tileset view
+		cur.drawAtlasToCanvas( jForm.find(".tileset canvas.fullPreview") );
+
+		// Demo tiles
+		var padding = 8;
+		var jDemo = jForm.find(".tileset canvas.demo");
+		jDemo.attr("width", cur.tileGridSize*6 + padding*5);
+		jDemo.attr("height", cur.tileGridSize);
+		var cnv = Std.downcast( jDemo.get(0), js.html.CanvasElement );
+		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
+
+		var idx = 0;
+		function renderDemoTile(tcx,tcy) {
+			cur.drawTileToCanvas(jDemo, cur.getTileId(tcx,tcy), (idx++)*(cur.tileGridSize+padding), 0);
+		}
+		renderDemoTile(0,0);
+		renderDemoTile(1,0);
+		renderDemoTile(2,0);
+		renderDemoTile(0,1);
+		renderDemoTile(0,2);
+	}
+
+
+	function updateForm() {
+		select(cur);
+	}
+
+
+	function updateList() {
+		jList.empty();
+
+		for(td in project.defs.tilesets) {
+			var e = new J("<li/>");
+			jList.append(e);
+
+			e.append('<span class="name">'+td.getName()+'</span>');
+			if( cur==td )
+				e.addClass("active");
+
+			e.click( function(_) select(td) );
+		}
+
+		// Make layer list sortable
+		// JsTools.makeSortable(".window .mainList ul", function(from, to) {
+			// var moved = project.defs.sortLayerDef(from,to);
+			// select(moved);
+		// 	client.ge.emit(LayerDefSorted);
+		// });
+	}
+}

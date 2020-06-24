@@ -157,6 +157,15 @@ class Definitions implements ISerializable {
 	}
 
 
+	/**  TILESET DEFS  *****************************************/
+
+	public function createTilesetDef() : TilesetDef {
+		var td = new TilesetDef(_project.makeUniqId() );
+		tilesets.push(td);
+		_project.tidy();
+		return td;
+	}
+
 	public function getTilesetDef(uid:Int) : Null<TilesetDef> {
 		for(td in tilesets)
 			if( td.uid==uid )

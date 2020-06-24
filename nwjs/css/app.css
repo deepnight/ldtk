@@ -839,26 +839,26 @@ input[type="file"] {
   color: white;
 }
 
-.window.panel.layerDefs li.tileset {
+.window.panel.layerDefs ul.form:not(.type-IntGrid) .IntGrid,
+.window.panel.layerDefs ul.form:not(.type-Tiles) .Tiles,
+.window.panel.layerDefs ul.form:not(.type-Entities) .Entities {
+  display: none;
+}
+
+.window.panel.tilesetDefs li.tileset {
   display: block;
 }
 
-.window.panel.layerDefs li.tileset canvas.demo,
-.window.panel.layerDefs li.tileset canvas.fullPreview {
+.window.panel.tilesetDefs li.tileset canvas.demo,
+.window.panel.tilesetDefs li.tileset canvas.fullPreview {
   display: block;
   width: 100%;
   image-rendering: pixelated;
 }
 
-.window.panel.layerDefs li.tileset canvas.fullPreview {
+.window.panel.tilesetDefs li.tileset canvas.fullPreview {
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
   background-color: rgba(0, 0, 0, 0.4);
-}
-
-.window.panel.layerDefs ul.form:not(.type-IntGrid) .IntGrid,
-.window.panel.layerDefs ul.form:not(.type-Tiles) .Tiles,
-.window.panel.layerDefs ul.form:not(.type-Entities) .Entities {
-  display: none;
 }
 
 .window.panel.entityDefs .content {

@@ -1,7 +1,7 @@
 package tool;
 
 class TileTool extends Tool< Array<Int> > {
-	public var curTilesetDef(get,never) : TilesetDef;
+	public var curTilesetDef(get,never) : Null<TilesetDef>;
 	inline function get_curTilesetDef() return client.project.defs.getTilesetDef( client.curLayerInstance.def.tilesetDefId );
 
 	public function new() {
@@ -106,7 +106,7 @@ class TileTool extends Tool< Array<Int> > {
 	override function updateCursor(m:MouseCoords) {
 		super.updateCursor(m);
 
-		if( curTilesetDef.isEmpty() ) {
+		if( curTilesetDef==null || curTilesetDef.isEmpty() ) {
 			client.cursor.set(None);
 			return;
 		}
@@ -128,7 +128,8 @@ class TileTool extends Tool< Array<Int> > {
 
 	override function createPalette() {
 		var target = super.createPalette();
-		new ui.TilesetPicker(target, this);
+		if( curTilesetDef!=null )
+			new ui.TilesetPicker(target, this);
 		return target;
 	}
 }

@@ -101,9 +101,6 @@ class EditLayerDefs extends ui.modal.Panel {
 		i.validityCheck = project.defs.isLayerNameValid;
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
-		// var i = Input.linkToHtmlInput( ld.type, jForm.find("select[name='type']") );
-		// i.onChange = client.ge.emit.bind(LayerDefChanged);
-
 		var i = Input.linkToHtmlInput( ld.gridSize, jForm.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
@@ -180,37 +177,36 @@ class EditLayerDefs extends ui.modal.Panel {
 			case Entities:
 
 			case Tiles:
-				var td = project.defs.getTilesetDef( cur.tilesetDefId );
-				var uploader = jForm.find("input[name=tilesetFile]");
-				uploader.attr("nwworkingdir",client.getCwd()+"\\tilesetTestImages");
-				uploader.change( function(ev) {
-					var path = uploader.val();
-					var buffer = js.node.Fs.readFileSync(path);
-					var bytes = buffer.hxToBytes();
-					if( !td.importImage(bytes) ) {
-						switch dn.Identify.getType(bytes) {
-							case Unknown:
-							case Png, Gif:
-								N.error("Couldn't read this image: maybe the data is corrupted or the format special?");
-
-							case Jpeg:
-								N.error("Sorry, JPEG is not yet supported, please use PNG instead.");
-
-							case Bmp:
-								N.error("Sorry, BMP is not supported, please use PNG instead.");
-						}
-						return;
+				var select = jForm.find("select[name=tilesets]");
+				var bt = select.siblings("button");
+				bt.off();
+				select.empty();
+				if( project.defs.tilesets.length==0 ) {
+					select.hide();
+					bt.text( Lang.t._("Create new tileset") );
+					bt.click( function(_) {
+						close();
+						new ui.modal.panel.EditTilesetDefs();
+					});
+				}
+				else {
+					select.show();
+					for(td in project.defs.tilesets) {
+						var opt = new J("<option/>");
+						opt.appendTo(select);
+						opt.attr("value", td.uid);
+						opt.text( td.getName() );
 					}
-					updateTilesetPreview();
-				});
 
-				var i = Input.linkToHtmlInput( td.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
-				i.linkEvent(LayerDefChanged);
-				i.setBounds(2, 512); // TODO cap to texture width
+					bt.text( Lang.t._("Edit") );
+					bt.click( function(_) {
+						close();
+						new ui.modal.panel.EditTilesetDefs();
+						N.debug("TODO");
+					});
+				}
 
-				var i = Input.linkToHtmlInput( td.tileGridSpacing, jForm.find("input[name=tilesetGridSpacing]") );
-				i.linkEvent(LayerDefChanged);
-				i.setBounds(0, 512);
+
 		}
 
 		updateList();

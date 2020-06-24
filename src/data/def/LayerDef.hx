@@ -38,7 +38,7 @@ class LayerDef implements ISerializable {
 		for( v in JsonTools.readArray(json.intGridValues) )
 			o.intGridValues.push(v);
 
-		o.tilesetDefId = JsonTools.readInt(json.tilesetDefId);
+		o.tilesetDefId = JsonTools.readNullableInt(json.tilesetDefId);
 
 		return o;
 	}
@@ -96,5 +96,9 @@ class LayerDef implements ISerializable {
 
 		return true;
 	}
+
+
+
+	public function hasTileset() return tilesetDefId!=null;
 
 }

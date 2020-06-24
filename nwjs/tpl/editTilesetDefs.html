@@ -1,0 +1,48 @@
+<h2>
+	<div class="icon layer orange"></div>
+	Project tilesets
+</h2>
+
+<div class="cols">
+	<div class="mainList">
+		<ul class="niceList"></ul>
+		<div class="buttons">
+			<button class="create">Create tileset</button>
+			<button class="delete">🗑️</button>
+		</div>
+	</div>
+
+	<ul class="form">
+		<li>
+			<label>Tileset image</label>
+			<label for="tilesetFile" class="file">Select an image file</label>
+			<input type="file" id="tilesetFile" name="tilesetFile"/>
+		</li>
+
+		<li>
+			<label for="name">Image path</label>
+			<span class="path"></span>
+		</li>
+
+		<li>
+			<label for="name">Name</label>
+			<input type="text" name="name" id="name"/>
+		</li>
+
+		<li>
+			<label for="tilesetGridSize">Tileset grid</label>
+			<input type="text" id="tilesetGridSize" name="tilesetGridSize"/>
+			<span>px, spaced by</span>
+			<input type="text" id="tilesetGridSpacing" name="tilesetGridSpacing"/>
+			<span>px</span>
+		</li>
+
+		<li class="tileset">
+			<h3>Tile examples</h3>
+			<canvas class="demo" width="512" height="16"></canvas>
+
+			<h3>Tileset</h3>
+			<canvas class="fullPreview" width="512" height="256"></canvas>
+		</li>
+	</ul>
+</div>

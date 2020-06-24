@@ -133,6 +133,12 @@ class Client extends dn.Process {
 			else
 				new ui.modal.panel.EditEntityDefs();
 		});
+		jMainPanel.find("button.editTilesets").click( function(_) {
+			if( ui.Modal.isOpen(ui.modal.panel.EditTilesetDefs) )
+				ui.Modal.closeAll();
+			else
+				new ui.modal.panel.EditTilesetDefs();
+		});
 
 
 
