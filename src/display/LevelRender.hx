@@ -160,7 +160,8 @@ class LevelRender extends dn.Process {
 					for(cx in 0...li.cWid) {
 						if( li.getGridTile(cx,cy)==null )
 							continue;
-						var t = li.def.tilesetDef.getTile( li.getGridTile(cx,cy) );
+						var td = client.project.defs.getTilesetDef(li.def.tilesetDefId);
+						var t = td.getTile( li.getGridTile(cx,cy) );
 						var bmp = new h2d.Bitmap(t, wrapper);
 						bmp.x = cx * li.def.gridSize;
 						bmp.y = cy * li.def.gridSize;

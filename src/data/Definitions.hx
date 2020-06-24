@@ -5,6 +5,7 @@ class Definitions implements ISerializable {
 
 	public var layers: Array<LayerDef> = [];
 	public var entities: Array<EntityDef> = [];
+	public var tilesets: Array<TilesetDef> = [];
 
 
 	public function new(project:ProjectData) {
@@ -19,6 +20,7 @@ class Definitions implements ISerializable {
 		return {
 			layers: layers.map( function(ld) return ld.toJson() ),
 			entities: entities.map( function(ed) return ed.toJson() ),
+			tilesets: tilesets.map( function(td) return td.toJson() ),
 		}
 	}
 
@@ -30,6 +32,9 @@ class Definitions implements ISerializable {
 
 		for( entityJson in JsonTools.readArray(json.entities) )
 			d.entities.push( EntityDef.fromJson(p.dataVersion, entityJson) );
+
+		for( tilesetJson in JsonTools.readArray(json.tilesets) )
+			d.tilesets.push( TilesetDef.fromJson(p.dataVersion, tilesetJson) );
 
 		return d;
 	}
@@ -148,6 +153,14 @@ class Definitions implements ISerializable {
 			if( fd.uid==id )
 				return fd;
 
+		return null;
+	}
+
+
+	public function getTilesetDef(uid:Int) : Null<TilesetDef> {
+		for(td in tilesets)
+			if( td.uid==uid )
+				return td;
 		return null;
 	}
 

@@ -11,16 +11,13 @@ class LayerDef implements ISerializable {
 	var intGridValues : Array<IntGridValueDef> = [];
 
 	// Tileset
-	public var tilesetDef : Null<TilesetDef>;
+	public var tilesetDefId : Null<Int>;
 
 	public function new(uid:Int, t:LayerType) {
 		this.uid = uid;
 		name = "New layer "+uid;
 		type = t;
 		addIntGridValue(0x0);
-
-		if( t==Tiles )
-			tilesetDef = new TilesetDef();
 	}
 
 	@:keep public function toString() {
@@ -41,8 +38,7 @@ class LayerDef implements ISerializable {
 		for( v in JsonTools.readArray(json.intGridValues) )
 			o.intGridValues.push(v);
 
-		if( json.tilesetDef!=null )
-			o.tilesetDef = TilesetDef.fromJson( json.tilesetDef );
+		o.tilesetDefId = JsonTools.readInt(json.tilesetDefId);
 
 		return o;
 	}
@@ -55,7 +51,7 @@ class LayerDef implements ISerializable {
 			gridSize: gridSize,
 			displaydisplayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
 			intGridValues: intGridValues,
-			tilesetDef: tilesetDef==null ? null : tilesetDef.toJson(),
+			tilesetDefId: tilesetDefId,
 		}
 	}
 

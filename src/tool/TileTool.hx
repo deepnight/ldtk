@@ -1,7 +1,8 @@
 package tool;
 
 class TileTool extends Tool< Array<Int> > {
-	public var curTilesetDef(get,never) : TilesetDef; inline function get_curTilesetDef() return client.curLayerInstance.def.tilesetDef;
+	public var curTilesetDef(get,never) : TilesetDef;
+	inline function get_curTilesetDef() return client.project.defs.getTilesetDef( client.curLayerInstance.def.tilesetDefId );
 
 	public function new() {
 		super();

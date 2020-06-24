@@ -1,11 +1,13 @@
 package data.def;
 
 class TilesetDef implements ISerializable {
+	public var uid : Int;
 	var base64(default,set): Null<String>;
 	public var pxWid = 0;
 	public var pxHei = 0;
 	public var tileGridSize : Int = Const.DEFAULT_GRID_SIZE;
 	public var tileGridSpacing : Int = 0;
+
 
 	var texture(get,never) : Null<h3d.mat.Texture>;
 	var _textureCache : Null<h3d.mat.Texture>;
@@ -16,7 +18,9 @@ class TilesetDef implements ISerializable {
 	var cWid(get,never) : Int; inline function get_cWid() return isEmpty() ? 0 : M.ceil( pxWid / tileGridSize );
 	var cHei(get,never) : Int; inline function get_cHei() return isEmpty() ? 0 : M.ceil( pxHei / tileGridSize );
 
-	public function new() {
+
+	public function new(uid:Int) {
+		this.uid = uid;
 	}
 
 	function set_base64(str:String) {
@@ -52,11 +56,12 @@ class TilesetDef implements ISerializable {
 
 
 	public function clone() {
-		return fromJson( toJson() );
+		return fromJson( Const.DATA_VERSION, toJson() );
 	}
 
 	public function toJson() {
 		return {
+			uid: uid,
 			base64: base64,
 			pxWid: pxWid,
 			pxHei: pxHei,
@@ -66,8 +71,8 @@ class TilesetDef implements ISerializable {
 	}
 
 
-	public static function fromJson(json:Dynamic) {
-		var td = new TilesetDef();
+	public static function fromJson(dataVersion:Int, json:Dynamic) {
+		var td = new TilesetDef( JsonTools.readInt(json.uid) );
 		td.tileGridSize = JsonTools.readInt(json.tileGridSize, Const.DEFAULT_GRID_SIZE);
 		td.tileGridSpacing = JsonTools.readInt(json.tileGridSpacing, 0);
 		td.pxWid = JsonTools.readInt( json.pxWid );
