@@ -213,7 +213,7 @@ class Tool<T> extends dn.Process {
 				case null: client.cursor.set(None);
 				case IntGrid(li, cx, cy): client.cursor.set( GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ) );
 				case Entity(instance): client.cursor.set( Entity(instance.def, instance.x, instance.y) );
-				case Tile(li, cx,cy): client.cursor.set( Tiles(li, li.def.tilesetDef, [li.getGridTile(cx,cy)], cx, cy) );
+				case Tile(li, cx,cy): client.cursor.set( Tiles(li, [li.getGridTile(cx,cy)], cx, cy) );
 			}
 		}
 		else if( client.isKeyDown(K.SPACE) )

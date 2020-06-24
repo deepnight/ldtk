@@ -117,9 +117,9 @@ class TileTool extends Tool< Array<Int> > {
 		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
 			var tileIds = getSelectedValue();
 			if( isRandomMode() )
-				client.cursor.set( Tiles(curLayerInstance, curTilesetDef, [ tileIds[Std.random(tileIds.length)] ], m.cx, m.cy) );
+				client.cursor.set( Tiles(curLayerInstance, [ tileIds[Std.random(tileIds.length)] ], m.cx, m.cy) );
 			else
-				client.cursor.set( Tiles(curLayerInstance, curTilesetDef, tileIds, m.cx, m.cy) );
+				client.cursor.set( Tiles(curLayerInstance, tileIds, m.cx, m.cy) );
 		}
 		else
 			client.cursor.set(None);

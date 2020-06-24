@@ -77,7 +77,8 @@ class Cursor extends dn.Process {
 
 				var o = display.LevelRender.createEntityRender(def, wrapper);
 
-			case Tiles(li, td, tileIds, cx, cy):
+			case Tiles(li, tileIds, cx, cy):
+				var td = li.def.tilesetDef;
 				var left = Const.INFINITE;
 				var top = Const.INFINITE;
 				for(tid in tileIds) {
@@ -127,7 +128,7 @@ class Cursor extends dn.Process {
 			case Entity(def, x,y):
 				wrapper.setPosition(x,y);
 
-			case Tiles(li, td, tileIds, cx, cy):
+			case Tiles(li, tileIds, cx, cy):
 				wrapper.setPosition(cx*li.def.gridSize, cy*li.def.gridSize);
 		}
 

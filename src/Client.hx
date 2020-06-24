@@ -266,7 +266,7 @@ class Client extends dn.Process {
 		selectionCursor.set(switch selection {
 			case IntGrid(li, cx, cy): GridCell(li, cx,cy);
 			case Entity(instance): Entity(instance.def, instance.x, instance.y);
-			case Tile(li,cx,cy): Tiles(li, li.def.tilesetDef, [li.getGridTile(cx,cy)], cx,cy);
+			case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
 		});
 
 		ui.InstanceEditor.closeAll();

@@ -49,7 +49,7 @@ enum CursorType {
 	GridCell(li:LayerInstance, cx:Int, cy:Int, ?col:UInt);
 	GridRect(li:LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
 	Entity(def:EntityDef, x:Int, y:Int);
-	Tiles(li:LayerInstance, td:TilesetDef, tileIds:Array<Int>, cx:Int, cy:Int);
+	Tiles(li:LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int);
 }
 
 enum GenericLevelElement {
