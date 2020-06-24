@@ -5,7 +5,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 	var jForm : js.jquery.JQuery;
 	public var cur : Null<TilesetDef>;
 
-	public function new() {
+	public function new(?selectedDef:TilesetDef) {
 		super();
 
 		loadTemplate( "editTilesetDefs", "defEditor tilesetDefs" );
@@ -36,7 +36,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		});
 
 
-		select(project.defs.tilesets[0]);
+		select(selectedDef!=null ? selectedDef : project.defs.tilesets[0]);
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -64,11 +64,55 @@ class EditTilesetDefs extends ui.modal.Panel {
 		}
 
 		jForm.show();
-		jForm.find(".path").text(td.path);
+
+		updateForm();
+		updateList();
+		updateTilesetPreview();
+	}
+
+
+
+	function updateTilesetPreview() {
+		// Main tileset view
+		var jFull = jForm.find(".tileset canvas.fullPreview");
+		if( cur==null || cur.isEmpty() ) {
+			var cnv = Std.downcast( jFull.get(0), js.html.CanvasElement );
+			cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
+		}
+		else
+			cur.drawAtlasToCanvas( jFull );
+
+		// Demo tiles
+		var padding = 8;
+		var jDemo = jForm.find(".tileset canvas.demo");
+		var cnv = Std.downcast( jDemo.get(0), js.html.CanvasElement );
+		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
+
+		if( cur!=null && !cur.isEmpty() ) {
+			jDemo.attr("width", cur.tileGridSize*6 + padding*5);
+			jDemo.attr("height", cur.tileGridSize);
+
+			var idx = 0;
+			function renderDemoTile(tcx,tcy) {
+				cur.drawTileToCanvas(jDemo, cur.getTileId(tcx,tcy), (idx++)*(cur.tileGridSize+padding), 0);
+			}
+			renderDemoTile(0,0);
+			renderDemoTile(1,0);
+			renderDemoTile(2,0);
+			renderDemoTile(0,1);
+			renderDemoTile(0,2);
+		}
+	}
+
+
+	function updateForm() {
+		if( cur.isEmpty() )
+			jForm.find(".path").empty();
+		else
+			jForm.find(".path").text(cur.path);
 
 		// Fields
 		var i = Input.linkToHtmlInput(cur.customName, jForm.find("input[name='name']") );
-		// i.validityCheck = project.defs.isLayerNameValid;
 		i.onChange = client.ge.emit.bind(TilesetDefChanged);
 		i.setPlaceholder( cur.getDefaultName() );
 
@@ -103,40 +147,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( cur.tileGridSpacing, jForm.find("input[name=tilesetGridSpacing]") );
 		i.linkEvent(TilesetDefChanged);
 		i.setBounds(0, 512);
-
-		updateList();
-		updateTilesetPreview();
-	}
-
-	function updateTilesetPreview() {
-		if( cur==null || cur.isEmpty() )
-			return;
-
-		// Main tileset view
-		cur.drawAtlasToCanvas( jForm.find(".tileset canvas.fullPreview") );
-
-		// Demo tiles
-		var padding = 8;
-		var jDemo = jForm.find(".tileset canvas.demo");
-		jDemo.attr("width", cur.tileGridSize*6 + padding*5);
-		jDemo.attr("height", cur.tileGridSize);
-		var cnv = Std.downcast( jDemo.get(0), js.html.CanvasElement );
-		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
-
-		var idx = 0;
-		function renderDemoTile(tcx,tcy) {
-			cur.drawTileToCanvas(jDemo, cur.getTileId(tcx,tcy), (idx++)*(cur.tileGridSize+padding), 0);
-		}
-		renderDemoTile(0,0);
-		renderDemoTile(1,0);
-		renderDemoTile(2,0);
-		renderDemoTile(0,1);
-		renderDemoTile(0,2);
-	}
-
-
-	function updateForm() {
-		select(cur);
 	}
 
 

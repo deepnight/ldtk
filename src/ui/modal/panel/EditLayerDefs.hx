@@ -65,7 +65,6 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			case TilesetDefChanged:
 				updateForm();
-				updateTilesetPreview();
 
 			case LayerDefSorted:
 				updateList();
@@ -182,6 +181,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				bt.off();
 				select.empty();
 				if( project.defs.tilesets.length==0 ) {
+					// No tileset in project
 					select.hide();
 					bt.text( Lang.t._("Create new tileset") );
 					bt.click( function(_) {
@@ -190,7 +190,13 @@ class EditLayerDefs extends ui.modal.Panel {
 					});
 				}
 				else {
+					// List tilesets
 					select.show();
+					var opt = new J("<option/>");
+					opt.appendTo(select);
+					opt.attr("value", -1);
+					opt.text("-- Select a tileset --");
+
 					for(td in project.defs.tilesets) {
 						var opt = new J("<option/>");
 						opt.appendTo(select);
@@ -198,11 +204,22 @@ class EditLayerDefs extends ui.modal.Panel {
 						opt.text( td.getName() );
 					}
 
+					select.val( cur.tilesetDefId==null ? -1 : cur.tilesetDefId );
+
+					// Change tileset
+					select.change( function(ev) {
+						var v = Std.parseInt( select.val() );
+						if( v<0 )
+							cur.tilesetDefId = null;
+						else
+							cur.tilesetDefId = v;
+						client.ge.emit(LayerDefChanged);
+					});
+
 					bt.text( Lang.t._("Edit") );
 					bt.click( function(_) {
 						close();
-						new ui.modal.panel.EditTilesetDefs();
-						N.debug("TODO");
+						new ui.modal.panel.EditTilesetDefs( project.defs.getTilesetDef(cur.tilesetDefId) );
 					});
 				}
 
@@ -210,36 +227,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		}
 
 		updateList();
-		updateTilesetPreview();
 	}
-
-	function updateTilesetPreview() {
-		var td = project.defs.getTilesetDef( cur.tilesetDefId );
-		if( cur.type!=Tiles || td==null || td.isEmpty() )
-			return;
-
-		// Main tileset view
-		td.drawAtlasToCanvas( jForm.find(".tileset canvas.fullPreview") );
-
-		// Demo tiles
-		var padding = 8;
-		var jDemo = jForm.find(".tileset canvas.demo");
-		jDemo.attr("width", td.tileGridSize*6 + padding*5);
-		jDemo.attr("height", td.tileGridSize);
-		var cnv = Std.downcast( jDemo.get(0), js.html.CanvasElement );
-		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
-
-		var idx = 0;
-		function renderDemoTile(tcx,tcy) {
-			td.drawTileToCanvas(jDemo, td.getTileId(tcx,tcy), (idx++)*(td.tileGridSize+padding), 0);
-		}
-		renderDemoTile(0,0);
-		renderDemoTile(1,0);
-		renderDemoTile(2,0);
-		renderDemoTile(0,1);
-		renderDemoTile(0,2);
-	}
-
 
 	function updateForm() {
 		select(cur);
