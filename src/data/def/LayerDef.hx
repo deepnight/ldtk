@@ -15,8 +15,8 @@ class LayerDef implements ISerializable {
 
 	public function new(uid:Int, t:LayerType) {
 		this.uid = uid;
-		name = "New layer "+uid;
 		type = t;
+		name = Lang.getLayerType(type)+" #"+uid;
 		addIntGridValue(0x0);
 	}
 

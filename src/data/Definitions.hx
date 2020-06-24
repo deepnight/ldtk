@@ -54,7 +54,9 @@ class Definitions implements ISerializable {
 
 	public function createLayerDef(type:LayerType, ?name:String) : LayerDef {
 		var l = new LayerDef(_project.makeUniqId(), type);
-		if( name!=null && isLayerNameValid(name) )
+		if( name==null && isLayerNameValid( Lang.getLayerType(type).toString() ) ) // dirty fix for string comparison issue
+			l.name = Lang.getLayerType(type);
+		else if( name!=null && isLayerNameValid(name) )
 			l.name = name;
 		l.gridSize = _project.defaultGridSize;
 		layers.push(l);
@@ -63,6 +65,9 @@ class Definitions implements ISerializable {
 	}
 
 	public function isLayerNameValid(name:String) {
+		if( name==null || StringTools.trim(name).length==0 )
+			return false;
+
 		for(ld in layers)
 			if( ld.name==name )
 				return false;
