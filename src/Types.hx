@@ -55,6 +55,7 @@ enum CursorType {
 enum GenericLevelElement {
 	IntGrid(li:LayerInstance, cx:Int, cy:Int);
 	Entity(instance:EntityInstance);
+	Tile(li:LayerInstance, cx:Int, cy:Int);
 }
 
 enum ToolEditMode {

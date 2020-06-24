@@ -259,19 +259,21 @@ class Client extends dn.Process {
 				clearSelection();
 				return;
 
-			case Entity(_):
+			case Entity(_), Tile(_):
 		}
 
 		selection = ge;
 		selectionCursor.set(switch selection {
 			case IntGrid(li, cx, cy): GridCell(li, cx,cy);
 			case Entity(instance): Entity(instance.def, instance.x, instance.y);
+			case Tile(li,cx,cy): Tiles(li, li.def.tilesetDef, [li.getGridTile(cx,cy)], cx,cy);
 		});
 
 		ui.InstanceEditor.closeAll();
 		switch selection {
 			case null:
-			case IntGrid(li, cx, cy):
+			case IntGrid(_):
+			case Tile(_):
 
 			case Entity(instance):
 				new ui.InstanceEditor(instance);
@@ -323,6 +325,10 @@ class Client extends dn.Process {
 							return true;
 						}
 				}
+
+			case Tile(li, cx, cy):
+				selectLayerInstance(li);
+				// TODO
 		}
 
 		return false;

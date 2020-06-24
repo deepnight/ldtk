@@ -91,7 +91,7 @@ class TilesetDef implements ISerializable {
 		return true;
 	}
 
-	public function coordId(tcx,tcy) {
+	public function coordId(tcx,tcy) { // TODO rename getTileId
 		return tcx + tcy * cWid;
 	}
 

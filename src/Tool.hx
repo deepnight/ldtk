@@ -120,6 +120,10 @@ class Tool<T> extends dn.Process {
 			case Entity(instance):
 				var ei = curLayerInstance.duplicateEntityInstance( instance );
 				return GenericLevelElement.Entity(ei);
+
+			case Tile(li, cx, cy):
+				throw "Unsupported yet";
+				// TODO
 		}
 	}
 
@@ -140,7 +144,8 @@ class Tool<T> extends dn.Process {
 							ge = GenericLevelElement.Entity(ei);
 
 				case Tiles:
-					// TODO
+					if( li.getGridTile(cx,cy)!=null )
+						ge = GenericLevelElement.Tile(li, cx, cy);
 			}
 		}
 
@@ -208,6 +213,7 @@ class Tool<T> extends dn.Process {
 				case null: client.cursor.set(None);
 				case IntGrid(li, cx, cy): client.cursor.set( GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ) );
 				case Entity(instance): client.cursor.set( Entity(instance.def, instance.x, instance.y) );
+				case Tile(li, cx,cy): client.cursor.set( Tiles(li, li.def.tilesetDef, [li.getGridTile(cx,cy)], cx, cy) );
 			}
 		}
 		else if( client.isKeyDown(K.SPACE) )
