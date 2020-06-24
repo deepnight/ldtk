@@ -862,6 +862,24 @@ label.file {
 			background-color: rgba(0, 0, 0, 0.4);
 		}
 	}
+	span.path {
+		flex: 1 1 auto;
+		overflow: auto;
+		background-color: $bgDark;
+		opacity: 1;
+
+		span {
+			display: inline-block;
+			font-size: 9pt;
+		}
+		span:last-of-type {
+			color: $orange;
+			font-weight: bold;
+		}
+		span+span::before {
+			content: " / ";
+		}
+	}
 }
 
 .window.panel.entityDefs {

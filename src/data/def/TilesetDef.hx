@@ -33,6 +33,13 @@ class TilesetDef implements ISerializable {
 		return path!=null ? dn.FilePath.extractFileWithExt(path) : "Empty tileset "+uid;
 	}
 
+	public function getFileName() : Null<String> {
+		if( path==null || isEmpty() )
+			return null;
+
+		return dn.FilePath.fromFile(path).fileWithExt;
+	}
+
 	function set_base64(str:String) {
 		disposeCache();
 		return base64 = str;
@@ -92,7 +99,7 @@ class TilesetDef implements ISerializable {
 	}
 
 	public function importImage(filePath:String, bytes:haxe.io.Bytes) : Bool {
-		path = dn.FilePath.fromFile(filePath).full;
+		path = dn.FilePath.fromFile(filePath).useSlashes().full;
 		base64 = haxe.crypto.Base64.encode(bytes);
 
 		if( pixels==null ) {
@@ -176,7 +183,8 @@ public inline function getTile(tileId:Int) {
 		if( !canvas.is("canvas") )
 			throw "Not a canvas";
 
-		// TODO check image bounds limits
+		if( getTileSourceX(tileId)+tileGridSize>=pxWid || getTileSourceY(tileId)+tileGridSize>=pxHei )
+			return; // out of bounds
 
 		var subPixels = pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
 		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);

@@ -107,10 +107,12 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 
 	function updateForm() {
-		if( cur.isEmpty() )
-			jForm.find(".path").empty();
-		else
-			jForm.find(".path").text(cur.path);
+		// Image path
+		var jPath = jForm.find(".path");
+		jPath.empty();
+		if( !cur.isEmpty() )
+			for(e in cur.path.split("/"))
+				jPath.append('<span>$e</span>');
 
 		// Fields
 		var i = Input.linkToHtmlInput(cur.customName, jForm.find("input[name='name']") );
@@ -119,11 +121,16 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		var uploader = jForm.find("input[name=tilesetFile]");
 		uploader.attr("nwworkingdir",client.getCwd()+"\\tilesetTestImages");
+		var label = uploader.siblings("[for="+uploader.attr("id")+"]");
+		label.text( cur.isEmpty() ? Lang.t._("Select an image file") : cur.getFileName() );
 		uploader.change( function(ev) {
-			var path = uploader.val();
-			var buffer = js.node.Fs.readFileSync(path);
+			var rawPath = uploader.val();
+			var relativePath = dn.FilePath.fromFile( rawPath );
+			relativePath.makeRelativeTo( client.getCwd() );
+
+			var buffer = js.node.Fs.readFileSync(rawPath);
 			var bytes = buffer.hxToBytes();
-			if( !cur.importImage(path, bytes) ) {
+			if( !cur.importImage(relativePath.full, bytes) ) {
 				switch dn.Identify.getType(bytes) {
 					case Unknown:
 					case Png, Gif:

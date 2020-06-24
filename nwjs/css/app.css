@@ -861,6 +861,27 @@ input[type="file"] {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+.window.panel.tilesetDefs span.path {
+  flex: 1 1 auto;
+  overflow: auto;
+  background-color: #1e2229;
+  opacity: 1;
+}
+
+.window.panel.tilesetDefs span.path span {
+  display: inline-block;
+  font-size: 9pt;
+}
+
+.window.panel.tilesetDefs span.path span:last-of-type {
+  color: #ffcc00;
+  font-weight: bold;
+}
+
+.window.panel.tilesetDefs span.path span + span::before {
+  content: " / ";
+}
+
 .window.panel.entityDefs .content {
   width: 900px;
 }
