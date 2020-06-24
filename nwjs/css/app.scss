@@ -531,7 +531,7 @@ label.file {
 		display: grid;
 		width: 100%;
 		gap: 2px;
-		grid-template-columns: repeat(3,auto);
+		grid-template-columns: repeat(3, 33.33%);
 
 		button {
 			margin: 0;

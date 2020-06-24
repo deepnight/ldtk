@@ -541,7 +541,7 @@ input[type="file"] {
   display: grid;
   width: 100%;
   gap: 2px;
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: repeat(3, 33.33%);
 }
 
 .window.dialog.fieldTypes .content button, .window.dialog.fieldTypes .content label.file,
