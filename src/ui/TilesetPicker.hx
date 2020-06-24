@@ -83,12 +83,12 @@ class TilesetPicker {
 			// Apply selection
 			var r = getCursorRect(ev.pageX, ev.pageY);
 			if( r.wid==1 && r.hei==1 )
-				onSelect([ tool.curTilesetDef.coordId(r.cx,r.cy) ]);
+				onSelect([ tool.curTilesetDef.getTileId(r.cx,r.cy) ]);
 			else {
 				var tileIds = [];
 				for(cx in r.cx...r.cx+r.wid)
 				for(cy in r.cy...r.cy+r.hei)
-					tileIds.push( tool.curTilesetDef.coordId(cx,cy) );
+					tileIds.push( tool.curTilesetDef.getTileId(cx,cy) );
 				onSelect(tileIds);
 			}
 		}
