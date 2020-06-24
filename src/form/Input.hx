@@ -96,18 +96,38 @@ class Input<T> {
 	public static macro function linkToHtmlInput(variable:Expr, formInput:ExprOf<js.jquery.JQuery>) {
 		var t = Context.typeof(variable);
 		switch t {
-			case TInst(t, params):
-				switch t.toString() {
-					case "String":
-						return macro {
-							new form.input.StringInput(
-								$formInput,
-								function() return $variable,
-								function(v) $variable = v
-							);
-						}
-					case _: Context.fatalError("Unsupported instance type "+t, variable.pos);
+			case TInst(_.toString()=>"String", _):
+				return macro {
+					new form.input.StringInput(
+						$formInput,
+						function() return $variable,
+						function(v) $variable = v
+					);
 				}
+
+			case TAbstract(_.toString()=>"Null", [ TInst(_.toString()=>"String", params) ]) :
+				return macro {
+					var i = new form.input.StringInput(
+						$formInput,
+						function() return $variable,
+						function(v) $variable = v
+					);
+					i.allowNull = true;
+					i;
+				}
+
+			// case TInst(t, params):
+			// 	switch t.toString() {
+			// 		case "String":
+			// 			return macro {
+			// 				new form.input.StringInput(
+			// 					$formInput,
+			// 					function() return $variable,
+			// 					function(v) $variable = v
+			// 				);
+			// 			}
+			// 		case _: Context.fatalError("Unsupported instance type "+t, variable.pos);
+			// 	}
 
 			case TEnum(eRef,_):
 				var enumType = haxe.macro.TypeTools.getEnum(t);
