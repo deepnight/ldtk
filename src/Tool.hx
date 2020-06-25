@@ -231,7 +231,6 @@ class Tool<T> extends dn.Process {
 
 
 	public function popOutPalette() {
-		updatePalette();
 		new ui.modal.FloatingToolPalette(this);
 	}
 
