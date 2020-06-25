@@ -174,6 +174,9 @@ class Tool<T> extends dn.Process {
 	function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {}
 
 	public function stopUsing(m:MouseCoords) {
+		if( curMode==PanView && M.dist(origin.htmlX, origin.htmlY, m.htmlX, m.htmlY) < Const.MIDDLE_CLICK_DIST_THRESHOLD )
+			popOutPalette();
+
 		if( isRunning() ) {
 			if( !rectangle )
 				useAt(m);

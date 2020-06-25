@@ -7,10 +7,24 @@ class FloatingToolPalette extends ui.Modal {
 		super();
 
 		ME = this;
-		jModalAndMask.addClass("floatingPalette");
+
+		// Detect middle click to close
+		var startX = 0.;
+		var startY = 0.;
+		jModalAndMask
+			.addClass("floatingPalette")
+			.mousedown( function(ev) {
+				startX = ev.pageX;
+				startY = ev.pageY;
+			} )
+			.mouseup( function(ev) {
+				if( ev.button==1 && M.dist(startX, startY, ev.pageX, ev.pageY)<Const.MIDDLE_CLICK_DIST_THRESHOLD )
+					close();
+			});
 
 		jContent.append( t.createPalette() );
 
+		// Position
 		var m = client.getMouse();
 		var x = m.htmlX - jWrapper.outerWidth()*0.5;
 		var y = m.htmlY - jWrapper.outerHeight()*0.5;
