@@ -40,7 +40,6 @@ class TilesetPicker {
 	}
 
 	function renderSelection() {
-		N.debug("render sel");
 		wrapper.find(".selection").remove();
 
 		for(tileId in tool.getSelectedValue())
