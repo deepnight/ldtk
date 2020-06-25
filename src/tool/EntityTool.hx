@@ -145,6 +145,8 @@ class EntityTool extends Tool<Int> {
 
 			e.click( function(_) {
 				selectValue(ed.uid);
+				list.find(".active").removeClass("active");
+				e.addClass("active");
 				updatePalette();
 			});
 		}

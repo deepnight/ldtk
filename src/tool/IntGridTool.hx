@@ -101,6 +101,8 @@ class IntGridTool extends Tool<Int> {
 			var curIdx = idx;
 			e.click( function(_) {
 				selectValue(curIdx);
+				list.find(".active").removeClass("active");
+				e.addClass("active");
 				updatePalette();
 			});
 			idx++;
