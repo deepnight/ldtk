@@ -494,7 +494,7 @@ input[type="file"] {
 
 .window.panel {
   left: 300px;
-  width: calc( 100% - $mainPanelWid);
+  width: calc( 100% - 300px);
 }
 
 .window.panel .wrapper {

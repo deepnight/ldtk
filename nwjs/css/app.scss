@@ -5,9 +5,6 @@ $bgLight: #545d73;
 $red: #e34d00;
 $orange: #ffcc00;
 
-// Constants
-$mainPanelWid: 300px;
-
 // Shortcuts
 @mixin resetMargin() {
 	margin: 0;
@@ -483,8 +480,8 @@ label.file {
 }
 
 .window.panel {
-	left: $mainPanelWid;
-	width: calc( 100% - $mainPanelWid );
+	left: 300px;
+	width: calc( 100% - 300px );
 	.wrapper {
 		top: 0px;
 		left: 0px;
@@ -618,7 +615,7 @@ label.file {
 
 #editor {
 	display: grid;
-	grid-template-columns: $mainPanelWid auto;
+	grid-template-columns: 300px auto;
 	width: 100%;
 	height: 100%;
 
