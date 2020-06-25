@@ -9,7 +9,7 @@ class TilesetDef implements ISerializable {
 	public var pxHei = 0;
 	public var tileGridSize : Int = Const.DEFAULT_GRID_SIZE;
 	public var tileGridSpacing : Int = 0;
-
+	public var savedSelections : Array< Array<Int> > = [];
 
 	var texture(get,never) : Null<h3d.mat.Texture>;
 	var _textureCache : Null<h3d.mat.Texture>;
@@ -86,6 +86,7 @@ class TilesetDef implements ISerializable {
 			pxHei: pxHei,
 			tileGridSize: tileGridSize,
 			tileGridSpacing: tileGridSpacing,
+			savedSelections: savedSelections,
 		}
 	}
 
@@ -99,6 +100,7 @@ class TilesetDef implements ISerializable {
 		td.base64 = json.base64;
 		td.path = json.path;
 		td.customName = json.customName;
+		td.savedSelections = json.savedSelections==null ? [] : json.savedSelections;
 		return td;
 	}
 
@@ -207,4 +209,27 @@ public inline function getTile(tileId:Int) {
 		base64 = null;
 	}
 
+
+	public function saveSelection(tileIds:Array<Int>) {
+		// Remove existing overlapping saved selections
+		for(tid in tileIds) {
+			var saved = getSavedSelectionFor(tid);
+			if( saved!=null )
+				savedSelections.remove(saved);
+		}
+
+		savedSelections.push( tileIds );
+	}
+
+	public inline function hasSavedSelectionFor(tid:Int) : Bool {
+		return getSavedSelectionFor(tid)!=null;
+	}
+
+	public function getSavedSelectionFor(tid:Int) : Null< Array<Int> > {
+		for(sel in savedSelections)
+			for(stid in sel)
+				if( stid==tid )
+					return sel;
+		return null;
+	}
 }
