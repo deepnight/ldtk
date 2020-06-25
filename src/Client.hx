@@ -247,7 +247,7 @@ class Client extends dn.Process {
 				if( ui.modal.FloatingToolPalette.isOpen() )
 					ui.modal.FloatingToolPalette.ME.close();
 				else if( !ui.Modal.hasAnyOpen() )
-					curTool.popOutPalette();
+					curTool.openFloatingPalette();
 
 			case K.S:
 				if( curLayerDef!=null && curLayerDef.type==Tiles ) {
