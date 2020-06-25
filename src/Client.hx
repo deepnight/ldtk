@@ -127,6 +127,13 @@ class Client extends dn.Process {
 		});
 
 
+		// Space bar blocking
+		new J(js.Browser.window).off().keydown( function(ev) {
+			var e = new J(ev.target);
+			if( !e.is("input") && !e.is("textarea") )
+				ev.preventDefault();
+		});
+
 
 		#if debug
 		jMainPanel.find("button.debug").click( function(ev) {
@@ -246,6 +253,7 @@ class Client extends dn.Process {
 				if( curLayerDef!=null && curLayerDef.type==Tiles ) {
 					var td = project.defs.getTilesetDef(curLayerDef.tilesetDefId);
 					td.saveSelection( curTool.getSelectedValue() );
+					ge.emit(TilesetDefChanged);
 					N.msg("Saved selection");
 				}
 		}

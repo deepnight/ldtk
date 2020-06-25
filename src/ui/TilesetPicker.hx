@@ -8,7 +8,7 @@ class TilesetPicker {
 	var zoom = 2.0;
 	var cursors : js.jquery.JQuery;
 
-	var dragStart : Null<{ x:Int, y:Int }>;
+	var dragStart : Null<{ bt:Int, localX:Int, localY:Int }>;
 
 	public function new(target:js.jquery.JQuery, tool:tool.TileTool) {
 		this.tool = tool;
@@ -66,15 +66,21 @@ class TilesetPicker {
 
 
 	var _lastRect = null;
-	function updateCursor(pageX:Float, pageY:Float) {
+	function updateCursor(pageX:Float, pageY:Float, force=false) {
+		if( isScrolling() || Client.ME.isKeyDown(K.SPACE) ) {
+			cursors.hide();
+			return;
+		}
+
 		var r = getCursorRect(pageX, pageY);
 
 		// Avoid re-render if it's the same rect
-		if( _lastRect!=null && r.cx==_lastRect.cx && r.cy==_lastRect.cy && r.wid==_lastRect.wid && r.hei==_lastRect.hei )
+		if( !force && _lastRect!=null && r.cx==_lastRect.cx && r.cy==_lastRect.cy && r.wid==_lastRect.wid && r.hei==_lastRect.hei )
 			return;
 
 		var tileId = tool.curTilesetDef.getTileId(r.cx,r.cy);
 		cursors.empty();
+		cursors.show();
 
 		var saved = tool.curTilesetDef.getSavedSelectionFor(tileId);
 		if( saved==null )
@@ -89,8 +95,29 @@ class TilesetPicker {
 	}
 
 
+	function scroll(pageX:Float, pageY:Float) {
+		var scroller = wrapper;
+		while( scroller.css("overflow")!="auto" )
+			scroller = scroller.parent();
+
+		var spd = 2;
+
+		scroller.scrollTop( scroller.scrollTop() - ( pageYtoLocal(pageY) - dragStart.localY ) * zoom * spd );
+		dragStart.localY = pageYtoLocal(pageY);
+
+		scroller.scrollLeft( scroller.scrollLeft() - ( pageXtoLocal(pageX) - dragStart.localX ) * zoom * spd );
+		dragStart.localX = pageXtoLocal(pageX);
+	}
+
+	inline function isScrolling() {
+		return dragStart!=null && ( dragStart.bt==1 || Client.ME.isKeyDown(K.SPACE) );
+	}
+
 	function onDocMouseMove(ev:js.jquery.Event) {
 		updateCursor(ev.pageX, ev.pageY);
+
+		if( isScrolling() )
+			scroll(ev.pageX, ev.pageY);
 	}
 
 	function onDocMouseUp(ev:js.jquery.Event) {
@@ -98,19 +125,22 @@ class TilesetPicker {
 
 		if( dragStart!=null ) {
 			// Apply selection
-			var r = getCursorRect(ev.pageX, ev.pageY);
-			if( r.wid==1 && r.hei==1 )
-				onSelect([ tool.curTilesetDef.getTileId(r.cx,r.cy) ]);
-			else {
-				var tileIds = [];
-				for(cx in r.cx...r.cx+r.wid)
-				for(cy in r.cy...r.cy+r.hei)
-					tileIds.push( tool.curTilesetDef.getTileId(cx,cy) );
-				onSelect(tileIds);
+			if( !isScrolling() ) {
+				var r = getCursorRect(ev.pageX, ev.pageY);
+				if( r.wid==1 && r.hei==1 )
+					onSelect([ tool.curTilesetDef.getTileId(r.cx,r.cy) ]);
+				else {
+					var tileIds = [];
+					for(cx in r.cx...r.cx+r.wid)
+					for(cy in r.cy...r.cy+r.hei)
+						tileIds.push( tool.curTilesetDef.getTileId(cx,cy) );
+					onSelect(tileIds);
+				}
 			}
 		}
 
 		dragStart = null;
+		updateCursor(ev.pageX, ev.pageY, true);
 	}
 
 	function onSelect(sel:Array<Int>) {
@@ -146,44 +176,49 @@ class TilesetPicker {
 				arr.push(tid);
 			tool.selectValue(arr);
 		}
+
+		renderSelection();
 	}
 
 
 	function onPickerMouseDown(ev:js.jquery.Event) {
 		dragStart = {
-			x: Std.int( ev.offsetX / zoom ),
-			y: Std.int( ev.offsetY / zoom ),
+			bt: ev.button,
+			localX: Std.int( ev.offsetX / zoom ),
+			localY: Std.int( ev.offsetY / zoom ),
 		}
 	}
 
 	function onPickerMouseMove(ev:js.jquery.Event) {
-		if( dragStart==null )
-			updateCursor(ev.pageX, ev.pageY);
+		updateCursor(ev.pageX, ev.pageY);
 	}
 
+	inline function pageXtoLocal(v:Float) return M.round( v/zoom - wrapper.offset().left );
+	inline function pageYtoLocal(v:Float) return M.round( v/zoom - wrapper.offset().top );
+
 	function getCursorRect(pageX:Float, pageY:Float) {
-		var curX = pageX - wrapper.offset().left * zoom;
-		var curY = pageY - wrapper.offset().top * zoom;
+		var localX = pageXtoLocal(pageX);
+		var localY = pageYtoLocal(pageY);
 
 		var grid = tool.curTilesetDef.tileGridSize;
-		var curCx = Std.int( curX / grid / zoom );
-		var curCy = Std.int( curY / grid / zoom );
+		var cx = Std.int( localX / grid );
+		var cy = Std.int( localY / grid );
 
 		if( dragStart==null )
 			return {
-				cx: curCx,
-				cy: curCy,
+				cx: cx,
+				cy: cy,
 				wid: 1,
 				hei: 1,
 			}
 		else {
-			var startCx = Std.int(dragStart.x/grid);
-			var startCy = Std.int(dragStart.y/grid);
+			var startCx = Std.int(dragStart.localX/grid);
+			var startCy = Std.int(dragStart.localY/grid);
 			return {
-				cx: M.imin(curCx,startCx),
-				cy: M.imin(curCy,startCy),
-				wid: M.iabs(curCx-startCx) + 1,
-				hei: M.iabs(curCy-startCy) + 1,
+				cx: M.imin(cx,startCx),
+				cy: M.imin(cy,startCy),
+				wid: M.iabs(cx-startCx) + 1,
+				hei: M.iabs(cy-startCy) + 1,
 			}
 		}
 	}
