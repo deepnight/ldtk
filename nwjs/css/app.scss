@@ -550,10 +550,12 @@ label.file {
 	.wrapper {
 		padding: 0;
 		border: none;
-		border: 2px solid black;
+		outline: 2px solid black;
+		box-shadow: 0px 0px 32px black;
 
 		.content {
-			max-height: 600px;
+			max-width: 60vw;
+			max-height: 80vh;
 		}
 	}
 }
@@ -622,8 +624,9 @@ label.file {
 	#mainPanel {
 		position: relative;
 		display: grid;
+		height: 100%;
 		overflow: hidden;
-		grid-template-rows: min-content 0.6fr 1fr;
+		grid-template-rows: min-content 300px auto;
 		padding: 5px;
 		gap: 5px;
 		background: $bgDark;
@@ -678,6 +681,22 @@ label.file {
 			ul.niceList {
 				height: 100%;
 				box-sizing: border-box;
+			}
+		}
+
+		#mainPaletteWrapper.popOut {
+			// overflow: visible;
+
+			.palette {
+				position: absolute;
+				z-index: 99;
+				box-sizing: border-box;
+				top: 30%;
+				// max-width: 50%;
+				height: 70%;
+				overflow: auto;
+				box-shadow: 0px 0px 32px black;
+				border: 1px solid white;
 			}
 		}
 	}

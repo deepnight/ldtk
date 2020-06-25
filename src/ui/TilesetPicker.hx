@@ -5,7 +5,7 @@ class TilesetPicker {
 	var wrapper : js.jquery.JQuery;
 
 	var tool : tool.TileTool;
-	var zoom = 2.0;
+	var zoom = 3.0;
 	var cursors : js.jquery.JQuery;
 
 	var dragStart : Null<{ bt:Int, localX:Int, localY:Int }>;
@@ -37,7 +37,20 @@ class TilesetPicker {
 		img.mousemove( onPickerMouseMove );
 
 		renderSelection();
+
 	}
+
+	// public function onAddedToDom() {
+	// 	// Center on selection
+	// 	var curSel = tool.getSelectedValue();
+	// 	var avgX = 0.;
+	// 	for(tid in curSel) {
+	// 		avgX += tool.curTilesetDef.getTileSourceX(tid);
+	// 	}
+	// 	avgX/=curSel.length;
+	// 	var scroller = getScroller();
+	// 	scroller.scrollLeft( - (avgX + scroller.outerWidth()*0.5) );
+	// }
 
 	function renderSelection() {
 		wrapper.find(".selection").remove();
@@ -94,13 +107,16 @@ class TilesetPicker {
 		_lastRect = r;
 	}
 
-
-	function scroll(pageX:Float, pageY:Float) {
+	function getScroller() {
 		var scroller = wrapper;
 		while( scroller.css("overflow")!="auto" )
 			scroller = scroller.parent();
+		return scroller;
+	}
 
-		var spd = 2;
+	function scroll(pageX:Float, pageY:Float) {
+		var scroller = getScroller();
+		var spd = 1.5;
 
 		scroller.scrollTop( scroller.scrollTop() - ( pageYtoLocal(pageY) - dragStart.localY ) * zoom * spd );
 		dragStart.localY = pageYtoLocal(pageY);

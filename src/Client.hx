@@ -4,6 +4,7 @@ class Client extends dn.Process {
 	public static var ME : Client;
 
 	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
+	public var jDoc(get,never) : J; inline function get_jDoc() return new J(js.Browser.document);
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
 	public var jCanvas(get,never) : J; inline function get_jCanvas() return new J("#webgl");
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
@@ -64,7 +65,7 @@ class Client extends dn.Process {
 		initUI();
 
 		project = try {
-			var raw = dn.LocalStorage.read("test");
+			var raw = dn.LocalStorage.read("cookie");
 			var json = haxe.Json.parse(raw);
 			ProjectData.fromJson(json);
 		}
@@ -130,7 +131,7 @@ class Client extends dn.Process {
 		// Space bar blocking
 		new J(js.Browser.window).off().keydown( function(ev) {
 			var e = new J(ev.target);
-			if( !e.is("input") && !e.is("textarea") )
+			if( ev.keyCode==K.SPACE && !e.is("input") && !e.is("textarea") )
 				ev.preventDefault();
 		});
 
@@ -235,6 +236,10 @@ class Client extends dn.Process {
 		keyDowns.remove(ev.keyCode);
 	}
 
+	inline function hasInputFocus() {
+		return jBody.find("input:focus").length>0;
+	}
+
 	function onKeyPress(keyId:Int) {
 		switch keyId {
 			case K.ESCAPE:
@@ -250,7 +255,7 @@ class Client extends dn.Process {
 					curTool.openFloatingPalette();
 
 			case K.S:
-				if( curLayerDef!=null && curLayerDef.type==Tiles ) {
+				if( !hasInputFocus() && curLayerDef!=null && curLayerDef.type==Tiles ) {
 					var td = project.defs.getTilesetDef(curLayerDef.tilesetDefId);
 					td.saveSelection( curTool.getSelectedValue() );
 					ge.emit(TilesetDefChanged);
@@ -410,6 +415,8 @@ class Client extends dn.Process {
 		var json = haxe.Json.stringify(obj);
 		json = dn.HaxeJson.prettify(json);
 		var bytes = haxe.io.Bytes.ofString(json);
+
+		dn.LocalStorage.write("cookie", json);
 
 		JsTools.saveAsDialog(bytes, [".json"], function(path) {
 			N.msg("Saved to "+path);

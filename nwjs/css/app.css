@@ -561,11 +561,13 @@ input[type="file"] {
 .window.floatingPalette .wrapper {
   padding: 0;
   border: none;
-  border: 2px solid black;
+  outline: 2px solid black;
+  box-shadow: 0px 0px 32px black;
 }
 
 .window.floatingPalette .wrapper .content {
-  max-height: 600px;
+  max-width: 60vw;
+  max-height: 80vh;
 }
 
 .panelMask {
@@ -635,8 +637,9 @@ input[type="file"] {
 #editor #mainPanel {
   position: relative;
   display: grid;
+  height: 100%;
   overflow: hidden;
-  grid-template-rows: min-content 0.6fr 1fr;
+  grid-template-rows: min-content 300px auto;
   padding: 5px;
   gap: 5px;
   background: #1e2229;
@@ -695,6 +698,17 @@ input[type="file"] {
 #editor #mainPanel #mainPaletteWrapper ul.niceList {
   height: 100%;
   box-sizing: border-box;
+}
+
+#editor #mainPanel #mainPaletteWrapper.popOut .palette {
+  position: absolute;
+  z-index: 99;
+  box-sizing: border-box;
+  top: 30%;
+  height: 70%;
+  overflow: auto;
+  box-shadow: 0px 0px 32px black;
+  border: 1px solid white;
 }
 
 #editor canvas {
