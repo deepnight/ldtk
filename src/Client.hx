@@ -241,6 +241,13 @@ class Client extends dn.Process {
 					ui.modal.FloatingToolPalette.ME.close();
 				else if( !ui.Modal.hasAnyOpen() )
 					curTool.popOutPalette();
+
+			case K.S:
+				if( curLayerDef!=null && curLayerDef.type==Tiles ) {
+					var td = project.defs.getTilesetDef(curLayerDef.tilesetDefId);
+					td.saveSelection( curTool.getSelectedValue() );
+					N.debug("Saved selection count="+curTool.getSelectedValue().length);
+				}
 		}
 	}
 

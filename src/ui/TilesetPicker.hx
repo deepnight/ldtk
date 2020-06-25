@@ -97,6 +97,22 @@ class TilesetPicker {
 	}
 
 	function onSelect(sel:Array<Int>) {
+		// Auto-pick saved selection
+		if( sel.length==1 && tool.curTilesetDef.hasSavedSelectionFor(sel[0]) ) {
+			// Check if the saved selection isn't already picked. If so, just pick the sub-tile
+			var cur = tool.getSelectedValue();
+			var saved = tool.curTilesetDef.getSavedSelectionFor( sel[0] ).copy();
+			var same = true;
+			var i = 0;
+			while( i<sel.length ) {
+				if( cur[i]!=saved[i] )
+					same = false;
+				i++;
+			}
+			if( !same )
+				sel = saved;
+		}
+
 		var cur = tool.getSelectedValue();
 		if( !Client.ME.isShiftDown() && !Client.ME.isCtrlDown() )
 			tool.selectValue(sel);
