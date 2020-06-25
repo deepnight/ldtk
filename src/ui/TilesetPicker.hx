@@ -6,8 +6,7 @@ class TilesetPicker {
 
 	var tool : tool.TileTool;
 	var zoom = 2.0;
-	var curSelection : Array<js.jquery.JQuery> = [];
-	var cursor : js.jquery.JQuery;
+	var cursors : js.jquery.JQuery;
 
 	var dragStart : Null<{ x:Int, y:Int }>;
 
@@ -15,12 +14,12 @@ class TilesetPicker {
 		this.tool = tool;
 
 		// Create picker elements
-		wrapper = new J("<div/>");
+		wrapper = new J('<div class="tilesetPicker"/>');
 		wrapper.appendTo(target);
 		wrapper.css("zoom",zoom);
 
-		cursor = new J('<div class="tileCursor"/>');
-		cursor.prependTo(wrapper);
+		cursors = new J('<div/>');
+		cursors.prependTo(wrapper);
 
 		var img = new J( tool.curTilesetDef.createAtlasHtmlImage() );
 		img.appendTo(wrapper);
@@ -41,36 +40,55 @@ class TilesetPicker {
 	}
 
 	function renderSelection() {
-		for(e in curSelection)
-			e.remove();
-		curSelection = [];
+		N.debug("render sel");
+		wrapper.find(".selection").remove();
 
 		for(tileId in tool.getSelectedValue())
-			createSelectionCursor(tileId);
+			wrapper.append( createCursor(tileId,"selection") );
 	}
 
 
-	function createSelectionCursor(tileId:Int) {
+	function createCursor(tileId:Int, ?subClass:String, ?cWid:Int, ?cHei:Int) {
 		var x = tool.curTilesetDef.getTileSourceX(tileId);
 		var y = tool.curTilesetDef.getTileSourceY(tileId);
 
-		var e = new J('<div class="tileCursor selection"/>');
-		e.prependTo(wrapper);
+		var e = new J('<div class="tileCursor"/>');
+		if( subClass!=null )
+			e.addClass(subClass);
 
-		e.css("margin-left", x+"px");
-		e.css("margin-top", y+"px");
-		e.css("width", tool.curTilesetDef.tileGridSize+"px");
-		e.css("height", tool.curTilesetDef.tileGridSize+"px");
-	}
-
-	function updateCursor(pageX:Float, pageY:Float) {
+		e.css("left", x+"px");
+		e.css("top", y+"px");
 		var grid = tool.curTilesetDef.tileGridSize;
-		var r = getCursorRect(pageX, pageY);
-		cursor.css("margin-left", r.cx*grid + "px");
-		cursor.css("margin-top", r.cy*grid + "px");
-		cursor.css("width", r.wid*grid + "px");
-		cursor.css("height", r.hei*grid + "px");
+		e.css("width", ( cWid!=null ? cWid*grid : tool.curTilesetDef.tileGridSize )+"px");
+		e.css("height", ( cHei!=null ? cHei*grid : tool.curTilesetDef.tileGridSize )+"px");
+		return e;
 	}
+
+
+
+	var _lastRect = null;
+	function updateCursor(pageX:Float, pageY:Float) {
+		var r = getCursorRect(pageX, pageY);
+
+		// Avoid re-render if it's the same rect
+		if( _lastRect!=null && r.cx==_lastRect.cx && r.cy==_lastRect.cy && r.wid==_lastRect.wid && r.hei==_lastRect.hei )
+			return;
+
+		var tileId = tool.curTilesetDef.getTileId(r.cx,r.cy);
+		cursors.empty();
+
+		var saved = tool.curTilesetDef.getSavedSelectionFor(tileId);
+		if( saved==null )
+			cursors.append( createCursor(tileId, r.wid, r.hei) );
+		else {
+			// Saved-selection rollover
+			for(tid in saved)
+				cursors.append( createCursor(tid) );
+		}
+
+		_lastRect = r;
+	}
+
 
 	function onDocMouseMove(ev:js.jquery.Event) {
 		updateCursor(ev.pageX, ev.pageY);
@@ -104,7 +122,7 @@ class TilesetPicker {
 			var saved = tool.curTilesetDef.getSavedSelectionFor( sel[0] ).copy();
 			var same = true;
 			var i = 0;
-			while( i<sel.length ) {
+			while( i<saved.length ) {
 				if( cur[i]!=saved[i] )
 					same = false;
 				i++;
