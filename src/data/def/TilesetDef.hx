@@ -86,6 +86,7 @@ class TilesetDef implements ISerializable {
 			pxHei: pxHei,
 			tileGridSize: tileGridSize,
 			tileGridSpacing: tileGridSpacing,
+			savedSelections: savedSelections,
 		}
 	}
 
@@ -99,6 +100,7 @@ class TilesetDef implements ISerializable {
 		td.base64 = json.base64;
 		td.path = json.path;
 		td.customName = json.customName;
+		td.savedSelections = json.savedSelections==null ? [] : json.savedSelections;
 		return td;
 	}
 
