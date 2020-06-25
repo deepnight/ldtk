@@ -246,7 +246,7 @@ class Client extends dn.Process {
 				if( curLayerDef!=null && curLayerDef.type==Tiles ) {
 					var td = project.defs.getTilesetDef(curLayerDef.tilesetDefId);
 					td.saveSelection( curTool.getSelectedValue() );
-					N.debug("Saved selection count="+curTool.getSelectedValue().length);
+					N.msg("Saved selection");
 				}
 		}
 	}
