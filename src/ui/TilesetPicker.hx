@@ -8,7 +8,7 @@ class TilesetPicker {
 	var jImg : js.jquery.JQuery;
 
 	var tool : tool.TileTool;
-	var zoom = 3.0;
+	var zoom(default,set) : Float;
 	var jCursors : js.jquery.JQuery;
 	var jSelections : js.jquery.JQuery;
 	var jShadows : js.jquery.JQuery;
@@ -27,7 +27,6 @@ class TilesetPicker {
 
 		jWrapper = new J('<div class="wrapper"/>');
 		jWrapper.appendTo(jPicker);
-		jWrapper.css("zoom",zoom);
 
 		jShadows = new J('<div class="shadows"/>');
 		jShadows.prependTo(jWrapper);
@@ -41,27 +40,40 @@ class TilesetPicker {
 		jImg = new J( tool.curTilesetDef.createAtlasHtmlImage() );
 		jImg.appendTo(jWrapper);
 		jImg.addClass("atlas");
-		jImg.css("min-width",tool.curTilesetDef.pxWid); // needed because base64 img rendering is async
-		jImg.css("min-height",tool.curTilesetDef.pxHei);
 
 		// Init events
 		jPicker.mousedown( function(ev) {
 			ev.preventDefault();
 			onPickerMouseDown(ev);
 			jDoc
-				.off(".pickerEvent")
-				.on("mouseup.pickerEvent", onDocMouseUp)
-				.on("mousemove.pickerEvent", onDocMouseMove);
+				.off(".pickerDragEvent")
+				.on("mouseup.pickerDragEvent", onDocMouseUp)
+				.on("mousemove.pickerDragEvent", onDocMouseMove);
 		});
 
+		jPicker.get(0).onwheel = onPickerMouseWheel;
 		jPicker.mousemove( onPickerMouseMove );
 
+		jImg.css("min-width",tool.curTilesetDef.pxWid+"px");
+		jImg.css("min-height",tool.curTilesetDef.pxHei+"px");
+		zoom = 3;
 		scrollX = 0;
 		scrollY = 0;
 		renderSelection();
 
 		updateShadows();
-		// N.debug(jPicker.innerWidth()+"x"+jPicker.innerHeight());
+
+		// Force picker dimensions when img is rendered
+		jImg.on("load", function(ev) {
+			jPicker.css("width",jPicker.innerWidth()+"px");
+			jPicker.css("height",jPicker.innerHeight()+"px");
+		});
+	}
+
+	function set_zoom(v) {
+		zoom = M.fclamp(v, 0.25, 6);
+		jWrapper.css("zoom",zoom);
+		return zoom;
 	}
 
 	inline function get_scrollX() {
@@ -196,7 +208,7 @@ class TilesetPicker {
 	}
 
 	function onDocMouseUp(ev:js.jquery.Event) {
-		jDoc.off(".pickerEvent");
+		jDoc.off(".pickerDragEvent");
 
 		if( dragStart!=null ) {
 			// Apply selection
@@ -256,13 +268,28 @@ class TilesetPicker {
 	}
 
 
+	function onPickerMouseWheel(ev:js.html.WheelEvent) {
+		if( ev.deltaY!=0 ) {
+			ev.preventDefault();
+			var oldLocalX = ev.offsetX / zoom;
+			var oldLocalY = ev.offsetY / zoom;
+
+			zoom += -ev.deltaY*0.001 * zoom;
+
+			var newLocalX = ev.offsetX / zoom;
+			var newLocalY = ev.offsetY / zoom;
+			scrollX += ( oldLocalX - newLocalX ) * zoom;
+			scrollY += ( oldLocalY - newLocalY ) * zoom;
+
+			updateShadows();
+		}
+	}
+
 	function onPickerMouseDown(ev:js.jquery.Event) {
 		dragStart = {
 			bt: ev.button,
 			pageX: ev.pageX,
 			pageY: ev.pageY,
-			// localX: Std.int( ev.offsetX / zoom ),
-			// localY: Std.int( ev.offsetY / zoom ),
 		}
 	}
 
