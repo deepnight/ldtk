@@ -1,19 +1,18 @@
 package ui;
 
 class TilesetPicker {
-	static var PADDING = 100;
+	static var BASE_PADDING = 300;
 
 	var jDoc(get,never) : js.jquery.JQuery; inline function get_jDoc() return new J(js.Browser.document);
 
 	var jPicker : js.jquery.JQuery;
-	var jWrapper : js.jquery.JQuery;
+	var jAtlas : js.jquery.JQuery;
 	var jImg : js.jquery.JQuery;
 
 	var tool : tool.TileTool;
 	var zoom(default,set) : Float;
 	var jCursors : js.jquery.JQuery;
 	var jSelections : js.jquery.JQuery;
-	var jShadows : js.jquery.JQuery;
 
 	var dragStart : Null<{ bt:Int, pageX:Float, pageY:Float }>;
 
@@ -26,22 +25,18 @@ class TilesetPicker {
 		// Create picker elements
 		jPicker = new J('<div class="tilesetPicker"/>');
 		jPicker.appendTo(target);
-		jPicker.css("padding", PADDING+"px");
 
-		jWrapper = new J('<div class="wrapper"/>');
-		jWrapper.appendTo(jPicker);
-
-		jShadows = new J('<div class="shadows"/>');
-		jShadows.prependTo(jPicker);
+		jAtlas = new J('<div class="wrapper"/>');
+		jAtlas.appendTo(jPicker);
 
 		jCursors = new J('<div class="cursorsWrapper"/>');
-		jCursors.prependTo(jWrapper);
+		jCursors.prependTo(jAtlas);
 
 		jSelections = new J('<div class="selectionsWrapper"/>');
-		jSelections.prependTo(jWrapper);
+		jSelections.prependTo(jAtlas);
 
-		jImg = new J( tool.curTilesetDef.createAtlasHtmlImage() );
-		jImg.appendTo(jWrapper);
+		var jImg = new J( tool.curTilesetDef.createAtlasHtmlImage() );
+		jImg.appendTo(jAtlas);
 		jImg.addClass("atlas");
 
 		// Init events
@@ -57,25 +52,28 @@ class TilesetPicker {
 		jPicker.get(0).onwheel = onPickerMouseWheel;
 		jPicker.mousemove( onPickerMouseMove );
 
-		jImg.css("min-width",tool.curTilesetDef.pxWid+"px");
-		jImg.css("min-height",tool.curTilesetDef.pxHei+"px");
+		jAtlas.css("min-width", tool.curTilesetDef.pxWid+"px");
+		jAtlas.css("min-height", tool.curTilesetDef.pxHei+"px");
 		zoom = 3;
-		scrollX = PADDING;
-		scrollY = PADDING;
+		scrollX = getPadding();
+		scrollY = getPadding();
 		renderSelection();
 
-		updateShadows();
-
-		// Force picker dimensions when img is rendered
+		// Force picker dimensions as soon as img is rendered
 		jImg.on("load", function(ev) {
 			jPicker.css("width",jPicker.innerWidth()+"px");
 			jPicker.css("height",jPicker.innerHeight()+"px");
 		});
 	}
 
+	function getPadding() {
+		return 0;
+		// return BASE_PADDING / zoom;
+	}
+
 	function set_zoom(v) {
-		zoom = M.fclamp(v, 0.25, 6);
-		jWrapper.css("zoom",zoom);
+		zoom = M.fclamp(v, 0.5, 6);
+		jAtlas.css("zoom",zoom);
 		return zoom;
 	}
 
@@ -95,8 +93,8 @@ class TilesetPicker {
 		return v;
 	}
 
-	inline function pageXtoLocal(v:Float) return M.round( ( v - PADDING - jPicker.offset().left + scrollX ) / zoom );
-	inline function pageYtoLocal(v:Float) return M.round( ( v - PADDING - jPicker.offset().top + scrollY ) / zoom );
+	inline function pageXtoLocal(v:Float) return M.round( ( v - jPicker.offset().left + scrollX ) / zoom - getPadding() );
+	inline function pageYtoLocal(v:Float) return M.round( ( v - jPicker.offset().top + scrollY ) / zoom - getPadding() );
 
 	function renderSelection() {
 		jSelections.empty();
@@ -135,7 +133,8 @@ class TilesetPicker {
 		Client.ME.debug(pageX+","+pageY+" => "+pageXtoLocal(pageX)+","+pageYtoLocal(pageY));
 		Client.ME.debug("scroll="+scrollX+","+scrollY, true);
 		Client.ME.debug("pickerSize="+jPicker.innerWidth()+"x"+jPicker.innerHeight(), true);
-		Client.ME.debug("img="+jImg.innerWidth()+"x"+jImg.innerHeight(), true);
+		var img = jAtlas.find("img.atlas");
+		Client.ME.debug("img="+img.innerWidth()+"x"+img.innerHeight(), true);
 
 		var r = getCursorRect(pageX, pageY);
 
@@ -167,36 +166,6 @@ class TilesetPicker {
 
 		scrollY -= ( newPageY - dragStart.pageY ) * spd;
 		dragStart.pageY = newPageY;
-
-		updateShadows();
-	}
-
-	function updateShadows() {
-		var shadows = [];
-		var col = "rgba(0, 0, 0, 0.4)";
-		var dist = "8px";
-		var blur = "2px";
-
-		if( scrollX>0 )
-			shadows.push('$dist 0px $blur $col inset');
-
-		if( scrollX < jImg.innerWidth()*zoom-jPicker.innerWidth() )
-			shadows.push('-$dist 0px $blur $col inset');
-
-		if( scrollY>0 )
-			shadows.push('0px $dist $blur $col inset');
-
-		if( scrollY < jImg.innerHeight()*zoom-jPicker.innerHeight() )
-			shadows.push('0px -$dist $blur $col inset');
-
-		if( shadows.length>0 ) {
-			jShadows.css("margin-left", -PADDING);
-			jShadows.css("margin-top", -PADDING);
-			shadows.push('0px 0px 4px black');
-			jShadows.css("box-shadow", shadows.join(","));
-		}
-		else
-			jShadows.css("box-shadow", "none");
 	}
 
 	inline function isScrolling() {
@@ -274,17 +243,27 @@ class TilesetPicker {
 	function onPickerMouseWheel(ev:js.html.WheelEvent) {
 		if( ev.deltaY!=0 ) {
 			ev.preventDefault();
-			var oldLocalX = ev.offsetX / zoom;
-			var oldLocalY = ev.offsetY / zoom;
+			var oldLocalX = pageXtoLocal(ev.pageX);
+			var oldLocalY = pageYtoLocal(ev.pageY);
+			// var oldLocalX = ev.offsetX / zoom;
+			// var oldLocalY = ev.offsetY / zoom;
+			var oldZoom = zoom;
 
 			zoom += -ev.deltaY*0.001 * zoom;
 
-			var newLocalX = ev.offsetX / zoom;
-			var newLocalY = ev.offsetY / zoom;
-			scrollX += ( oldLocalX - newLocalX ) * zoom;
-			scrollY += ( oldLocalY - newLocalY ) * zoom;
-
-			updateShadows();
+			var newLocalX = pageXtoLocal(ev.pageX);
+			var newLocalY = pageYtoLocal(ev.pageY);
+			// var newLocalX = ev.offsetX / zoom;
+			// var newLocalY = ev.offsetY / zoom;
+			N.debug(M.pretty(zoom));
+			// if( ev.deltaY>0 ) {
+			// 	scrollX += ( oldLocalX - newLocalX ) * zoom;
+			// 	scrollY += ( oldLocalY - newLocalY ) * zoom;
+			// }
+			// else {
+				scrollX += ( oldLocalX - newLocalX ) * zoom;
+				scrollY += ( oldLocalY - newLocalY ) * zoom;
+			// }
 		}
 	}
 

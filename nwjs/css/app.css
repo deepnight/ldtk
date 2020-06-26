@@ -759,16 +759,10 @@ input[type="file"] {
   outline: 1px solid white;
 }
 
-.palette .tilesetPicker .shadows {
-  position: absolute;
-  z-index: 2;
-  width: calc( 100% - 1px);
-  height: calc( 100% - 1px);
-  pointer-events: none;
-}
-
 .palette .tilesetPicker .wrapper img.atlas {
   image-rendering: pixelated;
+  box-shadow: 0px 0px 32px black;
+  outline: 1px solid #545d73;
 }
 
 .palette .tilesetPicker .wrapper .selectionsWrapper,
