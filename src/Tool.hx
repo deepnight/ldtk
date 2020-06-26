@@ -20,6 +20,11 @@ class Tool<T> extends dn.Process {
 	private function new() {
 		super(Client.ME);
 
+		jPalette.off();
+		updatePalette();
+	}
+
+	function enablePalettePopOut() {
 		jPalette
 			.off()
 			.mouseover( function(_) {
@@ -28,7 +33,6 @@ class Tool<T> extends dn.Process {
 			.mouseleave( function(_) {
 				popInPalette();
 			});
-		updatePalette();
 	}
 
 	override function toString():String {

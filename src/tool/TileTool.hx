@@ -6,6 +6,7 @@ class TileTool extends Tool< Array<Int> > {
 
 	public function new() {
 		super();
+		enablePalettePopOut();
 	}
 
 	override function getDefaultValue():Array<Int> {
