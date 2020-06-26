@@ -1,8 +1,6 @@
 package ui;
 
 class TilesetPicker {
-	static var BASE_PADDING = 300;
-
 	var jDoc(get,never) : js.jquery.JQuery; inline function get_jDoc() return new J(js.Browser.document);
 
 	var jPicker : js.jquery.JQuery;
@@ -16,8 +14,8 @@ class TilesetPicker {
 
 	var dragStart : Null<{ bt:Int, pageX:Float, pageY:Float }>;
 
-	var scrollX(get,set) : Float;
-	var scrollY(get,set) : Float;
+	var scrollX(default,set) : Float;
+	var scrollY(default,set) : Float;
 
 	public function new(target:js.jquery.JQuery, tool:tool.TileTool) {
 		this.tool = tool;
@@ -55,8 +53,8 @@ class TilesetPicker {
 		jAtlas.css("min-width", tool.curTilesetDef.pxWid+"px");
 		jAtlas.css("min-height", tool.curTilesetDef.pxHei+"px");
 		zoom = 3;
-		scrollX = getPadding();
-		scrollY = getPadding();
+		scrollX = 0; // TODO restore last pos
+		scrollY = 0;
 		renderSelection();
 
 		// Force picker dimensions as soon as img is rendered
@@ -66,35 +64,26 @@ class TilesetPicker {
 		});
 	}
 
-	function getPadding() {
-		return 0;
-		// return BASE_PADDING / zoom;
-	}
-
 	function set_zoom(v) {
 		zoom = M.fclamp(v, 0.5, 6);
 		jAtlas.css("zoom",zoom);
 		return zoom;
 	}
 
-	inline function get_scrollX() {
-		return jPicker.scrollLeft();
-	}
 	inline function set_scrollX(v:Float) {
-		jPicker.scrollLeft(v);
+		scrollX = v;
+		jAtlas.css("margin-left",-scrollX);
 		return v;
 	}
 
-	inline function get_scrollY() {
-		return jPicker.scrollTop();
-	}
 	inline function set_scrollY(v:Float) {
-		jPicker.scrollTop(v);
+		scrollY = v;
+		jAtlas.css("margin-top",-scrollY);
 		return v;
 	}
 
-	inline function pageXtoLocal(v:Float) return M.round( ( v - jPicker.offset().left + scrollX ) / zoom - getPadding() );
-	inline function pageYtoLocal(v:Float) return M.round( ( v - jPicker.offset().top + scrollY ) / zoom - getPadding() );
+	inline function pageXtoLocal(v:Float) return M.round( ( v - jPicker.offset().left ) / zoom + scrollX );
+	inline function pageYtoLocal(v:Float) return M.round( ( v - jPicker.offset().top ) / zoom + scrollY );
 
 	function renderSelection() {
 		jSelections.empty();
@@ -161,10 +150,10 @@ class TilesetPicker {
 	function scroll(newPageX:Float, newPageY:Float) {
 		var spd = 1.;
 
-		scrollX -= ( newPageX - dragStart.pageX ) * spd;
+		scrollX -= ( newPageX - dragStart.pageX ) / zoom * spd;
 		dragStart.pageX = newPageX;
 
-		scrollY -= ( newPageY - dragStart.pageY ) * spd;
+		scrollY -= ( newPageY - dragStart.pageY ) / zoom * spd;
 		dragStart.pageY = newPageY;
 	}
 
@@ -245,25 +234,13 @@ class TilesetPicker {
 			ev.preventDefault();
 			var oldLocalX = pageXtoLocal(ev.pageX);
 			var oldLocalY = pageYtoLocal(ev.pageY);
-			// var oldLocalX = ev.offsetX / zoom;
-			// var oldLocalY = ev.offsetY / zoom;
-			var oldZoom = zoom;
 
 			zoom += -ev.deltaY*0.001 * zoom;
 
 			var newLocalX = pageXtoLocal(ev.pageX);
 			var newLocalY = pageYtoLocal(ev.pageY);
-			// var newLocalX = ev.offsetX / zoom;
-			// var newLocalY = ev.offsetY / zoom;
-			N.debug(M.pretty(zoom));
-			// if( ev.deltaY>0 ) {
-			// 	scrollX += ( oldLocalX - newLocalX ) * zoom;
-			// 	scrollY += ( oldLocalY - newLocalY ) * zoom;
-			// }
-			// else {
-				scrollX += ( oldLocalX - newLocalX ) * zoom;
-				scrollY += ( oldLocalY - newLocalY ) * zoom;
-			// }
+			scrollX += ( oldLocalX - newLocalX );
+			scrollY += ( oldLocalY - newLocalY );
 		}
 	}
 
