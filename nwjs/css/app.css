@@ -774,6 +774,7 @@ input[type="file"] {
 .palette .tilesetPicker .wrapper .selectionsWrapper,
 .palette .tilesetPicker .wrapper .cursorsWrapper {
   pointer-events: none;
+  position: relative;
 }
 
 .palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor,

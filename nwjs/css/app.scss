@@ -777,6 +777,7 @@ label.file {
 			.selectionsWrapper,
 			.cursorsWrapper {
 				pointer-events: none;
+				position: relative;
 
 				.tileCursor {
 					position: absolute;

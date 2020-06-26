@@ -1,6 +1,8 @@
 package ui;
 
 class TilesetPicker {
+	static var PADDING = 100;
+
 	var jDoc(get,never) : js.jquery.JQuery; inline function get_jDoc() return new J(js.Browser.document);
 
 	var jPicker : js.jquery.JQuery;
@@ -24,12 +26,13 @@ class TilesetPicker {
 		// Create picker elements
 		jPicker = new J('<div class="tilesetPicker"/>');
 		jPicker.appendTo(target);
+		jPicker.css("padding", PADDING+"px");
 
 		jWrapper = new J('<div class="wrapper"/>');
 		jWrapper.appendTo(jPicker);
 
 		jShadows = new J('<div class="shadows"/>');
-		jShadows.prependTo(jWrapper);
+		jShadows.prependTo(jPicker);
 
 		jCursors = new J('<div class="cursorsWrapper"/>');
 		jCursors.prependTo(jWrapper);
@@ -57,8 +60,8 @@ class TilesetPicker {
 		jImg.css("min-width",tool.curTilesetDef.pxWid+"px");
 		jImg.css("min-height",tool.curTilesetDef.pxHei+"px");
 		zoom = 3;
-		scrollX = 0;
-		scrollY = 0;
+		scrollX = PADDING;
+		scrollY = PADDING;
 		renderSelection();
 
 		updateShadows();
@@ -92,8 +95,8 @@ class TilesetPicker {
 		return v;
 	}
 
-	inline function pageXtoLocal(v:Float) return M.round( ( v - jPicker.offset().left + scrollX ) / zoom );
-	inline function pageYtoLocal(v:Float) return M.round( ( v - jPicker.offset().top + scrollY ) / zoom );
+	inline function pageXtoLocal(v:Float) return M.round( ( v - PADDING - jPicker.offset().left + scrollX ) / zoom );
+	inline function pageYtoLocal(v:Float) return M.round( ( v - PADDING - jPicker.offset().top + scrollY ) / zoom );
 
 	function renderSelection() {
 		jSelections.empty();
@@ -187,8 +190,8 @@ class TilesetPicker {
 			shadows.push('0px -$dist $blur $col inset');
 
 		if( shadows.length>0 ) {
-			jShadows.css("margin-left", scrollX/zoom-1); // 1 is because of the padding
-			jShadows.css("margin-top", scrollY/zoom-1);
+			jShadows.css("margin-left", -PADDING);
+			jShadows.css("margin-top", -PADDING);
 			shadows.push('0px 0px 4px black');
 			jShadows.css("box-shadow", shadows.join(","));
 		}
@@ -302,8 +305,8 @@ class TilesetPicker {
 		var localY = pageYtoLocal(pageY);
 
 		var grid = tool.curTilesetDef.tileGridSize;
-		var cx = Std.int( localX / grid );
-		var cy = Std.int( localY / grid );
+		var cx = M.iclamp( Std.int( localX / grid ), 0, tool.curTilesetDef.cWid-1 );
+		var cy = M.iclamp( Std.int( localY / grid ), 0, tool.curTilesetDef.cHei-1 );
 
 		if( dragStart==null )
 			return {
@@ -313,8 +316,8 @@ class TilesetPicker {
 				hei: 1,
 			}
 		else {
-			var startCx = Std.int( pageXtoLocal(dragStart.pageX) / grid );
-			var startCy = Std.int( pageYtoLocal(dragStart.pageY) / grid );
+			var startCx = M.iclamp( Std.int( pageXtoLocal(dragStart.pageX) / grid ), 0, tool.curTilesetDef.cWid-1 );
+			var startCy = M.iclamp( Std.int( pageYtoLocal(dragStart.pageY) / grid ), 0, tool.curTilesetDef.cHei-1 );
 			return {
 				cx: M.imin(cx,startCx),
 				cy: M.imin(cy,startCy),
