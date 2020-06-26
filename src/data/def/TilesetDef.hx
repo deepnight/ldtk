@@ -17,8 +17,8 @@ class TilesetDef implements ISerializable {
 	var pixels(get,never) : Null<hxd.Pixels>;
 	var _pixelsCache : Null<hxd.Pixels>;
 
-	var cWid(get,never) : Int; inline function get_cWid() return isEmpty() ? 0 : M.ceil( pxWid / tileGridSize );
-	var cHei(get,never) : Int; inline function get_cHei() return isEmpty() ? 0 : M.ceil( pxHei / tileGridSize );
+	public var cWid(get,never) : Int; inline function get_cWid() return isEmpty() ? 0 : M.ceil( pxWid / tileGridSize );
+	public var cHei(get,never) : Int; inline function get_cHei() return isEmpty() ? 0 : M.ceil( pxHei / tileGridSize );
 
 
 	public function new(uid:Int) {
