@@ -478,7 +478,7 @@ input[type="file"] {
   background-color: rgba(0, 0, 0, 0.35);
 }
 
-.window .wrapper {
+.window > .wrapper {
   display: block;
   position: absolute;
   overflow: auto;
@@ -497,41 +497,41 @@ input[type="file"] {
   width: calc( 100% - 300px);
 }
 
-.window.panel .wrapper {
+.window.panel > .wrapper {
   top: 0px;
   left: 0px;
   height: 100%;
   border-left: none;
 }
 
-.window.panel .wrapper .content {
+.window.panel > .wrapper .content {
   width: 700px;
 }
 
-.window.dialog .wrapper {
+.window.dialog > .wrapper {
   padding: 16px;
 }
 
-.window.dialog .wrapper .content {
+.window.dialog > .wrapper .content {
   max-width: 260px;
 }
 
-.window.dialog .wrapper .buttons {
+.window.dialog > .wrapper .buttons {
   margin-top: 16px;
   flex-wrap: wrap;
 }
 
-.window.dialog .wrapper .buttons button, .window.dialog .wrapper .buttons label.file {
+.window.dialog > .wrapper .buttons button, .window.dialog > .wrapper .buttons label.file {
   flex: 1 1 0;
   margin: 1px;
 }
 
-.window.dialog .wrapper .buttons button.confirm, .window.dialog .wrapper .buttons label.confirm.file {
+.window.dialog > .wrapper .buttons button.confirm, .window.dialog > .wrapper .buttons label.confirm.file {
   flex-grow: 2;
 }
 
-.window.dialog.fieldTypes .wrapper,
-.window.dialog.layerTypes .wrapper {
+.window.dialog.fieldTypes > .wrapper,
+.window.dialog.layerTypes > .wrapper {
   width: auto;
   padding: 4px;
 }
@@ -558,14 +558,15 @@ input[type="file"] {
   margin-bottom: 4px;
 }
 
-.window.floatingPalette .wrapper {
+.window.floatingPalette > .wrapper {
+  overflow: visible;
   padding: 0;
   border: none;
   outline: 2px solid black;
   box-shadow: 0px 0px 32px black;
 }
 
-.window.floatingPalette .wrapper .content {
+.window.floatingPalette > .wrapper > .content {
   max-width: 60vw;
   max-height: 80vh;
 }
@@ -700,17 +701,6 @@ input[type="file"] {
   box-sizing: border-box;
 }
 
-#editor #mainPanel #mainPaletteWrapper.popOut .palette {
-  position: absolute;
-  z-index: 99;
-  box-sizing: border-box;
-  top: 30%;
-  height: 70%;
-  overflow: auto;
-  box-shadow: 0px 0px 32px black;
-  border: 1px solid white;
-}
-
 #editor canvas {
   width: 100% !important;
   height: 100% !important;
@@ -759,10 +749,34 @@ input[type="file"] {
 }
 
 .palette .tilesetPicker {
+  padding: 1px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
   position: relative;
+  outline: 1px solid white;
 }
 
-.palette .tilesetPicker .tileCursor {
+.palette .tilesetPicker .shadows {
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.palette .tilesetPicker .wrapper img.atlas {
+  image-rendering: pixelated;
+}
+
+.palette .tilesetPicker .wrapper .selectionsWrapper,
+.palette .tilesetPicker .wrapper .cursorsWrapper {
+  pointer-events: none;
+}
+
+.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor,
+.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor {
   position: absolute;
   z-index: 1;
   min-width: 1px;
@@ -774,7 +788,8 @@ input[type="file"] {
   pointer-events: none;
 }
 
-.palette .tilesetPicker .tileCursor.selection {
+.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.selection,
+.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.selection {
   outline: 1px solid #f3e4a4;
   box-shadow: 0px 0px 4px #ffcc00, 0px 0px 16px #e34d00;
 }

@@ -2,30 +2,50 @@ package ui;
 
 class TilesetPicker {
 	var jDoc(get,never) : js.jquery.JQuery; inline function get_jDoc() return new J(js.Browser.document);
-	var wrapper : js.jquery.JQuery;
+
+	var jPicker : js.jquery.JQuery;
+	var jWrapper : js.jquery.JQuery;
+	var jImg : js.jquery.JQuery;
 
 	var tool : tool.TileTool;
 	var zoom = 3.0;
-	var cursors : js.jquery.JQuery;
+	var jCursors : js.jquery.JQuery;
+	var jSelections : js.jquery.JQuery;
+	var jShadows : js.jquery.JQuery;
 
-	var dragStart : Null<{ bt:Int, localX:Int, localY:Int }>;
+	var dragStart : Null<{ bt:Int, pageX:Float, pageY:Float }>;
+
+	var scrollX(get,set) : Float;
+	var scrollY(get,set) : Float;
 
 	public function new(target:js.jquery.JQuery, tool:tool.TileTool) {
 		this.tool = tool;
 
 		// Create picker elements
-		wrapper = new J('<div class="tilesetPicker"/>');
-		wrapper.appendTo(target);
-		wrapper.css("zoom",zoom);
+		jPicker = new J('<div class="tilesetPicker"/>');
+		jPicker.appendTo(target);
 
-		cursors = new J('<div/>');
-		cursors.prependTo(wrapper);
+		jWrapper = new J('<div class="wrapper"/>');
+		jWrapper.appendTo(jPicker);
+		jWrapper.css("zoom",zoom);
 
-		var img = new J( tool.curTilesetDef.createAtlasHtmlImage() );
-		img.appendTo(wrapper);
+		jShadows = new J('<div class="shadows"/>');
+		jShadows.prependTo(jWrapper);
+
+		jCursors = new J('<div class="cursorsWrapper"/>');
+		jCursors.prependTo(jWrapper);
+
+		jSelections = new J('<div class="selectionsWrapper"/>');
+		jSelections.prependTo(jWrapper);
+
+		jImg = new J( tool.curTilesetDef.createAtlasHtmlImage() );
+		jImg.appendTo(jWrapper);
+		jImg.addClass("atlas");
+		jImg.css("min-width",tool.curTilesetDef.pxWid); // needed because base64 img rendering is async
+		jImg.css("min-height",tool.curTilesetDef.pxHei);
 
 		// Init events
-		img.mousedown( function(ev) {
+		jPicker.mousedown( function(ev) {
 			ev.preventDefault();
 			onPickerMouseDown(ev);
 			jDoc
@@ -34,29 +54,40 @@ class TilesetPicker {
 				.on("mousemove.pickerEvent", onDocMouseMove);
 		});
 
-		img.mousemove( onPickerMouseMove );
+		jPicker.mousemove( onPickerMouseMove );
 
+		scrollX = 0;
+		scrollY = 0;
 		renderSelection();
 
+		updateShadows();
+		// N.debug(jPicker.innerWidth()+"x"+jPicker.innerHeight());
 	}
 
-	// public function onAddedToDom() {
-	// 	// Center on selection
-	// 	var curSel = tool.getSelectedValue();
-	// 	var avgX = 0.;
-	// 	for(tid in curSel) {
-	// 		avgX += tool.curTilesetDef.getTileSourceX(tid);
-	// 	}
-	// 	avgX/=curSel.length;
-	// 	var scroller = getScroller();
-	// 	scroller.scrollLeft( - (avgX + scroller.outerWidth()*0.5) );
-	// }
+	inline function get_scrollX() {
+		return jPicker.scrollLeft();
+	}
+	inline function set_scrollX(v:Float) {
+		jPicker.scrollLeft(v);
+		return v;
+	}
+
+	inline function get_scrollY() {
+		return jPicker.scrollTop();
+	}
+	inline function set_scrollY(v:Float) {
+		jPicker.scrollTop(v);
+		return v;
+	}
+
+	inline function pageXtoLocal(v:Float) return M.round( ( v - jPicker.offset().left + scrollX ) / zoom );
+	inline function pageYtoLocal(v:Float) return M.round( ( v - jPicker.offset().top + scrollY ) / zoom );
 
 	function renderSelection() {
-		wrapper.find(".selection").remove();
+		jSelections.empty();
 
 		for(tileId in tool.getSelectedValue())
-			wrapper.append( createCursor(tileId,"selection") );
+			jSelections.append( createCursor(tileId,"selection") );
 	}
 
 
@@ -73,6 +104,7 @@ class TilesetPicker {
 		var grid = tool.curTilesetDef.tileGridSize;
 		e.css("width", ( cWid!=null ? cWid*grid : tool.curTilesetDef.tileGridSize )+"px");
 		e.css("height", ( cHei!=null ? cHei*grid : tool.curTilesetDef.tileGridSize )+"px");
+
 		return e;
 	}
 
@@ -81,9 +113,14 @@ class TilesetPicker {
 	var _lastRect = null;
 	function updateCursor(pageX:Float, pageY:Float, force=false) {
 		if( isScrolling() || Client.ME.isKeyDown(K.SPACE) ) {
-			cursors.hide();
+			jCursors.hide();
 			return;
 		}
+
+		Client.ME.debug(pageX+","+pageY+" => "+pageXtoLocal(pageX)+","+pageYtoLocal(pageY));
+		Client.ME.debug("scroll="+scrollX+","+scrollY, true);
+		Client.ME.debug("pickerSize="+jPicker.innerWidth()+"x"+jPicker.innerHeight(), true);
+		Client.ME.debug("img="+jImg.innerWidth()+"x"+jImg.innerHeight(), true);
 
 		var r = getCursorRect(pageX, pageY);
 
@@ -92,37 +129,59 @@ class TilesetPicker {
 			return;
 
 		var tileId = tool.curTilesetDef.getTileId(r.cx,r.cy);
-		cursors.empty();
-		cursors.show();
+		jCursors.empty();
+		jCursors.show();
 
 		var saved = tool.curTilesetDef.getSavedSelectionFor(tileId);
 		if( saved==null )
-			cursors.append( createCursor(tileId, r.wid, r.hei) );
+			jCursors.append( createCursor(tileId, r.wid, r.hei) );
 		else {
 			// Saved-selection rollover
 			for(tid in saved)
-				cursors.append( createCursor(tid) );
+				jCursors.append( createCursor(tid) );
 		}
 
 		_lastRect = r;
 	}
 
-	function getScroller() {
-		var scroller = wrapper;
-		while( scroller.css("overflow")!="auto" )
-			scroller = scroller.parent();
-		return scroller;
+	function scroll(newPageX:Float, newPageY:Float) {
+		var spd = 1.;
+
+		scrollX -= ( newPageX - dragStart.pageX ) * spd;
+		dragStart.pageX = newPageX;
+
+		scrollY -= ( newPageY - dragStart.pageY ) * spd;
+		dragStart.pageY = newPageY;
+
+		updateShadows();
 	}
 
-	function scroll(pageX:Float, pageY:Float) {
-		var scroller = getScroller();
-		var spd = 1.5;
+	function updateShadows() {
+		var shadows = [];
+		var col = "rgba(0, 0, 0, 0.4)";
+		var dist = "8px";
+		var blur = "2px";
 
-		scroller.scrollTop( scroller.scrollTop() - ( pageYtoLocal(pageY) - dragStart.localY ) * zoom * spd );
-		dragStart.localY = pageYtoLocal(pageY);
+		if( scrollX>0 )
+			shadows.push('$dist 0px $blur $col inset');
 
-		scroller.scrollLeft( scroller.scrollLeft() - ( pageXtoLocal(pageX) - dragStart.localX ) * zoom * spd );
-		dragStart.localX = pageXtoLocal(pageX);
+		if( scrollX < jImg.innerWidth()*zoom-jPicker.innerWidth() )
+			shadows.push('-$dist 0px $blur $col inset');
+
+		if( scrollY>0 )
+			shadows.push('0px $dist $blur $col inset');
+
+		if( scrollY < jImg.innerHeight()*zoom-jPicker.innerHeight() )
+			shadows.push('0px -$dist $blur $col inset');
+
+		if( shadows.length>0 ) {
+			jShadows.css("margin-left", scrollX/zoom-1); // 1 is because of the padding
+			jShadows.css("margin-top", scrollY/zoom-1);
+			shadows.push('0px 0px 4px black');
+			jShadows.css("box-shadow", shadows.join(","));
+		}
+		else
+			jShadows.css("box-shadow", "none");
 	}
 
 	inline function isScrolling() {
@@ -200,17 +259,16 @@ class TilesetPicker {
 	function onPickerMouseDown(ev:js.jquery.Event) {
 		dragStart = {
 			bt: ev.button,
-			localX: Std.int( ev.offsetX / zoom ),
-			localY: Std.int( ev.offsetY / zoom ),
+			pageX: ev.pageX,
+			pageY: ev.pageY,
+			// localX: Std.int( ev.offsetX / zoom ),
+			// localY: Std.int( ev.offsetY / zoom ),
 		}
 	}
 
 	function onPickerMouseMove(ev:js.jquery.Event) {
 		updateCursor(ev.pageX, ev.pageY);
 	}
-
-	inline function pageXtoLocal(v:Float) return M.round( v/zoom - wrapper.offset().left );
-	inline function pageYtoLocal(v:Float) return M.round( v/zoom - wrapper.offset().top );
 
 	function getCursorRect(pageX:Float, pageY:Float) {
 		var localX = pageXtoLocal(pageX);
@@ -228,8 +286,8 @@ class TilesetPicker {
 				hei: 1,
 			}
 		else {
-			var startCx = Std.int(dragStart.localX/grid);
-			var startCy = Std.int(dragStart.localY/grid);
+			var startCx = Std.int( pageXtoLocal(dragStart.pageX) / grid );
+			var startCy = Std.int( pageYtoLocal(dragStart.pageY) / grid );
 			return {
 				cx: M.imin(cx,startCx),
 				cy: M.imin(cy,startCy),
