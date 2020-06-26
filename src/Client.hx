@@ -386,14 +386,14 @@ class Client extends dn.Process {
 	}
 
 	public function debug(msg:Dynamic, append=false) {
-		var e = new J("#debug");
+		var wrapper = new J("#debug");
 		if( !append )
-			e.empty();
-		e.show();
+			wrapper.empty();
+		wrapper.show();
 
 		var line = new J("<p/>");
 		line.append( Std.string(msg) );
-		line.prependTo(e);
+		line.appendTo(wrapper);
 	}
 
 	public function selectLayerInstance(l:LayerInstance) {
