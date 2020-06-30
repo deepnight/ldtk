@@ -161,7 +161,7 @@ class TilesetPicker {
 		jCursors.show();
 
 		var saved = tool.curTilesetDef.getSavedSelectionFor(tileId);
-		if( saved==null )
+		if( saved==null || dragStart!=null )
 			jCursors.append( createCursor([tileId], r.wid, r.hei) );
 		else {
 			// Saved-selection rollover
