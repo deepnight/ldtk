@@ -184,7 +184,7 @@ class TilesetPicker {
 
 		var saved = tool.curTilesetDef.getSavedSelectionFor(tileId);
 		if( saved==null || dragStart!=null )
-			jCursors.append( createCursor([tileId], r.wid, r.hei) );
+			jCursors.append( createCursor([tileId], dragStart!=null && dragStart.bt==2?"remove":null, r.wid, r.hei) );
 		else {
 			// Saved-selection rollover
 			jCursors.append( createCursor(saved) );
@@ -296,6 +296,14 @@ class TilesetPicker {
 			pageX: ev.pageX,
 			pageY: ev.pageY,
 		}
+
+		// Block context menu
+		if( ev.button==2 )
+			jDoc.on("contextmenu.pickerCtxCatcher", function(ev) {
+				ev.preventDefault();
+				jDoc.off(".pickerCtxCatcher");
+				N.debug("ctx prevented");
+			});
 	}
 
 	function onPickerMouseMove(ev:js.jquery.Event) {
