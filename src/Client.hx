@@ -253,10 +253,10 @@ class Client extends dn.Process {
 					clearSelection();
 
 			// case K.TAB:
-				// if( ui.modal.FloatingToolPalette.isOpen() )
-				// 	ui.modal.FloatingToolPalette.ME.close();
-				// else if( !ui.Modal.hasAnyOpen() )
-				// 	curTool.openFloatingPalette();
+			// 	if( ui.modal.FloatingToolPalette.isOpen() )
+			// 		ui.modal.FloatingToolPalette.ME.close();
+			// 	else if( !ui.Modal.hasAnyOpen() )
+			// 		curTool.openFloatingPalette();
 
 			case K.S:
 				if( allowKeyPresses() && curLayerDef!=null && curLayerDef.type==Tiles ) {

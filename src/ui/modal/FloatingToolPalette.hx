@@ -40,8 +40,8 @@ class FloatingToolPalette extends ui.Modal {
 					startY = ev.pageY;
 				} )
 				.mouseup( function(ev) {
-					if( ev.button==1 && M.dist(startX, startY, ev.pageX, ev.pageY)<Const.MIDDLE_CLICK_DIST_THRESHOLD )
-						close();
+					// if( ev.button==1 && M.dist(startX, startY, ev.pageX, ev.pageY)<Const.MIDDLE_CLICK_DIST_THRESHOLD )
+					// 	close();
 				});
 		}
 

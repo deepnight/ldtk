@@ -582,7 +582,7 @@ input[type="file"] {
 }
 
 .window.floatingPalette > .wrapper {
-  overflow: visible;
+  overflow: hidden;
   padding: 0;
   border: none;
   outline: 1px solid white;
@@ -590,8 +590,8 @@ input[type="file"] {
 }
 
 .window.floatingPalette > .wrapper > .content {
-  width: 50vw;
-  max-height: 80vh;
+  width: 55vw;
+  max-height: 70vh;
 }
 
 .panelMask {
