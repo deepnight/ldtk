@@ -1,6 +1,8 @@
 package ui;
 
 class TilesetPicker {
+	static var SCROLL_MEMORY : Map<Int, { x:Float, y:Float, zoom:Float }> = new Map();
+
 	var jDoc(get,never) : js.jquery.JQuery; inline function get_jDoc() return new J(js.Browser.document);
 
 	var jPicker : js.jquery.JQuery;
@@ -52,9 +54,7 @@ class TilesetPicker {
 
 		jAtlas.css("min-width", tool.curTilesetDef.pxWid+"px");
 		jAtlas.css("min-height", tool.curTilesetDef.pxHei+"px");
-		zoom = 3;
-		scrollX = 0; // TODO restore last pos
-		scrollY = 0;
+		loadScrollPos();
 		renderSelection();
 
 		// Force picker dimensions as soon as img is rendered
@@ -64,21 +64,43 @@ class TilesetPicker {
 		});
 	}
 
+
+	function loadScrollPos() {
+		var mem = SCROLL_MEMORY.get(tool.curTilesetDef.uid);
+		if( mem!=null ) {
+			scrollX = mem.x;
+			scrollY = mem.y;
+			zoom = mem.zoom;
+		}
+		else {
+			scrollX = 0;
+			scrollY = 0;
+			zoom = 3;
+		}
+	}
+
+	function saveScrollPos() {
+		SCROLL_MEMORY.set(tool.curTilesetDef.uid, { x:scrollX, y:scrollY, zoom:zoom });
+	}
+
 	function set_zoom(v) {
 		zoom = M.fclamp(v, 0.5, 6);
 		jAtlas.css("zoom",zoom);
+		saveScrollPos();
 		return zoom;
 	}
 
 	inline function set_scrollX(v:Float) {
 		scrollX = v;
 		jAtlas.css("margin-left",-scrollX);
+		saveScrollPos();
 		return v;
 	}
 
 	inline function set_scrollY(v:Float) {
 		scrollY = v;
 		jAtlas.css("margin-top",-scrollY);
+		saveScrollPos();
 		return v;
 	}
 
