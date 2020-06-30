@@ -67,6 +67,7 @@ class FloatingToolPalette extends ui.Modal {
 		}
 	}
 
+
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		if( e==ToolOptionChanged )
@@ -138,6 +139,8 @@ class FloatingToolPalette extends ui.Modal {
 	override function onDispose() {
 		super.onDispose();
 		client.jDoc.off(".floatingPaletteEvent");
+		if( !tool.destroyed )
+			tool.updatePalette();
 		if( ME==this )
 			ME = null;
 	}
