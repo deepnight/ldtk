@@ -22,6 +22,16 @@ class Tool<T> extends dn.Process {
 
 		jPalette.off();
 		updatePalette();
+		client.ge.listenOnly(ToolOptionChanged, onToolOptionChanged);
+	}
+
+	function onToolOptionChanged() {
+		updatePalette();
+	}
+
+	override function onDispose() {
+		super.onDispose();
+		client.ge.stopListening(onToolOptionChanged);
 	}
 
 	function enablePalettePopOut() {

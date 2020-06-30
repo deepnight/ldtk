@@ -25,6 +25,8 @@ enum GlobalEvent {
 
 	EntityFieldChanged;
 	EntityFieldSorted;
+
+	ToolOptionChanged;
 }
 
 enum FieldType {

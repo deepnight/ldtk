@@ -103,7 +103,7 @@ class TilesetPicker {
 			return idsMap.exists( tool.curTilesetDef.getTileId(cx,cy) );
 		}
 
-		var individualMode = true;
+		var individualMode = Client.ME.tileRandomMode;
 
 		for(tileId in tileIds) {
 			var x = tool.curTilesetDef.getTileSourceX(tileId);

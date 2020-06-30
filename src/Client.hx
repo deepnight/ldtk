@@ -29,6 +29,7 @@ class Client extends dn.Process {
 	public var levelRender : display.LevelRender;
 	var bg : h2d.Bitmap;
 	public var curTool : Tool<Dynamic>;
+	public var tileRandomMode = false;
 
 	public var cursor : ui.Cursor;
 	public var selection : Null<GenericLevelElement>;
@@ -255,13 +256,23 @@ class Client extends dn.Process {
 					curTool.openFloatingPalette();
 
 			case K.S:
-				if( !hasInputFocus() && curLayerDef!=null && curLayerDef.type==Tiles ) {
+				if( allowKeyPresses() && curLayerDef!=null && curLayerDef.type==Tiles ) {
 					var td = project.defs.getTilesetDef(curLayerDef.tilesetDefId);
 					td.saveSelection( curTool.getSelectedValue() );
 					ge.emit(TilesetDefChanged);
 					N.msg("Saved selection");
 				}
+
+			case K.R:
+				if( allowKeyPresses() && curLayerDef!=null && curLayerDef.type==Tiles ) {
+					tileRandomMode = !tileRandomMode;
+					ge.emit(ToolOptionChanged);
+				}
 		}
+	}
+
+	function allowKeyPresses() {
+		return !hasInputFocus();
 	}
 
 
@@ -459,6 +470,7 @@ class Client extends dn.Process {
 			case EntityFieldChanged:
 			case EntityFieldSorted:
 			case EntityDefSorted:
+			case ToolOptionChanged:
 
 			case TilesetDefChanged, EntityDefChanged :
 				initTool();

@@ -3,6 +3,11 @@
   src: url("../fonts/RobotoCondensed-Light.ttf");
 }
 
+@font-face {
+  font-family: Roboto Bold;
+  src: url("../fonts/RobotoCondensed-Bold.ttf");
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -155,6 +160,19 @@ button.cancel:hover, label.cancel.file:hover {
 .buttons button.debug, .buttons label.debug.file {
   flex: 0 0 0;
   display: none;
+}
+
+.key {
+  display: inline-block;
+  padding-left: 3px;
+  padding-right: 3px;
+  padding-bottom: 3px;
+  color: #6d5f4d;
+  text-transform: uppercase;
+  font-family: Roboto Bold;
+  border-style: solid;
+  border-width: 9px;
+  border-image: url("/img/key.png") 6 fill repeat;
 }
 
 ul.niceList:first-child {
@@ -427,6 +445,11 @@ input[type=number]:focus {
   border-color: #ffcc00;
   box-shadow: 0px 0px 4px #e34d00;
   outline: none;
+}
+
+input[type=checkbox] {
+  width: 24px;
+  height: 24px;
 }
 
 input[type="file"] {
@@ -712,6 +735,23 @@ input[type="file"] {
   image-rendering: pixelated;
 }
 
+.palette label.option {
+  display: flex;
+  align-items: center;
+}
+
+.palette label.option input[type=checkbox] {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  margin-right: 4px;
+}
+
+.palette label.option .key {
+  flex: 0 0 auto;
+  margin-left: 10px;
+}
+
 .palette ul.niceList {
   margin: 0;
   padding: 4px;
@@ -782,13 +822,18 @@ input[type="file"] {
   border-style: dotted;
   border-color: white;
   border-width: 0px;
-  outline: 1px solid rgba(255, 255, 255, 0.15);
-  outline-offset: -2px;
+}
+
+.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.selection,
+.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.selection {
+  border-color: #f3e4a4;
+  border-style: solid;
 }
 
 .palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.allBorders,
 .palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.allBorders {
   border-width: 1px;
+  border-color: lightgreen;
 }
 
 .palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.left,
@@ -809,12 +854,6 @@ input[type="file"] {
 .palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.bottom,
 .palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.bottom {
   border-bottom-width: 1px;
-}
-
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.selection,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.selection {
-  border-color: #f3e4a4;
-  border-style: solid;
 }
 
 .instanceEditor {

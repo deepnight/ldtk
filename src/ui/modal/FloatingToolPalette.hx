@@ -7,6 +7,7 @@ class FloatingToolPalette extends ui.Modal {
 	public static var ME : Null<FloatingToolPalette>;
 	public var isPopOut = true;
 
+	var tool : Tool<Dynamic>;
 	var lastMouseX : Null<Float>;
 	var lastMouseY : Null<Float>;
 	var leavingElapsedDist = 0.;
@@ -15,10 +16,11 @@ class FloatingToolPalette extends ui.Modal {
 		super();
 
 		ME = this;
+		tool = t;
 		this.isPopOut = isPopOut;
 
 		jModalAndMask.addClass("floatingPalette");
-		jContent.append( t.createPalette() );
+		updatePalette();
 		client.jDoc.off(".floatingPaletteEvent");
 
 		if( isPopOut ) {
@@ -62,6 +64,17 @@ class FloatingToolPalette extends ui.Modal {
 				top: M.fclamp(y, 0, js.Browser.window.innerHeight-jWrapper.outerHeight()),
 			});
 		}
+	}
+
+	override function onGlobalEvent(e:GlobalEvent) {
+		super.onGlobalEvent(e);
+		if( e==ToolOptionChanged )
+			updatePalette();
+	}
+
+	function updatePalette() {
+		jContent.empty();
+		jContent.append( tool.createPalette() );
 	}
 
 	function onDocMouseMove(ev:js.jquery.Event) {

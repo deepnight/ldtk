@@ -16,6 +16,11 @@ $orange: #ffcc00;
 	src: url("../fonts/RobotoCondensed-Light.ttf");
 }
 
+@font-face {
+	font-family: Roboto Bold;
+	src: url("../fonts/RobotoCondensed-Bold.ttf");
+}
+
 
 body {
 	margin: 0;
@@ -155,6 +160,22 @@ button.cancel:hover {
 }
 
 
+.key {
+	display: inline-block;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-bottom: 3px;
+	// margin-right: 4px;
+	// margin-left: 4px;
+
+	color: #6d5f4d;
+	text-transform: uppercase;
+	font-family: Roboto Bold;
+
+	border-style: solid;
+	border-width: 9px;
+	border-image: url("/img/key.png") 6 fill repeat;
+}
 
 
 ul.niceList:first-child {
@@ -407,6 +428,11 @@ input[type=number]:focus {
 	border-color: $orange;
 	box-shadow: 0px 0px 4px $red;
 	outline: none;
+}
+
+input[type=checkbox] {
+	width: 24px;
+	height: 24px;
 }
 
 input[type="file"] {
@@ -714,6 +740,21 @@ label.file {
 	background-color: $bgDark;
 	image-rendering: pixelated;
 
+	label.option {
+		display: flex;
+		align-items: center;
+		input[type=checkbox] {
+			flex: 0 0 auto;
+			width: 24px;
+			height: 24px;
+			margin-right: 4px;
+		}
+		.key {
+			flex: 0 0 auto;
+			margin-left: 10px;
+		}
+	}
+
 	ul.niceList {
 		margin: 0;
 		padding: 4px;
@@ -778,18 +819,21 @@ label.file {
 					min-width: 1px;
 					min-height: 1px;
 					box-sizing: border-box;
-					// outline: 1px dotted white;
-					// outline-offset: -1px;
-					// box-shadow: 0px 0px 1px black, 0px 0px 8px black;
 					pointer-events: none;
 					border-style: dotted;
 					border-color: white;
 					border-width: 0px;
-					outline: 1px solid rgba(255,255,255,0.15);
-					outline-offset: -2px;
+					// outline: 1px solid rgba(255,255,255,0.15);
+					// outline-offset: -2px;
+
+					&.selection {
+						border-color: #f3e4a4;
+						border-style: solid;
+					}
 
 					&.allBorders {
 						border-width: 1px;
+						border-color: lightgreen;
 					}
 					&.left {
 						border-left-width: 1px;
@@ -804,11 +848,6 @@ label.file {
 						border-bottom-width: 1px;
 					}
 
-					&.selection {
-						border-color: #f3e4a4;
-						border-style: solid;
-						// box-shadow: 0px 0px 4px $orange, 0px 0px 16px $red;
-					}
 				}
 			}
 

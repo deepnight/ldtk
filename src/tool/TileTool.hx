@@ -17,7 +17,7 @@ class TileTool extends Tool< Array<Int> > {
 		return super.canEdit() && curTilesetDef!=null;
 	}
 
-	function isRandomMode() return Client.ME.isCtrlDown();
+	function isRandomMode() return Client.ME.tileRandomMode;
 
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
@@ -133,6 +133,19 @@ class TileTool extends Tool< Array<Int> > {
 
 	override function createPalette() {
 		var target = super.createPalette();
+
+		var opt = new J('<label class="option"/>');
+		opt.appendTo(target);
+		var chk = new J('<input type="checkbox"/>');
+		chk.prop("checked", client.tileRandomMode);
+		chk.change( function(ev) {
+			client.tileRandomMode = chk.prop("checked")==true;
+			client.ge.emit(ToolOptionChanged);
+		});
+		opt.append(chk);
+		opt.append('Random tiles');
+		opt.append('<div class="key">R</div>');
+
 		if( curTilesetDef!=null )
 			new ui.TilesetPicker(target, this);
 		return target;

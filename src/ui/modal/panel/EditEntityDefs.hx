@@ -100,6 +100,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			case LayerDefSorted:
 			case LayerInstanceChanged:
 			case TilesetDefChanged:
+			case ToolOptionChanged:
 
 			case EntityDefChanged:
 				updatePreview();
