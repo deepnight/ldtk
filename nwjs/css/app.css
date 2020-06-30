@@ -778,16 +778,43 @@ input[type="file"] {
   min-width: 1px;
   min-height: 1px;
   box-sizing: border-box;
-  outline: 1px dotted white;
-  outline-offset: -1px;
-  box-shadow: 0px 0px 1px black, 0px 0px 8px black;
   pointer-events: none;
+  border-style: dotted;
+  border-color: white;
+  border-width: 0px;
+  outline: 1px solid rgba(255, 255, 255, 0.15);
+  outline-offset: -2px;
+}
+
+.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.allBorders,
+.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.allBorders {
+  border-width: 1px;
+}
+
+.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.left,
+.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.left {
+  border-left-width: 1px;
+}
+
+.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.right,
+.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.right {
+  border-right-width: 1px;
+}
+
+.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.top,
+.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.top {
+  border-top-width: 1px;
+}
+
+.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.bottom,
+.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.bottom {
+  border-bottom-width: 1px;
 }
 
 .palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.selection,
 .palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.selection {
-  outline: 1px solid #f3e4a4;
-  box-shadow: 0px 0px 4px #ffcc00, 0px 0px 16px #e34d00;
+  border-color: #f3e4a4;
+  border-style: solid;
 }
 
 .instanceEditor {

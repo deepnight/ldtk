@@ -88,26 +88,51 @@ class TilesetPicker {
 	function renderSelection() {
 		jSelections.empty();
 
-		for(tileId in tool.getSelectedValue())
-			jSelections.append( createCursor(tileId,"selection") );
+		// for(tileId in tool.getSelectedValue())
+		// 	jSelections.append( createCursor(tileId,"selection") );
+		jSelections.append( createCursor(tool.getSelectedValue(),"selection") );
 	}
 
 
-	function createCursor(tileId:Int, ?subClass:String, ?cWid:Int, ?cHei:Int) {
-		var x = tool.curTilesetDef.getTileSourceX(tileId);
-		var y = tool.curTilesetDef.getTileSourceY(tileId);
+	function createCursor(tileIds:Array<Int>, ?subClass:String, ?cWid:Int, ?cHei:Int) {
+		var wrapper = new J("<div/>");
+		var idsMap = new Map();
+		for(tileId in tileIds)
+			idsMap.set(tileId,true);
+		inline function hasCursorAt(cx:Int,cy:Int) {
+			return idsMap.exists( tool.curTilesetDef.getTileId(cx,cy) );
+		}
 
-		var e = new J('<div class="tileCursor"/>');
-		if( subClass!=null )
-			e.addClass(subClass);
+		var individualMode = true;
 
-		e.css("left", x+"px");
-		e.css("top", y+"px");
-		var grid = tool.curTilesetDef.tileGridSize;
-		e.css("width", ( cWid!=null ? cWid*grid : tool.curTilesetDef.tileGridSize )+"px");
-		e.css("height", ( cHei!=null ? cHei*grid : tool.curTilesetDef.tileGridSize )+"px");
+		for(tileId in tileIds) {
+			var x = tool.curTilesetDef.getTileSourceX(tileId);
+			var y = tool.curTilesetDef.getTileSourceY(tileId);
+			var cx = tool.curTilesetDef.getTileCx(tileId);
+			var cy = tool.curTilesetDef.getTileCy(tileId);
 
-		return e;
+			var e = new J('<div class="tileCursor"/>');
+			e.appendTo(wrapper);
+			if( subClass!=null )
+				e.addClass(subClass);
+
+			if( individualMode )
+				e.addClass("allBorders");
+			else {
+				if( !hasCursorAt(cx-1,cy) ) e.addClass("left");
+				if( !hasCursorAt(cx+1,cy) ) e.addClass("right");
+				if( !hasCursorAt(cx,cy-1) ) e.addClass("top");
+				if( !hasCursorAt(cx,cy+1) ) e.addClass("bottom");
+			}
+
+			e.css("left", x+"px");
+			e.css("top", y+"px");
+			var grid = tool.curTilesetDef.tileGridSize;
+			e.css("width", ( cWid!=null ? cWid*grid : tool.curTilesetDef.tileGridSize )+"px");
+			e.css("height", ( cHei!=null ? cHei*grid : tool.curTilesetDef.tileGridSize )+"px");
+		}
+
+		return wrapper;
 	}
 
 
@@ -137,11 +162,10 @@ class TilesetPicker {
 
 		var saved = tool.curTilesetDef.getSavedSelectionFor(tileId);
 		if( saved==null )
-			jCursors.append( createCursor(tileId, r.wid, r.hei) );
+			jCursors.append( createCursor([tileId], r.wid, r.hei) );
 		else {
 			// Saved-selection rollover
-			for(tid in saved)
-				jCursors.append( createCursor(tid) );
+			jCursors.append( createCursor(saved) );
 		}
 
 		_lastRect = r;

@@ -778,14 +778,36 @@ label.file {
 					min-width: 1px;
 					min-height: 1px;
 					box-sizing: border-box;
-					outline: 1px dotted white;
-					outline-offset: -1px;
-					box-shadow: 0px 0px 1px black, 0px 0px 8px black;
+					// outline: 1px dotted white;
+					// outline-offset: -1px;
+					// box-shadow: 0px 0px 1px black, 0px 0px 8px black;
 					pointer-events: none;
+					border-style: dotted;
+					border-color: white;
+					border-width: 0px;
+					outline: 1px solid rgba(255,255,255,0.15);
+					outline-offset: -2px;
+
+					&.allBorders {
+						border-width: 1px;
+					}
+					&.left {
+						border-left-width: 1px;
+					}
+					&.right {
+						border-right-width: 1px;
+					}
+					&.top {
+						border-top-width: 1px;
+					}
+					&.bottom {
+						border-bottom-width: 1px;
+					}
 
 					&.selection {
-						outline: 1px solid #f3e4a4;
-						box-shadow: 0px 0px 4px $orange, 0px 0px 16px $red;
+						border-color: #f3e4a4;
+						border-style: solid;
+						// box-shadow: 0px 0px 4px $orange, 0px 0px 16px $red;
 					}
 				}
 			}
