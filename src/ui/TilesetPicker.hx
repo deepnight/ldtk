@@ -217,19 +217,17 @@ class TilesetPicker {
 	function onDocMouseUp(ev:js.jquery.Event) {
 		jDoc.off(".pickerDragEvent");
 
-		if( dragStart!=null ) {
-			// Apply selection
-			if( !isScrolling() ) {
-				var r = getCursorRect(ev.pageX, ev.pageY);
-				if( r.wid==1 && r.hei==1 )
-					onSelect([ tool.curTilesetDef.getTileId(r.cx,r.cy) ]);
-				else {
-					var tileIds = [];
-					for(cx in r.cx...r.cx+r.wid)
-					for(cy in r.cy...r.cy+r.hei)
-						tileIds.push( tool.curTilesetDef.getTileId(cx,cy) );
-					onSelect(tileIds);
-				}
+		// Apply selection
+		if( dragStart!=null && !isScrolling() ) {
+			var r = getCursorRect(ev.pageX, ev.pageY);
+			if( r.wid==1 && r.hei==1 )
+				onSelect([ tool.curTilesetDef.getTileId(r.cx,r.cy) ]);
+			else {
+				var tileIds = [];
+				for(cx in r.cx...r.cx+r.wid)
+				for(cy in r.cy...r.cy+r.hei)
+					tileIds.push( tool.curTilesetDef.getTileId(cx,cy) );
+				onSelect(tileIds);
 			}
 		}
 
@@ -272,6 +270,9 @@ class TilesetPicker {
 		}
 
 		renderSelection();
+	}
+
+	function onRemoveSel(rem:Array<Int>) {
 	}
 
 
