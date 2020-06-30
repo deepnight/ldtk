@@ -820,7 +820,7 @@ input[type="file"] {
   box-sizing: border-box;
   pointer-events: none;
   border-style: dotted;
-  border-color: white;
+  border-color: rgba(255, 255, 255, 0.66);
   border-width: 0px;
 }
 
@@ -854,6 +854,11 @@ input[type="file"] {
 .palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.bottom,
 .palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.bottom {
   border-bottom-width: 1px;
+}
+
+.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.remove,
+.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.remove {
+  border-color: red;
 }
 
 .instanceEditor {

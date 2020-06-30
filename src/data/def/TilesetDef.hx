@@ -218,7 +218,7 @@ public inline function getTile(tileId:Int) {
 				savedSelections.remove(saved);
 		}
 
-		savedSelections.push( tileIds );
+		savedSelections.push( tileIds.copy() );
 	}
 
 	public inline function hasSavedSelectionFor(tid:Int) : Bool {

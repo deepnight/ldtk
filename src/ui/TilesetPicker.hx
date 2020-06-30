@@ -221,13 +221,13 @@ class TilesetPicker {
 		if( dragStart!=null && !isScrolling() ) {
 			var r = getCursorRect(ev.pageX, ev.pageY);
 			if( r.wid==1 && r.hei==1 )
-				onSelect([ tool.curTilesetDef.getTileId(r.cx,r.cy) ]);
+				applySelection([ tool.curTilesetDef.getTileId(r.cx,r.cy) ], dragStart.bt!=2);
 			else {
 				var tileIds = [];
 				for(cx in r.cx...r.cx+r.wid)
 				for(cy in r.cy...r.cy+r.hei)
 					tileIds.push( tool.curTilesetDef.getTileId(cx,cy) );
-				onSelect(tileIds);
+				applySelection(tileIds, dragStart.bt!=2);
 			}
 		}
 
@@ -235,7 +235,7 @@ class TilesetPicker {
 		updateCursor(ev.pageX, ev.pageY, true);
 	}
 
-	function onSelect(sel:Array<Int>) {
+	function applySelection(sel:Array<Int>, add:Bool) {
 		// Auto-pick saved selection
 		if( sel.length==1 && tool.curTilesetDef.hasSavedSelectionFor(sel[0]) ) {
 			// Check if the saved selection isn't already picked. If so, just pick the sub-tile
@@ -253,20 +253,37 @@ class TilesetPicker {
 		}
 
 		var cur = tool.getSelectedValue();
-		if( !Client.ME.isShiftDown() && !Client.ME.isCtrlDown() )
-			tool.selectValue(sel);
-		else {
-			// Add selection
-			var idMap = new Map();
-			for(tid in tool.getSelectedValue())
-				idMap.set(tid,true);
-			for(tid in sel)
-				idMap.set(tid,true);
+		if( add ) {
+			if( !Client.ME.isShiftDown() && !Client.ME.isCtrlDown() ) {
+				// Replace active selection with this one
+				tool.selectValue(sel);
+			}
+			else {
+				// Add selection
+				var idMap = new Map();
+				for(tid in tool.getSelectedValue())
+					idMap.set(tid,true);
+				for(tid in sel)
+					idMap.set(tid,true);
 
-			var arr = [];
-			for(tid in idMap.keys())
-				arr.push(tid);
-			tool.selectValue(arr);
+				var arr = [];
+				for(tid in idMap.keys())
+					arr.push(tid);
+				tool.selectValue(arr);
+			}
+		}
+		else {
+			// Substract selection
+			N.debug("substract");
+			var remMap = new Map();
+			for(tid in sel)
+				remMap.set(tid, true);
+			var i = 0;
+			while( i<cur.length )
+				if( remMap.exists(cur[i]) )
+					cur.splice(i,1);
+				else
+					i++;
 		}
 
 		renderSelection();
@@ -303,7 +320,6 @@ class TilesetPicker {
 			jDoc.on("contextmenu.pickerCtxCatcher", function(ev) {
 				ev.preventDefault();
 				jDoc.off(".pickerCtxCatcher");
-				N.debug("ctx prevented");
 			});
 	}
 

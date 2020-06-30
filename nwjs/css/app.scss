@@ -821,7 +821,7 @@ label.file {
 					box-sizing: border-box;
 					pointer-events: none;
 					border-style: dotted;
-					border-color: white;
+					border-color: rgba(255, 255, 255, 0.66);
 					border-width: 0px;
 					// outline: 1px solid rgba(255,255,255,0.15);
 					// outline-offset: -2px;
@@ -846,6 +846,10 @@ label.file {
 					}
 					&.bottom {
 						border-bottom-width: 1px;
+					}
+
+					&.remove {
+						border-color: red;
 					}
 
 				}
