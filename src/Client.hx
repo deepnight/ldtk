@@ -199,7 +199,7 @@ class Client extends dn.Process {
 		project = p;
 		project.tidy();
 		curLevelId = project.levels[0].uid;
-		curLayerId = curLevel.layerInstances[0]==null ? -1 : curLevel.layerInstances[0].layerDefId;
+		curLayerId = -1;
 
 		Tool.clearSelectionMemory();
 		display.LevelRender.invalidateCaches();
@@ -207,9 +207,13 @@ class Client extends dn.Process {
 		levelRender.fit();
 		levelRender.invalidate();
 		updateBg();
-		updateLayerList();
 		updateProjectTitle();
-		initTool();
+
+		// Pick 1st layer in current level
+		for(li in curLevel.layerInstances) {
+			selectLayerInstance(li);
+			break;
+		}
 	}
 
 	public function getCwd() {
