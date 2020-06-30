@@ -688,7 +688,8 @@ input[type="file"] {
 }
 
 #editor #mainPanel ul#layers {
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   margin: 0;
 }
 
@@ -736,6 +737,19 @@ input[type="file"] {
 #editor canvas {
   width: 100% !important;
   height: 100% !important;
+}
+
+.compactPanel #editor {
+  grid-template-columns: 150px auto;
+}
+
+.compactPanel #editor #mainPanel {
+  grid-template-rows: min-content 200px auto;
+}
+
+.compactPanel #editor #mainPanel #layers li {
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 .palette {

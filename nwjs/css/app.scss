@@ -679,7 +679,8 @@ label.file {
 		}
 
 		ul#layers {
-			overflow: auto;
+			overflow-x: hidden;
+			overflow-y: auto;
 			margin: 0;
 
 			li {
@@ -730,22 +731,18 @@ label.file {
 }
 
 
-// .expandedPalette {
-// 	#editor {
-// 		grid-template-columns: 450px auto;
-// 		#projectTitle {
-// 			display: none;
-// 		}
-
-// 		#mainPanel {
-// 			grid-template-rows: min-content 200px auto;
-// 			#layers li {
-// 				padding-top: 4px;
-// 				padding-bottom: 4px;
-// 			}
-// 		}
-// 	}
-// }
+.compactPanel {
+	#editor {
+		grid-template-columns: 150px auto;
+		#mainPanel {
+			grid-template-rows: min-content 200px auto;
+			#layers li {
+				padding-top: 4px;
+				padding-bottom: 4px;
+			}
+		}
+	}
+}
 
 
 .palette {
