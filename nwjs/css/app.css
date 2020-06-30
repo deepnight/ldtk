@@ -585,12 +585,12 @@ input[type="file"] {
   overflow: visible;
   padding: 0;
   border: none;
-  outline: 2px solid black;
+  outline: 1px solid white;
   box-shadow: 0px 0px 32px black;
 }
 
 .window.floatingPalette > .wrapper > .content {
-  max-width: 60vw;
+  width: 50vw;
   max-height: 80vh;
 }
 

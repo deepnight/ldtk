@@ -244,7 +244,6 @@ class Client extends dn.Process {
 	inline function hasInputFocus() {
 		return jBody.find("input:focus").length>0;
 	}
-
 	function onKeyPress(keyId:Int) {
 		switch keyId {
 			case K.ESCAPE:

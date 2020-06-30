@@ -48,11 +48,12 @@ class FloatingToolPalette extends ui.Modal {
 		// Positionning
 		if( isPopOut ) {
 			jMask.css("opacity",0);
-			// var jPalette = client.jPalette;
-			// jWrapper.offset({
-			// 	left: jPalette.offset().left,
-			// 	top: jPalette.offset().top,
-			// });
+			var jPalette = client.jPalette;
+			jWrapper.offset({
+				left: jPalette.offset().left,
+				top: jPalette.offset().top,
+			});
+			jWrapper.css("height", jPalette.outerHeight());
 			// jWrapper.css("height", js.Browser.window.innerHeight - jWrapper.offset().top);
 		}
 		else {
