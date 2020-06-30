@@ -39,9 +39,6 @@ class Tool<T> extends dn.Process {
 			.off()
 			.mouseover( function(_) {
 				popOutPalette();
-			})
-			.mouseleave( function(_) {
-				popInPalette();
 			});
 	}
 
@@ -262,11 +259,6 @@ class Tool<T> extends dn.Process {
 
 	public function popOutPalette() {
 		new ui.modal.FloatingToolPalette(this, true);
-		// jPalette.addClass("popOut");
-	}
-
-	public function popInPalette() {
-		// jPalette.removeClass("popOut");
 	}
 
 	public final function updatePalette() {
