@@ -194,8 +194,8 @@ class Tool<T> extends dn.Process {
 	function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {}
 
 	public function stopUsing(m:MouseCoords) {
-		if( curMode==PanView && M.dist(origin.htmlX, origin.htmlY, m.htmlX, m.htmlY) < Const.MIDDLE_CLICK_DIST_THRESHOLD )
-			openFloatingPalette();
+		// if( curMode==PanView && M.dist(origin.htmlX, origin.htmlY, m.htmlX, m.htmlY) < Const.MIDDLE_CLICK_DIST_THRESHOLD )
+			// openFloatingPalette();
 
 		if( isRunning() ) {
 			if( !rectangle )
@@ -253,12 +253,8 @@ class Tool<T> extends dn.Process {
 	}
 
 
-	public function openFloatingPalette() {
-		new ui.modal.FloatingToolPalette(this, false);
-	}
-
 	public function popOutPalette() {
-		new ui.modal.FloatingToolPalette(this, true);
+		new ui.modal.ToolPalettePopOut(this);
 	}
 
 	public final function updatePalette() {

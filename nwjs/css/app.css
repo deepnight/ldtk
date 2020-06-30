@@ -516,7 +516,7 @@ input[type="file"] {
 }
 
 .window.panel {
-  left: 300px;
+  left: 0px;
   width: calc( 100% - 300px);
 }
 
@@ -582,16 +582,16 @@ input[type="file"] {
 }
 
 .window.floatingPalette > .wrapper {
-  overflow: visible;
+  overflow: hidden;
   padding: 0;
   border: none;
-  outline: 2px solid black;
+  outline: 1px solid white;
   box-shadow: 0px 0px 32px black;
 }
 
 .window.floatingPalette > .wrapper > .content {
-  max-width: 60vw;
-  max-height: 80vh;
+  width: 55vw;
+  max-height: 70vh;
 }
 
 .panelMask {
@@ -653,7 +653,7 @@ input[type="file"] {
 
 #editor {
   display: grid;
-  grid-template-columns: 300px auto;
+  grid-template-columns: 400px auto;
   width: 100%;
   height: 100%;
 }
@@ -663,7 +663,7 @@ input[type="file"] {
   display: grid;
   height: 100%;
   overflow: hidden;
-  grid-template-rows: min-content 300px auto;
+  grid-template-rows: min-content 250px auto;
   padding: 5px;
   gap: 5px;
   background: #1e2229;
@@ -678,17 +678,25 @@ input[type="file"] {
   overflow: hidden;
 }
 
+#editor #mainPanel #mainBar .buttons.project button, #editor #mainPanel #mainBar .buttons.project label.file {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
 #editor #mainPanel ul.niceList {
   min-height: auto;
 }
 
 #editor #mainPanel ul#layers {
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   margin: 0;
 }
 
 #editor #mainPanel ul#layers li {
   grid-template-columns: min-content auto min-content;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 #editor #mainPanel ul#layers li .name {
@@ -717,6 +725,8 @@ input[type="file"] {
 
 #editor #mainPanel #mainPaletteWrapper {
   overflow: auto;
+  position: relative;
+  outline: 1px solid white;
 }
 
 #editor #mainPanel #mainPaletteWrapper ul.niceList {
@@ -729,8 +739,24 @@ input[type="file"] {
   height: 100% !important;
 }
 
+.compactPanel #editor {
+  grid-template-columns: 150px auto;
+}
+
+.compactPanel #editor #mainPanel {
+  grid-template-rows: min-content 200px auto;
+}
+
+.compactPanel #editor #mainPanel #layers li {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
 .palette {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
   background-color: #1e2229;
   image-rendering: pixelated;
 }
@@ -755,6 +781,7 @@ input[type="file"] {
 .palette ul.niceList {
   margin: 0;
   padding: 4px;
+  width: 100%;
   height: 100%;
 }
 
@@ -795,8 +822,6 @@ input[type="file"] {
   padding: 1px;
   width: 100%;
   height: 100%;
-  min-width: 400px;
-  outline: 1px solid white;
 }
 
 .palette .tilesetPicker .wrapper img.atlas {

@@ -52,16 +52,16 @@ class TilesetPicker {
 		jPicker.get(0).onwheel = onPickerMouseWheel;
 		jPicker.mousemove( onPickerMouseMove );
 
-		jAtlas.css("min-width", tool.curTilesetDef.pxWid+"px");
-		jAtlas.css("min-height", tool.curTilesetDef.pxHei+"px");
+		// jAtlas.css("min-width", tool.curTilesetDef.pxWid+"px");
+		// jAtlas.css("min-height", tool.curTilesetDef.pxHei+"px");
 		loadScrollPos();
 		renderSelection();
 
 		// Force picker dimensions as soon as img is rendered
-		jImg.on("load", function(ev) {
-			jPicker.css("width",jPicker.innerWidth()+"px");
-			jPicker.css("height",jPicker.innerHeight()+"px");
-		});
+		// jImg.on("load", function(ev) {
+		// 	jPicker.css("width",jPicker.innerWidth()+"px");
+		// 	jPicker.css("height",jPicker.innerHeight()+"px");
+		// });
 	}
 
 

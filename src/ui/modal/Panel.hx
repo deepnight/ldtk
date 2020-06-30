@@ -7,9 +7,11 @@ class Panel extends ui.Modal {
 	public function new() {
 		super();
 
-		jModalAndMask.addClass("panel");
-
 		var mainPanel = new J("#mainPanel");
+
+		jModalAndMask.addClass("panel");
+		jModalAndMask.offset({ top:0, left:mainPanel.outerWidth() });
+
 		jPanelMask = new J("<div/>");
 		jPanelMask.addClass("panelMask");
 		jPanelMask.prependTo("body");

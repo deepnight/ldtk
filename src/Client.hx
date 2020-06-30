@@ -206,7 +206,7 @@ class Client extends dn.Process {
 
 		levelRender.fit();
 		levelRender.invalidate();
-		updateBg();
+		updateCanvasBg();
 		updateProjectTitle();
 
 		// Pick 1st layer in current level
@@ -244,7 +244,6 @@ class Client extends dn.Process {
 	inline function hasInputFocus() {
 		return jBody.find("input:focus").length>0;
 	}
-
 	function onKeyPress(keyId:Int) {
 		switch keyId {
 			case K.ESCAPE:
@@ -254,10 +253,8 @@ class Client extends dn.Process {
 					clearSelection();
 
 			case K.TAB:
-				if( ui.modal.FloatingToolPalette.isOpen() )
-					ui.modal.FloatingToolPalette.ME.close();
-				else if( !ui.Modal.hasAnyOpen() )
-					curTool.openFloatingPalette();
+				jBody.toggleClass("compactPanel");
+				updateCanvasBg();
 
 			case K.S:
 				if( allowKeyPresses() && curLayerDef!=null && curLayerDef.type==Tiles ) {
@@ -481,7 +478,7 @@ class Client extends dn.Process {
 				display.LevelRender.invalidateCaches();
 
 			case ProjectSettingsChanged:
-				updateBg();
+				updateCanvasBg();
 				updateProjectTitle();
 
 			case LayerDefChanged, LayerDefSorted:
@@ -493,7 +490,7 @@ class Client extends dn.Process {
 		}
 	}
 
-	function updateBg() {
+	function updateCanvasBg() {
 		if( bg!=null )
 			bg.remove();
 
@@ -505,14 +502,22 @@ class Client extends dn.Process {
 	override function onResize() {
 		super.onResize();
 		if( bg!=null ) {
-			bg.scaleX = w();
+			bg.scaleX = canvasWid();
 			bg.scaleY = h();
 		}
 	}
 
+	inline function canvasWid() {
+		return jCanvas.outerWidth() * js.Browser.window.devicePixelRatio;
+	}
+
+	inline function canvasHei() {
+		return jCanvas.outerHeight() * js.Browser.window.devicePixelRatio;
+	}
+
 	function updateProjectTitle() {
 		appWin.title = project.name+" -- L-Ed v"+Const.APP_VERSION;
-		jBody.find("h2#projectTitle").text( project.name );
+		// jBody.find("h2#projectTitle").text( project.name );
 	}
 
 	public function updateLayerList() {
