@@ -6,7 +6,6 @@ class Const {
 	static var _uniq = 0;
 	public static var NEXT_UNIQ(get,never) : Int; static inline function get_NEXT_UNIQ() return _uniq++;
 	public static var INFINITE = 999999;
-	public static var MIDDLE_CLICK_DIST_THRESHOLD = 8;
 
 	static var _inc = 0;
 	public static var DP_BG = _inc++;

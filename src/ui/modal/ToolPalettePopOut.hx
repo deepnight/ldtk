@@ -1,70 +1,39 @@
 package ui.modal;
 
-class FloatingToolPalette extends ui.Modal {
+class ToolPalettePopOut extends ui.Modal {
 	static var LEAVE_DIST_BEFORE_CLOSING = 90;
 	static var OVER_PADDING = 64;
 
-	public static var ME : Null<FloatingToolPalette>;
-	public var isPopOut = true;
+	public static var ME : Null<ToolPalettePopOut>;
 
 	var tool : Tool<Dynamic>;
 	var lastMouseX : Null<Float>;
 	var lastMouseY : Null<Float>;
 	var leavingElapsedDist = 0.;
 
-	public function new(t:Tool<Dynamic>, isPopOut:Bool) {
+	public function new(t:Tool<Dynamic>) {
 		super();
 
 		ME = this;
 		tool = t;
-		this.isPopOut = isPopOut;
 
 		jModalAndMask.addClass("floatingPalette");
 		updatePalette();
 		client.jDoc.off(".floatingPaletteEvent");
 
-		if( isPopOut ) {
-			jWrapper.mousedown( onWrapperMouseDown );
-			client.jDoc
-				.on("mousemove.floatingPaletteEvent", onDocMouseMove)
-				.on("mouseup.floatingPaletteEvent", onDocMouseUp);
-		}
-
-		// Detect middle click to close
-		if( !isPopOut ) {
-			var startX = 0.;
-			var startY = 0.;
-			jModalAndMask
-				.mousedown( function(ev) {
-					startX = ev.pageX;
-					startY = ev.pageY;
-				} )
-				.mouseup( function(ev) {
-					// if( ev.button==1 && M.dist(startX, startY, ev.pageX, ev.pageY)<Const.MIDDLE_CLICK_DIST_THRESHOLD )
-					// 	close();
-				});
-		}
+		jWrapper.mousedown( onWrapperMouseDown );
+		client.jDoc
+			.on("mousemove.floatingPaletteEvent", onDocMouseMove)
+			.on("mouseup.floatingPaletteEvent", onDocMouseUp);
 
 		// Positionning
-		if( isPopOut ) {
-			jMask.css("opacity",0);
-			var jPalette = client.jPalette;
-			jWrapper.offset({
-				left: jPalette.offset().left,
-				top: jPalette.offset().top,
-			});
-			jWrapper.css("height", jPalette.outerHeight());
-			// jWrapper.css("height", js.Browser.window.innerHeight - jWrapper.offset().top);
-		}
-		else {
-			var m = client.getMouse();
-			var x = m.htmlX - jWrapper.outerWidth()*0.5;
-			var y = m.htmlY - jWrapper.outerHeight()*0.5;
-			jWrapper.offset({
-				left: M.fclamp(x, 0, js.Browser.window.innerWidth-jWrapper.outerWidth()),
-				top: M.fclamp(y, 0, js.Browser.window.innerHeight-jWrapper.outerHeight()),
-			});
-		}
+		jMask.css("opacity",0);
+		var jPalette = client.jPalette;
+		jWrapper.offset({
+			left: jPalette.offset().left,
+			top: jPalette.offset().top,
+		});
+		jWrapper.css("height", jPalette.outerHeight());
 	}
 
 
@@ -116,10 +85,9 @@ class FloatingToolPalette extends ui.Modal {
 				leavingElapsedDist = M.fmax(0, leavingElapsedDist);
 
 				// Close
-				if( leavingElapsedDist>=LEAVE_DIST_BEFORE_CLOSING )
+				if( leavingElapsedDist>=LEAVE_DIST_BEFORE_CLOSING && !cd.has("suspendAutoClosing") )
 					close();
 			}
-			// Client.ME.debug("leaveDist = "+Std.int(leavingElapsedDist));
 		}
 
 		lastMouseX = ev.pageX;
@@ -133,6 +101,8 @@ class FloatingToolPalette extends ui.Modal {
 
 	function onDocMouseUp(ev:js.jquery.Event) {
 		isMouseDown = false;
+		leavingElapsedDist = 0;
+		cd.setS("suspendAutoClosing",0.5);
 	}
 
 
