@@ -6,7 +6,7 @@ class TileTool extends Tool< Array<Int> > {
 
 	public function new() {
 		super();
-		enablePalettePopOut();
+		// enablePalettePopOut();
 	}
 
 	override function getDefaultValue():Array<Int> {
@@ -134,8 +134,14 @@ class TileTool extends Tool< Array<Int> > {
 	override function createPalette() {
 		var target = super.createPalette();
 
+		if( curTilesetDef!=null )
+			new ui.TilesetPicker(target, this);
+
+
+		var options = new J('<div class="toolOptions"/>');
+		options.appendTo(target);
 		var opt = new J('<label class="option"/>');
-		opt.appendTo(target);
+		opt.appendTo(options);
 		var chk = new J('<input type="checkbox"/>');
 		chk.prop("checked", client.tileRandomMode);
 		chk.change( function(ev) {
@@ -146,8 +152,6 @@ class TileTool extends Tool< Array<Int> > {
 		opt.append('Random tiles');
 		opt.append('<div class="key">R</div>');
 
-		if( curTilesetDef!=null )
-			new ui.TilesetPicker(target, this);
 		return target;
 	}
 }

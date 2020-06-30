@@ -48,12 +48,12 @@ class FloatingToolPalette extends ui.Modal {
 		// Positionning
 		if( isPopOut ) {
 			jMask.css("opacity",0);
-			var jPalette = client.jPalette;
-			jWrapper.offset({
-				left: jPalette.offset().left,
-				top: jPalette.offset().top,
-			});
-			jWrapper.css("height", js.Browser.window.innerHeight - jWrapper.offset().top);
+			// var jPalette = client.jPalette;
+			// jWrapper.offset({
+			// 	left: jPalette.offset().left,
+			// 	top: jPalette.offset().top,
+			// });
+			// jWrapper.css("height", js.Browser.window.innerHeight - jWrapper.offset().top);
 		}
 		else {
 			var m = client.getMouse();
@@ -101,8 +101,8 @@ class FloatingToolPalette extends ui.Modal {
 				var angDeltaCorner4 = M.radSubstract( angToCenter, Math.atan2(modalY2-ev.pageY, modalX1-ev.pageX) );
 				var minDelta = M.fmin( angDeltaCorner1, M.fmin(angDeltaCorner2, M.fmin( angDeltaCorner3, angDeltaCorner4)) );
 				var maxDelta = M.fmax( angDeltaCorner1, M.fmax(angDeltaCorner2, M.fmax( angDeltaCorner3, angDeltaCorner4)) );
-				minDelta-=0.25;
-				maxDelta+=0.25;
+				minDelta-=0.1;
+				maxDelta+=0.1;
 
 				var angDeltaMouse = M.radSubstract( angToCenter, Math.atan2(ev.pageY-lastMouseY, ev.pageX-lastMouseX) );
 				var mouseDist = M.dist(lastMouseX, lastMouseY, ev.pageX, ev.pageY);

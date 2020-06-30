@@ -253,11 +253,11 @@ class Client extends dn.Process {
 				else
 					clearSelection();
 
-			case K.TAB:
-				if( ui.modal.FloatingToolPalette.isOpen() )
-					ui.modal.FloatingToolPalette.ME.close();
-				else if( !ui.Modal.hasAnyOpen() )
-					curTool.openFloatingPalette();
+			// case K.TAB:
+				// if( ui.modal.FloatingToolPalette.isOpen() )
+				// 	ui.modal.FloatingToolPalette.ME.close();
+				// else if( !ui.Modal.hasAnyOpen() )
+				// 	curTool.openFloatingPalette();
 
 			case K.S:
 				if( allowKeyPresses() && curLayerDef!=null && curLayerDef.type==Tiles ) {
@@ -512,7 +512,7 @@ class Client extends dn.Process {
 
 	function updateProjectTitle() {
 		appWin.title = project.name+" -- L-Ed v"+Const.APP_VERSION;
-		jBody.find("h2#projectTitle").text( project.name );
+		// jBody.find("h2#projectTitle").text( project.name );
 	}
 
 	public function updateLayerList() {
