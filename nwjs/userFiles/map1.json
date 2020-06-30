@@ -44,6 +44,26 @@
 					{
 						"color":16734464,
 						"name":"lava"
+					},
+					{
+						"color":16711680,
+						"name":"filler 1"
+					},
+					{
+						"color":16711680,
+						"name":"filler 2"
+					},
+					{
+						"color":16711680,
+						"name":"filler 3"
+					},
+					{
+						"color":16771584,
+						"name":"filler 4"
+					},
+					{
+						"color":65310,
+						"name":"filler 5"
 					}
 				],
 				"tilesetDefId":null
