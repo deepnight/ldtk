@@ -13,7 +13,7 @@
 				},
 				"name":"test",
 				"gridSize":16,
-				"displaydisplayOpacity":0.6,
+				"displaydisplayOpacity":1,
 				"intGridValues":[
 					{
 						"color":8234606
@@ -220,5 +220,5 @@
 	"defaultPivotX":0,
 	"defaultPivotY":0,
 	"defaultGridSize":16,
-	"bgColor":16777215
+	"bgColor":6778740
 }
