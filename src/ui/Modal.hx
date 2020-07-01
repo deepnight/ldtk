@@ -24,7 +24,7 @@ class Modal extends dn.Process {
 		jContent = jModalAndMask.find(".content");
 
 		jMask = jModalAndMask.find(".mask");
-		jMask.click( function(_) close() );
+		jMask.mousedown( function(_) close() );
 		jMask.hide().fadeIn(100);
 
 		client.ge.listenAll(onGlobalEvent);
