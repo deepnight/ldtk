@@ -769,6 +769,7 @@ input[type="file"] {
 .palette .toolOptions {
   display: flex;
   flex-wrap: nowrap;
+  padding-top: 1px;
 }
 
 .palette .toolOptions > * + * {
@@ -776,7 +777,7 @@ input[type="file"] {
 }
 
 .palette .toolOptions > * {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
 }
 
 .palette .toolOptions label {
@@ -794,10 +795,9 @@ input[type="file"] {
 }
 
 .palette .toolOptions button, .palette .toolOptions label.file {
-  flex: 0.33 1 auto;
   width: auto;
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 .palette ul.niceList {

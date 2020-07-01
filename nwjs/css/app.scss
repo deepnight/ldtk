@@ -759,13 +759,14 @@ label.file {
 	.toolOptions {
 		display: flex;
 		flex-wrap: nowrap;
+		padding-top: 1px;
 
 		>*+* {
 			margin-left: 10px;
 		}
 
 		>* {
-			flex: 1 1 auto;
+			flex: 0 1 auto;
 		}
 
 		label {
@@ -782,10 +783,9 @@ label.file {
 			}
 		}
 		button {
-			flex: 0.33 1 auto;
 			width: auto;
-			padding-top: 0px;
-			padding-bottom: 0px;
+			padding-top: 4px;
+			padding-bottom: 4px;
 		}
 	}
 
