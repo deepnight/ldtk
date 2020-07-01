@@ -262,7 +262,6 @@ class Client extends dn.Process {
 					td.saveSelection(tool.getSelectedValue());
 					ge.emit(TilesetDefChanged);
 					N.msg("Saved selection");
-					N.debug(tool.getSelectedValue());
 				}
 		}
 
