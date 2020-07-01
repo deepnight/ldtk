@@ -11,8 +11,8 @@ class TilesetPicker {
 
 	var tool : tool.TileTool;
 	var zoom(default,set) : Float;
-	var jCursors : js.jquery.JQuery;
-	var jSelections : js.jquery.JQuery;
+	var jCursor : js.jquery.JQuery;
+	var jSelection : js.jquery.JQuery;
 
 	var dragStart : Null<{ bt:Int, pageX:Float, pageY:Float }>;
 
@@ -29,11 +29,11 @@ class TilesetPicker {
 		jAtlas = new J('<div class="wrapper"/>');
 		jAtlas.appendTo(jPicker);
 
-		jCursors = new J('<div class="cursorsWrapper"/>');
-		jCursors.prependTo(jAtlas);
+		jCursor = new J('<div class="cursorsWrapper"/>');
+		jCursor.prependTo(jAtlas);
 
-		jSelections = new J('<div class="selectionsWrapper"/>');
-		jSelections.prependTo(jAtlas);
+		jSelection = new J('<div class="selectionsWrapper"/>');
+		jSelection.prependTo(jAtlas);
 
 		var jImg = new J( tool.curTilesetDef.createAtlasHtmlImage() );
 		jImg.appendTo(jAtlas);
@@ -108,8 +108,8 @@ class TilesetPicker {
 	inline function pageYtoLocal(v:Float) return M.round( ( v - jPicker.offset().top ) / zoom + scrollY );
 
 	function renderSelection() {
-		jSelections.empty();
-		jSelections.append( createCursor(tool.getSelectedValue(),"selection") );
+		jSelection.empty();
+		jSelection.append( createCursor(tool.getSelectedValue(),"selection") );
 	}
 
 
@@ -159,7 +159,7 @@ class TilesetPicker {
 	var _lastRect = null;
 	function updateCursor(pageX:Float, pageY:Float, force=false) {
 		if( isScrolling() || Client.ME.isKeyDown(K.SPACE) ) {
-			jCursors.hide();
+			jCursor.hide();
 			return;
 		}
 
@@ -176,17 +176,17 @@ class TilesetPicker {
 			return;
 
 		var tileId = tool.curTilesetDef.getTileId(r.cx,r.cy);
-		jCursors.empty();
-		jCursors.show();
+		jCursor.empty();
+		jCursor.show();
 
 		var saved = tool.curTilesetDef.getSavedSelectionFor(tileId);
 		if( saved==null || dragStart!=null ) {
 			var c = createCursor({ rand:tool.isRandomMode(), ids:[tileId] }, dragStart!=null && dragStart.bt==2?"remove":null, r.wid, r.hei);
-			c.appendTo(jCursors);
+			c.appendTo(jCursor);
 		}
 		else {
 			// Saved-selection rollover
-			jCursors.append( createCursor(saved) );
+			jCursor.append( createCursor(saved) );
 		}
 
 		_lastRect = r;
