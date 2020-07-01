@@ -168,13 +168,13 @@ div.key {
 	padding-left: 5px;
 	padding-right: 5px;
 
-	color: #6d5f4d;
+	// color: #6d5f4d;
 	text-transform: uppercase;
 	font-family: Roboto Bold;
 
-	background-color: #cfc5ac;
-	border: 1px solid #ebdfc3;
-	border-bottom: 2px solid #83725a;
+	background-color: rgba(207, 197, 172, 0.3);
+	border: 1px solid rgba(235, 223, 195, 0.3);
+	border-bottom: 2px solid rgba(131, 114, 90, 0.3);
 	box-shadow: 0px 0px 4px black;
 	border-radius: 2px;
 }
@@ -791,7 +791,9 @@ label.file {
 		button {
 			width: auto;
 			padding-top: 4px;
+			text-transform: none;
 			padding-bottom: 4px;
+			margin-bottom: 3px; // to show dropshadow
 		}
 	}
 
