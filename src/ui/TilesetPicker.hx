@@ -7,7 +7,6 @@ class TilesetPicker {
 
 	var jPicker : js.jquery.JQuery;
 	var jAtlas : js.jquery.JQuery;
-	var jImg : js.jquery.JQuery;
 
 	var tool : tool.TileTool;
 	var zoom(default,set) : Float;
@@ -35,7 +34,7 @@ class TilesetPicker {
 		jSelection = new J('<div class="selectionsWrapper"/>');
 		jSelection.prependTo(jAtlas);
 
-		jImg = new J( tool.curTilesetDef.createAtlasHtmlImage() );
+		var jImg = new J( tool.curTilesetDef.createAtlasHtmlImage() );
 		jImg.appendTo(jAtlas);
 		jImg.addClass("atlas");
 
@@ -52,16 +51,8 @@ class TilesetPicker {
 		jPicker.get(0).onwheel = onPickerMouseWheel;
 		jPicker.mousemove( onPickerMouseMove );
 
-		// jAtlas.css("min-width", tool.curTilesetDef.pxWid+"px");
-		// jAtlas.css("min-height", tool.curTilesetDef.pxHei+"px");
 		loadScrollPos();
 		renderSelection();
-
-		// Force picker dimensions as soon as img is rendered
-		// jImg.on("load", function(ev) {
-		// 	jPicker.css("width",jPicker.innerWidth()+"px");
-		// 	jPicker.css("height",jPicker.innerHeight()+"px");
-		// });
 	}
 
 
