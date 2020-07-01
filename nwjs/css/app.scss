@@ -760,6 +760,14 @@ label.file {
 		display: flex;
 		flex-wrap: nowrap;
 
+		>*+* {
+			margin-left: 10px;
+		}
+
+		>* {
+			flex: 1 1 auto;
+		}
+
 		label {
 			display: flex;
 			align-items: center;
@@ -774,6 +782,8 @@ label.file {
 			}
 		}
 		button {
+			flex: 0.33 1 auto;
+			width: auto;
 			padding-top: 0px;
 			padding-bottom: 0px;
 		}

@@ -147,6 +147,16 @@ class TileTool extends Tool<TilesetSelection> {
 
 		var options = new J('<div class="toolOptions"/>');
 		options.appendTo(target);
+
+		// Save selection
+		var bt = new J('<button/>');
+		bt.appendTo(options);
+		bt.append( JsTools.keyInLabel("[S]ave selection") );
+		bt.click( function(_) {
+			saveSelection();
+		});
+
+		// Random mode
 		var opt = new J('<label/>');
 		opt.appendTo(options);
 		var chk = new J('<input type="checkbox"/>');
@@ -161,6 +171,12 @@ class TileTool extends Tool<TilesetSelection> {
 		return target;
 	}
 
+	function saveSelection() {
+		curTilesetDef.saveSelection( getSelectedValue() );
+		client.ge.emit(TilesetDefChanged);
+		N.msg("Saved selection");
+	}
+
 	override function onKeyPress(keyId:Int) {
 		super.onKeyPress(keyId);
 
@@ -168,6 +184,9 @@ class TileTool extends Tool<TilesetSelection> {
 			case K.R :
 				setMode( isRandomMode() ? Stamp : Random );
 				client.ge.emit(ToolOptionChanged);
+
+			case K.S:
+				saveSelection();
 		}
 	}
 }

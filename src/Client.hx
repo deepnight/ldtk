@@ -254,15 +254,6 @@ class Client extends dn.Process {
 			case K.TAB:
 				jBody.toggleClass("compactPanel");
 				updateCanvasBg();
-
-			case K.S:
-				if( allowKeyPresses() && curLayerDef!=null && curLayerDef.type==Tiles ) {
-					var tool = Std.downcast(curTool, tool.TileTool);
-					var td = project.defs.getTilesetDef(curLayerDef.tilesetDefId);
-					td.saveSelection(tool.getSelectedValue());
-					ge.emit(TilesetDefChanged);
-					N.msg("Saved selection");
-				}
 		}
 
 		// Propagate to current tool

@@ -771,6 +771,14 @@ input[type="file"] {
   flex-wrap: nowrap;
 }
 
+.palette .toolOptions > * + * {
+  margin-left: 10px;
+}
+
+.palette .toolOptions > * {
+  flex: 1 1 auto;
+}
+
 .palette .toolOptions label {
   display: flex;
   align-items: center;
@@ -786,6 +794,8 @@ input[type="file"] {
 }
 
 .palette .toolOptions button, .palette .toolOptions label.file {
+  flex: 0.33 1 auto;
+  width: auto;
   padding-top: 0px;
   padding-bottom: 0px;
 }
