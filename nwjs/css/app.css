@@ -476,9 +476,10 @@ input[type="file"] {
   min-width: 150px;
   max-width: 300px;
   margin-bottom: 8px;
-  background-color: #2e333f;
-  border-left: 8px solid #545d73;
+  background-color: #1e2229;
+  border-left: 10px solid #545d73;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  animation: showNotif 1s;
 }
 
 #notificationList .notification .content {
@@ -486,8 +487,26 @@ input[type="file"] {
   padding-right: 80px;
 }
 
+@keyframes showNotif {
+  from {
+    max-height: 0;
+    overflow: hidden;
+  }
+  to {
+    max-height: 200;
+  }
+}
+
 #notificationList .notification:not(.latest) {
-  opacity: 0.66;
+  opacity: 0.5;
+  border-left-width: 3px;
+  transition: border 0.3s, opacity 0.3s;
+}
+
+#notificationList .notification:not(.latest) .content {
+  transition: padding 0.3s ease;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .window {

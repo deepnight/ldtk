@@ -462,9 +462,10 @@ label.file {
 		max-width: 300px;
 		margin-bottom: 8px;
 
-		background-color: $bgMed;
-		border-left: 8px solid $bgLight;
+		background-color: $bgDark;
+		border-left: 10px solid $bgLight;
 		box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+		animation: showNotif 1s;
 
 		.content {
 			padding: 20px;
@@ -472,8 +473,25 @@ label.file {
 		}
 	}
 
+	@keyframes showNotif {
+		from {
+			max-height: 0;
+			overflow: hidden;
+		}
+		to {
+			max-height: 200;
+		}
+	}
+
 	.notification:not(.latest) {
-		opacity: 0.66;
+		opacity: 0.5;
+		border-left-width: 3px;
+		transition: border 0.3s, opacity 0.3s;
+		.content {
+			transition: padding 0.3s ease;
+			padding-top: 10px;
+			padding-bottom: 10px;
+		}
 	}
 }
 

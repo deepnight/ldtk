@@ -19,8 +19,6 @@ class Notification extends dn.Process {
 			elem.css("background-color", C.intToHex( C.mix(col,defColor,0.66) ));
 		}
 
-		elem.hide().slideDown(100);
-		elem.click( function(_) hide() );
 		delayer.addS(hide, 3 + str.length*0.04);
 		elem.addClass("latest");
 	}
