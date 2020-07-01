@@ -32,6 +32,7 @@ class TileTool extends Tool<TilesetSelection> {
 
 		switch curMode {
 			case null, PanView:
+
 			case Add:
 				dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
 					drawSelectionAt(cx, cy);
