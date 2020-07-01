@@ -7,6 +7,7 @@ class TileTool extends Tool<TilesetSelection> {
 	public function new() {
 		super();
 		enablePalettePopOut();
+		selectValue( getSelectedValue() );
 	}
 
 	override function getDefaultValue():TilesetSelection {

@@ -278,6 +278,7 @@ class TilesetPicker {
 		}
 
 		renderSelection();
+		Client.ME.ge.emit(ToolOptionChanged);
 	}
 
 	function onRemoveSel(rem:Array<Int>) {
