@@ -50,7 +50,6 @@ class EditLayerDefs extends ui.modal.Panel {
 			});
 		});
 
-
 		select(client.curLayerDef);
 	}
 
@@ -75,16 +74,16 @@ class EditLayerDefs extends ui.modal.Panel {
 		}
 	}
 
-	function select(ld:LayerDef) {
+	function select(ld:Null<LayerDef>) {
 		cur = ld;
 		jForm.find("*").off(); // cleanup event listeners
-		client.selectLayerInstance( client.curLevel.getLayerInstance(ld) );
 
 		if( cur==null ) {
 			jForm.hide();
 			return;
 		}
 
+		client.selectLayerInstance( client.curLevel.getLayerInstance(cur) );
 		jForm.show();
 
 		// Set form class

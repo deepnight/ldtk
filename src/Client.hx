@@ -84,16 +84,8 @@ class Client extends dn.Process {
 		jMainPanel.find("*").off();
 
 		// Main file actions
-		jMainPanel.find("button.new").click( function(ev) {
-			ui.Modal.closeAll();
-			new ui.modal.dialog.Confirm(ev.getThis(), function() {
-				useProject( ProjectData.createEmpty() );
-				N.msg("New project created.");
-			});
-		});
-
+		jMainPanel.find("button.new").click( function(ev) onNew(ev.getThis()) );
 		jMainPanel.find("button.load").click( function(_) onLoad() );
-
 		jMainPanel.find("button.save").click( function(_) onSave() );
 			// ui.Modal.closeAll();
 			// dn.LocalStorage.write("test", dn.HaxeJson.prettify( haxe.Json.stringify( project.toJson() ) ) );
@@ -207,11 +199,18 @@ class Client extends dn.Process {
 		levelRender.invalidate();
 		updateCanvasBg();
 		updateProjectTitle();
+		initTool();
 
-		// Pick 1st layer in current level
-		for(li in curLevel.layerInstances) {
-			selectLayerInstance(li);
-			break;
+		if( project.defs.layers.length>0 ) {
+			// Pick 1st layer in current level
+			for(li in curLevel.layerInstances) {
+				selectLayerInstance(li);
+				break;
+			}
+		}
+		else {
+			updateLayerList();
+			initTool();
 		}
 	}
 
@@ -413,6 +412,15 @@ class Client extends dn.Process {
 		levelRender.onCurrentLayerChange(curLayerInstance);
 		updateLayerList();
 		initTool();
+	}
+
+
+	function onNew(bt:js.jquery.JQuery) {
+		ui.Modal.closeAll();
+		new ui.modal.dialog.Confirm(bt, function() {
+			useProject( ProjectData.createEmpty() );
+			N.msg("New project created.");
+		});
 	}
 
 
