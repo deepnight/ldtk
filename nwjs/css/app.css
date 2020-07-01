@@ -462,12 +462,13 @@ input[type="file"] {
 
 #notificationList {
   position: absolute;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   z-index: 99;
-  top: 0px;
+  bottom: 0px;
   right: 0px;
-  height: 100%;
-  padding-top: 30px;
+  padding-bottom: 30px;
   overflow: hidden;
   pointer-events: none;
 }
@@ -477,13 +478,17 @@ input[type="file"] {
   max-width: 300px;
   margin-bottom: 8px;
   background-color: #2e333f;
-  border-left: 8px solid #ffcc00;
+  border-left: 8px solid #545d73;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 #notificationList .notification .content {
   padding: 20px;
   padding-right: 80px;
+}
+
+#notificationList .notification:not(.latest) {
+  opacity: 0.66;
 }
 
 .window {

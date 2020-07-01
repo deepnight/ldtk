@@ -6,18 +6,23 @@ class Notification extends dn.Process {
 	private function new(str:String, ?col:UInt) {
 		super(Client.ME);
 
+		var jList = new J("#notificationList");
+		jList.find(".latest").removeClass("latest");
+
 		elem = new J("xml#notification").clone().children().first();
-		elem.prependTo( new J("#notificationList") );
+		elem.appendTo(jList);
 
 		elem.find(".content").text(str);
 		if( col!=null ) {
+			var defColor = C.hexToInt( elem.css("background-color") );
 			elem.css("border-color", C.intToHex(col));
-			// elem.find(".content").css("background-color", C.intToHex(col));
+			elem.css("background-color", C.intToHex( C.mix(col,defColor,0.66) ));
 		}
 
 		elem.hide().slideDown(100);
 		elem.click( function(_) hide() );
 		delayer.addS(hide, 3 + str.length*0.04);
+		elem.addClass("latest");
 	}
 
 	public static function msg(str:String) {

@@ -446,12 +446,14 @@ label.file {
 
 #notificationList {
 	position: absolute;
+	display: flex;
+	flex-direction: column;
+
 	box-sizing: border-box;
 	z-index: 99;
-	top: 0px;
+	bottom: 0px;
 	right: 0px;
-	height: 100%;
-	padding-top: 30px;
+	padding-bottom: 30px;
 	overflow: hidden;
 	pointer-events: none;
 
@@ -461,13 +463,17 @@ label.file {
 		margin-bottom: 8px;
 
 		background-color: $bgMed;
-		border-left: 8px solid $orange;
+		border-left: 8px solid $bgLight;
 		box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
 
 		.content {
 			padding: 20px;
 			padding-right: 80px;
 		}
+	}
+
+	.notification:not(.latest) {
+		opacity: 0.66;
 	}
 }
 
