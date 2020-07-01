@@ -9,7 +9,7 @@ class TilesetDef implements ISerializable {
 	public var pxHei = 0;
 	public var tileGridSize : Int = Const.DEFAULT_GRID_SIZE;
 	public var tileGridSpacing : Int = 0;
-	public var savedSelections : Array<TilesetSavedSelection> = [];
+	public var savedSelections : Array<TilesetSelection> = [];
 
 	var texture(get,never) : Null<h3d.mat.Texture>;
 	var _textureCache : Null<h3d.mat.Texture>;
@@ -210,7 +210,7 @@ public inline function getTile(tileId:Int) {
 	}
 
 
-	public function saveSelection(tsSel:TilesetSavedSelection) {
+	public function saveSelection(tsSel:TilesetSelection) {
 		// Remove existing overlapping saved selections
 		for(tid in tsSel.ids) {
 			var saved = getSavedSelectionFor(tid);
@@ -228,7 +228,7 @@ public inline function getTile(tileId:Int) {
 		return getSavedSelectionFor(tid)!=null;
 	}
 
-	public function getSavedSelectionFor(tid:Int) : Null< TilesetSavedSelection > {
+	public function getSavedSelectionFor(tid:Int) : Null< TilesetSelection > {
 		for(sel in savedSelections)
 			for(stid in sel.ids)
 				if( stid==tid )
