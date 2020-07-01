@@ -35,7 +35,7 @@ class TilesetPicker {
 		jSelection = new J('<div class="selectionsWrapper"/>');
 		jSelection.prependTo(jAtlas);
 
-		var jImg = new J( tool.curTilesetDef.createAtlasHtmlImage() );
+		jImg = new J( tool.curTilesetDef.createAtlasHtmlImage() );
 		jImg.appendTo(jAtlas);
 		jImg.addClass("atlas");
 
@@ -163,11 +163,10 @@ class TilesetPicker {
 			return;
 		}
 
-		Client.ME.debug(pageX+","+pageY+" => "+pageXtoLocal(pageX)+","+pageYtoLocal(pageY));
-		Client.ME.debug("scroll="+scrollX+","+scrollY, true);
-		Client.ME.debug("pickerSize="+jPicker.innerWidth()+"x"+jPicker.innerHeight(), true);
-		var img = jAtlas.find("img.atlas");
-		Client.ME.debug("img="+img.innerWidth()+"x"+img.innerHeight(), true);
+		// Client.ME.debug(pageX+","+pageY+" => "+pageXtoLocal(pageX)+","+pageYtoLocal(pageY));
+		// Client.ME.debug("scroll="+scrollX+","+scrollY, true);
+		// Client.ME.debug("pickerSize="+jPicker.innerWidth()+"x"+jPicker.innerHeight(), true);
+		// Client.ME.debug("img="+img.innerWidth()+"x"+img.innerHeight(), true);
 
 		var r = getCursorRect(pageX, pageY);
 
