@@ -1,7 +1,7 @@
 package ui.modal;
 
 class ToolPalettePopOut extends ui.Modal {
-	static var LEAVE_DIST_BEFORE_CLOSING = 60;
+	static var LEAVE_DIST_BEFORE_CLOSING = 30;
 	static var OVER_PADDING = 64;
 
 	public static var ME : Null<ToolPalettePopOut>;
@@ -72,8 +72,8 @@ class ToolPalettePopOut extends ui.Modal {
 				var angDeltaCorner4 = M.radSubstract( angToCenter, Math.atan2(modalY2-ev.pageY, modalX1-ev.pageX) );
 				var minDelta = M.fmin( angDeltaCorner1, M.fmin(angDeltaCorner2, M.fmin( angDeltaCorner3, angDeltaCorner4)) );
 				var maxDelta = M.fmax( angDeltaCorner1, M.fmax(angDeltaCorner2, M.fmax( angDeltaCorner3, angDeltaCorner4)) );
-				minDelta-=0.15;
-				maxDelta+=0.15;
+				minDelta-=0.35;
+				maxDelta+=0.35;
 
 				var angDeltaMouse = M.radSubstract( angToCenter, Math.atan2(ev.pageY-lastMouseY, ev.pageX-lastMouseX) );
 				var mouseDist = M.dist(lastMouseX, lastMouseY, ev.pageX, ev.pageY);
@@ -84,9 +84,14 @@ class ToolPalettePopOut extends ui.Modal {
 					leavingElapsedDist+=mouseDist; // mouse is moving away
 				leavingElapsedDist = M.fmax(0, leavingElapsedDist);
 
-				// Close
-				if( leavingElapsedDist>=LEAVE_DIST_BEFORE_CLOSING && !cd.has("suspendAutoClosing") )
-					close();
+				if( leavingElapsedDist>=LEAVE_DIST_BEFORE_CLOSING ) {
+					if( cd.has("suspendAutoClosing") )
+						cd.setS("needClosing",Const.INFINITE);
+					else
+						close();
+				}
+				else
+					cd.unset("needClosing");
 			}
 		}
 
@@ -102,7 +107,7 @@ class ToolPalettePopOut extends ui.Modal {
 	function onDocMouseUp(ev:js.jquery.Event) {
 		isMouseDown = false;
 		leavingElapsedDist = 0;
-		cd.setS("suspendAutoClosing",0.5);
+		cd.setS("suspendAutoClosing",0.2);
 	}
 
 
@@ -117,5 +122,12 @@ class ToolPalettePopOut extends ui.Modal {
 
 	public static function isOpen() {
 		return ME!=null && !ME.isClosing();
+	}
+
+	override function update() {
+		super.update();
+
+		if( !cd.has("suspendAutoClosing") && cd.has("needClosing") )
+			close();
 	}
 }
