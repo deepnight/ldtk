@@ -580,7 +580,7 @@ label.file {
 	}
 }
 
-.window.floatingPalette {
+.window.popOutPalette {
 	&>.wrapper {
 		overflow: hidden;
 		padding: 0;
@@ -589,7 +589,7 @@ label.file {
 		box-shadow: 0px 0px 32px black;
 
 		&>.content {
-			width: 55vw;
+			width: 45vw;
 			max-height: 70vh;
 		}
 	}

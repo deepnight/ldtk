@@ -589,7 +589,7 @@ input[type="file"] {
   margin-bottom: 4px;
 }
 
-.window.floatingPalette > .wrapper {
+.window.popOutPalette > .wrapper {
   overflow: hidden;
   padding: 0;
   border: none;
@@ -597,8 +597,8 @@ input[type="file"] {
   box-shadow: 0px 0px 32px black;
 }
 
-.window.floatingPalette > .wrapper > .content {
-  width: 55vw;
+.window.popOutPalette > .wrapper > .content {
+  width: 45vw;
   max-height: 70vh;
 }
 
