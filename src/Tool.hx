@@ -213,6 +213,8 @@ class Tool<T> extends dn.Process {
 		curMode = null;
 	}
 
+	public function onKeyPress(keyId:Int) {}
+
 	public function onMouseMove(m:MouseCoords) {
 		// Start moving elements only after a small elapsed mouse distance
 		if( curMode==Move && !moveStarted && M.dist(origin.gx,origin.gy, m.gx,m.gy)>=10*Const.SCALE ) {

@@ -29,7 +29,6 @@ class Client extends dn.Process {
 	public var levelRender : display.LevelRender;
 	var bg : h2d.Bitmap;
 	public var curTool : Tool<Dynamic>;
-	public var tileRandomMode = false;
 
 	public var cursor : ui.Cursor;
 	public var selection : Null<GenericLevelElement>;
@@ -258,21 +257,17 @@ class Client extends dn.Process {
 
 			case K.S:
 				if( allowKeyPresses() && curLayerDef!=null && curLayerDef.type==Tiles ) {
+					var tool = Std.downcast(curTool, tool.TileTool);
 					var td = project.defs.getTilesetDef(curLayerDef.tilesetDefId);
-					td.saveSelection({
-						rand: tileRandomMode,
-						ids: curTool.getSelectedValue(),
-					});
+					td.saveSelection(tool.getSelectedValue());
 					ge.emit(TilesetDefChanged);
 					N.msg("Saved selection");
-				}
-
-			case K.R:
-				if( allowKeyPresses() && curLayerDef!=null && curLayerDef.type==Tiles ) {
-					tileRandomMode = !tileRandomMode;
-					ge.emit(ToolOptionChanged);
+					N.debug(tool.getSelectedValue());
 				}
 		}
+
+		// Propagate to current tool
+		curTool.onKeyPress(keyId);
 	}
 
 	function allowKeyPresses() {

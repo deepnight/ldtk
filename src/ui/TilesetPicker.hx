@@ -109,25 +109,22 @@ class TilesetPicker {
 
 	function renderSelection() {
 		jSelections.empty();
-
-		// for(tileId in tool.getSelectedValue())
-		// 	jSelections.append( createCursor(tileId,"selection") );
 		jSelections.append( createCursor(tool.getSelectedValue(),"selection") );
 	}
 
 
-	function createCursor(tileIds:Array<Int>, ?subClass:String, ?cWid:Int, ?cHei:Int) {
+	function createCursor(sel:TilesetSelection, ?subClass:String, ?cWid:Int, ?cHei:Int) {
 		var wrapper = new J("<div/>");
 		var idsMap = new Map();
-		for(tileId in tileIds)
+		for(tileId in sel.ids)
 			idsMap.set(tileId,true);
 		inline function hasCursorAt(cx:Int,cy:Int) {
 			return idsMap.exists( tool.curTilesetDef.getTileId(cx,cy) );
 		}
 
-		var individualMode = Client.ME.tileRandomMode;
+		var individualMode = sel.rand;
 
-		for(tileId in tileIds) {
+		for(tileId in sel.ids) {
 			var x = tool.curTilesetDef.getTileSourceX(tileId);
 			var y = tool.curTilesetDef.getTileSourceY(tileId);
 			var cx = tool.curTilesetDef.getTileCx(tileId);
@@ -183,11 +180,13 @@ class TilesetPicker {
 		jCursors.show();
 
 		var saved = tool.curTilesetDef.getSavedSelectionFor(tileId);
-		if( saved==null || dragStart!=null )
-			jCursors.append( createCursor([tileId], dragStart!=null && dragStart.bt==2?"remove":null, r.wid, r.hei) );
+		if( saved==null || dragStart!=null ) {
+			var c = createCursor({ rand:tool.isRandomMode(), ids:[tileId] }, dragStart!=null && dragStart.bt==2?"remove":null, r.wid, r.hei);
+			c.appendTo(jCursors);
+		}
 		else {
 			// Saved-selection rollover
-			jCursors.append( createCursor(saved.ids) );
+			jCursors.append( createCursor(saved) );
 		}
 
 		_lastRect = r;
@@ -235,54 +234,55 @@ class TilesetPicker {
 		updateCursor(ev.pageX, ev.pageY, true);
 	}
 
-	function applySelection(sel:Array<Int>, add:Bool) {
+	function applySelection(selIds:Array<Int>, add:Bool) {
 		// Auto-pick saved selection
-		if( sel.length==1 && tool.curTilesetDef.hasSavedSelectionFor(sel[0]) ) {
+		if( selIds.length==1 && tool.curTilesetDef.hasSavedSelectionFor(selIds[0]) ) {
 			// Check if the saved selection isn't already picked. If so, just pick the sub-tile
-			var curIds = tool.getSelectedValue();
-			var saved = tool.curTilesetDef.getSavedSelectionFor( sel[0] );
+			var sel = tool.getSelectedValue();
+			var saved = tool.curTilesetDef.getSavedSelectionFor( selIds[0] );
 			var same = true;
 			var i = 0;
 			while( i<saved.ids.length ) {
-				if( curIds[i]!=saved.ids[i] )
+				if( sel.ids[i]!=saved.ids[i] )
 					same = false;
 				i++;
 			}
 			if( !same ) {
-				Client.ME.tileRandomMode = saved.rand;
-				sel = saved.ids.copy();
+				selIds = saved.ids.copy();
+				tool.setRandomMode( saved.rand );
 			}
 		}
 
-		var curIds = tool.getSelectedValue();
+		var curSel = tool.getSelectedValue();
 		if( add ) {
 			if( !Client.ME.isShiftDown() && !Client.ME.isCtrlDown() ) {
 				// Replace active selection with this one
-				tool.selectValue(sel);
+				tool.selectValue({ rand:tool.isRandomMode(), ids:selIds });
 			}
 			else {
-				// Add selection
+				// Add selection (OR)
 				var idMap = new Map();
-				for(tid in tool.getSelectedValue())
+				for(tid in tool.getSelectedValue().ids)
 					idMap.set(tid,true);
-				for(tid in sel)
+				for(tid in selIds)
 					idMap.set(tid,true);
 
 				var arr = [];
 				for(tid in idMap.keys())
 					arr.push(tid);
-				tool.selectValue(arr);
+				tool.selectValue({ rand:tool.isRandomMode(), ids:arr });
 			}
 		}
 		else {
 			// Substract selection
 			var remMap = new Map();
-			for(tid in sel)
+			for(tid in selIds)
 				remMap.set(tid, true);
+
 			var i = 0;
-			while( i<curIds.length )
-				if( remMap.exists(curIds[i]) )
-					curIds.splice(i,1);
+			while( i<curSel.ids.length && curSel.ids.length>1 )
+				if( remMap.exists(curSel.ids[i]) )
+					curSel.ids.splice(i,1);
 				else
 					i++;
 		}

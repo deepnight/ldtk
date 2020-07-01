@@ -1,6 +1,6 @@
 package tool;
 
-class TileTool extends Tool< Array<Int> > {
+class TileTool extends Tool<TilesetSelection> {
 	public var curTilesetDef(get,never) : Null<TilesetDef>;
 	inline function get_curTilesetDef() return client.project.defs.getTilesetDef( client.curLayerInstance.def.tilesetDefId );
 
@@ -9,15 +9,19 @@ class TileTool extends Tool< Array<Int> > {
 		enablePalettePopOut();
 	}
 
-	override function getDefaultValue():Array<Int> {
-		return [0];
+	override function getDefaultValue():TilesetSelection {
+		return { rand:false, ids:[0] };
 	}
 
 	override function canEdit():Bool {
 		return super.canEdit() && curTilesetDef!=null;
 	}
 
-	function isRandomMode() return Client.ME.tileRandomMode;
+	public function isRandomMode() return getSelectedValue().rand;
+
+	public function setRandomMode(v:Bool) {
+		getSelectedValue().rand = v;
+	}
 
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
@@ -62,21 +66,21 @@ class TileTool extends Tool< Array<Int> > {
 
 
 	function drawSelectionAt(cx:Int, cy:Int) {
-		var tileIds = getSelectedValue();
+		var sel = getSelectedValue();
 
 		if( isRandomMode() ) {
-			client.curLayerInstance.setGridTile(cx,cy, tileIds[Std.random(tileIds.length)]);
+			client.curLayerInstance.setGridTile(cx,cy, sel.ids[Std.random(sel.ids.length)]);
 		}
 		else {
 			var left = Const.INFINITE;
 			var top = Const.INFINITE;
 
-			for(tid in tileIds) {
+			for(tid in sel.ids) {
 				left = M.imin(left, curTilesetDef.getTileCx(tid));
 				top = M.imin(top, curTilesetDef.getTileCy(tid));
 			}
 
-			for(tid in tileIds)
+			for(tid in sel.ids)
 				client.curLayerInstance.setGridTile(
 					cx+curTilesetDef.getTileCx(tid)-left,
 					cy+curTilesetDef.getTileCy(tid)-top,
@@ -87,7 +91,7 @@ class TileTool extends Tool< Array<Int> > {
 
 
 	function removeSelectedTileAt(cx:Int, cy:Int) {
-		var tileIds = getSelectedValue();
+		var sel = getSelectedValue();
 
 		if( isRandomMode() )
 			client.curLayerInstance.removeGridTile(cx,cy);
@@ -95,12 +99,12 @@ class TileTool extends Tool< Array<Int> > {
 			var left = Const.INFINITE;
 			var top = Const.INFINITE;
 
-			for(tid in tileIds) {
+			for(tid in sel.ids) {
 				left = M.imin(left, curTilesetDef.getTileCx(tid));
 				top = M.imin(top, curTilesetDef.getTileCy(tid));
 			}
 
-			for(tid in tileIds)
+			for(tid in sel.ids)
 				client.curLayerInstance.removeGridTile(
 					cx+curTilesetDef.getTileCx(tid)-left,
 					cy+curTilesetDef.getTileCy(tid)-top
@@ -121,11 +125,11 @@ class TileTool extends Tool< Array<Int> > {
 			client.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei) );
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
-			var tileIds = getSelectedValue();
+			var sel = getSelectedValue();
 			if( isRandomMode() )
-				client.cursor.set( Tiles(curLayerInstance, [ tileIds[Std.random(tileIds.length)] ], m.cx, m.cy) );
+				client.cursor.set( Tiles(curLayerInstance, [ sel.ids[Std.random(sel.ids.length)] ], m.cx, m.cy) );
 			else
-				client.cursor.set( Tiles(curLayerInstance, tileIds, m.cx, m.cy) );
+				client.cursor.set( Tiles(curLayerInstance, sel.ids, m.cx, m.cy) );
 		}
 		else
 			client.cursor.set(None);
@@ -143,9 +147,9 @@ class TileTool extends Tool< Array<Int> > {
 		var opt = new J('<label class="option"/>');
 		opt.appendTo(options);
 		var chk = new J('<input type="checkbox"/>');
-		chk.prop("checked", client.tileRandomMode);
+		chk.prop("checked", isRandomMode());
 		chk.change( function(ev) {
-			client.tileRandomMode = chk.prop("checked")==true;
+			setRandomMode( chk.prop("checked")==true );
 			client.ge.emit(ToolOptionChanged);
 		});
 		opt.append(chk);
@@ -153,5 +157,15 @@ class TileTool extends Tool< Array<Int> > {
 		opt.append('<div class="key">R</div>');
 
 		return target;
+	}
+
+	override function onKeyPress(keyId:Int) {
+		super.onKeyPress(keyId);
+
+		switch keyId {
+			case K.R :
+				setRandomMode( !isRandomMode() );
+				client.ge.emit(ToolOptionChanged);
+		}
 	}
 }
