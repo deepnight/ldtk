@@ -227,10 +227,11 @@ public inline function getTile(tileId:Int) {
 				savedSelections.remove(saved);
 		}
 
-		savedSelections.push({
-			mode: tsSel.mode,
-			ids: tsSel.ids.copy(),
-		});
+		if( tsSel.ids.length>1 )
+			savedSelections.push({
+				mode: tsSel.mode,
+				ids: tsSel.ids.copy(),
+			});
 	}
 
 	public inline function hasSavedSelectionFor(tid:Int) : Bool {
