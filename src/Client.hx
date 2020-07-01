@@ -446,26 +446,11 @@ class Client extends dn.Process {
 				var json = haxe.Json.parse( bytes.toString() );
 				var p = ProjectData.fromJson(json);
 				useProject( p );
-				N.msg("Loaded project.");
+				N.msg("Loaded project: "+path);
 			} catch( err:Dynamic ) {
 				N.error("Couldn't read this project file: "+err);
 			}
 		});
-		// hxd.File.browse( function(sel) {
-			// N.debug(sel);
-		// });
-		// var raw = dn.LocalStorage.read("test");
-		// if( raw==null ) {
-		// 	N.error("No data found.");
-		// 	return;
-		// }
-		// var json = try haxe.Json.parse(raw) catch(e:Dynamic) null;
-		// if( json==null ) {
-		// 	N.error("Invalid JSON!");
-		// 	return;
-		// }
-		// useProject( ProjectData.fromJson(json) );
-		// N.msg("Loaded from local storage.");
 	}
 
 
