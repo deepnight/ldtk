@@ -80,5 +80,10 @@ enum FieldDisplayPosition {
 
 typedef TilesetSelection = {
 	var ids : Array<Int>;
-	var rand : Bool;
+	var mode : TileEditMode;
+}
+
+enum TileEditMode {
+	Stamp;
+	Random;
 }

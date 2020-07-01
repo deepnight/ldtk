@@ -122,7 +122,7 @@ class TilesetPicker {
 			return idsMap.exists( tool.curTilesetDef.getTileId(cx,cy) );
 		}
 
-		var individualMode = sel.rand;
+		var showIndividuals = sel.mode==Random;
 
 		for(tileId in sel.ids) {
 			var x = tool.curTilesetDef.getTileSourceX(tileId);
@@ -135,7 +135,7 @@ class TilesetPicker {
 			if( subClass!=null )
 				e.addClass(subClass);
 
-			if( individualMode )
+			if( showIndividuals )
 				e.addClass("allBorders");
 			else {
 				if( !hasCursorAt(cx-1,cy) ) e.addClass("left");
@@ -181,7 +181,7 @@ class TilesetPicker {
 
 		var saved = tool.curTilesetDef.getSavedSelectionFor(tileId);
 		if( saved==null || dragStart!=null ) {
-			var c = createCursor({ rand:tool.isRandomMode(), ids:[tileId] }, dragStart!=null && dragStart.bt==2?"remove":null, r.wid, r.hei);
+			var c = createCursor({ mode:tool.getMode(), ids:[tileId] }, dragStart!=null && dragStart.bt==2?"remove":null, r.wid, r.hei);
 			c.appendTo(jCursor);
 		}
 		else {
@@ -249,7 +249,7 @@ class TilesetPicker {
 			}
 			if( !same ) {
 				selIds = saved.ids.copy();
-				tool.setRandomMode( saved.rand );
+				tool.setMode( saved.mode );
 			}
 		}
 
@@ -257,7 +257,7 @@ class TilesetPicker {
 		if( add ) {
 			if( !Client.ME.isShiftDown() && !Client.ME.isCtrlDown() ) {
 				// Replace active selection with this one
-				tool.selectValue({ rand:tool.isRandomMode(), ids:selIds });
+				tool.selectValue({ mode:tool.getMode(), ids:selIds });
 			}
 			else {
 				// Add selection (OR)
@@ -270,7 +270,7 @@ class TilesetPicker {
 				var arr = [];
 				for(tid in idMap.keys())
 					arr.push(tid);
-				tool.selectValue({ rand:tool.isRandomMode(), ids:arr });
+				tool.selectValue({ mode:tool.getMode(), ids:arr });
 			}
 		}
 		else {

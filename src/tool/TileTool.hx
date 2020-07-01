@@ -10,18 +10,21 @@ class TileTool extends Tool<TilesetSelection> {
 	}
 
 	override function getDefaultValue():TilesetSelection {
-		return { rand:false, ids:[0] };
+		return { mode:Stamp, ids:[0] };
 	}
 
 	override function canEdit():Bool {
 		return super.canEdit() && curTilesetDef!=null;
 	}
 
-	public function isRandomMode() return getSelectedValue().rand;
 
-	public function setRandomMode(v:Bool) {
-		getSelectedValue().rand = v;
+	public function getMode() return getSelectedValue().mode;
+
+	public function setMode(m:TileEditMode) {
+		getSelectedValue().mode = m;
 	}
+	
+	public function isRandomMode() return getSelectedValue().mode==Random;
 
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
@@ -149,7 +152,7 @@ class TileTool extends Tool<TilesetSelection> {
 		var chk = new J('<input type="checkbox"/>');
 		chk.prop("checked", isRandomMode());
 		chk.change( function(ev) {
-			setRandomMode( chk.prop("checked")==true );
+			setMode( chk.prop("checked")==true ? Random : Stamp );
 			client.ge.emit(ToolOptionChanged);
 		});
 		opt.append(chk);
@@ -164,7 +167,7 @@ class TileTool extends Tool<TilesetSelection> {
 
 		switch keyId {
 			case K.R :
-				setRandomMode( !isRandomMode() );
+				setMode( isRandomMode() ? Stamp : Random );
 				client.ge.emit(ToolOptionChanged);
 		}
 	}

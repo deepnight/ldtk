@@ -219,7 +219,7 @@ public inline function getTile(tileId:Int) {
 		}
 
 		savedSelections.push({
-			rand: tsSel.rand,
+			mode: tsSel.mode,
 			ids: tsSel.ids.copy(),
 		});
 	}
