@@ -123,6 +123,20 @@
 								
 							]
 						}
+					},
+					{
+						"ids":[
+							0,
+							6,
+							1,
+							7
+						],
+						"mode":{
+							"id":0,
+							"p":[
+								
+							]
+						}
 					}
 				]
 			},
@@ -154,20 +168,20 @@
 					],
 					"gridTiles":[
 						{
-							"coordId":107,
-							"v":12
+							"coordId":40,
+							"v":0
 						},
 						{
-							"coordId":108,
-							"v":13
+							"coordId":41,
+							"v":1
 						},
 						{
-							"coordId":139,
-							"v":18
+							"coordId":72,
+							"v":6
 						},
 						{
-							"coordId":140,
-							"v":19
+							"coordId":73,
+							"v":7
 						}
 					],
 					"entityInstances":[
