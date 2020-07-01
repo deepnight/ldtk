@@ -86,7 +86,9 @@ class TilesetDef implements ISerializable {
 			pxHei: pxHei,
 			tileGridSize: tileGridSize,
 			tileGridSpacing: tileGridSpacing,
-			savedSelections: savedSelections,
+			savedSelections: savedSelections.map( function(sel) {
+				return { ids:sel.ids, mode:JsonTools.writeEnum(sel.mode, false) }
+			}),
 		}
 	}
 
@@ -100,7 +102,14 @@ class TilesetDef implements ISerializable {
 		td.base64 = json.base64;
 		td.path = json.path;
 		td.customName = json.customName;
-		td.savedSelections = json.savedSelections==null ? [] : json.savedSelections;
+
+		var arr = JsonTools.readArray( json.savedSelections );
+		td.savedSelections = json.savedSelections==null ? [] : arr.map( function(jsonSel:Dynamic) {
+			return {
+				mode: JsonTools.readEnum(TileEditMode, jsonSel.mode, false, Stamp),
+				ids: jsonSel.ids,
+			}
+		}) ;
 		return td;
 	}
 
