@@ -176,4 +176,22 @@ class JsTools {
 		});
 		input.click();
 	}
+
+
+	public static inline function keyInLabel(label:String) {
+		var r = ~/(.*)\[(.*)\](.*)/gi;
+		if( !r.match(label) )
+			return new J('<span>$label</span>');
+		else {
+			var j = new J("<span/>");
+			j.append(r.matched(1));
+			j.append( new J('<span class="key">'+r.matched(2)+'</span>') );
+			j.append(r.matched(3));
+			return j;
+		}
+	}
+
+	public static inline function key(keyLabel:String) {
+		return new J('<div class="key">$keyLabel</div>');
+	}
 }

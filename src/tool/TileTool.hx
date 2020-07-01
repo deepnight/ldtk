@@ -23,7 +23,7 @@ class TileTool extends Tool<TilesetSelection> {
 	public function setMode(m:TileEditMode) {
 		getSelectedValue().mode = m;
 	}
-	
+
 	public function isRandomMode() return getSelectedValue().mode==Random;
 
 	override function useAt(m:MouseCoords) {
@@ -147,7 +147,7 @@ class TileTool extends Tool<TilesetSelection> {
 
 		var options = new J('<div class="toolOptions"/>');
 		options.appendTo(target);
-		var opt = new J('<label class="option"/>');
+		var opt = new J('<label/>');
 		opt.appendTo(options);
 		var chk = new J('<input type="checkbox"/>');
 		chk.prop("checked", isRandomMode());
@@ -156,8 +156,7 @@ class TileTool extends Tool<TilesetSelection> {
 			client.ge.emit(ToolOptionChanged);
 		});
 		opt.append(chk);
-		opt.append('Random tiles');
-		opt.append('<div class="key">R</div>');
+		opt.append( JsTools.keyInLabel("[R]andom mode") );
 
 		return target;
 	}

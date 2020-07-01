@@ -160,21 +160,23 @@ button.cancel:hover {
 }
 
 
-.key {
+span.key,
+div.key {
 	display: inline-block;
-	padding-left: 3px;
-	padding-right: 3px;
-	padding-bottom: 3px;
-	// margin-right: 4px;
-	// margin-left: 4px;
+	margin: 2px;
+	padding: 1px;
+	padding-left: 5px;
+	padding-right: 5px;
 
 	color: #6d5f4d;
 	text-transform: uppercase;
 	font-family: Roboto Bold;
 
-	border-style: solid;
-	border-width: 9px;
-	border-image: url("/img/key.png") 6 fill repeat;
+	background-color: #cfc5ac;
+	border: 1px solid #ebdfc3;
+	border-bottom: 2px solid #83725a;
+	box-shadow: 0px 0px 4px black;
+	border-radius: 2px;
 }
 
 
@@ -746,27 +748,37 @@ label.file {
 
 
 .palette {
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-template-rows: auto fit-content(24px);
+	align-items: center;
 	width: 100%;
 	height: 100%;
 	background-color: $bgDark;
 	image-rendering: pixelated;
 
-	label.option {
+	.toolOptions {
 		display: flex;
-		align-items: center;
-		input[type=checkbox] {
-			flex: 0 0 auto;
-			width: 24px;
-			height: 24px;
-			margin-right: 4px;
+		flex-wrap: nowrap;
+
+		label {
+			display: flex;
+			align-items: center;
+			flex-wrap: nowrap;
+			white-space: nowrap;
+
+			input[type=checkbox] {
+				flex: 0 0 auto;
+				width: 24px;
+				height: 24px;
+				margin-right: 4px;
+			}
 		}
-		.key {
-			flex: 0 0 auto;
-			margin-left: 10px;
+		button {
+			padding-top: 0px;
+			padding-bottom: 0px;
 		}
 	}
+
 
 	ul.niceList {
 		margin: 0;
