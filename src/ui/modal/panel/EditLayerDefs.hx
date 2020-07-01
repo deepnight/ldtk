@@ -77,6 +77,7 @@ class EditLayerDefs extends ui.modal.Panel {
 	function select(ld:Null<LayerDef>) {
 		cur = ld;
 		jForm.find("*").off(); // cleanup event listeners
+		jForm.find(".tmp").remove();
 
 		if( cur==null ) {
 			jForm.hide();
@@ -215,6 +216,13 @@ class EditLayerDefs extends ui.modal.Panel {
 							cur.tilesetDefId = v;
 						client.ge.emit(LayerDefChanged);
 					});
+
+					var td = project.defs.getTilesetDef(cur.tilesetDefId);
+					if( td!=null && ld.gridSize!=td.tileGridSize ) {
+						var warn = new J('<div class="tmp warning"/>');
+						warn.appendTo( select.parent() );
+						warn.text("Warning: the tileset grid ("+td.tileGridSize+"px) differs from the layer grid, which can lead to unexpected behaviors.");
+					}
 
 					bt.text( Lang.t._("Edit") );
 					bt.click( function(_) {

@@ -327,6 +327,7 @@ ul.niceList li:not(.active):hover {
 }
 
 .pivotEditor {
+  width: calc( 3*32px);
   position: relative;
   display: grid;
   align-items: stretch;
@@ -375,7 +376,25 @@ ul.form {
 
 ul.form > li {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
+}
+
+ul.form > li > * {
+  flex: 1 1 0px;
+}
+
+ul.form > li > input[type=text],
+ul.form > li > input[type=text] {
+  width: 0px;
+}
+
+ul.form > li > input[type=color] {
+  flex: 0.1 1 32px;
+}
+
+ul.form > li > input[type=checkbox] {
+  flex: 0 1 auto;
 }
 
 ul.form > li .small {
@@ -427,16 +446,26 @@ ul.form > li + li {
   margin-top: 8px;
 }
 
+ul.form > li .warning {
+  flex: 1 0 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  margin-top: 4px;
+  margin-bottom: 16px;
+  border: 1px dashed red;
+  color: red;
+  box-shadow: 0px 0px 32px darkred inset, 0px 0px 4px darkred;
+  text-shadow: 0px 2px 0px black;
+}
+
 select {
   display: block;
-  width: 100%;
   padding: 3px;
 }
 
 input[type=text],
 input[type=number] {
   display: block;
-  width: 100%;
   padding: 8px;
   color: white;
   background-color: #1e2229;
