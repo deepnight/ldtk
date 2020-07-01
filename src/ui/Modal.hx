@@ -57,7 +57,7 @@ class Modal extends dn.Process {
 
 	public static function hasAnyOpen() {
 		for(e in ALL)
-			if( !e.isClosing() )
+			if( !e.isClosing() && e.countAsModal() )
 				return true;
 		return false;
 	}
@@ -68,6 +68,8 @@ class Modal extends dn.Process {
 				return true;
 		return false;
 	}
+
+	function countAsModal() return true;
 
 	function onGlobalEvent(e:GlobalEvent) {
 	}

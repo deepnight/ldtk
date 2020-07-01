@@ -251,20 +251,25 @@ class Client extends dn.Process {
 					clearSelection();
 
 			case K.TAB:
-				jBody.toggleClass("compactPanel");
-				updateCanvasBg();
+				if( !ui.Modal.hasAnyOpen() ) {
+					jBody.toggleClass("compactPanel");
+					updateCanvasBg();
+				}
 
 			#if debug
 			case K.T:
-				N.error("test error");
-				N.notImplemented();
-				N.msg("some message");
-				N.debug("debug msg");
+				if( !hasInputFocus() ) {
+					N.error("test error");
+					N.notImplemented();
+					N.msg("some message");
+					N.debug("debug msg");
+				}
 			#end
 		}
 
 		// Propagate to current tool
-		curTool.onKeyPress(keyId);
+		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() )
+			curTool.onKeyPress(keyId);
 	}
 
 	function allowKeyPresses() {

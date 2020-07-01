@@ -36,6 +36,9 @@ class ToolPalettePopOut extends ui.Modal {
 		jWrapper.css("height", jPalette.outerHeight());
 	}
 
+	override function countAsModal():Bool {
+		return false;
+	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
