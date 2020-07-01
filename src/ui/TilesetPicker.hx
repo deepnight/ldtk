@@ -187,7 +187,7 @@ class TilesetPicker {
 			jCursors.append( createCursor([tileId], dragStart!=null && dragStart.bt==2?"remove":null, r.wid, r.hei) );
 		else {
 			// Saved-selection rollover
-			jCursors.append( createCursor(saved) );
+			jCursors.append( createCursor(saved.ids) );
 		}
 
 		_lastRect = r;
@@ -239,20 +239,22 @@ class TilesetPicker {
 		// Auto-pick saved selection
 		if( sel.length==1 && tool.curTilesetDef.hasSavedSelectionFor(sel[0]) ) {
 			// Check if the saved selection isn't already picked. If so, just pick the sub-tile
-			var cur = tool.getSelectedValue();
-			var saved = tool.curTilesetDef.getSavedSelectionFor( sel[0] ).copy();
+			var curIds = tool.getSelectedValue();
+			var saved = tool.curTilesetDef.getSavedSelectionFor( sel[0] );
 			var same = true;
 			var i = 0;
-			while( i<saved.length ) {
-				if( cur[i]!=saved[i] )
+			while( i<saved.ids.length ) {
+				if( curIds[i]!=saved.ids[i] )
 					same = false;
 				i++;
 			}
-			if( !same )
-				sel = saved;
+			if( !same ) {
+				Client.ME.tileRandomMode = saved.rand;
+				sel = saved.ids.copy();
+			}
 		}
 
-		var cur = tool.getSelectedValue();
+		var curIds = tool.getSelectedValue();
 		if( add ) {
 			if( !Client.ME.isShiftDown() && !Client.ME.isCtrlDown() ) {
 				// Replace active selection with this one
@@ -274,14 +276,13 @@ class TilesetPicker {
 		}
 		else {
 			// Substract selection
-			N.debug("substract");
 			var remMap = new Map();
 			for(tid in sel)
 				remMap.set(tid, true);
 			var i = 0;
-			while( i<cur.length )
-				if( remMap.exists(cur[i]) )
-					cur.splice(i,1);
+			while( i<curIds.length )
+				if( remMap.exists(curIds[i]) )
+					curIds.splice(i,1);
 				else
 					i++;
 		}

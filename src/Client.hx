@@ -259,7 +259,10 @@ class Client extends dn.Process {
 			case K.S:
 				if( allowKeyPresses() && curLayerDef!=null && curLayerDef.type==Tiles ) {
 					var td = project.defs.getTilesetDef(curLayerDef.tilesetDefId);
-					td.saveSelection( curTool.getSelectedValue() );
+					td.saveSelection({
+						rand: tileRandomMode,
+						ids: curTool.getSelectedValue(),
+					});
 					ge.emit(TilesetDefChanged);
 					N.msg("Saved selection");
 				}

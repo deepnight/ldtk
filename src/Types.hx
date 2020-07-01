@@ -77,3 +77,8 @@ enum FieldDisplayPosition {
 	Above;
 	Beneath;
 }
+
+typedef TilesetSavedSelection = {
+	var ids : Array<Int>;
+	var rand : Bool;
+}
