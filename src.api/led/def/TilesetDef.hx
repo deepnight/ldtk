@@ -97,7 +97,7 @@ class TilesetDef implements ISerializable {
 		td.tileGridSpacing = JsonTools.readInt(json.tileGridSpacing, 0);
 		td.pxWid = JsonTools.readInt( json.pxWid );
 		td.pxHei = JsonTools.readInt( json.pxHei );
-		td.fileBase64 = json.base64; // TODO change after map updates
+		td.fileBase64 = json.fileBase64;
 		td.path = json.path;
 		td.customName = json.customName;
 
