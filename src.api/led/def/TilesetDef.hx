@@ -41,7 +41,7 @@ class TilesetDef implements ISerializable {
 		if( path==null || !hasAtlas() )
 			return null;
 
-		return dn.FilePath.fromFile(path).fileWithExt;
+		return dn.FilePath.extractFileWithExt(path);
 	}
 
 	function set_base64(str:String) {
@@ -111,15 +111,15 @@ class TilesetDef implements ISerializable {
 		return td;
 	}
 
-	public function importImage(filePath:String, bytes:haxe.io.Bytes) : Bool {
+	public function importImage(filePath:String, fileContent:haxe.io.Bytes) : Bool {
 		clearAtlas();
 
-		var img = dn.ImageDecoder.run(bytes);
+		var img = dn.ImageDecoder.run(fileContent);
 		if( img==null )
 			return false;
 
 		path = dn.FilePath.fromFile(filePath).useSlashes().full;
-		base64 = haxe.crypto.Base64.encode(bytes);
+		base64 = haxe.crypto.Base64.encode(fileContent);
 		pxWid = img.width;
 		pxHei = img.height;
 		return true;
