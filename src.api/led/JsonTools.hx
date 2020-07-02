@@ -104,21 +104,4 @@ class JsonTools {
 		return arr;
 	}
 
-	// public static function addJsonHeader(json:String, fileType:String, fileVersion:Int, prettify:Bool) {
-	// 	// Add header
-	// 	var header = {
-	// 		app: "RPG Map 2",
-	// 		appVersion: Client.ME.getLocalVersionNumber(),
-	// 		appAuthor: "Sebastien Benard",
-	// 		fileType:  fileType,
-	// 		fileVersion: fileVersion,
-	// 		url: Const.DEEPNIGHT_RPGMAP_URL,
-	// 	}
-	// 	var idx = json.indexOf("{");
-	// 	json = json.substr(0,idx+1)
-	// 		+ '"header" : ' + haxe.Json.stringify(header) + ','
-	// 		+ json.substr(idx+1);
-
-	// 	return prettify ? dn.HaxeJson.prettify(json) : json;
-	// }
 }

@@ -276,11 +276,5 @@ class FieldDef implements ISerializable {
 			case V_Float(v): defaultOverride = V_Float( fClamp(v) );
 			case _:
 		}
-		// if( defaultOverride!=null )
-		// 	switch type {
-		// 		case F_Int: defaultOverride = Std.string( getIntDefault() );
-		// 		case F_Float: defaultOverride = Std.string( getFloatDefault() );
-		// 		case _:
-		// 	}
 	}
 }

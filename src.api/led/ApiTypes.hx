@@ -13,11 +13,19 @@ class ApiTypes {
 }
 
 
+
+/*
+	WARNING: all the follow types are serialized when saving a Project:
+		- do not remove Enum values,
+		- always add new Enum values at the end of the Enum,
+		- Enum values can be renamed (they are stored as enum indexes)
+		- do not rename Typedef fields or change their type
+*/
+
 enum LayerType {
 	IntGrid;
 	Entities;
 	Tiles;
-	// WARNING: field is serialized (do not remove values, add new ones at the end!)
 }
 
 

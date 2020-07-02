@@ -187,7 +187,6 @@ class LayerInstance implements ISerializable {
 	/** TILES *******************/
 
 	public function setGridTile(cx:Int, cy:Int, tileId:Int) { // TODO support free positioning
-		// tiles.push({ x:cx*def.gridSize, y:cy*def.gridSize, tileId:tileId });
 		if( isValid(cx,cy) )
 			gridTiles.set( coordId(cx,cy), tileId );
 	}
