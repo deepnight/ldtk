@@ -20,7 +20,7 @@ class JsTools {
 		);
 	}
 
-	public static function createLayerTypeIcon(type:LayerType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
+	public static function createLayerTypeIcon(type:led.ApiTypes.LayerType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
 		var wrapper = new J('<span class="layerType"/>');
 
 		var icon = new J('<span class="icon"/>');
@@ -42,7 +42,7 @@ class JsTools {
 		return wrapper;
 	}
 
-	public static function createFieldTypeIcon(type:FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
+	public static function createFieldTypeIcon(type:led.ApiTypes.FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
 		var icon = new J("<span/>");
 		icon.addClass("icon fieldType");
 		icon.addClass(type.getName());
@@ -57,7 +57,7 @@ class JsTools {
 	}
 
 
-	public static function createEntityPreview(ed:EntityDef, sizePx=64) {
+	public static function createEntityPreview(ed:led.def.EntityDef, sizePx=64) {
 		var scale = sizePx/64;
 		var ent = new J('<div/>');
 		ent.addClass("entity");

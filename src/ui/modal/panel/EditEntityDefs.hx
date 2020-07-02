@@ -12,8 +12,8 @@ class EditEntityDefs extends ui.modal.Panel {
 	var jFieldForm(get,never) : js.jquery.JQuery; inline function get_jFieldForm() return jModalAndMask.find(".fields ul.form");
 	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jModalAndMask.find(".previewWrapper");
 
-	var curEntity : Null<EntityDef>;
-	var curField : Null<FieldDef>;
+	var curEntity : Null<led.def.EntityDef>;
+	var curField : Null<led.def.FieldDef>;
 
 	public function new() {
 		super();
@@ -45,7 +45,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Create field
 		jModalAndMask.find(".fields button.create").click( function(ev) {
-			function _create(type:FieldType) {
+			function _create(type:led.ApiTypes.FieldType) {
 				var f = curEntity.createField(project, type);
 				client.ge.emit(EntityFieldChanged);
 				selectField(f);
@@ -54,8 +54,8 @@ class EditEntityDefs extends ui.modal.Panel {
 
 			// Type picker
 			var w = new ui.modal.Dialog(ev.getThis(),"fieldTypes");
-			for(k in FieldType.getConstructors()) {
-				var type = FieldType.createByName(k);
+			for(k in led.ApiTypes.FieldType.getConstructors()) {
+				var type = led.ApiTypes.FieldType.createByName(k);
 				var b = new J("<button/>");
 				w.jContent.append(b);
 				JsTools.createFieldTypeIcon(type, b);
@@ -116,7 +116,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 	}
 
-	function selectEntity(ed:Null<EntityDef>) {
+	function selectEntity(ed:Null<led.def.EntityDef>) {
 		if( ed==null )
 			ed = client.project.defs.entities[0];
 
@@ -130,7 +130,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		updateLists();
 	}
 
-	function selectField(fd:FieldDef) {
+	function selectField(fd:led.def.FieldDef) {
 		curField = fd;
 		LAST_FIELD_ID = curField==null ? -1 : curField.uid;
 		updateFieldForm();
@@ -211,7 +211,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			jFieldForm.css("visibility","visible");
 
 		// Set form class
-		for(k in Type.getEnumConstructs(FieldType))
+		for(k in Type.getEnumConstructs(led.ApiTypes.FieldType))
 			jFieldForm.removeClass("type-"+k);
 		jFieldForm.addClass("type-"+curField.type);
 
@@ -220,10 +220,20 @@ class EditEntityDefs extends ui.modal.Panel {
 		jFieldForm.find(".type").append("<p>"+StringTools.htmlEscape(curField.toString())+"</p>");
 		#end
 
-		var i = Input.linkToHtmlInput( curField.editorDisplayMode, jFieldForm.find("select[name=editorDisplayMode]") );
+		var i = new form.input.EnumSelect(
+			jFieldForm.find("select[name=editorDisplayMode]"),
+			led.ApiTypes.FieldDisplayMode,
+			function() return curField.editorDisplayMode,
+			function(v) return curField.editorDisplayMode = v
+		);
 		i.linkEvent(EntityFieldChanged);
 
-		var i = Input.linkToHtmlInput( curField.editorDisplayPos, jFieldForm.find("select[name=editorDisplayPos]") );
+		var i = new form.input.EnumSelect(
+			jFieldForm.find("select[name=editorDisplayPos]"),
+			led.ApiTypes.FieldDisplayPosition,
+			function() return curField.editorDisplayPos,
+			function(v) return curField.editorDisplayPos = v
+		);
 		i.setEnabled( curField.editorDisplayMode!=Hidden );
 		i.linkEvent(EntityFieldChanged);
 

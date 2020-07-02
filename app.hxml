@@ -1,5 +1,5 @@
--cp src
 -cp src.api
+-cp src
 -cp externs
 -main Boot
 -dce full

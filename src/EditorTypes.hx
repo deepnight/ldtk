@@ -22,7 +22,7 @@ enum CursorType {
 	Eraser(x:Int,y:Int);
 	GridCell(li:led.inst.LayerInstance, cx:Int, cy:Int, ?col:UInt);
 	GridRect(li:led.inst.LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
-	Entity(def:EntityDef, x:Int, y:Int);
+	Entity(def:led.def.EntityDef, x:Int, y:Int);
 	Tiles(li:led.inst.LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int);
 }
 

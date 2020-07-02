@@ -3,9 +3,9 @@ package ui.modal.panel;
 class EditTilesetDefs extends ui.modal.Panel {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
-	public var cur : Null<TilesetDef>;
+	public var cur : Null<led.def.TilesetDef>;
 
-	public function new(?selectedDef:TilesetDef) {
+	public function new(?selectedDef:led.def.TilesetDef) {
 		super();
 
 		loadTemplate( "editTilesetDefs", "defEditor tilesetDefs" );
@@ -56,7 +56,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		}
 	}
 
-	function select(td:TilesetDef) {
+	function select(td:led.def.TilesetDef) {
 		cur = td;
 		jForm.find("*").off(); // cleanup event listeners
 

@@ -1,6 +1,6 @@
 package form.input;
 
-class EnumSelect<T> extends form.Input<T> {
+class EnumSelect<T:EnumValue> extends form.Input<T> {
 	var enumRef : Enum<T>;
 
 	public function new(j:js.jquery.JQuery, e:Enum<T>, getter:Void->T, setter:T->Void) {

@@ -12,17 +12,17 @@ class Client extends dn.Process {
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 
-	public var curLevel(get,never) : Level;
+	public var curLevel(get,never) : led.Level;
 	inline function get_curLevel() return project.getLevel(curLevelId);
 
-	public var curLayerDef(get,never) : Null<LayerDef>;
+	public var curLayerDef(get,never) : Null<led.def.LayerDef>;
 	inline function get_curLayerDef() return project.defs.getLayerDef(curLayerId);
 
 	public var curLayerInstance(get,never) : Null<led.inst.LayerInstance>;
 	function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
 
 	public var ge : GlobalEventDispatcher;
-	public var project : Project;
+	public var project : led.Project;
 	var curLevelId : Int;
 	var curLayerId : Int;
 
@@ -67,10 +67,10 @@ class Client extends dn.Process {
 		project = try {
 			var raw = dn.LocalStorage.read("cookie");
 			var json = haxe.Json.parse(raw);
-			Project.fromJson(json);
+			led.Project.fromJson(json);
 		}
 		catch( e:Dynamic ) {
-			Project.createEmpty();
+			led.Project.createEmpty();
 		}
 
 		levelRender = new display.LevelRender();
@@ -186,7 +186,7 @@ class Client extends dn.Process {
 		#end
 	}
 
-	public function useProject(p:Project) {
+	public function useProject(p:led.Project) {
 		project = p;
 		project.tidy();
 		curLevelId = project.levels[0].uid;
@@ -423,7 +423,7 @@ class Client extends dn.Process {
 	function onNew(bt:js.jquery.JQuery) {
 		ui.Modal.closeAll();
 		new ui.modal.dialog.Confirm(bt, function() {
-			useProject( Project.createEmpty() );
+			useProject( led.Project.createEmpty() );
 			N.msg("New project created.");
 		});
 	}
@@ -449,7 +449,7 @@ class Client extends dn.Process {
 		JsTools.loadDialog([".json"], function(path,bytes) {
 			try {
 				var json = haxe.Json.parse( bytes.toString() );
-				var p = Project.fromJson(json);
+				var p = led.Project.fromJson(json);
 				useProject( p );
 				N.msg("Loaded project: "+path);
 			} catch( err:Dynamic ) {

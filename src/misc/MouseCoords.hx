@@ -35,7 +35,7 @@ class MouseCoords {
 		return Rect.fromMouseCoords(this, to);
 	}
 
-	public function getLayerCx(ld:LayerDef) return Std.int( levelX / ld.gridSize );
-	public function getLayerCy(ld:LayerDef) return Std.int( levelY / ld.gridSize );
+	public function getLayerCx(ld:led.def.LayerDef) return Std.int( levelX / ld.gridSize );
+	public function getLayerCy(ld:led.def.LayerDef) return Std.int( levelY / ld.gridSize );
 }
 

@@ -3,7 +3,7 @@ package ui.modal.panel;
 class EditLayerDefs extends ui.modal.Panel {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
-	public var cur : Null<LayerDef>;
+	public var cur : Null<led.def.LayerDef>;
 
 	public function new() {
 		super();
@@ -15,7 +15,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		// Create layer
 		jModalAndMask.find(".mainList button.create").click( function(ev) {
-			function _create(type:LayerType) {
+			function _create(type:led.ApiTypes.LayerType) {
 				var ld = project.defs.createLayerDef(type);
 				select(ld);
 				client.ge.emit(LayerDefChanged);
@@ -24,8 +24,8 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			// Type picker
 			var w = new ui.modal.Dialog(ev.getThis(),"layerTypes");
-			for(k in LayerType.getConstructors()) {
-				var type = LayerType.createByName(k);
+			for(k in led.ApiTypes.LayerType.getConstructors()) {
+				var type = led.ApiTypes.LayerType.createByName(k);
 				var b = new J("<button/>");
 				b.appendTo( w.jContent );
 				JsTools.createLayerTypeIcon(type, b);
@@ -74,7 +74,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		}
 	}
 
-	function select(ld:Null<LayerDef>) {
+	function select(ld:Null<led.def.LayerDef>) {
 		cur = ld;
 		jForm.find("*").off(); // cleanup event listeners
 		jForm.find(".tmp").remove();
@@ -88,7 +88,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		jForm.show();
 
 		// Set form class
-		for(k in Type.getEnumConstructs(LayerType))
+		for(k in Type.getEnumConstructs(led.ApiTypes.LayerType))
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+ld.type);
 

@@ -4,8 +4,8 @@ class Tool<T> extends dn.Process {
 	static var SELECTION_MEMORY : Map<Int, Dynamic> = new Map();
 
 	var client(get,never) : Client; inline function get_client() return Client.ME;
-	var project(get,never) : Project; inline function get_project() return Client.ME.project;
-	var curLevel(get,never) : Level; inline function get_curLevel() return Client.ME.curLevel;
+	var project(get,never) : led.Project; inline function get_project() return Client.ME.project;
+	var curLevel(get,never) : led.Level; inline function get_curLevel() return Client.ME.curLevel;
 	var curLayerInstance(get,never) : led.inst.LayerInstance; inline function get_curLayerInstance() return Client.ME.curLayerInstance;
 
 	var jPalette(get,never) : J; inline function get_jPalette() return client.jPalette;

@@ -180,7 +180,7 @@ class LevelRender extends dn.Process {
 	}
 
 
-	public static function createEntityRender(?ei:led.inst.EntityInstance, ?def:EntityDef, ?parent:h2d.Object) {
+	public static function createEntityRender(?ei:led.inst.EntityInstance, ?def:led.def.EntityDef, ?parent:h2d.Object) {
 		if( def==null && ei==null )
 			throw "Need at least 1 parameter";
 
