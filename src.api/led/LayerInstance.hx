@@ -5,7 +5,7 @@ import led.ApiTypes;
 class LayerInstance implements ISerializable {
 	var _project : Project;
 	public var def(get,never) : led.def.LayerDef; inline function get_def() return _project.defs.getLayerDef(layerDefId);
-	public var level(get,never) : LevelData; function get_level() return _project.getLevel(levelId);
+	public var level(get,never) : Level; function get_level() return _project.getLevel(levelId);
 
 	public var levelId : Int;
 	public var layerDefId : Int;

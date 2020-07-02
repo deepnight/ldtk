@@ -3,7 +3,7 @@ package ui;
 class Cursor extends dn.Process {
 	var client(get,never) : Client; inline function get_client() return Client.ME;
 	var project(get,never) : Project; inline function get_project() return Client.ME.project;
-	var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
+	var curLevel(get,never) : Level; inline function get_curLevel() return Client.ME.curLevel;
 	// var curLayer(get,never) : LayerInstance; inline function get_curLayer() return Client.ME.curLayerInstance;
 
 	var type : CursorType = None;

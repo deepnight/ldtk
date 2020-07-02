@@ -12,7 +12,7 @@ class Client extends dn.Process {
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 
-	public var curLevel(get,never) : LevelData;
+	public var curLevel(get,never) : Level;
 	inline function get_curLevel() return project.getLevel(curLevelId);
 
 	public var curLayerDef(get,never) : Null<LayerDef>;

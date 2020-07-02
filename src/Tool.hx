@@ -5,7 +5,7 @@ class Tool<T> extends dn.Process {
 
 	var client(get,never) : Client; inline function get_client() return Client.ME;
 	var project(get,never) : Project; inline function get_project() return Client.ME.project;
-	var curLevel(get,never) : LevelData; inline function get_curLevel() return Client.ME.curLevel;
+	var curLevel(get,never) : Level; inline function get_curLevel() return Client.ME.curLevel;
 	var curLayerInstance(get,never) : LayerInstance; inline function get_curLayerInstance() return Client.ME.curLayerInstance;
 
 	var jPalette(get,never) : J; inline function get_jPalette() return client.jPalette;

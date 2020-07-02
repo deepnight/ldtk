@@ -1,6 +1,6 @@
 package led;
 
-class LevelData implements led.ISerializable {
+class Level implements led.ISerializable {
 	var _project : Project;
 
 	public var uid(default,null) : Int;
@@ -42,7 +42,7 @@ class LevelData implements led.ISerializable {
 	}
 
 	public static function fromJson(p:Project, json:Dynamic) {
-		var l = new LevelData( p, JsonTools.readInt(json.uid) );
+		var l = new Level( p, JsonTools.readInt(json.uid) );
 		l.pxWid = JsonTools.readInt( json.pxWid, ApiTypes.DEFAULT_LEVEL_WIDTH );
 		l.pxHei = JsonTools.readInt( json.pxHei, ApiTypes.DEFAULT_LEVEL_HEIGHT );
 

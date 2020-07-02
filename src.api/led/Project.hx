@@ -3,7 +3,7 @@ package led;
 class Project implements led.ISerializable {
 	var nextUniqId = 0;
 	public var defs : Definitions;
-	public var levels : Array<LevelData> = [];
+	public var levels : Array<Level> = [];
 
 	public var dataVersion : Int;
 	public var name : String;
@@ -51,7 +51,7 @@ class Project implements led.ISerializable {
 		p.defs = Definitions.fromJson(p, json.defs);
 
 		for( lvlJson in JsonTools.readArray(json.levels) )
-			p.levels.push( LevelData.fromJson(p, lvlJson) );
+			p.levels.push( Level.fromJson(p, lvlJson) );
 
 		p.dataVersion = ApiTypes.DATA_VERSION; // always uses latest version
 		return p;
@@ -83,20 +83,20 @@ class Project implements led.ISerializable {
 	/**  LEVELS  *****************************************/
 
 	public function createLevel() {
-		var l = new LevelData(this, makeUniqId());
+		var l = new Level(this, makeUniqId());
 		levels.push(l);
 		tidy(); // will create layer instances
 		return l;
 	}
 
-	public function removeLevel(l:LevelData) {
+	public function removeLevel(l:Level) {
 		if( !levels.remove(l) )
 			throw "Level not found in this Project";
 
 		tidy();
 	}
 
-	public function getLevel(uid:Int) : Null<LevelData> {
+	public function getLevel(uid:Int) : Null<Level> {
 		for(l in levels)
 			if( l.uid==uid )
 				return l;
