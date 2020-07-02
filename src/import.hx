@@ -6,14 +6,9 @@ import dn.Color as C;
 import hxd.Key as K;
 import Lang as L;
 
-// API
-// import led.ApiTypes;
-// import led.def.*;
-// import led.*;
-
 // Misc
+import misc.*;
 import EditorTypes;
 import ui.Notification as N;
-import misc.*;
 import form.Input;
 #end
