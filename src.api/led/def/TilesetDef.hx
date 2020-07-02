@@ -4,7 +4,7 @@ import led.ApiTypes;
 
 class TilesetDef implements ISerializable {
 	public var uid : Int;
-	public var base64(default,set) : Null<String>;
+	public var fileBase64(default,set) : Null<String>;
 	public var path : Null<String>;
 	public var customName : Null<String>;
 	public var pxWid = 0;
@@ -44,9 +44,9 @@ class TilesetDef implements ISerializable {
 		return dn.FilePath.extractFileWithExt(path);
 	}
 
-	function set_base64(str:String) {
+	function set_fileBase64(str:String) {
 		disposeAtlasCache();
-		return base64 = str;
+		return fileBase64 = str;
 	}
 
 	public function disposeAtlasCache() {
@@ -62,12 +62,12 @@ class TilesetDef implements ISerializable {
 	}
 
 	public function clearAtlas() {
-		base64 = null;
+		fileBase64 = null;
 		path = null;
 		savedSelections = [];
 	}
 
-	public inline function hasAtlas() return base64!=null;
+	public inline function hasAtlas() return fileBase64!=null;
 
 
 	public function clone() {
@@ -77,7 +77,7 @@ class TilesetDef implements ISerializable {
 	public function toJson() {
 		return {
 			uid: uid,
-			base64: base64,
+			fileBase64: fileBase64,
 			path: path,
 			customName: customName,
 			pxWid: pxWid,
@@ -97,7 +97,7 @@ class TilesetDef implements ISerializable {
 		td.tileGridSpacing = JsonTools.readInt(json.tileGridSpacing, 0);
 		td.pxWid = JsonTools.readInt( json.pxWid );
 		td.pxHei = JsonTools.readInt( json.pxHei );
-		td.base64 = json.base64;
+		td.fileBase64 = json.base64; // TODO change after map updates
 		td.path = json.path;
 		td.customName = json.customName;
 
@@ -114,12 +114,12 @@ class TilesetDef implements ISerializable {
 	public function importImage(filePath:String, fileContent:haxe.io.Bytes) : Bool {
 		clearAtlas();
 
-		var img = dn.ImageDecoder.run(fileContent);
+		var img = dn.ImageDecoder.decode(fileContent);
 		if( img==null )
 			return false;
 
 		path = dn.FilePath.fromFile(filePath).useSlashes().full;
-		base64 = haxe.crypto.Base64.encode(fileContent);
+		fileBase64 = haxe.crypto.Base64.encode(fileContent);
 		pxWid = img.width;
 		pxHei = img.height;
 		return true;
@@ -147,7 +147,7 @@ class TilesetDef implements ISerializable {
 
 	public function dispose() {
 		disposeAtlasCache();
-		base64 = null;
+		fileBase64 = null;
 	}
 
 
@@ -198,9 +198,9 @@ class TilesetDef implements ISerializable {
 	}
 
 	function get_pixels() {
-		if( _pixelsCache==null && base64!=null ) {
-			var bytes = haxe.crypto.Base64.decode( base64 );
-			_pixelsCache = dn.ImageDecoder.getPixels(bytes);
+		if( _pixelsCache==null && fileBase64!=null ) {
+			var bytes = haxe.crypto.Base64.decode( fileBase64 );
+			_pixelsCache = dn.ImageDecoder.decodePixels(bytes);
 		}
 		return _pixelsCache;
 	}
@@ -215,7 +215,7 @@ class TilesetDef implements ISerializable {
 	public function createAtlasHtmlImage() : js.html.Image {
 		var img = new js.html.Image();
 		if( hasAtlas() )
-			img.src = 'data:image/png;base64,$base64';
+			img.src = 'data:image/png;base64,$fileBase64';
 		return img;
 	}
 
@@ -231,7 +231,7 @@ class TilesetDef implements ISerializable {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		var img = new js.html.Image(pixels.width, pixels.height);
-		img.src = 'data:image/png;base64,$base64';
+		img.src = 'data:image/png;base64,$fileBase64';
 		img.onload = function() {
 			ctx.drawImage(img, 0, 0);
 		}
