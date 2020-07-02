@@ -1,6 +1,6 @@
 package led;
 
-class ProjectData implements led.ISerializable {
+class Project implements led.ISerializable {
 	var nextUniqId = 0;
 	public var defs : Definitions;
 	public var levels : Array<LevelData> = [];
@@ -23,7 +23,7 @@ class ProjectData implements led.ISerializable {
 	}
 
 	public static function createEmpty() {
-		var p = new ProjectData();
+		var p = new Project();
 		p.createLevel();
 		return p;
 	}
@@ -39,7 +39,7 @@ class ProjectData implements led.ISerializable {
 	}
 
 	public static function fromJson(json:Dynamic) {
-		var p = new ProjectData();
+		var p = new Project();
 		p.dataVersion = JsonTools.readInt(json.dataVersion, 0);
 		p.nextUniqId = JsonTools.readInt( json.nextUniqId, 0 );
 		p.name = JsonTools.readString( json.name );
@@ -104,8 +104,8 @@ class ProjectData implements led.ISerializable {
 	}
 
 
-	public static function createTest() : ProjectData {
-		var p = new ProjectData();
+	public static function createTest() : Project {
+		var p = new Project();
 
 		// Hero
 		var ed = p.defs.createEntityDef("Hero");

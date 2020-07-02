@@ -3,14 +3,14 @@ package led;
 import led.ApiTypes;
 
 class FieldInstance implements ISerializable {
-	public var _project : ProjectData;
+	public var _project : Project;
 	public var def(get,never) : led.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defId);
 
 	public var defId: Int;
 	var internalValue : Null<ValueWrapper>;
 
 	@:allow(led.EntityInstance)
-	private function new(p:ProjectData, fieldDefId:Int) {
+	private function new(p:Project, fieldDefId:Int) {
 		_project = p;
 		defId = fieldDefId;
 		internalValue = null;
@@ -28,7 +28,7 @@ class FieldInstance implements ISerializable {
 		return fromJson( _project, toJson() );
 	}
 
-	public static function fromJson(project:ProjectData, json:Dynamic) {
+	public static function fromJson(project:Project, json:Dynamic) {
 		var o = new FieldInstance( project, JsonTools.readInt(json.defId) );
 		o.internalValue = JsonTools.readEnum(ValueWrapper, json.internalValue, true);
 		return o;
@@ -172,7 +172,7 @@ class FieldInstance implements ISerializable {
 		}
 	}
 
-	public function tidy(p:ProjectData) {
+	public function tidy(p:Project) {
 		_project = p;
 	}
 }

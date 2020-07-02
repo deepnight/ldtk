@@ -3,7 +3,7 @@ package led;
 import led.ApiTypes;
 
 class LayerInstance implements ISerializable {
-	var _project : ProjectData;
+	var _project : Project;
 	public var def(get,never) : led.def.LayerDef; inline function get_def() return _project.defs.getLayerDef(layerDefId);
 	public var level(get,never) : LevelData; function get_level() return _project.getLevel(levelId);
 
@@ -19,7 +19,7 @@ class LayerInstance implements ISerializable {
 	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( level.pxHei / def.gridSize );
 
 
-	public function new(p:ProjectData, levelId:Int, layerDefId:Int) {
+	public function new(p:Project, levelId:Int, layerDefId:Int) {
 		_project = p;
 		this.levelId = levelId;
 		this.layerDefId = layerDefId;
@@ -61,7 +61,7 @@ class LayerInstance implements ISerializable {
 		}
 	}
 
-	public static function fromJson(p:ProjectData, json:Dynamic) {
+	public static function fromJson(p:Project, json:Dynamic) {
 		var li = new LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefId) );
 
 		for( intGridJson in JsonTools.readArray(json.intGrid) )
@@ -97,7 +97,7 @@ class LayerInstance implements ISerializable {
 		return Std.int(coordId/cWid);
 	}
 
-	public function tidy(p:ProjectData) {
+	public function tidy(p:Project) {
 		_project = p;
 
 		switch def.type {

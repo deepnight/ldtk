@@ -3,14 +3,14 @@ package led;
 import led.ApiTypes;
 
 class Definitions implements ISerializable {
-	var _project : ProjectData;
+	var _project : Project;
 
 	public var layers: Array<led.def.LayerDef> = [];
 	public var entities: Array<led.def.EntityDef> = [];
 	public var tilesets: Array<led.def.TilesetDef> = [];
 
 
-	public function new(project:ProjectData) {
+	public function new(project:Project) {
 		this._project = project;
 	}
 
@@ -26,7 +26,7 @@ class Definitions implements ISerializable {
 		}
 	}
 
-	public static function fromJson(p:ProjectData, json:Dynamic) {
+	public static function fromJson(p:Project, json:Dynamic) {
 		var d = new Definitions(p);
 
 		for( layerJson in JsonTools.readArray(json.layers) )
@@ -41,7 +41,7 @@ class Definitions implements ISerializable {
 		return d;
 	}
 
-	public function tidy(p:ProjectData) {
+	public function tidy(p:Project) {
 		_project = p;
 	}
 
@@ -63,7 +63,7 @@ class Definitions implements ISerializable {
 		else if( name!=null && isLayerNameValid(name) )
 			l.name = name;
 		#end
-		
+
 		l.gridSize = _project.defaultGridSize;
 		layers.push(l);
 		_project.tidy();

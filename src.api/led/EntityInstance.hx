@@ -1,7 +1,7 @@
 package led;
 
 class EntityInstance implements ISerializable {
-	public var _project : ProjectData;
+	public var _project : Project;
 	public var def(get,never) : led.def.EntityDef; inline function get_def() return _project.defs.getEntityDef(defId);
 
 	public var defId(default,null) : Int;
@@ -15,7 +15,7 @@ class EntityInstance implements ISerializable {
 	public var bottom(get,never) : Int; inline function get_bottom() return top + def.height-1;
 
 
-	public function new(p:ProjectData, entityDefId:Int) {
+	public function new(p:Project, entityDefId:Int) {
 		_project = p;
 		defId = entityDefId;
 	}
@@ -41,7 +41,7 @@ class EntityInstance implements ISerializable {
 		}
 	}
 
-	public static function fromJson(project:ProjectData, json:Dynamic) {
+	public static function fromJson(project:Project, json:Dynamic) {
 		var ei = new EntityInstance(project, JsonTools.readInt(json.defId));
 		ei.x = JsonTools.readInt( json.x, 0 );
 		ei.y = JsonTools.readInt( json.y, 0 );
@@ -66,7 +66,7 @@ class EntityInstance implements ISerializable {
 		return levelX >= left && levelX <= right && levelY >= top && levelY <= bottom;
 	}
 
-	public function tidy(p:led.ProjectData) {
+	public function tidy(p:led.Project) {
 		_project = p;
 
 		// Remove field instances whose def was removed

@@ -79,13 +79,13 @@ class EntityDef implements ISerializable {
 	inline function set_pivotY(v) return pivotY = dn.M.fclamp(v, 0, 1);
 
 
-	public function createField(project:ProjectData, type:FieldType) : FieldDef {
+	public function createField(project:Project, type:FieldType) : FieldDef {
 		var f = new FieldDef(project.makeUniqId(), type);
 		fieldDefs.push(f);
 		return f;
 	}
 
-	public function removeField(project:ProjectData, fd:FieldDef) {
+	public function removeField(project:Project, fd:FieldDef) {
 		if( !fieldDefs.remove(fd) )
 			throw "Unknown fieldDef";
 
