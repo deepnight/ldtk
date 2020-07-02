@@ -1,6 +1,6 @@
 package led.inst;
 
-import led.ApiTypes;
+import led.LedTypes;
 
 class LayerInstance implements ISerializable {
 	var _project : Project;

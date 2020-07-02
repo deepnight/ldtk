@@ -1,6 +1,6 @@
 package led.def;
 
-import led.ApiTypes;
+import led.LedTypes;
 
 class EntityDef implements ISerializable {
 	public var uid(default,null) : Int;
@@ -33,7 +33,7 @@ class EntityDef implements ISerializable {
 	}
 
 	public function clone() {
-		return fromJson( ApiTypes.DATA_VERSION, toJson() );
+		return fromJson( Project.DATA_VERSION, toJson() );
 	}
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {

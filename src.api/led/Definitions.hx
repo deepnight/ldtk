@@ -1,6 +1,6 @@
 package led;
 
-import led.ApiTypes;
+import led.LedTypes;
 
 class Definitions implements ISerializable {
 	var _project : Project;

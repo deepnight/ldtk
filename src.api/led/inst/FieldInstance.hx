@@ -1,6 +1,6 @@
 package led.inst;
 
-import led.ApiTypes;
+import led.LedTypes;
 
 class FieldInstance implements ISerializable {
 	public var _project : Project;

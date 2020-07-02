@@ -1,12 +1,12 @@
 package led.def;
 
-import led.ApiTypes;
+import led.LedTypes;
 
 class LayerDef implements ISerializable {
 	public var uid(default,null) : Int;
 	public var type : LayerType;
 	public var name : String;
-	public var gridSize : Int = ApiTypes.DEFAULT_GRID_SIZE;
+	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var displayOpacity : Float = 1.0;
 
 	// IntGrid
@@ -31,13 +31,13 @@ class LayerDef implements ISerializable {
 	}
 
 	public function clone() {
-		return fromJson( ApiTypes.DATA_VERSION, toJson() );
+		return fromJson( Project.DATA_VERSION, toJson() );
 	}
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type, false));
 		o.name = JsonTools.readString(json.name);
-		o.gridSize = JsonTools.readInt(json.gridSize, ApiTypes.DEFAULT_GRID_SIZE);
+		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
 
 		o.intGridValues = [];

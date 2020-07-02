@@ -1,6 +1,6 @@
 package led.def;
 
-import led.ApiTypes;
+import led.LedTypes;
 
 class TilesetDef implements ISerializable {
 	public var uid : Int;
@@ -9,7 +9,7 @@ class TilesetDef implements ISerializable {
 	public var customName : Null<String>;
 	public var pxWid = 0;
 	public var pxHei = 0;
-	public var tileGridSize : Int = ApiTypes.DEFAULT_GRID_SIZE;
+	public var tileGridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var tileGridSpacing : Int = 0;
 	public var savedSelections : Array<TilesetSelection> = [];
 
@@ -71,7 +71,7 @@ class TilesetDef implements ISerializable {
 
 
 	public function clone() {
-		return fromJson( ApiTypes.DATA_VERSION, toJson() );
+		return fromJson( Project.DATA_VERSION, toJson() );
 	}
 
 	public function toJson() {
@@ -93,7 +93,7 @@ class TilesetDef implements ISerializable {
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
 		var td = new TilesetDef( JsonTools.readInt(json.uid) );
-		td.tileGridSize = JsonTools.readInt(json.tileGridSize, ApiTypes.DEFAULT_GRID_SIZE);
+		td.tileGridSize = JsonTools.readInt(json.tileGridSize, Project.DEFAULT_GRID_SIZE);
 		td.tileGridSpacing = JsonTools.readInt(json.tileGridSpacing, 0);
 		td.pxWid = JsonTools.readInt( json.pxWid );
 		td.pxHei = JsonTools.readInt( json.pxHei );

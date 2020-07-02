@@ -15,7 +15,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		// Create layer
 		jModalAndMask.find(".mainList button.create").click( function(ev) {
-			function _create(type:led.ApiTypes.LayerType) {
+			function _create(type:led.LedTypes.LayerType) {
 				var ld = project.defs.createLayerDef(type);
 				select(ld);
 				client.ge.emit(LayerDefChanged);
@@ -24,8 +24,8 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			// Type picker
 			var w = new ui.modal.Dialog(ev.getThis(),"layerTypes");
-			for(k in led.ApiTypes.LayerType.getConstructors()) {
-				var type = led.ApiTypes.LayerType.createByName(k);
+			for(k in led.LedTypes.LayerType.getConstructors()) {
+				var type = led.LedTypes.LayerType.createByName(k);
 				var b = new J("<button/>");
 				b.appendTo( w.jContent );
 				JsTools.createLayerTypeIcon(type, b);
@@ -88,7 +88,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		jForm.show();
 
 		// Set form class
-		for(k in Type.getEnumConstructs(led.ApiTypes.LayerType))
+		for(k in Type.getEnumConstructs(led.LedTypes.LayerType))
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+ld.type);
 

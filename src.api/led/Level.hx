@@ -12,8 +12,8 @@ class Level implements led.ISerializable {
 	@:allow(led.Project)
 	private function new(project:Project, uid:Int) {
 		this.uid = uid;
-		pxWid = ApiTypes.DEFAULT_LEVEL_WIDTH;
-		pxHei = ApiTypes.DEFAULT_LEVEL_HEIGHT;
+		pxWid = Project.DEFAULT_LEVEL_WIDTH;
+		pxHei = Project.DEFAULT_LEVEL_HEIGHT;
 		this._project = project;
 
 		for(ld in _project.defs.layers)
@@ -43,8 +43,8 @@ class Level implements led.ISerializable {
 
 	public static function fromJson(p:Project, json:Dynamic) {
 		var l = new Level( p, JsonTools.readInt(json.uid) );
-		l.pxWid = JsonTools.readInt( json.pxWid, ApiTypes.DEFAULT_LEVEL_WIDTH );
-		l.pxHei = JsonTools.readInt( json.pxHei, ApiTypes.DEFAULT_LEVEL_HEIGHT );
+		l.pxWid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_WIDTH );
+		l.pxHei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_HEIGHT );
 
 		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
 			var li = led.inst.LayerInstance.fromJson(p, layerJson);

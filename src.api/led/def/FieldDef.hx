@@ -2,22 +2,22 @@ package led.def;
 
 class FieldDef implements ISerializable {
 	public var uid(default,null) : Int;
-	public var type(default,null) : led.ApiTypes.FieldType;
+	public var type(default,null) : led.LedTypes.FieldType;
 	public var name : String;
 	public var canBeNull : Bool;
-	public var editorDisplayMode : led.ApiTypes.FieldDisplayMode;
-	public var editorDisplayPos : led.ApiTypes.FieldDisplayPosition;
+	public var editorDisplayMode : led.LedTypes.FieldDisplayMode;
+	public var editorDisplayPos : led.LedTypes.FieldDisplayPosition;
 
 	#if editor
 	@:allow(ui.modal.panel.EditEntityDefs)
 	#end
-	var defaultOverride : Null<led.ApiTypes.ValueWrapper>;
+	var defaultOverride : Null<led.LedTypes.ValueWrapper>;
 
 	public var min : Null<Float>;
 	public var max : Null<Float>;
 
 	@:allow(led.def.EntityDef)
-	private function new(uid:Int, t:led.ApiTypes.FieldType) {
+	private function new(uid:Int, t:led.LedTypes.FieldType) {
 		this.uid = uid;
 		type = t;
 		editorDisplayMode = Hidden;
@@ -36,18 +36,18 @@ class FieldDef implements ISerializable {
 	}
 
 	public function clone() {
-		return fromJson( ApiTypes.DATA_VERSION, toJson() );
+		return fromJson( Project.DATA_VERSION, toJson() );
 	}
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
-		var o = new FieldDef( JsonTools.readInt(json.uid), JsonTools.readEnum(led.ApiTypes.FieldType, json.type, false) );
+		var o = new FieldDef( JsonTools.readInt(json.uid), JsonTools.readEnum(led.LedTypes.FieldType, json.type, false) );
 		o.name = JsonTools.readString(json.name);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
-		o.editorDisplayMode = JsonTools.readEnum(led.ApiTypes.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
-		o.editorDisplayPos = JsonTools.readEnum(led.ApiTypes.FieldDisplayPosition, json.editorDisplayPos, false, Above);
+		o.editorDisplayMode = JsonTools.readEnum(led.LedTypes.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
+		o.editorDisplayPos = JsonTools.readEnum(led.LedTypes.FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);
-		o.defaultOverride = JsonTools.readEnum(led.ApiTypes.ValueWrapper, json.defaultOverride, true);
+		o.defaultOverride = JsonTools.readEnum(led.LedTypes.ValueWrapper, json.defaultOverride, true);
 		return o;
 	}
 
@@ -79,7 +79,7 @@ class FieldDef implements ISerializable {
 	}
 	#end
 
-	inline function require(type:led.ApiTypes.FieldType) {
+	inline function require(type:led.LedTypes.FieldType) {
 		if( this.type!=type )
 			throw "Only available on "+type+" fields";
 	}

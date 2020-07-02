@@ -1,6 +1,16 @@
 package led;
 
 class Project implements led.ISerializable {
+	public static var DEFAULT_LEVEL_WIDTH = 128; // px
+	public static var DEFAULT_LEVEL_HEIGHT = 128; // px
+	public static var DEFAULT_GRID_SIZE = 16; // px
+
+	public static var DATA_VERSION = 1;
+	/* DATA VERSION CHANGELOG:
+		1. initial release
+	*/
+
+
 	var nextUniqId = 0;
 	public var defs : Definitions;
 	public var levels : Array<Level> = [];
@@ -14,8 +24,8 @@ class Project implements led.ISerializable {
 
 	private function new() {
 		name = "New project";
-		dataVersion = ApiTypes.DATA_VERSION;
-		defaultGridSize = ApiTypes.DEFAULT_GRID_SIZE;
+		dataVersion = Project.DATA_VERSION;
+		defaultGridSize = Project.DEFAULT_GRID_SIZE;
 		bgColor = 0xffffff;
 		defaultPivotX = defaultPivotY = 0;
 
@@ -45,7 +55,7 @@ class Project implements led.ISerializable {
 		p.name = JsonTools.readString( json.name );
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
-		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, ApiTypes.DEFAULT_GRID_SIZE );
+		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
 		p.bgColor = JsonTools.readInt( json.bgColor, 0xffffff );
 
 		p.defs = Definitions.fromJson(p, json.defs);
@@ -53,7 +63,7 @@ class Project implements led.ISerializable {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( Level.fromJson(p, lvlJson) );
 
-		p.dataVersion = ApiTypes.DATA_VERSION; // always uses latest version
+		p.dataVersion = Project.DATA_VERSION; // always uses latest version
 		return p;
 	}
 

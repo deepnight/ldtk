@@ -20,7 +20,7 @@ class JsTools {
 		);
 	}
 
-	public static function createLayerTypeIcon(type:led.ApiTypes.LayerType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
+	public static function createLayerTypeIcon(type:led.LedTypes.LayerType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
 		var wrapper = new J('<span class="layerType"/>');
 
 		var icon = new J('<span class="icon"/>');
@@ -42,7 +42,7 @@ class JsTools {
 		return wrapper;
 	}
 
-	public static function createFieldTypeIcon(type:led.ApiTypes.FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
+	public static function createFieldTypeIcon(type:led.LedTypes.FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
 		var icon = new J("<span/>");
 		icon.addClass("icon fieldType");
 		icon.addClass(type.getName());

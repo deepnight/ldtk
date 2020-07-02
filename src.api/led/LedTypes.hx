@@ -1,19 +1,5 @@
 package led;
 
-class ApiTypes {
-	public static var DEFAULT_LEVEL_WIDTH = 128; // px
-	public static var DEFAULT_LEVEL_HEIGHT = 128; // px
-	public static var DEFAULT_GRID_SIZE = 16; // px
-
-	public static var DATA_VERSION = 1;
-	/**
-		VERSION CHANGELOG
-		1. initial release
-	**/
-}
-
-
-
 /*
 	WARNING: all the follow types are serialized when saving a Project:
 		- do not remove Enum values,

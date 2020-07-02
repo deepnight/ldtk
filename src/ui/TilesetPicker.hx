@@ -104,7 +104,7 @@ class TilesetPicker {
 	}
 
 
-	function createCursor(sel:led.ApiTypes.TilesetSelection, ?subClass:String, ?cWid:Int, ?cHei:Int) {
+	function createCursor(sel:led.LedTypes.TilesetSelection, ?subClass:String, ?cWid:Int, ?cHei:Int) {
 		var wrapper = new J("<div/>");
 		var idsMap = new Map();
 		for(tileId in sel.ids)

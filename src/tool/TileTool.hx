@@ -1,6 +1,6 @@
 package tool;
 
-class TileTool extends Tool<led.ApiTypes.TilesetSelection> {
+class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 	public var curTilesetDef(get,never) : Null<led.def.TilesetDef>;
 	inline function get_curTilesetDef() return client.project.defs.getTilesetDef( client.curLayerInstance.def.tilesetDefId );
 
@@ -10,7 +10,7 @@ class TileTool extends Tool<led.ApiTypes.TilesetSelection> {
 		selectValue( getSelectedValue() );
 	}
 
-	override function getDefaultValue():led.ApiTypes.TilesetSelection {
+	override function getDefaultValue():led.LedTypes.TilesetSelection {
 		return { mode:Stamp, ids:[0] };
 	}
 
@@ -21,7 +21,7 @@ class TileTool extends Tool<led.ApiTypes.TilesetSelection> {
 
 	public function getMode() return getSelectedValue().mode;
 
-	public function setMode(m:led.ApiTypes.TileEditMode) {
+	public function setMode(m:led.LedTypes.TileEditMode) {
 		getSelectedValue().mode = m;
 	}
 

@@ -22,7 +22,7 @@ class Lang {
         return t.untranslated(str);
     }
 
-    public static function getLayerType(type:led.ApiTypes.LayerType) : LocaleString {
+    public static function getLayerType(type:led.LedTypes.LayerType) : LocaleString {
         return switch type {
             case IntGrid: Lang.t._("Integer grid");
             case Entities: Lang.t._("Entities");
@@ -30,7 +30,7 @@ class Lang {
         }
     }
 
-    public static function getFieldType(type:led.ApiTypes.FieldType) : LocaleString {
+    public static function getFieldType(type:led.LedTypes.FieldType) : LocaleString {
         return switch type {
             case F_Int: t._("Integer");
             case F_Color: t._("Color");
@@ -40,7 +40,7 @@ class Lang {
         }
     }
 
-    public static function getFieldTypeShortName(type:led.ApiTypes.FieldType) : LocaleString {
+    public static function getFieldTypeShortName(type:led.LedTypes.FieldType) : LocaleString {
         return switch type {
             case F_Int: t._("123");
             case F_Color: t._("Red");
