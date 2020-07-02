@@ -6,7 +6,7 @@ class Level implements led.ISerializable {
 	public var uid(default,null) : Int;
 	public var pxWid : Int;
 	public var pxHei : Int;
-	public var layerInstances : Map<Int,LayerInstance> = new Map();
+	public var layerInstances : Map<Int,led.inst.LayerInstance> = new Map();
 
 
 	@:allow(led.Project)
@@ -17,7 +17,7 @@ class Level implements led.ISerializable {
 		this._project = project;
 
 		for(ld in _project.defs.layers)
-			layerInstances.set( ld.uid, new LayerInstance(_project, uid, ld.uid) );
+			layerInstances.set( ld.uid, new led.inst.LayerInstance(_project, uid, ld.uid) );
 	}
 
 	@:keep public function toString() {
@@ -47,14 +47,14 @@ class Level implements led.ISerializable {
 		l.pxHei = JsonTools.readInt( json.pxHei, ApiTypes.DEFAULT_LEVEL_HEIGHT );
 
 		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
-			var li = LayerInstance.fromJson(p, layerJson);
+			var li = led.inst.LayerInstance.fromJson(p, layerJson);
 			l.layerInstances.set(li.layerDefId, li);
 		}
 
 		return l;
 	}
 
-	public function getLayerInstance(layerDef:led.def.LayerDef) : LayerInstance {
+	public function getLayerInstance(layerDef:led.def.LayerDef) : led.inst.LayerInstance {
 		if( !layerInstances.exists(layerDef.uid) )
 			throw "Missing layer instance for "+layerDef.name;
 		return layerInstances.get( layerDef.uid );
@@ -70,7 +70,7 @@ class Level implements led.ISerializable {
 		// Create missing layerInstances
 		for(ld in _project.defs.layers)
 			if( !layerInstances.exists(ld.uid) )
-				layerInstances.set( ld.uid, new LayerInstance(_project, uid, ld.uid) );
+				layerInstances.set( ld.uid, new led.inst.LayerInstance(_project, uid, ld.uid) );
 
 		// Layer instances content
 		for(li in layerInstances)

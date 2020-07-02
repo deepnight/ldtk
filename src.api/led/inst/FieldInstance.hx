@@ -1,4 +1,4 @@
-package led;
+package led.inst;
 
 import led.ApiTypes;
 
@@ -9,7 +9,7 @@ class FieldInstance implements ISerializable {
 	public var defId: Int;
 	var internalValue : Null<ValueWrapper>;
 
-	@:allow(led.EntityInstance)
+	@:allow(led.inst.EntityInstance)
 	private function new(p:Project, fieldDefId:Int) {
 		_project = p;
 		defId = fieldDefId;

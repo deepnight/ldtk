@@ -6,7 +6,7 @@ class Tool<T> extends dn.Process {
 	var client(get,never) : Client; inline function get_client() return Client.ME;
 	var project(get,never) : Project; inline function get_project() return Client.ME.project;
 	var curLevel(get,never) : Level; inline function get_curLevel() return Client.ME.curLevel;
-	var curLayerInstance(get,never) : LayerInstance; inline function get_curLayerInstance() return Client.ME.curLayerInstance;
+	var curLayerInstance(get,never) : led.inst.LayerInstance; inline function get_curLayerInstance() return Client.ME.curLayerInstance;
 
 	var jPalette(get,never) : J; inline function get_jPalette() return client.jPalette;
 
@@ -147,10 +147,10 @@ class Tool<T> extends dn.Process {
 		}
 	}
 
-	function getGenericLevelElementAt(m:MouseCoords, ?limitToLayerInstance:LayerInstance) : Null<GenericLevelElement> {
+	function getGenericLevelElementAt(m:MouseCoords, ?limitToLayerInstance:led.inst.LayerInstance) : Null<GenericLevelElement> {
 		var ge : GenericLevelElement = null;
 
-		function getElement(li:LayerInstance) {
+		function getElement(li:led.inst.LayerInstance) {
 			var cx = m.getLayerCx(li.def);
 			var cy = m.getLayerCy(li.def);
 			switch li.def.type {

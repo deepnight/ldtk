@@ -18,7 +18,7 @@ class Client extends dn.Process {
 	public var curLayerDef(get,never) : Null<LayerDef>;
 	inline function get_curLayerDef() return project.defs.getLayerDef(curLayerId);
 
-	public var curLayerInstance(get,never) : Null<LayerInstance>;
+	public var curLayerInstance(get,never) : Null<led.inst.LayerInstance>;
 	function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
 
 	public var ge : GlobalEventDispatcher;
@@ -408,7 +408,7 @@ class Client extends dn.Process {
 		line.appendTo(wrapper);
 	}
 
-	public function selectLayerInstance(l:LayerInstance) {
+	public function selectLayerInstance(l:led.inst.LayerInstance) {
 		if( curLayerId==l.def.uid )
 			return;
 

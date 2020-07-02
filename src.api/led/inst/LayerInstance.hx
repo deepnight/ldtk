@@ -1,4 +1,4 @@
-package led;
+package led.inst;
 
 import led.ApiTypes;
 
@@ -62,7 +62,7 @@ class LayerInstance implements ISerializable {
 	}
 
 	public static function fromJson(p:Project, json:Dynamic) {
-		var li = new LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefId) );
+		var li = new led.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefId) );
 
 		for( intGridJson in JsonTools.readArray(json.intGrid) )
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );

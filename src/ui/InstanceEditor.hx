@@ -4,9 +4,9 @@ class InstanceEditor extends dn.Process {
 	public static var ALL : Array<InstanceEditor> = [];
 
 	var jPanel : js.jquery.JQuery;
-	var ei : EntityInstance;
+	var ei : led.inst.EntityInstance;
 
-	public function new(ei:EntityInstance) {
+	public function new(ei:led.inst.EntityInstance) {
 		super(Client.ME);
 
 		ALL.push(this);

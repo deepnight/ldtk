@@ -1,4 +1,4 @@
-package led;
+package led.inst;
 
 class EntityInstance implements ISerializable {
 	public var _project : Project;
@@ -7,7 +7,7 @@ class EntityInstance implements ISerializable {
 	public var defId(default,null) : Int;
 	public var x : Int;
 	public var y : Int;
-	var fieldInstances : Map<Int, led.FieldInstance> = new Map();
+	var fieldInstances : Map<Int, led.inst.FieldInstance> = new Map();
 
 	public var left(get,never) : Int; inline function get_left() return Std.int( x - def.width*def.pivotX );
 	public var right(get,never) : Int; inline function get_right() return left + def.width-1;
@@ -80,7 +80,7 @@ class EntityInstance implements ISerializable {
 
 	public function getFieldInstance(fieldDef:led.def.FieldDef) {
 		if( !fieldInstances.exists(fieldDef.uid) )
-			fieldInstances.set(fieldDef.uid, new led.FieldInstance(_project, fieldDef.uid));
+			fieldInstances.set(fieldDef.uid, new led.inst.FieldInstance(_project, fieldDef.uid));
 		return fieldInstances.get( fieldDef.uid );
 	}
 
