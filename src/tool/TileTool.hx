@@ -121,7 +121,7 @@ class TileTool extends Tool<TilesetSelection> {
 	override function updateCursor(m:MouseCoords) {
 		super.updateCursor(m);
 
-		if( curTilesetDef==null || curTilesetDef.isEmpty() ) {
+		if( curTilesetDef==null || !curTilesetDef.hasAtlas() ) {
 			client.cursor.set(None);
 			return;
 		}

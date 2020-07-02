@@ -16,13 +16,13 @@ class TilesetDef implements ISerializable {
 	#if heaps
 	var texture(get,never) : Null<h3d.mat.Texture>;
 	var _textureCache : Null<h3d.mat.Texture>;
-	#end
 
 	var pixels(get,never) : Null<hxd.Pixels>;
 	var _pixelsCache : Null<hxd.Pixels>;
+	#end
 
-	public var cWid(get,never) : Int; inline function get_cWid() return isEmpty() ? 0 : dn.M.ceil( pxWid / tileGridSize );
-	public var cHei(get,never) : Int; inline function get_cHei() return isEmpty() ? 0 : dn.M.ceil( pxHei / tileGridSize );
+	public var cWid(get,never) : Int; inline function get_cWid() return !hasAtlas() ? 0 : dn.M.ceil( pxWid / tileGridSize );
+	public var cHei(get,never) : Int; inline function get_cHei() return !hasAtlas() ? 0 : dn.M.ceil( pxHei / tileGridSize );
 
 
 	public function new(uid:Int) {
@@ -38,7 +38,7 @@ class TilesetDef implements ISerializable {
 	}
 
 	public function getFileName() : Null<String> {
-		if( path==null || isEmpty() )
+		if( path==null || !hasAtlas() )
 			return null;
 
 		return dn.FilePath.fromFile(path).fileWithExt;
@@ -54,30 +54,20 @@ class TilesetDef implements ISerializable {
 		if( _textureCache!=null )
 			_textureCache.dispose();
 		_textureCache = null;
-		#end
 
 		if( _pixelsCache!=null )
 			_pixelsCache.dispose();
 		_pixelsCache = null;
+		#end
 	}
 
-	#if heaps
-	function get_texture() {
-		if( _textureCache==null && pixels!=null )
-			_textureCache = h3d.mat.Texture.fromPixels(pixels);
-		return _textureCache;
-	}
-	#end
-
-	function get_pixels() {
-		if( _pixelsCache==null && base64!=null ) {
-			var bytes = haxe.crypto.Base64.decode( base64 );
-			_pixelsCache = dn.heaps.ImageDecoder.getPixels(bytes);
-		}
-		return _pixelsCache;
+	public function clearAtlas() {
+		base64 = null;
+		path = null;
+		savedSelections = [];
 	}
 
-	public inline function isEmpty() return base64==null;
+	public inline function hasAtlas() return base64!=null;
 
 
 	public function clone() {
@@ -122,27 +112,16 @@ class TilesetDef implements ISerializable {
 	}
 
 	public function importImage(filePath:String, bytes:haxe.io.Bytes) : Bool {
+		clearAtlas();
+
+		var img = dn.ImageDecoder.run(bytes);
+		if( img==null )
+			return false;
+
 		path = dn.FilePath.fromFile(filePath).useSlashes().full;
 		base64 = haxe.crypto.Base64.encode(bytes);
-
-		if( pixels==null ) { // triggers pixels setter & image decoding
-			// switch dn.Identify.getType(bytes) {
-			// 	case Unknown:
-			// 	case Png, Gif:
-			// 		N.error("Couldn't read this image: maybe the data is corrupted or the format special?");
-
-			// 	case Jpeg:
-			// 		N.error("Sorry, JPEG is not yet supported, please use PNG instead.");
-
-			// 	case Bmp:
-			// 		N.error("Sorry, BMP is not supported, please use PNG instead.");
-			// }
-			return false;
-		}
-
-		pxWid = pixels.width;
-		pxHei = pixels.height;
-
+		pxWid = img.width;
+		pxHei = img.height;
 		return true;
 	}
 
@@ -202,38 +181,49 @@ class TilesetDef implements ISerializable {
 
 
 	/*** HEAPS API *********************************/
-
 	#if heaps
+
 	public inline function getAtlasTile() : Null<h2d.Tile> {
 		return texture==null ? null : h2d.Tile.fromTexture(texture);
 	}
-	#end
 
-	#if heaps
 	public inline function getTile(tileId:Int) {
 		return getAtlasTile().sub( getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize );
 	}
+
+	function get_texture() {
+		if( _textureCache==null && pixels!=null )
+			_textureCache = h3d.mat.Texture.fromPixels(pixels);
+		return _textureCache;
+	}
+
+	function get_pixels() {
+		if( _pixelsCache==null && base64!=null ) {
+			var bytes = haxe.crypto.Base64.decode( base64 );
+			_pixelsCache = dn.ImageDecoder.getPixels(bytes);
+		}
+		return _pixelsCache;
+	}
+
 	#end
 
 
 
 	/*** JS API *********************************/
-
 	#if js
+
 	public function createAtlasHtmlImage() : js.html.Image {
 		var img = new js.html.Image();
-		if( !isEmpty() )
+		if( hasAtlas() )
 			img.src = 'data:image/png;base64,$base64';
 		return img;
 	}
-	#end
 
-	#if js
 	public function drawAtlasToCanvas(canvas:js.jquery.JQuery) {
 		if( !canvas.is("canvas") )
 			throw "Not a canvas";
 
-		if( isEmpty() )
+		if( !hasAtlas() )
 			return;
 
 		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
@@ -246,9 +236,7 @@ class TilesetDef implements ISerializable {
 			ctx.drawImage(img, 0, 0);
 		}
 	}
-	#end
 
-	#if js
 	public function drawTileToCanvas(canvas:js.jquery.JQuery, tileId:Int, toX:Int, toY:Int) {
 		if( pixels==null )
 			return;
@@ -269,6 +257,6 @@ class TilesetDef implements ISerializable {
 			ctx.drawImage(img, toX, toY);
 		}
 	}
-	#end
 
+	#end
 }
