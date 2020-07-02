@@ -1,4 +1,6 @@
-package data.def;
+package led.def;
+
+import led.ApiTypes;
 
 class EntityDef implements ISerializable {
 	public var uid(default,null) : Int;
@@ -11,7 +13,7 @@ class EntityDef implements ISerializable {
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
 
-	public var fieldDefs : Array<data.def.FieldDef> = [];
+	public var fieldDefs : Array<led.def.FieldDef> = [];
 
 
 	public function new(uid:Int) {

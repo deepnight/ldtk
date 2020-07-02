@@ -1,6 +1,6 @@
-package data;
+package led;
 
-class LevelData implements data.ISerializable {
+class LevelData implements led.ISerializable {
 	var _project : ProjectData;
 
 	public var uid(default,null) : Int;
@@ -9,7 +9,7 @@ class LevelData implements data.ISerializable {
 	public var layerInstances : Map<Int,LayerInstance> = new Map();
 
 
-	@:allow(data.ProjectData)
+	@:allow(led.ProjectData)
 	private function new(project:ProjectData, uid:Int) {
 		this.uid = uid;
 		pxWid = Const.DEFAULT_LEVEL_WIDTH;
@@ -54,7 +54,7 @@ class LevelData implements data.ISerializable {
 		return l;
 	}
 
-	public function getLayerInstance(layerDef:LayerDef) : LayerInstance {
+	public function getLayerInstance(layerDef:led.def.LayerDef) : LayerInstance {
 		if( !layerInstances.exists(layerDef.uid) )
 			throw "Missing layer instance for "+layerDef.name;
 		return layerInstances.get( layerDef.uid );

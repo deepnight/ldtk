@@ -1,4 +1,4 @@
-package data;
+package led;
 
 interface ISerializable {
 	public function clone() : ISerializable;

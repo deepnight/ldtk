@@ -1,13 +1,15 @@
-package data;
+package led;
+
+import led.ApiTypes;
 
 class FieldInstance implements ISerializable {
 	public var _project : ProjectData;
-	public var def(get,never) : FieldDef; inline function get_def() return _project.defs.getFieldDef(defId);
+	public var def(get,never) : led.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defId);
 
 	public var defId: Int;
 	var internalValue : Null<ValueWrapper>;
 
-	@:allow(data.EntityInstance)
+	@:allow(led.EntityInstance)
 	private function new(p:ProjectData, fieldDefId:Int) {
 		_project = p;
 		defId = fieldDefId;

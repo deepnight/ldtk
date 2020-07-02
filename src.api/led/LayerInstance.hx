@@ -1,8 +1,10 @@
-package data;
+package led;
+
+import led.ApiTypes;
 
 class LayerInstance implements ISerializable {
 	var _project : ProjectData;
-	public var def(get,never) : data.def.LayerDef; inline function get_def() return _project.defs.getLayerDef(layerDefId);
+	public var def(get,never) : led.def.LayerDef; inline function get_def() return _project.defs.getLayerDef(layerDefId);
 	public var level(get,never) : LevelData; function get_level() return _project.getLevel(levelId);
 
 	public var levelId : Int;
@@ -152,7 +154,7 @@ class LayerInstance implements ISerializable {
 
 	/** ENTITY INSTANCE *******************/
 
-	public function createEntityInstance(ed:EntityDef) : Null<EntityInstance> {
+	public function createEntityInstance(ed:led.def.EntityDef) : Null<EntityInstance> {
 		requireType(Entities);
 		if( ed.maxPerLevel>0 ) {
 			var all = entityInstances.filter( function(ei) return ei.defId==ed.uid );

@@ -1,6 +1,6 @@
-package data;
+package led;
 
-class ProjectData implements data.ISerializable {
+class ProjectData implements led.ISerializable {
 	var nextUniqId = 0;
 	public var defs : Definitions;
 	public var levels : Array<LevelData> = [];

@@ -1,4 +1,6 @@
-package data.def;
+package led.def;
+
+import led.ApiTypes;
 
 class LayerDef implements ISerializable {
 	public var uid(default,null) : Int;

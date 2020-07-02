@@ -1,4 +1,6 @@
-package data.def;
+package led.def;
+
+import led.ApiTypes;
 
 class FieldDef implements ISerializable {
 	public var uid(default,null) : Int;
@@ -14,7 +16,7 @@ class FieldDef implements ISerializable {
 	public var min : Null<Float>;
 	public var max : Null<Float>;
 
-	@:allow(data.def.EntityDef)
+	@:allow(led.def.EntityDef)
 	private function new(uid:Int, t:FieldType) {
 		this.uid = uid;
 		type = t;
