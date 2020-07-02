@@ -85,10 +85,11 @@ class TileTool extends Tool<TilesetSelection> {
 				top = M.imin(top, curTilesetDef.getTileCy(tid));
 			}
 
+			var gridDiffScale = M.imax(1, M.round( curTilesetDef.tileGridSize / curLayerInstance.def.gridSize ) );
 			for(tid in sel.ids)
-				client.curLayerInstance.setGridTile(
-					cx+curTilesetDef.getTileCx(tid)-left,
-					cy+curTilesetDef.getTileCy(tid)-top,
+				curLayerInstance.setGridTile(
+					cx + (curTilesetDef.getTileCx(tid)-left) * gridDiffScale,
+					cy + (curTilesetDef.getTileCy(tid)-top) * gridDiffScale,
 					tid
 				);
 		}

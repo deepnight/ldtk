@@ -218,10 +218,13 @@ class EditLayerDefs extends ui.modal.Panel {
 					});
 
 					var td = project.defs.getTilesetDef(cur.tilesetDefId);
-					if( td!=null && ld.gridSize!=td.tileGridSize ) {
+					if( td!=null && ld.gridSize!=td.tileGridSize && ( td.tileGridSize<ld.gridSize || td.tileGridSize%ld.gridSize!=0 ) ) {
 						var warn = new J('<div class="tmp warning"/>');
 						warn.appendTo( select.parent() );
-						warn.text("Warning: the tileset grid ("+td.tileGridSize+"px) differs from the layer grid, which can lead to unexpected behaviors.");
+						warn.text(Lang.t._("Warning: the TILESET grid (::tileset::px) differs from the LAYER grid (::layer::px), and the values aren't multiples, which can lead to unexpected behaviors when adding a group of tiles.", {
+							tileset: td.tileGridSize,
+							layer: ld.gridSize,
+						}));
 					}
 
 					bt.text( Lang.t._("Edit") );

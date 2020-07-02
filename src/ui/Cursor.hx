@@ -85,12 +85,14 @@ class Cursor extends dn.Process {
 					left = M.imin( left, td.getTileCx(tid) );
 					top = M.imin( top, td.getTileCy(tid) );
 				}
+
+				var gridDiffScale = M.imax(1, M.round( td.tileGridSize / li.def.gridSize ) );
 				for(tid in tileIds) {
 					var cx = td.getTileCx(tid);
 					var cy = td.getTileCy(tid);
 					var bmp = new h2d.Bitmap( td.getTile(tid), wrapper );
-					bmp.x = (cx-left) * li.def.gridSize;
-					bmp.y = (cy-top) * li.def.gridSize;
+					bmp.x = (cx-left) * li.def.gridSize * gridDiffScale;
+					bmp.y = (cy-top) * li.def.gridSize * gridDiffScale;
 				}
 		}
 

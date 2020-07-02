@@ -1,18 +1,36 @@
 {
 	"dataVersion":1,
-	"nextUniqId":5,
+	"nextUniqId":7,
 	"defs":{
 		"layers":[
 			{
-				"uid":2,
+				"uid":6,
 				"type":{
 					"id":2,
 					"p":[
 						
 					]
 				},
-				"name":"32px tileset",
-				"gridSize":16,
+				"name":"Grid 8",
+				"gridSize":8,
+				"displaydisplayOpacity":1,
+				"intGridValues":[
+					{
+						"color":0
+					}
+				],
+				"tilesetDefId":1
+			},
+			{
+				"uid":5,
+				"type":{
+					"id":2,
+					"p":[
+						
+					]
+				},
+				"name":"Grid 24",
+				"gridSize":24,
 				"displaydisplayOpacity":1,
 				"intGridValues":[
 					{
@@ -38,6 +56,24 @@
 					}
 				],
 				"tilesetDefId":4
+			},
+			{
+				"uid":2,
+				"type":{
+					"id":2,
+					"p":[
+						
+					]
+				},
+				"name":"32px tileset",
+				"gridSize":16,
+				"displaydisplayOpacity":1,
+				"intGridValues":[
+					{
+						"color":0
+					}
+				],
+				"tilesetDefId":1
 			}
 		],
 		"entities":[
@@ -149,7 +185,62 @@
 				"tileGridSize":8,
 				"tileGridSpacing":0,
 				"savedSelections":[
-					
+					{
+						"ids":[
+							83,
+							166,
+							84,
+							167
+						],
+						"mode":{
+							"id":0,
+							"p":[
+								
+							]
+						}
+					},
+					{
+						"ids":[
+							85,
+							168,
+							86,
+							169
+						],
+						"mode":{
+							"id":0,
+							"p":[
+								
+							]
+						}
+					},
+					{
+						"ids":[
+							87,
+							170,
+							88,
+							171
+						],
+						"mode":{
+							"id":0,
+							"p":[
+								
+							]
+						}
+					},
+					{
+						"ids":[
+							89,
+							172,
+							90,
+							173
+						],
+						"mode":{
+							"id":0,
+							"p":[
+								
+							]
+						}
+					}
 				]
 			}
 		]
@@ -167,22 +258,7 @@
 						
 					],
 					"gridTiles":[
-						{
-							"coordId":40,
-							"v":0
-						},
-						{
-							"coordId":41,
-							"v":1
-						},
-						{
-							"coordId":72,
-							"v":6
-						},
-						{
-							"coordId":73,
-							"v":7
-						}
+						
 					],
 					"entityInstances":[
 						
@@ -191,6 +267,32 @@
 				{
 					"levelId":0,
 					"layerDefId":3,
+					"intGrid":[
+						
+					],
+					"gridTiles":[
+						
+					],
+					"entityInstances":[
+						
+					]
+				},
+				{
+					"levelId":0,
+					"layerDefId":5,
+					"intGrid":[
+						
+					],
+					"gridTiles":[
+						
+					],
+					"entityInstances":[
+						
+					]
+				},
+				{
+					"levelId":0,
+					"layerDefId":6,
 					"intGrid":[
 						
 					],
