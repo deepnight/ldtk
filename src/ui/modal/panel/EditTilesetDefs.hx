@@ -77,7 +77,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 	function updateTilesetPreview() {
 		// Main tileset view
 		var jFull = jForm.find(".tileset canvas.fullPreview");
-		if( cur==null || cur.isEmpty() ) {
+		if( cur==null || !cur.hasAtlas() ) {
 			var cnv = Std.downcast( jFull.get(0), js.html.CanvasElement );
 			cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
 		}
@@ -90,7 +90,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var cnv = Std.downcast( jDemo.get(0), js.html.CanvasElement );
 		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
 
-		if( cur!=null && !cur.isEmpty() ) {
+		if( cur!=null && cur.hasAtlas() ) {
 			jDemo.attr("width", cur.tileGridSize*6 + padding*5);
 			jDemo.attr("height", cur.tileGridSize);
 
@@ -111,7 +111,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		// Image path
 		var jPath = jForm.find(".path");
 		jPath.empty();
-		if( !cur.isEmpty() )
+		if( cur.hasAtlas() )
 			for(e in cur.path.split("/"))
 				jPath.append('<span>$e</span>');
 
@@ -123,7 +123,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var uploader = jForm.find("input[name=tilesetFile]");
 		uploader.attr("nwworkingdir",client.getCwd()+"\\tilesetTestImages");
 		var label = uploader.siblings("[for="+uploader.attr("id")+"]");
-		label.text( cur.isEmpty() ? Lang.t._("Select an image file") : cur.getFileName() );
+		label.text( !cur.hasAtlas() ? Lang.t._("Select an image file") : cur.getFileName() );
 		uploader.change( function(ev) {
 			var rawPath = uploader.val();
 			var relativePath = dn.FilePath.fromFile( rawPath );
@@ -133,7 +133,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 			var bytes = buffer.hxToBytes();
 			if( !cur.importImage(relativePath.full, bytes) ) {
 				switch dn.Identify.getType(bytes) {
-					case Unknown:
 					case Png, Gif:
 						N.error("Couldn't read this image: maybe the data is corrupted or the format special?");
 
@@ -142,7 +141,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 					case Bmp:
 						N.error("Sorry, BMP is not supported, please use PNG instead.");
-				}
+
+					case Unknown:
+						N.error("Is this an actual image file?");
+					}
 				return;
 			}
 			updateTilesetPreview();

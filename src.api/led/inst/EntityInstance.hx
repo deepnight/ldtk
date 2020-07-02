@@ -1,13 +1,13 @@
-package data;
+package led.inst;
 
 class EntityInstance implements ISerializable {
-	public var _project : ProjectData;
-	public var def(get,never) : EntityDef; inline function get_def() return _project.defs.getEntityDef(defId);
+	public var _project : Project;
+	public var def(get,never) : led.def.EntityDef; inline function get_def() return _project.defs.getEntityDef(defId);
 
 	public var defId(default,null) : Int;
 	public var x : Int;
 	public var y : Int;
-	var fieldInstances : Map<Int, data.FieldInstance> = new Map();
+	var fieldInstances : Map<Int, led.inst.FieldInstance> = new Map();
 
 	public var left(get,never) : Int; inline function get_left() return Std.int( x - def.width*def.pivotX );
 	public var right(get,never) : Int; inline function get_right() return left + def.width-1;
@@ -15,7 +15,7 @@ class EntityInstance implements ISerializable {
 	public var bottom(get,never) : Int; inline function get_bottom() return top + def.height-1;
 
 
-	public function new(p:ProjectData, entityDefId:Int) {
+	public function new(p:Project, entityDefId:Int) {
 		_project = p;
 		defId = entityDefId;
 	}
@@ -41,7 +41,7 @@ class EntityInstance implements ISerializable {
 		}
 	}
 
-	public static function fromJson(project:ProjectData, json:Dynamic) {
+	public static function fromJson(project:Project, json:Dynamic) {
 		var ei = new EntityInstance(project, JsonTools.readInt(json.defId));
 		ei.x = JsonTools.readInt( json.x, 0 );
 		ei.y = JsonTools.readInt( json.y, 0 );
@@ -54,11 +54,11 @@ class EntityInstance implements ISerializable {
 		return ei;
 	}
 
-	public function getCx(ld:LayerDef) {
+	public function getCx(ld:led.def.LayerDef) {
 		return Std.int( ( x + (def.pivotX==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
-	public function getCy(ld:LayerDef) {
+	public function getCy(ld:led.def.LayerDef) {
 		return Std.int( ( y + (def.pivotY==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
@@ -66,7 +66,7 @@ class EntityInstance implements ISerializable {
 		return levelX >= left && levelX <= right && levelY >= top && levelY <= bottom;
 	}
 
-	public function tidy(p:ProjectData) {
+	public function tidy(p:led.Project) {
 		_project = p;
 
 		// Remove field instances whose def was removed
@@ -78,9 +78,9 @@ class EntityInstance implements ISerializable {
 			fi.tidy(_project);
 	}
 
-	public function getFieldInstance(fieldDef:FieldDef) {
+	public function getFieldInstance(fieldDef:led.def.FieldDef) {
 		if( !fieldInstances.exists(fieldDef.uid) )
-			fieldInstances.set(fieldDef.uid, new data.FieldInstance(_project, fieldDef.uid));
+			fieldInstances.set(fieldDef.uid, new led.inst.FieldInstance(_project, fieldDef.uid));
 		return fieldInstances.get( fieldDef.uid );
 	}
 

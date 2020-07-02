@@ -1,9 +1,9 @@
-package data;
+package led;
 
-class ProjectData implements data.ISerializable {
+class Project implements led.ISerializable {
 	var nextUniqId = 0;
 	public var defs : Definitions;
-	public var levels : Array<LevelData> = [];
+	public var levels : Array<Level> = [];
 
 	public var dataVersion : Int;
 	public var name : String;
@@ -14,8 +14,8 @@ class ProjectData implements data.ISerializable {
 
 	private function new() {
 		name = "New project";
-		dataVersion = Const.DATA_VERSION;
-		defaultGridSize = Const.DEFAULT_GRID_SIZE;
+		dataVersion = ApiTypes.DATA_VERSION;
+		defaultGridSize = ApiTypes.DEFAULT_GRID_SIZE;
 		bgColor = 0xffffff;
 		defaultPivotX = defaultPivotY = 0;
 
@@ -23,7 +23,7 @@ class ProjectData implements data.ISerializable {
 	}
 
 	public static function createEmpty() {
-		var p = new ProjectData();
+		var p = new Project();
 		p.createLevel();
 		return p;
 	}
@@ -39,21 +39,21 @@ class ProjectData implements data.ISerializable {
 	}
 
 	public static function fromJson(json:Dynamic) {
-		var p = new ProjectData();
+		var p = new Project();
 		p.dataVersion = JsonTools.readInt(json.dataVersion, 0);
 		p.nextUniqId = JsonTools.readInt( json.nextUniqId, 0 );
 		p.name = JsonTools.readString( json.name );
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
-		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Const.DEFAULT_GRID_SIZE );
+		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, ApiTypes.DEFAULT_GRID_SIZE );
 		p.bgColor = JsonTools.readInt( json.bgColor, 0xffffff );
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
 		for( lvlJson in JsonTools.readArray(json.levels) )
-			p.levels.push( LevelData.fromJson(p, lvlJson) );
+			p.levels.push( Level.fromJson(p, lvlJson) );
 
-		p.dataVersion = Const.DATA_VERSION; // updated
+		p.dataVersion = ApiTypes.DATA_VERSION; // always uses latest version
 		return p;
 	}
 
@@ -83,20 +83,20 @@ class ProjectData implements data.ISerializable {
 	/**  LEVELS  *****************************************/
 
 	public function createLevel() {
-		var l = new LevelData(this, makeUniqId());
+		var l = new Level(this, makeUniqId());
 		levels.push(l);
 		tidy(); // will create layer instances
 		return l;
 	}
 
-	public function removeLevel(l:LevelData) {
+	public function removeLevel(l:Level) {
 		if( !levels.remove(l) )
 			throw "Level not found in this Project";
 
 		tidy();
 	}
 
-	public function getLevel(uid:Int) : Null<LevelData> {
+	public function getLevel(uid:Int) : Null<Level> {
 		for(l in levels)
 			if( l.uid==uid )
 				return l;
@@ -104,8 +104,8 @@ class ProjectData implements data.ISerializable {
 	}
 
 
-	public static function createTest() : ProjectData {
-		var p = new ProjectData();
+	public static function createTest() : Project {
+		var p = new Project();
 
 		// Hero
 		var ed = p.defs.createEntityDef("Hero");

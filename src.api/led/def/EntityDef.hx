@@ -1,4 +1,6 @@
-package data.def;
+package led.def;
+
+import led.ApiTypes;
 
 class EntityDef implements ISerializable {
 	public var uid(default,null) : Int;
@@ -11,7 +13,7 @@ class EntityDef implements ISerializable {
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
 
-	public var fieldDefs : Array<data.def.FieldDef> = [];
+	public var fieldDefs : Array<led.def.FieldDef> = [];
 
 
 	public function new(uid:Int) {
@@ -31,7 +33,7 @@ class EntityDef implements ISerializable {
 	}
 
 	public function clone() {
-		return fromJson( Const.DATA_VERSION, toJson() );
+		return fromJson( ApiTypes.DATA_VERSION, toJson() );
 	}
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
@@ -73,17 +75,17 @@ class EntityDef implements ISerializable {
 		pivotY = y;
 	}
 
-	inline function set_pivotX(v) return pivotX = M.fclamp(v, 0, 1);
-	inline function set_pivotY(v) return pivotY = M.fclamp(v, 0, 1);
+	inline function set_pivotX(v) return pivotX = dn.M.fclamp(v, 0, 1);
+	inline function set_pivotY(v) return pivotY = dn.M.fclamp(v, 0, 1);
 
 
-	public function createField(project:ProjectData, type:FieldType) : FieldDef {
+	public function createField(project:Project, type:FieldType) : FieldDef {
 		var f = new FieldDef(project.makeUniqId(), type);
 		fieldDefs.push(f);
 		return f;
 	}
 
-	public function removeField(project:ProjectData, fd:FieldDef) {
+	public function removeField(project:Project, fd:FieldDef) {
 		if( !fieldDefs.remove(fd) )
 			throw "Unknown fieldDef";
 

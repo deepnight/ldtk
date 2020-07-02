@@ -1,4 +1,5 @@
 -cp src
+-cp src.api
 -cp externs
 -main Boot
 -dce full
@@ -9,3 +10,5 @@
 -lib hxnodejs
 
 -js nwjs/js/app.js
+
+-D editor

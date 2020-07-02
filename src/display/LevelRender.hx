@@ -71,21 +71,21 @@ class LevelRender extends dn.Process {
 		invalidate();
 	}
 
-	public inline function isLayerVisible(l:LayerInstance) {
+	public inline function isLayerVisible(l:led.inst.LayerInstance) {
 		return l!=null && ( !layerVis.exists(l.layerDefId) || layerVis.get(l.layerDefId)==true );
 	}
 
-	public function toggleLayer(l:LayerInstance) {
+	public function toggleLayer(l:led.inst.LayerInstance) {
 		layerVis.set(l.layerDefId, !isLayerVisible(l));
 		updateLayersVisibility();
 	}
 
-	public function showLayer(l:LayerInstance) {
+	public function showLayer(l:led.inst.LayerInstance) {
 		layerVis.set(l.layerDefId, true);
 		invalidate();
 	}
 
-	public function hideLayer(l:LayerInstance) {
+	public function hideLayer(l:led.inst.LayerInstance) {
 		layerVis.set(l.layerDefId, false);
 		invalidate();
 	}
@@ -180,7 +180,7 @@ class LevelRender extends dn.Process {
 	}
 
 
-	public static function createEntityRender(?ei:EntityInstance, ?def:EntityDef, ?parent:h2d.Object) {
+	public static function createEntityRender(?ei:led.inst.EntityInstance, ?def:EntityDef, ?parent:h2d.Object) {
 		if( def==null && ei==null )
 			throw "Need at least 1 parameter";
 
@@ -291,7 +291,7 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	public function onCurrentLayerChange(cur:LayerInstance) { // TODO use global event
+	public function onCurrentLayerChange(cur:led.inst.LayerInstance) { // TODO use global event
 		updateLayersVisibility();
 		renderBg();
 	}

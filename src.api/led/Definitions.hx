@@ -1,14 +1,16 @@
-package data;
+package led;
+
+import led.ApiTypes;
 
 class Definitions implements ISerializable {
-	var _project : ProjectData;
+	var _project : Project;
 
-	public var layers: Array<LayerDef> = [];
-	public var entities: Array<EntityDef> = [];
-	public var tilesets: Array<TilesetDef> = [];
+	public var layers: Array<led.def.LayerDef> = [];
+	public var entities: Array<led.def.EntityDef> = [];
+	public var tilesets: Array<led.def.TilesetDef> = [];
 
 
-	public function new(project:ProjectData) {
+	public function new(project:Project) {
 		this._project = project;
 	}
 
@@ -24,40 +26,44 @@ class Definitions implements ISerializable {
 		}
 	}
 
-	public static function fromJson(p:ProjectData, json:Dynamic) {
+	public static function fromJson(p:Project, json:Dynamic) {
 		var d = new Definitions(p);
 
 		for( layerJson in JsonTools.readArray(json.layers) )
-			d.layers.push( LayerDef.fromJson(p.dataVersion, layerJson) );
+			d.layers.push( led.def.LayerDef.fromJson(p.dataVersion, layerJson) );
 
 		for( entityJson in JsonTools.readArray(json.entities) )
-			d.entities.push( EntityDef.fromJson(p.dataVersion, entityJson) );
+			d.entities.push( led.def.EntityDef.fromJson(p.dataVersion, entityJson) );
 
 		for( tilesetJson in JsonTools.readArray(json.tilesets) )
-			d.tilesets.push( TilesetDef.fromJson(p.dataVersion, tilesetJson) );
+			d.tilesets.push( led.def.TilesetDef.fromJson(p.dataVersion, tilesetJson) );
 
 		return d;
 	}
 
-	public function tidy(p:ProjectData) {
+	public function tidy(p:Project) {
 		_project = p;
 	}
 
 	/**  LAYER DEFS  *****************************************/
 
-	public function getLayerDef(uid:Int) : Null<LayerDef> {
+	public function getLayerDef(uid:Int) : Null<led.def.LayerDef> {
 		for(ld in layers)
 			if( ld.uid==uid )
 				return ld;
 		return null;
 	}
 
-	public function createLayerDef(type:LayerType, ?name:String) : LayerDef {
-		var l = new LayerDef(_project.makeUniqId(), type);
+	public function createLayerDef(type:LayerType, ?name:String) : led.def.LayerDef {
+		var l = new led.def.LayerDef(_project.makeUniqId(), type);
+
+		#if editor
 		if( name==null && isLayerNameValid( Lang.getLayerType(type).toString() ) ) // dirty fix for string comparison issue
 			l.name = Lang.getLayerType(type);
 		else if( name!=null && isLayerNameValid(name) )
 			l.name = name;
+		#end
+
 		l.gridSize = _project.defaultGridSize;
 		layers.push(l);
 		_project.tidy();
@@ -74,14 +80,14 @@ class Definitions implements ISerializable {
 		return true;
 	}
 
-	public function removeLayerDef(ld:LayerDef) {
+	public function removeLayerDef(ld:led.def.LayerDef) {
 		if( !layers.remove(ld) )
 			throw "Unknown layerDef";
 
 		_project.tidy();
 	}
 
-	public function sortLayerDef(from:Int, to:Int) : Null<LayerDef> {
+	public function sortLayerDef(from:Int, to:Int) : Null<led.def.LayerDef> {
 		if( from<0 || from>=layers.length || from==to )
 			return null;
 
@@ -99,15 +105,15 @@ class Definitions implements ISerializable {
 
 	/**  ENTITY DEFS  *****************************************/
 
-	public function getEntityDef(uid:Int) : Null<EntityDef> {
+	public function getEntityDef(uid:Int) : Null<led.def.EntityDef> {
 		for(ed in entities)
 			if( ed.uid==uid )
 				return ed;
 		return null;
 	}
 
-	public function createEntityDef(?name:String) : EntityDef {
-		var ed = new EntityDef(_project.makeUniqId());
+	public function createEntityDef(?name:String) : led.def.EntityDef {
+		var ed = new led.def.EntityDef(_project.makeUniqId());
 		entities.push(ed);
 
 		ed.setPivot( _project.defaultPivotX, _project.defaultPivotY );
@@ -118,7 +124,7 @@ class Definitions implements ISerializable {
 		return ed;
 	}
 
-	public function removeEntityDef(ed:EntityDef) {
+	public function removeEntityDef(ed:led.def.EntityDef) {
 		entities.remove(ed);
 		_project.tidy();
 	}
@@ -133,7 +139,7 @@ class Definitions implements ISerializable {
 		return true;
 	}
 
-	public function sortEntityDef(from:Int, to:Int) : Null<EntityDef> {
+	public function sortEntityDef(from:Int, to:Int) : Null<led.def.EntityDef> {
 		if( from<0 || from>=entities.length || from==to )
 			return null;
 
@@ -152,7 +158,7 @@ class Definitions implements ISerializable {
 
 	/**  FIELD DEFS  *****************************************/
 
-	public function getFieldDef(id:Int) : Null<FieldDef> {
+	public function getFieldDef(id:Int) : Null<led.def.FieldDef> {
 		for(ed in entities)
 		for(fd in ed.fieldDefs)
 			if( fd.uid==id )
@@ -164,14 +170,14 @@ class Definitions implements ISerializable {
 
 	/**  TILESET DEFS  *****************************************/
 
-	public function createTilesetDef() : TilesetDef {
-		var td = new TilesetDef(_project.makeUniqId() );
+	public function createTilesetDef() : led.def.TilesetDef {
+		var td = new led.def.TilesetDef(_project.makeUniqId() );
 		tilesets.push(td);
 		_project.tidy();
 		return td;
 	}
 
-	public function getTilesetDef(uid:Int) : Null<TilesetDef> {
+	public function getTilesetDef(uid:Int) : Null<led.def.TilesetDef> {
 		for(td in tilesets)
 			if( td.uid==uid )
 				return td;

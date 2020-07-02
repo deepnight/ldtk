@@ -88,7 +88,7 @@ class EntityTool extends Tool<Int> {
 		return false;
 	}
 
-	function getPickedEntityInstance() : Null<EntityInstance> {
+	function getPickedEntityInstance() : Null<led.inst.EntityInstance> {
 		switch client.selection {
 			case null, IntGrid(_), Tile(_):
 				return null;

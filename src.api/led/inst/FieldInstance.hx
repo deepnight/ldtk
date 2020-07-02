@@ -1,14 +1,16 @@
-package data;
+package led.inst;
+
+import led.ApiTypes;
 
 class FieldInstance implements ISerializable {
-	public var _project : ProjectData;
-	public var def(get,never) : FieldDef; inline function get_def() return _project.defs.getFieldDef(defId);
+	public var _project : Project;
+	public var def(get,never) : led.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defId);
 
 	public var defId: Int;
 	var internalValue : Null<ValueWrapper>;
 
-	@:allow(data.EntityInstance)
-	private function new(p:ProjectData, fieldDefId:Int) {
+	@:allow(led.inst.EntityInstance)
+	private function new(p:Project, fieldDefId:Int) {
 		_project = p;
 		defId = fieldDefId;
 		internalValue = null;
@@ -26,7 +28,7 @@ class FieldInstance implements ISerializable {
 		return fromJson( _project, toJson() );
 	}
 
-	public static function fromJson(project:ProjectData, json:Dynamic) {
+	public static function fromJson(project:Project, json:Dynamic) {
 		var o = new FieldInstance( project, JsonTools.readInt(json.defId) );
 		o.internalValue = JsonTools.readEnum(ValueWrapper, json.internalValue, true);
 		return o;
@@ -59,7 +61,7 @@ class FieldInstance implements ISerializable {
 		else switch def.type {
 			case F_Int:
 				var v = Std.parseInt(raw);
-				if( !M.isValidNumber(v) )
+				if( !dn.M.isValidNumber(v) )
 					setInternal(null);
 				else {
 					v = def.iClamp(v);
@@ -67,11 +69,11 @@ class FieldInstance implements ISerializable {
 				}
 
 			case F_Color:
-				setInternal( raw==null ? null : V_Int(C.hexToInt(raw)) );
+				setInternal( raw==null ? null : V_Int(dn.Color.hexToInt(raw)) );
 
 			case F_Float:
 				var v = Std.parseFloat(raw);
-				if( !M.isValidNumber(v) )
+				if( !dn.M.isValidNumber(v) )
 					setInternal(null);
 				else {
 					v = def.fClamp(v);
@@ -139,9 +141,9 @@ class FieldInstance implements ISerializable {
 	public function getColorAsHexStr() : Null<String> {
 		require(F_Color);
 		return isUsingDefault()
-			? def.getColorDefault()==null ? null : C.intToHex(def.getColorDefault())
+			? def.getColorDefault()==null ? null : dn.Color.intToHex(def.getColorDefault())
 			: switch internalValue {
-				case V_Int(v): C.intToHex(v);
+				case V_Int(v): dn.Color.intToHex(v);
 				case _: throw "unexpected";
 			}
 	}
@@ -170,7 +172,7 @@ class FieldInstance implements ISerializable {
 		}
 	}
 
-	public function tidy(p:ProjectData) {
+	public function tidy(p:Project) {
 		_project = p;
 	}
 }

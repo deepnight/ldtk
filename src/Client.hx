@@ -12,17 +12,17 @@ class Client extends dn.Process {
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 
-	public var curLevel(get,never) : LevelData;
+	public var curLevel(get,never) : Level;
 	inline function get_curLevel() return project.getLevel(curLevelId);
 
 	public var curLayerDef(get,never) : Null<LayerDef>;
 	inline function get_curLayerDef() return project.defs.getLayerDef(curLayerId);
 
-	public var curLayerInstance(get,never) : Null<LayerInstance>;
+	public var curLayerInstance(get,never) : Null<led.inst.LayerInstance>;
 	function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
 
 	public var ge : GlobalEventDispatcher;
-	public var project : ProjectData;
+	public var project : Project;
 	var curLevelId : Int;
 	var curLayerId : Int;
 
@@ -67,10 +67,10 @@ class Client extends dn.Process {
 		project = try {
 			var raw = dn.LocalStorage.read("cookie");
 			var json = haxe.Json.parse(raw);
-			ProjectData.fromJson(json);
+			Project.fromJson(json);
 		}
 		catch( e:Dynamic ) {
-			ProjectData.createEmpty();
+			Project.createEmpty();
 		}
 
 		levelRender = new display.LevelRender();
@@ -186,7 +186,7 @@ class Client extends dn.Process {
 		#end
 	}
 
-	public function useProject(p:ProjectData) {
+	public function useProject(p:Project) {
 		project = p;
 		project.tidy();
 		curLevelId = project.levels[0].uid;
@@ -408,7 +408,7 @@ class Client extends dn.Process {
 		line.appendTo(wrapper);
 	}
 
-	public function selectLayerInstance(l:LayerInstance) {
+	public function selectLayerInstance(l:led.inst.LayerInstance) {
 		if( curLayerId==l.def.uid )
 			return;
 
@@ -423,7 +423,7 @@ class Client extends dn.Process {
 	function onNew(bt:js.jquery.JQuery) {
 		ui.Modal.closeAll();
 		new ui.modal.dialog.Confirm(bt, function() {
-			useProject( ProjectData.createEmpty() );
+			useProject( Project.createEmpty() );
 			N.msg("New project created.");
 		});
 	}
@@ -449,7 +449,7 @@ class Client extends dn.Process {
 		JsTools.loadDialog([".json"], function(path,bytes) {
 			try {
 				var json = haxe.Json.parse( bytes.toString() );
-				var p = ProjectData.fromJson(json);
+				var p = Project.fromJson(json);
 				useProject( p );
 				N.msg("Loaded project: "+path);
 			} catch( err:Dynamic ) {
