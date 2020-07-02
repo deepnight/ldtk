@@ -13,8 +13,10 @@ class TilesetDef implements ISerializable {
 	public var tileGridSpacing : Int = 0;
 	public var savedSelections : Array<TilesetSelection> = [];
 
+	#if heaps
 	var texture(get,never) : Null<h3d.mat.Texture>;
 	var _textureCache : Null<h3d.mat.Texture>;
+	#end
 
 	var pixels(get,never) : Null<hxd.Pixels>;
 	var _pixelsCache : Null<hxd.Pixels>;
@@ -43,25 +45,29 @@ class TilesetDef implements ISerializable {
 	}
 
 	function set_base64(str:String) {
-		disposeCache();
+		disposeAtlasCache();
 		return base64 = str;
 	}
 
-	public function disposeCache() {
+	public function disposeAtlasCache() {
+		#if heaps
 		if( _textureCache!=null )
 			_textureCache.dispose();
 		_textureCache = null;
+		#end
 
 		if( _pixelsCache!=null )
 			_pixelsCache.dispose();
 		_pixelsCache = null;
 	}
 
+	#if heaps
 	function get_texture() {
 		if( _textureCache==null && pixels!=null )
 			_textureCache = h3d.mat.Texture.fromPixels(pixels);
 		return _textureCache;
 	}
+	#end
 
 	function get_pixels() {
 		if( _pixelsCache==null && base64!=null ) {
@@ -71,7 +77,7 @@ class TilesetDef implements ISerializable {
 		return _pixelsCache;
 	}
 
-	public inline function isEmpty() return pixels==null;
+	public inline function isEmpty() return base64==null;
 
 
 	public function clone() {
@@ -160,65 +166,8 @@ class TilesetDef implements ISerializable {
 		return getTileCy(tileId) * ( tileGridSize + tileGridSpacing );
 	}
 
-	public inline function getAtlasTile() : Null<h2d.Tile> {
-		return texture==null ? null : h2d.Tile.fromTexture(texture);
-	}
-
-	public inline function getTile(tileId:Int) {
-		return getAtlasTile().sub( getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize );
-	}
-
-	#if js
-	public function createAtlasHtmlImage() : js.html.Image {
-		var img = new js.html.Image();
-		if( !isEmpty() )
-			img.src = 'data:image/png;base64,$base64';
-		return img;
-	}
-
-	public function drawAtlasToCanvas(canvas:js.jquery.JQuery) {
-		if( !canvas.is("canvas") )
-			throw "Not a canvas";
-
-		if( isEmpty() )
-			return;
-
-		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
-		var ctx = canvas.getContext2d();
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-		var img = new js.html.Image(pixels.width, pixels.height);
-		img.src = 'data:image/png;base64,$base64';
-		img.onload = function() {
-			ctx.drawImage(img, 0, 0);
-		}
-	}
-
-	public function drawTileToCanvas(canvas:js.jquery.JQuery, tileId:Int, toX:Int, toY:Int) {
-		if( pixels==null )
-			return;
-
-		if( !canvas.is("canvas") )
-			throw "Not a canvas";
-
-		if( getTileSourceX(tileId)+tileGridSize>=pxWid || getTileSourceY(tileId)+tileGridSize>=pxHei )
-			return; // out of bounds
-
-		var subPixels = pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
-		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
-		var ctx = canvas.getContext2d();
-		var img = new js.html.Image(subPixels.width, subPixels.height);
-		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
-		img.src = 'data:image/png;base64,$b64';
-		img.onload = function() {
-			ctx.drawImage(img, toX, toY);
-		}
-	}
-	#end
-
-
 	public function dispose() {
-		disposeCache();
+		disposeAtlasCache();
 		base64 = null;
 	}
 
@@ -249,4 +198,77 @@ class TilesetDef implements ISerializable {
 					return sel;
 		return null;
 	}
+
+
+
+	/*** HEAPS API *********************************/
+
+	#if heaps
+	public inline function getAtlasTile() : Null<h2d.Tile> {
+		return texture==null ? null : h2d.Tile.fromTexture(texture);
+	}
+	#end
+
+	#if heaps
+	public inline function getTile(tileId:Int) {
+		return getAtlasTile().sub( getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize );
+	}
+	#end
+
+
+
+	/*** JS API *********************************/
+
+	#if js
+	public function createAtlasHtmlImage() : js.html.Image {
+		var img = new js.html.Image();
+		if( !isEmpty() )
+			img.src = 'data:image/png;base64,$base64';
+		return img;
+	}
+	#end
+
+	#if js
+	public function drawAtlasToCanvas(canvas:js.jquery.JQuery) {
+		if( !canvas.is("canvas") )
+			throw "Not a canvas";
+
+		if( isEmpty() )
+			return;
+
+		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
+		var ctx = canvas.getContext2d();
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		var img = new js.html.Image(pixels.width, pixels.height);
+		img.src = 'data:image/png;base64,$base64';
+		img.onload = function() {
+			ctx.drawImage(img, 0, 0);
+		}
+	}
+	#end
+
+	#if js
+	public function drawTileToCanvas(canvas:js.jquery.JQuery, tileId:Int, toX:Int, toY:Int) {
+		if( pixels==null )
+			return;
+
+		if( !canvas.is("canvas") )
+			throw "Not a canvas";
+
+		if( getTileSourceX(tileId)+tileGridSize>=pxWid || getTileSourceY(tileId)+tileGridSize>=pxHei )
+			return; // out of bounds
+
+		var subPixels = pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
+		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
+		var ctx = canvas.getContext2d();
+		var img = new js.html.Image(subPixels.width, subPixels.height);
+		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+		img.src = 'data:image/png;base64,$b64';
+		img.onload = function() {
+			ctx.drawImage(img, toX, toY);
+		}
+	}
+	#end
+
 }
