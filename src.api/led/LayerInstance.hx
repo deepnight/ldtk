@@ -15,8 +15,8 @@ class LayerInstance implements ISerializable {
 	public var entityInstances : Array<EntityInstance> = [];
 	public var gridTiles : Map<Int,Int> = []; // <coordId, tileId>
 
-	public var cWid(get,never) : Int; inline function get_cWid() return M.ceil( level.pxWid / def.gridSize );
-	public var cHei(get,never) : Int; inline function get_cHei() return M.ceil( level.pxHei / def.gridSize );
+	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( level.pxWid / def.gridSize );
+	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( level.pxHei / def.gridSize );
 
 
 	public function new(p:ProjectData, levelId:Int, layerDefId:Int) {

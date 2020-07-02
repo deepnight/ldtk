@@ -1,4 +1,4 @@
-package misc;
+package led;
 
 class JsonTools {
 
@@ -41,9 +41,9 @@ class JsonTools {
 		return v==null ? null : Std.string(v);
 	}
 
-	public static function readInt(v:Dynamic, ?defaultIfNull:Int) : Int {
-		if( v==null && defaultIfNull!=null )
-			return defaultIfNull;
+	public static function readInt(v:Dynamic, ?defaultIfMissing:Int) : Int {
+		if( v==null && defaultIfMissing!=null )
+			return defaultIfMissing;
 
 		if( v==null || Type.typeof(v)!=TInt )
 			throw "Couldn't read Int "+v;
@@ -61,9 +61,9 @@ class JsonTools {
 		return Std.int(v);
 	}
 
-	public static function readFloat(v:Dynamic, ?defaultIfNull:Float) : Float {
-		if( v==null && defaultIfNull!=null )
-			return defaultIfNull;
+	public static function readFloat(v:Dynamic, ?defaultIfMissing:Float) : Float {
+		if( v==null && defaultIfMissing!=null )
+			return defaultIfMissing;
 
 		if( v==null || Type.typeof(v)!=TInt && Type.typeof(v)!=TFloat )
 			throw "Couldn't read Float "+v;
@@ -83,12 +83,12 @@ class JsonTools {
 
 	public static function clampFloatPrecision(v:Float, precision=3) {
 		var p = Math.pow(10, precision);
-		return M.round(v*p)/p;
+		return dn.M.round(v*p)/p;
 	}
 
-	public static function readBool(v:Dynamic, ?defaultIfNull:Bool) : Bool {
-		if( v==null && defaultIfNull!=null )
-			return defaultIfNull;
+	public static function readBool(v:Dynamic, ?defaultIfMissing:Bool) : Bool {
+		if( v==null && defaultIfMissing!=null )
+			return defaultIfMissing;
 
 		if( v==null || Type.typeof(v)!=TBool )
 			throw "Couldn't read Bool "+v;

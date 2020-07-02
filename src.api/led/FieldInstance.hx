@@ -61,7 +61,7 @@ class FieldInstance implements ISerializable {
 		else switch def.type {
 			case F_Int:
 				var v = Std.parseInt(raw);
-				if( !M.isValidNumber(v) )
+				if( !dn.M.isValidNumber(v) )
 					setInternal(null);
 				else {
 					v = def.iClamp(v);
@@ -69,11 +69,11 @@ class FieldInstance implements ISerializable {
 				}
 
 			case F_Color:
-				setInternal( raw==null ? null : V_Int(C.hexToInt(raw)) );
+				setInternal( raw==null ? null : V_Int(dn.Color.hexToInt(raw)) );
 
 			case F_Float:
 				var v = Std.parseFloat(raw);
-				if( !M.isValidNumber(v) )
+				if( !dn.M.isValidNumber(v) )
 					setInternal(null);
 				else {
 					v = def.fClamp(v);
@@ -141,9 +141,9 @@ class FieldInstance implements ISerializable {
 	public function getColorAsHexStr() : Null<String> {
 		require(F_Color);
 		return isUsingDefault()
-			? def.getColorDefault()==null ? null : C.intToHex(def.getColorDefault())
+			? def.getColorDefault()==null ? null : dn.Color.intToHex(def.getColorDefault())
 			: switch internalValue {
-				case V_Int(v): C.intToHex(v);
+				case V_Int(v): dn.Color.intToHex(v);
 				case _: throw "unexpected";
 			}
 	}

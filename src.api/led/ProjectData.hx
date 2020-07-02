@@ -14,8 +14,8 @@ class ProjectData implements led.ISerializable {
 
 	private function new() {
 		name = "New project";
-		dataVersion = Const.DATA_VERSION;
-		defaultGridSize = Const.DEFAULT_GRID_SIZE;
+		dataVersion = ApiTypes.DATA_VERSION;
+		defaultGridSize = ApiTypes.DEFAULT_GRID_SIZE;
 		bgColor = 0xffffff;
 		defaultPivotX = defaultPivotY = 0;
 
@@ -45,7 +45,7 @@ class ProjectData implements led.ISerializable {
 		p.name = JsonTools.readString( json.name );
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
-		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Const.DEFAULT_GRID_SIZE );
+		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, ApiTypes.DEFAULT_GRID_SIZE );
 		p.bgColor = JsonTools.readInt( json.bgColor, 0xffffff );
 
 		p.defs = Definitions.fromJson(p, json.defs);
@@ -53,7 +53,7 @@ class ProjectData implements led.ISerializable {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( LevelData.fromJson(p, lvlJson) );
 
-		p.dataVersion = Const.DATA_VERSION; // updated
+		p.dataVersion = ApiTypes.DATA_VERSION; // always uses latest version
 		return p;
 	}
 

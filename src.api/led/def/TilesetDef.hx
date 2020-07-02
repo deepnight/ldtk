@@ -9,7 +9,7 @@ class TilesetDef implements ISerializable {
 	public var customName : Null<String>;
 	public var pxWid = 0;
 	public var pxHei = 0;
-	public var tileGridSize : Int = Const.DEFAULT_GRID_SIZE;
+	public var tileGridSize : Int = ApiTypes.DEFAULT_GRID_SIZE;
 	public var tileGridSpacing : Int = 0;
 	public var savedSelections : Array<TilesetSelection> = [];
 
@@ -19,8 +19,8 @@ class TilesetDef implements ISerializable {
 	var pixels(get,never) : Null<hxd.Pixels>;
 	var _pixelsCache : Null<hxd.Pixels>;
 
-	public var cWid(get,never) : Int; inline function get_cWid() return isEmpty() ? 0 : M.ceil( pxWid / tileGridSize );
-	public var cHei(get,never) : Int; inline function get_cHei() return isEmpty() ? 0 : M.ceil( pxHei / tileGridSize );
+	public var cWid(get,never) : Int; inline function get_cWid() return isEmpty() ? 0 : dn.M.ceil( pxWid / tileGridSize );
+	public var cHei(get,never) : Int; inline function get_cHei() return isEmpty() ? 0 : dn.M.ceil( pxHei / tileGridSize );
 
 
 	public function new(uid:Int) {
@@ -75,7 +75,7 @@ class TilesetDef implements ISerializable {
 
 
 	public function clone() {
-		return fromJson( Const.DATA_VERSION, toJson() );
+		return fromJson( ApiTypes.DATA_VERSION, toJson() );
 	}
 
 	public function toJson() {
@@ -97,7 +97,7 @@ class TilesetDef implements ISerializable {
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
 		var td = new TilesetDef( JsonTools.readInt(json.uid) );
-		td.tileGridSize = JsonTools.readInt(json.tileGridSize, Const.DEFAULT_GRID_SIZE);
+		td.tileGridSize = JsonTools.readInt(json.tileGridSize, ApiTypes.DEFAULT_GRID_SIZE);
 		td.tileGridSpacing = JsonTools.readInt(json.tileGridSpacing, 0);
 		td.pxWid = JsonTools.readInt( json.pxWid );
 		td.pxHei = JsonTools.readInt( json.pxHei );
@@ -119,18 +119,18 @@ class TilesetDef implements ISerializable {
 		path = dn.FilePath.fromFile(filePath).useSlashes().full;
 		base64 = haxe.crypto.Base64.encode(bytes);
 
-		if( pixels==null ) {
-			switch dn.Identify.getType(bytes) {
-				case Unknown:
-				case Png, Gif:
-					N.error("Couldn't read this image: maybe the data is corrupted or the format special?");
+		if( pixels==null ) { // triggers pixels setter & image decoding
+			// switch dn.Identify.getType(bytes) {
+			// 	case Unknown:
+			// 	case Png, Gif:
+			// 		N.error("Couldn't read this image: maybe the data is corrupted or the format special?");
 
-				case Jpeg:
-					N.error("Sorry, JPEG is not yet supported, please use PNG instead.");
+			// 	case Jpeg:
+			// 		N.error("Sorry, JPEG is not yet supported, please use PNG instead.");
 
-				case Bmp:
-					N.error("Sorry, BMP is not supported, please use PNG instead.");
-			}
+			// 	case Bmp:
+			// 		N.error("Sorry, BMP is not supported, please use PNG instead.");
+			// }
 			return false;
 		}
 
@@ -164,10 +164,11 @@ class TilesetDef implements ISerializable {
 		return texture==null ? null : h2d.Tile.fromTexture(texture);
 	}
 
-public inline function getTile(tileId:Int) {
+	public inline function getTile(tileId:Int) {
 		return getAtlasTile().sub( getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize );
 	}
 
+	#if js
 	public function createAtlasHtmlImage() : js.html.Image {
 		var img = new js.html.Image();
 		if( !isEmpty() )
@@ -213,6 +214,7 @@ public inline function getTile(tileId:Int) {
 			ctx.drawImage(img, toX, toY);
 		}
 	}
+	#end
 
 
 	public function dispose() {

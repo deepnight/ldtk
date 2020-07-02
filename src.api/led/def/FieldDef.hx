@@ -36,7 +36,7 @@ class FieldDef implements ISerializable {
 	}
 
 	public function clone() {
-		return fromJson( Const.DATA_VERSION, toJson() );
+		return fromJson( ApiTypes.DATA_VERSION, toJson() );
 	}
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
@@ -66,16 +66,18 @@ class FieldDef implements ISerializable {
 	}
 
 
+	#if editor
 	public function getDescription() {
 		var infinity = "∞";
-		return L.getFieldType(type)
+		return Lang.getFieldType(type)
 			+ ( canBeNull ? " nullable" : "" )
 			+ "=" + ( type==F_String && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
 			+ ( min==null && max==null ? "" :
-				( type==F_Int ? " ["+(min==null?"-"+infinity:""+M.round(min))+";"+(max==null?"+"+infinity:""+M.round(max))+"]" : "" )
+				( type==F_Int ? " ["+(min==null?"-"+infinity:""+dn.M.round(min))+";"+(max==null?"+"+infinity:""+dn.M.round(max))+"]" : "" )
 				+ ( type==F_Float ? " ["+(min==null?"-"+infinity:""+min)+";"+(max==null?infinity:""+max)+"]" : "" )
 			);
 	}
+	#end
 
 	inline function require(type:FieldType) {
 		if( this.type!=type )
@@ -87,10 +89,10 @@ class FieldDef implements ISerializable {
 			return v;
 
 		if( min!=null )
-			v = M.imax(v, M.round(min));
+			v = dn.M.imax(v, dn.M.round(min));
 
 		if( max!=null )
-			v = M.imin(v, M.round(max));
+			v = dn.M.imin(v, dn.M.round(max));
 
 		return v;
 	}
@@ -100,10 +102,10 @@ class FieldDef implements ISerializable {
 			return v;
 
 		if( min!=null )
-			v = M.fmax(v, min);
+			v = dn.M.fmax(v, min);
 
 		if( max!=null )
-			v = M.fmin(v, max);
+			v = dn.M.fmin(v, max);
 
 		return v;
 	}
@@ -173,15 +175,15 @@ class FieldDef implements ISerializable {
 		else switch type {
 			case F_Int:
 				var def = Std.parseInt(rawDef);
-				defaultOverride = !M.isValidNumber(def) ? null : V_Int( iClamp(def) );
+				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Int( iClamp(def) );
 
 			case F_Color:
-				var def = C.hexToInt(rawDef);
-				defaultOverride = !M.isValidNumber(def) ? null : V_Int(def);
+				var def = dn.Color.hexToInt(rawDef);
+				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Int(def);
 
 			case F_Float:
 				var def = Std.parseFloat(rawDef);
-				defaultOverride = !M.isValidNumber(def) ? null : V_Float( fClamp(def) );
+				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Float( fClamp(def) );
 
 			case F_String:
 				rawDef = StringTools.trim(rawDef);
@@ -214,14 +216,14 @@ class FieldDef implements ISerializable {
 			switch type {
 				case F_Int:
 					var v = Std.parseInt(raw);
-					if( !M.isValidNumber(v) )
+					if( !dn.M.isValidNumber(v) )
 						min = null;
 					else
 						min = v;
 
 				case F_Float:
 					var v = Std.parseFloat(raw);
-					if( !M.isValidNumber(v) )
+					if( !dn.M.isValidNumber(v) )
 						min = null;
 					else
 						min = v;
@@ -239,14 +241,14 @@ class FieldDef implements ISerializable {
 			switch type {
 				case F_Int:
 					var v = Std.parseInt(raw);
-					if( !M.isValidNumber(v) )
+					if( !dn.M.isValidNumber(v) )
 						max = null;
 					else
 						max = v;
 
 				case F_Float:
 					var v = Std.parseFloat(raw);
-					if( !M.isValidNumber(v) )
+					if( !dn.M.isValidNumber(v) )
 						max = null;
 					else
 						max = v;

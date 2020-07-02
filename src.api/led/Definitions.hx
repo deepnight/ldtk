@@ -30,13 +30,13 @@ class Definitions implements ISerializable {
 		var d = new Definitions(p);
 
 		for( layerJson in JsonTools.readArray(json.layers) )
-			d.layers.push( LayerDef.fromJson(p.dataVersion, layerJson) );
+			d.layers.push( led.def.LayerDef.fromJson(p.dataVersion, layerJson) );
 
 		for( entityJson in JsonTools.readArray(json.entities) )
-			d.entities.push( EntityDef.fromJson(p.dataVersion, entityJson) );
+			d.entities.push( led.def.EntityDef.fromJson(p.dataVersion, entityJson) );
 
 		for( tilesetJson in JsonTools.readArray(json.tilesets) )
-			d.tilesets.push( TilesetDef.fromJson(p.dataVersion, tilesetJson) );
+			d.tilesets.push( led.def.TilesetDef.fromJson(p.dataVersion, tilesetJson) );
 
 		return d;
 	}
@@ -56,10 +56,14 @@ class Definitions implements ISerializable {
 
 	public function createLayerDef(type:LayerType, ?name:String) : led.def.LayerDef {
 		var l = new led.def.LayerDef(_project.makeUniqId(), type);
+
+		#if editor
 		if( name==null && isLayerNameValid( Lang.getLayerType(type).toString() ) ) // dirty fix for string comparison issue
 			l.name = Lang.getLayerType(type);
 		else if( name!=null && isLayerNameValid(name) )
 			l.name = name;
+		#end
+		
 		l.gridSize = _project.defaultGridSize;
 		layers.push(l);
 		_project.tidy();
@@ -109,7 +113,7 @@ class Definitions implements ISerializable {
 	}
 
 	public function createEntityDef(?name:String) : led.def.EntityDef {
-		var ed = new EntityDef(_project.makeUniqId());
+		var ed = new led.def.EntityDef(_project.makeUniqId());
 		entities.push(ed);
 
 		ed.setPivot( _project.defaultPivotX, _project.defaultPivotY );

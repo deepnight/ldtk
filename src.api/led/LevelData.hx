@@ -12,8 +12,8 @@ class LevelData implements led.ISerializable {
 	@:allow(led.ProjectData)
 	private function new(project:ProjectData, uid:Int) {
 		this.uid = uid;
-		pxWid = Const.DEFAULT_LEVEL_WIDTH;
-		pxHei = Const.DEFAULT_LEVEL_HEIGHT;
+		pxWid = ApiTypes.DEFAULT_LEVEL_WIDTH;
+		pxHei = ApiTypes.DEFAULT_LEVEL_HEIGHT;
 		this._project = project;
 
 		for(ld in _project.defs.layers)
@@ -43,8 +43,8 @@ class LevelData implements led.ISerializable {
 
 	public static function fromJson(p:ProjectData, json:Dynamic) {
 		var l = new LevelData( p, JsonTools.readInt(json.uid) );
-		l.pxWid = JsonTools.readInt( json.pxWid, Const.DEFAULT_LEVEL_WIDTH );
-		l.pxHei = JsonTools.readInt( json.pxHei, Const.DEFAULT_LEVEL_HEIGHT );
+		l.pxWid = JsonTools.readInt( json.pxWid, ApiTypes.DEFAULT_LEVEL_WIDTH );
+		l.pxHei = JsonTools.readInt( json.pxHei, ApiTypes.DEFAULT_LEVEL_HEIGHT );
 
 		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
 			var li = LayerInstance.fromJson(p, layerJson);

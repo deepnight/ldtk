@@ -10,3 +10,5 @@
 -lib hxnodejs
 
 -js nwjs/js/app.js
+
+-D editor
