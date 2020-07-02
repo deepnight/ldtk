@@ -75,7 +75,32 @@ class Level {
 		// Layer instances content
 		for(li in layerInstances)
 			li.tidy(_project);
-
 	}
 
+
+
+	/** RENDERING *******************/
+
+	public function iterateLayerInstancesInRenderOrder( eachLayer:led.inst.LayerInstance->Void ) {
+		var i = _project.defs.layers.length-1;
+		while( i>=0 ) {
+			eachLayer( getLayerInstance(_project.defs.layers[i]) );
+			i--;
+		}
+	}
+
+	#if heaps
+
+	public function renderAllLayers(target:h2d.Object) {
+		iterateLayerInstancesInRenderOrder( function(li) {
+			li.render(target);
+		});
+	}
+
+	#else
+
+	@:deprecated("Not implemented on this platform")
+	public function renderAllLayers(target:Dynamic) {}
+
+	#end
 }

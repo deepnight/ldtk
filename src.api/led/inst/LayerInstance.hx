@@ -199,4 +199,51 @@ class LayerInstance {
 	public function getGridTile(cx:Int, cy:Int) : Null<Int> {
 		return !isValid(cx,cy) || !gridTiles.exists( coordId(cx,cy) ) ? null : gridTiles.get( coordId(cx,cy) );
 	}
+
+
+
+
+	/** RENDERING *******************/
+
+	#if heaps
+
+	public function render(target:h2d.Object) {
+		switch def.type {
+			case IntGrid:
+				var g = new h2d.Graphics(target);
+				for(cy in 0...cHei)
+				for(cx in 0...cWid) {
+					var id = getIntGrid(cx,cy);
+					if( id<0 )
+						continue;
+
+					g.beginFill( getIntGridColorAt(cx,cy) );
+					g.drawRect(cx*def.gridSize, cy*def.gridSize, def.gridSize, def.gridSize);
+				}
+
+			case Entities:
+				// not meant to be rendered
+
+			case Tiles:
+				for(cy in 0...cHei)
+				for(cx in 0...cWid) {
+					if( getGridTile(cx,cy)==null )
+						continue;
+
+					var td = _project.defs.getTilesetDef(def.tilesetDefId);
+					var t = td.getTile( getGridTile(cx,cy) );
+					var bmp = new h2d.Bitmap(t, target);
+					bmp.x = cx * def.gridSize;
+					bmp.y = cy * def.gridSize;
+				}
+
+		}
+	}
+
+	#else
+
+	@:deprecated("Not implemented on this platform")
+	public function render(target:Dynamic) {}
+
+	#end
 }

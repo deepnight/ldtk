@@ -137,36 +137,15 @@ class LevelRender extends dn.Process {
 
 			var grid = li.def.gridSize;
 			switch li.def.type {
-				case IntGrid:
-					var g = new h2d.Graphics(wrapper);
-					for(cy in 0...li.cHei)
-					for(cx in 0...li.cWid) {
-						var id = li.getIntGrid(cx,cy);
-						if( id<0 )
-							continue;
-
-						g.beginFill( li.getIntGridColorAt(cx,cy) );
-						g.drawRect(cx*grid, cy*grid, grid, grid);
-					}
+				case IntGrid, Tiles:
+					li.render(wrapper);
 
 				case Entities:
 					for(ei in li.entityInstances) {
 						var o = createEntityRender(ei, wrapper);
 						o.setPosition(ei.x, ei.y);
 					}
-
-				case Tiles:
-					for(cy in 0...li.cHei)
-					for(cx in 0...li.cWid) {
-						if( li.getGridTile(cx,cy)==null )
-							continue;
-						var td = client.project.defs.getTilesetDef(li.def.tilesetDefId);
-						var t = td.getTile( li.getGridTile(cx,cy) );
-						var bmp = new h2d.Bitmap(t, wrapper);
-						bmp.x = cx * li.def.gridSize;
-						bmp.y = cy * li.def.gridSize;
-					}
-				}
+			}
 		}
 
 		updateLayersVisibility();
