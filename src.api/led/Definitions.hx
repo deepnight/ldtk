@@ -2,7 +2,7 @@ package led;
 
 import led.LedTypes;
 
-class Definitions implements ISerializable {
+class Definitions {
 	var _project : Project;
 
 	public var layers: Array<led.def.LayerDef> = [];

@@ -1,6 +1,6 @@
 package led;
 
-class Project implements led.ISerializable {
+class Project {
 	public static var DEFAULT_LEVEL_WIDTH = 128; // px
 	public static var DEFAULT_LEVEL_HEIGHT = 128; // px
 	public static var DEFAULT_GRID_SIZE = 16; // px

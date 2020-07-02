@@ -2,7 +2,7 @@ package led.inst;
 
 import led.LedTypes;
 
-class LayerInstance implements ISerializable {
+class LayerInstance {
 	var _project : Project;
 	public var def(get,never) : led.def.LayerDef; inline function get_def() return _project.defs.getLayerDef(layerDefId);
 	public var level(get,never) : Level; function get_level() return _project.getLevel(levelId);

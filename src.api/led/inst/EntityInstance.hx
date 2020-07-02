@@ -1,6 +1,6 @@
 package led.inst;
 
-class EntityInstance implements ISerializable {
+class EntityInstance {
 	public var _project : Project;
 	public var def(get,never) : led.def.EntityDef; inline function get_def() return _project.defs.getEntityDef(defId);
 

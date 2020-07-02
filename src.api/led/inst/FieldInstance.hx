@@ -2,7 +2,7 @@ package led.inst;
 
 import led.LedTypes;
 
-class FieldInstance implements ISerializable {
+class FieldInstance {
 	public var _project : Project;
 	public var def(get,never) : led.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defId);
 

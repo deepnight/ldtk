@@ -2,7 +2,7 @@ package led.def;
 
 import led.LedTypes;
 
-class TilesetDef implements ISerializable {
+class TilesetDef {
 	public var uid : Int;
 	public var fileBase64(default,set) : Null<String>;
 	public var path : Null<String>;

@@ -1,6 +1,6 @@
 package led.def;
 
-class FieldDef implements ISerializable {
+class FieldDef {
 	public var uid(default,null) : Int;
 	public var type(default,null) : led.LedTypes.FieldType;
 	public var name : String;

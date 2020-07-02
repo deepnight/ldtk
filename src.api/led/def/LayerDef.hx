@@ -2,7 +2,7 @@ package led.def;
 
 import led.LedTypes;
 
-class LayerDef implements ISerializable {
+class LayerDef {
 	public var uid(default,null) : Int;
 	public var type : LayerType;
 	public var name : String;

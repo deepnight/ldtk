@@ -2,7 +2,7 @@ package led.def;
 
 import led.LedTypes;
 
-class EntityDef implements ISerializable {
+class EntityDef {
 	public var uid(default,null) : Int;
 	public var name : String;
 	public var width : Int;

@@ -1,6 +1,6 @@
 package led;
 
-class Level implements led.ISerializable {
+class Level {
 	var _project : Project;
 
 	public var uid(default,null) : Int;
