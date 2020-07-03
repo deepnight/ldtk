@@ -29,6 +29,7 @@ class Client extends dn.Process {
 	public var levelRender : display.LevelRender;
 	var bg : h2d.Bitmap;
 	public var curTool : Tool<Dynamic>;
+	public var history : History;
 
 	public var cursor : ui.Cursor;
 	public var selection : Null<GenericLevelElement>;
@@ -72,6 +73,7 @@ class Client extends dn.Process {
 		catch( e:Dynamic ) {
 			led.Project.createEmpty();
 		}
+		history = new History();
 
 		levelRender = new display.LevelRender();
 		useProject(project);
@@ -254,6 +256,16 @@ class Client extends dn.Process {
 				if( !ui.Modal.hasAnyOpen() ) {
 					jBody.toggleClass("compactPanel");
 					updateCanvasBg();
+				}
+
+			case K.Z:
+				if( !hasInputFocus() && isCtrlDown() ) {
+					history.undo();
+				}
+
+			case K.Y:
+				if( !hasInputFocus() && isCtrlDown() ) {
+					history.redo();
 				}
 
 			#if debug
@@ -466,6 +478,10 @@ class Client extends dn.Process {
 			case EntityFieldSorted:
 			case EntityDefSorted:
 			case ToolOptionChanged:
+
+			case RestoredFromHistory:
+				initTool();
+				levelRender.invalidate();
 
 			case TilesetDefChanged, EntityDefChanged :
 				initTool();

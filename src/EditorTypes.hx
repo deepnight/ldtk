@@ -14,6 +14,8 @@ enum GlobalEvent {
 	EntityFieldSorted;
 
 	ToolOptionChanged;
+
+	RestoredFromHistory;
 }
 
 enum CursorType {

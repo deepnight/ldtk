@@ -58,6 +58,10 @@ class EditLayerDefs extends ui.modal.Panel {
 		switch e {
 			case ProjectSettingsChanged: close();
 
+			case RestoredFromHistory:
+				updateForm();
+				updateList();
+
 			case LayerDefChanged:
 				updateForm();
 				updateList();
