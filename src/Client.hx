@@ -484,8 +484,11 @@ class Client extends dn.Process {
 			case ProjectReplaced:
 
 			case RestoredFromHistory:
+				updateCanvasBg();
+				updateLayerList();
+				updateProjectTitle();
 				initTool();
-				levelRender.invalidate();
+				levelRender.renderAll();
 
 			case TilesetDefChanged, EntityDefChanged :
 				initTool();
