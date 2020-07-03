@@ -55,6 +55,7 @@ class History {
 
 	public function undo() {
 		if( curIndex>0 ) {
+			N.debug("last known state: "+getLastKnownStateBefore(curIndex)); // TODO undoing bug
 			curIndex--;
 			applyState( states[curIndex] );
 			#if debug
@@ -63,6 +64,25 @@ class History {
 			N.msg("Undo", 0xb1df38);
 			#end
 		}
+	}
+
+	function getLastKnownStateBefore(idx:Int) : Null<Int> {
+		var cur = states[idx];
+
+		idx--;
+		while( idx>=0 ) {
+			var prev = states[idx];
+			switch prev {
+				case Full(json):
+					return idx;
+
+				case ProjectWithoutLevels(_), SingleLevel(_):
+					if( prev.getIndex()==cur.getIndex() )
+						return idx;
+			}
+			idx--;
+		}
+		return 0;
 	}
 
 	public function redo() {
