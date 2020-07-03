@@ -37,11 +37,11 @@ class History {
 			for(i in 1...MAX_LENGTH)
 				states[i-1] = states[i];
 		}
+		else
+			curIndex++;
 
 		// Store
-		states[curIndex+1] = state;
-		if( curIndex<MAX_LENGTH-1 )
-			curIndex++;
+		states[curIndex] = state;
 
 		#if debug
 		N.debug(toString());
@@ -57,7 +57,11 @@ class History {
 		if( curIndex>0 ) {
 			curIndex--;
 			applyState( states[curIndex] );
+			#if debug
+			N.debug("UNDO - "+toString());
+			#else
 			N.msg("Undo", 0xb1df38);
+			#end
 		}
 	}
 
@@ -65,7 +69,11 @@ class History {
 		if( curIndex<MAX_LENGTH-1 && states[curIndex+1]!=null ) {
 			curIndex++;
 			applyState( states[curIndex] );
+			#if debug
+			N.debug("REDO - "+toString());
+			#else
 			N.msg("Redo", 0x6caedf);
+			#end
 		}
 	}
 
@@ -98,13 +106,16 @@ class History {
 	@:keep
 	public function toString() {
 		var dbg = [];
-		for(i in 0...10)
+		for(i in 0...10) {
 			dbg.push( switch states[i] {
 				case null: " _ ";
-				case Full(json): "["+i+".Fu]";
-				case ProjectWithoutLevels(json): "["+i+".Pr]";
-				case SingleLevel(uid,json): "["+i+".Lv]";
+				case Full(json): i+".Fu";
+				case ProjectWithoutLevels(json): i+".Pr";
+				case SingleLevel(uid,json): i+".Lv";
 			} );
+			if( i==curIndex )
+				dbg[ dbg.length-1 ] = "["+dbg[ dbg.length-1 ]+"]";
+		}
 		return dbg.join(",");
 	}
 
