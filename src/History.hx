@@ -78,6 +78,15 @@ class History {
 				var oldLevels = client.project.levels;
 				client.project = led.Project.fromJson(json);
 				client.project.levels = oldLevels;
+
+			case SingleLevel(uid, json):
+				var lidx = 0;
+				for(l in client.project.levels)
+					if( l.uid==uid )
+						break;
+					else
+						lidx++;
+				client.project.levels[lidx] = led.Level.fromJson(client.project, json);
 		}
 
 		client.project.tidy(); // fix "_project" refs in all project parts
@@ -94,6 +103,7 @@ class History {
 				case null: " _ ";
 				case Full(json): "["+i+".Fu]";
 				case ProjectWithoutLevels(json): "["+i+".Pr]";
+				case SingleLevel(uid,json): "["+i+".Lv]";
 			} );
 		return dbg.join(",");
 	}
