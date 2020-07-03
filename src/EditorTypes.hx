@@ -41,3 +41,9 @@ enum ToolEditMode {
 	Remove;
 	Move;
 }
+
+enum HistoryElement {
+	Full(json:Dynamic);
+	// Project(json:Dynamic);
+	// Level(json:Dynamic);
+}
