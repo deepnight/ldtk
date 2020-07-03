@@ -4,21 +4,24 @@ class History {
 	var client(get,never): Client; inline function get_client() return Client.ME;
 
 	var curIndex = 0;
-	var elements : haxe.ds.Vector< HistoryElement >;
+	var states : haxe.ds.Vector< HistoryState >;
 
 	public function new() {
-		elements = new haxe.ds.Vector(MAX_LENGTH);
-		elements[0] = Full( client.project.toJson() );
+		states = new haxe.ds.Vector(MAX_LENGTH);
 		client.ge.listenAll(onGlobalEvent);
+		states[0] = Full(client.project.toJson());
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
-			case ProjectSettingsChanged, ProjectReplaced,
+			case ProjectReplaced:
+				saveState( Full(client.project.toJson()) );
+
+			case ProjectSettingsChanged,
 				LayerDefChanged, LayerDefSorted,
 				TilesetDefChanged,
 				EntityDefChanged, EntityDefSorted, EntityFieldChanged, EntityFieldSorted:
-					saveCurrentState();
+					saveState( Full(client.project.toJson()) );
 
 			case LayerInstanceChanged:
 				// Saving is done manually by the Tool, after usage
@@ -28,35 +31,32 @@ class History {
 		}
 	}
 
-	public function saveCurrentState() {
+	public function saveState(state:HistoryState) {
 		// Drop first element when max is reached
 		if( curIndex==MAX_LENGTH-1 ) {
 			for(i in 1...MAX_LENGTH)
-				elements[i-1] = elements[i];
+				states[i-1] = states[i];
 		}
 
 		// Store state
-		elements[curIndex+1] = Full( Client.ME.project.toJson() );
+		states[curIndex+1] = state;
 		if( curIndex<MAX_LENGTH-1 )
 			curIndex++;
 
 		#if debug
-		var dbg = [];
-		for(i in 0...10)
-			dbg.push(i+"="+(elements[i]==null ? "[?]" : "[#]"));
-		N.debug(dbg.join(", "));
+		N.debug(toString());
 		#end
 
 		// Trim after
 		for(i in curIndex+1...MAX_LENGTH)
-			elements[i] = null;
+			states[i] = null;
 	}
 
 
 	public function undo() {
 		if( curIndex>0 ) {
 			curIndex--;
-			switch elements[curIndex] {
+			switch states[curIndex] {
 				case Full(json):
 					client.project = led.Project.fromJson(json);
 			}
@@ -66,9 +66,9 @@ class History {
 	}
 
 	public function redo() {
-		if( curIndex<MAX_LENGTH-1 && elements[curIndex+1]!=null ) {
+		if( curIndex<MAX_LENGTH-1 && states[curIndex+1]!=null ) {
 			curIndex++;
-			switch elements[curIndex] {
+			switch states[curIndex] {
 				case Full(json):
 					client.project = led.Project.fromJson(json);
 			}
@@ -78,8 +78,19 @@ class History {
 	}
 
 
+	@:keep
+	public function toString() {
+		var dbg = [];
+		for(i in 0...10)
+			dbg.push( switch states[i] {
+				case null: " _ ";
+				case Full(json): "["+i+".F]";
+			} );
+		return dbg.join(",");
+	}
+
 	public function dispose() {
 		Client.ME.ge.stopListening(onGlobalEvent);
-		elements = null;
+		states = null;
 	}
 }

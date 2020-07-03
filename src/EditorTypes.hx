@@ -42,7 +42,7 @@ enum ToolEditMode {
 	Move;
 }
 
-enum HistoryElement {
+enum HistoryState {
 	Full(json:Dynamic);
 	// Project(json:Dynamic);
 	// Level(json:Dynamic);

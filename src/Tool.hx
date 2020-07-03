@@ -216,7 +216,7 @@ class Tool<T> extends dn.Process {
 		}
 
 		if( needHistorySaving ) {
-			client.history.saveCurrentState();
+			client.history.saveState( Full(client.project.toJson()) );
 			needHistorySaving = false;
 		}
 		curMode = null;
