@@ -42,8 +42,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
-			case ProjectSettingsChanged: close();
-
+			case ProjectSettingsChanged, ProjectReplaced:
+				close();
 
 			case RestoredFromHistory:
 				updateList();

@@ -111,19 +111,23 @@ class EntityTool extends Tool<Int> {
 			case Move:
 				if( moveStarted ) {
 					var ei = getPickedEntityInstance();
+					var oldX = ei.x;
+					var oldY = ei.y;
 					ei.x = getPlacementX(m);
 					ei.y = getPlacementY(m);
-					client.ge.emit(LayerInstanceChanged);
 					client.setSelection( Entity(ei) );
+					return oldX!=ei.x || oldY!=ei.y;
 				}
 		}
+
+		return false;
 	}
 
 
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(left, right, top, bottom);
-
-		client.ge.emit(LayerInstanceChanged);
+		return false;
+		// client.ge.emit(LayerInstanceChanged);
 	}
 
 

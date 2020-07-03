@@ -40,7 +40,9 @@ class IntGridTool extends Tool<Int> {
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
 
+		var anyChange = false;
 		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
+			var old = curLayerInstance.getIntGrid(cx,cy);
 			switch curMode {
 				case null, PanView:
 				case Add:
@@ -51,15 +53,21 @@ class IntGridTool extends Tool<Int> {
 
 				case Move:
 			}
+			if( old!=curLayerInstance.getIntGrid(cx,cy) )
+				anyChange = true;
 		});
-		client.ge.emit(LayerInstanceChanged);
+
+		return anyChange;
 	}
+
 
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(left, right, top, bottom);
 
+		var anyChange = false;
 		for(cx in left...right+1)
 		for(cy in top...bottom+1) {
+			var old = curLayerInstance.getIntGrid(cx,cy);
 			switch curMode {
 				case null, PanView:
 				case Add:
@@ -70,9 +78,12 @@ class IntGridTool extends Tool<Int> {
 
 				case Move:
 			}
+
+			if( old!=curLayerInstance.getIntGrid(cx,cy) )
+				anyChange = true;
 		}
 
-		client.ge.emit(LayerInstanceChanged);
+		return anyChange;
 	}
 
 

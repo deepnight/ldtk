@@ -16,7 +16,7 @@ class History {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
-			case ProjectSettingsChanged,
+			case ProjectSettingsChanged, ProjectReplaced,
 				LayerDefChanged, LayerDefSorted, LayerInstanceChanged,
 				TilesetDefChanged,
 				EntityDefChanged, EntityDefSorted, EntityFieldChanged, EntityFieldSorted:

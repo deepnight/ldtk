@@ -30,53 +30,64 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
 
+		var anyChange = false;
 		switch curMode {
 			case null, PanView:
 
 			case Add:
 				dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
-					drawSelectionAt(cx, cy);
+					if( drawSelectionAt(cx, cy) )
+						anyChange = true;
 				});
-				client.ge.emit(LayerInstanceChanged);
 
 			case Remove:
 				dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
-					removeSelectedTileAt(cx, cy);
+					removeSelectedTileAt(cx, cy); // TODO anychange update
 				});
-				client.ge.emit(LayerInstanceChanged);
 
 			case Move:
 		}
+
+		return anyChange;
 	}
 
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(left, right, top, bottom);
 
+		var anyChange = false;
 		for(cx in left...right+1)
 		for(cy in top...bottom+1) {
 			switch curMode {
 				case null, PanView:
 				case Add:
-					drawSelectionAt(cx,cy);
+					if( drawSelectionAt(cx,cy) )
+						anyChange = true;
 
 				case Remove:
-					removeSelectedTileAt(cx,cy);
+					removeSelectedTileAt(cx,cy); // TODO anychange
 
 				case Move:
 			}
 		}
 
-		client.ge.emit(LayerInstanceChanged);
+		return anyChange;
 	}
 
 
 	function drawSelectionAt(cx:Int, cy:Int) {
+		var anyChange = false;
 		var sel = getSelectedValue();
 
 		if( isRandomMode() ) {
-			client.curLayerInstance.setGridTile(cx,cy, sel.ids[Std.random(sel.ids.length)]);
+			// Single random tile
+			var tid = sel.ids[Std.random(sel.ids.length)];
+			if( tid!=curLayerInstance.getGridTile(cx,cy) ) {
+				curLayerInstance.setGridTile(cx,cy, tid);
+				anyChange = true;
+			}
 		}
 		else {
+			// Stamp
 			var left = Const.INFINITE;
 			var top = Const.INFINITE;
 
@@ -86,13 +97,16 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 			}
 
 			var gridDiffScale = M.imax(1, M.round( curTilesetDef.tileGridSize / curLayerInstance.def.gridSize ) );
-			for(tid in sel.ids)
-				curLayerInstance.setGridTile(
-					cx + (curTilesetDef.getTileCx(tid)-left) * gridDiffScale,
-					cy + (curTilesetDef.getTileCy(tid)-top) * gridDiffScale,
-					tid
-				);
+			for(tid in sel.ids) {
+				var tcx = cx + ( curTilesetDef.getTileCx(tid) - left ) * gridDiffScale;
+				var tcy = cy + ( curTilesetDef.getTileCy(tid) - top ) * gridDiffScale;
+				if( curLayerInstance.getGridTile(tcx,tcy)!=tid ) {
+					curLayerInstance.setGridTile(tcx,tcy,tid);
+					anyChange = true;
+				}
+			}
 		}
+		return anyChange;
 	}
 
 

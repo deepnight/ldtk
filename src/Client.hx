@@ -437,6 +437,7 @@ class Client extends dn.Process {
 		new ui.modal.dialog.Confirm(bt, function() {
 			useProject( led.Project.createEmpty() );
 			N.msg("New project created.");
+			ge.emit(ProjectReplaced);
 		});
 	}
 
@@ -464,6 +465,7 @@ class Client extends dn.Process {
 				var p = led.Project.fromJson(json);
 				useProject( p );
 				N.msg("Loaded project: "+path);
+				ge.emit(ProjectReplaced);
 			} catch( err:Dynamic ) {
 				N.error("Couldn't read this project file: "+err);
 			}
@@ -478,6 +480,8 @@ class Client extends dn.Process {
 			case EntityFieldSorted:
 			case EntityDefSorted:
 			case ToolOptionChanged:
+
+			case ProjectReplaced:
 
 			case RestoredFromHistory:
 				initTool();
