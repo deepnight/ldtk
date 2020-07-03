@@ -5,11 +5,9 @@ class History {
 
 	var curIndex = 0;
 	var projects : haxe.ds.Vector<Dynamic>;
-	// var levels : haxe.ds.Vector<led.Level>;
 
 	public function new() {
 		projects = new haxe.ds.Vector(MAX_LENGTH);
-		// levels = new haxe.ds.Vector(MAX_LENGTH);
 		client.ge.listenAll(onGlobalEvent);
 		projects[0] = client.project.toJson();
 	}
@@ -17,37 +15,48 @@ class History {
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case ProjectSettingsChanged, ProjectReplaced,
-				LayerDefChanged, LayerDefSorted, LayerInstanceChanged,
+				LayerDefChanged, LayerDefSorted,
 				TilesetDefChanged,
 				EntityDefChanged, EntityDefSorted, EntityFieldChanged, EntityFieldSorted:
-					if( curIndex==MAX_LENGTH-1 ) {
-						// Drop first element when max is reached
-						for(i in 1...MAX_LENGTH)
-							projects[i-1] = projects[i];
-					}
-					projects[curIndex+1] = Client.ME.project.toJson();
-					// N.debug("Stored at "+curIndex);
-					var dbg = [];
-					for(i in 0...10)
-						dbg.push(i+"="+(projects[i]==null ? "[?]" : "[#]"));
-					N.debug(dbg.join(", "));
-					if( curIndex<MAX_LENGTH-1 )
-						curIndex++;
+					saveCurrentState();
 
-					// Trim after
-					for(i in curIndex+1...MAX_LENGTH)
-						projects[i] = null;
-
+			case LayerInstanceChanged:
+				// Saving is done manually by the Tool, after usage
 
 			case RestoredFromHistory:
 			case ToolOptionChanged:
 		}
 	}
 
+	public function saveCurrentState() {
+		// Drop first element when max is reached
+		if( curIndex==MAX_LENGTH-1 ) {
+			for(i in 1...MAX_LENGTH)
+				projects[i-1] = projects[i];
+		}
+
+		// Store state
+		projects[curIndex+1] = Client.ME.project.toJson();
+		if( curIndex<MAX_LENGTH-1 )
+			curIndex++;
+
+		#if debug
+		var dbg = [];
+		for(i in 0...10)
+			dbg.push(i+"="+(projects[i]==null ? "[?]" : "[#]"));
+		N.debug(dbg.join(", "));
+		#end
+
+		// Trim after
+		for(i in curIndex+1...MAX_LENGTH)
+			projects[i] = null;
+	}
+
+
 	public function undo() {
 		if( curIndex>0 ) {
 			curIndex--;
-			N.debug("undo to "+curIndex);
+			N.msg("Undo", 0xb1df38);
 			client.project = led.Project.fromJson( projects[curIndex] );
 			client.ge.emit(RestoredFromHistory);
 		}
@@ -56,7 +65,7 @@ class History {
 	public function redo() {
 		if( curIndex<MAX_LENGTH-1 && projects[curIndex+1]!=null ) {
 			curIndex++;
-			N.debug("redo to "+curIndex);
+			N.msg("Redo", 0x6caedf);
 			client.project = led.Project.fromJson( projects[curIndex] );
 			client.ge.emit(RestoredFromHistory);
 		}
@@ -66,6 +75,5 @@ class History {
 	public function dispose() {
 		Client.ME.ge.stopListening(onGlobalEvent);
 		projects = null;
-		// levels = null;
 	}
 }

@@ -127,9 +127,8 @@ class Tool<T> extends dn.Process {
 		rectangle = client.isShiftDown();
 		origin = m;
 		lastMouse = m;
-		if( !rectangle )
-			if( useAt(m) )
-				client.ge.emit(LayerInstanceChanged);
+		if( !rectangle && useAt(m) )
+			onEditAnything();
 	}
 
 
@@ -198,6 +197,7 @@ class Tool<T> extends dn.Process {
 	}
 
 	public function stopUsing(m:MouseCoords) {
+		N.debug("stopped");
 		// if( curMode==PanView && M.dist(origin.htmlX, origin.htmlY, m.htmlX, m.htmlY) < Const.MIDDLE_CLICK_DIST_THRESHOLD )
 			// openFloatingPalette();
 
@@ -212,10 +212,20 @@ class Tool<T> extends dn.Process {
 				: useAt(m);
 
 			if( anyChange )
-				client.ge.emit(LayerInstanceChanged);
+				onEditAnything();
 		}
 
+		if( needHistorySaving ) {
+			client.history.saveCurrentState();
+			needHistorySaving = false;
+		}
 		curMode = null;
+	}
+
+	var needHistorySaving = false;
+	inline function onEditAnything() {
+		client.ge.emit(LayerInstanceChanged);
+		needHistorySaving = true;
 	}
 
 	public function onKeyPress(keyId:Int) {}
@@ -232,9 +242,8 @@ class Tool<T> extends dn.Process {
 		}
 
 		// Execute the tool
-		if( isRunning() && !rectangle )
-			if( useAt(m) )
-				client.ge.emit(LayerInstanceChanged);
+		if( isRunning() && !rectangle && useAt(m) )
+			onEditAnything();
 
 		// Render cursor
 		if( !isRunning() && client.isAltDown() ) {
