@@ -67,12 +67,12 @@ class Project {
 		return p;
 	}
 
-	public function toJson() {
+	public function toJson(excludeLevels=false) {
 		return {
 			dataVersion: dataVersion,
 			nextUniqId: nextUniqId,
 			defs: defs.toJson(),
-			levels: levels.map( function(l) return l.toJson() ),
+			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
 
 			name: name,
 			defaultPivotX: JsonTools.clampFloatPrecision( defaultPivotX ),

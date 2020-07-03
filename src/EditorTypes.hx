@@ -44,6 +44,6 @@ enum ToolEditMode {
 
 enum HistoryState {
 	Full(json:Dynamic);
-	// Project(json:Dynamic);
-	// Level(json:Dynamic);
+	ProjectWithoutLevels(json:Dynamic);
+	// Level(uid:Int, json:Dynamic);
 }
