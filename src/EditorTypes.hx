@@ -2,6 +2,8 @@ enum GlobalEvent {
 	ProjectSettingsChanged;
 	ProjectReplaced;
 
+	LayerDefAdded;
+	LayerDefRemoved;
 	LayerDefChanged;
 	LayerDefSorted;
 	LayerInstanceChanged;

@@ -260,7 +260,7 @@ class Client extends dn.Process {
 				}
 
 			case K.Z:
-				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && isCtrlDown() ) 
+				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && isCtrlDown() )
 					curLevelHistory.undo();
 
 			case K.Y:
@@ -483,6 +483,11 @@ class Client extends dn.Process {
 			case EntityFieldSorted:
 			case EntityDefSorted:
 			case ToolOptionChanged:
+
+			case LayerDefAdded, LayerDefRemoved:
+				updateLayerList();
+				initTool();
+				levelRender.invalidate();
 
 			case ProjectReplaced:
 
