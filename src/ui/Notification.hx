@@ -23,8 +23,8 @@ class Notification extends dn.Process {
 		elem.addClass("latest");
 	}
 
-	public static function msg(str:String) {
-		return new Notification(str);
+	public static function msg(str:String, ?c:UInt) {
+		return new Notification(str, c);
 	}
 
 	public static function error(str:String) {

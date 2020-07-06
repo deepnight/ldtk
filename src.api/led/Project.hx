@@ -1,8 +1,13 @@
 package led;
 
 class Project {
-	public static var DEFAULT_LEVEL_WIDTH = 128; // px
-	public static var DEFAULT_LEVEL_HEIGHT = 128; // px
+	#if !debug
+	public static var DEFAULT_LEVEL_WIDTH = 256; // px
+	public static var DEFAULT_LEVEL_HEIGHT = 256; // px
+	#else
+	public static var DEFAULT_LEVEL_WIDTH = 2048; // px
+	public static var DEFAULT_LEVEL_HEIGHT = 1024; // px
+	#end
 	public static var DEFAULT_GRID_SIZE = 16; // px
 
 	public static var DATA_VERSION = 1;
@@ -35,6 +40,18 @@ class Project {
 	public static function createEmpty() {
 		var p = new Project();
 		p.createLevel();
+		#if debug
+		for(i in 0...2) {
+			var ld = p.defs.createLayerDef(IntGrid);
+			var v = ld.getIntGridValueDef(0);
+			v.color = dn.Color.makeColorHsl(i*0.3, 1, 1);
+			var li = p.levels[0].getLayerInstance(ld);
+			for(cx in 0...li.cWid)
+			for(cy in 0...li.cHei)
+				li.setIntGrid(cx,cy, 0);
+		}
+		#end
+
 		return p;
 	}
 
@@ -67,12 +84,12 @@ class Project {
 		return p;
 	}
 
-	public function toJson() {
+	public function toJson(excludeLevels=false) {
 		return {
 			dataVersion: dataVersion,
 			nextUniqId: nextUniqId,
 			defs: defs.toJson(),
-			levels: levels.map( function(l) return l.toJson() ),
+			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
 
 			name: name,
 			defaultPivotX: JsonTools.clampFloatPrecision( defaultPivotX ),

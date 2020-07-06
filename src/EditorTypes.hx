@@ -1,19 +1,28 @@
 enum GlobalEvent {
 	ProjectSettingsChanged;
+	ProjectReplaced;
 
+	LayerDefAdded;
+	LayerDefRemoved;
 	LayerDefChanged;
 	LayerDefSorted;
 	LayerInstanceChanged;
 
 	TilesetDefChanged;
 
+	EntityDefAdded;
+	EntityDefRemoved;
 	EntityDefChanged;
 	EntityDefSorted;
 
+	EntityFieldAdded;
+	EntityFieldRemoved;
 	EntityFieldChanged;
 	EntityFieldSorted;
 
 	ToolOptionChanged;
+
+	RestoredFromHistory;
 }
 
 enum CursorType {
@@ -37,4 +46,9 @@ enum ToolEditMode {
 	Add;
 	Remove;
 	Move;
+}
+
+typedef LayerState = {
+	var layerId : Int;
+	var json : Dynamic;
 }

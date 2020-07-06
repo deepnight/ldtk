@@ -127,8 +127,8 @@ class Tool<T> extends dn.Process {
 		rectangle = client.isShiftDown();
 		origin = m;
 		lastMouse = m;
-		if( !rectangle )
-			useAt(m);
+		if( !rectangle && useAt(m) )
+			onEditAnything();
 	}
 
 
@@ -184,33 +184,47 @@ class Tool<T> extends dn.Process {
 
 	function updateCursor(m:MouseCoords) {}
 
-	function useAt(m:MouseCoords) {
+	function useAt(m:MouseCoords) : Bool {
 		if( curMode==PanView ) {
 			client.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
 			client.levelRender.focusLevelY -= m.levelY-lastMouse.levelY;
 		}
+		return false;
 	}
 
-	function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {}
+	function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) : Bool {
+		return false;
+	}
 
 	public function stopUsing(m:MouseCoords) {
 		// if( curMode==PanView && M.dist(origin.htmlX, origin.htmlY, m.htmlX, m.htmlY) < Const.MIDDLE_CLICK_DIST_THRESHOLD )
 			// openFloatingPalette();
 
 		if( isRunning() ) {
-			if( !rectangle )
-				useAt(m);
-			else {
-				useOnRectangle(
+			var anyChange = rectangle
+				? useOnRectangle(
 					M.imin(origin.cx, m.cx),
 					M.imax(origin.cx, m.cx),
 					M.imin(origin.cy, m.cy),
 					M.imax(origin.cy, m.cy)
-				);
-			}
+				 )
+				: useAt(m);
+
+			if( anyChange )
+				onEditAnything();
 		}
 
+		if( needHistorySaving ) {
+			client.curLevelHistory.saveLayerState( curLayerInstance );
+			needHistorySaving = false;
+		}
 		curMode = null;
+	}
+
+	var needHistorySaving = false;
+	inline function onEditAnything() {
+		client.ge.emit(LayerInstanceChanged);
+		needHistorySaving = true;
 	}
 
 	public function onKeyPress(keyId:Int) {}
@@ -227,8 +241,8 @@ class Tool<T> extends dn.Process {
 		}
 
 		// Execute the tool
-		if( isRunning() && !rectangle )
-			useAt(m);
+		if( isRunning() && !rectangle && useAt(m) )
+			onEditAnything();
 
 		// Render cursor
 		if( !isRunning() && client.isAltDown() ) {

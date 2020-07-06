@@ -13,13 +13,13 @@ class Client extends dn.Process {
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 
 	public var curLevel(get,never) : led.Level;
-	inline function get_curLevel() return project.getLevel(curLevelId);
+		inline function get_curLevel() return project.getLevel(curLevelId);
 
 	public var curLayerDef(get,never) : Null<led.def.LayerDef>;
-	inline function get_curLayerDef() return project.defs.getLayerDef(curLayerId);
+		inline function get_curLayerDef() return project.defs.getLayerDef(curLayerId);
 
 	public var curLayerInstance(get,never) : Null<led.inst.LayerInstance>;
-	function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
+		function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
 
 	public var ge : GlobalEventDispatcher;
 	public var project : led.Project;
@@ -29,6 +29,10 @@ class Client extends dn.Process {
 	public var levelRender : display.LevelRender;
 	var bg : h2d.Bitmap;
 	public var curTool : Tool<Dynamic>;
+
+	var levelHistory : Map<Int,LevelHistory> = new Map();
+	public var curLevelHistory(get,never) : LevelHistory;
+		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
 	public var cursor : ui.Cursor;
 	public var selection : Null<GenericLevelElement>;
@@ -77,8 +81,6 @@ class Client extends dn.Process {
 		useProject(project);
 		dn.Process.resizeAll();
 	}
-
-
 
 	public function initUI() {
 		jMainPanel.find("*").off();
@@ -191,6 +193,7 @@ class Client extends dn.Process {
 		project.tidy();
 		curLevelId = project.levels[0].uid;
 		curLayerId = -1;
+		levelHistory.set( curLevelId, new LevelHistory(curLevelId) ); // TODO
 
 		Tool.clearSelectionMemory();
 		display.LevelRender.invalidateCaches();
@@ -256,13 +259,25 @@ class Client extends dn.Process {
 					updateCanvasBg();
 				}
 
+			case K.Z:
+				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && isCtrlDown() )
+					curLevelHistory.undo();
+
+			case K.Y:
+				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && isCtrlDown() )
+					curLevelHistory.redo();
+
+
 			#if debug
 			case K.T:
 				if( !hasInputFocus() ) {
-					N.error("test error");
-					N.notImplemented();
-					N.msg("some message");
-					N.debug("debug msg");
+					// N.error("test error");
+					// N.notImplemented();
+					// N.msg("some message");
+					// N.debug("debug msg");
+					var t = haxe.Timer.stamp();
+					var json = project.levels[0].toJson();
+					Client.ME.debug(dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
 				}
 			#end
 		}
@@ -425,6 +440,7 @@ class Client extends dn.Process {
 		new ui.modal.dialog.Confirm(bt, function() {
 			useProject( led.Project.createEmpty() );
 			N.msg("New project created.");
+			ge.emit(ProjectReplaced);
 		});
 	}
 
@@ -452,6 +468,7 @@ class Client extends dn.Process {
 				var p = led.Project.fromJson(json);
 				useProject( p );
 				N.msg("Loaded project: "+path);
+				ge.emit(ProjectReplaced);
 			} catch( err:Dynamic ) {
 				N.error("Couldn't read this project file: "+err);
 			}
@@ -467,7 +484,25 @@ class Client extends dn.Process {
 			case EntityDefSorted:
 			case ToolOptionChanged:
 
-			case TilesetDefChanged, EntityDefChanged :
+			case EntityFieldAdded, EntityFieldRemoved:
+				initTool();
+				levelRender.invalidate();
+
+			case LayerDefAdded, LayerDefRemoved:
+				updateLayerList();
+				initTool();
+				levelRender.invalidate();
+
+			case ProjectReplaced:
+
+			case RestoredFromHistory:
+				updateCanvasBg();
+				updateLayerList();
+				updateProjectTitle();
+				initTool();
+				levelRender.renderAll();
+
+			case TilesetDefChanged, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				initTool();
 				display.LevelRender.invalidateCaches();
 

@@ -130,12 +130,12 @@ class LayerInstance {
 
 	/** INT GRID *******************/
 
-	public function getIntGrid(cx:Int, cy:Int) : Int {
+	public inline function getIntGrid(cx:Int, cy:Int) : Int {
 		requireType(IntGrid);
 		return !isValid(cx,cy) || !intGrid.exists( coordId(cx,cy) ) ? -1 : intGrid.get( coordId(cx,cy) );
 	}
 
-	public function getIntGridColorAt(cx:Int, cy:Int) : Null<UInt> {
+	public inline function getIntGridColorAt(cx:Int, cy:Int) : Null<UInt> {
 		var v = def.getIntGridValueDef( getIntGrid(cx,cy) );
 		return v==null ? null : v.color;
 	}
@@ -145,6 +145,12 @@ class LayerInstance {
 		if( isValid(cx,cy) )
 			intGrid.set( coordId(cx,cy), v );
 	}
+
+	public inline function hasIntGrid(cx:Int, cy:Int) {
+		requireType(IntGrid);
+		return getIntGrid(cx,cy)!=-1;
+	}
+
 	public function removeIntGrid(cx:Int, cy:Int) {
 		requireType(IntGrid);
 		if( isValid(cx,cy) )
@@ -186,7 +192,7 @@ class LayerInstance {
 
 	/** TILES *******************/
 
-	public function setGridTile(cx:Int, cy:Int, tileId:Int) { // TODO support free positioning
+	public function setGridTile(cx:Int, cy:Int, tileId:Int) {
 		if( isValid(cx,cy) )
 			gridTiles.set( coordId(cx,cy), tileId );
 	}
@@ -198,6 +204,10 @@ class LayerInstance {
 
 	public function getGridTile(cx:Int, cy:Int) : Null<Int> {
 		return !isValid(cx,cy) || !gridTiles.exists( coordId(cx,cy) ) ? null : gridTiles.get( coordId(cx,cy) );
+	}
+
+	public inline function hasGridTile(cx:Int, cy:Int) : Bool {
+		return getGridTile(cx,cy)!=null;
 	}
 
 

@@ -25,7 +25,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		jModalAndMask.find(".entityList button.create").click( function(_) {
 			var ed = project.defs.createEntityDef();
 			selectEntity(ed);
-			// client.ge.emit(LayerDefChanged);
+			client.ge.emit(EntityDefAdded);
 			jEntityForm.find("input").first().focus().select();
 		});
 
@@ -35,19 +35,21 @@ class EditEntityDefs extends ui.modal.Panel {
 				N.error("No entity selected.");
 				return;
 			}
-			project.defs.removeEntityDef(curEntity);
-			client.ge.emit(EntityDefChanged);
-			if( project.defs.entities.length>0 )
-				selectEntity(project.defs.entities[0]);
-			else
-				selectEntity(null);
+			new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("This operation cannot be canceled!"), function() {
+				project.defs.removeEntityDef(curEntity);
+				client.ge.emit(EntityDefRemoved);
+				if( project.defs.entities.length>0 )
+					selectEntity(project.defs.entities[0]);
+				else
+					selectEntity(null);
+			});
 		});
 
 		// Create field
 		jModalAndMask.find(".fields button.create").click( function(ev) {
 			function _create(type:led.LedTypes.FieldType) {
 				var f = curEntity.createField(project, type);
-				client.ge.emit(EntityFieldChanged);
+				client.ge.emit(EntityFieldAdded);
 				selectField(f);
 				jFieldForm.find("input:first").focus().select();
 			}
@@ -73,7 +75,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				return;
 			}
 			curEntity.removeField(project, curField);
-			client.ge.emit(EntityFieldChanged);
+			client.ge.emit(EntityFieldRemoved);
 			selectField( curEntity.fieldDefs[0] );
 		});
 
@@ -94,15 +96,23 @@ class EditEntityDefs extends ui.modal.Panel {
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
-			case ProjectSettingsChanged: close();
+			case ProjectSettingsChanged, ProjectReplaced:
+				close();
 
+			case LayerDefAdded, LayerDefRemoved:
 			case LayerDefChanged:
 			case LayerDefSorted:
 			case LayerInstanceChanged:
 			case TilesetDefChanged:
 			case ToolOptionChanged:
 
-			case EntityDefChanged:
+			case RestoredFromHistory:
+				updatePreview();
+				updateEntityForm();
+				updateFieldForm();
+				updateLists();
+
+			case EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				updatePreview();
 				updateEntityForm();
 				updateLists();
@@ -110,7 +120,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			case EntityDefSorted, EntityFieldSorted:
 				updateLists();
 
-			case EntityFieldChanged:
+			case EntityFieldAdded, EntityFieldRemoved, EntityFieldChanged:
 				updateLists();
 				updateFieldForm();
 		}

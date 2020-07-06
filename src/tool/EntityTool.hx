@@ -63,8 +63,9 @@ class EntityTool extends Tool<Int> {
 				else {
 					ei.x = getPlacementX(m);
 					ei.y = getPlacementY(m);
-					client.ge.emit(LayerInstanceChanged);
 					client.setSelection( Entity(ei) );
+					onEditAnything();
+					curMode = Move;
 				}
 
 			case Remove:
@@ -79,7 +80,6 @@ class EntityTool extends Tool<Int> {
 		switch ge {
 			case Entity(instance):
 				curLayerInstance.removeEntityInstance(instance);
-				client.ge.emit(LayerInstanceChanged);
 				return true;
 
 			case _:
@@ -106,24 +106,29 @@ class EntityTool extends Tool<Int> {
 			case Add:
 
 			case Remove:
-				removeAnyEntityAt(m);
+				if( removeAnyEntityAt(m) )
+					return true;
 
 			case Move:
 				if( moveStarted ) {
 					var ei = getPickedEntityInstance();
+					var oldX = ei.x;
+					var oldY = ei.y;
 					ei.x = getPlacementX(m);
 					ei.y = getPlacementY(m);
-					client.ge.emit(LayerInstanceChanged);
 					client.setSelection( Entity(ei) );
+					return oldX!=ei.x || oldY!=ei.y;
 				}
 		}
+
+		return false;
 	}
 
 
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(left, right, top, bottom);
-
-		client.ge.emit(LayerInstanceChanged);
+		return false;
+		// client.ge.emit(LayerInstanceChanged);
 	}
 
 

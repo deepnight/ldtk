@@ -18,7 +18,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			function _create(type:led.LedTypes.LayerType) {
 				var ld = project.defs.createLayerDef(type);
 				select(ld);
-				client.ge.emit(LayerDefChanged);
+				client.ge.emit(LayerDefAdded);
 				jForm.find("input").first().focus().select();
 			}
 
@@ -46,7 +46,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
 				project.defs.removeLayerDef(cur);
 				select(project.defs.layers[0]);
-				client.ge.emit(LayerDefChanged);
+				client.ge.emit(LayerDefRemoved);
 			});
 		});
 
@@ -56,11 +56,20 @@ class EditLayerDefs extends ui.modal.Panel {
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
-			case ProjectSettingsChanged: close();
+			case ProjectSettingsChanged, ProjectReplaced:
+				close();
 
-			case LayerDefChanged:
+			case RestoredFromHistory:
 				updateForm();
 				updateList();
+
+			case LayerDefAdded, LayerDefRemoved:
+				updateList();
+				updateForm();
+
+			case LayerDefChanged:
+				updateList();
+				updateForm();
 
 			case TilesetDefChanged:
 				updateForm();
@@ -71,6 +80,10 @@ class EditLayerDefs extends ui.modal.Panel {
 			case LayerInstanceChanged:
 
 			case EntityDefChanged, EntityDefSorted, EntityFieldChanged, EntityFieldSorted, ToolOptionChanged:
+
+			case EntityDefAdded, EntityDefRemoved:
+
+			case EntityFieldAdded, EntityFieldRemoved:
 		}
 	}
 

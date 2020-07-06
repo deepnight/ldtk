@@ -42,16 +42,24 @@ class EditTilesetDefs extends ui.modal.Panel {
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
-			case ProjectSettingsChanged: close();
+			case ProjectSettingsChanged, ProjectReplaced:
+				close();
 
+			case RestoredFromHistory:
+				updateList();
+				updateForm();
+				updateTilesetPreview();
 
 			case TilesetDefChanged:
 				updateList();
 				updateForm();
 				updateTilesetPreview();
 
+			case LayerDefAdded, LayerDefRemoved:
 			case LayerDefChanged, LayerDefSorted, LayerInstanceChanged:
 			case EntityDefChanged, EntityDefSorted, EntityFieldChanged, EntityFieldSorted:
+			case EntityDefAdded, EntityDefRemoved:
+			case EntityFieldAdded, EntityFieldRemoved:
 			case ToolOptionChanged:
 		}
 	}
