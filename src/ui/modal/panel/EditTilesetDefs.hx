@@ -58,6 +58,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			case LayerDefAdded, LayerDefRemoved:
 			case LayerDefChanged, LayerDefSorted, LayerInstanceChanged:
 			case EntityDefChanged, EntityDefSorted, EntityFieldChanged, EntityFieldSorted:
+			case EntityDefAdded, EntityDefRemoved:
 			case ToolOptionChanged:
 		}
 	}

@@ -25,7 +25,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		jModalAndMask.find(".entityList button.create").click( function(_) {
 			var ed = project.defs.createEntityDef();
 			selectEntity(ed);
-			// client.ge.emit(LayerDefChanged);
+			client.ge.emit(EntityDefAdded);
 			jEntityForm.find("input").first().focus().select();
 		});
 
@@ -35,12 +35,14 @@ class EditEntityDefs extends ui.modal.Panel {
 				N.error("No entity selected.");
 				return;
 			}
-			project.defs.removeEntityDef(curEntity);
-			client.ge.emit(EntityDefChanged);
-			if( project.defs.entities.length>0 )
-				selectEntity(project.defs.entities[0]);
-			else
-				selectEntity(null);
+			new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("This operation cannot be canceled!"), function() {
+				project.defs.removeEntityDef(curEntity);
+				client.ge.emit(EntityDefRemoved);
+				if( project.defs.entities.length>0 )
+					selectEntity(project.defs.entities[0]);
+				else
+					selectEntity(null);
+			});
 		});
 
 		// Create field
@@ -110,7 +112,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				updateFieldForm();
 				updateLists();
 
-			case EntityDefChanged:
+			case EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				updatePreview();
 				updateEntityForm();
 				updateLists();

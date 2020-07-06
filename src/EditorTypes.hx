@@ -10,6 +10,8 @@ enum GlobalEvent {
 
 	TilesetDefChanged;
 
+	EntityDefAdded;
+	EntityDefRemoved;
 	EntityDefChanged;
 	EntityDefSorted;
 

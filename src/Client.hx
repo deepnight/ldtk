@@ -498,7 +498,7 @@ class Client extends dn.Process {
 				initTool();
 				levelRender.renderAll();
 
-			case TilesetDefChanged, EntityDefChanged :
+			case TilesetDefChanged, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				initTool();
 				display.LevelRender.invalidateCaches();
 
