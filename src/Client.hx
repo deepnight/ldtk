@@ -489,6 +489,10 @@ class Client extends dn.Process {
 				initTool();
 				updateLayerList();
 
+			case LayerInstanceVisiblityChanged:
+				clearSelection();
+				updateLayerList();
+
 			case EntityFieldAdded, EntityFieldRemoved:
 				initTool();
 				levelRender.invalidate();
@@ -613,8 +617,6 @@ class Client extends dn.Process {
 					return;
 				ev.stopPropagation();
 				levelRender.toggleLayer(li);
-				clearSelection();
-				updateLayerList();
 			});
 
 		}

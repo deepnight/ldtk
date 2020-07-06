@@ -47,7 +47,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 			case LevelAdded:
 
-			case LayerInstanceSelected:
+			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
 
 			case RestoredFromHistory:
 				updateList();

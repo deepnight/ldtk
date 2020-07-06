@@ -82,6 +82,9 @@ class LevelRender extends dn.Process {
 
 			case LevelAdded:
 
+			case LayerInstanceVisiblityChanged:
+				updateLayersVisibility();
+
 			case LayerInstanceSelected:
 				updateLayersVisibility();
 				renderBg();
@@ -118,17 +121,18 @@ class LevelRender extends dn.Process {
 
 	public function toggleLayer(l:led.inst.LayerInstance) {
 		layerVis.set(l.layerDefId, !isLayerVisible(l));
-		updateLayersVisibility();
+		N.debug(l);
+		client.ge.emit(LayerInstanceVisiblityChanged);
 	}
 
 	public function showLayer(l:led.inst.LayerInstance) {
 		layerVis.set(l.layerDefId, true);
-		invalidate();
+		client.ge.emit(LayerInstanceVisiblityChanged);
 	}
 
 	public function hideLayer(l:led.inst.LayerInstance) {
 		layerVis.set(l.layerDefId, false);
-		invalidate();
+		client.ge.emit(LayerInstanceVisiblityChanged);
 	}
 
 	public function renderBg() {

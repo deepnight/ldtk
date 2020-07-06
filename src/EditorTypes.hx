@@ -14,6 +14,7 @@ enum GlobalEvent {
 
 	LayerInstanceSelected;
 	LayerInstanceChanged;
+	LayerInstanceVisiblityChanged;
 
 	TilesetDefChanged;
 

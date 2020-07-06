@@ -101,7 +101,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 			case LevelAdded:
 
-			case LayerInstanceSelected:
+			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
 
 			case LayerDefAdded, LayerDefRemoved:
 			case LayerDefChanged:

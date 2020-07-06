@@ -38,7 +38,7 @@ class LevelHistory {
 
 			case LevelAdded:
 
-			case LayerInstanceSelected:
+			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
 
 			case LayerInstanceChanged:
 				// Saving is done manually by the Tool, after usage

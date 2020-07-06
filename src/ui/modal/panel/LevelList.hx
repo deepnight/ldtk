@@ -31,7 +31,7 @@ class LevelList extends ui.modal.Panel {
 			case ProjectSettingsChanged, ProjectReplaced, RestoredFromHistory:
 				close();
 
-			case LayerInstanceSelected:
+			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
 
 			case LevelSelected, LevelSettingsChanged:
 				updateList();
