@@ -13,13 +13,13 @@ class Client extends dn.Process {
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 
 	public var curLevel(get,never) : led.Level;
-	inline function get_curLevel() return project.getLevel(curLevelId);
+		inline function get_curLevel() return project.getLevel(curLevelId);
 
 	public var curLayerDef(get,never) : Null<led.def.LayerDef>;
-	inline function get_curLayerDef() return project.defs.getLayerDef(curLayerId);
+		inline function get_curLayerDef() return project.defs.getLayerDef(curLayerId);
 
 	public var curLayerInstance(get,never) : Null<led.inst.LayerInstance>;
-	function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
+		function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
 
 	public var ge : GlobalEventDispatcher;
 	public var project : led.Project;
@@ -30,6 +30,10 @@ class Client extends dn.Process {
 	var bg : h2d.Bitmap;
 	public var curTool : Tool<Dynamic>;
 	public var history : History;
+
+	var levelHistory : Map<Int,LevelHistory> = new Map();
+	public var curLevelHistory(get,never) : LevelHistory;
+		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
 	public var cursor : ui.Cursor;
 	public var selection : Null<GenericLevelElement>;
@@ -79,8 +83,6 @@ class Client extends dn.Process {
 		useProject(project);
 		dn.Process.resizeAll();
 	}
-
-
 
 	public function initUI() {
 		jMainPanel.find("*").off();
@@ -193,6 +195,7 @@ class Client extends dn.Process {
 		project.tidy();
 		curLevelId = project.levels[0].uid;
 		curLayerId = -1;
+		levelHistory.set( curLevelId, new LevelHistory(curLevelId) ); // TODO
 
 		Tool.clearSelectionMemory();
 		display.LevelRender.invalidateCaches();
@@ -260,12 +263,14 @@ class Client extends dn.Process {
 
 			case K.Z:
 				if( !hasInputFocus() && isCtrlDown() ) {
-					history.undo();
+					curLevelHistory.undo();
+					// history.undo();
 				}
 
 			case K.Y:
 				if( !hasInputFocus() && isCtrlDown() ) {
-					history.redo();
+					curLevelHistory.redo();
+					// history.redo();
 				}
 
 			#if debug

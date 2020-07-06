@@ -47,3 +47,8 @@ enum HistoryState {
 	ProjectWithoutLevels(json:Dynamic);
 	SingleLevel(uid:Int, json:Dynamic);
 }
+
+typedef LayerState = {
+	var layerId : Int;
+	var json : Dynamic;
+}

@@ -1,0 +1,89 @@
+{
+	"dataVersion":1,
+	"nextUniqId":3,
+	"defs":{
+		"layers":[
+			{
+				"uid":1,
+				"type":{
+					"id":0,
+					"p":[
+						
+					]
+				},
+				"name":"A",
+				"gridSize":16,
+				"displaydisplayOpacity":1,
+				"intGridValues":[
+					{
+						"color":8234606
+					}
+				],
+				"tilesetDefId":null
+			},
+			{
+				"uid":2,
+				"type":{
+					"id":0,
+					"p":[
+						
+					]
+				},
+				"name":"B",
+				"gridSize":16,
+				"displaydisplayOpacity":1,
+				"intGridValues":[
+					{
+						"color":1489635
+					}
+				]
+			}
+		],
+		"entities":[
+			
+		],
+		"tilesets":[
+			
+		]
+	},
+	"levels":[
+		{
+			"uid":0,
+			"pxWid":512,
+			"pxHei":256,
+			"layerInstances":[
+				{
+					"levelId":0,
+					"layerDefId":1,
+					"intGrid":[
+						
+					],
+					"gridTiles":[
+						
+					],
+					"entityInstances":[
+						
+					]
+				},
+				{
+					"levelId":0,
+					"layerDefId":2,
+					"intGrid":[
+						
+					],
+					"gridTiles":[
+						
+					],
+					"entityInstances":[
+						
+					]
+				}
+			]
+		}
+	],
+	"name":"New project",
+	"defaultPivotX":0,
+	"defaultPivotY":0,
+	"defaultGridSize":16,
+	"bgColor":16777215
+}
