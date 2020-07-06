@@ -42,7 +42,8 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 
 			case Remove:
 				dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
-					removeSelectedTileAt(cx, cy); // TODO anychange update
+					if( removeSelectedTileAt(cx, cy) )
+						anyChange = true;
 				});
 
 			case Move:
@@ -64,7 +65,8 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 						anyChange = true;
 
 				case Remove:
-					removeSelectedTileAt(cx,cy); // TODO anychange
+					if( removeSelectedTileAt(cx,cy) )
+						anyChange = true;
 
 				case Move:
 			}
@@ -113,8 +115,13 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 	function removeSelectedTileAt(cx:Int, cy:Int) {
 		var sel = getSelectedValue();
 
-		if( isRandomMode() )
-			client.curLayerInstance.removeGridTile(cx,cy);
+		var anyChange = false;
+		if( isRandomMode() ) {
+			if( client.curLayerInstance.hasGridTile(cx,cy) ) {
+				client.curLayerInstance.removeGridTile(cx,cy);
+				anyChange = true;
+			}
+		}
 		else {
 			var left = Const.INFINITE;
 			var top = Const.INFINITE;
@@ -124,12 +131,17 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 				top = M.imin(top, curTilesetDef.getTileCy(tid));
 			}
 
-			for(tid in sel.ids)
-				client.curLayerInstance.removeGridTile(
-					cx+curTilesetDef.getTileCx(tid)-left,
-					cy+curTilesetDef.getTileCy(tid)-top
-				);
+			for(tid in sel.ids) {
+				var tcx = cx+curTilesetDef.getTileCx(tid)-left;
+				var tcy = cy+curTilesetDef.getTileCy(tid)-top;
+				if( client.curLayerInstance.hasGridTile(tcx,tcy) ) {
+					client.curLayerInstance.removeGridTile(tcx,tcy);
+					anyChange = true;
+				}
+			}
 		}
+
+		return anyChange;
 	}
 
 	override function updateCursor(m:MouseCoords) {

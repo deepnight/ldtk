@@ -206,6 +206,10 @@ class LayerInstance {
 		return !isValid(cx,cy) || !gridTiles.exists( coordId(cx,cy) ) ? null : gridTiles.get( coordId(cx,cy) );
 	}
 
+	public inline function hasGridTile(cx:Int, cy:Int) : Bool {
+		return getGridTile(cx,cy)!=null;
+	}
+
 
 
 
