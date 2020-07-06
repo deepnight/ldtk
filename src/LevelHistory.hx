@@ -1,5 +1,5 @@
 class LevelHistory {
-	static var MAX_LENGTH = 3;
+	static var MAX_HISTORY = 30;
 
 	var client(get,never): Client; inline function get_client() return Client.ME;
 
@@ -12,7 +12,7 @@ class LevelHistory {
 
 	public function new(lid) {
 		levelId = lid;
-		layerStates = new haxe.ds.Vector(MAX_LENGTH);
+		layerStates = new haxe.ds.Vector(MAX_HISTORY);
 		client.ge.listenAll(onGlobalEvent);
 		initMostDistanceKnownStates(true);
 	}
@@ -58,7 +58,7 @@ class LevelHistory {
 
 	public function clearHistory() {
 		curIndex = -1;
-		for(i in 0...MAX_LENGTH)
+		for(i in 0...MAX_HISTORY)
 			layerStates[i] = null;
 		initMostDistanceKnownStates(true);
 		N.msg("Undo history cleared.");
@@ -66,10 +66,10 @@ class LevelHistory {
 
 	public function saveLayerState(li:led.inst.LayerInstance) {
 		// Drop first element when max is reached
-		if( curIndex==MAX_LENGTH-1 ) {
+		if( curIndex==MAX_HISTORY-1 ) {
 			var droppedState = layerStates[0];
 			mostDistantKnownStates.set( droppedState.layerId, { layerId:droppedState.layerId, json:droppedState.json } );
-			for(i in 1...MAX_LENGTH)
+			for(i in 1...MAX_HISTORY)
 				layerStates[i-1] = layerStates[i]; // TODO update last known states
 		}
 		else
@@ -86,7 +86,7 @@ class LevelHistory {
 		#end
 
 		// Trim history after
-		for(i in curIndex+1...MAX_LENGTH)
+		for(i in curIndex+1...MAX_HISTORY)
 			layerStates[i] = null;
 	}
 
@@ -125,7 +125,7 @@ class LevelHistory {
 	}
 
 	public function redo() {
-		if( curIndex<MAX_LENGTH-1 && layerStates[curIndex+1]!=null ) {
+		if( curIndex<MAX_HISTORY-1 && layerStates[curIndex+1]!=null ) {
 			curIndex++;
 			applyState( layerStates[curIndex] );
 			#if debug
@@ -146,7 +146,7 @@ class LevelHistory {
 	@:keep
 	public function toString() {
 		var dbg = [];
-		for(i in 0...MAX_LENGTH) {
+		for(i in 0...MAX_HISTORY) {
 			dbg.push(layerStates[i]==null ? "-" : "L."+layerStates[i].layerId);
 			if( i==curIndex )
 				dbg[ dbg.length-1 ] = "["+dbg[ dbg.length-1 ]+"]";
