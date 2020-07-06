@@ -29,7 +29,6 @@ class Client extends dn.Process {
 	public var levelRender : display.LevelRender;
 	var bg : h2d.Bitmap;
 	public var curTool : Tool<Dynamic>;
-	public var history : History;
 
 	var levelHistory : Map<Int,LevelHistory> = new Map();
 	public var curLevelHistory(get,never) : LevelHistory;
@@ -77,7 +76,6 @@ class Client extends dn.Process {
 		catch( e:Dynamic ) {
 			led.Project.createEmpty();
 		}
-		history = new History();
 
 		levelRender = new display.LevelRender();
 		useProject(project);
@@ -264,13 +262,11 @@ class Client extends dn.Process {
 			case K.Z:
 				if( !hasInputFocus() && isCtrlDown() ) {
 					curLevelHistory.undo();
-					// history.undo();
 				}
 
 			case K.Y:
 				if( !hasInputFocus() && isCtrlDown() ) {
 					curLevelHistory.redo();
-					// history.redo();
 				}
 
 			#if debug

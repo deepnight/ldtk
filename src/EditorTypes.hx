@@ -42,12 +42,6 @@ enum ToolEditMode {
 	Move;
 }
 
-enum HistoryState {
-	Full(json:Dynamic);
-	ProjectWithoutLevels(json:Dynamic);
-	SingleLevel(uid:Int, json:Dynamic);
-}
-
 typedef LayerState = {
 	var layerId : Int;
 	var json : Dynamic;

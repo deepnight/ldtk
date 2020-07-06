@@ -216,7 +216,6 @@ class Tool<T> extends dn.Process {
 
 		if( needHistorySaving ) {
 			client.curLevelHistory.saveLayerState( curLayerInstance );
-			// client.history.saveState( SingleLevel(client.curLevel.uid, client.curLevel.toJson()) );
 			needHistorySaving = false;
 		}
 		curMode = null;
