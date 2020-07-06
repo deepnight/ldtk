@@ -63,7 +63,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
 
-			case RestoredFromHistory:
+			case LayerInstanceRestoredFromHistory:
 				updateForm();
 				updateList();
 

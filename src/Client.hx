@@ -520,7 +520,7 @@ class Client extends dn.Process {
 				if( !levelHistory.exists(curLevelId) )
 					levelHistory.set(curLevelId, new LevelHistory(curLevelId) );
 
-			case RestoredFromHistory:
+			case LayerInstanceRestoredFromHistory:
 				updateAppBg();
 				updateLayerList();
 				updateProjectTitle();

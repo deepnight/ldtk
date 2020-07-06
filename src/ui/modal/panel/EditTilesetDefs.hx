@@ -49,7 +49,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
 
-			case RestoredFromHistory:
+			case LayerInstanceRestoredFromHistory:
 				updateList();
 				updateForm();
 				updateTilesetPreview();

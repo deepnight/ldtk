@@ -2,8 +2,6 @@ enum GlobalEvent {
 	ProjectSelected;
 	ProjectSettingsChanged;
 
-	RestoredFromHistory;
-
 	LevelSelected;
 	LevelSettingsChanged;
 	LevelAdded;
@@ -16,6 +14,7 @@ enum GlobalEvent {
 	LayerInstanceSelected;
 	LayerInstanceChanged;
 	LayerInstanceVisiblityChanged;
+	LayerInstanceRestoredFromHistory;
 
 	TilesetDefChanged;
 

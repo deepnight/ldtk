@@ -110,7 +110,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			case TilesetDefChanged:
 			case ToolOptionChanged:
 
-			case RestoredFromHistory:
+			case LayerInstanceRestoredFromHistory:
 				updatePreview();
 				updateEntityForm();
 				updateFieldForm();

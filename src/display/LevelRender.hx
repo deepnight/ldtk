@@ -73,7 +73,7 @@ class LevelRender extends dn.Process {
 				invalidateCaches();
 				invalidate();
 
-			case ProjectSettingsChanged, RestoredFromHistory:
+			case ProjectSettingsChanged, LayerInstanceRestoredFromHistory:
 				invalidate();
 
 			case LevelSelected:

@@ -61,7 +61,7 @@ class LevelHistory {
 				TilesetDefChanged,
 				EntityDefSorted, EntityFieldSorted:
 
-			case RestoredFromHistory:
+			case LayerInstanceRestoredFromHistory:
 			case ToolOptionChanged:
 		}
 	}
@@ -149,7 +149,7 @@ class LevelHistory {
 	function applyState(s:LayerState) {
 		level.layerInstances.set( s.layerId, led.inst.LayerInstance.fromJson(client.project, s.json) );
 		client.project.tidy(); // fix "_project" refs & possible broken "instance<->def" refs
-		client.ge.emit(RestoredFromHistory);
+		client.ge.emit(LayerInstanceRestoredFromHistory);
 	}
 
 
