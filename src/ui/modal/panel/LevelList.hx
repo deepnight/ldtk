@@ -13,6 +13,7 @@ class LevelList extends ui.modal.Panel {
 		jContent.find(".mainList button.create").click( function(ev) {
 			var l = project.createLevel();
 			client.ge.emit(LevelAdded);
+			select(l);
 		});
 
 		jContent.find(".mainList button.delete").click( function(ev) {
