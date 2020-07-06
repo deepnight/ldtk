@@ -484,6 +484,10 @@ class Client extends dn.Process {
 			case EntityDefSorted:
 			case ToolOptionChanged:
 
+			case EntityFieldAdded, EntityFieldRemoved:
+				initTool();
+				levelRender.invalidate();
+
 			case LayerDefAdded, LayerDefRemoved:
 				updateLayerList();
 				initTool();

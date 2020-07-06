@@ -49,7 +49,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		jModalAndMask.find(".fields button.create").click( function(ev) {
 			function _create(type:led.LedTypes.FieldType) {
 				var f = curEntity.createField(project, type);
-				client.ge.emit(EntityFieldChanged);
+				client.ge.emit(EntityFieldAdded);
 				selectField(f);
 				jFieldForm.find("input:first").focus().select();
 			}
@@ -75,7 +75,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				return;
 			}
 			curEntity.removeField(project, curField);
-			client.ge.emit(EntityFieldChanged);
+			client.ge.emit(EntityFieldRemoved);
 			selectField( curEntity.fieldDefs[0] );
 		});
 
@@ -120,7 +120,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			case EntityDefSorted, EntityFieldSorted:
 				updateLists();
 
-			case EntityFieldChanged:
+			case EntityFieldAdded, EntityFieldRemoved, EntityFieldChanged:
 				updateLists();
 				updateFieldForm();
 		}

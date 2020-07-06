@@ -31,12 +31,9 @@ class LevelHistory {
 			case ProjectReplaced:
 				clearHistory();
 
-			case LayerDefAdded, EntityDefAdded:
+			case LayerDefAdded, EntityDefAdded, EntityFieldAdded:
 
-			case LayerDefRemoved:
-				clearHistory();
-
-			case EntityDefRemoved:
+			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved:
 				clearHistory();
 
 			case LayerDefChanged, EntityDefChanged, EntityFieldChanged:

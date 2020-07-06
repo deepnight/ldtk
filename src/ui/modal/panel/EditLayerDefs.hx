@@ -82,6 +82,8 @@ class EditLayerDefs extends ui.modal.Panel {
 			case EntityDefChanged, EntityDefSorted, EntityFieldChanged, EntityFieldSorted, ToolOptionChanged:
 
 			case EntityDefAdded, EntityDefRemoved:
+
+			case EntityFieldAdded, EntityFieldRemoved:
 		}
 	}
 
