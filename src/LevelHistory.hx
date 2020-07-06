@@ -13,7 +13,6 @@ class LevelHistory {
 	public function new(lid) {
 		levelId = lid;
 		layerStates = new haxe.ds.Vector(MAX_HISTORY);
-		client.ge.listenAll(onGlobalEvent);
 		initMostDistanceKnownStates(true);
 	}
 
@@ -30,7 +29,7 @@ class LevelHistory {
 		// TODO
 	}
 
-	function onGlobalEvent(e:GlobalEvent) {
+	public function manualOnGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case ProjectReplaced:
 				clearHistory();
@@ -92,13 +91,13 @@ class LevelHistory {
 			json: li.toJson(),
 		}
 
-		#if debug
-		N.debug(toString());
-		#end
-
 		// Trim history after
 		for(i in curIndex+1...MAX_HISTORY)
 			layerStates[i] = null;
+
+		#if debug
+		N.debug(toString());
+		#end
 	}
 
 
@@ -162,11 +161,10 @@ class LevelHistory {
 			if( i==curIndex )
 				dbg[ dbg.length-1 ] = "["+dbg[ dbg.length-1 ]+"]";
 		}
-		return dbg.join(",");
+		return "Level#"+levelId+" => "+dbg.join(",");
 	}
 
 	public function dispose() {
-		Client.ME.ge.stopListening(onGlobalEvent);
 		layerStates = null;
 	}
 }

@@ -199,28 +199,19 @@ class Client extends dn.Process {
 		project.tidy();
 		curLevelId = project.levels[0].uid;
 		curLayerId = -1;
-		levelHistory.set( curLevelId, new LevelHistory(curLevelId) ); // TODO
 
-		Tool.clearSelectionMemory();
-		display.LevelRender.invalidateCaches();
-
-		levelRender.fit();
-		levelRender.invalidate();
-		updateCanvasBg();
-		updateProjectTitle();
-		initTool();
-
+		// Pick 1st layer in current level
 		if( project.defs.layers.length>0 ) {
-			// Pick 1st layer in current level
 			for(li in curLevel.layerInstances) {
-				selectLayerInstance(li);
+				curLayerId = li.def.uid;
 				break;
 			}
 		}
-		else {
-			updateLayerList();
-			initTool();
-		}
+
+		levelHistory = new Map();
+		levelHistory.set( curLevelId, new LevelHistory(curLevelId) ); // TODO
+
+		ge.emit(ProjectReplaced);
 	}
 
 	public function getCwd() {
@@ -451,7 +442,6 @@ class Client extends dn.Process {
 		new ui.modal.dialog.Confirm(bt, function() {
 			useProject( led.Project.createEmpty() );
 			N.msg("New project created.");
-			ge.emit(ProjectReplaced);
 		});
 	}
 
@@ -479,7 +469,6 @@ class Client extends dn.Process {
 				var p = led.Project.fromJson(json);
 				useProject( p );
 				N.msg("Loaded project: "+path);
-				ge.emit(ProjectReplaced);
 			} catch( err:Dynamic ) {
 				N.error("Couldn't read this project file: "+err);
 			}
@@ -510,6 +499,13 @@ class Client extends dn.Process {
 				levelRender.invalidate();
 
 			case ProjectReplaced:
+				Tool.clearSelectionMemory();
+				display.LevelRender.invalidateCaches();
+				levelRender.invalidate();
+				updateCanvasBg();
+				updateProjectTitle();
+				updateLayerList();
+				initTool();
 
 			case LevelSettingsChanged:
 
@@ -542,8 +538,10 @@ class Client extends dn.Process {
 					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
 				initTool();
 				updateLayerList();
-
 		}
+
+		if( curLevelHistory!=null )
+			curLevelHistory.manualOnGlobalEvent(e);
 	}
 
 	function updateCanvasBg() {
