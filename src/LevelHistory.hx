@@ -35,6 +35,8 @@ class LevelHistory {
 			case ProjectReplaced:
 				clearHistory();
 
+			case LevelSelected:
+
 			case LevelAdded:
 
 			case LayerInstanceSelected:

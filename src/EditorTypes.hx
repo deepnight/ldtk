@@ -3,8 +3,7 @@ enum GlobalEvent {
 	ProjectReplaced;
 	RestoredFromHistory;
 
-	LayerInstanceSelected;
-
+	LevelSelected;
 	LevelSettingsChanged;
 	LevelAdded;
 
@@ -12,6 +11,8 @@ enum GlobalEvent {
 	LayerDefRemoved;
 	LayerDefChanged;
 	LayerDefSorted;
+
+	LayerInstanceSelected;
 	LayerInstanceChanged;
 
 	TilesetDefChanged;

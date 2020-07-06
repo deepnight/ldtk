@@ -32,7 +32,7 @@ class LevelList extends ui.modal.Panel {
 
 			case LayerInstanceSelected:
 
-			case LevelSettingsChanged:
+			case LevelSelected, LevelSettingsChanged:
 				updateList();
 				updateForm();
 
@@ -83,6 +83,7 @@ class LevelList extends ui.modal.Panel {
 	}
 
 	function select(l:led.Level) {
+		client.selectLevel(l);
 	}
 }
 

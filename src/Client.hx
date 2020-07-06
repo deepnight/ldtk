@@ -429,6 +429,14 @@ class Client extends dn.Process {
 		line.appendTo(wrapper);
 	}
 
+	public function selectLevel(l:led.Level) {
+		if( curLevelId==l.uid )
+			return;
+
+		curLevelId = l.uid;
+		ge.emit(LevelSelected);
+	}
+
 	public function selectLayerInstance(l:led.inst.LayerInstance) {
 		if( curLayerId==l.def.uid )
 			return;
@@ -504,14 +512,22 @@ class Client extends dn.Process {
 			case ProjectReplaced:
 
 			case LevelSettingsChanged:
+
 			case LevelAdded:
+
+			case LevelSelected:
+				updateLayerList();
+				updateProjectTitle();
+				initTool();
+				if( !levelHistory.exists(curLevelId) )
+					levelHistory.set(curLevelId, new LevelHistory(curLevelId) );
 
 			case RestoredFromHistory:
 				updateCanvasBg();
 				updateLayerList();
 				updateProjectTitle();
 				initTool();
-				levelRender.renderAll();
+				levelRender.renderAll(); // TODO already done ?
 
 			case TilesetDefChanged, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				initTool();
