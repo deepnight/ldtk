@@ -499,12 +499,10 @@ class Client extends dn.Process {
 				levelRender.invalidate();
 
 			case ProjectReplaced:
-				Tool.clearSelectionMemory();
-				display.LevelRender.invalidateCaches();
-				levelRender.invalidate();
 				updateAppBg();
 				updateProjectTitle();
 				updateLayerList();
+				Tool.clearSelectionMemory();
 				initTool();
 
 			case LevelSettingsChanged:
