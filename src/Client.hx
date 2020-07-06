@@ -271,10 +271,13 @@ class Client extends dn.Process {
 			#if debug
 			case K.T:
 				if( !hasInputFocus() ) {
-					N.error("test error");
-					N.notImplemented();
-					N.msg("some message");
-					N.debug("debug msg");
+					// N.error("test error");
+					// N.notImplemented();
+					// N.msg("some message");
+					// N.debug("debug msg");
+					var t = haxe.Timer.stamp();
+					var json = project.levels[0].toJson();
+					Client.ME.debug(dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
 				}
 			#end
 		}
