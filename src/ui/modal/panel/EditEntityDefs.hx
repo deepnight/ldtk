@@ -101,6 +101,8 @@ class EditEntityDefs extends ui.modal.Panel {
 
 			case LevelAdded:
 
+			case LayerInstanceSelected:
+
 			case LayerDefAdded, LayerDefRemoved:
 			case LayerDefChanged:
 			case LayerDefSorted:
@@ -122,7 +124,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			case EntityDefSorted, EntityFieldSorted:
 				updateLists();
 
-			case EntityFieldAdded, EntityFieldRemoved, EntityFieldChanged:
+			case EntityFieldAdded, EntityFieldRemoved, EntityFieldDefChanged:
 				updateLists();
 				updateFieldForm();
 		}
@@ -238,7 +240,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			function() return curField.editorDisplayMode,
 			function(v) return curField.editorDisplayMode = v
 		);
-		i.linkEvent(EntityFieldChanged);
+		i.linkEvent(EntityFieldDefChanged);
 
 		var i = new form.input.EnumSelect(
 			jFieldForm.find("select[name=editorDisplayPos]"),
@@ -247,10 +249,10 @@ class EditEntityDefs extends ui.modal.Panel {
 			function(v) return curField.editorDisplayPos = v
 		);
 		i.setEnabled( curField.editorDisplayMode!=Hidden );
-		i.linkEvent(EntityFieldChanged);
+		i.linkEvent(EntityFieldDefChanged);
 
 		var i = Input.linkToHtmlInput( curField.name, jFieldForm.find("input[name=name]") );
-		i.linkEvent(EntityFieldChanged);
+		i.linkEvent(EntityFieldDefChanged);
 
 		// Default value
 		switch curField.type {
@@ -275,7 +277,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 				defInput.change( function(ev) {
 					curField.setDefault( defInput.val() );
-					client.ge.emit(EntityFieldChanged);
+					client.ge.emit(EntityFieldDefChanged);
 					defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
 				});
 
@@ -284,7 +286,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				defInput.val( C.intToHex(curField.getColorDefault()) );
 				defInput.change( function(ev) {
 					curField.setDefault( defInput.val() );
-					client.ge.emit(EntityFieldChanged);
+					client.ge.emit(EntityFieldDefChanged);
 				});
 
 			case F_Bool:
@@ -293,20 +295,20 @@ class EditEntityDefs extends ui.modal.Panel {
 				defInput.change( function(ev) {
 					var checked = defInput.prop("checked") == true;
 					curField.setDefault( Std.string(checked) );
-					client.ge.emit(EntityFieldChanged);
+					client.ge.emit(EntityFieldDefChanged);
 				});
 		}
 
 		// Nullable
 		var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
-		i.onChange = client.ge.emit.bind(EntityFieldChanged);
+		i.onChange = client.ge.emit.bind(EntityFieldDefChanged);
 
 		// Min
 		var input = jFieldForm.find("input[name=min]");
 		input.val( curField.min==null ? "" : curField.min );
 		input.change( function(ev) {
 			curField.setMin( input.val() );
-			client.ge.emit(EntityFieldChanged);
+			client.ge.emit(EntityFieldDefChanged);
 		});
 
 		// Max
@@ -314,7 +316,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		input.val( curField.max==null ? "" : curField.max );
 		input.change( function(ev) {
 			curField.setMax( input.val() );
-			client.ge.emit(EntityFieldChanged);
+			client.ge.emit(EntityFieldDefChanged);
 		});
 	}
 

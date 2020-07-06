@@ -37,6 +37,8 @@ class LevelHistory {
 
 			case LevelAdded:
 
+			case LayerInstanceSelected:
+
 			case LayerInstanceChanged:
 				// Saving is done manually by the Tool, after usage
 
@@ -46,7 +48,7 @@ class LevelHistory {
 			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved:
 				clearHistory();
 
-			case EntityFieldChanged:
+			case EntityFieldDefChanged:
 				saveLayerState(client.curLayerInstance);
 
 			case LayerDefChanged, EntityDefChanged:

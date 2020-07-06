@@ -13,7 +13,6 @@ class LevelList extends ui.modal.Panel {
 		jContent.find(".mainList button.create").click( function(ev) {
 			var l = project.createLevel();
 			client.ge.emit(LevelAdded);
-			N.debug("added");
 		});
 
 		jContent.find(".mainList button.delete").click( function(ev) {
@@ -30,6 +29,8 @@ class LevelList extends ui.modal.Panel {
 		switch e {
 			case ProjectSettingsChanged, ProjectReplaced, RestoredFromHistory:
 				close();
+
+			case LayerInstanceSelected:
 
 			case LevelSettingsChanged:
 				updateList();
@@ -50,7 +51,7 @@ class LevelList extends ui.modal.Panel {
 			case EntityDefSorted:
 			case EntityFieldAdded:
 			case EntityFieldRemoved:
-			case EntityFieldChanged:
+			case EntityFieldDefChanged:
 			case EntityFieldSorted:
 			case ToolOptionChanged:
 		}

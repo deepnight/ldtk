@@ -1,6 +1,9 @@
 enum GlobalEvent {
 	ProjectSettingsChanged;
 	ProjectReplaced;
+	RestoredFromHistory;
+
+	LayerInstanceSelected;
 
 	LevelSettingsChanged;
 	LevelAdded;
@@ -20,12 +23,10 @@ enum GlobalEvent {
 
 	EntityFieldAdded;
 	EntityFieldRemoved;
-	EntityFieldChanged;
+	EntityFieldDefChanged;
 	EntityFieldSorted;
 
 	ToolOptionChanged;
-
-	RestoredFromHistory;
 }
 
 enum CursorType {

@@ -68,7 +68,40 @@ class LevelRender extends dn.Process {
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
-		invalidate();
+		switch e {
+			case ProjectSettingsChanged, ProjectReplaced, RestoredFromHistory:
+				invalidate();
+
+			case LevelAdded:
+
+			case LayerInstanceSelected:
+				updateLayersVisibility();
+				renderBg();
+
+			case LevelSettingsChanged:
+				invalidate();
+
+			case LayerDefAdded:
+
+			case LayerDefRemoved, LayerDefChanged, LayerDefSorted:
+				invalidate();
+
+			case LayerInstanceChanged:
+				invalidate(); // TODO optim to render only the changed layer
+
+			case TilesetDefChanged:
+				invalidate();
+
+			case EntityDefAdded:
+			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
+				invalidate();
+
+			case EntityFieldAdded, EntityFieldRemoved, EntityFieldDefChanged:
+				invalidate();
+
+			case EntityFieldSorted:
+			case ToolOptionChanged:
+		}
 	}
 
 	public inline function isLayerVisible(l:led.inst.LayerInstance) {
@@ -268,11 +301,6 @@ class LevelRender extends dn.Process {
 			wrapper.alpha = li.def.displayOpacity;
 			// wrapper.alpha = li.def.displayOpacity * ( li==client.curLayerInstance ? 1 : 0.25 );
 		}
-	}
-
-	public function onCurrentLayerChange(cur:led.inst.LayerInstance) { // TODO use global event
-		updateLayersVisibility();
-		renderBg();
 	}
 
 

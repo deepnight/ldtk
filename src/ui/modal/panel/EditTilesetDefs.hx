@@ -47,6 +47,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 			case LevelAdded:
 
+			case LayerInstanceSelected:
+
 			case RestoredFromHistory:
 				updateList();
 				updateForm();
@@ -59,7 +61,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 			case LayerDefAdded, LayerDefRemoved:
 			case LayerDefChanged, LayerDefSorted, LayerInstanceChanged:
-			case EntityDefChanged, EntityDefSorted, EntityFieldChanged, EntityFieldSorted:
+			case EntityDefChanged, EntityDefSorted, EntityFieldDefChanged, EntityFieldSorted:
 			case EntityDefAdded, EntityDefRemoved:
 			case EntityFieldAdded, EntityFieldRemoved:
 			case ToolOptionChanged:

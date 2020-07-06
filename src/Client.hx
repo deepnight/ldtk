@@ -433,11 +433,8 @@ class Client extends dn.Process {
 		if( curLayerId==l.def.uid )
 			return;
 
-		clearSelection();
 		curLayerId = l.def.uid;
-		levelRender.onCurrentLayerChange(curLayerInstance);
-		updateLayerList();
-		initTool();
+		ge.emit(LayerInstanceSelected);
 	}
 
 
@@ -485,10 +482,15 @@ class Client extends dn.Process {
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case LayerInstanceChanged:
-			case EntityFieldChanged:
+			case EntityFieldDefChanged:
 			case EntityFieldSorted:
 			case EntityDefSorted:
 			case ToolOptionChanged:
+
+			case LayerInstanceSelected:
+				clearSelection();
+				initTool();
+				updateLayerList();
 
 			case EntityFieldAdded, EntityFieldRemoved:
 				initTool();
