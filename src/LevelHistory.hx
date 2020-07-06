@@ -73,7 +73,7 @@ class LevelHistory {
 			var droppedState = layerStates[0];
 			mostDistantKnownStates.set( droppedState.layerId, { layerId:droppedState.layerId, json:droppedState.json } );
 			for(i in 1...MAX_HISTORY)
-				layerStates[i-1] = layerStates[i]; // TODO update last known states
+				layerStates[i-1] = layerStates[i];
 		}
 		else
 			curIndex++;
