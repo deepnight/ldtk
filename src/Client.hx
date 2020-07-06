@@ -78,7 +78,7 @@ class Client extends dn.Process {
 		}
 
 		levelRender = new display.LevelRender();
-		useProject(project);
+		selectProject(project);
 		dn.Process.resizeAll();
 	}
 
@@ -194,7 +194,7 @@ class Client extends dn.Process {
 		#end
 	}
 
-	public function useProject(p:led.Project) {
+	public function selectProject(p:led.Project) {
 		project = p;
 		project.tidy();
 		curLevelId = project.levels[0].uid;
@@ -211,7 +211,7 @@ class Client extends dn.Process {
 		levelHistory = new Map();
 		levelHistory.set( curLevelId, new LevelHistory(curLevelId) ); // TODO
 
-		ge.emit(ProjectReplaced);
+		ge.emit(ProjectSelected);
 	}
 
 	public function getCwd() {
@@ -440,7 +440,7 @@ class Client extends dn.Process {
 	function onNew(bt:js.jquery.JQuery) {
 		ui.Modal.closeAll();
 		new ui.modal.dialog.Confirm(bt, function() {
-			useProject( led.Project.createEmpty() );
+			selectProject( led.Project.createEmpty() );
 			N.msg("New project created.");
 		});
 	}
@@ -467,7 +467,7 @@ class Client extends dn.Process {
 			try {
 				var json = haxe.Json.parse( bytes.toString() );
 				var p = led.Project.fromJson(json);
-				useProject( p );
+				selectProject( p );
 				N.msg("Loaded project: "+path);
 			} catch( err:Dynamic ) {
 				N.error("Couldn't read this project file: "+err);
@@ -502,7 +502,7 @@ class Client extends dn.Process {
 				initTool();
 				levelRender.invalidate();
 
-			case ProjectReplaced:
+			case ProjectSelected:
 				updateAppBg();
 				updateProjectTitle();
 				updateLayerList();

@@ -1,6 +1,7 @@
 enum GlobalEvent {
+	ProjectSelected;
 	ProjectSettingsChanged;
-	ProjectReplaced;
+
 	RestoredFromHistory;
 
 	LevelSelected;

@@ -28,7 +28,7 @@ class LevelList extends ui.modal.Panel {
 		super.onGlobalEvent(e);
 
 		switch e {
-			case ProjectSettingsChanged, ProjectReplaced, RestoredFromHistory:
+			case ProjectSettingsChanged, ProjectSelected, RestoredFromHistory:
 				close();
 
 			case LayerInstanceSelected, LayerInstanceVisiblityChanged:

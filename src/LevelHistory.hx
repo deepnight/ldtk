@@ -31,7 +31,7 @@ class LevelHistory {
 
 	public function manualOnGlobalEvent(e:GlobalEvent) {
 		switch e {
-			case ProjectReplaced:
+			case ProjectSelected:
 				clearHistory();
 
 			case LevelSelected:

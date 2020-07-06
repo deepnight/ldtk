@@ -69,7 +69,7 @@ class LevelRender extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
-			case ProjectReplaced:
+			case ProjectSelected:
 				invalidateCaches();
 				invalidate();
 
