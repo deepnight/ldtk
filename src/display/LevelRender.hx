@@ -98,7 +98,7 @@ class LevelRender extends dn.Process {
 				invalidate();
 
 			case LayerInstanceChanged:
-				invalidate(); // TODO optim to render only the changed layer
+				invalidate(); // TODO optim needed to render only the changed layer
 
 			case TilesetDefChanged:
 				invalidate();
