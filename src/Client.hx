@@ -253,7 +253,7 @@ class Client extends dn.Process {
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() ) {
 					jBody.toggleClass("compactPanel");
-					updateCanvasBg();
+					updateAppBg();
 				}
 
 			case K.Z:
@@ -502,7 +502,7 @@ class Client extends dn.Process {
 				Tool.clearSelectionMemory();
 				display.LevelRender.invalidateCaches();
 				levelRender.invalidate();
-				updateCanvasBg();
+				updateAppBg();
 				updateProjectTitle();
 				updateLayerList();
 				initTool();
@@ -519,7 +519,7 @@ class Client extends dn.Process {
 					levelHistory.set(curLevelId, new LevelHistory(curLevelId) );
 
 			case RestoredFromHistory:
-				updateCanvasBg();
+				updateAppBg();
 				updateLayerList();
 				updateProjectTitle();
 				initTool();
@@ -529,7 +529,7 @@ class Client extends dn.Process {
 				display.LevelRender.invalidateCaches();
 
 			case ProjectSettingsChanged:
-				updateCanvasBg();
+				updateAppBg();
 				updateProjectTitle();
 
 			case LayerDefChanged, LayerDefSorted:
@@ -543,7 +543,7 @@ class Client extends dn.Process {
 			curLevelHistory.manualOnGlobalEvent(e);
 	}
 
-	function updateCanvasBg() {
+	function updateAppBg() {
 		if( bg!=null )
 			bg.remove();
 
