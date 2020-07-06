@@ -21,9 +21,13 @@ class LevelHistory {
 		if( clearExisting )
 			mostDistantKnownStates = new Map();
 
+		// Add missing states
 		for(li in level.layerInstances)
 			if( !mostDistantKnownStates.exists(li.def.uid) )
 				mostDistantKnownStates.set(li.def.uid, { layerId:li.def.uid, json: li.toJson() });
+
+		// Remove lost states (when def is removed)
+		// TODO
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
@@ -32,6 +36,7 @@ class LevelHistory {
 				clearHistory();
 
 			case LayerDefAdded, EntityDefAdded, EntityFieldAdded:
+				initMostDistanceKnownStates(false);
 
 			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved:
 				clearHistory();
