@@ -523,7 +523,6 @@ class Client extends dn.Process {
 				updateLayerList();
 				updateProjectTitle();
 				initTool();
-				levelRender.renderAll(); // TODO already done ?
 
 			case TilesetDefChanged, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				initTool();
