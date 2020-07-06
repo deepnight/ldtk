@@ -56,7 +56,7 @@ class EditLayerDefs extends ui.modal.Panel {
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
-			case ProjectSettingsChanged, ProjectReplaced:
+			case ProjectSettingsChanged, ProjectReplaced, LevelSettingsChanged:
 				close();
 
 			case RestoredFromHistory:

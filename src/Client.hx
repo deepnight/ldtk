@@ -102,6 +102,12 @@ class Client extends dn.Process {
 			else
 				new ui.modal.panel.ProjectSettings();
 		});
+		jMainPanel.find("button.levelList").click( function(_) {
+			if( ui.Modal.isOpen(ui.modal.panel.LevelList) )
+				ui.Modal.closeAll();
+			else
+				new ui.modal.panel.LevelList();
+		});
 		jMainPanel.find("button.editLayers").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditLayerDefs) )
 				ui.Modal.closeAll();
@@ -494,6 +500,8 @@ class Client extends dn.Process {
 				levelRender.invalidate();
 
 			case ProjectReplaced:
+
+			case LevelSettingsChanged:
 
 			case RestoredFromHistory:
 				updateCanvasBg();

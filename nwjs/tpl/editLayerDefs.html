@@ -3,59 +3,57 @@
 	Project layers
 </h2>
 
-<div class="cols">
-	<div class="mainList">
-		<ul class="niceList"></ul>
-		<div class="buttons">
-			<button class="create">Create layer</button>
-			<button class="delete">🗑️</button>
-		</div>
+<div class="mainList">
+	<ul class="niceList"></ul>
+	<div class="buttons">
+		<button class="create">Create layer</button>
+		<button class="delete">🗑️</button>
 	</div>
-
-	<ul class="form">
-		<li>
-			<label for="type">Type</label>
-			<span class="typeIcon"></span>
-			<span class="type"></span>
-		</li>
-
-		<li>
-			<label for="lName">Layer name</label>
-			<input type="text" name="name" id="lName"/>
-		</li>
-
-		<li>
-			<label for="gridSize">Grid size</label>
-			<input type="text" name="gridSize" class="small" id="gridSize"/>
-			<span>px</span>
-		</li>
-
-		<li>
-			<label for="opacity">Display opacity</label>
-			<input type="text" name="displayOpacity" class="small" id="opacity"/>
-			<span>%</span>
-		</li>
-
-		<li class="IntGrid">
-			<label>Grid values</label>
-			<ul class="intGridValues">
-				<li class="add">
-					<button type="button">+</button>
-				</li>
-			</ul>
-
-			<xml id="intGridValue">
-				<input type="color" value="#ffffff"/>
-				<span class="id">?</span>
-				<input type="text" class="name" placeholder="Value name"/>
-				<a href="#" class="remove">X</a>
-			</xml>
-		</li>
-
-		<li class="Tiles">
-			<label>Tileset</label>
-			<select name="tilesets"></select>
-			<button></button>
-		</li>
-	</ul>
 </div>
+
+<ul class="form">
+	<li>
+		<label for="type">Type</label>
+		<span class="typeIcon"></span>
+		<span class="type"></span>
+	</li>
+
+	<li>
+		<label for="lName">Layer name</label>
+		<input type="text" name="name" id="lName"/>
+	</li>
+
+	<li>
+		<label for="gridSize">Grid size</label>
+		<input type="text" name="gridSize" class="small" id="gridSize"/>
+		<span>px</span>
+	</li>
+
+	<li>
+		<label for="opacity">Display opacity</label>
+		<input type="text" name="displayOpacity" class="small" id="opacity"/>
+		<span>%</span>
+	</li>
+
+	<li class="IntGrid">
+		<label>Grid values</label>
+		<ul class="intGridValues">
+			<li class="add">
+				<button type="button">+</button>
+			</li>
+		</ul>
+
+		<xml id="intGridValue">
+			<input type="color" value="#ffffff"/>
+			<span class="id">?</span>
+			<input type="text" class="name" placeholder="Value name"/>
+			<a href="#" class="remove">X</a>
+		</xml>
+	</li>
+
+	<li class="Tiles">
+		<label>Tileset</label>
+		<select name="tilesets"></select>
+		<button></button>
+	</li>
+</ul>

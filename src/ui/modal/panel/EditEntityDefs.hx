@@ -4,7 +4,7 @@ class EditEntityDefs extends ui.modal.Panel {
 	static var LAST_ENTITY_ID = -1;
 	static var LAST_FIELD_ID = -1;
 
-	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jModalAndMask.find(".entityList ul");
+	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jModalAndMask.find(".mainList ul");
 	var jFieldList(get,never) : js.jquery.JQuery; inline function get_jFieldList() return jModalAndMask.find(".fieldList ul");
 
 	var jAllForms(get,never) : js.jquery.JQuery; inline function get_jAllForms() return jModalAndMask.find(".formsWrapper");
@@ -22,7 +22,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		linkToButton("button.editEntities");
 
 		// Create entity
-		jModalAndMask.find(".entityList button.create").click( function(_) {
+		jEntityList.find("button.create").click( function(_) {
 			var ed = project.defs.createEntityDef();
 			selectEntity(ed);
 			client.ge.emit(EntityDefAdded);
@@ -30,7 +30,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Delete entity
-		jModalAndMask.find(".entityList button.delete").click( function(ev) {
+		jEntityList.find("button.delete").click( function(ev) {
 			if( curEntity==null ) {
 				N.error("No entity selected.");
 				return;
@@ -96,7 +96,7 @@ class EditEntityDefs extends ui.modal.Panel {
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
-			case ProjectSettingsChanged, ProjectReplaced:
+			case ProjectSettingsChanged, ProjectReplaced, LevelSettingsChanged:
 				close();
 
 			case LayerDefAdded, LayerDefRemoved:
@@ -338,7 +338,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 
 		// Make layer list sortable
-		JsTools.makeSortable(".window .entityList ul", function(from, to) {
+		JsTools.makeSortable(".window .mainList ul", function(from, to) {
 			var moved = project.defs.sortEntityDef(from,to);
 			selectEntity(moved);
 			client.ge.emit(EntityDefSorted);

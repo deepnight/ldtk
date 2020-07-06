@@ -4,6 +4,7 @@ class Level {
 	var _project : Project;
 
 	public var uid(default,null) : Int;
+	public var customName: Null<String>; // TODO save
 	public var pxWid : Int;
 	public var pxHei : Int;
 	public var layerInstances : Map<Int,led.inst.LayerInstance> = new Map();
@@ -19,6 +20,10 @@ class Level {
 		for(ld in _project.defs.layers)
 			layerInstances.set( ld.uid, new led.inst.LayerInstance(_project, uid, ld.uid) );
 	}
+
+	public inline function getName() return customName!=null ? customName : getDefaultName();
+
+	public function getDefaultName() return "Level#"+uid;
 
 	@:keep public function toString() {
 		return Type.getClassName(Type.getClass(this));
@@ -38,6 +43,7 @@ class Level {
 			pxWid: pxWid,
 			pxHei: pxHei,
 			layerInstances : layersJson,
+			customName: customName,
 		}
 	}
 
@@ -45,6 +51,7 @@ class Level {
 		var l = new Level( p, JsonTools.readInt(json.uid) );
 		l.pxWid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_WIDTH );
 		l.pxHei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_HEIGHT );
+		l.customName = json.customName;
 
 		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
 			var li = led.inst.LayerInstance.fromJson(p, layerJson);

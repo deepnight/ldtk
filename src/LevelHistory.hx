@@ -49,6 +49,8 @@ class LevelHistory {
 
 			case LayerDefChanged, EntityDefChanged:
 
+			case LevelSettingsChanged:
+				
 			case ProjectSettingsChanged,
 				LayerDefSorted,
 				TilesetDefChanged,
