@@ -192,7 +192,7 @@ class LayerInstance {
 
 	/** TILES *******************/
 
-	public function setGridTile(cx:Int, cy:Int, tileId:Int) { // TODO support free positioning
+	public function setGridTile(cx:Int, cy:Int, tileId:Int) {
 		if( isValid(cx,cy) )
 			gridTiles.set( coordId(cx,cy), tileId );
 	}
