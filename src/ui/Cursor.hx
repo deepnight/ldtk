@@ -31,7 +31,7 @@ class Cursor extends dn.Process {
 		graphics.lineStyle(0);
 		graphics.endFill();
 
-		root.visible = type!=None && !Modal.hasAnyOpen();
+		root.visible = type!=None && !Modal.hasAnyOpen() && client.isCurrentLayerVisible();
 		hxd.System.setCursor(Default);
 
 		var pad = 2;

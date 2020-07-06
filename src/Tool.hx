@@ -75,7 +75,7 @@ class Tool<T> extends dn.Process {
 
 	public function as<E:Tool<X>,X>(c:Class<E>) : E return cast this;
 
-	public function canEdit() return getSelectedValue()!=null && client.levelRender.isLayerVisible(curLayerInstance);
+	public function canEdit() return getSelectedValue()!=null && client.isCurrentLayerVisible();
 	public function isRunning() return curMode!=null;
 
 	public function startUsing(m:MouseCoords, buttonId:Int) {
@@ -86,6 +86,9 @@ class Tool<T> extends dn.Process {
 
 		// Picking an existing element
 		if( client.isAltDown() && buttonId==0 ) {
+			if( !client.isCurrentLayerVisible() )
+				return;
+
 			var ge = getGenericLevelElementAt(m);
 
 			if( ge==null )

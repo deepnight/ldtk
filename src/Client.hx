@@ -623,6 +623,10 @@ class Client extends dn.Process {
 	}
 
 
+	public function isCurrentLayerVisible() {
+		return curLayerInstance!=null && levelRender.isLayerVisible(curLayerInstance);
+	}
+
 	public inline function isKeyDown(keyId:Int) return keyDowns.get(keyId)==true;
 	public inline function isShiftDown() return keyDowns.get(Key.SHIFT)==true;
 	public inline function isCtrlDown() return keyDowns.get(Key.CTRL)==true;
