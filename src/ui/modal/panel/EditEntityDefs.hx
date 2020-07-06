@@ -99,6 +99,8 @@ class EditEntityDefs extends ui.modal.Panel {
 			case ProjectSettingsChanged, ProjectReplaced, LevelSettingsChanged:
 				close();
 
+			case LevelAdded:
+
 			case LayerDefAdded, LayerDefRemoved:
 			case LayerDefChanged:
 			case LayerDefSorted:

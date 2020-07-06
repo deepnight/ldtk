@@ -32,7 +32,7 @@ class Notification extends dn.Process {
 	}
 
 	public static function notImplemented() {
-		return msg("Feature not implemented yet.");
+		return error("Feature not implemented yet.");
 	}
 
 	public static inline function debug(str:Dynamic) {

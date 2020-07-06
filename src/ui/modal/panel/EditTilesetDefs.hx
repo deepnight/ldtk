@@ -45,6 +45,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 			case ProjectSettingsChanged, ProjectReplaced, LevelSettingsChanged:
 				close();
 
+			case LevelAdded:
+
 			case RestoredFromHistory:
 				updateList();
 				updateForm();

@@ -35,6 +35,8 @@ class LevelHistory {
 			case ProjectReplaced:
 				clearHistory();
 
+			case LevelAdded:
+
 			case LayerInstanceChanged:
 				// Saving is done manually by the Tool, after usage
 
@@ -50,7 +52,7 @@ class LevelHistory {
 			case LayerDefChanged, EntityDefChanged:
 
 			case LevelSettingsChanged:
-				
+
 			case ProjectSettingsChanged,
 				LayerDefSorted,
 				TilesetDefChanged,

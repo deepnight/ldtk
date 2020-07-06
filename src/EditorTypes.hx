@@ -3,6 +3,7 @@ enum GlobalEvent {
 	ProjectReplaced;
 
 	LevelSettingsChanged;
+	LevelAdded;
 
 	LayerDefAdded;
 	LayerDefRemoved;

@@ -502,6 +502,7 @@ class Client extends dn.Process {
 			case ProjectReplaced:
 
 			case LevelSettingsChanged:
+			case LevelAdded:
 
 			case RestoredFromHistory:
 				updateCanvasBg();
