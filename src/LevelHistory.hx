@@ -14,10 +14,13 @@ class LevelHistory {
 		levelId = lid;
 		layerStates = new haxe.ds.Vector(MAX_LENGTH);
 		client.ge.listenAll(onGlobalEvent);
-		initMostDistanceKnownStates();
+		initMostDistanceKnownStates(true);
 	}
 
-	function initMostDistanceKnownStates() {
+	function initMostDistanceKnownStates(clearExisting:Bool) {
+		if( clearExisting )
+			mostDistantKnownStates = new Map();
+
 		for(li in level.layerInstances)
 			if( !mostDistantKnownStates.exists(li.def.uid) )
 				mostDistantKnownStates.set(li.def.uid, { layerId:li.def.uid, json: li.toJson() });
@@ -26,13 +29,15 @@ class LevelHistory {
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case ProjectReplaced:
-				// saveState( Full(client.project.toJson()) );
+				clearHistory();
+
+			case LayerDefChanged, EntityDefChanged, EntityFieldChanged:
+					clearHistory();
 
 			case ProjectSettingsChanged,
-				LayerDefChanged, LayerDefSorted,
+				LayerDefSorted,
 				TilesetDefChanged,
-				EntityDefChanged, EntityDefSorted, EntityFieldChanged, EntityFieldSorted:
-					// saveState( ProjectWithoutLevels(client.project.toJson(true)) );
+				EntityDefSorted, EntityFieldSorted:
 
 			case LayerInstanceChanged:
 				// Saving is done manually by the Tool, after usage
@@ -40,6 +45,14 @@ class LevelHistory {
 			case RestoredFromHistory:
 			case ToolOptionChanged:
 		}
+	}
+
+	public function clearHistory() {
+		curIndex = -1;
+		for(i in 0...MAX_LENGTH)
+			layerStates[i] = null;
+		initMostDistanceKnownStates(true);
+		N.msg("Undo history cleared.");
 	}
 
 	public function saveLayerState(li:led.inst.LayerInstance) {

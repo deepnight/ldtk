@@ -260,14 +260,13 @@ class Client extends dn.Process {
 				}
 
 			case K.Z:
-				if( !hasInputFocus() && isCtrlDown() ) {
+				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && isCtrlDown() ) 
 					curLevelHistory.undo();
-				}
 
 			case K.Y:
-				if( !hasInputFocus() && isCtrlDown() ) {
+				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && isCtrlDown() )
 					curLevelHistory.redo();
-				}
+
 
 			#if debug
 			case K.T:
