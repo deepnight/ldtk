@@ -44,7 +44,10 @@ class LevelHistory {
 			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved:
 				clearHistory();
 
-			case LayerDefChanged, EntityDefChanged, EntityFieldChanged:
+			case EntityFieldChanged:
+				saveLayerState(client.curLayerInstance);
+
+			case LayerDefChanged, EntityDefChanged:
 
 			case ProjectSettingsChanged,
 				LayerDefSorted,
