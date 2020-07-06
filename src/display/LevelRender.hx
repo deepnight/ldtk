@@ -71,7 +71,8 @@ class LevelRender extends dn.Process {
 		switch e {
 			case ProjectSelected:
 				invalidateCaches();
-				invalidate();
+				renderAll();
+				fit();
 
 			case ProjectSettingsChanged, LayerInstanceRestoredFromHistory:
 				invalidate();
@@ -161,6 +162,7 @@ class LevelRender extends dn.Process {
 	}
 
 	public function renderAll() {
+		invalidated = false;
 		renderBg();
 		renderLayers();
 	}
