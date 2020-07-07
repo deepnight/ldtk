@@ -29,7 +29,7 @@ class LevelRender extends dn.Process {
 		bg.filter = new h2d.filter.DropShadow(0, 0, 0x0,0.3, 32, true);
 
 		grid = new h2d.Graphics();
-		root.add(grid, Const.DP_BG);
+		root.add(grid, Const.DP_UI);
 
 		focusLevelX = 0;
 		focusLevelY = 0;
@@ -122,8 +122,9 @@ class LevelRender extends dn.Process {
 
 	public function toggleLayer(l:led.inst.LayerInstance) {
 		layerVis.set(l.layerDefId, !isLayerVisible(l));
-		N.debug(l);
 		client.ge.emit(LayerInstanceVisiblityChanged);
+		if( isLayerVisible(l) )
+			invalidate();
 	}
 
 	public function showLayer(l:led.inst.LayerInstance) {
