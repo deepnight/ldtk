@@ -21,24 +21,23 @@ class Client extends dn.Process {
 	public var curLayerInstance(get,never) : Null<led.inst.LayerInstance>;
 		function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
 
+
 	public var ge : GlobalEventDispatcher;
 	public var project : led.Project;
 	var curLevelId : Int;
 	var curLayerId : Int;
+	public var curTool : Tool<Dynamic>;
+	var keyDowns : Map<Int,Bool> = new Map();
 
 	public var levelRender : display.LevelRender;
 	var bg : h2d.Bitmap;
-	public var curTool : Tool<Dynamic>;
-
-	var levelHistory : Map<Int,LevelHistory> = new Map();
-	public var curLevelHistory(get,never) : LevelHistory;
-		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
-
 	public var cursor : ui.Cursor;
 	public var selection : Null<GenericLevelElement>;
 	var selectionCursor : ui.Cursor;
 
-	var keyDowns : Map<Int,Bool> = new Map();
+	var levelHistory : Map<Int,LevelHistory> = new Map();
+	public var curLevelHistory(get,never) : LevelHistory;
+		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
 
 
