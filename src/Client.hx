@@ -39,6 +39,7 @@ class Client extends dn.Process {
 	public var curLevelHistory(get,never) : LevelHistory;
 		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
+	var castle : cdb.Data;
 
 
 	public function new() {
@@ -74,6 +75,13 @@ class Client extends dn.Process {
 		}
 		catch( e:Dynamic ) {
 			led.Project.createEmpty();
+		}
+
+		// Tmp CDB import
+		var buffer = js.node.Fs.readFileSync("userfiles/castle.cdb");
+		castle = cdb.Parser.parse(buffer.toString(), false);
+		for(s in castle.sheets) {
+			N.debug(s.name+" => "+s.columns);
 		}
 
 		levelRender = new display.LevelRender();
