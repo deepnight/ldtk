@@ -54,7 +54,7 @@ enum ToolEditMode {
 	Move;
 }
 
-typedef LayerState = {
+typedef LayerHistoryState = {
 	var layerId : Int;
 	var json : Dynamic;
 }

@@ -7,8 +7,8 @@ class LevelHistory {
 	var level(get,never): led.Level; inline function get_level() return Client.ME.project.getLevel(levelId);
 
 	var curIndex = -1;
-	var layerStates : haxe.ds.Vector< LayerState >;
-	var mostDistantKnownStates : Map<Int, LayerState> = new Map();
+	var layerStates : haxe.ds.Vector< LayerHistoryState >;
+	var mostDistantKnownStates : Map<Int, LayerHistoryState> = new Map();
 
 	public function new(lid) {
 		levelId = lid;
@@ -107,7 +107,7 @@ class LevelHistory {
 			curIndex--;
 
 			// Find last known state for undone layer
-			var before : LayerState = null;
+			var before : LayerHistoryState = null;
 			var sid = curIndex;
 			while( sid>=0 )
 				if( layerStates[sid].layerId==undoneLayerId ) {
@@ -146,7 +146,7 @@ class LevelHistory {
 		}
 	}
 
-	function applyState(s:LayerState) {
+	function applyState(s:LayerHistoryState) {
 		level.layerInstances.set( s.layerId, led.inst.LayerInstance.fromJson(client.project, s.json) );
 		client.project.tidy(); // fix "_project" refs & possible broken "instance<->def" refs
 		client.ge.emit(LayerInstanceRestoredFromHistory);
