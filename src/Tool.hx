@@ -222,7 +222,6 @@ class Tool<T> extends dn.Process {
 				( M.iabs(origin.cx-m.cx) + 1 ) * curLayerInstance.def.gridSize,
 				( M.iabs(origin.cy-m.cy) + 1 ) * curLayerInstance.def.gridSize
 			);
-			// client.curLevelHistory.setLastStateBounds(origin.levelX, origin.levelY, m.levelX-origin.levelX, m.levelY-origin.levelY);
 			needHistorySaving = false;
 		}
 		curMode = null;
