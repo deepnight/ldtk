@@ -349,6 +349,7 @@ class Client extends dn.Process {
 				selectLayerInstance(li);
 				var v = li.getIntGrid(cx,cy);
 				curTool.as(tool.IntGridTool).selectValue(v);
+				levelRender.showRect( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
 				return true;
 
 			case Entity(instance):
@@ -361,6 +362,7 @@ class Client extends dn.Process {
 						if( e==instance ) {
 							selectLayerInstance(li);
 							curTool.as(tool.EntityTool).selectValue(instance.defId);
+							levelRender.showRect( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
 							return true;
 						}
 				}
@@ -370,6 +372,7 @@ class Client extends dn.Process {
 				var tid = li.getGridTile(cx,cy);
 				var t = curTool.as(tool.TileTool);
 				t.selectValue( { ids:[tid], mode:t.getMode() } );
+				levelRender.showRect( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
 				return true;
 		}
 

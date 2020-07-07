@@ -12,7 +12,7 @@ class LevelRender extends dn.Process {
 
 	var bg : h2d.Graphics;
 	var grid : h2d.Graphics;
-	var historyBounds : Array<h2d.Object> = [];
+	var fadingRects : Array<h2d.Object> = [];
 
 	public var focusLevelX(default,set) : Float = 0.;
 	public var focusLevelY(default,set) : Float = 0.;
@@ -136,21 +136,18 @@ class LevelRender extends dn.Process {
 		client.ge.emit(LayerInstanceVisiblityChanged);
 	}
 
-	public function showHistoryBounds(layerId:Int, bounds:HistoryStateBounds, col:UInt) {
-		var li = client.curLevel.getLayerInstance( client.project.defs.getLayerDef(layerId) );
-
-		// var x = ( Std.int(bounds.x/li.def.gridSize) ) * li.def.gridSize;
-		// var y = ( Std.int(bounds.y/li.def.gridSize) ) * li.def.gridSize;
-		// var endX = ( Std.int((bounds.x+bounds.wid)/li.def.gridSize) + 1 ) * li.def.gridSize;
-		// var endY = ( Std.int((bounds.y+bounds.hei)/li.def.gridSize) + 1 ) * li.def.gridSize;
-
+	public function showRect(x:Int, y:Int, w:Int, h:Int, col:UInt, thickness=1) {
 		var pad = 5;
 		var g = new h2d.Graphics();
-		historyBounds.push(g);
-		g.lineStyle(2, col);
-		g.drawRect(bounds.x-pad, bounds.y-pad, bounds.wid+pad*2, bounds.hei+pad*2);
-		// g.drawRect(x-pad, y-pad, endX-x+pad*2, endY-y+pad*2);
+		fadingRects.push(g);
+		g.lineStyle(thickness, col);
+		g.drawRect( Std.int(-pad-w*0.5), Std.int(-pad-h*0.5), w+pad*2, h+pad*2 );
+		g.setPosition( Std.int(x+w*0.5), Std.int(y+h*0.5) );
 		root.add(g, Const.DP_UI);
+	}
+
+	public inline function showHistoryBounds(layerId:Int, bounds:HistoryStateBounds, col:UInt) {
+		showRect(bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
 	}
 
 	public function renderBg() {
@@ -342,19 +339,24 @@ class LevelRender extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
+		// Update scrolling
 		root.setScale(zoom);
 		root.x = w()*0.5 - focusLevelX * zoom;
 		root.y = h()*0.5 - focusLevelY * zoom;
 
+		// Fade-out temporary rects
 		var i = 0;
-		while( i<historyBounds.length ) {
-			historyBounds[i].alpha-=tmod*0.02;
-			if( historyBounds[i].alpha<=0 )
-				historyBounds.splice(i,1);
+		while( i<fadingRects.length ) {
+			var o = fadingRects[i];
+			o.alpha-=tmod*0.05;
+			o.setScale( 1 + 0.2 * (1-o.alpha) );
+			if( o.alpha<=0 )
+				fadingRects.splice(i,1);
 			else
 				i++;
 		}
 
+		// Re-render
 		if( invalidated ) {
 			invalidated = false;
 			renderAll();
