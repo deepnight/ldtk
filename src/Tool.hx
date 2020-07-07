@@ -199,6 +199,9 @@ class Tool<T> extends dn.Process {
 		return false;
 	}
 
+	function onHistorySaving() {
+	}
+
 	public function stopUsing(m:MouseCoords) {
 		if( isRunning() ) {
 			var anyChange = rectangle
@@ -223,6 +226,7 @@ class Tool<T> extends dn.Process {
 				( M.iabs(origin.cy-m.cy) + 1 ) * curLayerInstance.def.gridSize
 			);
 			needHistorySaving = false;
+			onHistorySaving();
 		}
 		curMode = null;
 	}

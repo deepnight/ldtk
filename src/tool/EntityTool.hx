@@ -124,6 +124,16 @@ class EntityTool extends Tool<Int> {
 		return false;
 	}
 
+	override function onHistorySaving() {
+		super.onHistorySaving();
+
+		if( curMode==Move ) {
+			var ei = getPickedEntityInstance();
+			if( ei!=null )
+				client.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
+		}
+	}
+
 
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(left, right, top, bottom);
