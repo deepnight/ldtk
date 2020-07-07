@@ -9,10 +9,16 @@ class ProjectSettings extends ui.modal.Panel {
 		loadTemplate( "projectSettings", "projectSettings" );
 		linkToButton("button.editProject");
 		updateForm();
+
+		jContent.find("button.new").click( function(ev) client.onNew(ev.getThis()) );
+		jContent.find("button.load").click( function(_) client.onLoad() );
+		jContent.find("button.save").click( function(_) client.onSave() );
+
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
+		updateForm();
 	}
 
 	function updateForm() {

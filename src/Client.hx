@@ -86,9 +86,9 @@ class Client extends dn.Process {
 		jMainPanel.find("*").off();
 
 		// Main file actions
-		jMainPanel.find("button.new").click( function(ev) onNew(ev.getThis()) );
-		jMainPanel.find("button.load").click( function(_) onLoad() );
-		jMainPanel.find("button.save").click( function(_) onSave() );
+		// jMainPanel.find("button.new").click( function(ev) onNew(ev.getThis()) );
+		// jMainPanel.find("button.load").click( function(_) onLoad() );
+		// jMainPanel.find("button.save").click( function(_) onSave() );
 			// ui.Modal.closeAll();
 			// dn.LocalStorage.write("test", dn.HaxeJson.prettify( haxe.Json.stringify( project.toJson() ) ) );
 			// N.msg("Saved to local storage.");
@@ -126,6 +126,9 @@ class Client extends dn.Process {
 			else
 				new ui.modal.panel.EditTilesetDefs();
 		});
+
+
+		jMainPanel.find("h2#levelName").click( function(ev) jMainPanel.find("button.levelList").click() );
 
 
 		// Space bar blocking
@@ -437,8 +440,7 @@ class Client extends dn.Process {
 	}
 
 
-	function onNew(bt:js.jquery.JQuery) {
-		ui.Modal.closeAll();
+	public function onNew(bt:js.jquery.JQuery) {
 		new ui.modal.dialog.Confirm(bt, function() {
 			selectProject( led.Project.createEmpty() );
 			N.msg("New project created.");
@@ -446,9 +448,7 @@ class Client extends dn.Process {
 	}
 
 
-	function onSave() {
-		ui.Modal.closeAll();
-
+	public function onSave() {
 		var obj = project.toJson();
 		var json = haxe.Json.stringify(obj);
 		json = dn.HaxeJson.prettify(json);
@@ -461,8 +461,7 @@ class Client extends dn.Process {
 		});
 	}
 
-	function onLoad() {
-		ui.Modal.closeAll();
+	public function onLoad() {
 		JsTools.loadDialog([".json"], function(path,bytes) {
 			try {
 				var json = haxe.Json.parse( bytes.toString() );
@@ -504,18 +503,19 @@ class Client extends dn.Process {
 
 			case ProjectSelected:
 				updateAppBg();
-				updateProjectTitle();
+				updateTitles();
 				updateLayerList();
 				Tool.clearSelectionMemory();
 				initTool();
 
 			case LevelSettingsChanged:
+				updateTitles();
 
 			case LevelAdded:
 
 			case LevelSelected:
 				updateLayerList();
-				updateProjectTitle();
+				updateTitles();
 				initTool();
 				if( !levelHistory.exists(curLevelId) )
 					levelHistory.set(curLevelId, new LevelHistory(curLevelId) );
@@ -523,7 +523,7 @@ class Client extends dn.Process {
 			case LayerInstanceRestoredFromHistory:
 				updateAppBg();
 				updateLayerList();
-				updateProjectTitle();
+				updateTitles();
 				initTool();
 
 			case TilesetDefChanged, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
@@ -532,7 +532,7 @@ class Client extends dn.Process {
 
 			case ProjectSettingsChanged:
 				updateAppBg();
-				updateProjectTitle();
+				updateTitles();
 
 			case LayerDefChanged, LayerDefSorted:
 				if( curLayerDef==null && project.defs.layers.length>0 )
@@ -570,9 +570,9 @@ class Client extends dn.Process {
 		return jCanvas.outerHeight() * js.Browser.window.devicePixelRatio;
 	}
 
-	function updateProjectTitle() {
-		appWin.title = project.name+" -- L-Ed v"+Const.APP_VERSION;
-		// jBody.find("h2#projectTitle").text( project.name );
+	function updateTitles() {
+		appWin.title = project.name+" - "+curLevel.getName()+"    --    L-Ed v"+Const.APP_VERSION;
+		jMainPanel.find("h2#levelName").text( curLevel.getName() );
 	}
 
 	public function updateLayerList() {

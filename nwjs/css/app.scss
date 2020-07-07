@@ -717,16 +717,17 @@ label.file {
 		box-shadow: 0px 0px 16px black inset;
 		box-sizing: border-box;
 
-		h2#projectTitle {
+		h2#levelName{
+			margin: 0;
+			padding: 0;
+			margin-top: 8px;
 			white-space: nowrap;
 			overflow: hidden;
+			border: none;
+			cursor: pointer;
 		}
-
-		#mainBar {
-			.buttons.project button {
-				padding-top: 4px;
-				padding-bottom: 4px;
-			}
+		h2#levelName:hover {
+			color: white;
 		}
 
 		ul.niceList {
@@ -1000,6 +1001,13 @@ label.file {
 			display: grid;
 			grid-template-rows: auto min-content;
 		}
+	}
+}
+
+
+.window.panel.projectSettings {
+	.buttons.main {
+		margin-bottom: 10px;
 	}
 }
 

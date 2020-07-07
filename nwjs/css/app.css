@@ -731,14 +731,18 @@ input[type="file"] {
   box-sizing: border-box;
 }
 
-#editor #mainPanel h2#projectTitle {
+#editor #mainPanel h2#levelName {
+  margin: 0;
+  padding: 0;
+  margin-top: 8px;
   white-space: nowrap;
   overflow: hidden;
+  border: none;
+  cursor: pointer;
 }
 
-#editor #mainPanel #mainBar .buttons.project button, #editor #mainPanel #mainBar .buttons.project label.file {
-  padding-top: 4px;
-  padding-bottom: 4px;
+#editor #mainPanel h2#levelName:hover {
+  color: white;
 }
 
 #editor #mainPanel ul.niceList {
@@ -1014,6 +1018,10 @@ input[type="file"] {
 .window.panel.entityDefs .content > .mainList {
   display: grid;
   grid-template-rows: auto min-content;
+}
+
+.window.panel.projectSettings .buttons.main {
+  margin-bottom: 10px;
 }
 
 .window.panel.layerDefs ul.intGridValues li {
