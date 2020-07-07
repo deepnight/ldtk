@@ -36,7 +36,6 @@ class IntGridTool extends Tool<Int> {
 		super.onMouseMove(m);
 	}
 
-	public function ok() {}
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
 
