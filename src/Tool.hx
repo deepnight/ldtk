@@ -219,6 +219,7 @@ class Tool<T> extends dn.Process {
 
 		if( needHistorySaving ) {
 			client.curLevelHistory.saveLayerState( curLayerInstance );
+			client.curLevelHistory.setLastStateBounds(origin.levelX, origin.levelY, m.levelX-origin.levelX, m.levelY-origin.levelY);
 			needHistorySaving = false;
 		}
 		curMode = null;

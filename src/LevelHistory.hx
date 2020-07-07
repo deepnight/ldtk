@@ -23,7 +23,11 @@ class LevelHistory {
 		// Add missing states
 		for(li in level.layerInstances)
 			if( !mostDistantKnownStates.exists(li.def.uid) )
-				mostDistantKnownStates.set(li.def.uid, { layerId:li.def.uid, json: li.toJson() });
+				mostDistantKnownStates.set(li.def.uid, {
+					layerId: li.def.uid,
+					bounds: null,
+					json: li.toJson()
+				});
 
 		// Remove lost states (when def is removed)
 		// TODO
@@ -74,11 +78,26 @@ class LevelHistory {
 		N.msg("Undo history cleared.");
 	}
 
+	public function setLastStateBounds(x:Int, y:Int, w:Int, h:Int) {
+		var last = layerStates[ curIndex ];
+		if( last!=null )
+			last.bounds = {
+				x: x,
+				y: y,
+				wid: w,
+				hei: h,
+			}
+	}
+
 	public function saveLayerState(li:led.inst.LayerInstance) {
 		// Drop first element when max is reached
 		if( curIndex==MAX_HISTORY-1 ) {
 			var droppedState = layerStates[0];
-			mostDistantKnownStates.set( droppedState.layerId, { layerId:droppedState.layerId, json:droppedState.json } );
+			mostDistantKnownStates.set( droppedState.layerId, {
+				layerId: droppedState.layerId,
+				bounds: null,
+				json: droppedState.json,
+			} );
 			for(i in 1...MAX_HISTORY)
 				layerStates[i-1] = layerStates[i];
 		}
@@ -88,6 +107,7 @@ class LevelHistory {
 		// Store
 		layerStates[curIndex] = {
 			layerId: li.def.uid,
+			bounds: null,
 			json: li.toJson(),
 		}
 
@@ -104,6 +124,9 @@ class LevelHistory {
 	public function undo() {
 		if( curIndex>=0 ) {
 			var undoneLayerId = layerStates[curIndex].layerId;
+			if( layerStates[curIndex].bounds!=null )
+				client.levelRender.showHistoryBounds(undoneLayerId, layerStates[curIndex].bounds, 0xff0000);
+
 			curIndex--;
 
 			// Find last known state for undone layer
@@ -126,11 +149,12 @@ class LevelHistory {
 				throw "No history found for #"+undoneLayerId; // HACK should not happen
 
 			applyState( before );
-			#if debug
-			N.debug("LH UNDO - "+toString());
-			#else
+
+			// #if debug
+			// N.debug("LH UNDO - "+toString());
+			// #else
 			N.msg("Undo", 0xb1df38);
-			#end
+			// #end
 		}
 	}
 
@@ -138,11 +162,15 @@ class LevelHistory {
 		if( curIndex<MAX_HISTORY-1 && layerStates[curIndex+1]!=null ) {
 			curIndex++;
 			applyState( layerStates[curIndex] );
-			#if debug
-			N.debug("LH REDO - "+toString());
-			#else
+
+			if( layerStates[curIndex].bounds!=null )
+				client.levelRender.showHistoryBounds( layerStates[curIndex].layerId, layerStates[curIndex].bounds, 0xd2ff74 );
+
+			// #if debug
+			// N.debug("LH REDO - "+toString());
+			// #else
 			N.msg("Redo", 0x6caedf);
-			#end
+			// #end
 		}
 	}
 

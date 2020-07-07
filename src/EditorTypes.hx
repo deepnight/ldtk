@@ -56,5 +56,13 @@ enum ToolEditMode {
 
 typedef LayerHistoryState = {
 	var layerId : Int;
+	var bounds: Null<HistoryStateBounds>;
 	var json : Dynamic;
+}
+
+typedef HistoryStateBounds = {
+	var x : Int;
+	var y : Int;
+	var wid : Int;
+	var hei : Int;
 }

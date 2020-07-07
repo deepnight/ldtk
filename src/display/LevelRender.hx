@@ -12,6 +12,7 @@ class LevelRender extends dn.Process {
 
 	var bg : h2d.Graphics;
 	var grid : h2d.Graphics;
+	var historyBounds : Array<h2d.Object> = [];
 
 	public var focusLevelX(default,set) : Float = 0.;
 	public var focusLevelY(default,set) : Float = 0.;
@@ -135,6 +136,22 @@ class LevelRender extends dn.Process {
 	public function hideLayer(l:led.inst.LayerInstance) {
 		layerVis.set(l.layerDefId, false);
 		client.ge.emit(LayerInstanceVisiblityChanged);
+	}
+
+	public function showHistoryBounds(layerId:Int, bounds:HistoryStateBounds, col:UInt) {
+		var li = client.curLevel.getLayerInstance( client.project.defs.getLayerDef(layerId) );
+
+		var x = ( Std.int(bounds.x/li.def.gridSize) ) * li.def.gridSize;
+		var y = ( Std.int(bounds.y/li.def.gridSize) ) * li.def.gridSize;
+		var endX = ( Std.int((bounds.x+bounds.wid)/li.def.gridSize) + 1 ) * li.def.gridSize;
+		var endY = ( Std.int((bounds.y+bounds.hei)/li.def.gridSize) + 1 ) * li.def.gridSize;
+
+		var pad = 5;
+		var g = new h2d.Graphics();
+		historyBounds.push(g);
+		g.lineStyle(2, col);
+		g.drawRect(x-pad, y-pad, endX-x+pad*2, endY-y+pad*2);
+		root.add(g, Const.DP_UI);
 	}
 
 	public function renderBg() {
@@ -329,6 +346,15 @@ class LevelRender extends dn.Process {
 		root.setScale(zoom);
 		root.x = w()*0.5 - focusLevelX * zoom;
 		root.y = h()*0.5 - focusLevelY * zoom;
+
+		var i = 0;
+		while( i<historyBounds.length ) {
+			historyBounds[i].alpha-=tmod*0.02;
+			if( historyBounds[i].alpha<=0 )
+				historyBounds.splice(i,1);
+			else
+				i++;
+		}
 
 		if( invalidated ) {
 			invalidated = false;
