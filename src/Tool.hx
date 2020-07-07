@@ -82,6 +82,7 @@ class Tool<T> extends dn.Process {
 		curMode = null;
 		client.clearSelection();
 		moveStarted = false;
+		m.clampToLayer(curLayerInstance);
 		cd.unset("requireCtrlRelease");
 
 		// Picking an existing element
@@ -203,6 +204,8 @@ class Tool<T> extends dn.Process {
 	}
 
 	public function stopUsing(m:MouseCoords) {
+		m.clampToLayer(curLayerInstance);
+
 		if( isRunning() ) {
 			var anyChange = rectangle
 				? useOnRectangle(
@@ -240,6 +243,8 @@ class Tool<T> extends dn.Process {
 	public function onKeyPress(keyId:Int) {}
 
 	public function onMouseMove(m:MouseCoords) {
+		m.clampToLayer(curLayerInstance);
+
 		// Start moving elements only after a small elapsed mouse distance
 		if( curMode==Move && !moveStarted && M.dist(origin.gx,origin.gy, m.gx,m.gy)>=10*Const.SCALE ) {
 			moveStarted = true;

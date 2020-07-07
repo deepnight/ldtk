@@ -37,5 +37,15 @@ class MouseCoords {
 
 	public function getLayerCx(ld:led.def.LayerDef) return Std.int( levelX / ld.gridSize );
 	public function getLayerCy(ld:led.def.LayerDef) return Std.int( levelY / ld.gridSize );
+
+
+	public function clampToLayer(li:led.inst.LayerInstance) {
+		gx = M.fmax(gx, levelRender.root.x);
+		gx = M.fmin(gx, levelRender.root.x + client.curLevel.pxWid * levelRender.zoom - 1);
+
+		gy = M.fmax(gy, levelRender.root.y);
+		gy = M.fmin(gy, levelRender.root.y + client.curLevel.pxHei * levelRender.zoom - 1);
+
+	}
 }
 

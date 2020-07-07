@@ -55,13 +55,16 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(left, right, top, bottom);
 
+		if( curMode==Add && !isRandomMode() )
+			return drawSelectionInRectangle(left,top, right-left+1, bottom-top+1);
+
 		var anyChange = false;
 		for(cx in left...right+1)
 		for(cy in top...bottom+1) {
 			switch curMode {
 				case null, PanView:
 				case Add:
-					if( drawSelectionAt(cx,cy) )
+					if( drawSelectionAt(cx,cy) ) // random mode only
 						anyChange = true;
 
 				case Remove:
@@ -77,6 +80,22 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 		return anyChange;
 	}
 
+
+	function drawSelectionInRectangle(cx:Int, cy:Int, wid:Int, hei:Int) {
+		var anyChange = false;
+		var sel = getSelectedValue();
+
+		var selLeft = Const.INFINITE;
+		var selTop = Const.INFINITE;
+		var selRight = -Const.INFINITE;
+
+		for(tid in sel.ids) {
+			selLeft = M.imin(selLeft, curTilesetDef.getTileCx(tid));
+			selTop = M.imin(selTop, curTilesetDef.getTileCy(tid));
+		}
+
+		return anyChange;
+	}
 
 	function drawSelectionAt(cx:Int, cy:Int) {
 		var anyChange = false;
