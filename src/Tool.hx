@@ -200,9 +200,6 @@ class Tool<T> extends dn.Process {
 	}
 
 	public function stopUsing(m:MouseCoords) {
-		// if( curMode==PanView && M.dist(origin.htmlX, origin.htmlY, m.htmlX, m.htmlY) < Const.MIDDLE_CLICK_DIST_THRESHOLD )
-			// openFloatingPalette();
-
 		if( isRunning() ) {
 			var anyChange = rectangle
 				? useOnRectangle(
@@ -219,7 +216,13 @@ class Tool<T> extends dn.Process {
 
 		if( needHistorySaving ) {
 			client.curLevelHistory.saveLayerState( curLayerInstance );
-			client.curLevelHistory.setLastStateBounds(origin.levelX, origin.levelY, m.levelX-origin.levelX, m.levelY-origin.levelY);
+			client.curLevelHistory.setLastStateBounds(
+				M.imin(origin.cx, m.cx) * curLayerInstance.def.gridSize,
+				M.imin(origin.cy, m.cy) * curLayerInstance.def.gridSize,
+				( M.iabs(origin.cx-m.cx) + 1 ) * curLayerInstance.def.gridSize,
+				( M.iabs(origin.cy-m.cy) + 1 ) * curLayerInstance.def.gridSize
+			);
+			// client.curLevelHistory.setLastStateBounds(origin.levelX, origin.levelY, m.levelX-origin.levelX, m.levelY-origin.levelY);
 			needHistorySaving = false;
 		}
 		curMode = null;

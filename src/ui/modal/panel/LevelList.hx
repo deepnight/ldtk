@@ -53,6 +53,7 @@ class LevelList extends ui.modal.Panel {
 			case EntityFieldAdded:
 			case EntityFieldRemoved:
 			case EntityFieldDefChanged:
+			case EntityFieldInstanceChanged:
 			case EntityFieldSorted:
 			case ToolOptionChanged:
 		}

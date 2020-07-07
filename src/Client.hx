@@ -481,6 +481,7 @@ class Client extends dn.Process {
 			case EntityFieldDefChanged:
 			case EntityFieldSorted:
 			case EntityDefSorted:
+			case EntityFieldInstanceChanged:
 			case ToolOptionChanged:
 
 			case LayerInstanceSelected:

@@ -109,7 +109,7 @@ class LevelRender extends dn.Process {
 			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
 				invalidate();
 
-			case EntityFieldAdded, EntityFieldRemoved, EntityFieldDefChanged:
+			case EntityFieldAdded, EntityFieldRemoved, EntityFieldDefChanged, EntityFieldInstanceChanged:
 				invalidate();
 
 			case EntityFieldSorted:
@@ -141,16 +141,17 @@ class LevelRender extends dn.Process {
 	public function showHistoryBounds(layerId:Int, bounds:HistoryStateBounds, col:UInt) {
 		var li = client.curLevel.getLayerInstance( client.project.defs.getLayerDef(layerId) );
 
-		var x = ( Std.int(bounds.x/li.def.gridSize) ) * li.def.gridSize;
-		var y = ( Std.int(bounds.y/li.def.gridSize) ) * li.def.gridSize;
-		var endX = ( Std.int((bounds.x+bounds.wid)/li.def.gridSize) + 1 ) * li.def.gridSize;
-		var endY = ( Std.int((bounds.y+bounds.hei)/li.def.gridSize) + 1 ) * li.def.gridSize;
+		// var x = ( Std.int(bounds.x/li.def.gridSize) ) * li.def.gridSize;
+		// var y = ( Std.int(bounds.y/li.def.gridSize) ) * li.def.gridSize;
+		// var endX = ( Std.int((bounds.x+bounds.wid)/li.def.gridSize) + 1 ) * li.def.gridSize;
+		// var endY = ( Std.int((bounds.y+bounds.hei)/li.def.gridSize) + 1 ) * li.def.gridSize;
 
 		var pad = 5;
 		var g = new h2d.Graphics();
 		historyBounds.push(g);
 		g.lineStyle(2, col);
-		g.drawRect(x-pad, y-pad, endX-x+pad*2, endY-y+pad*2);
+		g.drawRect(bounds.x-pad, bounds.y-pad, bounds.wid+pad*2, bounds.hei+pad*2);
+		// g.drawRect(x-pad, y-pad, endX-x+pad*2, endY-y+pad*2);
 		root.add(g, Const.DP_UI);
 	}
 

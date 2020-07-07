@@ -53,8 +53,7 @@ class LevelHistory {
 			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved:
 				clearHistory();
 
-			case EntityFieldDefChanged:
-				saveLayerState(client.curLayerInstance);
+			case EntityFieldInstanceChanged:
 
 			case LayerDefChanged, EntityDefChanged:
 
@@ -63,7 +62,7 @@ class LevelHistory {
 			case ProjectSettingsChanged,
 				LayerDefSorted,
 				TilesetDefChanged,
-				EntityDefSorted, EntityFieldSorted:
+				EntityDefSorted, EntityFieldSorted, EntityFieldDefChanged:
 
 			case LayerInstanceRestoredFromHistory:
 			case ToolOptionChanged:
@@ -80,6 +79,7 @@ class LevelHistory {
 
 	public function setLastStateBounds(x:Int, y:Int, w:Int, h:Int) {
 		var last = layerStates[ curIndex ];
+		N.debug('$x,$y $w x $h');
 		if( last!=null )
 			last.bounds = {
 				x: x,

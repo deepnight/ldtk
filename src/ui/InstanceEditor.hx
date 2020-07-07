@@ -49,7 +49,10 @@ class InstanceEditor extends dn.Process {
 
 	function onFieldChange() {
 		updateForm();
-		Client.ME.ge.emit(EntityFieldDefChanged);
+		var client = Client.ME;
+		client.curLevelHistory.saveLayerState( client.curLayerInstance );
+		client.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
+		client.ge.emit(EntityFieldInstanceChanged);
 	}
 
 	function updateForm() {
