@@ -276,6 +276,10 @@ ul.niceList li:not(.active):hover {
   background-image: url("/img/icons/intGrid.png");
 }
 
+.icon.level {
+  background-image: url("/img/icons/level.png");
+}
+
 .icon.project {
   background-image: url("/img/icons/projectSettings.png");
 }
@@ -573,7 +577,7 @@ input[type="file"] {
 
 .window.panel {
   left: 0px;
-  width: calc( 100% - 300px);
+  width: calc( 100% - 400px);
 }
 
 .window.panel > .wrapper {
@@ -731,17 +735,20 @@ input[type="file"] {
   box-sizing: border-box;
 }
 
-#editor #mainPanel h2#levelName {
+#editor #mainPanel #mainbar {
+  overflow: hidden;
+}
+
+#editor #mainPanel #mainbar h2#levelName {
   margin: 0;
   padding: 0;
   margin-top: 8px;
   white-space: nowrap;
-  overflow: hidden;
   border: none;
   cursor: pointer;
 }
 
-#editor #mainPanel h2#levelName:hover {
+#editor #mainPanel #mainbar h2#levelName:hover {
   color: white;
 }
 
@@ -809,9 +816,23 @@ input[type="file"] {
   grid-template-rows: min-content 200px auto;
 }
 
-.compactPanel #editor #mainPanel #layers li {
+.compactPanel #editor #mainPanel ul.niceList li {
   padding-top: 4px;
   padding-bottom: 4px;
+  gap: 4px;
+}
+
+.compactPanel #editor #mainPanel ul.niceList li .icon {
+  width: 0.75em;
+  height: 0.75em;
+}
+
+.compactPanel #editor #mainPanel h2#levelName {
+  font-size: 1.1em;
+}
+
+.compactPanel .window.panel {
+  width: calc( 100% - 150px);
 }
 
 .palette {

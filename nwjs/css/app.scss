@@ -262,6 +262,7 @@ ul.niceList {
 .icon.tile		{ background-image: url("/img/icons/tile.png"); }
 .icon.layer		{ background-image: url("/img/icons/layer.png"); }
 .icon.intGrid	{ background-image: url("/img/icons/intGrid.png"); }
+.icon.level		{ background-image: url("/img/icons/level.png"); }
 .icon.project	{ background-image: url("/img/icons/projectSettings.png"); }
 
 .black		{ filter: brightness(0);}
@@ -560,7 +561,7 @@ label.file {
 
 .window.panel {
 	left: 0px; // set on opening
-	width: calc( 100% - 300px );
+	width: calc( 100% - 400px );
 	&>.wrapper {
 		top: 0px;
 		left: 0px;
@@ -717,18 +718,22 @@ label.file {
 		box-shadow: 0px 0px 16px black inset;
 		box-sizing: border-box;
 
-		h2#levelName{
-			margin: 0;
-			padding: 0;
-			margin-top: 8px;
-			white-space: nowrap;
-			overflow: hidden;
-			border: none;
-			cursor: pointer;
+		#mainbar {
+			overflow: hidden; // for title
+
+			h2#levelName {
+				margin: 0;
+				padding: 0;
+				margin-top: 8px;
+				white-space: nowrap;
+				border: none;
+				cursor: pointer;
+			}
+			h2#levelName:hover {
+				color: white;
+			}
 		}
-		h2#levelName:hover {
-			color: white;
-		}
+
 
 		ul.niceList {
 			min-height: auto;
@@ -792,11 +797,23 @@ label.file {
 		grid-template-columns: 150px auto;
 		#mainPanel {
 			grid-template-rows: min-content 200px auto;
-			#layers li {
+			ul.niceList li {
 				padding-top: 4px;
 				padding-bottom: 4px;
+				gap: 4px;
+
+				.icon {
+					width: 0.75em;
+					height: 0.75em;
+				}
+			}
+			h2#levelName {
+				font-size: 1.1em;
 			}
 		}
+	}
+	.window.panel {
+		width: calc( 100% - 150px );
 	}
 }
 
