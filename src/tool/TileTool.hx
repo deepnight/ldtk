@@ -84,14 +84,34 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 	function drawSelectionInRectangle(cx:Int, cy:Int, wid:Int, hei:Int) {
 		var anyChange = false;
 		var sel = getSelectedValue();
+		var selMap = new Map();
 
 		var selLeft = Const.INFINITE;
 		var selTop = Const.INFINITE;
 		var selRight = -Const.INFINITE;
+		var selBottom = -Const.INFINITE;
 
 		for(tid in sel.ids) {
+			selMap.set(tid,true);
 			selLeft = M.imin(selLeft, curTilesetDef.getTileCx(tid));
+			selRight = M.imax(selRight, curTilesetDef.getTileCx(tid));
 			selTop = M.imin(selTop, curTilesetDef.getTileCy(tid));
+			selBottom = M.imax(selBottom, curTilesetDef.getTileCy(tid));
+		}
+
+		var selWid = selRight-selLeft+1;
+		var selHei = selBottom-selTop+1;
+		var curX = cx;
+		var curY = cy;
+		for( x in cx...cx+wid )
+		for( y in cy...cy+hei ) {
+			var tcx = selLeft + (x-cx)%selWid;
+			var tcy = selTop + (y-cy)%selHei;
+			var tid = curTilesetDef.getTileId(tcx,tcy);
+			if( curLayerInstance.getGridTile(x,y)!=tid && selMap.exists(tid) ) {
+				curLayerInstance.setGridTile(x,y, tid);
+				anyChange = true;
+			}
 		}
 
 		return anyChange;
