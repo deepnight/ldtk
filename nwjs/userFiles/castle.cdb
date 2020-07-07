@@ -1,0 +1,28 @@
+{
+	"sheets": [
+		{
+			"name": "Item",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id"
+				},
+				{
+					"typeStr": "1",
+					"name": "name",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "Gold",
+					"name": "Gold coins"
+				}
+			],
+			"separators": [],
+			"props": {}
+		}
+	],
+	"customTypes": [],
+	"compress": false
+}
