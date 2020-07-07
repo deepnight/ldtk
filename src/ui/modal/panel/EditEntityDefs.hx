@@ -99,18 +99,6 @@ class EditEntityDefs extends ui.modal.Panel {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
 				close();
 
-			case LevelAdded:
-
-			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
-			case EntityFieldInstanceChanged:
-				
-			case LayerDefAdded, LayerDefRemoved:
-			case LayerDefChanged:
-			case LayerDefSorted:
-			case LayerInstanceChanged:
-			case TilesetDefChanged:
-			case ToolOptionChanged:
-
 			case LayerInstanceRestoredFromHistory:
 				updatePreview();
 				updateEntityForm();
@@ -128,6 +116,8 @@ class EditEntityDefs extends ui.modal.Panel {
 			case EntityFieldAdded, EntityFieldRemoved, EntityFieldDefChanged:
 				updateLists();
 				updateFieldForm();
+
+			case _:
 		}
 	}
 

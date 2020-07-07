@@ -82,8 +82,6 @@ class LevelRender extends dn.Process {
 				renderAll();
 				fit();
 
-			case LevelAdded:
-
 			case LayerInstanceVisiblityChanged:
 				updateLayersVisibility();
 
@@ -94,8 +92,6 @@ class LevelRender extends dn.Process {
 			case LevelSettingsChanged:
 				invalidate();
 
-			case LayerDefAdded:
-
 			case LayerDefRemoved, LayerDefChanged, LayerDefSorted:
 				invalidate();
 
@@ -105,13 +101,15 @@ class LevelRender extends dn.Process {
 			case TilesetDefChanged:
 				invalidate();
 
-			case EntityDefAdded:
 			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
 				invalidate();
 
 			case EntityFieldAdded, EntityFieldRemoved, EntityFieldDefChanged, EntityFieldInstanceChanged:
 				invalidate();
 
+			case LevelAdded:
+			case LayerDefAdded:
+			case EntityDefAdded:
 			case EntityFieldSorted:
 			case ToolOptionChanged:
 		}

@@ -59,10 +59,6 @@ class EditLayerDefs extends ui.modal.Panel {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
 				close();
 
-			case LevelAdded:
-
-			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
-
 			case LayerInstanceRestoredFromHistory:
 				updateForm();
 				updateList();
@@ -81,12 +77,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			case LayerDefSorted:
 				updateList();
 
-			case LayerInstanceChanged:
-
-			case EntityDefChanged, EntityDefSorted, EntityDefAdded, EntityDefRemoved:
-			case EntityFieldDefChanged, EntityFieldSorted, EntityFieldInstanceChanged:
-			case EntityFieldAdded, EntityFieldRemoved:
-			case ToolOptionChanged:
+			case _:
 		}
 	}
 

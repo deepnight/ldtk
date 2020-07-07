@@ -45,10 +45,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
 				close();
 
-			case LevelAdded:
-
-			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
-
 			case LayerInstanceRestoredFromHistory:
 				updateList();
 				updateForm();
@@ -59,12 +55,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				updateForm();
 				updateTilesetPreview();
 
-			case LayerDefAdded, LayerDefRemoved:
-			case LayerDefChanged, LayerDefSorted, LayerInstanceChanged:
-			case EntityDefChanged, EntityDefSorted, EntityFieldDefChanged, EntityFieldSorted:
-			case EntityDefAdded, EntityDefRemoved:
-			case EntityFieldAdded, EntityFieldRemoved, EntityFieldInstanceChanged:
-			case ToolOptionChanged:
+			case _:
 		}
 	}
 

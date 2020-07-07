@@ -40,22 +40,7 @@ class LevelList extends ui.modal.Panel {
 			case LevelAdded:
 				updateList();
 
-			case LayerDefAdded:
-			case LayerDefRemoved:
-			case LayerDefChanged:
-			case LayerDefSorted:
-			case LayerInstanceChanged:
-			case TilesetDefChanged:
-			case EntityDefAdded:
-			case EntityDefRemoved:
-			case EntityDefChanged:
-			case EntityDefSorted:
-			case EntityFieldAdded:
-			case EntityFieldRemoved:
-			case EntityFieldDefChanged:
-			case EntityFieldInstanceChanged:
-			case EntityFieldSorted:
-			case ToolOptionChanged:
+			case _:
 		}
 		updateList();
 		updateForm();

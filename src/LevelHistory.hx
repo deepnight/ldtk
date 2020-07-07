@@ -38,31 +38,23 @@ class LevelHistory {
 			case ProjectSelected:
 				clearHistory();
 
-			case LevelSelected:
-
-			case LevelAdded:
-
-			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
-
-			case LayerInstanceChanged:
-				// Saving is done manually by the Tool, after usage
-
 			case LayerDefAdded, EntityDefAdded, EntityFieldAdded:
 				initMostDistanceKnownStates(false);
 
 			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved:
 				clearHistory();
 
-			case EntityFieldInstanceChanged:
-
-			case LayerDefChanged, EntityDefChanged:
-
+			case LevelSelected:
+			case LevelAdded:
 			case LevelSettingsChanged:
 
-			case ProjectSettingsChanged,
-				LayerDefSorted,
-				TilesetDefChanged,
-				EntityDefSorted, EntityFieldSorted, EntityFieldDefChanged:
+			case ProjectSettingsChanged:
+			case LayerDefChanged, EntityDefChanged:
+			case LayerDefSorted, TilesetDefChanged:
+			case EntityDefSorted, EntityFieldSorted, EntityFieldDefChanged:
+			case EntityFieldInstanceChanged:
+			case LayerInstanceChanged:
+			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
 
 			case LayerInstanceRestoredFromHistory:
 			case ToolOptionChanged:
