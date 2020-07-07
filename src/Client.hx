@@ -294,11 +294,11 @@ class Client extends dn.Process {
 
 	public function setSelection(ge:GenericLevelElement) {
 		switch ge {
-			case IntGrid(_):
+			case IntGrid(_), Tile(_):
 				clearSelection();
 				return;
 
-			case Entity(_), Tile(_):
+			case Entity(_):
 		}
 
 		selection = ge;
@@ -367,7 +367,10 @@ class Client extends dn.Process {
 
 			case Tile(li, cx, cy):
 				selectLayerInstance(li);
-				// TODO
+				var tid = li.getGridTile(cx,cy);
+				var t = curTool.as(tool.TileTool);
+				t.selectValue( { ids:[tid], mode:t.getMode() } );
+				return true;
 		}
 
 		return false;
