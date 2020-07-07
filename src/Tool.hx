@@ -243,7 +243,8 @@ class Tool<T> extends dn.Process {
 	public function onKeyPress(keyId:Int) {}
 
 	public function onMouseMove(m:MouseCoords) {
-		m.clampToLayer(curLayerInstance);
+		if( isRunning() )
+			m.clampToLayer(curLayerInstance);
 
 		// Start moving elements only after a small elapsed mouse distance
 		if( curMode==Move && !moveStarted && M.dist(origin.gx,origin.gy, m.gx,m.gy)>=10*Const.SCALE ) {
