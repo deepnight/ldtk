@@ -150,7 +150,7 @@ class LevelHistory {
 			applyState( layerStates[curIndex] );
 
 			if( layerStates[curIndex].bounds!=null )
-				client.levelRender.showHistoryBounds( layerStates[curIndex].layerId, layerStates[curIndex].bounds, 0xd2ff74 );
+				client.levelRender.showHistoryBounds( layerStates[curIndex].layerId, layerStates[curIndex].bounds, 0x8ead4f );
 
 			// #if debug
 			// N.debug("LH REDO - "+toString());
