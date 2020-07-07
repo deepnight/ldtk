@@ -66,12 +66,10 @@ class LevelHistory {
 		for(i in 0...MAX_HISTORY)
 			layerStates[i] = null;
 		initMostDistanceKnownStates(true);
-		N.msg("Undo history cleared.");
 	}
 
 	public function setLastStateBounds(x:Int, y:Int, w:Int, h:Int) {
 		var last = layerStates[ curIndex ];
-		N.debug('$x,$y $w x $h');
 		if( last!=null )
 			last.bounds = {
 				x: x,
@@ -107,9 +105,9 @@ class LevelHistory {
 		for(i in curIndex+1...MAX_HISTORY)
 			layerStates[i] = null;
 
-		#if debug
-		N.debug(toString());
-		#end
+		// #if debug
+		// N.debug(toString());
+		// #end
 	}
 
 
@@ -132,10 +130,8 @@ class LevelHistory {
 				else
 					sid--;
 
-			if( before==null ) {
-				N.debug("used most distant for"+undoneLayerId);
+			if( before==null )
 				before = mostDistantKnownStates.get(undoneLayerId);
-			}
 
 			if( before==null )
 				throw "No history found for #"+undoneLayerId; // HACK should not happen
@@ -144,8 +140,6 @@ class LevelHistory {
 
 			// #if debug
 			// N.debug("LH UNDO - "+toString());
-			// #else
-			N.msg("Undo", 0xb1df38);
 			// #end
 		}
 	}
@@ -160,8 +154,6 @@ class LevelHistory {
 
 			// #if debug
 			// N.debug("LH REDO - "+toString());
-			// #else
-			N.msg("Redo", 0x6caedf);
 			// #end
 		}
 	}
