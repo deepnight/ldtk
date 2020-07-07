@@ -572,7 +572,7 @@ class Client extends dn.Process {
 	}
 
 	function updateTitles() {
-		appWin.title = project.name+" - "+curLevel.getName()+"    --    L-Ed v"+Const.APP_VERSION;
+		appWin.title = project.name+" ("+curLevel.getName()+")    --    L-Ed v"+Const.APP_VERSION;
 		jMainPanel.find("h2#levelName").text( curLevel.getName() );
 	}
 
