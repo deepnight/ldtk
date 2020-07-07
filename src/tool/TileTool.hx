@@ -65,8 +65,10 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 						anyChange = true;
 
 				case Remove:
-					if( removeSelectedTileAt(cx,cy) )
+					if( client.curLayerInstance.hasGridTile(cx,cy) ) {
+						client.curLayerInstance.removeGridTile(cx,cy);
 						anyChange = true;
+					}
 
 				case Move:
 			}
