@@ -23,7 +23,6 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Create entity
 		jContent.find(".mainList button.create").click( function(_) {
-			N.debug("err");
 			var ed = project.defs.createEntityDef();
 			selectEntity(ed);
 			client.ge.emit(EntityDefAdded);
