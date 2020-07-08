@@ -146,7 +146,6 @@ class EditEntityDefs extends ui.modal.Panel {
 		jEntityForm.find("*").off(); // cleanup event listeners
 
 		var jAll = jEntityForm.add( jFieldForm ).add( jFieldList.parent() ).add( jPreview );
-
 		if( curEntity==null ) {
 			jAll.css("visibility","hidden");
 			jContent.find(".none").show();
