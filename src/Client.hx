@@ -448,6 +448,7 @@ class Client extends dn.Process {
 		new ui.modal.dialog.Confirm(bt, function() {
 			selectProject( led.Project.createEmpty() );
 			N.msg("New project created.");
+			ui.Modal.closeAll();
 		});
 	}
 
