@@ -23,7 +23,7 @@ class Dialog extends ui.Modal {
 		if( target!=null ) {
 			var targetOff = target.offset();
 			var hei = client.jDoc.innerHeight();
-			if( targetOff.top>=hei*0.5 ) {
+			if( targetOff.top>=hei*0.7 ) {
 				// Place above target
 				jWrapper.offset({
 					left: targetOff.left,
