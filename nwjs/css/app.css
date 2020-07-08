@@ -1047,11 +1047,11 @@ input[type="file"] {
   text-align: left;
 }
 
-.window.panel.defEditor .mainList ul {
+.window.panel .mainList ul {
   border: 1px solid #545d73;
 }
 
-.window.panel.defEditor .mainList button.delete, .window.panel.defEditor .mainList label.delete.file {
+.window.panel .mainList button.delete, .window.panel .mainList label.delete.file {
   flex: 0 0 32px;
 }
 
@@ -1192,10 +1192,6 @@ input[type="file"] {
 
 .window.panel.entityDefs .content {
   width: 900px;
-}
-
-.window.panel.entityDefs button.delete, .window.panel.entityDefs label.delete.file {
-  flex: 0 1 0;
 }
 
 .window.panel.entityDefs .formsWrapper .previewWrapper {

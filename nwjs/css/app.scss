@@ -1025,7 +1025,7 @@ label.file {
 }
 
 
-.window.panel.defEditor {
+.window.panel {
 	.mainList {
 		ul {
 			border: 1px solid $bgLight;
@@ -1175,10 +1175,6 @@ label.file {
 .window.panel.entityDefs {
 	.content {
 		width: 900px;
-	}
-
-	button.delete {
-		flex: 0 1 0;
 	}
 
 	.formsWrapper .previewWrapper {
