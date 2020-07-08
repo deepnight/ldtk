@@ -84,16 +84,6 @@ class Client extends dn.Process {
 	public function initUI() {
 		jMainPanel.find("*").off();
 
-		// Main file actions
-		// jMainPanel.find("button.new").click( function(ev) onNew(ev.getThis()) );
-		// jMainPanel.find("button.load").click( function(_) onLoad() );
-		// jMainPanel.find("button.save").click( function(_) onSave() );
-			// ui.Modal.closeAll();
-			// dn.LocalStorage.write("test", dn.HaxeJson.prettify( haxe.Json.stringify( project.toJson() ) ) );
-			// N.msg("Saved to local storage.");
-		// });
-
-
 		// Edit buttons
 		jMainPanel.find("button.editProject").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.ProjectSettings) )
