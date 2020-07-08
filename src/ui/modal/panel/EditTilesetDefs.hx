@@ -61,23 +61,17 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 	function select(td:led.def.TilesetDef) {
 		cur = td;
-		jForm.find("*").off(); // cleanup event listeners
-
-		if( cur==null ) {
-			jForm.hide();
-			return;
-		}
-
-		jForm.show();
-
-		updateForm();
 		updateList();
+		updateForm();
 		updateTilesetPreview();
 	}
 
 
 
 	function updateTilesetPreview() {
+		if( cur==null )
+			return;
+
 		// Main tileset view
 		var jFull = jForm.find(".tileset canvas.fullPreview");
 		if( cur==null || !cur.hasAtlas() ) {
@@ -111,6 +105,22 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 
 	function updateForm() {
+		jForm.find("*").off(); // cleanup event listeners
+
+		if( cur==null ) {
+			jForm.hide();
+			jContent.find(".noTileLayer").hide();
+			jContent.find(".none").show();
+			return;
+		}
+
+		jForm.show();
+		jContent.find(".none").hide();
+		if( !project.defs.hasLayerType(Tiles) )
+			jContent.find(".noTileLayer").show();
+		else
+			jContent.find(".noTileLayer").hide();
+
 		// Image path
 		var jPath = jForm.find(".path");
 		jPath.empty();

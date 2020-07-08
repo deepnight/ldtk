@@ -41,15 +41,15 @@ class Project {
 		var p = new Project();
 		p.createLevel();
 		#if debug
-		for(i in 0...2) {
-			var ld = p.defs.createLayerDef(IntGrid);
-			var v = ld.getIntGridValueDef(0);
-			v.color = dn.Color.makeColorHsl(i*0.3, 1, 1);
-			var li = p.levels[0].getLayerInstance(ld);
-			for(cx in 0...li.cWid)
-			for(cy in 0...li.cHei)
-				li.setIntGrid(cx,cy, 0);
-		}
+		// for(i in 0...2) {
+		// 	var ld = p.defs.createLayerDef(IntGrid);
+		// 	var v = ld.getIntGridValueDef(0);
+		// 	v.color = dn.Color.makeColorHsl(i*0.3, 1, 1);
+		// 	var li = p.levels[0].getLayerInstance(ld);
+		// 	for(cx in 0...li.cWid)
+		// 	for(cy in 0...li.cHei)
+		// 		li.setIntGrid(cx,cy, 0);
+		// }
 		#end
 
 		return p;

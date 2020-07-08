@@ -162,6 +162,26 @@ button.cancel:hover, label.cancel.file:hover {
   display: none;
 }
 
+.help {
+  color: #ffcc00;
+  font-family: Roboto;
+  font-size: 1.1em;
+  padding: 10px;
+  border: 1px dotted #ffcc00;
+}
+
+.warning {
+  flex: 1 0 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  margin-top: 4px;
+  margin-bottom: 16px;
+  border: 1px dashed red;
+  color: white;
+  box-shadow: 0px 0px 32px darkred inset, 0px 0px 4px darkred;
+  text-shadow: 0px -1px 4px red, 0px 1px 4px red;
+}
+
 span.key,
 div.key {
   display: inline-block;
@@ -448,18 +468,6 @@ ul.form > li > span:last-child {
 
 ul.form > li + li {
   margin-top: 8px;
-}
-
-ul.form > li .warning {
-  flex: 1 0 100%;
-  box-sizing: border-box;
-  padding: 8px;
-  margin-top: 4px;
-  margin-bottom: 16px;
-  border: 1px dashed red;
-  color: red;
-  box-shadow: 0px 0px 32px darkred inset, 0px 0px 4px darkred;
-  text-shadow: 0px 2px 0px black;
 }
 
 select {
@@ -1029,11 +1037,18 @@ input[type="file"] {
   grid-template-columns: 200px auto;
 }
 
-.window.panel.levelList .content > h2,
-.window.panel.layerDefs .content > h2,
-.window.panel.tilesetDefs .content > h2,
-.window.panel.entityDefs .content > h2 {
+.window.panel.levelList .content > .header,
+.window.panel.layerDefs .content > .header,
+.window.panel.tilesetDefs .content > .header,
+.window.panel.entityDefs .content > .header {
   grid-column: 1/3;
+}
+
+.window.panel.levelList .content > .header h2,
+.window.panel.layerDefs .content > .header h2,
+.window.panel.tilesetDefs .content > .header h2,
+.window.panel.entityDefs .content > .header h2 {
+  margin-bottom: 8px;
 }
 
 .window.panel.levelList .content > .mainList,

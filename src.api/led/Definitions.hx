@@ -47,6 +47,13 @@ class Definitions {
 
 	/**  LAYER DEFS  *****************************************/
 
+	public function hasLayerType(t:LayerType) {
+		for(ld in layers)
+			if( ld.type==t )
+				return true;
+		return false;
+	}
+
 	public function getLayerDef(uid:Int) : Null<led.def.LayerDef> {
 		for(ld in layers)
 			if( ld.uid==uid )
