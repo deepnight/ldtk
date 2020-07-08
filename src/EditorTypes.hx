@@ -1,4 +1,6 @@
 enum GlobalEvent {
+	ViewportChanged;
+
 	ProjectSelected;
 	ProjectSettingsChanged;
 
@@ -66,4 +68,11 @@ typedef HistoryStateBounds = {
 	var y : Int;
 	var wid : Int;
 	var hei : Int;
+}
+
+enum RulerPos {
+	Top;
+	Bottom;
+	Left;
+	Right;
 }

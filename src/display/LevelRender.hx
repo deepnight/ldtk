@@ -14,9 +14,9 @@ class LevelRender extends dn.Process {
 	var grid : h2d.Graphics;
 	var fadingRects : Array<h2d.Object> = [];
 
-	public var focusLevelX(default,set) : Float = 0.;
-	public var focusLevelY(default,set) : Float = 0.;
-	public var zoom(default,set) : Float = 3.0;
+	public var focusLevelX(default,set) : Float;
+	public var focusLevelY(default,set) : Float;
+	public var zoom(default,set) : Float;
 
 	public function new() {
 		super(client);
@@ -34,6 +34,7 @@ class LevelRender extends dn.Process {
 
 		focusLevelX = 0;
 		focusLevelY = 0;
+		zoom = 3;
 	}
 
 	public function setFocus(x,y) {
@@ -48,19 +49,25 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function set_focusLevelX(v) {
-		return focusLevelX = client.curLevel==null
+		focusLevelX = client.curLevel==null
 			? v
 			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, client.curLevel.pxWid+MAX_FOCUS_PADDING/zoom );
+		client.ge.emitAtTheEndOfFrame( ViewportChanged );
+		return focusLevelX;
 	}
 
 	inline function set_focusLevelY(v) {
-		return focusLevelY = client.curLevel==null
+		focusLevelY = client.curLevel==null
 			? v
 			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, client.curLevel.pxHei+MAX_FOCUS_PADDING/zoom );
+		client.ge.emitAtTheEndOfFrame( ViewportChanged );
+		return focusLevelY;
 	}
 
-	function set_zoom(v) {
-		return zoom = M.fclamp(v, 0.2, 16);
+	inline function set_zoom(v) {
+		zoom = M.fclamp(v, 0.2, 16);
+		client.ge.emitAtTheEndOfFrame(ViewportChanged);
+		return zoom;
 	}
 
 	override function onDispose() {
@@ -70,6 +77,11 @@ class LevelRender extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
+			case ViewportChanged:
+				root.setScale(zoom);
+				root.x = w()*0.5 - focusLevelX * zoom;
+				root.y = h()*0.5 - focusLevelY * zoom;
+
 			case ProjectSelected:
 				invalidateCaches();
 				renderAll();
@@ -338,11 +350,6 @@ class LevelRender extends dn.Process {
 
 	override function postUpdate() {
 		super.postUpdate();
-
-		// Update scrolling
-		root.setScale(zoom);
-		root.x = w()*0.5 - focusLevelX * zoom;
-		root.y = h()*0.5 - focusLevelY * zoom;
 
 		// Fade-out temporary rects
 		var i = 0;

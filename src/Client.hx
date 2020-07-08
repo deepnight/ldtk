@@ -30,6 +30,7 @@ class Client extends dn.Process {
 	var keyDowns : Map<Int,Bool> = new Map();
 
 	public var levelRender : display.LevelRender;
+	public var rulers : display.Rulers;
 	var bg : h2d.Bitmap;
 	public var cursor : ui.Cursor;
 	public var selection : Null<GenericLevelElement>;
@@ -77,6 +78,7 @@ class Client extends dn.Process {
 		}
 
 		levelRender = new display.LevelRender();
+		rulers = new display.Rulers();
 		selectProject(project);
 		dn.Process.resizeAll();
 	}
@@ -482,6 +484,8 @@ class Client extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
+			case ViewportChanged:
+
 			case LayerInstanceChanged:
 			case EntityFieldDefChanged:
 			case EntityFieldSorted:
@@ -653,6 +657,12 @@ class Client extends dn.Process {
 		Boot.ME.s2d.removeEventListener(onEvent);
 
 		new J("body").off(".client");
+	}
+
+
+	override function postUpdate() {
+		super.postUpdate();
+		ge.onEndOfFrame();
 	}
 
 	override function update() {
