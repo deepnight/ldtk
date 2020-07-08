@@ -26,7 +26,7 @@ class Project {
 		name = "New project";
 		dataVersion = Project.DATA_VERSION;
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
-		bgColor = 0xffffff;
+		bgColor = 0x7f8093;
 		defaultPivotX = defaultPivotY = 0;
 
 		defs = new Definitions(this);

@@ -27,7 +27,7 @@ class LevelRender extends dn.Process {
 
 		bg = new h2d.Graphics();
 		root.add(bg, Const.DP_BG);
-		bg.filter = new h2d.filter.DropShadow(0, 0, 0x0,0.3, 32, true);
+		bg.filter = new h2d.filter.DropShadow(0, 0, 0x0, 0.7, 64, true);
 
 		grid = new h2d.Graphics();
 		root.add(grid, Const.DP_UI);
@@ -157,7 +157,7 @@ class LevelRender extends dn.Process {
 		bg.drawRect(0, 0, client.curLevel.pxWid, client.curLevel.pxHei);
 
 		// Grid
-		var col = C.autoContrast(client.project.bgColor);
+		var col = C.getPerceivedLuminosityInt( client.project.bgColor) >= 0.8 ? 0x0 : 0xffffff;
 
 		grid.clear();
 		if( client.curLayerInstance==null )
