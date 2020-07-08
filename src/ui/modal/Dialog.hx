@@ -15,14 +15,31 @@ class Dialog extends ui.Modal {
 		jButtons.appendTo(jWrapper);
 		jButtons.hide();
 
-		// Position
-		if( target!=null ) {
-			var off = target.offset();
-			jWrapper.offset({ left:off.left, top:off.top+target.outerHeight() });
-		}
-
 		// Arrival anim
 		jWrapper.hide().slideDown(60);
+
+
+		// Position near attach target
+		if( target!=null ) {
+			var targetOff = target.offset();
+			var hei = client.jDoc.innerHeight();
+			if( targetOff.top>=hei*0.5 ) {
+				// Place above target
+				jWrapper.offset({
+					left: targetOff.left,
+					top: 0,
+				});
+				jWrapper.css("top", "auto");
+				jWrapper.css("bottom", (hei-targetOff.top)+"px");
+			}
+			else {
+				// Place beneath target
+				jWrapper.offset({
+					left: targetOff.left,
+					top: targetOff.top+target.outerHeight()
+				});
+			}
+		}
 	}
 
 	public function removeButtons() {
@@ -57,5 +74,11 @@ class Dialog extends ui.Modal {
 				cb();
 			close();
 		});
+	}
+
+	override function update() {
+		super.update();
+
+
 	}
 }
