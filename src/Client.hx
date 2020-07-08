@@ -91,30 +91,39 @@ class Client extends dn.Process {
 			else
 				new ui.modal.panel.ProjectSettings();
 		});
+		ui.Tip.attach(jMainPanel.find("button.editProject"), "Project settings");
+
 		jMainPanel.find("button.levelList").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.LevelList) )
 				ui.Modal.closeAll();
 			else
 				new ui.modal.panel.LevelList();
 		});
+		ui.Tip.attach(jMainPanel.find("button.levelList"), "Levels");
+
 		jMainPanel.find("button.editLayers").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditLayerDefs) )
 				ui.Modal.closeAll();
 			else
 				new ui.modal.panel.EditLayerDefs();
 		});
+		ui.Tip.attach(jMainPanel.find("button.editLayers"), "Layers");
+
 		jMainPanel.find("button.editEntities").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditEntityDefs) )
 				ui.Modal.closeAll();
 			else
 				new ui.modal.panel.EditEntityDefs();
 		});
+		ui.Tip.attach(jMainPanel.find("button.editEntities"), "Entities");
+
 		jMainPanel.find("button.editTilesets").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditTilesetDefs) )
 				ui.Modal.closeAll();
 			else
 				new ui.modal.panel.EditTilesetDefs();
 		});
+		ui.Tip.attach(jMainPanel.find("button.editTilesets"), "Tilesets");
 
 
 		jMainPanel.find("h2#levelName").click( function(ev) jMainPanel.find("button.levelList").click() );

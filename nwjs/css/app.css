@@ -500,6 +500,32 @@ input[type="file"] {
   display: none;
 }
 
+.tip {
+  position: absolute;
+  box-sizing: border-box;
+  padding: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 2px;
+  background-color: #e34d00;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.tip .content {
+  display: flex;
+  align-items: center;
+  font-style: italic;
+  font-size: 0.8em;
+  text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.5), 0px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.tip .content .keys {
+  flex: 0 1 auto;
+  font-style: normal;
+  margin-left: 20px;
+}
+
 #notificationList {
   position: absolute;
   display: flex;
