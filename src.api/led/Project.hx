@@ -1,13 +1,8 @@
 package led;
 
 class Project {
-	#if !debug
 	public static var DEFAULT_LEVEL_WIDTH = 256; // px
 	public static var DEFAULT_LEVEL_HEIGHT = 256; // px
-	#else
-	public static var DEFAULT_LEVEL_WIDTH = 2048; // px
-	public static var DEFAULT_LEVEL_HEIGHT = 1024; // px
-	#end
 	public static var DEFAULT_GRID_SIZE = 16; // px
 
 	public static var DATA_VERSION = 1;
