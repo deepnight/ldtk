@@ -699,15 +699,6 @@ input[type="file"] {
   z-index: 97;
 }
 
-.cols {
-  display: grid;
-  width: 100%;
-  height: 100%;
-  justify-content: stretch;
-  gap: 16px;
-  grid-template-columns: 200px auto;
-}
-
 .sortable-placeholder {
   min-height: 1.3em;
   outline: 1px dashed #ffcc00;
@@ -1060,7 +1051,7 @@ input[type="file"] {
 .window.panel.tilesetDefs .content,
 .window.panel.entityDefs .content {
   display: grid;
-  height: 100%;
+  height: 100vh;
   justify-content: stretch;
   gap: 16px;
   grid-template-rows: min-content auto;
@@ -1220,11 +1211,12 @@ input[type="file"] {
 }
 
 .window.panel.entityDefs .fields {
+  display: grid;
   margin-top: 20px;
-}
-
-.window.panel.entityDefs .fields .cols {
-  grid-template-columns: 0.8fr 1fr;
+  width: 100%;
+  justify-content: stretch;
+  gap: 16px;
+  grid-template-columns: 0.5fr 1fr;
 }
 
 .window.panel.entityDefs .fields ul.form li > label {
