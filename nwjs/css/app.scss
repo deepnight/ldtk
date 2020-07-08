@@ -979,8 +979,11 @@ label.file {
 	background-color: $bgDark;
 
 	ul.form {
-		label {
-			flex: 0 0 60px;
+		&>li>label {
+			flex: 0 0 100%;
+			padding: 0;
+			padding-top: 8px;
+			text-align: left;
 		}
 	}
 }

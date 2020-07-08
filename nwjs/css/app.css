@@ -1002,8 +1002,11 @@ input[type="file"] {
   background-color: #1e2229;
 }
 
-.instanceEditor ul.form label {
-  flex: 0 0 60px;
+.instanceEditor ul.form > li > label {
+  flex: 0 0 100%;
+  padding: 0;
+  padding-top: 8px;
+  text-align: left;
 }
 
 .window.panel.defEditor .mainList ul {
