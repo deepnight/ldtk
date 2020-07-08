@@ -582,6 +582,8 @@ label.file {
 }
 
 .window.dialog {
+	overflow: hidden;
+
 	&>.wrapper {
 		padding: 16px;
 
@@ -1055,7 +1057,8 @@ label.file {
 		li.value {
 			display: grid;
 			align-items: center;
-			grid-template-columns: 64px 2em auto;
+			grid-template-columns: 2em auto 64px;
+			gap: 4px;
 
 			input[type=color] {
 				width: 100%;

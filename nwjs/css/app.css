@@ -599,6 +599,10 @@ input[type="file"] {
   width: 700px;
 }
 
+.window.dialog {
+  overflow: hidden;
+}
+
 .window.dialog > .wrapper {
   padding: 16px;
 }
@@ -1074,7 +1078,8 @@ input[type="file"] {
 .window.panel.layerDefs ul.intGridValues li.value {
   display: grid;
   align-items: center;
-  grid-template-columns: 64px 2em auto;
+  grid-template-columns: 2em auto 64px;
+  gap: 4px;
 }
 
 .window.panel.layerDefs ul.intGridValues li.value input[type=color] {
