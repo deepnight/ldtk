@@ -4,12 +4,11 @@ class EditEntityDefs extends ui.modal.Panel {
 	static var LAST_ENTITY_ID = -1;
 	static var LAST_FIELD_ID = -1;
 
-	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jContent.find(".mainList ul");
+	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jContent.find(".entityList ul");
 	var jFieldList(get,never) : js.jquery.JQuery; inline function get_jFieldList() return jContent.find(".fieldList ul");
 
-	var jAllForms(get,never) : js.jquery.JQuery; inline function get_jAllForms() return jContent.find(".formsWrapper");
-	var jEntityForm(get,never) : js.jquery.JQuery; inline function get_jEntityForm() return jContent.find("ul.form.entityDef");
-	var jFieldForm(get,never) : js.jquery.JQuery; inline function get_jFieldForm() return jContent.find(".fields ul.form");
+	var jEntityForm(get,never) : js.jquery.JQuery; inline function get_jEntityForm() return jContent.find(".entityForm>ul.form");
+	var jFieldForm(get,never) : js.jquery.JQuery; inline function get_jFieldForm() return jContent.find(".fieldForm>ul.form");
 	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jContent.find(".previewWrapper");
 
 	var curEntity : Null<led.def.EntityDef>;
@@ -22,7 +21,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		linkToButton("button.editEntities");
 
 		// Create entity
-		jContent.find(".mainList button.create").click( function(_) {
+		jEntityList.parent().find("button.create").click( function(_) {
 			var ed = project.defs.createEntityDef();
 			selectEntity(ed);
 			client.ge.emit(EntityDefAdded);
@@ -30,7 +29,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Delete entity
-		jContent.find(".mainList button.delete").click( function(ev) {
+		jEntityList.parent().find("button.delete").click( function(ev) {
 			if( curEntity==null ) {
 				N.error("No entity selected.");
 				return;
@@ -46,7 +45,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Create field
-		jContent.find(".fields button.create").click( function(ev) {
+		jFieldList.parent().find("button.create").click( function(ev) {
 			function _create(type:led.LedTypes.FieldType) {
 				var f = curEntity.createField(project, type);
 				client.ge.emit(EntityFieldAdded);
@@ -69,7 +68,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Delete field
-		jContent.find(".fields button.delete").click( function(ev) {
+		jFieldList.parent().find("button.delete").click( function(ev) {
 			if( curField==null ) {
 				N.error("No field selected.");
 				return;
@@ -146,14 +145,16 @@ class EditEntityDefs extends ui.modal.Panel {
 	function updateEntityForm() {
 		jEntityForm.find("*").off(); // cleanup event listeners
 
+		var jAll = jEntityForm.add( jFieldForm ).add( jFieldList.parent() ).add( jPreview );
+
 		if( curEntity==null ) {
-			jAllForms.css("visibility","hidden");
+			jAll.css("visibility","hidden");
 			jContent.find(".none").show();
 			jContent.find(".noEntLayer").hide();
 			return;
 		}
 
-		jAllForms.css("visibility","visible");
+		jAll.css("visibility","visible");
 		jContent.find(".none").hide();
 		if( !project.defs.hasLayerType(Entities) )
 			jContent.find(".noEntLayer").show();

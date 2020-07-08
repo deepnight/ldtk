@@ -9,7 +9,7 @@
 	<div class="warning noEntLayer">You need to create at least one ENTITY LAYER in order to insert entities in your levels.</div>
 </div>
 
-<div class="mainList">
+<div class="entityList">
 	<ul class="niceList"></ul>
 	<div class="buttons">
 		<button class="create">Create entity</button>
@@ -17,12 +17,12 @@
 	</div>
 </div>
 
-<div class="formsWrapper">
+<div class="entityForm">
 	<div class="previewWrapper">
 		<div class="label"></div>
 	</div>
 
-	<ul class="form entityDef">
+	<ul class="form">
 		<li>
 			<label for="eName">Entity name</label>
 			<input type="text" name="name" id="eName"/>
@@ -60,59 +60,59 @@
 		</li>
 	</ul>
 
+</div>
 
-	<div class="fields">
-		<div class="fieldList">
-			<ul class="niceList"></ul>
-			<div class="buttons">
-				<button type="button" class="create">Create field</button>
-				<button type="button" class="delete">🗑️</button>
-			</div>
-		</div>
-
-		<ul class="form">
-		<li>
-			<label>Value type</label>
-			<div class="type"></div>
-		</li>
-		<li>
-			<label for="fName">Field name</label>
-			<input type="text" name="name" id="fName"/>
-		</li>
-
-		<li class="F_Int F_Float F_String">
-			<label for="fDef">Default value</label>
-			<input type="text" name="fDef" placeholder="" id="fDef"/>
-		</li>
-
-		<li class="F_Bool">
-			<label for="bDef">Default state</label>
-			<input type="checkbox" name="bDef" id="bDef"/>
-		</li>
-
-		<li class="F_Color">
-			<label for="cDef">Default color</label>
-			<input type="color" name="cDef" id="cDef"/>
-		</li>
-
-		<li class="F_Int F_Float">
-			<label for="min">Limits</label>
-			<input type="text" name="min" id="min" placeholder="Min"/>
-			<span>to</span>
-			<input type="text" name="max" id="max" placeholder="Max"/>
-		</li>
-
-		<li class="F_Int F_Float F_String">
-			<label for="canBeNull">Can be null</label>
-			<input type="checkbox" name="canBeNull" id="canBeNull"/>
-		</li>
-
-		<li>
-			<label for="editorDisplayMode">Display in editor</label>
-			<select name="editorDisplayMode" id="editorDisplayMode"></select>
-			<select name="editorDisplayPos" id="editorDisplayPos"></select>
-		</li>
-
-		</ul>
+<div class="fieldList">
+	<ul class="niceList"></ul>
+	<div class="buttons">
+		<button type="button" class="create">Create field</button>
+		<button type="button" class="delete">🗑️</button>
 	</div>
+</div>
+
+<div class="fieldForm">
+	<ul class="form">
+	<li>
+		<label>Value type</label>
+		<div class="type"></div>
+	</li>
+	<li>
+		<label for="fName">Field name</label>
+		<input type="text" name="name" id="fName"/>
+	</li>
+
+	<li class="F_Int F_Float F_String">
+		<label for="fDef">Default value</label>
+		<input type="text" name="fDef" placeholder="" id="fDef"/>
+	</li>
+
+	<li class="F_Bool">
+		<label for="bDef">Default state</label>
+		<input type="checkbox" name="bDef" id="bDef"/>
+	</li>
+
+	<li class="F_Color">
+		<label for="cDef">Default color</label>
+		<input type="color" name="cDef" id="cDef"/>
+	</li>
+
+	<li class="F_Int F_Float">
+		<label for="min">Limits</label>
+		<input type="text" name="min" id="min" placeholder="Min"/>
+		<span>to</span>
+		<input type="text" name="max" id="max" placeholder="Max"/>
+	</li>
+
+	<li class="F_Int F_Float F_String">
+		<label for="canBeNull">Can be null</label>
+		<input type="checkbox" name="canBeNull" id="canBeNull"/>
+	</li>
+
+	<li>
+		<label for="editorDisplayMode">Display in editor</label>
+		<select name="editorDisplayMode" id="editorDisplayMode"></select>
+		<select name="editorDisplayPos" id="editorDisplayPos"></select>
+	</li>
+
+	</ul>
 </div>

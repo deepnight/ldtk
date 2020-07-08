@@ -1048,10 +1048,9 @@ input[type="file"] {
 
 .window.panel.levelList .content,
 .window.panel.layerDefs .content,
-.window.panel.tilesetDefs .content,
-.window.panel.entityDefs .content {
+.window.panel.tilesetDefs .content {
   display: grid;
-  height: 100vh;
+  height: 100%;
   justify-content: stretch;
   gap: 16px;
   grid-template-rows: min-content auto;
@@ -1060,22 +1059,19 @@ input[type="file"] {
 
 .window.panel.levelList .content > .header,
 .window.panel.layerDefs .content > .header,
-.window.panel.tilesetDefs .content > .header,
-.window.panel.entityDefs .content > .header {
+.window.panel.tilesetDefs .content > .header {
   grid-column: 1/3;
 }
 
 .window.panel.levelList .content > .header h2,
 .window.panel.layerDefs .content > .header h2,
-.window.panel.tilesetDefs .content > .header h2,
-.window.panel.entityDefs .content > .header h2 {
+.window.panel.tilesetDefs .content > .header h2 {
   margin-bottom: 8px;
 }
 
 .window.panel.levelList .content > .mainList,
 .window.panel.layerDefs .content > .mainList,
-.window.panel.tilesetDefs .content > .mainList,
-.window.panel.entityDefs .content > .mainList {
+.window.panel.tilesetDefs .content > .mainList {
   display: grid;
   grid-template-rows: auto min-content;
 }
@@ -1182,22 +1178,74 @@ input[type="file"] {
 }
 
 .window.panel.entityDefs .content {
+  display: grid;
+  height: 100%;
+  justify-content: stretch;
+  gap: 16px;
+  grid-template-rows: min-content auto auto;
+  grid-template-columns: 200px 200px auto;
+}
+
+.window.panel.entityDefs .content > .header {
+  grid-column: 1/4;
+}
+
+.window.panel.entityDefs .content > .header h2 {
+  margin-bottom: 8px;
+}
+
+.window.panel.entityDefs .content > .entityList {
+  grid-row: 2/4;
+  display: grid;
+  grid-template-rows: auto min-content;
+  overflow: hidden;
+}
+
+.window.panel.entityDefs .content > .entityList ul {
+  overflow: auto;
+}
+
+.window.panel.entityDefs .content > .entityForm {
+  grid-column: 2/4;
+  grid-row: 2/3;
+  overflow: hidden;
+}
+
+.window.panel.entityDefs .content > .fieldList {
+  grid-column: 2/3;
+  grid-row: 3/4;
+  display: grid;
+  grid-template-rows: auto min-content;
+  overflow: hidden;
+}
+
+.window.panel.entityDefs .content > .fieldList ul {
+  overflow: auto;
+}
+
+.window.panel.entityDefs .content > .fieldForm {
+  grid-column: 3/4;
+  grid-row: 3/4;
+  overflow: auto;
+}
+
+.window.panel.entityDefs .content {
   width: 900px;
 }
 
-.window.panel.entityDefs .formsWrapper .previewWrapper {
+.window.panel.entityDefs .previewWrapper {
   position: relative;
   float: right;
   margin: 8px;
   border: 1px solid #545d73;
 }
 
-.window.panel.entityDefs .formsWrapper .previewWrapper .entityPreview {
+.window.panel.entityDefs .previewWrapper .entityPreview {
   width: 64px;
   height: 64px;
 }
 
-.window.panel.entityDefs .formsWrapper .previewWrapper .label {
+.window.panel.entityDefs .previewWrapper .label {
   position: absolute;
   z-index: 1;
   bottom: 0px;
@@ -1210,27 +1258,18 @@ input[type="file"] {
   min-height: 32px;
 }
 
-.window.panel.entityDefs .fields {
-  display: grid;
-  margin-top: 20px;
-  width: 100%;
-  justify-content: stretch;
-  gap: 16px;
-  grid-template-columns: 0.5fr 1fr;
-}
-
-.window.panel.entityDefs .fields ul.form li > label {
+.window.panel.entityDefs .fieldForm ul.form li > label {
   flex: 0 0 100px;
 }
 
-.window.panel.entityDefs .fields ul.form li[class^="F_"] {
+.window.panel.entityDefs .fieldForm ul.form li[class^="F_"] {
   display: none;
 }
 
-.window.panel.entityDefs .fields ul.form.type-F_Int li.F_int,
-.window.panel.entityDefs .fields ul.form.type-F_Float li.F_Float,
-.window.panel.entityDefs .fields ul.form.type-F_Bool li.F_Bool,
-.window.panel.entityDefs .fields ul.form.type-F_Color li.F_Color,
-.window.panel.entityDefs .fields ul.form.type-F_String li.F_String {
+.window.panel.entityDefs .fieldForm ul.form.type-F_Int li.F_int,
+.window.panel.entityDefs .fieldForm ul.form.type-F_Float li.F_Float,
+.window.panel.entityDefs .fieldForm ul.form.type-F_Bool li.F_Bool,
+.window.panel.entityDefs .fieldForm ul.form.type-F_Color li.F_Color,
+.window.panel.entityDefs .fieldForm ul.form.type-F_String li.F_String {
   display: flex;
 }

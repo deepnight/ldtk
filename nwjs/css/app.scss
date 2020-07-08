@@ -1029,11 +1029,10 @@ label.file {
 
 .window.panel.levelList,
 .window.panel.layerDefs,
-.window.panel.tilesetDefs,
-.window.panel.entityDefs {
+.window.panel.tilesetDefs {
 	.content{
 		display: grid;
-		height: 100vh;
+		height: 100%;
 		justify-content: stretch;
 		gap: 16px;
 		grid-template-rows: min-content auto;
@@ -1163,11 +1162,59 @@ label.file {
 }
 
 .window.panel.entityDefs {
+	.content{
+		display: grid;
+		height: 100%;
+		justify-content: stretch;
+		gap: 16px;
+		grid-template-rows: min-content auto auto;
+		grid-template-columns: 200px 200px auto;
+
+		>.header {
+			grid-column: 1/4;
+			h2 {
+				margin-bottom: 8px;
+			}
+		}
+
+		>.entityList {
+			grid-row: 2/4;
+			display: grid;
+			grid-template-rows: auto min-content;
+			overflow: hidden;
+			ul {
+				overflow: auto;
+			}
+		}
+		>.entityForm {
+			grid-column: 2/4;
+			grid-row: 2/3;
+			overflow: hidden;
+		}
+
+		>.fieldList {
+			grid-column: 2/3;
+			grid-row: 3/4;
+			display: grid;
+			grid-template-rows: auto min-content;
+			overflow: hidden;
+			ul {
+				overflow: auto;
+			}
+		}
+
+		>.fieldForm {
+			grid-column: 3/4;
+			grid-row: 3/4;
+			overflow: auto;
+		}
+	}
+
 	.content {
 		width: 900px;
 	}
 
-	.formsWrapper .previewWrapper {
+	.previewWrapper {
 		position: relative;
 		float: right;
 		margin: 8px;
@@ -1192,13 +1239,7 @@ label.file {
 		min-height: 32px;
 	}
 
-	.fields {
-		display: grid;
-		margin-top: 20px;
-		width: 100%;
-		justify-content: stretch;
-		gap: 16px;
-		grid-template-columns: 0.5fr 1fr;
+	.fieldForm {
 		ul.form li>label {
 			flex: 0 0 100px;
 		}
