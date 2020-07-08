@@ -22,7 +22,7 @@ class Tool<T> extends dn.Process {
 
 		jPalette.off();
 		updatePalette();
-		client.ge.listenOnly(ToolOptionChanged, onToolOptionChanged);
+		client.ge.addSpecificListener(ToolOptionChanged, onToolOptionChanged);
 	}
 
 	function onToolOptionChanged() {
@@ -31,7 +31,7 @@ class Tool<T> extends dn.Process {
 
 	override function onDispose() {
 		super.onDispose();
-		client.ge.stopListening(onToolOptionChanged);
+		client.ge.removeListener(onToolOptionChanged);
 	}
 
 	function enablePalettePopOut() {

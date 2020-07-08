@@ -11,7 +11,7 @@ class InstanceEditor extends dn.Process {
 
 		ALL.push(this);
 		this.ei = ei;
-		Client.ME.ge.listenAll(onGlobalEvent);
+		Client.ME.ge.addGlobalListener(onGlobalEvent);
 
 		jPanel = new J('<div class="instanceEditor"/>');
 		Client.ME.jBody.append(jPanel);
@@ -27,7 +27,7 @@ class InstanceEditor extends dn.Process {
 		ei = null;
 
 		ALL.remove(this);
-		Client.ME.ge.stopListening(onGlobalEvent);
+		Client.ME.ge.removeListener(onGlobalEvent);
 	}
 
 	function onGlobalEvent(ge:GlobalEvent) {

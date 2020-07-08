@@ -27,14 +27,14 @@ class Modal extends dn.Process {
 		jMask.mousedown( function(_) close() );
 		jMask.hide().fadeIn(100);
 
-		client.ge.listenAll(onGlobalEvent);
+		client.ge.addGlobalListener(onGlobalEvent);
 	}
 
 	override function onDispose() {
 		super.onDispose();
 
 		ALL.remove(this);
-		client.ge.stopListening(onGlobalEvent);
+		client.ge.removeListener(onGlobalEvent);
 
 		jModalAndMask.remove();
 		jModalAndMask = null;

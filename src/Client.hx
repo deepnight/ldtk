@@ -58,7 +58,7 @@ class Client extends dn.Process {
 		Boot.ME.s2d.addEventListener( onEvent );
 
 		ge = new GlobalEventDispatcher();
-		ge.listenAll( onGlobalEvent );
+		ge.addGlobalListener( onGlobalEvent );
 
 
 		cursor = new ui.Cursor();
