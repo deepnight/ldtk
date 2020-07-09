@@ -55,7 +55,7 @@ class LayerDef {
 			type: JsonTools.writeEnum(type, false),
 			name: name,
 			gridSize: gridSize,
-			displaydisplayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
+			displayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
 			intGridValues: intGridValues,
 			tilesetDefId: tilesetDefId,
 		}
