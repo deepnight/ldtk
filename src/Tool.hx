@@ -84,7 +84,6 @@ class Tool<T> extends dn.Process {
 		client.clearSelection();
 		moveStarted = false;
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
-		m.clampToLayer(curLayerInstance);
 		cd.unset("requireCtrlRelease");
 
 		// Picking an existing element
@@ -124,6 +123,9 @@ class Tool<T> extends dn.Process {
 			case 2:
 				curMode = PanView;
 		}
+
+		if( curMode==PanView )
+			clickingOutsideBounds = false;
 
 		if( !canEdit() && ( curMode==Add || curMode==Remove ) ) {
 			curMode = null;
@@ -206,8 +208,6 @@ class Tool<T> extends dn.Process {
 	}
 
 	public function stopUsing(m:MouseCoords) {
-		m.clampToLayer(curLayerInstance);
-
 		if( isRunning() && !clickingOutsideBounds ) {
 			var anyChange = rectangle
 				? useOnRectangle(
@@ -247,9 +247,6 @@ class Tool<T> extends dn.Process {
 	public function onMouseMove(m:MouseCoords) {
 		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )
 			clickingOutsideBounds = false;
-
-		if( isRunning() )
-			m.clampToLayer(curLayerInstance);
 
 		// Start moving elements only after a small elapsed mouse distance
 		if( curMode==Move && !moveStarted && M.dist(origin.gx,origin.gy, m.gx,m.gy)>=10*Const.SCALE ) {
