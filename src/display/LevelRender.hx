@@ -10,7 +10,8 @@ class LevelRender extends dn.Process {
 	var layerWrappers : Map<Int,h2d.Object> = new Map();
 	var invalidated = true;
 
-	var bg : h2d.Graphics;
+	var bounds : h2d.Graphics;
+	var glow : h2d.Graphics;
 	var grid : h2d.Graphics;
 	var fadingRects : Array<h2d.Object> = [];
 
@@ -25,9 +26,11 @@ class LevelRender extends dn.Process {
 
 		createRootInLayers(client.root, Const.DP_MAIN);
 
-		bg = new h2d.Graphics();
-		root.add(bg, Const.DP_BG);
-		bg.filter = new h2d.filter.DropShadow(0, 0, 0x0, 0.7, 64, true);
+		bounds = new h2d.Graphics();
+		root.add(bounds, Const.DP_UI);
+
+		glow = new h2d.Graphics();
+		root.add(glow, Const.DP_UI);
 
 		grid = new h2d.Graphics();
 		root.add(grid, Const.DP_UI);
@@ -166,10 +169,17 @@ class LevelRender extends dn.Process {
 	}
 
 	public function renderBg() {
-		// Bg
-		bg.clear();
-		bg.beginFill(client.project.bgColor);
-		bg.drawRect(0, 0, client.curLevel.pxWid, client.curLevel.pxHei);
+		// Bounds
+		bounds.clear();
+		bounds.lineStyle(1, 0xffffff, 0.7);
+		bounds.drawRect(0, 0, client.curLevel.pxWid, client.curLevel.pxHei);
+
+		glow.clear();
+		glow.beginFill(0xff00ff);
+		glow.drawRect(0, 0, client.curLevel.pxWid, client.curLevel.pxHei);
+		var shadow = new h2d.filter.Glow( 0x0, 0.6, 128, true );
+		shadow.knockout = true;
+		glow.filter = shadow;
 
 		// Grid
 		var col = C.getPerceivedLuminosityInt( client.project.bgColor) >= 0.8 ? 0x0 : 0xffffff;
