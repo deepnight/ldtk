@@ -118,6 +118,11 @@ class Rulers extends dn.Process {
 		} );
 	}
 
+
+	public function onMouseDown(m:MouseCoords) {}
+	public function onMouseMove(m:MouseCoords) {}
+	public function onMouseUp(m:MouseCoords) {}
+
 	override function postUpdate() {
 		super.postUpdate();
 

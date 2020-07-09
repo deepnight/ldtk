@@ -399,13 +399,16 @@ class Client extends dn.Process {
 
 	function onMouseDown(e:hxd.Event) {
 		curTool.startUsing( getMouse(), e.button );
+		rulers.onMouseDown( getMouse() );
 	}
 	function onMouseUp() {
 		if( curTool.isRunning() )
 			curTool.stopUsing( getMouse() );
+		rulers.onMouseUp( getMouse() );
 	}
 	function onMouseMove(e:hxd.Event) {
 		curTool.onMouseMove( getMouse() );
+		rulers.onMouseMove( getMouse() );
 	}
 
 	function onMouseWheel(e:hxd.Event) {
