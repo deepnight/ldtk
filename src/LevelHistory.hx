@@ -8,22 +8,22 @@ class LevelHistory {
 
 	var curIndex = -1;
 	var states : haxe.ds.Vector< HistoryState >;
-	var mostDistantKnownLayerStates : Map<Int, HistoryState> = new Map();
+	var mostAncientLayerStates : Map<Int, HistoryState> = new Map();
 
 	public function new(lid) {
 		levelId = lid;
 		states = new haxe.ds.Vector(MAX_HISTORY);
-		initMostDistanceKnownStates(true);
+		initMostAncientLayerStates(true);
 	}
 
-	function initMostDistanceKnownStates(clearExisting:Bool) {
+	function initMostAncientLayerStates(clearExisting:Bool) {
 		if( clearExisting )
-			mostDistantKnownLayerStates = new Map();
+			mostAncientLayerStates = new Map();
 
 		// Add missing states
 		for(li in level.layerInstances)
-			if( !mostDistantKnownLayerStates.exists(li.def.uid) )
-				mostDistantKnownLayerStates.set( li.def.uid, Layer(li.def.uid, null, li.toJson()) );
+			if( !mostAncientLayerStates.exists(li.def.uid) )
+				mostAncientLayerStates.set( li.def.uid, Layer(li.def.uid, null, li.toJson()) );
 
 		// Remove lost states (when def is removed)
 		// TODO
@@ -35,7 +35,7 @@ class LevelHistory {
 				clearHistory();
 
 			case LayerDefAdded, EntityDefAdded, EntityFieldAdded:
-				initMostDistanceKnownStates(false);
+				initMostAncientLayerStates(false);
 
 			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved:
 				clearHistory();
@@ -65,7 +65,7 @@ class LevelHistory {
 		curIndex = -1;
 		for(i in 0...MAX_HISTORY)
 			states[i] = null;
-		initMostDistanceKnownStates(true);
+		initMostAncientLayerStates(true);
 	}
 
 	public function setLastStateBounds(x:Int, y:Int, w:Int, h:Int) {
@@ -88,7 +88,7 @@ class LevelHistory {
 			switch droppedState {
 				case FullLevel(json):
 				case Layer(layerId, bounds, json):
-					mostDistantKnownLayerStates.set( layerId, droppedState );
+					mostAncientLayerStates.set( layerId, droppedState );
 			}
 			for(i in 1...MAX_HISTORY)
 				states[i-1] = states[i];
@@ -138,7 +138,7 @@ class LevelHistory {
 				}
 
 				if( before==null )
-					before = mostDistantKnownLayerStates.get(undoneLayerId);
+					before = mostAncientLayerStates.get(undoneLayerId);
 
 				if( before==null )
 					throw "No history found for #"+undoneLayerId; // HACK should not happen
