@@ -10,6 +10,7 @@ class Tool<T> extends dn.Process {
 
 	var jPalette(get,never) : J; inline function get_jPalette() return client.jPalette;
 
+	var clickingOutsideBounds = false;
 	var curMode : Null<ToolEditMode> = null;
 	var origin : MouseCoords;
 	var lastMouse : Null<MouseCoords>;
@@ -82,6 +83,7 @@ class Tool<T> extends dn.Process {
 		curMode = null;
 		client.clearSelection();
 		moveStarted = false;
+		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
 		m.clampToLayer(curLayerInstance);
 		cd.unset("requireCtrlRelease");
 
@@ -131,7 +133,7 @@ class Tool<T> extends dn.Process {
 		rectangle = client.isShiftDown();
 		origin = m;
 		lastMouse = m;
-		if( !rectangle && useAt(m) )
+		if( !clickingOutsideBounds && !rectangle && useAt(m) )
 			onEditAnything();
 	}
 
@@ -206,7 +208,7 @@ class Tool<T> extends dn.Process {
 	public function stopUsing(m:MouseCoords) {
 		m.clampToLayer(curLayerInstance);
 
-		if( isRunning() ) {
+		if( isRunning() && !clickingOutsideBounds ) {
 			var anyChange = rectangle
 				? useOnRectangle(
 					M.imin(origin.cx, m.cx),
@@ -243,6 +245,9 @@ class Tool<T> extends dn.Process {
 	public function onKeyPress(keyId:Int) {}
 
 	public function onMouseMove(m:MouseCoords) {
+		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )
+			clickingOutsideBounds = false;
+
 		if( isRunning() )
 			m.clampToLayer(curLayerInstance);
 
@@ -257,11 +262,13 @@ class Tool<T> extends dn.Process {
 		}
 
 		// Execute the tool
-		if( isRunning() && !rectangle && useAt(m) )
+		if( !clickingOutsideBounds && isRunning() && !rectangle && useAt(m) )
 			onEditAnything();
 
 		// Render cursor
-		if( !isRunning() && client.isAltDown() ) {
+		if( isRunning() && clickingOutsideBounds )
+			client.cursor.set(None);
+		else if( !isRunning() && client.isAltDown() ) {
 			// Preview picking
 			var ge = getGenericLevelElementAt(m);
 			switch ge {

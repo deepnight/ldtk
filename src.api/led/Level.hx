@@ -61,6 +61,10 @@ class Level {
 		return l;
 	}
 
+	public inline function inBounds(x:Int, y:Int) {
+		return x>=0 && x<pxWid && y>=0 && y<pxHei;
+	}
+
 	public function getLayerInstance(layerDef:led.def.LayerDef) : led.inst.LayerInstance {
 		if( !layerInstances.exists(layerDef.uid) )
 			throw "Missing layer instance for "+layerDef.name;
