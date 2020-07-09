@@ -184,8 +184,8 @@ class Rulers extends dn.Process {
 			if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p )
 				client.cursor.set( Resize(p) );
 
-		// Drag threshold start
-		if( isClicking() && draggedPos!=null && !dragStarted && M.dist(m.gx, m.gy, dragOrigin.gx, dragOrigin.gy)>=8 )
+		// Drag only starts after a short threshold
+		if( isClicking() && draggedPos!=null && !dragStarted && M.dist(m.gx, m.gy, dragOrigin.gx, dragOrigin.gy)>=4 )
 			dragStarted = true;
 
 		// Preview resizing
@@ -205,24 +205,24 @@ class Rulers extends dn.Process {
 		return {
 			newLeft :
 				switch draggedPos {
-					case Left, TopLeft, BottomLeft : m.cx*grid;
+					case Left, TopLeft, BottomLeft : M.floor( ( m.levelX - dragOrigin.levelX ) / grid ) * grid;
 					case _: 0;
 				},
 
 			newTop :
 				switch draggedPos {
-					case Top, TopLeft, TopRight: m.cy*grid;
+					case Top, TopLeft, TopRight: M.floor( ( m.levelY - dragOrigin.levelY ) / grid ) * grid;
 					case _: 0;
 				},
 
 			newRight :
 				switch draggedPos {
-					case Right, TopRight, BottomRight: m.cx*grid;
+					case Right, TopRight, BottomRight: curLevel.pxWid + M.floor( ( m.levelX - dragOrigin.levelX ) / grid ) * grid;
 					case _: curLevel.pxWid;
 				},
 			newBottom :
 				switch draggedPos {
-					case Bottom, BottomLeft, BottomRight: m.cy*grid;
+					case Bottom, BottomLeft, BottomRight: curLevel.pxHei + M.floor( ( m.levelY - dragOrigin.levelY ) / grid ) * grid;
 					case _: curLevel.pxHei;
 				},
 
