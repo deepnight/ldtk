@@ -26,6 +26,22 @@
       "excludedTags": []
     },
     {
+      "definition": "grid",
+      "name": "grid16",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "10623748",
+      "arrayMode": 0,
+      "legend": {"0": "#00000000", "1": "#ffffffff"}
+    },
+    {
+      "definition": "grid",
+      "name": "grid24",
+      "gridSize": {"x": 24, "y": 24},
+      "exportID": "28708620",
+      "arrayMode": 0,
+      "legend": {"0": "#00000000", "1": "#f90000ff"}
+    },
+    {
       "definition": "tile",
       "name": "tiles",
       "gridSize": {"x": 8, "y": 8},
@@ -33,14 +49,6 @@
       "exportMode": 1,
       "arrayMode": 1,
       "defaultTileset": "Tileset"
-    },
-    {
-      "definition": "grid",
-      "name": "grid",
-      "gridSize": {"x": 16, "y": 16},
-      "exportID": "10623748",
-      "arrayMode": 0,
-      "legend": {"0": "#00000000", "1": "#000000ff"}
     }
   ],
   "entities": [
