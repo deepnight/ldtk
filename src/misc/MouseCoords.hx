@@ -5,22 +5,22 @@ class MouseCoords {
 	public var gy : Float;
 
 	public var levelX(get,never) : Int;
-	inline function get_levelX() return Std.int( ( gx/Const.SCALE - levelRender.root.x ) / levelRender.zoom );
+	inline function get_levelX() return M.round( ( gx/Const.SCALE - levelRender.root.x ) / levelRender.zoom );
 
 	public var levelY(get,never) : Int;
-	inline function get_levelY() return Std.int( ( gy/Const.SCALE - levelRender.root.y ) / levelRender.zoom );
+	inline function get_levelY() return M.round( ( gy/Const.SCALE - levelRender.root.y ) / levelRender.zoom );
 
 	public var cx(get,never) : Int;
-	inline function get_cx() return Std.int( levelX / client.curLayerInstance.def.gridSize );
+	inline function get_cx() return M.floor( levelX / client.curLayerInstance.def.gridSize );
 
 	public var cy(get,never) : Int;
-	inline function get_cy() return Std.int( levelY / client.curLayerInstance.def.gridSize );
+	inline function get_cy() return M.floor( levelY / client.curLayerInstance.def.gridSize );
 
 	public var htmlX(get,never) : Int;
-	inline function get_htmlX() return Std.int( gx / js.Browser.window.devicePixelRatio + new J("#webgl").offset().left );
+	inline function get_htmlX() return M.round( gx / js.Browser.window.devicePixelRatio + new J("#webgl").offset().left );
 
 	public var htmlY(get,never) : Int;
-	inline function get_htmlY() return Std.int( gy / js.Browser.window.devicePixelRatio + new J("#webgl").offset().top );
+	inline function get_htmlY() return M.round( gy / js.Browser.window.devicePixelRatio + new J("#webgl").offset().top );
 
 
 	var client(get,never) : Client; inline function get_client() return Client.ME;
