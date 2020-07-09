@@ -190,31 +190,49 @@ class Rulers extends dn.Process {
 
 		// Preview resizing
 		if( dragStarted ) {
-			var grid = curLayerInstance.def.gridSize;
-			var newLeft = switch draggedPos {
-				case Left, TopLeft, BottomLeft : m.cx*grid;
-				case _: 0;
-			}
-			var newTop = switch draggedPos {
-				case Top, TopLeft, TopRight: m.cy*grid;
-				case _: 0;
-			}
-			var newRight = switch draggedPos {
-				case Right, TopRight, BottomRight: m.cx*grid;
-				case _: curLevel.pxWid;
-			}
-			var newBottom = switch draggedPos {
-				case Bottom, BottomLeft, BottomRight: m.cy*grid;
-				case _: curLevel.pxHei;
-			}
-
 			resizePreview.clear();
 			resizePreview.lineStyle(4, 0xffcc00);
-			resizePreview.drawRect(newLeft, newTop, newRight-newLeft, newBottom-newTop);
+			var b = getResizedBounds(m);
+			resizePreview.drawRect(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
+		}
+	}
+
+	function getResizedBounds(m:MouseCoords) {
+		if( draggedPos==null )
+			return null;
+
+		var grid = curLayerInstance.def.gridSize;
+		return {
+			newLeft :
+				switch draggedPos {
+					case Left, TopLeft, BottomLeft : m.cx*grid;
+					case _: 0;
+				},
+
+			newTop :
+				switch draggedPos {
+					case Top, TopLeft, TopRight: m.cy*grid;
+					case _: 0;
+				},
+
+			newRight :
+				switch draggedPos {
+					case Right, TopRight, BottomRight: m.cx*grid;
+					case _: curLevel.pxWid;
+				},
+			newBottom :
+				switch draggedPos {
+					case Bottom, BottomLeft, BottomRight: m.cy*grid;
+					case _: curLevel.pxHei;
+				},
+
 		}
 	}
 
 	public function onMouseUp(m:MouseCoords) {
+		if( dragStarted ) {
+		}
+
 		dragOrigin = null;
 		draggedPos = null;
 		dragStarted = false;
