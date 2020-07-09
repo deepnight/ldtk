@@ -42,6 +42,7 @@ enum CursorType {
 	GridRect(li:led.inst.LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
 	Entity(def:led.def.EntityDef, x:Int, y:Int);
 	Tiles(li:led.inst.LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int);
+	Resize(p:RulerPos);
 }
 
 enum GenericLevelElement {

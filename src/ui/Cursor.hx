@@ -39,6 +39,20 @@ class Cursor extends dn.Process {
 		switch type {
 			case None:
 
+			case Resize(pos):
+				#if js
+				hxd.System.setCursor( hxd.Cursor.CustomCursor.getNativeCursor(switch pos {
+					case Top: "n-resize";
+					case Bottom: "s-resize";
+					case Left: "w-resize";
+					case Right: "e-resize";
+					case TopLeft: "nw-resize";
+					case TopRight: "ne-resize";
+					case BottomLeft: "sw-resize";
+					case BottomRight: "se-resize";
+				}) );
+				#end
+
 			case Move:
 				hxd.System.setCursor(Move);
 
@@ -120,6 +134,7 @@ class Cursor extends dn.Process {
 
 		switch type {
 			case None, Move:
+			case Resize(_):
 
 			case Eraser(x, y):
 				wrapper.setPosition(x,y);

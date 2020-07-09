@@ -19,6 +19,7 @@ class Rulers extends dn.Process {
 	var labels : h2d.Object;
 
 	// Drag & drop
+	var draggables : Array<RulerPos>;
 	var draggedPos : Null<RulerPos>;
 	var dragOrigin : Null<MouseCoords>;
 	var dragStarted = false;
@@ -28,6 +29,8 @@ class Rulers extends dn.Process {
 		super(client);
 		createRootInLayers(client.root, Const.DP_UI);
 		client.ge.addGlobalListener(onGlobalEvent);
+
+		draggables = RulerPos.createAll();
 
 		g = new h2d.Graphics(root);
 		labels = new h2d.Object(root);
@@ -97,11 +100,13 @@ class Rulers extends dn.Process {
 
 
 		// Corners
-		g.lineStyle(0);
-		g.beginFill(c, a);
-		var size = 8;
-		for(p in [TopLeft, TopRight, BottomLeft, BottomRight])
-			g.drawRect( getX(p)-size*0.5, getY(p)-size*0.5, size, size );
+		if( curLayerInstance!=null ) {
+			g.lineStyle(0);
+			g.beginFill(c, a);
+			var size = 8;
+			for(p in draggables)
+				g.drawRect( getX(p)-size*0.5, getY(p)-size*0.5, size, size );
+		}
 	}
 
 	function addLabel(str:String, pos:RulerPos) {
@@ -157,12 +162,12 @@ class Rulers extends dn.Process {
 		dragStarted = false;
 		draggedPos = null;
 
-		if( buttonId!=0 || client.isKeyDown(K.SPACE) )
+		if( buttonId!=0 || client.isKeyDown(K.SPACE) || curLayerInstance==null )
 			return;
 
 		dragOrigin = m;
 
-		for( p in RulerPos.createAll() )
+		for( p in draggables )
 			if( isOver(m.levelX, m.levelY, p) )
 				draggedPos = p;
 
@@ -171,9 +176,41 @@ class Rulers extends dn.Process {
 	}
 
 	public function onMouseMove(m:MouseCoords) {
-		if( isClicking() && draggedPos!=null && !dragStarted && M.dist(m.levelX, m.levelY, dragOrigin.levelX, dragOrigin.levelY)>=16 ) {
-			N.debug(draggedPos+" drag started");
+		if( curLayerInstance==null)
+			return;
+
+		// Cursor
+		for( p in draggables )
+			if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p )
+				client.cursor.set( Resize(p) );
+
+		// Drag threshold start
+		if( isClicking() && draggedPos!=null && !dragStarted && M.dist(m.gx, m.gy, dragOrigin.gx, dragOrigin.gy)>=8 )
 			dragStarted = true;
+
+		// Preview resizing
+		if( dragStarted ) {
+			var grid = curLayerInstance.def.gridSize;
+			var newLeft = switch draggedPos {
+				case Left, TopLeft, BottomLeft : m.cx*grid;
+				case _: 0;
+			}
+			var newTop = switch draggedPos {
+				case Top, TopLeft, TopRight: m.cy*grid;
+				case _: 0;
+			}
+			var newRight = switch draggedPos {
+				case Right, TopRight, BottomRight: m.cx*grid;
+				case _: curLevel.pxWid;
+			}
+			var newBottom = switch draggedPos {
+				case Bottom, BottomLeft, BottomRight: m.cy*grid;
+				case _: curLevel.pxHei;
+			}
+
+			resizePreview.clear();
+			resizePreview.lineStyle(4, 0xffcc00);
+			resizePreview.drawRect(newLeft, newTop, newRight-newLeft, newBottom-newTop);
 		}
 	}
 
