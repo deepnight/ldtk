@@ -47,7 +47,7 @@ class Rulers extends dn.Process {
 			case ProjectSelected, LevelSelected, LayerInstanceSelected, ProjectSettingsChanged:
 				invalidate();
 
-			case LayerDefChanged, LayerDefRemoved:
+			case LayerDefChanged, LayerDefRemoved, LevelResized:
 				invalidate();
 
 			case ViewportChanged:
@@ -231,6 +231,9 @@ class Rulers extends dn.Process {
 
 	public function onMouseUp(m:MouseCoords) {
 		if( dragStarted ) {
+			var b = getResizedBounds(m);
+			curLevel.applyNewBounds(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
+			client.ge.emit(LevelResized);
 		}
 
 		dragOrigin = null;

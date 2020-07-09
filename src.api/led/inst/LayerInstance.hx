@@ -9,6 +9,8 @@ class LayerInstance {
 
 	public var levelId : Int;
 	public var layerDefId : Int;
+	public var pxOffsetX : Int = 0;
+	public var pxOffsetY : Int = 0;
 
 	// Layer content
 	var intGrid : Map<Int,Int> = new Map(); // <coordId, value>
@@ -39,6 +41,8 @@ class LayerInstance {
 		return {
 			levelId: levelId,
 			layerDefId: layerDefId,
+			pxOffsetX: pxOffsetX,
+			pxOffsetY: pxOffsetY,
 			intGrid: {
 				var arr = [];
 				for(e in intGrid.keyValueIterator())
@@ -72,6 +76,9 @@ class LayerInstance {
 
 		for( entityJson in JsonTools.readArray(json.entityInstances) )
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
+
+		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
+		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
 		return li;
 	}
@@ -126,7 +133,66 @@ class LayerInstance {
 			case Tiles:
 				// TODO
 		}
-}
+	}
+
+
+	@:allow(led.Level)
+	function applyNewBounds(newPxLeft:Int, newPxTop:Int, newPxWid:Int, newPxHei:Int) {
+		var pxDeltaX = pxOffsetX - newPxLeft;
+		var pxDeltaY = pxOffsetY - newPxTop;
+		var newCWid = dn.M.ceil( newPxWid / def.gridSize );
+		var newCHei = dn.M.ceil( newPxHei/ def.gridSize );
+
+		// Move data
+		var cDeltaX = Std.int(pxDeltaX/def.gridSize);
+		var cDeltaY = Std.int(pxDeltaY/def.gridSize);
+		switch def.type {
+			case IntGrid:
+				// Remap coords
+				var old = intGrid;
+				intGrid = new Map();
+				for(cx in 0...cWid)
+				for(cy in 0...cHei) {
+					var newCx = cx + cDeltaX;
+					var newCy = cy + cDeltaY;
+					var newCoordId = newCx + newCy * newCWid;
+					if( old.exists(coordId(cx,cy)) && newCx>=0 && newCx<newCWid && newCy>=0 && newCy<newCHei )
+						intGrid.set( newCoordId, old.get(coordId(cx,cy)) );
+				}
+
+			case Entities:
+				var i = 0;
+				while( i<entityInstances.length ) {
+					var ei = entityInstances[i];
+					ei.x += pxDeltaX;
+					ei.y += pxDeltaY;
+					if( ei.x<0 || ei.y<0 )
+						entityInstances.splice(i,1);
+					else
+						i++;
+				}
+
+			case Tiles:
+				// Remap coords
+				var old = gridTiles;
+				gridTiles = new Map();
+				for(cx in 0...cWid)
+				for(cy in 0...cHei) {
+					var newCx = cx + cDeltaX;
+					var newCy = cy + cDeltaY;
+					var newCoordId = newCx + newCy * newCWid;
+					if( old.exists(coordId(cx,cy)) && newCx>=0 && newCx<newCWid && newCy>=0 && newCy<newCHei )
+						gridTiles.set( newCoordId, old.get(coordId(cx,cy)) );
+				}
+
+		}
+
+		// The remaining pixels are stored in offsets
+		pxOffsetX = pxDeltaX % def.gridSize;
+		pxOffsetY = pxDeltaY % def.gridSize;
+		ui.Notification.debug(def.name+" => offset: newTotal="+pxDeltaX+" case="+cDeltaX+", finalOffset="+pxOffsetX, true);
+	}
+
 
 	/** INT GRID *******************/
 

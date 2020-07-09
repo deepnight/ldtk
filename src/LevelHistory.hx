@@ -44,6 +44,8 @@ class LevelHistory {
 			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved:
 				clearHistory();
 
+			case LevelResized:
+
 			case ViewportChanged:
 
 			case LevelSelected:

@@ -7,6 +7,7 @@ enum GlobalEvent {
 	LevelSelected;
 	LevelSettingsChanged;
 	LevelAdded;
+	LevelResized;
 
 	LayerDefAdded;
 	LayerDefRemoved;

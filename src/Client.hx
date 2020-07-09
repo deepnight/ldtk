@@ -526,6 +526,8 @@ class Client extends dn.Process {
 
 			case LevelAdded:
 
+			case LevelResized:
+
 			case LevelSelected:
 				updateLayerList();
 				updateTitles();

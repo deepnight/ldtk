@@ -94,6 +94,9 @@ class LevelRender extends dn.Process {
 				renderAll();
 				fit();
 
+			case LevelResized:
+				invalidate();
+
 			case LayerInstanceVisiblityChanged:
 				updateLayersVisibility();
 
@@ -204,6 +207,8 @@ class LevelRender extends dn.Process {
 			root.add(wrapper,Const.DP_MAIN);
 			root.under(wrapper);
 			layerWrappers.set(li.layerDefId, wrapper);
+			wrapper.x = li.pxOffsetX;
+			wrapper.y = li.pxOffsetY;
 
 			if( !isLayerVisible(li) )
 				continue;
