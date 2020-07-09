@@ -114,10 +114,10 @@ class EditLayerDefs extends ui.modal.Panel {
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
-		var i = Input.linkToHtmlInput( ld.offsetX, jForm.find("input[name='offsetX']") );
+		var i = Input.linkToHtmlInput( ld.pxOffsetX, jForm.find("input[name='offsetX']") );
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
-		var i = Input.linkToHtmlInput( ld.offsetY, jForm.find("input[name='offsetY']") );
+		var i = Input.linkToHtmlInput( ld.pxOffsetY, jForm.find("input[name='offsetY']") );
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( ld.displayOpacity, jForm.find("input[name='displayOpacity']") );
