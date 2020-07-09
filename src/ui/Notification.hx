@@ -3,7 +3,7 @@ package ui;
 class Notification extends dn.Process {
 	var elem : js.jquery.JQuery;
 
-	private function new(str:String, ?col:UInt) {
+	private function new(str:String, ?col:UInt, ?long=false) {
 		super(Client.ME);
 
 		var jList = new J("#notificationList");
@@ -19,7 +19,7 @@ class Notification extends dn.Process {
 			elem.css("background-color", C.intToHex( C.mix(col,defColor,0.66) ));
 		}
 
-		delayer.addS(hide, 3 + str.length*0.04);
+		delayer.addS(hide, 3 + str.length*0.04 + (long ? 20 : 0));
 		elem.addClass("latest");
 	}
 
@@ -35,10 +35,10 @@ class Notification extends dn.Process {
 		return error("Feature not implemented yet.");
 	}
 
-	public static inline function debug(str:Dynamic) {
+	public static inline function debug(str:Dynamic, long=false) {
 		#if debug
 		var str = StringTools.replace( Std.string(str), ",", ", " );
-		new Notification(str, 0xff00ff);
+		new Notification(str, 0xff00ff, long);
 		#end
 	}
 
