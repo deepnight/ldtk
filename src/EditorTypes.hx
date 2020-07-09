@@ -59,10 +59,9 @@ enum ToolEditMode {
 	Move;
 }
 
-typedef LayerHistoryState = {
-	var layerId : Int;
-	var bounds: Null<HistoryStateBounds>;
-	var json : Dynamic;
+enum HistoryState {
+	FullLevel(json:Dynamic);
+	Layer(layerId:Int, bounds:Null<HistoryStateBounds>, json:Dynamic);
 }
 
 typedef HistoryStateBounds = {
