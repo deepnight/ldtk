@@ -13,9 +13,16 @@ class Rulers extends dn.Process {
 	var curLayerInstance(get,never) : Null<led.inst.LayerInstance>;
 		inline function get_curLayerInstance() return Client.ME.curLayerInstance;
 
+	// Render
 	var invalidated = true;
 	var g : h2d.Graphics;
 	var labels : h2d.Object;
+
+	// Drag & drop
+	var draggedPos : Null<RulerPos>;
+	var dragOrigin : Null<MouseCoords>;
+	var dragStarted = false;
+	var resizePreview : h2d.Graphics;
 
 	public function new() {
 		super(client);
@@ -24,6 +31,7 @@ class Rulers extends dn.Process {
 
 		g = new h2d.Graphics(root);
 		labels = new h2d.Object(root);
+		resizePreview = new h2d.Graphics(root);
 	}
 
 	override function onDispose() {
@@ -58,7 +66,8 @@ class Rulers extends dn.Process {
 		labels.removeChildren();
 
 		var c = C.getPerceivedLuminosityInt(client.project.bgColor)>=0.7 ? 0x0 : 0xffffff;
-		g.lineStyle(2, c, 0.4);
+		var a = 0.3;
+		g.lineStyle(2, c, a);
 
 		// Top
 		g.moveTo(0, -PADDING);
@@ -76,22 +85,32 @@ class Rulers extends dn.Process {
 		g.moveTo(curLevel.pxWid+PADDING, 0);
 		g.lineTo(curLevel.pxWid+PADDING, curLevel.pxHei);
 
+		// Horizontal labels
 		var xLabel = curLayerInstance==null ? curLevel.pxWid+"px" : curLayerInstance.cWid+" cells / "+curLevel.pxWid+"px";
 		addLabel(xLabel, Top);
 		addLabel(xLabel, Bottom);
 
+		// Vertical labels
 		var yLabel = curLayerInstance==null ? curLevel.pxHei+"px" : curLayerInstance.cHei+" cells / "+curLevel.pxHei+"px";
 		addLabel(yLabel, Left);
 		addLabel(yLabel, Right);
+
+
+		// Corners
+		g.lineStyle(0);
+		g.beginFill(c, a);
+		var size = 8;
+		for(p in [TopLeft, TopRight, BottomLeft, BottomRight])
+			g.drawRect( getX(p)-size*0.5, getY(p)-size*0.5, size, size );
 	}
 
 	function addLabel(str:String, pos:RulerPos) {
 		var wrapper = new h2d.Object(labels);
-		wrapper.x = getX(pos);
-		wrapper.y = getY(pos);
+		wrapper.x = getX(pos, PADDING*2);
+		wrapper.y = getY(pos, PADDING*2);
 		switch pos {
 			case Left, Right: wrapper.rotate(-M.PIHALF);
-			case Top, Bottom:
+			case _:
 		}
 
 		var tf = new h2d.Text(Assets.fontPixel, wrapper);
@@ -102,26 +121,68 @@ class Rulers extends dn.Process {
 		tf.y = Std.int( -tf.textHeight*0.5*tf.scaleY );
 	}
 
-	function getX(pos:RulerPos) : Int {
-		return Std.int( switch pos {
-			case Top, Bottom: curLevel.pxWid*0.5;
-			case Left: -PADDING*2;
-			case Right: curLevel.pxWid + PADDING*2;
-		} );
-	}
 
-	function getY(pos:RulerPos) : Int {
-		return Std.int( switch pos {
-			case Top: -PADDING*2;
-			case Bottom: curLevel.pxHei + PADDING*2;
-			case Left, Right: curLevel.pxHei*0.5;
-		} );
+	inline function isOver(x:Int, y:Int, pos:RulerPos) {
+		return M.dist( x,y, getX(pos), getY(pos) ) <= PADDING;
 	}
 
 
-	public function onMouseDown(m:MouseCoords) {}
-	public function onMouseMove(m:MouseCoords) {}
-	public function onMouseUp(m:MouseCoords) {}
+	function getX(pos:RulerPos, ?padding:Float) : Int {
+		if( padding==null )
+			padding = PADDING;
+
+		return Std.int( switch pos {
+			case Top, Bottom : curLevel.pxWid*0.5;
+			case Left, TopLeft, BottomLeft : -padding;
+			case Right, TopRight, BottomRight : curLevel.pxWid + padding;
+		} );
+	}
+
+	function getY(pos:RulerPos, ?padding:Float) : Int {
+		if( padding==null )
+			padding = PADDING;
+
+		return Std.int( switch pos {
+			case Top, TopLeft, TopRight : -padding;
+			case Bottom, BottomLeft, BottomRight : curLevel.pxHei + padding;
+			case Left, Right : curLevel.pxHei*0.5;
+		} );
+	}
+
+	inline function isClicking() return dragOrigin!=null;
+
+	public function onMouseDown(m:MouseCoords, buttonId:Int) {
+		resizePreview.clear();
+		dragOrigin = null;
+		dragStarted = false;
+		draggedPos = null;
+
+		if( buttonId!=0 || client.isKeyDown(K.SPACE) )
+			return;
+
+		dragOrigin = m;
+
+		for( p in RulerPos.createAll() )
+			if( isOver(m.levelX, m.levelY, p) )
+				draggedPos = p;
+
+		if( draggedPos!=null )
+			client.curTool.stopUsing(m);
+	}
+
+	public function onMouseMove(m:MouseCoords) {
+		if( isClicking() && draggedPos!=null && !dragStarted && M.dist(m.levelX, m.levelY, dragOrigin.levelX, dragOrigin.levelY)>=16 ) {
+			N.debug(draggedPos+" drag started");
+			dragStarted = true;
+		}
+	}
+
+	public function onMouseUp(m:MouseCoords) {
+		dragOrigin = null;
+		draggedPos = null;
+		dragStarted = false;
+		resizePreview.clear();
+	}
 
 	override function postUpdate() {
 		super.postUpdate();

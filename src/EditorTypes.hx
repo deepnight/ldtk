@@ -75,4 +75,9 @@ enum RulerPos {
 	Bottom;
 	Left;
 	Right;
+
+	TopLeft;
+	TopRight;
+	BottomLeft;
+	BottomRight;
 }
