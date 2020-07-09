@@ -7,8 +7,6 @@ class LayerDef {
 	public var type : LayerType;
 	public var name : String;
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
-	public var pxOffsetX : Int = 0;
-	public var pxOffsetY : Int = 0;
 	public var displayOpacity : Float = 1.0;
 
 	// IntGrid
@@ -41,8 +39,6 @@ class LayerDef {
 		o.name = JsonTools.readString(json.name);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
-		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
-		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
 		o.intGridValues = [];
 		for( v in JsonTools.readArray(json.intGridValues) )
@@ -59,8 +55,6 @@ class LayerDef {
 			type: JsonTools.writeEnum(type, false),
 			name: name,
 			gridSize: gridSize,
-			pxOffsetX: pxOffsetX,
-			pxOffsetY: pxOffsetY,
 			displayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
 			intGridValues: intGridValues,
 			tilesetDefId: tilesetDefId,
