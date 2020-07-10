@@ -162,7 +162,7 @@ class Rulers extends dn.Process {
 		dragStarted = false;
 		draggedPos = null;
 
-		if( buttonId!=0 || client.isKeyDown(K.SPACE) || curLayerInstance==null )
+		if( buttonId!=0 || !canUseResizers() )
 			return;
 
 		dragOrigin = m;
@@ -175,14 +175,20 @@ class Rulers extends dn.Process {
 			client.curTool.stopUsing(m);
 	}
 
+	function canUseResizers() {
+		return curLayerInstance!=null
+			&& !client.isKeyDown(K.SPACE) && !client.isShiftDown() && !client.isCtrlDown() && !client.isAltDown();
+	}
+
 	public function onMouseMove(m:MouseCoords) {
 		if( curLayerInstance==null)
 			return;
 
 		// Cursor
-		for( p in draggables )
-			if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p )
-				client.cursor.set( Resize(p) );
+		if( canUseResizers() )
+			for( p in draggables )
+				if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p )
+					client.cursor.set( Resize(p) );
 
 		// Drag only starts after a short threshold
 		if( isClicking() && draggedPos!=null && !dragStarted && M.dist(m.gx, m.gy, dragOrigin.gx, dragOrigin.gy)>=4 )
