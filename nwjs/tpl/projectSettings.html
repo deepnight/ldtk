@@ -9,7 +9,7 @@
 	<button class="saveAs">Save as</button>
 </div>
 
-<ul class="form">
+<ul class="form projectForm">
 	<li>
 		<label for="pName">Project name</label>
 		<input type="text" name="pName" id="pName"/>
@@ -29,5 +29,30 @@
 	<li>
 		<label>Default pivot point for new entities</label>
 		<div class="pivot"></div>
+	</li>
+</ul>
+
+<div class="help">
+	Enumerations (Enums) are special value types of Entities.
+</div>
+
+<div class="enumList">
+	<ul class="niceList"></ul>
+	<div class="buttons">
+		<button class="createEnum">Create enum</button>
+		<button class="deleteEnum">🗑️</button>
+	</div>
+</div>
+
+<ul class="form enumForm">
+	<li>
+		<label for="eName">Enum name</label>
+		<input type="text" name="eName" id="eName"/>
+	</li>
+
+	<li>
+		<label for="eValues">Enum values</label>
+		<textarea id="eValues"></textarea>
+		<span>One per line</span>
 	</li>
 </ul>

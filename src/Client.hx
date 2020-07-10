@@ -255,7 +255,7 @@ class Client extends dn.Process {
 	}
 
 	inline function hasInputFocus() {
-		return jBody.find("input:focus").length>0;
+		return jBody.find("input:focus, textarea:focus").length>0;
 	}
 	function onKeyPress(keyId:Int) {
 		switch keyId {
@@ -567,6 +567,8 @@ class Client extends dn.Process {
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case ViewportChanged:
+
+			case EnumDefAdded, EnumDefRemoved, EnumDefChanged:
 
 			case LayerInstanceChanged:
 			case EntityFieldDefChanged:

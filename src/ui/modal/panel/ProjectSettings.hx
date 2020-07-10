@@ -1,27 +1,43 @@
 package ui.modal.panel;
 
 class ProjectSettings extends ui.modal.Panel {
-	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jModalAndMask.find("ul.form:first");
+	var curEnum : Null<led.def.EnumDef>;
 
 	public function new() {
 		super();
 
 		loadTemplate( "projectSettings", "projectSettings" );
 		linkToButton("button.editProject");
-		updateForm();
 
 		jContent.find("button.new").click( function(ev) client.onNew(ev.getThis()) );
 		jContent.find("button.load").click( function(_) client.onLoad() );
 		jContent.find("button.saveAs").click( function(_) client.onSaveAs() );
+		jContent.find("button.createEnum").click( function(_) {
+			var ed = project.defs.createEnumDef();
+			client.ge.emit(EnumDefAdded);
+			selectEnum(ed);
+		});
 
+		if( project.defs.enums.length>0 )
+			selectEnum( project.defs.enums[0] );
+
+		updateProjectForm();
+		updateEnumList();
+		updateEnumForm();
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
-		updateForm();
+
+		updateProjectForm();
+
+		updateEnumList();
+		updateEnumForm();
 	}
 
-	function updateForm() {
+	function updateProjectForm() {
+		var jForm = jContent.find("ul.form:first");
+
 		var i = Input.linkToHtmlInput( project.name, jForm.find("[name=pName]") );
 		i.linkEvent(ProjectSettingsChanged);
 
@@ -44,5 +60,63 @@ class ProjectSettings extends ui.modal.Panel {
 				client.ge.emit(ProjectSettingsChanged);
 			}
 		));
+	}
+
+	function selectEnum(ed:led.def.EnumDef) {
+		curEnum = ed;
+		updateEnumList();
+		updateEnumForm();
+	}
+
+	function updateEnumList() {
+		var jList = jContent.find(".enumList ul");
+		jList.empty();
+
+		for(ed in project.defs.enums) {
+			var e = new J("<li/>");
+			e.appendTo(jList);
+			if( ed==curEnum )
+				e.addClass("active");
+			e.append('<span class="name">'+ed.name+'</span>');
+			e.click( function(_) {
+				selectEnum(ed);
+			});
+		}
+
+		// Make list sortable
+		JsTools.makeSortable(".window .enumList ul", function(from, to) {
+			N.notImplemented();
+			// var moved = project.defs.sortLayerDef(from,to);
+			// select(moved);
+			// client.ge.emit(LayerDefSorted);
+		});
+
+	}
+
+	function updateEnumForm() {
+		var jForm = jContent.find("ul.enumForm");
+		jForm.off();
+
+		if( curEnum==null ) {
+			jForm.hide();
+			return;
+		}
+
+		jForm.show();
+
+		var i = Input.linkToHtmlInput( curEnum.name, jForm.find("[name=eName]") );
+		i.linkEvent(EnumDefChanged);
+
+		var ta = @:privateAccess new form.Input( jForm.find("textarea"), function() {
+			return curEnum.values.join("\n");
+		}, function(str:String) {
+			curEnum.values = [];
+			for(v in str.split("\n"))
+				curEnum.addValue(v);
+		});
+		ta.onChange = function() {
+			N.debug(curEnum.values);
+		}
+		ta.linkEvent(EnumDefChanged);
 	}
 }

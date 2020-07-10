@@ -38,6 +38,10 @@ enum GlobalEvent {
 	EntityFieldInstanceChanged;
 	EntityFieldSorted;
 
+	EnumDefAdded;
+	EnumDefRemoved;
+	EnumDefChanged;
+
 	ToolOptionChanged;
 }
 

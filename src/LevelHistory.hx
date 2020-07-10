@@ -37,10 +37,13 @@ class LevelHistory {
 			case LayerDefAdded, EntityDefAdded, EntityFieldAdded:
 				initMostAncientLayerStates(false);
 
-			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved:
+			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved, EnumDefRemoved:
 				clearHistory();
 
 			case ViewportChanged:
+
+			case EnumDefAdded:
+			case EnumDefChanged:
 
 			case LevelResized:
 			case LevelSorted:
