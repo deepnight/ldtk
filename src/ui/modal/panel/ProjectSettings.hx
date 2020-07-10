@@ -12,7 +12,7 @@ class ProjectSettings extends ui.modal.Panel {
 
 		jContent.find("button.new").click( function(ev) client.onNew(ev.getThis()) );
 		jContent.find("button.load").click( function(_) client.onLoad() );
-		jContent.find("button.save").click( function(_) client.onSave() );
+		jContent.find("button.saveAs").click( function(_) client.onSaveAs() );
 
 	}
 
