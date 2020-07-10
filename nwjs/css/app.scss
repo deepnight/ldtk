@@ -236,12 +236,28 @@ ul.niceList:first-child {
 	margin-top: 0;
 }
 ul.niceList {
+	box-sizing: border-box;
 	padding: 4px;
 	margin-top: 4px;
 	min-height: 200px;
 	margin-bottom: 4px;
 	border: 1px solid $bgLight;
 	background-color: $bgDark;
+
+	&:empty {
+		background-image: url("/img/stripes.png");
+		box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.4) inset;
+		text-align: center;
+		padding-top: 30px;
+	}
+
+	&:empty::before {
+		content: "No element";
+		color: $bgLight;
+		font-style: italic;
+		font-family: Roboto;
+		font-size: 1.3em;
+	}
 
 	li {
 		display: grid;
@@ -913,6 +929,9 @@ label.file {
 		grid-template-columns: 150px auto;
 		#mainPanel {
 			grid-template-rows: min-content 200px auto;
+			#guide {
+				display: none;
+			}
 			ul.niceList li {
 				padding-top: 4px;
 				padding-bottom: 4px;
@@ -1109,14 +1128,8 @@ label.file {
 
 
 .window.panel {
-	.mainList {
-		ul {
-			border: 1px solid $bgLight;
-		}
-
-		button.delete {
-			flex: 0 0 32px;
-		}
+	button.delete {
+		flex: 0 0 32px;
 	}
 }
 

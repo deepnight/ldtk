@@ -233,12 +233,28 @@ ul.niceList:first-child {
 }
 
 ul.niceList {
+  box-sizing: border-box;
   padding: 4px;
   margin-top: 4px;
   min-height: 200px;
   margin-bottom: 4px;
   border: 1px solid #545d73;
   background-color: #1e2229;
+}
+
+ul.niceList:empty {
+  background-image: url("/img/stripes.png");
+  box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.4) inset;
+  text-align: center;
+  padding-top: 30px;
+}
+
+ul.niceList:empty::before {
+  content: "No element";
+  color: #545d73;
+  font-style: italic;
+  font-family: Roboto;
+  font-size: 1.3em;
 }
 
 ul.niceList li {
@@ -942,6 +958,10 @@ input[type="file"] {
   grid-template-rows: min-content 200px auto;
 }
 
+.compactPanel #editor #mainPanel #guide {
+  display: none;
+}
+
 .compactPanel #editor #mainPanel ul.niceList li {
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1141,11 +1161,7 @@ input[type="file"] {
   text-align: left;
 }
 
-.window.panel .mainList ul {
-  border: 1px solid #545d73;
-}
-
-.window.panel .mainList button.delete, .window.panel .mainList label.delete.file {
+.window.panel button.delete, .window.panel label.delete.file {
   flex: 0 0 32px;
 }
 
