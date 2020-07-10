@@ -7,27 +7,23 @@ class LevelHistory {
 	var level(get,never): led.Level; inline function get_level() return Client.ME.project.getLevel(levelId);
 
 	var curIndex = -1;
-	var layerStates : haxe.ds.Vector< LayerHistoryState >;
-	var mostDistantKnownStates : Map<Int, LayerHistoryState> = new Map();
+	var states : haxe.ds.Vector< HistoryState >;
+	var mostAncientLayerStates : Map<Int, HistoryState> = new Map();
 
 	public function new(lid) {
 		levelId = lid;
-		layerStates = new haxe.ds.Vector(MAX_HISTORY);
-		initMostDistanceKnownStates(true);
+		states = new haxe.ds.Vector(MAX_HISTORY);
+		initMostAncientLayerStates(true);
 	}
 
-	function initMostDistanceKnownStates(clearExisting:Bool) {
+	function initMostAncientLayerStates(clearExisting:Bool) {
 		if( clearExisting )
-			mostDistantKnownStates = new Map();
+			mostAncientLayerStates = new Map();
 
 		// Add missing states
 		for(li in level.layerInstances)
-			if( !mostDistantKnownStates.exists(li.def.uid) )
-				mostDistantKnownStates.set(li.def.uid, {
-					layerId: li.def.uid,
-					bounds: null,
-					json: li.toJson()
-				});
+			if( !mostAncientLayerStates.exists(li.def.uid) )
+				mostAncientLayerStates.set( li.def.uid, Layer(li.def.uid, null, li.toJson()) );
 
 		// Remove lost states (when def is removed)
 		// TODO
@@ -39,10 +35,12 @@ class LevelHistory {
 				clearHistory();
 
 			case LayerDefAdded, EntityDefAdded, EntityFieldAdded:
-				initMostDistanceKnownStates(false);
+				initMostAncientLayerStates(false);
 
 			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved:
 				clearHistory();
+
+			case LevelResized:
 
 			case ViewportChanged:
 
@@ -59,6 +57,7 @@ class LevelHistory {
 			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
 
 			case LayerInstanceRestoredFromHistory:
+			case LevelRestoredFromHistory:
 			case ToolOptionChanged:
 		}
 	}
@@ -66,104 +65,153 @@ class LevelHistory {
 	public function clearHistory() {
 		curIndex = -1;
 		for(i in 0...MAX_HISTORY)
-			layerStates[i] = null;
-		initMostDistanceKnownStates(true);
+			states[i] = null;
+		initMostAncientLayerStates(true);
 	}
 
 	public function setLastStateBounds(x:Int, y:Int, w:Int, h:Int) {
-		var last = layerStates[ curIndex ];
-		if( last!=null )
-			last.bounds = {
-				x: x,
-				y: y,
-				wid: w,
-				hei: h,
-			}
+		switch states[ curIndex ] {
+			case null:
+			case ResizedLevel(_):
+			case Layer(layerId, bounds, json):
+				states[curIndex] = Layer(layerId, { x:x, y:y, wid:w, hei:h }, json);
+		}
 	}
 
 	public function saveLayerState(li:led.inst.LayerInstance) {
+		saveState( Layer(li.layerDefId, null, li.toJson()) );
+	}
+
+	public function saveResizedState(levelJsonBefore:Dynamic, levelJsonAfter:Dynamic)  {
+		saveState( ResizedLevel(levelJsonBefore, levelJsonAfter) );
+	}
+
+	function saveState(s:HistoryState) {
 		// Drop first element when max is reached
 		if( curIndex==MAX_HISTORY-1 ) {
-			var droppedState = layerStates[0];
-			mostDistantKnownStates.set( droppedState.layerId, {
-				layerId: droppedState.layerId,
-				bounds: null,
-				json: droppedState.json,
-			} );
+			var droppedState = states[0];
+			switch droppedState {
+				case ResizedLevel(beforeJson, afterJson):
+					var level = led.Level.fromJson(client.project, afterJson);
+					for(li in level.layerInstances)
+						mostAncientLayerStates.set( li.layerDefId, Layer(li.layerDefId, null, li.toJson()) );
+
+				case Layer(layerId, bounds, json):
+					mostAncientLayerStates.set( layerId, droppedState );
+			}
 			for(i in 1...MAX_HISTORY)
-				layerStates[i-1] = layerStates[i];
+				states[i-1] = states[i];
 		}
 		else
 			curIndex++;
 
 		// Store
-		layerStates[curIndex] = {
-			layerId: li.def.uid,
-			bounds: null,
-			json: li.toJson(),
-		}
+		states[curIndex] = s;
 
 		// Trim history after
 		for(i in curIndex+1...MAX_HISTORY)
-			layerStates[i] = null;
+			states[i] = null;
 
-		// #if debug
-		// N.debug(toString());
-		// #end
+		#if debug
+		N.debug(toString());
+		#end
 	}
 
 
 	public function undo() {
 		if( curIndex>=0 ) {
-			var undoneLayerId = layerStates[curIndex].layerId;
-			if( layerStates[curIndex].bounds!=null )
-				client.levelRender.showHistoryBounds(undoneLayerId, layerStates[curIndex].bounds, 0xff0000);
+			var undoneState = states[curIndex];
+			switch undoneState {
+			case ResizedLevel(beforeJson, afterJson):
+				curIndex--;
+				applyState(undoneState, true);
 
-			curIndex--;
+			case Layer(layerId, bounds, json):
+				var undoneLayerId = layerId;
 
-			// Find last known state for undone layer
-			var before : LayerHistoryState = null;
-			var sid = curIndex;
-			while( sid>=0 )
-				if( layerStates[sid].layerId==undoneLayerId ) {
-					before = layerStates[sid];
-					break;
-				}
-				else
+				// Animate bounds
+				if( bounds!=null )
+					client.levelRender.showHistoryBounds(undoneLayerId, bounds, 0xff0000);
+
+				curIndex--;
+
+				// Find previous known state for undone layer
+				var before : HistoryState = null;
+				var sid = curIndex;
+				while( sid>=0 && before==null ) {
+					switch states[sid] {
+					case ResizedLevel(beforeJson, afterJson):
+						var level = led.Level.fromJson(client.project, afterJson);
+						for(li in level.layerInstances)
+							if( li.layerDefId==undoneLayerId ) {
+								before = Layer(li.layerDefId, null, li.toJson());
+								break;
+							}
+
+
+					case Layer(layerId, bounds, json):
+						if( layerId==undoneLayerId )
+							before = states[sid];
+					}
 					sid--;
+				}
 
-			if( before==null )
-				before = mostDistantKnownStates.get(undoneLayerId);
+				if( before==null )
+					before = mostAncientLayerStates.get(undoneLayerId);
 
-			if( before==null )
-				throw "No history found for #"+undoneLayerId; // HACK should not happen
+				if( before==null ) {
+					N.error("No history found for layer #"+undoneLayerId); // should never happen
+					return;
+				}
 
-			applyState( before );
+				applyState( before, true );
+			}
 
-			// #if debug
-			// N.debug("LH UNDO - "+toString());
-			// #end
+			#if debug
+			N.debug("LH UNDO - "+toString());
+			#end
 		}
 	}
 
 	public function redo() {
-		if( curIndex<MAX_HISTORY-1 && layerStates[curIndex+1]!=null ) {
+		if( curIndex<MAX_HISTORY-1 && states[curIndex+1]!=null ) {
 			curIndex++;
-			applyState( layerStates[curIndex] );
+			applyState( states[curIndex], false );
 
-			if( layerStates[curIndex].bounds!=null )
-				client.levelRender.showHistoryBounds( layerStates[curIndex].layerId, layerStates[curIndex].bounds, 0x8ead4f );
+			// Bounds anim
+			switch states[curIndex] {
+				case ResizedLevel(_):
 
-			// #if debug
-			// N.debug("LH REDO - "+toString());
-			// #end
+				case Layer(layerId, bounds, json):
+					if( bounds!=null )
+						client.levelRender.showHistoryBounds( layerId, bounds, 0x8ead4f );
+			}
+
+			#if debug
+			N.debug("LH REDO - "+toString());
+			#end
 		}
 	}
 
-	function applyState(s:LayerHistoryState) {
-		level.layerInstances.set( s.layerId, led.inst.LayerInstance.fromJson(client.project, s.json) );
-		client.project.tidy(); // fix "_project" refs & possible broken "instance<->def" refs
-		client.ge.emit(LayerInstanceRestoredFromHistory);
+	function applyState(s:HistoryState, isUndo:Bool) {
+		switch s {
+			case ResizedLevel(beforeJson, afterJson):
+				var lidx = 0;
+				while( lidx < client.project.levels.length )
+					if( client.project.levels[lidx].uid == client.curLevelId )
+						break;
+
+				if( isUndo )
+					client.project.levels[lidx] = led.Level.fromJson(client.project, beforeJson);
+				else
+					client.project.levels[lidx] = led.Level.fromJson(client.project, afterJson);
+				client.ge.emit(LevelRestoredFromHistory);
+
+			case Layer(layerId, bounds, json):
+				level.layerInstances.set( layerId, led.inst.LayerInstance.fromJson(client.project, json) );
+				client.project.tidy(); // fix "_project" refs & possible broken "instance<->def" refs
+				client.ge.emit(LayerInstanceRestoredFromHistory);
+		}
 	}
 
 
@@ -171,7 +219,14 @@ class LevelHistory {
 	public function toString() {
 		var dbg = [];
 		for(i in 0...MAX_HISTORY) {
-			dbg.push(layerStates[i]==null ? "-" : "L."+layerStates[i].layerId);
+			switch states[i] {
+				case null: "-";
+				case ResizedLevel(beforeJson, afterJson):
+					dbg.push("Rsz");
+
+				case Layer(layerId, bounds, json):
+					dbg.push("L."+layerId);
+			}
 			if( i==curIndex )
 				dbg[ dbg.length-1 ] = "["+dbg[ dbg.length-1 ]+"]";
 		}
@@ -179,6 +234,6 @@ class LevelHistory {
 	}
 
 	public function dispose() {
-		layerStates = null;
+		states = null;
 	}
 }

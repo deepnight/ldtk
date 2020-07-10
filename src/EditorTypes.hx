@@ -7,6 +7,8 @@ enum GlobalEvent {
 	LevelSelected;
 	LevelSettingsChanged;
 	LevelAdded;
+	LevelResized;
+	LevelRestoredFromHistory;
 
 	LayerDefAdded;
 	LayerDefRemoved;
@@ -58,10 +60,10 @@ enum ToolEditMode {
 	Move;
 }
 
-typedef LayerHistoryState = {
-	var layerId : Int;
-	var bounds: Null<HistoryStateBounds>;
-	var json : Dynamic;
+enum HistoryState {
+	ResizedLevel(beforeJson:Dynamic, afterJson:Dynamic);
+	// FullLevel(json:Dynamic);
+	Layer(layerId:Int, bounds:Null<HistoryStateBounds>, json:Dynamic);
 }
 
 typedef HistoryStateBounds = {

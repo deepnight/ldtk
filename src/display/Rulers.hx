@@ -47,7 +47,7 @@ class Rulers extends dn.Process {
 			case ProjectSelected, LevelSelected, LayerInstanceSelected, ProjectSettingsChanged:
 				invalidate();
 
-			case LayerDefChanged, LayerDefRemoved:
+			case LayerDefChanged, LayerDefRemoved, LevelResized, LevelRestoredFromHistory:
 				invalidate();
 
 			case ViewportChanged:
@@ -162,7 +162,7 @@ class Rulers extends dn.Process {
 		dragStarted = false;
 		draggedPos = null;
 
-		if( buttonId!=0 || client.isKeyDown(K.SPACE) || curLayerInstance==null )
+		if( buttonId!=0 || !canUseResizers() )
 			return;
 
 		dragOrigin = m;
@@ -175,17 +175,23 @@ class Rulers extends dn.Process {
 			client.curTool.stopUsing(m);
 	}
 
+	function canUseResizers() {
+		return curLayerInstance!=null
+			&& !client.isKeyDown(K.SPACE) && !client.isShiftDown() && !client.isCtrlDown() && !client.isAltDown();
+	}
+
 	public function onMouseMove(m:MouseCoords) {
 		if( curLayerInstance==null)
 			return;
 
 		// Cursor
-		for( p in draggables )
-			if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p )
-				client.cursor.set( Resize(p) );
+		if( canUseResizers() )
+			for( p in draggables )
+				if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p )
+					client.cursor.set( Resize(p) );
 
-		// Drag threshold start
-		if( isClicking() && draggedPos!=null && !dragStarted && M.dist(m.gx, m.gy, dragOrigin.gx, dragOrigin.gy)>=8 )
+		// Drag only starts after a short threshold
+		if( isClicking() && draggedPos!=null && !dragStarted && M.dist(m.gx, m.gy, dragOrigin.gx, dragOrigin.gy)>=4 )
 			dragStarted = true;
 
 		// Preview resizing
@@ -205,24 +211,24 @@ class Rulers extends dn.Process {
 		return {
 			newLeft :
 				switch draggedPos {
-					case Left, TopLeft, BottomLeft : m.cx*grid;
+					case Left, TopLeft, BottomLeft : M.floor( ( m.levelX - dragOrigin.levelX ) / grid ) * grid;
 					case _: 0;
 				},
 
 			newTop :
 				switch draggedPos {
-					case Top, TopLeft, TopRight: m.cy*grid;
+					case Top, TopLeft, TopRight: M.floor( ( m.levelY - dragOrigin.levelY ) / grid ) * grid;
 					case _: 0;
 				},
 
 			newRight :
 				switch draggedPos {
-					case Right, TopRight, BottomRight: m.cx*grid;
+					case Right, TopRight, BottomRight: curLevel.pxWid + M.floor( ( m.levelX - dragOrigin.levelX ) / grid ) * grid;
 					case _: curLevel.pxWid;
 				},
 			newBottom :
 				switch draggedPos {
-					case Bottom, BottomLeft, BottomRight: m.cy*grid;
+					case Bottom, BottomLeft, BottomRight: curLevel.pxHei + M.floor( ( m.levelY - dragOrigin.levelY ) / grid ) * grid;
 					case _: curLevel.pxHei;
 				},
 
@@ -231,6 +237,13 @@ class Rulers extends dn.Process {
 
 	public function onMouseUp(m:MouseCoords) {
 		if( dragStarted ) {
+			var b = getResizedBounds(m);
+			if( b.newLeft!=0 || b.newTop!=0 || b.newRight!=curLevel.pxWid || b.newBottom!=curLevel.pxHei ) {
+				var before = curLevel.toJson();
+				curLevel.applyNewBounds(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
+				client.ge.emit(LevelResized);
+				client.curLevelHistory.saveResizedState( before, curLevel.toJson() );
+			}
 		}
 
 		dragOrigin = null;

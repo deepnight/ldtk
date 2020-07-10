@@ -46,8 +46,10 @@ class EntityTool extends Tool<Int> {
 			client.cursor.set(None);
 		else if( isRunning() && curMode==Remove )
 			client.cursor.set( Eraser(m.levelX,m.levelY) );
-		else
+		else if( curLevel.inBounds(m.levelX, m.levelY) )
 			client.cursor.set( Entity(curEntityDef, getPlacementX(m), getPlacementY(m)) );
+		else
+			client.cursor.set(None);
 	}
 
 
@@ -57,15 +59,17 @@ class EntityTool extends Tool<Int> {
 		switch curMode {
 			case null, PanView:
 			case Add:
-				var ei = curLayerInstance.createEntityInstance(curEntityDef);
-				if( ei==null )
-					N.error("Max per level reached!");
-				else {
-					ei.x = getPlacementX(m);
-					ei.y = getPlacementY(m);
-					client.setSelection( Entity(ei) );
-					onEditAnything();
-					curMode = Move;
+				if( curLevel.inBounds(m.levelX, m.levelY) ) {
+					var ei = curLayerInstance.createEntityInstance(curEntityDef);
+					if( ei==null )
+						N.error("Max per level reached!");
+					else {
+						ei.x = getPlacementX(m);
+						ei.y = getPlacementY(m);
+						client.setSelection( Entity(ei) );
+						onEditAnything();
+						curMode = Move;
+					}
 				}
 
 			case Remove:
