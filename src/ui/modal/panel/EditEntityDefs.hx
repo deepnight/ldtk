@@ -73,9 +73,12 @@ class EditEntityDefs extends ui.modal.Panel {
 				N.error("No field selected.");
 				return;
 			}
-			curEntity.removeField(project, curField);
-			client.ge.emit(EntityFieldRemoved);
-			selectField( curEntity.fieldDefs[0] );
+
+			new ui.modal.dialog.Confirm(ev.getThis(), function() {
+				curEntity.removeField(project, curField);
+				client.ge.emit(EntityFieldRemoved);
+				selectField( curEntity.fieldDefs[0] );
+			});
 		});
 
 		// Select same entity as current client selection
