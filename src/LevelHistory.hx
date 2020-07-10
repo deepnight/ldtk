@@ -63,6 +63,8 @@ class LevelHistory {
 	}
 
 	public function clearHistory() {
+		ui.LastChance.end();
+
 		curIndex = -1;
 		for(i in 0...MAX_HISTORY)
 			states[i] = null;
@@ -87,6 +89,9 @@ class LevelHistory {
 	}
 
 	function saveState(s:HistoryState) {
+		N.debug("state");
+		ui.LastChance.end();
+
 		// Drop first element when max is reached
 		if( curIndex==MAX_HISTORY-1 ) {
 			var droppedState = states[0];

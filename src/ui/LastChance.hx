@@ -4,8 +4,11 @@ class LastChance extends dn.Process {
 	static var CUR : Null<LastChance>;
 	var elem : js.jquery.JQuery;
 
-	private function new(str:dn.data.GetText.LocaleString, projectJsonBackup:Dynamic) {
+	public function new(str:dn.data.GetText.LocaleString, projectJsonBackup:Dynamic) {
 		super(Client.ME);
+
+		LastChance.end();
+		CUR = this;
 
 		elem = new J("xml#lastChance").clone().children().first();
 		elem.appendTo(Client.ME.jBody);
@@ -19,17 +22,14 @@ class LastChance extends dn.Process {
 			hide();
 		});
 
-		// delayer.addS(hide, 10);
-		Client.ME.ge.addGlobalListener(onGlobalEvent);
+		delayer.addS(hide, 12);
 		cd.setF("ignoreFrame",1);
 	}
 
-	function onGlobalEvent(ge:GlobalEvent) {
-		if( cd.has("ignoreFrame") )
-			return;
-
-		// HACK check specific events
-		hide();
+	public static function end() {
+		if( CUR!=null && CUR.isActive() && !CUR.cd.has("ignoreFrame") ) {
+			CUR.hide();
+		}
 	}
 
 	function isActive() {
@@ -47,8 +47,11 @@ class LastChance extends dn.Process {
 	override function onDispose() {
 		super.onDispose();
 
-		Client.ME.ge.removeListener(onGlobalEvent);
+		// Client.ME.ge.removeListener(onGlobalEvent);
 		elem.remove();
 		elem = null;
+
+		if( CUR==this )
+			CUR = null;
 	}
 }
