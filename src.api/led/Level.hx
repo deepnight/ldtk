@@ -90,7 +90,6 @@ class Level {
 
 
 	public function applyNewBounds(newPxLeft:Int, newPxTop:Int, newPxWid:Int, newPxHei:Int) {
-		ui.Notification.debug('resize: $newPxLeft,$newPxTop ; $newPxWid x $newPxHei', true);
 		for(li in layerInstances)
 			li.applyNewBounds(newPxLeft, newPxTop, newPxWid, newPxHei);
 		pxWid = newPxWid;

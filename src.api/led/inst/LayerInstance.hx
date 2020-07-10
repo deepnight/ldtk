@@ -190,7 +190,6 @@ class LayerInstance {
 		// The remaining pixels are stored in offsets
 		pxOffsetX = pxDeltaX % def.gridSize;
 		pxOffsetY = pxDeltaY % def.gridSize;
-		ui.Notification.debug(def.name+" => offset: newTotal="+pxDeltaX+" case="+cDeltaX+", finalOffset="+pxOffsetX, true);
 	}
 
 

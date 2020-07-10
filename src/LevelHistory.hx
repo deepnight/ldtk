@@ -112,9 +112,9 @@ class LevelHistory {
 		for(i in curIndex+1...MAX_HISTORY)
 			states[i] = null;
 
-		#if debug
-		N.debug(toString());
-		#end
+		// #if debug
+		// N.debug(toString());
+		// #end
 	}
 
 
@@ -167,9 +167,9 @@ class LevelHistory {
 				applyState( before, true );
 			}
 
-			#if debug
-			N.debug("LH UNDO - "+toString());
-			#end
+			// #if debug
+			// N.debug("LH UNDO - "+toString());
+			// #end
 		}
 	}
 
@@ -187,9 +187,9 @@ class LevelHistory {
 						client.levelRender.showHistoryBounds( layerId, bounds, 0x8ead4f );
 			}
 
-			#if debug
-			N.debug("LH REDO - "+toString());
-			#end
+			// #if debug
+			// N.debug("LH REDO - "+toString());
+			// #end
 		}
 	}
 
