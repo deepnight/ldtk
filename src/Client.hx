@@ -670,7 +670,7 @@ class Client extends dn.Process {
 		#elseif nwjs
 		appWin.title = project.name+" ("+curLevel.getName()+")    --    L-Ed v"+Const.APP_VERSION;
 		#end
-		
+
 		jMainPanel.find("h2#levelName").text( curLevel.getName() );
 	}
 
@@ -704,6 +704,7 @@ class Client extends dn.Process {
 				case Entities:
 					_createGuideBlock([K.ALT], "mouseLeft", L.t._("Pick"));
 					_createGuideBlock([K.CTRL,K.ALT], "mouseLeft", L.t._("Copy"));
+					_createGuideBlock([K.CTRL], null, L.t._("(while moving) Free mode"));
 
 				case Tiles:
 					_createGuideBlock([K.SHIFT], "mouseLeft", L.t._("Rectangle"));
