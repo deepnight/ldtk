@@ -136,14 +136,22 @@ button.active, label.active.file {
   border-color: #ffff00;
 }
 
-button.cancel, label.cancel.file {
-  background-color: #2e333f;
-  border-color: #545d73;
-  box-shadow: 0px 2px 0px #2e333f;
+button.cancel, label.cancel.file,
+button.gray,
+label.gray.file,
+button.grey,
+label.grey.file {
+  background-color: #545d73;
+  border-color: #737f9d;
+  box-shadow: 0px 2px 0px #545d73;
 }
 
-button.cancel:hover, label.cancel.file:hover {
-  background-color: #545d73;
+button.cancel:hover, label.cancel.file:hover,
+button.gray:hover,
+label.gray.file:hover,
+button.grey:hover,
+label.grey.file:hover {
+  background-color: #737f9d;
 }
 
 .buttons {
@@ -162,7 +170,7 @@ button.cancel:hover, label.cancel.file:hover {
   display: none;
 }
 
-.help {
+.help:not(.icon) {
   color: #79dd8a;
   font-family: Roboto;
   font-size: 1.1em;
@@ -328,6 +336,20 @@ ul.niceList li:not(.active):hover {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+.icon.help {
+  display: grid;
+  align-items: center;
+  width: auto;
+  height: auto;
+  font-size: 2em;
+  font-family: Roboto;
+  font-weight: bold;
+}
+
+.icon.help::before {
+  content: "?";
 }
 
 .icon.entity {
@@ -883,6 +905,10 @@ input[type="file"] {
 
 #editor #mainPanel #mainbar {
   overflow: hidden;
+}
+
+#editor #mainPanel #mainbar button.showHelp, #editor #mainPanel #mainbar label.showHelp.file {
+  flex: 0 1 0;
 }
 
 #editor #mainPanel #mainbar h2#levelName {

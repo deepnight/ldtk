@@ -134,6 +134,11 @@ class Client extends dn.Process {
 		});
 		ui.Tip.attach(jMainPanel.find("button.editTilesets"), "Tilesets");
 
+		jMainPanel.find("button.showHelp").click( function(_) {
+			onHelp();
+		});
+		ui.Tip.attach(jMainPanel.find("button.showHelp"), "Quick [h]elp");
+
 
 		jMainPanel.find("h2#levelName").click( function(ev) jMainPanel.find("button.levelList").click() );
 
@@ -282,11 +287,8 @@ class Client extends dn.Process {
 						onSave();
 
 			case K.H:
-				if( !hasInputFocus() ) {
-					ui.Modal.closeAll();
-					var m = new ui.Modal();
-					m.loadTemplate("help","helpWindow");
-				}
+				if( !hasInputFocus() )
+					onHelp();
 
 
 			#if debug
@@ -471,6 +473,11 @@ class Client extends dn.Process {
 		ge.emit(LayerInstanceSelected);
 	}
 
+	function onHelp() {
+		ui.Modal.closeAll();
+		var m = new ui.Modal();
+		m.loadTemplate("help","helpWindow");
+	}
 
 	public function onNew(bt:js.jquery.JQuery) {
 		new ui.modal.dialog.Confirm(bt, function() {

@@ -2,6 +2,7 @@
 $bgDark: #1e2229;
 $bgMed: #2e333f;
 $bgLight: #545d73;
+$bgLighter: #737f9d;
 $red: #e34d00;
 $orange: #ffcc00;
 $help: #79dd8a;
@@ -125,25 +126,31 @@ button {
 		width: 1.7em;
 		height: 1.7em;
 	}
-}
-button:hover {
-	background-color: #ff5d4a;
-}
-button:focus {
-	outline: inherit;
-}
-button.active {
-	background-color: $orange;
-	border-color: #ffff00;
+
+	&:hover {
+		background-color: #ff5d4a;
+	}
+
+	&:focus {
+		outline: inherit;
+	}
+
+	&.active {
+		background-color: $orange;
+		border-color: #ffff00;
+	}
 }
 
-button.cancel {
-	background-color: $bgMed;
-	border-color: $bgLight;
-	box-shadow: 0px 2px 0px $bgMed;
-}
-button.cancel:hover {
+
+button.cancel,
+button.gray,
+button.grey {
 	background-color: $bgLight;
+	border-color: $bgLighter;
+	box-shadow: 0px 2px 0px $bgLight;
+	&:hover {
+		background-color: $bgLighter;
+	}
 }
 
 .buttons {
@@ -160,7 +167,7 @@ button.cancel:hover {
 	}
 }
 
-.help {
+.help:not(.icon) {
 	color: $help;
 	font-family: Roboto;
 	font-size: 1.1em;
@@ -329,6 +336,18 @@ ul.niceList {
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-size: contain;
+}
+.icon.help {
+	display: grid;
+	align-items: center;
+	width: auto;
+	height: auto;
+	font-size: 2em;
+	font-family: Roboto;
+	font-weight: bold;
+	&::before {
+		content: "?";
+	}
 }
 .icon.entity	{ background-image: url("/img/icons/entity.png"); }
 .icon.tile		{ background-image: url("/img/icons/tile.png"); }
@@ -856,6 +875,10 @@ label.file {
 
 		#mainbar {
 			overflow: hidden; // for title
+
+			button.showHelp {
+				flex: 0 1 0;
+			}
 
 			h2#levelName {
 				margin: 0;
