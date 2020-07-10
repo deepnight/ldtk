@@ -585,8 +585,8 @@ class Client extends dn.Process {
 				updateTitles();
 
 			case LevelAdded:
-
 			case LevelResized:
+			case LevelSorted:
 
 			case LevelSelected:
 				updateLayerList();

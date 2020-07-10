@@ -13,6 +13,7 @@ enum GlobalEvent {
 	LevelAdded;
 	LevelResized;
 	LevelRestoredFromHistory;
+	LevelSorted;
 
 	LayerDefAdded;
 	LayerDefRemoved;

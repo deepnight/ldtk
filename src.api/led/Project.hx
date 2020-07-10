@@ -35,17 +35,6 @@ class Project {
 	public static function createEmpty() {
 		var p = new Project();
 		p.createLevel();
-		#if debug
-		// for(i in 0...2) {
-		// 	var ld = p.defs.createLayerDef(IntGrid);
-		// 	var v = ld.getIntGridValueDef(0);
-		// 	v.color = dn.Color.makeColorHsl(i*0.3, 1, 1);
-		// 	var li = p.levels[0].getLayerInstance(ld);
-		// 	for(cx in 0...li.cWid)
-		// 	for(cy in 0...li.cHei)
-		// 		li.setIntGrid(cx,cy, 0);
-		// }
-		#end
 
 		return p;
 	}
@@ -125,7 +114,25 @@ class Project {
 		return null;
 	}
 
+	public function sortLevel(from:Int, to:Int) : Null<led.Level> {
+		if( from<0 || from>=levels.length || from==to )
+			return null;
 
+		if( to<0 || to>=levels.length )
+			return null;
+
+		tidy();
+
+		var moved = levels.splice(from,1)[0];
+		levels.insert(to, moved);
+		return moved;
+	}
+
+
+
+
+
+	#if debug
 	public static function createTest() : Project {
 		var p = new Project();
 
@@ -164,4 +171,5 @@ class Project {
 
 		return p;
 	}
+	#end
 }

@@ -40,10 +40,10 @@ class LevelHistory {
 			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved:
 				clearHistory();
 
-			case LevelResized:
-
 			case ViewportChanged:
 
+			case LevelResized:
+			case LevelSorted:
 			case LevelSelected:
 			case LevelAdded:
 			case LevelSettingsChanged:
