@@ -647,22 +647,12 @@ input[type="file"] {
   background-color: #1e2229;
   border-left: 10px solid #545d73;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
-  animation: showNotif 1s;
+  animation: slideUp 1s;
 }
 
 #notificationList .notification .content {
   padding: 20px;
   padding-right: 80px;
-}
-
-@keyframes showNotif {
-  from {
-    max-height: 0;
-    overflow: hidden;
-  }
-  to {
-    max-height: 200;
-  }
 }
 
 #notificationList .notification:not(.latest) {
@@ -675,6 +665,40 @@ input[type="file"] {
   transition: padding 0.3s ease;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+@keyframes slideUp {
+  from {
+    max-height: 0;
+    overflow: hidden;
+  }
+  to {
+    max-height: 200;
+  }
+}
+
+.lastChance {
+  position: absolute;
+  z-index: 99;
+  top: 40px;
+  right: 0;
+  min-width: 150px;
+  background-color: #2e333f;
+  border-left: 4px solid #e34d00;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  animation: slideUp 1.2s;
+}
+
+.lastChance .content {
+  display: grid;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+  padding-right: 80px;
+  gap: 10px;
+  grid-template-columns: min-content auto;
+  justify-content: right;
 }
 
 .window {

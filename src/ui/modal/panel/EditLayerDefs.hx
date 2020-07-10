@@ -44,6 +44,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				return;
 			}
 			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
+				new ui.LastChance( L.t._("Layer deleted"), project.toJson() );
 				project.defs.removeLayerDef(cur);
 				select(project.defs.layers[0]);
 				client.ge.emit(LayerDefRemoved);
