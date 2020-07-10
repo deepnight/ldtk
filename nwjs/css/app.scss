@@ -259,6 +259,10 @@ ul.niceList {
 		font-size: 1.3em;
 	}
 
+	&#layers:empty::before {
+		content: "No layer";
+	}
+
 	li {
 		display: grid;
 		justify-items: left;
@@ -1167,6 +1171,9 @@ label.file {
 
 
 .window.panel.layerDefs {
+	.mainList ul:empty::before {
+		content: "No layer";
+	}
 	ul.intGridValues {
 		li {
 			position: relative;
@@ -1232,6 +1239,9 @@ label.file {
 
 
 .window.panel.tilesetDefs {
+	.mainList ul:empty::before {
+		content: "No tileset";
+	}
 	li.tileset {
 		display: block;
 
@@ -1291,6 +1301,9 @@ label.file {
 			ul {
 				overflow: auto;
 			}
+			ul:empty::before {
+				content: "No entity";
+			}
 		}
 		>.entityForm {
 			grid-column: 2/4;
@@ -1306,6 +1319,9 @@ label.file {
 			overflow: hidden;
 			ul {
 				overflow: auto;
+			}
+			ul:empty::before {
+				content: "No custom field";
 			}
 		}
 

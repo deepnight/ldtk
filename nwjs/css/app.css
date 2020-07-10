@@ -257,6 +257,10 @@ ul.niceList:empty::before {
   font-size: 1.3em;
 }
 
+ul.niceList#layers:empty::before {
+  content: "No layer";
+}
+
 ul.niceList li {
   display: grid;
   justify-items: left;
@@ -1199,6 +1203,10 @@ input[type="file"] {
   margin-bottom: 10px;
 }
 
+.window.panel.layerDefs .mainList ul:empty::before {
+  content: "No layer";
+}
+
 .window.panel.layerDefs ul.intGridValues li {
   position: relative;
 }
@@ -1257,6 +1265,10 @@ input[type="file"] {
 .window.panel.layerDefs ul.form:not(.type-Tiles) .Tiles,
 .window.panel.layerDefs ul.form:not(.type-Entities) .Entities {
   display: none;
+}
+
+.window.panel.tilesetDefs .mainList ul:empty::before {
+  content: "No tileset";
 }
 
 .window.panel.tilesetDefs li.tileset {
@@ -1324,6 +1336,10 @@ input[type="file"] {
   overflow: auto;
 }
 
+.window.panel.entityDefs .content > .entityList ul:empty::before {
+  content: "No entity";
+}
+
 .window.panel.entityDefs .content > .entityForm {
   grid-column: 2/4;
   grid-row: 2/3;
@@ -1340,6 +1356,10 @@ input[type="file"] {
 
 .window.panel.entityDefs .content > .fieldList ul {
   overflow: auto;
+}
+
+.window.panel.entityDefs .content > .fieldList ul:empty::before {
+  content: "No custom field";
 }
 
 .window.panel.entityDefs .content > .fieldForm {
