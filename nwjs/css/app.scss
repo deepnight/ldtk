@@ -952,37 +952,40 @@ label.file {
 					min-height: 1px;
 					box-sizing: border-box;
 					pointer-events: none;
-					border-style: dotted;
-					border-color: rgba(255, 255, 255, 0.66);
+					border-color: rgba(255, 255, 255, 0.5);
 					border-width: 0px;
-					// outline: 1px solid rgba(255,255,255,0.15);
-					// outline-offset: -2px;
 
-					&.selection {
+					&.randomMode {
+						border-width: 1px;
+						border-color: rgba(144, 238, 144, 0.5);
+						border-style: dotted;
+					}
+
+					&.randomMode.selection {
+						border-color: rgba(144, 238, 144, 1);
+						border-style: solid;
+					}
+
+					&.stampMode.selection {
 						border-color: #f3e4a4;
 						border-style: solid;
 					}
 
-					&.allBorders {
-						border-width: 1px;
-						border-color: lightgreen;
-					}
-					&.left {
-						border-left-width: 1px;
-					}
-					&.right {
-						border-right-width: 1px;
-					}
-					&.top {
-						border-top-width: 1px;
-					}
-					&.bottom {
-						border-bottom-width: 1px;
-					}
+					&.left {	border-left-width: 1px; }
+					&.right {	border-right-width: 1px; }
+					&.top {		border-top-width: 1px; }
+					&.bottom {	border-bottom-width: 1px; }
+
+					// &.stampMode.left {	box-shadow: 0px -3px 0px #61a187; }
+					// &.stampMode.left {		box-shadow: -3px 0px 0px #ff8344; }
+					// &.stampMode.right {		box-shadow: 3px 0px 0px #ff8344; }
+					// &.stampMode.top {		box-shadow: 0px -3px 0px #ff8344; }
+					// &.stampMode.bottom {	box-shadow: 0px 3px 0px #ff8344; }
 
 					&.remove {
 						border-color: red;
 					}
+
 
 				}
 			}

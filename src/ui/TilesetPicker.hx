@@ -127,8 +127,9 @@ class TilesetPicker {
 				e.addClass(subClass);
 
 			if( showIndividuals )
-				e.addClass("allBorders");
+				e.addClass("randomMode");
 			else {
+				e.addClass("stampMode");
 				if( !hasCursorAt(cx-1,cy) ) e.addClass("left");
 				if( !hasCursorAt(cx+1,cy) ) e.addClass("right");
 				if( !hasCursorAt(cx,cy-1) ) e.addClass("top");
@@ -240,7 +241,7 @@ class TilesetPicker {
 
 	function applySelection(selIds:Array<Int>, add:Bool) {
 		// Auto-pick saved selection
-		if( selIds.length==1 && tool.curTilesetDef.hasSavedSelectionFor(selIds[0]) ) {
+		if( selIds.length==1 && tool.curTilesetDef.hasSavedSelectionFor(selIds[0]) && !Client.ME.isCtrlDown() ) {
 			// Check if the saved selection isn't already picked. If so, just pick the sub-tile
 			var sel = tool.getSelectedValue();
 			var saved = tool.curTilesetDef.getSavedSelectionFor( selIds[0] );

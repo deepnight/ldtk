@@ -661,6 +661,7 @@ class Client extends dn.Process {
 	public inline function isShiftDown() return keyDowns.get(Key.SHIFT)==true;
 	public inline function isCtrlDown() return keyDowns.get(Key.CTRL)==true;
 	public inline function isAltDown() return keyDowns.get(Key.ALT)==true;
+	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlDown() || isAltDown();
 
 
 	public inline function getMouse() : MouseCoords {

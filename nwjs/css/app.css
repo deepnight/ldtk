@@ -976,21 +976,27 @@ input[type="file"] {
   min-height: 1px;
   box-sizing: border-box;
   pointer-events: none;
-  border-style: dotted;
-  border-color: rgba(255, 255, 255, 0.66);
+  border-color: rgba(255, 255, 255, 0.5);
   border-width: 0px;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.selection,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.selection {
-  border-color: #f3e4a4;
+.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.randomMode,
+.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.randomMode {
+  border-width: 1px;
+  border-color: rgba(144, 238, 144, 0.5);
+  border-style: dotted;
+}
+
+.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.randomMode.selection,
+.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.randomMode.selection {
+  border-color: lightgreen;
   border-style: solid;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.allBorders,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.allBorders {
-  border-width: 1px;
-  border-color: lightgreen;
+.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.stampMode.selection,
+.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.stampMode.selection {
+  border-color: #f3e4a4;
+  border-style: solid;
 }
 
 .palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.left,
