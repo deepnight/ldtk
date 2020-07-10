@@ -8,6 +8,7 @@ enum GlobalEvent {
 	LevelSettingsChanged;
 	LevelAdded;
 	LevelResized;
+	LevelRestoredFromHistory;
 
 	LayerDefAdded;
 	LayerDefRemoved;
@@ -60,7 +61,8 @@ enum ToolEditMode {
 }
 
 enum HistoryState {
-	FullLevel(json:Dynamic);
+	ResizedLevel(beforeJson:Dynamic, afterJson:Dynamic);
+	// FullLevel(json:Dynamic);
 	Layer(layerId:Int, bounds:Null<HistoryStateBounds>, json:Dynamic);
 }
 

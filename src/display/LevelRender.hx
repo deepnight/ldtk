@@ -90,7 +90,7 @@ class LevelRender extends dn.Process {
 				renderAll();
 				fit();
 
-			case ProjectSettingsChanged, LayerInstanceRestoredFromHistory:
+			case ProjectSettingsChanged, LayerInstanceRestoredFromHistory, LevelRestoredFromHistory:
 				invalidate();
 
 			case LevelSelected:

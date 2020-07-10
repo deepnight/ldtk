@@ -57,6 +57,7 @@ class LevelHistory {
 			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
 
 			case LayerInstanceRestoredFromHistory:
+			case LevelRestoredFromHistory:
 			case ToolOptionChanged:
 		}
 	}
@@ -71,7 +72,7 @@ class LevelHistory {
 	public function setLastStateBounds(x:Int, y:Int, w:Int, h:Int) {
 		switch states[ curIndex ] {
 			case null:
-			case FullLevel(json):
+			case ResizedLevel(_):
 			case Layer(layerId, bounds, json):
 				states[curIndex] = Layer(layerId, { x:x, y:y, wid:w, hei:h }, json);
 		}
@@ -81,12 +82,20 @@ class LevelHistory {
 		saveState( Layer(li.layerDefId, null, li.toJson()) );
 	}
 
+	public function saveResizedState(levelJsonBefore:Dynamic, levelJsonAfter:Dynamic)  {
+		saveState( ResizedLevel(levelJsonBefore, levelJsonAfter) );
+	}
+
 	function saveState(s:HistoryState) {
 		// Drop first element when max is reached
 		if( curIndex==MAX_HISTORY-1 ) {
 			var droppedState = states[0];
 			switch droppedState {
-				case FullLevel(json):
+				case ResizedLevel(beforeJson, afterJson):
+					var level = led.Level.fromJson(client.project, afterJson);
+					for(li in level.layerInstances)
+						mostAncientLayerStates.set( li.layerDefId, Layer(li.layerDefId, null, li.toJson()) );
+
 				case Layer(layerId, bounds, json):
 					mostAncientLayerStates.set( layerId, droppedState );
 			}
@@ -113,13 +122,17 @@ class LevelHistory {
 		if( curIndex>=0 ) {
 			var undoneState = states[curIndex];
 			switch undoneState {
-			case FullLevel(json):
-				N.notImplemented(); // TODO
+			case ResizedLevel(beforeJson, afterJson):
+				curIndex--;
+				applyState(undoneState, true);
 
 			case Layer(layerId, bounds, json):
 				var undoneLayerId = layerId;
+
+				// Animate bounds
 				if( bounds!=null )
 					client.levelRender.showHistoryBounds(undoneLayerId, bounds, 0xff0000);
+
 				curIndex--;
 
 				// Find last known state for undone layer
@@ -127,8 +140,14 @@ class LevelHistory {
 				var sid = curIndex;
 				while( sid>=0 && before==null ) {
 					switch states[sid] {
-						case FullLevel(json):
-							before = states[sid];
+						case ResizedLevel(beforeJson, afterJson):
+							var level = led.Level.fromJson(client.project, afterJson);
+							for(li in level.layerInstances)
+								if( li.layerDefId==undoneLayerId ) {
+									before = Layer(li.layerDefId, null, li.toJson());
+									break;
+								}
+
 
 						case Layer(layerId, bounds, json):
 							if( layerId==undoneLayerId )
@@ -140,10 +159,12 @@ class LevelHistory {
 				if( before==null )
 					before = mostAncientLayerStates.get(undoneLayerId);
 
-				if( before==null )
-					throw "No history found for #"+undoneLayerId; // HACK should not happen
+				if( before==null ) {
+					N.error("No history found for layer #"+undoneLayerId); // should never happen
+					return;
+				}
 
-				applyState( before );
+				applyState( before, true );
 			}
 
 			#if debug
@@ -155,10 +176,11 @@ class LevelHistory {
 	public function redo() {
 		if( curIndex<MAX_HISTORY-1 && states[curIndex+1]!=null ) {
 			curIndex++;
-			applyState( states[curIndex] );
+			applyState( states[curIndex], false );
 
+			// Bounds anim
 			switch states[curIndex] {
-				case FullLevel(json):
+				case ResizedLevel(_):
 
 				case Layer(layerId, bounds, json):
 					if( bounds!=null )
@@ -171,10 +193,19 @@ class LevelHistory {
 		}
 	}
 
-	function applyState(s:HistoryState) {
+	function applyState(s:HistoryState, isUndo:Bool) {
 		switch s {
-			case FullLevel(json):
-				// TODO
+			case ResizedLevel(beforeJson, afterJson):
+				var lidx = 0;
+				while( lidx < client.project.levels.length )
+					if( client.project.levels[lidx].uid == client.curLevelId )
+						break;
+
+				if( isUndo )
+					client.project.levels[lidx] = led.Level.fromJson(client.project, beforeJson);
+				else
+					client.project.levels[lidx] = led.Level.fromJson(client.project, afterJson);
+				client.ge.emit(LevelRestoredFromHistory);
 
 			case Layer(layerId, bounds, json):
 				level.layerInstances.set( layerId, led.inst.LayerInstance.fromJson(client.project, json) );
@@ -190,8 +221,8 @@ class LevelHistory {
 		for(i in 0...MAX_HISTORY) {
 			switch states[i] {
 				case null: "-";
-				case FullLevel(json):
-					dbg.push("FUL");
+				case ResizedLevel(beforeJson, afterJson):
+					dbg.push("Rsz");
 
 				case Layer(layerId, bounds, json):
 					dbg.push("L."+layerId);
