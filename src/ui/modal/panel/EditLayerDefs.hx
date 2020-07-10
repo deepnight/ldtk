@@ -88,11 +88,9 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		if( cur==null ) {
 			jForm.hide();
-			jContent.find(".none").show();
 			return;
 		}
 
-		jContent.find(".none").hide();
 		client.selectLayerInstance( client.curLevel.getLayerInstance(cur) );
 		jForm.show();
 
