@@ -209,19 +209,33 @@ class TilesetPicker {
 		// Apply selection
 		if( dragStart!=null && !isScrolling() ) {
 			var r = getCursorRect(ev.pageX, ev.pageY);
-			if( r.wid==1 && r.hei==1 )
-				applySelection([ tool.curTilesetDef.getTileId(r.cx,r.cy) ], dragStart.bt!=2);
+			var addToSelection = dragStart.bt!=2;
+			if( r.wid==1 && r.hei==1 ) {
+				if( Client.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
+					addToSelection = false;
+				applySelection([ tool.curTilesetDef.getTileId(r.cx,r.cy) ], addToSelection);
+			}
 			else {
+				if( Client.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
+					addToSelection = false;
+
 				var tileIds = [];
 				for(cx in r.cx...r.cx+r.wid)
 				for(cy in r.cy...r.cy+r.hei)
 					tileIds.push( tool.curTilesetDef.getTileId(cx,cy) );
-				applySelection(tileIds, dragStart.bt!=2);
+				applySelection(tileIds, addToSelection);
 			}
 		}
 
 		dragStart = null;
 		updateCursor(ev.pageX, ev.pageY, true);
+	}
+
+	function isSelected(tcx,tcy) {
+		for( id in tool.getSelectedValue().ids )
+			if( id==tool.curTilesetDef.getTileId(tcx,tcy) )
+				return true;
+		return false;
 	}
 
 	function applySelection(selIds:Array<Int>, add:Bool) {
