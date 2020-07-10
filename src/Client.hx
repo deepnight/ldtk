@@ -3,7 +3,10 @@ import hxd.Key;
 class Client extends dn.Process {
 	public static var ME : Client;
 
+	#if nwjs
 	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
+	#end
+
 	public var jDoc(get,never) : J; inline function get_jDoc() return new J(js.Browser.document);
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
 	public var jCanvas(get,never) : J; inline function get_jCanvas() return new J("#webgl");
@@ -48,7 +51,9 @@ class Client extends dn.Process {
 
 		ME = this;
 		createRoot(Boot.ME.s2d);
+		#if nwjs
 		appWin.maximize();
+		#end
 
 		// Events
 		new J("body")
@@ -660,7 +665,12 @@ class Client extends dn.Process {
 	}
 
 	function updateTitles() {
+		#if electron
+		// TODO
+		#elseif nwjs
 		appWin.title = project.name+" ("+curLevel.getName()+")    --    L-Ed v"+Const.APP_VERSION;
+		#end
+		
 		jMainPanel.find("h2#levelName").text( curLevel.getName() );
 	}
 

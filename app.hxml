@@ -12,3 +12,6 @@
 -js nwjs/js/app.js
 
 -D editor
+
+# -D electron
+-D nwjs
