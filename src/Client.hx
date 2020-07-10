@@ -23,6 +23,7 @@ class Client extends dn.Process {
 
 
 	public var ge : GlobalEventDispatcher;
+	public var session : SessionData;
 	public var project : led.Project;
 	public var curLevelId : Int;
 	var curLayerId : Int;
@@ -68,7 +69,15 @@ class Client extends dn.Process {
 
 		initUI();
 
-		loadFromLocalStorage();
+		// Restore last stored project state
+		session = {
+			lastFilePath: null,
+		}
+		if( loadFromLocalStorage() ) {
+			// Restore corresponding session info
+			session = dn.LocalStorage.readObject("session", session);
+		}
+
 
 		levelRender = new display.LevelRender();
 		rulers = new display.Rulers();
@@ -261,19 +270,13 @@ class Client extends dn.Process {
 					curLevelHistory.redo();
 
 			case K.S:
-				if( !hasInputFocus() && isCtrlDown() ) {
-					saveToLocalStorage();
-					N.msg("Saved to local storage.");
-				}
+				if( !hasInputFocus() && isCtrlDown() )
+					onSave();
 
 
 			#if debug
 			case K.T:
 				if( !hasInputFocus() ) {
-					// N.error("test error");
-					// N.notImplemented();
-					// N.msg("some message");
-					// N.debug("debug msg");
 					var t = haxe.Timer.stamp();
 					var json = project.levels[0].toJson();
 					Client.ME.debug(dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
@@ -456,35 +459,60 @@ class Client extends dn.Process {
 		});
 	}
 
-	function loadFromLocalStorage() {
-		project =
-			try {
-				var json = haxe.Json.parse( dn.LocalStorage.read("cookie") );
-				led.Project.fromJson(json);
-			}
-			catch( err:Dynamic ) {
-				led.Project.createEmpty();
-			}
+	function loadFromLocalStorage() : Bool {
+		try {
+			var json = dn.LocalStorage.readJson("cookie");
+			if( json==null )
+				throw null;
+			project = led.Project.fromJson(json);
+			return true;
+		}
+		catch( err:Dynamic ) {
+			project = led.Project.createEmpty();
+			return false;
+		}
 	}
 
-	function saveToLocalStorage(?jsonStr:String) {
-		if( jsonStr==null )
-			jsonStr = haxe.Json.stringify( project.toJson() );
+	function saveToLocalStorage(?json:Dynamic) {
+		if( json==null )
+			json = project.toJson();
 
-		dn.LocalStorage.write("cookie", jsonStr);
+		dn.LocalStorage.writeJson("cookie", json);
+	}
+
+	function saveSessionData() {
+		dn.LocalStorage.writeObject("session", session);
+	}
+
+	function makeProjectFile() : haxe.io.Bytes {
+		var json = project.toJson();
+		saveToLocalStorage(json); // TODO not here
+
+		var jsonStr = haxe.Json.stringify(json);
+		jsonStr = dn.HaxeJson.prettify(jsonStr); // TODO make optional
+		return haxe.io.Bytes.ofString( jsonStr );
+	}
+
+	public function onSaveAs() {
+		var bytes = makeProjectFile();
+		JsTools.saveAsDialog(bytes, [".json"], function(path) {
+			N.msg("Saved to "+path);
+			session.lastFilePath = path;
+			saveSessionData();
+		});
 	}
 
 	public function onSave() {
-		var json = project.toJson();
-		var jsonStr = haxe.Json.stringify(json);
-		saveToLocalStorage(jsonStr);
-		jsonStr = dn.HaxeJson.prettify(jsonStr);
+		if( session.lastFilePath==null || !js.node.Fs.existsSync(session.lastFilePath) ) {
+			onSaveAs();
+			return;
+		}
 
-		var bytes = haxe.io.Bytes.ofString(jsonStr);
-		JsTools.saveAsDialog(bytes, [".json"], function(path) {
-			N.msg("Saved to "+path);
-		});
-	}
+		var bytes = makeProjectFile();
+		var buffer = js.node.Buffer.hxFromBytes(bytes);
+		js.node.Fs.writeFileSync(session.lastFilePath, buffer);
+		N.msg("Saved to "+session.lastFilePath);
+}
 
 	public function onLoad() {
 		JsTools.loadDialog([".json"], function(path,bytes) {
@@ -492,7 +520,11 @@ class Client extends dn.Process {
 				var json = haxe.Json.parse( bytes.toString() );
 				var p = led.Project.fromJson(json);
 				selectProject( p );
+				ui.Modal.closeAll();
 				N.msg("Loaded project: "+path);
+
+				session.lastFilePath = dn.FilePath.fromFile(path).full;
+				saveSessionData();
 			} catch( err:Dynamic ) {
 				N.error("Couldn't read this project file: "+err);
 			}

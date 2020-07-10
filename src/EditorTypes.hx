@@ -1,3 +1,7 @@
+typedef SessionData = {
+	var lastFilePath : Null<String>;
+}
+
 enum GlobalEvent {
 	ViewportChanged;
 
