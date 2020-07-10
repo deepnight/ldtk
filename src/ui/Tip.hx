@@ -19,7 +19,7 @@ class Tip extends dn.Process {
 			kWrapper.appendTo(jContent);
 
 			for(kid in keys)
-				kWrapper.append( JsTools.key(hxd.Key.getKeyName(kid)) );
+				kWrapper.append( JsTools.createKey(kid) );
 		}
 
 		// Position

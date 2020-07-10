@@ -93,7 +93,10 @@ class Modal extends dn.Process {
 
 	function onClose() {}
 
-	public function loadTemplate(tplName:String, className:String) {
+	public function loadTemplate(tplName:String, ?className:String) {
+		if( className==null )
+			className = tplName;
+
 		jModalAndMask.addClass(className);
 		var html = JsTools.getHtmlTemplate(tplName);
 		jContent.empty().append( html );

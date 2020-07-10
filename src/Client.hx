@@ -276,6 +276,13 @@ class Client extends dn.Process {
 					else
 						onSave();
 
+			case K.H:
+				if( !hasInputFocus() ) {
+					ui.Modal.closeAll();
+					var m = new ui.Modal();
+					m.loadTemplate("help","helpWindow");
+				}
+
 
 			#if debug
 			case K.T:
@@ -560,6 +567,7 @@ class Client extends dn.Process {
 				clearSelection();
 				initTool();
 				updateLayerList();
+				updateGuide();
 
 			case LayerInstanceVisiblityChanged:
 				clearSelection();
@@ -578,11 +586,13 @@ class Client extends dn.Process {
 				updateAppBg();
 				updateTitles();
 				updateLayerList();
+				updateGuide();
 				Tool.clearSelectionMemory();
 				initTool();
 
 			case LevelSettingsChanged:
 				updateTitles();
+				updateGuide();
 
 			case LevelAdded:
 			case LevelResized:
@@ -591,6 +601,7 @@ class Client extends dn.Process {
 			case LevelSelected:
 				updateLayerList();
 				updateTitles();
+				updateGuide();
 				initTool();
 				if( !levelHistory.exists(curLevelId) )
 					levelHistory.set(curLevelId, new LevelHistory(curLevelId) );
@@ -599,10 +610,12 @@ class Client extends dn.Process {
 				updateAppBg();
 				updateLayerList();
 				updateTitles();
+				updateGuide();
 				initTool();
 
 			case TilesetDefChanged, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				initTool();
+				updateGuide();
 				display.LevelRender.invalidateCaches();
 
 			case ProjectSettingsChanged:
@@ -613,6 +626,7 @@ class Client extends dn.Process {
 				if( curLayerDef==null && project.defs.layers.length>0 )
 					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
 				initTool();
+				updateGuide();
 				updateLayerList();
 		}
 
@@ -648,6 +662,45 @@ class Client extends dn.Process {
 	function updateTitles() {
 		appWin.title = project.name+" ("+curLevel.getName()+")    --    L-Ed v"+Const.APP_VERSION;
 		jMainPanel.find("h2#levelName").text( curLevel.getName() );
+	}
+
+	public function updateGuide() {
+		var jGuide = new J("#guide");
+		jGuide.empty();
+
+		function _createGuideBlock(?keys:Array<Int>, mouseIconId:Null<String>, label:dn.data.GetText.LocaleString) {
+			var block = new J('<span/>');
+			block.appendTo(jGuide);
+
+			if( keys!=null )
+				for(kid in keys)
+					block.append( JsTools.createKey(kid) );
+
+			if( mouseIconId!=null )
+				block.append( JsTools.createIcon(mouseIconId) );
+
+			block.append(label);
+			return block;
+		}
+
+		if( project.defs.layers.length==0 )
+			jGuide.append( _createGuideBlock([], null, Lang.t._("You should start by adding at least ONE layer from the Layer panel.")) );
+		else if( curLayerDef!=null ) {
+			switch curLayerDef.type {
+				case IntGrid:
+					_createGuideBlock([K.SHIFT], "mouseLeft", L.t._("Rectangle"));
+					_createGuideBlock([K.ALT], "mouseLeft", L.t._("Pick"));
+
+				case Entities:
+					_createGuideBlock([K.ALT], "mouseLeft", L.t._("Pick"));
+					_createGuideBlock([K.CTRL,K.ALT], "mouseLeft", L.t._("Copy"));
+
+				case Tiles:
+					_createGuideBlock([K.SHIFT], "mouseLeft", L.t._("Rectangle"));
+					_createGuideBlock([K.ALT], "mouseLeft", L.t._("Pick"));
+					_createGuideBlock([K.SHIFT,K.ALT], "mouseLeft", L.t._("Pick saved selection"));
+			}
+		}
 	}
 
 	public function updateLayerList() {

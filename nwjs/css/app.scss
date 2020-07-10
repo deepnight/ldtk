@@ -4,6 +4,7 @@ $bgMed: #2e333f;
 $bgLight: #545d73;
 $red: #e34d00;
 $orange: #ffcc00;
+$help: #79dd8a;
 
 // Shortcuts
 @mixin resetMargin() {
@@ -160,11 +161,41 @@ button.cancel:hover {
 }
 
 .help {
-	color: $orange;
+	color: $help;
 	font-family: Roboto;
 	font-size: 1.1em;
 	padding: 10px;
-	border: 1px dotted $orange;
+	border: 1px dotted $help;
+}
+
+#guide {
+	display: flex;
+	padding: 2px;
+	min-height: 1.3em;
+
+	vertical-align: middle;
+	font-family: Roboto;
+	color: $help;
+	font-style: italic;
+	font-size: 0.9em;
+
+	border: 1px dotted $bgMed;
+
+	>span {
+		padding: 2px;
+		padding-left: 1px;
+		padding-right: 8px;
+		white-space: nowrap;
+		flex: 0 1 auto;
+		margin-right: 2px;
+		background-color: $bgMed;
+		border-radius: 3px;
+		border-left: 1px solid $bgLight;
+	}
+
+	.key {
+		color: white;
+	}
 }
 
 .warning {
@@ -183,12 +214,15 @@ div.key {
 	display: inline-block;
 	margin: 2px;
 	padding: 1px;
-	padding-left: 5px;
-	padding-right: 5px;
+	padding-left: 2px;
+	padding-right: 2px;
+	min-width: 16px;
 
 	// color: #6d5f4d;
+	text-align: center;
 	text-transform: uppercase;
-	font-family: Roboto Bold;
+	font-family: Roboto;
+	font-style: normal;
 
 	background-color: rgba(207, 197, 172, 0.3);
 	border: 1px solid rgba(235, 223, 195, 0.3);
@@ -282,6 +316,10 @@ ul.niceList {
 .icon.intGrid	{ background-image: url("/img/icons/intGrid.png"); }
 .icon.level		{ background-image: url("/img/icons/level.png"); }
 .icon.project	{ background-image: url("/img/icons/projectSettings.png"); }
+
+.icon.mouseLeft		{ background-image: url("/img/icons/mouseLeft.png"); image-rendering: pixelated; }
+.icon.mouseRight	{ background-image: url("/img/icons/mouseRight.png"); image-rendering: pixelated; }
+.icon.mouseWheel	{ background-image: url("/img/icons/mouseWheel.png"); image-rendering: pixelated; }
 
 .black		{ filter: brightness(0);}
 .orange		{ filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10); }
@@ -644,6 +682,48 @@ label.file {
 	}
 }
 
+.window.helpWindow {
+	dl {
+		display: grid;
+		grid-template-columns: 0.5fr 1fr;
+		align-items: stretch;
+		gap: 10px;
+
+		dt {
+			margin: 0;
+
+			text-align: right;
+			white-space: nowrap;
+
+			.icon {
+				width: 32px;
+				height: 32px;
+			}
+		}
+
+		dd {
+			display: grid;
+			align-items: center;
+			margin: 0;
+
+			font-family: Roboto;
+		}
+	}
+	dl.major {
+		dt {
+			padding: 8px;
+			background-color: $bgDark;
+			border-radius: 4px;
+		}
+		dd {
+			padding: 8px;
+			background-color: $bgLight;
+			border-radius: 4px;
+			font-size: 1.5em;
+		}
+	}
+}
+
 .window.dialog.fieldTypes,
 .window.dialog.layerTypes {
 	&>.wrapper {
@@ -745,7 +825,7 @@ label.file {
 		display: grid;
 		height: 100%;
 		overflow: hidden;
-		grid-template-rows: min-content 250px auto;
+		grid-template-rows: min-content 250px min-content auto;
 		padding: 5px;
 		gap: 5px;
 		background: $bgDark;

@@ -163,11 +163,39 @@ button.cancel:hover, label.cancel.file:hover {
 }
 
 .help {
-  color: #ffcc00;
+  color: #79dd8a;
   font-family: Roboto;
   font-size: 1.1em;
   padding: 10px;
-  border: 1px dotted #ffcc00;
+  border: 1px dotted #79dd8a;
+}
+
+#guide {
+  display: flex;
+  padding: 2px;
+  min-height: 1.3em;
+  vertical-align: middle;
+  font-family: Roboto;
+  color: #79dd8a;
+  font-style: italic;
+  font-size: 0.9em;
+  border: 1px dotted #2e333f;
+}
+
+#guide > span {
+  padding: 2px;
+  padding-left: 1px;
+  padding-right: 8px;
+  white-space: nowrap;
+  flex: 0 1 auto;
+  margin-right: 2px;
+  background-color: #2e333f;
+  border-radius: 3px;
+  border-left: 1px solid #545d73;
+}
+
+#guide .key {
+  color: white;
 }
 
 .warning {
@@ -186,10 +214,13 @@ div.key {
   display: inline-block;
   margin: 2px;
   padding: 1px;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 2px;
+  padding-right: 2px;
+  min-width: 16px;
+  text-align: center;
   text-transform: uppercase;
-  font-family: Roboto Bold;
+  font-family: Roboto;
+  font-style: normal;
   background-color: rgba(207, 197, 172, 0.3);
   border: 1px solid rgba(235, 223, 195, 0.3);
   border-bottom: 2px solid rgba(131, 114, 90, 0.3);
@@ -301,6 +332,21 @@ ul.niceList li:not(.active):hover {
 
 .icon.project {
   background-image: url("/img/icons/projectSettings.png");
+}
+
+.icon.mouseLeft {
+  background-image: url("/img/icons/mouseLeft.png");
+  image-rendering: pixelated;
+}
+
+.icon.mouseRight {
+  background-image: url("/img/icons/mouseRight.png");
+  image-rendering: pixelated;
+}
+
+.icon.mouseWheel {
+  background-image: url("/img/icons/mouseWheel.png");
+  image-rendering: pixelated;
 }
 
 .black {
@@ -664,6 +710,44 @@ input[type="file"] {
   flex-grow: 2;
 }
 
+.window.helpWindow dl {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.window.helpWindow dl dt {
+  margin: 0;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.window.helpWindow dl dt .icon {
+  width: 32px;
+  height: 32px;
+}
+
+.window.helpWindow dl dd {
+  display: grid;
+  align-items: center;
+  margin: 0;
+  font-family: Roboto;
+}
+
+.window.helpWindow dl.major dt {
+  padding: 8px;
+  background-color: #1e2229;
+  border-radius: 4px;
+}
+
+.window.helpWindow dl.major dd {
+  padding: 8px;
+  background-color: #545d73;
+  border-radius: 4px;
+  font-size: 1.5em;
+}
+
 .window.dialog.fieldTypes > .wrapper,
 .window.dialog.layerTypes > .wrapper {
   width: auto;
@@ -767,7 +851,7 @@ input[type="file"] {
   display: grid;
   height: 100%;
   overflow: hidden;
-  grid-template-rows: min-content 250px auto;
+  grid-template-rows: min-content 250px min-content auto;
   padding: 5px;
   gap: 5px;
   background: #1e2229;

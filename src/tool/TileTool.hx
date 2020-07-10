@@ -221,7 +221,7 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 		// Save selection
 		var bt = new J('<button/>');
 		bt.appendTo(options);
-		bt.append( JsTools.keyInLabel("[S]ave selection") );
+		bt.append( JsTools.createKeyInLabel("[S]ave selection") );
 		bt.click( function(_) {
 			saveSelection();
 		});
@@ -236,7 +236,7 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 			client.ge.emit(ToolOptionChanged);
 		});
 		opt.append(chk);
-		opt.append( JsTools.keyInLabel("[R]andom mode") );
+		opt.append( JsTools.createKeyInLabel("[R]andom mode") );
 
 		return target;
 	}

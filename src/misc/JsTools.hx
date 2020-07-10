@@ -100,6 +100,14 @@ class JsTools {
 		return pivots;
 	}
 
+	public static function createIcon(id:String) {
+		var jIcon = new J('<span class="icon"/>');
+		jIcon.addClass(id);
+		return jIcon;
+	}
+
+
+
 
 	static var _fileCache : Map<String,String> = new Map();
 	public static function clearFileCache() {
@@ -178,7 +186,7 @@ class JsTools {
 	}
 
 
-	public static inline function keyInLabel(label:String) {
+	public static inline function createKeyInLabel(label:String) {
 		var r = ~/(.*)\[(.*)\](.*)/gi;
 		if( !r.match(label) )
 			return new J('<span>$label</span>');
@@ -191,7 +199,13 @@ class JsTools {
 		}
 	}
 
-	public static inline function key(keyLabel:String) {
-		return new J('<div class="key">$keyLabel</div>');
+	public static inline function createKey(?kid:Int, ?keyLabel:String) {
+		if( kid!=null )
+			keyLabel = K.getKeyName(kid);
+
+		if( keyLabel.toLowerCase()=="shift" )
+			keyLabel = "⇧";
+
+		return new J('<span class="key">$keyLabel</span>');
 	}
 }
