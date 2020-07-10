@@ -375,8 +375,14 @@ class Client extends dn.Process {
 			case Tile(li, cx, cy):
 				selectLayerInstance(li);
 				var tid = li.getGridTile(cx,cy);
+				var td = project.defs.getTilesetDef(li.def.tilesetDefId);
+				var savedSel = td.getSavedSelectionFor(tid);
+
 				var t = curTool.as(tool.TileTool);
-				t.selectValue( { ids:[tid], mode:t.getMode() } );
+				if( savedSel==null || !isShiftDown() && !isCtrlDown() )
+					t.selectValue( { ids:[tid], mode:t.getMode() } );
+				else
+					t.selectValue( savedSel );
 				levelRender.showRect( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
 				return true;
 		}
