@@ -1,7 +1,7 @@
 package display;
 
 class Rulers extends dn.Process {
-	static var PADDING = 16;
+	static var PADDING = 20;
 
 	var client(get,never) : Client; inline function get_client() return Client.ME;
 	var levelRender(get,never) : LevelRender;
@@ -48,6 +48,9 @@ class Rulers extends dn.Process {
 				invalidate();
 
 			case LayerDefChanged, LayerDefRemoved, LevelResized, LevelRestoredFromHistory:
+				invalidate();
+
+			case LevelSettingsChanged:
 				invalidate();
 
 			case ViewportChanged:
@@ -98,6 +101,8 @@ class Rulers extends dn.Process {
 		addLabel(yLabel, Left);
 		addLabel(yLabel, Right);
 
+		addLabel(client.curLevel.getName(), Top, 2, PADDING*3);
+
 
 		// Corners
 		if( curLayerInstance!=null ) {
@@ -109,10 +114,10 @@ class Rulers extends dn.Process {
 		}
 	}
 
-	function addLabel(str:String, pos:RulerPos) {
+	function addLabel(str:String, pos:RulerPos, scale=1.0, extraPadding=0) {
 		var wrapper = new h2d.Object(labels);
-		wrapper.x = getX(pos, PADDING*2);
-		wrapper.y = getY(pos, PADDING*2);
+		wrapper.x = getX(pos, PADDING*2 + extraPadding);
+		wrapper.y = getY(pos, PADDING*2 + extraPadding);
 		switch pos {
 			case Left, Right: wrapper.rotate(-M.PIHALF);
 			case _:
@@ -121,7 +126,7 @@ class Rulers extends dn.Process {
 		var tf = new h2d.Text(Assets.fontPixel, wrapper);
 		tf.alpha = 0.5;
 		tf.text = str;
-		tf.scale(2);
+		tf.scale(2*scale);
 		tf.x = Std.int( -tf.textWidth*0.5*tf.scaleX );
 		tf.y = Std.int( -tf.textHeight*0.5*tf.scaleY );
 	}
