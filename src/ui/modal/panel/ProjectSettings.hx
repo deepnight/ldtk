@@ -101,7 +101,6 @@ class ProjectSettings extends ui.modal.Panel {
 			jForm.hide();
 			return;
 		}
-
 		jForm.show();
 
 		var i = Input.linkToHtmlInput( curEnum.name, jForm.find("[name=eName]") );
@@ -114,9 +113,6 @@ class ProjectSettings extends ui.modal.Panel {
 			for(v in str.split("\n"))
 				curEnum.addValue(v);
 		});
-		ta.onChange = function() {
-			N.debug(curEnum.values);
-		}
 		ta.linkEvent(EnumDefChanged);
 	}
 }
