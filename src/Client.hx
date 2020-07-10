@@ -271,7 +271,10 @@ class Client extends dn.Process {
 
 			case K.S:
 				if( !hasInputFocus() && isCtrlDown() )
-					onSave();
+					if( isShiftDown() )
+						onSaveAs();
+					else
+						onSave();
 
 
 			#if debug
@@ -473,32 +476,34 @@ class Client extends dn.Process {
 		}
 	}
 
-	function saveToLocalStorage(?json:Dynamic) {
+	function saveProjectToLocalStorage(?json:Dynamic) {
 		if( json==null )
 			json = project.toJson();
 
 		dn.LocalStorage.writeJson("cookie", json);
 	}
 
-	function saveSessionData() {
+	function saveSessionDataToLocalStorage() {
 		dn.LocalStorage.writeObject("session", session);
 	}
 
-	function makeProjectFile() : haxe.io.Bytes {
+	function makeProjectFile() : { bytes:haxe.io.Bytes, json:Dynamic } {
 		var json = project.toJson();
-		saveToLocalStorage(json); // TODO not here
-
 		var jsonStr = haxe.Json.stringify(json);
 		jsonStr = dn.HaxeJson.prettify(jsonStr); // TODO make optional
-		return haxe.io.Bytes.ofString( jsonStr );
+		return {
+			bytes: haxe.io.Bytes.ofString( jsonStr ),
+			json: json,
+		}
 	}
 
 	public function onSaveAs() {
-		var bytes = makeProjectFile();
-		JsTools.saveAsDialog(bytes, [".json"], function(path) {
+		var data = makeProjectFile();
+		JsTools.saveAsDialog(data.bytes, [".json"], function(path) {
 			N.msg("Saved to "+path);
 			session.lastFilePath = path;
-			saveSessionData();
+			saveSessionDataToLocalStorage();
+			saveProjectToLocalStorage(data.json);
 		});
 	}
 
@@ -508,9 +513,10 @@ class Client extends dn.Process {
 			return;
 		}
 
-		var bytes = makeProjectFile();
-		var buffer = js.node.Buffer.hxFromBytes(bytes);
+		var data = makeProjectFile();
+		var buffer = js.node.Buffer.hxFromBytes(data.bytes);
 		js.node.Fs.writeFileSync(session.lastFilePath, buffer);
+		saveProjectToLocalStorage(data.json);
 		N.msg("Saved to "+session.lastFilePath);
 }
 
@@ -524,7 +530,8 @@ class Client extends dn.Process {
 				N.msg("Loaded project: "+path);
 
 				session.lastFilePath = dn.FilePath.fromFile(path).full;
-				saveSessionData();
+				saveSessionDataToLocalStorage();
+				saveProjectToLocalStorage(json);
 			} catch( err:Dynamic ) {
 				N.error("Couldn't read this project file: "+err);
 			}
