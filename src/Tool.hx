@@ -140,18 +140,17 @@ class Tool<T> extends dn.Process {
 	}
 
 
-	function duplicateElement(ge:GenericLevelElement) : GenericLevelElement {
+	function duplicateElement(ge:GenericLevelElement) : Null<GenericLevelElement> {
 		switch ge {
 			case IntGrid(li, cx, cy):
-				throw "Unsupported";
+				return null;
 
 			case Entity(instance):
 				var ei = curLayerInstance.duplicateEntityInstance( instance );
 				return GenericLevelElement.Entity(ei);
 
 			case Tile(li, cx, cy):
-				throw "Unsupported yet";
-				// TODO
+				return null;
 		}
 	}
 
@@ -251,10 +250,12 @@ class Tool<T> extends dn.Process {
 		// Start moving elements only after a small elapsed mouse distance
 		if( curMode==Move && !moveStarted && M.dist(origin.gx,origin.gy, m.gx,m.gy)>=10*Const.SCALE ) {
 			moveStarted = true;
-			if( client.isCtrlDown() ) {
+			if( client.isCtrlDown() && client.selection!=null ) {
 				var copy = duplicateElement(client.selection);
-				client.setSelection(copy);
-				cd.setS("requireCtrlRelease", Const.INFINITE);
+				if( copy!=null ) {
+					client.setSelection(copy);
+					cd.setS("requireCtrlRelease", Const.INFINITE);
+				}
 			}
 		}
 
