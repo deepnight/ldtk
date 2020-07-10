@@ -168,7 +168,6 @@ button.cancel:hover {
 }
 
 .warning {
-	flex: 1 0 100%;
 	box-sizing: border-box;
 	padding: 8px;
 	margin-top: 4px;
@@ -384,6 +383,12 @@ ul.form {
 		>* {
 			flex: 1 1 0px;
 		}
+		>.warning {
+			flex: 1 0 100%;
+		}
+		>.pivot {
+			flex: 0 0 auto;
+		}
 		>input[type=text],
 		>input[type=text] {
 			width: 0px; // for flex min-width
@@ -434,6 +439,11 @@ ul.form {
 			padding: 8px;
 			text-align: center;
 			white-space: nowrap;
+		}
+		> span.long {
+			flex: 1 1 20px;
+			white-space: normal;
+			text-align: left;
 		}
 
 		> span:last-child {

@@ -14,6 +14,8 @@ class LayerDef {
 
 	// Tileset
 	public var tilesetDefId : Null<Int>;
+	public var tilePivotX(default,set) : Float;
+	public var tilePivotY(default,set) : Float;
 
 	public function new(uid:Int, t:LayerType) {
 		this.uid = uid;
@@ -45,6 +47,8 @@ class LayerDef {
 			o.intGridValues.push(v);
 
 		o.tilesetDefId = JsonTools.readNullableInt(json.tilesetDefId);
+		o.tilePivotX = JsonTools.readFloat(json.tilePivotX, 0);
+		o.tilePivotY = JsonTools.readFloat(json.tilePivotY, 0);
 
 		return o;
 	}
@@ -56,8 +60,12 @@ class LayerDef {
 			name: name,
 			gridSize: gridSize,
 			displayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
+
 			intGridValues: intGridValues,
+
 			tilesetDefId: tilesetDefId,
+			tilePivotX: tilePivotX,
+			tilePivotY: tilePivotY,
 		}
 	}
 
@@ -106,5 +114,9 @@ class LayerDef {
 
 
 	public function hasTileset() return tilesetDefId!=null;
+
+
+	inline function set_tilePivotX(v) return tilePivotX = dn.M.fclamp(v, 0, 1);
+	inline function set_tilePivotY(v) return tilePivotY = dn.M.fclamp(v, 0, 1);
 
 }

@@ -1,6 +1,6 @@
 {
 	"dataVersion":1,
-	"nextUniqId":9,
+	"nextUniqId":10,
 	"defs":{
 		"layers":[
 			{
@@ -19,7 +19,9 @@
 						"color":3563670
 					}
 				],
-				"tilesetDefId":null
+				"tilesetDefId":null,
+				"tilePivotX":0,
+				"tilePivotY":0
 			},
 			{
 				"uid":2,
@@ -37,7 +39,9 @@
 						"color":1489635
 					}
 				],
-				"tilesetDefId":null
+				"tilesetDefId":null,
+				"tilePivotX":0,
+				"tilePivotY":0
 			},
 			{
 				"uid":4,
@@ -55,7 +59,9 @@
 						"color":0
 					}
 				],
-				"tilesetDefId":null
+				"tilesetDefId":null,
+				"tilePivotX":0,
+				"tilePivotY":0
 			},
 			{
 				"uid":7,
@@ -73,7 +79,9 @@
 						"color":0
 					}
 				],
-				"tilesetDefId":6
+				"tilesetDefId":6,
+				"tilePivotX":0,
+				"tilePivotY":0
 			}
 		],
 		"entities":[

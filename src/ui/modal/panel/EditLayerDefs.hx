@@ -250,6 +250,17 @@ class EditLayerDefs extends ui.modal.Panel {
 				}
 
 
+				var jPivots = jForm.find(".pivot");
+				jPivots.empty();
+				var p = JsTools.createPivotEditor(cur.tilePivotX, cur.tilePivotY, 0x0, function(x,y) {
+					cur.tilePivotX = x;
+					cur.tilePivotY = y;
+					client.ge.emit(LayerDefChanged);
+				});
+				p.appendTo(jPivots);
+
+
+
 		}
 
 		updateList();

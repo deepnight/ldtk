@@ -171,7 +171,6 @@ button.cancel:hover, label.cancel.file:hover {
 }
 
 .warning {
-  flex: 1 0 100%;
   box-sizing: border-box;
   padding: 8px;
   margin-top: 4px;
@@ -408,6 +407,14 @@ ul.form > li > * {
   flex: 1 1 0px;
 }
 
+ul.form > li > .warning {
+  flex: 1 0 100%;
+}
+
+ul.form > li > .pivot {
+  flex: 0 0 auto;
+}
+
 ul.form > li > input[type=text],
 ul.form > li > input[type=text] {
   width: 0px;
@@ -460,6 +467,12 @@ ul.form > li > span {
   padding: 8px;
   text-align: center;
   white-space: nowrap;
+}
+
+ul.form > li > span.long {
+  flex: 1 1 20px;
+  white-space: normal;
+  text-align: left;
 }
 
 ul.form > li > span:last-child {

@@ -146,7 +146,7 @@ class Cursor extends dn.Process {
 				wrapper.setPosition(x,y);
 
 			case Tiles(li, tileIds, cx, cy):
-				wrapper.setPosition(cx*li.def.gridSize, cy*li.def.gridSize);
+				wrapper.setPosition((cx-li.def.tilePivotX)*li.def.gridSize, (cy-li.def.tilePivotY)*li.def.gridSize);
 		}
 
 		graphics.setPosition(wrapper.x, wrapper.y);
