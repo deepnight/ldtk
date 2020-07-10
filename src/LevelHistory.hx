@@ -135,23 +135,23 @@ class LevelHistory {
 
 				curIndex--;
 
-				// Find last known state for undone layer
+				// Find previous known state for undone layer
 				var before : HistoryState = null;
 				var sid = curIndex;
 				while( sid>=0 && before==null ) {
 					switch states[sid] {
-						case ResizedLevel(beforeJson, afterJson):
-							var level = led.Level.fromJson(client.project, afterJson);
-							for(li in level.layerInstances)
-								if( li.layerDefId==undoneLayerId ) {
-									before = Layer(li.layerDefId, null, li.toJson());
-									break;
-								}
+					case ResizedLevel(beforeJson, afterJson):
+						var level = led.Level.fromJson(client.project, afterJson);
+						for(li in level.layerInstances)
+							if( li.layerDefId==undoneLayerId ) {
+								before = Layer(li.layerDefId, null, li.toJson());
+								break;
+							}
 
 
-						case Layer(layerId, bounds, json):
-							if( layerId==undoneLayerId )
-								before = states[sid];
+					case Layer(layerId, bounds, json):
+						if( layerId==undoneLayerId )
+							before = states[sid];
 					}
 					sid--;
 				}
