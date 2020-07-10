@@ -89,7 +89,6 @@ class LevelHistory {
 	}
 
 	function saveState(s:HistoryState) {
-		N.debug("state");
 		ui.LastChance.end();
 
 		// Drop first element when max is reached
