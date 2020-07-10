@@ -107,6 +107,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			case EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				updatePreview();
 				updateEntityForm();
+				updateFieldForm();
 				updateLists();
 
 			case EntityDefSorted, EntityFieldSorted:
