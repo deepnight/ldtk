@@ -24,7 +24,7 @@ class Client extends dn.Process {
 
 	public var ge : GlobalEventDispatcher;
 	public var project : led.Project;
-	var curLevelId : Int;
+	public var curLevelId : Int;
 	var curLayerId : Int;
 	public var curTool : Tool<Dynamic>;
 	var keyDowns : Map<Int,Bool> = new Map();
@@ -68,14 +68,7 @@ class Client extends dn.Process {
 
 		initUI();
 
-		project = try {
-			var raw = dn.LocalStorage.read("cookie");
-			var json = haxe.Json.parse(raw);
-			led.Project.fromJson(json);
-		}
-		catch( e:Dynamic ) {
-			led.Project.createEmpty();
-		}
+		loadFromLocalStorage();
 
 		levelRender = new display.LevelRender();
 		rulers = new display.Rulers();
@@ -267,6 +260,12 @@ class Client extends dn.Process {
 				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && isCtrlDown() )
 					curLevelHistory.redo();
 
+			case K.S:
+				if( !hasInputFocus() && isCtrlDown() ) {
+					saveToLocalStorage();
+					N.msg("Saved to local storage.");
+				}
+
 
 			#if debug
 			case K.T:
@@ -457,15 +456,31 @@ class Client extends dn.Process {
 		});
 	}
 
+	function loadFromLocalStorage() {
+		project =
+			try {
+				var json = haxe.Json.parse( dn.LocalStorage.read("cookie") );
+				led.Project.fromJson(json);
+			}
+			catch( err:Dynamic ) {
+				led.Project.createEmpty();
+			}
+	}
+
+	function saveToLocalStorage(?jsonStr:String) {
+		if( jsonStr==null )
+			jsonStr = haxe.Json.stringify( project.toJson() );
+
+		dn.LocalStorage.write("cookie", jsonStr);
+	}
 
 	public function onSave() {
-		var obj = project.toJson();
-		var json = haxe.Json.stringify(obj);
-		json = dn.HaxeJson.prettify(json);
-		var bytes = haxe.io.Bytes.ofString(json);
+		var json = project.toJson();
+		var jsonStr = haxe.Json.stringify(json);
+		saveToLocalStorage(jsonStr);
+		jsonStr = dn.HaxeJson.prettify(jsonStr);
 
-		dn.LocalStorage.write("cookie", json);
-
+		var bytes = haxe.io.Bytes.ofString(jsonStr);
 		JsTools.saveAsDialog(bytes, [".json"], function(path) {
 			N.msg("Saved to "+path);
 		});
