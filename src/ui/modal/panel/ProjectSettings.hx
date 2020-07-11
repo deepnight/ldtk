@@ -12,10 +12,27 @@ class ProjectSettings extends ui.modal.Panel {
 		jContent.find("button.new").click( function(ev) client.onNew(ev.getThis()) );
 		jContent.find("button.load").click( function(_) client.onLoad() );
 		jContent.find("button.saveAs").click( function(_) client.onSaveAs() );
+
+		// Add enum
 		jContent.find("button.createEnum").click( function(_) {
 			var ed = project.defs.createEnumDef();
 			client.ge.emit(EnumDefAdded);
 			selectEnum(ed);
+		});
+
+		// Delete enum
+		jContent.find("button.deleteEnum").click( function(ev) {
+			if( curEnum==null ) {
+				N.error(L.t._("No enum selected."));
+				return;
+			}
+
+			new ui.modal.dialog.Confirm(ev.getThis(), function() {
+				new ui.LastChance( L.t._("Enum deleted"), project.toJson() );
+				project.defs.removeEnumDef(curEnum);
+				client.ge.emit(EnumDefRemoved);
+				selectEnum( project.defs.enums[0] );
+			});
 		});
 
 		if( project.defs.enums.length>0 )
@@ -26,11 +43,17 @@ class ProjectSettings extends ui.modal.Panel {
 		updateEnumForm();
 	}
 
-	override function onGlobalEvent(e:GlobalEvent) {
-		super.onGlobalEvent(e);
+	override function onGlobalEvent(ge:GlobalEvent) {
+		super.onGlobalEvent(ge);
+
+		switch(ge) {
+			case ProjectSelected:
+				selectEnum( project.defs.enums[0] );
+
+			case _:
+		}
 
 		updateProjectForm();
-
 		updateEnumList();
 		updateEnumForm();
 	}
@@ -107,7 +130,7 @@ class ProjectSettings extends ui.modal.Panel {
 		i.linkEvent(EnumDefChanged);
 
 		var ta = @:privateAccess new form.Input( jForm.find("textarea"), function() {
-			return curEnum.values.join("\n");
+			return curEnum.values.join("\n") + ( curEnum.values.length>0 ? "\n" : "" );
 		}, function(str:String) {
 			curEnum.values = [];
 			for(v in str.split("\n"))
