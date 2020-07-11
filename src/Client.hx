@@ -149,64 +149,6 @@ class Client extends dn.Process {
 			if( ev.keyCode==K.SPACE && !e.is("input") && !e.is("textarea") )
 				ev.preventDefault();
 		});
-
-
-		#if debug
-		jMainPanel.find("button.debug").click( function(ev) {
-			var w = new ui.modal.Dialog( ev.getThis() );
-			function test(json:Dynamic) {
-				trace( dn.HaxeJson.stringify(json,true) );
-				N.debug("Done");
-			}
-
-			w.jContent.append('<p>Serialization tests</p>');
-			w.addButton("Project", function() test( project.toJson() ));
-			w.addButton("Definitions", function() test( project.defs.toJson() ));
-			w.addButton("Current level", function() test( curLevel.toJson() ));
-			w.addButton("Current layer", function() test( curLayerInstance.toJson() ));
-
-			w.addButton("Clone: FieldDef", function() {
-				var fd = project.defs.entities[0].fieldDefs[0];
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(fd.toJson()) ) );
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(fd.clone().toJson()) ) );
-			});
-
-			w.addButton("Clone: LayerDef", function() {
-				var ld = project.defs.layers[0];
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(ld.toJson()) ) );
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(ld.clone().toJson()) ) );
-			});
-
-			w.addButton("Clone: EntityDef", function() {
-				var ed = project.defs.entities[0];
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(ed.toJson()) ) );
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(ed.clone().toJson()) ) );
-			});
-
-			w.addButton("Clone: Defs", function() {
-				var defs = project.defs;
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(defs.toJson()) ) );
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(defs.clone().toJson()) ) );
-			});
-
-			w.addButton("Clone: curLevel", function() {
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(curLevel.toJson()) ) );
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(curLevel.clone().toJson()) ) );
-			});
-
-			w.addButton("Clone: curLayerInstance", function() {
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(curLayerInstance.toJson()) ) );
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(curLayerInstance.clone().toJson()) ) );
-			});
-
-			w.addButton("Clone: project", function() {
-				trace( dn.HaxeJson.prettify( haxe.Json.stringify(project.clone().toJson()) ) );
-				project = project.clone();
-				levelRender.invalidate();
-				N.debug("Replaced with a copy");
-			});
-		});
-		#end
 	}
 
 	public function selectProject(p:led.Project) {
