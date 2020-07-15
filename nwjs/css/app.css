@@ -1522,6 +1522,7 @@ textarea:focus {
 .window.panel.entityDefs .fieldForm ul.form.type-F_Float li.F_Float,
 .window.panel.entityDefs .fieldForm ul.form.type-F_Bool li.F_Bool,
 .window.panel.entityDefs .fieldForm ul.form.type-F_Color li.F_Color,
+.window.panel.entityDefs .fieldForm ul.form.type-F_Enum li.F_Enum,
 .window.panel.entityDefs .fieldForm ul.form.type-F_String li.F_String {
   display: flex;
 }

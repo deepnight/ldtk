@@ -115,6 +115,43 @@ class InstanceEditor extends dn.Process {
 						onFieldChange();
 					});
 
+				case F_Enum(name):
+					var ed = Client.ME.project.defs.getEnumDef(name);
+					var select = new J("<select/>");
+					select.appendTo(li);
+					if( fi.def.canBeNull ) {
+						var opt = new J('<option/>');
+						opt.appendTo(select);
+						opt.attr("value","");
+						opt.text("-- null --");
+						if( fi.getEnumValue()==null )
+							opt.attr("selected","selected");
+					}
+					for(v in ed.values) {
+						var opt = new J('<option/>');
+						opt.appendTo(select);
+						opt.attr("value",v);
+						opt.text(v);
+						if( fi.getEnumValue()==v )
+							opt.attr("selected","selected");
+					}
+
+					select.change( function(ev) {
+						var v = select.val()=="" ? null : select.val();
+						fi.parseValue(v);
+						N.debug(fi.getEnumValue());
+						onFieldChange();
+					});
+
+					// var def = fi.def.getStringDefault();
+					// input.attr("placeholder", def==null ? "(null)" : def=="" ? "(empty string)" : def);
+					// if( !fi.isUsingDefault() )
+					// 	input.val( fi.getString() );
+					// input.change( function(ev) {
+					// 	fi.parseValue( input.val() );
+					// 	onFieldChange();
+					// });
+
 				case F_Bool:
 					var input = new J("<input/>");
 					input.appendTo(li);

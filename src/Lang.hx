@@ -37,6 +37,7 @@ class Lang {
             case F_Float: t._("Float");
             case F_String: t._("String");
             case F_Bool: t._("Boolean");
+            case F_Enum(name): t._("Enum[::e::]", { e:name });
         }
     }
 
@@ -47,6 +48,7 @@ class Lang {
             case F_Float: t._("1.0");
             case F_String: t._("\"Ab\"");
             case F_Bool: t._("✔");
+            case F_Enum(name): t._("Enu");
         }
     }
 }

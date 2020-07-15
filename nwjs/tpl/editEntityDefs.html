@@ -96,6 +96,18 @@
 		<input type="color" name="cDef" id="cDef"/>
 	</li>
 
+	<!-- <li class="F_Enum">
+		<label for="enumId">Enum</label>
+		<select name="enumId" id="enumId">
+			<option value="null">-- Select an enum --</option>
+		</select>
+	</li> -->
+
+	<li class="F_Enum">
+		<label for="enumDef">Default value</label>
+		<select name="enumDef" id="enumDef"></select>
+	</li>
+
 	<li class="F_Int F_Float">
 		<label for="min">Limits</label>
 		<input type="text" name="min" id="min" placeholder="Min"/>
@@ -103,7 +115,7 @@
 		<input type="text" name="max" id="max" placeholder="Max"/>
 	</li>
 
-	<li class="F_Int F_Float F_String">
+	<li class="F_Int F_Float F_String F_Enum">
 		<label for="canBeNull">Can be null</label>
 		<input type="checkbox" name="canBeNull" id="canBeNull"/>
 	</li>

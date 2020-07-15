@@ -8,7 +8,7 @@
 -lib castle
 -lib deepnightLibs
 -lib hxnodejs
--lib led-haxe-api
+# -lib led-haxe-api
 
 -D editor
 # -D electron

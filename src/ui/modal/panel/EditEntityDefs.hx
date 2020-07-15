@@ -47,7 +47,25 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Create field
 		jFieldList.parent().find("button.create").click( function(ev) {
 			function _create(type:led.LedTypes.FieldType) {
-				var f = curEntity.createField(project, type);
+				switch type {
+					case F_Enum(null):
+						// Create enum
+						var w = new ui.modal.Dialog("enums");
+						for(ed in project.defs.enums) {
+							var b = new J("<button/>");
+							b.appendTo(w.jContent);
+							b.text(ed.name);
+							b.click( function(_) {
+								_create(F_Enum(ed.name));
+								w.close();
+							});
+						}
+						return;
+
+
+					case _:
+				}
+				var f = curEntity.createFieldDef(project, type);
 				client.ge.emit(EntityFieldAdded);
 				selectField(f);
 				jFieldForm.find("input:first").focus().select();
@@ -55,8 +73,10 @@ class EditEntityDefs extends ui.modal.Panel {
 
 			// Type picker
 			var w = new ui.modal.Dialog(ev.getThis(),"fieldTypes");
-			for(k in led.LedTypes.FieldType.getConstructors()) {
-				var type = led.LedTypes.FieldType.createByName(k);
+			var types : Array<led.LedTypes.FieldType> = [
+				F_Int, F_Float, F_Bool, F_String, F_Enum(null), F_Color
+			];
+			for(type in types) {
 				var b = new J("<button/>");
 				w.jContent.append(b);
 				JsTools.createFieldTypeIcon(type, b);
@@ -229,7 +249,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Set form class
 		for(k in Type.getEnumConstructs(led.LedTypes.FieldType))
 			jFieldForm.removeClass("type-"+k);
-		jFieldForm.addClass("type-"+curField.type);
+		jFieldForm.addClass("type-"+curField.type.getName());
 
 		jFieldForm.find(".type").empty().append( Std.string(L.getFieldType(curField.type)) );
 		#if debug
@@ -274,13 +294,44 @@ class EditEntityDefs extends ui.modal.Panel {
 						case F_Int: Std.string( curField.iClamp(0) );
 						case F_Float: Std.string( curField.fClamp(0) );
 						case F_String: "";
-						case F_Bool, F_Color: "N/A";
+						case F_Bool, F_Color, F_Enum(_): "N/A";
 					});
 
 				defInput.change( function(ev) {
 					curField.setDefault( defInput.val() );
 					client.ge.emit(EntityFieldDefChanged);
 					defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
+				});
+
+			case F_Enum(name):
+				var ed = project.defs.getEnumDef(name);
+				var enumDef = jFieldForm.find("[name=enumDef]");
+				enumDef.find("[value]").remove();
+				if( curField.canBeNull ) {
+					var opt = new J('<option/>');
+					opt.appendTo(enumDef);
+					opt.attr("value","");
+					opt.text("-- null --");
+					if( curField.getEnumDefault()==null )
+						opt.attr("selected","selected");
+				}
+				for(v in ed.values) {
+					var opt = new J('<option/>');
+					opt.appendTo(enumDef);
+					opt.attr("value",v);
+					opt.text(v);
+					if( curField.getEnumDefault()==v )
+						opt.attr("selected","selected");
+				}
+
+				enumDef.change( function(ev) {
+					var v = enumDef.val();
+					N.debug(v);
+					if( v=="" && curField.canBeNull )
+						curField.setDefault(null);
+					else if( v!="" )
+						curField.setDefault(v);
+					client.ge.emit(EntityFieldDefChanged);
 				});
 
 			case F_Color:
