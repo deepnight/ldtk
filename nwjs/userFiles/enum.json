@@ -1,6 +1,6 @@
 {
 	"dataVersion":1,
-	"nextUniqId":8,
+	"nextUniqId":10,
 	"defs":{
 		"layers":[
 			{
@@ -47,7 +47,7 @@
 						"name":"type",
 						"canBeNull":false,
 						"editorDisplayMode":{
-							"id":2,
+							"id":1,
 							"p":[
 								
 							]
@@ -73,7 +73,7 @@
 						"name":"loot",
 						"canBeNull":true,
 						"editorDisplayMode":{
-							"id":2,
+							"id":0,
 							"p":[
 								
 							]
@@ -87,6 +87,37 @@
 						"min":null,
 						"max":null,
 						"defaultOverride":null
+					},
+					{
+						"uid":9,
+						"type":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"name":"scale",
+						"canBeNull":false,
+						"editorDisplayMode":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"min":0.1,
+						"max":10,
+						"defaultOverride":{
+							"id":1,
+							"p":[
+								1
+							]
+						}
 					}
 				]
 			}
@@ -117,8 +148,8 @@
 	"levels":[
 		{
 			"uid":0,
-			"pxWid":256,
-			"pxHei":256,
+			"pxWid":208,
+			"pxHei":224,
 			"layerInstances":[
 				{
 					"levelId":0,
@@ -132,7 +163,25 @@
 						
 					],
 					"entityInstances":[
-						
+						{
+							"defId":3,
+							"x":56,
+							"y":80,
+							"fieldInstances":[
+								{
+									"defId":6,
+									"internalValue":null
+								},
+								{
+									"defId":7,
+									"internalValue":null
+								},
+								{
+									"defId":9,
+									"internalValue":null
+								}
+							]
+						}
 					]
 				}
 			]
