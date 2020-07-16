@@ -102,4 +102,10 @@ class EntityInstance {
 		return getFieldInstance(fd).getInt();
 	}
 
+	public function getColorField(name:String) : Null<UInt> {
+		var fd = def.getFieldDef(name);
+		fd.require(F_Color);
+		return getFieldInstance(fd).getColorAsInt();
+	}
+
 }

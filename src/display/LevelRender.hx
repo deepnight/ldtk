@@ -252,6 +252,13 @@ class LevelRender extends dn.Process {
 	}
 
 
+	static function getFieldColor(ei:led.inst.EntityInstance, fd:led.def.FieldDef) {
+		for(fd in ei.def.fieldDefs)
+			if( fd.type==F_Color )
+				return ei.getColorField(fd.name);
+		return C.toWhite(ei.def.color, 0.5);
+	}
+
 	public static function createEntityRender(?ei:led.inst.EntityInstance, ?def:led.def.EntityDef, ?parent:h2d.Object) {
 		if( def==null && ei==null )
 			throw "Need at least 1 parameter";
@@ -331,7 +338,7 @@ class LevelRender extends dn.Process {
 
 					case NameAndValue:
 						var tf = new h2d.Text(font, fieldWrapper);
-						tf.textColor = C.toWhite(ei.def.color, 0.6);
+						tf.textColor = getFieldColor(ei,fd);
 						var v = fi.getForDisplay();
 						tf.text = fd.name+" = "+v;
 
@@ -346,7 +353,7 @@ class LevelRender extends dn.Process {
 							}
 							else {
 								var tf = new h2d.Text(font, fieldWrapper);
-								tf.textColor = C.toWhite(ei.def.color, 0.6);
+								tf.textColor = getFieldColor(ei,fd);
 								var v = fi.getForDisplay();
 								if( fd.type==F_Bool )
 									tf.text = '[${fd.name}]';
