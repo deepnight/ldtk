@@ -6551,6 +6551,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -6567,87 +6571,16 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":{
 										"id":3,
 										"p":[
 											"Gem"
 										]
 									}
-								}
-							]
-						},
-						{
-							"defId":13,
-							"x":408,
-							"y":240,
-							"fieldInstances":[
-								{
-									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":null
-								}
-							]
-						},
-						{
-							"defId":13,
-							"x":456,
-							"y":240,
-							"fieldInstances":[
-								{
-									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":null
-								}
-							]
-						},
-						{
-							"defId":13,
-							"x":440,
-							"y":208,
-							"fieldInstances":[
-								{
-									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":null
-								}
-							]
-						},
-						{
-							"defId":13,
-							"x":456,
-							"y":304,
-							"fieldInstances":[
-								{
-									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":null
-								}
-							]
-						},
-						{
-							"defId":13,
-							"x":312,
-							"y":192,
-							"fieldInstances":[
-								{
-									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":null
 								}
 							]
 						},
@@ -6662,7 +6595,12 @@
 								},
 								{
 									"defId":45,
-									"internalValue":null
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Goblin"
+										]
+									}
 								}
 							]
 						},
@@ -6716,8 +6654,8 @@
 						},
 						{
 							"defId":31,
-							"x":280,
-							"y":296,
+							"x":264,
+							"y":280,
 							"fieldInstances":[
 								{
 									"defId":32,
@@ -6736,6 +6674,86 @@
 						},
 						{
 							"defId":13,
+							"x":312,
+							"y":192,
+							"fieldInstances":[
+								{
+									"defId":14,
+									"internalValue":null
+								},
+								{
+									"defId":45,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Goblin"
+										]
+									}
+								}
+							]
+						},
+						{
+							"defId":13,
+							"x":440,
+							"y":208,
+							"fieldInstances":[
+								{
+									"defId":14,
+									"internalValue":null
+								},
+								{
+									"defId":45,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Goblin"
+										]
+									}
+								}
+							]
+						},
+						{
+							"defId":13,
+							"x":408,
+							"y":240,
+							"fieldInstances":[
+								{
+									"defId":14,
+									"internalValue":null
+								},
+								{
+									"defId":45,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Goblin"
+										]
+									}
+								}
+							]
+						},
+						{
+							"defId":13,
+							"x":456,
+							"y":240,
+							"fieldInstances":[
+								{
+									"defId":14,
+									"internalValue":null
+								},
+								{
+									"defId":45,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Goblin"
+										]
+									}
+								}
+							]
+						},
+						{
+							"defId":13,
 							"x":424,
 							"y":272,
 							"fieldInstances":[
@@ -6745,7 +6763,32 @@
 								},
 								{
 									"defId":45,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Goblin"
+										]
+									}
+								}
+							]
+						},
+						{
+							"defId":13,
+							"x":456,
+							"y":304,
+							"fieldInstances":[
+								{
+									"defId":14,
 									"internalValue":null
+								},
+								{
+									"defId":45,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Goblin"
+										]
+									}
 								}
 							]
 						},
@@ -6760,7 +6803,12 @@
 								},
 								{
 									"defId":45,
-									"internalValue":null
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Goblin"
+										]
+									}
 								}
 							]
 						}
@@ -8138,6 +8186,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -8154,6 +8206,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13624,6 +13680,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13640,6 +13700,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13656,6 +13720,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13672,6 +13740,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13688,6 +13760,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13704,6 +13780,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13715,6 +13795,10 @@
 								{
 									"defId":14,
 									"internalValue":null
+								},
+								{
+									"defId":45,
+									"internalValue":null
 								}
 							]
 						},
@@ -13725,6 +13809,10 @@
 							"fieldInstances":[
 								{
 									"defId":14,
+									"internalValue":null
+								},
+								{
+									"defId":45,
 									"internalValue":null
 								}
 							]
@@ -13822,6 +13910,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13870,6 +13962,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13977,6 +14073,10 @@
 							"fieldInstances":[
 								{
 									"defId":14,
+									"internalValue":null
+								},
+								{
+									"defId":45,
 									"internalValue":null
 								}
 							]

@@ -108,7 +108,6 @@ class InstanceEditor extends dn.Process {
 			defLink.appendTo(span);
 			defLink.on("click.def", function(ev) {
 				fi.parseValue(null);
-				N.debug("used default");
 				onFieldChange();
 				ev.preventDefault();
 			});
@@ -216,7 +215,6 @@ class InstanceEditor extends dn.Process {
 					select.change( function(ev) {
 						var v = select.val()=="" ? null : select.val();
 						fi.parseValue(v);
-						N.debug(fi.getEnumValue());
 						onFieldChange();
 					});
 					hideInputIfDefault(select, fi);
