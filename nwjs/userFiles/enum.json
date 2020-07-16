@@ -286,7 +286,7 @@
 	"levels":[
 		{
 			"uid":0,
-			"pxWid":208,
+			"pxWid":384,
 			"pxHei":224,
 			"layerInstances":[
 				{
@@ -308,7 +308,12 @@
 							"fieldInstances":[
 								{
 									"defId":6,
-									"internalValue":null
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Food"
+										]
+									}
 								},
 								{
 									"defId":9,
@@ -380,7 +385,12 @@
 							"fieldInstances":[
 								{
 									"defId":12,
-									"internalValue":null
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Elite"
+										]
+									}
 								},
 								{
 									"defId":13,

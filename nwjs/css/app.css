@@ -1305,6 +1305,13 @@ textarea:focus {
   text-align: left;
 }
 
+.instanceEditor ul.form select.required {
+  border-color: #e34d00;
+  color: white;
+  background-color: #791105;
+  box-shadow: 0px 0px 8px #e34d00;
+}
+
 .window.panel button.delete, .window.panel label.delete.file {
   flex: 0 0 32px;
 }

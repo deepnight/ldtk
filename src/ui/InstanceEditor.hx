@@ -89,7 +89,7 @@ class InstanceEditor extends dn.Process {
 					hideInputIfDefault(input,fi);
 				});
 			}
-			else {
+			else if( input.is("select") && ( fi.getEnumValue()!=null || fi.def.canBeNull ) ) {
 				// SELECT case
 				input.addClass("usingDefault");
 				input.on("click.def", function(ev) {
@@ -184,21 +184,26 @@ class InstanceEditor extends dn.Process {
 					var select = new J("<select/>");
 					select.appendTo(li);
 
-					var opt = new J('<option/>');
-					opt.appendTo(select);
-					opt.attr("value","");
-					opt.text("-- Use default ("+fi.def.getDefault()+") --");
-					if( fi.isUsingDefault() )
-						opt.attr("selected","selected");
-
-					if( fi.def.canBeNull ) {
+					// Null value
+					if( fi.def.canBeNull || fi.getEnumValue()==null ) {
 						var opt = new J('<option/>');
 						opt.appendTo(select);
 						opt.attr("value","");
-						opt.text("null");
-						if( fi.getEnumValue()==null && !fi.isUsingDefault() )
+						if( fi.def.canBeNull )
+							opt.text("-- null --");
+						else {
+							// SELECT shouldn't be null
+							select.addClass("required");
+							opt.text("[ Select one ]");
+							select.click( function(ev) {
+								select.removeClass("required");
+								select.blur( function(ev) updateForm() );
+							});
+						}
+						if( fi.getEnumValue()==null )
 							opt.attr("selected","selected");
 					}
+
 					for(v in ed.values) {
 						var opt = new J('<option/>');
 						opt.appendTo(select);

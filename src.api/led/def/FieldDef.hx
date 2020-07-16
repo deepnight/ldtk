@@ -166,25 +166,26 @@ class FieldDef {
 
 	public function getEnumDefault() : Null<String> {
 		require(F_Enum(null));
+		return null;
 
-		switch defaultOverride {
-			case null:
-				if( canBeNull )
-					return null;
-				switch type {
-					case F_Enum(name):
-						var ed = _project.defs.getEnumDef(name);
-						return ed.values[0];
-					case _: // can't happen
-						return null;
-				}
+		// switch defaultOverride {
+		// 	case null:
+		// 		if( canBeNull )
+		// 			return null;
+		// 		switch type {
+		// 			case F_Enum(name):
+		// 				var ed = _project.defs.getEnumDef(name);
+		// 				return ed.values[0];
+		// 			case _: // can't happen
+		// 				return null;
+		// 		}
 
-			case V_String(v):
-				return v;
+		// 	case V_String(v):
+		// 		return v;
 
-			case _:
-				return null;
-		}
+		// 	case _:
+		// 		return null;
+		// }
 	}
 
 	public function restoreDefault() {

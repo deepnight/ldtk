@@ -4,6 +4,7 @@ $bgMed: #2e333f;
 $bgLight: #545d73;
 $bgLighter: #737f9d;
 $red: #e34d00;
+$darkRed: #791105;
 $orange: #ffcc00;
 $help: #79dd8a;
 
@@ -1256,6 +1257,12 @@ textarea {
 			padding: 0;
 			padding-top: 8px;
 			text-align: left;
+		}
+		select.required {
+			border-color: $red;
+			color: white;
+			background-color: $darkRed;
+			box-shadow: 0px 0px 8px $red;
 		}
 	}
 }
