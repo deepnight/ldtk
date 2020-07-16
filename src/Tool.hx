@@ -21,7 +21,7 @@ class Tool<T> extends dn.Process {
 	private function new() {
 		super(Client.ME);
 
-		jPalette.off();
+		jPalette.find("*").off();
 		updatePalette();
 		client.ge.addSpecificListener(ToolOptionChanged, onToolOptionChanged);
 	}
