@@ -536,6 +536,7 @@ ul.form {
 select {
 	display: block;
 	padding: 8px;
+	max-width: 100%;
 }
 
 input[type=text],
@@ -591,6 +592,16 @@ label.file {
 	&:hover {
 		border-color: $orange;
 	}
+}
+select.isDefault {
+	border: 1px dashed $bgLight;
+	padding: 8px;
+	color: white;
+	option {
+		overflow: hidden;
+	}
+	background-color: $bgMed;
+	background-image: url("/img/stripes.png");
 }
 
 textarea {

@@ -574,6 +574,7 @@ ul.form > li + li {
 select {
   display: block;
   padding: 8px;
+  max-width: 100%;
 }
 
 input[type=text],
@@ -630,6 +631,18 @@ input[type="file"] {
 
 .formDefault:hover {
   border-color: #ffcc00;
+}
+
+select.isDefault {
+  border: 1px dashed #545d73;
+  padding: 8px;
+  color: white;
+  background-color: #2e333f;
+  background-image: url("/img/stripes.png");
+}
+
+select.isDefault option {
+  overflow: hidden;
 }
 
 textarea {
