@@ -103,8 +103,8 @@
 				"color":16711680,
 				"maxPerLevel":0,
 				"discardExcess":true,
-				"pivotX":0,
-				"pivotY":0,
+				"pivotX":0.5,
+				"pivotY":1,
 				"fieldDefs":[
 					{
 						"uid":12,

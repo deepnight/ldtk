@@ -303,10 +303,22 @@ class LevelRender extends dn.Process {
 
 			// Attach fields
 			for(fd in ei.def.fieldDefs) {
+				var fi = ei.getFieldInstance(fd);
+
+				if( fd.type.getIndex()==led.LedTypes.FieldType.F_Enum(null).getIndex() && fi.getEnumValue()==null && !fd.canBeNull ) {
+					// Null enum warning
+					var tf = new h2d.Text(font, above);
+					tf.textColor = 0xffcc00;
+					tf.text = "!ERR!";
+					continue;
+				}
+
 				if( fd.editorDisplayMode==Hidden )
 					continue;
 
-				var fi = ei.getFieldInstance(fd);
+				if( fi.isUsingDefault() )
+					continue;
+
 				var fieldWrapper = new h2d.Object();
 				switch fd.editorDisplayPos {
 					case Above: above.addChild(fieldWrapper);
