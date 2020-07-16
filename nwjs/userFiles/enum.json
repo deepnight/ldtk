@@ -1,6 +1,6 @@
 {
 	"dataVersion":1,
-	"nextUniqId":16,
+	"nextUniqId":17,
 	"defs":{
 		"layers":[
 			{
@@ -224,6 +224,37 @@
 								3
 							]
 						}
+					},
+					{
+						"uid":16,
+						"type":{
+							"id":3,
+							"p":[
+								
+							]
+						},
+						"name":"active",
+						"canBeNull":false,
+						"editorDisplayMode":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"min":null,
+						"max":null,
+						"defaultOverride":{
+							"id":2,
+							"p":[
+								true
+							]
+						}
 					}
 				]
 			}
@@ -330,6 +361,15 @@
 								{
 									"defId":15,
 									"internalValue":null
+								},
+								{
+									"defId":16,
+									"internalValue":{
+										"id":2,
+										"p":[
+											true
+										]
+									}
 								}
 							]
 						},
@@ -352,6 +392,10 @@
 								},
 								{
 									"defId":15,
+									"internalValue":null
+								},
+								{
+									"defId":16,
 									"internalValue":null
 								}
 							]

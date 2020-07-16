@@ -57,18 +57,29 @@ class InstanceEditor extends dn.Process {
 
 
 	function hideInputIfDefault(input:js.jquery.JQuery, fi:led.inst.FieldInstance) {
-		input.off(".def").removeClass("isDefault");
+		input.off(".def").removeClass("usingDefault");
 
 		if( fi.isUsingDefault() ) {
 			if( !input.is("select") ) {
 				// General INPUT
-				var jRep = new J('<a class="formDefault" href="#"/>');
-				jRep.append('<span class="value">${fi.getForDisplay()}</span>');
-				jRep.append('<span class="label">(default)</span>');
+				var jRep = new J('<a class="usingDefault" href="#"/>');
+				if( input.is("[type=checkbox]") ) {
+					var chk = new J('<input type="checkbox"/>');
+					chk.prop("checked", fi.getBool());
+					jRep.append( chk.wrap('<span class="value"/>').parent() );
+					jRep.addClass("checkbox");
+				}
+				else
+					jRep.append('<span class="value">${fi.getForDisplay()}</span>');
+				jRep.append('<span class="label">Default</span>');
 				jRep.on("click.def", function(ev) {
 					ev.preventDefault();
 					jRep.remove();
 					input.show().focus();
+					if( input.is("[type=checkbox]") ) {
+						input.prop("checked", !fi.getBool());
+						input.change();
+					}
 				});
 				jRep.insertBefore(input);
 				input.hide();
@@ -80,14 +91,27 @@ class InstanceEditor extends dn.Process {
 			}
 			else {
 				// SELECT case
-				input.addClass("isDefault");
+				input.addClass("usingDefault");
 				input.on("click.def", function(ev) {
-					input.removeClass("isDefault");
+					input.removeClass("usingDefault");
 				});
 				input.on("blur.def", function(ev) {
 					hideInputIfDefault(input,fi);
 				});
 			}
+		}
+		else if( input.is("[type=checkbox]") ) {
+			// CHECKBOX which is not using default
+			var span = input.wrap('<span class="checkboxWithDefaultOption"/>').parent();
+			span.find("input").wrap('<span class="value"/>');
+			var defLink = new J('<a class="reset" href="#">[ Reset ]</a>');
+			defLink.appendTo(span);
+			defLink.on("click.def", function(ev) {
+				fi.parseValue(null);
+				N.debug("used default");
+				onFieldChange();
+				ev.preventDefault();
+			});
 		}
 	}
 
@@ -210,6 +234,8 @@ class InstanceEditor extends dn.Process {
 						fi.parseValue( Std.string( input.prop("checked") ) );
 						onFieldChange();
 					});
+
+					hideInputIfDefault(input, fi);
 			}
 		}
 	}

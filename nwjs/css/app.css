@@ -602,7 +602,31 @@ input[type="file"] {
   display: none;
 }
 
-.formDefault {
+span.checkboxWithDefaultOption {
+  display: flex;
+  align-items: center;
+  opacity: 1 !important;
+  padding: 0 !important;
+  flex: 1 0 auto !important;
+}
+
+span.checkboxWithDefaultOption span.value {
+  flex: 1 0 auto;
+}
+
+span.checkboxWithDefaultOption a.reset {
+  flex: 0 0 0px;
+  margin-left: 10px;
+  font-size: 0.75em;
+  text-decoration: underline;
+  color: #ffcc00;
+}
+
+span.checkboxWithDefaultOption a.reset:hover {
+  color: white;
+}
+
+a.usingDefault {
   display: flex;
   text-decoration: none;
   border: 1px dashed #545d73;
@@ -612,28 +636,33 @@ input[type="file"] {
   background-image: url("/img/stripes.png");
 }
 
-.formDefault span {
+a.usingDefault.checkbox {
+  padding: 0;
+  padding-right: 8px;
+}
+
+a.usingDefault span {
   opacity: 1;
   text-shadow: 2px 0px 4px #2e333f, 0px 2px 4px #2e333f, -2px 0px 4px #2e333f, 0px -2px 4px #2e333f;
 }
 
-.formDefault span.value {
+a.usingDefault span.value {
   flex: 1 1 auto;
   color: white;
   font-style: italic;
 }
 
-.formDefault span.label {
+a.usingDefault span.label {
   font-size: 0.75em;
-  font-style: normal;
+  font-style: italic;
   color: #ffcc00;
 }
 
-.formDefault:hover {
+a.usingDefault:hover {
   border-color: #ffcc00;
 }
 
-select.isDefault {
+select.usingDefault {
   border: 1px dashed #545d73;
   padding: 8px;
   color: white;
@@ -641,7 +670,7 @@ select.isDefault {
   background-image: url("/img/stripes.png");
 }
 
-select.isDefault option {
+select.usingDefault option {
   overflow: hidden;
 }
 

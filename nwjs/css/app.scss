@@ -565,7 +565,28 @@ label.file {
 	@extend button;
 }
 
-.formDefault {
+span.checkboxWithDefaultOption {
+	display: flex;
+	align-items: center;
+	opacity: 1 !important;
+	padding: 0 !important;
+	flex: 1 0 auto !important;
+	span.value {
+		flex: 1 0 auto;
+	}
+	a.reset {
+		flex: 0 0 0px;
+		margin-left: 10px;
+		font-size: 0.75em;
+		text-decoration: underline;
+		color: $orange;
+	}
+	a.reset:hover {
+		color: white;
+	}
+}
+
+a.usingDefault {
 	display: flex;
 	text-decoration: none;
 	border: 1px dashed $bgLight;
@@ -573,6 +594,11 @@ label.file {
 	align-items: center;
 	background-color: $bgMed;
 	background-image: url("/img/stripes.png");
+
+	&.checkbox {
+		padding: 0;
+		padding-right: 8px;
+	}
 
 	span {
 		opacity: 1;
@@ -584,7 +610,7 @@ label.file {
 		}
 		&.label {
 			font-size: 0.75em;
-			font-style: normal;
+			font-style: italic;
 			color: $orange;
 		}
 	}
@@ -593,7 +619,7 @@ label.file {
 		border-color: $orange;
 	}
 }
-select.isDefault {
+select.usingDefault {
 	border: 1px dashed $bgLight;
 	padding: 8px;
 	color: white;
