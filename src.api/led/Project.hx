@@ -125,6 +125,25 @@ class Project {
 	}
 
 
+	public static function cleanupIdentifier(id:String) {
+		id = StringTools.trim(id);
+		var reg = ~/([^A-Z0-9_])+/gi;
+		id = reg.replace(id, "_");
+		var dup = ~/([_\1]+)/gi;
+		return dup.replace(id,"_");
+	}
+
+
+	#if editor
+	public function iterateAllFieldInstances(?searchType:led.LedTypes.FieldType, run:led.inst.FieldInstance->Void) {
+		for(l in levels)
+		for(li in l.layerInstances)
+		for(ei in li.entityInstances)
+		for(fi in ei.fieldInstances)
+			if( searchType==null || fi.def.type.equals(searchType) )
+				run(fi);
+	}
+	#end
 
 
 

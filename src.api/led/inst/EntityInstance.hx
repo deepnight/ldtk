@@ -7,7 +7,7 @@ class EntityInstance {
 	public var defId(default,null) : Int;
 	public var x : Int;
 	public var y : Int;
-	var fieldInstances : Map<Int, led.inst.FieldInstance> = new Map();
+	public var fieldInstances : Map<Int, led.inst.FieldInstance> = new Map();
 
 	public var left(get,never) : Int; inline function get_left() return Std.int( x - def.width*def.pivotX );
 	public var right(get,never) : Int; inline function get_right() return left + def.width-1;

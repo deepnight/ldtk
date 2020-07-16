@@ -61,7 +61,7 @@ class EditEntityDefs extends ui.modal.Panel {
 							b.appendTo(w.jContent);
 							b.text(ed.name);
 							b.click( function(_) {
-								_create(F_Enum(ed.name));
+								_create(F_Enum(ed.uid));
 								w.close();
 							});
 						}

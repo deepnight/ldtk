@@ -46,13 +46,20 @@
 
 <ul class="form enumForm">
 	<li>
-		<label for="eName">Enum name</label>
+		<label for="eName">Enum identifier</label>
 		<input type="text" name="eName" id="eName"/>
 	</li>
 
 	<li>
-		<label for="eValues">Enum values</label>
-		<textarea id="eValues"></textarea>
-		<span>One per line</span>
+		<label for="eValues">Possible values</label>
+
+		<ul class="enumValues"></ul>
+		<button class="createEnumValue">Add value</button>
+
+		<xml id="enum">
+			<input type="text" class="name" placeholder="REQUIRED - Unique identifier"/>
+			<input type="color" class="color"/>
+			<button class="delete">X</button>
+		</xml>
 	</li>
 </ul>

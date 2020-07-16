@@ -221,10 +221,10 @@ class Definitions {
 		_project.tidy();
 	}
 
-	function isEnumNameValid(name:String) {
-		name = led.def.EnumDef.cleanUpString(name);
+	public function isEnumIdentifierUnique(id:String) {
+		id = Project.cleanupIdentifier(id);
 		for(ed in enums)
-			if( ed.name==name )
+			if( ed.name==id )
 				return false;
 		return true;
 	}

@@ -543,6 +543,7 @@ ul.form > li input[type=checkbox] + label {
 ul.form > li input[type=color] {
   height: 32px;
   cursor: pointer;
+  padding: 0;
 }
 
 ul.form > li input[type=color]:hover {
@@ -890,8 +891,9 @@ textarea:focus {
 
 *[draggable=true] {
   background: url("/img/icons/drag.png") no-repeat;
-  background-position: right center;
-  padding-right: 35px !important;
+  background-position: left center;
+  padding-left: 32px !important;
+  cursor: ns-resize;
 }
 
 #debug {
@@ -1402,6 +1404,25 @@ textarea:focus {
 
 .window.panel.projectSettings .content .enumForm textarea {
   height: 200px;
+}
+
+.window.panel.projectSettings .content .enumForm ul.enumValues li {
+  display: grid;
+  gap: 2px;
+  grid-template-columns: auto min-content 32px;
+  margin-bottom: 4px;
+}
+
+.window.panel.projectSettings .content .enumForm ul.enumValues li input[type=color] {
+  height: 24px;
+}
+
+.window.panel.projectSettings .content .enumForm ul.enumValues li input[type=text] {
+  padding: 3px;
+}
+
+.window.panel.projectSettings .content .enumForm ul.enumValues li button, .window.panel.projectSettings .content .enumForm ul.enumValues li label.file {
+  padding: 0;
 }
 
 .window.panel.projectSettings .buttons.main {

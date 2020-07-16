@@ -119,7 +119,7 @@ class ProjectSettings extends ui.modal.Panel {
 
 	function updateEnumForm() {
 		var jForm = jContent.find("ul.enumForm");
-		jForm.off();
+		jForm.find("*").off();
 
 		if( curEnum==null ) {
 			jForm.hide();
@@ -128,15 +128,54 @@ class ProjectSettings extends ui.modal.Panel {
 		jForm.show();
 
 		var i = Input.linkToHtmlInput( curEnum.name, jForm.find("[name=eName]") );
+		i.validityCheck = function(v) {
+			return project.defs.isEnumIdentifierUnique(v);
+		}
 		i.linkEvent(EnumDefChanged);
 
-		var ta = @:privateAccess new form.Input( jForm.find("textarea"), function() {
-			return curEnum.values.join("\n") + ( curEnum.values.length>0 ? "\n" : "" );
-		}, function(str:String) {
-			curEnum.values = [];
-			for(v in str.split("\n"))
-				curEnum.addValue(v);
+		var jList = jForm.find("ul.enumValues");
+		jList.empty();
+		var xml = jForm.find("xml").clone().children();
+		for(v in curEnum.values) {
+			var li = new J("<li/>");
+			li.appendTo(jList);
+			li.append( xml.clone() );
+
+			var i = new form.input.StringInput(li.find(".name"),
+				function() return v,
+				function(newV) {
+					if( curEnum.renameValue(v, newV) ) {
+						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
+							if( fi.getEnumValue()==v ) {
+								fi.parseValue(newV);
+								N.debug("renamed "+fi);
+							}
+						});
+					}
+					else
+						N.error("This value isn't valid or is already used.");
+				}
+			);
+			i.linkEvent(EnumDefChanged);
+
+			li.find(".delete").click( function(ev) {
+				curEnum.values.remove(v);
+				client.ge.emit(EnumDefChanged);
+			});
+		}
+
+		jForm.find(".createEnumValue").click( function(_) {
+			var uid = 0;
+			while( !curEnum.addValue(curEnum.name+uid) )
+				uid++;
+			client.ge.emit(EnumDefChanged);
 		});
-		ta.linkEvent(EnumDefChanged);
+
+		// Make fields list sortable
+		JsTools.makeSortable(".window ul.enumValues", function(from, to) {
+			var v = curEnum.values.splice(from,1)[0];
+			curEnum.values.insert(to, v);
+			client.ge.emit(EnumDefChanged);
+		});
 	}
 }

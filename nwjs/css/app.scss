@@ -506,6 +506,7 @@ ul.form {
 		input[type=color] {
 			height: 32px;
 			cursor: pointer;
+			padding: 0;
 		}
 		input[type=color]:hover {
 			outline: 1px solid $orange;
@@ -867,8 +868,9 @@ textarea {
 
 *[draggable=true] {
 	background: url("/img/icons/drag.png") no-repeat;
-	background-position: right center;
-	padding-right: 35px !important;
+	background-position: left center;
+	padding-left: 32px !important;
+	cursor: ns-resize;
 }
 
 
@@ -1352,6 +1354,23 @@ textarea {
 
 			textarea {
 				height: 200px;
+			}
+			ul.enumValues {
+				li {
+					display: grid;
+					gap: 2px;
+					grid-template-columns: auto min-content 32px;
+					margin-bottom: 4px;
+					input[type=color] {
+						height: 24px;
+					}
+					input[type=text] {
+						padding: 3px;
+					}
+					button {
+						padding: 0;
+					}
+				}
 			}
 		}
 	}

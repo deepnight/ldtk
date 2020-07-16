@@ -1,6 +1,6 @@
 {
 	"dataVersion":1,
-	"nextUniqId":17,
+	"nextUniqId":6,
 	"defs":{
 		"layers":[
 			{
@@ -26,80 +26,10 @@
 		],
 		"entities":[
 			{
-				"uid":3,
-				"name":"Item",
-				"width":16,
-				"height":16,
-				"color":12028002,
-				"maxPerLevel":0,
-				"discardExcess":true,
-				"pivotX":0.5,
-				"pivotY":1,
-				"fieldDefs":[
-					{
-						"uid":6,
-						"type":{
-							"id":5,
-							"p":[
-								"ItemType"
-							]
-						},
-						"name":"type",
-						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
-						"min":null,
-						"max":null,
-						"defaultOverride":null
-					},
-					{
-						"uid":9,
-						"type":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"name":"scale",
-						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":0,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
-						"min":0.1,
-						"max":10,
-						"defaultOverride":{
-							"id":1,
-							"p":[
-								1
-							]
-						}
-					}
-				]
-			},
-			{
-				"uid":11,
+				"uid":2,
 				"name":"Mob",
 				"width":16,
-				"height":24,
+				"height":32,
 				"color":16711680,
 				"maxPerLevel":0,
 				"discardExcess":true,
@@ -107,46 +37,15 @@
 				"pivotY":1,
 				"fieldDefs":[
 					{
-						"uid":12,
+						"uid":3,
 						"type":{
 							"id":5,
 							"p":[
-								"MobType"
+								1
 							]
 						},
-						"name":"type",
+						"name":"mobType",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
-						"min":null,
-						"max":null,
-						"defaultOverride":{
-							"id":3,
-							"p":[
-								"Trash"
-							]
-						}
-					},
-					{
-						"uid":13,
-						"type":{
-							"id":5,
-							"p":[
-								"ItemType"
-							]
-						},
-						"name":"loot",
-						"canBeNull":true,
 						"editorDisplayMode":{
 							"id":1,
 							"p":[
@@ -164,79 +63,17 @@
 						"defaultOverride":null
 					},
 					{
-						"uid":14,
-						"type":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"name":"scale",
-						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":2,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
-						"min":0.1,
-						"max":10,
-						"defaultOverride":{
-							"id":1,
-							"p":[
-								1
-							]
-						}
-					},
-					{
-						"uid":15,
-						"type":{
-							"id":0,
-							"p":[
-								
-							]
-						},
-						"name":"life",
-						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"min":1,
-						"max":null,
-						"defaultOverride":{
-							"id":0,
-							"p":[
-								3
-							]
-						}
-					},
-					{
-						"uid":16,
+						"uid":5,
 						"type":{
 							"id":3,
 							"p":[
 								
 							]
 						},
-						"name":"active",
+						"name":"elite",
 						"canBeNull":false,
 						"editorDisplayMode":{
-							"id":0,
+							"id":1,
 							"p":[
 								
 							]
@@ -249,12 +86,7 @@
 						},
 						"min":null,
 						"max":null,
-						"defaultOverride":{
-							"id":2,
-							"p":[
-								true
-							]
-						}
+						"defaultOverride":null
 					}
 				]
 			}
@@ -265,19 +97,10 @@
 		"enums":[
 			{
 				"uid":1,
-				"name":"ItemType",
-				"values":[
-					"Food",
-					"Ammo",
-					"Gold"
-				]
-			},
-			{
-				"uid":10,
 				"name":"MobType",
 				"values":[
 					"Trash",
-					"Elite",
+					"Shooter",
 					"Boss"
 				]
 			}
@@ -286,8 +109,8 @@
 	"levels":[
 		{
 			"uid":0,
-			"pxWid":384,
-			"pxHei":224,
+			"pxWid":256,
+			"pxHei":256,
 			"layerInstances":[
 				{
 					"levelId":0,
@@ -302,52 +125,12 @@
 					],
 					"entityInstances":[
 						{
-							"defId":3,
-							"x":72,
-							"y":32,
-							"fieldInstances":[
-								{
-									"defId":6,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Food"
-										]
-									}
-								},
-								{
-									"defId":9,
-									"internalValue":null
-								}
-							]
-						},
-						{
-							"defId":3,
-							"x":72,
+							"defId":2,
+							"x":88,
 							"y":80,
 							"fieldInstances":[
 								{
-									"defId":6,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Gold"
-										]
-									}
-								},
-								{
-									"defId":9,
-									"internalValue":null
-								}
-							]
-						},
-						{
-							"defId":11,
-							"x":72,
-							"y":160,
-							"fieldInstances":[
-								{
-									"defId":12,
+									"defId":3,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -356,24 +139,67 @@
 									}
 								},
 								{
-									"defId":13,
+									"defId":5,
 									"internalValue":null
-								},
+								}
+							]
+						},
+						{
+							"defId":2,
+							"x":168,
+							"y":80,
+							"fieldInstances":[
 								{
-									"defId":14,
+									"defId":3,
 									"internalValue":{
-										"id":1,
+										"id":3,
 										"p":[
-											2
+											"Shooter"
 										]
 									}
 								},
 								{
-									"defId":15,
+									"defId":5,
 									"internalValue":null
+								}
+							]
+						},
+						{
+							"defId":2,
+							"x":72,
+							"y":144,
+							"fieldInstances":[
+								{
+									"defId":3,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Shooter"
+										]
+									}
 								},
 								{
-									"defId":16,
+									"defId":5,
+									"internalValue":null
+								}
+							]
+						},
+						{
+							"defId":2,
+							"x":136,
+							"y":176,
+							"fieldInstances":[
+								{
+									"defId":3,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Boss"
+										]
+									}
+								},
+								{
+									"defId":5,
 									"internalValue":{
 										"id":2,
 										"p":[
@@ -384,33 +210,21 @@
 							]
 						},
 						{
-							"defId":11,
-							"x":72,
-							"y":208,
+							"defId":2,
+							"x":216,
+							"y":176,
 							"fieldInstances":[
 								{
-									"defId":12,
+									"defId":3,
 									"internalValue":{
 										"id":3,
 										"p":[
-											"Elite"
+											"Trash"
 										]
 									}
 								},
 								{
-									"defId":13,
-									"internalValue":null
-								},
-								{
-									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":15,
-									"internalValue":null
-								},
-								{
-									"defId":16,
+									"defId":5,
 									"internalValue":null
 								}
 							]
@@ -421,8 +235,8 @@
 		}
 	],
 	"name":"New project",
-	"defaultPivotX":0.5,
-	"defaultPivotY":1,
+	"defaultPivotX":0,
+	"defaultPivotY":0,
 	"defaultGridSize":16,
 	"bgColor":8355987
 }

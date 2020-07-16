@@ -11,7 +11,7 @@ class EnumDef {
 	}
 
 	function set_name(v:String) {
-		name = cleanUpString(v);
+		name = Project.cleanupIdentifier(v);
 		return name;
 	}
 
@@ -36,15 +36,8 @@ class EnumDef {
 		};
 	}
 
-	public static inline function cleanUpString(str:String) {
-		str = StringTools.trim(str);
-		var reg = ~/[^0-9a-zA-Z_]+/gm;
-		str = reg.replace(str, "_");
-		return str;
-	}
-
 	public function hasValue(v:String) {
-		v = cleanUpString(v).toLowerCase();
+		v = Project.cleanupIdentifier(v).toLowerCase();
 		if( v.length==0 )
 			return false;
 
@@ -54,18 +47,32 @@ class EnumDef {
 		return false;
 	}
 
-	public function isValueNameValid(v:String) {
-		v = cleanUpString(v);
+	public function isValueIdentifierValid(v:String) {
+		v = Project.cleanupIdentifier(v);
 		return v.length>0 && !hasValue(v);
 	}
 
 	public function addValue(v:String) {
-		if( !isValueNameValid(v) )
+		if( !isValueIdentifierValid(v) )
 			return false;
 
-		v = cleanUpString(v);
+		v = Project.cleanupIdentifier(v);
 		values.push(v);
 		return true;
+	}
+
+	public function renameValue(from,to) {
+		if( !isValueIdentifierValid(to) )
+			return false;
+
+		to = Project.cleanupIdentifier(to);
+
+		for(i in 0...values.length)
+			if( values[i]==from ) {
+				values[i] = to;
+				return true;
+			}
+		return false;
 	}
 
 
