@@ -140,7 +140,7 @@ class Client extends dn.Process {
 		ui.Tip.attach(jMainPanel.find("button.showHelp"), "Quick [h]elp");
 
 
-		jMainPanel.find("h2#levelName").click( function(ev) jMainPanel.find("button.levelList").click() );
+		// jMainPanel.find("h2#levelName").click( function(ev) jMainPanel.find("button.levelList").click() );
 
 
 		// Space bar blocking
@@ -622,7 +622,7 @@ class Client extends dn.Process {
 		appWin.title = project.name+" ("+curLevel.getName()+")    --    L-Ed v"+Const.APP_VERSION;
 		#end
 
-		jMainPanel.find("h2#levelName").text( curLevel.getName() );
+		// jMainPanel.find("h2#levelName").text( curLevel.getName() );
 	}
 
 	public function updateGuide() {
