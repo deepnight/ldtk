@@ -1,6 +1,6 @@
 {
 	"dataVersion":1,
-	"nextUniqId":10,
+	"nextUniqId":15,
 	"defs":{
 		"layers":[
 			{
@@ -63,17 +63,92 @@
 						"defaultOverride":null
 					},
 					{
-						"uid":7,
+						"uid":9,
+						"type":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"name":"scale",
+						"canBeNull":false,
+						"editorDisplayMode":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"min":0.1,
+						"max":10,
+						"defaultOverride":{
+							"id":1,
+							"p":[
+								1
+							]
+						}
+					}
+				]
+			},
+			{
+				"uid":11,
+				"name":"Mob",
+				"width":16,
+				"height":24,
+				"color":16711680,
+				"maxPerLevel":0,
+				"discardExcess":true,
+				"pivotX":0.5,
+				"pivotY":1,
+				"fieldDefs":[
+					{
+						"uid":12,
 						"type":{
 							"id":5,
 							"p":[
-								"LootMethod"
+								"MobType"
+							]
+						},
+						"name":"type",
+						"canBeNull":false,
+						"editorDisplayMode":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"min":null,
+						"max":null,
+						"defaultOverride":{
+							"id":3,
+							"p":[
+								"Trash"
+							]
+						}
+					},
+					{
+						"uid":13,
+						"type":{
+							"id":5,
+							"p":[
+								"ItemType"
 							]
 						},
 						"name":"loot",
 						"canBeNull":true,
 						"editorDisplayMode":{
-							"id":0,
+							"id":1,
 							"p":[
 								
 							]
@@ -89,7 +164,7 @@
 						"defaultOverride":null
 					},
 					{
-						"uid":9,
+						"uid":14,
 						"type":{
 							"id":1,
 							"p":[
@@ -136,11 +211,12 @@
 				]
 			},
 			{
-				"uid":5,
-				"name":"LootMethod",
+				"uid":10,
+				"name":"MobType",
 				"values":[
-					"Kill",
-					"Search"
+					"Trash",
+					"Elite",
+					"Boss"
 				]
 			}
 		]
@@ -165,20 +241,84 @@
 					"entityInstances":[
 						{
 							"defId":3,
-							"x":56,
-							"y":80,
+							"x":72,
+							"y":32,
 							"fieldInstances":[
 								{
 									"defId":6,
 									"internalValue":null
 								},
 								{
-									"defId":7,
+									"defId":9,
 									"internalValue":null
+								}
+							]
+						},
+						{
+							"defId":3,
+							"x":72,
+							"y":80,
+							"fieldInstances":[
+								{
+									"defId":6,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Gold"
+										]
+									}
 								},
 								{
 									"defId":9,
 									"internalValue":null
+								}
+							]
+						},
+						{
+							"defId":11,
+							"x":72,
+							"y":160,
+							"fieldInstances":[
+								{
+									"defId":12,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Trash"
+										]
+									}
+								},
+								{
+									"defId":13,
+									"internalValue":null
+								},
+								{
+									"defId":14,
+									"internalValue":null
+								}
+							]
+						},
+						{
+							"defId":11,
+							"x":72,
+							"y":208,
+							"fieldInstances":[
+								{
+									"defId":12,
+									"internalValue":null
+								},
+								{
+									"defId":13,
+									"internalValue":null
+								},
+								{
+									"defId":14,
+									"internalValue":{
+										"id":1,
+										"p":[
+											1000
+										]
+									}
 								}
 							]
 						}

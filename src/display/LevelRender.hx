@@ -288,6 +288,7 @@ class LevelRender extends dn.Process {
 		// Display fields not marked as "Hidden"
 		if( ei!=null ) {
 			// Init field wrappers
+			var font = Assets.fontPixel;
 			var above = new h2d.Flow(wrapper);
 			above.layout = Vertical;
 			above.horizontalAlign = Middle;
@@ -312,7 +313,7 @@ class LevelRender extends dn.Process {
 					case Hidden: // N/A
 
 					case NameAndValue:
-						var tf = new h2d.Text(Assets.fontSmall, fieldWrapper);
+						var tf = new h2d.Text(font, fieldWrapper);
 						tf.textColor = C.toWhite(ei.def.color, 0.6);
 						var v = fi.getForDisplay();
 						tf.text = fd.name+" = "+v;
@@ -327,7 +328,7 @@ class LevelRender extends dn.Process {
 								g.drawCircle(r,r,r, 16);
 							}
 							else {
-								var tf = new h2d.Text(Assets.fontSmall, fieldWrapper);
+								var tf = new h2d.Text(font, fieldWrapper);
 								tf.textColor = C.toWhite(ei.def.color, 0.6);
 								var v = fi.getForDisplay();
 								if( fd.type==F_Bool )
