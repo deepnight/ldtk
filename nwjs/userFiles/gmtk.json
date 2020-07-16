@@ -133,7 +133,7 @@
 						"type":{
 							"id":5,
 							"p":[
-								"ItemType"
+								45
 							]
 						},
 						"name":"type",
@@ -145,7 +145,7 @@
 							]
 						},
 						"editorDisplayPos":{
-							"id":1,
+							"id":0,
 							"p":[
 								
 							]
@@ -213,11 +213,11 @@
 						}
 					},
 					{
-						"uid":45,
+						"uid":46,
 						"type":{
 							"id":5,
 							"p":[
-								"MobType"
+								44
 							]
 						},
 						"name":"type",
@@ -290,13 +290,13 @@
 						"name":"MaxChildren",
 						"canBeNull":false,
 						"editorDisplayMode":{
-							"id":1,
+							"id":2,
 							"p":[
 								
 							]
 						},
 						"editorDisplayPos":{
-							"id":1,
+							"id":0,
 							"p":[
 								
 							]
@@ -321,7 +321,7 @@
 						"name":"PerSpawn",
 						"canBeNull":false,
 						"editorDisplayMode":{
-							"id":0,
+							"id":2,
 							"p":[
 								
 							]
@@ -352,7 +352,7 @@
 						"name":"Delay",
 						"canBeNull":false,
 						"editorDisplayMode":{
-							"id":0,
+							"id":2,
 							"p":[
 								
 							]
@@ -527,11 +527,12 @@
 				]
 			},
 			{
-				"uid":46,
+				"uid":45,
 				"name":"ItemType",
 				"values":[
 					"Gem",
-					"Bomb"
+					"Bomb",
+					"Food"
 				]
 			}
 		]
@@ -1081,6 +1082,22 @@
 							"v":0
 						},
 						{
+							"coordId":133,
+							"v":0
+						},
+						{
+							"coordId":135,
+							"v":0
+						},
+						{
+							"coordId":137,
+							"v":0
+						},
+						{
+							"coordId":139,
+							"v":0
+						},
+						{
 							"coordId":149,
 							"v":0
 						},
@@ -1174,6 +1191,22 @@
 						},
 						{
 							"coordId":220,
+							"v":0
+						},
+						{
+							"coordId":221,
+							"v":0
+						},
+						{
+							"coordId":223,
+							"v":0
+						},
+						{
+							"coordId":225,
+							"v":0
+						},
+						{
+							"coordId":227,
 							"v":0
 						},
 						{
@@ -1674,7 +1707,7 @@
 									"internalValue":null
 								},
 								{
-									"defId":45,
+									"defId":46,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -1694,7 +1727,7 @@
 									"internalValue":null
 								},
 								{
-									"defId":45,
+									"defId":46,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -1776,7 +1809,7 @@
 									"internalValue":{
 										"id":0,
 										"p":[
-											16766008
+											9539507
 										]
 									}
 								}
@@ -2559,12 +2592,7 @@
 								},
 								{
 									"defId":47,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Gem"
-										]
-									}
+									"internalValue":null
 								}
 							]
 						},
@@ -2578,13 +2606,8 @@
 									"internalValue":null
 								},
 								{
-									"defId":45,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Goblin"
-										]
-									}
+									"defId":46,
+									"internalValue":null
 								}
 							]
 						},
@@ -2598,13 +2621,8 @@
 									"internalValue":null
 								},
 								{
-									"defId":45,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Goblin"
-										]
-									}
+									"defId":46,
+									"internalValue":null
 								}
 							]
 						},
@@ -2658,12 +2676,7 @@
 								},
 								{
 									"defId":47,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Gem"
-										]
-									}
+									"internalValue":null
 								}
 							]
 						},
@@ -6551,10 +6564,6 @@
 							"fieldInstances":[
 								{
 									"defId":10,
-									"internalValue":null
-								},
-								{
-									"defId":47,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -6571,10 +6580,6 @@
 							"fieldInstances":[
 								{
 									"defId":10,
-									"internalValue":null
-								},
-								{
-									"defId":47,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -6586,21 +6591,67 @@
 						},
 						{
 							"defId":13,
+							"x":408,
+							"y":240,
+							"fieldInstances":[
+								{
+									"defId":14,
+									"internalValue":null
+								}
+							]
+						},
+						{
+							"defId":13,
+							"x":456,
+							"y":240,
+							"fieldInstances":[
+								{
+									"defId":14,
+									"internalValue":null
+								}
+							]
+						},
+						{
+							"defId":13,
+							"x":440,
+							"y":208,
+							"fieldInstances":[
+								{
+									"defId":14,
+									"internalValue":null
+								}
+							]
+						},
+						{
+							"defId":13,
+							"x":456,
+							"y":304,
+							"fieldInstances":[
+								{
+									"defId":14,
+									"internalValue":null
+								}
+							]
+						},
+						{
+							"defId":13,
+							"x":312,
+							"y":192,
+							"fieldInstances":[
+								{
+									"defId":14,
+									"internalValue":null
+								}
+							]
+						},
+						{
+							"defId":13,
 							"x":376,
 							"y":176,
 							"fieldInstances":[
 								{
 									"defId":14,
 									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Goblin"
-										]
-									}
 								}
 							]
 						},
@@ -6654,8 +6705,8 @@
 						},
 						{
 							"defId":31,
-							"x":264,
-							"y":280,
+							"x":280,
+							"y":296,
 							"fieldInstances":[
 								{
 									"defId":32,
@@ -6674,121 +6725,12 @@
 						},
 						{
 							"defId":13,
-							"x":312,
-							"y":192,
-							"fieldInstances":[
-								{
-									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Goblin"
-										]
-									}
-								}
-							]
-						},
-						{
-							"defId":13,
-							"x":440,
-							"y":208,
-							"fieldInstances":[
-								{
-									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Goblin"
-										]
-									}
-								}
-							]
-						},
-						{
-							"defId":13,
-							"x":408,
-							"y":240,
-							"fieldInstances":[
-								{
-									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Goblin"
-										]
-									}
-								}
-							]
-						},
-						{
-							"defId":13,
-							"x":456,
-							"y":240,
-							"fieldInstances":[
-								{
-									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Goblin"
-										]
-									}
-								}
-							]
-						},
-						{
-							"defId":13,
 							"x":424,
 							"y":272,
 							"fieldInstances":[
 								{
 									"defId":14,
 									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Goblin"
-										]
-									}
-								}
-							]
-						},
-						{
-							"defId":13,
-							"x":456,
-							"y":304,
-							"fieldInstances":[
-								{
-									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Goblin"
-										]
-									}
 								}
 							]
 						},
@@ -6800,15 +6742,6 @@
 								{
 									"defId":14,
 									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Goblin"
-										]
-									}
 								}
 							]
 						}
@@ -8186,10 +8119,6 @@
 											"Bomb"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -8206,10 +8135,6 @@
 											"Gem"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -9146,10 +9071,6 @@
 								{
 									"defId":10,
 									"internalValue":null
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -9161,10 +9082,6 @@
 								{
 									"defId":10,
 									"internalValue":null
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -9175,10 +9092,6 @@
 							"fieldInstances":[
 								{
 									"defId":10,
-									"internalValue":null
-								},
-								{
-									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -9196,10 +9109,6 @@
 											"Bomb"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -9216,10 +9125,6 @@
 											"Bomb"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -9236,10 +9141,6 @@
 											"Bomb"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -9264,10 +9165,6 @@
 											"Bomb"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -9312,10 +9209,6 @@
 											"Bomb"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -9332,10 +9225,6 @@
 											"Bomb"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						}
@@ -13716,10 +13605,6 @@
 											"Gem"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -13736,10 +13621,6 @@
 											"Gem"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -13756,10 +13637,6 @@
 											"Gem"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -13776,10 +13653,6 @@
 											"Gem"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -13796,10 +13669,6 @@
 											"Gem"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -13816,10 +13685,6 @@
 											"Gem"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -13831,10 +13696,6 @@
 								{
 									"defId":14,
 									"internalValue":null
-								},
-								{
-									"defId":45,
-									"internalValue":null
 								}
 							]
 						},
@@ -13845,10 +13706,6 @@
 							"fieldInstances":[
 								{
 									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":45,
 									"internalValue":null
 								}
 							]
@@ -13946,10 +13803,6 @@
 											"Bomb"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -13998,10 +13851,6 @@
 											"Bomb"
 										]
 									}
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -14109,10 +13958,6 @@
 							"fieldInstances":[
 								{
 									"defId":14,
-									"internalValue":null
-								},
-								{
-									"defId":45,
 									"internalValue":null
 								}
 							]
@@ -14868,10 +14713,6 @@
 								{
 									"defId":10,
 									"internalValue":null
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -14882,10 +14723,6 @@
 							"fieldInstances":[
 								{
 									"defId":10,
-									"internalValue":null
-								},
-								{
-									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -14898,10 +14735,6 @@
 								{
 									"defId":10,
 									"internalValue":null
-								},
-								{
-									"defId":47,
-									"internalValue":null
 								}
 							]
 						},
@@ -14912,10 +14745,6 @@
 							"fieldInstances":[
 								{
 									"defId":10,
-									"internalValue":null
-								},
-								{
-									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -15829,15 +15658,6 @@
 								{
 									"defId":10,
 									"internalValue":null
-								},
-								{
-									"defId":47,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Gem"
-										]
-									}
 								}
 							]
 						},
@@ -15849,15 +15669,6 @@
 								{
 									"defId":10,
 									"internalValue":null
-								},
-								{
-									"defId":47,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Gem"
-										]
-									}
 								}
 							]
 						},
@@ -15869,15 +15680,6 @@
 								{
 									"defId":10,
 									"internalValue":null
-								},
-								{
-									"defId":47,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Gem"
-										]
-									}
 								}
 							]
 						},
@@ -15889,15 +15691,6 @@
 								{
 									"defId":10,
 									"internalValue":null
-								},
-								{
-									"defId":47,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Gem"
-										]
-									}
 								}
 							]
 						},
@@ -15909,15 +15702,6 @@
 								{
 									"defId":10,
 									"internalValue":null
-								},
-								{
-									"defId":47,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Gem"
-										]
-									}
 								}
 							]
 						},
@@ -15929,15 +15713,6 @@
 								{
 									"defId":10,
 									"internalValue":null
-								},
-								{
-									"defId":47,
-									"internalValue":{
-										"id":3,
-										"p":[
-											"Gem"
-										]
-									}
 								}
 							]
 						}

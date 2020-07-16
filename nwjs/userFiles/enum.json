@@ -1,6 +1,6 @@
 {
 	"dataVersion":1,
-	"nextUniqId":6,
+	"nextUniqId":13,
 	"defs":{
 		"layers":[
 			{
@@ -63,6 +63,63 @@
 						"defaultOverride":null
 					},
 					{
+						"uid":11,
+						"type":{
+							"id":5,
+							"p":[
+								10
+							]
+						},
+						"name":"loot",
+						"canBeNull":true,
+						"editorDisplayMode":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"min":null,
+						"max":null,
+						"defaultOverride":null
+					},
+					{
+						"uid":12,
+						"type":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"name":"lootCount",
+						"canBeNull":false,
+						"editorDisplayMode":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"min":1,
+						"max":null,
+						"defaultOverride":{
+							"id":0,
+							"p":[
+								1
+							]
+						}
+					},
+					{
 						"uid":5,
 						"type":{
 							"id":3,
@@ -87,6 +144,63 @@
 						"min":null,
 						"max":null,
 						"defaultOverride":null
+					},
+					{
+						"uid":6,
+						"type":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"name":"lifeOverride",
+						"canBeNull":true,
+						"editorDisplayMode":{
+							"id":2,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"min":1,
+						"max":null,
+						"defaultOverride":null
+					},
+					{
+						"uid":7,
+						"type":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"name":"scale",
+						"canBeNull":false,
+						"editorDisplayMode":{
+							"id":2,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"min":0.1,
+						"max":4,
+						"defaultOverride":{
+							"id":1,
+							"p":[
+								1
+							]
+						}
 					}
 				]
 			}
@@ -101,7 +215,16 @@
 				"values":[
 					"Trash",
 					"Shooter",
-					"Boss"
+					"Ninja"
+				]
+			},
+			{
+				"uid":10,
+				"name":"ItemType",
+				"values":[
+					"Gold",
+					"Ammo",
+					"Food"
 				]
 			}
 		]
@@ -141,6 +264,22 @@
 								{
 									"defId":5,
 									"internalValue":null
+								},
+								{
+									"defId":6,
+									"internalValue":null
+								},
+								{
+									"defId":7,
+									"internalValue":null
+								},
+								{
+									"defId":11,
+									"internalValue":null
+								},
+								{
+									"defId":12,
+									"internalValue":null
 								}
 							]
 						},
@@ -154,13 +293,39 @@
 									"internalValue":{
 										"id":3,
 										"p":[
-											"Shooter"
+											"Ninja"
 										]
 									}
 								},
 								{
 									"defId":5,
 									"internalValue":null
+								},
+								{
+									"defId":6,
+									"internalValue":null
+								},
+								{
+									"defId":7,
+									"internalValue":null
+								},
+								{
+									"defId":11,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Ammo"
+										]
+									}
+								},
+								{
+									"defId":12,
+									"internalValue":{
+										"id":0,
+										"p":[
+											10
+										]
+									}
 								}
 							]
 						},
@@ -174,12 +339,28 @@
 									"internalValue":{
 										"id":3,
 										"p":[
-											"Shooter"
+											"Trash"
 										]
 									}
 								},
 								{
 									"defId":5,
+									"internalValue":null
+								},
+								{
+									"defId":6,
+									"internalValue":null
+								},
+								{
+									"defId":7,
+									"internalValue":null
+								},
+								{
+									"defId":11,
+									"internalValue":null
+								},
+								{
+									"defId":12,
 									"internalValue":null
 								}
 							]
@@ -187,14 +368,14 @@
 						{
 							"defId":2,
 							"x":136,
-							"y":176,
+							"y":224,
 							"fieldInstances":[
 								{
 									"defId":3,
 									"internalValue":{
 										"id":3,
 										"p":[
-											"Boss"
+											"Ninja"
 										]
 									}
 								},
@@ -204,6 +385,42 @@
 										"id":2,
 										"p":[
 											true
+										]
+									}
+								},
+								{
+									"defId":6,
+									"internalValue":{
+										"id":0,
+										"p":[
+											10
+										]
+									}
+								},
+								{
+									"defId":7,
+									"internalValue":{
+										"id":1,
+										"p":[
+											2
+										]
+									}
+								},
+								{
+									"defId":11,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Gold"
+										]
+									}
+								},
+								{
+									"defId":12,
+									"internalValue":{
+										"id":0,
+										"p":[
+											150
 										]
 									}
 								}
@@ -219,22 +436,54 @@
 									"internalValue":{
 										"id":3,
 										"p":[
-											"Trash"
+											"Shooter"
 										]
 									}
 								},
 								{
 									"defId":5,
+									"internalValue":{
+										"id":2,
+										"p":[
+											true
+										]
+									}
+								},
+								{
+									"defId":6,
+									"internalValue":null
+								},
+								{
+									"defId":7,
+									"internalValue":{
+										"id":1,
+										"p":[
+											2
+										]
+									}
+								},
+								{
+									"defId":11,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Food"
+										]
+									}
+								},
+								{
+									"defId":12,
 									"internalValue":null
 								}
 							]
 						}
 					]
 				}
-			]
+			],
+			"customName":"Foo level"
 		}
 	],
-	"name":"New project",
+	"name":"Enum testing",
 	"defaultPivotX":0,
 	"defaultPivotY":0,
 	"defaultGridSize":16,
