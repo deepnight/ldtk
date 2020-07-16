@@ -103,8 +103,8 @@
 				"color":16711680,
 				"maxPerLevel":0,
 				"discardExcess":true,
-				"pivotX":0.5,
-				"pivotY":1,
+				"pivotX":0,
+				"pivotY":0,
 				"fieldDefs":[
 					{
 						"uid":12,
@@ -174,7 +174,7 @@
 						"name":"scale",
 						"canBeNull":false,
 						"editorDisplayMode":{
-							"id":0,
+							"id":2,
 							"p":[
 								
 							]
@@ -211,7 +211,7 @@
 							]
 						},
 						"editorDisplayPos":{
-							"id":0,
+							"id":1,
 							"p":[
 								
 							]
@@ -361,7 +361,12 @@
 								},
 								{
 									"defId":14,
-									"internalValue":null
+									"internalValue":{
+										"id":1,
+										"p":[
+											2
+										]
+									}
 								},
 								{
 									"defId":15,

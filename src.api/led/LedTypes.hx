@@ -44,6 +44,7 @@ enum FieldDisplayMode {
 
 enum FieldDisplayPosition {
 	Above;
+	Center;
 	Beneath;
 }
 

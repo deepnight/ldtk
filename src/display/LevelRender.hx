@@ -293,6 +293,10 @@ class LevelRender extends dn.Process {
 			above.layout = Vertical;
 			above.horizontalAlign = Middle;
 
+			var center = new h2d.Flow(wrapper);
+			center.layout = Vertical;
+			center.horizontalAlign = Middle;
+
 			var beneath = new h2d.Flow(wrapper);
 			beneath.layout = Vertical;
 			beneath.horizontalAlign = Middle;
@@ -306,6 +310,7 @@ class LevelRender extends dn.Process {
 				var fieldWrapper = new h2d.Object();
 				switch fd.editorDisplayPos {
 					case Above: above.addChild(fieldWrapper);
+					case Center: center.addChild(fieldWrapper);
 					case Beneath: beneath.addChild(fieldWrapper);
 				}
 
@@ -341,10 +346,13 @@ class LevelRender extends dn.Process {
 			}
 
 			// Update wrappers pos
-			above.x = Std.int( -above.outerWidth*0.5 );
+			above.x = Std.int( -bmp.tile.width*def.pivotX - above.outerWidth*0.5 + bmp.tile.width*0.5 );
 			above.y = Std.int( -above.outerHeight - bmp.tile.height*def.pivotY );
 
-			beneath.x = Std.int( -beneath.outerWidth*0.5 );
+			center.x = Std.int( -bmp.tile.width*def.pivotX - center.outerWidth*0.5 + bmp.tile.width*0.5 );
+			center.y = Std.int( -bmp.tile.height*def.pivotY - center.outerHeight*0.5 + bmp.tile.height*0.5);
+
+			beneath.x = Std.int( -bmp.tile.width*def.pivotX - beneath.outerWidth*0.5 + bmp.tile.width*0.5 );
 			beneath.y = Std.int( bmp.tile.height*(1-def.pivotY) );
 		}
 
