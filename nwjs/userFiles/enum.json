@@ -1,6 +1,6 @@
 {
 	"dataVersion":1,
-	"nextUniqId":15,
+	"nextUniqId":16,
 	"defs":{
 		"layers":[
 			{
@@ -193,6 +193,37 @@
 								1
 							]
 						}
+					},
+					{
+						"uid":15,
+						"type":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"name":"life",
+						"canBeNull":false,
+						"editorDisplayMode":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"min":1,
+						"max":null,
+						"defaultOverride":{
+							"id":0,
+							"p":[
+								3
+							]
+						}
 					}
 				]
 			}
@@ -295,6 +326,10 @@
 								{
 									"defId":14,
 									"internalValue":null
+								},
+								{
+									"defId":15,
+									"internalValue":null
 								}
 							]
 						},
@@ -313,12 +348,11 @@
 								},
 								{
 									"defId":14,
-									"internalValue":{
-										"id":1,
-										"p":[
-											1000
-										]
-									}
+									"internalValue":null
+								},
+								{
+									"defId":15,
+									"internalValue":null
 								}
 							]
 						}

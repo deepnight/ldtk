@@ -55,6 +55,50 @@ class InstanceEditor extends dn.Process {
 		client.ge.emit(EntityFieldInstanceChanged);
 	}
 
+	function hideInputDefault(input:js.jquery.JQuery, fi:led.inst.FieldInstance) {
+		input.off(".def");
+
+		if( fi.isUsingDefault() ) {
+			var jRep = new J('<a class="formDefault" href="#"/>');
+			jRep.append('<span class="value">${fi.getForDisplay()}</span>');
+			jRep.append('<span class="label">(default)</span>');
+			jRep.on("click.def", function(ev) {
+				ev.preventDefault();
+				jRep.remove();
+				input.show().focus();
+
+				// Using some hack to manually drop SELECT down
+				// if( input.is("select") ) {
+				// 	var event = new js.html.MouseEvent("click", {
+				// 		view: js.Browser.window,
+				// 		bubbles: true,
+				// 		cancelable: true,
+				// 	});
+				// 	input.get(0).dispatchEvent(event);
+				// }
+			});
+			jRep.insertBefore(input);
+			input.hide();
+
+			input.on("blur.def", function(ev) {
+				jRep.remove();
+				hideInputDefault(input,fi);
+			});
+		}
+
+		// showDropdown = function (element) {
+		// 	var event = js.Browser.document.createEvent('MouseEvents');
+		// 	event.initMouseEvent('mousedown', true, true, js.Browser.window);
+		// 	element.dispatchEvent(event);
+		// };
+
+		// // This isn't magic.
+		// window.runThis = function () {
+		// 	var dropdown = document.getElementById('dropdown');
+		// 	showDropdown(dropdown);
+		// };
+	}
+
 	function updateForm() {
 		jPanel.empty();
 		jPanel.append("<h2>"+ei.def.name+"</h2>");
@@ -79,6 +123,7 @@ class InstanceEditor extends dn.Process {
 						fi.parseValue( input.val() );
 						onFieldChange();
 					});
+					hideInputDefault(input, fi);
 
 				case F_Color:
 					var input = new J("<input/>");
@@ -89,6 +134,7 @@ class InstanceEditor extends dn.Process {
 						fi.parseValue( input.val() );
 						onFieldChange();
 					});
+					hideInputDefault(input, fi);
 
 				case F_Float:
 					var input = new J("<input/>");
@@ -101,6 +147,7 @@ class InstanceEditor extends dn.Process {
 						fi.parseValue( input.val() );
 						onFieldChange();
 					});
+					hideInputDefault(input, fi);
 
 				case F_String:
 					var input = new J("<input/>");
@@ -114,16 +161,25 @@ class InstanceEditor extends dn.Process {
 						fi.parseValue( input.val() );
 						onFieldChange();
 					});
+					hideInputDefault(input, fi);
 
 				case F_Enum(name):
 					var ed = Client.ME.project.defs.getEnumDef(name);
 					var select = new J("<select/>");
 					select.appendTo(li);
+
+					var opt = new J('<option/>');
+					opt.appendTo(select);
+					opt.attr("value","");
+					opt.text("-- Use default ("+fi.def.getDefault()+") --");
+					if( fi.isUsingDefault() )
+						opt.attr("selected","selected");
+
 					if( fi.def.canBeNull ) {
 						var opt = new J('<option/>');
 						opt.appendTo(select);
 						opt.attr("value","");
-						opt.text("-- null --");
+						opt.text("null");
 						if( fi.getEnumValue()==null )
 							opt.attr("selected","selected");
 					}
@@ -132,7 +188,7 @@ class InstanceEditor extends dn.Process {
 						opt.appendTo(select);
 						opt.attr("value",v);
 						opt.text(v);
-						if( fi.getEnumValue()==v )
+						if( fi.getEnumValue()==v && !fi.isUsingDefault() )
 							opt.attr("selected","selected");
 					}
 
@@ -142,6 +198,7 @@ class InstanceEditor extends dn.Process {
 						N.debug(fi.getEnumValue());
 						onFieldChange();
 					});
+					hideInputDefault(select, fi);
 
 					// var def = fi.def.getStringDefault();
 					// input.attr("placeholder", def==null ? "(null)" : def=="" ? "(empty string)" : def);

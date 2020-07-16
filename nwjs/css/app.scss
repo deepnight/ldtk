@@ -535,7 +535,7 @@ ul.form {
 
 select {
 	display: block;
-	padding: 3px;
+	padding: 8px;
 }
 
 input[type=text],
@@ -562,6 +562,35 @@ input[type="file"] {
 }
 label.file {
 	@extend button;
+}
+
+.formDefault {
+	display: flex;
+	text-decoration: none;
+	border: 1px dashed $bgLight;
+	padding: 8px;
+	align-items: center;
+	background-color: $bgMed;
+	background-image: url("/img/stripes.png");
+
+	span {
+		opacity: 1;
+		text-shadow: 2px 0px 4px $bgMed, 0px 2px 4px $bgMed, -2px 0px 4px $bgMed, 0px -2px 4px $bgMed;
+		&.value {
+			flex: 1 1 auto;
+			color: white;
+			font-style: italic;
+		}
+		&.label {
+			font-size: 0.75em;
+			font-style: normal;
+			color: $orange;
+		}
+	}
+
+	&:hover {
+		border-color: $orange;
+	}
 }
 
 textarea {

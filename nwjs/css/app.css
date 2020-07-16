@@ -573,7 +573,7 @@ ul.form > li + li {
 
 select {
   display: block;
-  padding: 3px;
+  padding: 8px;
 }
 
 input[type=text],
@@ -599,6 +599,37 @@ input[type=checkbox] {
 
 input[type="file"] {
   display: none;
+}
+
+.formDefault {
+  display: flex;
+  text-decoration: none;
+  border: 1px dashed #545d73;
+  padding: 8px;
+  align-items: center;
+  background-color: #2e333f;
+  background-image: url("/img/stripes.png");
+}
+
+.formDefault span {
+  opacity: 1;
+  text-shadow: 2px 0px 4px #2e333f, 0px 2px 4px #2e333f, -2px 0px 4px #2e333f, 0px -2px 4px #2e333f;
+}
+
+.formDefault span.value {
+  flex: 1 1 auto;
+  color: white;
+  font-style: italic;
+}
+
+.formDefault span.label {
+  font-size: 0.75em;
+  font-style: normal;
+  color: #ffcc00;
+}
+
+.formDefault:hover {
+  border-color: #ffcc00;
 }
 
 textarea {
