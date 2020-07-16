@@ -275,8 +275,8 @@ ul.niceList li {
   align-items: center;
   grid-template-columns: auto auto;
   gap: 0px 8px;
-  padding: 10px;
-  font-size: 14pt;
+  padding: 8px;
+  font-size: 12pt;
   border-bottom: 1px solid #1e2229;
   background-color: #2e333f;
   cursor: pointer;
@@ -1347,6 +1347,15 @@ textarea:focus {
 .window.panel.tilesetDefs .content > .mainList {
   display: grid;
   grid-template-rows: auto min-content;
+}
+
+.window.panel.levelList .content {
+  grid-template-columns: auto;
+  width: 250px;
+}
+
+.window.panel.levelList .content > .header {
+  grid-column: auto;
 }
 
 .window.panel.projectSettings .content {

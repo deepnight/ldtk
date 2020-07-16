@@ -277,9 +277,9 @@ ul.niceList {
 		align-items: center;
 		grid-template-columns: auto auto;
 		gap: 0px 8px;
-		padding: 10px;
+		padding: 8px;
 
-		font-size: 14pt;
+		font-size: 12pt;
 
 		border-bottom: 1px solid $bgDark;
 		background-color: $bgMed;
@@ -1298,6 +1298,16 @@ textarea {
 		>.mainList {
 			display: grid;
 			grid-template-rows: auto min-content;
+		}
+	}
+}
+
+.window.panel.levelList {
+	.content {
+		grid-template-columns: auto;
+		width: 250px;
+		>.header {
+			grid-column: auto;
 		}
 	}
 }
