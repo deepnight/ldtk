@@ -9146,6 +9146,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9157,6 +9161,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9167,6 +9175,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -9184,6 +9196,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9200,6 +9216,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9216,6 +9236,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9240,6 +9264,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9284,6 +9312,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9300,6 +9332,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						}
@@ -14832,6 +14868,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -14842,6 +14882,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -14854,6 +14898,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -14864,6 +14912,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -15777,6 +15829,15 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Gem"
+										]
+									}
 								}
 							]
 						},
@@ -15788,6 +15849,15 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Gem"
+										]
+									}
 								}
 							]
 						},
@@ -15799,6 +15869,15 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Gem"
+										]
+									}
 								}
 							]
 						},
@@ -15810,6 +15889,15 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Gem"
+										]
+									}
 								}
 							]
 						},
@@ -15821,6 +15909,15 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Gem"
+										]
+									}
 								}
 							]
 						},
@@ -15832,6 +15929,15 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Gem"
+										]
+									}
 								}
 							]
 						}
