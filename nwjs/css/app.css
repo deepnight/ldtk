@@ -602,78 +602,6 @@ input[type="file"] {
   display: none;
 }
 
-span.checkboxWithDefaultOption {
-  display: flex;
-  align-items: center;
-  opacity: 1 !important;
-  padding: 0 !important;
-  flex: 1 0 auto !important;
-}
-
-span.checkboxWithDefaultOption span.value {
-  flex: 1 0 auto;
-}
-
-span.checkboxWithDefaultOption a.reset {
-  flex: 0 0 0px;
-  margin-left: 10px;
-  font-size: 0.75em;
-  text-decoration: underline;
-  color: #ffcc00;
-}
-
-span.checkboxWithDefaultOption a.reset:hover {
-  color: white;
-}
-
-a.usingDefault {
-  display: flex;
-  text-decoration: none;
-  border: 1px dashed #545d73;
-  padding: 8px;
-  align-items: center;
-  background-color: #2e333f;
-  background-image: url("/img/stripes.png");
-}
-
-a.usingDefault.checkbox {
-  padding: 0;
-  padding-right: 8px;
-}
-
-a.usingDefault span {
-  opacity: 1;
-  text-shadow: 2px 0px 4px #2e333f, 0px 2px 4px #2e333f, -2px 0px 4px #2e333f, 0px -2px 4px #2e333f;
-}
-
-a.usingDefault span.value {
-  flex: 1 1 auto;
-  color: white;
-  font-style: italic;
-}
-
-a.usingDefault span.label {
-  font-size: 0.75em;
-  font-style: italic;
-  color: #ffcc00;
-}
-
-a.usingDefault:hover {
-  border-color: #ffcc00;
-}
-
-select.usingDefault {
-  border: 1px dashed #545d73;
-  padding: 8px;
-  color: white;
-  background-color: #2e333f;
-  background-image: url("/img/stripes.png");
-}
-
-select.usingDefault option {
-  overflow: hidden;
-}
-
 textarea {
   resize: none;
   height: 200px;
@@ -1313,6 +1241,78 @@ textarea:focus {
   color: white;
   background-color: #791105;
   box-shadow: 0px 0px 8px #e34d00;
+}
+
+.instanceEditor ul.form span.inputWithDefaultOption {
+  display: flex;
+  align-items: center;
+  opacity: 1 !important;
+  padding: 0 !important;
+  flex: 1 0 auto !important;
+}
+
+.instanceEditor ul.form span.inputWithDefaultOption span.value {
+  flex: 1 0 auto;
+}
+
+.instanceEditor ul.form span.inputWithDefaultOption a.reset {
+  flex: 0 0 0px;
+  margin-left: 10px;
+  font-size: 0.75em;
+  text-decoration: underline;
+  color: #ffcc00;
+}
+
+.instanceEditor ul.form span.inputWithDefaultOption a.reset:hover {
+  color: white;
+}
+
+.instanceEditor ul.form a.usingDefault {
+  display: flex;
+  text-decoration: none;
+  border: 1px dashed #545d73;
+  padding: 8px;
+  align-items: center;
+  background-color: #2e333f;
+  background-image: url("/img/stripes.png");
+}
+
+.instanceEditor ul.form a.usingDefault.checkbox {
+  padding: 0;
+  padding-right: 8px;
+}
+
+.instanceEditor ul.form a.usingDefault span {
+  opacity: 1;
+  text-shadow: 2px 0px 4px #2e333f, 0px 2px 4px #2e333f, -2px 0px 4px #2e333f, 0px -2px 4px #2e333f;
+}
+
+.instanceEditor ul.form a.usingDefault span.value {
+  flex: 1 1 auto;
+  color: white;
+  font-style: italic;
+}
+
+.instanceEditor ul.form a.usingDefault span.label {
+  font-size: 0.75em;
+  font-style: italic;
+  color: #737f9d;
+}
+
+.instanceEditor ul.form a.usingDefault:hover {
+  border-color: #ffcc00;
+}
+
+.instanceEditor ul.form select.usingDefault {
+  border: 1px dashed #545d73;
+  padding: 8px;
+  color: white;
+  background-color: #2e333f;
+  background-image: url("/img/stripes.png");
+}
+
+.instanceEditor ul.form select.usingDefault option {
+  overflow: hidden;
 }
 
 .window.panel button.delete, .window.panel label.delete.file {

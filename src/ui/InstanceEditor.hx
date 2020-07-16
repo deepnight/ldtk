@@ -100,9 +100,9 @@ class InstanceEditor extends dn.Process {
 				});
 			}
 		}
-		else if( input.is("[type=checkbox]") ) {
-			// CHECKBOX which is not using default
-			var span = input.wrap('<span class="checkboxWithDefaultOption"/>').parent();
+		else if( fi.def.type==F_Color || fi.def.type==F_Bool ) {
+			// BOOL or COLOR requiring a "Reset to default" link
+			var span = input.wrap('<span class="inputWithDefaultOption"/>').parent();
 			span.find("input").wrap('<span class="value"/>');
 			var defLink = new J('<a class="reset" href="#">[ Reset ]</a>');
 			defLink.appendTo(span);

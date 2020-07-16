@@ -566,71 +566,6 @@ label.file {
 	@extend button;
 }
 
-span.checkboxWithDefaultOption {
-	display: flex;
-	align-items: center;
-	opacity: 1 !important;
-	padding: 0 !important;
-	flex: 1 0 auto !important;
-	span.value {
-		flex: 1 0 auto;
-	}
-	a.reset {
-		flex: 0 0 0px;
-		margin-left: 10px;
-		font-size: 0.75em;
-		text-decoration: underline;
-		color: $orange;
-	}
-	a.reset:hover {
-		color: white;
-	}
-}
-
-a.usingDefault {
-	display: flex;
-	text-decoration: none;
-	border: 1px dashed $bgLight;
-	padding: 8px;
-	align-items: center;
-	background-color: $bgMed;
-	background-image: url("/img/stripes.png");
-
-	&.checkbox {
-		padding: 0;
-		padding-right: 8px;
-	}
-
-	span {
-		opacity: 1;
-		text-shadow: 2px 0px 4px $bgMed, 0px 2px 4px $bgMed, -2px 0px 4px $bgMed, 0px -2px 4px $bgMed;
-		&.value {
-			flex: 1 1 auto;
-			color: white;
-			font-style: italic;
-		}
-		&.label {
-			font-size: 0.75em;
-			font-style: italic;
-			color: $orange;
-		}
-	}
-
-	&:hover {
-		border-color: $orange;
-	}
-}
-select.usingDefault {
-	border: 1px dashed $bgLight;
-	padding: 8px;
-	color: white;
-	option {
-		overflow: hidden;
-	}
-	background-color: $bgMed;
-	background-image: url("/img/stripes.png");
-}
-
 textarea {
 	resize: none;
 	height: 200px;
@@ -1267,6 +1202,73 @@ textarea {
 			background-color: $darkRed;
 			box-shadow: 0px 0px 8px $red;
 		}
+
+		span.inputWithDefaultOption {
+			display: flex;
+			align-items: center;
+			opacity: 1 !important;
+			padding: 0 !important;
+			flex: 1 0 auto !important;
+			span.value {
+				flex: 1 0 auto;
+			}
+			a.reset {
+				flex: 0 0 0px;
+				margin-left: 10px;
+				font-size: 0.75em;
+				text-decoration: underline;
+				color: $orange;
+			}
+			a.reset:hover {
+				color: white;
+			}
+		}
+
+		a.usingDefault {
+			display: flex;
+			text-decoration: none;
+			border: 1px dashed $bgLight;
+			padding: 8px;
+			align-items: center;
+			background-color: $bgMed;
+			background-image: url("/img/stripes.png");
+
+			&.checkbox {
+				padding: 0;
+				padding-right: 8px;
+			}
+
+			span {
+				opacity: 1;
+				text-shadow: 2px 0px 4px $bgMed, 0px 2px 4px $bgMed, -2px 0px 4px $bgMed, 0px -2px 4px $bgMed;
+				&.value {
+					flex: 1 1 auto;
+					color: white;
+					font-style: italic;
+				}
+				&.label {
+					font-size: 0.75em;
+					font-style: italic;
+					color: $bgLighter;
+				}
+			}
+
+			&:hover {
+				border-color: $orange;
+			}
+		}
+		select.usingDefault {
+			border: 1px dashed $bgLight;
+			padding: 8px;
+			color: white;
+			background-color: $bgMed;
+			background-image: url("/img/stripes.png");
+
+			option {
+				overflow: hidden;
+			}
+		}
+
 	}
 }
 
