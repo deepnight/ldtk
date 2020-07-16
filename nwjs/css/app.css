@@ -693,6 +693,7 @@ textarea:focus {
 
 .tip {
   position: absolute;
+  z-index: 99;
   box-sizing: border-box;
   padding: 4px;
   padding-left: 8px;
