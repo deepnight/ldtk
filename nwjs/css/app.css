@@ -1303,6 +1303,8 @@ textarea:focus {
   padding: 0;
   padding-top: 8px;
   text-align: left;
+  font-size: 10pt;
+  text-transform: none;
 }
 
 .instanceEditor ul.form select.required {

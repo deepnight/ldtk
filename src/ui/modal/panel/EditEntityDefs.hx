@@ -46,11 +46,16 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Create field
 		jFieldList.parent().find("button.create").click( function(ev) {
+			var anchor = ev.getThis();
 			function _create(type:led.LedTypes.FieldType) {
 				switch type {
 					case F_Enum(null):
-						// Create enum
-						var w = new ui.modal.Dialog("enums");
+						// Enum picker
+						var w = new ui.modal.Dialog(anchor, "enums");
+						if( project.defs.enums.length==0 ) {
+							w.jContent.append('<div class="warning">You first need to create an ENUM from the Project tab.</div>');
+						}
+
 						for(ed in project.defs.enums) {
 							var b = new J("<button/>");
 							b.appendTo(w.jContent);
@@ -72,7 +77,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			}
 
 			// Type picker
-			var w = new ui.modal.Dialog(ev.getThis(),"fieldTypes");
+			var w = new ui.modal.Dialog(anchor,"fieldTypes");
 			var types : Array<led.LedTypes.FieldType> = [
 				F_Int, F_Float, F_Bool, F_String, F_Enum(null), F_Color
 			];
@@ -80,7 +85,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				var b = new J("<button/>");
 				w.jContent.append(b);
 				JsTools.createFieldTypeIcon(type, b);
-				b.click( function(_) {
+				b.click( function(ev) {
 					_create(type);
 					w.close();
 				});

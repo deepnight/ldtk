@@ -124,7 +124,7 @@ class FieldInstance {
 			return "null";
 		else switch def.type {
 			case F_Int, F_Float, F_Bool, F_Color: return Std.string(v);
-			case F_Enum(name): return '$name.$v';
+			case F_Enum(name): return '$v';
 			case F_String: return '"$v"';
 		}
 	}
