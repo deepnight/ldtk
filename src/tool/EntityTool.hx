@@ -156,8 +156,12 @@ class EntityTool extends Tool<Int> {
 			var e = new J("<li/>");
 			list.append(e);
 			e.addClass("entity");
-			if( ed==curEntityDef )
+			if( ed==curEntityDef ) {
 				e.addClass("active");
+				e.css( "background-color", C.intToHex( C.toWhite(ed.color, 0.7) ) );
+			}
+			else
+				e.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
 
 			e.append( JsTools.createEntityPreview(ed, 32) );
 			e.append(ed.name);

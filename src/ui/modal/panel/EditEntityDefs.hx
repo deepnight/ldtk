@@ -393,8 +393,12 @@ class EditEntityDefs extends ui.modal.Panel {
 			preview.appendTo(elem);
 
 			elem.append('<span class="name">'+ed.name+'</span>');
-			if( curEntity==ed )
+			if( curEntity==ed ) {
 				elem.addClass("active");
+				elem.css( "background-color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
+			}
+			else
+				elem.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
 
 			elem.click( function(_) selectEntity(ed) );
 		}
