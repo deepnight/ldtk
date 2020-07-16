@@ -18,6 +18,7 @@ class ProjectSettings extends ui.modal.Panel {
 			var ed = project.defs.createEnumDef();
 			client.ge.emit(EnumDefAdded);
 			selectEnum(ed);
+			jContent.find("ul.enumForm input:first").focus();
 		});
 
 		// Delete enum
