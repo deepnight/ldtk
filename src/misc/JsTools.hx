@@ -57,8 +57,8 @@ class JsTools {
 	}
 
 
-	public static function createEntityPreview(ed:led.def.EntityDef, sizePx=64) {
-		var scale = sizePx/64;
+	public static function createEntityPreview(ed:led.def.EntityDef, sizePx=40) {
+		var scale = sizePx/40;
 		var ent = new J('<div/>');
 		ent.addClass("entity");
 		ent.css("width", ed.width*scale);
