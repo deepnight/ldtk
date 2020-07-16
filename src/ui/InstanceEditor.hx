@@ -221,15 +221,6 @@ class InstanceEditor extends dn.Process {
 					});
 					hideInputIfDefault(select, fi);
 
-					// var def = fi.def.getStringDefault();
-					// input.attr("placeholder", def==null ? "(null)" : def=="" ? "(empty string)" : def);
-					// if( !fi.isUsingDefault() )
-					// 	input.val( fi.getString() );
-					// input.change( function(ev) {
-					// 	fi.parseValue( input.val() );
-					// 	onFieldChange();
-					// });
-
 				case F_Bool:
 					var input = new J("<input/>");
 					input.appendTo(li);
