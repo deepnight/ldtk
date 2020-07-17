@@ -4,7 +4,7 @@ class Level {
 	var _project : Project;
 
 	public var uid(default,null) : Int;
-	public var customName: Null<String>; // TODO save
+	public var identifier(default,set): String;
 	public var pxWid : Int;
 	public var pxHei : Int;
 	public var layerInstances : Map<Int,led.inst.LayerInstance> = new Map();
@@ -16,14 +16,15 @@ class Level {
 		pxWid = Project.DEFAULT_LEVEL_WIDTH;
 		pxHei = Project.DEFAULT_LEVEL_HEIGHT;
 		this._project = project;
+		this.identifier = "Level"+uid;
 
 		for(ld in _project.defs.layers)
 			layerInstances.set( ld.uid, new led.inst.LayerInstance(_project, uid, ld.uid) );
 	}
 
-	public inline function getName() return customName!=null ? customName : getDefaultName();
-
-	public function getDefaultName() return "Level#"+uid;
+	function set_identifier(id:String) {
+		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id) : identifier;
+	}
 
 	@:keep public function toString() {
 		return Type.getClassName(Type.getClass(this));
@@ -36,10 +37,10 @@ class Level {
 
 		return {
 			uid: uid,
+			identifier: identifier,
 			pxWid: pxWid,
 			pxHei: pxHei,
 			layerInstances : layersJson,
-			customName: customName,
 		}
 	}
 
@@ -47,7 +48,7 @@ class Level {
 		var l = new Level( p, JsonTools.readInt(json.uid) );
 		l.pxWid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_WIDTH );
 		l.pxHei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_HEIGHT );
-		l.customName = json.customName;
+		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
 
 		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
 			var li = led.inst.LayerInstance.fromJson(p, layerJson);

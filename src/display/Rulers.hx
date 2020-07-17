@@ -101,7 +101,7 @@ class Rulers extends dn.Process {
 		addLabel(yLabel, Left);
 		addLabel(yLabel, Right);
 
-		addLabel(client.curLevel.getName(), Top, 2, PADDING*3);
+		addLabel(client.curLevel.identifier, Top, 2, PADDING*3);
 
 
 		// Corners

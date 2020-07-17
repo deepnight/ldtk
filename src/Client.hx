@@ -619,7 +619,7 @@ class Client extends dn.Process {
 		#if electron
 		// TODO
 		#elseif nwjs
-		appWin.title = project.name+" ("+curLevel.getName()+")    --    L-Ed v"+Const.APP_VERSION;
+		appWin.title = project.name+" ("+curLevel.identifier+")    --    L-Ed v"+Const.APP_VERSION;
 		#end
 
 		// jMainPanel.find("h2#levelName").text( curLevel.getName() );

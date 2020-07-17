@@ -92,8 +92,23 @@ class Project {
 	public function createLevel() {
 		var l = new Level(this, makeUniqId());
 		levels.push(l);
-		tidy(); // will create layer instances
+
+		var id = "Level";
+		var idx = 2;
+		while( !isLevelIdentifierUnique(id) )
+			id = "Level"+(idx++);
+		l.identifier = id;
+
+		tidy(); // this will create layer instances
 		return l;
+	}
+
+	public function isLevelIdentifierUnique(id:String) {
+		id = cleanupIdentifier(id);
+		for(l in levels)
+			if( l.identifier==id )
+				return false;
+		return true;
 	}
 
 	public function removeLevel(l:Level) {
@@ -103,9 +118,9 @@ class Project {
 		tidy();
 	}
 
-	public function getLevel(?name:String, ?uid:Int) : Null<Level> {
+	public function getLevel(?id:String, ?uid:Int) : Null<Level> {
 		for(l in levels)
-			if( l.uid==uid || l.getName()==name )
+			if( l.uid==uid || l.identifier==id )
 				return l;
 		return null;
 	}
@@ -123,6 +138,9 @@ class Project {
 		levels.insert(to, moved);
 		return moved;
 	}
+
+
+	/**  GENERAL TOOLS  *****************************************/
 
 	public static inline function isValidIdentifier(id:String) {
 		return cleanupIdentifier(id) != null;
@@ -155,7 +173,6 @@ class Project {
 		else
 			return null;
 	}
-
 
 	#if editor
 	public function iterateAllFieldInstances(?searchType:led.LedTypes.FieldType, run:led.inst.FieldInstance->Void) {

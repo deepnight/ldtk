@@ -64,9 +64,10 @@ class LevelList extends ui.modal.Panel {
 	}
 
 	function updateForm() {
-		var i = Input.linkToHtmlInput( curLevel.customName, jForm.find("[name=name]") );
+		var i = Input.linkToHtmlInput( curLevel.identifier, jForm.find("[name=name]") );
 		i.linkEvent(LevelSettingsChanged);
-		i.setPlaceholder( curLevel.getDefaultName() );
+		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.isLevelIdentifierUnique(id);
+		i.validityError = N.invalidIdentifier;
 	}
 
 	function updateList() {
@@ -76,7 +77,7 @@ class LevelList extends ui.modal.Panel {
 		for(l in project.levels) {
 			var e = new J("<li/>");
 			e.appendTo(list);
-			e.text( l.getName() );
+			e.text( l.identifier );
 			if( curLevel==l )
 				e.addClass("active");
 

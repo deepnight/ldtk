@@ -34,11 +34,11 @@ class JsonTools {
 		}
 	}
 
-	public static function readString(v:Dynamic, allowNull=false) : Null<String> {
-		if( v==null && !allowNull )
-			throw "Couldn't read String "+v;
+	public static function readString(v:Dynamic, ?defaultIfMissing:String) : String {
+		if( v==null && defaultIfMissing==null )
+			throw "Missing String "+v;
 
-		return v==null ? null : Std.string(v);
+		return v==null ? defaultIfMissing : Std.string(v);
 	}
 
 	public static function readInt(v:Dynamic, ?defaultIfMissing:Int) : Int {
