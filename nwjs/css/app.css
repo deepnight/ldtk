@@ -460,6 +460,7 @@ ul.niceList li:not(.active):hover {
   overflow: hidden;
   padding: 8px;
   background-image: url("/img/grid.png");
+  background-color: #1e2229;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
 }
 
