@@ -63,26 +63,6 @@
 				"tilesetDefId":16,
 				"tilePivotX":0,
 				"tilePivotY":0
-			},
-			{
-				"uid":18,
-				"type":{
-					"id":2,
-					"p":[
-						
-					]
-				},
-				"identifier":"Bg",
-				"gridSize":16,
-				"displayOpacity":1,
-				"intGridValues":[
-					{
-						"color":0
-					}
-				],
-				"tilesetDefId":16,
-				"tilePivotX":0,
-				"tilePivotY":0
 			}
 		],
 		"entities":[
@@ -506,6 +486,7 @@
 		"tilesets":[
 			{
 				"uid":16,
+				"identifier":"Tileset16",
 				"fileBase64":"iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAACXBIWXMAAAsTAAALEwEAmpwYAAAFwmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNi4wLWMwMDIgNzkuMTY0MzUyLCAyMDIwLzAxLzMwLTE1OjUwOjM4ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjEuMSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIwLTA3LTEyVDA5OjM3KzAyOjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDIwLTA3LTEyVDE4OjMxOjU2KzAyOjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMC0wNy0xMlQxODozMTo1NiswMjowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NjVmMWRlZmQtNzQ1Zi02ZDQ3LWI5OGYtN2RkYmU4MTE3NThiIiB4bXBNTTpEb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6Mjk0ZGEwMzktNGQ0ZS0yNDQwLTk4MTAtNmQyYzgxMDUwZTJmIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6MWI0MzBhZGMtZTMwZS03ZDQ1LWFjNGEtODM0MjRlNTk0ZmQxIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIj4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0iY3JlYXRlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDoxYjQzMGFkYy1lMzBlLTdkNDUtYWM0YS04MzQyNGU1OTRmZDEiIHN0RXZ0OndoZW49IjIwMjAtMDctMTJUMDk6MzcrMDI6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCAyMS4xIChXaW5kb3dzKSIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6NjVmMWRlZmQtNzQ1Zi02ZDQ3LWI5OGYtN2RkYmU4MTE3NThiIiBzdEV2dDp3aGVuPSIyMDIwLTA3LTEyVDE4OjMxOjU2KzAyOjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjEuMSAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+DKeYawAAB5NJREFUeNrt3MENgjAUgOHu4xJeXcApXMZ9nMMVHKNKYkl9gBpPtv1MvijF0zv9ViDlnBMAMBZDAIBRA+B8OuSnxRfenQMAGg2Ay/WWi/KKx3EtvBskALQWAI9X+YU/HeV4HM/FNUMEgDYDYN7mj9v+8XNKaXEeAGg8AKb/+eNxPBfPGyIAdHIR4FYAuDAQAASAAAAAAQAACAAA4K8D4OVe/7XnANTPClj5jkECgOcAAABN/AVw3O/ypCzWx+Xzw3wbYL1miADQaAAAAAIAABghAOJFfkF6t2aIACAAAICOAmCNAAAAOwAAQGsB8IkAAIABdgCSHQAAGCwA6rVPgWCIANBXAHzFEAGgwx2ArV/9dgAAoM+LAG37A0CvAfDrrX9iAAAEAADQcQDMF/4JAACwAwAACAAA4O/vAgAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAAAWAIACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAIAAAAAEAAAgAAAAAQAACAAAQAAAAAIAABAAAIAAAAAEAAAgAAAAAQAACAAAQAAAAAIAABAAAIAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAEgCEAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAIAABAAAIAAAAAEAAAgAAAAAQAACAAAQAAAAAIAABAAAIAAAAAEAAAgAAAAAQAACAAAQAAAAAIAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAABAAhgAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAACAAAQAAAAAIAABAAAIAAAAAEAAAgAAAAAQAACAAAQAAAAAIAABAAAIAAAAAEAAAgAAAAAQAACAAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAQAAYAgAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAAAgAAAAAQAACAAAQAAAAAIAABAAAIAAAAAEAAAgAAAAAQAACAAAQAAAAAIAABAAAIAAAAAEAAAgAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAAAWAIACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAIAAAAAEAAAgAAAAAQAACAAAQAAAAAIAABAAAIAAAAAEAAAgAAAAAQAACAAAQAAAAAIAABAAAIAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAEgCEAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAQAACAAAAABAAAIAABAAAAAAgAAEAAAgAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAAAEAAAgAAEAAAAACAAAQAACAAAAABAAAIAAAgMkd3r5fnIOVvP4AAAAASUVORK5CYII=",
 				"path":"../../gmtk-god/res/ld/tileset.png",
 				"pxWid":512,
@@ -1820,21 +1801,6 @@
 				},
 				{
 					"levelId":41,
-					"layerDefId":18,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
-					],
-					"entityInstances":[
-						
-					]
-				},
-				{
-					"levelId":41,
 					"layerDefId":20,
 					"pxOffsetX":0,
 					"pxOffsetY":0,
@@ -2705,17 +2671,13 @@
 				},
 				{
 					"levelId":29,
-					"layerDefId":18,
+					"layerDefId":20,
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
 						
 					],
 					"gridTiles":[
-						{
-							"coordId":232,
-							"v":0
-						},
 						{
 							"coordId":233,
 							"v":0
@@ -2743,22 +2705,19 @@
 						{
 							"coordId":239,
 							"v":0
+						},
+						{
+							"coordId":240,
+							"v":0
+						},
+						{
+							"coordId":241,
+							"v":0
+						},
+						{
+							"coordId":242,
+							"v":0
 						}
-					],
-					"entityInstances":[
-						
-					]
-				},
-				{
-					"levelId":29,
-					"layerDefId":20,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
 					],
 					"entityInstances":[
 						
@@ -6571,6 +6530,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -6587,6 +6550,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -6598,6 +6565,10 @@
 								{
 									"defId":14,
 									"internalValue":null
+								},
+								{
+									"defId":46,
+									"internalValue":null
 								}
 							]
 						},
@@ -6608,6 +6579,10 @@
 							"fieldInstances":[
 								{
 									"defId":14,
+									"internalValue":null
+								},
+								{
+									"defId":46,
 									"internalValue":null
 								}
 							]
@@ -6620,6 +6595,10 @@
 								{
 									"defId":14,
 									"internalValue":null
+								},
+								{
+									"defId":46,
+									"internalValue":null
 								}
 							]
 						},
@@ -6630,6 +6609,10 @@
 							"fieldInstances":[
 								{
 									"defId":14,
+									"internalValue":null
+								},
+								{
+									"defId":46,
 									"internalValue":null
 								}
 							]
@@ -6642,6 +6625,10 @@
 								{
 									"defId":14,
 									"internalValue":null
+								},
+								{
+									"defId":46,
+									"internalValue":null
 								}
 							]
 						},
@@ -6652,6 +6639,10 @@
 							"fieldInstances":[
 								{
 									"defId":14,
+									"internalValue":null
+								},
+								{
+									"defId":46,
 									"internalValue":null
 								}
 							]
@@ -6732,6 +6723,10 @@
 								{
 									"defId":14,
 									"internalValue":null
+								},
+								{
+									"defId":46,
+									"internalValue":null
 								}
 							]
 						},
@@ -6743,24 +6738,13 @@
 								{
 									"defId":14,
 									"internalValue":null
+								},
+								{
+									"defId":46,
+									"internalValue":null
 								}
 							]
 						}
-					]
-				},
-				{
-					"levelId":30,
-					"layerDefId":18,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
-					],
-					"entityInstances":[
-						
 					]
 				},
 				{
@@ -8120,6 +8104,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -8136,6 +8124,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -8179,21 +8171,6 @@
 								}
 							]
 						}
-					]
-				},
-				{
-					"levelId":35,
-					"layerDefId":18,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
-					],
-					"entityInstances":[
-						
 					]
 				},
 				{
@@ -9072,6 +9049,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9083,6 +9064,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9093,6 +9078,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -9110,6 +9099,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9126,6 +9119,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9142,6 +9139,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9166,6 +9167,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9210,6 +9215,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9226,24 +9235,13 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						}
-					]
-				},
-				{
-					"levelId":42,
-					"layerDefId":18,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
-					],
-					"entityInstances":[
-						
 					]
 				},
 				{
@@ -9774,6 +9772,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9784,6 +9786,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -9796,6 +9802,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9807,6 +9817,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -9817,6 +9831,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -9857,21 +9875,6 @@
 								}
 							]
 						}
-					]
-				},
-				{
-					"levelId":37,
-					"layerDefId":18,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
-					],
-					"entityInstances":[
-						
 					]
 				},
 				{
@@ -10573,6 +10576,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -10584,6 +10591,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -10594,6 +10605,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -10611,6 +10626,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -10627,6 +10646,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -10638,6 +10661,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -10648,6 +10675,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -10729,6 +10760,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -10745,6 +10780,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -10761,6 +10800,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -10777,24 +10820,13 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						}
-					]
-				},
-				{
-					"levelId":38,
-					"layerDefId":18,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
-					],
-					"entityInstances":[
-						
 					]
 				},
 				{
@@ -12745,6 +12777,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -12755,6 +12791,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -12772,6 +12812,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -12788,6 +12832,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -12810,6 +12858,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -12820,6 +12872,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -12832,6 +12888,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -12848,6 +12908,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -12864,6 +12928,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13025,6 +13093,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13068,21 +13140,6 @@
 								
 							]
 						}
-					]
-				},
-				{
-					"levelId":40,
-					"layerDefId":18,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
-					],
-					"entityInstances":[
-						
 					]
 				},
 				{
@@ -14011,21 +14068,6 @@
 				},
 				{
 					"levelId":0,
-					"layerDefId":18,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
-					],
-					"entityInstances":[
-						
-					]
-				},
-				{
-					"levelId":0,
 					"layerDefId":20,
 					"pxOffsetX":0,
 					"pxOffsetY":0,
@@ -14896,7 +14938,7 @@
 				},
 				{
 					"levelId":39,
-					"layerDefId":18,
+					"layerDefId":20,
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
@@ -14930,26 +14972,7 @@
 						{
 							"coordId":100,
 							"v":0
-						},
-						{
-							"coordId":101,
-							"v":0
 						}
-					],
-					"entityInstances":[
-						
-					]
-				},
-				{
-					"levelId":39,
-					"layerDefId":20,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
 					],
 					"entityInstances":[
 						
@@ -15719,6 +15742,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -15729,6 +15756,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -15741,6 +15772,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -15751,6 +15786,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -15763,6 +15802,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -15774,24 +15817,13 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						}
-					]
-				},
-				{
-					"levelId":22,
-					"layerDefId":18,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
-					],
-					"entityInstances":[
-						
 					]
 				},
 				{
