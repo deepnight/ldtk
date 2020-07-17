@@ -407,7 +407,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 
 		// Make layer list sortable
-		JsTools.makeSortable(".window .mainList ul", function(from, to) {
+		JsTools.makeSortable(".entityList ul", function(from, to) {
 			var moved = project.defs.sortEntityDef(from,to);
 			selectEntity(moved);
 			client.ge.emit(EntityDefSorted);
