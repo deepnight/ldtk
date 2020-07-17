@@ -4,9 +4,9 @@ import led.LedTypes;
 
 class TilesetDef {
 	public var uid : Int;
+	public var identifier(default,set) : String;
 	public var fileBase64(default,set) : Null<String>;
 	public var path : Null<String>;
-	public var customName : Null<String>;
 	public var pxWid = 0;
 	public var pxHei = 0;
 	public var tileGridSize : Int = Project.DEFAULT_GRID_SIZE;
@@ -27,21 +27,26 @@ class TilesetDef {
 
 	public function new(uid:Int) {
 		this.uid = uid;
+		identifier = "Tileset"+uid;
 	}
 
-	public function getName() {
-		return customName!=null ? customName : getDefaultName();
+	function set_identifier(id:String) {
+		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id) : identifier;
 	}
 
-	public function getDefaultName() {
-		return path!=null ? dn.FilePath.extractFileWithExt(path) : "Empty tileset "+uid;
-	}
+	// public function getName() {
+	// 	return customName!=null ? customName : getDefaultName();
+	// }
 
-	public function getFileName() : Null<String> {
+	// public function getDefaultName() {
+	// 	return path!=null ? dn.FilePath.extractFileWithExt(path) : "Empty tileset "+uid;
+	// }
+
+	public function getFileName(withExt:Bool) : Null<String> {
 		if( path==null || !hasAtlas() )
 			return null;
 
-		return dn.FilePath.extractFileWithExt(path);
+		return withExt ? dn.FilePath.extractFileWithExt(path) : dn.FilePath.extractFileName(path);
 	}
 
 	function set_fileBase64(str:String) {
@@ -73,9 +78,9 @@ class TilesetDef {
 	public function toJson() {
 		return {
 			uid: uid,
+			identifier: identifier,
 			fileBase64: fileBase64,
 			path: path,
-			customName: customName,
 			pxWid: pxWid,
 			pxHei: pxHei,
 			tileGridSize: tileGridSize,
@@ -95,7 +100,7 @@ class TilesetDef {
 		td.pxHei = JsonTools.readInt( json.pxHei );
 		td.fileBase64 = json.fileBase64;
 		td.path = json.path;
-		td.customName = json.customName;
+		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
 
 		var arr = JsonTools.readArray( json.savedSelections );
 		td.savedSelections = json.savedSelections==null ? [] : arr.map( function(jsonSel:Dynamic) {

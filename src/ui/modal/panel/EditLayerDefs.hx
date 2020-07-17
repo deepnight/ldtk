@@ -212,7 +212,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						var opt = new J("<option/>");
 						opt.appendTo(select);
 						opt.attr("value", td.uid);
-						opt.text( td.getName() );
+						opt.text( td.identifier );
 					}
 
 					select.val( cur.tilesetDefId==null ? -1 : cur.tilesetDefId );

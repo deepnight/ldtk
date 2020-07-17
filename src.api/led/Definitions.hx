@@ -206,6 +206,27 @@ class Definitions {
 		return null;
 	}
 
+	public function isTilesetIdentifierUnique(id:String) {
+		id = Project.cleanupIdentifier(id);
+		for(td in tilesets)
+			if( td.identifier==id )
+				return false;
+		return true;
+	}
+
+	public function autoRenameTilesetIdentifier(oldPath:Null<String>, td:led.def.TilesetDef) {
+		var defIdReg = ~/^Tileset[0-9]*/g;
+		var oldFileName = oldPath==null ? null : Project.cleanupIdentifier(dn.FilePath.extractFileName(oldPath));
+		if( defIdReg.match(td.identifier) || oldFileName!=null && td.identifier.indexOf(oldFileName)>=0 ) {
+			var base = Project.cleanupIdentifier( td.getFileName(false) );
+			var id = base;
+			var idx = 2;
+			while( !isTilesetIdentifierUnique(id) )
+				id = base+(idx++);
+			td.identifier = id;
+		}
+	}
+
 
 	/**  ENUM DEFS  *****************************************/
 

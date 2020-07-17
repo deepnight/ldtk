@@ -114,6 +114,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			return;
 		}
 
+		JsTools.parseComponents(jForm);
 		jForm.show();
 		jContent.find(".none").hide();
 		if( !project.defs.hasLayerType(Tiles) )
@@ -129,15 +130,17 @@ class EditTilesetDefs extends ui.modal.Panel {
 				jPath.append('<span>$e</span>');
 
 		// Fields
-		var i = Input.linkToHtmlInput(cur.customName, jForm.find("input[name='name']") );
+		var i = Input.linkToHtmlInput(cur.identifier, jForm.find("input[name='name']") );
+		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.defs.isTilesetIdentifierUnique(id);
+		i.validityError = N.invalidIdentifier;
 		i.onChange = client.ge.emit.bind(TilesetDefChanged);
-		i.setPlaceholder( cur.getDefaultName() );
 
 		var uploader = jForm.find("input[name=tilesetFile]");
 		uploader.attr("nwworkingdir",client.getCwd()+"\\tilesetTestImages");
 		var label = uploader.siblings("[for="+uploader.attr("id")+"]");
-		label.text( !cur.hasAtlas() ? Lang.t._("Select an image file") : cur.getFileName() );
+		label.text( !cur.hasAtlas() ? Lang.t._("Select an image file") : cur.getFileName(true) );
 		uploader.change( function(ev) {
+			var oldPath = cur.path;
 			var rawPath = uploader.val();
 			var relativePath = dn.FilePath.fromFile( rawPath );
 			relativePath.makeRelativeTo( client.getCwd() );
@@ -160,6 +163,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 					}
 				return;
 			}
+			project.defs.autoRenameTilesetIdentifier(oldPath, cur);
 			updateTilesetPreview();
 			client.ge.emit(TilesetDefChanged);
 		});
@@ -181,7 +185,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			var e = new J("<li/>");
 			jList.append(e);
 
-			e.append('<span class="name">'+td.getName()+'</span>');
+			e.append('<span class="name">'+td.identifier+'</span>');
 			if( cur==td )
 				e.addClass("active");
 
