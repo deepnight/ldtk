@@ -44,7 +44,7 @@
 								1
 							]
 						},
-						"name":"mobType",
+						"identifier":"mobType",
 						"canBeNull":false,
 						"editorDisplayMode":{
 							"id":1,
@@ -70,7 +70,7 @@
 								10
 							]
 						},
-						"name":"loot",
+						"identifier":"loot",
 						"canBeNull":true,
 						"editorDisplayMode":{
 							"id":1,
@@ -96,7 +96,7 @@
 								
 							]
 						},
-						"name":"lootCount",
+						"identifier":"lootCount",
 						"canBeNull":false,
 						"editorDisplayMode":{
 							"id":1,
@@ -127,7 +127,7 @@
 								
 							]
 						},
-						"name":"elite",
+						"identifier":"elite",
 						"canBeNull":false,
 						"editorDisplayMode":{
 							"id":1,
@@ -153,7 +153,7 @@
 								
 							]
 						},
-						"name":"lifeOverride",
+						"identifier":"lifeOverride",
 						"canBeNull":true,
 						"editorDisplayMode":{
 							"id":2,
@@ -179,7 +179,7 @@
 								
 							]
 						},
-						"name":"scale",
+						"identifier":"scale",
 						"canBeNull":false,
 						"editorDisplayMode":{
 							"id":2,
