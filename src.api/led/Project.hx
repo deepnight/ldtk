@@ -192,7 +192,8 @@ class Project {
 		var p = new Project();
 
 		// Hero
-		var ed = p.defs.createEntityDef("Hero");
+		var ed = p.defs.createEntityDef();
+		ed.identifier = "Hero";
 		ed.color = 0x00ff00;
 		ed.width = 24;
 		ed.height = 32;

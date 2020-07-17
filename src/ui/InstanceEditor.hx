@@ -116,7 +116,7 @@ class InstanceEditor extends dn.Process {
 
 	function updateForm() {
 		jPanel.empty();
-		jPanel.append("<h2>"+ei.def.name+"</h2>");
+		jPanel.append("<h2>"+ei.def.identifier+"</h2>");
 
 		var form = new J('<ul class="form"/>');
 		form.appendTo(jPanel);

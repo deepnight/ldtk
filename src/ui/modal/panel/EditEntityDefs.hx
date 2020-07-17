@@ -192,11 +192,10 @@ class EditEntityDefs extends ui.modal.Panel {
 
 
 		// Name
-		var i = Input.linkToHtmlInput(curEntity.name, jEntityForm.find("input[name='name']") );
-		i.validityCheck = project.defs.isEntityNameValid;
-		i.onChange = function() {
-			client.ge.emit(EntityDefChanged);
-		};
+		var i = Input.linkToHtmlInput(curEntity.identifier, jEntityForm.find("input[name='name']") );
+		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.defs.isEntityIdentifierUnique(id);
+		i.validityError = N.invalidIdentifier;
+		i.linkEvent(EntityDefChanged);
 
 		// Dimensions
 		var i = Input.linkToHtmlInput( curEntity.width, jEntityForm.find("input[name='width']") );
@@ -399,7 +398,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			var preview = JsTools.createEntityPreview(ed, 32);
 			preview.appendTo(elem);
 
-			elem.append('<span class="name">'+ed.name+'</span>');
+			elem.append('<span class="name">'+ed.identifier+'</span>');
 			if( curEntity==ed ) {
 				elem.addClass("active");
 				elem.css( "background-color", C.intToHex( C.toWhite(ed.color, 0.5) ) );

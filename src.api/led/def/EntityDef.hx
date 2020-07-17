@@ -4,7 +4,7 @@ import led.LedTypes;
 
 class EntityDef {
 	public var uid(default,null) : Int;
-	public var name : String;
+	public var identifier(default,set) : String;
 	public var width : Int;
 	public var height : Int;
 	public var color : UInt;
@@ -22,19 +22,23 @@ class EntityDef {
 		width = height = 16;
 		maxPerLevel = 0;
 		discardExcess = true;
-		name = "New entity "+uid;
+		identifier = "Entity"+uid;
 		setPivot(0.5,1);
 	}
 
+	function set_identifier(id:String) {
+		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id) : identifier;
+	}
+
 	@:keep public function toString() {
-		return '$name($width x $height)['
+		return '$identifier($width x $height)['
 			+ fieldDefs.map( function(fd) return fd.identifier+":"+fd.type ).join(",")
 			+ "]";
 	}
 
 	public static function fromJson(p:Project, json:Dynamic) {
 		var o = new EntityDef( JsonTools.readInt(json.uid) );
-		o.name = JsonTools.readString( json.name );
+		o.identifier = JsonTools.readString( json.name ); // TODO rename
 		o.width = JsonTools.readInt( json.width, 16 );
 		o.height = JsonTools.readInt( json.height, 16 );
 		o.color = JsonTools.readInt( json.color, 0x0 );
@@ -52,7 +56,7 @@ class EntityDef {
 	public function toJson() {
 		return {
 			uid: uid,
-			name: name,
+			identifier: identifier,
 			width: width,
 			height: height,
 			color: color,

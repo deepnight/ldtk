@@ -21,7 +21,7 @@ class EntityInstance {
 	}
 
 	@:keep public function toString() {
-		return 'Instance<${def.name}>@$x,$y';
+		return 'Instance<${def.identifier}>@$x,$y';
 	}
 
 	public function toJson() {

@@ -131,14 +131,17 @@ class Definitions {
 		return null;
 	}
 
-	public function createEntityDef(?name:String) : led.def.EntityDef {
+	public function createEntityDef() : led.def.EntityDef {
 		var ed = new led.def.EntityDef(_project.makeUniqId());
 		entities.push(ed);
 
 		ed.setPivot( _project.defaultPivotX, _project.defaultPivotY );
 
-		if( isEntityNameValid(name) )
-			ed.name = name;
+		var id = "Entity";
+		var idx = 2;
+		while( !isEntityIdentifierUnique(id) )
+			id = "Entity"+(idx++);
+		ed.identifier = id;
 
 		return ed;
 	}
@@ -148,13 +151,13 @@ class Definitions {
 		_project.tidy();
 	}
 
-	public function isEntityNameValid(name:String) {
-		if( name==null || name.length==0 )
-			return false;
+	public function isEntityIdentifierUnique(id:String) {
+		id = Project.cleanupIdentifier(id);
 
 		for(ed in entities)
-			if( ed.name==name )
+			if( ed.identifier==id )
 				return false;
+
 		return true;
 	}
 

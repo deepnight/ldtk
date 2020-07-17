@@ -164,7 +164,7 @@ class EntityTool extends Tool<Int> {
 				e.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
 
 			e.append( JsTools.createEntityPreview(ed, 32) );
-			e.append(ed.name);
+			e.append(ed.identifier);
 
 			e.click( function(_) {
 				selectValue(ed.uid);
