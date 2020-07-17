@@ -63,7 +63,7 @@ class EnumDef {
 
 	public function renameValue(from,to) {
 		to = Project.cleanupIdentifier(to);
-		if( to==null )
+		if( to==null || !isValueIdentifierValidAndUnique(to) )
 			return false;
 
 		for(i in 0...values.length)
