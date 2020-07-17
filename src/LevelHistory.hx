@@ -44,6 +44,7 @@ class LevelHistory {
 
 			case EnumDefAdded:
 			case EnumDefChanged:
+			case EnumDefSorted:
 
 			case LevelResized:
 			case LevelSorted:

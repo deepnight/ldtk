@@ -223,6 +223,9 @@ class Definitions {
 
 	public function isEnumIdentifierUnique(id:String) {
 		id = Project.cleanupIdentifier(id);
+		if( id==null )
+			return false;
+
 		for(ed in enums)
 			if( ed.name==id )
 				return false;
@@ -235,5 +238,22 @@ class Definitions {
 				return ed;
 		return null;
 	}
+
+
+	public function sortEnumDef(from:Int, to:Int) : Null<led.def.EnumDef> {
+		if( from<0 || from>=enums.length || from==to )
+			return null;
+
+		if( to<0 || to>=enums.length )
+			return null;
+
+		_project.tidy();
+
+		var moved = enums.splice(from,1)[0];
+		enums.insert(to, moved);
+
+		return moved;
+	}
+
 
 }

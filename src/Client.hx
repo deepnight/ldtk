@@ -510,7 +510,7 @@ class Client extends dn.Process {
 		switch e {
 			case ViewportChanged:
 
-			case EnumDefAdded, EnumDefRemoved, EnumDefChanged:
+			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted:
 
 			case LayerInstanceChanged:
 			case EntityFieldDefChanged:

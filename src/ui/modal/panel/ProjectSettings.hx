@@ -36,6 +36,7 @@ class ProjectSettings extends ui.modal.Panel {
 			});
 		});
 
+		// Default enum selection
 		if( project.defs.enums.length>0 )
 			selectEnum( project.defs.enums[0] );
 
@@ -109,10 +110,9 @@ class ProjectSettings extends ui.modal.Panel {
 
 		// Make list sortable
 		JsTools.makeSortable(".window .enumList ul", function(from, to) {
-			N.notImplemented();
-			// var moved = project.defs.sortLayerDef(from,to);
-			// select(moved);
-			// client.ge.emit(LayerDefSorted);
+			var moved = project.defs.sortEnumDef(from,to);
+			selectEnum(moved);
+			client.ge.emit(EnumDefSorted);
 		});
 
 	}
@@ -146,10 +146,8 @@ class ProjectSettings extends ui.modal.Panel {
 				function(newV) {
 					if( curEnum.renameValue(v, newV) ) {
 						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-							if( fi.getEnumValue()==v ) {
+							if( fi.getEnumValue()==v )
 								fi.parseValue(newV);
-								N.debug("renamed "+fi);
-							}
 						});
 					}
 					else
@@ -159,8 +157,14 @@ class ProjectSettings extends ui.modal.Panel {
 			i.linkEvent(EnumDefChanged);
 
 			li.find(".delete").click( function(ev) {
-				curEnum.values.remove(v);
-				client.ge.emit(EnumDefChanged);
+				new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("Warning! This operation will affect any Entity using this Enum in ALL LEVELS!"), function() {
+					project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
+						if( fi.getEnumValue()==v )
+							fi.parseValue(null);
+					});
+					curEnum.values.remove(v);
+					client.ge.emit(EnumDefChanged);
+				});
 			});
 		}
 
@@ -169,6 +173,7 @@ class ProjectSettings extends ui.modal.Panel {
 			while( !curEnum.addValue(curEnum.name+uid) )
 				uid++;
 			client.ge.emit(EnumDefChanged);
+			jContent.find("ul.enumValues li:last input[type=text]").select();
 		});
 
 		// Make fields list sortable

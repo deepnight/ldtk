@@ -131,10 +131,14 @@ class LevelRender extends dn.Process {
 			case LevelAdded:
 			case LevelSorted:
 			case LayerDefAdded:
+				
 			case EntityDefAdded:
 			case EntityFieldSorted:
+
 			case ToolOptionChanged:
+
 			case EnumDefAdded:
+			case EnumDefSorted:
 		}
 	}
 

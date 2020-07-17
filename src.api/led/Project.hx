@@ -124,13 +124,33 @@ class Project {
 		return moved;
 	}
 
+	public static inline function isValidIdentifier(id:String) {
+		return cleanupIdentifier(id) != null;
+	}
 
-	public static function cleanupIdentifier(id:String) {
+
+	public static function cleanupIdentifier(id:String) : Null<String> {
 		id = StringTools.trim(id);
+
+		// Replace any invalid char with "_"
 		var reg = ~/([^A-Z0-9_])+/gi;
 		id = reg.replace(id, "_");
-		var dup = ~/([_\1]+)/gi;
-		return dup.replace(id,"_");
+
+		// Replace leading numbers with "_"
+		reg =~/^([0-9]+)([a-z0-9_]*)$/gi;
+		// if( reg.match(id) )
+		id = reg.replace(id, "_$2");
+
+		// Trim duplicates "_"
+		reg = ~/([_\1]+)/gi;
+		id = reg.replace(id, "_");
+
+		// Checks identifier syntax
+		var r = ~/^[a-z_]+[a-z0-9_]*$/gi;
+		if( r.match(id) )
+			return id;
+		else
+			return null;
 	}
 
 
