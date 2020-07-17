@@ -124,7 +124,7 @@ class InstanceEditor extends dn.Process {
 			var fi = ei.getFieldInstance(fd);
 			var li = new J("<li/>");
 			li.appendTo(form);
-			li.append('<label>${fi.def.name}</label>');
+			li.append('<label>${fi.def.identifier}</label>');
 
 			switch fi.def.type {
 				case F_Int:

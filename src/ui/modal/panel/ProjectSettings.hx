@@ -151,7 +151,7 @@ class ProjectSettings extends ui.modal.Panel {
 						});
 					}
 					else
-						N.error("This value isn't valid or is already used.");
+						N.invalidIdentifier(v);
 				}
 			);
 			i.linkEvent(EnumDefChanged);

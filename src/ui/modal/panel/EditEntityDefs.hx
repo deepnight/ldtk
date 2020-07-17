@@ -278,8 +278,12 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.setEnabled( curField.editorDisplayMode!=Hidden );
 		i.linkEvent(EntityFieldDefChanged);
 
-		var i = Input.linkToHtmlInput( curField.name, jFieldForm.find("input[name=name]") );
+		var i = Input.linkToHtmlInput( curField.identifier, jFieldForm.find("input[name=name]") );
 		i.linkEvent(EntityFieldDefChanged);
+		i.validityCheck = function(id) {
+			return led.Project.isValidIdentifier(id) && curEntity.isFieldIdentifierUnique(id);
+		}
+		i.validityError = N.invalidIdentifier;
 
 		// Default value
 		switch curField.type {
@@ -415,7 +419,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			for(f in curEntity.fieldDefs) {
 				var li = new J("<li/>");
 				li.appendTo(jFieldList);
-				li.append('<span class="name">'+f.name+'</span>');
+				li.append('<span class="name">'+f.identifier+'</span>');
 				if( curField==f )
 					li.addClass("active");
 

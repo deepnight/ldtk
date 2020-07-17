@@ -31,6 +31,10 @@ class Notification extends dn.Process {
 		return new Notification(str, 0xff0000);
 	}
 
+	public static function invalidIdentifier(id:String) {
+		return error( Lang.t._("The identifier \"::id::\" isn't valid, or isn't unique.", { id:id }) );
+	}
+
 	public static function notImplemented() {
 		return error("Feature not implemented yet.");
 	}

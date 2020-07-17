@@ -28,7 +28,7 @@ class EntityDef {
 
 	@:keep public function toString() {
 		return '$name($width x $height)['
-			+ fieldDefs.map( function(fd) return fd.name+":"+fd.type ).join(",")
+			+ fieldDefs.map( function(fd) return fd.identifier+":"+fd.type ).join(",")
 			+ "]";
 	}
 
@@ -75,6 +75,9 @@ class EntityDef {
 	inline function set_pivotY(v) return pivotY = dn.M.fclamp(v, 0, 1);
 
 
+
+	/** FIELDS ****************************/
+
 	public function createFieldDef(project:Project, type:FieldType) : FieldDef {
 		var f = new FieldDef(project, project.makeUniqId(), type);
 		fieldDefs.push(f);
@@ -102,14 +105,22 @@ class EntityDef {
 	}
 
 	// TODO either
-	public function getFieldDef(?name:String, ?id:Int) : Null<FieldDef> {
-		if( name==null && id==null )
+	public function getFieldDef(?id:String, ?uid:Int) : Null<FieldDef> {
+		if( id==null && uid==null )
 			throw "Need 1 parameter";
 
 		for(fd in fieldDefs)
-			if( fd.uid==id || fd.name==name )
+			if( fd.uid==uid || fd.identifier==id )
 				return fd;
 		return null;
+	}
+
+	public function isFieldIdentifierUnique(id:String) {
+		id = Project.cleanupIdentifier(id);
+		for(fd in fieldDefs)
+			if( fd.identifier==id )
+				return false;
+		return true;
 	}
 
 

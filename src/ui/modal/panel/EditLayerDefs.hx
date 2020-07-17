@@ -149,7 +149,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						function(v) intGridVal.name = v
 					);
 					i.validityCheck = ld.isIntGridValueNameValid;
-					i.validityError = N.error.bind("This value name is already used.");
+					i.validityError = N.invalidIdentifier;
 					i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 					if( ld.countIntGridValues()>1 && idx==ld.countIntGridValues()-1 )

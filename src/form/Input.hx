@@ -13,7 +13,7 @@ class Input<T> {
 
 	var lastValidValue : T;
 	public var validityCheck : Null<T->Bool>;
-	public var validityError : Null<Void->Void>;
+	public var validityError : Null<T->Void>;
 	var linkedEvents : Map<GlobalEvent,Bool> = new Map();
 
 	private function new(jElement:js.jquery.JQuery, getter, setter) {
@@ -34,12 +34,13 @@ class Input<T> {
 
 	function onInputChange() {
 		if( validityCheck!=null && !validityCheck(parseInputValue()) ) {
+			var err = parseInputValue();
 			setter( lastValidValue );
 			writeValueToInput();
 			if( validityError==null )
 				N.error("This value isn't valid.");
 			else
-				validityError();
+				validityError(err);
 			return;
 		}
 

@@ -181,7 +181,7 @@ class Project {
 
 		// Hero.life
 		var fd = ed.createFieldDef(p, F_Int);
-		fd.name = "life";
+		fd.identifier = "life";
 		fd.setDefault(Std.string(3));
 		fd.setMin("1");
 		fd.setMax("10");

@@ -19,7 +19,7 @@ class FieldInstance {
 	@:keep
 	public function toString() {
 		return
-			'${def.name} = '
+			'${def.identifier} = '
 			+ getForDisplay()
 			+ ' [ $internalValue ]';
 	}

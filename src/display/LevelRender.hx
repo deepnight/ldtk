@@ -131,7 +131,7 @@ class LevelRender extends dn.Process {
 			case LevelAdded:
 			case LevelSorted:
 			case LayerDefAdded:
-				
+
 			case EntityDefAdded:
 			case EntityFieldSorted:
 
@@ -259,7 +259,7 @@ class LevelRender extends dn.Process {
 	static function getFieldColor(ei:led.inst.EntityInstance, fd:led.def.FieldDef) {
 		for(fd in ei.def.fieldDefs)
 			if( fd.type==F_Color )
-				return ei.getColorField(fd.name);
+				return ei.getColorField(fd.identifier);
 		return C.toWhite(ei.def.color, 0.5);
 	}
 
@@ -344,7 +344,7 @@ class LevelRender extends dn.Process {
 						var tf = new h2d.Text(font, fieldWrapper);
 						tf.textColor = getFieldColor(ei,fd);
 						var v = fi.getForDisplay();
-						tf.text = fd.name+" = "+v;
+						tf.text = fd.identifier+" = "+v;
 
 					case ValueOnly:
 						if( !fi.valueIsNull() && !( fd.type==F_Bool && fi.getBool()==false ) ) {
@@ -360,7 +360,7 @@ class LevelRender extends dn.Process {
 								tf.textColor = getFieldColor(ei,fd);
 								var v = fi.getForDisplay();
 								if( fd.type==F_Bool )
-									tf.text = '[${fd.name}]';
+									tf.text = '[${fd.identifier}]';
 								else
 									tf.text = v;
 							}

@@ -3,7 +3,7 @@ package led.def;
 class FieldDef {
 	public var uid(default,null) : Int;
 	public var type(default,null) : led.LedTypes.FieldType;
-	public var name : String;
+	public var identifier(default,set) : String;
 	public var canBeNull : Bool;
 	public var editorDisplayMode : led.LedTypes.FieldDisplayMode;
 	public var editorDisplayPos : led.LedTypes.FieldDisplayPosition;
@@ -25,14 +25,22 @@ class FieldDef {
 		type = t;
 		editorDisplayMode = Hidden;
 		editorDisplayPos = Above;
-		name = "New field "+uid;
+		identifier = "NewField"+uid;
 		canBeNull = type==F_String;
 		min = max = null;
 		defaultOverride = null;
 	}
 
+	function set_identifier(id:String) {
+		id = Project.cleanupIdentifier(id);
+		if( id==null )
+			return identifier;
+		else
+			return identifier = id;
+	}
+
 	@:keep public function toString() {
-		return '$name('
+		return '$identifier('
 			+ ( canBeNull ? 'Null<$type>' : '$type' )
 			+ ', default=${getDefault()})'
 			+ ( type==F_Int || type==F_Float ? '[$min-$max]' : "" );
@@ -40,7 +48,7 @@ class FieldDef {
 
 	public static function fromJson(p:Project, json:Dynamic) {
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), JsonTools.readEnum(led.LedTypes.FieldType, json.type, false) );
-		o.name = JsonTools.readString(json.name);
+		o.identifier = JsonTools.readString(json.name); // TODO rename
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.editorDisplayMode = JsonTools.readEnum(led.LedTypes.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
 		o.editorDisplayPos = JsonTools.readEnum(led.LedTypes.FieldDisplayPosition, json.editorDisplayPos, false, Above);
@@ -54,7 +62,7 @@ class FieldDef {
 		return {
 			uid: uid,
 			type: JsonTools.writeEnum(type, false),
-			name: name,
+			identifier: identifier,
 			canBeNull: canBeNull,
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
@@ -167,25 +175,6 @@ class FieldDef {
 	public function getEnumDefault() : Null<String> {
 		require(F_Enum(null));
 		return null;
-
-		// switch defaultOverride {
-		// 	case null:
-		// 		if( canBeNull )
-		// 			return null;
-		// 		switch type {
-		// 			case F_Enum(name):
-		// 				var ed = _project.defs.getEnumDef(name);
-		// 				return ed.values[0];
-		// 			case _: // can't happen
-		// 				return null;
-		// 		}
-
-		// 	case V_String(v):
-		// 		return v;
-
-		// 	case _:
-		// 		return null;
-		// }
 	}
 
 	public function restoreDefault() {
