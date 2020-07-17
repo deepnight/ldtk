@@ -74,11 +74,22 @@ class FieldDef {
 
 
 	#if editor
-	public function getDescription() {
+	public function getShortDescription() {
+		return switch type {
+			case F_Int: "Int";
+			case F_Float: "Float";
+			case F_String: "String";
+			case F_Bool: "Bool";
+			case F_Color: "Color";
+			case F_Enum(enumDefId): _project.defs.getEnumDef(enumDefId).identifier;
+		}
+	}
+
+	public function getLongDescription() {
 		var infinity = "∞";
-		return Lang.getFieldType(type)
-			+ ( canBeNull ? " nullable" : "" )
-			+ "=" + ( type==F_String && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
+		return getShortDescription()
+			+ ( canBeNull ? " (nullable)" : "" )
+			+ ", default = " + ( type==F_String && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
 			+ ( min==null && max==null ? "" :
 				( type==F_Int ? " ["+(min==null?"-"+infinity:""+dn.M.round(min))+";"+(max==null?"+"+infinity:""+dn.M.round(max))+"]" : "" )
 				+ ( type==F_Float ? " ["+(min==null?"-"+infinity:""+min)+";"+(max==null?infinity:""+max)+"]" : "" )

@@ -258,10 +258,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			jFieldForm.removeClass("type-"+k);
 		jFieldForm.addClass("type-"+curField.type.getName());
 
-		jFieldForm.find(".type").empty().append( Std.string(L.getFieldType(curField.type)) );
-		#if debug
-		jFieldForm.find(".type").append("<p>"+StringTools.htmlEscape(curField.toString())+"</p>");
-		#end
+		jFieldForm.find(".type").empty().append( curField.getShortDescription() );
 
 		var i = new form.input.EnumSelect(
 			jFieldForm.find("select[name=editorDisplayMode]"),
@@ -427,7 +424,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 				var sub = new J('<span class="sub"></span>');
 				sub.appendTo(li);
-				sub.text( f.getDescription() );
+				sub.text( f.getShortDescription() );
 
 				li.click( function(_) selectField(f) );
 			}

@@ -314,11 +314,11 @@ ul.niceList {
 		cursor: pointer;
 
 		.sub {
-			grid-column: 1/3;
-			grid-row: 2/3;
-			font-size: 70%;
-			opacity: 0.65;
-			padding-left: 8px;
+			display: block;
+			width: 100%;
+			text-align: right;
+			font-size: 0.7em;
+			opacity: 0.5;
 		}
 	}
 
