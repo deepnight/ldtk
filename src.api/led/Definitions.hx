@@ -195,6 +195,13 @@ class Definitions {
 	public function createTilesetDef() : led.def.TilesetDef {
 		var td = new led.def.TilesetDef(_project.makeUniqId() );
 		tilesets.push(td);
+
+		var id = "Tileset";
+		var idx = 2;
+		while( !isTilesetIdentifierUnique(id) )
+			id = "Tileset"+(idx++);
+		td.identifier = id;
+
 		_project.tidy();
 		return td;
 	}
