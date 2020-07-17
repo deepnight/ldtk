@@ -61,18 +61,18 @@ class Level {
 		return x>=0 && x<pxWid && y>=0 && y<pxHei;
 	}
 
-	public function getLayerInstance(?name:String, ?layerDef:led.def.LayerDef) : led.inst.LayerInstance {
-		if( name==null && layerDef==null )
+	public function getLayerInstance(?id:String, ?layerDef:led.def.LayerDef) : led.inst.LayerInstance {
+		if( id==null && layerDef==null )
 			throw "Need 1 parameter";
 
-		if( name!=null ) {
+		if( id!=null ) {
 			for(li in layerInstances)
-				if( li.def.name==name )
+				if( li.def.identifier==id )
 					return li;
-			throw "Unknown layer "+name;
+			throw "Unknown layer "+id;
 		}
 		else if( !layerInstances.exists(layerDef.uid) )
-			throw "Missing layer instance for "+layerDef.name;
+			throw "Missing layer instance for "+layerDef.identifier;
 		else
 			return layerInstances.get( layerDef.uid );
 	}

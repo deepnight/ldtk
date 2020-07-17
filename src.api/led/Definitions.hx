@@ -74,15 +74,17 @@ class Definitions {
 		return null;
 	}
 
-	public function createLayerDef(type:LayerType, ?name:String) : led.def.LayerDef {
+	public function createLayerDef(type:LayerType, ?id:String) : led.def.LayerDef {
 		var l = new led.def.LayerDef(_project.makeUniqId(), type);
 
-		#if editor
-		if( name==null && isLayerNameValid( Lang.getLayerType(type).toString() ) ) // dirty fix for string comparison issue
-			l.name = Lang.getLayerType(type);
-		else if( name!=null && isLayerNameValid(name) )
-			l.name = name;
-		#end
+		id = Project.cleanupIdentifier(id);
+		if( id==null ) {
+			id = Std.string(type);
+			var idx = 2;
+			while( !isLayerNameUnique(id) )
+				id = Std.string(type) + (idx++);
+		}
+		l.identifier = id;
 
 		l.gridSize = _project.defaultGridSize;
 		layers.push(l);
@@ -90,12 +92,9 @@ class Definitions {
 		return l;
 	}
 
-	public function isLayerNameValid(name:String) {
-		if( name==null || StringTools.trim(name).length==0 )
-			return false;
-
+	public function isLayerNameUnique(id:String) {
 		for(ld in layers)
-			if( ld.name==name )
+			if( ld.identifier==id )
 				return false;
 		return true;
 	}

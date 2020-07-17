@@ -130,6 +130,9 @@ class Project {
 
 
 	public static function cleanupIdentifier(id:String) : Null<String> {
+		if( id==null )
+			return null;
+
 		id = StringTools.trim(id);
 
 		// Replace any invalid char with "_"
@@ -188,7 +191,7 @@ class Project {
 
 		// Collision layer
 		var ld = p.defs.layers[0];
-		ld.name = "Collisions";
+		ld.identifier = "Collisions";
 		ld.getIntGridValueDef(0).name = "walls";
 		ld.addIntGridValue(0x00ff00, "grass");
 		ld.addIntGridValue(0x0000ff, "water");

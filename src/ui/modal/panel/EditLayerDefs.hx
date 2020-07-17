@@ -92,6 +92,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			return;
 		}
 
+		JsTools.parseComponents(jForm);
 		client.selectLayerInstance( client.curLevel.getLayerInstance(cur) );
 		jForm.show();
 
@@ -105,8 +106,9 @@ class EditLayerDefs extends ui.modal.Panel {
 
 
 		// Fields
-		var i = Input.linkToHtmlInput( ld.name, jForm.find("input[name='name']") );
-		i.validityCheck = project.defs.isLayerNameValid;
+		var i = Input.linkToHtmlInput( ld.identifier, jForm.find("input[name='name']") );
+		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.defs.isLayerNameUnique(id);
+		i.validityError = N.invalidIdentifier;
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( ld.gridSize, jForm.find("input[name='gridSize']") );
@@ -279,7 +281,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				case Tiles: icon.addClass("tile");
 			}
 
-			e.append('<span class="name">'+ld.name+'</span>');
+			e.append('<span class="name">'+ld.identifier+'</span>');
 			if( cur==ld )
 				e.addClass("active");
 

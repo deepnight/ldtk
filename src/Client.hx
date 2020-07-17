@@ -690,7 +690,7 @@ class Client extends dn.Process {
 
 			// Name
 			var name = e.find(".name");
-			name.text(li.def.name);
+			name.text(li.def.identifier);
 			e.click( function(_) {
 				selectLayerInstance(li);
 			});

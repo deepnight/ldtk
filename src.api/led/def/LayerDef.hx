@@ -5,7 +5,7 @@ import led.LedTypes;
 class LayerDef {
 	public var uid(default,null) : Int;
 	public var type : LayerType;
-	public var name : String;
+	public var identifier(default,set) : String;
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var displayOpacity : Float = 1.0;
 
@@ -21,20 +21,25 @@ class LayerDef {
 		this.uid = uid;
 		type = t;
 		#if editor
-		name = Lang.getLayerType(type)+" #"+uid;
+		identifier = Lang.getLayerType(type)+uid;
 		#else
-		name = type+"#"+uid;
+		identifier = type+uid;
 		#end
 		addIntGridValue(0x0);
 	}
 
+	function set_identifier(id:String) {
+		id = Project.cleanupIdentifier(id);
+		return identifier = id==null ? identifier : id;
+	}
+
 	@:keep public function toString() {
-		return '$name($type, ${gridSize}px)';
+		return '$identifier($type, ${gridSize}px)';
 	}
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type, false));
-		o.name = JsonTools.readString(json.name);
+		o.identifier = JsonTools.readString(json.name); // TODO rename
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
 
@@ -53,7 +58,7 @@ class LayerDef {
 		return {
 			uid: uid,
 			type: JsonTools.writeEnum(type, false),
-			name: name,
+			identifier: identifier,
 			gridSize: gridSize,
 			displayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
 
@@ -115,7 +120,7 @@ class LayerDef {
 	inline function set_tilePivotX(v) return tilePivotX = dn.M.fclamp(v, 0, 1);
 	inline function set_tilePivotY(v) return tilePivotY = dn.M.fclamp(v, 0, 1);
 
-	
+
 	public function tidy(p:led.Project) {
 	}
 }
