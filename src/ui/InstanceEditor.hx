@@ -38,6 +38,9 @@ class InstanceEditor extends dn.Process {
 				else
 					updateForm();
 
+			case EnumDefRemoved, EnumDefChanged, EnumDefSorted:
+				updateForm();
+
 			case _:
 		}
 	}
