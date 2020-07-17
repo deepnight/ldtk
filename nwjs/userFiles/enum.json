@@ -27,7 +27,7 @@
 		"entities":[
 			{
 				"uid":2,
-				"name":"Mob",
+				"identifier":"Mob",
 				"width":16,
 				"height":32,
 				"color":16711680,

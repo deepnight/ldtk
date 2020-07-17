@@ -88,7 +88,7 @@
 		"entities":[
 			{
 				"uid":9,
-				"name":"Item",
+				"identifier":"Item",
 				"width":10,
 				"height":10,
 				"color":16768256,
@@ -158,7 +158,7 @@
 			},
 			{
 				"uid":11,
-				"name":"Hero",
+				"identifier":"Hero",
 				"width":10,
 				"height":16,
 				"color":65310,
@@ -172,7 +172,7 @@
 			},
 			{
 				"uid":13,
-				"name":"Mob",
+				"identifier":"Mob",
 				"width":8,
 				"height":16,
 				"color":16711680,
@@ -242,7 +242,7 @@
 			},
 			{
 				"uid":19,
-				"name":"Cart",
+				"identifier":"Cart",
 				"width":24,
 				"height":16,
 				"color":11052416,
@@ -256,7 +256,7 @@
 			},
 			{
 				"uid":21,
-				"name":"Crate",
+				"identifier":"Crate",
 				"width":16,
 				"height":16,
 				"color":10641476,
@@ -270,7 +270,7 @@
 			},
 			{
 				"uid":23,
-				"name":"MobGen",
+				"identifier":"MobGen",
 				"width":16,
 				"height":16,
 				"color":16711901,
@@ -376,7 +376,7 @@
 			},
 			{
 				"uid":24,
-				"name":"BossDoor",
+				"identifier":"BossDoor",
 				"width":24,
 				"height":32,
 				"color":16711680,
@@ -420,7 +420,7 @@
 			},
 			{
 				"uid":31,
-				"name":"Label",
+				"identifier":"Label",
 				"width":48,
 				"height":16,
 				"color":7895160,
@@ -490,7 +490,7 @@
 			},
 			{
 				"uid":34,
-				"name":"Pointer",
+				"identifier":"Pointer",
 				"width":8,
 				"height":32,
 				"color":16762880,

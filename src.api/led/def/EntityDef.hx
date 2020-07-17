@@ -38,7 +38,7 @@ class EntityDef {
 
 	public static function fromJson(p:Project, json:Dynamic) {
 		var o = new EntityDef( JsonTools.readInt(json.uid) );
-		o.identifier = JsonTools.readString( json.name ); // TODO rename
+		o.identifier = JsonTools.readString( json.identifier );
 		o.width = JsonTools.readInt( json.width, 16 );
 		o.height = JsonTools.readInt( json.height, 16 );
 		o.color = JsonTools.readInt( json.color, 0x0 );
