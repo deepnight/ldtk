@@ -34,14 +34,6 @@ class TilesetDef {
 		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
 	}
 
-	// public function getName() {
-	// 	return customName!=null ? customName : getDefaultName();
-	// }
-
-	// public function getDefaultName() {
-	// 	return path!=null ? dn.FilePath.extractFileWithExt(path) : "Empty tileset "+uid;
-	// }
-
 	public function getFileName(withExt:Bool) : Null<String> {
 		if( path==null || !hasAtlas() )
 			return null;
