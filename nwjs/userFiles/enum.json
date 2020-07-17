@@ -11,7 +11,7 @@
 						
 					]
 				},
-				"name":"Entities",
+				"identifier":"Entities",
 				"gridSize":16,
 				"displayOpacity":1,
 				"intGridValues":[
@@ -232,6 +232,7 @@
 	"levels":[
 		{
 			"uid":0,
+			"identifier":"Level0",
 			"pxWid":256,
 			"pxHei":256,
 			"layerInstances":[
@@ -479,8 +480,7 @@
 						}
 					]
 				}
-			],
-			"customName":"Foo level"
+			]
 		}
 	],
 	"name":"Enum testing",

@@ -8,10 +8,10 @@
 				"type":{
 					"id":1,
 					"p":[
-
+						
 					]
 				},
-				"name":"Entities",
+				"identifier":"Entities",
 				"gridSize":16,
 				"displayOpacity":0.8,
 				"intGridValues":[
@@ -28,10 +28,10 @@
 				"type":{
 					"id":0,
 					"p":[
-
+						
 					]
 				},
-				"name":"Collisions",
+				"identifier":"Collisions",
 				"gridSize":16,
 				"displayOpacity":0.7,
 				"intGridValues":[
@@ -49,10 +49,10 @@
 				"type":{
 					"id":2,
 					"p":[
-
+						
 					]
 				},
-				"name":"Details",
+				"identifier":"Details",
 				"gridSize":16,
 				"displayOpacity":1,
 				"intGridValues":[
@@ -69,10 +69,10 @@
 				"type":{
 					"id":2,
 					"p":[
-
+						
 					]
 				},
-				"name":"Bg",
+				"identifier":"Bg",
 				"gridSize":16,
 				"displayOpacity":1,
 				"intGridValues":[
@@ -102,7 +102,7 @@
 						"type":{
 							"id":2,
 							"p":[
-
+								
 							]
 						},
 						"identifier":"Type",
@@ -110,13 +110,13 @@
 						"editorDisplayMode":{
 							"id":1,
 							"p":[
-
+								
 							]
 						},
 						"editorDisplayPos":{
 							"id":0,
 							"p":[
-
+								
 							]
 						},
 						"min":null,
@@ -141,13 +141,13 @@
 						"editorDisplayMode":{
 							"id":1,
 							"p":[
-
+								
 							]
 						},
 						"editorDisplayPos":{
 							"id":0,
 							"p":[
-
+								
 							]
 						},
 						"min":null,
@@ -167,7 +167,7 @@
 				"pivotX":0.5,
 				"pivotY":1,
 				"fieldDefs":[
-
+					
 				]
 			},
 			{
@@ -186,7 +186,7 @@
 						"type":{
 							"id":2,
 							"p":[
-
+								
 							]
 						},
 						"identifier":"Type",
@@ -194,13 +194,13 @@
 						"editorDisplayMode":{
 							"id":1,
 							"p":[
-
+								
 							]
 						},
 						"editorDisplayPos":{
 							"id":0,
 							"p":[
-
+								
 							]
 						},
 						"min":null,
@@ -225,13 +225,13 @@
 						"editorDisplayMode":{
 							"id":1,
 							"p":[
-
+								
 							]
 						},
 						"editorDisplayPos":{
 							"id":0,
 							"p":[
-
+								
 							]
 						},
 						"min":null,
@@ -251,7 +251,7 @@
 				"pivotX":0.5,
 				"pivotY":1,
 				"fieldDefs":[
-
+					
 				]
 			},
 			{
@@ -265,7 +265,7 @@
 				"pivotX":0.5,
 				"pivotY":1,
 				"fieldDefs":[
-
+					
 				]
 			},
 			{
@@ -284,7 +284,7 @@
 						"type":{
 							"id":0,
 							"p":[
-
+								
 							]
 						},
 						"identifier":"MaxChildren",
@@ -292,13 +292,13 @@
 						"editorDisplayMode":{
 							"id":2,
 							"p":[
-
+								
 							]
 						},
 						"editorDisplayPos":{
 							"id":0,
 							"p":[
-
+								
 							]
 						},
 						"min":1,
@@ -315,7 +315,7 @@
 						"type":{
 							"id":0,
 							"p":[
-
+								
 							]
 						},
 						"identifier":"PerSpawn",
@@ -323,13 +323,13 @@
 						"editorDisplayMode":{
 							"id":2,
 							"p":[
-
+								
 							]
 						},
 						"editorDisplayPos":{
 							"id":0,
 							"p":[
-
+								
 							]
 						},
 						"min":1,
@@ -346,7 +346,7 @@
 						"type":{
 							"id":1,
 							"p":[
-
+								
 							]
 						},
 						"identifier":"Delay",
@@ -354,13 +354,13 @@
 						"editorDisplayMode":{
 							"id":2,
 							"p":[
-
+								
 							]
 						},
 						"editorDisplayPos":{
 							"id":0,
 							"p":[
-
+								
 							]
 						},
 						"min":1,
@@ -390,7 +390,7 @@
 						"type":{
 							"id":0,
 							"p":[
-
+								
 							]
 						},
 						"identifier":"Time",
@@ -398,13 +398,13 @@
 						"editorDisplayMode":{
 							"id":2,
 							"p":[
-
+								
 							]
 						},
 						"editorDisplayPos":{
 							"id":0,
 							"p":[
-
+								
 							]
 						},
 						"min":1,
@@ -434,7 +434,7 @@
 						"type":{
 							"id":2,
 							"p":[
-
+								
 							]
 						},
 						"identifier":"Text",
@@ -442,13 +442,13 @@
 						"editorDisplayMode":{
 							"id":1,
 							"p":[
-
+								
 							]
 						},
 						"editorDisplayPos":{
 							"id":1,
 							"p":[
-
+								
 							]
 						},
 						"min":null,
@@ -460,7 +460,7 @@
 						"type":{
 							"id":4,
 							"p":[
-
+								
 							]
 						},
 						"identifier":"Color",
@@ -468,13 +468,13 @@
 						"editorDisplayMode":{
 							"id":1,
 							"p":[
-
+								
 							]
 						},
 						"editorDisplayPos":{
 							"id":0,
 							"p":[
-
+								
 							]
 						},
 						"min":null,
@@ -499,7 +499,7 @@
 				"pivotX":0.5,
 				"pivotY":1,
 				"fieldDefs":[
-
+					
 				]
 			}
 		],
@@ -513,7 +513,7 @@
 				"tileGridSize":16,
 				"tileGridSpacing":0,
 				"savedSelections":[
-
+					
 				]
 			}
 		],
@@ -540,6 +540,7 @@
 	"levels":[
 		{
 			"uid":41,
+			"identifier":"Tutorial_intro",
 			"pxWid":352,
 			"pxHei":256,
 			"layerInstances":[
@@ -1671,10 +1672,10 @@
 						}
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -1683,10 +1684,10 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
 						{
@@ -1694,7 +1695,7 @@
 							"x":72,
 							"y":144,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -1762,7 +1763,7 @@
 							"x":40,
 							"y":144,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -1823,13 +1824,13 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -1838,7 +1839,7 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
 						{
@@ -1871,14 +1872,14 @@
 						}
 					],
 					"entityInstances":[
-
+						
 					]
 				}
-			],
-			"identifier":"Tutorial intro"
+			]
 		},
 		{
 			"uid":29,
+			"identifier":"Tutorial_gems",
 			"pxWid":336,
 			"pxHei":256,
 			"layerInstances":[
@@ -2542,10 +2543,10 @@
 						}
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -2554,10 +2555,10 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
 						{
@@ -2565,7 +2566,7 @@
 							"x":88,
 							"y":192,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -2573,7 +2574,7 @@
 							"x":120,
 							"y":192,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -2708,7 +2709,7 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
 						{
@@ -2745,7 +2746,7 @@
 						}
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -2754,20 +2755,20 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				}
-			],
-			"identifier":"Tutorial gems"
+			]
 		},
 		{
 			"uid":30,
+			"identifier":"Tutorial_bait",
 			"pxWid":560,
 			"pxHei":512,
 			"layerInstances":[
@@ -6523,10 +6524,10 @@
 						}
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -6535,10 +6536,10 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
 						{
@@ -6546,7 +6547,7 @@
 							"x":56,
 							"y":96,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -6554,7 +6555,7 @@
 							"x":456,
 							"y":176,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -6680,7 +6681,7 @@
 							"x":248,
 							"y":96,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -6753,13 +6754,13 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -6768,7 +6769,7 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
 						{
@@ -6793,14 +6794,14 @@
 						}
 					],
 					"entityInstances":[
-
+						
 					]
 				}
-			],
-			"identifier":"Tutorial bait"
+			]
 		},
 		{
 			"uid":35,
+			"identifier":"Tutorial_slap",
 			"pxWid":560,
 			"pxHei":208,
 			"layerInstances":[
@@ -8072,10 +8073,10 @@
 						}
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -8084,10 +8085,10 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
 						{
@@ -8095,7 +8096,7 @@
 							"x":120,
 							"y":112,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -8103,7 +8104,7 @@
 							"x":136,
 							"y":80,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -8186,13 +8187,13 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -8201,7 +8202,7 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
 						{
@@ -8226,14 +8227,14 @@
 						}
 					],
 					"entityInstances":[
-
+						
 					]
 				}
-			],
-			"identifier":"Tutorial slap"
+			]
 		},
 		{
 			"uid":42,
+			"identifier":"Tutorial_slap_2",
 			"pxWid":400,
 			"pxHei":288,
 			"layerInstances":[
@@ -9037,10 +9038,10 @@
 						}
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -9049,10 +9050,10 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
 						{
@@ -9060,7 +9061,7 @@
 							"x":88,
 							"y":128,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -9149,7 +9150,7 @@
 							"x":136,
 							"y":96,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -9193,7 +9194,7 @@
 							"x":72,
 							"y":192,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -9236,13 +9237,13 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -9251,7 +9252,7 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
 						{
@@ -9284,14 +9285,14 @@
 						}
 					],
 					"entityInstances":[
-
+						
 					]
 				}
-			],
-			"identifier":"Tutorial slap 2"
+			]
 		},
 		{
 			"uid":37,
+			"identifier":"Tutorial_boss",
 			"pxWid":272,
 			"pxHei":288,
 			"layerInstances":[
@@ -9723,10 +9724,10 @@
 						}
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -9735,10 +9736,10 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
 						{
@@ -9746,7 +9747,7 @@
 							"x":88,
 							"y":240,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -9754,7 +9755,7 @@
 							"x":152,
 							"y":208,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -9762,7 +9763,7 @@
 							"x":104,
 							"y":224,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -9864,13 +9865,13 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -9879,7 +9880,7 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
 						{
@@ -9912,14 +9913,14 @@
 						}
 					],
 					"entityInstances":[
-
+						
 					]
 				}
-			],
-			"identifier":"Tutorial boss"
+			]
 		},
 		{
 			"uid":38,
+			"identifier":"Dual",
 			"pxWid":384,
 			"pxHei":320,
 			"layerInstances":[
@@ -10511,10 +10512,10 @@
 						}
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -10523,10 +10524,10 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
 						{
@@ -10545,7 +10546,7 @@
 							"x":136,
 							"y":48,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -10553,7 +10554,7 @@
 							"x":152,
 							"y":80,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -10561,7 +10562,7 @@
 							"x":216,
 							"y":112,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -10656,7 +10657,7 @@
 							"x":312,
 							"y":176,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -10664,7 +10665,7 @@
 							"x":328,
 							"y":176,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -10672,7 +10673,7 @@
 							"x":296,
 							"y":128,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -10680,7 +10681,7 @@
 							"x":360,
 							"y":112,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -10688,7 +10689,7 @@
 							"x":264,
 							"y":48,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -10696,7 +10697,7 @@
 							"x":264,
 							"y":128,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -10704,7 +10705,7 @@
 							"x":344,
 							"y":160,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -10712,7 +10713,7 @@
 							"x":344,
 							"y":176,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -10787,13 +10788,13 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -10802,7 +10803,7 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
 						{
@@ -10835,14 +10836,14 @@
 						}
 					],
 					"entityInstances":[
-
+						
 					]
 				}
-			],
-			"identifier":"Dual"
+			]
 		},
 		{
 			"uid":40,
+			"identifier":"Trio",
 			"pxWid":544,
 			"pxHei":416,
 			"layerInstances":[
@@ -12686,10 +12687,10 @@
 						}
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -12698,10 +12699,10 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
 						{
@@ -12709,7 +12710,7 @@
 							"x":120,
 							"y":224,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -12717,7 +12718,7 @@
 							"x":136,
 							"y":208,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -12725,7 +12726,7 @@
 							"x":120,
 							"y":160,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -12733,7 +12734,7 @@
 							"x":104,
 							"y":192,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13032,7 +13033,7 @@
 							"x":488,
 							"y":224,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13040,7 +13041,7 @@
 							"x":488,
 							"y":272,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13048,7 +13049,7 @@
 							"x":520,
 							"y":224,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13056,7 +13057,7 @@
 							"x":520,
 							"y":240,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13064,7 +13065,7 @@
 							"x":520,
 							"y":272,
 							"fieldInstances":[
-
+								
 							]
 						}
 					]
@@ -13075,13 +13076,13 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -13090,7 +13091,7 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
 						{
@@ -13115,14 +13116,14 @@
 						}
 					],
 					"entityInstances":[
-
+						
 					]
 				}
-			],
-			"identifier":"Trio"
+			]
 		},
 		{
 			"uid":0,
+			"identifier":"Main",
 			"pxWid":416,
 			"pxHei":272,
 			"layerInstances":[
@@ -13574,10 +13575,10 @@
 						}
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -13586,10 +13587,10 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
 						{
@@ -13605,6 +13606,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13621,6 +13626,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13637,6 +13646,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13653,6 +13666,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13669,6 +13686,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13685,6 +13706,10 @@
 											"Gem"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13695,6 +13720,10 @@
 							"fieldInstances":[
 								{
 									"defId":14,
+									"internalValue":null
+								},
+								{
+									"defId":46,
 									"internalValue":null
 								}
 							]
@@ -13707,6 +13736,10 @@
 								{
 									"defId":14,
 									"internalValue":null
+								},
+								{
+									"defId":46,
+									"internalValue":null
 								}
 							]
 						},
@@ -13715,7 +13748,7 @@
 							"x":72,
 							"y":144,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13723,7 +13756,7 @@
 							"x":104,
 							"y":128,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13731,7 +13764,7 @@
 							"x":56,
 							"y":112,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13739,7 +13772,7 @@
 							"x":136,
 							"y":160,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13747,7 +13780,7 @@
 							"x":152,
 							"y":144,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13755,7 +13788,7 @@
 							"x":40,
 							"y":224,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13763,7 +13796,7 @@
 							"x":24,
 							"y":256,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13771,7 +13804,7 @@
 							"x":136,
 							"y":256,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13779,7 +13812,7 @@
 							"x":120,
 							"y":208,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13787,7 +13820,7 @@
 							"x":88,
 							"y":144,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13803,6 +13836,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13811,7 +13848,7 @@
 							"x":200,
 							"y":128,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13819,7 +13856,7 @@
 							"x":232,
 							"y":240,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13827,7 +13864,7 @@
 							"x":280,
 							"y":256,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13835,7 +13872,7 @@
 							"x":376,
 							"y":176,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13851,6 +13888,10 @@
 											"Bomb"
 										]
 									}
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -13859,7 +13900,7 @@
 							"x":24,
 							"y":96,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13867,7 +13908,7 @@
 							"x":40,
 							"y":96,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13875,7 +13916,7 @@
 							"x":40,
 							"y":112,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -13959,6 +14000,10 @@
 								{
 									"defId":14,
 									"internalValue":null
+								},
+								{
+									"defId":46,
+									"internalValue":null
 								}
 							]
 						}
@@ -13970,13 +14015,13 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -13985,7 +14030,7 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
 						{
@@ -14010,14 +14055,14 @@
 						}
 					],
 					"entityInstances":[
-
+						
 					]
 				}
-			],
-			"identifier":null
+			]
 		},
 		{
 			"uid":39,
+			"identifier":"Final",
 			"pxWid":368,
 			"pxHei":288,
 			"layerInstances":[
@@ -14561,10 +14606,10 @@
 						}
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -14573,10 +14618,10 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
 						{
@@ -14584,7 +14629,7 @@
 							"x":120,
 							"y":48,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -14592,7 +14637,7 @@
 							"x":152,
 							"y":64,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -14600,7 +14645,7 @@
 							"x":120,
 							"y":96,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -14713,6 +14758,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -14723,6 +14772,10 @@
 							"fieldInstances":[
 								{
 									"defId":10,
+									"internalValue":null
+								},
+								{
+									"defId":47,
 									"internalValue":null
 								}
 							]
@@ -14735,6 +14788,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -14746,6 +14803,10 @@
 								{
 									"defId":10,
 									"internalValue":null
+								},
+								{
+									"defId":47,
+									"internalValue":null
 								}
 							]
 						},
@@ -14754,7 +14815,7 @@
 							"x":88,
 							"y":80,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -14839,7 +14900,7 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
 						{
@@ -14876,7 +14937,7 @@
 						}
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -14885,20 +14946,20 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				}
-			],
-			"identifier":null
+			]
 		},
 		{
 			"uid":22,
+			"identifier":"Credits",
 			"pxWid":304,
 			"pxHei":336,
 			"layerInstances":[
@@ -15418,10 +15479,10 @@
 						}
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -15430,10 +15491,10 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
 						{
@@ -15441,7 +15502,7 @@
 							"x":184,
 							"y":256,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -15449,7 +15510,7 @@
 							"x":120,
 							"y":256,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -15533,7 +15594,7 @@
 							"x":152,
 							"y":256,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -15647,7 +15708,7 @@
 							"x":152,
 							"y":288,
 							"fieldInstances":[
-
+								
 							]
 						},
 						{
@@ -15724,13 +15785,13 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
-
+						
 					],
 					"entityInstances":[
-
+						
 					]
 				},
 				{
@@ -15739,7 +15800,7 @@
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
-
+						
 					],
 					"gridTiles":[
 						{
@@ -15812,11 +15873,10 @@
 						}
 					],
 					"entityInstances":[
-
+						
 					]
 				}
-			],
-			"identifier":"Credits"
+			]
 		}
 	],
 	"name":"God",
