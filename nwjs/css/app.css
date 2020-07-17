@@ -656,7 +656,7 @@ textarea:focus {
   z-index: 99;
   box-sizing: border-box;
   border-radius: 2px;
-  background-color: #4a8754;
+  background-color: #3c6148;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
   pointer-events: none;
 }
