@@ -32,7 +32,7 @@ class FieldDef {
 	}
 
 	function set_identifier(id:String) {
-		id = Project.cleanupIdentifier(id);
+		id = Project.cleanupIdentifier(id,false);
 		if( id==null )
 			return identifier;
 		else

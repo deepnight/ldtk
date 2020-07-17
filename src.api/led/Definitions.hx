@@ -77,7 +77,7 @@ class Definitions {
 	public function createLayerDef(type:LayerType, ?id:String) : led.def.LayerDef {
 		var l = new led.def.LayerDef(_project.makeUniqId(), type);
 
-		id = Project.cleanupIdentifier(id);
+		id = Project.cleanupIdentifier(id, true);
 		if( id==null ) {
 			id = Std.string(type);
 			var idx = 2;
@@ -152,7 +152,7 @@ class Definitions {
 	}
 
 	public function isEntityIdentifierUnique(id:String) {
-		id = Project.cleanupIdentifier(id);
+		id = Project.cleanupIdentifier(id, true);
 
 		for(ed in entities)
 			if( ed.identifier==id )
@@ -207,7 +207,7 @@ class Definitions {
 	}
 
 	public function isTilesetIdentifierUnique(id:String) {
-		id = Project.cleanupIdentifier(id);
+		id = Project.cleanupIdentifier(id, true);
 		for(td in tilesets)
 			if( td.identifier==id )
 				return false;
@@ -216,9 +216,9 @@ class Definitions {
 
 	public function autoRenameTilesetIdentifier(oldPath:Null<String>, td:led.def.TilesetDef) {
 		var defIdReg = ~/^Tileset[0-9]*/g;
-		var oldFileName = oldPath==null ? null : Project.cleanupIdentifier(dn.FilePath.extractFileName(oldPath));
+		var oldFileName = oldPath==null ? null : Project.cleanupIdentifier(dn.FilePath.extractFileName(oldPath), true);
 		if( defIdReg.match(td.identifier) || oldFileName!=null && td.identifier.indexOf(oldFileName)>=0 ) {
-			var base = Project.cleanupIdentifier( td.getFileName(false) );
+			var base = Project.cleanupIdentifier( td.getFileName(false), true );
 			var id = base;
 			var idx = 2;
 			while( !isTilesetIdentifierUnique(id) )
@@ -245,7 +245,7 @@ class Definitions {
 	}
 
 	public function isEnumIdentifierUnique(id:String) {
-		id = Project.cleanupIdentifier(id);
+		id = Project.cleanupIdentifier(id, true);
 		if( id==null )
 			return false;
 

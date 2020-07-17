@@ -104,7 +104,7 @@ class Project {
 	}
 
 	public function isLevelIdentifierUnique(id:String) {
-		id = cleanupIdentifier(id);
+		id = cleanupIdentifier(id,true);
 		for(l in levels)
 			if( l.identifier==id )
 				return false;
@@ -143,11 +143,11 @@ class Project {
 	/**  GENERAL TOOLS  *****************************************/
 
 	public static inline function isValidIdentifier(id:String) {
-		return cleanupIdentifier(id) != null;
+		return cleanupIdentifier(id,false) != null;
 	}
 
 
-	public static function cleanupIdentifier(id:String) : Null<String> {
+	public static function cleanupIdentifier(id:String, capitalizeFirstLetter:Bool) : Null<String> {
 		if( id==null )
 			return null;
 
@@ -166,10 +166,17 @@ class Project {
 		reg = ~/([_\1]+)/gi;
 		id = reg.replace(id, "_");
 
-		// Checks identifier syntax
-		var r = ~/^[a-z_]+[a-z0-9_]*$/gi;
-		if( r.match(id) )
+		// Checks identifier syntax (letters or _ )
+		reg = ~/^[a-z_]+[a-z0-9_]*$/gi; // TODO not checking leading numbers
+		if( reg.match(id) ) {
+			if( capitalizeFirstLetter ) {
+				reg = ~/^(_*)([a-z])([a-zA-Z0-9_]*)/g; // extract first letter, if it's lowercase
+				if( reg.match(id) )
+					id = reg.matched(1) + reg.matched(2).toUpperCase() + reg.matched(3);
+			}
+
 			return id;
+		}
 		else
 			return null;
 	}

@@ -23,7 +23,7 @@ class Level {
 	}
 
 	function set_identifier(id:String) {
-		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id) : identifier;
+		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
 	}
 
 	@:keep public function toString() {

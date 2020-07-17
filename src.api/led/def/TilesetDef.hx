@@ -31,7 +31,7 @@ class TilesetDef {
 	}
 
 	function set_identifier(id:String) {
-		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id) : identifier;
+		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
 	}
 
 	// public function getName() {

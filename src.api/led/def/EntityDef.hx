@@ -27,7 +27,7 @@ class EntityDef {
 	}
 
 	function set_identifier(id:String) {
-		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id) : identifier;
+		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
 	}
 
 	@:keep public function toString() {
@@ -120,7 +120,7 @@ class EntityDef {
 	}
 
 	public function isFieldIdentifierUnique(id:String) {
-		id = Project.cleanupIdentifier(id);
+		id = Project.cleanupIdentifier(id,false);
 		for(fd in fieldDefs)
 			if( fd.identifier==id )
 				return false;

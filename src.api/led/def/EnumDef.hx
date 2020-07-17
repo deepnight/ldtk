@@ -11,7 +11,7 @@ class EnumDef {
 	}
 
 	function set_identifier(v:String) {
-		v = Project.cleanupIdentifier(v);
+		v = Project.cleanupIdentifier(v,true);
 		if( v==null )
 			return identifier;
 		else
@@ -40,7 +40,7 @@ class EnumDef {
 	}
 
 	public function hasValue(v:String) {
-		v = Project.cleanupIdentifier(v);
+		v = Project.cleanupIdentifier(v,true);
 		for(ev in values)
 			if( ev==v )
 				return true;
@@ -56,13 +56,13 @@ class EnumDef {
 		if( !isValueIdentifierValidAndUnique(v) )
 			return false;
 
-		v = Project.cleanupIdentifier(v);
+		v = Project.cleanupIdentifier(v,true);
 		values.push(v);
 		return true;
 	}
 
 	public function renameValue(from,to) {
-		to = Project.cleanupIdentifier(to);
+		to = Project.cleanupIdentifier(to,true);
 		if( to==null || !isValueIdentifierValidAndUnique(to) )
 			return false;
 

@@ -29,7 +29,7 @@ class LayerDef {
 	}
 
 	function set_identifier(id:String) {
-		id = Project.cleanupIdentifier(id);
+		id = Project.cleanupIdentifier(id,true);
 		return identifier = id==null ? identifier : id;
 	}
 
