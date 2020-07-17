@@ -39,7 +39,7 @@ class LayerDef {
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type, false));
-		o.identifier = JsonTools.readString(json.name); // TODO rename
+		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
 
