@@ -48,7 +48,7 @@ class FieldDef {
 
 	public static function fromJson(p:Project, json:Dynamic) {
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), JsonTools.readEnum(led.LedTypes.FieldType, json.type, false) );
-		o.identifier = JsonTools.readString(json.name); // TODO rename
+		o.identifier = JsonTools.readString(json.identifier);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.editorDisplayMode = JsonTools.readEnum(led.LedTypes.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
 		o.editorDisplayPos = JsonTools.readEnum(led.LedTypes.FieldDisplayPosition, json.editorDisplayPos, false, Above);
