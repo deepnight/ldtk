@@ -84,6 +84,11 @@ class EditLayerDefs extends ui.modal.Panel {
 
 	function select(ld:Null<led.def.LayerDef>) {
 		cur = ld;
+		updateForm();
+		updateList();
+	}
+
+	function updateForm() {
 		jForm.find("*").off(); // cleanup event listeners
 		jForm.find(".tmp").remove();
 
@@ -99,29 +104,29 @@ class EditLayerDefs extends ui.modal.Panel {
 		// Set form class
 		for(k in Type.getEnumConstructs(led.LedTypes.LayerType))
 			jForm.removeClass("type-"+k);
-		jForm.addClass("type-"+ld.type);
+		jForm.addClass("type-"+cur.type);
 
-		jForm.find("span.type").text( Lang.getLayerType(ld.type) );
-		jForm.find("span.typeIcon").empty().append( JsTools.createLayerTypeIcon(ld.type,false) );
+		jForm.find("span.type").text( Lang.getLayerType(cur.type) );
+		jForm.find("span.typeIcon").empty().append( JsTools.createLayerTypeIcon(cur.type,false) );
 
 
 		// Fields
-		var i = Input.linkToHtmlInput( ld.identifier, jForm.find("input[name='name']") );
+		var i = Input.linkToHtmlInput( cur.identifier, jForm.find("input[name='name']") );
 		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.defs.isLayerNameUnique(id);
 		i.validityError = N.invalidIdentifier;
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
-		var i = Input.linkToHtmlInput( ld.gridSize, jForm.find("input[name='gridSize']") );
+		var i = Input.linkToHtmlInput( cur.gridSize, jForm.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
-		var i = Input.linkToHtmlInput( ld.displayOpacity, jForm.find("input[name='displayOpacity']") );
+		var i = Input.linkToHtmlInput( cur.displayOpacity, jForm.find("input[name='displayOpacity']") );
 		i.displayAsPct = true;
 		i.setBounds(0.1, 1);
 		i.onChange = client.ge.emit.bind(LayerDefChanged);
 
 		// Layer-type specific inits
-		switch ld.type {
+		switch cur.type {
 
 			case IntGrid:
 				var valuesList = jForm.find("ul.intGridValues");
@@ -130,14 +135,14 @@ class EditLayerDefs extends ui.modal.Panel {
 				// Add intGrid value button
 				var addButton = valuesList.find("li.add");
 				addButton.find("button").off().click( function(ev) {
-					ld.addIntGridValue(0xff0000);
+					cur.addIntGridValue(0xff0000);
 					client.ge.emit(LayerDefChanged);
 					updateForm();
 				});
 
 				// Existing values
 				var idx = 0;
-				for( intGridVal in ld.getAllIntGridValues() ) {
+				for( intGridVal in cur.getAllIntGridValues() ) {
 					var curIdx = idx;
 					var e = jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
 					e.addClass("value");
@@ -150,18 +155,18 @@ class EditLayerDefs extends ui.modal.Panel {
 						function() return intGridVal.name,
 						function(v) intGridVal.name = v
 					);
-					i.validityCheck = ld.isIntGridValueNameValid;
+					i.validityCheck = cur.isIntGridValueNameValid;
 					i.validityError = N.invalidIdentifier;
 					i.onChange = client.ge.emit.bind(LayerDefChanged);
 
-					if( ld.countIntGridValues()>1 && idx==ld.countIntGridValues()-1 )
+					if( cur.countIntGridValues()>1 && idx==cur.countIntGridValues()-1 )
 						e.addClass("removable");
 
 					// Edit color
 					var col = e.find("input[type=color]");
 					col.val( C.intToHex(intGridVal.color) );
 					col.change( function(ev) {
-						ld.getIntGridValueDef(curIdx).color = C.hexToInt( col.val() );
+						cur.getIntGridValueDef(curIdx).color = C.hexToInt( col.val() );
 						client.ge.emit(LayerDefChanged);
 						updateForm();
 					});
@@ -169,11 +174,11 @@ class EditLayerDefs extends ui.modal.Panel {
 					// Remove
 					e.find("a.remove").click( function(ev) {
 						function run() {
-							ld.getAllIntGridValues().splice(curIdx,1);
+							cur.getAllIntGridValues().splice(curIdx,1);
 							client.ge.emit(LayerDefChanged);
 							updateForm();
 						}
-						if( ld.isIntGridValueUsedInProject(project, curIdx) ) {
+						if( cur.isIntGridValueUsedInProject(project, curIdx) ) {
 							new ui.modal.dialog.Confirm(e.find("a.remove"), L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"), run);
 							return;
 						}
@@ -228,12 +233,12 @@ class EditLayerDefs extends ui.modal.Panel {
 					});
 
 					var td = project.defs.getTilesetDef(cur.tilesetDefId);
-					if( td!=null && ld.gridSize!=td.tileGridSize && ( td.tileGridSize<ld.gridSize || td.tileGridSize%ld.gridSize!=0 ) ) {
+					if( td!=null && cur.gridSize!=td.tileGridSize && ( td.tileGridSize<cur.gridSize || td.tileGridSize%cur.gridSize!=0 ) ) {
 						var warn = new J('<div class="tmp warning"/>');
 						warn.appendTo( select.parent() );
 						warn.text(Lang.t._("Warning: the TILESET grid (::tileset::px) differs from the LAYER grid (::layer::px), and the values aren't multiples, which can lead to unexpected behaviors when adding a group of tiles.", {
 							tileset: td.tileGridSize,
-							layer: ld.gridSize,
+							layer: cur.gridSize,
 						}));
 					}
 
@@ -253,16 +258,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					client.ge.emit(LayerDefChanged);
 				});
 				p.appendTo(jPivots);
-
-
-
 		}
-
-		updateList();
-	}
-
-	function updateForm() {
-		select(cur);
 	}
 
 
