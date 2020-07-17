@@ -102,7 +102,7 @@ class ProjectSettings extends ui.modal.Panel {
 			e.appendTo(jList);
 			if( ed==curEnum )
 				e.addClass("active");
-			e.append('<span class="name">'+ed.name+'</span>');
+			e.append('<span class="name">'+ed.identifier+'</span>');
 			e.click( function(_) {
 				selectEnum(ed);
 			});
@@ -127,7 +127,7 @@ class ProjectSettings extends ui.modal.Panel {
 		}
 		jForm.show();
 
-		var i = Input.linkToHtmlInput( curEnum.name, jForm.find("[name=eName]") );
+		var i = Input.linkToHtmlInput( curEnum.identifier, jForm.find("[name=eName]") );
 		i.validityCheck = function(v) {
 			return project.defs.isEnumIdentifierUnique(v);
 		}
@@ -170,7 +170,7 @@ class ProjectSettings extends ui.modal.Panel {
 
 		jForm.find(".createEnumValue").click( function(_) {
 			var uid = 0;
-			while( !curEnum.addValue(curEnum.name+uid) )
+			while( !curEnum.addValue(curEnum.identifier+uid) )
 				uid++;
 			client.ge.emit(EnumDefChanged);
 			jContent.find("ul.enumValues li:last input[type=text]").select();

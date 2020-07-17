@@ -59,7 +59,7 @@ class EditEntityDefs extends ui.modal.Panel {
 						for(ed in project.defs.enums) {
 							var b = new J("<button/>");
 							b.appendTo(w.jContent);
-							b.text(ed.name);
+							b.text(ed.identifier);
 							b.click( function(_) {
 								_create(F_Enum(ed.uid));
 								w.close();

@@ -211,7 +211,7 @@
 		"enums":[
 			{
 				"uid":1,
-				"name":"MobType",
+				"identifier":"MobType",
 				"values":[
 					"Trash",
 					"Shooter",
@@ -220,7 +220,7 @@
 			},
 			{
 				"uid":10,
-				"name":"ItemType",
+				"identifier":"ItemType",
 				"values":[
 					"Gold",
 					"Ammo",

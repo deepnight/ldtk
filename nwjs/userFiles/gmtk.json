@@ -520,7 +520,7 @@
 		"enums":[
 			{
 				"uid":44,
-				"name":"MobType",
+				"identifier":"MobType",
 				"values":[
 					"Goblin",
 					"Boss"
@@ -528,7 +528,7 @@
 			},
 			{
 				"uid":45,
-				"name":"ItemType",
+				"identifier":"ItemType",
 				"values":[
 					"Gem",
 					"Bomb",

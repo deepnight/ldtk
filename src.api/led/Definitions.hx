@@ -227,14 +227,14 @@ class Definitions {
 			return false;
 
 		for(ed in enums)
-			if( ed.name==id )
+			if( ed.identifier==id )
 				return false;
 		return true;
 	}
 
-	public function getEnumDef(?uid:Int, ?name:String) : Null<led.def.EnumDef> {
+	public function getEnumDef(?uid:Int, ?id:String) : Null<led.def.EnumDef> {
 		for(ed in enums)
-			if( ed.uid==uid || ed.name==name )
+			if( ed.uid==uid || ed.identifier==id )
 				return ed;
 		return null;
 	}

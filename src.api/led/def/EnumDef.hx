@@ -2,28 +2,28 @@ package led.def;
 
 class EnumDef {
 	public var uid(default,null) : Int;
-	public var name(default,set) : String;
+	public var identifier(default,set) : String;
 	public var values : Array<String> = [];
 
-	public function new(uid:Int, name:String) {
+	public function new(uid:Int, id:String) {
 		this.uid = uid;
-		this.name = name;
+		this.identifier = id;
 	}
 
-	function set_name(v:String) {
+	function set_identifier(v:String) {
 		v = Project.cleanupIdentifier(v);
 		if( v==null )
-			return name;
+			return identifier;
 		else
-			return name = v;
+			return identifier = v;
 	}
 
 	@:keep public function toString() {
-		return '$name(' + values.join(",")+")";
+		return '$identifier(' + values.join(",")+")";
 	}
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
-		var ed = new EnumDef(JsonTools.readInt(json.uid), json.name);
+		var ed = new EnumDef(JsonTools.readInt(json.uid), json.identifier);
 
 		for(v in JsonTools.readArray(json.values))
 			ed.values.push(v);
@@ -34,7 +34,7 @@ class EnumDef {
 	public function toJson() {
 		return {
 			uid: uid,
-			name: name,
+			identifier: identifier,
 			values: values,
 		};
 	}
