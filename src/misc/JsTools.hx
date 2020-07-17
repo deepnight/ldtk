@@ -208,4 +208,19 @@ class JsTools {
 
 		return new J('<span class="key">$keyLabel</span>');
 	}
+
+
+	public static function parseComponents(jCtx:js.jquery.JQuery) {
+		jCtx.find(".info").each( function(idx, e) {
+			var jElem = new J(e);
+			if( jElem.data("str")==null ) {
+				if( jElem.hasClass("identifier") )
+					jElem.data( "str", L.t._("An identifier should be UNIQUE and only contain LETTERS, NUMBERS or UNDERSCORES (ie. \"_\").") );
+				else
+					jElem.data("str", jElem.text());
+				jElem.empty();
+			}
+			ui.Tip.attach(jElem, jElem.data("str"), "infoTip");
+		});
+	}
 }

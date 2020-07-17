@@ -100,5 +100,6 @@ class Modal extends dn.Process {
 		jModalAndMask.addClass(className);
 		var html = JsTools.getHtmlTemplate(tplName);
 		jContent.empty().append( html );
+		JsTools.parseComponents(jContent);
 	}
 }

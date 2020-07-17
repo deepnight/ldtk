@@ -7,6 +7,7 @@ $red: #e34d00;
 $darkRed: #791105;
 $orange: #ffcc00;
 $help: #79dd8a;
+$helpDark: #4a8754;
 
 // Shortcuts
 @mixin resetMargin() {
@@ -215,6 +216,33 @@ button.grey {
 	color: white;
 	box-shadow: 0px 0px 32px darkred inset, 0px 0px 4px darkred;
 	text-shadow: 0px -1px 4px red, 0px 1px 4px red;
+}
+
+div.info {
+	display: grid;
+	justify-items: center;
+	align-items: center;
+	box-sizing: border-box;
+	font-size: 14pt;
+	width: 32px;
+	height: 32px;
+	margin-left: 4px;
+
+	font-weight: bold;
+	text-align: center;
+	color: $help;
+	border: 3px solid $help;
+	border-radius: 16px;
+	cursor: help;
+
+	&:hover {
+		color: $orange;
+		border-color: $orange;
+	}
+
+	&::before {
+		content: "i";
+	}
 }
 
 span.key,
@@ -483,6 +511,10 @@ ul.form {
 			flex: 0 1 60px;
 		}
 
+		div.info {
+			flex: 0 0 32px;
+		}
+
 		>label:first-of-type {
 			flex: 0 0 150px;
 			padding-right: 16px;
@@ -587,20 +619,22 @@ textarea {
 	position: absolute;
 	z-index: 99;
 	box-sizing: border-box;
-	padding: 4px;
-	padding-left: 8px;
-	padding-right: 8px;
 
 	border-radius: 2px;
-	background-color: $red;
+	background-color: $helpDark;
 	box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
 	pointer-events: none;
 
 	.content {
 		display: flex;
+		padding: 4px;
+		padding-left: 8px;
+		padding-right: 8px;
 		align-items: center;
+
 		font-style: italic;
 		font-size: 0.8em;
+		color: $help;
 		text-shadow: 0px 1px 0px rgba(0,0,0, 0.5), 0px 2px 4px rgba(0,0,0, 0.5);
 
 		.keys {
@@ -608,6 +642,13 @@ textarea {
 			font-style: normal;
 			margin-left: 20px;
 		}
+	}
+
+	&.infoTip .content {
+		padding: 10px;
+		font-style: normal;
+		font-size: 1em;
+		max-width: 250px;
 	}
 }
 

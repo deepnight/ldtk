@@ -182,6 +182,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			return;
 		}
 
+		JsTools.parseComponents(jEntityForm);
 		jAll.css("visibility","visible");
 		jContent.find(".none").hide();
 		if( !project.defs.hasLayerType(Entities) )
@@ -250,6 +251,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 		else
 			jFieldForm.css("visibility","visible");
+
+		JsTools.parseComponents(jFieldForm);
 
 		// Set form class
 		for(k in Type.getEnumConstructs(led.LedTypes.FieldType))
