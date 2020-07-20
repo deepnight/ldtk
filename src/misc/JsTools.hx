@@ -251,15 +251,6 @@ class JsTools {
 		js.node.Fs.writeFileSync( path, js.node.Buffer.hxFromBytes(bytes) );
 	}
 
-	public static function setCwd(dir:String) {
-		var fp = dn.FilePath.fromDir(dir);
-		if( isWindows() )
-			fp.useBackslashes();
-		else
-			fp.useSlashes();
-		js.Node.process.chdir(fp.full);
-	}
-
 	public static function getCwd() {
 		return js.Node.process.cwd();
 	}

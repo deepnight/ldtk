@@ -131,13 +131,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 		}
 		else
 			jPath.text("-- No file --");
-
-		// Locate button
-		var b = new J("button.locate");
-		if( cur.path==null )
-			b.hide();
-		b.off().click( function(ev) {
-			JsTools.exploreToFile(cur.path);
+		jPath.off().click( function(ev) {
+			if( cur.path!=null )
+				JsTools.exploreToFile( client.makeFullFilePath(cur.path) );
 		});
 
 		// Fields
@@ -148,7 +144,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// "Import image" button
 		var uploader = jForm.find("input[name=tilesetFile]");
-		uploader.attr("nwworkingdir",JsTools.getCwd()+"\\tilesetTestImages");
+		uploader.attr("nwworkingdir",client.getProjectRoot()+"\\tilesetTestImages");
 		var label = uploader.siblings("[for="+uploader.attr("id")+"]");
 		if( cur.path==null )
 			label.text( Lang.t._("Select an image file") );
@@ -162,23 +158,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 		uploader.change( function(ev) {
 			var oldPath = cur.path;
 			var absPath = uploader.val();
-			var relPath = client.makeFilePathRelative( absPath );
+			var relPath = client.makeRelativeFilePath( absPath );
 
-			var bytes = JsTools.readFileBytes(absPath);
-			if( !cur.importImage(relPath, bytes) ) {
-				switch dn.Identify.getType(bytes) {
-					case Png, Gif:
-						N.error("Couldn't read this image: maybe the data is corrupted or the format special?");
-
-					case Jpeg:
-						N.error("Sorry, JPEG is not yet supported, please use PNG instead.");
-
-					case Bmp:
-						N.error("Sorry, BMP is not supported, please use PNG instead.");
-
-					case Unknown:
-						N.error("Is this an actual image file?");
-					}
+			if( !cur.importImage(relPath) ) {
+				N.error("Is this an actual image file?");
 				return;
 			}
 			project.defs.autoRenameTilesetIdentifier(oldPath, cur);

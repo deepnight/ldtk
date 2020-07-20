@@ -1335,6 +1335,19 @@ textarea {
 		grid-template-rows: min-content auto;
 		grid-template-columns: 200px auto;
 
+		.path {
+			flex: 1 0 100%;
+			box-sizing: border-box;
+			cursor: pointer;
+			&:hover {
+				span:not(.slash) {
+					border-radius: 3px;
+					background-color: $orange;
+					color: black !important;
+				}
+			}
+		}
+
 		> .header {
 			grid-column: 1/3;
 			h2 {

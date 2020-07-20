@@ -59,6 +59,7 @@ class TilesetDef {
 		_pixelsCache = null;
 
 		_bytesCache = null;
+		_base64cache = null;
 		#end
 	}
 
@@ -107,15 +108,20 @@ class TilesetDef {
 		return td;
 	}
 
-	public function importImage(filePath:String, fileContent:haxe.io.Bytes) : Bool {
+	public function importImage(relFilePath:String) : Bool {
 		clearAtlas();
+		relFilePath = dn.FilePath.fromFile( relFilePath ).useSlashes().full;
 
-		var img = dn.ImageDecoder.decode(fileContent);
+		var b = misc.JsTools.readFileBytes( Client.ME.makeFullFilePath(relFilePath) );
+		ui.Notification.debug(Client.ME.makeFullFilePath(relFilePath));
+		ui.Notification.debug(b.length);
+		var img = dn.ImageDecoder.decode(b);
+		ui.Notification.debug(img.width+"x"+img.height);
 		if( img==null )
 			return false;
 
-		_bytesCache = fileContent;
-		path = dn.FilePath.fromFile(filePath).useSlashes().full;
+		path = relFilePath;
+		_bytesCache = b;
 		pxWid = img.width;
 		pxHei = img.height;
 		return true;

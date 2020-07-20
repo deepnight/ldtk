@@ -1375,6 +1375,22 @@ textarea:focus {
   grid-template-columns: 200px auto;
 }
 
+.window.panel.levelList .content .path,
+.window.panel.layerDefs .content .path,
+.window.panel.tilesetDefs .content .path {
+  flex: 1 0 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.window.panel.levelList .content .path:hover span:not(.slash),
+.window.panel.layerDefs .content .path:hover span:not(.slash),
+.window.panel.tilesetDefs .content .path:hover span:not(.slash) {
+  border-radius: 3px;
+  background-color: #ffcc00;
+  color: black !important;
+}
+
 .window.panel.levelList .content > .header,
 .window.panel.layerDefs .content > .header,
 .window.panel.tilesetDefs .content > .header {
