@@ -50,6 +50,7 @@ class Level {
 		l.pxHei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_HEIGHT );
 		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
 
+		l.layerInstances = [];
 		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
 			var li = led.inst.LayerInstance.fromJson(p, layerJson);
 			l.layerInstances.push(li);
@@ -62,18 +63,18 @@ class Level {
 		return x>=0 && x<pxWid && y>=0 && y<pxHei;
 	}
 
-	public function getLayerInstance(?id:String, ?layerDef:led.def.LayerDef) : led.inst.LayerInstance {
-		if( id==null && layerDef==null )
+	public function getLayerInstance(?uid:Int, ?layerDef:led.def.LayerDef) : led.inst.LayerInstance {
+		if( uid==null && layerDef==null )
 			throw "Need 1 parameter";
 
-		if( id==null )
-			id = layerDef.identifier;
+		if( uid==null )
+			uid = layerDef.uid;
 
 		for(li in layerInstances)
-			if( li.def.identifier==id )
+			if( li.layerDefId==uid )
 				return li;
 
-		throw "Missing layer instance for "+id;
+		throw "Missing layer instance for "+uid;
 	}
 
 	public function tidy(p:Project) {
@@ -99,7 +100,6 @@ class Level {
 						layerInstances.push( existing.get(ld.uid) );
 					else
 						layerInstances.push( new led.inst.LayerInstance(_project, uid, ld.uid) );
-				ui.Notification.debug(layerInstances);
 				break;
 			}
 
