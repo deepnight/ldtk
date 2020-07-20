@@ -229,7 +229,7 @@
 			{
 				"uid":14,
 				"identifier":"Cavesofgallet_tiles",
-				"path":"C:/projects/led/nwjs/userFiles/atlas/cavesofgallet_tiles.png",
+				"path":"atlas/cavesofgallet_tiles.png",
 				"pxWid":96,
 				"pxHei":256,
 				"tileGridSize":8,

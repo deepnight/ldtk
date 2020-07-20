@@ -69,8 +69,7 @@ class TilesetDef {
 		savedSelections = [];
 	}
 
-	public inline function isAtlasPathValid() return path!=null && misc.JsTools.fileExists(path);
-	public inline function isAtlasValid() return isAtlasPathValid() && bytes!=null;
+	public inline function isAtlasValid() return path!=null && bytes!=null;
 
 
 	public function toJson() {
@@ -113,10 +112,7 @@ class TilesetDef {
 		relFilePath = dn.FilePath.fromFile( relFilePath ).useSlashes().full;
 
 		var b = misc.JsTools.readFileBytes( Client.ME.makeFullFilePath(relFilePath) );
-		ui.Notification.debug(Client.ME.makeFullFilePath(relFilePath));
-		ui.Notification.debug(b.length);
 		var img = dn.ImageDecoder.decode(b);
-		ui.Notification.debug(img.width+"x"+img.height);
 		if( img==null )
 			return false;
 
@@ -221,7 +217,7 @@ class TilesetDef {
 
 	function get_bytes() {
 		if( _bytesCache==null )
-			_bytesCache = misc.JsTools.readFileBytes(path);
+			_bytesCache = misc.JsTools.readFileBytes( Client.ME.makeFullFilePath(path) );
 		return _bytesCache;
 	}
 
@@ -236,7 +232,7 @@ class TilesetDef {
 		if( path==null )
 			return null;
 		else if( _base64cache==null )
-			_base64cache = haxe.crypto.Base64.encode( misc.JsTools.readFileBytes(path) );
+			_base64cache = haxe.crypto.Base64.encode(bytes);
 		return _base64cache;
 	}
 

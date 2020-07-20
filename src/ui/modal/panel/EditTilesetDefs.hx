@@ -148,8 +148,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var label = uploader.siblings("[for="+uploader.attr("id")+"]");
 		if( cur.path==null )
 			label.text( Lang.t._("Select an image file") );
-		else if( !cur.isAtlasPathValid() )
-			label.text("ERROR: File not found!");
 		else if( !cur.isAtlasValid() )
 			label.text("ERROR: Couldn't read image data");
 		else
