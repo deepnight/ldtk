@@ -12,7 +12,6 @@ class Boot extends hxd.App {
 		var fp = dn.FilePath.fromDir( ""+JsTools.getCwd() );
 		fp.useSlashes();
 		APP_ROOT = fp.directoryWithSlash;
-		trace(APP_ROOT);
 
 		h3d.Engine.getCurrent().backgroundColor = 0xffffff;
 		hxd.Res.initEmbed();
