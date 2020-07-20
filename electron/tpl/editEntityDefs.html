@@ -1,0 +1,132 @@
+<div class="header">
+	<h2>
+		<div class="icon entity orange"></div>
+		Project entities
+	</h2>
+	<div class="help">
+		ENTITIES are generic data that can be placed in your levels, such as the Player start position or Items to pick up. Each entity can have various custom editable properties as defined below.
+	</div>
+	<div class="warning noEntLayer">You need to create at least one ENTITY LAYER in order to insert entities in your levels.</div>
+</div>
+
+<div class="entityList">
+	<ul class="niceList"></ul>
+	<div class="buttons">
+		<button class="create">Create entity</button>
+		<button class="delete">🗑️</button>
+	</div>
+</div>
+
+<div class="entityForm">
+	<div class="previewWrapper">
+		<div class="label"></div>
+	</div>
+
+	<ul class="form">
+		<li>
+			<label for="eName">Entity identifier</label>
+			<input type="text" name="name" id="eName"/>
+			<div class="info identifier"></div>
+		</li>
+
+		<li>
+			<label for="width">Width</label>
+			<input type="text" name="width" class="small" id="width"/>
+			<span>x</span>
+			<input type="text" name="height" class="small"/>
+			<span>px</span>
+		</li>
+
+		<li>
+			<label for="eColor">Color</label>
+			<input type="color" name="color" id="eColor"/>
+		</li>
+
+		<li>
+			<label>Pivot point</label>
+			<div class="pivot"></div>
+		</li>
+
+		<li>
+			<label for="maxPerLevel">Max per level</label>
+			<input type="text" name="maxPerLevel" id="maxPerLevel" placeholder="0"/>
+			<span>(0 = unlimited)</span>
+		</li>
+		<li>
+			<label for="discardExcess">When max is reached...</label>
+			<select name="discardExcess">
+				<option value="true">... remove extra instances</option>
+				<option value="false">... prevent adding more</option>
+			</select>
+		</li>
+	</ul>
+
+</div>
+
+<div class="fieldList">
+	<ul class="niceList"></ul>
+	<div class="buttons">
+		<button type="button" class="create">Create field</button>
+		<button type="button" class="delete">🗑️</button>
+	</div>
+</div>
+
+<div class="fieldForm">
+	<ul class="form">
+	<li>
+		<label>Type</label>
+		<div class="type"></div>
+	</li>
+	<li>
+		<label for="fName">Field identifier</label>
+		<input type="text" name="name" id="fName"/>
+		<div class="info identifier"></div>
+	</li>
+
+	<li class="F_Int F_Float F_String">
+		<label for="fDef">Default value</label>
+		<input type="text" name="fDef" placeholder="" id="fDef"/>
+	</li>
+
+	<li class="F_Bool">
+		<label for="bDef">Default state</label>
+		<input type="checkbox" name="bDef" id="bDef"/>
+	</li>
+
+	<li class="F_Color">
+		<label for="cDef">Default color</label>
+		<input type="color" name="cDef" id="cDef"/>
+	</li>
+
+	<!-- <li class="F_Enum">
+		<label for="enumId">Enum</label>
+		<select name="enumId" id="enumId">
+			<option value="null">-- Select an enum --</option>
+		</select>
+	</li> -->
+
+	<!-- <li class="F_Enum">
+		<label for="enumDef">Default value</label>
+		<select name="enumDef" id="enumDef"></select>
+	</li> -->
+
+	<li class="F_Int F_Float">
+		<label for="min">Limits</label>
+		<input type="text" name="min" id="min" placeholder="Min"/>
+		<span>to</span>
+		<input type="text" name="max" id="max" placeholder="Max"/>
+	</li>
+
+	<li class="F_Int F_Float F_String F_Enum">
+		<label for="canBeNull">Can be null</label>
+		<input type="checkbox" name="canBeNull" id="canBeNull"/>
+	</li>
+
+	<li>
+		<label for="editorDisplayMode">Display in editor</label>
+		<select name="editorDisplayMode" id="editorDisplayMode"></select>
+		<select name="editorDisplayPos" id="editorDisplayPos"></select>
+	</li>
+
+	</ul>
+</div>

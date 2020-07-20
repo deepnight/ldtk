@@ -1,0 +1,53 @@
+<div class="header">
+	<h2>
+		<div class="icon tile orange"></div>
+		Project tilesets
+	</h2>
+	<div class="help">
+		Tilesets are large images in which you pick sub-parts to draw them in your levels.
+	</div>
+	<div class="warning noTileLayer">You need to create at least one TILE LAYER in order to draw tiles in a level.</div>
+</div>
+
+<div class="mainList">
+	<ul class="niceList"></ul>
+	<div class="buttons">
+		<button class="create">Create tileset</button>
+		<button class="delete">🗑️</button>
+	</div>
+</div>
+
+<ul class="form">
+	<li>
+		<label>Tileset image</label>
+		<label for="tilesetFile" class="file"></label>
+		<input type="file" id="tilesetFile" name="tilesetFile"/>
+	</li>
+
+	<li>
+		<label for="name">Image path</label>
+		<span class="path"></span>
+	</li>
+
+	<li>
+		<label for="name">Identifier</label>
+		<input type="text" name="name" id="name"/>
+		<div class="info identifier"></div>
+	</li>
+
+	<li>
+		<label for="tilesetGridSize">Tileset grid</label>
+		<input type="text" id="tilesetGridSize" name="tilesetGridSize"/>
+		<span>px, spaced by</span>
+		<input type="text" id="tilesetGridSpacing" name="tilesetGridSpacing"/>
+		<span>px</span>
+	</li>
+
+	<li class="tileset">
+		<h3>Tile examples</h3>
+		<canvas class="demo" width="512" height="16"></canvas>
+
+		<h3>Tileset</h3>
+		<canvas class="fullPreview" width="512" height="256"></canvas>
+	</li>
+</ul>

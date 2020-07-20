@@ -1,0 +1,38 @@
+<div class="header">
+	<h2>
+		<div class="icon enum orange"></div>
+		Entity enums
+	</h2>
+	<div class="help">
+		Enumerations (Enums) are special value types of Entities. They could be for example the list of possible Enemy types, or a list of Item identifiers.
+	</div>
+</div>
+
+
+<div class="enumList">
+	<ul class="niceList"></ul>
+	<div class="buttons">
+		<button class="createEnum">Create enum</button>
+		<button class="deleteEnum delete">🗑️</button>
+	</div>
+</div>
+
+<ul class="form enumForm">
+	<li>
+		<label for="eName">Enum identifier</label>
+		<input type="text" name="eName" id="eName"/>
+	</li>
+
+	<li>
+		<label for="eValues">Possible values</label>
+
+		<ul class="enumValues"></ul>
+		<button class="createEnumValue">Add value</button>
+
+		<xml id="enum">
+			<input type="text" class="name" placeholder="REQUIRED - Unique identifier"/>
+			<!-- <input type="color" class="color"/> -->
+			<button class="delete">X</button>
+		</xml>
+	</li>
+</ul>

@@ -1,0 +1,72 @@
+<div class="header">
+	<h2>
+		<div class="icon layer orange"></div>
+		Project layers
+	</h2>
+	<div class="help">
+		Each LEVEL in your project has LAYERS, as defined below. The layers content can be of various types, including Image Tiles or Integer values.
+	</div>
+</div>
+
+<div class="mainList">
+	<ul class="niceList"></ul>
+	<div class="buttons">
+		<button class="create">Create layer</button>
+		<button class="delete">🗑️</button>
+	</div>
+</div>
+
+
+<ul class="form">
+	<li>
+		<label for="type">Type</label>
+		<span class="typeIcon"></span>
+		<span class="type"></span>
+	</li>
+
+	<li>
+		<label for="lName">Layer identifier</label>
+		<input type="text" name="name" id="lName"/>
+		<div class="info identifier"></div>
+	</li>
+
+	<li>
+		<label for="gridSize">Grid size</label>
+		<input type="text" name="gridSize" class="small" id="gridSize"/>
+		<span>px</span>
+	</li>
+
+	<li>
+		<label for="opacity">Display opacity</label>
+		<input type="text" name="displayOpacity" class="small" id="opacity"/>
+		<span>%</span>
+	</li>
+
+	<li class="IntGrid">
+		<label>Grid values</label>
+		<ul class="intGridValues">
+			<li class="add">
+				<button type="button">+</button>
+			</li>
+		</ul>
+
+		<xml id="intGridValue">
+			<span class="id">?</span>
+			<input type="text" class="name" placeholder="Optional value name"/>
+			<input type="color" value="#ffffff"/>
+			<a href="#" class="remove">X</a>
+		</xml>
+	</li>
+
+	<li class="Tiles">
+		<label>Tileset</label>
+		<select name="tilesets"></select>
+		<button></button>
+	</li>
+
+	<li class="Tiles">
+		<label>Tile pivot point</label>
+		<div class="pivot"></div>
+		<span class="long">This is only useful if the Tileset grid size is different from the layer grid size.</span>
+	</li>
+</ul>
