@@ -232,6 +232,10 @@ class Client extends dn.Process {
 					else
 						onSave();
 
+			case K.N:
+				if( !hasInputFocus() && isCtrlDown() )
+					onNew();
+
 			case K.H:
 				if( !hasInputFocus() )
 					onHelp();
@@ -425,11 +429,19 @@ class Client extends dn.Process {
 		m.loadTemplate("help","helpWindow");
 	}
 
-	public function onNew(bt:js.jquery.JQuery) {
+	public function onNew(?bt:js.jquery.JQuery) {
 		new ui.modal.dialog.Confirm(bt, function() {
-			selectProject( led.Project.createEmpty() );
-			N.msg("New project created.");
-			ui.Modal.closeAll();
+			JsTools.saveAsDialog(["json"], function(filePath) {
+				selectProject( led.Project.createEmpty() );
+
+				var fp = dn.FilePath.fromFile(filePath);
+				fp.extension = "json";
+				var data = makeProjectFile();
+				JsTools.writeFileBytes(fp.full, data.bytes);
+				N.msg("New project created: "+fp.full);
+				ui.Modal.closeAll();
+			});
+			// selectProject( led.Project.createEmpty() );
 		});
 	}
 
