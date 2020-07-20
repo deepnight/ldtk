@@ -220,7 +220,9 @@ class JsTools {
 	}
 
 
-	// *** File API **************************************
+	// *** File API (NWJS) **************************************
+
+	#if hxnodejs
 
 	public static function fileExists(path:String) {
 		js.node.Require.require("fs");
@@ -249,5 +251,7 @@ class JsTools {
 	public static function getCwd() {
 		return js.Node.process.cwd();
 	}
+	
+	#end
 
 }
