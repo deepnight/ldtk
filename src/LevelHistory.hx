@@ -216,7 +216,9 @@ class LevelHistory {
 				client.ge.emit(LevelRestoredFromHistory);
 
 			case Layer(layerId, bounds, json):
-				level.layerInstances.set( layerId, led.inst.LayerInstance.fromJson(client.project, json) );
+				for( i in 0...level.layerInstances.length )
+					if( level.layerInstances[i].layerDefId==layerId )
+						level.layerInstances[i] = led.inst.LayerInstance.fromJson(client.project, json);
 				client.project.tidy(); // fix "_project" refs & possible broken "instance<->def" refs
 				client.ge.emit(LayerInstanceRestoredFromHistory);
 		}

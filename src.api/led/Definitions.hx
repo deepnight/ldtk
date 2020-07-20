@@ -116,10 +116,10 @@ class Definitions {
 		if( to<0 || to>=layers.length )
 			return null;
 
-		_project.tidy();
-
 		var moved = layers.splice(from,1)[0];
 		layers.insert(to, moved);
+
+		_project.tidy(); // ensure layerInstances are also properly sorted
 		return moved;
 	}
 

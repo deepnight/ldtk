@@ -7,7 +7,7 @@ class Level {
 	public var identifier(default,set): String;
 	public var pxWid : Int;
 	public var pxHei : Int;
-	public var layerInstances : Map<Int,led.inst.LayerInstance> = new Map();
+	public var layerInstances : Array<led.inst.LayerInstance> = [];
 
 
 	@:allow(led.Project)
@@ -19,7 +19,7 @@ class Level {
 		this.identifier = "Level"+uid;
 
 		for(ld in _project.defs.layers)
-			layerInstances.set( ld.uid, new led.inst.LayerInstance(_project, uid, ld.uid) );
+			layerInstances.push( new led.inst.LayerInstance(_project, uid, ld.uid) );
 	}
 
 	function set_identifier(id:String) {
@@ -52,7 +52,7 @@ class Level {
 
 		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
 			var li = led.inst.LayerInstance.fromJson(p, layerJson);
-			l.layerInstances.set(li.layerDefId, li);
+			l.layerInstances.push(li);
 		}
 
 		return l;
@@ -66,31 +66,44 @@ class Level {
 		if( id==null && layerDef==null )
 			throw "Need 1 parameter";
 
-		if( id!=null ) {
-			for(li in layerInstances)
-				if( li.def.identifier==id )
-					return li;
-			throw "Unknown layer "+id;
-		}
-		else if( !layerInstances.exists(layerDef.uid) )
-			throw "Missing layer instance for "+layerDef.identifier;
-		else
-			return layerInstances.get( layerDef.uid );
+		if( id==null )
+			id = layerDef.identifier;
+
+		for(li in layerInstances)
+			if( li.def.identifier==id )
+				return li;
+
+		throw "Missing layer instance for "+id;
 	}
 
 	public function tidy(p:Project) {
 		_project = p;
+
 		// Remove layerInstances without layerDefs
-		for(e in layerInstances.keyValueIterator())
-			if( e.value.def==null )
-				layerInstances.remove(e.key);
+		var i = 0;
+		while( i<layerInstances.length )
+			if( layerInstances[i].def==null )
+				layerInstances.splice(i,1);
+			else
+				i++;
 
-		// Create missing layerInstances
-		for(ld in _project.defs.layers)
-			if( !layerInstances.exists(ld.uid) )
-				layerInstances.set( ld.uid, new led.inst.LayerInstance(_project, uid, ld.uid) );
+		// Create missing layerInstances & check if they're sorted in the same order as defs
+		for(i in 0..._project.defs.layers.length)
+			if( i>=layerInstances.length || layerInstances[i].layerDefId!=_project.defs.layers[i].uid ) {
+				var existing = new Map();
+				for(li in layerInstances)
+					existing.set(li.layerDefId, li);
+				layerInstances = [];
+				for(ld in _project.defs.layers)
+					if( existing.exists(ld.uid) )
+						layerInstances.push( existing.get(ld.uid) );
+					else
+						layerInstances.push( new led.inst.LayerInstance(_project, uid, ld.uid) );
+				ui.Notification.debug(layerInstances);
+				break;
+			}
 
-		// Layer instances content
+		// Tidy layer instances
 		for(li in layerInstances)
 			li.tidy(_project);
 	}
