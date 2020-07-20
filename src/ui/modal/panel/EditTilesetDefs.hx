@@ -162,12 +162,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 		uploader.change( function(ev) {
 			var oldPath = cur.path;
 			var absPath = uploader.val();
-			// var relativePath = dn.FilePath.fromFile( absPath );
-			// relativePath.makeRelativeTo( JsTools.getCwd() );
+			var relPath = client.makeFilePathRelative( absPath );
 
 			var bytes = JsTools.readFileBytes(absPath);
-			if( !cur.importImage(absPath, bytes) ) { // TODO
-			// if( !cur.importImage(relativePath.full, bytes) ) {
+			if( !cur.importImage(relPath, bytes) ) {
 				switch dn.Identify.getType(bytes) {
 					case Png, Gif:
 						N.error("Couldn't read this image: maybe the data is corrupted or the format special?");
