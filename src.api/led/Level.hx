@@ -40,7 +40,7 @@ class Level {
 			identifier: identifier,
 			pxWid: pxWid,
 			pxHei: pxHei,
-			layerInstances : layersJson,
+			layerInstances: layersJson,
 		}
 	}
 
