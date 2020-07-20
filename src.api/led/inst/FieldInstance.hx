@@ -32,6 +32,7 @@ class FieldInstance {
 
 	public function toJson() {
 		return {
+			__comment__: def.identifier+" ("+def.getShortDescription()+")",
 			defId: defId,
 			internalValue: JsonTools.writeEnum(internalValue,true),
 		}

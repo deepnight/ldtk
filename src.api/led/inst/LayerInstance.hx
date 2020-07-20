@@ -35,7 +35,7 @@ class LayerInstance {
 
 	public function toJson() {
 		return {
-			_comment: level.identifier+"->"+def.identifier,
+			__comment__: level.identifier+"->"+def.identifier,
 			levelId: levelId,
 			layerDefUid: layerDefUid,
 			pxOffsetX: pxOffsetX,

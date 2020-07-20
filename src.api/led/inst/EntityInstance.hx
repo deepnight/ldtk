@@ -30,7 +30,7 @@ class EntityInstance {
 			fieldsJson.push( fi.toJson() );
 
 		return {
-			_comment: def.identifier,
+			__comment__: def.identifier,
 			defId: defId,
 			x: x,
 			y: y,

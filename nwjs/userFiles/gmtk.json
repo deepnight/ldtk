@@ -526,7 +526,7 @@
 			"pxHei":256,
 			"layerInstances":[
 				{
-					"_comment":"Tutorial_intro->Entities",
+					"__comment__":"Tutorial_intro->Entities",
 					"levelId":41,
 					"layerDefUid":7,
 					"pxOffsetX":0,
@@ -539,7 +539,7 @@
 					],
 					"entityInstances":[
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":72,
 							"y":144,
@@ -548,16 +548,18 @@
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":200,
 							"y":128,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":{
 										"id":3,
@@ -569,16 +571,18 @@
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":200,
 							"y":160,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":{
 										"id":3,
@@ -590,16 +594,18 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":232,
 							"y":136,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":{
 										"id":3,
@@ -611,7 +617,7 @@
 							]
 						},
 						{
-							"_comment":"Cart",
+							"__comment__":"Cart",
 							"defId":19,
 							"x":40,
 							"y":144,
@@ -620,12 +626,13 @@
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":152,
 							"y":40,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -635,6 +642,7 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":{
 										"id":0,
@@ -646,12 +654,13 @@
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":152,
 							"y":72,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -661,6 +670,7 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":{
 										"id":0,
@@ -674,7 +684,7 @@
 					]
 				},
 				{
-					"_comment":"Tutorial_intro->Collisions",
+					"__comment__":"Tutorial_intro->Collisions",
 					"levelId":41,
 					"layerDefUid":1,
 					"pxOffsetX":0,
@@ -1809,7 +1819,7 @@
 					]
 				},
 				{
-					"_comment":"Tutorial_intro->Details",
+					"__comment__":"Tutorial_intro->Details",
 					"levelId":41,
 					"layerDefUid":20,
 					"pxOffsetX":0,
@@ -1860,7 +1870,7 @@
 			"pxHei":256,
 			"layerInstances":[
 				{
-					"_comment":"Tutorial_gems->Entities",
+					"__comment__":"Tutorial_gems->Entities",
 					"levelId":29,
 					"layerDefUid":7,
 					"pxOffsetX":0,
@@ -1873,7 +1883,7 @@
 					],
 					"entityInstances":[
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":88,
 							"y":192,
@@ -1882,7 +1892,7 @@
 							]
 						},
 						{
-							"_comment":"Cart",
+							"__comment__":"Cart",
 							"defId":19,
 							"x":120,
 							"y":192,
@@ -1891,12 +1901,13 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":152,
 							"y":56,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -1906,50 +1917,56 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":296,
 							"y":80,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":216,
 							"y":32,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":232,
 							"y":40,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":{
 										"id":0,
@@ -1959,6 +1976,7 @@
 									}
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":{
 										"id":0,
@@ -1968,6 +1986,7 @@
 									}
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":{
 										"id":1,
@@ -1979,12 +1998,13 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":216,
 							"y":88,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -1994,18 +2014,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":152,
 							"y":120,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -2015,6 +2037,7 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":null
 								}
@@ -2023,7 +2046,7 @@
 					]
 				},
 				{
-					"_comment":"Tutorial_gems->Collisions",
+					"__comment__":"Tutorial_gems->Collisions",
 					"levelId":29,
 					"layerDefUid":1,
 					"pxOffsetX":0,
@@ -2690,7 +2713,7 @@
 					]
 				},
 				{
-					"_comment":"Tutorial_gems->Details",
+					"__comment__":"Tutorial_gems->Details",
 					"levelId":29,
 					"layerDefUid":20,
 					"pxOffsetX":0,
@@ -2753,7 +2776,7 @@
 			"pxHei":512,
 			"layerInstances":[
 				{
-					"_comment":"Tutorial_bait->Entities",
+					"__comment__":"Tutorial_bait->Entities",
 					"levelId":30,
 					"layerDefUid":7,
 					"pxOffsetX":0,
@@ -2766,7 +2789,7 @@
 					],
 					"entityInstances":[
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":56,
 							"y":96,
@@ -2775,7 +2798,7 @@
 							]
 						},
 						{
-							"_comment":"Cart",
+							"__comment__":"Cart",
 							"defId":19,
 							"x":456,
 							"y":176,
@@ -2784,12 +2807,13 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":456,
 							"y":264,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -2799,18 +2823,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":392,
 							"y":168,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -2820,114 +2846,128 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":408,
 							"y":240,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":456,
 							"y":240,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":440,
 							"y":208,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":456,
 							"y":304,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":312,
 							"y":192,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":376,
 							"y":176,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":360,
 							"y":104,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -2937,13 +2977,14 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Pointer",
+							"__comment__":"Pointer",
 							"defId":34,
 							"x":248,
 							"y":96,
@@ -2952,12 +2993,13 @@
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":88,
 							"y":56,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -2967,18 +3009,20 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":280,
 							"y":296,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -2988,38 +3032,43 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":424,
 							"y":272,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":472,
 							"y":272,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
@@ -3028,7 +3077,7 @@
 					]
 				},
 				{
-					"_comment":"Tutorial_bait->Collisions",
+					"__comment__":"Tutorial_bait->Collisions",
 					"levelId":30,
 					"layerDefUid":1,
 					"pxOffsetX":0,
@@ -6787,7 +6836,7 @@
 					]
 				},
 				{
-					"_comment":"Tutorial_bait->Details",
+					"__comment__":"Tutorial_bait->Details",
 					"levelId":30,
 					"layerDefUid":20,
 					"pxOffsetX":0,
@@ -6830,7 +6879,7 @@
 			"pxHei":208,
 			"layerInstances":[
 				{
-					"_comment":"Tutorial_slap->Entities",
+					"__comment__":"Tutorial_slap->Entities",
 					"levelId":35,
 					"layerDefUid":7,
 					"pxOffsetX":0,
@@ -6843,7 +6892,7 @@
 					],
 					"entityInstances":[
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":120,
 							"y":112,
@@ -6852,7 +6901,7 @@
 							]
 						},
 						{
-							"_comment":"Cart",
+							"__comment__":"Cart",
 							"defId":19,
 							"x":136,
 							"y":80,
@@ -6861,12 +6910,13 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":216,
 							"y":88,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -6876,18 +6926,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":328,
 							"y":104,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -6897,18 +6949,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":216,
 							"y":136,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -6918,18 +6972,20 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":216,
 							"y":56,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -6939,6 +6995,7 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":null
 								}
@@ -6947,7 +7004,7 @@
 					]
 				},
 				{
-					"_comment":"Tutorial_slap->Collisions",
+					"__comment__":"Tutorial_slap->Collisions",
 					"levelId":35,
 					"layerDefUid":1,
 					"pxOffsetX":0,
@@ -8222,7 +8279,7 @@
 					]
 				},
 				{
-					"_comment":"Tutorial_slap->Details",
+					"__comment__":"Tutorial_slap->Details",
 					"levelId":35,
 					"layerDefUid":20,
 					"pxOffsetX":0,
@@ -8265,7 +8322,7 @@
 			"pxHei":288,
 			"layerInstances":[
 				{
-					"_comment":"Tutorial_slap_2->Entities",
+					"__comment__":"Tutorial_slap_2->Entities",
 					"levelId":42,
 					"layerDefUid":7,
 					"pxOffsetX":0,
@@ -8278,7 +8335,7 @@
 					],
 					"entityInstances":[
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":88,
 							"y":128,
@@ -8287,60 +8344,67 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":216,
 							"y":216,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":280,
 							"y":152,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":328,
 							"y":216,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":280,
 							"y":200,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -8350,18 +8414,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":328,
 							"y":136,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -8371,18 +8437,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":72,
 							"y":232,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -8392,13 +8460,14 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":136,
 							"y":96,
@@ -8407,12 +8476,13 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":248,
 							"y":88,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -8422,18 +8492,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":216,
 							"y":40,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -8443,13 +8515,14 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Cart",
+							"__comment__":"Cart",
 							"defId":19,
 							"x":72,
 							"y":192,
@@ -8458,12 +8531,13 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":200,
 							"y":152,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -8473,18 +8547,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":152,
 							"y":216,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -8494,6 +8570,7 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
@@ -8502,7 +8579,7 @@
 					]
 				},
 				{
-					"_comment":"Tutorial_slap_2->Collisions",
+					"__comment__":"Tutorial_slap_2->Collisions",
 					"levelId":42,
 					"layerDefUid":1,
 					"pxOffsetX":0,
@@ -9309,7 +9386,7 @@
 					]
 				},
 				{
-					"_comment":"Tutorial_slap_2->Details",
+					"__comment__":"Tutorial_slap_2->Details",
 					"levelId":42,
 					"layerDefUid":20,
 					"pxOffsetX":0,
@@ -9360,7 +9437,7 @@
 			"pxHei":288,
 			"layerInstances":[
 				{
-					"_comment":"Tutorial_boss->Entities",
+					"__comment__":"Tutorial_boss->Entities",
 					"levelId":37,
 					"layerDefUid":7,
 					"pxOffsetX":0,
@@ -9373,7 +9450,7 @@
 					],
 					"entityInstances":[
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":88,
 							"y":240,
@@ -9382,7 +9459,7 @@
 							]
 						},
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":152,
 							"y":208,
@@ -9391,7 +9468,7 @@
 							]
 						},
 						{
-							"_comment":"Cart",
+							"__comment__":"Cart",
 							"defId":19,
 							"x":104,
 							"y":224,
@@ -9400,92 +9477,103 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":136,
 							"y":168,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":216,
 							"y":248,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":40,
 							"y":248,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":104,
 							"y":72,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":168,
 							"y":72,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"BossDoor",
+							"__comment__":"BossDoor",
 							"defId":24,
 							"x":136,
 							"y":128,
 							"fieldInstances":[
 								{
+									"__comment__":"Time (Int)",
 									"defId":25,
 									"internalValue":{
 										"id":0,
@@ -9497,12 +9585,13 @@
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":136,
 							"y":40,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -9512,6 +9601,7 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":null
 								}
@@ -9520,7 +9610,7 @@
 					]
 				},
 				{
-					"_comment":"Tutorial_boss->Collisions",
+					"__comment__":"Tutorial_boss->Collisions",
 					"levelId":37,
 					"layerDefUid":1,
 					"pxOffsetX":0,
@@ -9955,7 +10045,7 @@
 					]
 				},
 				{
-					"_comment":"Tutorial_boss->Details",
+					"__comment__":"Tutorial_boss->Details",
 					"levelId":37,
 					"layerDefUid":20,
 					"pxOffsetX":0,
@@ -10006,7 +10096,7 @@
 			"pxHei":320,
 			"layerInstances":[
 				{
-					"_comment":"Dual->Entities",
+					"__comment__":"Dual->Entities",
 					"levelId":38,
 					"layerDefUid":7,
 					"pxOffsetX":0,
@@ -10019,19 +10109,20 @@
 					],
 					"entityInstances":[
 						{
-							"_comment":"BossDoor",
+							"__comment__":"BossDoor",
 							"defId":24,
 							"x":216,
 							"y":96,
 							"fieldInstances":[
 								{
+									"__comment__":"Time (Int)",
 									"defId":25,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Cart",
+							"__comment__":"Cart",
 							"defId":19,
 							"x":136,
 							"y":48,
@@ -10040,7 +10131,7 @@
 							]
 						},
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":152,
 							"y":80,
@@ -10049,7 +10140,7 @@
 							]
 						},
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":216,
 							"y":112,
@@ -10058,60 +10149,67 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":40,
 							"y":104,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":344,
 							"y":264,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":56,
 							"y":232,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":88,
 							"y":88,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -10121,18 +10219,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":312,
 							"y":296,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -10142,45 +10242,50 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":248,
 							"y":280,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":264,
 							"y":72,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":312,
 							"y":176,
@@ -10189,7 +10294,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":328,
 							"y":176,
@@ -10198,7 +10303,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":296,
 							"y":128,
@@ -10207,7 +10312,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":360,
 							"y":112,
@@ -10216,7 +10321,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":264,
 							"y":48,
@@ -10225,7 +10330,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":264,
 							"y":128,
@@ -10234,7 +10339,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":344,
 							"y":160,
@@ -10243,7 +10348,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":344,
 							"y":176,
@@ -10252,12 +10357,13 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":312,
 							"y":296,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -10267,18 +10373,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":312,
 							"y":40,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -10288,18 +10396,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":360,
 							"y":56,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -10309,18 +10419,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":328,
 							"y":72,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -10330,6 +10442,7 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
@@ -10338,7 +10451,7 @@
 					]
 				},
 				{
-					"_comment":"Dual->Collisions",
+					"__comment__":"Dual->Collisions",
 					"levelId":38,
 					"layerDefUid":1,
 					"pxOffsetX":0,
@@ -10933,7 +11046,7 @@
 					]
 				},
 				{
-					"_comment":"Dual->Details",
+					"__comment__":"Dual->Details",
 					"levelId":38,
 					"layerDefUid":20,
 					"pxOffsetX":0,
@@ -10984,7 +11097,7 @@
 			"pxHei":416,
 			"layerInstances":[
 				{
-					"_comment":"Trio->Entities",
+					"__comment__":"Trio->Entities",
 					"levelId":40,
 					"layerDefUid":7,
 					"pxOffsetX":0,
@@ -10997,7 +11110,7 @@
 					],
 					"entityInstances":[
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":120,
 							"y":224,
@@ -11006,7 +11119,7 @@
 							]
 						},
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":136,
 							"y":208,
@@ -11015,7 +11128,7 @@
 							]
 						},
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":120,
 							"y":160,
@@ -11024,7 +11137,7 @@
 							]
 						},
 						{
-							"_comment":"Cart",
+							"__comment__":"Cart",
 							"defId":19,
 							"x":104,
 							"y":192,
@@ -11033,44 +11146,49 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":184,
 							"y":120,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":184,
 							"y":264,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":136,
 							"y":360,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -11080,18 +11198,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":136,
 							"y":40,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -11101,78 +11221,87 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"BossDoor",
+							"__comment__":"BossDoor",
 							"defId":24,
 							"x":312,
 							"y":48,
 							"fieldInstances":[
 								{
+									"__comment__":"Time (Int)",
 									"defId":25,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":312,
 							"y":280,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":264,
 							"y":200,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":360,
 							"y":40,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":264,
 							"y":376,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -11182,18 +11311,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":360,
 							"y":376,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -11203,18 +11334,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":312,
 							"y":120,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":{
 										"id":0,
@@ -11224,10 +11357,12 @@
 									}
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":null
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":{
 										"id":1,
@@ -11239,20 +11374,23 @@
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":312,
 							"y":328,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":null
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":null
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":{
 										"id":1,
@@ -11264,12 +11402,13 @@
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":104,
 							"y":120,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":{
 										"id":0,
@@ -11279,6 +11418,7 @@
 									}
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":{
 										"id":0,
@@ -11288,6 +11428,7 @@
 									}
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":{
 										"id":1,
@@ -11299,12 +11440,13 @@
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":104,
 							"y":264,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":{
 										"id":0,
@@ -11314,6 +11456,7 @@
 									}
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":{
 										"id":0,
@@ -11323,6 +11466,7 @@
 									}
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":{
 										"id":1,
@@ -11334,12 +11478,13 @@
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":456,
 							"y":248,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":{
 										"id":0,
@@ -11349,10 +11494,12 @@
 									}
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":null
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":{
 										"id":1,
@@ -11364,23 +11511,25 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":504,
 							"y":248,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":488,
 							"y":224,
@@ -11389,7 +11538,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":488,
 							"y":272,
@@ -11398,7 +11547,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":520,
 							"y":224,
@@ -11407,7 +11556,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":520,
 							"y":240,
@@ -11416,7 +11565,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":520,
 							"y":272,
@@ -11427,7 +11576,7 @@
 					]
 				},
 				{
-					"_comment":"Trio->Collisions",
+					"__comment__":"Trio->Collisions",
 					"levelId":40,
 					"layerDefUid":1,
 					"pxOffsetX":0,
@@ -13274,7 +13423,7 @@
 					]
 				},
 				{
-					"_comment":"Trio->Details",
+					"__comment__":"Trio->Details",
 					"levelId":40,
 					"layerDefUid":20,
 					"pxOffsetX":0,
@@ -13317,7 +13466,7 @@
 			"pxHei":272,
 			"layerInstances":[
 				{
-					"_comment":"Main->Entities",
+					"__comment__":"Main->Entities",
 					"levelId":0,
 					"layerDefUid":7,
 					"pxOffsetX":0,
@@ -13330,12 +13479,13 @@
 					],
 					"entityInstances":[
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":232,
 							"y":120,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -13345,18 +13495,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":152,
 							"y":24,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -13366,18 +13518,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":88,
 							"y":232,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -13387,18 +13541,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":360,
 							"y":224,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -13408,18 +13564,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":296,
 							"y":112,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -13429,18 +13587,20 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":344,
 							"y":24,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -13450,45 +13610,50 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":376,
 							"y":128,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":344,
 							"y":98,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Cart",
+							"__comment__":"Cart",
 							"defId":19,
 							"x":72,
 							"y":144,
@@ -13497,7 +13662,7 @@
 							]
 						},
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":104,
 							"y":128,
@@ -13506,7 +13671,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":56,
 							"y":112,
@@ -13515,7 +13680,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":136,
 							"y":160,
@@ -13524,7 +13689,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":152,
 							"y":144,
@@ -13533,7 +13698,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":40,
 							"y":224,
@@ -13542,7 +13707,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":24,
 							"y":256,
@@ -13551,7 +13716,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":136,
 							"y":256,
@@ -13560,7 +13725,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":120,
 							"y":208,
@@ -13569,7 +13734,7 @@
 							]
 						},
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":88,
 							"y":144,
@@ -13578,12 +13743,13 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":40,
 							"y":248,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -13593,13 +13759,14 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":200,
 							"y":128,
@@ -13608,7 +13775,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":232,
 							"y":240,
@@ -13617,7 +13784,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":280,
 							"y":256,
@@ -13626,7 +13793,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":376,
 							"y":176,
@@ -13635,12 +13802,13 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":312,
 							"y":248,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":{
 										"id":3,
@@ -13650,13 +13818,14 @@
 									}
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":24,
 							"y":96,
@@ -13665,7 +13834,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":40,
 							"y":96,
@@ -13674,7 +13843,7 @@
 							]
 						},
 						{
-							"_comment":"Crate",
+							"__comment__":"Crate",
 							"defId":21,
 							"x":40,
 							"y":112,
@@ -13683,64 +13852,72 @@
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":88,
 							"y":56,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":null
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":null
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":296,
 							"y":56,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":null
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":null
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"BossDoor",
+							"__comment__":"BossDoor",
 							"defId":24,
 							"x":200,
 							"y":128,
 							"fieldInstances":[
 								{
+									"__comment__":"Time (Int)",
 									"defId":25,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":216,
 							"y":216,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":{
 										"id":0,
@@ -13750,26 +13927,30 @@
 									}
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":null
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Mob",
+							"__comment__":"Mob",
 							"defId":13,
 							"x":136,
 							"y":192,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":14,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (MobType)",
 									"defId":46,
 									"internalValue":null
 								}
@@ -13778,7 +13959,7 @@
 					]
 				},
 				{
-					"_comment":"Main->Collisions",
+					"__comment__":"Main->Collisions",
 					"levelId":0,
 					"layerDefUid":1,
 					"pxOffsetX":0,
@@ -14233,7 +14414,7 @@
 					]
 				},
 				{
-					"_comment":"Main->Details",
+					"__comment__":"Main->Details",
 					"levelId":0,
 					"layerDefUid":20,
 					"pxOffsetX":0,
@@ -14276,7 +14457,7 @@
 			"pxHei":288,
 			"layerInstances":[
 				{
-					"_comment":"Final->Entities",
+					"__comment__":"Final->Entities",
 					"levelId":39,
 					"layerDefUid":7,
 					"pxOffsetX":0,
@@ -14289,7 +14470,7 @@
 					],
 					"entityInstances":[
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":120,
 							"y":48,
@@ -14298,7 +14479,7 @@
 							]
 						},
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":152,
 							"y":64,
@@ -14307,7 +14488,7 @@
 							]
 						},
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":120,
 							"y":96,
@@ -14316,12 +14497,13 @@
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":120,
 							"y":248,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":{
 										"id":0,
@@ -14331,6 +14513,7 @@
 									}
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":{
 										"id":0,
@@ -14340,6 +14523,7 @@
 									}
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":{
 										"id":1,
@@ -14351,12 +14535,13 @@
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":328,
 							"y":248,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":{
 										"id":0,
@@ -14366,6 +14551,7 @@
 									}
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":{
 										"id":0,
@@ -14375,6 +14561,7 @@
 									}
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":{
 										"id":1,
@@ -14386,12 +14573,13 @@
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":328,
 							"y":72,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":{
 										"id":0,
@@ -14401,6 +14589,7 @@
 									}
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":{
 										"id":0,
@@ -14410,6 +14599,7 @@
 									}
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":{
 										"id":1,
@@ -14421,71 +14611,79 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":168,
 							"y":248,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":280,
 							"y":248,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":328,
 							"y":200,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":328,
 							"y":104,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Cart",
+							"__comment__":"Cart",
 							"defId":19,
 							"x":88,
 							"y":80,
@@ -14494,12 +14692,13 @@
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":216,
 							"y":40,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":{
 										"id":0,
@@ -14509,6 +14708,7 @@
 									}
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":{
 										"id":0,
@@ -14518,6 +14718,7 @@
 									}
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":{
 										"id":1,
@@ -14529,12 +14730,13 @@
 							]
 						},
 						{
-							"_comment":"BossDoor",
+							"__comment__":"BossDoor",
 							"defId":24,
 							"x":216,
 							"y":144,
 							"fieldInstances":[
 								{
+									"__comment__":"Time (Int)",
 									"defId":25,
 									"internalValue":{
 										"id":0,
@@ -14546,16 +14748,18 @@
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":328,
 							"y":72,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":null
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":{
 										"id":0,
@@ -14565,6 +14769,7 @@
 									}
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":null
 								}
@@ -14573,7 +14778,7 @@
 					]
 				},
 				{
-					"_comment":"Final->Collisions",
+					"__comment__":"Final->Collisions",
 					"levelId":39,
 					"layerDefUid":1,
 					"pxOffsetX":0,
@@ -15120,7 +15325,7 @@
 					]
 				},
 				{
-					"_comment":"Final->Details",
+					"__comment__":"Final->Details",
 					"levelId":39,
 					"layerDefUid":20,
 					"pxOffsetX":0,
@@ -15171,7 +15376,7 @@
 			"pxHei":336,
 			"layerInstances":[
 				{
-					"_comment":"Credits->Entities",
+					"__comment__":"Credits->Entities",
 					"levelId":22,
 					"layerDefUid":7,
 					"pxOffsetX":0,
@@ -15184,7 +15389,7 @@
 					],
 					"entityInstances":[
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":184,
 							"y":256,
@@ -15193,7 +15398,7 @@
 							]
 						},
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":120,
 							"y":256,
@@ -15202,12 +15407,13 @@
 							]
 						},
 						{
-							"_comment":"BossDoor",
+							"__comment__":"BossDoor",
 							"defId":24,
 							"x":152,
 							"y":96,
 							"fieldInstances":[
 								{
+									"__comment__":"Time (Int)",
 									"defId":25,
 									"internalValue":{
 										"id":0,
@@ -15219,12 +15425,13 @@
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":152,
 							"y":120,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -15234,18 +15441,20 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":152,
 							"y":200,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -15255,18 +15464,20 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Label",
+							"__comment__":"Label",
 							"defId":31,
 							"x":152,
 							"y":136,
 							"fieldInstances":[
 								{
+									"__comment__":"Text (String)",
 									"defId":32,
 									"internalValue":{
 										"id":3,
@@ -15276,13 +15487,14 @@
 									}
 								},
 								{
+									"__comment__":"Color (Color)",
 									"defId":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Hero",
+							"__comment__":"Hero",
 							"defId":11,
 							"x":152,
 							"y":256,
@@ -15291,12 +15503,13 @@
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":264,
 							"y":72,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":{
 										"id":0,
@@ -15306,6 +15519,7 @@
 									}
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":{
 										"id":0,
@@ -15315,18 +15529,20 @@
 									}
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":40,
 							"y":72,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":{
 										"id":0,
@@ -15336,6 +15552,7 @@
 									}
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":{
 										"id":0,
@@ -15345,26 +15562,30 @@
 									}
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":40,
 							"y":248,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":null
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":null
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":{
 										"id":1,
@@ -15376,20 +15597,23 @@
 							]
 						},
 						{
-							"_comment":"MobGen",
+							"__comment__":"MobGen",
 							"defId":23,
 							"x":264,
 							"y":248,
 							"fieldInstances":[
 								{
+									"__comment__":"MaxChildren (Int)",
 									"defId":26,
 									"internalValue":null
 								},
 								{
+									"__comment__":"PerSpawn (Int)",
 									"defId":27,
 									"internalValue":null
 								},
 								{
+									"__comment__":"Delay (Float)",
 									"defId":28,
 									"internalValue":{
 										"id":1,
@@ -15401,7 +15625,7 @@
 							]
 						},
 						{
-							"_comment":"Cart",
+							"__comment__":"Cart",
 							"defId":19,
 							"x":152,
 							"y":288,
@@ -15410,96 +15634,108 @@
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":24,
 							"y":56,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":280,
 							"y":56,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":88,
 							"y":56,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":136,
 							"y":56,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":168,
 							"y":56,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
-							"_comment":"Item",
+							"__comment__":"Item",
 							"defId":9,
 							"x":216,
 							"y":56,
 							"fieldInstances":[
 								{
+									"__comment__":"Type (String)",
 									"defId":10,
 									"internalValue":null
 								},
 								{
+									"__comment__":"type (ItemType)",
 									"defId":47,
 									"internalValue":null
 								}
@@ -15508,7 +15744,7 @@
 					]
 				},
 				{
-					"_comment":"Credits->Collisions",
+					"__comment__":"Credits->Collisions",
 					"levelId":22,
 					"layerDefUid":1,
 					"pxOffsetX":0,
@@ -16031,7 +16267,7 @@
 					]
 				},
 				{
-					"_comment":"Credits->Details",
+					"__comment__":"Credits->Details",
 					"levelId":22,
 					"layerDefUid":20,
 					"pxOffsetX":0,
