@@ -259,12 +259,10 @@ class JsTools {
 		var fp = dn.FilePath.fromFile(filePath);
 		if( isWindows() )
 			fp.useBackslashes();
-		N.debug(fp.full);
 		nw.Shell.showItemInFolder(fp.full);
 	}
 
 	public static function isWindows() {
-		N.debug( js.Node.process.platform );
 		return js.Node.process.platform.toLowerCase().indexOf("win")==0;
 	}
 
