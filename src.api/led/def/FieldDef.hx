@@ -81,7 +81,7 @@ class FieldDef {
 			case F_String: "String";
 			case F_Bool: "Bool";
 			case F_Color: "Color";
-			case F_Enum(enumDefId): _project.defs.getEnumDef(enumDefId).identifier;
+			case F_Enum(enumDefUid): _project.defs.getEnumDef(enumDefUid).identifier;
 		}
 	}
 

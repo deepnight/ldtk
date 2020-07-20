@@ -15,9 +15,9 @@ class EntityInstance {
 	public var bottom(get,never) : Int; inline function get_bottom() return top + def.height-1;
 
 
-	public function new(p:Project, entityDefId:Int) {
+	public function new(p:Project, entityDefUid:Int) {
 		_project = p;
-		defUid = entityDefId;
+		defUid = entityDefUid;
 	}
 
 	@:keep public function toString() {

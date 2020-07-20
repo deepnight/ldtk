@@ -26,7 +26,7 @@ enum FieldType {
 	F_String;
 	F_Bool;
 	F_Color;
-	F_Enum(enumDefId:Int);
+	F_Enum(enumDefUid:Int);
 }
 
 enum ValueWrapper {

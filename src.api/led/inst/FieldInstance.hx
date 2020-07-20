@@ -10,9 +10,9 @@ class FieldInstance {
 	var internalValue : Null<ValueWrapper>;
 
 	@:allow(led.inst.EntityInstance)
-	private function new(p:Project, fieldDefId:Int) {
+	private function new(p:Project, fieldDefUid:Int) {
 		_project = p;
-		defUid = fieldDefId;
+		defUid = fieldDefUid;
 		internalValue = null;
 	}
 
