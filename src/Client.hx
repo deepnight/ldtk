@@ -78,11 +78,12 @@ class Client extends dn.Process {
 		session = {
 			lastFilePath: null,
 		}
-		if( loadFromLocalStorage() ) {
-			// Restore corresponding session info
-			session = dn.LocalStorage.readObject("session", session);
+		session = dn.LocalStorage.readObject("session", session);
+		if( !JsTools.fileExists(session.lastFilePath) || !loadProject(session.lastFilePath) ) {
+			selectProject( led.Project.createEmpty() );
+			N.error("Couldn't re-open last project ("+session.lastFilePath+"). Please start a new one, or load an existing one! ");
+			// TODO open project selection page
 		}
-
 
 		levelRender = new display.LevelRender();
 		rulers = new display.Rulers();
@@ -481,9 +482,16 @@ class Client extends dn.Process {
 		}
 	}
 
-	public function onSave() {
-		if( session.lastFilePath==null || !JsTools.fileExists(session.lastFilePath) ) {
-			N.error("Project file not found");
+	public function onSave(?bypassMissing=false) {
+		if( !bypassMissing && !JsTools.fileExists(session.lastFilePath) ) {
+			new ui.modal.dialog.Confirm(
+				Lang.t._("The project file is missing in ::path::. Save to this path anyway?", { path:session.lastFilePath }),
+				onSave.bind(true)
+			);
+		}
+
+		if( session.lastFilePath==null ) {
+			N.error("Unknown project path. Please reload your project file.");
 			return;
 		}
 
@@ -494,22 +502,35 @@ class Client extends dn.Process {
 }
 
 	public function onLoad() {
-		JsTools.loadDialog([".json"], function(path,bytes) {
-			try {
-				var json = haxe.Json.parse( bytes.toString() );
-				var p = led.Project.fromJson(json);
-				selectProject( p );
-				ui.Modal.closeAll();
-				N.msg("Loaded project: "+path);
-
-				session.lastFilePath = dn.FilePath.fromFile(path).full;
-				saveSessionDataToLocalStorage();
-				saveProjectToLocalStorage(json);
-			} catch( err:Dynamic ) {
-				N.error("Couldn't read this project file: "+err);
-			}
+		JsTools.loadDialog([".json"], function(path) {
+			loadProject(path);
 		});
 	}
+
+	function loadProject(filePath:String) {
+		if( !JsTools.fileExists(filePath) )
+			return false;
+
+		var json = null;
+		try {
+			var bytes = JsTools.readFileBytes(filePath);
+			json = haxe.Json.parse( bytes.toString() );
+			var p = led.Project.fromJson(json);
+			selectProject( p );
+		}
+		catch(err:Dynamic) {
+			N.error("Couldn't read project file: "+err);
+			return false;
+		}
+
+		ui.Modal.closeAll();
+		N.msg("Loaded project: "+filePath);
+
+		session.lastFilePath = dn.FilePath.fromFile(filePath).full;
+		saveSessionDataToLocalStorage();
+		saveProjectToLocalStorage(json);
+		return true;
+}
 
 
 	function onGlobalEvent(e:GlobalEvent) {
