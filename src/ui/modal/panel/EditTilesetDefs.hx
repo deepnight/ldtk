@@ -136,17 +136,16 @@ class EditTilesetDefs extends ui.modal.Panel {
 		i.onChange = client.ge.emit.bind(TilesetDefChanged);
 
 		var uploader = jForm.find("input[name=tilesetFile]");
-		uploader.attr("nwworkingdir",client.getCwd()+"\\tilesetTestImages");
+		uploader.attr("nwworkingdir",JsTools.getCwd()+"\\tilesetTestImages");
 		var label = uploader.siblings("[for="+uploader.attr("id")+"]");
 		label.text( !cur.hasAtlas() ? Lang.t._("Select an image file") : cur.getFileName(true) );
 		uploader.change( function(ev) {
 			var oldPath = cur.path;
 			var rawPath = uploader.val();
 			var relativePath = dn.FilePath.fromFile( rawPath );
-			relativePath.makeRelativeTo( client.getCwd() );
+			relativePath.makeRelativeTo( JsTools.getCwd() );
 
-			var buffer = js.node.Fs.readFileSync(rawPath);
-			var bytes = buffer.hxToBytes();
+			var bytes = JsTools.readFileBytes(rawPath);
 			if( !cur.importImage(relativePath.full, bytes) ) {
 				switch dn.Identify.getType(bytes) {
 					case Png, Gif:

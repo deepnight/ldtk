@@ -2,7 +2,6 @@ package misc;
 
 class JsTools {
 	public static function init() {
-		js.node.Require.require("fs");
 	}
 
 	public static function makeSortable(selector:String, onSort:(from:Int, to:Int)->Void) {
@@ -119,11 +118,10 @@ class JsTools {
 			var path = dn.FilePath.fromFile("tpl/"+name);
 			path.extension = "html";
 
-			if( !js.node.Fs.existsSync(path.full) )
+			if( !fileExists(path.full) )
 				throw "File not found "+path.full;
 
-			var buffer = js.node.Fs.readFileSync(path.full);
-			_fileCache.set( name, buffer.toString() );
+			_fileCache.set( name, readFileString(path.full) );
 		}
 
 		return _fileCache.get(name);
@@ -159,10 +157,8 @@ class JsTools {
 
 		input.change( function(ev) {
 			var path = input.val();
-			var buffer = js.node.Fs.readFileSync(path);
-			var bytes = buffer.hxToBytes();
 			input.remove();
-			onLoad(path, bytes);
+			onLoad(path, readFileBytes(path));
 		});
 		input.click();
 	}
@@ -177,8 +173,7 @@ class JsTools {
 
 		input.change( function(ev) {
 			var path = input.val();
-			var buffer = js.node.Buffer.hxFromBytes(bytes);
-			js.node.Fs.writeFileSync(path, buffer);
+			writeFileBytes(path, bytes);
 			input.remove();
 			onSave(path);
 		});
@@ -223,4 +218,36 @@ class JsTools {
 			ui.Tip.attach(jElem, jElem.data("str"), "infoTip");
 		});
 	}
+
+
+	// *** File API **************************************
+
+	public static function fileExists(path:String) {
+		js.node.Require.require("fs");
+		return js.node.Fs.existsSync(path);
+	}
+
+	public static function readFileString(path:String) : Null<String> {
+		if( !fileExists(path) )
+			return null;
+		else
+			return js.node.Fs.readFileSync(path).toString();
+	}
+
+	public static function readFileBytes(path:String) : Null<haxe.io.Bytes> {
+		if( !fileExists(path) )
+			return null;
+		else
+			return js.node.Fs.readFileSync(path).hxToBytes();
+	}
+
+	public static function writeFileBytes(path:String, bytes:haxe.io.Bytes) {
+		js.node.Require.require("fs");
+		js.node.Fs.writeFileSync( path, js.node.Buffer.hxFromBytes(bytes) );
+	}
+
+	public static function getCwd() {
+		return js.Node.process.cwd();
+	}
+
 }

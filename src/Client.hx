@@ -179,10 +179,6 @@ class Client extends dn.Process {
 		ge.emit(ProjectSelected);
 	}
 
-	public function getCwd() {
-		return js.Node.process.cwd();
-	}
-
 	function onJsKeyDown(ev:js.jquery.Event) {
 		if( ev.keyCode==K.TAB && !ui.Modal.hasAnyOpen() )
 			ev.preventDefault();
@@ -483,14 +479,13 @@ class Client extends dn.Process {
 	}
 
 	public function onSave() {
-		if( session.lastFilePath==null || !js.node.Fs.existsSync(session.lastFilePath) ) {
+		if( session.lastFilePath==null || !JsTools.fileExists(session.lastFilePath) ) {
 			onSaveAs();
 			return;
 		}
 
 		var data = makeProjectFile();
-		var buffer = js.node.Buffer.hxFromBytes(data.bytes);
-		js.node.Fs.writeFileSync(session.lastFilePath, buffer);
+		JsTools.writeFileBytes(session.lastFilePath, data.bytes);
 		saveProjectToLocalStorage(data.json);
 		N.msg("Saved to "+session.lastFilePath);
 }
