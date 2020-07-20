@@ -92,7 +92,7 @@ class Cursor extends dn.Process {
 				var o = display.LevelRender.createEntityRender(def, wrapper);
 
 			case Tiles(li, tileIds, cx, cy):
-				var td = project.defs.getTilesetDef( li.def.tilesetDefId );
+				var td = project.defs.getTilesetDef( li.def.tilesetDefUid );
 				var left = Const.INFINITE;
 				var top = Const.INFINITE;
 				for(tid in tileIds) {

@@ -13,7 +13,7 @@ class LayerDef {
 	var intGridValues : Array<IntGridValueDef> = [];
 
 	// Tileset
-	public var tilesetDefId : Null<Int>;
+	public var tilesetDefUid : Null<Int>;
 	public var tilePivotX(default,set) : Float;
 	public var tilePivotY(default,set) : Float;
 
@@ -47,7 +47,7 @@ class LayerDef {
 		for( v in JsonTools.readArray(json.intGridValues) )
 			o.intGridValues.push(v);
 
-		o.tilesetDefId = JsonTools.readNullableInt(json.tilesetDefId);
+		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
 		o.tilePivotX = JsonTools.readFloat(json.tilePivotX, 0);
 		o.tilePivotY = JsonTools.readFloat(json.tilePivotY, 0);
 
@@ -64,7 +64,7 @@ class LayerDef {
 
 			intGridValues: intGridValues,
 
-			tilesetDefId: tilesetDefId,
+			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,
 			tilePivotY: tilePivotY,
 		}
@@ -114,7 +114,7 @@ class LayerDef {
 
 
 
-	public function hasTileset() return tilesetDefId!=null;
+	public function hasTileset() return tilesetDefUid!=null;
 
 
 	inline function set_tilePivotX(v) return tilePivotX = dn.M.fclamp(v, 0, 1);

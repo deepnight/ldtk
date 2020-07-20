@@ -339,7 +339,7 @@ class Client extends dn.Process {
 			case Tile(li, cx, cy):
 				selectLayerInstance(li);
 				var tid = li.getGridTile(cx,cy);
-				var td = project.defs.getTilesetDef(li.def.tilesetDefId);
+				var td = project.defs.getTilesetDef(li.def.tilesetDefUid);
 				var savedSel = td.getSavedSelectionFor(tid);
 
 				var t = curTool.as(tool.TileTool);

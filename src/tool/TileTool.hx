@@ -2,7 +2,7 @@ package tool;
 
 class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 	public var curTilesetDef(get,never) : Null<led.def.TilesetDef>;
-	inline function get_curTilesetDef() return client.project.defs.getTilesetDef( client.curLayerInstance.def.tilesetDefId );
+	inline function get_curTilesetDef() return client.project.defs.getTilesetDef( client.curLayerInstance.def.tilesetDefUid );
 
 	public function new() {
 		super();

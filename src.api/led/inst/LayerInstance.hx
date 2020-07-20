@@ -302,7 +302,7 @@ class LayerInstance {
 					if( getGridTile(cx,cy)==null )
 						continue;
 
-					var td = _project.defs.getTilesetDef(def.tilesetDefId);
+					var td = _project.defs.getTilesetDef(def.tilesetDefUid);
 					var t = td.getTile( getGridTile(cx,cy) );
 					t.setCenterRatio(def.tilePivotX, def.tilePivotY);
 					var bmp = new h2d.Bitmap(t, target);

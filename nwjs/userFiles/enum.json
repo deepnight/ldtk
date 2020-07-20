@@ -19,7 +19,7 @@
 						"color":0
 					}
 				],
-				"tilesetDefId":null,
+				"tilesetDefUid":null,
 				"tilePivotX":0,
 				"tilePivotY":0
 			},
@@ -39,7 +39,7 @@
 						"color":0
 					}
 				],
-				"tilesetDefId":null,
+				"tilesetDefUid":null,
 				"tilePivotX":0,
 				"tilePivotY":0
 			}

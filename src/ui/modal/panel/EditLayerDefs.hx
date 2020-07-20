@@ -220,19 +220,19 @@ class EditLayerDefs extends ui.modal.Panel {
 						opt.text( td.identifier );
 					}
 
-					select.val( cur.tilesetDefId==null ? -1 : cur.tilesetDefId );
+					select.val( cur.tilesetDefUid==null ? -1 : cur.tilesetDefUid );
 
 					// Change tileset
 					select.change( function(ev) {
 						var v = Std.parseInt( select.val() );
 						if( v<0 )
-							cur.tilesetDefId = null;
+							cur.tilesetDefUid = null;
 						else
-							cur.tilesetDefId = v;
+							cur.tilesetDefUid = v;
 						client.ge.emit(LayerDefChanged);
 					});
 
-					var td = project.defs.getTilesetDef(cur.tilesetDefId);
+					var td = project.defs.getTilesetDef(cur.tilesetDefUid);
 					if( td!=null && cur.gridSize!=td.tileGridSize && ( td.tileGridSize<cur.gridSize || td.tileGridSize%cur.gridSize!=0 ) ) {
 						var warn = new J('<div class="tmp warning"/>');
 						warn.appendTo( select.parent() );
@@ -245,7 +245,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					bt.text( Lang.t._("Edit") );
 					bt.click( function(_) {
 						close();
-						new ui.modal.panel.EditTilesetDefs( project.defs.getTilesetDef(cur.tilesetDefId) );
+						new ui.modal.panel.EditTilesetDefs( project.defs.getTilesetDef(cur.tilesetDefUid) );
 					});
 				}
 
