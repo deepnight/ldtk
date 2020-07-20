@@ -1,0 +1,6 @@
+app.hxml
+
+-D nwjs
+-debug
+
+-js nwjs/js/app.js

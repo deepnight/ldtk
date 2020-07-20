@@ -9,7 +9,7 @@
 			"type": "nwjs",
 			"request": "launch",
 			"webRoot":"${workspaceFolder}/nwjs",
-			"preLaunchTask": "JS debug"
+			"preLaunchTask": "NWJS debug"
 		}
 	]
 }

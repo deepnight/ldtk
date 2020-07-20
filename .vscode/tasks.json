@@ -2,9 +2,9 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "JS debug",
+			"label": "Electron debug",
 			"type": "hxml",
-			"file": "app.debug.hxml",
+			"file": "app.electron.hxml",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",
@@ -25,12 +25,10 @@
 				"isDefault": true
 			}
 		},
-
-
 		{
-			"label": "JS release",
+			"label": "NWJS debug",
 			"type": "hxml",
-			"file": "app.hxml",
+			"file": "app.nwjs.hxml",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",
@@ -48,6 +46,7 @@
 			},
 			"group": {
 				"kind": "build",
+				"isDefault": true
 			}
 		}
 	]

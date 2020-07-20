@@ -3,32 +3,46 @@
 	"skipSwitchToOutput": false,
 	"skipErrorMessage": true,
 	"commands": [
+
+
 		{
-			"text": "⚙ Build debug",
+			"text": "⚙ Build Electron",
 			"color": "yellow",
 			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|JS debug",
+			"command": "workbench.action.tasks.runTask|Electron debug",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -10
 		},
 		{
-			"text": "⚙ Build release",
-			"color": "cyan",
-			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|JS release",
+			"text": "💻 Run Electron",
+			"color": "yellow",
+			"command": "run.electron.cmd",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -11
 		},
+
+
+		{
+			"text": "⚙ Build NWJS",
+			"color": "cyan",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|NWJS debug",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -20
+		},
 		{
 			"text": "💻 Run NWJS",
-			"color": "white",
-			"command": "run.cmd",
+			"color": "cyan",
+			"command": "run.nwjs.cmd",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -21
 		},
+
+
 		{
 			"text": "🅰️ Build POT",
 			"color": "white",
@@ -38,6 +52,8 @@
 			"skipTerminateQuickPick": false,
 			"priority": -40
 		},
+
+
 		{
 			"text": "📦 Redist",
 			"color": "lightgreen",

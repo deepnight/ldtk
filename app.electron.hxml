@@ -1,0 +1,7 @@
+app.hxml
+
+-lib hxelectron
+-D electron
+-debug
+
+-js electron/js/app.js
