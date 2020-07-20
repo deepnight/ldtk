@@ -115,7 +115,7 @@ class JsTools {
 
 	public static function getHtmlTemplate(name:String) : Null<String> {
 		if( !_fileCache.exists(name) ) {
-			var path = dn.FilePath.fromFile("tpl/"+name);
+			var path = dn.FilePath.fromFile(Boot.APP_ROOT + "tpl/" + name);
 			path.extension = "html";
 
 			if( !fileExists(path.full) )
@@ -249,6 +249,15 @@ class JsTools {
 	public static function writeFileBytes(path:String, bytes:haxe.io.Bytes) {
 		js.node.Require.require("fs");
 		js.node.Fs.writeFileSync( path, js.node.Buffer.hxFromBytes(bytes) );
+	}
+
+	public static function setCwd(dir:String) {
+		var fp = dn.FilePath.fromDir(dir);
+		if( isWindows() )
+			fp.useBackslashes();
+		else
+			fp.useSlashes();
+		js.Node.process.chdir(fp.full);
 	}
 
 	public static function getCwd() {
