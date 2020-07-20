@@ -7,7 +7,7 @@ class Level {
 	public var identifier(default,set): String;
 	public var pxWid : Int;
 	public var pxHei : Int;
-	public var layerInstances : Map<Int,led.inst.LayerInstance> = new Map();
+	public var layerInstances : Map<String,led.inst.LayerInstance> = new Map(); // TODO make an array here
 
 
 	@:allow(led.Project)
@@ -19,7 +19,7 @@ class Level {
 		this.identifier = "Level"+uid;
 
 		for(ld in _project.defs.layers)
-			layerInstances.set( ld.uid, new led.inst.LayerInstance(_project, uid, ld.uid) );
+			layerInstances.set( ld.identifier, new led.inst.LayerInstance(_project, uid, ld.identifier) );
 	}
 
 	function set_identifier(id:String) {
@@ -68,14 +68,14 @@ class Level {
 
 		if( id!=null ) {
 			for(li in layerInstances)
-				if( li.def.identifier==id )
+				if( li.layerDefId==id )
 					return li;
 			throw "Unknown layer "+id;
 		}
-		else if( !layerInstances.exists(layerDef.uid) )
+		else if( !layerInstances.exists(layerDef.identifier) )
 			throw "Missing layer instance for "+layerDef.identifier;
 		else
-			return layerInstances.get( layerDef.uid );
+			return layerInstances.get( layerDef.identifier );
 	}
 
 	public function tidy(p:Project) {
@@ -87,8 +87,8 @@ class Level {
 
 		// Create missing layerInstances
 		for(ld in _project.defs.layers)
-			if( !layerInstances.exists(ld.uid) )
-				layerInstances.set( ld.uid, new led.inst.LayerInstance(_project, uid, ld.uid) );
+			if( !layerInstances.exists(ld.identifier) )
+				layerInstances.set( ld.identifier, new led.inst.LayerInstance(_project, uid, ld.identifier) );
 
 		// Layer instances content
 		for(li in layerInstances)

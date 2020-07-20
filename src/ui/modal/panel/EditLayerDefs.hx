@@ -114,7 +114,12 @@ class EditLayerDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( cur.identifier, jForm.find("input[name='name']") );
 		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.defs.isLayerNameUnique(id);
 		i.validityError = N.invalidIdentifier;
-		i.onChange = client.ge.emit.bind(LayerDefChanged);
+		var old = cur.identifier;
+		i.onChange = function() {
+			project.defs.renameLayerDef(old,cur.identifier);
+			old = cur.identifier;
+			client.ge.emit(LayerDefChanged);
+		}
 
 		var i = Input.linkToHtmlInput( cur.gridSize, jForm.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);

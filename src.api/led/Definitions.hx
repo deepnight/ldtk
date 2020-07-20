@@ -67,28 +67,24 @@ class Definitions {
 		return false;
 	}
 
-	public function getLayerDef(?uid:Int, ?id:String) : Null<led.def.LayerDef> {
-		if( uid==null && id==null )
-			throw "Need 1 parameter";
-
+	public function getLayerDef(id:String) : Null<led.def.LayerDef> {
 		for(ld in layers)
-			if( ld.uid==uid || ld.identifier==id )
+			if( ld.identifier==id )
 				return ld;
 		return null;
 	}
 
 	public function createLayerDef(type:LayerType, ?id:String) : led.def.LayerDef {
-		var l = new led.def.LayerDef(_project.makeUniqId(), type);
-
+		// Make & check the identifier
 		id = Project.cleanupIdentifier(id, true);
-		if( id==null ) {
+		if( id==null || !isLayerNameUnique(id) ) {
 			id = Std.string(type);
 			var idx = 2;
 			while( !isLayerNameUnique(id) )
 				id = Std.string(type) + (idx++);
 		}
-		l.identifier = id;
 
+		var l = new led.def.LayerDef(type, id);
 		l.gridSize = _project.defaultGridSize;
 		layers.push(l);
 		_project.tidy();
@@ -123,6 +119,15 @@ class Definitions {
 		return moved;
 	}
 
+
+	public function renameLayerDef(from:String, to:String) {
+		for(l in _project.levels) {
+			var li = l.getLayerInstance(from);
+			li.layerDefId = to;
+			l.layerInstances.remove(from);
+			l.layerInstances.set(to, li);
+		}
+	}
 
 
 	/**  ENTITY DEFS  *****************************************/

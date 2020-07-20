@@ -29,7 +29,7 @@ class Client extends dn.Process {
 	public var session : SessionData;
 	public var project : led.Project;
 	public var curLevelId : Int;
-	var curLayerId : Int;
+	var curLayerId : Null<String>;
 	public var curTool : Tool<Dynamic>;
 	var keyDowns : Map<Int,Bool> = new Map();
 
@@ -163,12 +163,12 @@ class Client extends dn.Process {
 		project = p;
 		project.tidy();
 		curLevelId = project.levels[0].uid;
-		curLayerId = -1;
+		curLayerId = null;
 
 		// Pick 1st layer in current level
 		if( project.defs.layers.length>0 ) {
 			for(li in curLevel.layerInstances) {
-				curLayerId = li.def.uid;
+				curLayerId = li.def.identifier;
 				break;
 			}
 		}
@@ -416,10 +416,10 @@ class Client extends dn.Process {
 	}
 
 	public function selectLayerInstance(l:led.inst.LayerInstance) {
-		if( curLayerId==l.def.uid )
+		if( curLayerId==l.def.identifier )
 			return;
 
-		curLayerId = l.def.uid;
+		curLayerId = l.def.identifier;
 		ge.emit(LayerInstanceSelected);
 	}
 

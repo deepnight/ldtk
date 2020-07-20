@@ -3,9 +3,8 @@ package led.def;
 import led.LedTypes;
 
 class LayerDef {
-	public var uid(default,null) : Int;
-	public var type : LayerType;
 	public var identifier(default,set) : String;
+	public var type : LayerType;
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var displayOpacity : Float = 1.0;
 
@@ -17,14 +16,9 @@ class LayerDef {
 	public var tilePivotX(default,set) : Float;
 	public var tilePivotY(default,set) : Float;
 
-	public function new(uid:Int, t:LayerType) {
-		this.uid = uid;
+	public function new(t:LayerType, id:String) {
 		type = t;
-		#if editor
-		identifier = Lang.getLayerType(type)+uid;
-		#else
-		identifier = type+uid;
-		#end
+		identifier = id;
 		addIntGridValue(0x0);
 	}
 
@@ -38,8 +32,7 @@ class LayerDef {
 	}
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
-		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type, false));
-		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
+		var o = new LayerDef( JsonTools.readEnum(LayerType, json.type, false), JsonTools.readString(json.identifier) );
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
 
@@ -56,9 +49,8 @@ class LayerDef {
 
 	public function toJson() {
 		return {
-			uid: uid,
-			type: JsonTools.writeEnum(type, false),
 			identifier: identifier,
+			type: JsonTools.writeEnum(type, false),
 			gridSize: gridSize,
 			displayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
 

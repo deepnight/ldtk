@@ -8,7 +8,7 @@ class LevelHistory {
 
 	var curIndex = -1;
 	var states : haxe.ds.Vector< HistoryState >;
-	var mostAncientLayerStates : Map<Int, HistoryState> = new Map();
+	var mostAncientLayerStates : Map<String, HistoryState> = new Map();
 
 	public function new(lid) {
 		levelId = lid;
@@ -22,8 +22,8 @@ class LevelHistory {
 
 		// Add missing states
 		for(li in level.layerInstances)
-			if( !mostAncientLayerStates.exists(li.def.uid) )
-				mostAncientLayerStates.set( li.def.uid, Layer(li.def.uid, null, li.toJson()) );
+			if( !mostAncientLayerStates.exists(li.def.identifier) )
+				mostAncientLayerStates.set( li.def.identifier, Layer(li.def.identifier, null, li.toJson()) );
 
 		// Remove lost states (when def is removed)
 		// TODO

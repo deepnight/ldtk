@@ -8,7 +8,7 @@ class LayerInstance {
 	public var level(get,never) : Level; function get_level() return _project.getLevel(levelId);
 
 	public var levelId : Int;
-	public var layerDefId : Int;
+	public var layerDefId : String;
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
 
@@ -21,7 +21,7 @@ class LayerInstance {
 	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( level.pxHei / def.gridSize );
 
 
-	public function new(p:Project, levelId:Int, layerDefId:Int) {
+	public function new(p:Project, levelId:Int, layerDefId:String) {
 		_project = p;
 		this.levelId = levelId;
 		this.layerDefId = layerDefId;
@@ -62,7 +62,7 @@ class LayerInstance {
 	}
 
 	public static function fromJson(p:Project, json:Dynamic) {
-		var li = new led.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefId) );
+		var li = new led.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readString(json.layerDefId) );
 
 		for( intGridJson in JsonTools.readArray(json.intGrid) )
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );

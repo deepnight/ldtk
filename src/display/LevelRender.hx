@@ -6,8 +6,8 @@ class LevelRender extends dn.Process {
 
 	public var client(get,never) : Client; inline function get_client() return Client.ME;
 
-	var layerVis : Map<Int,Bool> = new Map();
-	var layerWrappers : Map<Int,h2d.Object> = new Map();
+	var layerVis : Map<String,Bool> = new Map();
+	var layerWrappers : Map<String,h2d.Object> = new Map();
 	var invalidated = true;
 
 	var bounds : h2d.Graphics;
@@ -173,7 +173,7 @@ class LevelRender extends dn.Process {
 		root.add(g, Const.DP_UI);
 	}
 
-	public inline function showHistoryBounds(layerId:Int, bounds:HistoryStateBounds, col:UInt) {
+	public inline function showHistoryBounds(layerId:String, bounds:HistoryStateBounds, col:UInt) {
 		showRect(bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
 	}
 
@@ -385,7 +385,7 @@ class LevelRender extends dn.Process {
 	function updateLayersVisibility() {
 		for(ld in client.project.defs.layers) {
 			var li = client.curLevel.getLayerInstance(ld);
-			var wrapper = layerWrappers.get(ld.uid);
+			var wrapper = layerWrappers.get(ld.identifier);
 			if( wrapper==null )
 				continue;
 

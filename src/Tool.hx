@@ -1,7 +1,7 @@
 import dn.Bresenham;
 
 class Tool<T> extends dn.Process {
-	static var SELECTION_MEMORY : Map<Int, Dynamic> = new Map();
+	static var SELECTION_MEMORY : Map<String, Dynamic> = new Map();
 
 	var client(get,never) : Client; inline function get_client() return Client.ME;
 	var project(get,never) : led.Project; inline function get_project() return Client.ME.project;

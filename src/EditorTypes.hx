@@ -72,8 +72,7 @@ enum ToolEditMode {
 
 enum HistoryState {
 	ResizedLevel(beforeJson:Dynamic, afterJson:Dynamic);
-	// FullLevel(json:Dynamic);
-	Layer(layerId:Int, bounds:Null<HistoryStateBounds>, json:Dynamic);
+	Layer(layerId:String, bounds:Null<HistoryStateBounds>, json:Dynamic);
 }
 
 typedef HistoryStateBounds = {
