@@ -232,6 +232,10 @@ class Client extends dn.Process {
 					else
 						onSave();
 
+			case K.O, K.L:
+				if( !hasInputFocus() && isCtrlDown() )
+					onLoad();
+
 			case K.H:
 				if( !hasInputFocus() )
 					onHelp();
