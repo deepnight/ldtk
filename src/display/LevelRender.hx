@@ -52,7 +52,7 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function set_focusLevelX(v) {
-		focusLevelX = client.curLevel==null
+		focusLevelX = client.curLevelId==null
 			? v
 			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, client.curLevel.pxWid+MAX_FOCUS_PADDING/zoom );
 		client.ge.emitAtTheEndOfFrame( ViewportChanged );
@@ -60,7 +60,7 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function set_focusLevelY(v) {
-		focusLevelY = client.curLevel==null
+		focusLevelY = client.curLevelId==null
 			? v
 			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, client.curLevel.pxHei+MAX_FOCUS_PADDING/zoom );
 		client.ge.emitAtTheEndOfFrame( ViewportChanged );
