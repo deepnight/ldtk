@@ -51,15 +51,15 @@ class Tool<T> extends dn.Process {
 
 	public function selectValue(v:T) {
 		if( curLayerInstance!=null )
-			SELECTION_MEMORY.set(curLayerInstance.layerDefId, v);
+			SELECTION_MEMORY.set(curLayerInstance.layerDefUid, v);
 		updatePalette();
 	}
 	public function getSelectedValue() : T {
 		return
 			curLayerInstance==null
 			? getDefaultValue()
-			: SELECTION_MEMORY.exists(curLayerInstance.layerDefId)
-				? SELECTION_MEMORY.get(curLayerInstance.layerDefId)
+			: SELECTION_MEMORY.exists(curLayerInstance.layerDefUid)
+				? SELECTION_MEMORY.get(curLayerInstance.layerDefUid)
 				: getDefaultValue();
 	}
 	function getDefaultValue() : T {

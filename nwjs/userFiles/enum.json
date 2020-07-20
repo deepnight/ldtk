@@ -1,8 +1,28 @@
 {
 	"dataVersion":1,
-	"nextUniqId":13,
+	"nextUniqId":14,
 	"defs":{
 		"layers":[
+			{
+				"uid":13,
+				"type":{
+					"id":0,
+					"p":[
+						
+					]
+				},
+				"identifier":"IntGrid",
+				"gridSize":16,
+				"displayOpacity":1,
+				"intGridValues":[
+					{
+						"color":0
+					}
+				],
+				"tilesetDefId":null,
+				"tilePivotX":0,
+				"tilePivotY":0
+			},
 			{
 				"uid":4,
 				"type":{
@@ -237,8 +257,25 @@
 			"pxHei":256,
 			"layerInstances":[
 				{
+					"_comment":"Level0->IntGrid",
 					"levelId":0,
-					"layerDefId":4,
+					"layerDefUid":13,
+					"pxOffsetX":0,
+					"pxOffsetY":0,
+					"intGrid":[
+						
+					],
+					"gridTiles":[
+						
+					],
+					"entityInstances":[
+						
+					]
+				},
+				{
+					"_comment":"Level0->Entities",
+					"levelId":0,
+					"layerDefUid":4,
 					"pxOffsetX":0,
 					"pxOffsetY":0,
 					"intGrid":[
@@ -249,6 +286,7 @@
 					],
 					"entityInstances":[
 						{
+							"_comment":"Mob",
 							"defId":2,
 							"x":88,
 							"y":80,
@@ -285,6 +323,7 @@
 							]
 						},
 						{
+							"_comment":"Mob",
 							"defId":2,
 							"x":168,
 							"y":80,
@@ -331,6 +370,7 @@
 							]
 						},
 						{
+							"_comment":"Mob",
 							"defId":2,
 							"x":72,
 							"y":144,
@@ -367,6 +407,7 @@
 							]
 						},
 						{
+							"_comment":"Mob",
 							"defId":2,
 							"x":136,
 							"y":224,
@@ -428,6 +469,7 @@
 							]
 						},
 						{
+							"_comment":"Mob",
 							"defId":2,
 							"x":216,
 							"y":176,

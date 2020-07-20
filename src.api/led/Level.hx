@@ -71,7 +71,7 @@ class Level {
 			uid = layerDef.uid;
 
 		for(li in layerInstances)
-			if( li.layerDefId==uid )
+			if( li.layerDefUid==uid )
 				return li;
 
 		throw "Missing layer instance for "+uid;
@@ -90,10 +90,10 @@ class Level {
 
 		// Create missing layerInstances & check if they're sorted in the same order as defs
 		for(i in 0..._project.defs.layers.length)
-			if( i>=layerInstances.length || layerInstances[i].layerDefId!=_project.defs.layers[i].uid ) {
+			if( i>=layerInstances.length || layerInstances[i].layerDefUid!=_project.defs.layers[i].uid ) {
 				var existing = new Map();
 				for(li in layerInstances)
-					existing.set(li.layerDefId, li);
+					existing.set(li.layerDefUid, li);
 				layerInstances = [];
 				for(ld in _project.defs.layers)
 					if( existing.exists(ld.uid) )

@@ -4,11 +4,11 @@ import led.LedTypes;
 
 class LayerInstance {
 	var _project : Project;
-	public var def(get,never) : led.def.LayerDef; inline function get_def() return _project.defs.getLayerDef(layerDefId);
+	public var def(get,never) : led.def.LayerDef; inline function get_def() return _project.defs.getLayerDef(layerDefUid);
 	public var level(get,never) : Level; function get_level() return _project.getLevel(levelId);
 
 	public var levelId : Int;
-	public var layerDefId : Int;
+	public var layerDefUid : Int;
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
 
@@ -21,10 +21,10 @@ class LayerInstance {
 	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( level.pxHei / def.gridSize );
 
 
-	public function new(p:Project, levelId:Int, layerDefId:Int) {
+	public function new(p:Project, levelId:Int, layerDefUid:Int) {
 		_project = p;
 		this.levelId = levelId;
-		this.layerDefId = layerDefId;
+		this.layerDefUid = layerDefUid;
 	}
 
 
@@ -37,7 +37,7 @@ class LayerInstance {
 		return {
 			_comment: level.identifier+"->"+def.identifier,
 			levelId: levelId,
-			layerDefId: layerDefId,
+			layerDefUid: layerDefUid,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
 			intGrid: {
@@ -63,7 +63,7 @@ class LayerInstance {
 	}
 
 	public static function fromJson(p:Project, json:Dynamic) {
-		var li = new led.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefId) );
+		var li = new led.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
 
 		for( intGridJson in JsonTools.readArray(json.intGrid) )
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );

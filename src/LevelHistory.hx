@@ -85,7 +85,7 @@ class LevelHistory {
 	}
 
 	public function saveLayerState(li:led.inst.LayerInstance) {
-		saveState( Layer(li.layerDefId, null, li.toJson()) );
+		saveState( Layer(li.layerDefUid, null, li.toJson()) );
 	}
 
 	public function saveResizedState(levelJsonBefore:Dynamic, levelJsonAfter:Dynamic)  {
@@ -102,7 +102,7 @@ class LevelHistory {
 				case ResizedLevel(beforeJson, afterJson):
 					var level = led.Level.fromJson(client.project, afterJson);
 					for(li in level.layerInstances)
-						mostAncientLayerStates.set( li.layerDefId, Layer(li.layerDefId, null, li.toJson()) );
+						mostAncientLayerStates.set( li.layerDefUid, Layer(li.layerDefUid, null, li.toJson()) );
 
 				case Layer(layerId, bounds, json):
 					mostAncientLayerStates.set( layerId, droppedState );
@@ -151,8 +151,8 @@ class LevelHistory {
 					case ResizedLevel(beforeJson, afterJson):
 						var level = led.Level.fromJson(client.project, afterJson);
 						for(li in level.layerInstances)
-							if( li.layerDefId==undoneLayerId ) {
-								before = Layer(li.layerDefId, null, li.toJson());
+							if( li.layerDefUid==undoneLayerId ) {
+								before = Layer(li.layerDefUid, null, li.toJson());
 								break;
 							}
 
@@ -217,7 +217,7 @@ class LevelHistory {
 
 			case Layer(layerId, bounds, json):
 				for( i in 0...level.layerInstances.length )
-					if( level.layerInstances[i].layerDefId==layerId )
+					if( level.layerInstances[i].layerDefUid==layerId )
 						level.layerInstances[i] = led.inst.LayerInstance.fromJson(client.project, json);
 				client.project.tidy(); // fix "_project" refs & possible broken "instance<->def" refs
 				client.ge.emit(LayerInstanceRestoredFromHistory);

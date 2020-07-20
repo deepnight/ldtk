@@ -143,23 +143,23 @@ class LevelRender extends dn.Process {
 	}
 
 	public inline function isLayerVisible(l:led.inst.LayerInstance) {
-		return l!=null && ( !layerVis.exists(l.layerDefId) || layerVis.get(l.layerDefId)==true );
+		return l!=null && ( !layerVis.exists(l.layerDefUid) || layerVis.get(l.layerDefUid)==true );
 	}
 
 	public function toggleLayer(l:led.inst.LayerInstance) {
-		layerVis.set(l.layerDefId, !isLayerVisible(l));
+		layerVis.set(l.layerDefUid, !isLayerVisible(l));
 		client.ge.emit(LayerInstanceVisiblityChanged);
 		if( isLayerVisible(l) )
 			invalidate();
 	}
 
 	public function showLayer(l:led.inst.LayerInstance) {
-		layerVis.set(l.layerDefId, true);
+		layerVis.set(l.layerDefUid, true);
 		client.ge.emit(LayerInstanceVisiblityChanged);
 	}
 
 	public function hideLayer(l:led.inst.LayerInstance) {
-		layerVis.set(l.layerDefId, false);
+		layerVis.set(l.layerDefUid, false);
 		client.ge.emit(LayerInstanceVisiblityChanged);
 	}
 
@@ -225,7 +225,7 @@ class LevelRender extends dn.Process {
 			var wrapper = new h2d.Object();
 			root.add(wrapper,Const.DP_MAIN);
 			root.under(wrapper);
-			layerWrappers.set(li.layerDefId, wrapper);
+			layerWrappers.set(li.layerDefUid, wrapper);
 			wrapper.x = li.pxOffsetX;
 			wrapper.y = li.pxOffsetY;
 
