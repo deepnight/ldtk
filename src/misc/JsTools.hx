@@ -251,7 +251,20 @@ class JsTools {
 	public static function getCwd() {
 		return js.Node.process.cwd();
 	}
-	
+
+	public static function exploreToFile(filePath:String) {
+		var fp = dn.FilePath.fromFile(filePath);
+		if( isWindows() )
+			fp.useBackslashes();
+		N.debug(fp.full);
+		nw.Shell.showItemInFolder(fp.full);
+	}
+
+	public static function isWindows() {
+		N.debug( js.Node.process.platform );
+		return js.Node.process.platform.toLowerCase().indexOf("win")==0;
+	}
+
 	#end
 
 }

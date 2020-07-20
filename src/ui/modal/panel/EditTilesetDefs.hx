@@ -74,7 +74,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Main tileset view
 		var jFull = jForm.find(".tileset canvas.fullPreview");
-		if( cur==null || !cur.hasAtlas() ) {
+		if( cur==null || !cur.isAtlasValid() ) {
 			var cnv = Std.downcast( jFull.get(0), js.html.CanvasElement );
 			cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
 		}
@@ -87,7 +87,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var cnv = Std.downcast( jDemo.get(0), js.html.CanvasElement );
 		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
 
-		if( cur!=null && cur.hasAtlas() ) {
+		if( cur!=null && cur.isAtlasValid() ) {
 			jDemo.attr("width", cur.tileGridSize*6 + padding*5);
 			jDemo.attr("height", cur.tileGridSize);
 
@@ -124,10 +124,21 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Image path
 		var jPath = jForm.find(".path");
-		jPath.empty();
-		if( cur.hasAtlas() )
-			for(e in cur.path.split("/"))
-				jPath.append('<span>$e</span>');
+		if( cur.path!=null ) {
+			jPath.empty();
+			var parts = cur.path.split("/").map( function(p) return '<span>$p</span>' );
+			jPath.append( parts.join('<span class="slash">/</span>') );
+		}
+		else
+			jPath.text("-- No file --");
+
+		// Locate button
+		var b = new J("button.locate");
+		if( cur.path==null )
+			b.hide();
+		b.off().click( function(ev) {
+			JsTools.exploreToFile(cur.path);
+		});
 
 		// Fields
 		var i = Input.linkToHtmlInput(cur.identifier, jForm.find("input[name='name']") );
@@ -135,18 +146,28 @@ class EditTilesetDefs extends ui.modal.Panel {
 		i.validityError = N.invalidIdentifier;
 		i.onChange = client.ge.emit.bind(TilesetDefChanged);
 
+		// "Import image" button
 		var uploader = jForm.find("input[name=tilesetFile]");
 		uploader.attr("nwworkingdir",JsTools.getCwd()+"\\tilesetTestImages");
 		var label = uploader.siblings("[for="+uploader.attr("id")+"]");
-		label.text( !cur.hasAtlas() ? Lang.t._("Select an image file") : cur.getFileName(true) );
+		if( cur.path==null )
+			label.text( Lang.t._("Select an image file") );
+		else if( !cur.isAtlasPathValid() )
+			label.text("ERROR: File not found!");
+		else if( !cur.isAtlasValid() )
+			label.text("ERROR: Couldn't read image data");
+		else
+			label.text("Replace image");
+
 		uploader.change( function(ev) {
 			var oldPath = cur.path;
-			var rawPath = uploader.val();
-			var relativePath = dn.FilePath.fromFile( rawPath );
-			relativePath.makeRelativeTo( JsTools.getCwd() );
+			var absPath = uploader.val();
+			// var relativePath = dn.FilePath.fromFile( absPath );
+			// relativePath.makeRelativeTo( JsTools.getCwd() );
 
-			var bytes = JsTools.readFileBytes(rawPath);
-			if( !cur.importImage(relativePath.full, bytes) ) {
+			var bytes = JsTools.readFileBytes(absPath);
+			if( !cur.importImage(absPath, bytes) ) { // TODO
+			// if( !cur.importImage(relativePath.full, bytes) ) {
 				switch dn.Identify.getType(bytes) {
 					case Png, Gif:
 						N.error("Couldn't read this image: maybe the data is corrupted or the format special?");
