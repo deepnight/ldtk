@@ -163,7 +163,7 @@ class JsTools {
 		input.click();
 	}
 
-	public static function saveAsDialog(bytes:haxe.io.Bytes, ?fileTypes:Array<String>, onSave:String->Void) {
+	public static function saveAsDialog(?fileTypes:Array<String>, onFileSelect:(filePath:String)->Void) {
 		var input = getTmpFileInput();
 
 		if( fileTypes==null || fileTypes.length==0 )
@@ -173,9 +173,8 @@ class JsTools {
 
 		input.change( function(ev) {
 			var path = input.val();
-			writeFileBytes(path, bytes);
 			input.remove();
-			onSave(path);
+			onFileSelect(path);
 		});
 		input.click();
 	}
@@ -251,7 +250,7 @@ class JsTools {
 	public static function getCwd() {
 		return js.Node.process.cwd();
 	}
-	
+
 	#end
 
 }

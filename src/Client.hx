@@ -469,12 +469,13 @@ class Client extends dn.Process {
 	}
 
 	public function onSaveAs() {
-		var data = makeProjectFile();
-		JsTools.saveAsDialog(data.bytes, [".json"], function(path) {
-			N.msg("Saved to "+path);
-			session.lastFilePath = path;
+		JsTools.saveAsDialog([".json"], function(filePath) {
+			var data = makeProjectFile();
+			JsTools.writeFileBytes(filePath, data.bytes);
+			session.lastFilePath = filePath;
 			saveSessionDataToLocalStorage();
 			saveProjectToLocalStorage(data.json);
+			N.msg("Saved to "+filePath);
 		});
 	}
 
