@@ -148,7 +148,7 @@ class JsTools {
 		return input;
 	}
 
-	public static function loadDialog(?fileTypes:Array<String>, onLoad:(path:String, bytes:haxe.io.Bytes)->Void) {
+	public static function loadDialog(?fileTypes:Array<String>, onLoad:(filePath:String)->Void) {
 		var input = getTmpFileInput();
 
 		if( fileTypes==null || fileTypes.length==0 )
@@ -158,12 +158,12 @@ class JsTools {
 		input.change( function(ev) {
 			var path = input.val();
 			input.remove();
-			onLoad(path, readFileBytes(path));
+			onLoad(path);
 		});
 		input.click();
 	}
 
-	public static function saveAsDialog(bytes:haxe.io.Bytes, ?fileTypes:Array<String>, onSave:String->Void) {
+	public static function saveAsDialog(?fileTypes:Array<String>, onFileSelect:(filePath:String)->Void) {
 		var input = getTmpFileInput();
 
 		if( fileTypes==null || fileTypes.length==0 )
@@ -173,9 +173,8 @@ class JsTools {
 
 		input.change( function(ev) {
 			var path = input.val();
-			writeFileBytes(path, bytes);
 			input.remove();
-			onSave(path);
+			onFileSelect(path);
 		});
 		input.click();
 	}
@@ -225,8 +224,12 @@ class JsTools {
 	#if hxnodejs
 
 	public static function fileExists(path:String) {
-		js.node.Require.require("fs");
-		return js.node.Fs.existsSync(path);
+		if( path==null )
+			return false;
+		else {
+			js.node.Require.require("fs");
+			return js.node.Fs.existsSync(path);
+		}
 	}
 
 	public static function readFileString(path:String) : Null<String> {

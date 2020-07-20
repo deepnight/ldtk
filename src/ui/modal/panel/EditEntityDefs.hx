@@ -334,7 +334,6 @@ class EditEntityDefs extends ui.modal.Panel {
 
 				enumDef.change( function(ev) {
 					var v = enumDef.val();
-					N.debug(v);
 					if( v=="" && curField.canBeNull )
 						curField.setDefault(null);
 					else if( v!="" )
