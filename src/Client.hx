@@ -76,12 +76,13 @@ class Client extends dn.Process {
 
 		// Restore last stored project state
 		session = {
-			lastFilePath: null,
+			projectPath: null,
 		}
 		session = dn.LocalStorage.readObject("session", session);
-		if( !JsTools.fileExists(session.lastFilePath) || !loadProject(session.lastFilePath) ) {
+		N.debug(session);
+		if( !JsTools.fileExists(session.projectPath) || !loadProject(session.projectPath) ) {
 			selectProject( led.Project.createEmpty() );
-			N.error("Couldn't re-open last project ("+session.lastFilePath+"). Please start a new one, or load an existing one! ");
+			N.error("Couldn't re-open last project ("+session.projectPath+"). Please start a new one, or load an existing one! ");
 			// TODO open project selection page
 		}
 
@@ -437,7 +438,7 @@ class Client extends dn.Process {
 				var data = makeProjectFile();
 				JsTools.writeFileBytes(fp.full, data.bytes);
 
-				session.lastFilePath = fp.full;
+				session.projectPath = fp.full;
 				saveSessionDataToLocalStorage();
 
 				N.msg("New project created: "+fp.full);
@@ -447,19 +448,19 @@ class Client extends dn.Process {
 		});
 	}
 
-	function loadFromLocalStorage() : Bool {
-		try {
-			var json = dn.LocalStorage.readJson("cookie");
-			if( json==null )
-				throw null;
-			project = led.Project.fromJson(json);
-			return true;
-		}
-		catch( err:Dynamic ) {
-			project = led.Project.createEmpty();
-			return false;
-		}
-	}
+	// function loadProjectFromLocalStorage() : Bool {
+	// 	try {
+			// var json = dn.LocalStorage.readJson("cookie");
+	// 		if( json==null )
+	// 			throw null;
+	// 		project = led.Project.fromJson(json);
+	// 		return true;
+	// 	}
+	// 	catch( err:Dynamic ) {
+	// 		project = led.Project.createEmpty();
+	// 		return false;
+	// 	}
+	// }
 
 	function saveProjectToLocalStorage(?json:Dynamic) {
 		if( json==null )
@@ -483,22 +484,17 @@ class Client extends dn.Process {
 	}
 
 	public function onSave(?bypassMissing=false) {
-		if( !bypassMissing && !JsTools.fileExists(session.lastFilePath) ) {
+		if( !bypassMissing && !JsTools.fileExists(session.projectPath) ) {
 			new ui.modal.dialog.Confirm(
-				Lang.t._("The project file is missing in ::path::. Save to this path anyway?", { path:session.lastFilePath }),
+				Lang.t._("The project file is missing in ::path::. Save to this path anyway?", { path:session.projectPath }),
 				onSave.bind(true)
 			);
 		}
 
-		if( session.lastFilePath==null ) {
-			N.error("Unknown project path. Please reload your project file.");
-			return;
-		}
-
 		var data = makeProjectFile();
-		JsTools.writeFileBytes(session.lastFilePath, data.bytes);
+		JsTools.writeFileBytes(session.projectPath, data.bytes);
 		saveProjectToLocalStorage(data.json);
-		N.msg("Saved to "+session.lastFilePath);
+		N.msg("Saved to "+session.projectPath);
 }
 
 	public function onLoad() {
@@ -526,7 +522,7 @@ class Client extends dn.Process {
 		ui.Modal.closeAll();
 		N.msg("Loaded project: "+filePath);
 
-		session.lastFilePath = dn.FilePath.fromFile(filePath).full;
+		session.projectPath = dn.FilePath.fromFile(filePath).full;
 		saveSessionDataToLocalStorage();
 		saveProjectToLocalStorage(json);
 		return true;
