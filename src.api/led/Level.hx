@@ -7,7 +7,7 @@ class Level {
 	public var identifier(default,set): String;
 	public var pxWid : Int;
 	public var pxHei : Int;
-	public var layerInstances : Map<String,led.inst.LayerInstance> = new Map(); // TODO make an array here
+	public var layerInstances : Array<led.inst.LayerInstance> = [];
 
 
 	@:allow(led.Project)
@@ -19,7 +19,7 @@ class Level {
 		this.identifier = "Level"+uid;
 
 		for(ld in _project.defs.layers)
-			layerInstances.set( ld.identifier, new led.inst.LayerInstance(_project, uid, ld.identifier) );
+			layerInstances.push( new led.inst.LayerInstance(_project, uid, ld.identifier) );
 	}
 
 	function set_identifier(id:String) {
@@ -52,7 +52,7 @@ class Level {
 
 		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
 			var li = led.inst.LayerInstance.fromJson(p, layerJson);
-			l.layerInstances.set(li.layerDefId, li);
+			l.layerInstances.push(li);
 		}
 
 		return l;
@@ -62,33 +62,38 @@ class Level {
 		return x>=0 && x<pxWid && y>=0 && y<pxHei;
 	}
 
-	public function getLayerInstance(?id:String, ?layerDef:led.def.LayerDef) : led.inst.LayerInstance {
+	public function getLayerInstance(?id:String, ?layerDef:led.def.LayerDef) : Null<led.inst.LayerInstance> {
 		if( id==null && layerDef==null )
 			throw "Need 1 parameter";
 
-		if( id!=null ) {
-			for(li in layerInstances)
-				if( li.layerDefId==id )
-					return li;
-			throw "Unknown layer "+id;
-		}
-		else if( !layerInstances.exists(layerDef.identifier) )
-			throw "Missing layer instance for "+layerDef.identifier;
-		else
-			return layerInstances.get( layerDef.identifier );
+		if( id==null )
+			id = layerDef.identifier;
+
+		for(li in layerInstances)
+			if( li.layerDefId==id )
+				return li;
+
+		return null;
 	}
 
 	public function tidy(p:Project) {
 		_project = p;
 		// Remove layerInstances without layerDefs
-		for(e in layerInstances.keyValueIterator())
-			if( e.value.def==null )
-				layerInstances.remove(e.key);
+		var i = 0;
+		while( i<layerInstances.length )
+			if( layerInstances[i].def==null )
+				layerInstances.splice(i,1);
+			else
+				i++;
 
-		// Create missing layerInstances
-		for(ld in _project.defs.layers)
-			if( !layerInstances.exists(ld.identifier) )
-				layerInstances.set( ld.identifier, new led.inst.LayerInstance(_project, uid, ld.identifier) );
+		// Create missing layerInstances (NOTE: this array is assumed to be sorted)
+		var i = 0;
+		while( i<_project.defs.layers.length ) {
+			var ld = _project.defs.layers[i];
+			if( i>=layerInstances.length || layerInstances[i].layerDefId!=ld.identifier )
+				layerInstances.insert(i, new led.inst.LayerInstance(_project, uid, ld.identifier));
+			i++;
+		}
 
 		// Layer instances content
 		for(li in layerInstances)

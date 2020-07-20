@@ -124,8 +124,6 @@ class Definitions {
 		for(l in _project.levels) {
 			var li = l.getLayerInstance(from);
 			li.layerDefId = to;
-			l.layerInstances.remove(from);
-			l.layerInstances.set(to, li);
 		}
 	}
 
