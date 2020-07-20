@@ -402,6 +402,10 @@ ul.niceList li:not(.active):hover {
   background-image: url("/img/icons/projectSettings.png");
 }
 
+.icon.enum {
+  background-image: url("/img/icons/enum.png");
+}
+
 .icon.mouseLeft {
   background-image: url("/img/icons/mouseLeft.png");
   image-rendering: pixelated;
@@ -1401,71 +1405,68 @@ textarea:focus {
 
 .window.panel.projectSettings .content {
   display: grid;
-  grid-template-columns: 200px auto;
-  grid-template-rows: repeat(min-content, 4) auto;
+  grid-template-columns: auto;
+  grid-template-rows: min-content min-content auto;
   gap: 16px;
   height: 100%;
 }
 
 .window.panel.projectSettings .content h2 {
-  grid-column: 1/3;
+  margin-bottom: 0;
 }
 
 .window.panel.projectSettings .content .buttons.main {
+  margin-bottom: 10px;
+}
+
+.window.panel.editEnums .content {
+  display: grid;
+  grid-template-columns: 200px auto;
+  grid-template-rows: min-content auto;
+  gap: 16px;
+  height: 100%;
+}
+
+.window.panel.editEnums .content .header {
   grid-column: 1/3;
 }
 
-.window.panel.projectSettings .content .projectForm {
-  grid-column: 1/3;
-}
-
-.window.panel.projectSettings .content .help {
-  grid-column: 1/3;
-  grid-row: 4/5;
-}
-
-.window.panel.projectSettings .content .enumList {
+.window.panel.editEnums .content .enumList {
   grid-column: 1/2;
-  grid-row: 5/6;
   display: grid;
   grid-template-rows: auto min-content;
   overflow: hidden;
 }
 
-.window.panel.projectSettings .content .enumList ul {
+.window.panel.editEnums .content .enumList ul {
   overflow: auto;
 }
 
-.window.panel.projectSettings .content .enumForm {
+.window.panel.editEnums .content .enumForm {
   grid-column: 2/3;
-  grid-row: 5/6;
 }
 
-.window.panel.projectSettings .content .enumForm textarea {
+.window.panel.editEnums .content .enumForm textarea {
   height: 200px;
 }
 
-.window.panel.projectSettings .content .enumForm ul.enumValues li {
+.window.panel.editEnums .content .enumForm ul.enumValues li {
   display: grid;
   gap: 2px;
   grid-template-columns: auto min-content 32px;
   margin-bottom: 4px;
 }
 
-.window.panel.projectSettings .content .enumForm ul.enumValues li input[type=color] {
+.window.panel.editEnums .content .enumForm ul.enumValues li input[type=color] {
   height: 24px;
 }
 
-.window.panel.projectSettings .content .enumForm ul.enumValues li input[type=text] {
+.window.panel.editEnums .content .enumForm ul.enumValues li input[type=text] {
   padding: 3px;
 }
 
-.window.panel.projectSettings .content .enumForm ul.enumValues li button, .window.panel.projectSettings .content .enumForm ul.enumValues li label.file {
+.window.panel.editEnums .content .enumForm ul.enumValues li button, .window.panel.editEnums .content .enumForm ul.enumValues li label.file {
   padding: 0;
-}
-
-.window.panel.projectSettings .buttons.main {
-  margin-bottom: 10px;
 }
 
 .window.panel.layerDefs .mainList ul:empty::before {

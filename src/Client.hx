@@ -134,6 +134,14 @@ class Client extends dn.Process {
 		});
 		ui.Tip.attach(jMainPanel.find("button.editTilesets"), "Tilesets");
 
+		jMainPanel.find("button.editEnums").click( function(_) {
+			if( ui.Modal.isOpen(ui.modal.panel.EditEnums) )
+				ui.Modal.closeAll();
+			else
+				new ui.modal.panel.EditEnums();
+		});
+		ui.Tip.attach(jMainPanel.find("button.editEnums"), "Entity enums");
+
 		jMainPanel.find("button.showHelp").click( function(_) {
 			onHelp();
 		});
