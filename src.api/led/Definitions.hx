@@ -67,9 +67,12 @@ class Definitions {
 		return false;
 	}
 
-	public function getLayerDef(uid:Int) : Null<led.def.LayerDef> {
+	public function getLayerDef(?uid:Int, ?id:String) : Null<led.def.LayerDef> {
+		if( uid==null && id==null )
+			throw "Need 1 parameter";
+
 		for(ld in layers)
-			if( ld.uid==uid )
+			if( ld.uid==uid || ld.identifier==id )
 				return ld;
 		return null;
 	}
