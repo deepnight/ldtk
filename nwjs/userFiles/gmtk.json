@@ -540,7 +540,7 @@
 					"entityInstances":[
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":72,
 							"y":144,
 							"fieldInstances":[
@@ -549,18 +549,18 @@
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":200,
 							"y":128,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -572,18 +572,18 @@
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":200,
 							"y":160,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -595,18 +595,18 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":232,
 							"y":136,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -618,7 +618,7 @@
 						},
 						{
 							"__comment__":"Cart",
-							"defId":19,
+							"defUid":19,
 							"x":40,
 							"y":144,
 							"fieldInstances":[
@@ -627,13 +627,13 @@
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":152,
 							"y":40,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -643,7 +643,7 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -655,13 +655,13 @@
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":152,
 							"y":72,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -671,7 +671,7 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -1884,7 +1884,7 @@
 					"entityInstances":[
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":88,
 							"y":192,
 							"fieldInstances":[
@@ -1893,7 +1893,7 @@
 						},
 						{
 							"__comment__":"Cart",
-							"defId":19,
+							"defUid":19,
 							"x":120,
 							"y":192,
 							"fieldInstances":[
@@ -1902,13 +1902,13 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":152,
 							"y":56,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -1918,56 +1918,56 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":296,
 							"y":80,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":216,
 							"y":32,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":232,
 							"y":40,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -1977,7 +1977,7 @@
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -1987,7 +1987,7 @@
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -1999,13 +1999,13 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":216,
 							"y":88,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -2015,20 +2015,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":152,
 							"y":120,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -2038,7 +2038,7 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":null
 								}
 							]
@@ -2790,7 +2790,7 @@
 					"entityInstances":[
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":56,
 							"y":96,
 							"fieldInstances":[
@@ -2799,7 +2799,7 @@
 						},
 						{
 							"__comment__":"Cart",
-							"defId":19,
+							"defUid":19,
 							"x":456,
 							"y":176,
 							"fieldInstances":[
@@ -2808,13 +2808,13 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":456,
 							"y":264,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -2824,20 +2824,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":392,
 							"y":168,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -2847,128 +2847,128 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":408,
 							"y":240,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":456,
 							"y":240,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":440,
 							"y":208,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":456,
 							"y":304,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":312,
 							"y":192,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":376,
 							"y":176,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":360,
 							"y":104,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -2978,14 +2978,14 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Pointer",
-							"defId":34,
+							"defUid":34,
 							"x":248,
 							"y":96,
 							"fieldInstances":[
@@ -2994,13 +2994,13 @@
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":88,
 							"y":56,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -3010,20 +3010,20 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":280,
 							"y":296,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -3033,43 +3033,43 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":424,
 							"y":272,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":472,
 							"y":272,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
@@ -6893,7 +6893,7 @@
 					"entityInstances":[
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":120,
 							"y":112,
 							"fieldInstances":[
@@ -6902,7 +6902,7 @@
 						},
 						{
 							"__comment__":"Cart",
-							"defId":19,
+							"defUid":19,
 							"x":136,
 							"y":80,
 							"fieldInstances":[
@@ -6911,13 +6911,13 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":216,
 							"y":88,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -6927,20 +6927,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":328,
 							"y":104,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -6950,20 +6950,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":216,
 							"y":136,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -6973,20 +6973,20 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":216,
 							"y":56,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -6996,7 +6996,7 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":null
 								}
 							]
@@ -8336,7 +8336,7 @@
 					"entityInstances":[
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":88,
 							"y":128,
 							"fieldInstances":[
@@ -8345,67 +8345,67 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":216,
 							"y":216,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":280,
 							"y":152,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":328,
 							"y":216,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":280,
 							"y":200,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -8415,20 +8415,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":328,
 							"y":136,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -8438,20 +8438,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":72,
 							"y":232,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -8461,14 +8461,14 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":136,
 							"y":96,
 							"fieldInstances":[
@@ -8477,13 +8477,13 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":248,
 							"y":88,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -8493,20 +8493,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":216,
 							"y":40,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -8516,14 +8516,14 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Cart",
-							"defId":19,
+							"defUid":19,
 							"x":72,
 							"y":192,
 							"fieldInstances":[
@@ -8532,13 +8532,13 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":200,
 							"y":152,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -8548,20 +8548,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":152,
 							"y":216,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -8571,7 +8571,7 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
@@ -9451,7 +9451,7 @@
 					"entityInstances":[
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":88,
 							"y":240,
 							"fieldInstances":[
@@ -9460,7 +9460,7 @@
 						},
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":152,
 							"y":208,
 							"fieldInstances":[
@@ -9469,7 +9469,7 @@
 						},
 						{
 							"__comment__":"Cart",
-							"defId":19,
+							"defUid":19,
 							"x":104,
 							"y":224,
 							"fieldInstances":[
@@ -9478,103 +9478,103 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":136,
 							"y":168,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":216,
 							"y":248,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":40,
 							"y":248,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":104,
 							"y":72,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":168,
 							"y":72,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"BossDoor",
-							"defId":24,
+							"defUid":24,
 							"x":136,
 							"y":128,
 							"fieldInstances":[
 								{
 									"__comment__":"Time (Int)",
-									"defId":25,
+									"defUid":25,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -9586,13 +9586,13 @@
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":136,
 							"y":40,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -9602,7 +9602,7 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":null
 								}
 							]
@@ -10110,20 +10110,20 @@
 					"entityInstances":[
 						{
 							"__comment__":"BossDoor",
-							"defId":24,
+							"defUid":24,
 							"x":216,
 							"y":96,
 							"fieldInstances":[
 								{
 									"__comment__":"Time (Int)",
-									"defId":25,
+									"defUid":25,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Cart",
-							"defId":19,
+							"defUid":19,
 							"x":136,
 							"y":48,
 							"fieldInstances":[
@@ -10132,7 +10132,7 @@
 						},
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":152,
 							"y":80,
 							"fieldInstances":[
@@ -10141,7 +10141,7 @@
 						},
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":216,
 							"y":112,
 							"fieldInstances":[
@@ -10150,67 +10150,67 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":40,
 							"y":104,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":344,
 							"y":264,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":56,
 							"y":232,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":88,
 							"y":88,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -10220,20 +10220,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":312,
 							"y":296,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -10243,50 +10243,50 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":248,
 							"y":280,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":264,
 							"y":72,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":312,
 							"y":176,
 							"fieldInstances":[
@@ -10295,7 +10295,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":328,
 							"y":176,
 							"fieldInstances":[
@@ -10304,7 +10304,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":296,
 							"y":128,
 							"fieldInstances":[
@@ -10313,7 +10313,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":360,
 							"y":112,
 							"fieldInstances":[
@@ -10322,7 +10322,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":264,
 							"y":48,
 							"fieldInstances":[
@@ -10331,7 +10331,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":264,
 							"y":128,
 							"fieldInstances":[
@@ -10340,7 +10340,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":344,
 							"y":160,
 							"fieldInstances":[
@@ -10349,7 +10349,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":344,
 							"y":176,
 							"fieldInstances":[
@@ -10358,13 +10358,13 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":312,
 							"y":296,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -10374,20 +10374,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":312,
 							"y":40,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -10397,20 +10397,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":360,
 							"y":56,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -10420,20 +10420,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":328,
 							"y":72,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -10443,7 +10443,7 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
@@ -11111,7 +11111,7 @@
 					"entityInstances":[
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":120,
 							"y":224,
 							"fieldInstances":[
@@ -11120,7 +11120,7 @@
 						},
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":136,
 							"y":208,
 							"fieldInstances":[
@@ -11129,7 +11129,7 @@
 						},
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":120,
 							"y":160,
 							"fieldInstances":[
@@ -11138,7 +11138,7 @@
 						},
 						{
 							"__comment__":"Cart",
-							"defId":19,
+							"defUid":19,
 							"x":104,
 							"y":192,
 							"fieldInstances":[
@@ -11147,49 +11147,49 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":184,
 							"y":120,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":184,
 							"y":264,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":136,
 							"y":360,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -11199,20 +11199,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":136,
 							"y":40,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -11222,87 +11222,87 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"BossDoor",
-							"defId":24,
+							"defUid":24,
 							"x":312,
 							"y":48,
 							"fieldInstances":[
 								{
 									"__comment__":"Time (Int)",
-									"defId":25,
+									"defUid":25,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":312,
 							"y":280,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":264,
 							"y":200,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":360,
 							"y":40,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":264,
 							"y":376,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -11312,20 +11312,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":360,
 							"y":376,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -11335,20 +11335,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":312,
 							"y":120,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -11358,12 +11358,12 @@
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":null
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -11375,23 +11375,23 @@
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":312,
 							"y":328,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":null
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":null
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -11403,13 +11403,13 @@
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":104,
 							"y":120,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -11419,7 +11419,7 @@
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -11429,7 +11429,7 @@
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -11441,13 +11441,13 @@
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":104,
 							"y":264,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -11457,7 +11457,7 @@
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -11467,7 +11467,7 @@
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -11479,13 +11479,13 @@
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":456,
 							"y":248,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -11495,12 +11495,12 @@
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":null
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -11512,25 +11512,25 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":504,
 							"y":248,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":488,
 							"y":224,
 							"fieldInstances":[
@@ -11539,7 +11539,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":488,
 							"y":272,
 							"fieldInstances":[
@@ -11548,7 +11548,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":520,
 							"y":224,
 							"fieldInstances":[
@@ -11557,7 +11557,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":520,
 							"y":240,
 							"fieldInstances":[
@@ -11566,7 +11566,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":520,
 							"y":272,
 							"fieldInstances":[
@@ -13480,13 +13480,13 @@
 					"entityInstances":[
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":232,
 							"y":120,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -13496,20 +13496,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":152,
 							"y":24,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -13519,20 +13519,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":88,
 							"y":232,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -13542,20 +13542,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":360,
 							"y":224,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -13565,20 +13565,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":296,
 							"y":112,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -13588,20 +13588,20 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":344,
 							"y":24,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -13611,50 +13611,50 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":376,
 							"y":128,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":344,
 							"y":98,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Cart",
-							"defId":19,
+							"defUid":19,
 							"x":72,
 							"y":144,
 							"fieldInstances":[
@@ -13663,7 +13663,7 @@
 						},
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":104,
 							"y":128,
 							"fieldInstances":[
@@ -13672,7 +13672,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":56,
 							"y":112,
 							"fieldInstances":[
@@ -13681,7 +13681,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":136,
 							"y":160,
 							"fieldInstances":[
@@ -13690,7 +13690,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":152,
 							"y":144,
 							"fieldInstances":[
@@ -13699,7 +13699,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":40,
 							"y":224,
 							"fieldInstances":[
@@ -13708,7 +13708,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":24,
 							"y":256,
 							"fieldInstances":[
@@ -13717,7 +13717,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":136,
 							"y":256,
 							"fieldInstances":[
@@ -13726,7 +13726,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":120,
 							"y":208,
 							"fieldInstances":[
@@ -13735,7 +13735,7 @@
 						},
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":88,
 							"y":144,
 							"fieldInstances":[
@@ -13744,13 +13744,13 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":40,
 							"y":248,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -13760,14 +13760,14 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":200,
 							"y":128,
 							"fieldInstances":[
@@ -13776,7 +13776,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":232,
 							"y":240,
 							"fieldInstances":[
@@ -13785,7 +13785,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":280,
 							"y":256,
 							"fieldInstances":[
@@ -13794,7 +13794,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":376,
 							"y":176,
 							"fieldInstances":[
@@ -13803,13 +13803,13 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":312,
 							"y":248,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -13819,14 +13819,14 @@
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":24,
 							"y":96,
 							"fieldInstances":[
@@ -13835,7 +13835,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":40,
 							"y":96,
 							"fieldInstances":[
@@ -13844,7 +13844,7 @@
 						},
 						{
 							"__comment__":"Crate",
-							"defId":21,
+							"defUid":21,
 							"x":40,
 							"y":112,
 							"fieldInstances":[
@@ -13853,72 +13853,72 @@
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":88,
 							"y":56,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":null
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":null
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":296,
 							"y":56,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":null
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":null
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"BossDoor",
-							"defId":24,
+							"defUid":24,
 							"x":200,
 							"y":128,
 							"fieldInstances":[
 								{
 									"__comment__":"Time (Int)",
-									"defId":25,
+									"defUid":25,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":216,
 							"y":216,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -13928,30 +13928,30 @@
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":null
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":13,
+							"defUid":13,
 							"x":136,
 							"y":192,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":14,
+									"defUid":14,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (MobType)",
-									"defId":46,
+									"defUid":46,
 									"internalValue":null
 								}
 							]
@@ -14471,7 +14471,7 @@
 					"entityInstances":[
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":120,
 							"y":48,
 							"fieldInstances":[
@@ -14480,7 +14480,7 @@
 						},
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":152,
 							"y":64,
 							"fieldInstances":[
@@ -14489,7 +14489,7 @@
 						},
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":120,
 							"y":96,
 							"fieldInstances":[
@@ -14498,13 +14498,13 @@
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":120,
 							"y":248,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -14514,7 +14514,7 @@
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -14524,7 +14524,7 @@
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -14536,13 +14536,13 @@
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":328,
 							"y":248,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -14552,7 +14552,7 @@
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -14562,7 +14562,7 @@
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -14574,13 +14574,13 @@
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":328,
 							"y":72,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -14590,7 +14590,7 @@
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -14600,7 +14600,7 @@
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -14612,79 +14612,79 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":168,
 							"y":248,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":280,
 							"y":248,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":328,
 							"y":200,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":328,
 							"y":104,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Cart",
-							"defId":19,
+							"defUid":19,
 							"x":88,
 							"y":80,
 							"fieldInstances":[
@@ -14693,13 +14693,13 @@
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":216,
 							"y":40,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -14709,7 +14709,7 @@
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -14719,7 +14719,7 @@
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -14731,13 +14731,13 @@
 						},
 						{
 							"__comment__":"BossDoor",
-							"defId":24,
+							"defUid":24,
 							"x":216,
 							"y":144,
 							"fieldInstances":[
 								{
 									"__comment__":"Time (Int)",
-									"defId":25,
+									"defUid":25,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -14749,18 +14749,18 @@
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":328,
 							"y":72,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":null
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -14770,7 +14770,7 @@
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":null
 								}
 							]
@@ -15390,7 +15390,7 @@
 					"entityInstances":[
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":184,
 							"y":256,
 							"fieldInstances":[
@@ -15399,7 +15399,7 @@
 						},
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":120,
 							"y":256,
 							"fieldInstances":[
@@ -15408,13 +15408,13 @@
 						},
 						{
 							"__comment__":"BossDoor",
-							"defId":24,
+							"defUid":24,
 							"x":152,
 							"y":96,
 							"fieldInstances":[
 								{
 									"__comment__":"Time (Int)",
-									"defId":25,
+									"defUid":25,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -15426,13 +15426,13 @@
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":152,
 							"y":120,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -15442,20 +15442,20 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":152,
 							"y":200,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -15465,20 +15465,20 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Label",
-							"defId":31,
+							"defUid":31,
 							"x":152,
 							"y":136,
 							"fieldInstances":[
 								{
 									"__comment__":"Text (String)",
-									"defId":32,
+									"defUid":32,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -15488,14 +15488,14 @@
 								},
 								{
 									"__comment__":"Color (Color)",
-									"defId":33,
+									"defUid":33,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Hero",
-							"defId":11,
+							"defUid":11,
 							"x":152,
 							"y":256,
 							"fieldInstances":[
@@ -15504,13 +15504,13 @@
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":264,
 							"y":72,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -15520,7 +15520,7 @@
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -15530,20 +15530,20 @@
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":40,
 							"y":72,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -15553,7 +15553,7 @@
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -15563,30 +15563,30 @@
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":40,
 							"y":248,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":null
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":null
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -15598,23 +15598,23 @@
 						},
 						{
 							"__comment__":"MobGen",
-							"defId":23,
+							"defUid":23,
 							"x":264,
 							"y":248,
 							"fieldInstances":[
 								{
 									"__comment__":"MaxChildren (Int)",
-									"defId":26,
+									"defUid":26,
 									"internalValue":null
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
-									"defId":27,
+									"defUid":27,
 									"internalValue":null
 								},
 								{
 									"__comment__":"Delay (Float)",
-									"defId":28,
+									"defUid":28,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -15626,7 +15626,7 @@
 						},
 						{
 							"__comment__":"Cart",
-							"defId":19,
+							"defUid":19,
 							"x":152,
 							"y":288,
 							"fieldInstances":[
@@ -15635,108 +15635,108 @@
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":24,
 							"y":56,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":280,
 							"y":56,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":88,
 							"y":56,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":136,
 							"y":56,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":168,
 							"y":56,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Item",
-							"defId":9,
+							"defUid":9,
 							"x":216,
 							"y":56,
 							"fieldInstances":[
 								{
 									"__comment__":"Type (String)",
-									"defId":10,
+									"defUid":10,
 									"internalValue":null
 								},
 								{
 									"__comment__":"type (ItemType)",
-									"defId":47,
+									"defUid":47,
 									"internalValue":null
 								}
 							]

@@ -2,9 +2,9 @@ package led.inst;
 
 class EntityInstance {
 	public var _project : Project;
-	public var def(get,never) : led.def.EntityDef; inline function get_def() return _project.defs.getEntityDef(defId);
+	public var def(get,never) : led.def.EntityDef; inline function get_def() return _project.defs.getEntityDef(defUid);
 
-	public var defId(default,null) : Int;
+	public var defUid(default,null) : Int;
 	public var x : Int;
 	public var y : Int;
 	public var fieldInstances : Map<Int, led.inst.FieldInstance> = new Map();
@@ -17,7 +17,7 @@ class EntityInstance {
 
 	public function new(p:Project, entityDefId:Int) {
 		_project = p;
-		defId = entityDefId;
+		defUid = entityDefId;
 	}
 
 	@:keep public function toString() {
@@ -31,7 +31,7 @@ class EntityInstance {
 
 		return {
 			__comment__: def.identifier,
-			defId: defId,
+			defUid: defUid,
 			x: x,
 			y: y,
 			fieldInstances: fieldsJson,
@@ -39,13 +39,13 @@ class EntityInstance {
 	}
 
 	public static function fromJson(project:Project, json:Dynamic) {
-		var ei = new EntityInstance(project, JsonTools.readInt(json.defId));
+		var ei = new EntityInstance(project, JsonTools.readInt(json.defUid));
 		ei.x = JsonTools.readInt( json.x, 0 );
 		ei.y = JsonTools.readInt( json.y, 0 );
 
 		for( fieldJson in JsonTools.readArray(json.fieldInstances) ) {
 			var fi = FieldInstance.fromJson(project, fieldJson);
-			ei.fieldInstances.set(fi.defId, fi);
+			ei.fieldInstances.set(fi.defUid, fi);
 		}
 
 		return ei;

@@ -287,13 +287,13 @@
 					"entityInstances":[
 						{
 							"__comment__":"Mob",
-							"defId":2,
+							"defUid":2,
 							"x":88,
 							"y":80,
 							"fieldInstances":[
 								{
 									"__comment__":"mobType (MobType)",
-									"defId":3,
+									"defUid":3,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -303,40 +303,40 @@
 								},
 								{
 									"__comment__":"elite (Bool)",
-									"defId":5,
+									"defUid":5,
 									"internalValue":null
 								},
 								{
 									"__comment__":"lifeOverride (Int)",
-									"defId":6,
+									"defUid":6,
 									"internalValue":null
 								},
 								{
 									"__comment__":"scale (Float)",
-									"defId":7,
+									"defUid":7,
 									"internalValue":null
 								},
 								{
 									"__comment__":"loot (ItemType)",
-									"defId":11,
+									"defUid":11,
 									"internalValue":null
 								},
 								{
 									"__comment__":"lootCount (Int)",
-									"defId":12,
+									"defUid":12,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":2,
+							"defUid":2,
 							"x":168,
 							"y":80,
 							"fieldInstances":[
 								{
 									"__comment__":"mobType (MobType)",
-									"defId":3,
+									"defUid":3,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -346,22 +346,22 @@
 								},
 								{
 									"__comment__":"elite (Bool)",
-									"defId":5,
+									"defUid":5,
 									"internalValue":null
 								},
 								{
 									"__comment__":"lifeOverride (Int)",
-									"defId":6,
+									"defUid":6,
 									"internalValue":null
 								},
 								{
 									"__comment__":"scale (Float)",
-									"defId":7,
+									"defUid":7,
 									"internalValue":null
 								},
 								{
 									"__comment__":"loot (ItemType)",
-									"defId":11,
+									"defUid":11,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -371,7 +371,7 @@
 								},
 								{
 									"__comment__":"lootCount (Int)",
-									"defId":12,
+									"defUid":12,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -383,13 +383,13 @@
 						},
 						{
 							"__comment__":"Mob",
-							"defId":2,
+							"defUid":2,
 							"x":72,
 							"y":144,
 							"fieldInstances":[
 								{
 									"__comment__":"mobType (MobType)",
-									"defId":3,
+									"defUid":3,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -399,40 +399,40 @@
 								},
 								{
 									"__comment__":"elite (Bool)",
-									"defId":5,
+									"defUid":5,
 									"internalValue":null
 								},
 								{
 									"__comment__":"lifeOverride (Int)",
-									"defId":6,
+									"defUid":6,
 									"internalValue":null
 								},
 								{
 									"__comment__":"scale (Float)",
-									"defId":7,
+									"defUid":7,
 									"internalValue":null
 								},
 								{
 									"__comment__":"loot (ItemType)",
-									"defId":11,
+									"defUid":11,
 									"internalValue":null
 								},
 								{
 									"__comment__":"lootCount (Int)",
-									"defId":12,
+									"defUid":12,
 									"internalValue":null
 								}
 							]
 						},
 						{
 							"__comment__":"Mob",
-							"defId":2,
+							"defUid":2,
 							"x":136,
 							"y":224,
 							"fieldInstances":[
 								{
 									"__comment__":"mobType (MobType)",
-									"defId":3,
+									"defUid":3,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -442,7 +442,7 @@
 								},
 								{
 									"__comment__":"elite (Bool)",
-									"defId":5,
+									"defUid":5,
 									"internalValue":{
 										"id":2,
 										"p":[
@@ -452,7 +452,7 @@
 								},
 								{
 									"__comment__":"lifeOverride (Int)",
-									"defId":6,
+									"defUid":6,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -462,7 +462,7 @@
 								},
 								{
 									"__comment__":"scale (Float)",
-									"defId":7,
+									"defUid":7,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -472,7 +472,7 @@
 								},
 								{
 									"__comment__":"loot (ItemType)",
-									"defId":11,
+									"defUid":11,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -482,7 +482,7 @@
 								},
 								{
 									"__comment__":"lootCount (Int)",
-									"defId":12,
+									"defUid":12,
 									"internalValue":{
 										"id":0,
 										"p":[
@@ -494,13 +494,13 @@
 						},
 						{
 							"__comment__":"Mob",
-							"defId":2,
+							"defUid":2,
 							"x":216,
 							"y":176,
 							"fieldInstances":[
 								{
 									"__comment__":"mobType (MobType)",
-									"defId":3,
+									"defUid":3,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -510,7 +510,7 @@
 								},
 								{
 									"__comment__":"elite (Bool)",
-									"defId":5,
+									"defUid":5,
 									"internalValue":{
 										"id":2,
 										"p":[
@@ -520,12 +520,12 @@
 								},
 								{
 									"__comment__":"lifeOverride (Int)",
-									"defId":6,
+									"defUid":6,
 									"internalValue":null
 								},
 								{
 									"__comment__":"scale (Float)",
-									"defId":7,
+									"defUid":7,
 									"internalValue":{
 										"id":1,
 										"p":[
@@ -535,7 +535,7 @@
 								},
 								{
 									"__comment__":"loot (ItemType)",
-									"defId":11,
+									"defUid":11,
 									"internalValue":{
 										"id":3,
 										"p":[
@@ -545,7 +545,7 @@
 								},
 								{
 									"__comment__":"lootCount (Int)",
-									"defId":12,
+									"defUid":12,
 									"internalValue":null
 								}
 							]

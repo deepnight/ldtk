@@ -330,7 +330,7 @@ class Client extends dn.Process {
 					for(e in li.entityInstances)
 						if( e==instance ) {
 							selectLayerInstance(li);
-							curTool.as(tool.EntityTool).selectValue(instance.defId);
+							curTool.as(tool.EntityTool).selectValue(instance.defUid);
 							levelRender.showRect( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
 							return true;
 						}

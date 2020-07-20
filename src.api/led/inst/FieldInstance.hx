@@ -4,15 +4,15 @@ import led.LedTypes;
 
 class FieldInstance {
 	public var _project : Project;
-	public var def(get,never) : led.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defId);
+	public var def(get,never) : led.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defUid);
 
-	public var defId: Int;
+	public var defUid: Int;
 	var internalValue : Null<ValueWrapper>;
 
 	@:allow(led.inst.EntityInstance)
 	private function new(p:Project, fieldDefId:Int) {
 		_project = p;
-		defId = fieldDefId;
+		defUid = fieldDefId;
 		internalValue = null;
 	}
 
@@ -25,7 +25,7 @@ class FieldInstance {
 	}
 
 	public static function fromJson(project:Project, json:Dynamic) {
-		var o = new FieldInstance( project, JsonTools.readInt(json.defId) );
+		var o = new FieldInstance( project, JsonTools.readInt(json.defUid) );
 		o.internalValue = JsonTools.readEnum(ValueWrapper, json.internalValue, true);
 		return o;
 	}
@@ -33,7 +33,7 @@ class FieldInstance {
 	public function toJson() {
 		return {
 			__comment__: def.identifier+" ("+def.getShortDescription()+")",
-			defId: defId,
+			defUid: defUid,
 			internalValue: JsonTools.writeEnum(internalValue,true),
 		}
 	}

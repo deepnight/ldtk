@@ -225,7 +225,7 @@ class LayerInstance {
 	public function createEntityInstance(ed:led.def.EntityDef) : Null<EntityInstance> {
 		requireType(Entities);
 		if( ed.maxPerLevel>0 ) {
-			var all = entityInstances.filter( function(ei) return ei.defId==ed.uid );
+			var all = entityInstances.filter( function(ei) return ei.defUid==ed.uid );
 			if( ed.discardExcess )
 				while( all.length>=ed.maxPerLevel )
 					removeEntityInstance( all.shift() );
