@@ -79,16 +79,14 @@ class Client extends dn.Process {
 			projectPath: null,
 		}
 		session = dn.LocalStorage.readObject("session", session);
-		N.debug(session);
-		if( !JsTools.fileExists(session.projectPath) || !loadProject(session.projectPath) ) {
-			selectProject( led.Project.createEmpty() );
-			N.error("Couldn't re-open last project ("+session.projectPath+"). Please start a new one, or load an existing one! ");
-			// TODO open project selection page
-		}
 
 		levelRender = new display.LevelRender();
 		rulers = new display.Rulers();
-		selectProject(project);
+		if( !JsTools.fileExists(session.projectPath) || !loadProject(session.projectPath) ) {
+			selectProject( led.Project.createEmpty() );
+			N.error("Couldn't re-open last project ("+session.projectPath+"). Please start a new one, or load an existing one! ");
+			// TODO open future "project selection" page
+		}
 		dn.Process.resizeAll();
 	}
 
@@ -504,21 +502,27 @@ class Client extends dn.Process {
 	}
 
 	function loadProject(filePath:String) {
-		if( !JsTools.fileExists(filePath) )
+		if( !JsTools.fileExists(filePath) ) {
+			N.error("File not found: "+filePath);
 			return false;
+		}
 
+		// Parse
 		var json = null;
-		try {
+		var p = try {
 			var bytes = JsTools.readFileBytes(filePath);
 			json = haxe.Json.parse( bytes.toString() );
-			var p = led.Project.fromJson(json);
-			selectProject( p );
+			led.Project.fromJson(json);
 		}
-		catch(err:Dynamic) {
-			N.error("Couldn't read project file: "+err);
+		catch(e:Dynamic) null;
+
+		if( p==null ) {
+			N.error("Couldn't read project file!");
 			return false;
 		}
 
+		// Update everything
+		selectProject( p );
 		ui.Modal.closeAll();
 		N.msg("Loaded project: "+filePath);
 
