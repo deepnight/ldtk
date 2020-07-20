@@ -227,10 +227,7 @@ class Client extends dn.Process {
 
 			case K.S:
 				if( !hasInputFocus() && isCtrlDown() )
-					if( isShiftDown() )
-						onSaveAs();
-					else
-						onSave();
+					onSave();
 
 			case K.N:
 				if( !hasInputFocus() && isCtrlDown() )
@@ -438,6 +435,10 @@ class Client extends dn.Process {
 				fp.extension = "json";
 				var data = makeProjectFile();
 				JsTools.writeFileBytes(fp.full, data.bytes);
+
+				session.lastFilePath = fp.full;
+				saveSessionDataToLocalStorage();
+
 				N.msg("New project created: "+fp.full);
 				ui.Modal.closeAll();
 			});
@@ -480,20 +481,9 @@ class Client extends dn.Process {
 		}
 	}
 
-	public function onSaveAs() {
-		JsTools.saveAsDialog([".json"], function(filePath) {
-			var data = makeProjectFile();
-			JsTools.writeFileBytes(filePath, data.bytes);
-			session.lastFilePath = filePath;
-			saveSessionDataToLocalStorage();
-			saveProjectToLocalStorage(data.json);
-			N.msg("Saved to "+filePath);
-		});
-	}
-
 	public function onSave() {
 		if( session.lastFilePath==null || !JsTools.fileExists(session.lastFilePath) ) {
-			onSaveAs();
+			N.error("Project file not found");
 			return;
 		}
 
