@@ -1,6 +1,5 @@
 class Boot extends hxd.App {
 	public static var ME : Boot;
-	public static var APP_ROOT : String; // with leading slash
 
 	// Boot
 	static function main() new Boot();
@@ -8,10 +7,6 @@ class Boot extends hxd.App {
 	// Engine ready
 	override function init() {
 		ME = this;
-
-		var fp = dn.FilePath.fromDir( ""+JsTools.getCwd() );
-		fp.useSlashes();
-		APP_ROOT = fp.directoryWithSlash;
 
 		h3d.Engine.getCurrent().backgroundColor = 0xffffff;
 		hxd.Res.initEmbed();

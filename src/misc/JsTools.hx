@@ -126,7 +126,7 @@ class JsTools {
 
 	public static function getHtmlTemplate(name:String) : Null<String> {
 		if( !_fileCache.exists(name) ) {
-			var path = dn.FilePath.fromFile(Boot.APP_ROOT + "tpl/" + name);
+			var path = dn.FilePath.fromFile(App.APP_DIR + "tpl/" + name);
 			path.extension = "html";
 
 			if( !fileExists(path.full) )

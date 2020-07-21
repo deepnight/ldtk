@@ -1,5 +1,7 @@
 class App extends dn.Process {
 	public static var ME : App;
+	public static var APP_DIR = "./"; // with leading slash
+
 	public var jDoc(get,never) : J; inline function get_jDoc() return new J(js.Browser.document);
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
 	public var jPage(get,never) : J; inline function get_jPage() return new J("#page");
@@ -16,10 +18,14 @@ class App extends dn.Process {
 		super();
 		ME = this;
 		createRoot(Boot.ME.s2d);
-
 		#if nwjs
 		appWin.maximize();
 		#end
+
+		// Init app dir
+		var fp = dn.FilePath.fromDir( ""+JsTools.getCwd() );
+		fp.useSlashes();
+		APP_DIR = fp.directoryWithSlash;
 
 		// Restore last stored project state
 		session = {
@@ -75,7 +81,7 @@ class App extends dn.Process {
 
 	public function getDefaultDir() {
 		if( session.recentProjects.length==0 )
-			return JsTools.getCwd(); // find a better default?
+			return APP_DIR; // find a better default?
 
 		var last = session.recentProjects[session.recentProjects.length-1];
 		return dn.FilePath.fromFile(last).directory;
