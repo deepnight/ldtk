@@ -14,8 +14,8 @@ class LayerDef {
 
 	// Tileset
 	public var tilesetDefUid : Null<Int>;
-	public var tilePivotX(default,set) : Float;
-	public var tilePivotY(default,set) : Float;
+	public var tilePivotX(default,set) : Float = 0;
+	public var tilePivotY(default,set) : Float = 0;
 
 	public function new(uid:Int, t:LayerType) {
 		this.uid = uid;
