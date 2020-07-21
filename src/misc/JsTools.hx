@@ -154,9 +154,14 @@ class JsTools {
 		if( fileTypes==null || fileTypes.length==0 )
 			fileTypes = [".*"];
 		input.attr("accept", fileTypes.join(","));
+		input.attr("nwWorkingDir",Client.ME.getProjectRoot());
 
 		input.change( function(ev) {
-			var path = input.val();
+			var path : String = input.val();
+			if( path==null || path.length==0 )
+				return;
+
+			N.debug(path);
 			input.remove();
 			onLoad(path);
 		});
@@ -170,6 +175,7 @@ class JsTools {
 			fileTypes = [".*"];
 		input.attr("accept", fileTypes.join(","));
 		input.attr("nwsaveas","nwsaveas");
+		input.attr("nwWorkingDir",Client.ME.getProjectRoot());
 
 		input.change( function(ev) {
 			var path = input.val();

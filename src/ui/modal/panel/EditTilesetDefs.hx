@@ -144,7 +144,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// "Import image" button
 		var uploader = jForm.find("input[name=tilesetFile]");
-		uploader.attr("nwworkingdir",client.getProjectRoot()+"\\tilesetTestImages");
+		uploader.attr("nwWorkingDir", client.getProjectRoot());
 		var label = uploader.siblings("[for="+uploader.attr("id")+"]");
 		if( cur.relPath==null )
 			label.text( Lang.t._("Select an image file") );
@@ -155,7 +155,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		uploader.change( function(ev) {
 			var oldPath = cur.relPath;
-			var absPath = uploader.val();
+			var absPath : String = uploader.val();
+			if( absPath==null || absPath.length==0 )
+				return;
+
 			var relPath = client.makeRelativeFilePath( absPath );
 
 			if( !cur.loadAtlasImage(relPath) ) {
