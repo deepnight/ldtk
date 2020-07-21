@@ -4,9 +4,6 @@ class Client extends dn.Process {
 	public static var ME : Client;
 
 
-	public var jDoc(get,never) : J; inline function get_jDoc() return new J(js.Browser.document);
-	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
-	public var jCanvas(get,never) : J; inline function get_jCanvas() return new J("#webgl");
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
@@ -195,7 +192,7 @@ class Client extends dn.Process {
 	}
 
 	inline function hasInputFocus() {
-		return jBody.find("input:focus, textarea:focus").length>0;
+		return App.ME.jBody.find("input:focus, textarea:focus").length>0;
 	}
 	function onKeyPress(keyId:Int) {
 		switch keyId {
@@ -207,7 +204,7 @@ class Client extends dn.Process {
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() ) {
-					jBody.toggleClass("compactPanel");
+					App.ME.jBody.toggleClass("compactPanel");
 					updateAppBg();
 				}
 
@@ -648,11 +645,11 @@ class Client extends dn.Process {
 	}
 
 	inline function canvasWid() {
-		return jCanvas.outerWidth() * js.Browser.window.devicePixelRatio;
+		return App.ME.jCanvas.outerWidth() * js.Browser.window.devicePixelRatio;
 	}
 
 	inline function canvasHei() {
-		return jCanvas.outerHeight() * js.Browser.window.devicePixelRatio;
+		return App.ME.jCanvas.outerHeight() * js.Browser.window.devicePixelRatio;
 	}
 
 	function updateTitles() {
@@ -706,7 +703,7 @@ class Client extends dn.Process {
 
 		for(ld in project.defs.layers) {
 			var li = curLevel.getLayerInstance(ld);
-			var e = jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
+			var e = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			list.append(e);
 
 			if( li==curLayerInstance )

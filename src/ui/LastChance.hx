@@ -11,7 +11,7 @@ class LastChance extends dn.Process {
 		CUR = this;
 
 		elem = new J("xml#lastChance").clone().children().first();
-		elem.appendTo(Client.ME.jBody);
+		elem.appendTo(App.ME.jBody);
 		elem.find(".content").append('<div class="desc">$str</div>');
 
 		elem.find("button").click( function(ev) {
