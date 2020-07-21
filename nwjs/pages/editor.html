@@ -1,122 +1,73 @@
-<html>
-<head>
-	<meta charset="utf-8"/>
-	<script type="text/javascript" src="js/jquery-3.5.1.js"></script>
-	<script type="text/javascript" src="js/html5sortable.min.js"></script>
-	<link rel="stylesheet" href="css/app.min.css"/>
-</head>
-
-<body>
-
-	<div id="debug"></div>
-
-	<div id="editor">
-
-		<div id="mainPanel">
-			<div id="mainBar">
-				<div class="buttons panels">
-					<button class="editProject"><div class="icon project"></div></button>
-					<button class="levelList"><div class="icon level"></div></button>
-					<button class="editLayers"><div class="icon layer"></div></button>
-					<button class="editEntities"><div class="icon entity"></div></button>
-					<button class="editTilesets"><div class="icon tile"></div></button>
-					<button class="editEnums"><div class="icon enum"></div></button>
-					<button class="showHelp gray"><div class="icon help"></div></button>
-				</div>
-
-			</div>
-
-			<ul id="layers" class="niceList"></ul>
-
-			<div id="guide">some useful tips</div>
-
-			<div id="mainPaletteWrapper"></div>
+<div id="mainPanel">
+	<div id="mainBar">
+		<div class="buttons panels">
+			<button class="editProject"><div class="icon project"></div></button>
+			<button class="levelList"><div class="icon level"></div></button>
+			<button class="editLayers"><div class="icon layer"></div></button>
+			<button class="editEntities"><div class="icon entity"></div></button>
+			<button class="editTilesets"><div class="icon tile"></div></button>
+			<button class="editEnums"><div class="icon enum"></div></button>
+			<button class="close gray"><div class="icon mouseLeft"></div></button>
+			<button class="showHelp gray"><div class="icon help"></div></button>
 		</div>
 
-		<canvas id="webgl"></canvas>
 	</div>
 
+	<ul id="layers" class="niceList"></ul>
+	<div id="guide">some useful tips</div>
+	<div id="mainPaletteWrapper"></div>
+</div>
 
 
-	<!-- Templates -->
+<!-- Element templates -->
 
-	<xml class="layer">
-		<span class="icon"></span>
-		<span class="name"></span>
-		<span class="vis">
-			<span class="on">👁️</span>
-			<span class="off">❌</span>
-		 </span>
-	</xml>
+<xml class="layer">
+	<span class="icon"></span>
+	<span class="name"></span>
+	<span class="vis">
+		<span class="on">👁️</span>
+		<span class="off">❌</span>
+		</span>
+</xml>
 
-	<xml id="window">
-		<div class="window">
-			<div class="mask"></div>
-			<div class="wrapper">
-				<div class="content"></div>
-			</div>
-		</div>
-	</xml>
-
-
-	<xml id="tip">
-		<div class="tip">
+<xml id="window">
+	<div class="window">
+		<div class="mask"></div>
+		<div class="wrapper">
 			<div class="content"></div>
 		</div>
-	</xml>
+	</div>
+</xml>
 
 
-	<xml id="notification">
-		<div class="notification">
-			<div class="content"></div>
+<xml id="tip">
+	<div class="tip">
+		<div class="content"></div>
+	</div>
+</xml>
+
+<xml id="lastChance">
+	<div class="lastChance">
+		<div class="content">
+			<button>Undo</button>
 		</div>
-	</xml>
-	<div id="notificationList"></div>
-
-	<xml id="lastChance">
-		<div class="lastChance">
-			<div class="content">
-				<button>Undo</button>
-			</div>
-		</div>
-	</xml>
+	</div>
+</xml>
 
 
-	<xml id="pivotEditor">
-		<div class="pivotEditor">
-			<div class="bg"></div>
-			<label> <input type="radio" value="0 0"/> </label>
-			<label> <input type="radio" value="0.5 0"/> </label>
-			<label> <input type="radio" value="1 0"/> </label>
+<xml id="pivotEditor">
+	<div class="pivotEditor">
+		<div class="bg"></div>
+		<label> <input type="radio" value="0 0"/> </label>
+		<label> <input type="radio" value="0.5 0"/> </label>
+		<label> <input type="radio" value="1 0"/> </label>
 
-			<label> <input type="radio" value="0 0.5"/> </label>
-			<label> <input type="radio" value="0.5 0.5"/> </label>
-			<label> <input type="radio" value="1 0.5"/> </label>
+		<label> <input type="radio" value="0 0.5"/> </label>
+		<label> <input type="radio" value="0.5 0.5"/> </label>
+		<label> <input type="radio" value="1 0.5"/> </label>
 
-			<label> <input type="radio" value="0 1"/> </label>
-			<label> <input type="radio" value="0.5 1"/> </label>
-			<label> <input type="radio" value="1 1"/> </label>
-		</div>
-	</xml>
-
-
-	<!-- Hot reloader -->
-	<!-- <script type="text/javascript">
-		var path = './';
-		var fs = require('fs');
-		var reloadWatcher = fs.watch(path, function(_,file) {
-		var ext = file.split(".").pop().toLowerCase();
-		if( ext!="js" && ext!="css" && ext!="html" )
-			return;
-		reloadWatcher.close();
-		setTimeout(function() {
-			window.location.reload();
-		},2000);
-		});
-	</script> -->
-
-	<!-- App boot -->
-	<script type="text/javascript" src="js/app.js"></script>
-
-</body>
-</html>
+		<label> <input type="radio" value="0 1"/> </label>
+		<label> <input type="radio" value="0.5 1"/> </label>
+		<label> <input type="radio" value="1 1"/> </label>
+	</div>
+</xml>

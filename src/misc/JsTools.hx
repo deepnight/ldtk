@@ -19,6 +19,17 @@ class JsTools {
 		);
 	}
 
+	public static function prepareProjectFile(p:led.Project) : { bytes:haxe.io.Bytes, json:Dynamic } {
+		var json = p.toJson();
+		var jsonStr = haxe.Json.stringify(json);
+		jsonStr = dn.HaxeJson.prettify(jsonStr); // TODO make optional
+
+		return {
+			bytes: haxe.io.Bytes.ofString( jsonStr ),
+			json: json,
+		}
+	}
+
 	public static function createLayerTypeIcon(type:led.LedTypes.LayerType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
 		var wrapper = new J('<span class="layerType"/>');
 

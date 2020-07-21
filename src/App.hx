@@ -9,13 +9,38 @@ class App extends dn.Process {
 	var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
 	#end
 
+	var curPageProcess : Null< dn.Process >;
+
 	public function new() {
 		super();
 		ME = this;
+		createRoot(Boot.ME.s2d);
 
 		#if nwjs
 		appWin.maximize();
 		#end
+
+		openHome();
+	}
+
+	function clearCurPage() {
+		jPage.empty();
+		if( curPageProcess!=null ) {
+			curPageProcess.destroy();
+			curPageProcess = null;
+		}
+	}
+
+	public function openEditor() {
+		clearCurPage();
+		curPageProcess = new Client(this);
+		dn.Process.resizeAll();
+	}
+
+	public function openHome() {
+		clearCurPage();
+		curPageProcess = new Home(this);
+		dn.Process.resizeAll();
 	}
 
 	override function onDispose() {
@@ -38,6 +63,10 @@ class App extends dn.Process {
 		if( raw==null )
 			throw "Page not found: "+id;
 
-		jPage.off().html( raw );
+		jPage
+			.off()
+			.removeClass()
+			.addClass(id)
+			.html(raw);
 	}
 }

@@ -977,22 +977,16 @@ canvas#webgl {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
   z-index: 2;
 }
 
-#editor {
+#page.editor #mainPanel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 100vh;
   display: grid;
-  grid-template-columns: 400px auto;
-  width: 100%;
-  height: 100%;
-}
-
-#editor #mainPanel {
-  position: relative;
-  display: grid;
-  height: 100%;
   overflow: hidden;
   grid-template-rows: min-content 250px min-content auto;
   padding: 5px;
@@ -1004,15 +998,15 @@ canvas#webgl {
   box-sizing: border-box;
 }
 
-#editor #mainPanel #mainbar {
+#page.editor #mainPanel #mainbar {
   overflow: hidden;
 }
 
-#editor #mainPanel #mainbar button.showHelp {
+#page.editor #mainPanel #mainbar button.showHelp {
   flex: 0 1 0;
 }
 
-#editor #mainPanel #mainbar h2#levelName {
+#page.editor #mainPanel #mainbar h2#levelName {
   margin: 0;
   padding: 0;
   margin-top: 8px;
@@ -1021,27 +1015,27 @@ canvas#webgl {
   cursor: pointer;
 }
 
-#editor #mainPanel #mainbar h2#levelName:hover {
+#page.editor #mainPanel #mainbar h2#levelName:hover {
   color: white;
 }
 
-#editor #mainPanel ul.niceList {
+#page.editor #mainPanel ul.niceList {
   min-height: auto;
 }
 
-#editor #mainPanel ul#layers {
+#page.editor #mainPanel ul#layers {
   overflow-x: hidden;
   overflow-y: auto;
   margin: 0;
 }
 
-#editor #mainPanel ul#layers li {
+#page.editor #mainPanel ul#layers li {
   grid-template-columns: min-content auto min-content;
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#editor #mainPanel ul#layers li .name {
+#page.editor #mainPanel ul#layers li .name {
   font-size: 10pt;
   flex: 1 1 auto;
   order: 1;
@@ -1049,7 +1043,7 @@ canvas#webgl {
   cursor: pointer;
 }
 
-#editor #mainPanel ul#layers li .vis {
+#page.editor #mainPanel ul#layers li .vis {
   flex: 0 0 auto;
   padding: 10px;
   margin: -10px;
@@ -1060,46 +1054,74 @@ canvas#webgl {
   cursor: zoom-out;
 }
 
-#editor #mainPanel ul#layers li .vis:hover {
+#page.editor #mainPanel ul#layers li .vis:hover {
   outline: 1px solid white;
   outline-offset: -4px;
 }
 
-#editor #mainPanel #mainPaletteWrapper {
+#page.editor #mainPanel #mainPaletteWrapper {
   overflow: auto;
   position: relative;
   outline: 1px solid white;
 }
 
-#editor #mainPanel #mainPaletteWrapper ul.niceList {
+#page.editor #mainPanel #mainPaletteWrapper ul.niceList {
   height: 100%;
   box-sizing: border-box;
 }
 
-.compactPanel #editor {
+#page.home {
+  background-color: #1e2229;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+#page.home .wrapper {
+  width: 400px;
+}
+
+#page.home .wrapper .logo {
+  font-family: Roboto;
+  font-size: 100px;
+  line-height: 80%;
+  text-align: center;
+  color: #ffcc00;
+}
+
+#page.home .wrapper .version {
+  opacity: 0.6;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 0.8em;
+}
+
+.compactPanel #page.editor {
   grid-template-columns: 150px auto;
 }
 
-.compactPanel #editor #mainPanel {
+.compactPanel #page.editor #mainPanel {
   grid-template-rows: min-content 200px auto;
 }
 
-.compactPanel #editor #mainPanel #guide {
+.compactPanel #page.editor #mainPanel #guide {
   display: none;
 }
 
-.compactPanel #editor #mainPanel ul.niceList li {
+.compactPanel #page.editor #mainPanel ul.niceList li {
   padding-top: 4px;
   padding-bottom: 4px;
   gap: 4px;
 }
 
-.compactPanel #editor #mainPanel ul.niceList li .icon {
+.compactPanel #page.editor #mainPanel ul.niceList li .icon {
   width: 0.75em;
   height: 0.75em;
 }
 
-.compactPanel #editor #mainPanel h2#levelName {
+.compactPanel #page.editor #mainPanel h2#levelName {
   font-size: 1.1em;
 }
 

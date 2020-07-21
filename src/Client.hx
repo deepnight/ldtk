@@ -40,11 +40,13 @@ class Client extends dn.Process {
 
 
 
-	public function new() {
-		super();
+	public function new(p:dn.Process) {
+		super(p);
+
+		App.ME.loadPage("editor");
 
 		ME = this;
-		createRoot(Boot.ME.s2d);
+		createRoot(p.root);
 
 		// Events
 		new J("body")
@@ -78,7 +80,6 @@ class Client extends dn.Process {
 			N.error("Couldn't re-open last project ("+session.projectFilePath+"). Please start a new one, or load an existing one! ");
 			// TODO open future "project selection" page
 		}
-		dn.Process.resizeAll();
 	}
 
 	public function initUI() {
@@ -132,6 +133,12 @@ class Client extends dn.Process {
 				new ui.modal.panel.EditEnums();
 		});
 		ui.Tip.attach(jMainPanel.find("button.editEnums"), "Entity enums");
+
+
+		jMainPanel.find("button.close").click( function(_) {
+			App.ME.openHome();
+		});
+
 
 		jMainPanel.find("button.showHelp").click( function(_) {
 			onHelp();
@@ -428,7 +435,7 @@ class Client extends dn.Process {
 
 				var fp = dn.FilePath.fromFile(filePath);
 				fp.extension = "json";
-				var data = makeProjectFile();
+				var data = JsTools.prepareProjectFile(project);
 				JsTools.writeFileBytes(fp.full, data.bytes);
 
 				session.projectFilePath = fp.full;
@@ -481,16 +488,6 @@ class Client extends dn.Process {
 		return fp.full;
 	}
 
-	function makeProjectFile() : { bytes:haxe.io.Bytes, json:Dynamic } {
-		var json = project.toJson();
-		var jsonStr = haxe.Json.stringify(json);
-		jsonStr = dn.HaxeJson.prettify(jsonStr); // TODO make optional
-		return {
-			bytes: haxe.io.Bytes.ofString( jsonStr ),
-			json: json,
-		}
-	}
-
 	public function onSave(?bypassMissing=false) {
 		if( !bypassMissing && !JsTools.fileExists(session.projectFilePath) ) {
 			new ui.modal.dialog.Confirm(
@@ -499,7 +496,7 @@ class Client extends dn.Process {
 			);
 		}
 
-		var data = makeProjectFile();
+		var data = JsTools.prepareProjectFile(project);
 		JsTools.writeFileBytes(session.projectFilePath, data.bytes);
 		saveProjectToLocalStorage(data.json);
 		N.msg("Saved to "+session.projectFilePath);

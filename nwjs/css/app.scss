@@ -952,21 +952,18 @@ canvas#webgl {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100%;
-	height: 100%;
 	z-index: 2;
 }
 
-#editor {
-	display: grid;
-	grid-template-columns: 400px auto;
-	width: 100%;
-	height: 100%;
-
+#page.editor {
 	#mainPanel {
-		position: relative;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 400px;
+		height: 100vh;
+
 		display: grid;
-		height: 100%;
 		overflow: hidden;
 		grid-template-rows: min-content 250px min-content auto;
 		padding: 5px;
@@ -1050,8 +1047,37 @@ canvas#webgl {
 }
 
 
-.compactPanel {
-	#editor {
+#page.home {
+	background-color: $bgDark;
+	width: 100vw;
+	height: 100vh;
+	display: grid;
+	align-items: center;
+	justify-items: center;
+
+	.wrapper {
+		width: 400px;
+
+		.logo {
+			font-family: Roboto;
+			font-size: 100px;
+			line-height: 80%;
+			text-align: center;
+			color: $orange;
+		}
+
+		.version {
+			opacity: 0.6;
+			text-align: center;
+			margin-bottom: 10px;
+			font-size: 0.8em;
+		}
+	}
+}
+
+
+.compactPanel { // TODO move that to Page DIV
+	#page.editor {
 		grid-template-columns: 150px auto;
 		#mainPanel {
 			grid-template-rows: min-content 200px auto;
