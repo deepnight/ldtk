@@ -20,7 +20,7 @@ class Boot extends hxd.App {
 		Lang.init();
 		JsTools.init();
 
-		new Client();
+		new App();
 	}
 
 	override function update(deltaTime:Float) {

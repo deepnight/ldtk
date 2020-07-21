@@ -964,6 +964,24 @@ textarea:focus {
   margin-top: 8px;
 }
 
+canvas#webgl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1;
+}
+
+#page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
 #editor {
   display: grid;
   grid-template-columns: 400px auto;
@@ -1056,11 +1074,6 @@ textarea:focus {
 #editor #mainPanel #mainPaletteWrapper ul.niceList {
   height: 100%;
   box-sizing: border-box;
-}
-
-#editor canvas {
-  width: 100% !important;
-  height: 100% !important;
 }
 
 .compactPanel #editor {

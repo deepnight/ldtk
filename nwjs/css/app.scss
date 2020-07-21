@@ -939,6 +939,24 @@ textarea {
 	}
 }
 
+canvas#webgl {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100% !important;
+	height: 100% !important;
+	z-index: 1;
+}
+
+#page {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 2;
+}
+
 #editor {
 	display: grid;
 	grid-template-columns: 400px auto;
@@ -1028,11 +1046,6 @@ textarea {
 				box-sizing: border-box;
 			}
 		}
-	}
-
-	canvas {
-		width: 100% !important;
-		height: 100% !important;
 	}
 }
 
