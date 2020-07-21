@@ -21,6 +21,11 @@ class FileWatcher extends dn.Process {
 		});
 	}
 
+	override function onDispose() {
+		super.onDispose();
+		clearAllWatches();
+	}
+
 	public function clearAllWatches() {
 		for( w in watches )
 			w.watcher.close();
