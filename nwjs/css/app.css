@@ -980,6 +980,7 @@ textarea:focus {
 #debug {
   display: none;
   position: absolute;
+  z-index: 99;
   padding: 8px;
   right: 0px;
   top: 0px;

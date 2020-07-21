@@ -955,6 +955,7 @@ textarea {
 #debug {
 	display: none;
 	position: absolute;
+	z-index: 99;
 	padding: 8px;
 	right: 0px;
 	top: 0px;
@@ -962,6 +963,7 @@ textarea {
 	color:white;
 	text-shadow: 0px 1px 3px black;
 	background-color: rgba(0, 0, 0, 0.4);
+
 	p {
 		@include resetMargin();
 		opacity: 0.5;
