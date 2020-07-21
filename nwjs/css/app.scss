@@ -597,9 +597,6 @@ input[type=checkbox] {
 input[type="file"] {
 	display: none;
 }
-label.file {
-	@extend button;
-}
 
 textarea {
 	resize: none;

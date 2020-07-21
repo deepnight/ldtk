@@ -143,31 +143,37 @@ class EditTilesetDefs extends ui.modal.Panel {
 		i.onChange = client.ge.emit.bind(TilesetDefChanged);
 
 		// "Import image" button
-		var uploader = jForm.find("input[name=tilesetFile]");
-		uploader.attr("nwWorkingDir", client.getProjectRoot());
-		var label = uploader.siblings("[for="+uploader.attr("id")+"]");
+		var b = jForm.find("#tilesetFile");
 		if( cur.relPath==null )
-			label.text( Lang.t._("Select an image file") );
+			b.text( Lang.t._("Select an image file") );
 		else if( !cur.isAtlasValid() )
-			label.text("ERROR: Couldn't read image data");
+			b.text("ERROR: Couldn't read image data");
 		else
-			label.text("Replace image");
+			b.text("Replace image");
 
-		uploader.change( function(ev) {
-			var oldPath = cur.relPath;
-			var absPath : String = uploader.val();
-			if( absPath==null || absPath.length==0 )
-				return;
+		b.click( function(ev) {
+			JsTools.loadDialog(["jpg","jpeg","gif","png"], function(absPath) {
+				var oldPath = cur.relPath;
+				var relPath = client.makeRelativeFilePath( absPath );
 
-			var relPath = client.makeRelativeFilePath( absPath );
+				if( !cur.loadAtlasImage(relPath) ) {
+					switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) {
+						case Unknown:
+							N.error("ERROR: I don't think this is an actual image");
 
-			if( !cur.loadAtlasImage(relPath) ) {
-				N.error("ERROR: couldn't read this image file. Is this an actual image?");
-				return;
-			}
-			project.defs.autoRenameTilesetIdentifier(oldPath, cur);
-			updateTilesetPreview();
-			client.ge.emit(TilesetDefChanged);
+						case Png, Jpeg, Gif:
+							N.error("ERROR: couldn't read this image file");
+
+						case Bmp:
+							N.error("ERROR: unsupported image format");
+					}
+					return;
+				}
+
+				project.defs.autoRenameTilesetIdentifier(oldPath, cur);
+				updateTilesetPreview();
+				client.ge.emit(TilesetDefChanged);
+			});
 		});
 
 		var i = Input.linkToHtmlInput( cur.tileGridSize, jForm.find("input[name=tilesetGridSize]") );

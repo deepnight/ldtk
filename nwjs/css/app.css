@@ -104,7 +104,7 @@ hr {
   border-bottom: 1px solid #545d73;
 }
 
-button, label.file {
+button {
   width: 100%;
   margin: 1px;
   padding: 10px;
@@ -117,40 +117,36 @@ button, label.file {
   cursor: pointer;
 }
 
-button > .icon, label.file > .icon {
+button > .icon {
   margin: -4px;
   width: 1.7em;
   height: 1.7em;
 }
 
-button:hover, label.file:hover {
+button:hover {
   background-color: #ff5d4a;
 }
 
-button:focus, label.file:focus {
+button:focus {
   outline: inherit;
 }
 
-button.active, label.active.file {
+button.active {
   background-color: #ffcc00;
   border-color: #ffff00;
 }
 
-button.cancel, label.cancel.file,
+button.cancel,
 button.gray,
-label.gray.file,
-button.grey,
-label.grey.file {
+button.grey {
   background-color: #545d73;
   border-color: #737f9d;
   box-shadow: 0px 2px 0px #545d73;
 }
 
-button.cancel:hover, label.cancel.file:hover,
+button.cancel:hover,
 button.gray:hover,
-label.gray.file:hover,
-button.grey:hover,
-label.grey.file:hover {
+button.grey:hover {
   background-color: #737f9d;
 }
 
@@ -161,11 +157,11 @@ label.grey.file:hover {
   margin-bottom: 2px;
 }
 
-.buttons button, .buttons label.file {
+.buttons button {
   flex: 1 1 0;
 }
 
-.buttons button.debug, .buttons label.debug.file {
+.buttons button.debug {
   flex: 0 0 0;
   display: none;
 }
@@ -830,12 +826,12 @@ textarea:focus {
   flex-wrap: wrap;
 }
 
-.window.dialog > .wrapper .buttons button, .window.dialog > .wrapper .buttons label.file {
+.window.dialog > .wrapper .buttons button {
   flex: 1 1 0;
   margin: 1px;
 }
 
-.window.dialog > .wrapper .buttons button.confirm, .window.dialog > .wrapper .buttons label.confirm.file {
+.window.dialog > .wrapper .buttons button.confirm {
   flex-grow: 2;
 }
 
@@ -891,9 +887,8 @@ textarea:focus {
   grid-template-columns: repeat(3, 33.33%);
 }
 
-.window.dialog.fieldTypes .content button, .window.dialog.fieldTypes .content label.file,
-.window.dialog.layerTypes .content button,
-.window.dialog.layerTypes .content label.file {
+.window.dialog.fieldTypes .content button,
+.window.dialog.layerTypes .content button {
   margin: 0;
 }
 
@@ -995,7 +990,7 @@ textarea:focus {
   overflow: hidden;
 }
 
-#editor #mainPanel #mainbar button.showHelp, #editor #mainPanel #mainbar label.showHelp.file {
+#editor #mainPanel #mainbar button.showHelp {
   flex: 0 1 0;
 }
 
@@ -1137,7 +1132,7 @@ textarea:focus {
   margin-right: 4px;
 }
 
-.palette .toolOptions button, .palette .toolOptions label.file {
+.palette .toolOptions button {
   width: auto;
   padding-top: 4px;
   text-transform: none;
@@ -1360,7 +1355,7 @@ textarea:focus {
   overflow: hidden;
 }
 
-.window.panel button.delete, .window.panel label.delete.file {
+.window.panel button.delete {
   flex: 0 0 32px;
 }
 
@@ -1481,7 +1476,7 @@ textarea:focus {
   padding: 3px;
 }
 
-.window.panel.editEnums .content .enumForm ul.enumValues li button, .window.panel.editEnums .content .enumForm ul.enumValues li label.file {
+.window.panel.editEnums .content .enumForm ul.enumValues li button {
   padding: 0;
 }
 
@@ -1534,7 +1529,7 @@ textarea:focus {
   display: block;
 }
 
-.window.panel.layerDefs ul.intGridValues li.add button, .window.panel.layerDefs ul.intGridValues li.add label.file {
+.window.panel.layerDefs ul.intGridValues li.add button {
   padding: 0px;
   text-align: center;
   font-weight: bold;
