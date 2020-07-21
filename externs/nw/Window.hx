@@ -26,6 +26,7 @@ extern class Window {
 	public function enterFullscreen() : Void;
 	public function leaveFullscreen() : Void;
 	public function on( event : String, callb : Void -> Void ) : Void;
+	public function removeAllListeners( ?event : String ) : Void;
 
 	public function show( b : Bool ) : Void;
 
