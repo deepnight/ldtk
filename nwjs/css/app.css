@@ -298,6 +298,7 @@ ul.niceList {
   margin-bottom: 4px;
   border: 1px solid #545d73;
   background-color: #1e2229;
+  overflow-x: hidden;
 }
 
 ul.niceList:empty {
@@ -1124,6 +1125,12 @@ canvas#webgl {
   text-align: center;
   margin-bottom: 10px;
   font-size: 0.8em;
+}
+
+#page.home .wrapper ul.recents {
+  min-height: 15vh;
+  max-height: 30vh;
+  overflow-y: auto;
 }
 
 #page.home .wrapper ul.recents .path span:not(:last-of-type) {

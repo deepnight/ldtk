@@ -306,6 +306,7 @@ ul.niceList {
 	margin-bottom: 4px;
 	border: 1px solid $bgLight;
 	background-color: $bgDark;
+	overflow-x: hidden;
 
 	&:empty {
 		background-image: url("/img/stripes.png");
@@ -1100,9 +1101,14 @@ canvas#webgl {
 			font-size: 0.8em;
 		}
 		ul.recents {
+			min-height: 15vh;
+			max-height: 30vh;
+			overflow-y: auto;
+
 			.path span:not(:last-of-type) {
 				font-size: 8pt;
 			}
+
 			li:not(:first-of-type) {
 				opacity: 0.6;
 			}

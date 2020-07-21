@@ -50,6 +50,10 @@ class App extends dn.Process {
 		return true;
 	}
 
+	public function unregisterRecentProject(path:String) {
+		return session.recentProjects.remove(path);
+	}
+
 	public function openEditor(p:led.Project, path:String) {
 		clearCurPage();
 		curPageProcess = new Client(this, p, path);
