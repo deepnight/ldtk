@@ -124,16 +124,16 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Image path
 		var jPath = jForm.find(".path");
-		if( cur.path!=null ) {
+		if( cur.relPath!=null ) {
 			jPath.empty();
-			var parts = cur.path.split("/").map( function(p) return '<span>$p</span>' );
+			var parts = cur.relPath.split("/").map( function(p) return '<span>$p</span>' );
 			jPath.append( parts.join('<span class="slash">/</span>') );
 		}
 		else
 			jPath.text("-- No file --");
 		jPath.off().click( function(ev) {
-			if( cur.path!=null )
-				JsTools.exploreToFile( client.makeFullFilePath(cur.path) );
+			if( cur.relPath!=null )
+				JsTools.exploreToFile( client.makeFullFilePath(cur.relPath) );
 		});
 
 		// Fields
@@ -146,7 +146,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var uploader = jForm.find("input[name=tilesetFile]");
 		uploader.attr("nwworkingdir",client.getProjectRoot()+"\\tilesetTestImages");
 		var label = uploader.siblings("[for="+uploader.attr("id")+"]");
-		if( cur.path==null )
+		if( cur.relPath==null )
 			label.text( Lang.t._("Select an image file") );
 		else if( !cur.isAtlasValid() )
 			label.text("ERROR: Couldn't read image data");
@@ -154,7 +154,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			label.text("Replace image");
 
 		uploader.change( function(ev) {
-			var oldPath = cur.path;
+			var oldPath = cur.relPath;
 			var absPath = uploader.val();
 			var relPath = client.makeRelativeFilePath( absPath );
 

@@ -486,8 +486,8 @@
 		"tilesets":[
 			{
 				"uid":16,
-				"identifier":"Tileset",
-				"path":"../../gmtk20-dumberDwarves/res/ld/tileset.png",
+				"identifier":"Tileset2",
+				"relPath":"../../../gmtk20-dumberDwarves/res/ld/tileset.png",
 				"pxWid":512,
 				"pxHei":512,
 				"tileGridSize":16,

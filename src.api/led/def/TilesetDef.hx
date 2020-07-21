@@ -5,7 +5,7 @@ import led.LedTypes;
 class TilesetDef {
 	public var uid : Int;
 	public var identifier(default,set) : String;
-	public var path : Null<String>; // TODO add a setter to auto clear cache
+	public var relPath(default,set) : Null<String>;
 	public var pxWid = 0;
 	public var pxHei = 0;
 	public var tileGridSize : Int = Project.DEFAULT_GRID_SIZE;
@@ -41,11 +41,17 @@ class TilesetDef {
 		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
 	}
 
+	function set_relPath(v:String) {
+		relPath = v;
+		disposeAtlasCache();
+		return relPath;
+	}
+
 	public function getFileName(withExt:Bool) : Null<String> {
-		if( path==null )
+		if( relPath==null )
 			return null;
 
-		return withExt ? dn.FilePath.extractFileWithExt(path) : dn.FilePath.extractFileName(path);
+		return withExt ? dn.FilePath.extractFileWithExt(relPath) : dn.FilePath.extractFileName(relPath);
 	}
 
 	public function disposeAtlasCache() {
@@ -64,19 +70,19 @@ class TilesetDef {
 	}
 
 	public function clearAtlas() {
-		path = null;
+		relPath = null;
 		disposeAtlasCache();
 		savedSelections = [];
 	}
 
-	public inline function isAtlasValid() return path!=null && bytes!=null;
+	public inline function isAtlasValid() return relPath!=null && bytes!=null;
 
 
 	public function toJson() {
 		return {
 			uid: uid,
 			identifier: identifier,
-			path: path,
+			relPath: relPath,
 			pxWid: pxWid,
 			pxHei: pxHei,
 			tileGridSize: tileGridSize,
@@ -94,7 +100,7 @@ class TilesetDef {
 		td.tileGridSpacing = JsonTools.readInt(json.tileGridSpacing, 0);
 		td.pxWid = JsonTools.readInt( json.pxWid );
 		td.pxHei = JsonTools.readInt( json.pxHei );
-		td.path = json.path;
+		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
 
 		var arr = JsonTools.readArray( json.savedSelections );
@@ -116,7 +122,7 @@ class TilesetDef {
 		if( img==null )
 			return false;
 
-		path = relFilePath;
+		relPath = relFilePath;
 		_bytesCache = b;
 		pxWid = img.width;
 		pxHei = img.height;
@@ -203,7 +209,7 @@ class TilesetDef {
 	}
 
 	function get_pixels() {
-		if( path==null )
+		if( relPath==null )
 			return null;
 
 		if( _pixelsCache==null ) {
@@ -217,7 +223,7 @@ class TilesetDef {
 
 	function get_bytes() {
 		if( _bytesCache==null )
-			_bytesCache = misc.JsTools.readFileBytes( Client.ME.makeFullFilePath(path) );
+			_bytesCache = misc.JsTools.readFileBytes( Client.ME.makeFullFilePath(relPath) );
 		return _bytesCache;
 	}
 
@@ -229,7 +235,7 @@ class TilesetDef {
 	#if js
 
 	function get_base64() {
-		if( path==null )
+		if( relPath==null )
 			return null;
 		else if( _base64cache==null )
 			_base64cache = haxe.crypto.Base64.encode(bytes);
