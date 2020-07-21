@@ -158,8 +158,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 			var absPath = uploader.val();
 			var relPath = client.makeRelativeFilePath( absPath );
 
-			if( !cur.importImage(relPath) ) {
-				N.error("Is this an actual image file?");
+			if( !cur.loadAtlasImage(relPath) ) {
+				N.error("ERROR: couldn't read this image file. Is this an actual image?");
 				return;
 			}
 			project.defs.autoRenameTilesetIdentifier(oldPath, cur);

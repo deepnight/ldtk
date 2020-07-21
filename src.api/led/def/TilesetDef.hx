@@ -5,31 +5,24 @@ import led.LedTypes;
 class TilesetDef {
 	public var uid : Int;
 	public var identifier(default,set) : String;
-	public var relPath(default,set) : Null<String>;
-	public var pxWid = 0;
-	public var pxHei = 0;
+	public var relPath(default,null) : Null<String>;
 	public var tileGridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var tileGridSpacing : Int = 0;
 	public var savedSelections : Array<TilesetSelection> = [];
 
-	#if heaps
-	var bytes(get,never) : Null<haxe.io.Bytes>;
-	var _bytesCache : Null<haxe.io.Bytes>;
+	public var pxWid = 0;
+	public var pxHei = 0;
+	var bytes : Null<haxe.io.Bytes>;
+	var texture : Null<h3d.mat.Texture>;
+	var pixels : Null<hxd.Pixels>;
+	var base64 : Null<String>;
 
-	var texture(get,never) : Null<h3d.mat.Texture>;
-	var _textureCache : Null<h3d.mat.Texture>;
 
-	var pixels(get,never) : Null<hxd.Pixels>;
-	var _pixelsCache : Null<hxd.Pixels>;
-	#end
+	public var cWid(get,never) : Int;
+	inline function get_cWid() return !isAtlasValid() ? 0 : dn.M.ceil( pxWid / tileGridSize );
 
-	#if editor
-	var base64(get,null): Null<String>;
-	var _base64cache : Null<String>;
-	#end
-
-	public var cWid(get,never) : Int; inline function get_cWid() return !isAtlasValid() ? 0 : dn.M.ceil( pxWid / tileGridSize );
-	public var cHei(get,never) : Int; inline function get_cHei() return !isAtlasValid() ? 0 : dn.M.ceil( pxHei / tileGridSize );
+	public var cHei(get,never) : Int;
+	inline function get_cHei() return !isAtlasValid() ? 0 : dn.M.ceil( pxHei / tileGridSize );
 
 
 	public function new(uid:Int) {
@@ -41,41 +34,33 @@ class TilesetDef {
 		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
 	}
 
-	function set_relPath(v:String) {
-		relPath = v;
-		disposeAtlasCache();
-		return relPath;
-	}
-
 	public function getFileName(withExt:Bool) : Null<String> {
-		if( relPath==null )
+		if( !isAtlasValid() )
 			return null;
 
 		return withExt ? dn.FilePath.extractFileWithExt(relPath) : dn.FilePath.extractFileName(relPath);
 	}
 
-	public function disposeAtlasCache() {
+	public function removeAtlasImage() {
+		relPath = null;
+		pxWid = pxHei = 0;
+		savedSelections = [];
+
 		#if heaps
-		if( _textureCache!=null )
-			_textureCache.dispose();
-		_textureCache = null;
+		if( texture!=null )
+			texture.dispose();
+		texture = null;
 
-		if( _pixelsCache!=null )
-			_pixelsCache.dispose();
-		_pixelsCache = null;
+		if( pixels!=null )
+			pixels.dispose();
+		pixels = null;
 
-		_bytesCache = null;
-		_base64cache = null;
+		bytes = null;
+		base64 = null;
 		#end
 	}
 
-	public function clearAtlas() {
-		relPath = null;
-		disposeAtlasCache();
-		savedSelections = [];
-	}
-
-	public inline function isAtlasValid() return relPath!=null && bytes!=null;
+	public inline function isAtlasValid() return relPath!=null;
 
 
 	public function toJson() {
@@ -109,24 +94,43 @@ class TilesetDef {
 				mode: JsonTools.readEnum(TileEditMode, jsonSel.mode, false, Stamp),
 				ids: jsonSel.ids,
 			}
-		}) ;
+		});
+
+		td.reloadImage();
 		return td;
 	}
 
-	public function importImage(relFilePath:String) : Bool {
-		clearAtlas();
-		relFilePath = dn.FilePath.fromFile( relFilePath ).useSlashes().full;
 
-		var b = misc.JsTools.readFileBytes( Client.ME.makeFullFilePath(relFilePath) );
-		var img = dn.ImageDecoder.decode(b);
-		if( img==null )
+	public function loadAtlasImage(relFilePath:String) : Bool {
+		relPath = dn.FilePath.fromFile( relFilePath ).useSlashes().full;
+
+		try {
+			var fullPath = Client.ME.makeFullFilePath(relPath);
+			var bytes = misc.JsTools.readFileBytes(fullPath);
+
+			if( bytes==null )
+				return false;
+
+			base64 = haxe.crypto.Base64.encode(bytes);
+			pixels = dn.ImageDecoder.decodePixels(bytes);
+			texture = h3d.mat.Texture.fromPixels(pixels);
+		}
+		catch(err:Dynamic) {
+			trace(err);
+			removeAtlasImage();
 			return false;
+		}
 
-		relPath = relFilePath;
-		_bytesCache = b;
-		pxWid = img.width;
-		pxHei = img.height;
+		pxWid = pixels.width;
+		pxHei = pixels.height;
 		return true;
+	}
+
+	public function reloadImage() {
+		if( isAtlasValid() )
+			return loadAtlasImage(relPath);
+		else
+			return false;
 	}
 
 	public function getTileId(tcx,tcy) {
@@ -147,11 +151,6 @@ class TilesetDef {
 
 	public inline function getTileSourceY(tileId:Int) {
 		return getTileCy(tileId) * ( tileGridSize + tileGridSpacing );
-	}
-
-	public function dispose() {
-		disposeAtlasCache();
-		// TODO clear other fields?
 	}
 
 
@@ -185,14 +184,13 @@ class TilesetDef {
 
 
 	/*** HEAPS API *********************************/
-	#if heaps
 
 	function makeErrorTile() {
 		return h2d.Tile.fromColor(0xff0000, tileGridSize, tileGridSize);
 	}
 
 	public inline function getAtlasTile() : Null<h2d.Tile> {
-		return texture==null ? null : h2d.Tile.fromTexture(texture);
+		return isAtlasValid() ? h2d.Tile.fromTexture(texture) : null;
 	}
 
 	public inline function getTile(tileId:Int) : h2d.Tile {
@@ -202,45 +200,10 @@ class TilesetDef {
 			return makeErrorTile();
 	}
 
-	function get_texture() {
-		if( _textureCache==null && pixels!=null )
-			_textureCache = h3d.mat.Texture.fromPixels(pixels);
-		return _textureCache;
-	}
-
-	function get_pixels() {
-		if( relPath==null )
-			return null;
-
-		if( _pixelsCache==null ) {
-			if( bytes==null )
-				return null;
-			_pixelsCache = dn.ImageDecoder.decodePixels(bytes);
-		}
-		return _pixelsCache;
-	}
-
-
-	function get_bytes() {
-		if( _bytesCache==null )
-			_bytesCache = misc.JsTools.readFileBytes( Client.ME.makeFullFilePath(relPath) );
-		return _bytesCache;
-	}
-
-	#end
-
 
 
 	/*** JS API *********************************/
 	#if js
-
-	function get_base64() {
-		if( relPath==null )
-			return null;
-		else if( _base64cache==null )
-			_base64cache = haxe.crypto.Base64.encode(bytes);
-		return _base64cache;
-	}
 
 	public function createAtlasHtmlImage() : js.html.Image {
 		var img = new js.html.Image();
