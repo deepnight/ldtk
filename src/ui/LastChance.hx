@@ -5,7 +5,7 @@ class LastChance extends dn.Process {
 	var elem : js.jquery.JQuery;
 
 	public function new(str:dn.data.GetText.LocaleString, projectJsonBackup:Dynamic) {
-		super(Client.ME);
+		super(Editor.ME);
 
 		LastChance.end();
 		CUR = this;
@@ -17,7 +17,7 @@ class LastChance extends dn.Process {
 		elem.find("button").click( function(ev) {
 			if( !isActive() )
 				return;
-			Client.ME.selectProject( led.Project.fromJson(projectJsonBackup) );
+			Editor.ME.selectProject( led.Project.fromJson(projectJsonBackup) );
 			N.msg( L.t._("Canceled action") );
 			hide();
 		});
@@ -47,7 +47,7 @@ class LastChance extends dn.Process {
 	override function onDispose() {
 		super.onDispose();
 
-		// Client.ME.ge.removeListener(onGlobalEvent);
+		// Editor.ME.ge.removeListener(onGlobalEvent);
 		elem.remove();
 		elem = null;
 

@@ -8,8 +8,8 @@ class ProjectSettings extends ui.modal.Panel {
 		loadTemplate( "projectSettings", "projectSettings" );
 		linkToButton("button.editProject");
 
-		// jContent.find("button.new").click( function(ev) client.onNew(ev.getThis()) );
-		// jContent.find("button.load").click( function(_) client.onLoad() );
+		// jContent.find("button.new").click( function(ev) editor.onNew(ev.getThis()) );
+		// jContent.find("button.load").click( function(_) editor.onLoad() );
 
 		updateProjectForm();
 	}
@@ -41,7 +41,7 @@ class ProjectSettings extends ui.modal.Panel {
 			function(x,y) {
 				project.defaultPivotX = x;
 				project.defaultPivotY = y;
-				client.ge.emit(ProjectSettingsChanged);
+				editor.ge.emit(ProjectSettingsChanged);
 			}
 		));
 	}

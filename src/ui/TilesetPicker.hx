@@ -150,15 +150,15 @@ class TilesetPicker {
 
 	var _lastRect = null;
 	function updateCursor(pageX:Float, pageY:Float, force=false) {
-		if( isScrolling() || Client.ME.isKeyDown(K.SPACE) ) {
+		if( isScrolling() || Editor.ME.isKeyDown(K.SPACE) ) {
 			jCursor.hide();
 			return;
 		}
 
-		// Client.ME.debug(pageX+","+pageY+" => "+pageXtoLocal(pageX)+","+pageYtoLocal(pageY));
-		// Client.ME.debug("scroll="+scrollX+","+scrollY, true);
-		// Client.ME.debug("pickerSize="+jPicker.innerWidth()+"x"+jPicker.innerHeight(), true);
-		// Client.ME.debug("img="+img.innerWidth()+"x"+img.innerHeight(), true);
+		// Editor.ME.debug(pageX+","+pageY+" => "+pageXtoLocal(pageX)+","+pageYtoLocal(pageY));
+		// Editor.ME.debug("scroll="+scrollX+","+scrollY, true);
+		// Editor.ME.debug("pickerSize="+jPicker.innerWidth()+"x"+jPicker.innerHeight(), true);
+		// Editor.ME.debug("img="+img.innerWidth()+"x"+img.innerHeight(), true);
 
 		var r = getCursorRect(pageX, pageY);
 
@@ -194,7 +194,7 @@ class TilesetPicker {
 	}
 
 	inline function isScrolling() {
-		return dragStart!=null && ( dragStart.bt==1 || Client.ME.isKeyDown(K.SPACE) );
+		return dragStart!=null && ( dragStart.bt==1 || Editor.ME.isKeyDown(K.SPACE) );
 	}
 
 	function onDocMouseMove(ev:js.jquery.Event) {
@@ -212,12 +212,12 @@ class TilesetPicker {
 			var r = getCursorRect(ev.pageX, ev.pageY);
 			var addToSelection = dragStart.bt!=2;
 			if( r.wid==1 && r.hei==1 ) {
-				if( Client.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
+				if( Editor.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
 					addToSelection = false;
 				applySelection([ tool.curTilesetDef.getTileId(r.cx,r.cy) ], addToSelection);
 			}
 			else {
-				if( Client.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
+				if( Editor.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
 					addToSelection = false;
 
 				var tileIds = [];
@@ -241,7 +241,7 @@ class TilesetPicker {
 
 	function applySelection(selIds:Array<Int>, add:Bool) {
 		// Auto-pick saved selection
-		if( selIds.length==1 && tool.curTilesetDef.hasSavedSelectionFor(selIds[0]) && !Client.ME.isCtrlDown() ) {
+		if( selIds.length==1 && tool.curTilesetDef.hasSavedSelectionFor(selIds[0]) && !Editor.ME.isCtrlDown() ) {
 			// Check if the saved selection isn't already picked. If so, just pick the sub-tile
 			var sel = tool.getSelectedValue();
 			var saved = tool.curTilesetDef.getSavedSelectionFor( selIds[0] );
@@ -260,7 +260,7 @@ class TilesetPicker {
 
 		var curSel = tool.getSelectedValue();
 		if( add ) {
-			if( !Client.ME.isShiftDown() && !Client.ME.isCtrlDown() ) {
+			if( !Editor.ME.isShiftDown() && !Editor.ME.isCtrlDown() ) {
 				// Replace active selection with this one
 				tool.selectValue({ mode:tool.getMode(), ids:selIds });
 			}
@@ -293,7 +293,7 @@ class TilesetPicker {
 		}
 
 		renderSelection();
-		Client.ME.ge.emit(ToolOptionChanged);
+		Editor.ME.ge.emit(ToolOptionChanged);
 	}
 
 	function onRemoveSel(rem:Array<Int>) {

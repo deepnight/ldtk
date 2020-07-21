@@ -14,7 +14,7 @@ class JsTools {
 				onSort(from,to);
 				// var moved = project.sortLayerDef(from,to);
 				// selectLayer(moved);
-				// client.ge.emit(LayerDefSorted);
+				// editor.ge.emit(LayerDefSorted);
 			}
 		);
 	}

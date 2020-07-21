@@ -17,7 +17,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		jModalAndMask.find(".mainList button.create").click( function(ev) {
 			var td = project.defs.createTilesetDef();
 			select(td);
-			client.ge.emit(TilesetDefChanged);
+			editor.ge.emit(TilesetDefChanged);
 			jForm.find("input").first().focus().select();
 		});
 
@@ -31,7 +31,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				N.notImplemented();
 				// project.defs.removeLayerDef(cur);
 				// select(project.defs.layers[0]);
-				// client.ge.emit(TilesetDefChanged);
+				// editor.ge.emit(TilesetDefChanged);
 			});
 		});
 
@@ -132,14 +132,14 @@ class EditTilesetDefs extends ui.modal.Panel {
 			jPath.text("-- No file --");
 		jPath.off().click( function(ev) {
 			if( cur.relPath!=null )
-				JsTools.exploreToFile( Client.ME.makeFullFilePath(cur.relPath) );
+				JsTools.exploreToFile( Editor.ME.makeFullFilePath(cur.relPath) );
 		});
 
 		// Fields
 		var i = Input.linkToHtmlInput(cur.identifier, jForm.find("input[name='name']") );
 		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.defs.isTilesetIdentifierUnique(id);
 		i.validityError = N.invalidIdentifier;
-		i.onChange = client.ge.emit.bind(TilesetDefChanged);
+		i.onChange = editor.ge.emit.bind(TilesetDefChanged);
 
 		// "Import image" button
 		var b = jForm.find("#tilesetFile");
@@ -151,9 +151,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 			b.text("Replace image");
 
 		b.click( function(ev) {
-			JsTools.loadDialog(["jpg","jpeg","gif","png"], Client.ME.getProjectDir(), function(absPath) {
+			JsTools.loadDialog(["jpg","jpeg","gif","png"], Editor.ME.getProjectDir(), function(absPath) {
 				var oldPath = cur.relPath;
-				var relPath = Client.ME.makeRelativeFilePath( absPath );
+				var relPath = Editor.ME.makeRelativeFilePath( absPath );
 
 				if( !cur.loadAtlasImage(relPath) ) {
 					switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) {
@@ -171,7 +171,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 				project.defs.autoRenameTilesetIdentifier(oldPath, cur);
 				updateTilesetPreview();
-				client.ge.emit(TilesetDefChanged);
+				editor.ge.emit(TilesetDefChanged);
 			});
 		});
 
@@ -203,7 +203,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		// JsTools.makeSortable(".window .mainList ul", function(from, to) {
 			// var moved = project.defs.sortLayerDef(from,to);
 			// select(moved);
-		// 	client.ge.emit(LayerDefSorted);
+		// 	editor.ge.emit(LayerDefSorted);
 		// });
 	}
 }

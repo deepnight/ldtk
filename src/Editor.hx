@@ -1,7 +1,7 @@
 import hxd.Key;
 
-class Client extends dn.Process {
-	public static var ME : Client;
+class Editor extends dn.Process {
+	public static var ME : Editor;
 
 
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
@@ -254,7 +254,7 @@ class Client extends dn.Process {
 				if( !hasInputFocus() ) {
 					var t = haxe.Timer.stamp();
 					var json = project.levels[0].toJson();
-					Client.ME.debug(dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
+					Editor.ME.debug(dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
 				}
 			#end
 		}

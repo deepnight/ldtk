@@ -4,7 +4,7 @@ class Notification extends dn.Process {
 	var elem : js.jquery.JQuery;
 
 	private function new(str:String, ?col:UInt, ?long=false) {
-		super(Client.ME);
+		super(Editor.ME);
 
 		var jList = new J("#notificationList");
 		jList.find(".latest").removeClass("latest");

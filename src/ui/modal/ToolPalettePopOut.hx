@@ -28,7 +28,7 @@ class ToolPalettePopOut extends ui.Modal {
 
 		// Positionning
 		jMask.css("opacity",0);
-		var jPalette = client.jPalette;
+		var jPalette = editor.jPalette;
 		jWrapper.offset({
 			left: jPalette.offset().left,
 			top: jPalette.offset().top,

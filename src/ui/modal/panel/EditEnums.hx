@@ -12,7 +12,7 @@ class EditEnums extends ui.modal.Panel {
 		// Add enum
 		jContent.find("button.createEnum").click( function(_) {
 			var ed = project.defs.createEnumDef();
-			client.ge.emit(EnumDefAdded);
+			editor.ge.emit(EnumDefAdded);
 			selectEnum(ed);
 			jContent.find("ul.enumForm input:first").focus();
 		});
@@ -27,7 +27,7 @@ class EditEnums extends ui.modal.Panel {
 			new ui.modal.dialog.Confirm(ev.getThis(), function() {
 				new ui.LastChance( L.t._("Enum deleted"), project.toJson() );
 				project.defs.removeEnumDef(curEnum);
-				client.ge.emit(EnumDefRemoved);
+				editor.ge.emit(EnumDefRemoved);
 				selectEnum( project.defs.enums[0] );
 			});
 		});
@@ -79,7 +79,7 @@ class EditEnums extends ui.modal.Panel {
 		JsTools.makeSortable(".window .enumList ul", function(from, to) {
 			var moved = project.defs.sortEnumDef(from,to);
 			selectEnum(moved);
-			client.ge.emit(EnumDefSorted);
+			editor.ge.emit(EnumDefSorted);
 		});
 	}
 
@@ -131,7 +131,7 @@ class EditEnums extends ui.modal.Panel {
 							fi.parseValue(null);
 					});
 					curEnum.values.remove(v);
-					client.ge.emit(EnumDefChanged);
+					editor.ge.emit(EnumDefChanged);
 				});
 			});
 		}
@@ -140,7 +140,7 @@ class EditEnums extends ui.modal.Panel {
 			var uid = 0;
 			while( !curEnum.addValue(curEnum.identifier+uid) )
 				uid++;
-			client.ge.emit(EnumDefChanged);
+			editor.ge.emit(EnumDefChanged);
 			jContent.find("ul.enumValues li:last input[type=text]").select();
 		});
 
@@ -148,7 +148,7 @@ class EditEnums extends ui.modal.Panel {
 		JsTools.makeSortable(".window ul.enumValues", function(from, to) {
 			var v = curEnum.values.splice(from,1)[0];
 			curEnum.values.insert(to, v);
-			client.ge.emit(EnumDefChanged);
+			editor.ge.emit(EnumDefChanged);
 		});
 	}
 }

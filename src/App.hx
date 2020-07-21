@@ -57,7 +57,7 @@ class App extends dn.Process {
 
 	public function openEditor(p:led.Project, path:String) {
 		clearCurPage();
-		curPageProcess = new Client(this, p, path);
+		curPageProcess = new Editor(this, p, path);
 		dn.Process.resizeAll();
 	}
 

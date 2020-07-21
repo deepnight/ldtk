@@ -2,7 +2,7 @@ package tool;
 
 class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 	public var curTilesetDef(get,never) : Null<led.def.TilesetDef>;
-	inline function get_curTilesetDef() return client.project.defs.getTilesetDef( client.curLayerInstance.def.tilesetDefUid );
+	inline function get_curTilesetDef() return editor.project.defs.getTilesetDef( editor.curLayerInstance.def.tilesetDefUid );
 
 	public function new() {
 		super();
@@ -68,8 +68,8 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 						anyChange = true;
 
 				case Remove:
-					if( client.curLayerInstance.hasGridTile(cx,cy) ) {
-						client.curLayerInstance.removeGridTile(cx,cy);
+					if( editor.curLayerInstance.hasGridTile(cx,cy) ) {
+						editor.curLayerInstance.removeGridTile(cx,cy);
 						anyChange = true;
 					}
 
@@ -158,8 +158,8 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 
 		var anyChange = false;
 		if( isRandomMode() ) {
-			if( client.curLayerInstance.hasGridTile(cx,cy) ) {
-				client.curLayerInstance.removeGridTile(cx,cy);
+			if( editor.curLayerInstance.hasGridTile(cx,cy) ) {
+				editor.curLayerInstance.removeGridTile(cx,cy);
 				anyChange = true;
 			}
 		}
@@ -175,8 +175,8 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 			for(tid in sel.ids) {
 				var tcx = cx+curTilesetDef.getTileCx(tid)-left;
 				var tcy = cy+curTilesetDef.getTileCy(tid)-top;
-				if( client.curLayerInstance.hasGridTile(tcx,tcy) ) {
-					client.curLayerInstance.removeGridTile(tcx,tcy);
+				if( editor.curLayerInstance.hasGridTile(tcx,tcy) ) {
+					editor.curLayerInstance.removeGridTile(tcx,tcy);
 					anyChange = true;
 				}
 			}
@@ -189,23 +189,23 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 		super.updateCursor(m);
 
 		if( curTilesetDef==null || !curTilesetDef.isAtlasValid() ) {
-			client.cursor.set(None);
+			editor.cursor.set(None);
 			return;
 		}
 
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromMouseCoords(origin, m);
-			client.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei) );
+			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei) );
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
 			var sel = getSelectedValue();
 			if( isRandomMode() )
-				client.cursor.set( Tiles(curLayerInstance, [ sel.ids[Std.random(sel.ids.length)] ], m.cx, m.cy) );
+				editor.cursor.set( Tiles(curLayerInstance, [ sel.ids[Std.random(sel.ids.length)] ], m.cx, m.cy) );
 			else
-				client.cursor.set( Tiles(curLayerInstance, sel.ids, m.cx, m.cy) );
+				editor.cursor.set( Tiles(curLayerInstance, sel.ids, m.cx, m.cy) );
 		}
 		else
-			client.cursor.set(None);
+			editor.cursor.set(None);
 	}
 
 	override function createPalette() {
@@ -233,7 +233,7 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 		chk.prop("checked", isRandomMode());
 		chk.change( function(ev) {
 			setMode( chk.prop("checked")==true ? Random : Stamp );
-			client.ge.emit(ToolOptionChanged);
+			editor.ge.emit(ToolOptionChanged);
 		});
 		opt.append(chk);
 		opt.append( JsTools.createKeyInLabel("[R]andom mode") );
@@ -243,18 +243,18 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 
 	function saveSelection() {
 		curTilesetDef.saveSelection( getSelectedValue() );
-		client.ge.emit(TilesetDefChanged);
+		editor.ge.emit(TilesetDefChanged);
 		N.msg("Saved selection");
 	}
 
 	override function onKeyPress(keyId:Int) {
 		super.onKeyPress(keyId);
 
-		if( !client.hasAnyToggleKeyDown() )
+		if( !editor.hasAnyToggleKeyDown() )
 			switch keyId {
 				case K.R :
 					setMode( isRandomMode() ? Stamp : Random );
-					client.ge.emit(ToolOptionChanged);
+					editor.ge.emit(ToolOptionChanged);
 
 				case K.S:
 					saveSelection();

@@ -3,15 +3,15 @@ package display;
 class Rulers extends dn.Process {
 	static var PADDING = 20;
 
-	var client(get,never) : Client; inline function get_client() return Client.ME;
+	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var levelRender(get,never) : LevelRender;
-		inline function get_levelRender() return Client.ME.levelRender;
+		inline function get_levelRender() return Editor.ME.levelRender;
 
 	var curLevel(get,never) : led.Level;
-		inline function get_curLevel() return Client.ME.curLevel;
+		inline function get_curLevel() return Editor.ME.curLevel;
 
 	var curLayerInstance(get,never) : Null<led.inst.LayerInstance>;
-		inline function get_curLayerInstance() return Client.ME.curLayerInstance;
+		inline function get_curLayerInstance() return Editor.ME.curLayerInstance;
 
 	// Render
 	var invalidated = true;
@@ -26,9 +26,10 @@ class Rulers extends dn.Process {
 	var resizePreview : h2d.Graphics;
 
 	public function new() {
-		super(client);
-		createRootInLayers(client.root, Const.DP_UI);
-		client.ge.addGlobalListener(onGlobalEvent);
+		super(editor);
+		
+		createRootInLayers(editor.root, Const.DP_UI);
+		editor.ge.addGlobalListener(onGlobalEvent);
 
 		draggables = RulerPos.createAll();
 
@@ -39,7 +40,7 @@ class Rulers extends dn.Process {
 
 	override function onDispose() {
 		super.onDispose();
-		client.ge.removeListener(onGlobalEvent);
+		editor.ge.removeListener(onGlobalEvent);
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
@@ -71,7 +72,7 @@ class Rulers extends dn.Process {
 		g.clear();
 		labels.removeChildren();
 
-		var c = C.getPerceivedLuminosityInt(client.project.bgColor)>=0.7 ? 0x0 : 0xffffff;
+		var c = C.getPerceivedLuminosityInt(editor.project.bgColor)>=0.7 ? 0x0 : 0xffffff;
 		var a = 0.3;
 		g.lineStyle(2, c, a);
 
@@ -101,7 +102,7 @@ class Rulers extends dn.Process {
 		addLabel(yLabel, Left);
 		addLabel(yLabel, Right);
 
-		addLabel(client.curLevel.identifier, Top, 2, PADDING*3);
+		addLabel(editor.curLevel.identifier, Top, 2, PADDING*3);
 
 
 		// Corners
@@ -177,12 +178,12 @@ class Rulers extends dn.Process {
 				draggedPos = p;
 
 		if( draggedPos!=null )
-			client.curTool.stopUsing(m);
+			editor.curTool.stopUsing(m);
 	}
 
 	function canUseResizers() {
 		return curLayerInstance!=null
-			&& !client.isKeyDown(K.SPACE) && !client.isShiftDown() && !client.isCtrlDown() && !client.isAltDown();
+			&& !editor.isKeyDown(K.SPACE) && !editor.isShiftDown() && !editor.isCtrlDown() && !editor.isAltDown();
 	}
 
 	public function onMouseMove(m:MouseCoords) {
@@ -193,7 +194,7 @@ class Rulers extends dn.Process {
 		if( canUseResizers() )
 			for( p in draggables )
 				if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p )
-					client.cursor.set( Resize(p) );
+					editor.cursor.set( Resize(p) );
 
 		// Drag only starts after a short threshold
 		if( isClicking() && draggedPos!=null && !dragStarted && M.dist(m.gx, m.gy, dragOrigin.gx, dragOrigin.gy)>=4 )
@@ -246,8 +247,8 @@ class Rulers extends dn.Process {
 			if( b.newLeft!=0 || b.newTop!=0 || b.newRight!=curLevel.pxWid || b.newBottom!=curLevel.pxHei ) {
 				var before = curLevel.toJson();
 				curLevel.applyNewBounds(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
-				client.ge.emit(LevelResized);
-				client.curLevelHistory.saveResizedState( before, curLevel.toJson() );
+				editor.ge.emit(LevelResized);
+				editor.curLevelHistory.saveResizedState( before, curLevel.toJson() );
 			}
 		}
 

@@ -1,10 +1,10 @@
 class LevelHistory {
 	static var MAX_HISTORY = 30;
 
-	var client(get,never): Client; inline function get_client() return Client.ME;
+	var editor(get,never): Editor; inline function get_editor() return Editor.ME;
 
 	var levelId : Int;
-	var level(get,never): led.Level; inline function get_level() return Client.ME.project.getLevel(levelId);
+	var level(get,never): led.Level; inline function get_level() return Editor.ME.project.getLevel(levelId);
 
 	var curIndex = -1;
 	var states : haxe.ds.Vector< HistoryState >;
@@ -100,7 +100,7 @@ class LevelHistory {
 			var droppedState = states[0];
 			switch droppedState {
 				case ResizedLevel(beforeJson, afterJson):
-					var level = led.Level.fromJson(client.project, afterJson);
+					var level = led.Level.fromJson(editor.project, afterJson);
 					for(li in level.layerInstances)
 						mostAncientLayerStates.set( li.layerDefUid, Layer(li.layerDefUid, null, li.toJson()) );
 
@@ -139,7 +139,7 @@ class LevelHistory {
 
 				// Animate bounds
 				if( bounds!=null )
-					client.levelRender.showHistoryBounds(undoneLayerId, bounds, 0xff0000);
+					editor.levelRender.showHistoryBounds(undoneLayerId, bounds, 0xff0000);
 
 				curIndex--;
 
@@ -149,7 +149,7 @@ class LevelHistory {
 				while( sid>=0 && before==null ) {
 					switch states[sid] {
 					case ResizedLevel(beforeJson, afterJson):
-						var level = led.Level.fromJson(client.project, afterJson);
+						var level = led.Level.fromJson(editor.project, afterJson);
 						for(li in level.layerInstances)
 							if( li.layerDefUid==undoneLayerId ) {
 								before = Layer(li.layerDefUid, null, li.toJson());
@@ -192,7 +192,7 @@ class LevelHistory {
 
 				case Layer(layerId, bounds, json):
 					if( bounds!=null )
-						client.levelRender.showHistoryBounds( layerId, bounds, 0x8ead4f );
+						editor.levelRender.showHistoryBounds( layerId, bounds, 0x8ead4f );
 			}
 
 			// #if debug
@@ -205,22 +205,22 @@ class LevelHistory {
 		switch s {
 			case ResizedLevel(beforeJson, afterJson):
 				var lidx = 0;
-				while( lidx < client.project.levels.length )
-					if( client.project.levels[lidx].uid == client.curLevelId )
+				while( lidx < editor.project.levels.length )
+					if( editor.project.levels[lidx].uid == editor.curLevelId )
 						break;
 
 				if( isUndo )
-					client.project.levels[lidx] = led.Level.fromJson(client.project, beforeJson);
+					editor.project.levels[lidx] = led.Level.fromJson(editor.project, beforeJson);
 				else
-					client.project.levels[lidx] = led.Level.fromJson(client.project, afterJson);
-				client.ge.emit(LevelRestoredFromHistory);
+					editor.project.levels[lidx] = led.Level.fromJson(editor.project, afterJson);
+				editor.ge.emit(LevelRestoredFromHistory);
 
 			case Layer(layerId, bounds, json):
 				for( i in 0...level.layerInstances.length )
 					if( level.layerInstances[i].layerDefUid==layerId )
-						level.layerInstances[i] = led.inst.LayerInstance.fromJson(client.project, json);
-				client.project.tidy(); // fix "_project" refs & possible broken "instance<->def" refs
-				client.ge.emit(LayerInstanceRestoredFromHistory);
+						level.layerInstances[i] = led.inst.LayerInstance.fromJson(editor.project, json);
+				editor.project.tidy(); // fix "_project" refs & possible broken "instance<->def" refs
+				editor.ge.emit(LayerInstanceRestoredFromHistory);
 		}
 	}
 

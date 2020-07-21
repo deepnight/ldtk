@@ -11,10 +11,10 @@ class MouseCoords {
 	inline function get_levelY() return M.round( ( gy/Const.SCALE - levelRender.root.y ) / levelRender.zoom );
 
 	public var cx(get,never) : Int;
-	inline function get_cx() return M.floor( levelX / client.curLayerInstance.def.gridSize );
+	inline function get_cx() return M.floor( levelX / editor.curLayerInstance.def.gridSize );
 
 	public var cy(get,never) : Int;
-	inline function get_cy() return M.floor( levelY / client.curLayerInstance.def.gridSize );
+	inline function get_cy() return M.floor( levelY / editor.curLayerInstance.def.gridSize );
 
 	public var htmlX(get,never) : Int;
 	inline function get_htmlX() return M.round( gx / js.Browser.window.devicePixelRatio + new J("#webgl").offset().left );
@@ -23,8 +23,8 @@ class MouseCoords {
 	inline function get_htmlY() return M.round( gy / js.Browser.window.devicePixelRatio + new J("#webgl").offset().top );
 
 
-	var client(get,never) : Client; inline function get_client() return Client.ME;
-	var levelRender(get,never) : display.LevelRender; inline function get_levelRender() return Client.ME.levelRender;
+	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
+	var levelRender(get,never) : display.LevelRender; inline function get_levelRender() return Editor.ME.levelRender;
 
 	public function new(gx:Float,gy:Float) {
 		this.gx = gx;
@@ -41,10 +41,10 @@ class MouseCoords {
 
 	public function clampToLayer(li:led.inst.LayerInstance) {
 		gx = M.fmax(gx, levelRender.root.x);
-		gx = M.fmin(gx, levelRender.root.x + client.curLevel.pxWid * levelRender.zoom - 1);
+		gx = M.fmin(gx, levelRender.root.x + editor.curLevel.pxWid * levelRender.zoom - 1);
 
 		gy = M.fmax(gy, levelRender.root.y);
-		gy = M.fmin(gy, levelRender.root.y + client.curLevel.pxHei * levelRender.zoom - 1);
+		gy = M.fmin(gy, levelRender.root.y + editor.curLevel.pxHei * levelRender.zoom - 1);
 
 	}
 }

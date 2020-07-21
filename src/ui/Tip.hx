@@ -4,7 +4,7 @@ class Tip extends dn.Process {
 	var jTip : js.jquery.JQuery;
 
 	private function new(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String) {
-		super(Client.ME);
+		super(Editor.ME);
 
 		jTip = new J("xml#tip").clone().children().first();
 		jTip.appendTo(App.ME.jBody);

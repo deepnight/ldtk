@@ -43,13 +43,13 @@ class EntityTool extends Tool<Int> {
 		super.updateCursor(m);
 
 		if( curEntityDef==null )
-			client.cursor.set(None);
+			editor.cursor.set(None);
 		else if( isRunning() && curMode==Remove )
-			client.cursor.set( Eraser(m.levelX,m.levelY) );
+			editor.cursor.set( Eraser(m.levelX,m.levelY) );
 		else if( curLevel.inBounds(m.levelX, m.levelY) )
-			client.cursor.set( Entity(curEntityDef, getPlacementX(m), getPlacementY(m)) );
+			editor.cursor.set( Entity(curEntityDef, getPlacementX(m), getPlacementY(m)) );
 		else
-			client.cursor.set(None);
+			editor.cursor.set(None);
 	}
 
 
@@ -66,7 +66,7 @@ class EntityTool extends Tool<Int> {
 					else {
 						ei.x = getPlacementX(m);
 						ei.y = getPlacementY(m);
-						client.setSelection( Entity(ei) );
+						editor.setSelection( Entity(ei) );
 						onEditAnything();
 						curMode = Move;
 					}
@@ -93,7 +93,7 @@ class EntityTool extends Tool<Int> {
 	}
 
 	function getPickedEntityInstance() : Null<led.inst.EntityInstance> {
-		switch client.selection {
+		switch editor.selection {
 			case null, IntGrid(_), Tile(_):
 				return null;
 
@@ -120,7 +120,7 @@ class EntityTool extends Tool<Int> {
 					var oldY = ei.y;
 					ei.x = getPlacementX(m);
 					ei.y = getPlacementY(m);
-					client.setSelection( Entity(ei) );
+					editor.setSelection( Entity(ei) );
 					return oldX!=ei.x || oldY!=ei.y;
 				}
 		}
@@ -134,7 +134,7 @@ class EntityTool extends Tool<Int> {
 		if( curMode==Move ) {
 			var ei = getPickedEntityInstance();
 			if( ei!=null )
-				client.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
+				editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
 		}
 	}
 
@@ -142,7 +142,7 @@ class EntityTool extends Tool<Int> {
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(left, right, top, bottom);
 		return false;
-		// client.ge.emit(LayerInstanceChanged);
+		// editor.ge.emit(LayerInstanceChanged);
 	}
 
 

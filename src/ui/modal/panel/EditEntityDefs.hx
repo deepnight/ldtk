@@ -24,7 +24,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		jEntityList.parent().find("button.create").click( function(_) {
 			var ed = project.defs.createEntityDef();
 			selectEntity(ed);
-			client.ge.emit(EntityDefAdded);
+			editor.ge.emit(EntityDefAdded);
 			jEntityForm.find("input").first().focus().select();
 		});
 
@@ -36,7 +36,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			}
 			new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("This operation cannot be canceled!"), function() {
 				project.defs.removeEntityDef(curEntity);
-				client.ge.emit(EntityDefRemoved);
+				editor.ge.emit(EntityDefRemoved);
 				if( project.defs.entities.length>0 )
 					selectEntity(project.defs.entities[0]);
 				else
@@ -71,7 +71,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					case _:
 				}
 				var f = curEntity.createFieldDef(project, type);
-				client.ge.emit(EntityFieldAdded);
+				editor.ge.emit(EntityFieldAdded);
 				selectField(f);
 				jFieldForm.find("input:first").focus().select();
 			}
@@ -101,15 +101,15 @@ class EditEntityDefs extends ui.modal.Panel {
 
 			new ui.modal.dialog.Confirm(ev.getThis(), function() {
 				curEntity.removeField(project, curField);
-				client.ge.emit(EntityFieldRemoved);
+				editor.ge.emit(EntityFieldRemoved);
 				selectField( curEntity.fieldDefs[0] );
 			});
 		});
 
 		// Select same entity as current client selection
 		var lastFieldId = LAST_FIELD_ID; // because selectEntity changes it
-		if( client.curLayerDef!=null && client.curLayerDef.type==Entities )
-			selectEntity( project.defs.getEntityDef(client.curTool.getSelectedValue()) );
+		if( editor.curLayerDef!=null && editor.curLayerDef.type==Entities )
+			selectEntity( project.defs.getEntityDef(editor.curTool.getSelectedValue()) );
 		else if( LAST_ENTITY_ID>=0 && project.defs.getEntityDef(LAST_ENTITY_ID)!=null )
 			selectEntity( project.defs.getEntityDef(LAST_ENTITY_ID) );
 		else
@@ -151,7 +151,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 	function selectEntity(ed:Null<led.def.EntityDef>) {
 		if( ed==null )
-			ed = client.project.defs.entities[0];
+			ed = editor.project.defs.entities[0];
 
 		curEntity = ed;
 		curField = ed==null ? null : ed.fieldDefs[0];
@@ -200,25 +200,25 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Dimensions
 		var i = Input.linkToHtmlInput( curEntity.width, jEntityForm.find("input[name='width']") );
 		i.setBounds(1,256);
-		i.onChange = client.ge.emit.bind(EntityDefChanged);
+		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 
 		var i = Input.linkToHtmlInput( curEntity.height, jEntityForm.find("input[name='height']") );
 		i.setBounds(1,256);
-		i.onChange = client.ge.emit.bind(EntityDefChanged);
+		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 
 		// Color
 		var col = jEntityForm.find("input[name=color]");
 		col.val( C.intToHex(curEntity.color) );
 		col.change( function(ev) {
 			curEntity.color = C.hexToInt( col.val() );
-			client.ge.emit(EntityDefChanged);
+			editor.ge.emit(EntityDefChanged);
 			updateEntityForm();
 		});
 
 		// Max per level
 		var i = Input.linkToHtmlInput(curEntity.maxPerLevel, jEntityForm.find("input[name='maxPerLevel']") );
 		i.setBounds(0,1024);
-		i.onChange = client.ge.emit.bind(EntityDefChanged);
+		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 
 		// Behavior when max is reached
 		var i = new form.input.BoolInput(
@@ -235,7 +235,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		var p = JsTools.createPivotEditor(curEntity.pivotX, curEntity.pivotY, curEntity.color, function(x,y) {
 			curEntity.pivotX = x;
 			curEntity.pivotY = y;
-			client.ge.emit(EntityDefChanged);
+			editor.ge.emit(EntityDefChanged);
 		});
 		jPivots.append(p);
 	}
@@ -307,7 +307,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 				defInput.change( function(ev) {
 					curField.setDefault( defInput.val() );
-					client.ge.emit(EntityFieldDefChanged);
+					editor.ge.emit(EntityFieldDefChanged);
 					defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
 				});
 
@@ -338,7 +338,7 @@ class EditEntityDefs extends ui.modal.Panel {
 						curField.setDefault(null);
 					else if( v!="" )
 						curField.setDefault(v);
-					client.ge.emit(EntityFieldDefChanged);
+					editor.ge.emit(EntityFieldDefChanged);
 				});
 
 			case F_Color:
@@ -346,7 +346,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				defInput.val( C.intToHex(curField.getColorDefault()) );
 				defInput.change( function(ev) {
 					curField.setDefault( defInput.val() );
-					client.ge.emit(EntityFieldDefChanged);
+					editor.ge.emit(EntityFieldDefChanged);
 				});
 
 			case F_Bool:
@@ -355,20 +355,20 @@ class EditEntityDefs extends ui.modal.Panel {
 				defInput.change( function(ev) {
 					var checked = defInput.prop("checked") == true;
 					curField.setDefault( Std.string(checked) );
-					client.ge.emit(EntityFieldDefChanged);
+					editor.ge.emit(EntityFieldDefChanged);
 				});
 		}
 
 		// Nullable
 		var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
-		i.onChange = client.ge.emit.bind(EntityFieldDefChanged);
+		i.onChange = editor.ge.emit.bind(EntityFieldDefChanged);
 
 		// Min
 		var input = jFieldForm.find("input[name=min]");
 		input.val( curField.min==null ? "" : curField.min );
 		input.change( function(ev) {
 			curField.setMin( input.val() );
-			client.ge.emit(EntityFieldDefChanged);
+			editor.ge.emit(EntityFieldDefChanged);
 		});
 
 		// Max
@@ -376,7 +376,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		input.val( curField.max==null ? "" : curField.max );
 		input.change( function(ev) {
 			curField.setMax( input.val() );
-			client.ge.emit(EntityFieldDefChanged);
+			editor.ge.emit(EntityFieldDefChanged);
 		});
 	}
 
@@ -409,7 +409,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		JsTools.makeSortable(".entityList ul", function(from, to) {
 			var moved = project.defs.sortEntityDef(from,to);
 			selectEntity(moved);
-			client.ge.emit(EntityDefSorted);
+			editor.ge.emit(EntityDefSorted);
 		});
 
 		// Fields
@@ -433,7 +433,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		JsTools.makeSortable(".window .fieldList ul", function(from, to) {
 			var moved = curEntity.sortField(from,to);
 			selectField(moved);
-			client.ge.emit(EntityFieldSorted);
+			editor.ge.emit(EntityFieldSorted);
 		});
 	}
 
