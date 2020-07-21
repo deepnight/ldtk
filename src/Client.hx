@@ -464,6 +464,7 @@ class Client extends dn.Process {
 				Lang.t._("The project file is missing in ::path::. Save to this path anyway?", { path:projectFilePath }),
 				onSave.bind(true)
 			);
+			return;
 		}
 
 		var data = JsTools.prepareProjectFile(project);
