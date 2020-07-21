@@ -47,8 +47,7 @@ class Client extends dn.Process {
 		ME = this;
 		createRoot(parent.root);
 		projectFilePath = path;
-		App.ME.session.lastDir = getProjectDir();
-		App.ME.saveSessionDataToLocalStorage();
+		App.ME.registerRecentProject(path);
 
 		// Events
 		new J("body")

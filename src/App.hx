@@ -23,7 +23,7 @@ class App extends dn.Process {
 
 		// Restore last stored project state
 		session = {
-			lastDir: null,
+			recentProjects: [],
 		}
 		session = dn.LocalStorage.readObject("session", session);
 
@@ -31,7 +31,7 @@ class App extends dn.Process {
 	}
 
 
-	public function saveSessionDataToLocalStorage() {
+	public function saveSessionData() {
 		dn.LocalStorage.writeObject("session", session);
 	}
 
@@ -41,6 +41,13 @@ class App extends dn.Process {
 			curPageProcess.destroy();
 			curPageProcess = null;
 		}
+	}
+
+	public function registerRecentProject(path:String) {
+		session.recentProjects.remove(path);
+		session.recentProjects.push(path);
+		saveSessionData();
+		return true;
 	}
 
 	public function openEditor(p:led.Project, path:String) {
@@ -59,6 +66,14 @@ class App extends dn.Process {
 		super.onDispose();
 		if( ME==this )
 			ME = null;
+	}
+
+	public function getDefaultDir() {
+		if( session.recentProjects.length==0 )
+			return JsTools.getCwd(); // find a better default?
+
+		var last = session.recentProjects[session.recentProjects.length-1];
+		return dn.FilePath.fromFile(last).directory;
 	}
 
 	public function setWindowTitle(str:String) {

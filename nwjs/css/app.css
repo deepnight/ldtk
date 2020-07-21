@@ -258,6 +258,34 @@ div.key {
   border-radius: 2px;
 }
 
+.path {
+  flex: 1 1 auto;
+  text-align: right;
+  overflow: auto;
+  opacity: 1;
+  align-items: center;
+}
+
+.path span + span {
+  margin-left: 2px;
+}
+
+.path span:not(.slash) {
+  display: inline-block;
+  font-size: 9pt;
+}
+
+.path span:not(.slash):last-of-type {
+  color: #ffcc00;
+  font-weight: bold;
+  font-size: 10pt;
+}
+
+.path span.slash {
+  color: #545d73;
+  font-size: 12pt;
+}
+
 ul.niceList:first-child {
   margin-top: 0;
 }
@@ -1098,6 +1126,14 @@ canvas#webgl {
   font-size: 0.8em;
 }
 
+#page.home .wrapper ul.recents .path span:not(:last-of-type) {
+  font-size: 8pt;
+}
+
+#page.home .wrapper ul.recents li:not(:first-of-type) {
+  opacity: 0.6;
+}
+
 .compactPanel #page.editor {
   grid-template-columns: 150px auto;
 }
@@ -1597,35 +1633,6 @@ canvas#webgl {
 .window.panel.tilesetDefs li.tileset canvas.fullPreview {
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
   background-color: rgba(0, 0, 0, 0.4);
-}
-
-.window.panel.tilesetDefs span.path {
-  flex: 1 1 auto;
-  text-align: right;
-  overflow: auto;
-  opacity: 1;
-  align-items: center;
-}
-
-.window.panel.tilesetDefs span.path span + span {
-  margin-left: 2px;
-}
-
-.window.panel.tilesetDefs span.path span:not(.slash) {
-  display: inline-block;
-  font-size: 9pt;
-  padding: 2px;
-}
-
-.window.panel.tilesetDefs span.path span:not(.slash):last-of-type {
-  color: #ffcc00;
-  font-weight: bold;
-  font-size: 10pt;
-}
-
-.window.panel.tilesetDefs span.path span.slash {
-  color: #545d73;
-  font-size: 12pt;
 }
 
 .window.panel.entityDefs .content {

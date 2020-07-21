@@ -236,6 +236,13 @@ class JsTools {
 	}
 
 
+	public static function makePath(path:String) {
+		path = StringTools.replace(path,"\\","/");
+		var parts = path.split("/").map( function(p) return '<span>$p</span>' );
+		var e = new J( parts.join('<span class="slash">/</span>') );
+		return e.wrapAll('<div class="path"/>').parent();
+	}
+
 	// *** File API (NWJS) **************************************
 
 	#if hxnodejs

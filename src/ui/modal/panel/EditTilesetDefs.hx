@@ -126,8 +126,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var jPath = jForm.find(".path");
 		if( cur.relPath!=null ) {
 			jPath.empty();
-			var parts = cur.relPath.split("/").map( function(p) return '<span>$p</span>' );
-			jPath.append( parts.join('<span class="slash">/</span>') );
+			jPath.append( JsTools.makePath(cur.relPath) );
 		}
 		else
 			jPath.text("-- No file --");
