@@ -69,8 +69,8 @@ class Home extends dn.Process {
 		// Parse
 		var json = null;
 		var p = try {
-			var bytes = JsTools.readFileBytes(filePath);
-			json = haxe.Json.parse( bytes.toString() );
+			var raw = JsTools.readFileString(filePath);
+			json = haxe.Json.parse(raw);
 			led.Project.fromJson(json);
 		}
 		catch(e:Dynamic) {
