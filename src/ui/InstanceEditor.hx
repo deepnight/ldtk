@@ -14,7 +14,7 @@ class InstanceEditor extends dn.Process {
 		Client.ME.ge.addGlobalListener(onGlobalEvent);
 
 		jPanel = new J('<div class="instanceEditor"/>');
-		Client.ME.jBody.append(jPanel);
+		App.ME.jBody.append(jPanel);
 		updateForm();
 	}
 

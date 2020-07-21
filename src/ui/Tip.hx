@@ -7,7 +7,7 @@ class Tip extends dn.Process {
 		super(Client.ME);
 
 		jTip = new J("xml#tip").clone().children().first();
-		jTip.appendTo(Client.ME.jBody);
+		jTip.appendTo(App.ME.jBody);
 		jTip.css("min-width", target.outerWidth()+"px");
 		if( className!=null )
 			jTip.addClass(className);

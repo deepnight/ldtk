@@ -126,14 +126,13 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var jPath = jForm.find(".path");
 		if( cur.relPath!=null ) {
 			jPath.empty();
-			var parts = cur.relPath.split("/").map( function(p) return '<span>$p</span>' );
-			jPath.append( parts.join('<span class="slash">/</span>') );
+			jPath.append( JsTools.makePath(cur.relPath) );
 		}
 		else
 			jPath.text("-- No file --");
 		jPath.off().click( function(ev) {
 			if( cur.relPath!=null )
-				JsTools.exploreToFile( client.makeFullFilePath(cur.relPath) );
+				JsTools.exploreToFile( Client.ME.makeFullFilePath(cur.relPath) );
 		});
 
 		// Fields
@@ -152,9 +151,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 			b.text("Replace image");
 
 		b.click( function(ev) {
-			JsTools.loadDialog(["jpg","jpeg","gif","png"], function(absPath) {
+			JsTools.loadDialog(["jpg","jpeg","gif","png"], Client.ME.getProjectDir(), function(absPath) {
 				var oldPath = cur.relPath;
-				var relPath = client.makeRelativeFilePath( absPath );
+				var relPath = Client.ME.makeRelativeFilePath( absPath );
 
 				if( !cur.loadAtlasImage(relPath) ) {
 					switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) {

@@ -268,6 +268,33 @@ div.key {
 }
 
 
+.path {
+	flex: 1 1 auto;
+	text-align: right;
+	overflow: auto;
+	opacity: 1;
+	align-items: center;
+
+	span+span {
+		margin-left: 2px;
+	}
+
+	span:not(.slash) {
+		display: inline-block;
+		font-size: 9pt;
+
+		&:last-of-type {
+			color: $orange;
+			font-weight: bold;
+			font-size: 10pt;
+		}
+	}
+	span.slash {
+		color: $bgLight;
+		font-size: 12pt;
+	}
+}
+
 ul.niceList:first-child {
 	margin-top: 0;
 }
@@ -279,6 +306,7 @@ ul.niceList {
 	margin-bottom: 4px;
 	border: 1px solid $bgLight;
 	background-color: $bgDark;
+	overflow-x: hidden;
 
 	&:empty {
 		background-image: url("/img/stripes.png");
@@ -939,16 +967,31 @@ textarea {
 	}
 }
 
-#editor {
-	display: grid;
-	grid-template-columns: 400px auto;
-	width: 100%;
-	height: 100%;
+canvas#webgl {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100% !important;
+	height: 100% !important;
+	z-index: 1;
+}
 
+#page {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+}
+
+#page.editor {
 	#mainPanel {
-		position: relative;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 400px;
+		height: 100vh;
+
 		display: grid;
-		height: 100%;
 		overflow: hidden;
 		grid-template-rows: min-content 250px min-content auto;
 		padding: 5px;
@@ -1029,16 +1072,53 @@ textarea {
 			}
 		}
 	}
+}
 
-	canvas {
-		width: 100% !important;
-		height: 100% !important;
+
+#page.home {
+	background-color: $bgDark;
+	width: 100vw;
+	height: 100vh;
+	display: grid;
+	align-items: center;
+	justify-items: center;
+
+	.wrapper {
+		width: 400px;
+
+		.logo {
+			font-family: Roboto;
+			font-size: 100px;
+			line-height: 80%;
+			text-align: center;
+			color: $orange;
+		}
+
+		.version {
+			opacity: 0.6;
+			text-align: center;
+			margin-bottom: 10px;
+			font-size: 0.8em;
+		}
+		ul.recents {
+			min-height: 15vh;
+			max-height: 30vh;
+			overflow-y: auto;
+
+			.path span:not(:last-of-type) {
+				font-size: 8pt;
+			}
+
+			li:not(:first-of-type) {
+				opacity: 0.6;
+			}
+		}
 	}
 }
 
 
-.compactPanel {
-	#editor {
+.compactPanel { // TODO move that to Page DIV
+	#page.editor {
 		grid-template-columns: 150px auto;
 		#mainPanel {
 			grid-template-rows: min-content 200px auto;
@@ -1522,37 +1602,6 @@ textarea {
 		canvas.fullPreview {
 			box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
 			background-color: rgba(0, 0, 0, 0.4);
-		}
-	}
-
-	span.path {
-		flex: 1 1 auto;
-		text-align: right;
-		overflow: auto;
-		// background-color: $bgDark;
-		opacity: 1;
-		align-items: center;
-
-		span+span {
-			margin-left: 2px;
-		}
-
-		span:not(.slash) {
-			display: inline-block;
-			font-size: 9pt;
-			padding: 2px;
-			// border-radius: 3px;
-			// background-color: $bgDark;
-
-			&:last-of-type {
-				color: $orange;
-				font-weight: bold;
-				font-size: 10pt;
-			}
-		}
-		span.slash {
-			color: $bgLight;
-			font-size: 12pt;
 		}
 	}
 }

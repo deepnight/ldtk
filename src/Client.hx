@@ -3,13 +3,7 @@ import hxd.Key;
 class Client extends dn.Process {
 	public static var ME : Client;
 
-	#if nwjs
-	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
-	#end
 
-	public var jDoc(get,never) : J; inline function get_jDoc() return new J(js.Browser.document);
-	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
-	public var jCanvas(get,never) : J; inline function get_jCanvas() return new J("#webgl");
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
@@ -26,8 +20,8 @@ class Client extends dn.Process {
 
 
 	public var ge : GlobalEventDispatcher;
-	public var session : SessionData;
 	public var project : led.Project;
+	public var projectFilePath : String;
 	public var curLevelId : Int;
 	var curLayerId : Int;
 	public var curTool : Tool<Dynamic>;
@@ -45,15 +39,15 @@ class Client extends dn.Process {
 		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
 
+	public function new(parent:dn.Process, p:led.Project, path:String) {
+		super(parent);
 
-	public function new() {
-		super();
+		App.ME.loadPage("editor");
 
 		ME = this;
-		createRoot(Boot.ME.s2d);
-		#if nwjs
-		appWin.maximize();
-		#end
+		createRoot(parent.root);
+		projectFilePath = path;
+		App.ME.registerRecentProject(path);
 
 		// Events
 		new J("body")
@@ -74,20 +68,11 @@ class Client extends dn.Process {
 
 		initUI();
 
-		// Restore last stored project state
-		session = {
-			projectFilePath: null,
-		}
-		session = dn.LocalStorage.readObject("session", session);
 
 		levelRender = new display.LevelRender();
 		rulers = new display.Rulers();
-		if( !JsTools.fileExists(session.projectFilePath) || !loadProject(session.projectFilePath) ) {
-			selectProject( led.Project.createEmpty() );
-			N.error("Couldn't re-open last project ("+session.projectFilePath+"). Please start a new one, or load an existing one! ");
-			// TODO open future "project selection" page
-		}
-		dn.Process.resizeAll();
+
+		selectProject(p);
 	}
 
 	public function initUI() {
@@ -142,6 +127,12 @@ class Client extends dn.Process {
 		});
 		ui.Tip.attach(jMainPanel.find("button.editEnums"), "Entity enums");
 
+
+		jMainPanel.find("button.close").click( function(_) {
+			App.ME.openHome();
+		});
+
+
 		jMainPanel.find("button.showHelp").click( function(_) {
 			onHelp();
 		});
@@ -157,6 +148,22 @@ class Client extends dn.Process {
 			if( ev.keyCode==K.SPACE && !e.is("input") && !e.is("textarea") )
 				ev.preventDefault();
 		});
+	}
+
+
+	public function getProjectDir() {
+		return dn.FilePath.fromFile( projectFilePath ).directory;
+	}
+
+	public function makeRelativeFilePath(filePath:String) {
+		var relativePath = dn.FilePath.fromFile( filePath );
+		relativePath.makeRelativeTo( getProjectDir() );
+		return relativePath.full;
+	}
+
+	public function makeFullFilePath(relPath:String) {
+		var fp = dn.FilePath.fromFile( getProjectDir() +"/"+ relPath );
+		return fp.full;
 	}
 
 	public function selectProject(p:led.Project) {
@@ -201,7 +208,7 @@ class Client extends dn.Process {
 	}
 
 	inline function hasInputFocus() {
-		return jBody.find("input:focus, textarea:focus").length>0;
+		return App.ME.jBody.find("input:focus, textarea:focus").length>0;
 	}
 	function onKeyPress(keyId:Int) {
 		switch keyId {
@@ -213,7 +220,7 @@ class Client extends dn.Process {
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() ) {
-					jBody.toggleClass("compactPanel");
+					App.ME.jBody.toggleClass("compactPanel");
 					updateAppBg();
 				}
 
@@ -230,12 +237,12 @@ class Client extends dn.Process {
 					onSave();
 
 			case K.N:
-				if( !hasInputFocus() && isCtrlDown() )
-					onNew();
+				// if( !hasInputFocus() && isCtrlDown() )
+				// 	onNew();
 
 			case K.O, K.L:
-				if( !hasInputFocus() && isCtrlDown() )
-					onLoad();
+				// if( !hasInputFocus() && isCtrlDown() )
+				// 	onLoad();
 
 			case K.H:
 				if( !hasInputFocus() )
@@ -430,26 +437,6 @@ class Client extends dn.Process {
 		m.loadTemplate("help","helpWindow");
 	}
 
-	public function onNew(?bt:js.jquery.JQuery) {
-		new ui.modal.dialog.Confirm(bt, function() {
-			JsTools.saveAsDialog(["json"], function(filePath) {
-				selectProject( led.Project.createEmpty() );
-
-				var fp = dn.FilePath.fromFile(filePath);
-				fp.extension = "json";
-				var data = makeProjectFile();
-				JsTools.writeFileBytes(fp.full, data.bytes);
-
-				session.projectFilePath = fp.full;
-				saveSessionDataToLocalStorage();
-
-				N.msg("New project created: "+fp.full);
-				ui.Modal.closeAll();
-			});
-			// selectProject( led.Project.createEmpty() );
-		});
-	}
-
 	// function loadProjectFromLocalStorage() : Bool {
 	// 	try {
 			// var json = dn.LocalStorage.readJson("cookie");
@@ -464,93 +451,25 @@ class Client extends dn.Process {
 	// 	}
 	// }
 
-	function saveProjectToLocalStorage(?json:Dynamic) {
-		if( json==null )
-			json = project.toJson();
+	// function saveProjectToLocalStorage(?json:Dynamic) {
+	// 	if( json==null )
+	// 		json = project.toJson();
 
-		dn.LocalStorage.writeJson("cookie", json);
-	}
-
-	function saveSessionDataToLocalStorage() {
-		dn.LocalStorage.writeObject("session", session);
-	}
-
-	public function getProjectRoot() {
-		return dn.FilePath.fromFile( session.projectFilePath ).directory;
-	}
-
-	public function makeRelativeFilePath(filePath:String) {
-		var relativePath = dn.FilePath.fromFile( filePath );
-		relativePath.makeRelativeTo( getProjectRoot() );
-		return relativePath.full;
-	}
-
-	public function makeFullFilePath(relPath:String) {
-		var fp = dn.FilePath.fromFile( getProjectRoot() +"/"+ relPath );
-		return fp.full;
-	}
-
-	function makeProjectFile() : { bytes:haxe.io.Bytes, json:Dynamic } {
-		var json = project.toJson();
-		var jsonStr = haxe.Json.stringify(json);
-		jsonStr = dn.HaxeJson.prettify(jsonStr); // TODO make optional
-		return {
-			bytes: haxe.io.Bytes.ofString( jsonStr ),
-			json: json,
-		}
-	}
+	// 	dn.LocalStorage.writeJson("cookie", json);
+	// }
 
 	public function onSave(?bypassMissing=false) {
-		if( !bypassMissing && !JsTools.fileExists(session.projectFilePath) ) {
+		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
 			new ui.modal.dialog.Confirm(
-				Lang.t._("The project file is missing in ::path::. Save to this path anyway?", { path:session.projectFilePath }),
+				Lang.t._("The project file is missing in ::path::. Save to this path anyway?", { path:projectFilePath }),
 				onSave.bind(true)
 			);
 		}
 
-		var data = makeProjectFile();
-		JsTools.writeFileBytes(session.projectFilePath, data.bytes);
-		saveProjectToLocalStorage(data.json);
-		N.msg("Saved to "+session.projectFilePath);
-}
-
-	public function onLoad() {
-		JsTools.loadDialog([".json"], function(path) {
-			loadProject(path);
-		});
+		var data = JsTools.prepareProjectFile(project);
+		JsTools.writeFileBytes(projectFilePath, data.bytes);
+		N.msg("Saved to "+projectFilePath);
 	}
-
-	function loadProject(filePath:String) {
-		if( !JsTools.fileExists(filePath) ) {
-			N.error("File not found: "+filePath);
-			return false;
-		}
-
-		// Parse
-		var json = null;
-		var p = try {
-			var bytes = JsTools.readFileBytes(filePath);
-			json = haxe.Json.parse( bytes.toString() );
-			led.Project.fromJson(json);
-		}
-		catch(e:Dynamic) null;
-
-		if( p==null ) {
-			N.error("Couldn't read project file!");
-			return false;
-		}
-
-		// Update everything
-		selectProject( p );
-		ui.Modal.closeAll();
-		N.msg("Loaded project: "+filePath);
-
-		session.projectFilePath = dn.FilePath.fromFile(filePath).full;
-		saveSessionDataToLocalStorage();
-		saveProjectToLocalStorage(json);
-		return true;
-	}
-
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
@@ -654,20 +573,15 @@ class Client extends dn.Process {
 	}
 
 	inline function canvasWid() {
-		return jCanvas.outerWidth() * js.Browser.window.devicePixelRatio;
+		return App.ME.jCanvas.outerWidth() * js.Browser.window.devicePixelRatio;
 	}
 
 	inline function canvasHei() {
-		return jCanvas.outerHeight() * js.Browser.window.devicePixelRatio;
+		return App.ME.jCanvas.outerHeight() * js.Browser.window.devicePixelRatio;
 	}
 
 	function updateTitles() {
-		#if electron
-		// TODO
-		#elseif nwjs
-		appWin.title = project.name+" ("+curLevel.identifier+")    --    L-Ed v"+Const.APP_VERSION;
-		#end
-
+		App.ME.setWindowTitle( project.name+" ("+curLevel.identifier+")" );
 		// jMainPanel.find("h2#levelName").text( curLevel.getName() );
 	}
 
@@ -717,7 +631,7 @@ class Client extends dn.Process {
 
 		for(ld in project.defs.layers) {
 			var li = curLevel.getLayerInstance(ld);
-			var e = jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
+			var e = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			list.append(e);
 
 			if( li==curLayerInstance )

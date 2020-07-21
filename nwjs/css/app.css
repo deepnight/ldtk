@@ -258,6 +258,34 @@ div.key {
   border-radius: 2px;
 }
 
+.path {
+  flex: 1 1 auto;
+  text-align: right;
+  overflow: auto;
+  opacity: 1;
+  align-items: center;
+}
+
+.path span + span {
+  margin-left: 2px;
+}
+
+.path span:not(.slash) {
+  display: inline-block;
+  font-size: 9pt;
+}
+
+.path span:not(.slash):last-of-type {
+  color: #ffcc00;
+  font-weight: bold;
+  font-size: 10pt;
+}
+
+.path span.slash {
+  color: #545d73;
+  font-size: 12pt;
+}
+
 ul.niceList:first-child {
   margin-top: 0;
 }
@@ -270,6 +298,7 @@ ul.niceList {
   margin-bottom: 4px;
   border: 1px solid #545d73;
   background-color: #1e2229;
+  overflow-x: hidden;
 }
 
 ul.niceList:empty {
@@ -964,17 +993,29 @@ textarea:focus {
   margin-top: 8px;
 }
 
-#editor {
-  display: grid;
-  grid-template-columns: 400px auto;
-  width: 100%;
-  height: 100%;
+canvas#webgl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1;
 }
 
-#editor #mainPanel {
-  position: relative;
+#page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+#page.editor #mainPanel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 100vh;
   display: grid;
-  height: 100%;
   overflow: hidden;
   grid-template-rows: min-content 250px min-content auto;
   padding: 5px;
@@ -986,15 +1027,15 @@ textarea:focus {
   box-sizing: border-box;
 }
 
-#editor #mainPanel #mainbar {
+#page.editor #mainPanel #mainbar {
   overflow: hidden;
 }
 
-#editor #mainPanel #mainbar button.showHelp {
+#page.editor #mainPanel #mainbar button.showHelp {
   flex: 0 1 0;
 }
 
-#editor #mainPanel #mainbar h2#levelName {
+#page.editor #mainPanel #mainbar h2#levelName {
   margin: 0;
   padding: 0;
   margin-top: 8px;
@@ -1003,27 +1044,27 @@ textarea:focus {
   cursor: pointer;
 }
 
-#editor #mainPanel #mainbar h2#levelName:hover {
+#page.editor #mainPanel #mainbar h2#levelName:hover {
   color: white;
 }
 
-#editor #mainPanel ul.niceList {
+#page.editor #mainPanel ul.niceList {
   min-height: auto;
 }
 
-#editor #mainPanel ul#layers {
+#page.editor #mainPanel ul#layers {
   overflow-x: hidden;
   overflow-y: auto;
   margin: 0;
 }
 
-#editor #mainPanel ul#layers li {
+#page.editor #mainPanel ul#layers li {
   grid-template-columns: min-content auto min-content;
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#editor #mainPanel ul#layers li .name {
+#page.editor #mainPanel ul#layers li .name {
   font-size: 10pt;
   flex: 1 1 auto;
   order: 1;
@@ -1031,7 +1072,7 @@ textarea:focus {
   cursor: pointer;
 }
 
-#editor #mainPanel ul#layers li .vis {
+#page.editor #mainPanel ul#layers li .vis {
   flex: 0 0 auto;
   padding: 10px;
   margin: -10px;
@@ -1042,51 +1083,88 @@ textarea:focus {
   cursor: zoom-out;
 }
 
-#editor #mainPanel ul#layers li .vis:hover {
+#page.editor #mainPanel ul#layers li .vis:hover {
   outline: 1px solid white;
   outline-offset: -4px;
 }
 
-#editor #mainPanel #mainPaletteWrapper {
+#page.editor #mainPanel #mainPaletteWrapper {
   overflow: auto;
   position: relative;
   outline: 1px solid white;
 }
 
-#editor #mainPanel #mainPaletteWrapper ul.niceList {
+#page.editor #mainPanel #mainPaletteWrapper ul.niceList {
   height: 100%;
   box-sizing: border-box;
 }
 
-#editor canvas {
-  width: 100% !important;
-  height: 100% !important;
+#page.home {
+  background-color: #1e2229;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  align-items: center;
+  justify-items: center;
 }
 
-.compactPanel #editor {
+#page.home .wrapper {
+  width: 400px;
+}
+
+#page.home .wrapper .logo {
+  font-family: Roboto;
+  font-size: 100px;
+  line-height: 80%;
+  text-align: center;
+  color: #ffcc00;
+}
+
+#page.home .wrapper .version {
+  opacity: 0.6;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 0.8em;
+}
+
+#page.home .wrapper ul.recents {
+  min-height: 15vh;
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
+#page.home .wrapper ul.recents .path span:not(:last-of-type) {
+  font-size: 8pt;
+}
+
+#page.home .wrapper ul.recents li:not(:first-of-type) {
+  opacity: 0.6;
+}
+
+.compactPanel #page.editor {
   grid-template-columns: 150px auto;
 }
 
-.compactPanel #editor #mainPanel {
+.compactPanel #page.editor #mainPanel {
   grid-template-rows: min-content 200px auto;
 }
 
-.compactPanel #editor #mainPanel #guide {
+.compactPanel #page.editor #mainPanel #guide {
   display: none;
 }
 
-.compactPanel #editor #mainPanel ul.niceList li {
+.compactPanel #page.editor #mainPanel ul.niceList li {
   padding-top: 4px;
   padding-bottom: 4px;
   gap: 4px;
 }
 
-.compactPanel #editor #mainPanel ul.niceList li .icon {
+.compactPanel #page.editor #mainPanel ul.niceList li .icon {
   width: 0.75em;
   height: 0.75em;
 }
 
-.compactPanel #editor #mainPanel h2#levelName {
+.compactPanel #page.editor #mainPanel h2#levelName {
   font-size: 1.1em;
 }
 
@@ -1562,35 +1640,6 @@ textarea:focus {
 .window.panel.tilesetDefs li.tileset canvas.fullPreview {
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
   background-color: rgba(0, 0, 0, 0.4);
-}
-
-.window.panel.tilesetDefs span.path {
-  flex: 1 1 auto;
-  text-align: right;
-  overflow: auto;
-  opacity: 1;
-  align-items: center;
-}
-
-.window.panel.tilesetDefs span.path span + span {
-  margin-left: 2px;
-}
-
-.window.panel.tilesetDefs span.path span:not(.slash) {
-  display: inline-block;
-  font-size: 9pt;
-  padding: 2px;
-}
-
-.window.panel.tilesetDefs span.path span:not(.slash):last-of-type {
-  color: #ffcc00;
-  font-weight: bold;
-  font-size: 10pt;
-}
-
-.window.panel.tilesetDefs span.path span.slash {
-  color: #545d73;
-  font-size: 12pt;
 }
 
 .window.panel.entityDefs .content {

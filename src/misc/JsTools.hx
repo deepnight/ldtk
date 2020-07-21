@@ -19,6 +19,17 @@ class JsTools {
 		);
 	}
 
+	public static function prepareProjectFile(p:led.Project) : { bytes:haxe.io.Bytes, json:Dynamic } {
+		var json = p.toJson();
+		var jsonStr = haxe.Json.stringify(json);
+		jsonStr = dn.HaxeJson.prettify(jsonStr); // TODO make optional
+
+		return {
+			bytes: haxe.io.Bytes.ofString( jsonStr ),
+			json: json,
+		}
+	}
+
 	public static function createLayerTypeIcon(type:led.LedTypes.LayerType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
 		var wrapper = new J('<span class="layerType"/>');
 
@@ -148,13 +159,13 @@ class JsTools {
 		return input;
 	}
 
-	public static function loadDialog(?fileTypes:Array<String>, onLoad:(filePath:String)->Void) {
+	public static function loadDialog(?fileTypes:Array<String>, rootDir:String, onLoad:(filePath:String)->Void) {
 		var input = getTmpFileInput();
 
 		if( fileTypes==null || fileTypes.length==0 )
 			fileTypes = [".*"];
 		input.attr("accept", fileTypes.join(","));
-		input.attr("nwWorkingDir",Client.ME.getProjectRoot());
+		input.attr("nwWorkingDir",rootDir);
 
 		input.change( function(ev) {
 			var path : String = input.val();
@@ -168,14 +179,14 @@ class JsTools {
 		input.click();
 	}
 
-	public static function saveAsDialog(?fileTypes:Array<String>, onFileSelect:(filePath:String)->Void) {
+	public static function saveAsDialog(?fileTypes:Array<String>, rootDir:String, onFileSelect:(filePath:String)->Void) {
 		var input = getTmpFileInput();
 
 		if( fileTypes==null || fileTypes.length==0 )
 			fileTypes = [".*"];
 		input.attr("accept", fileTypes.join(","));
 		input.attr("nwsaveas","nwsaveas");
-		input.attr("nwWorkingDir",Client.ME.getProjectRoot());
+		input.attr("nwWorkingDir",rootDir);
 
 		input.change( function(ev) {
 			var path = input.val();
@@ -224,6 +235,13 @@ class JsTools {
 		});
 	}
 
+
+	public static function makePath(path:String) {
+		path = StringTools.replace(path,"\\","/");
+		var parts = path.split("/").map( function(p) return '<span>$p</span>' );
+		var e = new J( parts.join('<span class="slash">/</span>') );
+		return e.wrapAll('<div class="path"/>').parent();
+	}
 
 	// *** File API (NWJS) **************************************
 

@@ -1,5 +1,5 @@
 typedef SessionData = {
-	var projectFilePath: String;
+	var recentProjects : Array<String>;
 }
 
 enum GlobalEvent {
