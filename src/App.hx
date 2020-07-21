@@ -8,7 +8,7 @@ class App extends dn.Process {
 	public var jCanvas(get,never) : J; inline function get_jCanvas() return new J("#webgl");
 
 	#if nwjs
-	var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
+	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
 	#end
 
 	var curPageProcess : Null< dn.Process >;
@@ -20,6 +20,7 @@ class App extends dn.Process {
 		createRoot(Boot.ME.s2d);
 		#if nwjs
 		appWin.maximize();
+		appWin.on("close", exit);
 		#end
 
 		// Init app dir
@@ -117,5 +118,14 @@ class App extends dn.Process {
 			.removeClass()
 			.addClass(id)
 			.html(raw);
+	}
+
+	public function exit() {
+		if( Editor.ME!=null && Editor.ME.needSaving ) {
+			ui.Modal.closeAll();
+			new ui.modal.dialog.Confirm(Lang.t._("All unsaved changes will be lost!"), appWin.close.bind(true));
+		}
+		else
+			appWin.close(true);
 	}
 }

@@ -26,7 +26,7 @@ class Editor extends dn.Process {
 	var curLayerId : Int;
 	public var curTool : Tool<Dynamic>;
 	var keyDowns : Map<Int,Bool> = new Map();
-	var needSaving = false;
+	public var needSaving = false;
 
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
@@ -444,7 +444,8 @@ class Editor extends dn.Process {
 		m.loadTemplate("help","helpWindow");
 	}
 
-	function onClose(bt:js.jquery.JQuery) {
+	function onClose(?bt:js.jquery.JQuery) {
+		ui.Modal.closeAll();
 		if( needSaving )
 			new ui.modal.dialog.Confirm(bt, Lang.t._("Some changes were not saved and will be lost! Do you still want to exit?"), App.ME.openHome);
 		else
