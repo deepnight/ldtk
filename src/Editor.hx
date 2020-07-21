@@ -448,27 +448,6 @@ class Editor extends dn.Process {
 			App.ME.openHome();
 	}
 
-	// function loadProjectFromLocalStorage() : Bool {
-	// 	try {
-			// var json = dn.LocalStorage.readJson("cookie");
-	// 		if( json==null )
-	// 			throw null;
-	// 		project = led.Project.fromJson(json);
-	// 		return true;
-	// 	}
-	// 	catch( err:Dynamic ) {
-	// 		project = led.Project.createEmpty();
-	// 		return false;
-	// 	}
-	// }
-
-	// function saveProjectToLocalStorage(?json:Dynamic) {
-	// 	if( json==null )
-	// 		json = project.toJson();
-
-	// 	dn.LocalStorage.writeJson("cookie", json);
-	// }
-
 	public function onSave(?bypassMissing=false) {
 		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
 			new ui.modal.dialog.Confirm(
