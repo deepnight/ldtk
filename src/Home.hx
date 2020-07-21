@@ -87,19 +87,17 @@ class Home extends dn.Process {
 		App.ME.openEditor(p, filePath);
 		N.msg("Loaded project: "+filePath);
 		return true;
-}
+	}
 
 	public function onNew() {
 		JsTools.saveAsDialog(["json"], App.ME.getDefaultDir(), function(filePath) {
-			var p = led.Project.createEmpty();
-
 			var fp = dn.FilePath.fromFile(filePath);
 			fp.extension = "json";
+
+			var p = led.Project.createEmpty();
+			p.name = fp.fileName;
 			var data = JsTools.prepareProjectFile(p);
 			JsTools.writeFileBytes(fp.full, data.bytes);
-
-			// session.projectFilePath = fp.full;
-			// saveSessionDataToLocalStorage();
 
 			N.msg("New project created: "+fp.full);
 			App.ME.openEditor(p, fp.full);
