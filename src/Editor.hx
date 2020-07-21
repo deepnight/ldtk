@@ -3,7 +3,6 @@ import hxd.Key;
 class Editor extends dn.Process {
 	public static var ME : Editor;
 
-
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
@@ -20,6 +19,7 @@ class Editor extends dn.Process {
 
 
 	public var ge : GlobalEventDispatcher;
+	public var watcher : misc.FileWatcher;
 	public var project : led.Project;
 	public var projectFilePath : String;
 	public var curLevelId : Int;
@@ -62,6 +62,7 @@ class Editor extends dn.Process {
 		ge = new GlobalEventDispatcher();
 		ge.addGlobalListener( onGlobalEvent );
 
+		watcher = new misc.FileWatcher(this);
 
 		cursor = new ui.Cursor();
 		selectionCursor = new ui.Cursor();
@@ -171,6 +172,8 @@ class Editor extends dn.Process {
 	}
 
 	public function selectProject(p:led.Project) {
+		watcher.clearAllWatches();
+
 		project = p;
 		project.tidy();
 		project.reloadExternalFiles( getProjectDir() );
@@ -189,6 +192,16 @@ class Editor extends dn.Process {
 		levelHistory.set( curLevelId, new LevelHistory(curLevelId) ); // TODO
 
 		ge.emit(ProjectSelected);
+
+		// Image hot-reloading
+		for( td in project.defs.tilesets ) {
+			N.debug("watching "+td.relPath);
+			watcher.watch( makeFullFilePath(td.relPath), function() {
+				td.reloadImage( getProjectDir() );
+				ge.emit(TilesetDefChanged);
+				N.msg( Lang.t._("Reloaded: ::file::", { file:td.relPath }) );
+			});
+		}
 	}
 
 	function onJsKeyDown(ev:js.jquery.Event) {
@@ -259,7 +272,7 @@ class Editor extends dn.Process {
 				if( !hasInputFocus() ) {
 					var t = haxe.Timer.stamp();
 					var json = project.levels[0].toJson();
-					Editor.ME.debug(dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
+					App.ME.debug(dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
 				}
 			#end
 		}
@@ -407,17 +420,6 @@ class Editor extends dn.Process {
 		var panRatio = e.wheelDelta < 0 ? 0.15 : 0.05;
 		levelRender.focusLevelX = levelRender.focusLevelX*(1-panRatio) + mouseX*panRatio;
 		levelRender.focusLevelY = levelRender.focusLevelY*(1-panRatio) + mouseY*panRatio;
-	}
-
-	public function debug(msg:Dynamic, append=false) {
-		var wrapper = new J("#debug");
-		if( !append )
-			wrapper.empty();
-		wrapper.show();
-
-		var line = new J("<p/>");
-		line.append( Std.string(msg) );
-		line.appendTo(wrapper);
 	}
 
 	public function selectLevel(l:led.Level) {

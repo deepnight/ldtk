@@ -73,6 +73,17 @@ class App extends dn.Process {
 		dn.Process.resizeAll();
 	}
 
+	public function debug(msg:Dynamic, append=false) {
+		var wrapper = new J("#debug");
+		if( !append )
+			wrapper.empty();
+		wrapper.show();
+
+		var line = new J("<p/>");
+		line.append( Std.string(msg) );
+		line.appendTo(wrapper);
+	}
+
 	override function onDispose() {
 		super.onDispose();
 		if( ME==this )
