@@ -33,6 +33,8 @@ class Home extends dn.Process {
 
 	function updateRecents() {
 		var jRecentList = jPage.find("ul.recents");
+		jRecentList.empty();
+
 		var recents = App.ME.session.recentProjects;
 		if( recents.length==0 )
 			jRecentList.hide();

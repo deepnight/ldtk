@@ -51,7 +51,8 @@ class App extends dn.Process {
 	}
 
 	public function unregisterRecentProject(path:String) {
-		return session.recentProjects.remove(path);
+		session.recentProjects.remove(path);
+		saveSessionData();
 	}
 
 	public function openEditor(p:led.Project, path:String) {
