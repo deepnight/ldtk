@@ -486,7 +486,8 @@ class Client extends dn.Process {
 	}
 
 	public function makeFullFilePath(relPath:String) {
-		return getProjectRoot() +"/"+ relPath;
+		var fp = dn.FilePath.fromFile( getProjectRoot() +"/"+ relPath );
+		return fp.full;
 	}
 
 	function makeProjectFile() : { bytes:haxe.io.Bytes, json:Dynamic } {
