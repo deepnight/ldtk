@@ -1375,6 +1375,22 @@ textarea:focus {
   grid-template-columns: 200px auto;
 }
 
+.window.panel.levelList .content .path,
+.window.panel.layerDefs .content .path,
+.window.panel.tilesetDefs .content .path {
+  flex: 1 0 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.window.panel.levelList .content .path:hover span:not(.slash),
+.window.panel.layerDefs .content .path:hover span:not(.slash),
+.window.panel.tilesetDefs .content .path:hover span:not(.slash) {
+  border-radius: 3px;
+  background-color: #ffcc00;
+  color: black !important;
+}
+
 .window.panel.levelList .content > .header,
 .window.panel.layerDefs .content > .header,
 .window.panel.tilesetDefs .content > .header {
@@ -1555,23 +1571,31 @@ textarea:focus {
 
 .window.panel.tilesetDefs span.path {
   flex: 1 1 auto;
+  text-align: right;
   overflow: auto;
-  background-color: #1e2229;
   opacity: 1;
+  align-items: center;
 }
 
-.window.panel.tilesetDefs span.path span {
+.window.panel.tilesetDefs span.path span + span {
+  margin-left: 2px;
+}
+
+.window.panel.tilesetDefs span.path span:not(.slash) {
   display: inline-block;
   font-size: 9pt;
+  padding: 2px;
 }
 
-.window.panel.tilesetDefs span.path span:last-of-type {
+.window.panel.tilesetDefs span.path span:not(.slash):last-of-type {
   color: #ffcc00;
   font-weight: bold;
+  font-size: 10pt;
 }
 
-.window.panel.tilesetDefs span.path span + span::before {
-  content: " / ";
+.window.panel.tilesetDefs span.path span.slash {
+  color: #545d73;
+  font-size: 12pt;
 }
 
 .window.panel.entityDefs .content {

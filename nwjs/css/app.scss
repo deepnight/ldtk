@@ -1335,6 +1335,19 @@ textarea {
 		grid-template-rows: min-content auto;
 		grid-template-columns: 200px auto;
 
+		.path {
+			flex: 1 0 100%;
+			box-sizing: border-box;
+			cursor: pointer;
+			&:hover {
+				span:not(.slash) {
+					border-radius: 3px;
+					background-color: $orange;
+					color: black !important;
+				}
+			}
+		}
+
 		> .header {
 			grid-column: 1/3;
 			h2 {
@@ -1514,22 +1527,35 @@ textarea {
 			background-color: rgba(0, 0, 0, 0.4);
 		}
 	}
+
 	span.path {
 		flex: 1 1 auto;
+		text-align: right;
 		overflow: auto;
-		background-color: $bgDark;
+		// background-color: $bgDark;
 		opacity: 1;
+		align-items: center;
 
-		span {
+		span+span {
+			margin-left: 2px;
+		}
+
+		span:not(.slash) {
 			display: inline-block;
 			font-size: 9pt;
+			padding: 2px;
+			// border-radius: 3px;
+			// background-color: $bgDark;
+
+			&:last-of-type {
+				color: $orange;
+				font-weight: bold;
+				font-size: 10pt;
+			}
 		}
-		span:last-of-type {
-			color: $orange;
-			font-weight: bold;
-		}
-		span+span::before {
-			content: " / ";
+		span.slash {
+			color: $bgLight;
+			font-size: 12pt;
 		}
 	}
 }

@@ -115,7 +115,7 @@ class JsTools {
 
 	public static function getHtmlTemplate(name:String) : Null<String> {
 		if( !_fileCache.exists(name) ) {
-			var path = dn.FilePath.fromFile("tpl/"+name);
+			var path = dn.FilePath.fromFile(Boot.APP_ROOT + "tpl/" + name);
 			path.extension = "html";
 
 			if( !fileExists(path.full) )
@@ -253,6 +253,17 @@ class JsTools {
 
 	public static function getCwd() {
 		return js.Node.process.cwd();
+	}
+
+	public static function exploreToFile(filePath:String) {
+		var fp = dn.FilePath.fromFile(filePath);
+		if( isWindows() )
+			fp.useBackslashes();
+		nw.Shell.showItemInFolder(fp.full);
+	}
+
+	public static function isWindows() {
+		return js.Node.process.platform.toLowerCase().indexOf("win")==0;
 	}
 
 	#end

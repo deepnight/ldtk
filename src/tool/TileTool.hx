@@ -188,7 +188,7 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 	override function updateCursor(m:MouseCoords) {
 		super.updateCursor(m);
 
-		if( curTilesetDef==null || !curTilesetDef.hasAtlas() ) {
+		if( curTilesetDef==null || !curTilesetDef.isAtlasValid() ) {
 			client.cursor.set(None);
 			return;
 		}

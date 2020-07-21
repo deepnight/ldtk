@@ -76,15 +76,15 @@ class Client extends dn.Process {
 
 		// Restore last stored project state
 		session = {
-			projectPath: null,
+			projectFilePath: null,
 		}
 		session = dn.LocalStorage.readObject("session", session);
 
 		levelRender = new display.LevelRender();
 		rulers = new display.Rulers();
-		if( !JsTools.fileExists(session.projectPath) || !loadProject(session.projectPath) ) {
+		if( !JsTools.fileExists(session.projectFilePath) || !loadProject(session.projectFilePath) ) {
 			selectProject( led.Project.createEmpty() );
-			N.error("Couldn't re-open last project ("+session.projectPath+"). Please start a new one, or load an existing one! ");
+			N.error("Couldn't re-open last project ("+session.projectFilePath+"). Please start a new one, or load an existing one! ");
 			// TODO open future "project selection" page
 		}
 		dn.Process.resizeAll();
@@ -232,6 +232,10 @@ class Client extends dn.Process {
 			case K.N:
 				if( !hasInputFocus() && isCtrlDown() )
 					onNew();
+
+			case K.O, K.L:
+				if( !hasInputFocus() && isCtrlDown() )
+					onLoad();
 
 			case K.H:
 				if( !hasInputFocus() )
@@ -436,7 +440,7 @@ class Client extends dn.Process {
 				var data = makeProjectFile();
 				JsTools.writeFileBytes(fp.full, data.bytes);
 
-				session.projectPath = fp.full;
+				session.projectFilePath = fp.full;
 				saveSessionDataToLocalStorage();
 
 				N.msg("New project created: "+fp.full);
@@ -471,6 +475,21 @@ class Client extends dn.Process {
 		dn.LocalStorage.writeObject("session", session);
 	}
 
+	public function getProjectRoot() {
+		return dn.FilePath.fromFile( session.projectFilePath ).directory;
+	}
+
+	public function makeRelativeFilePath(filePath:String) {
+		var relativePath = dn.FilePath.fromFile( filePath );
+		relativePath.makeRelativeTo( getProjectRoot() );
+		return relativePath.full;
+	}
+
+	public function makeFullFilePath(relPath:String) {
+		var fp = dn.FilePath.fromFile( getProjectRoot() +"/"+ relPath );
+		return fp.full;
+	}
+
 	function makeProjectFile() : { bytes:haxe.io.Bytes, json:Dynamic } {
 		var json = project.toJson();
 		var jsonStr = haxe.Json.stringify(json);
@@ -482,17 +501,17 @@ class Client extends dn.Process {
 	}
 
 	public function onSave(?bypassMissing=false) {
-		if( !bypassMissing && !JsTools.fileExists(session.projectPath) ) {
+		if( !bypassMissing && !JsTools.fileExists(session.projectFilePath) ) {
 			new ui.modal.dialog.Confirm(
-				Lang.t._("The project file is missing in ::path::. Save to this path anyway?", { path:session.projectPath }),
+				Lang.t._("The project file is missing in ::path::. Save to this path anyway?", { path:session.projectFilePath }),
 				onSave.bind(true)
 			);
 		}
 
 		var data = makeProjectFile();
-		JsTools.writeFileBytes(session.projectPath, data.bytes);
+		JsTools.writeFileBytes(session.projectFilePath, data.bytes);
 		saveProjectToLocalStorage(data.json);
-		N.msg("Saved to "+session.projectPath);
+		N.msg("Saved to "+session.projectFilePath);
 }
 
 	public function onLoad() {
@@ -526,11 +545,11 @@ class Client extends dn.Process {
 		ui.Modal.closeAll();
 		N.msg("Loaded project: "+filePath);
 
-		session.projectPath = dn.FilePath.fromFile(filePath).full;
+		session.projectFilePath = dn.FilePath.fromFile(filePath).full;
 		saveSessionDataToLocalStorage();
 		saveProjectToLocalStorage(json);
 		return true;
-}
+	}
 
 
 	function onGlobalEvent(e:GlobalEvent) {

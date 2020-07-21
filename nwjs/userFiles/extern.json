@@ -1,0 +1,574 @@
+{
+	"dataVersion":1,
+	"nextUniqId":15,
+	"defs":{
+		"layers":[
+			{
+				"uid":13,
+				"type":{
+					"id":0,
+					"p":[
+						
+					]
+				},
+				"identifier":"IntGrid",
+				"gridSize":16,
+				"displayOpacity":1,
+				"intGridValues":[
+					{
+						"color":0
+					}
+				],
+				"tilesetDefUid":null,
+				"tilePivotX":0,
+				"tilePivotY":0
+			},
+			{
+				"uid":4,
+				"type":{
+					"id":1,
+					"p":[
+						
+					]
+				},
+				"identifier":"Entities",
+				"gridSize":16,
+				"displayOpacity":1,
+				"intGridValues":[
+					{
+						"color":0
+					}
+				],
+				"tilesetDefUid":null,
+				"tilePivotX":0,
+				"tilePivotY":0
+			}
+		],
+		"entities":[
+			{
+				"uid":2,
+				"identifier":"Mob",
+				"width":16,
+				"height":32,
+				"color":16711680,
+				"maxPerLevel":0,
+				"discardExcess":true,
+				"pivotX":0.5,
+				"pivotY":1,
+				"fieldDefs":[
+					{
+						"uid":3,
+						"type":{
+							"id":5,
+							"p":[
+								1
+							]
+						},
+						"identifier":"mobType",
+						"canBeNull":false,
+						"editorDisplayMode":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"min":null,
+						"max":null,
+						"defaultOverride":null
+					},
+					{
+						"uid":11,
+						"type":{
+							"id":5,
+							"p":[
+								10
+							]
+						},
+						"identifier":"loot",
+						"canBeNull":true,
+						"editorDisplayMode":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"min":null,
+						"max":null,
+						"defaultOverride":null
+					},
+					{
+						"uid":12,
+						"type":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"identifier":"lootCount",
+						"canBeNull":false,
+						"editorDisplayMode":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"min":1,
+						"max":null,
+						"defaultOverride":{
+							"id":0,
+							"p":[
+								1
+							]
+						}
+					},
+					{
+						"uid":5,
+						"type":{
+							"id":3,
+							"p":[
+								
+							]
+						},
+						"identifier":"elite",
+						"canBeNull":false,
+						"editorDisplayMode":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"min":null,
+						"max":null,
+						"defaultOverride":null
+					},
+					{
+						"uid":6,
+						"type":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"identifier":"lifeOverride",
+						"canBeNull":true,
+						"editorDisplayMode":{
+							"id":2,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"min":1,
+						"max":null,
+						"defaultOverride":null
+					},
+					{
+						"uid":7,
+						"type":{
+							"id":1,
+							"p":[
+								
+							]
+						},
+						"identifier":"scale",
+						"canBeNull":false,
+						"editorDisplayMode":{
+							"id":2,
+							"p":[
+								
+							]
+						},
+						"editorDisplayPos":{
+							"id":0,
+							"p":[
+								
+							]
+						},
+						"min":0.1,
+						"max":4,
+						"defaultOverride":{
+							"id":1,
+							"p":[
+								1
+							]
+						}
+					}
+				]
+			}
+		],
+		"tilesets":[
+			{
+				"uid":14,
+				"identifier":"Cavesofgallet_tiles",
+				"relPath":"atlas/cavesofgallet_tiles.png",
+				"pxWid":96,
+				"pxHei":256,
+				"tileGridSize":8,
+				"tileGridSpacing":0,
+				"savedSelections":[
+					
+				]
+			}
+		],
+		"enums":[
+			{
+				"uid":1,
+				"identifier":"MobType",
+				"values":[
+					"Trash",
+					"Shooter",
+					"Ninja"
+				]
+			},
+			{
+				"uid":10,
+				"identifier":"ItemType",
+				"values":[
+					"Gold",
+					"Ammo",
+					"Food"
+				]
+			}
+		]
+	},
+	"levels":[
+		{
+			"uid":0,
+			"identifier":"Level0",
+			"pxWid":256,
+			"pxHei":256,
+			"layerInstances":[
+				{
+					"__comment__":"Level0->IntGrid",
+					"levelId":0,
+					"layerDefUid":13,
+					"pxOffsetX":0,
+					"pxOffsetY":0,
+					"intGrid":[
+						
+					],
+					"gridTiles":[
+						
+					],
+					"entityInstances":[
+						
+					]
+				},
+				{
+					"__comment__":"Level0->Entities",
+					"levelId":0,
+					"layerDefUid":4,
+					"pxOffsetX":0,
+					"pxOffsetY":0,
+					"intGrid":[
+						
+					],
+					"gridTiles":[
+						
+					],
+					"entityInstances":[
+						{
+							"__comment__":"Mob",
+							"defUid":2,
+							"x":88,
+							"y":80,
+							"fieldInstances":[
+								{
+									"__comment__":"mobType (MobType)",
+									"defUid":3,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Trash"
+										]
+									}
+								},
+								{
+									"__comment__":"elite (Bool)",
+									"defUid":5,
+									"internalValue":null
+								},
+								{
+									"__comment__":"lifeOverride (Int)",
+									"defUid":6,
+									"internalValue":null
+								},
+								{
+									"__comment__":"scale (Float)",
+									"defUid":7,
+									"internalValue":null
+								},
+								{
+									"__comment__":"loot (ItemType)",
+									"defUid":11,
+									"internalValue":null
+								},
+								{
+									"__comment__":"lootCount (Int)",
+									"defUid":12,
+									"internalValue":null
+								}
+							]
+						},
+						{
+							"__comment__":"Mob",
+							"defUid":2,
+							"x":168,
+							"y":80,
+							"fieldInstances":[
+								{
+									"__comment__":"mobType (MobType)",
+									"defUid":3,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Ninja"
+										]
+									}
+								},
+								{
+									"__comment__":"elite (Bool)",
+									"defUid":5,
+									"internalValue":null
+								},
+								{
+									"__comment__":"lifeOverride (Int)",
+									"defUid":6,
+									"internalValue":null
+								},
+								{
+									"__comment__":"scale (Float)",
+									"defUid":7,
+									"internalValue":null
+								},
+								{
+									"__comment__":"loot (ItemType)",
+									"defUid":11,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Ammo"
+										]
+									}
+								},
+								{
+									"__comment__":"lootCount (Int)",
+									"defUid":12,
+									"internalValue":{
+										"id":0,
+										"p":[
+											10
+										]
+									}
+								}
+							]
+						},
+						{
+							"__comment__":"Mob",
+							"defUid":2,
+							"x":72,
+							"y":144,
+							"fieldInstances":[
+								{
+									"__comment__":"mobType (MobType)",
+									"defUid":3,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Trash"
+										]
+									}
+								},
+								{
+									"__comment__":"elite (Bool)",
+									"defUid":5,
+									"internalValue":null
+								},
+								{
+									"__comment__":"lifeOverride (Int)",
+									"defUid":6,
+									"internalValue":null
+								},
+								{
+									"__comment__":"scale (Float)",
+									"defUid":7,
+									"internalValue":null
+								},
+								{
+									"__comment__":"loot (ItemType)",
+									"defUid":11,
+									"internalValue":null
+								},
+								{
+									"__comment__":"lootCount (Int)",
+									"defUid":12,
+									"internalValue":null
+								}
+							]
+						},
+						{
+							"__comment__":"Mob",
+							"defUid":2,
+							"x":136,
+							"y":224,
+							"fieldInstances":[
+								{
+									"__comment__":"mobType (MobType)",
+									"defUid":3,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Ninja"
+										]
+									}
+								},
+								{
+									"__comment__":"elite (Bool)",
+									"defUid":5,
+									"internalValue":{
+										"id":2,
+										"p":[
+											true
+										]
+									}
+								},
+								{
+									"__comment__":"lifeOverride (Int)",
+									"defUid":6,
+									"internalValue":{
+										"id":0,
+										"p":[
+											10
+										]
+									}
+								},
+								{
+									"__comment__":"scale (Float)",
+									"defUid":7,
+									"internalValue":{
+										"id":1,
+										"p":[
+											2
+										]
+									}
+								},
+								{
+									"__comment__":"loot (ItemType)",
+									"defUid":11,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Gold"
+										]
+									}
+								},
+								{
+									"__comment__":"lootCount (Int)",
+									"defUid":12,
+									"internalValue":{
+										"id":0,
+										"p":[
+											150
+										]
+									}
+								}
+							]
+						},
+						{
+							"__comment__":"Mob",
+							"defUid":2,
+							"x":216,
+							"y":176,
+							"fieldInstances":[
+								{
+									"__comment__":"mobType (MobType)",
+									"defUid":3,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Shooter"
+										]
+									}
+								},
+								{
+									"__comment__":"elite (Bool)",
+									"defUid":5,
+									"internalValue":{
+										"id":2,
+										"p":[
+											true
+										]
+									}
+								},
+								{
+									"__comment__":"lifeOverride (Int)",
+									"defUid":6,
+									"internalValue":null
+								},
+								{
+									"__comment__":"scale (Float)",
+									"defUid":7,
+									"internalValue":{
+										"id":1,
+										"p":[
+											2
+										]
+									}
+								},
+								{
+									"__comment__":"loot (ItemType)",
+									"defUid":11,
+									"internalValue":{
+										"id":3,
+										"p":[
+											"Food"
+										]
+									}
+								},
+								{
+									"__comment__":"lootCount (Int)",
+									"defUid":12,
+									"internalValue":null
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"name":"Enum testing",
+	"defaultPivotX":0,
+	"defaultPivotY":0,
+	"defaultGridSize":16,
+	"bgColor":8355987
+}
