@@ -105,7 +105,7 @@ class TilesetDef {
 		relPath = dn.FilePath.fromFile( relFilePath ).useSlashes().full;
 
 		try {
-			var fullPath = App.ME.makeFullFilePath(relPath);
+			var fullPath = Client.ME.makeFullFilePath(relPath);
 			var bytes = misc.JsTools.readFileBytes(fullPath);
 
 			if( bytes==null )

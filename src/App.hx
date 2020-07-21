@@ -23,7 +23,7 @@ class App extends dn.Process {
 
 		// Restore last stored project state
 		session = {
-			projectFilePath: null,
+			lastDir: null,
 		}
 		session = dn.LocalStorage.readObject("session", session);
 
@@ -35,22 +35,6 @@ class App extends dn.Process {
 		dn.LocalStorage.writeObject("session", session);
 	}
 
-	public function getCurrentRootDir() {
-		return dn.FilePath.fromFile( session.projectFilePath ).directory;
-	}
-
-	public function makeRelativeFilePath(filePath:String) {
-		var relativePath = dn.FilePath.fromFile( filePath );
-		relativePath.makeRelativeTo( getCurrentRootDir() );
-		return relativePath.full;
-	}
-
-	public function makeFullFilePath(relPath:String) {
-		var fp = dn.FilePath.fromFile( getCurrentRootDir() +"/"+ relPath );
-		return fp.full;
-	}
-
-
 	function clearCurPage() {
 		jPage.empty();
 		if( curPageProcess!=null ) {
@@ -59,9 +43,9 @@ class App extends dn.Process {
 		}
 	}
 
-	public function openEditor(p:led.Project) {
+	public function openEditor(p:led.Project, path:String) {
 		clearCurPage();
-		curPageProcess = new Client(this, p);
+		curPageProcess = new Client(this, p, path);
 		dn.Process.resizeAll();
 	}
 

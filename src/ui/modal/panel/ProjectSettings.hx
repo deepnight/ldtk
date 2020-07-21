@@ -8,8 +8,8 @@ class ProjectSettings extends ui.modal.Panel {
 		loadTemplate( "projectSettings", "projectSettings" );
 		linkToButton("button.editProject");
 
-		jContent.find("button.new").click( function(ev) client.onNew(ev.getThis()) );
-		jContent.find("button.load").click( function(_) client.onLoad() );
+		// jContent.find("button.new").click( function(ev) client.onNew(ev.getThis()) );
+		// jContent.find("button.load").click( function(_) client.onLoad() );
 
 		updateProjectForm();
 	}

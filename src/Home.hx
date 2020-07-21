@@ -15,7 +15,11 @@ class Home extends dn.Process {
 			pv: Const.DATA_VERSION,
 		}) );
 
-		jPage.find(".newProject").click( function(_) {
+		jPage.find(".load").click( function(ev) {
+			onLoad();
+		});
+
+		jPage.find(".new").click( function(ev) {
 			onNew();
 		});
 
@@ -23,8 +27,46 @@ class Home extends dn.Process {
 		createRoot(p.root);
 	}
 
+	function getDefaultDir() {
+		return App.ME.session.lastDir==null ? JsTools.getCwd() : App.ME.session.lastDir;
+	}
+
+
+
+	public function onLoad() {
+		JsTools.loadDialog([".json"], getDefaultDir(), function(filePath) {
+			if( !JsTools.fileExists(filePath) ) {
+				N.error("File not found: "+filePath);
+				return;
+			}
+
+			// Parse
+			var json = null;
+			var p = try {
+				var bytes = JsTools.readFileBytes(filePath);
+				json = haxe.Json.parse( bytes.toString() );
+				led.Project.fromJson(json);
+			}
+			catch(e:Dynamic) null;
+
+			if( p==null ) {
+				N.error("Couldn't read project file!");
+				return;
+			}
+
+			// Open it
+			App.ME.openEditor(p, filePath);
+			N.msg("Loaded project: "+filePath);
+			return;
+		});
+	}
+
+	function loadProject(filePath:String) {
+
+	}
+
 	public function onNew() {
-		JsTools.saveAsDialog(["json"], function(filePath) {
+		JsTools.saveAsDialog(["json"], getDefaultDir(), function(filePath) {
 			var p = led.Project.createEmpty();
 
 			var fp = dn.FilePath.fromFile(filePath);
@@ -36,7 +78,7 @@ class Home extends dn.Process {
 			// saveSessionDataToLocalStorage();
 
 			N.msg("New project created: "+fp.full);
-			App.ME.openEditor(p);
+			App.ME.openEditor(p, fp.full);
 		});
 	}
 

@@ -159,13 +159,13 @@ class JsTools {
 		return input;
 	}
 
-	public static function loadDialog(?fileTypes:Array<String>, onLoad:(filePath:String)->Void) {
+	public static function loadDialog(?fileTypes:Array<String>, rootDir:String, onLoad:(filePath:String)->Void) {
 		var input = getTmpFileInput();
 
 		if( fileTypes==null || fileTypes.length==0 )
 			fileTypes = [".*"];
 		input.attr("accept", fileTypes.join(","));
-		input.attr("nwWorkingDir",App.ME.getCurrentRootDir());
+		input.attr("nwWorkingDir",rootDir);
 
 		input.change( function(ev) {
 			var path : String = input.val();
@@ -179,14 +179,14 @@ class JsTools {
 		input.click();
 	}
 
-	public static function saveAsDialog(?fileTypes:Array<String>, onFileSelect:(filePath:String)->Void) {
+	public static function saveAsDialog(?fileTypes:Array<String>, rootDir:String, onFileSelect:(filePath:String)->Void) {
 		var input = getTmpFileInput();
 
 		if( fileTypes==null || fileTypes.length==0 )
 			fileTypes = [".*"];
 		input.attr("accept", fileTypes.join(","));
 		input.attr("nwsaveas","nwsaveas");
-		input.attr("nwWorkingDir",App.ME.getCurrentRootDir());
+		input.attr("nwWorkingDir",rootDir);
 
 		input.change( function(ev) {
 			var path = input.val();

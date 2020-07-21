@@ -21,6 +21,7 @@ class Client extends dn.Process {
 
 	public var ge : GlobalEventDispatcher;
 	public var project : led.Project;
+	public var projectFilePath : String;
 	public var curLevelId : Int;
 	var curLayerId : Int;
 	public var curTool : Tool<Dynamic>;
@@ -38,14 +39,16 @@ class Client extends dn.Process {
 		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
 
-
-	public function new(parent:dn.Process, p:led.Project) {
+	public function new(parent:dn.Process, p:led.Project, path:String) {
 		super(parent);
 
 		App.ME.loadPage("editor");
 
 		ME = this;
 		createRoot(parent.root);
+		projectFilePath = path;
+		App.ME.session.lastDir = getProjectDir();
+		App.ME.saveSessionDataToLocalStorage();
 
 		// Events
 		new J("body")
@@ -69,12 +72,8 @@ class Client extends dn.Process {
 
 		levelRender = new display.LevelRender();
 		rulers = new display.Rulers();
-		if( !JsTools.fileExists(App.ME.session.projectFilePath) || !loadProject(App.ME.session.projectFilePath) ) {
-			selectProject( led.Project.createEmpty() );
-			N.error("Couldn't re-open last project ("+App.ME.session.projectFilePath+"). Please start a new one, or load an existing one! ");
-			App.ME.openHome();
-			return;
-		}
+
+		selectProject(p);
 	}
 
 	public function initUI() {
@@ -152,6 +151,22 @@ class Client extends dn.Process {
 		});
 	}
 
+
+	public function getProjectDir() {
+		return dn.FilePath.fromFile( projectFilePath ).directory;
+	}
+
+	public function makeRelativeFilePath(filePath:String) {
+		var relativePath = dn.FilePath.fromFile( filePath );
+		relativePath.makeRelativeTo( getProjectDir() );
+		return relativePath.full;
+	}
+
+	public function makeFullFilePath(relPath:String) {
+		var fp = dn.FilePath.fromFile( getProjectDir() +"/"+ relPath );
+		return fp.full;
+	}
+
 	public function selectProject(p:led.Project) {
 		project = p;
 		project.tidy();
@@ -223,12 +238,12 @@ class Client extends dn.Process {
 					onSave();
 
 			case K.N:
-				if( !hasInputFocus() && isCtrlDown() )
-					onNew();
+				// if( !hasInputFocus() && isCtrlDown() )
+				// 	onNew();
 
 			case K.O, K.L:
-				if( !hasInputFocus() && isCtrlDown() )
-					onLoad();
+				// if( !hasInputFocus() && isCtrlDown() )
+				// 	onLoad();
 
 			case K.H:
 				if( !hasInputFocus() )
@@ -423,26 +438,6 @@ class Client extends dn.Process {
 		m.loadTemplate("help","helpWindow");
 	}
 
-	public function onNew(?bt:js.jquery.JQuery) {
-		new ui.modal.dialog.Confirm(bt, function() {
-			JsTools.saveAsDialog(["json"], function(filePath) {
-				selectProject( led.Project.createEmpty() );
-
-				var fp = dn.FilePath.fromFile(filePath);
-				fp.extension = "json";
-				var data = JsTools.prepareProjectFile(project);
-				JsTools.writeFileBytes(fp.full, data.bytes);
-
-				App.ME.session.projectFilePath = fp.full;
-				App.ME.saveSessionDataToLocalStorage();
-
-				N.msg("New project created: "+fp.full);
-				ui.Modal.closeAll();
-			});
-			// selectProject( led.Project.createEmpty() );
-		});
-	}
-
 	// function loadProjectFromLocalStorage() : Bool {
 	// 	try {
 			// var json = dn.LocalStorage.readJson("cookie");
@@ -457,64 +452,25 @@ class Client extends dn.Process {
 	// 	}
 	// }
 
-	function saveProjectToLocalStorage(?json:Dynamic) {
-		if( json==null )
-			json = project.toJson();
+	// function saveProjectToLocalStorage(?json:Dynamic) {
+	// 	if( json==null )
+	// 		json = project.toJson();
 
-		dn.LocalStorage.writeJson("cookie", json);
-	}
+	// 	dn.LocalStorage.writeJson("cookie", json);
+	// }
 
 	public function onSave(?bypassMissing=false) {
-		if( !bypassMissing && !JsTools.fileExists(App.ME.session.projectFilePath) ) {
+		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
 			new ui.modal.dialog.Confirm(
-				Lang.t._("The project file is missing in ::path::. Save to this path anyway?", { path:App.ME.session.projectFilePath }),
+				Lang.t._("The project file is missing in ::path::. Save to this path anyway?", { path:projectFilePath }),
 				onSave.bind(true)
 			);
 		}
 
 		var data = JsTools.prepareProjectFile(project);
-		JsTools.writeFileBytes(App.ME.session.projectFilePath, data.bytes);
-		saveProjectToLocalStorage(data.json);
-		N.msg("Saved to "+App.ME.session.projectFilePath);
-}
-
-	public function onLoad() {
-		JsTools.loadDialog([".json"], function(path) {
-			loadProject(path);
-		});
+		JsTools.writeFileBytes(projectFilePath, data.bytes);
+		N.msg("Saved to "+projectFilePath);
 	}
-
-	function loadProject(filePath:String) {
-		if( !JsTools.fileExists(filePath) ) {
-			N.error("File not found: "+filePath);
-			return false;
-		}
-
-		// Parse
-		var json = null;
-		var p = try {
-			var bytes = JsTools.readFileBytes(filePath);
-			json = haxe.Json.parse( bytes.toString() );
-			led.Project.fromJson(json);
-		}
-		catch(e:Dynamic) null;
-
-		if( p==null ) {
-			N.error("Couldn't read project file!");
-			return false;
-		}
-
-		// Update everything
-		selectProject( p );
-		ui.Modal.closeAll();
-		N.msg("Loaded project: "+filePath);
-
-		App.ME.session.projectFilePath = dn.FilePath.fromFile(filePath).full;
-		App.ME.saveSessionDataToLocalStorage();
-		saveProjectToLocalStorage(json);
-		return true;
-	}
-
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
