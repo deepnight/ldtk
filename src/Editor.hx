@@ -26,6 +26,7 @@ class Editor extends dn.Process {
 	var curLayerId : Int;
 	public var curTool : Tool<Dynamic>;
 	var keyDowns : Map<Int,Bool> = new Map();
+	var needSaving = false;
 
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
@@ -73,6 +74,7 @@ class Editor extends dn.Process {
 		rulers = new display.Rulers();
 
 		selectProject(p);
+		needSaving = false;
 	}
 
 	public function initUI() {
@@ -111,26 +113,28 @@ class Editor extends dn.Process {
 		});
 		ui.Tip.attach(jMainPanel.find("button.editEntities"), "Entities");
 
-		jMainPanel.find("button.editTilesets").click( function(_) {
+		var bt = jMainPanel.find("button.editTilesets");
+		bt.click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditTilesetDefs) )
 				ui.Modal.closeAll();
 			else
 				new ui.modal.panel.EditTilesetDefs();
 		});
-		ui.Tip.attach(jMainPanel.find("button.editTilesets"), "Tilesets");
+		ui.Tip.attach(bt, "Tilesets");
 
-		jMainPanel.find("button.editEnums").click( function(_) {
+		var bt = jMainPanel.find("button.editEnums");
+		bt.click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditEnums) )
 				ui.Modal.closeAll();
 			else
 				new ui.modal.panel.EditEnums();
 		});
-		ui.Tip.attach(jMainPanel.find("button.editEnums"), "Entity enums");
+		ui.Tip.attach(bt, "Entity enums");
 
 
-		jMainPanel.find("button.close").click( function(_) {
-			App.ME.openHome();
-		});
+		var bt = jMainPanel.find("button.close");
+		bt.click( function(ev) onClose(ev.getThis()) );
+		ui.Tip.attach(bt, Lang.t._("Close project"));
 
 
 		jMainPanel.find("button.showHelp").click( function(_) {
@@ -437,6 +441,13 @@ class Editor extends dn.Process {
 		m.loadTemplate("help","helpWindow");
 	}
 
+	function onClose(bt:js.jquery.JQuery) {
+		if( needSaving )
+			new ui.modal.dialog.Confirm(bt, Lang.t._("Some changes were not saved and will be lost! Do you still want to exit?"), App.ME.openHome);
+		else
+			App.ME.openHome();
+	}
+
 	// function loadProjectFromLocalStorage() : Bool {
 	// 	try {
 			// var json = dn.LocalStorage.readJson("cookie");
@@ -469,10 +480,14 @@ class Editor extends dn.Process {
 
 		var data = JsTools.prepareProjectFile(project);
 		JsTools.writeFileBytes(projectFilePath, data.bytes);
+		needSaving = false;
 		N.msg("Saved to "+projectFilePath);
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
+		if( e!=ViewportChanged )
+			needSaving = true;
+
 		switch e {
 			case ViewportChanged:
 

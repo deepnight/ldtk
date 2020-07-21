@@ -155,6 +155,15 @@ button.grey {
 	}
 }
 
+button.close {
+	background-color: $bgDark;
+	border-color: $bgMed;
+	box-shadow: 0px 2px 0px $bgMed;
+	&:hover {
+		background-color: $bgLight;
+	}
+}
+
 .buttons {
 	display: flex;
 	flex-wrap: wrap;
@@ -413,6 +422,7 @@ ul.niceList {
 .icon.level		{ background-image: url("/img/icons/level.png"); }
 .icon.project	{ background-image: url("/img/icons/projectSettings.png"); }
 .icon.enum		{ background-image: url("/img/icons/enum.png"); }
+.icon.close		{ background-image: url("/img/icons/close.png"); }
 
 .icon.mouseLeft		{ background-image: url("/img/icons/mouseLeft.png"); image-rendering: pixelated; }
 .icon.mouseRight	{ background-image: url("/img/icons/mouseRight.png"); image-rendering: pixelated; }
@@ -1007,6 +1017,10 @@ canvas#webgl {
 
 			button.showHelp {
 				flex: 0 1 0;
+			}
+
+			button.close {
+				flex: 0 1 16px;
 			}
 
 			h2#levelName {

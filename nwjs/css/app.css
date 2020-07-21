@@ -150,6 +150,16 @@ button.grey:hover {
   background-color: #737f9d;
 }
 
+button.close {
+  background-color: #1e2229;
+  border-color: #2e333f;
+  box-shadow: 0px 2px 0px #2e333f;
+}
+
+button.close:hover {
+  background-color: #545d73;
+}
+
 .buttons {
   display: flex;
   flex-wrap: wrap;
@@ -429,6 +439,10 @@ ul.niceList li:not(.active):hover {
 
 .icon.enum {
   background-image: url("/img/icons/enum.png");
+}
+
+.icon.close {
+  background-image: url("/img/icons/close.png");
 }
 
 .icon.mouseLeft {
@@ -1033,6 +1047,10 @@ canvas#webgl {
 
 #page.editor #mainPanel #mainbar button.showHelp {
   flex: 0 1 0;
+}
+
+#page.editor #mainPanel #mainbar button.close {
+  flex: 0 1 16px;
 }
 
 #page.editor #mainPanel #mainbar h2#levelName {
