@@ -133,7 +133,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			jPath.text("-- No file --");
 		jPath.off().click( function(ev) {
 			if( cur.relPath!=null )
-				JsTools.exploreToFile( client.makeFullFilePath(cur.relPath) );
+				JsTools.exploreToFile( App.ME.makeFullFilePath(cur.relPath) );
 		});
 
 		// Fields
@@ -154,7 +154,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		b.click( function(ev) {
 			JsTools.loadDialog(["jpg","jpeg","gif","png"], function(absPath) {
 				var oldPath = cur.relPath;
-				var relPath = client.makeRelativeFilePath( absPath );
+				var relPath = App.ME.makeRelativeFilePath( absPath );
 
 				if( !cur.loadAtlasImage(relPath) ) {
 					switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) {

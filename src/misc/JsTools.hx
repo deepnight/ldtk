@@ -165,7 +165,7 @@ class JsTools {
 		if( fileTypes==null || fileTypes.length==0 )
 			fileTypes = [".*"];
 		input.attr("accept", fileTypes.join(","));
-		input.attr("nwWorkingDir",Client.ME.getProjectRoot());
+		input.attr("nwWorkingDir",App.ME.getCurrentRootDir());
 
 		input.change( function(ev) {
 			var path : String = input.val();
@@ -186,7 +186,7 @@ class JsTools {
 			fileTypes = [".*"];
 		input.attr("accept", fileTypes.join(","));
 		input.attr("nwsaveas","nwsaveas");
-		input.attr("nwWorkingDir",Client.ME.getProjectRoot());
+		input.attr("nwWorkingDir",App.ME.getCurrentRootDir());
 
 		input.change( function(ev) {
 			var path = input.val();

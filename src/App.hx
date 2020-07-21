@@ -10,6 +10,7 @@ class App extends dn.Process {
 	#end
 
 	var curPageProcess : Null< dn.Process >;
+	public var session : SessionData;
 
 	public function new() {
 		super();
@@ -20,8 +21,35 @@ class App extends dn.Process {
 		appWin.maximize();
 		#end
 
+		// Restore last stored project state
+		session = {
+			projectFilePath: null,
+		}
+		session = dn.LocalStorage.readObject("session", session);
+
 		openHome();
 	}
+
+
+	public function saveSessionDataToLocalStorage() {
+		dn.LocalStorage.writeObject("session", session);
+	}
+
+	public function getCurrentRootDir() {
+		return dn.FilePath.fromFile( session.projectFilePath ).directory;
+	}
+
+	public function makeRelativeFilePath(filePath:String) {
+		var relativePath = dn.FilePath.fromFile( filePath );
+		relativePath.makeRelativeTo( getCurrentRootDir() );
+		return relativePath.full;
+	}
+
+	public function makeFullFilePath(relPath:String) {
+		var fp = dn.FilePath.fromFile( getCurrentRootDir() +"/"+ relPath );
+		return fp.full;
+	}
+
 
 	function clearCurPage() {
 		jPage.empty();
@@ -31,9 +59,9 @@ class App extends dn.Process {
 		}
 	}
 
-	public function openEditor() {
+	public function openEditor(p:led.Project) {
 		clearCurPage();
-		curPageProcess = new Client(this);
+		curPageProcess = new Client(this, p);
 		dn.Process.resizeAll();
 	}
 

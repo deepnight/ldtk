@@ -7,32 +7,37 @@ class Home extends dn.Process {
 		super(p);
 
 		App.ME.loadPage("home");
+		var jPage = App.ME.jPage;
 
-		var ver = App.ME.jPage.find(".version");
+		var ver = jPage.find(".version");
 		ver.text( Lang.t._("Version ::v::, project file version ::pv::", {
 			v: Const.APP_VERSION,
 			pv: Const.DATA_VERSION,
 		}) );
 
+		jPage.find(".newProject").click( function(_) {
+			onNew();
+		});
+
 		ME = this;
 		createRoot(p.root);
 	}
 
+	public function onNew() {
+		JsTools.saveAsDialog(["json"], function(filePath) {
+			var p = led.Project.createEmpty();
 
-	// public function onNew() {
-	// 	JsTools.saveAsDialog(["json"], function(filePath) {
-	// 		var p = led.Project.createEmpty();
+			var fp = dn.FilePath.fromFile(filePath);
+			fp.extension = "json";
+			var data = JsTools.prepareProjectFile(p);
+			JsTools.writeFileBytes(fp.full, data.bytes);
 
-	// 		var fp = dn.FilePath.fromFile(filePath);
-	// 		fp.extension = "json";
-	// 		var data = JsTools.prepareProjectFile(p);
-	// 		JsTools.writeFileBytes(fp.full, data.bytes);
+			// session.projectFilePath = fp.full;
+			// saveSessionDataToLocalStorage();
 
-	// 		// session.projectFilePath = fp.full;
-	// 		// saveSessionDataToLocalStorage();
-
-	// 		N.msg("New project created: "+fp.full);
-	// 	});
-	// }
+			N.msg("New project created: "+fp.full);
+			App.ME.openEditor(p);
+		});
+	}
 
 }
