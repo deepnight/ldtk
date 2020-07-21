@@ -20,7 +20,9 @@ class Dialog extends ui.Modal {
 
 
 		// Position near attach target
-		if( target!=null ) {
+		if( target==null )
+			jModalAndMask.addClass("centered");
+		else {
 			var targetOff = target.offset();
 			var hei = App.ME.jDoc.innerHeight();
 			if( targetOff.top>=hei*0.7 ) {
