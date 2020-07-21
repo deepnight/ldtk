@@ -1155,6 +1155,14 @@ canvas#webgl {
   font-size: 8pt;
 }
 
+#page.home .wrapper ul.recents li:first-of-type {
+  border: 1px solid #ffcc00;
+}
+
+#page.home .wrapper ul.recents li:first-of-type:hover {
+  outline-color: white;
+}
+
 #page.home .wrapper ul.recents li:not(:first-of-type) {
   opacity: 0.6;
 }

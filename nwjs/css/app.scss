@@ -1123,6 +1123,12 @@ canvas#webgl {
 				font-size: 8pt;
 			}
 
+			li:first-of-type {
+				border: 1px solid $orange;
+				&:hover {
+					outline-color: white;
+				}
+			}
 			li:not(:first-of-type) {
 				opacity: 0.6;
 			}
