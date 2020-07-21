@@ -95,13 +95,16 @@ class TilesetDef {
 				ids: jsonSel.ids,
 			}
 		});
-
-		td.reloadImage();
 		return td;
 	}
 
 
-	public function loadAtlasImage(relFilePath:String) : Bool {
+	public function loadAtlasImage(projectDir:String, relFilePath:String) : Bool {
+		if( relFilePath==null ) {
+			removeAtlasImage();
+			return false;
+		}
+
 		relPath = dn.FilePath.fromFile( relFilePath ).useSlashes().full;
 
 		try {
@@ -126,11 +129,8 @@ class TilesetDef {
 		return true;
 	}
 
-	public function reloadImage() {
-		if( isAtlasValid() )
-			return loadAtlasImage(relPath);
-		else
-			return false;
+	public inline function reloadImage(projectDir:String) {
+		return loadAtlasImage(projectDir, relPath);
 	}
 
 	public function getTileId(tcx,tcy) {

@@ -173,6 +173,7 @@ class Editor extends dn.Process {
 	public function selectProject(p:led.Project) {
 		project = p;
 		project.tidy();
+		project.reloadExternalFiles( getProjectDir() );
 		curLevelId = project.levels[0].uid;
 		curLayerId = -1;
 
