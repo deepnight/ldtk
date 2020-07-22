@@ -31,16 +31,12 @@ class Level {
 	}
 
 	public function toJson() {
-		var layersJson = [];
-		for(li in layerInstances)
-			layersJson.push( li.toJson() );
-
 		return {
 			uid: uid,
 			identifier: identifier,
 			pxWid: pxWid,
 			pxHei: pxHei,
-			layerInstances: layersJson,
+			layerInstances: layerInstances.map( function(li) return li.toJson() ),
 		}
 	}
 
