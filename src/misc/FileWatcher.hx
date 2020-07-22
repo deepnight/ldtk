@@ -1,43 +1,45 @@
 package misc;
 
-class FileWatcher extends dn.Process {
-	var watches : Array<{ watcher:js.node.fs.FSWatcher, path:String, cb:Void->Void }> = [];
+class FileWatcher {
+	var all : Array<{ watcher:js.node.fs.FSWatcher, path:String, cb:Void->Void }> = [];
 
-	public function new(p) {
-		super(p);
+	public function new() {
 		js.node.Require.require("fs");
 	}
 
-	public function watch(filePath:String, onChange:Void->Void) {
-		var w = js.node.Fs.watch(filePath, function(event,f) {
+	public function watch(absFilePath:String, onChange:Void->Void) {
+		N.debug("watching "+Editor.ME.makeRelativeFilePath(absFilePath));
+		var w = js.node.Fs.watch(absFilePath, function(event,f) {
 			if( event=="change" )
 				onChange();
 		});
 
-		watches.push({
+		all.push({
 			watcher: w,
-			path: filePath,
+			path: absFilePath,
 			cb: onChange,
 		});
 	}
 
-	override function onDispose() {
-		super.onDispose();
+	public function dispose() {
 		clearAllWatches();
 	}
 
 	public function clearAllWatches() {
-		for( w in watches )
+		for( w in all ) {
+			N.debug("stopped: "+w.path);
 			w.watcher.close();
-		watches = [];
+		}
+		all = [];
 	}
 
-	public function stopWatching(filePath:String) {
+	public function stopWatching(absFilePath:String) {
 		var i = 0;
-		while( i<watches.length )
-			if( watches[i].path==filePath ) {
-				watches[i].watcher.close();
-				watches.splice(i,1);
+		while( i<all.length )
+			if( all[i].path==absFilePath ) {
+				all[i].watcher.close();
+				N.debug("stopped: "+all[i].path);
+				all.splice(i,1);
 			}
 			else
 				i++;

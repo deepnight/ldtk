@@ -62,7 +62,7 @@ class Editor extends dn.Process {
 		ge = new GlobalEventDispatcher();
 		ge.addGlobalListener( onGlobalEvent );
 
-		watcher = new misc.FileWatcher(this);
+		watcher = new misc.FileWatcher();
 
 		cursor = new ui.Cursor();
 		selectionCursor = new ui.Cursor();
@@ -194,14 +194,14 @@ class Editor extends dn.Process {
 		ge.emit(ProjectSelected);
 
 		// Image hot-reloading
-		for( td in project.defs.tilesets ) {
-			N.debug("watching "+td.relPath);
-			watcher.watch( makeFullFilePath(td.relPath), function() {
-				td.reloadImage( getProjectDir() );
-				ge.emit(TilesetDefChanged);
-				N.msg( Lang.t._("Reloaded: ::file::", { file:td.relPath }) );
-			});
-		}
+		for( td in project.defs.tilesets )
+			watcher.watch( makeFullFilePath(td.relPath), onTilesetImageChange.bind(td) );
+	}
+
+	public function onTilesetImageChange(td:led.def.TilesetDef) {
+		td.reloadImage( getProjectDir() );
+		ge.emit(TilesetDefChanged);
+		N.msg( Lang.t._("Reloaded: ::file::", { file:td.relPath }) );
 	}
 
 	function onJsKeyDown(ev:js.jquery.Event) {
@@ -693,7 +693,12 @@ class Editor extends dn.Process {
 		if( ME==this )
 			ME = null;
 
+		watcher.dispose();
+		watcher = null;
+
 		ge.dispose();
+		ge = null;
+		
 		Boot.ME.s2d.removeEventListener(onEvent);
 
 		new J("body").off(".client");

@@ -1,6 +1,6 @@
 {
 	"dataVersion":1,
-	"nextUniqId":16,
+	"nextUniqId":18,
 	"defs":{
 		"layers":[
 			{
@@ -257,6 +257,30 @@
 				"savedSelections":[
 					
 				]
+			},
+			{
+				"uid":16,
+				"identifier":"S4m_ur4i_huge_assetpack_tilemap",
+				"relPath":"atlas/s4m_ur4i_huge-assetpack-tilemap.png",
+				"pxWid":658,
+				"pxHei":892,
+				"tileGridSize":8,
+				"tileGridSpacing":0,
+				"savedSelections":[
+					
+				]
+			},
+			{
+				"uid":17,
+				"identifier":"SystemShock",
+				"relPath":"atlas/SystemShock.png",
+				"pxWid":256,
+				"pxHei":1024,
+				"tileGridSize":16,
+				"tileGridSpacing":0,
+				"savedSelections":[
+					
+				]
 			}
 		],
 		"enums":[
@@ -285,7 +309,7 @@
 			"uid":0,
 			"identifier":"Level0",
 			"pxWid":256,
-			"pxHei":256,
+			"pxHei":320,
 			"layerInstances":[
 				{
 					"__comment__":"Level0->IntGrid",
@@ -319,8 +343,8 @@
 						{
 							"__comment__":"Mob",
 							"defUid":2,
-							"x":88,
-							"y":80,
+							"x":56,
+							"y":96,
 							"fieldInstances":[
 								{
 									"__comment__":"mobType (MobType)",
@@ -362,8 +386,8 @@
 						{
 							"__comment__":"Mob",
 							"defUid":2,
-							"x":168,
-							"y":80,
+							"x":200,
+							"y":96,
 							"fieldInstances":[
 								{
 									"__comment__":"mobType (MobType)",
@@ -415,8 +439,8 @@
 						{
 							"__comment__":"Mob",
 							"defUid":2,
-							"x":72,
-							"y":144,
+							"x":40,
+							"y":192,
 							"fieldInstances":[
 								{
 									"__comment__":"mobType (MobType)",
@@ -459,7 +483,7 @@
 							"__comment__":"Mob",
 							"defUid":2,
 							"x":136,
-							"y":224,
+							"y":192,
 							"fieldInstances":[
 								{
 									"__comment__":"mobType (MobType)",
@@ -526,8 +550,8 @@
 						{
 							"__comment__":"Mob",
 							"defUid":2,
-							"x":216,
-							"y":176,
+							"x":232,
+							"y":192,
 							"fieldInstances":[
 								{
 									"__comment__":"mobType (MobType)",
@@ -595,259 +619,323 @@
 					"gridTiles":[
 						{
 							"coordId":0,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":1,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":2,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":3,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":4,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":5,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":6,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":7,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":8,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":9,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":10,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":11,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":12,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":13,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":14,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":15,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":16,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":17,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":18,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":19,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":20,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":21,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":22,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":23,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":24,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":25,
-							"v":1
+							"v":3
 						},
 						{
 							"coordId":26,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":27,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":28,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":29,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":30,
-							"v":1
+							"v":3
 						},
 						{
 							"coordId":31,
-							"v":1
+							"v":7
 						},
 						{
 							"coordId":32,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":33,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":34,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":35,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":36,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":37,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":38,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":39,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":40,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":41,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":42,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":43,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":44,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":45,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":46,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":47,
-							"v":0
+							"v":7
 						},
 						{
 							"coordId":48,
-							"v":0
+							"v":3
 						},
 						{
 							"coordId":49,
-							"v":0
+							"v":3
 						},
 						{
 							"coordId":50,
-							"v":0
+							"v":3
 						},
 						{
 							"coordId":51,
-							"v":0
+							"v":3
 						},
 						{
 							"coordId":52,
-							"v":0
+							"v":3
 						},
 						{
 							"coordId":53,
-							"v":0
+							"v":3
 						},
 						{
 							"coordId":54,
-							"v":0
+							"v":3
 						},
 						{
 							"coordId":55,
-							"v":0
+							"v":3
 						},
 						{
 							"coordId":56,
-							"v":0
+							"v":2
 						},
 						{
 							"coordId":57,
-							"v":0
+							"v":2
 						},
 						{
 							"coordId":58,
-							"v":0
+							"v":2
 						},
 						{
 							"coordId":59,
-							"v":0
+							"v":2
 						},
 						{
 							"coordId":60,
-							"v":0
+							"v":2
 						},
 						{
 							"coordId":61,
-							"v":0
+							"v":2
 						},
 						{
 							"coordId":62,
-							"v":0
+							"v":2
 						},
 						{
 							"coordId":63,
-							"v":0
+							"v":2
+						},
+						{
+							"coordId":64,
+							"v":2
+						},
+						{
+							"coordId":65,
+							"v":2
+						},
+						{
+							"coordId":66,
+							"v":2
+						},
+						{
+							"coordId":67,
+							"v":2
+						},
+						{
+							"coordId":68,
+							"v":2
+						},
+						{
+							"coordId":69,
+							"v":2
+						},
+						{
+							"coordId":70,
+							"v":2
+						},
+						{
+							"coordId":71,
+							"v":2
+						},
+						{
+							"coordId":72,
+							"v":2
+						},
+						{
+							"coordId":73,
+							"v":2
+						},
+						{
+							"coordId":74,
+							"v":2
+						},
+						{
+							"coordId":75,
+							"v":2
+						},
+						{
+							"coordId":76,
+							"v":2
+						},
+						{
+							"coordId":77,
+							"v":2
+						},
+						{
+							"coordId":78,
+							"v":2
+						},
+						{
+							"coordId":79,
+							"v":2
 						}
 					],
 					"entityInstances":[

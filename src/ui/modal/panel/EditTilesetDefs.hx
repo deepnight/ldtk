@@ -152,7 +152,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		b.click( function(ev) {
 			JsTools.loadDialog(["jpg","jpeg","gif","png"], Editor.ME.getProjectDir(), function(absPath) {
-				var oldPath = cur.relPath;
+				var oldRelPath = cur.relPath;
 				var relPath = Editor.ME.makeRelativeFilePath( absPath );
 
 				if( !cur.loadAtlasImage(editor.getProjectDir(), relPath) ) {
@@ -169,7 +169,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 					return;
 				}
 
-				project.defs.autoRenameTilesetIdentifier(oldPath, cur);
+				editor.watcher.stopWatching( editor.makeFullFilePath(oldRelPath) );
+				editor.watcher.watch(absPath, editor.onTilesetImageChange.bind(cur));
+				project.defs.autoRenameTilesetIdentifier(oldRelPath, cur);
 				updateTilesetPreview();
 				editor.ge.emit(TilesetDefChanged);
 			});
