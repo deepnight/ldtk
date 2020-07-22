@@ -35,7 +35,7 @@ class EnumDef {
 		return {
 			uid: uid,
 			identifier: identifier,
-			values: values,
+			values: values.copy(),
 		};
 	}
 
@@ -74,7 +74,6 @@ class EnumDef {
 
 		return false;
 	}
-
 
 	public function tidy(p:Project) {
 	}
