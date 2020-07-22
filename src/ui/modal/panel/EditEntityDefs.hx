@@ -35,7 +35,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				return;
 			}
 			new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("This operation cannot be canceled!"), function() {
-				new ui.LastChance( L.t._("Entity deleted"), project );
+				new ui.LastChance( L.t._("Entity ::name:: deleted", { name:curEntity.identifier }), project );
 				project.defs.removeEntityDef(curEntity);
 				editor.ge.emit(EntityDefRemoved);
 				if( project.defs.entities.length>0 )
@@ -101,7 +101,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			}
 
 			new ui.modal.dialog.Confirm(ev.getThis(), function() {
-				new ui.LastChance( L.t._("Entity field deleted"), project );
+				new ui.LastChance( L.t._("Entity field ::name:: deleted", { name:curField.identifier }), project );
 				curEntity.removeField(project, curField);
 				editor.ge.emit(EntityFieldRemoved);
 				selectField( curEntity.fieldDefs[0] );

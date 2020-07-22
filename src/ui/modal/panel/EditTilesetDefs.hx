@@ -28,7 +28,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				return;
 			}
 			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this tileset, it will be deleted in all levels and corresponding layers as well. Are you sure?", function() {
-				new LastChance(L.t._("Tileset deleted"), project);
+				new LastChance(L.t._("Tileset ::name:: deleted", { name:cur.identifier }), project);
 				project.defs.removeTilesetDef(cur);
 				select(project.defs.tilesets[0]);
 				editor.ge.emit(TilesetDefRemoved);
