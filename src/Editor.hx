@@ -459,7 +459,7 @@ class Editor extends dn.Process {
 	public function onSave(?bypassMissing=false) {
 		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
 			new ui.modal.dialog.Confirm(
-				Lang.t._("The project file is missing in ::path::. Save to this path anyway?", { path:projectFilePath }),
+				Lang.t._("The project file is no longer in ::path::. Save to this path anyway?", { path:projectFilePath }),
 				onSave.bind(true)
 			);
 			return;
