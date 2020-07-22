@@ -86,7 +86,7 @@ class Project {
 		defs.tidy(this);
 	}
 
-	public function reloadExternalFiles(projectDir:String) {
+	public function loadExternalFiles(projectDir:String) {
 		for(td in defs.tilesets)
 			td.reloadImage(projectDir);
 	}

@@ -176,7 +176,7 @@ class Editor extends dn.Process {
 
 		project = p;
 		project.tidy();
-		project.reloadExternalFiles( getProjectDir() );
+		project.loadExternalFiles( getProjectDir() );
 		curLevelId = project.levels[0].uid;
 		curLayerId = -1;
 
@@ -193,15 +193,19 @@ class Editor extends dn.Process {
 
 		ge.emit(ProjectSelected);
 
-		// Image hot-reloading
+		// Tileset image hot-reloading
 		for( td in project.defs.tilesets )
 			watcher.watchTileset(td);
 	}
 
 	public function onTilesetImageChange(td:led.def.TilesetDef) {
-		td.reloadImage( getProjectDir() );
-		ge.emit(TilesetDefChanged);
-		N.msg( Lang.t._("Reloaded: ::file::", { file:td.relPath }) );
+		var name = dn.FilePath.fromFile(td.relPath).fileName;
+		if( td.reloadImage( getProjectDir() ) ) {
+			ge.emit(TilesetDefChanged);
+			N.msg( Lang.t._("Reloaded: ::file::", { file:name }) );
+		}
+		else
+			N.error( Lang.t._("Failed to reload: ::file::", { file:name }) );
 	}
 
 	function onJsKeyDown(ev:js.jquery.Event) {
