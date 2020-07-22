@@ -1,12 +1,17 @@
 {
+	"name":"Mini lab",
 	"dataVersion":1,
+	"defaultPivotX":0,
+	"defaultPivotY":0,
+	"defaultGridSize":16,
+	"bgColor":8355987,
 	"nextUniqId":18,
 	"defs":{
 		"layers":[
 			{
-				"uid":13,
-				"type":"IntGrid",
 				"identifier":"IntGrid",
+				"type":"IntGrid",
+				"uid":13,
 				"gridSize":16,
 				"displayOpacity":1,
 				"intGridValues":[
@@ -19,9 +24,9 @@
 				"tilePivotY":0
 			},
 			{
-				"uid":4,
-				"type":"Entities",
 				"identifier":"Entities",
+				"type":"Entities",
+				"uid":4,
 				"gridSize":16,
 				"displayOpacity":1,
 				"intGridValues":[
@@ -34,9 +39,9 @@
 				"tilePivotY":0
 			},
 			{
-				"uid":15,
-				"type":"Tiles",
 				"identifier":"Tiles",
+				"type":"Tiles",
+				"uid":15,
 				"gridSize":32,
 				"displayOpacity":1,
 				"intGridValues":[
@@ -51,8 +56,8 @@
 		],
 		"entities":[
 			{
-				"uid":2,
 				"identifier":"Mob",
+				"uid":2,
 				"width":16,
 				"height":32,
 				"color":16711680,
@@ -62,6 +67,7 @@
 				"pivotY":1,
 				"fieldDefs":[
 					{
+						"identifier":"mobType",
 						"uid":3,
 						"type":{
 							"id":"F_Enum",
@@ -69,7 +75,6 @@
 								1
 							]
 						},
-						"identifier":"mobType",
 						"canBeNull":false,
 						"editorDisplayMode":"ValueOnly",
 						"editorDisplayPos":"Above",
@@ -78,6 +83,7 @@
 						"defaultOverride":null
 					},
 					{
+						"identifier":"loot",
 						"uid":11,
 						"type":{
 							"id":"F_Enum",
@@ -85,7 +91,6 @@
 								10
 							]
 						},
-						"identifier":"loot",
 						"canBeNull":true,
 						"editorDisplayMode":"ValueOnly",
 						"editorDisplayPos":"Center",
@@ -94,9 +99,9 @@
 						"defaultOverride":null
 					},
 					{
+						"identifier":"lootCount",
 						"uid":12,
 						"type":"F_Int",
-						"identifier":"lootCount",
 						"canBeNull":false,
 						"editorDisplayMode":"ValueOnly",
 						"editorDisplayPos":"Center",
@@ -110,9 +115,9 @@
 						}
 					},
 					{
+						"identifier":"elite",
 						"uid":5,
 						"type":"F_Bool",
-						"identifier":"elite",
 						"canBeNull":false,
 						"editorDisplayMode":"ValueOnly",
 						"editorDisplayPos":"Above",
@@ -121,9 +126,9 @@
 						"defaultOverride":null
 					},
 					{
+						"identifier":"lifeOverride",
 						"uid":6,
 						"type":"F_Int",
-						"identifier":"lifeOverride",
 						"canBeNull":true,
 						"editorDisplayMode":"NameAndValue",
 						"editorDisplayPos":"Above",
@@ -132,9 +137,9 @@
 						"defaultOverride":null
 					},
 					{
+						"identifier":"scale",
 						"uid":7,
 						"type":"F_Float",
-						"identifier":"scale",
 						"canBeNull":false,
 						"editorDisplayMode":"NameAndValue",
 						"editorDisplayPos":"Above",
@@ -152,8 +157,8 @@
 		],
 		"tilesets":[
 			{
-				"uid":14,
 				"identifier":"Gif87a",
+				"uid":14,
 				"relPath":"atlas/gif87a.gif",
 				"pxWid":192,
 				"pxHei":128,
@@ -166,8 +171,8 @@
 		],
 		"enums":[
 			{
-				"uid":1,
 				"identifier":"MobType",
+				"uid":1,
 				"values":[
 					"Trash",
 					"Shooter",
@@ -175,8 +180,8 @@
 				]
 			},
 			{
-				"uid":10,
 				"identifier":"ItemType",
+				"uid":10,
 				"values":[
 					"Gold",
 					"Ammo",
@@ -187,13 +192,13 @@
 	},
 	"levels":[
 		{
-			"uid":0,
 			"identifier":"Level0",
+			"uid":0,
 			"pxWid":256,
 			"pxHei":320,
 			"layerInstances":[
 				{
-					"__comment__":"Level0->IntGrid",
+					"_identifier":"IntGrid",
 					"levelId":0,
 					"layerDefUid":13,
 					"pxOffsetX":0,
@@ -209,7 +214,7 @@
 					]
 				},
 				{
-					"__comment__":"Level0->Entities",
+					"_identifier":"Entities",
 					"levelId":0,
 					"layerDefUid":4,
 					"pxOffsetX":0,
@@ -222,304 +227,314 @@
 					],
 					"entityInstances":[
 						{
-							"__comment__":"Mob",
+							"_identifier":"Mob",
+							"_cx":3,
+							"_cy":5,
 							"defUid":2,
 							"x":56,
 							"y":96,
 							"fieldInstances":[
 								{
-									"__comment__":"mobType (MobType)",
+									"_identifier":"mobType",
+									"_value":"Trash",
 									"defUid":3,
 									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Trash"
 										]
-									},
-									"displayValue":"Trash"
+									}
 								},
 								{
-									"__comment__":"elite (Bool)",
+									"_identifier":"elite",
+									"_value":false,
 									"defUid":5,
-									"realEditorValue":null,
-									"displayValue":false
+									"realEditorValue":null
 								},
 								{
-									"__comment__":"lifeOverride (Int)",
+									"_identifier":"lifeOverride",
+									"_value":null,
 									"defUid":6,
-									"realEditorValue":null,
-									"displayValue":null
+									"realEditorValue":null
 								},
 								{
-									"__comment__":"scale (Float)",
+									"_identifier":"scale",
+									"_value":1,
 									"defUid":7,
-									"realEditorValue":null,
-									"displayValue":1
+									"realEditorValue":null
 								},
 								{
-									"__comment__":"loot (ItemType)",
+									"_identifier":"loot",
+									"_value":null,
 									"defUid":11,
-									"realEditorValue":null,
-									"displayValue":null
+									"realEditorValue":null
 								},
 								{
-									"__comment__":"lootCount (Int)",
+									"_identifier":"lootCount",
+									"_value":1,
 									"defUid":12,
-									"realEditorValue":null,
-									"displayValue":1
+									"realEditorValue":null
 								}
 							]
 						},
 						{
-							"__comment__":"Mob",
+							"_identifier":"Mob",
+							"_cx":12,
+							"_cy":5,
 							"defUid":2,
 							"x":200,
 							"y":96,
 							"fieldInstances":[
 								{
-									"__comment__":"mobType (MobType)",
+									"_identifier":"mobType",
+									"_value":"Ninja",
 									"defUid":3,
 									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Ninja"
 										]
-									},
-									"displayValue":"Ninja"
+									}
 								},
 								{
-									"__comment__":"elite (Bool)",
+									"_identifier":"elite",
+									"_value":false,
 									"defUid":5,
-									"realEditorValue":null,
-									"displayValue":false
+									"realEditorValue":null
 								},
 								{
-									"__comment__":"lifeOverride (Int)",
+									"_identifier":"lifeOverride",
+									"_value":null,
 									"defUid":6,
-									"realEditorValue":null,
-									"displayValue":null
+									"realEditorValue":null
 								},
 								{
-									"__comment__":"scale (Float)",
+									"_identifier":"scale",
+									"_value":1,
 									"defUid":7,
-									"realEditorValue":null,
-									"displayValue":1
+									"realEditorValue":null
 								},
 								{
-									"__comment__":"loot (ItemType)",
+									"_identifier":"loot",
+									"_value":"Ammo",
 									"defUid":11,
 									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Ammo"
 										]
-									},
-									"displayValue":"Ammo"
+									}
 								},
 								{
-									"__comment__":"lootCount (Int)",
+									"_identifier":"lootCount",
+									"_value":10,
 									"defUid":12,
 									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											10
 										]
-									},
-									"displayValue":10
+									}
 								}
 							]
 						},
 						{
-							"__comment__":"Mob",
+							"_identifier":"Mob",
+							"_cx":2,
+							"_cy":11,
 							"defUid":2,
 							"x":40,
 							"y":192,
 							"fieldInstances":[
 								{
-									"__comment__":"mobType (MobType)",
+									"_identifier":"mobType",
+									"_value":"Trash",
 									"defUid":3,
 									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Trash"
 										]
-									},
-									"displayValue":"Trash"
+									}
 								},
 								{
-									"__comment__":"elite (Bool)",
+									"_identifier":"elite",
+									"_value":false,
 									"defUid":5,
-									"realEditorValue":null,
-									"displayValue":false
+									"realEditorValue":null
 								},
 								{
-									"__comment__":"lifeOverride (Int)",
+									"_identifier":"lifeOverride",
+									"_value":null,
 									"defUid":6,
-									"realEditorValue":null,
-									"displayValue":null
+									"realEditorValue":null
 								},
 								{
-									"__comment__":"scale (Float)",
+									"_identifier":"scale",
+									"_value":1,
 									"defUid":7,
-									"realEditorValue":null,
-									"displayValue":1
+									"realEditorValue":null
 								},
 								{
-									"__comment__":"loot (ItemType)",
+									"_identifier":"loot",
+									"_value":null,
 									"defUid":11,
-									"realEditorValue":null,
-									"displayValue":null
+									"realEditorValue":null
 								},
 								{
-									"__comment__":"lootCount (Int)",
+									"_identifier":"lootCount",
+									"_value":1,
 									"defUid":12,
-									"realEditorValue":null,
-									"displayValue":1
+									"realEditorValue":null
 								}
 							]
 						},
 						{
-							"__comment__":"Mob",
+							"_identifier":"Mob",
+							"_cx":8,
+							"_cy":11,
 							"defUid":2,
 							"x":136,
 							"y":192,
 							"fieldInstances":[
 								{
-									"__comment__":"mobType (MobType)",
+									"_identifier":"mobType",
+									"_value":"Ninja",
 									"defUid":3,
 									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Ninja"
 										]
-									},
-									"displayValue":"Ninja"
+									}
 								},
 								{
-									"__comment__":"elite (Bool)",
+									"_identifier":"elite",
+									"_value":true,
 									"defUid":5,
 									"realEditorValue":{
 										"id":"V_Bool",
 										"params":[
 											true
 										]
-									},
-									"displayValue":true
+									}
 								},
 								{
-									"__comment__":"lifeOverride (Int)",
+									"_identifier":"lifeOverride",
+									"_value":10,
 									"defUid":6,
 									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											10
 										]
-									},
-									"displayValue":10
+									}
 								},
 								{
-									"__comment__":"scale (Float)",
+									"_identifier":"scale",
+									"_value":2,
 									"defUid":7,
 									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											2
 										]
-									},
-									"displayValue":2
+									}
 								},
 								{
-									"__comment__":"loot (ItemType)",
+									"_identifier":"loot",
+									"_value":"Gold",
 									"defUid":11,
 									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gold"
 										]
-									},
-									"displayValue":"Gold"
+									}
 								},
 								{
-									"__comment__":"lootCount (Int)",
+									"_identifier":"lootCount",
+									"_value":150,
 									"defUid":12,
 									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											150
 										]
-									},
-									"displayValue":150
+									}
 								}
 							]
 						},
 						{
-							"__comment__":"Mob",
+							"_identifier":"Mob",
+							"_cx":14,
+							"_cy":11,
 							"defUid":2,
 							"x":232,
 							"y":192,
 							"fieldInstances":[
 								{
-									"__comment__":"mobType (MobType)",
+									"_identifier":"mobType",
+									"_value":"Shooter",
 									"defUid":3,
 									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Shooter"
 										]
-									},
-									"displayValue":"Shooter"
+									}
 								},
 								{
-									"__comment__":"elite (Bool)",
+									"_identifier":"elite",
+									"_value":true,
 									"defUid":5,
 									"realEditorValue":{
 										"id":"V_Bool",
 										"params":[
 											true
 										]
-									},
-									"displayValue":true
+									}
 								},
 								{
-									"__comment__":"lifeOverride (Int)",
+									"_identifier":"lifeOverride",
+									"_value":null,
 									"defUid":6,
-									"realEditorValue":null,
-									"displayValue":null
+									"realEditorValue":null
 								},
 								{
-									"__comment__":"scale (Float)",
+									"_identifier":"scale",
+									"_value":2,
 									"defUid":7,
 									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											2
 										]
-									},
-									"displayValue":2
+									}
 								},
 								{
-									"__comment__":"loot (ItemType)",
+									"_identifier":"loot",
+									"_value":"Food",
 									"defUid":11,
 									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Food"
 										]
-									},
-									"displayValue":"Food"
+									}
 								},
 								{
-									"__comment__":"lootCount (Int)",
+									"_identifier":"lootCount",
+									"_value":1,
 									"defUid":12,
-									"realEditorValue":null,
-									"displayValue":1
+									"realEditorValue":null
 								}
 							]
 						}
 					]
 				},
 				{
-					"__comment__":"Level0->Tiles",
+					"_identifier":"Tiles",
 					"levelId":0,
 					"layerDefUid":15,
 					"pxOffsetX":0,
@@ -855,10 +870,5 @@
 				}
 			]
 		}
-	],
-	"name":"Mini lab",
-	"defaultPivotX":0,
-	"defaultPivotY":0,
-	"defaultGridSize":16,
-	"bgColor":8355987
+	]
 }

@@ -32,8 +32,8 @@ class Level {
 
 	public function toJson() {
 		return {
-			uid: uid,
 			identifier: identifier,
+			uid: uid,
 			pxWid: pxWid,
 			pxHei: pxHei,
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),

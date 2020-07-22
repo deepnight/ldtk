@@ -66,16 +66,16 @@ class Project {
 
 	public function toJson(excludeLevels=false) {
 		return {
-			dataVersion: dataVersion,
-			nextUniqId: nextUniqId,
-			defs: defs.toJson(),
-			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
-
 			name: name,
+			dataVersion: dataVersion,
 			defaultPivotX: JsonTools.clampFloatPrecision( defaultPivotX ),
 			defaultPivotY: JsonTools.clampFloatPrecision( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
-			bgColor: bgColor,
+			bgColor: bgColor, // TODO use hex format
+			nextUniqId: nextUniqId,
+
+			defs: defs.toJson(),
+			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
 		}
 	}
 

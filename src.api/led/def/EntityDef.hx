@@ -55,8 +55,8 @@ class EntityDef {
 
 	public function toJson() {
 		return {
-			uid: uid,
 			identifier: identifier,
+			uid: uid,
 			width: width,
 			height: height,
 			color: color,

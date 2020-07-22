@@ -56,9 +56,9 @@ class LayerDef {
 
 	public function toJson() {
 		return {
-			uid: uid,
-			type: JsonTools.writeEnum(type, false),
 			identifier: identifier,
+			type: JsonTools.writeEnum(type, false),
+			uid: uid,
 			gridSize: gridSize,
 			displayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
 

@@ -35,7 +35,8 @@ class LayerInstance {
 
 	public function toJson() {
 		return {
-			__comment__: level.identifier+"->"+def.identifier,
+			_identifier: def.identifier, // only exported for readability purpose
+
 			levelId: levelId,
 			layerDefUid: layerDefUid,
 			pxOffsetX: pxOffsetX,
@@ -60,7 +61,7 @@ class LayerInstance {
 					});
 				arr;
 			},
-			entityInstances: entityInstances.map( function(ei) return ei.toJson() ),
+			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
 	}
 
@@ -243,7 +244,7 @@ class LayerInstance {
 	}
 
 	public function duplicateEntityInstance(ei:EntityInstance) : EntityInstance {
-		var copy = EntityInstance.fromJson( _project, ei.toJson() );
+		var copy = EntityInstance.fromJson( _project, ei.toJson(this) );
 		entityInstances.push(copy);
 		return copy;
 	}

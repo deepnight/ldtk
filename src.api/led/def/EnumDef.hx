@@ -33,8 +33,8 @@ class EnumDef {
 
 	public function toJson() {
 		return {
-			uid: uid,
 			identifier: identifier,
+			uid: uid,
 			values: values.copy(),
 		};
 	}

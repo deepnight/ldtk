@@ -68,8 +68,8 @@ class TilesetDef {
 
 	public function toJson() {
 		return {
-			uid: uid,
 			identifier: identifier,
+			uid: uid,
 			relPath: relPath,
 			pxWid: pxWid,
 			pxHei: pxHei,

@@ -32,18 +32,19 @@ class FieldInstance {
 
 	public function toJson() {
 		return {
-			__comment__: def.identifier+" ("+def.getShortDescription()+")",
-			defUid: defUid,
-			realEditorValue: JsonTools.writeEnum(internalValue,true),
-
-			displayValue: untyped switch def.type { // only exported for readability purpose
+			_identifier: def.identifier, // only exported for readability purpose
+			_value: untyped switch def.type { // only exported for readability purpose
 				case F_Int: getInt();
 				case F_Float: getFloat();
 				case F_String: getString();
 				case F_Bool: getBool();
 				case F_Color: getColorAsHexStr();
 				case F_Enum(enumDefUid): getEnumValue();
-			}
+			},
+
+			defUid: defUid,
+			realEditorValue: JsonTools.writeEnum(internalValue,true),
+
 		}
 	}
 
