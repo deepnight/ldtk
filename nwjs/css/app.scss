@@ -318,7 +318,7 @@ ul.niceList {
 	overflow-x: hidden;
 
 	&:empty {
-		background-image: url("/img/stripes.png");
+		background-image: url("../img/stripes.png");
 		box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.4) inset;
 		text-align: center;
 		padding-top: 30px;
@@ -415,18 +415,18 @@ ul.niceList {
 		content: "?";
 	}
 }
-.icon.entity	{ background-image: url("/img/icons/entity.png"); }
-.icon.tile		{ background-image: url("/img/icons/tile.png"); }
-.icon.layer		{ background-image: url("/img/icons/layer.png"); }
-.icon.intGrid	{ background-image: url("/img/icons/intGrid.png"); }
-.icon.level		{ background-image: url("/img/icons/level.png"); }
-.icon.project	{ background-image: url("/img/icons/projectSettings.png"); }
-.icon.enum		{ background-image: url("/img/icons/enum.png"); }
-.icon.close		{ background-image: url("/img/icons/close.png"); }
+.icon.entity	{ background-image: url("../img/icons/entity.png"); }
+.icon.tile		{ background-image: url("../img/icons/tile.png"); }
+.icon.layer		{ background-image: url("../img/icons/layer.png"); }
+.icon.intGrid	{ background-image: url("../img/icons/intGrid.png"); }
+.icon.level		{ background-image: url("../img/icons/level.png"); }
+.icon.project	{ background-image: url("../img/icons/projectSettings.png"); }
+.icon.enum		{ background-image: url("../img/icons/enum.png"); }
+.icon.close		{ background-image: url("../img/icons/close.png"); }
 
-.icon.mouseLeft		{ background-image: url("/img/icons/mouseLeft.png"); image-rendering: pixelated; }
-.icon.mouseRight	{ background-image: url("/img/icons/mouseRight.png"); image-rendering: pixelated; }
-.icon.mouseWheel	{ background-image: url("/img/icons/mouseWheel.png"); image-rendering: pixelated; }
+.icon.mouseLeft		{ background-image: url("../img/icons/mouseLeft.png"); image-rendering: pixelated; }
+.icon.mouseRight	{ background-image: url("../img/icons/mouseRight.png"); image-rendering: pixelated; }
+.icon.mouseWheel	{ background-image: url("../img/icons/mouseWheel.png"); image-rendering: pixelated; }
 
 .black		{ filter: brightness(0);}
 .orange		{ filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10); }
@@ -470,7 +470,7 @@ ul.niceList {
 	box-sizing: border-box; // Actual width/height are defined in code
 	overflow: hidden;
 	padding: 8px;
-	background-image: url("/img/grid.png");
+	background-image: url("../img/grid.png");
 	background-color: $bgDark;
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
 }
@@ -984,7 +984,7 @@ textarea {
 }
 
 *[draggable=true] {
-	background: url("/img/icons/drag.png") no-repeat;
+	background: url("../img/icons/drag.png") no-repeat;
 	background-position: left center;
 	padding-left: 32px !important;
 	cursor: ns-resize;
@@ -1433,7 +1433,7 @@ canvas#webgl {
 			padding: 8px;
 			align-items: center;
 			background-color: $bgMed;
-			background-image: url("/img/stripes.png");
+			background-image: url("../img/stripes.png");
 
 			&.checkbox {
 				padding: 0;
@@ -1464,7 +1464,7 @@ canvas#webgl {
 			padding: 8px;
 			color: white;
 			background-color: $bgMed;
-			background-image: url("/img/stripes.png");
+			background-image: url("../img/stripes.png");
 
 			option {
 				overflow: hidden;
