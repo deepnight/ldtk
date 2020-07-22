@@ -22,6 +22,7 @@ class LevelList extends ui.modal.Panel {
 				N.error(L.t._("Can't delete the last level."));
 			else {
 				new ui.modal.dialog.Confirm(ev.getThis(), function() {
+					new LastChance(Lang.t._("Level ::name:: deleted", { name:curLevel.identifier }), project);
 					var idx = 0;
 					for( l in project.levels)
 						if( l==curLevel )
