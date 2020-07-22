@@ -130,6 +130,7 @@ class TilesetDef {
 	}
 
 	public inline function reloadImage(projectDir:String) {
+		// TODO remap IDs if size changes
 		return loadAtlasImage(projectDir, relPath);
 	}
 

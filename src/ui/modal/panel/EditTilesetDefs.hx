@@ -170,7 +170,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 				}
 
 				editor.watcher.stopWatching( editor.makeFullFilePath(oldRelPath) );
-				editor.watcher.watch(absPath, editor.onTilesetImageChange.bind(cur));
+				editor.watcher.watchTileset(cur);
+
 				project.defs.autoRenameTilesetIdentifier(oldRelPath, cur);
 				updateTilesetPreview();
 				editor.ge.emit(TilesetDefChanged);

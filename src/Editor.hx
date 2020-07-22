@@ -195,7 +195,7 @@ class Editor extends dn.Process {
 
 		// Image hot-reloading
 		for( td in project.defs.tilesets )
-			watcher.watch( makeFullFilePath(td.relPath), onTilesetImageChange.bind(td) );
+			watcher.watchTileset(td);
 	}
 
 	public function onTilesetImageChange(td:led.def.TilesetDef) {
@@ -698,7 +698,7 @@ class Editor extends dn.Process {
 
 		ge.dispose();
 		ge = null;
-		
+
 		Boot.ME.s2d.removeEventListener(onEvent);
 
 		new J("body").off(".client");

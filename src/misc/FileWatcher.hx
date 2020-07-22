@@ -8,7 +8,6 @@ class FileWatcher {
 	}
 
 	public function watch(absFilePath:String, onChange:Void->Void) {
-		N.debug("watching "+Editor.ME.makeRelativeFilePath(absFilePath));
 		var w = js.node.Fs.watch(absFilePath, function(event,f) {
 			if( event=="change" )
 				onChange();
@@ -21,15 +20,20 @@ class FileWatcher {
 		});
 	}
 
+	public function watchTileset(td:led.def.TilesetDef) {
+		watch(
+			Editor.ME.makeFullFilePath(td.relPath),
+			Editor.ME.onTilesetImageChange.bind(td)
+		);
+	}
+
 	public function dispose() {
 		clearAllWatches();
 	}
 
 	public function clearAllWatches() {
-		for( w in all ) {
-			N.debug("stopped: "+w.path);
+		for( w in all )
 			w.watcher.close();
-		}
 		all = [];
 	}
 
@@ -38,7 +42,6 @@ class FileWatcher {
 		while( i<all.length )
 			if( all[i].path==absFilePath ) {
 				all[i].watcher.close();
-				N.debug("stopped: "+all[i].path);
 				all.splice(i,1);
 			}
 			else
