@@ -5,12 +5,7 @@
 		"layers":[
 			{
 				"uid":7,
-				"type":{
-					"id":1,
-					"p":[
-						
-					]
-				},
+				"type":"Entities",
 				"identifier":"Entities",
 				"gridSize":16,
 				"displayOpacity":0.8,
@@ -25,12 +20,7 @@
 			},
 			{
 				"uid":1,
-				"type":{
-					"id":0,
-					"p":[
-						
-					]
-				},
+				"type":"IntGrid",
 				"identifier":"Collisions",
 				"gridSize":16,
 				"displayOpacity":0.7,
@@ -46,12 +36,7 @@
 			},
 			{
 				"uid":20,
-				"type":{
-					"id":2,
-					"p":[
-						
-					]
-				},
+				"type":"Tiles",
 				"identifier":"Details",
 				"gridSize":16,
 				"displayOpacity":1,
@@ -79,31 +64,16 @@
 				"fieldDefs":[
 					{
 						"uid":10,
-						"type":{
-							"id":2,
-							"p":[
-								
-							]
-						},
+						"type":"F_String",
 						"identifier":"Type",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"ValueOnly",
+						"editorDisplayPos":"Above",
 						"min":null,
 						"max":null,
 						"defaultOverride":{
-							"id":3,
-							"p":[
+							"id":"V_String",
+							"params":[
 								"Gem"
 							]
 						}
@@ -111,25 +81,15 @@
 					{
 						"uid":47,
 						"type":{
-							"id":5,
-							"p":[
+							"id":"F_Enum",
+							"params":[
 								45
 							]
 						},
 						"identifier":"type",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"ValueOnly",
+						"editorDisplayPos":"Above",
 						"min":null,
 						"max":null,
 						"defaultOverride":null
@@ -163,31 +123,16 @@
 				"fieldDefs":[
 					{
 						"uid":14,
-						"type":{
-							"id":2,
-							"p":[
-								
-							]
-						},
+						"type":"F_String",
 						"identifier":"Type",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"ValueOnly",
+						"editorDisplayPos":"Above",
 						"min":null,
 						"max":null,
 						"defaultOverride":{
-							"id":3,
-							"p":[
+							"id":"V_String",
+							"params":[
 								"Gob"
 							]
 						}
@@ -195,25 +140,15 @@
 					{
 						"uid":46,
 						"type":{
-							"id":5,
-							"p":[
+							"id":"F_Enum",
+							"params":[
 								44
 							]
 						},
 						"identifier":"type",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"ValueOnly",
+						"editorDisplayPos":"Above",
 						"min":null,
 						"max":null,
 						"defaultOverride":null
@@ -261,93 +196,48 @@
 				"fieldDefs":[
 					{
 						"uid":26,
-						"type":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"type":"F_Int",
 						"identifier":"MaxChildren",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":2,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"NameAndValue",
+						"editorDisplayPos":"Above",
 						"min":1,
 						"max":null,
 						"defaultOverride":{
-							"id":0,
-							"p":[
+							"id":"V_Int",
+							"params":[
 								3
 							]
 						}
 					},
 					{
 						"uid":27,
-						"type":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"type":"F_Int",
 						"identifier":"PerSpawn",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":2,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"NameAndValue",
+						"editorDisplayPos":"Above",
 						"min":1,
 						"max":null,
 						"defaultOverride":{
-							"id":0,
-							"p":[
+							"id":"V_Int",
+							"params":[
 								1
 							]
 						}
 					},
 					{
 						"uid":28,
-						"type":{
-							"id":1,
-							"p":[
-								
-							]
-						},
+						"type":"F_Float",
 						"identifier":"Delay",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":2,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"NameAndValue",
+						"editorDisplayPos":"Above",
 						"min":1,
 						"max":null,
 						"defaultOverride":{
-							"id":1,
-							"p":[
+							"id":"V_Float",
+							"params":[
 								5
 							]
 						}
@@ -367,31 +257,16 @@
 				"fieldDefs":[
 					{
 						"uid":25,
-						"type":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"type":"F_Int",
 						"identifier":"Time",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":2,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"NameAndValue",
+						"editorDisplayPos":"Above",
 						"min":1,
 						"max":null,
 						"defaultOverride":{
-							"id":0,
-							"p":[
+							"id":"V_Int",
+							"params":[
 								30
 							]
 						}
@@ -411,57 +286,27 @@
 				"fieldDefs":[
 					{
 						"uid":32,
-						"type":{
-							"id":2,
-							"p":[
-								
-							]
-						},
+						"type":"F_String",
 						"identifier":"Text",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":1,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"ValueOnly",
+						"editorDisplayPos":"Center",
 						"min":null,
 						"max":null,
 						"defaultOverride":null
 					},
 					{
 						"uid":33,
-						"type":{
-							"id":4,
-							"p":[
-								
-							]
-						},
+						"type":"F_Color",
 						"identifier":"Color",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"ValueOnly",
+						"editorDisplayPos":"Above",
 						"min":null,
 						"max":null,
 						"defaultOverride":{
-							"id":0,
-							"p":[
+							"id":"V_Int",
+							"params":[
 								16777215
 							]
 						}
@@ -561,8 +406,8 @@
 									"__comment__":"type (MobType)",
 									"defUid":46,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Goblin"
 										]
 									}
@@ -584,8 +429,8 @@
 									"__comment__":"type (MobType)",
 									"defUid":46,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Goblin"
 										]
 									}
@@ -607,8 +452,8 @@
 									"__comment__":"type (ItemType)",
 									"defUid":47,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gem"
 										]
 									}
@@ -634,8 +479,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"DUMBER DWARVES"
 										]
 									}
@@ -644,8 +489,8 @@
 									"__comment__":"Color (Color)",
 									"defUid":33,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											16766008
 										]
 									}
@@ -662,8 +507,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"A 48h game by Sebastien Benard (deepnight.net)"
 										]
 									}
@@ -672,8 +517,8 @@
 									"__comment__":"Color (Color)",
 									"defUid":33,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											9539507
 										]
 									}
@@ -1909,8 +1754,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gem"
 										]
 									}
@@ -1968,8 +1813,8 @@
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											2
 										]
 									}
@@ -1978,8 +1823,8 @@
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											1
 										]
 									}
@@ -1988,8 +1833,8 @@
 									"__comment__":"Delay (Float)",
 									"defUid":28,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											3
 										]
 									}
@@ -2006,8 +1851,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gem"
 										]
 									}
@@ -2029,8 +1874,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Your dwarves collect GEMS automatically for you."
 										]
 									}
@@ -2815,8 +2660,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gem"
 										]
 									}
@@ -2838,8 +2683,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gem"
 										]
 									}
@@ -2969,8 +2814,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Click here to drop some FOOD to BAIT your dwarf."
 										]
 									}
@@ -3001,8 +2846,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Dwarves are kind of stupid."
 										]
 									}
@@ -3024,8 +2869,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Use food to guide them."
 										]
 									}
@@ -6918,8 +6763,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -6941,8 +6786,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gem"
 										]
 									}
@@ -6964,8 +6809,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"... except when they do something stupid, like picking a trap-bomb. Click ON THEM to slap them."
 										]
 									}
@@ -6987,8 +6832,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Dwarves cannot die..."
 										]
 									}
@@ -8406,8 +8251,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -8429,8 +8274,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -8452,8 +8297,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -8484,8 +8329,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -8507,8 +8352,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Slap your dwarves when they do something you don't want."
 										]
 									}
@@ -8539,8 +8384,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -8562,8 +8407,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -9575,8 +9420,8 @@
 									"__comment__":"Time (Int)",
 									"defUid":25,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											10
 										]
 									}
@@ -9593,8 +9438,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"You might sometime be in a hurry..."
 										]
 									}
@@ -10211,8 +10056,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -10234,8 +10079,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -10365,8 +10210,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -10388,8 +10233,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -10411,8 +10256,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -10434,8 +10279,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -11190,8 +11035,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -11213,8 +11058,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -11303,8 +11148,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -11326,8 +11171,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -11349,8 +11194,8 @@
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											4
 										]
 									}
@@ -11364,8 +11209,8 @@
 									"__comment__":"Delay (Float)",
 									"defUid":28,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											3
 										]
 									}
@@ -11392,8 +11237,8 @@
 									"__comment__":"Delay (Float)",
 									"defUid":28,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											3
 										]
 									}
@@ -11410,8 +11255,8 @@
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											2
 										]
 									}
@@ -11420,8 +11265,8 @@
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											2
 										]
 									}
@@ -11430,8 +11275,8 @@
 									"__comment__":"Delay (Float)",
 									"defUid":28,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											10
 										]
 									}
@@ -11448,8 +11293,8 @@
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											2
 										]
 									}
@@ -11458,8 +11303,8 @@
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											2
 										]
 									}
@@ -11468,8 +11313,8 @@
 									"__comment__":"Delay (Float)",
 									"defUid":28,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											10
 										]
 									}
@@ -11486,8 +11331,8 @@
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											1
 										]
 									}
@@ -11501,8 +11346,8 @@
 									"__comment__":"Delay (Float)",
 									"defUid":28,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											10
 										]
 									}
@@ -13487,8 +13332,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gem"
 										]
 									}
@@ -13510,8 +13355,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gem"
 										]
 									}
@@ -13533,8 +13378,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gem"
 										]
 									}
@@ -13556,8 +13401,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gem"
 										]
 									}
@@ -13579,8 +13424,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gem"
 										]
 									}
@@ -13602,8 +13447,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gem"
 										]
 									}
@@ -13751,8 +13596,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -13810,8 +13655,8 @@
 									"__comment__":"Type (String)",
 									"defUid":10,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Bomb"
 										]
 									}
@@ -13919,8 +13764,8 @@
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											2
 										]
 									}
@@ -14505,8 +14350,8 @@
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											3
 										]
 									}
@@ -14515,8 +14360,8 @@
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											1
 										]
 									}
@@ -14525,8 +14370,8 @@
 									"__comment__":"Delay (Float)",
 									"defUid":28,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											3
 										]
 									}
@@ -14543,8 +14388,8 @@
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											4
 										]
 									}
@@ -14553,8 +14398,8 @@
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											2
 										]
 									}
@@ -14563,8 +14408,8 @@
 									"__comment__":"Delay (Float)",
 									"defUid":28,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											3
 										]
 									}
@@ -14581,8 +14426,8 @@
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											3
 										]
 									}
@@ -14591,8 +14436,8 @@
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											1
 										]
 									}
@@ -14601,8 +14446,8 @@
 									"__comment__":"Delay (Float)",
 									"defUid":28,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											4
 										]
 									}
@@ -14700,8 +14545,8 @@
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											4
 										]
 									}
@@ -14710,8 +14555,8 @@
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											2
 										]
 									}
@@ -14720,8 +14565,8 @@
 									"__comment__":"Delay (Float)",
 									"defUid":28,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											3
 										]
 									}
@@ -14738,8 +14583,8 @@
 									"__comment__":"Time (Int)",
 									"defUid":25,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											5
 										]
 									}
@@ -14761,8 +14606,8 @@
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											2
 										]
 									}
@@ -15415,8 +15260,8 @@
 									"__comment__":"Time (Int)",
 									"defUid":25,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											5
 										]
 									}
@@ -15433,8 +15278,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"THANK YOU FOR PLAYING"
 										]
 									}
@@ -15456,8 +15301,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"For more, please visit: deepnight.net"
 										]
 									}
@@ -15479,8 +15324,8 @@
 									"__comment__":"Text (String)",
 									"defUid":32,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Hope you liked this short game :)"
 										]
 									}
@@ -15511,8 +15356,8 @@
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											4
 										]
 									}
@@ -15521,8 +15366,8 @@
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											2
 										]
 									}
@@ -15544,8 +15389,8 @@
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											4
 										]
 									}
@@ -15554,8 +15399,8 @@
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											2
 										]
 									}
@@ -15587,8 +15432,8 @@
 									"__comment__":"Delay (Float)",
 									"defUid":28,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											2
 										]
 									}
@@ -15615,8 +15460,8 @@
 									"__comment__":"Delay (Float)",
 									"defUid":28,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											2
 										]
 									}

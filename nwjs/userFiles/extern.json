@@ -5,12 +5,7 @@
 		"layers":[
 			{
 				"uid":13,
-				"type":{
-					"id":0,
-					"p":[
-						
-					]
-				},
+				"type":"IntGrid",
 				"identifier":"IntGrid",
 				"gridSize":16,
 				"displayOpacity":1,
@@ -25,12 +20,7 @@
 			},
 			{
 				"uid":4,
-				"type":{
-					"id":1,
-					"p":[
-						
-					]
-				},
+				"type":"Entities",
 				"identifier":"Entities",
 				"gridSize":16,
 				"displayOpacity":1,
@@ -45,12 +35,7 @@
 			},
 			{
 				"uid":15,
-				"type":{
-					"id":2,
-					"p":[
-						
-					]
-				},
+				"type":"Tiles",
 				"identifier":"Tiles",
 				"gridSize":32,
 				"displayOpacity":1,
@@ -79,25 +64,15 @@
 					{
 						"uid":3,
 						"type":{
-							"id":5,
-							"p":[
+							"id":"F_Enum",
+							"params":[
 								1
 							]
 						},
 						"identifier":"mobType",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"ValueOnly",
+						"editorDisplayPos":"Above",
 						"min":null,
 						"max":null,
 						"defaultOverride":null
@@ -105,139 +80,69 @@
 					{
 						"uid":11,
 						"type":{
-							"id":5,
-							"p":[
+							"id":"F_Enum",
+							"params":[
 								10
 							]
 						},
 						"identifier":"loot",
 						"canBeNull":true,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":1,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"ValueOnly",
+						"editorDisplayPos":"Center",
 						"min":null,
 						"max":null,
 						"defaultOverride":null
 					},
 					{
 						"uid":12,
-						"type":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"type":"F_Int",
 						"identifier":"lootCount",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":1,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"ValueOnly",
+						"editorDisplayPos":"Center",
 						"min":1,
 						"max":null,
 						"defaultOverride":{
-							"id":0,
-							"p":[
+							"id":"V_Int",
+							"params":[
 								1
 							]
 						}
 					},
 					{
 						"uid":5,
-						"type":{
-							"id":3,
-							"p":[
-								
-							]
-						},
+						"type":"F_Bool",
 						"identifier":"elite",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":1,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"ValueOnly",
+						"editorDisplayPos":"Above",
 						"min":null,
 						"max":null,
 						"defaultOverride":null
 					},
 					{
 						"uid":6,
-						"type":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"type":"F_Int",
 						"identifier":"lifeOverride",
 						"canBeNull":true,
-						"editorDisplayMode":{
-							"id":2,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"NameAndValue",
+						"editorDisplayPos":"Above",
 						"min":1,
 						"max":null,
 						"defaultOverride":null
 					},
 					{
 						"uid":7,
-						"type":{
-							"id":1,
-							"p":[
-								
-							]
-						},
+						"type":"F_Float",
 						"identifier":"scale",
 						"canBeNull":false,
-						"editorDisplayMode":{
-							"id":2,
-							"p":[
-								
-							]
-						},
-						"editorDisplayPos":{
-							"id":0,
-							"p":[
-								
-							]
-						},
+						"editorDisplayMode":"NameAndValue",
+						"editorDisplayPos":"Above",
 						"min":0.1,
 						"max":4,
 						"defaultOverride":{
-							"id":1,
-							"p":[
+							"id":"V_Float",
+							"params":[
 								1
 							]
 						}
@@ -326,8 +231,8 @@
 									"__comment__":"mobType (MobType)",
 									"defUid":3,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Trash"
 										]
 									}
@@ -369,8 +274,8 @@
 									"__comment__":"mobType (MobType)",
 									"defUid":3,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Ninja"
 										]
 									}
@@ -394,8 +299,8 @@
 									"__comment__":"loot (ItemType)",
 									"defUid":11,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Ammo"
 										]
 									}
@@ -404,8 +309,8 @@
 									"__comment__":"lootCount (Int)",
 									"defUid":12,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											10
 										]
 									}
@@ -422,8 +327,8 @@
 									"__comment__":"mobType (MobType)",
 									"defUid":3,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Trash"
 										]
 									}
@@ -465,8 +370,8 @@
 									"__comment__":"mobType (MobType)",
 									"defUid":3,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Ninja"
 										]
 									}
@@ -475,8 +380,8 @@
 									"__comment__":"elite (Bool)",
 									"defUid":5,
 									"internalValue":{
-										"id":2,
-										"p":[
+										"id":"V_Bool",
+										"params":[
 											true
 										]
 									}
@@ -485,8 +390,8 @@
 									"__comment__":"lifeOverride (Int)",
 									"defUid":6,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											10
 										]
 									}
@@ -495,8 +400,8 @@
 									"__comment__":"scale (Float)",
 									"defUid":7,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											2
 										]
 									}
@@ -505,8 +410,8 @@
 									"__comment__":"loot (ItemType)",
 									"defUid":11,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Gold"
 										]
 									}
@@ -515,8 +420,8 @@
 									"__comment__":"lootCount (Int)",
 									"defUid":12,
 									"internalValue":{
-										"id":0,
-										"p":[
+										"id":"V_Int",
+										"params":[
 											150
 										]
 									}
@@ -533,8 +438,8 @@
 									"__comment__":"mobType (MobType)",
 									"defUid":3,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Shooter"
 										]
 									}
@@ -543,8 +448,8 @@
 									"__comment__":"elite (Bool)",
 									"defUid":5,
 									"internalValue":{
-										"id":2,
-										"p":[
+										"id":"V_Bool",
+										"params":[
 											true
 										]
 									}
@@ -558,8 +463,8 @@
 									"__comment__":"scale (Float)",
 									"defUid":7,
 									"internalValue":{
-										"id":1,
-										"p":[
+										"id":"V_Float",
+										"params":[
 											2
 										]
 									}
@@ -568,8 +473,8 @@
 									"__comment__":"loot (ItemType)",
 									"defUid":11,
 									"internalValue":{
-										"id":3,
-										"p":[
+										"id":"V_String",
+										"params":[
 											"Food"
 										]
 									}
