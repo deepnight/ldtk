@@ -4,7 +4,7 @@
 	"defaultPivotX":0,
 	"defaultPivotY":0,
 	"defaultGridSize":16,
-	"bgColor":8355987,
+	"bgColor":"#7F8093",
 	"nextUniqId":18,
 	"defs":{
 		"layers":[
@@ -16,7 +16,7 @@
 				"displayOpacity":1,
 				"intGridValues":[
 					{
-						"color":0
+						"color":"#000000"
 					}
 				],
 				"tilesetDefUid":null,
@@ -31,7 +31,7 @@
 				"displayOpacity":1,
 				"intGridValues":[
 					{
-						"color":0
+						"color":"#000000"
 					}
 				],
 				"tilesetDefUid":null,
@@ -46,7 +46,7 @@
 				"displayOpacity":1,
 				"intGridValues":[
 					{
-						"color":0
+						"color":"#000000"
 					}
 				],
 				"tilesetDefUid":14,
@@ -60,7 +60,7 @@
 				"uid":2,
 				"width":16,
 				"height":32,
-				"color":16711680,
+				"color":"#FF0000",
 				"maxPerLevel":0,
 				"discardExcess":true,
 				"pivotX":0.5,

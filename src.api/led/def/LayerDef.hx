@@ -2,6 +2,7 @@ package led.def;
 
 import led.LedTypes;
 
+// TODO make intGridValue a real identifier
 class LayerDef {
 	public var uid(default,null) : Int;
 	public var type : LayerType;
@@ -45,7 +46,10 @@ class LayerDef {
 
 		o.intGridValues = [];
 		for( v in JsonTools.readArray(json.intGridValues) )
-			o.intGridValues.push(v);
+			o.intGridValues.push({
+				name: v.name,
+				color: JsonTools.readColor(v.color),
+			});
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
 		o.tilePivotX = JsonTools.readFloat(json.tilePivotX, 0);
@@ -62,7 +66,7 @@ class LayerDef {
 			gridSize: gridSize,
 			displayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
 
-			intGridValues: intGridValues,
+			intGridValues: intGridValues.map( function(iv) return { name:iv.name, color:JsonTools.writeColor(iv.color) }),
 
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,

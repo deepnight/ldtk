@@ -53,7 +53,7 @@ class Project {
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
-		p.bgColor = JsonTools.readInt( json.bgColor, 0xffffff );
+		p.bgColor = JsonTools.readColor( json.bgColor, 0xffffff );
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
@@ -71,7 +71,7 @@ class Project {
 			defaultPivotX: JsonTools.clampFloatPrecision( defaultPivotX ),
 			defaultPivotY: JsonTools.clampFloatPrecision( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
-			bgColor: bgColor, // TODO use hex format
+			bgColor: JsonTools.writeColor(bgColor),
 			nextUniqId: nextUniqId,
 
 			defs: defs.toJson(),

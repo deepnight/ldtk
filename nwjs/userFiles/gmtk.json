@@ -4,7 +4,7 @@
 	"defaultPivotX":0.5,
 	"defaultPivotY":1,
 	"defaultGridSize":16,
-	"bgColor":8355987,
+	"bgColor":"#7F8093",
 	"nextUniqId":48,
 	"defs":{
 		"layers":[
@@ -16,7 +16,7 @@
 				"displayOpacity":0.8,
 				"intGridValues":[
 					{
-						"color":0
+						"color":"#000000"
 					}
 				],
 				"tilesetDefUid":null,
@@ -31,8 +31,8 @@
 				"displayOpacity":0.7,
 				"intGridValues":[
 					{
-						"color":0,
-						"name":"Walls"
+						"name":"Walls",
+						"color":"#000000"
 					}
 				],
 				"tilesetDefUid":null,
@@ -47,7 +47,7 @@
 				"displayOpacity":1,
 				"intGridValues":[
 					{
-						"color":0
+						"color":"#000000"
 					}
 				],
 				"tilesetDefUid":16,
@@ -61,7 +61,7 @@
 				"uid":9,
 				"width":10,
 				"height":10,
-				"color":16768256,
+				"color":"#FFDD00",
 				"maxPerLevel":0,
 				"discardExcess":true,
 				"pivotX":0.5,
@@ -106,7 +106,7 @@
 				"uid":11,
 				"width":10,
 				"height":16,
-				"color":65310,
+				"color":"#00FF1E",
 				"maxPerLevel":3,
 				"discardExcess":false,
 				"pivotX":0.5,
@@ -120,7 +120,7 @@
 				"uid":13,
 				"width":8,
 				"height":16,
-				"color":16711680,
+				"color":"#FF0000",
 				"maxPerLevel":0,
 				"discardExcess":true,
 				"pivotX":0.5,
@@ -165,7 +165,7 @@
 				"uid":19,
 				"width":24,
 				"height":16,
-				"color":11052416,
+				"color":"#A8A580",
 				"maxPerLevel":0,
 				"discardExcess":true,
 				"pivotX":0.5,
@@ -179,7 +179,7 @@
 				"uid":21,
 				"width":16,
 				"height":16,
-				"color":10641476,
+				"color":"#A26044",
 				"maxPerLevel":0,
 				"discardExcess":true,
 				"pivotX":0.5,
@@ -193,7 +193,7 @@
 				"uid":23,
 				"width":16,
 				"height":16,
-				"color":16711901,
+				"color":"#FF00DD",
 				"maxPerLevel":0,
 				"discardExcess":true,
 				"pivotX":0.5,
@@ -254,7 +254,7 @@
 				"uid":24,
 				"width":24,
 				"height":32,
-				"color":16711680,
+				"color":"#FF0000",
 				"maxPerLevel":1,
 				"discardExcess":false,
 				"pivotX":0.5,
@@ -283,7 +283,7 @@
 				"uid":31,
 				"width":48,
 				"height":16,
-				"color":7895160,
+				"color":"#787878",
 				"maxPerLevel":0,
 				"discardExcess":true,
 				"pivotX":0.5,
@@ -323,7 +323,7 @@
 				"uid":34,
 				"width":8,
 				"height":32,
-				"color":16762880,
+				"color":"#FFC800",
 				"maxPerLevel":0,
 				"discardExcess":true,
 				"pivotX":0.5,

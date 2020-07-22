@@ -13,7 +13,6 @@ class JsonTools {
 			return { id:e.getName(), params:e.getParameters() }
 		else
 			return e.getName();
-		// return { id:e.getIndex(), p:e.getParameters() }
 	}
 
 	public static function readEnum<T>(e:Enum<T>, o:Dynamic, allowNull:Bool, ?def:T) : T {
@@ -42,19 +41,34 @@ class JsonTools {
 			else
 				throw "Couldn't create "+e+" from "+o+" ("+err+")";
 		}
+	}
 
-		// try {
-		// 	return cast Type.createEnumIndex(e, o.id, o.p);
-		// }
-		// catch( err:Dynamic ) {
-		// 	if( def!=null )
-		// 		return def;
+	public static function readColor(v:Dynamic, ?defaultIfMissing:UInt) : UInt {
+		if( v==null && defaultIfMissing!=null )
+			return defaultIfMissing;
 
-		// 	if( !Reflect.hasField(o,"id") || Math.isNaN(o.id) )
-		// 		throw "Missing enum ID in "+o;
-		// 	else
-		// 		throw "Couldn't create "+e+" from "+o;
-		// }
+		if( v==null )
+			throw "Missing color value";
+
+		switch Type.typeof(v) {
+			case TClass(String):
+				var c = dn.Color.hexToInt(v);
+				if( !dn.M.isValidNumber(c) ) {
+					if( defaultIfMissing!=null )
+						return defaultIfMissing;
+					else
+						throw "Couldn't read color: "+v;
+				}
+				else
+					return c;
+
+			case _:
+				throw "Invalid color format: "+v;
+		}
+	}
+
+	public static function writeColor(c:UInt) : String {
+		return dn.Color.intToHex(c);
 	}
 
 
