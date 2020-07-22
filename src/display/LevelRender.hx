@@ -19,7 +19,7 @@ class LevelRender extends dn.Process {
 	public var focusLevelY(default,set) : Float;
 	public var zoom(default,set) : Float;
 
-	public var enhanceActiveLayer = true;
+	public var enhanceActiveLayer(default,null) = true;
 
 	public function new() {
 		super(editor);
@@ -386,7 +386,13 @@ class LevelRender extends dn.Process {
 		return wrapper;
 	}
 
-	public function updateLayersVisibility() {
+	public function setEnhanceActiveLayer(v:Bool) {
+		enhanceActiveLayer = v;
+		editor.jMainPanel.find("input#enhanceActiveLayer").prop("checked", v);
+		updateLayersVisibility();
+	}
+
+	function updateLayersVisibility() {
 		for(ld in editor.project.defs.layers) {
 			var li = editor.curLevel.getLayerInstance(ld);
 			var wrapper = layerWrappers.get(ld.uid);
@@ -394,12 +400,8 @@ class LevelRender extends dn.Process {
 				continue;
 
 			wrapper.visible = isLayerVisible(li);
-			wrapper.alpha = li.def.displayOpacity;
-
-			if( enhanceActiveLayer ) {
-				wrapper.alpha = li.def.displayOpacity * ( li==editor.curLayerInstance ? 1 : 0.6 );
-				wrapper.filter = li==editor.curLayerInstance ? null : new h2d.filter.Blur(2);
-			}
+			wrapper.alpha = li.def.displayOpacity * ( !enhanceActiveLayer || li==editor.curLayerInstance ? 1 : 0.55 );
+			wrapper.filter = !enhanceActiveLayer || li==editor.curLayerInstance ? null : new h2d.filter.Blur(3);
 		}
 	}
 

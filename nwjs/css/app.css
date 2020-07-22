@@ -1074,7 +1074,7 @@ canvas#webgl {
   height: 100vh;
   display: grid;
   overflow: hidden;
-  grid-template-rows: min-content 250px min-content auto;
+  grid-template-rows: min-content 250px min-content min-content auto;
   padding: 5px;
   gap: 5px;
   background: #1e2229;
@@ -1147,6 +1147,25 @@ canvas#webgl {
 #page.editor #mainPanel ul#layers li .vis:hover {
   outline: 1px solid white;
   outline-offset: -4px;
+}
+
+#page.editor #mainPanel .enhanceActiveLayer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  font-size: 8pt;
+}
+
+#page.editor #mainPanel .enhanceActiveLayer input[type=checkbox] {
+  flex: 0 1 auto;
+  width: 16px;
+  height: 16px;
+}
+
+#page.editor #mainPanel .enhanceActiveLayer label:hover {
+  color: #ffcc00;
+  cursor: pointer;
 }
 
 #page.editor #mainPanel #mainPaletteWrapper {

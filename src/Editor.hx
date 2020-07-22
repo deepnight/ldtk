@@ -68,11 +68,10 @@ class Editor extends dn.Process {
 		selectionCursor = new ui.Cursor();
 		selectionCursor.highlight();
 
-		initUI();
-
-
 		levelRender = new display.LevelRender();
 		rulers = new display.Rulers();
+
+		initUI();
 
 		selectProject(p);
 		needSaving = false;
@@ -143,6 +142,12 @@ class Editor extends dn.Process {
 		});
 		ui.Tip.attach(jMainPanel.find("button.showHelp"), "Quick [h]elp");
 
+
+		jMainPanel.find("input#enhanceActiveLayer")
+			.change( function(ev) {
+				levelRender.setEnhanceActiveLayer( ev.getThis().prop("checked") );
+			})
+			.prop("checked", levelRender.enhanceActiveLayer);
 
 		// jMainPanel.find("h2#levelName").click( function(ev) jMainPanel.find("button.levelList").click() );
 
@@ -263,10 +268,8 @@ class Editor extends dn.Process {
 					onClose();
 
 			case K.A:
-				if( !hasInputFocus() ) {
-					levelRender.enhanceActiveLayer = !levelRender.enhanceActiveLayer;
-					levelRender.updateLayersVisibility();
-				}
+				if( !hasInputFocus() )
+					levelRender.setEnhanceActiveLayer( !levelRender.enhanceActiveLayer );
 
 			case K.H:
 				if( !hasInputFocus() )

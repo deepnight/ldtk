@@ -1044,7 +1044,7 @@ canvas#webgl {
 
 		display: grid;
 		overflow: hidden;
-		grid-template-rows: min-content 250px min-content auto;
+		grid-template-rows: min-content 250px min-content min-content auto;
 		padding: 5px;
 		gap: 5px;
 		background: $bgDark;
@@ -1113,6 +1113,25 @@ canvas#webgl {
 					outline: 1px solid white;
 					outline-offset: -4px;
 				}
+			}
+		}
+
+		.enhanceActiveLayer {
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			padding-right: 8px;
+
+			font-size: 8pt;
+
+			input[type=checkbox] {
+				flex: 0 1 auto;
+				width: 16px;
+				height: 16px;
+			}
+			label:hover {
+				color: $orange;
+				cursor: pointer;
 			}
 		}
 
