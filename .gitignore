@@ -1,4 +1,6 @@
 nwjs/js/app.js
 nwjs/js/*.map
+electron/js/app.js
+electron/js/*.map
 dump/
 res/.tmp
