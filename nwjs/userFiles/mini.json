@@ -9,9 +9,9 @@
 	"defs":{
 		"layers":[
 			{
-				"identifier":"IntGrid",
-				"type":"IntGrid",
-				"uid":13,
+				"identifier":"Entities",
+				"type":"Entities",
+				"uid":4,
 				"gridSize":16,
 				"displayOpacity":1,
 				"intGridValues":[
@@ -24,9 +24,9 @@
 				"tilePivotY":0
 			},
 			{
-				"identifier":"Entities",
-				"type":"Entities",
-				"uid":4,
+				"identifier":"IntGrid",
+				"type":"IntGrid",
+				"uid":13,
 				"gridSize":16,
 				"displayOpacity":1,
 				"intGridValues":[
@@ -197,22 +197,6 @@
 			"pxWid":256,
 			"pxHei":320,
 			"layerInstances":[
-				{
-					"_identifier":"IntGrid",
-					"levelId":0,
-					"layerDefUid":13,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
-					],
-					"entityInstances":[
-						
-					]
-				},
 				{
 					"_identifier":"Entities",
 					"levelId":0,
@@ -531,6 +515,101 @@
 								}
 							]
 						}
+					]
+				},
+				{
+					"_identifier":"IntGrid",
+					"levelId":0,
+					"layerDefUid":13,
+					"pxOffsetX":0,
+					"pxOffsetY":0,
+					"intGrid":[
+						{
+							"coordId":98,
+							"v":0
+						},
+						{
+							"coordId":99,
+							"v":0
+						},
+						{
+							"coordId":108,
+							"v":0
+						},
+						{
+							"coordId":109,
+							"v":0
+						},
+						{
+							"coordId":192,
+							"v":0
+						},
+						{
+							"coordId":193,
+							"v":0
+						},
+						{
+							"coordId":194,
+							"v":0
+						},
+						{
+							"coordId":195,
+							"v":0
+						},
+						{
+							"coordId":196,
+							"v":0
+						},
+						{
+							"coordId":197,
+							"v":0
+						},
+						{
+							"coordId":198,
+							"v":0
+						},
+						{
+							"coordId":199,
+							"v":0
+						},
+						{
+							"coordId":200,
+							"v":0
+						},
+						{
+							"coordId":201,
+							"v":0
+						},
+						{
+							"coordId":202,
+							"v":0
+						},
+						{
+							"coordId":203,
+							"v":0
+						},
+						{
+							"coordId":204,
+							"v":0
+						},
+						{
+							"coordId":205,
+							"v":0
+						},
+						{
+							"coordId":206,
+							"v":0
+						},
+						{
+							"coordId":207,
+							"v":0
+						}
+					],
+					"gridTiles":[
+						
+					],
+					"entityInstances":[
+						
 					]
 				},
 				{
