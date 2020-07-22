@@ -172,7 +172,6 @@ class JsTools {
 			if( path==null || path.length==0 )
 				return;
 
-			N.debug(path);
 			input.remove();
 			onLoad(path);
 		});
