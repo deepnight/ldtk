@@ -9,12 +9,12 @@ class LastChance extends dn.Process {
 
 		LastChance.end();
 		CUR = this;
+		var json = project.toJson();
 
 		elem = new J("xml#lastChance").clone().children().first();
 		elem.appendTo(App.ME.jBody);
 		elem.find(".action").text(str);
 
-		var json = project.toJson();
 		elem.find("button").click( function(ev) {
 			if( !isActive() )
 				return;

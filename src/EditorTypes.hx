@@ -44,6 +44,7 @@ enum GlobalEvent {
 	EnumDefRemoved;
 	EnumDefChanged;
 	EnumDefSorted;
+	EnumDefValueRemoved;
 
 	ToolOptionChanged;
 }

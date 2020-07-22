@@ -129,6 +129,22 @@ class EntityDef {
 
 
 	public function tidy(p:led.Project) {
+		// Remove Enum-based field defs whose EnumDef is lost
+		var i = 0;
+		while( i<fieldDefs.length ) {
+			var fd = fieldDefs[i];
+			switch fd.type {
+				case F_Enum(enumDefUid):
+					if( p.defs.getEnumDef(enumDefUid)==null ) {
+						fieldDefs.splice(i,1);
+						continue;
+					}
+
+				case _:
+			}
+			i++;
+		}
+
 		for(fd in fieldDefs)
 			fd.tidy(p);
 	}

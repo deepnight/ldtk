@@ -45,7 +45,7 @@ class EditEnums extends ui.modal.Panel {
 
 		switch(ge) {
 			case ProjectSelected:
-				selectEnum( project.defs.enums[0] );
+				close();
 
 			case _:
 		}
@@ -126,12 +126,14 @@ class EditEnums extends ui.modal.Panel {
 
 			li.find(".delete").click( function(ev) {
 				new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("Warning! This operation will affect any Entity using this Enum in ALL LEVELS!"), function() {
+					new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+v }), project);
+
 					project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
 						if( fi.getEnumValue()==v )
 							fi.parseValue(null);
 					});
-					curEnum.values.remove(v);
-					editor.ge.emit(EnumDefChanged);
+					project.defs.removeEnumDefValue(curEnum, v);
+					editor.ge.emit(EnumDefValueRemoved);
 				});
 			});
 		}

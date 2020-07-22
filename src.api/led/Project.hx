@@ -80,10 +80,10 @@ class Project {
 	}
 
 	public function tidy() {
+		defs.tidy(this);
+
 		for(level in levels)
 			level.tidy(this);
-
-		defs.tidy(this);
 	}
 
 	public function loadExternalFiles(projectDir:String) {

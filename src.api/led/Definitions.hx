@@ -261,6 +261,12 @@ class Definitions {
 		_project.tidy();
 	}
 
+	public function removeEnumDefValue(ed:led.def.EnumDef, v:String) {
+		if( !ed.values.remove(v) )
+			throw "EnumDef value not found";
+		_project.tidy();
+	}
+
 	public function isEnumIdentifierUnique(id:String) {
 		id = Project.cleanupIdentifier(id, true);
 		if( id==null )
