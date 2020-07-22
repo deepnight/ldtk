@@ -34,7 +34,7 @@ class Definitions {
 			d.entities.push( led.def.EntityDef.fromJson(p, entityJson) );
 
 		for( tilesetJson in JsonTools.readArray(json.tilesets) )
-			d.tilesets.push( led.def.TilesetDef.fromJson(p.dataVersion, tilesetJson) );
+			d.tilesets.push( led.def.TilesetDef.fromJson(p, tilesetJson) );
 
 		for( enumJson in JsonTools.readArray(json.enums) )
 			d.enums.push( led.def.EnumDef.fromJson(p.dataVersion, enumJson) );
@@ -196,7 +196,7 @@ class Definitions {
 	/**  TILESET DEFS  *****************************************/
 
 	public function createTilesetDef() : led.def.TilesetDef {
-		var td = new led.def.TilesetDef(_project.makeUniqId() );
+		var td = new led.def.TilesetDef( _project, _project.makeUniqId() );
 		tilesets.push(td);
 
 		var id = "Tileset";

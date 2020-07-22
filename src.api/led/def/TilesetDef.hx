@@ -3,6 +3,8 @@ package led.def;
 import led.LedTypes;
 
 class TilesetDef {
+	var _project : Project;
+
 	public var uid : Int;
 	public var identifier(default,set) : String;
 	public var relPath(default,null) : Null<String>;
@@ -25,7 +27,8 @@ class TilesetDef {
 	inline function get_cHei() return !isAtlasValid() ? 0 : dn.M.ceil( pxHei / tileGridSize );
 
 
-	public function new(uid:Int) {
+	public function new(p:Project, uid:Int) {
+		_project = p;
 		this.uid = uid;
 		identifier = "Tileset"+uid;
 	}
@@ -79,8 +82,8 @@ class TilesetDef {
 	}
 
 
-	public static function fromJson(dataVersion:Int, json:Dynamic) {
-		var td = new TilesetDef( JsonTools.readInt(json.uid) );
+	public static function fromJson(p:Project, json:Dynamic) {
+		var td = new TilesetDef( p, JsonTools.readInt(json.uid) );
 		td.tileGridSize = JsonTools.readInt(json.tileGridSize, Project.DEFAULT_GRID_SIZE);
 		td.tileGridSpacing = JsonTools.readInt(json.tileGridSpacing, 0);
 		td.pxWid = JsonTools.readInt( json.pxWid );
@@ -130,8 +133,16 @@ class TilesetDef {
 	}
 
 	public inline function reloadImage(projectDir:String) {
-		// TODO remap IDs if size changes
-		return loadAtlasImage(projectDir, relPath);
+		var oldWid = pxWid;
+		var oldHei = pxHei;
+		if( !loadAtlasImage(projectDir, relPath) )
+			return false;
+
+		if( oldWid!=pxWid ) {
+			ui.Notification.debug("remapping required");
+			// TODO
+		}
+		return true;
 	}
 
 	public function getTileId(tcx,tcy) {
@@ -257,5 +268,6 @@ class TilesetDef {
 	#end
 
 	public function tidy(p:led.Project) {
+		_project = p;
 	}
 }
