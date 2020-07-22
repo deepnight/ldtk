@@ -43,10 +43,6 @@
 				"showReuseMessage": false,
 				"clear": false,
 				"revealProblems": "onProblem"
-			},
-			"group": {
-				"kind": "build",
-				"isDefault": true
 			}
 		}
 	]
