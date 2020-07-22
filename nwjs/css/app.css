@@ -893,6 +893,11 @@ textarea:focus {
   flex-grow: 2;
 }
 
+.window.dialog.unsavedChanges button.ignore,
+.window.dialog.unsavedChanges button.save {
+  flex-grow: 2;
+}
+
 .window.helpWindow dl {
   display: grid;
   grid-template-columns: 0.5fr 1fr;

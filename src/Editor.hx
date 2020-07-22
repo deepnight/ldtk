@@ -451,7 +451,7 @@ class Editor extends dn.Process {
 	function onClose(?bt:js.jquery.JQuery) {
 		ui.Modal.closeAll();
 		if( needSaving )
-			new ui.modal.dialog.Confirm(bt, Lang.t._("Some changes were not saved and will be lost! Do you still want to exit?"), App.ME.openHome);
+			new ui.modal.dialog.UnsavedChanges(bt, App.ME.openHome);
 		else
 			App.ME.openHome();
 	}

@@ -123,7 +123,7 @@ class App extends dn.Process {
 	public function exit() {
 		if( Editor.ME!=null && Editor.ME.needSaving ) {
 			ui.Modal.closeAll();
-			new ui.modal.dialog.Confirm(Lang.t._("All unsaved changes will be lost!"), appWin.close.bind(true));
+			new ui.modal.dialog.UnsavedChanges(appWin.close.bind(true));
 		}
 		else
 			appWin.close(true);

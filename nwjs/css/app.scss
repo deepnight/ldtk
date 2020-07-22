@@ -856,6 +856,12 @@ textarea {
 			}
 		}
 	}
+	&.unsavedChanges {
+		button.ignore,
+		button.save {
+			flex-grow: 2;
+		}
+	}
 }
 
 .window.helpWindow {
