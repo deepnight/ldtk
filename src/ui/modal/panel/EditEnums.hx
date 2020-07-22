@@ -25,7 +25,7 @@ class EditEnums extends ui.modal.Panel {
 			}
 
 			new ui.modal.dialog.Confirm(ev.getThis(), function() {
-				new ui.LastChance( L.t._("Enum deleted"), project.toJson() );
+				new ui.LastChance( L.t._("Enum deleted"), project );
 				project.defs.removeEnumDef(curEnum);
 				editor.ge.emit(EnumDefRemoved);
 				selectEnum( project.defs.enums[0] );

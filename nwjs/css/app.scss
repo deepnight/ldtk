@@ -748,7 +748,7 @@ textarea {
 
 	min-width: 150px;
 
-	background-color: $bgMed;
+	background-color: $darkRed;
 	border-left: 4px solid $red;
 	box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
 	animation: slideUp 1.2s;
@@ -780,7 +780,8 @@ textarea {
 			max-width: 250px;
 			font-style: italic;
 			font-size: 9pt;
-			color: $bgLighter;
+			color: white;
+			opacity: 0.7;
 		}
 	}
 }

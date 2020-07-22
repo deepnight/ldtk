@@ -26,6 +26,8 @@ enum GlobalEvent {
 	LayerInstanceRestoredFromHistory;
 
 	TilesetDefChanged;
+	TilesetDefAdded;
+	TilesetDefRemoved;
 
 	EntityDefAdded;
 	EntityDefRemoved;

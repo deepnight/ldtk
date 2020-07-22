@@ -4,7 +4,7 @@ class LastChance extends dn.Process {
 	static var CUR : Null<LastChance>;
 	var elem : js.jquery.JQuery;
 
-	public function new(str:dn.data.GetText.LocaleString, projectJsonBackup:Dynamic) {
+	public function new(str:dn.data.GetText.LocaleString, project:led.Project) {
 		super(Editor.ME);
 
 		LastChance.end();
@@ -14,16 +14,26 @@ class LastChance extends dn.Process {
 		elem.appendTo(App.ME.jBody);
 		elem.find(".action").text(str);
 
+		var json = project.toJson();
 		elem.find("button").click( function(ev) {
 			if( !isActive() )
 				return;
-			Editor.ME.selectProject( led.Project.fromJson(projectJsonBackup) );
+			Editor.ME.selectProject( led.Project.fromJson(json) );
 			N.msg( L.t._("Canceled action: \"::act::\"", {act:str}) );
 			hide();
 		});
 
 		delayer.addS(hide, 20);
 		cd.setF("ignoreFrame",1);
+
+		Editor.ME.ge.addGlobalListener(onGlobalEvent);
+	}
+
+	function onGlobalEvent(e:GlobalEvent) {
+		switch(e) {
+			case ViewportChanged:
+			case _: LastChance.end();
+		}
 	}
 
 	public static function end() {
@@ -47,7 +57,7 @@ class LastChance extends dn.Process {
 	override function onDispose() {
 		super.onDispose();
 
-		// Editor.ME.ge.removeListener(onGlobalEvent);
+		Editor.ME.ge.removeListener(onGlobalEvent);
 		elem.remove();
 		elem = null;
 

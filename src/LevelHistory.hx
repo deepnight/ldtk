@@ -37,7 +37,7 @@ class LevelHistory {
 			case LayerDefAdded, EntityDefAdded, EntityFieldAdded:
 				initMostAncientLayerStates(false);
 
-			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved, EnumDefRemoved:
+			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved, EnumDefRemoved, TilesetDefRemoved:
 				clearHistory();
 
 			case ViewportChanged:
@@ -54,7 +54,11 @@ class LevelHistory {
 
 			case ProjectSettingsChanged:
 			case LayerDefChanged, EntityDefChanged:
-			case LayerDefSorted, TilesetDefChanged:
+			case LayerDefSorted:
+
+			case TilesetDefChanged:
+			case TilesetDefAdded:
+
 			case EntityDefSorted, EntityFieldSorted, EntityFieldDefChanged:
 			case EntityFieldInstanceChanged:
 			case LayerInstanceChanged:
@@ -93,8 +97,6 @@ class LevelHistory {
 	}
 
 	function saveState(s:HistoryState) {
-		ui.LastChance.end();
-
 		// Drop first element when max is reached
 		if( curIndex==MAX_HISTORY-1 ) {
 			var droppedState = states[0];

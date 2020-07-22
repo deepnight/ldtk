@@ -540,10 +540,12 @@ class Editor extends dn.Process {
 				updateGuide();
 				initTool();
 
-			case TilesetDefChanged, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
+			case TilesetDefChanged, TilesetDefRemoved, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				initTool();
 				updateGuide();
 				display.LevelRender.invalidateCaches();
+
+			case TilesetDefAdded:
 
 			case ProjectSettingsChanged:
 				updateAppBg();
