@@ -757,6 +757,10 @@ textarea:focus {
   padding-right: 80px;
 }
 
+#notificationList .notification .content pre {
+  font-size: 8pt;
+}
+
 #notificationList .notification:not(.latest) {
   opacity: 0.5;
   border-left-width: 3px;
