@@ -1,1 +1,2 @@
-@electron electron
+@cd electron
+@npm start
