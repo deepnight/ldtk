@@ -139,8 +139,18 @@ class TilesetDef {
 			return false;
 
 		if( oldWid!=pxWid ) {
-			ui.Notification.debug("remapping required");
-			// TODO
+			// tileIDs remapping
+			var oldCwid = dn.M.ceil( oldWid / tileGridSize );
+			for(l in _project.levels)
+			for(li in l.layerInstances) {
+				ui.Notification.debug("remapping "+li);
+				for( coordId in li.gridTiles.keys() ) {
+					var tCoordId = li.gridTiles.get(coordId);
+					var oldCy = Std.int( tCoordId / oldCwid );
+					var oldCx = tCoordId - oldCwid*oldCy;
+					li.gridTiles.set(coordId, getTileId(oldCx, oldCy));
+				}
+			}
 		}
 		return true;
 	}
