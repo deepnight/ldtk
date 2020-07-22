@@ -40,6 +40,7 @@ class LayerInstance {
 			layerDefUid: layerDefUid,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
+
 			intGrid: {
 				var arr = [];
 				for(e in intGrid.keyValueIterator())
@@ -49,6 +50,7 @@ class LayerInstance {
 					});
 				arr;
 			},
+
 			gridTiles: {
 				var arr = [];
 				for(e in gridTiles.keyValueIterator())
