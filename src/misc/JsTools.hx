@@ -12,17 +12,13 @@ class JsTools {
 				var from : Int = ev.detail.origin.index;
 				var to : Int = ev.detail.destination.index;
 				onSort(from,to);
-				// var moved = project.sortLayerDef(from,to);
-				// selectLayer(moved);
-				// editor.ge.emit(LayerDefSorted);
 			}
 		);
 	}
 
 	public static function prepareProjectFile(p:led.Project) : { bytes:haxe.io.Bytes, json:Dynamic } {
 		var json = p.toJson();
-		var jsonStr = haxe.Json.stringify(json);
-		jsonStr = dn.HaxeJson.prettify(jsonStr); // TODO make optional
+		var jsonStr = dn.JsonPretty.stringify(json);
 
 		return {
 			bytes: haxe.io.Bytes.ofString( jsonStr ),
