@@ -763,7 +763,25 @@ textarea {
 		gap: 10px;
 
 		grid-template-columns: min-content auto;
+		grid-template-rows: auto auto;
 		justify-content: right;
+		button {
+			grid-row: 1/3;
+			height: 100%;
+		}
+		.action {
+			grid-column: 2/3;
+			font-weight: bold;
+			color: $orange;
+		}
+		.desc {
+			grid-column: 2/3;
+			grid-row: 2/3;
+			max-width: 250px;
+			font-style: italic;
+			font-size: 9pt;
+			color: $bgLighter;
+		}
 	}
 }
 

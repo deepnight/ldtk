@@ -12,17 +12,17 @@ class LastChance extends dn.Process {
 
 		elem = new J("xml#lastChance").clone().children().first();
 		elem.appendTo(App.ME.jBody);
-		elem.find(".content").append('<div class="desc">$str</div>');
+		elem.find(".action").text(str);
 
 		elem.find("button").click( function(ev) {
 			if( !isActive() )
 				return;
 			Editor.ME.selectProject( led.Project.fromJson(projectJsonBackup) );
-			N.msg( L.t._("Canceled action") );
+			N.msg( L.t._("Canceled action: \"::act::\"", {act:str}) );
 			hide();
 		});
 
-		delayer.addS(hide, 12);
+		delayer.addS(hide, 20);
 		cd.setF("ignoreFrame",1);
 	}
 
