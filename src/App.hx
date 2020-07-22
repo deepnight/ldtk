@@ -125,11 +125,17 @@ class App extends dn.Process {
 	}
 
 	public function exit() {
+		function _closeApp() {
+			#if nwjs
+			appWin.close(true);
+			#end
+		}
+
 		if( Editor.ME!=null && Editor.ME.needSaving ) {
 			ui.Modal.closeAll();
-			new ui.modal.dialog.UnsavedChanges(appWin.close.bind(true));
+			new ui.modal.dialog.UnsavedChanges(_closeApp);
 		}
 		else
-			appWin.close(true);
+			_closeApp;
 	}
 }
