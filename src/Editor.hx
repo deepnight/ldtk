@@ -258,13 +258,9 @@ class Editor extends dn.Process {
 				if( !hasInputFocus() && isCtrlDown() )
 					onSave();
 
-			case K.N:
-				// if( !hasInputFocus() && isCtrlDown() )
-				// 	onNew();
-
-			case K.O, K.L:
-				// if( !hasInputFocus() && isCtrlDown() )
-				// 	onLoad();
+			case K.W:
+				if( !hasInputFocus() && isCtrlDown() )
+					onClose();
 
 			case K.H:
 				if( !hasInputFocus() )
