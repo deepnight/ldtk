@@ -207,8 +207,30 @@ class TilesetDef {
 
 	/*** HEAPS API *********************************/
 
-	function makeErrorTile() {
-		return h2d.Tile.fromColor(0xff0000, tileGridSize, tileGridSize);
+	static var CACHED_ERROR_TILES: Map<Int,h3d.mat.Texture> = new Map();
+	public static function makeErrorTile(size) {
+		if( !CACHED_ERROR_TILES.exists(size) ) {
+			var g = new h2d.Graphics();
+			g.beginFill(0x880000);
+			g.drawRect(0,0,size,size);
+			g.endFill();
+
+			g.lineStyle(2,0xff0000);
+
+			g.moveTo(size*0.2,size*0.2);
+			g.lineTo(size*0.8,size*0.8);
+
+			g.moveTo(size*0.2,size*0.8);
+			g.lineTo(size*0.8,size*0.2);
+
+			g.endFill();
+
+			var tex = new h3d.mat.Texture(size,size, [Target]);
+			g.drawTo(tex);
+			CACHED_ERROR_TILES.set(size, tex);
+		}
+
+		return h2d.Tile.fromTexture( CACHED_ERROR_TILES.get(size) );
 	}
 
 	public inline function getAtlasTile() : Null<h2d.Tile> {
@@ -219,7 +241,7 @@ class TilesetDef {
 		if( isAtlasValid() )
 			return getAtlasTile().sub( getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize );
 		else
-			return makeErrorTile();
+			return makeErrorTile(tileGridSize);
 	}
 
 

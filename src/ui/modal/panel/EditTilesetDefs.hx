@@ -28,10 +28,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 				return;
 			}
 			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this tileset, it will be deleted in all levels and corresponding layers as well. Are you sure?", function() {
-				N.notImplemented();
-				// project.defs.removeLayerDef(cur);
-				// select(project.defs.layers[0]);
-				// editor.ge.emit(TilesetDefChanged);
+				project.defs.removeTilesetDef(cur);
+				select(project.defs.tilesets[0]);
+				editor.ge.emit(TilesetDefChanged);
 			});
 		});
 

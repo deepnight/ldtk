@@ -257,30 +257,6 @@
 				"savedSelections":[
 					
 				]
-			},
-			{
-				"uid":16,
-				"identifier":"S4m_ur4i_huge_assetpack_tilemap",
-				"relPath":"atlas/s4m_ur4i_huge-assetpack-tilemap.png",
-				"pxWid":658,
-				"pxHei":892,
-				"tileGridSize":8,
-				"tileGridSpacing":0,
-				"savedSelections":[
-					
-				]
-			},
-			{
-				"uid":17,
-				"identifier":"SystemShock",
-				"relPath":"atlas/SystemShock.png",
-				"pxWid":256,
-				"pxHei":1024,
-				"tileGridSize":16,
-				"tileGridSpacing":0,
-				"savedSelections":[
-					
-				]
 			}
 		],
 		"enums":[

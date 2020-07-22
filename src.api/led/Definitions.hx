@@ -209,6 +209,13 @@ class Definitions {
 		return td;
 	}
 
+	public function removeTilesetDef(td:led.def.TilesetDef) {
+		if( !tilesets.remove(td) )
+			throw "Unknown tilesetDef";
+
+		_project.tidy();
+	}
+
 	public function getTilesetDef(uid:Int) : Null<led.def.TilesetDef> {
 		for(td in tilesets)
 			if( td.uid==uid )
