@@ -41,7 +41,7 @@ class EntityDef {
 		o.identifier = JsonTools.readString( json.identifier );
 		o.width = JsonTools.readInt( json.width, 16 );
 		o.height = JsonTools.readInt( json.height, 16 );
-		o.color = JsonTools.readInt( json.color, 0x0 );
+		o.color = JsonTools.readColor( json.color, 0x0 );
 		o.maxPerLevel = JsonTools.readInt( json.maxPerLevel, 0 );
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
 		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
@@ -55,11 +55,11 @@ class EntityDef {
 
 	public function toJson() {
 		return {
-			uid: uid,
 			identifier: identifier,
+			uid: uid,
 			width: width,
 			height: height,
-			color: color,
+			color: JsonTools.writeColor(color),
 			maxPerLevel: maxPerLevel,
 			discardExcess: discardExcess,
 			pivotX: JsonTools.clampFloatPrecision( pivotX ),
@@ -129,6 +129,22 @@ class EntityDef {
 
 
 	public function tidy(p:led.Project) {
+		// Remove Enum-based field defs whose EnumDef is lost
+		var i = 0;
+		while( i<fieldDefs.length ) {
+			var fd = fieldDefs[i];
+			switch fd.type {
+				case F_Enum(enumDefUid):
+					if( p.defs.getEnumDef(enumDefUid)==null ) {
+						fieldDefs.splice(i,1);
+						continue;
+					}
+
+				case _:
+			}
+			i++;
+		}
+
 		for(fd in fieldDefs)
 			fd.tidy(p);
 	}

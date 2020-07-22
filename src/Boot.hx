@@ -7,6 +7,7 @@ class Boot extends hxd.App {
 	// Engine ready
 	override function init() {
 		ME = this;
+
 		h3d.Engine.getCurrent().backgroundColor = 0xffffff;
 		hxd.Res.initEmbed();
 
@@ -14,7 +15,7 @@ class Boot extends hxd.App {
 		Lang.init();
 		JsTools.init();
 
-		new Client();
+		new App();
 	}
 
 	override function update(deltaTime:Float) {

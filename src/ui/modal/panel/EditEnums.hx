@@ -12,7 +12,7 @@ class EditEnums extends ui.modal.Panel {
 		// Add enum
 		jContent.find("button.createEnum").click( function(_) {
 			var ed = project.defs.createEnumDef();
-			client.ge.emit(EnumDefAdded);
+			editor.ge.emit(EnumDefAdded);
 			selectEnum(ed);
 			jContent.find("ul.enumForm input:first").focus();
 		});
@@ -25,9 +25,9 @@ class EditEnums extends ui.modal.Panel {
 			}
 
 			new ui.modal.dialog.Confirm(ev.getThis(), function() {
-				new ui.LastChance( L.t._("Enum deleted"), project.toJson() );
+				new ui.LastChance( L.t._("Enum ::name:: deleted", { name: curEnum.identifier}), project );
 				project.defs.removeEnumDef(curEnum);
-				client.ge.emit(EnumDefRemoved);
+				editor.ge.emit(EnumDefRemoved);
 				selectEnum( project.defs.enums[0] );
 			});
 		});
@@ -45,7 +45,7 @@ class EditEnums extends ui.modal.Panel {
 
 		switch(ge) {
 			case ProjectSelected:
-				selectEnum( project.defs.enums[0] );
+				close();
 
 			case _:
 		}
@@ -79,7 +79,7 @@ class EditEnums extends ui.modal.Panel {
 		JsTools.makeSortable(".window .enumList ul", function(from, to) {
 			var moved = project.defs.sortEnumDef(from,to);
 			selectEnum(moved);
-			client.ge.emit(EnumDefSorted);
+			editor.ge.emit(EnumDefSorted);
 		});
 	}
 
@@ -126,12 +126,14 @@ class EditEnums extends ui.modal.Panel {
 
 			li.find(".delete").click( function(ev) {
 				new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("Warning! This operation will affect any Entity using this Enum in ALL LEVELS!"), function() {
+					new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+v }), project);
+
 					project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
 						if( fi.getEnumValue()==v )
 							fi.parseValue(null);
 					});
-					curEnum.values.remove(v);
-					client.ge.emit(EnumDefChanged);
+					project.defs.removeEnumDefValue(curEnum, v);
+					editor.ge.emit(EnumDefValueRemoved);
 				});
 			});
 		}
@@ -140,7 +142,7 @@ class EditEnums extends ui.modal.Panel {
 			var uid = 0;
 			while( !curEnum.addValue(curEnum.identifier+uid) )
 				uid++;
-			client.ge.emit(EnumDefChanged);
+			editor.ge.emit(EnumDefChanged);
 			jContent.find("ul.enumValues li:last input[type=text]").select();
 		});
 
@@ -148,7 +150,7 @@ class EditEnums extends ui.modal.Panel {
 		JsTools.makeSortable(".window ul.enumValues", function(from, to) {
 			var v = curEnum.values.splice(from,1)[0];
 			curEnum.values.insert(to, v);
-			client.ge.emit(EnumDefChanged);
+			editor.ge.emit(EnumDefChanged);
 		});
 	}
 }

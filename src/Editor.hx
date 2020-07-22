@@ -1,15 +1,8 @@
 import hxd.Key;
 
-class Client extends dn.Process {
-	public static var ME : Client;
+class Editor extends dn.Process {
+	public static var ME : Editor;
 
-	#if nwjs
-	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
-	#end
-
-	public var jDoc(get,never) : J; inline function get_jDoc() return new J(js.Browser.document);
-	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
-	public var jCanvas(get,never) : J; inline function get_jCanvas() return new J("#webgl");
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
@@ -26,12 +19,14 @@ class Client extends dn.Process {
 
 
 	public var ge : GlobalEventDispatcher;
-	public var session : SessionData;
+	public var watcher : misc.FileWatcher;
 	public var project : led.Project;
+	public var projectFilePath : String;
 	public var curLevelId : Int;
 	var curLayerId : Int;
 	public var curTool : Tool<Dynamic>;
 	var keyDowns : Map<Int,Bool> = new Map();
+	public var needSaving = false;
 
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
@@ -45,15 +40,15 @@ class Client extends dn.Process {
 		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
 
+	public function new(parent:dn.Process, p:led.Project, path:String) {
+		super(parent);
 
-	public function new() {
-		super();
+		App.ME.loadPage("editor");
 
 		ME = this;
-		createRoot(Boot.ME.s2d);
-		#if nwjs
-		appWin.maximize();
-		#end
+		createRoot(parent.root);
+		projectFilePath = path;
+		App.ME.registerRecentProject(path);
 
 		// Events
 		new J("body")
@@ -67,27 +62,19 @@ class Client extends dn.Process {
 		ge = new GlobalEventDispatcher();
 		ge.addGlobalListener( onGlobalEvent );
 
+		watcher = new misc.FileWatcher();
 
 		cursor = new ui.Cursor();
 		selectionCursor = new ui.Cursor();
 		selectionCursor.highlight();
 
-		initUI();
-
-		// Restore last stored project state
-		session = {
-			projectPath: null,
-		}
-		session = dn.LocalStorage.readObject("session", session);
-
 		levelRender = new display.LevelRender();
 		rulers = new display.Rulers();
-		if( !JsTools.fileExists(session.projectPath) || !loadProject(session.projectPath) ) {
-			selectProject( led.Project.createEmpty() );
-			N.error("Couldn't re-open last project ("+session.projectPath+"). Please start a new one, or load an existing one! ");
-			// TODO open future "project selection" page
-		}
-		dn.Process.resizeAll();
+
+		initUI();
+
+		selectProject(p);
+		needSaving = false;
 	}
 
 	public function initUI() {
@@ -126,27 +113,41 @@ class Client extends dn.Process {
 		});
 		ui.Tip.attach(jMainPanel.find("button.editEntities"), "Entities");
 
-		jMainPanel.find("button.editTilesets").click( function(_) {
+		var bt = jMainPanel.find("button.editTilesets");
+		bt.click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditTilesetDefs) )
 				ui.Modal.closeAll();
 			else
 				new ui.modal.panel.EditTilesetDefs();
 		});
-		ui.Tip.attach(jMainPanel.find("button.editTilesets"), "Tilesets");
+		ui.Tip.attach(bt, "Tilesets");
 
-		jMainPanel.find("button.editEnums").click( function(_) {
+		var bt = jMainPanel.find("button.editEnums");
+		bt.click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditEnums) )
 				ui.Modal.closeAll();
 			else
 				new ui.modal.panel.EditEnums();
 		});
-		ui.Tip.attach(jMainPanel.find("button.editEnums"), "Entity enums");
+		ui.Tip.attach(bt, "Entity enums");
+
+
+		var bt = jMainPanel.find("button.close");
+		bt.click( function(ev) onClose(ev.getThis()) );
+		ui.Tip.attach(bt, Lang.t._("Close project"));
+
 
 		jMainPanel.find("button.showHelp").click( function(_) {
 			onHelp();
 		});
 		ui.Tip.attach(jMainPanel.find("button.showHelp"), "Quick [h]elp");
 
+
+		jMainPanel.find("input#enhanceActiveLayer")
+			.change( function(ev) {
+				levelRender.setEnhanceActiveLayer( ev.getThis().prop("checked") );
+			})
+			.prop("checked", levelRender.enhanceActiveLayer);
 
 		// jMainPanel.find("h2#levelName").click( function(ev) jMainPanel.find("button.levelList").click() );
 
@@ -159,9 +160,28 @@ class Client extends dn.Process {
 		});
 	}
 
+
+	public function getProjectDir() {
+		return dn.FilePath.fromFile( projectFilePath ).directory;
+	}
+
+	public function makeRelativeFilePath(filePath:String) {
+		var relativePath = dn.FilePath.fromFile( filePath );
+		relativePath.makeRelativeTo( getProjectDir() );
+		return relativePath.full;
+	}
+
+	public function makeFullFilePath(relPath:String) {
+		var fp = dn.FilePath.fromFile( getProjectDir() +"/"+ relPath );
+		return fp.full;
+	}
+
 	public function selectProject(p:led.Project) {
+		watcher.clearAllWatches();
+
 		project = p;
 		project.tidy();
+		project.loadExternalFiles( getProjectDir() );
 		curLevelId = project.levels[0].uid;
 		curLayerId = -1;
 
@@ -177,6 +197,20 @@ class Client extends dn.Process {
 		levelHistory.set( curLevelId, new LevelHistory(curLevelId) ); // TODO
 
 		ge.emit(ProjectSelected);
+
+		// Tileset image hot-reloading
+		for( td in project.defs.tilesets )
+			watcher.watchTileset(td);
+	}
+
+	public function onTilesetImageChange(td:led.def.TilesetDef) {
+		var name = dn.FilePath.fromFile(td.relPath).fileName;
+		if( td.reloadImage( getProjectDir() ) ) {
+			ge.emit(TilesetDefChanged);
+			N.msg( Lang.t._("Reloaded: ::file::", { file:name }) );
+		}
+		else
+			N.error( Lang.t._("Failed to reload: ::file::", { file:name }) );
 	}
 
 	function onJsKeyDown(ev:js.jquery.Event) {
@@ -201,7 +235,7 @@ class Client extends dn.Process {
 	}
 
 	inline function hasInputFocus() {
-		return jBody.find("input:focus, textarea:focus").length>0;
+		return App.ME.jBody.find("input:focus, textarea:focus").length>0;
 	}
 	function onKeyPress(keyId:Int) {
 		switch keyId {
@@ -213,7 +247,7 @@ class Client extends dn.Process {
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() ) {
-					jBody.toggleClass("compactPanel");
+					App.ME.jBody.toggleClass("compactPanel");
 					updateAppBg();
 				}
 
@@ -229,9 +263,13 @@ class Client extends dn.Process {
 				if( !hasInputFocus() && isCtrlDown() )
 					onSave();
 
-			case K.N:
+			case K.W:
 				if( !hasInputFocus() && isCtrlDown() )
-					onNew();
+					onClose();
+
+			case K.A:
+				if( !hasInputFocus() )
+					levelRender.setEnhanceActiveLayer( !levelRender.enhanceActiveLayer );
 
 			case K.H:
 				if( !hasInputFocus() )
@@ -243,7 +281,7 @@ class Client extends dn.Process {
 				if( !hasInputFocus() ) {
 					var t = haxe.Timer.stamp();
 					var json = project.levels[0].toJson();
-					Client.ME.debug(dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
+					App.ME.debug(dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
 				}
 			#end
 		}
@@ -337,6 +375,9 @@ class Client extends dn.Process {
 				selectLayerInstance(li);
 				var tid = li.getGridTile(cx,cy);
 				var td = project.defs.getTilesetDef(li.def.tilesetDefUid);
+				if( td==null )
+					return false;
+
 				var savedSel = td.getSavedSelectionFor(tid);
 
 				var t = curTool.as(tool.TileTool);
@@ -393,17 +434,6 @@ class Client extends dn.Process {
 		levelRender.focusLevelY = levelRender.focusLevelY*(1-panRatio) + mouseY*panRatio;
 	}
 
-	public function debug(msg:Dynamic, append=false) {
-		var wrapper = new J("#debug");
-		if( !append )
-			wrapper.empty();
-		wrapper.show();
-
-		var line = new J("<p/>");
-		line.append( Std.string(msg) );
-		line.appendTo(wrapper);
-	}
-
 	public function selectLevel(l:led.Level) {
 		if( curLevelId==l.uid )
 			return;
@@ -426,118 +456,45 @@ class Client extends dn.Process {
 		m.loadTemplate("help","helpWindow");
 	}
 
-	public function onNew(?bt:js.jquery.JQuery) {
-		new ui.modal.dialog.Confirm(bt, function() {
-			JsTools.saveAsDialog(["json"], function(filePath) {
-				selectProject( led.Project.createEmpty() );
-
-				var fp = dn.FilePath.fromFile(filePath);
-				fp.extension = "json";
-				var data = makeProjectFile();
-				JsTools.writeFileBytes(fp.full, data.bytes);
-
-				session.projectPath = fp.full;
-				saveSessionDataToLocalStorage();
-
-				N.msg("New project created: "+fp.full);
-				ui.Modal.closeAll();
-			});
-			// selectProject( led.Project.createEmpty() );
-		});
-	}
-
-	// function loadProjectFromLocalStorage() : Bool {
-	// 	try {
-			// var json = dn.LocalStorage.readJson("cookie");
-	// 		if( json==null )
-	// 			throw null;
-	// 		project = led.Project.fromJson(json);
-	// 		return true;
-	// 	}
-	// 	catch( err:Dynamic ) {
-	// 		project = led.Project.createEmpty();
-	// 		return false;
-	// 	}
-	// }
-
-	function saveProjectToLocalStorage(?json:Dynamic) {
-		if( json==null )
-			json = project.toJson();
-
-		dn.LocalStorage.writeJson("cookie", json);
-	}
-
-	function saveSessionDataToLocalStorage() {
-		dn.LocalStorage.writeObject("session", session);
-	}
-
-	function makeProjectFile() : { bytes:haxe.io.Bytes, json:Dynamic } {
-		var json = project.toJson();
-		var jsonStr = haxe.Json.stringify(json);
-		jsonStr = dn.HaxeJson.prettify(jsonStr); // TODO make optional
-		return {
-			bytes: haxe.io.Bytes.ofString( jsonStr ),
-			json: json,
-		}
+	function onClose(?bt:js.jquery.JQuery) {
+		ui.Modal.closeAll();
+		if( needSaving )
+			new ui.modal.dialog.UnsavedChanges(bt, App.ME.openHome);
+		else
+			App.ME.openHome();
 	}
 
 	public function onSave(?bypassMissing=false) {
-		if( !bypassMissing && !JsTools.fileExists(session.projectPath) ) {
+		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
 			new ui.modal.dialog.Confirm(
-				Lang.t._("The project file is missing in ::path::. Save to this path anyway?", { path:session.projectPath }),
+				Lang.t._("The project file is no longer in ::path::. Save to this path anyway?", { path:projectFilePath }),
 				onSave.bind(true)
 			);
+			return;
 		}
 
-		var data = makeProjectFile();
-		JsTools.writeFileBytes(session.projectPath, data.bytes);
-		saveProjectToLocalStorage(data.json);
-		N.msg("Saved to "+session.projectPath);
-}
-
-	public function onLoad() {
-		JsTools.loadDialog([".json"], function(path) {
-			loadProject(path);
-		});
+		var data = JsTools.prepareProjectFile(project);
+		JsTools.writeFileBytes(projectFilePath, data.bytes);
+		needSaving = false;
+		N.msg("Saved to "+projectFilePath);
 	}
-
-	function loadProject(filePath:String) {
-		if( !JsTools.fileExists(filePath) ) {
-			N.error("File not found: "+filePath);
-			return false;
-		}
-
-		// Parse
-		var json = null;
-		var p = try {
-			var bytes = JsTools.readFileBytes(filePath);
-			json = haxe.Json.parse( bytes.toString() );
-			led.Project.fromJson(json);
-		}
-		catch(e:Dynamic) null;
-
-		if( p==null ) {
-			N.error("Couldn't read project file!");
-			return false;
-		}
-
-		// Update everything
-		selectProject( p );
-		ui.Modal.closeAll();
-		N.msg("Loaded project: "+filePath);
-
-		session.projectPath = dn.FilePath.fromFile(filePath).full;
-		saveSessionDataToLocalStorage();
-		saveProjectToLocalStorage(json);
-		return true;
-}
-
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case ViewportChanged:
+			case LayerInstanceSelected:
+			case LevelSelected:
+			case LayerInstanceVisiblityChanged:
+			case ToolOptionChanged:
 
-			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted:
+			case _:
+				needSaving = true;
+		}
+
+		switch e {
+			case ViewportChanged:
+
+			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 
 			case LayerInstanceChanged:
 			case EntityFieldDefChanged:
@@ -596,10 +553,12 @@ class Client extends dn.Process {
 				updateGuide();
 				initTool();
 
-			case TilesetDefChanged, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
+			case TilesetDefChanged, TilesetDefRemoved, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				initTool();
 				updateGuide();
 				display.LevelRender.invalidateCaches();
+
+			case TilesetDefAdded:
 
 			case ProjectSettingsChanged:
 				updateAppBg();
@@ -635,20 +594,15 @@ class Client extends dn.Process {
 	}
 
 	inline function canvasWid() {
-		return jCanvas.outerWidth() * js.Browser.window.devicePixelRatio;
+		return App.ME.jCanvas.outerWidth() * js.Browser.window.devicePixelRatio;
 	}
 
 	inline function canvasHei() {
-		return jCanvas.outerHeight() * js.Browser.window.devicePixelRatio;
+		return App.ME.jCanvas.outerHeight() * js.Browser.window.devicePixelRatio;
 	}
 
 	function updateTitles() {
-		#if electron
-		// TODO
-		#elseif nwjs
-		appWin.title = project.name+" ("+curLevel.identifier+")    --    L-Ed v"+Const.APP_VERSION;
-		#end
-
+		App.ME.setWindowTitle( project.name+" ("+curLevel.identifier+")" );
 		// jMainPanel.find("h2#levelName").text( curLevel.getName() );
 	}
 
@@ -698,7 +652,7 @@ class Client extends dn.Process {
 
 		for(ld in project.defs.layers) {
 			var li = curLevel.getLayerInstance(ld);
-			var e = jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
+			var e = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			list.append(e);
 
 			if( li==curLayerInstance )
@@ -761,7 +715,12 @@ class Client extends dn.Process {
 		if( ME==this )
 			ME = null;
 
+		watcher.dispose();
+		watcher = null;
+
 		ge.dispose();
+		ge = null;
+
 		Boot.ME.s2d.removeEventListener(onEvent);
 
 		new J("body").off(".client");

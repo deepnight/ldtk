@@ -19,16 +19,16 @@ class ToolPalettePopOut extends ui.Modal {
 
 		jModalAndMask.addClass("popOutPalette");
 		updatePalette();
-		client.jDoc.off(".popOutPaletteEvent");
+		App.ME.jDoc.off(".popOutPaletteEvent");
 
 		jWrapper.mousedown( onWrapperMouseDown );
-		client.jDoc
+		App.ME.jDoc
 			.on("mousemove.popOutPaletteEvent", onDocMouseMove)
 			.on("mouseup.popOutPaletteEvent", onDocMouseUp);
 
 		// Positionning
 		jMask.css("opacity",0);
-		var jPalette = client.jPalette;
+		var jPalette = editor.jPalette;
 		jWrapper.offset({
 			left: jPalette.offset().left,
 			top: jPalette.offset().top,
@@ -116,7 +116,7 @@ class ToolPalettePopOut extends ui.Modal {
 
 	override function onDispose() {
 		super.onDispose();
-		client.jDoc.off(".popOutPaletteEvent");
+		App.ME.jDoc.off(".popOutPaletteEvent");
 		if( !tool.destroyed )
 			tool.updatePalette();
 		if( ME==this )

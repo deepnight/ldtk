@@ -35,11 +35,13 @@ class LayerInstance {
 
 	public function toJson() {
 		return {
-			__comment__: level.identifier+"->"+def.identifier,
+			_identifier: def.identifier, // only exported for readability purpose
+
 			levelId: levelId,
 			layerDefUid: layerDefUid,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
+
 			intGrid: {
 				var arr = [];
 				for(e in intGrid.keyValueIterator())
@@ -49,6 +51,7 @@ class LayerInstance {
 					});
 				arr;
 			},
+
 			gridTiles: {
 				var arr = [];
 				for(e in gridTiles.keyValueIterator())
@@ -58,7 +61,7 @@ class LayerInstance {
 					});
 				arr;
 			},
-			entityInstances: entityInstances.map( function(ei) return ei.toJson() ),
+			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
 	}
 
@@ -128,7 +131,9 @@ class LayerInstance {
 					ei.tidy(_project);
 
 			case Tiles:
-				// TODO
+				// Lost tileset
+				if( _project.defs.getTilesetDef(def.tilesetDefUid)==null )
+					def.tilesetDefUid = null;
 		}
 	}
 
@@ -239,7 +244,7 @@ class LayerInstance {
 	}
 
 	public function duplicateEntityInstance(ei:EntityInstance) : EntityInstance {
-		var copy = EntityInstance.fromJson( _project, ei.toJson() );
+		var copy = EntityInstance.fromJson( _project, ei.toJson(this) );
 		entityInstances.push(copy);
 		return copy;
 	}
@@ -297,13 +302,13 @@ class LayerInstance {
 				// not meant to be rendered
 
 			case Tiles:
+				var td = _project.defs.getTilesetDef(def.tilesetDefUid);
 				for(cy in 0...cHei)
 				for(cx in 0...cWid) {
 					if( getGridTile(cx,cy)==null )
 						continue;
 
-					var td = _project.defs.getTilesetDef(def.tilesetDefUid);
-					var t = td.getTile( getGridTile(cx,cy) );
+					var t = td!=null ? td.getTile( getGridTile(cx,cy) ) : led.def.TilesetDef.makeErrorTile(def.gridSize);
 					t.setCenterRatio(def.tilePivotX, def.tilePivotY);
 					var bmp = new h2d.Bitmap(t, target);
 					bmp.x = (cx + def.tilePivotX) * def.gridSize;

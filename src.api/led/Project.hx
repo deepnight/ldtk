@@ -53,7 +53,7 @@ class Project {
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
-		p.bgColor = JsonTools.readInt( json.bgColor, 0xffffff );
+		p.bgColor = JsonTools.readColor( json.bgColor, 0xffffff );
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
@@ -66,24 +66,29 @@ class Project {
 
 	public function toJson(excludeLevels=false) {
 		return {
-			dataVersion: dataVersion,
-			nextUniqId: nextUniqId,
-			defs: defs.toJson(),
-			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
-
 			name: name,
+			dataVersion: dataVersion,
 			defaultPivotX: JsonTools.clampFloatPrecision( defaultPivotX ),
 			defaultPivotY: JsonTools.clampFloatPrecision( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
-			bgColor: bgColor,
+			bgColor: JsonTools.writeColor(bgColor),
+			nextUniqId: nextUniqId,
+
+			defs: defs.toJson(),
+			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
 		}
 	}
 
 	public function tidy() {
+		defs.tidy(this);
+
 		for(level in levels)
 			level.tidy(this);
+	}
 
-		defs.tidy(this);
+	public function loadExternalFiles(projectDir:String) {
+		for(td in defs.tilesets)
+			td.reloadImage(projectDir);
 	}
 
 

@@ -3,9 +3,9 @@ package ui;
 class Modal extends dn.Process {
 	static var ALL : Array<Modal> = [];
 
-	public var client(get,never) : Client; inline function get_client() return Client.ME;
-	public var project(get,never) : led.Project; inline function get_project() return Client.ME.project;
-	public var curLevel(get,never) : led.Level; inline function get_curLevel() return Client.ME.curLevel;
+	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
+	public var project(get,never) : led.Project; inline function get_project() return Editor.ME.project;
+	public var curLevel(get,never) : led.Level; inline function get_curLevel() return Editor.ME.curLevel;
 
 	var jModalAndMask: js.jquery.JQuery;
 	var jWrapper: js.jquery.JQuery;
@@ -13,7 +13,7 @@ class Modal extends dn.Process {
 	var jMask: js.jquery.JQuery;
 
 	public function new() {
-		super(Client.ME);
+		super(Editor.ME);
 
 		ALL.push(this);
 
@@ -27,14 +27,14 @@ class Modal extends dn.Process {
 		jMask.mousedown( function(_) close() );
 		jMask.hide().fadeIn(100);
 
-		client.ge.addGlobalListener(onGlobalEvent);
+		editor.ge.addGlobalListener(onGlobalEvent);
 	}
 
 	override function onDispose() {
 		super.onDispose();
 
 		ALL.remove(this);
-		client.ge.removeListener(onGlobalEvent);
+		editor.ge.removeListener(onGlobalEvent);
 
 		jModalAndMask.remove();
 		jModalAndMask = null;

@@ -17,7 +17,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		jModalAndMask.find(".mainList button.create").click( function(ev) {
 			var td = project.defs.createTilesetDef();
 			select(td);
-			client.ge.emit(TilesetDefChanged);
+			editor.ge.emit(TilesetDefAdded);
 			jForm.find("input").first().focus().select();
 		});
 
@@ -28,10 +28,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 				return;
 			}
 			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this tileset, it will be deleted in all levels and corresponding layers as well. Are you sure?", function() {
-				N.notImplemented();
-				// project.defs.removeLayerDef(cur);
-				// select(project.defs.layers[0]);
-				// client.ge.emit(TilesetDefChanged);
+				new LastChance(L.t._("Tileset ::name:: deleted", { name:cur.identifier }), project);
+				project.defs.removeTilesetDef(cur);
+				select(project.defs.tilesets[0]);
+				editor.ge.emit(TilesetDefRemoved);
 			});
 		});
 
@@ -74,7 +74,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Main tileset view
 		var jFull = jForm.find(".tileset canvas.fullPreview");
-		if( cur==null || !cur.hasAtlas() ) {
+		if( cur==null || !cur.isAtlasValid() ) {
 			var cnv = Std.downcast( jFull.get(0), js.html.CanvasElement );
 			cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
 		}
@@ -87,7 +87,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var cnv = Std.downcast( jDemo.get(0), js.html.CanvasElement );
 		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
 
-		if( cur!=null && cur.hasAtlas() ) {
+		if( cur!=null && cur.isAtlasValid() ) {
 			jDemo.attr("width", cur.tileGridSize*6 + padding*5);
 			jDemo.attr("height", cur.tileGridSize);
 
@@ -124,47 +124,58 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Image path
 		var jPath = jForm.find(".path");
-		jPath.empty();
-		if( cur.hasAtlas() )
-			for(e in cur.path.split("/"))
-				jPath.append('<span>$e</span>');
+		if( cur.relPath!=null ) {
+			jPath.empty();
+			jPath.append( JsTools.makePath(cur.relPath) );
+		}
+		else
+			jPath.text("-- No file --");
+		jPath.off().click( function(ev) {
+			if( cur.relPath!=null )
+				JsTools.exploreToFile( Editor.ME.makeFullFilePath(cur.relPath) );
+		});
 
 		// Fields
 		var i = Input.linkToHtmlInput(cur.identifier, jForm.find("input[name='name']") );
 		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.defs.isTilesetIdentifierUnique(id);
 		i.validityError = N.invalidIdentifier;
-		i.onChange = client.ge.emit.bind(TilesetDefChanged);
+		i.onChange = editor.ge.emit.bind(TilesetDefChanged);
 
-		var uploader = jForm.find("input[name=tilesetFile]");
-		uploader.attr("nwworkingdir",JsTools.getCwd()+"\\tilesetTestImages");
-		var label = uploader.siblings("[for="+uploader.attr("id")+"]");
-		label.text( !cur.hasAtlas() ? Lang.t._("Select an image file") : cur.getFileName(true) );
-		uploader.change( function(ev) {
-			var oldPath = cur.path;
-			var rawPath = uploader.val();
-			var relativePath = dn.FilePath.fromFile( rawPath );
-			relativePath.makeRelativeTo( JsTools.getCwd() );
+		// "Import image" button
+		var b = jForm.find("#tilesetFile");
+		if( cur.relPath==null )
+			b.text( Lang.t._("Select an image file") );
+		else if( !cur.isAtlasValid() )
+			b.text("ERROR: Couldn't read image data");
+		else
+			b.text("Replace image");
 
-			var bytes = JsTools.readFileBytes(rawPath);
-			if( !cur.importImage(relativePath.full, bytes) ) {
-				switch dn.Identify.getType(bytes) {
-					case Png, Gif:
-						N.error("Couldn't read this image: maybe the data is corrupted or the format special?");
+		b.click( function(ev) {
+			JsTools.loadDialog(["jpg","jpeg","gif","png"], Editor.ME.getProjectDir(), function(absPath) {
+				var oldRelPath = cur.relPath;
+				var relPath = Editor.ME.makeRelativeFilePath( absPath );
 
-					case Jpeg:
-						N.error("Sorry, JPEG is not yet supported, please use PNG instead.");
+				if( !cur.loadAtlasImage(editor.getProjectDir(), relPath) ) {
+					switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) {
+						case Unknown:
+							N.error("ERROR: I don't think this is an actual image");
 
-					case Bmp:
-						N.error("Sorry, BMP is not supported, please use PNG instead.");
+						case Png, Jpeg, Gif:
+							N.error("ERROR: couldn't read this image file");
 
-					case Unknown:
-						N.error("Is this an actual image file?");
+						case Bmp:
+							N.error("ERROR: unsupported image format");
 					}
-				return;
-			}
-			project.defs.autoRenameTilesetIdentifier(oldPath, cur);
-			updateTilesetPreview();
-			client.ge.emit(TilesetDefChanged);
+					return;
+				}
+
+				editor.watcher.stopWatching( editor.makeFullFilePath(oldRelPath) );
+				editor.watcher.watchTileset(cur);
+
+				project.defs.autoRenameTilesetIdentifier(oldRelPath, cur);
+				updateTilesetPreview();
+				editor.ge.emit(TilesetDefChanged);
+			});
 		});
 
 		var i = Input.linkToHtmlInput( cur.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
@@ -195,7 +206,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		// JsTools.makeSortable(".window .mainList ul", function(from, to) {
 			// var moved = project.defs.sortLayerDef(from,to);
 			// select(moved);
-		// 	client.ge.emit(LayerDefSorted);
+		// 	editor.ge.emit(LayerDefSorted);
 		// });
 	}
 }

@@ -60,9 +60,9 @@ class FieldDef {
 
 	public function toJson() {
 		return {
+			identifier: identifier,
 			uid: uid,
 			type: JsonTools.writeEnum(type, false),
-			identifier: identifier,
 			canBeNull: canBeNull,
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),

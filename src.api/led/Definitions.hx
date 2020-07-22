@@ -34,7 +34,7 @@ class Definitions {
 			d.entities.push( led.def.EntityDef.fromJson(p, entityJson) );
 
 		for( tilesetJson in JsonTools.readArray(json.tilesets) )
-			d.tilesets.push( led.def.TilesetDef.fromJson(p.dataVersion, tilesetJson) );
+			d.tilesets.push( led.def.TilesetDef.fromJson(p, tilesetJson) );
 
 		for( enumJson in JsonTools.readArray(json.enums) )
 			d.enums.push( led.def.EnumDef.fromJson(p.dataVersion, enumJson) );
@@ -196,7 +196,7 @@ class Definitions {
 	/**  TILESET DEFS  *****************************************/
 
 	public function createTilesetDef() : led.def.TilesetDef {
-		var td = new led.def.TilesetDef(_project.makeUniqId() );
+		var td = new led.def.TilesetDef( _project, _project.makeUniqId() );
 		tilesets.push(td);
 
 		var id = "Tileset";
@@ -207,6 +207,13 @@ class Definitions {
 
 		_project.tidy();
 		return td;
+	}
+
+	public function removeTilesetDef(td:led.def.TilesetDef) {
+		if( !tilesets.remove(td) )
+			throw "Unknown tilesetDef";
+
+		_project.tidy();
 	}
 
 	public function getTilesetDef(uid:Int) : Null<led.def.TilesetDef> {
@@ -251,6 +258,12 @@ class Definitions {
 	public function removeEnumDef(ed:led.def.EnumDef) {
 		if( !enums.remove(ed) )
 			throw "EnumDef not found";
+		_project.tidy();
+	}
+
+	public function removeEnumDefValue(ed:led.def.EnumDef, v:String) {
+		if( !ed.values.remove(v) )
+			throw "EnumDef value not found";
 		_project.tidy();
 	}
 

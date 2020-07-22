@@ -3,29 +3,32 @@ package led.def;
 import led.LedTypes;
 
 class TilesetDef {
+	var _project : Project;
+
 	public var uid : Int;
 	public var identifier(default,set) : String;
-	public var fileBase64(default,set) : Null<String>;
-	public var path : Null<String>;
-	public var pxWid = 0;
-	public var pxHei = 0;
+	public var relPath(default,null) : Null<String>;
 	public var tileGridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var tileGridSpacing : Int = 0;
 	public var savedSelections : Array<TilesetSelection> = [];
 
-	#if heaps
-	var texture(get,never) : Null<h3d.mat.Texture>;
-	var _textureCache : Null<h3d.mat.Texture>;
-
-	var pixels(get,never) : Null<hxd.Pixels>;
-	var _pixelsCache : Null<hxd.Pixels>;
-	#end
-
-	public var cWid(get,never) : Int; inline function get_cWid() return !hasAtlas() ? 0 : dn.M.ceil( pxWid / tileGridSize );
-	public var cHei(get,never) : Int; inline function get_cHei() return !hasAtlas() ? 0 : dn.M.ceil( pxHei / tileGridSize );
+	public var pxWid = 0;
+	public var pxHei = 0;
+	var bytes : Null<haxe.io.Bytes>;
+	var texture : Null<h3d.mat.Texture>;
+	var pixels : Null<hxd.Pixels>;
+	var base64 : Null<String>;
 
 
-	public function new(uid:Int) {
+	public var cWid(get,never) : Int;
+	inline function get_cWid() return !isAtlasValid() ? 0 : dn.M.ceil( pxWid / tileGridSize );
+
+	public var cHei(get,never) : Int;
+	inline function get_cHei() return !isAtlasValid() ? 0 : dn.M.ceil( pxHei / tileGridSize );
+
+
+	public function new(p:Project, uid:Int) {
+		_project = p;
 		this.uid = uid;
 		identifier = "Tileset"+uid;
 	}
@@ -35,44 +38,39 @@ class TilesetDef {
 	}
 
 	public function getFileName(withExt:Bool) : Null<String> {
-		if( path==null || !hasAtlas() )
+		if( !isAtlasValid() )
 			return null;
 
-		return withExt ? dn.FilePath.extractFileWithExt(path) : dn.FilePath.extractFileName(path);
+		return withExt ? dn.FilePath.extractFileWithExt(relPath) : dn.FilePath.extractFileName(relPath);
 	}
 
-	function set_fileBase64(str:String) {
-		disposeAtlasCache();
-		return fileBase64 = str;
-	}
+	public function removeAtlasImage() {
+		relPath = null;
+		pxWid = pxHei = 0;
+		savedSelections = [];
 
-	public function disposeAtlasCache() {
 		#if heaps
-		if( _textureCache!=null )
-			_textureCache.dispose();
-		_textureCache = null;
+		if( texture!=null )
+			texture.dispose();
+		texture = null;
 
-		if( _pixelsCache!=null )
-			_pixelsCache.dispose();
-		_pixelsCache = null;
+		if( pixels!=null )
+			pixels.dispose();
+		pixels = null;
+
+		bytes = null;
+		base64 = null;
 		#end
 	}
 
-	public function clearAtlas() {
-		fileBase64 = null;
-		path = null;
-		savedSelections = [];
-	}
-
-	public inline function hasAtlas() return fileBase64!=null;
+	public inline function isAtlasValid() return relPath!=null;
 
 
 	public function toJson() {
 		return {
-			uid: uid,
 			identifier: identifier,
-			fileBase64: fileBase64,
-			path: path,
+			uid: uid,
+			relPath: relPath,
 			pxWid: pxWid,
 			pxHei: pxHei,
 			tileGridSize: tileGridSize,
@@ -84,14 +82,13 @@ class TilesetDef {
 	}
 
 
-	public static function fromJson(dataVersion:Int, json:Dynamic) {
-		var td = new TilesetDef( JsonTools.readInt(json.uid) );
+	public static function fromJson(p:Project, json:Dynamic) {
+		var td = new TilesetDef( p, JsonTools.readInt(json.uid) );
 		td.tileGridSize = JsonTools.readInt(json.tileGridSize, Project.DEFAULT_GRID_SIZE);
 		td.tileGridSpacing = JsonTools.readInt(json.tileGridSpacing, 0);
 		td.pxWid = JsonTools.readInt( json.pxWid );
 		td.pxHei = JsonTools.readInt( json.pxHei );
-		td.fileBase64 = json.fileBase64;
-		td.path = json.path;
+		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
 
 		var arr = JsonTools.readArray( json.savedSelections );
@@ -100,21 +97,61 @@ class TilesetDef {
 				mode: JsonTools.readEnum(TileEditMode, jsonSel.mode, false, Stamp),
 				ids: jsonSel.ids,
 			}
-		}) ;
+		});
 		return td;
 	}
 
-	public function importImage(filePath:String, fileContent:haxe.io.Bytes) : Bool {
-		clearAtlas();
 
-		var img = dn.ImageDecoder.decode(fileContent);
-		if( img==null )
+	public function loadAtlasImage(projectDir:String, relFilePath:String) : Bool {
+		if( relFilePath==null ) {
+			removeAtlasImage();
+			return false;
+		}
+
+		relPath = dn.FilePath.fromFile( relFilePath ).useSlashes().full;
+
+		try {
+			var fullPath = Editor.ME.makeFullFilePath(relPath);
+			var bytes = misc.JsTools.readFileBytes(fullPath);
+
+			if( bytes==null )
+				return false;
+
+			base64 = haxe.crypto.Base64.encode(bytes);
+			pixels = dn.ImageDecoder.decodePixels(bytes);
+			texture = h3d.mat.Texture.fromPixels(pixels);
+		}
+		catch(err:Dynamic) {
+			trace(err);
+			removeAtlasImage();
+			return false;
+		}
+
+		pxWid = pixels.width;
+		pxHei = pixels.height;
+		return true;
+	}
+
+	public inline function reloadImage(projectDir:String) {
+		var oldWid = pxWid;
+		var oldHei = pxHei;
+		if( !loadAtlasImage(projectDir, relPath) )
 			return false;
 
-		path = dn.FilePath.fromFile(filePath).useSlashes().full;
-		fileBase64 = haxe.crypto.Base64.encode(fileContent);
-		pxWid = img.width;
-		pxHei = img.height;
+		if( oldWid!=pxWid ) {
+			// tileIDs remapping
+			var oldCwid = dn.M.ceil( oldWid / tileGridSize );
+			for(l in _project.levels)
+			for(li in l.layerInstances) {
+				ui.Notification.debug("remapping "+li);
+				for( coordId in li.gridTiles.keys() ) {
+					var tCoordId = li.gridTiles.get(coordId);
+					var oldCy = Std.int( tCoordId / oldCwid );
+					var oldCx = tCoordId - oldCwid*oldCy;
+					li.gridTiles.set(coordId, getTileId(oldCx, oldCy));
+				}
+			}
+		}
 		return true;
 	}
 
@@ -136,11 +173,6 @@ class TilesetDef {
 
 	public inline function getTileSourceY(tileId:Int) {
 		return getTileCy(tileId) * ( tileGridSize + tileGridSpacing );
-	}
-
-	public function dispose() {
-		disposeAtlasCache();
-		fileBase64 = null;
 	}
 
 
@@ -174,31 +206,43 @@ class TilesetDef {
 
 
 	/*** HEAPS API *********************************/
-	#if heaps
+
+	static var CACHED_ERROR_TILES: Map<Int,h3d.mat.Texture> = new Map();
+	public static function makeErrorTile(size) {
+		if( !CACHED_ERROR_TILES.exists(size) ) {
+			var g = new h2d.Graphics();
+			g.beginFill(0x880000);
+			g.drawRect(0,0,size,size);
+			g.endFill();
+
+			g.lineStyle(2,0xff0000);
+
+			g.moveTo(size*0.2,size*0.2);
+			g.lineTo(size*0.8,size*0.8);
+
+			g.moveTo(size*0.2,size*0.8);
+			g.lineTo(size*0.8,size*0.2);
+
+			g.endFill();
+
+			var tex = new h3d.mat.Texture(size,size, [Target]);
+			g.drawTo(tex);
+			CACHED_ERROR_TILES.set(size, tex);
+		}
+
+		return h2d.Tile.fromTexture( CACHED_ERROR_TILES.get(size) );
+	}
 
 	public inline function getAtlasTile() : Null<h2d.Tile> {
-		return texture==null ? null : h2d.Tile.fromTexture(texture);
+		return isAtlasValid() ? h2d.Tile.fromTexture(texture) : null;
 	}
 
-	public inline function getTile(tileId:Int) {
-		return getAtlasTile().sub( getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize );
+	public inline function getTile(tileId:Int) : h2d.Tile {
+		if( isAtlasValid() )
+			return getAtlasTile().sub( getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize );
+		else
+			return makeErrorTile(tileGridSize);
 	}
-
-	function get_texture() {
-		if( _textureCache==null && pixels!=null )
-			_textureCache = h3d.mat.Texture.fromPixels(pixels);
-		return _textureCache;
-	}
-
-	function get_pixels() {
-		if( _pixelsCache==null && fileBase64!=null ) {
-			var bytes = haxe.crypto.Base64.decode( fileBase64 );
-			_pixelsCache = dn.ImageDecoder.decodePixels(bytes);
-		}
-		return _pixelsCache;
-	}
-
-	#end
 
 
 
@@ -207,8 +251,8 @@ class TilesetDef {
 
 	public function createAtlasHtmlImage() : js.html.Image {
 		var img = new js.html.Image();
-		if( hasAtlas() )
-			img.src = 'data:image/png;base64,$fileBase64';
+		if( isAtlasValid() )
+			img.src = 'data:image/png;base64,$base64';
 		return img;
 	}
 
@@ -217,7 +261,7 @@ class TilesetDef {
 		if( !canvas.is("canvas") )
 			throw "Not a canvas";
 
-		if( !hasAtlas() )
+		if( !isAtlasValid() )
 			return;
 
 		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
@@ -225,7 +269,7 @@ class TilesetDef {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		var img = new js.html.Image(pixels.width, pixels.height);
-		img.src = 'data:image/png;base64,$fileBase64';
+		img.src = 'data:image/png;base64,$base64';
 		img.onload = function() {
 			ctx.drawImage(img, 0, 0);
 		}
@@ -256,5 +300,6 @@ class TilesetDef {
 	#end
 
 	public function tidy(p:led.Project) {
+		_project = p;
 	}
 }

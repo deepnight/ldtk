@@ -1,10 +1,10 @@
 package ui;
 
 class Cursor extends dn.Process {
-	var client(get,never) : Client; inline function get_client() return Client.ME;
-	var project(get,never) : led.Project; inline function get_project() return Client.ME.project;
-	var curLevel(get,never) : led.Level; inline function get_curLevel() return Client.ME.curLevel;
-	// var curLayer(get,never) : LayerInstance; inline function get_curLayer() return Client.ME.curLayerInstance;
+	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
+	var project(get,never) : led.Project; inline function get_project() return Editor.ME.project;
+	var curLevel(get,never) : led.Level; inline function get_curLevel() return Editor.ME.curLevel;
+	// var curLayer(get,never) : LayerInstance; inline function get_curLayer() return Editor.ME.curLayerInstance;
 
 	var type : CursorType = None;
 
@@ -12,8 +12,8 @@ class Cursor extends dn.Process {
 	var graphics : h2d.Graphics;
 
 	public function new() {
-		super(Client.ME);
-		createRootInLayers(Client.ME.root, Const.DP_UI);
+		super(Editor.ME);
+		createRootInLayers(Editor.ME.root, Const.DP_UI);
 
 		graphics = new h2d.Graphics(root);
 
@@ -31,7 +31,7 @@ class Cursor extends dn.Process {
 		graphics.lineStyle(0);
 		graphics.endFill();
 
-		root.visible = type!=None && !Modal.hasAnyOpen() && client.isCurrentLayerVisible();
+		root.visible = type!=None && !Modal.hasAnyOpen() && editor.isCurrentLayerVisible();
 		hxd.System.setCursor(Default);
 
 		var pad = 2;
@@ -93,20 +93,22 @@ class Cursor extends dn.Process {
 
 			case Tiles(li, tileIds, cx, cy):
 				var td = project.defs.getTilesetDef( li.def.tilesetDefUid );
-				var left = Const.INFINITE;
-				var top = Const.INFINITE;
-				for(tid in tileIds) {
-					left = M.imin( left, td.getTileCx(tid) );
-					top = M.imin( top, td.getTileCy(tid) );
-				}
+				if( td!=null ) {
+					var left = Const.INFINITE;
+					var top = Const.INFINITE;
+					for(tid in tileIds) {
+						left = M.imin( left, td.getTileCx(tid) );
+						top = M.imin( top, td.getTileCy(tid) );
+					}
 
-				var gridDiffScale = M.imax(1, M.round( td.tileGridSize / li.def.gridSize ) );
-				for(tid in tileIds) {
-					var cx = td.getTileCx(tid);
-					var cy = td.getTileCy(tid);
-					var bmp = new h2d.Bitmap( td.getTile(tid), wrapper );
-					bmp.x = (cx-left) * li.def.gridSize * gridDiffScale;
-					bmp.y = (cy-top) * li.def.gridSize * gridDiffScale;
+					var gridDiffScale = M.imax(1, M.round( td.tileGridSize / li.def.gridSize ) );
+					for(tid in tileIds) {
+						var cx = td.getTileCx(tid);
+						var cy = td.getTileCy(tid);
+						var bmp = new h2d.Bitmap( td.getTile(tid), wrapper );
+						bmp.x = (cx-left) * li.def.gridSize * gridDiffScale;
+						bmp.y = (cy-top) * li.def.gridSize * gridDiffScale;
+					}
 				}
 		}
 
@@ -162,9 +164,9 @@ class Cursor extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
-		root.x = client.levelRender.root.x;
-		root.y = client.levelRender.root.y;
-		root.setScale(client.levelRender.zoom);
+		root.x = editor.levelRender.root.x;
+		root.y = editor.levelRender.root.y;
+		root.setScale(editor.levelRender.zoom);
 
 		updatePosition();
 	}

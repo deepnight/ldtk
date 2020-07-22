@@ -4,7 +4,7 @@ class LevelRender extends dn.Process {
 	static var MAX_FOCUS_PADDING = 200;
 	static var _entityRenderCache : Map<Int, h3d.mat.Texture> = new Map();
 
-	public var client(get,never) : Client; inline function get_client() return Client.ME;
+	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 
 	var layerVis : Map<Int,Bool> = new Map();
 	var layerWrappers : Map<Int,h2d.Object> = new Map();
@@ -19,12 +19,14 @@ class LevelRender extends dn.Process {
 	public var focusLevelY(default,set) : Float;
 	public var zoom(default,set) : Float;
 
+	public var enhanceActiveLayer(default,null) = true;
+
 	public function new() {
-		super(client);
+		super(editor);
 
-		client.ge.addGlobalListener(onGlobalEvent);
+		editor.ge.addGlobalListener(onGlobalEvent);
 
-		createRootInLayers(client.root, Const.DP_MAIN);
+		createRootInLayers(editor.root, Const.DP_MAIN);
 
 		bounds = new h2d.Graphics();
 		root.add(bounds, Const.DP_UI);
@@ -46,36 +48,36 @@ class LevelRender extends dn.Process {
 	}
 
 	public function fit() {
-		focusLevelX = client.curLevel.pxWid*0.5;
-		focusLevelY = client.curLevel.pxHei*0.5;
+		focusLevelX = editor.curLevel.pxWid*0.5;
+		focusLevelY = editor.curLevel.pxHei*0.5;
 		zoom = 1;
 	}
 
 	inline function set_focusLevelX(v) {
-		focusLevelX = client.curLevelId==null
+		focusLevelX = editor.curLevelId==null
 			? v
-			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, client.curLevel.pxWid+MAX_FOCUS_PADDING/zoom );
-		client.ge.emitAtTheEndOfFrame( ViewportChanged );
+			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING/zoom );
+		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
 		return focusLevelX;
 	}
 
 	inline function set_focusLevelY(v) {
-		focusLevelY = client.curLevelId==null
+		focusLevelY = editor.curLevelId==null
 			? v
-			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, client.curLevel.pxHei+MAX_FOCUS_PADDING/zoom );
-		client.ge.emitAtTheEndOfFrame( ViewportChanged );
+			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING/zoom );
+		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
 		return focusLevelY;
 	}
 
 	inline function set_zoom(v) {
 		zoom = M.fclamp(v, 0.2, 16);
-		client.ge.emitAtTheEndOfFrame(ViewportChanged);
+		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
 		return zoom;
 	}
 
 	override function onDispose() {
 		super.onDispose();
-		client.ge.removeListener(onGlobalEvent);
+		editor.ge.removeListener(onGlobalEvent);
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
@@ -116,8 +118,10 @@ class LevelRender extends dn.Process {
 			case LayerInstanceChanged:
 				invalidate(); // TODO optim needed to render only the changed layer
 
-			case TilesetDefChanged:
+			case TilesetDefChanged, TilesetDefRemoved:
 				invalidate();
+
+			case TilesetDefAdded:
 
 			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
 				invalidate();
@@ -125,7 +129,7 @@ class LevelRender extends dn.Process {
 			case EntityFieldAdded, EntityFieldRemoved, EntityFieldDefChanged, EntityFieldInstanceChanged:
 				invalidate();
 
-			case EnumDefRemoved, EnumDefChanged:
+			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved:
 				invalidate();
 
 			case LevelAdded:
@@ -148,19 +152,19 @@ class LevelRender extends dn.Process {
 
 	public function toggleLayer(l:led.inst.LayerInstance) {
 		layerVis.set(l.layerDefUid, !isLayerVisible(l));
-		client.ge.emit(LayerInstanceVisiblityChanged);
+		editor.ge.emit(LayerInstanceVisiblityChanged);
 		if( isLayerVisible(l) )
 			invalidate();
 	}
 
 	public function showLayer(l:led.inst.LayerInstance) {
 		layerVis.set(l.layerDefUid, true);
-		client.ge.emit(LayerInstanceVisiblityChanged);
+		editor.ge.emit(LayerInstanceVisiblityChanged);
 	}
 
 	public function hideLayer(l:led.inst.LayerInstance) {
 		layerVis.set(l.layerDefUid, false);
-		client.ge.emit(LayerInstanceVisiblityChanged);
+		editor.ge.emit(LayerInstanceVisiblityChanged);
 	}
 
 	public function showRect(x:Int, y:Int, w:Int, h:Int, col:UInt, thickness=1) {
@@ -181,29 +185,29 @@ class LevelRender extends dn.Process {
 		// Bounds
 		bounds.clear();
 		bounds.lineStyle(1, 0xffffff, 0.7);
-		bounds.drawRect(0, 0, client.curLevel.pxWid, client.curLevel.pxHei);
+		bounds.drawRect(0, 0, editor.curLevel.pxWid, editor.curLevel.pxHei);
 
 		glow.clear();
 		glow.beginFill(0xff00ff);
-		glow.drawRect(0, 0, client.curLevel.pxWid, client.curLevel.pxHei);
+		glow.drawRect(0, 0, editor.curLevel.pxWid, editor.curLevel.pxHei);
 		var shadow = new h2d.filter.Glow( 0x0, 0.6, 128, true );
 		shadow.knockout = true;
 		glow.filter = shadow;
 
 		// Grid
-		var col = C.getPerceivedLuminosityInt( client.project.bgColor) >= 0.8 ? 0x0 : 0xffffff;
+		var col = C.getPerceivedLuminosityInt( editor.project.bgColor) >= 0.8 ? 0x0 : 0xffffff;
 
 		grid.clear();
-		if( client.curLayerInstance==null )
+		if( editor.curLayerInstance==null )
 			return;
 
-		var l = client.curLayerInstance;
+		var l = editor.curLayerInstance;
 		grid.lineStyle(1, col, 0.2);
-		for( cx in 0...client.curLayerInstance.cWid+1 ) {
+		for( cx in 0...editor.curLayerInstance.cWid+1 ) {
 			grid.moveTo(cx*l.def.gridSize, 0);
 			grid.lineTo(cx*l.def.gridSize, l.cHei*l.def.gridSize);
 		}
-		for( cy in 0...client.curLayerInstance.cHei+1 ) {
+		for( cy in 0...editor.curLayerInstance.cHei+1 ) {
 			grid.moveTo(0, cy*l.def.gridSize);
 			grid.lineTo(l.cWid*l.def.gridSize, cy*l.def.gridSize);
 		}
@@ -220,8 +224,8 @@ class LevelRender extends dn.Process {
 			e.remove();
 		layerWrappers = new Map();
 
-		for(ld in client.project.defs.layers) {
-			var li = client.curLevel.getLayerInstance(ld);
+		for(ld in editor.project.defs.layers) {
+			var li = editor.curLevel.getLayerInstance(ld);
 			var wrapper = new h2d.Object();
 			root.add(wrapper,Const.DP_MAIN);
 			root.under(wrapper);
@@ -382,16 +386,22 @@ class LevelRender extends dn.Process {
 		return wrapper;
 	}
 
+	public function setEnhanceActiveLayer(v:Bool) {
+		enhanceActiveLayer = v;
+		editor.jMainPanel.find("input#enhanceActiveLayer").prop("checked", v);
+		updateLayersVisibility();
+	}
+
 	function updateLayersVisibility() {
-		for(ld in client.project.defs.layers) {
-			var li = client.curLevel.getLayerInstance(ld);
+		for(ld in editor.project.defs.layers) {
+			var li = editor.curLevel.getLayerInstance(ld);
 			var wrapper = layerWrappers.get(ld.uid);
 			if( wrapper==null )
 				continue;
 
 			wrapper.visible = isLayerVisible(li);
-			wrapper.alpha = li.def.displayOpacity;
-			// wrapper.alpha = li.def.displayOpacity * ( li==client.curLayerInstance ? 1 : 0.25 );
+			wrapper.alpha = li.def.displayOpacity * ( !enhanceActiveLayer || li==editor.curLayerInstance ? 1 : 0.55 );
+			wrapper.filter = !enhanceActiveLayer || li==editor.curLayerInstance ? null : new h2d.filter.Blur(3);
 		}
 	}
 

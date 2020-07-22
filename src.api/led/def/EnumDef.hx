@@ -33,9 +33,9 @@ class EnumDef {
 
 	public function toJson() {
 		return {
-			uid: uid,
 			identifier: identifier,
-			values: values,
+			uid: uid,
+			values: values.copy(),
 		};
 	}
 
@@ -74,7 +74,6 @@ class EnumDef {
 
 		return false;
 	}
-
 
 	public function tidy(p:Project) {
 	}

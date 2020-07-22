@@ -2,17 +2,20 @@ package led;
 
 class JsonTools {
 
-	public static function writeEnum(e:EnumValue, canBeNull:Bool) {
+	public static function writeEnum(e:EnumValue, canBeNull:Bool) : Dynamic {
 		if( e==null )
 			if( canBeNull )
 				return null;
 			else
 				throw "Enum is null";
 
-		return { id:e.getIndex(), p:e.getParameters() }
+		if( e.getParameters().length>0 )
+			return { id:e.getName(), params:e.getParameters() }
+		else
+			return e.getName();
 	}
 
-	public static function readEnum<T>(e:Enum<T>, o:{ id:Int, p:Array<Dynamic>}, allowNull:Bool, ?def:T) : T {
+	public static function readEnum<T>(e:Enum<T>, o:Dynamic, allowNull:Bool, ?def:T) : T {
 		if( o==null ) {
 			if( def==null && !allowNull )
 				throw "Couldn't create "+e+", object is null";
@@ -21,18 +24,53 @@ class JsonTools {
 		}
 
 		try {
-			return cast Type.createEnumIndex(e, o.id, o.p);
+			switch Type.typeof(o) {
+			case TObject:
+				return e.createByName(o.id, o.params);
+
+			case TClass(String):
+				return e.createByName(o);
+
+			case _:
+				throw "Cannot read enum "+e+", data seems corrupted";
+			}
 		}
 		catch( err:Dynamic ) {
 			if( def!=null )
 				return def;
-
-			if( !Reflect.hasField(o,"id") || Math.isNaN(o.id) )
-				throw "Missing enum ID in "+o;
 			else
-				throw "Couldn't create "+e+" from "+o;
+				throw "Couldn't create "+e+" from "+o+" ("+err+")";
 		}
 	}
+
+	public static function readColor(v:Dynamic, ?defaultIfMissing:UInt) : UInt {
+		if( v==null && defaultIfMissing!=null )
+			return defaultIfMissing;
+
+		if( v==null )
+			throw "Missing color value";
+
+		switch Type.typeof(v) {
+			case TClass(String):
+				var c = dn.Color.hexToInt(v);
+				if( !dn.M.isValidNumber(c) ) {
+					if( defaultIfMissing!=null )
+						return defaultIfMissing;
+					else
+						throw "Couldn't read color: "+v;
+				}
+				else
+					return c;
+
+			case _:
+				throw "Invalid color format: "+v;
+		}
+	}
+
+	public static function writeColor(c:UInt) : String {
+		return dn.Color.intToHex(c);
+	}
+
 
 	public static function readString(v:Dynamic, ?defaultIfMissing:String) : String {
 		if( v==null && defaultIfMissing==null )

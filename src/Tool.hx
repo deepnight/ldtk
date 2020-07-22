@@ -3,12 +3,12 @@ import dn.Bresenham;
 class Tool<T> extends dn.Process {
 	static var SELECTION_MEMORY : Map<Int, Dynamic> = new Map();
 
-	var client(get,never) : Client; inline function get_client() return Client.ME;
-	var project(get,never) : led.Project; inline function get_project() return Client.ME.project;
-	var curLevel(get,never) : led.Level; inline function get_curLevel() return Client.ME.curLevel;
-	var curLayerInstance(get,never) : led.inst.LayerInstance; inline function get_curLayerInstance() return Client.ME.curLayerInstance;
+	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
+	var project(get,never) : led.Project; inline function get_project() return Editor.ME.project;
+	var curLevel(get,never) : led.Level; inline function get_curLevel() return Editor.ME.curLevel;
+	var curLayerInstance(get,never) : led.inst.LayerInstance; inline function get_curLayerInstance() return Editor.ME.curLayerInstance;
 
-	var jPalette(get,never) : J; inline function get_jPalette() return client.jPalette;
+	var jPalette(get,never) : J; inline function get_jPalette() return editor.jPalette;
 
 	var clickingOutsideBounds = false;
 	var curMode : Null<ToolEditMode> = null;
@@ -19,11 +19,11 @@ class Tool<T> extends dn.Process {
 	var moveStarted = false;
 
 	private function new() {
-		super(Client.ME);
+		super(Editor.ME);
 
 		jPalette.find("*").off();
 		updatePalette();
-		client.ge.addSpecificListener(ToolOptionChanged, onToolOptionChanged);
+		editor.ge.addSpecificListener(ToolOptionChanged, onToolOptionChanged);
 	}
 
 	function onToolOptionChanged() {
@@ -32,7 +32,7 @@ class Tool<T> extends dn.Process {
 
 	override function onDispose() {
 		super.onDispose();
-		client.ge.removeListener(onToolOptionChanged);
+		editor.ge.removeListener(onToolOptionChanged);
 	}
 
 	function enablePalettePopOut() {
@@ -71,24 +71,24 @@ class Tool<T> extends dn.Process {
 	}
 
 
-	function snapToGrid() return !client.isCtrlDown() || cd.has("requireCtrlRelease");
+	function snapToGrid() return !editor.isCtrlDown() || cd.has("requireCtrlRelease");
 
 
 	public function as<E:Tool<X>,X>(c:Class<E>) : E return cast this;
 
-	public function canEdit() return getSelectedValue()!=null && client.isCurrentLayerVisible();
+	public function canEdit() return getSelectedValue()!=null && editor.isCurrentLayerVisible();
 	public function isRunning() return curMode!=null;
 
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		curMode = null;
-		client.clearSelection();
+		editor.clearSelection();
 		moveStarted = false;
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
 		cd.unset("requireCtrlRelease");
 
 		// Picking an existing element
-		if( client.isAltDown() && buttonId==0 ) {
-			if( !client.isCurrentLayerVisible() )
+		if( editor.isAltDown() && buttonId==0 ) {
+			if( !editor.isCurrentLayerVisible() )
 				return;
 
 			var ge = getGenericLevelElementAt(m);
@@ -96,12 +96,12 @@ class Tool<T> extends dn.Process {
 			if( ge==null )
 				return;
 
-			client.pickGenericLevelElement(ge);
-			client.setSelection(ge);
+			editor.pickGenericLevelElement(ge);
+			editor.setSelection(ge);
 
 			// If layer changed, client curTool was re-created
-			if( client.curTool!=this ) {
-				client.curTool.startUsing(m,buttonId);
+			if( editor.curTool!=this ) {
+				editor.curTool.startUsing(m,buttonId);
 				return;
 			}
 		}
@@ -110,9 +110,9 @@ class Tool<T> extends dn.Process {
 		button = buttonId;
 		switch button {
 			case 0:
-				if( client.isKeyDown(K.SPACE) )
+				if( editor.isKeyDown(K.SPACE) )
 					curMode = PanView;
-				else if( client.isAltDown() )
+				else if( editor.isAltDown() )
 					curMode = Move;
 				else
 					curMode = Add;
@@ -132,7 +132,7 @@ class Tool<T> extends dn.Process {
 			return;
 		}
 
-		rectangle = client.isShiftDown();
+		rectangle = editor.isShiftDown();
 		origin = m;
 		lastMouse = m;
 		if( !clickingOutsideBounds && !rectangle && useAt(m) )
@@ -193,8 +193,8 @@ class Tool<T> extends dn.Process {
 
 	function useAt(m:MouseCoords) : Bool {
 		if( curMode==PanView ) {
-			client.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
-			client.levelRender.focusLevelY -= m.levelY-lastMouse.levelY;
+			editor.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
+			editor.levelRender.focusLevelY -= m.levelY-lastMouse.levelY;
 		}
 		return false;
 	}
@@ -222,8 +222,8 @@ class Tool<T> extends dn.Process {
 		}
 
 		if( needHistorySaving ) {
-			client.curLevelHistory.saveLayerState( curLayerInstance );
-			client.curLevelHistory.setLastStateBounds(
+			editor.curLevelHistory.saveLayerState( curLayerInstance );
+			editor.curLevelHistory.setLastStateBounds(
 				M.imin(origin.cx, m.cx) * curLayerInstance.def.gridSize,
 				M.imin(origin.cy, m.cy) * curLayerInstance.def.gridSize,
 				( M.iabs(origin.cx-m.cx) + 1 ) * curLayerInstance.def.gridSize,
@@ -237,7 +237,7 @@ class Tool<T> extends dn.Process {
 
 	var needHistorySaving = false;
 	inline function onEditAnything() {
-		client.ge.emit(LayerInstanceChanged);
+		editor.ge.emit(LayerInstanceChanged);
 		needHistorySaving = true;
 	}
 
@@ -250,10 +250,10 @@ class Tool<T> extends dn.Process {
 		// Start moving elements only after a small elapsed mouse distance
 		if( curMode==Move && !moveStarted && M.dist(origin.gx,origin.gy, m.gx,m.gy)>=10*Const.SCALE ) {
 			moveStarted = true;
-			if( client.isCtrlDown() && client.selection!=null ) {
-				var copy = duplicateElement(client.selection);
+			if( editor.isCtrlDown() && editor.selection!=null ) {
+				var copy = duplicateElement(editor.selection);
 				if( copy!=null ) {
-					client.setSelection(copy);
+					editor.setSelection(copy);
 					cd.setS("requireCtrlRelease", Const.INFINITE);
 				}
 			}
@@ -265,22 +265,22 @@ class Tool<T> extends dn.Process {
 
 		// Render cursor
 		if( isRunning() && clickingOutsideBounds )
-			client.cursor.set(None);
-		else if( !isRunning() && client.isAltDown() ) {
+			editor.cursor.set(None);
+		else if( !isRunning() && editor.isAltDown() ) {
 			// Preview picking
 			var ge = getGenericLevelElementAt(m);
 			switch ge {
 				case null: updateCursor(m);
-				case IntGrid(li, cx, cy): client.cursor.set( GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ) );
-				case Entity(instance): client.cursor.set( Entity(instance.def, instance.x, instance.y) );
-				case Tile(li, cx,cy): client.cursor.set( Tiles(li, [li.getGridTile(cx,cy)], cx, cy) );
+				case IntGrid(li, cx, cy): editor.cursor.set( GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ) );
+				case Entity(instance): editor.cursor.set( Entity(instance.def, instance.x, instance.y) );
+				case Tile(li, cx,cy): editor.cursor.set( Tiles(li, [li.getGridTile(cx,cy)], cx, cy) );
 			}
 		}
-		else if( client.isKeyDown(K.SPACE) )
-			client.cursor.set(Move);
+		else if( editor.isKeyDown(K.SPACE) )
+			editor.cursor.set(Move);
 		else switch curMode {
 			case PanView, Move:
-				client.cursor.set(Move);
+				editor.cursor.set(Move);
 
 			case null, Add, Remove:
 				updateCursor(m);
@@ -307,7 +307,7 @@ class Tool<T> extends dn.Process {
 	override function update() {
 		super.update();
 
-		if( !client.isCtrlDown() && cd.has("requireCtrlRelease") )
+		if( !editor.isCtrlDown() && cd.has("requireCtrlRelease") )
 			cd.unset("requireCtrlRelease");
 	}
 

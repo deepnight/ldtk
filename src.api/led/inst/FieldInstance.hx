@@ -26,15 +26,25 @@ class FieldInstance {
 
 	public static function fromJson(project:Project, json:Dynamic) {
 		var o = new FieldInstance( project, JsonTools.readInt(json.defUid) );
-		o.internalValue = JsonTools.readEnum(ValueWrapper, json.internalValue, true);
+		o.internalValue = JsonTools.readEnum(ValueWrapper, json.realEditorValue, true);
 		return o;
 	}
 
 	public function toJson() {
 		return {
-			__comment__: def.identifier+" ("+def.getShortDescription()+")",
+			_identifier: def.identifier, // only exported for readability purpose
+			_value: untyped switch def.type { // only exported for readability purpose
+				case F_Int: getInt();
+				case F_Float: getFloat();
+				case F_String: getString();
+				case F_Bool: getBool();
+				case F_Color: getColorAsHexStr();
+				case F_Enum(enumDefUid): getEnumValue();
+			},
+
 			defUid: defUid,
-			internalValue: JsonTools.writeEnum(internalValue,true),
+			realEditorValue: JsonTools.writeEnum(internalValue,true),
+
 		}
 	}
 

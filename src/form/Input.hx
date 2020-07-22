@@ -48,7 +48,7 @@ class Input<T> {
 		writeValueToInput();
 		lastValidValue = getter();
 		for(e in linkedEvents.keys())
-			Client.ME.ge.emit(e);
+			Editor.ME.ge.emit(e);
 		onChange();
 		onValueChange( getter() );
 	}

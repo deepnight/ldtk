@@ -24,12 +24,12 @@ class IntGridTool extends Tool<Int> {
 
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromMouseCoords(origin, m);
-			client.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, getSelectedColor()) );
+			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, getSelectedColor()) );
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) )
-			client.cursor.set( GridCell(curLayerInstance, m.cx, m.cy, getSelectedColor()) );
+			editor.cursor.set( GridCell(curLayerInstance, m.cx, m.cy, getSelectedColor()) );
 		else
-			client.cursor.set(None);
+			editor.cursor.set(None);
 	}
 
 	override function onMouseMove(m:MouseCoords) {

@@ -24,17 +24,21 @@ class EntityInstance {
 		return 'Instance<${def.identifier}>@$x,$y';
 	}
 
-	public function toJson() {
+	public function toJson(li:led.inst.LayerInstance) {
 		var fieldsJson = [];
 		for(fi in fieldInstances)
 			fieldsJson.push( fi.toJson() );
 
 		return {
-			__comment__: def.identifier,
+			_identifier: def.identifier, // only exported for readability purpose
+			_cx: getCx(li.def), // only exported for readability purpose
+			_cy: getCy(li.def), // only exported for readability purpose
+
 			defUid: defUid,
 			x: x,
 			y: y,
 			fieldInstances: fieldsJson,
+
 		}
 	}
 
@@ -51,7 +55,6 @@ class EntityInstance {
 		return ei;
 	}
 
-	// TODO get rid of this parameter
 	public function getCx(ld:led.def.LayerDef) {
 		return Std.int( ( x + (def.pivotX==1 ? -1 : 0) ) / ld.gridSize );
 	}

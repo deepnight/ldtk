@@ -7,14 +7,14 @@ class InstanceEditor extends dn.Process {
 	var ei : led.inst.EntityInstance;
 
 	public function new(ei:led.inst.EntityInstance) {
-		super(Client.ME);
+		super(Editor.ME);
 
 		ALL.push(this);
 		this.ei = ei;
-		Client.ME.ge.addGlobalListener(onGlobalEvent);
+		Editor.ME.ge.addGlobalListener(onGlobalEvent);
 
 		jPanel = new J('<div class="instanceEditor"/>');
-		Client.ME.jBody.append(jPanel);
+		App.ME.jBody.append(jPanel);
 		updateForm();
 	}
 
@@ -27,7 +27,7 @@ class InstanceEditor extends dn.Process {
 		ei = null;
 
 		ALL.remove(this);
-		Client.ME.ge.removeListener(onGlobalEvent);
+		Editor.ME.ge.removeListener(onGlobalEvent);
 	}
 
 	function onGlobalEvent(ge:GlobalEvent) {
@@ -38,7 +38,7 @@ class InstanceEditor extends dn.Process {
 				else
 					updateForm();
 
-			case EnumDefRemoved, EnumDefChanged, EnumDefSorted:
+			case EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 				updateForm();
 
 			case _:
@@ -52,10 +52,10 @@ class InstanceEditor extends dn.Process {
 
 	function onFieldChange() {
 		updateForm();
-		var client = Client.ME;
-		client.curLevelHistory.saveLayerState( client.curLayerInstance );
-		client.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
-		client.ge.emit(EntityFieldInstanceChanged);
+		var editor = Editor.ME;
+		editor.curLevelHistory.saveLayerState( editor.curLayerInstance );
+		editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
+		editor.ge.emit(EntityFieldInstanceChanged);
 	}
 
 
@@ -182,7 +182,7 @@ class InstanceEditor extends dn.Process {
 					hideInputIfDefault(input, fi);
 
 				case F_Enum(name):
-					var ed = Client.ME.project.defs.getEnumDef(name);
+					var ed = Editor.ME.project.defs.getEnumDef(name);
 					var select = new J("<select/>");
 					select.appendTo(li);
 

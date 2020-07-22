@@ -4,26 +4,42 @@ class LastChance extends dn.Process {
 	static var CUR : Null<LastChance>;
 	var elem : js.jquery.JQuery;
 
-	public function new(str:dn.data.GetText.LocaleString, projectJsonBackup:Dynamic) {
-		super(Client.ME);
+	public function new(str:dn.data.GetText.LocaleString, project:led.Project) {
+		super(Editor.ME);
 
 		LastChance.end();
 		CUR = this;
+		var json = project.toJson();
 
 		elem = new J("xml#lastChance").clone().children().first();
-		elem.appendTo(Client.ME.jBody);
-		elem.find(".content").append('<div class="desc">$str</div>');
+		elem.appendTo(App.ME.jBody);
+		elem.find(".action").text(str);
 
 		elem.find("button").click( function(ev) {
 			if( !isActive() )
 				return;
-			Client.ME.selectProject( led.Project.fromJson(projectJsonBackup) );
-			N.msg( L.t._("Canceled action") );
+			Editor.ME.selectProject( led.Project.fromJson(json) );
+			N.msg( L.t._("Canceled action: \"::act::\"", {act:str}) );
 			hide();
 		});
 
-		delayer.addS(hide, 12);
+		delayer.addS(hide, 20);
 		cd.setF("ignoreFrame",1);
+
+		Editor.ME.ge.addGlobalListener(onGlobalEvent);
+	}
+
+	function onGlobalEvent(e:GlobalEvent) {
+		switch(e) {
+			case ViewportChanged:
+			case LevelSelected:
+			case LayerInstanceSelected:
+			case LayerInstanceVisiblityChanged:
+			case ToolOptionChanged:
+
+			case _:
+				LastChance.end();
+		}
 	}
 
 	public static function end() {
@@ -47,7 +63,7 @@ class LastChance extends dn.Process {
 	override function onDispose() {
 		super.onDispose();
 
-		// Client.ME.ge.removeListener(onGlobalEvent);
+		Editor.ME.ge.removeListener(onGlobalEvent);
 		elem.remove();
 		elem = null;
 

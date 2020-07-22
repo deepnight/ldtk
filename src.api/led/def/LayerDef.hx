@@ -2,6 +2,7 @@ package led.def;
 
 import led.LedTypes;
 
+// TODO make intGridValue a real identifier
 class LayerDef {
 	public var uid(default,null) : Int;
 	public var type : LayerType;
@@ -14,8 +15,8 @@ class LayerDef {
 
 	// Tileset
 	public var tilesetDefUid : Null<Int>;
-	public var tilePivotX(default,set) : Float;
-	public var tilePivotY(default,set) : Float;
+	public var tilePivotX(default,set) : Float = 0;
+	public var tilePivotY(default,set) : Float = 0;
 
 	public function new(uid:Int, t:LayerType) {
 		this.uid = uid;
@@ -45,7 +46,10 @@ class LayerDef {
 
 		o.intGridValues = [];
 		for( v in JsonTools.readArray(json.intGridValues) )
-			o.intGridValues.push(v);
+			o.intGridValues.push({
+				name: v.name,
+				color: JsonTools.readColor(v.color),
+			});
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
 		o.tilePivotX = JsonTools.readFloat(json.tilePivotX, 0);
@@ -56,13 +60,13 @@ class LayerDef {
 
 	public function toJson() {
 		return {
-			uid: uid,
-			type: JsonTools.writeEnum(type, false),
 			identifier: identifier,
+			type: JsonTools.writeEnum(type, false),
+			uid: uid,
 			gridSize: gridSize,
 			displayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
 
-			intGridValues: intGridValues,
+			intGridValues: intGridValues.map( function(iv) return { name:iv.name, color:JsonTools.writeColor(iv.color) }),
 
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,

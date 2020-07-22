@@ -155,6 +155,15 @@ button.grey {
 	}
 }
 
+button.close {
+	background-color: $bgDark;
+	border-color: $bgMed;
+	box-shadow: 0px 2px 0px $bgMed;
+	&:hover {
+		background-color: $bgLight;
+	}
+}
+
 .buttons {
 	display: flex;
 	flex-wrap: wrap;
@@ -268,6 +277,33 @@ div.key {
 }
 
 
+.path {
+	flex: 1 1 auto;
+	text-align: right;
+	overflow: auto;
+	opacity: 1;
+	align-items: center;
+
+	span+span {
+		margin-left: 2px;
+	}
+
+	span:not(.slash) {
+		display: inline-block;
+		font-size: 9pt;
+
+		&:last-of-type {
+			color: $orange;
+			font-weight: bold;
+			font-size: 10pt;
+		}
+	}
+	span.slash {
+		color: $bgLight;
+		font-size: 12pt;
+	}
+}
+
 ul.niceList:first-child {
 	margin-top: 0;
 }
@@ -279,6 +315,7 @@ ul.niceList {
 	margin-bottom: 4px;
 	border: 1px solid $bgLight;
 	background-color: $bgDark;
+	overflow-x: hidden;
 
 	&:empty {
 		background-image: url("/img/stripes.png");
@@ -385,6 +422,7 @@ ul.niceList {
 .icon.level		{ background-image: url("/img/icons/level.png"); }
 .icon.project	{ background-image: url("/img/icons/projectSettings.png"); }
 .icon.enum		{ background-image: url("/img/icons/enum.png"); }
+.icon.close		{ background-image: url("/img/icons/close.png"); }
 
 .icon.mouseLeft		{ background-image: url("/img/icons/mouseLeft.png"); image-rendering: pixelated; }
 .icon.mouseRight	{ background-image: url("/img/icons/mouseRight.png"); image-rendering: pixelated; }
@@ -597,9 +635,6 @@ input[type=checkbox] {
 input[type="file"] {
 	display: none;
 }
-label.file {
-	@extend button;
-}
 
 textarea {
 	resize: none;
@@ -713,7 +748,7 @@ textarea {
 
 	min-width: 150px;
 
-	background-color: $bgMed;
+	background-color: $darkRed;
 	border-left: 4px solid $red;
 	box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
 	animation: slideUp 1.2s;
@@ -728,7 +763,26 @@ textarea {
 		gap: 10px;
 
 		grid-template-columns: min-content auto;
+		grid-template-rows: auto auto;
 		justify-content: right;
+		button {
+			grid-row: 1/3;
+			height: 100%;
+		}
+		.action {
+			grid-column: 2/3;
+			font-weight: bold;
+			color: $orange;
+		}
+		.desc {
+			grid-column: 2/3;
+			grid-row: 2/3;
+			max-width: 250px;
+			font-style: italic;
+			font-size: 9pt;
+			color: white;
+			opacity: 0.7;
+		}
 	}
 }
 
@@ -786,8 +840,22 @@ textarea {
 .window.dialog {
 	overflow: hidden;
 
+	&.centered {
+		display: grid;
+		align-items: center;
+		justify-items: center;
+		>.wrapper {
+			position: static;
+		}
+	}
+
+	&>.mask {
+		background-color: rgba(0,0,0,0.55);
+	}
+
 	&>.wrapper {
 		padding: 16px;
+		box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.6);
 
 		.content {
 			max-width: 260px;
@@ -805,6 +873,12 @@ textarea {
 			button.confirm {
 				flex-grow: 2;
 			}
+		}
+	}
+	&.unsavedChanges {
+		button.ignore,
+		button.save {
+			flex-grow: 2;
 		}
 	}
 }
@@ -920,6 +994,7 @@ textarea {
 #debug {
 	display: none;
 	position: absolute;
+	z-index: 99;
 	padding: 8px;
 	right: 0px;
 	top: 0px;
@@ -927,6 +1002,7 @@ textarea {
 	color:white;
 	text-shadow: 0px 1px 3px black;
 	background-color: rgba(0, 0, 0, 0.4);
+
 	p {
 		@include resetMargin();
 		opacity: 0.5;
@@ -942,18 +1018,33 @@ textarea {
 	}
 }
 
-#editor {
-	display: grid;
-	grid-template-columns: 400px auto;
-	width: 100%;
-	height: 100%;
+canvas#webgl {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100% !important;
+	height: 100% !important;
+	z-index: 1;
+}
 
+#page {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+}
+
+#page.editor {
 	#mainPanel {
-		position: relative;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 400px;
+		height: 100vh;
+
 		display: grid;
-		height: 100%;
 		overflow: hidden;
-		grid-template-rows: min-content 250px min-content auto;
+		grid-template-rows: min-content 250px min-content min-content auto;
 		padding: 5px;
 		gap: 5px;
 		background: $bgDark;
@@ -967,6 +1058,10 @@ textarea {
 
 			button.showHelp {
 				flex: 0 1 0;
+			}
+
+			button.close {
+				flex: 0 1 16px;
 			}
 
 			h2#levelName {
@@ -1021,6 +1116,25 @@ textarea {
 			}
 		}
 
+		.enhanceActiveLayer {
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			padding-right: 8px;
+
+			font-size: 8pt;
+
+			input[type=checkbox] {
+				flex: 0 1 auto;
+				width: 16px;
+				height: 16px;
+			}
+			label:hover {
+				color: $orange;
+				cursor: pointer;
+			}
+		}
+
 		#mainPaletteWrapper {
 			overflow: auto;
 			position: relative;
@@ -1032,16 +1146,59 @@ textarea {
 			}
 		}
 	}
+}
 
-	canvas {
-		width: 100% !important;
-		height: 100% !important;
+
+#page.home {
+	background-color: $bgDark;
+	width: 100vw;
+	height: 100vh;
+	display: grid;
+	align-items: center;
+	justify-items: center;
+
+	.wrapper {
+		width: 400px;
+
+		.logo {
+			font-family: Roboto;
+			font-size: 100px;
+			line-height: 80%;
+			text-align: center;
+			color: $orange;
+		}
+
+		.version {
+			opacity: 0.6;
+			text-align: center;
+			margin-bottom: 10px;
+			font-size: 0.8em;
+		}
+		ul.recents {
+			min-height: 15vh;
+			max-height: 30vh;
+			overflow-y: auto;
+
+			.path span:not(:last-of-type) {
+				font-size: 8pt;
+			}
+
+			li:first-of-type {
+				border: 1px solid $orange;
+				&:hover {
+					outline-color: white;
+				}
+			}
+			li:not(:first-of-type) {
+				opacity: 0.6;
+			}
+		}
 	}
 }
 
 
-.compactPanel {
-	#editor {
+.compactPanel { // TODO move that to Page DIV
+	#page.editor {
 		grid-template-columns: 150px auto;
 		#mainPanel {
 			grid-template-rows: min-content 200px auto;
@@ -1335,6 +1492,19 @@ textarea {
 		grid-template-rows: min-content auto;
 		grid-template-columns: 200px auto;
 
+		.path {
+			flex: 1 0 100%;
+			box-sizing: border-box;
+			cursor: pointer;
+			&:hover {
+				span:not(.slash) {
+					border-radius: 3px;
+					background-color: $orange;
+					color: black !important;
+				}
+			}
+		}
+
 		> .header {
 			grid-column: 1/3;
 			h2 {
@@ -1512,24 +1682,6 @@ textarea {
 		canvas.fullPreview {
 			box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
 			background-color: rgba(0, 0, 0, 0.4);
-		}
-	}
-	span.path {
-		flex: 1 1 auto;
-		overflow: auto;
-		background-color: $bgDark;
-		opacity: 1;
-
-		span {
-			display: inline-block;
-			font-size: 9pt;
-		}
-		span:last-of-type {
-			color: $orange;
-			font-weight: bold;
-		}
-		span+span::before {
-			content: " / ";
 		}
 	}
 }

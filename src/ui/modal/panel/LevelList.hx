@@ -12,7 +12,7 @@ class LevelList extends ui.modal.Panel {
 
 		jContent.find(".mainList button.create").click( function(ev) {
 			var l = project.createLevel();
-			client.ge.emit(LevelAdded);
+			editor.ge.emit(LevelAdded);
 			select(l);
 		});
 
@@ -22,6 +22,7 @@ class LevelList extends ui.modal.Panel {
 				N.error(L.t._("Can't delete the last level."));
 			else {
 				new ui.modal.dialog.Confirm(ev.getThis(), function() {
+					new LastChance(Lang.t._("Level ::name:: deleted", { name:curLevel.identifier }), project);
 					var idx = 0;
 					for( l in project.levels)
 						if( l==curLevel )
@@ -30,9 +31,9 @@ class LevelList extends ui.modal.Panel {
 							idx++;
 					project.removeLevel( curLevel );
 					if( idx==0 )
-						client.selectLevel( project.levels[0] );
+						editor.selectLevel( project.levels[0] );
 					else
-						client.selectLevel( project.levels[idx-1] );
+						editor.selectLevel( project.levels[idx-1] );
 				});
 			}
 		});
@@ -90,13 +91,13 @@ class LevelList extends ui.modal.Panel {
 		JsTools.makeSortable(".window ul.levels", function(from, to) {
 			var moved = project.sortLevel(from,to);
 			select(moved);
-			client.ge.emit(LevelSorted);
+			editor.ge.emit(LevelSorted);
 		});
 
 	}
 
 	function select(l:led.Level) {
-		client.selectLevel(l);
+		editor.selectLevel(l);
 	}
 }
 

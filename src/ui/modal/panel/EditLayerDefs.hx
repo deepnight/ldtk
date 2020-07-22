@@ -18,7 +18,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			function _create(type:led.LedTypes.LayerType) {
 				var ld = project.defs.createLayerDef(type);
 				select(ld);
-				client.ge.emit(LayerDefAdded);
+				editor.ge.emit(LayerDefAdded);
 				jForm.find("input").first().focus().select();
 			}
 
@@ -44,14 +44,14 @@ class EditLayerDefs extends ui.modal.Panel {
 				return;
 			}
 			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
-				new ui.LastChance( L.t._("Layer deleted"), project.toJson() );
+				new ui.LastChance( L.t._("Layer ::name:: deleted", { name:cur.identifier }), project );
 				project.defs.removeLayerDef(cur);
 				select(project.defs.layers[0]);
-				client.ge.emit(LayerDefRemoved);
+				editor.ge.emit(LayerDefRemoved);
 			});
 		});
 
-		select(client.curLayerDef);
+		select(editor.curLayerDef);
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -98,7 +98,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		}
 
 		JsTools.parseComponents(jForm);
-		client.selectLayerInstance( client.curLevel.getLayerInstance(cur) );
+		editor.selectLayerInstance( editor.curLevel.getLayerInstance(cur) );
 		jForm.show();
 
 		// Set form class
@@ -114,16 +114,16 @@ class EditLayerDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( cur.identifier, jForm.find("input[name='name']") );
 		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.defs.isLayerNameUnique(id);
 		i.validityError = N.invalidIdentifier;
-		i.onChange = client.ge.emit.bind(LayerDefChanged);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( cur.gridSize, jForm.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
-		i.onChange = client.ge.emit.bind(LayerDefChanged);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( cur.displayOpacity, jForm.find("input[name='displayOpacity']") );
 		i.displayAsPct = true;
 		i.setBounds(0.1, 1);
-		i.onChange = client.ge.emit.bind(LayerDefChanged);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
 		// Layer-type specific inits
 		switch cur.type {
@@ -136,7 +136,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				var addButton = valuesList.find("li.add");
 				addButton.find("button").off().click( function(ev) {
 					cur.addIntGridValue(0xff0000);
-					client.ge.emit(LayerDefChanged);
+					editor.ge.emit(LayerDefChanged);
 					updateForm();
 				});
 
@@ -157,7 +157,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					);
 					i.validityCheck = cur.isIntGridValueNameValid;
 					i.validityError = N.invalidIdentifier;
-					i.onChange = client.ge.emit.bind(LayerDefChanged);
+					i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
 					if( cur.countIntGridValues()>1 && idx==cur.countIntGridValues()-1 )
 						e.addClass("removable");
@@ -167,7 +167,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					col.val( C.intToHex(intGridVal.color) );
 					col.change( function(ev) {
 						cur.getIntGridValueDef(curIdx).color = C.hexToInt( col.val() );
-						client.ge.emit(LayerDefChanged);
+						editor.ge.emit(LayerDefChanged);
 						updateForm();
 					});
 
@@ -175,7 +175,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					e.find("a.remove").click( function(ev) {
 						function run() {
 							cur.getAllIntGridValues().splice(curIdx,1);
-							client.ge.emit(LayerDefChanged);
+							editor.ge.emit(LayerDefChanged);
 							updateForm();
 						}
 						if( cur.isIntGridValueUsedInProject(project, curIdx) ) {
@@ -229,7 +229,7 @@ class EditLayerDefs extends ui.modal.Panel {
 							cur.tilesetDefUid = null;
 						else
 							cur.tilesetDefUid = v;
-						client.ge.emit(LayerDefChanged);
+						editor.ge.emit(LayerDefChanged);
 					});
 
 					var td = project.defs.getTilesetDef(cur.tilesetDefUid);
@@ -255,7 +255,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				var p = JsTools.createPivotEditor(cur.tilePivotX, cur.tilePivotY, 0x0, function(x,y) {
 					cur.tilePivotX = x;
 					cur.tilePivotY = y;
-					client.ge.emit(LayerDefChanged);
+					editor.ge.emit(LayerDefChanged);
 				});
 				p.appendTo(jPivots);
 		}
@@ -288,7 +288,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		JsTools.makeSortable(".window .mainList ul", function(from, to) {
 			var moved = project.defs.sortLayerDef(from,to);
 			select(moved);
-			client.ge.emit(LayerDefSorted);
+			editor.ge.emit(LayerDefSorted);
 		});
 	}
 }

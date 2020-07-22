@@ -104,7 +104,7 @@ hr {
   border-bottom: 1px solid #545d73;
 }
 
-button, label.file {
+button {
   width: 100%;
   margin: 1px;
   padding: 10px;
@@ -117,41 +117,47 @@ button, label.file {
   cursor: pointer;
 }
 
-button > .icon, label.file > .icon {
+button > .icon {
   margin: -4px;
   width: 1.7em;
   height: 1.7em;
 }
 
-button:hover, label.file:hover {
+button:hover {
   background-color: #ff5d4a;
 }
 
-button:focus, label.file:focus {
+button:focus {
   outline: inherit;
 }
 
-button.active, label.active.file {
+button.active {
   background-color: #ffcc00;
   border-color: #ffff00;
 }
 
-button.cancel, label.cancel.file,
+button.cancel,
 button.gray,
-label.gray.file,
-button.grey,
-label.grey.file {
+button.grey {
   background-color: #545d73;
   border-color: #737f9d;
   box-shadow: 0px 2px 0px #545d73;
 }
 
-button.cancel:hover, label.cancel.file:hover,
+button.cancel:hover,
 button.gray:hover,
-label.gray.file:hover,
-button.grey:hover,
-label.grey.file:hover {
+button.grey:hover {
   background-color: #737f9d;
+}
+
+button.close {
+  background-color: #1e2229;
+  border-color: #2e333f;
+  box-shadow: 0px 2px 0px #2e333f;
+}
+
+button.close:hover {
+  background-color: #545d73;
 }
 
 .buttons {
@@ -161,11 +167,11 @@ label.grey.file:hover {
   margin-bottom: 2px;
 }
 
-.buttons button, .buttons label.file {
+.buttons button {
   flex: 1 1 0;
 }
 
-.buttons button.debug, .buttons label.debug.file {
+.buttons button.debug {
   flex: 0 0 0;
   display: none;
 }
@@ -262,6 +268,34 @@ div.key {
   border-radius: 2px;
 }
 
+.path {
+  flex: 1 1 auto;
+  text-align: right;
+  overflow: auto;
+  opacity: 1;
+  align-items: center;
+}
+
+.path span + span {
+  margin-left: 2px;
+}
+
+.path span:not(.slash) {
+  display: inline-block;
+  font-size: 9pt;
+}
+
+.path span:not(.slash):last-of-type {
+  color: #ffcc00;
+  font-weight: bold;
+  font-size: 10pt;
+}
+
+.path span.slash {
+  color: #545d73;
+  font-size: 12pt;
+}
+
 ul.niceList:first-child {
   margin-top: 0;
 }
@@ -274,6 +308,7 @@ ul.niceList {
   margin-bottom: 4px;
   border: 1px solid #545d73;
   background-color: #1e2229;
+  overflow-x: hidden;
 }
 
 ul.niceList:empty {
@@ -404,6 +439,10 @@ ul.niceList li:not(.active):hover {
 
 .icon.enum {
   background-image: url("/img/icons/enum.png");
+}
+
+.icon.close {
+  background-image: url("/img/icons/close.png");
 }
 
 .icon.mouseLeft {
@@ -746,7 +785,7 @@ textarea:focus {
   top: 40px;
   right: 0;
   min-width: 150px;
-  background-color: #2e333f;
+  background-color: #791105;
   border-left: 4px solid #e34d00;
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
   animation: slideUp 1.2s;
@@ -761,7 +800,29 @@ textarea:focus {
   padding-right: 80px;
   gap: 10px;
   grid-template-columns: min-content auto;
+  grid-template-rows: auto auto;
   justify-content: right;
+}
+
+.lastChance .content button {
+  grid-row: 1/3;
+  height: 100%;
+}
+
+.lastChance .content .action {
+  grid-column: 2/3;
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+.lastChance .content .desc {
+  grid-column: 2/3;
+  grid-row: 2/3;
+  max-width: 250px;
+  font-style: italic;
+  font-size: 9pt;
+  color: white;
+  opacity: 0.7;
 }
 
 .window {
@@ -817,8 +878,23 @@ textarea:focus {
   overflow: hidden;
 }
 
+.window.dialog.centered {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.window.dialog.centered > .wrapper {
+  position: static;
+}
+
+.window.dialog > .mask {
+  background-color: rgba(0, 0, 0, 0.55);
+}
+
 .window.dialog > .wrapper {
   padding: 16px;
+  box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.6);
 }
 
 .window.dialog > .wrapper .content {
@@ -830,12 +906,17 @@ textarea:focus {
   flex-wrap: wrap;
 }
 
-.window.dialog > .wrapper .buttons button, .window.dialog > .wrapper .buttons label.file {
+.window.dialog > .wrapper .buttons button {
   flex: 1 1 0;
   margin: 1px;
 }
 
-.window.dialog > .wrapper .buttons button.confirm, .window.dialog > .wrapper .buttons label.confirm.file {
+.window.dialog > .wrapper .buttons button.confirm {
+  flex-grow: 2;
+}
+
+.window.dialog.unsavedChanges button.ignore,
+.window.dialog.unsavedChanges button.save {
   flex-grow: 2;
 }
 
@@ -891,9 +972,8 @@ textarea:focus {
   grid-template-columns: repeat(3, 33.33%);
 }
 
-.window.dialog.fieldTypes .content button, .window.dialog.fieldTypes .content label.file,
-.window.dialog.layerTypes .content button,
-.window.dialog.layerTypes .content label.file {
+.window.dialog.fieldTypes .content button,
+.window.dialog.layerTypes .content button {
   margin: 0;
 }
 
@@ -942,6 +1022,7 @@ textarea:focus {
 #debug {
   display: none;
   position: absolute;
+  z-index: 99;
   padding: 8px;
   right: 0px;
   top: 0px;
@@ -969,19 +1050,31 @@ textarea:focus {
   margin-top: 8px;
 }
 
-#editor {
-  display: grid;
-  grid-template-columns: 400px auto;
-  width: 100%;
-  height: 100%;
+canvas#webgl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1;
 }
 
-#editor #mainPanel {
-  position: relative;
+#page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+#page.editor #mainPanel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 100vh;
   display: grid;
-  height: 100%;
   overflow: hidden;
-  grid-template-rows: min-content 250px min-content auto;
+  grid-template-rows: min-content 250px min-content min-content auto;
   padding: 5px;
   gap: 5px;
   background: #1e2229;
@@ -991,15 +1084,19 @@ textarea:focus {
   box-sizing: border-box;
 }
 
-#editor #mainPanel #mainbar {
+#page.editor #mainPanel #mainbar {
   overflow: hidden;
 }
 
-#editor #mainPanel #mainbar button.showHelp, #editor #mainPanel #mainbar label.showHelp.file {
+#page.editor #mainPanel #mainbar button.showHelp {
   flex: 0 1 0;
 }
 
-#editor #mainPanel #mainbar h2#levelName {
+#page.editor #mainPanel #mainbar button.close {
+  flex: 0 1 16px;
+}
+
+#page.editor #mainPanel #mainbar h2#levelName {
   margin: 0;
   padding: 0;
   margin-top: 8px;
@@ -1008,27 +1105,27 @@ textarea:focus {
   cursor: pointer;
 }
 
-#editor #mainPanel #mainbar h2#levelName:hover {
+#page.editor #mainPanel #mainbar h2#levelName:hover {
   color: white;
 }
 
-#editor #mainPanel ul.niceList {
+#page.editor #mainPanel ul.niceList {
   min-height: auto;
 }
 
-#editor #mainPanel ul#layers {
+#page.editor #mainPanel ul#layers {
   overflow-x: hidden;
   overflow-y: auto;
   margin: 0;
 }
 
-#editor #mainPanel ul#layers li {
+#page.editor #mainPanel ul#layers li {
   grid-template-columns: min-content auto min-content;
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#editor #mainPanel ul#layers li .name {
+#page.editor #mainPanel ul#layers li .name {
   font-size: 10pt;
   flex: 1 1 auto;
   order: 1;
@@ -1036,7 +1133,7 @@ textarea:focus {
   cursor: pointer;
 }
 
-#editor #mainPanel ul#layers li .vis {
+#page.editor #mainPanel ul#layers li .vis {
   flex: 0 0 auto;
   padding: 10px;
   margin: -10px;
@@ -1047,51 +1144,115 @@ textarea:focus {
   cursor: zoom-out;
 }
 
-#editor #mainPanel ul#layers li .vis:hover {
+#page.editor #mainPanel ul#layers li .vis:hover {
   outline: 1px solid white;
   outline-offset: -4px;
 }
 
-#editor #mainPanel #mainPaletteWrapper {
+#page.editor #mainPanel .enhanceActiveLayer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  font-size: 8pt;
+}
+
+#page.editor #mainPanel .enhanceActiveLayer input[type=checkbox] {
+  flex: 0 1 auto;
+  width: 16px;
+  height: 16px;
+}
+
+#page.editor #mainPanel .enhanceActiveLayer label:hover {
+  color: #ffcc00;
+  cursor: pointer;
+}
+
+#page.editor #mainPanel #mainPaletteWrapper {
   overflow: auto;
   position: relative;
   outline: 1px solid white;
 }
 
-#editor #mainPanel #mainPaletteWrapper ul.niceList {
+#page.editor #mainPanel #mainPaletteWrapper ul.niceList {
   height: 100%;
   box-sizing: border-box;
 }
 
-#editor canvas {
-  width: 100% !important;
-  height: 100% !important;
+#page.home {
+  background-color: #1e2229;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  align-items: center;
+  justify-items: center;
 }
 
-.compactPanel #editor {
+#page.home .wrapper {
+  width: 400px;
+}
+
+#page.home .wrapper .logo {
+  font-family: Roboto;
+  font-size: 100px;
+  line-height: 80%;
+  text-align: center;
+  color: #ffcc00;
+}
+
+#page.home .wrapper .version {
+  opacity: 0.6;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 0.8em;
+}
+
+#page.home .wrapper ul.recents {
+  min-height: 15vh;
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
+#page.home .wrapper ul.recents .path span:not(:last-of-type) {
+  font-size: 8pt;
+}
+
+#page.home .wrapper ul.recents li:first-of-type {
+  border: 1px solid #ffcc00;
+}
+
+#page.home .wrapper ul.recents li:first-of-type:hover {
+  outline-color: white;
+}
+
+#page.home .wrapper ul.recents li:not(:first-of-type) {
+  opacity: 0.6;
+}
+
+.compactPanel #page.editor {
   grid-template-columns: 150px auto;
 }
 
-.compactPanel #editor #mainPanel {
+.compactPanel #page.editor #mainPanel {
   grid-template-rows: min-content 200px auto;
 }
 
-.compactPanel #editor #mainPanel #guide {
+.compactPanel #page.editor #mainPanel #guide {
   display: none;
 }
 
-.compactPanel #editor #mainPanel ul.niceList li {
+.compactPanel #page.editor #mainPanel ul.niceList li {
   padding-top: 4px;
   padding-bottom: 4px;
   gap: 4px;
 }
 
-.compactPanel #editor #mainPanel ul.niceList li .icon {
+.compactPanel #page.editor #mainPanel ul.niceList li .icon {
   width: 0.75em;
   height: 0.75em;
 }
 
-.compactPanel #editor #mainPanel h2#levelName {
+.compactPanel #page.editor #mainPanel h2#levelName {
   font-size: 1.1em;
 }
 
@@ -1137,7 +1298,7 @@ textarea:focus {
   margin-right: 4px;
 }
 
-.palette .toolOptions button, .palette .toolOptions label.file {
+.palette .toolOptions button {
   width: auto;
   padding-top: 4px;
   text-transform: none;
@@ -1360,7 +1521,7 @@ textarea:focus {
   overflow: hidden;
 }
 
-.window.panel button.delete, .window.panel label.delete.file {
+.window.panel button.delete {
   flex: 0 0 32px;
 }
 
@@ -1373,6 +1534,22 @@ textarea:focus {
   gap: 16px;
   grid-template-rows: min-content auto;
   grid-template-columns: 200px auto;
+}
+
+.window.panel.levelList .content .path,
+.window.panel.layerDefs .content .path,
+.window.panel.tilesetDefs .content .path {
+  flex: 1 0 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.window.panel.levelList .content .path:hover span:not(.slash),
+.window.panel.layerDefs .content .path:hover span:not(.slash),
+.window.panel.tilesetDefs .content .path:hover span:not(.slash) {
+  border-radius: 3px;
+  background-color: #ffcc00;
+  color: black !important;
 }
 
 .window.panel.levelList .content > .header,
@@ -1465,7 +1642,7 @@ textarea:focus {
   padding: 3px;
 }
 
-.window.panel.editEnums .content .enumForm ul.enumValues li button, .window.panel.editEnums .content .enumForm ul.enumValues li label.file {
+.window.panel.editEnums .content .enumForm ul.enumValues li button {
   padding: 0;
 }
 
@@ -1518,7 +1695,7 @@ textarea:focus {
   display: block;
 }
 
-.window.panel.layerDefs ul.intGridValues li.add button, .window.panel.layerDefs ul.intGridValues li.add label.file {
+.window.panel.layerDefs ul.intGridValues li.add button {
   padding: 0px;
   text-align: center;
   font-weight: bold;
@@ -1551,27 +1728,6 @@ textarea:focus {
 .window.panel.tilesetDefs li.tileset canvas.fullPreview {
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
   background-color: rgba(0, 0, 0, 0.4);
-}
-
-.window.panel.tilesetDefs span.path {
-  flex: 1 1 auto;
-  overflow: auto;
-  background-color: #1e2229;
-  opacity: 1;
-}
-
-.window.panel.tilesetDefs span.path span {
-  display: inline-block;
-  font-size: 9pt;
-}
-
-.window.panel.tilesetDefs span.path span:last-of-type {
-  color: #ffcc00;
-  font-weight: bold;
-}
-
-.window.panel.tilesetDefs span.path span + span::before {
-  content: " / ";
 }
 
 .window.panel.entityDefs .content {

@@ -1,5 +1,5 @@
 typedef SessionData = {
-	var projectPath: String;
+	var recentProjects : Array<String>;
 }
 
 enum GlobalEvent {
@@ -26,6 +26,8 @@ enum GlobalEvent {
 	LayerInstanceRestoredFromHistory;
 
 	TilesetDefChanged;
+	TilesetDefAdded;
+	TilesetDefRemoved;
 
 	EntityDefAdded;
 	EntityDefRemoved;
@@ -42,6 +44,7 @@ enum GlobalEvent {
 	EnumDefRemoved;
 	EnumDefChanged;
 	EnumDefSorted;
+	EnumDefValueRemoved;
 
 	ToolOptionChanged;
 }

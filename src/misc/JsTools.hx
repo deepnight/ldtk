@@ -14,9 +14,20 @@ class JsTools {
 				onSort(from,to);
 				// var moved = project.sortLayerDef(from,to);
 				// selectLayer(moved);
-				// client.ge.emit(LayerDefSorted);
+				// editor.ge.emit(LayerDefSorted);
 			}
 		);
+	}
+
+	public static function prepareProjectFile(p:led.Project) : { bytes:haxe.io.Bytes, json:Dynamic } {
+		var json = p.toJson();
+		var jsonStr = haxe.Json.stringify(json);
+		jsonStr = dn.HaxeJson.prettify(jsonStr); // TODO make optional
+
+		return {
+			bytes: haxe.io.Bytes.ofString( jsonStr ),
+			json: json,
+		}
 	}
 
 	public static function createLayerTypeIcon(type:led.LedTypes.LayerType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
@@ -115,7 +126,7 @@ class JsTools {
 
 	public static function getHtmlTemplate(name:String) : Null<String> {
 		if( !_fileCache.exists(name) ) {
-			var path = dn.FilePath.fromFile("tpl/"+name);
+			var path = dn.FilePath.fromFile(App.APP_DIR + "tpl/" + name);
 			path.extension = "html";
 
 			if( !fileExists(path.full) )
@@ -148,28 +159,33 @@ class JsTools {
 		return input;
 	}
 
-	public static function loadDialog(?fileTypes:Array<String>, onLoad:(filePath:String)->Void) {
+	public static function loadDialog(?fileTypes:Array<String>, rootDir:String, onLoad:(filePath:String)->Void) {
 		var input = getTmpFileInput();
 
 		if( fileTypes==null || fileTypes.length==0 )
 			fileTypes = [".*"];
 		input.attr("accept", fileTypes.join(","));
+		input.attr("nwWorkingDir",rootDir);
 
 		input.change( function(ev) {
-			var path = input.val();
+			var path : String = input.val();
+			if( path==null || path.length==0 )
+				return;
+
 			input.remove();
 			onLoad(path);
 		});
 		input.click();
 	}
 
-	public static function saveAsDialog(?fileTypes:Array<String>, onFileSelect:(filePath:String)->Void) {
+	public static function saveAsDialog(?fileTypes:Array<String>, rootDir:String, onFileSelect:(filePath:String)->Void) {
 		var input = getTmpFileInput();
 
 		if( fileTypes==null || fileTypes.length==0 )
 			fileTypes = [".*"];
 		input.attr("accept", fileTypes.join(","));
 		input.attr("nwsaveas","nwsaveas");
+		input.attr("nwWorkingDir",rootDir);
 
 		input.change( function(ev) {
 			var path = input.val();
@@ -219,6 +235,13 @@ class JsTools {
 	}
 
 
+	public static function makePath(path:String) {
+		path = StringTools.replace(path,"\\","/");
+		var parts = path.split("/").map( function(p) return '<span>$p</span>' );
+		var e = new J( parts.join('<span class="slash">/</span>') );
+		return e.wrapAll('<div class="path"/>').parent();
+	}
+
 	// *** File API (NWJS) **************************************
 
 	#if hxnodejs
@@ -253,6 +276,17 @@ class JsTools {
 
 	public static function getCwd() {
 		return js.Node.process.cwd();
+	}
+
+	public static function exploreToFile(filePath:String) {
+		var fp = dn.FilePath.fromFile(filePath);
+		if( isWindows() )
+			fp.useBackslashes();
+		nw.Shell.showItemInFolder(fp.full);
+	}
+
+	public static function isWindows() {
+		return js.Node.process.platform.toLowerCase().indexOf("win")==0;
 	}
 
 	#end
