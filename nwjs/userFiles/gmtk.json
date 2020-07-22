@@ -400,17 +400,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Goblin"
 										]
-									}
+									},
+									"displayValue":"Goblin"
 								}
 							]
 						},
@@ -423,17 +425,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Goblin"
 										]
-									}
+									},
+									"displayValue":"Goblin"
 								}
 							]
 						},
@@ -446,17 +450,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gem"
 										]
-									}
+									},
+									"displayValue":"Gem"
 								}
 							]
 						},
@@ -478,22 +484,24 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"DUMBER DWARVES"
 										]
-									}
+									},
+									"displayValue":"DUMBER DWARVES"
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											16766008
 										]
-									}
+									},
+									"displayValue":"#FFD438"
 								}
 							]
 						},
@@ -506,22 +514,24 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"A 48h game by Sebastien Benard (deepnight.net)"
 										]
-									}
+									},
+									"displayValue":"A 48h game by Sebastien Benard (deepnight.net)"
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											9539507
 										]
-									}
+									},
+									"displayValue":"#918FB3"
 								}
 							]
 						}
@@ -1753,17 +1763,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gem"
 										]
-									}
+									},
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -1776,12 +1788,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -1794,12 +1808,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -1812,32 +1828,35 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											1
 										]
-									}
+									},
+									"displayValue":1
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											3
 										]
-									}
+									},
+									"displayValue":3
 								}
 							]
 						},
@@ -1850,17 +1869,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gem"
 										]
-									}
+									},
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -1873,17 +1894,19 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Your dwarves collect GEMS automatically for you."
 										]
-									}
+									},
+									"displayValue":"Your dwarves collect GEMS automatically for you."
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"#FFFFFF"
 								}
 							]
 						}
@@ -2659,17 +2682,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gem"
 										]
-									}
+									},
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -2682,17 +2707,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gem"
 										]
-									}
+									},
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -2705,12 +2732,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -2723,12 +2752,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -2741,12 +2772,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -2759,12 +2792,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -2777,12 +2812,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -2795,12 +2832,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -2813,17 +2852,19 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Click here to drop some FOOD to BAIT your dwarf."
 										]
-									}
+									},
+									"displayValue":"Click here to drop some FOOD to BAIT your dwarf."
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"#FFFFFF"
 								}
 							]
 						},
@@ -2845,17 +2886,19 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Dwarves are kind of stupid."
 										]
-									}
+									},
+									"displayValue":"Dwarves are kind of stupid."
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"#FFFFFF"
 								}
 							]
 						},
@@ -2868,17 +2911,19 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Use food to guide them."
 										]
-									}
+									},
+									"displayValue":"Use food to guide them."
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"#FFFFFF"
 								}
 							]
 						},
@@ -2891,12 +2936,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -2909,12 +2956,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						}
@@ -6762,17 +6811,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -6785,17 +6836,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gem"
 										]
-									}
+									},
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -6808,17 +6861,19 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"... except when they do something stupid, like picking a trap-bomb. Click ON THEM to slap them."
 										]
-									}
+									},
+									"displayValue":"... except when they do something stupid, like picking a trap-bomb. Click ON THEM to slap them."
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"#FFFFFF"
 								}
 							]
 						},
@@ -6831,17 +6886,19 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Dwarves cannot die..."
 										]
-									}
+									},
+									"displayValue":"Dwarves cannot die..."
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"#FFFFFF"
 								}
 							]
 						}
@@ -8196,12 +8253,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -8214,12 +8273,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -8232,12 +8293,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -8250,17 +8313,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -8273,17 +8338,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -8296,17 +8363,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -8328,17 +8397,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -8351,17 +8422,19 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Slap your dwarves when they do something you don't want."
 										]
-									}
+									},
+									"displayValue":"Slap your dwarves when they do something you don't want."
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"#FFFFFF"
 								}
 							]
 						},
@@ -8383,17 +8456,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -8406,17 +8481,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						}
@@ -9329,12 +9406,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -9347,12 +9426,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -9365,12 +9446,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -9383,12 +9466,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -9401,12 +9486,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -9419,12 +9506,13 @@
 								{
 									"__comment__":"Time (Int)",
 									"defUid":25,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											10
 										]
-									}
+									},
+									"displayValue":10
 								}
 							]
 						},
@@ -9437,17 +9525,19 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"You might sometime be in a hurry..."
 										]
-									}
+									},
+									"displayValue":"You might sometime be in a hurry..."
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"#FFFFFF"
 								}
 							]
 						}
@@ -9961,7 +10051,8 @@
 								{
 									"__comment__":"Time (Int)",
 									"defUid":25,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":30
 								}
 							]
 						},
@@ -10001,12 +10092,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -10019,12 +10112,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -10037,12 +10132,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -10055,17 +10152,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -10078,17 +10177,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -10101,12 +10202,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -10119,12 +10222,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -10209,17 +10314,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -10232,17 +10339,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -10255,17 +10364,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -10278,17 +10389,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						}
@@ -10998,12 +11111,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -11016,12 +11131,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -11034,17 +11151,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -11057,17 +11176,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -11080,7 +11201,8 @@
 								{
 									"__comment__":"Time (Int)",
 									"defUid":25,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":30
 								}
 							]
 						},
@@ -11093,12 +11215,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -11111,12 +11235,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -11129,12 +11255,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -11147,17 +11275,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -11170,17 +11300,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -11193,27 +11325,30 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											4
 										]
-									}
+									},
+									"displayValue":4
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											3
 										]
-									}
+									},
+									"displayValue":3
 								}
 							]
 						},
@@ -11226,22 +11361,25 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":3
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											3
 										]
-									}
+									},
+									"displayValue":3
 								}
 							]
 						},
@@ -11254,32 +11392,35 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											10
 										]
-									}
+									},
+									"displayValue":10
 								}
 							]
 						},
@@ -11292,32 +11433,35 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											10
 										]
-									}
+									},
+									"displayValue":10
 								}
 							]
 						},
@@ -11330,27 +11474,30 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											1
 										]
-									}
+									},
+									"displayValue":1
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											10
 										]
-									}
+									},
+									"displayValue":10
 								}
 							]
 						},
@@ -11363,12 +11510,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -13331,17 +13480,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gem"
 										]
-									}
+									},
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -13354,17 +13505,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gem"
 										]
-									}
+									},
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -13377,17 +13530,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gem"
 										]
-									}
+									},
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -13400,17 +13555,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gem"
 										]
-									}
+									},
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -13423,17 +13580,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gem"
 										]
-									}
+									},
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -13446,17 +13605,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gem"
 										]
-									}
+									},
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -13469,12 +13630,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -13487,12 +13650,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -13595,17 +13760,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -13654,17 +13821,19 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Bomb"
 										]
-									}
+									},
+									"displayValue":"Bomb"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -13704,17 +13873,20 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":3
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":5
 								}
 							]
 						},
@@ -13727,17 +13899,20 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":3
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":5
 								}
 							]
 						},
@@ -13750,7 +13925,8 @@
 								{
 									"__comment__":"Time (Int)",
 									"defUid":25,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":30
 								}
 							]
 						},
@@ -13763,22 +13939,25 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":5
 								}
 							]
 						},
@@ -13791,12 +13970,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":14,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gob"
 								},
 								{
 									"__comment__":"type (MobType)",
 									"defUid":46,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						}
@@ -14349,32 +14530,35 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											3
 										]
-									}
+									},
+									"displayValue":3
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											1
 										]
-									}
+									},
+									"displayValue":1
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											3
 										]
-									}
+									},
+									"displayValue":3
 								}
 							]
 						},
@@ -14387,32 +14571,35 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											4
 										]
-									}
+									},
+									"displayValue":4
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											3
 										]
-									}
+									},
+									"displayValue":3
 								}
 							]
 						},
@@ -14425,32 +14612,35 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											3
 										]
-									}
+									},
+									"displayValue":3
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											1
 										]
-									}
+									},
+									"displayValue":1
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											4
 										]
-									}
+									},
+									"displayValue":4
 								}
 							]
 						},
@@ -14463,12 +14653,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -14481,12 +14673,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -14499,12 +14693,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -14517,12 +14713,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -14544,32 +14742,35 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											4
 										]
-									}
+									},
+									"displayValue":4
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											3
 										]
-									}
+									},
+									"displayValue":3
 								}
 							]
 						},
@@ -14582,12 +14783,13 @@
 								{
 									"__comment__":"Time (Int)",
 									"defUid":25,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											5
 										]
-									}
+									},
+									"displayValue":5
 								}
 							]
 						},
@@ -14600,22 +14802,25 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":3
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":5
 								}
 							]
 						}
@@ -15259,12 +15464,13 @@
 								{
 									"__comment__":"Time (Int)",
 									"defUid":25,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											5
 										]
-									}
+									},
+									"displayValue":5
 								}
 							]
 						},
@@ -15277,17 +15483,19 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"THANK YOU FOR PLAYING"
 										]
-									}
+									},
+									"displayValue":"THANK YOU FOR PLAYING"
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"#FFFFFF"
 								}
 							]
 						},
@@ -15300,17 +15508,19 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"For more, please visit: deepnight.net"
 										]
-									}
+									},
+									"displayValue":"For more, please visit: deepnight.net"
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"#FFFFFF"
 								}
 							]
 						},
@@ -15323,17 +15533,19 @@
 								{
 									"__comment__":"Text (String)",
 									"defUid":32,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Hope you liked this short game :)"
 										]
-									}
+									},
+									"displayValue":"Hope you liked this short game :)"
 								},
 								{
 									"__comment__":"Color (Color)",
 									"defUid":33,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"#FFFFFF"
 								}
 							]
 						},
@@ -15355,27 +15567,30 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											4
 										]
-									}
+									},
+									"displayValue":4
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":5
 								}
 							]
 						},
@@ -15388,27 +15603,30 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											4
 										]
-									}
+									},
+									"displayValue":4
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":5
 								}
 							]
 						},
@@ -15421,22 +15639,25 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":3
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								}
 							]
 						},
@@ -15449,22 +15670,25 @@
 								{
 									"__comment__":"MaxChildren (Int)",
 									"defUid":26,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":3
 								},
 								{
 									"__comment__":"PerSpawn (Int)",
 									"defUid":27,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								},
 								{
 									"__comment__":"Delay (Float)",
 									"defUid":28,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								}
 							]
 						},
@@ -15486,12 +15710,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -15504,12 +15730,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -15522,12 +15750,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -15540,12 +15770,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -15558,12 +15790,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						},
@@ -15576,12 +15810,14 @@
 								{
 									"__comment__":"Type (String)",
 									"defUid":10,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":"Gem"
 								},
 								{
 									"__comment__":"type (ItemType)",
 									"defUid":47,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								}
 							]
 						}

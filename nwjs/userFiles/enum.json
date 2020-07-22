@@ -204,37 +204,43 @@
 								{
 									"__comment__":"mobType (MobType)",
 									"defUid":3,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Trash"
 										]
-									}
+									},
+									"displayValue":"Trash"
 								},
 								{
 									"__comment__":"elite (Bool)",
 									"defUid":5,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":false
 								},
 								{
 									"__comment__":"lifeOverride (Int)",
 									"defUid":6,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								},
 								{
 									"__comment__":"scale (Float)",
 									"defUid":7,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								},
 								{
 									"__comment__":"loot (ItemType)",
 									"defUid":11,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								},
 								{
 									"__comment__":"lootCount (Int)",
 									"defUid":12,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								}
 							]
 						},
@@ -247,47 +253,53 @@
 								{
 									"__comment__":"mobType (MobType)",
 									"defUid":3,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Ninja"
 										]
-									}
+									},
+									"displayValue":"Ninja"
 								},
 								{
 									"__comment__":"elite (Bool)",
 									"defUid":5,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":false
 								},
 								{
 									"__comment__":"lifeOverride (Int)",
 									"defUid":6,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								},
 								{
 									"__comment__":"scale (Float)",
 									"defUid":7,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								},
 								{
 									"__comment__":"loot (ItemType)",
 									"defUid":11,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Ammo"
 										]
-									}
+									},
+									"displayValue":"Ammo"
 								},
 								{
 									"__comment__":"lootCount (Int)",
 									"defUid":12,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											10
 										]
-									}
+									},
+									"displayValue":10
 								}
 							]
 						},
@@ -300,37 +312,43 @@
 								{
 									"__comment__":"mobType (MobType)",
 									"defUid":3,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Trash"
 										]
-									}
+									},
+									"displayValue":"Trash"
 								},
 								{
 									"__comment__":"elite (Bool)",
 									"defUid":5,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":false
 								},
 								{
 									"__comment__":"lifeOverride (Int)",
 									"defUid":6,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								},
 								{
 									"__comment__":"scale (Float)",
 									"defUid":7,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								},
 								{
 									"__comment__":"loot (ItemType)",
 									"defUid":11,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								},
 								{
 									"__comment__":"lootCount (Int)",
 									"defUid":12,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								}
 							]
 						},
@@ -343,62 +361,68 @@
 								{
 									"__comment__":"mobType (MobType)",
 									"defUid":3,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Ninja"
 										]
-									}
+									},
+									"displayValue":"Ninja"
 								},
 								{
 									"__comment__":"elite (Bool)",
 									"defUid":5,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Bool",
 										"params":[
 											true
 										]
-									}
+									},
+									"displayValue":true
 								},
 								{
 									"__comment__":"lifeOverride (Int)",
 									"defUid":6,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											10
 										]
-									}
+									},
+									"displayValue":10
 								},
 								{
 									"__comment__":"scale (Float)",
 									"defUid":7,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"loot (ItemType)",
 									"defUid":11,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Gold"
 										]
-									}
+									},
+									"displayValue":"Gold"
 								},
 								{
 									"__comment__":"lootCount (Int)",
 									"defUid":12,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Int",
 										"params":[
 											150
 										]
-									}
+									},
+									"displayValue":150
 								}
 							]
 						},
@@ -411,52 +435,58 @@
 								{
 									"__comment__":"mobType (MobType)",
 									"defUid":3,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Shooter"
 										]
-									}
+									},
+									"displayValue":"Shooter"
 								},
 								{
 									"__comment__":"elite (Bool)",
 									"defUid":5,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Bool",
 										"params":[
 											true
 										]
-									}
+									},
+									"displayValue":true
 								},
 								{
 									"__comment__":"lifeOverride (Int)",
 									"defUid":6,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":null
 								},
 								{
 									"__comment__":"scale (Float)",
 									"defUid":7,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_Float",
 										"params":[
 											2
 										]
-									}
+									},
+									"displayValue":2
 								},
 								{
 									"__comment__":"loot (ItemType)",
 									"defUid":11,
-									"internalValue":{
+									"realEditorValue":{
 										"id":"V_String",
 										"params":[
 											"Food"
 										]
-									}
+									},
+									"displayValue":"Food"
 								},
 								{
 									"__comment__":"lootCount (Int)",
 									"defUid":12,
-									"internalValue":null
+									"realEditorValue":null,
+									"displayValue":1
 								}
 							]
 						}
