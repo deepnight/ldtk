@@ -160,6 +160,7 @@ class JsTools {
 	}
 
 	public static function loadDialog(?fileTypes:Array<String>, rootDir:String, onLoad:(filePath:String)->Void) {
+		#if nwjs
 		var input = getTmpFileInput();
 
 		if( fileTypes==null || fileTypes.length==0 )
@@ -169,6 +170,7 @@ class JsTools {
 
 		input.change( function(ev) {
 			var path : String = input.val();
+
 			if( path==null || path.length==0 )
 				return;
 
@@ -176,6 +178,16 @@ class JsTools {
 			onLoad(path);
 		});
 		input.click();
+		#elseif electron
+		var e = js.node.Require.require("electron");
+		trace(e);
+		trace(e.ipcRenderer);
+		trace(e.ipcRenderer.invoke);
+		e.ipcRenderer.invoke("open-file-dialog"); // TODO retrieve result??
+		// electron.main.Dialog.showOpenDialog
+		#else
+		throw "Not implemented on this platform";
+		#end
 	}
 
 	public static function saveAsDialog(?fileTypes:Array<String>, rootDir:String, onFileSelect:(filePath:String)->Void) {
