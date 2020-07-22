@@ -475,8 +475,16 @@ class Editor extends dn.Process {
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
-		if( e!=ViewportChanged )
-			needSaving = true;
+		switch e {
+			case ViewportChanged:
+			case LayerInstanceSelected:
+			case LevelSelected:
+			case LayerInstanceVisiblityChanged:
+			case ToolOptionChanged:
+
+			case _:
+				needSaving = true;
+		}
 
 		switch e {
 			case ViewportChanged:
