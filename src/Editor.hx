@@ -262,6 +262,12 @@ class Editor extends dn.Process {
 				if( !hasInputFocus() && isCtrlDown() )
 					onClose();
 
+			case K.A:
+				if( !hasInputFocus() ) {
+					levelRender.enhanceActiveLayer = !levelRender.enhanceActiveLayer;
+					levelRender.updateLayersVisibility();
+				}
+
 			case K.H:
 				if( !hasInputFocus() )
 					onHelp();
