@@ -11,6 +11,7 @@ class Home extends dn.Process {
 		ME = this;
 		createRoot(p.root);
 		App.ME.loadPage("home");
+		App.ME.setWindowTitle();
 
 		// Version
 		var ver = jPage.find(".version");

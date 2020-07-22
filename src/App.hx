@@ -99,8 +99,12 @@ class App extends dn.Process {
 		return dn.FilePath.fromFile(last).directory;
 	}
 
-	public function setWindowTitle(str:String) {
-		str = str + "    --    L-Ed v"+Const.APP_VERSION;
+	public function setWindowTitle(?str:String) {
+		var base = "L-Ed v"+Const.APP_VERSION;
+		if( str==null )
+			str = base;
+		else
+			str = str + "    --    "+base;
 
 		#if nwjs
 		appWin.title = str;
