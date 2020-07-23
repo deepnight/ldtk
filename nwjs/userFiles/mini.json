@@ -146,9 +146,10 @@
 				"identifier" : "MobType",
 				"uid" : 1,
 				"values" : [
-					{ "id" : "Trash" },
-					{ "id" : "Shooter" },
-					{ "id" : "Ninja" }
+					{ "id" : "Trash", "tileId" : 4 },
+					{ "id" : "Shooter", "tileId" : 12 },
+					{ "id" : "Ninja", "tileId" : 13 },
+					{ "id" : "Mage", "tileId" : 15 }
 				],
 				"iconTilesetUid" : 14
 			},
@@ -156,9 +157,9 @@
 				"identifier" : "ItemType",
 				"uid" : 10,
 				"values" : [
-					{ "id" : "Gold" },
-					{ "id" : "Ammo" },
-					{ "id" : "Food" }
+					{ "id" : "Gold", "tileId" : null },
+					{ "id" : "Ammo", "tileId" : null },
+					{ "id" : "Food", "tileId" : null }
 				],
 				"iconTilesetUid" : null
 			}
