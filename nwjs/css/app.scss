@@ -1322,77 +1322,85 @@ canvas#webgl {
 			outline: 2px solid white !important;
 		}
 	}
-
-	.tilesetPicker {
-		position: relative;
-		overflow: hidden;
-		box-sizing: border-box;
-
-		padding: 1px;
-		width: 100%;
-		height: 100%;
-
-		.wrapper {
-			img.atlas {
-				image-rendering: pixelated;
-				box-shadow: 0px 0px 32px black;
-				outline: 1px solid $bgLight;
-			}
-
-			.selectionsWrapper,
-			.cursorsWrapper {
-				pointer-events: none;
-				position: relative;
-
-				.tileCursor {
-					position: absolute;
-					z-index: 1;
-					min-width: 1px;
-					min-height: 1px;
-					box-sizing: border-box;
-					pointer-events: none;
-					border-color: rgba(255, 255, 255, 0.5);
-					border-style: solid;
-					border-width: 0px;
-
-					&.randomMode {
-						border-width: 1px;
-						border-color: rgba(144, 238, 144, 0.5);
-						border-style: dotted;
-					}
-
-					&.randomMode.selection {
-						border-color: rgba(144, 238, 144, 1);
-						border-style: solid;
-					}
-
-					&.stampMode.selection {
-						border-color: #f3e4a4;
-						border-style: solid;
-					}
-
-					&.left {	border-left-width: 1px; }
-					&.right {	border-right-width: 1px; }
-					&.top {		border-top-width: 1px; }
-					&.bottom {	border-bottom-width: 1px; }
-
-					// &.stampMode.left {	box-shadow: 0px -3px 0px #61a187; }
-					// &.stampMode.left {		box-shadow: -3px 0px 0px #ff8344; }
-					// &.stampMode.right {		box-shadow: 3px 0px 0px #ff8344; }
-					// &.stampMode.top {		box-shadow: 0px -3px 0px #ff8344; }
-					// &.stampMode.bottom {	box-shadow: 0px 3px 0px #ff8344; }
-
-					&.remove {
-						border-color: red;
-					}
+}
 
 
-				}
-			}
+.tilesetPicker {
+	position: relative;
+	overflow: hidden;
+	box-sizing: border-box;
 
+	padding: 1px;
+	width: 100%;
+	height: 100%;
+
+	.wrapper {
+		img.atlas {
+			image-rendering: pixelated;
+			box-shadow: 0px 0px 32px black;
+			outline: 1px solid $bgLight;
 		}
-	}
 
+		.selectionsWrapper,
+		.cursorsWrapper {
+			pointer-events: none;
+			position: relative;
+
+			.tileCursor {
+				position: absolute;
+				z-index: 1;
+				min-width: 1px;
+				min-height: 1px;
+				box-sizing: border-box;
+				pointer-events: none;
+				border-color: rgba(255, 255, 255, 0.5);
+				border-style: solid;
+				border-width: 0px;
+
+				&.randomMode {
+					border-width: 1px;
+					border-color: rgba(144, 238, 144, 0.5);
+					border-style: dotted;
+				}
+
+				&.randomMode.selection {
+					border-color: rgba(144, 238, 144, 1);
+					border-style: solid;
+				}
+
+				&.stampMode.selection {
+					border-color: #f3e4a4;
+					border-style: solid;
+				}
+
+				&.left {	border-left-width: 1px; }
+				&.right {	border-right-width: 1px; }
+				&.top {		border-top-width: 1px; }
+				&.bottom {	border-bottom-width: 1px; }
+
+				// &.stampMode.left {	box-shadow: 0px -3px 0px #61a187; }
+				// &.stampMode.left {		box-shadow: -3px 0px 0px #ff8344; }
+				// &.stampMode.right {		box-shadow: 3px 0px 0px #ff8344; }
+				// &.stampMode.top {		box-shadow: 0px -3px 0px #ff8344; }
+				// &.stampMode.bottom {	box-shadow: 0px 3px 0px #ff8344; }
+
+				&.remove {
+					border-color: red;
+				}
+
+
+			}
+		}
+
+	}
+}
+
+.window.singleTilePicker {
+	z-index: 99;
+	.content {
+		width: 60vw;
+		height: 60vh;
+	}
 }
 
 .instanceEditor {

@@ -146,15 +146,21 @@
 				"identifier" : "MobType",
 				"uid" : 1,
 				"values" : [
-					"Trash",
-					"Shooter",
-					"Ninja"
-				]
+					{ "id" : "Trash" },
+					{ "id" : "Shooter" },
+					{ "id" : "Ninja" }
+				],
+				"iconTilesetUid" : 14
 			},
 			{
 				"identifier" : "ItemType",
 				"uid" : 10,
-				"values" : [ "Gold", "Ammo", "Food" ]
+				"values" : [
+					{ "id" : "Gold" },
+					{ "id" : "Ammo" },
+					{ "id" : "Food" }
+				],
+				"iconTilesetUid" : null
 			}
 		]
 	},

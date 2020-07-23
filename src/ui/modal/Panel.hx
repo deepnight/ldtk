@@ -14,7 +14,7 @@ class Panel extends ui.Modal {
 
 		jPanelMask = new J("<div/>");
 		jPanelMask.addClass("panelMask");
-		jPanelMask.prependTo("body");
+		jPanelMask.prependTo( App.ME.jPage );
 		jPanelMask.offset({ top:mainPanel.find("#layers").offset().top, left:0 });
 		jPanelMask.width(mainPanel.outerWidth());
 		jPanelMask.height( mainPanel.outerHeight() - jPanelMask.offset().top );

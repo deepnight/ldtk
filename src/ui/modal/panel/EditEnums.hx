@@ -164,14 +164,24 @@ class EditEnums extends ui.modal.Panel {
 
 			// Tile preview
 			var previewCanvas = li.find(".tile");
-			if( curEnum.iconTilesetUid!=null )
-				previewCanvas.addClass("active");
-			if( curEnum.iconTilesetUid!=null && eValue.tileId!=null ) {
+			if( curEnum.iconTilesetUid!=null ) {
 				var td = project.defs.getTilesetDef(curEnum.iconTilesetUid);
-				td.drawTileToCanvas( previewCanvas, eValue.tileId, 0, 0 );
-				previewCanvas.attr("width", td.tileGridSize);
-				previewCanvas.attr("height", td.tileGridSize);
-				previewCanvas.css("zoom", 32/td.tileGridSize);
+				previewCanvas.addClass("active");
+
+				// Pick a tile
+				previewCanvas.click( function(_) {
+					var m = new Modal();
+					m.jModalAndMask.addClass("singleTilePicker");
+					new ui.SingleTilePicker(m.jContent, td);
+				});
+
+				// Render preview
+				if( eValue.tileId!=null ) {
+					td.drawTileToCanvas( previewCanvas, eValue.tileId, 0, 0 );
+					previewCanvas.attr("width", td.tileGridSize);
+					previewCanvas.attr("height", td.tileGridSize);
+					previewCanvas.css("zoom", 32/td.tileGridSize);
+				}
 			}
 
 			// var i = Input.linkToHtmlInput( eValue.tileId, jForm.find("[name=tileId]") );

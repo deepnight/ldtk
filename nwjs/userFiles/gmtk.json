@@ -289,12 +289,21 @@
 			{
 				"identifier" : "MobType",
 				"uid" : 44,
-				"values" : [ "Goblin", "Boss" ]
+				"values" : [
+					{ "id" : "Goblin" },
+					{ "id" : "Boss" }
+				],
+				"iconTilesetUid" : null
 			},
 			{
 				"identifier" : "ItemType",
 				"uid" : 45,
-				"values" : [ "Gem", "Bomb", "Food" ]
+				"values" : [
+					{ "id" : "Gem" },
+					{ "id" : "Bomb" },
+					{ "id" : "Food" }
+				],
+				"iconTilesetUid" : null
 			}
 		]
 	},

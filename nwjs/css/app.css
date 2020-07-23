@@ -1360,7 +1360,7 @@ canvas#webgl {
   outline: 2px solid white !important;
 }
 
-.palette .tilesetPicker {
+.tilesetPicker {
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
@@ -1369,20 +1369,20 @@ canvas#webgl {
   height: 100%;
 }
 
-.palette .tilesetPicker .wrapper img.atlas {
+.tilesetPicker .wrapper img.atlas {
   image-rendering: pixelated;
   box-shadow: 0px 0px 32px black;
   outline: 1px solid #545d73;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper,
-.palette .tilesetPicker .wrapper .cursorsWrapper {
+.tilesetPicker .wrapper .selectionsWrapper,
+.tilesetPicker .wrapper .cursorsWrapper {
   pointer-events: none;
   position: relative;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor {
+.tilesetPicker .wrapper .selectionsWrapper .tileCursor,
+.tilesetPicker .wrapper .cursorsWrapper .tileCursor {
   position: absolute;
   z-index: 1;
   min-width: 1px;
@@ -1394,48 +1394,57 @@ canvas#webgl {
   border-width: 0px;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.randomMode,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.randomMode {
+.tilesetPicker .wrapper .selectionsWrapper .tileCursor.randomMode,
+.tilesetPicker .wrapper .cursorsWrapper .tileCursor.randomMode {
   border-width: 1px;
   border-color: rgba(144, 238, 144, 0.5);
   border-style: dotted;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.randomMode.selection,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.randomMode.selection {
+.tilesetPicker .wrapper .selectionsWrapper .tileCursor.randomMode.selection,
+.tilesetPicker .wrapper .cursorsWrapper .tileCursor.randomMode.selection {
   border-color: lightgreen;
   border-style: solid;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.stampMode.selection,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.stampMode.selection {
+.tilesetPicker .wrapper .selectionsWrapper .tileCursor.stampMode.selection,
+.tilesetPicker .wrapper .cursorsWrapper .tileCursor.stampMode.selection {
   border-color: #f3e4a4;
   border-style: solid;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.left,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.left {
+.tilesetPicker .wrapper .selectionsWrapper .tileCursor.left,
+.tilesetPicker .wrapper .cursorsWrapper .tileCursor.left {
   border-left-width: 1px;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.right,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.right {
+.tilesetPicker .wrapper .selectionsWrapper .tileCursor.right,
+.tilesetPicker .wrapper .cursorsWrapper .tileCursor.right {
   border-right-width: 1px;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.top,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.top {
+.tilesetPicker .wrapper .selectionsWrapper .tileCursor.top,
+.tilesetPicker .wrapper .cursorsWrapper .tileCursor.top {
   border-top-width: 1px;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.bottom,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.bottom {
+.tilesetPicker .wrapper .selectionsWrapper .tileCursor.bottom,
+.tilesetPicker .wrapper .cursorsWrapper .tileCursor.bottom {
   border-bottom-width: 1px;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.remove,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.remove {
+.tilesetPicker .wrapper .selectionsWrapper .tileCursor.remove,
+.tilesetPicker .wrapper .cursorsWrapper .tileCursor.remove {
   border-color: red;
+}
+
+.window.singleTilePicker {
+  z-index: 99;
+}
+
+.window.singleTilePicker .content {
+  width: 60vw;
+  height: 60vh;
 }
 
 .instanceEditor {
