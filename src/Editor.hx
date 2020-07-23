@@ -107,16 +107,14 @@ class Editor extends dn.Process {
 				new ui.modal.panel.EditEntityDefs();
 		});
 
-		var bt = jMainPanel.find("button.editTilesets");
-		bt.click( function(_) {
+		jMainPanel.find("button.editTilesets").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditTilesetDefs) )
 				ui.Modal.closeAll();
 			else
 				new ui.modal.panel.EditTilesetDefs();
 		});
 
-		var bt = jMainPanel.find("button.editEnums");
-		bt.click( function(_) {
+		jMainPanel.find("button.editEnums").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditEnums) )
 				ui.Modal.closeAll();
 			else
@@ -124,21 +122,18 @@ class Editor extends dn.Process {
 		});
 
 
-		var bt = jMainPanel.find("button.close");
-		bt.click( function(ev) onClose(ev.getThis()) );
+		jMainPanel.find("button.close").click( function(ev) onClose(ev.getThis()) );
 
 
 		jMainPanel.find("button.showHelp").click( function(_) {
 			onHelp();
 		});
 
-		var e = jMainPanel.find("input#enhanceActiveLayer");
-		e.prop("checked", levelRender.enhanceActiveLayer)
+		jMainPanel.find("input#enhanceActiveLayer")
+			.prop("checked", levelRender.enhanceActiveLayer)
 			.change( function(ev) {
 				levelRender.setEnhanceActiveLayer( ev.getThis().prop("checked") );
 			});
-
-		// jMainPanel.find("h2#levelName").click( function(ev) jMainPanel.find("button.levelList").click() );
 
 
 		// Space bar blocking
