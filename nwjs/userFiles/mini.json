@@ -5,7 +5,7 @@
 	"defaultPivotY" : 0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 18,
+	"nextUid" : 19,
 	"defs" : {
 		"layers" : [
 			{
@@ -52,7 +52,7 @@
 			{
 				"identifier" : "Mob",
 				"uid" : 2,
-				"width" : 16,
+				"width" : 20,
 				"height" : 32,
 				"color" : "#FF0000",
 				"maxPerLevel" : 0,
@@ -66,7 +66,7 @@
 						"type" : { "id" : "F_Enum", "params" : [ 1 ] },
 						"canBeNull" : false,
 						"editorDisplayMode" : "ValueOnly",
-						"editorDisplayPos" : "Above",
+						"editorDisplayPos" : "Center",
 						"min" : null,
 						"max" : null,
 						"defaultOverride" : null
@@ -77,7 +77,7 @@
 						"type" : { "id" : "F_Enum", "params" : [ 10 ] },
 						"canBeNull" : true,
 						"editorDisplayMode" : "ValueOnly",
-						"editorDisplayPos" : "Center",
+						"editorDisplayPos" : "Above",
 						"min" : null,
 						"max" : null,
 						"defaultOverride" : null
@@ -88,7 +88,7 @@
 						"type" : "F_Int",
 						"canBeNull" : false,
 						"editorDisplayMode" : "ValueOnly",
-						"editorDisplayPos" : "Center",
+						"editorDisplayPos" : "Above",
 						"min" : 1,
 						"max" : null,
 						"defaultOverride" : { "id" : "V_Int", "params" : [ 1 ] }
@@ -139,6 +139,16 @@
 				"tileGridSize" : 32,
 				"tileGridSpacing" : 0,
 				"savedSelections" : []
+			},
+			{
+				"identifier" : "Icons",
+				"uid" : 18,
+				"relPath" : "atlas/s4m_ur4i_huge-assetpack-tilemap.png",
+				"pxWid" : 658,
+				"pxHei" : 892,
+				"tileGridSize" : 8,
+				"tileGridSpacing" : 0,
+				"savedSelections" : []
 			}
 		],
 		"enums" : [
@@ -146,10 +156,9 @@
 				"identifier" : "MobType",
 				"uid" : 1,
 				"values" : [
-					{ "id" : "Trash", "tileId" : 4 },
+					{ "id" : "Trash", "tileId" : 7 },
 					{ "id" : "Shooter", "tileId" : 12 },
-					{ "id" : "Ninja", "tileId" : 13 },
-					{ "id" : "Mage", "tileId" : 15 }
+					{ "id" : "Ninja", "tileId" : 13 }
 				],
 				"iconTilesetUid" : 14
 			},
@@ -157,11 +166,11 @@
 				"identifier" : "ItemType",
 				"uid" : 10,
 				"values" : [
-					{ "id" : "Gold", "tileId" : null },
-					{ "id" : "Ammo", "tileId" : null },
-					{ "id" : "Food", "tileId" : null }
+					{ "id" : "Gold", "tileId" : 1510 },
+					{ "id" : "Ammo", "tileId" : 1097 },
+					{ "id" : "Food", "tileId" : 1086 }
 				],
-				"iconTilesetUid" : null
+				"iconTilesetUid" : 18
 			}
 		]
 	},
