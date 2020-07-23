@@ -1599,6 +1599,10 @@ canvas#webgl {
 			ul {
 				overflow: auto;
 			}
+
+			button[class^="import"]{
+				flex: 1 0 100%;
+			}
 		}
 		.enumForm {
 			grid-column: 2/3;

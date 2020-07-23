@@ -1654,6 +1654,10 @@ canvas#webgl {
   overflow: auto;
 }
 
+.window.panel.editEnums .content .enumList button[class^="import"] {
+  flex: 1 0 100%;
+}
+
 .window.panel.editEnums .content .enumForm {
   grid-column: 2/3;
 }
