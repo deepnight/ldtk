@@ -3,7 +3,7 @@ package led.def;
 class EnumDef {
 	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
-	public var values : Array<String> = [];
+	public var values : Array<{ id:String }> = [];
 	public var iconTilesetUid : Null<Int>;
 
 	public function new(uid:Int, id:String) {
@@ -26,8 +26,8 @@ class EnumDef {
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
 		var ed = new EnumDef(JsonTools.readInt(json.uid), json.identifier);
 
-		for(v in JsonTools.readArray(json.values))
-			ed.values.push(v);
+		for(v in JsonTools.readArray(json.values)) // TODO
+			ed.addValue(v);
 
 		ed.iconTilesetUid = JsonTools.readNullableInt(json.iconTilesetUid);
 
@@ -46,7 +46,7 @@ class EnumDef {
 	public function hasValue(v:String) {
 		v = Project.cleanupIdentifier(v,true);
 		for(ev in values)
-			if( ev==v )
+			if( ev.id==v )
 				return true;
 
 		return false;
@@ -61,18 +61,18 @@ class EnumDef {
 			return false;
 
 		v = Project.cleanupIdentifier(v,true);
-		values.push(v);
+		values.push({ id:v });
 		return true;
 	}
 
-	public function renameValue(from,to) {
+	public function renameValue(from:String, to:String) {
 		to = Project.cleanupIdentifier(to,true);
 		if( to==null || !isValueIdentifierValidAndUnique(to) )
 			return false;
 
 		for(i in 0...values.length)
-			if( values[i]==from ) {
-				values[i] = to;
+			if( values[i].id==from ) {
+				values[i].id = to;
 				return true;
 			}
 

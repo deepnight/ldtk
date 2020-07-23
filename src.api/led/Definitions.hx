@@ -258,10 +258,14 @@ class Definitions {
 		_project.tidy();
 	}
 
-	public function removeEnumDefValue(ed:led.def.EnumDef, v:String) {
-		if( !ed.values.remove(v) )
-			throw "EnumDef value not found";
-		_project.tidy();
+	public function removeEnumDefValue(ed:led.def.EnumDef, id:String) {
+		for(e in ed.values)
+			if( e.id==id ) {
+				ed.values.remove(e);
+				_project.tidy();
+			}
+
+		throw "EnumDef value not found";
 	}
 
 	public function isEnumIdentifierUnique(id:String) {

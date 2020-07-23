@@ -141,16 +141,16 @@ class EditEnums extends ui.modal.Panel {
 			li.append( xml.clone() );
 
 			var i = new form.input.StringInput(li.find(".name"),
-				function() return v,
+				function() return v.id,
 				function(newV) {
-					if( curEnum.renameValue(v, newV) ) {
+					if( curEnum.renameValue(v.id, newV) ) {
 						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-							if( fi.getEnumValue()==v )
+							if( fi.getEnumValue()==v.id )
 								fi.parseValue(newV);
 						});
 					}
 					else
-						N.invalidIdentifier(v);
+						N.invalidIdentifier(v.id);
 				}
 			);
 			i.linkEvent(EnumDefChanged);
@@ -161,10 +161,10 @@ class EditEnums extends ui.modal.Panel {
 					new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+v }), project);
 
 					project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-						if( fi.getEnumValue()==v )
+						if( fi.getEnumValue()==v.id )
 							fi.parseValue(null);
 					});
-					project.defs.removeEnumDefValue(curEnum, v);
+					project.defs.removeEnumDefValue(curEnum, v.id);
 					editor.ge.emit(EnumDefValueRemoved);
 				});
 			});
