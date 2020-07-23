@@ -67,12 +67,9 @@ class Definitions {
 		return false;
 	}
 
-	public function getLayerDef(?uid:Int, ?id:String) : Null<led.def.LayerDef> {
-		if( uid==null && id==null )
-			throw "Need 1 parameter";
-
+	public function getLayerDef(id:haxe.extern.EitherType<String,Int>) : Null<led.def.LayerDef> {
 		for(ld in layers)
-			if( ld.uid==uid || ld.identifier==id )
+			if( ld.uid==id || ld.identifier==id )
 				return ld;
 		return null;
 	}
@@ -127,9 +124,9 @@ class Definitions {
 
 	/**  ENTITY DEFS  *****************************************/
 
-	public function getEntityDef(uid:Int) : Null<led.def.EntityDef> {
+	public function getEntityDef(id:haxe.extern.EitherType<String,Int>) : Null<led.def.EntityDef> {
 		for(ed in entities)
-			if( ed.uid==uid )
+			if( ed.uid==id || ed.identifier==id )
 				return ed;
 		return null;
 	}
@@ -183,10 +180,10 @@ class Definitions {
 
 	/**  FIELD DEFS  *****************************************/
 
-	public function getFieldDef(id:Int) : Null<led.def.FieldDef> {
+	public function getFieldDef(id:haxe.extern.EitherType<String,Int>) : Null<led.def.FieldDef> {
 		for(ed in entities)
 		for(fd in ed.fieldDefs)
-			if( fd.uid==id )
+			if( fd.uid==id || fd.identifier==id )
 				return fd;
 
 		return null;
@@ -216,9 +213,9 @@ class Definitions {
 		_project.tidy();
 	}
 
-	public function getTilesetDef(uid:Int) : Null<led.def.TilesetDef> {
+	public function getTilesetDef(id:haxe.extern.EitherType<String,Int>) : Null<led.def.TilesetDef> {
 		for(td in tilesets)
-			if( td.uid==uid )
+			if( td.uid==id || td.identifier==id )
 				return td;
 		return null;
 	}
@@ -278,9 +275,9 @@ class Definitions {
 		return true;
 	}
 
-	public function getEnumDef(?uid:Int, ?id:String) : Null<led.def.EnumDef> {
+	public function getEnumDef(id:haxe.extern.EitherType<String,Int>) : Null<led.def.EnumDef> {
 		for(ed in enums)
-			if( ed.uid==uid || ed.identifier==id )
+			if( ed.uid==id || ed.identifier==id )
 				return ed;
 		return null;
 	}
