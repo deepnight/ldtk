@@ -172,7 +172,7 @@ class Project {
 		id = reg.replace(id, "_");
 
 		// Checks identifier syntax (letters or _ )
-		reg = ~/^[a-z_]+[a-z0-9_]*$/gi; // TODO not checking leading numbers
+		reg = ~/^[a-z_]+[a-z0-9_]*$/gi;
 		if( reg.match(id) ) {
 			if( capitalizeFirstLetter ) {
 				reg = ~/^(_*)([a-z])([a-zA-Z0-9_]*)/g; // extract first letter, if it's lowercase
