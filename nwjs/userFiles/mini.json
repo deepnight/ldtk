@@ -1,951 +1,492 @@
 {
-	"name":"Mini lab",
-	"dataVersion":1,
-	"defaultPivotX":0,
-	"defaultPivotY":0,
-	"defaultGridSize":16,
-	"bgColor":"#7F8093",
-	"nextUniqId":18,
-	"defs":{
-		"layers":[
+	"name" : "Mini lab",
+	"dataVersion" : 1,
+	"defaultPivotX" : 0,
+	"defaultPivotY" : 0,
+	"defaultGridSize" : 16,
+	"bgColor" : "#7F8093",
+	"nextUid" : 18,
+	"defs" : {
+		"layers" : [
 			{
-				"identifier":"Entities",
-				"type":"Entities",
-				"uid":4,
-				"gridSize":16,
-				"displayOpacity":1,
-				"intGridValues":[
-					{
-						"color":"#000000"
-					}
+				"identifier" : "Entities",
+				"type" : "Entities",
+				"uid" : 4,
+				"gridSize" : 16,
+				"displayOpacity" : 1,
+				"intGridValues" : [
+					{ "name" : null, "color" : "#000000" }
 				],
-				"tilesetDefUid":null,
-				"tilePivotX":0,
-				"tilePivotY":0
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
 			},
 			{
-				"identifier":"IntGrid",
-				"type":"IntGrid",
-				"uid":13,
-				"gridSize":16,
-				"displayOpacity":1,
-				"intGridValues":[
-					{
-						"color":"#000000"
-					}
+				"identifier" : "IntGrid",
+				"type" : "IntGrid",
+				"uid" : 13,
+				"gridSize" : 16,
+				"displayOpacity" : 1,
+				"intGridValues" : [
+					{ "name" : null, "color" : "#000000" }
 				],
-				"tilesetDefUid":null,
-				"tilePivotX":0,
-				"tilePivotY":0
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
 			},
 			{
-				"identifier":"Tiles",
-				"type":"Tiles",
-				"uid":15,
-				"gridSize":32,
-				"displayOpacity":1,
-				"intGridValues":[
-					{
-						"color":"#000000"
-					}
+				"identifier" : "Tiles",
+				"type" : "Tiles",
+				"uid" : 15,
+				"gridSize" : 32,
+				"displayOpacity" : 1,
+				"intGridValues" : [
+					{ "name" : null, "color" : "#000000" }
 				],
-				"tilesetDefUid":14,
-				"tilePivotX":0,
-				"tilePivotY":0
+				"tilesetDefUid" : 14,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
 			}
 		],
-		"entities":[
+		"entities" : [
 			{
-				"identifier":"Mob",
-				"uid":2,
-				"width":16,
-				"height":32,
-				"color":"#FF0000",
-				"maxPerLevel":0,
-				"discardExcess":true,
-				"pivotX":0.5,
-				"pivotY":1,
-				"fieldDefs":[
+				"identifier" : "Mob",
+				"uid" : 2,
+				"width" : 16,
+				"height" : 32,
+				"color" : "#FF0000",
+				"maxPerLevel" : 0,
+				"discardExcess" : true,
+				"pivotX" : 0.5,
+				"pivotY" : 1,
+				"fieldDefs" : [
 					{
-						"identifier":"mobType",
-						"uid":3,
-						"type":{
-							"id":"F_Enum",
-							"params":[
-								1
-							]
-						},
-						"canBeNull":false,
-						"editorDisplayMode":"ValueOnly",
-						"editorDisplayPos":"Above",
-						"min":null,
-						"max":null,
-						"defaultOverride":null
+						"identifier" : "mobType",
+						"uid" : 3,
+						"type" : { "id" : "F_Enum", "params" : [ 1 ] },
+						"canBeNull" : false,
+						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayPos" : "Above",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
 					},
 					{
-						"identifier":"loot",
-						"uid":11,
-						"type":{
-							"id":"F_Enum",
-							"params":[
-								10
-							]
-						},
-						"canBeNull":true,
-						"editorDisplayMode":"ValueOnly",
-						"editorDisplayPos":"Center",
-						"min":null,
-						"max":null,
-						"defaultOverride":null
+						"identifier" : "loot",
+						"uid" : 11,
+						"type" : { "id" : "F_Enum", "params" : [ 10 ] },
+						"canBeNull" : true,
+						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayPos" : "Center",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
 					},
 					{
-						"identifier":"lootCount",
-						"uid":12,
-						"type":"F_Int",
-						"canBeNull":false,
-						"editorDisplayMode":"ValueOnly",
-						"editorDisplayPos":"Center",
-						"min":1,
-						"max":null,
-						"defaultOverride":{
-							"id":"V_Int",
-							"params":[
-								1
-							]
-						}
+						"identifier" : "lootCount",
+						"uid" : 12,
+						"type" : "F_Int",
+						"canBeNull" : false,
+						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayPos" : "Center",
+						"min" : 1,
+						"max" : null,
+						"defaultOverride" : { "id" : "V_Int", "params" : [ 1 ] }
 					},
 					{
-						"identifier":"elite",
-						"uid":5,
-						"type":"F_Bool",
-						"canBeNull":false,
-						"editorDisplayMode":"ValueOnly",
-						"editorDisplayPos":"Above",
-						"min":null,
-						"max":null,
-						"defaultOverride":null
+						"identifier" : "elite",
+						"uid" : 5,
+						"type" : "F_Bool",
+						"canBeNull" : false,
+						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayPos" : "Above",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
 					},
 					{
-						"identifier":"lifeOverride",
-						"uid":6,
-						"type":"F_Int",
-						"canBeNull":true,
-						"editorDisplayMode":"NameAndValue",
-						"editorDisplayPos":"Above",
-						"min":1,
-						"max":null,
-						"defaultOverride":null
+						"identifier" : "lifeOverride",
+						"uid" : 6,
+						"type" : "F_Int",
+						"canBeNull" : true,
+						"editorDisplayMode" : "NameAndValue",
+						"editorDisplayPos" : "Above",
+						"min" : 1,
+						"max" : null,
+						"defaultOverride" : null
 					},
 					{
-						"identifier":"scale",
-						"uid":7,
-						"type":"F_Float",
-						"canBeNull":false,
-						"editorDisplayMode":"NameAndValue",
-						"editorDisplayPos":"Above",
-						"min":0.1,
-						"max":4,
-						"defaultOverride":{
-							"id":"V_Float",
-							"params":[
-								1
-							]
-						}
+						"identifier" : "scale",
+						"uid" : 7,
+						"type" : "F_Float",
+						"canBeNull" : false,
+						"editorDisplayMode" : "NameAndValue",
+						"editorDisplayPos" : "Above",
+						"min" : 0.1,
+						"max" : 4,
+						"defaultOverride" : { "id" : "V_Float", "params" : [ 1 ] }
 					}
 				]
 			}
 		],
-		"tilesets":[
+		"tilesets" : [
 			{
-				"identifier":"Gif87a",
-				"uid":14,
-				"relPath":"atlas/gif87a.gif",
-				"pxWid":192,
-				"pxHei":128,
-				"tileGridSize":32,
-				"tileGridSpacing":0,
-				"savedSelections":[
-					
-				]
+				"identifier" : "Gif87a",
+				"uid" : 14,
+				"relPath" : "atlas/gif87a.gif",
+				"pxWid" : 192,
+				"pxHei" : 128,
+				"tileGridSize" : 32,
+				"tileGridSpacing" : 0,
+				"savedSelections" : []
 			}
 		],
-		"enums":[
+		"enums" : [
 			{
-				"identifier":"MobType",
-				"uid":1,
-				"values":[
+				"identifier" : "MobType",
+				"uid" : 1,
+				"values" : [
 					"Trash",
 					"Shooter",
 					"Ninja"
 				]
 			},
 			{
-				"identifier":"ItemType",
-				"uid":10,
-				"values":[
-					"Gold",
-					"Ammo",
-					"Food"
-				]
+				"identifier" : "ItemType",
+				"uid" : 10,
+				"values" : [ "Gold", "Ammo", "Food" ]
 			}
 		]
 	},
-	"levels":[
+	"levels" : [
 		{
-			"identifier":"Level0",
-			"uid":0,
-			"pxWid":256,
-			"pxHei":320,
-			"layerInstances":[
+			"identifier" : "Level0",
+			"uid" : 0,
+			"pxWid" : 256,
+			"pxHei" : 320,
+			"layerInstances" : [
 				{
-					"_identifier":"Entities",
-					"levelId":0,
-					"layerDefUid":4,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
-					],
-					"gridTiles":[
-						
-					],
-					"entityInstances":[
+					"_identifier" : "Entities",
+					"levelId" : 0,
+					"layerDefUid" : 4,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
+					"gridTiles" : [],
+					"entityInstances" : [
 						{
-							"_identifier":"Mob",
-							"_cx":3,
-							"_cy":5,
-							"defUid":2,
-							"x":56,
-							"y":96,
-							"fieldInstances":[
+							"_identifier" : "Mob",
+							"_cx" : 3,
+							"_cy" : 5,
+							"defUid" : 2,
+							"x" : 56,
+							"y" : 96,
+							"fieldInstances" : [
 								{
-									"_identifier":"mobType",
-									"_value":"Trash",
-									"defUid":3,
-									"realEditorValue":{
-										"id":"V_String",
-										"params":[
-											"Trash"
-										]
-									}
+									"_identifier" : "mobType",
+									"_value" : "Trash",
+									"defUid" : 3,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Trash" ] }
 								},
+								{ "_identifier" : "elite", "_value" : false, "defUid" : 5, "realEditorValue" : null },
 								{
-									"_identifier":"elite",
-									"_value":false,
-									"defUid":5,
-									"realEditorValue":null
+									"_identifier" : "lifeOverride",
+									"_value" : null,
+									"defUid" : 6,
+									"realEditorValue" : null
 								},
+								{ "_identifier" : "scale", "_value" : 1, "defUid" : 7, "realEditorValue" : null },
+								{ "_identifier" : "loot", "_value" : null, "defUid" : 11, "realEditorValue" : null },
 								{
-									"_identifier":"lifeOverride",
-									"_value":null,
-									"defUid":6,
-									"realEditorValue":null
-								},
-								{
-									"_identifier":"scale",
-									"_value":1,
-									"defUid":7,
-									"realEditorValue":null
-								},
-								{
-									"_identifier":"loot",
-									"_value":null,
-									"defUid":11,
-									"realEditorValue":null
-								},
-								{
-									"_identifier":"lootCount",
-									"_value":1,
-									"defUid":12,
-									"realEditorValue":null
+									"_identifier" : "lootCount",
+									"_value" : 1,
+									"defUid" : 12,
+									"realEditorValue" : null
 								}
 							]
 						},
 						{
-							"_identifier":"Mob",
-							"_cx":12,
-							"_cy":5,
-							"defUid":2,
-							"x":200,
-							"y":96,
-							"fieldInstances":[
+							"_identifier" : "Mob",
+							"_cx" : 12,
+							"_cy" : 5,
+							"defUid" : 2,
+							"x" : 200,
+							"y" : 96,
+							"fieldInstances" : [
 								{
-									"_identifier":"mobType",
-									"_value":"Ninja",
-									"defUid":3,
-									"realEditorValue":{
-										"id":"V_String",
-										"params":[
-											"Ninja"
-										]
-									}
+									"_identifier" : "mobType",
+									"_value" : "Ninja",
+									"defUid" : 3,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Ninja" ] }
+								},
+								{ "_identifier" : "elite", "_value" : false, "defUid" : 5, "realEditorValue" : null },
+								{
+									"_identifier" : "lifeOverride",
+									"_value" : null,
+									"defUid" : 6,
+									"realEditorValue" : null
+								},
+								{ "_identifier" : "scale", "_value" : 1, "defUid" : 7, "realEditorValue" : null },
+								{
+									"_identifier" : "loot",
+									"_value" : "Ammo",
+									"defUid" : 11,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Ammo" ] }
 								},
 								{
-									"_identifier":"elite",
-									"_value":false,
-									"defUid":5,
-									"realEditorValue":null
-								},
-								{
-									"_identifier":"lifeOverride",
-									"_value":null,
-									"defUid":6,
-									"realEditorValue":null
-								},
-								{
-									"_identifier":"scale",
-									"_value":1,
-									"defUid":7,
-									"realEditorValue":null
-								},
-								{
-									"_identifier":"loot",
-									"_value":"Ammo",
-									"defUid":11,
-									"realEditorValue":{
-										"id":"V_String",
-										"params":[
-											"Ammo"
-										]
-									}
-								},
-								{
-									"_identifier":"lootCount",
-									"_value":10,
-									"defUid":12,
-									"realEditorValue":{
-										"id":"V_Int",
-										"params":[
-											10
-										]
-									}
+									"_identifier" : "lootCount",
+									"_value" : 10,
+									"defUid" : 12,
+									"realEditorValue" : { "id" : "V_Int", "params" : [ 10 ] }
 								}
 							]
 						},
 						{
-							"_identifier":"Mob",
-							"_cx":2,
-							"_cy":11,
-							"defUid":2,
-							"x":40,
-							"y":192,
-							"fieldInstances":[
+							"_identifier" : "Mob",
+							"_cx" : 2,
+							"_cy" : 11,
+							"defUid" : 2,
+							"x" : 40,
+							"y" : 192,
+							"fieldInstances" : [
 								{
-									"_identifier":"mobType",
-									"_value":"Trash",
-									"defUid":3,
-									"realEditorValue":{
-										"id":"V_String",
-										"params":[
-											"Trash"
-										]
-									}
+									"_identifier" : "mobType",
+									"_value" : "Trash",
+									"defUid" : 3,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Trash" ] }
 								},
+								{ "_identifier" : "elite", "_value" : false, "defUid" : 5, "realEditorValue" : null },
 								{
-									"_identifier":"elite",
-									"_value":false,
-									"defUid":5,
-									"realEditorValue":null
+									"_identifier" : "lifeOverride",
+									"_value" : null,
+									"defUid" : 6,
+									"realEditorValue" : null
 								},
+								{ "_identifier" : "scale", "_value" : 1, "defUid" : 7, "realEditorValue" : null },
+								{ "_identifier" : "loot", "_value" : null, "defUid" : 11, "realEditorValue" : null },
 								{
-									"_identifier":"lifeOverride",
-									"_value":null,
-									"defUid":6,
-									"realEditorValue":null
-								},
-								{
-									"_identifier":"scale",
-									"_value":1,
-									"defUid":7,
-									"realEditorValue":null
-								},
-								{
-									"_identifier":"loot",
-									"_value":null,
-									"defUid":11,
-									"realEditorValue":null
-								},
-								{
-									"_identifier":"lootCount",
-									"_value":1,
-									"defUid":12,
-									"realEditorValue":null
+									"_identifier" : "lootCount",
+									"_value" : 1,
+									"defUid" : 12,
+									"realEditorValue" : null
 								}
 							]
 						},
 						{
-							"_identifier":"Mob",
-							"_cx":8,
-							"_cy":11,
-							"defUid":2,
-							"x":136,
-							"y":192,
-							"fieldInstances":[
+							"_identifier" : "Mob",
+							"_cx" : 8,
+							"_cy" : 11,
+							"defUid" : 2,
+							"x" : 136,
+							"y" : 192,
+							"fieldInstances" : [
 								{
-									"_identifier":"mobType",
-									"_value":"Ninja",
-									"defUid":3,
-									"realEditorValue":{
-										"id":"V_String",
-										"params":[
-											"Ninja"
-										]
-									}
+									"_identifier" : "mobType",
+									"_value" : "Ninja",
+									"defUid" : 3,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Ninja" ] }
 								},
 								{
-									"_identifier":"elite",
-									"_value":true,
-									"defUid":5,
-									"realEditorValue":{
-										"id":"V_Bool",
-										"params":[
-											true
-										]
-									}
+									"_identifier" : "elite",
+									"_value" : true,
+									"defUid" : 5,
+									"realEditorValue" : { "id" : "V_Bool", "params" : [ true ] }
 								},
 								{
-									"_identifier":"lifeOverride",
-									"_value":10,
-									"defUid":6,
-									"realEditorValue":{
-										"id":"V_Int",
-										"params":[
-											10
-										]
-									}
+									"_identifier" : "lifeOverride",
+									"_value" : 10,
+									"defUid" : 6,
+									"realEditorValue" : { "id" : "V_Int", "params" : [ 10 ] }
 								},
 								{
-									"_identifier":"scale",
-									"_value":2,
-									"defUid":7,
-									"realEditorValue":{
-										"id":"V_Float",
-										"params":[
-											2
-										]
-									}
+									"_identifier" : "scale",
+									"_value" : 2,
+									"defUid" : 7,
+									"realEditorValue" : { "id" : "V_Float", "params" : [ 2 ] }
 								},
 								{
-									"_identifier":"loot",
-									"_value":"Gold",
-									"defUid":11,
-									"realEditorValue":{
-										"id":"V_String",
-										"params":[
-											"Gold"
-										]
-									}
+									"_identifier" : "loot",
+									"_value" : "Gold",
+									"defUid" : 11,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Gold" ] }
 								},
 								{
-									"_identifier":"lootCount",
-									"_value":150,
-									"defUid":12,
-									"realEditorValue":{
-										"id":"V_Int",
-										"params":[
-											150
-										]
-									}
+									"_identifier" : "lootCount",
+									"_value" : 150,
+									"defUid" : 12,
+									"realEditorValue" : { "id" : "V_Int", "params" : [ 150 ] }
 								}
 							]
 						},
 						{
-							"_identifier":"Mob",
-							"_cx":14,
-							"_cy":11,
-							"defUid":2,
-							"x":232,
-							"y":192,
-							"fieldInstances":[
+							"_identifier" : "Mob",
+							"_cx" : 14,
+							"_cy" : 11,
+							"defUid" : 2,
+							"x" : 232,
+							"y" : 192,
+							"fieldInstances" : [
 								{
-									"_identifier":"mobType",
-									"_value":"Shooter",
-									"defUid":3,
-									"realEditorValue":{
-										"id":"V_String",
-										"params":[
-											"Shooter"
-										]
-									}
+									"_identifier" : "mobType",
+									"_value" : "Shooter",
+									"defUid" : 3,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Shooter" ] }
 								},
 								{
-									"_identifier":"elite",
-									"_value":true,
-									"defUid":5,
-									"realEditorValue":{
-										"id":"V_Bool",
-										"params":[
-											true
-										]
-									}
+									"_identifier" : "elite",
+									"_value" : true,
+									"defUid" : 5,
+									"realEditorValue" : { "id" : "V_Bool", "params" : [ true ] }
 								},
 								{
-									"_identifier":"lifeOverride",
-									"_value":null,
-									"defUid":6,
-									"realEditorValue":null
+									"_identifier" : "lifeOverride",
+									"_value" : null,
+									"defUid" : 6,
+									"realEditorValue" : null
 								},
 								{
-									"_identifier":"scale",
-									"_value":2,
-									"defUid":7,
-									"realEditorValue":{
-										"id":"V_Float",
-										"params":[
-											2
-										]
-									}
+									"_identifier" : "scale",
+									"_value" : 2,
+									"defUid" : 7,
+									"realEditorValue" : { "id" : "V_Float", "params" : [ 2 ] }
 								},
 								{
-									"_identifier":"loot",
-									"_value":"Food",
-									"defUid":11,
-									"realEditorValue":{
-										"id":"V_String",
-										"params":[
-											"Food"
-										]
-									}
+									"_identifier" : "loot",
+									"_value" : "Food",
+									"defUid" : 11,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Food" ] }
 								},
 								{
-									"_identifier":"lootCount",
-									"_value":1,
-									"defUid":12,
-									"realEditorValue":null
+									"_identifier" : "lootCount",
+									"_value" : 1,
+									"defUid" : 12,
+									"realEditorValue" : null
 								}
 							]
 						}
 					]
 				},
 				{
-					"_identifier":"IntGrid",
-					"levelId":0,
-					"layerDefUid":13,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						{
-							"coordId":98,
-							"v":0
-						},
-						{
-							"coordId":99,
-							"v":0
-						},
-						{
-							"coordId":108,
-							"v":0
-						},
-						{
-							"coordId":109,
-							"v":0
-						},
-						{
-							"coordId":192,
-							"v":0
-						},
-						{
-							"coordId":193,
-							"v":0
-						},
-						{
-							"coordId":194,
-							"v":0
-						},
-						{
-							"coordId":195,
-							"v":0
-						},
-						{
-							"coordId":196,
-							"v":0
-						},
-						{
-							"coordId":197,
-							"v":0
-						},
-						{
-							"coordId":198,
-							"v":0
-						},
-						{
-							"coordId":199,
-							"v":0
-						},
-						{
-							"coordId":200,
-							"v":0
-						},
-						{
-							"coordId":201,
-							"v":0
-						},
-						{
-							"coordId":202,
-							"v":0
-						},
-						{
-							"coordId":203,
-							"v":0
-						},
-						{
-							"coordId":204,
-							"v":0
-						},
-						{
-							"coordId":205,
-							"v":0
-						},
-						{
-							"coordId":206,
-							"v":0
-						},
-						{
-							"coordId":207,
-							"v":0
-						}
+					"_identifier" : "IntGrid",
+					"levelId" : 0,
+					"layerDefUid" : 13,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [
+						{ "coordId" : 98, "v" : 0 },
+						{ "coordId" : 99, "v" : 0 },
+						{ "coordId" : 108, "v" : 0 },
+						{ "coordId" : 109, "v" : 0 },
+						{ "coordId" : 192, "v" : 0 },
+						{ "coordId" : 193, "v" : 0 },
+						{ "coordId" : 194, "v" : 0 },
+						{ "coordId" : 195, "v" : 0 },
+						{ "coordId" : 196, "v" : 0 },
+						{ "coordId" : 197, "v" : 0 },
+						{ "coordId" : 198, "v" : 0 },
+						{ "coordId" : 199, "v" : 0 },
+						{ "coordId" : 200, "v" : 0 },
+						{ "coordId" : 201, "v" : 0 },
+						{ "coordId" : 202, "v" : 0 },
+						{ "coordId" : 203, "v" : 0 },
+						{ "coordId" : 204, "v" : 0 },
+						{ "coordId" : 205, "v" : 0 },
+						{ "coordId" : 206, "v" : 0 },
+						{ "coordId" : 207, "v" : 0 }
 					],
-					"gridTiles":[
-						
-					],
-					"entityInstances":[
-						
-					]
+					"gridTiles" : [],
+					"entityInstances" : []
 				},
 				{
-					"_identifier":"Tiles",
-					"levelId":0,
-					"layerDefUid":15,
-					"pxOffsetX":0,
-					"pxOffsetY":0,
-					"intGrid":[
-						
+					"_identifier" : "Tiles",
+					"levelId" : 0,
+					"layerDefUid" : 15,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
+					"gridTiles" : [
+						{ "coordId" : 0, "v" : 7 },
+						{ "coordId" : 1, "v" : 7 },
+						{ "coordId" : 2, "v" : 7 },
+						{ "coordId" : 3, "v" : 7 },
+						{ "coordId" : 4, "v" : 7 },
+						{ "coordId" : 5, "v" : 7 },
+						{ "coordId" : 6, "v" : 7 },
+						{ "coordId" : 7, "v" : 7 },
+						{ "coordId" : 8, "v" : 7 },
+						{ "coordId" : 9, "v" : 7 },
+						{ "coordId" : 10, "v" : 7 },
+						{ "coordId" : 11, "v" : 16 },
+						{ "coordId" : 12, "v" : 16 },
+						{ "coordId" : 13, "v" : 7 },
+						{ "coordId" : 14, "v" : 7 },
+						{ "coordId" : 15, "v" : 7 },
+						{ "coordId" : 16, "v" : 7 },
+						{ "coordId" : 17, "v" : 7 },
+						{ "coordId" : 18, "v" : 7 },
+						{ "coordId" : 19, "v" : 16 },
+						{ "coordId" : 20, "v" : 16 },
+						{ "coordId" : 21, "v" : 7 },
+						{ "coordId" : 22, "v" : 7 },
+						{ "coordId" : 23, "v" : 7 },
+						{ "coordId" : 24, "v" : 7 },
+						{ "coordId" : 25, "v" : 11 },
+						{ "coordId" : 26, "v" : 7 },
+						{ "coordId" : 27, "v" : 7 },
+						{ "coordId" : 28, "v" : 7 },
+						{ "coordId" : 29, "v" : 7 },
+						{ "coordId" : 30, "v" : 11 },
+						{ "coordId" : 31, "v" : 7 },
+						{ "coordId" : 32, "v" : 7 },
+						{ "coordId" : 33, "v" : 17 },
+						{ "coordId" : 34, "v" : 15 },
+						{ "coordId" : 35, "v" : 15 },
+						{ "coordId" : 36, "v" : 7 },
+						{ "coordId" : 37, "v" : 7 },
+						{ "coordId" : 38, "v" : 17 },
+						{ "coordId" : 39, "v" : 7 },
+						{ "coordId" : 40, "v" : 7 },
+						{ "coordId" : 41, "v" : 17 },
+						{ "coordId" : 42, "v" : 15 },
+						{ "coordId" : 43, "v" : 15 },
+						{ "coordId" : 44, "v" : 7 },
+						{ "coordId" : 45, "v" : 7 },
+						{ "coordId" : 46, "v" : 17 },
+						{ "coordId" : 47, "v" : 7 },
+						{ "coordId" : 48, "v" : 23 },
+						{ "coordId" : 49, "v" : 22 },
+						{ "coordId" : 50, "v" : 22 },
+						{ "coordId" : 51, "v" : 22 },
+						{ "coordId" : 52, "v" : 23 },
+						{ "coordId" : 53, "v" : 22 },
+						{ "coordId" : 54, "v" : 23 },
+						{ "coordId" : 55, "v" : 22 },
+						{ "coordId" : 56, "v" : 23 },
+						{ "coordId" : 57, "v" : 23 },
+						{ "coordId" : 58, "v" : 22 },
+						{ "coordId" : 59, "v" : 23 },
+						{ "coordId" : 60, "v" : 23 },
+						{ "coordId" : 61, "v" : 22 },
+						{ "coordId" : 62, "v" : 22 },
+						{ "coordId" : 63, "v" : 22 },
+						{ "coordId" : 64, "v" : 22 },
+						{ "coordId" : 65, "v" : 22 },
+						{ "coordId" : 66, "v" : 22 },
+						{ "coordId" : 67, "v" : 22 },
+						{ "coordId" : 68, "v" : 22 },
+						{ "coordId" : 69, "v" : 23 },
+						{ "coordId" : 70, "v" : 22 },
+						{ "coordId" : 71, "v" : 23 },
+						{ "coordId" : 72, "v" : 23 },
+						{ "coordId" : 73, "v" : 22 },
+						{ "coordId" : 74, "v" : 22 },
+						{ "coordId" : 75, "v" : 22 },
+						{ "coordId" : 76, "v" : 23 },
+						{ "coordId" : 77, "v" : 22 },
+						{ "coordId" : 78, "v" : 22 },
+						{ "coordId" : 79, "v" : 22 }
 					],
-					"gridTiles":[
-						{
-							"coordId":0,
-							"v":7
-						},
-						{
-							"coordId":1,
-							"v":7
-						},
-						{
-							"coordId":2,
-							"v":7
-						},
-						{
-							"coordId":3,
-							"v":7
-						},
-						{
-							"coordId":4,
-							"v":7
-						},
-						{
-							"coordId":5,
-							"v":7
-						},
-						{
-							"coordId":6,
-							"v":7
-						},
-						{
-							"coordId":7,
-							"v":7
-						},
-						{
-							"coordId":8,
-							"v":7
-						},
-						{
-							"coordId":9,
-							"v":7
-						},
-						{
-							"coordId":10,
-							"v":7
-						},
-						{
-							"coordId":11,
-							"v":16
-						},
-						{
-							"coordId":12,
-							"v":16
-						},
-						{
-							"coordId":13,
-							"v":7
-						},
-						{
-							"coordId":14,
-							"v":7
-						},
-						{
-							"coordId":15,
-							"v":7
-						},
-						{
-							"coordId":16,
-							"v":7
-						},
-						{
-							"coordId":17,
-							"v":7
-						},
-						{
-							"coordId":18,
-							"v":7
-						},
-						{
-							"coordId":19,
-							"v":16
-						},
-						{
-							"coordId":20,
-							"v":16
-						},
-						{
-							"coordId":21,
-							"v":7
-						},
-						{
-							"coordId":22,
-							"v":7
-						},
-						{
-							"coordId":23,
-							"v":7
-						},
-						{
-							"coordId":24,
-							"v":7
-						},
-						{
-							"coordId":25,
-							"v":11
-						},
-						{
-							"coordId":26,
-							"v":7
-						},
-						{
-							"coordId":27,
-							"v":7
-						},
-						{
-							"coordId":28,
-							"v":7
-						},
-						{
-							"coordId":29,
-							"v":7
-						},
-						{
-							"coordId":30,
-							"v":11
-						},
-						{
-							"coordId":31,
-							"v":7
-						},
-						{
-							"coordId":32,
-							"v":7
-						},
-						{
-							"coordId":33,
-							"v":17
-						},
-						{
-							"coordId":34,
-							"v":15
-						},
-						{
-							"coordId":35,
-							"v":15
-						},
-						{
-							"coordId":36,
-							"v":7
-						},
-						{
-							"coordId":37,
-							"v":7
-						},
-						{
-							"coordId":38,
-							"v":17
-						},
-						{
-							"coordId":39,
-							"v":7
-						},
-						{
-							"coordId":40,
-							"v":7
-						},
-						{
-							"coordId":41,
-							"v":17
-						},
-						{
-							"coordId":42,
-							"v":15
-						},
-						{
-							"coordId":43,
-							"v":15
-						},
-						{
-							"coordId":44,
-							"v":7
-						},
-						{
-							"coordId":45,
-							"v":7
-						},
-						{
-							"coordId":46,
-							"v":17
-						},
-						{
-							"coordId":47,
-							"v":7
-						},
-						{
-							"coordId":48,
-							"v":23
-						},
-						{
-							"coordId":49,
-							"v":22
-						},
-						{
-							"coordId":50,
-							"v":22
-						},
-						{
-							"coordId":51,
-							"v":22
-						},
-						{
-							"coordId":52,
-							"v":23
-						},
-						{
-							"coordId":53,
-							"v":22
-						},
-						{
-							"coordId":54,
-							"v":23
-						},
-						{
-							"coordId":55,
-							"v":22
-						},
-						{
-							"coordId":56,
-							"v":23
-						},
-						{
-							"coordId":57,
-							"v":23
-						},
-						{
-							"coordId":58,
-							"v":22
-						},
-						{
-							"coordId":59,
-							"v":23
-						},
-						{
-							"coordId":60,
-							"v":23
-						},
-						{
-							"coordId":61,
-							"v":22
-						},
-						{
-							"coordId":62,
-							"v":22
-						},
-						{
-							"coordId":63,
-							"v":22
-						},
-						{
-							"coordId":64,
-							"v":22
-						},
-						{
-							"coordId":65,
-							"v":22
-						},
-						{
-							"coordId":66,
-							"v":22
-						},
-						{
-							"coordId":67,
-							"v":22
-						},
-						{
-							"coordId":68,
-							"v":22
-						},
-						{
-							"coordId":69,
-							"v":23
-						},
-						{
-							"coordId":70,
-							"v":22
-						},
-						{
-							"coordId":71,
-							"v":23
-						},
-						{
-							"coordId":72,
-							"v":23
-						},
-						{
-							"coordId":73,
-							"v":22
-						},
-						{
-							"coordId":74,
-							"v":22
-						},
-						{
-							"coordId":75,
-							"v":22
-						},
-						{
-							"coordId":76,
-							"v":23
-						},
-						{
-							"coordId":77,
-							"v":22
-						},
-						{
-							"coordId":78,
-							"v":22
-						},
-						{
-							"coordId":79,
-							"v":22
-						}
-					],
-					"entityInstances":[
-						
-					]
+					"entityInstances" : []
 				}
 			]
 		}

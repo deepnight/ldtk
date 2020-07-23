@@ -11,7 +11,7 @@ class Project {
 	*/
 
 
-	var nextUniqId = 0;
+	var nextUid = 0;
 	public var defs : Definitions;
 	public var levels : Array<Level> = [];
 
@@ -39,7 +39,7 @@ class Project {
 		return p;
 	}
 
-	public function makeUniqId() return nextUniqId++;
+	public function makeUniqId() return nextUid++;
 
 	@:keep public function toString() {
 		return '$name(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
@@ -48,7 +48,7 @@ class Project {
 	public static function fromJson(json:Dynamic) {
 		var p = new Project();
 		p.dataVersion = JsonTools.readInt(json.dataVersion, 0);
-		p.nextUniqId = JsonTools.readInt( json.nextUniqId, 0 );
+		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
 		p.name = JsonTools.readString( json.name );
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
@@ -72,7 +72,7 @@ class Project {
 			defaultPivotY: JsonTools.clampFloatPrecision( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
 			bgColor: JsonTools.writeColor(bgColor),
-			nextUniqId: nextUniqId,
+			nextUid: nextUid,
 
 			defs: defs.toJson(),
 			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
