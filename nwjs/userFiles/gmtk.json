@@ -15,7 +15,7 @@
 				"gridSize" : 16,
 				"displayOpacity" : 0.8,
 				"intGridValues" : [
-					{ "name" : null, "color" : "#000000" }
+					{ "identifier" : null, "color" : "#000000" }
 				],
 				"tilesetDefUid" : null,
 				"tilePivotX" : 0,
@@ -28,7 +28,7 @@
 				"gridSize" : 16,
 				"displayOpacity" : 0.7,
 				"intGridValues" : [
-					{ "name" : "Walls", "color" : "#000000" }
+					{ "identifier" : "Walls", "color" : "#000000" }
 				],
 				"tilesetDefUid" : null,
 				"tilePivotX" : 0,
@@ -41,7 +41,7 @@
 				"gridSize" : 16,
 				"displayOpacity" : 1,
 				"intGridValues" : [
-					{ "name" : null, "color" : "#000000" }
+					{ "identifier" : null, "color" : "#000000" }
 				],
 				"tilesetDefUid" : 16,
 				"tilePivotX" : 0,
