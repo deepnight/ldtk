@@ -33,6 +33,10 @@ class TilesetDef {
 		identifier = "Tileset"+uid;
 	}
 
+	public function getMaxTileGridSize() {
+		return isAtlasValid() ? dn.M.imin(pxWid, pxHei) : 100;
+	}
+
 	function set_identifier(id:String) {
 		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
 	}
@@ -102,7 +106,7 @@ class TilesetDef {
 	}
 
 
-	public function loadAtlasImage(projectDir:String, relFilePath:String) : Bool {
+	public function importAtlasImage(projectDir:String, relFilePath:String) : Bool {
 		if( relFilePath==null ) {
 			removeAtlasImage();
 			return false;
@@ -129,13 +133,16 @@ class TilesetDef {
 
 		pxWid = pixels.width;
 		pxHei = pixels.height;
+		tileGridSize = dn.M.imin( tileGridSize, getMaxTileGridSize() );
+		tileGridSpacing = dn.M.imin( tileGridSpacing, getMaxTileGridSize() );
+
 		return true;
 	}
 
 	public inline function reloadImage(projectDir:String) {
 		var oldWid = pxWid;
 		var oldHei = pxHei;
-		if( !loadAtlasImage(projectDir, relPath) )
+		if( !importAtlasImage(projectDir, relPath) )
 			return false;
 
 		if( oldWid!=pxWid ) {
@@ -282,7 +289,7 @@ class TilesetDef {
 		if( !canvas.is("canvas") )
 			throw "Not a canvas";
 
-		if( getTileSourceX(tileId)+tileGridSize>=pxWid || getTileSourceY(tileId)+tileGridSize>=pxHei )
+		if( getTileSourceX(tileId)+tileGridSize>pxWid || getTileSourceY(tileId)+tileGridSize>pxHei )
 			return; // out of bounds
 
 		var subPixels = pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
