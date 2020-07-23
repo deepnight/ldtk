@@ -1023,6 +1023,7 @@ textarea {
 	color:white;
 	text-shadow: 0px 1px 3px black;
 	background-color: rgba(0, 0, 0, 0.4);
+	max-width: 40vw;
 
 	p {
 		@include resetMargin();
