@@ -1,6 +1,6 @@
 package ui;
 
-class TilesetPicker {
+class TilesetToolPicker {
 	static var SCROLL_MEMORY : Map<Int, { x:Float, y:Float, zoom:Float }> = new Map();
 
 	var jDoc(get,never) : js.jquery.JQuery; inline function get_jDoc() return new J(js.Browser.document);
