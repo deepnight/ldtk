@@ -1369,20 +1369,27 @@ canvas#webgl {
   height: 100%;
 }
 
-.tilesetPicker .wrapper img.atlas {
+.tilesetPicker img.atlas {
   image-rendering: pixelated;
   box-shadow: 0px 0px 32px black;
   outline: 1px solid #545d73;
 }
 
-.tilesetPicker .wrapper .selectionsWrapper,
-.tilesetPicker .wrapper .cursorsWrapper {
+.tilesetPicker.singleTileMode .selectionsWrapper .tileCursor.selection {
+  border-width: 1px;
+  border-color: #ffcc00;
+  border-style: solid;
+  box-shadow: 0px 0px 16px #e34d00;
+}
+
+.tilesetPicker .selectionsWrapper,
+.tilesetPicker .cursorsWrapper {
   pointer-events: none;
   position: relative;
 }
 
-.tilesetPicker .wrapper .selectionsWrapper .tileCursor,
-.tilesetPicker .wrapper .cursorsWrapper .tileCursor {
+.tilesetPicker .selectionsWrapper .tileCursor,
+.tilesetPicker .cursorsWrapper .tileCursor {
   position: absolute;
   z-index: 1;
   min-width: 1px;
@@ -1394,47 +1401,47 @@ canvas#webgl {
   border-width: 0px;
 }
 
-.tilesetPicker .wrapper .selectionsWrapper .tileCursor.randomMode,
-.tilesetPicker .wrapper .cursorsWrapper .tileCursor.randomMode {
+.tilesetPicker .selectionsWrapper .tileCursor.randomMode,
+.tilesetPicker .cursorsWrapper .tileCursor.randomMode {
   border-width: 1px;
   border-color: rgba(144, 238, 144, 0.5);
   border-style: dotted;
 }
 
-.tilesetPicker .wrapper .selectionsWrapper .tileCursor.randomMode.selection,
-.tilesetPicker .wrapper .cursorsWrapper .tileCursor.randomMode.selection {
+.tilesetPicker .selectionsWrapper .tileCursor.randomMode.selection,
+.tilesetPicker .cursorsWrapper .tileCursor.randomMode.selection {
   border-color: lightgreen;
   border-style: solid;
 }
 
-.tilesetPicker .wrapper .selectionsWrapper .tileCursor.stampMode.selection,
-.tilesetPicker .wrapper .cursorsWrapper .tileCursor.stampMode.selection {
+.tilesetPicker .selectionsWrapper .tileCursor.stampMode.selection,
+.tilesetPicker .cursorsWrapper .tileCursor.stampMode.selection {
   border-color: #f3e4a4;
   border-style: solid;
 }
 
-.tilesetPicker .wrapper .selectionsWrapper .tileCursor.left,
-.tilesetPicker .wrapper .cursorsWrapper .tileCursor.left {
+.tilesetPicker .selectionsWrapper .tileCursor.left,
+.tilesetPicker .cursorsWrapper .tileCursor.left {
   border-left-width: 1px;
 }
 
-.tilesetPicker .wrapper .selectionsWrapper .tileCursor.right,
-.tilesetPicker .wrapper .cursorsWrapper .tileCursor.right {
+.tilesetPicker .selectionsWrapper .tileCursor.right,
+.tilesetPicker .cursorsWrapper .tileCursor.right {
   border-right-width: 1px;
 }
 
-.tilesetPicker .wrapper .selectionsWrapper .tileCursor.top,
-.tilesetPicker .wrapper .cursorsWrapper .tileCursor.top {
+.tilesetPicker .selectionsWrapper .tileCursor.top,
+.tilesetPicker .cursorsWrapper .tileCursor.top {
   border-top-width: 1px;
 }
 
-.tilesetPicker .wrapper .selectionsWrapper .tileCursor.bottom,
-.tilesetPicker .wrapper .cursorsWrapper .tileCursor.bottom {
+.tilesetPicker .selectionsWrapper .tileCursor.bottom,
+.tilesetPicker .cursorsWrapper .tileCursor.bottom {
   border-bottom-width: 1px;
 }
 
-.tilesetPicker .wrapper .selectionsWrapper .tileCursor.remove,
-.tilesetPicker .wrapper .cursorsWrapper .tileCursor.remove {
+.tilesetPicker .selectionsWrapper .tileCursor.remove,
+.tilesetPicker .cursorsWrapper .tileCursor.remove {
   border-color: red;
 }
 
@@ -1653,7 +1660,7 @@ canvas#webgl {
 .window.panel.editEnums .content .enumForm ul.enumValues li {
   display: grid;
   gap: 3px;
-  grid-template-columns: 32px auto 50px 32px;
+  grid-template-columns: 32px auto 32px;
   margin-bottom: 4px;
 }
 
@@ -1674,6 +1681,7 @@ canvas#webgl {
   height: 32px;
   background-image: url("../img/stripes.png");
   border: 1px solid #545d73;
+  image-rendering: pixelated;
 }
 
 .window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile:not(.active) {

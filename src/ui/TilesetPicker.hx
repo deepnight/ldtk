@@ -1,30 +1,37 @@
 package ui;
 
-class SingleTilePicker {
+class TilesetPicker {
 	static var SCROLL_MEMORY : Map<Int, { x:Float, y:Float, zoom:Float }> = new Map();
-
-	var tilesetDef : led.def.TilesetDef;
 
 	var jDoc(get,never) : js.jquery.JQuery; inline function get_jDoc() return new J(js.Browser.document);
 
+	var tilesetDef : led.def.TilesetDef;
+	var tool : Null<tool.TileTool>;
+
 	var jPicker : js.jquery.JQuery;
 	var jAtlas : js.jquery.JQuery;
-
-	var zoom(default,set) : Float;
 	var jCursor : js.jquery.JQuery;
 	var jSelection : js.jquery.JQuery;
 
+	var zoom(default,set) : Float;
 	var dragStart : Null<{ bt:Int, pageX:Float, pageY:Float }>;
-
 	var scrollX(default,set) : Float;
 	var scrollY(default,set) : Float;
 
-	public function new(target:js.jquery.JQuery, td:led.def.TilesetDef) {
+	public var singleSelectedTileId(default,set) : Null<Int>;
+	var singleTileMode(get,never) : Bool;
+		inline function get_singleTileMode() return tool==null;
+
+
+	public function new(target:js.jquery.JQuery, td:led.def.TilesetDef, ?tool:tool.TileTool) {
 		tilesetDef = td;
+		this.tool = tool;
 
 		// Create picker elements
 		jPicker = new J('<div class="tilesetPicker"/>');
 		jPicker.appendTo(target);
+		if( singleTileMode )
+			jPicker.addClass("singleTileMode");
 
 		jAtlas = new J('<div class="wrapper"/>');
 		jAtlas.appendTo(jPicker);
@@ -53,8 +60,16 @@ class SingleTilePicker {
 		jPicker.mousemove( onPickerMouseMove );
 
 		loadScrollPos();
+		renderSelection();
 	}
 
+	function set_singleSelectedTileId(v) {
+		singleSelectedTileId = v;
+		renderSelection();
+		return singleSelectedTileId;
+	}
+
+	public dynamic function onSingleTileSelect(tileId:Int) {}
 
 	function loadScrollPos() {
 		var mem = SCROLL_MEMORY.get(tilesetDef.uid);
@@ -98,6 +113,17 @@ class SingleTilePicker {
 	inline function pageXtoLocal(v:Float) return M.round( ( v - jPicker.offset().left ) / zoom + scrollX );
 	inline function pageYtoLocal(v:Float) return M.round( ( v - jPicker.offset().top ) / zoom + scrollY );
 
+
+	function renderSelection() {
+		jSelection.empty();
+
+		if( singleTileMode ) {
+			if( singleSelectedTileId!=null )
+				jSelection.append( createCursor({ mode:Stamp, ids:[singleSelectedTileId] },"selection") );
+		}
+		else
+			jSelection.append( createCursor(tool.getSelectedValue(),"selection") );
+	}
 
 	function createCursor(sel:led.LedTypes.TilesetSelection, ?subClass:String, ?cWid:Int, ?cHei:Int) {
 		var wrapper = new J("<div/>");
@@ -150,11 +176,6 @@ class SingleTilePicker {
 			return;
 		}
 
-		// Editor.ME.debug(pageX+","+pageY+" => "+pageXtoLocal(pageX)+","+pageYtoLocal(pageY));
-		// Editor.ME.debug("scroll="+scrollX+","+scrollY, true);
-		// Editor.ME.debug("pickerSize="+jPicker.innerWidth()+"x"+jPicker.innerHeight(), true);
-		// Editor.ME.debug("img="+img.innerWidth()+"x"+img.innerHeight(), true);
-
 		var r = getCursorRect(pageX, pageY);
 
 		// Avoid re-render if it's the same rect
@@ -164,6 +185,22 @@ class SingleTilePicker {
 		var tileId = tilesetDef.getTileId(r.cx,r.cy);
 		jCursor.empty();
 		jCursor.show();
+
+		if( singleTileMode ) {
+			var c = createCursor({ mode:Stamp, ids:[tileId] }, null, r.wid, r.hei);
+			c.appendTo(jCursor);
+		}
+		else {
+			var saved = tilesetDef.getSavedSelectionFor(tileId);
+			if( saved==null || dragStart!=null ) {
+				var c = createCursor({ mode:tool.getMode(), ids:[tileId] }, dragStart!=null && dragStart.bt==2?"remove":null, r.wid, r.hei);
+				c.appendTo(jCursor);
+			}
+			else {
+				// Saved-selection rollover
+				jCursor.append( createCursor(saved) );
+			}
+		}
 
 		_lastRect = r;
 	}
@@ -197,9 +234,14 @@ class SingleTilePicker {
 			var r = getCursorRect(ev.pageX, ev.pageY);
 			var addToSelection = dragStart.bt!=2;
 			if( r.wid==1 && r.hei==1 ) {
+				if( Editor.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
+					addToSelection = false;
 				applySelection([ tilesetDef.getTileId(r.cx,r.cy) ], addToSelection);
 			}
 			else {
+				if( Editor.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
+					addToSelection = false;
+
 				var tileIds = [];
 				for(cx in r.cx...r.cx+r.wid)
 				for(cy in r.cy...r.cy+r.hei)
@@ -212,8 +254,79 @@ class SingleTilePicker {
 		updateCursor(ev.pageX, ev.pageY, true);
 	}
 
+	function isSelected(tcx,tcy) {
+		if( singleTileMode )
+			return false; // TODO
+
+		for( id in tool.getSelectedValue().ids )
+			if( id==tilesetDef.getTileId(tcx,tcy) )
+				return true;
+		return false;
+	}
+
 	function applySelection(selIds:Array<Int>, add:Bool) {
-		// TODO
+		// Auto-pick saved selection
+		if( !singleTileMode && selIds.length==1 && tilesetDef.hasSavedSelectionFor(selIds[0]) && !Editor.ME.isCtrlDown() ) {
+			// Check if the saved selection isn't already picked. If so, just pick the sub-tile
+			var sel = tool.getSelectedValue();
+			var saved = tilesetDef.getSavedSelectionFor( selIds[0] );
+			var same = true;
+			var i = 0;
+			while( i<saved.ids.length ) {
+				if( sel.ids[i]!=saved.ids[i] )
+					same = false;
+				i++;
+			}
+			if( !same ) {
+				selIds = saved.ids.copy();
+				tool.setMode( saved.mode );
+			}
+		}
+
+		if( singleTileMode ) {
+			onSingleTileSelect( selIds[0] );
+		}
+		else {
+			var curSel = tool.getSelectedValue();
+			if( add ) {
+				if( !Editor.ME.isShiftDown() && !Editor.ME.isCtrlDown() ) {
+					// Replace active selection with this one
+					tool.selectValue({ mode:tool.getMode(), ids:selIds });
+				}
+				else {
+					// Add selection (OR)
+					var idMap = new Map();
+					for(tid in tool.getSelectedValue().ids)
+						idMap.set(tid,true);
+					for(tid in selIds)
+						idMap.set(tid,true);
+
+					var arr = [];
+					for(tid in idMap.keys())
+						arr.push(tid);
+					tool.selectValue({ mode:tool.getMode(), ids:arr });
+				}
+			}
+			else {
+				// Substract selection
+				var remMap = new Map();
+				for(tid in selIds)
+					remMap.set(tid, true);
+
+				var i = 0;
+				while( i<curSel.ids.length && curSel.ids.length>1 )
+					if( remMap.exists(curSel.ids[i]) )
+						curSel.ids.splice(i,1);
+					else
+						i++;
+			}
+			Editor.ME.ge.emit(ToolOptionChanged);
+		}
+
+		renderSelection();
+	}
+
+	function onRemoveSel(rem:Array<Int>) {
 	}
 
 
@@ -233,18 +346,23 @@ class SingleTilePicker {
 	}
 
 	function onPickerMouseDown(ev:js.jquery.Event) {
-		dragStart = {
-			bt: ev.button,
-			pageX: ev.pageX,
-			pageY: ev.pageY,
-		}
-
 		// Block context menu
 		if( ev.button==2 )
 			jDoc.on("contextmenu.pickerCtxCatcher", function(ev) {
 				ev.preventDefault();
 				jDoc.off(".pickerCtxCatcher");
 			});
+
+		if( ev.button==2 && singleTileMode )
+			return;
+
+		// Start dragging
+		dragStart = {
+			bt: ev.button,
+			pageX: ev.pageX,
+			pageY: ev.pageY,
+		}
+
 	}
 
 	function onPickerMouseMove(ev:js.jquery.Event) {
@@ -259,7 +377,7 @@ class SingleTilePicker {
 		var cx = M.iclamp( Std.int( localX / grid ), 0, tilesetDef.cWid-1 );
 		var cy = M.iclamp( Std.int( localY / grid ), 0, tilesetDef.cHei-1 );
 
-		if( dragStart==null )
+		if( dragStart==null || singleTileMode )
 			return {
 				cx: cx,
 				cy: cy,

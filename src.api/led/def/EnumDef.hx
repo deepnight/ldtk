@@ -101,5 +101,7 @@ class EnumDef {
 		// Lost tileset
 		if( iconTilesetUid!=null && p.defs.getTilesetDef(iconTilesetUid)==null )
 			iconTilesetUid = null;
+
+		// TODO clear value tileIds if no tileset
 	}
 }
