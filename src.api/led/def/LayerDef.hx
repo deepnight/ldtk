@@ -2,7 +2,6 @@ package led.def;
 
 import led.LedTypes;
 
-// TODO make intGridValue a real identifier
 class LayerDef {
 	public var uid(default,null) : Int;
 	public var type : LayerType;
