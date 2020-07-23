@@ -153,7 +153,11 @@ class EditLayerDefs extends ui.modal.Panel {
 					var i = new form.input.StringInput(
 						e.find("input.name"),
 						function() return intGridVal.identifier,
-						function(v) intGridVal.identifier = led.Project.cleanupIdentifier(v, false)
+						function(v) {
+							if( v!=null && StringTools.trim(v).length==0 )
+								v = null;
+							intGridVal.identifier = led.Project.cleanupIdentifier(v, false);
+						}
 					);
 					i.validityCheck = cur.isIntGridValueIdentifierValid;
 					i.validityError = N.invalidIdentifier;

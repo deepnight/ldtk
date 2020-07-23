@@ -106,7 +106,7 @@ class LayerDef {
 	}
 
 	public function isIntGridValueIdentifierValid(id:Null<String>) {
-		if( id==null )
+		if( id==null || id=="" )
 			return true;
 
 		if( !Project.isValidIdentifier(id) )
