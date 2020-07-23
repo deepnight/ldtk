@@ -46,9 +46,7 @@
 				"clear": false,
 				"revealProblems": "onProblem"
 			},
-			"group": {
-				"kind": "build",
-			}
+			"group": "build"
 		}
 	]
 }
