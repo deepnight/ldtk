@@ -126,8 +126,6 @@ class EditEnums extends ui.modal.Panel {
 			else
 				curEnum.iconTilesetUid = tid;
 			editor.ge.emit(EnumDefChanged);
-			N.debug(jSelect.val());
-			N.debug( Type.typeof(jSelect.val()) );
 		});
 
 
