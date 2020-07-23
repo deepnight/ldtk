@@ -194,7 +194,7 @@ class Editor extends dn.Process {
 		}
 
 		levelHistory = new Map();
-		levelHistory.set( curLevelId, new LevelHistory(curLevelId) ); // TODO
+		levelHistory.set( curLevelId, new LevelHistory(curLevelId) );
 
 		ge.emit(ProjectSelected);
 

@@ -24,9 +24,6 @@ class LevelHistory {
 		for(li in level.layerInstances)
 			if( !mostAncientLayerStates.exists(li.def.uid) )
 				mostAncientLayerStates.set( li.def.uid, Layer(li.def.uid, null, li.toJson()) );
-
-		// Remove lost states (when def is removed)
-		// TODO
 	}
 
 	public function manualOnGlobalEvent(e:GlobalEvent) {
