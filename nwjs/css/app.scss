@@ -318,7 +318,7 @@ ul.niceList {
 	overflow-x: hidden;
 
 	&:empty {
-		background-image: url("/img/stripes.png");
+		background-image: url("../img/stripes.png");
 		box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.4) inset;
 		text-align: center;
 		padding-top: 30px;
@@ -415,18 +415,18 @@ ul.niceList {
 		content: "?";
 	}
 }
-.icon.entity	{ background-image: url("/img/icons/entity.png"); }
-.icon.tile		{ background-image: url("/img/icons/tile.png"); }
-.icon.layer		{ background-image: url("/img/icons/layer.png"); }
-.icon.intGrid	{ background-image: url("/img/icons/intGrid.png"); }
-.icon.level		{ background-image: url("/img/icons/level.png"); }
-.icon.project	{ background-image: url("/img/icons/projectSettings.png"); }
-.icon.enum		{ background-image: url("/img/icons/enum.png"); }
-.icon.close		{ background-image: url("/img/icons/close.png"); }
+.icon.entity	{ background-image: url("../img/icons/entity.png"); }
+.icon.tile		{ background-image: url("../img/icons/tile.png"); }
+.icon.layer		{ background-image: url("../img/icons/layer.png"); }
+.icon.intGrid	{ background-image: url("../img/icons/intGrid.png"); }
+.icon.level		{ background-image: url("../img/icons/level.png"); }
+.icon.project	{ background-image: url("../img/icons/projectSettings.png"); }
+.icon.enum		{ background-image: url("../img/icons/enum.png"); }
+.icon.close		{ background-image: url("../img/icons/close.png"); }
 
-.icon.mouseLeft		{ background-image: url("/img/icons/mouseLeft.png"); image-rendering: pixelated; }
-.icon.mouseRight	{ background-image: url("/img/icons/mouseRight.png"); image-rendering: pixelated; }
-.icon.mouseWheel	{ background-image: url("/img/icons/mouseWheel.png"); image-rendering: pixelated; }
+.icon.mouseLeft		{ background-image: url("../img/icons/mouseLeft.png"); image-rendering: pixelated; }
+.icon.mouseRight	{ background-image: url("../img/icons/mouseRight.png"); image-rendering: pixelated; }
+.icon.mouseWheel	{ background-image: url("../img/icons/mouseWheel.png"); image-rendering: pixelated; }
 
 .black		{ filter: brightness(0);}
 .orange		{ filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10); }
@@ -470,7 +470,7 @@ ul.niceList {
 	box-sizing: border-box; // Actual width/height are defined in code
 	overflow: hidden;
 	padding: 8px;
-	background-image: url("/img/grid.png");
+	background-image: url("../img/grid.png");
 	background-color: $bgDark;
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
 }
@@ -668,6 +668,7 @@ textarea {
 		padding-left: 8px;
 		padding-right: 8px;
 		align-items: center;
+		max-width: 250px;
 
 		font-style: italic;
 		font-size: 0.8em;
@@ -685,7 +686,6 @@ textarea {
 		padding: 10px;
 		font-style: normal;
 		font-size: 1em;
-		max-width: 250px;
 	}
 }
 
@@ -715,6 +715,10 @@ textarea {
 		.content {
 			padding: 20px;
 			padding-right: 80px;
+
+			pre {
+				font-size: 8pt;
+			}
 		}
 	}
 
@@ -790,8 +794,8 @@ textarea {
 	position: absolute;
 	left: 0px;
 	top: 0px;
-	width: 100%;
-	height: 100%;
+	width: 100vw;
+	height: 100vh;
 	z-index: 98;
 
 	.mask {
@@ -824,11 +828,11 @@ textarea {
 
 .window.panel {
 	left: 0px; // set on opening
-	width: calc( 100% - 400px );
+	width: calc( 100vw - 400px );
 	&>.wrapper {
 		top: 0px;
 		left: 0px;
-		height: 100%;
+		height: 100vh;
 		border-left: none;
 
 		.content {
@@ -984,7 +988,7 @@ textarea {
 }
 
 *[draggable=true] {
-	background: url("/img/icons/drag.png") no-repeat;
+	background: url("../img/icons/drag.png") no-repeat;
 	background-position: left center;
 	padding-left: 32px !important;
 	cursor: ns-resize;
@@ -1197,31 +1201,32 @@ canvas#webgl {
 }
 
 
-.compactPanel { // TODO move that to Page DIV
-	#page.editor {
-		grid-template-columns: 150px auto;
-		#mainPanel {
-			grid-template-rows: min-content 200px auto;
-			#guide {
-				display: none;
-			}
-			ul.niceList li {
-				padding-top: 4px;
-				padding-bottom: 4px;
-				gap: 4px;
+#page.editor.compactPanel {
+	#mainPanel {
+		width: 150px;
+		grid-template-rows: min-content 200px min-content auto;
+		.notCompact {
+			display: none;
+		}
+		#guide {
+			display: none;
+		}
+		ul.niceList li {
+			padding-top: 4px;
+			padding-bottom: 4px;
+			gap: 4px;
 
-				.icon {
-					width: 0.75em;
-					height: 0.75em;
-				}
+			.icon {
+				width: 0.75em;
+				height: 0.75em;
 			}
-			h2#levelName {
-				font-size: 1.1em;
-			}
+		}
+		h2#levelName {
+			font-size: 1.1em;
 		}
 	}
 	.window.panel {
-		width: calc( 100% - 150px );
+		width: calc( 100vw - 150px );
 	}
 }
 
@@ -1335,6 +1340,7 @@ canvas#webgl {
 					box-sizing: border-box;
 					pointer-events: none;
 					border-color: rgba(255, 255, 255, 0.5);
+					border-style: solid;
 					border-width: 0px;
 
 					&.randomMode {
@@ -1433,7 +1439,7 @@ canvas#webgl {
 			padding: 8px;
 			align-items: center;
 			background-color: $bgMed;
-			background-image: url("/img/stripes.png");
+			background-image: url("../img/stripes.png");
 
 			&.checkbox {
 				padding: 0;
@@ -1464,7 +1470,7 @@ canvas#webgl {
 			padding: 8px;
 			color: white;
 			background-color: $bgMed;
-			background-image: url("/img/stripes.png");
+			background-image: url("../img/stripes.png");
 
 			option {
 				overflow: hidden;

@@ -12,7 +12,7 @@ class Notification extends dn.Process {
 		elem = new J("xml#notification").clone().children().first();
 		elem.appendTo(jList);
 
-		elem.find(".content").text(str);
+		elem.find(".content").html(str);
 		if( col!=null ) {
 			var defColor = C.hexToInt( elem.css("background-color") );
 			elem.css("border-color", C.intToHex(col));

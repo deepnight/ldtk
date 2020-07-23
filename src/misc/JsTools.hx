@@ -12,17 +12,13 @@ class JsTools {
 				var from : Int = ev.detail.origin.index;
 				var to : Int = ev.detail.destination.index;
 				onSort(from,to);
-				// var moved = project.sortLayerDef(from,to);
-				// selectLayer(moved);
-				// editor.ge.emit(LayerDefSorted);
 			}
 		);
 	}
 
 	public static function prepareProjectFile(p:led.Project) : { bytes:haxe.io.Bytes, json:Dynamic } {
 		var json = p.toJson();
-		var jsonStr = haxe.Json.stringify(json);
-		jsonStr = dn.HaxeJson.prettify(jsonStr); // TODO make optional
+		var jsonStr = dn.JsonPretty.stringify(json);
 
 		return {
 			bytes: haxe.io.Bytes.ofString( jsonStr ),
@@ -233,16 +229,47 @@ class JsTools {
 
 
 	public static function parseComponents(jCtx:js.jquery.JQuery) {
+		// (i) Info bubbles
 		jCtx.find(".info").each( function(idx, e) {
-			var jElem = new J(e);
-			if( jElem.data("str")==null ) {
-				if( jElem.hasClass("identifier") )
-					jElem.data( "str", L.t._("An identifier should be UNIQUE and only contain LETTERS, NUMBERS or UNDERSCORES (ie. \"_\").") );
+			var jThis = new J(e);
+
+			if( jThis.data("str")==null ) {
+				if( jThis.hasClass("identifier") )
+					jThis.data( "str", L.t._("An identifier should be UNIQUE and only contain LETTERS, NUMBERS or UNDERSCORES (ie. \"_\").") );
 				else
-					jElem.data("str", jElem.text());
-				jElem.empty();
+					jThis.data("str", jThis.text());
+				jThis.empty();
 			}
-			ui.Tip.attach(jElem, jElem.data("str"), "infoTip");
+			ui.Tip.attach(jThis, jThis.data("str"), "infoTip");
+		});
+
+		// Auto tool-tips
+		jCtx.find("[title]").each( function(idx,e) {
+			var jThis = new J(e);
+			var tip = jThis.attr("title");
+			jThis.removeAttr("title");
+
+			// Parse key shortcut
+			var keys = [];
+			if( jThis.attr("keys")!=null ) {
+				var rawKeys = jThis.attr("keys").split("+").map( function(k) return StringTools.trim(k).toLowerCase() );
+				jThis.removeAttr("keys");
+				for(k in rawKeys) {
+					switch k {
+						case "ctrl" : keys.push(K.CTRL);
+						case "shift" : keys.push(K.SHIFT);
+						case "alt" : keys.push(K.ALT);
+						case _ :
+							if( k.length==1 ) {
+								var cid = k.charCodeAt(0);
+								if( cid>="a".code && cid<="z".code )
+									keys.push( cid - "a".code + K.A );
+							}
+					}
+				}
+			}
+
+			ui.Tip.attach( jThis, tip, keys );
 		});
 	}
 

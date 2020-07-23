@@ -11,7 +11,7 @@ class Project {
 	*/
 
 
-	var nextUniqId = 0;
+	var nextUid = 0;
 	public var defs : Definitions;
 	public var levels : Array<Level> = [];
 
@@ -39,7 +39,7 @@ class Project {
 		return p;
 	}
 
-	public function makeUniqId() return nextUniqId++;
+	public function makeUniqId() return nextUid++;
 
 	@:keep public function toString() {
 		return '$name(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
@@ -48,7 +48,7 @@ class Project {
 	public static function fromJson(json:Dynamic) {
 		var p = new Project();
 		p.dataVersion = JsonTools.readInt(json.dataVersion, 0);
-		p.nextUniqId = JsonTools.readInt( json.nextUniqId, 0 );
+		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
 		p.name = JsonTools.readString( json.name );
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
@@ -72,7 +72,7 @@ class Project {
 			defaultPivotY: JsonTools.clampFloatPrecision( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
 			bgColor: JsonTools.writeColor(bgColor),
-			nextUniqId: nextUniqId,
+			nextUid: nextUid,
 
 			defs: defs.toJson(),
 			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
@@ -172,7 +172,7 @@ class Project {
 		id = reg.replace(id, "_");
 
 		// Checks identifier syntax (letters or _ )
-		reg = ~/^[a-z_]+[a-z0-9_]*$/gi; // TODO not checking leading numbers
+		reg = ~/^[a-z_]+[a-z0-9_]*$/gi;
 		if( reg.match(id) ) {
 			if( capitalizeFirstLetter ) {
 				reg = ~/^(_*)([a-z])([a-zA-Z0-9_]*)/g; // extract first letter, if it's lowercase
@@ -222,7 +222,7 @@ class Project {
 		// Collision layer
 		var ld = p.defs.layers[0];
 		ld.identifier = "Collisions";
-		ld.getIntGridValueDef(0).name = "walls";
+		ld.getIntGridValueDef(0).identifier = "walls";
 		ld.addIntGridValue(0x00ff00, "grass");
 		ld.addIntGridValue(0x0000ff, "water");
 

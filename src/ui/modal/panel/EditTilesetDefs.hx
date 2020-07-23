@@ -155,7 +155,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				var oldRelPath = cur.relPath;
 				var relPath = Editor.ME.makeRelativeFilePath( absPath );
 
-				if( !cur.loadAtlasImage(editor.getProjectDir(), relPath) ) {
+				if( !cur.importAtlasImage(editor.getProjectDir(), relPath) ) {
 					switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) {
 						case Unknown:
 							N.error("ERROR: I don't think this is an actual image");
@@ -180,11 +180,11 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		var i = Input.linkToHtmlInput( cur.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
 		i.linkEvent(TilesetDefChanged);
-		i.setBounds(2, 512); // TODO cap to texture width
+		i.setBounds(2, cur.getMaxTileGridSize());
 
 		var i = Input.linkToHtmlInput( cur.tileGridSpacing, jForm.find("input[name=tilesetGridSpacing]") );
 		i.linkEvent(TilesetDefChanged);
-		i.setBounds(0, 512);
+		i.setBounds(0, cur.getMaxTileGridSize());
 	}
 
 

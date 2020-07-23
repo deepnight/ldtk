@@ -43,7 +43,8 @@
 				"showReuseMessage": false,
 				"clear": false,
 				"revealProblems": "onProblem"
-			}
+			},
+			"group": "build"
 		}
 	]
 }

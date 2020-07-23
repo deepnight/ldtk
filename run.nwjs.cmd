@@ -1,2 +1,2 @@
 @cd nwjs
-@start nw
+@start nw .

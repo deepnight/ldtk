@@ -149,13 +149,17 @@ class EditLayerDefs extends ui.modal.Panel {
 					e.insertBefore(addButton);
 					e.find(".id").html("#"+idx);
 
-					// Edit value name
+					// Edit value identifier
 					var i = new form.input.StringInput(
 						e.find("input.name"),
-						function() return intGridVal.name,
-						function(v) intGridVal.name = v
+						function() return intGridVal.identifier,
+						function(v) {
+							if( v!=null && StringTools.trim(v).length==0 )
+								v = null;
+							intGridVal.identifier = led.Project.cleanupIdentifier(v, false);
+						}
 					);
-					i.validityCheck = cur.isIntGridValueNameValid;
+					i.validityCheck = cur.isIntGridValueIdentifierValid;
 					i.validityError = N.invalidIdentifier;
 					i.onChange = editor.ge.emit.bind(LayerDefChanged);
 

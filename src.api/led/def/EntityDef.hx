@@ -108,14 +108,11 @@ class EntityDef {
 		return moved;
 	}
 
-	// TODO either
-	public function getFieldDef(?id:String, ?uid:Int) : Null<FieldDef> {
-		if( id==null && uid==null )
-			throw "Need 1 parameter";
-
+	public function getFieldDef(id:haxe.extern.EitherType<String,Int>) : Null<FieldDef> {
 		for(fd in fieldDefs)
-			if( fd.uid==uid || fd.identifier==id )
+			if( fd.uid==id || fd.identifier==id )
 				return fd;
+
 		return null;
 	}
 
