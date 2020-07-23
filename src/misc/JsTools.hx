@@ -217,16 +217,26 @@ class JsTools {
 
 
 	public static function parseComponents(jCtx:js.jquery.JQuery) {
+		// (i) Info bubbles
 		jCtx.find(".info").each( function(idx, e) {
-			var jElem = new J(e);
-			if( jElem.data("str")==null ) {
-				if( jElem.hasClass("identifier") )
-					jElem.data( "str", L.t._("An identifier should be UNIQUE and only contain LETTERS, NUMBERS or UNDERSCORES (ie. \"_\").") );
+			var jThis = new J(e);
+
+			if( jThis.data("str")==null ) {
+				if( jThis.hasClass("identifier") )
+					jThis.data( "str", L.t._("An identifier should be UNIQUE and only contain LETTERS, NUMBERS or UNDERSCORES (ie. \"_\").") );
 				else
-					jElem.data("str", jElem.text());
-				jElem.empty();
+					jThis.data("str", jThis.text());
+				jThis.empty();
 			}
-			ui.Tip.attach(jElem, jElem.data("str"), "infoTip");
+			ui.Tip.attach(jThis, jThis.data("str"), "infoTip");
+		});
+
+		// Auto tool-tips
+		jCtx.find("[title]").each( function(idx,e) {
+			var jThis = new J(e);
+			var tip = jThis.attr("title");
+			jThis.removeAttr("title");
+			ui.Tip.attach( jThis, tip );
 		});
 	}
 

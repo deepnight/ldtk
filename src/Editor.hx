@@ -78,8 +78,6 @@ class Editor extends dn.Process {
 	}
 
 	public function initUI() {
-		jMainPanel.find("*").off();
-
 		// Edit buttons
 		jMainPanel.find("button.editProject").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.ProjectSettings) )
@@ -87,7 +85,6 @@ class Editor extends dn.Process {
 			else
 				new ui.modal.panel.ProjectSettings();
 		});
-		ui.Tip.attach(jMainPanel.find("button.editProject"), "Project settings");
 
 		jMainPanel.find("button.levelList").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.LevelList) )
@@ -95,7 +92,6 @@ class Editor extends dn.Process {
 			else
 				new ui.modal.panel.LevelList();
 		});
-		ui.Tip.attach(jMainPanel.find("button.levelList"), "Levels");
 
 		jMainPanel.find("button.editLayers").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditLayerDefs) )
@@ -103,7 +99,6 @@ class Editor extends dn.Process {
 			else
 				new ui.modal.panel.EditLayerDefs();
 		});
-		ui.Tip.attach(jMainPanel.find("button.editLayers"), "Layers");
 
 		jMainPanel.find("button.editEntities").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditEntityDefs) )
@@ -111,7 +106,6 @@ class Editor extends dn.Process {
 			else
 				new ui.modal.panel.EditEntityDefs();
 		});
-		ui.Tip.attach(jMainPanel.find("button.editEntities"), "Entities");
 
 		var bt = jMainPanel.find("button.editTilesets");
 		bt.click( function(_) {
@@ -120,7 +114,6 @@ class Editor extends dn.Process {
 			else
 				new ui.modal.panel.EditTilesetDefs();
 		});
-		ui.Tip.attach(bt, "Tilesets");
 
 		var bt = jMainPanel.find("button.editEnums");
 		bt.click( function(_) {
@@ -129,19 +122,15 @@ class Editor extends dn.Process {
 			else
 				new ui.modal.panel.EditEnums();
 		});
-		ui.Tip.attach(bt, "Entity enums");
 
 
 		var bt = jMainPanel.find("button.close");
 		bt.click( function(ev) onClose(ev.getThis()) );
-		ui.Tip.attach(bt, Lang.t._("Close project"));
 
 
 		jMainPanel.find("button.showHelp").click( function(_) {
 			onHelp();
 		});
-		ui.Tip.attach(jMainPanel.find("button.showHelp"), "Quick [h]elp");
-
 
 		var e = jMainPanel.find("input#enhanceActiveLayer");
 		e.prop("checked", levelRender.enhanceActiveLayer)

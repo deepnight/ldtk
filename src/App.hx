@@ -122,6 +122,8 @@ class App extends dn.Process {
 			.removeClass()
 			.addClass(id)
 			.html(raw);
+
+		JsTools.parseComponents(jPage);
 	}
 
 	public function exit() {
