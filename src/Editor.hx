@@ -143,11 +143,16 @@ class Editor extends dn.Process {
 		ui.Tip.attach(jMainPanel.find("button.showHelp"), "Quick [h]elp");
 
 
-		jMainPanel.find("input#enhanceActiveLayer")
+		var e = jMainPanel.find("input#enhanceActiveLayer");
+		e.prop("checked", levelRender.enhanceActiveLayer)
 			.change( function(ev) {
 				levelRender.setEnhanceActiveLayer( ev.getThis().prop("checked") );
-			})
-			.prop("checked", levelRender.enhanceActiveLayer);
+			});
+		ui.Tip.attach(
+			e.add( e.siblings() ),
+			Lang.t._("Check this to make the selected layer more obvious by fading/bluring all other inactive layers."),
+			[ K.A ]
+		);
 
 		// jMainPanel.find("h2#levelName").click( function(ev) jMainPanel.find("button.levelList").click() );
 
@@ -247,7 +252,7 @@ class Editor extends dn.Process {
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() ) {
-					App.ME.jBody.toggleClass("compactPanel");
+					App.ME.jPage.toggleClass("compactPanel");
 					updateAppBg();
 				}
 
