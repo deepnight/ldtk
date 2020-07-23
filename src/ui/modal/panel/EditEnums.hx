@@ -34,18 +34,29 @@ class EditEnums extends ui.modal.Panel {
 
 		// Import HX
 		jContent.find("button.importHx").click( function(_) {
-			JsTools.loadDialog(["hx"], editor.getProjectDir(), function(path:String) {
+			JsTools.loadDialog([".hx"], editor.getProjectDir(), function(path:String) {
 				var file = JsTools.readFileString(path);
-				var reg = ~/^[ \t]*enum[ \t]+([a-z0-9_]+)[ \t]*{/gim;
-				if( !reg.match(file) ) {
+
+				// Trim comments
+				var lineCommentReg = ~/^([^\/\n]*)(\/\/.*)$/gm;
+				file = lineCommentReg.replace(file,"$1");
+				var multilineCommentReg = ~/(\/\*[\s\S]*?\*\/)/gm;
+				file = multilineCommentReg.replace(file,"");
+
+				// Any enum?
+				var enumBlocksReg = ~/^[ \t]*enum[ \t]+([a-z0-9_]+)[ \t]*{/gim;
+				if( !enumBlocksReg.match(file) ) {
 					N.error("Couldn't find any simple Enum in this source file.");
 					return;
 				}
 
-				var limit = 10;
-				while( limit-->0 && reg.match(file) ) {
+				// Search enum blocks
+				var limit = 10; // HACK
+				while( limit-->0 && enumBlocksReg.match(file) ) {
+					var enumId = enumBlocksReg.matched(1);
+
 					var brackets = 1;
-					var pos = reg.matchedPos().pos + reg.matchedPos().len;
+					var pos = enumBlocksReg.matchedPos().pos + enumBlocksReg.matchedPos().len;
 					var start = pos;
 					while( pos < file.length && brackets>=1 ) {
 						if( file.charAt(pos)=="{" )
@@ -54,10 +65,23 @@ class EditEnums extends ui.modal.Panel {
 							brackets--;
 						pos++;
 					}
-					trace("-- FOUND "+reg.matched(1)+" ---");
-					trace(file.substring(start,pos));
+					var rawValues = file.substring(start,pos-1);
 
-					file = reg.matchedRight();
+					// Checks presence of unsupported Parametered values
+					var paramEnumReg = ~/([A-Z][A-Za-z0-9_]*)[ \t]*\(/gm;
+					if( !paramEnumReg.match(rawValues) ) {
+						// This enum only contains unparametered values
+						var enumValuesReg = ~/([A-Z][A-Za-z0-9_]*)[ \t]*;/gm;
+						var values = [];
+						while( enumValuesReg.match(rawValues) ) {
+							values.push( enumValuesReg.matched(1) );
+							rawValues = enumValuesReg.matchedRight();
+						}
+						App.ME.debug(enumId+" => "+values.join(", "), true);
+					}
+
+
+					file = enumBlocksReg.matchedRight();
 				}
 			});
 		});
