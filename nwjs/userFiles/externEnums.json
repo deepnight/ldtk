@@ -5,8 +5,69 @@
 	"defaultPivotY" : 0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 1,
-	"defs" : { "layers" : [], "entities" : [], "tilesets" : [], "enums" : [] },
+	"nextUid" : 6,
+	"defs" : {
+		"layers" : [],
+		"entities" : [],
+		"tilesets" : [],
+		"enums" : [
+			{
+				"identifier" : "GoodBoy",
+				"uid" : 1,
+				"values" : [
+					{ "id" : "PanView", "tileId" : null },
+					{ "id" : "Add", "tileId" : null },
+					{ "id" : "Remove", "tileId" : null },
+					{ "id" : "Move", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "TypesTest.hx"
+			},
+			{
+				"identifier" : "LayerType",
+				"uid" : 2,
+				"values" : [
+					{ "id" : "IntGrid", "tileId" : null },
+					{ "id" : "Entities", "tileId" : null },
+					{ "id" : "Tiles", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "../../src.api/led/LedTypes.hx"
+			},
+			{
+				"identifier" : "FieldDisplayMode",
+				"uid" : 3,
+				"values" : [
+					{ "id" : "Hidden", "tileId" : null },
+					{ "id" : "ValueOnly", "tileId" : null },
+					{ "id" : "NameAndValue", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "../../src.api/led/LedTypes.hx"
+			},
+			{
+				"identifier" : "FieldDisplayPosition",
+				"uid" : 4,
+				"values" : [
+					{ "id" : "Above", "tileId" : null },
+					{ "id" : "Center", "tileId" : null },
+					{ "id" : "Beneath", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "../../src.api/led/LedTypes.hx"
+			},
+			{
+				"identifier" : "TileEditMode",
+				"uid" : 5,
+				"values" : [
+					{ "id" : "Stamp", "tileId" : null },
+					{ "id" : "Random", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "../../src.api/led/LedTypes.hx"
+			}
+		]
+	},
 	"levels" : [
 		{ "identifier" : "Level", "uid" : 0, "pxWid" : 256, "pxHei" : 256, "layerInstances" : [] }
 	]

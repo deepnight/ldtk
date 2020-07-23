@@ -34,8 +34,10 @@ class EditEnums extends ui.modal.Panel {
 
 		// Import HX
 		jContent.find("button.importHx").click( function(_) {
-			JsTools.loadDialog([".hx"], editor.getProjectDir(), function(path:String) {
-				var file = JsTools.readFileString(path);
+			JsTools.loadDialog([".hx"], editor.getProjectDir(), function(absPath:String) {
+				absPath = StringTools.replace(absPath,"\\","/");
+				var relPath = editor.makeRelativeFilePath(absPath);
+				var file = JsTools.readFileString(absPath);
 
 				// Trim comments
 				var lineCommentReg = ~/^([^\/\n]*)(\/\/.*)$/gm;
@@ -77,7 +79,15 @@ class EditEnums extends ui.modal.Panel {
 							values.push( enumValuesReg.matched(1) );
 							rawValues = enumValuesReg.matchedRight();
 						}
-						App.ME.debug(enumId+" => "+values.join(", "), true);
+						if( values.length>0 ) {
+							// App.ME.debug(enumId+" => "+values.join(", "), true);
+							var ed = project.defs.createEnumDef();
+							ed.identifier = enumId;
+							ed.externalRelPath = relPath;
+							for(v in values)
+								ed.addValue(v);
+							editor.ge.emit(EnumDefAdded);
+						}
 					}
 
 
