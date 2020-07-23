@@ -95,15 +95,46 @@ class EditEnums extends ui.modal.Panel {
 		}
 		jForm.show();
 
-		var i = Input.linkToHtmlInput( curEnum.identifier, jForm.find("[name=eName]") );
+		var i = Input.linkToHtmlInput( curEnum.identifier, jForm.find("[name=id]") );
 		i.validityCheck = function(v) {
 			return project.defs.isEnumIdentifierUnique(v);
 		}
 		i.linkEvent(EnumDefChanged);
 
+		// Tilesets
+		var jSelect = jForm.find("select#icons");
+		jSelect.empty();
+		if( curEnum.iconTilesetUid==null )
+			jSelect.addClass("gray");
+		else
+			jSelect.removeClass("gray");
+
+		var opt = new J('<option value="-1">-- Select a tileset --</option>');
+		opt.appendTo(jSelect);
+
+		for(td in project.defs.tilesets) {
+			var opt = new J('<option value="${td.uid}"/>');
+			opt.appendTo(jSelect);
+			opt.text( td.identifier );
+		}
+
+		jSelect.val( curEnum.iconTilesetUid==null ? "-1" : Std.string(curEnum.iconTilesetUid) );
+		jSelect.change( function(ev) {
+			var tid = Std.parseInt( jSelect.val() );
+			if( tid<0 )
+				curEnum.iconTilesetUid = null;
+			else
+				curEnum.iconTilesetUid = tid;
+			editor.ge.emit(EnumDefChanged);
+			N.debug(jSelect.val());
+			N.debug( Type.typeof(jSelect.val()) );
+		});
+
+
+		// Values
 		var jList = jForm.find("ul.enumValues");
 		jList.empty();
-		var xml = jForm.find("xml").clone().children();
+		var xml = jForm.find("xml").children();
 		for(v in curEnum.values) {
 			var li = new J("<li/>");
 			li.appendTo(jList);
@@ -124,6 +155,7 @@ class EditEnums extends ui.modal.Panel {
 			);
 			i.linkEvent(EnumDefChanged);
 
+			// Remove value button
 			li.find(".delete").click( function(ev) {
 				new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("Warning! This operation will affect any Entity using this Enum in ALL LEVELS!"), function() {
 					new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+v }), project);

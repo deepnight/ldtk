@@ -652,6 +652,18 @@ select {
   max-width: 100%;
 }
 
+select.gray {
+  border: 1px dashed #545d73;
+  padding: 8px;
+  color: white;
+  background-color: #2e333f;
+  background-image: url("../img/stripes.png");
+}
+
+select option {
+  overflow: hidden;
+}
+
 input[type=text],
 input[type=number] {
   display: block;
@@ -1521,10 +1533,6 @@ canvas#webgl {
   color: white;
   background-color: #2e333f;
   background-image: url("../img/stripes.png");
-}
-
-.instanceEditor ul.form select.usingDefault option {
-  overflow: hidden;
 }
 
 .window.panel button.delete {

@@ -611,6 +611,18 @@ select {
 	display: block;
 	padding: 8px;
 	max-width: 100%;
+
+	&.gray {
+		border: 1px dashed $bgLight;
+		padding: 8px;
+		color: white;
+		background-color: $bgMed;
+		background-image: url("../img/stripes.png");
+	}
+
+	option {
+		overflow: hidden;
+	}
 }
 
 input[type=text],
@@ -1471,10 +1483,6 @@ canvas#webgl {
 			color: white;
 			background-color: $bgMed;
 			background-image: url("../img/stripes.png");
-
-			option {
-				overflow: hidden;
-			}
 		}
 
 	}

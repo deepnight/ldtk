@@ -4,6 +4,7 @@ class EnumDef {
 	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
 	public var values : Array<String> = [];
+	public var iconTilesetUid : Null<Int>;
 
 	public function new(uid:Int, id:String) {
 		this.uid = uid;
@@ -28,6 +29,8 @@ class EnumDef {
 		for(v in JsonTools.readArray(json.values))
 			ed.values.push(v);
 
+		ed.iconTilesetUid = JsonTools.readNullableInt(json.iconTilesetUid);
+
 		return ed;
 	}
 
@@ -36,6 +39,7 @@ class EnumDef {
 			identifier: identifier,
 			uid: uid,
 			values: values.copy(),
+			iconTilesetUid: iconTilesetUid,
 		};
 	}
 
