@@ -263,6 +263,7 @@ class Definitions {
 			if( e.id==id ) {
 				ed.values.remove(e);
 				_project.tidy();
+				return;
 			}
 
 		throw "EnumDef value not found";
