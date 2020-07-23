@@ -5,22 +5,11 @@
 	"defaultPivotY" : 0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 10,
+	"nextUid" : 11,
 	"defs" : {
 		"layers" : [],
 		"entities" : [],
-		"tilesets" : [
-			{
-				"identifier" : "Gif89_8colors",
-				"uid" : 9,
-				"relPath" : "testImages/gif89.8colors.gif",
-				"pxWid" : 192,
-				"pxHei" : 128,
-				"tileGridSize" : 32,
-				"tileGridSpacing" : 0,
-				"savedSelections" : []
-			}
-		],
+		"tilesets" : [],
 		"enums" : [
 			{
 				"identifier" : "CommentTest",
