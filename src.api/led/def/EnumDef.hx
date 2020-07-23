@@ -26,8 +26,11 @@ class EnumDef {
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
 		var ed = new EnumDef(JsonTools.readInt(json.uid), json.identifier);
 
-		for(v in JsonTools.readArray(json.values)) // TODO
-			ed.addValue(v);
+		for(v in JsonTools.readArray(json.values)) {
+			ed.values.push({
+				id: v.id,
+			});
+		}
 
 		ed.iconTilesetUid = JsonTools.readNullableInt(json.iconTilesetUid);
 
