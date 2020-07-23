@@ -222,7 +222,7 @@ class Project {
 		// Collision layer
 		var ld = p.defs.layers[0];
 		ld.identifier = "Collisions";
-		ld.getIntGridValueDef(0).name = "walls";
+		ld.getIntGridValueDef(0).identifier = "walls";
 		ld.addIntGridValue(0x00ff00, "grass");
 		ld.addIntGridValue(0x0000ff, "water");
 

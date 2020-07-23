@@ -47,7 +47,7 @@ class LayerDef {
 		o.intGridValues = [];
 		for( v in JsonTools.readArray(json.intGridValues) )
 			o.intGridValues.push({
-				name: v.name,
+				identifier: v.identifier,
 				color: JsonTools.readColor(v.color),
 			});
 
@@ -66,7 +66,7 @@ class LayerDef {
 			gridSize: gridSize,
 			displayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
 
-			intGridValues: intGridValues.map( function(iv) return { name:iv.name, color:JsonTools.writeColor(iv.color) }),
+			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
 
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,
@@ -75,12 +75,13 @@ class LayerDef {
 	}
 
 
-	public function addIntGridValue(col:UInt, ?name:String) {
-		if( !isIntGridValueNameValid(name) )
-			throw "Invalid intGrid value name "+name;
+	public function addIntGridValue(col:UInt, ?id:String) {
+		if( !isIntGridValueIdentifierValid(id) )
+			throw "Invalid intGrid value identifier "+id;
+
 		intGridValues.push({
 			color: col,
-			name: name,
+			identifier: id,
 		});
 	}
 
@@ -105,12 +106,15 @@ class LayerDef {
 		return false;
 	}
 
-	public function isIntGridValueNameValid(name:Null<String>) {
-		if( name==null )
+	public function isIntGridValueIdentifierValid(id:Null<String>) {
+		if( id==null )
 			return true;
 
+		if( !Project.isValidIdentifier(id) )
+			return false;
+
 		for(v in intGridValues)
-			if( v.name==name )
+			if( v.identifier==id )
 				return false;
 
 		return true;

@@ -101,10 +101,10 @@ class IntGridTool extends Tool<Int> {
 			if( idx==getSelectedValue() )
 				e.addClass("active");
 
-			if( intGridVal.name==null )
+			if( intGridVal.identifier==null )
 				e.text("#"+idx);
 			else
-				e.text("#"+idx+" - "+intGridVal.name);
+				e.text("#"+idx+" - "+intGridVal.identifier);
 
 			e.css("color", C.intToHex( C.autoContrast(C.toBlack(intGridVal.color,0.3)) ));
 			e.css("background-color", C.intToHex(intGridVal.color));
