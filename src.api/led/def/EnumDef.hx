@@ -42,7 +42,7 @@ class EnumDef {
 		return {
 			identifier: identifier,
 			uid: uid,
-			values: values.copy(),
+			values: values.map( function(v) return { id:v.id, tileId:v.tileId } ), // breaks memory refs
 			iconTilesetUid: iconTilesetUid,
 		};
 	}
@@ -83,6 +83,11 @@ class EnumDef {
 		getValue(id).tileId = tid; // TODO check validity?
 	}
 
+	public function clearAllTileIds() {
+		for(ev in values)
+			ev.tileId = null;
+	}
+
 	public function renameValue(from:String, to:String) {
 		to = Project.cleanupIdentifier(to,true);
 		if( to==null || !isValueIdentifierValidAndUnique(to) )
@@ -99,9 +104,9 @@ class EnumDef {
 
 	public function tidy(p:Project) {
 		// Lost tileset
-		if( iconTilesetUid!=null && p.defs.getTilesetDef(iconTilesetUid)==null )
+		if( iconTilesetUid!=null && p.defs.getTilesetDef(iconTilesetUid)==null ) {
 			iconTilesetUid = null;
-
-		// TODO clear value tileIds if no tileset
+			clearAllTileIds();
+		}
 	}
 }
