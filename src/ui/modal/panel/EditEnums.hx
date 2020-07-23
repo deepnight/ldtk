@@ -32,6 +32,36 @@ class EditEnums extends ui.modal.Panel {
 			});
 		});
 
+		// Import HX
+		jContent.find("button.importHx").click( function(_) {
+			JsTools.loadDialog(["hx"], editor.getProjectDir(), function(path:String) {
+				var file = JsTools.readFileString(path);
+				var reg = ~/^[ \t]*enum[ \t]+([a-z0-9_]+)[ \t]*{/gim;
+				if( !reg.match(file) ) {
+					N.error("Couldn't find any simple Enum in this source file.");
+					return;
+				}
+
+				var limit = 10;
+				while( limit-->0 && reg.match(file) ) {
+					var brackets = 1;
+					var pos = reg.matchedPos().pos + reg.matchedPos().len;
+					var start = pos;
+					while( pos < file.length && brackets>=1 ) {
+						if( file.charAt(pos)=="{" )
+							brackets++;
+						else if( file.charAt(pos)=="}" )
+							brackets--;
+						pos++;
+					}
+					trace("-- FOUND "+reg.matched(1)+" ---");
+					trace(file.substring(start,pos));
+
+					file = reg.matchedRight();
+				}
+			});
+		});
+
 		// Default enum selection
 		if( project.defs.enums.length>0 )
 			selectEnum( project.defs.enums[0] );
