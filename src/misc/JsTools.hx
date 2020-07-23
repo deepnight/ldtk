@@ -236,7 +236,29 @@ class JsTools {
 			var jThis = new J(e);
 			var tip = jThis.attr("title");
 			jThis.removeAttr("title");
-			ui.Tip.attach( jThis, tip );
+
+			// Parse key shortcut
+			var keys = [];
+			if( jThis.attr("keys")!=null ) {
+				var rawKeys = jThis.attr("keys").split("+").map( function(k) return StringTools.trim(k).toLowerCase() );
+				jThis.removeAttr("keys");
+				N.debug(rawKeys);
+				for(k in rawKeys) {
+					switch k {
+						case "ctrl" : keys.push(K.CTRL);
+						case "shift" : keys.push(K.SHIFT);
+						case "alt" : keys.push(K.ALT);
+						case _ :
+							if( k.length==1 ) {
+								var cid = k.charCodeAt(0);
+								if( cid>="a".code && cid<="z".code )
+									keys.push( cid - "a".code + K.A );
+							}
+					}
+				}
+			}
+
+			ui.Tip.attach( jThis, tip, keys );
 		});
 	}
 

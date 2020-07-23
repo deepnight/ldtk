@@ -137,11 +137,6 @@ class Editor extends dn.Process {
 			.change( function(ev) {
 				levelRender.setEnhanceActiveLayer( ev.getThis().prop("checked") );
 			});
-		ui.Tip.attach(
-			e.add( e.siblings() ),
-			Lang.t._("Check this to make the selected layer more obvious by fading/bluring all other inactive layers."),
-			[ K.A ]
-		);
 
 		// jMainPanel.find("h2#levelName").click( function(ev) jMainPanel.find("button.levelList").click() );
 

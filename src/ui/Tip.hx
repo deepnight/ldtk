@@ -16,7 +16,7 @@ class Tip extends dn.Process {
 		jContent.text(str);
 
 
-		if( keys!=null ) {
+		if( keys!=null && keys.length>0 ) {
 			var kWrapper = new J('<div class="keys"/>');
 			kWrapper.appendTo(jContent);
 
