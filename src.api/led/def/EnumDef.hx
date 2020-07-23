@@ -80,5 +80,8 @@ class EnumDef {
 	}
 
 	public function tidy(p:Project) {
+		// Lost tileset
+		if( iconTilesetUid!=null && p.defs.getTilesetDef(iconTilesetUid)==null )
+			iconTilesetUid = null;
 	}
 }
