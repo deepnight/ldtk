@@ -5,18 +5,18 @@ enum Mixed {
 	Some(n:Int);
 }
 
-enum CommentTest{
-	None; // multi // comment
-	Foo; // multi // comment  / rezoizeo
-	Move; Test; // Pouet;
+enum CommentTest {
+	Value1; // multi // comment
+	Value2; // multi // comment  / rezoizeo
+	Value3; Value4; // Pouet;
 	//Bar;
-	Eraser(x:Int,y:Int);/*
+	/*
 	GridCell(li:led.inst.LayerInstance, cx:Int, cy:Int, ?col:UInt);
 	GridRect(li:led.inst.LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
 	Entity(def:led.def.EntityDef, x:Int, y:Int);
 	Tiles(li:led.inst.LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int);
 	Resize(p:RulerPos);*/
-	End;
+	Value5;
 }
 
 enum OnlyParams {
@@ -25,9 +25,16 @@ enum OnlyParams {
 	Tile(li:led.inst.LayerInstance, cx:Int, cy:Int);
 }
 
-enum GoodBoy {
-	PanView;
-	Add;
-	Remove;
-	Move;
+enum ItemType {
+	Food;
+	Gold;
+	Ammo;
+	Key;
+}
+
+enum MobType {
+	Crawler;
+	Shooter;
+	Behemoth;
+	Hunter;
 }

@@ -5,66 +5,59 @@
 	"defaultPivotY" : 0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 6,
+	"nextUid" : 10,
 	"defs" : {
 		"layers" : [],
 		"entities" : [],
-		"tilesets" : [],
+		"tilesets" : [
+			{
+				"identifier" : "Gif89_8colors",
+				"uid" : 9,
+				"relPath" : "testImages/gif89.8colors.gif",
+				"pxWid" : 192,
+				"pxHei" : 128,
+				"tileGridSize" : 32,
+				"tileGridSpacing" : 0,
+				"savedSelections" : []
+			}
+		],
 		"enums" : [
 			{
-				"identifier" : "GoodBoy",
-				"uid" : 1,
+				"identifier" : "CommentTest",
+				"uid" : 6,
 				"values" : [
-					{ "id" : "PanView", "tileId" : null },
-					{ "id" : "Add", "tileId" : null },
-					{ "id" : "Remove", "tileId" : null },
-					{ "id" : "Move", "tileId" : null }
+					{ "id" : "Value1", "tileId" : null },
+					{ "id" : "Value2", "tileId" : null },
+					{ "id" : "Value3", "tileId" : null },
+					{ "id" : "Value4", "tileId" : null },
+					{ "id" : "Value5", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
 				"externalRelPath" : "TypesTest.hx"
 			},
 			{
-				"identifier" : "LayerType",
-				"uid" : 2,
+				"identifier" : "ItemType",
+				"uid" : 7,
 				"values" : [
-					{ "id" : "IntGrid", "tileId" : null },
-					{ "id" : "Entities", "tileId" : null },
-					{ "id" : "Tiles", "tileId" : null }
+					{ "id" : "Food", "tileId" : null },
+					{ "id" : "Gold", "tileId" : null },
+					{ "id" : "Ammo", "tileId" : null },
+					{ "id" : "Key", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "../../src.api/led/LedTypes.hx"
+				"externalRelPath" : "TypesTest.hx"
 			},
 			{
-				"identifier" : "FieldDisplayMode",
-				"uid" : 3,
+				"identifier" : "MobType",
+				"uid" : 8,
 				"values" : [
-					{ "id" : "Hidden", "tileId" : null },
-					{ "id" : "ValueOnly", "tileId" : null },
-					{ "id" : "NameAndValue", "tileId" : null }
+					{ "id" : "Crawler", "tileId" : null },
+					{ "id" : "Shooter", "tileId" : null },
+					{ "id" : "Behemoth", "tileId" : null },
+					{ "id" : "Hunter", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "../../src.api/led/LedTypes.hx"
-			},
-			{
-				"identifier" : "FieldDisplayPosition",
-				"uid" : 4,
-				"values" : [
-					{ "id" : "Above", "tileId" : null },
-					{ "id" : "Center", "tileId" : null },
-					{ "id" : "Beneath", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : "../../src.api/led/LedTypes.hx"
-			},
-			{
-				"identifier" : "TileEditMode",
-				"uid" : 5,
-				"values" : [
-					{ "id" : "Stamp", "tileId" : null },
-					{ "id" : "Random", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : "../../src.api/led/LedTypes.hx"
+				"externalRelPath" : "TypesTest.hx"
 			}
 		]
 	},
