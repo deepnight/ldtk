@@ -555,6 +555,11 @@ ul.form {
 			flex: 0 0 32px;
 		}
 
+		div.help {
+			flex: 1 0 100%;
+			box-sizing: border-box;
+		}
+
 		>label:first-of-type {
 			flex: 0 0 150px;
 			padding-right: 16px;
@@ -1821,15 +1826,15 @@ canvas#webgl {
 			flex: 0 0 100px;
 		}
 
-		ul.form li[class^="F_"] {
+		ul.form *[class*="F_"] {
 			display: none;
 		}
-		ul.form.type-F_Int li.F_int,
-		ul.form.type-F_Float li.F_Float,
-		ul.form.type-F_Bool li.F_Bool,
-		ul.form.type-F_Color li.F_Color,
-		ul.form.type-F_Enum li.F_Enum,
-		ul.form.type-F_String li.F_String {
+		ul.form.type-F_Int .F_int,
+		ul.form.type-F_Float .F_Float,
+		ul.form.type-F_Bool .F_Bool,
+		ul.form.type-F_Color .F_Color,
+		ul.form.type-F_Enum .F_Enum,
+		ul.form.type-F_String .F_String {
 			display: flex;
 		}
 

@@ -126,7 +126,7 @@ class EditEnums extends ui.modal.Panel {
 
 			// Check if this change will break something
 			if( curEnum.iconTilesetUid!=null )
-				for(v in curEnum.values)
+				for( v in curEnum.values )
 					if( v.tileId!=null ) {
 						new LastChance(Lang.t._("Enum icons changed"), project);
 						break;
@@ -192,7 +192,7 @@ class EditEnums extends ui.modal.Panel {
 					td.drawTileToCanvas( previewCanvas, eValue.tileId, 0, 0 );
 					previewCanvas.attr("width", td.tileGridSize);
 					previewCanvas.attr("height", td.tileGridSize);
-					previewCanvas.css("zoom", 32/td.tileGridSize);
+					// previewCanvas.css("zoom", 32/td.tileGridSize);
 				}
 			}
 

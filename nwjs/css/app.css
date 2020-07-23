@@ -594,6 +594,11 @@ ul.form > li div.info {
   flex: 0 0 32px;
 }
 
+ul.form > li div.help {
+  flex: 1 0 100%;
+  box-sizing: border-box;
+}
+
 ul.form > li > label:first-of-type {
   flex: 0 0 150px;
   padding-right: 16px;
@@ -1874,15 +1879,15 @@ canvas#webgl {
   flex: 0 0 100px;
 }
 
-.window.panel.entityDefs .fieldForm ul.form li[class^="F_"] {
+.window.panel.entityDefs .fieldForm ul.form *[class*="F_"] {
   display: none;
 }
 
-.window.panel.entityDefs .fieldForm ul.form.type-F_Int li.F_int,
-.window.panel.entityDefs .fieldForm ul.form.type-F_Float li.F_Float,
-.window.panel.entityDefs .fieldForm ul.form.type-F_Bool li.F_Bool,
-.window.panel.entityDefs .fieldForm ul.form.type-F_Color li.F_Color,
-.window.panel.entityDefs .fieldForm ul.form.type-F_Enum li.F_Enum,
-.window.panel.entityDefs .fieldForm ul.form.type-F_String li.F_String {
+.window.panel.entityDefs .fieldForm ul.form.type-F_Int .F_int,
+.window.panel.entityDefs .fieldForm ul.form.type-F_Float .F_Float,
+.window.panel.entityDefs .fieldForm ul.form.type-F_Bool .F_Bool,
+.window.panel.entityDefs .fieldForm ul.form.type-F_Color .F_Color,
+.window.panel.entityDefs .fieldForm ul.form.type-F_Enum .F_Enum,
+.window.panel.entityDefs .fieldForm ul.form.type-F_String .F_String {
   display: flex;
 }
