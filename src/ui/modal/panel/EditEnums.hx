@@ -121,10 +121,23 @@ class EditEnums extends ui.modal.Panel {
 		jSelect.val( curEnum.iconTilesetUid==null ? "-1" : Std.string(curEnum.iconTilesetUid) );
 		jSelect.change( function(ev) {
 			var tid = Std.parseInt( jSelect.val() );
+			if( tid==curEnum.iconTilesetUid )
+				return;
+
+			// Check if this change will break something
+			if( curEnum.iconTilesetUid!=null )
+				for(v in curEnum.values)
+					if( v.tileId!=null ) {
+						new LastChance(Lang.t._("Enum icons changed"), project);
+						break;
+					}
+
+			// Update tileset link
 			if( tid<0 )
 				curEnum.iconTilesetUid = null;
 			else
 				curEnum.iconTilesetUid = tid;
+			curEnum.clearAllTileIds();
 			editor.ge.emit(EnumDefChanged);
 		});
 
