@@ -1637,14 +1637,14 @@ canvas#webgl {
   grid-column: 2/3;
 }
 
-.window.panel.editEnums .content .enumForm textarea {
-  height: 200px;
+.window.panel.editEnums .content .enumForm button.createEnumValue {
+  flex: 1 0 100%;
 }
 
 .window.panel.editEnums .content .enumForm ul.enumValues li {
   display: grid;
-  gap: 2px;
-  grid-template-columns: auto min-content 32px;
+  gap: 3px;
+  grid-template-columns: 32px auto 50px 32px;
   margin-bottom: 4px;
 }
 
@@ -1658,6 +1658,26 @@ canvas#webgl {
 
 .window.panel.editEnums .content .enumForm ul.enumValues li button {
   padding: 0;
+}
+
+.window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile {
+  width: 32px;
+  height: 32px;
+  background-image: url("../img/stripes.png");
+  border: 1px solid #545d73;
+}
+
+.window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile:not(.active) {
+  cursor: not-allowed;
+}
+
+.window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile:not(.active):hover {
+  border-color: #e34d00;
+}
+
+.window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile.active:hover {
+  border-color: #ffcc00;
+  cursor: pointer;
 }
 
 .window.panel.layerDefs .mainList ul:empty::before {

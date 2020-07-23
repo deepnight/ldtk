@@ -1586,14 +1586,15 @@ canvas#webgl {
 		.enumForm {
 			grid-column: 2/3;
 
-			textarea {
-				height: 200px;
+			button.createEnumValue {
+				flex: 1 0 100%;
 			}
+
 			ul.enumValues {
 				li {
 					display: grid;
-					gap: 2px;
-					grid-template-columns: auto min-content 32px;
+					gap: 3px;
+					grid-template-columns: 32px auto 50px 32px;
 					margin-bottom: 4px;
 					input[type=color] {
 						height: 24px;
@@ -1603,6 +1604,24 @@ canvas#webgl {
 					}
 					button {
 						padding: 0;
+					}
+					canvas.tile {
+						width: 32px;
+						height: 32px;
+						background-image: url("../img/stripes.png");
+						border: 1px solid $bgLight;
+
+						&:not(.active) {
+							cursor: not-allowed;
+							&:hover {
+								border-color: $red;
+							}
+						}
+
+						&.active:hover {
+							border-color: $orange;
+							cursor: pointer;
+						}
 					}
 				}
 			}

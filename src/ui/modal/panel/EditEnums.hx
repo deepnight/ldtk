@@ -133,36 +133,63 @@ class EditEnums extends ui.modal.Panel {
 		var jList = jForm.find("ul.enumValues");
 		jList.empty();
 		var xml = jForm.find("xml").children();
-		for(v in curEnum.values) {
+		for(eValue in curEnum.values) {
 			var li = new J("<li/>");
 			li.appendTo(jList);
 			li.append( xml.clone() );
 
+			// Identifier
 			var i = new form.input.StringInput(li.find(".name"),
-				function() return v.id,
+				function() return eValue.id,
 				function(newV) {
-					if( curEnum.renameValue(v.id, newV) ) {
+					if( curEnum.renameValue(eValue.id, newV) ) {
 						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-							if( fi.getEnumValue()==v.id )
+							if( fi.getEnumValue()==eValue.id )
 								fi.parseValue(newV);
 						});
 					}
 					else
-						N.invalidIdentifier(v.id);
+						N.invalidIdentifier(eValue.id);
 				}
 			);
 			i.linkEvent(EnumDefChanged);
 
+			// Tile picker
+			var i = new form.input.IntInput(
+				li.find(".tileId"),
+				function() return eValue.tileId,
+				function(v) curEnum.setValueTileId(eValue.id, v)
+			);
+			i.linkEvent(EnumDefChanged);
+
+			// Tile preview
+			var previewCanvas = li.find(".tile");
+			if( curEnum.iconTilesetUid!=null )
+				previewCanvas.addClass("active");
+			if( curEnum.iconTilesetUid!=null && eValue.tileId!=null ) {
+				var td = project.defs.getTilesetDef(curEnum.iconTilesetUid);
+				td.drawTileToCanvas( previewCanvas, eValue.tileId, 0, 0 );
+				previewCanvas.attr("width", td.tileGridSize);
+				previewCanvas.attr("height", td.tileGridSize);
+				previewCanvas.css("zoom", 32/td.tileGridSize);
+			}
+
+			// var i = Input.linkToHtmlInput( eValue.tileId, jForm.find("[name=tileId]") );
+			// i.validityCheck = function(v) {
+			// 	return project.defs.isEnumIdentifierUnique(v);
+			// }
+
+
 			// Remove value button
 			li.find(".delete").click( function(ev) {
 				new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("Warning! This operation will affect any Entity using this Enum in ALL LEVELS!"), function() {
-					new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+v }), project);
+					new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+eValue.id }), project);
 
 					project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-						if( fi.getEnumValue()==v.id )
+						if( fi.getEnumValue()==eValue.id )
 							fi.parseValue(null);
 					});
-					project.defs.removeEnumDefValue(curEnum, v.id);
+					project.defs.removeEnumDefValue(curEnum, eValue.id);
 					editor.ge.emit(EnumDefValueRemoved);
 				});
 			});

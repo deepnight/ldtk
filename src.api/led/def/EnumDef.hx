@@ -3,7 +3,7 @@ package led.def;
 class EnumDef {
 	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
-	public var values : Array<{ id:String }> = [];
+	public var values : Array<led.LedTypes.EnumDefValue> = [];
 	public var iconTilesetUid : Null<Int>;
 
 	public function new(uid:Int, id:String) {
@@ -29,6 +29,7 @@ class EnumDef {
 		for(v in JsonTools.readArray(json.values)) {
 			ed.values.push({
 				id: v.id,
+				tileId: JsonTools.readNullableInt(v.tileId),
 			});
 		}
 
@@ -46,13 +47,17 @@ class EnumDef {
 		};
 	}
 
-	public function hasValue(v:String) {
+	public inline function hasValue(v:String) {
+		return getValue(v)!=null;
+	}
+
+	public function getValue(v:String) : Null<led.LedTypes.EnumDefValue> {
 		v = Project.cleanupIdentifier(v,true);
 		for(ev in values)
 			if( ev.id==v )
-				return true;
+				return ev;
 
-		return false;
+		return null;
 	}
 
 	public inline function isValueIdentifierValidAndUnique(v:String) {
@@ -64,8 +69,18 @@ class EnumDef {
 			return false;
 
 		v = Project.cleanupIdentifier(v,true);
-		values.push({ id:v });
+		values.push({
+			id: v,
+			tileId: null,
+		});
 		return true;
+	}
+
+	public function setValueTileId(id:String, tid:Int) {
+		if( !hasValue(id) || iconTilesetUid==null )
+			return;
+
+		getValue(id).tileId = tid; // TODO check validity?
 	}
 
 	public function renameValue(from:String, to:String) {
