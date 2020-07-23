@@ -122,6 +122,32 @@ class FieldInstance {
 		return v == null;
 	}
 
+	public function hasIconForDisplay() {
+		switch def.type {
+			case F_Enum(enumDefUid):
+				var ed = _project.defs.getEnumDef(enumDefUid);
+				return ed.iconTilesetUid!=null && ed.getValue( getEnumValue() ).tileId!=null;
+
+			case _:
+				return false;
+		}
+	}
+
+	public function getIconForDisplay() : Null<h2d.Tile> {
+		if( !hasIconForDisplay() )
+			return null;
+
+		switch def.type {
+			case F_Enum(enumDefUid):
+				var ed = _project.defs.getEnumDef(enumDefUid);
+				var td = _project.defs.getTilesetDef(ed.iconTilesetUid);
+				return td.getTile( ed.getValue( getEnumValue() ).tileId );
+
+			case _:
+				return null;
+		}
+	}
+
 	public function getForDisplay() : String {
 		var v : Dynamic = switch def.type {
 			case F_Int: getInt();

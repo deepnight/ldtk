@@ -3,7 +3,8 @@ package led.def;
 class EnumDef {
 	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
-	public var values : Array<String> = [];
+	public var values : Array<led.LedTypes.EnumDefValue> = [];
+	public var iconTilesetUid : Null<Int>;
 
 	public function new(uid:Int, id:String) {
 		this.uid = uid;
@@ -25,8 +26,14 @@ class EnumDef {
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
 		var ed = new EnumDef(JsonTools.readInt(json.uid), json.identifier);
 
-		for(v in JsonTools.readArray(json.values))
-			ed.values.push(v);
+		for(v in JsonTools.readArray(json.values)) {
+			ed.values.push({
+				id: v.id,
+				tileId: JsonTools.readNullableInt(v.tileId),
+			});
+		}
+
+		ed.iconTilesetUid = JsonTools.readNullableInt(json.iconTilesetUid);
 
 		return ed;
 	}
@@ -35,17 +42,22 @@ class EnumDef {
 		return {
 			identifier: identifier,
 			uid: uid,
-			values: values.copy(),
+			values: values.map( function(v) return { id:v.id, tileId:v.tileId } ), // breaks memory refs
+			iconTilesetUid: iconTilesetUid,
 		};
 	}
 
-	public function hasValue(v:String) {
+	public inline function hasValue(v:String) {
+		return getValue(v)!=null;
+	}
+
+	public function getValue(v:String) : Null<led.LedTypes.EnumDefValue> {
 		v = Project.cleanupIdentifier(v,true);
 		for(ev in values)
-			if( ev==v )
-				return true;
+			if( ev.id==v )
+				return ev;
 
-		return false;
+		return null;
 	}
 
 	public inline function isValueIdentifierValidAndUnique(v:String) {
@@ -57,18 +69,33 @@ class EnumDef {
 			return false;
 
 		v = Project.cleanupIdentifier(v,true);
-		values.push(v);
+		values.push({
+			id: v,
+			tileId: null,
+		});
 		return true;
 	}
 
-	public function renameValue(from,to) {
+	public function setValueTileId(id:String, tid:Int) {
+		if( !hasValue(id) || iconTilesetUid==null )
+			return;
+
+		getValue(id).tileId = tid; // TODO check validity?
+	}
+
+	public function clearAllTileIds() {
+		for(ev in values)
+			ev.tileId = null;
+	}
+
+	public function renameValue(from:String, to:String) {
 		to = Project.cleanupIdentifier(to,true);
 		if( to==null || !isValueIdentifierValidAndUnique(to) )
 			return false;
 
 		for(i in 0...values.length)
-			if( values[i]==from ) {
-				values[i] = to;
+			if( values[i].id==from ) {
+				values[i].id = to;
 				return true;
 			}
 
@@ -76,5 +103,10 @@ class EnumDef {
 	}
 
 	public function tidy(p:Project) {
+		// Lost tileset
+		if( iconTilesetUid!=null && p.defs.getTilesetDef(iconTilesetUid)==null ) {
+			iconTilesetUid = null;
+			clearAllTileIds();
+		}
 	}
 }

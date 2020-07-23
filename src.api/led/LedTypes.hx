@@ -57,3 +57,8 @@ enum TileEditMode {
 	Stamp;
 	Random;
 }
+
+typedef EnumDefValue = {
+	var id : String;
+	var tileId : Null<Int>;
+}

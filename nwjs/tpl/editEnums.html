@@ -19,8 +19,13 @@
 
 <ul class="form enumForm">
 	<li>
-		<label for="eName">Enum identifier</label>
-		<input type="text" name="eName" id="eName"/>
+		<label for="id">Enum identifier</label>
+		<input type="text" name="id" id="id"/>
+	</li>
+
+	<li>
+		<label for="icons">Icon tileset</label>
+		<select id="icons"></select>
 	</li>
 
 	<li>
@@ -30,8 +35,8 @@
 		<button class="createEnumValue">Add value</button>
 
 		<xml id="enum">
+			<canvas class="tile" width="16" height="16"></canvas>
 			<input type="text" class="name" placeholder="REQUIRED - Unique identifier"/>
-			<!-- <input type="color" class="color"/> -->
 			<button class="delete">X</button>
 		</xml>
 	</li>

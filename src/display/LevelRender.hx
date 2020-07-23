@@ -320,8 +320,8 @@ class LevelRender extends dn.Process {
 			for(fd in ei.def.fieldDefs) {
 				var fi = ei.getFieldInstance(fd);
 
+				// Null enum warning
 				if( fd.type.getIndex()==led.LedTypes.FieldType.F_Enum(null).getIndex() && fi.getEnumValue()==null && !fd.canBeNull ) {
-					// Null enum warning
 					var tf = new h2d.Text(font, above);
 					tf.textColor = 0xffcc00;
 					tf.text = "!ERR!";
@@ -334,6 +334,7 @@ class LevelRender extends dn.Process {
 				if( fi.isUsingDefault() )
 					continue;
 
+				// Position
 				var fieldWrapper = new h2d.Object();
 				switch fd.editorDisplayPos {
 					case Above: above.addChild(fieldWrapper);
@@ -352,7 +353,13 @@ class LevelRender extends dn.Process {
 
 					case ValueOnly:
 						if( !fi.valueIsNull() && !( fd.type==F_Bool && fi.getBool()==false ) ) {
-							if( fd.type==F_Color ) {
+							if( fi.hasIconForDisplay() ) {
+								var tile = fi.getIconForDisplay();
+								var bmp = new h2d.Bitmap( tile, fieldWrapper );
+								var s = M.fmin( ei.def.width/ tile.width, ei.def.height/tile.height );
+								bmp.setScale(s);
+							}
+							else if( fd.type==F_Color ) {
 								var g = new h2d.Graphics(fieldWrapper);
 								var r = 4;
 								g.beginFill(fi.getColorAsInt());

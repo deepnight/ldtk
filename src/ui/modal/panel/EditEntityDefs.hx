@@ -328,9 +328,9 @@ class EditEntityDefs extends ui.modal.Panel {
 				for(v in ed.values) {
 					var opt = new J('<option/>');
 					opt.appendTo(enumDef);
-					opt.attr("value",v);
-					opt.text(v);
-					if( curField.getEnumDefault()==v )
+					opt.attr("value",v.id);
+					opt.text(v.id);
+					if( curField.getEnumDefault()==v.id )
 						opt.attr("selected","selected");
 				}
 

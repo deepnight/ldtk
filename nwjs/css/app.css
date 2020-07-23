@@ -594,6 +594,11 @@ ul.form > li div.info {
   flex: 0 0 32px;
 }
 
+ul.form > li div.help {
+  flex: 1 0 100%;
+  box-sizing: border-box;
+}
+
 ul.form > li > label:first-of-type {
   flex: 0 0 150px;
   padding-right: 16px;
@@ -650,6 +655,18 @@ select {
   display: block;
   padding: 8px;
   max-width: 100%;
+}
+
+select.gray {
+  border: 1px dashed #545d73;
+  padding: 8px;
+  color: white;
+  background-color: #2e333f;
+  background-image: url("../img/stripes.png");
+}
+
+select option {
+  overflow: hidden;
 }
 
 input[type=text],
@@ -1348,7 +1365,7 @@ canvas#webgl {
   outline: 2px solid white !important;
 }
 
-.palette .tilesetPicker {
+.tilesetPicker {
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
@@ -1357,20 +1374,27 @@ canvas#webgl {
   height: 100%;
 }
 
-.palette .tilesetPicker .wrapper img.atlas {
+.tilesetPicker img.atlas {
   image-rendering: pixelated;
   box-shadow: 0px 0px 32px black;
   outline: 1px solid #545d73;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper,
-.palette .tilesetPicker .wrapper .cursorsWrapper {
+.tilesetPicker.singleTileMode .selectionsWrapper .tileCursor.selection {
+  border-width: 1px;
+  border-color: #ffcc00;
+  border-style: solid;
+  box-shadow: 0px 0px 16px #e34d00;
+}
+
+.tilesetPicker .selectionsWrapper,
+.tilesetPicker .cursorsWrapper {
   pointer-events: none;
   position: relative;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor {
+.tilesetPicker .selectionsWrapper .tileCursor,
+.tilesetPicker .cursorsWrapper .tileCursor {
   position: absolute;
   z-index: 1;
   min-width: 1px;
@@ -1382,48 +1406,57 @@ canvas#webgl {
   border-width: 0px;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.randomMode,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.randomMode {
+.tilesetPicker .selectionsWrapper .tileCursor.randomMode,
+.tilesetPicker .cursorsWrapper .tileCursor.randomMode {
   border-width: 1px;
   border-color: rgba(144, 238, 144, 0.5);
   border-style: dotted;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.randomMode.selection,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.randomMode.selection {
+.tilesetPicker .selectionsWrapper .tileCursor.randomMode.selection,
+.tilesetPicker .cursorsWrapper .tileCursor.randomMode.selection {
   border-color: lightgreen;
   border-style: solid;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.stampMode.selection,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.stampMode.selection {
+.tilesetPicker .selectionsWrapper .tileCursor.stampMode.selection,
+.tilesetPicker .cursorsWrapper .tileCursor.stampMode.selection {
   border-color: #f3e4a4;
   border-style: solid;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.left,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.left {
+.tilesetPicker .selectionsWrapper .tileCursor.left,
+.tilesetPicker .cursorsWrapper .tileCursor.left {
   border-left-width: 1px;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.right,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.right {
+.tilesetPicker .selectionsWrapper .tileCursor.right,
+.tilesetPicker .cursorsWrapper .tileCursor.right {
   border-right-width: 1px;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.top,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.top {
+.tilesetPicker .selectionsWrapper .tileCursor.top,
+.tilesetPicker .cursorsWrapper .tileCursor.top {
   border-top-width: 1px;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.bottom,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.bottom {
+.tilesetPicker .selectionsWrapper .tileCursor.bottom,
+.tilesetPicker .cursorsWrapper .tileCursor.bottom {
   border-bottom-width: 1px;
 }
 
-.palette .tilesetPicker .wrapper .selectionsWrapper .tileCursor.remove,
-.palette .tilesetPicker .wrapper .cursorsWrapper .tileCursor.remove {
+.tilesetPicker .selectionsWrapper .tileCursor.remove,
+.tilesetPicker .cursorsWrapper .tileCursor.remove {
   border-color: red;
+}
+
+.window.singleTilePicker {
+  z-index: 99;
+}
+
+.window.singleTilePicker .content {
+  width: 60vw;
+  height: 60vh;
 }
 
 .instanceEditor {
@@ -1521,10 +1554,6 @@ canvas#webgl {
   color: white;
   background-color: #2e333f;
   background-image: url("../img/stripes.png");
-}
-
-.instanceEditor ul.form select.usingDefault option {
-  overflow: hidden;
 }
 
 .window.panel button.delete {
@@ -1629,14 +1658,14 @@ canvas#webgl {
   grid-column: 2/3;
 }
 
-.window.panel.editEnums .content .enumForm textarea {
-  height: 200px;
+.window.panel.editEnums .content .enumForm button.createEnumValue {
+  flex: 1 0 100%;
 }
 
 .window.panel.editEnums .content .enumForm ul.enumValues li {
   display: grid;
-  gap: 2px;
-  grid-template-columns: auto min-content 32px;
+  gap: 3px;
+  grid-template-columns: 32px auto 32px;
   margin-bottom: 4px;
 }
 
@@ -1650,6 +1679,27 @@ canvas#webgl {
 
 .window.panel.editEnums .content .enumForm ul.enumValues li button {
   padding: 0;
+}
+
+.window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile {
+  width: 32px;
+  height: 32px;
+  background-image: url("../img/stripes.png");
+  border: 1px solid #545d73;
+  image-rendering: pixelated;
+}
+
+.window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile:not(.active) {
+  cursor: not-allowed;
+}
+
+.window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile:not(.active):hover {
+  border-color: #e34d00;
+}
+
+.window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile.active:hover {
+  border-color: #ffcc00;
+  cursor: pointer;
 }
 
 .window.panel.layerDefs .mainList ul:empty::before {
@@ -1829,15 +1879,15 @@ canvas#webgl {
   flex: 0 0 100px;
 }
 
-.window.panel.entityDefs .fieldForm ul.form li[class^="F_"] {
+.window.panel.entityDefs .fieldForm ul.form *[class*="F_"] {
   display: none;
 }
 
-.window.panel.entityDefs .fieldForm ul.form.type-F_Int li.F_int,
-.window.panel.entityDefs .fieldForm ul.form.type-F_Float li.F_Float,
-.window.panel.entityDefs .fieldForm ul.form.type-F_Bool li.F_Bool,
-.window.panel.entityDefs .fieldForm ul.form.type-F_Color li.F_Color,
-.window.panel.entityDefs .fieldForm ul.form.type-F_Enum li.F_Enum,
-.window.panel.entityDefs .fieldForm ul.form.type-F_String li.F_String {
+.window.panel.entityDefs .fieldForm ul.form.type-F_Int .F_int,
+.window.panel.entityDefs .fieldForm ul.form.type-F_Float .F_Float,
+.window.panel.entityDefs .fieldForm ul.form.type-F_Bool .F_Bool,
+.window.panel.entityDefs .fieldForm ul.form.type-F_Color .F_Color,
+.window.panel.entityDefs .fieldForm ul.form.type-F_Enum .F_Enum,
+.window.panel.entityDefs .fieldForm ul.form.type-F_String .F_String {
   display: flex;
 }

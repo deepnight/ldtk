@@ -95,44 +95,117 @@ class EditEnums extends ui.modal.Panel {
 		}
 		jForm.show();
 
-		var i = Input.linkToHtmlInput( curEnum.identifier, jForm.find("[name=eName]") );
+		var i = Input.linkToHtmlInput( curEnum.identifier, jForm.find("[name=id]") );
 		i.validityCheck = function(v) {
 			return project.defs.isEnumIdentifierUnique(v);
 		}
 		i.linkEvent(EnumDefChanged);
 
+		// Tilesets
+		var jSelect = jForm.find("select#icons");
+		jSelect.empty();
+		if( curEnum.iconTilesetUid==null )
+			jSelect.addClass("gray");
+		else
+			jSelect.removeClass("gray");
+
+		var opt = new J('<option value="-1">-- Select a tileset --</option>');
+		opt.appendTo(jSelect);
+
+		for(td in project.defs.tilesets) {
+			var opt = new J('<option value="${td.uid}"/>');
+			opt.appendTo(jSelect);
+			opt.text( td.identifier );
+		}
+
+		jSelect.val( curEnum.iconTilesetUid==null ? "-1" : Std.string(curEnum.iconTilesetUid) );
+		jSelect.change( function(ev) {
+			var tid = Std.parseInt( jSelect.val() );
+			if( tid==curEnum.iconTilesetUid )
+				return;
+
+			// Check if this change will break something
+			if( curEnum.iconTilesetUid!=null )
+				for( v in curEnum.values )
+					if( v.tileId!=null ) {
+						new LastChance(Lang.t._("Enum icons changed"), project);
+						break;
+					}
+
+			// Update tileset link
+			if( tid<0 )
+				curEnum.iconTilesetUid = null;
+			else
+				curEnum.iconTilesetUid = tid;
+			curEnum.clearAllTileIds();
+			editor.ge.emit(EnumDefChanged);
+		});
+
+
+		// Values
 		var jList = jForm.find("ul.enumValues");
 		jList.empty();
-		var xml = jForm.find("xml").clone().children();
-		for(v in curEnum.values) {
+		var xml = jForm.find("xml").children();
+		for(eValue in curEnum.values) {
 			var li = new J("<li/>");
 			li.appendTo(jList);
 			li.append( xml.clone() );
 
+			// Identifier
 			var i = new form.input.StringInput(li.find(".name"),
-				function() return v,
+				function() return eValue.id,
 				function(newV) {
-					if( curEnum.renameValue(v, newV) ) {
+					if( curEnum.renameValue(eValue.id, newV) ) {
 						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-							if( fi.getEnumValue()==v )
+							if( fi.getEnumValue()==eValue.id )
 								fi.parseValue(newV);
 						});
 					}
 					else
-						N.invalidIdentifier(v);
+						N.invalidIdentifier(eValue.id);
 				}
 			);
 			i.linkEvent(EnumDefChanged);
 
+			// Tile preview
+			var previewCanvas = li.find(".tile");
+			if( curEnum.iconTilesetUid!=null ) {
+				var td = project.defs.getTilesetDef(curEnum.iconTilesetUid);
+				previewCanvas.addClass("active");
+
+				// Pick a tile
+				previewCanvas.click( function(_) {
+					var m = new Modal();
+					m.jModalAndMask.addClass("singleTilePicker");
+					var tp = new ui.TilesetPicker(m.jContent, td);
+					tp.singleSelectedTileId = eValue.tileId;
+					tp.onSingleTileSelect = function(tileId) {
+						N.debug(tileId);
+						m.close();
+						eValue.tileId = tileId;
+						editor.ge.emit(EnumDefChanged);
+					}
+				});
+
+				// Render preview
+				if( eValue.tileId!=null ) {
+					td.drawTileToCanvas( previewCanvas, eValue.tileId, 0, 0 );
+					previewCanvas.attr("width", td.tileGridSize);
+					previewCanvas.attr("height", td.tileGridSize);
+					// previewCanvas.css("zoom", 32/td.tileGridSize);
+				}
+			}
+
+			// Remove value button
 			li.find(".delete").click( function(ev) {
 				new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("Warning! This operation will affect any Entity using this Enum in ALL LEVELS!"), function() {
-					new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+v }), project);
+					new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+eValue.id }), project);
 
 					project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-						if( fi.getEnumValue()==v )
+						if( fi.getEnumValue()==eValue.id )
 							fi.parseValue(null);
 					});
-					project.defs.removeEnumDefValue(curEnum, v);
+					project.defs.removeEnumDefValue(curEnum, eValue.id);
 					editor.ge.emit(EnumDefValueRemoved);
 				});
 			});

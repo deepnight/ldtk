@@ -209,9 +209,9 @@ class InstanceEditor extends dn.Process {
 					for(v in ed.values) {
 						var opt = new J('<option/>');
 						opt.appendTo(select);
-						opt.attr("value",v);
-						opt.text(v);
-						if( fi.getEnumValue()==v && !fi.isUsingDefault() )
+						opt.attr("value",v.id);
+						opt.text(v.id);
+						if( fi.getEnumValue()==v.id && !fi.isUsingDefault() )
 							opt.attr("selected","selected");
 					}
 
