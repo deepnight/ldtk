@@ -358,7 +358,6 @@ class LevelRender extends dn.Process {
 								var bmp = new h2d.Bitmap( tile, fieldWrapper );
 								var s = M.fmin( ei.def.width/ tile.width, ei.def.height/tile.height );
 								bmp.setScale(s);
-								bmp.filter = new h2d.filter.Outline(1, ei.def.color);
 							}
 							else if( fd.type==F_Color ) {
 								var g = new h2d.Graphics(fieldWrapper);
