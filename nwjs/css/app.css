@@ -1008,6 +1008,17 @@ textarea:focus {
   max-width: none;
 }
 
+.window.lostFile .wrapper .content {
+  max-width: 50vw;
+}
+
+.window.lostFile .wrapper .content .path {
+  text-align: left;
+  padding: 4px;
+  background-color: #1e2229;
+  border: 1px solid #e34d00;
+}
+
 .window.helpWindow dl {
   display: grid;
   grid-template-columns: 0.5fr 1fr;

@@ -969,11 +969,26 @@ textarea {
 	}
 }
 
+
 .window.enumImport {
 	.wrapper .content {
 		max-width: none;
 	}
 }
+
+
+.window.lostFile {
+	.wrapper .content {
+		max-width: 50vw;
+		.path {
+			text-align: left;
+			padding: 4px;
+			background-color: $bgDark;
+			border: 1px solid $red;
+		}
+	}
+}
+
 
 .window.helpWindow {
 	dl {

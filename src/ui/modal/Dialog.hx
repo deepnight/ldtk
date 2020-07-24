@@ -48,6 +48,16 @@ class Dialog extends ui.Modal {
 		jButtons.empty().hide();
 	}
 
+
+	public function addTitle(label:dn.data.GetText.LocaleString) {
+		jContent.append('<h2>$label</h2>');
+	}
+
+	public function addParagraph(str:dn.data.GetText.LocaleString) {
+		jContent.append('<p>$str</p>');
+	}
+
+
 	public function addButton(label:String, ?className:String, cb:Void->Void) : js.jquery.JQuery {
 		var b = new J("<button/>");
 		jButtons.show().append(b);

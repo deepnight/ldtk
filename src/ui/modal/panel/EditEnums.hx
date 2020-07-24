@@ -119,7 +119,7 @@ class EditEnums extends ui.modal.Panel {
 			sync.appendTo(e);
 			sync.text("⟳");
 			sync.click( function(ev) {
-				importHxEnums(group.key);
+				importHxEnums(group.key, true);
 			});
 			Tip.attach(sync, Lang.t._("Reload and synchronize Enums"));
 
@@ -317,14 +317,28 @@ class EditEnums extends ui.modal.Panel {
 	}
 
 
-	function importHxEnums(relPath:String) {
+	function importHxEnums(relPath:String, isSync=false) {
 		var absPath = editor.makeFullFilePath(relPath);
 		var file = JsTools.readFileString(absPath);
+
 		if( file==null ) {
-			N.error( Lang.t._("File not found: ::path::", { path:relPath }) );
+			// File not found
+			if( isSync )
+				new ui.modal.dialog.LostFile(relPath, function(newAbs) {
+					var newRel = editor.makeRelativeFilePath(newAbs);
+					for(ed in project.defs.externalEnums)
+						if( ed.externalRelPath==relPath )
+							ed.externalRelPath = newRel;
+					editor.ge.emit( EnumDefChanged );
+					importHxEnums(newRel, true);
+				});
+			else
+				N.error( Lang.t._("File not found: ::path::", { path:relPath }) );
+
 			return;
 		}
 
+		// Import it
 		var parseds = parser.HxEnumParser.run(file);
 		if( parseds.length>0 )
 			loadParsedEnums(relPath, parseds);
