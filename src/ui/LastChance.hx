@@ -19,6 +19,7 @@ class LastChance extends dn.Process {
 			if( !isActive() )
 				return;
 			Editor.ME.selectProject( led.Project.fromJson(json) );
+			ui.modal.Dialog.closeAll();
 			N.msg( L.t._("Canceled action: \"::act::\"", {act:str}) );
 			hide();
 		});

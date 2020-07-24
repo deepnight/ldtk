@@ -325,6 +325,7 @@ class EditEnums extends ui.modal.Panel {
 			// File not found
 			if( isSync )
 				new ui.modal.dialog.LostFile(relPath, function(newAbs) {
+					new LastChance( Lang.t._("Relocated a lost file"), project );
 					var newRel = editor.makeRelativeFilePath(newAbs);
 					for(ed in project.defs.externalEnums)
 						if( ed.externalRelPath==relPath )

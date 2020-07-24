@@ -44,6 +44,12 @@ class Dialog extends ui.Modal {
 		}
 	}
 
+	public static function closeAll() {
+		for(m in Modal.ALL)
+			if( !m.isClosing() && Std.is(m, Dialog) )
+				m.close();
+	}
+
 	public function removeButtons() {
 		jButtons.empty().hide();
 	}
