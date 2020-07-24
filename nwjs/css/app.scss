@@ -336,7 +336,7 @@ ul.niceList {
 		content: "No layer";
 	}
 
-	li {
+	li:not(.title) {
 		display: grid;
 		justify-items: left;
 		align-items: center;
@@ -357,6 +357,24 @@ ul.niceList {
 			font-size: 0.7em;
 			opacity: 0.5;
 		}
+
+		&:not(.active):hover {
+			outline: 1px solid #586279;
+			outline-offset: -1px;
+		}
+	}
+
+	li.title {
+		display: grid;
+		padding: 4px;
+		// padding-top: 8px;
+		margin-top: 2px;
+
+		color: $orange;
+		font-size: 0.8em;
+		font-family: Roboto;
+
+		border-top: 1px solid $bgLight;
 	}
 
 	li.iconLeft {
@@ -387,10 +405,6 @@ ul.niceList {
 			background: transparent;
 			cursor: zoom-in;
 		}
-	}
-	li:not(.active):hover {
-		outline: 1px solid #586279;
-		outline-offset: -1px;
 	}
 }
 
@@ -569,7 +583,7 @@ ul.form {
 			font-size: 80%;
 		}
 
-		input[type=text]:hover {
+		input[type=text]:not([readonly]):hover {
 			outline: 1px solid $orange;
 		}
 
@@ -1605,7 +1619,7 @@ canvas#webgl {
 				flex: 1 0 100%;
 			}
 		}
-		.enumForm {
+		ul.enumForm {
 			grid-column: 2/3;
 
 			button.createEnumValue {
@@ -1646,6 +1660,29 @@ canvas#webgl {
 							cursor: pointer;
 						}
 					}
+				}
+			}
+
+
+			.onlyExternal {
+				display: none;
+			}
+
+			&.externalEnum {
+				.noExternal {
+					display: none;
+				}
+				li.onlyExternal {
+					display: flex;
+				}
+				ul.enumValues li {
+					grid-template-columns: auto;
+				}
+
+				.path {
+					background-color: $bgDark;
+					padding: 5px;
+					border: 1px solid $bgLight;
 				}
 			}
 		}

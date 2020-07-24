@@ -12,6 +12,8 @@ class EnumDef {
 		this.identifier = id;
 	}
 
+	public inline function isExternal() return externalRelPath!=null;
+
 	function set_identifier(v:String) {
 		v = Project.cleanupIdentifier(v,true);
 		if( v==null )
