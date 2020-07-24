@@ -112,6 +112,10 @@ class App extends dn.Process {
 	}
 
 	public function loadPage(id:String) {
+		ui.modal.Dialog.closeAll();
+		ui.Modal.closeAll();
+		ui.Tip.clear();
+
 		var path = JsTools.getCwd() + '/pages/$id.html';
 		var raw = JsTools.readFileString(path);
 		if( raw==null )
