@@ -2,6 +2,9 @@ package parser;
 
 class HxEnumParser {
 	public static function run(fileContent:String) : Array<ParsedExternalEnum> {
+		if( fileContent==null || fileContent.length==0 )
+			return [];
+
 		// Trim comments
 		var lineCommentReg = ~/^([^\/\n]*)(\/\/.*)$/gm;
 		fileContent = lineCommentReg.replace(fileContent,"$1");

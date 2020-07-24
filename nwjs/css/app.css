@@ -416,7 +416,7 @@ ul.niceList li.hidden .vis {
 
 ul.log {
   box-sizing: border-box;
-  padding: 8px;
+  padding: 4px;
   margin-bottom: 4px;
   max-width: 80vw;
   min-width: 50vw;
@@ -425,6 +425,14 @@ ul.log {
   border: 1px solid #545d73;
   background-color: #1e2229;
   overflow: auto;
+}
+
+ul.log li {
+  padding: 4px;
+}
+
+ul.log li:hover {
+  outline: 1px dashed #545d73;
 }
 
 ul.log li.good {
@@ -996,7 +1004,7 @@ textarea:focus {
   flex-grow: 2;
 }
 
-.window.log .wrapper .content {
+.window.enumImport .wrapper .content {
   max-width: none;
 }
 

@@ -5,7 +5,7 @@
 	"defaultPivotY" : 0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 25,
+	"nextUid" : 39,
 	"defs" : {
 		"layers" : [
 			{
@@ -35,12 +35,24 @@
 				"pivotY" : 0.5,
 				"fieldDefs" : [
 					{
-						"identifier" : "local",
-						"_desc" : "SomeLocalEnum",
-						"uid" : 16,
-						"type" : { "id" : "F_Enum", "params" : [ 14 ] },
+						"identifier" : "type",
+						"_desc" : "EnemyType",
+						"uid" : 37,
+						"type" : { "id" : "F_Enum", "params" : [ 35 ] },
 						"canBeNull" : false,
-						"editorDisplayMode" : "Hidden",
+						"editorDisplayMode" : "NameAndValue",
+						"editorDisplayPos" : "Above",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
+					},
+					{
+						"identifier" : "item",
+						"_desc" : "ItemType",
+						"uid" : 38,
+						"type" : { "id" : "F_Enum", "params" : [ 34 ] },
+						"canBeNull" : true,
+						"editorDisplayMode" : "NameAndValue",
 						"editorDisplayPos" : "Above",
 						"min" : null,
 						"max" : null,
@@ -92,38 +104,37 @@
 		],
 		"externalEnums" : [
 			{
-				"identifier" : "AnImportedEnum",
-				"uid" : 22,
-				"values" : [
-					{ "id" : "Value1", "tileId" : null },
-					{ "id" : "Value2", "tileId" : null },
-					{ "id" : "Value3", "tileId" : null },
-					{ "id" : "Value4", "tileId" : null },
-					{ "id" : "Value5", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : "TypesTest.hx"
-			},
-			{
 				"identifier" : "ItemType",
-				"uid" : 23,
+				"uid" : 34,
 				"values" : [
+					{ "id" : "Ammo", "tileId" : null },
 					{ "id" : "Food", "tileId" : null },
 					{ "id" : "Gold", "tileId" : null },
-					{ "id" : "Ammo", "tileId" : null },
-					{ "id" : "Key", "tileId" : null }
+					{ "id" : "Key", "tileId" : null },
+					{ "id" : "SomeNewObject", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
 				"externalRelPath" : "TypesTest.hx"
 			},
 			{
 				"identifier" : "EnemyType",
-				"uid" : 24,
+				"uid" : 35,
 				"values" : [
-					{ "id" : "Crawler", "tileId" : null },
-					{ "id" : "Shooter", "tileId" : null },
 					{ "id" : "Behemoth", "tileId" : null },
-					{ "id" : "Hunter", "tileId" : null }
+					{ "id" : "Crawler", "tileId" : null },
+					{ "id" : "Hunter", "tileId" : null },
+					{ "id" : "NewBigBoy", "tileId" : null },
+					{ "id" : "Shooter", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "TypesTest.hx"
+			},
+			{
+				"identifier" : "SomeEnum",
+				"uid" : 36,
+				"values" : [
+					{ "id" : "Bar", "tileId" : null },
+					{ "id" : "Foo", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
 				"externalRelPath" : "TypesTest.hx"
@@ -134,8 +145,8 @@
 		{
 			"identifier" : "Level",
 			"uid" : 0,
-			"pxWid" : 256,
-			"pxHei" : 256,
+			"pxWid" : 336,
+			"pxHei" : 240,
 			"layerInstances" : [
 				{
 					"_identifier" : "Entities",
@@ -149,16 +160,61 @@
 						{
 							"_identifier" : "Mob",
 							"_cx" : 10,
-							"_cy" : 8,
+							"_cy" : 4,
 							"defUid" : 15,
 							"x" : 168,
-							"y" : 136,
+							"y" : 72,
 							"fieldInstances" : [
 								{
-									"_identifier" : "local",
-									"_value" : "A",
-									"defUid" : 16,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "A" ] }
+									"_identifier" : "type",
+									"_value" : "Hunter",
+									"defUid" : 37,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Hunter" ] }
+								},
+								{ "_identifier" : "item", "_value" : null, "defUid" : 38, "realEditorValue" : null }
+							]
+						},
+						{
+							"_identifier" : "Mob",
+							"_cx" : 10,
+							"_cy" : 7,
+							"defUid" : 15,
+							"x" : 168,
+							"y" : 120,
+							"fieldInstances" : [
+								{
+									"_identifier" : "type",
+									"_value" : "Behemoth",
+									"defUid" : 37,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Behemoth" ] }
+								},
+								{
+									"_identifier" : "item",
+									"_value" : "Key",
+									"defUid" : 38,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Key" ] }
+								}
+							]
+						},
+						{
+							"_identifier" : "Mob",
+							"_cx" : 10,
+							"_cy" : 10,
+							"defUid" : 15,
+							"x" : 168,
+							"y" : 168,
+							"fieldInstances" : [
+								{
+									"_identifier" : "type",
+									"_value" : "Hunter",
+									"defUid" : 37,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Hunter" ] }
+								},
+								{
+									"_identifier" : "item",
+									"_value" : "Key",
+									"defUid" : 38,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Key" ] }
 								}
 							]
 						}

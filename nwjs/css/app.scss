@@ -426,7 +426,7 @@ ul.niceList {
 
 ul.log {
 	box-sizing: border-box;
-	padding: 8px;
+	padding: 4px;
 	margin-bottom: 4px;
 
 	max-width: 80vw;
@@ -437,6 +437,13 @@ ul.log {
 	border: 1px solid $bgLight;
 	background-color: $bgDark;
 	overflow: auto;
+
+	li {
+		padding: 4px;
+	}
+	li:hover {
+		outline: 1px dashed $bgLight;
+	}
 
 	li.good {
 		color: #a7d93d;
@@ -962,7 +969,7 @@ textarea {
 	}
 }
 
-.window.log {
+.window.enumImport {
 	.wrapper .content {
 		max-width: none;
 	}

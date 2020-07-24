@@ -318,7 +318,12 @@ class EditEnums extends ui.modal.Panel {
 
 
 	function importHxEnums(relPath:String) {
-		var file = JsTools.readFileString( editor.makeFullFilePath(relPath) );
+		var absPath = editor.makeFullFilePath(relPath);
+		var file = JsTools.readFileString(absPath);
+		if( file==null ) {
+			N.error( Lang.t._("File not found: ::path::", { path:relPath }) );
+			return;
+		}
 
 		var parseds = parser.HxEnumParser.run(file);
 		if( parseds.length>0 )
@@ -334,13 +339,17 @@ class EditEnums extends ui.modal.Panel {
 				return;
 			}
 		}
-		var log = project.defs.importExternalEnums(relPath, parseds);
-		if( log.length>0 ) {
-			new ui.modal.dialog.ImportLog(log);
-			N.success("External enums successfully synced!");
+
+
+		var copy = project.clone();
+		var result = copy.defs.importExternalEnums(relPath, parseds);
+		if( result.needConfirm )
+			new ui.modal.dialog.EnumImport(result.log, copy);
+		else if( result.log.length>0 ) {
+			editor.selectProject(copy);
+			N.success("Successfully imported enums!");
 		}
 		else
 			N.msg("Nothing to sync.");
-		editor.ge.emit(EnumDefImported);
 	}
 }

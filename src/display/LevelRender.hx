@@ -129,7 +129,7 @@ class LevelRender extends dn.Process {
 			case EntityFieldAdded, EntityFieldRemoved, EntityFieldDefChanged, EntityFieldInstanceChanged:
 				invalidate();
 
-			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved, EnumDefImported:
+			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved:
 				invalidate();
 
 			case LevelAdded:

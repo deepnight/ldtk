@@ -79,6 +79,10 @@ class Project {
 		}
 	}
 
+	public function clone() : led.Project {
+		return fromJson( toJson() );
+	}
+
 	public function tidy() {
 		defs.tidy(this);
 

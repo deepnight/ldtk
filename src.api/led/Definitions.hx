@@ -363,8 +363,9 @@ class Definitions {
 	}
 
 
-	public function importExternalEnums(relSourcePath:String, parseds:Array<EditorTypes.ParsedExternalEnum>) : Array<String> {
+	public function importExternalEnums(relSourcePath:String, parseds:Array<EditorTypes.ParsedExternalEnum>) {
 		var log = [];
+		var needConfirm = false;
 
 		var isNew = true;
 		for(ed in externalEnums)
@@ -376,7 +377,7 @@ class Definitions {
 		if( isNew ) {
 			// Source file is completely new
 			for(pe in parseds) {
-				log.push("Added "+pe.enumId+".*");
+				log.push("ADDED: "+pe.enumId+".*");
 				createExternalEnumDef(relSourcePath, pe);
 			}
 		}
@@ -387,14 +388,16 @@ class Definitions {
 				if( existing==null ) {
 					// New enum found
 					createExternalEnumDef(relSourcePath, pe);
-					log.push("Added "+pe.enumId+".*");
+					log.push("ADDED: "+pe.enumId+".*");
+					needConfirm = true;
 				}
 				else {
 					// Add new values on existing
 					for(v in pe.values)
 						if( !existing.hasValue(v) ) {
-							log.push("Added "+pe.enumId+"."+v);
 							existing.addValue(v);
+							log.push("ADDED: "+pe.enumId+"."+v);
+							needConfirm = true;
 						}
 
 					// Remove lost values
@@ -407,8 +410,9 @@ class Definitions {
 							}
 
 						if( !found ) {
-							log.push("Removed "+pe.enumId+"."+v.id);
 							removeEnumDefValue(existing, v.id);
+							log.push("REMOVED: "+pe.enumId+"."+v.id);
+							needConfirm = true;
 						}
 					}
 
@@ -427,14 +431,15 @@ class Definitions {
 						}
 
 					if( !found ) {
-						log.push("Removed "+ed.identifier+".*");
 						removeEnumDef(ed);
+						log.push("REMOVED: "+ed.identifier+".*");
+						needConfirm = true;
 					}
 				}
 		}
 
 		_project.tidy();
-		return log;
+		return { log:log, needConfirm:needConfirm }
 	}
 
 }
