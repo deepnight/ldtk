@@ -6,50 +6,7 @@
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
 	"nextUid" : 11,
-	"defs" : {
-		"layers" : [],
-		"entities" : [],
-		"tilesets" : [],
-		"enums" : [
-			{
-				"identifier" : "CommentTest",
-				"uid" : 6,
-				"values" : [
-					{ "id" : "Value1", "tileId" : null },
-					{ "id" : "Value2", "tileId" : null },
-					{ "id" : "Value3", "tileId" : null },
-					{ "id" : "Value4", "tileId" : null },
-					{ "id" : "Value5", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : "TypesTest.hx"
-			},
-			{
-				"identifier" : "ItemType",
-				"uid" : 7,
-				"values" : [
-					{ "id" : "Food", "tileId" : null },
-					{ "id" : "Gold", "tileId" : null },
-					{ "id" : "Ammo", "tileId" : null },
-					{ "id" : "Key", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : "TypesTest.hx"
-			},
-			{
-				"identifier" : "MobType",
-				"uid" : 8,
-				"values" : [
-					{ "id" : "Crawler", "tileId" : null },
-					{ "id" : "Shooter", "tileId" : null },
-					{ "id" : "Behemoth", "tileId" : null },
-					{ "id" : "Hunter", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : "TypesTest.hx"
-			}
-		]
-	},
+	"defs" : { "layers" : [], "entities" : [], "tilesets" : [], "enums" : [], "externalEnums" : [] },
 	"levels" : [
 		{ "identifier" : "Level", "uid" : 0, "pxWid" : 256, "pxHei" : 256, "layerInstances" : [] }
 	]
