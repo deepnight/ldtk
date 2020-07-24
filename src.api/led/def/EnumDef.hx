@@ -107,6 +107,12 @@ class EnumDef {
 		return false;
 	}
 
+	public function alphaSortValues() {
+		values.sort( function(a,b) {
+			return Reflect.compare( a.id.toLowerCase(), b.id.toLowerCase() );
+		});
+	}
+
 	public function tidy(p:Project) {
 		// Lost tileset
 		if( iconTilesetUid!=null && p.defs.getTilesetDef(iconTilesetUid)==null ) {

@@ -273,6 +273,8 @@ class Definitions {
 		for(v in e.values)
 			ed.addValue(v);
 
+		ed.alphaSortValues();
+
 		return ed;
 	}
 
@@ -410,6 +412,7 @@ class Definitions {
 						}
 					}
 
+					existing.alphaSortValues();
 				}
 			}
 
