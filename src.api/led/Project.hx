@@ -90,11 +90,6 @@ class Project {
 			level.tidy(this);
 	}
 
-	public function loadExternalFiles(projectDir:String) {
-		for(td in defs.tilesets)
-			td.reloadImage(projectDir);
-	}
-
 
 	/**  LEVELS  *****************************************/
 

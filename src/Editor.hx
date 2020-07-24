@@ -165,7 +165,19 @@ class Editor extends dn.Process {
 
 		project = p;
 		project.tidy();
-		project.loadExternalFiles( getProjectDir() );
+
+		// Load external files
+		for(td in project.defs.tilesets) {
+			if( !td.reloadImage( getProjectDir() ) ) {
+				new ui.modal.dialog.LostFile( td.relPath, function(newAbsPath) {
+					var newRelPath = makeRelativeFilePath(newAbsPath);
+					td.importAtlasImage( getProjectDir(), newRelPath );
+					ge.emit( TilesetDefChanged );
+				});
+			}
+		}
+
+
 		curLevelId = project.levels[0].uid;
 		curLayerId = -1;
 

@@ -36,6 +36,7 @@ class LostFile extends ui.modal.Dialog {
 	}
 
 	function pickNewPath(newPath:String) {
+		new LastChance( Lang.t._("Relocated a lost file"), editor.project );
 		onNewPath(newPath);
 		close();
 	}

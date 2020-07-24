@@ -74,7 +74,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Main tileset view
 		var jFull = jForm.find(".tileset canvas.fullPreview");
-		if( cur==null || !cur.isAtlasValid() ) {
+		if( cur==null || !cur.isAtlasLoaded() ) {
 			var cnv = Std.downcast( jFull.get(0), js.html.CanvasElement );
 			cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
 		}
@@ -87,7 +87,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var cnv = Std.downcast( jDemo.get(0), js.html.CanvasElement );
 		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
 
-		if( cur!=null && cur.isAtlasValid() ) {
+		if( cur!=null && cur.isAtlasLoaded() ) {
 			jDemo.attr("width", cur.tileGridSize*6 + padding*5);
 			jDemo.attr("height", cur.tileGridSize);
 
@@ -143,9 +143,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// "Import image" button
 		var b = jForm.find("#tilesetFile");
-		if( cur.relPath==null )
+		if( !cur.hasAtlasPath() )
 			b.text( Lang.t._("Select an image file") );
-		else if( !cur.isAtlasValid() )
+		else if( !cur.isAtlasLoaded() )
 			b.text("ERROR: Couldn't read image data");
 		else
 			b.text("Replace image");

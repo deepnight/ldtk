@@ -21,10 +21,10 @@ class TilesetDef {
 
 
 	public var cWid(get,never) : Int;
-	inline function get_cWid() return !isAtlasValid() ? 0 : dn.M.ceil( pxWid / tileGridSize );
+	inline function get_cWid() return !hasAtlasPath() ? 0 : dn.M.ceil( pxWid / tileGridSize );
 
 	public var cHei(get,never) : Int;
-	inline function get_cHei() return !isAtlasValid() ? 0 : dn.M.ceil( pxHei / tileGridSize );
+	inline function get_cHei() return !hasAtlasPath() ? 0 : dn.M.ceil( pxHei / tileGridSize );
 
 
 	public function new(p:Project, uid:Int) {
@@ -33,8 +33,12 @@ class TilesetDef {
 		identifier = "Tileset"+uid;
 	}
 
+
+	public inline function hasAtlasPath() return relPath!=null;
+	public inline function isAtlasLoaded() return relPath!=null && bytes!=null;
+
 	public function getMaxTileGridSize() {
-		return isAtlasValid() ? dn.M.imin(pxWid, pxHei) : 100;
+		return hasAtlasPath() ? dn.M.imin(pxWid, pxHei) : 100;
 	}
 
 	function set_identifier(id:String) {
@@ -42,7 +46,7 @@ class TilesetDef {
 	}
 
 	public function getFileName(withExt:Bool) : Null<String> {
-		if( !isAtlasValid() )
+		if( !hasAtlasPath() )
 			return null;
 
 		return withExt ? dn.FilePath.extractFileWithExt(relPath) : dn.FilePath.extractFileName(relPath);
@@ -66,8 +70,6 @@ class TilesetDef {
 		base64 = null;
 		#end
 	}
-
-	public inline function isAtlasValid() return relPath!=null;
 
 
 	public function toJson() {
@@ -116,7 +118,7 @@ class TilesetDef {
 
 		try {
 			var fullPath = Editor.ME.makeFullFilePath(relPath);
-			var bytes = misc.JsTools.readFileBytes(fullPath);
+			bytes = misc.JsTools.readFileBytes(fullPath);
 
 			if( bytes==null )
 				return false;
@@ -240,11 +242,11 @@ class TilesetDef {
 	}
 
 	public inline function getAtlasTile() : Null<h2d.Tile> {
-		return isAtlasValid() ? h2d.Tile.fromTexture(texture) : null;
+		return isAtlasLoaded() ? h2d.Tile.fromTexture(texture) : null;
 	}
 
 	public inline function getTile(tileId:Int) : h2d.Tile {
-		if( isAtlasValid() )
+		if( isAtlasLoaded() )
 			return getAtlasTile().sub( getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize );
 		else
 			return makeErrorTile(tileGridSize);
@@ -257,7 +259,7 @@ class TilesetDef {
 
 	public function createAtlasHtmlImage() : js.html.Image {
 		var img = new js.html.Image();
-		if( isAtlasValid() )
+		if( isAtlasLoaded() )
 			img.src = 'data:image/png;base64,$base64';
 		return img;
 	}
@@ -267,7 +269,7 @@ class TilesetDef {
 		if( !canvas.is("canvas") )
 			throw "Not a canvas";
 
-		if( !isAtlasValid() )
+		if( !isAtlasLoaded() )
 			return;
 
 		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
