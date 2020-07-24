@@ -16,6 +16,7 @@ class Modal extends dn.Process {
 		super(Editor.ME);
 
 		InstanceEditor.closeAll();
+		Tip.clear();
 		ALL.push(this);
 
 		jModalAndMask = new J("xml#window").children().first().clone();

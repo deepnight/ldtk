@@ -36,6 +36,10 @@ class Tip extends dn.Process {
 		});
 	}
 
+	public static function clear() {
+		App.ME.jBody.find(".tip").not("xml .tip").remove();
+	}
+
 
 	public static function attach(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String) {
 		var cur : Tip = null;
