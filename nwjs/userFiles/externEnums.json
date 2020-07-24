@@ -5,9 +5,175 @@
 	"defaultPivotY" : 0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 11,
-	"defs" : { "layers" : [], "entities" : [], "tilesets" : [], "enums" : [], "externalEnums" : [] },
+	"nextUid" : 20,
+	"defs" : {
+		"layers" : [
+			{
+				"identifier" : "Entities",
+				"type" : "Entities",
+				"uid" : 19,
+				"gridSize" : 16,
+				"displayOpacity" : 1,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" }
+				],
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			}
+		],
+		"entities" : [
+			{
+				"identifier" : "Mob",
+				"uid" : 15,
+				"width" : 16,
+				"height" : 16,
+				"color" : "#FF0000",
+				"maxPerLevel" : 0,
+				"discardExcess" : true,
+				"pivotX" : 0.5,
+				"pivotY" : 0.5,
+				"fieldDefs" : [
+					{
+						"identifier" : "type",
+						"_desc" : "MobType",
+						"uid" : 17,
+						"type" : { "id" : "F_Enum", "params" : [ 13 ] },
+						"canBeNull" : false,
+						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayPos" : "Above",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
+					},
+					{
+						"identifier" : "local",
+						"_desc" : "Local",
+						"uid" : 16,
+						"type" : { "id" : "F_Enum", "params" : [ 14 ] },
+						"canBeNull" : false,
+						"editorDisplayMode" : "Hidden",
+						"editorDisplayPos" : "Above",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
+					},
+					{
+						"identifier" : "loot",
+						"_desc" : "ItemType",
+						"uid" : 18,
+						"type" : { "id" : "F_Enum", "params" : [ 12 ] },
+						"canBeNull" : true,
+						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayPos" : "Center",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
+					}
+				]
+			}
+		],
+		"tilesets" : [],
+		"enums" : [
+			{
+				"identifier" : "Local",
+				"uid" : 14,
+				"values" : [
+					{ "id" : "A", "tileId" : null },
+					{ "id" : "B", "tileId" : null },
+					{ "id" : "C", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : null
+			}
+		],
+		"externalEnums" : [
+			{
+				"identifier" : "CommentTest",
+				"uid" : 11,
+				"values" : [
+					{ "id" : "Value1", "tileId" : null },
+					{ "id" : "Value2", "tileId" : null },
+					{ "id" : "Value3", "tileId" : null },
+					{ "id" : "Value4", "tileId" : null },
+					{ "id" : "Value5", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "TypesTest.hx"
+			},
+			{
+				"identifier" : "ItemType",
+				"uid" : 12,
+				"values" : [
+					{ "id" : "Food", "tileId" : null },
+					{ "id" : "Gold", "tileId" : null },
+					{ "id" : "Ammo", "tileId" : null },
+					{ "id" : "Key", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "TypesTest.hx"
+			},
+			{
+				"identifier" : "MobType",
+				"uid" : 13,
+				"values" : [
+					{ "id" : "Crawler", "tileId" : null },
+					{ "id" : "Shooter", "tileId" : null },
+					{ "id" : "Behemoth", "tileId" : null },
+					{ "id" : "Hunter", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "TypesTest.hx"
+			}
+		]
+	},
 	"levels" : [
-		{ "identifier" : "Level", "uid" : 0, "pxWid" : 256, "pxHei" : 256, "layerInstances" : [] }
+		{
+			"identifier" : "Level",
+			"uid" : 0,
+			"pxWid" : 256,
+			"pxHei" : 256,
+			"layerInstances" : [
+				{
+					"_identifier" : "Entities",
+					"levelId" : 0,
+					"layerDefUid" : 19,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
+					"gridTiles" : [],
+					"entityInstances" : [
+						{
+							"_identifier" : "Mob",
+							"_cx" : 10,
+							"_cy" : 8,
+							"defUid" : 15,
+							"x" : 168,
+							"y" : 136,
+							"fieldInstances" : [
+								{
+									"_identifier" : "local",
+									"_value" : "A",
+									"defUid" : 16,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "A" ] }
+								},
+								{
+									"_identifier" : "type",
+									"_value" : "Crawler",
+									"defUid" : 17,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Crawler" ] }
+								},
+								{
+									"_identifier" : "loot",
+									"_value" : "Gold",
+									"defUid" : 18,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Gold" ] }
+								}
+							]
+						}
+					]
+				}
+			]
+		}
 	]
 }
