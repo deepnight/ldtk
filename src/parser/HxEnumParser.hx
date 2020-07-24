@@ -1,7 +1,7 @@
 package parser;
 
 class HxEnumParser {
-	public static function run(project:led.Project, fileContent:String) : Array<ParsedEnum> {
+	public static function run(fileContent:String) : Array<ParsedEnum> {
 
 		// Trim comments
 		var lineCommentReg = ~/^([^\/\n]*)(\/\/.*)$/gm;
@@ -21,11 +21,7 @@ class HxEnumParser {
 		while( enumBlocksReg.match(fileContent) ) {
 			var enumId = enumBlocksReg.matched(1);
 
-			if( !project.defs.isEnumIdentifierUnique(enumId) ) {
-				N.error("This fileContent contains the Enum identifier \""+enumId+"\" which is already used in this project");
-				return null;
-			}
-
+			// Extract values block
 			var brackets = 1;
 			var pos = enumBlocksReg.matchedPos().pos + enumBlocksReg.matchedPos().len;
 			var start = pos;
@@ -54,12 +50,6 @@ class HxEnumParser {
 						enumId: enumId,
 						values: values,
 					});
-					// App.ME.debug(enumId+" => "+values.join(", "), true);
-					// var ed = project.defs.createEnumDef(relPath);
-					// ed.identifier = enumId;
-					// for(v in values)
-					// 	ed.addValue(v);
-					// editor.ge.emit(EnumDefAdded);
 				}
 			}
 

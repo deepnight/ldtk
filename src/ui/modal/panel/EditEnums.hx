@@ -28,7 +28,7 @@ class EditEnums extends ui.modal.Panel {
 				// Extern enum removal
 				new ui.modal.dialog.Confirm(
 					ev.getThis(),
-					L.t._("WARNING: removing this external enum will also remove ALL the external enums from the same source!"),
+					L.t._("WARNING: removing this external enum will also remove ALL the external enums from the same source! Please note that this will also affect all Entities using any of these enums in ALL levels."),
 					function() {
 						var name = dn.FilePath.fromFile(curEnum.externalRelPath).fileWithExt;
 						new ui.LastChance( L.t._("::file:: enums deleted", { file:name }), project );
@@ -40,7 +40,7 @@ class EditEnums extends ui.modal.Panel {
 			}
 			else {
 				// Local enum removal
-				new ui.modal.dialog.Confirm(ev.getThis(), function() {
+				new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("Warning! This operation will affect any Entity using this Enum in ALL LEVELS!"), function() {
 					new ui.LastChance( L.t._("Enum ::name:: deleted", { name: curEnum.identifier}), project );
 					project.defs.removeEnumDef(curEnum);
 					editor.ge.emit(EnumDefRemoved);
@@ -57,9 +57,17 @@ class EditEnums extends ui.modal.Panel {
 				var relPath = editor.makeRelativeFilePath(absPath);
 				var file = JsTools.readFileString(absPath);
 
-				var parseds = parser.HxEnumParser.run(project, file);
+				var parseds = parser.HxEnumParser.run(file);
 				if( parseds.length>0 ) {
 					trace(parseds);
+					for(pe in parseds) {
+						var ed = project.defs.getEnumDef(pe.enumId);
+						if( ed!=null && ed.externalRelPath!=relPath ) {
+							N.error("Import failed: the file contains the Enum identifier \""+pe.enumId+"\" which is already used in this project.");
+							return;
+						}
+
+					}
 					project.defs.importExternalEnums(relPath, parseds);
 					editor.ge.emit(EnumDefAdded);
 				}
@@ -80,7 +88,10 @@ class EditEnums extends ui.modal.Panel {
 
 		switch(ge) {
 			case ProjectSelected:
-				close();
+				if( curEnum==null || project.defs.getEnumDef(curEnum.identifier)==null )
+					selectEnum(project.defs.enums[0]);
+				else
+					selectEnum( project.defs.getEnumDef(curEnum.identifier) );
 
 			case _:
 		}
