@@ -78,6 +78,14 @@ class Dialog extends ui.Modal {
 		});
 	}
 
+	public function addClose(?cb:Void->Void) {
+		var b = addButton("Close", "confirm", function() {
+			if( cb!=null )
+				cb();
+			close();
+		});
+	}
+
 	override function update() {
 		super.update();
 

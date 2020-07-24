@@ -37,6 +37,9 @@ class LevelHistory {
 			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved, EnumDefRemoved, TilesetDefRemoved, EnumDefValueRemoved:
 				clearHistory();
 
+			case EnumDefImported:
+				clearHistory(); // TODO add a last chance
+
 			case ViewportChanged:
 
 			case EnumDefAdded:

@@ -45,6 +45,7 @@ enum GlobalEvent {
 	EnumDefChanged;
 	EnumDefSorted;
 	EnumDefValueRemoved;
+	EnumDefImported;
 
 	ToolOptionChanged;
 }
@@ -98,7 +99,7 @@ enum RulerPos {
 	BottomRight;
 }
 
-typedef ParsedEnum = {
+typedef ParsedExternalEnum = {
 	var enumId : String;
 	var values : Array<String>;
 }

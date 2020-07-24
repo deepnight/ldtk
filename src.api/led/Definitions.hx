@@ -266,8 +266,18 @@ class Definitions {
 		return ed;
 	}
 
+	public function createExternalEnumDef(relSourcePath:String, e:EditorTypes.ParsedExternalEnum) {
+		var ed = createEnumDef(relSourcePath);
+		ed.identifier = e.enumId;
+
+		for(v in e.values)
+			ed.addValue(v);
+
+		return ed;
+	}
+
 	public function removeEnumDef(ed:led.def.EnumDef) {
-		if( !enums.remove(ed) )
+		if( ed.isExternal() && !externalEnums.remove(ed) || !ed.isExternal() && enums.remove(ed) )
 			throw "EnumDef not found";
 		_project.tidy();
 	}
@@ -351,7 +361,9 @@ class Definitions {
 	}
 
 
-	public function importExternalEnums(relSourcePath:String, parseds:Array<EditorTypes.ParsedEnum>) {
+	public function importExternalEnums(relSourcePath:String, parseds:Array<EditorTypes.ParsedExternalEnum>) : Array<String> {
+		var log = [];
+
 		var isNew = true;
 		for(ed in externalEnums)
 			if( ed.externalRelPath==relSourcePath ) {
@@ -360,21 +372,67 @@ class Definitions {
 			}
 
 		if( isNew ) {
-			// Source file is new
+			// Source file is completely new
 			for(pe in parseds) {
-				var ed = createEnumDef(relSourcePath);
-				ed.identifier = pe.enumId;
-
-				for(v in pe.values)
-					ed.addValue(v);
+				log.push("Added "+pe.enumId+".*");
+				createExternalEnumDef(relSourcePath, pe);
 			}
 		}
 		else {
 			// Source file was previously already imported
-			// TODO
+			for(pe in parseds) {
+				var existing = getEnumDef(pe.enumId);
+				if( existing==null ) {
+					// New enum found
+					ui.Notification.debug("whole new "+pe.enumId);
+					createExternalEnumDef(relSourcePath, pe);
+					log.push("Added "+pe.enumId+".*");
+				}
+				else {
+					// Add new values on existing
+					for(v in pe.values)
+						if( !existing.hasValue(v) ) {
+							log.push("Added "+pe.enumId+"."+v);
+							existing.addValue(v);
+						}
+
+					// Remove lost values
+					for(v in existing.values.copy()) {
+						var found = false;
+						for(v2 in pe.values)
+							if( v2==v.id ) {
+								found = true;
+								break;
+							}
+
+						if( !found ) {
+							log.push("Removed "+pe.enumId+"."+v.id);
+							removeEnumDefValue(existing, v.id);
+						}
+					}
+
+				}
+			}
+
+			// Remove lost enums
+			for( ed in externalEnums.copy() )
+				if( ed.externalRelPath==relSourcePath ) {
+					var found = false;
+					for(pe in parseds)
+						if( pe.enumId==ed.identifier ) {
+							found = true;
+							break;
+						}
+
+					if( !found ) {
+						log.push("Removed "+ed.identifier+".*");
+						removeEnumDef(ed);
+					}
+				}
 		}
 
 		_project.tidy();
+		return log;
 	}
 
 }

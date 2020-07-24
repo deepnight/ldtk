@@ -478,7 +478,7 @@ class Editor extends dn.Process {
 		switch e {
 			case ViewportChanged:
 
-			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
+			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved, EnumDefImported:
 
 			case LayerInstanceChanged:
 			case EntityFieldDefChanged:

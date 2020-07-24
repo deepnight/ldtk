@@ -59,17 +59,21 @@ class EditEnums extends ui.modal.Panel {
 
 				var parseds = parser.HxEnumParser.run(file);
 				if( parseds.length>0 ) {
-					trace(parseds);
 					for(pe in parseds) {
 						var ed = project.defs.getEnumDef(pe.enumId);
 						if( ed!=null && ed.externalRelPath!=relPath ) {
 							N.error("Import failed: the file contains the Enum identifier \""+pe.enumId+"\" which is already used in this project.");
 							return;
 						}
-
 					}
-					project.defs.importExternalEnums(relPath, parseds);
-					editor.ge.emit(EnumDefAdded);
+					var log = project.defs.importExternalEnums(relPath, parseds);
+					if( log.length>0 ) {
+						new ui.modal.dialog.ImportLog(log);
+						N.success("External enums successfully synced!");
+					}
+					else
+						N.msg("Nothing to sync.");
+					editor.ge.emit(EnumDefImported);
 				}
 
 			});

@@ -1,8 +1,7 @@
 package parser;
 
 class HxEnumParser {
-	public static function run(fileContent:String) : Array<ParsedEnum> {
-
+	public static function run(fileContent:String) : Array<ParsedExternalEnum> {
 		// Trim comments
 		var lineCommentReg = ~/^([^\/\n]*)(\/\/.*)$/gm;
 		fileContent = lineCommentReg.replace(fileContent,"$1");
@@ -17,7 +16,7 @@ class HxEnumParser {
 		}
 
 		// Search enum blocks
-		var parseds : Array<ParsedEnum> = [];
+		var parseds : Array<ParsedExternalEnum> = [];
 		while( enumBlocksReg.match(fileContent) ) {
 			var enumId = enumBlocksReg.matched(1);
 

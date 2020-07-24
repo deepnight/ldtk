@@ -296,10 +296,6 @@ div.key {
   font-size: 12pt;
 }
 
-ul.niceList:first-child {
-  margin-top: 0;
-}
-
 ul.niceList {
   box-sizing: border-box;
   padding: 4px;
@@ -309,6 +305,10 @@ ul.niceList {
   border: 1px solid #545d73;
   background-color: #1e2229;
   overflow-x: hidden;
+}
+
+ul.niceList:first-child {
+  margin-top: 0;
 }
 
 ul.niceList:empty {
@@ -412,6 +412,35 @@ ul.niceList li.hidden {
 ul.niceList li.hidden .vis {
   background: transparent;
   cursor: zoom-in;
+}
+
+ul.log {
+  box-sizing: border-box;
+  padding: 4px;
+  margin-bottom: 4px;
+  max-width: 80vw;
+  min-width: 50vw;
+  min-height: 300px;
+  max-height: 80vh;
+  border: 1px solid #545d73;
+  background-color: #1e2229;
+  overflow: auto;
+}
+
+ul.log li {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+ul.log li.good {
+  color: #a7d93d;
+}
+
+ul.log li.bad {
+  color: #ffbb12;
+}
+
+ul.log li + li {
+  margin-top: 8px;
 }
 
 .icon {
@@ -969,6 +998,10 @@ textarea:focus {
 .window.dialog.unsavedChanges button.ignore,
 .window.dialog.unsavedChanges button.save {
   flex-grow: 2;
+}
+
+.window.log .wrapper .content {
+  max-width: none;
 }
 
 .window.helpWindow dl {

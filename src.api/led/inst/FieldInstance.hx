@@ -226,5 +226,18 @@ class FieldInstance {
 
 	public function tidy(p:Project) {
 		_project = p;
+
+		switch def.type {
+			case F_Int:
+			case F_Float:
+			case F_String:
+			case F_Bool:
+			case F_Color:
+
+			case F_Enum(enumDefUid):
+				var ed = _project.defs.getEnumDef(enumDefUid);
+				if( !ed.hasValue(getEnumValue()) )
+					parseValue(null);
+		}
 	}
 }
