@@ -126,6 +126,7 @@ class EditEnums extends ui.modal.Panel {
 			sync.click( function(ev) {
 				N.notImplemented();
 			});
+			Tip.attach(sync, Lang.t._("Reload and synchronize Enums"));
 
 			// Values
 			for(ed in group.value) {
