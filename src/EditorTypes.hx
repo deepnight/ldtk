@@ -97,3 +97,8 @@ enum RulerPos {
 	BottomLeft;
 	BottomRight;
 }
+
+typedef ParsedEnum = {
+	var enumId : String;
+	var values : Array<String>;
+}

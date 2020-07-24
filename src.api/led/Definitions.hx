@@ -311,6 +311,22 @@ class Definitions {
 		return null;
 	}
 
+	public function sortEnumDef(from:Int, to:Int) : Null<led.def.EnumDef> {
+		if( from<0 || from>=enums.length || from==to )
+			return null;
+
+		if( to<0 || to>=enums.length )
+			return null;
+
+		_project.tidy();
+
+		var moved = enums.splice(from,1)[0];
+		enums.insert(to, moved);
+
+		return moved;
+	}
+
+
 
 	public function getGroupedExternalEnums() : Map<String,Array<led.def.EnumDef>> {
 		var map = new Map();
@@ -334,20 +350,19 @@ class Definitions {
 		_project.tidy();
 	}
 
-	public function sortEnumDef(from:Int, to:Int) : Null<led.def.EnumDef> {
-		if( from<0 || from>=enums.length || from==to )
-			return null;
 
-		if( to<0 || to>=enums.length )
-			return null;
+	public function importExternalEnums(relSourcePath:String, parseds:Array<EditorTypes.ParsedEnum>) {
+		// TODO update if it already existed
+
+		for(pe in parseds) {
+			var ed = createEnumDef(relSourcePath);
+			ed.identifier = pe.enumId;
+
+			for(v in pe.values)
+				ed.addValue(v);
+		}
 
 		_project.tidy();
-
-		var moved = enums.splice(from,1)[0];
-		enums.insert(to, moved);
-
-		return moved;
 	}
-
 
 }

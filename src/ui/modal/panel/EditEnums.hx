@@ -57,64 +57,13 @@ class EditEnums extends ui.modal.Panel {
 				var relPath = editor.makeRelativeFilePath(absPath);
 				var file = JsTools.readFileString(absPath);
 
-				// Trim comments
-				var lineCommentReg = ~/^([^\/\n]*)(\/\/.*)$/gm;
-				file = lineCommentReg.replace(file,"$1");
-				var multilineCommentReg = ~/(\/\*[\s\S]*?\*\/)/gm;
-				file = multilineCommentReg.replace(file,"");
-
-				// Any enum?
-				var enumBlocksReg = ~/^[ \t]*enum[ \t]+([a-z0-9_]+)[ \t]*{/gim;
-				if( !enumBlocksReg.match(file) ) {
-					N.error("Couldn't find any simple Enum in this source file.");
-					return;
+				var parseds = parser.HxEnumParser.run(project, file);
+				if( parseds.length>0 ) {
+					trace(parseds);
+					project.defs.importExternalEnums(relPath, parseds);
+					editor.ge.emit(EnumDefAdded);
 				}
 
-				// Search enum blocks
-				var limit = 10; // HACK
-				while( limit-->0 && enumBlocksReg.match(file) ) {
-					var enumId = enumBlocksReg.matched(1);
-
-					if( !project.defs.isEnumIdentifierUnique(enumId) ) {
-						N.error("This file contains the Enum identifier \""+enumId+"\" which is already used in this project");
-						return;
-					}
-
-					var brackets = 1;
-					var pos = enumBlocksReg.matchedPos().pos + enumBlocksReg.matchedPos().len;
-					var start = pos;
-					while( pos < file.length && brackets>=1 ) {
-						if( file.charAt(pos)=="{" )
-							brackets++;
-						else if( file.charAt(pos)=="}" )
-							brackets--;
-						pos++;
-					}
-					var rawValues = file.substring(start,pos-1);
-
-					// Checks presence of unsupported Parametered values
-					var paramEnumReg = ~/([A-Z][A-Za-z0-9_]*)[ \t]*\(/gm;
-					if( !paramEnumReg.match(rawValues) ) {
-						// This enum only contains unparametered values
-						var enumValuesReg = ~/([A-Z][A-Za-z0-9_]*)[ \t]*;/gm;
-						var values = [];
-						while( enumValuesReg.match(rawValues) ) {
-							values.push( enumValuesReg.matched(1) );
-							rawValues = enumValuesReg.matchedRight();
-						}
-						if( values.length>0 ) {
-							// App.ME.debug(enumId+" => "+values.join(", "), true);
-							var ed = project.defs.createEnumDef(relPath);
-							ed.identifier = enumId;
-							for(v in values)
-								ed.addValue(v);
-							editor.ge.emit(EnumDefAdded);
-						}
-					}
-
-
-					file = enumBlocksReg.matchedRight();
-				}
 			});
 		});
 
