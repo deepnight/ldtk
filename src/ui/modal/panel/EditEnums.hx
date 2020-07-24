@@ -54,28 +54,7 @@ class EditEnums extends ui.modal.Panel {
 		jContent.find("button.importHx").click( function(_) {
 			JsTools.loadDialog([".hx"], editor.getProjectDir(), function(absPath:String) {
 				absPath = StringTools.replace(absPath,"\\","/");
-				var relPath = editor.makeRelativeFilePath(absPath);
-				var file = JsTools.readFileString(absPath);
-
-				var parseds = parser.HxEnumParser.run(file);
-				if( parseds.length>0 ) {
-					for(pe in parseds) {
-						var ed = project.defs.getEnumDef(pe.enumId);
-						if( ed!=null && ed.externalRelPath!=relPath ) {
-							N.error("Import failed: the file contains the Enum identifier \""+pe.enumId+"\" which is already used in this project.");
-							return;
-						}
-					}
-					var log = project.defs.importExternalEnums(relPath, parseds);
-					if( log.length>0 ) {
-						new ui.modal.dialog.ImportLog(log);
-						N.success("External enums successfully synced!");
-					}
-					else
-						N.msg("Nothing to sync.");
-					editor.ge.emit(EnumDefImported);
-				}
-
+				importHxEnums( editor.makeRelativeFilePath(absPath) );
 			});
 		});
 
@@ -103,6 +82,7 @@ class EditEnums extends ui.modal.Panel {
 		updateEnumList();
 		updateEnumForm();
 	}
+
 
 	function selectEnum(ed:led.def.EnumDef) {
 		curEnum = ed;
@@ -139,7 +119,7 @@ class EditEnums extends ui.modal.Panel {
 			sync.appendTo(e);
 			sync.text("⟳");
 			sync.click( function(ev) {
-				N.notImplemented();
+				importHxEnums(group.key);
 			});
 			Tip.attach(sync, Lang.t._("Reload and synchronize Enums"));
 
@@ -334,5 +314,33 @@ class EditEnums extends ui.modal.Panel {
 				curEnum.values.insert(to, v);
 				editor.ge.emit(EnumDefChanged);
 			});
+	}
+
+
+	function importHxEnums(relPath:String) {
+		var file = JsTools.readFileString( editor.makeFullFilePath(relPath) );
+
+		var parseds = parser.HxEnumParser.run(file);
+		if( parseds.length>0 )
+			loadParsedEnums(relPath, parseds);
+	}
+
+
+	function loadParsedEnums(relPath:String, parseds:Array<ParsedExternalEnum>) {
+		for(pe in parseds) {
+			var ed = project.defs.getEnumDef(pe.enumId);
+			if( ed!=null && ed.externalRelPath!=relPath ) {
+				N.error("Import failed: the file contains the Enum identifier \""+pe.enumId+"\" which is already used in this project.");
+				return;
+			}
+		}
+		var log = project.defs.importExternalEnums(relPath, parseds);
+		if( log.length>0 ) {
+			new ui.modal.dialog.ImportLog(log);
+			N.success("External enums successfully synced!");
+		}
+		else
+			N.msg("Nothing to sync.");
+		editor.ge.emit(EnumDefImported);
 	}
 }
