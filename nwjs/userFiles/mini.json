@@ -62,6 +62,7 @@
 				"fieldDefs" : [
 					{
 						"identifier" : "mobType",
+						"_desc" : "MobType",
 						"uid" : 3,
 						"type" : { "id" : "F_Enum", "params" : [ 1 ] },
 						"canBeNull" : false,
@@ -73,6 +74,7 @@
 					},
 					{
 						"identifier" : "loot",
+						"_desc" : "ItemType",
 						"uid" : 11,
 						"type" : { "id" : "F_Enum", "params" : [ 10 ] },
 						"canBeNull" : true,
@@ -84,6 +86,7 @@
 					},
 					{
 						"identifier" : "lootCount",
+						"_desc" : "Int",
 						"uid" : 12,
 						"type" : "F_Int",
 						"canBeNull" : false,
@@ -95,6 +98,7 @@
 					},
 					{
 						"identifier" : "elite",
+						"_desc" : "Bool",
 						"uid" : 5,
 						"type" : "F_Bool",
 						"canBeNull" : false,
@@ -106,6 +110,7 @@
 					},
 					{
 						"identifier" : "lifeOverride",
+						"_desc" : "Int",
 						"uid" : 6,
 						"type" : "F_Int",
 						"canBeNull" : true,
@@ -117,6 +122,7 @@
 					},
 					{
 						"identifier" : "scale",
+						"_desc" : "Float",
 						"uid" : 7,
 						"type" : "F_Float",
 						"canBeNull" : false,
