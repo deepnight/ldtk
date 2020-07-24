@@ -416,7 +416,7 @@ ul.niceList li.hidden .vis {
 
 ul.log {
   box-sizing: border-box;
-  padding: 4px;
+  padding: 8px;
   margin-bottom: 4px;
   max-width: 80vw;
   min-width: 50vw;
@@ -427,16 +427,12 @@ ul.log {
   overflow: auto;
 }
 
-ul.log li {
-  font-family: 'Courier New', Courier, monospace;
-}
-
 ul.log li.good {
   color: #a7d93d;
 }
 
 ul.log li.bad {
-  color: #ffbb12;
+  color: #e34d00;
 }
 
 ul.log li + li {

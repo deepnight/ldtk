@@ -426,7 +426,7 @@ ul.niceList {
 
 ul.log {
 	box-sizing: border-box;
-	padding: 4px;
+	padding: 8px;
 	margin-bottom: 4px;
 
 	max-width: 80vw;
@@ -438,14 +438,11 @@ ul.log {
 	background-color: $bgDark;
 	overflow: auto;
 
-	li {
-		font-family: 'Courier New', Courier, monospace;
-	}
 	li.good {
 		color: #a7d93d;
 	}
 	li.bad {
-		color: #ffbb12;
+		color: $red;
 	}
 	li+li {
 		margin-top: 8px;
