@@ -358,12 +358,27 @@ ul.niceList li:not(.title):not(.active):hover {
 
 ul.niceList li.title {
   display: grid;
+  grid-template-columns: auto min-content;
+  align-items: center;
   padding: 4px;
   margin-top: 2px;
   color: #ffcc00;
   font-size: 0.8em;
   font-family: Roboto;
   border-top: 1px solid #545d73;
+}
+
+ul.niceList li.title a {
+  font-size: 1.1em;
+  padding: 3px;
+  background-color: #ffcc00;
+  border-radius: 2px;
+  cursor: pointer;
+  color: black;
+}
+
+ul.niceList li.title a:hover {
+  background-color: white;
 }
 
 ul.niceList li.iconLeft {
@@ -618,7 +633,7 @@ ul.form > li > label:first-of-type {
   font-size: 80%;
 }
 
-ul.form > li input[type=text]:not([readonly]):hover {
+ul.form > li input[type=text]:not(:read-only):hover {
   outline: 1px solid #ffcc00;
 }
 
@@ -686,6 +701,11 @@ input[type=number] {
   color: white;
   background-color: #1e2229;
   border: 1px solid #545d73;
+}
+
+input[type=text]:read-only,
+input[type=number]:read-only {
+  background-color: transparent;
 }
 
 input[type=text]:focus,
@@ -1734,8 +1754,8 @@ canvas#webgl {
 }
 
 .window.panel.editEnums .content ul.enumForm.externalEnum .path {
-  background-color: #1e2229;
   padding: 5px;
+  text-align: left;
   border: 1px solid #545d73;
 }
 

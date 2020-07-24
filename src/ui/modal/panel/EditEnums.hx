@@ -112,12 +112,22 @@ class EditEnums extends ui.modal.Panel {
 
 		var grouped = project.defs.getGroupedExternalEnums();
 		for( group in grouped.keyValueIterator() ) {
+			// Source name
 			var e = new J("<li/>");
 			e.addClass("title fixed");
 			e.appendTo(jList);
 			var name = dn.FilePath.fromFile(group.key).fileWithExt;
-			e.text(name);
+			e.html('<span>$name</span>');
 
+			// Reload source
+			var sync = new J('<a/>');
+			sync.appendTo(e);
+			sync.text("⟳");
+			sync.click( function(ev) {
+				N.notImplemented();
+			});
+
+			// Values
 			for(ed in group.value) {
 				var e = new J("<li/>");
 				e.addClass("fixed");

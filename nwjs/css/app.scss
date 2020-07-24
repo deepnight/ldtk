@@ -366,8 +366,10 @@ ul.niceList {
 
 	li.title {
 		display: grid;
+		grid-template-columns: auto min-content;
+		align-items: center;
+
 		padding: 4px;
-		// padding-top: 8px;
 		margin-top: 2px;
 
 		color: $orange;
@@ -375,6 +377,19 @@ ul.niceList {
 		font-family: Roboto;
 
 		border-top: 1px solid $bgLight;
+
+		a {
+			font-size: 1.1em;
+			padding: 3px;
+			background-color: $orange;
+			border-radius: 2px;
+			cursor: pointer;
+			color: black;
+
+			&:hover {
+				background-color: white;
+			}
+		}
 	}
 
 	li.iconLeft {
@@ -583,7 +598,7 @@ ul.form {
 			font-size: 80%;
 		}
 
-		input[type=text]:not([readonly]):hover {
+		input[type=text]:not(:read-only):hover {
 			outline: 1px solid $orange;
 		}
 
@@ -651,6 +666,9 @@ input[type=number] {
 	color: white;
 	background-color: $bgDark;
 	border: 1px solid $bgLight;
+	&:read-only {
+		background-color: transparent;
+	}
 	&:focus {
 		border-color: $orange;
 		box-shadow: 0px 0px 4px $red;
@@ -1680,8 +1698,8 @@ canvas#webgl {
 				}
 
 				.path {
-					background-color: $bgDark;
 					padding: 5px;
+					text-align: left;
 					border: 1px solid $bgLight;
 				}
 			}

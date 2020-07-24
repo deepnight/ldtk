@@ -352,14 +352,26 @@ class Definitions {
 
 
 	public function importExternalEnums(relSourcePath:String, parseds:Array<EditorTypes.ParsedEnum>) {
-		// TODO update if it already existed
+		var isNew = true;
+		for(ed in externalEnums)
+			if( ed.externalRelPath==relSourcePath ) {
+				isNew = false;
+				break;
+			}
 
-		for(pe in parseds) {
-			var ed = createEnumDef(relSourcePath);
-			ed.identifier = pe.enumId;
+		if( isNew ) {
+			// Source file is new
+			for(pe in parseds) {
+				var ed = createEnumDef(relSourcePath);
+				ed.identifier = pe.enumId;
 
-			for(v in pe.values)
-				ed.addValue(v);
+				for(v in pe.values)
+					ed.addValue(v);
+			}
+		}
+		else {
+			// Source file was previously already imported
+			// TODO
 		}
 
 		_project.tidy();
