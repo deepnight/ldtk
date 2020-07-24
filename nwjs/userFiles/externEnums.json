@@ -5,7 +5,7 @@
 	"defaultPivotY" : 0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 22,
+	"nextUid" : 25,
 	"defs" : {
 		"layers" : [
 			{
@@ -76,12 +76,59 @@
 			{
 				"identifier" : "AnotherLocalEnum",
 				"uid" : 20,
-				"values" : [],
+				"values" : [
+					{
+						"id" : "AnotherLocalEnum0",
+						"tileId" : null
+					},
+					{
+						"id" : "AnotherLocalEnum1",
+						"tileId" : null
+					}
+				],
 				"iconTilesetUid" : null,
 				"externalRelPath" : null
 			}
 		],
-		"externalEnums" : []
+		"externalEnums" : [
+			{
+				"identifier" : "AnImportedEnum",
+				"uid" : 22,
+				"values" : [
+					{ "id" : "Value1", "tileId" : null },
+					{ "id" : "Value2", "tileId" : null },
+					{ "id" : "Value3", "tileId" : null },
+					{ "id" : "Value4", "tileId" : null },
+					{ "id" : "Value5", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "TypesTest.hx"
+			},
+			{
+				"identifier" : "ItemType",
+				"uid" : 23,
+				"values" : [
+					{ "id" : "Food", "tileId" : null },
+					{ "id" : "Gold", "tileId" : null },
+					{ "id" : "Ammo", "tileId" : null },
+					{ "id" : "Key", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "TypesTest.hx"
+			},
+			{
+				"identifier" : "EnemyType",
+				"uid" : 24,
+				"values" : [
+					{ "id" : "Crawler", "tileId" : null },
+					{ "id" : "Shooter", "tileId" : null },
+					{ "id" : "Behemoth", "tileId" : null },
+					{ "id" : "Hunter", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "TypesTest.hx"
+			}
+		]
 	},
 	"levels" : [
 		{
