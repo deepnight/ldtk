@@ -5,7 +5,7 @@
 	"defaultPivotY" : 0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 39,
+	"nextUid" : 40,
 	"defs" : {
 		"layers" : [
 			{
@@ -61,28 +61,17 @@
 				]
 			}
 		],
-		"tilesets" : [
-			{
-				"identifier" : "MyTextures",
-				"uid" : 21,
-				"relPath" : "atlas/gif87a.gif",
-				"pxWid" : 192,
-				"pxHei" : 128,
-				"tileGridSize" : 32,
-				"tileGridSpacing" : 0,
-				"savedSelections" : []
-			}
-		],
+		"tilesets" : [],
 		"enums" : [
 			{
 				"identifier" : "SomeLocalEnum",
 				"uid" : 14,
 				"values" : [
-					{ "id" : "Value_A", "tileId" : 2 },
-					{ "id" : "Value_B", "tileId" : 12 },
-					{ "id" : "Value_C", "tileId" : 0 }
+					{ "id" : "Value_A", "tileId" : null },
+					{ "id" : "Value_B", "tileId" : null },
+					{ "id" : "Value_C", "tileId" : null }
 				],
-				"iconTilesetUid" : 21,
+				"iconTilesetUid" : null,
 				"externalRelPath" : null
 			},
 			{
@@ -145,8 +134,8 @@
 		{
 			"identifier" : "Level",
 			"uid" : 0,
-			"pxWid" : 336,
-			"pxHei" : 240,
+			"pxWid" : 352,
+			"pxHei" : 256,
 			"layerInstances" : [
 				{
 					"_identifier" : "Entities",
