@@ -384,7 +384,6 @@ class Definitions {
 				var existing = getEnumDef(pe.enumId);
 				if( existing==null ) {
 					// New enum found
-					ui.Notification.debug("whole new "+pe.enumId);
 					createExternalEnumDef(relSourcePath, pe);
 					log.push("Added "+pe.enumId+".*");
 				}
