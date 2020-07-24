@@ -5,7 +5,7 @@ class JsTools {
 	}
 
 	public static function makeSortable(selector:String, onSort:(from:Int, to:Int)->Void) {
-		js.Lib.eval('sortable("$selector")');
+		js.Lib.eval('sortable("$selector", { items:":not(.fixed)" })');
 		new J(selector)
 			.off("sortupdate")
 			.on("sortupdate", function(ev) {

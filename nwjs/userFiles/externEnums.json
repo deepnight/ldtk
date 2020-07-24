@@ -1,11 +1,11 @@
 {
-	"name" : "empty",
+	"name" : "externEnums",
 	"dataVersion" : 1,
 	"defaultPivotX" : 0,
 	"defaultPivotY" : 0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 1,
+	"nextUid" : 11,
 	"defs" : { "layers" : [], "entities" : [], "tilesets" : [], "enums" : [], "externalEnums" : [] },
 	"levels" : [
 		{ "identifier" : "Level", "uid" : 0, "pxWid" : 256, "pxHei" : 256, "layerInstances" : [] }

@@ -32,6 +32,74 @@ class EditEnums extends ui.modal.Panel {
 			});
 		});
 
+		// Import HX
+		jContent.find("button.importHx").click( function(_) {
+			JsTools.loadDialog([".hx"], editor.getProjectDir(), function(absPath:String) {
+				absPath = StringTools.replace(absPath,"\\","/");
+				var relPath = editor.makeRelativeFilePath(absPath);
+				var file = JsTools.readFileString(absPath);
+
+				// Trim comments
+				var lineCommentReg = ~/^([^\/\n]*)(\/\/.*)$/gm;
+				file = lineCommentReg.replace(file,"$1");
+				var multilineCommentReg = ~/(\/\*[\s\S]*?\*\/)/gm;
+				file = multilineCommentReg.replace(file,"");
+
+				// Any enum?
+				var enumBlocksReg = ~/^[ \t]*enum[ \t]+([a-z0-9_]+)[ \t]*{/gim;
+				if( !enumBlocksReg.match(file) ) {
+					N.error("Couldn't find any simple Enum in this source file.");
+					return;
+				}
+
+				// Search enum blocks
+				var limit = 10; // HACK
+				while( limit-->0 && enumBlocksReg.match(file) ) {
+					var enumId = enumBlocksReg.matched(1);
+
+					if( !project.defs.isEnumIdentifierUnique(enumId) ) {
+						N.error("This file contains the Enum identifier \""+enumId+"\" which is already used in this project");
+						return;
+					}
+
+					var brackets = 1;
+					var pos = enumBlocksReg.matchedPos().pos + enumBlocksReg.matchedPos().len;
+					var start = pos;
+					while( pos < file.length && brackets>=1 ) {
+						if( file.charAt(pos)=="{" )
+							brackets++;
+						else if( file.charAt(pos)=="}" )
+							brackets--;
+						pos++;
+					}
+					var rawValues = file.substring(start,pos-1);
+
+					// Checks presence of unsupported Parametered values
+					var paramEnumReg = ~/([A-Z][A-Za-z0-9_]*)[ \t]*\(/gm;
+					if( !paramEnumReg.match(rawValues) ) {
+						// This enum only contains unparametered values
+						var enumValuesReg = ~/([A-Z][A-Za-z0-9_]*)[ \t]*;/gm;
+						var values = [];
+						while( enumValuesReg.match(rawValues) ) {
+							values.push( enumValuesReg.matched(1) );
+							rawValues = enumValuesReg.matchedRight();
+						}
+						if( values.length>0 ) {
+							// App.ME.debug(enumId+" => "+values.join(", "), true);
+							var ed = project.defs.createEnumDef(relPath);
+							ed.identifier = enumId;
+							for(v in values)
+								ed.addValue(v);
+							editor.ge.emit(EnumDefAdded);
+						}
+					}
+
+
+					file = enumBlocksReg.matchedRight();
+				}
+			});
+		});
+
 		// Default enum selection
 		if( project.defs.enums.length>0 )
 			selectEnum( project.defs.enums[0] );
@@ -75,6 +143,27 @@ class EditEnums extends ui.modal.Panel {
 			});
 		}
 
+		var grouped = project.defs.getGroupedExternalEnums();
+		for( group in grouped.keyValueIterator() ) {
+			var e = new J("<li/>");
+			e.addClass("title fixed");
+			e.appendTo(jList);
+			var name = dn.FilePath.fromFile(group.key).fileWithExt;
+			e.text(name);
+
+			for(ed in group.value) {
+				var e = new J("<li/>");
+				e.addClass("fixed");
+				e.appendTo(jList);
+				if( ed==curEnum )
+					e.addClass("active");
+				e.append('<span class="name">'+ed.identifier+'</span>');
+				e.click( function(_) {
+					selectEnum(ed);
+				});
+			}
+		}
+
 		// Make list sortable
 		JsTools.makeSortable(".window .enumList ul", function(from, to) {
 			var moved = project.defs.sortEnumDef(from,to);
@@ -94,58 +183,77 @@ class EditEnums extends ui.modal.Panel {
 			return;
 		}
 		jForm.show();
+		jForm.find("input").not("xml input").removeAttr("readonly");
 
+		if( curEnum.isExternal() )
+			jForm.addClass("externalEnum");
+		else
+			jForm.removeClass("externalEnum");
+
+
+		// Enum ID
 		var i = Input.linkToHtmlInput( curEnum.identifier, jForm.find("[name=id]") );
 		i.validityCheck = function(v) {
 			return project.defs.isEnumIdentifierUnique(v);
 		}
 		i.linkEvent(EnumDefChanged);
 
-		// Tilesets
-		var jSelect = jForm.find("select#icons");
-		jSelect.empty();
-		if( curEnum.iconTilesetUid==null )
-			jSelect.addClass("gray");
-		else
-			jSelect.removeClass("gray");
-
-		var opt = new J('<option value="-1">-- Select a tileset --</option>');
-		opt.appendTo(jSelect);
-
-		for(td in project.defs.tilesets) {
-			var opt = new J('<option value="${td.uid}"/>');
-			opt.appendTo(jSelect);
-			opt.text( td.identifier );
+		// Source path
+		if( curEnum.isExternal() ) {
+			jForm.find(".source .path").remove();
+			jForm.find(".source").append(
+				JsTools.makePath(curEnum.externalRelPath)
+			);
 		}
 
-		jSelect.val( curEnum.iconTilesetUid==null ? "-1" : Std.string(curEnum.iconTilesetUid) );
-		jSelect.change( function(ev) {
-			var tid = Std.parseInt( jSelect.val() );
-			if( tid==curEnum.iconTilesetUid )
-				return;
-
-			// Check if this change will break something
-			if( curEnum.iconTilesetUid!=null )
-				for( v in curEnum.values )
-					if( v.tileId!=null ) {
-						new LastChance(Lang.t._("Enum icons changed"), project);
-						break;
-					}
-
-			// Update tileset link
-			if( tid<0 )
-				curEnum.iconTilesetUid = null;
+		// Tilesets
+		var jSelect = jForm.find("select#icons");
+		if( !curEnum.isExternal() ) {
+			jSelect.show();
+			jSelect.empty();
+			if( curEnum.iconTilesetUid==null )
+				jSelect.addClass("gray");
 			else
-				curEnum.iconTilesetUid = tid;
-			curEnum.clearAllTileIds();
-			editor.ge.emit(EnumDefChanged);
-		});
+				jSelect.removeClass("gray");
+
+			var opt = new J('<option value="-1">-- Select a tileset --</option>');
+			opt.appendTo(jSelect);
+
+			for(td in project.defs.tilesets) {
+				var opt = new J('<option value="${td.uid}"/>');
+				opt.appendTo(jSelect);
+				opt.text( td.identifier );
+			}
+
+			jSelect.val( curEnum.iconTilesetUid==null ? "-1" : Std.string(curEnum.iconTilesetUid) );
+			jSelect.change( function(ev) {
+				var tid = Std.parseInt( jSelect.val() );
+				if( tid==curEnum.iconTilesetUid )
+					return;
+
+				// Check if this change will break something
+				if( curEnum.iconTilesetUid!=null )
+					for( v in curEnum.values )
+						if( v.tileId!=null ) {
+							new LastChance(Lang.t._("Enum icons changed"), project);
+							break;
+						}
+
+				// Update tileset link
+				if( tid<0 )
+					curEnum.iconTilesetUid = null;
+				else
+					curEnum.iconTilesetUid = tid;
+				curEnum.clearAllTileIds();
+				editor.ge.emit(EnumDefChanged);
+			});
+		}
 
 
 		// Values
 		var jList = jForm.find("ul.enumValues");
 		jList.empty();
-		var xml = jForm.find("xml").children();
+		var xml = jForm.find("xml.enum").children();
 		for(eValue in curEnum.values) {
 			var li = new J("<li/>");
 			li.appendTo(jList);
@@ -168,47 +276,51 @@ class EditEnums extends ui.modal.Panel {
 			i.linkEvent(EnumDefChanged);
 
 			// Tile preview
-			var previewCanvas = li.find(".tile");
-			if( curEnum.iconTilesetUid!=null ) {
-				var td = project.defs.getTilesetDef(curEnum.iconTilesetUid);
-				previewCanvas.addClass("active");
+			if( !curEnum.isExternal() ) {
+				var previewCanvas = li.find(".tile");
+				if( curEnum.iconTilesetUid!=null ) {
+					var td = project.defs.getTilesetDef(curEnum.iconTilesetUid);
+					previewCanvas.addClass("active");
 
-				// Pick a tile
-				previewCanvas.click( function(_) {
-					var m = new Modal();
-					m.jModalAndMask.addClass("singleTilePicker");
-					var tp = new ui.TilesetPicker(m.jContent, td);
-					tp.singleSelectedTileId = eValue.tileId;
-					tp.onSingleTileSelect = function(tileId) {
-						N.debug(tileId);
-						m.close();
-						eValue.tileId = tileId;
-						editor.ge.emit(EnumDefChanged);
+					// Pick a tile
+					previewCanvas.click( function(_) {
+						var m = new Modal();
+						m.jModalAndMask.addClass("singleTilePicker");
+						var tp = new ui.TilesetPicker(m.jContent, td);
+						tp.singleSelectedTileId = eValue.tileId;
+						tp.onSingleTileSelect = function(tileId) {
+							N.debug(tileId);
+							m.close();
+							eValue.tileId = tileId;
+							editor.ge.emit(EnumDefChanged);
+						}
+					});
+
+					// Render preview
+					if( eValue.tileId!=null ) {
+						td.drawTileToCanvas( previewCanvas, eValue.tileId, 0, 0 );
+						previewCanvas.attr("width", td.tileGridSize);
+						previewCanvas.attr("height", td.tileGridSize);
+						// previewCanvas.css("zoom", 32/td.tileGridSize);
 					}
-				});
-
-				// Render preview
-				if( eValue.tileId!=null ) {
-					td.drawTileToCanvas( previewCanvas, eValue.tileId, 0, 0 );
-					previewCanvas.attr("width", td.tileGridSize);
-					previewCanvas.attr("height", td.tileGridSize);
-					// previewCanvas.css("zoom", 32/td.tileGridSize);
 				}
 			}
 
 			// Remove value button
-			li.find(".delete").click( function(ev) {
-				new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("Warning! This operation will affect any Entity using this Enum in ALL LEVELS!"), function() {
-					new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+eValue.id }), project);
+			if( !curEnum.isExternal() ) {
+				li.find(".delete").click( function(ev) {
+					new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("Warning! This operation will affect any Entity using this Enum in ALL LEVELS!"), function() {
+						new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+eValue.id }), project);
 
-					project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-						if( fi.getEnumValue()==eValue.id )
-							fi.parseValue(null);
+						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
+							if( fi.getEnumValue()==eValue.id )
+								fi.parseValue(null);
+						});
+						project.defs.removeEnumDefValue(curEnum, eValue.id);
+						editor.ge.emit(EnumDefValueRemoved);
 					});
-					project.defs.removeEnumDefValue(curEnum, eValue.id);
-					editor.ge.emit(EnumDefValueRemoved);
 				});
-			});
+			}
 		}
 
 		jForm.find(".createEnumValue").click( function(_) {
@@ -219,11 +331,15 @@ class EditEnums extends ui.modal.Panel {
 			jContent.find("ul.enumValues li:last input[type=text]").select();
 		});
 
+		if( curEnum.isExternal() )
+			jForm.find("input").not("xml input").attr("readonly", "readonly");
+
 		// Make fields list sortable
-		JsTools.makeSortable(".window ul.enumValues", function(from, to) {
-			var v = curEnum.values.splice(from,1)[0];
-			curEnum.values.insert(to, v);
-			editor.ge.emit(EnumDefChanged);
-		});
+		if( !curEnum.isExternal() )
+			JsTools.makeSortable(".window ul.enumValues", function(from, to) {
+				var v = curEnum.values.splice(from,1)[0];
+				curEnum.values.insert(to, v);
+				editor.ge.emit(EnumDefChanged);
+			});
 	}
 }

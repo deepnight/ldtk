@@ -290,22 +290,25 @@
 				"identifier" : "MobType",
 				"uid" : 44,
 				"values" : [
-					{ "id" : "Goblin" },
-					{ "id" : "Boss" }
+					{ "id" : "Goblin", "tileId" : null },
+					{ "id" : "Boss", "tileId" : null }
 				],
-				"iconTilesetUid" : null
+				"iconTilesetUid" : null,
+				"externalRelPath" : null
 			},
 			{
 				"identifier" : "ItemType",
 				"uid" : 45,
 				"values" : [
-					{ "id" : "Gem" },
-					{ "id" : "Bomb" },
-					{ "id" : "Food" }
+					{ "id" : "Gem", "tileId" : null },
+					{ "id" : "Bomb", "tileId" : null },
+					{ "id" : "Food", "tileId" : null }
 				],
-				"iconTilesetUid" : null
+				"iconTilesetUid" : null,
+				"externalRelPath" : null
 			}
-		]
+		],
+		"externalEnums" : []
 	},
 	"levels" : [
 		{

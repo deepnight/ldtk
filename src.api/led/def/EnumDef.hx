@@ -5,11 +5,14 @@ class EnumDef {
 	public var identifier(default,set) : String;
 	public var values : Array<led.LedTypes.EnumDefValue> = [];
 	public var iconTilesetUid : Null<Int>;
+	public var externalRelPath : Null<String>;
 
 	public function new(uid:Int, id:String) {
 		this.uid = uid;
 		this.identifier = id;
 	}
+
+	public inline function isExternal() return externalRelPath!=null;
 
 	function set_identifier(v:String) {
 		v = Project.cleanupIdentifier(v,true);
@@ -34,6 +37,7 @@ class EnumDef {
 		}
 
 		ed.iconTilesetUid = JsonTools.readNullableInt(json.iconTilesetUid);
+		ed.externalRelPath = json.externalRelPath;
 
 		return ed;
 	}
@@ -44,6 +48,7 @@ class EnumDef {
 			uid: uid,
 			values: values.map( function(v) return { id:v.id, tileId:v.tileId } ), // breaks memory refs
 			iconTilesetUid: iconTilesetUid,
+			externalRelPath: externalRelPath,
 		};
 	}
 

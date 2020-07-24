@@ -9,6 +9,7 @@ class Definitions {
 	public var entities: Array<led.def.EntityDef> = [];
 	public var tilesets: Array<led.def.TilesetDef> = [];
 	public var enums: Array<led.def.EnumDef> = [];
+	public var externalEnums: Array<led.def.EnumDef> = [];
 
 
 	public function new(project:Project) {
@@ -21,6 +22,7 @@ class Definitions {
 			entities: entities.map( function(ed) return ed.toJson() ),
 			tilesets: tilesets.map( function(td) return td.toJson() ),
 			enums: enums.map( function(ed) return ed.toJson() ),
+			externalEnums: externalEnums.map( function(ed) return ed.toJson() ),
 		}
 	}
 
@@ -39,6 +41,9 @@ class Definitions {
 		for( enumJson in JsonTools.readArray(json.enums) )
 			d.enums.push( led.def.EnumDef.fromJson(p.dataVersion, enumJson) );
 
+		// for( enumJson in JsonTools.readArray(json.externalEnums) )
+		// 	d.externalEnums.push( led.def.EnumDef.fromJson(p.dataVersion, enumJson) );
+
 		return d;
 	}
 
@@ -52,6 +57,9 @@ class Definitions {
 			ld.tidy(p);
 
 		for( ed in enums )
+			ed.tidy(p);
+
+		for( ed in externalEnums )
 			ed.tidy(p);
 
 		for(td in tilesets)
@@ -244,10 +252,16 @@ class Definitions {
 
 	/**  ENUM DEFS  *****************************************/
 
-	public function createEnumDef() : led.def.EnumDef {
+	public function createEnumDef(?externalRelPath:String) : led.def.EnumDef {
 		var uid = _project.makeUniqId();
 		var ed = new led.def.EnumDef(uid, "LedEnum"+uid);
-		enums.push(ed);
+		if( externalRelPath!=null ) {
+			ed.externalRelPath = externalRelPath;
+			externalEnums.push(ed);
+		}
+		else
+			enums.push(ed);
+
 		_project.tidy();
 		return ed;
 	}
@@ -277,6 +291,11 @@ class Definitions {
 		for(ed in enums)
 			if( ed.identifier==id )
 				return false;
+
+		for(ed in externalEnums)
+			if( ed.identifier==id )
+				return false;
+
 		return true;
 	}
 
@@ -284,9 +303,24 @@ class Definitions {
 		for(ed in enums)
 			if( ed.uid==id || ed.identifier==id )
 				return ed;
+
+		for(ed in externalEnums)
+			if( ed.uid==id || ed.identifier==id )
+				return ed;
+
 		return null;
 	}
 
+
+	public function getGroupedExternalEnums() : Map<String,Array<led.def.EnumDef>> {
+		var map = new Map();
+		for(ed in externalEnums) {
+			if( !map.exists(ed.externalRelPath) )
+				map.set(ed.externalRelPath, []);
+			map.get(ed.externalRelPath).push(ed);
+		}
+		return map;
+	}
 
 	public function sortEnumDef(from:Int, to:Int) : Null<led.def.EnumDef> {
 		if( from<0 || from>=enums.length || from==to )

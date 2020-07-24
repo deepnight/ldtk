@@ -160,7 +160,8 @@
 					{ "id" : "Shooter", "tileId" : 12 },
 					{ "id" : "Ninja", "tileId" : 13 }
 				],
-				"iconTilesetUid" : 14
+				"iconTilesetUid" : 14,
+				"externalRelPath" : null
 			},
 			{
 				"identifier" : "ItemType",
@@ -170,9 +171,11 @@
 					{ "id" : "Ammo", "tileId" : 1097 },
 					{ "id" : "Food", "tileId" : 1086 }
 				],
-				"iconTilesetUid" : 18
+				"iconTilesetUid" : 18,
+				"externalRelPath" : null
 			}
-		]
+		],
+		"externalEnums" : []
 	},
 	"levels" : [
 		{

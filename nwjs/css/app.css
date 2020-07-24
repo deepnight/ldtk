@@ -330,7 +330,7 @@ ul.niceList#layers:empty::before {
   content: "No layer";
 }
 
-ul.niceList li {
+ul.niceList li:not(.title) {
   display: grid;
   justify-items: left;
   align-items: center;
@@ -343,12 +343,27 @@ ul.niceList li {
   cursor: pointer;
 }
 
-ul.niceList li .sub {
+ul.niceList li:not(.title) .sub {
   display: block;
   width: 100%;
   text-align: right;
   font-size: 0.7em;
   opacity: 0.5;
+}
+
+ul.niceList li:not(.title):not(.active):hover {
+  outline: 1px solid #586279;
+  outline-offset: -1px;
+}
+
+ul.niceList li.title {
+  display: grid;
+  padding: 4px;
+  margin-top: 2px;
+  color: #ffcc00;
+  font-size: 0.8em;
+  font-family: Roboto;
+  border-top: 1px solid #545d73;
 }
 
 ul.niceList li.iconLeft {
@@ -382,11 +397,6 @@ ul.niceList li.hidden {
 ul.niceList li.hidden .vis {
   background: transparent;
   cursor: zoom-in;
-}
-
-ul.niceList li:not(.active):hover {
-  outline: 1px solid #586279;
-  outline-offset: -1px;
 }
 
 .icon {
@@ -608,7 +618,7 @@ ul.form > li > label:first-of-type {
   font-size: 80%;
 }
 
-ul.form > li input[type=text]:hover {
+ul.form > li input[type=text]:not([readonly]):hover {
   outline: 1px solid #ffcc00;
 }
 
@@ -1051,6 +1061,7 @@ textarea:focus {
   color: white;
   text-shadow: 0px 1px 3px black;
   background-color: rgba(0, 0, 0, 0.4);
+  max-width: 40vw;
 }
 
 #debug p {
@@ -1654,34 +1665,38 @@ canvas#webgl {
   overflow: auto;
 }
 
-.window.panel.editEnums .content .enumForm {
-  grid-column: 2/3;
-}
-
-.window.panel.editEnums .content .enumForm button.createEnumValue {
+.window.panel.editEnums .content .enumList button[class^="import"] {
   flex: 1 0 100%;
 }
 
-.window.panel.editEnums .content .enumForm ul.enumValues li {
+.window.panel.editEnums .content ul.enumForm {
+  grid-column: 2/3;
+}
+
+.window.panel.editEnums .content ul.enumForm button.createEnumValue {
+  flex: 1 0 100%;
+}
+
+.window.panel.editEnums .content ul.enumForm ul.enumValues li {
   display: grid;
   gap: 3px;
   grid-template-columns: 32px auto 32px;
   margin-bottom: 4px;
 }
 
-.window.panel.editEnums .content .enumForm ul.enumValues li input[type=color] {
+.window.panel.editEnums .content ul.enumForm ul.enumValues li input[type=color] {
   height: 24px;
 }
 
-.window.panel.editEnums .content .enumForm ul.enumValues li input[type=text] {
+.window.panel.editEnums .content ul.enumForm ul.enumValues li input[type=text] {
   padding: 3px;
 }
 
-.window.panel.editEnums .content .enumForm ul.enumValues li button {
+.window.panel.editEnums .content ul.enumForm ul.enumValues li button {
   padding: 0;
 }
 
-.window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile {
+.window.panel.editEnums .content ul.enumForm ul.enumValues li canvas.tile {
   width: 32px;
   height: 32px;
   background-image: url("../img/stripes.png");
@@ -1689,17 +1704,39 @@ canvas#webgl {
   image-rendering: pixelated;
 }
 
-.window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile:not(.active) {
+.window.panel.editEnums .content ul.enumForm ul.enumValues li canvas.tile:not(.active) {
   cursor: not-allowed;
 }
 
-.window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile:not(.active):hover {
+.window.panel.editEnums .content ul.enumForm ul.enumValues li canvas.tile:not(.active):hover {
   border-color: #e34d00;
 }
 
-.window.panel.editEnums .content .enumForm ul.enumValues li canvas.tile.active:hover {
+.window.panel.editEnums .content ul.enumForm ul.enumValues li canvas.tile.active:hover {
   border-color: #ffcc00;
   cursor: pointer;
+}
+
+.window.panel.editEnums .content ul.enumForm .onlyExternal {
+  display: none;
+}
+
+.window.panel.editEnums .content ul.enumForm.externalEnum .noExternal {
+  display: none;
+}
+
+.window.panel.editEnums .content ul.enumForm.externalEnum li.onlyExternal {
+  display: flex;
+}
+
+.window.panel.editEnums .content ul.enumForm.externalEnum ul.enumValues li {
+  grid-template-columns: auto;
+}
+
+.window.panel.editEnums .content ul.enumForm.externalEnum .path {
+  background-color: #1e2229;
+  padding: 5px;
+  border: 1px solid #545d73;
 }
 
 .window.panel.layerDefs .mainList ul:empty::before {

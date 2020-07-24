@@ -14,16 +14,26 @@
 	<div class="buttons">
 		<button class="createEnum">Create enum</button>
 		<button class="deleteEnum delete">🗑️</button>
+		<button class="importHx large">Import Haxe</button>
+		<button class="importCdb large">Import CastleDB</button>
 	</div>
 </div>
 
 <ul class="form enumForm">
+	<li class="onlyExternal">
+		<div class="help">External enums can be manually synced with their source file.</div>
+	</li>
+
 	<li>
 		<label for="id">Enum identifier</label>
 		<input type="text" name="id" id="id"/>
 	</li>
 
-	<li>
+	<li class="onlyExternal source">
+		<label>Source file</label>
+	</li>
+
+	<li class="noExternal">
 		<label for="icons">Icon tileset</label>
 		<select id="icons"></select>
 	</li>
@@ -32,12 +42,14 @@
 		<label for="eValues">Possible values</label>
 
 		<ul class="enumValues"></ul>
-		<button class="createEnumValue">Add value</button>
+		<button class="createEnumValue noExternal">Add value</button>
 
-		<xml id="enum">
-			<canvas class="tile" width="16" height="16"></canvas>
+		<!-- Template -->
+		<xml class="enum">
+			<canvas class="tile noExternal" width="16" height="16"></canvas>
 			<input type="text" class="name" placeholder="REQUIRED - Unique identifier"/>
-			<button class="delete">X</button>
+			<button class="delete noExternal">X</button>
 		</xml>
 	</li>
 </ul>
+

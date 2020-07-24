@@ -53,11 +53,21 @@ class EditEntityDefs extends ui.modal.Panel {
 					case F_Enum(null):
 						// Enum picker
 						var w = new ui.modal.Dialog(anchor, "enums");
-						if( project.defs.enums.length==0 ) {
-							w.jContent.append('<div class="warning">You first need to create an ENUM from the Project tab.</div>');
+						if( project.defs.enums.length==0 && project.defs.externalEnums.length==0 ) {
+							w.jContent.append('<div class="warning">This project has no Enum: add one from the Enum panel.</div>');
 						}
 
 						for(ed in project.defs.enums) {
+							var b = new J("<button/>");
+							b.appendTo(w.jContent);
+							b.text(ed.identifier);
+							b.click( function(_) {
+								_create(F_Enum(ed.uid));
+								w.close();
+							});
+						}
+
+						for(ed in project.defs.externalEnums) {
 							var b = new J("<button/>");
 							b.appendTo(w.jContent);
 							b.text(ed.identifier);
