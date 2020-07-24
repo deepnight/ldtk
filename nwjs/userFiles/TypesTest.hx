@@ -1,20 +1,20 @@
 enum ItemType {
 	Food;
-	// Gold;
+	Gold;
 	Ammo;
 	Key;
 	SomeNewObject;
 }
 
 enum EnemyType {
-	// Crawler;
+	Crawler;
 	Shooter;
 	Behemoth;
 	Hunter;
 	NewBigBoy;
 }
 
-enum NewEnum {
+enum SomeEnum {
 	Foo;
 	Bar;
 }
