@@ -41,8 +41,8 @@ class Definitions {
 		for( enumJson in JsonTools.readArray(json.enums) )
 			d.enums.push( led.def.EnumDef.fromJson(p.dataVersion, enumJson) );
 
-		// for( enumJson in JsonTools.readArray(json.externalEnums) )
-		// 	d.externalEnums.push( led.def.EnumDef.fromJson(p.dataVersion, enumJson) );
+		for( enumJson in JsonTools.readArray(json.externalEnums) )
+			d.externalEnums.push( led.def.EnumDef.fromJson(p.dataVersion, enumJson) );
 
 		return d;
 	}
