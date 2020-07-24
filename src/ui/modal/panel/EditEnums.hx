@@ -24,12 +24,30 @@ class EditEnums extends ui.modal.Panel {
 				return;
 			}
 
-			new ui.modal.dialog.Confirm(ev.getThis(), function() {
-				new ui.LastChance( L.t._("Enum ::name:: deleted", { name: curEnum.identifier}), project );
-				project.defs.removeEnumDef(curEnum);
-				editor.ge.emit(EnumDefRemoved);
-				selectEnum( project.defs.enums[0] );
-			});
+			if( curEnum.isExternal() ) {
+				// Extern enum removal
+				new ui.modal.dialog.Confirm(
+					ev.getThis(),
+					L.t._("WARNING: removing this external enum will also remove ALL the external enums from the same source!"),
+					function() {
+						var name = dn.FilePath.fromFile(curEnum.externalRelPath).fileWithExt;
+						new ui.LastChance( L.t._("::file:: enums deleted", { file:name }), project );
+						project.defs.removeExternalEnumSource(curEnum.externalRelPath);
+						editor.ge.emit(EnumDefRemoved);
+						selectEnum( project.defs.enums[0] );
+					}
+				);
+			}
+			else {
+				// Local enum removal
+				new ui.modal.dialog.Confirm(ev.getThis(), function() {
+					new ui.LastChance( L.t._("Enum ::name:: deleted", { name: curEnum.identifier}), project );
+					project.defs.removeEnumDef(curEnum);
+					editor.ge.emit(EnumDefRemoved);
+					selectEnum( project.defs.enums[0] );
+				});
+			}
+
 		});
 
 		// Import HX

@@ -322,6 +322,18 @@ class Definitions {
 		return map;
 	}
 
+
+	public function removeExternalEnumSource(relPath:String) {
+		var i = 0;
+		while( i<externalEnums.length )
+			if( externalEnums[i].externalRelPath==relPath )
+				externalEnums.splice(i,1);
+			else
+				i++;
+
+		_project.tidy();
+	}
+
 	public function sortEnumDef(from:Int, to:Int) : Null<led.def.EnumDef> {
 		if( from<0 || from>=enums.length || from==to )
 			return null;
