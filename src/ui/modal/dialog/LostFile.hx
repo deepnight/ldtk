@@ -18,6 +18,7 @@ class LostFile extends ui.modal.Dialog {
 		addParagraph(Lang.t._("What do you want to do?") );
 		addButton(Lang.t._("Locate the file"), "confirm", function() {
 			JsTools.loadDialog(lostExt==null ? null : ["."+lostExt], editor.getProjectDir(), function(newPath:String) {
+				newPath = StringTools.replace(newPath, "\\", "/");
 				var newName = dn.FilePath.fromFile(newPath).fileName;
 				if( newName!=lostName ) {
 					// Different naming, that could be suspicious

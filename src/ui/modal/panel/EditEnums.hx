@@ -347,6 +347,7 @@ class EditEnums extends ui.modal.Panel {
 
 
 	function loadParsedEnums(relPath:String, parseds:Array<ParsedExternalEnum>) {
+		// Check for duplicate identifiers
 		for(pe in parseds) {
 			var ed = project.defs.getEnumDef(pe.enumId);
 			if( ed!=null && ed.externalRelPath!=relPath ) {
@@ -355,7 +356,7 @@ class EditEnums extends ui.modal.Panel {
 			}
 		}
 
-
+		// Try to import/sync
 		var copy = project.clone();
 		var result = copy.defs.importExternalEnums(relPath, parseds);
 		if( result.needConfirm )
@@ -365,6 +366,6 @@ class EditEnums extends ui.modal.Panel {
 			N.success("Successfully imported enums!");
 		}
 		else
-			N.msg("Nothing to sync.");
+			N.msg("File is up-to-date!");
 	}
 }

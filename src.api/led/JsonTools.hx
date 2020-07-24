@@ -71,6 +71,10 @@ class JsonTools {
 		return dn.Color.intToHex(c);
 	}
 
+	public static function writePath(path:Null<String>) : Null<String> {
+		return path==null ? null : StringTools.replace(path, "\\", "/");
+	}
+
 
 	public static function readString(v:Dynamic, ?defaultIfMissing:String) : String {
 		if( v==null && defaultIfMissing==null )

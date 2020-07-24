@@ -48,7 +48,7 @@ class EnumDef {
 			uid: uid,
 			values: values.map( function(v) return { id:v.id, tileId:v.tileId } ), // breaks memory refs
 			iconTilesetUid: iconTilesetUid,
-			externalRelPath: externalRelPath,
+			externalRelPath: JsonTools.writePath(externalRelPath),
 		};
 	}
 

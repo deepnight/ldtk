@@ -74,7 +74,7 @@ class TilesetDef {
 		return {
 			identifier: identifier,
 			uid: uid,
-			relPath: relPath,
+			relPath: JsonTools.writePath(relPath),
 			pxWid: pxWid,
 			pxHei: pxHei,
 			tileGridSize: tileGridSize,
