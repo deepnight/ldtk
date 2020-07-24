@@ -1,28 +1,20 @@
-enum Mixed {
+enum MixedWithParameters { // parametered enums can't be imported
 	Foo;
 	Bar(s:String);
 	Pouet;
 	Some(n:Int);
 }
 
-enum CommentTest {
-	Value1; // multi // comment
-	Value2; // multi // comment  / rezoizeo
-	Value3; Value4; // Pouet;
-	//Bar;
+enum AnImportedEnum {
+	Value1;
+	Value2;
+	//DiscardedValue1;
+	Value3; Value4; // 2 on the same line
 	/*
-	GridCell(li:led.inst.LayerInstance, cx:Int, cy:Int, ?col:UInt);
-	GridRect(li:led.inst.LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
-	Entity(def:led.def.EntityDef, x:Int, y:Int);
-	Tiles(li:led.inst.LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int);
-	Resize(p:RulerPos);*/
+	DiscardedValue2;
+	DiscardedValue3;
+	*/
 	Value5;
-}
-
-enum OnlyParams {
-	IntGrid(li:led.inst.LayerInstance, cx:Int, cy:Int);
-	Entity(instance:led.inst.EntityInstance);
-	Tile(li:led.inst.LayerInstance, cx:Int, cy:Int);
 }
 
 enum ItemType {
@@ -32,9 +24,12 @@ enum ItemType {
 	Key;
 }
 
-enum MobType {
+enum EnemyType {
 	Crawler;
 	Shooter;
 	Behemoth;
 	Hunter;
 }
+
+
+

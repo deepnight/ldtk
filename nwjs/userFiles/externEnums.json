@@ -5,7 +5,7 @@
 	"defaultPivotY" : 0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 20,
+	"nextUid" : 22,
 	"defs" : {
 		"layers" : [
 			{
@@ -35,20 +35,8 @@
 				"pivotY" : 0.5,
 				"fieldDefs" : [
 					{
-						"identifier" : "type",
-						"_desc" : "MobType",
-						"uid" : 17,
-						"type" : { "id" : "F_Enum", "params" : [ 13 ] },
-						"canBeNull" : false,
-						"editorDisplayMode" : "ValueOnly",
-						"editorDisplayPos" : "Above",
-						"min" : null,
-						"max" : null,
-						"defaultOverride" : null
-					},
-					{
 						"identifier" : "local",
-						"_desc" : "Local",
+						"_desc" : "SomeLocalEnum",
 						"uid" : 16,
 						"type" : { "id" : "F_Enum", "params" : [ 14 ] },
 						"canBeNull" : false,
@@ -57,75 +45,43 @@
 						"min" : null,
 						"max" : null,
 						"defaultOverride" : null
-					},
-					{
-						"identifier" : "loot",
-						"_desc" : "ItemType",
-						"uid" : 18,
-						"type" : { "id" : "F_Enum", "params" : [ 12 ] },
-						"canBeNull" : true,
-						"editorDisplayMode" : "ValueOnly",
-						"editorDisplayPos" : "Center",
-						"min" : null,
-						"max" : null,
-						"defaultOverride" : null
 					}
 				]
 			}
 		],
-		"tilesets" : [],
+		"tilesets" : [
+			{
+				"identifier" : "MyTextures",
+				"uid" : 21,
+				"relPath" : "atlas/gif87a.gif",
+				"pxWid" : 192,
+				"pxHei" : 128,
+				"tileGridSize" : 32,
+				"tileGridSpacing" : 0,
+				"savedSelections" : []
+			}
+		],
 		"enums" : [
 			{
-				"identifier" : "Local",
+				"identifier" : "SomeLocalEnum",
 				"uid" : 14,
 				"values" : [
-					{ "id" : "A", "tileId" : null },
-					{ "id" : "B", "tileId" : null },
-					{ "id" : "C", "tileId" : null }
+					{ "id" : "Value_A", "tileId" : 2 },
+					{ "id" : "Value_B", "tileId" : 12 },
+					{ "id" : "Value_C", "tileId" : 0 }
 				],
+				"iconTilesetUid" : 21,
+				"externalRelPath" : null
+			},
+			{
+				"identifier" : "AnotherLocalEnum",
+				"uid" : 20,
+				"values" : [],
 				"iconTilesetUid" : null,
 				"externalRelPath" : null
 			}
 		],
-		"externalEnums" : [
-			{
-				"identifier" : "CommentTest",
-				"uid" : 11,
-				"values" : [
-					{ "id" : "Value1", "tileId" : null },
-					{ "id" : "Value2", "tileId" : null },
-					{ "id" : "Value3", "tileId" : null },
-					{ "id" : "Value4", "tileId" : null },
-					{ "id" : "Value5", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : "TypesTest.hx"
-			},
-			{
-				"identifier" : "ItemType",
-				"uid" : 12,
-				"values" : [
-					{ "id" : "Food", "tileId" : null },
-					{ "id" : "Gold", "tileId" : null },
-					{ "id" : "Ammo", "tileId" : null },
-					{ "id" : "Key", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : "TypesTest.hx"
-			},
-			{
-				"identifier" : "MobType",
-				"uid" : 13,
-				"values" : [
-					{ "id" : "Crawler", "tileId" : null },
-					{ "id" : "Shooter", "tileId" : null },
-					{ "id" : "Behemoth", "tileId" : null },
-					{ "id" : "Hunter", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : "TypesTest.hx"
-			}
-		]
+		"externalEnums" : []
 	},
 	"levels" : [
 		{
@@ -156,18 +112,6 @@
 									"_value" : "A",
 									"defUid" : 16,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "A" ] }
-								},
-								{
-									"_identifier" : "type",
-									"_value" : "Crawler",
-									"defUid" : 17,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "Crawler" ] }
-								},
-								{
-									"_identifier" : "loot",
-									"_value" : "Gold",
-									"defUid" : 18,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "Gold" ] }
 								}
 							]
 						}
