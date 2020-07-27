@@ -40,8 +40,8 @@ class HxEnum {
 			// Try to import/sync
 			var copy = curProject.clone();
 			var log = importToProject(copy, relPath, parseds);
-			if( log.length>0 ) 
-				new ui.modal.dialog.EnumImport(log, relPath, copy);
+			if( log.length>0 )
+				new ui.modal.dialog.Sync(log, relPath, copy);
 			else
 				N.msg("File is up-to-date!");
 		}

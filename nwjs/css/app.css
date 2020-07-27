@@ -1025,11 +1025,11 @@ textarea:focus {
   flex-grow: 2;
 }
 
-.window.enumImport .wrapper .content {
+.window.sync .wrapper .content {
   max-width: none;
 }
 
-.window.enumImport .wrapper .content h2 .file {
+.window.sync .wrapper .content h2 .file {
   color: white;
 }
 

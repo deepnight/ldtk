@@ -1,10 +1,10 @@
 package ui.modal.dialog;
 
-class EnumImport extends ui.modal.Dialog {
+class Sync extends ui.modal.Dialog {
 	public function new(log:SyncLog, filePath:String, newProject:led.Project) {
 		super();
 
-		loadTemplate("enumImport");
+		loadTemplate("sync");
 		jContent.find("h2 .file").text( dn.FilePath.fromFile(filePath).fileWithExt );
 
 		// Warning
@@ -32,7 +32,7 @@ class EnumImport extends ui.modal.Dialog {
 
 		// Buttons
 		addConfirm( function() {
-			new LastChance( Lang.t._("External enums synced"), editor.project );
+			new LastChance( Lang.t._("External file synced"), editor.project );
 			editor.selectProject(newProject);
 		});
 
