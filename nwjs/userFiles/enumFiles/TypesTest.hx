@@ -11,7 +11,6 @@ enum EnemyType {
 	Shooter;
 	Behemoth;
 	Hunter;
-	// NewBigBoy;
 }
 
 enum SomeEnum {
