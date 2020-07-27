@@ -58,6 +58,10 @@ class EditEnums extends ui.modal.Panel {
 			});
 		});
 
+		jContent.find("button.importCdb").click( function(_) {
+			N.notImplemented();
+		});
+
 		// Default enum selection
 		if( project.defs.enums.length>0 )
 			selectEnum( project.defs.enums[0] );
