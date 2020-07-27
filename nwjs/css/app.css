@@ -212,7 +212,7 @@ button.close:hover {
   color: white;
 }
 
-.warning {
+div.warning:not(.window) {
   box-sizing: border-box;
   padding: 8px;
   margin-top: 4px;
@@ -1023,6 +1023,10 @@ textarea:focus {
 .window.dialog.unsavedChanges button.ignore,
 .window.dialog.unsavedChanges button.save {
   flex-grow: 2;
+}
+
+.window.dialog.warning .wrapper .content {
+  max-width: 400px;
 }
 
 .window.sync .wrapper .content {

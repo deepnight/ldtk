@@ -216,7 +216,7 @@ button.close {
 	}
 }
 
-.warning {
+div.warning:not(.window) {
 	box-sizing: border-box;
 	padding: 8px;
 	margin-top: 4px;
@@ -979,11 +979,16 @@ textarea {
 			}
 		}
 	}
+
 	&.unsavedChanges {
 		button.ignore,
 		button.save {
 			flex-grow: 2;
 		}
+	}
+
+	&.warning .wrapper .content {
+		max-width: 400px;
 	}
 }
 
