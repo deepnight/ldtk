@@ -58,7 +58,13 @@ class EditEnums extends ui.modal.Panel {
 			});
 		});
 
+		// Import CastleDB
 		jContent.find("button.importCdb").click( function(_) {
+			N.notImplemented();
+		});
+
+		// Import ExpDB
+		jContent.find("button.importEdb").click( function(_) {
 			N.notImplemented();
 		});
 
