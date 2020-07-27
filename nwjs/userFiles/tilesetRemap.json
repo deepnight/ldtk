@@ -1,0 +1,126 @@
+{
+	"name" : "tilesetRemap",
+	"dataVersion" : 1,
+	"defaultPivotX" : 0,
+	"defaultPivotY" : 0,
+	"defaultGridSize" : 16,
+	"bgColor" : "#7F8093",
+	"nextUid" : 3,
+	"defs" : {
+		"layers" : [
+			{
+				"identifier" : "Tiles",
+				"type" : "Tiles",
+				"uid" : 2,
+				"gridSize" : 32,
+				"displayOpacity" : 1,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" }
+				],
+				"tilesetDefUid" : 1,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			}
+		],
+		"entities" : [],
+		"tilesets" : [
+			{
+				"identifier" : "Remap",
+				"uid" : 1,
+				"relPath" : "atlas/_remap.gif",
+				"pxWid" : 192,
+				"pxHei" : 128,
+				"tileGridSize" : 32,
+				"tileGridSpacing" : 0,
+				"savedSelections" : []
+			}
+		],
+		"enums" : [],
+		"externalEnums" : []
+	},
+	"levels" : [
+		{
+			"identifier" : "Level",
+			"uid" : 0,
+			"pxWid" : 256,
+			"pxHei" : 256,
+			"layerInstances" : [
+				{
+					"_identifier" : "Tiles",
+					"levelId" : 0,
+					"layerDefUid" : 2,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
+					"gridTiles" : [
+						{ "coordId" : 0, "v" : 7 },
+						{ "coordId" : 1, "v" : 7 },
+						{ "coordId" : 2, "v" : 7 },
+						{ "coordId" : 3, "v" : 7 },
+						{ "coordId" : 4, "v" : 7 },
+						{ "coordId" : 5, "v" : 7 },
+						{ "coordId" : 6, "v" : 7 },
+						{ "coordId" : 7, "v" : 7 },
+						{ "coordId" : 8, "v" : 7 },
+						{ "coordId" : 9, "v" : 7 },
+						{ "coordId" : 10, "v" : 7 },
+						{ "coordId" : 11, "v" : 7 },
+						{ "coordId" : 12, "v" : 7 },
+						{ "coordId" : 13, "v" : 7 },
+						{ "coordId" : 14, "v" : 11 },
+						{ "coordId" : 15, "v" : 7 },
+						{ "coordId" : 16, "v" : 7 },
+						{ "coordId" : 17, "v" : 11 },
+						{ "coordId" : 18, "v" : 7 },
+						{ "coordId" : 19, "v" : 7 },
+						{ "coordId" : 20, "v" : 7 },
+						{ "coordId" : 21, "v" : 7 },
+						{ "coordId" : 22, "v" : 17 },
+						{ "coordId" : 23, "v" : 7 },
+						{ "coordId" : 24, "v" : 7 },
+						{ "coordId" : 25, "v" : 17 },
+						{ "coordId" : 26, "v" : 7 },
+						{ "coordId" : 27, "v" : 15 },
+						{ "coordId" : 28, "v" : 15 },
+						{ "coordId" : 29, "v" : 7 },
+						{ "coordId" : 30, "v" : 17 },
+						{ "coordId" : 31, "v" : 7 },
+						{ "coordId" : 32, "v" : 7 },
+						{ "coordId" : 33, "v" : 17 },
+						{ "coordId" : 34, "v" : 7 },
+						{ "coordId" : 35, "v" : 15 },
+						{ "coordId" : 36, "v" : 15 },
+						{ "coordId" : 37, "v" : 7 },
+						{ "coordId" : 38, "v" : 17 },
+						{ "coordId" : 39, "v" : 7 },
+						{ "coordId" : 40, "v" : 3 },
+						{ "coordId" : 41, "v" : 3 },
+						{ "coordId" : 42, "v" : 3 },
+						{ "coordId" : 43, "v" : 3 },
+						{ "coordId" : 44, "v" : 3 },
+						{ "coordId" : 45, "v" : 3 },
+						{ "coordId" : 46, "v" : 3 },
+						{ "coordId" : 47, "v" : 3 },
+						{ "coordId" : 48, "v" : 18 },
+						{ "coordId" : 49, "v" : 19 },
+						{ "coordId" : 50, "v" : 20 },
+						{ "coordId" : 51, "v" : 18 },
+						{ "coordId" : 52, "v" : 19 },
+						{ "coordId" : 53, "v" : 20 },
+						{ "coordId" : 54, "v" : 18 },
+						{ "coordId" : 55, "v" : 19 },
+						{ "coordId" : 56, "v" : 18 },
+						{ "coordId" : 57, "v" : 19 },
+						{ "coordId" : 58, "v" : 20 },
+						{ "coordId" : 59, "v" : 18 },
+						{ "coordId" : 60, "v" : 19 },
+						{ "coordId" : 61, "v" : 20 },
+						{ "coordId" : 62, "v" : 18 },
+						{ "coordId" : 63, "v" : 19 }
+					],
+					"entityInstances" : []
+				}
+			]
+		}
+	]
+}
