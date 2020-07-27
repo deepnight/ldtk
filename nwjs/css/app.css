@@ -1008,6 +1008,10 @@ textarea:focus {
   max-width: none;
 }
 
+.window.enumImport .wrapper .content h2 .file {
+  color: white;
+}
+
 .window.lostFile .wrapper .content {
   max-width: 50vw;
 }

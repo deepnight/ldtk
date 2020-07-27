@@ -973,6 +973,9 @@ textarea {
 .window.enumImport {
 	.wrapper .content {
 		max-width: none;
+		h2 .file {
+			color: white;
+		}
 	}
 }
 
