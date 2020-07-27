@@ -1,7 +1,58 @@
-package parser;
+package importer;
 
-class HxEnumParser {
-	public static function run(fileContent:String) : Array<ParsedExternalEnum> {
+class HxEnum {
+
+	public static function load(relPath:String, isSync:Bool) {
+		var curProject = Editor.ME.project;
+		var absPath = Editor.ME.makeFullFilePath(relPath);
+		var file = JsTools.readFileString(absPath);
+
+		if( file==null ) {
+			// File not found
+			if( isSync )
+				new ui.modal.dialog.LostFile(relPath, function(newAbs) {
+					var newRel = Editor.ME.makeRelativeFilePath(newAbs);
+					for(ed in curProject.defs.externalEnums)
+						if( ed.externalRelPath==relPath )
+							ed.externalRelPath = newRel;
+					Editor.ME.ge.emit( EnumDefChanged );
+					load(newRel, true);
+				});
+			else
+				N.error( Lang.t._("File not found: ::path::", { path:relPath }) );
+
+			return;
+		}
+
+		// Parse file
+		var parseds = parse(file);
+		if( parseds.length>0 ) {
+			// Check for duplicate identifiers
+			for(pe in parseds) {
+				var ed = curProject.defs.getEnumDef(pe.enumId);
+				if( ed!=null && ed.externalRelPath!=relPath ) {
+					N.error("Import failed: the file contains the Enum identifier \""+pe.enumId+"\" which is already used in this project.");
+					return;
+				}
+			}
+
+			// Try to import/sync
+			var copy = curProject.clone();
+			var result = copy.defs.importExternalEnums(relPath, parseds);
+			if( result.needConfirm )
+				new ui.modal.dialog.EnumImport(result.log, relPath, copy);
+			else if( result.log.length>0 ) {
+				Editor.ME.selectProject(copy);
+				N.success("Successfully imported enums!");
+			}
+			else
+				N.msg("File is up-to-date!");
+		}
+	}
+
+
+
+	static function parse(fileContent:String) : Array<ParsedExternalEnum> {
 		if( fileContent==null || fileContent.length==0 )
 			return [];
 

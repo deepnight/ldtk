@@ -1,10 +1,11 @@
 package ui.modal.dialog;
 
 class EnumImport extends ui.modal.Dialog {
-	public function new(log:Array<String>, newProject:led.Project) {
+	public function new(log:Array<String>, filePath:String, newProject:led.Project) {
 		super();
 
 		loadTemplate("enumImport");
+		jContent.find("h2 .file").text( dn.FilePath.fromFile(filePath).fileWithExt );
 
 		var jList = jContent.find(".log");
 		jList.appendTo(jContent);

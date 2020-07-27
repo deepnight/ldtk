@@ -54,7 +54,7 @@ class EditEnums extends ui.modal.Panel {
 		jContent.find("button.importHx").click( function(_) {
 			JsTools.loadDialog([".hx"], editor.getProjectDir(), function(absPath:String) {
 				absPath = StringTools.replace(absPath,"\\","/");
-				importHxEnums( editor.makeRelativeFilePath(absPath) );
+				importer.HxEnum.load( editor.makeRelativeFilePath(absPath), false );
 			});
 		});
 
@@ -119,7 +119,7 @@ class EditEnums extends ui.modal.Panel {
 			sync.appendTo(e);
 			sync.text("⟳");
 			sync.click( function(ev) {
-				importHxEnums(group.key, true);
+				importer.HxEnum.load(group.key, true);
 			});
 			Tip.attach(sync, Lang.t._("Reload and synchronize Enums"));
 
@@ -314,57 +314,5 @@ class EditEnums extends ui.modal.Panel {
 				curEnum.values.insert(to, v);
 				editor.ge.emit(EnumDefChanged);
 			});
-	}
-
-
-	function importHxEnums(relPath:String, isSync=false) {
-		var absPath = editor.makeFullFilePath(relPath);
-		var file = JsTools.readFileString(absPath);
-
-		if( file==null ) {
-			// File not found
-			if( isSync )
-				new ui.modal.dialog.LostFile(relPath, function(newAbs) {
-					var newRel = editor.makeRelativeFilePath(newAbs);
-					for(ed in project.defs.externalEnums)
-						if( ed.externalRelPath==relPath )
-							ed.externalRelPath = newRel;
-					editor.ge.emit( EnumDefChanged );
-					importHxEnums(newRel, true);
-				});
-			else
-				N.error( Lang.t._("File not found: ::path::", { path:relPath }) );
-
-			return;
-		}
-
-		// Import it
-		var parseds = parser.HxEnumParser.run(file);
-		if( parseds.length>0 )
-			loadParsedEnums(relPath, parseds);
-	}
-
-
-	function loadParsedEnums(relPath:String, parseds:Array<ParsedExternalEnum>) {
-		// Check for duplicate identifiers
-		for(pe in parseds) {
-			var ed = project.defs.getEnumDef(pe.enumId);
-			if( ed!=null && ed.externalRelPath!=relPath ) {
-				N.error("Import failed: the file contains the Enum identifier \""+pe.enumId+"\" which is already used in this project.");
-				return;
-			}
-		}
-
-		// Try to import/sync
-		var copy = project.clone();
-		var result = copy.defs.importExternalEnums(relPath, parseds);
-		if( result.needConfirm )
-			new ui.modal.dialog.EnumImport(result.log, copy);
-		else if( result.log.length>0 ) {
-			editor.selectProject(copy);
-			N.success("Successfully imported enums!");
-		}
-		else
-			N.msg("File is up-to-date!");
 	}
 }
