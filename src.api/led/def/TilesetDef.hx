@@ -141,26 +141,42 @@ class TilesetDef {
 		return true;
 	}
 
-	public inline function reloadImage(projectDir:String) {
+	public inline function reloadImage(projectDir:String) : EditorTypes.ImageSyncResult {
 		var oldWid = pxWid;
 		var oldHei = pxHei;
-		if( !importAtlasImage(projectDir, relPath) )
-			return false;
 
-		if( oldWid!=pxWid ) {
-			// tileIDs remapping
-			var oldCwid = dn.M.ceil( oldWid / tileGridSize );
-			for(l in _project.levels)
-			for(li in l.layerInstances) {
-				for( coordId in li.gridTiles.keys() ) {
-					var tCoordId = li.gridTiles.get(coordId);
-					var oldCy = Std.int( tCoordId / oldCwid );
-					var oldCx = tCoordId - oldCwid*oldCy;
-					li.gridTiles.set(coordId, getTileId(oldCx, oldCy));
-				}
-			}
+		if( !importAtlasImage(projectDir, relPath) )
+			return FileNotFound;
+
+		if( oldWid==pxWid && oldHei==pxHei )
+			return Ok;
+
+		var oldCwid = dn.M.ceil( oldWid / tileGridSize );
+
+		// Layers remapping
+		for(l in _project.levels)
+		for(li in l.layerInstances)
+		for( coordId in li.gridTiles.keys() ) {
+			var remapped = remapTileId( oldCwid, li.gridTiles.get(coordId) );
+			if( remapped==null )
+				li.gridTiles.remove(coordId);
+			else
+				li.gridTiles.set( coordId, remapped );
 		}
-		return true;
+
+		if( pxWid<oldWid || pxHei<oldHei )
+			return RemapLoss;
+		else
+			return RemapSuccessful;
+	}
+
+	inline function remapTileId(oldCwid:Int, oldTileCoordId:Int) : Null<Int> {
+		var oldCy = Std.int( oldTileCoordId / oldCwid );
+		var oldCx = oldTileCoordId - oldCwid*oldCy;
+		if( oldCx>=cWid || oldCy>=cHei )
+			return null;
+		else
+			return getTileId(oldCx, oldCy);
 	}
 
 	public function getTileId(tcx,tcy) {

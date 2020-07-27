@@ -167,15 +167,8 @@ class Editor extends dn.Process {
 		project.tidy();
 
 		// Load tilesets
-		for(td in project.defs.tilesets) {
-			if( !td.reloadImage( getProjectDir() ) ) {
-				new ui.modal.dialog.LostFile( td.relPath, function(newAbsPath) {
-					var newRelPath = makeRelativeFilePath(newAbsPath);
-					td.importAtlasImage( getProjectDir(), newRelPath );
-					ge.emit( TilesetDefChanged );
-				});
-			}
-		}
+		for(td in project.defs.tilesets)
+			reloadTileset(td, true);
 
 		// Check external enums
 		for( relPath in project.defs.getExternalEnumPaths() ) {
@@ -208,14 +201,31 @@ class Editor extends dn.Process {
 			watcher.watchTileset(td);
 	}
 
-	public function onTilesetImageChange(td:led.def.TilesetDef) {
-		var name = dn.FilePath.fromFile(td.relPath).fileName;
-		if( td.reloadImage( getProjectDir() ) ) {
-			ge.emit(TilesetDefChanged);
-			N.msg( Lang.t._("Reloaded: ::file::", { file:name }) );
+
+	public function reloadTileset(td:led.def.TilesetDef, silentOk=false) {
+		if( !td.hasAtlasPath() )
+			return;
+
+		var result = td.reloadImage( getProjectDir() );
+		var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
+
+		switch result {
+			case FileNotFound:
+				new ui.modal.dialog.LostFile( td.relPath, function(newAbsPath) {
+					var newRelPath = makeRelativeFilePath(newAbsPath);
+					td.importAtlasImage( getProjectDir(), newRelPath );
+					ge.emit( TilesetDefChanged );
+				});
+
+			case RemapLoss:
+				new ui.modal.dialog.Warning( Lang.t._("The image ::file:: was updated, but the new version is smaller than the previous one.\nSome tiles might have been lost in the process. It is recommended to check this carefully before saving this project!", { file:name } ) );
+
+			case RemapSuccessful, Ok:
+				if( !silentOk || result!=Ok )
+					N.success(Lang.t._("Tileset image ::file:: updated.", { file:name } ) );
 		}
-		else
-			N.error( Lang.t._("Failed to reload: ::file::", { file:name }) );
+
+		ge.emit(TilesetDefChanged);
 	}
 
 	function onJsKeyDown(ev:js.jquery.Event) {

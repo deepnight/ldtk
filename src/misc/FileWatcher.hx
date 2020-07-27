@@ -23,7 +23,7 @@ class FileWatcher {
 	public function watchTileset(td:led.def.TilesetDef) {
 		watch(
 			Editor.ME.makeFullFilePath(td.relPath),
-			Editor.ME.onTilesetImageChange.bind(td)
+			Editor.ME.reloadTileset.bind(td)
 		);
 	}
 

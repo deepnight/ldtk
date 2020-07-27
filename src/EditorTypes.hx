@@ -112,3 +112,10 @@ enum SyncOp {
 	Add;
 	Remove;
 }
+
+enum ImageSyncResult {
+	Ok;
+	FileNotFound;
+	RemapLoss;
+	RemapSuccessful;
+}
