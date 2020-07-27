@@ -115,6 +115,7 @@ class App extends dn.Process {
 		ui.modal.Dialog.closeAll();
 		ui.Modal.closeAll();
 		ui.Tip.clear();
+		ui.LastChance.end();
 
 		var path = JsTools.getCwd() + '/pages/$id.html';
 		var raw = JsTools.readFileString(path);
