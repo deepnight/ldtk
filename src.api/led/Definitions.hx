@@ -351,6 +351,20 @@ class Definitions {
 	}
 
 
+	public function getExternalEnumPaths() : Array<String> {
+		var map = new Map();
+		var relPaths = [];
+
+		for(ed in externalEnums)
+			if( !map.exists(ed.externalRelPath) ) {
+				relPaths.push(ed.externalRelPath);
+				map.set(ed.externalRelPath, true);
+			}
+
+		return relPaths;
+	}
+
+
 	public function removeExternalEnumSource(relPath:String) {
 		var i = 0;
 		while( i<externalEnums.length )

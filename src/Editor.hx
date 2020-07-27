@@ -176,6 +176,8 @@ class Editor extends dn.Process {
 				});
 			}
 		}
+		for( relPath in project.defs.getExternalEnumPaths() )
+			importer.HxEnum.load(relPath, true);
 
 
 		curLevelId = project.levels[0].uid;
