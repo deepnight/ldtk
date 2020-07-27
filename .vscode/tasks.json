@@ -18,7 +18,7 @@
 				"panel": "shared",
 				"showReuseMessage": false,
 				"clear": false,
-				"revealProblems": "onProblem"
+				"revealProblems": "never"
 			},
 			"group": {
 				"kind": "build",

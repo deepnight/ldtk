@@ -435,12 +435,33 @@ ul.log li:hover {
   outline: 1px dashed #545d73;
 }
 
-ul.log li.good {
+ul.log li span.op {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+  font-size: 8pt;
+  color: white;
+  background-color: #545d73;
+  border-radius: 2px;
+}
+
+ul.log li.opAdd {
   color: #a7d93d;
 }
 
-ul.log li.bad {
+ul.log li.opAdd span.op {
+  color: black;
+  background-color: #a7d93d;
+}
+
+ul.log li.opRemove {
   color: #e34d00;
+}
+
+ul.log li.opRemove span.op {
+  background-color: #e34d00;
 }
 
 ul.log li + li {

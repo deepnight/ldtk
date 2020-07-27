@@ -445,11 +445,29 @@ ul.log {
 		outline: 1px dashed $bgLight;
 	}
 
-	li.good {
-		color: #a7d93d;
+	li span.op {
+		display: inline-block;
+		margin-left: 8px;
+		padding: 2px;
+		padding-left: 4px;
+		padding-right: 4px;
+		font-size: 8pt;
+		color: white;
+		background-color: $bgLight;
+		border-radius: 2px;
 	}
-	li.bad {
+	li.opAdd {
+		color: #a7d93d;
+		span.op {
+			color: black;
+			background-color: #a7d93d;
+		}
+	}
+	li.opRemove {
 		color: $red;
+		span.op {
+			background-color: $red;
+		}
 	}
 	li+li {
 		margin-top: 8px;

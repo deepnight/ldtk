@@ -7,8 +7,8 @@ class HxEnum {
 		var absPath = Editor.ME.makeFullFilePath(relPath);
 		var file = JsTools.readFileString(absPath);
 
+		// File not found
 		if( file==null ) {
-			// File not found
 			if( isSync )
 				new ui.modal.dialog.LostFile(relPath, function(newAbs) {
 					var newRel = Editor.ME.makeRelativeFilePath(newAbs);
@@ -27,6 +27,7 @@ class HxEnum {
 		// Parse file
 		var parseds = parse(file);
 		if( parseds.length>0 ) {
+
 			// Check for duplicate identifiers
 			for(pe in parseds) {
 				var ed = curProject.defs.getEnumDef(pe.enumId);
@@ -38,13 +39,9 @@ class HxEnum {
 
 			// Try to import/sync
 			var copy = curProject.clone();
-			var result = copy.defs.importExternalEnums(relPath, parseds);
-			if( result.needConfirm )
-				new ui.modal.dialog.EnumImport(result.log, relPath, copy);
-			else if( result.log.length>0 ) {
-				Editor.ME.selectProject(copy);
-				N.success("Successfully imported enums!");
-			}
+			var log = importToProject(copy, relPath, parseds);
+			if( log.length>0 ) 
+				new ui.modal.dialog.EnumImport(log, relPath, copy);
 			else
 				N.msg("File is up-to-date!");
 		}
@@ -111,4 +108,81 @@ class HxEnum {
 		}
 		return parseds;
 	}
+
+
+
+	static function importToProject(project:led.Project, relSourcePath:String, parseds:Array<EditorTypes.ParsedExternalEnum>) : SyncLog {
+		var log : SyncLog = [];
+
+		var isNew = true;
+		for(ed in project.defs.externalEnums)
+			if( ed.externalRelPath==relSourcePath ) {
+				isNew = false;
+				break;
+			}
+
+		if( isNew ) {
+			// Source file is completely new
+			for(pe in parseds) {
+				log.push({ op:Add, str:pe.enumId+".*" });
+				project.defs.createExternalEnumDef(relSourcePath, pe);
+			}
+		}
+		else {
+			// Source file was previously already imported
+			for(pe in parseds) {
+				var existing = project.defs.getEnumDef(pe.enumId);
+				if( existing==null ) {
+					// New enum found
+					project.defs.createExternalEnumDef(relSourcePath, pe);
+					log.push({ op:Add, str:pe.enumId+".*" });
+				}
+				else {
+					// Add new values on existing
+					for(v in pe.values)
+						if( !existing.hasValue(v) ) {
+							existing.addValue(v);
+							log.push({ op:Add, str:pe.enumId+"."+v });
+						}
+
+					// Remove lost values
+					for(v in existing.values.copy()) {
+						var found = false;
+						for(v2 in pe.values)
+							if( v2==v.id ) {
+								found = true;
+								break;
+							}
+
+						if( !found ) {
+							project.defs.removeEnumDefValue(existing, v.id);
+							log.push({ op:Remove, str:pe.enumId+"."+v.id });
+						}
+					}
+
+					existing.alphaSortValues();
+				}
+			}
+
+			// Remove lost enums
+			for( ed in project.defs.externalEnums.copy() )
+				if( ed.externalRelPath==relSourcePath ) {
+					var found = false;
+					for(pe in parseds)
+						if( pe.enumId==ed.identifier ) {
+							found = true;
+							break;
+						}
+
+					if( !found ) {
+						project.defs.removeEnumDef(ed);
+						log.push({ op:Remove, str:ed.identifier+".*" });
+					}
+				}
+		}
+
+		project.tidy();
+		return log;
+	}
+
 }

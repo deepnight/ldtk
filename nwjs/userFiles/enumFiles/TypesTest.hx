@@ -3,7 +3,7 @@ enum ItemType {
 	Gold;
 	Ammo;
 	Key;
-	SomeNewObject;
+	// SomeNewObject;
 }
 
 enum EnemyType {
@@ -11,10 +11,11 @@ enum EnemyType {
 	Shooter;
 	Behemoth;
 	Hunter;
-	NewBigBoy;
+	// NewBigBoy;
 }
 
 enum SomeEnum {
 	Foo;
 	Bar;
+	Pouet;
 }

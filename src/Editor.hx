@@ -166,7 +166,7 @@ class Editor extends dn.Process {
 		project = p;
 		project.tidy();
 
-		// Load external files
+		// Load tilesets
 		for(td in project.defs.tilesets) {
 			if( !td.reloadImage( getProjectDir() ) ) {
 				new ui.modal.dialog.LostFile( td.relPath, function(newAbsPath) {
@@ -176,8 +176,15 @@ class Editor extends dn.Process {
 				});
 			}
 		}
-		for( relPath in project.defs.getExternalEnumPaths() )
-			importer.HxEnum.load(relPath, true);
+
+		// Check external enums
+		for( relPath in project.defs.getExternalEnumPaths() ) {
+			if( !JsTools.fileExists( makeFullFilePath(relPath) ) )
+				new ui.modal.dialog.LostFile(relPath, function(newAbsPath) {
+					var newRel = makeRelativeFilePath(newAbsPath);
+					importer.HxEnum.load(newRel, true);
+				});
+		}
 
 
 		curLevelId = project.levels[0].uid;
