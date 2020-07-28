@@ -11,7 +11,7 @@ class App extends dn.Process {
 	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
 	#end
 
-	var curPageProcess : Null< dn.Process >;
+	var curPageProcess : Null<Page>;
 	public var session : SessionData;
 
 	public function new() {
@@ -22,6 +22,9 @@ class App extends dn.Process {
 		appWin.maximize();
 		appWin.on("close", exit);
 		#end
+
+		js.Browser.window.onblur = onBlur;
+		js.Browser.window.onfocus = onFocus;
 
 		// Init app dir
 		var fp = dn.FilePath.fromDir( ""+JsTools.getCwd() );
@@ -35,6 +38,16 @@ class App extends dn.Process {
 		session = dn.LocalStorage.readObject("session", session);
 
 		openHome();
+	}
+
+	function onFocus(ev:js.html.Event) {
+		if( curPageProcess!=null && !curPageProcess.destroyed )
+			curPageProcess.onAppFocus();
+	}
+
+	function onBlur(ev:js.html.Event) {
+		if( curPageProcess!=null && !curPageProcess.destroyed )
+			curPageProcess.onAppBlur();
 	}
 
 
@@ -62,15 +75,15 @@ class App extends dn.Process {
 		saveSessionData();
 	}
 
-	public function openEditor(p:led.Project, path:String) {
+	public function openEditor(project:led.Project, path:String) {
 		clearCurPage();
-		curPageProcess = new Editor(this, p, path);
+		curPageProcess = new Editor(project, path);
 		dn.Process.resizeAll();
 	}
 
 	public function openHome() {
 		clearCurPage();
-		curPageProcess = new Home(this);
+		curPageProcess = new Home();
 		dn.Process.resizeAll();
 	}
 

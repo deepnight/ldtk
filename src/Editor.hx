@@ -1,6 +1,6 @@
 import hxd.Key;
 
-class Editor extends dn.Process {
+class Editor extends Page {
 	public static var ME : Editor;
 
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
@@ -41,8 +41,8 @@ class Editor extends dn.Process {
 		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
 
-	public function new(parent:dn.Process, p:led.Project, path:String) {
-		super(parent);
+	public function new(p:led.Project, path:String) {
+		super();
 
 		App.ME.loadPage("editor");
 

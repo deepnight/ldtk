@@ -1,15 +1,14 @@
 import hxd.Key;
 
-class Home extends dn.Process {
+class Home extends Page {
 	public static var ME : Home;
 
 	var jPage(get,never) : js.jquery.JQuery; inline function get_jPage() return App.ME.jPage;
 
-	public function new(p:dn.Process) {
-		super(p);
+	public function new() {
+		super();
 
 		ME = this;
-		createRoot(p.root);
 		App.ME.loadPage("home");
 		App.ME.setWindowTitle();
 
