@@ -239,6 +239,11 @@ class Editor extends Page {
 		ge.emit(TilesetDefChanged);
 	}
 
+	override function onAppBlur() {
+		super.onAppBlur();
+		keyDowns = new Map();
+	}
+
 	function onJsKeyDown(ev:js.jquery.Event) {
 		if( ev.keyCode==K.TAB && !ui.Modal.hasAnyOpen() )
 			ev.preventDefault();
