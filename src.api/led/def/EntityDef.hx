@@ -31,6 +31,10 @@ class EntityDef {
 		setPivot(0.5,1);
 	}
 
+	public function isTileValid() {
+		return tilesetId!=null && tileId!=null;
+	}
+
 	function set_identifier(id:String) {
 		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
 	}

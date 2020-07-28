@@ -579,12 +579,14 @@ ul.log {
 
 	width: auto;
 	height: auto;
-	box-sizing: border-box; // Actual width/height are defined in code
 	overflow: hidden;
-	padding: 8px;
+	padding: 2px;
 	background-image: url("../img/grid.png");
 	background-color: $bgDark;
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
+	canvas {
+		image-rendering: pixelated;
+	}
 }
 
 

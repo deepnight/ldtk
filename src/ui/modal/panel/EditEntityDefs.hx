@@ -455,7 +455,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			jEntityList.append(elem);
 			elem.addClass("iconLeft");
 
-			var preview = JsTools.createEntityPreview(ed, 32);
+			var preview = JsTools.createEntityPreview(editor.project, ed);
 			preview.appendTo(elem);
 
 			elem.append('<span class="name">'+ed.identifier+'</span>');
@@ -507,6 +507,6 @@ class EditEntityDefs extends ui.modal.Panel {
 			return;
 
 		jPreview.children(".entityPreview").remove();
-		jPreview.append( JsTools.createEntityPreview(curEntity) );
+		jPreview.append( JsTools.createEntityPreview(project, curEntity, 64) );
 	}
 }

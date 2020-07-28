@@ -163,7 +163,7 @@ class EntityTool extends Tool<Int> {
 			else
 				e.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
 
-			e.append( JsTools.createEntityPreview(ed, 32) );
+			e.append( JsTools.createEntityPreview(project, ed) );
 			e.append(ed.identifier);
 
 			e.click( function(_) {

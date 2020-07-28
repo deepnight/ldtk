@@ -63,20 +63,49 @@ class JsTools {
 	}
 
 
-	public static function createEntityPreview(ed:led.def.EntityDef, sizePx=40) {
-		var scale = sizePx/40;
-		var ent = new J('<div/>');
-		ent.addClass("entity");
-		ent.css("width", ed.width*scale);
-		ent.css("height", ed.height*scale);
-		ent.css("background-color", C.intToHex(ed.color));
+	public static function createEntityPreview(project:led.Project, ed:led.def.EntityDef, sizePx=24) {
+		var jWrapper = new J('<div class="entityPreview icon"></div>');
+		jWrapper.css("width", sizePx+"px");
+		jWrapper.css("height", sizePx+"px");
 
-		var wrapper = ent.wrap("<div/>").parent();
-		wrapper.addClass("icon entityPreview");
-		wrapper.width(sizePx);
-		wrapper.height(sizePx);
+		var scale = sizePx / M.fmax(ed.width, ed.height);
+		var jEnt = new J('<div class="entity"/>');
+		jEnt.appendTo(jWrapper);
 
-		return wrapper;
+		switch ed.renderMode {
+			case Rectangle:
+				jEnt.css("background-color", C.intToHex(ed.color));
+				jEnt.css("width", ed.width*scale);
+				jEnt.css("height", ed.height*scale);
+
+			case Ellipse:
+
+			case Tile:
+				var jCanvas = new J('<canvas></canvas>');
+				jCanvas.appendTo(jEnt);
+				if( ed.isTileValid() ) {
+					var td = project.defs.getTilesetDef(ed.tilesetId);
+					td.drawTileToCanvas(jCanvas, ed.tileId);
+					jCanvas.attr("width", td.tileGridSize);
+					jCanvas.attr("height", td.tileGridSize);
+					jCanvas.css("width",sizePx+"px");
+					jCanvas.css("height",sizePx+"px");
+				}
+		}
+
+		// var scale = sizePx/40;
+		// var ent = new J('<div/>');
+		// ent.addClass("entity");
+		// ent.css("width", ed.width*scale);
+		// ent.css("height", ed.height*scale);
+		// ent.css("background-color", C.intToHex(ed.color));
+
+		// var wrapper = ent.wrap("<div/>").parent();
+		// wrapper.addClass("icon entityPreview");
+		// wrapper.width(sizePx);
+		// wrapper.height(sizePx);
+
+		return jWrapper;
 	}
 
 
