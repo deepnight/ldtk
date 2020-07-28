@@ -2,9 +2,9 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "JS debug",
+			"label": "NWJS debug",
 			"type": "hxml",
-			"file": "app.debug.hxml",
+			"file": "nwjs.debug.hxml",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",
@@ -28,9 +28,9 @@
 
 
 		{
-			"label": "JS release",
+			"label": "NWJS release",
 			"type": "hxml",
-			"file": "app.hxml",
+			"file": "nwjs.hxml",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",

@@ -4,19 +4,19 @@
 	"skipErrorMessage": true,
 	"commands": [
 		{
-			"text": "⚙ Build debug",
+			"text": "⚙ NWJS debug",
 			"color": "yellow",
 			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|JS debug",
+			"command": "workbench.action.tasks.runTask|NWJS debug",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -10
 		},
 		{
-			"text": "⚙ Build release",
+			"text": "⚙ NWJS release",
 			"color": "cyan",
 			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|JS release",
+			"command": "workbench.action.tasks.runTask|NWJS release",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -11

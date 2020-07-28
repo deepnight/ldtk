@@ -10,7 +10,5 @@
 -lib hxnodejs
 
 -D editor
-# -D electron
--D nwjs
 
 -js app/js/app.js
