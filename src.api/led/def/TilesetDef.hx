@@ -182,17 +182,17 @@ class TilesetDef {
 		}
 
 		// Enum tiles remapping
-		for(ed in _project.defs.enums) {
-			if( ed.iconTilesetUid!=uid )
-				continue;
+		for(ed in _project.defs.enums)
+			if( ed.iconTilesetUid==uid )
+				for(v in ed.values)
+					if( v.tileId!=null )
+						v.tileId = remapTileId(oldCwid, v.tileId);
 
-			for(v in ed.values) {
-				if( v.tileId==null )
-					continue;
+		// Entity tiles remapping
+		for( ed in _project.defs.entities )
+			if( ed.tilesetId==uid && ed.tileId!=null )
+				ed.tileId = remapTileId(oldCwid, ed.tileId);
 
-				v.tileId = remapTileId(oldCwid, v.tileId);
-			}
-		}
 
 		if( pxWid<oldWid || pxHei<oldHei )
 			return RemapLoss;
