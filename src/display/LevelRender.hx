@@ -288,10 +288,21 @@ class LevelRender extends dn.Process {
 				g.endFill();
 
 			case Tile:
-				var td = Editor.ME.project.defs.getTilesetDef(def.tilesetId);
-				var t = td.getTile(def.tileId);
-				t.setCenterRatio(def.pivotX, def.pivotY);
-				var bmp = new h2d.Bitmap(t, wrapper);
+				if( def.tileId==null || def.tilesetId==null ) {
+					// Missing tile
+					var p = 2;
+					g.lineStyle(3, 0xff0000);
+					g.moveTo(p,p);
+					g.lineTo(def.width-p, def.height-p);
+					g.moveTo(def.width-p, p);
+					g.lineTo(p, def.height-p);
+				}
+				else {
+					var td = Editor.ME.project.defs.getTilesetDef(def.tilesetId);
+					var t = td.getTile(def.tileId);
+					t.setCenterRatio(def.pivotX, def.pivotY);
+					var bmp = new h2d.Bitmap(t, wrapper);
+				}
 		}
 
 		// Pivot
