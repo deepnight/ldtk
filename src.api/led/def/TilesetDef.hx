@@ -33,6 +33,9 @@ class TilesetDef {
 		identifier = "Tileset"+uid;
 	}
 
+	public function toString() {
+		return identifier+"("+relPath+")";
+	}
 
 	public inline function hasAtlasPath() return relPath!=null;
 	public inline function isAtlasLoaded() return relPath!=null && bytes!=null;
