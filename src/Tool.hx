@@ -247,7 +247,7 @@ class Tool<T> extends dn.Process {
 			clickingOutsideBounds = false;
 
 		// Start moving elements only after a small elapsed mouse distance
-		if( curMode==Move && !moveStarted && M.dist(origin.gx,origin.gy, m.gx,m.gy)>=10*Const.SCALE ) {
+		if( curMode==Move && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {
 			moveStarted = true;
 			if( editor.isCtrlDown() && editor.selection!=null ) {
 				var copy = duplicateElement(editor.selection);
