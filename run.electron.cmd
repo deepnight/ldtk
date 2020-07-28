@@ -1,0 +1,2 @@
+@cd app
+@start electron .

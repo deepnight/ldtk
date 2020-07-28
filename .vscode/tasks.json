@@ -46,6 +46,12 @@
 				"$haxe-error",
 				"$haxe-trace"
 			],
+			"presentation": {
+				"reveal": "never",
+				"panel": "shared",
+				"clear": false,
+				"revealProblems": "onProblem"
+			},
 			"group": "build"
 		},
 		{
@@ -58,6 +64,12 @@
 				"$haxe-error",
 				"$haxe-trace"
 			],
+			"presentation": {
+				"reveal": "never",
+				"panel": "shared",
+				"clear": false,
+				"revealProblems": "onProblem"
+			},
 			"group": {
 				"kind": "build",
 				"isDefault": true

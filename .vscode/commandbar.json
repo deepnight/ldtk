@@ -21,7 +21,7 @@
 			"priority": -20
 		},
 		{
-			"text": "💻 Run Electron",
+			"text": "⚡ Run Electron",
 			"color": "white",
 			"command": "run.electron.cmd",
 			"alignment": "right",
