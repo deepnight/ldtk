@@ -173,7 +173,7 @@ class JsTools {
 			input = new J("<input/>");
 			input.attr("type","file");
 			input.attr("id","tmpFileInput");
-			input.appendTo( new J("body") );
+			input.appendTo( App.ME.jBody );
 			input.hide();
 		}
 		input.off();

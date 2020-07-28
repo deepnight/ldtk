@@ -48,7 +48,7 @@ class Modal extends dn.Process {
 		jContent = null;
 
 		if( !hasAnyOpen() )
-			new J("body").removeClass("hasModal");
+			App.ME.jBody.removeClass("hasModal");
 	}
 
 	public static function closeAll(?except:Modal) {

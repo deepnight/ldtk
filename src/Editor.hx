@@ -52,7 +52,7 @@ class Editor extends dn.Process {
 		App.ME.registerRecentProject(path);
 
 		// Events
-		new J("body")
+		App.ME.jBody
 			.on("keydown.client", onJsKeyDown )
 			.on("keyup.client", onJsKeyUp )
 			.mouseup( function(_) onMouseUp() )
@@ -753,7 +753,7 @@ class Editor extends dn.Process {
 
 		Boot.ME.s2d.removeEventListener(onEvent);
 
-		new J("body").off(".client");
+		App.ME.jBody.off(".client");
 	}
 
 
