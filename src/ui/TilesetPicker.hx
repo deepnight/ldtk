@@ -63,6 +63,13 @@ class TilesetPicker {
 		renderSelection();
 	}
 
+	public function clearScrollMemory() {
+		scrollX = 0;
+		scrollY = 0;
+		zoom = 3;
+		SCROLL_MEMORY.remove( tilesetDef.uid );
+	}
+
 	function set_singleSelectedTileId(v) {
 		singleSelectedTileId = v;
 		renderSelection();
@@ -78,11 +85,8 @@ class TilesetPicker {
 			scrollY = mem.y;
 			zoom = mem.zoom;
 		}
-		else {
-			scrollX = 0;
-			scrollY = 0;
-			zoom = 3;
-		}
+		else
+			clearScrollMemory();
 	}
 
 	function saveScrollPos() {

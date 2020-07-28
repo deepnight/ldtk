@@ -73,19 +73,20 @@ class EditTilesetDefs extends ui.modal.Panel {
 			return;
 
 		// Main tileset view
-		var jFull = jForm.find(".tileset canvas.fullPreview");
-		if( cur==null || !cur.isAtlasLoaded() )
-			JsTools.clearCanvas(jFull);
-		else
-			cur.drawAtlasToCanvas( jFull );
+		var jPickerWrapper = jContent.find(".pickerWrapper");
+		jPickerWrapper.empty();
+		if( cur.isAtlasLoaded() ) {
+			var picker = new TilesetPicker(jPickerWrapper, cur);
+			picker.clearScrollMemory();
+		}
 
 		// Demo tiles
 		var padding = 8;
-		var jDemo = jForm.find(".tileset canvas.demo");
+		var jDemo = jContent.find(".tilesDemo canvas");
 		JsTools.clearCanvas(jDemo);
 
 		if( cur!=null && cur.isAtlasLoaded() ) {
-			jDemo.attr("width", cur.tileGridSize*6 + padding*5);
+			jDemo.attr("width", cur.tileGridSize*8 + padding*7);
 			jDemo.attr("height", cur.tileGridSize);
 
 			var idx = 0;
@@ -97,6 +98,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 			renderDemoTile(2,0);
 			renderDemoTile(0,1);
 			renderDemoTile(0,2);
+			renderDemoTile(0,3);
+			renderDemoTile(0,4);
 		}
 	}
 
@@ -121,12 +124,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Image path
 		var jPath = jForm.find(".path");
-		if( cur.relPath!=null ) {
-			jPath.empty();
-			jPath.append( JsTools.makePath(cur.relPath) );
-		}
+		if( cur.relPath!=null )
+			jPath.empty().show().append( JsTools.makePath(cur.relPath) );
 		else
-			jPath.text("-- No file --");
+			jPath.hide();
 		jPath.off().click( function(ev) {
 			if( cur.relPath!=null )
 				JsTools.exploreToFile( Editor.ME.makeFullFilePath(cur.relPath) );

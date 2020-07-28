@@ -100,6 +100,16 @@ h3 {
 	text-transform: uppercase;
 }
 
+h4 {
+	margin-bottom: 4px;
+	padding-bottom: 2px;
+
+	font-family: Roboto;
+	font-size: 12pt;
+	color: $orange;
+	text-transform: uppercase;
+}
+
 hr {
 	@include resetMargin();
 	border: none;
@@ -1901,22 +1911,36 @@ canvas#webgl {
 	.mainList ul:empty::before {
 		content: "No tileset";
 	}
-	li.tileset {
-		display: block;
 
-		canvas.demo,
-		canvas.fullPreview {
+	.content {
+		grid-template-rows: min-content min-content min-content auto;
+		.mainList {
+			grid-row: 2/5;
+		}
+		ul.form {
+			grid-row: 2/3;
+		}
+		.tilesDemo {
+			grid-row: 3/4;
+		}
+		.pickerWrapper {
+			grid-row: 4/5;
+		}
+
+		.tilesDemo canvas {
 			display: block;
 			width: 100%;
 			image-rendering: pixelated;
 		}
-
-		canvas.fullPreview {
+		.pickerWrapper {
+			overflow: hidden;
+			outline: 1px solid white;
 			box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
 			background-color: rgba(0, 0, 0, 0.4);
 		}
 	}
 }
+
 
 .window.panel.entityDefs {
 	.content{

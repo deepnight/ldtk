@@ -202,7 +202,7 @@ class TilesetDef {
 	inline function remapTileId(oldCwid:Int, oldTileCoordId:Null<Int>) : Null<Int> {
 		if( oldTileCoordId==null )
 			return null;
-		
+
 		var oldCy = Std.int( oldTileCoordId / oldCwid );
 		var oldCx = oldTileCoordId - oldCwid*oldCy;
 		if( oldCx>=cWid || oldCy>=cHei )
@@ -313,7 +313,7 @@ class TilesetDef {
 	}
 
 	#if editor
-	public function drawAtlasToCanvas(jCanvas:js.jquery.JQuery) {
+	public function drawAtlasToCanvas(jCanvas:js.jquery.JQuery, scale=1.0) {
 		if( !jCanvas.is("canvas") )
 			throw "Not a canvas";
 
@@ -322,12 +322,13 @@ class TilesetDef {
 
 		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
 		var ctx = canvas.getContext2d();
+		ctx.imageSmoothingEnabled = false;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		var img = new js.html.Image(pixels.width, pixels.height);
 		img.src = 'data:image/png;base64,$base64';
 		img.onload = function() {
-			ctx.drawImage(img, 0, 0);
+			ctx.drawImage(img, 0, 0, pixels.width*scale, pixels.height*scale);
 		}
 	}
 
