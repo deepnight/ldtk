@@ -609,13 +609,8 @@ ul.log li + li {
   height: auto;
   overflow: hidden;
   padding: 2px;
-  background-image: url("../img/grid.png");
-  background-color: #1e2229;
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
-}
-
-.icon.entityPreview canvas {
-  image-rendering: pixelated;
+  background-color: #2e333f;
+  border-radius: 3px;
 }
 
 .pivotEditor {

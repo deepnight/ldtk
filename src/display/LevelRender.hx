@@ -298,6 +298,9 @@ class LevelRender extends dn.Process {
 					g.lineTo(p, def.height-p);
 				}
 				else {
+					g.lineStyle(1, def.color, 1);
+					g.drawRect(0,0,def.width,def.height);
+
 					var td = Editor.ME.project.defs.getTilesetDef(def.tilesetId);
 					var t = td.getTile(def.tileId);
 					t.setCenterRatio(def.pivotX, def.pivotY);

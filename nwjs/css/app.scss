@@ -581,12 +581,8 @@ ul.log {
 	height: auto;
 	overflow: hidden;
 	padding: 2px;
-	background-image: url("../img/grid.png");
-	background-color: $bgDark;
-	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.4) inset;
-	canvas {
-		image-rendering: pixelated;
-	}
+	background-color: $bgMed;
+	border-radius: 3px;
 }
 
 

@@ -329,7 +329,7 @@ class TilesetDef {
 		}
 	}
 
-	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0) {
+	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scale=1.0) {
 		if( pixels==null )
 			return;
 
@@ -342,11 +342,12 @@ class TilesetDef {
 		var subPixels = pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
 		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
 		var ctx = canvas.getContext2d();
+		ctx.imageSmoothingEnabled = false;
 		var img = new js.html.Image(subPixels.width, subPixels.height);
 		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
 		img.src = 'data:image/png;base64,$b64';
 		img.onload = function() {
-			ctx.drawImage(img, toX, toY);
+			ctx.drawImage(img, toX, toY, subPixels.width*scale, subPixels.height*scale);
 		}
 	}
 	#end

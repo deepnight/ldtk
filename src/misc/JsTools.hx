@@ -69,41 +69,47 @@ class JsTools {
 		jWrapper.css("height", sizePx+"px");
 
 		var scale = sizePx / M.fmax(ed.width, ed.height);
-		var jEnt = new J('<div class="entity"/>');
-		jEnt.appendTo(jWrapper);
+
+		var jCanvas = new J('<canvas></canvas>');
+		jCanvas.appendTo(jWrapper);
+		jCanvas.attr("width", ed.width*scale);
+		jCanvas.attr("height", ed.height*scale);
+		// jCanvas.css("zoom", sizePx / M.fmax(ed.width, ed.height));
+
+		var cnv = Std.downcast( jCanvas.get(0), js.html.CanvasElement );
+		var ctx = cnv.getContext2d();
 
 		switch ed.renderMode {
 			case Rectangle:
-				jEnt.css("background-color", C.intToHex(ed.color));
-				jEnt.css("width", ed.width*scale);
-				jEnt.css("height", ed.height*scale);
+				ctx.fillStyle = C.intToHex(ed.color);
+				ctx.fillRect(0, 0, ed.width*scale, ed.height*scale);
 
 			case Ellipse:
+				ctx.fillStyle = C.intToHex(ed.color);
+				ctx.beginPath();
+				ctx.ellipse(
+					ed.width*0.5*scale, ed.height*0.5*scale,
+					ed.width*0.5*scale, ed.height*0.5*scale,
+					0, 0, M.PI*2
+				);
+				ctx.fill();
 
 			case Tile:
-				var jCanvas = new J('<canvas></canvas>');
-				jCanvas.appendTo(jEnt);
+				ctx.strokeStyle = C.intToHex(ed.color);
+				ctx.beginPath();
+				ctx.rect(0, 0, Std.int(ed.width*scale), Std.int(ed.height*scale));
+				ctx.stroke();
+
 				if( ed.isTileValid() ) {
 					var td = project.defs.getTilesetDef(ed.tilesetId);
-					td.drawTileToCanvas(jCanvas, ed.tileId);
-					jCanvas.attr("width", td.tileGridSize);
-					jCanvas.attr("height", td.tileGridSize);
-					jCanvas.css("width",sizePx+"px");
-					jCanvas.css("height",sizePx+"px");
+					td.drawTileToCanvas(
+						jCanvas, ed.tileId,
+						Std.int(ed.width*ed.pivotX*scale - td.tileGridSize*ed.pivotX*scale),
+						Std.int(ed.height*ed.pivotY*scale - td.tileGridSize*ed.pivotY*scale),
+						scale
+					);
 				}
 		}
-
-		// var scale = sizePx/40;
-		// var ent = new J('<div/>');
-		// ent.addClass("entity");
-		// ent.css("width", ed.width*scale);
-		// ent.css("height", ed.height*scale);
-		// ent.css("background-color", C.intToHex(ed.color));
-
-		// var wrapper = ent.wrap("<div/>").parent();
-		// wrapper.addClass("icon entityPreview");
-		// wrapper.width(sizePx);
-		// wrapper.height(sizePx);
 
 		return jWrapper;
 	}

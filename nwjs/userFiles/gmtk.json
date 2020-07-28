@@ -55,6 +55,9 @@
 				"width" : 10,
 				"height" : 10,
 				"color" : "#FFDD00",
+				"renderMode" : "Tile",
+				"tilesetId" : 16,
+				"tileId" : 32,
 				"maxPerLevel" : 0,
 				"discardExcess" : true,
 				"pivotX" : 0.5,
@@ -92,6 +95,9 @@
 				"width" : 10,
 				"height" : 16,
 				"color" : "#00FF1E",
+				"renderMode" : "Ellipse",
+				"tilesetId" : null,
+				"tileId" : null,
 				"maxPerLevel" : 3,
 				"discardExcess" : false,
 				"pivotX" : 0.5,
@@ -104,6 +110,9 @@
 				"width" : 8,
 				"height" : 16,
 				"color" : "#FF0000",
+				"renderMode" : "Ellipse",
+				"tilesetId" : null,
+				"tileId" : null,
 				"maxPerLevel" : 0,
 				"discardExcess" : true,
 				"pivotX" : 0.5,
@@ -141,6 +150,9 @@
 				"width" : 24,
 				"height" : 16,
 				"color" : "#A8A580",
+				"renderMode" : "Tile",
+				"tilesetId" : 16,
+				"tileId" : 0,
 				"maxPerLevel" : 0,
 				"discardExcess" : true,
 				"pivotX" : 0.5,
@@ -153,6 +165,9 @@
 				"width" : 16,
 				"height" : 16,
 				"color" : "#A26044",
+				"renderMode" : "Rectangle",
+				"tilesetId" : null,
+				"tileId" : null,
 				"maxPerLevel" : 0,
 				"discardExcess" : true,
 				"pivotX" : 0.5,
@@ -165,6 +180,9 @@
 				"width" : 16,
 				"height" : 16,
 				"color" : "#FF00DD",
+				"renderMode" : "Rectangle",
+				"tilesetId" : null,
+				"tileId" : null,
 				"maxPerLevel" : 0,
 				"discardExcess" : true,
 				"pivotX" : 0.5,
@@ -214,6 +232,9 @@
 				"width" : 24,
 				"height" : 32,
 				"color" : "#FF0000",
+				"renderMode" : "Rectangle",
+				"tilesetId" : null,
+				"tileId" : null,
 				"maxPerLevel" : 1,
 				"discardExcess" : false,
 				"pivotX" : 0.5,
@@ -239,6 +260,9 @@
 				"width" : 48,
 				"height" : 16,
 				"color" : "#787878",
+				"renderMode" : "Rectangle",
+				"tilesetId" : null,
+				"tileId" : null,
 				"maxPerLevel" : 0,
 				"discardExcess" : true,
 				"pivotX" : 0.5,
@@ -276,6 +300,9 @@
 				"width" : 8,
 				"height" : 32,
 				"color" : "#FFC800",
+				"renderMode" : "Ellipse",
+				"tilesetId" : null,
+				"tileId" : null,
 				"maxPerLevel" : 0,
 				"discardExcess" : true,
 				"pivotX" : 0.5,
@@ -1156,13 +1183,13 @@
 							"x" : 456,
 							"y" : 264,
 							"fieldInstances" : [
+								{ "_identifier" : "Type", "_value" : "Gem", "defUid" : 10, "realEditorValue" : null },
 								{
-									"_identifier" : "Type",
+									"_identifier" : "type",
 									"_value" : "Gem",
-									"defUid" : 10,
+									"defUid" : 47,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
-								},
-								{ "_identifier" : "type", "_value" : null, "defUid" : 47, "realEditorValue" : null }
+								}
 							]
 						},
 						{
@@ -1173,13 +1200,13 @@
 							"x" : 392,
 							"y" : 168,
 							"fieldInstances" : [
+								{ "_identifier" : "Type", "_value" : "Gem", "defUid" : 10, "realEditorValue" : null },
 								{
-									"_identifier" : "Type",
+									"_identifier" : "type",
 									"_value" : "Gem",
-									"defUid" : 10,
+									"defUid" : 47,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
-								},
-								{ "_identifier" : "type", "_value" : null, "defUid" : 47, "realEditorValue" : null }
+								}
 							]
 						},
 						{
@@ -1191,19 +1218,12 @@
 							"y" : 240,
 							"fieldInstances" : [
 								{ "_identifier" : "Type", "_value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "_identifier" : "type", "_value" : null, "defUid" : 46, "realEditorValue" : null }
-							]
-						},
-						{
-							"_identifier" : "Mob",
-							"_cx" : 28,
-							"_cy" : 14,
-							"defUid" : 13,
-							"x" : 456,
-							"y" : 240,
-							"fieldInstances" : [
-								{ "_identifier" : "Type", "_value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "_identifier" : "type", "_value" : null, "defUid" : 46, "realEditorValue" : null }
+								{
+									"_identifier" : "type",
+									"_value" : "Goblin",
+									"defUid" : 46,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
+								}
 							]
 						},
 						{
@@ -1215,19 +1235,12 @@
 							"y" : 208,
 							"fieldInstances" : [
 								{ "_identifier" : "Type", "_value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "_identifier" : "type", "_value" : null, "defUid" : 46, "realEditorValue" : null }
-							]
-						},
-						{
-							"_identifier" : "Mob",
-							"_cx" : 28,
-							"_cy" : 18,
-							"defUid" : 13,
-							"x" : 456,
-							"y" : 304,
-							"fieldInstances" : [
-								{ "_identifier" : "Type", "_value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "_identifier" : "type", "_value" : null, "defUid" : 46, "realEditorValue" : null }
+								{
+									"_identifier" : "type",
+									"_value" : "Goblin",
+									"defUid" : 46,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
+								}
 							]
 						},
 						{
@@ -1239,7 +1252,12 @@
 							"y" : 192,
 							"fieldInstances" : [
 								{ "_identifier" : "Type", "_value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "_identifier" : "type", "_value" : null, "defUid" : 46, "realEditorValue" : null }
+								{
+									"_identifier" : "type",
+									"_value" : "Goblin",
+									"defUid" : 46,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
+								}
 							]
 						},
 						{
@@ -1251,7 +1269,12 @@
 							"y" : 176,
 							"fieldInstances" : [
 								{ "_identifier" : "Type", "_value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "_identifier" : "type", "_value" : null, "defUid" : 46, "realEditorValue" : null }
+								{
+									"_identifier" : "type",
+									"_value" : "Goblin",
+									"defUid" : 46,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
+								}
 							]
 						},
 						{
@@ -1346,26 +1369,53 @@
 						},
 						{
 							"_identifier" : "Mob",
-							"_cx" : 26,
-							"_cy" : 16,
+							"_cx" : 25,
+							"_cy" : 17,
 							"defUid" : 13,
-							"x" : 424,
-							"y" : 272,
+							"x" : 408,
+							"y" : 288,
 							"fieldInstances" : [
 								{ "_identifier" : "Type", "_value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "_identifier" : "type", "_value" : null, "defUid" : 46, "realEditorValue" : null }
+								{
+									"_identifier" : "type",
+									"_value" : "Goblin",
+									"defUid" : 46,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
+								}
+							]
+						},
+						{
+							"_identifier" : "Mob",
+							"_cx" : 27,
+							"_cy" : 18,
+							"defUid" : 13,
+							"x" : 440,
+							"y" : 304,
+							"fieldInstances" : [
+								{ "_identifier" : "Type", "_value" : "Gob", "defUid" : 14, "realEditorValue" : null },
+								{
+									"_identifier" : "type",
+									"_value" : "Goblin",
+									"defUid" : 46,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
+								}
 							]
 						},
 						{
 							"_identifier" : "Mob",
 							"_cx" : 29,
-							"_cy" : 16,
+							"_cy" : 17,
 							"defUid" : 13,
 							"x" : 472,
-							"y" : 272,
+							"y" : 288,
 							"fieldInstances" : [
 								{ "_identifier" : "Type", "_value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "_identifier" : "type", "_value" : null, "defUid" : 46, "realEditorValue" : null }
+								{
+									"_identifier" : "type",
+									"_value" : "Goblin",
+									"defUid" : 46,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
+								}
 							]
 						}
 					]
