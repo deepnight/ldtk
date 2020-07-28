@@ -1,9 +1,6 @@
 package misc;
 
 class JsTools {
-	public static function init() {
-	}
-
 	public static function makeSortable(selector:String, onSort:(from:Int, to:Int)->Void) {
 		js.Lib.eval('sortable("$selector", { items:":not(.fixed)" })');
 		new J(selector)

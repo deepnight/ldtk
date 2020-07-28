@@ -13,7 +13,6 @@ class Boot extends hxd.App {
 
 		Assets.init();
 		Lang.init();
-		JsTools.init();
 
 		new App();
 	}
