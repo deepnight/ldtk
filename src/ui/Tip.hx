@@ -43,6 +43,9 @@ class Tip extends dn.Process {
 
 	public static function attach(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String) {
 		var cur : Tip = null;
+		if( target.is("input") && target.attr("id")!=null )
+			target = target.add( App.ME.jPage.find("[for="+target.attr("id")+"]") );
+
 		target
 			.off(".tip")
 			.on( "mouseover.tip", function(ev) {
@@ -54,7 +57,6 @@ class Tip extends dn.Process {
 				if( cur!=null )
 					cur.destroy();
 			});
-
 	}
 
 	function hide() {
