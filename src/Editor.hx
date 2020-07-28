@@ -706,7 +706,7 @@ class Editor extends Page {
 				case Entities:
 					_createGuideBlock([K.ALT], "mouseLeft", L.t._("Pick"));
 					_createGuideBlock([K.CTRL,K.ALT], "mouseLeft", L.t._("Copy"));
-					_createGuideBlock([K.CTRL], null, L.t._("(while moving) Free mode"));
+					// _createGuideBlock([K.CTRL], null, L.t._("(while moving) Free mode"));
 
 				case Tiles:
 					_createGuideBlock([K.SHIFT], "mouseLeft", L.t._("Rectangle"));

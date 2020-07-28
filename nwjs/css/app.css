@@ -1091,7 +1091,7 @@ textarea:focus {
   display: grid;
   grid-template-columns: 0.5fr 1fr;
   align-items: stretch;
-  gap: 10px;
+  gap: 1px;
 }
 
 .window.helpWindow dl dt {
@@ -1123,6 +1123,14 @@ textarea:focus {
   background-color: #545d73;
   border-radius: 4px;
   font-size: 1.5em;
+}
+
+.window.helpWindow dl.minor dt {
+  margin-top: 4px;
+}
+
+.window.helpWindow dl.minor dd {
+  padding-left: 10px;
 }
 
 .window.dialog.fieldTypes > .wrapper,

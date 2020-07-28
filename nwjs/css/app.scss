@@ -1062,7 +1062,7 @@ textarea {
 		display: grid;
 		grid-template-columns: 0.5fr 1fr;
 		align-items: stretch;
-		gap: 10px;
+		gap: 1px;
 
 		dt {
 			margin: 0;
@@ -1083,18 +1083,28 @@ textarea {
 
 			font-family: Roboto;
 		}
-	}
-	dl.major {
-		dt {
-			padding: 8px;
-			background-color: $bgDark;
-			border-radius: 4px;
+
+
+		&.major {
+			dt {
+				padding: 8px;
+				background-color: $bgDark;
+				border-radius: 4px;
+			}
+			dd {
+				padding: 8px;
+				background-color: $bgLight;
+				border-radius: 4px;
+				font-size: 1.5em;
+			}
 		}
-		dd {
-			padding: 8px;
-			background-color: $bgLight;
-			border-radius: 4px;
-			font-size: 1.5em;
+		&.minor {
+			dt {
+				margin-top: 4px;
+			}
+			dd {
+				padding-left: 10px;
+			}
 		}
 	}
 }
