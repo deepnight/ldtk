@@ -73,6 +73,7 @@ class Editor extends Page {
 		rulers = new display.Rulers();
 
 		initUI();
+		updateCanvasSize();
 
 		selectProject(p);
 		needSaving = false;
@@ -280,6 +281,7 @@ class Editor extends Page {
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() ) {
 					App.ME.jPage.toggleClass("compactPanel");
+					updateCanvasSize();
 					updateAppBg();
 				}
 
@@ -634,6 +636,12 @@ class Editor extends Page {
 			curLevelHistory.manualOnGlobalEvent(e);
 	}
 
+	function updateCanvasSize() {
+		var panelWid = jMainPanel.outerWidth();
+		App.ME.jCanvas.css("left", panelWid+"px");
+		App.ME.jCanvas.css("width", "calc( 100vw - "+panelWid+"px )");
+	}
+
 	function updateAppBg() {
 		if( bg!=null )
 			bg.remove();
@@ -645,7 +653,9 @@ class Editor extends Page {
 
 	override function onAppResize() {
 		super.onAppResize();
-		N.debug("resized");
+
+		updateCanvasSize();
+
 		if( bg!=null ) {
 			bg.scaleX = canvasWid();
 			bg.scaleY = canvasHei();
