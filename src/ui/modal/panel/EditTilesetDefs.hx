@@ -74,18 +74,15 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Main tileset view
 		var jFull = jForm.find(".tileset canvas.fullPreview");
-		if( cur==null || !cur.isAtlasLoaded() ) {
-			var cnv = Std.downcast( jFull.get(0), js.html.CanvasElement );
-			cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
-		}
+		if( cur==null || !cur.isAtlasLoaded() )
+			JsTools.clearCanvas(jFull);
 		else
 			cur.drawAtlasToCanvas( jFull );
 
 		// Demo tiles
 		var padding = 8;
 		var jDemo = jForm.find(".tileset canvas.demo");
-		var cnv = Std.downcast( jDemo.get(0), js.html.CanvasElement );
-		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
+		JsTools.clearCanvas(jDemo);
 
 		if( cur!=null && cur.isAtlasLoaded() ) {
 			jDemo.attr("width", cur.tileGridSize*6 + padding*5);

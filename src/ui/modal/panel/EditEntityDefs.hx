@@ -218,6 +218,12 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.setBounds(1,256);
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 
+		// Display renderMode form fields based on current mode
+		var jRenderModeBlock = jEntityForm.find("li.renderMode");
+		JsTools.removeClassReg(jRenderModeBlock, ~/mode_\S+/g);
+		jRenderModeBlock.find("canvas").remove();
+		jRenderModeBlock.addClass("mode_"+curEntity.renderMode);
+
 		// Color
 		var col = jEntityForm.find("input[name=color]");
 		col.val( C.intToHex(curEntity.color) );
@@ -235,6 +241,39 @@ class EditEntityDefs extends ui.modal.Panel {
 			function(v) curEntity.renderMode = v
 		);
 		i.linkEvent(EntityDefChanged);
+
+		// Tileset pick
+		var jTilesets = jEntityForm.find("select.tilesets");
+		jTilesets.find("option:not(:first)").remove();
+		if( curEntity.renderMode==Tile ) {
+			for( td in project.defs.tilesets ) {
+				var opt = new J('<option/>');
+				opt.appendTo(jTilesets);
+				opt.attr("value",td.uid);
+				opt.text( td.identifier );
+				if( td.uid==curEntity.tilesetId )
+					opt.attr("selected","selected");
+			}
+			jTilesets.change( function(_) {
+				var id = Std.parseInt( jTilesets.val() );
+				curEntity.tileId = null;
+				if( !M.isValidNumber(id) || id<0 )
+					curEntity.tilesetId = null;
+				else
+					curEntity.tilesetId = id;
+				editor.ge.emit(EntityDefChanged);
+			});
+		}
+
+		// Tile pick
+		if( curEntity.renderMode==Tile ) {
+			var jPicker = JsTools.createSingleTilePicker(curEntity.tilesetId, curEntity.tileId, function(tileId) {
+				curEntity.tileId = tileId;
+				editor.ge.emit(EntityDefChanged);
+			});
+			jRenderModeBlock.append(jPicker);
+		}
+
 
 		// Max per level
 		var i = Input.linkToHtmlInput(curEntity.maxPerLevel, jEntityForm.find("input[name='maxPerLevel']") );

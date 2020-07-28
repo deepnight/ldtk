@@ -335,6 +335,43 @@ class JsTools {
 		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
 	}
 
+
+	public static function createSingleTilePicker(tilesetId:Null<Int>, tileId:Null<Int>, onPick:(tileId:Int)->Void) {
+		var jTile = new J('<canvas class="tile"></canvas>');
+
+		if( tilesetId!=null ) {
+			jTile.addClass("active");
+			var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
+
+			// Render tile
+			if( tileId!=null ) {
+				jTile.removeClass("empty");
+				jTile.attr("width", td.tileGridSize);
+				jTile.attr("height", td.tileGridSize);
+				td.drawTileToCanvas(jTile, tileId);
+			}
+			else
+				jTile.addClass("empty");
+
+			// Open picker
+			jTile.click( function(ev) {
+				var m = new ui.Modal();
+				m.addClass("singleTilePicker");
+
+				var tp = new ui.TilesetPicker(m.jContent, td);
+				tp.singleSelectedTileId = tileId;
+				tp.onSingleTileSelect = function(tileId) {
+					m.close();
+					onPick(tileId);
+				}
+			});
+		}
+		else
+			jTile.addClass("empty");
+
+		return jTile;
+	}
+
 	#end
 
 }

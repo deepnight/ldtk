@@ -32,6 +32,10 @@ class Modal extends dn.Process {
 		editor.ge.addGlobalListener(onGlobalEvent);
 	}
 
+	public function addClass(cname:String) {
+		jModalAndMask.addClass(cname);
+	}
+
 	override function onDispose() {
 		super.onDispose();
 

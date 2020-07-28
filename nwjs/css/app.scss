@@ -304,6 +304,31 @@ div.key {
 	}
 }
 
+
+canvas.tile {
+	width: 32px;
+	height: 32px;
+	border: 1px solid $bgLight;
+	image-rendering: pixelated;
+
+	&.empty {
+		background-image: url("../img/stripes.png");
+	}
+
+	&:not(.active) {
+		cursor: not-allowed;
+		&:hover {
+			border-color: $red;
+		}
+	}
+
+	&.active:hover {
+		border-color: $orange;
+		cursor: pointer;
+	}
+}
+
+
 ul.niceList {
 	box-sizing: border-box;
 	padding: 4px;
@@ -606,7 +631,7 @@ ul.form {
 	>li {
 		display: flex;
 		flex-wrap: wrap;
-		align-items: top;
+		align-items: flex-start;
 
 		>* {
 			flex: 1 1 0px;
@@ -1743,25 +1768,6 @@ canvas#webgl {
 					button {
 						padding: 0;
 					}
-					canvas.tile {
-						width: 32px;
-						height: 32px;
-						background-image: url("../img/stripes.png");
-						border: 1px solid $bgLight;
-						image-rendering: pixelated;
-
-						&:not(.active) {
-							cursor: not-allowed;
-							&:hover {
-								border-color: $red;
-							}
-						}
-
-						&.active:hover {
-							border-color: $orange;
-							cursor: pointer;
-						}
-					}
 				}
 			}
 
@@ -1933,6 +1939,30 @@ canvas#webgl {
 			grid-column: 3/4;
 			grid-row: 3/4;
 			overflow: auto;
+		}
+
+
+		.renderMode {
+			*[class*=mode_] {
+				display: none;
+			}
+			&.mode_Rectangle .mode_Rectangle,
+			&.mode_Ellipse .mode_Ellipse,
+			&.mode_Tile .mode_Tile {
+				display: block;
+			}
+
+			select, canvas {
+				margin-left: 4px;
+			}
+
+			select.renderMode {
+				flex: 0.5 1 0px;
+			}
+
+			canvas.tile {
+				flex: 0 0 auto;
+			}
 		}
 	}
 

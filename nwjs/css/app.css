@@ -296,6 +296,30 @@ div.key {
   font-size: 12pt;
 }
 
+canvas.tile {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #545d73;
+  image-rendering: pixelated;
+}
+
+canvas.tile.empty {
+  background-image: url("../img/stripes.png");
+}
+
+canvas.tile:not(.active) {
+  cursor: not-allowed;
+}
+
+canvas.tile:not(.active):hover {
+  border-color: #e34d00;
+}
+
+canvas.tile.active:hover {
+  border-color: #ffcc00;
+  cursor: pointer;
+}
+
 ul.niceList {
   box-sizing: border-box;
   padding: 4px;
@@ -639,7 +663,7 @@ ul.form {
 ul.form > li {
   display: flex;
   flex-wrap: wrap;
-  align-items: top;
+  align-items: flex-start;
 }
 
 ul.form > li > * {
@@ -1797,27 +1821,6 @@ canvas#webgl {
   padding: 0;
 }
 
-.window.panel.editEnums .content ul.enumForm ul.enumValues li canvas.tile {
-  width: 32px;
-  height: 32px;
-  background-image: url("../img/stripes.png");
-  border: 1px solid #545d73;
-  image-rendering: pixelated;
-}
-
-.window.panel.editEnums .content ul.enumForm ul.enumValues li canvas.tile:not(.active) {
-  cursor: not-allowed;
-}
-
-.window.panel.editEnums .content ul.enumForm ul.enumValues li canvas.tile:not(.active):hover {
-  border-color: #e34d00;
-}
-
-.window.panel.editEnums .content ul.enumForm ul.enumValues li canvas.tile.active:hover {
-  border-color: #ffcc00;
-  cursor: pointer;
-}
-
 .window.panel.editEnums .content ul.enumForm .onlyExternal {
   display: none;
 }
@@ -1982,6 +1985,28 @@ canvas#webgl {
   grid-column: 3/4;
   grid-row: 3/4;
   overflow: auto;
+}
+
+.window.panel.entityDefs .content .renderMode *[class*=mode_] {
+  display: none;
+}
+
+.window.panel.entityDefs .content .renderMode.mode_Rectangle .mode_Rectangle,
+.window.panel.entityDefs .content .renderMode.mode_Ellipse .mode_Ellipse,
+.window.panel.entityDefs .content .renderMode.mode_Tile .mode_Tile {
+  display: block;
+}
+
+.window.panel.entityDefs .content .renderMode select, .window.panel.entityDefs .content .renderMode canvas {
+  margin-left: 4px;
+}
+
+.window.panel.entityDefs .content .renderMode select.renderMode {
+  flex: 0.5 1 0px;
+}
+
+.window.panel.entityDefs .content .renderMode canvas.tile {
+  flex: 0 0 auto;
 }
 
 .window.panel.entityDefs .content {

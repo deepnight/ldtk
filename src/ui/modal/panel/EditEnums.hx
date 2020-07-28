@@ -261,36 +261,11 @@ class EditEnums extends ui.modal.Panel {
 
 			// Tile preview
 			if( !curEnum.isExternal() ) {
-				var previewCanvas = li.find(".tile");
-				if( curEnum.iconTilesetUid!=null ) {
-					var td = project.defs.getTilesetDef(curEnum.iconTilesetUid);
-					previewCanvas.addClass("active");
-
-					// Pick a tile
-					previewCanvas.click( function(_) {
-						if( !td.isAtlasLoaded() ) {
-							N.error(Lang.t._("This atlas has no image file."));
-							return;
-						}
-						var m = new Modal();
-						m.jModalAndMask.addClass("singleTilePicker");
-						var tp = new ui.TilesetPicker(m.jContent, td);
-						tp.singleSelectedTileId = eValue.tileId;
-						tp.onSingleTileSelect = function(tileId) {
-							m.close();
-							eValue.tileId = tileId;
-							editor.ge.emit(EnumDefChanged);
-						}
-					});
-
-					// Render preview
-					if( eValue.tileId!=null && td.isAtlasLoaded() ) {
-						td.drawTileToCanvas( previewCanvas, eValue.tileId, 0, 0 );
-						previewCanvas.attr("width", td.tileGridSize);
-						previewCanvas.attr("height", td.tileGridSize);
-						// previewCanvas.css("zoom", 32/td.tileGridSize);
-					}
-				}
+				var jPicker = JsTools.createSingleTilePicker(curEnum.iconTilesetUid, eValue.tileId, function(tileId) {
+					eValue.tileId = tileId;
+					editor.ge.emit(EnumDefChanged);
+				});
+				li.prepend(jPicker);
 			}
 
 			// Remove value button
