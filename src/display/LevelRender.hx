@@ -2,7 +2,6 @@ package display;
 
 class LevelRender extends dn.Process {
 	static var MAX_FOCUS_PADDING = 200;
-	static var _entityRenderCache : Map<Int, h3d.mat.Texture> = new Map();
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 
@@ -88,7 +87,6 @@ class LevelRender extends dn.Process {
 				root.y = h()*0.5 - focusLevelY * zoom;
 
 			case ProjectSelected:
-				invalidateCaches();
 				renderAll();
 				fit();
 
@@ -253,14 +251,6 @@ class LevelRender extends dn.Process {
 	}
 
 
-	public static function invalidateCaches() {
-		// BUG seems buggy
-		for(tex in _entityRenderCache)
-			tex.dispose();
-		_entityRenderCache = new Map();
-	}
-
-
 	static function getFieldColor(ei:led.inst.EntityInstance, fd:led.def.FieldDef) {
 		for(fd in ei.def.fieldDefs)
 			if( fd.type==F_Color )
@@ -275,41 +265,45 @@ class LevelRender extends dn.Process {
 		if( def==null )
 			def = ei.def;
 
-		// Main render
-		if( !_entityRenderCache.exists(def.uid) ) {
-			var g = new h2d.Graphics();
-			g.beginFill(def.color);
-			g.lineStyle(1, 0x0, 0.25);
-			switch def.renderMode {
-				case Rectangle:
-					g.drawRect(0, 0, def.width, def.height);
-
-				case Ellipse:
-					g.drawEllipse(def.width*0.5, def.height*0.5, def.width*0.5, def.height*0.5);
-
-				case Tile:
-					// TODO
-			}
-
-			g.lineStyle(1, 0x0, 0.5);
-			var pivotSize = 3;
-			g.drawRect(
-				Std.int((def.width-pivotSize)*def.pivotX),
-				Std.int((def.height-pivotSize)*def.pivotY),
-				pivotSize, pivotSize
-			);
-
-			var tex = new h3d.mat.Texture(def.width, def.height, [Target]);
-			g.drawTo(tex);
-			_entityRenderCache.set(def.uid, tex);
-		}
-
 		var wrapper = new h2d.Object(parent);
 
-		// Entity base render
-		var bmp = new h2d.Bitmap(wrapper);
-		bmp.tile = h2d.Tile.fromTexture( _entityRenderCache.get(def.uid) );
-		bmp.tile.setCenterRatio(def.pivotX, def.pivotY);
+		// Base render
+		var g = new h2d.Graphics(wrapper);
+		g.x = Std.int( -def.width*def.pivotX );
+		g.y = Std.int( -def.height*def.pivotY );
+
+		switch def.renderMode {
+			case Rectangle, Ellipse:
+				g.beginFill(def.color);
+				g.lineStyle(1, 0x0, 0.25);
+				switch def.renderMode {
+					case Rectangle:
+						g.drawRect(0, 0, def.width, def.height);
+
+					case Ellipse:
+						g.drawEllipse(def.width*0.5, def.height*0.5, def.width*0.5, def.height*0.5);
+
+					case _:
+				}
+				g.endFill();
+
+			case Tile:
+				var td = Editor.ME.project.defs.getTilesetDef(def.tilesetId);
+				var t = td.getTile(def.tileId);
+				t.setCenterRatio(def.pivotX, def.pivotY);
+				var bmp = new h2d.Bitmap(t, wrapper);
+		}
+
+		// Pivot
+		g.beginFill(def.color);
+		g.lineStyle(1, 0x0, 0.5);
+		var pivotSize = 3;
+		g.drawRect(
+			Std.int((def.width-pivotSize)*def.pivotX),
+			Std.int((def.height-pivotSize)*def.pivotY),
+			pivotSize, pivotSize
+		);
+
 
 		// Display fields not marked as "Hidden"
 		if( ei!=null ) {
@@ -391,14 +385,14 @@ class LevelRender extends dn.Process {
 			}
 
 			// Update wrappers pos
-			above.x = Std.int( -bmp.tile.width*def.pivotX - above.outerWidth*0.5 + bmp.tile.width*0.5 );
-			above.y = Std.int( -above.outerHeight - bmp.tile.height*def.pivotY );
+			above.x = Std.int( -def.width*def.pivotX - above.outerWidth*0.5 + def.width*0.5 );
+			above.y = Std.int( -above.outerHeight - def.height*def.pivotY );
 
-			center.x = Std.int( -bmp.tile.width*def.pivotX - center.outerWidth*0.5 + bmp.tile.width*0.5 );
-			center.y = Std.int( -bmp.tile.height*def.pivotY - center.outerHeight*0.5 + bmp.tile.height*0.5);
+			center.x = Std.int( -def.width*def.pivotX - center.outerWidth*0.5 + def.width*0.5 );
+			center.y = Std.int( -def.height*def.pivotY - center.outerHeight*0.5 + def.height*0.5);
 
-			beneath.x = Std.int( -bmp.tile.width*def.pivotX - beneath.outerWidth*0.5 + bmp.tile.width*0.5 );
-			beneath.y = Std.int( bmp.tile.height*(1-def.pivotY) );
+			beneath.x = Std.int( -def.width*def.pivotX - beneath.outerWidth*0.5 + def.width*0.5 );
+			beneath.y = Std.int( def.height*(1-def.pivotY) );
 		}
 
 		return wrapper;

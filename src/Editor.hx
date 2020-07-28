@@ -574,7 +574,6 @@ class Editor extends dn.Process {
 			case TilesetDefChanged, TilesetDefRemoved, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				initTool();
 				updateGuide();
-				display.LevelRender.invalidateCaches();
 
 			case TilesetDefAdded:
 
