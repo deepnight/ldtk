@@ -1,2 +1,2 @@
-@cd nwjs
+@cd app
 @start nw .
