@@ -160,11 +160,11 @@ class TilesetDef {
 		for(l in _project.levels)
 		for(li in l.layerInstances)
 		for( coordId in li.gridTiles.keys() ) {
-			var remapped = remapTileId( oldCwid, li.gridTiles.get(coordId) );
-			if( remapped==null )
+			var remap = remapTileId( oldCwid, li.gridTiles.get(coordId) );
+			if( remap==null )
 				li.gridTiles.remove(coordId);
 			else
-				li.gridTiles.set( coordId, remapped );
+				li.gridTiles.set( coordId, remap );
 		}
 
 		// Save selections remapping
@@ -178,6 +178,19 @@ class TilesetDef {
 					sel.ids[i] = remap;
 					i++;
 				}
+			}
+		}
+
+		// Enum tiles remapping
+		for(ed in _project.defs.enums) {
+			if( ed.iconTilesetUid!=uid )
+				continue;
+
+			for(v in ed.values) {
+				if( v.tileId==null )
+					continue;
+
+				v.tileId = remapTileId(oldCwid, v.tileId);
 			}
 		}
 
