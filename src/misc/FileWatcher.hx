@@ -10,10 +10,8 @@ class FileWatcher extends dn.Process {
 
 	public function watch(absFilePath:String, onChange:Void->Void) {
 		var w = js.node.Fs.watch(absFilePath, function(event,f) {
-			if( event=="change" ) {
-				delayer.cancelById(absFilePath);
-				delayer.addS(absFilePath, onChange, 1);
-			}
+			delayer.cancelById(absFilePath);
+			delayer.addS(absFilePath, onChange, 1);
 		});
 
 		all.push({
