@@ -5,10 +5,10 @@ class MouseCoords {
 	public var gy : Float;
 
 	public var levelX(get,never) : Int;
-	inline function get_levelX() return M.round( ( gx/Const.SCALE - levelRender.root.x ) / levelRender.zoom );
+	inline function get_levelX() return globalToLevelX(gx);
 
 	public var levelY(get,never) : Int;
-	inline function get_levelY() return M.round( ( gy/Const.SCALE - levelRender.root.y ) / levelRender.zoom );
+	inline function get_levelY() return globalToLevelY(gy);
 
 	public var cx(get,never) : Int;
 	inline function get_cx() return M.floor( levelX / editor.curLayerInstance.def.gridSize );
@@ -33,6 +33,14 @@ class MouseCoords {
 
 	public inline function getRect(to:MouseCoords) : Rect {
 		return Rect.fromMouseCoords(this, to);
+	}
+
+	public static function globalToLevelX(gx:Float) {
+		return M.round( ( gx/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.levelRender.zoom );
+	}
+
+	public static function globalToLevelY(gy:Float) {
+		return M.round( ( gy/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.levelRender.zoom );
 	}
 
 	public function getLayerCx(ld:led.def.LayerDef) return Std.int( levelX / ld.gridSize );
