@@ -791,6 +791,5 @@ class Editor extends Page {
 
 	override function update() {
 		super.update();
-		App.ME.debug(canvasWid()+"x"+canvasHei()+" "+w()+"x"+h() );
 	}
 }
