@@ -279,7 +279,7 @@ class Definitions {
 	}
 
 	public function removeEnumDef(ed:led.def.EnumDef) {
-		if( ed.isExternal() && !externalEnums.remove(ed) || !ed.isExternal() && enums.remove(ed) )
+		if( ed.isExternal() && !externalEnums.remove(ed) || !ed.isExternal() && !enums.remove(ed) )
 			throw "EnumDef not found";
 		_project.tidy();
 	}
