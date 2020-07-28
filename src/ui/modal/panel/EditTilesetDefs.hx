@@ -179,9 +179,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 		i.linkEvent(TilesetDefChanged);
 		i.setBounds(2, cur.getMaxTileGridSize());
 
-		var i = Input.linkToHtmlInput( cur.tileGridSpacing, jForm.find("input[name=tilesetGridSpacing]") );
-		i.linkEvent(TilesetDefChanged);
-		i.setBounds(0, cur.getMaxTileGridSize());
+		// var i = Input.linkToHtmlInput( cur.tileGridSpacing, jForm.find("input[name=tilesetGridSpacing]") );
+		// i.linkEvent(TilesetDefChanged);
+		// i.setBounds(0, cur.getMaxTileGridSize());
 	}
 
 
