@@ -277,7 +277,6 @@ class EditEnums extends ui.modal.Panel {
 						var tp = new ui.TilesetPicker(m.jContent, td);
 						tp.singleSelectedTileId = eValue.tileId;
 						tp.onSingleTileSelect = function(tileId) {
-							N.debug(tileId);
 							m.close();
 							eValue.tileId = tileId;
 							editor.ge.emit(EnumDefChanged);

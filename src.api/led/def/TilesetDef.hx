@@ -311,14 +311,14 @@ class TilesetDef {
 	}
 
 	#if editor
-	public function drawAtlasToCanvas(canvas:js.jquery.JQuery) {
-		if( !canvas.is("canvas") )
+	public function drawAtlasToCanvas(jCanvas:js.jquery.JQuery) {
+		if( !jCanvas.is("canvas") )
 			throw "Not a canvas";
 
 		if( !isAtlasLoaded() )
 			return;
 
-		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
+		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
 		var ctx = canvas.getContext2d();
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -329,18 +329,18 @@ class TilesetDef {
 		}
 	}
 
-	public function drawTileToCanvas(canvas:js.jquery.JQuery, tileId:Int, toX:Int, toY:Int) {
+	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0) {
 		if( pixels==null )
 			return;
 
-		if( !canvas.is("canvas") )
+		if( !jCanvas.is("canvas") )
 			throw "Not a canvas";
 
 		if( getTileSourceX(tileId)+tileGridSize>pxWid || getTileSourceY(tileId)+tileGridSize>pxHei )
 			return; // out of bounds
 
 		var subPixels = pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
-		var canvas = Std.downcast(canvas.get(0), js.html.CanvasElement);
+		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
 		var ctx = canvas.getContext2d();
 		var img = new js.html.Image(subPixels.width, subPixels.height);
 		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
