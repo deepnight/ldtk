@@ -21,6 +21,14 @@
 			"priority": -20
 		},
 		{
+			"text": "💻 Run Electron",
+			"color": "white",
+			"command": "run.electron.cmd",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -22
+		},
+		{
 			"text": "🅰️ Build POT",
 			"color": "white",
 			"commandType":"palette",
