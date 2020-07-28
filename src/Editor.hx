@@ -26,6 +26,7 @@ class Editor extends dn.Process {
 	var curLayerId : Int;
 	public var curTool : Tool<Dynamic>;
 	var keyDowns : Map<Int,Bool> = new Map();
+	public var gridSnapping = true;
 	public var needSaving = false;
 
 	public var levelRender : display.LevelRender;
@@ -133,6 +134,13 @@ class Editor extends dn.Process {
 			.prop("checked", levelRender.enhanceActiveLayer)
 			.change( function(ev) {
 				levelRender.setEnhanceActiveLayer( ev.getThis().prop("checked") );
+			});
+
+
+		jMainPanel.find("input#gridSnapping")
+			.prop("checked", gridSnapping)
+			.change( function(ev) {
+				gridSnapping = ev.getThis().prop("checked");
 			});
 
 
@@ -288,6 +296,12 @@ class Editor extends dn.Process {
 			case K.A:
 				if( !hasInputFocus() )
 					levelRender.setEnhanceActiveLayer( !levelRender.enhanceActiveLayer );
+
+			case K.G:
+				if( !hasInputFocus() ) {
+					gridSnapping = !gridSnapping;
+					jMainPanel.find("input#gridSnapping").prop("checked", gridSnapping);
+				}
 
 			case K.H:
 				if( !hasInputFocus() )

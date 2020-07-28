@@ -30,9 +30,13 @@ class Tip extends dn.Process {
 		if( x>=js.Browser.window.innerWidth*0.5 )
 			 x= tOff.left + target.innerWidth() - jTip.outerWidth();
 
+		var y = tOff.top + target.outerHeight() + 4;
+		if( target.outerHeight()<=32 )
+			y = tOff.top - jTip.outerHeight() - 4;
+
 		jTip.offset({
 			left: x,
-			top: tOff.top + target.outerHeight() + 4,
+			top: y,
 		});
 	}
 

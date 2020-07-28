@@ -261,7 +261,7 @@ div.key {
   text-transform: uppercase;
   font-family: Roboto;
   font-style: normal;
-  background-color: rgba(207, 197, 172, 0.3);
+  background-color: rgba(207, 197, 172, 0.45);
   border: 1px solid rgba(235, 223, 195, 0.3);
   border-bottom: 2px solid rgba(131, 114, 90, 0.3);
   box-shadow: 0px 0px 4px black;
@@ -805,6 +805,10 @@ input[type=checkbox] {
   height: 24px;
 }
 
+input[type=checkbox]:hover {
+  outline: 1px solid #ffcc00;
+}
+
 input[type="file"] {
   display: none;
 }
@@ -853,6 +857,10 @@ textarea:focus {
   flex: 0 1 auto;
   font-style: normal;
   margin-left: 20px;
+}
+
+.tip .content .key {
+  color: white;
 }
 
 .tip.infoTip .content {
@@ -1309,21 +1317,26 @@ canvas#webgl {
   outline-offset: -4px;
 }
 
-#page.editor #mainPanel .enhanceActiveLayer {
+#page.editor #mainPanel ul.options {
   display: flex;
-  align-items: center;
   justify-content: flex-end;
-  padding-right: 8px;
+}
+
+#page.editor #mainPanel ul.options li {
+  display: flex;
+  margin-right: 4px;
+  align-items: center;
   font-size: 8pt;
 }
 
-#page.editor #mainPanel .enhanceActiveLayer input[type=checkbox] {
+#page.editor #mainPanel ul.options li input[type=checkbox] {
   flex: 0 1 auto;
   width: 16px;
   height: 16px;
+  cursor: pointer;
 }
 
-#page.editor #mainPanel .enhanceActiveLayer label:hover {
+#page.editor #mainPanel ul.options li input:hover + label {
   color: #ffcc00;
   cursor: pointer;
 }

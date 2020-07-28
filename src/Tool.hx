@@ -71,7 +71,7 @@ class Tool<T> extends dn.Process {
 	}
 
 
-	function snapToGrid() return !editor.isCtrlDown() || cd.has("requireCtrlRelease");
+	function snapToGrid() return editor.gridSnapping;
 
 
 	public function as<E:Tool<X>,X>(c:Class<E>) : E return cast this;
@@ -84,7 +84,6 @@ class Tool<T> extends dn.Process {
 		editor.clearSelection();
 		moveStarted = false;
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
-		cd.unset("requireCtrlRelease");
 
 		// Picking an existing element
 		if( editor.isAltDown() && buttonId==0 ) {
@@ -252,10 +251,8 @@ class Tool<T> extends dn.Process {
 			moveStarted = true;
 			if( editor.isCtrlDown() && editor.selection!=null ) {
 				var copy = duplicateElement(editor.selection);
-				if( copy!=null ) {
+				if( copy!=null )
 					editor.setSelection(copy);
-					cd.setS("requireCtrlRelease", Const.INFINITE);
-				}
 			}
 		}
 
@@ -306,9 +303,6 @@ class Tool<T> extends dn.Process {
 
 	override function update() {
 		super.update();
-
-		if( !editor.isCtrlDown() && cd.has("requireCtrlRelease") )
-			cd.unset("requireCtrlRelease");
 	}
 
 }

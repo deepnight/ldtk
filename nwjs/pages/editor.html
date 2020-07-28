@@ -13,12 +13,18 @@
 	</div>
 
 	<ul id="layers" class="niceList"></ul>
-	<div class="enhanceActiveLayer">
-		<input type="checkbox" id="enhanceActiveLayer"/>
-		<label for="enhanceActiveLayer" title="Check this to make the selected layer more obvious by fading away all other inactive layers." keys="A">
-			<span class="notCompact">Enhance</span> Active layer
-		</label>
+
+	<ul class="options">
+		<li>
+			<input type="checkbox" id="gridSnapping" title="Snap elements to the layer grid." keys="G"s/>
+			<label for="gridSnapping"> Grid <span class="notCompact">snapping</span> </label>
+		</li>
+		<li>
+			<input type="checkbox" id="enhanceActiveLayer" title="Check this to make the selected layer more obvious by fading away all other inactive layers." keys="A"/>
+			<label for="enhanceActiveLayer"> <span class="notCompact">Enhance</span> Active layer </label>
+		</li>
 	</div>
+
 	<div id="guide">some useful tips</div>
 	<div id="mainPaletteWrapper"></div>
 </div>
