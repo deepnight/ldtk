@@ -7,10 +7,6 @@ class App extends dn.Process {
 	public var jPage(get,never) : J; inline function get_jPage() return new J("#page");
 	public var jCanvas(get,never) : J; inline function get_jCanvas() return new J("#webgl");
 
-	#if nwjs
-	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
-	#end
-
 	public var lastKnownMouse : { pageX:Int, pageY:Int };
 	var curPageProcess : Null<Page>;
 	public var session : SessionData;
@@ -22,8 +18,8 @@ class App extends dn.Process {
 		createRoot(Boot.ME.s2d);
 		lastKnownMouse = { pageX:0, pageY:0 }
 		#if nwjs
-		appWin.maximize();
-		appWin.on("close", exit);
+		nw.Window.get().maximize();
+		nw.Window.get().on("close", exit.bind(false));
 		#end
 
 		var win = js.Browser.window;
@@ -136,7 +132,7 @@ class App extends dn.Process {
 			str = str + "    --    "+base;
 
 		#if nwjs
-		appWin.title = str;
+		nw.Window.get().title = str;
 		#end
 	}
 
@@ -160,12 +156,15 @@ class App extends dn.Process {
 		JsTools.parseComponents(jPage);
 	}
 
-	public function exit() {
-		if( Editor.ME!=null && Editor.ME.needSaving ) {
+	public function exit(force=false) {
+		if( !force && Editor.ME!=null && Editor.ME.needSaving ) {
 			ui.Modal.closeAll();
-			new ui.modal.dialog.UnsavedChanges(appWin.close.bind(true));
+			new ui.modal.dialog.UnsavedChanges(exit.bind(true));
 		}
-		else
-			appWin.close(true);
+		else {
+			#if nwjs
+			nw.Window.get().close(true);
+			#end
+		}
 	}
 }
