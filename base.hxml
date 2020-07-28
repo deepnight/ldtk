@@ -1,8 +1,6 @@
 -cp src.api
 -cp src
 -cp externs
--main Boot
--dce full
 
 -lib heaps
 -lib castle
@@ -11,4 +9,6 @@
 
 -D editor
 
+-main Boot
+-dce full
 -js app/js/app.js
