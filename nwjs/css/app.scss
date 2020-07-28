@@ -317,15 +317,22 @@ canvas.tile {
 
 	&:not(.active) {
 		cursor: not-allowed;
+		opacity: 0.4;
 		&:hover {
 			border-color: $red;
 		}
 	}
 
-	&.active:hover {
-		border-color: $orange;
-		cursor: pointer;
+	&.active {
+		&.empty {
+			border-color: $red;
+		}
+		&:hover {
+			border-color: $orange;
+			cursor: pointer;
+		}
 	}
+
 }
 
 

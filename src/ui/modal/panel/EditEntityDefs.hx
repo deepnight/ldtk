@@ -238,7 +238,11 @@ class EditEntityDefs extends ui.modal.Panel {
 			jEntityForm.find("select.renderMode"),
 			led.LedTypes.EntityRenderMode,
 			function() return curEntity.renderMode,
-			function(v) curEntity.renderMode = v
+			function(v) {
+				curEntity.tileId = null;
+				curEntity.tilesetId = null;
+				curEntity.renderMode = v;
+			}
 		);
 		i.linkEvent(EntityDefChanged);
 

@@ -309,9 +309,14 @@ canvas.tile.empty {
 
 canvas.tile:not(.active) {
   cursor: not-allowed;
+  opacity: 0.4;
 }
 
 canvas.tile:not(.active):hover {
+  border-color: #e34d00;
+}
+
+canvas.tile.active.empty {
   border-color: #e34d00;
 }
 
