@@ -246,14 +246,15 @@ class EditEnums extends ui.modal.Panel {
 			var i = new form.input.StringInput(li.find(".name"),
 				function() return eValue.id,
 				function(newV) {
-					if( curEnum.renameValue(eValue.id, newV) ) {
+					var oldV = eValue.id;
+					if( curEnum.renameValue(oldV, newV) ) {
 						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-							if( fi.getEnumValue()==eValue.id )
+							if( fi.getEnumValue()==oldV )
 								fi.parseValue(newV);
 						});
 					}
 					else
-						N.invalidIdentifier(eValue.id);
+						N.invalidIdentifier(newV);
 				}
 			);
 			i.linkEvent(EnumDefChanged);
