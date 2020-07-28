@@ -316,6 +316,25 @@ class JsTools {
 		return js.Node.process.platform.toLowerCase().indexOf("win")==0;
 	}
 
+	public static function removeClassReg(jElem:js.jquery.JQuery, reg:EReg) {
+		jElem.removeClass( function(idx, classes) {
+			var all = [];
+			while( reg.match(classes) ) {
+				all.push( reg.matched(0) );
+				classes = reg.matchedRight();
+			}
+			return all.join(" ");
+		});
+	}
+
+	public static function clearCanvas(jCanvas:js.jquery.JQuery) {
+		if( !jCanvas.is("canvas") )
+			throw "Not a canvas";
+
+		var cnv = Std.downcast( jCanvas.get(0), js.html.CanvasElement );
+		cnv.getContext2d().clearRect(0,0, cnv.width, cnv.height);
+	}
+
 	#end
 
 }
