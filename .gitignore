@@ -1,4 +1,4 @@
-nwjs/js/app.js
-nwjs/js/*.map
+app/js/app.js
+app/js/*.map
 dump/
 res/.tmp
