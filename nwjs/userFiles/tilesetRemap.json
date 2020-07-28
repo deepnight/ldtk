@@ -110,7 +110,7 @@
 				"values" : [
 					{ "id" : "Books", "tileId" : 15 },
 					{ "id" : "Gold", "tileId" : 12 },
-					{ "id" : "Crate", "tileId" : 4 },
+					{ "id" : "OrangeStone", "tileId" : 5 },
 					{ "id" : "Grass", "tileId" : 0 }
 				],
 				"iconTilesetUid" : 1,
@@ -177,9 +177,12 @@
 							"fieldInstances" : [
 								{
 									"_identifier" : "type",
-									"_value" : "Crate",
+									"_value" : "OrangeStone",
 									"defUid" : 6,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "Crate" ] }
+									"realEditorValue" : {
+										"id" : "V_String",
+										"params" : [ "OrangeStone" ]
+									}
 								}
 							]
 						},
