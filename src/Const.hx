@@ -9,7 +9,7 @@ class Const {
 			#end
 
 			#if debug
-			"DebugBuild "+
+			"DBG "+
 			#else
 			"RC "+
 			#end
