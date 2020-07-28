@@ -637,7 +637,7 @@ ul.form {
 ul.form > li {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: top;
 }
 
 ul.form > li > * {
@@ -680,6 +680,8 @@ ul.form > li div.help {
 
 ul.form > li > label:first-of-type {
   flex: 0 0 150px;
+  align-self: stretch;
+  padding-top: 8px;
   padding-right: 16px;
   font-weight: bold;
   text-transform: uppercase;
