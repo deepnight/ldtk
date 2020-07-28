@@ -1,16 +1,29 @@
 'use strict';
-const electron = require('electron');
+const {app, BrowserWindow, dialog, ipcMain} = require('electron');
+const url = require('url')
+const path = require('path')
 let mainWindow = null;
 
-electron.app.on('window-all-closed', () => {
-	if (process.platform !== 'darwin') electron.app.quit();
+// *** Main app *****************************************************
+
+app.on('window-all-closed', () => {
+	if (process.platform !== 'darwin') app.quit();
 });
 
-electron.app.on('ready', () => {
-	mainWindow = new electron.BrowserWindow({
+app.on('ready', () => {
+	mainWindow = new BrowserWindow({
 		webPreferences: { nodeIntegration:true }
 	});
 	mainWindow.loadURL(`file://${__dirname}/app.html`);
 	mainWindow.on('closed', () => { mainWindow = null; });
+});
+
+
+
+// *** Dialog handlers *****************************************************
+
+ipcMain.handle("loadFile", async function(event) {
+	var filePaths = dialog.showOpenDialogSync();
+	return filePaths===undefined ? null : filePaths[0];
 });
 

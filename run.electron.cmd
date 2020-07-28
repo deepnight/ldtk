@@ -1,2 +1,4 @@
-@cd app
-@start electron .
+@echo off
+cd app
+electron .
+exit
