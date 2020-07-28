@@ -53,19 +53,17 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function set_focusLevelX(v) {
-		// focusLevelX = editor.curLevelId==null
-		// 	? v
-		// 	: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING/zoom );
-		focusLevelX = v; // HACK disabled clamping
+		focusLevelX = editor.curLevelId==null
+			? v
+			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING/zoom );
 		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
 		return focusLevelX;
 	}
 
 	inline function set_focusLevelY(v) {
-		// focusLevelY = editor.curLevelId==null
-		// 	? v
-		// 	: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING/zoom );
-		focusLevelY = v; // HACK disabled clamping
+		focusLevelY = editor.curLevelId==null
+			? v
+			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING/zoom );
 		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
 		return focusLevelY;
 	}
