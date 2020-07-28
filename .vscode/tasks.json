@@ -40,5 +40,31 @@
 			},
 			"group": "build"
 		},
+
+		{
+			"label": "Electron release",
+			"type": "hxml",
+			"file": "electron.hxml",
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"group": "build"
+		},
+
+		{
+			"label": "Electron debug",
+			"type": "hxml",
+			"file": "electron.debug.hxml",
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"group": "build"
+		}
 	]
 }
