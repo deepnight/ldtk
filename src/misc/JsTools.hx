@@ -298,9 +298,7 @@ class JsTools {
 		return e.wrapAll('<div class="path"/>').parent();
 	}
 
-	// *** File API (NWJS) **************************************
-
-	#if hxnodejs
+	// *** File API (node) **************************************
 
 	public static function fileExists(path:String) {
 		if( path==null )
@@ -400,7 +398,5 @@ class JsTools {
 
 		return jTile;
 	}
-
-	#end
 
 }
