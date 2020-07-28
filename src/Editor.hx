@@ -465,12 +465,14 @@ class Editor extends Page {
 
 	function onMouseWheel(e:hxd.Event) {
 		var m = getMouse();
-		var mouseX = m.levelX;
-		var mouseY = m.levelY;
+		var oldLevelX = m.levelX;
+		var oldLevelY = m.levelY;
+
 		levelRender.zoom += -e.wheelDelta*0.1 * levelRender.zoom;
-		var panRatio = e.wheelDelta < 0 ? 0.15 : 0.05;
-		levelRender.focusLevelX = levelRender.focusLevelX*(1-panRatio) + mouseX*panRatio;
-		levelRender.focusLevelY = levelRender.focusLevelY*(1-panRatio) + mouseY*panRatio;
+		ge.emit(ViewportChanged);
+
+		levelRender.focusLevelX += ( oldLevelX - m.levelX );
+		levelRender.focusLevelY += ( oldLevelY - m.levelY);
 	}
 
 	public function selectLevel(l:led.Level) {
@@ -765,6 +767,7 @@ class Editor extends Page {
 
 	public inline function getMouse() : MouseCoords {
 		return new MouseCoords();
+		// return new MouseCoords(Boot.ME.s2d.mouseX, Boot.ME.s2d.mouseY); // TODO replace with coords updated in JS event
 	}
 
 	override function onDispose() {
