@@ -11,21 +11,26 @@ class App extends dn.Process {
 	public var appWin(get,never) : nw.Window; inline function get_appWin() return nw.Window.get();
 	#end
 
+	public var lastKnownMouse : { pageX:Int, pageY:Int };
 	var curPageProcess : Null<Page>;
 	public var session : SessionData;
 
 	public function new() {
 		super();
+
 		ME = this;
 		createRoot(Boot.ME.s2d);
+		lastKnownMouse = { pageX:0, pageY:0 }
 		#if nwjs
 		appWin.maximize();
 		appWin.on("close", exit);
 		#end
 
-		js.Browser.window.onblur = onAppBlur;
-		js.Browser.window.onfocus = onAppFocus;
-		js.Browser.window.onresize= onAppResize;
+		var win = js.Browser.window;
+		win.onblur = onAppBlur;
+		win.onfocus = onAppFocus;
+		win.onresize = onAppResize;
+		win.onmousemove = onAppMouseMove;
 
 		// Init app dir
 		var fp = dn.FilePath.fromDir( ""+JsTools.getCwd() );
@@ -39,6 +44,11 @@ class App extends dn.Process {
 		session = dn.LocalStorage.readObject("session", session);
 
 		openHome();
+	}
+
+	function onAppMouseMove(e:js.html.MouseEvent) {
+		lastKnownMouse.pageX = e.pageX;
+		lastKnownMouse.pageY = e.pageY;
 	}
 
 	function onAppFocus(ev:js.html.Event) {
