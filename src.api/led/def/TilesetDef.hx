@@ -185,8 +185,7 @@ class TilesetDef {
 		for(ed in _project.defs.enums)
 			if( ed.iconTilesetUid==uid )
 				for(v in ed.values)
-					if( v.tileId!=null )
-						v.tileId = remapTileId(oldCwid, v.tileId);
+					v.tileId = remapTileId(oldCwid, v.tileId);
 
 		// Entity tiles remapping
 		for( ed in _project.defs.entities )
@@ -200,7 +199,10 @@ class TilesetDef {
 			return RemapSuccessful;
 	}
 
-	inline function remapTileId(oldCwid:Int, oldTileCoordId:Int) : Null<Int> {
+	inline function remapTileId(oldCwid:Int, oldTileCoordId:Null<Int>) : Null<Int> {
+		if( oldTileCoordId==null )
+			return null;
+		
 		var oldCy = Std.int( oldTileCoordId / oldCwid );
 		var oldCx = oldTileCoordId - oldCwid*oldCy;
 		if( oldCx>=cWid || oldCy>=cHei )
