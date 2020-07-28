@@ -23,8 +23,9 @@ class App extends dn.Process {
 		appWin.on("close", exit);
 		#end
 
-		js.Browser.window.onblur = onBlur;
-		js.Browser.window.onfocus = onFocus;
+		js.Browser.window.onblur = onAppBlur;
+		js.Browser.window.onfocus = onAppFocus;
+		js.Browser.window.onresize= onAppResize;
 
 		// Init app dir
 		var fp = dn.FilePath.fromDir( ""+JsTools.getCwd() );
@@ -40,14 +41,19 @@ class App extends dn.Process {
 		openHome();
 	}
 
-	function onFocus(ev:js.html.Event) {
+	function onAppFocus(ev:js.html.Event) {
 		if( curPageProcess!=null && !curPageProcess.destroyed )
 			curPageProcess.onAppFocus();
 	}
 
-	function onBlur(ev:js.html.Event) {
+	function onAppBlur(ev:js.html.Event) {
 		if( curPageProcess!=null && !curPageProcess.destroyed )
 			curPageProcess.onAppBlur();
+	}
+
+	function onAppResize(ev:js.html.Event) {
+		if( curPageProcess!=null && !curPageProcess.destroyed )
+			curPageProcess.onAppResize();
 	}
 
 
@@ -78,13 +84,13 @@ class App extends dn.Process {
 	public function openEditor(project:led.Project, path:String) {
 		clearCurPage();
 		curPageProcess = new Editor(project, path);
-		dn.Process.resizeAll();
+		curPageProcess.onAppResize();
 	}
 
 	public function openHome() {
 		clearCurPage();
 		curPageProcess = new Home();
-		dn.Process.resizeAll();
+		curPageProcess.onAppResize();
 	}
 
 	public function debug(msg:Dynamic, append=false) {

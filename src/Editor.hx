@@ -638,22 +638,24 @@ class Editor extends Page {
 
 		bg = new h2d.Bitmap( h2d.Tile.fromColor(project.bgColor) );
 		root.add(bg, Const.DP_BG);
-		onResize();
+		onAppResize();
 	}
 
-	override function onResize() {
-		super.onResize();
+	override function onAppResize() {
+		super.onAppResize();
+		N.debug("resized");
 		if( bg!=null ) {
 			bg.scaleX = canvasWid();
-			bg.scaleY = h();
+			bg.scaleY = canvasHei();
 		}
+		ge.emit(ViewportChanged);
 	}
 
-	inline function canvasWid() {
+	public inline function canvasWid() {
 		return App.ME.jCanvas.outerWidth() * js.Browser.window.devicePixelRatio;
 	}
 
-	inline function canvasHei() {
+	public inline function canvasHei() {
 		return App.ME.jCanvas.outerHeight() * js.Browser.window.devicePixelRatio;
 	}
 
@@ -789,5 +791,6 @@ class Editor extends Page {
 
 	override function update() {
 		super.update();
+		App.ME.debug(canvasWid()+"x"+canvasHei()+" "+w()+"x"+h() );
 	}
 }

@@ -83,8 +83,8 @@ class LevelRender extends dn.Process {
 		switch e {
 			case ViewportChanged:
 				root.setScale(zoom);
-				root.x = w()*0.5 - focusLevelX * zoom;
-				root.y = h()*0.5 - focusLevelY * zoom;
+				root.x = editor.canvasWid()*0.5 - focusLevelX * zoom;
+				root.y = editor.canvasHei()*0.5 - focusLevelY * zoom;
 
 			case ProjectSelected:
 				renderAll();

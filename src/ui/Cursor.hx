@@ -21,10 +21,6 @@ class Cursor extends dn.Process {
 		wrapper.alpha = 0.4;
 	}
 
-	override function onResize() {
-		super.onResize();
-	}
-
 	function render() {
 		wrapper.removeChildren();
 		graphics.clear();

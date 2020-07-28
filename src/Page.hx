@@ -5,4 +5,5 @@ class Page extends dn.Process {
 
 	public function onAppBlur() {}
 	public function onAppFocus() {}
+	public function onAppResize() {}
 }
