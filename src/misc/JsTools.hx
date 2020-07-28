@@ -76,9 +76,6 @@ class JsTools {
 		wrapper.width(sizePx);
 		wrapper.height(sizePx);
 
-		// if( scale!=1 )
-			// wrapper.css("transform","scale("+scale+")");
-
 		return wrapper;
 	}
 
