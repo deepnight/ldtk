@@ -12,20 +12,15 @@
 				"$haxe-trace"
 			],
 			"presentation": {
-				"echo": true,
 				"reveal": "never",
-				"focus": false,
 				"panel": "shared",
-				"showReuseMessage": false,
-				"clear": false,
-				"revealProblems": "never"
+				"clear": false
 			},
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			}
 		},
-
 
 		{
 			"label": "NWJS release",
@@ -38,15 +33,12 @@
 				"$haxe-trace"
 			],
 			"presentation": {
-				"echo": true,
 				"reveal": "never",
-				"focus": false,
 				"panel": "shared",
-				"showReuseMessage": false,
 				"clear": false,
 				"revealProblems": "onProblem"
 			},
 			"group": "build"
-		}
+		},
 	]
 }
