@@ -260,7 +260,7 @@ class TilesetPicker {
 
 	function isSelected(tcx,tcy) {
 		if( singleTileMode )
-			return false; // TODO
+			return false;
 
 		for( id in tool.getSelectedValue().ids )
 			if( id==tilesetDef.getTileId(tcx,tcy) )

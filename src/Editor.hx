@@ -503,7 +503,7 @@ class Editor extends Page {
 		return switch curLayerDef.type {
 			case IntGrid: false;
 			case Entities: true;
-			case Tiles: false; // TODO
+			case Tiles: false;
 		}
 	}
 
@@ -777,7 +777,6 @@ class Editor extends Page {
 
 	public inline function getMouse() : MouseCoords {
 		return new MouseCoords();
-		// return new MouseCoords(Boot.ME.s2d.mouseX, Boot.ME.s2d.mouseY); // TODO replace with coords updated in JS event
 	}
 
 	override function onDispose() {
