@@ -1,5 +1,15 @@
 class Const {
-	public static var APP_VERSION = "0.1";
+	static var APP_VERSION = "0.1";
+	public static function getAppVersion() {
+		return
+			#if nwjs
+			"NWJS "+
+			#elseif electron
+			"Electron "+
+			#end
+			APP_VERSION;
+	}
+
 	public static var FPS = 60;
 	public static var SCALE = 1.0;
 

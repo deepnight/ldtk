@@ -125,7 +125,7 @@ class App extends dn.Process {
 	}
 
 	public function setWindowTitle(?str:String) {
-		var base = "L-Ed v"+Const.APP_VERSION;
+		var base = "L-Ed v"+Const.getAppVersion();
 		if( str==null )
 			str = base;
 		else

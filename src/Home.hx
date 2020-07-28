@@ -15,7 +15,7 @@ class Home extends Page {
 		// Version
 		var ver = jPage.find(".version");
 		ver.text( Lang.t._("Version ::v::, project file version ::pv::", {
-			v: Const.APP_VERSION,
+			v: Const.getAppVersion(),
 			pv: Const.DATA_VERSION,
 		}) );
 
