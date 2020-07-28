@@ -16,12 +16,8 @@
 				"panel": "shared",
 				"clear": false
 			},
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
+			"group": "build"
 		},
-
 		{
 			"label": "NWJS release",
 			"type": "hxml",
@@ -40,7 +36,6 @@
 			},
 			"group": "build"
 		},
-
 		{
 			"label": "Electron release",
 			"type": "hxml",
@@ -53,7 +48,6 @@
 			],
 			"group": "build"
 		},
-
 		{
 			"label": "Electron debug",
 			"type": "hxml",
@@ -64,7 +58,10 @@
 				"$haxe-error",
 				"$haxe-trace"
 			],
-			"group": "build"
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
 		}
 	]
 }
