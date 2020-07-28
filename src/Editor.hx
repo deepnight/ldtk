@@ -26,7 +26,7 @@ class Editor extends Page {
 	var curLayerId : Int;
 	public var curTool : Tool<Dynamic>;
 	var keyDowns : Map<Int,Bool> = new Map();
-	public var gridSnapping = true;
+	var gridSnapping = true;
 	public var needSaving = false;
 
 	public var levelRender : display.LevelRender;
@@ -141,6 +141,7 @@ class Editor extends Page {
 			.prop("checked", gridSnapping)
 			.change( function(ev) {
 				gridSnapping = ev.getThis().prop("checked");
+				levelRender.renderBg();
 			});
 
 
@@ -305,6 +306,7 @@ class Editor extends Page {
 			case K.G:
 				if( !hasInputFocus() ) {
 					gridSnapping = !gridSnapping;
+					levelRender.renderBg();
 					jMainPanel.find("input#gridSnapping").prop("checked", gridSnapping);
 				}
 
@@ -485,6 +487,24 @@ class Editor extends Page {
 
 		curLayerId = l.def.uid;
 		ge.emit(LayerInstanceSelected);
+
+		var opt = jMainPanel.find("input#gridSnapping");
+		if( layerSupportsFreeMode() )
+			opt.removeClass("unsupported");
+		else
+			opt.addClass("unsupported");
+	}
+
+	function layerSupportsFreeMode() {
+		return switch curLayerDef.type {
+			case IntGrid: false;
+			case Entities: true;
+			case Tiles: false; // TODO
+		}
+	}
+
+	public function getGridSnapping() {
+		return gridSnapping || !layerSupportsFreeMode();
 	}
 
 	function onHelp() {

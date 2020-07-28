@@ -71,7 +71,7 @@ class Tool<T> extends dn.Process {
 	}
 
 
-	function snapToGrid() return editor.gridSnapping;
+	function snapToGrid() return editor.getGridSnapping();
 
 
 	public function as<E:Tool<X>,X>(c:Class<E>) : E return cast this;

@@ -1341,6 +1341,14 @@ canvas#webgl {
   cursor: pointer;
 }
 
+#page.editor #mainPanel ul.options li input.unsupported {
+  opacity: 0.3;
+}
+
+#page.editor #mainPanel ul.options li input.unsupported + label {
+  color: #545d73;
+}
+
 #page.editor #mainPanel #mainPaletteWrapper {
   overflow: auto;
   position: relative;
