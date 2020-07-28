@@ -38,9 +38,24 @@
 		</li>
 
 		<li>
+			<label>Visual</label>
+
+			<input type="color" name="color" id="eColor"/>
+
+			<select class="renderMode">
+				<option value="rect">Color rectangle</option>
+				<option value="ellipse">Color ellipse</option>
+				<option value="icon">Tileset icon</option>
+			</select>
+
+			<select name="mode_icon tilesets"></select>
+			<div class="mode_icon tile"></div>
+		</li>
+
+		<!-- <li>
 			<label for="eColor">Color</label>
 			<input type="color" name="color" id="eColor"/>
-		</li>
+		</li> -->
 
 		<li>
 			<label>Pivot point</label>
@@ -75,7 +90,7 @@
 	<ul class="form">
 	<li>
 		<label>Type</label>
-		<div class="type"></div>
+		<input type="text" readonly="readonly" class="type"/>
 	</li>
 	<li>
 		<label for="fName">Field identifier</label>

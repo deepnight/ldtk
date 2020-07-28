@@ -227,6 +227,15 @@ class EditEntityDefs extends ui.modal.Panel {
 			updateEntityForm();
 		});
 
+		// Render mode
+		var i = new form.input.EnumSelect(
+			jEntityForm.find("select.renderMode"),
+			led.LedTypes.EntityRenderMode,
+			function() return curEntity.renderMode,
+			function(v) curEntity.renderMode = v
+		);
+		i.linkEvent(EntityDefChanged);
+
 		// Max per level
 		var i = Input.linkToHtmlInput(curEntity.maxPerLevel, jEntityForm.find("input[name='maxPerLevel']") );
 		i.setBounds(0,1024);

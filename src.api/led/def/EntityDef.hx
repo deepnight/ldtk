@@ -8,6 +8,8 @@ class EntityDef {
 	public var width : Int;
 	public var height : Int;
 	public var color : UInt;
+	public var renderMode : EntityRenderMode;
+
 	public var maxPerLevel : Int;
 	public var discardExcess : Bool; // what to do when maxPerLevel is reached
 	public var pivotX(default,set) : Float;
@@ -18,7 +20,8 @@ class EntityDef {
 
 	public function new(uid:Int) {
 		this.uid = uid;
-		color = 0xff0000;
+		color = 0x94d9b3;
+		renderMode = Rectangle;
 		width = height = 16;
 		maxPerLevel = 0;
 		discardExcess = true;
@@ -42,6 +45,7 @@ class EntityDef {
 		o.width = JsonTools.readInt( json.width, 16 );
 		o.height = JsonTools.readInt( json.height, 16 );
 		o.color = JsonTools.readColor( json.color, 0x0 );
+		o.renderMode = JsonTools.readEnum(EntityRenderMode, json.renderMode, false, Rectangle);
 		o.maxPerLevel = JsonTools.readInt( json.maxPerLevel, 0 );
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
 		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
@@ -60,6 +64,7 @@ class EntityDef {
 			width: width,
 			height: height,
 			color: JsonTools.writeColor(color),
+			renderMode: JsonTools.writeEnum(renderMode, false),
 			maxPerLevel: maxPerLevel,
 			discardExcess: discardExcess,
 			pivotX: JsonTools.clampFloatPrecision( pivotX ),

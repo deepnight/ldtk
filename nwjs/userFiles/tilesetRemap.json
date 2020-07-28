@@ -5,7 +5,7 @@
 	"defaultPivotY" : 0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 7,
+	"nextUid" : 8,
 	"defs" : {
 		"layers" : [
 			{
@@ -42,6 +42,7 @@
 				"width" : 16,
 				"height" : 16,
 				"color" : "#FF0000",
+				"renderMode" : "Ellipse",
 				"maxPerLevel" : 0,
 				"discardExcess" : true,
 				"pivotX" : 0,
@@ -60,6 +61,19 @@
 						"defaultOverride" : null
 					}
 				]
+			},
+			{
+				"identifier" : "Player",
+				"uid" : 7,
+				"width" : 16,
+				"height" : 32,
+				"color" : "#94D9B3",
+				"renderMode" : "Ellipse",
+				"maxPerLevel" : 0,
+				"discardExcess" : true,
+				"pivotX" : 0.5,
+				"pivotY" : 1,
+				"fieldDefs" : []
 			}
 		],
 		"tilesets" : [
@@ -201,6 +215,15 @@
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Grass" ] }
 								}
 							]
+						},
+						{
+							"_identifier" : "Player",
+							"_cx" : 1,
+							"_cy" : 9,
+							"defUid" : 7,
+							"x" : 24,
+							"y" : 160,
+							"fieldInstances" : []
 						}
 					]
 				},

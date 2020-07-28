@@ -254,6 +254,7 @@ class LevelRender extends dn.Process {
 
 
 	public static function invalidateCaches() {
+		// BUG seems buggy
 		for(tex in _entityRenderCache)
 			tex.dispose();
 		_entityRenderCache = new Map();
@@ -274,11 +275,21 @@ class LevelRender extends dn.Process {
 		if( def==null )
 			def = ei.def;
 
+		// Main render
 		if( !_entityRenderCache.exists(def.uid) ) {
 			var g = new h2d.Graphics();
 			g.beginFill(def.color);
 			g.lineStyle(1, 0x0, 0.25);
-			g.drawRect(0, 0, def.width, def.height);
+			switch def.renderMode {
+				case Rectangle:
+					g.drawRect(0, 0, def.width, def.height);
+
+				case Ellipse:
+					g.drawEllipse(def.width*0.5, def.height*0.5, def.width*0.5, def.height*0.5);
+
+				case Tile:
+					// TODO
+			}
 
 			g.lineStyle(1, 0x0, 0.5);
 			var pivotSize = 3;

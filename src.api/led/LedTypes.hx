@@ -48,6 +48,12 @@ enum FieldDisplayPosition {
 	Beneath;
 }
 
+enum EntityRenderMode {
+	Rectangle;
+	Ellipse;
+	Tile;
+}
+
 typedef TilesetSelection = {
 	var ids : Array<Int>;
 	var mode : TileEditMode;
