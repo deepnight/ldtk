@@ -1,19 +1,18 @@
 {
-	"name" : "led",
+	"name": "led",
 	"version": "0.0.1",
 	"description": "L-Ed, a lightweight & efficient 2D level editor",
-
-	"window" : {
-		"title" : "LEd",
-		"width" : 800,
-		"height" : 600,
-		"show" : true
+	"window": {
+		"title": "LEd",
+		"width": 800,
+		"height": 600,
+		"show": true
 	},
-	"main" : "app.html",
-	"chromium-args":"--enable-spell-checking",
+	"main": "app.html",
+	"chromium-args": "--enable-spell-checking",
 	"js-flags": "--expose-gc",
-
 	"build": {
-        "nwVersion": "0.46.4"
-	}
+		"nwVersion": "0.46.4"
+	},
+	"dependencies": {}
 }
