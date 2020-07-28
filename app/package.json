@@ -1,5 +1,6 @@
 {
 	"name": "led",
 	"version": "0.0.1",
-	"main": "electronMain.js"
+	"main": "electronMain.js",
+	"dependencies": {}
 }
