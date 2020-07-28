@@ -7,6 +7,13 @@ class Const {
 			#elseif electron
 			"Electron "+
 			#end
+
+			#if debug
+			"DebugBuild "+
+			#else
+			"RC "+
+			#end
+
 			APP_VERSION;
 	}
 
