@@ -587,13 +587,13 @@ ul.log li + li {
 }
 
 .pivotEditor {
-  width: calc( 3*32px);
+  width: calc( 3*18px);
   position: relative;
   display: grid;
   align-items: stretch;
   justify-items: stretch;
-  grid-template-columns: repeat(3, 32px);
-  grid-template-rows: repeat(3, 32px);
+  grid-template-columns: repeat(3, 18px);
+  grid-template-rows: repeat(3, 18px);
 }
 
 .pivotEditor .bg {
@@ -610,6 +610,7 @@ ul.log li + li {
   display: grid;
   align-items: center;
   justify-items: center;
+  cursor: pointer;
 }
 
 .pivotEditor label:hover {
@@ -618,14 +619,15 @@ ul.log li + li {
 }
 
 .pivotEditor label input[type=radio] {
-  width: 45%;
-  height: 45%;
+  width: 50%;
+  height: 50%;
   opacity: 0.7;
+  cursor: pointer;
 }
 
 .pivotEditor label input[type=radio]:checked {
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   opacity: 1;
 }
 
