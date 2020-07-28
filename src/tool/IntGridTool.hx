@@ -52,8 +52,10 @@ class IntGridTool extends Tool<Int> {
 
 				case Move:
 			}
-			if( old!=curLayerInstance.getIntGrid(cx,cy) )
+			if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
+				editor.curLevelHistory.markChange(cx,cy);
 				anyChange = true;
+			}
 		});
 
 		return anyChange;
@@ -78,8 +80,10 @@ class IntGridTool extends Tool<Int> {
 				case Move:
 			}
 
-			if( old!=curLayerInstance.getIntGrid(cx,cy) )
+			if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
+				editor.curLevelHistory.markChange(cx,cy);
 				anyChange = true;
+			}
 		}
 
 		return anyChange;

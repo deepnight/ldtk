@@ -76,6 +76,37 @@ class LevelHistory {
 		initMostAncientLayerStates(true);
 	}
 
+
+	var _changeMarks : Map<Int,Bool> = new Map();
+	public function initChangeMarks() {
+		_changeMarks = new Map();
+	}
+
+	public inline function markChange(cx:Int, cy:Int) {
+		_changeMarks.set( editor.curLayerInstance.coordId(cx,cy), true );
+	}
+
+	public function flushChangeMarks() {
+		var left = Const.INFINITE;
+		var top = Const.INFINITE;
+		var right = 0;
+		var bottom = 0;
+
+		for( coordId in _changeMarks.keys() ) {
+			var cx = editor.curLayerInstance.getCx(coordId);
+			var cy = editor.curLayerInstance.getCy(coordId);
+			left = M.imin(cx, left);
+			right = M.imax(cx, right);
+			top = M.imin(cy, top);
+			bottom = M.imax(cy, bottom);
+		}
+
+		if( left<=right ) {
+			var ld = editor.curLayerDef;
+			setLastStateBounds(left*ld.gridSize, top*ld.gridSize, (right-left+1)*ld.gridSize, (bottom-top+1)*ld.gridSize);
+		}
+	}
+
 	public function setLastStateBounds(x:Int, y:Int, w:Int, h:Int) {
 		switch states[ curIndex ] {
 			case null:

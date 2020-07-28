@@ -69,6 +69,7 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 
 				case Remove:
 					if( editor.curLayerInstance.hasGridTile(cx,cy) ) {
+						editor.curLevelHistory.markChange(cx,cy);
 						editor.curLayerInstance.removeGridTile(cx,cy);
 						anyChange = true;
 					}
@@ -108,8 +109,9 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 			var tcx = selLeft + (x-cx)%selWid;
 			var tcy = selTop + (y-cy)%selHei;
 			var tid = curTilesetDef.getTileId(tcx,tcy);
-			if( curLayerInstance.getGridTile(x,y)!=tid && selMap.exists(tid) ) {
+			if( curLayerInstance.isValid(x,y) && curLayerInstance.getGridTile(x,y)!=tid && selMap.exists(tid) ) {
 				curLayerInstance.setGridTile(x,y, tid);
+				editor.curLevelHistory.markChange(x,y);
 				anyChange = true;
 			}
 		}
@@ -124,7 +126,7 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 		if( isRandomMode() ) {
 			// Single random tile
 			var tid = sel.ids[Std.random(sel.ids.length)];
-			if( tid!=curLayerInstance.getGridTile(cx,cy) ) {
+			if( curLayerInstance.isValid(cx,cy) && tid!=curLayerInstance.getGridTile(cx,cy) ) {
 				curLayerInstance.setGridTile(cx,cy, tid);
 				anyChange = true;
 			}
@@ -143,8 +145,9 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 			for(tid in sel.ids) {
 				var tcx = cx + ( curTilesetDef.getTileCx(tid) - left ) * gridDiffScale;
 				var tcy = cy + ( curTilesetDef.getTileCy(tid) - top ) * gridDiffScale;
-				if( curLayerInstance.getGridTile(tcx,tcy)!=tid ) {
+				if( curLayerInstance.isValid(tcx,tcy) && curLayerInstance.getGridTile(tcx,tcy)!=tid ) {
 					curLayerInstance.setGridTile(tcx,tcy,tid);
+					editor.curLevelHistory.markChange(tcx,tcy);
 					anyChange = true;
 				}
 			}
@@ -177,6 +180,7 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 				var tcy = cy+curTilesetDef.getTileCy(tid)-top;
 				if( editor.curLayerInstance.hasGridTile(tcx,tcy) ) {
 					editor.curLayerInstance.removeGridTile(tcx,tcy);
+					editor.curLevelHistory.markChange(tcx,tcy);
 					anyChange = true;
 				}
 			}

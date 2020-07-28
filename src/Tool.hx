@@ -131,6 +131,7 @@ class Tool<T> extends dn.Process {
 			return;
 		}
 
+		editor.curLevelHistory.initChangeMarks();
 		rectangle = editor.isShiftDown();
 		origin = m;
 		lastMouse = m;
@@ -222,12 +223,13 @@ class Tool<T> extends dn.Process {
 
 		if( needHistorySaving ) {
 			editor.curLevelHistory.saveLayerState( curLayerInstance );
-			editor.curLevelHistory.setLastStateBounds(
-				M.imin(origin.cx, m.cx) * curLayerInstance.def.gridSize,
-				M.imin(origin.cy, m.cy) * curLayerInstance.def.gridSize,
-				( M.iabs(origin.cx-m.cx) + 1 ) * curLayerInstance.def.gridSize,
-				( M.iabs(origin.cy-m.cy) + 1 ) * curLayerInstance.def.gridSize
-			);
+			editor.curLevelHistory.flushChangeMarks();
+			// editor.curLevelHistory.setLastStateBounds(
+			// 	M.imin(origin.cx, m.cx) * curLayerInstance.def.gridSize,
+			// 	M.imin(origin.cy, m.cy) * curLayerInstance.def.gridSize,
+			// 	( M.iabs(origin.cx-m.cx) + 1 ) * curLayerInstance.def.gridSize,
+			// 	( M.iabs(origin.cy-m.cy) + 1 ) * curLayerInstance.def.gridSize
+			// );
 			needHistorySaving = false;
 			onHistorySaving();
 		}
