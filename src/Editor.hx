@@ -206,23 +206,26 @@ class Editor extends dn.Process {
 		if( !td.hasAtlasPath() )
 			return;
 
+		var oldRelPath = td.relPath;
 		var result = td.reloadImage( getProjectDir() );
-		var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 
 		switch result {
 			case FileNotFound:
-				new ui.modal.dialog.LostFile( td.relPath, function(newAbsPath) {
+				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
 					var newRelPath = makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( getProjectDir(), newRelPath );
 					ge.emit( TilesetDefChanged );
 				});
 
 			case RemapLoss:
+				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 				new ui.modal.dialog.Warning( Lang.t._("The image ::file:: was updated, but the new version is smaller than the previous one.\nSome tiles might have been lost in the process. It is recommended to check this carefully before saving this project!", { file:name } ) );
 
 			case RemapSuccessful, Ok:
-				if( !silentOk || result!=Ok )
+				if( !silentOk || result!=Ok ) {
+					var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 					N.success(Lang.t._("Tileset image ::file:: updated.", { file:name } ) );
+				}
 		}
 
 		ge.emit(TilesetDefChanged);
@@ -730,7 +733,6 @@ class Editor extends dn.Process {
 		if( ME==this )
 			ME = null;
 
-		watcher.dispose();
 		watcher = null;
 
 		ge.dispose();

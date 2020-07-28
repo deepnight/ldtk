@@ -1,16 +1,19 @@
 package misc;
 
-class FileWatcher {
+class FileWatcher extends dn.Process {
 	var all : Array<{ watcher:js.node.fs.FSWatcher, path:String, cb:Void->Void }> = [];
 
 	public function new() {
+		super(Editor.ME);
 		js.node.Require.require("fs");
 	}
 
 	public function watch(absFilePath:String, onChange:Void->Void) {
 		var w = js.node.Fs.watch(absFilePath, function(event,f) {
-			if( event=="change" )
-				onChange();
+			if( event=="change" ) {
+				delayer.cancelById(absFilePath);
+				delayer.addS(absFilePath, onChange, 1);
+			}
 		});
 
 		all.push({
@@ -20,14 +23,15 @@ class FileWatcher {
 		});
 	}
 
-	public function watchTileset(td:led.def.TilesetDef) {
+	public inline function watchTileset(td:led.def.TilesetDef) {
 		watch(
 			Editor.ME.makeFullFilePath(td.relPath),
 			Editor.ME.reloadTileset.bind(td)
 		);
 	}
 
-	public function dispose() {
+	override function onDispose() {
+		super.onDispose();
 		clearAllWatches();
 	}
 
