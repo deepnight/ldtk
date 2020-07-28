@@ -167,6 +167,20 @@ class TilesetDef {
 				li.gridTiles.set( coordId, remapped );
 		}
 
+		// Save selections remapping
+		for(sel in savedSelections) {
+			var i = 0;
+			while( i<sel.ids.length ) {
+				var remap = remapTileId(oldCwid, sel.ids[i]);
+				if( remap==null )
+					sel.ids.splice(i,1);
+				else {
+					sel.ids[i] = remap;
+					i++;
+				}
+			}
+		}
+
 		if( pxWid<oldWid || pxHei<oldHei )
 			return RemapLoss;
 		else
