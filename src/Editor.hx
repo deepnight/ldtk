@@ -55,8 +55,8 @@ class Editor extends Page {
 		App.ME.jBody
 			.on("keydown.client", onJsKeyDown )
 			.on("keyup.client", onJsKeyUp )
-			.mouseup( function(_) onMouseUp() )
-			.mouseleave(function(_) onMouseUp() );
+			.on("mouseup.client", function(_) onMouseUp() )
+			.on("mouseleave.client", function(_) onMouseUp() );
 
 		Boot.ME.s2d.addEventListener( onEvent );
 
