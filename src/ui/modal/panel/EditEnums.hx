@@ -268,6 +268,10 @@ class EditEnums extends ui.modal.Panel {
 
 					// Pick a tile
 					previewCanvas.click( function(_) {
+						if( !td.isAtlasLoaded() ) {
+							N.error(Lang.t._("This atlas has no image file."));
+							return;
+						}
 						var m = new Modal();
 						m.jModalAndMask.addClass("singleTilePicker");
 						var tp = new ui.TilesetPicker(m.jContent, td);
@@ -281,7 +285,7 @@ class EditEnums extends ui.modal.Panel {
 					});
 
 					// Render preview
-					if( eValue.tileId!=null ) {
+					if( eValue.tileId!=null && td.isAtlasLoaded() ) {
 						td.drawTileToCanvas( previewCanvas, eValue.tileId, 0, 0 );
 						previewCanvas.attr("width", td.tileGridSize);
 						previewCanvas.attr("height", td.tileGridSize);
