@@ -764,7 +764,7 @@ class Editor extends Page {
 
 
 	public inline function getMouse() : MouseCoords {
-		return new MouseCoords(Boot.ME.s2d.mouseX, Boot.ME.s2d.mouseY);
+		return new MouseCoords();
 	}
 
 	override function onDispose() {
