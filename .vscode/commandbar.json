@@ -4,15 +4,6 @@
 	"skipErrorMessage": true,
 	"commands": [
 		{
-			"text": "⚙ NWJS debug",
-			"color": "yellow",
-			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|NWJS debug",
-			"alignment": "right",
-			"skipTerminateQuickPick": false,
-			"priority": -10
-		},
-		{
 			"text": "⚙ NWJS release",
 			"color": "cyan",
 			"commandType":"palette",
@@ -24,10 +15,10 @@
 		{
 			"text": "💻 Run NWJS",
 			"color": "white",
-			"command": "run.cmd",
+			"command": "run.nwjs.cmd",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
-			"priority": -21
+			"priority": -20
 		},
 		{
 			"text": "🅰️ Build POT",
@@ -36,7 +27,7 @@
 			"command": "workbench.action.tasks.runTask|Lang",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
-			"priority": -40
+			"priority": -50
 		},
 		{
 			"text": "📦 Redist",
@@ -44,7 +35,7 @@
 			"command": "haxelib run redistHelper app.hxml -o redist -p LEd",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
-			"priority": -50
+			"priority": -51
 		}
 	]
 }
