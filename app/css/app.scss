@@ -235,6 +235,7 @@ div.warning:not(.window) {
 	color: white;
 	box-shadow: 0px 0px 32px darkred inset, 0px 0px 4px darkred;
 	text-shadow: 0px -1px 4px red, 0px 1px 4px red;
+	background-color: rgba(0,0,0, 0.66);
 }
 
 div.info {
@@ -667,6 +668,10 @@ ul.form {
 
 		>input[type=checkbox] {
 			flex: 0 1 auto;
+		}
+		>select {
+			width: 0;
+			flex: 1 1 0;
 		}
 
 		.small {
@@ -1439,6 +1444,14 @@ canvas#webgl {
 	height: 100%;
 	background-color: $bgDark;
 	image-rendering: pixelated;
+
+	&.invalid {
+		background: url("../img/stripes.png");
+		.warning {
+			color: $red;
+			margin: 50px;
+		}
+	}
 
 	.toolOptions {
 		display: flex;

@@ -197,21 +197,33 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			case Tiles:
 				var select = jForm.find("select[name=tilesets]");
-				var bt = select.siblings("button");
-				bt.off();
+				var jInfos = select.siblings(".infos");
+				var bt = select.siblings("button.create");
 				select.empty();
+				jInfos.empty();
+
 				if( project.defs.tilesets.length==0 ) {
 					// No tileset in project
 					select.hide();
-					bt.text( Lang.t._("Create new tileset") );
-					bt.click( function(_) {
+					jInfos.hide();
+
+					bt.show().off().click( function(_) {
 						close();
 						new ui.modal.panel.EditTilesetDefs();
 					});
 				}
 				else {
-					// List tilesets
+					// Tileset selector
 					select.show();
+					bt.hide();
+
+					if( cur.tilesetDefUid==null )
+						jInfos.hide();
+					else {
+						jInfos.show();
+						jInfos.text(project.defs.getTilesetDef(cur.tilesetDefUid).tileGridSize+"px tiles");
+					}
+
 					var opt = new J("<option/>");
 					opt.appendTo(select);
 					opt.attr("value", -1);
@@ -231,8 +243,10 @@ class EditLayerDefs extends ui.modal.Panel {
 						var v = Std.parseInt( select.val() );
 						if( v<0 )
 							cur.tilesetDefUid = null;
-						else
+						else {
 							cur.tilesetDefUid = v;
+							cur.gridSize = project.defs.getTilesetDef(cur.tilesetDefUid).tileGridSize;
+						}
 						editor.ge.emit(LayerDefChanged);
 					});
 
@@ -246,11 +260,11 @@ class EditLayerDefs extends ui.modal.Panel {
 						}));
 					}
 
-					bt.text( Lang.t._("Edit") );
-					bt.click( function(_) {
-						close();
-						new ui.modal.panel.EditTilesetDefs( project.defs.getTilesetDef(cur.tilesetDefUid) );
-					});
+					// bt.text( Lang.t._("Edit") );
+					// bt.click( function(_) {
+					// 	close();
+					// 	new ui.modal.panel.EditTilesetDefs( project.defs.getTilesetDef(cur.tilesetDefUid) );
+					// });
 				}
 
 

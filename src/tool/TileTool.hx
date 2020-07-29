@@ -215,9 +215,14 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 	override function createPalette() {
 		var target = super.createPalette();
 
-		if( curTilesetDef!=null )
-			new ui.TilesetPicker(target, curTilesetDef, this);
+		if( curTilesetDef==null ) {
+			target.addClass("invalid");
+			target.append('<div class="warning">'+Lang.t._("This tile layer has no Tileset.")+'</div>');
+			return target;
+		}
 
+		// Picker
+		new ui.TilesetPicker(target, curTilesetDef, this);
 
 		var options = new J('<div class="toolOptions"/>');
 		options.appendTo(target);
