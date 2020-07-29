@@ -217,6 +217,7 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 
 		if( curTilesetDef==null ) {
 			target.addClass("invalid");
+			target.append('<div class="warning">'+Lang.t._("This tile layer has no Tileset.")+'</div>');
 			return target;
 		}
 
