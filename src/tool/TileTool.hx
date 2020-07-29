@@ -175,9 +175,10 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 				top = M.imin(top, curTilesetDef.getTileCy(tid));
 			}
 
+			var gridDiffScale = M.imax(1, M.round( curTilesetDef.tileGridSize / curLayerInstance.def.gridSize ) );
 			for(tid in sel.ids) {
-				var tcx = cx+curTilesetDef.getTileCx(tid)-left;
-				var tcy = cy+curTilesetDef.getTileCy(tid)-top;
+				var tcx = cx + ( curTilesetDef.getTileCx(tid) - left ) * gridDiffScale;
+				var tcy = cy + ( curTilesetDef.getTileCy(tid) - top ) * gridDiffScale;
 				if( editor.curLayerInstance.hasGridTile(tcx,tcy) ) {
 					editor.curLayerInstance.removeGridTile(tcx,tcy);
 					editor.curLevelHistory.markChange(tcx,tcy);
