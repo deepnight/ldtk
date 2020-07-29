@@ -215,9 +215,13 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 	override function createPalette() {
 		var target = super.createPalette();
 
-		if( curTilesetDef!=null )
-			new ui.TilesetPicker(target, curTilesetDef, this);
+		if( curTilesetDef==null ) {
+			target.addClass("invalid");
+			return target;
+		}
 
+		// Picker
+		new ui.TilesetPicker(target, curTilesetDef, this);
 
 		var options = new J('<div class="toolOptions"/>');
 		options.appendTo(target);

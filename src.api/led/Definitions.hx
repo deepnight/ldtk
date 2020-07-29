@@ -95,6 +95,14 @@ class Definitions {
 		l.identifier = id;
 
 		l.gridSize = _project.defaultGridSize;
+
+		// Init tileset
+		if( type==Tiles && tilesets.length==1 ) {
+			var td = tilesets[0];
+			l.gridSize = td.tileGridSize;
+			l.tilesetDefUid = td.uid;
+		}
+
 		layers.push(l);
 		_project.tidy();
 		return l;

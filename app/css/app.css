@@ -703,6 +703,11 @@ ul.form > li > input[type=checkbox] {
   flex: 0 1 auto;
 }
 
+ul.form > li > select {
+  width: 0;
+  flex: 1 1 0;
+}
+
 ul.form > li .small {
   flex: 0 1 60px;
 }
