@@ -18,6 +18,10 @@
 		"nwVersion": "0.46.4"
 	},
 
+	"scripts": {
+		"dist": "build --tasks win-x64 --mirror https://dl.nwjs.io/ ."
+	},
+
 	"dependencies": {},
 	"devDependencies": {
 		"nwjs-builder-phoenix": "^1.15.0"
