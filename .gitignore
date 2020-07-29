@@ -2,3 +2,4 @@ app/js/app.js
 app/js/*.map
 dump/
 res/.tmp
+app/node_modules
