@@ -4,29 +4,56 @@
 	"skipErrorMessage": true,
 	"commands": [
 		{
-			"text": "⚙ NWJS release",
+			"text": "☕ Debug",
 			"color": "cyan",
 			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|NWJS release",
+			"command": "workbench.action.tasks.runTask|NWJS debug",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -11
 		},
 		{
-			"text": "💻 Run NWJS",
-			"color": "white",
+			"text": "☕ Release",
+			"color": "cyan",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|NWJS debug",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -12
+		},
+		{
+			"text": "☕ Run",
+			"color": "cyan",
 			"command": "run.nwjs.cmd",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -20
 		},
 		{
-			"text": "⚡ Run Electron",
-			"color": "white",
-			"command": "run.electron.cmd",
+			"text": "⚡ Debug",
+			"color": "yellow",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|Electron debug",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -21
+		},
+		{
+			"text": "⚡ Release",
+			"color": "yellow",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|Electron debug",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -22
+		},
+		{
+			"text": "⚡ Run",
+			"color": "yellow",
+			"command": "run.electron.cmd",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -23
 		},
 		{
 			"text": "🅰️ Build POT",
