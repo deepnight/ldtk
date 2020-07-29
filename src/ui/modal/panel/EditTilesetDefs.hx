@@ -69,12 +69,18 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 
 	function updateTilesetPreview() {
-		if( cur==null )
+		var jPickerWrapper = jContent.find(".pickerWrapper");
+
+		if( cur==null ) {
+			jPickerWrapper.hide();
+			jContent.find(".tilesDemo").hide();
 			return;
+		}
+
+		jContent.find(".tilesDemo").show();
 
 		// Main tileset view
-		var jPickerWrapper = jContent.find(".pickerWrapper");
-		jPickerWrapper.empty();
+		jPickerWrapper.show().empty();
 		if( cur.isAtlasLoaded() ) {
 			var picker = new TilesetPicker(jPickerWrapper, cur);
 			picker.clearScrollMemory();
