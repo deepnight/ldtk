@@ -541,7 +541,6 @@ class Editor extends Page {
 	}
 
 	public function onSaveAs() {
-		N.debug(projectFilePath);
 		JsTools.saveAsDialog([".json"], getProjectDir(), function(filePath:String) {
 			if( JsTools.fileExists(filePath) )
 				new ui.modal.dialog.Confirm(Lang.t._("This file already exists and will be overwritten!"), function() {
