@@ -135,9 +135,9 @@ class App extends dn.Process {
 			str = str + "    --    "+base;
 
 		#if nwjs
-		nw.Window.get().title = str;
+			nw.Window.get().title = str;
 		#elseif electron
-		// TODO window title
+			electron.renderer.IpcRenderer.invoke("setWinTitle", str);
 		#end
 	}
 

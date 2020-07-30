@@ -13,6 +13,7 @@ app.on('ready', () => {
 		webPreferences: { nodeIntegration:true },
 		fullscreenable: true,
 		autoHideMenuBar: true,
+		title: "L-Ed",
 	});
 	mainWindow.maximize();
 	mainWindow.loadURL(`file://${__dirname}/app.html`);
@@ -34,6 +35,10 @@ ipcMain.handle("exit", async function(event) {
 
 ipcMain.handle("setFullScreen", function(event,args) {
 	mainWindow.setFullScreen(args);
+});
+
+ipcMain.handle("setWinTitle", function(event,args) {
+	mainWindow.title = args;
 });
 
 
