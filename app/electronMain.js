@@ -18,6 +18,12 @@ app.on('ready', () => {
 	mainWindow.maximize();
 	mainWindow.loadURL(`file://${__dirname}/app.html`);
 	mainWindow.on('closed', () => { mainWindow = null; });
+
+	// Window close button
+    mainWindow.on('close', function(ev) {
+		ev.preventDefault();
+		mainWindow.webContents.send("winClose");
+    });
 });
 
 

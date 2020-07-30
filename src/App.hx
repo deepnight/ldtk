@@ -19,8 +19,10 @@ class App extends dn.Process {
 		lastKnownMouse = { pageX:0, pageY:0 }
 
 		#if nwjs
-		nw.Window.get().maximize();
-		nw.Window.get().on("close", exit.bind(false));
+			nw.Window.get().maximize();
+			nw.Window.get().on("close", exit.bind(false));
+		#elseif electron
+			electron.renderer.IpcRenderer.on("winClose", onWindowCloseButton);
 		#end
 
 		jCanvas.hide();
@@ -45,22 +47,31 @@ class App extends dn.Process {
 		openHome();
 	}
 
+	#if electron
+	function onWindowCloseButton() {
+		exit(false);
+	}
+	#end
+
 	function onAppMouseMove(e:js.html.MouseEvent) {
 		lastKnownMouse.pageX = e.pageX;
 		lastKnownMouse.pageY = e.pageY;
 	}
 
 	function onAppFocus(ev:js.html.Event) {
+		N.debug("focus");
 		if( curPageProcess!=null && !curPageProcess.destroyed )
 			curPageProcess.onAppFocus();
 	}
 
 	function onAppBlur(ev:js.html.Event) {
+		N.debug("blur");
 		if( curPageProcess!=null && !curPageProcess.destroyed )
 			curPageProcess.onAppBlur();
 	}
 
 	function onAppResize(ev:js.html.Event) {
+		N.debug("resize");
 		if( curPageProcess!=null && !curPageProcess.destroyed )
 			curPageProcess.onAppResize();
 	}
