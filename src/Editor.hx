@@ -537,6 +537,7 @@ class Editor extends Page {
 		var data = JsTools.prepareProjectFile(project);
 		JsTools.writeFileBytes(projectFilePath, data.bytes);
 		needSaving = false;
+		App.ME.registerRecentProject(projectFilePath);
 		N.msg("Saved to "+projectFilePath);
 	}
 
