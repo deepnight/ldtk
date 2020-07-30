@@ -8,6 +8,14 @@ class EditProject extends ui.modal.Panel {
 		loadTemplate("editProject", "editProject");
 		linkToButton("button.editProject");
 
+		jContent.find("button.save").click( function(ev) {
+			editor.onSave();
+		});
+
+		jContent.find("button.saveAs").click( function(ev) {
+			editor.onSaveAs();
+		});
+
 		updateProjectForm();
 	}
 

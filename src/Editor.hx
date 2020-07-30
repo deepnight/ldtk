@@ -540,6 +540,21 @@ class Editor extends Page {
 		N.msg("Saved to "+projectFilePath);
 	}
 
+	public function onSaveAs() {
+		N.debug(projectFilePath);
+		JsTools.saveAsDialog([".json"], getProjectDir(), function(filePath:String) {
+			if( JsTools.fileExists(filePath) )
+				new ui.modal.dialog.Confirm(Lang.t._("This file already exists and will be overwritten!"), function() {
+					this.projectFilePath = filePath;
+					onSave();
+				});
+			else {
+				this.projectFilePath = filePath;
+				onSave(true);
+			}
+		});
+	}
+
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case ViewportChanged:
