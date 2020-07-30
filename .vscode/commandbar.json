@@ -16,7 +16,7 @@
 			"text": "☕ Release",
 			"color": "cyan",
 			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|NWJS debug",
+			"command": "workbench.action.tasks.runTask|NWJS release",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -12
@@ -42,7 +42,7 @@
 			"text": "⚡ Release",
 			"color": "yellow",
 			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|Electron debug",
+			"command": "workbench.action.tasks.runTask|Electron release",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -22
