@@ -25,8 +25,11 @@ ipcMain.handle("loadFile", async function(event) {
 	return filePaths===undefined ? null : filePaths[0];
 });
 
-
 ipcMain.handle("exit", async function(event) {
 	app.exit();
+});
+
+ipcMain.on("getAppCwd", function(event) {
+	event.returnValue = app.getAppPath();
 });
 

@@ -207,7 +207,7 @@ class JsTools {
 
 		#elseif electron
 
-		electron.renderer.IpcRenderer.invoke('loadFile').then( function(res) {
+		electron.renderer.IpcRenderer.invoke("loadFile").then( function(res) {
 			if( res!=null )
 				onLoad( Std.string(res) );
 		});
@@ -358,7 +358,16 @@ class JsTools {
 	}
 
 	public static function getCwd() {
+		#if electron
+
+		var path = electron.renderer.IpcRenderer.sendSync("getAppCwd");
+		return dn.FilePath.fromDir( path ).useSlashes().directory;
+
+		#else
+
 		return js.Node.process.cwd();
+
+		#end
 	}
 
 	public static function exploreToFile(filePath:String) {
