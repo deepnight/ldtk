@@ -3,12 +3,6 @@
 	"version": "0.0.1",
 	"main": "electronMain.js",
 	"productName": "L-Ed",
-
-	"scripts": {
-		"package-win": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electron Tutorial App\""
-	},
-
-
 	"dependencies": {},
 	"devDependencies": {
 		"electron": "^9.1.2",

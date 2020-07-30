@@ -5,3 +5,4 @@ app/dist
 dump/
 res/.tmp
 app/node_modules
+redist/
