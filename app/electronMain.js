@@ -1,8 +1,5 @@
 'use strict';
-const {app, BrowserWindow, dialog, ipcMain} = require('electron');
-const url = require('url')
-const path = require('path')
-let mainWindow = null;
+const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 
 // *** Main app *****************************************************
 
@@ -10,6 +7,7 @@ app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') app.quit();
 });
 
+let mainWindow = null;
 app.on('ready', () => {
 	mainWindow = new BrowserWindow({
 		webPreferences: { nodeIntegration:true }
@@ -20,10 +18,15 @@ app.on('ready', () => {
 
 
 
-// *** Dialog handlers *****************************************************
+// *** Handlers *****************************************************
 
 ipcMain.handle("loadFile", async function(event) {
 	var filePaths = dialog.showOpenDialogSync();
 	return filePaths===undefined ? null : filePaths[0];
+});
+
+
+ipcMain.handle("exit", async function(event) {
+	app.exit();
 });
 

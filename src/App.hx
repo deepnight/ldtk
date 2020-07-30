@@ -163,7 +163,13 @@ class App extends dn.Process {
 		}
 		else {
 			#if nwjs
+
 			nw.Window.get().close(true);
+
+			#elseif electron
+
+			electron.renderer.IpcRenderer.invoke("exit");
+
 			#end
 		}
 	}
