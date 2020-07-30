@@ -188,33 +188,33 @@ class JsTools {
 	public static function loadDialog(?fileTypes:Array<String>, rootDir:String, onLoad:(filePath:String)->Void) {
 		#if nwjs
 
-		var input = getTmpFileInput();
+			var input = getTmpFileInput();
 
-		if( fileTypes==null || fileTypes.length==0 )
-			fileTypes = [".*"];
-		input.attr("accept", fileTypes.join(","));
-		input.attr("nwWorkingDir",rootDir);
+			if( fileTypes==null || fileTypes.length==0 )
+				fileTypes = [".*"];
+			input.attr("accept", fileTypes.join(","));
+			input.attr("nwWorkingDir",rootDir);
 
-		input.change( function(ev) {
-			var path : String = input.val();
-			if( path==null || path.length==0 )
-				return;
+			input.change( function(ev) {
+				var path : String = input.val();
+				if( path==null || path.length==0 )
+					return;
 
-			input.remove();
-			onLoad(path);
-		});
-		input.click();
+				input.remove();
+				onLoad(path);
+			});
+			input.click();
 
 		#elseif electron
 
-		electron.renderer.IpcRenderer.invoke("loadFile").then( function(res) {
-			if( res!=null )
-				onLoad( Std.string(res) );
-		});
+			electron.renderer.IpcRenderer.invoke("loadFile").then( function(res) {
+				if( res!=null )
+					onLoad( Std.string(res) );
+			});
 
 		#else
 
-		throw "Unsupported";
+			throw "Unsupported";
 
 		#end
 	}
@@ -223,28 +223,28 @@ class JsTools {
 	public static function saveAsDialog(?fileTypes:Array<String>, rootDir:String, onFileSelect:(filePath:String)->Void) {
 		#if nwjs
 
-		var input = getTmpFileInput();
+			var input = getTmpFileInput();
 
-		if( fileTypes==null || fileTypes.length==0 )
-			fileTypes = [".*"];
-		input.attr("accept", fileTypes.join(","));
-		input.attr("nwsaveas","nwsaveas");
-		input.attr("nwWorkingDir",rootDir);
+			if( fileTypes==null || fileTypes.length==0 )
+				fileTypes = [".*"];
+			input.attr("accept", fileTypes.join(","));
+			input.attr("nwsaveas","nwsaveas");
+			input.attr("nwWorkingDir",rootDir);
 
-		input.change( function(ev) {
-			var path = input.val();
-			input.remove();
-			onFileSelect(path);
-		});
-		input.click();
+			input.change( function(ev) {
+				var path = input.val();
+				input.remove();
+				onFileSelect(path);
+			});
+			input.click();
 
 		#elseif electron
 
-		ui.Notification.notImplemented(); // TODO electron save dialog
+			ui.Notification.notImplemented(); // TODO electron save dialog
 
 		#else
 
-		throw "Unsupported";
+			throw "Unsupported";
 
 		#end
 	}

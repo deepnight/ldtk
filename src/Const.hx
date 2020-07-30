@@ -3,15 +3,15 @@ class Const {
 	public static function getAppVersion() {
 		return
 			#if nwjs
-			"NWJS "+
+				"NWJS "+
 			#elseif electron
-			"Electron "+
+				"Electron "+
 			#end
 
 			#if debug
-			"DBG "+
+				"DBG "+
 			#else
-			"RC "+
+				"RC "+
 			#end
 
 			"v"+APP_VERSION;

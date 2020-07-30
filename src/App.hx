@@ -19,10 +19,8 @@ class App extends dn.Process {
 		lastKnownMouse = { pageX:0, pageY:0 }
 
 		#if nwjs
-
 		nw.Window.get().maximize();
 		nw.Window.get().on("close", exit.bind(false));
-
 		#end
 
 		jCanvas.hide();
@@ -138,6 +136,8 @@ class App extends dn.Process {
 
 		#if nwjs
 		nw.Window.get().title = str;
+		#elseif electron
+		// TODO window title
 		#end
 	}
 
@@ -170,13 +170,9 @@ class App extends dn.Process {
 		}
 		else {
 			#if nwjs
-
-			nw.Window.get().close(true);
-
+				nw.Window.get().close(true);
 			#elseif electron
-
-			electron.renderer.IpcRenderer.invoke("exit");
-
+				electron.renderer.IpcRenderer.invoke("exit");
 			#end
 		}
 	}
