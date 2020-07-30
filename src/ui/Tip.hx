@@ -57,8 +57,8 @@ class Tip extends dn.Process {
 				cur = new Tip(target, str, keys, className);
 			})
 			.on( "mouseout.tip", function(ev) {
-				// if( cur!=null )
-				// 	cur.destroy();
+				if( cur!=null )
+					cur.destroy();
 			});
 	}
 
