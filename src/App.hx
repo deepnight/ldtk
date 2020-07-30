@@ -17,10 +17,15 @@ class App extends dn.Process {
 		ME = this;
 		createRoot(Boot.ME.s2d);
 		lastKnownMouse = { pageX:0, pageY:0 }
+
 		#if nwjs
+
 		nw.Window.get().maximize();
 		nw.Window.get().on("close", exit.bind(false));
+
 		#end
+
+		jCanvas.hide();
 
 		var win = js.Browser.window;
 		win.onblur = onAppBlur;
@@ -142,6 +147,8 @@ class App extends dn.Process {
 		ui.Tip.clear();
 		ui.LastChance.end();
 
+		jCanvas.hide();
+
 		var path = JsTools.getCwd() + '/pages/$id.html';
 		var raw = JsTools.readFileString(path);
 		if( raw==null )
@@ -163,7 +170,13 @@ class App extends dn.Process {
 		}
 		else {
 			#if nwjs
+
 			nw.Window.get().close(true);
+
+			#elseif electron
+
+			electron.renderer.IpcRenderer.invoke("exit");
+
 			#end
 		}
 	}

@@ -184,7 +184,10 @@ class JsTools {
 		return input;
 	}
 
+
 	public static function loadDialog(?fileTypes:Array<String>, rootDir:String, onLoad:(filePath:String)->Void) {
+		#if nwjs
+
 		var input = getTmpFileInput();
 
 		if( fileTypes==null || fileTypes.length==0 )
@@ -201,9 +204,25 @@ class JsTools {
 			onLoad(path);
 		});
 		input.click();
+
+		#elseif electron
+
+		electron.renderer.IpcRenderer.invoke("loadFile").then( function(res) {
+			if( res!=null )
+				onLoad( Std.string(res) );
+		});
+
+		#else
+
+		throw "Unsupported";
+
+		#end
 	}
 
+
 	public static function saveAsDialog(?fileTypes:Array<String>, rootDir:String, onFileSelect:(filePath:String)->Void) {
+		#if nwjs
+
 		var input = getTmpFileInput();
 
 		if( fileTypes==null || fileTypes.length==0 )
@@ -218,6 +237,16 @@ class JsTools {
 			onFileSelect(path);
 		});
 		input.click();
+
+		#elseif electron
+
+		ui.Notification.notImplemented(); // TODO electron save dialog
+
+		#else
+
+		throw "Unsupported";
+
+		#end
 	}
 
 
@@ -329,7 +358,16 @@ class JsTools {
 	}
 
 	public static function getCwd() {
+		#if electron
+
+		var path = electron.renderer.IpcRenderer.sendSync("getAppCwd");
+		return dn.FilePath.fromDir( path ).useSlashes().directory;
+
+		#else
+
 		return js.Node.process.cwd();
+
+		#end
 	}
 
 	public static function exploreToFile(filePath:String) {

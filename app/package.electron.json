@@ -3,6 +3,7 @@
 	"version": "0.0.1",
 	"main": "electronMain.js",
 	"productName": "L-Ed",
+
 	"dependencies": {},
 	"devDependencies": {
 		"electron": "^9.1.2",

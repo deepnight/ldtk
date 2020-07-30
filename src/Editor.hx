@@ -653,6 +653,7 @@ class Editor extends Page {
 
 	function updateCanvasSize() {
 		var panelWid = jMainPanel.outerWidth();
+		App.ME.jCanvas.show();
 		App.ME.jCanvas.css("left", panelWid+"px");
 		App.ME.jCanvas.css("width", "calc( 100vw - "+panelWid+"px )");
 	}
