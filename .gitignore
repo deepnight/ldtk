@@ -1,8 +1,8 @@
 app/js/app.js
 app/js/*.map
 app/node_modules
-app/dist
+app/node_modules
+app/package-lock.json
 dump/
 res/.tmp
-app/node_modules
 redist/
