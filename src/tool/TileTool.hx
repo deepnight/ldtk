@@ -104,11 +104,20 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 		var selHei = selBottom-selTop+1;
 		var curX = cx;
 		var curY = cy;
-		for( x in cx...cx+wid )
-		for( y in cy...cy+hei ) {
-			var tcx = selLeft + (x-cx)%selWid;
-			var tcy = selTop + (y-cy)%selHei;
-			var tid = curTilesetDef.getTileId(tcx,tcy);
+		var gridDiffScale = M.imax(1, M.round( curTilesetDef.tileGridSize / curLayerInstance.def.gridSize ) );
+		for( dx in 0...wid )
+		for( dy in 0...hei ) {
+			if( dx%gridDiffScale!=0 || dy%gridDiffScale!=0 )
+				continue;
+
+			var x = cx+dx;
+			var y = cy+dy;
+
+			var tid = curTilesetDef.getTileId(
+				selLeft + Std.int(dx/gridDiffScale)%selWid,
+				selTop + Std.int(dy/gridDiffScale)%selHei
+			);
+
 			if( curLayerInstance.isValid(x,y) && curLayerInstance.getGridTile(x,y)!=tid && selMap.exists(tid) ) {
 				curLayerInstance.setGridTile(x,y, tid);
 				editor.curLevelHistory.markChange(x,y);
@@ -175,9 +184,10 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 				top = M.imin(top, curTilesetDef.getTileCy(tid));
 			}
 
+			var gridDiffScale = M.imax(1, M.round( curTilesetDef.tileGridSize / curLayerInstance.def.gridSize ) );
 			for(tid in sel.ids) {
-				var tcx = cx+curTilesetDef.getTileCx(tid)-left;
-				var tcy = cy+curTilesetDef.getTileCy(tid)-top;
+				var tcx = cx + ( curTilesetDef.getTileCx(tid) - left ) * gridDiffScale;
+				var tcy = cy + ( curTilesetDef.getTileCy(tid) - top ) * gridDiffScale;
 				if( editor.curLayerInstance.hasGridTile(tcx,tcy) ) {
 					editor.curLayerInstance.removeGridTile(tcx,tcy);
 					editor.curLevelHistory.markChange(tcx,tcy);

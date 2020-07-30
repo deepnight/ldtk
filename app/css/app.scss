@@ -815,22 +815,30 @@ textarea {
 	pointer-events: none;
 
 	.content {
-		display: flex;
+		display: grid;
+		grid-template-columns: auto min-content;
+		box-sizing: border-box;
+
+		width: 100%;
+
 		padding: 4px;
 		padding-left: 8px;
 		padding-right: 8px;
 		align-items: center;
-		max-width: 250px;
 
-		font-style: italic;
 		font-size: 0.8em;
 		color: $help;
-		text-shadow: 0px 1px 0px rgba(0,0,0, 0.5), 0px 2px 4px rgba(0,0,0, 0.5);
+
+		.text {
+			max-width: 250px;
+			text-shadow: 0px 1px 0px rgba(0,0,0, 0.5), 0px 2px 4px rgba(0,0,0, 0.5);
+			font-style: italic;
+		}
 
 		.keys {
-			flex: 0 1 auto;
 			font-style: normal;
 			margin-left: 20px;
+			white-space: nowrap;
 		}
 
 		.key {
@@ -1402,6 +1410,11 @@ canvas#webgl {
 				opacity: 0.6;
 			}
 		}
+		.buttons {
+			.exit {
+				flex: 0.3 1 0;
+			}
+		}
 	}
 }
 
@@ -1757,11 +1770,11 @@ canvas#webgl {
 }
 
 
-.window.panel.projectSettings {
+.window.panel.editProject {
 	.content {
 		display: grid;
 		grid-template-columns: auto;
-		grid-template-rows: min-content min-content auto;
+		grid-template-rows: repeat(3, min-content);
 		gap: 16px;
 		height: 100%;
 

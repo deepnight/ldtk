@@ -102,6 +102,7 @@ class Cursor extends dn.Process {
 						var cx = td.getTileCx(tid);
 						var cy = td.getTileCy(tid);
 						var bmp = new h2d.Bitmap( td.getTile(tid), wrapper );
+						bmp.tile.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
 						bmp.x = (cx-left) * li.def.gridSize * gridDiffScale;
 						bmp.y = (cy-top) * li.def.gridSize * gridDiffScale;
 					}
@@ -144,7 +145,7 @@ class Cursor extends dn.Process {
 				wrapper.setPosition(x,y);
 
 			case Tiles(li, tileIds, cx, cy):
-				wrapper.setPosition((cx-li.def.tilePivotX)*li.def.gridSize, (cy-li.def.tilePivotY)*li.def.gridSize);
+				wrapper.setPosition((cx+li.def.tilePivotX)*li.def.gridSize, (cy+li.def.tilePivotY)*li.def.gridSize);
 		}
 
 		graphics.setPosition(wrapper.x, wrapper.y);

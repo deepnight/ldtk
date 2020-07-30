@@ -856,22 +856,28 @@ textarea:focus {
 }
 
 .tip .content {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto min-content;
+  box-sizing: border-box;
+  width: 100%;
   padding: 4px;
   padding-left: 8px;
   padding-right: 8px;
   align-items: center;
-  max-width: 250px;
-  font-style: italic;
   font-size: 0.8em;
   color: #79dd8a;
+}
+
+.tip .content .text {
+  max-width: 250px;
   text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.5), 0px 2px 4px rgba(0, 0, 0, 0.5);
+  font-style: italic;
 }
 
 .tip .content .keys {
-  flex: 0 1 auto;
   font-style: normal;
   margin-left: 20px;
+  white-space: nowrap;
 }
 
 .tip .content .key {
@@ -1432,6 +1438,10 @@ canvas#webgl {
   opacity: 0.6;
 }
 
+#page.home .wrapper .buttons .exit {
+  flex: 0.3 1 0;
+}
+
 #page.editor.compactPanel #mainPanel {
   width: 150px;
   grid-template-rows: min-content 200px min-content auto;
@@ -1806,19 +1816,19 @@ canvas#webgl {
   grid-column: auto;
 }
 
-.window.panel.projectSettings .content {
+.window.panel.editProject .content {
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows: min-content min-content auto;
+  grid-template-rows: repeat(3, min-content);
   gap: 16px;
   height: 100%;
 }
 
-.window.panel.projectSettings .content h2 {
+.window.panel.editProject .content h2 {
   margin-bottom: 0;
 }
 
-.window.panel.projectSettings .content .buttons.main {
+.window.panel.editProject .content .buttons.main {
   margin-bottom: 10px;
 }
 

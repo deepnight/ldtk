@@ -82,10 +82,10 @@ class Editor extends Page {
 	public function initUI() {
 		// Edit buttons
 		jMainPanel.find("button.editProject").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.panel.ProjectSettings) )
+			if( ui.Modal.isOpen(ui.modal.panel.EditProject) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.panel.ProjectSettings();
+				new ui.modal.panel.EditProject();
 		});
 
 		jMainPanel.find("button.levelList").click( function(_) {
@@ -537,7 +537,22 @@ class Editor extends Page {
 		var data = JsTools.prepareProjectFile(project);
 		JsTools.writeFileBytes(projectFilePath, data.bytes);
 		needSaving = false;
+		App.ME.registerRecentProject(projectFilePath);
 		N.msg("Saved to "+projectFilePath);
+	}
+
+	public function onSaveAs() {
+		JsTools.saveAsDialog([".json"], getProjectDir(), function(filePath:String) {
+			if( JsTools.fileExists(filePath) )
+				new ui.modal.dialog.Confirm(Lang.t._("This file already exists and will be overwritten!"), function() {
+					this.projectFilePath = filePath;
+					onSave();
+				});
+			else {
+				this.projectFilePath = filePath;
+				onSave(true);
+			}
+		});
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
