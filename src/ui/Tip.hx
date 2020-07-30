@@ -13,15 +13,14 @@ class Tip extends dn.Process {
 			jTip.addClass(className);
 
 		var jContent = jTip.find(".content");
-		jContent.text(str);
+		jContent.find(".text").text(str);
 
 
 		if( keys!=null && keys.length>0 ) {
-			var kWrapper = new J('<div class="keys"/>');
-			kWrapper.appendTo(jContent);
+			var jKeys = jContent.find(".keys");
 
 			for(kid in keys)
-				kWrapper.append( JsTools.createKey(kid) );
+				jKeys.append( JsTools.createKey(kid) );
 		}
 
 		// Position
@@ -58,8 +57,8 @@ class Tip extends dn.Process {
 				cur = new Tip(target, str, keys, className);
 			})
 			.on( "mouseout.tip", function(ev) {
-				if( cur!=null )
-					cur.destroy();
+				// if( cur!=null )
+				// 	cur.destroy();
 			});
 	}
 
