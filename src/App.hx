@@ -17,9 +17,12 @@ class App extends dn.Process {
 		ME = this;
 		createRoot(Boot.ME.s2d);
 		lastKnownMouse = { pageX:0, pageY:0 }
+
 		#if nwjs
+
 		nw.Window.get().maximize();
 		nw.Window.get().on("close", exit.bind(false));
+
 		#end
 
 		var win = js.Browser.window;

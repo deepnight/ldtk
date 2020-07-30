@@ -10,8 +10,11 @@ app.on('window-all-closed', () => {
 let mainWindow = null;
 app.on('ready', () => {
 	mainWindow = new BrowserWindow({
-		webPreferences: { nodeIntegration:true }
+		webPreferences: { nodeIntegration:true },
+		fullscreenable: true,
+		autoHideMenuBar: true,
 	});
+	mainWindow.maximize();
 	mainWindow.loadURL(`file://${__dirname}/app.html`);
 	mainWindow.on('closed', () => { mainWindow = null; });
 });
