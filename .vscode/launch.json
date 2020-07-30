@@ -9,14 +9,14 @@
 			"type": "chrome",
 			"request": "launch",
 			"cwd": "${workspaceFolder}/app",
+			"webRoot": "${workspaceFolder}/app",
 			"windows": {
 				"runtimeExecutable": "C:\\Users\\deepnight\\AppData\\Roaming\\npm\\electron.cmd"
 			},
 			"runtimeArgs" : [
-				"${workspaceFolder}/app/electronMain.js",
+				"${workspaceFolder}/app/main.js",
 				"--remote-debugging-port=9222"
 			],
-			"webRoot": "${workspaceFolder}/app",
 			"preLaunchTask": "Electron debug",
 		},
 

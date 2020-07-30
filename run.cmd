@@ -1,4 +1,4 @@
 @echo off
 cd app
-electron .
+npm run start
 exit
