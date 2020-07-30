@@ -82,10 +82,10 @@ class Editor extends Page {
 	public function initUI() {
 		// Edit buttons
 		jMainPanel.find("button.editProject").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.panel.ProjectSettings) )
+			if( ui.Modal.isOpen(ui.modal.panel.EditProject) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.panel.ProjectSettings();
+				new ui.modal.panel.EditProject();
 		});
 
 		jMainPanel.find("button.levelList").click( function(_) {

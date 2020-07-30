@@ -1,11 +1,11 @@
 package ui.modal.panel;
 
-class ProjectSettings extends ui.modal.Panel {
+class EditProject extends ui.modal.Panel {
 
 	public function new() {
 		super();
 
-		loadTemplate( "projectSettings", "projectSettings" );
+		loadTemplate("editProject", "editProject");
 		linkToButton("button.editProject");
 
 		updateProjectForm();
