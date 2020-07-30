@@ -1432,6 +1432,10 @@ canvas#webgl {
   opacity: 0.6;
 }
 
+#page.home .wrapper .buttons .exit {
+  flex: 0.3 1 0;
+}
+
 #page.editor.compactPanel #mainPanel {
   width: 150px;
   grid-template-rows: min-content 200px min-content auto;

@@ -28,6 +28,10 @@ class Home extends Page {
 			onNew();
 		});
 
+		jPage.find(".exit").click( function(ev) {
+			App.ME.exit(true);
+		});
+
 		updateRecents();
 	}
 
