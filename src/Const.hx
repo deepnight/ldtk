@@ -14,7 +14,7 @@ class Const {
 			"RC "+
 			#end
 
-			APP_VERSION;
+			"v"+APP_VERSION;
 	}
 
 	public static var FPS = 60;
