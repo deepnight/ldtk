@@ -25,6 +25,8 @@ class App extends dn.Process {
 
 		#end
 
+		jCanvas.hide();
+
 		var win = js.Browser.window;
 		win.onblur = onAppBlur;
 		win.onfocus = onAppFocus;
@@ -144,6 +146,8 @@ class App extends dn.Process {
 		ui.Modal.closeAll();
 		ui.Tip.clear();
 		ui.LastChance.end();
+
+		jCanvas.hide();
 
 		var path = JsTools.getCwd() + '/pages/$id.html';
 		var raw = JsTools.readFileString(path);
