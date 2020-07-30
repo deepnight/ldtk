@@ -21,7 +21,7 @@ app.on('ready', () => {
 
 
 
-// *** Handlers *****************************************************
+// *** Async handlers *****************************************************
 
 ipcMain.handle("loadFile", async function(event) {
 	var filePaths = dialog.showOpenDialogSync();
@@ -32,7 +32,13 @@ ipcMain.handle("exit", async function(event) {
 	app.exit();
 });
 
+ipcMain.handle("setFullScreen", function(event,args) {
+	mainWindow.setFullScreen(args);
+});
+
+
+// *** Sync handlers *****************************************************
+
 ipcMain.on("getAppCwd", function(event) {
 	event.returnValue = app.getAppPath();
 });
-
