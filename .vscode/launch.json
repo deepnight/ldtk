@@ -5,15 +5,6 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Debug NWJS",
-			"type": "nwjs",
-			"request": "launch",
-			"webRoot":"${workspaceFolder}/app",
-			"sourceMaps": true,
-			"preLaunchTask": "NWJS debug",
-		},
-
-		{
 			"name": "Debug Electron renderer",
 			"type": "chrome",
 			"request": "launch",

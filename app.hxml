@@ -8,6 +8,8 @@
 -lib hxnodejs
 
 -D editor
+-D electron
+-lib hxelectron
 
 -main Boot
 -dce full

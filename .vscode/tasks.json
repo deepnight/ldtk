@@ -2,44 +2,9 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "NWJS debug",
-			"type": "hxml",
-			"file": "nwjs.debug.hxml",
-			"problemMatcher": [
-				"$haxe-absolute",
-				"$haxe",
-				"$haxe-error",
-				"$haxe-trace"
-			],
-			"presentation": {
-				"reveal": "never",
-				"panel": "shared",
-				"clear": false
-			},
-			"group": "build"
-		},
-		{
-			"label": "NWJS release",
-			"type": "hxml",
-			"file": "nwjs.hxml",
-			"problemMatcher": [
-				"$haxe-absolute",
-				"$haxe",
-				"$haxe-error",
-				"$haxe-trace"
-			],
-			"presentation": {
-				"reveal": "never",
-				"panel": "shared",
-				"clear": false,
-				"revealProblems": "onProblem"
-			},
-			"group": "build"
-		},
-		{
 			"label": "Electron release",
 			"type": "hxml",
-			"file": "electron.hxml",
+			"file": "app.hxml",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",
@@ -57,7 +22,7 @@
 		{
 			"label": "Electron debug",
 			"type": "hxml",
-			"file": "electron.debug.hxml",
+			"file": "app.debug.hxml",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",

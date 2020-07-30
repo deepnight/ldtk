@@ -4,32 +4,6 @@
 	"skipErrorMessage": true,
 	"commands": [
 		{
-			"text": "☕ Debug",
-			"color": "cyan",
-			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|NWJS debug",
-			"alignment": "right",
-			"skipTerminateQuickPick": false,
-			"priority": -11
-		},
-		{
-			"text": "☕ Release",
-			"color": "cyan",
-			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|NWJS release",
-			"alignment": "right",
-			"skipTerminateQuickPick": false,
-			"priority": -12
-		},
-		{
-			"text": "☕ Run",
-			"color": "cyan",
-			"command": "run.nwjs.cmd",
-			"alignment": "right",
-			"skipTerminateQuickPick": false,
-			"priority": -20
-		},
-		{
 			"text": "⚡ Debug",
 			"color": "yellow",
 			"commandType":"palette",
