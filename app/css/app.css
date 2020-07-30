@@ -1810,7 +1810,7 @@ canvas#webgl {
   grid-column: auto;
 }
 
-.window.panel.projectSettings .content {
+.window.panel.editProject .content {
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: min-content min-content auto;
@@ -1818,11 +1818,11 @@ canvas#webgl {
   height: 100%;
 }
 
-.window.panel.projectSettings .content h2 {
+.window.panel.editProject .content h2 {
   margin-bottom: 0;
 }
 
-.window.panel.projectSettings .content .buttons.main {
+.window.panel.editProject .content .buttons.main {
   margin-bottom: 10px;
 }
 
