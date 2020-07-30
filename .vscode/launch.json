@@ -9,7 +9,38 @@
 			"type": "nwjs",
 			"request": "launch",
 			"webRoot":"${workspaceFolder}/app",
-			"preLaunchTask": "NWJS debug"
+			"sourceMaps": true,
+			"preLaunchTask": "NWJS debug",
+		},
+
+		{
+			"name": "Debug Electron renderer",
+			"type": "chrome",
+			"request": "launch",
+			"cwd": "${workspaceFolder}/app",
+			"windows": {
+				"runtimeExecutable": "C:\\Users\\deepnight\\AppData\\Roaming\\npm\\electron.cmd"
+			},
+			"runtimeArgs" : [
+				"${workspaceFolder}/app/electronMain.js",
+				"--remote-debugging-port=9222"
+			],
+			"webRoot": "${workspaceFolder}/app",
+			"preLaunchTask": "Electron debug",
+		},
+
+		{
+			"name": "Debug Electron main",
+			"type": "node",
+			"request": "launch",
+			"cwd": "${workspaceFolder}/app",
+			"windows": {
+				"runtimeExecutable": "C:\\Users\\deepnight\\AppData\\Roaming\\npm\\electron.cmd"
+			},
+			"args" : ["."],
+			"outputCapture": "std",
+			"sourceMaps": true,
+			"preLaunchTask": "Electron debug",
 		}
 	]
 }
