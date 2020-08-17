@@ -59,13 +59,11 @@ class App extends dn.Process {
 	}
 
 	function onAppFocus(ev:js.html.Event) {
-		N.debug("focus");
 		if( curPageProcess!=null && !curPageProcess.destroyed )
 			curPageProcess.onAppFocus();
 	}
 
 	function onAppBlur(ev:js.html.Event) {
-		N.debug("blur");
 		if( curPageProcess!=null && !curPageProcess.destroyed )
 			curPageProcess.onAppBlur();
 	}
