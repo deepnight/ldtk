@@ -61,7 +61,7 @@ class FieldDef {
 	public function toJson() {
 		return {
 			identifier: identifier,
-			_desc: getShortDescription(),
+			_type: getShortDescription(),
 			uid: uid,
 			type: JsonTools.writeEnum(type, false),
 			canBeNull: canBeNull,
