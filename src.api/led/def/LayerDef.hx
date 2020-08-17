@@ -63,7 +63,7 @@ class LayerDef {
 			type: JsonTools.writeEnum(type, false),
 			uid: uid,
 			gridSize: gridSize,
-			displayOpacity: JsonTools.clampFloatPrecision(displayOpacity),
+			displayOpacity: JsonTools.writeFloat(displayOpacity),
 
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
 

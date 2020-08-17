@@ -123,9 +123,9 @@ class JsonTools {
 		return v*1.0;
 	}
 
-	public static function clampFloatPrecision(v:Float, precision=3) {
-		var p = Math.pow(10, precision);
-		return dn.M.round(v*p)/p;
+	public static function writeFloat(v:Float, maxPrecision=3) : String {
+		var p = Math.pow(10, maxPrecision);
+		return dn.M.round(v*p)/p + "f"; // the "f" suffix will be dropped by the JSON stringifier
 	}
 
 	public static function readBool(v:Dynamic, ?defaultIfMissing:Bool) : Bool {

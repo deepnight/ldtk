@@ -81,8 +81,8 @@ class EntityDef {
 
 			maxPerLevel: maxPerLevel,
 			discardExcess: discardExcess,
-			pivotX: JsonTools.clampFloatPrecision( pivotX ),
-			pivotY: JsonTools.clampFloatPrecision( pivotY ),
+			pivotX: JsonTools.writeFloat( pivotX ),
+			pivotY: JsonTools.writeFloat( pivotY ),
 
 			fieldDefs: fieldDefs.map( function(fd) return fd.toJson() ),
 		}

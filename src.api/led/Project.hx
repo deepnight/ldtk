@@ -68,8 +68,8 @@ class Project {
 		return {
 			name: name,
 			dataVersion: dataVersion,
-			defaultPivotX: JsonTools.clampFloatPrecision( defaultPivotX ),
-			defaultPivotY: JsonTools.clampFloatPrecision( defaultPivotY ),
+			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
+			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
 			bgColor: JsonTools.writeColor(bgColor),
 			nextUid: nextUid,

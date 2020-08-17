@@ -67,8 +67,8 @@ class FieldDef {
 			canBeNull: canBeNull,
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
-			min: min==null ? null : JsonTools.clampFloatPrecision(min),
-			max: max==null ? null : JsonTools.clampFloatPrecision(max),
+			min: min==null ? null : JsonTools.writeFloat(min),
+			max: max==null ? null : JsonTools.writeFloat(max),
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
 		}
 	}
