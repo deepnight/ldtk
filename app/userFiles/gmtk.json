@@ -2,7 +2,7 @@
 	"name" : "God",
 	"dataVersion" : 1,
 	"defaultPivotX" : 0.5,
-	"defaultPivotY" : 1,
+	"defaultPivotY" : 1.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
 	"nextUid" : 48,
@@ -39,7 +39,7 @@
 				"type" : "Tiles",
 				"uid" : 20,
 				"gridSize" : 16,
-				"displayOpacity" : 1,
+				"displayOpacity" : 1.0,
 				"intGridValues" : [
 					{ "identifier" : null, "color" : "#000000" }
 				],
@@ -65,7 +65,7 @@
 				"fieldDefs" : [
 					{
 						"identifier" : "Type",
-						"_desc" : "String",
+						"_type" : "String",
 						"uid" : 10,
 						"type" : "F_String",
 						"canBeNull" : false,
@@ -77,7 +77,7 @@
 					},
 					{
 						"identifier" : "type",
-						"_desc" : "ItemType",
+						"_type" : "ItemType",
 						"uid" : 47,
 						"type" : { "id" : "F_Enum", "params" : [ 45 ] },
 						"canBeNull" : false,
@@ -101,7 +101,7 @@
 				"maxPerLevel" : 3,
 				"discardExcess" : false,
 				"pivotX" : 0.5,
-				"pivotY" : 1,
+				"pivotY" : 1.0,
 				"fieldDefs" : []
 			},
 			{
@@ -116,11 +116,11 @@
 				"maxPerLevel" : 0,
 				"discardExcess" : true,
 				"pivotX" : 0.5,
-				"pivotY" : 1,
+				"pivotY" : 1.0,
 				"fieldDefs" : [
 					{
 						"identifier" : "Type",
-						"_desc" : "String",
+						"_type" : "String",
 						"uid" : 14,
 						"type" : "F_String",
 						"canBeNull" : false,
@@ -132,7 +132,7 @@
 					},
 					{
 						"identifier" : "type",
-						"_desc" : "MobType",
+						"_type" : "MobType",
 						"uid" : 46,
 						"type" : { "id" : "F_Enum", "params" : [ 44 ] },
 						"canBeNull" : false,
@@ -156,7 +156,7 @@
 				"maxPerLevel" : 0,
 				"discardExcess" : true,
 				"pivotX" : 0.5,
-				"pivotY" : 1,
+				"pivotY" : 1.0,
 				"fieldDefs" : []
 			},
 			{
@@ -171,7 +171,7 @@
 				"maxPerLevel" : 0,
 				"discardExcess" : true,
 				"pivotX" : 0.5,
-				"pivotY" : 1,
+				"pivotY" : 1.0,
 				"fieldDefs" : []
 			},
 			{
@@ -190,37 +190,37 @@
 				"fieldDefs" : [
 					{
 						"identifier" : "MaxChildren",
-						"_desc" : "Int",
+						"_type" : "Int",
 						"uid" : 26,
 						"type" : "F_Int",
 						"canBeNull" : false,
 						"editorDisplayMode" : "NameAndValue",
 						"editorDisplayPos" : "Above",
-						"min" : 1,
+						"min" : 1.0,
 						"max" : null,
 						"defaultOverride" : { "id" : "V_Int", "params" : [ 3 ] }
 					},
 					{
 						"identifier" : "PerSpawn",
-						"_desc" : "Int",
+						"_type" : "Int",
 						"uid" : 27,
 						"type" : "F_Int",
 						"canBeNull" : false,
 						"editorDisplayMode" : "NameAndValue",
 						"editorDisplayPos" : "Above",
-						"min" : 1,
+						"min" : 1.0,
 						"max" : null,
 						"defaultOverride" : { "id" : "V_Int", "params" : [ 1 ] }
 					},
 					{
 						"identifier" : "Delay",
-						"_desc" : "Float",
+						"_type" : "Float",
 						"uid" : 28,
 						"type" : "F_Float",
 						"canBeNull" : false,
 						"editorDisplayMode" : "NameAndValue",
 						"editorDisplayPos" : "Above",
-						"min" : 1,
+						"min" : 1.0,
 						"max" : null,
 						"defaultOverride" : { "id" : "V_Float", "params" : [ 5 ] }
 					}
@@ -238,17 +238,17 @@
 				"maxPerLevel" : 1,
 				"discardExcess" : false,
 				"pivotX" : 0.5,
-				"pivotY" : 1,
+				"pivotY" : 1.0,
 				"fieldDefs" : [
 					{
 						"identifier" : "Time",
-						"_desc" : "Int",
+						"_type" : "Int",
 						"uid" : 25,
 						"type" : "F_Int",
 						"canBeNull" : false,
 						"editorDisplayMode" : "NameAndValue",
 						"editorDisplayPos" : "Above",
-						"min" : 1,
+						"min" : 1.0,
 						"max" : null,
 						"defaultOverride" : { "id" : "V_Int", "params" : [ 30 ] }
 					}
@@ -270,7 +270,7 @@
 				"fieldDefs" : [
 					{
 						"identifier" : "Text",
-						"_desc" : "String",
+						"_type" : "String",
 						"uid" : 32,
 						"type" : "F_String",
 						"canBeNull" : false,
@@ -282,7 +282,7 @@
 					},
 					{
 						"identifier" : "Color",
-						"_desc" : "Color",
+						"_type" : "Color",
 						"uid" : 33,
 						"type" : "F_Color",
 						"canBeNull" : false,
@@ -306,7 +306,7 @@
 				"maxPerLevel" : 0,
 				"discardExcess" : true,
 				"pivotX" : 0.5,
-				"pivotY" : 1,
+				"pivotY" : 1.0,
 				"fieldDefs" : []
 			}
 		],
@@ -893,7 +893,7 @@
 								},
 								{
 									"_identifier" : "Delay",
-									"_value" : 3,
+									"_value" : 3.0,
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 3 ] }
 								}
@@ -4250,7 +4250,7 @@
 								},
 								{
 									"_identifier" : "Delay",
-									"_value" : 3,
+									"_value" : 3.0,
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 3 ] }
 								}
@@ -4278,7 +4278,7 @@
 								},
 								{
 									"_identifier" : "Delay",
-									"_value" : 3,
+									"_value" : 3.0,
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 3 ] }
 								}
@@ -4306,7 +4306,7 @@
 								},
 								{
 									"_identifier" : "Delay",
-									"_value" : 10,
+									"_value" : 10.0,
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 10 ] }
 								}
@@ -4334,7 +4334,7 @@
 								},
 								{
 									"_identifier" : "Delay",
-									"_value" : 10,
+									"_value" : 10.0,
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 10 ] }
 								}
@@ -4362,7 +4362,7 @@
 								},
 								{
 									"_identifier" : "Delay",
-									"_value" : 10,
+									"_value" : 10.0,
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 10 ] }
 								}
@@ -5262,7 +5262,7 @@
 									"defUid" : 27,
 									"realEditorValue" : null
 								},
-								{ "_identifier" : "Delay", "_value" : 5, "defUid" : 28, "realEditorValue" : null }
+								{ "_identifier" : "Delay", "_value" : 5.0, "defUid" : 28, "realEditorValue" : null }
 							]
 						},
 						{
@@ -5285,7 +5285,7 @@
 									"defUid" : 27,
 									"realEditorValue" : null
 								},
-								{ "_identifier" : "Delay", "_value" : 5, "defUid" : 28, "realEditorValue" : null }
+								{ "_identifier" : "Delay", "_value" : 5.0, "defUid" : 28, "realEditorValue" : null }
 							]
 						},
 						{
@@ -5319,7 +5319,7 @@
 									"defUid" : 27,
 									"realEditorValue" : null
 								},
-								{ "_identifier" : "Delay", "_value" : 5, "defUid" : 28, "realEditorValue" : null }
+								{ "_identifier" : "Delay", "_value" : 5.0, "defUid" : 28, "realEditorValue" : null }
 							]
 						},
 						{
@@ -5539,7 +5539,7 @@
 								},
 								{
 									"_identifier" : "Delay",
-									"_value" : 3,
+									"_value" : 3.0,
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 3 ] }
 								}
@@ -5567,7 +5567,7 @@
 								},
 								{
 									"_identifier" : "Delay",
-									"_value" : 3,
+									"_value" : 3.0,
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 3 ] }
 								}
@@ -5595,7 +5595,7 @@
 								},
 								{
 									"_identifier" : "Delay",
-									"_value" : 4,
+									"_value" : 4.0,
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 4 ] }
 								}
@@ -5680,7 +5680,7 @@
 								},
 								{
 									"_identifier" : "Delay",
-									"_value" : 3,
+									"_value" : 3.0,
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 3 ] }
 								}
@@ -5722,7 +5722,7 @@
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
-								{ "_identifier" : "Delay", "_value" : 5, "defUid" : 28, "realEditorValue" : null }
+								{ "_identifier" : "Delay", "_value" : 5.0, "defUid" : 28, "realEditorValue" : null }
 							]
 						}
 					]
@@ -6050,7 +6050,7 @@
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
-								{ "_identifier" : "Delay", "_value" : 5, "defUid" : 28, "realEditorValue" : null }
+								{ "_identifier" : "Delay", "_value" : 5.0, "defUid" : 28, "realEditorValue" : null }
 							]
 						},
 						{
@@ -6073,7 +6073,7 @@
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
-								{ "_identifier" : "Delay", "_value" : 5, "defUid" : 28, "realEditorValue" : null }
+								{ "_identifier" : "Delay", "_value" : 5.0, "defUid" : 28, "realEditorValue" : null }
 							]
 						},
 						{
@@ -6098,7 +6098,7 @@
 								},
 								{
 									"_identifier" : "Delay",
-									"_value" : 2,
+									"_value" : 2.0,
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 2 ] }
 								}
@@ -6126,7 +6126,7 @@
 								},
 								{
 									"_identifier" : "Delay",
-									"_value" : 2,
+									"_value" : 2.0,
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 2 ] }
 								}

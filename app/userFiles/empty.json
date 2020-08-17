@@ -1,8 +1,8 @@
 {
 	"name" : "empty",
 	"dataVersion" : 1,
-	"defaultPivotX" : 0,
-	"defaultPivotY" : 0,
+	"defaultPivotX" : 0.0,
+	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
 	"nextUid" : 1,
