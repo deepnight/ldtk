@@ -30,9 +30,15 @@ app.on('ready', () => {
 
 // *** Async handlers *****************************************************
 
-ipcMain.handle("loadFile", async function(event) {
-	var filePaths = dialog.showOpenDialogSync();
+ipcMain.handle("loadFile", async function(event, options) {
+	console.log(options);
+	var filePaths = dialog.showOpenDialogSync(null, options);
 	return filePaths===undefined ? null : filePaths[0];
+});
+
+ipcMain.handle("saveAs", async function(event, options) {
+	var filePaths = dialog.showSaveDialogSync(null, options);
+	return filePaths===undefined ? null : filePaths;
 });
 
 ipcMain.handle("exit", async function(event) {

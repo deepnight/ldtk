@@ -207,7 +207,13 @@ class JsTools {
 
 		#elseif electron
 
-			electron.renderer.IpcRenderer.invoke("loadFile").then( function(res) {
+			var options = {
+				filters: fileTypes==null
+					? [{ name:"Any file type", extensions:["*"] }]
+					: [{ name:"Supported file types", extensions:fileTypes.map( function(ext) return ext.substr(1) ) }],
+				defaultPath: rootDir,
+			}
+			electron.renderer.IpcRenderer.invoke("loadFile", options).then( function(res) {
 				if( res!=null )
 					onLoad( Std.string(res) );
 			});
@@ -240,7 +246,16 @@ class JsTools {
 
 		#elseif electron
 
-			ui.Notification.notImplemented(); // TODO electron save dialog
+			var options = {
+				filters: fileTypes==null
+					? [{ name:"Any file type", extensions:["*"] }]
+					: [{ name:"Supported file types", extensions:fileTypes.map( function(ext) return ext.substr(1) ) }],
+				defaultPath: rootDir,
+			}
+			electron.renderer.IpcRenderer.invoke("saveAs", options).then( function(res) {
+				if( res!=null )
+					onFileSelect( Std.string(res) );
+			});
 
 		#else
 

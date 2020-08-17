@@ -94,7 +94,7 @@ class Home extends Page {
 	}
 
 	public function onNew() {
-		JsTools.saveAsDialog(["json"], App.ME.getDefaultDir(), function(filePath) {
+		JsTools.saveAsDialog([".json"], App.ME.getDefaultDir(), function(filePath) {
 			var fp = dn.FilePath.fromFile(filePath);
 			fp.extension = "json";
 
