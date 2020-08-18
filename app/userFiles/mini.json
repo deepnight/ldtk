@@ -28,7 +28,9 @@
 				"gridSize" : 16,
 				"displayOpacity" : 1.0,
 				"intGridValues" : [
-					{ "identifier" : null, "color" : "#000000" }
+					{ "identifier" : "a", "color" : "#000000" },
+					{ "identifier" : "b", "color" : "#FF0000" },
+					{ "identifier" : "c", "color" : "#00FF1E" }
 				],
 				"tilesetDefUid" : null,
 				"tilePivotX" : 0,
@@ -407,6 +409,9 @@
 					"pxOffsetX" : 0,
 					"pxOffsetY" : 0,
 					"intGrid" : [
+						{ "coordId" : 0, "v" : 2 },
+						{ "coordId" : 1, "v" : 1 },
+						{ "coordId" : 2, "v" : 0 },
 						{ "coordId" : 98, "v" : 0 },
 						{ "coordId" : 99, "v" : 0 },
 						{ "coordId" : 108, "v" : 0 },
