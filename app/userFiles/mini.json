@@ -65,7 +65,7 @@
 				"fieldDefs" : [
 					{
 						"identifier" : "mobType",
-						"_type" : "MobType",
+						"__type" : "MobType",
 						"uid" : 3,
 						"type" : { "id" : "F_Enum", "params" : [ 1 ] },
 						"canBeNull" : false,
@@ -77,7 +77,7 @@
 					},
 					{
 						"identifier" : "loot",
-						"_type" : "ItemType",
+						"__type" : "ItemType",
 						"uid" : 11,
 						"type" : { "id" : "F_Enum", "params" : [ 10 ] },
 						"canBeNull" : true,
@@ -89,7 +89,7 @@
 					},
 					{
 						"identifier" : "lootCount",
-						"_type" : "Int",
+						"__type" : "Int",
 						"uid" : 12,
 						"type" : "F_Int",
 						"canBeNull" : false,
@@ -101,7 +101,7 @@
 					},
 					{
 						"identifier" : "elite",
-						"_type" : "Bool",
+						"__type" : "Bool",
 						"uid" : 5,
 						"type" : "F_Bool",
 						"canBeNull" : false,
@@ -113,7 +113,7 @@
 					},
 					{
 						"identifier" : "lifeOverride",
-						"_type" : "Int",
+						"__type" : "Int",
 						"uid" : 6,
 						"type" : "F_Int",
 						"canBeNull" : true,
@@ -125,7 +125,7 @@
 					},
 					{
 						"identifier" : "scale",
-						"_type" : "Float",
+						"__type" : "Float",
 						"uid" : 7,
 						"type" : "F_Float",
 						"canBeNull" : false,
@@ -194,7 +194,8 @@
 			"pxHei" : 320,
 			"layerInstances" : [
 				{
-					"_identifier" : "Entities",
+					"__identifier" : "Entities",
+					"__type" : "Entities",
 					"levelId" : 0,
 					"layerDefUid" : 4,
 					"pxOffsetX" : 0,
@@ -203,190 +204,190 @@
 					"gridTiles" : [],
 					"entityInstances" : [
 						{
-							"_identifier" : "Mob",
-							"_cx" : 3,
-							"_cy" : 5,
+							"__identifier" : "Mob",
+							"__cx" : 3,
+							"__cy" : 5,
 							"defUid" : 2,
 							"x" : 56,
 							"y" : 96,
 							"fieldInstances" : [
 								{
-									"_identifier" : "mobType",
-									"_value" : "Trash",
+									"__identifier" : "mobType",
+									"__value" : "Trash",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Trash" ] }
 								},
-								{ "_identifier" : "elite", "_value" : false, "defUid" : 5, "realEditorValue" : null },
+								{ "__identifier" : "elite", "__value" : false, "defUid" : 5, "realEditorValue" : null },
 								{
-									"_identifier" : "lifeOverride",
-									"_value" : null,
+									"__identifier" : "lifeOverride",
+									"__value" : null,
 									"defUid" : 6,
 									"realEditorValue" : null
 								},
-								{ "_identifier" : "scale", "_value" : 1.0, "defUid" : 7, "realEditorValue" : null },
-								{ "_identifier" : "loot", "_value" : null, "defUid" : 11, "realEditorValue" : null },
+								{ "__identifier" : "scale", "__value" : 1.0, "defUid" : 7, "realEditorValue" : null },
+								{ "__identifier" : "loot", "__value" : null, "defUid" : 11, "realEditorValue" : null },
 								{
-									"_identifier" : "lootCount",
-									"_value" : 1,
+									"__identifier" : "lootCount",
+									"__value" : 1,
 									"defUid" : 12,
 									"realEditorValue" : null
 								}
 							]
 						},
 						{
-							"_identifier" : "Mob",
-							"_cx" : 12,
-							"_cy" : 5,
+							"__identifier" : "Mob",
+							"__cx" : 12,
+							"__cy" : 5,
 							"defUid" : 2,
 							"x" : 200,
 							"y" : 96,
 							"fieldInstances" : [
 								{
-									"_identifier" : "mobType",
-									"_value" : "Ninja",
+									"__identifier" : "mobType",
+									"__value" : "Ninja",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Ninja" ] }
 								},
-								{ "_identifier" : "elite", "_value" : false, "defUid" : 5, "realEditorValue" : null },
+								{ "__identifier" : "elite", "__value" : false, "defUid" : 5, "realEditorValue" : null },
 								{
-									"_identifier" : "lifeOverride",
-									"_value" : null,
+									"__identifier" : "lifeOverride",
+									"__value" : null,
 									"defUid" : 6,
 									"realEditorValue" : null
 								},
-								{ "_identifier" : "scale", "_value" : 1.0, "defUid" : 7, "realEditorValue" : null },
+								{ "__identifier" : "scale", "__value" : 1.0, "defUid" : 7, "realEditorValue" : null },
 								{
-									"_identifier" : "loot",
-									"_value" : "Ammo",
+									"__identifier" : "loot",
+									"__value" : "Ammo",
 									"defUid" : 11,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Ammo" ] }
 								},
 								{
-									"_identifier" : "lootCount",
-									"_value" : 10,
+									"__identifier" : "lootCount",
+									"__value" : 10,
 									"defUid" : 12,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 10 ] }
 								}
 							]
 						},
 						{
-							"_identifier" : "Mob",
-							"_cx" : 2,
-							"_cy" : 11,
+							"__identifier" : "Mob",
+							"__cx" : 2,
+							"__cy" : 11,
 							"defUid" : 2,
 							"x" : 40,
 							"y" : 192,
 							"fieldInstances" : [
 								{
-									"_identifier" : "mobType",
-									"_value" : "Trash",
+									"__identifier" : "mobType",
+									"__value" : "Trash",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Trash" ] }
 								},
-								{ "_identifier" : "elite", "_value" : false, "defUid" : 5, "realEditorValue" : null },
+								{ "__identifier" : "elite", "__value" : false, "defUid" : 5, "realEditorValue" : null },
 								{
-									"_identifier" : "lifeOverride",
-									"_value" : null,
+									"__identifier" : "lifeOverride",
+									"__value" : null,
 									"defUid" : 6,
 									"realEditorValue" : null
 								},
-								{ "_identifier" : "scale", "_value" : 1.0, "defUid" : 7, "realEditorValue" : null },
-								{ "_identifier" : "loot", "_value" : null, "defUid" : 11, "realEditorValue" : null },
+								{ "__identifier" : "scale", "__value" : 1.0, "defUid" : 7, "realEditorValue" : null },
+								{ "__identifier" : "loot", "__value" : null, "defUid" : 11, "realEditorValue" : null },
 								{
-									"_identifier" : "lootCount",
-									"_value" : 1,
+									"__identifier" : "lootCount",
+									"__value" : 1,
 									"defUid" : 12,
 									"realEditorValue" : null
 								}
 							]
 						},
 						{
-							"_identifier" : "Mob",
-							"_cx" : 8,
-							"_cy" : 11,
+							"__identifier" : "Mob",
+							"__cx" : 8,
+							"__cy" : 11,
 							"defUid" : 2,
 							"x" : 136,
 							"y" : 192,
 							"fieldInstances" : [
 								{
-									"_identifier" : "mobType",
-									"_value" : "Ninja",
+									"__identifier" : "mobType",
+									"__value" : "Ninja",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Ninja" ] }
 								},
 								{
-									"_identifier" : "elite",
-									"_value" : true,
+									"__identifier" : "elite",
+									"__value" : true,
 									"defUid" : 5,
 									"realEditorValue" : { "id" : "V_Bool", "params" : [ true ] }
 								},
 								{
-									"_identifier" : "lifeOverride",
-									"_value" : 10,
+									"__identifier" : "lifeOverride",
+									"__value" : 10,
 									"defUid" : 6,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 10 ] }
 								},
 								{
-									"_identifier" : "scale",
-									"_value" : 2.0,
+									"__identifier" : "scale",
+									"__value" : 2.0,
 									"defUid" : 7,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 2 ] }
 								},
 								{
-									"_identifier" : "loot",
-									"_value" : "Gold",
+									"__identifier" : "loot",
+									"__value" : "Gold",
 									"defUid" : 11,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gold" ] }
 								},
 								{
-									"_identifier" : "lootCount",
-									"_value" : 150,
+									"__identifier" : "lootCount",
+									"__value" : 150,
 									"defUid" : 12,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 150 ] }
 								}
 							]
 						},
 						{
-							"_identifier" : "Mob",
-							"_cx" : 14,
-							"_cy" : 11,
+							"__identifier" : "Mob",
+							"__cx" : 14,
+							"__cy" : 11,
 							"defUid" : 2,
 							"x" : 232,
 							"y" : 192,
 							"fieldInstances" : [
 								{
-									"_identifier" : "mobType",
-									"_value" : "Shooter",
+									"__identifier" : "mobType",
+									"__value" : "Shooter",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Shooter" ] }
 								},
 								{
-									"_identifier" : "elite",
-									"_value" : true,
+									"__identifier" : "elite",
+									"__value" : true,
 									"defUid" : 5,
 									"realEditorValue" : { "id" : "V_Bool", "params" : [ true ] }
 								},
 								{
-									"_identifier" : "lifeOverride",
-									"_value" : null,
+									"__identifier" : "lifeOverride",
+									"__value" : null,
 									"defUid" : 6,
 									"realEditorValue" : null
 								},
 								{
-									"_identifier" : "scale",
-									"_value" : 2.0,
+									"__identifier" : "scale",
+									"__value" : 2.0,
 									"defUid" : 7,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 2 ] }
 								},
 								{
-									"_identifier" : "loot",
-									"_value" : "Food",
+									"__identifier" : "loot",
+									"__value" : "Food",
 									"defUid" : 11,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Food" ] }
 								},
 								{
-									"_identifier" : "lootCount",
-									"_value" : 1,
+									"__identifier" : "lootCount",
+									"__value" : 1,
 									"defUid" : 12,
 									"realEditorValue" : null
 								}
@@ -395,7 +396,8 @@
 					]
 				},
 				{
-					"_identifier" : "IntGrid",
+					"__identifier" : "IntGrid",
+					"__type" : "IntGrid",
 					"levelId" : 0,
 					"layerDefUid" : 13,
 					"pxOffsetX" : 0,
@@ -426,7 +428,8 @@
 					"entityInstances" : []
 				},
 				{
-					"_identifier" : "Tiles",
+					"__identifier" : "Tiles",
+					"__type" : "Tiles",
 					"levelId" : 0,
 					"layerDefUid" : 15,
 					"pxOffsetX" : 0,
