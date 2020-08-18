@@ -35,7 +35,8 @@ class LayerInstance {
 
 	public function toJson() {
 		return {
-			_identifier: def.identifier, // only exported for readability purpose
+			__identifier: def.identifier, // only exported for readability purpose
+			__type: Std.string(def.type), // only exported for readability purpose
 
 			levelId: levelId,
 			layerDefUid: layerDefUid,

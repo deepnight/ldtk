@@ -30,9 +30,9 @@ class EntityInstance {
 			fieldsJson.push( fi.toJson() );
 
 		return {
-			_identifier: def.identifier, // only exported for readability purpose
-			_cx: getCx(li.def), // only exported for readability purpose
-			_cy: getCy(li.def), // only exported for readability purpose
+			__identifier: def.identifier, // only exported for readability purpose
+			__cx: getCx(li.def), // only exported for readability purpose
+			__cy: getCy(li.def), // only exported for readability purpose
 
 			defUid: defUid,
 			x: x,

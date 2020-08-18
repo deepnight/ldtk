@@ -32,8 +32,8 @@ class FieldInstance {
 
 	public function toJson() {
 		return {
-			_identifier: def.identifier, // only exported for readability purpose
-			_value: untyped switch def.type { // only exported for readability purpose
+			__identifier: def.identifier, // only exported for readability purpose
+			__value: untyped switch def.type { // only exported for readability purpose
 				case F_Int: getInt();
 				case F_Float: JsonTools.writeFloat( getFloat() );
 				case F_String: getString();
