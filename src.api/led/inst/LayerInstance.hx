@@ -35,8 +35,11 @@ class LayerInstance {
 
 	public function toJson() {
 		return {
-			__identifier: def.identifier, // only exported for readability purpose
-			__type: Std.string(def.type), // only exported for readability purpose
+			// Fields preceded by "__" are only exported to facilitate parsing
+			__identifier: def.identifier,
+			__type: Std.string(def.type),
+			__cWid: cWid,
+			__cHei: cHei,
 
 			levelId: levelId,
 			layerDefUid: layerDefUid,
