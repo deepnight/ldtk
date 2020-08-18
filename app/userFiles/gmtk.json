@@ -357,6 +357,8 @@
 				{
 					"__identifier" : "Entities",
 					"__type" : "Entities",
+					"__cWid" : 22,
+					"__cHei" : 16,
 					"levelId" : 41,
 					"layerDefUid" : 7,
 					"pxOffsetX" : 0,
@@ -490,6 +492,8 @@
 				{
 					"__identifier" : "Collisions",
 					"__type" : "IntGrid",
+					"__cWid" : 22,
+					"__cHei" : 16,
 					"levelId" : 41,
 					"layerDefUid" : 1,
 					"pxOffsetX" : 0,
@@ -782,6 +786,8 @@
 				{
 					"__identifier" : "Details",
 					"__type" : "Tiles",
+					"__cWid" : 22,
+					"__cHei" : 16,
 					"levelId" : 41,
 					"layerDefUid" : 20,
 					"pxOffsetX" : 0,
@@ -809,6 +815,8 @@
 				{
 					"__identifier" : "Entities",
 					"__type" : "Entities",
+					"__cWid" : 21,
+					"__cHei" : 16,
 					"levelId" : 29,
 					"layerDefUid" : 7,
 					"pxOffsetX" : 0,
@@ -952,6 +960,8 @@
 				{
 					"__identifier" : "Collisions",
 					"__type" : "IntGrid",
+					"__cWid" : 21,
+					"__cHei" : 16,
 					"levelId" : 29,
 					"layerDefUid" : 1,
 					"pxOffsetX" : 0,
@@ -1127,6 +1137,8 @@
 				{
 					"__identifier" : "Details",
 					"__type" : "Tiles",
+					"__cWid" : 21,
+					"__cHei" : 16,
 					"levelId" : 29,
 					"layerDefUid" : 20,
 					"pxOffsetX" : 0,
@@ -1157,6 +1169,8 @@
 				{
 					"__identifier" : "Entities",
 					"__type" : "Entities",
+					"__cWid" : 35,
+					"__cHei" : 32,
 					"levelId" : 30,
 					"layerDefUid" : 7,
 					"pxOffsetX" : 0,
@@ -1430,6 +1444,8 @@
 				{
 					"__identifier" : "Collisions",
 					"__type" : "IntGrid",
+					"__cWid" : 35,
+					"__cHei" : 32,
 					"levelId" : 30,
 					"layerDefUid" : 1,
 					"pxOffsetX" : 0,
@@ -2378,6 +2394,8 @@
 				{
 					"__identifier" : "Details",
 					"__type" : "Tiles",
+					"__cWid" : 35,
+					"__cHei" : 32,
 					"levelId" : 30,
 					"layerDefUid" : 20,
 					"pxOffsetX" : 0,
@@ -2403,6 +2421,8 @@
 				{
 					"__identifier" : "Entities",
 					"__type" : "Entities",
+					"__cWid" : 35,
+					"__cHei" : 13,
 					"levelId" : 35,
 					"layerDefUid" : 7,
 					"pxOffsetX" : 0,
@@ -2521,6 +2541,8 @@
 				{
 					"__identifier" : "Collisions",
 					"__type" : "IntGrid",
+					"__cWid" : 35,
+					"__cHei" : 13,
 					"levelId" : 35,
 					"layerDefUid" : 1,
 					"pxOffsetX" : 0,
@@ -2848,6 +2870,8 @@
 				{
 					"__identifier" : "Details",
 					"__type" : "Tiles",
+					"__cWid" : 35,
+					"__cHei" : 13,
 					"levelId" : 35,
 					"layerDefUid" : 20,
 					"pxOffsetX" : 0,
@@ -2873,6 +2897,8 @@
 				{
 					"__identifier" : "Entities",
 					"__type" : "Entities",
+					"__cWid" : 25,
+					"__cHei" : 18,
 					"levelId" : 42,
 					"layerDefUid" : 7,
 					"pxOffsetX" : 0,
@@ -3077,6 +3103,8 @@
 				{
 					"__identifier" : "Collisions",
 					"__type" : "IntGrid",
+					"__cWid" : 25,
+					"__cHei" : 18,
 					"levelId" : 42,
 					"layerDefUid" : 1,
 					"pxOffsetX" : 0,
@@ -3287,6 +3315,8 @@
 				{
 					"__identifier" : "Details",
 					"__type" : "Tiles",
+					"__cWid" : 25,
+					"__cHei" : 18,
 					"levelId" : 42,
 					"layerDefUid" : 20,
 					"pxOffsetX" : 0,
@@ -3314,6 +3344,8 @@
 				{
 					"__identifier" : "Entities",
 					"__type" : "Entities",
+					"__cWid" : 17,
+					"__cHei" : 18,
 					"levelId" : 37,
 					"layerDefUid" : 7,
 					"pxOffsetX" : 0,
@@ -3456,6 +3488,8 @@
 				{
 					"__identifier" : "Collisions",
 					"__type" : "IntGrid",
+					"__cWid" : 17,
+					"__cHei" : 18,
 					"levelId" : 37,
 					"layerDefUid" : 1,
 					"pxOffsetX" : 0,
@@ -3573,6 +3607,8 @@
 				{
 					"__identifier" : "Details",
 					"__type" : "Tiles",
+					"__cWid" : 17,
+					"__cHei" : 18,
 					"levelId" : 37,
 					"layerDefUid" : 20,
 					"pxOffsetX" : 0,
@@ -3600,6 +3636,8 @@
 				{
 					"__identifier" : "Entities",
 					"__type" : "Entities",
+					"__cWid" : 24,
+					"__cHei" : 20,
 					"levelId" : 38,
 					"layerDefUid" : 7,
 					"pxOffsetX" : 0,
@@ -3884,6 +3922,8 @@
 				{
 					"__identifier" : "Collisions",
 					"__type" : "IntGrid",
+					"__cWid" : 24,
+					"__cHei" : 20,
 					"levelId" : 38,
 					"layerDefUid" : 1,
 					"pxOffsetX" : 0,
@@ -4041,6 +4081,8 @@
 				{
 					"__identifier" : "Details",
 					"__type" : "Tiles",
+					"__cWid" : 24,
+					"__cHei" : 20,
 					"levelId" : 38,
 					"layerDefUid" : 20,
 					"pxOffsetX" : 0,
@@ -4068,6 +4110,8 @@
 				{
 					"__identifier" : "Entities",
 					"__type" : "Entities",
+					"__cWid" : 34,
+					"__cHei" : 26,
 					"levelId" : 40,
 					"layerDefUid" : 7,
 					"pxOffsetX" : 0,
@@ -4452,6 +4496,8 @@
 				{
 					"__identifier" : "Collisions",
 					"__type" : "IntGrid",
+					"__cWid" : 34,
+					"__cHei" : 26,
 					"levelId" : 40,
 					"layerDefUid" : 1,
 					"pxOffsetX" : 0,
@@ -4922,6 +4968,8 @@
 				{
 					"__identifier" : "Details",
 					"__type" : "Tiles",
+					"__cWid" : 34,
+					"__cHei" : 26,
 					"levelId" : 40,
 					"layerDefUid" : 20,
 					"pxOffsetX" : 0,
@@ -4947,6 +4995,8 @@
 				{
 					"__identifier" : "Entities",
 					"__type" : "Entities",
+					"__cWid" : 26,
+					"__cHei" : 17,
 					"levelId" : 0,
 					"layerDefUid" : 7,
 					"pxOffsetX" : 0,
@@ -5364,6 +5414,8 @@
 				{
 					"__identifier" : "Collisions",
 					"__type" : "IntGrid",
+					"__cWid" : 26,
+					"__cHei" : 17,
 					"levelId" : 0,
 					"layerDefUid" : 1,
 					"pxOffsetX" : 0,
@@ -5486,6 +5538,8 @@
 				{
 					"__identifier" : "Details",
 					"__type" : "Tiles",
+					"__cWid" : 26,
+					"__cHei" : 17,
 					"levelId" : 0,
 					"layerDefUid" : 20,
 					"pxOffsetX" : 0,
@@ -5511,6 +5565,8 @@
 				{
 					"__identifier" : "Entities",
 					"__type" : "Entities",
+					"__cWid" : 23,
+					"__cHei" : 18,
 					"levelId" : 39,
 					"layerDefUid" : 7,
 					"pxOffsetX" : 0,
@@ -5758,6 +5814,8 @@
 				{
 					"__identifier" : "Collisions",
 					"__type" : "IntGrid",
+					"__cWid" : 23,
+					"__cHei" : 18,
 					"levelId" : 39,
 					"layerDefUid" : 1,
 					"pxOffsetX" : 0,
@@ -5903,6 +5961,8 @@
 				{
 					"__identifier" : "Details",
 					"__type" : "Tiles",
+					"__cWid" : 23,
+					"__cHei" : 18,
 					"levelId" : 39,
 					"layerDefUid" : 20,
 					"pxOffsetX" : 0,
@@ -5930,6 +5990,8 @@
 				{
 					"__identifier" : "Entities",
 					"__type" : "Entities",
+					"__cWid" : 19,
+					"__cHei" : 21,
 					"levelId" : 22,
 					"layerDefUid" : 7,
 					"pxOffsetX" : 0,
@@ -6249,6 +6311,8 @@
 				{
 					"__identifier" : "Collisions",
 					"__type" : "IntGrid",
+					"__cWid" : 19,
+					"__cHei" : 21,
 					"levelId" : 22,
 					"layerDefUid" : 1,
 					"pxOffsetX" : 0,
@@ -6388,6 +6452,8 @@
 				{
 					"__identifier" : "Details",
 					"__type" : "Tiles",
+					"__cWid" : 19,
+					"__cHei" : 21,
 					"levelId" : 22,
 					"layerDefUid" : 20,
 					"pxOffsetX" : 0,

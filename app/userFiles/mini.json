@@ -196,6 +196,8 @@
 				{
 					"__identifier" : "Entities",
 					"__type" : "Entities",
+					"__cWid" : 16,
+					"__cHei" : 20,
 					"levelId" : 0,
 					"layerDefUid" : 4,
 					"pxOffsetX" : 0,
@@ -398,6 +400,8 @@
 				{
 					"__identifier" : "IntGrid",
 					"__type" : "IntGrid",
+					"__cWid" : 16,
+					"__cHei" : 20,
 					"levelId" : 0,
 					"layerDefUid" : 13,
 					"pxOffsetX" : 0,
@@ -430,6 +434,8 @@
 				{
 					"__identifier" : "Tiles",
 					"__type" : "Tiles",
+					"__cWid" : 8,
+					"__cHei" : 10,
 					"levelId" : 0,
 					"layerDefUid" : 15,
 					"pxOffsetX" : 0,
