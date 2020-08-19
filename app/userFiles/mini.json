@@ -9,7 +9,7 @@
 	"defs" : {
 		"layers" : [
 			{
-				"identifier" : "Entities",
+				"identifier" : "Objects",
 				"type" : "Entities",
 				"uid" : 4,
 				"gridSize" : 16,
@@ -22,7 +22,7 @@
 				"tilePivotY" : 0
 			},
 			{
-				"identifier" : "IntGrid",
+				"identifier" : "Collisions",
 				"type" : "IntGrid",
 				"uid" : 13,
 				"gridSize" : 16,
@@ -37,7 +37,7 @@
 				"tilePivotY" : 0
 			},
 			{
-				"identifier" : "Tiles",
+				"identifier" : "Bg",
 				"type" : "Tiles",
 				"uid" : 15,
 				"gridSize" : 32,
@@ -196,7 +196,7 @@
 			"pxHei" : 320,
 			"layerInstances" : [
 				{
-					"__identifier" : "Entities",
+					"__identifier" : "Objects",
 					"__type" : "Entities",
 					"__cWid" : 16,
 					"__cHei" : 20,
@@ -400,7 +400,7 @@
 					]
 				},
 				{
-					"__identifier" : "IntGrid",
+					"__identifier" : "Collisions",
 					"__type" : "IntGrid",
 					"__cWid" : 16,
 					"__cHei" : 20,
@@ -437,7 +437,7 @@
 					"entityInstances" : []
 				},
 				{
-					"__identifier" : "Tiles",
+					"__identifier" : "Bg",
 					"__type" : "Tiles",
 					"__cWid" : 8,
 					"__cHei" : 10,
