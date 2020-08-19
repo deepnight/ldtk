@@ -9,7 +9,7 @@
 	"defs" : {
 		"layers" : [
 			{
-				"identifier" : "Collisions",
+				"identifier" : "Colls",
 				"type" : "IntGrid",
 				"uid" : 13,
 				"gridSize" : 16,
@@ -170,7 +170,7 @@
 			"pxHei" : 320,
 			"layerInstances" : [
 				{
-					"__identifier" : "Collisions",
+					"__identifier" : "Colls",
 					"__type" : "IntGrid",
 					"__cWid" : 16,
 					"__cHei" : 20,
