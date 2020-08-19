@@ -1,0 +1,212 @@
+{
+	"name" : "Mini lab",
+	"dataVersion" : 1,
+	"defaultPivotX" : 0.0,
+	"defaultPivotY" : 0.0,
+	"defaultGridSize" : 16,
+	"bgColor" : "#7F8093",
+	"nextUid" : 19,
+	"defs" : {
+		"layers" : [
+			{
+				"identifier" : "Collisions",
+				"type" : "IntGrid",
+				"uid" : 13,
+				"gridSize" : 16,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : "a", "color" : "#000000" },
+					{ "identifier" : "b", "color" : "#FF0000" },
+					{ "identifier" : "c", "color" : "#00FF1E" }
+				],
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			}
+		],
+		"entities" : [
+			{
+				"identifier" : "Mob",
+				"uid" : 2,
+				"width" : 20,
+				"height" : 32,
+				"color" : "#FF0000",
+				"renderMode" : "Rectangle",
+				"tilesetId" : null,
+				"tileId" : null,
+				"maxPerLevel" : 0,
+				"discardExcess" : true,
+				"pivotX" : 0.5,
+				"pivotY" : 1.0,
+				"fieldDefs" : [
+					{
+						"identifier" : "mobType",
+						"__type" : "MobType",
+						"uid" : 3,
+						"type" : { "id" : "F_Enum", "params" : [ 1 ] },
+						"canBeNull" : false,
+						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayPos" : "Center",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
+					},
+					{
+						"identifier" : "loot",
+						"__type" : "ItemType",
+						"uid" : 11,
+						"type" : { "id" : "F_Enum", "params" : [ 10 ] },
+						"canBeNull" : true,
+						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayPos" : "Above",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
+					},
+					{
+						"identifier" : "lootCount",
+						"__type" : "Int",
+						"uid" : 12,
+						"type" : "F_Int",
+						"canBeNull" : false,
+						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayPos" : "Above",
+						"min" : 1.0,
+						"max" : null,
+						"defaultOverride" : { "id" : "V_Int", "params" : [ 1 ] }
+					},
+					{
+						"identifier" : "elite",
+						"__type" : "Bool",
+						"uid" : 5,
+						"type" : "F_Bool",
+						"canBeNull" : false,
+						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayPos" : "Above",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
+					},
+					{
+						"identifier" : "lifeOverride",
+						"__type" : "Int",
+						"uid" : 6,
+						"type" : "F_Int",
+						"canBeNull" : true,
+						"editorDisplayMode" : "NameAndValue",
+						"editorDisplayPos" : "Above",
+						"min" : 1.0,
+						"max" : null,
+						"defaultOverride" : null
+					},
+					{
+						"identifier" : "scale",
+						"__type" : "Float",
+						"uid" : 7,
+						"type" : "F_Float",
+						"canBeNull" : false,
+						"editorDisplayMode" : "NameAndValue",
+						"editorDisplayPos" : "Above",
+						"min" : 0.1,
+						"max" : 4.0,
+						"defaultOverride" : { "id" : "V_Float", "params" : [ 1 ] }
+					}
+				]
+			}
+		],
+		"tilesets" : [
+			{
+				"identifier" : "Gif87a",
+				"uid" : 14,
+				"relPath" : "atlas/gif87a.gif",
+				"pxWid" : 192,
+				"pxHei" : 128,
+				"tileGridSize" : 32,
+				"tileGridSpacing" : 0,
+				"savedSelections" : []
+			},
+			{
+				"identifier" : "Icons",
+				"uid" : 18,
+				"relPath" : "atlas/s4m_ur4i_huge-assetpack-tilemap.png",
+				"pxWid" : 658,
+				"pxHei" : 892,
+				"tileGridSize" : 8,
+				"tileGridSpacing" : 0,
+				"savedSelections" : []
+			}
+		],
+		"enums" : [
+			{
+				"identifier" : "MobType",
+				"uid" : 1,
+				"values" : [
+					{ "id" : "Trash", "tileId" : 7 },
+					{ "id" : "Shooter", "tileId" : 12 },
+					{ "id" : "Ninja", "tileId" : 13 }
+				],
+				"iconTilesetUid" : 14,
+				"externalRelPath" : null
+			},
+			{
+				"identifier" : "ItemType",
+				"uid" : 10,
+				"values" : [
+					{ "id" : "Gold", "tileId" : 1510 },
+					{ "id" : "Ammo", "tileId" : 1097 },
+					{ "id" : "Food", "tileId" : 1086 }
+				],
+				"iconTilesetUid" : 18,
+				"externalRelPath" : null
+			}
+		],
+		"externalEnums" : []
+	},
+	"levels" : [
+		{
+			"identifier" : "Level0",
+			"uid" : 0,
+			"pxWid" : 256,
+			"pxHei" : 320,
+			"layerInstances" : [
+				{
+					"__identifier" : "Collisions",
+					"__type" : "IntGrid",
+					"__cWid" : 16,
+					"__cHei" : 20,
+					"levelId" : 0,
+					"layerDefUid" : 13,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [
+						{ "coordId" : 0, "v" : 2 },
+						{ "coordId" : 1, "v" : 1 },
+						{ "coordId" : 2, "v" : 0 },
+						{ "coordId" : 98, "v" : 0 },
+						{ "coordId" : 99, "v" : 0 },
+						{ "coordId" : 108, "v" : 0 },
+						{ "coordId" : 109, "v" : 0 },
+						{ "coordId" : 192, "v" : 0 },
+						{ "coordId" : 193, "v" : 0 },
+						{ "coordId" : 194, "v" : 0 },
+						{ "coordId" : 195, "v" : 0 },
+						{ "coordId" : 196, "v" : 0 },
+						{ "coordId" : 197, "v" : 0 },
+						{ "coordId" : 198, "v" : 0 },
+						{ "coordId" : 199, "v" : 0 },
+						{ "coordId" : 200, "v" : 0 },
+						{ "coordId" : 201, "v" : 0 },
+						{ "coordId" : 202, "v" : 0 },
+						{ "coordId" : 203, "v" : 0 },
+						{ "coordId" : 204, "v" : 0 },
+						{ "coordId" : 205, "v" : 0 },
+						{ "coordId" : 206, "v" : 0 },
+						{ "coordId" : 207, "v" : 0 }
+					],
+					"gridTiles" : [],
+					"entityInstances" : []
+				}
+			]
+		}
+	]
+}
