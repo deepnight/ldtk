@@ -5,7 +5,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 19,
+	"nextUid" : 20,
 	"defs" : {
 		"layers" : [
 			{
@@ -18,6 +18,19 @@
 					{ "identifier" : "a", "color" : "#000000" },
 					{ "identifier" : "b", "color" : "#FF0000" },
 					{ "identifier" : "c", "color" : "#00FF1E" }
+				],
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			},
+			{
+				"identifier" : "Deco",
+				"type" : "IntGrid",
+				"uid" : 19,
+				"gridSize" : 8,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" }
 				],
 				"tilesetDefUid" : null,
 				"tilePivotX" : 0,
@@ -203,6 +216,19 @@
 						{ "coordId" : 206, "v" : 0 },
 						{ "coordId" : 207, "v" : 0 }
 					],
+					"gridTiles" : [],
+					"entityInstances" : []
+				},
+				{
+					"__identifier" : "Deco",
+					"__type" : "IntGrid",
+					"__cWid" : 32,
+					"__cHei" : 40,
+					"levelId" : 0,
+					"layerDefUid" : 19,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
 					"gridTiles" : [],
 					"entityInstances" : []
 				}
