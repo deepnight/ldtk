@@ -218,21 +218,42 @@
 								{
 									"__identifier" : "mobType",
 									"__value" : "Trash",
+									"__type" : "MobType",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Trash" ] }
 								},
-								{ "__identifier" : "elite", "__value" : false, "defUid" : 5, "realEditorValue" : null },
+								{
+									"__identifier" : "elite",
+									"__value" : false,
+									"__type" : "Bool",
+									"defUid" : 5,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "lifeOverride",
 									"__value" : null,
+									"__type" : "Int",
 									"defUid" : 6,
 									"realEditorValue" : null
 								},
-								{ "__identifier" : "scale", "__value" : 1.0, "defUid" : 7, "realEditorValue" : null },
-								{ "__identifier" : "loot", "__value" : null, "defUid" : 11, "realEditorValue" : null },
+								{
+									"__identifier" : "scale",
+									"__value" : 1.0,
+									"__type" : "Float",
+									"defUid" : 7,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "loot",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 11,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "lootCount",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 12,
 									"realEditorValue" : null
 								}
@@ -249,26 +270,42 @@
 								{
 									"__identifier" : "mobType",
 									"__value" : "Ninja",
+									"__type" : "MobType",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Ninja" ] }
 								},
-								{ "__identifier" : "elite", "__value" : false, "defUid" : 5, "realEditorValue" : null },
+								{
+									"__identifier" : "elite",
+									"__value" : false,
+									"__type" : "Bool",
+									"defUid" : 5,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "lifeOverride",
 									"__value" : null,
+									"__type" : "Int",
 									"defUid" : 6,
 									"realEditorValue" : null
 								},
-								{ "__identifier" : "scale", "__value" : 1.0, "defUid" : 7, "realEditorValue" : null },
+								{
+									"__identifier" : "scale",
+									"__value" : 1.0,
+									"__type" : "Float",
+									"defUid" : 7,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "loot",
 									"__value" : "Ammo",
+									"__type" : "ItemType",
 									"defUid" : 11,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Ammo" ] }
 								},
 								{
 									"__identifier" : "lootCount",
 									"__value" : 10,
+									"__type" : "Int",
 									"defUid" : 12,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 10 ] }
 								}
@@ -285,21 +322,42 @@
 								{
 									"__identifier" : "mobType",
 									"__value" : "Trash",
+									"__type" : "MobType",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Trash" ] }
 								},
-								{ "__identifier" : "elite", "__value" : false, "defUid" : 5, "realEditorValue" : null },
+								{
+									"__identifier" : "elite",
+									"__value" : false,
+									"__type" : "Bool",
+									"defUid" : 5,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "lifeOverride",
 									"__value" : null,
+									"__type" : "Int",
 									"defUid" : 6,
 									"realEditorValue" : null
 								},
-								{ "__identifier" : "scale", "__value" : 1.0, "defUid" : 7, "realEditorValue" : null },
-								{ "__identifier" : "loot", "__value" : null, "defUid" : 11, "realEditorValue" : null },
+								{
+									"__identifier" : "scale",
+									"__value" : 1.0,
+									"__type" : "Float",
+									"defUid" : 7,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "loot",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 11,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "lootCount",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 12,
 									"realEditorValue" : null
 								}
@@ -316,36 +374,42 @@
 								{
 									"__identifier" : "mobType",
 									"__value" : "Ninja",
+									"__type" : "MobType",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Ninja" ] }
 								},
 								{
 									"__identifier" : "elite",
 									"__value" : true,
+									"__type" : "Bool",
 									"defUid" : 5,
 									"realEditorValue" : { "id" : "V_Bool", "params" : [ true ] }
 								},
 								{
 									"__identifier" : "lifeOverride",
 									"__value" : 10,
+									"__type" : "Int",
 									"defUid" : 6,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 10 ] }
 								},
 								{
 									"__identifier" : "scale",
 									"__value" : 2.0,
+									"__type" : "Float",
 									"defUid" : 7,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 2 ] }
 								},
 								{
 									"__identifier" : "loot",
 									"__value" : "Gold",
+									"__type" : "ItemType",
 									"defUid" : 11,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gold" ] }
 								},
 								{
 									"__identifier" : "lootCount",
 									"__value" : 150,
+									"__type" : "Int",
 									"defUid" : 12,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 150 ] }
 								}
@@ -362,36 +426,42 @@
 								{
 									"__identifier" : "mobType",
 									"__value" : "Shooter",
+									"__type" : "MobType",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Shooter" ] }
 								},
 								{
 									"__identifier" : "elite",
 									"__value" : true,
+									"__type" : "Bool",
 									"defUid" : 5,
 									"realEditorValue" : { "id" : "V_Bool", "params" : [ true ] }
 								},
 								{
 									"__identifier" : "lifeOverride",
 									"__value" : null,
+									"__type" : "Int",
 									"defUid" : 6,
 									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "scale",
 									"__value" : 2.0,
+									"__type" : "Float",
 									"defUid" : 7,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 2 ] }
 								},
 								{
 									"__identifier" : "loot",
 									"__value" : "Food",
+									"__type" : "ItemType",
 									"defUid" : 11,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Food" ] }
 								},
 								{
 									"__identifier" : "lootCount",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 12,
 									"realEditorValue" : null
 								}
