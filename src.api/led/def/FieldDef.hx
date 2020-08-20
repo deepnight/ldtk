@@ -61,7 +61,7 @@ class FieldDef {
 	public function toJson() {
 		return {
 			identifier: identifier,
-			__type: getShortDescription(),
+			__type: getJsonTypeString(),
 			uid: uid,
 			type: JsonTools.writeEnum(type, false),
 			canBeNull: canBeNull,
@@ -75,14 +75,27 @@ class FieldDef {
 
 
 	#if editor
-	public function getShortDescription() {
+	public function getShortDescription() : String {
 		return switch type {
 			case F_Int: "Int";
 			case F_Float: "Float";
 			case F_String: "String";
 			case F_Bool: "Bool";
 			case F_Color: "Color";
-			case F_Enum(enumDefUid): _project.defs.getEnumDef(enumDefUid).identifier;
+			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
+		}
+	}
+
+	public function getJsonTypeString() {
+		return switch type {
+			case F_Int: "Int";
+			case F_Float: "Float";
+			case F_String: "String";
+			case F_Bool: "Bool";
+			case F_Color: "Color";
+			case F_Enum(enumDefUid):
+				var ed = _project.defs.getEnumDef(enumDefUid);
+				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
 		}
 	}
 

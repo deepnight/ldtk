@@ -42,7 +42,7 @@ class FieldInstance {
 				case F_Color: getColorAsHexStr();
 				case F_Enum(enumDefUid): getEnumValue();
 			},
-			__type: def.getShortDescription(),
+			__type: def.getJsonTypeString(),
 
 			defUid: defUid,
 			realEditorValue: JsonTools.writeEnum(internalValue,true),
