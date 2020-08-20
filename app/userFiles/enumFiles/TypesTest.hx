@@ -1,4 +1,4 @@
-enum ItemType {
+enum DroppedItemType {
 	Food;
 	Gold;
 	Ammo;
