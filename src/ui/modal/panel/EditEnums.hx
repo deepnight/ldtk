@@ -54,7 +54,10 @@ class EditEnums extends ui.modal.Panel {
 		jContent.find("button.importHx").click( function(_) {
 			JsTools.loadDialog([".hx"], editor.getProjectDir(), function(absPath:String) {
 				absPath = StringTools.replace(absPath,"\\","/");
-				importer.HxEnum.load( editor.makeRelativeFilePath(absPath), false );
+				if( dn.FilePath.extractExtension(absPath)!="hx" )
+					N.error("The file must have the HX extension.");
+				else
+					importer.HxEnum.load( editor.makeRelativeFilePath(absPath), false );
 			});
 		});
 
