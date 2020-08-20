@@ -66,8 +66,8 @@
 				"pivotY" : 1.0,
 				"fieldDefs" : [
 					{
-						"identifier" : "mobType",
-						"__type" : "MobType",
+						"identifier" : "type",
+						"__type" : "LocalEnum.MobType",
 						"uid" : 3,
 						"type" : { "id" : "F_Enum", "params" : [ 1 ] },
 						"canBeNull" : false,
@@ -79,7 +79,7 @@
 					},
 					{
 						"identifier" : "loot",
-						"__type" : "ItemType",
+						"__type" : "LocalEnum.ItemType",
 						"uid" : 11,
 						"type" : { "id" : "F_Enum", "params" : [ 10 ] },
 						"canBeNull" : true,
@@ -216,9 +216,9 @@
 							"y" : 96,
 							"fieldInstances" : [
 								{
-									"__identifier" : "mobType",
+									"__identifier" : "type",
 									"__value" : "Trash",
-									"__type" : "MobType",
+									"__type" : "LocalEnum.MobType",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Trash" ] }
 								},
@@ -246,7 +246,7 @@
 								{
 									"__identifier" : "loot",
 									"__value" : null,
-									"__type" : "ItemType",
+									"__type" : "LocalEnum.ItemType",
 									"defUid" : 11,
 									"realEditorValue" : null
 								},
@@ -268,9 +268,9 @@
 							"y" : 96,
 							"fieldInstances" : [
 								{
-									"__identifier" : "mobType",
+									"__identifier" : "type",
 									"__value" : "Ninja",
-									"__type" : "MobType",
+									"__type" : "LocalEnum.MobType",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Ninja" ] }
 								},
@@ -298,7 +298,7 @@
 								{
 									"__identifier" : "loot",
 									"__value" : "Ammo",
-									"__type" : "ItemType",
+									"__type" : "LocalEnum.ItemType",
 									"defUid" : 11,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Ammo" ] }
 								},
@@ -320,9 +320,9 @@
 							"y" : 192,
 							"fieldInstances" : [
 								{
-									"__identifier" : "mobType",
+									"__identifier" : "type",
 									"__value" : "Trash",
-									"__type" : "MobType",
+									"__type" : "LocalEnum.MobType",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Trash" ] }
 								},
@@ -350,7 +350,7 @@
 								{
 									"__identifier" : "loot",
 									"__value" : null,
-									"__type" : "ItemType",
+									"__type" : "LocalEnum.ItemType",
 									"defUid" : 11,
 									"realEditorValue" : null
 								},
@@ -372,9 +372,9 @@
 							"y" : 192,
 							"fieldInstances" : [
 								{
-									"__identifier" : "mobType",
+									"__identifier" : "type",
 									"__value" : "Ninja",
-									"__type" : "MobType",
+									"__type" : "LocalEnum.MobType",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Ninja" ] }
 								},
@@ -402,7 +402,7 @@
 								{
 									"__identifier" : "loot",
 									"__value" : "Gold",
-									"__type" : "ItemType",
+									"__type" : "LocalEnum.ItemType",
 									"defUid" : 11,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gold" ] }
 								},
@@ -424,9 +424,9 @@
 							"y" : 192,
 							"fieldInstances" : [
 								{
-									"__identifier" : "mobType",
+									"__identifier" : "type",
 									"__value" : "Shooter",
-									"__type" : "MobType",
+									"__type" : "LocalEnum.MobType",
 									"defUid" : 3,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Shooter" ] }
 								},
@@ -454,7 +454,7 @@
 								{
 									"__identifier" : "loot",
 									"__value" : "Food",
-									"__type" : "ItemType",
+									"__type" : "LocalEnum.ItemType",
 									"defUid" : 11,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Food" ] }
 								},
