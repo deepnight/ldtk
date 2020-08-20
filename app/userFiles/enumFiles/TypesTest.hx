@@ -1,3 +1,5 @@
+package enumFiles;
+
 enum DroppedItemType {
 	Food;
 	Gold;
