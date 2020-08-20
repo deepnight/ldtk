@@ -5,7 +5,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 19,
+	"nextUid" : 29,
 	"defs" : {
 		"layers" : [
 			{
@@ -138,6 +138,34 @@
 						"defaultOverride" : { "id" : "V_Float", "params" : [ 1 ] }
 					}
 				]
+			},
+			{
+				"identifier" : "Hero",
+				"uid" : 23,
+				"width" : 16,
+				"height" : 16,
+				"color" : "#94D9B3",
+				"renderMode" : "Rectangle",
+				"tilesetId" : null,
+				"tileId" : null,
+				"maxPerLevel" : 0,
+				"discardExcess" : true,
+				"pivotX" : 0.5,
+				"pivotY" : 1.0,
+				"fieldDefs" : [
+					{
+						"identifier" : "startItem",
+						"__type" : "ExternEnum.DroppedItemType",
+						"uid" : 28,
+						"type" : { "id" : "F_Enum", "params" : [ 25 ] },
+						"canBeNull" : false,
+						"editorDisplayMode" : "NameAndValue",
+						"editorDisplayPos" : "Above",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
+					}
+				]
 			}
 		],
 		"tilesets" : [
@@ -186,7 +214,43 @@
 				"externalRelPath" : null
 			}
 		],
-		"externalEnums" : []
+		"externalEnums" : [
+			{
+				"identifier" : "DroppedItemType",
+				"uid" : 25,
+				"values" : [
+					{ "id" : "Ammo", "tileId" : null },
+					{ "id" : "Food", "tileId" : null },
+					{ "id" : "Gold", "tileId" : null },
+					{ "id" : "Key", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "enumFiles/TypesTest.hx"
+			},
+			{
+				"identifier" : "EnemyType",
+				"uid" : 26,
+				"values" : [
+					{ "id" : "Behemoth", "tileId" : null },
+					{ "id" : "Crawler", "tileId" : null },
+					{ "id" : "Hunter", "tileId" : null },
+					{ "id" : "Shooter", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "enumFiles/TypesTest.hx"
+			},
+			{
+				"identifier" : "SomeEnum",
+				"uid" : 27,
+				"values" : [
+					{ "id" : "Bar", "tileId" : null },
+					{ "id" : "Foo", "tileId" : null },
+					{ "id" : "Pouet", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "enumFiles/TypesTest.hx"
+			}
+		]
 	},
 	"levels" : [
 		{
@@ -464,6 +528,23 @@
 									"__type" : "Int",
 									"defUid" : 12,
 									"realEditorValue" : null
+								}
+							]
+						},
+						{
+							"__identifier" : "Hero",
+							"__cx" : 5,
+							"__cy" : 11,
+							"defUid" : 23,
+							"x" : 88,
+							"y" : 192,
+							"fieldInstances" : [
+								{
+									"__identifier" : "startItem",
+									"__value" : "Ammo",
+									"__type" : "ExternEnum.DroppedItemType",
+									"defUid" : 28,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Ammo" ] }
 								}
 							]
 						}
