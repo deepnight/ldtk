@@ -5,10 +5,10 @@ class HxEnum {
 	public static function load(relPath:String, isSync:Bool) {
 		var curProject = Editor.ME.project;
 		var absPath = Editor.ME.makeFullFilePath(relPath);
-		var file = JsTools.readFileString(absPath);
+		var fileContent = JsTools.readFileString(absPath);
 
 		// File not found
-		if( file==null ) {
+		if( fileContent==null ) {
 			if( isSync )
 				new ui.modal.dialog.LostFile(relPath, function(newAbs) {
 					var newRel = Editor.ME.makeRelativeFilePath(newAbs);
@@ -25,7 +25,7 @@ class HxEnum {
 		}
 
 		// Parse file
-		var parseds = parse(file);
+		var parseds = parse(fileContent);
 		if( parseds.length>0 ) {
 
 			// Check for duplicate identifiers
