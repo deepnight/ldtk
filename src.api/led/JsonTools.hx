@@ -103,24 +103,35 @@ class JsonTools {
 		return Std.int(v);
 	}
 
+
+	static var floatReg = ~/^([-0-9.]+)f$/g;
 	public static function readFloat(v:Dynamic, ?defaultIfMissing:Float) : Float {
 		if( v==null && defaultIfMissing!=null )
 			return defaultIfMissing;
 
-		if( v==null || Type.typeof(v)!=TInt && Type.typeof(v)!=TFloat )
-			throw "Couldn't read Float "+v;
+		if( v==null )
+			throw "Expected Float is null";
 
-		return v*1.0;
+		return readNullableFloat(v);
 	}
+
 
 	public static function readNullableFloat(v:Dynamic) : Null<Float> {
 		if( v==null )
 			return null;
 
-		if( Type.typeof(v)!=TInt && Type.typeof(v)!=TFloat )
-			throw "Couldn't read Float "+v;
+		return switch Type.typeof(v) {
+			case TInt: v*1.0;
+			case TFloat: v;
+			case TClass(String):
+				if( floatReg.match(v) ) // number that ends with "f"
+					return Std.parseFloat( v.substr(0,v.length-1) );
+				else
+					throw "Couldn't read Float "+v;
 
-		return v*1.0;
+			case _:
+				throw "Couldn't read Float "+v;
+		}
 	}
 
 	public static function writeFloat(v:Float, maxPrecision=3) : String {
