@@ -383,10 +383,17 @@
 							"x" : 200,
 							"y" : 128,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "type",
 									"__value" : "Goblin",
+									"__type" : "MobType",
 									"defUid" : 46,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
 								}
@@ -400,10 +407,17 @@
 							"x" : 200,
 							"y" : 160,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "type",
 									"__value" : "Goblin",
+									"__type" : "MobType",
 									"defUid" : 46,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
 								}
@@ -417,10 +431,17 @@
 							"x" : 232,
 							"y" : 136,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "type",
 									"__value" : "Gem",
+									"__type" : "ItemType",
 									"defUid" : 47,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
 								}
@@ -446,6 +467,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "DUMBER DWARVES",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -455,6 +477,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#FFD438",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 16766008 ] }
 								}
@@ -471,6 +494,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "A 48h game by Sebastien Benard (deepnight.net)",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -482,6 +506,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#918FB3",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 9539507 ] }
 								}
@@ -853,10 +878,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Gem",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -867,8 +899,20 @@
 							"x" : 296,
 							"y" : 80,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 46, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "MobType",
+									"defUid" : 46,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -879,8 +923,20 @@
 							"x" : 216,
 							"y" : 32,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 46, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "MobType",
+									"defUid" : 46,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -894,18 +950,21 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 2,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 1 ] }
 								},
 								{
 									"__identifier" : "Delay",
 									"__value" : 3.0,
+									"__type" : "Float",
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 3 ] }
 								}
@@ -922,10 +981,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Gem",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -939,6 +1005,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "Your dwarves collect GEMS automatically for you.",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -950,6 +1017,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#FFFFFF",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : null
 								}
@@ -1204,10 +1272,17 @@
 							"x" : 456,
 							"y" : 264,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "type",
 									"__value" : "Gem",
+									"__type" : "ItemType",
 									"defUid" : 47,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
 								}
@@ -1221,10 +1296,17 @@
 							"x" : 392,
 							"y" : 168,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "type",
 									"__value" : "Gem",
+									"__type" : "ItemType",
 									"defUid" : 47,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
 								}
@@ -1238,10 +1320,17 @@
 							"x" : 408,
 							"y" : 240,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "type",
 									"__value" : "Goblin",
+									"__type" : "MobType",
 									"defUid" : 46,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
 								}
@@ -1255,10 +1344,17 @@
 							"x" : 440,
 							"y" : 208,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "type",
 									"__value" : "Goblin",
+									"__type" : "MobType",
 									"defUid" : 46,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
 								}
@@ -1272,10 +1368,17 @@
 							"x" : 312,
 							"y" : 192,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "type",
 									"__value" : "Goblin",
+									"__type" : "MobType",
 									"defUid" : 46,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
 								}
@@ -1289,10 +1392,17 @@
 							"x" : 376,
 							"y" : 176,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "type",
 									"__value" : "Goblin",
+									"__type" : "MobType",
 									"defUid" : 46,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
 								}
@@ -1309,6 +1419,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "Click here to drop some FOOD to BAIT your dwarf.",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -1320,6 +1431,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#FFFFFF",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : null
 								}
@@ -1345,6 +1457,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "Dwarves are kind of stupid.",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -1356,6 +1469,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#FFFFFF",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : null
 								}
@@ -1372,6 +1486,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "Use food to guide them.",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -1383,6 +1498,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#FFFFFF",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : null
 								}
@@ -1396,10 +1512,17 @@
 							"x" : 408,
 							"y" : 288,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "type",
 									"__value" : "Goblin",
+									"__type" : "MobType",
 									"defUid" : 46,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
 								}
@@ -1413,10 +1536,17 @@
 							"x" : 440,
 							"y" : 304,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "type",
 									"__value" : "Goblin",
+									"__type" : "MobType",
 									"defUid" : 46,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
 								}
@@ -1430,10 +1560,17 @@
 							"x" : 472,
 							"y" : 288,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
 								{
 									"__identifier" : "type",
 									"__value" : "Goblin",
+									"__type" : "MobType",
 									"defUid" : 46,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Goblin" ] }
 								}
@@ -2459,10 +2596,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -2476,10 +2620,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Gem",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -2493,6 +2644,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "... except when they do something stupid, like picking a trap-bomb. Click ON THEM to slap them.",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -2504,6 +2656,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#FFFFFF",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : null
 								}
@@ -2520,6 +2673,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "Dwarves cannot die...",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -2531,6 +2685,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#FFFFFF",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : null
 								}
@@ -2923,8 +3078,20 @@
 							"x" : 216,
 							"y" : 216,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -2935,8 +3102,20 @@
 							"x" : 280,
 							"y" : 152,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -2947,8 +3126,20 @@
 							"x" : 328,
 							"y" : 216,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -2962,10 +3153,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -2979,10 +3177,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -2996,10 +3201,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3022,10 +3234,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3039,6 +3258,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "Slap your dwarves when they do something you don't want.",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -3050,6 +3270,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#FFFFFF",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : null
 								}
@@ -3075,10 +3296,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3092,10 +3320,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						}
 					]
@@ -3388,8 +3623,20 @@
 							"x" : 136,
 							"y" : 168,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3400,8 +3647,20 @@
 							"x" : 216,
 							"y" : 248,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3412,8 +3671,20 @@
 							"x" : 40,
 							"y" : 248,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3424,8 +3695,20 @@
 							"x" : 104,
 							"y" : 72,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3436,8 +3719,20 @@
 							"x" : 168,
 							"y" : 72,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3451,6 +3746,7 @@
 								{
 									"__identifier" : "Time",
 									"__value" : 10,
+									"__type" : "Int",
 									"defUid" : 25,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 10 ] }
 								}
@@ -3467,6 +3763,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "You might sometime be in a hurry...",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -3478,6 +3775,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#FFFFFF",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : null
 								}
@@ -3653,7 +3951,13 @@
 							"x" : 216,
 							"y" : 96,
 							"fieldInstances" : [
-								{ "__identifier" : "Time", "__value" : 30, "defUid" : 25, "realEditorValue" : null }
+								{
+									"__identifier" : "Time",
+									"__value" : 30,
+									"__type" : "Int",
+									"defUid" : 25,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3691,8 +3995,20 @@
 							"x" : 40,
 							"y" : 104,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3703,8 +4019,20 @@
 							"x" : 344,
 							"y" : 264,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3715,8 +4043,20 @@
 							"x" : 56,
 							"y" : 232,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3730,10 +4070,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3747,10 +4094,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3761,8 +4115,20 @@
 							"x" : 248,
 							"y" : 280,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3773,8 +4139,20 @@
 							"x" : 264,
 							"y" : 72,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3860,10 +4238,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3877,10 +4262,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3894,10 +4286,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -3911,10 +4310,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						}
 					]
@@ -4163,8 +4569,20 @@
 							"x" : 184,
 							"y" : 120,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -4175,8 +4593,20 @@
 							"x" : 184,
 							"y" : 264,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -4190,10 +4620,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -4207,10 +4644,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -4221,7 +4665,13 @@
 							"x" : 312,
 							"y" : 48,
 							"fieldInstances" : [
-								{ "__identifier" : "Time", "__value" : 30, "defUid" : 25, "realEditorValue" : null }
+								{
+									"__identifier" : "Time",
+									"__value" : 30,
+									"__type" : "Int",
+									"defUid" : 25,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -4232,8 +4682,20 @@
 							"x" : 312,
 							"y" : 280,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -4244,8 +4706,20 @@
 							"x" : 264,
 							"y" : 200,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -4256,8 +4730,20 @@
 							"x" : 360,
 							"y" : 40,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -4271,10 +4757,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -4288,10 +4781,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -4305,18 +4805,21 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 4,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 4 ] }
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "Delay",
 									"__value" : 3.0,
+									"__type" : "Float",
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 3 ] }
 								}
@@ -4333,18 +4836,21 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 3,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "Delay",
 									"__value" : 3.0,
+									"__type" : "Float",
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 3 ] }
 								}
@@ -4361,18 +4867,21 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 2,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 2,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
 								{
 									"__identifier" : "Delay",
 									"__value" : 10.0,
+									"__type" : "Float",
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 10 ] }
 								}
@@ -4389,18 +4898,21 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 2,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 2,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
 								{
 									"__identifier" : "Delay",
 									"__value" : 10.0,
+									"__type" : "Float",
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 10 ] }
 								}
@@ -4417,18 +4929,21 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 1 ] }
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "Delay",
 									"__value" : 10.0,
+									"__type" : "Float",
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 10 ] }
 								}
@@ -4442,8 +4957,20 @@
 							"x" : 504,
 							"y" : 248,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5015,10 +5542,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Gem",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5032,10 +5566,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Gem",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5049,10 +5590,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Gem",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5066,10 +5614,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Gem",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5083,10 +5638,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Gem",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5100,10 +5662,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Gem",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Gem" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5114,8 +5683,20 @@
 							"x" : 376,
 							"y" : 128,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 46, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "MobType",
+									"defUid" : 46,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5126,8 +5707,20 @@
 							"x" : 344,
 							"y" : 98,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 46, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "MobType",
+									"defUid" : 46,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5231,10 +5824,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5284,10 +5884,17 @@
 								{
 									"__identifier" : "Type",
 									"__value" : "Bomb",
+									"__type" : "String",
 									"defUid" : 10,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Bomb" ] }
 								},
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5328,16 +5935,24 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 3,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : null
 								},
-								{ "__identifier" : "Delay", "__value" : 5.0, "defUid" : 28, "realEditorValue" : null }
+								{
+									"__identifier" : "Delay",
+									"__value" : 5.0,
+									"__type" : "Float",
+									"defUid" : 28,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5351,16 +5966,24 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 3,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : null
 								},
-								{ "__identifier" : "Delay", "__value" : 5.0, "defUid" : 28, "realEditorValue" : null }
+								{
+									"__identifier" : "Delay",
+									"__value" : 5.0,
+									"__type" : "Float",
+									"defUid" : 28,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5371,7 +5994,13 @@
 							"x" : 200,
 							"y" : 128,
 							"fieldInstances" : [
-								{ "__identifier" : "Time", "__value" : 30, "defUid" : 25, "realEditorValue" : null }
+								{
+									"__identifier" : "Time",
+									"__value" : 30,
+									"__type" : "Int",
+									"defUid" : 25,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5385,16 +6014,24 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 2,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : null
 								},
-								{ "__identifier" : "Delay", "__value" : 5.0, "defUid" : 28, "realEditorValue" : null }
+								{
+									"__identifier" : "Delay",
+									"__value" : 5.0,
+									"__type" : "Float",
+									"defUid" : 28,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5405,8 +6042,20 @@
 							"x" : 136,
 							"y" : 192,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gob", "defUid" : 14, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 46, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gob",
+									"__type" : "String",
+									"defUid" : 14,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "MobType",
+									"defUid" : 46,
+									"realEditorValue" : null
+								}
 							]
 						}
 					]
@@ -5612,18 +6261,21 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 3,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 3 ] }
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 1 ] }
 								},
 								{
 									"__identifier" : "Delay",
 									"__value" : 3.0,
+									"__type" : "Float",
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 3 ] }
 								}
@@ -5640,18 +6292,21 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 4,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 4 ] }
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 2,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
 								{
 									"__identifier" : "Delay",
 									"__value" : 3.0,
+									"__type" : "Float",
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 3 ] }
 								}
@@ -5668,18 +6323,21 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 3,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 3 ] }
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 1 ] }
 								},
 								{
 									"__identifier" : "Delay",
 									"__value" : 4.0,
+									"__type" : "Float",
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 4 ] }
 								}
@@ -5693,8 +6351,20 @@
 							"x" : 168,
 							"y" : 248,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5705,8 +6375,20 @@
 							"x" : 280,
 							"y" : 248,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5717,8 +6399,20 @@
 							"x" : 328,
 							"y" : 200,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5729,8 +6423,20 @@
 							"x" : 328,
 							"y" : 104,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -5753,18 +6459,21 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 4,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 4 ] }
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 2,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
 								{
 									"__identifier" : "Delay",
 									"__value" : 3.0,
+									"__type" : "Float",
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 3 ] }
 								}
@@ -5781,6 +6490,7 @@
 								{
 									"__identifier" : "Time",
 									"__value" : 5,
+									"__type" : "Int",
 									"defUid" : 25,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 5 ] }
 								}
@@ -5797,16 +6507,24 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 3,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 2,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
-								{ "__identifier" : "Delay", "__value" : 5.0, "defUid" : 28, "realEditorValue" : null }
+								{
+									"__identifier" : "Delay",
+									"__value" : 5.0,
+									"__type" : "Float",
+									"defUid" : 28,
+									"realEditorValue" : null
+								}
 							]
 						}
 					]
@@ -6028,6 +6746,7 @@
 								{
 									"__identifier" : "Time",
 									"__value" : 5,
+									"__type" : "Int",
 									"defUid" : 25,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 5 ] }
 								}
@@ -6044,6 +6763,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "THANK YOU FOR PLAYING",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -6055,6 +6775,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#FFFFFF",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : null
 								}
@@ -6071,6 +6792,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "For more, please visit: deepnight.net",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -6082,6 +6804,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#FFFFFF",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : null
 								}
@@ -6098,6 +6821,7 @@
 								{
 									"__identifier" : "Text",
 									"__value" : "Hope you liked this short game :)",
+									"__type" : "String",
 									"defUid" : 32,
 									"realEditorValue" : {
 										"id" : "V_String",
@@ -6109,6 +6833,7 @@
 								{
 									"__identifier" : "Color",
 									"__value" : "#FFFFFF",
+									"__type" : "Color",
 									"defUid" : 33,
 									"realEditorValue" : null
 								}
@@ -6134,16 +6859,24 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 4,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 4 ] }
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 2,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
-								{ "__identifier" : "Delay", "__value" : 5.0, "defUid" : 28, "realEditorValue" : null }
+								{
+									"__identifier" : "Delay",
+									"__value" : 5.0,
+									"__type" : "Float",
+									"defUid" : 28,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -6157,16 +6890,24 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 4,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 4 ] }
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 2,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : { "id" : "V_Int", "params" : [ 2 ] }
 								},
-								{ "__identifier" : "Delay", "__value" : 5.0, "defUid" : 28, "realEditorValue" : null }
+								{
+									"__identifier" : "Delay",
+									"__value" : 5.0,
+									"__type" : "Float",
+									"defUid" : 28,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -6180,18 +6921,21 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 3,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "Delay",
 									"__value" : 2.0,
+									"__type" : "Float",
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 2 ] }
 								}
@@ -6208,18 +6952,21 @@
 								{
 									"__identifier" : "MaxChildren",
 									"__value" : 3,
+									"__type" : "Int",
 									"defUid" : 26,
 									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "PerSpawn",
 									"__value" : 1,
+									"__type" : "Int",
 									"defUid" : 27,
 									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "Delay",
 									"__value" : 2.0,
+									"__type" : "Float",
 									"defUid" : 28,
 									"realEditorValue" : { "id" : "V_Float", "params" : [ 2 ] }
 								}
@@ -6242,8 +6989,20 @@
 							"x" : 24,
 							"y" : 56,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -6254,8 +7013,20 @@
 							"x" : 280,
 							"y" : 56,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -6266,8 +7037,20 @@
 							"x" : 88,
 							"y" : 56,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -6278,8 +7061,20 @@
 							"x" : 136,
 							"y" : 56,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -6290,8 +7085,20 @@
 							"x" : 168,
 							"y" : 56,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
@@ -6302,8 +7109,20 @@
 							"x" : 216,
 							"y" : 56,
 							"fieldInstances" : [
-								{ "__identifier" : "Type", "__value" : "Gem", "defUid" : 10, "realEditorValue" : null },
-								{ "__identifier" : "type", "__value" : null, "defUid" : 47, "realEditorValue" : null }
+								{
+									"__identifier" : "Type",
+									"__value" : "Gem",
+									"__type" : "String",
+									"defUid" : 10,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "type",
+									"__value" : null,
+									"__type" : "ItemType",
+									"defUid" : 47,
+									"realEditorValue" : null
+								}
 							]
 						}
 					]
