@@ -1,22 +1,18 @@
 package enumFiles;
 
-enum DroppedItemType {
-	Food;
-	Gold;
-	Ammo;
-	Key;
-	// SomeNewObject;
+enum A {
+	A0;
+	A1;
+	A2;
+	// A3;
 }
 
-enum EnemyType {
-	Crawler;
-	Shooter;
-	Behemoth;
-	Hunter;
+enum B {
+	B0;
 }
 
-enum SomeEnum {
-	Foo;
-	Bar;
-	Pouet;
+enum C {
+	C0;
+	C1;
+	C2;
 }

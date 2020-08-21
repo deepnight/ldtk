@@ -5,7 +5,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 29,
+	"nextUid" : 37,
 	"defs" : {
 		"layers" : [
 			{
@@ -154,10 +154,22 @@
 				"pivotY" : 1.0,
 				"fieldDefs" : [
 					{
-						"identifier" : "startItem",
+						"identifier" : "inventory",
 						"__type" : "ExternEnum.DroppedItemType",
-						"uid" : 28,
-						"type" : { "id" : "F_Enum", "params" : [ 25 ] },
+						"uid" : 32,
+						"type" : { "id" : "F_Enum", "params" : [ 29 ] },
+						"canBeNull" : false,
+						"editorDisplayMode" : "NameAndValue",
+						"editorDisplayPos" : "Above",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
+					},
+					{
+						"identifier" : "testA",
+						"__type" : "ExternEnum.A",
+						"uid" : 36,
+						"type" : { "id" : "F_Enum", "params" : [ 33 ] },
 						"canBeNull" : false,
 						"editorDisplayMode" : "NameAndValue",
 						"editorDisplayPos" : "Above",
@@ -217,7 +229,7 @@
 		"externalEnums" : [
 			{
 				"identifier" : "DroppedItemType",
-				"uid" : 25,
+				"uid" : 29,
 				"values" : [
 					{ "id" : "Ammo", "tileId" : null },
 					{ "id" : "Food", "tileId" : null },
@@ -225,11 +237,11 @@
 					{ "id" : "Key", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "enumFiles/TypesTest.hx"
+				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx"
 			},
 			{
 				"identifier" : "EnemyType",
-				"uid" : 26,
+				"uid" : 30,
 				"values" : [
 					{ "id" : "Behemoth", "tileId" : null },
 					{ "id" : "Crawler", "tileId" : null },
@@ -237,15 +249,46 @@
 					{ "id" : "Shooter", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "enumFiles/TypesTest.hx"
+				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx"
 			},
 			{
 				"identifier" : "SomeEnum",
-				"uid" : 27,
+				"uid" : 31,
 				"values" : [
 					{ "id" : "Bar", "tileId" : null },
 					{ "id" : "Foo", "tileId" : null },
 					{ "id" : "Pouet", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx"
+			},
+			{
+				"identifier" : "A",
+				"uid" : 33,
+				"values" : [
+					{ "id" : "A0", "tileId" : null },
+					{ "id" : "A1", "tileId" : null },
+					{ "id" : "A2", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "enumFiles/TypesTest.hx"
+			},
+			{
+				"identifier" : "B",
+				"uid" : 34,
+				"values" : [
+					{ "id" : "B0", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : "enumFiles/TypesTest.hx"
+			},
+			{
+				"identifier" : "C",
+				"uid" : 35,
+				"values" : [
+					{ "id" : "C0", "tileId" : null },
+					{ "id" : "C1", "tileId" : null },
+					{ "id" : "C2", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
 				"externalRelPath" : "enumFiles/TypesTest.hx"
@@ -540,11 +583,18 @@
 							"y" : 192,
 							"fieldInstances" : [
 								{
-									"__identifier" : "startItem",
-									"__value" : "Ammo",
+									"__identifier" : "inventory",
+									"__value" : "Gold",
 									"__type" : "ExternEnum.DroppedItemType",
-									"defUid" : 28,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "Ammo" ] }
+									"defUid" : 32,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Gold" ] }
+								},
+								{
+									"__identifier" : "testA",
+									"__value" : "A2",
+									"__type" : "ExternEnum.A",
+									"defUid" : 36,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "A2" ] }
 								}
 							]
 						}
