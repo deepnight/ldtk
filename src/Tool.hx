@@ -17,6 +17,7 @@ class Tool<T> extends dn.Process {
 	var button = -1;
 	var rectangle = false;
 	var moveStarted = false;
+	var startTime = 0.;
 
 	private function new() {
 		super(Editor.ME);
@@ -81,6 +82,7 @@ class Tool<T> extends dn.Process {
 
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		curMode = null;
+		startTime = haxe.Timer.stamp();
 		editor.clearSelection();
 		moveStarted = false;
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
@@ -191,6 +193,10 @@ class Tool<T> extends dn.Process {
 
 	function updateCursor(m:MouseCoords) {}
 
+	function useFloodfillAt(m:MouseCoords) {
+		return false;
+	}
+
 	function useAt(m:MouseCoords) : Bool {
 		if( curMode==PanView ) {
 			editor.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
@@ -207,15 +213,24 @@ class Tool<T> extends dn.Process {
 	}
 
 	public function stopUsing(m:MouseCoords) {
+		var clickTime = haxe.Timer.stamp() - startTime;
+
 		if( isRunning() && !clickingOutsideBounds ) {
-			var anyChange = rectangle
-				? useOnRectangle(
-					M.imin(origin.cx, m.cx),
-					M.imax(origin.cx, m.cx),
-					M.imin(origin.cy, m.cy),
-					M.imax(origin.cy, m.cy)
-				 )
-				: useAt(m);
+			var anyChange = false;
+
+			if( rectangle && m.cx==origin.cx && m.cy==origin.cy && clickTime<=0.22 )
+				anyChange = useFloodfillAt(m);
+			else {
+				anyChange = rectangle
+					? useOnRectangle(
+						M.imin(origin.cx, m.cx),
+						M.imax(origin.cx, m.cx),
+						M.imin(origin.cy, m.cy),
+						M.imax(origin.cy, m.cy)
+					 )
+					: useAt(m);
+			}
+
 
 			if( anyChange )
 				onEditAnything();
