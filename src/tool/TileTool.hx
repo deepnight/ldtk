@@ -52,6 +52,19 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 		return anyChange;
 	}
 
+	override function useFloodfillAt(m:MouseCoords):Bool {
+		var initial = curLayerInstance.getGridTile(m.cx,m.cy);
+
+		if( initial==getSelectedValue().ids[0] )
+			return false;
+
+		return _floodFillImpl(
+			m,
+			function(cx,cy) return curLayerInstance.getGridTile(cx,cy) != initial,
+			function(cx,cy,v) curLayerInstance.setGridTile(cx,cy, v.ids[0])
+		);
+	}
+
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(left, right, top, bottom);
 

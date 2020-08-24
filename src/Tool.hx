@@ -197,18 +197,16 @@ class Tool<T> extends dn.Process {
 		return false;
 	}
 
-	function _floodFillImpl(m:MouseCoords, getter:(cx:Int,cy:Int)->T, setter:(cx:Int,cy:Int,v:T)->Void) {
+	function _floodFillImpl(m:MouseCoords, isBlocking:(cx:Int,cy:Int)->Bool, setter:(cx:Int,cy:Int,v:T)->Void) {
 		var li = curLayerInstance;
 
-		var initial : T = getter(m.cx,m.cy);
-		if( initial==getSelectedValue() )
+		if( isBlocking(m.cx,m.cy) )
 			return false;
-
 
 		var pending = [{ cx:m.cx, cy:m.cy }];
 		var dones = new Map();
-		inline function check(cx:Int,cy:Int) {
-			if( li.isValid(cx,cy) && !dones.exists(cx+cy*li.cWid) && getter(cx,cy) == initial ) {
+		function check(cx:Int,cy:Int) {
+			if( li.isValid(cx,cy) && !dones.exists(cx+cy*li.cWid) && !isBlocking(cx,cy) ) {
 				dones.set(cx+cy*li.cWid, true);
 				pending.push({ cx:cx, cy:cy });
 			}
