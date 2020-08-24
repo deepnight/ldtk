@@ -12,6 +12,8 @@ L-Ed is an open-source 2D level editor.
 
 Even if it works great with the Haxe environement, it is completely compatible with any language or platform.
 
+Haxe API : https://github.com/deepnight/led-haxe-api
+
 # INSTALL GUIDE
 
 Coming soon...
