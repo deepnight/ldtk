@@ -1,6 +1,8 @@
-# ABOUT
+# About
 
-L-Ed is an open-source 2D level editor.
+L-Ed is a **lightweight**, **modern** and **open-source** 2D level editor.
+
+# Features
 
  - **Easy to use**: modern UI with a strong focus on ease-of-use and quality-of-life features.
  - **Customizable layers**: Integer grid layers, tile layers and entity layers support
@@ -14,6 +16,16 @@ L-Ed is an open-source 2D level editor.
  - **Haxe (any framework)**: https://github.com/deepnight/led-haxe-api
  - More coming soon!
 
-# INSTALL GUIDE
+# Install
+
+Coming soon...
+
+# Building from the source
+
+## Requirements
+
+Coming soon...
+
+## Compiling
 
 Coming soon...
