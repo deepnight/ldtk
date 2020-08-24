@@ -40,6 +40,7 @@ class LayerInstance {
 			__type: Std.string(def.type),
 			__cWid: cWid,
 			__cHei: cHei,
+			__gridSize: def.gridSize,
 
 			levelId: levelId,
 			layerDefUid: layerDefUid,
