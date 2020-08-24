@@ -91,36 +91,7 @@ class IntGridTool extends Tool<Int> {
 
 
 	override function useFloodfillAt(m:MouseCoords):Bool {
-		super.useFloodfillAt(m);
-
-		var li = curLayerInstance;
-
-		var initial = li.getIntGrid(m.cx,m.cy);
-		if( initial==getSelectedValue() )
-			return false;
-
-
-		var pending = [{ cx:m.cx, cy:m.cy }];
-		var dones = new Map();
-		inline function check(cx:Int,cy:Int) {
-			if( li.isValid(cx,cy) && !dones.exists(cx+cy*li.cWid) && li.getIntGrid(cx,cy) == initial ) {
-				dones.set(cx+cy*li.cWid, true);
-				pending.push({ cx:cx, cy:cy });
-			}
-		}
-
-		while( pending.length>0 ) {
-			var cur = pending.pop();
-
-			check(cur.cx-1, cur.cy);
-			check(cur.cx+1, cur.cy);
-			check(cur.cx, cur.cy-1);
-			check(cur.cx, cur.cy+1);
-
-			li.setIntGrid( cur.cx, cur.cy, getSelectedValue() );
-		}
-
-		return true;
+		return _floodFillImpl(m, curLayerInstance.getIntGrid, curLayerInstance.setIntGrid);
 	}
 
 
