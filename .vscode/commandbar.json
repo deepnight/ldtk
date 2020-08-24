@@ -28,23 +28,6 @@
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -23
-		},
-		{
-			"text": "🅰️ Build POT",
-			"color": "white",
-			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|Lang",
-			"alignment": "right",
-			"skipTerminateQuickPick": false,
-			"priority": -50
-		},
-		{
-			"text": "📦 Redist",
-			"color": "lightgreen",
-			"command": "haxelib run redistHelper app.hxml -o redist -p LEd",
-			"alignment": "right",
-			"skipTerminateQuickPick": false,
-			"priority": -51
 		}
 	]
 }
