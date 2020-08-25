@@ -36,6 +36,14 @@
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -30
+		},
+		{
+			"text": "🌐 Upload to itch.io",
+			"color": "white",
+			"command": "itch.io.cmd",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -31
 		}
 	]
 }
