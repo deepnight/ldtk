@@ -37,7 +37,7 @@ class Lang {
             case F_Float: t._("Float");
             case F_String: t._("String");
             case F_Bool: t._("Boolean");
-            case F_Enum(name): t._("Enum[::e::]", { e:name });
+            case F_Enum(name): name==null ? t._("Enum") : t._("Enum.::e::", { e:name });
         }
     }
 

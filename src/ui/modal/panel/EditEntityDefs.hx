@@ -70,7 +70,11 @@ class EditEntityDefs extends ui.modal.Panel {
 						for(ed in project.defs.externalEnums) {
 							var b = new J("<button/>");
 							b.appendTo(w.jContent);
-							b.text(ed.identifier);
+							b.append('<span class="id">${ed.identifier}</span>');
+
+							var fileName = dn.FilePath.extractFileWithExt(ed.externalRelPath);
+							b.append('<span class="source">$fileName</span>');
+
 							b.click( function(_) {
 								_create(F_Enum(ed.uid));
 								w.close();

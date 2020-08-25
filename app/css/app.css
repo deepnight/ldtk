@@ -1207,6 +1207,26 @@ textarea:focus {
   margin: 0;
 }
 
+.window.dialog.enums .content button {
+  display: flex;
+  width: 100%;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  text-transform: none;
+}
+
+.window.dialog.enums .content button .id {
+  flex: 1 0 auto;
+  text-align: left;
+}
+
+.window.dialog.enums .content button .source {
+  flex: 0 1 0;
+  margin-left: 8px;
+  font-size: 8pt;
+  opacity: 0.7;
+}
+
 .window.dialog.layerTypes .icon {
   display: block;
   width: 3em;
