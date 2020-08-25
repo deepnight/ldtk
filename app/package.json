@@ -3,14 +3,12 @@
 	"version": "0.0.1",
 	"main": "main.js",
 	"productName": "L-Ed",
-
 	"scripts": {
 		"start": "electron ."
 	},
-
 	"dependencies": {},
 	"devDependencies": {
-		"electron": "^9.1.2",
+		"electron": "^9.2.1",
 		"electron-packager": "^8.7.2"
 	}
 }
