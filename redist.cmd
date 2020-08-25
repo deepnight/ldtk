@@ -1,7 +1,9 @@
 @echo off
+echo.
 
 echo Cleaning up existing redists...
 rmdir redist /S /Q
+echo.
 
 cd app
 
@@ -14,4 +16,5 @@ echo.
 call electron-packager . LEd --platform=win32 --arch=ia32,x64  --overwrite --out=../redist
 
 echo.
-pause
+echo Done.
+echo.

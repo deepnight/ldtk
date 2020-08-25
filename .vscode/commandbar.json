@@ -28,6 +28,14 @@
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -23
+		},
+		{
+			"text": "📦 Redist",
+			"color": "white",
+			"command": "redist.cmd",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -30
 		}
 	]
 }
