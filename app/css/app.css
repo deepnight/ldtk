@@ -159,12 +159,14 @@ button.grey:hover {
   background-color: #737f9d;
 }
 
+button.dark,
 button.close {
   background-color: #1e2229;
   border-color: #2e333f;
   box-shadow: 0px 2px 0px #2e333f;
 }
 
+button.dark:hover,
 button.close:hover {
   background-color: #545d73;
 }
@@ -1082,9 +1084,6 @@ textarea:focus {
 .window.dialog > .wrapper {
   padding: 16px;
   box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.6);
-}
-
-.window.dialog > .wrapper .content {
   max-width: 260px;
 }
 
@@ -1099,11 +1098,6 @@ textarea:focus {
 }
 
 .window.dialog > .wrapper .buttons button.confirm {
-  flex-grow: 2;
-}
-
-.window.dialog.unsavedChanges button.ignore,
-.window.dialog.unsavedChanges button.save {
   flex-grow: 2;
 }
 

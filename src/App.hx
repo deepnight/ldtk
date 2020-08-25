@@ -175,7 +175,7 @@ class App extends dn.Process {
 	public function exit(force=false) {
 		if( !force && Editor.ME!=null && Editor.ME.needSaving ) {
 			ui.Modal.closeAll();
-			new ui.modal.dialog.UnsavedChanges(exit.bind(true));
+			new ui.modal.dialog.UnsavedChanges(Editor.ME.onSave.bind(false), exit.bind(true));
 		}
 		else {
 			#if nwjs

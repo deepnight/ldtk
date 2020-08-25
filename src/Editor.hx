@@ -535,7 +535,7 @@ class Editor extends Page {
 	function onClose(?bt:js.jquery.JQuery) {
 		ui.Modal.closeAll();
 		if( needSaving )
-			new ui.modal.dialog.UnsavedChanges(bt, App.ME.openHome);
+			new ui.modal.dialog.UnsavedChanges(bt, onSave.bind(false), App.ME.openHome);
 		else
 			App.ME.openHome();
 	}

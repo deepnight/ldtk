@@ -165,6 +165,7 @@ button.grey {
 	}
 }
 
+button.dark,
 button.close {
 	background-color: $bgDark;
 	border-color: $bgMed;
@@ -1045,10 +1046,7 @@ textarea {
 	&>.wrapper {
 		padding: 16px;
 		box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.6);
-
-		.content {
-			max-width: 260px;
-		}
+		max-width: 260px;
 
 		.buttons {
 			margin-top: 16px;
@@ -1062,13 +1060,6 @@ textarea {
 			button.confirm {
 				flex-grow: 2;
 			}
-		}
-	}
-
-	&.unsavedChanges {
-		button.ignore,
-		button.save {
-			flex-grow: 2;
 		}
 	}
 
