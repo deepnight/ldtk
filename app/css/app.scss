@@ -1832,6 +1832,10 @@ canvas#webgl {
 		>.header {
 			grid-column: auto;
 		}
+		ul.form li label {
+			flex: 1 0 100%;
+			text-align: left;
+		}
 	}
 }
 

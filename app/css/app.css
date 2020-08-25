@@ -1875,6 +1875,11 @@ canvas#webgl {
   grid-column: auto;
 }
 
+.window.panel.levelList .content ul.form li label {
+  flex: 1 0 100%;
+  text-align: left;
+}
+
 .window.panel.editProject .content {
   display: grid;
   grid-template-columns: auto;
