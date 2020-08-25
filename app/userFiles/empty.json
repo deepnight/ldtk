@@ -1,6 +1,13 @@
 {
+	"__header__" : {
+		"fileType" : "L-Ed Project JSON",
+		"app" : "L-Ed",
+		"appAuthor" : "Sebastien Benard",
+		"appVersion" : "Electron DBG v0.1",
+		"url" : "https://deepnight.net/"
+	},
 	"name" : "empty",
-	"dataVersion" : 1,
+	"jsonVersion" : 1,
 	"defaultPivotX" : 0.0,
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,

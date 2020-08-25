@@ -1,6 +1,13 @@
 {
+	"__header__" : {
+		"fileType" : "L-Ed Project JSON",
+		"app" : "L-Ed",
+		"appAuthor" : "Sebastien Benard",
+		"appVersion" : "Electron DBG v0.1",
+		"url" : "https://deepnight.net/"
+	},
 	"name" : "Mini lab",
-	"dataVersion" : 1,
+	"jsonVersion" : 1,
 	"defaultPivotX" : 0.0,
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
@@ -241,7 +248,7 @@
 					{ "id" : "MachineGun", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx",
+				"externalRelPath" : "../../../led-haxe-api/tests/src/externEnums/GameEnums.hx",
 				"externalFileChecksum" : "3e6dd7884a808e4603dd30f58c532227"
 			},
 			{
@@ -254,7 +261,7 @@
 					{ "id" : "Shooter", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx",
+				"externalRelPath" : "../../../led-haxe-api/tests/src/externEnums/GameEnums.hx",
 				"externalFileChecksum" : "3e6dd7884a808e4603dd30f58c532227"
 			},
 			{
@@ -266,7 +273,7 @@
 					{ "id" : "Pouet", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx",
+				"externalRelPath" : "../../../led-haxe-api/tests/src/externEnums/GameEnums.hx",
 				"externalFileChecksum" : "3e6dd7884a808e4603dd30f58c532227"
 			},
 			{
