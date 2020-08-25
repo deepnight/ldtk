@@ -296,7 +296,7 @@ class JsTools {
 
 			if( jThis.data("str")==null ) {
 				if( jThis.hasClass("identifier") )
-					jThis.data( "str", L.t._("An identifier should be UNIQUE and only contain LETTERS, NUMBERS or UNDERSCORES (ie. \"_\").") );
+					jThis.data( "str", L.t._("An identifier should be UNIQUE (in this context) and can only contain LETTERS, NUMBERS or UNDERSCORES (ie. \"_\").") );
 				else
 					jThis.data("str", jThis.text());
 				jThis.empty();
