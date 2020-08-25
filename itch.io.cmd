@@ -5,10 +5,10 @@ REM haxelib run redistHelper hl.dx.hxml hl.sdl.hxml -o redist/itch.io res/change
 REM if ERRORLEVEL 1 goto error
 REM echo.
 
-choice /C YN /M "Start uploading?"
-if ERRORLEVEL 2 goto end
-if ERRORLEVEL 1 goto upload
-goto end
+REM choice /C YN /M "Start uploading?"
+REM if ERRORLEVEL 2 goto end
+REM if ERRORLEVEL 1 goto upload
+REM goto end
 
 
 :upload
@@ -29,5 +29,7 @@ echo FAILED!
 
 :end
 echo.
-pause
-exit
+echo Done.
+echo.
+REM pause
+REM exit
