@@ -111,6 +111,7 @@ typedef SyncLog = Array<{
 enum SyncOp {
 	Add;
 	Remove;
+	ChecksumFix;
 }
 
 enum ImageSyncResult {

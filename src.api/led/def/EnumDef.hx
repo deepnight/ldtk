@@ -6,6 +6,7 @@ class EnumDef {
 	public var values : Array<led.LedTypes.EnumDefValue> = [];
 	public var iconTilesetUid : Null<Int>;
 	public var externalRelPath : Null<String>;
+	public var externalFileChecksum : Null<String>;
 
 	public function new(uid:Int, id:String) {
 		this.uid = uid;
@@ -38,6 +39,7 @@ class EnumDef {
 
 		ed.iconTilesetUid = JsonTools.readNullableInt(json.iconTilesetUid);
 		ed.externalRelPath = json.externalRelPath;
+		ed.externalFileChecksum = json.externalFileChecksum;
 
 		return ed;
 	}
@@ -49,6 +51,7 @@ class EnumDef {
 			values: values.map( function(v) return { id:v.id, tileId:v.tileId } ), // breaks memory refs
 			iconTilesetUid: iconTilesetUid,
 			externalRelPath: JsonTools.writePath(externalRelPath),
+			externalFileChecksum: externalFileChecksum,
 		};
 	}
 

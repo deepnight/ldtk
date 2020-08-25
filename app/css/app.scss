@@ -1062,12 +1062,26 @@ textarea {
 		max-width: none;
 		h2 .file {
 			color: white;
+			text-transform: none;
 		}
 	}
 }
 
 
 .window.lostFile {
+	.wrapper .content {
+		max-width: 50vw;
+		.path {
+			text-align: left;
+			padding: 4px;
+			background-color: $bgDark;
+			border: 1px solid $red;
+		}
+	}
+}
+
+
+.window.fileChanged {
 	.wrapper .content {
 		max-width: 50vw;
 		.path {

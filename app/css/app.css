@@ -1095,6 +1095,7 @@ textarea:focus {
 
 .window.sync .wrapper .content h2 .file {
   color: white;
+  text-transform: none;
 }
 
 .window.lostFile .wrapper .content {
@@ -1102,6 +1103,17 @@ textarea:focus {
 }
 
 .window.lostFile .wrapper .content .path {
+  text-align: left;
+  padding: 4px;
+  background-color: #1e2229;
+  border: 1px solid #e34d00;
+}
+
+.window.fileChanged .wrapper .content {
+  max-width: 50vw;
+}
+
+.window.fileChanged .wrapper .content .path {
   text-align: left;
   padding: 4px;
   background-color: #1e2229;

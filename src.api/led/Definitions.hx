@@ -274,9 +274,10 @@ class Definitions {
 		return ed;
 	}
 
-	public function createExternalEnumDef(relSourcePath:String, e:EditorTypes.ParsedExternalEnum) {
+	public function createExternalEnumDef(relSourcePath:String, checksum:String, e:EditorTypes.ParsedExternalEnum) {
 		var ed = createEnumDef(relSourcePath);
 		ed.identifier = e.enumId;
+		ed.externalFileChecksum = checksum;
 
 		for(v in e.values)
 			ed.addValue(v);
@@ -370,6 +371,10 @@ class Definitions {
 			}
 
 		return relPaths;
+	}
+
+	public inline function getAllExternalEnumsFrom(relPath:String) {
+		return externalEnums.filter( function(ed) return ed.externalRelPath==relPath );
 	}
 
 

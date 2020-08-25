@@ -39,7 +39,8 @@ class HxEnum {
 
 			// Try to import/sync
 			var copy = curProject.clone();
-			var log = importToProject(copy, relPath, parseds);
+			var checksum = haxe.crypto.Md5.encode(fileContent);
+			var log = importToProject(copy, relPath, checksum, parseds);
 			if( log.length>0 )
 				new ui.modal.dialog.Sync(log, relPath, copy);
 			else
@@ -111,7 +112,7 @@ class HxEnum {
 
 
 
-	static function importToProject(project:led.Project, relSourcePath:String, parseds:Array<EditorTypes.ParsedExternalEnum>) : SyncLog {
+	static function importToProject(project:led.Project, relSourcePath:String, checksum:String, parseds:Array<EditorTypes.ParsedExternalEnum>) : SyncLog {
 		var log : SyncLog = [];
 
 		var isNew = true;
@@ -125,7 +126,7 @@ class HxEnum {
 			// Source file is completely new
 			for(pe in parseds) {
 				log.push({ op:Add, str:pe.enumId+".*" });
-				project.defs.createExternalEnumDef(relSourcePath, pe);
+				project.defs.createExternalEnumDef(relSourcePath, checksum, pe);
 			}
 		}
 		else {
@@ -134,7 +135,7 @@ class HxEnum {
 				var existing = project.defs.getEnumDef(pe.enumId);
 				if( existing==null ) {
 					// New enum found
-					project.defs.createExternalEnumDef(relSourcePath, pe);
+					project.defs.createExternalEnumDef(relSourcePath, checksum, pe);
 					log.push({ op:Add, str:pe.enumId+".*" });
 				}
 				else {
@@ -180,6 +181,15 @@ class HxEnum {
 					}
 				}
 		}
+
+		// Fix checksum
+		for( ed in project.defs.externalEnums )
+			if( ed.externalRelPath==relSourcePath && ed.externalFileChecksum!=checksum ) {
+				ed.externalFileChecksum = checksum;
+				log.push({ op:ChecksumFix, str:ed.identifier+".*" });
+			}
+
+
 
 		project.tidy();
 		return log;

@@ -172,6 +172,7 @@ class Editor extends Page {
 
 	public function selectProject(p:led.Project) {
 		watcher.clearAllWatches();
+		ui.modal.Dialog.closeAll();
 
 		project = p;
 		project.tidy();
@@ -182,11 +183,25 @@ class Editor extends Page {
 
 		// Check external enums
 		for( relPath in project.defs.getExternalEnumPaths() ) {
-			if( !JsTools.fileExists( makeFullFilePath(relPath) ) )
+			if( !JsTools.fileExists( makeFullFilePath(relPath) ) ) {
+				// File not found
 				new ui.modal.dialog.LostFile(relPath, function(newAbsPath) {
 					var newRel = makeRelativeFilePath(newAbsPath);
 					importer.HxEnum.load(newRel, true);
 				});
+			}
+			else {
+				// Verify checksum
+				var f = JsTools.readFileString( makeFullFilePath(relPath) );
+				var checksum = haxe.crypto.Md5.encode(f);
+				for(ed in project.defs.getAllExternalEnumsFrom(relPath) )
+					if( ed.externalFileChecksum!=checksum ) {
+						new ui.modal.dialog.ExternalFileChanged(relPath, function() {
+							importer.HxEnum.load(relPath, true);
+						});
+						break;
+					}
+			}
 		}
 
 

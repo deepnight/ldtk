@@ -12,8 +12,8 @@ class Sync extends ui.modal.Dialog {
 		for(l in log)
 			switch l.op {
 				case Add:
-				case Remove:
-					jContent.find(".warning").show();
+				case ChecksumFix:
+				case Remove: jContent.find(".warning").show();
 			}
 
 		// Log
@@ -25,6 +25,7 @@ class Sync extends ui.modal.Dialog {
 			switch l.op {
 				case Add: li.append('<span class="op">New</op>');
 				case Remove: li.append('<span class="op">Removed</op>');
+				case ChecksumFix: li.append('<span class="op">Fixed checksum</op>');
 			}
 			li.addClass("op"+Std.string(l.op));
 			li.appendTo(jList);
