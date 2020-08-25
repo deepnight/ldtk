@@ -127,6 +127,19 @@ class EditEnums extends ui.modal.Panel {
 			var name = dn.FilePath.fromFile(group.key).fileWithExt;
 			e.html('<span>$name</span>');
 
+			// Check file
+			var needSync = !JsTools.fileExists( editor.makeFullFilePath(group.key) );
+			if( !needSync ) {
+				var checksum = haxe.crypto.Md5.encode( JsTools.readFileString( editor.makeFullFilePath(group.key) ) );
+				for( ed in group.value )
+					if( ed.externalFileChecksum!=checksum ) {
+						needSync = true;
+						break;
+					}
+			}
+			if( needSync )
+				e.append('<div class="error">File was modified!</div>');
+
 			// Reload source
 			var sync = new J('<a/>');
 			sync.appendTo(e);

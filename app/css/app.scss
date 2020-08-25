@@ -435,6 +435,20 @@ ul.niceList {
 			}
 		}
 	}
+	li div.error {
+		grid-column: span 2;
+		grid-row: 2;
+		padding: 4px;
+		margin-top: 4px;
+
+		color: white;
+		text-transform: uppercase;
+
+		background-color: $red;
+		border: 1px solid $orange;
+		outline: none;
+		box-shadow: 0px 0px 16px $red;
+	}
 
 	li.iconLeft {
 		grid-template-columns: min-content auto;
