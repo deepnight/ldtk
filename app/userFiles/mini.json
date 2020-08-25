@@ -236,11 +236,13 @@
 					{ "id" : "Ammo", "tileId" : null },
 					{ "id" : "Food", "tileId" : null },
 					{ "id" : "Gold", "tileId" : null },
-					{ "id" : "Key", "tileId" : null }
+					{ "id" : "Key", "tileId" : null },
+					{ "id" : "LongBow", "tileId" : null },
+					{ "id" : "MachineGun", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
 				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx",
-				"externalFileChecksum" : "c6cf23b5715490fffa677f12410459b2"
+				"externalFileChecksum" : "3e6dd7884a808e4603dd30f58c532227"
 			},
 			{
 				"identifier" : "EnemyType",
@@ -253,7 +255,7 @@
 				],
 				"iconTilesetUid" : null,
 				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx",
-				"externalFileChecksum" : "c6cf23b5715490fffa677f12410459b2"
+				"externalFileChecksum" : "3e6dd7884a808e4603dd30f58c532227"
 			},
 			{
 				"identifier" : "SomeEnum",
@@ -265,7 +267,7 @@
 				],
 				"iconTilesetUid" : null,
 				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx",
-				"externalFileChecksum" : "c6cf23b5715490fffa677f12410459b2"
+				"externalFileChecksum" : "3e6dd7884a808e4603dd30f58c532227"
 			},
 			{
 				"identifier" : "A",
