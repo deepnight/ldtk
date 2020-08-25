@@ -33,7 +33,7 @@ Get latest version from the official website: https://deepnight.itch.io/l-ed
  - Close the Layer panel (press ESCAPE or click outside)
  - Start editing :)
 
-
+**IMPORTANT: please have a look to the "?" (or press H) from the editor window to learn about useful powertips.**
 
 ## Layer types
 
@@ -61,7 +61,7 @@ Various examples:
  - "lifePoints": Integer value within [0,100] bounds, cannot be null
  - "goldDrop": Integer value within [1,∞], can be null, displayed above the entity instance (if not null)
 
-**Important: you need at least one "Entity layer" to place entity instances.**
+**IMPORTANT: you need at least one "Entity layer" to place entity instances.**
 
 ## Enums
 
