@@ -212,7 +212,8 @@
 					{ "id" : "Ninja", "tileId" : 13 }
 				],
 				"iconTilesetUid" : 14,
-				"externalRelPath" : null
+				"externalRelPath" : null,
+				"externalFileChecksum" : null
 			},
 			{
 				"identifier" : "ItemType",
@@ -223,7 +224,8 @@
 					{ "id" : "Food", "tileId" : 1086 }
 				],
 				"iconTilesetUid" : 18,
-				"externalRelPath" : null
+				"externalRelPath" : null,
+				"externalFileChecksum" : null
 			}
 		],
 		"externalEnums" : [
@@ -237,7 +239,8 @@
 					{ "id" : "Key", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx"
+				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx",
+				"externalFileChecksum" : "c6cf23b5715490fffa677f12410459b2"
 			},
 			{
 				"identifier" : "EnemyType",
@@ -249,7 +252,8 @@
 					{ "id" : "Shooter", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx"
+				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx",
+				"externalFileChecksum" : "c6cf23b5715490fffa677f12410459b2"
 			},
 			{
 				"identifier" : "SomeEnum",
@@ -260,7 +264,8 @@
 					{ "id" : "Pouet", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx"
+				"externalRelPath" : "../../../led-haxe-api/src/externEnums/GameEnums.hx",
+				"externalFileChecksum" : "c6cf23b5715490fffa677f12410459b2"
 			},
 			{
 				"identifier" : "A",
@@ -271,7 +276,8 @@
 					{ "id" : "A2", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "enumFiles/TypesTest.hx"
+				"externalRelPath" : "enumFiles/TypesTest.hx",
+				"externalFileChecksum" : "13d5a15135ebf5413f6525d1287519c6"
 			},
 			{
 				"identifier" : "B",
@@ -280,7 +286,8 @@
 					{ "id" : "B0", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "enumFiles/TypesTest.hx"
+				"externalRelPath" : "enumFiles/TypesTest.hx",
+				"externalFileChecksum" : "13d5a15135ebf5413f6525d1287519c6"
 			},
 			{
 				"identifier" : "C",
@@ -291,7 +298,8 @@
 					{ "id" : "C2", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "enumFiles/TypesTest.hx"
+				"externalRelPath" : "enumFiles/TypesTest.hx",
+				"externalFileChecksum" : "13d5a15135ebf5413f6525d1287519c6"
 			}
 		]
 	},
@@ -307,6 +315,7 @@
 					"__type" : "Entities",
 					"__cWid" : 16,
 					"__cHei" : 20,
+					"__gridSize" : 16,
 					"levelId" : 0,
 					"layerDefUid" : 4,
 					"pxOffsetX" : 0,
@@ -605,6 +614,7 @@
 					"__type" : "IntGrid",
 					"__cWid" : 16,
 					"__cHei" : 20,
+					"__gridSize" : 16,
 					"levelId" : 0,
 					"layerDefUid" : 13,
 					"pxOffsetX" : 0,
@@ -642,6 +652,7 @@
 					"__type" : "Tiles",
 					"__cWid" : 8,
 					"__cHei" : 10,
+					"__gridSize" : 32,
 					"levelId" : 0,
 					"layerDefUid" : 15,
 					"pxOffsetX" : 0,
