@@ -1116,6 +1116,10 @@ textarea {
 
 
 .window.helpWindow {
+	.wrapper {
+		max-height: 85vh;
+		max-width: 60vw;
+	}
 	dl {
 		display: grid;
 		grid-template-columns: 0.5fr 1fr;

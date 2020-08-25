@@ -1142,6 +1142,11 @@ textarea:focus {
   border: 1px solid #e34d00;
 }
 
+.window.helpWindow .wrapper {
+  max-height: 85vh;
+  max-width: 60vw;
+}
+
 .window.helpWindow dl {
   display: grid;
   grid-template-columns: 0.5fr 1fr;
