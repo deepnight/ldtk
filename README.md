@@ -2,6 +2,10 @@
 
 L-Ed is a **lightweight**, **modern** and **open-source** 2D level editor.
 
+# Install
+
+Get latest version from the official website: https://deepnight.itch.io/l-ed
+
 ## Features
 
  - **Easy to use**: modern UI with a strong focus on ease-of-use and quality-of-life features.
@@ -18,10 +22,6 @@ Many new features are planned, but feel free to suggest ideas on the official is
 
  - **Haxe (any framework)**: https://github.com/deepnight/led-haxe-api
  - More coming soon!
-
-# Install
-
-Get latest version from the official website: https://deepnight.itch.io/l-ed
 
 # How to use
 
