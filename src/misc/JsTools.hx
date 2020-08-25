@@ -337,7 +337,13 @@ class JsTools {
 
 	public static function makePath(path:String) {
 		path = StringTools.replace(path,"\\","/");
-		var parts = path.split("/").map( function(p) return '<span>$p</span>' );
+		var parts = path.split("/").map( function(p) {
+			var chksum = 0;
+			for(i in 0...p.length)
+				chksum+=p.charCodeAt(i);
+			var col = C.makeColorHsl( (chksum/100) % 0.5, 0.6, 1.0 );
+			return '<span style="color: ${C.intToHex(col)}">$p</span>';
+		});
 		var e = new J( parts.join('<span class="slash">/</span>') );
 		return e.wrapAll('<div class="path"/>').parent();
 	}

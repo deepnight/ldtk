@@ -295,6 +295,9 @@ div.key {
 	opacity: 1;
 	align-items: center;
 
+	span {
+		vertical-align: middle;
+	}
 	span+span {
 		margin-left: 2px;
 	}
@@ -304,13 +307,14 @@ div.key {
 		font-size: 9pt;
 
 		&:last-of-type {
-			color: $orange;
+			color: white !important;
 			font-weight: bold;
 			font-size: 10pt;
 		}
 	}
 	span.slash {
-		color: $bgLight;
+		color: $bgLighter;
+		font-weight: bold;
 		font-size: 12pt;
 	}
 }
@@ -1428,18 +1432,19 @@ canvas#webgl {
 			max-height: 30vh;
 			overflow-y: auto;
 
-			.path span:not(:last-of-type) {
+			.path span:not(:last-of-type):not(.slash) {
 				font-size: 8pt;
 			}
 
 			li:first-of-type {
-				border: 1px solid $orange;
+				// background-color: $bgLight;
 				&:hover {
 					outline-color: white;
 				}
 			}
 			li:not(:first-of-type) {
-				opacity: 0.6;
+				// background-color: $bgMed;
+				opacity: 0.65;
 			}
 		}
 		.buttons {

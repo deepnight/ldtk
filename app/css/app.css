@@ -286,6 +286,10 @@ div.key {
   align-items: center;
 }
 
+.path span {
+  vertical-align: middle;
+}
+
 .path span + span {
   margin-left: 2px;
 }
@@ -296,13 +300,14 @@ div.key {
 }
 
 .path span:not(.slash):last-of-type {
-  color: #ffcc00;
+  color: white !important;
   font-weight: bold;
   font-size: 10pt;
 }
 
 .path span.slash {
-  color: #545d73;
+  color: #737f9d;
+  font-weight: bold;
   font-size: 12pt;
 }
 
@@ -1452,12 +1457,8 @@ canvas#webgl {
   overflow-y: auto;
 }
 
-#page.home .wrapper ul.recents .path span:not(:last-of-type) {
+#page.home .wrapper ul.recents .path span:not(:last-of-type):not(.slash) {
   font-size: 8pt;
-}
-
-#page.home .wrapper ul.recents li:first-of-type {
-  border: 1px solid #ffcc00;
 }
 
 #page.home .wrapper ul.recents li:first-of-type:hover {
@@ -1465,7 +1466,7 @@ canvas#webgl {
 }
 
 #page.home .wrapper ul.recents li:not(:first-of-type) {
-  opacity: 0.6;
+  opacity: 0.65;
 }
 
 #page.home .wrapper .buttons .exit {
