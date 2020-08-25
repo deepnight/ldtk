@@ -2147,6 +2147,10 @@ canvas#webgl {
 			flex: 0 0 100px;
 		}
 
+		input.type {
+			font-family: 'Courier New', Courier, monospace;
+		}
+
 		ul.form *[class*="F_"] {
 			display: none;
 		}

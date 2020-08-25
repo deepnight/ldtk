@@ -2183,6 +2183,10 @@ canvas#webgl {
   flex: 0 0 100px;
 }
 
+.window.panel.entityDefs .fieldForm input.type {
+  font-family: 'Courier New', Courier, monospace;
+}
+
 .window.panel.entityDefs .fieldForm ul.form *[class*="F_"] {
   display: none;
 }

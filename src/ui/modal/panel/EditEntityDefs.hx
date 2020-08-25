@@ -88,7 +88,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				var f = curEntity.createFieldDef(project, type);
 				editor.ge.emit(EntityFieldAdded);
 				selectField(f);
-				jFieldForm.find("input:first").focus().select();
+				jFieldForm.find("input:not([readonly]):first").focus().select();
 			}
 
 			// Type picker
@@ -326,7 +326,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			jFieldForm.removeClass("type-"+k);
 		jFieldForm.addClass("type-"+curField.type.getName());
 
-		jFieldForm.find(".type").empty().append( curField.getShortDescription() );
+		jFieldForm.find(".type").val( curField.getShortDescription() );
 
 		var i = new form.input.EnumSelect(
 			jFieldForm.find("select[name=editorDisplayMode]"),
