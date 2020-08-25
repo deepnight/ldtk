@@ -16,7 +16,7 @@ class Home extends Page {
 		var ver = jPage.find(".version");
 		ver.text( Lang.t._("Version ::v::, project file version ::pv::", {
 			v: Const.getAppVersion(),
-			pv: Const.DATA_VERSION,
+			pv: led.Project.JSON_VERSION,
 		}) );
 
 		// Buttons

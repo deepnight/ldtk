@@ -1,5 +1,6 @@
 class Const {
 	static var APP_VERSION = "0.1";
+
 	public static function getAppVersion() {
 		return
 			#if nwjs
@@ -17,6 +18,15 @@ class Const {
 			"v"+APP_VERSION;
 	}
 
+	public static var JSON_HEADER = {
+		fileType: "L-Ed Project JSON",
+		app: "L-Ed",
+		appAuthor: "Sebastien Benard",
+		appVersion: getAppVersion(),
+		url: "https://deepnight.net/"
+	}
+
+
 	public static var FPS = 60;
 	public static var SCALE = 1.0;
 
@@ -33,6 +43,4 @@ class Const {
 	public static var DEFAULT_LEVEL_HEIGHT = 256;
 	public static var DEFAULT_GRID_SIZE = 16;
 	public static var MAX_GRID_SIZE = 256;
-
-	public static var DATA_VERSION = 1;
 }

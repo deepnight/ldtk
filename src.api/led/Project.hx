@@ -5,7 +5,7 @@ class Project {
 	public static var DEFAULT_LEVEL_HEIGHT = 256; // px
 	public static var DEFAULT_GRID_SIZE = 16; // px
 
-	public static var DATA_VERSION = 1;
+	public static var JSON_VERSION = 1;
 	/* DATA VERSION CHANGELOG:
 		1. initial release
 	*/
@@ -15,7 +15,7 @@ class Project {
 	public var defs : Definitions;
 	public var levels : Array<Level> = [];
 
-	public var dataVersion : Int;
+	public var jsonVersion : Int;
 	public var name : String;
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
@@ -24,7 +24,7 @@ class Project {
 
 	private function new() {
 		name = "New project";
-		dataVersion = Project.DATA_VERSION;
+		jsonVersion = Project.JSON_VERSION;
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
 		bgColor = 0x7f8093;
 		defaultPivotX = defaultPivotY = 0;
@@ -47,7 +47,7 @@ class Project {
 
 	public static function fromJson(json:Dynamic) {
 		var p = new Project();
-		p.dataVersion = JsonTools.readInt(json.dataVersion, 0);
+		p.jsonVersion = JsonTools.readInt(json.jsonVersion, 0);
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
 		p.name = JsonTools.readString( json.name );
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
@@ -60,14 +60,14 @@ class Project {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( Level.fromJson(p, lvlJson) );
 
-		p.dataVersion = Project.DATA_VERSION; // always uses latest version
+		p.jsonVersion = Project.JSON_VERSION; // always uses latest version
 		return p;
 	}
 
 	public function toJson(excludeLevels=false) {
 		return {
 			name: name,
-			dataVersion: dataVersion,
+			jsonVersion: jsonVersion,
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
 			defaultGridSize: defaultGridSize,

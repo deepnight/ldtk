@@ -15,7 +15,7 @@ class JsTools {
 
 	public static function prepareProjectFile(p:led.Project) : { bytes:haxe.io.Bytes, json:Dynamic } {
 		var json = p.toJson();
-		var jsonStr = dn.JsonPretty.stringify(json);
+		var jsonStr = dn.JsonPretty.stringify(json, Const.JSON_HEADER);
 
 		return {
 			bytes: haxe.io.Bytes.ofString( jsonStr ),

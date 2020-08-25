@@ -30,7 +30,7 @@ class Definitions {
 		var d = new Definitions(p);
 
 		for( layerJson in JsonTools.readArray(json.layers) )
-			d.layers.push( led.def.LayerDef.fromJson(p.dataVersion, layerJson) );
+			d.layers.push( led.def.LayerDef.fromJson(p.jsonVersion, layerJson) );
 
 		for( entityJson in JsonTools.readArray(json.entities) )
 			d.entities.push( led.def.EntityDef.fromJson(p, entityJson) );
@@ -39,10 +39,10 @@ class Definitions {
 			d.tilesets.push( led.def.TilesetDef.fromJson(p, tilesetJson) );
 
 		for( enumJson in JsonTools.readArray(json.enums) )
-			d.enums.push( led.def.EnumDef.fromJson(p.dataVersion, enumJson) );
+			d.enums.push( led.def.EnumDef.fromJson(p.jsonVersion, enumJson) );
 
 		for( enumJson in JsonTools.readArray(json.externalEnums) )
-			d.externalEnums.push( led.def.EnumDef.fromJson(p.dataVersion, enumJson) );
+			d.externalEnums.push( led.def.EnumDef.fromJson(p.jsonVersion, enumJson) );
 
 		return d;
 	}
