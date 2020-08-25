@@ -203,10 +203,15 @@ class Rulers extends dn.Process {
 		// Preview resizing
 		if( dragStarted ) {
 			resizePreview.clear();
-			resizePreview.lineStyle(4, 0xffcc00);
 			var b = getResizedBounds(m);
+			resizePreview.lineStyle(4, !resizeBoundsValid(b) ? 0xff0000 : 0xffcc00);
 			resizePreview.drawRect(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
 		}
+	}
+
+	function resizeBoundsValid(b) {
+		var min = curLayerInstance.def.gridSize * 2;
+		return b.newRight>b.newLeft+min && b.newBottom>b.newTop+min;
 	}
 
 	function getResizedBounds(m:MouseCoords) {
@@ -245,12 +250,14 @@ class Rulers extends dn.Process {
 		if( dragStarted ) {
 			var b = getResizedBounds(m);
 			if( b.newLeft!=0 || b.newTop!=0 || b.newRight!=curLevel.pxWid || b.newBottom!=curLevel.pxHei ) {
-				var before = curLevel.toJson();
-				editor.levelRender.focusLevelX -= b.newLeft;
-				editor.levelRender.focusLevelY -= b.newTop;
-				curLevel.applyNewBounds(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
-				editor.ge.emit(LevelResized);
-				editor.curLevelHistory.saveResizedState( before, curLevel.toJson() );
+				if( resizeBoundsValid(b) ) {
+					var before = curLevel.toJson();
+					editor.levelRender.focusLevelX -= b.newLeft;
+					editor.levelRender.focusLevelY -= b.newTop;
+					curLevel.applyNewBounds(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
+					editor.ge.emit(LevelResized);
+					editor.curLevelHistory.saveResizedState( before, curLevel.toJson() );
+				}
 			}
 		}
 
