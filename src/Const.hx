@@ -2,20 +2,21 @@ class Const {
 	static var APP_VERSION = "0.1";
 
 	public static function getAppVersion() {
-		return
+		return [
+			Std.string(APP_VERSION),
+
 			#if nwjs
-				"NWJS "+
+				"NWJS",
 			#elseif electron
-				"Electron "+
+				"Electron",
 			#end
 
 			#if debug
-				"DBG "+
+				"DBG",
 			#else
-				"RC "+
+				"RC",
 			#end
-
-			"v"+APP_VERSION;
+		].join(" ");
 	}
 
 	public static var JSON_HEADER = {

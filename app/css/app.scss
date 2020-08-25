@@ -1416,15 +1416,23 @@ canvas#webgl {
 		.logo {
 			font-family: Roboto;
 			font-size: 100px;
-			line-height: 80%;
+			line-height: 85%;
 			text-align: center;
 			color: $orange;
+		}
+
+		.sub {
+			font-family: Roboto;
+			font-size: 14pt;
+			text-align: center;
+			color: $orange;
+			margin-bottom: 20px;
 		}
 
 		.version {
 			opacity: 0.6;
 			text-align: center;
-			margin-bottom: 10px;
+			margin-top: 20px;
 			font-size: 0.8em;
 		}
 		ul.recents {

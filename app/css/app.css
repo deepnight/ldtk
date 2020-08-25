@@ -1439,15 +1439,23 @@ canvas#webgl {
 #page.home .wrapper .logo {
   font-family: Roboto;
   font-size: 100px;
-  line-height: 80%;
+  line-height: 85%;
   text-align: center;
   color: #ffcc00;
+}
+
+#page.home .wrapper .sub {
+  font-family: Roboto;
+  font-size: 14pt;
+  text-align: center;
+  color: #ffcc00;
+  margin-bottom: 20px;
 }
 
 #page.home .wrapper .version {
   opacity: 0.6;
   text-align: center;
-  margin-bottom: 10px;
+  margin-top: 20px;
   font-size: 0.8em;
 }
 
