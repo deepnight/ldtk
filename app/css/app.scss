@@ -526,6 +526,9 @@ ul.log {
 			background-color: $red;
 		}
 	}
+	li.opChecksumFix {
+		color: $bgLighter;
+	}
 	li+li {
 		margin-top: 8px;
 	}

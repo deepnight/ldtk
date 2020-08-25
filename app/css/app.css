@@ -516,6 +516,10 @@ ul.log li.opRemove span.op {
   background-color: #e34d00;
 }
 
+ul.log li.opChecksumFix {
+  color: #737f9d;
+}
+
 ul.log li + li {
   margin-top: 8px;
 }
