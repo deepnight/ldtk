@@ -246,6 +246,8 @@ class Rulers extends dn.Process {
 			var b = getResizedBounds(m);
 			if( b.newLeft!=0 || b.newTop!=0 || b.newRight!=curLevel.pxWid || b.newBottom!=curLevel.pxHei ) {
 				var before = curLevel.toJson();
+				editor.levelRender.focusLevelX -= b.newLeft;
+				editor.levelRender.focusLevelY -= b.newTop;
 				curLevel.applyNewBounds(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
 				editor.ge.emit(LevelResized);
 				editor.curLevelHistory.saveResizedState( before, curLevel.toJson() );
