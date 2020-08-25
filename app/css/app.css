@@ -1186,7 +1186,10 @@ textarea:focus {
 }
 
 .window.helpWindow dl.minor dt {
-  margin-top: 4px;
+  padding: 4px;
+  padding-right: 8px;
+  background-color: #1e2229;
+  border-radius: 4px;
 }
 
 .window.helpWindow dl.minor dd {

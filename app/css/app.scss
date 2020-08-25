@@ -1162,7 +1162,10 @@ textarea {
 		}
 		&.minor {
 			dt {
-				margin-top: 4px;
+				padding: 4px;
+				padding-right: 8px;
+				background-color: $bgDark;
+				border-radius: 4px;
 			}
 			dd {
 				padding-left: 10px;
