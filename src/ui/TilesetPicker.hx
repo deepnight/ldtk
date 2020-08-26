@@ -17,6 +17,7 @@ class TilesetPicker {
 	var dragStart : Null<{ bt:Int, pageX:Float, pageY:Float }>;
 	var scrollX(default,set) : Float;
 	var scrollY(default,set) : Float;
+	var mouseOver = false;
 
 	public var singleSelectedTileId(default,set) : Null<Int>;
 	var singleTileMode(get,never) : Bool;
@@ -58,6 +59,7 @@ class TilesetPicker {
 
 		jPicker.get(0).onwheel = onPickerMouseWheel;
 		jPicker.mousemove( onPickerMouseMove );
+		jPicker.mouseleave( onPickerMouseLeave );
 
 		loadScrollPos();
 		renderSelection();
@@ -175,7 +177,7 @@ class TilesetPicker {
 
 	var _lastRect = null;
 	function updateCursor(pageX:Float, pageY:Float, force=false) {
-		if( isScrolling() || Editor.ME.isKeyDown(K.SPACE) ) {
+		if( isScrolling() || Editor.ME.isKeyDown(K.SPACE) || !mouseOver ) {
 			jCursor.hide();
 			return;
 		}
@@ -370,6 +372,12 @@ class TilesetPicker {
 	}
 
 	function onPickerMouseMove(ev:js.jquery.Event) {
+		mouseOver = true;
+		updateCursor(ev.pageX, ev.pageY);
+	}
+
+	function onPickerMouseLeave(ev:js.jquery.Event) {
+		mouseOver = false;
 		updateCursor(ev.pageX, ev.pageY);
 	}
 
