@@ -52,13 +52,7 @@ class Const {
 
 	#if macro
 	public static function dumpVersionToFile() {
-		// #if debug
-		// trace("I'm debug");
-		// #else
-		// trace("I'm release");
-		// #end
-		var v = Const.getAppVersion();
-		// trace(v);
+		var v = getAppVersion();
 		sys.io.File.saveContent("buildVersion.txt", v);
 	}
 	#end
