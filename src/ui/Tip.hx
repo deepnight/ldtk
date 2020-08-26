@@ -3,7 +3,7 @@ package ui;
 class Tip extends dn.Process {
 	var jTip : js.jquery.JQuery;
 
-	private function new(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String) {
+	private function new(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, forceBelowPos=false) {
 		super(Editor.ME);
 
 		jTip = new J("xml#tip").clone().children().first();
@@ -27,10 +27,10 @@ class Tip extends dn.Process {
 		var tOff = target.offset();
 		var x = tOff.left;
 		if( x>=js.Browser.window.innerWidth*0.5 )
-			 x= tOff.left + target.innerWidth() - jTip.outerWidth();
+			 x = tOff.left + target.innerWidth() - jTip.outerWidth();
 
 		var y = tOff.top + target.outerHeight() + 4;
-		if( target.outerHeight()<=32 )
+		if( target.outerHeight()<=32 && !forceBelowPos )
 			y = tOff.top - jTip.outerHeight() - 4;
 
 		jTip.offset({
@@ -44,7 +44,7 @@ class Tip extends dn.Process {
 	}
 
 
-	public static function attach(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String) {
+	public static function attach(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, ?forceBelow:Bool) {
 		var cur : Tip = null;
 		if( target.is("input") && target.attr("id")!=null )
 			target = target.add( App.ME.jPage.find("[for="+target.attr("id")+"]") );
@@ -54,7 +54,7 @@ class Tip extends dn.Process {
 			.on( "mouseover.tip", function(ev) {
 				if( cur!=null )
 					cur.destroy();
-				cur = new Tip(target, str, keys, className);
+				cur = new Tip(target, str, keys, className, forceBelow);
 			})
 			.on( "mouseout.tip", function(ev) {
 				if( cur!=null )
