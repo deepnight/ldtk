@@ -1661,6 +1661,10 @@ canvas#webgl {
 			border-style: solid;
 			border-width: 0px;
 
+			&.mouseOver {
+				border-color: rgba(255, 255, 255, 0.25);
+			}
+
 			&.randomMode {
 				border-width: 1px;
 				border-color: rgba(144, 238, 144, 0.5);

@@ -192,14 +192,16 @@ class TilesetPicker {
 		jCursor.empty();
 		jCursor.show();
 
+		var defaultClass = dragStart==null ? "mouseOver" : null;
+
 		if( singleTileMode ) {
-			var c = createCursor({ mode:Stamp, ids:[tileId] }, null, r.wid, r.hei);
+			var c = createCursor({ mode:Stamp, ids:[tileId] }, defaultClass, r.wid, r.hei);
 			c.appendTo(jCursor);
 		}
 		else {
 			var saved = tilesetDef.getSavedSelectionFor(tileId);
 			if( saved==null || dragStart!=null ) {
-				var c = createCursor({ mode:tool.getMode(), ids:[tileId] }, dragStart!=null && dragStart.bt==2?"remove":null, r.wid, r.hei);
+				var c = createCursor({ mode:tool.getMode(), ids:[tileId] }, dragStart!=null && dragStart.bt==2?"remove":defaultClass, r.wid, r.hei);
 				c.appendTo(jCursor);
 			}
 			else {

@@ -1689,6 +1689,11 @@ canvas#webgl {
   border-width: 0px;
 }
 
+.tilesetPicker .selectionsWrapper .tileCursor.mouseOver,
+.tilesetPicker .cursorsWrapper .tileCursor.mouseOver {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
 .tilesetPicker .selectionsWrapper .tileCursor.randomMode,
 .tilesetPicker .cursorsWrapper .tileCursor.randomMode {
   border-width: 1px;
