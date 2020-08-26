@@ -22,7 +22,7 @@ class Tool<T> extends dn.Process {
 	private function new() {
 		super(Editor.ME);
 
-		jPalette.find("*").off();
+		jPalette.off().find("*").off();
 		updatePalette();
 		editor.ge.addSpecificListener(ToolOptionChanged, onToolOptionChanged);
 	}
