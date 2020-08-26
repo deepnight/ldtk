@@ -1246,7 +1246,7 @@ textarea:focus {
 }
 
 .window.popOutPalette > .wrapper > .content {
-  width: 45vw;
+  width: max(45vw, 500px);
   max-height: 70vh;
 }
 
