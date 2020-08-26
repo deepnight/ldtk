@@ -149,7 +149,7 @@ class App extends dn.Process {
 		#end
 	}
 
-	public function loadPage(id:String) {
+	public function loadPage(id:String, ?vars:Dynamic) {
 		ui.modal.Dialog.closeAll();
 		ui.Modal.closeAll();
 		ui.Tip.clear();
@@ -161,6 +161,11 @@ class App extends dn.Process {
 		var raw = JsTools.readFileString(path);
 		if( raw==null )
 			throw "Page not found: "+id;
+
+		if( vars!=null ) {
+			for(k in Reflect.fields(vars))
+				raw = StringTools.replace( raw, '::$k::', Reflect.field(vars,k) );
+		}
 
 		jPage
 			.off()
