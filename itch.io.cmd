@@ -13,12 +13,12 @@ REM goto end
 
 :upload
 echo -- SENDING BUILDS --------------------------
-butler push redist/LEd-win32-x64 deepnight/l-ed:win64 --userversion-file redist/buildVersion.txt
+butler push redist/LEd-win32-x64 deepnight/led:win64 --userversion-file redist/buildVersion.txt
 
 echo -- CHECKING ITCH.IO VERSIONS --------------------------
 echo Please wait...
 ping -n 6 localhost > nul
-butler status deepnight/l-ed:win64
+butler status deepnight/led:win64
 goto end
 
 
