@@ -69,7 +69,6 @@ class App extends dn.Process {
 	}
 
 	function onAppResize(ev:js.html.Event) {
-		N.debug("resize");
 		if( curPageProcess!=null && !curPageProcess.destroyed )
 			curPageProcess.onAppResize();
 	}
@@ -137,7 +136,7 @@ class App extends dn.Process {
 	}
 
 	public function setWindowTitle(?str:String) {
-		var base = "L-Ed "+Const.getAppVersion();
+		var base = Const.APP_NAME+" "+Const.getAppVersion();
 		if( str==null )
 			str = base;
 		else
