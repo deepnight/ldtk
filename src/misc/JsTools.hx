@@ -304,6 +304,17 @@ class JsTools {
 			ui.Tip.attach(jThis, jThis.data("str"), "infoTip");
 		});
 
+		// External links
+		var links = jCtx.find("a[href]");
+		links.each( function(idx,e) {
+			var link = new J(e);
+			link.click( function(ev) {
+				ev.preventDefault();
+				electron.Shell.openExternal( link.attr("href") );
+			});
+		});
+
+
 		// Auto tool-tips
 		jCtx.find("[title]").each( function(idx,e) {
 			var jThis = new J(e);
