@@ -13,7 +13,7 @@ REM goto end
 
 :upload
 echo -- SENDING BUILDS --------------------------
-butler push redist/LEd-win32-x64 deepnight/l-ed:win64 --userversion-file buildVersion.txt
+butler push redist/LEd-win32-x64 deepnight/l-ed:win64 --userversion-file redist/buildVersion.txt
 
 echo -- CHECKING ITCH.IO VERSIONS --------------------------
 echo Please wait...

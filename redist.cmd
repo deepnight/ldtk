@@ -20,5 +20,10 @@ echo.
 call electron-packager . LEd --platform=win32 --arch=ia32,x64  --overwrite --out=../redist
 
 echo.
+echo Copying version file...
+cd..
+copy buildVersion.txt redist >NUL
+
+echo.
 echo Done.
 echo.
