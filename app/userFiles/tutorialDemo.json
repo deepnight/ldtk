@@ -3,7 +3,7 @@
 		"fileType" : "LEd Project JSON",
 		"app" : "LEd",
 		"appAuthor" : "Sebastien Benard",
-		"appVersion" : "0.1 Electron DBG",
+		"appVersion" : "Alpha 2 Electron Debug",
 		"url" : "https://deepnight.net/"
 	},
 	"name" : "empty",
@@ -12,7 +12,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#28282F",
-	"nextUid" : 3,
+	"nextUid" : 4,
 	"defs" : {
 		"layers" : [
 			{
@@ -51,7 +51,8 @@
 							21
 						],
 						"mode" : "Random"
-					}
+					},
+					{ "ids" : [ 11, 17 ], "mode" : "Stamp" }
 				]
 			}
 		],
@@ -296,6 +297,90 @@
 						{ "coordId" : 357, "v" : 21 },
 						{ "coordId" : 358, "v" : 1 },
 						{ "coordId" : 359, "v" : 1 }
+					],
+					"entityInstances" : []
+				}
+			]
+		},
+		{
+			"identifier" : "Level2",
+			"uid" : 3,
+			"pxWid" : 448,
+			"pxHei" : 352,
+			"layerInstances" : [
+				{
+					"__identifier" : "Tiles",
+					"__type" : "Tiles",
+					"__cWid" : 14,
+					"__cHei" : 11,
+					"__gridSize" : 32,
+					"levelId" : 3,
+					"layerDefUid" : 2,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
+					"gridTiles" : [
+						{ "coordId" : 36, "v" : 11 },
+						{ "coordId" : 50, "v" : 17 },
+						{ "coordId" : 58, "v" : 11 },
+						{ "coordId" : 64, "v" : 17 },
+						{ "coordId" : 65, "v" : 1 },
+						{ "coordId" : 66, "v" : 1 },
+						{ "coordId" : 67, "v" : 1 },
+						{ "coordId" : 68, "v" : 1 },
+						{ "coordId" : 69, "v" : 1 },
+						{ "coordId" : 72, "v" : 17 },
+						{ "coordId" : 78, "v" : 17 },
+						{ "coordId" : 79, "v" : 1 },
+						{ "coordId" : 80, "v" : 1 },
+						{ "coordId" : 81, "v" : 1 },
+						{ "coordId" : 82, "v" : 1 },
+						{ "coordId" : 83, "v" : 1 },
+						{ "coordId" : 84, "v" : 3 },
+						{ "coordId" : 85, "v" : 3 },
+						{ "coordId" : 86, "v" : 17 },
+						{ "coordId" : 92, "v" : 17 },
+						{ "coordId" : 93, "v" : 1 },
+						{ "coordId" : 94, "v" : 1 },
+						{ "coordId" : 95, "v" : 1 },
+						{ "coordId" : 96, "v" : 1 },
+						{ "coordId" : 97, "v" : 1 },
+						{ "coordId" : 98, "v" : 2 },
+						{ "coordId" : 99, "v" : 2 },
+						{ "coordId" : 100, "v" : 17 },
+						{ "coordId" : 106, "v" : 17 },
+						{ "coordId" : 107, "v" : 1 },
+						{ "coordId" : 108, "v" : 1 },
+						{ "coordId" : 109, "v" : 1 },
+						{ "coordId" : 110, "v" : 1 },
+						{ "coordId" : 111, "v" : 1 },
+						{ "coordId" : 112, "v" : 2 },
+						{ "coordId" : 113, "v" : 2 },
+						{ "coordId" : 114, "v" : 17 },
+						{ "coordId" : 120, "v" : 17 },
+						{ "coordId" : 121, "v" : 1 },
+						{ "coordId" : 122, "v" : 1 },
+						{ "coordId" : 123, "v" : 1 },
+						{ "coordId" : 124, "v" : 1 },
+						{ "coordId" : 125, "v" : 1 },
+						{ "coordId" : 126, "v" : 2 },
+						{ "coordId" : 127, "v" : 2 },
+						{ "coordId" : 128, "v" : 17 },
+						{ "coordId" : 134, "v" : 17 },
+						{ "coordId" : 135, "v" : 1 },
+						{ "coordId" : 136, "v" : 1 },
+						{ "coordId" : 137, "v" : 1 },
+						{ "coordId" : 138, "v" : 1 },
+						{ "coordId" : 139, "v" : 1 },
+						{ "coordId" : 140, "v" : 2 },
+						{ "coordId" : 141, "v" : 2 },
+						{ "coordId" : 142, "v" : 17 },
+						{ "coordId" : 148, "v" : 17 },
+						{ "coordId" : 149, "v" : 1 },
+						{ "coordId" : 150, "v" : 1 },
+						{ "coordId" : 151, "v" : 1 },
+						{ "coordId" : 152, "v" : 1 },
+						{ "coordId" : 153, "v" : 1 }
 					],
 					"entityInstances" : []
 				}
