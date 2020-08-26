@@ -247,7 +247,7 @@ class Tool<T> extends dn.Process {
 		if( isRunning() && !clickingOutsideBounds ) {
 			var anyChange = false;
 
-			if( rectangle && m.cx==origin.cx && m.cy==origin.cy && clickTime<=0.22 )
+			if( rectangle && m.cx==origin.cx && m.cy==origin.cy && clickTime<=0.22 && !editor.isAltDown() )
 				anyChange = useFloodfillAt(m);
 			else {
 				anyChange = rectangle
