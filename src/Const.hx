@@ -1,5 +1,5 @@
 class Const {
-	static var APP_VERSION = "0.2";
+	static var APP_VERSION = "Alpha 2";
 
 	public static function getAppVersion() {
 		return [
@@ -12,7 +12,7 @@ class Const {
 			#end
 
 			#if debug
-				"DBG",
+				"Debug",
 			#else
 				"RC",
 			#end
@@ -49,4 +49,17 @@ class Const {
 	public static var DEFAULT_LEVEL_HEIGHT = 256;
 	public static var DEFAULT_GRID_SIZE = 16;
 	public static var MAX_GRID_SIZE = 256;
+
+	#if macro
+	public static function dumpVersionToFile() {
+		// #if debug
+		// trace("I'm debug");
+		// #else
+		// trace("I'm release");
+		// #end
+		var v = Const.getAppVersion();
+		// trace(v);
+		sys.io.File.saveContent("buildVersion.txt", v);
+	}
+	#end
 }

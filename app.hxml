@@ -15,4 +15,4 @@
 -dce full
 -js app/js/app.js
 
---macro Macros.dumpVersionToFile()
+--macro Const.dumpVersionToFile()
