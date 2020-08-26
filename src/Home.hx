@@ -11,6 +11,7 @@ class Home extends Page {
 		ME = this;
 		App.ME.loadPage("home", {
 			app: Const.APP_NAME,
+			docUrl: Const.DOCUMENTATION_URL,
 			websiteUrl : Const.WEBSITE_URL,
 			issueUrl : Const.ISSUES_URL,
 		});
