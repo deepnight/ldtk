@@ -2,7 +2,7 @@
 	"name": "led",
 	"version": "0.0.1",
 	"main": "main.js",
-	"productName": "L-Ed",
+	"productName": "LEd",
 	"scripts": {
 		"start": "electron ."
 	},
