@@ -1,5 +1,5 @@
 class Const {
-	static var APP_VERSION = "0.1";
+	static var APP_VERSION = "0.2";
 
 	public static function getAppVersion() {
 		return [
@@ -20,6 +20,8 @@ class Const {
 	}
 
 	public static var APP_NAME = "LEd";
+	public static var WEBSITE_URL = "https://deepnight.net/tools/led-2d-level-editor/";
+	public static var ISSUES_URL = "https://github.com/deepnight/led/issues";
 
 	public static var JSON_HEADER = {
 		fileType: Const.APP_NAME+" Project JSON",

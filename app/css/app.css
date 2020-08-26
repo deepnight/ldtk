@@ -32,6 +32,10 @@ ul li {
   user-select: none;
 }
 
+a {
+  color: #ffcc00;
+}
+
 img {
   vertical-align: middle;
 }
@@ -1479,6 +1483,23 @@ canvas#webgl {
   text-align: center;
   margin-top: 20px;
   font-size: 0.8em;
+}
+
+#page.home .wrapper .disclaimer {
+  padding: 16px;
+  background-color: #791105;
+  border-radius: 3px;
+  margin-bottom: 16px;
+}
+
+#page.home .wrapper .disclaimer h2 {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+#page.home .wrapper .disclaimer strong {
+  text-decoration: underline;
 }
 
 #page.home .wrapper ul.recents {

@@ -49,6 +49,10 @@ ul {
 	user-select: none;
 }
 
+a {
+	color: $orange;
+}
+
 img {
 	vertical-align: middle;
 }
@@ -1453,6 +1457,22 @@ canvas#webgl {
 			text-align: center;
 			margin-top: 20px;
 			font-size: 0.8em;
+		}
+
+		.disclaimer {
+			padding: 16px;
+			background-color: $darkRed;
+			border-radius: 3px;
+			margin-bottom: 16px;
+			h2 {
+				border: none;
+				margin: 0;
+				padding: 0;
+			}
+
+			strong {
+				text-decoration: underline;
+			}
 		}
 		ul.recents {
 			min-height: 15vh;

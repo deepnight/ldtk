@@ -9,7 +9,11 @@ class Home extends Page {
 		super();
 
 		ME = this;
-		App.ME.loadPage("home");
+		App.ME.loadPage("home", {
+			app: Const.APP_NAME,
+			websiteUrl : Const.WEBSITE_URL,
+			issueUrl : Const.ISSUES_URL,
+		});
 		App.ME.setWindowTitle();
 
 		// Version
