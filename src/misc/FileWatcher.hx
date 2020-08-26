@@ -21,11 +21,12 @@ class FileWatcher extends dn.Process {
 		});
 	}
 
-	public inline function watchTileset(td:led.def.TilesetDef) {
-		watch(
-			Editor.ME.makeFullFilePath(td.relPath),
-			Editor.ME.reloadTileset.bind(td)
-		);
+	public function watchTileset(td:led.def.TilesetDef) {
+		if( td.relPath!=null )
+			watch(
+				Editor.ME.makeFullFilePath(td.relPath),
+				Editor.ME.reloadTileset.bind(td)
+			);
 	}
 
 	override function onDispose() {
