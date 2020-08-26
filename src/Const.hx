@@ -19,9 +19,11 @@ class Const {
 		].join(" ");
 	}
 
+	public static var APP_NAME = "LEd";
+
 	public static var JSON_HEADER = {
-		fileType: "L-Ed Project JSON",
-		app: "L-Ed",
+		fileType: Const.APP_NAME+" Project JSON",
+		app: Const.APP_NAME,
 		appAuthor: "Sebastien Benard",
 		appVersion: getAppVersion(),
 		url: "https://deepnight.net/"
