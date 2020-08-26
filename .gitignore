@@ -6,3 +6,5 @@ app/package-lock.json
 dump/
 res/.tmp
 redist/
+buildVersion.txt
+.vscode/settings.json
