@@ -5,6 +5,10 @@ echo Cleaning up existing redists...
 rmdir redist /S /Q
 echo.
 
+echo Compiling app...
+haxe app.hxml
+echo.
+
 cd app
 
 echo Installing required tools...
