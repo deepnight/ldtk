@@ -24,7 +24,7 @@
 		{
 			"text": "⚡ Run",
 			"color": "yellow",
-			"command": "run.electron.cmd",
+			"command": "run.cmd",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -23
