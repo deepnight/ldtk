@@ -1,9 +1,9 @@
 {
 	"__header__" : {
-		"fileType" : "L-Ed Project JSON",
-		"app" : "L-Ed",
+		"fileType" : "LEd Project JSON",
+		"app" : "LEd",
 		"appAuthor" : "Sebastien Benard",
-		"appVersion" : "0.1 Electron DBG",
+		"appVersion" : "0.0.3-electron-alpha-debug",
 		"url" : "https://deepnight.net/"
 	},
 	"name" : "demo",
@@ -12,7 +12,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#3B3B4F",
-	"nextUid" : 14,
+	"nextUid" : 22,
 	"defs" : {
 		"layers" : [
 			{
@@ -99,11 +99,11 @@
 				"pivotY" : 1.0,
 				"fieldDefs" : [
 					{
-						"identifier" : "name",
-						"__type" : "String",
-						"uid" : 8,
-						"type" : "F_String",
-						"canBeNull" : true,
+						"identifier" : "type",
+						"__type" : "LocalEnum.Type",
+						"uid" : 16,
+						"type" : { "id" : "F_Enum", "params" : [ 14 ] },
+						"canBeNull" : false,
 						"editorDisplayMode" : "ValueOnly",
 						"editorDisplayPos" : "Beneath",
 						"min" : null,
@@ -128,10 +128,10 @@
 				"fieldDefs" : [
 					{
 						"identifier" : "type",
-						"__type" : "String",
-						"uid" : 10,
-						"type" : "F_String",
-						"canBeNull" : true,
+						"__type" : "LocalEnum.Type",
+						"uid" : 15,
+						"type" : { "id" : "F_Enum", "params" : [ 14 ] },
+						"canBeNull" : false,
 						"editorDisplayMode" : "ValueOnly",
 						"editorDisplayPos" : "Beneath",
 						"min" : null,
@@ -139,16 +139,52 @@
 						"defaultOverride" : null
 					},
 					{
-						"identifier" : "loot",
+						"identifier" : "displayName",
 						"__type" : "String",
-						"uid" : 11,
+						"uid" : 19,
 						"type" : "F_String",
+						"canBeNull" : true,
+						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayPos" : "Above",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
+					},
+					{
+						"identifier" : "loot",
+						"__type" : "LocalEnum.Item",
+						"uid" : 21,
+						"type" : { "id" : "F_Enum", "params" : [ 20 ] },
 						"canBeNull" : true,
 						"editorDisplayMode" : "NameAndValue",
 						"editorDisplayPos" : "Beneath",
 						"min" : null,
 						"max" : null,
 						"defaultOverride" : null
+					},
+					{
+						"identifier" : "hitPoints",
+						"__type" : "Int",
+						"uid" : 17,
+						"type" : "F_Int",
+						"canBeNull" : false,
+						"editorDisplayMode" : "Hidden",
+						"editorDisplayPos" : "Above",
+						"min" : 1.0,
+						"max" : 100.0,
+						"defaultOverride" : { "id" : "V_Int", "params" : [ 50 ] }
+					},
+					{
+						"identifier" : "isVisible",
+						"__type" : "Bool",
+						"uid" : 18,
+						"type" : "F_Bool",
+						"canBeNull" : false,
+						"editorDisplayMode" : "Hidden",
+						"editorDisplayPos" : "Above",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : { "id" : "V_Bool", "params" : [ true ] }
 					}
 				]
 			},
@@ -363,7 +399,33 @@
 				]
 			}
 		],
-		"enums" : [],
+		"enums" : [
+			{
+				"identifier" : "Type",
+				"uid" : 14,
+				"values" : [
+					{ "id" : "Thug", "tileId" : null },
+					{ "id" : "Boss", "tileId" : null },
+					{ "id" : "Player", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : null,
+				"externalFileChecksum" : null
+			},
+			{
+				"identifier" : "Item",
+				"uid" : 20,
+				"values" : [
+					{ "id" : "Key", "tileId" : null },
+					{ "id" : "Ammo", "tileId" : null },
+					{ "id" : "Gold", "tileId" : null },
+					{ "id" : "Food", "tileId" : null }
+				],
+				"iconTilesetUid" : null,
+				"externalRelPath" : null,
+				"externalFileChecksum" : null
+			}
+		],
 		"externalEnums" : []
 	},
 	"levels" : [
@@ -388,17 +450,17 @@
 					"entityInstances" : [
 						{
 							"__identifier" : "Player",
-							"__cx" : 5,
+							"__cx" : 6,
 							"__cy" : 13,
 							"defUid" : 6,
-							"x" : 88,
+							"x" : 104,
 							"y" : 224,
 							"fieldInstances" : [
 								{
-									"__identifier" : "name",
+									"__identifier" : "type",
 									"__value" : "Player",
-									"__type" : "String",
-									"defUid" : 8,
+									"__type" : "LocalEnum.Type",
+									"defUid" : 16,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Player" ] }
 								}
 							]
@@ -414,15 +476,36 @@
 								{
 									"__identifier" : "type",
 									"__value" : "Thug",
-									"__type" : "String",
-									"defUid" : 10,
+									"__type" : "LocalEnum.Type",
+									"defUid" : 15,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Thug" ] }
+								},
+								{
+									"__identifier" : "hitPoints",
+									"__value" : 50,
+									"__type" : "Int",
+									"defUid" : 17,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "isVisible",
+									"__value" : true,
+									"__type" : "Bool",
+									"defUid" : 18,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "displayName",
+									"__value" : null,
+									"__type" : "String",
+									"defUid" : 19,
+									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "loot",
 									"__value" : null,
-									"__type" : "String",
-									"defUid" : 11,
+									"__type" : "LocalEnum.Item",
+									"defUid" : 21,
 									"realEditorValue" : null
 								}
 							]
@@ -438,33 +521,57 @@
 								{
 									"__identifier" : "type",
 									"__value" : "Boss",
-									"__type" : "String",
-									"defUid" : 10,
+									"__type" : "LocalEnum.Type",
+									"defUid" : 15,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Boss" ] }
+								},
+								{
+									"__identifier" : "hitPoints",
+									"__value" : 50,
+									"__type" : "Int",
+									"defUid" : 17,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "isVisible",
+									"__value" : true,
+									"__type" : "Bool",
+									"defUid" : 18,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "displayName",
+									"__value" : null,
+									"__type" : "String",
+									"defUid" : 19,
+									"realEditorValue" : null
 								},
 								{
 									"__identifier" : "loot",
 									"__value" : "Key",
-									"__type" : "String",
-									"defUid" : 11,
+									"__type" : "LocalEnum.Item",
+									"defUid" : 21,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "Key" ] }
 								}
 							]
 						},
 						{
 							"__identifier" : "Exit",
-							"__cx" : 1,
+							"__cx" : 2,
 							"__cy" : 14,
 							"defUid" : 12,
-							"x" : 16,
+							"x" : 32,
 							"y" : 224,
 							"fieldInstances" : [
 								{
 									"__identifier" : "destination",
-									"__value" : "Exit",
+									"__value" : "To West street",
 									"__type" : "String",
 									"defUid" : 13,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "Exit" ] }
+									"realEditorValue" : {
+										"id" : "V_String",
+										"params" : [ "To West street" ]
+									}
 								}
 							]
 						}
