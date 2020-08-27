@@ -54,7 +54,7 @@
 			"priority": -40
 		},
 		{
-			"text": "🌐 Upload to itch.io",
+			"text": "🌐 Itch.io",
 			"color": "cyan",
 			"command": "itch.io.cmd",
 			"alignment": "right",
