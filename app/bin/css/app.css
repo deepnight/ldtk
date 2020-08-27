@@ -1145,6 +1145,12 @@ textarea:focus {
   max-width: 60vw;
 }
 
+.window.helpWindow .version {
+  font-size: 8pt;
+  opacity: 0.75;
+  margin-bottom: 10px;
+}
+
 .window.helpWindow dl {
   display: grid;
   grid-template-columns: 0.5fr 1fr;

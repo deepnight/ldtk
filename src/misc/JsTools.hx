@@ -149,7 +149,7 @@ class JsTools {
 		_fileCache = new Map();
 	}
 
-	public static function getHtmlTemplate(name:String) : Null<String> {
+	public static function getHtmlTemplate(name:String, ?vars:Dynamic) : Null<String> {
 		if( !_fileCache.exists(name) ) {
 			var path = dn.FilePath.fromFile(App.RESOURCE_DIR + "tpl/" + name);
 			path.extension = "html";
@@ -160,7 +160,13 @@ class JsTools {
 			_fileCache.set( name, readFileString(path.full) );
 		}
 
-		return _fileCache.get(name);
+		var raw = _fileCache.get(name);
+		if( vars!=null ) {
+			for(k in Reflect.fields(vars))
+				raw = StringTools.replace( raw, '::$k::', Reflect.field(vars,k) );
+		}
+
+		return raw;
 	}
 
 

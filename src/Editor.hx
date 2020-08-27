@@ -529,7 +529,10 @@ class Editor extends Page {
 	function onHelp() {
 		ui.Modal.closeAll();
 		var m = new ui.Modal();
-		m.loadTemplate("help","helpWindow");
+		m.loadTemplate("help","helpWindow", {
+			app: Const.APP_NAME,
+			ver: Const.getAppVersion(),
+		});
 	}
 
 	function onClose(?bt:js.jquery.JQuery) {

@@ -99,12 +99,12 @@ class Modal extends dn.Process {
 
 	function onClose() {}
 
-	public function loadTemplate(tplName:String, ?className:String) {
+	public function loadTemplate(tplName:String, ?className:String, ?vars:Dynamic) {
 		if( className==null )
 			className = tplName;
 
 		jModalAndMask.addClass(className);
-		var html = JsTools.getHtmlTemplate(tplName);
+		var html = JsTools.getHtmlTemplate(tplName, vars);
 		jContent.empty().append( html );
 		JsTools.parseComponents(jContent);
 	}
