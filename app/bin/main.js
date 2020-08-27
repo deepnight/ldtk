@@ -2,6 +2,9 @@
 const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
 
+var hasDownloadedUpdate = false;
+var isInstallingUpdate = false;
+
 // *** Main app *****************************************************
 
 app.on('window-all-closed', () => {
@@ -25,14 +28,16 @@ app.on('ready', () => {
 
 	// Window close button
     mainWindow.on('close', function(ev) {
-		ev.preventDefault();
-		mainWindow.webContents.send("winClose");
+		if( !isInstallingUpdate ) {
+			ev.preventDefault();
+			mainWindow.webContents.send("winClose");
+		}
     });
 });
 
 
 
-// *** Async handlers *****************************************************
+// *** Async invoke() handlers *****************************************************
 
 ipcMain.handle("loadFile", async function(event, options) {
 	console.log(options);
@@ -58,11 +63,25 @@ ipcMain.handle("setWinTitle", function(event,args) {
 });
 
 ipcMain.handle("checkUpdate", function(event,args) {
-	autoUpdater.checkForUpdatesAndNotify();
+	console.log("checking...");
+	autoUpdater.checkForUpdates();
+	autoUpdater.on('update-available', (info) => {
+		mainWindow.webContents.send('updateFound');
+	})
+	autoUpdater.on('update-downloaded', (info) => {
+		mainWindow.webContents.send('updateReady');
+		hasDownloadedUpdate = true;
+	})
+});
+
+ipcMain.handle("installUpdate", function(event) {
+	console.log("install");
+	isInstallingUpdate = true;
+	autoUpdater.quitAndInstall();
 });
 
 
-// *** Sync handlers *****************************************************
+// *** Sync send() handlers *****************************************************
 
 ipcMain.on("getCwd", function(event) {
 	event.returnValue = process.cwd();
@@ -72,16 +91,3 @@ ipcMain.on("getAppDir", function(event) {
 	event.returnValue = app.getAppPath();
 });
 
-ipcMain.on("getAppResources", function(event) {
-	event.returnValue = process.resourcesPath;
-});
-
-// *** Auto-updater handlers *****************************************************
-
-autoUpdater.on('update-available', () => {
-	mainWindow.webContents.send('update_available');
-});
-
-autoUpdater.on('update-downloaded', () => {
-	mainWindow.webContents.send('update_downloaded');
-});
