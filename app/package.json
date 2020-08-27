@@ -6,7 +6,8 @@
 	"scripts": {
 		"start": "electron .",
 		"build": "electron-builder build --win",
-		"deploy": "electron-builder build --win --publish always"
+		"build-publish": "electron-builder build --win --publish always",
+		"pack": "electron-packager . LEd --platform=win32 --arch=ia32,x64  --overwrite --out=../redist"
 	},
 	"repository": {
 		"type": "git",
@@ -16,13 +17,13 @@
 	"devDependencies": {
 		"electron": "^9.2.1",
 		"electron-builder": "^22.8.0",
-		"electron-packager": "^8.7.2"
+		"electron-packager": "^15.1.0"
 	},
 	"build": {
 		"appId": "com.deepnight.led",
 		"asar": false,
 		"directories": {
-			"output":"../redist"
+			"output": "../redist"
 		},
 		"win": {
 			"target": "portable"
