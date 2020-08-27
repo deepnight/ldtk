@@ -17,12 +17,13 @@ call npm i electron-packager --save-dev
 call npm i electron --save-dev
 
 echo.
-call electron-packager . LEd --platform=win32 --arch=ia32,x64  --overwrite --out=../redist
+call electron-packager . LEd --platform=win32 --arch=ia32,x64  --overwrite --out=..\redist
 
 echo.
 echo Copying version file...
-cd..
-copy buildVersion.txt redist >NUL
+copy ..\buildVersion.txt ..\redist >NUL
+
+cd ..
 
 echo.
 echo Done.
