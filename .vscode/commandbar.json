@@ -22,14 +22,6 @@
 			"priority": -22
 		},
 		{
-			"text": "⚡ Run",
-			"color": "yellow",
-			"command": "start run.cmd",
-			"alignment": "right",
-			"skipTerminateQuickPick": false,
-			"priority": -23
-		},
-		{
 			"text": "📦 Package",
 			"color": "white",
 			"command": "npm run pack --prefix app",
