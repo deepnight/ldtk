@@ -127,7 +127,7 @@ class App extends dn.Process {
 
 	public function openHome() {
 		clearCurPage();
-		curPageProcess = new Home();
+		curPageProcess = new page.Home();
 		curPageProcess.onAppResize();
 	}
 

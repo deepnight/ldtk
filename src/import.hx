@@ -7,6 +7,7 @@ import hxd.Key as K;
 import Lang as L;
 
 // Misc
+import page.Editor;
 import misc.*;
 import EditorTypes;
 import ui.Notification as N;

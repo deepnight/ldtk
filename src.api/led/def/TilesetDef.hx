@@ -120,7 +120,7 @@ class TilesetDef {
 		relPath = dn.FilePath.fromFile( relFilePath ).useSlashes().full;
 
 		try {
-			var fullPath = Editor.ME.makeFullFilePath(relPath);
+			var fullPath = page.Editor.ME.makeFullFilePath(relPath); // HACK avoid Editor ref in API
 			bytes = misc.JsTools.readFileBytes(fullPath);
 
 			if( bytes==null )

@@ -1,3 +1,5 @@
+package page;
+
 import hxd.Key;
 
 class Editor extends Page {
