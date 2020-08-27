@@ -1,5 +1,5 @@
 class Const {
-	static var APP_VERSION = "Alpha 2";
+	static var APP_VERSION = "Alpha 2.1";
 
 	public static function getAppVersion() {
 		return [
