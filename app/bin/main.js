@@ -56,6 +56,14 @@ ipcMain.handle("setWinTitle", function(event,args) {
 
 // *** Sync handlers *****************************************************
 
-ipcMain.on("getAppCwd", function(event) {
+ipcMain.on("getCwd", function(event) {
+	event.returnValue = process.cwd();
+});
+
+ipcMain.on("getAppDir", function(event) {
 	event.returnValue = app.getAppPath();
+});
+
+ipcMain.on("getAppResources", function(event) {
+	event.returnValue = process.resourcesPath;
 });

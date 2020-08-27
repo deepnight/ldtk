@@ -13,6 +13,6 @@
 
 -main Boot
 -dce full
--js app/js/app.js
+-js app/bin/js/app.js
 
 --macro Const.dumpVersionToFile()

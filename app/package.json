@@ -1,21 +1,31 @@
 {
 	"name": "led",
 	"version": "0.0.3",
-	"main": "main.js",
+	"main": "bin/main.js",
 	"productName": "LEd",
-
 	"scripts": {
-		"start": "electron ."
+		"start": "electron .",
+		"build": "electron-builder build --win",
+		"deploy": "electron-builder build --win --publish always"
 	},
-
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/deepnight/led.git"
 	},
-
 	"dependencies": {},
 	"devDependencies": {
 		"electron": "^9.2.1",
+		"electron-builder": "^22.8.0",
 		"electron-packager": "^8.7.2"
+	},
+	"build": {
+		"appId": "com.deepnight.led",
+		"asar": false,
+		"directories": {
+			"output":"../redist"
+		},
+		"win": {
+			"target": "portable"
+		}
 	}
 }

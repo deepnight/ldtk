@@ -1,6 +1,7 @@
 class App extends dn.Process {
 	public static var ME : App;
 	public static var APP_DIR = "./"; // with leading slash
+	public static var RESOURCE_DIR = "bin/"; // with leading slash
 
 	public var jDoc(get,never) : J; inline function get_jDoc() return new J(js.Browser.document);
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
@@ -34,15 +35,21 @@ class App extends dn.Process {
 		win.onmousemove = onAppMouseMove;
 
 		// Init app dir
-		var fp = dn.FilePath.fromDir( ""+JsTools.getCwd() );
+		var fp = dn.FilePath.fromDir( JsTools.getAppDir() );
 		fp.useSlashes();
 		APP_DIR = fp.directoryWithSlash;
+		RESOURCE_DIR = APP_DIR+"bin/";
+		trace("cwd="+JsTools.getCwd());
+		trace("appDir="+APP_DIR);
+		trace("resDir="+RESOURCE_DIR);
 
 		// Restore last stored project state
 		session = {
 			recentProjects: [],
 		}
 		session = dn.LocalStorage.readObject("session", session);
+
+		trace(JsTools.fileExists("buildVersion.txt"));
 
 		openHome();
 	}
@@ -129,7 +136,7 @@ class App extends dn.Process {
 
 	public function getDefaultDir() {
 		if( session.recentProjects.length==0 )
-			return APP_DIR; // find a better default?
+			return APP_DIR; // TODO find a better default?
 
 		var last = session.recentProjects[session.recentProjects.length-1];
 		return dn.FilePath.fromFile(last).directory;
@@ -157,10 +164,10 @@ class App extends dn.Process {
 
 		jCanvas.hide();
 
-		var path = JsTools.getCwd() + '/pages/$id.html';
+		var path = RESOURCE_DIR + 'pages/$id.html';
 		var raw = JsTools.readFileString(path);
 		if( raw==null )
-			throw "Page not found: "+id;
+			throw "Page not found: "+id+" in "+path+"( cwd="+JsTools.getAppDir()+")";
 
 		if( vars!=null ) {
 			for(k in Reflect.fields(vars))

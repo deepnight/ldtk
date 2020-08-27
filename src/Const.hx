@@ -54,9 +54,12 @@ class Const {
 	#end
 
 	static function extractVersionFromPackageJson() : String {
+		#if !macro
+		return "TODO"; // HACK fix path
+		#end
 		var raw =
 			#if macro sys.io.File.getContent("app/package.json");
-			#else misc.JsTools.readFileString("package.json");
+			#else misc.JsTools.readFileString("app/package.json");
 			#end
 
 		var json = haxe.Json.parse(raw);

@@ -151,7 +151,7 @@ class JsTools {
 
 	public static function getHtmlTemplate(name:String) : Null<String> {
 		if( !_fileCache.exists(name) ) {
-			var path = dn.FilePath.fromFile(App.APP_DIR + "tpl/" + name);
+			var path = dn.FilePath.fromFile(App.RESOURCE_DIR + "tpl/" + name);
 			path.extension = "html";
 
 			if( !fileExists(path.full) )
@@ -391,10 +391,23 @@ class JsTools {
 		js.node.Fs.writeFileSync( path, js.node.Buffer.hxFromBytes(bytes) );
 	}
 
+	public static function getAppDir() {
+		#if electron
+
+		var path = electron.renderer.IpcRenderer.sendSync("getAppDir");
+		return dn.FilePath.fromDir( path ).useSlashes().directory;
+
+		#else
+
+		return js.Node.process.cwd();
+
+		#end
+	}
+
 	public static function getCwd() {
 		#if electron
 
-		var path = electron.renderer.IpcRenderer.sendSync("getAppCwd");
+		var path = electron.renderer.IpcRenderer.sendSync("getCwd");
 		return dn.FilePath.fromDir( path ).useSlashes().directory;
 
 		#else
