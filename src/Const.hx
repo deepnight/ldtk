@@ -1,5 +1,5 @@
 class Const {
-	static var APP_VERSION = extractVersionFromPackageJson();
+	static var APP_VERSION = #if macro getPackageVersion() #else getPackageVersionMacro() #end;
 
 	public static function getAppVersion() {
 		return [
@@ -47,22 +47,20 @@ class Const {
 	#end
 
 	#if macro
-	public static function dumpVersionToFile() {
+	public static function dumpBuildVersionToFile() {
 		var v = getAppVersion();
 		sys.io.File.saveContent("buildVersion.txt", v);
 	}
 	#end
 
-	static function extractVersionFromPackageJson() : String {
-		#if !macro
-		return "TODO"; // HACK fix path
-		#end
-		var raw =
-			#if macro sys.io.File.getContent("app/package.json");
-			#else misc.JsTools.readFileString("app/package.json");
-			#end
-
+	static function getPackageVersion() : String {
+		var raw = sys.io.File.getContent("app/package.json");
 		var json = haxe.Json.parse(raw);
 		return json.version;
+	}
+
+	static macro function getPackageVersionMacro() {
+		haxe.macro.Context.registerModuleDependency("Const","app/package.json");
+		return macro $v{ getPackageVersion() };
 	}
 }
