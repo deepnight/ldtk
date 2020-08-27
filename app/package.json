@@ -32,9 +32,8 @@
 			"package.json"
 		],
 		"nsis": {
-			"oneClick": false,
-			"perMachine": true,
-			"allowToChangeInstallationDirectory": true
+			"oneClick": true,
+			"shortcutName": "LEd - Modern 2D level editor"
 		},
 		"win": {
 			"target": "nsis",
