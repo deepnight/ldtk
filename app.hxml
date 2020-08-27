@@ -6,10 +6,10 @@
 -lib castle
 -lib deepnightLibs
 -lib hxnodejs
+-lib hxelectron
 
 -D editor
 -D electron
--lib hxelectron
 
 -main Boot
 -dce full
