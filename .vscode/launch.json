@@ -14,7 +14,7 @@
 				"runtimeExecutable": "C:\\Users\\deepnight\\AppData\\Roaming\\npm\\electron.cmd"
 			},
 			"runtimeArgs" : [
-				"${workspaceFolder}/app/main.js",
+				".",
 				"--remote-debugging-port=9222"
 			],
 			"preLaunchTask": "Electron debug",
