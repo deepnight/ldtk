@@ -1,24 +1,19 @@
 class Const {
-	static var APP_VERSION = "Alpha 2.1";
+	static var APP_VERSION = extractVersionFromPackageJson();
 
 	public static function getAppVersion() {
 		return [
 			Std.string(APP_VERSION),
 
-			#if nwjs
-				"NWJS",
-			#elseif electron
-				"Electron",
-			#end
+			#if nwjs "nwjs", #elseif electron "electron", #end
 
-			#if debug
-				"Debug",
-			#else
-				"RC",
-			#end
-		].join(" ");
+			"alpha",
+
+			#if debug "debug", #end
+		].join("-");
 	}
 
+	#if !macro
 	public static var APP_NAME = "LEd";
 	public static var WEBSITE_URL = "https://deepnight.net/tools/led-2d-level-editor/";
 	public static var DOCUMENTATION_URL = "https://deepnight.net/led-doc/home";
@@ -49,6 +44,7 @@ class Const {
 	public static var DEFAULT_LEVEL_HEIGHT = 256;
 	public static var DEFAULT_GRID_SIZE = 16;
 	public static var MAX_GRID_SIZE = 256;
+	#end
 
 	#if macro
 	public static function dumpVersionToFile() {
@@ -56,4 +52,14 @@ class Const {
 		sys.io.File.saveContent("buildVersion.txt", v);
 	}
 	#end
+
+	static function extractVersionFromPackageJson() : String {
+		var raw =
+			#if macro sys.io.File.getContent("app/package.json");
+			#else misc.JsTools.readFileString("package.json");
+			#end
+
+		var json = haxe.Json.parse(raw);
+		return json.version;
+	}
 }
