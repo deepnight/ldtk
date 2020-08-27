@@ -179,6 +179,15 @@ button.close {
 	}
 }
 
+button#update {
+	position: absolute;
+	width: auto;
+	padding: 4px;
+	top: 0;
+	right: 0;
+	z-index: 99;
+}
+
 .buttons {
 	display: flex;
 	flex-wrap: wrap;
@@ -1430,13 +1439,17 @@ canvas#webgl {
 }
 
 
+#page.update,
 #page.home {
-	background-color: $bgDark;
+	display: grid;
+	box-sizing: border-box;
 	width: 100vw;
 	height: 100vh;
-	display: grid;
+
 	align-items: center;
 	justify-items: center;
+
+	background-color: $bgDark;
 
 	.wrapper {
 		width: 400px;
@@ -1507,6 +1520,28 @@ canvas#webgl {
 	}
 }
 
+#page.update {
+	padding-top: 20px;
+	align-items: baseline;
+
+	.wrapper {
+		text-align: center;
+
+		.logo,
+		.sub {
+			color: $bgLight;
+		}
+
+		.updating {
+			display: inline-block;
+			padding: 10px;
+			font-size: 12pt;
+			color: black;
+			border-radius: 3px;
+			background-color: $orange;
+		}
+	}
+}
 
 #page.editor.compactPanel {
 	#mainPanel {

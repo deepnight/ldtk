@@ -175,6 +175,15 @@ button.close:hover {
   background-color: #545d73;
 }
 
+button#update {
+  position: absolute;
+  width: auto;
+  padding: 4px;
+  top: 0;
+  right: 0;
+  z-index: 99;
+}
+
 .buttons {
   display: flex;
   flex-wrap: wrap;
@@ -1455,19 +1464,23 @@ canvas#webgl {
   box-sizing: border-box;
 }
 
+#page.update,
 #page.home {
-  background-color: #1e2229;
+  display: grid;
+  box-sizing: border-box;
   width: 100vw;
   height: 100vh;
-  display: grid;
   align-items: center;
   justify-items: center;
+  background-color: #1e2229;
 }
 
+#page.update .wrapper,
 #page.home .wrapper {
   width: 400px;
 }
 
+#page.update .wrapper .logo,
 #page.home .wrapper .logo {
   font-family: Roboto;
   font-size: 100px;
@@ -1476,6 +1489,7 @@ canvas#webgl {
   color: #ffcc00;
 }
 
+#page.update .wrapper .sub,
 #page.home .wrapper .sub {
   font-family: Roboto;
   font-size: 14pt;
@@ -1484,6 +1498,7 @@ canvas#webgl {
   margin-bottom: 20px;
 }
 
+#page.update .wrapper .version,
 #page.home .wrapper .version {
   opacity: 0.6;
   text-align: center;
@@ -1491,6 +1506,7 @@ canvas#webgl {
   font-size: 0.8em;
 }
 
+#page.update .wrapper .disclaimer,
 #page.home .wrapper .disclaimer {
   padding: 16px;
   background-color: #791105;
@@ -1498,36 +1514,66 @@ canvas#webgl {
   margin-bottom: 16px;
 }
 
+#page.update .wrapper .disclaimer h2,
 #page.home .wrapper .disclaimer h2 {
   border: none;
   margin: 0;
   padding: 0;
 }
 
+#page.update .wrapper .disclaimer strong,
 #page.home .wrapper .disclaimer strong {
   text-decoration: underline;
 }
 
+#page.update .wrapper ul.recents,
 #page.home .wrapper ul.recents {
   min-height: 15vh;
   max-height: 30vh;
   overflow-y: auto;
 }
 
+#page.update .wrapper ul.recents .path span:not(:last-of-type):not(.slash),
 #page.home .wrapper ul.recents .path span:not(:last-of-type):not(.slash) {
   font-size: 8pt;
 }
 
+#page.update .wrapper ul.recents li:first-of-type:hover,
 #page.home .wrapper ul.recents li:first-of-type:hover {
   outline-color: white;
 }
 
+#page.update .wrapper ul.recents li:not(:first-of-type),
 #page.home .wrapper ul.recents li:not(:first-of-type) {
   opacity: 0.65;
 }
 
+#page.update .wrapper .buttons .exit,
 #page.home .wrapper .buttons .exit {
   flex: 0.3 1 0;
+}
+
+#page.update {
+  padding-top: 20px;
+  align-items: baseline;
+}
+
+#page.update .wrapper {
+  text-align: center;
+}
+
+#page.update .wrapper .logo,
+#page.update .wrapper .sub {
+  color: #545d73;
+}
+
+#page.update .wrapper .updating {
+  display: inline-block;
+  padding: 10px;
+  font-size: 12pt;
+  color: black;
+  border-radius: 3px;
+  background-color: #ffcc00;
 }
 
 #page.editor.compactPanel #mainPanel {

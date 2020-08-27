@@ -18,7 +18,9 @@ class App extends dn.Process {
 		ME = this;
 		createRoot(Boot.ME.s2d);
 		lastKnownMouse = { pageX:0, pageY:0 }
+		jCanvas.hide();
 
+		// Init window
 		#if nwjs
 			nw.Window.get().maximize();
 			nw.Window.get().on("close", exit.bind(false));
@@ -26,31 +28,17 @@ class App extends dn.Process {
 			electron.renderer.IpcRenderer.on("winClose", onWindowCloseButton);
 		#end
 
-		// Auto updater
-		electron.renderer.IpcRenderer.on("update_available", function() {
-			N.appUpdate("A new "+Const.APP_NAME+" update is available! It will be automatically downloaded in the background.");
-		});
-
-		electron.renderer.IpcRenderer.on("update_downloaded", function() {
-			N.appUpdate("Update downloaded.");
-		});
-
-		jCanvas.hide();
-
 		var win = js.Browser.window;
 		win.onblur = onAppBlur;
 		win.onfocus = onAppFocus;
 		win.onresize = onAppResize;
 		win.onmousemove = onAppMouseMove;
 
-		// Init app dir
+		// Init dirs
 		var fp = dn.FilePath.fromDir( JsTools.getAppDir() );
 		fp.useSlashes();
 		APP_DIR = fp.directoryWithSlash;
 		RESOURCE_DIR = APP_DIR+"bin/";
-		// trace("cwd="+JsTools.getCwd());
-		// trace("appDir="+APP_DIR);
-		// trace("resDir="+RESOURCE_DIR);
 
 		// Restore last stored project state
 		session = {
@@ -58,9 +46,26 @@ class App extends dn.Process {
 		}
 		session = dn.LocalStorage.readObject("session", session);
 
-		openHome();
-
+		// Auto updater
 		electron.renderer.IpcRenderer.invoke("checkUpdate");
+		electron.renderer.IpcRenderer.on("updateFound", function(ev) {
+			N.appUpdate("A new "+Const.APP_NAME+" update is available! It will be automatically downloaded in the background.");
+		});
+		electron.renderer.IpcRenderer.on("updateReady", function(ev) {
+			N.appUpdate("New version has been downloaded! CLick INSTALL to update the app.");
+			jBody.find("#update").remove();
+			var bt = new J('<button id="update"/>');
+			bt.appendTo(jBody);
+			bt.text("Install update");
+			bt.click(function(_) {
+				bt.remove();
+				loadPage("update", { app : Const.APP_NAME });
+				electron.renderer.IpcRenderer.invoke("installUpdate");
+			});
+		});
+
+		// Start
+		openHome();
 	}
 
 	#if electron
