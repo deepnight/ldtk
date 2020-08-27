@@ -3,9 +3,16 @@
 	"version": "0.0.3",
 	"main": "main.js",
 	"productName": "LEd",
+
 	"scripts": {
 		"start": "electron ."
 	},
+
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/deepnight/led.git"
+	},
+
 	"dependencies": {},
 	"devDependencies": {
 		"electron": "^9.2.1",
