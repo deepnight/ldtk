@@ -39,9 +39,9 @@ class App extends dn.Process {
 		fp.useSlashes();
 		APP_DIR = fp.directoryWithSlash;
 		RESOURCE_DIR = APP_DIR+"bin/";
-		trace("cwd="+JsTools.getCwd());
-		trace("appDir="+APP_DIR);
-		trace("resDir="+RESOURCE_DIR);
+		// trace("cwd="+JsTools.getCwd());
+		// trace("appDir="+APP_DIR);
+		// trace("resDir="+RESOURCE_DIR);
 
 		// Restore last stored project state
 		session = {
