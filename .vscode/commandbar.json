@@ -32,7 +32,7 @@
 		{
 			"text": "📦 Redist",
 			"color": "white",
-			"command": "electron-builder.cmd",
+			"command": "redist.cmd",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -30
