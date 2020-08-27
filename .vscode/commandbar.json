@@ -38,12 +38,28 @@
 			"priority": -30
 		},
 		{
-			"text": "🌐 Upload to itch.io",
+			"text": "📦 Redist-test",
 			"color": "white",
-			"command": "itch.io.cmd",
+			"command": "npm run build-test --prefix app",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -31
+		},
+		{
+			"text": "🌐 GitHub publish",
+			"color": "cyan",
+			"command": "npm run publish --prefix app",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -40
+		},
+		{
+			"text": "🌐 Upload to itch.io",
+			"color": "cyan",
+			"command": "itch.io.cmd",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -41
 		}
 	]
 }

@@ -1,15 +1,15 @@
 {
 	"name": "led",
-	"version": "0.0.1",
+	"version": "0.0.4",
 	"main": "bin/main.js",
 	"productName": "LEd",
 	"author": "Sebastien Benard",
 	"description": "Modern 2D level editor",
 	"scripts": {
 		"start": "electron .",
-		"build": "electron-builder build --win --publish never",
-		"build-publish": "electron-builder build --win --publish always",
-		"pack": "electron-packager . LEd --platform=win32 --arch=ia32,x64  --overwrite --out=../redist"
+		"build": "electron-builder build --publish never",
+		"build-test": "electron-builder build --dir --publish never",
+		"publish": "electron-builder build --publish always"
 	},
 	"repository": {
 		"type": "git",
@@ -19,9 +19,8 @@
 		"electron-updater": "^4.3.4"
 	},
 	"devDependencies": {
-		"electron": "^9.2.1",
-		"electron-builder": "^22.8.0",
-		"electron-packager": "^15.1.0"
+		"electron": "^10.0.0",
+		"electron-builder": "^22.8.0"
 	},
 	"build": {
 		"appId": "com.deepnight.led",
