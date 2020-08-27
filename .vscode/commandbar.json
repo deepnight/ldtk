@@ -24,39 +24,31 @@
 		{
 			"text": "⚡ Run",
 			"color": "yellow",
-			"command": "run.cmd",
+			"command": "start run.cmd",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -23
 		},
 		{
-			"text": "📦 Redist",
+			"text": "📦 Package",
 			"color": "white",
-			"command": "redist.cmd",
+			"command": "npm run pack --prefix app",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -30
 		},
 		{
-			"text": "📦 Redist-test",
-			"color": "white",
-			"command": "npm run build-test --prefix app",
-			"alignment": "right",
-			"skipTerminateQuickPick": false,
-			"priority": -31
-		},
-		{
-			"text": "🌐 GitHub publish",
+			"text": "🌐 publish-GitHub",
 			"color": "cyan",
-			"command": "npm run publish --prefix app",
+			"command": "npm run publish-github --prefix app",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -40
 		},
 		{
-			"text": "🌐 Itch.io",
+			"text": "🌐 publish-ItchIo",
 			"color": "cyan",
-			"command": "itch.io.cmd",
+			"command": "npm run publish-itchio --prefix app",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -41

@@ -1,10 +1,10 @@
-buildVersion.txt
+lastBuildVersion.txt
 
 dump/
-redist/
 res/.tmp
 .vscode/settings.json
 
+app/redist
 app/node_modules
 app/package-lock.json
 app/bin/js/app.js

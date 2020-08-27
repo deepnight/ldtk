@@ -1,35 +1,21 @@
 @echo off
 
-REM echo -- PACKAGING RPG MAP --------------------------
-REM haxelib run redistHelper hl.dx.hxml hl.sdl.hxml -o redist/itch.io res/changelog.md@CHANGELOG.txt redist/extras/README.txt redist/updateExtracter/neko@updater -hl32
-REM if ERRORLEVEL 1 goto error
-REM echo.
+echo -- BUILDING APP --------------------------
+cd app
+call npm run pack
 
-REM choice /C YN /M "Start uploading?"
-REM if ERRORLEVEL 2 goto end
-REM if ERRORLEVEL 1 goto upload
-REM goto end
-
-
-:upload
 echo -- SENDING BUILDS --------------------------
-butler push redist/LEd-win32-x64 deepnight/led:win64 --userversion-file redist/buildVersion.txt
-
-echo -- CHECKING ITCH.IO VERSIONS --------------------------
-echo Please wait...
-ping -n 6 localhost > nul
-butler status deepnight/led:win64
+butler push "redist/LEd installer.exe" deepnight/led:win64 --userversion-file ../lastBuildVersion.txt
 goto end
-
 
 :error
 echo.
 echo FAILED!
-
+pause
 
 :end
 echo.
 echo Done.
 echo.
-REM pause
-REM exit
+pause
+exit

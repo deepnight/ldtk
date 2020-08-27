@@ -7,9 +7,11 @@
 	"description": "Modern 2D level editor",
 	"scripts": {
 		"start": "electron .",
-		"build": "electron-builder build --publish never",
-		"build-test": "electron-builder build --dir --publish never",
-		"publish": "electron-builder build --publish always"
+		"compile": "cd.. && haxe app.hxml",
+		"pack": "electron-builder build --publish never",
+		"publish-github": "electron-builder build --publish always",
+		"publish-itchio": "butler push \"redist/LEd installer.exe\" deepnight/led:win64 --userversion-file ../lastBuildVersion.txt",
+		"publish": "npm run compile && npm run publish-github && npm run publish-itchio"
 	},
 	"repository": {
 		"type": "git",
@@ -24,6 +26,7 @@
 	},
 	"build": {
 		"appId": "com.deepnight.led",
+		"artifactName":"${productName} installer.${ext}",
 		"directories": {
 			"output": "redist"
 		},

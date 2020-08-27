@@ -49,7 +49,7 @@ class Const {
 	#if macro
 	public static function dumpBuildVersionToFile() {
 		var v = getAppVersion();
-		sys.io.File.saveContent("buildVersion.txt", v);
+		sys.io.File.saveContent("lastBuildVersion.txt", v);
 	}
 	#end
 
