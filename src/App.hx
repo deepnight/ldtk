@@ -26,14 +26,13 @@ class App extends dn.Process {
 			electron.renderer.IpcRenderer.on("winClose", onWindowCloseButton);
 		#end
 
+		// Auto updater
 		electron.renderer.IpcRenderer.on("update_available", function() {
-			trace("update available");
-			N.success("New update available!");
+			N.appUpdate("A new "+Const.APP_NAME+" update is available! It will be automatically downloaded in the background.");
 		});
 
 		electron.renderer.IpcRenderer.on("update_downloaded", function() {
-			trace("update dl done");
-			N.success("Update downloaded");
+			N.appUpdate("Update downloaded.");
 		});
 
 		jCanvas.hide();

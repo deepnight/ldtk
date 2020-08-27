@@ -31,6 +31,10 @@ class Notification extends dn.Process {
 		return new Notification(str, 0x42b771);
 	}
 
+	public static function appUpdate(str:String) {
+		return new Notification(str, 0xdbab13);
+	}
+
 	public static function error(str:String) {
 		return new Notification(str, 0xff0000);
 	}
