@@ -1,6 +1,6 @@
 -cp src.api
 -cp src
--cp externs
+-cp src.externs
 
 -lib heaps
 -lib castle
