@@ -49,8 +49,6 @@ class App extends dn.Process {
 		}
 		session = dn.LocalStorage.readObject("session", session);
 
-		trace(JsTools.fileExists("buildVersion.txt"));
-
 		openHome();
 	}
 
