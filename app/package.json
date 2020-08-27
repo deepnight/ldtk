@@ -1,6 +1,6 @@
 {
 	"name": "led",
-	"version": "0.0.4",
+	"version": "0.0.1",
 	"main": "bin/main.js",
 	"productName": "LEd",
 	"author": "Sebastien Benard",
@@ -15,12 +15,13 @@
 		"type": "git",
 		"url": "https://github.com/deepnight/led.git"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"electron-updater": "^4.3.4"
+	},
 	"devDependencies": {
 		"electron": "^9.2.1",
 		"electron-builder": "^22.8.0",
-		"electron-packager": "^15.1.0",
-		"electron-updater": "^4.3.4"
+		"electron-packager": "^15.1.0"
 	},
 	"build": {
 		"appId": "com.deepnight.led",
@@ -28,7 +29,8 @@
 			"output": "redist"
 		},
 		"files": [
-			"bin"
+			"bin",
+			"package.json"
 		],
 		"nsis": {
 			"oneClick": false,

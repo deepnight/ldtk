@@ -1,5 +1,6 @@
 'use strict';
 const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const { autoUpdater } = require('electron-updater');
 
 // *** Main app *****************************************************
 
@@ -13,11 +14,14 @@ app.on('ready', () => {
 		webPreferences: { nodeIntegration:true },
 		fullscreenable: true,
 		autoHideMenuBar: true,
+		show: false,
 		title: "L-Ed",
 	});
-	mainWindow.maximize();
 	mainWindow.loadURL(`file://${__dirname}/app.html`);
 	mainWindow.on('closed', () => { mainWindow = null; });
+
+
+	mainWindow.maximize();
 
 	// Window close button
     mainWindow.on('close', function(ev) {
@@ -53,6 +57,10 @@ ipcMain.handle("setWinTitle", function(event,args) {
 	mainWindow.title = args;
 });
 
+ipcMain.handle("checkUpdate", function(event,args) {
+	autoUpdater.checkForUpdatesAndNotify();
+});
+
 
 // *** Sync handlers *****************************************************
 
@@ -66,4 +74,14 @@ ipcMain.on("getAppDir", function(event) {
 
 ipcMain.on("getAppResources", function(event) {
 	event.returnValue = process.resourcesPath;
+});
+
+// *** Auto-updater handlers *****************************************************
+
+autoUpdater.on('update-available', () => {
+	mainWindow.webContents.send('update_available');
+});
+
+autoUpdater.on('update-downloaded', () => {
+	mainWindow.webContents.send('update_downloaded');
 });

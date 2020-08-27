@@ -26,6 +26,16 @@ class App extends dn.Process {
 			electron.renderer.IpcRenderer.on("winClose", onWindowCloseButton);
 		#end
 
+		electron.renderer.IpcRenderer.on("update_available", function() {
+			trace("update available");
+			N.success("New update available!");
+		});
+
+		electron.renderer.IpcRenderer.on("update_downloaded", function() {
+			trace("update dl done");
+			N.success("Update downloaded");
+		});
+
 		jCanvas.hide();
 
 		var win = js.Browser.window;
@@ -50,6 +60,8 @@ class App extends dn.Process {
 		session = dn.LocalStorage.readObject("session", session);
 
 		openHome();
+
+		electron.renderer.IpcRenderer.invoke("checkUpdate");
 	}
 
 	#if electron
