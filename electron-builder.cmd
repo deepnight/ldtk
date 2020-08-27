@@ -11,15 +11,9 @@ echo.
 
 cd app
 
-echo Installing required tools...
-echo.
-call npm i electron-packager --save-dev
-call npm i electron --save-dev
-
 echo.
 echo Packaging...
-echo.
-call electron-packager . LEd --platform=win32 --arch=ia32,x64  --overwrite --out=redist
+call npm run build
 
 echo.
 echo Copying version file...
