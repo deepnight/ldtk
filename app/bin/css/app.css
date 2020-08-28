@@ -216,19 +216,20 @@ button#update {
   border: 1px dotted #79dd8a;
 }
 
-.exploreTo {
+a.exploreTo {
+  flex: 0 0 auto !important;
   padding: 8px;
   background-color: #545d73;
   border-radius: 3px;
   cursor: pointer;
 }
 
-.exploreTo:hover {
+a.exploreTo:hover {
   color: black;
   background-color: #ffcc00;
 }
 
-.exploreTo::before {
+a.exploreTo::before {
   content: "📁";
 }
 

@@ -215,7 +215,8 @@ button#update {
 	border: 1px dotted $help;
 }
 
-.exploreTo {
+a.exploreTo {
+	flex: 0 0 auto !important;
 	padding: 8px;
 	background-color: $bgLight;
 	border-radius: 3px;

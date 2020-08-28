@@ -210,10 +210,10 @@ class EditEnums extends ui.modal.Panel {
 
 		// Source path
 		if( curEnum.isExternal() ) {
-			jForm.find(".source .path").remove();
-			jForm.find(".source").append(
-				JsTools.makePath(curEnum.externalRelPath)
-			);
+			jForm.find(".source .path, .source .exploreTo").remove();
+			jForm.find(".source")
+				.append( JsTools.makePath(curEnum.externalRelPath) )
+				.append( JsTools.makeExploreLink( editor.makeFullFilePath(curEnum.externalRelPath) ) );
 		}
 
 		// Tilesets
