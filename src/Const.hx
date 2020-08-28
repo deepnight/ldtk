@@ -73,7 +73,10 @@ class Const {
 
 		// Dump latest version notes to "build" release notes
 		var c = new dn.Changelog(raw);
-		sys.io.File.saveContent("app/build/release-notes.md", "##"+c.latest.fullVersion+"\n\n"+c.latest.linesMd.join("\n"));
+		var relNotes = [
+			"## " + c.latest.fullVersion + ( c.latest.title!=null ? " -- *"+c.latest.title+"*" : "" ),
+		].concat( c.latest.linesMd );
+		sys.io.File.saveContent("app/build/release-notes.md", relNotes.join("\n"));
 
 		return macro $v{raw};
 	}
