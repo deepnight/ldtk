@@ -2,7 +2,7 @@ package importer;
 
 class HxEnum {
 
-	public static function load(relPath:String, isSync:Bool) {
+	public static function load(relPath:String, isSync:Bool, ?ignoredExtPath:String) {
 		var curProject = Editor.ME.project;
 		var absPath = Editor.ME.makeFullFilePath(relPath);
 		var fileContent = JsTools.readFileString(absPath);
@@ -31,7 +31,7 @@ class HxEnum {
 			// Check for duplicate identifiers
 			for(pe in parseds) {
 				var ed = curProject.defs.getEnumDef(pe.enumId);
-				if( ed!=null && ed.externalRelPath!=relPath ) {
+				if( ed!=null && ed.externalRelPath!=relPath && ed.externalRelPath!=ignoredExtPath ) {
 					N.error("Import failed: the file contains the Enum identifier \""+pe.enumId+"\" which is already used in this project.");
 					return;
 				}

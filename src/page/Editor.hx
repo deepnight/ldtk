@@ -189,7 +189,7 @@ class Editor extends Page {
 				// File not found
 				new ui.modal.dialog.LostFile(relPath, function(newAbsPath) {
 					var newRel = makeRelativeFilePath(newAbsPath);
-					importer.HxEnum.load(newRel, true);
+					importer.HxEnum.load(newRel, true, relPath); // BUG not working
 				});
 			}
 			else {
