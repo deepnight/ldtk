@@ -22,25 +22,33 @@
 			"priority": -22
 		},
 		{
-			"text": "📦 Package",
+			"text": "🖥️ Term",
 			"color": "white",
-			"command": "npm run pack --prefix app",
+			"command": "start /d app cmd",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -30
 		},
 		{
-			"text": "🌐 publish-GitHub",
+			"text": "📦 Pack",
+			"color": "#ffcc94",
+			"command": "cd app && npm run pack && echo Done.",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -31
+		},
+		{
+			"text": "🌐 pub-GitHub",
 			"color": "cyan",
-			"command": "npm run publish-github --prefix app",
+			"command": "cd app && npm run publish-github && echo Done.",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -40
 		},
 		{
-			"text": "🌐 publish-ItchIo",
+			"text": "🌐 pub-ItchIo",
 			"color": "cyan",
-			"command": "npm run publish-itchio --prefix app",
+			"command": "cd app && npm run publish-itchio && echo Done.",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -41
