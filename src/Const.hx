@@ -27,7 +27,8 @@ class Const {
 		url: "https://deepnight.net/"
 	}
 
-	public static var CHANGELOG = new dn.Changelog( getChangelog() );
+	public static var CHANGELOG_MD = getChangelog();
+	public static var CHANGELOG = new dn.Changelog(CHANGELOG_MD);
 
 
 	public static var FPS = 60;

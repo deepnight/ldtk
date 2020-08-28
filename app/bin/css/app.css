@@ -45,10 +45,10 @@ xml {
 }
 
 h1 {
-  color: yellow;
-  background: red;
+  color: #ff00ff;
 }
 
+h1,
 h2,
 h3,
 h4,
@@ -57,6 +57,7 @@ h5 {
   padding: 0;
 }
 
+h1 .icon,
 h2 .icon,
 h3 .icon,
 h4 .icon,
@@ -66,6 +67,8 @@ h5 .icon {
   height: 2em;
 }
 
+h1 .icon,
+h1 img,
 h2 .icon,
 h2 img,
 h3 .icon,
@@ -75,6 +78,10 @@ h4 img,
 h5 .icon,
 h5 img {
   margin-right: 4px;
+}
+
+h1 {
+  font-family: Roboto;
 }
 
 h2 {
@@ -1464,24 +1471,30 @@ canvas#webgl {
   box-sizing: border-box;
 }
 
-#page.update,
 #page.home {
   display: grid;
-  box-sizing: border-box;
   width: 100vw;
   height: 100vh;
-  align-items: center;
-  justify-items: center;
+  align-content: center;
   background-color: #1e2229;
 }
 
-#page.update .wrapper,
 #page.home .wrapper {
-  width: 400px;
+  display: grid;
+  grid-template-columns: 400px 500px;
+  grid-template-rows: repeat(3, min-content);
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
-#page.update .wrapper .logo,
-#page.home .wrapper .logo {
+#page.home .wrapper .header {
+  grid-column: 1/3;
+}
+
+#page.home .wrapper .header .logo {
   font-family: Roboto;
   font-size: 100px;
   line-height: 85%;
@@ -1489,8 +1502,7 @@ canvas#webgl {
   color: #ffcc00;
 }
 
-#page.update .wrapper .sub,
-#page.home .wrapper .sub {
+#page.home .wrapper .header .sub {
   font-family: Roboto;
   font-size: 14pt;
   text-align: center;
@@ -1498,59 +1510,112 @@ canvas#webgl {
   margin-bottom: 20px;
 }
 
-#page.update .wrapper .version,
-#page.home .wrapper .version {
+#page.home .wrapper .header .disclaimer {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding: 16px;
+  font-size: 9pt;
+  background-color: #791105;
+  border-radius: 3px;
+}
+
+#page.home .wrapper .header .disclaimer h2 {
+  font-size: 10pt;
+  border: none;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 4px;
+}
+
+#page.home .wrapper .header .disclaimer p {
+  margin: 0;
+  margin-bottom: 4px;
+}
+
+#page.home .wrapper .header .disclaimer strong {
+  text-decoration: underline;
+}
+
+#page.home .wrapper .actions {
+  grid-column: 1/2;
+  display: grid;
+  height: 100%;
+  grid-template-rows: auto min-content;
+}
+
+#page.home .wrapper .actions ul.recents {
+  overflow-y: auto;
+}
+
+#page.home .wrapper .actions ul.recents:empty::before {
+  content: "No recent project";
+}
+
+#page.home .wrapper .actions ul.recents .path span:not(:last-of-type):not(.slash) {
+  font-size: 8pt;
+}
+
+#page.home .wrapper .actions ul.recents li:first-of-type:hover {
+  outline-color: white;
+}
+
+#page.home .wrapper .actions ul.recents li:not(:first-of-type) {
+  opacity: 0.65;
+}
+
+#page.home .wrapper .actions .buttons .exit {
+  flex: 0.3 1 0;
+}
+
+#page.home .wrapper .changelog {
+  grid-column: 2/3;
+  margin-left: 8px;
+  box-sizing: border-box;
+  padding: 16px;
+  border: 1px solid #2e333f;
+  border-radius: 3px;
+}
+
+#page.home .wrapper .changelog h1 {
+  color: #ffcc00;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+#page.home .wrapper .changelog #changelogHtml {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+#page.home .wrapper .changelog #changelogHtml h1 {
+  display: none;
+}
+
+#page.home .wrapper .changelog #changelogHtml h1 + h2 {
+  margin-top: 0;
+}
+
+#page.home .wrapper .changelog #changelogHtml h2 {
+  margin-top: 32px;
+  margin-bottom: 8px;
+  text-transform: none;
+  font-size: 14pt;
+}
+
+#page.home .wrapper .changelog #changelogMd {
+  display: none;
+}
+
+#page.home .wrapper .footer {
+  grid-column: 1/3;
+}
+
+#page.home .wrapper .footer .version {
   opacity: 0.6;
   text-align: center;
   margin-top: 20px;
   font-size: 0.8em;
-}
-
-#page.update .wrapper .disclaimer,
-#page.home .wrapper .disclaimer {
-  padding: 16px;
-  background-color: #791105;
-  border-radius: 3px;
-  margin-bottom: 16px;
-}
-
-#page.update .wrapper .disclaimer h2,
-#page.home .wrapper .disclaimer h2 {
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-
-#page.update .wrapper .disclaimer strong,
-#page.home .wrapper .disclaimer strong {
-  text-decoration: underline;
-}
-
-#page.update .wrapper ul.recents,
-#page.home .wrapper ul.recents {
-  min-height: 15vh;
-  max-height: 30vh;
-  overflow-y: auto;
-}
-
-#page.update .wrapper ul.recents .path span:not(:last-of-type):not(.slash),
-#page.home .wrapper ul.recents .path span:not(:last-of-type):not(.slash) {
-  font-size: 8pt;
-}
-
-#page.update .wrapper ul.recents li:first-of-type:hover,
-#page.home .wrapper ul.recents li:first-of-type:hover {
-  outline-color: white;
-}
-
-#page.update .wrapper ul.recents li:not(:first-of-type),
-#page.home .wrapper ul.recents li:not(:first-of-type) {
-  opacity: 0.65;
-}
-
-#page.update .wrapper .buttons .exit,
-#page.home .wrapper .buttons .exit {
-  flex: 0.3 1 0;
 }
 
 #page.update {

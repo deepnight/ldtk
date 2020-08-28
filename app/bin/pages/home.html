@@ -1,30 +1,48 @@
 <div class="wrapper">
-	<div class="logo">::app::</div>
-	<div class="sub">Modern 2D level editor</div>
+	<div class="header">
+		<div class="logo">::app::</div>
+		<div class="sub">Modern 2D level editor</div>
+		<div class="disclaimer">
+			<h2>Friendly warning</h2>
+			<p>
+				This is an <strong>ALPHA</strong> demo version of ::app::.
+			</p>
+			<p>
+				It is only meant for early testing & feedback. Things might change and break a lot during this Alpha phase, so please refrain to use it for production for now.
+			</p>
+			<p>
+				Links:
+				<a href="::docUrl::">Documentation</a> |
+				<a href="::websiteUrl::">Official website</a> |
+				<a href="::issueUrl::">Bugs & suggestions</a>
+			</p>
+		</div>
 
-	<div class="disclaimer">
-		<h2>Friendly warning</h2>
-		<p>
-			This is an <strong>ALPHA</strong> demo version of ::app::.
-		</p>
-		<p>
-			It is only meant for early testing & feedback. Things might change and break a lot during this Alpha phase, so please refrain to use it for production for now.
-		</p>
-		<p>
-			Links:
-			<a href="::docUrl::">Documentation</a> |
-			<a href="::websiteUrl::">Official website</a> |
-			<a href="::issueUrl::">Bugs & suggestions</a>
-		</p>
 	</div>
 
-	<ul class="niceList recents"></ul>
+	<div class="actions">
+		<ul class="niceList recents"></ul>
 
-	<div class="buttons">
-		<button class="new">New project</button>
-		<button class="load">Load project</button>
-		<button class="exit gray">Exit</button>
+		<div class="buttons">
+			<button class="new">New project</button>
+			<button class="load">Load project</button>
+			<button class="exit gray">Exit</button>
+		</div>
 	</div>
 
-	<div class="version"></div>
+	<div class="changelog">
+		<h1>Release notes</h1>
+		<div class="markdown" id="changelogHtml"></div>
+		<div id="changelogMd">::changelog::</div>
+	</div>
+
+	<div class="footer">
+		<div class="version"></div>
+	</div>
 </div>
+
+<script type="text/javascript" src="js/marked.min.js"></script>
+<script type="text/javascript">
+	document.getElementById("changelogHtml").innerHTML =
+		marked( document.getElementById("changelogMd").innerHTML );
+</script>

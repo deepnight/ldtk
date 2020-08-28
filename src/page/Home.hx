@@ -16,6 +16,7 @@ class Home extends Page {
 			docUrl: Const.DOCUMENTATION_URL,
 			websiteUrl : Const.WEBSITE_URL,
 			issueUrl : Const.ISSUES_URL,
+			changelog: StringTools.htmlEscape( Const.CHANGELOG_MD ),
 		});
 		App.ME.setWindowTitle();
 
@@ -47,18 +48,14 @@ class Home extends Page {
 		jRecentList.empty();
 
 		var recents = App.ME.session.recentProjects;
-		if( recents.length==0 )
-			jRecentList.hide();
-		else {
-			var i = recents.length-1;
-			while( i>=0 ) {
-				var p = recents[i];
-				var li = new J('<li/>');
-				li.appendTo(jRecentList);
-				li.append( JsTools.makePath(p) );
-				li.click( function(ev) loadProject(p) );
-				i--;
-			}
+		var i = recents.length-1;
+		while( i>=0 ) {
+			var p = recents[i];
+			var li = new J('<li/>');
+			li.appendTo(jRecentList);
+			li.append( JsTools.makePath(p) );
+			li.click( function(ev) loadProject(p) );
+			i--;
 		}
 	}
 
