@@ -7,8 +7,9 @@ class LostFile extends ui.modal.Dialog {
 
 		this.onNewPath = onNewPath;
 
-		var lostName = dn.FilePath.fromFile(lostPath).fileName;
-		var lostExt = dn.FilePath.fromFile(lostPath).extension;
+		var fp = dn.FilePath.fromFile(lostPath);
+		var lostName = fp.fileName;
+		var lostExt = fp.extension;
 
 		addTitle( Lang.t._("File not found!") );
 		addParagraph(Lang.t._("The following file cannot be found anymore:") );
@@ -17,7 +18,10 @@ class LostFile extends ui.modal.Dialog {
 
 		addParagraph(Lang.t._("What do you want to do?") );
 		addButton(Lang.t._("Locate the file"), "confirm", function() {
-			JsTools.loadDialog(lostExt==null ? null : ["."+lostExt], editor.getProjectDir(), function(newPath:String) {
+			var lostDir = editor.makeFullFilePath( fp.directory );
+			var baseDir = JsTools.fileExists(lostDir) ? lostDir : editor.getProjectDir();
+
+			JsTools.loadDialog(lostExt==null ? null : ["."+lostExt], baseDir, function(newPath:String) {
 				newPath = StringTools.replace(newPath, "\\", "/");
 				var newName = dn.FilePath.fromFile(newPath).fileName;
 				if( newName!=lostName ) {
