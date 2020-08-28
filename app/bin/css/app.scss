@@ -216,9 +216,11 @@ button#update {
 }
 
 .exploreTo {
-	padding: 4px 8px;
+	padding: 8px;
 	background-color: $bgLight;
 	border-radius: 3px;
+	cursor: pointer;
+
 	&:hover {
 		color: black;
 		background-color: $orange;
@@ -1543,6 +1545,9 @@ canvas#webgl {
 
 				li {
 					grid-template-columns: auto min-content;
+					.exploreTo {
+						padding: 4px 8px;
+					}
 				}
 
 				li:first-of-type {
@@ -1963,14 +1968,6 @@ canvas#webgl {
 		.path {
 			flex: 1 0 100%;
 			box-sizing: border-box;
-			cursor: pointer;
-			&:hover {
-				span:not(.slash) {
-					border-radius: 3px;
-					background-color: $orange;
-					color: black !important;
-				}
-			}
 		}
 
 		> .header {

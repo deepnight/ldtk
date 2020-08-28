@@ -217,9 +217,10 @@ button#update {
 }
 
 .exploreTo {
-  padding: 4px 8px;
+  padding: 8px;
   background-color: #545d73;
   border-radius: 3px;
+  cursor: pointer;
 }
 
 .exploreTo:hover {
@@ -1575,6 +1576,10 @@ canvas#webgl {
   grid-template-columns: auto min-content;
 }
 
+#page.home .wrapper .actions ul.recents li .exploreTo {
+  padding: 4px 8px;
+}
+
 #page.home .wrapper .actions ul.recents li:first-of-type:hover {
   outline-color: white;
 }
@@ -2004,15 +2009,6 @@ canvas#webgl {
 .window.panel.tilesetDefs .content .path {
   flex: 1 0 100%;
   box-sizing: border-box;
-  cursor: pointer;
-}
-
-.window.panel.levelList .content .path:hover span:not(.slash),
-.window.panel.layerDefs .content .path:hover span:not(.slash),
-.window.panel.tilesetDefs .content .path:hover span:not(.slash) {
-  border-radius: 3px;
-  background-color: #ffcc00;
-  color: black !important;
 }
 
 .window.panel.levelList .content > .header,
