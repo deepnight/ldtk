@@ -59,7 +59,7 @@ class App extends dn.Process {
 			bt.text("Install update");
 			bt.click(function(_) {
 				bt.remove();
-				loadPage("update", { app : Const.APP_NAME });
+				jBody.find("*").off();
 				electron.renderer.IpcRenderer.invoke("installUpdate");
 			});
 		});
