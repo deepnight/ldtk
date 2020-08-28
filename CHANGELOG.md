@@ -2,7 +2,10 @@
 
 ## 0.0.2-alpha
 
- - Added release notes to app Home page
+ - **Release notes**: added release notes to app Home page
+ - Adjusted grid opacity
+ - Bug fixes
+ - Dev scripts cleanup
 
 ## 0.0.1-alpha
 
