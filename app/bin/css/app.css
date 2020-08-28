@@ -1131,7 +1131,6 @@ textarea:focus {
 .window.dialog > .wrapper {
   padding: 16px;
   box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.6);
-  max-width: 260px;
 }
 
 .window.dialog > .wrapper .buttons {
