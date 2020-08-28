@@ -1,1 +1,6 @@
-See what's new in [CHANGELOG.md](https://github.com/deepnight/led/blob/master/CHANGELOG.md).
+
+ - **Release notes**: added release notes to app Home page
+ - Adjusted grid opacity
+ - Bug fixes
+ - Dev scripts cleanup
+

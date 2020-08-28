@@ -70,6 +70,11 @@ class Const {
 	static macro function getChangelog() {
 		haxe.macro.Context.registerModuleDependency("Const","CHANGELOG.md");
 		var raw = sys.io.File.getContent("CHANGELOG.md");
+
+		// Dump latest version notes to "build" release notes
+		var c = new dn.Changelog(raw);
+		sys.io.File.saveContent("app/build/release-notes.md", c.latest.linesMd.join("\n"));
+
 		return macro $v{raw};
 	}
 }
