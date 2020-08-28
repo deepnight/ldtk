@@ -460,13 +460,20 @@ ul.niceList {
 
 		border-top: 1px solid $bgLight;
 
+		.links {
+			display: flex;
+			a+a {
+				margin-left: 1px;
+			}
+		}
+
 		a {
 			font-size: 1.1em;
 			padding: 3px;
-			background-color: $orange;
+			background-color: $bgMed;
 			border-radius: 2px;
 			cursor: pointer;
-			color: black;
+			color: white;
 
 			&:hover {
 				background-color: white;
@@ -476,14 +483,16 @@ ul.niceList {
 	li div.error {
 		grid-column: span 2;
 		grid-row: 2;
-		padding: 4px;
+		padding: 8px;
 		margin-top: 4px;
 
+		font-size: 10pt;
 		color: white;
 		text-transform: uppercase;
 
-		background-color: $red;
-		border: 1px solid $orange;
+		border-radius: 4px;
+		background-color: $darkRed;
+		border: 1px solid $red;
 		outline: none;
 		box-shadow: 0px 0px 16px $red;
 	}

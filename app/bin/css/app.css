@@ -451,13 +451,21 @@ ul.niceList li.title {
   border-top: 1px solid #545d73;
 }
 
+ul.niceList li.title .links {
+  display: flex;
+}
+
+ul.niceList li.title .links a + a {
+  margin-left: 1px;
+}
+
 ul.niceList li.title a {
   font-size: 1.1em;
   padding: 3px;
-  background-color: #ffcc00;
+  background-color: #2e333f;
   border-radius: 2px;
   cursor: pointer;
-  color: black;
+  color: white;
 }
 
 ul.niceList li.title a:hover {
@@ -467,12 +475,14 @@ ul.niceList li.title a:hover {
 ul.niceList li div.error {
   grid-column: span 2;
   grid-row: 2;
-  padding: 4px;
+  padding: 8px;
   margin-top: 4px;
+  font-size: 10pt;
   color: white;
   text-transform: uppercase;
-  background-color: #e34d00;
-  border: 1px solid #ffcc00;
+  border-radius: 4px;
+  background-color: #791105;
+  border: 1px solid #e34d00;
   outline: none;
   box-shadow: 0px 0px 16px #e34d00;
 }

@@ -120,6 +120,8 @@ class EditEnums extends ui.modal.Panel {
 
 		var grouped = project.defs.getGroupedExternalEnums();
 		for( group in grouped.keyValueIterator() ) {
+			var fullPath = editor.makeFullFilePath(group.key);
+
 			// Source name
 			var e = new J("<li/>");
 			e.addClass("title fixed");
@@ -128,21 +130,30 @@ class EditEnums extends ui.modal.Panel {
 			e.html('<span>$name</span>');
 
 			// Check file
-			var needSync = !JsTools.fileExists( editor.makeFullFilePath(group.key) );
-			if( !needSync ) {
-				var checksum = haxe.crypto.Md5.encode( JsTools.readFileString( editor.makeFullFilePath(group.key) ) );
+			var fileExists = JsTools.fileExists(fullPath);
+			if( !fileExists )
+				e.append('<div class="error">File not found!</div>');
+			else {
+				var checksum = haxe.crypto.Md5.encode( JsTools.readFileString(fullPath) );
 				for( ed in group.value )
 					if( ed.externalFileChecksum!=checksum ) {
-						needSync = true;
+						e.append('<div class="error">File was modified, please use sync.</div>');
 						break;
 					}
 			}
-			if( needSync )
-				e.append('<div class="error">File was modified!</div>');
 
-			// Reload source
+			var links = new J('<div class="links"/>');
+			links.appendTo(e);
+
+			// Explore button
+			if( fileExists ) {
+				var a = JsTools.makeExploreLink(fullPath);
+				a.appendTo(links);
+			}
+
+			// Sync button
 			var sync = new J('<a/>');
-			sync.appendTo(e);
+			sync.appendTo(links);
 			sync.text("⟳");
 			sync.click( function(ev) {
 				importer.HxEnum.load(group.key, true);
