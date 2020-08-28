@@ -215,6 +215,19 @@ button#update {
 	border: 1px dotted $help;
 }
 
+.exploreTo {
+	padding: 4px 8px;
+	background-color: $bgLight;
+	border-radius: 3px;
+	&:hover {
+		color: black;
+		background-color: $orange;
+	}
+	&::before {
+		content: "📁";
+	}
+}
+
 #guide {
 	display: flex;
 	padding: 2px;
@@ -1526,6 +1539,10 @@ canvas#webgl {
 
 				.path span:not(:last-of-type):not(.slash) {
 					font-size: 8pt;
+				}
+
+				li {
+					grid-template-columns: auto min-content;
 				}
 
 				li:first-of-type {

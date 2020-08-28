@@ -427,7 +427,21 @@ class JsTools {
 		var fp = dn.FilePath.fromFile(filePath);
 		if( isWindows() )
 			fp.useBackslashes();
+		#if nwjs
 		nw.Shell.showItemInFolder(fp.full);
+		#else
+		electron.Shell.showItemInFolder(fp.full);
+		#end
+	}
+
+	public static function makeExploreLink(filePath:String) {
+		var a = new J('<a class="exploreTo"/>');
+		a.click( function(ev) {
+			ev.preventDefault();
+			ev.stopPropagation();
+			exploreToFile(filePath);
+		});
+		return a;
 	}
 
 	public static function isWindows() {

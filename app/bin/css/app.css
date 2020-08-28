@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: Roboto;
   src: url("../fonts/RobotoCondensed-Light.ttf");
@@ -213,6 +214,21 @@ button#update {
   font-size: 1.1em;
   padding: 10px;
   border: 1px dotted #79dd8a;
+}
+
+.exploreTo {
+  padding: 4px 8px;
+  background-color: #545d73;
+  border-radius: 3px;
+}
+
+.exploreTo:hover {
+  color: black;
+  background-color: #ffcc00;
+}
+
+.exploreTo::before {
+  content: "📁";
 }
 
 #guide {
@@ -1553,6 +1569,10 @@ canvas#webgl {
 
 #page.home .wrapper .actions ul.recents .path span:not(:last-of-type):not(.slash) {
   font-size: 8pt;
+}
+
+#page.home .wrapper .actions ul.recents li {
+  grid-template-columns: auto min-content;
 }
 
 #page.home .wrapper .actions ul.recents li:first-of-type:hover {
