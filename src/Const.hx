@@ -27,6 +27,8 @@ class Const {
 		url: "https://deepnight.net/"
 	}
 
+	public static var CHANGELOG = new dn.Changelog( getChangelog() );
+
 
 	public static var FPS = 60;
 	public static var SCALE = 1.0;
@@ -62,5 +64,11 @@ class Const {
 	static macro function getPackageVersionMacro() {
 		haxe.macro.Context.registerModuleDependency("Const","app/package.json");
 		return macro $v{ getPackageVersion() };
+	}
+
+	static macro function getChangelog() {
+		haxe.macro.Context.registerModuleDependency("Const","CHANGELOG.md");
+		var raw = sys.io.File.getContent("CHANGELOG.md");
+		return macro $v{raw};
 	}
 }
