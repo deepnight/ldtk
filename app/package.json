@@ -18,8 +18,7 @@
 		"url": "https://github.com/deepnight/led.git"
 	},
 	"dependencies": {
-		"electron-updater": "^4.3.4",
-		"marked": "^1.1.1"
+		"electron-updater": "^4.3.4"
 	},
 	"devDependencies": {
 		"electron": "^10.0.0",
