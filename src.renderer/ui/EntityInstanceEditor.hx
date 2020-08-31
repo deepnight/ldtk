@@ -78,7 +78,10 @@ class EntityInstanceEditor extends dn.Process {
 		if( CURRENT!=null && !CURRENT.destroyed ) {
 			CURRENT.destroy();
 			CURRENT = null;
+			return true;
 		}
+		else
+			return false;
 	}
 
 	function onFieldChange() {

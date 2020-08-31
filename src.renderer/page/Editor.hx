@@ -473,11 +473,13 @@ class Editor extends Page {
 		curTool.startUsing( getMouse(), e.button );
 		rulers.onMouseDown( getMouse(), e.button );
 	}
+
 	function onMouseUp() {
 		if( curTool.isRunning() )
 			curTool.stopUsing( getMouse() );
 		rulers.onMouseUp( getMouse() );
 	}
+
 	function onMouseMove(e:hxd.Event) {
 		curTool.onMouseMove( getMouse() );
 		rulers.onMouseMove( getMouse() );
