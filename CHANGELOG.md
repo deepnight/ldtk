@@ -1,5 +1,10 @@
 # LEd release notes
 
+## 0.0.3-alpha
+
+ - Better auto-update UI
+ - Code: Electron cleanup
+
 ## 0.0.2-alpha
 
  - **Release notes**: added release notes to app Home page
@@ -13,4 +18,4 @@
  - **Auto updater**: Added support for built-in Electron auto-updater
  - Packaged app with a NSIS setup
  - Added Changelog doc
- - Major GIT repo cleaning
+ - Code: major GIT repo cleaning
