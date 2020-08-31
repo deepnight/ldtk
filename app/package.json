@@ -7,7 +7,7 @@
 	"description": "Modern 2D level editor",
 	"scripts": {
 		"start": "electron .",
-		"compile": "cd.. && haxe app.hxml",
+		"compile": "cd.. && haxe main.hxml && haxe renderer.hxml",
 		"pack": "npm run pack-win && npm run pack-mac",
 		"pack-win": "electron-builder build --win --publish never",
 		"pack-mac": "electron-builder build --mac --publish never",
