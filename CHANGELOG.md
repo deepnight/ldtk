@@ -2,6 +2,7 @@
 
 ## 0.0.3-alpha
 
+ - ALT+click picking no longer picks in other layers by default (you need to hold SHIFT key to pick in any layer)
  - Better auto-update UI
  - Code: Electron cleanup
 
