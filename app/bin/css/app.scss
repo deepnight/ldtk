@@ -1684,29 +1684,6 @@ canvas#webgl {
 	}
 }
 
-#page.update {
-	padding-top: 20px;
-	align-items: baseline;
-
-	.wrapper {
-		text-align: center;
-
-		.logo,
-		.sub {
-			color: $bgLight;
-		}
-
-		.updating {
-			display: inline-block;
-			padding: 10px;
-			font-size: 12pt;
-			color: black;
-			border-radius: 3px;
-			background-color: $orange;
-		}
-	}
-}
-
 #page.editor.compactPanel {
 	#mainPanel {
 		width: 150px;
