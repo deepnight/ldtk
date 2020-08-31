@@ -4,6 +4,7 @@
 
  - Better **Entity instance fields editor**
  - Better **auto-update UI**
+ - Enhanced ALT-click picking cursor
  - Fixed Changelog display on Home page
  - ALT+click picking no longer picks in other layers by default (you can hold SHIFT key to pick in any layer)
  - Fixed window closing not working sometimes
