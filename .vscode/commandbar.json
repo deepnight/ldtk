@@ -41,7 +41,7 @@
 		{
 			"text": "📦 Pack",
 			"color": "#ffcc94",
-			"command": "cd app && npm run compile && npm run pack-win && echo Done.",
+			"command": "cd app  &&  npm run pack-win  &&  echo Done.",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -31
@@ -49,7 +49,7 @@
 		{
 			"text": "🌐 pub-GitHub",
 			"color": "cyan",
-			"command": "cd app && npm run publish-github && echo Done.",
+			"command": "cd app  &&  npm run publish-github  &&  echo Done.",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -40
@@ -57,7 +57,7 @@
 		{
 			"text": "🌐 pub-ItchIo",
 			"color": "cyan",
-			"command": "cd app && npm run publish-itchio && echo Done.",
+			"command": "cd app  &&  npm run publish-itchio  &&  echo Done.",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -41

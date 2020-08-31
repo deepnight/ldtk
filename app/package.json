@@ -7,13 +7,11 @@
 	"description": "Modern 2D level editor",
 	"scripts": {
 		"start": "electron .",
-		"compile": "cd.. && haxe main.hxml && haxe renderer.hxml",
-		"pack": "npm run pack-win && npm run pack-mac",
-		"pack-win": "electron-builder build --win --publish never",
-		"pack-mac": "electron-builder build --mac --publish never",
-		"publish-github": "electron-builder build --publish always",
-		"publish-itchio": "butler push \"redist/LEd %npm_package_version% installer.exe\" deepnight/led:win64 --userversion-file ../lastBuildVersion.txt",
-		"publish": "npm run compile && npm run publish-github && npm run publish-itchio"
+		"compile": "cd..  &&  haxe main.hxml  &&  haxe renderer.hxml",
+		"pack-win": "npm run compile  &&  electron-builder build --win --publish never",
+		"pack-mac": "npm run compile  &&  electron-builder build --mac --publish never",
+		"publish-github": "npm run compile  &&  electron-builder build --publish always",
+		"publish-itchio": "npm run compile  &&  butler push \"redist/LEd %npm_package_version% installer.exe\" deepnight/led:win64 --userversion-file ../lastBuildVersion.txt"
 	},
 	"repository": {
 		"type": "git",
