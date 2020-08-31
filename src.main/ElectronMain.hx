@@ -6,9 +6,6 @@ import js.Node.process;
 class ElectronMain {
 	// Boot
 	static function main() {
-		var hasDownloadedUpdate = false;
-		var isInstallingUpdate = false;
-
 		var mainWindow : electron.main.BrowserWindow = null;
 		App.on('ready', function() {
 			// Init window
@@ -26,6 +23,7 @@ class ElectronMain {
 			mainWindow.maximize();
 
 			dn.electron.Dialogs.initMain();
+			dn.electron.ElectronUpdater.initMain(mainWindow);
 		});
 
 		App.on('window-all-closed', function() {
@@ -38,7 +36,7 @@ class ElectronMain {
 		IpcMain.handle("appReady", function(ev) {
 			// Window close button
 			mainWindow.on('close', function(ev) {
-				if( !isInstallingUpdate ) {
+				if( !dn.electron.ElectronUpdater.isIntalling ) {
 					ev.preventDefault();
 					mainWindow.webContents.send("winClose");
 				}
@@ -66,43 +64,6 @@ class ElectronMain {
 
 		IpcMain.on("getAppDir", function(event) {
 			event.returnValue = App.getAppPath();
-		});
-
-
-		// *** electron-updater handlers *****************************************************
-
-		var autoUpdater : electronUpdater.AutoUpdater = js.node.Require.require("electron-updater").autoUpdater;
-		var checking = false;
-		IpcMain.handle("checkUpdate", function(event,args) {
-			checking = true;
-			js.html.Console.log("Checking for updates...");
-			autoUpdater.checkForUpdates();
-			autoUpdater.on('update-available', function(info) {
-				checking = false;
-				js.html.Console.log("Update found!");
-				mainWindow.webContents.send('updateChecked');
-				mainWindow.webContents.send('updateFound', info.version);
-			});
-			autoUpdater.on('error', function(_) {
-				if( checking )
-					mainWindow.webContents.send('updateError');
-				checking = false;
-			});
-			autoUpdater.on('update-not-available', function(info) {
-				checking = false;
-				mainWindow.webContents.send('updateChecked');
-			});
-			autoUpdater.on('update-downloaded', function(info) {
-				js.html.Console.log("Update ready!");
-				mainWindow.webContents.send('updateReady');
-				hasDownloadedUpdate = true;
-			});
-		});
-
-		IpcMain.handle("installUpdate", function(event) {
-			js.html.Console.log("Installing update...");
-			isInstallingUpdate = true;
-			autoUpdater.quitAndInstall();
 		});
 
 

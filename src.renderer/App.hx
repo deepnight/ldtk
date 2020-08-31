@@ -45,24 +45,31 @@ class App extends dn.Process {
 		session = dn.LocalStorage.readObject("session", session);
 
 		// Auto updater
-		var updateVer : Null<String> = null;
 		miniNotif("Checking for update...", true);
-		IpcRenderer.invoke("checkUpdate");
-		IpcRenderer.on("updateError", function(ev) {
-			miniNotif("Can't check for updates");
-		});
-		IpcRenderer.on("updateChecked", function(ev) {
-			miniNotif("App is up-to-date");
-		});
-		IpcRenderer.on("updateFound", function(ev, version) {
-			updateVer = version;
-			miniNotif('Downloading $updateVer...');
-		});
-		IpcRenderer.on("updateReady", function(ev) {
-			miniNotif('Update $updateVer ready!');
-			N.appUpdate("Update "+updateVer+" is ready! Click on the INSTALL button above.");
-			onUpdateReady(updateVer);
-		});
+		dn.electron.ElectronUpdater.initRenderer();
+		dn.electron.ElectronUpdater.onUpdateFound = function(info) miniNotif('Downloading ${info.version}...');
+		dn.electron.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
+		dn.electron.ElectronUpdater.onError = function() miniNotif("Can't check for updates");
+		dn.electron.ElectronUpdater.onUpdateDownloaded = function(info) {
+			miniNotif('Update ${info.version} ready!');
+			N.appUpdate("Update "+info.version+" is ready! Click on the INSTALL button above.");
+
+			var e = jBody.find("#updateInstall");
+			e.show();
+			var bt = e.find("button");
+			bt.off().empty();
+			bt.append('<strong>Install update</strong>');
+			bt.append('<em>Version ${info.version}</em>');
+			bt.click(function(_) {
+				bt.remove();
+				loadPage("updating", { app : Const.APP_NAME });
+				jBody.find("*").off();
+				delayer.addS(function() {
+					IpcRenderer.invoke("installUpdate");
+				}, 1);
+			});
+		}
+		dn.electron.ElectronUpdater.checkNow();
 
 		// Start
 		openHome();
@@ -92,23 +99,6 @@ class App extends dn.Process {
 		jBody.find("#miniNotif")
 			.stop(false,true)
 			.fadeOut(1500);
-	}
-
-	function onUpdateReady(ver:String) {
-		var e = jBody.find("#updateInstall");
-		e.show();
-		var bt = e.find("button");
-		bt.off().empty();
-		bt.append('<strong>Install update</strong>');
-		bt.append('<em>Version $ver</em>');
-		bt.click(function(_) {
-			bt.remove();
-			loadPage("updating", { app : Const.APP_NAME });
-			jBody.find("*").off();
-			delayer.addS(function() {
-				IpcRenderer.invoke("installUpdate");
-			}, 1);
-		});
 	}
 
 	function onAppMouseMove(e:js.html.MouseEvent) {
