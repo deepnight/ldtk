@@ -28,9 +28,14 @@ class ElectronMain {
 				mainWindow = null;
 			});
 			mainWindow.maximize();
+		});
 
+
+		// *** Async invoke() handlers *****************************************************
+
+		IpcMain.handle("appReady", function(ev) {
 			// Window close button
-			mainWindow.on('close', function(ev) { // TODO move that after proper App init
+			mainWindow.on('close', function(ev) {
 				if( !isInstallingUpdate ) {
 					ev.preventDefault();
 					mainWindow.webContents.send("winClose");
@@ -38,8 +43,6 @@ class ElectronMain {
 			});
 		});
 
-
-		// *** Async invoke() handlers *****************************************************
 		IpcMain.handle("loadFile", function(event, options) {
 			js.html.Console.log(options);
 			var filePaths = electron.main.Dialog.showOpenDialogSync(null, options);

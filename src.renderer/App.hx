@@ -69,6 +69,8 @@ class App extends dn.Process {
 
 		// Start
 		openHome();
+
+		electron.renderer.IpcRenderer.invoke("appReady");
 	}
 
 	#if electron
