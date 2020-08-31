@@ -1004,15 +1004,16 @@ textarea {
 
 .layerPickNotif {
 	position: absolute;
-	z-index: 10;
+	z-index: 99;
 	display: grid;
 	align-items: center;
 	justify-items: center;
+	top: 5px;
+	right: 5px;
 
-	width: 100vw;
-	height: 100vh;
 	box-sizing: border-box;
 	pointer-events: none;
+
 
 	span {
 		margin-left: 200px;
@@ -1020,8 +1021,11 @@ textarea {
 		padding: 4px 16px;
 		font-family: Roboto;
 		font-size: 30pt;
-		background-color: rgba(0, 0, 0, 0.66);
+		color: $orange;
+		background-color: rgba(0, 0, 0, 0.8);
 		border-radius: 8px;
+
+		animation: slideDown 1s;
 	}
 }
 
