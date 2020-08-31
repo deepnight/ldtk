@@ -51,11 +51,9 @@ class App extends dn.Process {
 		electron.renderer.IpcRenderer.invoke("checkUpdate");
 		electron.renderer.IpcRenderer.on("updateFound", function(ev, version) {
 			updateVer = version;
-			N.appUpdate("Update "+updateVer+" is available! It will be automatically downloaded in the background.");
-			N.debug(version);
 		});
 		electron.renderer.IpcRenderer.on("updateReady", function(ev) {
-			N.appUpdate("Update "+updateVer+" has been downloaded! CLick on the INSTALL button above.");
+			N.appUpdate("Update "+updateVer+" has been downloaded! Click on the INSTALL button above.");
 			onUpdateReady(updateVer);
 		});
 
