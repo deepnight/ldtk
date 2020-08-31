@@ -187,15 +187,17 @@ button.close {
 #miniNotif {
 	position: absolute;
 	z-index: 98;
-	top: 15px;
-	right: 0px;
+	bottom: 15px;
+	left: 0px;
 	display: none;
 
 	color: $bgLighter;
 	font-size: 9pt;
 	background-color: rgba(0, 0, 0, 0.4);
 	padding: 4px;
+	padding-left: 16px;
 	border-radius: 3px;
+
 	pointer-events: none;
 }
 
