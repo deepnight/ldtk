@@ -83,7 +83,8 @@ class Tool<T> extends dn.Process {
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		curMode = null;
 		startTime = haxe.Timer.stamp();
-		editor.clearSelection();
+		if( buttonId!=2 )
+			editor.clearSelection();
 		moveStarted = false;
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
 

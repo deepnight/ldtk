@@ -5,6 +5,7 @@ class EntityInstanceEditor extends dn.Process {
 
 	var jPanel : js.jquery.JQuery;
 	var ei : led.inst.EntityInstance;
+	var link : h2d.Graphics;
 
 	public function new(ei:led.inst.EntityInstance) {
 		super(Editor.ME);
@@ -13,9 +14,14 @@ class EntityInstanceEditor extends dn.Process {
 		this.ei = ei;
 		Editor.ME.ge.addGlobalListener(onGlobalEvent);
 
+		link = new h2d.Graphics();
+		Editor.ME.root.add(link, Const.DP_UI);
+
 		jPanel = new J('<div class="instanceEditor"/>');
 		App.ME.jBody.append(jPanel);
+
 		updateForm();
+		renderLink();
 	}
 
 	override function onDispose() {
@@ -23,6 +29,9 @@ class EntityInstanceEditor extends dn.Process {
 
 		jPanel.remove();
 		jPanel = null;
+
+		link.remove();
+		link = null;
 
 		ei = null;
 
@@ -42,8 +51,27 @@ class EntityInstanceEditor extends dn.Process {
 			case EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 				updateForm();
 
+			case ViewportChanged:
+				renderLink();
+
 			case _:
 		}
+	}
+
+	function renderLink() {
+		jPanel.css("border-color", C.intToHex(ei.def.color));
+		var win = js.Browser.window;
+		var render = Editor.ME.levelRender;
+		link.clear();
+		link.lineStyle(2*win.devicePixelRatio, ei.def.color);
+		link.moveTo(
+			render.levelToUiX(ei.x),
+			render.levelToUiY(ei.y)
+		);
+		link.lineTo(
+			Editor.ME.canvasWid() - jPanel.outerWidth()*win.devicePixelRatio,
+			Editor.ME.canvasHei()*0.5
+		);
 	}
 
 	public static function close() {
@@ -122,7 +150,7 @@ class EntityInstanceEditor extends dn.Process {
 
 	function updateForm() {
 		jPanel.empty();
-		jPanel.append("<h2>"+ei.def.identifier+"</h2>");
+		// jPanel.append("<h2>"+ei.def.identifier+"</h2>");
 
 		var form = new J('<ul class="form"/>');
 		form.appendTo(jPanel);
@@ -238,5 +266,9 @@ class EntityInstanceEditor extends dn.Process {
 					hideInputIfDefault(input, fi);
 			}
 		}
+
+		var wh = js.Browser.window.innerHeight;
+		var h = jPanel.outerHeight();
+		jPanel.css("top", Std.int(wh*0.5 - h*0.5)+"px");
 	}
 }

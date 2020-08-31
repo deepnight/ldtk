@@ -1950,13 +1950,19 @@ canvas#webgl {
 	z-index: 10;
 	top: 0px;
 	right: 0px;
+
 	width: 200px;
-	height: 100%;
+	max-height: 90%;
 	box-sizing: border-box;
-	padding: 5px;
+	padding: 10px;
+	border-left: 4px solid $orange;
+	box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.6);
+
 	background-color: $bgDark;
 
 	ul.form {
+		padding: 0;
+		border: none;
 		&>li>label {
 			flex: 0 0 100%;
 			padding: 0;
