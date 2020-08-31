@@ -9,5 +9,6 @@ app/redist
 app/node_modules
 app/build/release-notes.md
 app/bin/main.js
+app/bin/css/app.css
 app/bin/js/renderer.js
 app/bin/js/*.map
