@@ -1690,7 +1690,7 @@ canvas#webgl {
 			margin-left: 8px;
 			box-sizing: border-box;
 
-			border: 1px solid $bgMed;
+			border: 1px solid $bgLight;
 			border-radius: 3px;
 
 			h1 {
@@ -1703,18 +1703,33 @@ canvas#webgl {
 			#changelogHtml {
 				max-height: 50vh;
 				overflow-y: auto;
+				font-size: 10pt;
+				color: #b5becd;
 
 				h1 {
 					display: none;
 				}
+
 				h1+h2 {
 					margin-top: 0;
 				}
+
 				h2 {
 					margin-top: 32px;
 					margin-bottom: 8px;
 					text-transform: none;
 					font-size: 14pt;
+				}
+
+				ul {
+					margin-bottom: 8px;
+					li+li {
+						margin-top: 8px;
+					}
+				}
+
+				strong {
+					color: white;
 				}
 			}
 

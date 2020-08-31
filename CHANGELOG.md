@@ -2,10 +2,12 @@
 
 ## 0.0.3-alpha
 
- - ALT+click picking no longer picks in other layers by default (you need to hold SHIFT key to pick in any layer)
- - Fixed window close button not working sometimes
+ - Better **Entity instance fields editor**
+ - Better **auto-update UI**
+ - Fixed Changelog display on Home page
+ - ALT+click picking no longer picks in other layers by default (you can hold SHIFT key to pick in any layer)
+ - Fixed window closing not working sometimes
  - Added a brief notification when switching layers using picking
- - Better auto-update UI
  - Code: Electron cleanup
 
 ## 0.0.2-alpha
