@@ -4,6 +4,7 @@ dump/
 res/.tmp
 .vscode/settings.json
 
+app/main.js
 app/redist
 app/build/release-notes.md
 app/node_modules
