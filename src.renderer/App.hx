@@ -52,7 +52,6 @@ class App extends dn.Process {
 		dn.electron.ElectronUpdater.onError = function() miniNotif("Can't check for updates");
 		dn.electron.ElectronUpdater.onUpdateDownloaded = function(info) {
 			miniNotif('Update ${info.version} ready!');
-			N.appUpdate("Update "+info.version+" is ready! Click on the INSTALL button above.");
 
 			var e = jBody.find("#updateInstall");
 			e.show();
