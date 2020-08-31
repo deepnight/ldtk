@@ -437,7 +437,7 @@ class Editor extends Page {
 					return false;
 
 				var t = curTool.as(tool.TileTool);
-				t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO support picking save selections?
+				t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking save selections?
 
 				// var savedSel = td.getSavedSelectionFor(tid);
 				// if( savedSel==null || !isShiftDown() && !isCtrlDown() )
