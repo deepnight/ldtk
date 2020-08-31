@@ -235,7 +235,7 @@ class App extends dn.Process {
 			ui.Modal.closeAll();
 			new ui.modal.dialog.UnsavedChanges(Editor.ME.onSave.bind(false), exit.bind(true));
 		}
-		else 
-			IpcRenderer.invoke("exit");
+		else
+			IpcRenderer.invoke("exitApp");
 	}
 }

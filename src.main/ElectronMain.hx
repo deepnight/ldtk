@@ -28,6 +28,8 @@ class ElectronMain {
 				mainWindow = null;
 			});
 			mainWindow.maximize();
+
+			dn.electron.Dialogs.initMain();
 		});
 
 
@@ -43,18 +45,7 @@ class ElectronMain {
 			});
 		});
 
-		IpcMain.handle("loadFile", function(event, options) {
-			js.html.Console.log(options);
-			var filePaths = electron.main.Dialog.showOpenDialogSync(null, options);
-			return filePaths==null ? null : filePaths[0];
-		});
-
-		IpcMain.handle("saveAs", function(event, options) {
-			var filePaths = electron.main.Dialog.showSaveDialogSync(null, options);
-			return filePaths==null ? null : filePaths;
-		});
-
-		IpcMain.handle("exit", function(event) {
+		IpcMain.handle("exitApp", function(event) {
 			App.exit();
 		});
 

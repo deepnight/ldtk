@@ -160,7 +160,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			b.text("Replace image");
 
 		b.click( function(ev) {
-			JsTools.loadDialog([".png", ".gif", ".jpg", ".jpeg"], Editor.ME.getProjectDir(), function(absPath) {
+			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], Editor.ME.getProjectDir(), function(absPath) {
 				var oldRelPath = cur.relPath;
 				var relPath = Editor.ME.makeRelativeFilePath( absPath );
 

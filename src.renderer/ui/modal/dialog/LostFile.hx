@@ -21,7 +21,7 @@ class LostFile extends ui.modal.Dialog {
 			var lostDir = editor.makeFullFilePath( fp.directory );
 			var baseDir = JsTools.fileExists(lostDir) ? lostDir : editor.getProjectDir();
 
-			JsTools.loadDialog(lostExt==null ? null : ["."+lostExt], baseDir, function(newPath:String) {
+			dn.electron.Dialogs.open(lostExt==null ? null : ["."+lostExt], baseDir, function(newPath:String) {
 				newPath = StringTools.replace(newPath, "\\", "/");
 				var newName = dn.FilePath.fromFile(newPath).fileName;
 				if( newName!=lostName ) {

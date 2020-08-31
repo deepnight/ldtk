@@ -566,7 +566,7 @@ class Editor extends Page {
 	}
 
 	public function onSaveAs() {
-		JsTools.saveAsDialog([".json"], getProjectDir(), function(filePath:String) {
+		dn.electron.Dialogs.saveAs([".json"], getProjectDir(), function(filePath:String) {
 			if( JsTools.fileExists(filePath) )
 				new ui.modal.dialog.Confirm(Lang.t._("This file already exists and will be overwritten!"), function() {
 					this.projectFilePath = filePath;

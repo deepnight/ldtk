@@ -58,7 +58,7 @@ class Home extends Page {
 
 
 	public function onLoad() {
-		JsTools.loadDialog([".json"], App.ME.getDefaultDir(), function(filePath) {
+		dn.electron.Dialogs.open([".json"], App.ME.getDefaultDir(), function(filePath) {
 			loadProject(filePath);
 		});
 	}
@@ -95,7 +95,7 @@ class Home extends Page {
 	}
 
 	public function onNew() {
-		JsTools.saveAsDialog([".json"], App.ME.getDefaultDir(), function(filePath) {
+		dn.electron.Dialogs.saveAs([".json"], App.ME.getDefaultDir(), function(filePath) {
 			var fp = dn.FilePath.fromFile(filePath);
 			fp.extension = "json";
 
