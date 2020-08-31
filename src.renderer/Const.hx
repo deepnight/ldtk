@@ -8,8 +8,6 @@ class Const {
 			return [
 				Std.string(APP_VERSION),
 
-				#if nwjs "nwjs", #elseif electron "electron", #end
-
 				"alpha",
 
 				#if debug "debug", #end

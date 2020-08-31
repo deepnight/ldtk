@@ -1,3 +1,5 @@
+import electron.renderer.IpcRenderer;
+
 class App extends dn.Process {
 	public static var ME : App;
 	public static var APP_DIR = "./"; // with leading slash
@@ -22,12 +24,7 @@ class App extends dn.Process {
 		clearMiniNotif();
 
 		// Init window
-		#if nwjs
-			nw.Window.get().maximize();
-			nw.Window.get().on("close", exit.bind(false));
-		#elseif electron
-			electron.renderer.IpcRenderer.on("winClose", onWindowCloseButton);
-		#end
+		IpcRenderer.on("winClose", onWindowCloseButton);
 
 		var win = js.Browser.window;
 		win.onblur = onAppBlur;
@@ -50,18 +47,18 @@ class App extends dn.Process {
 		// Auto updater
 		var updateVer : Null<String> = null;
 		miniNotif("Checking for update...", true);
-		electron.renderer.IpcRenderer.invoke("checkUpdate");
-		electron.renderer.IpcRenderer.on("updateError", function(ev) {
+		IpcRenderer.invoke("checkUpdate");
+		IpcRenderer.on("updateError", function(ev) {
 			miniNotif("Can't check for updates");
 		});
-		electron.renderer.IpcRenderer.on("updateChecked", function(ev) {
+		IpcRenderer.on("updateChecked", function(ev) {
 			miniNotif("App is up-to-date");
 		});
-		electron.renderer.IpcRenderer.on("updateFound", function(ev, version) {
+		IpcRenderer.on("updateFound", function(ev, version) {
 			updateVer = version;
 			miniNotif('Downloading $updateVer...');
 		});
-		electron.renderer.IpcRenderer.on("updateReady", function(ev) {
+		IpcRenderer.on("updateReady", function(ev) {
 			miniNotif('Update $updateVer ready!');
 			N.appUpdate("Update "+updateVer+" is ready! Click on the INSTALL button above.");
 			onUpdateReady(updateVer);
@@ -70,7 +67,7 @@ class App extends dn.Process {
 		// Start
 		openHome();
 
-		electron.renderer.IpcRenderer.invoke("appReady");
+		IpcRenderer.invoke("appReady");
 	}
 
 	#if electron
@@ -109,7 +106,7 @@ class App extends dn.Process {
 			loadPage("updating", { app : Const.APP_NAME });
 			jBody.find("*").off();
 			delayer.addS(function() {
-				electron.renderer.IpcRenderer.invoke("installUpdate");
+				IpcRenderer.invoke("installUpdate");
 			}, 1);
 		});
 	}
@@ -203,11 +200,7 @@ class App extends dn.Process {
 		else
 			str = str + "    --    "+base;
 
-		#if nwjs
-			nw.Window.get().title = str;
-		#elseif electron
-			electron.renderer.IpcRenderer.invoke("setWinTitle", str);
-		#end
+		IpcRenderer.invoke("setWinTitle", str);
 	}
 
 	public function loadPage(id:String, ?vars:Dynamic) {
@@ -242,12 +235,7 @@ class App extends dn.Process {
 			ui.Modal.closeAll();
 			new ui.modal.dialog.UnsavedChanges(Editor.ME.onSave.bind(false), exit.bind(true));
 		}
-		else {
-			#if nwjs
-				nw.Window.get().close(true);
-			#elseif electron
-				electron.renderer.IpcRenderer.invoke("exit");
-			#end
-		}
+		else 
+			IpcRenderer.invoke("exit");
 	}
 }
