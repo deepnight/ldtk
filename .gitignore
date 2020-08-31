@@ -4,10 +4,10 @@ dump/
 res/.tmp
 .vscode/settings.json
 
-app/main.js
-app/redist
-app/build/release-notes.md
-app/node_modules
 app/package-lock.json
+app/redist
+app/node_modules
+app/build/release-notes.md
+app/bin/main.js
 app/bin/js/renderer.js
 app/bin/js/*.map
