@@ -9,10 +9,6 @@ class ElectronMain {
 		var hasDownloadedUpdate = false;
 		var isInstallingUpdate = false;
 
-		App.on('window-all-closed', function() {
-			electron.main.App.quit();
-		});
-
 		var mainWindow : electron.main.BrowserWindow = null;
 		App.on('ready', function() {
 			// Init window
@@ -32,8 +28,12 @@ class ElectronMain {
 			dn.electron.Dialogs.initMain();
 		});
 
+		App.on('window-all-closed', function() {
+			App.quit();
+		});
 
-		// *** Async invoke() handlers *****************************************************
+
+		// *** invoke/handle *****************************************************
 
 		IpcMain.handle("appReady", function(ev) {
 			// Window close button
@@ -58,7 +58,18 @@ class ElectronMain {
 		});
 
 
-		// *** Electron-Updater invoke handlers *****************************************************
+		// *** sendSync/on *****************************************************
+
+		IpcMain.on("getCwd", function(event) {
+			event.returnValue = process.cwd();
+		});
+
+		IpcMain.on("getAppDir", function(event) {
+			event.returnValue = App.getAppPath();
+		});
+
+
+		// *** electron-updater handlers *****************************************************
 
 		var autoUpdater : electronUpdater.AutoUpdater = js.node.Require.require("electron-updater").autoUpdater;
 		var checking = false;
@@ -92,17 +103,6 @@ class ElectronMain {
 			js.html.Console.log("Installing update...");
 			isInstallingUpdate = true;
 			autoUpdater.quitAndInstall();
-		});
-
-
-		// *** Sync send() handlers *****************************************************
-
-		IpcMain.on("getCwd", function(event) {
-			event.returnValue = process.cwd();
-		});
-
-		IpcMain.on("getAppDir", function(event) {
-			event.returnValue = App.getAppPath();
 		});
 
 
