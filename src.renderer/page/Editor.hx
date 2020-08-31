@@ -436,13 +436,14 @@ class Editor extends Page {
 				if( td==null )
 					return false;
 
-				var savedSel = td.getSavedSelectionFor(tid);
-
 				var t = curTool.as(tool.TileTool);
-				if( savedSel==null || !isShiftDown() && !isCtrlDown() )
-					t.selectValue( { ids:[tid], mode:t.getMode() } );
-				else
-					t.selectValue( savedSel );
+				t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO support picking save selections?
+
+				// var savedSel = td.getSavedSelectionFor(tid);
+				// if( savedSel==null || !isShiftDown() && !isCtrlDown() )
+				// 	t.selectValue( { ids:[tid], mode:t.getMode() } );
+				// else
+				// 	t.selectValue( savedSel );
 				levelRender.showRect( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
 				return true;
 		}

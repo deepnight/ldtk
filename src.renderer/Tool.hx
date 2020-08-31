@@ -92,7 +92,7 @@ class Tool<T> extends dn.Process {
 			if( !editor.isCurrentLayerVisible() )
 				return;
 
-			var ge = getGenericLevelElementAt(m);
+			var ge = getGenericLevelElementAt(m, editor.isShiftDown() ? null : curLayerInstance);
 
 			if( ge==null )
 				return;
@@ -311,7 +311,7 @@ class Tool<T> extends dn.Process {
 			editor.cursor.set(None);
 		else if( !isRunning() && editor.isAltDown() ) {
 			// Preview picking
-			var ge = getGenericLevelElementAt(m);
+			var ge = getGenericLevelElementAt(m, editor.isShiftDown() ? null : curLayerInstance);
 			switch ge {
 				case null: updateCursor(m);
 				case IntGrid(li, cx, cy): editor.cursor.set( GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ) );
