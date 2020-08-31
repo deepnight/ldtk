@@ -4,7 +4,7 @@
 	"skipErrorMessage": true,
 	"commands": [
 		{
-			"text": "⚡ Debug",
+			"text": "⚡ Rdr debug",
 			"color": "yellow",
 			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|Electron Renderer debug",
@@ -13,13 +13,22 @@
 			"priority": -21
 		},
 		{
-			"text": "⚡ Release",
+			"text": "⚡ Rdr release",
 			"color": "yellow",
 			"commandType":"palette",
 			"command": "workbench.action.tasks.runTask|Electron Renderer release",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -22
+		},
+		{
+			"text": "⚡ Main",
+			"color": "yellow",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|Electron Main",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -23
 		},
 		{
 			"text": "🖥️ Term",
