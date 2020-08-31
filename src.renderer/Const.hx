@@ -8,8 +8,6 @@ class Const {
 			return [
 				Std.string(APP_VERSION),
 
-				"alpha",
-
 				#if debug "debug", #end
 			].join("-");
 	}
