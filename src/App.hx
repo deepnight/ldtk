@@ -19,6 +19,7 @@ class App extends dn.Process {
 		createRoot(Boot.ME.s2d);
 		lastKnownMouse = { pageX:0, pageY:0 }
 		jCanvas.hide();
+		N.debug("goooood");
 
 		// Init window
 		#if nwjs

@@ -4,7 +4,7 @@
 		{
 			"label": "Electron release",
 			"type": "hxml",
-			"file": "app.hxml",
+			"file": "renderer.hxml",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",
@@ -22,7 +22,7 @@
 		{
 			"label": "Electron debug",
 			"type": "hxml",
-			"file": "app.debug.hxml",
+			"file": "renderer.debug.hxml",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",

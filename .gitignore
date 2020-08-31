@@ -8,5 +8,5 @@ app/redist
 app/build/release-notes.md
 app/node_modules
 app/package-lock.json
-app/bin/js/app.js
+app/bin/js/renderer.js
 app/bin/js/*.map
