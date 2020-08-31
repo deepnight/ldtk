@@ -3,6 +3,8 @@
 ## 0.0.3-alpha
 
  - ALT+click picking no longer picks in other layers by default (you need to hold SHIFT key to pick in any layer)
+ - Fixed window close button not working sometimes
+ - Added a brief notification when switching layers using picking
  - Better auto-update UI
  - Code: Electron cleanup
 
