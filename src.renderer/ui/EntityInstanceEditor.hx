@@ -1,7 +1,7 @@
 package ui;
 
-class InstanceEditor extends dn.Process {
-	public static var ALL : Array<InstanceEditor> = [];
+class EntityInstanceEditor extends dn.Process {
+	public static var CURRENT : Null<EntityInstanceEditor> = null;
 
 	var jPanel : js.jquery.JQuery;
 	var ei : led.inst.EntityInstance;
@@ -9,7 +9,7 @@ class InstanceEditor extends dn.Process {
 	public function new(ei:led.inst.EntityInstance) {
 		super(Editor.ME);
 
-		ALL.push(this);
+		CURRENT = this;
 		this.ei = ei;
 		Editor.ME.ge.addGlobalListener(onGlobalEvent);
 
@@ -26,7 +26,8 @@ class InstanceEditor extends dn.Process {
 
 		ei = null;
 
-		ALL.remove(this);
+		if( CURRENT==this )
+			CURRENT = null;
 		Editor.ME.ge.removeListener(onGlobalEvent);
 	}
 
@@ -45,9 +46,11 @@ class InstanceEditor extends dn.Process {
 		}
 	}
 
-	public static function closeAll() {
-		for(e in ALL)
-			e.destroy();
+	public static function close() {
+		if( CURRENT!=null && !CURRENT.destroyed ) {
+			CURRENT.destroy();
+			CURRENT = null;
+		}
 	}
 
 	function onFieldChange() {

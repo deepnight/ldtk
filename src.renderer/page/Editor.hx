@@ -370,21 +370,21 @@ class Editor extends Page {
 			case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
 		});
 
-		ui.InstanceEditor.closeAll();
+		ui.EntityInstanceEditor.close();
 		switch selection {
 			case null:
 			case IntGrid(_):
 			case Tile(_):
 
 			case Entity(instance):
-				new ui.InstanceEditor(instance);
+				new ui.EntityInstanceEditor(instance);
 		}
 	}
 
 	public function clearSelection() {
 		selection = null;
 		selectionCursor.set(None);
-		ui.InstanceEditor.closeAll();
+		ui.EntityInstanceEditor.close();
 	}
 
 	function initTool() {
