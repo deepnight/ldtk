@@ -2,7 +2,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Electron release",
+			"label": "Electron Renderer release",
 			"type": "hxml",
 			"file": "renderer.hxml",
 			"problemMatcher": [
@@ -19,8 +19,9 @@
 			},
 			"group": "build"
 		},
+
 		{
-			"label": "Electron debug",
+			"label": "Electron Renderer debug",
 			"type": "hxml",
 			"file": "renderer.debug.hxml",
 			"problemMatcher": [
@@ -35,10 +36,48 @@
 				"clear": false,
 				"revealProblems": "onProblem"
 			},
+			"group": "build"
+		},
+
+		{
+			"label": "Electron Main",
+			"type": "hxml",
+			"file": "main.hxml",
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"presentation": {
+				"reveal": "never",
+				"panel": "shared",
+				"clear": false,
+				"revealProblems": "onProblem"
+			},
+			"group": "build"
+		},
+
+		{
+			"type": "haxe",
+			"args": "active configuration",
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
 			"group": {
 				"kind": "build",
 				"isDefault": true
-			}
+			},
+			"presentation": {
+				"reveal": "never",
+				"panel": "shared",
+				"clear": false,
+				"revealProblems": "onProblem"
+			},
+			"label": "haxe: active configuration"
 		}
 	]
 }

@@ -7,7 +7,7 @@
 			"text": "⚡ Debug",
 			"color": "yellow",
 			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|Electron debug",
+			"command": "workbench.action.tasks.runTask|Electron Renderer debug",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -21
@@ -16,7 +16,7 @@
 			"text": "⚡ Release",
 			"color": "yellow",
 			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|Electron release",
+			"command": "workbench.action.tasks.runTask|Electron Renderer release",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -22

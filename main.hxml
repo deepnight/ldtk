@@ -1,0 +1,8 @@
+-cp src.main
+-cp src.externs
+-lib deepnightLibs
+-lib hxelectron
+
+-main ElectronMain
+-dce full
+-js app/bin/main.js
