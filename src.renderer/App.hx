@@ -19,7 +19,6 @@ class App extends dn.Process {
 		createRoot(Boot.ME.s2d);
 		lastKnownMouse = { pageX:0, pageY:0 }
 		jCanvas.hide();
-		N.debug("goooood");
 
 		// Init window
 		#if nwjs
@@ -57,15 +56,7 @@ class App extends dn.Process {
 		});
 		electron.renderer.IpcRenderer.on("updateReady", function(ev) {
 			N.appUpdate("Update "+updateVer+" has been downloaded! CLick on the INSTALL button above.");
-			jBody.find("#update").remove();
-			var bt = new J('<button id="update"/>');
-			bt.appendTo(jBody);
-			bt.text("Install update");
-			bt.click(function(_) {
-				bt.remove();
-				jBody.find("*").off();
-				electron.renderer.IpcRenderer.invoke("installUpdate");
-			});
+			onUpdateReady(updateVer);
 		});
 
 		// Start
@@ -77,6 +68,23 @@ class App extends dn.Process {
 		exit(false);
 	}
 	#end
+
+	function onUpdateReady(ver:String) {
+		jBody.find("#update").remove();
+
+		var bt = new J('<button id="update"/>');
+		bt.appendTo(jBody);
+		bt.append('<strong>Install update</strong>');
+		bt.append('<em>Version $ver</em>');
+		bt.click(function(_) {
+			bt.remove();
+			loadPage("updating", { app : Const.APP_NAME });
+			jBody.find("*").off();
+			delayer.addS(function() {
+				electron.renderer.IpcRenderer.invoke("installUpdate");
+			}, 1);
+		});
+	}
 
 	function onAppMouseMove(e:js.html.MouseEvent) {
 		lastKnownMouse.pageX = e.pageX;
