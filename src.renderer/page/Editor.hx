@@ -507,6 +507,7 @@ class Editor extends Page {
 		if( curLayerId==l.def.uid )
 			return;
 
+		layerPickingNotification(l);
 		curLayerId = l.def.uid;
 		ge.emit(LayerInstanceSelected);
 
@@ -515,6 +516,15 @@ class Editor extends Page {
 			opt.removeClass("unsupported");
 		else
 			opt.addClass("unsupported");
+	}
+
+	function layerPickingNotification(l:led.inst.LayerInstance) {
+		App.ME.jBody.find(".layerPickNotif").remove();
+
+		var e = new J('<div class="layerPickNotif"/>');
+		App.ME.jBody.append(e);
+		e.append('<span>${l.def.identifier}</span>');
+		e.fadeOut(1200);
 	}
 
 	function layerSupportsFreeMode() {
