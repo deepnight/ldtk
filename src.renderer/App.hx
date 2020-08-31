@@ -19,6 +19,7 @@ class App extends dn.Process {
 		createRoot(Boot.ME.s2d);
 		lastKnownMouse = { pageX:0, pageY:0 }
 		jCanvas.hide();
+		clearMiniNotif();
 
 		// Init window
 		#if nwjs
@@ -48,12 +49,21 @@ class App extends dn.Process {
 
 		// Auto updater
 		var updateVer : Null<String> = null;
+		miniNotif("Checking for update...", true);
 		electron.renderer.IpcRenderer.invoke("checkUpdate");
+		electron.renderer.IpcRenderer.on("updateError", function(ev) {
+			miniNotif("Can't check for updates");
+		});
+		electron.renderer.IpcRenderer.on("updateChecked", function(ev) {
+			miniNotif("App is up-to-date");
+		});
 		electron.renderer.IpcRenderer.on("updateFound", function(ev, version) {
 			updateVer = version;
+			miniNotif('Downloading $updateVer...');
 		});
 		electron.renderer.IpcRenderer.on("updateReady", function(ev) {
-			N.appUpdate("Update "+updateVer+" has been downloaded! Click on the INSTALL button above.");
+			miniNotif('Update $updateVer ready!');
+			N.appUpdate("Update "+updateVer+" is ready! Click on the INSTALL button above.");
 			onUpdateReady(updateVer);
 		});
 
@@ -67,11 +77,29 @@ class App extends dn.Process {
 	}
 	#end
 
-	function onUpdateReady(ver:String) {
-		jBody.find("#update").remove();
+	public function miniNotif(html:String, persist=false) {
+		var e = jBody.find("#miniNotif");
+		e.empty();
 
-		var bt = new J('<button id="update"/>');
-		bt.appendTo(jBody);
+		e.stop(false,true)
+			.fadeIn(250)
+			.html(html);
+
+		if( !persist )
+			e.fadeOut(2500);
+	}
+
+	function clearMiniNotif() {
+		jBody.find("#miniNotif")
+			.stop(false,true)
+			.fadeOut(1500);
+	}
+
+	function onUpdateReady(ver:String) {
+		var e = jBody.find("#updateInstall");
+		e.show();
+		var bt = e.find("button");
+		bt.off().empty();
 		bt.append('<strong>Install update</strong>');
 		bt.append('<em>Version $ver</em>');
 		bt.click(function(_) {

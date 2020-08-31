@@ -184,33 +184,53 @@ button.close {
 	}
 }
 
-button#update {
+#miniNotif {
 	position: absolute;
-	display: grid;
-	grid-template-rows: auto auto;
-	width: auto;
-	padding: 8px;
-	padding-right: 16px;
+	z-index: 98;
+	top: 15px;
+	right: 0px;
+	display: none;
+
+	color: $bgLighter;
+	font-size: 9pt;
+	background-color: rgba(0, 0, 0, 0.4);
+	padding: 4px;
+	border-radius: 3px;
+	pointer-events: none;
+}
+
+#updateInstall {
+	display: none;
+	position: absolute;
 	top: 15px;
 	right: 0;
-
-	text-align: left;
 	z-index: 99;
 
-	animation: slideUp 2s;
-	box-shadow: 0px 3px 0px #b53d00, 0px 0px 16px $red;
+	button {
+		display: grid;
+		grid-template-rows: auto auto;
+		width: auto;
+		padding: 8px;
+		padding-right: 16px;
 
-	strong {
-		font-size: 1.2em;
-		margin-bottom: 4px;
-	}
+		text-align: left;
 
-	em {
-		opacity: 0.7;
-		font-size: 0.8em;
-		font-style: normal;
+		animation: slideUp 2s;
+		box-shadow: 0px 3px 0px #b53d00, 0px 0px 16px $red;
+
+		strong {
+			font-size: 1.2em;
+			margin-bottom: 4px;
+		}
+
+		em {
+			opacity: 0.7;
+			font-size: 0.8em;
+			font-style: normal;
+		}
 	}
 }
+
 
 .buttons {
 	display: flex;
