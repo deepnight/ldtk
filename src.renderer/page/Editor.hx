@@ -366,7 +366,7 @@ class Editor extends Page {
 		selection = ge;
 		selectionCursor.set(switch selection {
 			case IntGrid(li, cx, cy): GridCell(li, cx,cy);
-			case Entity(instance): Entity(instance.def, instance.x, instance.y);
+			case Entity(li, instance): Entity(li, instance.def, instance.x, instance.y);
 			case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
 		});
 
@@ -376,7 +376,7 @@ class Editor extends Page {
 			case IntGrid(_):
 			case Tile(_):
 
-			case Entity(instance):
+			case Entity(li, instance):
 				new ui.EntityInstanceEditor(instance);
 		}
 	}
@@ -414,20 +414,11 @@ class Editor extends Page {
 				levelRender.showRect( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
 				return true;
 
-			case Entity(instance):
-				for(ld in project.defs.layers) {
-					var li = curLevel.getLayerInstance(ld);
-					if( li.def.type!=Entities )
-						continue;
-
-					for(e in li.entityInstances)
-						if( e==instance ) {
-							selectLayerInstance(li);
-							curTool.as(tool.EntityTool).selectValue(instance.defUid);
-							levelRender.showRect( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
-							return true;
-						}
-				}
+			case Entity(li, instance):
+				selectLayerInstance(li);
+				curTool.as(tool.EntityTool).selectValue(instance.defUid);
+				levelRender.showRect( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
+				return true;
 
 			case Tile(li, cx, cy):
 				selectLayerInstance(li);

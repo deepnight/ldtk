@@ -47,7 +47,7 @@ class EntityTool extends Tool<Int> {
 		else if( isRunning() && curMode==Remove )
 			editor.cursor.set( Eraser(m.levelX,m.levelY) );
 		else if( curLevel.inBounds(m.levelX, m.levelY) )
-			editor.cursor.set( Entity(curEntityDef, getPlacementX(m), getPlacementY(m)) );
+			editor.cursor.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m)) );
 		else
 			editor.cursor.set(None);
 	}
@@ -66,7 +66,7 @@ class EntityTool extends Tool<Int> {
 					else {
 						ei.x = getPlacementX(m);
 						ei.y = getPlacementY(m);
-						editor.setSelection( Entity(ei) );
+						editor.setSelection( Entity(curLayerInstance, ei) );
 						onEditAnything();
 						curMode = Move;
 					}
@@ -82,7 +82,7 @@ class EntityTool extends Tool<Int> {
 	function removeAnyEntityAt(m:MouseCoords) {
 		var ge = getGenericLevelElementAt(m, curLayerInstance);
 		switch ge {
-			case Entity(instance):
+			case Entity(curLayerInstance, instance):
 				curLayerInstance.removeEntityInstance(instance);
 				return true;
 
@@ -97,7 +97,7 @@ class EntityTool extends Tool<Int> {
 			case null, IntGrid(_), Tile(_):
 				return null;
 
-			case Entity(instance):
+			case Entity(curLayerInstance, instance):
 				return instance;
 		}
 	}
@@ -120,7 +120,7 @@ class EntityTool extends Tool<Int> {
 					var oldY = ei.y;
 					ei.x = getPlacementX(m);
 					ei.y = getPlacementY(m);
-					editor.setSelection( Entity(ei) );
+					editor.setSelection( Entity(curLayerInstance, ei) );
 					return oldX!=ei.x || oldY!=ei.y;
 				}
 		}

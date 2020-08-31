@@ -148,9 +148,9 @@ class Tool<T> extends dn.Process {
 			case IntGrid(li, cx, cy):
 				return null;
 
-			case Entity(instance):
-				var ei = curLayerInstance.duplicateEntityInstance( instance );
-				return GenericLevelElement.Entity(ei);
+			case Entity(li, instance):
+				var ei = li.duplicateEntityInstance( instance );
+				return GenericLevelElement.Entity(li, ei);
 
 			case Tile(li, cx, cy):
 				return null;
@@ -171,7 +171,7 @@ class Tool<T> extends dn.Process {
 				case Entities:
 					for(ei in li.entityInstances)
 						if( ei.isOver(m.levelX, m.levelY) )
-							ge = GenericLevelElement.Entity(ei);
+							ge = GenericLevelElement.Entity(li, ei);
 
 				case Tiles:
 					if( li.getGridTile(cx,cy)!=null )
@@ -290,6 +290,7 @@ class Tool<T> extends dn.Process {
 	public function onKeyPress(keyId:Int) {}
 
 	public function onMouseMove(m:MouseCoords) {
+		editor.cursor.setLabel();
 		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )
 			clickingOutsideBounds = false;
 
@@ -314,10 +315,25 @@ class Tool<T> extends dn.Process {
 			// Preview picking
 			var ge = getGenericLevelElementAt(m, editor.isShiftDown() ? null : curLayerInstance);
 			switch ge {
-				case null: updateCursor(m);
-				case IntGrid(li, cx, cy): editor.cursor.set( GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ) );
-				case Entity(instance): editor.cursor.set( Entity(instance.def, instance.x, instance.y) );
-				case Tile(li, cx,cy): editor.cursor.set( Tiles(li, [li.getGridTile(cx,cy)], cx, cy) );
+				case null: editor.cursor.set(PickNothing);
+				case IntGrid(li, cx, cy):
+					var id = li.getIntGridIdentifierAt(cx,cy);
+					editor.cursor.set(
+						GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ),
+						id==null ? "#"+li.getIntGrid(cx,cy) : id
+					);
+
+				case Entity(li, ei):
+					editor.cursor.set(
+						Entity(li, ei.def, ei.x, ei.y),
+						ei.def.identifier
+					);
+
+				case Tile(li, cx,cy):
+					editor.cursor.set(
+						Tiles(li, [li.getGridTile(cx,cy)], cx, cy),
+						"Tile "+li.getGridTile(cx,cy)
+					);
 			}
 		}
 		else if( editor.isKeyDown(K.SPACE) )

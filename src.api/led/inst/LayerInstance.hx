@@ -212,6 +212,11 @@ class LayerInstance {
 		return v==null ? null : v.color;
 	}
 
+	public inline function getIntGridIdentifierAt(cx:Int, cy:Int) : Null<String> {
+		var v = def.getIntGridValueDef( getIntGrid(cx,cy) );
+		return v==null ? null : v.identifier;
+	}
+
 	public function setIntGrid(cx:Int, cy:Int, v:Int) {
 		requireType(IntGrid);
 		if( isValid(cx,cy) )

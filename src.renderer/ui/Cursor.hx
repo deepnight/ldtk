@@ -4,12 +4,14 @@ class Cursor extends dn.Process {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : led.Project; inline function get_project() return Editor.ME.project;
 	var curLevel(get,never) : led.Level; inline function get_curLevel() return Editor.ME.curLevel;
-	// var curLayer(get,never) : LayerInstance; inline function get_curLayer() return Editor.ME.curLayerInstance;
 
 	var type : CursorType = None;
 
 	var wrapper : h2d.Object;
 	var graphics : h2d.Graphics;
+
+	var labelWrapper : h2d.Flow;
+	var curLabel : Null<String>;
 
 	public function new() {
 		super(Editor.ME);
@@ -19,6 +21,20 @@ class Cursor extends dn.Process {
 
 		wrapper = new h2d.Object(root);
 		wrapper.alpha = 0.4;
+
+		labelWrapper = new h2d.Flow(root);
+		labelWrapper.backgroundTile = h2d.Tile.fromColor(0x0, 1,1, 0.7);
+		labelWrapper.paddingHorizontal = 4;
+		labelWrapper.paddingVertical = 2;
+	}
+
+	public function setLabel(?str:String) {
+		labelWrapper.removeChildren();
+		if( str!=null ) {
+			var tf = new h2d.Text(Assets.fontPixel, labelWrapper);
+			tf.text = str;
+		}
+		curLabel = str;
 	}
 
 	function render() {
@@ -27,7 +43,10 @@ class Cursor extends dn.Process {
 		graphics.lineStyle(0);
 		graphics.endFill();
 
-		root.visible = type!=None && !Modal.hasAnyOpen() && editor.isCurrentLayerVisible();
+		wrapper.visible = type!=None && !Modal.hasAnyOpen() && editor.isCurrentLayerVisible();
+		graphics.visible = wrapper.visible;
+		labelWrapper.visible = curLabel!=null;
+
 		hxd.System.setCursor(Default);
 
 		var pad = 2;
@@ -48,6 +67,9 @@ class Cursor extends dn.Process {
 					case BottomRight: "se-resize";
 				}) );
 				#end
+
+			case PickNothing:
+				hxd.System.setCursor( hxd.Cursor.CustomCursor.getNativeCursor("help") );
 
 			case Move:
 				hxd.System.setCursor(Move);
@@ -76,7 +98,7 @@ class Cursor extends dn.Process {
 				graphics.lineStyle(1, col==null ? 0x0 : col);
 				graphics.drawRect(0, 0, li.def.gridSize*wid, li.def.gridSize*hei);
 
-			case Entity(def, x, y):
+			case Entity(li, def, x, y):
 				graphics.lineStyle(1, getOpposite(def.color), 0.8);
 				graphics.drawRect(
 					-pad -def.width*def.pivotX,
@@ -120,9 +142,10 @@ class Cursor extends dn.Process {
 		return C.interpolateInt(c, C.getPerceivedLuminosityInt(c)>=0.7 ? 0x0 : 0xffffff, 0.5);
 	}
 
-	public function set(t:CursorType) {
-		var changed = type==null || !type.equals(t);
+	public function set(t:CursorType, ?label:String) {
+		var changed = type==null || !type.equals(t) || curLabel!=label;
 		type = t;
+		setLabel(label);
 		if( changed )
 			render();
 	}
@@ -132,23 +155,32 @@ class Cursor extends dn.Process {
 			return;
 
 		switch type {
-			case None, Move:
-			case Resize(_):
+			case None, Move, Resize(_), PickNothing:
+				var m = editor.getMouse();
+				labelWrapper.setPosition(m.levelX, m.levelY);
 
 			case Eraser(x, y):
 				wrapper.setPosition(x,y);
 
 			case GridCell(li, cx, cy), GridRect(li, cx,cy, _):
 				wrapper.setPosition( cx*li.def.gridSize, cy*li.def.gridSize );
+				labelWrapper.setPosition(wrapper.x + li.def.gridSize, wrapper.y);
 
-			case Entity(def, x,y):
+			case Entity(li, def, x,y):
 				wrapper.setPosition(x,y);
+				labelWrapper.setPosition(
+					( Std.int(x/li.def.gridSize) + 1 ) * li.def.gridSize,
+					Std.int(y/li.def.gridSize) * li.def.gridSize
+				);
 
 			case Tiles(li, tileIds, cx, cy):
 				wrapper.setPosition((cx+li.def.tilePivotX)*li.def.gridSize, (cy+li.def.tilePivotY)*li.def.gridSize);
+				labelWrapper.setPosition( (cx+1)*li.def.gridSize, cy*li.def.gridSize );
 		}
 
 		graphics.setPosition(wrapper.x, wrapper.y);
+
+		labelWrapper.setScale(1/editor.levelRender.zoom * js.Browser.window.devicePixelRatio*2);
 	}
 
 	public function highlight() {

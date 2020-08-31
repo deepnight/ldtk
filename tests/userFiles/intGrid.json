@@ -1,9 +1,9 @@
 {
 	"__header__" : {
-		"fileType" : "L-Ed Project JSON",
-		"app" : "L-Ed",
+		"fileType" : "LEd Project JSON",
+		"app" : "LEd",
 		"appAuthor" : "Sebastien Benard",
-		"appVersion" : "0.1 Electron DBG",
+		"appVersion" : "0.0.3-alpha-alpha-debug",
 		"url" : "https://deepnight.net/"
 	},
 	"name" : "Mini lab",
@@ -67,9 +67,9 @@
 					"pxOffsetX" : 0,
 					"pxOffsetY" : 0,
 					"intGrid" : [
-						{ "coordId" : 0, "v" : 2 },
+						{ "coordId" : 0, "v" : 0 },
 						{ "coordId" : 1, "v" : 1 },
-						{ "coordId" : 2, "v" : 0 },
+						{ "coordId" : 2, "v" : 2 },
 						{ "coordId" : 82, "v" : 0 },
 						{ "coordId" : 83, "v" : 0 },
 						{ "coordId" : 84, "v" : 0 },
