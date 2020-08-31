@@ -1561,7 +1561,7 @@ canvas#webgl {
 
 			.logo { // remember to update "Updating" page
 				font-family: Roboto;
-				font-size: 100px;
+				font-size: 110pt;
 				line-height: 85%;
 				text-align: center;
 				color: $orange;
@@ -1569,9 +1569,16 @@ canvas#webgl {
 
 			.sub {
 				font-family: Roboto;
-				font-size: 14pt;
+				font-size: 18pt;
 				text-align: center;
 				color: $orange;
+			}
+
+			.version {
+				font-size: 14pt;
+				color: $bgLighter;
+				text-align: center;
+				margin-top: 8px;
 				margin-bottom: 20px;
 			}
 

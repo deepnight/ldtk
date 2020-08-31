@@ -1,16 +1,19 @@
 class Const {
-	static var APP_VERSION = #if macro getPackageVersion() #else getPackageVersionMacro() #end;
+	static var APP_VERSION : String = #if macro getPackageVersion() #else getPackageVersionMacro() #end;
 
-	public static function getAppVersion() {
-		return [
-			Std.string(APP_VERSION),
+	public static function getAppVersion(short=false) {
+		if( short )
+			return APP_VERSION;
+		else
+			return [
+				Std.string(APP_VERSION),
 
-			#if nwjs "nwjs", #elseif electron "electron", #end
+				#if nwjs "nwjs", #elseif electron "electron", #end
 
-			"alpha",
+				"alpha",
 
-			#if debug "debug", #end
-		].join("-");
+				#if debug "debug", #end
+			].join("-");
 	}
 
 	#if !macro

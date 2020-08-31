@@ -13,19 +13,15 @@ class Home extends Page {
 		ME = this;
 		App.ME.loadPage("home", {
 			app: Const.APP_NAME,
+			appVer: Const.getAppVersion(),
+			shortVer: Const.getAppVersion(true),
+			jsonVer: Const.JSON_HEADER,
 			docUrl: Const.DOCUMENTATION_URL,
 			websiteUrl : Const.WEBSITE_URL,
 			issueUrl : Const.ISSUES_URL,
 			changelog: StringTools.htmlEscape( Const.CHANGELOG_MD ),
 		});
 		App.ME.setWindowTitle();
-
-		// Version
-		var ver = jPage.find(".version");
-		ver.text( Lang.t._("App version ::appVer:: | Project JSON version ::jsonVer::", {
-			appVer: Const.getAppVersion(),
-			jsonVer: led.Project.JSON_VERSION,
-		}) );
 
 		// Buttons
 		jPage.find(".load").click( function(ev) {
