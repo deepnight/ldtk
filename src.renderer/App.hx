@@ -48,12 +48,15 @@ class App extends dn.Process {
 		session = dn.LocalStorage.readObject("session", session);
 
 		// Auto updater
+		var updateVer : Null<String> = null;
 		electron.renderer.IpcRenderer.invoke("checkUpdate");
-		electron.renderer.IpcRenderer.on("updateFound", function(ev) {
-			N.appUpdate("A new "+Const.APP_NAME+" update is available! It will be automatically downloaded in the background.");
+		electron.renderer.IpcRenderer.on("updateFound", function(ev, version) {
+			updateVer = version;
+			N.appUpdate("Update "+updateVer+" is available! It will be automatically downloaded in the background.");
+			N.debug(version);
 		});
 		electron.renderer.IpcRenderer.on("updateReady", function(ev) {
-			N.appUpdate("New version has been downloaded! CLick INSTALL to update the app.");
+			N.appUpdate("Update "+updateVer+" has been downloaded! CLick on the INSTALL button above.");
 			jBody.find("#update").remove();
 			var bt = new J('<button id="update"/>');
 			bt.appendTo(jBody);

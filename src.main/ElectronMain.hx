@@ -67,21 +67,22 @@ class ElectronMain {
 		// *** Electron-Updater invoke handlers *****************************************************
 
 		var autoUpdater : electronUpdater.AutoUpdater = js.node.Require.require("electron-updater").autoUpdater;
-
 		IpcMain.handle("checkUpdate", function(event,args) {
 			js.html.Console.log("Checking for updates...");
 			autoUpdater.checkForUpdates();
 			autoUpdater.on('update-available', function(info) {
-				mainWindow.webContents.send('updateFound');
+				js.html.Console.log("Update found!");
+				mainWindow.webContents.send('updateFound', info.version);
 			});
 			autoUpdater.on('update-downloaded', function(info) {
+				js.html.Console.log("Update ready!");
 				mainWindow.webContents.send('updateReady');
 				hasDownloadedUpdate = true;
 			});
 		});
 
 		IpcMain.handle("installUpdate", function(event) {
-			js.html.Console.log("install");
+			js.html.Console.log("Installing update...");
 			isInstallingUpdate = true;
 			autoUpdater.quitAndInstall();
 		});
