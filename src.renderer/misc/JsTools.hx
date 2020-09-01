@@ -347,6 +347,10 @@ class JsTools {
 		var fp = dn.FilePath.fromFile(filePath);
 		if( isWindows() )
 			fp.useBackslashes();
+
+		if( !fileExists(fp.full) )
+			fp.fileWithExt = null;
+		
 		#if nwjs
 		nw.Shell.showItemInFolder(fp.full);
 		#else

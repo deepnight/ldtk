@@ -1677,6 +1677,12 @@ canvas#webgl {
 					}
 				}
 
+				li.missing .path span {
+					text-decoration: line-through;
+					font-weight: normal;
+					color: $red !important;
+				}
+
 				li:first-of-type {
 					// background-color: $bgLight;
 					&:hover {

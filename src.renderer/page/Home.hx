@@ -52,6 +52,8 @@ class Home extends Page {
 			li.append( JsTools.makePath(p) );
 			li.click( function(ev) loadProject(p) );
 			li.append( JsTools.makeExploreLink(p) );
+			if( !JsTools.fileExists(p) )
+				li.addClass("missing");
 			i--;
 		}
 	}
