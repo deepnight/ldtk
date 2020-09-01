@@ -1,0 +1,231 @@
+{
+	"__header__" : {
+		"fileType" : "LEd Project JSON",
+		"app" : "LEd",
+		"appAuthor" : "Sebastien Benard",
+		"appVersion" : "0.0.4-alpha-debug",
+		"url" : "https://deepnight.net/"
+	},
+	"name" : "tilesetPickerTests",
+	"jsonVersion" : 1,
+	"defaultPivotX" : 0.0,
+	"defaultPivotY" : 0.0,
+	"defaultGridSize" : 16,
+	"bgColor" : "#7F8093",
+	"nextUid" : 7,
+	"defs" : {
+		"layers" : [
+			{
+				"identifier" : "SShock",
+				"type" : "Tiles",
+				"uid" : 6,
+				"gridSize" : 16,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" }
+				],
+				"tilesetDefUid" : 5,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			},
+			{
+				"identifier" : "Gif2",
+				"type" : "Tiles",
+				"uid" : 4,
+				"gridSize" : 32,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" }
+				],
+				"tilesetDefUid" : 1,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			},
+			{
+				"identifier" : "Gif1",
+				"type" : "Tiles",
+				"uid" : 2,
+				"gridSize" : 32,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" }
+				],
+				"tilesetDefUid" : 1,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			}
+		],
+		"entities" : [],
+		"tilesets" : [
+			{
+				"identifier" : "Gif87a",
+				"uid" : 1,
+				"relPath" : "atlas/gif87a.gif",
+				"pxWid" : 192,
+				"pxHei" : 128,
+				"tileGridSize" : 32,
+				"tileGridSpacing" : 0,
+				"savedSelections" : [
+					{
+						"ids" : [
+							12,
+							13,
+							14,
+							18,
+							19,
+							20,
+							21
+						],
+						"mode" : "Random"
+					}
+				]
+			},
+			{
+				"identifier" : "SystemShock",
+				"uid" : 5,
+				"relPath" : "atlas/SystemShock.png",
+				"pxWid" : 256,
+				"pxHei" : 1024,
+				"tileGridSize" : 16,
+				"tileGridSpacing" : 0,
+				"savedSelections" : [
+					{
+						"ids" : [ 117, 133, 118, 134 ],
+						"mode" : "Stamp"
+					}
+				]
+			}
+		],
+		"enums" : [],
+		"externalEnums" : []
+	},
+	"levels" : [
+		{
+			"identifier" : "Level",
+			"uid" : 0,
+			"pxWid" : 256,
+			"pxHei" : 256,
+			"layerInstances" : [
+				{
+					"__identifier" : "SShock",
+					"__type" : "Tiles",
+					"__cWid" : 16,
+					"__cHei" : 16,
+					"__gridSize" : 16,
+					"levelId" : 0,
+					"layerDefUid" : 6,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
+					"gridTiles" : [
+						{ "coordId" : 29, "v" : 117 },
+						{ "coordId" : 30, "v" : 118 },
+						{ "coordId" : 45, "v" : 133 },
+						{ "coordId" : 46, "v" : 134 }
+					],
+					"entityInstances" : []
+				},
+				{
+					"__identifier" : "Gif2",
+					"__type" : "Tiles",
+					"__cWid" : 8,
+					"__cHei" : 8,
+					"__gridSize" : 32,
+					"levelId" : 0,
+					"layerDefUid" : 4,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
+					"gridTiles" : [
+						{ "coordId" : 25, "v" : 19 },
+						{ "coordId" : 26, "v" : 21 },
+						{ "coordId" : 35, "v" : 18 },
+						{ "coordId" : 44, "v" : 20 },
+						{ "coordId" : 52, "v" : 19 },
+						{ "coordId" : 53, "v" : 19 }
+					],
+					"entityInstances" : []
+				},
+				{
+					"__identifier" : "Gif1",
+					"__type" : "Tiles",
+					"__cWid" : 8,
+					"__cHei" : 8,
+					"__gridSize" : 32,
+					"levelId" : 0,
+					"layerDefUid" : 2,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
+					"gridTiles" : [
+						{ "coordId" : 0, "v" : 0 },
+						{ "coordId" : 1, "v" : 0 },
+						{ "coordId" : 2, "v" : 11 },
+						{ "coordId" : 3, "v" : 11 },
+						{ "coordId" : 4, "v" : 11 },
+						{ "coordId" : 5, "v" : 23 },
+						{ "coordId" : 6, "v" : 23 },
+						{ "coordId" : 7, "v" : 23 },
+						{ "coordId" : 8, "v" : 0 },
+						{ "coordId" : 9, "v" : 0 },
+						{ "coordId" : 10, "v" : 11 },
+						{ "coordId" : 11, "v" : 11 },
+						{ "coordId" : 12, "v" : 11 },
+						{ "coordId" : 13, "v" : 23 },
+						{ "coordId" : 14, "v" : 23 },
+						{ "coordId" : 15, "v" : 23 },
+						{ "coordId" : 16, "v" : 7 },
+						{ "coordId" : 17, "v" : 7 },
+						{ "coordId" : 18, "v" : 11 },
+						{ "coordId" : 19, "v" : 11 },
+						{ "coordId" : 20, "v" : 11 },
+						{ "coordId" : 21, "v" : 23 },
+						{ "coordId" : 22, "v" : 23 },
+						{ "coordId" : 23, "v" : 23 },
+						{ "coordId" : 24, "v" : 7 },
+						{ "coordId" : 25, "v" : 7 },
+						{ "coordId" : 26, "v" : 8 },
+						{ "coordId" : 27, "v" : 8 },
+						{ "coordId" : 28, "v" : 8 },
+						{ "coordId" : 29, "v" : 23 },
+						{ "coordId" : 30, "v" : 23 },
+						{ "coordId" : 31, "v" : 23 },
+						{ "coordId" : 32, "v" : 7 },
+						{ "coordId" : 33, "v" : 7 },
+						{ "coordId" : 34, "v" : 8 },
+						{ "coordId" : 35, "v" : 8 },
+						{ "coordId" : 36, "v" : 8 },
+						{ "coordId" : 37, "v" : 2 },
+						{ "coordId" : 38, "v" : 2 },
+						{ "coordId" : 39, "v" : 2 },
+						{ "coordId" : 40, "v" : 7 },
+						{ "coordId" : 41, "v" : 7 },
+						{ "coordId" : 42, "v" : 12 },
+						{ "coordId" : 43, "v" : 18 },
+						{ "coordId" : 44, "v" : 18 },
+						{ "coordId" : 45, "v" : 2 },
+						{ "coordId" : 46, "v" : 2 },
+						{ "coordId" : 47, "v" : 2 },
+						{ "coordId" : 48, "v" : 15 },
+						{ "coordId" : 49, "v" : 15 },
+						{ "coordId" : 50, "v" : 14 },
+						{ "coordId" : 51, "v" : 20 },
+						{ "coordId" : 52, "v" : 13 },
+						{ "coordId" : 53, "v" : 2 },
+						{ "coordId" : 54, "v" : 2 },
+						{ "coordId" : 55, "v" : 2 },
+						{ "coordId" : 56, "v" : 15 },
+						{ "coordId" : 57, "v" : 15 },
+						{ "coordId" : 58, "v" : 19 },
+						{ "coordId" : 59, "v" : 19 },
+						{ "coordId" : 60, "v" : 21 },
+						{ "coordId" : 61, "v" : 2 },
+						{ "coordId" : 62, "v" : 2 },
+						{ "coordId" : 63, "v" : 2 }
+					],
+					"entityInstances" : []
+				}
+			]
+		}
+	]
+}
