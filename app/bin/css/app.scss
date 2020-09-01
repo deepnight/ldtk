@@ -1656,11 +1656,11 @@ canvas#webgl {
 			grid-column: 1/2;
 			display: grid;
 			height: 100%;
-			grid-template-rows: auto min-content;
+			grid-template-rows: min-content auto;
 
 			ul.recents {
 				overflow-y: auto;
-				margin-bottom: 8px;
+				margin-top: 8px;
 
 				&:empty::before {
 					content: "No recent project";
@@ -1699,7 +1699,7 @@ canvas#webgl {
 		.about {
 			grid-column: 2/3;
 			display: grid;
-			grid-template-rows: auto min-content;
+			grid-template-rows: min-content auto;
 			height: 100%;
 			margin-left: 16px;
 
@@ -1710,7 +1710,7 @@ canvas#webgl {
 			.changelog {
 				padding: 16px;
 				box-sizing: border-box;
-				margin-bottom: 8px;
+				margin-top: 8px;
 				overflow-y: auto;
 				max-height: 50vh;
 
