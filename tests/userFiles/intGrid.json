@@ -12,7 +12,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 20,
+	"nextUid" : 21,
 	"defs" : {
 		"layers" : [
 			{
@@ -38,6 +38,22 @@
 					{ "identifier" : "a", "color" : "#000000" },
 					{ "identifier" : "b", "color" : "#FF0000" },
 					{ "identifier" : "c", "color" : "#00FF1E" }
+				],
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			},
+			{
+				"identifier" : "IntGrid",
+				"type" : "IntGrid",
+				"uid" : 20,
+				"gridSize" : 16,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" },
+					{ "identifier" : null, "color" : "#FF0000" },
+					{ "identifier" : null, "color" : "#EE00FF" },
+					{ "identifier" : null, "color" : "#D96D6D" }
 				],
 				"tilesetDefUid" : null,
 				"tilePivotX" : 0,
@@ -98,6 +114,7 @@
 						{ "coordId" : 775, "v" : 0 },
 						{ "coordId" : 783, "v" : 0 },
 						{ "coordId" : 784, "v" : 0 },
+						{ "coordId" : 792, "v" : 0 },
 						{ "coordId" : 795, "v" : 0 },
 						{ "coordId" : 808, "v" : 0 },
 						{ "coordId" : 809, "v" : 0 },
@@ -164,6 +181,53 @@
 						{ "coordId" : 203, "v" : 0 },
 						{ "coordId" : 204, "v" : 0 },
 						{ "coordId" : 205, "v" : 0 }
+					],
+					"gridTiles" : [],
+					"entityInstances" : []
+				},
+				{
+					"__identifier" : "IntGrid",
+					"__type" : "IntGrid",
+					"__cWid" : 16,
+					"__cHei" : 20,
+					"__gridSize" : 16,
+					"levelId" : 0,
+					"layerDefUid" : 20,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [
+						{ "coordId" : 71, "v" : 0 },
+						{ "coordId" : 83, "v" : 1 },
+						{ "coordId" : 87, "v" : 0 },
+						{ "coordId" : 99, "v" : 1 },
+						{ "coordId" : 104, "v" : 0 },
+						{ "coordId" : 116, "v" : 1 },
+						{ "coordId" : 121, "v" : 0 },
+						{ "coordId" : 122, "v" : 0 },
+						{ "coordId" : 132, "v" : 1 },
+						{ "coordId" : 139, "v" : 0 },
+						{ "coordId" : 149, "v" : 1 },
+						{ "coordId" : 156, "v" : 0 },
+						{ "coordId" : 166, "v" : 1 },
+						{ "coordId" : 177, "v" : 2 },
+						{ "coordId" : 178, "v" : 2 },
+						{ "coordId" : 183, "v" : 1 },
+						{ "coordId" : 195, "v" : 2 },
+						{ "coordId" : 200, "v" : 1 },
+						{ "coordId" : 210, "v" : 3 },
+						{ "coordId" : 212, "v" : 2 },
+						{ "coordId" : 227, "v" : 3 },
+						{ "coordId" : 229, "v" : 2 },
+						{ "coordId" : 230, "v" : 2 },
+						{ "coordId" : 244, "v" : 3 },
+						{ "coordId" : 245, "v" : 3 },
+						{ "coordId" : 247, "v" : 2 },
+						{ "coordId" : 261, "v" : 3 },
+						{ "coordId" : 264, "v" : 2 },
+						{ "coordId" : 278, "v" : 3 },
+						{ "coordId" : 281, "v" : 2 },
+						{ "coordId" : 282, "v" : 2 },
+						{ "coordId" : 298, "v" : 2 }
 					],
 					"gridTiles" : [],
 					"entityInstances" : []
