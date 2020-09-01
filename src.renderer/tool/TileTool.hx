@@ -238,47 +238,51 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 			editor.cursor.set(None);
 	}
 
+	override function createToolPalette():ui.ToolPalette {
+		return new ui.palette.TilePalette(this);
+	}
+
 	override function createPalette() {
 		var target = super.createPalette();
 
-		if( curTilesetDef==null ) {
-			target.addClass("invalid");
-			target.append('<div class="warning">'+Lang.t._("This tile layer has no Tileset.")+'</div>');
-			return target;
-		}
+		// if( curTilesetDef==null ) {
+		// 	target.addClass("invalid");
+		// 	target.append('<div class="warning">'+Lang.t._("This tile layer has no Tileset.")+'</div>');
+		// 	return target;
+		// }
 
-		// Picker
-		new ui.TilesetPicker(target, curTilesetDef, this);
+		// // Picker
+		// new ui.TilesetPicker(target, curTilesetDef, this);
 
-		var options = new J('<div class="toolOptions"/>');
-		options.appendTo(target);
+		// var options = new J('<div class="toolOptions"/>');
+		// options.appendTo(target);
 
-		// Save selection
-		var bt = new J('<button/>');
-		bt.appendTo(options);
-		bt.append( JsTools.createKeyInLabel("[S]ave selection") );
-		bt.click( function(_) {
-			saveSelection();
-		});
+		// // Save selection
+		// var bt = new J('<button/>');
+		// bt.appendTo(options);
+		// bt.append( JsTools.createKeyInLabel("[S]ave selection") );
+		// bt.click( function(_) {
+		// 	saveSelection();
+		// });
 
-		// Random mode
-		var opt = new J('<label/>');
-		opt.appendTo(options);
-		var chk = new J('<input type="checkbox"/>');
-		chk.prop("checked", isRandomMode());
-		chk.change( function(ev) {
-			setMode( chk.prop("checked")==true ? Random : Stamp );
-			editor.ge.emit(ToolOptionChanged);
-		});
-		opt.append(chk);
-		opt.append( JsTools.createKeyInLabel("[R]andom mode") );
+		// // Random mode
+		// var opt = new J('<label/>');
+		// opt.appendTo(options);
+		// var chk = new J('<input type="checkbox"/>');
+		// chk.prop("checked", isRandomMode());
+		// chk.change( function(ev) {
+		// 	setMode( chk.prop("checked")==true ? Random : Stamp );
+		// 	editor.ge.emit(ToolOptionChanged);
+		// });
+		// opt.append(chk);
+		// opt.append( JsTools.createKeyInLabel("[R]andom mode") );
 
-		enablePalettePopOut();
+		// enablePalettePopOut();
 
 		return target;
 	}
 
-	function saveSelection() {
+	public function saveSelection() {
 		curTilesetDef.saveSelection( getSelectedValue() );
 		editor.ge.emit(TilesetDefChanged);
 		N.msg("Saved selection");
@@ -292,6 +296,7 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 				case K.R :
 					setMode( isRandomMode() ? Stamp : Random );
 					editor.ge.emit(ToolOptionChanged);
+					palette.render();
 
 				case K.S:
 					saveSelection();

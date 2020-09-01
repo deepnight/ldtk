@@ -106,8 +106,8 @@ class IntGridTool extends Tool<Int> {
 		return new ui.palette.IntGridPalette(this);
 	}
 
-	// override function createPalette() {
-	// 	var target = super.createPalette();
+	override function createPalette() {
+		var target = super.createPalette();
 
 	// 	var list = new J('<ul class="niceList"/>');
 	// 	list.appendTo(target);
@@ -137,6 +137,6 @@ class IntGridTool extends Tool<Int> {
 	// 		idx++;
 	// 	}
 
-	// 	return target;
-	// }
+		return target;
+	}
 }

@@ -6,6 +6,7 @@ class ToolPalette {
 
 	public function new(t:Tool<Dynamic>) {
 		tool = t;
+		N.error("new ToolPalette: "+tool);
 		jContent = new J('<div class="palette"/>');
 	}
 

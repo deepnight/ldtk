@@ -378,7 +378,10 @@ class Tool<T> extends dn.Process {
 		// 	});
 	}
 
-	public function showPalette() {
+	public final function showPalette() {
+		if( palette==null )
+			return;
+
 		N.debug("showPalette");
 		jPalette.empty();
 		palette.jContent.appendTo( jPalette );
@@ -390,7 +393,6 @@ class Tool<T> extends dn.Process {
 	}
 
 	public function initPalette() {
-		N.error("initPalette");
 		palette = createToolPalette();
 		palette.render();
 	}
