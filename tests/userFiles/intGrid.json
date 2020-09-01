@@ -3,7 +3,7 @@
 		"fileType" : "LEd Project JSON",
 		"app" : "LEd",
 		"appAuthor" : "Sebastien Benard",
-		"appVersion" : "0.0.3-alpha-alpha-debug",
+		"appVersion" : "0.0.4-alpha-debug",
 		"url" : "https://deepnight.net/"
 	},
 	"name" : "Mini lab",
@@ -16,6 +16,19 @@
 	"defs" : {
 		"layers" : [
 			{
+				"identifier" : "Deco",
+				"type" : "IntGrid",
+				"uid" : 19,
+				"gridSize" : 8,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#30B06E" }
+				],
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			},
+			{
 				"identifier" : "Colls",
 				"type" : "IntGrid",
 				"uid" : 13,
@@ -25,19 +38,6 @@
 					{ "identifier" : "a", "color" : "#000000" },
 					{ "identifier" : "b", "color" : "#FF0000" },
 					{ "identifier" : "c", "color" : "#00FF1E" }
-				],
-				"tilesetDefUid" : null,
-				"tilePivotX" : 0,
-				"tilePivotY" : 0
-			},
-			{
-				"identifier" : "Deco",
-				"type" : "IntGrid",
-				"uid" : 19,
-				"gridSize" : 8,
-				"displayOpacity" : 1.0,
-				"intGridValues" : [
-					{ "identifier" : null, "color" : "#000000" }
 				],
 				"tilesetDefUid" : null,
 				"tilePivotX" : 0,
@@ -56,6 +56,64 @@
 			"pxWid" : 256,
 			"pxHei" : 320,
 			"layerInstances" : [
+				{
+					"__identifier" : "Deco",
+					"__type" : "IntGrid",
+					"__cWid" : 32,
+					"__cHei" : 40,
+					"__gridSize" : 8,
+					"levelId" : 0,
+					"layerDefUid" : 19,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [
+						{ "coordId" : 327, "v" : 0 },
+						{ "coordId" : 328, "v" : 0 },
+						{ "coordId" : 335, "v" : 0 },
+						{ "coordId" : 336, "v" : 0 },
+						{ "coordId" : 337, "v" : 0 },
+						{ "coordId" : 338, "v" : 0 },
+						{ "coordId" : 373, "v" : 0 },
+						{ "coordId" : 405, "v" : 0 },
+						{ "coordId" : 437, "v" : 0 },
+						{ "coordId" : 485, "v" : 0 },
+						{ "coordId" : 517, "v" : 0 },
+						{ "coordId" : 533, "v" : 0 },
+						{ "coordId" : 537, "v" : 0 },
+						{ "coordId" : 538, "v" : 0 },
+						{ "coordId" : 539, "v" : 0 },
+						{ "coordId" : 548, "v" : 0 },
+						{ "coordId" : 549, "v" : 0 },
+						{ "coordId" : 568, "v" : 0 },
+						{ "coordId" : 569, "v" : 0 },
+						{ "coordId" : 580, "v" : 0 },
+						{ "coordId" : 603, "v" : 0 },
+						{ "coordId" : 612, "v" : 0 },
+						{ "coordId" : 635, "v" : 0 },
+						{ "coordId" : 644, "v" : 0 },
+						{ "coordId" : 676, "v" : 0 },
+						{ "coordId" : 708, "v" : 0 },
+						{ "coordId" : 773, "v" : 0 },
+						{ "coordId" : 774, "v" : 0 },
+						{ "coordId" : 775, "v" : 0 },
+						{ "coordId" : 783, "v" : 0 },
+						{ "coordId" : 784, "v" : 0 },
+						{ "coordId" : 795, "v" : 0 },
+						{ "coordId" : 808, "v" : 0 },
+						{ "coordId" : 809, "v" : 0 },
+						{ "coordId" : 810, "v" : 0 },
+						{ "coordId" : 811, "v" : 0 },
+						{ "coordId" : 816, "v" : 0 },
+						{ "coordId" : 817, "v" : 0 },
+						{ "coordId" : 820, "v" : 0 },
+						{ "coordId" : 821, "v" : 0 },
+						{ "coordId" : 822, "v" : 0 },
+						{ "coordId" : 826, "v" : 0 },
+						{ "coordId" : 827, "v" : 0 }
+					],
+					"gridTiles" : [],
+					"entityInstances" : []
+				},
 				{
 					"__identifier" : "Colls",
 					"__type" : "IntGrid",
@@ -107,20 +165,6 @@
 						{ "coordId" : 204, "v" : 0 },
 						{ "coordId" : 205, "v" : 0 }
 					],
-					"gridTiles" : [],
-					"entityInstances" : []
-				},
-				{
-					"__identifier" : "Deco",
-					"__type" : "IntGrid",
-					"__cWid" : 32,
-					"__cHei" : 40,
-					"__gridSize" : 8,
-					"levelId" : 0,
-					"layerDefUid" : 19,
-					"pxOffsetX" : 0,
-					"pxOffsetY" : 0,
-					"intGrid" : [],
 					"gridTiles" : [],
 					"entityInstances" : []
 				}
