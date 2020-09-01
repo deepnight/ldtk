@@ -1,11 +1,18 @@
 {
+	"__header__" : {
+		"fileType" : "LEd Project JSON",
+		"app" : "LEd",
+		"appAuthor" : "Sebastien Benard",
+		"appVersion" : "0.0.4-alpha-debug",
+		"url" : "https://deepnight.net/"
+	},
 	"name" : "externEnums",
-	"dataVersion" : 1,
-	"defaultPivotX" : 0,
-	"defaultPivotY" : 0,
+	"jsonVersion" : 1,
+	"defaultPivotX" : 0.0,
+	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 44,
+	"nextUid" : 49,
 	"defs" : {
 		"layers" : [
 			{
@@ -13,7 +20,7 @@
 				"type" : "Entities",
 				"uid" : 19,
 				"gridSize" : 16,
-				"displayOpacity" : 1,
+				"displayOpacity" : 1.0,
 				"intGridValues" : [
 					{ "identifier" : null, "color" : "#000000" }
 				],
@@ -26,7 +33,7 @@
 				"type" : "IntGrid",
 				"uid" : 43,
 				"gridSize" : 16,
-				"displayOpacity" : 1,
+				"displayOpacity" : 1.0,
 				"intGridValues" : [
 					{ "identifier" : null, "color" : "#000000" }
 				],
@@ -51,24 +58,24 @@
 				"pivotY" : 0.5,
 				"fieldDefs" : [
 					{
-						"identifier" : "type",
-						"_desc" : "EnemyType",
-						"uid" : 37,
-						"type" : { "id" : "F_Enum", "params" : [ 35 ] },
+						"identifier" : "A",
+						"__type" : "ExternEnum.A",
+						"uid" : 47,
+						"type" : { "id" : "F_Enum", "params" : [ 44 ] },
 						"canBeNull" : false,
-						"editorDisplayMode" : "NameAndValue",
+						"editorDisplayMode" : "ValueOnly",
 						"editorDisplayPos" : "Above",
 						"min" : null,
 						"max" : null,
 						"defaultOverride" : null
 					},
 					{
-						"identifier" : "item",
-						"_desc" : "ItemType",
-						"uid" : 38,
-						"type" : { "id" : "F_Enum", "params" : [ 34 ] },
+						"identifier" : "B",
+						"__type" : "ExternEnum.B",
+						"uid" : 48,
+						"type" : { "id" : "F_Enum", "params" : [ 45 ] },
 						"canBeNull" : true,
-						"editorDisplayMode" : "NameAndValue",
+						"editorDisplayMode" : "ValueOnly",
 						"editorDisplayPos" : "Above",
 						"min" : null,
 						"max" : null,
@@ -88,7 +95,8 @@
 					{ "id" : "Value_C", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : null
+				"externalRelPath" : null,
+				"externalFileChecksum" : null
 			},
 			{
 				"identifier" : "AnotherLocalEnum",
@@ -104,44 +112,44 @@
 					}
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : null
+				"externalRelPath" : null,
+				"externalFileChecksum" : null
 			}
 		],
 		"externalEnums" : [
 			{
-				"identifier" : "ItemType",
-				"uid" : 34,
+				"identifier" : "A",
+				"uid" : 44,
 				"values" : [
-					{ "id" : "Ammo", "tileId" : null },
-					{ "id" : "Food", "tileId" : null },
-					{ "id" : "Gold", "tileId" : null },
-					{ "id" : "Key", "tileId" : null }
+					{ "id" : "A0", "tileId" : null },
+					{ "id" : "A1", "tileId" : null },
+					{ "id" : "A2", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "enumFiles/TypesTest.hx"
+				"externalRelPath" : "enumFiles/TypesTest.hx",
+				"externalFileChecksum" : "13d5a15135ebf5413f6525d1287519c6"
 			},
 			{
-				"identifier" : "EnemyType",
-				"uid" : 35,
+				"identifier" : "B",
+				"uid" : 45,
 				"values" : [
-					{ "id" : "Behemoth", "tileId" : null },
-					{ "id" : "Crawler", "tileId" : null },
-					{ "id" : "Hunter", "tileId" : null },
-					{ "id" : "Shooter", "tileId" : null }
+					{ "id" : "B0", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "enumFiles/TypesTest.hx"
+				"externalRelPath" : "enumFiles/TypesTest.hx",
+				"externalFileChecksum" : "13d5a15135ebf5413f6525d1287519c6"
 			},
 			{
-				"identifier" : "SomeEnum",
-				"uid" : 36,
+				"identifier" : "C",
+				"uid" : 46,
 				"values" : [
-					{ "id" : "Bar", "tileId" : null },
-					{ "id" : "Foo", "tileId" : null },
-					{ "id" : "Pouet", "tileId" : null }
+					{ "id" : "C0", "tileId" : null },
+					{ "id" : "C1", "tileId" : null },
+					{ "id" : "C2", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
-				"externalRelPath" : "enumFiles/TypesTest.hx"
+				"externalRelPath" : "enumFiles/TypesTest.hx",
+				"externalFileChecksum" : "13d5a15135ebf5413f6525d1287519c6"
 			}
 		]
 	},
@@ -153,7 +161,11 @@
 			"pxHei" : 256,
 			"layerInstances" : [
 				{
-					"_identifier" : "Entities",
+					"__identifier" : "Entities",
+					"__type" : "Entities",
+					"__cWid" : 22,
+					"__cHei" : 16,
+					"__gridSize" : 16,
 					"levelId" : 0,
 					"layerDefUid" : 19,
 					"pxOffsetX" : 0,
@@ -162,70 +174,85 @@
 					"gridTiles" : [],
 					"entityInstances" : [
 						{
-							"_identifier" : "Mob",
-							"_cx" : 10,
-							"_cy" : 4,
+							"__identifier" : "Mob",
+							"__cx" : 10,
+							"__cy" : 4,
 							"defUid" : 15,
 							"x" : 168,
 							"y" : 72,
 							"fieldInstances" : [
 								{
-									"_identifier" : "type",
-									"_value" : "Hunter",
-									"defUid" : 37,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "Hunter" ] }
+									"__identifier" : "A",
+									"__value" : "A0",
+									"__type" : "ExternEnum.A",
+									"defUid" : 47,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "A0" ] }
 								},
-								{ "_identifier" : "item", "_value" : null, "defUid" : 38, "realEditorValue" : null }
+								{
+									"__identifier" : "B",
+									"__value" : null,
+									"__type" : "ExternEnum.B",
+									"defUid" : 48,
+									"realEditorValue" : null
+								}
 							]
 						},
 						{
-							"_identifier" : "Mob",
-							"_cx" : 10,
-							"_cy" : 7,
+							"__identifier" : "Mob",
+							"__cx" : 10,
+							"__cy" : 7,
 							"defUid" : 15,
 							"x" : 168,
 							"y" : 120,
 							"fieldInstances" : [
 								{
-									"_identifier" : "type",
-									"_value" : "Behemoth",
-									"defUid" : 37,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "Behemoth" ] }
+									"__identifier" : "A",
+									"__value" : "A1",
+									"__type" : "ExternEnum.A",
+									"defUid" : 47,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "A1" ] }
 								},
 								{
-									"_identifier" : "item",
-									"_value" : "Key",
-									"defUid" : 38,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "Key" ] }
+									"__identifier" : "B",
+									"__value" : null,
+									"__type" : "ExternEnum.B",
+									"defUid" : 48,
+									"realEditorValue" : null
 								}
 							]
 						},
 						{
-							"_identifier" : "Mob",
-							"_cx" : 10,
-							"_cy" : 10,
+							"__identifier" : "Mob",
+							"__cx" : 10,
+							"__cy" : 10,
 							"defUid" : 15,
 							"x" : 168,
 							"y" : 168,
 							"fieldInstances" : [
 								{
-									"_identifier" : "type",
-									"_value" : "Hunter",
-									"defUid" : 37,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "Hunter" ] }
+									"__identifier" : "A",
+									"__value" : "A2",
+									"__type" : "ExternEnum.A",
+									"defUid" : 47,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "A2" ] }
 								},
 								{
-									"_identifier" : "item",
-									"_value" : "Key",
-									"defUid" : 38,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "Key" ] }
+									"__identifier" : "B",
+									"__value" : "B0",
+									"__type" : "ExternEnum.B",
+									"defUid" : 48,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "B0" ] }
 								}
 							]
 						}
 					]
 				},
 				{
-					"_identifier" : "IntGrid",
+					"__identifier" : "IntGrid",
+					"__type" : "IntGrid",
+					"__cWid" : 22,
+					"__cHei" : 16,
+					"__gridSize" : 16,
 					"levelId" : 0,
 					"layerDefUid" : 43,
 					"pxOffsetX" : 0,

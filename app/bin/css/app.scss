@@ -1808,7 +1808,7 @@ canvas#webgl {
 				min-width: 0.9em;
 			}
 		}
-		
+
 		ul.niceList li {
 			padding-top: 4px;
 			padding-bottom: 4px;
@@ -2277,6 +2277,11 @@ canvas#webgl {
 					padding: 5px;
 					text-align: left;
 					border: 1px solid $bgLight;
+				}
+
+				.exploreTo {
+					margin-left: 4px;
+					padding: 6px;
 				}
 			}
 		}
