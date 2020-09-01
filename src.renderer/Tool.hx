@@ -80,6 +80,10 @@ class Tool<T> extends dn.Process {
 	public function canEdit() return getSelectedValue()!=null && editor.isCurrentLayerVisible();
 	public function isRunning() return curMode!=null;
 
+	function isPicking(m:MouseCoords) {
+		return editor.isAltDown();
+	}
+
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		curMode = null;
 		startTime = haxe.Timer.stamp();
@@ -89,7 +93,7 @@ class Tool<T> extends dn.Process {
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
 
 		// Picking an existing element
-		if( editor.isAltDown() && buttonId==0 ) {
+		if( isPicking(m) && buttonId==0 ) {
 			if( !editor.isCurrentLayerVisible() )
 				return;
 
@@ -114,7 +118,7 @@ class Tool<T> extends dn.Process {
 			case 0:
 				if( editor.isKeyDown(K.SPACE) )
 					curMode = PanView;
-				else if( editor.isAltDown() )
+				else if( isPicking(m) )
 					curMode = Move;
 				else
 					curMode = Add;
@@ -248,7 +252,7 @@ class Tool<T> extends dn.Process {
 		if( isRunning() && !clickingOutsideBounds ) {
 			var anyChange = false;
 
-			if( rectangle && m.cx==origin.cx && m.cy==origin.cy && clickTime<=0.22 && !editor.isAltDown() )
+			if( rectangle && m.cx==origin.cx && m.cy==origin.cy && clickTime<=0.22 && !isPicking(m) )
 				anyChange = useFloodfillAt(m);
 			else {
 				anyChange = rectangle
@@ -311,7 +315,7 @@ class Tool<T> extends dn.Process {
 		// Render cursor
 		if( isRunning() && clickingOutsideBounds )
 			editor.cursor.set(None);
-		else if( !isRunning() && editor.isAltDown() ) {
+		else if( !isRunning() && isPicking(m) ) {
 			// Preview picking
 			var ge = getGenericLevelElementAt(m, editor.isShiftDown() ? null : curLayerInstance);
 			switch ge {

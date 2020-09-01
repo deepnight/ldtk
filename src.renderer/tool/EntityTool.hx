@@ -20,6 +20,14 @@ class EntityTool extends Tool<Int> {
 		return super.canEdit() && getSelectedValue()>=0;
 	}
 
+	override function isPicking(m:MouseCoords):Bool {
+		var e = getGenericLevelElementAt(m, curLayerInstance);
+		if( e!=null )
+			return true;
+		else
+			return super.isPicking(m);
+	}
+
 	override function getDefaultValue():Int{
 		if( project.defs.entities.length>0 )
 			return project.defs.entities[0].uid;
