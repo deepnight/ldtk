@@ -1474,9 +1474,17 @@ canvas#webgl {
 			margin: 0;
 
 			li {
-				grid-template-columns: min-content auto min-content;
+				grid-template-columns: min-content min-content auto min-content;
 				padding-top: 4px;
 				padding-bottom: 4px;
+
+				.index {
+					min-width: 1.2em;
+					text-align: center;
+					color: $bgLighter;
+					font-weight: bold;
+					font-size: 14pt;
+				}
 
 				.name {
 					font-size: 10pt;
@@ -1485,6 +1493,7 @@ canvas#webgl {
 					display: block;
 					cursor: pointer;
 				}
+
 				.vis {
 					flex: 0 0 auto;
 					padding: 10px;
@@ -1792,6 +1801,14 @@ canvas#webgl {
 		#guide {
 			display: none;
 		}
+
+		ul#layers li {
+			.index {
+				font-size: 9pt;
+				min-width: 0.9em;
+			}
+		}
+		
 		ul.niceList li {
 			padding-top: 4px;
 			padding-bottom: 4px;
@@ -1802,6 +1819,7 @@ canvas#webgl {
 				height: 0.75em;
 			}
 		}
+
 		h2#levelName {
 			font-size: 1.1em;
 		}

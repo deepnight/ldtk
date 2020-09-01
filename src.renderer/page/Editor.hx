@@ -336,6 +336,11 @@ class Editor extends Page {
 				if( !hasInputFocus() )
 					onHelp();
 
+			case k if( k>=49 && k<=57 ):
+				var idx = k-49;
+				if( idx < curLevel.layerInstances.length )
+					selectLayerInstance( curLevel.layerInstances[idx] );
+
 
 			#if debug
 			case K.T:
@@ -764,6 +769,7 @@ class Editor extends Page {
 		var list = jLayers;
 		list.empty();
 
+		var idx = 1;
 		for(ld in project.defs.layers) {
 			var li = curLevel.getLayerInstance(ld);
 			var e = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
@@ -774,6 +780,8 @@ class Editor extends Page {
 
 			if( !levelRender.isLayerVisible(li) )
 				e.addClass("hidden");
+
+			e.find(".index").text( Std.string(idx++) );
 
 			// Icon
 			var icon = e.find(".icon");
