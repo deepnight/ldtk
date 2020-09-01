@@ -3,6 +3,7 @@
 ## 0.0.4-alpha
 
  - Added an edit link in Entity instance editor
+ - Updated home
  - UI polishing
 
 ## 0.0.3-alpha
