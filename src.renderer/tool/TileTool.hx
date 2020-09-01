@@ -6,8 +6,11 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 
 	public function new() {
 		super();
-		enablePalettePopOut();
 		selectValue( getSelectedValue() );
+	}
+
+	override function getSelectionMemoryKey():Null<String> {
+		return curTilesetDef==null ? super.getSelectionMemoryKey() : curTilesetDef.relPath;
 	}
 
 	override function getDefaultValue():led.LedTypes.TilesetSelection {
@@ -269,6 +272,8 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 		});
 		opt.append(chk);
 		opt.append( JsTools.createKeyInLabel("[R]andom mode") );
+
+		enablePalettePopOut();
 
 		return target;
 	}

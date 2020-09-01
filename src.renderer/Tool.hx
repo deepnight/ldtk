@@ -1,7 +1,7 @@
 import dn.Bresenham;
 
 class Tool<T> extends dn.Process {
-	static var SELECTION_MEMORY : Map<Int, Dynamic> = new Map();
+	static var SELECTION_MEMORY : Map<String, Dynamic> = new Map();
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : led.Project; inline function get_project() return Editor.ME.project;
@@ -49,18 +49,21 @@ class Tool<T> extends dn.Process {
 			+ "[" + ( curMode==null ? "--" : curMode.getName() ) + "]";
 	}
 
+	function getSelectionMemoryKey() {
+		return curLayerInstance!=null ? Std.string(curLayerInstance.layerDefUid) : null;
+	}
 
 	public function selectValue(v:T) {
 		if( curLayerInstance!=null )
-			SELECTION_MEMORY.set(curLayerInstance.layerDefUid, v);
+			SELECTION_MEMORY.set(getSelectionMemoryKey(), v);
 		updatePalette();
 	}
 	public function getSelectedValue() : T {
 		return
 			curLayerInstance==null
 			? getDefaultValue()
-			: SELECTION_MEMORY.exists(curLayerInstance.layerDefUid)
-				? SELECTION_MEMORY.get(curLayerInstance.layerDefUid)
+			: SELECTION_MEMORY.exists( getSelectionMemoryKey() )
+				? SELECTION_MEMORY.get( getSelectionMemoryKey() )
 				: getDefaultValue();
 	}
 	function getDefaultValue() : T {
