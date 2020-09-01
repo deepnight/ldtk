@@ -133,16 +133,12 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var jLocate = jForm.find(".locate");
 		if( cur.relPath!=null ) {
 			jPath.empty().show().append( JsTools.makePath(cur.relPath) );
-			jLocate.empty().append( JsTools.makeExploreLink( Editor.ME.makeFullFilePath(cur.relPath) ) );
+			jLocate.empty().show().append( JsTools.makeExploreLink( Editor.ME.makeFullFilePath(cur.relPath) ) );
 		}
 		else {
 			jLocate.hide();
 			jPath.hide();
 		}
-		// jPath.off().click( function(ev) {
-		// 	if( cur.relPath!=null )
-		// 		JsTools.exploreToFile( Editor.ME.makeFullFilePath(cur.relPath) );
-		// });
 
 		// Fields
 		var i = Input.linkToHtmlInput(cur.identifier, jForm.find("input[name='name']") );
