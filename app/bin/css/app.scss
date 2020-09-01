@@ -162,7 +162,6 @@ button {
 	}
 }
 
-
 button.cancel,
 button.gray,
 button.grey {
@@ -171,6 +170,18 @@ button.grey {
 	box-shadow: 0px 2px 0px $bgLight;
 	&:hover {
 		background-color: $bgLighter;
+	}
+}
+
+button[href] {
+	background-color: $bgMed;
+	border-color: $bgLight;
+	box-shadow: 0px 0px 0px $bgLight;
+	text-decoration: underline;
+	text-transform: none;
+
+	&:hover {
+		background-color: $bgLight;
 	}
 }
 
@@ -1577,7 +1588,7 @@ canvas#webgl {
 
 	.wrapper {
 		display: grid;
-		grid-template-columns: 400px 500px;
+		grid-template-columns: 30% 40%;
 		grid-template-rows: min-content 50vh min-content;
 		box-sizing: border-box;
 		width: 100%;
@@ -1641,7 +1652,7 @@ canvas#webgl {
 
 		}
 
-		.actions {
+		.files {
 			grid-column: 1/2;
 			display: grid;
 			height: 100%;
@@ -1649,6 +1660,7 @@ canvas#webgl {
 
 			ul.recents {
 				overflow-y: auto;
+				margin-bottom: 8px;
 
 				&:empty::before {
 					content: "No recent project";
@@ -1677,67 +1689,78 @@ canvas#webgl {
 				}
 			}
 			.buttons {
+				margin: 0;
 				.exit {
 					flex: 0.3 1 0;
 				}
 			}
 		}
 
-		.changelog {
+		.about {
 			grid-column: 2/3;
 			display: grid;
-			grid-template-rows: min-content auto;
+			grid-template-rows: auto min-content;
 			height: 100%;
-			padding: 16px;
-			margin-left: 8px;
-			box-sizing: border-box;
+			margin-left: 16px;
 
-			border: 1px solid $bgLight;
-			border-radius: 3px;
-
-			h1 {
-				color: $orange;
+			.buttons {
 				margin: 0;
-				padding: 0;
-				margin-bottom: 8px;
 			}
 
-			#changelogHtml {
-				max-height: 50vh;
+			.changelog {
+				padding: 16px;
+				box-sizing: border-box;
+				margin-bottom: 8px;
 				overflow-y: auto;
-				font-size: 10pt;
-				color: #b5becd;
+				max-height: 50vh;
+
+				border: 1px solid $bgLight;
+				border-radius: 3px;
 
 				h1 {
-					display: none;
-				}
-
-				h1+h2 {
-					margin-top: 0;
-				}
-
-				h2 {
-					margin-top: 32px;
+					color: $orange;
+					margin: 0;
+					padding: 0;
 					margin-bottom: 8px;
-					text-transform: none;
-					font-size: 14pt;
 				}
 
-				ul {
-					margin-bottom: 8px;
-					li+li {
-						margin-top: 8px;
+				#changelogHtml {
+					// overflow-y: auto;
+					font-size: 10pt;
+					color: #b5becd;
+
+					h1 {
+						display: none;
+					}
+
+					h1+h2 {
+						margin-top: 0;
+					}
+
+					h2 {
+						margin-top: 32px;
+						margin-bottom: 8px;
+						text-transform: none;
+						font-size: 14pt;
+					}
+
+					ul {
+						margin-bottom: 8px;
+						li+li {
+							margin-top: 8px;
+						}
+					}
+
+					strong {
+						color: white;
 					}
 				}
 
-				strong {
-					color: white;
+				#changelogMd {
+					display: none;
 				}
 			}
 
-			#changelogMd {
-				display: none;
-			}
 		}
 
 
