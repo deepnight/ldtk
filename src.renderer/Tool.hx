@@ -363,8 +363,9 @@ class Tool<T> extends dn.Process {
 	}
 
 	public final function updatePalette() {
-		jPalette.empty();
-		jPalette.append( createPalette() );
+		jPalette
+			.empty()
+			.append( createPalette() );
 	}
 
 	public function createPalette() : js.jquery.JQuery {
