@@ -2,6 +2,7 @@
 
 ## 0.0.4-alpha
 
+ - Added 0-9 number keys to quickly select layers
  - Added an edit link in Entity instance editor
  - Updated home
  - UI polishing
