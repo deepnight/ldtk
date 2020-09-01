@@ -16,6 +16,19 @@
 	"defs" : {
 		"layers" : [
 			{
+				"identifier" : "Entities",
+				"type" : "Entities",
+				"uid" : 16,
+				"gridSize" : 16,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" }
+				],
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			},
+			{
 				"identifier" : "IntGrid",
 				"type" : "IntGrid",
 				"uid" : 3,
@@ -57,19 +70,6 @@
 					{ "identifier" : null, "color" : "#000000" }
 				],
 				"tilesetDefUid" : 12,
-				"tilePivotX" : 0,
-				"tilePivotY" : 0
-			},
-			{
-				"identifier" : "Entities",
-				"type" : "Entities",
-				"uid" : 16,
-				"gridSize" : 16,
-				"displayOpacity" : 1.0,
-				"intGridValues" : [
-					{ "identifier" : null, "color" : "#000000" }
-				],
-				"tilesetDefUid" : null,
 				"tilePivotX" : 0,
 				"tilePivotY" : 0
 			}
@@ -145,6 +145,39 @@
 			"pxWid" : 256,
 			"pxHei" : 256,
 			"layerInstances" : [
+				{
+					"__identifier" : "Entities",
+					"__type" : "Entities",
+					"__cWid" : 16,
+					"__cHei" : 16,
+					"__gridSize" : 16,
+					"levelId" : 0,
+					"layerDefUid" : 16,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
+					"gridTiles" : [],
+					"entityInstances" : [
+						{
+							"__identifier" : "Mob",
+							"__cx" : 1,
+							"__cy" : 11,
+							"defUid" : 15,
+							"x" : 24,
+							"y" : 192,
+							"fieldInstances" : []
+						},
+						{
+							"__identifier" : "Hero",
+							"__cx" : 8,
+							"__cy" : 11,
+							"defUid" : 14,
+							"x" : 136,
+							"y" : 192,
+							"fieldInstances" : []
+						}
+					]
+				},
 				{
 					"__identifier" : "IntGrid",
 					"__type" : "IntGrid",
@@ -252,41 +285,43 @@
 					"pxOffsetX" : 0,
 					"pxOffsetY" : 0,
 					"intGrid" : [],
-					"gridTiles" : [],
+					"gridTiles" : [
+						{ "coordId" : 5, "v" : 17 },
+						{ "coordId" : 6, "v" : 1 },
+						{ "coordId" : 7, "v" : 1 },
+						{ "coordId" : 13, "v" : 17 },
+						{ "coordId" : 14, "v" : 1 },
+						{ "coordId" : 15, "v" : 18 },
+						{ "coordId" : 21, "v" : 17 },
+						{ "coordId" : 22, "v" : 12 },
+						{ "coordId" : 23, "v" : 18 },
+						{ "coordId" : 29, "v" : 17 },
+						{ "coordId" : 30, "v" : 1 },
+						{ "coordId" : 31, "v" : 19 },
+						{ "coordId" : 37, "v" : 17 },
+						{ "coordId" : 38, "v" : 1 },
+						{ "coordId" : 39, "v" : 1 },
+						{ "coordId" : 45, "v" : 17 },
+						{ "coordId" : 46, "v" : 1 },
+						{ "coordId" : 47, "v" : 21 },
+						{ "coordId" : 48, "v" : 3 },
+						{ "coordId" : 49, "v" : 3 },
+						{ "coordId" : 50, "v" : 3 },
+						{ "coordId" : 51, "v" : 3 },
+						{ "coordId" : 52, "v" : 3 },
+						{ "coordId" : 53, "v" : 17 },
+						{ "coordId" : 54, "v" : 1 },
+						{ "coordId" : 55, "v" : 20 },
+						{ "coordId" : 56, "v" : 2 },
+						{ "coordId" : 57, "v" : 2 },
+						{ "coordId" : 58, "v" : 2 },
+						{ "coordId" : 59, "v" : 2 },
+						{ "coordId" : 60, "v" : 2 },
+						{ "coordId" : 61, "v" : 17 },
+						{ "coordId" : 62, "v" : 18 },
+						{ "coordId" : 63, "v" : 19 }
+					],
 					"entityInstances" : []
-				},
-				{
-					"__identifier" : "Entities",
-					"__type" : "Entities",
-					"__cWid" : 16,
-					"__cHei" : 16,
-					"__gridSize" : 16,
-					"levelId" : 0,
-					"layerDefUid" : 16,
-					"pxOffsetX" : 0,
-					"pxOffsetY" : 0,
-					"intGrid" : [],
-					"gridTiles" : [],
-					"entityInstances" : [
-						{
-							"__identifier" : "Mob",
-							"__cx" : 5,
-							"__cy" : 8,
-							"defUid" : 15,
-							"x" : 88,
-							"y" : 144,
-							"fieldInstances" : []
-						},
-						{
-							"__identifier" : "Hero",
-							"__cx" : 13,
-							"__cy" : 3,
-							"defUid" : 14,
-							"x" : 216,
-							"y" : 64,
-							"fieldInstances" : []
-						}
-					]
 				}
 			]
 		}
