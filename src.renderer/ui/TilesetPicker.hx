@@ -1,7 +1,7 @@
 package ui;
 
 class TilesetPicker {
-	static var SCROLL_MEMORY : Map<Int, { x:Float, y:Float, zoom:Float }> = new Map();
+	static var SCROLL_MEMORY : Map<String, { x:Float, y:Float, zoom:Float }> = new Map();
 
 	var jDoc(get,never) : js.jquery.JQuery; inline function get_jDoc() return new J(js.Browser.document);
 
@@ -69,7 +69,7 @@ class TilesetPicker {
 		scrollX = 0;
 		scrollY = 0;
 		zoom = 3;
-		SCROLL_MEMORY.remove( tilesetDef.uid );
+		SCROLL_MEMORY.remove( tilesetDef.relPath );
 	}
 
 	function set_singleSelectedTileId(v) {
@@ -81,7 +81,7 @@ class TilesetPicker {
 	public dynamic function onSingleTileSelect(tileId:Int) {}
 
 	function loadScrollPos() {
-		var mem = SCROLL_MEMORY.get(tilesetDef.uid);
+		var mem = SCROLL_MEMORY.get(tilesetDef.relPath);
 		if( mem!=null ) {
 			scrollX = mem.x;
 			scrollY = mem.y;
@@ -92,7 +92,7 @@ class TilesetPicker {
 	}
 
 	function saveScrollPos() {
-		SCROLL_MEMORY.set(tilesetDef.uid, { x:scrollX, y:scrollY, zoom:zoom });
+		SCROLL_MEMORY.set(tilesetDef.relPath, { x:scrollX, y:scrollY, zoom:zoom });
 	}
 
 	function set_zoom(v) {
