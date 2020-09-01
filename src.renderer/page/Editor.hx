@@ -336,8 +336,8 @@ class Editor extends Page {
 				if( !hasInputFocus() )
 					onHelp();
 
-			case k if( k>=49 && k<=57 ):
-				var idx = k-49;
+			case k if( k>=48 && k<=57 ):
+				var idx = k==48 ? 9 : k-49;
 				if( idx < curLevel.layerInstances.length )
 					selectLayerInstance( curLevel.layerInstances[idx] );
 
