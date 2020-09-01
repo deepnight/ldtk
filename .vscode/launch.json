@@ -5,7 +5,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Debug Electron renderer",
+			"name": "Debug renderer",
 			"type": "chrome",
 			"request": "launch",
 			"cwd": "${workspaceFolder}/app",
