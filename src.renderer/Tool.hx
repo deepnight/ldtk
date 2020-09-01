@@ -319,7 +319,9 @@ class Tool<T> extends dn.Process {
 			// Preview picking
 			var ge = getGenericLevelElementAt(m, editor.isShiftDown() ? null : curLayerInstance);
 			switch ge {
-				case null: editor.cursor.set(PickNothing);
+				case null:
+					editor.cursor.set(PickNothing);
+
 				case IntGrid(li, cx, cy):
 					var id = li.getIntGridIdentifierAt(cx,cy);
 					editor.cursor.set(
@@ -339,6 +341,8 @@ class Tool<T> extends dn.Process {
 						"Tile "+li.getGridTile(cx,cy)
 					);
 			}
+			if( ge!=null )
+				editor.cursor.setSystemCursor(Button);
 		}
 		else if( editor.isKeyDown(K.SPACE) )
 			editor.cursor.set(Move);

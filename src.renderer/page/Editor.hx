@@ -68,6 +68,7 @@ class Editor extends Page {
 		watcher = new misc.FileWatcher();
 
 		cursor = new ui.Cursor();
+		cursor.canChangeSystemCursors = true;
 		selectionCursor = new ui.Cursor();
 		selectionCursor.highlight();
 

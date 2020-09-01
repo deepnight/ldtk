@@ -12,6 +12,7 @@ class Cursor extends dn.Process {
 
 	var labelWrapper : h2d.Flow;
 	var curLabel : Null<String>;
+	public var canChangeSystemCursors = false;
 
 	public function new() {
 		super(Editor.ME);
@@ -37,6 +38,11 @@ class Cursor extends dn.Process {
 		curLabel = str;
 	}
 
+	public function setSystemCursor(c:hxd.Cursor) {
+		if( canChangeSystemCursors )
+			hxd.System.setCursor(c);
+	}
+
 	function render() {
 		wrapper.removeChildren();
 		graphics.clear();
@@ -47,7 +53,7 @@ class Cursor extends dn.Process {
 		graphics.visible = wrapper.visible;
 		labelWrapper.visible = curLabel!=null;
 
-		hxd.System.setCursor(Default);
+		setSystemCursor(Default);
 
 		var pad = 2;
 
@@ -56,7 +62,7 @@ class Cursor extends dn.Process {
 
 			case Resize(pos):
 				#if js
-				hxd.System.setCursor( hxd.Cursor.CustomCursor.getNativeCursor(switch pos {
+				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor(switch pos {
 					case Top: "n-resize";
 					case Bottom: "s-resize";
 					case Left: "w-resize";
@@ -69,10 +75,10 @@ class Cursor extends dn.Process {
 				#end
 
 			case PickNothing:
-				hxd.System.setCursor( hxd.Cursor.CustomCursor.getNativeCursor("help") );
+				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("help") );
 
 			case Move:
-				hxd.System.setCursor(Move);
+				setSystemCursor(Move);
 
 			case Eraser(x, y):
 				graphics.lineStyle(1, 0xff0000, 1);
@@ -143,7 +149,18 @@ class Cursor extends dn.Process {
 	}
 
 	public function set(t:CursorType, ?label:String) {
-		var changed = type==null || !type.equals(t) || curLabel!=label;
+		var changed = type==null || curLabel!=label || type.getIndex()!=t.getIndex();
+		if( !changed )
+			changed = switch t {
+				case None, Move, PickNothing: type!=t;
+				case Eraser(x, y): false;
+				case GridCell(li, cx, cy, col): !type.equals(t);
+				case GridRect(li, cx, cy, wid, hei, col): !type.equals(t);
+				case Entity(li, def, x, y): !type.equals(t);
+				case Tiles(li, tileIds, cx, cy): !type.equals(t);
+				case Resize(p): !type.equals(t);
+			}
+
 		type = t;
 		setLabel(label);
 		if( changed )
