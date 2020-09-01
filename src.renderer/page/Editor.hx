@@ -451,12 +451,14 @@ class Editor extends Page {
 				var v = li.getIntGrid(cx,cy);
 				curTool.as(tool.IntGridTool).selectValue(v);
 				levelRender.showRect( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
+				curTool.onValuePicking();
 				return true;
 
 			case Entity(li, instance):
 				selectLayerInstance(li);
 				curTool.as(tool.EntityTool).selectValue(instance.defUid);
 				levelRender.showRect( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
+				curTool.onValuePicking();
 				return true;
 
 			case Tile(li, cx, cy):
@@ -468,6 +470,7 @@ class Editor extends Page {
 
 				var t = curTool.as(tool.TileTool);
 				t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking save selections?
+				curTool.onValuePicking();
 
 				// var savedSel = td.getSavedSelectionFor(tid);
 				// if( savedSel==null || !isShiftDown() && !isCtrlDown() )

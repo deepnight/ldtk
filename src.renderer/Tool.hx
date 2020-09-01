@@ -392,6 +392,10 @@ class Tool<T> extends dn.Process {
 		return new ui.ToolPalette(this); // <-- should be overridden in extended classes
 	}
 
+	public function onValuePicking() {
+		palette.render();
+	}
+
 	public function initPalette() {
 		palette = createToolPalette();
 		palette.render();

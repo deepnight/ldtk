@@ -33,7 +33,6 @@ class TilePalette extends ui.ToolPalette {
 		});
 
 		// Random mode
-		N.debug("rand="+tool.isRandomMode());
 		var opt = new J('<label/>');
 		opt.appendTo(options);
 		var chk = new J('<input type="checkbox"/>');
