@@ -1961,7 +1961,7 @@ canvas#webgl {
 	}
 }
 
-.instanceEditor {
+.entityInstanceEditor {
 	position: absolute;
 	overflow: auto;
 	z-index: 10;
@@ -1976,6 +1976,38 @@ canvas#webgl {
 	box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.6);
 
 	background-color: $bgDark;
+
+	header {
+		display: grid;
+		grid-template-columns: auto min-content;
+		width: 100%;
+		padding-bottom: 4px;
+		margin-bottom: 4px;
+
+		font-weight: bold;
+		color: $orange;
+
+		border-bottom: 1px solid $bgLight;
+
+		a {
+			display: inline-block;
+			padding: 2px 4px;
+			font-size: 8pt;
+			color: black;
+			border-radius: 2px;
+			background-color: $orange;
+			cursor: pointer;
+
+			&:hover {
+				background-color: white;
+			}
+		}
+	}
+
+	.empty {
+		color: $bgLighter;
+		font-style: italic;
+	}
 
 	ul.form {
 		padding: 0;

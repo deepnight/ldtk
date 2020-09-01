@@ -267,6 +267,9 @@ class Editor extends Page {
 		if( ev.keyCode==K.TAB && !ui.Modal.hasAnyOpen() )
 			ev.preventDefault();
 
+		if( ev.keyCode==K.ALT )
+			ev.preventDefault();
+
 		keyDowns.set(ev.keyCode, true);
 		onKeyPress(ev.keyCode);
 	}
