@@ -1,5 +1,10 @@
 # LEd release notes
 
+## 0.0.4-alpha
+
+ - Added an edit link in Entity instance editor
+ - UI polishing
+
 ## 0.0.3-alpha
 
  - Better **Entity instance fields editor**
