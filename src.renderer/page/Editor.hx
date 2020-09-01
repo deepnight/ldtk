@@ -878,6 +878,8 @@ class Editor extends Page {
 		ge = null;
 
 		Boot.ME.s2d.removeEventListener(onEvent);
+		Tool.clearSelectionMemory();
+		ui.TilesetPicker.clearScrollMemory();
 
 		App.ME.jBody.off(".client");
 	}

@@ -65,7 +65,11 @@ class TilesetPicker {
 		renderSelection();
 	}
 
-	public function clearScrollMemory() {
+	public static function clearScrollMemory() {
+		SCROLL_MEMORY = new Map();
+	}
+
+	public function resetScroll() {
 		scrollX = 0;
 		scrollY = 0;
 		zoom = 3;
@@ -88,7 +92,7 @@ class TilesetPicker {
 			zoom = mem.zoom;
 		}
 		else
-			clearScrollMemory();
+			resetScroll();
 	}
 
 	function saveScrollPos() {
