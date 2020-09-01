@@ -1,0 +1,294 @@
+{
+	"__header__" : {
+		"fileType" : "LEd Project JSON",
+		"app" : "LEd",
+		"appAuthor" : "Sebastien Benard",
+		"appVersion" : "0.0.4-alpha-debug",
+		"url" : "https://deepnight.net/"
+	},
+	"name" : "test",
+	"jsonVersion" : 1,
+	"defaultPivotX" : 0.0,
+	"defaultPivotY" : 0.0,
+	"defaultGridSize" : 16,
+	"bgColor" : "#7F8093",
+	"nextUid" : 17,
+	"defs" : {
+		"layers" : [
+			{
+				"identifier" : "IntGrid",
+				"type" : "IntGrid",
+				"uid" : 3,
+				"gridSize" : 16,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" },
+					{ "identifier" : null, "color" : "#FF0000" },
+					{ "identifier" : null, "color" : "#00FF1E" },
+					{ "identifier" : null, "color" : "#0008FF" },
+					{ "identifier" : null, "color" : "#CE5FC1" },
+					{ "identifier" : null, "color" : "#FFD500" }
+				],
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			},
+			{
+				"identifier" : "IntGrid2",
+				"type" : "IntGrid",
+				"uid" : 2,
+				"gridSize" : 16,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" },
+					{ "identifier" : null, "color" : "#C4C4C4" }
+				],
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			},
+			{
+				"identifier" : "Gif",
+				"type" : "Tiles",
+				"uid" : 13,
+				"gridSize" : 32,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" }
+				],
+				"tilesetDefUid" : 12,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			},
+			{
+				"identifier" : "Entities",
+				"type" : "Entities",
+				"uid" : 16,
+				"gridSize" : 16,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" }
+				],
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			}
+		],
+		"entities" : [
+			{
+				"identifier" : "Hero",
+				"uid" : 14,
+				"width" : 16,
+				"height" : 32,
+				"color" : "#C8FF00",
+				"renderMode" : "Rectangle",
+				"tilesetId" : null,
+				"tileId" : null,
+				"maxPerLevel" : 0,
+				"discardExcess" : true,
+				"pivotX" : 0.5,
+				"pivotY" : 1.0,
+				"fieldDefs" : []
+			},
+			{
+				"identifier" : "Mob",
+				"uid" : 15,
+				"width" : 24,
+				"height" : 32,
+				"color" : "#FF0000",
+				"renderMode" : "Rectangle",
+				"tilesetId" : null,
+				"tileId" : null,
+				"maxPerLevel" : 0,
+				"discardExcess" : true,
+				"pivotX" : 0.5,
+				"pivotY" : 1.0,
+				"fieldDefs" : []
+			}
+		],
+		"tilesets" : [
+			{
+				"identifier" : "Gif87a",
+				"uid" : 12,
+				"relPath" : "atlas/gif87a.gif",
+				"pxWid" : 192,
+				"pxHei" : 128,
+				"tileGridSize" : 32,
+				"tileGridSpacing" : 0,
+				"savedSelections" : [
+					{
+						"ids" : [ 16, 22, 17, 23 ],
+						"mode" : "Stamp"
+					},
+					{
+						"ids" : [
+							12,
+							13,
+							14,
+							18,
+							19,
+							20,
+							21
+						],
+						"mode" : "Random"
+					}
+				]
+			}
+		],
+		"enums" : [],
+		"externalEnums" : []
+	},
+	"levels" : [
+		{
+			"identifier" : "Level",
+			"uid" : 0,
+			"pxWid" : 256,
+			"pxHei" : 256,
+			"layerInstances" : [
+				{
+					"__identifier" : "IntGrid",
+					"__type" : "IntGrid",
+					"__cWid" : 16,
+					"__cHei" : 16,
+					"__gridSize" : 16,
+					"levelId" : 0,
+					"layerDefUid" : 3,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [
+						{ "coordId" : 21, "v" : 1 },
+						{ "coordId" : 25, "v" : 3 },
+						{ "coordId" : 36, "v" : 2 },
+						{ "coordId" : 37, "v" : 2 },
+						{ "coordId" : 38, "v" : 1 },
+						{ "coordId" : 42, "v" : 3 },
+						{ "coordId" : 51, "v" : 2 },
+						{ "coordId" : 55, "v" : 1 },
+						{ "coordId" : 59, "v" : 3 },
+						{ "coordId" : 66, "v" : 2 },
+						{ "coordId" : 71, "v" : 1 },
+						{ "coordId" : 76, "v" : 3 },
+						{ "coordId" : 82, "v" : 2 },
+						{ "coordId" : 87, "v" : 1 },
+						{ "coordId" : 92, "v" : 3 },
+						{ "coordId" : 98, "v" : 2 },
+						{ "coordId" : 104, "v" : 1 },
+						{ "coordId" : 108, "v" : 3 },
+						{ "coordId" : 114, "v" : 2 },
+						{ "coordId" : 121, "v" : 1 },
+						{ "coordId" : 127, "v" : 2 },
+						{ "coordId" : 131, "v" : 2 },
+						{ "coordId" : 137, "v" : 1 },
+						{ "coordId" : 142, "v" : 2 },
+						{ "coordId" : 147, "v" : 2 },
+						{ "coordId" : 154, "v" : 1 },
+						{ "coordId" : 157, "v" : 2 },
+						{ "coordId" : 164, "v" : 2 },
+						{ "coordId" : 171, "v" : 1 },
+						{ "coordId" : 172, "v" : 2 },
+						{ "coordId" : 181, "v" : 2 },
+						{ "coordId" : 182, "v" : 2 },
+						{ "coordId" : 186, "v" : 2 },
+						{ "coordId" : 187, "v" : 2 },
+						{ "coordId" : 188, "v" : 1 },
+						{ "coordId" : 199, "v" : 2 },
+						{ "coordId" : 200, "v" : 2 },
+						{ "coordId" : 201, "v" : 2 },
+						{ "coordId" : 205, "v" : 1 },
+						{ "coordId" : 206, "v" : 1 },
+						{ "coordId" : 207, "v" : 1 }
+					],
+					"gridTiles" : [],
+					"entityInstances" : []
+				},
+				{
+					"__identifier" : "IntGrid2",
+					"__type" : "IntGrid",
+					"__cWid" : 16,
+					"__cHei" : 16,
+					"__gridSize" : 16,
+					"levelId" : 0,
+					"layerDefUid" : 2,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [
+						{ "coordId" : 58, "v" : 0 },
+						{ "coordId" : 59, "v" : 0 },
+						{ "coordId" : 60, "v" : 0 },
+						{ "coordId" : 72, "v" : 0 },
+						{ "coordId" : 73, "v" : 0 },
+						{ "coordId" : 74, "v" : 0 },
+						{ "coordId" : 81, "v" : 0 },
+						{ "coordId" : 82, "v" : 0 },
+						{ "coordId" : 83, "v" : 0 },
+						{ "coordId" : 84, "v" : 0 },
+						{ "coordId" : 85, "v" : 0 },
+						{ "coordId" : 86, "v" : 0 },
+						{ "coordId" : 87, "v" : 0 },
+						{ "coordId" : 107, "v" : 1 },
+						{ "coordId" : 122, "v" : 1 },
+						{ "coordId" : 123, "v" : 1 },
+						{ "coordId" : 138, "v" : 1 },
+						{ "coordId" : 152, "v" : 1 },
+						{ "coordId" : 153, "v" : 1 },
+						{ "coordId" : 168, "v" : 1 },
+						{ "coordId" : 181, "v" : 1 },
+						{ "coordId" : 182, "v" : 1 },
+						{ "coordId" : 183, "v" : 1 },
+						{ "coordId" : 197, "v" : 1 },
+						{ "coordId" : 213, "v" : 1 }
+					],
+					"gridTiles" : [],
+					"entityInstances" : []
+				},
+				{
+					"__identifier" : "Gif",
+					"__type" : "Tiles",
+					"__cWid" : 8,
+					"__cHei" : 8,
+					"__gridSize" : 32,
+					"levelId" : 0,
+					"layerDefUid" : 13,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
+					"gridTiles" : [],
+					"entityInstances" : []
+				},
+				{
+					"__identifier" : "Entities",
+					"__type" : "Entities",
+					"__cWid" : 16,
+					"__cHei" : 16,
+					"__gridSize" : 16,
+					"levelId" : 0,
+					"layerDefUid" : 16,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
+					"gridTiles" : [],
+					"entityInstances" : [
+						{
+							"__identifier" : "Mob",
+							"__cx" : 5,
+							"__cy" : 8,
+							"defUid" : 15,
+							"x" : 88,
+							"y" : 144,
+							"fieldInstances" : []
+						},
+						{
+							"__identifier" : "Hero",
+							"__cx" : 13,
+							"__cy" : 3,
+							"defUid" : 14,
+							"x" : 216,
+							"y" : 64,
+							"fieldInstances" : []
+						}
+					]
+				}
+			]
+		}
+	]
+}
