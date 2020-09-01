@@ -6,6 +6,8 @@ class Tool<T> extends dn.Process {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : led.Project; inline function get_project() return Editor.ME.project;
 	var curLevel(get,never) : led.Level; inline function get_curLevel() return Editor.ME.curLevel;
+
+	@:allow(ui.ToolPalette)
 	var curLayerInstance(get,never) : led.inst.LayerInstance; inline function get_curLayerInstance() return Editor.ME.curLayerInstance;
 
 	var jPalette(get,never) : J; inline function get_jPalette() return editor.jPalette;
@@ -18,11 +20,12 @@ class Tool<T> extends dn.Process {
 	var rectangle = false;
 	var moveStarted = false;
 	var startTime = 0.;
+	var palette : ui.ToolPalette;
 
 	private function new() {
 		super(Editor.ME);
 
-		jPalette.off().find("*").off();
+		// jPalette.off().find("*").off();
 		updatePalette();
 		editor.ge.addSpecificListener(ToolOptionChanged, onToolOptionChanged);
 	}
@@ -34,14 +37,6 @@ class Tool<T> extends dn.Process {
 	override function onDispose() {
 		super.onDispose();
 		editor.ge.removeListener(onToolOptionChanged);
-	}
-
-	function enablePalettePopOut() {
-		jPalette
-			.off()
-			.mouseover( function(_) {
-				popOutPalette();
-			});
 	}
 
 	override function toString():String {
@@ -362,17 +357,42 @@ class Tool<T> extends dn.Process {
 
 
 	public function popOutPalette() {
-		new ui.modal.ToolPalettePopOut(this);
+		// new ui.modal.ToolPalettePopOut(this);
 	}
 
 	public final function updatePalette() {
-		jPalette
-			.empty()
-			.append( createPalette() );
+		// jPalette
+		// 	.empty()
+		// 	.append( createPalette() );
 	}
 
 	public function createPalette() : js.jquery.JQuery {
 		return new J('<div class="palette"/>');
+	}
+
+	function enablePalettePopOut() {
+		// jPalette
+		// 	.off()
+		// 	.mouseover( function(_) {
+		// 		popOutPalette();
+		// 	});
+	}
+
+	public function showPalette() {
+		N.debug("showPalette");
+		jPalette.empty();
+		palette.jContent.appendTo( jPalette );
+		palette.render();
+	}
+
+	function createToolPalette() {
+		return new ui.ToolPalette(this); // <-- should be overridden in extended classes
+	}
+
+	public function initPalette() {
+		N.error("initPalette");
+		palette = createToolPalette();
+		palette.render();
 	}
 
 

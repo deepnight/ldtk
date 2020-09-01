@@ -401,15 +401,15 @@ class Editor extends Page {
 		if( curLayerDef==null )
 			return new tool.EmptyTool();
 
-		if( !allTools.exists(curLayerDef.uid) )
-			allTools.set(
-				curLayerInstance.layerDefUid,
-				switch curLayerDef.type {
-					case IntGrid: new tool.IntGridTool();
-					case Entities: new tool.EntityTool();
-					case Tiles: new tool.TileTool();
-				}
-			);
+		if( !allTools.exists(curLayerDef.uid) ) {
+			var t : Tool<Dynamic> = switch curLayerDef.type {
+				case IntGrid: new tool.IntGridTool();
+				case Entities: new tool.EntityTool();
+				case Tiles: new tool.TileTool();
+			}
+			t.initPalette();
+			allTools.set( curLayerInstance.layerDefUid, t );
+		}
 
 		return allTools.get( curLayerDef.uid );
 	}
@@ -424,7 +424,8 @@ class Editor extends Page {
 	function updateTool() {
 		clearSelection();
 		cursor.set(None);
-		curTool.updatePalette();
+		// curTool.updatePalette();
+		curTool.showPalette();
 
 		// if( curTool!=null )
 		// 	curTool.destroy();
