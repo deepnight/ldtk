@@ -92,7 +92,7 @@ class Home extends Page {
 
 		// Open it
 		App.ME.openEditor(p, filePath);
-		N.msg("Loaded project: "+filePath);
+		N.msg("Loaded project: "+dn.FilePath.extractFileWithExt(filePath));
 		return true;
 	}
 

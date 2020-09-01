@@ -7,6 +7,7 @@
  - Added an edit link in Entity instance editor
  - Fixed file path display in Enum panel
  - Fixed image path sometime disappearing in Tileset panel
+ - Fixed load/save notifications
  - Updated home
  - UI polishing
 

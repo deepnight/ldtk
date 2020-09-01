@@ -572,7 +572,7 @@ class Editor extends Page {
 		JsTools.writeFileBytes(projectFilePath, data.bytes);
 		needSaving = false;
 		App.ME.registerRecentProject(projectFilePath);
-		N.msg("Saved to "+projectFilePath);
+		N.msg("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
 	}
 
 	public function onSaveAs() {
