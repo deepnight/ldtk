@@ -131,6 +131,31 @@ class TilesetPicker {
 			jSelection.append( createCursor(tool.getSelectedValue(),"selection") );
 	}
 
+	public function focusOnSelection() {
+		var cx = 0.;
+		var cy = 0.;
+		if( singleTileMode ) {
+			cx = tilesetDef.getTileCx(singleSelectedTileId);
+			cy = tilesetDef.getTileCy(singleSelectedTileId);
+		}
+		else {
+			var tids = tool.getSelectedValue().ids;
+			for(tid in tids) {
+				cx += tilesetDef.getTileCx(tid);
+				cy += tilesetDef.getTileCy(tid);
+			}
+			cx = cx/tids.length;
+			cy = cy/tids.length;
+		}
+		cx+=0.5;
+		cy+=0.5;
+
+		scrollX = cx*tilesetDef.tileGridSize; // TODO center focus point
+		scrollY = cy*tilesetDef.tileGridSize; // TODO center focus point
+
+		saveScrollPos();
+	}
+
 	function createCursor(sel:led.LedTypes.TilesetSelection, ?subClass:String, ?cWid:Int, ?cHei:Int) {
 		var wrapper = new J("<div/>");
 		var idsMap = new Map();
