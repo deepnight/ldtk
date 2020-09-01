@@ -2,8 +2,11 @@
 
 ## 0.0.4-alpha
 
+ - Clicking an existing Entity now automatically picks it
  - Added 0-9 number keys to quickly select layers
  - Added an edit link in Entity instance editor
+ - Fixed file path display in Enum panel
+ - Fixed image path sometime disappearing in Tileset panel
  - Updated home
  - UI polishing
 
