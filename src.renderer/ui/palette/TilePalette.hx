@@ -1,9 +1,6 @@
 package ui.palette;
 
 class TilePalette extends ui.ToolPalette {
-	var scrollX = 0.;
-	var scrollY = 0.;
-
 	public function new(t) {
 		super(t);
 	}
