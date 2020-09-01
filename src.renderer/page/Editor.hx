@@ -520,6 +520,7 @@ class Editor extends Page {
 		var e = new J('<div class="layerPickNotif"/>');
 		App.ME.jBody.append(e);
 		e.append('<span>${l.def.identifier}</span>');
+		e.css("left", (jMainPanel.outerWidth()+15)+"px");
 		e.fadeOut(1200);
 	}
 
