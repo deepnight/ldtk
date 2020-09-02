@@ -23,6 +23,10 @@ class App extends dn.Process {
 		jCanvas.hide();
 		clearMiniNotif();
 
+		#if debug
+		IpcRenderer.invoke("enableDebugMenu");
+		#end
+
 		// Init window
 		IpcRenderer.on("winClose", onWindowCloseButton);
 

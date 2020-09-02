@@ -12,15 +12,15 @@ class ElectronMain {
 			mainWindow = new electron.main.BrowserWindow({
 				webPreferences: { nodeIntegration:true },
 				fullscreenable: true,
-				autoHideMenuBar: true,
 				show: false,
 				title: "L-Ed",
 			});
+			mainWindow.setMenu(null);
+			mainWindow.maximize();
 			mainWindow.loadURL('file://$__dirname/app.html');
 			mainWindow.on('closed', function() {
 				mainWindow = null;
 			});
-			mainWindow.maximize();
 
 			dn.electron.Dialogs.initMain();
 			dn.electron.ElectronUpdater.initMain(mainWindow);
@@ -53,6 +53,27 @@ class ElectronMain {
 
 		IpcMain.handle("setWinTitle", function(event,args) {
 			mainWindow.title = args;
+		});
+
+		IpcMain.handle("enableDebugMenu", function(_) {
+			var menu = electron.main.Menu.buildFromTemplate([
+				{
+					label: "Debug tools",
+					submenu: cast [
+						{
+							label: "Reload",
+							click: function() mainWindow.reload(),
+							accelerator: "CmdOrCtrl+R",
+						},
+						{
+							label: "Dev tools",
+							click: function() mainWindow.webContents.toggleDevTools(),
+							accelerator: "CmdOrCtrl+Shift+I",
+						},
+					]
+				}
+			]);
+			electron.main.Menu.setApplicationMenu(menu);
 		});
 
 
