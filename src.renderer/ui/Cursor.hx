@@ -5,7 +5,7 @@ class Cursor extends dn.Process {
 	var project(get,never) : led.Project; inline function get_project() return Editor.ME.project;
 	var curLevel(get,never) : led.Level; inline function get_curLevel() return Editor.ME.curLevel;
 
-	var type : CursorType = None;
+	var type : CursorType = null;
 
 	var wrapper : h2d.Object;
 	var graphics : h2d.Graphics;
