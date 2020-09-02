@@ -690,6 +690,8 @@ class Editor extends Page {
 				updateTool();
 				updateGuide();
 
+			case TilesetSelectionSaved:
+
 			case TilesetDefAdded:
 
 			case ProjectSettingsChanged:

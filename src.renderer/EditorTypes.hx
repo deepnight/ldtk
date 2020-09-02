@@ -28,6 +28,7 @@ enum GlobalEvent {
 	TilesetDefChanged;
 	TilesetDefAdded;
 	TilesetDefRemoved;
+	TilesetSelectionSaved;
 
 	EntityDefAdded;
 	EntityDefRemoved;
