@@ -1,16 +1,14 @@
 package ui.palette;
 
 class IntGridPalette extends ui.ToolPalette {
-	var scrollY = 0.;
-
 	public function new(t) {
 		super(t);
 	}
 
-	override function render() {
-		super.render();
+	override function doRender() {
+		super.doRender();
 
-		var jList = new J('<ul class="niceList"/>');
+		jList = new J('<ul class="niceList"/>');
 		jList.appendTo(jContent);
 
 		var idx = 0;
@@ -37,22 +35,14 @@ class IntGridPalette extends ui.ToolPalette {
 			});
 			idx++;
 		}
-
-		// Scrolling memory
-		jList.scroll(function(ev) {
-			scrollY = jList.scrollTop();
-		});
-		jList.scrollTop(scrollY);
 	}
 
 	override function focusOnSelection() {
 		super.focusOnSelection();
 
-		var jList = jContent.find(">ul");
+		// Focus scroll animation
 		var e = jList.find('[data-id=${tool.getSelectedValue()}]');
-		if( e.length>0 ) {
-			jList.scrollTop(0);
-			jList.scrollTop( e.position().top - jList.outerHeight()*0.5 + e.outerHeight()*0.5 );
-		}
+		if( e.length>0 )
+			animateListScrolling(e.position().top + e.outerHeight()*0.5 );
 	}
 }

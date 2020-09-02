@@ -7,8 +7,8 @@ class TilePalette extends ui.ToolPalette {
 		super(t);
 	}
 
-	override function render() {
-		super.render();
+	override function doRender() {
+		super.doRender();
 
 		var tool : tool.TileTool = cast tool;
 

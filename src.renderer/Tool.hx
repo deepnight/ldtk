@@ -405,6 +405,8 @@ class Tool<T> extends dn.Process {
 
 	override function update() {
 		super.update();
+		if( palette!=null )
+			palette.update();
 	}
 
 }
