@@ -110,4 +110,15 @@ class Home extends Page {
 		});
 	}
 
+
+	override function onKeyPress(keyCode:Int) {
+		super.onKeyPress(keyCode);
+
+		switch keyCode {
+			case K.W, K.Q:
+				if( App.ME.isCtrlDown() )
+					App.ME.exit();
+		}
+	}
+
 }

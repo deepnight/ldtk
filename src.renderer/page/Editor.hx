@@ -28,7 +28,6 @@ class Editor extends Page {
 	var curLayerId : Int;
 	public var curTool(get,never) : Tool<Dynamic>;
 	var allTools : Map<Int,Tool<Dynamic>> = new Map();
-	var keyDowns : Map<Int,Bool> = new Map();
 	var gridSnapping = true;
 	public var needSaving = false;
 
@@ -56,12 +55,10 @@ class Editor extends Page {
 
 		// Events
 		App.ME.jBody
-			.on("keydown.client", onJsKeyDown )
-			.on("keyup.client", onJsKeyUp )
 			.on("mouseup.client", function(_) onMouseUp() )
 			.on("mouseleave.client", function(_) onMouseUp() );
 
-		Boot.ME.s2d.addEventListener( onEvent );
+		Boot.ME.s2d.addEventListener( onHeapsEvent );
 
 		ge = new GlobalEventDispatcher();
 		ge.addGlobalListener( onGlobalEvent );
@@ -260,40 +257,14 @@ class Editor extends Page {
 		ge.emit(TilesetDefChanged);
 	}
 
-	override function onAppBlur() {
-		super.onAppBlur();
-		keyDowns = new Map();
-	}
-
-	function onJsKeyDown(ev:js.jquery.Event) {
-		if( ev.keyCode==K.TAB && !ui.Modal.hasAnyOpen() )
-			ev.preventDefault();
-
-		if( ev.keyCode==K.ALT )
-			ev.preventDefault();
-
-		keyDowns.set(ev.keyCode, true);
-		onKeyPress(ev.keyCode);
-	}
-
-	function onJsKeyUp(ev:js.jquery.Event) {
-		keyDowns.remove(ev.keyCode);
-	}
-
-	function onHeapsKeyDown(ev:hxd.Event) {
-		keyDowns.set(ev.keyCode, true);
-		onKeyPress(ev.keyCode);
-	}
-
-	function onHeapsKeyUp(ev:hxd.Event) {
-		keyDowns.remove(ev.keyCode);
-	}
-
 	inline function hasInputFocus() {
 		return App.ME.jBody.find("input:focus, textarea:focus").length>0;
 	}
-	function onKeyPress(keyId:Int) {
-		switch keyId {
+
+	override function onKeyPress(keyCode:Int) {
+		super.onKeyPress(keyCode);
+
+		switch keyCode {
 			case K.ESCAPE:
 				if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeAll();
@@ -308,20 +279,24 @@ class Editor extends Page {
 				}
 
 			case K.Z:
-				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && isCtrlDown() )
+				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() )
 					curLevelHistory.undo();
 
 			case K.Y:
-				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && isCtrlDown() )
+				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() )
 					curLevelHistory.redo();
 
 			case K.S:
-				if( !hasInputFocus() && isCtrlDown() )
+				if( !hasInputFocus() && App.ME.isCtrlDown() )
 					onSave();
 
 			case K.W:
-				if( !hasInputFocus() && isCtrlDown() )
+				if( App.ME.isCtrlDown() )
 					onClose();
+
+			case K.Q:
+				if( App.ME.isCtrlDown() )
+					App.ME.exit();
 
 			case K.A:
 				if( !hasInputFocus() )
@@ -356,11 +331,7 @@ class Editor extends Page {
 
 		// Propagate to current tool
 		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() )
-			curTool.onKeyPress(keyId);
-	}
-
-	function allowKeyPresses() {
-		return !hasInputFocus();
+			curTool.onKeyPress(keyCode);
 	}
 
 
@@ -475,7 +446,7 @@ class Editor extends Page {
 		return false;
 	}
 
-	function onEvent(e:hxd.Event) {
+	function onHeapsEvent(e:hxd.Event) {
 		switch e.kind {
 			case EPush: onMouseDown(e);
 			case ERelease: onMouseUp();
@@ -485,8 +456,8 @@ class Editor extends Page {
 			case EWheel: onMouseWheel(e);
 			case EFocus:
 			case EFocusLost: onMouseUp();
-			case EKeyDown: onHeapsKeyDown(e);
-			case EKeyUp: onHeapsKeyUp(e);
+			case EKeyDown:
+			case EKeyUp:
 			case EReleaseOutside: onMouseUp();
 			case ETextInput:
 			case ECheck:
@@ -852,13 +823,6 @@ class Editor extends Page {
 		return curLayerInstance!=null && levelRender.isLayerVisible(curLayerInstance);
 	}
 
-	public inline function isKeyDown(keyId:Int) return keyDowns.get(keyId)==true;
-	public inline function isShiftDown() return keyDowns.get(Key.SHIFT)==true;
-	public inline function isCtrlDown() return keyDowns.get(Key.CTRL)==true;
-	public inline function isAltDown() return keyDowns.get(Key.ALT)==true;
-	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlDown() || isAltDown();
-
-
 	public inline function getMouse() : MouseCoords {
 		return new MouseCoords();
 	}
@@ -874,7 +838,7 @@ class Editor extends Page {
 		ge.dispose();
 		ge = null;
 
-		Boot.ME.s2d.removeEventListener(onEvent);
+		Boot.ME.s2d.removeEventListener(onHeapsEvent);
 		Tool.clearSelectionMemory();
 		ui.TilesetPicker.clearScrollMemory();
 

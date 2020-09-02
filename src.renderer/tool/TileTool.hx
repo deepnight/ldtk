@@ -251,7 +251,7 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 	override function onKeyPress(keyId:Int) {
 		super.onKeyPress(keyId);
 
-		if( !editor.hasAnyToggleKeyDown() )
+		if( !App.ME.hasAnyToggleKeyDown() )
 			switch keyId {
 				case K.R :
 					setMode( isRandomMode() ? Stamp : Random );

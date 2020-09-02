@@ -76,7 +76,7 @@ class Tool<T> extends dn.Process {
 	public function isRunning() return curMode!=null;
 
 	function isPicking(m:MouseCoords) {
-		return editor.isAltDown();
+		return App.ME.isAltDown();
 	}
 
 	public function startUsing(m:MouseCoords, buttonId:Int) {
@@ -92,7 +92,7 @@ class Tool<T> extends dn.Process {
 			if( !editor.isCurrentLayerVisible() )
 				return;
 
-			var ge = getGenericLevelElementAt(m, editor.isShiftDown() ? null : curLayerInstance);
+			var ge = getGenericLevelElementAt(m, App.ME.isShiftDown() ? null : curLayerInstance);
 
 			if( ge==null )
 				return;
@@ -111,7 +111,7 @@ class Tool<T> extends dn.Process {
 		button = buttonId;
 		switch button {
 			case 0:
-				if( editor.isKeyDown(K.SPACE) )
+				if( App.ME.isKeyDown(K.SPACE) )
 					curMode = PanView;
 				else if( isPicking(m) )
 					curMode = Move;
@@ -134,7 +134,7 @@ class Tool<T> extends dn.Process {
 		}
 
 		editor.curLevelHistory.initChangeMarks();
-		rectangle = editor.isShiftDown();
+		rectangle = App.ME.isShiftDown();
 		origin = m;
 		lastMouse = m;
 		if( !clickingOutsideBounds && !rectangle && useAt(m) )
@@ -296,7 +296,7 @@ class Tool<T> extends dn.Process {
 		// Start moving elements only after a small elapsed mouse distance
 		if( curMode==Move && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {
 			moveStarted = true;
-			if( editor.isCtrlDown() && editor.selection!=null ) {
+			if( App.ME.isCtrlDown() && editor.selection!=null ) {
 				var copy = duplicateElement(editor.selection);
 				if( copy!=null )
 					editor.setSelection(copy);
@@ -312,7 +312,7 @@ class Tool<T> extends dn.Process {
 			editor.cursor.set(None);
 		else if( !isRunning() && isPicking(m) ) {
 			// Preview picking
-			var ge = getGenericLevelElementAt(m, editor.isShiftDown() ? null : curLayerInstance);
+			var ge = getGenericLevelElementAt(m, App.ME.isShiftDown() ? null : curLayerInstance);
 			switch ge {
 				case null:
 					editor.cursor.set(PickNothing);
@@ -339,7 +339,7 @@ class Tool<T> extends dn.Process {
 			if( ge!=null )
 				editor.cursor.setSystemCursor(Button);
 		}
-		else if( editor.isKeyDown(K.SPACE) )
+		else if( App.ME.isKeyDown(K.SPACE) )
 			editor.cursor.set(Move);
 		else switch curMode {
 			case PanView, Move:

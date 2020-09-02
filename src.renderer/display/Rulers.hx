@@ -183,7 +183,7 @@ class Rulers extends dn.Process {
 
 	function canUseResizers() {
 		return curLayerInstance!=null
-			&& !editor.isKeyDown(K.SPACE) && !editor.isShiftDown() && !editor.isCtrlDown() && !editor.isAltDown();
+			&& !App.ME.isKeyDown(K.SPACE) && !App.ME.hasAnyToggleKeyDown();
 	}
 
 	public function onMouseMove(m:MouseCoords) {

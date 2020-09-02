@@ -210,7 +210,7 @@ class TilesetPicker {
 
 	var _lastRect = null;
 	function updateCursor(pageX:Float, pageY:Float, force=false) {
-		if( isScrolling() || Editor.ME.isKeyDown(K.SPACE) || !mouseOver ) {
+		if( isScrolling() || App.ME.isKeyDown(K.SPACE) || !mouseOver ) {
 			jCursor.hide();
 			return;
 		}
@@ -257,7 +257,7 @@ class TilesetPicker {
 	}
 
 	inline function isScrolling() {
-		return dragStart!=null && ( dragStart.bt==1 || Editor.ME.isKeyDown(K.SPACE) );
+		return dragStart!=null && ( dragStart.bt==1 || App.ME.isKeyDown(K.SPACE) );
 	}
 
 	function onDocMouseMove(ev:js.jquery.Event) {
@@ -275,12 +275,12 @@ class TilesetPicker {
 			var r = getCursorRect(ev.pageX, ev.pageY);
 			var addToSelection = dragStart.bt!=2;
 			if( r.wid==1 && r.hei==1 ) {
-				if( Editor.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
+				if( App.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
 					addToSelection = false;
 				applySelection([ tilesetDef.getTileId(r.cx,r.cy) ], addToSelection);
 			}
 			else {
-				if( Editor.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
+				if( App.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
 					addToSelection = false;
 
 				var tileIds = [];
@@ -307,7 +307,7 @@ class TilesetPicker {
 
 	function applySelection(selIds:Array<Int>, add:Bool) {
 		// Auto-pick saved selection
-		if( !singleTileMode && selIds.length==1 && tilesetDef.hasSavedSelectionFor(selIds[0]) && !Editor.ME.isCtrlDown() ) {
+		if( !singleTileMode && selIds.length==1 && tilesetDef.hasSavedSelectionFor(selIds[0]) && !App.ME.isCtrlDown() ) {
 			// Check if the saved selection isn't already picked. If so, just pick the sub-tile
 			var sel = tool.getSelectedValue();
 			var saved = tilesetDef.getSavedSelectionFor( selIds[0] );
@@ -330,7 +330,7 @@ class TilesetPicker {
 		else {
 			var curSel = tool.getSelectedValue();
 			if( add ) {
-				if( !Editor.ME.isShiftDown() && !Editor.ME.isCtrlDown() ) {
+				if( !App.ME.isShiftDown() && !App.ME.isCtrlDown() ) {
 					// Replace active selection with this one
 					tool.selectValue({ mode:tool.getMode(), ids:selIds });
 				}

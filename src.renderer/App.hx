@@ -13,6 +13,8 @@ class App extends dn.Process {
 	public var lastKnownMouse : { pageX:Int, pageY:Int };
 	var curPageProcess : Null<Page>;
 	public var session : SessionData;
+	var keyDowns : Map<Int,Bool> = new Map();
+
 
 	public function new() {
 		super();
@@ -35,6 +37,12 @@ class App extends dn.Process {
 		win.onfocus = onAppFocus;
 		win.onresize = onAppResize;
 		win.onmousemove = onAppMouseMove;
+
+		// Keyboard events
+		jBody
+			.on("keydown", onJsKeyDown )
+			.on("keyup", onJsKeyUp );
+		Boot.ME.s2d.addEventListener(onHeapsEvent);
 
 		// Init dirs
 		var fp = dn.FilePath.fromDir( JsTools.getAppDir() );
@@ -80,11 +88,56 @@ class App extends dn.Process {
 		IpcRenderer.invoke("appReady");
 	}
 
-	#if electron
+
+	function onHeapsEvent(e:hxd.Event) {
+		switch e.kind {
+			case EKeyDown: onHeapsKeyDown(e);
+			case EKeyUp: onHeapsKeyUp(e);
+			case _:
+		}
+	}
+
+
+
+	function onJsKeyDown(ev:js.jquery.Event) {
+		if( ev.keyCode==K.TAB && !ui.Modal.hasAnyOpen() )
+			ev.preventDefault();
+
+		if( ev.keyCode==K.ALT )
+			ev.preventDefault();
+
+		keyDowns.set(ev.keyCode, true);
+		onKeyPress(ev.keyCode);
+	}
+
+	function onJsKeyUp(ev:js.jquery.Event) {
+		keyDowns.remove(ev.keyCode);
+	}
+
+	function onHeapsKeyDown(ev:hxd.Event) {
+		keyDowns.set(ev.keyCode, true);
+		onKeyPress(ev.keyCode);
+	}
+
+	function onHeapsKeyUp(ev:hxd.Event) {
+		keyDowns.remove(ev.keyCode);
+	}
+
 	function onWindowCloseButton() {
 		exit(false);
 	}
-	#end
+
+	public inline function isKeyDown(keyId:Int) return keyDowns.get(keyId)==true;
+	public inline function isShiftDown() return keyDowns.get(K.SHIFT)==true;
+	public inline function isCtrlDown() return keyDowns.get(K.CTRL)==true; // TODO support mac cmd
+	public inline function isAltDown() return keyDowns.get(K.ALT)==true;
+	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlDown() || isAltDown();
+
+	function onKeyPress(keyCode:Int) {
+		if( hasPage() )
+			curPageProcess.onKeyPress(keyCode);
+	}
+
 
 	public function miniNotif(html:String, persist=false) {
 		var e = jBody.find("#miniNotif");
@@ -110,17 +163,19 @@ class App extends dn.Process {
 	}
 
 	function onAppFocus(ev:js.html.Event) {
-		if( curPageProcess!=null && !curPageProcess.destroyed )
+		keyDowns = new Map();
+		if( hasPage() )
 			curPageProcess.onAppFocus();
 	}
 
 	function onAppBlur(ev:js.html.Event) {
-		if( curPageProcess!=null && !curPageProcess.destroyed )
+		keyDowns = new Map();
+		if( hasPage() )
 			curPageProcess.onAppBlur();
 	}
 
 	function onAppResize(ev:js.html.Event) {
-		if( curPageProcess!=null && !curPageProcess.destroyed )
+		if( hasPage() )
 			curPageProcess.onAppResize();
 	}
 
@@ -194,6 +249,10 @@ class App extends dn.Process {
 			str = str + "    --    "+base;
 
 		IpcRenderer.invoke("setWinTitle", str);
+	}
+
+	public inline function hasPage() {
+		return curPageProcess!=null && !curPageProcess.destroyed;
 	}
 
 	public function loadPage(id:String, ?vars:Dynamic) {
