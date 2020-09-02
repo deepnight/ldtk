@@ -84,14 +84,14 @@ class App extends dn.Process {
 
 	public function miniNotif(html:String, persist=false) {
 		var e = jBody.find("#miniNotif");
-		e.empty();
-
-		e.stop(false,true)
-			.fadeIn(250)
+		e.empty()
+			.stop(false,true)
+			.hide()
+			.show()
 			.html(html);
 
 		if( !persist )
-			e.fadeOut(2500);
+			e.delay(1000).fadeOut(2000);
 	}
 
 	function clearMiniNotif() {

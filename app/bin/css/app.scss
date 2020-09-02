@@ -201,15 +201,29 @@ button.close {
 	bottom: 15px;
 	left: 0px;
 	display: none;
+	overflow: hidden;
 
-	color: $bgLighter;
+	color: white;
 	font-size: 9pt;
-	background-color: rgba(0, 0, 0, 0.4);
+	background-color: rgba(0, 0, 0, 0.85);
 	padding: 4px;
 	padding-left: 16px;
 	border-radius: 3px;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
 
 	pointer-events: none;
+	animation-duration: 1s;
+	animation-name: miniNotifArrival;
+
+	@keyframes miniNotifArrival {
+		from {
+			padding-left: 0px;
+		}
+		to {
+			padding-left: 16px;
+		}
+	}
 }
 
 #updateInstall {
