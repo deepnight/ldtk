@@ -5,6 +5,7 @@ class TilePalette extends ui.ToolPalette {
 
 	public function new(t) {
 		super(t);
+		canPopOut = true;
 	}
 
 	override function doRender() {
@@ -56,7 +57,7 @@ class TilePalette extends ui.ToolPalette {
 
 	override function update() {
 		super.update();
-		
+
 		if( picker!=null )
 			picker.update();
 	}

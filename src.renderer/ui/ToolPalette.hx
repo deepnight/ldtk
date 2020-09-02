@@ -3,11 +3,16 @@ package ui;
 class ToolPalette {
 	public var jContent : js.jquery.JQuery;
 	var tool : Tool<Dynamic>;
+	var canPopOut = false;
+	var isPoppedOut = false;
 
-	// Optional list object (not used for Tileset for example)
+	// Optional scrollable list stuff
 	var jList : Null<js.jquery.JQuery>;
 	var listScrollY = 0.;
 	var listTargetY : Null<Float>;
+
+	// Pop-out stuff
+	var jPlaceholder: Null<js.jquery.JQuery>;
 
 	public function new(t:Tool<Dynamic>) {
 		tool = t;
@@ -20,10 +25,17 @@ class ToolPalette {
 
 	public final function render() {
 		jContent.off().empty();
+
 		doRender();
 
+		// Pop-out
+		jContent.mouseover( function(ev) {
+			if( canPopOut && !isPoppedOut )
+				popOut();
+		});
+
 		if( jList!=null ) {
-			// Cancel Focus scroll animation
+			// Cancel Focus scrolling animation
 			jList.on("mousewheel mousedown", function(ev) listTargetY = null );
 
 			// Scroll Y memory
@@ -35,6 +47,27 @@ class ToolPalette {
 	}
 
 	function doRender() {}
+
+	function popOut() {
+		N.debug("out");
+		isPoppedOut = true;
+
+		jPlaceholder = new J('<div class="toolPopOutPlaceholder"/>');
+		jPlaceholder.insertBefore(jContent);
+
+		new ui.modal.ToolPalettePopOut(this);
+	}
+
+	@:allow(ui.modal.ToolPalettePopOut)
+	function onPopBackIn() {
+		isPoppedOut = false;
+		N.success("in");
+
+		jContent.insertBefore(jPlaceholder);
+
+		jPlaceholder.remove();
+		jPlaceholder = null;
+	}
 
 	function animateListScrolling(toY:Float) {
 		listTargetY = toY + jList.scrollTop() - jList.outerHeight()*0.5;

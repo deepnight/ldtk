@@ -423,11 +423,14 @@ class Editor extends Page {
 
 	function updateTool() {
 		clearSelection();
-		cursor.set(None);
 		for(t in allTools)
 			t.pause();
-		curTool.onToolActivation();
 
+		if( ui.modal.ToolPalettePopOut.isOpen() )
+			ui.modal.ToolPalettePopOut.ME.close();
+
+		cursor.set(None);
+		curTool.onToolActivation();
 	}
 
 	public function pickGenericLevelElement(ge:Null<GenericLevelElement>) {

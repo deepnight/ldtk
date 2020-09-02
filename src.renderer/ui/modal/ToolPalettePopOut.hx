@@ -6,19 +6,19 @@ class ToolPalettePopOut extends ui.Modal {
 
 	public static var ME : Null<ToolPalettePopOut>;
 
-	var tool : Tool<Dynamic>;
+	var palette : ToolPalette;
 	var lastMouseX : Null<Float>;
 	var lastMouseY : Null<Float>;
 	var leavingElapsedDist = 0.;
 
-	public function new(t:Tool<Dynamic>) {
+	public function new(p:ToolPalette) {
 		super();
 
 		ME = this;
-		tool = t;
+		palette = p;
+		jContent.append(palette.jContent);
 
 		jModalAndMask.addClass("popOutPalette");
-		updatePalette();
 		App.ME.jDoc.off(".popOutPaletteEvent");
 
 		jWrapper.mousedown( onWrapperMouseDown );
@@ -38,17 +38,6 @@ class ToolPalettePopOut extends ui.Modal {
 
 	override function countAsModal():Bool {
 		return false;
-	}
-
-	override function onGlobalEvent(e:GlobalEvent) {
-		super.onGlobalEvent(e);
-		if( e==ToolOptionChanged )
-			updatePalette();
-	}
-
-	function updatePalette() {
-		jContent.empty();
-		jContent.append( tool.createPalette() );
 	}
 
 	function onDocMouseMove(ev:js.jquery.Event) {
@@ -113,12 +102,15 @@ class ToolPalettePopOut extends ui.Modal {
 		cd.setS("suspendAutoClosing",0.2);
 	}
 
+	override function close() {
+		palette.onPopBackIn();
+		super.close();
+	}
 
 	override function onDispose() {
 		super.onDispose();
 		App.ME.jDoc.off(".popOutPaletteEvent");
-		if( !tool.destroyed )
-			tool.updatePalette();
+
 		if( ME==this )
 			ME = null;
 	}

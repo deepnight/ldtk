@@ -352,21 +352,7 @@ class Tool<T> extends dn.Process {
 		lastMouse = m;
 	}
 
-
-	// public function popOutPalette() { // TODO reimplement
-	// 	new ui.modal.ToolPalettePopOut(this);
-	// }
-
-	// function enablePalettePopOut() {
-	// 	jPalette
-	// 		.off()
-	// 		.mouseover( function(_) {
-	// 			popOutPalette();
-	// 		});
-	// }
-
 	public final function onToolActivation() {
-		N.debug("onToolActivation");
 		resume();
 
 		if( palette!=null ) {
