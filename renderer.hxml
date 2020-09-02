@@ -16,3 +16,4 @@
 -js app/bin/js/renderer.js
 
 --macro Const.dumpBuildVersionToFile()
+--macro Assets.enableXmlFonts()

@@ -102,7 +102,7 @@ class Rulers extends dn.Process {
 		addLabel(yLabel, Left);
 		addLabel(yLabel, Right);
 
-		addLabel(editor.curLevel.identifier, Top, 2, PADDING*3);
+		addLabel(editor.curLevel.identifier, Top, 2, PADDING, 0xffcc00);
 
 
 		// Corners
@@ -115,7 +115,7 @@ class Rulers extends dn.Process {
 		}
 	}
 
-	function addLabel(str:String, pos:RulerPos, scale=1.0, extraPadding=0) {
+	function addLabel(str:String, pos:RulerPos, scale=1.0, extraPadding=0, ?color:UInt) {
 		var wrapper = new h2d.Object(labels);
 		wrapper.x = getX(pos, PADDING*2 + extraPadding);
 		wrapper.y = getY(pos, PADDING*2 + extraPadding);
@@ -124,10 +124,13 @@ class Rulers extends dn.Process {
 			case _:
 		}
 
-		var tf = new h2d.Text(Assets.fontPixelOutline, wrapper);
-		tf.alpha = 0.5;
+		if( color==null )
+			color = C.toWhite(editor.project.bgColor,0.5);
+
+		var tf = new h2d.Text(Assets.fontPixel, wrapper);
 		tf.text = str;
-		tf.scale(2*scale);
+		tf.textColor = color;
+		tf.scale(scale);
 		tf.x = Std.int( -tf.textWidth*0.5*tf.scaleX );
 		tf.y = Std.int( -tf.textHeight*0.5*tf.scaleY );
 	}
