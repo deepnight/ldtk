@@ -49,7 +49,12 @@ class LevelRender extends dn.Process {
 	public function fit() {
 		focusLevelX = editor.curLevel.pxWid*0.5;
 		focusLevelY = editor.curLevel.pxHei*0.5;
-		zoom = 1;
+
+		var pad = 100 * js.Browser.window.devicePixelRatio;
+		zoom = M.fmin(
+			editor.canvasWid() / ( editor.curLevel.pxWid + pad ),
+			editor.canvasHei() / ( editor.curLevel.pxHei + pad )
+		);
 	}
 
 	inline function set_focusLevelX(v) {
@@ -125,7 +130,7 @@ class LevelRender extends dn.Process {
 				invalidate(); // TODO optim needed to render only the changed layer
 
 			case TilesetSelectionSaved:
-				
+
 			case TilesetDefChanged, TilesetDefRemoved:
 				invalidate();
 
