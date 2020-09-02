@@ -1338,6 +1338,13 @@ textarea {
 	}
 }
 
+.toolPopOutPlaceholder {
+	width: 100%;
+	height: 100%;
+	outline: 2px solid red;
+	background-color: darkred;
+}
+
 .window.popOutPalette {
 	&>.wrapper {
 		overflow: hidden;

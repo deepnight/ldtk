@@ -26,7 +26,8 @@ class Editor extends Page {
 	public var projectFilePath : String;
 	public var curLevelId : Int;
 	var curLayerId : Int;
-	public var curTool : Tool<Dynamic>;
+	public var curTool(get,never) : Tool<Dynamic>;
+	var allTools : Map<Int,Tool<Dynamic>> = new Map();
 	var keyDowns : Map<Int,Bool> = new Map();
 	var gridSnapping = true;
 	public var needSaving = false;
@@ -396,20 +397,40 @@ class Editor extends Page {
 		ui.EntityInstanceEditor.close();
 	}
 
-	function initTool() {
-		if( curTool!=null )
-			curTool.destroy();
-
-		clearSelection();
-		cursor.set(None);
+	function get_curTool() : Tool<Dynamic> {
 		if( curLayerDef==null )
-			curTool = new tool.EmptyTool();
-		else
-			curTool = switch curLayerDef.type {
+			return new tool.EmptyTool();
+
+		if( !allTools.exists(curLayerDef.uid) ) {
+			var t : Tool<Dynamic> = switch curLayerDef.type {
 				case IntGrid: new tool.IntGridTool();
 				case Entities: new tool.EntityTool();
 				case Tiles: new tool.TileTool();
 			}
+			t.initPalette();
+			allTools.set( curLayerInstance.layerDefUid, t );
+		}
+
+		return allTools.get( curLayerDef.uid );
+	}
+
+	function resetTools() {
+		for(t in allTools)
+			t.destroy();
+		allTools = new Map();
+		updateTool();
+	}
+
+	function updateTool() {
+		clearSelection();
+		for(t in allTools)
+			t.pause();
+
+		if( ui.modal.ToolPalettePopOut.isOpen() )
+			ui.modal.ToolPalettePopOut.ME.close();
+
+		cursor.set(None);
+		curTool.onToolActivation();
 	}
 
 	public function pickGenericLevelElement(ge:Null<GenericLevelElement>) {
@@ -421,12 +442,14 @@ class Editor extends Page {
 				var v = li.getIntGrid(cx,cy);
 				curTool.as(tool.IntGridTool).selectValue(v);
 				levelRender.showRect( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
+				curTool.onValuePicking();
 				return true;
 
 			case Entity(li, instance):
 				selectLayerInstance(li);
 				curTool.as(tool.EntityTool).selectValue(instance.defUid);
 				levelRender.showRect( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
+				curTool.onValuePicking();
 				return true;
 
 			case Tile(li, cx, cy):
@@ -438,6 +461,7 @@ class Editor extends Page {
 
 				var t = curTool.as(tool.TileTool);
 				t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking save selections?
+				curTool.onValuePicking();
 
 				// var savedSel = td.getSavedSelectionFor(tid);
 				// if( savedSel==null || !isShiftDown() && !isCtrlDown() )
@@ -614,8 +638,7 @@ class Editor extends Page {
 			case ToolOptionChanged:
 
 			case LayerInstanceSelected:
-				clearSelection();
-				initTool();
+				updateTool();
 				updateLayerList();
 				updateGuide();
 
@@ -624,12 +647,12 @@ class Editor extends Page {
 				updateLayerList();
 
 			case EntityFieldAdded, EntityFieldRemoved:
-				initTool();
+				updateTool();
 				levelRender.invalidate();
 
 			case LayerDefAdded, LayerDefRemoved:
 				updateLayerList();
-				initTool();
+				updateTool();
 				levelRender.invalidate();
 
 			case ProjectSelected:
@@ -638,7 +661,7 @@ class Editor extends Page {
 				updateLayerList();
 				updateGuide();
 				Tool.clearSelectionMemory();
-				initTool();
+				updateTool();
 
 			case LevelSettingsChanged:
 				updateTitles();
@@ -652,7 +675,7 @@ class Editor extends Page {
 				updateLayerList();
 				updateTitles();
 				updateGuide();
-				initTool();
+				updateTool();
 				if( !levelHistory.exists(curLevelId) )
 					levelHistory.set(curLevelId, new LevelHistory(curLevelId) );
 
@@ -661,11 +684,13 @@ class Editor extends Page {
 				updateLayerList();
 				updateTitles();
 				updateGuide();
-				initTool();
+				updateTool();
 
 			case TilesetDefChanged, TilesetDefRemoved, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
-				initTool();
+				updateTool();
 				updateGuide();
+
+			case TilesetSelectionSaved:
 
 			case TilesetDefAdded:
 
@@ -673,10 +698,16 @@ class Editor extends Page {
 				updateAppBg();
 				updateTitles();
 
-			case LayerDefChanged, LayerDefSorted:
+			case LayerDefChanged:
 				if( curLayerDef==null && project.defs.layers.length>0 )
 					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
-				initTool();
+				resetTools();
+				updateLayerList();
+
+			case LayerDefSorted:
+				if( curLayerDef==null && project.defs.layers.length>0 )
+					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
+				updateTool();
 				updateGuide();
 				updateLayerList();
 		}
@@ -844,6 +875,8 @@ class Editor extends Page {
 		ge = null;
 
 		Boot.ME.s2d.removeEventListener(onEvent);
+		Tool.clearSelectionMemory();
+		ui.TilesetPicker.clearScrollMemory();
 
 		App.ME.jBody.off(".client");
 	}

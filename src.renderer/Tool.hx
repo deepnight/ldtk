@@ -1,11 +1,13 @@
 import dn.Bresenham;
 
 class Tool<T> extends dn.Process {
-	static var SELECTION_MEMORY : Map<Int, Dynamic> = new Map();
+	static var SELECTION_MEMORY : Map<String, Dynamic> = new Map();
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : led.Project; inline function get_project() return Editor.ME.project;
 	var curLevel(get,never) : led.Level; inline function get_curLevel() return Editor.ME.curLevel;
+
+	@:allow(ui.ToolPalette)
 	var curLayerInstance(get,never) : led.inst.LayerInstance; inline function get_curLayerInstance() return Editor.ME.curLayerInstance;
 
 	var jPalette(get,never) : J; inline function get_jPalette() return editor.jPalette;
@@ -18,17 +20,16 @@ class Tool<T> extends dn.Process {
 	var rectangle = false;
 	var moveStarted = false;
 	var startTime = 0.;
+	var palette : ui.ToolPalette;
 
 	private function new() {
 		super(Editor.ME);
 
-		jPalette.off().find("*").off();
-		updatePalette();
 		editor.ge.addSpecificListener(ToolOptionChanged, onToolOptionChanged);
 	}
 
-	function onToolOptionChanged() {
-		updatePalette();
+	function onToolOptionChanged() { // TODO is it still needed?
+		// updatePalette();
 	}
 
 	override function onDispose() {
@@ -36,31 +37,25 @@ class Tool<T> extends dn.Process {
 		editor.ge.removeListener(onToolOptionChanged);
 	}
 
-	function enablePalettePopOut() {
-		jPalette
-			.off()
-			.mouseover( function(_) {
-				popOutPalette();
-			});
-	}
-
 	override function toString():String {
 		return Type.getClassName(Type.getClass(this))
 			+ "[" + ( curMode==null ? "--" : curMode.getName() ) + "]";
 	}
 
+	function getSelectionMemoryKey() {
+		return curLayerInstance!=null ? Std.string(curLayerInstance.layerDefUid) : null;
+	}
 
 	public function selectValue(v:T) {
 		if( curLayerInstance!=null )
-			SELECTION_MEMORY.set(curLayerInstance.layerDefUid, v);
-		updatePalette();
+			SELECTION_MEMORY.set(getSelectionMemoryKey(), v);
 	}
 	public function getSelectedValue() : T {
 		return
 			curLayerInstance==null
 			? getDefaultValue()
-			: SELECTION_MEMORY.exists(curLayerInstance.layerDefUid)
-				? SELECTION_MEMORY.get(curLayerInstance.layerDefUid)
+			: SELECTION_MEMORY.exists( getSelectionMemoryKey() )
+				? SELECTION_MEMORY.get( getSelectionMemoryKey() )
 				: getDefaultValue();
 	}
 	function getDefaultValue() : T {
@@ -357,24 +352,36 @@ class Tool<T> extends dn.Process {
 		lastMouse = m;
 	}
 
+	public final function onToolActivation() {
+		resume();
 
-	public function popOutPalette() {
-		new ui.modal.ToolPalettePopOut(this);
+		if( palette!=null ) {
+			// Show palette
+			jPalette.empty();
+			palette.jContent.appendTo( jPalette );
+			palette.render();
+		}
 	}
 
-	public final function updatePalette() {
-		jPalette
-			.empty()
-			.append( createPalette() );
+	function createToolPalette() {
+		return new ui.ToolPalette(this); // <-- should be overridden in extended classes
 	}
 
-	public function createPalette() : js.jquery.JQuery {
-		return new J('<div class="palette"/>');
+	public function onValuePicking() {
+		palette.render();
+		palette.focusOnSelection();
+	}
+
+	public function initPalette() {
+		palette = createToolPalette();
+		palette.render();
 	}
 
 
 	override function update() {
 		super.update();
+		if( palette!=null )
+			palette.update();
 	}
 
 }

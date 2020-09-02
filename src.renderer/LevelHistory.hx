@@ -54,6 +54,7 @@ class LevelHistory {
 			case LayerDefSorted:
 
 			case TilesetDefChanged:
+			case TilesetSelectionSaved:
 			case TilesetDefAdded:
 
 			case EntityDefSorted, EntityFieldSorted, EntityFieldDefChanged:

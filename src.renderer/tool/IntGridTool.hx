@@ -102,38 +102,7 @@ class IntGridTool extends Tool<Int> {
 		);
 	}
 
-
-	override function createPalette() {
-		var target = super.createPalette();
-
-		var list = new J('<ul class="niceList"/>');
-		list.appendTo(target);
-
-		var idx = 0;
-		for( intGridVal in curLayerInstance.def.getAllIntGridValues() ) {
-			var e = new J("<li/>");
-			e.appendTo(list);
-			e.addClass("color");
-			if( idx==getSelectedValue() )
-				e.addClass("active");
-
-			if( intGridVal.identifier==null )
-				e.text("#"+idx);
-			else
-				e.text("#"+idx+" - "+intGridVal.identifier);
-
-			e.css("color", C.intToHex( C.autoContrast(C.toBlack(intGridVal.color,0.3)) ));
-			e.css("background-color", C.intToHex(intGridVal.color));
-			var curIdx = idx;
-			e.click( function(_) {
-				selectValue(curIdx);
-				list.find(".active").removeClass("active");
-				e.addClass("active");
-				updatePalette();
-			});
-			idx++;
-		}
-
-		return target;
+	override function createToolPalette():ui.ToolPalette {
+		return new ui.palette.IntGridPalette(this);
 	}
 }
