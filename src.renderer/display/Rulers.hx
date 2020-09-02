@@ -124,7 +124,7 @@ class Rulers extends dn.Process {
 			case _:
 		}
 
-		var tf = new h2d.Text(Assets.fontPixel, wrapper);
+		var tf = new h2d.Text(Assets.fontPixelOutline, wrapper);
 		tf.alpha = 0.5;
 		tf.text = str;
 		tf.scale(2*scale);

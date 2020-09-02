@@ -32,7 +32,7 @@ class Cursor extends dn.Process {
 	public function setLabel(?str:String) {
 		labelWrapper.removeChildren();
 		if( str!=null ) {
-			var tf = new h2d.Text(Assets.fontPixel, labelWrapper);
+			var tf = new h2d.Text(Assets.fontPixelOutline, labelWrapper);
 			tf.text = str;
 		}
 		curLabel = str;

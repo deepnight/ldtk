@@ -337,7 +337,7 @@ class LevelRender extends dn.Process {
 		// Display fields not marked as "Hidden"
 		if( ei!=null ) {
 			// Init field wrappers
-			var font = Assets.fontPixel;
+			var font = Assets.fontPixelOutline;
 			var above = new h2d.Flow(wrapper);
 			above.layout = Vertical;
 			above.horizontalAlign = Middle;
