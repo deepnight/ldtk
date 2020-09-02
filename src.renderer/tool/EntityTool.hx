@@ -157,37 +157,4 @@ class EntityTool extends Tool<Int> {
 	override function createToolPalette():ui.ToolPalette {
 		return new ui.palette.EntityPalette(this);
 	}
-
-
-	override function createPalette() {
-		var target = super.createPalette();
-
-		// var list = new J('<ul class="niceList"/>');
-		// list.appendTo(target);
-
-		// for(ed in project.defs.entities) {
-		// 	var e = new J("<li/>");
-		// 	list.append(e);
-		// 	e.addClass("entity");
-		// 	if( ed==curEntityDef ) {
-		// 		e.addClass("active");
-		// 		e.css( "background-color", C.intToHex( C.toWhite(ed.color, 0.7) ) );
-		// 	}
-		// 	else
-		// 		e.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
-
-		// 	e.append( JsTools.createEntityPreview(project, ed) );
-		// 	e.append(ed.identifier);
-
-		// 	e.click( function(_) {
-		// 		selectValue(ed.uid);
-		// 		list.find(".active").removeClass("active");
-		// 		e.addClass("active");
-		// 		updatePalette();
-		// 	});
-		// }
-
-		return target;
-	}
-
 }

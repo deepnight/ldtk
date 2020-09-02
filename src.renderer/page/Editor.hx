@@ -424,25 +424,10 @@ class Editor extends Page {
 	function updateTool() {
 		clearSelection();
 		cursor.set(None);
-		curTool.showPalette();
-
 		for(t in allTools)
 			t.pause();
-		curTool.resume();
+		curTool.onToolActivation();
 
-		// if( curTool!=null )
-		// 	curTool.destroy();
-
-		// clearSelection();
-		// cursor.set(None);
-		// if( curLayerDef==null )
-		// 	curTool = new tool.EmptyTool();
-		// else
-		// 	curTool = switch curLayerDef.type {
-		// 		case IntGrid: new tool.IntGridTool();
-		// 		case Entities: new tool.EntityTool();
-		// 		case Tiles: new tool.TileTool();
-		// 	}
 	}
 
 	public function pickGenericLevelElement(ge:Null<GenericLevelElement>) {

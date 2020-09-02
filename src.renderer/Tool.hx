@@ -25,13 +25,11 @@ class Tool<T> extends dn.Process {
 	private function new() {
 		super(Editor.ME);
 
-		// jPalette.off().find("*").off();
-		updatePalette();
 		editor.ge.addSpecificListener(ToolOptionChanged, onToolOptionChanged);
 	}
 
-	function onToolOptionChanged() {
-		updatePalette();
+	function onToolOptionChanged() { // TODO is it still needed?
+		// updatePalette();
 	}
 
 	override function onDispose() {
@@ -51,7 +49,6 @@ class Tool<T> extends dn.Process {
 	public function selectValue(v:T) {
 		if( curLayerInstance!=null )
 			SELECTION_MEMORY.set(getSelectionMemoryKey(), v);
-		updatePalette();
 	}
 	public function getSelectedValue() : T {
 		return
@@ -356,36 +353,28 @@ class Tool<T> extends dn.Process {
 	}
 
 
-	public function popOutPalette() {
-		// new ui.modal.ToolPalettePopOut(this);
-	}
+	// public function popOutPalette() { // TODO reimplement
+	// 	new ui.modal.ToolPalettePopOut(this);
+	// }
 
-	public final function updatePalette() {
-		// jPalette
-		// 	.empty()
-		// 	.append( createPalette() );
-	}
+	// function enablePalettePopOut() {
+	// 	jPalette
+	// 		.off()
+	// 		.mouseover( function(_) {
+	// 			popOutPalette();
+	// 		});
+	// }
 
-	public function createPalette() : js.jquery.JQuery {
-		return new J('<div class="palette"/>');
-	}
+	public final function onToolActivation() {
+		N.debug("onToolActivation");
+		resume();
 
-	function enablePalettePopOut() {
-		// jPalette
-		// 	.off()
-		// 	.mouseover( function(_) {
-		// 		popOutPalette();
-		// 	});
-	}
-
-	public final function showPalette() {
-		if( palette==null )
-			return;
-
-		N.debug("showPalette");
-		jPalette.empty();
-		palette.jContent.appendTo( jPalette );
-		palette.render();
+		if( palette!=null ) {
+			// Show palette
+			jPalette.empty();
+			palette.jContent.appendTo( jPalette );
+			palette.render();
+		}
 	}
 
 	function createToolPalette() {
