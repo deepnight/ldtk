@@ -17,9 +17,11 @@ class ElectronMain {
 				title: "L-Ed",
 			});
 
-			// Debug menu
+			// Menu
 			#if debug
 			enableDebugMenu();
+			#else
+			mainWindow.setMenu(null);
 			#end
 
 			// Start renderer part
@@ -94,7 +96,7 @@ class ElectronMain {
 			]
 		}]);
 
-		electron.main.Menu.setApplicationMenu(menu);
+		mainWindow.setMenu(menu);
 	}
 	#end
 }
