@@ -14,7 +14,6 @@ class Home extends Page {
 		App.ME.loadPage("home", {
 			app: Const.APP_NAME,
 			appVer: Const.getAppVersion(),
-			shortVer: Const.getAppVersion(true),
 			jsonVer: Const.JSON_HEADER,
 			docUrl: Const.DOCUMENTATION_URL,
 			websiteUrl : Const.WEBSITE_URL,
