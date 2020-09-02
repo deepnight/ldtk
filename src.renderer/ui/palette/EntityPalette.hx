@@ -1,23 +1,22 @@
 package ui.palette;
 
 class EntityPalette extends ui.ToolPalette {
-	var scrollY = 0.;
-
 	public function new(t) {
 		super(t);
 	}
 
 	override function doRender() {
 		super.doRender();
-		
+
 		var tool : tool.EntityTool = cast tool;
 
-		var list = new J('<ul class="niceList"/>');
-		list.appendTo(jContent);
+		jList = new J('<ul class="niceList"/>');
+		jList.appendTo(jContent);
 
 		for(ed in Editor.ME.project.defs.entities) {
 			var e = new J("<li/>");
-			list.append(e);
+			jList.append(e);
+			e.attr("data-defUid", ed.uid);
 			e.addClass("entity");
 			if( ed==tool.curEntityDef ) {
 				e.addClass("active");
@@ -34,12 +33,14 @@ class EntityPalette extends ui.ToolPalette {
 				render();
 			});
 		}
+	}
 
-		// Scrolling memory
-		list.scroll(function(ev) {
-			scrollY = list.scrollTop();
-		});
-		list.scrollTop(scrollY);
+	override function focusOnSelection() {
+		super.focusOnSelection();
 
+		// Focus scroll animation
+		var e = jList.find('[data-defUid=${tool.getSelectedValue()}]');
+		if( e.length>0 )
+			animateListScrolling(e.position().top + e.outerHeight()*0.5 );
 	}
 }
