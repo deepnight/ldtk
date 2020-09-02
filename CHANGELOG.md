@@ -7,6 +7,8 @@
  - Clicking an existing Entity now automatically picks it
  - Added **0 to 9 key shortcuts** to quickly select layers
  - Added a convenient Edit link in Entity instance editor
+ - Fixed **CTRL-W** shortcut (should only close current app page)
+ - Added **CTRL-Q** shortcut to close the app
  - Fixed file path display in Enum panel
  - Fixed image path sometime disappearing in Tileset panel
  - Fixed load/save notifications
