@@ -4,9 +4,10 @@ import js.Node.__dirname;
 import js.Node.process;
 
 class ElectronMain {
-	// Boot
+	static var mainWindow : electron.main.BrowserWindow;
+
 	static function main() {
-		var mainWindow : electron.main.BrowserWindow = null;
+
 		App.on('ready', function() {
 			// Init window
 			mainWindow = new electron.main.BrowserWindow({
@@ -15,17 +16,25 @@ class ElectronMain {
 				show: false,
 				title: "L-Ed",
 			});
-			mainWindow.setMenu(null);
+
+			// Debug menu
+			#if debug
+			enableDebugMenu();
+			#end
+
+			// Start renderer part
 			mainWindow.maximize();
 			mainWindow.loadURL('file://$__dirname/app.html');
 			mainWindow.on('closed', function() {
 				mainWindow = null;
 			});
 
+			// Misc bindings
 			dn.electron.Dialogs.initMain();
 			dn.electron.ElectronUpdater.initMain(mainWindow);
 		});
 
+		// For mac
 		App.on('window-all-closed', function() {
 			App.quit();
 		});
@@ -55,27 +64,6 @@ class ElectronMain {
 			mainWindow.title = args;
 		});
 
-		IpcMain.handle("enableDebugMenu", function(_) {
-			var menu = electron.main.Menu.buildFromTemplate([
-				{
-					label: "Debug tools",
-					submenu: cast [
-						{
-							label: "Reload",
-							click: function() mainWindow.reload(),
-							accelerator: "CmdOrCtrl+R",
-						},
-						{
-							label: "Dev tools",
-							click: function() mainWindow.webContents.toggleDevTools(),
-							accelerator: "CmdOrCtrl+Shift+I",
-						},
-					]
-				}
-			]);
-			electron.main.Menu.setApplicationMenu(menu);
-		});
-
 
 		// *** sendSync/on *****************************************************
 
@@ -86,7 +74,27 @@ class ElectronMain {
 		IpcMain.on("getAppDir", function(event) {
 			event.returnValue = App.getAppPath();
 		});
-
-
 	}
+
+	#if debug
+	static function enableDebugMenu() {
+		var menu = electron.main.Menu.buildFromTemplate([{
+			label: "Debug tools",
+			submenu: cast [
+				{
+					label: "Reload",
+					click: function() mainWindow.reload(),
+					accelerator: "CmdOrCtrl+R",
+				},
+				{
+					label: "Dev tools",
+					click: function() mainWindow.webContents.toggleDevTools(),
+					accelerator: "CmdOrCtrl+Shift+I",
+				},
+			]
+		}]);
+
+		electron.main.Menu.setApplicationMenu(menu);
+	}
+	#end
 }

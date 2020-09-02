@@ -25,7 +25,7 @@
 			"text": "⚡ Main",
 			"color": "yellow",
 			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|Electron Main",
+			"command": "workbench.action.tasks.runTask|Electron Main debug",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -23

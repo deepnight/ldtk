@@ -40,9 +40,28 @@
 		},
 
 		{
-			"label": "Electron Main",
+			"label": "Electron Main release",
 			"type": "hxml",
 			"file": "main.hxml",
+			"problemMatcher": [
+				"$haxe-absolute",
+				"$haxe",
+				"$haxe-error",
+				"$haxe-trace"
+			],
+			"presentation": {
+				"reveal": "never",
+				"panel": "shared",
+				"clear": false,
+				"revealProblems": "onProblem"
+			},
+			"group": "build"
+		},
+
+		{
+			"label": "Electron Main debug",
+			"type": "hxml",
+			"file": "main.debug.hxml",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",
