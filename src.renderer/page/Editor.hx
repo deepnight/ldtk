@@ -288,9 +288,11 @@ class Editor extends Page {
 				if( !hasInputFocus() && App.ME.isCtrlDown() )
 					onSave();
 
-			case K.W:
-				if( App.ME.isCtrlDown() )
-					onClose();
+			case K.F if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				levelRender.fit();
+
+			case K.W if( App.ME.isCtrlDown() ):
+				onClose();
 
 			case K.Q:
 				if( App.ME.isCtrlDown() )
