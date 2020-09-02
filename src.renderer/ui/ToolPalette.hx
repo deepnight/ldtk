@@ -47,7 +47,7 @@ class ToolPalette {
 			var jList = jContent.find(">ul");
 			var curY = jList.scrollTop();
 			if( M.fabs(listTargetY-curY)>=3 )
-				jList.scrollTop( curY + ( listTargetY-curY )*0.25 * Editor.ME.tmod );
+				jList.scrollTop( curY + ( listTargetY-curY )*0.25 );
 			else {
 				jList.scrollTop(listTargetY);
 				listTargetY = null;

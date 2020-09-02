@@ -17,6 +17,8 @@ class TilesetPicker {
 	var dragStart : Null<{ bt:Int, pageX:Float, pageY:Float }>;
 	var scrollX(default,set) : Float;
 	var scrollY(default,set) : Float;
+	var tx : Null<Float>;
+	var ty : Null<Float>;
 	var mouseOver = false;
 
 	public var singleSelectedTileId(default,set) : Null<Int>;
@@ -70,6 +72,7 @@ class TilesetPicker {
 	}
 
 	public function resetScroll() {
+		tx = ty = null;
 		scrollX = 0;
 		scrollY = 0;
 		zoom = 3;
@@ -87,6 +90,7 @@ class TilesetPicker {
 	function loadScrollPos() {
 		var mem = SCROLL_MEMORY.get(tilesetDef.relPath);
 		if( mem!=null ) {
+			tx = ty = null;
 			scrollX = mem.x;
 			scrollY = mem.y;
 			zoom = mem.zoom;
@@ -154,8 +158,8 @@ class TilesetPicker {
 		cx+=0.5;
 		cy+=0.5;
 
-		scrollX = cx*tilesetDef.tileGridSize - jPicker.outerWidth()*0.5/zoom;
-		scrollY = cy*tilesetDef.tileGridSize - jPicker.outerHeight()*0.5/zoom;
+		tx = cx*tilesetDef.tileGridSize - jPicker.outerWidth()*0.5/zoom;
+		ty = cy*tilesetDef.tileGridSize - jPicker.outerHeight()*0.5/zoom;
 
 		saveScrollPos();
 	}
@@ -379,6 +383,8 @@ class TilesetPicker {
 			var newLocalY = pageYtoLocal(ev.pageY);
 			scrollX += ( oldLocalX - newLocalX );
 			scrollY += ( oldLocalY - newLocalY );
+
+			tx = ty = null;
 		}
 	}
 
@@ -400,6 +406,7 @@ class TilesetPicker {
 			pageY: ev.pageY,
 		}
 
+		tx = ty = null;
 	}
 
 	function onPickerMouseMove(ev:js.jquery.Event) {
@@ -436,6 +443,15 @@ class TilesetPicker {
 				wid: M.iabs(cx-startCx) + 1,
 				hei: M.iabs(cy-startCy) + 1,
 			}
+		}
+	}
+
+	public function update() {
+		// Focus scrolling animation
+		if( tx!=null ) {
+			var spd = 0.25;
+			scrollX += (tx-scrollX) * spd;
+			scrollY += (ty-scrollY) * spd;
 		}
 	}
 }

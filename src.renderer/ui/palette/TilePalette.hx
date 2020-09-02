@@ -53,4 +53,11 @@ class TilePalette extends ui.ToolPalette {
 		if( picker!=null )
 			picker.focusOnSelection();
 	}
+
+	override function update() {
+		super.update();
+		
+		if( picker!=null )
+			picker.update();
+	}
 }

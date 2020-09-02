@@ -424,8 +424,11 @@ class Editor extends Page {
 	function updateTool() {
 		clearSelection();
 		cursor.set(None);
-		// curTool.updatePalette();
 		curTool.showPalette();
+
+		for(t in allTools)
+			t.pause();
+		curTool.resume();
 
 		// if( curTool!=null )
 		// 	curTool.destroy();
