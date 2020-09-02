@@ -541,6 +541,8 @@ class Editor extends Page {
 		ui.Modal.closeAll();
 		var m = new ui.Modal();
 		m.loadTemplate("help","helpWindow", {
+			appUrl: Const.WEBSITE_URL,
+			docUrl: Const.DOCUMENTATION_URL,
 			app: Const.APP_NAME,
 			ver: Const.getAppVersion(),
 		});
