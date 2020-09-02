@@ -2,14 +2,16 @@
 
 ## 0.0.4-alpha
 
+ - Added nice **movement animations** to the tool palette when picking a value with the ALT+click shortcut
+ - Reworked the code of the tool palette to be much simpler
  - Clicking an existing Entity now automatically picks it
- - Added 0-9 number keys to quickly select layers
- - Added an edit link in Entity instance editor
+ - Added **0 to 9 key shortcuts** to quickly select layers
+ - Added a convenient Edit link in Entity instance editor
  - Fixed file path display in Enum panel
  - Fixed image path sometime disappearing in Tileset panel
  - Fixed load/save notifications
  - Updated home
- - UI polishing
+ - Many minor **UI polishing**
 
 ## 0.0.3-alpha
 
