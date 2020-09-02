@@ -16,7 +16,6 @@ class ToolPalette {
 
 	public function new(t:Tool<Dynamic>) {
 		tool = t;
-		N.error("new ToolPalette: "+tool);
 		jContent = new J('<div class="palette"/>');
 	}
 
@@ -49,7 +48,6 @@ class ToolPalette {
 	function doRender() {}
 
 	function popOut() {
-		N.debug("out");
 		isPoppedOut = true;
 
 		jPlaceholder = new J('<div class="toolPopOutPlaceholder"/>');
@@ -61,7 +59,6 @@ class ToolPalette {
 	@:allow(ui.modal.ToolPalettePopOut)
 	function onPopBackIn() {
 		isPoppedOut = false;
-		N.success("in");
 
 		jContent.insertBefore(jPlaceholder);
 
