@@ -5,10 +5,12 @@
  - Added nice **movement animations** to the tool palette when picking a value with the ALT+click shortcut
  - Reworked the code of the tool palette to be much simpler
  - Clicking an existing Entity now automatically picks it
+ - Nicer pixel font for Rulers around the level canvas
  - Added **0 to 9 key shortcuts** to quickly select layers
  - Added a convenient Edit link in Entity instance editor
  - Fixed **CTRL-W** shortcut (should only close current app page)
  - Added **CTRL-Q** shortcut to close the app
+ - Added **F** shortcut to fit current level in screen
  - Fixed file path display in Enum panel
  - Fixed image path sometime disappearing in Tileset panel
  - Fixed load/save notifications
