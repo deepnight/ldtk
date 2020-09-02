@@ -1,6 +1,8 @@
 package ui.palette;
 
 class TilePalette extends ui.ToolPalette {
+	public var picker : Null<TilesetPicker>;
+
 	public function new(t) {
 		super(t);
 	}
@@ -19,7 +21,7 @@ class TilePalette extends ui.ToolPalette {
 		jContent.removeClass("invalid");
 
 		// Picker
-		new ui.TilesetPicker(jContent, tool.curTilesetDef, tool);
+		picker = new ui.TilesetPicker(jContent, tool.curTilesetDef, tool);
 
 		var options = new J('<div class="toolOptions"/>');
 		options.appendTo(jContent);
@@ -44,5 +46,11 @@ class TilePalette extends ui.ToolPalette {
 		});
 		opt.append(chk);
 		opt.append( JsTools.createKeyInLabel("[R]andom mode") );
+	}
+
+	override function focusOnSelection() {
+		super.focusOnSelection();
+		if( picker!=null )
+			picker.focusOnSelection();
 	}
 }

@@ -154,8 +154,8 @@ class TilesetPicker {
 		cx+=0.5;
 		cy+=0.5;
 
-		scrollX = cx*tilesetDef.tileGridSize; // TODO center focus point
-		scrollY = cy*tilesetDef.tileGridSize; // TODO center focus point
+		scrollX = cx*tilesetDef.tileGridSize - jPicker.outerWidth()*0.5/zoom;
+		scrollY = cy*tilesetDef.tileGridSize - jPicker.outerHeight()*0.5/zoom;
 
 		saveScrollPos();
 	}

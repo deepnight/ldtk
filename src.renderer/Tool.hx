@@ -394,6 +394,7 @@ class Tool<T> extends dn.Process {
 
 	public function onValuePicking() {
 		palette.render();
+		palette.focusOnSelection();
 	}
 
 	public function initPalette() {

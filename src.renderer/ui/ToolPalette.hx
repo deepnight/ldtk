@@ -10,6 +10,9 @@ class ToolPalette {
 		jContent = new J('<div class="palette"/>');
 	}
 
+	public function focusOnSelection() {
+	}
+
 	public function render() {
 		jContent.off().empty();
 	}
