@@ -10,13 +10,14 @@ class IntGridPalette extends ui.ToolPalette {
 	override function render() {
 		super.render();
 
-		var list = new J('<ul class="niceList"/>');
-		list.appendTo(jContent);
+		var jList = new J('<ul class="niceList"/>');
+		jList.appendTo(jContent);
 
 		var idx = 0;
 		for( intGridVal in tool.curLayerInstance.def.getAllIntGridValues() ) {
 			var e = new J("<li/>");
-			e.appendTo(list);
+			e.attr("data-id", idx);
+			e.appendTo(jList);
 			e.addClass("color");
 			if( idx==tool.getSelectedValue() )
 				e.addClass("active");
@@ -31,16 +32,27 @@ class IntGridPalette extends ui.ToolPalette {
 			var curIdx = idx;
 			e.click( function(_) {
 				tool.selectValue(curIdx);
-				list.find(".active").removeClass("active");
+				jList.find(".active").removeClass("active");
 				e.addClass("active");
 			});
 			idx++;
 		}
 
 		// Scrolling memory
-		list.scroll(function(ev) {
-			scrollY = list.scrollTop();
+		jList.scroll(function(ev) {
+			scrollY = jList.scrollTop();
 		});
-		list.scrollTop(scrollY);
+		jList.scrollTop(scrollY);
+	}
+
+	override function focusOnSelection() {
+		super.focusOnSelection();
+
+		var jList = jContent.find(">ul");
+		var e = jList.find('[data-id=${tool.getSelectedValue()}]');
+		if( e.length>0 ) {
+			jList.scrollTop(0);
+			jList.scrollTop( e.position().top - jList.outerHeight()*0.5 + e.outerHeight()*0.5 );
+		}
 	}
 }
