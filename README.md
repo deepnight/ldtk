@@ -14,7 +14,7 @@ Links: [Official website](https://deepnight.net/tools/led-2d-level-editor/) | [H
 Install required haxe libs:
  - `haxelib git heaps https://github.com/HeapsIO/heaps.git`
  - `haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git`
- - `haxelib git hxelectron https://github.com/tong/hxelectron.git`
+ - `haxelib git electron https://github.com/tong/hxelectron.git`
  - `haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git`
 
 Install all other required dependencies:
@@ -23,7 +23,7 @@ Install all other required dependencies:
 
 ## Compiling
 
-Run either: 
+Run either:
 
  - `haxe app.hxml` (release version)
  - `npm run compile` from the app folder (same effect as above)

@@ -2,7 +2,7 @@
 -cp src.externs
 
 -lib deepnightLibs
--lib hxelectron
+-lib electron
 
 -main ElectronMain
 -dce full
