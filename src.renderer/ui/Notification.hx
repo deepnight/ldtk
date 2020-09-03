@@ -1,6 +1,9 @@
 package ui;
 
 class Notification extends dn.Process {
+	static var LAST : Null<String>;
+	static var LAST_STAMP = 0.;
+
 	var elem : js.jquery.JQuery;
 
 	private function new(str:String, ?col:UInt, ?long=false) {
@@ -23,28 +26,43 @@ class Notification extends dn.Process {
 		elem.addClass("latest");
 	}
 
+	static function sameAsLast(str:String) {
+		if( str==LAST && haxe.Timer.stamp()-LAST_STAMP<=0.7 )
+			return true;
+		else {
+			LAST = str;
+			LAST_STAMP = haxe.Timer.stamp();
+			return false;
+		}
+	}
+
+
 	public static function msg(str:String, ?c:UInt) {
-		return new Notification(str, c);
+		if( !sameAsLast(str) )
+			new Notification(str, c);
 	}
 
 	public static function success(str:String) {
-		return new Notification(str, 0x42b771);
+		if( !sameAsLast(str) )
+			new Notification(str, 0x42b771);
 	}
 
 	public static function appUpdate(str:String) {
-		return new Notification(str, 0xdbab13);
+		if( !sameAsLast(str) )
+			new Notification(str, 0xdbab13);
 	}
 
 	public static function error(str:String) {
-		return new Notification(str, 0xff0000);
+		if( !sameAsLast(str) )
+			new Notification(str, 0xff0000);
 	}
 
 	public static function invalidIdentifier(id:String) {
-		return error( Lang.t._("The identifier \"::id::\" isn't valid, or isn't unique.", { id:id }) );
+		error( Lang.t._("The identifier \"::id::\" isn't valid, or isn't unique.", { id:id }) );
 	}
 
 	public static function notImplemented() {
-		return error("Feature not implemented yet.");
+		error("Feature not implemented yet.");
 	}
 
 	public static inline function debug(str:Dynamic, long=false) {
