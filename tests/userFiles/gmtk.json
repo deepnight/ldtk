@@ -1,9 +1,9 @@
 {
 	"__header__" : {
-		"fileType" : "L-Ed Project JSON",
-		"app" : "L-Ed",
+		"fileType" : "LEd Project JSON",
+		"app" : "LEd",
 		"appAuthor" : "Sebastien Benard",
-		"appVersion" : "0.1 Electron DBG",
+		"appVersion" : "0.0.4-alpha-debug",
 		"url" : "https://deepnight.net/"
 	},
 	"name" : "God",
