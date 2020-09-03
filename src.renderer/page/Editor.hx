@@ -630,14 +630,12 @@ class Editor extends Page {
 
 			case ProjectSelected:
 				updateAppBg();
-				updateTitles();
 				updateLayerList();
 				updateGuide();
 				Tool.clearSelectionMemory();
 				updateTool();
 
 			case LevelSettingsChanged:
-				updateTitles();
 				updateGuide();
 
 			case LevelAdded:
@@ -646,7 +644,6 @@ class Editor extends Page {
 
 			case LevelSelected:
 				updateLayerList();
-				updateTitles();
 				updateGuide();
 				updateTool();
 				if( !levelHistory.exists(curLevelId) )
@@ -655,7 +652,6 @@ class Editor extends Page {
 			case LayerInstanceRestoredFromHistory, LevelRestoredFromHistory:
 				updateAppBg();
 				updateLayerList();
-				updateTitles();
 				updateGuide();
 				updateTool();
 
@@ -669,7 +665,6 @@ class Editor extends Page {
 
 			case ProjectSettingsChanged:
 				updateAppBg();
-				updateTitles();
 
 			case LayerDefChanged:
 				if( curLayerDef==null && project.defs.layers.length>0 )
@@ -687,6 +682,8 @@ class Editor extends Page {
 
 		if( curLevelHistory!=null )
 			curLevelHistory.manualOnGlobalEvent(e);
+
+		updateTitle();
 	}
 
 	function updateCanvasSize() {
@@ -725,8 +722,12 @@ class Editor extends Page {
 		return App.ME.jCanvas.outerHeight() * js.Browser.window.devicePixelRatio;
 	}
 
-	function updateTitles() {
-		App.ME.setWindowTitle( project.name+" ("+curLevel.identifier+")" );
+	function updateTitle() {
+		App.ME.setWindowTitle(
+			project.name
+			+ ( needSaving ? " [UNSAVED]" : "" )
+			+ ( curLevel!=null ? " ("+curLevel.identifier+")" : "" )
+		);
 		// jMainPanel.find("h2#levelName").text( curLevel.getName() );
 	}
 
