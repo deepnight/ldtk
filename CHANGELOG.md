@@ -1,5 +1,10 @@
 # LEd release notes
 
+## 0.0.5-alpha
+
+ - Fixed 0-9 keyboard shortcuts while focusing a field
+ - Fixed save/load notifications
+
 ## 0.0.4-alpha
 
  - Added nice **movement animations** to the tool palette when picking a value with the ALT+click shortcut
