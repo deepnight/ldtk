@@ -557,7 +557,9 @@ class Editor extends Page {
 	}
 
 	public function onSave(?bypassMissing=false) {
+		var neededSaving = needSaving;
 		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
+			needSaving = true;
 			new ui.modal.dialog.Confirm(
 				Lang.t._("The project file is no longer in ::path::. Save to this path anyway?", { path:projectFilePath }),
 				onSave.bind(true)
@@ -569,7 +571,10 @@ class Editor extends Page {
 		JsTools.writeFileBytes(projectFilePath, data.bytes);
 		needSaving = false;
 		App.ME.registerRecentProject(projectFilePath);
-		N.msg("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
+		if( neededSaving)
+			N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
+		else
+			N.msg("Nothing to save");
 	}
 
 	public function onSaveAs() {
