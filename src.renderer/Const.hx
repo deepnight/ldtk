@@ -75,7 +75,14 @@ class Const {
 		var relNotes =
 			"## " + c.latest.fullVersion + ( c.latest.title!=null ? " -- *"+c.latest.title+"*" : "" ) + "\n"
 			+ c.latest.linesMd.join("\n");
-		sys.io.File.saveContent("app/build/release-notes.md", relNotes);
+
+		var relNotesPath = "app/build/release-notes.md";
+		try {
+			sys.io.File.saveContent(relNotesPath, relNotes);
+		}
+		catch(e:Dynamic) {
+			haxe.macro.Context.warning("Couldn't write "+relNotesPath, haxe.macro.Context.currentPos());
+		}
 
 		return macro $v{raw};
 	}
