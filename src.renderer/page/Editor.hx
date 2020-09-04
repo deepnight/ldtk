@@ -575,6 +575,7 @@ class Editor extends Page {
 			N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
 		else
 			N.msg("Nothing to save");
+		updateTitle();
 	}
 
 	public function onSaveAs() {
