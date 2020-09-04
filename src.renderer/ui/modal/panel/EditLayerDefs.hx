@@ -290,10 +290,11 @@ class EditLayerDefs extends ui.modal.Panel {
 
 
 	function updateRuleForm() {
-		var jRules = jForm.find("ul.rules").off().empty();
+		var jAutoLayer = jContent.find(".autoLayerRules");
+		var jRules = jAutoLayer.find("ul.rules").off().empty();
 
 		// Add rule
-		jForm.find("button.createRule").click( function(ev) {
+		jAutoLayer.find("button.createRule").click( function(ev) {
 			cur.rules.insert(0, {
 				tileId: null,
 				pattern: [],
@@ -303,7 +304,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		});
 
 		// Tileset selection
-		var jTileset = jForm.find("[name=autoTileset]");
+		var jTileset = jAutoLayer.find("[name=autoTileset]");
 		jTileset.empty();
 		var opt = new J("<option/>");
 		opt.appendTo(jTileset);
@@ -325,7 +326,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		// Rules
 		for( r in cur.rules) {
-			var jRule = jForm.find("xml#rule").clone().children().wrapAll('<li/>').parent();
+			var jRule = jAutoLayer.find("xml#rule").clone().children().wrapAll('<li/>').parent();
 			jRule.appendTo(jRules);
 
 			// Result tile(s)

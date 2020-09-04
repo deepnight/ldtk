@@ -2349,6 +2349,9 @@ canvas#webgl {
 
 
 .window.panel.layerDefs {
+	.mainList {
+		grid-row: 2/4;
+	}
 	.mainList ul:empty::before {
 		content: "No layer";
 	}
@@ -2414,9 +2417,11 @@ canvas#webgl {
 		display: none;
 	}
 
-	ul.form li.autoLayerRules {
+	.autoLayerRules {
 		display: grid;
 		grid-template-columns: auto;
+		overflow: auto;
+		grid-column: 2/3;
 
 		select {
 			width: auto;
