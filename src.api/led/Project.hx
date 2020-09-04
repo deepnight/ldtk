@@ -146,7 +146,7 @@ class Project {
 
 	/**  USED CHECKS  *****************************************/
 
-	public function isEnumUsed(enumDef:led.def.EnumDef) {
+	public function isEnumDefUsed(enumDef:led.def.EnumDef) {
 		for( ed in defs.entities )
 		for( fd in ed.fieldDefs )
 			switch fd.type {

@@ -176,7 +176,7 @@ class HxEnum {
 						}
 
 					if( !found ) {
-						log.push({ op:Remove(project.isEnumUsed(ed)), str:ed.identifier+".*" });
+						log.push({ op:Remove(project.isEnumDefUsed(ed)), str:ed.identifier+".*" });
 						project.defs.removeEnumDef(ed);
 					}
 				}

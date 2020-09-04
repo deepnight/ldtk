@@ -41,7 +41,7 @@ class EditEnums extends ui.modal.Panel {
 			}
 			else {
 				// Local enum removal
-				var isUsed = project.isEnumUsed(curEnum);
+				var isUsed = project.isEnumDefUsed(curEnum);
 				new ui.modal.dialog.Confirm(
 					ev.getThis(),
 					isUsed
