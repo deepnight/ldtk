@@ -40,12 +40,18 @@ class EditEnums extends ui.modal.Panel {
 			}
 			else {
 				// Local enum removal
-				new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("Warning! This operation will affect any Entity using this Enum in ALL LEVELS!"), function() {
-					new ui.LastChance( L.t._("Enum ::name:: deleted", { name: curEnum.identifier}), project );
-					project.defs.removeEnumDef(curEnum);
-					editor.ge.emit(EnumDefRemoved);
-					selectEnum( project.defs.enums[0] );
-				});
+				new ui.modal.dialog.Confirm(
+					ev.getThis(),
+					project.isEnumUsed(curEnum)
+						? Lang.t._("WARNING! This ENUM is used in one or more entity fields. These fields will also be removed!")
+						: Lang.t._("This enum is not used and can be safely removed."),
+					function() {
+						new ui.LastChance( L.t._("Enum ::name:: deleted", { name: curEnum.identifier}), project );
+						project.defs.removeEnumDef(curEnum);
+						editor.ge.emit(EnumDefRemoved);
+						selectEnum( project.defs.enums[0] );
+					}
+				);
 			}
 
 		});

@@ -12,7 +12,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 51,
+	"nextUid" : 52,
 	"defs" : {
 		"layers" : [
 			{
@@ -57,6 +57,18 @@
 				"pivotX" : 0.5,
 				"pivotY" : 0.5,
 				"fieldDefs" : [
+					{
+						"identifier" : "Local",
+						"__type" : "LocalEnum.SomeLocalEnum",
+						"uid" : 51,
+						"type" : { "id" : "F_Enum", "params" : [ 14 ] },
+						"canBeNull" : true,
+						"editorDisplayMode" : "NameAndValue",
+						"editorDisplayPos" : "Above",
+						"min" : null,
+						"max" : null,
+						"defaultOverride" : null
+					},
 					{
 						"identifier" : "A",
 						"__type" : "ExternEnum.A",
@@ -195,6 +207,13 @@
 									"__type" : "ExternEnum.B",
 									"defUid" : 48,
 									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "Local",
+									"__value" : "Value_A",
+									"__type" : "LocalEnum.SomeLocalEnum",
+									"defUid" : 51,
+									"realEditorValue" : { "id" : "V_String", "params" : [ "Value_A" ] }
 								}
 							]
 						},
@@ -218,6 +237,13 @@
 									"__value" : null,
 									"__type" : "ExternEnum.B",
 									"defUid" : 48,
+									"realEditorValue" : null
+								},
+								{
+									"__identifier" : "Local",
+									"__value" : null,
+									"__type" : "LocalEnum.SomeLocalEnum",
+									"defUid" : 51,
 									"realEditorValue" : null
 								}
 							]
@@ -243,6 +269,13 @@
 									"__type" : "ExternEnum.B",
 									"defUid" : 48,
 									"realEditorValue" : { "id" : "V_String", "params" : [ "B0" ] }
+								},
+								{
+									"__identifier" : "Local",
+									"__value" : null,
+									"__type" : "LocalEnum.SomeLocalEnum",
+									"defUid" : 51,
+									"realEditorValue" : null
 								}
 							]
 						}
