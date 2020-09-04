@@ -2428,7 +2428,7 @@ canvas#webgl {
 			li {
 				display: grid;
 				gap: 4px;
-				grid-template-columns: min-content min-content auto min-content min-content;
+				grid-template-columns: min-content min-content auto min-content min-content min-content;
 				align-items: center;
 				padding: 4px;
 
@@ -2442,6 +2442,100 @@ canvas#webgl {
 	}
 }
 
+.window.dialog.autoPatternEditor {
+	$patternSize : 32px;
+
+	.content {
+		display: grid;
+		gap: 16px;
+		grid-template-columns: min-content min-content;
+
+		.autoPattern {
+			display: grid;
+			gap: 2px;
+
+			.cell {
+				display: grid;
+				position: relative;
+				justify-content: center;
+				align-content: center;
+				width: $patternSize;
+				height: $patternSize;
+				border: 1px dotted $bgLight;
+				background-color: $bgMed;
+
+				&:hover {
+					border-color: $orange;
+				}
+
+				&.empty {
+					box-shadow: 0px 2px 4px black inset;
+					background-image: url("../img/stripes.png");
+				}
+
+				&.not {
+					outline: 2px solid $red;
+					outline-offset: -5px;
+
+					.cross {
+						position: absolute;
+						top: 0;
+						left: 0;
+						z-index: 1;
+
+						display: grid;
+						align-content: center;
+						justify-content: center;
+						width: $patternSize;
+						height: $patternSize;
+
+						font-size: $patternSize;
+						color: $red;
+
+						text-shadow: 0px 2px 0px $darkRed,  0px 2px black;
+					}
+				}
+
+				&.center {
+					border: 1px dashed white;
+					border-radius: 4px;
+				}
+
+				canvas {
+					pointer-events: none;
+				}
+			}
+		}
+
+		ul.values {
+			display: grid;
+			grid-template-columns: repeat( 2, 100px );
+			gap: 2px;
+			padding: 4px;
+			border: 1px solid $bgLight;
+
+			li {
+				display: grid;
+				align-content: center;
+				justify-content: center;
+
+				text-shadow: 0px 2px 1px black, 0px 0px 4px white;
+
+				border: 1px solid $bgMed;
+				cursor: pointer;
+
+				&:hover {
+					outline: 1px solid $orange;
+					outline-offset: -1px;
+				}
+
+				&.active {
+					border-color: white;
+				}
+			}
+		}
+	}
+}
 
 .window.panel.tilesetDefs {
 	.mainList ul:empty::before {

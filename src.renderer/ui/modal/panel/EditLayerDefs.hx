@@ -313,14 +313,32 @@ class EditLayerDefs extends ui.modal.Panel {
 			jTileset.val( cur.autoTilesetDefUid );
 
 
-		// Rule
-		var jRule = jForm.find("xml#rule").clone().children().wrapAll('<li/>').parent();
-		jRule.appendTo(jRules);
+		// Rules
+		for( r in cur.rules) {
+			var jRule = jForm.find("xml#rule").clone().children().wrapAll('<li/>').parent();
+			jRule.appendTo(jRules);
 
-		var jPicker = JsTools.createSingleTilePicker( cur.autoTilesetDefUid, null, function(tid:Int) {
-			N.notImplemented();
-		});
-		jRule.find(".result").append( jPicker );
+			// Result tile(s)
+			var jPicker = JsTools.createSingleTilePicker( cur.autoTilesetDefUid, r.tileId, function(tid:Int) {
+				r.tileId = tid;
+				editor.ge.emit(LayerDefChanged);
+			});
+			jRule.find(".result").append( jPicker );
+
+			// Random
+			var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
+			i.linkEvent(LayerDefChanged);
+			i.displayAsPct = true;
+			i.setBounds(0,1);
+
+			// Edit pattern
+			var bt = jRule.find("button.pattern");
+			bt.click( function(ev) {
+				new ui.modal.dialog.AutoPatternEditor(bt, cur, r);
+			});
+
+		}
+
 
 		JsTools.makeSortable("ul.rules", function(from,to) {});
 	}

@@ -11,7 +11,8 @@ class LayerDef {
 
 	// IntGrid
 	var intGridValues : Array<IntGridValueDef> = [];
-	public var autoTilesetDefUid : Null<Int>;
+	public var autoTilesetDefUid : Null<Int>; // JSON
+	public var rules : Array<AutoLayerRule> = []; // JSON
 
 	// Tiles
 	public var tilesetDefUid : Null<Int>;
@@ -27,6 +28,17 @@ class LayerDef {
 		identifier = type+uid;
 		#end
 		addIntGridValue(0x0);
+
+		rules.push({ // HACK
+			tileId: 0,
+			pattern: [],
+			chance: 1,
+		});
+		rules.push({ // HACK
+			tileId: 1,
+			pattern: [],
+			chance: 0.5,
+		});
 	}
 
 	function set_identifier(id:String) {
