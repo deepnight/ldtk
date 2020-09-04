@@ -16,3 +16,8 @@ install:
 script:
   - haxe main.hxml
   - haxe renderer.hxml
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
