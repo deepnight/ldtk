@@ -1184,6 +1184,15 @@ textarea {
 .window.dialog {
 	overflow: hidden;
 
+	&.confirm .wrapper {
+		max-width: 400px;
+	}
+
+	&.warning .wrapper {
+		background-color: $darkRed;
+		border-color: $red;
+	}
+
 	&.centered {
 		display: grid;
 		align-items: center;

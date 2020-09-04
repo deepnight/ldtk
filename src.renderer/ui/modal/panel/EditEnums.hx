@@ -29,6 +29,7 @@ class EditEnums extends ui.modal.Panel {
 				new ui.modal.dialog.Confirm(
 					ev.getThis(),
 					L.t._("WARNING: removing this external enum will also remove ALL the external enums from the same source! Please note that this will also affect all Entities using any of these enums in ALL levels."),
+					true,
 					function() {
 						var name = dn.FilePath.fromFile(curEnum.externalRelPath).fileWithExt;
 						new ui.LastChance( L.t._("::file:: enums deleted", { file:name }), project );
@@ -40,11 +41,13 @@ class EditEnums extends ui.modal.Panel {
 			}
 			else {
 				// Local enum removal
+				var isUsed = project.isEnumUsed(curEnum);
 				new ui.modal.dialog.Confirm(
 					ev.getThis(),
-					project.isEnumUsed(curEnum)
+					isUsed
 						? Lang.t._("WARNING! This ENUM is used in one or more entity fields. These fields will also be removed!")
 						: Lang.t._("This enum is not used and can be safely removed."),
+					isUsed,
 					function() {
 						new ui.LastChance( L.t._("Enum ::name:: deleted", { name: curEnum.identifier}), project );
 						project.defs.removeEnumDef(curEnum);
@@ -304,16 +307,24 @@ class EditEnums extends ui.modal.Panel {
 			// Remove value button
 			if( !curEnum.isExternal() ) {
 				li.find(".delete").click( function(ev) {
-					new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("Warning! This operation will affect any Entity using this Enum in ALL LEVELS!"), function() {
-						new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+eValue.id }), project);
+					var isUsed = project.isEnumValueUsed(curEnum, eValue.id );
+					new ui.modal.dialog.Confirm(
+						ev.getThis(),
+						isUsed
+							? Lang.t._("WARNING! This enum value is USED in one or more entity instances. These values will also be removed!")
+							: Lang.t._("This enum value is not used and can be safely removed."),
+						isUsed,
+						function() {
+							new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+eValue.id }), project);
 
-						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-							if( fi.getEnumValue()==eValue.id )
-								fi.parseValue(null);
-						});
-						project.defs.removeEnumDefValue(curEnum, eValue.id);
-						editor.ge.emit(EnumDefValueRemoved);
-					});
+							project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
+								if( fi.getEnumValue()==eValue.id )
+									fi.parseValue(null);
+							});
+							project.defs.removeEnumDefValue(curEnum, eValue.id);
+							editor.ge.emit(EnumDefValueRemoved);
+						}
+					);
 				});
 			}
 		}

@@ -160,6 +160,26 @@ class Project {
 		return false;
 	}
 
+	public function isEnumValueUsed(enumDef:led.def.EnumDef, val:String) {
+		for( l in levels )
+		for( li in l.layerInstances ) {
+			if( li.def.type!=Entities )
+				continue;
+
+			for( ei in li.entityInstances )
+			for( fi in ei.fieldInstances )
+				switch fi.def.type {
+					case F_Enum(enumDefUid):
+						if( enumDefUid==enumDef.uid && fi.getEnumValue()==val )
+							return true;
+
+					case _:
+				}
+		}
+
+		return false;
+	}
+
 	/**  GENERAL TOOLS  *****************************************/
 
 	public static inline function isValidIdentifier(id:String) {
