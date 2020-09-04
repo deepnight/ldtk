@@ -292,8 +292,9 @@ class EditLayerDefs extends ui.modal.Panel {
 	function updateRuleForm() {
 		var jRules = jForm.find("ul.rules").off().empty();
 
+		// Add rule
 		jForm.find("button.createRule").click( function(ev) {
-			cur.rules.push({
+			cur.rules.insert(0, {
 				tileId: null,
 				pattern: [],
 				chance: 1,
@@ -353,7 +354,10 @@ class EditLayerDefs extends ui.modal.Panel {
 		}
 
 
-		JsTools.makeSortable("ul.rules", function(from,to) {});
+		JsTools.makeSortable("ul.rules", function(from,to) {
+			project.defs.sortLayerAutoRules(cur, from, to);
+			editor.ge.emit(LayerDefChanged);
+		});
 	}
 
 

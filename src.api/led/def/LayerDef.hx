@@ -121,5 +121,11 @@ class LayerDef {
 
 
 	public function tidy(p:led.Project) {
+		// Lost auto-layer tileset
+		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {
+			autoTilesetDefUid = null;
+			for(r in rules)
+				r.tileId = null;
+		}
 	}
 }

@@ -346,22 +346,34 @@ class LayerInstance {
 			if( r.pattern[coordId]==null )
 				continue;
 
-			if( r.pattern[coordId]>0 && getIntGrid(cx+px-radius,cy+py-radius)!=r.pattern[coordId]-1 )
-				return false;
+			if( dn.M.iabs( r.pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
+				// Anything checks
+				if( r.pattern[coordId]>0 && !hasIntGrid(cx+px-radius,cy+py-radius) )
+					return false;
 
-			if( r.pattern[coordId]<0 && getIntGrid(cx+px-radius,cy+py-radius)==-r.pattern[coordId]-1 )
-				return false;
+				if( r.pattern[coordId]<0 && hasIntGrid(cx+px-radius,cy+py-radius) )
+					return false;
+			}
+			else {
+				// Specific value checks
+				if( r.pattern[coordId]>0 && getIntGrid(cx+px-radius,cy+py-radius)!=r.pattern[coordId]-1 )
+					return false;
+
+				if( r.pattern[coordId]<0 && getIntGrid(cx+px-radius,cy+py-radius)==-r.pattern[coordId]-1 )
+					return false;
+			}
 		}
 		return true;
 	}
 
 	public function renderAutoLayer(target:h2d.Object) { // TODO make this heaps-independant
 		var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
+		var rseed = new dn.Rand( 0 ); // TODO store seed
 
 		for(cy in 0...cHei)
 		for(cx in 0...cWid) {
-			for(r in def.rules)
-				if( ruleMatches(r, cx,cy) ) {
+			for(r in def.rules) {
+				if( ( r.chance>=1 || rseed.rand()<r.chance ) && ruleMatches(r, cx,cy) ) {
 					var t = td.getTile(r.tileId);
 					// t.setCenterRatio(def.tilePivotX, def.tilePivotY); // TODO support tile pivots here also?
 					var bmp = new h2d.Bitmap(t, target);
@@ -369,7 +381,9 @@ class LayerInstance {
 					// bmp.y = (cy + def.tilePivotY) * def.gridSize;
 					bmp.x = cx * def.gridSize;
 					bmp.y = cy * def.gridSize;
+					break;
 				}
+			}
 		}
 }
 

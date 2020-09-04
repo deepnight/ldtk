@@ -76,8 +76,9 @@ class AutoPatternEditor extends ui.modal.Dialog {
 					else
 						rule.pattern[coordId] = null;
 				}
-				N.debug(rule.pattern);
+				editor.ge.emit(LayerDefChanged);
 				render();
+				trace(rule.pattern);
 			});
 			idx++;
 		}

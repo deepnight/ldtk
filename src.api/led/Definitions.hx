@@ -137,6 +137,20 @@ class Definitions {
 	}
 
 
+	public function sortLayerAutoRules(ld:led.def.LayerDef, from:Int, to:Int) : Null<AutoLayerRule> {
+		if( from<0 || from>=ld.rules.length || from==to )
+			return null;
+
+		if( to<0 || to>=ld.rules.length )
+			return null;
+
+		var moved = ld.rules.splice(from,1)[0];
+		ld.rules.insert(to, moved);
+
+		return moved;
+	}
+
+
 
 	/**  ENTITY DEFS  *****************************************/
 
