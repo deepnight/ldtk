@@ -12,7 +12,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 3,
+	"nextUid" : 4,
 	"defs" : {
 		"layers" : [
 			{

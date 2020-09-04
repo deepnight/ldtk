@@ -283,6 +283,14 @@ class EditLayerDefs extends ui.modal.Panel {
 				});
 				p.appendTo(jPivots);
 		}
+
+		if( cur.type==IntGrid )
+			updateRuleForm();
+	}
+
+	function updateRuleForm() {
+		var jRules = jForm.find("ul.rules");
+		JsTools.makeSortable("ul.rules", function(from,to) {});
 	}
 
 
