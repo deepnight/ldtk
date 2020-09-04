@@ -92,7 +92,7 @@ class LayerDef {
 	public inline function countIntGridValues() return intGridValues.length;
 
 
-	public function isIntGridValueUsedInProject(p:Project, idx:Int) {
+	public function isIntGridValueUsedInProject(p:Project, idx:Int) { // TODO move that to project
 		for(level in p.levels) {
 			var li = level.getLayerInstance(this);
 			if( li!=null ) {
