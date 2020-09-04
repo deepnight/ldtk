@@ -1413,11 +1413,25 @@ textarea {
 	background-color: $bgDark;
 }
 
-*[draggable=true] {
+li[draggable=true] {
 	background: url("../img/icons/drag.png") no-repeat;
 	background-position: left center;
 	padding-left: 32px !important;
 	cursor: ns-resize;
+}
+
+.dragHandle {
+	display: inline-block;
+	background: url("../img/icons/drag.png") no-repeat;
+	background-position: left center;
+	width: 32px;
+	min-height: 32px;
+	cursor: move;
+
+	&:hover {
+		background-color: $orange;
+		border-radius: 2px;
+	}
 }
 
 
@@ -2288,7 +2302,7 @@ canvas#webgl {
 				li {
 					display: grid;
 					gap: 3px;
-					grid-template-columns: 32px auto 32px;
+					grid-template-columns: min-content 32px auto 32px;
 					margin-bottom: 4px;
 					input[type=color] {
 						height: 24px;

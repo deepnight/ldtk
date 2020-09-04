@@ -2,7 +2,12 @@ package misc;
 
 class JsTools {
 	public static function makeSortable(selector:String, onSort:(from:Int, to:Int)->Void) {
-		js.Lib.eval('sortable("$selector", { items:":not(.fixed)" })');
+		// TODO replace html5sortable with corresponding npm module
+		if( new J(selector).find(".dragHandle").length>0 )
+			js.Lib.eval('sortable("$selector", { items:":not(.fixed)", handle:".dragHandle" })');
+		else
+			js.Lib.eval('sortable("$selector", { items:":not(.fixed)" })');
+
 		new J(selector)
 			.off("sortupdate")
 			.on("sortupdate", function(ev) {
@@ -350,7 +355,7 @@ class JsTools {
 
 		if( !fileExists(fp.full) )
 			fp.fileWithExt = null;
-		
+
 		#if nwjs
 		nw.Shell.showItemInFolder(fp.full);
 		#else
