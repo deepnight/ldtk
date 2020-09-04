@@ -144,6 +144,22 @@ class Project {
 	}
 
 
+	/**  USED CHECKS  *****************************************/
+
+	public function isEnumUsed(enumDef:led.def.EnumDef) {
+		for( ed in defs.entities )
+		for( fd in ed.fieldDefs )
+			switch fd.type {
+				case F_Enum(enumDefUid):
+					if( enumDefUid==enumDef.uid )
+						return true;
+
+				case _:
+			}
+
+		return false;
+	}
+
 	/**  GENERAL TOOLS  *****************************************/
 
 	public static inline function isValidIdentifier(id:String) {

@@ -157,7 +157,7 @@ class HxEnum {
 
 						if( !found ) {
 							project.defs.removeEnumDefValue(existing, v.id);
-							log.push({ op:Remove, str:pe.enumId+"."+v.id });
+							log.push({ op:Remove(true), str:pe.enumId+"."+v.id });
 						}
 					}
 
@@ -176,8 +176,8 @@ class HxEnum {
 						}
 
 					if( !found ) {
+						log.push({ op:Remove(project.isEnumUsed(ed)), str:ed.identifier+".*" });
 						project.defs.removeEnumDef(ed);
-						log.push({ op:Remove, str:ed.identifier+".*" });
 					}
 				}
 		}
@@ -186,7 +186,7 @@ class HxEnum {
 		for( ed in project.defs.externalEnums )
 			if( ed.externalRelPath==relSourcePath && ed.externalFileChecksum!=checksum ) {
 				ed.externalFileChecksum = checksum;
-				log.push({ op:ChecksumFix, str:ed.identifier+".*" });
+				log.push({ op:ChecksumUpdated, str:ed.identifier+".*" });
 			}
 
 

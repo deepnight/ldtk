@@ -112,8 +112,9 @@ typedef SyncLog = Array<{
 
 enum SyncOp {
 	Add;
-	Remove;
-	ChecksumFix;
+	Remove(used:Bool);
+	ChecksumUpdated;
+	DateUpdated;
 }
 
 enum ImageSyncResult {

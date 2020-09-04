@@ -4,7 +4,7 @@ enum A {
 	A0;
 	A1;
 	A2;
-	// A3;
+	A3;
 }
 
 enum B {

@@ -12,7 +12,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 49,
+	"nextUid" : 51,
 	"defs" : {
 		"layers" : [
 			{
@@ -63,7 +63,7 @@
 						"uid" : 47,
 						"type" : { "id" : "F_Enum", "params" : [ 44 ] },
 						"canBeNull" : false,
-						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayMode" : "NameAndValue",
 						"editorDisplayPos" : "Above",
 						"min" : null,
 						"max" : null,
@@ -75,7 +75,7 @@
 						"uid" : 48,
 						"type" : { "id" : "F_Enum", "params" : [ 45 ] },
 						"canBeNull" : true,
-						"editorDisplayMode" : "ValueOnly",
+						"editorDisplayMode" : "NameAndValue",
 						"editorDisplayPos" : "Above",
 						"min" : null,
 						"max" : null,
@@ -123,11 +123,12 @@
 				"values" : [
 					{ "id" : "A0", "tileId" : null },
 					{ "id" : "A1", "tileId" : null },
-					{ "id" : "A2", "tileId" : null }
+					{ "id" : "A2", "tileId" : null },
+					{ "id" : "A3", "tileId" : null }
 				],
 				"iconTilesetUid" : null,
 				"externalRelPath" : "enumFiles/TypesTest.hx",
-				"externalFileChecksum" : "13d5a15135ebf5413f6525d1287519c6"
+				"externalFileChecksum" : "e01092ff71df428d14dc2d6018651a70"
 			},
 			{
 				"identifier" : "B",
@@ -137,11 +138,11 @@
 				],
 				"iconTilesetUid" : null,
 				"externalRelPath" : "enumFiles/TypesTest.hx",
-				"externalFileChecksum" : "13d5a15135ebf5413f6525d1287519c6"
+				"externalFileChecksum" : "e01092ff71df428d14dc2d6018651a70"
 			},
 			{
 				"identifier" : "C",
-				"uid" : 46,
+				"uid" : 50,
 				"values" : [
 					{ "id" : "C0", "tileId" : null },
 					{ "id" : "C1", "tileId" : null },
@@ -149,7 +150,7 @@
 				],
 				"iconTilesetUid" : null,
 				"externalRelPath" : "enumFiles/TypesTest.hx",
-				"externalFileChecksum" : "13d5a15135ebf5413f6525d1287519c6"
+				"externalFileChecksum" : "e01092ff71df428d14dc2d6018651a70"
 			}
 		]
 	},

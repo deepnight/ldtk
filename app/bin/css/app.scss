@@ -6,6 +6,7 @@ $bgLighter: #737f9d;
 $red: #e34d00;
 $darkRed: #791105;
 $orange: #ffcc00;
+$darkOrange: #d56932;
 $help: #79dd8a;
 $helpDark: #3c6148;
 
@@ -339,6 +340,18 @@ div.warning:not(.window) {
 	background-color: rgba(0,0,0, 0.66);
 }
 
+div.safe:not(.window) {
+	box-sizing: border-box;
+	padding: 8px;
+	margin-top: 4px;
+	margin-bottom: 16px;
+	border: 1px dashed $help;
+	color: white;
+	box-shadow: 0px 0px 32px $helpDark inset, 0px 0px 4px helpDark;
+	text-shadow: 0px -1px 4px $help, 0px 1px 4px $helpDark;
+	background-color: $helpDark;
+}
+
 div.info {
 	display: grid;
 	justify-items: center;
@@ -627,7 +640,8 @@ ul.log {
 		background-color: $bgLight;
 		border-radius: 2px;
 	}
-	li.opAdd {
+	li.opAdd,
+	li.opDateUpdated {
 		color: #a7d93d;
 		span.op {
 			color: black;
@@ -638,6 +652,12 @@ ul.log {
 		color: $red;
 		span.op {
 			background-color: $red;
+		}
+		&.unused {
+			color: $darkOrange;
+			span.op {
+				background-color: $darkOrange;
+			}
 		}
 	}
 	li.opChecksumFix {
