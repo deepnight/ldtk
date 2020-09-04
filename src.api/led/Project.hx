@@ -196,47 +196,4 @@ class Project {
 	}
 	#end
 
-
-
-	#if debug
-	public static function createTest() : Project {
-		var p = new Project();
-
-		// Hero
-		var ed = p.defs.createEntityDef();
-		ed.identifier = "Hero";
-		ed.color = 0x00ff00;
-		ed.width = 24;
-		ed.height = 32;
-		ed.maxPerLevel = 1;
-		ed.setPivot(0.5,1);
-
-		// Hero.life
-		var fd = ed.createFieldDef(p, F_Int);
-		fd.identifier = "life";
-		fd.setDefault(Std.string(3));
-		fd.setMin("1");
-		fd.setMax("10");
-
-		// Collision layer
-		var ld = p.defs.layers[0];
-		ld.identifier = "Collisions";
-		ld.getIntGridValueDef(0).identifier = "walls";
-		ld.addIntGridValue(0x00ff00, "grass");
-		ld.addIntGridValue(0x0000ff, "water");
-
-		// Entity layer
-		var ld = p.defs.createLayerDef(Entities,"Entities");
-
-		// Decoration layer
-		var ld = p.defs.createLayerDef(IntGrid,"Decorations");
-		ld.gridSize = 8;
-		ld.displayOpacity = 0.7;
-		ld.getIntGridValueDef(0).color = 0x00ff00;
-
-		p.tidy();
-
-		return p;
-	}
-	#end
 }
