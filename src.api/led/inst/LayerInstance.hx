@@ -93,6 +93,10 @@ class LayerInstance {
 			throw 'Only works on $t layer!';
 	}
 
+	public inline function isAutoLayer() {
+		return def.autoTilesetDefUid!=null && def.rules.length>0;
+	}
+
 	public inline function isValid(cx:Int,cy:Int) {
 		return cx>=0 && cx<cWid && cy>=0 && cy<cHei;
 	}
@@ -304,9 +308,12 @@ class LayerInstance {
 					if( id<0 )
 						continue;
 
-					g.beginFill( getIntGridColorAt(cx,cy) );
+					g.beginFill( getIntGridColorAt(cx,cy), isAutoLayer() ? 0.5 : 1 );
 					g.drawRect(cx*def.gridSize, cy*def.gridSize, def.gridSize, def.gridSize);
 				}
+
+				if( isAutoLayer() )
+					renderAutoLayer(target);
 
 			case Entities:
 				// not meant to be rendered
@@ -327,6 +334,44 @@ class LayerInstance {
 
 		}
 	}
+
+	function ruleMatches(r:AutoLayerRule, cx:Int, cy:Int) {
+		if( r.tileId==null )
+			return false;
+
+		var radius = Std.int( Const.AUTO_LAYER_PATTERN_SIZE/2 );
+		for(px in 0...Const.AUTO_LAYER_PATTERN_SIZE)
+		for(py in 0...Const.AUTO_LAYER_PATTERN_SIZE) {
+			var coordId = px + py*Const.AUTO_LAYER_PATTERN_SIZE;
+			if( r.pattern[coordId]==null )
+				continue;
+
+			if( r.pattern[coordId]>0 && getIntGrid(cx+px-radius,cy+py-radius)!=r.pattern[coordId]-1 )
+				return false;
+
+			if( r.pattern[coordId]<0 && getIntGrid(cx+px-radius,cy+py-radius)==-r.pattern[coordId]-1 )
+				return false;
+		}
+		return true;
+	}
+
+	public function renderAutoLayer(target:h2d.Object) { // TODO make this heaps-independant
+		var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
+
+		for(cy in 0...cHei)
+		for(cx in 0...cWid) {
+			for(r in def.rules)
+				if( ruleMatches(r, cx,cy) ) {
+					var t = td.getTile(r.tileId);
+					// t.setCenterRatio(def.tilePivotX, def.tilePivotY); // TODO support tile pivots here also?
+					var bmp = new h2d.Bitmap(t, target);
+					// bmp.x = (cx + def.tilePivotX) * def.gridSize;
+					// bmp.y = (cy + def.tilePivotY) * def.gridSize;
+					bmp.x = cx * def.gridSize;
+					bmp.y = cy * def.gridSize;
+				}
+		}
+}
 
 	#else
 

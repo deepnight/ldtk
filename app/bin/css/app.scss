@@ -2495,6 +2495,11 @@ canvas#webgl {
 						text-shadow: 0px 2px 0px $darkRed,  0px 2px black;
 					}
 				}
+				&.anything {
+					&::before {
+						content: "?";
+					}
+				}
 
 				&.center {
 					border: 1px dashed white;

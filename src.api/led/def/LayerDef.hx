@@ -11,8 +11,8 @@ class LayerDef {
 
 	// IntGrid
 	var intGridValues : Array<IntGridValueDef> = [];
-	public var autoTilesetDefUid : Null<Int>; // JSON
-	public var rules : Array<AutoLayerRule> = []; // JSON
+	public var autoTilesetDefUid : Null<Int>; // BUG kill this value if tileset is deleted
+	public var rules : Array<AutoLayerRule> = [];
 
 	// Tiles
 	public var tilesetDefUid : Null<Int>;
@@ -28,17 +28,6 @@ class LayerDef {
 		identifier = type+uid;
 		#end
 		addIntGridValue(0x0);
-
-		rules.push({ // HACK
-			tileId: 0,
-			pattern: [],
-			chance: 1,
-		});
-		rules.push({ // HACK
-			tileId: 1,
-			pattern: [],
-			chance: 0.5,
-		});
 	}
 
 	function set_identifier(id:String) {
@@ -62,6 +51,8 @@ class LayerDef {
 				identifier: v.identifier,
 				color: JsonTools.readColor(v.color),
 			});
+		o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
+		o.rules = json.rules!=null ? json.rules : [];
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
 		o.tilePivotX = JsonTools.readFloat(json.tilePivotX, 0);
@@ -79,6 +70,8 @@ class LayerDef {
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
 
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
+			autoTilesetDefUid: autoTilesetDefUid,
+			rules: rules,
 
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,

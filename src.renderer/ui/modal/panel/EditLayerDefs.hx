@@ -292,6 +292,15 @@ class EditLayerDefs extends ui.modal.Panel {
 	function updateRuleForm() {
 		var jRules = jForm.find("ul.rules").off().empty();
 
+		jForm.find("button.createRule").click( function(ev) {
+			cur.rules.push({
+				tileId: null,
+				pattern: [],
+				chance: 1,
+			});
+			editor.ge.emit(LayerDefChanged);
+		});
+
 		// Tileset selection
 		var jTileset = jForm.find("[name=autoTileset]");
 		jTileset.empty();
@@ -337,6 +346,10 @@ class EditLayerDefs extends ui.modal.Panel {
 				new ui.modal.dialog.AutoPatternEditor(bt, cur, r);
 			});
 
+			jRule.find("button.delete").click( function(ev) {
+				cur.rules.remove(r);
+				editor.ge.emit(LayerDefChanged);
+			});
 		}
 
 

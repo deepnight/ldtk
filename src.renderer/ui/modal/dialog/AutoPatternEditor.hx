@@ -19,6 +19,12 @@ class AutoPatternEditor extends ui.modal.Dialog {
 	function render() {
 		jContent.empty();
 
+
+		// TODO preview
+		// if( rule.tileId!=null && td!=null )
+		// 	jContent.append( JsTools.createTile(td, rule.tileId, 32) );
+
+
 		// Pattern grid
 		var jGrid = new J('<div class="autoPattern"/>');
 		jGrid.appendTo(jContent);
@@ -34,8 +40,6 @@ class AutoPatternEditor extends ui.modal.Dialog {
 			if( cx==Std.int(Const.AUTO_LAYER_PATTERN_SIZE/2) && cy==Std.int(Const.AUTO_LAYER_PATTERN_SIZE/2) ) {
 				var td = project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
 				jCell.addClass("center");
-				if( rule.tileId!=null && td!=null )
-					jCell.append( JsTools.createTile(td, rule.tileId, 32) );
 			}
 
 			// Cell color
