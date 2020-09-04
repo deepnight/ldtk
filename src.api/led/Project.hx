@@ -193,6 +193,21 @@ class Project {
 		return false;
 	}
 
+	public function isIntGridValueUsed(layer:led.def.LayerDef, valueId:Int) {
+		for(l in levels) {
+			var li = l.getLayerInstance(layer);
+			if( li!=null ) {
+				for(cx in 0...li.cWid)
+				for(cy in 0...li.cHei)
+					if( li.getIntGrid(cx,cy)==valueId )
+						return true;
+			}
+		}
+		return false;
+	}
+
+
+
 	/**  GENERAL TOOLS  *****************************************/
 
 	public static inline function isValidIdentifier(id:String) {

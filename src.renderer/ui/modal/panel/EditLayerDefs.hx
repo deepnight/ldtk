@@ -182,8 +182,14 @@ class EditLayerDefs extends ui.modal.Panel {
 							editor.ge.emit(LayerDefChanged);
 							updateForm();
 						}
-						if( cur.isIntGridValueUsedInProject(project, curIdx) ) {
-							new ui.modal.dialog.Confirm(e.find("a.remove"), L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"), run);
+						// if( cur.isIntGridValueUsedInProject(project, curIdx) ) {
+						if( project.isIntGridValueUsed(cur, curIdx) ) {
+							new ui.modal.dialog.Confirm(
+								e.find("a.remove"),
+								L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"),
+								true,
+								run
+							);
 							return;
 						}
 						else
