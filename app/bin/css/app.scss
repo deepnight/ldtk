@@ -2420,7 +2420,8 @@ canvas#webgl {
 	.autoLayerRules {
 		display: grid;
 		grid-template-columns: auto;
-		overflow: auto;
+		overflow-x: hidden;
+		overflow-y: auto;
 		grid-column: 2/3;
 
 		select {
@@ -2428,20 +2429,21 @@ canvas#webgl {
 		}
 
 		ul.rules {
-			margin-top: 8px;
+			display: grid;
+			grid-template-columns: auto;
+			gap: 2px;
+			margin-top: 4px;
 
 			li {
 				display: grid;
-				gap: 4px;
+				box-sizing: border-box;
+				gap: 2px;
 				grid-template-columns: min-content min-content auto min-content min-content min-content;
 				align-items: center;
-				padding: 4px;
+				padding: 2px;
 
 				background-color: $bgDark;
-				border-radius: 2px;
-			}
-			li+li {
-				margin-top: 4px;
+				border-radius: 3px;
 			}
 		}
 	}
