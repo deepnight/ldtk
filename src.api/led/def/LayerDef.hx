@@ -52,7 +52,14 @@ class LayerDef {
 				color: JsonTools.readColor(v.color),
 			});
 		o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
-		o.rules = json.rules!=null ? json.rules : [];
+		o.rules = [];
+		if( json.rules!=null )
+			for( rjson in JsonTools.readArray(json.rules) )
+				o.rules.push({
+					tileId: rjson.tileId,
+					chance: JsonTools.readFloat(rjson.chance),
+					pattern: JsonTools.readArray(rjson.pattern),
+				});
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
 		o.tilePivotX = JsonTools.readFloat(json.tilePivotX, 0);
@@ -71,7 +78,11 @@ class LayerDef {
 
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
 			autoTilesetDefUid: autoTilesetDefUid,
-			rules: rules,
+			rules: rules.map( function(r) return {
+				tileId: r.tileId,
+				chance: JsonTools.writeFloat(r.chance),
+				pattern: r.pattern.copy(), // WARNING: this could lead to memory "leaks" on undo/redo
+			}),
 
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,

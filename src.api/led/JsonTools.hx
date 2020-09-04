@@ -149,7 +149,7 @@ class JsonTools {
 		return v==true;
 	}
 
-	public static function readArray(arr:Dynamic) : Array<Dynamic> {
+	public static function readArray<T>(arr:Dynamic) : Array<T> {
 		switch Type.typeof(arr) {
 			case TClass(Array):
 			case _: throw "Not an array ("+Type.typeof(arr)+")";
