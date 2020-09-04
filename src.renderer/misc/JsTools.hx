@@ -64,6 +64,16 @@ class JsTools {
 		return icon;
 	}
 
+	public static function createTile(td:led.def.TilesetDef, tileId:Int, size:Int) {
+		var jCanvas = new J('<canvas></canvas>');
+		jCanvas.attr("width",td.tileGridSize);
+		jCanvas.attr("height",td.tileGridSize);
+		jCanvas.css("width", size+"px");
+		jCanvas.css("height", size+"px");
+		td.drawTileToCanvas(jCanvas, tileId);
+		return jCanvas;
+	}
+
 
 	public static function createEntityPreview(project:led.Project, ed:led.def.EntityDef, sizePx=24) {
 		var jWrapper = new J('<div class="entityPreview icon"></div>');
