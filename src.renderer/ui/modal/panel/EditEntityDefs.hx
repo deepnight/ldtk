@@ -34,15 +34,23 @@ class EditEntityDefs extends ui.modal.Panel {
 				N.error("No entity selected.");
 				return;
 			}
-			new ui.modal.dialog.Confirm(ev.getThis(), Lang.t._("This operation cannot be canceled!"), function() {
-				new ui.LastChance( L.t._("Entity ::name:: deleted", { name:curEntity.identifier }), project );
-				project.defs.removeEntityDef(curEntity);
-				editor.ge.emit(EntityDefRemoved);
-				if( project.defs.entities.length>0 )
-					selectEntity(project.defs.entities[0]);
-				else
-					selectEntity(null);
-			});
+			var isUsed = project.isEntityDefUsed(curEntity);
+			new ui.modal.dialog.Confirm(
+				ev.getThis(),
+				isUsed
+					? Lang.t._("WARNING! This entity is used in one more levels. They will also be removed!")
+					: Lang.t._("This entity is not used and can be safely removed."),
+				isUsed,
+				function() {
+					new ui.LastChance( L.t._("Entity ::name:: deleted", { name:curEntity.identifier }), project );
+					project.defs.removeEntityDef(curEntity);
+					editor.ge.emit(EntityDefRemoved);
+					if( project.defs.entities.length>0 )
+						selectEntity(project.defs.entities[0]);
+					else
+						selectEntity(null);
+				}
+			);
 		});
 
 		// Create field
@@ -114,12 +122,16 @@ class EditEntityDefs extends ui.modal.Panel {
 				return;
 			}
 
-			new ui.modal.dialog.Confirm(ev.getThis(), function() {
-				new ui.LastChance( L.t._("Entity field ::name:: deleted", { name:curField.identifier }), project );
-				curEntity.removeField(project, curField);
-				editor.ge.emit(EntityFieldRemoved);
-				selectField( curEntity.fieldDefs[0] );
-			});
+			new ui.modal.dialog.Confirm(
+				ev.getThis(),
+				true,
+				function() {
+					new ui.LastChance( L.t._("Entity field ::name:: deleted", { name:curField.identifier }), project );
+					curEntity.removeField(project, curField);
+					editor.ge.emit(EntityFieldRemoved);
+					selectField( curEntity.fieldDefs[0] );
+				}
+			);
 		});
 
 		// Select same entity as current client selection

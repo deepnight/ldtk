@@ -180,6 +180,19 @@ class Project {
 		return false;
 	}
 
+	public function isEntityDefUsed(ed:led.def.EntityDef) {
+		for(l in levels)
+		for(li in l.layerInstances) {
+			if( li.def.type!=Entities )
+				continue;
+
+			for(ei in li.entityInstances)
+				if( ei.defUid==ed.uid )
+					return true;
+		}
+		return false;
+	}
+
 	/**  GENERAL TOOLS  *****************************************/
 
 	public static inline function isValidIdentifier(id:String) {
