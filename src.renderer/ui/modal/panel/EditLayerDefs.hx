@@ -182,7 +182,6 @@ class EditLayerDefs extends ui.modal.Panel {
 							editor.ge.emit(LayerDefChanged);
 							updateForm();
 						}
-						// if( cur.isIntGridValueUsedInProject(project, curIdx) ) {
 						if( project.isIntGridValueUsed(cur, curIdx) ) {
 							new ui.modal.dialog.Confirm(
 								e.find("a.remove"),
@@ -265,12 +264,6 @@ class EditLayerDefs extends ui.modal.Panel {
 							layer: cur.gridSize,
 						}));
 					}
-
-					// bt.text( Lang.t._("Edit") );
-					// bt.click( function(_) {
-					// 	close();
-					// 	new ui.modal.panel.EditTilesetDefs( project.defs.getTilesetDef(cur.tilesetDefUid) );
-					// });
 				}
 
 
