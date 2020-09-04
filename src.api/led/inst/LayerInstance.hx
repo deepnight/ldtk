@@ -335,7 +335,8 @@ class LayerInstance {
 		}
 	}
 
-	function ruleMatches(r:AutoLayerRule, cx:Int, cy:Int) {
+
+	function ruleMatches(r:AutoLayerRule, cx:Int, cy:Int) { // TODO optimize the rule checks!
 		if( r.tileId==null )
 			return false;
 
@@ -347,7 +348,7 @@ class LayerInstance {
 				continue;
 
 			if( dn.M.iabs( r.pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
-				// Anything checks
+				// "Anything" checks
 				if( r.pattern[coordId]>0 && !hasIntGrid(cx+px-radius,cy+py-radius) )
 					return false;
 
