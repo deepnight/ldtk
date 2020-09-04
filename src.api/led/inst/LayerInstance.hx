@@ -368,7 +368,7 @@ class LayerInstance {
 
 	public function renderAutoLayer(target:h2d.Object) { // TODO make this heaps-independant
 		var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
-		var rseed = new dn.Rand( 0 ); // TODO store seed
+		var rseed = new dn.Rand( 0 ); // TODO better cell-based randomizer
 
 		for(cy in 0...cHei)
 		for(cx in 0...cWid) {
