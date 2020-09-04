@@ -11,8 +11,9 @@ class LayerDef {
 
 	// IntGrid
 	var intGridValues : Array<IntGridValueDef> = [];
+	public var autoTilesetDefUid : Null<Int>;
 
-	// Tileset
+	// Tiles
 	public var tilesetDefUid : Null<Int>;
 	public var tilePivotX(default,set) : Float = 0;
 	public var tilePivotY(default,set) : Float = 0;

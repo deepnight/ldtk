@@ -73,14 +73,19 @@
 
 	<li class="IntGrid autoLayerRules">
 		<h3>Auto-layer rules</h3>
+
+		<select name="autoTileset"></select>
+
 		<button class="addRule">Add rule</button>
-		<ul class="rules">
-			<li>
-				<div class="dragHandle"></div>
-				Rule 1
-			</li>
-			<li>Rule 2</li>
-			<li>Rule 3</li>
-		</ul>
+
+		<ul class="rules"></ul>
+
+		<xml id="rule">
+			<div class="dragHandle"></div>
+			<div class="result"></div>
+			<button class="pattern">Pattern</button>
+			<input type="text" name="random"/>
+			<button class="remove dark">Remove</button>
+		</xml>
 	</li>
 </ul>

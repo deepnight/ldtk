@@ -2413,6 +2413,33 @@ canvas#webgl {
 	ul.form:not(.type-Entities) .Entities {
 		display: none;
 	}
+
+	ul.form li.autoLayerRules {
+		display: grid;
+		grid-template-columns: auto;
+
+		select {
+			width: auto;
+		}
+
+		ul.rules {
+			margin-top: 8px;
+
+			li {
+				display: grid;
+				gap: 4px;
+				grid-template-columns: min-content min-content auto min-content min-content;
+				align-items: center;
+				padding: 4px;
+
+				background-color: $bgDark;
+				border-radius: 2px;
+			}
+			li+li {
+				margin-top: 4px;
+			}
+		}
+	}
 }
 
 

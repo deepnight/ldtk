@@ -288,8 +288,40 @@ class EditLayerDefs extends ui.modal.Panel {
 			updateRuleForm();
 	}
 
+
 	function updateRuleForm() {
-		var jRules = jForm.find("ul.rules");
+		var jRules = jForm.find("ul.rules").off().empty();
+
+		// Tileset selection
+		var jTileset = jForm.find("[name=autoTileset]");
+		jTileset.empty();
+		var opt = new J("<option/>");
+		opt.appendTo(jTileset);
+		opt.attr("value", -1);
+		opt.text("-- Select a tileset --");
+		for(td in project.defs.tilesets) {
+			var opt = new J("<option/>");
+			opt.appendTo(jTileset);
+			opt.attr("value", td.uid);
+			opt.text( td.identifier );
+		}
+		jTileset.change( function(ev) {
+			cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
+			editor.ge.emit( LayerDefChanged);
+		});
+		if( cur.autoTilesetDefUid!=null )
+			jTileset.val( cur.autoTilesetDefUid );
+
+
+		// Rule
+		var jRule = jForm.find("xml#rule").clone().children().wrapAll('<li/>').parent();
+		jRule.appendTo(jRules);
+
+		var jPicker = JsTools.createSingleTilePicker( cur.autoTilesetDefUid, null, function(tid:Int) {
+			N.notImplemented();
+		});
+		jRule.find(".result").append( jPicker );
+
 		JsTools.makeSortable("ul.rules", function(from,to) {});
 	}
 
