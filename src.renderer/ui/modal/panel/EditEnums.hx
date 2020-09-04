@@ -301,7 +301,7 @@ class EditEnums extends ui.modal.Panel {
 					eValue.tileId = tileId;
 					editor.ge.emit(EnumDefChanged);
 				});
-				li.prepend(jPicker);
+				jPicker.insertAfter( li.find(".dragHandle") );
 			}
 
 			// Remove value button
