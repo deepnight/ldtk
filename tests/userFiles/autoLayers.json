@@ -22,8 +22,8 @@
 				"gridSize" : 8,
 				"displayOpacity" : 1.0,
 				"intGridValues" : [
-					{ "identifier" : null, "color" : "#FFFFFF" },
-					{ "identifier" : null, "color" : "#00EEFF" }
+					{ "identifier" : "walls", "color" : "#FFFFFF" },
+					{ "identifier" : "water", "color" : "#33ADCC" }
 				],
 				"autoTilesetDefUid" : 9,
 				"rules" : [
