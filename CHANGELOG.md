@@ -1,5 +1,13 @@
 # LEd release notes
 
+## 0.1.0-alpha
+
+ - **Auto-layers**: IntGrid layers can now render themselves automatically by drawing tiles based on their content. You can create "patterns of IntGrid values" to decide when a specific (or group of random tiles) should appear. It can for example be used to:
+   - add some random grass on top of platforms,
+   - add random ceiling props under platforms,
+   - render ground/water/lava area,
+   - etc.
+
 ## 0.0.5-alpha
 
  - Fixed 0-9 keyboard shortcuts while focusing a field
