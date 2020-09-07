@@ -927,6 +927,16 @@ input[type=number] {
 	}
 }
 
+input.quickEdit {
+	cursor: ew-resize;
+
+	&.editing {
+		border-color: $orange;
+		border-style: dashed;
+		color: $orange;
+	}
+}
+
 input[type=checkbox] {
 	width: 24px;
 	height: 24px;

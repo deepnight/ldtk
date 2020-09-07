@@ -12,7 +12,37 @@ class FloatInput extends form.Input<Float> {
 
 	function set_displayAsPct(v) {
 		displayAsPct = v;
-		jInput.val( Std.string(getter()) );
+		jInput.val( Std.string( M.round(getter()) ) );
+
+		if( displayAsPct ) {
+			jInput.addClass("quickEdit");
+			var startX = -1.;
+			var threshold = 3;
+			jInput.off(".quickEdit")
+				.on("mousedown.quickEdit", function(ev:js.jquery.Event) {
+					startX = ev.pageX;
+					ev.preventDefault();
+
+					var startVal = getter();
+					App.ME.jDoc
+						.off(".quickEdit")
+						.on("mousemove.quickEdit", function(ev) {
+							var delta = startX<0 ? 0 : ev.pageX-startX;
+							if( M.fabs(delta)>=threshold ) {
+								jInput.val( M.round(startVal + delta*0.35) );
+								jInput.val( parseInputValue() ); // Force clamping
+								jInput.addClass("editing");
+							}
+						})
+						.on("mouseup.quickEdit", function(ev) {
+							var delta = startX<0 ? 0 : ev.pageX-startX;
+							if( M.fabs(delta)<=threshold )
+								jInput.focus().select();
+							App.ME.jDoc.off(".quickEdit");
+							onInputChange();
+						});
+				});
+		}
 		return displayAsPct;
 	}
 
