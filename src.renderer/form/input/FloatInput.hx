@@ -12,7 +12,7 @@ class FloatInput extends form.Input<Float> {
 
 	function set_displayAsPct(v) {
 		displayAsPct = v;
-		input.val( Std.string(getter()) );
+		jInput.val( Std.string(getter()) );
 		return displayAsPct;
 	}
 
@@ -30,7 +30,7 @@ class FloatInput extends form.Input<Float> {
 	}
 
 	override function parseInputValue() : Float {
-		var v = Std.parseFloat( input.val() );
+		var v = Std.parseFloat( jInput.val() );
 		if( Math.isNaN(v) || !Math.isFinite(v) || v==null )
 			v = 0;
 

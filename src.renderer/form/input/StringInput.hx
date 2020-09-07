@@ -9,7 +9,7 @@ class StringInput extends form.Input<String> {
 	}
 
 	override function parseInputValue() : String {
-		var v = input.val();
+		var v = jInput.val();
 		if( allowNull && StringTools.trim(v).length==0 )
 			return null;
 
