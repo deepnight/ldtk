@@ -1854,8 +1854,13 @@ canvas#webgl {
 
 					ul {
 						margin-bottom: 8px;
-						li+li {
+						>li+li {
 							margin-top: 8px;
+						}
+						ul {
+							margin-top: 8px;
+							list-style-type: square;
+							padding-left: 16px;
 						}
 					}
 
