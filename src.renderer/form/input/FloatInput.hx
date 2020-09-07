@@ -29,7 +29,7 @@ class FloatInput extends form.Input<Float> {
 						.on("mousemove.quickEdit", function(ev) {
 							var delta = startX<0 ? 0 : ev.pageX-startX;
 							if( M.fabs(delta)>=threshold ) {
-								jInput.val( M.round(startVal + delta*0.35) );
+								jInput.val( M.round(startVal + delta*0.8) );
 								jInput.val( parseInputValue() ); // Force clamping
 								jInput.addClass("editing");
 							}
@@ -39,6 +39,7 @@ class FloatInput extends form.Input<Float> {
 							if( M.fabs(delta)<=threshold )
 								jInput.focus().select();
 							App.ME.jDoc.off(".quickEdit");
+							jInput.removeClass("editing");
 							onInputChange();
 						});
 				});

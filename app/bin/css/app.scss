@@ -931,9 +931,11 @@ input.quickEdit {
 	cursor: ew-resize;
 
 	&.editing {
-		border-color: $orange;
+		border-color: $orange !important;
 		border-style: dashed;
 		color: $orange;
+		outline: none !important;
+		box-shadow: 0px 0px 8px $darkOrange !important;
 	}
 }
 
