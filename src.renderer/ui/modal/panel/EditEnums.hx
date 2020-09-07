@@ -297,8 +297,8 @@ class EditEnums extends ui.modal.Panel {
 
 			// Tile preview
 			if( !curEnum.isExternal() ) {
-				var jPicker = JsTools.createSingleTilePicker(curEnum.iconTilesetUid, eValue.tileId, function(tileId) {
-					eValue.tileId = tileId;
+				var jPicker = JsTools.createTilePicker(curEnum.iconTilesetUid, true, [eValue.tileId], function(tileIds) {
+					eValue.tileId = tileIds[0];
 					editor.ge.emit(EnumDefChanged);
 				});
 				jPicker.insertAfter( li.find(".dragHandle") );

@@ -306,7 +306,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		// Add rule
 		jAutoLayer.find("button.createRule").click( function(ev) {
 			cur.rules.insert(0, {
-				tileId: null,
+				tileIds: [],
 				pattern: [],
 				chance: 1,
 			});
@@ -340,8 +340,9 @@ class EditLayerDefs extends ui.modal.Panel {
 			jRule.appendTo(jRules);
 
 			// Result tile(s)
-			var jPicker = JsTools.createSingleTilePicker( cur.autoTilesetDefUid, r.tileId, function(tid:Int) {
-				r.tileId = tid;
+			var jPicker = JsTools.createTilePicker( cur.autoTilesetDefUid, r.tileIds, function(tids) {
+				r.tileIds = tids.copy();
+				N.debug(tids);
 				editor.ge.emit(LayerDefChanged);
 			});
 			jRule.find(".result").append( jPicker );

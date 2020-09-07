@@ -344,7 +344,8 @@ class LayerInstance {
 		for(cx in 0...cWid) {
 			for(r in def.rules) {
 				if( def.ruleMatches(this, r, cx,cy) ) {
-					var t = td.getTile(r.tileId);
+					var tid = r.tileIds[ dn.M.randSeedCoords( def.randSeed, cx,cy, r.tileIds.length ) ];
+					var t = td.getTile(tid);
 					// t.setCenterRatio(def.tilePivotX, def.tilePivotY); // TODO support tile pivots here also?
 					var bmp = new h2d.Bitmap(t, target);
 					// bmp.x = (cx + def.tilePivotX) * def.gridSize;

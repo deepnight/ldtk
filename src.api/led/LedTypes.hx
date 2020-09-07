@@ -70,7 +70,7 @@ typedef EnumDefValue = {
 }
 
 typedef AutoLayerRule = {
-	var tileId : Null<Int>;
+	var tileIds : Array<Int>;
 	var chance : Float;
 	var pattern : Array<Int>;
 }

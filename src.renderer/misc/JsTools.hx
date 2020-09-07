@@ -407,7 +407,7 @@ class JsTools {
 	}
 
 
-	public static function createSingleTilePicker(tilesetId:Null<Int>, tileId:Null<Int>, onPick:(tileId:Int)->Void) {
+	public static function createTilePicker(tilesetId:Null<Int>, singleMode=false, tileIds:Array<Int>, onPick:(tileIds:Array<Int>)->Void) {
 		var jTile = new J('<canvas class="tile"></canvas>');
 
 		if( tilesetId!=null ) {
@@ -415,11 +415,11 @@ class JsTools {
 			var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
 
 			// Render tile
-			if( tileId!=null ) {
+			if( tileIds.length>0 ) {
 				jTile.removeClass("empty");
 				jTile.attr("width", td.tileGridSize);
 				jTile.attr("height", td.tileGridSize);
-				td.drawTileToCanvas(jTile, tileId);
+				td.drawTileToCanvas(jTile, tileIds[0]);
 			}
 			else
 				jTile.addClass("empty");
@@ -430,11 +430,18 @@ class JsTools {
 				m.addClass("singleTilePicker");
 
 				var tp = new ui.TilesetPicker(m.jContent, td);
-				tp.singleSelectedTileId = tileId;
-				tp.onSingleTileSelect = function(tileId) {
-					m.close();
-					onPick(tileId);
-				}
+				if( singleMode )
+					tp.mode = SingleTile;
+				tp.setSelectedTileIds(tileIds);
+				if( singleMode )
+					tp.onSingleTileSelect = function(tileId) {
+						m.close();
+						onPick([tileId]);
+					}
+				else
+					m.onCloseCb = function() {
+						onPick( tp.getSelectedTileIds() );
+					}
 			});
 		}
 		else

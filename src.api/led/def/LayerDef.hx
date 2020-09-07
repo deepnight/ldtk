@@ -57,7 +57,7 @@ class LayerDef {
 		if( json.rules!=null )
 			for( rjson in JsonTools.readArray(json.rules) )
 				o.rules.push({
-					tileId: rjson.tileId,
+					tileIds: rjson.tileId!=null ? [rjson.tileId] : rjson.tileIds, // HACK hold format support
 					chance: JsonTools.readFloat(rjson.chance),
 					pattern: JsonTools.readArray(rjson.pattern),
 				});
@@ -80,7 +80,7 @@ class LayerDef {
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
 			autoTilesetDefUid: autoTilesetDefUid,
 			rules: rules.map( function(r) return {
-				tileId: r.tileId,
+				tileIds: r.tileIds.copy(),
 				chance: JsonTools.writeFloat(r.chance),
 				pattern: r.pattern.copy(), // WARNING: this could lead to memory "leaks" on undo/redo
 			}),
@@ -136,7 +136,7 @@ class LayerDef {
 		if( r.chance<=0 || r.chance<1 && dn.M.randSeedCoords(randSeed, cx,cy, 100)>=r.chance*100 )
 			return false;
 
-		if( r.tileId==null )
+		if( r.tileIds.length==0 )
 			return false;
 
 		var radius = Std.int( Const.AUTO_LAYER_PATTERN_SIZE/2 );
@@ -171,7 +171,7 @@ class LayerDef {
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {
 			autoTilesetDefUid = null;
 			for(r in rules)
-				r.tileId = null;
+				r.tileIds = [];
 		}
 	}
 }
