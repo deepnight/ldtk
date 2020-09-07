@@ -215,7 +215,7 @@ class LevelRender extends dn.Process {
 			return;
 
 		var l = editor.curLayerInstance;
-		grid.lineStyle(1, editor.getGridSnapping() ? col : 0xff0000, editor.getGridSnapping() ? 0.1 : 0.07);
+		grid.lineStyle(1, editor.getGridSnapping() ? col : 0xff0000, editor.getGridSnapping() ? 0.07 : 0.07);
 		for( cx in 0...editor.curLayerInstance.cWid+1 ) {
 			grid.moveTo(cx*l.def.gridSize, 0);
 			grid.lineTo(cx*l.def.gridSize, l.cHei*l.def.gridSize);
