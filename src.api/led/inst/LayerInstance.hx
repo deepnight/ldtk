@@ -301,19 +301,20 @@ class LayerInstance {
 	public function render(target:h2d.Object) {
 		switch def.type {
 			case IntGrid:
-				var g = new h2d.Graphics(target);
-				for(cy in 0...cHei)
-				for(cx in 0...cWid) {
-					var id = getIntGrid(cx,cy);
-					if( id<0 )
-						continue;
-
-					g.beginFill( getIntGridColorAt(cx,cy), isAutoLayer() ? 0.5 : 1 );
-					g.drawRect(cx*def.gridSize, cy*def.gridSize, def.gridSize, def.gridSize);
-				}
-
 				if( isAutoLayer() )
 					renderAutoLayer(target);
+				else {
+					var g = new h2d.Graphics(target);
+					for(cy in 0...cHei)
+					for(cx in 0...cWid) {
+						var id = getIntGrid(cx,cy);
+						if( id<0 )
+							continue;
+
+						g.beginFill( getIntGridColorAt(cx,cy), 1 );
+						g.drawRect(cx*def.gridSize, cy*def.gridSize, def.gridSize, def.gridSize);
+					}
+				}
 
 			case Entities:
 				// not meant to be rendered
@@ -337,23 +338,34 @@ class LayerInstance {
 
 
 	public function renderAutoLayer(target:h2d.Object) { // TODO make this heaps-independant
+		var g = new h2d.Graphics(target);
+
 		var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
 		var rseed = new dn.Rand( 0 ); // TODO better cell-based randomizer
 
 		for(cy in 0...cHei)
 		for(cx in 0...cWid) {
+			var anyMatch = false;
 			for(r in def.rules) {
 				if( def.ruleMatches(this, r, cx,cy) ) {
 					var tid = r.tileIds[ dn.M.randSeedCoords( def.randSeed, cx,cy, r.tileIds.length ) ];
 					var t = td.getTile(tid);
 					// t.setCenterRatio(def.tilePivotX, def.tilePivotY); // TODO support tile pivots here also?
-					var bmp = new h2d.Bitmap(t, target);
+					var bmp = new h2d.Bitmap(t);
+					target.addChildAt(bmp,0);
 					// bmp.x = (cx + def.tilePivotX) * def.gridSize;
 					// bmp.y = (cy + def.tilePivotY) * def.gridSize;
 					bmp.x = cx * def.gridSize;
 					bmp.y = cy * def.gridSize;
-					break;
+					anyMatch = true;
+					// break;
 				}
+			}
+
+			// Default render
+			if( !anyMatch && hasIntGrid(cx,cy) ) {
+				g.beginFill( getIntGridColorAt(cx,cy), 1 );
+				g.drawRect(cx*def.gridSize, cy*def.gridSize, def.gridSize, def.gridSize);
 			}
 		}
 }
