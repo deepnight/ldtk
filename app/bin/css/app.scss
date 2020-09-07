@@ -1439,9 +1439,11 @@ li[draggable=true] {
 	width: 32px;
 	min-height: 32px;
 	height: 100%;
+	opacity: 0.3;
 	cursor: move;
 
 	&:hover {
+		opacity: 1;
 		background-color: $orange;
 		border-radius: 2px;
 	}
@@ -2486,6 +2488,24 @@ canvas#webgl {
 
 				input[name="random"] {
 					width: 40px;
+					font-size: 9pt;
+				}
+
+				span {
+					font-size: 8pt;
+					color: $bgLighter;
+					padding-right: 8px;
+				}
+
+				input[type=text] {
+					border-color: transparent;
+					&:focus {
+						border-color: $orange;
+					}
+				}
+
+				button {
+					padding: 6px;
 				}
 
 				>.preview {

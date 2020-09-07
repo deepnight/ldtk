@@ -45,12 +45,15 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			});
 			lastRule = ld.rules[0];
 			editor.ge.emit(LayerDefChanged);
+			new ui.modal.dialog.AutoPatternEditor( jContent.find("ul.rules [idx=0]"), ld, lastRule );
 		});
 
 		// Rules
+		var idx = 0;
 		for( r in ld.rules) {
 			var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
 			jRule.appendTo(jRuleList);
+			jRule.attr("idx", idx);
 
 			// Last edited highlight
 			jRule.mousedown( function(ev) {
@@ -75,9 +78,13 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			i.setBounds(0,1);
 
 			jRule.find("button.delete").click( function(ev) {
-				ld.rules.remove(r);
-				editor.ge.emit(LayerDefChanged);
+				new ui.modal.dialog.Confirm( jRule, Lang.t._("Warning, this cannot be undone!"), true, function() {
+					ld.rules.remove(r);
+					editor.ge.emit(LayerDefChanged);
+				});
 			});
+
+			idx++;
 		}
 
 		JsTools.parseComponents(jRuleList);

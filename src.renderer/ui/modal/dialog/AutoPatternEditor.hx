@@ -20,7 +20,6 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		jContent.empty();
 
 		// Tile(s)
-		// var td = project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
 		var jTile = JsTools.createTilePicker(layerDef.autoTilesetDefUid, rule.tileIds, function(tids) {
 			rule.tileIds = tids.copy();
 			editor.ge.emit(LayerDefChanged);
@@ -79,6 +78,14 @@ class AutoPatternEditor extends ui.modal.Dialog {
 				render();
 			});
 			idx++;
+		}
+	}
+
+	override function close() {
+		super.close();
+		if( layerDef.isRuleEmpty(rule) ) {
+			layerDef.rules.remove(rule);
+			editor.ge.emit(LayerDefChanged);
 		}
 	}
 }
