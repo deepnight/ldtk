@@ -1560,25 +1560,46 @@ canvas#webgl {
 
 				.name {
 					font-size: 10pt;
-					flex: 1 1 auto;
-					order: 1;
 					display: block;
 					cursor: pointer;
 				}
 
-				.vis {
-					flex: 0 0 auto;
-					padding: 10px;
-					margin: -10px;
-					color: white;
-					text-shadow: 0px 0px 4px black;
-					order: 2;
-					display: block;
-					cursor: zoom-out;
-				}
-				.vis:hover {
-					outline: 1px solid white;
-					outline-offset: -4px;
+				.actions {
+					display: flex;
+					.vis {
+						// padding: 10px;
+						// margin: -10px;
+						color: white;
+						text-shadow: 0px 0px 4px black;
+						order: 2;
+						display: block;
+						border-radius: 3px;
+						cursor: zoom-out;
+
+						&:hover {
+							background-color: white;
+						}
+					}
+
+					a {
+						display: grid;
+						align-content: center;
+						padding: 4px;
+
+						color: white;
+						font-size: 8pt;
+						text-transform: uppercase;
+						text-decoration: none;
+
+						background-color: $bgLight;
+						border-radius: 3px;
+						cursor: pointer;
+
+						&:hover {
+							color: black;
+							background-color: white;
+						}
+					}
 				}
 			}
 		}
@@ -2429,17 +2450,17 @@ canvas#webgl {
 	ul.form:not(.type-Entities) .Entities {
 		display: none;
 	}
+}
 
-	.autoLayerRules {
-		display: grid;
-		grid-template-columns: auto;
-		overflow-x: hidden;
-		overflow-y: auto;
-		grid-column: 2/3;
+.window.panel.editAutoLayerRules {
+	// width: 100vw;
 
-		select {
-			width: auto;
-		}
+	.wrapper {
+		padding: 8px;
+	}
+
+	.content {
+		width: auto;
 
 		ul.rules {
 			display: grid;
@@ -2457,6 +2478,11 @@ canvas#webgl {
 
 				background-color: $bgDark;
 				border-radius: 3px;
+				border: 1px solid transparent;
+
+				&.last {
+					border-color: $bgLighter;
+				}
 
 				input[name="random"] {
 					width: 40px;
@@ -2485,18 +2511,22 @@ $patternSize : 32px;
 	&.preview {
 		.cell {
 			zoom: 0.5;
+			opacity: 0.5;
 		}
-		.cell.center canvas {
-			box-sizing: border-box;
-			zoom: 1.5;
-			margin-left: -25%;
-			margin-top: -25%;
-			padding: 2px;
+		.cell.center {
+			opacity: 1;
+			canvas {
+				box-sizing: border-box;
+				zoom: 1.7;
+				margin-left: -35%;
+				margin-top: -35%;
+				padding: 2px;
 
-			background-color: black;
-			border: 1px solid white;
-			border-radius: 3px;
-			box-shadow: 0px 2px 4px black;
+				background-color: black;
+				border: 1px solid white;
+				border-radius: 3px;
+				box-shadow: 0px 2px 4px black;
+			}
 		}
 	}
 

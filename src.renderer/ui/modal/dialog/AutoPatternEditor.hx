@@ -23,6 +23,7 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		// var td = project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
 		var jTile = JsTools.createTilePicker(layerDef.autoTilesetDefUid, rule.tileIds, function(tids) {
 			rule.tileIds = tids.copy();
+			editor.ge.emit(LayerDefChanged);
 			render();
 		});
 		jContent.append(jTile);

@@ -203,6 +203,29 @@ class EditLayerDefs extends ui.modal.Panel {
 					idx++;
 				}
 
+				// Auto-tileset selection
+				var jTileset = jForm.find("[name=autoTileset]");
+				jTileset.empty();
+
+				var opt = new J("<option/>");
+				opt.appendTo(jTileset);
+				opt.attr("value", -1);
+				opt.text("-- Select a tileset --");
+
+				for(td in project.defs.tilesets) {
+					var opt = new J("<option/>");
+					opt.appendTo(jTileset);
+					opt.attr("value", td.uid);
+					opt.text( td.identifier );
+				}
+				jTileset.change( function(ev) {
+					cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
+					editor.ge.emit( LayerDefChanged);
+				});
+				if( cur.autoTilesetDefUid!=null )
+					jTileset.val( cur.autoTilesetDefUid );
+
+
 
 			case Entities:
 
@@ -299,6 +322,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			jAutoLayer.hide();
 			return;
 		}
+		return;
 
 		jAutoLayer.show();
 		var jRules = jAutoLayer.find("ul.rules").off().empty();
@@ -313,25 +337,25 @@ class EditLayerDefs extends ui.modal.Panel {
 			editor.ge.emit(LayerDefChanged);
 		});
 
-		// Tileset selection
-		var jTileset = jAutoLayer.find("[name=autoTileset]");
-		jTileset.empty();
-		var opt = new J("<option/>");
-		opt.appendTo(jTileset);
-		opt.attr("value", -1);
-		opt.text("-- Select a tileset --");
-		for(td in project.defs.tilesets) {
-			var opt = new J("<option/>");
-			opt.appendTo(jTileset);
-			opt.attr("value", td.uid);
-			opt.text( td.identifier );
-		}
-		jTileset.change( function(ev) {
-			cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
-			editor.ge.emit( LayerDefChanged);
-		});
-		if( cur.autoTilesetDefUid!=null )
-			jTileset.val( cur.autoTilesetDefUid );
+		// // Tileset selection
+		// var jTileset = jAutoLayer.find("[name=autoTileset]");
+		// jTileset.empty();
+		// var opt = new J("<option/>");
+		// opt.appendTo(jTileset);
+		// opt.attr("value", -1);
+		// opt.text("-- Select a tileset --");
+		// for(td in project.defs.tilesets) {
+		// 	var opt = new J("<option/>");
+		// 	opt.appendTo(jTileset);
+		// 	opt.attr("value", td.uid);
+		// 	opt.text( td.identifier );
+		// }
+		// jTileset.change( function(ev) {
+		// 	cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
+		// 	editor.ge.emit( LayerDefChanged);
+		// });
+		// if( cur.autoTilesetDefUid!=null )
+		// 	jTileset.val( cur.autoTilesetDefUid );
 
 
 		// Rules
@@ -345,14 +369,6 @@ class EditLayerDefs extends ui.modal.Panel {
 			jPreview.click( function(ev) {
 				new ui.modal.dialog.AutoPatternEditor(jPreview, cur, r);
 			});
-
-			// Result tile(s)
-			// var jPicker = JsTools.createTilePicker( cur.autoTilesetDefUid, r.tileIds, function(tids) {
-			// 	r.tileIds = tids.copy();
-			// 	N.debug(tids);
-			// 	editor.ge.emit(LayerDefChanged);
-			// });
-			// jRule.find(".result").append( jPicker );
 
 			// Random
 			var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
