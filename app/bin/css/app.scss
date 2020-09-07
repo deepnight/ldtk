@@ -927,6 +927,18 @@ input[type=number] {
 	}
 }
 
+input.quickEdit {
+	cursor: ew-resize;
+
+	&.editing {
+		border-color: $orange !important;
+		border-style: dashed;
+		color: $orange;
+		outline: none !important;
+		box-shadow: 0px 0px 8px $darkOrange !important;
+	}
+}
+
 input[type=checkbox] {
 	width: 24px;
 	height: 24px;
@@ -1426,9 +1438,12 @@ li[draggable=true] {
 	background-position: left center;
 	width: 32px;
 	min-height: 32px;
+	height: 100%;
+	opacity: 0.3;
 	cursor: move;
 
 	&:hover {
+		opacity: 1;
 		background-color: $orange;
 		border-radius: 2px;
 	}
@@ -1547,25 +1562,46 @@ canvas#webgl {
 
 				.name {
 					font-size: 10pt;
-					flex: 1 1 auto;
-					order: 1;
 					display: block;
 					cursor: pointer;
 				}
 
-				.vis {
-					flex: 0 0 auto;
-					padding: 10px;
-					margin: -10px;
-					color: white;
-					text-shadow: 0px 0px 4px black;
-					order: 2;
-					display: block;
-					cursor: zoom-out;
-				}
-				.vis:hover {
-					outline: 1px solid white;
-					outline-offset: -4px;
+				.actions {
+					display: flex;
+					.vis {
+						// padding: 10px;
+						// margin: -10px;
+						color: white;
+						text-shadow: 0px 0px 4px black;
+						order: 2;
+						display: block;
+						border-radius: 3px;
+						cursor: zoom-out;
+
+						&:hover {
+							background-color: white;
+						}
+					}
+
+					a {
+						display: grid;
+						align-content: center;
+						padding: 4px;
+
+						color: white;
+						font-size: 8pt;
+						text-transform: uppercase;
+						text-decoration: none;
+
+						background-color: $bgLight;
+						border-radius: 3px;
+						cursor: pointer;
+
+						&:hover {
+							color: black;
+							background-color: white;
+						}
+					}
 				}
 			}
 		}
@@ -2349,6 +2385,9 @@ canvas#webgl {
 
 
 .window.panel.layerDefs {
+	.mainList {
+		grid-row: 2/4;
+	}
 	.mainList ul:empty::before {
 		content: "No layer";
 	}
@@ -2415,6 +2454,222 @@ canvas#webgl {
 	}
 }
 
+.window.panel.editAutoLayerRules {
+	// width: 100vw;
+
+	.wrapper {
+		padding: 8px;
+	}
+
+	.content {
+		width: auto;
+
+		ul.rules {
+			display: grid;
+			grid-template-columns: auto;
+			gap: 2px;
+			margin-top: 4px;
+
+			li {
+				display: grid;
+				box-sizing: border-box;
+				gap: 2px;
+				grid-template-columns: repeat(5, min-content);
+				align-items: center;
+				padding: 2px;
+
+				background-color: $bgDark;
+				border-radius: 3px;
+				border: 1px solid transparent;
+
+				&.last {
+					border-color: $bgLighter;
+				}
+
+				input[name="random"] {
+					width: 40px;
+					font-size: 9pt;
+				}
+
+				span {
+					font-size: 8pt;
+					color: $bgLighter;
+					padding-right: 8px;
+				}
+
+				input[type=text] {
+					border-color: transparent;
+					&:focus {
+						border-color: $orange;
+					}
+				}
+
+				button {
+					padding: 6px;
+				}
+
+				>.preview {
+					margin-right: 8px;
+					cursor: pointer;
+
+					&:hover {
+						outline: 1px solid $orange;
+					}
+				}
+
+			}
+		}
+	}
+}
+
+
+$patternSize : 32px;
+.autoPatternGrid {
+	display: grid;
+	gap: 2px;
+
+	&.preview {
+		.cell {
+			zoom: 0.5;
+			opacity: 0.5;
+		}
+		.cell.center {
+			opacity: 1;
+			canvas {
+				box-sizing: border-box;
+				zoom: 1.7;
+				margin-left: -35%;
+				margin-top: -35%;
+				padding: 2px;
+
+				background-color: black;
+				border: 1px solid white;
+				border-radius: 3px;
+				box-shadow: 0px 2px 4px black;
+			}
+		}
+	}
+
+	.cell {
+		display: grid;
+		position: relative;
+		justify-content: center;
+		align-content: center;
+		width: $patternSize;
+		height: $patternSize;
+		border: 1px dotted $bgLight;
+		background-color: $bgMed;
+		box-shadow: 0px 0px 2px black inset;
+		border-radius: 4px;
+
+		&.editable {
+			cursor: pointer;
+			&:hover {
+				border-color: $orange;
+			}
+		}
+
+
+		&.empty {
+			box-shadow: 0px 2px 4px black inset;
+			background-image: url("../img/stripes.png");
+			border-radius: 0px;
+		}
+
+		&.not {
+			outline: 2px solid $red;
+			outline-offset: -5px;
+
+			.cross {
+				position: absolute;
+				top: 0;
+				left: 0;
+				z-index: 1;
+
+				display: grid;
+				align-content: center;
+				justify-content: center;
+				width: $patternSize;
+				height: $patternSize;
+
+				font-size: $patternSize;
+				color: $red;
+
+				text-shadow: 0px 2px 0px $darkRed,  0px 2px black;
+			}
+		}
+		&.anything {
+			&::before {
+				content: "?";
+			}
+		}
+
+		&.center {
+			border: 1px dashed white;
+			border-radius: 4px;
+		}
+
+		canvas {
+			pointer-events: none;
+			position: absolute;
+			z-index: 2;
+			image-rendering: pixelated;
+		}
+	}
+}
+
+.window.dialog.autoPatternEditor {
+	.content {
+		padding: 8px;
+		display: grid;
+		gap: 8px;
+		grid-template-columns: repeat(3, min-content);
+		align-items: center;
+
+		canvas {
+			image-rendering: pixelated;
+			zoom: 2;
+			// width: auto !important;
+			// height: 100% !important;
+			outline: 1px solid $orange;
+			cursor: pointer;
+
+			&:hover {
+				outline-color: white;
+			}
+		}
+
+		ul.values {
+			align-self: stretch;
+
+			display: grid;
+			grid-template-columns: repeat( 2, 100px );
+			gap: 2px;
+			padding: 4px;
+			border: 1px solid $bgLight;
+
+			li {
+				display: grid;
+				align-content: center;
+				justify-content: center;
+
+				text-shadow: 0px 2px 1px black, 0px 0px 4px black;
+
+				border: 1px solid $bgMed;
+				cursor: pointer;
+
+				&:hover {
+					outline: 1px solid $orange;
+					outline-offset: -1px;
+				}
+
+				&.active {
+					border-color: white;
+				}
+			}
+		}
+	}
+}
 
 .window.panel.tilesetDefs {
 	.mainList ul:empty::before {

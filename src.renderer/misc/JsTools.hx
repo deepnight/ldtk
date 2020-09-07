@@ -64,6 +64,16 @@ class JsTools {
 		return icon;
 	}
 
+	public static function createTile(td:led.def.TilesetDef, tileId:Int, size:Int) {
+		var jCanvas = new J('<canvas></canvas>');
+		jCanvas.attr("width",td.tileGridSize);
+		jCanvas.attr("height",td.tileGridSize);
+		jCanvas.css("width", size+"px");
+		jCanvas.css("height", size+"px");
+		td.drawTileToCanvas(jCanvas, tileId);
+		return jCanvas;
+	}
+
 
 	public static function createEntityPreview(project:led.Project, ed:led.def.EntityDef, sizePx=24) {
 		var jWrapper = new J('<div class="entityPreview icon"></div>');
@@ -397,7 +407,7 @@ class JsTools {
 	}
 
 
-	public static function createSingleTilePicker(tilesetId:Null<Int>, tileId:Null<Int>, onPick:(tileId:Int)->Void) {
+	public static function createTilePicker(tilesetId:Null<Int>, singleMode=false, tileIds:Array<Int>, onPick:(tileIds:Array<Int>)->Void) {
 		var jTile = new J('<canvas class="tile"></canvas>');
 
 		if( tilesetId!=null ) {
@@ -405,11 +415,11 @@ class JsTools {
 			var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
 
 			// Render tile
-			if( tileId!=null ) {
+			if( tileIds.length>0 ) {
 				jTile.removeClass("empty");
 				jTile.attr("width", td.tileGridSize);
 				jTile.attr("height", td.tileGridSize);
-				td.drawTileToCanvas(jTile, tileId);
+				td.drawTileToCanvas(jTile, tileIds[0]);
 			}
 			else
 				jTile.addClass("empty");
@@ -420,11 +430,18 @@ class JsTools {
 				m.addClass("singleTilePicker");
 
 				var tp = new ui.TilesetPicker(m.jContent, td);
-				tp.singleSelectedTileId = tileId;
-				tp.onSingleTileSelect = function(tileId) {
-					m.close();
-					onPick(tileId);
-				}
+				if( singleMode )
+					tp.mode = SingleTile;
+				tp.setSelectedTileIds(tileIds);
+				if( singleMode )
+					tp.onSingleTileSelect = function(tileId) {
+						m.close();
+						onPick([tileId]);
+					}
+				else
+					m.onCloseCb = function() {
+						onPick( tp.getSelectedTileIds() );
+					}
 			});
 		}
 		else
@@ -433,4 +450,72 @@ class JsTools {
 		return jTile;
 	}
 
+
+	public static function createAutoPatternGrid(rule:led.LedTypes.AutoLayerRule, layerDef:led.def.LayerDef, previewMode=false, ?onClick:(coordId:Int, button:Int)->Void) {
+		var jGrid = new J('<div class="autoPatternGrid"/>');
+		jGrid.css("grid-template-columns", 'repeat( ${Const.AUTO_LAYER_PATTERN_SIZE}, auto )');
+
+		if( onClick!=null )
+			jGrid.addClass("editable");
+
+		if( previewMode )
+			jGrid.addClass("preview");
+
+		var idx = 0;
+		for(cy in 0...Const.AUTO_LAYER_PATTERN_SIZE)
+		for(cx in 0...Const.AUTO_LAYER_PATTERN_SIZE) {
+			var coordId = cx+cy*Const.AUTO_LAYER_PATTERN_SIZE;
+			var isCenter = cx==Std.int(Const.AUTO_LAYER_PATTERN_SIZE/2) && cy==Std.int(Const.AUTO_LAYER_PATTERN_SIZE/2);
+
+			var jCell = new J('<div class="cell"/>');
+			jCell.appendTo(jGrid);
+			if( onClick!=null )
+				jCell.addClass("editable");
+
+			// Center
+			if( isCenter ) {
+				jCell.addClass("center");
+				if( previewMode ) {
+					var td = Editor.ME.project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
+					if( td!=null ) {
+						var jTile = createTile(td, rule.tileIds[0], 32);
+						jCell.append(jTile);
+						jCell.addClass("tilePreview");
+					}
+				}
+			}
+
+			// Cell color
+			if( !isCenter || !previewMode ) {
+				var v = rule.pattern[coordId];
+				if( v!=null ) {
+					if( v>0 ) {
+						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING )
+							jCell.addClass("anything");
+						else
+							jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
+					}
+					else {
+						jCell.addClass("not").append('<span class="cross">x</span>');
+						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING )
+							jCell.addClass("anything");
+						else
+							jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
+					}
+				}
+				else
+					jCell.addClass("empty");
+			}
+
+			// Edit grid value
+			if( onClick!=null )
+				jCell.mousedown( function(ev) {
+					onClick(coordId, ev.button);
+				});
+
+			idx++;
+		}
+
+		return jGrid;
+	}
 }

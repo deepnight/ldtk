@@ -22,18 +22,18 @@ class IntInput extends form.Input<Int> {
 
 	override function writeValueToInput() {
 		if( isColorCode )
-			input.val( C.intToHex(getter()) );
+			jInput.val( C.intToHex(getter()) );
 		else
 			super.writeValueToInput();
 	}
 
 	override function parseInputValue() : Int {
 		if( isColorCode ) {
-			var v = C.hexToInt( input.val() );
+			var v = C.hexToInt( jInput.val() );
 			return v;
 		}
 		else {
-			var v = Std.parseInt( input.val() );
+			var v = Std.parseInt( jInput.val() );
 			if( Math.isNaN(v) || !Math.isFinite(v) || v==null )
 				v = 0;
 

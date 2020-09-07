@@ -11,8 +11,11 @@ class LayerDef {
 
 	// IntGrid
 	var intGridValues : Array<IntGridValueDef> = [];
+	public var autoTilesetDefUid : Null<Int>; // BUG kill this value if tileset is deleted
+	public var rules : Array<AutoLayerRule> = [];
+	public var randSeed = 0;
 
-	// Tileset
+	// Tiles
 	public var tilesetDefUid : Null<Int>;
 	public var tilePivotX(default,set) : Float = 0;
 	public var tilePivotY(default,set) : Float = 0;
@@ -49,6 +52,15 @@ class LayerDef {
 				identifier: v.identifier,
 				color: JsonTools.readColor(v.color),
 			});
+		o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
+		o.rules = [];
+		if( json.rules!=null )
+			for( rjson in JsonTools.readArray(json.rules) )
+				o.rules.push({
+					tileIds: rjson.tileId!=null ? [rjson.tileId] : rjson.tileIds, // HACK hold format support
+					chance: JsonTools.readFloat(rjson.chance),
+					pattern: JsonTools.readArray(rjson.pattern),
+				});
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
 		o.tilePivotX = JsonTools.readFloat(json.tilePivotX, 0);
@@ -66,6 +78,12 @@ class LayerDef {
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
 
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
+			autoTilesetDefUid: autoTilesetDefUid,
+			rules: rules.map( function(r) return {
+				tileIds: r.tileIds.copy(),
+				chance: JsonTools.writeFloat(r.chance),
+				pattern: r.pattern.copy(), // WARNING: this could lead to memory "leaks" on undo/redo
+			}),
 
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,
@@ -114,6 +132,50 @@ class LayerDef {
 	inline function set_tilePivotY(v) return tilePivotY = dn.M.fclamp(v, 0, 1);
 
 
+	public function isRuleEmpty(r:AutoLayerRule) {
+		return r.pattern.length==0 && r.tileIds.length==0;
+	}
+
+	public function ruleMatches(li:led.inst.LayerInstance, r:AutoLayerRule, cx:Int, cy:Int) { // TODO optimize the rule checks!
+		if( r.chance<=0 || r.chance<1 && dn.M.randSeedCoords(randSeed, cx,cy, 100)>=r.chance*100 )
+			return false;
+
+		if( r.tileIds.length==0 )
+			return false;
+
+		var radius = Std.int( Const.AUTO_LAYER_PATTERN_SIZE/2 );
+		for(px in 0...Const.AUTO_LAYER_PATTERN_SIZE)
+		for(py in 0...Const.AUTO_LAYER_PATTERN_SIZE) {
+			var coordId = px + py*Const.AUTO_LAYER_PATTERN_SIZE;
+			if( r.pattern[coordId]==null )
+				continue;
+
+			if( dn.M.iabs( r.pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
+				// "Anything" checks
+				if( r.pattern[coordId]>0 && !li.hasIntGrid(cx+px-radius,cy+py-radius) )
+					return false;
+
+				if( r.pattern[coordId]<0 && li.hasIntGrid(cx+px-radius,cy+py-radius) )
+					return false;
+			}
+			else {
+				// Specific value checks
+				if( r.pattern[coordId]>0 && li.getIntGrid(cx+px-radius,cy+py-radius)!=r.pattern[coordId]-1 )
+					return false;
+
+				if( r.pattern[coordId]<0 && li.getIntGrid(cx+px-radius,cy+py-radius)==-r.pattern[coordId]-1 )
+					return false;
+			}
+		}
+		return true;
+	}
+
 	public function tidy(p:led.Project) {
+		// Lost auto-layer tileset
+		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {
+			autoTilesetDefUid = null;
+			for(r in rules)
+				r.tileIds = [];
+		}
 	}
 }

@@ -12,7 +12,40 @@ class FloatInput extends form.Input<Float> {
 
 	function set_displayAsPct(v) {
 		displayAsPct = v;
-		input.val( Std.string(getter()) );
+		jInput.val( Std.string( M.round(getter()) ) );
+
+		if( displayAsPct ) {
+			jInput.addClass("quickEdit");
+			var startX = -1.;
+			var threshold = 3;
+			jInput.off(".quickEdit")
+				.on("mousedown.quickEdit", function(ev:js.jquery.Event) {
+					startX = ev.pageX;
+					ev.preventDefault();
+
+					var startVal = getter();
+					App.ME.jDoc
+						.off(".quickEdit")
+						.on("mousemove.quickEdit", function(ev) {
+							var delta = startX<0 ? 0 : ev.pageX-startX;
+							if( M.fabs(delta)>=threshold ) {
+								jInput.val( M.round(startVal + delta*0.8) );
+								jInput.val( parseInputValue() ); // Force clamping
+								jInput.addClass("editing");
+							}
+						})
+						.on("mouseup.quickEdit", function(ev) {
+							App.ME.jDoc.off(".quickEdit");
+							jInput.removeClass("editing");
+
+							var delta = startX<0 ? 0 : ev.pageX-startX;
+							if( M.fabs(delta)<=threshold )
+								jInput.focus().select();
+							else
+								onInputChange();
+						});
+				});
+		}
 		return displayAsPct;
 	}
 
@@ -30,7 +63,7 @@ class FloatInput extends form.Input<Float> {
 	}
 
 	override function parseInputValue() : Float {
-		var v = Std.parseFloat( input.val() );
+		var v = Std.parseFloat( jInput.val() );
 		if( Math.isNaN(v) || !Math.isFinite(v) || v==null )
 			v = 0;
 

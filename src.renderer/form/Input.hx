@@ -7,7 +7,7 @@ import haxe.macro.Context;
 
 class Input<T> {
 	#if !macro
-	var input : js.jquery.JQuery;
+	var jInput : js.jquery.JQuery;
 	var getter : Void->T;
 	var setter : T->Void;
 
@@ -22,12 +22,12 @@ class Input<T> {
 
 		this.getter = getter;
 		this.setter = setter;
-		input = jElement;
-		input.off();
+		jInput = jElement;
+		jInput.off();
 		writeValueToInput();
 		lastValidValue = getter();
 
-		input.change( function(_) {
+		jInput.change( function(_) {
 			onInputChange();
 		});
 	}
@@ -61,34 +61,34 @@ class Input<T> {
 	public dynamic function onValueChange(v:T) {}
 
 	function parseInputValue() : T {
-		return input.val();
+		return jInput.val();
 	}
 
 	function writeValueToInput() {
 		var v = getter();
 		if( v==null )
-			input.val("");
+			jInput.val("");
 		else
-			input.val( Std.string( getter() ) );
+			jInput.val( Std.string( getter() ) );
 	}
 
 
 	public function setEnabled(v:Bool) {
-		input.prop("disabled", !v);
+		jInput.prop("disabled", !v);
 	}
 
 	public function enable() {
-		input.prop("disabled",false);
+		jInput.prop("disabled",false);
 	}
 
 	public function disable() {
-		input.prop("disabled",true);
+		jInput.prop("disabled",true);
 	}
 
 	public function setPlaceholder(v:T) {
-		if( !input.is("[type=text]") )
+		if( !jInput.is("[type=text]") )
 			throw "Not compatible with this input type";
-		input.attr("placeholder", Std.string(v));
+		jInput.attr("placeholder", Std.string(v));
 	}
 
 	#end

@@ -91,13 +91,17 @@ class Modal extends dn.Process {
 		jModalAndMask.find("*").off();
 		onClose();
 		doCloseAnimation();
+		onCloseCb();
 	}
 
 	function doCloseAnimation() {
 		destroy();
 	}
 
-	function onClose() {}
+	function onClose() {
+	}
+
+	public dynamic function onCloseCb() {}
 
 	public function loadTemplate(tplName:String, ?className:String, ?vars:Dynamic) {
 		if( className==null )

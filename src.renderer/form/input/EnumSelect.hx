@@ -7,11 +7,11 @@ class EnumSelect<T:EnumValue> extends form.Input<T> {
 		super(j, getter, setter);
 		enumRef = e;
 
-		input.empty();
+		jInput.empty();
 		for(k in Type.getEnumConstructs(enumRef)) {
 			var t = enumRef.createByName(k);
 			var opt = new J("<option>");
-			input.append(opt);
+			jInput.append(opt);
 			opt.attr("value",k);
 			opt.text(k);
 			if( t==getter() )
@@ -20,7 +20,7 @@ class EnumSelect<T:EnumValue> extends form.Input<T> {
 	}
 
 	override function parseInputValue() : T {
-		var v = input.val();
-		return enumRef.createByName( input.val() );
+		var v = jInput.val();
+		return enumRef.createByName( jInput.val() );
 	}
 }

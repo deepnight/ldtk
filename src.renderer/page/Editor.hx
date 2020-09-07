@@ -575,6 +575,7 @@ class Editor extends Page {
 			N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
 		else
 			N.msg("Nothing to save");
+		updateTitle();
 	}
 
 	public function onSaveAs() {
@@ -809,6 +810,20 @@ class Editor extends Page {
 				selectLayerInstance(li);
 			});
 
+			// Rules button
+			var rules = e.find(".rules");
+			if( li.isAutoLayer() )
+				rules.show();
+			else
+				rules.hide();
+			rules.click( function(ev:js.jquery.Event) {
+				if( ui.Modal.closeAll() )
+					return;
+				ev.preventDefault();
+				ev.stopPropagation();
+				selectLayerInstance(li);
+				new ui.modal.panel.EditAutoLayerRules();
+			});
 
 			// Visibility button
 			var vis = e.find(".vis");
