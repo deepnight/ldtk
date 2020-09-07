@@ -19,69 +19,33 @@ class AutoPatternEditor extends ui.modal.Dialog {
 	function render() {
 		jContent.empty();
 
+		// Tile(s)
+		// var td = project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
+		var jTile = JsTools.createTilePicker(layerDef.autoTilesetDefUid, rule.tileIds, function(tids) {
+			rule.tileIds = tids.copy();
+			render();
+		});
+		jContent.append(jTile);
 
-		// TODO preview
-		// if( rule.tileId!=null && td!=null )
-		// 	jContent.append( JsTools.createTile(td, rule.tileId, 32) );
-
-
-		// Pattern grid
-		var jGrid = new J('<div class="autoPattern"/>');
-		jGrid.appendTo(jContent);
-		jGrid.css("grid-template-columns", 'repeat( ${Const.AUTO_LAYER_PATTERN_SIZE}, auto )');
-		var idx = 0;
-		for(cy in 0...Const.AUTO_LAYER_PATTERN_SIZE)
-		for(cx in 0...Const.AUTO_LAYER_PATTERN_SIZE) {
-			var coordId = cx+cy*Const.AUTO_LAYER_PATTERN_SIZE;
-			var jCell = new J('<div class="cell"/>');
-			jCell.appendTo(jGrid);
-
-			// Center
-			if( cx==Std.int(Const.AUTO_LAYER_PATTERN_SIZE/2) && cy==Std.int(Const.AUTO_LAYER_PATTERN_SIZE/2) ) {
-				var td = project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
-				jCell.addClass("center");
-			}
-
-			// Cell color
+		// Pattern grid editor
+		var jGrid = JsTools.createAutoPatternGrid(rule, layerDef, function(coordId,button) {
 			var v = rule.pattern[coordId];
-			if( v!=null ) {
-				if( v>0 ) {
-					if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING )
-						jCell.addClass("anything");
-					else
-						jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
-				}
-				else {
-					jCell.addClass("not").append('<span class="cross">x</span>');
-					if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING )
-						jCell.addClass("anything");
-					else
-						jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
-				}
+			if( button==0 ) {
+				if( v==null || v>0 )
+					rule.pattern[coordId] = curValIdx+1; // avoid zero value
+				else if( v<0 )
+					rule.pattern[coordId] = null;
 			}
-			else
-				jCell.addClass("empty");
-
-			// Set grid value
-			jCell.mousedown( function(ev) {
-				if( ev.button==0 ) {
-					if( v==null || v>0 )
-						rule.pattern[coordId] = curValIdx+1; // avoid zero value
-					else if( v<0 )
-						rule.pattern[coordId] = null;
-				}
-				else {
-					if( v==null )
-						rule.pattern[coordId] = -curValIdx-1;
-					else
-						rule.pattern[coordId] = null;
-				}
-				editor.ge.emit(LayerDefChanged);
-				render();
-				trace(rule.pattern);
-			});
-			idx++;
-		}
+			else {
+				if( v==null )
+					rule.pattern[coordId] = -curValIdx-1;
+				else
+					rule.pattern[coordId] = null;
+			}
+			editor.ge.emit(LayerDefChanged);
+			render();
+		});
+		jContent.append(jGrid);
 
 		// Value picker
 		var jValues = new J('<ul class="values"/>');

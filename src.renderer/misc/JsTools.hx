@@ -450,4 +450,72 @@ class JsTools {
 		return jTile;
 	}
 
+
+	public static function createAutoPatternGrid(rule:led.LedTypes.AutoLayerRule, layerDef:led.def.LayerDef, previewMode=false, ?onClick:(coordId:Int, button:Int)->Void) {
+		var jGrid = new J('<div class="autoPatternGrid"/>');
+		jGrid.css("grid-template-columns", 'repeat( ${Const.AUTO_LAYER_PATTERN_SIZE}, auto )');
+
+		if( onClick!=null )
+			jGrid.addClass("editable");
+
+		if( previewMode )
+			jGrid.addClass("preview");
+
+		var idx = 0;
+		for(cy in 0...Const.AUTO_LAYER_PATTERN_SIZE)
+		for(cx in 0...Const.AUTO_LAYER_PATTERN_SIZE) {
+			var coordId = cx+cy*Const.AUTO_LAYER_PATTERN_SIZE;
+			var isCenter = cx==Std.int(Const.AUTO_LAYER_PATTERN_SIZE/2) && cy==Std.int(Const.AUTO_LAYER_PATTERN_SIZE/2);
+
+			var jCell = new J('<div class="cell"/>');
+			jCell.appendTo(jGrid);
+			if( onClick!=null )
+				jCell.addClass("editable");
+
+			// Center
+			if( isCenter ) {
+				jCell.addClass("center");
+				if( previewMode ) {
+					var td = Editor.ME.project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
+					if( td!=null ) {
+						var jTile = createTile(td, rule.tileIds[0], 32);
+						jCell.append(jTile);
+						jCell.addClass("tilePreview");
+					}
+				}
+			}
+
+			// Cell color
+			if( !isCenter || !previewMode ) {
+				var v = rule.pattern[coordId];
+				if( v!=null ) {
+					if( v>0 ) {
+						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING )
+							jCell.addClass("anything");
+						else
+							jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
+					}
+					else {
+						jCell.addClass("not").append('<span class="cross">x</span>');
+						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING )
+							jCell.addClass("anything");
+						else
+							jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
+					}
+				}
+				else
+					jCell.addClass("empty");
+			}
+
+			// Edit grid value
+			if( onClick!=null )
+				jCell.mousedown( function(ev) {
+					onClick(coordId, ev.button);
+				});
+
+			idx++;
+		}
+
+		return jGrid;
+	}
 }

@@ -339,13 +339,20 @@ class EditLayerDefs extends ui.modal.Panel {
 			var jRule = jAutoLayer.find("xml#rule").clone().children().wrapAll('<li/>').parent();
 			jRule.appendTo(jRules);
 
-			// Result tile(s)
-			var jPicker = JsTools.createTilePicker( cur.autoTilesetDefUid, r.tileIds, function(tids) {
-				r.tileIds = tids.copy();
-				N.debug(tids);
-				editor.ge.emit(LayerDefChanged);
+			// Preview
+			var jPreview = jRule.find(".preview");
+			JsTools.createAutoPatternGrid(r, cur, true).appendTo(jPreview);
+			jPreview.click( function(ev) {
+				new ui.modal.dialog.AutoPatternEditor(jPreview, cur, r);
 			});
-			jRule.find(".result").append( jPicker );
+
+			// Result tile(s)
+			// var jPicker = JsTools.createTilePicker( cur.autoTilesetDefUid, r.tileIds, function(tids) {
+			// 	r.tileIds = tids.copy();
+			// 	N.debug(tids);
+			// 	editor.ge.emit(LayerDefChanged);
+			// });
+			// jRule.find(".result").append( jPicker );
 
 			// Random
 			var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
@@ -353,18 +360,13 @@ class EditLayerDefs extends ui.modal.Panel {
 			i.displayAsPct = true;
 			i.setBounds(0,1);
 
-			// Edit pattern
-			var bt = jRule.find("button.pattern");
-			bt.click( function(ev) {
-				new ui.modal.dialog.AutoPatternEditor(bt, cur, r);
-			});
-
 			jRule.find("button.delete").click( function(ev) {
 				cur.rules.remove(r);
 				editor.ge.emit(LayerDefChanged);
 			});
 		}
 
+		JsTools.parseComponents(jRules);
 
 		JsTools.makeSortable("ul.rules", function(from,to) {
 			project.defs.sortLayerAutoRules(cur, from, to);

@@ -29,6 +29,21 @@
 				"autoTilesetDefUid" : 9,
 				"rules" : [
 					{
+						"tileIds" : [ 192, 193, 194 ],
+						"chance" : 0.02,
+						"pattern" : [
+							null,
+							null,
+							null,
+							null,
+							-1000001,
+							null,
+							null,
+							-1000001,
+							null
+						]
+					},
+					{
 						"tileIds" : [
 							32,
 							44,
