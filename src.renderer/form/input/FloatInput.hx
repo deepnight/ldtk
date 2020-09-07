@@ -35,12 +35,14 @@ class FloatInput extends form.Input<Float> {
 							}
 						})
 						.on("mouseup.quickEdit", function(ev) {
+							App.ME.jDoc.off(".quickEdit");
+							jInput.removeClass("editing");
+
 							var delta = startX<0 ? 0 : ev.pageX-startX;
 							if( M.fabs(delta)<=threshold )
 								jInput.focus().select();
-							App.ME.jDoc.off(".quickEdit");
-							jInput.removeClass("editing");
-							onInputChange();
+							else
+								onInputChange();
 						});
 				});
 		}
