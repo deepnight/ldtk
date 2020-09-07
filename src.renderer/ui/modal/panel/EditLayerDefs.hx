@@ -63,17 +63,21 @@ class EditLayerDefs extends ui.modal.Panel {
 			case LayerInstanceRestoredFromHistory:
 				updateForm();
 				updateList();
+				updateRuleForm();
 
 			case LayerDefAdded, LayerDefRemoved:
 				updateList();
 				updateForm();
+				updateRuleForm();
 
 			case LayerDefChanged:
 				updateList();
 				updateForm();
+				updateRuleForm();
 
 			case TilesetDefChanged:
 				updateForm();
+				updateRuleForm();
 
 			case LayerDefSorted:
 				updateList();
@@ -86,6 +90,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		cur = ld;
 		updateForm();
 		updateList();
+		updateRuleForm();
 	}
 
 	function updateForm() {
@@ -283,14 +288,19 @@ class EditLayerDefs extends ui.modal.Panel {
 				});
 				p.appendTo(jPivots);
 		}
-
-		if( cur.type==IntGrid )
-			updateRuleForm();
 	}
 
 
 	function updateRuleForm() {
 		var jAutoLayer = jContent.find(".autoLayerRules");
+		jAutoLayer.find("*").off();
+
+		if( cur==null || cur.type!=IntGrid ) {
+			jAutoLayer.hide();
+			return;
+		}
+
+		jAutoLayer.show();
 		var jRules = jAutoLayer.find("ul.rules").off().empty();
 
 		// Add rule
