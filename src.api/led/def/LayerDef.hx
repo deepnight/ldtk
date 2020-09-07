@@ -13,6 +13,7 @@ class LayerDef {
 	var intGridValues : Array<IntGridValueDef> = [];
 	public var autoTilesetDefUid : Null<Int>; // BUG kill this value if tileset is deleted
 	public var rules : Array<AutoLayerRule> = [];
+	public var randSeed = 0;
 
 	// Tiles
 	public var tilesetDefUid : Null<Int>;
@@ -132,7 +133,7 @@ class LayerDef {
 
 
 	public function ruleMatches(li:led.inst.LayerInstance, r:AutoLayerRule, cx:Int, cy:Int) { // TODO optimize the rule checks!
-		if( r.chance<1 && Math.random()>=r.chance )  // TODO seed random
+		if( r.chance<=0 || r.chance<1 && dn.M.randSeedCoords(randSeed, cx,cy, 100)>=r.chance*100 )
 			return false;
 
 		if( r.tileId==null )
