@@ -124,19 +124,4 @@ class Level {
 			i--;
 		}
 	}
-
-	#if heaps
-
-	public function renderAllLayers(target:h2d.Object) {
-		iterateLayerInstancesInRenderOrder( function(li) {
-			li.render(target);
-		});
-	}
-
-	#else
-
-	@:deprecated("Not implemented on this platform")
-	public function renderAllLayers(target:Dynamic) {}
-
-	#end
 }
