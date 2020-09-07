@@ -131,6 +131,40 @@ class LayerDef {
 	inline function set_tilePivotY(v) return tilePivotY = dn.M.fclamp(v, 0, 1);
 
 
+	public function ruleMatches(li:led.inst.LayerInstance, r:AutoLayerRule, cx:Int, cy:Int) { // TODO optimize the rule checks!
+		if( r.chance<1 && Math.random()>=r.chance )  // TODO seed random
+			return false;
+
+		if( r.tileId==null )
+			return false;
+
+		var radius = Std.int( Const.AUTO_LAYER_PATTERN_SIZE/2 );
+		for(px in 0...Const.AUTO_LAYER_PATTERN_SIZE)
+		for(py in 0...Const.AUTO_LAYER_PATTERN_SIZE) {
+			var coordId = px + py*Const.AUTO_LAYER_PATTERN_SIZE;
+			if( r.pattern[coordId]==null )
+				continue;
+
+			if( dn.M.iabs( r.pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
+				// "Anything" checks
+				if( r.pattern[coordId]>0 && !li.hasIntGrid(cx+px-radius,cy+py-radius) )
+					return false;
+
+				if( r.pattern[coordId]<0 && li.hasIntGrid(cx+px-radius,cy+py-radius) )
+					return false;
+			}
+			else {
+				// Specific value checks
+				if( r.pattern[coordId]>0 && li.getIntGrid(cx+px-radius,cy+py-radius)!=r.pattern[coordId]-1 )
+					return false;
+
+				if( r.pattern[coordId]<0 && li.getIntGrid(cx+px-radius,cy+py-radius)==-r.pattern[coordId]-1 )
+					return false;
+			}
+		}
+		return true;
+	}
+
 	public function tidy(p:led.Project) {
 		// Lost auto-layer tileset
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {

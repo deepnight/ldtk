@@ -336,37 +336,6 @@ class LayerInstance {
 	}
 
 
-	function ruleMatches(r:AutoLayerRule, cx:Int, cy:Int) { // TODO optimize the rule checks!
-		if( r.tileId==null )
-			return false;
-
-		var radius = Std.int( Const.AUTO_LAYER_PATTERN_SIZE/2 );
-		for(px in 0...Const.AUTO_LAYER_PATTERN_SIZE)
-		for(py in 0...Const.AUTO_LAYER_PATTERN_SIZE) {
-			var coordId = px + py*Const.AUTO_LAYER_PATTERN_SIZE;
-			if( r.pattern[coordId]==null )
-				continue;
-
-			if( dn.M.iabs( r.pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
-				// "Anything" checks
-				if( r.pattern[coordId]>0 && !hasIntGrid(cx+px-radius,cy+py-radius) )
-					return false;
-
-				if( r.pattern[coordId]<0 && hasIntGrid(cx+px-radius,cy+py-radius) )
-					return false;
-			}
-			else {
-				// Specific value checks
-				if( r.pattern[coordId]>0 && getIntGrid(cx+px-radius,cy+py-radius)!=r.pattern[coordId]-1 )
-					return false;
-
-				if( r.pattern[coordId]<0 && getIntGrid(cx+px-radius,cy+py-radius)==-r.pattern[coordId]-1 )
-					return false;
-			}
-		}
-		return true;
-	}
-
 	public function renderAutoLayer(target:h2d.Object) { // TODO make this heaps-independant
 		var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
 		var rseed = new dn.Rand( 0 ); // TODO better cell-based randomizer
@@ -374,7 +343,7 @@ class LayerInstance {
 		for(cy in 0...cHei)
 		for(cx in 0...cWid) {
 			for(r in def.rules) {
-				if( ( r.chance>=1 || rseed.rand()<r.chance ) && ruleMatches(r, cx,cy) ) {
+				if( def.ruleMatches(this, r, cx,cy) ) {
 					var t = td.getTile(r.tileId);
 					// t.setCenterRatio(def.tilePivotX, def.tilePivotY); // TODO support tile pivots here also?
 					var bmp = new h2d.Bitmap(t, target);
