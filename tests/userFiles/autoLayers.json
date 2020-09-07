@@ -3,7 +3,7 @@
 		"fileType" : "LEd Project JSON",
 		"app" : "LEd",
 		"appAuthor" : "Sebastien Benard",
-		"appVersion" : "0.0.4-alpha-debug",
+		"appVersion" : "0.1.0-alpha-debug",
 		"url" : "https://deepnight.net/"
 	},
 	"name" : "autoLayers",
@@ -173,7 +173,7 @@
 					},
 					{
 						"tileIds" : [ 26 ],
-						"chance" : 0.72,
+						"chance" : 1.0,
 						"pattern" : [
 							null,
 							null,
@@ -232,18 +232,6 @@
 						"tileIds" : [ 12 ],
 						"chance" : 1.0,
 						"pattern" : [ null, -1, null, -1, 1 ]
-					},
-					{
-						"tileIds" : [ 14 ],
-						"chance" : 1.0,
-						"pattern" : [
-							null,
-							-1,
-							null,
-							null,
-							1,
-							-1
-						]
 					},
 					{
 						"tileIds" : [ 52 ],
@@ -310,40 +298,9 @@
 				"tilesetDefUid" : null,
 				"tilePivotX" : 0,
 				"tilePivotY" : 0
-			},
-			{
-				"identifier" : "Entities",
-				"type" : "Entities",
-				"uid" : 17,
-				"gridSize" : 8,
-				"displayOpacity" : 1.0,
-				"intGridValues" : [
-					{ "identifier" : null, "color" : "#000000" }
-				],
-				"autoTilesetDefUid" : null,
-				"rules" : [],
-				"tilesetDefUid" : null,
-				"tilePivotX" : 0,
-				"tilePivotY" : 0
 			}
 		],
-		"entities" : [
-			{
-				"identifier" : "Entity",
-				"uid" : 16,
-				"width" : 16,
-				"height" : 16,
-				"color" : "#94D9B3",
-				"renderMode" : "Tile",
-				"tilesetId" : 9,
-				"tileId" : 55,
-				"maxPerLevel" : 0,
-				"discardExcess" : true,
-				"pivotX" : 0.5,
-				"pivotY" : 1.0,
-				"fieldDefs" : []
-			}
-		],
+		"entities" : [],
 		"tilesets" : [
 			{
 				"identifier" : "Cavesofgallet_tiles",
@@ -430,15 +387,61 @@
 					"intGrid" : [
 						{ "coordId" : 4, "v" : 1 },
 						{ "coordId" : 52, "v" : 1 },
+						{ "coordId" : 62, "v" : 0 },
+						{ "coordId" : 63, "v" : 0 },
+						{ "coordId" : 64, "v" : 0 },
+						{ "coordId" : 65, "v" : 0 },
+						{ "coordId" : 66, "v" : 0 },
+						{ "coordId" : 67, "v" : 0 },
+						{ "coordId" : 68, "v" : 0 },
+						{ "coordId" : 69, "v" : 0 },
 						{ "coordId" : 100, "v" : 1 },
+						{ "coordId" : 110, "v" : 0 },
+						{ "coordId" : 111, "v" : 0 },
+						{ "coordId" : 112, "v" : 0 },
+						{ "coordId" : 113, "v" : 0 },
+						{ "coordId" : 114, "v" : 0 },
+						{ "coordId" : 115, "v" : 0 },
+						{ "coordId" : 116, "v" : 0 },
+						{ "coordId" : 117, "v" : 0 },
 						{ "coordId" : 148, "v" : 1 },
+						{ "coordId" : 154, "v" : 0 },
+						{ "coordId" : 155, "v" : 0 },
+						{ "coordId" : 156, "v" : 0 },
+						{ "coordId" : 157, "v" : 0 },
+						{ "coordId" : 158, "v" : 0 },
+						{ "coordId" : 159, "v" : 0 },
+						{ "coordId" : 160, "v" : 0 },
+						{ "coordId" : 161, "v" : 0 },
+						{ "coordId" : 162, "v" : 0 },
+						{ "coordId" : 163, "v" : 0 },
+						{ "coordId" : 164, "v" : 0 },
+						{ "coordId" : 165, "v" : 0 },
 						{ "coordId" : 196, "v" : 1 },
+						{ "coordId" : 202, "v" : 0 },
+						{ "coordId" : 203, "v" : 0 },
+						{ "coordId" : 204, "v" : 0 },
+						{ "coordId" : 205, "v" : 0 },
+						{ "coordId" : 206, "v" : 0 },
+						{ "coordId" : 207, "v" : 0 },
 						{ "coordId" : 244, "v" : 1 },
+						{ "coordId" : 250, "v" : 0 },
+						{ "coordId" : 251, "v" : 0 },
+						{ "coordId" : 252, "v" : 0 },
+						{ "coordId" : 253, "v" : 0 },
+						{ "coordId" : 254, "v" : 0 },
+						{ "coordId" : 255, "v" : 0 },
 						{ "coordId" : 273, "v" : 0 },
 						{ "coordId" : 274, "v" : 0 },
 						{ "coordId" : 275, "v" : 0 },
 						{ "coordId" : 276, "v" : 0 },
 						{ "coordId" : 292, "v" : 1 },
+						{ "coordId" : 298, "v" : 0 },
+						{ "coordId" : 299, "v" : 0 },
+						{ "coordId" : 300, "v" : 0 },
+						{ "coordId" : 301, "v" : 0 },
+						{ "coordId" : 302, "v" : 0 },
+						{ "coordId" : 303, "v" : 0 },
 						{ "coordId" : 314, "v" : 0 },
 						{ "coordId" : 315, "v" : 2 },
 						{ "coordId" : 316, "v" : 0 },
@@ -452,6 +455,12 @@
 						{ "coordId" : 324, "v" : 0 },
 						{ "coordId" : 325, "v" : 0 },
 						{ "coordId" : 340, "v" : 1 },
+						{ "coordId" : 346, "v" : 0 },
+						{ "coordId" : 347, "v" : 0 },
+						{ "coordId" : 348, "v" : 0 },
+						{ "coordId" : 349, "v" : 0 },
+						{ "coordId" : 350, "v" : 0 },
+						{ "coordId" : 351, "v" : 0 },
 						{ "coordId" : 363, "v" : 2 },
 						{ "coordId" : 368, "v" : 0 },
 						{ "coordId" : 369, "v" : 0 },
@@ -986,102 +995,6 @@
 					],
 					"gridTiles" : [],
 					"entityInstances" : []
-				},
-				{
-					"__identifier" : "Entities",
-					"__type" : "Entities",
-					"__cWid" : 48,
-					"__cHei" : 32,
-					"__gridSize" : 8,
-					"levelId" : 0,
-					"layerDefUid" : 17,
-					"pxOffsetX" : 0,
-					"pxOffsetY" : 0,
-					"intGrid" : [],
-					"gridTiles" : [],
-					"entityInstances" : [
-						{
-							"__identifier" : "Entity",
-							"__cx" : 25,
-							"__cy" : 10,
-							"defUid" : 16,
-							"x" : 204,
-							"y" : 88,
-							"fieldInstances" : []
-						},
-						{
-							"__identifier" : "Entity",
-							"__cx" : 35,
-							"__cy" : 4,
-							"defUid" : 16,
-							"x" : 284,
-							"y" : 40,
-							"fieldInstances" : []
-						},
-						{
-							"__identifier" : "Entity",
-							"__cx" : 11,
-							"__cy" : 10,
-							"defUid" : 16,
-							"x" : 92,
-							"y" : 88,
-							"fieldInstances" : []
-						},
-						{
-							"__identifier" : "Entity",
-							"__cx" : 16,
-							"__cy" : 18,
-							"defUid" : 16,
-							"x" : 132,
-							"y" : 152,
-							"fieldInstances" : []
-						},
-						{
-							"__identifier" : "Entity",
-							"__cx" : 11,
-							"__cy" : 18,
-							"defUid" : 16,
-							"x" : 92,
-							"y" : 152,
-							"fieldInstances" : []
-						},
-						{
-							"__identifier" : "Entity",
-							"__cx" : 45,
-							"__cy" : 6,
-							"defUid" : 16,
-							"x" : 364,
-							"y" : 56,
-							"fieldInstances" : []
-						},
-						{
-							"__identifier" : "Entity",
-							"__cx" : 29,
-							"__cy" : 5,
-							"defUid" : 16,
-							"x" : 236,
-							"y" : 48,
-							"fieldInstances" : []
-						},
-						{
-							"__identifier" : "Entity",
-							"__cx" : 18,
-							"__cy" : 10,
-							"defUid" : 16,
-							"x" : 148,
-							"y" : 88,
-							"fieldInstances" : []
-						},
-						{
-							"__identifier" : "Entity",
-							"__cx" : 8,
-							"__cy" : 18,
-							"defUid" : 16,
-							"x" : 68,
-							"y" : 152,
-							"fieldInstances" : []
-						}
-					]
 				}
 			]
 		},
@@ -1099,20 +1012,6 @@
 					"__gridSize" : 8,
 					"levelId" : 4,
 					"layerDefUid" : 10,
-					"pxOffsetX" : 0,
-					"pxOffsetY" : 0,
-					"intGrid" : [],
-					"gridTiles" : [],
-					"entityInstances" : []
-				},
-				{
-					"__identifier" : "Entities",
-					"__type" : "Entities",
-					"__cWid" : 32,
-					"__cHei" : 32,
-					"__gridSize" : 8,
-					"levelId" : 4,
-					"layerDefUid" : 17,
 					"pxOffsetX" : 0,
 					"pxOffsetY" : 0,
 					"intGrid" : [],
