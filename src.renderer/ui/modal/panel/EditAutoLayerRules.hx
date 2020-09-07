@@ -1,6 +1,9 @@
 package ui.modal.panel;
 
 class EditAutoLayerRules extends ui.modal.Panel {
+	public var li(get,never) : led.inst.LayerInstance;
+		inline function get_li() return Editor.ME.curLayerInstance;
+
 	public var ld(get,never) : led.def.LayerDef;
 		inline function get_ld() return Editor.ME.curLayerDef;
 
@@ -46,6 +49,13 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			lastRule = ld.rules[0];
 			editor.ge.emit(LayerDefChanged);
 			new ui.modal.dialog.AutoPatternEditor( jContent.find("ul.rules [idx=0]"), ld, lastRule );
+		});
+
+		// Render
+		var chk = jContent.find("#renderRules");
+		chk.prop("checked", editor.levelRender.isLayerAutoRendered(li) );
+		chk.change( function(ev) {
+			editor.levelRender.setLayerAutoRender( li, chk.prop("checked") );
 		});
 
 		// Rules

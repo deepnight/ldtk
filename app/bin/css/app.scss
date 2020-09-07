@@ -2469,6 +2469,12 @@ canvas#webgl {
 	.content {
 		width: auto;
 
+		header {
+			display: flex;
+			width: 100%;
+			align-items: center;
+		}
+
 		ul.rules {
 			display: grid;
 			grid-template-columns: auto;

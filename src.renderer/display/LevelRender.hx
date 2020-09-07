@@ -5,6 +5,7 @@ class LevelRender extends dn.Process {
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 
+	var layerAutoRender : Map<Int,Bool> = new Map();
 	var layerVis : Map<Int,Bool> = new Map();
 	var layerWrappers : Map<Int,h2d.Object> = new Map();
 	var invalidated = true;
@@ -159,6 +160,26 @@ class LevelRender extends dn.Process {
 		}
 	}
 
+	public inline function isLayerAutoRendered(li:led.inst.LayerInstance) {
+		if( li==null || li.def.type!=IntGrid )
+			return false;
+
+		return ( !layerAutoRender.exists(li.layerDefUid) || layerAutoRender.get(li.layerDefUid)==true );
+	}
+
+	public function setLayerAutoRender(li:led.inst.LayerInstance, v:Bool) {
+		if( li==null || li.def.type!=IntGrid )
+			return;
+
+		layerAutoRender.set(li.layerDefUid, v);
+		editor.ge.emit(LayerDefChanged); // HACK not the right event
+	}
+
+	public function toggleLayerAutoRender(li:led.inst.LayerInstance) {
+		if( li!=null && li.isAutoLayer() )
+			setLayerAutoRender( li, !isLayerAutoRendered(li) );
+	}
+
 	public inline function isLayerVisible(l:led.inst.LayerInstance) {
 		return l!=null && ( !layerVis.exists(l.layerDefUid) || layerVis.get(l.layerDefUid)==true );
 	}
@@ -252,7 +273,7 @@ class LevelRender extends dn.Process {
 			var grid = li.def.gridSize;
 			switch li.def.type {
 				case IntGrid, Tiles:
-					li.render(wrapper);
+					li.render(wrapper, isLayerAutoRendered(li));
 
 				case Entities:
 					for(ei in li.entityInstances) {

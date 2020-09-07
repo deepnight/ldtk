@@ -291,6 +291,9 @@ class Editor extends Page {
 			case K.F if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				levelRender.fit();
 
+			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				levelRender.toggleLayerAutoRender(curLayerInstance);
+
 			case K.W if( App.ME.isCtrlDown() ):
 				onClose();
 

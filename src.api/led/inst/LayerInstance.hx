@@ -298,10 +298,10 @@ class LayerInstance {
 
 	#if heaps
 
-	public function render(target:h2d.Object) {
+	public function render(target:h2d.Object, withAutoLayers:Bool) {
 		switch def.type {
 			case IntGrid:
-				if( isAutoLayer() )
+				if( isAutoLayer() && withAutoLayers )
 					renderAutoLayer(target);
 				else {
 					var g = new h2d.Graphics(target);
@@ -337,7 +337,7 @@ class LayerInstance {
 	}
 
 
-	public function renderAutoLayer(target:h2d.Object) { // TODO make this heaps-independant
+	function renderAutoLayer(target:h2d.Object) { // TODO make this heaps-independant
 		var g = new h2d.Graphics(target);
 
 		var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
