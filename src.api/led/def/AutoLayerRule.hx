@@ -6,6 +6,7 @@ class AutoLayerRule {
 	public var size(default,null): Int;
 	var pattern : Array<Int> = [];
 	public var seed = 1;
+	public var flipX = true;
 
 	// var bitMasksHas : Null< Map<Int, Int> >;
 	// var bitMasksNot : Null< Map<Int, Int> >;
@@ -136,7 +137,7 @@ class AutoLayerRule {
 	// }
 
 
-	public function matches(li:led.inst.LayerInstance, cx:Int, cy:Int) { // TODO optimize the rule checks!
+	public function matches(li:led.inst.LayerInstance, cx:Int, cy:Int, xMul=1, yMul=1) {
 		if( tileIds.length==0 )
 			return false;
 
@@ -164,18 +165,18 @@ class AutoLayerRule {
 
 			if( dn.M.iabs( pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
 				// "Anything" checks
-				if( pattern[coordId]>0 && !li.hasIntGrid(cx+px-radius,cy+py-radius) )
+				if( pattern[coordId]>0 && !li.hasIntGrid(cx+xMul*(px-radius), cy+py-radius) )
 					return false;
 
-				if( pattern[coordId]<0 && li.hasIntGrid(cx+px-radius,cy+py-radius) )
+				if( pattern[coordId]<0 && li.hasIntGrid(cx+px-radius, cy+py-radius) )
 					return false;
 			}
 			else {
 				// Specific value checks
-				if( pattern[coordId]>0 && li.getIntGrid(cx+px-radius,cy+py-radius)!=pattern[coordId]-1 )
+				if( pattern[coordId]>0 && li.getIntGrid(cx+xMul*(px-radius), cy+py-radius)!=pattern[coordId]-1 )
 					return false;
 
-				if( pattern[coordId]<0 && li.getIntGrid(cx+px-radius,cy+py-radius)==-pattern[coordId]-1 )
+				if( pattern[coordId]<0 && li.getIntGrid(cx+xMul*(px-radius), cy+py-radius)==-pattern[coordId]-1 )
 					return false;
 			}
 		}

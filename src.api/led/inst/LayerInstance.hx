@@ -310,11 +310,20 @@ class LayerInstance {
 
 						var i = def.rules.length-1;
 						while( i>=0 ) {
-							if( def.rules[i].matches(this, cx,cy) ) {
-								var r = def.rules[i];
+							var r = def.rules[i];
+							if( r.matches(this, cx,cy) ) {
 								tg.add(
 									(cx + def.tilePivotX) * def.gridSize,
 									(cy + def.tilePivotX) * def.gridSize,
+									td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
+								);
+								anyMatch = true;
+							}
+							else if( r.flipX && r.matches(this, cx,cy, -1) ) {
+								tg.addTransform(
+									((cx+1) + def.tilePivotX) * def.gridSize,
+									(cy + def.tilePivotX) * def.gridSize,
+									-1, 1, 0,
 									td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
 								);
 								anyMatch = true;
