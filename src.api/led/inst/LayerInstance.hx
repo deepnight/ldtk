@@ -367,40 +367,6 @@ class LayerInstance {
 		}
 	}
 
-
-// 	function renderAutoLayer(target:h2d.Object) { // TODO make this heaps-independant
-// 		var g = new h2d.Graphics(target);
-
-// 		var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
-// 		var rseed = new dn.Rand( 0 ); // TODO better cell-based randomizer
-
-// 		for(cy in 0...cHei)
-// 		for(cx in 0...cWid) {
-// 			var anyMatch = false;
-// 			for(r in def.rules) {
-// 				if( r.matches(this, cx,cy) ) {
-// 					var tid = r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ];
-// 					var t = td.getTile(tid);
-// 					// t.setCenterRatio(def.tilePivotX, def.tilePivotY); // TODO support tile pivots here also?
-// 					var bmp = new h2d.Bitmap(t);
-// 					target.addChildAt(bmp,0);
-// 					// bmp.x = (cx + def.tilePivotX) * def.gridSize;
-// 					// bmp.y = (cy + def.tilePivotY) * def.gridSize;
-// 					bmp.x = cx * def.gridSize;
-// 					bmp.y = cy * def.gridSize;
-// 					anyMatch = true;
-// 					// break;
-// 				}
-// 			}
-
-// 			// Default render
-// 			if( !anyMatch && hasIntGrid(cx,cy) ) {
-// 				g.beginFill( getIntGridColorAt(cx,cy), 1 );
-// 				g.drawRect(cx*def.gridSize, cy*def.gridSize, def.gridSize, def.gridSize);
-// 			}
-// 		}
-// 	}
-
 	#else
 
 	@:deprecated("Not implemented on this platform")
