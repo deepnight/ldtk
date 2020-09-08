@@ -30,7 +30,7 @@ class Tip extends dn.Process {
 			 x = tOff.left + target.innerWidth() - jTip.outerWidth();
 
 		var y = tOff.top + target.outerHeight() + 4;
-		if( target.outerHeight()<=32 && !forceBelowPos )
+		if( target.outerHeight()<=32 && !forceBelowPos && tOff.top>=40 )
 			y = tOff.top - jTip.outerHeight() - 4;
 
 		jTip.offset({
@@ -51,14 +51,16 @@ class Tip extends dn.Process {
 
 		target
 			.off(".tip")
-			.on( "mouseover.tip", function(ev) {
+			.on( "mouseenter.tip", function(ev) {
 				if( cur!=null )
-					cur.destroy();
+					return;
 				cur = new Tip(target, str, keys, className, forceBelow);
 			})
-			.on( "mouseout.tip", function(ev) {
-				if( cur!=null )
+			.on( "mouseleave.tip", function(ev) {
+				if( cur!=null ) {
 					cur.destroy();
+					cur = null;
+				}
 			});
 	}
 

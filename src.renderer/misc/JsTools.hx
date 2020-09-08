@@ -259,10 +259,14 @@ class JsTools {
 
 
 		// Auto tool-tips
-		jCtx.find("[title]").each( function(idx,e) {
+		jCtx.find("[title], [data-title]").each( function(idx,e) {
 			var jThis = new J(e);
-			var tip = jThis.attr("title");
-			jThis.removeAttr("title");
+			var tip = jThis.attr("data-title");
+			if( tip==null ) {
+				tip =  jThis.attr("title");
+				jThis.removeAttr("title");
+				jThis.attr("data-title", tip);
+			}
 
 			// Parse key shortcut
 			var keys = [];
