@@ -3,8 +3,8 @@ package led.def;
 class AutoLayerRule {
 	public var tileIds : Array<Int> = [];
 	public var chance : Float = 1.0;
-	public var size(default,null): Int; //  TODO private
-	public var pattern : Array<Int> = []; // TODO private
+	public var size(default,null): Int;
+	public var pattern : Array<Int> = [];
 
 	public function new(s) {
 		size = s;
