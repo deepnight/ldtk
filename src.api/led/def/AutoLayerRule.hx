@@ -98,4 +98,39 @@ class AutoLayerRule {
 		return true;
 	}
 
+
+	public function matches(li:led.inst.LayerInstance, cx:Int, cy:Int) { // TODO optimize the rule checks!
+		if( tileIds.length==0 )
+			return false;
+
+		if( chance<=0 || chance<1 && dn.M.randSeedCoords(li.def.randSeed, cx,cy, 100) >= chance*100 )
+			return false;
+
+		var radius = Std.int( size/2 );
+		for(px in 0...size)
+		for(py in 0...size) {
+			var coordId = px + py*size;
+			if( pattern[coordId]==null )
+				continue;
+
+			if( dn.M.iabs( pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
+				// "Anything" checks
+				if( pattern[coordId]>0 && !li.hasIntGrid(cx+px-radius,cy+py-radius) )
+					return false;
+
+				if( pattern[coordId]<0 && li.hasIntGrid(cx+px-radius,cy+py-radius) )
+					return false;
+			}
+			else {
+				// Specific value checks
+				if( pattern[coordId]>0 && li.getIntGrid(cx+px-radius,cy+py-radius)!=pattern[coordId]-1 )
+					return false;
+
+				if( pattern[coordId]<0 && li.getIntGrid(cx+px-radius,cy+py-radius)==-pattern[coordId]-1 )
+					return false;
+			}
+		}
+		return true;
+	}
+
 }

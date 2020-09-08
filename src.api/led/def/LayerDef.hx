@@ -144,41 +144,6 @@ class LayerDef {
 	inline function set_tilePivotX(v) return tilePivotX = dn.M.fclamp(v, 0, 1);
 	inline function set_tilePivotY(v) return tilePivotY = dn.M.fclamp(v, 0, 1);
 
-
-	public function ruleMatches(li:led.inst.LayerInstance, r:AutoLayerRule, cx:Int, cy:Int) { // TODO optimize the rule checks!
-		if( r.chance<=0 || r.chance<1 && dn.M.randSeedCoords(randSeed, cx,cy, 100)>=r.chance*100 )
-			return false;
-
-		if( r.tileIds.length==0 )
-			return false;
-
-		var radius = Std.int( r.size/2 );
-		for(px in 0...r.size)
-		for(py in 0...r.size) {
-			var coordId = px + py*r.size;
-			if( r.pattern[coordId]==null )
-				continue;
-
-			if( dn.M.iabs( r.pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
-				// "Anything" checks
-				if( r.pattern[coordId]>0 && !li.hasIntGrid(cx+px-radius,cy+py-radius) )
-					return false;
-
-				if( r.pattern[coordId]<0 && li.hasIntGrid(cx+px-radius,cy+py-radius) )
-					return false;
-			}
-			else {
-				// Specific value checks
-				if( r.pattern[coordId]>0 && li.getIntGrid(cx+px-radius,cy+py-radius)!=r.pattern[coordId]-1 )
-					return false;
-
-				if( r.pattern[coordId]<0 && li.getIntGrid(cx+px-radius,cy+py-radius)==-r.pattern[coordId]-1 )
-					return false;
-			}
-		}
-		return true;
-	}
-
 	public function tidy(p:led.Project) {
 		// Lost auto-layer tileset
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {

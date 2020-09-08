@@ -347,7 +347,7 @@ class LayerInstance {
 		for(cx in 0...cWid) {
 			var anyMatch = false;
 			for(r in def.rules) {
-				if( def.ruleMatches(this, r, cx,cy) ) {
+				if( r.matches(this, cx,cy) ) {
 					var tid = r.tileIds[ dn.M.randSeedCoords( def.randSeed, cx,cy, r.tileIds.length ) ];
 					var t = td.getTile(tid);
 					// t.setCenterRatio(def.tilePivotX, def.tilePivotY); // TODO support tile pivots here also?
