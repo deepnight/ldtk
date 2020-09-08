@@ -27,9 +27,27 @@
 				"autoTilesetDefUid" : 2,
 				"rules" : [
 					{
+						"size" : 3,
+						"tileIds" : [ 56, 57, 58, 59 ],
+						"chance" : 0.85,
+						"pattern" : [
+							0,
+							0,
+							0,
+							0,
+							-1000001,
+							0,
+							0,
+							1,
+							0
+						],
+						"flipX" : false,
+						"seed" : 1
+					},
+					{
+						"size" : 3,
 						"tileIds" : [ 75 ],
 						"chance" : 1.0,
-						"size" : 3,
 						"pattern" : [
 							0,
 							1,
@@ -41,12 +59,13 @@
 							-1,
 							0
 						],
+						"flipX" : true,
 						"seed" : 1
 					},
 					{
+						"size" : 3,
 						"tileIds" : [ 51 ],
 						"chance" : 1.0,
-						"size" : 3,
 						"pattern" : [
 							0,
 							-1,
@@ -58,12 +77,31 @@
 							1,
 							0
 						],
+						"flipX" : true,
 						"seed" : 1
 					},
 					{
+						"size" : 3,
+						"tileIds" : [ 37 ],
+						"chance" : 1.0,
+						"pattern" : [
+							0,
+							0,
+							0,
+							0,
+							1,
+							0,
+							0,
+							-1,
+							0
+						],
+						"flipX" : false,
+						"seed" : 1
+					},
+					{
+						"size" : 3,
 						"tileIds" : [ 13 ],
 						"chance" : 1.0,
-						"size" : 3,
 						"pattern" : [
 							0,
 							-1,
@@ -75,12 +113,13 @@
 							0,
 							0
 						],
+						"flipX" : false,
 						"seed" : 1
 					},
 					{
+						"size" : 3,
 						"tileIds" : [ 24 ],
 						"chance" : 1.0,
-						"size" : 3,
 						"pattern" : [
 							0,
 							0,
@@ -92,12 +131,13 @@
 							0,
 							0
 						],
+						"flipX" : true,
 						"seed" : 1
 					},
 					{
-						"tileIds" : [ 252, 264, 276, 288 ],
-						"chance" : 0.59,
 						"size" : 3,
+						"tileIds" : [ 252, 264, 276, 288 ],
+						"chance" : 0.51,
 						"pattern" : [
 							0,
 							0,
@@ -109,6 +149,32 @@
 							0,
 							0
 						],
+						"flipX" : false,
+						"seed" : 1
+					},
+					{
+						"size" : 3,
+						"tileIds" : [
+							1,
+							2,
+							3,
+							4,
+							5,
+							6
+						],
+						"chance" : 1.0,
+						"pattern" : [
+							0,
+							0,
+							0,
+							0,
+							1,
+							0,
+							0,
+							0,
+							0
+						],
+						"flipX" : false,
 						"seed" : 1
 					}
 				],
@@ -155,35 +221,37 @@
 						{ "coordId" : 19, "v" : 0 },
 						{ "coordId" : 31, "v" : 0 },
 						{ "coordId" : 32, "v" : 0 },
-						{ "coordId" : 44, "v" : 0 },
-						{ "coordId" : 45, "v" : 0 },
-						{ "coordId" : 57, "v" : 0 },
-						{ "coordId" : 58, "v" : 0 },
 						{ "coordId" : 93, "v" : 0 },
 						{ "coordId" : 94, "v" : 0 },
 						{ "coordId" : 95, "v" : 0 },
 						{ "coordId" : 96, "v" : 0 },
 						{ "coordId" : 97, "v" : 0 },
+						{ "coordId" : 98, "v" : 0 },
+						{ "coordId" : 99, "v" : 0 },
+						{ "coordId" : 100, "v" : 0 },
+						{ "coordId" : 101, "v" : 0 },
 						{ "coordId" : 106, "v" : 0 },
 						{ "coordId" : 107, "v" : 0 },
 						{ "coordId" : 108, "v" : 0 },
 						{ "coordId" : 109, "v" : 0 },
 						{ "coordId" : 110, "v" : 0 },
+						{ "coordId" : 111, "v" : 0 },
+						{ "coordId" : 112, "v" : 0 },
+						{ "coordId" : 113, "v" : 0 },
+						{ "coordId" : 114, "v" : 0 },
 						{ "coordId" : 119, "v" : 0 },
 						{ "coordId" : 120, "v" : 0 },
 						{ "coordId" : 121, "v" : 0 },
-						{ "coordId" : 122, "v" : 0 },
-						{ "coordId" : 123, "v" : 0 },
+						{ "coordId" : 126, "v" : 0 },
+						{ "coordId" : 127, "v" : 0 },
 						{ "coordId" : 132, "v" : 0 },
 						{ "coordId" : 133, "v" : 0 },
-						{ "coordId" : 134, "v" : 0 },
-						{ "coordId" : 135, "v" : 0 },
-						{ "coordId" : 136, "v" : 0 },
+						{ "coordId" : 139, "v" : 0 },
+						{ "coordId" : 140, "v" : 0 },
 						{ "coordId" : 145, "v" : 0 },
 						{ "coordId" : 146, "v" : 0 },
-						{ "coordId" : 147, "v" : 0 },
-						{ "coordId" : 148, "v" : 0 },
-						{ "coordId" : 149, "v" : 0 }
+						{ "coordId" : 152, "v" : 0 },
+						{ "coordId" : 153, "v" : 0 }
 					],
 					"gridTiles" : [],
 					"entityInstances" : []
