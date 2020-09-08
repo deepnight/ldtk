@@ -27,6 +27,66 @@
 				"autoTilesetDefUid" : 2,
 				"rules" : [
 					{
+						"tileIds" : [ 126, 127, 147, 148 ],
+						"chance" : 0.54,
+						"size" : 3,
+						"pattern" : [
+							0,
+							1,
+							0,
+							0,
+							-1,
+							0,
+							0,
+							-1000001,
+							0
+						],
+						"seed" : 1
+					},
+					{
+						"tileIds" : [ 56, 57, 58, 59 ],
+						"chance" : 0.86,
+						"size" : 3,
+						"pattern" : [
+							0,
+							0,
+							0,
+							0,
+							-1000001,
+							0,
+							0,
+							1,
+							0
+						],
+						"seed" : 1
+					},
+					{
+						"tileIds" : [
+							32,
+							44,
+							33,
+							45,
+							34,
+							46,
+							35,
+							47
+						],
+						"chance" : 0.35,
+						"size" : 3,
+						"pattern" : [
+							0,
+							0,
+							0,
+							0,
+							-1000001,
+							0,
+							0,
+							1,
+							0
+						],
+						"seed" : 1
+					},
+					{
 						"tileIds" : [
 							1,
 							2,
@@ -108,24 +168,14 @@
 						{ "coordId" : 45, "v" : 0 },
 						{ "coordId" : 46, "v" : 0 },
 						{ "coordId" : 47, "v" : 0 },
-						{ "coordId" : 52, "v" : 0 },
-						{ "coordId" : 53, "v" : 0 },
-						{ "coordId" : 54, "v" : 0 },
-						{ "coordId" : 55, "v" : 0 },
-						{ "coordId" : 56, "v" : 0 },
-						{ "coordId" : 57, "v" : 0 },
-						{ "coordId" : 62, "v" : 0 },
-						{ "coordId" : 63, "v" : 0 },
-						{ "coordId" : 64, "v" : 0 },
-						{ "coordId" : 65, "v" : 0 },
-						{ "coordId" : 66, "v" : 0 },
-						{ "coordId" : 67, "v" : 0 },
 						{ "coordId" : 72, "v" : 0 },
 						{ "coordId" : 73, "v" : 0 },
-						{ "coordId" : 74, "v" : 0 },
-						{ "coordId" : 75, "v" : 0 },
-						{ "coordId" : 76, "v" : 0 },
-						{ "coordId" : 77, "v" : 0 }
+						{ "coordId" : 82, "v" : 0 },
+						{ "coordId" : 83, "v" : 0 },
+						{ "coordId" : 84, "v" : 0 },
+						{ "coordId" : 85, "v" : 0 },
+						{ "coordId" : 86, "v" : 0 },
+						{ "coordId" : 87, "v" : 0 }
 					],
 					"gridTiles" : [],
 					"entityInstances" : []
