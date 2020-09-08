@@ -94,7 +94,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			idx++;
 		}
 
-		JsTools.parseComponents(jRuleList);
+		JsTools.parseComponents(jContent);
 
 		JsTools.makeSortable("ul.rules", function(from,to) {
 			project.defs.sortLayerAutoRules(ld, from, to);
