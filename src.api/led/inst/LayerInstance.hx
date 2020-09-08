@@ -294,13 +294,43 @@ class LayerInstance {
 
 	#if heaps
 
-	public function render(target:h2d.Object, withAutoLayers:Bool) {
+	public function render(target:h2d.Object, renderAutoLayers:Bool) {
 		switch def.type {
 			case IntGrid:
-				if( def.isAutoLayer() && withAutoLayers )
-					renderAutoLayer(target);
+				var g = new h2d.Graphics(target);
+
+				if( def.isAutoLayer() && renderAutoLayers ) {
+					// Auto-layer
+					var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
+					var tg = new h2d.TileGroup( td.getAtlasTile(), target );
+
+					for(cy in 0...cHei)
+					for(cx in 0...cWid) {
+						var anyMatch = false;
+
+						var i = def.rules.length-1;
+						while( i>=0 ) {
+							if( def.rules[i].matches(this, cx,cy) ) {
+								var r = def.rules[i];
+								tg.add(
+									(cx + def.tilePivotX) * def.gridSize,
+									(cy + def.tilePivotX) * def.gridSize,
+									td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
+								);
+								anyMatch = true;
+							}
+							i--;
+						}
+
+						// Default render
+						if( !anyMatch && hasIntGrid(cx,cy) ) {
+							g.beginFill( getIntGridColorAt(cx,cy), 1 );
+							g.drawRect(cx*def.gridSize, cy*def.gridSize, def.gridSize, def.gridSize);
+						}
+					}
+				}
 				else {
-					var g = new h2d.Graphics(target);
+					// Normal intGrid
 					for(cy in 0...cHei)
 					for(cx in 0...cWid) {
 						var id = getIntGrid(cx,cy);
@@ -317,54 +347,59 @@ class LayerInstance {
 
 			case Tiles:
 				var td = _project.defs.getTilesetDef(def.tilesetDefUid);
+				var tg = new h2d.TileGroup( td.getAtlasTile(), target );
+
 				for(cy in 0...cHei)
 				for(cx in 0...cWid) {
 					if( getGridTile(cx,cy)==null )
 						continue;
 
+
 					var t = td!=null ? td.getTile( getGridTile(cx,cy) ) : led.def.TilesetDef.makeErrorTile(def.gridSize);
 					t.setCenterRatio(def.tilePivotX, def.tilePivotY);
-					var bmp = new h2d.Bitmap(t, target);
-					bmp.x = (cx + def.tilePivotX) * def.gridSize;
-					bmp.y = (cy + def.tilePivotY) * def.gridSize;
+					tg.add(
+						(cx + def.tilePivotX) * def.gridSize,
+						(cy + def.tilePivotX) * def.gridSize,
+						t
+					);
 				}
 
 		}
 	}
 
 
-	function renderAutoLayer(target:h2d.Object) { // TODO make this heaps-independant
-		var g = new h2d.Graphics(target);
+// 	function renderAutoLayer(target:h2d.Object) { // TODO make this heaps-independant
+// 		var g = new h2d.Graphics(target);
 
-		var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
-		var rseed = new dn.Rand( 0 ); // TODO better cell-based randomizer
+// 		var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
+// 		var rseed = new dn.Rand( 0 ); // TODO better cell-based randomizer
 
-		for(cy in 0...cHei)
-		for(cx in 0...cWid) {
-			var anyMatch = false;
-			for(r in def.rules) {
-				if( r.matches(this, cx,cy) ) {
-					var tid = r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ];
-					var t = td.getTile(tid);
-					// t.setCenterRatio(def.tilePivotX, def.tilePivotY); // TODO support tile pivots here also?
-					var bmp = new h2d.Bitmap(t);
-					target.addChildAt(bmp,0);
-					// bmp.x = (cx + def.tilePivotX) * def.gridSize;
-					// bmp.y = (cy + def.tilePivotY) * def.gridSize;
-					bmp.x = cx * def.gridSize;
-					bmp.y = cy * def.gridSize;
-					anyMatch = true;
-					// break;
-				}
-			}
+// 		for(cy in 0...cHei)
+// 		for(cx in 0...cWid) {
+// 			var anyMatch = false;
+// 			for(r in def.rules) {
+// 				if( r.matches(this, cx,cy) ) {
+// 					var tid = r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ];
+// 					var t = td.getTile(tid);
+// 					// t.setCenterRatio(def.tilePivotX, def.tilePivotY); // TODO support tile pivots here also?
+// 					var bmp = new h2d.Bitmap(t);
+// 					target.addChildAt(bmp,0);
+// 					// bmp.x = (cx + def.tilePivotX) * def.gridSize;
+// 					// bmp.y = (cy + def.tilePivotY) * def.gridSize;
+// 					bmp.x = cx * def.gridSize;
+// 					bmp.y = cy * def.gridSize;
+// 					anyMatch = true;
+// 					// break;
+// 				}
+// 			}
 
-			// Default render
-			if( !anyMatch && hasIntGrid(cx,cy) ) {
-				g.beginFill( getIntGridColorAt(cx,cy), 1 );
-				g.drawRect(cx*def.gridSize, cy*def.gridSize, def.gridSize, def.gridSize);
-			}
-		}
-}
+// 			// Default render
+// 			if( !anyMatch && hasIntGrid(cx,cy) ) {
+// 				g.beginFill( getIntGridColorAt(cx,cy), 1 );
+// 				g.drawRect(cx*def.gridSize, cy*def.gridSize, def.gridSize, def.gridSize);
+// 			}
+// 		}
+// 	}
 
 	#else
 
