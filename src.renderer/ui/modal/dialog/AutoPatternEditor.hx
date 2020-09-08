@@ -13,19 +13,18 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		this.layerDef = layerDef;
 		this.rule = rule;
 
+		loadTemplate("autoPatternEditor");
 		render();
 	}
 
 	function render() {
-		jContent.empty();
-
 		// Tile(s)
 		var jTile = JsTools.createTilePicker(layerDef.autoTilesetDefUid, rule.tileIds, function(tids) {
 			rule.tileIds = tids.copy();
 			editor.ge.emit(LayerDefChanged);
 			render();
 		});
-		jContent.append(jTile);
+		jContent.find(">.tiles .wrapper").empty().append(jTile);
 
 		// Pattern grid editor
 		var jGrid = JsTools.createAutoPatternGrid(rule, layerDef, function(coordId,button) {
@@ -45,11 +44,10 @@ class AutoPatternEditor extends ui.modal.Dialog {
 			editor.ge.emit(LayerDefChanged);
 			render();
 		});
-		jContent.append(jGrid);
+		jContent.find(">.grid .wrapper").empty().append(jGrid);
 
 		// Value picker
-		var jValues = new J('<ul class="values"/>');
-		jValues.appendTo(jContent);
+		var jValues = jContent.find(">.values ul").empty();
 
 		var jVal = new J('<li/>');
 		jVal.appendTo(jValues);
@@ -83,6 +81,7 @@ class AutoPatternEditor extends ui.modal.Dialog {
 
 	override function close() {
 		super.close();
+
 		if( layerDef.isRuleEmpty(rule) ) {
 			layerDef.rules.remove(rule);
 			editor.ge.emit(LayerDefChanged);

@@ -2658,53 +2658,76 @@ $patternSize : 32px;
 
 .window.dialog.autoPatternEditor {
 	.content {
-		padding: 8px;
+		padding: 4px;
 		display: grid;
-		gap: 8px;
+		gap: 16px;
 		grid-template-columns: repeat(3, min-content);
 		align-items: center;
 
-		canvas {
-			image-rendering: pixelated;
-			zoom: 2;
-			// width: auto !important;
-			// height: 100% !important;
-			outline: 1px solid $orange;
-			cursor: pointer;
-
-			&:hover {
-				outline-color: white;
-			}
+		.help {
+			grid-column: 1/4;
 		}
 
-		ul.values {
-			align-self: stretch;
+		label {
+			display: block;
+			margin-bottom: 4px;
+			color: $bgLighter;
+			font-size: 9pt;
+		}
 
+		.tiles {
 			display: grid;
-			grid-template-columns: repeat( 2, 100px );
-			gap: 2px;
-			padding: 4px;
-			border: 1px solid $bgLight;
+			grid-template-rows: min-content auto;
+			height: 100%;
 
-			li {
-				display: grid;
-				align-content: center;
-				justify-content: center;
-
-				text-shadow: 0px 2px 1px black, 0px 0px 4px black;
-
-				border: 1px solid $bgMed;
+			canvas {
+				image-rendering: pixelated;
+				zoom: 2;
+				// width: auto !important;
+				// height: 100% !important;
+				outline: 1px solid $orange;
 				cursor: pointer;
 
 				&:hover {
-					outline: 1px solid $orange;
-					outline-offset: -1px;
-				}
-
-				&.active {
-					border-color: white;
+					outline-color: white;
 				}
 			}
+		}
+
+
+		.values {
+			align-self: stretch;
+			display: grid;
+			grid-template-rows: min-content auto;
+
+			ul {
+				display: grid;
+				grid-template-columns: repeat( 2, 100px );
+				gap: 2px;
+				padding: 4px;
+				border: 1px solid $bgLight;
+
+				li {
+					display: grid;
+					align-content: center;
+					justify-content: center;
+
+					text-shadow: 0px 2px 1px black, 0px 0px 4px black;
+
+					border: 1px solid $bgMed;
+					cursor: pointer;
+
+					&:hover {
+						outline: 1px solid $orange;
+						outline-offset: -1px;
+					}
+
+					&.active {
+						border-color: white;
+					}
+				}
+			}
+
 		}
 	}
 }
