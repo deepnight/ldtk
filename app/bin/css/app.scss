@@ -2473,6 +2473,33 @@ canvas#webgl {
 			display: flex;
 			width: 100%;
 			align-items: center;
+
+			>*+* {
+				margin-left: 4px;
+			}
+
+			label {
+				display: flex;
+				flex-wrap: nowrap;
+				align-items: center;
+				padding-right: 4px;
+
+				font-size: 9pt;
+				color: $bgLighter;
+
+				background-color: $bgDark;
+				border-radius: 3px;
+				cursor: pointer;
+
+				input {
+					cursor: pointer;
+				}
+
+				&:hover {
+					color: black;
+					background-color: $orange;
+				}
+			}
 		}
 
 		ul.rules {

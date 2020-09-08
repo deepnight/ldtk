@@ -13,9 +13,6 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		super();
 
 		loadTemplate("editAutoLayerRules");
-		// jModalAndMask.offset({ top:0, left:0 });
-		// jPanelMask.hide();
-		// jMask.hide();
 		updateForm();
 	}
 
@@ -52,7 +49,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		});
 
 		// Render
-		var chk = jContent.find("#renderRules");
+		var chk = jContent.find("[name=renderRules]");
 		chk.prop("checked", editor.levelRender.isLayerAutoRendered(li) );
 		chk.change( function(ev) {
 			editor.levelRender.setLayerAutoRender( li, chk.prop("checked") );
