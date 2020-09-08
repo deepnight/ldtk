@@ -12,7 +12,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#1B2037",
-	"nextUid" : 19,
+	"nextUid" : 23,
 	"defs" : {
 		"layers" : [
 			{
@@ -35,10 +35,27 @@
 						"pattern" : [
 							null,
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							1,
 							null,
+							null,
+							null,
 							-1000001,
-							1
+							1,
+							null,
+							null,
+							null,
+							-1000001,
+							null,
+							null,
+							null,
+							null,
+							null
 						]
 					},
 					{
@@ -49,7 +66,22 @@
 							null,
 							null,
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							-1000001,
+							null,
+							null,
+							null,
+							null,
+							-1000001,
+							null,
+							null,
 							null,
 							null,
 							1
@@ -63,7 +95,17 @@
 							null,
 							null,
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							-1000001,
+							null,
+							null,
 							null,
 							null,
 							1
@@ -73,12 +115,22 @@
 						"tileIds" : [ 216, 217, 218, 219 ],
 						"chance" : 0.15,
 						"pattern" : [
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							-1000001,
 							-1000001,
 							-1000001,
+							null,
+							null,
 							-1000001,
 							-1000001,
 							-1000001,
+							null,
+							null,
 							-1000001,
 							-1000001,
 							-1000001
@@ -89,11 +141,21 @@
 						"chance" : 1.0,
 						"pattern" : [
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							4,
+							null,
+							null,
 							null,
 							-4,
 							4,
 							-4,
+							null,
+							null,
 							4,
 							4,
 							4
@@ -102,12 +164,40 @@
 					{
 						"tileIds" : [ 124 ],
 						"chance" : 1.0,
-						"pattern" : [ null, -4, null, null, 4 ]
+						"pattern" : [
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							-4,
+							null,
+							null,
+							null,
+							null,
+							4
+						]
 					},
 					{
 						"tileIds" : [ 100 ],
 						"chance" : 1.0,
-						"pattern" : [ null, null, null, null, 4 ]
+						"pattern" : [
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							4
+						]
 					},
 					{
 						"tileIds" : [ 110 ],
@@ -116,8 +206,18 @@
 							null,
 							null,
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							2,
 							-1000001,
+							null,
+							null,
 							null,
 							null,
 							2
@@ -128,11 +228,21 @@
 						"chance" : 1.0,
 						"pattern" : [
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							-2,
+							null,
+							null,
 							null,
 							null,
 							-1000001,
 							2,
+							null,
+							null,
 							null,
 							2
 						]
@@ -145,7 +255,17 @@
 							null,
 							null,
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							-1000001,
+							null,
+							null,
 							null,
 							null,
 							3
@@ -159,7 +279,17 @@
 							null,
 							null,
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							3,
+							null,
+							null,
 							null,
 							null,
 							null
@@ -170,10 +300,20 @@
 						"chance" : 1.0,
 						"pattern" : [
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							2,
 							null,
 							null,
+							null,
+							null,
 							-1000001,
+							null,
+							null,
 							null,
 							null,
 							null
@@ -186,9 +326,19 @@
 							null,
 							null,
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							-2,
 							2,
 							-2,
+							null,
+							null,
 							2,
 							2,
 							2
@@ -199,7 +349,15 @@
 						"chance" : 0.53,
 						"pattern" : [
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							2,
+							null,
+							null,
 							null,
 							-2,
 							2,
@@ -209,17 +367,41 @@
 					{
 						"tileIds" : [ 123 ],
 						"chance" : 1.0,
-						"pattern" : [ null, -2, null, null, 2 ]
+						"pattern" : [
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							-2,
+							null,
+							null,
+							null,
+							null,
+							2
+						]
 					},
 					{
 						"tileIds" : [ 134 ],
 						"chance" : 1.0,
 						"pattern" : [
 							null,
-							2,
+							null,
+							null,
+							null,
+							null,
 							null,
 							null,
 							2,
+							null,
+							null,
+							null,
+							null,
+							2,
+							null,
+							null,
 							null,
 							null,
 							null
@@ -232,8 +414,18 @@
 							null,
 							null,
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							1,
 							-1,
+							null,
+							null,
 							null,
 							null,
 							-1
@@ -242,7 +434,21 @@
 					{
 						"tileIds" : [ 126, 127, 147, 148 ],
 						"chance" : 0.42,
-						"pattern" : [ null, 1, null, null, -1 ]
+						"pattern" : [
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							1,
+							null,
+							null,
+							null,
+							null,
+							-1
+						]
 					},
 					{
 						"tileIds" : [
@@ -261,7 +467,17 @@
 							null,
 							null,
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							-1000001,
+							null,
+							null,
 							null,
 							1,
 							1,
@@ -276,7 +492,17 @@
 							null,
 							null,
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							-1,
+							null,
+							null,
 							null,
 							null,
 							1
@@ -285,12 +511,40 @@
 					{
 						"tileIds" : [ 12 ],
 						"chance" : 1.0,
-						"pattern" : [ null, -1, null, -1, 1 ]
+						"pattern" : [
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							-1,
+							null,
+							null,
+							null,
+							-1,
+							1
+						]
 					},
 					{
 						"tileIds" : [ 52 ],
 						"chance" : 0.35,
-						"pattern" : [ null, -1, null, null, 1 ]
+						"pattern" : [
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							-1,
+							null,
+							null,
+							null,
+							null,
+							1
+						]
 					},
 					{
 						"tileIds" : [ 36 ],
@@ -299,8 +553,18 @@
 							null,
 							null,
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							-1,
 							1,
+							null,
+							null,
 							null,
 							null,
 							-1
@@ -309,12 +573,40 @@
 					{
 						"tileIds" : [ 24 ],
 						"chance" : 1.0,
-						"pattern" : [ null, null, null, -1, 1 ]
+						"pattern" : [
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							-1,
+							1
+						]
 					},
 					{
 						"tileIds" : [ 13 ],
 						"chance" : 1.0,
-						"pattern" : [ null, -1, null, null, 1 ]
+						"pattern" : [
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							-1,
+							null,
+							null,
+							null,
+							null,
+							1
+						]
 					},
 					{
 						"tileIds" : [ 37 ],
@@ -324,7 +616,17 @@
 							null,
 							null,
 							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
 							1,
+							null,
+							null,
 							null,
 							null,
 							-1
@@ -341,20 +643,94 @@
 							6
 						],
 						"chance" : 0.3,
-						"pattern" : [ null, null, null, null, 1 ]
+						"pattern" : [
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							1
+						]
 					},
 					{
 						"tileIds" : [ 40 ],
 						"chance" : 1.0,
-						"pattern" : [ null, null, null, null, 1 ]
+						"pattern" : [
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							null,
+							1
+						]
 					}
 				],
 				"tilesetDefUid" : null,
 				"tilePivotX" : 0,
 				"tilePivotY" : 0
+			},
+			{
+				"identifier" : "Entities",
+				"type" : "Entities",
+				"uid" : 22,
+				"gridSize" : 16,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" }
+				],
+				"autoTilesetDefUid" : null,
+				"rules" : [],
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
 			}
 		],
-		"entities" : [],
+		"entities" : [
+			{
+				"identifier" : "Entity",
+				"uid" : 20,
+				"width" : 16,
+				"height" : 16,
+				"color" : "#94D9B3",
+				"renderMode" : "Rectangle",
+				"tilesetId" : null,
+				"tileId" : null,
+				"maxPerLevel" : 0,
+				"discardExcess" : true,
+				"pivotX" : 0.0,
+				"pivotY" : 0.0,
+				"fieldDefs" : []
+			},
+			{
+				"identifier" : "Entity2",
+				"uid" : 21,
+				"width" : 16,
+				"height" : 16,
+				"color" : "#94D9B3",
+				"renderMode" : "Rectangle",
+				"tilesetId" : null,
+				"tileId" : null,
+				"maxPerLevel" : 0,
+				"discardExcess" : true,
+				"pivotX" : 0.0,
+				"pivotY" : 0.0,
+				"fieldDefs" : []
+			}
+		],
 		"tilesets" : [
 			{
 				"identifier" : "Cavesofgallet_tiles",
@@ -1086,6 +1462,20 @@
 					],
 					"gridTiles" : [],
 					"entityInstances" : []
+				},
+				{
+					"__identifier" : "Entities",
+					"__type" : "Entities",
+					"__cWid" : 24,
+					"__cHei" : 16,
+					"__gridSize" : 16,
+					"levelId" : 0,
+					"layerDefUid" : 22,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
+					"gridTiles" : [],
+					"entityInstances" : []
 				}
 			]
 		},
@@ -1168,6 +1558,20 @@
 						{ "coordId" : 207, "v" : 0 },
 						{ "coordId" : 208, "v" : 0 }
 					],
+					"gridTiles" : [],
+					"entityInstances" : []
+				},
+				{
+					"__identifier" : "Entities",
+					"__type" : "Entities",
+					"__cWid" : 8,
+					"__cHei" : 8,
+					"__gridSize" : 16,
+					"levelId" : 18,
+					"layerDefUid" : 22,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [],
 					"gridTiles" : [],
 					"entityInstances" : []
 				}

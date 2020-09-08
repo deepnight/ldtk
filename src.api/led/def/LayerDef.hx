@@ -60,6 +60,21 @@ class LayerDef {
 					tileIds: rjson.tileId!=null ? [rjson.tileId] : rjson.tileIds, // HACK hold format support
 					chance: JsonTools.readFloat(rjson.chance),
 					pattern: JsonTools.readArray(rjson.pattern),
+					// pattern: {
+					// 	var old = JsonTools.readArray(rjson.pattern);
+					// 	var arr = [];
+					// 	var cx = 1;
+					// 	var cy = 1;
+					// 	for(v in old) {
+					// 		arr[cx+cy*Const.AUTO_LAYER_PATTERN_SIZE] = v;
+					// 		cx++;
+					// 		if( cx>3 ) {
+					// 			cx = 1;
+					// 			cy++;
+					// 		}
+					// 	}
+					// 	arr;
+					// },
 				});
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
