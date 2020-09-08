@@ -13,7 +13,6 @@ class LayerDef {
 	var intGridValues : Array<IntGridValueDef> = [];
 	public var autoTilesetDefUid : Null<Int>; // BUG kill this value if tileset is deleted
 	public var rules : Array<AutoLayerRule> = [];
-	public var randSeed = 0;
 
 	// Tiles
 	public var tilesetDefUid : Null<Int>;

@@ -5,6 +5,7 @@ class AutoLayerRule {
 	public var chance : Float = 1.0;
 	public var size(default,null): Int;
 	public var pattern : Array<Int> = [];
+	public var seed = 1;
 
 	public function new(s) {
 		size = s;
@@ -27,6 +28,7 @@ class AutoLayerRule {
 			chance: JsonTools.writeFloat(chance),
 			size: size,
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
+			seed: seed,
 		}
 	}
 
@@ -35,6 +37,7 @@ class AutoLayerRule {
 		r.tileIds = json.tileIds;
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
+		r.seed = JsonTools.readInt(json.seed, 1);
 		return r;
 	}
 
@@ -104,7 +107,7 @@ class AutoLayerRule {
 		if( tileIds.length==0 )
 			return false;
 
-		if( chance<=0 || chance<1 && dn.M.randSeedCoords(li.def.randSeed, cx,cy, 100) >= chance*100 )
+		if( chance<=0 || chance<1 && dn.M.randSeedCoords(seed, cx,cy, 100) >= chance*100 )
 			return false;
 
 		var radius = Std.int( size/2 );
