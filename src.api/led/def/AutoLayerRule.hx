@@ -21,6 +21,25 @@ class AutoLayerRule {
 		return 'Rule(${size}x$size):$pattern';
 	}
 
+	public function toJson() {
+		return {
+			tileIds: tileIds.copy(),
+			chance: JsonTools.writeFloat(chance),
+			size: size,
+			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
+		}
+	}
+
+	public static function fromJson(dataVersion:Int, json:Dynamic) {
+		var r = new AutoLayerRule( json.size );
+		r.tileIds = json.tileIds;
+		r.chance = JsonTools.readFloat(json.chance);
+		r.pattern = json.pattern;
+		return r;
+	}
+
+
+
 	public function resize(newSize:Int) {
 		var oldSize = size;
 		var oldPatt = pattern.copy();
@@ -68,24 +87,6 @@ class AutoLayerRule {
 
 		return true;
 	}
-
-	public function toJson() {
-		return {
-			tileIds: tileIds.copy(),
-			chance: JsonTools.writeFloat(chance),
-			size: size,
-			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
-		}
-	}
-
-	public static function fromJson(dataVersion:Int, json:Dynamic) {
-		var r = new AutoLayerRule( json.size );
-		r.tileIds = json.tileIds;
-		r.chance = JsonTools.readFloat(json.chance);
-		r.pattern = json.pattern;
-		return r;
-	}
-
 
 	public function isEmpty() {
 		if( tileIds.length==0 )
