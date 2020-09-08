@@ -80,6 +80,15 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			i.displayAsPct = true;
 			i.setBounds(0,1);
 
+			// Flip-X
+			var jFlip = jRule.find("a.flipX");
+			jFlip.addClass( r.flipX ? "on" : "off" );
+			jFlip.click( function(ev:js.jquery.Event) {
+				ev.preventDefault();
+				r.flipX = !r.flipX;
+				editor.ge.emit(LayerDefChanged);
+			});
+
 			jRule.find("button.delete").click( function(ev) {
 				new ui.modal.dialog.Confirm( jRule, Lang.t._("Warning, this cannot be undone!"), true, function() {
 					ld.rules.remove(r);

@@ -7,6 +7,7 @@ $red: #e34d00;
 $darkRed: #791105;
 $orange: #ffcc00;
 $darkOrange: #d56932;
+$green: #cfdd40;
 $help: #79dd8a;
 $helpDark: #3c6148;
 
@@ -2524,16 +2525,66 @@ canvas#webgl {
 					border-color: $bgLighter;
 				}
 
-				input[name="random"] {
-					width: 40px;
-					font-size: 9pt;
+				.options {
+					display: flex;
+					flex-direction: column;
+
+					&>* {
+						padding: 3px;
+						background-color: $bgMed;
+						margin-bottom: 2px;
+						border-radius: 4px;
+						&:hover {
+							background-color: $bgLight;
+						}
+					}
+
+					.random {
+						display: flex;
+						flex-wrap: nowrap;
+						align-items: center;
+
+						input[name="random"] {
+							width: 40px;
+							font-size: 9pt;
+							padding-top: 4px;
+							padding-bottom: 4px;
+							background-color: $bgMed;
+							&:focus, &.editing {
+								background-color: $bgDark;
+							}
+						}
+
+						span {
+							font-size: 8pt;
+							color: $bgLighter;
+							padding-right: 8px;
+						}
+					}
+
+					a {
+						display: grid;
+						align-content: center;
+						border: 1px solid $bgLight;
+						text-align: center;
+						font-size: 8pt;
+						cursor: pointer;
+
+						&.on {
+							color: $green;
+							font-weight: bold;
+						}
+						&.off {
+							opacity: 0.4;
+							color: $red;
+							font-style: italic;
+							border: 1px dashed $red;
+							background-color: $darkRed;
+						}
+					}
 				}
 
-				span {
-					font-size: 8pt;
-					color: $bgLighter;
-					padding-right: 8px;
-				}
+
 
 				input[type=text] {
 					border-color: transparent;

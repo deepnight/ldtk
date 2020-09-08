@@ -6,7 +6,7 @@ class AutoLayerRule {
 	public var size(default,null): Int;
 	var pattern : Array<Int> = [];
 	public var seed = 1;
-	public var flipX = true;
+	public var flipX = false;
 
 	// var bitMasksHas : Null< Map<Int, Int> >;
 	// var bitMasksNot : Null< Map<Int, Int> >;
@@ -37,10 +37,11 @@ class AutoLayerRule {
 
 	public function toJson() {
 		return {
+			size: size,
 			tileIds: tileIds.copy(),
 			chance: JsonTools.writeFloat(chance),
-			size: size,
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
+			flipX: flipX,
 			seed: seed,
 		}
 	}
@@ -51,6 +52,7 @@ class AutoLayerRule {
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
 		r.seed = JsonTools.readInt(json.seed, 1);
+		r.flipX = JsonTools.readBool(json.flipX, false);
 		return r;
 	}
 
