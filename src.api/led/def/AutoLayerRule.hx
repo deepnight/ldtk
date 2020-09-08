@@ -143,6 +143,18 @@ class AutoLayerRule {
 		if( chance<=0 || chance<1 && dn.M.randSeedCoords(seed, cx,cy, 100) >= chance*100 )
 			return false;
 
+		// Checks if this rule cares about the cell IntGrid value
+		var iv = li.getIntGrid(cx,cy);
+		var used = false;
+		for(v in pattern)
+			if( dn.M.iabs(v)==iv+1 || dn.M.iabs(v)==Const.AUTO_LAYER_ANYTHING+1 ) {
+				used = true;
+				break;
+			}
+		if( !used )
+			return false;
+
+		// Rule check
 		var radius = Std.int( size/2 );
 		for(px in 0...size)
 		for(py in 0...size) {
