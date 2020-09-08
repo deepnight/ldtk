@@ -68,9 +68,3 @@ typedef EnumDefValue = {
 	var id : String;
 	var tileId : Null<Int>;
 }
-
-typedef AutoLayerRule = {
-	var tileIds : Array<Int>;
-	var chance : Float;
-	var pattern : Array<Int>;
-}

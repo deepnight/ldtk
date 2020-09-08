@@ -52,14 +52,16 @@ class LayerDef {
 				identifier: v.identifier,
 				color: JsonTools.readColor(v.color),
 			});
+
 		o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
+
+		// Read auto-layer rules
 		o.rules = [];
 		if( json.rules!=null )
-			for( rjson in JsonTools.readArray(json.rules) )
-				o.rules.push({
-					tileIds: rjson.tileId!=null ? [rjson.tileId] : rjson.tileIds, // HACK hold format support
-					chance: JsonTools.readFloat(rjson.chance),
-					pattern: JsonTools.readArray(rjson.pattern),
+			for( rjson in JsonTools.readArray(json.rules) ) {
+				var r = AutoLayerRule.fromJson(dataVersion, rjson);
+				o.rules.push(r);
+			}
 					// pattern: {
 					// 	var old = JsonTools.readArray(rjson.pattern);
 					// 	var arr = [];
@@ -75,7 +77,7 @@ class LayerDef {
 					// 	}
 					// 	arr;
 					// },
-				});
+				// });
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
 		o.tilePivotX = JsonTools.readFloat(json.tilePivotX, 0);
@@ -94,11 +96,7 @@ class LayerDef {
 
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
 			autoTilesetDefUid: autoTilesetDefUid,
-			rules: rules.map( function(r) return {
-				tileIds: r.tileIds.copy(),
-				chance: JsonTools.writeFloat(r.chance),
-				pattern: r.pattern.copy(), // WARNING: this could lead to memory "leaks" on undo/redo
-			}),
+			rules: rules.map( function(r) return r.toJson() ),
 
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,
@@ -158,10 +156,10 @@ class LayerDef {
 		if( r.tileIds.length==0 )
 			return false;
 
-		var radius = Std.int( Const.AUTO_LAYER_PATTERN_SIZE/2 );
-		for(px in 0...Const.AUTO_LAYER_PATTERN_SIZE)
-		for(py in 0...Const.AUTO_LAYER_PATTERN_SIZE) {
-			var coordId = px + py*Const.AUTO_LAYER_PATTERN_SIZE;
+		var radius = Std.int( r.size/2 );
+		for(px in 0...r.size)
+		for(py in 0...r.size) {
+			var coordId = px + py*r.size;
 			if( r.pattern[coordId]==null )
 				continue;
 

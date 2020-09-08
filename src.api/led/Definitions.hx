@@ -137,7 +137,7 @@ class Definitions {
 	}
 
 
-	public function sortLayerAutoRules(ld:led.def.LayerDef, from:Int, to:Int) : Null<AutoLayerRule> {
+	public function sortLayerAutoRules(ld:led.def.LayerDef, from:Int, to:Int) : Null<led.def.AutoLayerRule> {
 		if( from<0 || from>=ld.rules.length || from==to )
 			return null;
 

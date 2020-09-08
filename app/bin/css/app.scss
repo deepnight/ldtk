@@ -2566,10 +2566,30 @@ $patternSize : 32px;
 	display: grid;
 	gap: 2px;
 
+	&.size-3 {
+		grid-template-columns: repeat(3,auto);
+	}
+
+	&.size-5 {
+		grid-template-columns: repeat(5,auto);
+	}
+
 	&.preview {
-		.cell {
+		&.size-3 .cell {
 			zoom: 0.5;
+		}
+		&.size-5 .cell {
+			zoom: 0.3;
+		}
+
+		.cell {
 			opacity: 0.5;
+		}
+
+		.cell.empty {
+			background: $bgMed;
+			box-shadow: none;
+			border-color: $bgLighter;
 		}
 		.cell.center {
 			opacity: 1;
@@ -2585,6 +2605,11 @@ $patternSize : 32px;
 				border-radius: 3px;
 				box-shadow: 0px 2px 4px black;
 			}
+		}
+		&.size-5 .cell.center canvas {
+			zoom: 2;
+			margin-left: -50%;
+			margin-top: -50%;
 		}
 	}
 
@@ -2691,6 +2716,13 @@ $patternSize : 32px;
 				&:hover {
 					outline-color: white;
 				}
+			}
+		}
+
+		.grid {
+			select {
+				width: 100%;
+				margin-top: 2px;
 			}
 		}
 

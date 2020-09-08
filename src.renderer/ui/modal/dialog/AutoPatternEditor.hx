@@ -5,9 +5,9 @@ import led.LedTypes;
 class AutoPatternEditor extends ui.modal.Dialog {
 	var curValIdx = 0;
 	var layerDef : led.def.LayerDef;
-	var rule : AutoLayerRule;
+	var rule : led.def.AutoLayerRule;
 
-	public function new(target:js.jquery.JQuery, layerDef:led.def.LayerDef, rule:AutoLayerRule) {
+	public function new(target:js.jquery.JQuery, layerDef:led.def.LayerDef, rule:led.def.AutoLayerRule) {
 		super(target, "autoPatternEditor");
 
 		this.layerDef = layerDef;
@@ -30,21 +30,36 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		var jGrid = JsTools.createAutoPatternGrid(rule, layerDef, function(coordId,button) {
 			var v = rule.pattern[coordId];
 			if( button==0 ) {
-				if( v==null || v>0 )
+				if( v==0 || v>0 )
 					rule.pattern[coordId] = curValIdx+1; // avoid zero value
 				else if( v<0 )
-					rule.pattern[coordId] = null;
+					rule.pattern[coordId] = 0;
 			}
 			else {
-				if( v==null )
+				if( v==0 )
 					rule.pattern[coordId] = -curValIdx-1;
 				else
-					rule.pattern[coordId] = null;
+					rule.pattern[coordId] = 0;
 			}
 			editor.ge.emit(LayerDefChanged);
 			render();
 		});
 		jContent.find(">.grid .wrapper").empty().append(jGrid);
+
+		var jSizes = jContent.find(">.grid select").empty();
+		for(size in [3,5]) {
+			var jOpt = new J('<option value="$size">${size}x$size</option>');
+			jOpt.appendTo(jSizes);
+		}
+		jSizes.change( function(_) {
+			var size = Std.parseInt( jSizes.val() );
+			trace("before: "+rule);
+			rule.resize(size);
+			trace("after: "+rule);
+			editor.ge.emit(LayerDefChanged);
+			render();
+		});
+		jSizes.val(rule.size);
 
 		// Value picker
 		var jValues = jContent.find(">.values ul").empty();
@@ -86,5 +101,8 @@ class AutoPatternEditor extends ui.modal.Dialog {
 			layerDef.rules.remove(rule);
 			editor.ge.emit(LayerDefChanged);
 		}
+
+		if( rule.trim() )
+			editor.ge.emit(LayerDefChanged);
 	}
 }

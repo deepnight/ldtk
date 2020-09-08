@@ -7,7 +7,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 	public var ld(get,never) : led.def.LayerDef;
 		inline function get_ld() return Editor.ME.curLayerDef;
 
-	var lastRule : Null<led.LedTypes.AutoLayerRule>;
+	var lastRule : Null<led.def.AutoLayerRule>;
 
 	public function new() {
 		super();
@@ -38,11 +38,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 		// Add rule
 		jContent.find("button.createRule").click( function(ev) {
-			ld.rules.insert(0, {
-				tileIds: [],
-				pattern: [],
-				chance: 1,
-			});
+			ld.rules.insert(0, new led.def.AutoLayerRule(3));
 			lastRule = ld.rules[0];
 			editor.ge.emit(LayerDefChanged);
 			new ui.modal.dialog.AutoPatternEditor( jContent.find("ul.rules [idx=0]"), ld, lastRule );

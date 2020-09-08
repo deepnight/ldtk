@@ -63,21 +63,17 @@ class EditLayerDefs extends ui.modal.Panel {
 			case LayerInstanceRestoredFromHistory:
 				updateForm();
 				updateList();
-				updateRuleForm();
 
 			case LayerDefAdded, LayerDefRemoved:
 				updateList();
 				updateForm();
-				updateRuleForm();
 
 			case LayerDefChanged:
 				updateList();
 				updateForm();
-				updateRuleForm();
 
 			case TilesetDefChanged:
 				updateForm();
-				updateRuleForm();
 
 			case LayerDefSorted:
 				updateList();
@@ -90,7 +86,6 @@ class EditLayerDefs extends ui.modal.Panel {
 		cur = ld;
 		updateForm();
 		updateList();
-		updateRuleForm();
 	}
 
 	function updateForm() {
@@ -304,83 +299,6 @@ class EditLayerDefs extends ui.modal.Panel {
 				});
 				p.appendTo(jPivots);
 		}
-	}
-
-
-	function updateRuleForm() {
-		var jAutoLayer = jContent.find(".autoLayerRules");
-		jAutoLayer.find("*").off();
-
-		if( cur==null || cur.type!=IntGrid ) {
-			jAutoLayer.hide();
-			return;
-		}
-		return;
-
-		jAutoLayer.show();
-		var jRules = jAutoLayer.find("ul.rules").off().empty();
-
-		// Add rule
-		jAutoLayer.find("button.createRule").click( function(ev) {
-			cur.rules.insert(0, {
-				tileIds: [],
-				pattern: [],
-				chance: 1,
-			});
-			editor.ge.emit(LayerDefChanged);
-		});
-
-		// // Tileset selection
-		// var jTileset = jAutoLayer.find("[name=autoTileset]");
-		// jTileset.empty();
-		// var opt = new J("<option/>");
-		// opt.appendTo(jTileset);
-		// opt.attr("value", -1);
-		// opt.text("-- Select a tileset --");
-		// for(td in project.defs.tilesets) {
-		// 	var opt = new J("<option/>");
-		// 	opt.appendTo(jTileset);
-		// 	opt.attr("value", td.uid);
-		// 	opt.text( td.identifier );
-		// }
-		// jTileset.change( function(ev) {
-		// 	cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
-		// 	editor.ge.emit( LayerDefChanged);
-		// });
-		// if( cur.autoTilesetDefUid!=null )
-		// 	jTileset.val( cur.autoTilesetDefUid );
-
-
-		// Rules
-		for( r in cur.rules) {
-			var jRule = jAutoLayer.find("xml#rule").clone().children().wrapAll('<li/>').parent();
-			jRule.appendTo(jRules);
-
-			// Preview
-			var jPreview = jRule.find(".preview");
-			JsTools.createAutoPatternGrid(r, cur, true).appendTo(jPreview);
-			jPreview.click( function(ev) {
-				new ui.modal.dialog.AutoPatternEditor(jPreview, cur, r);
-			});
-
-			// Random
-			var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
-			i.linkEvent(LayerDefChanged);
-			i.displayAsPct = true;
-			i.setBounds(0,1);
-
-			jRule.find("button.delete").click( function(ev) {
-				cur.rules.remove(r);
-				editor.ge.emit(LayerDefChanged);
-			});
-		}
-
-		JsTools.parseComponents(jRules);
-
-		JsTools.makeSortable("ul.rules", function(from,to) {
-			project.defs.sortLayerAutoRules(cur, from, to);
-			editor.ge.emit(LayerDefChanged);
-		});
 	}
 
 
