@@ -145,10 +145,6 @@ class LayerDef {
 	inline function set_tilePivotY(v) return tilePivotY = dn.M.fclamp(v, 0, 1);
 
 
-	public function isRuleEmpty(r:AutoLayerRule) {
-		return r.pattern.length==0 && r.tileIds.length==0;
-	}
-
 	public function ruleMatches(li:led.inst.LayerInstance, r:AutoLayerRule, cx:Int, cy:Int) { // TODO optimize the rule checks!
 		if( r.chance<=0 || r.chance<1 && dn.M.randSeedCoords(randSeed, cx,cy, 100)>=r.chance*100 )
 			return false;

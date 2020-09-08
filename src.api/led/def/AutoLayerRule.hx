@@ -85,4 +85,17 @@ class AutoLayerRule {
 		r.pattern = json.pattern;
 		return r;
 	}
+
+
+	public function isEmpty() {
+		if( tileIds.length==0 )
+			return true;
+
+		for(v in pattern)
+			if( v!=0 )
+				return false;
+
+		return true;
+	}
+
 }
