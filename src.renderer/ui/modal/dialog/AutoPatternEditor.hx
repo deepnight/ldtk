@@ -27,19 +27,19 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		jContent.find(">.tiles .wrapper").empty().append(jTile);
 
 		// Pattern grid editor
-		var jGrid = JsTools.createAutoPatternGrid(rule, layerDef, function(coordId,button) {
-			var v = rule.pattern[coordId];
+		var jGrid = JsTools.createAutoPatternGrid(rule, layerDef, function(cx,cy,button) {
+			var v = rule.get(cx,cy);
 			if( button==0 ) {
 				if( v==0 || v>0 )
-					rule.pattern[coordId] = curValIdx+1; // avoid zero value
+					rule.set(cx,cy, curValIdx+1); // avoid zero value
 				else if( v<0 )
-					rule.pattern[coordId] = 0;
+					rule.set(cx,cy, 0);
 			}
 			else {
 				if( v==0 )
-					rule.pattern[coordId] = -curValIdx-1;
+					rule.set(cx,cy, -curValIdx-1);
 				else
-					rule.pattern[coordId] = 0;
+					rule.set(cx,cy, 0);
 			}
 			editor.ge.emit(LayerDefChanged);
 			render();

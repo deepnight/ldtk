@@ -456,7 +456,7 @@ class JsTools {
 	}
 
 
-	public static function createAutoPatternGrid(rule:led.def.AutoLayerRule, layerDef:led.def.LayerDef, previewMode=false, ?onClick:(coordId:Int, button:Int)->Void) {
+	public static function createAutoPatternGrid(rule:led.def.AutoLayerRule, layerDef:led.def.LayerDef, previewMode=false, ?onClick:(cx:Int, cy:Int, button:Int)->Void) {
 		var jGrid = new J('<div class="autoPatternGrid"/>');
 		jGrid.addClass("size-"+rule.size);
 
@@ -492,7 +492,7 @@ class JsTools {
 
 			// Cell color
 			if( !isCenter || !previewMode ) {
-				var v = rule.pattern[coordId];
+				var v = rule.get(cx,cy);
 				if( v!=0 ) {
 					if( v>0 ) {
 						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING )
@@ -515,7 +515,7 @@ class JsTools {
 			// Edit grid value
 			if( onClick!=null )
 				jCell.mousedown( function(ev) {
-					onClick(coordId, ev.button);
+					onClick(cx,cy, ev.button);
 				});
 
 			idx++;

@@ -4,12 +4,24 @@ class AutoLayerRule {
 	public var tileIds : Array<Int> = [];
 	public var chance : Float = 1.0;
 	public var size(default,null): Int;
-	public var pattern : Array<Int> = [];
+	var pattern : Array<Int> = [];
 	public var seed = 1;
+
+	// var bitMasksHas : Null< Map<Int, Int> >;
+	// var bitMasksNot : Null< Map<Int, Int> >;
 
 	public function new(s) {
 		size = s;
 		initPattern();
+	}
+
+	public inline function get(cx,cy) {
+		return pattern[ coordId(cx,cy) ];
+	}
+
+	public inline function set(cx,cy,v) {
+		// clearOptim();
+		return pattern[ coordId(cx,cy) ] = v;
 	}
 
 	function initPattern() {
@@ -92,15 +104,36 @@ class AutoLayerRule {
 	}
 
 	public function isEmpty() {
-		if( tileIds.length==0 )
-			return true;
-
 		for(v in pattern)
 			if( v!=0 )
 				return false;
 
-		return true;
+		return tileIds.length==0;
 	}
+
+	// inline function clearOptim() {
+	// 	bitMasksHas = null;
+	// 	bitMasksNot = null;
+	// }
+
+	// public function optimize(li:led.inst.LayerInstance) {
+	// 	bitMasksHas = new Map();
+	// 	bitMasksNot = new Map();
+
+	// 	for(idx in 0...li.def.countIntGridValues()) {
+	// 		var hasMask = 0;
+	// 		var notMask = 0;
+	// 		for(i in 0...size*size) {
+	// 			if( pattern[i]==idx+1 )
+	// 				hasMask = dn.M.setBit(hasMask, i);
+
+	// 			if( pattern[i]==-idx-1 )
+	// 				notMask = dn.M.setBit(notMask, i);
+	// 		}
+	// 		bitMasksHas.set(idx, hasMask);
+	// 		bitMasksNot.set(idx, notMask);
+	// 	}
+	// }
 
 
 	public function matches(li:led.inst.LayerInstance, cx:Int, cy:Int) { // TODO optimize the rule checks!

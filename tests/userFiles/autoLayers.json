@@ -12,7 +12,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#1B2037",
-	"nextUid" : 23,
+	"nextUid" : 25,
 	"defs" : {
 		"layers" : [
 			{
@@ -43,7 +43,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 252, 264, 276, 288 ],
@@ -59,7 +60,8 @@
 							0,
 							-1000001,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 65, 77 ],
@@ -91,7 +93,8 @@
 							1,
 							1,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 125, 252, 264, 276, 288 ],
@@ -107,7 +110,8 @@
 							0,
 							1,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 216, 217, 218, 219 ],
@@ -123,7 +127,8 @@
 							-1000001,
 							-1000001,
 							-1000001
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 112 ],
@@ -139,7 +144,8 @@
 							4,
 							4,
 							4
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 124 ],
@@ -155,7 +161,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 100 ],
@@ -171,7 +178,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 110 ],
@@ -187,7 +195,8 @@
 							0,
 							2,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 108 ],
@@ -203,7 +212,8 @@
 							0,
 							2,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 66 ],
@@ -219,7 +229,8 @@
 							0,
 							3,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 78 ],
@@ -235,7 +246,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 132 ],
@@ -251,7 +263,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 109 ],
@@ -267,7 +280,8 @@
 							2,
 							2,
 							2
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 97 ],
@@ -283,7 +297,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 123 ],
@@ -299,7 +314,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 134 ],
@@ -315,7 +331,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 26 ],
@@ -331,7 +348,8 @@
 							0,
 							-1,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 126, 127, 147, 148 ],
@@ -363,7 +381,8 @@
 							-1000001,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [
@@ -388,7 +407,8 @@
 							1,
 							1,
 							1
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 38, 56, 57, 58, 59 ],
@@ -404,7 +424,8 @@
 							0,
 							1,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 12 ],
@@ -420,7 +441,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 52 ],
@@ -436,7 +458,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 36 ],
@@ -452,7 +475,8 @@
 							0,
 							-1,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 24 ],
@@ -468,7 +492,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 13 ],
@@ -484,7 +509,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 37 ],
@@ -500,7 +526,8 @@
 							0,
 							-1,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [
@@ -524,7 +551,8 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					},
 					{
 						"tileIds" : [ 40 ],
@@ -540,61 +568,16 @@
 							0,
 							0,
 							0
-						]
+						],
+						"seed" : 1
 					}
 				],
 				"tilesetDefUid" : null,
 				"tilePivotX" : 0,
 				"tilePivotY" : 0
-			},
-			{
-				"identifier" : "Entities",
-				"type" : "Entities",
-				"uid" : 22,
-				"gridSize" : 16,
-				"displayOpacity" : 1.0,
-				"intGridValues" : [
-					{ "identifier" : null, "color" : "#000000" }
-				],
-				"autoTilesetDefUid" : null,
-				"rules" : [],
-				"tilesetDefUid" : null,
-				"tilePivotX" : 0,
-				"tilePivotY" : 0
 			}
 		],
-		"entities" : [
-			{
-				"identifier" : "Entity",
-				"uid" : 20,
-				"width" : 16,
-				"height" : 16,
-				"color" : "#94D9B3",
-				"renderMode" : "Rectangle",
-				"tilesetId" : null,
-				"tileId" : null,
-				"maxPerLevel" : 0,
-				"discardExcess" : true,
-				"pivotX" : 0.0,
-				"pivotY" : 0.0,
-				"fieldDefs" : []
-			},
-			{
-				"identifier" : "Entity2",
-				"uid" : 21,
-				"width" : 16,
-				"height" : 16,
-				"color" : "#94D9B3",
-				"renderMode" : "Rectangle",
-				"tilesetId" : null,
-				"tileId" : null,
-				"maxPerLevel" : 0,
-				"discardExcess" : true,
-				"pivotX" : 0.0,
-				"pivotY" : 0.0,
-				"fieldDefs" : []
-			}
-		],
+		"entities" : [],
 		"tilesets" : [
 			{
 				"identifier" : "Cavesofgallet_tiles",
@@ -1607,20 +1590,6 @@
 					],
 					"gridTiles" : [],
 					"entityInstances" : []
-				},
-				{
-					"__identifier" : "Entities",
-					"__type" : "Entities",
-					"__cWid" : 24,
-					"__cHei" : 20,
-					"__gridSize" : 16,
-					"levelId" : 0,
-					"layerDefUid" : 22,
-					"pxOffsetX" : 0,
-					"pxOffsetY" : 0,
-					"intGrid" : [],
-					"gridTiles" : [],
-					"entityInstances" : []
 				}
 			]
 		},
@@ -1703,20 +1672,6 @@
 						{ "coordId" : 207, "v" : 0 },
 						{ "coordId" : 208, "v" : 0 }
 					],
-					"gridTiles" : [],
-					"entityInstances" : []
-				},
-				{
-					"__identifier" : "Entities",
-					"__type" : "Entities",
-					"__cWid" : 8,
-					"__cHei" : 8,
-					"__gridSize" : 16,
-					"levelId" : 18,
-					"layerDefUid" : 22,
-					"pxOffsetX" : 0,
-					"pxOffsetY" : 0,
-					"intGrid" : [],
 					"gridTiles" : [],
 					"entityInstances" : []
 				}
