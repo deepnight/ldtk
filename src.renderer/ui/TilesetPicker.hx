@@ -109,7 +109,6 @@ class TilesetPicker {
 
 			case MultiTiles, SingleTile:
 				_internalSelectedIds = tileIds;
-				N.debug(_internalSelectedIds.copy());
 		}
 		renderSelection();
 	}
