@@ -144,6 +144,11 @@ class LayerDef {
 	inline function set_tilePivotX(v) return tilePivotX = dn.M.fclamp(v, 0, 1);
 	inline function set_tilePivotY(v) return tilePivotY = dn.M.fclamp(v, 0, 1);
 
+
+	public inline function isAutoLayer() {
+		return autoTilesetDefUid!=null;
+	}
+
 	public function tidy(p:led.Project) {
 		// Lost auto-layer tileset
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {

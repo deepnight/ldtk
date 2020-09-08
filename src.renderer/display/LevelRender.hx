@@ -176,7 +176,7 @@ class LevelRender extends dn.Process {
 	}
 
 	public function toggleLayerAutoRender(li:led.inst.LayerInstance) {
-		if( li!=null && li.isAutoLayer() )
+		if( li!=null && li.def.isAutoLayer() )
 			setLayerAutoRender( li, !isLayerAutoRendered(li) );
 	}
 

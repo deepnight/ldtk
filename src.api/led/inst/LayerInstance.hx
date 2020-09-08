@@ -93,10 +93,6 @@ class LayerInstance {
 			throw 'Only works on $t layer!';
 	}
 
-	public inline function isAutoLayer() {
-		return def.autoTilesetDefUid!=null && def.rules.length>0;
-	}
-
 	public inline function isValid(cx:Int,cy:Int) {
 		return cx>=0 && cx<cWid && cy>=0 && cy<cHei;
 	}
@@ -301,7 +297,7 @@ class LayerInstance {
 	public function render(target:h2d.Object, withAutoLayers:Bool) {
 		switch def.type {
 			case IntGrid:
-				if( isAutoLayer() && withAutoLayers )
+				if( def.isAutoLayer() && withAutoLayers )
 					renderAutoLayer(target);
 				else {
 					var g = new h2d.Graphics(target);

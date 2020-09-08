@@ -815,7 +815,7 @@ class Editor extends Page {
 
 			// Rules button
 			var rules = e.find(".rules");
-			if( li.isAutoLayer() )
+			if( li.def.isAutoLayer() )
 				rules.show();
 			else
 				rules.hide();

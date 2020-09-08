@@ -213,8 +213,26 @@ class EditLayerDefs extends ui.modal.Panel {
 					opt.text( td.identifier );
 				}
 				jTileset.change( function(ev) {
-					cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
-					editor.ge.emit( LayerDefChanged);
+					function changeTileset(clear:Bool) {
+						if( clear ) {
+							new LastChance(Lang.t._("Deleted all auto-layer rules"), project);
+							cur.rules = [];
+						}
+						cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
+						editor.ge.emit( LayerDefChanged);
+					}
+
+					if( cur.rules.length==0 )
+						changeTileset(false);
+					else {
+						new ui.modal.dialog.Confirm(
+							jTileset,
+							Lang.t._("Warning: changing the tileset will DELETE all the existing rules in this auto-layer!"),
+							true,
+							changeTileset.bind(true),
+							updateForm
+						);
+					}
 				});
 				if( cur.autoTilesetDefUid!=null )
 					jTileset.val( cur.autoTilesetDefUid );
