@@ -86,6 +86,15 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			else if( r.chance<=0 )
 				i.jInput.addClass("off");
 
+			// Break
+			// var jFlag = jRule.find("a.break");
+			// jFlag.addClass( r.breakOnMatch ? "on" : "off" );
+			// jFlag.click( function(ev:js.jquery.Event) {
+			// 	ev.preventDefault();
+			// 	r.breakOnMatch = !r.breakOnMatch;
+			// 	editor.ge.emit(LayerDefChanged);
+			// });
+
 			// Flip-X
 			var jFlag = jRule.find("a.flipX");
 			jFlag.addClass( r.flipX ? "on" : "off" );

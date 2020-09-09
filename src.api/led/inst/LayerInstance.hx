@@ -336,6 +336,9 @@ class LayerInstance {
 								renderAutoTile(r, tg, td, cx,cy, -1, -1);
 								anyMatch = true;
 							}
+
+							// if( anyMatch && r.breakOnMatch )
+							// 	break;
 							i--;
 						}
 

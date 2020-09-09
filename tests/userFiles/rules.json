@@ -1,0 +1,137 @@
+{
+	"__header__" : {
+		"fileType" : "LEd Project JSON",
+		"app" : "LEd",
+		"appAuthor" : "Sebastien Benard",
+		"appVersion" : "0.1.6-alpha-debug",
+		"url" : "https://deepnight.net/"
+	},
+	"name" : "rules",
+	"jsonVersion" : 1,
+	"defaultPivotX" : 0.0,
+	"defaultPivotY" : 0.0,
+	"defaultGridSize" : 16,
+	"bgColor" : "#7F8093",
+	"nextUid" : 3,
+	"defs" : {
+		"layers" : [
+			{
+				"identifier" : "IntGrid",
+				"type" : "IntGrid",
+				"uid" : 2,
+				"gridSize" : 8,
+				"displayOpacity" : 1.0,
+				"intGridValues" : [
+					{ "identifier" : null, "color" : "#000000" }
+				],
+				"autoTilesetDefUid" : 1,
+				"rules" : [
+					{
+						"size" : 3,
+						"tileIds" : [ 56 ],
+						"chance" : 1.0,
+						"seed" : 5796138,
+						"pattern" : [
+							0,
+							0,
+							0,
+							0,
+							-1,
+							0,
+							0,
+							1,
+							0
+						],
+						"flipX" : false,
+						"flipY" : false,
+						"breakOnMatch" : false,
+						"perlinActive" : false,
+						"perlinSeed" : 809053,
+						"perlinScale" : 0.2,
+						"perlinOctaves" : 2
+					},
+					{
+						"size" : 3,
+						"tileIds" : [ 35 ],
+						"chance" : 0.45,
+						"seed" : 1052501,
+						"pattern" : [
+							0,
+							0,
+							0,
+							0,
+							-1,
+							0,
+							0,
+							1,
+							0
+						],
+						"flipX" : false,
+						"flipY" : false,
+						"breakOnMatch" : true,
+						"perlinActive" : false,
+						"perlinSeed" : 1908758,
+						"perlinScale" : 0.2,
+						"perlinOctaves" : 2
+					}
+				],
+				"tilesetDefUid" : null,
+				"tilePivotX" : 0,
+				"tilePivotY" : 0
+			}
+		],
+		"entities" : [],
+		"tilesets" : [
+			{
+				"identifier" : "Cavesofgallet_tiles",
+				"uid" : 1,
+				"relPath" : "atlas/cavesofgallet_tiles.png",
+				"pxWid" : 96,
+				"pxHei" : 256,
+				"tileGridSize" : 8,
+				"tileGridSpacing" : 0,
+				"savedSelections" : []
+			}
+		],
+		"enums" : [],
+		"externalEnums" : []
+	},
+	"levels" : [
+		{
+			"identifier" : "Level",
+			"uid" : 0,
+			"pxWid" : 256,
+			"pxHei" : 256,
+			"layerInstances" : [
+				{
+					"__identifier" : "IntGrid",
+					"__type" : "IntGrid",
+					"__cWid" : 32,
+					"__cHei" : 32,
+					"__gridSize" : 8,
+					"levelId" : 0,
+					"layerDefUid" : 2,
+					"pxOffsetX" : 0,
+					"pxOffsetY" : 0,
+					"intGrid" : [
+						{ "coordId" : 490, "v" : 0 },
+						{ "coordId" : 491, "v" : 0 },
+						{ "coordId" : 492, "v" : 0 },
+						{ "coordId" : 493, "v" : 0 },
+						{ "coordId" : 494, "v" : 0 },
+						{ "coordId" : 495, "v" : 0 },
+						{ "coordId" : 496, "v" : 0 },
+						{ "coordId" : 497, "v" : 0 },
+						{ "coordId" : 498, "v" : 0 },
+						{ "coordId" : 499, "v" : 0 },
+						{ "coordId" : 500, "v" : 0 },
+						{ "coordId" : 501, "v" : 0 },
+						{ "coordId" : 502, "v" : 0 }
+					],
+					"gridTiles" : [],
+					"entityInstances" : []
+				}
+			]
+		}
+	]
+}

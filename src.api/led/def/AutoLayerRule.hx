@@ -8,6 +8,7 @@ class AutoLayerRule {
 	public var seed : Int;
 	public var flipX = false;
 	public var flipY = false;
+	public var breakOnMatch = false;
 
 	var perlinActive = false;
 	public var perlinSeed : Int;
@@ -101,6 +102,7 @@ class AutoLayerRule {
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
 			flipX: flipX,
 			flipY: flipY,
+			breakOnMatch: breakOnMatch,
 
 			perlinActive: perlinActive,
 			perlinSeed: perlinSeed,
@@ -117,6 +119,7 @@ class AutoLayerRule {
 		r.seed = JsonTools.readInt(json.seed, 1);
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
+		r.breakOnMatch = JsonTools.readBool(json.breakOnMatch, false);
 
 		r.perlinActive = JsonTools.readBool(json.perlinActive, false);
 		r.perlinScale = JsonTools.readFloat(json.perlinScale, 0.2);
