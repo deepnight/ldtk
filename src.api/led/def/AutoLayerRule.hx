@@ -235,8 +235,11 @@ class AutoLayerRule {
 		for(px in 0...size)
 		for(py in 0...size) {
 			var coordId = px + py*size;
-			if( pattern[coordId]==null )
+			if( pattern[coordId]==0 )
 				continue;
+
+			if( !li.isValid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+				return false;
 
 			if( dn.M.iabs( pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
 				// "Anything" checks
