@@ -439,10 +439,19 @@ canvas.tile {
 	width: 32px;
 	height: 32px;
 	border: 1px solid $bgLight;
+	border-radius: 4px;
 	image-rendering: pixelated;
 
 	&.empty {
 		background-image: url("../img/stripes.png");
+	}
+
+	&.multi {
+		box-shadow:
+			2px 2px 0px black,
+			3px 3px 0px white,
+			4px 4px 0px black,
+			5px 5px 0px white;
 	}
 
 	&:not(.active) {
@@ -2688,8 +2697,10 @@ $patternSize : 32px;
 		}
 		.cell.center {
 			opacity: 1;
-			canvas,
-			.multiGhost {
+			canvas {
+				box-sizing: border-box;
+				padding: 2px;
+
 				zoom: 2;
 				margin-left: -50%;
 				margin-top: -50%;
@@ -2698,17 +2709,11 @@ $patternSize : 32px;
 				border: 1px solid white;
 				border-radius: 3px;
 				box-shadow: 0px 2px 4px black;
-			}
-			canvas {
-				box-sizing: border-box;
-				padding: 2px;
-			}
-			.multiGhost {
-				position: absolute;
-				width: $patternSize;
-				height: $patternSize;
-				top: -4px;
-				left: -4px;
+				&.multi {
+					box-shadow:
+					2px 2px 0px black,
+					3px 3px 0px white;
+				}
 			}
 		}
 		&.size-5 .cell.center canvas {
@@ -2833,13 +2838,11 @@ $patternSize : 32px;
 			canvas {
 				image-rendering: pixelated;
 				zoom: 2;
-				// width: auto !important;
-				// height: 100% !important;
-				outline: 1px solid $orange;
+				border: 1px solid $orange;
 				cursor: pointer;
 
 				&:hover {
-					outline-color: white;
+					border-color: white;
 				}
 			}
 		}

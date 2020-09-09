@@ -432,6 +432,26 @@ class JsTools {
 				jTileCanvas.attr("width", td.tileGridSize);
 				jTileCanvas.attr("height", td.tileGridSize);
 				td.drawTileToCanvas(jTileCanvas, tileIds[0]);
+				if( tileIds.length>1 ) {
+					// Cycling animation among multiple tiles
+					jTileCanvas.addClass("multi");
+					var idx = 0;
+					Editor.ME.createChildProcess(function(p) {
+						if( p.cd.hasSetS("tick",0.2) )
+							return;
+
+						if( jTileCanvas.parents("body").length==0 ) {
+							p.destroy();
+							return;
+						}
+
+						idx++;
+						if( idx>=tileIds.length )
+							idx = 0;
+
+						td.drawTileToCanvas(jTileCanvas, tileIds[idx]);
+					});
+				}
 			}
 			else
 				jTileCanvas.addClass("empty");
@@ -490,12 +510,11 @@ class JsTools {
 				if( previewMode ) {
 					var td = Editor.ME.project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
 					if( td!=null ) {
-						if( rule.tileIds.length>1 )
-							jCell.append('<div class="multiGhost"></div>');
-
 						var jTile = createTile(td, rule.tileIds[0], 32);
 						jCell.append(jTile);
 						jCell.addClass("tilePreview");
+						if( rule.tileIds.length>1 )
+							jTile.addClass("multi");
 					}
 				}
 			}
