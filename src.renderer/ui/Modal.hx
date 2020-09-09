@@ -92,6 +92,11 @@ class Modal extends dn.Process {
 		if( cd.hasSetS("closing",Const.INFINITE) )
 			return;
 
+		// Validate current edits before closing
+		jContent.find(":focus").blur();
+		jContent.find("input[type=color]").change();
+
+		// Close
 		jModalAndMask.find("*").off();
 		onClose();
 		doCloseAnimation();
