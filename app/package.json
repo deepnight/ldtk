@@ -18,7 +18,8 @@
 		"url": "https://github.com/deepnight/led.git"
 	},
 	"dependencies": {
-		"electron-updater": "^4.3.4"
+		"electron-updater": "^4.3.4",
+		"sortablejs": "^1.10.2"
 	},
 	"devDependencies": {
 		"electron": "^10.0.0",
@@ -44,7 +45,6 @@
 				"github"
 			]
 		},
-		"mac": {
-		}
+		"mac": {}
 	}
 }

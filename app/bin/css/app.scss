@@ -1427,19 +1427,23 @@ textarea {
 	z-index: 97;
 }
 
-.sortable-placeholder {
-	min-height: 1.3em;
-	outline: 1px dashed $orange;
-	outline-offset: -2px;
-	background-color: $bgDark;
-}
-
-li[draggable=true] {
-	background: url("../img/icons/drag.png") no-repeat;
+ul.sortable:not(.customHandle) li {
+	background-image: url("../img/icons/drag.png");
+	background-repeat: no-repeat;
 	background-position: left center;
 	padding-left: 32px !important;
 	cursor: ns-resize;
 }
+
+ul.sortable li[draggable=true] {
+	outline: 1px dashed $orange;
+	outline-offset: -1px;
+	box-shadow: 0px 0px 8px $red inset;
+	background-color: $darkOrange !important;
+	background-image: url("../img/stripes.png");
+	background-repeat: repeat;
+}
+
 
 .dragHandle {
 	display: inline-block;
@@ -2483,6 +2487,9 @@ canvas#webgl {
 
 	.content {
 		width: auto;
+		display: grid;
+		grid-template-rows: min-content auto;
+		height: 100%;
 
 		header {
 			display: flex;
@@ -2519,6 +2526,7 @@ canvas#webgl {
 
 		ul.rules {
 			display: grid;
+			overflow-y: auto;
 			grid-template-columns: auto;
 			gap: 2px;
 			margin-top: 4px;
@@ -2562,8 +2570,8 @@ canvas#webgl {
 						input[name="random"] {
 							width: 40px;
 							font-size: 9pt;
-							padding-top: 4px;
-							padding-bottom: 4px;
+							padding-top: 1px;
+							padding-bottom: 1px;
 							background-color: $bgMed;
 							&:focus, &.editing {
 								background-color: $bgDark;
@@ -2655,6 +2663,9 @@ $patternSize : 32px;
 	}
 
 	&.preview {
+		gap: 1px;
+		border: 1px solid $bgLight;
+
 		&.size-3 .cell {
 			zoom: 0.5;
 		}
@@ -2669,15 +2680,16 @@ $patternSize : 32px;
 		.cell.empty {
 			background: $bgMed;
 			box-shadow: none;
-			border-color: $bgLighter;
+			// border-color: $bgLighter;
+			border: none;
 		}
 		.cell.center {
 			opacity: 1;
 			canvas {
 				box-sizing: border-box;
-				zoom: 1.7;
-				margin-left: -35%;
-				margin-top: -35%;
+				zoom: 2;
+				margin-left: -50%;
+				margin-top: -50%;
 				padding: 2px;
 
 				background-color: black;

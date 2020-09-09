@@ -1,19 +1,30 @@
 package misc;
 
+import sortablejs.*;
+import sortablejs.Sortable;
+
 class JsTools {
 	public static function makeSortable(selector:String, onSort:(from:Int, to:Int)->Void) {
-		if( new J(selector).find(".dragHandle").length>0 )
-			js.Lib.eval('sortable("$selector", { items:":not(.fixed)", handle:".dragHandle" })');
-		else
-			js.Lib.eval('sortable("$selector", { items:":not(.fixed)" })');
+		var j = new J(selector);
+		j.addClass("sortable");
 
-		new J(selector)
-			.off("sortupdate")
-			.on("sortupdate", function(ev) {
-				var from : Int = ev.detail.origin.index;
-				var to : Int = ev.detail.destination.index;
-				onSort(from,to);
-			});
+		var settings : SortableOptions = {
+			onEnd: function(ev) {
+				if( ev.oldIndex!=ev.newIndex )
+					onSort( ev.oldIndex, ev.newIndex );
+			},
+			scroll: j.get(0),
+			scrollSpeed: 40,
+			scrollSensitivity: 200,
+		}
+
+		// Custom handle
+		if( j.find(".dragHandle").length>0 ) { // TODO rename sortHandle
+			settings.handle = ".dragHandle";
+			j.addClass("customHandle");
+		}
+
+		Sortable.create( j.get(0), settings);
 	}
 
 	public static function prepareProjectFile(p:led.Project) : { bytes:haxe.io.Bytes, json:Dynamic } {
