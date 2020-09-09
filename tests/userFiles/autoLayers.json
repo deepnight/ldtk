@@ -447,7 +447,7 @@
 							0
 						],
 						"flipX" : false,
-						"flipY" : false,
+						"flipY" : true,
 						"seed" : 9923078
 					},
 					{
