@@ -221,9 +221,12 @@ class EditEnums extends ui.modal.Panel {
 		if( curEnum.isExternal() ) {
 			jForm.find(".source .path, .source .exploreTo").remove();
 			jForm.find(".source")
+				.show()
 				.append( JsTools.makePath(curEnum.externalRelPath) )
 				.append( JsTools.makeExploreLink( editor.makeFullFilePath(curEnum.externalRelPath) ) );
 		}
+		else
+			jForm.find(".source").hide();
 
 		// Tilesets
 		var jSelect = jForm.find("select#icons");
