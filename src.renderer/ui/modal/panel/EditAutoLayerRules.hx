@@ -91,8 +91,12 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			jFlag.addClass( r.flipX ? "on" : "off" );
 			jFlag.click( function(ev:js.jquery.Event) {
 				ev.preventDefault();
-				r.flipX = !r.flipX;
-				editor.ge.emit(LayerDefChanged);
+				if( r.isSymetricX() )
+					N.error("This option will have no effect on a symetric rule.");
+				else {
+					r.flipX = !r.flipX;
+					editor.ge.emit(LayerDefChanged);
+				}
 			});
 
 			// Flip-Y
@@ -100,8 +104,12 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			jFlag.addClass( r.flipY ? "on" : "off" );
 			jFlag.click( function(ev:js.jquery.Event) {
 				ev.preventDefault();
-				r.flipY = !r.flipY;
-				editor.ge.emit(LayerDefChanged);
+				if( r.isSymetricY() )
+					N.error("This option will have no effect on a symetric rule.");
+				else {
+					r.flipY = !r.flipY;
+					editor.ge.emit(LayerDefChanged);
+				}
 			});
 
 			// Perlin

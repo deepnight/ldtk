@@ -49,6 +49,23 @@ class AutoLayerRule {
 			perlinActive = true;
 	}
 
+	public function isSymetricX() {
+		for( cx in 0...Std.int(size*0.5) )
+		for( cy in 0...size )
+			if( pattern[coordId(cx,cy)] != pattern[coordId(size-1-cx,cy)] )
+				return false;
+
+		return true;
+	}
+
+	public function isSymetricY() {
+		for( cx in 0...size )
+		for( cy in 0...Std.int(size*0.5) )
+			if( pattern[coordId(cx,cy)] != pattern[coordId(cx,size-1-cy)] )
+				return false;
+
+		return true;
+	}
 
 	public inline function get(cx,cy) {
 		return pattern[ coordId(cx,cy) ];
@@ -70,6 +87,12 @@ class AutoLayerRule {
 	}
 
 	public function toJson() {
+		if( flipX && isSymetricX() )
+			flipX = false;
+
+		if( flipY && isSymetricY() )
+			flipY = false;
+
 		return {
 			size: size,
 			tileIds: tileIds.copy(),
