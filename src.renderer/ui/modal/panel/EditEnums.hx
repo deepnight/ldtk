@@ -299,7 +299,7 @@ class EditEnums extends ui.modal.Panel {
 			i.linkEvent(EnumDefChanged);
 
 			if( curEnum.isExternal() )
-				li.find(".dragHandle").hide();
+				li.find(".sortHandle").hide();
 
 			// Tile preview
 			if( !curEnum.isExternal() ) {
@@ -307,7 +307,7 @@ class EditEnums extends ui.modal.Panel {
 					eValue.tileId = tileIds[0];
 					editor.ge.emit(EnumDefChanged);
 				});
-				jPicker.insertAfter( li.find(".dragHandle") );
+				jPicker.insertAfter( li.find(".sortHandle") );
 			}
 
 			// Remove value button

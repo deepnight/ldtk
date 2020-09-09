@@ -1436,8 +1436,10 @@ ul.sortable:not(.customHandle) li {
 }
 
 ul.sortable li[draggable=true] {
+	color: white;
 	outline: 1px dashed $orange;
 	outline-offset: -1px;
+	opacity: 0.7;
 	box-shadow: 0px 0px 8px $red inset;
 	background-color: $darkOrange !important;
 	background-image: url("../img/stripes.png");
@@ -1445,7 +1447,7 @@ ul.sortable li[draggable=true] {
 }
 
 
-.dragHandle {
+.sortHandle {
 	display: inline-block;
 	background: url("../img/icons/drag.png") no-repeat;
 	background-position: left center;
@@ -2527,6 +2529,7 @@ canvas#webgl {
 		ul.rules {
 			display: grid;
 			overflow-y: auto;
+			align-items: flex-start;
 			grid-template-columns: auto;
 			gap: 2px;
 			margin-top: 4px;

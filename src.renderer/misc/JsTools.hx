@@ -19,8 +19,8 @@ class JsTools {
 		}
 
 		// Custom handle
-		if( j.find(".dragHandle").length>0 ) { // TODO rename sortHandle
-			settings.handle = ".dragHandle";
+		if( j.find(".sortHandle").length>0 ) {
+			settings.handle = ".sortHandle";
 			j.addClass("customHandle");
 		}
 
