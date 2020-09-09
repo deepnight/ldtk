@@ -378,11 +378,7 @@ class JsTools {
 		if( !fileExists(fp.full) )
 			fp.fileWithExt = null;
 
-		#if nwjs
-		nw.Shell.showItemInFolder(fp.full);
-		#else
 		electron.Shell.showItemInFolder(fp.full);
-		#end
 	}
 
 	public static function makeExploreLink(filePath:String) {
