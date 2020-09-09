@@ -9,7 +9,9 @@ class AutoLayerRule {
 	public var flipX = false;
 	public var flipY = false;
 
-	public var perlinSeed : Null<Int>;
+	var perlinSeed : Null<Int>;
+	public var perlinScale : Float = 0.2;
+	public var perlinOctaves = 3;
 	var _perlin(get,default) : Null<hxd.Perlin>;
 
 	// var bitMasksHas : Null< Map<Int, Int> >;
@@ -32,6 +34,18 @@ class AutoLayerRule {
 			_perlin = null;
 
 		return _perlin;
+	}
+
+	public inline function hasPerlin() return perlinSeed!=null;
+
+	public function setPerlin(active:Bool) {
+		if( !active ) {
+			perlinSeed = null;
+			_perlin = null;
+		}
+		else {
+			perlinSeed = Std.random(9999999);
+		}
 	}
 
 
@@ -169,7 +183,7 @@ class AutoLayerRule {
 		if( chance<=0 || chance<1 && dn.M.randSeedCoords(seed, cx,cy, 100) >= chance*100 )
 			return false;
 
-		if( perlinSeed!=null && _perlin.perlin(perlinSeed, cx*0.2, cy*0.2, 3) < 0 )
+		if( hasPerlin() && _perlin.perlin(perlinSeed, cx*perlinScale, cy*perlinScale, perlinOctaves) < 0 )
 			return false;
 
 		// Checks if this rule cares about the cell IntGrid value

@@ -2751,6 +2751,19 @@ $patternSize : 32px;
 	}
 }
 
+.window.dialog.perlinSettings {
+	.content {
+		width: 150px;
+		ul.form {
+			label {
+				flex: 1 1 auto;
+			}
+			input {
+				flex: 0 0 50px;
+			}
+		}
+	}
+}
 .window.dialog.autoPatternEditor {
 	.content {
 		padding: 4px;
