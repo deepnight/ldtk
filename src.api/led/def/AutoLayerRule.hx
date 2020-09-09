@@ -5,14 +5,16 @@ class AutoLayerRule {
 	public var chance : Float = 1.0;
 	public var size(default,null): Int;
 	var pattern : Array<Int> = [];
-	public var seed = 1;
+	public var seed : Int;
 	public var flipX = false;
+	public var flipY = false;
 
 	// var bitMasksHas : Null< Map<Int, Int> >;
 	// var bitMasksNot : Null< Map<Int, Int> >;
 
 	public function new(s) {
 		size = s;
+		seed = Std.random(9999999);
 		initPattern();
 	}
 
@@ -42,6 +44,7 @@ class AutoLayerRule {
 			chance: JsonTools.writeFloat(chance),
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
 			flipX: flipX,
+			flipY: flipY,
 			seed: seed,
 		}
 	}
@@ -53,6 +56,7 @@ class AutoLayerRule {
 		r.pattern = json.pattern;
 		r.seed = JsonTools.readInt(json.seed, 1);
 		r.flipX = JsonTools.readBool(json.flipX, false);
+		r.flipY = JsonTools.readBool(json.flipY, false);
 		return r;
 	}
 
@@ -139,7 +143,7 @@ class AutoLayerRule {
 	// }
 
 
-	public function matches(li:led.inst.LayerInstance, cx:Int, cy:Int, xMul=1, yMul=1) {
+	public function matches(li:led.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
 		if( tileIds.length==0 )
 			return false;
 
@@ -167,18 +171,18 @@ class AutoLayerRule {
 
 			if( dn.M.iabs( pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
 				// "Anything" checks
-				if( pattern[coordId]>0 && !li.hasIntGrid(cx+xMul*(px-radius), cy+py-radius) )
+				if( pattern[coordId]>0 && !li.hasIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
 					return false;
 
-				if( pattern[coordId]<0 && li.hasIntGrid(cx+px-radius, cy+py-radius) )
+				if( pattern[coordId]<0 && li.hasIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
 					return false;
 			}
 			else {
 				// Specific value checks
-				if( pattern[coordId]>0 && li.getIntGrid(cx+xMul*(px-radius), cy+py-radius)!=pattern[coordId]-1 )
+				if( pattern[coordId]>0 && li.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius))!=pattern[coordId]-1 )
 					return false;
 
-				if( pattern[coordId]<0 && li.getIntGrid(cx+xMul*(px-radius), cy+py-radius)==-pattern[coordId]-1 )
+				if( pattern[coordId]<0 && li.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius))==-pattern[coordId]-1 )
 					return false;
 			}
 		}

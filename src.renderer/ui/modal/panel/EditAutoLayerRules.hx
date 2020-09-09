@@ -35,6 +35,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 	function updateForm() {
 		var jRuleList = jContent.find("ul.rules").off().empty();
 		jContent.find("*").off();
+		ui.Tip.clear();
 
 		// Add rule
 		jContent.find("button.createRule").click( function(ev) {
@@ -86,6 +87,15 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			jFlip.click( function(ev:js.jquery.Event) {
 				ev.preventDefault();
 				r.flipX = !r.flipX;
+				editor.ge.emit(LayerDefChanged);
+			});
+
+			// Flip-Y
+			var jFlip = jRule.find("a.flipY");
+			jFlip.addClass( r.flipY ? "on" : "off" );
+			jFlip.click( function(ev:js.jquery.Event) {
+				ev.preventDefault();
+				r.flipY = !r.flipY;
 				editor.ge.emit(LayerDefChanged);
 			});
 

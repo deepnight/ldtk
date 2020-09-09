@@ -294,6 +294,15 @@ class LayerInstance {
 
 	#if heaps
 
+	inline function renderAutoTile(r:led.def.AutoLayerRule, tg:h2d.TileGroup, td:led.def.TilesetDef, cx,cy, dirX:Int, dirY:Int) {
+		tg.addTransform(
+			( cx + (dirX<0?1:0) + def.tilePivotX ) * def.gridSize,
+			( cy + (dirY<0?1:0) + def.tilePivotX ) * def.gridSize,
+			dirX, dirY, 0,
+			td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
+		);
+	}
+
 	public function render(target:h2d.Object, renderAutoLayers:Bool) {
 		switch def.type {
 			case IntGrid:
@@ -312,20 +321,19 @@ class LayerInstance {
 						while( i>=0 ) {
 							var r = def.rules[i];
 							if( r.matches(this, cx,cy) ) {
-								tg.add(
-									(cx + def.tilePivotX) * def.gridSize,
-									(cy + def.tilePivotX) * def.gridSize,
-									td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
-								);
+								renderAutoTile(r, tg, td, cx,cy, 1, 1);
 								anyMatch = true;
 							}
 							else if( r.flipX && r.matches(this, cx,cy, -1) ) {
-								tg.addTransform(
-									((cx+1) + def.tilePivotX) * def.gridSize,
-									(cy + def.tilePivotX) * def.gridSize,
-									-1, 1, 0,
-									td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
-								);
+								renderAutoTile(r, tg, td, cx,cy, -1, 1);
+								anyMatch = true;
+							}
+							else if( r.flipY && r.matches(this, cx,cy, 1, -1) ) {
+								renderAutoTile(r, tg, td, cx,cy, 1, -1);
+								anyMatch = true;
+							}
+							else if( r.flipX && r.flipY && r.matches(this, cx,cy, -1, -1) ) {
+								renderAutoTile(r, tg, td, cx,cy, -1, -1);
 								anyMatch = true;
 							}
 							i--;

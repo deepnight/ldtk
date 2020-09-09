@@ -45,7 +45,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 133996
 					},
 					{
 						"size" : 3,
@@ -63,7 +64,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 5304993
 					},
 					{
 						"size" : 5,
@@ -97,7 +99,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 1590064
 					},
 					{
 						"size" : 3,
@@ -115,7 +118,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 5051877
 					},
 					{
 						"size" : 3,
@@ -133,7 +137,8 @@
 							-1000001
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 3748058
 					},
 					{
 						"size" : 3,
@@ -151,7 +156,8 @@
 							4
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 5687881
 					},
 					{
 						"size" : 3,
@@ -169,7 +175,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 500099
 					},
 					{
 						"size" : 3,
@@ -187,7 +194,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 6021377
 					},
 					{
 						"size" : 3,
@@ -205,7 +213,8 @@
 							0
 						],
 						"flipX" : true,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 7523151
 					},
 					{
 						"size" : 3,
@@ -223,7 +232,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 9581010
 					},
 					{
 						"size" : 3,
@@ -241,7 +251,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 8483980
 					},
 					{
 						"size" : 3,
@@ -259,7 +270,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 8296216
 					},
 					{
 						"size" : 3,
@@ -277,7 +289,8 @@
 							2
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 6115170
 					},
 					{
 						"size" : 3,
@@ -295,7 +308,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 7959840
 					},
 					{
 						"size" : 3,
@@ -313,7 +327,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 8807736
 					},
 					{
 						"size" : 3,
@@ -331,7 +346,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 2138461
 					},
 					{
 						"size" : 3,
@@ -349,7 +365,8 @@
 							0
 						],
 						"flipX" : true,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 8333176
 					},
 					{
 						"size" : 5,
@@ -383,7 +400,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 9136179
 					},
 					{
 						"size" : 3,
@@ -410,7 +428,8 @@
 							1
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 2063583
 					},
 					{
 						"size" : 3,
@@ -428,7 +447,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 9923078
 					},
 					{
 						"size" : 3,
@@ -446,7 +466,8 @@
 							0
 						],
 						"flipX" : true,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 6334197
 					},
 					{
 						"size" : 3,
@@ -464,7 +485,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 479315
 					},
 					{
 						"size" : 3,
@@ -482,7 +504,8 @@
 							0
 						],
 						"flipX" : true,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 2166168
 					},
 					{
 						"size" : 3,
@@ -500,7 +523,8 @@
 							0
 						],
 						"flipX" : true,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 1764855
 					},
 					{
 						"size" : 3,
@@ -518,7 +542,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 6979246
 					},
 					{
 						"size" : 3,
@@ -536,7 +561,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 8209577
 					},
 					{
 						"size" : 3,
@@ -562,7 +588,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 5335887
 					},
 					{
 						"size" : 3,
@@ -580,7 +607,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 1569511
 					}
 				],
 				"tilesetDefUid" : null,

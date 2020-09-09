@@ -52,7 +52,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 3053337
 					},
 					{
 						"size" : 3,
@@ -70,7 +71,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 926288
 					},
 					{
 						"size" : 3,
@@ -95,7 +97,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 1926375
 					},
 					{
 						"size" : 3,
@@ -113,7 +116,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 5788820
 					},
 					{
 						"size" : 3,
@@ -131,7 +135,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 4153621
 					},
 					{
 						"size" : 3,
@@ -149,7 +154,8 @@
 							0
 						],
 						"flipX" : false,
-						"seed" : 1
+						"flipY" : false,
+						"seed" : 57590
 					}
 				],
 				"tilesetDefUid" : null,
