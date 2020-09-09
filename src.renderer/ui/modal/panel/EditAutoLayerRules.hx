@@ -82,20 +82,29 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			i.setBounds(0,1);
 
 			// Flip-X
-			var jFlip = jRule.find("a.flipX");
-			jFlip.addClass( r.flipX ? "on" : "off" );
-			jFlip.click( function(ev:js.jquery.Event) {
+			var jFlag = jRule.find("a.flipX");
+			jFlag.addClass( r.flipX ? "on" : "off" );
+			jFlag.click( function(ev:js.jquery.Event) {
 				ev.preventDefault();
 				r.flipX = !r.flipX;
 				editor.ge.emit(LayerDefChanged);
 			});
 
 			// Flip-Y
-			var jFlip = jRule.find("a.flipY");
-			jFlip.addClass( r.flipY ? "on" : "off" );
-			jFlip.click( function(ev:js.jquery.Event) {
+			var jFlag = jRule.find("a.flipY");
+			jFlag.addClass( r.flipY ? "on" : "off" );
+			jFlag.click( function(ev:js.jquery.Event) {
 				ev.preventDefault();
 				r.flipY = !r.flipY;
+				editor.ge.emit(LayerDefChanged);
+			});
+
+			// Perlin
+			var jFlag = jRule.find("a.perlin");
+			jFlag.addClass( r.perlinSeed!=null ? "on" : "off" );
+			jFlag.click( function(ev:js.jquery.Event) {
+				ev.preventDefault();
+				r.perlinSeed = r.perlinSeed==null ? Std.random(9999999) : null;
 				editor.ge.emit(LayerDefChanged);
 			});
 

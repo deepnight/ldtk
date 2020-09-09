@@ -9,6 +9,9 @@ class AutoLayerRule {
 	public var flipX = false;
 	public var flipY = false;
 
+	public var perlinSeed : Null<Int>;
+	var _perlin(get,default) : Null<hxd.Perlin>;
+
 	// var bitMasksHas : Null< Map<Int, Int> >;
 	// var bitMasksNot : Null< Map<Int, Int> >;
 
@@ -17,6 +20,20 @@ class AutoLayerRule {
 		seed = Std.random(9999999);
 		initPattern();
 	}
+
+	inline function get__perlin() {
+		if( perlinSeed!=null && _perlin==null ) {
+			_perlin = new hxd.Perlin();
+			_perlin.normalize = true;
+			_perlin.adjustScale(50, 1);
+		}
+
+		if( perlinSeed==null && _perlin!=null )
+			_perlin = null;
+
+		return _perlin;
+	}
+
 
 	public inline function get(cx,cy) {
 		return pattern[ coordId(cx,cy) ];
@@ -45,6 +62,7 @@ class AutoLayerRule {
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
 			flipX: flipX,
 			flipY: flipY,
+			perlinSeed: perlinSeed,
 			seed: seed,
 		}
 	}
@@ -55,6 +73,7 @@ class AutoLayerRule {
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
 		r.seed = JsonTools.readInt(json.seed, 1);
+		r.perlinSeed = JsonTools.readNullableInt(json.perlinSeed);
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
 		return r;
@@ -148,6 +167,9 @@ class AutoLayerRule {
 			return false;
 
 		if( chance<=0 || chance<1 && dn.M.randSeedCoords(seed, cx,cy, 100) >= chance*100 )
+			return false;
+
+		if( perlinSeed!=null && _perlin.perlin(perlinSeed, cx*0.2, cy*0.2, 3) < 0 )
 			return false;
 
 		// Checks if this rule cares about the cell IntGrid value
