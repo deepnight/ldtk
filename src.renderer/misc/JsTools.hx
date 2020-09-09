@@ -272,7 +272,6 @@ class JsTools {
 			var keys = [];
 			if( jThis.attr("keys")!=null ) {
 				var rawKeys = jThis.attr("keys").split("+").map( function(k) return StringTools.trim(k).toLowerCase() );
-				jThis.removeAttr("keys");
 				for(k in rawKeys) {
 					switch k {
 						case "ctrl" : keys.push(K.CTRL);
