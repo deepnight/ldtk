@@ -2540,6 +2540,7 @@ canvas#webgl {
 			overflow-y: auto;
 			align-items: flex-start;
 			grid-template-columns: auto;
+			grid-auto-rows: min-content;
 			gap: 2px;
 			margin-top: 4px;
 
