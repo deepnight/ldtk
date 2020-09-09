@@ -220,6 +220,7 @@ class Tool<T> extends dn.Process {
 			check(cur.cx, cur.cy-1);
 			check(cur.cx, cur.cy+1);
 
+			editor.curLevelHistory.markChange(cur.cx, cur.cy);
 			setter( cur.cx, cur.cy, getSelectedValue() );
 		}
 
