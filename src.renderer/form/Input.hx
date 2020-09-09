@@ -27,6 +27,9 @@ class Input<T> {
 		writeValueToInput();
 		lastValidValue = getter();
 
+		jInput.focus( function(ev) {
+			jInput.select();
+		});
 		jInput.change( function(_) {
 			onInputChange();
 		});
