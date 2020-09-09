@@ -109,6 +109,7 @@ class Definitions {
 	}
 
 	public function isLayerNameUnique(id:String) {
+		var id = Project.cleanupIdentifier(id, true);
 		for(ld in layers)
 			if( ld.identifier==id )
 				return false;
