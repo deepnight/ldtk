@@ -295,6 +295,9 @@ class EditEnums extends ui.modal.Panel {
 			);
 			i.linkEvent(EnumDefChanged);
 
+			if( curEnum.isExternal() )
+				li.find(".dragHandle").hide();
+
 			// Tile preview
 			if( !curEnum.isExternal() ) {
 				var jPicker = JsTools.createTilePicker(curEnum.iconTilesetUid, true, [eValue.tileId], function(tileIds) {
