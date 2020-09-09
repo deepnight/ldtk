@@ -10,6 +10,7 @@ haxe:
 install:
   - yes | haxelib install main.hxml
   - yes | haxelib install renderer.hxml
+  - haxelib git heaps https://github.com/HeapsIO/heaps.git
   - haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
   - haxelib list
 
