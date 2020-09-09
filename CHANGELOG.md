@@ -1,12 +1,14 @@
 # LEd release notes
 
-## 0.1.0-alpha
+## 0.1.6-alpha
 
  - **Auto-layers**: IntGrid layers can now render themselves automatically by drawing tiles based on their content. You can create "patterns of IntGrid values" to decide when a specific (or group of random tiles) should appear. It can for example be used to:
-   - add some random grass on top of platforms,
+   - add random grass or rocks on top of platforms,
    - add random ceiling props under platforms,
    - render ground/water/lava area,
    - etc.
+ - Added perlin noise support to Auto-layers rules (a rule can apply to only a random area).
+ - Changed version number to 0.1.x because no one could stop me from doing it
 
 ## 0.0.5-alpha
 
