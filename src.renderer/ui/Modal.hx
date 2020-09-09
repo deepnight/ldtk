@@ -32,6 +32,10 @@ class Modal extends dn.Process {
 		editor.ge.addGlobalListener(onGlobalEvent);
 	}
 
+	public function setTransparentMask() {
+		jMask.addClass("transparent");
+	}
+
 	public function addClass(cname:String) {
 		jModalAndMask.addClass(cname);
 	}

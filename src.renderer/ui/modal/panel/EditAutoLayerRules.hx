@@ -13,6 +13,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		super();
 
 		loadTemplate("editAutoLayerRules");
+		setTransparentMask();
 		updateForm();
 	}
 
@@ -113,12 +114,22 @@ class EditAutoLayerRules extends ui.modal.Panel {
 						N.error("Perlin isn't enabled");
 					}
 					else {
+						// Perlin settings
 						var m = new Dialog(jFlag, "perlinSettings");
 						m.addClose();
 						m.loadTemplate("perlinSettings");
+						m.setTransparentMask();
+
+						var i = Input.linkToHtmlInput(r.perlinSeed, m.jContent.find("#perlinSeed"));
+						i.linkEvent(LayerDefChanged);
+						i.jInput.siblings("button").click( function(_) {
+							r.perlinSeed = Std.random(99999999);
+							i.jInput.val(r.perlinSeed);
+							editor.ge.emit(LayerDefChanged);
+						});
 
 						var i = Input.linkToHtmlInput(r.perlinScale, m.jContent.find("#perlinScale"));
-						N.debug(r.perlinScale);
+						i.displayAsPct = true;
 						i.setBounds(0.01, 1);
 						i.linkEvent(LayerDefChanged);
 

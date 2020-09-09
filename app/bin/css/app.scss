@@ -1163,6 +1163,10 @@ textarea {
 		width: 100%;
 		height: 100%;
 		background-color: rgba(0,0,0,0.35);
+
+		&.transparent {
+			opacity: 0 !important;
+		}
 	}
 
 	&>.wrapper {
@@ -2753,13 +2757,20 @@ $patternSize : 32px;
 
 .window.dialog.perlinSettings {
 	.content {
-		width: 150px;
+		width: 300px;
 		ul.form {
-			label {
-				flex: 1 1 auto;
+			li {
+				align-items: stretch;
 			}
-			input {
+			label {
 				flex: 0 0 50px;
+			}
+			input#perlinSeed {
+				flex: 1 0 80px;
+			}
+			button {
+				padding-top: 0;
+				padding-bottom: 0;
 			}
 		}
 	}

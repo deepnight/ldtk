@@ -39,7 +39,8 @@
 							503,
 							504
 						],
-						"chance" : 0.04,
+						"chance" : 0.1,
+						"seed" : 3053337,
 						"pattern" : [
 							0,
 							0,
@@ -53,12 +54,16 @@
 						],
 						"flipX" : false,
 						"flipY" : false,
-						"seed" : 3053337
+						"perlinActive" : true,
+						"perlinSeed" : 6802540,
+						"perlinScale" : 0.2,
+						"perlinOctaves" : 2
 					},
 					{
 						"size" : 3,
 						"tileIds" : [ 32, 33, 53 ],
 						"chance" : 0.14,
+						"seed" : 926288,
 						"pattern" : [
 							0,
 							0,
@@ -72,7 +77,10 @@
 						],
 						"flipX" : false,
 						"flipY" : false,
-						"seed" : 926288
+						"perlinActive" : false,
+						"perlinSeed" : 1217772,
+						"perlinScale" : 0.2,
+						"perlinOctaves" : 2
 					},
 					{
 						"size" : 3,
@@ -85,6 +93,7 @@
 							40
 						],
 						"chance" : 0.3,
+						"seed" : 1926375,
 						"pattern" : [
 							0,
 							0,
@@ -98,12 +107,16 @@
 						],
 						"flipX" : false,
 						"flipY" : false,
-						"seed" : 1926375
+						"perlinActive" : true,
+						"perlinSeed" : 1720679,
+						"perlinScale" : 0.2,
+						"perlinOctaves" : 2
 					},
 					{
 						"size" : 3,
 						"tileIds" : [ 9, 10 ],
 						"chance" : 0.06,
+						"seed" : 5788820,
 						"pattern" : [
 							0,
 							0,
@@ -117,12 +130,16 @@
 						],
 						"flipX" : false,
 						"flipY" : false,
-						"seed" : 5788820
+						"perlinActive" : true,
+						"perlinSeed" : 819551,
+						"perlinScale" : 0.2,
+						"perlinOctaves" : 2
 					},
 					{
 						"size" : 3,
-						"tileIds" : [ 147, 148, 149, 150 ],
+						"tileIds" : [ 182, 183, 184 ],
 						"chance" : 1.0,
+						"seed" : 4153621,
 						"pattern" : [
 							0,
 							0,
@@ -136,12 +153,16 @@
 						],
 						"flipX" : false,
 						"flipY" : false,
-						"seed" : 4153621
+						"perlinActive" : false,
+						"perlinSeed" : 2869966,
+						"perlinScale" : 0.2,
+						"perlinOctaves" : 2
 					},
 					{
 						"size" : 3,
 						"tileIds" : [ 99, 100, 101 ],
 						"chance" : 1.0,
+						"seed" : 57590,
 						"pattern" : [
 							0,
 							1,
@@ -155,7 +176,10 @@
 						],
 						"flipX" : false,
 						"flipY" : false,
-						"seed" : 57590
+						"perlinActive" : false,
+						"perlinSeed" : 7087840,
+						"perlinScale" : 0.2,
+						"perlinOctaves" : 2
 					}
 				],
 				"tilesetDefUid" : null,

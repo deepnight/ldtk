@@ -9,9 +9,10 @@ class AutoLayerRule {
 	public var flipX = false;
 	public var flipY = false;
 
-	var perlinSeed : Null<Int>;
+	var perlinActive = false;
+	public var perlinSeed : Int;
 	public var perlinScale : Float = 0.2;
-	public var perlinOctaves = 3;
+	public var perlinOctaves = 2;
 	var _perlin(get,default) : Null<hxd.Perlin>;
 
 	// var bitMasksHas : Null< Map<Int, Int> >;
@@ -19,6 +20,7 @@ class AutoLayerRule {
 
 	public function new(s) {
 		size = s;
+		perlinSeed = Std.random(9999999);
 		seed = Std.random(9999999);
 		initPattern();
 	}
@@ -36,16 +38,15 @@ class AutoLayerRule {
 		return _perlin;
 	}
 
-	public inline function hasPerlin() return perlinSeed!=null;
+	public inline function hasPerlin() return perlinActive;
 
 	public function setPerlin(active:Bool) {
 		if( !active ) {
-			perlinSeed = null;
+			perlinActive = false;
 			_perlin = null;
 		}
-		else {
-			perlinSeed = Std.random(9999999);
-		}
+		else
+			perlinActive = true;
 	}
 
 
@@ -73,11 +74,15 @@ class AutoLayerRule {
 			size: size,
 			tileIds: tileIds.copy(),
 			chance: JsonTools.writeFloat(chance),
+			seed: seed,
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
 			flipX: flipX,
 			flipY: flipY,
+
+			perlinActive: perlinActive,
 			perlinSeed: perlinSeed,
-			seed: seed,
+			perlinScale: JsonTools.writeFloat(perlinScale),
+			perlinOctaves: perlinOctaves,
 		}
 	}
 
@@ -87,9 +92,14 @@ class AutoLayerRule {
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
 		r.seed = JsonTools.readInt(json.seed, 1);
-		r.perlinSeed = JsonTools.readNullableInt(json.perlinSeed);
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
+
+		r.perlinActive = JsonTools.readBool(json.perlinActive, false);
+		r.perlinScale = JsonTools.readFloat(json.perlinScale, 0.2);
+		r.perlinOctaves = JsonTools.readInt(json.perlinOctaves, 2);
+		r.perlinSeed = JsonTools.readInt(json.perlinSeed, Std.random(9999999));
+
 		return r;
 	}
 
