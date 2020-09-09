@@ -3,7 +3,7 @@
 		"fileType" : "LEd Project JSON",
 		"app" : "LEd",
 		"appAuthor" : "Sebastien Benard",
-		"appVersion" : "0.1.0-alpha-debug",
+		"appVersion" : "0.1.6-alpha-debug",
 		"url" : "https://deepnight.net/"
 	},
 	"name" : "test",

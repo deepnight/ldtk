@@ -3,7 +3,7 @@
 		"fileType" : "LEd Project JSON",
 		"app" : "LEd",
 		"appAuthor" : "Sebastien Benard",
-		"appVersion" : "0.1.0-alpha-debug",
+		"appVersion" : "0.1.6-alpha-debug",
 		"url" : "https://deepnight.net/"
 	},
 	"name" : "autoLayers",
@@ -12,7 +12,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#1B2037",
-	"nextUid" : 25,
+	"nextUid" : 26,
 	"defs" : {
 		"layers" : [
 			{
@@ -234,9 +234,9 @@
 							0,
 							0,
 							0,
-							0,
-							0,
-							0,
+							-1000001,
+							-1000001,
+							-1000001,
 							0,
 							0,
 							-1000001,
@@ -826,7 +826,7 @@
 							5,
 							6
 						],
-						"chance" : 0.3,
+						"chance" : 1.0,
 						"seed" : 5335887,
 						"pattern" : [
 							0,
@@ -841,14 +841,14 @@
 						],
 						"flipX" : false,
 						"flipY" : false,
-						"perlinActive" : false,
+						"perlinActive" : true,
 						"perlinSeed" : 9436988,
-						"perlinScale" : 0.2,
-						"perlinOctaves" : 2
+						"perlinScale" : 0.29,
+						"perlinOctaves" : 3
 					},
 					{
 						"size" : 3,
-						"tileIds" : [ 40 ],
+						"tileIds" : [ 0 ],
 						"chance" : 1.0,
 						"seed" : 1569511,
 						"pattern" : [
@@ -944,7 +944,7 @@
 	},
 	"levels" : [
 		{
-			"identifier" : "Level",
+			"identifier" : "Big",
 			"uid" : 0,
 			"pxWid" : 480,
 			"pxHei" : 320,
