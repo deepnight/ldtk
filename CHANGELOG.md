@@ -1,6 +1,6 @@
 # LEd release notes
 
-## 0.1.6-alpha
+## 0.1.5-alpha
 
  - **Auto-layers**: IntGrid layers can now render themselves automatically by drawing tiles based on their content. You can create "patterns of IntGrid values" to decide when a specific (or group of random tiles) should appear. It can for example be used to:
    - add random grass or rocks on top of platforms,
@@ -14,13 +14,10 @@
  - Better element sorting (levels, layers etc.) experience using SortableJS lib
  - Closing a panel with a color picker will now validate color before closing the panel.
  - Better viewport centering when opening a level.
- - Many UI/UX fixes
- - Bug fixes
-
-## 0.0.5-alpha
-
  - Fixed 0-9 keyboard shortcuts while focusing a field
  - Fixed save/load notifications
+ - Many UI/UX fixes
+ - Bug fixes
 
 ## 0.0.4-alpha
 
