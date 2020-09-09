@@ -2,7 +2,6 @@ package misc;
 
 class JsTools {
 	public static function makeSortable(selector:String, onSort:(from:Int, to:Int)->Void) {
-		// TODO replace html5sortable with corresponding npm module
 		if( new J(selector).find(".dragHandle").length>0 )
 			js.Lib.eval('sortable("$selector", { items:":not(.fixed)", handle:".dragHandle" })');
 		else
@@ -14,8 +13,7 @@ class JsTools {
 				var from : Int = ev.detail.origin.index;
 				var to : Int = ev.detail.destination.index;
 				onSort(from,to);
-			}
-		);
+			});
 	}
 
 	public static function prepareProjectFile(p:led.Project) : { bytes:haxe.io.Bytes, json:Dynamic } {
