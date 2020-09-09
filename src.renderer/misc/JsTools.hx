@@ -420,24 +420,24 @@ class JsTools {
 
 
 	public static function createTilePicker(tilesetId:Null<Int>, singleMode=false, tileIds:Array<Int>, onPick:(tileIds:Array<Int>)->Void) {
-		var jTile = new J('<canvas class="tile"></canvas>');
+		var jTileCanvas = new J('<canvas class="tile"></canvas>');
 
 		if( tilesetId!=null ) {
-			jTile.addClass("active");
+			jTileCanvas.addClass("active");
 			var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
 
 			// Render tile
 			if( tileIds.length>0 ) {
-				jTile.removeClass("empty");
-				jTile.attr("width", td.tileGridSize);
-				jTile.attr("height", td.tileGridSize);
-				td.drawTileToCanvas(jTile, tileIds[0]);
+				jTileCanvas.removeClass("empty");
+				jTileCanvas.attr("width", td.tileGridSize);
+				jTileCanvas.attr("height", td.tileGridSize);
+				td.drawTileToCanvas(jTileCanvas, tileIds[0]);
 			}
 			else
-				jTile.addClass("empty");
+				jTileCanvas.addClass("empty");
 
 			// Open picker
-			jTile.click( function(ev) {
+			jTileCanvas.click( function(ev) {
 				var m = new ui.Modal();
 				m.addClass("singleTilePicker");
 
@@ -457,9 +457,9 @@ class JsTools {
 			});
 		}
 		else
-			jTile.addClass("empty");
+			jTileCanvas.addClass("empty");
 
-		return jTile;
+		return jTileCanvas;
 	}
 
 
