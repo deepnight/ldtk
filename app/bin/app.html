@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<script type="text/javascript" src="js/jquery-3.5.1.js"></script>
+	<script type="text/javascript" src="js/jquery-3.5.1.min.js"></script>
 	<script type="text/javascript" src="js/html5sortable.min.js"></script>
 	<link rel="stylesheet" href="css/app.min.css"/>
 </head>
@@ -39,6 +39,8 @@
 	</xml>
 
 	<!-- Fix jquery/electron issue -->
-	<script>window.$ = window.jQuery = require('./js/jquery-3.5.1.js');</script>
+	<script type="text/javascript">
+		window.$ = window.jQuery = window.jquery = require('./js/jquery-3.5.1.min.js');
+	</script>
 </body>
 </html>
