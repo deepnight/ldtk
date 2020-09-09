@@ -7,8 +7,15 @@
    - add random ceiling props under platforms,
    - render ground/water/lava area,
    - etc.
+ - **Smarter warning** when deleting something in a panel. ie. If the value you're removing isn't actually used in your project, you will get a "softer" warning.
+ - Smarter extern Enum sync: the removal of unused enums will be shown as low-risks operations.
  - Added perlin noise support to Auto-layers rules (a rule can apply to only a random area).
  - Changed version number to 0.1.x because no one could stop me from doing it
+ - Better element sorting (levels, layers etc.) experience using SortableJS lib
+ - Closing a panel with a color picker will now validate color before closing the panel.
+ - Better viewport centering when opening a level.
+ - Many UI/UX fixes
+ - Bug fixes
 
 ## 0.0.5-alpha
 
