@@ -5,6 +5,8 @@ class Panel extends ui.Modal {
 	var jLinkedButton : Null<js.jquery.JQuery>;
 
 	public function new() {
+		ui.Modal.closeAll(this);
+
 		super();
 
 		var mainPanel = new J("#mainPanel");
@@ -19,8 +21,6 @@ class Panel extends ui.Modal {
 		jPanelMask.width(mainPanel.outerWidth());
 		jPanelMask.height( mainPanel.outerHeight() - jPanelMask.offset().top );
 		jPanelMask.click( function(_) close() );
-
-		ui.Modal.closeAll(this);
 	}
 
 	function linkToButton(selector:String) {
