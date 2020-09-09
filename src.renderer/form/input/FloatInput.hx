@@ -12,9 +12,9 @@ class FloatInput extends form.Input<Float> {
 
 	function set_displayAsPct(v) {
 		displayAsPct = v;
-		jInput.val( Std.string( M.round(getter()) ) );
 
 		if( displayAsPct ) {
+			jInput.val( Std.string( M.round(getter()) ) );
 			jInput.addClass("quickEdit");
 			var startX = -1.;
 			var threshold = 3;
