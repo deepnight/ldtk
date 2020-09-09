@@ -11,6 +11,7 @@ enum GlobalEvent {
 	LevelSelected;
 	LevelSettingsChanged;
 	LevelAdded;
+	LevelRemoved;
 	LevelResized;
 	LevelRestoredFromHistory;
 	LevelSorted;

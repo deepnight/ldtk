@@ -34,6 +34,7 @@ class LevelList extends ui.modal.Panel {
 						editor.selectLevel( project.levels[0] );
 					else
 						editor.selectLevel( project.levels[idx-1] );
+					editor.ge.emit(LevelRemoved);
 				});
 			}
 		});

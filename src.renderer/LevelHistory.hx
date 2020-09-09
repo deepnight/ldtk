@@ -47,6 +47,7 @@ class LevelHistory {
 			case LevelSorted:
 			case LevelSelected:
 			case LevelAdded:
+			case LevelRemoved:
 			case LevelSettingsChanged:
 
 			case ProjectSettingsChanged:

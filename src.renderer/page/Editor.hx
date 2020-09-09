@@ -648,6 +648,7 @@ class Editor extends Page {
 				updateGuide();
 
 			case LevelAdded:
+			case LevelRemoved:
 			case LevelResized:
 			case LevelSorted:
 

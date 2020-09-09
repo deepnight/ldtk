@@ -147,6 +147,7 @@ class LevelRender extends dn.Process {
 				invalidate();
 
 			case LevelAdded:
+			case LevelRemoved:
 			case LevelSorted:
 			case LayerDefAdded:
 
