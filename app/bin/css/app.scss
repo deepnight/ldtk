@@ -1777,11 +1777,17 @@ canvas#webgl {
 					content: "No recent project";
 				}
 
-				.path span:not(:last-of-type):not(.slash) {
-					font-size: 8pt;
+				.path {
+					white-space: nowrap;
+					span:not(:last-of-type):not(.slash) {
+						font-size: 8pt;
+						opacity: 0.5;
+					}
 				}
 
 				li {
+					justify-items: right;
+					overflow: hidden;
 					grid-template-columns: auto min-content;
 					.exploreTo {
 						padding: 4px 8px;

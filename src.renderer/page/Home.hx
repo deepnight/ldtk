@@ -43,12 +43,38 @@ class Home extends Page {
 		jRecentList.empty();
 
 		var recents = App.ME.session.recentProjects;
+
+
+		// Trim common path parts
+		var trimmedPaths = recents.copy();
+		if( trimmedPaths.length>1 ) {
+			var splitPaths = trimmedPaths.map( function(p) return dn.FilePath.fromFile(p).getDirectoryAndFileArray() );
+
+			var same = true;
+			var trim = 0;
+			while( same ) {
+				for( i in 1...splitPaths.length )
+					if( trim>=splitPaths[0].length || splitPaths[0][trim] != splitPaths[i][trim] ) {
+						same = false;
+						break;
+					}
+				if( same )
+					trim++;
+			}
+
+			for(i in 0...trim)
+			for(p in splitPaths)
+				p.shift();
+
+			trimmedPaths = splitPaths.map( function(p) return p.join("/") );
+		}
+
 		var i = recents.length-1;
 		while( i>=0 ) {
 			var p = recents[i];
 			var li = new J('<li/>');
 			li.appendTo(jRecentList);
-			li.append( JsTools.makePath(p) );
+			li.append( JsTools.makePath(trimmedPaths[i], C.fromStringLight(dn.FilePath.fromFile(trimmedPaths[i]).directory)) );
 			li.click( function(ev) loadProject(p) );
 			li.append( JsTools.makeExploreLink(p) );
 			if( !JsTools.fileExists(p) )
