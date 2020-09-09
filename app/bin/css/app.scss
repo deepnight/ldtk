@@ -2688,17 +2688,27 @@ $patternSize : 32px;
 		}
 		.cell.center {
 			opacity: 1;
-			canvas {
-				box-sizing: border-box;
+			canvas,
+			.multiGhost {
 				zoom: 2;
 				margin-left: -50%;
 				margin-top: -50%;
-				padding: 2px;
 
 				background-color: black;
 				border: 1px solid white;
 				border-radius: 3px;
 				box-shadow: 0px 2px 4px black;
+			}
+			canvas {
+				box-sizing: border-box;
+				padding: 2px;
+			}
+			.multiGhost {
+				position: absolute;
+				width: $patternSize;
+				height: $patternSize;
+				top: -4px;
+				left: -4px;
 			}
 		}
 		&.size-5 .cell.center canvas {

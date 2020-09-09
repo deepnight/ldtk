@@ -490,6 +490,9 @@ class JsTools {
 				if( previewMode ) {
 					var td = Editor.ME.project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
 					if( td!=null ) {
+						if( rule.tileIds.length>1 )
+							jCell.append('<div class="multiGhost"></div>');
+
 						var jTile = createTile(td, rule.tileIds[0], 32);
 						jCell.append(jTile);
 						jCell.addClass("tilePreview");
