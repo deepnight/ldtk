@@ -7,7 +7,7 @@ import haxe.macro.Context;
 
 class Input<T> {
 	#if !macro
-	var jInput : js.jquery.JQuery;
+	public var jInput : js.jquery.JQuery;
 	var getter : Void->T;
 	var setter : T->Void;
 

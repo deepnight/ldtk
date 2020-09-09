@@ -80,6 +80,10 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			i.linkEvent(LayerDefChanged);
 			i.displayAsPct = true;
 			i.setBounds(0,1);
+			if( r.chance>=1 )
+				i.jInput.addClass("max");
+			else if( r.chance<=0 )
+				i.jInput.addClass("off");
 
 			// Flip-X
 			var jFlag = jRule.find("a.flipX");

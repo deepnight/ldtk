@@ -2558,6 +2558,12 @@ canvas#webgl {
 							&:focus, &.editing {
 								background-color: $bgDark;
 							}
+							&.max {
+								color: $bgLight;
+							}
+							&.off {
+								color: $red;
+							}
 						}
 
 						span {
@@ -2584,7 +2590,7 @@ canvas#webgl {
 							color: $green;
 							font-weight: bold;
 							text-shadow: 0px 0px 4px $green;
-							box-shadow: 0px 0px 8px $green;
+							// box-shadow: 0px 0px 8px $green;
 							border-color: $green;
 						}
 						&.off {
