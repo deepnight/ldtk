@@ -33,7 +33,7 @@ class AutoLayerRule {
 	}
 
 	inline function isValidSize(size:Int) {
-		return size>=3 && size<=7 && size%2!=0;
+		return size>=1 && size<=7 && size%2!=0;
 	}
 
 	inline function get__perlin() {
@@ -169,7 +169,7 @@ class AutoLayerRule {
 	inline function coordId(cx,cy) return cx+cy*size;
 
 	public function trim() {
-		while( size>3 ) {
+		while( size>1 ) {
 			var emptyBorder = true;
 			for( cx in 0...size )
 				if( pattern[coordId(cx,0)]!=0 || pattern[coordId(cx,size-1)]!=0 ) {

@@ -526,7 +526,7 @@ class JsTools {
 							jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
 					}
 					else {
-						jCell.addClass("not").append('<span class="cross">x</span>');
+						jCell.addClass("not").append('<span class="cross"></span>');
 						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING )
 							jCell.addClass("anything");
 						else

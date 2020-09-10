@@ -450,8 +450,6 @@ canvas.tile {
 		box-shadow:
 			2px 2px 0px black,
 			3px 3px 0px white,
-			4px 4px 0px black,
-			5px 5px 0px white;
 	}
 
 	&:not(.active) {
@@ -2667,6 +2665,10 @@ $patternSize : 32px;
 	display: grid;
 	gap: 2px;
 
+	&.size-1 {
+		grid-template-columns: repeat(1,auto);
+	}
+
 	&.size-3 {
 		grid-template-columns: repeat(3,auto);
 	}
@@ -2675,15 +2677,25 @@ $patternSize : 32px;
 		grid-template-columns: repeat(5,auto);
 	}
 
+	&.size-7 {
+		grid-template-columns: repeat(7,auto);
+	}
+
 	&.preview {
 		gap: 1px;
 		border: 1px solid $bgLight;
 
+		&.size-1 .cell {
+			zoom: 1;
+		}
 		&.size-3 .cell {
 			zoom: 0.5;
 		}
 		&.size-5 .cell {
 			zoom: 0.3;
+		}
+		&.size-7 .cell {
+			zoom: 0.1;
 		}
 
 		.cell {
@@ -2702,25 +2714,33 @@ $patternSize : 32px;
 				box-sizing: border-box;
 				padding: 2px;
 
-				zoom: 2;
-				margin-left: -50%;
-				margin-top: -50%;
-
 				background-color: black;
 				border: 1px solid white;
 				border-radius: 3px;
 				box-shadow: 0px 2px 4px black;
+
 				&.multi {
 					box-shadow:
-					2px 2px 0px black,
-					3px 3px 0px white;
+						2px 2px 0px black,
+						3px 3px 0px white;
 				}
 			}
+		}
+
+		&.size-3 .cell.center canvas {
+			zoom: 2;
+			margin-left: -50%;
+			margin-top: -50%;
 		}
 		&.size-5 .cell.center canvas {
 			zoom: 2;
 			margin-left: -50%;
 			margin-top: -50%;
+		}
+		&.size-7 .cell.center canvas {
+			zoom: 3;
+			margin-left: -75%;
+			margin-top: -75%;
 		}
 	}
 
@@ -2755,21 +2775,20 @@ $patternSize : 32px;
 			outline-offset: -5px;
 
 			.cross {
+				width: $patternSize;
+				height: $patternSize;
 				position: absolute;
 				top: 0;
 				left: 0;
 				z-index: 1;
 
-				display: grid;
-				align-content: center;
-				justify-content: center;
+				background-image: url("../img/icons/cross.png");
+				background-repeat: no-repeat;
+				background-size: 80%;
+				background-position: center center;
+				image-rendering: pixelated;
 				width: $patternSize;
 				height: $patternSize;
-
-				font-size: $patternSize;
-				color: $red;
-
-				text-shadow: 0px 2px 0px $darkRed,  0px 2px black;
 			}
 		}
 		&.anything {
@@ -2849,6 +2868,10 @@ $patternSize : 32px;
 		}
 
 		.grid {
+			display: grid;
+			min-width: 80px;
+			justify-items: center;
+
 			select {
 				width: 100%;
 				margin-top: 2px;
@@ -2859,6 +2882,7 @@ $patternSize : 32px;
 		.values {
 			align-self: stretch;
 			display: grid;
+			min-height: 125px;
 			grid-template-rows: min-content auto;
 
 			ul {
@@ -2879,13 +2903,20 @@ $patternSize : 32px;
 					cursor: pointer;
 
 					&:hover {
-						outline: 1px solid $orange;
+						outline: 1px solid white;
 						outline-offset: -1px;
 					}
 
 					&.active {
-						border-color: white;
+						border-color: $orange;
+						outline: 1px solid black;
+						outline-offset: -2px;
+						box-shadow: 0px 0px 8px $red;
 					}
+				}
+				li.any {
+					font-style: italic;
+					background-image: url("../img/any.png");
 				}
 			}
 

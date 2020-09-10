@@ -13,11 +13,12 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		this.layerDef = layerDef;
 		this.rule = rule;
 
-		loadTemplate("autoPatternEditor");
 		render();
 	}
 
 	function render() {
+		loadTemplate("autoPatternEditor");
+
 		// Tile(s)
 		var jTile = JsTools.createTilePicker(layerDef.autoTilesetDefUid, rule.tileIds, function(tids) {
 			rule.tileIds = tids.copy();
@@ -47,15 +48,15 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		jContent.find(">.grid .wrapper").empty().append(jGrid);
 
 		var jSizes = jContent.find(">.grid select").empty();
-		for(size in [3,5]) {
+		for(size in [1,3,5,7]) {
 			var jOpt = new J('<option value="$size">${size}x$size</option>');
+			if( size>=7 )
+				jOpt.append(" (WARNING: might slow-down app)");
 			jOpt.appendTo(jSizes);
 		}
 		jSizes.change( function(_) {
 			var size = Std.parseInt( jSizes.val() );
-			trace("before: "+rule);
 			rule.resize(size);
-			trace("after: "+rule);
 			editor.ge.emit(LayerDefChanged);
 			render();
 		});
@@ -63,16 +64,6 @@ class AutoPatternEditor extends ui.modal.Dialog {
 
 		// Value picker
 		var jValues = jContent.find(">.values ul").empty();
-
-		var jVal = new J('<li/>');
-		jVal.appendTo(jValues);
-		jVal.text("Anything");
-		if( curValIdx==Const.AUTO_LAYER_ANYTHING )
-			jVal.addClass("active");
-		jVal.click( function(ev) {
-			curValIdx = Const.AUTO_LAYER_ANYTHING;
-			render();
-		});
 
 		var idx = 0;
 		for(v in layerDef.getAllIntGridValues()) {
@@ -92,6 +83,18 @@ class AutoPatternEditor extends ui.modal.Dialog {
 			});
 			idx++;
 		}
+
+		// "Anything" value
+		var jVal = new J('<li/>');
+		jVal.appendTo(jValues);
+		jVal.addClass("any");
+		jVal.text("Anything");
+		if( curValIdx==Const.AUTO_LAYER_ANYTHING )
+			jVal.addClass("active");
+		jVal.click( function(ev) {
+			curValIdx = Const.AUTO_LAYER_ANYTHING;
+			render();
+		});
 	}
 
 	override function close() {
