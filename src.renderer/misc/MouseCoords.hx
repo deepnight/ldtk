@@ -9,34 +9,34 @@ class MouseCoords {
 
 	// Canvas
 	public var canvasX(get,never) : Int;
-	inline function get_canvasX() return M.round( ( pageX - App.ME.jCanvas.offset().left ) * pixelRatio );
+		inline function get_canvasX() return M.round( ( pageX - App.ME.jCanvas.offset().left ) * pixelRatio );
 
 	public var canvasY(get,never) : Int;
-	inline function get_canvasY() return M.round( ( pageY - App.ME.jCanvas.offset().top ) * pixelRatio );
+		inline function get_canvasY() return M.round( ( pageY - App.ME.jCanvas.offset().top ) * pixelRatio );
 
 	// Level
 	public var levelX(get,never) : Int;
-	inline function get_levelX() {
-		if( Editor.ME==null || Editor.ME.destroyed )
-			return -1;
-		else
-			return M.round( ( canvasX/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.levelRender.zoom );
-	}
+		inline function get_levelX() {
+			if( Editor.ME==null || Editor.ME.destroyed )
+				return -1;
+			else
+				return M.round( ( canvasX/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.levelRender.zoom );
+		}
 
 	public var levelY(get,never) : Int;
-	inline function get_levelY() {
-		if( Editor.ME==null || Editor.ME.destroyed )
-			return -1;
-		else
-			return M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.levelRender.zoom );
-	}
+		inline function get_levelY() {
+			if( Editor.ME==null || Editor.ME.destroyed )
+				return -1;
+			else
+				return M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.levelRender.zoom );
+		}
 
 	// Level cell
 	public var cx(get,never) : Int;
-	inline function get_cx() return M.floor( levelX / Editor.ME.curLayerInstance.def.gridSize );
+		inline function get_cx() return M.floor( levelX / Editor.ME.curLayerInstance.def.gridSize );
 
 	public var cy(get,never) : Int;
-	inline function get_cy() return M.floor( levelY / Editor.ME.curLayerInstance.def.gridSize );
+		inline function get_cy() return M.floor( levelY / Editor.ME.curLayerInstance.def.gridSize );
 
 
 
