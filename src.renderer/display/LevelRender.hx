@@ -5,10 +5,16 @@ class LevelRender extends dn.Process {
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 
-	var layerAutoRender : Map<Int,Bool> = new Map();
-	var layerVis : Map<Int,Bool> = new Map();
-	var layerWrappers : Map<Int,h2d.Object> = new Map();
 	var needFullRender = true;
+
+	/** <LayerUID, Bool> **/
+	var autoLayerRendering : Map<Int,Bool> = new Map();
+
+	/** <LayerUID, Bool> **/
+	var layerVis : Map<Int,Bool> = new Map();
+
+	/** <LayerUID, h2d.Object> **/
+	var layerWrappers : Map<Int,h2d.Object> = new Map();
 
 	var bounds : h2d.Graphics;
 	var glow : h2d.Graphics;
@@ -162,24 +168,24 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	public inline function isLayerAutoRendered(li:led.inst.LayerInstance) {
+	public inline function autoLayerRenderingEnabled(li:led.inst.LayerInstance) {
 		if( li==null || li.def.type!=IntGrid )
 			return false;
 
-		return ( !layerAutoRender.exists(li.layerDefUid) || layerAutoRender.get(li.layerDefUid)==true );
+		return ( !autoLayerRendering.exists(li.layerDefUid) || autoLayerRendering.get(li.layerDefUid)==true );
 	}
 
-	public function setLayerAutoRender(li:led.inst.LayerInstance, v:Bool) {
+	public function setAutoLayerRendering(li:led.inst.LayerInstance, v:Bool) {
 		if( li==null || li.def.type!=IntGrid )
 			return;
 
-		layerAutoRender.set(li.layerDefUid, v);
+		autoLayerRendering.set(li.layerDefUid, v);
 		editor.ge.emit(LayerDefChanged); // HACK not the right event
 	}
 
-	public function toggleLayerAutoRender(li:led.inst.LayerInstance) {
+	public function toggleAutoLayerRendering(li:led.inst.LayerInstance) {
 		if( li!=null && li.def.isAutoLayer() )
-			setLayerAutoRender( li, !isLayerAutoRendered(li) );
+			setAutoLayerRendering( li, !autoLayerRenderingEnabled(li) );
 	}
 
 	public inline function isLayerVisible(l:led.inst.LayerInstance) {
@@ -280,7 +286,7 @@ class LevelRender extends dn.Process {
 			var grid = li.def.gridSize;
 			switch li.def.type {
 				case IntGrid, Tiles:
-					li.render(wrapper, isLayerAutoRendered(li));
+					li.render(wrapper, autoLayerRenderingEnabled(li));
 
 				case Entities:
 					for(ei in li.entityInstances) {
