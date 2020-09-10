@@ -6,6 +6,7 @@ class LevelRender extends dn.Process {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 
 	var needFullRender = true;
+	public var enhanceActiveLayer(default,null) = true;
 
 	/** <LayerUID, Bool> **/
 	var autoLayerRendering : Map<Int,Bool> = new Map();
@@ -19,13 +20,13 @@ class LevelRender extends dn.Process {
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
 	var grid : h2d.Graphics;
-	var fadingRects : Array<h2d.Object> = [];
+	var rectBleeps : Array<h2d.Object> = [];
 
 	public var focusLevelX(default,set) : Float;
 	public var focusLevelY(default,set) : Float;
 	public var zoom(default,set) : Float;
 
-	public var enhanceActiveLayer(default,null) = true;
+
 
 	public function new() {
 		super(editor);
@@ -213,7 +214,7 @@ class LevelRender extends dn.Process {
 	public function showRect(x:Int, y:Int, w:Int, h:Int, col:UInt, thickness=1) {
 		var pad = 5;
 		var g = new h2d.Graphics();
-		fadingRects.push(g);
+		rectBleeps.push(g);
 		g.lineStyle(thickness, col);
 		g.drawRect( Std.int(-pad-w*0.5), Std.int(-pad-h*0.5), w+pad*2, h+pad*2 );
 		g.setPosition( Std.int(x+w*0.5), Std.int(y+h*0.5) );
@@ -506,12 +507,12 @@ class LevelRender extends dn.Process {
 
 		// Fade-out temporary rects
 		var i = 0;
-		while( i<fadingRects.length ) {
-			var o = fadingRects[i];
+		while( i<rectBleeps.length ) {
+			var o = rectBleeps[i];
 			o.alpha-=tmod*0.05;
 			o.setScale( 1 + 0.2 * (1-o.alpha) );
 			if( o.alpha<=0 )
-				fadingRects.splice(i,1);
+				rectBleeps.splice(i,1);
 			else
 				i++;
 		}
