@@ -122,11 +122,12 @@ class LevelRender extends dn.Process {
 				invalidateAll();
 
 			case LayerInstanceVisiblityChanged:
-				updateLayersVisibility();
+				applyLayerVisibility();
 
 			case LayerInstanceSelected:
-				updateLayersVisibility();
-				renderBg();
+				applyLayerVisibility();
+				renderBounds();
+				renderGrid();
 
 			case LevelSettingsChanged:
 				invalidateAll();
@@ -223,25 +224,29 @@ class LevelRender extends dn.Process {
 		showRect(bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
 	}
 
-	public function renderBg() {
+
+	function renderBounds() {
 		// Bounds
 		bounds.clear();
 		bounds.lineStyle(1, 0xffffff, 0.7);
 		bounds.drawRect(0, 0, editor.curLevel.pxWid, editor.curLevel.pxHei);
 
+		// Bounds glow/shadow
 		glow.clear();
 		glow.beginFill(0xff00ff);
 		glow.drawRect(0, 0, editor.curLevel.pxWid, editor.curLevel.pxHei);
 		var shadow = new h2d.filter.Glow( 0x0, 0.6, 128, true );
 		shadow.knockout = true;
 		glow.filter = shadow;
+	}
 
-		// Grid
-		var col = C.getPerceivedLuminosityInt( editor.project.bgColor) >= 0.8 ? 0x0 : 0xffffff;
-
+	public function renderGrid() {
 		grid.clear();
+
 		if( editor.curLayerInstance==null )
 			return;
+
+		var col = C.getPerceivedLuminosityInt( editor.project.bgColor) >= 0.8 ? 0x0 : 0xffffff;
 
 		var l = editor.curLayerInstance;
 		grid.lineStyle(1, editor.getGridSnapping() ? col : 0xff0000, editor.getGridSnapping() ? 0.07 : 0.07);
@@ -255,6 +260,7 @@ class LevelRender extends dn.Process {
 		}
 	}
 
+
 	public function renderAll() {
 		needFullRender = false;
 
@@ -262,11 +268,14 @@ class LevelRender extends dn.Process {
 			if( li.def.isAutoLayer() )
 				li.applyAllAutoLayerRules();
 
-		renderBg();
+		renderBounds();
+		renderGrid();
 		renderLayers();
 	}
 
-	public function renderLayers() {
+
+
+	function renderLayers() {
 		for(e in layerWrappers)
 			e.remove();
 		layerWrappers = new Map();
@@ -296,7 +305,7 @@ class LevelRender extends dn.Process {
 			}
 		}
 
-		updateLayersVisibility();
+		applyLayerVisibility();
 	}
 
 
@@ -464,10 +473,10 @@ class LevelRender extends dn.Process {
 	public function setEnhanceActiveLayer(v:Bool) {
 		enhanceActiveLayer = v;
 		editor.jMainPanel.find("input#enhanceActiveLayer").prop("checked", v);
-		updateLayersVisibility();
+		applyLayerVisibility();
 	}
 
-	function updateLayersVisibility() {
+	function applyLayerVisibility() {
 		for(ld in editor.project.defs.layers) {
 			var li = editor.curLevel.getLayerInstance(ld);
 			var wrapper = layerWrappers.get(ld.uid);
