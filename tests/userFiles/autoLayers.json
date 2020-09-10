@@ -12,7 +12,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#1B2037",
-	"nextUid" : 26,
+	"nextUid" : 60,
 	"defs" : {
 		"layers" : [
 			{
@@ -30,6 +30,7 @@
 				"autoTilesetDefUid" : 9,
 				"rules" : [
 					{
+						"uid" : 26,
 						"size" : 3,
 						"tileIds" : [ 19 ],
 						"chance" : 1.0,
@@ -54,6 +55,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 27,
 						"size" : 3,
 						"tileIds" : [ 18 ],
 						"chance" : 1.0,
@@ -78,6 +80,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 28,
 						"size" : 3,
 						"tileIds" : [ 120, 121, 122 ],
 						"chance" : 1.0,
@@ -102,6 +105,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 29,
 						"size" : 5,
 						"tileIds" : [ 15 ],
 						"chance" : 1.0,
@@ -142,6 +146,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 30,
 						"size" : 5,
 						"tileIds" : [ 16, 49 ],
 						"chance" : 1.0,
@@ -182,6 +187,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 31,
 						"size" : 3,
 						"tileIds" : [ 120, 121, 122 ],
 						"chance" : 0.55,
@@ -206,6 +212,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 32,
 						"size" : 3,
 						"tileIds" : [ 252, 264, 276, 288 ],
 						"chance" : 0.3,
@@ -230,6 +237,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 33,
 						"size" : 5,
 						"tileIds" : [ 65, 77 ],
 						"chance" : 0.1,
@@ -270,6 +278,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 34,
 						"size" : 3,
 						"tileIds" : [ 125, 252, 264, 276, 288 ],
 						"chance" : 0.3,
@@ -294,6 +303,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 35,
 						"size" : 3,
 						"tileIds" : [ 216, 217, 218, 219 ],
 						"chance" : 0.1,
@@ -318,6 +328,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 36,
 						"size" : 3,
 						"tileIds" : [ 112 ],
 						"chance" : 1.0,
@@ -342,6 +353,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 37,
 						"size" : 3,
 						"tileIds" : [ 124 ],
 						"chance" : 1.0,
@@ -366,6 +378,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 38,
 						"size" : 3,
 						"tileIds" : [ 100 ],
 						"chance" : 1.0,
@@ -390,6 +403,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 39,
 						"size" : 3,
 						"tileIds" : [ 110 ],
 						"chance" : 1.0,
@@ -414,6 +428,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 40,
 						"size" : 3,
 						"tileIds" : [ 66 ],
 						"chance" : 1.0,
@@ -438,6 +453,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 41,
 						"size" : 3,
 						"tileIds" : [ 78 ],
 						"chance" : 1.0,
@@ -462,6 +478,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 42,
 						"size" : 3,
 						"tileIds" : [ 132 ],
 						"chance" : 1.0,
@@ -486,6 +503,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 43,
 						"size" : 3,
 						"tileIds" : [ 109 ],
 						"chance" : 1.0,
@@ -510,6 +528,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 44,
 						"size" : 3,
 						"tileIds" : [ 97 ],
 						"chance" : 0.53,
@@ -534,6 +553,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 45,
 						"size" : 3,
 						"tileIds" : [ 123 ],
 						"chance" : 1.0,
@@ -558,6 +578,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 46,
 						"size" : 3,
 						"tileIds" : [ 134 ],
 						"chance" : 1.0,
@@ -582,6 +603,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 47,
 						"size" : 3,
 						"tileIds" : [ 26 ],
 						"chance" : 0.79,
@@ -606,6 +628,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 48,
 						"size" : 5,
 						"tileIds" : [ 126, 127, 147, 148 ],
 						"chance" : 0.42,
@@ -646,6 +669,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 49,
 						"size" : 3,
 						"tileIds" : [
 							32,
@@ -679,6 +703,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 50,
 						"size" : 3,
 						"tileIds" : [ 38, 56, 57, 58, 59 ],
 						"chance" : 0.8,
@@ -703,6 +728,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 51,
 						"size" : 3,
 						"tileIds" : [ 12 ],
 						"chance" : 1.0,
@@ -727,6 +753,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 52,
 						"size" : 3,
 						"tileIds" : [ 52 ],
 						"chance" : 0.58,
@@ -751,6 +778,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 53,
 						"size" : 3,
 						"tileIds" : [ 36 ],
 						"chance" : 1.0,
@@ -775,6 +803,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 54,
 						"size" : 3,
 						"tileIds" : [ 24 ],
 						"chance" : 1.0,
@@ -799,6 +828,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 55,
 						"size" : 3,
 						"tileIds" : [ 13 ],
 						"chance" : 1.0,
@@ -823,6 +853,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 56,
 						"size" : 3,
 						"tileIds" : [ 37 ],
 						"chance" : 1.0,
@@ -847,6 +878,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 57,
 						"size" : 3,
 						"tileIds" : [ 25 ],
 						"chance" : 0.69,
@@ -871,6 +903,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 58,
 						"size" : 3,
 						"tileIds" : [
 							1,
@@ -902,6 +935,7 @@
 						"perlinOctaves" : 3
 					},
 					{
+						"uid" : 59,
 						"size" : 3,
 						"tileIds" : [ 0 ],
 						"chance" : 1.0,

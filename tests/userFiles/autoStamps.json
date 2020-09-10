@@ -3,7 +3,7 @@
 		"fileType" : "LEd Project JSON",
 		"app" : "LEd",
 		"appAuthor" : "Sebastien Benard",
-		"appVersion" : "0.1.6-alpha-debug",
+		"appVersion" : "0.1.5-alpha-debug",
 		"url" : "https://deepnight.net/"
 	},
 	"name" : "empty",
@@ -12,7 +12,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 4,
+	"nextUid" : 13,
 	"defs" : {
 		"layers" : [
 			{
@@ -27,6 +27,7 @@
 				"autoTilesetDefUid" : 3,
 				"rules" : [
 					{
+						"uid" : 4,
 						"size" : 3,
 						"tileIds" : [ 1162, 1163, 1164, 1165 ],
 						"chance" : 1.0,
@@ -51,6 +52,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 5,
 						"size" : 3,
 						"tileIds" : [ 1333 ],
 						"chance" : 0.16,
@@ -75,6 +77,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 6,
 						"size" : 3,
 						"tileIds" : [
 							2324,
@@ -108,6 +111,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 7,
 						"size" : 3,
 						"tileIds" : [
 							3573,
@@ -139,6 +143,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 8,
 						"size" : 3,
 						"tileIds" : [ 581 ],
 						"chance" : 1.0,
@@ -163,6 +168,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 9,
 						"size" : 3,
 						"tileIds" : [ 2906, 2907, 2908, 2909 ],
 						"chance" : 0.67,
@@ -187,6 +193,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 10,
 						"size" : 3,
 						"tileIds" : [ 1330, 1331, 1332 ],
 						"chance" : 0.6,
@@ -211,6 +218,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 11,
 						"size" : 3,
 						"tileIds" : [ 1366 ],
 						"chance" : 1.0,
@@ -235,6 +243,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 12,
 						"size" : 3,
 						"tileIds" : [
 							180,

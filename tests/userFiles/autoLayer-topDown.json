@@ -3,7 +3,7 @@
 		"fileType" : "LEd Project JSON",
 		"app" : "LEd",
 		"appAuthor" : "Sebastien Benard",
-		"appVersion" : "0.1.6-alpha-debug",
+		"appVersion" : "0.1.5-alpha-debug",
 		"url" : "https://deepnight.net/"
 	},
 	"name" : "test",
@@ -12,7 +12,7 @@
 	"defaultPivotY" : 0.0,
 	"defaultGridSize" : 16,
 	"bgColor" : "#7F8093",
-	"nextUid" : 4,
+	"nextUid" : 10,
 	"defs" : {
 		"layers" : [
 			{
@@ -27,6 +27,7 @@
 				"autoTilesetDefUid" : 1,
 				"rules" : [
 					{
+						"uid" : 4,
 						"size" : 3,
 						"tileIds" : [
 							496,
@@ -61,6 +62,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 5,
 						"size" : 3,
 						"tileIds" : [ 32, 33, 53 ],
 						"chance" : 0.14,
@@ -85,6 +87,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 6,
 						"size" : 3,
 						"tileIds" : [
 							35,
@@ -116,6 +119,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 7,
 						"size" : 3,
 						"tileIds" : [ 9, 10 ],
 						"chance" : 0.06,
@@ -140,6 +144,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 8,
 						"size" : 3,
 						"tileIds" : [ 182, 183, 184 ],
 						"chance" : 1.0,
@@ -164,6 +169,7 @@
 						"perlinOctaves" : 2
 					},
 					{
+						"uid" : 9,
 						"size" : 3,
 						"tileIds" : [ 99, 100, 101 ],
 						"chance" : 1.0,

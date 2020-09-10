@@ -40,7 +40,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 		// Add rule
 		jContent.find("button.createRule").click( function(ev) {
-			ld.rules.insert(0, new led.def.AutoLayerRule(3));
+			ld.rules.insert(0, new led.def.AutoLayerRule(project.makeUniqId(), 3));
 			lastRule = ld.rules[0];
 			editor.ge.emit(LayerDefChanged);
 			new ui.modal.dialog.AutoPatternEditor( jContent.find("ul.rules [idx=0]"), ld, lastRule );

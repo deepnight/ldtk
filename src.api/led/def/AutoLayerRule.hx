@@ -1,6 +1,8 @@
 package led.def;
 
 class AutoLayerRule {
+	public var uid(default,null) : Int;
+
 	public var tileIds : Array<Int> = [];
 	public var chance : Float = 1.0;
 	public var size(default,null): Int;
@@ -19,8 +21,9 @@ class AutoLayerRule {
 	// var bitMasksHas : Null< Map<Int, Int> >;
 	// var bitMasksNot : Null< Map<Int, Int> >;
 
-	public function new(s) {
-		size = s;
+	public function new(uid, size) {
+		this.uid = uid;
+		this.size = size;
 		perlinSeed = Std.random(9999999);
 		seed = Std.random(9999999);
 		initPattern();
@@ -95,6 +98,7 @@ class AutoLayerRule {
 			flipY = false;
 
 		return {
+			uid: uid,
 			size: size,
 			tileIds: tileIds.copy(),
 			chance: JsonTools.writeFloat(chance),
@@ -112,7 +116,7 @@ class AutoLayerRule {
 	}
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
-		var r = new AutoLayerRule( json.size );
+		var r = new AutoLayerRule( json.uid, json.size );
 		r.tileIds = json.tileIds;
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
