@@ -46,7 +46,9 @@ class Const {
 	public static var DEFAULT_LEVEL_HEIGHT = 256;
 	public static var DEFAULT_GRID_SIZE = 16;
 	public static var MAX_GRID_SIZE = 256;
+
 	public static var AUTO_LAYER_ANYTHING = 1000000;
+	public static var MAX_AUTO_PATTERN_SIZE = 7;
 	#end
 
 

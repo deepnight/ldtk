@@ -33,7 +33,7 @@ class AutoLayerRule {
 	}
 
 	inline function isValidSize(size:Int) {
-		return size>=1 && size<=7 && size%2!=0;
+		return size>=1 && size<=Const.MAX_AUTO_PATTERN_SIZE && size%2!=0;
 	}
 
 	inline function get__perlin() {
