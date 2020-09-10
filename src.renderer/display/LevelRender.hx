@@ -5,8 +5,10 @@ class LevelRender extends dn.Process {
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 
-	var needFullRender = true;
 	public var enhanceActiveLayer(default,null) = true;
+	public var focusLevelX(default,set) : Float;
+	public var focusLevelY(default,set) : Float;
+	public var zoom(default,set) : Float;
 
 	/** <LayerUID, Bool> **/
 	var autoLayerRendering : Map<Int,Bool> = new Map();
@@ -22,10 +24,10 @@ class LevelRender extends dn.Process {
 	var grid : h2d.Graphics;
 	var rectBleeps : Array<h2d.Object> = [];
 
-	public var focusLevelX(default,set) : Float;
-	public var focusLevelY(default,set) : Float;
-	public var zoom(default,set) : Float;
-
+	// Invalidation system (ie. render calls)
+	var allInvalidated = true;
+	var gridInvalidated = false;
+	var layerInvalidations : Map<Int, { left:Int, right:Int, top:Int, bottom:Int }> = new Map();
 
 
 	public function new() {
@@ -112,7 +114,10 @@ class LevelRender extends dn.Process {
 				renderAll();
 				fit();
 
-			case ProjectSettingsChanged, LayerInstanceRestoredFromHistory, LevelRestoredFromHistory:
+			case ProjectSettingsChanged, LevelRestoredFromHistory:
+				invalidateAll();
+
+			case LayerInstanceRestoredFromHistory:
 				invalidateAll();
 
 			case LevelSelected:
@@ -194,11 +199,12 @@ class LevelRender extends dn.Process {
 		return l!=null && ( !layerVis.exists(l.layerDefUid) || layerVis.get(l.layerDefUid)==true );
 	}
 
-	public function toggleLayer(l:led.inst.LayerInstance) {
-		layerVis.set(l.layerDefUid, !isLayerVisible(l));
+	public function toggleLayer(li:led.inst.LayerInstance) {
+		layerVis.set(li.layerDefUid, !isLayerVisible(li));
 		editor.ge.emit(LayerInstanceVisiblityChanged);
-		if( isLayerVisible(l) )
-			invalidateAll();
+
+		if( isLayerVisible(li) )
+			invalidateLayer(li);
 	}
 
 	public function showLayer(l:led.inst.LayerInstance) {
@@ -211,7 +217,7 @@ class LevelRender extends dn.Process {
 		editor.ge.emit(LayerInstanceVisiblityChanged);
 	}
 
-	public function showRect(x:Int, y:Int, w:Int, h:Int, col:UInt, thickness=1) {
+	public function showRectPx(x:Int, y:Int, w:Int, h:Int, col:UInt, thickness=1) {
 		var pad = 5;
 		var g = new h2d.Graphics();
 		rectBleeps.push(g);
@@ -222,7 +228,7 @@ class LevelRender extends dn.Process {
 	}
 
 	public inline function showHistoryBounds(layerId:Int, bounds:HistoryStateBounds, col:UInt) {
-		showRect(bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
+		showRectPx(bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
 	}
 
 
@@ -241,7 +247,8 @@ class LevelRender extends dn.Process {
 		boundsGlow.filter = shadow;
 	}
 
-	public function renderGrid() {
+	public function renderGrid() { // TODO should be behind invalidation system
+		gridInvalidated = false;
 		grid.clear();
 
 		if( editor.curLayerInstance==null )
@@ -263,7 +270,8 @@ class LevelRender extends dn.Process {
 
 
 	public function renderAll() {
-		needFullRender = false;
+		allInvalidated = false;
+		layerInvalidations = new Map();
 
 		for( li in editor.curLevel.layerInstances )
 			if( li.def.isAutoLayer() )
@@ -271,7 +279,8 @@ class LevelRender extends dn.Process {
 
 		renderBounds();
 		renderGrid();
-		renderLayers();
+		renderAllLayers();
+
 		applyLayerVisibility();
 	}
 
@@ -305,7 +314,7 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	function renderLayers() {
+	function renderAllLayers() {
 		for(ld in editor.project.defs.layers) {
 			var li = editor.curLevel.getLayerInstance(ld);
 			renderLayer(li);
@@ -493,16 +502,24 @@ class LevelRender extends dn.Process {
 		}
 	}
 
+
 	public inline function invalidateLayer(li:led.inst.LayerInstance) {
-		invalidateAll(); // HACK need layer invalidation
+		layerInvalidations.set( li.layerDefUid, { left:0, right:li.cWid-1, top:0, bottom:li.cHei-1 } );
 	}
 
-	public inline function invalidateArea(li:led.inst.LayerInstance, cx:Int, cy:Int, wid=1, hei=1) {
-		invalidateAll(); // HACK need layer area invalidation
+	public inline function invalidateLayerArea(li:led.inst.LayerInstance, left:Int, right:Int, top:Int, bottom:Int) {
+		if( layerInvalidations.exists(li.layerDefUid) ) {
+			var bounds = layerInvalidations.get(li.layerDefUid);
+			bounds.left = M.imin(bounds.left, left);
+			bounds.right = M.imax(bounds.right, right);
+		}
+		else
+			layerInvalidations.set( li.layerDefUid, { left:left, right:right, top:top, bottom:bottom } );
+		// showRectPx(left*li.def.gridSize, top*li.def.gridSize, (right-left+1)*li.def.gridSize, (bottom-top+1)*li.def.gridSize, 0xff00ff, 2);
 	}
 
 	public inline function invalidateAll() {
-		needFullRender = true;
+		allInvalidated = true;
 	}
 
 	override function postUpdate() {
@@ -521,7 +538,7 @@ class LevelRender extends dn.Process {
 		}
 
 		// Re-render
-		if( needFullRender )
+		if( allInvalidated )
 			renderAll();
 	}
 
