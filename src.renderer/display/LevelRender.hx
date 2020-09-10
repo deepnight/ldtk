@@ -10,13 +10,13 @@ class LevelRender extends dn.Process {
 	public var focusLevelY(default,set) : Float;
 	public var zoom(default,set) : Float;
 
-	/** <LayerUID, Bool> **/
+	/** <LayerDefUID, Bool> **/
 	var autoLayerRendering : Map<Int,Bool> = new Map();
 
-	/** <LayerUID, Bool> **/
+	/** <LayerDefUID, Bool> **/
 	var layerVis : Map<Int,Bool> = new Map();
 
-	/** <LayerUID, h2d.Object> **/
+	/** <LayerDefUID, h2d.Object> **/
 	var layerWrappers : Map<Int,h2d.Object> = new Map();
 
 	var bounds : h2d.Graphics;
@@ -138,9 +138,15 @@ class LevelRender extends dn.Process {
 				invalidateBg();
 
 			case LevelSettingsChanged:
-				invalidateAll(); // TODO
+				invalidateBg();
 
-			case LayerDefRemoved, LayerDefChanged, LayerDefSorted:
+			case LayerDefRemoved(uid):
+				if( layerWrappers.exists(uid) ) {
+					layerWrappers.get(uid).remove();
+					layerWrappers.remove(uid);
+				}
+
+			case LayerDefChanged, LayerDefSorted:
 				invalidateAll(); // TODO
 
 			case LayerInstanceChanged:
@@ -275,6 +281,7 @@ class LevelRender extends dn.Process {
 
 
 	public function renderAll() {
+		N.error("render ALL");
 		allInvalidated = false;
 
 		for( li in editor.curLevel.layerInstances )
