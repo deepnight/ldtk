@@ -362,7 +362,6 @@ class LayerInstance {
 		);
 	}
 
-	var _once = false;
 	public function render(target:h2d.Object, renderAutoLayers:Bool) {
 		switch def.type {
 			case IntGrid:
