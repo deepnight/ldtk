@@ -251,6 +251,11 @@ class LevelRender extends dn.Process {
 
 	public function renderAll() {
 		needFullRender = false;
+
+		for( li in editor.curLevel.layerInstances )
+			if( li.def.isAutoLayer() )
+				li.applyAllAutoLayerRules();
+
 		renderBg();
 		renderLayers();
 	}
@@ -469,10 +474,12 @@ class LevelRender extends dn.Process {
 		}
 	}
 
+	public inline function invalidateLayer(li:led.inst.LayerInstance) {
+		invalidateAll(); // HACK need layer invalidation
+	}
 
 	public inline function invalidateArea(li:led.inst.LayerInstance, cx:Int, cy:Int, wid=1, hei=1) {
-		needFullRender = true;
-		N.notImplemented(); // TODO
+		invalidateAll(); // HACK need layer area invalidation
 	}
 
 	public inline function invalidateAll() {
@@ -495,10 +502,8 @@ class LevelRender extends dn.Process {
 		}
 
 		// Re-render
-		if( needFullRender ) {
-			needFullRender = false;
+		if( needFullRender )
 			renderAll();
-		}
 	}
 
 }

@@ -212,17 +212,33 @@ class Tool<T> extends dn.Process {
 			}
 		}
 
+		// Fill bounds
+		var left = m.cx;
+		var right = left;
+		var top = m.cy;
+		var bottom = top;
+
 		while( pending.length>0 ) {
 			var cur = pending.pop();
 
+			// Add nearby "empty" cells
 			check(cur.cx-1, cur.cy);
 			check(cur.cx+1, cur.cy);
 			check(cur.cx, cur.cy-1);
 			check(cur.cx, cur.cy+1);
 
+			// Apply
 			editor.curLevelHistory.markChange(cur.cx, cur.cy);
 			setter( cur.cx, cur.cy, getSelectedValue() );
+
+			// Update bounds
+			left = M.imin( left, cur.cx );
+			right = M.imax( right, cur.cx );
+			top = M.imin( top, cur.cy );
+			bottom = M.imax( bottom, cur.cy );
 		}
+
+		editor.levelRender.invalidateArea(curLayerInstance, left, top, right-left+1, bottom-top+1);
 
 		return true;
 	}
@@ -236,6 +252,8 @@ class Tool<T> extends dn.Process {
 		var anyChange = false;
 		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
 			anyChange = useAtInterpolatedGrid(cx,cy) || anyChange;
+			if( anyChange )
+				editor.levelRender.invalidateArea(curLayerInstance, cx,cy);
 		});
 		return anyChange;
 	}
@@ -257,17 +275,22 @@ class Tool<T> extends dn.Process {
 		if( isRunning() && !clickingOutsideBounds ) {
 			var anyChange = false;
 
-			if( rectangle && m.cx==origin.cx && m.cy==origin.cy && clickTime<=0.22 && !isPicking(m) )
+			if( rectangle && m.cx==origin.cx && m.cy==origin.cy && clickTime<=0.22 && !isPicking(m) ) {
 				anyChange = useFloodfillAt(m);
+			}
 			else {
-				anyChange = rectangle
-					? useOnRectangle(
-						M.imin(origin.cx, m.cx),
-						M.imax(origin.cx, m.cx),
-						M.imin(origin.cy, m.cy),
-						M.imax(origin.cy, m.cy)
-					 )
-					: useAt(m);
+				if( rectangle ) {
+					var left = M.imin(origin.cx, m.cx);
+					var right = M.imax(origin.cx, m.cx);
+					var top = M.imin(origin.cy, m.cy);
+					var bottom = M.imax(origin.cy, m.cy);
+					anyChange = useOnRectangle(left, right, top, bottom);
+					if( anyChange )
+						editor.levelRender.invalidateArea(curLayerInstance, left, top, right-left+1, bottom-top+1);
+				}
+				else {
+					anyChange = useAt(m);
+				}
 			}
 
 
