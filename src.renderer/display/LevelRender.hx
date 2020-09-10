@@ -26,7 +26,7 @@ class LevelRender extends dn.Process {
 
 	// Invalidation system (ie. render calls)
 	var allInvalidated = true;
-	var gridInvalidated = false;
+	var bgInvalidated = false;
 	var layerInvalidations : Map<Int, { left:Int, right:Int, top:Int, bottom:Int }> = new Map();
 
 
@@ -114,7 +114,10 @@ class LevelRender extends dn.Process {
 				renderAll();
 				fit();
 
-			case ProjectSettingsChanged, LevelRestoredFromHistory:
+			case ProjectSettingsChanged:
+				invalidateBg();
+
+			case LevelRestoredFromHistory:
 				invalidateAll();
 
 			case LayerInstanceRestoredFromHistory:
@@ -132,8 +135,7 @@ class LevelRender extends dn.Process {
 
 			case LayerInstanceSelected:
 				applyLayerVisibility();
-				renderBounds();
-				renderGrid();
+				invalidateBg();
 
 			case LevelSettingsChanged:
 				invalidateAll();
@@ -233,6 +235,8 @@ class LevelRender extends dn.Process {
 
 
 	function renderBounds() {
+		bgInvalidated = false;
+
 		// Bounds
 		bounds.clear();
 		bounds.lineStyle(1, 0xffffff, 0.7);
@@ -247,8 +251,9 @@ class LevelRender extends dn.Process {
 		boundsGlow.filter = shadow;
 	}
 
-	public function renderGrid() { // TODO should be behind invalidation system
-		gridInvalidated = false;
+	function renderGrid() {
+		bgInvalidated = false;
+
 		grid.clear();
 
 		if( editor.curLayerInstance==null )
@@ -271,7 +276,6 @@ class LevelRender extends dn.Process {
 
 	public function renderAll() {
 		allInvalidated = false;
-		layerInvalidations = new Map();
 
 		for( li in editor.curLevel.layerInstances )
 			if( li.def.isAutoLayer() )
@@ -286,6 +290,9 @@ class LevelRender extends dn.Process {
 
 
 	function renderLayer(li:led.inst.LayerInstance) {
+		layerInvalidations.remove(li.layerDefUid);
+
+		// Create wrapper
 		if( layerWrappers.exists(li.layerDefUid) )
 			layerWrappers.get(li.layerDefUid).remove();
 
@@ -298,19 +305,68 @@ class LevelRender extends dn.Process {
 		wrapper.x = li.pxOffsetX;
 		wrapper.y = li.pxOffsetY;
 
-		// if( !isLayerVisible(li) )
-			// continue;
-
-		var grid = li.def.gridSize;
+		// Render
 		switch li.def.type {
-			case IntGrid, Tiles:
-				li.render(wrapper, autoLayerRenderingEnabled(li));
+		case IntGrid:
+			var g = new h2d.Graphics(wrapper);
 
-			case Entities:
-				for(ei in li.entityInstances) {
-					var o = createEntityRender(ei, wrapper);
-					o.setPosition(ei.x, ei.y);
+			if( li.def.isAutoLayer() && autoLayerRenderingEnabled(li) ) {
+				// Auto-layer tiles
+				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
+				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper);
+
+				for(cy in 0...li.cHei)
+				for(cx in 0...li.cWid) {
+					var i = li.def.rules.length-1;
+					while( i>=0 ) {
+						var r = li.def.rules[i];
+						var at = li.autoTiles.get(r.uid).get( li.coordId(cx,cy) );
+						if( at!=null ) {
+							tg.addTransform(
+								( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+								( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+								dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
+								td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
+							);
+						}
+
+						i--;
+					}
 				}
+			}
+			else {
+				// Normal intGrid
+				for(cy in 0...li.cHei)
+				for(cx in 0...li.cWid) {
+					var id = li.getIntGrid(cx,cy);
+					if( id<0 )
+						continue;
+
+					g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
+					g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);
+				}
+			}
+
+		case Entities:
+			// not meant to be rendered
+
+		case Tiles:
+			var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
+			var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper );
+
+			for(cy in 0...li.cHei)
+			for(cx in 0...li.cWid) {
+				if( li.getGridTile(cx,cy)==null )
+					continue;
+
+				var t = td!=null ? td.getTile( li.getGridTile(cx,cy) ) : led.def.TilesetDef.makeErrorTile(li.def.gridSize);
+				t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
+				tg.add(
+					(cx + li.def.tilePivotX) * li.def.gridSize,
+					(cy + li.def.tilePivotX) * li.def.gridSize,
+					t
+				);
+			}
 		}
 	}
 
@@ -518,6 +574,10 @@ class LevelRender extends dn.Process {
 		// showRectPx(left*li.def.gridSize, top*li.def.gridSize, (right-left+1)*li.def.gridSize, (bottom-top+1)*li.def.gridSize, 0xff00ff, 2);
 	}
 
+	public inline function invalidateBg() {
+		bgInvalidated = true;
+	}
+
 	public inline function invalidateAll() {
 		allInvalidated = true;
 	}
@@ -537,9 +597,19 @@ class LevelRender extends dn.Process {
 				i++;
 		}
 
-		// Re-render
+		// Render invalidation system
 		if( allInvalidated )
 			renderAll();
+		else {
+			if( bgInvalidated ) {
+				renderBounds();
+				renderGrid();
+			}
+
+			for( li in editor.curLevel.layerInstances )
+				if( layerInvalidations.exists(li.layerDefUid) )
+					renderLayer(li);
+		}
 	}
 
 }

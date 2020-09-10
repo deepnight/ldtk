@@ -141,7 +141,7 @@ class Editor extends Page {
 			.prop("checked", gridSnapping)
 			.change( function(ev) {
 				gridSnapping = ev.getThis().prop("checked");
-				levelRender.renderGrid();
+				levelRender.invalidateBg();
 			});
 
 
@@ -308,7 +308,7 @@ class Editor extends Page {
 			case K.G:
 				if( !hasInputFocus() ) {
 					gridSnapping = !gridSnapping;
-					levelRender.renderGrid();
+					levelRender.invalidateBg();
 					jMainPanel.find("input#gridSnapping").prop("checked", gridSnapping);
 				}
 
