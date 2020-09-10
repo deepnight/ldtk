@@ -17,7 +17,7 @@ class LevelRender extends dn.Process {
 	var layerWrappers : Map<Int,h2d.Object> = new Map();
 
 	var bounds : h2d.Graphics;
-	var glow : h2d.Graphics;
+	var boundsGlow : h2d.Graphics;
 	var grid : h2d.Graphics;
 	var fadingRects : Array<h2d.Object> = [];
 
@@ -37,8 +37,8 @@ class LevelRender extends dn.Process {
 		bounds = new h2d.Graphics();
 		root.add(bounds, Const.DP_UI);
 
-		glow = new h2d.Graphics();
-		root.add(glow, Const.DP_UI);
+		boundsGlow = new h2d.Graphics();
+		root.add(boundsGlow, Const.DP_UI);
 
 		grid = new h2d.Graphics();
 		root.add(grid, Const.DP_UI);
@@ -232,12 +232,12 @@ class LevelRender extends dn.Process {
 		bounds.drawRect(0, 0, editor.curLevel.pxWid, editor.curLevel.pxHei);
 
 		// Bounds glow/shadow
-		glow.clear();
-		glow.beginFill(0xff00ff);
-		glow.drawRect(0, 0, editor.curLevel.pxWid, editor.curLevel.pxHei);
+		boundsGlow.clear();
+		boundsGlow.beginFill(0xff00ff);
+		boundsGlow.drawRect(0, 0, editor.curLevel.pxWid, editor.curLevel.pxHei);
 		var shadow = new h2d.filter.Glow( 0x0, 0.6, 128, true );
 		shadow.knockout = true;
-		glow.filter = shadow;
+		boundsGlow.filter = shadow;
 	}
 
 	public function renderGrid() {
