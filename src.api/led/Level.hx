@@ -59,18 +59,18 @@ class Level {
 		return x>=0 && x<pxWid && y>=0 && y<pxHei;
 	}
 
-	public function getLayerInstance(?uid:Int, ?layerDef:led.def.LayerDef) : led.inst.LayerInstance {
-		if( uid==null && layerDef==null )
+	public function getLayerInstance(?layerDefUid:Int, ?layerDef:led.def.LayerDef) : led.inst.LayerInstance {
+		if( layerDefUid==null && layerDef==null )
 			throw "Need 1 parameter";
 
-		if( uid==null )
-			uid = layerDef.uid;
+		if( layerDefUid==null )
+			layerDefUid = layerDef.uid;
 
 		for(li in layerInstances)
-			if( li.layerDefUid==uid )
+			if( li.layerDefUid==layerDefUid )
 				return li;
 
-		throw "Missing layer instance for "+uid;
+		throw "Missing layer instance for "+layerDefUid;
 	}
 
 	public function tidy(p:Project) {
