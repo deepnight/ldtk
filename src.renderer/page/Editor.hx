@@ -630,12 +630,12 @@ class Editor extends Page {
 
 			case EntityFieldAdded, EntityFieldRemoved:
 				updateTool();
-				levelRender.invalidate();
+				levelRender.invalidateAll();
 
 			case LayerDefAdded, LayerDefRemoved:
 				updateLayerList();
 				updateTool();
-				levelRender.invalidate();
+				levelRender.invalidateAll();
 
 			case ProjectSelected:
 				updateAppBg();

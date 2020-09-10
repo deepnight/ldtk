@@ -8,7 +8,7 @@ class LevelRender extends dn.Process {
 	var layerAutoRender : Map<Int,Bool> = new Map();
 	var layerVis : Map<Int,Bool> = new Map();
 	var layerWrappers : Map<Int,h2d.Object> = new Map();
-	var invalidated = true;
+	var needFullRender = true;
 
 	var bounds : h2d.Graphics;
 	var glow : h2d.Graphics;
@@ -76,6 +76,7 @@ class LevelRender extends dn.Process {
 
 	inline function set_zoom(v) {
 		zoom = M.fclamp(v, 0.2, 16);
+		// zoom = M.round(zoom*2)/2;
 		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
 		return zoom;
 	}
@@ -105,14 +106,14 @@ class LevelRender extends dn.Process {
 				fit();
 
 			case ProjectSettingsChanged, LayerInstanceRestoredFromHistory, LevelRestoredFromHistory:
-				invalidate();
+				invalidateAll();
 
 			case LevelSelected:
 				renderAll();
 				fit();
 
 			case LevelResized:
-				invalidate();
+				invalidateAll();
 
 			case LayerInstanceVisiblityChanged:
 				updateLayersVisibility();
@@ -122,29 +123,29 @@ class LevelRender extends dn.Process {
 				renderBg();
 
 			case LevelSettingsChanged:
-				invalidate();
+				invalidateAll();
 
 			case LayerDefRemoved, LayerDefChanged, LayerDefSorted:
-				invalidate();
+				invalidateAll();
 
 			case LayerInstanceChanged:
-				invalidate();
+				invalidateAll();
 
 			case TilesetSelectionSaved:
 
 			case TilesetDefChanged, TilesetDefRemoved:
-				invalidate();
+				invalidateAll();
 
 			case TilesetDefAdded:
 
 			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
-				invalidate();
+				invalidateAll();
 
 			case EntityFieldAdded, EntityFieldRemoved, EntityFieldDefChanged, EntityFieldInstanceChanged:
-				invalidate();
+				invalidateAll();
 
 			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved:
-				invalidate();
+				invalidateAll();
 
 			case LevelAdded:
 			case LevelRemoved:
@@ -189,7 +190,7 @@ class LevelRender extends dn.Process {
 		layerVis.set(l.layerDefUid, !isLayerVisible(l));
 		editor.ge.emit(LayerInstanceVisiblityChanged);
 		if( isLayerVisible(l) )
-			invalidate();
+			invalidateAll();
 	}
 
 	public function showLayer(l:led.inst.LayerInstance) {
@@ -249,7 +250,7 @@ class LevelRender extends dn.Process {
 	}
 
 	public function renderAll() {
-		invalidated = false;
+		needFullRender = false;
 		renderBg();
 		renderLayers();
 	}
@@ -469,8 +470,13 @@ class LevelRender extends dn.Process {
 	}
 
 
-	public inline function invalidate() {
-		invalidated = true;
+	public inline function invalidateArea(li:led.inst.LayerInstance, cx:Int, cy:Int, wid=1, hei=1) {
+		needFullRender = true;
+		N.notImplemented(); // TODO
+	}
+
+	public inline function invalidateAll() {
+		needFullRender = true;
 	}
 
 	override function postUpdate() {
@@ -489,8 +495,8 @@ class LevelRender extends dn.Process {
 		}
 
 		// Re-render
-		if( invalidated ) {
-			invalidated = false;
+		if( needFullRender ) {
+			needFullRender = false;
 			renderAll();
 		}
 	}

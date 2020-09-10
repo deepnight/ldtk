@@ -290,36 +290,62 @@ class LayerInstance {
 	}
 
 
+
+	inline function applyAutoLayerRuleAt(r:led.def.AutoLayerRule, cx:Int, cy:Int) {
+		if( def.isAutoLayer() ) {
+			// Init
+			if( !autoTiles.exists(r.uid) )
+				autoTiles.set( r.uid, new Map() );
+			autoTiles.get(r.uid).remove( coordId(cx,cy) );
+
+			// Apply rule
+			if( r.matches(this, cx,cy) ) {
+				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:0 } );
+				return true;
+			}
+			else if( r.flipX && r.matches(this, cx,cy, -1) ) {
+				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:1 } );
+				return true;
+			}
+			else if( r.flipY && r.matches(this, cx,cy, 1, -1) ) {
+				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:2 } );
+				return true;
+			}
+			else if( r.flipX && r.flipY && r.matches(this, cx,cy, -1, -1) ) {
+				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:3 } );
+				return true;
+			}
+			else
+				return false;
+		}
+		else
+			return false;
+	}
+
+	public function applyAllAutoLayerRulesAt(cx:Int, cy:Int, wid:Int, hei:Int) {
+		if( !def.isAutoLayer() )
+			return;
+
+		// Adjust bounds to also redraw nearby cells
+		var left = dn.M.imax( 0, cx - Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
+		var top = dn.M.imax( 0, cy - Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
+		var right = dn.M.imin( cWid-1, cx + wid-1 + Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
+		var bottom = dn.M.imin( cHei-1, cy + hei-1 + Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
+
+		// Apply rules
+		for(cx in left...right+1)
+		for(cy in top...bottom+1)
+		for(r in def.rules)
+			if( applyAutoLayerRuleAt(r,cx,cy) && r.breakOnMatch )
+				break;
+	}
+
 	public function applyAllAutoLayerRules() {
 		if( !def.isAutoLayer() )
 			return;
 
-		// Init
 		autoTiles = new Map();
-		for(r in def.rules)
-			autoTiles.set( r.uid, new Map() );
-
-		// Check rules
-		for(cy in 0...cHei)
-		for(cx in 0...cWid)
-		for(r in def.rules) {
-			if( r.matches(this, cx,cy) ) {
-				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:0 } );
-				// anyMatch = true;
-			}
-			else if( r.flipX && r.matches(this, cx,cy, -1) ) {
-				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:1 } );
-				// anyMatch = true;
-			}
-			else if( r.flipY && r.matches(this, cx,cy, 1, -1) ) {
-				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:2 } );
-				// anyMatch = true;
-			}
-			else if( r.flipX && r.flipY && r.matches(this, cx,cy, -1, -1) ) {
-				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:3 } );
-				// anyMatch = true;
-			}
-	}
+		applyAllAutoLayerRulesAt(0, 0, cWid, cHei);
 	}
 
 
@@ -336,9 +362,14 @@ class LayerInstance {
 		);
 	}
 
+	var _once = false;
 	public function render(target:h2d.Object, renderAutoLayers:Bool) {
-		if( renderAutoLayers )
-			applyAllAutoLayerRules(); // TODO should only be done when needed
+		if( !_once ) {
+			applyAllAutoLayerRules(); // HACK
+			_once = true;
+		}
+		// if( renderAutoLayers && def.isAutoLayer() )
+			// applyAllAutoLayerRules(); // HACK should only be done when needed
 
 		switch def.type {
 			case IntGrid:
