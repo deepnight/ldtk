@@ -368,8 +368,6 @@ class LayerInstance {
 			applyAllAutoLayerRules(); // HACK
 			_once = true;
 		}
-		// if( renderAutoLayers && def.isAutoLayer() )
-			// applyAllAutoLayerRules(); // HACK should only be done when needed
 
 		switch def.type {
 			case IntGrid:
