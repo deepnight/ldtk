@@ -276,4 +276,9 @@ class AutoLayerRule {
 		return true;
 	}
 
+
+	public function getRandomTileForCoord(cx:Int,cy:Int) : Int {
+		return tileIds[ dn.M.randSeedCoords( seed, cx,cy, tileIds.length ) ];
+	}
+
 }

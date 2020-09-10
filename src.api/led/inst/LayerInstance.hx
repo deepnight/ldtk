@@ -17,6 +17,8 @@ class LayerInstance {
 	public var entityInstances : Array<EntityInstance> = [];
 	public var gridTiles : Map<Int,Int> = []; // <coordId, tileId>
 
+	public var autoTiles : Map<Int, Map<Int, { tileId:Int, flips:Int }> > = []; // <ruleUid, <coordId, {tile}>> // JSON
+
 	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( level.pxWid / def.gridSize );
 	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( level.pxHei / def.gridSize );
 
@@ -288,6 +290,37 @@ class LayerInstance {
 	}
 
 
+	public function applyAllAutoLayerRules() {
+		if( !def.isAutoLayer() )
+			return;
+
+		// Init
+		autoTiles = new Map();
+		for(r in def.rules)
+			autoTiles.set( r.uid, new Map() );
+
+		// Check rules
+		for(cy in 0...cHei)
+		for(cx in 0...cWid)
+		for(r in def.rules) {
+			if( r.matches(this, cx,cy) ) {
+				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:0 } );
+				// anyMatch = true;
+			}
+			else if( r.flipX && r.matches(this, cx,cy, -1) ) {
+				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:1 } );
+				// anyMatch = true;
+			}
+			else if( r.flipY && r.matches(this, cx,cy, 1, -1) ) {
+				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:2 } );
+				// anyMatch = true;
+			}
+			else if( r.flipX && r.flipY && r.matches(this, cx,cy, -1, -1) ) {
+				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:3 } );
+				// anyMatch = true;
+			}
+	}
+	}
 
 
 	/** RENDERING *******************/
@@ -304,6 +337,9 @@ class LayerInstance {
 	}
 
 	public function render(target:h2d.Object, renderAutoLayers:Bool) {
+		if( renderAutoLayers )
+			applyAllAutoLayerRules(); // TODO should only be done when needed
+
 		switch def.type {
 			case IntGrid:
 				var g = new h2d.Graphics(target);
@@ -315,37 +351,15 @@ class LayerInstance {
 
 					for(cy in 0...cHei)
 					for(cx in 0...cWid) {
-						var anyMatch = false;
-
 						var i = def.rules.length-1;
 						while( i>=0 ) {
 							var r = def.rules[i];
-							if( r.matches(this, cx,cy) ) {
-								renderAutoTile(r, tg, td, cx,cy, 1, 1);
-								anyMatch = true;
-							}
-							else if( r.flipX && r.matches(this, cx,cy, -1) ) {
-								renderAutoTile(r, tg, td, cx,cy, -1, 1);
-								anyMatch = true;
-							}
-							else if( r.flipY && r.matches(this, cx,cy, 1, -1) ) {
-								renderAutoTile(r, tg, td, cx,cy, 1, -1);
-								anyMatch = true;
-							}
-							else if( r.flipX && r.flipY && r.matches(this, cx,cy, -1, -1) ) {
-								renderAutoTile(r, tg, td, cx,cy, -1, -1);
-								anyMatch = true;
+							var at = autoTiles.get(r.uid).get( coordId(cx,cy) );
+							if( at!=null ) {
+								renderAutoTile( r, tg, td, cx,cy, dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1 );
 							}
 
-							// if( anyMatch && r.breakOnMatch )
-							// 	break;
 							i--;
-						}
-
-						// Default render
-						if( !anyMatch && hasIntGrid(cx,cy) ) {
-							g.beginFill( getIntGridColorAt(cx,cy), 1 );
-							g.drawRect(cx*def.gridSize, cy*def.gridSize, def.gridSize, def.gridSize);
 						}
 					}
 				}
