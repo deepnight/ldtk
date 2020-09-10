@@ -22,11 +22,18 @@ class AutoLayerRule {
 	// var bitMasksNot : Null< Map<Int, Int> >;
 
 	public function new(uid, size) {
+		if( !isValidSize(size) )
+			throw 'Invalid rule size ${size}x$size';
+
 		this.uid = uid;
 		this.size = size;
 		perlinSeed = Std.random(9999999);
 		seed = Std.random(9999999);
 		initPattern();
+	}
+
+	inline function isValidSize(size:Int) {
+		return size>=3 && size<=7 && size%2!=0;
 	}
 
 	inline function get__perlin() {
@@ -136,6 +143,9 @@ class AutoLayerRule {
 
 
 	public function resize(newSize:Int) {
+		if( !isValidSize(newSize) )
+			throw 'Invalid rule size ${size}x$size';
+
 		var oldSize = size;
 		var oldPatt = pattern.copy();
 		var pad = Std.int( dn.M.iabs(newSize-oldSize) / 2 );
@@ -154,8 +164,6 @@ class AutoLayerRule {
 			for( cy in 0...oldSize )
 				pattern[cx+pad + (cy+pad)*newSize] = oldPatt[cx + cy*oldSize];
 		}
-
-		return true;
 	}
 
 	inline function coordId(cx,cy) return cx+cy*size;
