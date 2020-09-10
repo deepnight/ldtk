@@ -479,7 +479,13 @@ class JsTools {
 	}
 
 
-	public static function createAutoPatternGrid(rule:led.def.AutoLayerRule, layerDef:led.def.LayerDef, previewMode=false, ?onClick:(cx:Int, cy:Int, button:Int)->Void) {
+	public static function createAutoPatternGrid(
+		rule:led.def.AutoLayerRule,
+		layerDef:led.def.LayerDef,
+		previewMode=false,
+		?explainCell: (desc:Null<String>)->Void,
+		?onClick:(cx:Int, cy:Int, button:Int)->Void
+	) {
 		var jGrid = new J('<div class="autoPatternGrid"/>');
 		jGrid.addClass("size-"+rule.size);
 
@@ -488,6 +494,19 @@ class JsTools {
 
 		if( previewMode )
 			jGrid.addClass("preview");
+
+		function addExplain(jTarget:js.jquery.JQuery, desc:String) {
+			if( explainCell==null )
+				return;
+
+			jTarget
+				.mouseover( function(_) {
+					explainCell(desc);
+				})
+				.mouseout( function(_) {
+					explainCell(null);
+				});
+		}
 
 		var idx = 0;
 		for(cy in 0...rule.size)
@@ -513,6 +532,7 @@ class JsTools {
 							jTile.addClass("multi");
 					}
 				}
+				// addExplain(jCell, "The tile(s) will be renderer here.");
 			}
 
 			// Cell color
@@ -520,21 +540,31 @@ class JsTools {
 				var v = rule.get(cx,cy);
 				if( v!=0 ) {
 					if( v>0 ) {
-						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING )
+						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING ) {
 							jCell.addClass("anything");
-						else
+							addExplain(jCell, 'This cell should contain any IntGrid value to match.');
+						}
+						else {
 							jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
+							addExplain(jCell, 'This cell should contain "${layerDef.getIntGridValueName(M.iabs(v)-1)}" to match.');
+						}
 					}
 					else {
 						jCell.addClass("not").append('<span class="cross"></span>');
-						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING )
+						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING ) {
 							jCell.addClass("anything");
-						else
+							addExplain(jCell, 'This cell should NOT contain any IntGrid value to match.');
+						}
+						else {
 							jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
+							addExplain(jCell, 'This cell should NOT contain "${layerDef.getIntGridValueName(M.iabs(v)-1)}" to match.');
+						}
 					}
 				}
-				else
+				else {
+					addExplain(jCell, 'This cell content doesn\'t matter.');
 					jCell.addClass("empty");
+				}
 			}
 
 			// Edit grid value

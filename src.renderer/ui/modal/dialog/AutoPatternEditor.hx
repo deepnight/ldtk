@@ -19,6 +19,15 @@ class AutoPatternEditor extends ui.modal.Dialog {
 	function render() {
 		loadTemplate("autoPatternEditor");
 
+		// Mini explanation tip
+		var jExplain = jContent.find(".explain");
+		function setExplain(?str:String) {
+			if( str==null )
+				jExplain.empty();
+			else
+				jExplain.html(str);
+		}
+
 		// Tile(s)
 		var jTile = JsTools.createTilePicker(layerDef.autoTilesetDefUid, rule.tileIds, function(tids) {
 			rule.tileIds = tids.copy();
@@ -28,7 +37,7 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		jContent.find(">.tiles .wrapper").empty().append(jTile);
 
 		// Pattern grid editor
-		var jGrid = JsTools.createAutoPatternGrid(rule, layerDef, function(cx,cy,button) {
+		var jGrid = JsTools.createAutoPatternGrid(rule, layerDef, setExplain, function(cx,cy,button) {
 			var v = rule.get(cx,cy);
 			if( button==0 ) {
 				if( v==0 || v>0 )

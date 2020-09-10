@@ -102,6 +102,11 @@ class LayerDef {
 		return intGridValues[idx];
 	}
 
+	public function getIntGridValueName(idx:Int) : Null<String> {
+		var vd = getIntGridValueDef(idx);
+		return vd==null ? null : vd.identifier==null ? "#"+idx : vd.identifier;
+	}
+
 	public inline function getAllIntGridValues() return intGridValues;
 	public inline function countIntGridValues() return intGridValues.length;
 
