@@ -88,7 +88,7 @@ class EnumDef {
 		if( !hasValue(id) || iconTilesetUid==null )
 			return;
 
-		getValue(id).tileId = tid; // TODO check validity?
+		getValue(id).tileId = tid;
 	}
 
 	public function clearAllTileIds() {

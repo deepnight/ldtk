@@ -364,11 +364,6 @@ class LayerInstance {
 
 	var _once = false;
 	public function render(target:h2d.Object, renderAutoLayers:Bool) {
-		if( !_once ) {
-			applyAllAutoLayerRules(); // HACK
-			_once = true;
-		}
-
 		switch def.type {
 			case IntGrid:
 				var g = new h2d.Graphics(target);
