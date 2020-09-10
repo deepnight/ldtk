@@ -138,29 +138,29 @@ class LevelRender extends dn.Process {
 				invalidateBg();
 
 			case LevelSettingsChanged:
-				invalidateAll();
+				invalidateAll(); // TODO
 
 			case LayerDefRemoved, LayerDefChanged, LayerDefSorted:
-				invalidateAll();
+				invalidateAll(); // TODO
 
 			case LayerInstanceChanged:
-				invalidateAll();
+				invalidateAll(); // TODO
 
 			case TilesetSelectionSaved:
 
 			case TilesetDefChanged, TilesetDefRemoved:
-				invalidateAll();
+				invalidateAll(); // TODO
 
 			case TilesetDefAdded:
 
 			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
-				invalidateAll();
+				invalidateAll(); // TODO
 
 			case EntityFieldAdded, EntityFieldRemoved, EntityFieldDefChanged, EntityFieldInstanceChanged:
-				invalidateAll();
+				invalidateAll(); // TODO
 
 			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved:
-				invalidateAll();
+				invalidateAll(); // TODO
 
 			case LevelAdded:
 			case LevelRemoved:
