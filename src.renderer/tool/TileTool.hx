@@ -30,29 +30,24 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 
 	public function isRandomMode() return getSelectedValue().mode==Random;
 
-	override function useAt(m:MouseCoords) {
-		super.useAt(m);
+	override function useAtInterpolatedGrid(cx:Int, cy:Int):Bool {
+		super.useAtInterpolatedGrid(cx, cy);
 
-		var anyChange = false;
 		switch curMode {
 			case null, PanView:
 
 			case Add:
-				dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
-					if( drawSelectionAt(cx, cy) )
-						anyChange = true;
-				});
+				if( drawSelectionAt(cx, cy) )
+					return true;
 
 			case Remove:
-				dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
-					if( removeSelectedTileAt(cx, cy) )
-						anyChange = true;
-				});
+				if( removeSelectedTileAt(cx, cy) )
+					return true;
 
 			case Move:
 		}
 
-		return anyChange;
+		return false;
 	}
 
 	override function useFloodfillAt(m:MouseCoords):Bool {

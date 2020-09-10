@@ -36,29 +36,27 @@ class IntGridTool extends Tool<Int> {
 		super.onMouseMove(m);
 	}
 
-	override function useAt(m:MouseCoords) {
-		super.useAt(m);
+	override function useAtInterpolatedGrid(cx:Int, cy:Int):Bool {
+		super.useAtInterpolatedGrid(cx, cy);
 
-		var anyChange = false;
-		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
-			var old = curLayerInstance.getIntGrid(cx,cy);
-			switch curMode {
-				case null, PanView:
-				case Add:
-					curLayerInstance.setIntGrid(cx, cy, getSelectedValue());
+		var old = curLayerInstance.getIntGrid(cx,cy);
+		switch curMode {
+			case null, PanView:
+			case Add:
+				curLayerInstance.setIntGrid(cx, cy, getSelectedValue());
 
-				case Remove:
-					curLayerInstance.removeIntGrid(cx, cy);
+			case Remove:
+				curLayerInstance.removeIntGrid(cx, cy);
 
-				case Move:
-			}
-			if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
-				editor.curLevelHistory.markChange(cx,cy);
-				anyChange = true;
-			}
-		});
+			case Move:
+		}
 
-		return anyChange;
+		if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
+			editor.curLevelHistory.markChange(cx,cy);
+			return true;
+		}
+		else
+			return false;
 	}
 
 

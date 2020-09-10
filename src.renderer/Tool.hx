@@ -232,6 +232,15 @@ class Tool<T> extends dn.Process {
 			editor.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
 			editor.levelRender.focusLevelY -= m.levelY-lastMouse.levelY;
 		}
+
+		var anyChange = false;
+		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
+			anyChange = useAtInterpolatedGrid(cx,cy) || anyChange;
+		});
+		return anyChange;
+	}
+
+	function useAtInterpolatedGrid(cx:Int, cy:Int) {
 		return false;
 	}
 
