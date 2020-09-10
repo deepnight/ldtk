@@ -272,41 +272,44 @@ class LevelRender extends dn.Process {
 		renderBounds();
 		renderGrid();
 		renderLayers();
+		applyLayerVisibility();
 	}
 
 
+	function renderLayer(li:led.inst.LayerInstance) {
+		if( layerWrappers.exists(li.layerDefUid) )
+			layerWrappers.get(li.layerDefUid).remove();
+
+		var wrapper = new h2d.Object();
+		layerWrappers.set(li.layerDefUid, wrapper);
+
+		root.add(wrapper,Const.DP_MAIN);
+		root.under(wrapper); // TODO not working when updating one layer at a time
+
+		wrapper.x = li.pxOffsetX;
+		wrapper.y = li.pxOffsetY;
+
+		// if( !isLayerVisible(li) )
+			// continue;
+
+		var grid = li.def.gridSize;
+		switch li.def.type {
+			case IntGrid, Tiles:
+				li.render(wrapper, autoLayerRenderingEnabled(li));
+
+			case Entities:
+				for(ei in li.entityInstances) {
+					var o = createEntityRender(ei, wrapper);
+					o.setPosition(ei.x, ei.y);
+				}
+		}
+	}
 
 	function renderLayers() {
-		for(e in layerWrappers)
-			e.remove();
-		layerWrappers = new Map();
-
 		for(ld in editor.project.defs.layers) {
 			var li = editor.curLevel.getLayerInstance(ld);
-			var wrapper = new h2d.Object();
-			root.add(wrapper,Const.DP_MAIN);
-			root.under(wrapper);
-			layerWrappers.set(li.layerDefUid, wrapper);
-			wrapper.x = li.pxOffsetX;
-			wrapper.y = li.pxOffsetY;
-
-			if( !isLayerVisible(li) )
-				continue;
-
-			var grid = li.def.gridSize;
-			switch li.def.type {
-				case IntGrid, Tiles:
-					li.render(wrapper, autoLayerRenderingEnabled(li));
-
-				case Entities:
-					for(ei in li.entityInstances) {
-						var o = createEntityRender(ei, wrapper);
-						o.setPosition(ei.x, ei.y);
-					}
-			}
+			renderLayer(li);
 		}
-
-		applyLayerVisibility();
 	}
 
 
