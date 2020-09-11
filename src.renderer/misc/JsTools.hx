@@ -32,7 +32,20 @@ class JsTools {
 		Sortable.create( j.get(0), settings);
 	}
 
-	
+
+	public static function focusScrollableList(jList:js.jquery.JQuery, jElem:js.jquery.JQuery) {
+		var targetY = jElem.position().top + jList.scrollTop();
+
+		if( jList.css("position")=="static" )
+			jList.css("position", "relative");
+
+		targetY -= jList.outerHeight()*0.5;
+		targetY = M.fclamp( targetY, 0, jList.prop("scrollHeight")-jList.outerHeight() );
+
+		jList.scrollTop(targetY);
+	}
+
+
 	public static function prepareProjectFile(p:led.Project) : { bytes:haxe.io.Bytes, json:Dynamic } {
 		var json = p.toJson();
 		var jsonStr = dn.JsonPretty.stringify(json, Const.JSON_HEADER);
