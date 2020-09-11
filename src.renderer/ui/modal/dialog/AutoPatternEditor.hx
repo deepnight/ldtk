@@ -60,7 +60,7 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		// Grid size selection
 		var jSizes = jContent.find(">.grid select").empty();
 		var s = -1;
-		var sizes = [ while( s<=Const.MAX_AUTO_PATTERN_SIZE ) s+=2 ];
+		var sizes = [ while( s<Const.MAX_AUTO_PATTERN_SIZE ) s+=2 ];
 		for(size in sizes) {
 			var jOpt = new J('<option value="$size">${size}x$size</option>');
 			if( size>=7 )
