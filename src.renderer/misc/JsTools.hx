@@ -18,7 +18,7 @@ class JsTools {
 			},
 			scroll: j.get(0),
 			scrollSpeed: 40,
-			scrollSensitivity: 200,
+			scrollSensitivity: 140,
 			filter: ".fixed",
 			animation: anim ? 100 : 0,
 		}
