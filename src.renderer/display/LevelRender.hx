@@ -146,8 +146,11 @@ class LevelRender extends dn.Process {
 					layerWrappers.remove(uid);
 				}
 
-			case LayerDefChanged, LayerDefSorted:
-				invalidateAll(); // TODO
+			case LayerDefSorted:
+				invalidateAllLayers();
+
+			case LayerDefChanged:
+				invalidateAll();
 
 			case LayerRuleChanged(r), LayerRuleAdded(r):
 				var li = editor.curLevel.getLayerInstanceFromRule(r);
@@ -161,7 +164,6 @@ class LevelRender extends dn.Process {
 				invalidateLayer( editor.curLayerInstance );
 
 			case LayerInstanceChanged:
-				invalidateAll(); // TODO
 
 			case TilesetSelectionSaved:
 
@@ -244,6 +246,17 @@ class LevelRender extends dn.Process {
 		g.drawRect( Std.int(-pad-w*0.5), Std.int(-pad-h*0.5), w+pad*2, h+pad*2 );
 		g.setPosition( Std.int(x+w*0.5), Std.int(y+h*0.5) );
 		root.add(g, Const.DP_UI);
+	}
+
+	public inline function showRectCase(cx:Int, cy:Int, cWid:Int, cHei:Int, col:UInt, thickness=1) {
+		var li = editor.curLayerInstance;
+		showRectPx(
+			cx*li.def.gridSize,
+			cy*li.def.gridSize,
+			cWid*li.def.gridSize,
+			cHei*li.def.gridSize,
+			0xff00ff, 2
+		);
 	}
 
 	public inline function showHistoryBounds(layerId:Int, bounds:HistoryStateBounds, col:UInt) {
@@ -591,7 +604,11 @@ class LevelRender extends dn.Process {
 		}
 		else
 			layerInvalidations.set( li.layerDefUid, { left:left, right:right, top:top, bottom:bottom } );
-		// showRectPx(left*li.def.gridSize, top*li.def.gridSize, (right-left+1)*li.def.gridSize, (bottom-top+1)*li.def.gridSize, 0xff00ff, 2);
+	}
+
+	public inline function invalidateAllLayers() {
+		for(li in editor.curLevel.layerInstances)
+			invalidateLayer(li);
 	}
 
 	public inline function invalidateBg() {
@@ -618,17 +635,25 @@ class LevelRender extends dn.Process {
 		}
 
 		// Render invalidation system
-		if( allInvalidated )
+		if( allInvalidated ) {
+			// Full
 			renderAll();
+		}
 		else {
+			// Bg
 			if( bgInvalidated ) {
 				renderBounds();
 				renderGrid();
 			}
 
+			// Layers
 			for( li in editor.curLevel.layerInstances )
-				if( layerInvalidations.exists(li.layerDefUid) )
+				if( layerInvalidations.exists(li.layerDefUid) ) {
+					var b = layerInvalidations.get(li.layerDefUid);
+					if( li.def.isAutoLayer() )
+						li.applyAllAutoLayerRulesAt(b.left, b.top, b.right-b.left+1, b.bottom-b.top+1);
 					renderLayer(li);
+				}
 		}
 	}
 
