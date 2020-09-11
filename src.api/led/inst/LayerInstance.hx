@@ -17,7 +17,8 @@ class LayerInstance {
 	public var entityInstances : Array<EntityInstance> = [];
 	public var gridTiles : Map<Int,Int> = []; // <coordId, tileId>
 
-	public var autoTiles : Map<Int, Map<Int, { tileId:Int, flips:Int }> > = []; // <ruleUid, <coordId, {tile}>> // JSON
+	/** < RuleUid, < coordId, {tileInfos} > > **/
+	public var autoTiles : Map<Int, Map<Int, { tileId:Int, flips:Int }> > = [];
 
 	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( level.pxWid / def.gridSize );
 	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( level.pxHei / def.gridSize );
@@ -58,6 +59,27 @@ class LayerInstance {
 					});
 				arr;
 			},
+
+			// __autoTiles: {
+			// 	applyAllAutoLayerRules(); // HACK autoTiles should actually be saved and reused for perf issues
+
+			// 	var perCoords = new Map();
+			// 	for( rTiles in autoTiles ) {
+			// 		for( at in rTiles.keyValueIterator() ) {
+			// 			if( !perCoords.exists(at.key) )
+			// 				perCoords.set(at.key, []);
+			// 			perCoords.get(at.key).push(at.value);
+			// 		}
+			// 	}
+
+			// 	var arr = [];
+			// 	for( e in perCoords.keyValueIterator() )
+			// 		arr.push({
+			// 			coordId: e.key,
+			// 			tiles: e.value,
+			// 		});
+			// 	arr;
+			// },
 
 			gridTiles: {
 				var arr = [];
