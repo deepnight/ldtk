@@ -379,7 +379,10 @@ class Tool<T> extends dn.Process {
 				editor.cursor.set(Move);
 
 			case null, Add, Remove:
-				updateCursor(m);
+				if( editor.isCurrentLayerVisible() )
+					updateCursor(m);
+				else
+					editor.cursor.set(Forbidden);
 		}
 
 		lastMouse = m;

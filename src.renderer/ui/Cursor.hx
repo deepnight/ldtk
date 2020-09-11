@@ -77,6 +77,9 @@ class Cursor extends dn.Process {
 			case PickNothing:
 				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("help") );
 
+			case Forbidden:
+				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("not-allowed") );
+
 			case Move:
 				setSystemCursor(Move);
 
@@ -152,7 +155,7 @@ class Cursor extends dn.Process {
 		var changed = type==null || curLabel!=label || type.getIndex()!=t.getIndex();
 		if( !changed )
 			changed = switch t {
-				case None, Move, PickNothing: type!=t;
+				case None, Move, PickNothing, Forbidden: type!=t;
 				case Eraser(x, y): false;
 				case GridCell(li, cx, cy, col): !type.equals(t);
 				case GridRect(li, cx, cy, wid, hei, col): !type.equals(t);
@@ -172,7 +175,7 @@ class Cursor extends dn.Process {
 			return;
 
 		switch type {
-			case None, Move, Resize(_), PickNothing:
+			case None, Move, Resize(_), PickNothing, Forbidden:
 				var m = editor.getMouse();
 				labelWrapper.setPosition(m.levelX, m.levelY);
 

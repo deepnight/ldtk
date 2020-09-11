@@ -62,6 +62,7 @@ enum GlobalEvent {
 
 enum CursorType {
 	None;
+	Forbidden;
 	Move;
 	PickNothing;
 	Eraser(x:Int,y:Int);
