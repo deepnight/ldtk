@@ -415,14 +415,14 @@ class Editor extends Page {
 				selectLayerInstance(li);
 				var v = li.getIntGrid(cx,cy);
 				curTool.as(tool.IntGridTool).selectValue(v);
-				levelRender.showRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
+				levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
 				curTool.onValuePicking();
 				return true;
 
 			case Entity(li, instance):
 				selectLayerInstance(li);
 				curTool.as(tool.EntityTool).selectValue(instance.defUid);
-				levelRender.showRectPx( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
+				levelRender.bleepRectPx( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
 				curTool.onValuePicking();
 				return true;
 
@@ -442,7 +442,7 @@ class Editor extends Page {
 				// 	t.selectValue( { ids:[tid], mode:t.getMode() } );
 				// else
 				// 	t.selectValue( savedSel );
-				levelRender.showRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
+				levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
 				return true;
 		}
 

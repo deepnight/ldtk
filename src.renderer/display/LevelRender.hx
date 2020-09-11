@@ -254,7 +254,7 @@ class LevelRender extends dn.Process {
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 	}
 
-	public function showRectPx(x:Int, y:Int, w:Int, h:Int, col:UInt, thickness=1) {
+	public function bleepRectPx(x:Int, y:Int, w:Int, h:Int, col:UInt, thickness=1) {
 		var pad = 5;
 		var g = new h2d.Graphics();
 		rectBleeps.push(g);
@@ -264,9 +264,9 @@ class LevelRender extends dn.Process {
 		root.add(g, Const.DP_UI);
 	}
 
-	public inline function showRectCase(cx:Int, cy:Int, cWid:Int, cHei:Int, col:UInt, thickness=1) {
+	public inline function bleepRectCase(cx:Int, cy:Int, cWid:Int, cHei:Int, col:UInt, thickness=1) {
 		var li = editor.curLayerInstance;
-		showRectPx(
+		bleepRectPx(
 			cx*li.def.gridSize,
 			cy*li.def.gridSize,
 			cWid*li.def.gridSize,
@@ -275,8 +275,8 @@ class LevelRender extends dn.Process {
 		);
 	}
 
-	public inline function showHistoryBounds(layerId:Int, bounds:HistoryStateBounds, col:UInt) {
-		showRectPx(bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
+	public inline function bleepHistoryBounds(layerId:Int, bounds:HistoryStateBounds, col:UInt) {
+		bleepRectPx(bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
 	}
 
 

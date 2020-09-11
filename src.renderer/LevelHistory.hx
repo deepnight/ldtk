@@ -180,7 +180,7 @@ class LevelHistory {
 
 				// Animate bounds
 				if( bounds!=null )
-					editor.levelRender.showHistoryBounds(undoneLayerId, bounds, 0xff0000);
+					editor.levelRender.bleepHistoryBounds(undoneLayerId, bounds, 0xff0000);
 
 				curIndex--;
 
@@ -233,7 +233,7 @@ class LevelHistory {
 
 				case Layer(layerId, bounds, json):
 					if( bounds!=null )
-						editor.levelRender.showHistoryBounds( layerId, bounds, 0x8ead4f );
+						editor.levelRender.bleepHistoryBounds( layerId, bounds, 0x8ead4f );
 			}
 
 			// #if debug
