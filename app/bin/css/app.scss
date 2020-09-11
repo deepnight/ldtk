@@ -2497,10 +2497,11 @@ canvas#webgl {
 	}
 
 	.content {
-		width: auto;
 		display: grid;
 		grid-template-rows: min-content auto;
 		height: 100%;
+		width: auto;
+		min-width: 250px;
 
 		header {
 			display: flex;
@@ -2536,6 +2537,7 @@ canvas#webgl {
 		}
 
 		ul.rules {
+			position: relative;
 			display: grid;
 			overflow-y: auto;
 			align-items: flex-start;
@@ -2543,6 +2545,8 @@ canvas#webgl {
 			grid-auto-rows: min-content;
 			gap: 2px;
 			margin-top: 4px;
+			padding: 8px;
+			border: 1px solid $bgLight;
 
 			&:empty {
 				background-image: url("../img/stripes.png");
@@ -2552,20 +2556,49 @@ canvas#webgl {
 				border: 1px solid $bgLight;
 			}
 
+			li:last-child {
+				margin-bottom: 30px;
+			}
+
 			li {
+				position: relative;
 				display: grid;
 				box-sizing: border-box;
 				gap: 2px;
-				grid-template-columns: min-content 80px repeat(3, min-content);
+				grid-template-columns: min-content 80px auto repeat(2, min-content);
 				align-items: center;
 				padding: 2px;
 
 				background-color: $bgDark;
 				border-radius: 3px;
-				border: 1px solid transparent;
+				border: 1px dashed transparent;
+
+				button.insert {
+					position: absolute;
+					z-index: 2;
+					display: none;
+					left: 100px;
+					padding: 0;
+					width: 18px;
+					height: 18px;
+					font-weight: bold;
+					opacity: 0.6;
+					&:hover {
+						opacity: 1;
+					}
+					&.before {
+						top: -10px;
+					}
+					&.after {
+						bottom: -10px;
+					}
+				}
+				&:hover button.insert {
+					display: block;
+				}
 
 				&.last {
-					border-color: $bgLighter;
+					border-color: white;
 				}
 
 				.options {

@@ -34,16 +34,26 @@ class EditAutoLayerRules extends ui.modal.Panel {
 	}
 
 	function updatePanel() {
-		var jRuleList = jContent.find("ul.rules").off().empty();
 		jContent.find("*").off();
 		ui.Tip.clear();
 
-		// Add rule
-		jContent.find("button.createRule").click( function(ev) {
-			ld.rules.insert(0, new led.def.AutoLayerRule(project.makeUniqId(), 3));
-			lastRule = ld.rules[0];
+		var jRuleList = jContent.find("ul.rules").empty();
+
+		function createRuleAtIndex(idx:Int) {
+			ld.rules.insert(idx, new led.def.AutoLayerRule(project.makeUniqId(), 3));
+			lastRule = ld.rules[idx];
 			editor.ge.emit( LayerRuleAdded(lastRule) );
-			new ui.modal.dialog.AutoPatternEditor( jContent.find("ul.rules [idx=0]"), ld, lastRule );
+
+			var jNewRule = jContent.find("ul.rules [idx="+idx+"]");
+			if( idx==0 )
+				jRuleList.scrollTop(0);
+
+			new ui.modal.dialog.AutoPatternEditor(jNewRule, ld, lastRule );
+		}
+
+		// Add rule
+		jContent.find("button.create").click( function(ev) {
+			createRuleAtIndex(0);
 		});
 
 		// Render
@@ -59,6 +69,17 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
 			jRule.appendTo(jRuleList);
 			jRule.attr("idx", idx);
+
+			// Insert rule before
+			var i = idx;
+			jRule.find(".insert.before").click( function(_) {
+				createRuleAtIndex(i);
+			});
+
+			// Insert rule after
+			jRule.find(".insert.after").click( function(_) {
+				createRuleAtIndex(i+1);
+			});
 
 			// Last edited highlight
 			jRule.mousedown( function(ev) {
