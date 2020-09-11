@@ -638,8 +638,10 @@ class LevelRender extends dn.Process {
 			var o = rectBleeps[i];
 			o.alpha-=tmod*0.05;
 			o.setScale( 1 + 0.2 * (1-o.alpha) );
-			if( o.alpha<=0 )
+			if( o.alpha<=0 ) {
+				o.remove();
 				rectBleeps.splice(i,1);
+			}
 			else
 				i++;
 		}
