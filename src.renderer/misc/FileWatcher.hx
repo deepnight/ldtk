@@ -9,6 +9,9 @@ class FileWatcher extends dn.Process {
 	}
 
 	public function watch(absFilePath:String, onChange:Void->Void) {
+		if( !JsTools.fileExists(absFilePath) )
+			return;
+
 		var w = js.node.Fs.watch(absFilePath, function(event,f) {
 			delayer.cancelById(absFilePath);
 			delayer.addS(absFilePath, onChange, 1);

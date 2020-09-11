@@ -216,13 +216,13 @@ class Editor extends Page {
 
 		ge.emit(ProjectSelected);
 
-		// Tileset image hot-reloading
-		for( td in project.defs.tilesets )
-			watcher.watchTileset(td);
-
 		// Load tilesets
 		for(td in project.defs.tilesets)
 			reloadTileset(td, true);
+
+		// Tileset image hot-reloading
+		for( td in project.defs.tilesets )
+			watcher.watchTileset(td);
 	}
 
 
