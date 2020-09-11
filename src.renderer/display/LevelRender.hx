@@ -371,6 +371,7 @@ class LevelRender extends dn.Process {
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
 					var i = li.def.rules.length-1;
+					var noTile = true;
 					while( i>=0 ) {
 						var r = li.def.rules[i];
 						if( r.active ) {
@@ -382,10 +383,16 @@ class LevelRender extends dn.Process {
 									dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
 									td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
 								);
+								noTile = false;
 							}
 						}
 
 						i--;
+					}
+					if( noTile && li.hasIntGrid(cx,cy) ) {
+						// Default render when no tile applies
+						g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
+						g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);
 					}
 				}
 			}
