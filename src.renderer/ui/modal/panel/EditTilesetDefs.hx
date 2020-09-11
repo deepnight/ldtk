@@ -17,7 +17,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		jModalAndMask.find(".mainList button.create").click( function(ev) {
 			var td = project.defs.createTilesetDef();
 			select(td);
-			editor.ge.emit(TilesetDefAdded);
+			editor.ge.emit( TilesetDefAdded(td) );
 			jForm.find("input").first().focus().select();
 		});
 
@@ -29,9 +29,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 			}
 			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this tileset, it will be deleted in all levels and corresponding layers as well. Are you sure?", function() {
 				new LastChance(L.t._("Tileset ::name:: deleted", { name:cur.identifier }), project);
+				var old = cur;
 				project.defs.removeTilesetDef(cur);
 				select(project.defs.tilesets[0]);
-				editor.ge.emit(TilesetDefRemoved);
+				editor.ge.emit( TilesetDefRemoved(old) );
 			});
 		});
 
@@ -50,7 +51,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				updateForm();
 				updateTilesetPreview();
 
-			case TilesetDefChanged:
+			case TilesetDefChanged(td):
 				updateList();
 				updateForm();
 				updateTilesetPreview();
@@ -144,7 +145,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput(cur.identifier, jForm.find("input[name='name']") );
 		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.defs.isTilesetIdentifierUnique(id);
 		i.validityError = N.invalidIdentifier;
-		i.onChange = editor.ge.emit.bind(TilesetDefChanged);
+		i.onChange = editor.ge.emit.bind( TilesetDefChanged(cur) );
 
 		// "Import image" button
 		var b = jForm.find("#tilesetFile");
@@ -179,12 +180,12 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 				project.defs.autoRenameTilesetIdentifier(oldRelPath, cur);
 				updateTilesetPreview();
-				editor.ge.emit(TilesetDefChanged);
+				editor.ge.emit( TilesetDefChanged(cur) );
 			});
 		});
 
 		var i = Input.linkToHtmlInput( cur.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
-		i.linkEvent(TilesetDefChanged);
+		i.linkEvent( TilesetDefChanged(cur) );
 		i.setBounds(2, cur.getMaxTileGridSize());
 
 		// var i = Input.linkToHtmlInput( cur.tileGridSpacing, jForm.find("input[name=tilesetGridSpacing]") );

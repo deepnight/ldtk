@@ -72,7 +72,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				updateList();
 				updateForm();
 
-			case TilesetDefChanged:
+			case TilesetDefChanged(td):
 				updateForm();
 
 			case LayerDefSorted:

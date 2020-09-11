@@ -31,10 +31,10 @@ enum GlobalEvent {
 	LayerInstanceVisiblityChanged;
 	LayerInstanceRestoredFromHistory;
 
-	TilesetDefChanged;
-	TilesetDefAdded;
-	TilesetDefRemoved;
-	TilesetSelectionSaved;
+	TilesetDefChanged(td:led.def.TilesetDef);
+	TilesetDefAdded(td:led.def.TilesetDef);
+	TilesetDefRemoved(td:led.def.TilesetDef);
+	TilesetSelectionSaved(td:led.def.TilesetDef);
 
 	EntityDefAdded;
 	EntityDefRemoved;

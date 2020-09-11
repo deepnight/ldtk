@@ -176,10 +176,6 @@ class Editor extends Page {
 		project = p;
 		project.tidy();
 
-		// Load tilesets
-		for(td in project.defs.tilesets)
-			reloadTileset(td, true);
-
 		// Check external enums
 		for( relPath in project.defs.getExternalEnumPaths() ) {
 			if( !JsTools.fileExists( makeFullFilePath(relPath) ) ) {
@@ -223,6 +219,10 @@ class Editor extends Page {
 		// Tileset image hot-reloading
 		for( td in project.defs.tilesets )
 			watcher.watchTileset(td);
+
+		// Load tilesets
+		for(td in project.defs.tilesets)
+			reloadTileset(td, true);
 	}
 
 
@@ -238,7 +238,7 @@ class Editor extends Page {
 				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
 					var newRelPath = makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( getProjectDir(), newRelPath );
-					ge.emit( TilesetDefChanged );
+					ge.emit( TilesetDefChanged(td) );
 				});
 
 			case RemapLoss:
@@ -252,7 +252,7 @@ class Editor extends Page {
 				}
 		}
 
-		ge.emit(TilesetDefChanged);
+		ge.emit(TilesetDefChanged(td));
 	}
 
 	inline function hasInputFocus() {
@@ -668,13 +668,13 @@ class Editor extends Page {
 				updateGuide();
 				updateTool();
 
-			case TilesetDefChanged, TilesetDefRemoved, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
+			case TilesetDefChanged(_), TilesetDefRemoved(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				updateTool();
 				updateGuide();
 
-			case TilesetSelectionSaved:
+			case TilesetSelectionSaved(td):
 
-			case TilesetDefAdded:
+			case TilesetDefAdded(td):
 
 			case ProjectSettingsChanged:
 				updateAppBg();

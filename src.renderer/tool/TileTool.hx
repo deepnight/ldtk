@@ -239,7 +239,7 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 
 	public function saveSelection() {
 		curTilesetDef.saveSelection( getSelectedValue() );
-		editor.ge.emit(TilesetSelectionSaved);
+		editor.ge.emit( TilesetSelectionSaved(curTilesetDef) );
 		N.msg("Saved selection");
 	}
 

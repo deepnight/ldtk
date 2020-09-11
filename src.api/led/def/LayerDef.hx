@@ -126,7 +126,9 @@ class LayerDef {
 
 
 
-	public function hasTileset() return tilesetDefUid!=null;
+	public function isUsingTileset(td:TilesetDef) {
+		return tilesetDefUid==td.uid || autoTilesetDefUid==td.uid;
+	}
 
 
 	inline function set_tilePivotX(v) return tilePivotX = dn.M.fclamp(v, 0, 1);
