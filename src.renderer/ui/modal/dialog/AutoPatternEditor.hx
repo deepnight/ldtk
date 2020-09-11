@@ -56,8 +56,10 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		});
 		jContent.find(">.grid .wrapper").empty().append(jGrid);
 
+
+		// Grid size selection
 		var jSizes = jContent.find(">.grid select").empty();
-		var s = 1;
+		var s = -1;
 		var sizes = [ while( s<=Const.MAX_AUTO_PATTERN_SIZE ) s+=2 ];
 		for(size in sizes) {
 			var jOpt = new J('<option value="$size">${size}x$size</option>');
@@ -72,6 +74,7 @@ class AutoPatternEditor extends ui.modal.Dialog {
 			render();
 		});
 		jSizes.val(rule.size);
+
 
 		// Value picker
 		var jValues = jContent.find(">.values ul").empty();
