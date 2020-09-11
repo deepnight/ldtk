@@ -16,8 +16,9 @@ class LevelRender extends dn.Process {
 	/** <LayerDefUID, Bool> **/
 	var layerVis : Map<Int,Bool> = new Map();
 
+	var layersWrapper : h2d.Layers;
 	/** <LayerDefUID, h2d.Object> **/
-	var layerWrappers : Map<Int,h2d.Object> = new Map();
+	var layerRenders : Map<Int,h2d.Object> = new Map();
 
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
@@ -45,6 +46,9 @@ class LevelRender extends dn.Process {
 
 		grid = new h2d.Graphics();
 		root.add(grid, Const.DP_UI);
+
+		layersWrapper = new h2d.Layers();
+		root.add(layersWrapper, Const.DP_MAIN);
 
 		focusLevelX = 0;
 		focusLevelY = 0;
@@ -131,19 +135,19 @@ class LevelRender extends dn.Process {
 				invalidateAll();
 
 			case LayerInstanceVisiblityChanged:
-				applyLayerVisibility();
+				applyAllLayersVisibility(); // TODO
 
 			case LayerInstanceSelected:
-				applyLayerVisibility();
+				applyAllLayersVisibility(); // TODO why?
 				invalidateBg();
 
 			case LevelSettingsChanged:
 				invalidateBg();
 
 			case LayerDefRemoved(uid):
-				if( layerWrappers.exists(uid) ) {
-					layerWrappers.get(uid).remove();
-					layerWrappers.remove(uid);
+				if( layerRenders.exists(uid) ) {
+					layerRenders.get(uid).remove();
+					layerRenders.remove(uid);
 				}
 
 			case LayerDefSorted:
@@ -317,8 +321,6 @@ class LevelRender extends dn.Process {
 		renderBounds();
 		renderGrid();
 		renderAllLayers();
-
-		applyLayerVisibility();
 	}
 
 
@@ -326,17 +328,17 @@ class LevelRender extends dn.Process {
 		layerInvalidations.remove(li.layerDefUid);
 
 		// Create wrapper
-		if( layerWrappers.exists(li.layerDefUid) )
-			layerWrappers.get(li.layerDefUid).remove();
+		if( layerRenders.exists(li.layerDefUid) )
+			layerRenders.get(li.layerDefUid).remove();
 
 		var wrapper = new h2d.Object();
-		layerWrappers.set(li.layerDefUid, wrapper);
-
-		root.add(wrapper,Const.DP_MAIN);
-		root.under(wrapper); // TODO not working when updating one layer at a time
-
 		wrapper.x = li.pxOffsetX;
 		wrapper.y = li.pxOffsetY;
+
+		// Register it
+		layerRenders.set(li.layerDefUid, wrapper);
+		var depth = editor.project.defs.getLayerDepth(li.def);
+		layersWrapper.add( wrapper, depth );
 
 		// Render
 		switch li.def.type {
@@ -401,6 +403,8 @@ class LevelRender extends dn.Process {
 				);
 			}
 		}
+
+		applyLayerVisibility(li);
 	}
 
 	function renderAllLayers() {
@@ -575,19 +579,23 @@ class LevelRender extends dn.Process {
 	public function setEnhanceActiveLayer(v:Bool) {
 		enhanceActiveLayer = v;
 		editor.jMainPanel.find("input#enhanceActiveLayer").prop("checked", v);
-		applyLayerVisibility();
+		applyAllLayersVisibility();
 	}
 
-	function applyLayerVisibility() {
+	function applyLayerVisibility(li:led.inst.LayerInstance) {
+		var wrapper = layerRenders.get(li.layerDefUid);
+		if( wrapper==null )
+			return;
+
+		wrapper.visible = isLayerVisible(li);
+		wrapper.alpha = li.def.displayOpacity * ( !enhanceActiveLayer || li==editor.curLayerInstance ? 1 : 0.4 );
+		wrapper.filter = !enhanceActiveLayer || li==editor.curLayerInstance ? null : new h2d.filter.Blur(4);
+	}
+
+	function applyAllLayersVisibility() {
 		for(ld in editor.project.defs.layers) {
 			var li = editor.curLevel.getLayerInstance(ld);
-			var wrapper = layerWrappers.get(ld.uid);
-			if( wrapper==null )
-				continue;
-
-			wrapper.visible = isLayerVisible(li);
-			wrapper.alpha = li.def.displayOpacity * ( !enhanceActiveLayer || li==editor.curLayerInstance ? 1 : 0.4 );
-			wrapper.filter = !enhanceActiveLayer || li==editor.curLayerInstance ? null : new h2d.filter.Blur(4);
+			applyLayerVisibility(li);
 		}
 	}
 

@@ -167,6 +167,17 @@ class Definitions {
 	}
 
 
+	public function getLayerDepth(ld:led.def.LayerDef) {
+		var i = 0;
+		while( i<layers.length && layers[i]!=ld )
+			i++;
+
+		if( i==layers.length )
+			throw "Layer not found";
+
+		return layers.length-1-i;
+	}
+
 
 	/**  ENTITY DEFS  *****************************************/
 
