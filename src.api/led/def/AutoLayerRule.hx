@@ -10,7 +10,7 @@ class AutoLayerRule {
 	public var seed : Int;
 	public var flipX = false;
 	public var flipY = false;
-	public var active = true; // JSON
+	public var active = true;
 
 	var perlinActive = false;
 	public var perlinSeed : Int;
@@ -103,6 +103,7 @@ class AutoLayerRule {
 
 		return {
 			uid: uid,
+			active: active,
 			size: size,
 			tileIds: tileIds.copy(),
 			chance: JsonTools.writeFloat(chance),
@@ -120,6 +121,7 @@ class AutoLayerRule {
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
 		var r = new AutoLayerRule( json.uid, json.size );
+		r.active = JsonTools.readBool(json.active, true);
 		r.tileIds = json.tileIds;
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
