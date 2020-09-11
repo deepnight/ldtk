@@ -31,7 +31,7 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		// Tile(s)
 		var jTile = JsTools.createTilePicker(layerDef.autoTilesetDefUid, rule.tileIds, function(tids) {
 			rule.tileIds = tids.copy();
-			editor.ge.emit(LayerDefChanged);
+			editor.ge.emit( LayerRuleChanged(rule) );
 			render();
 		});
 		jContent.find(">.tiles .wrapper").empty().append(jTile);
@@ -51,13 +51,15 @@ class AutoPatternEditor extends ui.modal.Dialog {
 				else
 					rule.set(cx,cy, 0);
 			}
-			editor.ge.emit(LayerDefChanged);
+			editor.ge.emit( LayerRuleChanged(rule) );
 			render();
 		});
 		jContent.find(">.grid .wrapper").empty().append(jGrid);
 
+
+		// Grid size selection
 		var jSizes = jContent.find(">.grid select").empty();
-		var s = 1;
+		var s = -1;
 		var sizes = [ while( s<=Const.MAX_AUTO_PATTERN_SIZE ) s+=2 ];
 		for(size in sizes) {
 			var jOpt = new J('<option value="$size">${size}x$size</option>');
@@ -68,10 +70,11 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		jSizes.change( function(_) {
 			var size = Std.parseInt( jSizes.val() );
 			rule.resize(size);
-			editor.ge.emit(LayerDefChanged);
+			editor.ge.emit( LayerRuleChanged(rule) );
 			render();
 		});
 		jSizes.val(rule.size);
+
 
 		// Value picker
 		var jValues = jContent.find(">.values ul").empty();
@@ -113,10 +116,9 @@ class AutoPatternEditor extends ui.modal.Dialog {
 
 		if( rule.isEmpty() ) {
 			layerDef.rules.remove(rule);
-			editor.ge.emit(LayerDefChanged);
+			editor.ge.emit( LayerRuleRemoved(rule) );
 		}
-
-		if( rule.trim() )
-			editor.ge.emit(LayerDefChanged);
+		else if( rule.trim() )
+			editor.ge.emit( LayerRuleChanged(rule) );
 	}
 }

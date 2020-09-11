@@ -35,7 +35,7 @@ class LastChance extends dn.Process {
 			case ViewportChanged:
 			case LevelSelected:
 			case LayerInstanceSelected:
-			case LayerInstanceVisiblityChanged:
+			case LayerInstanceVisiblityChanged(li):
 			case ToolOptionChanged:
 
 			case _:

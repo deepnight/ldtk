@@ -17,29 +17,38 @@ enum GlobalEvent {
 	LevelSorted;
 
 	LayerDefAdded;
-	LayerDefRemoved;
+	LayerDefRemoved(defUid:Int);
 	LayerDefChanged;
 	LayerDefSorted;
 
+	LayerRuleChanged(rule:led.def.AutoLayerRule);
+	LayerRuleAdded(rule:led.def.AutoLayerRule);
+	LayerRuleRemoved(rule:led.def.AutoLayerRule);
+	LayerRuleSorted;
+
 	LayerInstanceSelected;
 	LayerInstanceChanged;
-	LayerInstanceVisiblityChanged;
-	LayerInstanceRestoredFromHistory;
+	LayerInstanceVisiblityChanged(li:led.inst.LayerInstance);
+	LayerInstanceRestoredFromHistory(li:led.inst.LayerInstance);
 
-	TilesetDefChanged;
-	TilesetDefAdded;
-	TilesetDefRemoved;
-	TilesetSelectionSaved;
+	TilesetDefChanged(td:led.def.TilesetDef);
+	TilesetDefAdded(td:led.def.TilesetDef);
+	TilesetDefRemoved(td:led.def.TilesetDef);
+	TilesetSelectionSaved(td:led.def.TilesetDef);
+
+	EntityInstanceAdded(ei:led.inst.EntityInstance);
+	EntityInstanceRemoved(ei:led.inst.EntityInstance);
+	EntityInstanceChanged(ei:led.inst.EntityInstance);
+	EntityInstanceFieldChanged(ei:led.inst.EntityInstance);
 
 	EntityDefAdded;
 	EntityDefRemoved;
 	EntityDefChanged;
 	EntityDefSorted;
 
-	EntityFieldAdded;
-	EntityFieldRemoved;
-	EntityFieldDefChanged;
-	EntityFieldInstanceChanged;
+	EntityFieldAdded(ed:led.def.EntityDef);
+	EntityFieldRemoved(ed:led.def.EntityDef);
+	EntityFieldDefChanged(ed:led.def.EntityDef);
 	EntityFieldSorted;
 
 	EnumDefAdded;

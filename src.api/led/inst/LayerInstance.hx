@@ -348,87 +348,13 @@ class LayerInstance {
 		applyAllAutoLayerRulesAt(0, 0, cWid, cHei);
 	}
 
+	public function applyAutoLayerRule(r:led.def.AutoLayerRule) {
+		if( !def.isAutoLayer() )
+			return;
 
-	/** RENDERING *******************/
-
-	#if heaps
-
-	inline function renderAutoTile(r:led.def.AutoLayerRule, tg:h2d.TileGroup, td:led.def.TilesetDef, cx,cy, dirX:Int, dirY:Int) {
-		tg.addTransform(
-			( cx + (dirX<0?1:0) + def.tilePivotX ) * def.gridSize,
-			( cy + (dirY<0?1:0) + def.tilePivotX ) * def.gridSize,
-			dirX, dirY, 0,
-			td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
-		);
+		for(cx in 0...cWid)
+		for(cy in 0...cHei)
+			applyAutoLayerRuleAt(r, cx,cy);
 	}
 
-	var _once = false;
-	public function render(target:h2d.Object, renderAutoLayers:Bool) {
-		switch def.type {
-			case IntGrid:
-				var g = new h2d.Graphics(target);
-
-				if( def.isAutoLayer() && renderAutoLayers ) {
-					// Auto-layer
-					var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
-					var tg = new h2d.TileGroup( td.getAtlasTile(), target );
-
-					for(cy in 0...cHei)
-					for(cx in 0...cWid) {
-						var i = def.rules.length-1;
-						while( i>=0 ) {
-							var r = def.rules[i];
-							var at = autoTiles.get(r.uid).get( coordId(cx,cy) );
-							if( at!=null ) {
-								renderAutoTile( r, tg, td, cx,cy, dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1 );
-							}
-
-							i--;
-						}
-					}
-				}
-				else {
-					// Normal intGrid
-					for(cy in 0...cHei)
-					for(cx in 0...cWid) {
-						var id = getIntGrid(cx,cy);
-						if( id<0 )
-							continue;
-
-						g.beginFill( getIntGridColorAt(cx,cy), 1 );
-						g.drawRect(cx*def.gridSize, cy*def.gridSize, def.gridSize, def.gridSize);
-					}
-				}
-
-			case Entities:
-				// not meant to be rendered
-
-			case Tiles:
-				var td = _project.defs.getTilesetDef(def.tilesetDefUid);
-				var tg = new h2d.TileGroup( td.getAtlasTile(), target );
-
-				for(cy in 0...cHei)
-				for(cx in 0...cWid) {
-					if( getGridTile(cx,cy)==null )
-						continue;
-
-
-					var t = td!=null ? td.getTile( getGridTile(cx,cy) ) : led.def.TilesetDef.makeErrorTile(def.gridSize);
-					t.setCenterRatio(def.tilePivotX, def.tilePivotY);
-					tg.add(
-						(cx + def.tilePivotX) * def.gridSize,
-						(cy + def.tilePivotX) * def.gridSize,
-						t
-					);
-				}
-
-		}
-	}
-
-	#else
-
-	@:deprecated("Not implemented on this platform")
-	public function render(target:Dynamic) {}
-
-	#end
 }

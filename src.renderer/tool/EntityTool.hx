@@ -77,6 +77,7 @@ class EntityTool extends Tool<Int> {
 						editor.setSelection( Entity(curLayerInstance, ei) );
 						onEditAnything();
 						curMode = Move;
+						editor.ge.emit( EntityInstanceAdded(ei) );
 					}
 				}
 
@@ -92,6 +93,7 @@ class EntityTool extends Tool<Int> {
 		switch ge {
 			case Entity(curLayerInstance, instance):
 				curLayerInstance.removeEntityInstance(instance);
+				editor.ge.emit( EntityInstanceRemoved(instance) );
 				return true;
 
 			case _:
@@ -129,7 +131,11 @@ class EntityTool extends Tool<Int> {
 					ei.x = getPlacementX(m);
 					ei.y = getPlacementY(m);
 					editor.setSelection( Entity(curLayerInstance, ei) );
-					return oldX!=ei.x || oldY!=ei.y;
+					var changed = oldX!=ei.x || oldY!=ei.y;
+					if( changed )
+						editor.ge.emit( EntityInstanceChanged(ei) );
+					
+					return changed;
 				}
 		}
 

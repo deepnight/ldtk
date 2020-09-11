@@ -59,18 +59,35 @@ class Level {
 		return x>=0 && x<pxWid && y>=0 && y<pxHei;
 	}
 
-	public function getLayerInstance(?uid:Int, ?layerDef:led.def.LayerDef) : led.inst.LayerInstance {
-		if( uid==null && layerDef==null )
+	public function getLayerInstance(?layerDefUid:Int, ?layerDef:led.def.LayerDef) : led.inst.LayerInstance {
+		if( layerDefUid==null && layerDef==null )
 			throw "Need 1 parameter";
 
-		if( uid==null )
-			uid = layerDef.uid;
+		if( layerDefUid==null )
+			layerDefUid = layerDef.uid;
 
 		for(li in layerInstances)
-			if( li.layerDefUid==uid )
+			if( li.layerDefUid==layerDefUid )
 				return li;
 
-		throw "Missing layer instance for "+uid;
+		throw "Missing layer instance for "+layerDefUid;
+	}
+
+	public function getLayerInstanceFromRule(r:led.def.AutoLayerRule) {
+		var ld = _project.defs.getLayerDefFromRule(r);
+		return ld!=null ? getLayerInstance(ld) : null;
+	}
+
+	public function getLayerInstanceFromEntity(?ei:led.inst.EntityInstance, ?ed:led.def.EntityDef) : Null<led.inst.LayerInstance> {
+		if( ei==null && ed==null )
+			return null;
+
+		for(li in layerInstances)
+		for(e in li.entityInstances)
+			if( ei!=null && e==ei || ed!=null && e.defUid==ed.uid )
+				return li;
+
+		return null;
 	}
 
 	public function tidy(p:Project) {

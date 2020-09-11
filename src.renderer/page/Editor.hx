@@ -141,7 +141,7 @@ class Editor extends Page {
 			.prop("checked", gridSnapping)
 			.change( function(ev) {
 				gridSnapping = ev.getThis().prop("checked");
-				levelRender.renderGrid();
+				levelRender.invalidateBg();
 			});
 
 
@@ -175,10 +175,6 @@ class Editor extends Page {
 
 		project = p;
 		project.tidy();
-
-		// Load tilesets
-		for(td in project.defs.tilesets)
-			reloadTileset(td, true);
 
 		// Check external enums
 		for( relPath in project.defs.getExternalEnumPaths() ) {
@@ -223,6 +219,10 @@ class Editor extends Page {
 		// Tileset image hot-reloading
 		for( td in project.defs.tilesets )
 			watcher.watchTileset(td);
+
+		// Load tilesets
+		for(td in project.defs.tilesets)
+			reloadTileset(td, true);
 	}
 
 
@@ -238,7 +238,7 @@ class Editor extends Page {
 				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
 					var newRelPath = makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( getProjectDir(), newRelPath );
-					ge.emit( TilesetDefChanged );
+					ge.emit( TilesetDefChanged(td) );
 				});
 
 			case RemapLoss:
@@ -252,7 +252,7 @@ class Editor extends Page {
 				}
 		}
 
-		ge.emit(TilesetDefChanged);
+		ge.emit(TilesetDefChanged(td));
 	}
 
 	inline function hasInputFocus() {
@@ -308,7 +308,7 @@ class Editor extends Page {
 			case K.G:
 				if( !hasInputFocus() ) {
 					gridSnapping = !gridSnapping;
-					levelRender.renderGrid();
+					levelRender.invalidateBg();
 					jMainPanel.find("input#gridSnapping").prop("checked", gridSnapping);
 				}
 
@@ -415,14 +415,14 @@ class Editor extends Page {
 				selectLayerInstance(li);
 				var v = li.getIntGrid(cx,cy);
 				curTool.as(tool.IntGridTool).selectValue(v);
-				levelRender.showRect( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
+				levelRender.showRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
 				curTool.onValuePicking();
 				return true;
 
 			case Entity(li, instance):
 				selectLayerInstance(li);
 				curTool.as(tool.EntityTool).selectValue(instance.defUid);
-				levelRender.showRect( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
+				levelRender.showRectPx( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
 				curTool.onValuePicking();
 				return true;
 
@@ -442,7 +442,7 @@ class Editor extends Page {
 				// 	t.selectValue( { ids:[tid], mode:t.getMode() } );
 				// else
 				// 	t.selectValue( savedSel );
-				levelRender.showRect( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
+				levelRender.showRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
 				return true;
 		}
 
@@ -600,7 +600,7 @@ class Editor extends Page {
 			case ViewportChanged:
 			case LayerInstanceSelected:
 			case LevelSelected:
-			case LayerInstanceVisiblityChanged:
+			case LayerInstanceVisiblityChanged(_):
 			case ToolOptionChanged:
 
 			case _:
@@ -613,10 +613,15 @@ class Editor extends Page {
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 
 			case LayerInstanceChanged:
-			case EntityFieldDefChanged:
+
+			case EntityFieldDefChanged(ed):
 			case EntityFieldSorted:
 			case EntityDefSorted:
-			case EntityFieldInstanceChanged:
+			case EntityInstanceFieldChanged(ei):
+			case EntityInstanceAdded(ei):
+			case EntityInstanceRemoved(ei):
+			case EntityInstanceChanged(ei):
+
 			case ToolOptionChanged:
 
 			case LayerInstanceSelected:
@@ -624,18 +629,21 @@ class Editor extends Page {
 				updateLayerList();
 				updateGuide();
 
-			case LayerInstanceVisiblityChanged:
+			case LayerInstanceVisiblityChanged(li):
 				clearSelection();
 				updateLayerList();
 
-			case EntityFieldAdded, EntityFieldRemoved:
+			case EntityFieldAdded(ed), EntityFieldRemoved(ed):
 				updateTool();
-				levelRender.invalidateAll();
 
-			case LayerDefAdded, LayerDefRemoved:
+			case LayerDefAdded, LayerDefRemoved(_):
 				updateLayerList();
 				updateTool();
-				levelRender.invalidateAll();
+
+			case LayerRuleChanged(r):
+			case LayerRuleAdded(r):
+			case LayerRuleRemoved(r):
+			case LayerRuleSorted:
 
 			case ProjectSelected:
 				updateAppBg();
@@ -659,19 +667,19 @@ class Editor extends Page {
 				if( !levelHistory.exists(curLevelId) )
 					levelHistory.set(curLevelId, new LevelHistory(curLevelId) );
 
-			case LayerInstanceRestoredFromHistory, LevelRestoredFromHistory:
+			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory:
 				updateAppBg();
 				updateLayerList();
 				updateGuide();
 				updateTool();
 
-			case TilesetDefChanged, TilesetDefRemoved, EntityDefChanged, EntityDefAdded, EntityDefRemoved:
+			case TilesetDefChanged(_), TilesetDefRemoved(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				updateTool();
 				updateGuide();
 
-			case TilesetSelectionSaved:
+			case TilesetSelectionSaved(td):
 
-			case TilesetDefAdded:
+			case TilesetDefAdded(td):
 
 			case ProjectSettingsChanged:
 				updateAppBg();

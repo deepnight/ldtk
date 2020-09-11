@@ -235,15 +235,15 @@ class AutoLayerRule {
 			return false;
 
 		// Checks if this rule cares about the cell IntGrid value
-		var iv = li.getIntGrid(cx,cy);
-		var used = false;
-		for(v in pattern)
-			if( dn.M.iabs(v)==iv+1 || dn.M.iabs(v)==Const.AUTO_LAYER_ANYTHING+1 ) {
-				used = true;
-				break;
-			}
-		if( !used )
-			return false;
+		// var iv = li.getIntGrid(cx,cy);
+		// var used = false;
+		// for(v in pattern)
+		// 	if( dn.M.iabs(v)==iv+1 || dn.M.iabs(v)==Const.AUTO_LAYER_ANYTHING+1 ) {
+		// 		used = true;
+		// 		break;
+		// 	}
+		// if( !used )
+		// 	return false;
 
 		// Rule check
 		var radius = Std.int( size/2 );

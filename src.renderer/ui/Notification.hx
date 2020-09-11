@@ -68,6 +68,7 @@ class Notification extends dn.Process {
 	public static inline function debug(str:Dynamic, long=false) {
 		#if debug
 		var str = StringTools.replace( Std.string(str), ",", ", " );
+		str = StringTools.htmlEscape(str);
 		new Notification(str, 0xff00ff, long);
 		#end
 	}

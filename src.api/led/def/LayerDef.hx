@@ -126,7 +126,9 @@ class LayerDef {
 
 
 
-	public function hasTileset() return tilesetDefUid!=null;
+	public function isUsingTileset(td:TilesetDef) {
+		return tilesetDefUid==td.uid || autoTilesetDefUid==td.uid;
+	}
 
 
 	inline function set_tilePivotX(v) return tilePivotX = dn.M.fclamp(v, 0, 1);
@@ -135,6 +137,14 @@ class LayerDef {
 
 	public inline function isAutoLayer() {
 		return autoTilesetDefUid!=null;
+	}
+
+
+	public function getRule(uid:Int) : Null<AutoLayerRule> {
+		for( r in rules )
+			if( r.uid==uid )
+				return r;
+		return null;
 	}
 
 	public function tidy(p:led.Project) {

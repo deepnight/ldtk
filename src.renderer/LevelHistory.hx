@@ -31,11 +31,16 @@ class LevelHistory {
 			case ProjectSelected:
 				clearHistory();
 
-			case LayerDefAdded, EntityDefAdded, EntityFieldAdded:
+			case LayerDefAdded, EntityDefAdded, EntityFieldAdded(_):
 				initMostAncientLayerStates(false);
 
-			case LayerDefRemoved, EntityDefRemoved, EntityFieldRemoved, EnumDefRemoved, TilesetDefRemoved, EnumDefValueRemoved:
+			case LayerDefRemoved(_), EntityDefRemoved, EntityFieldRemoved(_), EnumDefRemoved, TilesetDefRemoved(_), EnumDefValueRemoved:
 				clearHistory();
+
+			case LayerRuleChanged(r):
+			case LayerRuleAdded(r):
+			case LayerRuleRemoved(r):
+			case LayerRuleSorted:
 
 			case ViewportChanged:
 
@@ -54,16 +59,20 @@ class LevelHistory {
 			case LayerDefChanged, EntityDefChanged:
 			case LayerDefSorted:
 
-			case TilesetDefChanged:
-			case TilesetSelectionSaved:
-			case TilesetDefAdded:
+			case TilesetDefChanged(td):
+			case TilesetSelectionSaved(td):
+			case TilesetDefAdded(td):
 
-			case EntityDefSorted, EntityFieldSorted, EntityFieldDefChanged:
-			case EntityFieldInstanceChanged:
+			case EntityDefSorted, EntityFieldSorted, EntityFieldDefChanged(_):
+			case EntityInstanceFieldChanged(ei):
+			case EntityInstanceAdded(ei):
+			case EntityInstanceRemoved(ei):
+			case EntityInstanceChanged(ei):
+
 			case LayerInstanceChanged:
-			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
+			case LayerInstanceSelected, LayerInstanceVisiblityChanged(_):
 
-			case LayerInstanceRestoredFromHistory:
+			case LayerInstanceRestoredFromHistory(_):
 			case LevelRestoredFromHistory:
 			case ToolOptionChanged:
 		}
@@ -248,11 +257,12 @@ class LevelHistory {
 				editor.ge.emit(LevelRestoredFromHistory);
 
 			case Layer(layerId, bounds, json):
+				var li = led.inst.LayerInstance.fromJson(editor.project, json);
 				for( i in 0...level.layerInstances.length )
 					if( level.layerInstances[i].layerDefUid==layerId )
-						level.layerInstances[i] = led.inst.LayerInstance.fromJson(editor.project, json);
+						level.layerInstances[i] = li;
 				editor.project.tidy(); // fix "_project" refs & possible broken "instance<->def" refs
-				editor.ge.emit(LayerInstanceRestoredFromHistory);
+				editor.ge.emit( LayerInstanceRestoredFromHistory(li) );
 		}
 	}
 

@@ -48,7 +48,7 @@ class Rulers extends dn.Process {
 			case ProjectSelected, LevelSelected, LayerInstanceSelected, ProjectSettingsChanged:
 				invalidate();
 
-			case LayerDefChanged, LayerDefRemoved, LevelResized, LevelRestoredFromHistory:
+			case LayerDefChanged, LayerDefRemoved(_), LevelResized, LevelRestoredFromHistory:
 				invalidate();
 
 			case LevelSettingsChanged:

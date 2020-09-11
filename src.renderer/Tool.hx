@@ -238,7 +238,7 @@ class Tool<T> extends dn.Process {
 			bottom = M.imax( bottom, cur.cy );
 		}
 
-		editor.levelRender.invalidateArea(curLayerInstance, left, top, right-left+1, bottom-top+1);
+		editor.levelRender.invalidateLayerArea(curLayerInstance, left, right, top, bottom);
 
 		return true;
 	}
@@ -253,7 +253,7 @@ class Tool<T> extends dn.Process {
 		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
 			anyChange = useAtInterpolatedGrid(cx,cy) || anyChange;
 			if( anyChange )
-				editor.levelRender.invalidateArea(curLayerInstance, cx,cy);
+				editor.levelRender.invalidateLayerArea(curLayerInstance, cx,cx, cy,cy);
 		});
 		return anyChange;
 	}
@@ -286,7 +286,7 @@ class Tool<T> extends dn.Process {
 					var bottom = M.imax(origin.cy, m.cy);
 					anyChange = useOnRectangle(left, right, top, bottom);
 					if( anyChange )
-						editor.levelRender.invalidateArea(curLayerInstance, left, top, right-left+1, bottom-top+1);
+						editor.levelRender.invalidateLayerArea(curLayerInstance, left, right, top, bottom);
 				}
 				else {
 					anyChange = useAt(m);
