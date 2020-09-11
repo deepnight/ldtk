@@ -70,9 +70,9 @@ class LevelHistory {
 			case EntityInstanceChanged(ei):
 
 			case LayerInstanceChanged:
-			case LayerInstanceSelected, LayerInstanceVisiblityChanged:
+			case LayerInstanceSelected, LayerInstanceVisiblityChanged(_):
 
-			case LayerInstanceRestoredFromHistory:
+			case LayerInstanceRestoredFromHistory(_):
 			case LevelRestoredFromHistory:
 			case ToolOptionChanged:
 		}
@@ -257,11 +257,12 @@ class LevelHistory {
 				editor.ge.emit(LevelRestoredFromHistory);
 
 			case Layer(layerId, bounds, json):
+				var li = led.inst.LayerInstance.fromJson(editor.project, json);
 				for( i in 0...level.layerInstances.length )
 					if( level.layerInstances[i].layerDefUid==layerId )
-						level.layerInstances[i] = led.inst.LayerInstance.fromJson(editor.project, json);
+						level.layerInstances[i] = li;
 				editor.project.tidy(); // fix "_project" refs & possible broken "instance<->def" refs
-				editor.ge.emit(LayerInstanceRestoredFromHistory);
+				editor.ge.emit( LayerInstanceRestoredFromHistory(li) );
 		}
 	}
 

@@ -23,7 +23,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
 				close();
 
-			case LayerInstanceRestoredFromHistory:
+			case LayerInstanceRestoredFromHistory(li):
 				updatePanel();
 
 			case LayerRuleChanged(_), LayerRuleRemoved(_), LayerRuleSorted, LayerRuleAdded(_):

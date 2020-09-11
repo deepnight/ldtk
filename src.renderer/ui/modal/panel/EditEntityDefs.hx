@@ -154,7 +154,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
 				close();
 
-			case LayerInstanceRestoredFromHistory:
+			case LayerInstanceRestoredFromHistory(li):
 				updatePreview();
 				updateEntityForm();
 				updateFieldForm();

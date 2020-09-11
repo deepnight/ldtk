@@ -124,8 +124,8 @@ class LevelRender extends dn.Process {
 			case LevelRestoredFromHistory:
 				invalidateAll();
 
-			case LayerInstanceRestoredFromHistory:
-				invalidateAll();
+			case LayerInstanceRestoredFromHistory(li):
+				invalidateLayer(li);
 
 			case LevelSelected:
 				renderAll();
@@ -134,11 +134,11 @@ class LevelRender extends dn.Process {
 			case LevelResized:
 				invalidateAll();
 
-			case LayerInstanceVisiblityChanged:
-				applyAllLayersVisibility(); // TODO
+			case LayerInstanceVisiblityChanged(li):
+				applyLayerVisibility(li);
 
 			case LayerInstanceSelected:
-				applyAllLayersVisibility(); // TODO why?
+				applyAllLayersVisibility();
 				invalidateBg();
 
 			case LevelSettingsChanged:
@@ -238,20 +238,20 @@ class LevelRender extends dn.Process {
 
 	public function toggleLayer(li:led.inst.LayerInstance) {
 		layerVis.set(li.layerDefUid, !isLayerVisible(li));
-		editor.ge.emit(LayerInstanceVisiblityChanged);
+		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 
 		if( isLayerVisible(li) )
 			invalidateLayer(li);
 	}
 
-	public function showLayer(l:led.inst.LayerInstance) {
-		layerVis.set(l.layerDefUid, true);
-		editor.ge.emit(LayerInstanceVisiblityChanged);
+	public function showLayer(li:led.inst.LayerInstance) {
+		layerVis.set(li.layerDefUid, true);
+		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 	}
 
-	public function hideLayer(l:led.inst.LayerInstance) {
-		layerVis.set(l.layerDefUid, false);
-		editor.ge.emit(LayerInstanceVisiblityChanged);
+	public function hideLayer(li:led.inst.LayerInstance) {
+		layerVis.set(li.layerDefUid, false);
+		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 	}
 
 	public function showRectPx(x:Int, y:Int, w:Int, h:Int, col:UInt, thickness=1) {

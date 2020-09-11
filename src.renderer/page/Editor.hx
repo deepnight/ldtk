@@ -600,7 +600,7 @@ class Editor extends Page {
 			case ViewportChanged:
 			case LayerInstanceSelected:
 			case LevelSelected:
-			case LayerInstanceVisiblityChanged:
+			case LayerInstanceVisiblityChanged(_):
 			case ToolOptionChanged:
 
 			case _:
@@ -629,7 +629,7 @@ class Editor extends Page {
 				updateLayerList();
 				updateGuide();
 
-			case LayerInstanceVisiblityChanged:
+			case LayerInstanceVisiblityChanged(li):
 				clearSelection();
 				updateLayerList();
 
@@ -667,7 +667,7 @@ class Editor extends Page {
 				if( !levelHistory.exists(curLevelId) )
 					levelHistory.set(curLevelId, new LevelHistory(curLevelId) );
 
-			case LayerInstanceRestoredFromHistory, LevelRestoredFromHistory:
+			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory:
 				updateAppBg();
 				updateLayerList();
 				updateGuide();
