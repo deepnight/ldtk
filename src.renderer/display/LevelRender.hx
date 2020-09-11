@@ -321,16 +321,17 @@ class LevelRender extends dn.Process {
 
 
 	public function renderAll() {
-		N.error("render ALL");
 		allInvalidated = false;
-
-		for( li in editor.curLevel.layerInstances )
-			if( li.def.isAutoLayer() )
-				li.applyAllAutoLayerRules();
 
 		renderBounds();
 		renderGrid();
-		renderAllLayers();
+
+		for(ld in editor.project.defs.layers) {
+			var li = editor.curLevel.getLayerInstance(ld);
+			if( li.def.isAutoLayer() )
+				li.applyAllAutoLayerRules();
+			renderLayer(li);
+		}
 	}
 
 
@@ -420,13 +421,6 @@ class LevelRender extends dn.Process {
 		}
 
 		applyLayerVisibility(li);
-	}
-
-	function renderAllLayers() {
-		for(ld in editor.project.defs.layers) {
-			var li = editor.curLevel.getLayerInstance(ld);
-			renderLayer(li);
-		}
 	}
 
 
