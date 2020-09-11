@@ -613,10 +613,15 @@ class Editor extends Page {
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 
 			case LayerInstanceChanged:
-			case EntityFieldDefChanged:
+
+			case EntityFieldDefChanged(ed):
 			case EntityFieldSorted:
 			case EntityDefSorted:
-			case EntityFieldInstanceChanged:
+			case EntityInstanceFieldChanged(ei):
+			case EntityInstanceAdded(ei):
+			case EntityInstanceRemoved(ei):
+			case EntityInstanceChanged(ei):
+
 			case ToolOptionChanged:
 
 			case LayerInstanceSelected:
@@ -628,7 +633,7 @@ class Editor extends Page {
 				clearSelection();
 				updateLayerList();
 
-			case EntityFieldAdded, EntityFieldRemoved:
+			case EntityFieldAdded(ed), EntityFieldRemoved(ed):
 				updateTool();
 
 			case LayerDefAdded, LayerDefRemoved(_):

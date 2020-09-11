@@ -75,7 +75,19 @@ class Level {
 
 	public function getLayerInstanceFromRule(r:led.def.AutoLayerRule) {
 		var ld = _project.defs.getLayerDefFromRule(r);
-		return getLayerInstance(ld);
+		return ld!=null ? getLayerInstance(ld) : null;
+	}
+
+	public function getLayerInstanceFromEntity(?ei:led.inst.EntityInstance, ?ed:led.def.EntityDef) : Null<led.inst.LayerInstance> {
+		if( ei==null && ed==null )
+			return null;
+
+		for(li in layerInstances)
+		for(e in li.entityInstances)
+			if( ei!=null && e==ei || ed!=null && e.defUid==ed.uid )
+				return li;
+
+		return null;
 	}
 
 	public function tidy(p:Project) {

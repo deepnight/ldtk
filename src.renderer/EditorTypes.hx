@@ -36,15 +36,19 @@ enum GlobalEvent {
 	TilesetDefRemoved(td:led.def.TilesetDef);
 	TilesetSelectionSaved(td:led.def.TilesetDef);
 
+	EntityInstanceAdded(ei:led.inst.EntityInstance);
+	EntityInstanceRemoved(ei:led.inst.EntityInstance);
+	EntityInstanceChanged(ei:led.inst.EntityInstance);
+	EntityInstanceFieldChanged(ei:led.inst.EntityInstance);
+
 	EntityDefAdded;
 	EntityDefRemoved;
 	EntityDefChanged;
 	EntityDefSorted;
 
-	EntityFieldAdded;
-	EntityFieldRemoved;
-	EntityFieldDefChanged;
-	EntityFieldInstanceChanged;
+	EntityFieldAdded(ed:led.def.EntityDef);
+	EntityFieldRemoved(ed:led.def.EntityDef);
+	EntityFieldDefChanged(ed:led.def.EntityDef);
 	EntityFieldSorted;
 
 	EnumDefAdded;

@@ -165,7 +165,8 @@ class LevelRender extends dn.Process {
 				invalidateLayer( editor.curLayerInstance );
 
 			case LayerRuleRemoved(r):
-				invalidateLayer( editor.curLayerInstance );
+				var li = editor.curLevel.getLayerInstanceFromRule(r);
+				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
 			case LayerInstanceChanged:
 
@@ -181,11 +182,16 @@ class LevelRender extends dn.Process {
 			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
 				invalidateAll(); // TODO
 
-			case EntityFieldAdded, EntityFieldRemoved, EntityFieldDefChanged, EntityFieldInstanceChanged:
-				invalidateAll(); // TODO
+			case EntityFieldAdded(ed), EntityFieldRemoved(ed), EntityFieldDefChanged(ed):
+				var li = editor.curLevel.getLayerInstanceFromEntity(ed);
+				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
 			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved:
 				invalidateAll(); // TODO
+
+			case EntityInstanceAdded(ei), EntityInstanceRemoved(ei), EntityInstanceChanged(ei), EntityInstanceFieldChanged(ei):
+				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
+				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
 			case LevelAdded:
 			case LevelRemoved:
@@ -384,6 +390,11 @@ class LevelRender extends dn.Process {
 
 		case Entities:
 			// not meant to be rendered
+			for(ei in li.entityInstances) {
+				var e = createEntityRender(ei);
+				e.setPosition(ei.x, ei.y);
+				wrapper.addChild(e);
+			}
 
 		case Tiles:
 			var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
