@@ -51,11 +51,31 @@ class LayerInstance {
 			pxOffsetY: pxOffsetY,
 
 			intGrid: {
+				applyAllAutoLayerRules(); // HACK autoTiles should actually be saved and reused for perf issues
+
+				var autoTilesPerCoords = new Map();
+				for( rTiles in autoTiles ) {
+					for( at in rTiles.keyValueIterator() ) {
+						if( !autoTilesPerCoords.exists(at.key) )
+							autoTilesPerCoords.set(at.key, []);
+						autoTilesPerCoords.get(at.key).push({
+							t: at.value.tileId,
+							flips: switch at.value.flips {
+								case 1: "x";
+								case 2: "y";
+								case 3: "xy";
+								case _: "";
+							}
+						});
+					}
+				}
+
 				var arr = [];
 				for(e in intGrid.keyValueIterator())
 					arr.push({
 						coordId: e.key,
 						v: e.value,
+						__tiles: autoTilesPerCoords.exists(e.key) ? autoTilesPerCoords.get(e.key) : [],
 					});
 				arr;
 			},
