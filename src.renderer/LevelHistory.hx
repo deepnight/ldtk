@@ -38,6 +38,7 @@ class LevelHistory {
 				clearHistory();
 
 			case LayerRuleChanged(r):
+			case LayerRuleAdded(r):
 			case LayerRuleRemoved(r):
 			case LayerRuleSorted:
 

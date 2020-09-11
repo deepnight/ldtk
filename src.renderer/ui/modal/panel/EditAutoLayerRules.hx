@@ -42,7 +42,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		jContent.find("button.createRule").click( function(ev) {
 			ld.rules.insert(0, new led.def.AutoLayerRule(project.makeUniqId(), 3));
 			lastRule = ld.rules[0];
-			editor.ge.emit( LayerRuleChanged(lastRule) ); // HACK need better event
+			editor.ge.emit( LayerRuleAdded(lastRule) );
 			new ui.modal.dialog.AutoPatternEditor( jContent.find("ul.rules [idx=0]"), ld, lastRule );
 		});
 
@@ -175,7 +175,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 		JsTools.makeSortable("ul.rules", function(from,to) {
 			project.defs.sortLayerAutoRules(ld, from, to);
-			editor.ge.emit(LayerRuleSorted); 
+			editor.ge.emit(LayerRuleSorted);
 		});
 	}
 }

@@ -636,6 +636,7 @@ class Editor extends Page {
 				updateTool();
 
 			case LayerRuleChanged(r):
+			case LayerRuleAdded(r):
 			case LayerRuleRemoved(r):
 			case LayerRuleSorted:
 
