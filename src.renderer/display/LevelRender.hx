@@ -373,14 +373,16 @@ class LevelRender extends dn.Process {
 					var i = li.def.rules.length-1;
 					while( i>=0 ) {
 						var r = li.def.rules[i];
-						var at = li.autoTiles.get(r.uid).get( li.coordId(cx,cy) );
-						if( at!=null ) {
-							tg.addTransform(
-								( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-								( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-								dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
-								td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
-							);
+						if( r.active ) {
+							var at = li.autoTiles.get(r.uid).get( li.coordId(cx,cy) );
+							if( at!=null ) {
+								tg.addTransform(
+									( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+									( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+									dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
+									td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
+								);
+							}
 						}
 
 						i--;

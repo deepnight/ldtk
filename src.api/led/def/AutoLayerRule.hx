@@ -10,6 +10,7 @@ class AutoLayerRule {
 	public var seed : Int;
 	public var flipX = false;
 	public var flipY = false;
+	public var active = true; // JSON
 	public var breakOnMatch = false;
 
 	var perlinActive = false;

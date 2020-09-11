@@ -92,7 +92,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			// jFlag.click( function(ev:js.jquery.Event) {
 			// 	ev.preventDefault();
 			// 	r.breakOnMatch = !r.breakOnMatch;
-			// 	editor.ge.emit( LayerRuleChanged(li.layerDefUid, r.uid) );
+			// 	editor.ge.emit( LayerRuleChanged(r) );
 			// });
 
 			// Flip-X
@@ -161,6 +161,16 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				}
 			});
 
+			// Active
+			var jActive = jRule.find("a.active");
+			jActive.addClass( r.active ? "on" : "off" );
+			jActive.click( function(ev:js.jquery.Event) {
+				ev.preventDefault();
+				r.active = !r.active;
+				editor.ge.emit( LayerRuleChanged(r) );
+			});
+
+			// Delete
 			jRule.find("button.delete").click( function(ev) {
 				new ui.modal.dialog.Confirm( jRule, Lang.t._("Warning, this cannot be undone!"), true, function() {
 					ld.rules.remove(r);

@@ -2568,7 +2568,7 @@ canvas#webgl {
 
 				.options {
 					display: grid;
-					grid-template-columns: repeat(3, auto);
+					grid-template-columns: repeat(4, auto);
 					gap: 2px;
 
 					&>* {
@@ -2581,7 +2581,7 @@ canvas#webgl {
 					}
 
 					.random {
-						grid-column: 1/4;
+						grid-column: 1/5;
 						display: flex;
 						flex-wrap: nowrap;
 						align-items: center;
@@ -2627,7 +2627,6 @@ canvas#webgl {
 							color: $green;
 							font-weight: bold;
 							text-shadow: 0px 0px 4px $green;
-							// box-shadow: 0px 0px 8px $green;
 							border-color: $green;
 						}
 						&.off {
@@ -2637,20 +2636,29 @@ canvas#webgl {
 							border: 1px dashed $red;
 							background-color: $darkRed;
 						}
+
+						&.on span.off {
+							display: none;
+						}
+						&.off span.on {
+							display: none;
+						}
+
+						&.active.on {
+							border-color: $orange;
+						}
 					}
 				}
 
-
+				button {
+					padding: 4px;
+				}
 
 				input[type=text] {
 					border-color: transparent;
 					&:focus {
 						border-color: $orange;
 					}
-				}
-
-				button {
-					padding: 6px;
 				}
 
 				>.preview {
