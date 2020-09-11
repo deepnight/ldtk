@@ -27,6 +27,10 @@ class Home extends Page {
 			onLoad();
 		});
 
+		jPage.find(".samples").click( function(ev) {
+			onLoadSamples();
+		});
+
 		jPage.find(".new").click( function(ev) {
 			onNew();
 		});
@@ -86,6 +90,13 @@ class Home extends Page {
 
 	public function onLoad() {
 		dn.electron.Dialogs.open([".json"], App.ME.getDefaultDir(), function(filePath) {
+			loadProject(filePath);
+		});
+	}
+
+	public function onLoadSamples() {
+		N.debug(App.APP_DIR+" "+JsTools.getAppDir());
+		dn.electron.Dialogs.open([".json"], App.APP_DIR+"samples", function(filePath) {
 			loadProject(filePath);
 		});
 	}

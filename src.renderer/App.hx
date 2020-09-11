@@ -2,8 +2,8 @@ import electron.renderer.IpcRenderer;
 
 class App extends dn.Process {
 	public static var ME : App;
-	public static var APP_DIR = "./"; // with leading slash
-	public static var RESOURCE_DIR = "bin/"; // with leading slash
+	public static var APP_DIR = "./"; // with trailing slash
+	public static var RESOURCE_DIR = "bin/"; // with trailing slash
 
 	public var jDoc(get,never) : J; inline function get_jDoc() return new J(js.Browser.document);
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
