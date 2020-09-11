@@ -336,8 +336,7 @@ class LayerInstance {
 		for(cx in left...right+1)
 		for(cy in top...bottom+1)
 		for(r in def.rules)
-			if( applyAutoLayerRuleAt(r,cx,cy) && r.breakOnMatch )
-				break;
+			applyAutoLayerRuleAt(r,cx,cy);
 	}
 
 	public function applyAllAutoLayerRules() {
