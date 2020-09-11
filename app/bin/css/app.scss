@@ -2554,7 +2554,7 @@ canvas#webgl {
 				display: grid;
 				box-sizing: border-box;
 				gap: 2px;
-				grid-template-columns: repeat(5, min-content);
+				grid-template-columns: min-content 80px repeat(3, min-content);
 				align-items: center;
 				padding: 2px;
 
@@ -2664,6 +2664,12 @@ canvas#webgl {
 				>.preview {
 					margin-right: 8px;
 					cursor: pointer;
+					display: grid;
+					justify-items: center;
+
+					.autoPatternGrid {
+						border-color: $bgMed;
+					}
 
 					&:hover {
 						outline: 1px solid $orange;
@@ -2711,7 +2717,7 @@ $patternSize : 32px;
 			zoom: 0.3;
 		}
 		&.size-7 .cell {
-			zoom: 0.1;
+			zoom: 0.2;
 		}
 
 		.cell {
