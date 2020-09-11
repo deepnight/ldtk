@@ -4,18 +4,23 @@ import sortablejs.*;
 import sortablejs.Sortable;
 
 class JsTools {
-	public static function makeSortable(selector:String, onSort:(from:Int, to:Int)->Void) {
+	public static function makeSortable(selector:String, anim=true, onSort:(from:Int, to:Int)->Void) {
 		var j = new J(selector);
 		j.addClass("sortable");
 
+		// Base settings
 		var settings : SortableOptions = {
 			onEnd: function(ev) {
 				if( ev.oldIndex!=ev.newIndex )
 					onSort( ev.oldIndex, ev.newIndex );
+				else
+					new J(ev.item).click();
 			},
 			scroll: j.get(0),
 			scrollSpeed: 40,
 			scrollSensitivity: 200,
+			filter: ".fixed",
+			animation: anim ? 100 : 0,
 		}
 
 		// Custom handle
@@ -27,6 +32,7 @@ class JsTools {
 		Sortable.create( j.get(0), settings);
 	}
 
+	
 	public static function prepareProjectFile(p:led.Project) : { bytes:haxe.io.Bytes, json:Dynamic } {
 		var json = p.toJson();
 		var jsonStr = dn.JsonPretty.stringify(json, Const.JSON_HEADER);

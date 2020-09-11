@@ -1434,12 +1434,14 @@ textarea {
 	z-index: 97;
 }
 
-ul.sortable:not(.customHandle) li {
+ul.sortable:not(.customHandle) li:not(.fixed) {
 	background-image: url("../img/icons/drag.png");
 	background-repeat: no-repeat;
 	background-position: left center;
 	padding-left: 32px !important;
-	cursor: ns-resize;
+	&[draggable] {
+		cursor: ns-resize;
+	}
 }
 
 ul.sortable li[draggable=true] {
