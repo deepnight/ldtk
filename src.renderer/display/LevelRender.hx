@@ -180,14 +180,18 @@ class LevelRender extends dn.Process {
 			case TilesetDefAdded(td):
 
 			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
-				invalidateAll(); // TODO
+				for(li in editor.curLevel.layerInstances)
+					if( li.def.type==Entities )
+						invalidateLayer(li);
 
 			case EntityFieldAdded(ed), EntityFieldRemoved(ed), EntityFieldDefChanged(ed):
 				var li = editor.curLevel.getLayerInstanceFromEntity(ed);
 				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
 			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved:
-				invalidateAll(); // TODO
+				for(li in editor.curLevel.layerInstances)
+					if( li.def.type==Entities )
+						invalidateLayer(li);
 
 			case EntityInstanceAdded(ei), EntityInstanceRemoved(ei), EntityInstanceChanged(ei), EntityInstanceFieldChanged(ei):
 				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
