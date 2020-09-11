@@ -137,6 +137,14 @@ class LayerDef {
 		return autoTilesetDefUid!=null;
 	}
 
+
+	public function getRule(uid:Int) : Null<AutoLayerRule> {
+		for( r in rules )
+			if( r.uid==uid )
+				return r;
+		return null;
+	}
+
 	public function tidy(p:led.Project) {
 		// Lost auto-layer tileset
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {

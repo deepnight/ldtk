@@ -635,6 +635,10 @@ class Editor extends Page {
 				updateLayerList();
 				updateTool();
 
+			case LayerRuleChanged(r):
+			case LayerRuleRemoved(r):
+			case LayerRuleSorted:
+
 			case ProjectSelected:
 				updateAppBg();
 				updateLayerList();

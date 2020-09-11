@@ -149,6 +149,17 @@ class LevelRender extends dn.Process {
 			case LayerDefChanged, LayerDefSorted:
 				invalidateAll(); // TODO
 
+			case LayerRuleChanged(r):
+				var li = editor.curLevel.getLayerInstanceFromRule(r);
+				li.applyAutoLayerRule(r);
+				invalidateLayer(li);
+
+			case LayerRuleSorted:
+				invalidateLayer( editor.curLayerInstance );
+
+			case LayerRuleRemoved(r):
+				invalidateLayer( editor.curLayerInstance );
+
 			case LayerInstanceChanged:
 				invalidateAll(); // TODO
 
@@ -566,7 +577,9 @@ class LevelRender extends dn.Process {
 	}
 
 
-	public inline function invalidateLayer(li:led.inst.LayerInstance) {
+	public inline function invalidateLayer(?li:led.inst.LayerInstance, ?layerDefUid:Int) {
+		if( li==null )
+			li = editor.curLevel.getLayerInstance(layerDefUid);
 		layerInvalidations.set( li.layerDefUid, { left:0, right:li.cWid-1, top:0, bottom:li.cHei-1 } );
 	}
 

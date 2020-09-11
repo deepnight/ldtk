@@ -17,9 +17,14 @@ enum GlobalEvent {
 	LevelSorted;
 
 	LayerDefAdded;
-	LayerDefRemoved(uid:Int);
+	LayerDefRemoved(defUid:Int);
 	LayerDefChanged;
 	LayerDefSorted;
+
+	LayerRuleChanged(rule:led.def.AutoLayerRule);
+	// LayerRuleAdded(ruleUid:Int);
+	LayerRuleRemoved(rule:led.def.AutoLayerRule);
+	LayerRuleSorted;
 
 	LayerInstanceSelected;
 	LayerInstanceChanged;

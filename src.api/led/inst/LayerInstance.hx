@@ -348,4 +348,13 @@ class LayerInstance {
 		applyAllAutoLayerRulesAt(0, 0, cWid, cHei);
 	}
 
+	public function applyAutoLayerRule(r:led.def.AutoLayerRule) {
+		if( !def.isAutoLayer() )
+			return;
+
+		for(cx in 0...cWid)
+		for(cy in 0...cHei)
+			applyAutoLayerRuleAt(r, cx,cy);
+	}
+
 }

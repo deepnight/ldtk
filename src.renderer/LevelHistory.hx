@@ -37,6 +37,10 @@ class LevelHistory {
 			case LayerDefRemoved(_), EntityDefRemoved, EntityFieldRemoved, EnumDefRemoved, TilesetDefRemoved, EnumDefValueRemoved:
 				clearHistory();
 
+			case LayerRuleChanged(r):
+			case LayerRuleRemoved(r):
+			case LayerRuleSorted:
+
 			case ViewportChanged:
 
 			case EnumDefAdded:

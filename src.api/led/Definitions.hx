@@ -151,6 +151,21 @@ class Definitions {
 		return moved;
 	}
 
+	public function getLayerDefFromRule(?r:led.def.AutoLayerRule, ?ruleUid:Int) : Null<led.def.LayerDef> {
+		if( r==null && ruleUid==null )
+			throw "Need 1 parameter";
+
+		if( ruleUid==null )
+			ruleUid = r.uid;
+
+		for( ld in layers )
+		for( r in ld.rules )
+			if( r.uid==ruleUid )
+				return ld;
+
+		return null;
+	}
+
 
 
 	/**  ENTITY DEFS  *****************************************/

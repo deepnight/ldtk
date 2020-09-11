@@ -14,7 +14,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 		loadTemplate("editAutoLayerRules");
 		setTransparentMask();
-		updateForm();
+		updatePanel();
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -24,16 +24,16 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				close();
 
 			case LayerInstanceRestoredFromHistory:
-				updateForm();
+				updatePanel();
 
-			case LayerDefChanged:
-				updateForm();
+			case LayerRuleChanged(_), LayerRuleRemoved(_), LayerRuleSorted:
+				updatePanel();
 
 			case _:
 		}
 	}
 
-	function updateForm() {
+	function updatePanel() {
 		var jRuleList = jContent.find("ul.rules").off().empty();
 		jContent.find("*").off();
 		ui.Tip.clear();
@@ -42,7 +42,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		jContent.find("button.createRule").click( function(ev) {
 			ld.rules.insert(0, new led.def.AutoLayerRule(project.makeUniqId(), 3));
 			lastRule = ld.rules[0];
-			editor.ge.emit(LayerDefChanged);
+			editor.ge.emit( LayerRuleChanged(lastRule) ); // HACK need better event
 			new ui.modal.dialog.AutoPatternEditor( jContent.find("ul.rules [idx=0]"), ld, lastRule );
 		});
 
@@ -78,7 +78,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 			// Random
 			var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
-			i.linkEvent(LayerDefChanged);
+			i.linkEvent( LayerRuleChanged(r) );
 			i.displayAsPct = true;
 			i.setBounds(0,1);
 			if( r.chance>=1 )
@@ -92,7 +92,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			// jFlag.click( function(ev:js.jquery.Event) {
 			// 	ev.preventDefault();
 			// 	r.breakOnMatch = !r.breakOnMatch;
-			// 	editor.ge.emit(LayerDefChanged);
+			// 	editor.ge.emit( LayerRuleChanged(li.layerDefUid, r.uid) );
 			// });
 
 			// Flip-X
@@ -104,7 +104,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 					N.error("This option will have no effect on a symetric rule.");
 				else {
 					r.flipX = !r.flipX;
-					editor.ge.emit(LayerDefChanged);
+					editor.ge.emit( LayerRuleChanged(r) );
 				}
 			});
 
@@ -117,7 +117,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 					N.error("This option will have no effect on a symetric rule.");
 				else {
 					r.flipY = !r.flipY;
-					editor.ge.emit(LayerDefChanged);
+					editor.ge.emit( LayerRuleChanged(r) );
 				}
 			});
 
@@ -138,33 +138,33 @@ class EditAutoLayerRules extends ui.modal.Panel {
 						m.setTransparentMask();
 
 						var i = Input.linkToHtmlInput(r.perlinSeed, m.jContent.find("#perlinSeed"));
-						i.linkEvent(LayerDefChanged);
+						i.linkEvent( LayerRuleChanged(r) );
 						i.jInput.siblings("button").click( function(_) {
 							r.perlinSeed = Std.random(99999999);
 							i.jInput.val(r.perlinSeed);
-							editor.ge.emit(LayerDefChanged);
+							editor.ge.emit( LayerRuleChanged(r) );
 						});
 
 						var i = Input.linkToHtmlInput(r.perlinScale, m.jContent.find("#perlinScale"));
 						i.displayAsPct = true;
 						i.setBounds(0.01, 1);
-						i.linkEvent(LayerDefChanged);
+						i.linkEvent( LayerRuleChanged(r) );
 
 						var i = Input.linkToHtmlInput(r.perlinOctaves, m.jContent.find("#perlinOctaves"));
 						i.setBounds(1, 4);
-						i.linkEvent(LayerDefChanged);
+						i.linkEvent( LayerRuleChanged(r) );
 					}
 				}
 				else {
 					r.setPerlin( !r.hasPerlin() );
-					editor.ge.emit(LayerDefChanged);
+					editor.ge.emit( LayerRuleChanged(r) );
 				}
 			});
 
 			jRule.find("button.delete").click( function(ev) {
 				new ui.modal.dialog.Confirm( jRule, Lang.t._("Warning, this cannot be undone!"), true, function() {
 					ld.rules.remove(r);
-					editor.ge.emit(LayerDefChanged);
+					editor.ge.emit( LayerRuleRemoved(r) );
 				});
 			});
 
@@ -175,7 +175,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 		JsTools.makeSortable("ul.rules", function(from,to) {
 			project.defs.sortLayerAutoRules(ld, from, to);
-			editor.ge.emit(LayerDefChanged);
+			editor.ge.emit(LayerRuleSorted); 
 		});
 	}
 }
