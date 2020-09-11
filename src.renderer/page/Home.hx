@@ -95,8 +95,7 @@ class Home extends Page {
 	}
 
 	public function onLoadSamples() {
-		N.debug(App.APP_DIR+" "+JsTools.getAppDir());
-		dn.electron.Dialogs.open([".json"], App.APP_DIR+"samples", function(filePath) {
+		dn.electron.Dialogs.open([".json"], JsTools.getExeDir()+"/samples", function(filePath) {
 			loadProject(filePath);
 		});
 	}

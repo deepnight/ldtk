@@ -363,30 +363,19 @@ class JsTools {
 		js.node.Fs.writeFileSync( path, js.node.Buffer.hxFromBytes(bytes) );
 	}
 
-	public static function getAppDir() {
-		#if electron
+	public static function getExeDir() {
+		var path = electron.renderer.IpcRenderer.sendSync("getExeDir");
+		return dn.FilePath.fromFile( path ).useSlashes().directory;
+	}
 
+	public static function getAppDir() { // TODO clarify this: it's resource dir
 		var path = electron.renderer.IpcRenderer.sendSync("getAppDir");
 		return dn.FilePath.fromDir( path ).useSlashes().directory;
-
-		#else
-
-		return js.Node.process.cwd();
-
-		#end
 	}
 
 	public static function getCwd() {
-		#if electron
-
 		var path = electron.renderer.IpcRenderer.sendSync("getCwd");
 		return dn.FilePath.fromDir( path ).useSlashes().directory;
-
-		#else
-
-		return js.Node.process.cwd();
-
-		#end
 	}
 
 	public static function exploreToFile(filePath:String) {
