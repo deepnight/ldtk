@@ -18,9 +18,6 @@ class AutoLayerRule {
 	public var perlinOctaves = 2;
 	var _perlin(get,default) : Null<hxd.Perlin>;
 
-	// var bitMasksHas : Null< Map<Int, Int> >;
-	// var bitMasksNot : Null< Map<Int, Int> >;
-
 	public function new(uid, size) {
 		if( !isValidSize(size) )
 			throw 'Invalid rule size ${size}x$size';
@@ -197,31 +194,6 @@ class AutoLayerRule {
 		return tileIds.length==0;
 	}
 
-	// inline function clearOptim() {
-	// 	bitMasksHas = null;
-	// 	bitMasksNot = null;
-	// }
-
-	// public function optimize(li:led.inst.LayerInstance) {
-	// 	bitMasksHas = new Map();
-	// 	bitMasksNot = new Map();
-
-	// 	for(idx in 0...li.def.countIntGridValues()) {
-	// 		var hasMask = 0;
-	// 		var notMask = 0;
-	// 		for(i in 0...size*size) {
-	// 			if( pattern[i]==idx+1 )
-	// 				hasMask = dn.M.setBit(hasMask, i);
-
-	// 			if( pattern[i]==-idx-1 )
-	// 				notMask = dn.M.setBit(notMask, i);
-	// 		}
-	// 		bitMasksHas.set(idx, hasMask);
-	// 		bitMasksNot.set(idx, notMask);
-	// 	}
-	// }
-
-
 	public function matches(li:led.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
 		if( tileIds.length==0 )
 			return false;
@@ -231,17 +203,6 @@ class AutoLayerRule {
 
 		if( hasPerlin() && _perlin.perlin(perlinSeed, cx*perlinScale, cy*perlinScale, perlinOctaves) < 0 )
 			return false;
-
-		// Checks if this rule cares about the cell IntGrid value
-		// var iv = li.getIntGrid(cx,cy);
-		// var used = false;
-		// for(v in pattern)
-		// 	if( dn.M.iabs(v)==iv+1 || dn.M.iabs(v)==Const.AUTO_LAYER_ANYTHING+1 ) {
-		// 		used = true;
-		// 		break;
-		// 	}
-		// if( !used )
-		// 	return false;
 
 		// Rule check
 		var radius = Std.int( size/2 );
