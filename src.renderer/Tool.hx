@@ -160,6 +160,9 @@ class Tool<T> extends dn.Process {
 		var ge : GenericLevelElement = null;
 
 		function getElement(li:led.inst.LayerInstance) {
+			if( !editor.levelRender.isLayerVisible(li) )
+				return;
+
 			var cx = m.getLayerCx(li.def);
 			var cy = m.getLayerCy(li.def);
 			switch li.def.type {
