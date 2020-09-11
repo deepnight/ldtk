@@ -8,7 +8,8 @@ class LevelRender extends dn.Process {
 	public var enhanceActiveLayer(default,null) = true;
 	public var focusLevelX(default,set) : Float;
 	public var focusLevelY(default,set) : Float;
-	public var zoom(default,set) : Float;
+	public var zoom(get,set) : Float;
+	public var unclampedZoom : Float;
 
 	/** <LayerDefUID, Bool> **/
 	var autoLayerRendering : Map<Int,Bool> = new Map();
@@ -88,10 +89,16 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function set_zoom(v) {
-		zoom = M.fclamp(v, 0.2, 16);
-		// zoom = M.round(zoom*2)/2;
+		unclampedZoom = M.fclamp(v, 0.2, 16);
 		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
-		return zoom;
+		return unclampedZoom;
+	}
+
+	inline function get_zoom() {
+		if( unclampedZoom<=js.Browser.window.devicePixelRatio )
+			return unclampedZoom;
+		else
+			return M.round(unclampedZoom*2)/2; // reduces tile flickering (#71)
 	}
 
 	public inline function levelToUiX(x:Float) {
