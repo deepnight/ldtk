@@ -8,6 +8,7 @@
 	"scripts": {
 		"start": "electron .",
 		"compile": "cd..  &&  haxe main.hxml  &&  haxe renderer.hxml",
+		"pack-test": "npm run compile  &&  electron-builder build --dir --publish never",
 		"pack-win": "npm run compile  &&  electron-builder build --win --publish never",
 		"pack-mac": "npm run compile  &&  electron-builder build --mac --publish never",
 		"publish-github": "npm run compile  &&  electron-builder build --publish always",
@@ -31,6 +32,7 @@
 		"directories": {
 			"output": "redist"
 		},
+		"extraFiles": ["samples"],
 		"files": [
 			"bin",
 			"package.json"
