@@ -13,7 +13,7 @@
 
 -main Boot
 -dce full
--js app/bin/js/renderer.js
+-js app/assets/js/renderer.js
 
 --macro Const.dumpBuildVersionToFile()
 --macro Assets.enableXmlFonts()

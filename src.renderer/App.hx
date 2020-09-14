@@ -4,7 +4,7 @@ class App extends dn.Process {
 	public static var ME : App;
 	public static var APP_RESOURCE_DIR = "./"; // with trailing slash
 	public static var APP_ASSETS_DIR(get,never) : String;
-		static inline function get_APP_ASSETS_DIR() return APP_RESOURCE_DIR+"bin/";
+		static inline function get_APP_ASSETS_DIR() return APP_RESOURCE_DIR+"assets/";
 
 	public var jDoc(get,never) : J; inline function get_jDoc() return new J(js.Browser.document);
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");

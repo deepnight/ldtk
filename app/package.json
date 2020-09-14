@@ -1,7 +1,7 @@
 {
 	"name": "led",
 	"version": "0.1.5-alpha",
-	"main": "bin/main.js",
+	"main": "assets/main.js",
 	"productName": "LEd",
 	"author": "Sebastien Benard",
 	"description": "Modern 2D level editor",
@@ -34,7 +34,7 @@
 		},
 		"extraFiles": ["samples"],
 		"files": [
-			"bin",
+			"assets",
 			"package.json"
 		],
 		"nsis": {

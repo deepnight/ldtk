@@ -6,4 +6,4 @@
 
 -main ElectronMain
 -dce full
--js app/bin/main.js
+-js app/assets/main.js
