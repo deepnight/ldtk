@@ -687,7 +687,12 @@ class Editor extends Page {
 				updateGuide();
 				updateTool();
 
-			case TilesetDefChanged(_), TilesetDefRemoved(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved:
+			case TilesetDefRemoved(_):
+				updateLayerList(); // for rule-based layers
+				updateTool();
+				updateGuide();
+
+			case TilesetDefChanged(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				updateTool();
 				updateGuide();
 

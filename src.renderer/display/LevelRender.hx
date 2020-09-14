@@ -165,7 +165,8 @@ class LevelRender extends dn.Process {
 			case LayerDefSorted:
 				for( li in editor.curLevel.layerInstances ) {
 					var depth = editor.project.defs.getLayerDepth(li.def);
-					layersWrapper.add( layerRenders.get(li.layerDefUid), depth );
+					if( layerRenders.exists(li.layerDefUid) )
+						layersWrapper.add( layerRenders.get(li.layerDefUid), depth );
 				}
 
 			case LayerDefChanged:
@@ -187,7 +188,10 @@ class LevelRender extends dn.Process {
 
 			case TilesetSelectionSaved(td):
 
-			case TilesetDefChanged(td), TilesetDefRemoved(td):
+			case TilesetDefRemoved(td):
+				invalidateAll();
+
+			case TilesetDefChanged(td):
 				for(li in editor.curLevel.layerInstances)
 					if( li.def.isUsingTileset(td) )
 						invalidateLayer(li);
@@ -430,20 +434,35 @@ class LevelRender extends dn.Process {
 
 		case Tiles:
 			var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
-			var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper );
+			if( td!=null && td.isAtlasLoaded() ) {
+				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper );
 
-			for(cy in 0...li.cHei)
-			for(cx in 0...li.cWid) {
-				if( li.getGridTile(cx,cy)==null )
-					continue;
+				for(cy in 0...li.cHei)
+				for(cx in 0...li.cWid) {
+					if( li.getGridTile(cx,cy)==null )
+						continue;
 
-				var t = td!=null ? td.getTile( li.getGridTile(cx,cy) ) : led.def.TilesetDef.makeErrorTile(li.def.gridSize);
-				t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
-				tg.add(
-					(cx + li.def.tilePivotX) * li.def.gridSize,
-					(cy + li.def.tilePivotX) * li.def.gridSize,
-					t
-				);
+					var t = td.getTile( li.getGridTile(cx,cy) );
+					t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
+					tg.add(
+						(cx + li.def.tilePivotX) * li.def.gridSize,
+						(cy + li.def.tilePivotX) * li.def.gridSize,
+						t
+					);
+				}
+			}
+			else {
+				// Missing tileset
+				var tileError = led.def.TilesetDef.makeErrorTile(li.def.gridSize);
+				var tg = new h2d.TileGroup( tileError, wrapper );
+				for(cy in 0...li.cHei)
+				for(cx in 0...li.cWid)
+					if( li.getGridTile(cx,cy)!=null )
+						tg.add(
+							(cx + li.def.tilePivotX) * li.def.gridSize,
+							(cy + li.def.tilePivotX) * li.def.gridSize,
+							tileError
+						);
 			}
 		}
 
