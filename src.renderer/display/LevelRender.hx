@@ -158,7 +158,10 @@ class LevelRender extends dn.Process {
 				}
 
 			case LayerDefSorted:
-				invalidateAllLayers();
+				for( li in editor.curLevel.layerInstances ) {
+					var depth = editor.project.defs.getLayerDepth(li.def);
+					layersWrapper.add( layerRenders.get(li.layerDefUid), depth );
+				}
 
 			case LayerDefChanged:
 				invalidateAll();
@@ -375,7 +378,8 @@ class LevelRender extends dn.Process {
 					while( i>=0 ) {
 						var r = li.def.rules[i];
 						if( r.active ) {
-							var at = li.autoTiles.get(r.uid).get( li.coordId(cx,cy) );
+							var e = li.autoTiles.get(r.uid);
+							var at = e.get( li.coordId(cx,cy) );
 							if( at!=null ) {
 								tg.addTransform(
 									( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
@@ -641,10 +645,10 @@ class LevelRender extends dn.Process {
 			layerInvalidations.set( li.layerDefUid, { left:left, right:right, top:top, bottom:bottom } );
 	}
 
-	public inline function invalidateAllLayers() {
-		for(li in editor.curLevel.layerInstances)
-			invalidateLayer(li);
-	}
+	// public inline function invalidateAllLayers() {
+	// 	for(li in editor.curLevel.layerInstances)
+	// 		invalidateLayer(li);
+	// }
 
 	public inline function invalidateBg() {
 		bgInvalidated = true;
@@ -687,8 +691,6 @@ class LevelRender extends dn.Process {
 			for( li in editor.curLevel.layerInstances )
 				if( layerInvalidations.exists(li.layerDefUid) ) {
 					var b = layerInvalidations.get(li.layerDefUid);
-					if( li.def.isAutoLayer() )
-						li.applyAllAutoLayerRulesAt(b.left, b.top, b.right-b.left+1, b.bottom-b.top+1);
 					renderLayer(li);
 				}
 		}

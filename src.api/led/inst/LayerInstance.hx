@@ -156,9 +156,15 @@ class LayerInstance {
 			case IntGrid:
 				// Remove lost intGrid values
 				for(cy in 0...cHei)
-				for(cx in 0...cWid) {
+				for(cx in 0...cWid)
 					if( getIntGrid(cx,cy) >= def.countIntGridValues() )
 						removeIntGrid(cx,cy);
+
+				// Discard lost rules autoTiles
+				if( def.isAutoLayer() ) {
+					for( rUid in autoTiles.keys() )
+						if( !def.hasRule(rUid) )
+							autoTiles.remove(rUid);
 				}
 
 			case Entities:
@@ -326,7 +332,6 @@ class LayerInstance {
 	public inline function hasGridTile(cx:Int, cy:Int) : Bool {
 		return getGridTile(cx,cy)!=null;
 	}
-
 
 
 	inline function applyAutoLayerRuleAt(r:led.def.AutoLayerRule, cx:Int, cy:Int) {

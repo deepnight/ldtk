@@ -140,6 +140,13 @@ class LayerDef {
 	}
 
 
+	public function hasRule(ruleUid:Int) : Bool {
+		for(r in rules)
+			if( r.uid==ruleUid )
+				return true;
+		return false;
+	}
+	
 	public function getRule(uid:Int) : Null<AutoLayerRule> {
 		for( r in rules )
 			if( r.uid==uid )

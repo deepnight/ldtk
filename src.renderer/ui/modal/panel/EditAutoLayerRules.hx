@@ -1,6 +1,8 @@
 package ui.modal.panel;
 
 class EditAutoLayerRules extends ui.modal.Panel {
+	var invalidatedRules : Map<Int,Int> = new Map();
+
 	public var li(get,never) : led.inst.LayerInstance;
 		inline function get_li() return Editor.ME.curLayerInstance;
 
@@ -26,10 +28,34 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			case LayerInstanceRestoredFromHistory(li):
 				updatePanel();
 
-			case LayerRuleChanged(_), LayerRuleRemoved(_), LayerRuleSorted, LayerRuleAdded(_):
+			case LayerRuleChanged(r), LayerRuleRemoved(r), LayerRuleAdded(r):
+				updatePanel();
+				invalidatedRules.set(r.uid, r.uid);
+
+			case LayerRuleSorted:
 				updatePanel();
 
 			case _:
+		}
+	}
+
+	override function onClose() {
+		super.onClose();
+
+		// Apply edited rules to all other levels
+		for(ruleUid in invalidatedRules) {
+			for( l in project.levels )
+			for( li in l.layerInstances ) {
+				var r = li.def.getRule(ruleUid);
+				if( r!=null ) {
+					li.applyAutoLayerRule(r);
+					N.success("updated level "+l.identifier);
+				}
+				else if( r==null && li.autoTiles.exists(ruleUid) ) {
+					li.autoTiles.remove(ruleUid);
+					N.success("Discarded rule AutoTiles in "+l.identifier);
+				}
+			}
 		}
 	}
 
