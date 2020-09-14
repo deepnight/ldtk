@@ -291,7 +291,7 @@ class Editor extends Page {
 			case K.F if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				levelRender.fit();
 
-			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() && curLayerInstance.def.isAutoLayer() ):
 				levelRender.toggleAutoLayerRendering(curLayerInstance);
 
 			case K.W if( App.ME.isCtrlDown() ):
@@ -606,6 +606,7 @@ class Editor extends Page {
 			case LayerInstanceSelected:
 			case LevelSelected:
 			case LayerInstanceVisiblityChanged(_):
+			case LayerInstanceAutoRenderingChanged(_):
 			case ToolOptionChanged:
 			case BeforeProjectSaving:
 			case ProjectSaved:
@@ -636,6 +637,8 @@ class Editor extends Page {
 				updateTool();
 				updateLayerList();
 				updateGuide();
+
+			case LayerInstanceAutoRenderingChanged(li):
 
 			case LayerInstanceVisiblityChanged(li):
 				clearSelection();

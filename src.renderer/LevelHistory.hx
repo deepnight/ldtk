@@ -73,6 +73,7 @@ class LevelHistory {
 
 			case LayerInstanceChanged:
 			case LayerInstanceSelected, LayerInstanceVisiblityChanged(_):
+			case LayerInstanceAutoRenderingChanged(_):
 
 			case LayerInstanceRestoredFromHistory(_):
 			case LevelRestoredFromHistory:

@@ -146,6 +146,9 @@ class LevelRender extends dn.Process {
 			case LayerInstanceVisiblityChanged(li):
 				applyLayerVisibility(li);
 
+			case LayerInstanceAutoRenderingChanged(li):
+				invalidateLayer(li);
+
 			case LayerInstanceSelected:
 				applyAllLayersVisibility();
 				invalidateBg();
@@ -238,7 +241,7 @@ class LevelRender extends dn.Process {
 			return;
 
 		autoLayerRendering.set(li.layerDefUid, v);
-		editor.ge.emit(LayerDefChanged); // HACK not the right event
+		editor.ge.emit( LayerInstanceAutoRenderingChanged(li) );
 	}
 
 	public function toggleAutoLayerRendering(li:led.inst.LayerInstance) {

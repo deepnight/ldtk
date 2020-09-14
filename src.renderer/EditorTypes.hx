@@ -32,6 +32,7 @@ enum GlobalEvent {
 	LayerInstanceChanged;
 	LayerInstanceVisiblityChanged(li:led.inst.LayerInstance);
 	LayerInstanceRestoredFromHistory(li:led.inst.LayerInstance);
+	LayerInstanceAutoRenderingChanged(li:led.inst.LayerInstance);
 
 	TilesetDefChanged(td:led.def.TilesetDef);
 	TilesetDefAdded(td:led.def.TilesetDef);
