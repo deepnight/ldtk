@@ -197,8 +197,10 @@ class LevelRender extends dn.Process {
 						invalidateLayer(li);
 
 			case EntityFieldAdded(ed), EntityFieldRemoved(ed), EntityFieldDefChanged(ed):
-				var li = editor.curLevel.getLayerInstanceFromEntity(ed);
-				invalidateLayer( li==null ? editor.curLayerInstance : li );
+				if( editor.curLayerInstance!=null ) {
+					var li = editor.curLevel.getLayerInstanceFromEntity(ed);
+					invalidateLayer( li==null ? editor.curLayerInstance : li );
+				}
 
 			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved:
 				for(li in editor.curLevel.layerInstances)
