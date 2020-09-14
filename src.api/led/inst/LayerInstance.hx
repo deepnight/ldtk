@@ -63,12 +63,13 @@ class LayerInstance {
 			autoTiles: {
 				var arr = [];
 				if( def.isAutoLayer() ) {
-					for( ruleTiles in autoTiles.keyValueIterator() ) {
+					for(rule in def.rules) {
+						var ruleTiles = autoTiles.get( rule.uid );
 						arr.push({
-							ruleId: ruleTiles.key,
+							ruleId: rule.uid,
 							tiles: {
 								var tilesArr = [];
-								for( tile in ruleTiles.value.keyValueIterator() )
+								for( tile in ruleTiles.keyValueIterator() )
 									tilesArr.push({
 										coordId: tile.key,
 										tileId: tile.value.tileId,
