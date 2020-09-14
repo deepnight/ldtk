@@ -1,0 +1,222 @@
+{
+	"__header__": {
+		"fileType": "LEd Project JSON",
+		"app": "LEd",
+		"appAuthor": "Sebastien Benard",
+		"appVersion": "0.1.5-alpha-debug",
+		"url": "https://deepnight.net/"
+	},
+	"name": "Entities demo",
+	"jsonVersion": 1,
+	"defaultPivotX": 0.5,
+	"defaultPivotY": 1.0,
+	"defaultGridSize": 16,
+	"bgColor": "#7F8093",
+	"nextUid": 13,
+	"minifyJson": false,
+	"defs": {
+		"layers": [
+			{
+				"identifier": "Entities",
+				"type": "Entities",
+				"uid": 7,
+				"gridSize": 16,
+				"displayOpacity": 1.0,
+				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
+				"autoTilesetDefUid": null,
+				"rules": [],
+				"tilesetDefUid": null,
+				"tilePivotX": 0,
+				"tilePivotY": 0
+			}
+		],
+		"entities": [
+			{
+				"identifier": "Player",
+				"uid": 1,
+				"width": 16,
+				"height": 24,
+				"color": "#B8DE4F",
+				"renderMode": "Ellipse",
+				"tilesetId": null,
+				"tileId": null,
+				"maxPerLevel": 0,
+				"discardExcess": true,
+				"pivotX": 0.5,
+				"pivotY": 1.0,
+				"fieldDefs": [
+					{
+						"identifier": "life",
+						"__type": "Int",
+						"uid": 2,
+						"type": "F_Int",
+						"canBeNull": false,
+						"editorDisplayMode": "NameAndValue",
+						"editorDisplayPos": "Above",
+						"min": 1.0,
+						"max": 10.0,
+						"defaultOverride": { "id": "V_Int", "params": [ 3 ] }
+					},
+					{
+						"identifier": "isAwaken",
+						"__type": "Bool",
+						"uid": 3,
+						"type": "F_Bool",
+						"canBeNull": false,
+						"editorDisplayMode": "NameAndValue",
+						"editorDisplayPos": "Above",
+						"min": null,
+						"max": null,
+						"defaultOverride": {
+							"id": "V_Bool",
+							"params": [ true ]
+						}
+					},
+					{
+						"identifier": "startWeapon",
+						"__type": "LocalEnum.Weapon",
+						"uid": 6,
+						"type": { "id": "F_Enum", "params": [ 5 ] },
+						"canBeNull": true,
+						"editorDisplayMode": "NameAndValue",
+						"editorDisplayPos": "Above",
+						"min": null,
+						"max": null,
+						"defaultOverride": null
+					}
+				]
+			},
+			{
+				"identifier": "Crate",
+				"uid": 8,
+				"width": 12,
+				"height": 10,
+				"color": "#8A5B38",
+				"renderMode": "Rectangle",
+				"tilesetId": null,
+				"tileId": null,
+				"maxPerLevel": 0,
+				"discardExcess": true,
+				"pivotX": 0.5,
+				"pivotY": 1.0,
+				"fieldDefs": [
+					{
+						"identifier": "content",
+						"__type": "LocalEnum.Weapon",
+						"uid": 9,
+						"type": { "id": "F_Enum", "params": [ 5 ] },
+						"canBeNull": false,
+						"editorDisplayMode": "ValueOnly",
+						"editorDisplayPos": "Above",
+						"min": null,
+						"max": null,
+						"defaultOverride": null
+					}
+				]
+			},
+			{
+				"identifier": "Light",
+				"uid": 10,
+				"width": 20,
+				"height": 6,
+				"color": "#FFFFFF",
+				"renderMode": "Rectangle",
+				"tilesetId": null,
+				"tileId": null,
+				"maxPerLevel": 5,
+				"discardExcess": false,
+				"pivotX": 0.5,
+				"pivotY": 0.0,
+				"fieldDefs": [
+					{
+						"identifier": "color",
+						"__type": "Color",
+						"uid": 11,
+						"type": "F_Color",
+						"canBeNull": false,
+						"editorDisplayMode": "ValueOnly",
+						"editorDisplayPos": "Beneath",
+						"min": null,
+						"max": null,
+						"defaultOverride": { "id": "V_Int", "params": [ 0 ] }
+					},
+					{
+						"identifier": "flickering",
+						"__type": "Bool",
+						"uid": 12,
+						"type": "F_Bool",
+						"canBeNull": false,
+						"editorDisplayMode": "ValueOnly",
+						"editorDisplayPos": "Beneath",
+						"min": null,
+						"max": null,
+						"defaultOverride": null
+					}
+				]
+			}
+		],
+		"tilesets": [],
+		"enums": [ { "identifier": "Weapon", "uid": 5, "values": [
+			{ "id": "SmallGun", "tileId": null },
+			{ "id": "Shotgun", "tileId": null },
+			{ "id": "Bow", "tileId": null },
+			{ "id": "Katana", "tileId": null }
+		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null } ],
+		"externalEnums": []
+	},
+	"levels": [ {
+		"identifier": "Entities_demo",
+		"uid": 0,
+		"pxWid": 272,
+		"pxHei": 144,
+		"layerInstances": [
+			{
+				"__identifier": "Entities",
+				"__type": "Entities",
+				"__cWid": 17,
+				"__cHei": 9,
+				"__gridSize": 16,
+				"levelId": 0,
+				"layerDefUid": 7,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGrid": [],
+				"autoTiles": [],
+				"gridTiles": [],
+				"entityInstances": [
+					{ "__identifier": "Player", "__cx": 5, "__cy": 8, "defUid": 1, "x": 88, "y": 144, "fieldInstances": [
+						{ "__identifier": "life", "__value": 3, "__type": "Int", "defUid": 2, "realEditorValue": null },
+						{ "__identifier": "isAwaken", "__value": true, "__type": "Bool", "defUid": 3, "realEditorValue": null },
+						{ "__identifier": "startWeapon", "__value": "Katana", "__type": "LocalEnum.Weapon", "defUid": 6, "realEditorValue": {
+							"id": "V_String",
+							"params": [ "Katana" ]
+						} }
+					] },
+					{ "__identifier": "Crate", "__cx": 13, "__cy": 8, "defUid": 8, "x": 216, "y": 144, "fieldInstances": [ { "__identifier": "content", "__value": "SmallGun", "__type": "LocalEnum.Weapon", "defUid": 9, "realEditorValue": {
+						"id": "V_String",
+						"params": [ "SmallGun" ]
+					} } ] },
+					{ "__identifier": "Light", "__cx": 6, "__cy": 0, "defUid": 10, "x": 104, "y": 0, "fieldInstances": [
+						{ "__identifier": "color", "__value": "#FBE889", "__type": "Color", "defUid": 11, "realEditorValue": { "id": "V_Int", "params": [ 16509065 ] } },
+						{ "__identifier": "flickering", "__value": false, "__type": "Bool", "defUid": 12, "realEditorValue": null }
+					] },
+					{ "__identifier": "Light", "__cx": 2, "__cy": 0, "defUid": 10, "x": 40, "y": 0, "fieldInstances": [
+						{ "__identifier": "color", "__value": "#FBE889", "__type": "Color", "defUid": 11, "realEditorValue": { "id": "V_Int", "params": [ 16509065 ] } },
+						{ "__identifier": "flickering", "__value": false, "__type": "Bool", "defUid": 12, "realEditorValue": null }
+					] },
+					{ "__identifier": "Light", "__cx": 10, "__cy": 0, "defUid": 10, "x": 168, "y": 0, "fieldInstances": [
+						{ "__identifier": "color", "__value": "#FBE889", "__type": "Color", "defUid": 11, "realEditorValue": { "id": "V_Int", "params": [ 16509065 ] } },
+						{ "__identifier": "flickering", "__value": true, "__type": "Bool", "defUid": 12, "realEditorValue": {
+							"id": "V_Bool",
+							"params": [ true ]
+						} }
+					] },
+					{ "__identifier": "Light", "__cx": 14, "__cy": 0, "defUid": 10, "x": 232, "y": 0, "fieldInstances": [
+						{ "__identifier": "color", "__value": "#FBE889", "__type": "Color", "defUid": 11, "realEditorValue": { "id": "V_Int", "params": [ 16509065 ] } },
+						{ "__identifier": "flickering", "__value": false, "__type": "Bool", "defUid": 12, "realEditorValue": null }
+					] }
+				]
+			}
+		]
+	} ]
+}
