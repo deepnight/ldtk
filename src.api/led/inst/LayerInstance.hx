@@ -51,55 +51,36 @@ class LayerInstance {
 			pxOffsetY: pxOffsetY,
 
 			intGrid: {
-				// applyAllAutoLayerRules(); // HACK autoTiles should actually be saved and reused for perf issues
-
-				// var autoTilesPerCoords = new Map();
-				// for( rTiles in autoTiles ) {
-				// 	for( at in rTiles.keyValueIterator() ) {
-				// 		if( !autoTilesPerCoords.exists(at.key) )
-				// 			autoTilesPerCoords.set(at.key, []);
-				// 		autoTilesPerCoords.get(at.key).push({
-				// 			t: at.value.tileId,
-				// 			flips: switch at.value.flips {
-				// 				case 1: "x";
-				// 				case 2: "y";
-				// 				case 3: "xy";
-				// 				case _: "";
-				// 			}
-				// 		});
-				// 	}
-				// }
-
 				var arr = [];
 				for(e in intGrid.keyValueIterator())
 					arr.push({
 						coordId: e.key,
 						v: e.value,
-						// __tiles: autoTilesPerCoords.exists(e.key) ? autoTilesPerCoords.get(e.key) : [],
 					});
 				arr;
 			},
 
-			// __autoTiles: {
-			// 	applyAllAutoLayerRules(); // HACK autoTiles should actually be saved and reused for perf issues
-
-			// 	var perCoords = new Map();
-			// 	for( rTiles in autoTiles ) {
-			// 		for( at in rTiles.keyValueIterator() ) {
-			// 			if( !perCoords.exists(at.key) )
-			// 				perCoords.set(at.key, []);
-			// 			perCoords.get(at.key).push(at.value);
-			// 		}
-			// 	}
-
-			// 	var arr = [];
-			// 	for( e in perCoords.keyValueIterator() )
-			// 		arr.push({
-			// 			coordId: e.key,
-			// 			tiles: e.value,
-			// 		});
-			// 	arr;
-			// },
+			autoTiles: {
+				var arr = [];
+				if( def.isAutoLayer() ) {
+					for( ruleTiles in autoTiles.keyValueIterator() ) {
+						arr.push({
+							ruleId: ruleTiles.key,
+							tiles: {
+								var tilesArr = [];
+								for( tile in ruleTiles.value.keyValueIterator() )
+									tilesArr.push({
+										coordId: tile.key,
+										tileId: tile.value.tileId,
+										flips: tile.value.flips,
+									});
+								tilesArr;
+							}
+						});
+					}
+				}
+				arr;
+			},
 
 			gridTiles: {
 				var arr = [];
@@ -125,6 +106,21 @@ class LayerInstance {
 
 		for( entityJson in JsonTools.readArray(json.entityInstances) )
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
+
+		if( json.autoTiles!=null ) {
+			var jsonAutoTiles = JsonTools.readArray(json.autoTiles);
+			for(ruleTiles in jsonAutoTiles) {
+				li.autoTiles.set(ruleTiles.ruleId, new Map());
+				for( t in JsonTools.readArray(ruleTiles.tiles) )
+					li.autoTiles.get(ruleTiles.ruleId).set(
+						JsonTools.readInt(t.coordId),
+						{
+							tileId: JsonTools.readInt(t.tileId),
+							flips: JsonTools.readInt(t.flips, 0),
+						}
+					);
+			}
+		}
 
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
@@ -367,6 +363,8 @@ class LayerInstance {
 	public function applyAllAutoLayerRulesAt(cx:Int, cy:Int, wid:Int, hei:Int) {
 		if( !def.isAutoLayer() )
 			return;
+
+		ui.Notification.debug('evaluate rules: $cx,$cy $wid x $hei');
 
 		// Adjust bounds to also redraw nearby cells
 		var left = dn.M.imax( 0, cx - Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
