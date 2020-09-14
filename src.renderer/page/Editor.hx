@@ -802,7 +802,6 @@ class Editor extends Page {
 
 	public function updateLayerList() {
 		jLayerList.empty();
-		N.debug(project.defs.layers);
 
 		var idx = 1;
 		for(ld in project.defs.layers) {
