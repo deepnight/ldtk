@@ -53,14 +53,10 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			for( l in project.levels )
 			for( li in l.layerInstances ) {
 				var r = li.def.getRule(ruleUid);
-				if( r!=null ) {
+				if( r!=null )
 					li.applyAutoLayerRule(r);
-					N.success("updated level "+l.identifier);
-				}
-				else if( r==null && li.autoTiles.exists(ruleUid) ) {
+				else if( r==null && li.autoTiles.exists(ruleUid) )
 					li.autoTiles.remove(ruleUid);
-					N.success("Discarded rule AutoTiles in "+l.identifier);
-				}
 			}
 		}
 
