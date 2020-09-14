@@ -161,12 +161,18 @@ class LayerInstance {
 					if( getIntGrid(cx,cy) >= def.countIntGridValues() )
 						removeIntGrid(cx,cy);
 
-				// Discard lost rules autoTiles
 				if( def.isAutoLayer() ) {
+					// Discard lost rules autoTiles
 					for( rUid in autoTiles.keys() )
 						if( !def.hasRule(rUid) )
 							autoTiles.remove(rUid);
+
+					// Fix missing autoTiles
+					for(r in def.rules)
+						if( !autoTiles.exists(r.uid) )
+							applyAutoLayerRule(r);
 				}
+
 
 			case Entities:
 				// Remove lost entities (def removed)
