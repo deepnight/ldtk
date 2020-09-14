@@ -45,9 +45,10 @@ class EditLayerDefs extends ui.modal.Panel {
 			}
 			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
 				new ui.LastChance( L.t._("Layer ::name:: deleted", { name:cur.identifier }), project );
-				editor.ge.emit( LayerDefRemoved(cur.uid) );
+				var oldUid = cur.uid;
 				project.defs.removeLayerDef(cur);
 				select(project.defs.layers[0]);
+				editor.ge.emit( LayerDefRemoved(oldUid) );
 			});
 		});
 

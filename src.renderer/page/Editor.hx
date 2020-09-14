@@ -5,7 +5,7 @@ class Editor extends Page {
 
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
-	public var jLayers(get,never) : J; inline function get_jLayers() return new J("#layers");
+	public var jLayerList(get,never) : J; inline function get_jLayerList() return new J("#layers");
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 
 	public var curLevel(get,never) : led.Level;
@@ -801,14 +801,14 @@ class Editor extends Page {
 	}
 
 	public function updateLayerList() {
-		var list = jLayers;
-		list.empty();
+		jLayerList.empty();
+		N.debug(project.defs.layers);
 
 		var idx = 1;
 		for(ld in project.defs.layers) {
 			var li = curLevel.getLayerInstance(ld);
 			var e = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
-			list.append(e);
+			jLayerList.append(e);
 
 			if( li==curLayerInstance )
 				e.addClass("active");
