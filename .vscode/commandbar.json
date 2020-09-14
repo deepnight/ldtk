@@ -41,7 +41,7 @@
 		{
 			"text": "📦 Pack",
 			"color": "#ffcc94",
-			"command": "cd app  &&  npm run pack-test  &&  echo Done.",
+			"command": "cd app  &&  npm run pack-win  &&  echo Done.",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -31
