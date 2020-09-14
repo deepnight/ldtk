@@ -22,6 +22,8 @@ class Project {
 	public var defaultGridSize : Int;
 	public var bgColor : UInt;
 
+	public var minifyJson = false;
+
 	private function new() {
 		name = "New project";
 		jsonVersion = Project.JSON_VERSION;
@@ -54,6 +56,7 @@ class Project {
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
 		p.bgColor = JsonTools.readColor( json.bgColor, 0xffffff );
+		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
@@ -73,6 +76,7 @@ class Project {
 			defaultGridSize: defaultGridSize,
 			bgColor: JsonTools.writeColor(bgColor),
 			nextUid: nextUid,
+			minifyJson: minifyJson,
 
 			defs: defs.toJson(),
 			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
