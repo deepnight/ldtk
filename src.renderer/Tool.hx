@@ -24,17 +24,10 @@ class Tool<T> extends dn.Process {
 
 	private function new() {
 		super(Editor.ME);
-
-		editor.ge.addSpecificListener(ToolOptionChanged, onToolOptionChanged);
-	}
-
-	function onToolOptionChanged() { // TODO is it still needed?
-		// updatePalette();
 	}
 
 	override function onDispose() {
 		super.onDispose();
-		editor.ge.removeListener(onToolOptionChanged);
 	}
 
 	override function toString():String {
