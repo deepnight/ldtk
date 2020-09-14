@@ -436,7 +436,7 @@ class TilesetPicker {
 				jDoc.off(".pickerCtxCatcher");
 			});
 
-		if( ev.button==2 && mode==SingleTile ) // TODO is it useful?
+		if( ev.button==2 && mode==SingleTile )
 			return;
 
 		// Start dragging
