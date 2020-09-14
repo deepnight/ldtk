@@ -12,7 +12,7 @@ class LayerDef {
 	// IntGrid
 	var intGridValues : Array<IntGridValueDef> = [];
 	public var autoTilesetDefUid : Null<Int>; // BUG kill this value if tileset is deleted
-	public var rules : Array<AutoLayerRule> = [];
+	public var rules : Array<AutoLayerRuleDef> = [];
 
 	// Tiles
 	public var tilesetDefUid : Null<Int>;
@@ -58,7 +58,7 @@ class LayerDef {
 		o.rules = [];
 		if( json.rules!=null )
 			for( rjson in JsonTools.readArray(json.rules) ) {
-				var r = AutoLayerRule.fromJson(dataVersion, rjson);
+				var r = AutoLayerRuleDef.fromJson(dataVersion, rjson);
 				o.rules.push(r);
 			}
 
@@ -146,8 +146,8 @@ class LayerDef {
 				return true;
 		return false;
 	}
-	
-	public function getRule(uid:Int) : Null<AutoLayerRule> {
+
+	public function getRule(uid:Int) : Null<AutoLayerRuleDef> {
 		for( r in rules )
 			if( r.uid==uid )
 				return r;

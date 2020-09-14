@@ -9,7 +9,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 	public var ld(get,never) : led.def.LayerDef;
 		inline function get_ld() return Editor.ME.curLayerDef;
 
-	var lastRule : Null<led.def.AutoLayerRule>;
+	var lastRule : Null<led.def.AutoLayerRuleDef>;
 
 	public function new() {
 		super();
@@ -74,7 +74,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		var jRuleList = jContent.find("ul.rules").empty();
 
 		function createRuleAtIndex(idx:Int) {
-			ld.rules.insert(idx, new led.def.AutoLayerRule(project.makeUniqId(), 3));
+			ld.rules.insert(idx, new led.def.AutoLayerRuleDef(project.makeUniqId(), 3));
 			lastRule = ld.rules[idx];
 			editor.ge.emit( LayerRuleAdded(lastRule) );
 

@@ -5,9 +5,9 @@ import led.LedTypes;
 class AutoPatternEditor extends ui.modal.Dialog {
 	var curValIdx = 0;
 	var layerDef : led.def.LayerDef;
-	var rule : led.def.AutoLayerRule;
+	var rule : led.def.AutoLayerRuleDef;
 
-	public function new(target:js.jquery.JQuery, layerDef:led.def.LayerDef, rule:led.def.AutoLayerRule) {
+	public function new(target:js.jquery.JQuery, layerDef:led.def.LayerDef, rule:led.def.AutoLayerRuleDef) {
 		super(target, "autoPatternEditor");
 
 		this.layerDef = layerDef;

@@ -488,7 +488,7 @@ class JsTools {
 
 
 	public static function createAutoPatternGrid(
-		rule:led.def.AutoLayerRule,
+		rule:led.def.AutoLayerRuleDef,
 		layerDef:led.def.LayerDef,
 		previewMode=false,
 		?explainCell: (desc:Null<String>)->Void,

@@ -335,7 +335,7 @@ class LayerInstance {
 	}
 
 
-	inline function applyAutoLayerRuleAt(r:led.def.AutoLayerRule, cx:Int, cy:Int) {
+	inline function applyAutoLayerRuleAt(r:led.def.AutoLayerRuleDef, cx:Int, cy:Int) {
 		if( def.isAutoLayer() ) {
 			// Init
 			if( !autoTiles.exists(r.uid) )
@@ -391,7 +391,7 @@ class LayerInstance {
 		applyAllAutoLayerRulesAt(0, 0, cWid, cHei);
 	}
 
-	public function applyAutoLayerRule(r:led.def.AutoLayerRule) {
+	public function applyAutoLayerRule(r:led.def.AutoLayerRuleDef) {
 		if( !def.isAutoLayer() )
 			return;
 

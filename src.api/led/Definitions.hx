@@ -138,7 +138,7 @@ class Definitions {
 	}
 
 
-	public function sortLayerAutoRules(ld:led.def.LayerDef, from:Int, to:Int) : Null<led.def.AutoLayerRule> {
+	public function sortLayerAutoRules(ld:led.def.LayerDef, from:Int, to:Int) : Null<led.def.AutoLayerRuleDef> {
 		if( from<0 || from>=ld.rules.length || from==to )
 			return null;
 
@@ -151,7 +151,7 @@ class Definitions {
 		return moved;
 	}
 
-	public function getLayerDefFromRule(?r:led.def.AutoLayerRule, ?ruleUid:Int) : Null<led.def.LayerDef> {
+	public function getLayerDefFromRule(?r:led.def.AutoLayerRuleDef, ?ruleUid:Int) : Null<led.def.LayerDef> {
 		if( r==null && ruleUid==null )
 			throw "Need 1 parameter";
 

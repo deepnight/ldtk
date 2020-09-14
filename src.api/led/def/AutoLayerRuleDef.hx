@@ -1,6 +1,6 @@
 package led.def;
 
-class AutoLayerRule {
+class AutoLayerRuleDef {
 	public var uid(default,null) : Int;
 
 	public var tileIds : Array<Int> = [];
@@ -120,7 +120,7 @@ class AutoLayerRule {
 	}
 
 	public static function fromJson(dataVersion:Int, json:Dynamic) {
-		var r = new AutoLayerRule( json.uid, json.size );
+		var r = new AutoLayerRuleDef( json.uid, json.size );
 		r.active = JsonTools.readBool(json.active, true);
 		r.tileIds = json.tileIds;
 		r.chance = JsonTools.readFloat(json.chance);

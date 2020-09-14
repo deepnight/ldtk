@@ -23,9 +23,9 @@ enum GlobalEvent {
 	LayerDefChanged;
 	LayerDefSorted;
 
-	LayerRuleChanged(rule:led.def.AutoLayerRule);
-	LayerRuleAdded(rule:led.def.AutoLayerRule);
-	LayerRuleRemoved(rule:led.def.AutoLayerRule);
+	LayerRuleChanged(rule:led.def.AutoLayerRuleDef);
+	LayerRuleAdded(rule:led.def.AutoLayerRuleDef);
+	LayerRuleRemoved(rule:led.def.AutoLayerRuleDef);
 	LayerRuleSorted;
 
 	LayerInstanceSelected;

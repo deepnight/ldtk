@@ -73,7 +73,7 @@ class Level {
 		throw "Missing layer instance for "+layerDefUid;
 	}
 
-	public function getLayerInstanceFromRule(r:led.def.AutoLayerRule) {
+	public function getLayerInstanceFromRule(r:led.def.AutoLayerRuleDef) {
 		var ld = _project.defs.getLayerDefFromRule(r);
 		return ld!=null ? getLayerInstance(ld) : null;
 	}
