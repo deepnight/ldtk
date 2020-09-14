@@ -7,6 +7,8 @@ enum GlobalEvent {
 
 	ProjectSelected;
 	ProjectSettingsChanged;
+	BeforeProjectSaving;
+	ProjectSaved;
 
 	LevelSelected;
 	LevelSettingsChanged;

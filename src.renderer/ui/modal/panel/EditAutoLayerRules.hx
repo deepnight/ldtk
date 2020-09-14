@@ -28,6 +28,9 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			case LayerInstanceRestoredFromHistory(li):
 				updatePanel();
 
+			case BeforeProjectSaving:
+				updateAllLevels();
+
 			case LayerRuleChanged(r), LayerRuleRemoved(r), LayerRuleAdded(r):
 				updatePanel();
 				invalidatedRules.set(r.uid, r.uid);
@@ -41,7 +44,10 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 	override function onClose() {
 		super.onClose();
+		updateAllLevels();
+	}
 
+	function updateAllLevels() {
 		// Apply edited rules to all other levels
 		for(ruleUid in invalidatedRules) {
 			for( l in project.levels )
@@ -57,6 +63,8 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				}
 			}
 		}
+
+		invalidatedRules = new Map();
 	}
 
 	function updatePanel() {

@@ -121,6 +121,8 @@ class LevelRender extends dn.Process {
 				root.x = M.round( editor.canvasWid()*0.5 - focusLevelX * zoom );
 				root.y = M.round( editor.canvasHei()*0.5 - focusLevelY * zoom );
 
+			case ProjectSaved, BeforeProjectSaving:
+
 			case ProjectSelected:
 				renderAll();
 				fit();

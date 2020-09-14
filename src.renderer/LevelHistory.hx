@@ -28,6 +28,8 @@ class LevelHistory {
 
 	public function manualOnGlobalEvent(e:GlobalEvent) {
 		switch e {
+			case ProjectSaved, BeforeProjectSaving:
+
 			case ProjectSelected:
 				clearHistory();
 

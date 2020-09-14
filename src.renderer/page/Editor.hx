@@ -570,15 +570,20 @@ class Editor extends Page {
 			return;
 		}
 
+		ge.emit(BeforeProjectSaving);
+
 		var data = JsTools.prepareProjectFile(project);
 		JsTools.writeFileBytes(projectFilePath, data.bytes);
 		needSaving = false;
 		App.ME.registerRecentProject(projectFilePath);
+
 		if( neededSaving)
 			N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
 		else
 			N.msg("Nothing to save");
 		updateTitle();
+
+		ge.emit(ProjectSaved);
 	}
 
 	public function onSaveAs() {
@@ -602,10 +607,13 @@ class Editor extends Page {
 			case LevelSelected:
 			case LayerInstanceVisiblityChanged(_):
 			case ToolOptionChanged:
+			case BeforeProjectSaving:
+			case ProjectSaved:
 
 			case _:
 				needSaving = true;
 		}
+
 
 		switch e {
 			case ViewportChanged:
@@ -644,6 +652,9 @@ class Editor extends Page {
 			case LayerRuleAdded(r):
 			case LayerRuleRemoved(r):
 			case LayerRuleSorted:
+
+			case BeforeProjectSaving:
+			case ProjectSaved:
 
 			case ProjectSelected:
 				updateAppBg();
