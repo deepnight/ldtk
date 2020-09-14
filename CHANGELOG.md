@@ -10,6 +10,7 @@
  - **Samples**: click on the *Samples* button on home page to load some example projects.
  - **Smarter warning** when deleting something in a panel. ie. If the value you're removing isn't actually used in your project, you will get a "softer" warning.
  - **Large levels optimizations**: started an important rework of the way levels are rendered on-screen to make room for future optimizations on large levels. For now, it's still recommended to work on levels with smaller dimensions.
+ - Added a project option to minify the JSON file.
  - Smarter extern Enum sync: the removal of unused enums will be shown as low-risks operations.
  - Added perlin noise support to Auto-layers rules (a rule can apply to only a random area).
  - Changed version number to 0.1.x because no one could stop me from doing it
