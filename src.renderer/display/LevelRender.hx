@@ -693,6 +693,8 @@ class LevelRender extends dn.Process {
 			for( li in editor.curLevel.layerInstances )
 				if( layerInvalidations.exists(li.layerDefUid) ) {
 					var b = layerInvalidations.get(li.layerDefUid);
+					if( li.def.isAutoLayer() )
+						li.applyAllAutoLayerRulesAt( b.left, b.top, b.right-b.left+1, b.bottom-b.top+1 );
 					renderLayer(li);
 				}
 		}
