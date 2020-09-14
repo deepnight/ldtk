@@ -73,7 +73,7 @@ class ElectronMain {
 			event.returnValue = process.cwd();
 		});
 
-		IpcMain.on("getAppDir", function(event) {
+		IpcMain.on("getAppResourceDir", function(event) {
 			event.returnValue = App.getAppPath();
 		});
 

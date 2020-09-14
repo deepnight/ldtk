@@ -89,13 +89,18 @@ class Home extends Page {
 
 
 	public function onLoad() {
-		dn.electron.Dialogs.open([".json"], App.ME.getDefaultDir(), function(filePath) {
+		dn.electron.Dialogs.open([".json"], App.ME.getDefaultDialogDir(), function(filePath) {
 			loadProject(filePath);
 		});
 	}
 
 	public function onLoadSamples() {
-		dn.electron.Dialogs.open([".json"], JsTools.getExeDir()+"/samples", function(filePath) {
+		var path = JsTools.getExeDir()+"/samples";
+		#if debug
+		path = JsTools.getAppResourceDir()+"/samples";
+		N.debug(path);
+		#end
+		dn.electron.Dialogs.open([".json"], path, function(filePath) {
 			loadProject(filePath);
 		});
 	}
@@ -132,7 +137,7 @@ class Home extends Page {
 	}
 
 	public function onNew() {
-		dn.electron.Dialogs.saveAs([".json"], App.ME.getDefaultDir(), function(filePath) {
+		dn.electron.Dialogs.saveAs([".json"], App.ME.getDefaultDialogDir(), function(filePath) {
 			var fp = dn.FilePath.fromFile(filePath);
 			fp.extension = "json";
 

@@ -2,8 +2,9 @@ import electron.renderer.IpcRenderer;
 
 class App extends dn.Process {
 	public static var ME : App;
-	public static var APP_DIR = "./"; // with trailing slash
-	public static var RESOURCE_DIR = "bin/"; // with trailing slash
+	public static var APP_RESOURCE_DIR = "./"; // with trailing slash
+	public static var APP_ASSETS_DIR(get,never) : String;
+		static inline function get_APP_ASSETS_DIR() return APP_RESOURCE_DIR+"bin/";
 
 	public var jDoc(get,never) : J; inline function get_jDoc() return new J(js.Browser.document);
 	public var jBody(get,never) : J; inline function get_jBody() return new J("body");
@@ -41,10 +42,11 @@ class App extends dn.Process {
 		Boot.ME.s2d.addEventListener(onHeapsEvent);
 
 		// Init dirs
-		var fp = dn.FilePath.fromDir( JsTools.getAppDir() );
+		var fp = dn.FilePath.fromDir( JsTools.getAppResourceDir() );
 		fp.useSlashes();
-		APP_DIR = fp.directoryWithSlash;
-		RESOURCE_DIR = APP_DIR+"bin/";
+		APP_RESOURCE_DIR = fp.directoryWithSlash;
+		trace("rsc="+APP_RESOURCE_DIR);
+		trace("assets="+APP_ASSETS_DIR);
 
 		// Restore last stored project state
 		session = {
@@ -229,9 +231,9 @@ class App extends dn.Process {
 			ME = null;
 	}
 
-	public function getDefaultDir() {
+	public function getDefaultDialogDir() {
 		if( session.recentProjects.length==0 )
-			return APP_DIR; // TODO find a better default?
+			return #if debug JsTools.getAppResourceDir() #else JsTools.getExeDir() #end;
 
 		var last = session.recentProjects[session.recentProjects.length-1];
 		return dn.FilePath.fromFile(last).directory;
@@ -259,10 +261,10 @@ class App extends dn.Process {
 
 		jCanvas.hide();
 
-		var path = RESOURCE_DIR + 'pages/$id.html';
+		var path = APP_ASSETS_DIR + 'pages/$id.html';
 		var raw = JsTools.readFileString(path);
 		if( raw==null )
-			throw "Page not found: "+id+" in "+path+"( cwd="+JsTools.getAppDir()+")";
+			throw "Page not found: "+id+" in "+path+"( cwd="+JsTools.getAppResourceDir()+")";
 
 		if( vars!=null ) {
 			for(k in Reflect.fields(vars))

@@ -194,7 +194,7 @@ class JsTools {
 
 	public static function getHtmlTemplate(name:String, ?vars:Dynamic) : Null<String> {
 		if( !_fileCache.exists(name) ) {
-			var path = dn.FilePath.fromFile(App.RESOURCE_DIR + "tpl/" + name);
+			var path = dn.FilePath.fromFile(App.APP_ASSETS_DIR + "tpl/" + name);
 			path.extension = "html";
 
 			if( !fileExists(path.full) )
@@ -365,11 +365,14 @@ class JsTools {
 
 	public static function getExeDir() {
 		var path = electron.renderer.IpcRenderer.sendSync("getExeDir");
+		#if debug
+		path = getAppResourceDir();
+		#end
 		return dn.FilePath.fromFile( path ).useSlashes().directory;
 	}
 
-	public static function getAppDir() { // TODO clarify this: it's resource dir
-		var path = electron.renderer.IpcRenderer.sendSync("getAppDir");
+	public static function getAppResourceDir() {
+		var path = electron.renderer.IpcRenderer.sendSync("getAppResourceDir");
 		return dn.FilePath.fromDir( path ).useSlashes().directory;
 	}
 
