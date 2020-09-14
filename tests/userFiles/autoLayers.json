@@ -3,7 +3,7 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.1.5-alpha-debug",
+		"appVersion": "0.1.5-alpha",
 		"url": "https://deepnight.net/"
 	},
 	"name": "autoLayers",
@@ -12,7 +12,7 @@
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,
 	"bgColor": "#1B2037",
-	"nextUid": 79,
+	"nextUid": 80,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -196,21 +196,6 @@
 						"perlinOctaves": 2
 					},
 					{
-						"uid": 27,
-						"active": true,
-						"size": 3,
-						"tileIds": [ 105 ],
-						"chance": 1.0,
-						"seed": 7914855,
-						"pattern": [ 0, -1000001, 0, 0, 1, 0, 0, -1, 0 ],
-						"flipX": false,
-						"flipY": false,
-						"perlinActive": false,
-						"perlinSeed": 97504770,
-						"perlinScale": 0.2,
-						"perlinOctaves": 2
-					},
-					{
 						"uid": 26,
 						"active": true,
 						"size": 3,
@@ -222,6 +207,21 @@
 						"flipY": false,
 						"perlinActive": false,
 						"perlinSeed": 8308428,
+						"perlinScale": 0.2,
+						"perlinOctaves": 2
+					},
+					{
+						"uid": 27,
+						"active": true,
+						"size": 3,
+						"tileIds": [ 105 ],
+						"chance": 1.0,
+						"seed": 7914855,
+						"pattern": [ 0, -1000001, 0, 0, 1, 0, 0, -1, 0 ],
+						"flipX": false,
+						"flipY": false,
+						"perlinActive": false,
+						"perlinSeed": 97504770,
 						"perlinScale": 0.2,
 						"perlinOctaves": 2
 					},
@@ -829,6 +829,8 @@
 						{ "coordId": 255, "v": 0 },
 						{ "coordId": 256, "v": 0 },
 						{ "coordId": 257, "v": 0 },
+						{ "coordId": 262, "v": 0 },
+						{ "coordId": 263, "v": 0 },
 						{ "coordId": 264, "v": 0 },
 						{ "coordId": 265, "v": 0 },
 						{ "coordId": 266, "v": 0 },
@@ -850,7 +852,6 @@
 						{ "coordId": 282, "v": 0 },
 						{ "coordId": 283, "v": 0 },
 						{ "coordId": 284, "v": 0 },
-						{ "coordId": 285, "v": 0 },
 						{ "coordId": 292, "v": 0 },
 						{ "coordId": 293, "v": 0 },
 						{ "coordId": 294, "v": 0 },
@@ -872,6 +873,7 @@
 						{ "coordId": 310, "v": 0 },
 						{ "coordId": 311, "v": 0 },
 						{ "coordId": 312, "v": 0 },
+						{ "coordId": 320, "v": 0 },
 						{ "coordId": 321, "v": 0 },
 						{ "coordId": 322, "v": 0 },
 						{ "coordId": 323, "v": 0 },
@@ -1004,9 +1006,8 @@
 								{ "coordId": 117, "tileId": 276, "flips": 0 },
 								{ "coordId": 160, "tileId": 264, "flips": 0 },
 								{ "coordId": 164, "tileId": 276, "flips": 1 },
-								{ "coordId": 263, "tileId": 252, "flips": 0 },
-								{ "coordId": 286, "tileId": 288, "flips": 1 },
-								{ "coordId": 291, "tileId": 276, "flips": 0 }
+								{ "coordId": 291, "tileId": 276, "flips": 0 },
+								{ "coordId": 319, "tileId": 252, "flips": 0 }
 							]
 						},
 						{
@@ -1037,6 +1038,15 @@
 							"tiles": [ { "coordId": 89, "tileId": 19, "flips": 0 }, { "coordId": 130, "tileId": 19, "flips": 0 } ]
 						},
 						{
+							"ruleId": 26,
+							"tiles": [
+								{ "coordId": 85, "tileId": 30, "flips": 1 },
+								{ "coordId": 89, "tileId": 30, "flips": 0 },
+								{ "coordId": 230, "tileId": 30, "flips": 1 },
+								{ "coordId": 233, "tileId": 30, "flips": 0 }
+							]
+						},
+						{
 							"ruleId": 27,
 							"tiles": [
 								{ "coordId": 85, "tileId": 105, "flips": 0 },
@@ -1050,18 +1060,7 @@
 								{ "coordId": 230, "tileId": 105, "flips": 0 },
 								{ "coordId": 231, "tileId": 105, "flips": 0 },
 								{ "coordId": 232, "tileId": 105, "flips": 0 },
-								{ "coordId": 233, "tileId": 105, "flips": 0 },
-								{ "coordId": 234, "tileId": 105, "flips": 0 },
-								{ "coordId": 235, "tileId": 105, "flips": 0 }
-							]
-						},
-						{
-							"ruleId": 26,
-							"tiles": [
-								{ "coordId": 85, "tileId": 30, "flips": 1 },
-								{ "coordId": 89, "tileId": 30, "flips": 0 },
-								{ "coordId": 230, "tileId": 30, "flips": 1 },
-								{ "coordId": 235, "tileId": 30, "flips": 0 }
+								{ "coordId": 233, "tileId": 105, "flips": 0 }
 							]
 						},
 						{ "ruleId": 36, "tiles": [] },
@@ -1204,12 +1203,11 @@
 								{ "coordId": 97, "tileId": 26, "flips": 0 },
 								{ "coordId": 134, "tileId": 26, "flips": 0 },
 								{ "coordId": 244, "tileId": 26, "flips": 0 },
-								{ "coordId": 258, "tileId": 26, "flips": 0 },
-								{ "coordId": 263, "tileId": 26, "flips": 1 },
 								{ "coordId": 272, "tileId": 26, "flips": 0 },
 								{ "coordId": 276, "tileId": 26, "flips": 1 },
+								{ "coordId": 285, "tileId": 26, "flips": 0 },
+								{ "coordId": 291, "tileId": 26, "flips": 1 },
 								{ "coordId": 304, "tileId": 26, "flips": 1 },
-								{ "coordId": 320, "tileId": 26, "flips": 1 },
 								{ "coordId": 329, "tileId": 26, "flips": 0 },
 								{ "coordId": 348, "tileId": 26, "flips": 1 }
 							]
@@ -1222,7 +1220,8 @@
 								{ "coordId": 146, "tileId": 148, "flips": 0 },
 								{ "coordId": 152, "tileId": 126, "flips": 0 },
 								{ "coordId": 159, "tileId": 147, "flips": 0 },
-								{ "coordId": 191, "tileId": 148, "flips": 0 }
+								{ "coordId": 191, "tileId": 148, "flips": 0 },
+								{ "coordId": 290, "tileId": 147, "flips": 0 }
 							]
 						},
 						{
@@ -1338,9 +1337,10 @@
 								{ "coordId": 151, "tileId": 36, "flips": 1 },
 								{ "coordId": 161, "tileId": 36, "flips": 0 },
 								{ "coordId": 163, "tileId": 36, "flips": 0 },
-								{ "coordId": 285, "tileId": 36, "flips": 1 },
-								{ "coordId": 292, "tileId": 36, "flips": 0 },
-								{ "coordId": 312, "tileId": 36, "flips": 1 }
+								{ "coordId": 257, "tileId": 36, "flips": 1 },
+								{ "coordId": 262, "tileId": 36, "flips": 0 },
+								{ "coordId": 312, "tileId": 36, "flips": 1 },
+								{ "coordId": 320, "tileId": 36, "flips": 0 }
 							]
 						},
 						{
@@ -1385,15 +1385,15 @@
 								{ "coordId": 243, "tileId": 24, "flips": 1 },
 								{ "coordId": 249, "tileId": 24, "flips": 0 },
 								{ "coordId": 257, "tileId": 24, "flips": 1 },
-								{ "coordId": 264, "tileId": 24, "flips": 0 },
+								{ "coordId": 262, "tileId": 24, "flips": 0 },
 								{ "coordId": 271, "tileId": 24, "flips": 1 },
 								{ "coordId": 277, "tileId": 24, "flips": 0 },
-								{ "coordId": 285, "tileId": 24, "flips": 1 },
+								{ "coordId": 284, "tileId": 24, "flips": 1 },
 								{ "coordId": 292, "tileId": 24, "flips": 0 },
 								{ "coordId": 299, "tileId": 24, "flips": 1 },
 								{ "coordId": 305, "tileId": 24, "flips": 0 },
 								{ "coordId": 312, "tileId": 24, "flips": 1 },
-								{ "coordId": 321, "tileId": 24, "flips": 0 },
+								{ "coordId": 320, "tileId": 24, "flips": 0 },
 								{ "coordId": 328, "tileId": 24, "flips": 1 },
 								{ "coordId": 333, "tileId": 24, "flips": 0 },
 								{ "coordId": 339, "tileId": 24, "flips": 1 },
@@ -1491,11 +1491,11 @@
 								{ "coordId": 231, "tileId": 37, "flips": 0 },
 								{ "coordId": 232, "tileId": 37, "flips": 0 },
 								{ "coordId": 233, "tileId": 37, "flips": 0 },
-								{ "coordId": 234, "tileId": 37, "flips": 0 },
-								{ "coordId": 235, "tileId": 37, "flips": 0 },
-								{ "coordId": 285, "tileId": 37, "flips": 0 },
-								{ "coordId": 292, "tileId": 37, "flips": 0 },
-								{ "coordId": 312, "tileId": 37, "flips": 0 }
+								{ "coordId": 257, "tileId": 37, "flips": 0 },
+								{ "coordId": 262, "tileId": 37, "flips": 0 },
+								{ "coordId": 263, "tileId": 37, "flips": 0 },
+								{ "coordId": 312, "tileId": 37, "flips": 0 },
+								{ "coordId": 320, "tileId": 37, "flips": 0 }
 							]
 						},
 						{
@@ -1656,6 +1656,7 @@
 								{ "coordId": 255, "tileId": 1, "flips": 0 },
 								{ "coordId": 256, "tileId": 4, "flips": 0 },
 								{ "coordId": 257, "tileId": 6, "flips": 0 },
+								{ "coordId": 262, "tileId": 1, "flips": 0 },
 								{ "coordId": 266, "tileId": 6, "flips": 0 },
 								{ "coordId": 270, "tileId": 2, "flips": 0 },
 								{ "coordId": 271, "tileId": 2, "flips": 0 },
@@ -1668,6 +1669,7 @@
 								{ "coordId": 299, "tileId": 3, "flips": 0 },
 								{ "coordId": 305, "tileId": 3, "flips": 0 },
 								{ "coordId": 307, "tileId": 4, "flips": 0 },
+								{ "coordId": 320, "tileId": 4, "flips": 0 },
 								{ "coordId": 323, "tileId": 1, "flips": 0 },
 								{ "coordId": 324, "tileId": 6, "flips": 0 },
 								{ "coordId": 326, "tileId": 2, "flips": 0 },
@@ -1821,6 +1823,8 @@
 								{ "coordId": 255, "tileId": 0, "flips": 0 },
 								{ "coordId": 256, "tileId": 0, "flips": 0 },
 								{ "coordId": 257, "tileId": 0, "flips": 0 },
+								{ "coordId": 262, "tileId": 0, "flips": 0 },
+								{ "coordId": 263, "tileId": 0, "flips": 0 },
 								{ "coordId": 264, "tileId": 0, "flips": 0 },
 								{ "coordId": 265, "tileId": 0, "flips": 0 },
 								{ "coordId": 266, "tileId": 0, "flips": 0 },
@@ -1837,7 +1841,6 @@
 								{ "coordId": 282, "tileId": 0, "flips": 0 },
 								{ "coordId": 283, "tileId": 0, "flips": 0 },
 								{ "coordId": 284, "tileId": 0, "flips": 0 },
-								{ "coordId": 285, "tileId": 0, "flips": 0 },
 								{ "coordId": 292, "tileId": 0, "flips": 0 },
 								{ "coordId": 293, "tileId": 0, "flips": 0 },
 								{ "coordId": 294, "tileId": 0, "flips": 0 },
@@ -1854,6 +1857,7 @@
 								{ "coordId": 310, "tileId": 0, "flips": 0 },
 								{ "coordId": 311, "tileId": 0, "flips": 0 },
 								{ "coordId": 312, "tileId": 0, "flips": 0 },
+								{ "coordId": 320, "tileId": 0, "flips": 0 },
 								{ "coordId": 321, "tileId": 0, "flips": 0 },
 								{ "coordId": 322, "tileId": 0, "flips": 0 },
 								{ "coordId": 323, "tileId": 0, "flips": 0 },
@@ -3528,6 +3532,19 @@
 							"tiles": [ { "coordId": 2058, "tileId": 19, "flips": 0 } ]
 						},
 						{
+							"ruleId": 26,
+							"tiles": [
+								{ "coordId": 983, "tileId": 30, "flips": 1 },
+								{ "coordId": 1291, "tileId": 30, "flips": 0 },
+								{ "coordId": 1569, "tileId": 30, "flips": 0 },
+								{ "coordId": 1591, "tileId": 30, "flips": 0 },
+								{ "coordId": 1826, "tileId": 30, "flips": 1 },
+								{ "coordId": 1988, "tileId": 30, "flips": 0 },
+								{ "coordId": 2057, "tileId": 30, "flips": 1 },
+								{ "coordId": 2058, "tileId": 30, "flips": 0 }
+							]
+						},
+						{
 							"ruleId": 27,
 							"tiles": [
 								{ "coordId": 983, "tileId": 105, "flips": 0 },
@@ -3549,19 +3566,6 @@
 								{ "coordId": 1988, "tileId": 105, "flips": 0 },
 								{ "coordId": 2057, "tileId": 105, "flips": 0 },
 								{ "coordId": 2058, "tileId": 105, "flips": 0 }
-							]
-						},
-						{
-							"ruleId": 26,
-							"tiles": [
-								{ "coordId": 983, "tileId": 30, "flips": 1 },
-								{ "coordId": 1291, "tileId": 30, "flips": 0 },
-								{ "coordId": 1569, "tileId": 30, "flips": 0 },
-								{ "coordId": 1591, "tileId": 30, "flips": 0 },
-								{ "coordId": 1826, "tileId": 30, "flips": 1 },
-								{ "coordId": 1988, "tileId": 30, "flips": 0 },
-								{ "coordId": 2057, "tileId": 30, "flips": 1 },
-								{ "coordId": 2058, "tileId": 30, "flips": 0 }
 							]
 						},
 						{ "ruleId": 36, "tiles": [] },
@@ -7522,8 +7526,8 @@
 							]
 						},
 						{ "ruleId": 66, "tiles": [] },
-						{ "ruleId": 27, "tiles": [] },
 						{ "ruleId": 26, "tiles": [] },
+						{ "ruleId": 27, "tiles": [] },
 						{ "ruleId": 36, "tiles": [] },
 						{ "ruleId": 37, "tiles": [] },
 						{ "ruleId": 38, "tiles": [] },
@@ -9092,8 +9096,8 @@
 							]
 						},
 						{ "ruleId": 66, "tiles": [] },
-						{ "ruleId": 27, "tiles": [] },
 						{ "ruleId": 26, "tiles": [] },
+						{ "ruleId": 27, "tiles": [] },
 						{ "ruleId": 36, "tiles": [] },
 						{ "ruleId": 37, "tiles": [] },
 						{ "ruleId": 38, "tiles": [] },
@@ -10474,8 +10478,8 @@
 							]
 						},
 						{ "ruleId": 66, "tiles": [] },
-						{ "ruleId": 27, "tiles": [] },
 						{ "ruleId": 26, "tiles": [] },
+						{ "ruleId": 27, "tiles": [] },
 						{ "ruleId": 36, "tiles": [] },
 						{ "ruleId": 37, "tiles": [] },
 						{ "ruleId": 38, "tiles": [] },
@@ -12247,6 +12251,10 @@
 							"tiles": [ { "coordId": 665, "tileId": 19, "flips": 0 } ]
 						},
 						{
+							"ruleId": 26,
+							"tiles": [ { "coordId": 646, "tileId": 30, "flips": 1 }, { "coordId": 665, "tileId": 30, "flips": 0 } ]
+						},
+						{
 							"ruleId": 27,
 							"tiles": [
 								{ "coordId": 646, "tileId": 105, "flips": 0 },
@@ -12267,10 +12275,6 @@
 								{ "coordId": 664, "tileId": 105, "flips": 0 },
 								{ "coordId": 665, "tileId": 105, "flips": 0 }
 							]
-						},
-						{
-							"ruleId": 26,
-							"tiles": [ { "coordId": 646, "tileId": 30, "flips": 1 }, { "coordId": 665, "tileId": 30, "flips": 0 } ]
 						},
 						{ "ruleId": 36, "tiles": [] },
 						{ "ruleId": 37, "tiles": [] },
