@@ -18,7 +18,7 @@ class JsTools {
 				new J(ev.item).removeClass("dragging");
 			},
 			onSort: function(ev) {
-				if( ev.oldIndex!=ev.newIndex )
+				if( ev.oldIndex!=ev.newIndex || ev.from!=ev.to )
 					onSort(ev);
 				else
 					new J(ev.item).click();
