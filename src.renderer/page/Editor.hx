@@ -656,6 +656,11 @@ class Editor extends Page {
 			case LayerRuleRemoved(r):
 			case LayerRuleSorted:
 
+			case LayerRuleGroupChanged:
+			case LayerRuleGroupAdded:
+			case LayerRuleGroupRemoved:
+			case LayerRuleGroupSorted:
+
 			case BeforeProjectSaving:
 			case ProjectSaved:
 

@@ -12,7 +12,8 @@ class LayerDef {
 	// IntGrid
 	var intGridValues : Array<IntGridValueDef> = [];
 	public var autoTilesetDefUid : Null<Int>;
-	public var rules : Array<AutoLayerRuleDef> = [];
+	// public var rules : Array<AutoLayerRuleDef> = [];
+	public var ruleGroups : Array<AutoLayerRuleGroup> = [];
 
 	// Tiles
 	public var tilesetDefUid : Null<Int>;
@@ -55,12 +56,18 @@ class LayerDef {
 		o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
 
 		// Read auto-layer rules
-		o.rules = [];
-		if( json.rules!=null )
-			for( rjson in JsonTools.readArray(json.rules) ) {
-				var r = AutoLayerRuleDef.fromJson(dataVersion, rjson);
-				o.rules.push(r);
+		if( json.rules!=null ) {
+			for( ruleGroupJson in JsonTools.readArray(json.rules) ) {
+				var rg = o.createRuleGroup(
+					JsonTools.readInt(ruleGroupJson.uid,-1),
+					JsonTools.readString(ruleGroupJson.name, "default")
+				);
+				rg.collapsed = JsonTools.readBool( ruleGroupJson.collapsed );
+				rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
+					return AutoLayerRuleDef.fromJson(dataVersion, ruleJson);
+				});
 			}
+		}
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
 		o.tilePivotX = JsonTools.readFloat(json.tilePivotX, 0);
@@ -78,8 +85,14 @@ class LayerDef {
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
 
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
+
 			autoTilesetDefUid: autoTilesetDefUid,
-			rules: rules.map( function(r) return r.toJson() ),
+			rules: ruleGroups.map( function(rg) return {
+				uid: rg.uid,
+				name: rg.name,
+				collapsed: rg.collapsed,
+				rules: rg.rules.map( function(r) return r.toJson() ),
+			}),
 
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,
@@ -141,25 +154,55 @@ class LayerDef {
 
 
 	public function hasRule(ruleUid:Int) : Bool {
-		for(r in rules)
+		for(rg in ruleGroups)
+		for(r in rg.rules)
 			if( r.uid==ruleUid )
 				return true;
 		return false;
 	}
 
 	public function getRule(uid:Int) : Null<AutoLayerRuleDef> {
-		for( r in rules )
+		for( rg in ruleGroups )
+		for( r in rg.rules )
 			if( r.uid==uid )
 				return r;
 		return null;
+	}
+
+	public function removeRuleGroup(rg:AutoLayerRuleGroup) {
+		for( g in ruleGroups )
+			if( g.uid==rg.uid ) {
+				ruleGroups.remove(g);
+				return true;
+			}
+		return false;
+	}
+
+	public function createRuleGroup(uid:Int, name:String, ?index:Int) {
+		var rg : AutoLayerRuleGroup = {
+			uid: uid,
+			name: name,
+			collapsed: false,
+			rules: [],
+		}
+		if( index!=null )
+			ruleGroups.insert(index, rg);
+		else
+			ruleGroups.push(rg);
+		return rg;
 	}
 
 	public function tidy(p:led.Project) {
 		// Lost auto-layer tileset
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {
 			autoTilesetDefUid = null;
-			for(r in rules)
+			for(rg in ruleGroups)
+			for(r in rg.rules)
 				r.tileIds = [];
 		}
+
+		for(rg in ruleGroups)
+			if( rg.uid<0 )
+				rg.uid = p.makeUniqId(); // HACK tmp fix
 	}
 }

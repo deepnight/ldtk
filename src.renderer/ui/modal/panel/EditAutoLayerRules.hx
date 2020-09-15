@@ -23,7 +23,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		super.onGlobalEvent(e);
 		switch e {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
-				close();
+				updatePanel();
 
 			case LayerInstanceRestoredFromHistory(li):
 				updatePanel();
@@ -34,6 +34,17 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			case LayerRuleChanged(r), LayerRuleRemoved(r), LayerRuleAdded(r):
 				updatePanel();
 				invalidatedRules.set(r.uid, r.uid);
+
+			case LayerRuleGroupRemoved:
+				// TODO invalidate rules
+				updatePanel();
+
+			case LayerRuleGroupSorted:
+				// TODO invalidate rules
+				updatePanel();
+
+			case LayerRuleGroupAdded, LayerRuleGroupChanged:
+				updatePanel();
 
 			case LayerRuleSorted:
 				updatePanel();
@@ -67,23 +78,34 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		jContent.find("*").off();
 		ui.Tip.clear();
 
-		var jRuleList = jContent.find("ul.rules").empty();
+		var jRuleGroupList = jContent.find("ul.ruleGroups").empty();
 
-		function createRuleAtIndex(idx:Int) {
-			ld.rules.insert(idx, new led.def.AutoLayerRuleDef(project.makeUniqId(), 3));
-			lastRule = ld.rules[idx];
+
+		// Create new rule
+		function createRule(rg:led.LedTypes.AutoLayerRuleGroup, insertIdx:Int) {
+			var r = new led.def.AutoLayerRuleDef( project.makeUniqId() );
+			rg.rules.insert(insertIdx, r);
+
+			if( rg.collapsed )
+				rg.collapsed = false;
+
+			lastRule = rg.rules[insertIdx];
 			editor.ge.emit( LayerRuleAdded(lastRule) );
 
-			var jNewRule = jContent.find("ul.rules [idx="+idx+"]");
-			if( idx==0 )
-				jRuleList.scrollTop(0);
 
+			var jNewRule = jContent.find("[ruleUid="+r.uid+"]"); // BUG fix scrollbar position
 			new ui.modal.dialog.AutoPatternEditor(jNewRule, ld, lastRule );
 		}
 
-		// Add rule
-		jContent.find("button.create").click( function(ev) {
-			createRuleAtIndex(0);
+
+		// Add rule group
+		jContent.find("button.createGroup").click( function(ev) {
+			var insertIdx = 0;
+			var rg = ld.createRuleGroup(project.makeUniqId(), "New group", insertIdx);
+			editor.ge.emit(LayerRuleGroupAdded);
+
+			var jNewGroup = jContent.find("[groupUid="+rg.uid+"]");
+			jNewGroup.siblings("header").find(".edit").click();
 		});
 
 		// Render
@@ -93,141 +115,235 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			editor.levelRender.setAutoLayerRendering( li, chk.prop("checked") );
 		});
 
-		// Rules
-		var idx = 0;
-		for( r in ld.rules) {
-			var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
-			jRule.appendTo(jRuleList);
-			jRule.attr("idx", idx);
 
-			// Insert rule before
-			var i = idx;
-			jRule.find(".insert.before").click( function(_) {
-				createRuleAtIndex(i);
-			});
+		// Rule groups
+		var groupIdx = 0;
+		for( rg in ld.ruleGroups) {
+			var groupIdx = groupIdx++; // prevent memory pointer issues
 
-			// Insert rule after
-			jRule.find(".insert.after").click( function(_) {
-				createRuleAtIndex(i+1);
-			});
+			var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
+			jGroup.appendTo( jRuleGroupList );
 
-			// Last edited highlight
-			jRule.mousedown( function(ev) {
-				jRuleList.find("li").removeClass("last");
-				jRule.addClass("last");
-				lastRule = r;
-			});
-			if( r==lastRule )
-				jRule.addClass("last");
+			var jGroupList = jGroup.find(">ul");
+			jGroupList.attr("groupUid", rg.uid);
+			jGroupList.attr("groupIdx", groupIdx);
 
-			// Preview
-			var jPreview = jRule.find(".preview");
-			JsTools.createAutoPatternGrid(r, ld, true).appendTo(jPreview);
-			jPreview.click( function(ev) {
-				new ui.modal.dialog.AutoPatternEditor(jPreview, ld, r);
-			});
+			var jHeader = jGroup.find("header");
 
-			// Random
-			var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
-			i.linkEvent( LayerRuleChanged(r) );
-			i.displayAsPct = true;
-			i.setBounds(0,1);
-			if( r.chance>=1 )
-				i.jInput.addClass("max");
-			else if( r.chance<=0 )
-				i.jInput.addClass("off");
+			// Collapsing
+			jHeader.find("div.name")
+				.click( function(_) {
+					rg.collapsed = !rg.collapsed;
+					editor.ge.emit(LayerRuleGroupSorted);
+				})
+				.text(rg.name);
 
-			// Flip-X
-			var jFlag = jRule.find("a.flipX");
-			jFlag.addClass( r.flipX ? "on" : "off" );
-			jFlag.click( function(ev:js.jquery.Event) {
-				ev.preventDefault();
-				if( r.isSymetricX() )
-					N.error("This option will have no effect on a symetric rule.");
-				else {
-					r.flipX = !r.flipX;
-					editor.ge.emit( LayerRuleChanged(r) );
-				}
-			});
-
-			// Flip-Y
-			var jFlag = jRule.find("a.flipY");
-			jFlag.addClass( r.flipY ? "on" : "off" );
-			jFlag.click( function(ev:js.jquery.Event) {
-				ev.preventDefault();
-				if( r.isSymetricY() )
-					N.error("This option will have no effect on a symetric rule.");
-				else {
-					r.flipY = !r.flipY;
-					editor.ge.emit( LayerRuleChanged(r) );
-				}
-			});
-
-			// Perlin
-			var jFlag = jRule.find("a.perlin");
-			jFlag.addClass( r.hasPerlin() ? "on" : "off" );
-			jFlag.mousedown( function(ev:js.jquery.Event) {
-				ev.preventDefault();
-				if( ev.button==2 ) {
-					if( !r.hasPerlin() ) {
-						N.error("Perlin isn't enabled");
-					}
-					else {
-						// Perlin settings
-						var m = new Dialog(jFlag, "perlinSettings");
-						m.addClose();
-						m.loadTemplate("perlinSettings");
-						m.setTransparentMask();
-
-						var i = Input.linkToHtmlInput(r.perlinSeed, m.jContent.find("#perlinSeed"));
-						i.linkEvent( LayerRuleChanged(r) );
-						i.jInput.siblings("button").click( function(_) {
-							r.perlinSeed = Std.random(99999999);
-							i.jInput.val(r.perlinSeed);
-							editor.ge.emit( LayerRuleChanged(r) );
-						});
-
-						var i = Input.linkToHtmlInput(r.perlinScale, m.jContent.find("#perlinScale"));
-						i.displayAsPct = true;
-						i.setBounds(0.01, 1);
-						i.linkEvent( LayerRuleChanged(r) );
-
-						var i = Input.linkToHtmlInput(r.perlinOctaves, m.jContent.find("#perlinOctaves"));
-						i.setBounds(1, 4);
-						i.linkEvent( LayerRuleChanged(r) );
-					}
-				}
-				else {
-					r.setPerlin( !r.hasPerlin() );
-					editor.ge.emit( LayerRuleChanged(r) );
-				}
-			});
-
-			// Active
-			var jActive = jRule.find("a.active");
-			jActive.addClass( r.active ? "on" : "off" );
-			jActive.click( function(ev:js.jquery.Event) {
-				ev.preventDefault();
-				r.active = !r.active;
-				editor.ge.emit( LayerRuleChanged(r) );
-			});
-
-			// Delete
-			jRule.find("button.delete").click( function(ev) {
-				new ui.modal.dialog.Confirm( jRule, Lang.t._("Warning, this cannot be undone!"), true, function() {
-					ld.rules.remove(r);
-					editor.ge.emit( LayerRuleRemoved(r) );
+			// Delete group
+			jHeader.find(".delete").click( function(ev:js.jquery.Event) {
+				new ui.modal.dialog.Confirm(ev.getThis(), true, function() {
+					new LastChance(Lang.t._("Rule group removed"), project);
+					ld.removeRuleGroup(rg);
+					editor.ge.emit( LayerRuleGroupRemoved );
 				});
 			});
 
-			idx++;
+			// Edit group
+			jHeader.find(".edit").click( function(ev:js.jquery.Event) {
+				jHeader.find("div.name").hide();
+				var jInput = jHeader.find("input.name");
+				jInput
+					.val( rg.name )
+					.off()
+					.show()
+					.focus()
+					.select()
+					.on("keydown", function(ev:js.jquery.Event) {
+						switch ev.key {
+							case "Escape":
+								ev.preventDefault();
+								ev.stopPropagation();
+								jInput.val(rg.name).blur();
+
+							case "Enter":
+								jInput.blur();
+
+							case _:
+						}
+					})
+					.on("blur", function(ev:js.jquery.Event) {
+						rg.name = jInput.val();
+						editor.ge.emit(LayerRuleGroupChanged);
+					});
+			});
+
+			// Add rule
+			jHeader.find(".addRule").click( function(ev:js.jquery.Event) {
+				createRule(rg, 0);
+			});
+
+			if( rg.collapsed ) {
+				jGroup.addClass("collapsed");
+				var jDropTarget = new J('<ul class="collapsedSortTarget"/>');
+				jDropTarget.attr("groupIdx",groupIdx);
+				jDropTarget.attr("groupUid",rg.uid);
+				jGroup.append(jDropTarget);
+			}
+
+
+			// Rules
+			var ruleIdx = 0;
+			for( r in rg.rules) {
+				var ruleIdx = ruleIdx++; // prevent memory pointer issues
+
+				var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
+				jRule.appendTo( jGroupList );
+				jRule.attr("ruleUid", r.uid);
+
+				// Insert rule before
+				jRule.find(".insert.before").click( function(_) {
+					createRule(rg, ruleIdx);
+				});
+
+				// Insert rule after
+				jRule.find(".insert.after").click( function(_) {
+					createRule(rg, ruleIdx+1);
+				});
+
+				// Last edited highlight
+				jRule.mousedown( function(ev) {
+					jRuleGroupList.find("li").removeClass("last");
+					jRule.addClass("last");
+					lastRule = r;
+				});
+				if( r==lastRule )
+					jRule.addClass("last");
+
+				// Preview
+				var jPreview = jRule.find(".preview");
+				JsTools.createAutoPatternGrid(r, ld, true).appendTo(jPreview);
+				jPreview.click( function(ev) {
+					new ui.modal.dialog.AutoPatternEditor(jPreview, ld, r);
+				});
+
+				// Random
+				var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
+				i.linkEvent( LayerRuleChanged(r) );
+				i.displayAsPct = true;
+				i.setBounds(0,1);
+				if( r.chance>=1 )
+					i.jInput.addClass("max");
+				else if( r.chance<=0 )
+					i.jInput.addClass("off");
+
+				// Flip-X
+				var jFlag = jRule.find("a.flipX");
+				jFlag.addClass( r.flipX ? "on" : "off" );
+				jFlag.click( function(ev:js.jquery.Event) {
+					ev.preventDefault();
+					if( r.isSymetricX() )
+						N.error("This option will have no effect on a symetric rule.");
+					else {
+						r.flipX = !r.flipX;
+						editor.ge.emit( LayerRuleChanged(r) );
+					}
+				});
+
+				// Flip-Y
+				var jFlag = jRule.find("a.flipY");
+				jFlag.addClass( r.flipY ? "on" : "off" );
+				jFlag.click( function(ev:js.jquery.Event) {
+					ev.preventDefault();
+					if( r.isSymetricY() )
+						N.error("This option will have no effect on a symetric rule.");
+					else {
+						r.flipY = !r.flipY;
+						editor.ge.emit( LayerRuleChanged(r) );
+					}
+				});
+
+				// Perlin
+				var jFlag = jRule.find("a.perlin");
+				jFlag.addClass( r.hasPerlin() ? "on" : "off" );
+				jFlag.mousedown( function(ev:js.jquery.Event) {
+					ev.preventDefault();
+					if( ev.button==2 ) {
+						if( !r.hasPerlin() ) {
+							N.error("Perlin isn't enabled");
+						}
+						else {
+							// Perlin settings
+							var m = new Dialog(jFlag, "perlinSettings");
+							m.addClose();
+							m.loadTemplate("perlinSettings");
+							m.setTransparentMask();
+
+							var i = Input.linkToHtmlInput(r.perlinSeed, m.jContent.find("#perlinSeed"));
+							i.linkEvent( LayerRuleChanged(r) );
+							i.jInput.siblings("button").click( function(_) {
+								r.perlinSeed = Std.random(99999999);
+								i.jInput.val(r.perlinSeed);
+								editor.ge.emit( LayerRuleChanged(r) );
+							});
+
+							var i = Input.linkToHtmlInput(r.perlinScale, m.jContent.find("#perlinScale"));
+							i.displayAsPct = true;
+							i.setBounds(0.01, 1);
+							i.linkEvent( LayerRuleChanged(r) );
+
+							var i = Input.linkToHtmlInput(r.perlinOctaves, m.jContent.find("#perlinOctaves"));
+							i.setBounds(1, 4);
+							i.linkEvent( LayerRuleChanged(r) );
+						}
+					}
+					else {
+						r.setPerlin( !r.hasPerlin() );
+						editor.ge.emit( LayerRuleChanged(r) );
+					}
+				});
+
+				// Active
+				var jActive = jRule.find("a.active");
+				jActive.addClass( r.active ? "on" : "off" );
+				jActive.click( function(ev:js.jquery.Event) {
+					ev.preventDefault();
+					r.active = !r.active;
+					editor.ge.emit( LayerRuleChanged(r) );
+				});
+
+				// Delete
+				jRule.find("button.delete").click( function(ev) {
+					new ui.modal.dialog.Confirm( jRule, Lang.t._("Warning, this cannot be undone!"), true, function() {
+						rg.rules.remove(r);
+						editor.ge.emit( LayerRuleRemoved(r) );
+					});
+				});
+			}
+
+			// Make rules sortable
+			JsTools.makeSortable(jGroupList, "allRules", false, function(ev) {
+				var fromUid = Std.parseInt( ev.from.getAttribute("groupUid") );
+				if( fromUid!=rg.uid )
+					return; // Prevent double "onSort" call (one for From, one for To)
+
+				var fromGroupIdx = Std.parseInt( ev.from.getAttribute("groupIdx") );
+				var toGroupIdx = Std.parseInt( ev.to.getAttribute("groupIdx") );
+
+				project.defs.sortLayerAutoRules(ld, fromGroupIdx, toGroupIdx, ev.oldIndex, ev.newIndex);
+				editor.ge.emit(LayerRuleSorted);
+			});
+
+			// Turn the fake UL into a drop target
+			if( rg.collapsed )
+				JsTools.makeSortable( jGroup.find(".collapsedSortTarget"), "allRules", false, function(_) {} );
 		}
+
+		// Make groups sortable
+		JsTools.makeSortable(jRuleGroupList, "allGroups", false, function(ev) {
+			project.defs.sortLayerAutoGroup(ld, ev.oldIndex, ev.newIndex);
+			editor.ge.emit(LayerRuleGroupSorted);
+		});
 
 		JsTools.parseComponents(jContent);
 
-		JsTools.makeSortable("ul.rules", false, function(from,to) {
-			project.defs.sortLayerAutoRules(ld, from, to);
-			editor.ge.emit(LayerRuleSorted);
-		});
 	}
 }

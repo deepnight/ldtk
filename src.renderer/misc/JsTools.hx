@@ -4,19 +4,29 @@ import sortablejs.*;
 import sortablejs.Sortable;
 
 class JsTools {
-	public static function makeSortable(selector:String, anim=true, onSort:(from:Int, to:Int)->Void) {
-		var j = new J(selector);
-		j.addClass("sortable");
+	public static function makeSortable(jSortable:js.jquery.JQuery, ?group:String, anim=true, onSort:(event:SortableDragEvent)->Void) {
+		if( jSortable.length!=1 )
+			N.error("Used sortable on a set of "+jSortable.length+" element(s)");
+		jSortable.addClass("sortable");
 
 		// Base settings
 		var settings : SortableOptions = {
+			onStart: function(ev) {
+				App.ME.jBody.addClass("sorting");
+				new J(ev.item).addClass("dragging");
+			},
 			onEnd: function(ev) {
-				if( ev.oldIndex!=ev.newIndex )
-					onSort( ev.oldIndex, ev.newIndex );
+				App.ME.jBody.removeClass("sorting");
+				new J(ev.item).removeClass("dragging");
+			},
+			onSort: function(ev) {
+				if( ev.oldIndex!=ev.newIndex || ev.from!=ev.to )
+					onSort(ev);
 				else
 					new J(ev.item).click();
 			},
-			scroll: j.get(0),
+			group: group,
+			scroll: jSortable.get(0),
 			scrollSpeed: 40,
 			scrollSensitivity: 140,
 			filter: ".fixed",
@@ -24,12 +34,12 @@ class JsTools {
 		}
 
 		// Custom handle
-		if( j.find(".sortHandle").length>0 ) {
+		if( jSortable.children().children(".sortHandle").length>0 ) {
 			settings.handle = ".sortHandle";
-			j.addClass("customHandle");
+			jSortable.addClass("customHandle");
 		}
 
-		Sortable.create( j.get(0), settings);
+		Sortable.create( jSortable.get(0), settings);
 	}
 
 

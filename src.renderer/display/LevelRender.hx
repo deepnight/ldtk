@@ -184,6 +184,17 @@ class LevelRender extends dn.Process {
 				var li = editor.curLevel.getLayerInstanceFromRule(r);
 				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
+			case LayerRuleGroupAdded:
+
+			case LayerRuleGroupRemoved:
+				editor.curLayerInstance.applyAllAutoLayerRules();
+				invalidateLayer( editor.curLayerInstance );
+
+			case LayerRuleGroupChanged:
+
+			case LayerRuleGroupSorted:
+				invalidateLayer( editor.curLayerInstance );
+
 			case LayerInstanceChanged:
 
 			case TilesetSelectionSaved(td):
@@ -384,27 +395,33 @@ class LevelRender extends dn.Process {
 
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
-					var i = li.def.rules.length-1;
-					var noTile = true;
-					while( i>=0 ) {
-						var r = li.def.rules[i];
-						if( r.active ) {
-							var e = li.autoTiles.get(r.uid);
-							var at = e.get( li.coordId(cx,cy) );
-							if( at!=null ) {
-								tg.addTransform(
-									( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-									( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-									dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
-									td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
-								);
-								noTile = false;
+					var groupIdx = li.def.ruleGroups.length-1;
+					var anyTile = false;
+					while( groupIdx>=0 ) {
+						var rg = li.def.ruleGroups[groupIdx];
+						var ruleIdx = rg.rules.length-1;
+						while( ruleIdx>=0 ) {
+							var r = rg.rules[ruleIdx];
+							if( r.active ) {
+								var e = li.autoTiles.get(r.uid);
+								var at = e.get( li.coordId(cx,cy) );
+								if( at!=null ) {
+									tg.addTransform(
+										( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+										( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+										dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
+										td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
+									);
+									anyTile = true;
+								}
 							}
+
+							ruleIdx--;
 						}
 
-						i--;
+						groupIdx--;
 					}
-					if( noTile && li.hasIntGrid(cx,cy) ) {
+					if( !anyTile && li.hasIntGrid(cx,cy) ) {
 						// Default render when no tile applies
 						g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
 						g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);

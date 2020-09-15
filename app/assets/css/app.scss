@@ -197,6 +197,16 @@ button.close {
 	}
 }
 
+button.transparent {
+	border: none;
+	outline: none;
+	box-shadow: none;
+	background-color: transparent;
+	&:hover {
+		background-color: $orange;
+	}
+}
+
 #miniNotif {
 	position: absolute;
 	z-index: 98;
@@ -1439,12 +1449,16 @@ ul.sortable:not(.customHandle) li:not(.fixed) {
 	background-repeat: no-repeat;
 	background-position: left center;
 	padding-left: 32px !important;
-	&[draggable] {
+	&.dragging {
 		cursor: ns-resize;
 	}
 }
+body.sorting {
+	outline: 3px solid red !important;
+	outline-offset: -3px;
+}
 
-ul.sortable li[draggable=true] {
+ul.sortable li.dragging {
 	color: white;
 	outline: 1px dashed $orange;
 	outline-offset: -1px;
@@ -1456,13 +1470,12 @@ ul.sortable li[draggable=true] {
 }
 
 
-.sortHandle {
+div.sortHandle {
 	display: inline-block;
 	background: url("../img/icons/drag.png") no-repeat;
 	background-position: left center;
-	width: 32px;
-	min-height: 32px;
-	height: 100%;
+	padding-left: 32px;
+	padding-top: 32px;
 	opacity: 0.3;
 	cursor: move;
 
@@ -2489,6 +2502,11 @@ canvas#webgl {
 	}
 }
 
+
+body.sorting ul.collapsedSortTarget {
+	display: block !important;
+}
+
 .window.panel.editAutoLayerRules {
 	// width: 100vw;
 
@@ -2499,6 +2517,7 @@ canvas#webgl {
 	.content {
 		display: grid;
 		grid-template-rows: min-content auto;
+		gap: 8px;
 		height: 100%;
 		width: auto;
 		min-width: 250px;
@@ -2536,17 +2555,16 @@ canvas#webgl {
 			}
 		}
 
-		ul.rules {
-			position: relative;
-			display: grid;
-			overflow-y: auto;
-			align-items: flex-start;
-			grid-template-columns: auto;
-			grid-auto-rows: min-content;
-			gap: 2px;
-			margin-top: 4px;
+		ul.ruleGroups {
 			padding: 8px;
 			border: 1px solid $bgLight;
+			overflow-y: auto;
+			background-color: $bgDark;
+			box-shadow: 0px 4px 8px black inset;
+
+			>li:last-child {
+				margin-bottom: 30px;
+			}
 
 			&:empty {
 				background-image: url("../img/stripes.png");
@@ -2556,162 +2574,262 @@ canvas#webgl {
 				border: 1px solid $bgLight;
 			}
 
-			li:last-child {
-				margin-bottom: 30px;
-			}
-
-			li {
+			>li { // Group
 				position: relative;
-				display: grid;
-				box-sizing: border-box;
-				gap: 2px;
-				grid-template-columns: min-content 80px auto repeat(2, min-content);
-				align-items: center;
-				padding: 2px;
+				border: 1px solid $bgLight;
+				padding: 4px;
+				margin-bottom: 16px;
+				box-shadow: 0px 2px 4px black;
+				background-color: $bgMed;
 
-				background-color: $bgDark;
-				border-radius: 3px;
-				border: 1px dashed transparent;
+				&.collapsed {
+					border-style: dashed;
+					opacity: 0.66;
+					box-shadow: none;
+					margin-bottom: 4px;
+					padding-bottom: 0;
 
-				button.insert {
-					position: absolute;
-					z-index: 2;
+					header .name {
+						cursor: cell;
+					}
+					ul.ruleGroup {
+						display: none;
+					}
+				}
+
+				ul.collapsedSortTarget {
 					display: none;
-					left: 100px;
-					padding: 0;
-					width: 18px;
-					height: 18px;
-					font-weight: bold;
-					opacity: 0.6;
-					&:hover {
-						opacity: 1;
+					position: absolute;
+					padding: 8px;
+					top: 0;
+					left: 0;
+					bottom: 0;
+					right: 0;
+					overflow: hidden;
+
+					&:not(:empty) {
+						outline: 2px solid $orange;
 					}
-					&.before {
-						top: -10px;
+
+					* {
+						visibility: hidden;
 					}
-					&.after {
-						bottom: -10px;
-					}
-				}
-				&:hover button.insert {
-					display: block;
 				}
 
-				&.last {
-					border-color: white;
-				}
 
-				.options {
+				header {
 					display: grid;
-					grid-template-columns: repeat(4, auto);
-					gap: 2px;
+					grid-template-columns: auto repeat(3, min-content);
+					align-items: stretch;
+					width: calc( 100% + 6px );
+					height: 32px;
+					margin: -3px;
+					border-bottom: 2px solid $bgDark;
 
-					&>* {
-						padding: 3px;
-						background-color: $bgMed;
-						border-radius: 4px;
-						&:hover {
-							background-color: $bgLight;
-						}
-					}
+					background-color: $bgLight;
 
-					.random {
-						grid-column: 1/5;
-						display: flex;
-						flex-wrap: nowrap;
-						align-items: center;
-
-						input[name="random"] {
-							width: 40px;
-							font-size: 9pt;
-							padding-top: 1px;
-							padding-bottom: 1px;
-							background-color: $bgMed;
-							&:focus, &.editing {
-								background-color: $bgDark;
-							}
-							&.max {
-								color: $bgLight;
-							}
-							&.off {
-								color: $red;
-							}
-						}
-
-						span {
-							font-size: 8pt;
-							color: $bgLighter;
-							padding-right: 8px;
-						}
-					}
-
-					a {
-						flex: 0.5 1 auto;
+					div.name {
 						display: grid;
 						align-content: center;
-						border: 1px solid $bgLight;
-						text-align: center;
-						font-size: 8pt;
-						cursor: pointer;
+						height: 100%;
+						padding-left: 8px;
+
+						font-weight: bold;
+						overflow-x: hidden;
+
+						cursor: zoom-out;
 
 						&:hover {
-							color: white !important;
+							background-color: $orange;
 						}
+					}
+					input.name {
+						display: none;
+						width: 140px;
+					}
 
-						&.on {
-							color: $green;
+					button {
+						padding: 3px;
+						margin: 0;
+						min-width: 24px;
+						&.add {
 							font-weight: bold;
-							text-shadow: 0px 0px 4px $green;
-							border-color: $green;
-						}
-						&.off {
-							opacity: 0.4;
-							color: $red;
-							font-style: italic;
-							border: 1px dashed $red;
-							background-color: $darkRed;
-						}
-
-						&.on span.off {
-							display: none;
-						}
-						&.off span.on {
-							display: none;
-						}
-
-						&.active.on {
-							border-color: $orange;
+							font-size: 12pt;
 						}
 					}
 				}
 
-				button {
-					padding: 4px;
-				}
 
-				input[type=text] {
-					border-color: transparent;
-					&:focus {
-						border-color: $orange;
-					}
-				}
+				ul.ruleGroup {
+					position: relative;
 
-				>.preview {
-					margin-right: 8px;
-					cursor: pointer;
 					display: grid;
-					justify-items: center;
+					align-items: flex-start;
+					grid-template-columns: auto;
+					grid-auto-rows: min-content;
+					gap: 2px;
 
-					.autoPatternGrid {
-						border-color: $bgMed;
+					margin-top: 16px;
+
+					&:empty {
+						min-height: 50px;
 					}
 
-					&:hover {
-						outline: 1px solid $orange;
+					li {
+						position: relative;
+						display: grid;
+						box-sizing: border-box;
+						gap: 2px;
+						grid-template-columns: min-content 80px auto repeat(2, min-content);
+						align-items: center;
+						padding: 2px;
+
+						background-color: $bgDark;
+						border-radius: 3px;
+						border: 1px dashed transparent;
+
+						button.insert {
+							position: absolute;
+							z-index: 2;
+							display: none;
+							left: 100px;
+							padding: 0;
+							width: 18px;
+							height: 18px;
+							font-weight: bold;
+							opacity: 0.6;
+							&:hover {
+								opacity: 1;
+							}
+							&.before {
+								top: -10px;
+							}
+							&.after {
+								bottom: -10px;
+							}
+						}
+						&:hover button.insert {
+							display: block;
+						}
+
+						&.last {
+							border-color: white;
+						}
+
+						.options {
+							display: grid;
+							grid-template-columns: repeat(4, auto);
+							gap: 2px;
+
+							&>* {
+								padding: 3px;
+								background-color: $bgMed;
+								border-radius: 4px;
+								&:hover {
+									background-color: $bgLight;
+								}
+							}
+
+							.random {
+								grid-column: 1/5;
+								display: flex;
+								flex-wrap: nowrap;
+								align-items: center;
+
+								input[name="random"] {
+									width: 40px;
+									font-size: 9pt;
+									padding-top: 1px;
+									padding-bottom: 1px;
+									background-color: $bgMed;
+									&:focus, &.editing {
+										background-color: $bgDark;
+									}
+									&.max {
+										color: $bgLight;
+									}
+									&.off {
+										color: $red;
+									}
+								}
+
+								span {
+									font-size: 8pt;
+									color: $bgLighter;
+									padding-right: 8px;
+								}
+							}
+
+							a {
+								flex: 0.5 1 auto;
+								display: grid;
+								align-content: center;
+								border: 1px solid $bgLight;
+								text-align: center;
+								font-size: 8pt;
+								cursor: pointer;
+
+								&:hover {
+									color: white !important;
+								}
+
+								&.on {
+									color: $green;
+									font-weight: bold;
+									text-shadow: 0px 0px 4px $green;
+									border-color: $green;
+								}
+								&.off {
+									opacity: 0.4;
+									color: $red;
+									font-style: italic;
+									border: 1px dashed $red;
+									background-color: $darkRed;
+								}
+
+								&.on span.off {
+									display: none;
+								}
+								&.off span.on {
+									display: none;
+								}
+
+								&.active.on {
+									border-color: $orange;
+								}
+							}
+						}
+
+						button {
+							padding: 4px;
+						}
+
+						input[type=text] {
+							border-color: transparent;
+							&:focus {
+								border-color: $orange;
+							}
+						}
+
+						>.preview {
+							margin-right: 8px;
+							cursor: pointer;
+							display: grid;
+							justify-items: center;
+
+							.autoPatternGrid {
+								border-color: $bgMed;
+							}
+
+							&:hover {
+								outline: 1px solid $orange;
+							}
+						}
+
 					}
 				}
-
 			}
+
 		}
 	}
 }

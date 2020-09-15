@@ -28,6 +28,11 @@ enum GlobalEvent {
 	LayerRuleRemoved(rule:led.def.AutoLayerRuleDef);
 	LayerRuleSorted;
 
+	LayerRuleGroupAdded;
+	LayerRuleGroupRemoved;
+	LayerRuleGroupChanged;
+	LayerRuleGroupSorted;
+
 	LayerInstanceSelected;
 	LayerInstanceChanged;
 	LayerInstanceVisiblityChanged(li:led.inst.LayerInstance);

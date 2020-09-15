@@ -184,8 +184,8 @@ class EditEnums extends ui.modal.Panel {
 		}
 
 		// Make list sortable
-		JsTools.makeSortable(".window .enumList ul", function(from, to) {
-			var moved = project.defs.sortEnumDef(from,to);
+		JsTools.makeSortable(jList, function(ev) {
+			var moved = project.defs.sortEnumDef(ev.oldIndex, ev.newIndex);
 			selectEnum(moved);
 			editor.ge.emit(EnumDefSorted);
 		});
@@ -348,9 +348,9 @@ class EditEnums extends ui.modal.Panel {
 
 		// Make fields list sortable
 		if( !curEnum.isExternal() )
-			JsTools.makeSortable(".window ul.enumValues", function(from, to) {
-				var v = curEnum.values.splice(from,1)[0];
-				curEnum.values.insert(to, v);
+			JsTools.makeSortable(jList, function(ev) {
+				var v = curEnum.values.splice(ev.oldIndex,1)[0];
+				curEnum.values.insert(ev.newIndex, v);
 				editor.ge.emit(EnumDefChanged);
 			});
 	}
