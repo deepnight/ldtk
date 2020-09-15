@@ -96,22 +96,24 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 
 		// Rules
-		var idx = 0;
+		var groupidx = 0;
 		for( rg in ld.ruleGroups) {
 			var jGroup = new J('<li> <ul class="ruleGroup"/> </li>');
 			jGroup.appendTo( jRuleGroupList );
 
-			jGroup.prepend('<div class="groupName">${rg.name}</div>');
-			jGroup.prepend('<div class="sortHandle"></div>');
+			var jGroupList = jGroup.find(">ul");
+			jGroupList.attr("idx", groupidx);
+			jGroupList.before('<div class="sortHandle"></div>');
+			jGroupList.before('<div class="groupName">${rg.name}</div>');
 
-
+			var ruleIdx = 0;
 			for( r in rg.rules) {
 				var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
-				jRule.appendTo( jGroup.find("ul") );
-				jRule.attr("idx", idx);
+				jRule.appendTo( jGroupList );
+				jRule.attr("idx", ruleIdx);
 
 				// Insert rule before
-				var i = idx;
+				var i = ruleIdx;
 				jRule.find(".insert.before").click( function(_) {
 					createRuleAtIndex(i);
 				});
@@ -230,18 +232,28 @@ class EditAutoLayerRules extends ui.modal.Panel {
 					});
 				});
 
-				idx++;
+				ruleIdx++;
 			}
 
-			JsTools.makeSortable(jGroup.find("ul"), "allRules", false, function(ev) {
-				project.defs.sortLayerAutoRules(ld, ev.oldIndex, ev.newIndex);
+			// Make rules sortable
+			var i = groupidx;
+			JsTools.makeSortable(jGroupList, "allRules", false, function(ev) {
+				var fromGroupIdx = Std.parseInt( ev.from.getAttribute("idx") );
+				var toGroupIdx = Std.parseInt( ev.to.getAttribute("idx") );
+
+				if( toGroupIdx!=i ) // Prevent double "onSort" call (one for From, one for To)
+					return;
+
+				project.defs.sortLayerAutoRules(ld, fromGroupIdx, toGroupIdx, ev.oldIndex, ev.newIndex);
 				editor.ge.emit(LayerRuleSorted);
 			});
+
+			groupidx++;
 		}
 
-
+		// Make groups sortable
 		JsTools.makeSortable(jRuleGroupList, "allGroups", false, function(ev) {
-			project.defs.sortLayerAutoRules(ld, ev.oldIndex, ev.newIndex);
+			project.defs.sortLayerAutoGroup(ld, ev.oldIndex, ev.newIndex);
 			editor.ge.emit(LayerRuleSorted);
 		});
 
