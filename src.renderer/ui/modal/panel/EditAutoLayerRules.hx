@@ -138,6 +138,14 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				})
 				.text(rg.name);
 
+			if( rg.collapsed ) {
+				jGroup.addClass("collapsed");
+				var jDropTarget = new J('<ul class="collapsedSortTarget"/>');
+				jDropTarget.attr("groupIdx",groupIdx);
+				jDropTarget.attr("groupUid",rg.uid);
+				jGroup.append(jDropTarget);
+			}
+
 			// Delete group
 			jHeader.find(".delete").click( function(ev:js.jquery.Event) {
 				new ui.modal.dialog.Confirm(ev.getThis(), true, function() {
@@ -176,18 +184,17 @@ class EditAutoLayerRules extends ui.modal.Panel {
 					});
 			});
 
+			// Edit group
+			jHeader.find(".active").click( function(ev:js.jquery.Event) {
+				rg.active = !rg.active;
+				editor.ge.emit(LayerRuleGroupChanged);
+			});
+			jHeader.find(".active .icon").addClass( rg.active ? "visible" : "hidden" );
+
 			// Add rule
 			jHeader.find(".addRule").click( function(ev:js.jquery.Event) {
 				createRule(rg, 0);
 			});
-
-			if( rg.collapsed ) {
-				jGroup.addClass("collapsed");
-				var jDropTarget = new J('<ul class="collapsedSortTarget"/>');
-				jDropTarget.attr("groupIdx",groupIdx);
-				jDropTarget.attr("groupUid",rg.uid);
-				jGroup.append(jDropTarget);
-			}
 
 
 			// Rules
@@ -303,7 +310,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 				// Active
 				var jActive = jRule.find("a.active");
-				jActive.addClass( r.active ? "on" : "off" );
+				jActive.find(".icon").addClass( r.active ? "visible" : "hidden" );
 				jActive.click( function(ev:js.jquery.Event) {
 					ev.preventDefault();
 					r.active = !r.active;
@@ -332,7 +339,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				editor.ge.emit(LayerRuleSorted);
 			});
 
-			// Turn the fake UL into a drop target
+			// Turn the fake UL in collapsed groups into a sorting drop-target
 			if( rg.collapsed )
 				JsTools.makeSortable( jGroup.find(".collapsedSortTarget"), "allRules", false, function(_) {} );
 		}

@@ -191,6 +191,7 @@ class LevelRender extends dn.Process {
 				invalidateLayer( editor.curLayerInstance );
 
 			case LayerRuleGroupChanged:
+				invalidateLayer( editor.curLayerInstance );
 
 			case LayerRuleGroupSorted:
 				invalidateLayer( editor.curLayerInstance );
@@ -399,24 +400,26 @@ class LevelRender extends dn.Process {
 					var anyTile = false;
 					while( groupIdx>=0 ) {
 						var rg = li.def.ruleGroups[groupIdx];
-						var ruleIdx = rg.rules.length-1;
-						while( ruleIdx>=0 ) {
-							var r = rg.rules[ruleIdx];
-							if( r.active ) {
-								var e = li.autoTiles.get(r.uid);
-								var at = e.get( li.coordId(cx,cy) );
-								if( at!=null ) {
-									tg.addTransform(
-										( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-										( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-										dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
-										td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
-									);
-									anyTile = true;
+						if( rg.active ) {
+							var ruleIdx = rg.rules.length-1;
+							while( ruleIdx>=0 ) {
+								var r = rg.rules[ruleIdx];
+								if( r.active ) {
+									var e = li.autoTiles.get(r.uid);
+									var at = e.get( li.coordId(cx,cy) );
+									if( at!=null ) {
+										tg.addTransform(
+											( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+											( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+											dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
+											td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
+										);
+										anyTile = true;
+									}
 								}
-							}
 
-							ruleIdx--;
+								ruleIdx--;
+							}
 						}
 
 						groupIdx--;

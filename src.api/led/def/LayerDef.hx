@@ -62,7 +62,8 @@ class LayerDef {
 					JsonTools.readInt(ruleGroupJson.uid,-1),
 					JsonTools.readString(ruleGroupJson.name, "default")
 				);
-				rg.collapsed = JsonTools.readBool( ruleGroupJson.collapsed );
+				rg.active = JsonTools.readBool( ruleGroupJson.active, true );
+				rg.collapsed = JsonTools.readBool( ruleGroupJson.collapsed, false );
 				rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
 					return AutoLayerRuleDef.fromJson(dataVersion, ruleJson);
 				});
@@ -90,6 +91,7 @@ class LayerDef {
 			rules: ruleGroups.map( function(rg) return {
 				uid: rg.uid,
 				name: rg.name,
+				active: rg.active,
 				collapsed: rg.collapsed,
 				rules: rg.rules.map( function(r) return r.toJson() ),
 			}),
@@ -182,6 +184,7 @@ class LayerDef {
 		var rg : AutoLayerRuleGroup = {
 			uid: uid,
 			name: name,
+			active: true,
 			collapsed: false,
 			rules: [],
 		}

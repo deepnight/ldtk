@@ -715,6 +715,8 @@ ul.log {
 .icon.project	{ background-image: url("../img/icons/projectSettings.png"); }
 .icon.enum		{ background-image: url("../img/icons/enum.png"); }
 .icon.close		{ background-image: url("../img/icons/close.png"); }
+.icon.visible	{ background-image: url("../img/icons/visible.png"); }
+.icon.hidden	{ background-image: url("../img/icons/hidden.png"); }
 
 .icon.mouseLeft		{ background-image: url("../img/icons/mouseLeft.png"); image-rendering: pixelated; }
 .icon.mouseRight	{ background-image: url("../img/icons/mouseRight.png"); image-rendering: pixelated; }
@@ -2619,7 +2621,7 @@ body.sorting ul.collapsedSortTarget {
 
 				header {
 					display: grid;
-					grid-template-columns: auto repeat(3, min-content);
+					grid-template-columns: auto repeat(4, min-content);
 					align-items: stretch;
 					width: calc( 100% + 6px );
 					height: 32px;
@@ -2635,7 +2637,10 @@ body.sorting ul.collapsedSortTarget {
 						padding-left: 8px;
 
 						font-weight: bold;
+
 						overflow-x: hidden;
+						white-space: nowrap;
+						max-width: 150px;
 
 						cursor: zoom-out;
 
@@ -2656,6 +2661,11 @@ body.sorting ul.collapsedSortTarget {
 							font-weight: bold;
 							font-size: 12pt;
 						}
+					}
+
+					button.off {
+						opacity: 0.3;
+						background-color: $red;
 					}
 				}
 
