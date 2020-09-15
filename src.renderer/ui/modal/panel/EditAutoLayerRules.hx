@@ -69,9 +69,10 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 		var jRuleList = jContent.find("ul.rules").empty();
 
-		function createRuleAtIndex(idx:Int) {
-			ld.ruleGroups[0].rules.insert(idx, new led.def.AutoLayerRuleDef(project.makeUniqId(), 3)); // HACK fix insert
-			lastRule = ld.ruleGroups[0].rules[idx]; // HACK fix get
+		function createRuleAtIndex(idx:Int) { // HACK fix insert to support groups
+			var rg = ld.ruleGroups.length==0 ? ld.createRuleGroup("default") : ld.ruleGroups[0];
+			rg.rules.insert(idx, new led.def.AutoLayerRuleDef(project.makeUniqId(), 3));
+			lastRule = rg.rules[idx];
 			editor.ge.emit( LayerRuleAdded(lastRule) );
 
 			var jNewRule = jContent.find("ul.rules [idx="+idx+"]");
