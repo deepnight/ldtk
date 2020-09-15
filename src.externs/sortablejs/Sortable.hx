@@ -28,8 +28,20 @@ typedef SortableDragEvent = {
 
 
 typedef SortableOptions = {
+	/** Called by any change to the list (add / update / remove) **/
+	var ?onSort: (SortableDragEvent)->Void;
+
+	/** Element dragging started **/
 	var ?onStart: (SortableDragEvent)->Void;
+
+	/** Element dragging ended **/
 	var ?onEnd: (SortableDragEvent)->Void;
+
+	/** Element is dropped into the list from another list **/
+	var ?onAdd: (SortableDragEvent)->Void;
+
+	/** Element is removed from the list into another list **/
+	var ?onRemove: (SortableDragEvent)->Void;
 
 	/** Selector for handle **/
 	var ?handle: String;
