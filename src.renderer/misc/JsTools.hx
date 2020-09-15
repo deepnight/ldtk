@@ -12,9 +12,12 @@ class JsTools {
 		// Base settings
 		var settings : SortableOptions = {
 			onStart: function(ev) {
-				// TODO set CSS draggable look at this point
+				new J(ev.item).addClass("dragging");
 			},
 			onEnd: function(ev) {
+				new J(ev.item).removeClass("dragging");
+			},
+			onSort: function(ev) {
 				if( ev.oldIndex!=ev.newIndex )
 					onSort(ev);
 				else
@@ -30,7 +33,6 @@ class JsTools {
 
 		// Custom handle
 		if( jSortable.children().children(".sortHandle").length>0 ) {
-			N.debug("found handle");
 			settings.handle = ".sortHandle";
 			jSortable.addClass("customHandle");
 		}

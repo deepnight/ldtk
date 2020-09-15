@@ -1439,12 +1439,12 @@ ul.sortable:not(.customHandle) li:not(.fixed) {
 	background-repeat: no-repeat;
 	background-position: left center;
 	padding-left: 32px !important;
-	&[draggable] {
+	&.dragging {
 		cursor: ns-resize;
 	}
 }
 
-ul.sortable li[draggable=true] {
+ul.sortable li.dragging {
 	color: white;
 	outline: 1px dashed $orange;
 	outline-offset: -1px;
