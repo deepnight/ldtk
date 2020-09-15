@@ -344,8 +344,8 @@ class EditLayerDefs extends ui.modal.Panel {
 		}
 
 		// Make layer list sortable
-		JsTools.makeSortable(jList, function(from, to) {
-			var moved = project.defs.sortLayerDef(from,to);
+		JsTools.makeSortable(jList, function(ev) {
+			var moved = project.defs.sortLayerDef(ev.oldIndex, ev.newIndex);
 			select(moved);
 			editor.ge.emit(LayerDefSorted);
 		});

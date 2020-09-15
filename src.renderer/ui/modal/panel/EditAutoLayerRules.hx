@@ -233,15 +233,15 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				idx++;
 			}
 
-			JsTools.makeSortable(jGroup.find("ul"), "allRules", false, function(from,to) {
-				project.defs.sortLayerAutoRules(ld, from, to);
+			JsTools.makeSortable(jGroup.find("ul"), "allRules", false, function(ev) {
+				project.defs.sortLayerAutoRules(ld, ev.oldIndex, ev.newIndex);
 				editor.ge.emit(LayerRuleSorted);
 			});
 		}
 
 
-		JsTools.makeSortable(jRuleGroupList, "allGroups", false, function(from,to) {
-			project.defs.sortLayerAutoRules(ld, from, to);
+		JsTools.makeSortable(jRuleGroupList, "allGroups", false, function(ev) {
+			project.defs.sortLayerAutoRules(ld, ev.oldIndex, ev.newIndex);
 			editor.ge.emit(LayerRuleSorted);
 		});
 

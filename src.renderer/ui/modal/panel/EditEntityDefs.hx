@@ -486,8 +486,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 
 		// Make list sortable
-		JsTools.makeSortable(jEntityList, function(from, to) {
-			var moved = project.defs.sortEntityDef(from,to);
+		JsTools.makeSortable(jEntityList, function(ev) {
+			var moved = project.defs.sortEntityDef(ev.oldIndex, ev.newIndex);
 			selectEntity(moved);
 			editor.ge.emit(EntityDefSorted);
 		});
@@ -510,8 +510,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 
 		// Make fields list sortable
-		JsTools.makeSortable(jFieldList, function(from, to) {
-			var moved = curEntity.sortField(from,to);
+		JsTools.makeSortable(jFieldList, function(ev) {
+			var moved = curEntity.sortField(ev.oldIndex, ev.newIndex);
 			selectField(moved);
 			editor.ge.emit( EntityFieldSorted );
 		});

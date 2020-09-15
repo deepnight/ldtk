@@ -4,7 +4,7 @@ import sortablejs.*;
 import sortablejs.Sortable;
 
 class JsTools {
-	public static function makeSortable(jSortable:js.jquery.JQuery, ?group:String, anim=true, onSort:(from:Int, to:Int)->Void) {
+	public static function makeSortable(jSortable:js.jquery.JQuery, ?group:String, anim=true, onSort:(event:SortableDragEvent)->Void) {
 		if( jSortable.length!=1 )
 			N.error("Used sortable on a set of "+jSortable.length+" element(s)");
 		jSortable.addClass("sortable");
@@ -16,7 +16,7 @@ class JsTools {
 			},
 			onEnd: function(ev) {
 				if( ev.oldIndex!=ev.newIndex )
-					onSort( ev.oldIndex, ev.newIndex );
+					onSort(ev);
 				else
 					new J(ev.item).click();
 			},
