@@ -27,7 +27,7 @@
 				"rules": [
 					{
 						"uid": 91,
-						"group": "default",
+						"group": "grass",
 						"active": true,
 						"size": 3,
 						"tileIds": [ 126, 127, 147, 148 ],
@@ -43,7 +43,7 @@
 					},
 					{
 						"uid": 90,
-						"group": "default",
+						"group": "grass",
 						"active": true,
 						"size": 3,
 						"tileIds": [ 56, 57, 58, 59 ],
