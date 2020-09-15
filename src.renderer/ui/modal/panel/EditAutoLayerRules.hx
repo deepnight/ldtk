@@ -107,8 +107,12 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			jGroupList.before('<div class="groupName">${rg.name}</div>');
 			var jName = jGroup.find(".groupName");
 			jName.click( function(_) {
-				jGroup.toggleClass("collapsed");
+				rg.collapsed = !rg.collapsed;
+				editor.ge.emit(LayerRuleSorted); // HACK not the right event
 			});
+
+			if( rg.collapsed )
+				jGroup.addClass("collapsed");
 
 			var ruleIdx = 0;
 			for( r in rg.rules) {

@@ -57,12 +57,12 @@ class LayerDef {
 
 		// Read auto-layer rules
 		if( json.rules!=null ) {
-			for( rjson in JsonTools.readArray(json.rules) ) {
-				var groupName = JsonTools.readString(rjson.group, "default");
-				if( o.ruleGroups.length==0 || o.ruleGroups[o.ruleGroups.length-1].name!=groupName )
-					o.createRuleGroup(groupName);
-				var r = AutoLayerRuleDef.fromJson(dataVersion, rjson);
-				o.ruleGroups[ o.ruleGroups.length-1 ].rules.push(r);
+			for( ruleGroupJson in JsonTools.readArray(json.rules) ) {
+				var rg = o.createRuleGroup( JsonTools.readString(ruleGroupJson.name, "default") );
+				rg.collapsed = JsonTools.readBool( ruleGroupJson.collapsed );
+				rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
+					return AutoLayerRuleDef.fromJson(dataVersion, ruleJson);
+				});
 			}
 		}
 
@@ -82,15 +82,13 @@ class LayerDef {
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
 
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
+
 			autoTilesetDefUid: autoTilesetDefUid,
-			rules: {
-				var arr = [];
-				for(rg in ruleGroups)
-				for(r in rg.rules)
-					arr.push( r.toJson(rg.name) );
-				arr;
-			},
-			// rules: rules.map( function(r) return r.toJson() ),
+			rules: ruleGroups.map( function(rg) return {
+				name: rg.name,
+				collapsed: rg.collapsed,
+				rules: rg.rules.map( function(r) return r.toJson() ),
+			}),
 
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,
