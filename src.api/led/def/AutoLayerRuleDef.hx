@@ -94,7 +94,7 @@ class AutoLayerRuleDef {
 		return 'Rule(${size}x$size):$pattern';
 	}
 
-	public function toJson() {
+	public function toJson(group:String) {
 		if( flipX && isSymetricX() )
 			flipX = false;
 
@@ -103,6 +103,7 @@ class AutoLayerRuleDef {
 
 		return {
 			uid: uid,
+			group: group,
 			active: active,
 			size: size,
 			tileIds: tileIds.copy(),

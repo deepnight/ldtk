@@ -68,3 +68,8 @@ typedef EnumDefValue = {
 	var id : String;
 	var tileId : Null<Int>;
 }
+
+typedef AutoLayerRuleGroup = {
+	var name : String;
+	var rules : Array<led.def.AutoLayerRuleDef>;
+}

@@ -115,7 +115,8 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		super.close();
 
 		if( rule.isEmpty() ) {
-			layerDef.rules.remove(rule);
+			for(rg in layerDef.ruleGroups)
+				rg.rules.remove(rule);
 			editor.ge.emit( LayerRuleRemoved(rule) );
 		}
 		else if( rule.trim() )

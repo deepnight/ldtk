@@ -12,7 +12,8 @@ class LayerDef {
 	// IntGrid
 	var intGridValues : Array<IntGridValueDef> = [];
 	public var autoTilesetDefUid : Null<Int>;
-	public var rules : Array<AutoLayerRuleDef> = [];
+	// public var rules : Array<AutoLayerRuleDef> = [];
+	public var ruleGroups : Array<AutoLayerRuleGroup> = [];
 
 	// Tiles
 	public var tilesetDefUid : Null<Int>;
@@ -55,12 +56,15 @@ class LayerDef {
 		o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
 
 		// Read auto-layer rules
-		o.rules = [];
-		if( json.rules!=null )
+		if( json.rules!=null ) {
 			for( rjson in JsonTools.readArray(json.rules) ) {
+				var groupName = JsonTools.readString(rjson.group, "default");
+				if( o.ruleGroups.length==0 || o.ruleGroups[o.ruleGroups.length-1].name!=groupName ) 
+					o.createRuleGroup(groupName);
 				var r = AutoLayerRuleDef.fromJson(dataVersion, rjson);
-				o.rules.push(r);
+				o.ruleGroups[ o.ruleGroups.length-1 ].rules.push(r);
 			}
+		}
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
 		o.tilePivotX = JsonTools.readFloat(json.tilePivotX, 0);
@@ -79,7 +83,14 @@ class LayerDef {
 
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
 			autoTilesetDefUid: autoTilesetDefUid,
-			rules: rules.map( function(r) return r.toJson() ),
+			rules: {
+				var arr = [];
+				for(rg in ruleGroups)
+				for(r in rg.rules)
+					arr.push( r.toJson(rg.name) );
+				arr;
+			},
+			// rules: rules.map( function(r) return r.toJson() ),
 
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,
@@ -141,24 +152,34 @@ class LayerDef {
 
 
 	public function hasRule(ruleUid:Int) : Bool {
-		for(r in rules)
+		for(rg in ruleGroups)
+		for(r in rg.rules)
 			if( r.uid==ruleUid )
 				return true;
 		return false;
 	}
 
 	public function getRule(uid:Int) : Null<AutoLayerRuleDef> {
-		for( r in rules )
+		for( rg in ruleGroups )
+		for( r in rg.rules )
 			if( r.uid==uid )
 				return r;
 		return null;
+	}
+
+	public function createRuleGroup(name:String) {
+		ruleGroups.push({
+			name: name,
+			rules: [],
+		});
 	}
 
 	public function tidy(p:led.Project) {
 		// Lost auto-layer tileset
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {
 			autoTilesetDefUid = null;
-			for(r in rules)
+			for(rg in ruleGroups)
+			for(r in rg.rules)
 				r.tileIds = [];
 		}
 	}

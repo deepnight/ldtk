@@ -139,16 +139,19 @@ class Definitions {
 
 
 	public function sortLayerAutoRules(ld:led.def.LayerDef, from:Int, to:Int) : Null<led.def.AutoLayerRuleDef> {
-		if( from<0 || from>=ld.rules.length || from==to )
-			return null;
+		// if( from<0 || from>=ld.rules.length || from==to )
+		// 	return null;
 
-		if( to<0 || to>=ld.rules.length )
-			return null;
+		// if( to<0 || to>=ld.rules.length )
+		// 	return null;
 
-		var moved = ld.rules.splice(from,1)[0];
-		ld.rules.insert(to, moved);
+		// var moved = ld.rules.splice(from,1)[0];
+		// ld.rules.insert(to, moved);
 
-		return moved;
+		// return moved;
+
+		ui.Notification.notImplemented();
+		return null; // TODO rule sorting
 	}
 
 	public function getLayerDefFromRule(?r:led.def.AutoLayerRuleDef, ?ruleUid:Int) : Null<led.def.LayerDef> {
@@ -159,8 +162,7 @@ class Definitions {
 			ruleUid = r.uid;
 
 		for( ld in layers )
-		for( r in ld.rules )
-			if( r.uid==ruleUid )
+			if( ld.hasRule(ruleUid) )
 				return ld;
 
 		return null;
