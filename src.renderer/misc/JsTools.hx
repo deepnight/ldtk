@@ -12,9 +12,11 @@ class JsTools {
 		// Base settings
 		var settings : SortableOptions = {
 			onStart: function(ev) {
+				App.ME.jBody.addClass("sorting");
 				new J(ev.item).addClass("dragging");
 			},
 			onEnd: function(ev) {
+				App.ME.jBody.removeClass("sorting");
 				new J(ev.item).removeClass("dragging");
 			},
 			onSort: function(ev) {

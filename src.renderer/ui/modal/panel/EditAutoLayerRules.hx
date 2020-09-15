@@ -181,8 +181,13 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				createRule(rg, 0);
 			});
 
-			if( rg.collapsed )
+			if( rg.collapsed ) {
 				jGroup.addClass("collapsed");
+				var jDropTarget = new J('<ul class="collapsedSortTarget"/>');
+				jDropTarget.attr("groupIdx",groupIdx);
+				jDropTarget.attr("groupUid",rg.uid);
+				jGroup.append(jDropTarget);
+			}
 
 
 			// Rules
@@ -316,22 +321,20 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 			// Make rules sortable
 			JsTools.makeSortable(jGroupList, "allRules", false, function(ev) {
+				var fromUid = Std.parseInt( ev.from.getAttribute("groupUid") );
+				if( fromUid!=rg.uid )
+					return; // Prevent double "onSort" call (one for From, one for To)
+
 				var fromGroupIdx = Std.parseInt( ev.from.getAttribute("groupIdx") );
 				var toGroupIdx = Std.parseInt( ev.to.getAttribute("groupIdx") );
-
-				if( toGroupIdx!=groupIdx ) // Prevent double "onSort" call (one for From, one for To)
-					return;
-
-				// Insert in a closed group?
-				var toGroup = ld.ruleGroups[toGroupIdx];
-				if( toGroup.collapsed ) {
-					toGroup.collapsed = false;
-					ev.newIndex = 0;
-				}
 
 				project.defs.sortLayerAutoRules(ld, fromGroupIdx, toGroupIdx, ev.oldIndex, ev.newIndex);
 				editor.ge.emit(LayerRuleSorted);
 			});
+
+			// Turn the fake UL into a drop target
+			if( rg.collapsed )
+				JsTools.makeSortable( jGroup.find(".collapsedSortTarget"), "allRules", false, function(_) {} );
 		}
 
 		// Make groups sortable

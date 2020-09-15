@@ -1453,6 +1453,10 @@ ul.sortable:not(.customHandle) li:not(.fixed) {
 		cursor: ns-resize;
 	}
 }
+body.sorting {
+	outline: 3px solid red !important;
+	outline-offset: -3px;
+}
 
 ul.sortable li.dragging {
 	color: white;
@@ -2498,6 +2502,11 @@ canvas#webgl {
 	}
 }
 
+
+body.sorting ul.collapsedSortTarget {
+	display: block !important;
+}
+
 .window.panel.editAutoLayerRules {
 	// width: 100vw;
 
@@ -2566,6 +2575,7 @@ canvas#webgl {
 			}
 
 			>li { // Group
+				position: relative;
 				border: 1px solid $bgLight;
 				padding: 4px;
 				margin-bottom: 16px;
@@ -2584,6 +2594,25 @@ canvas#webgl {
 					}
 					ul.ruleGroup {
 						display: none;
+					}
+				}
+
+				ul.collapsedSortTarget {
+					display: none;
+					position: absolute;
+					padding: 8px;
+					top: 0;
+					left: 0;
+					bottom: 0;
+					right: 0;
+					overflow: hidden;
+
+					&:not(:empty) {
+						outline: 2px solid $orange;
+					}
+
+					* {
+						visibility: hidden;
 					}
 				}
 
