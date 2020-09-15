@@ -170,6 +170,7 @@ class LayerDef {
 	public function createRuleGroup(name:String) {
 		var rg : AutoLayerRuleGroup = {
 			name: name,
+			collapsed: false,
 			rules: [],
 		}
 		ruleGroups.push(rg);

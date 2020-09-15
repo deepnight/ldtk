@@ -105,6 +105,10 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			jGroupList.attr("idx", groupidx);
 			jGroupList.before('<div class="sortHandle"></div>');
 			jGroupList.before('<div class="groupName">${rg.name}</div>');
+			var jName = jGroup.find(".groupName");
+			jName.click( function(_) {
+				jGroup.toggleClass("collapsed");
+			});
 
 			var ruleIdx = 0;
 			for( r in rg.rules) {

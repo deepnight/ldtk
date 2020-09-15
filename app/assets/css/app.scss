@@ -2574,11 +2574,24 @@ canvas#webgl {
 					overflow-x: hidden;
 
 					background-color: $bgLight;
-					border-bottom: 2px solid $bgDark;
+					cursor: zoom-out;
+
+					&:hover {
+						background-color: $orange;
+					}
 				}
 
 				>.sortHandle:not(:hover) {
 					background-color: $bgLight;
+				}
+
+				&.collapsed {
+					.groupName {
+						cursor: cell;
+					}
+					ul.ruleGroup {
+						display: none;
+					}
 				}
 
 				ul.ruleGroup {
