@@ -862,10 +862,7 @@ class Editor extends Page {
 
 			// Visibility button
 			var vis = e.find(".vis");
-			if( levelRender.isLayerVisible(li) )
-				vis.find(".off").hide();
-			else
-				vis.find(".on").hide();
+			vis.find(".icon").addClass( levelRender.isLayerVisible(li) ? "visible" : "hidden" );
 			vis.click( function(ev) {
 				if( ui.Modal.closeAll() )
 					return;
