@@ -1,0 +1,72 @@
+{
+	"__header__": {
+		"fileType": "LEd Project JSON",
+		"app": "LEd",
+		"appAuthor": "Sebastien Benard",
+		"appVersion": "0.1.5-alpha-debug",
+		"url": "https://deepnight.net/"
+	},
+	"name": "test",
+	"jsonVersion": 1,
+	"defaultPivotX": 0.0,
+	"defaultPivotY": 0.0,
+	"defaultGridSize": 16,
+	"bgColor": "#7F8093",
+	"nextUid": 4,
+	"minifyJson": false,
+	"defs": {
+		"layers": [
+			{
+				"identifier": "IntGrid",
+				"type": "IntGrid",
+				"uid": 2,
+				"gridSize": 16,
+				"displayOpacity": 1.0,
+				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
+				"autoTilesetDefUid": 1,
+				"rules": [ { "name": "default", "collapsed": false, "rules": [] } ],
+				"tilesetDefUid": null,
+				"tilePivotX": 0,
+				"tilePivotY": 0
+			}
+		],
+		"entities": [],
+		"tilesets": [
+			{
+				"identifier": "Cavesofgallet_tiles",
+				"uid": 1,
+				"relPath": "atlas/cavesofgallet_tiles.png",
+				"pxWid": 96,
+				"pxHei": 256,
+				"tileGridSize": 8,
+				"tileGridSpacing": 0,
+				"savedSelections": []
+			}
+		],
+		"enums": [],
+		"externalEnums": []
+	},
+	"levels": [ {
+		"identifier": "Level",
+		"uid": 0,
+		"pxWid": 256,
+		"pxHei": 256,
+		"layerInstances": [
+			{
+				"__identifier": "IntGrid",
+				"__type": "IntGrid",
+				"__cWid": 16,
+				"__cHei": 16,
+				"__gridSize": 16,
+				"levelId": 0,
+				"layerDefUid": 2,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGrid": [],
+				"autoTiles": [],
+				"gridTiles": [],
+				"entityInstances": []
+			}
+		]
+	} ]
+}

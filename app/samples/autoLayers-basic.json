@@ -12,7 +12,7 @@
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,
 	"bgColor": "#1D2135",
-	"nextUid": 92,
+	"nextUid": 93,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -27,7 +27,7 @@
 				"rules": [
 					{
 						"uid": 86,
-						"name": "grass",
+						"name": "Plants",
 						"collapsed": false,
 						"rules": [
 							{
@@ -45,6 +45,28 @@
 								"perlinScale": 0.2,
 								"perlinOctaves": 2
 							},
+							{
+								"uid": 79,
+								"active": true,
+								"size": 3,
+								"tileIds": [ 126, 147, 148 ],
+								"chance": 0.38,
+								"seed": 4309879,
+								"pattern": [ 0, 1, 0, 0, -1, 0, 0, 0, 0 ],
+								"flipX": false,
+								"flipY": false,
+								"perlinActive": false,
+								"perlinSeed": 2799971,
+								"perlinScale": 0.2,
+								"perlinOctaves": 2
+							}
+						]
+					},
+					{
+						"uid": 92,
+						"name": "Ground grass",
+						"collapsed": false,
+						"rules": [
 							{
 								"uid": 91,
 								"active": true,
@@ -74,27 +96,12 @@
 								"perlinSeed": 1,
 								"perlinScale": 0.2,
 								"perlinOctaves": 2
-							},
-							{
-								"uid": 79,
-								"active": true,
-								"size": 3,
-								"tileIds": [ 126, 147, 148 ],
-								"chance": 0.38,
-								"seed": 4309879,
-								"pattern": [ 0, 1, 0, 0, -1, 0, 0, 0, 0 ],
-								"flipX": false,
-								"flipY": false,
-								"perlinActive": false,
-								"perlinSeed": 2799971,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
 							}
 						]
 					},
 					{
 						"uid": 85,
-						"name": "walls",
+						"name": "Walls",
 						"collapsed": false,
 						"rules": [
 							{
@@ -385,6 +392,27 @@
 						]
 					},
 					{
+						"ruleId": 79,
+						"tiles": [
+							{ "coordId": 45, "tileId": 126, "flips": 0 },
+							{ "coordId": 48, "tileId": 147, "flips": 0 },
+							{ "coordId": 66, "tileId": 148, "flips": 0 },
+							{ "coordId": 67, "tileId": 147, "flips": 0 },
+							{ "coordId": 87, "tileId": 148, "flips": 0 },
+							{ "coordId": 88, "tileId": 126, "flips": 0 },
+							{ "coordId": 89, "tileId": 147, "flips": 0 },
+							{ "coordId": 102, "tileId": 126, "flips": 0 },
+							{ "coordId": 103, "tileId": 147, "flips": 0 },
+							{ "coordId": 213, "tileId": 126, "flips": 0 },
+							{ "coordId": 214, "tileId": 147, "flips": 0 },
+							{ "coordId": 215, "tileId": 148, "flips": 0 },
+							{ "coordId": 234, "tileId": 147, "flips": 0 },
+							{ "coordId": 236, "tileId": 148, "flips": 0 },
+							{ "coordId": 258, "tileId": 147, "flips": 0 },
+							{ "coordId": 260, "tileId": 148, "flips": 0 }
+						]
+					},
+					{
 						"ruleId": 91,
 						"tiles": [ { "coordId": 28, "tileId": 12, "flips": 2 }, { "coordId": 140, "tileId": 12, "flips": 0 } ]
 					},
@@ -410,27 +438,6 @@
 							{ "coordId": 285, "tileId": 13, "flips": 0 },
 							{ "coordId": 286, "tileId": 13, "flips": 0 },
 							{ "coordId": 287, "tileId": 13, "flips": 0 }
-						]
-					},
-					{
-						"ruleId": 79,
-						"tiles": [
-							{ "coordId": 45, "tileId": 126, "flips": 0 },
-							{ "coordId": 48, "tileId": 147, "flips": 0 },
-							{ "coordId": 66, "tileId": 148, "flips": 0 },
-							{ "coordId": 67, "tileId": 147, "flips": 0 },
-							{ "coordId": 87, "tileId": 148, "flips": 0 },
-							{ "coordId": 88, "tileId": 126, "flips": 0 },
-							{ "coordId": 89, "tileId": 147, "flips": 0 },
-							{ "coordId": 102, "tileId": 126, "flips": 0 },
-							{ "coordId": 103, "tileId": 147, "flips": 0 },
-							{ "coordId": 213, "tileId": 126, "flips": 0 },
-							{ "coordId": 214, "tileId": 147, "flips": 0 },
-							{ "coordId": 215, "tileId": 148, "flips": 0 },
-							{ "coordId": 234, "tileId": 147, "flips": 0 },
-							{ "coordId": 236, "tileId": 148, "flips": 0 },
-							{ "coordId": 258, "tileId": 147, "flips": 0 },
-							{ "coordId": 260, "tileId": 148, "flips": 0 }
 						]
 					},
 					{

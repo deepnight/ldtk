@@ -12,7 +12,7 @@
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,
 	"bgColor": "#1B2037",
-	"nextUid": 81,
+	"nextUid": 82,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -92,73 +92,6 @@
 								"flipY": false,
 								"perlinActive": false,
 								"perlinSeed": 8403599,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							}
-						]
-					},
-					{
-						"uid": 73,
-						"name": "Ladders",
-						"collapsed": true,
-						"rules": [
-							{
-								"uid": 64,
-								"active": true,
-								"size": 5,
-								"tileIds": [ 66 ],
-								"chance": 1.0,
-								"seed": 7192036,
-								"pattern": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1000001, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0, 0 ],
-								"flipX": false,
-								"flipY": false,
-								"perlinActive": false,
-								"perlinSeed": 3079004,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							},
-							{
-								"uid": 63,
-								"active": true,
-								"size": 3,
-								"tileIds": [ 78 ],
-								"chance": 1.0,
-								"seed": 8159238,
-								"pattern": [ 0, -1000001, 0, 0, 1, 0, 0, 3, 0 ],
-								"flipX": false,
-								"flipY": false,
-								"perlinActive": false,
-								"perlinSeed": 6162057,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							},
-							{
-								"uid": 40,
-								"active": true,
-								"size": 3,
-								"tileIds": [ 66 ],
-								"chance": 1.0,
-								"seed": 9581010,
-								"pattern": [ 0, 0, 0, 0, -1000001, 0, 0, 3, 0 ],
-								"flipX": false,
-								"flipY": false,
-								"perlinActive": false,
-								"perlinSeed": 1137913,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							},
-							{
-								"uid": 41,
-								"active": true,
-								"size": 3,
-								"tileIds": [ 78 ],
-								"chance": 1.0,
-								"seed": 8483980,
-								"pattern": [ 0, 0, 0, 0, 3, 0, 0, 0, 0 ],
-								"flipX": false,
-								"flipY": false,
-								"perlinActive": false,
-								"perlinSeed": 6377351,
 								"perlinScale": 0.2,
 								"perlinOctaves": 2
 							}
@@ -337,6 +270,125 @@
 						]
 					},
 					{
+						"uid": 73,
+						"name": "Ladders",
+						"collapsed": true,
+						"rules": [
+							{
+								"uid": 64,
+								"active": true,
+								"size": 5,
+								"tileIds": [ 66 ],
+								"chance": 1.0,
+								"seed": 7192036,
+								"pattern": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1000001, 0, 0, 0, 0, 1, 0, 0, 0, 0, 3, 0, 0 ],
+								"flipX": false,
+								"flipY": false,
+								"perlinActive": false,
+								"perlinSeed": 3079004,
+								"perlinScale": 0.2,
+								"perlinOctaves": 2
+							},
+							{
+								"uid": 63,
+								"active": true,
+								"size": 3,
+								"tileIds": [ 78 ],
+								"chance": 1.0,
+								"seed": 8159238,
+								"pattern": [ 0, -1000001, 0, 0, 1, 0, 0, 3, 0 ],
+								"flipX": false,
+								"flipY": false,
+								"perlinActive": false,
+								"perlinSeed": 6162057,
+								"perlinScale": 0.2,
+								"perlinOctaves": 2
+							},
+							{
+								"uid": 40,
+								"active": true,
+								"size": 3,
+								"tileIds": [ 66 ],
+								"chance": 1.0,
+								"seed": 9581010,
+								"pattern": [ 0, 0, 0, 0, -1000001, 0, 0, 3, 0 ],
+								"flipX": false,
+								"flipY": false,
+								"perlinActive": false,
+								"perlinSeed": 1137913,
+								"perlinScale": 0.2,
+								"perlinOctaves": 2
+							},
+							{
+								"uid": 41,
+								"active": true,
+								"size": 3,
+								"tileIds": [ 78 ],
+								"chance": 1.0,
+								"seed": 8483980,
+								"pattern": [ 0, 0, 0, 0, 3, 0, 0, 0, 0 ],
+								"flipX": false,
+								"flipY": false,
+								"perlinActive": false,
+								"perlinSeed": 6377351,
+								"perlinScale": 0.2,
+								"perlinOctaves": 2
+							}
+						]
+					},
+					{
+						"uid": 77,
+						"name": "Thin platforms",
+						"collapsed": true,
+						"rules": [
+							{
+								"uid": 26,
+								"active": true,
+								"size": 3,
+								"tileIds": [ 30 ],
+								"chance": 1.0,
+								"seed": 7758811,
+								"pattern": [ 0, -1000001, 0, 0, 1, 1, 0, -1, 1 ],
+								"flipX": true,
+								"flipY": false,
+								"perlinActive": false,
+								"perlinSeed": 8308428,
+								"perlinScale": 0.2,
+								"perlinOctaves": 2
+							},
+							{
+								"uid": 66,
+								"active": true,
+								"size": 3,
+								"tileIds": [ 19 ],
+								"chance": 1.0,
+								"seed": 8348197,
+								"pattern": [ 0, -1000001, 1, 0, 1, 1, 0, -1, 0 ],
+								"flipX": false,
+								"flipY": false,
+								"perlinActive": false,
+								"perlinSeed": 6488958,
+								"perlinScale": 0.2,
+								"perlinOctaves": 2
+							},
+							{
+								"uid": 27,
+								"active": true,
+								"size": 3,
+								"tileIds": [ 105 ],
+								"chance": 1.0,
+								"seed": 7914855,
+								"pattern": [ 0, -1000001, 0, 0, 1, 0, 0, -1, 0 ],
+								"flipX": false,
+								"flipY": false,
+								"perlinActive": false,
+								"perlinSeed": 97504770,
+								"perlinScale": 0.2,
+								"perlinOctaves": 2
+							}
+						]
+					},
+					{
 						"uid": 75,
 						"name": "Vegetation",
 						"collapsed": true,
@@ -419,62 +471,25 @@
 						]
 					},
 					{
-						"uid": 77,
-						"name": "Thin platforms",
+						"uid": 81,
+						"name": "Misc props",
 						"collapsed": true,
 						"rules": [
 							{
-								"uid": 26,
+								"uid": 33,
 								"active": true,
-								"size": 3,
-								"tileIds": [ 30 ],
-								"chance": 1.0,
-								"seed": 7758811,
-								"pattern": [ 0, -1000001, 0, 0, 1, 1, 0, -1, 1 ],
-								"flipX": true,
-								"flipY": false,
-								"perlinActive": false,
-								"perlinSeed": 8308428,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							},
-							{
-								"uid": 66,
-								"active": true,
-								"size": 3,
-								"tileIds": [ 19 ],
-								"chance": 1.0,
-								"seed": 8348197,
-								"pattern": [ 0, -1000001, 1, 0, 1, 1, 0, -1, 0 ],
+								"size": 5,
+								"tileIds": [ 65, 77 ],
+								"chance": 0.1,
+								"seed": 1590064,
+								"pattern": [ 0, 0, 0, 0, 0, 0, -1000001, -1000001, -1000001, 0, 0, -1000001, -1000001, -1000001, 0, 0, -1000001, -1000001, -1000001, 0, 0, 1, 1, 1, 0 ],
 								"flipX": false,
 								"flipY": false,
 								"perlinActive": false,
-								"perlinSeed": 6488958,
+								"perlinSeed": 2840723,
 								"perlinScale": 0.2,
 								"perlinOctaves": 2
 							},
-							{
-								"uid": 27,
-								"active": true,
-								"size": 3,
-								"tileIds": [ 105 ],
-								"chance": 1.0,
-								"seed": 7914855,
-								"pattern": [ 0, -1000001, 0, 0, 1, 0, 0, -1, 0 ],
-								"flipX": false,
-								"flipY": false,
-								"perlinActive": false,
-								"perlinSeed": 97504770,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							}
-						]
-					},
-					{
-						"uid": 76,
-						"name": "Walls",
-						"collapsed": true,
-						"rules": [
 							{
 								"uid": 49,
 								"active": true,
@@ -489,7 +504,14 @@
 								"perlinSeed": 7824201,
 								"perlinScale": 0.2,
 								"perlinOctaves": 2
-							},
+							}
+						]
+					},
+					{
+						"uid": 76,
+						"name": "Walls",
+						"collapsed": true,
+						"rules": [
 							{
 								"uid": 67,
 								"active": true,
@@ -645,23 +667,8 @@
 					{
 						"uid": 78,
 						"name": "Background",
-						"collapsed": false,
+						"collapsed": true,
 						"rules": [
-							{
-								"uid": 33,
-								"active": true,
-								"size": 5,
-								"tileIds": [ 65, 77 ],
-								"chance": 0.1,
-								"seed": 1590064,
-								"pattern": [ 0, 0, 0, 0, 0, 0, -1000001, -1000001, -1000001, 0, 0, -1000001, -1000001, -1000001, 0, 0, -1000001, -1000001, -1000001, 0, 0, 1, 1, 1, 0 ],
-								"flipX": false,
-								"flipY": false,
-								"perlinActive": false,
-								"perlinSeed": 2840723,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							},
 							{
 								"uid": 35,
 								"active": true,
@@ -1394,39 +1401,6 @@
 						]
 					},
 					{
-						"ruleId": 64,
-						"tiles": [ { "coordId": 420, "tileId": 66, "flips": 0 }, { "coordId": 612, "tileId": 66, "flips": 0 } ]
-					},
-					{
-						"ruleId": 63,
-						"tiles": [ { "coordId": 457, "tileId": 78, "flips": 0 }, { "coordId": 649, "tileId": 78, "flips": 0 } ]
-					},
-					{
-						"ruleId": 40,
-						"tiles": [ { "coordId": 394, "tileId": 66, "flips": 0 } ]
-					},
-					{
-						"ruleId": 41,
-						"tiles": [
-							{ "coordId": 431, "tileId": 78, "flips": 0 },
-							{ "coordId": 468, "tileId": 78, "flips": 0 },
-							{ "coordId": 494, "tileId": 78, "flips": 0 },
-							{ "coordId": 505, "tileId": 78, "flips": 0 },
-							{ "coordId": 531, "tileId": 78, "flips": 0 },
-							{ "coordId": 542, "tileId": 78, "flips": 0 },
-							{ "coordId": 568, "tileId": 78, "flips": 0 },
-							{ "coordId": 579, "tileId": 78, "flips": 0 },
-							{ "coordId": 605, "tileId": 78, "flips": 0 },
-							{ "coordId": 616, "tileId": 78, "flips": 0 },
-							{ "coordId": 642, "tileId": 78, "flips": 0 },
-							{ "coordId": 679, "tileId": 78, "flips": 0 },
-							{ "coordId": 686, "tileId": 78, "flips": 0 },
-							{ "coordId": 716, "tileId": 78, "flips": 0 },
-							{ "coordId": 723, "tileId": 78, "flips": 0 },
-							{ "coordId": 760, "tileId": 78, "flips": 0 }
-						]
-					},
-					{
 						"ruleId": 62,
 						"tiles": [ { "coordId": 1264, "tileId": 108, "flips": 0 }, { "coordId": 1269, "tileId": 108, "flips": 0 } ]
 					},
@@ -1547,6 +1521,93 @@
 					{
 						"ruleId": 30,
 						"tiles": [ { "coordId": 1339, "tileId": 16, "flips": 0 }, { "coordId": 1344, "tileId": 16, "flips": 0 } ]
+					},
+					{
+						"ruleId": 64,
+						"tiles": [ { "coordId": 420, "tileId": 66, "flips": 0 }, { "coordId": 612, "tileId": 66, "flips": 0 } ]
+					},
+					{
+						"ruleId": 63,
+						"tiles": [ { "coordId": 457, "tileId": 78, "flips": 0 }, { "coordId": 649, "tileId": 78, "flips": 0 } ]
+					},
+					{
+						"ruleId": 40,
+						"tiles": [ { "coordId": 394, "tileId": 66, "flips": 0 } ]
+					},
+					{
+						"ruleId": 41,
+						"tiles": [
+							{ "coordId": 431, "tileId": 78, "flips": 0 },
+							{ "coordId": 468, "tileId": 78, "flips": 0 },
+							{ "coordId": 494, "tileId": 78, "flips": 0 },
+							{ "coordId": 505, "tileId": 78, "flips": 0 },
+							{ "coordId": 531, "tileId": 78, "flips": 0 },
+							{ "coordId": 542, "tileId": 78, "flips": 0 },
+							{ "coordId": 568, "tileId": 78, "flips": 0 },
+							{ "coordId": 579, "tileId": 78, "flips": 0 },
+							{ "coordId": 605, "tileId": 78, "flips": 0 },
+							{ "coordId": 616, "tileId": 78, "flips": 0 },
+							{ "coordId": 642, "tileId": 78, "flips": 0 },
+							{ "coordId": 679, "tileId": 78, "flips": 0 },
+							{ "coordId": 686, "tileId": 78, "flips": 0 },
+							{ "coordId": 716, "tileId": 78, "flips": 0 },
+							{ "coordId": 723, "tileId": 78, "flips": 0 },
+							{ "coordId": 760, "tileId": 78, "flips": 0 }
+						]
+					},
+					{
+						"ruleId": 26,
+						"tiles": [
+							{ "coordId": 284, "tileId": 30, "flips": 0 },
+							{ "coordId": 459, "tileId": 30, "flips": 0 },
+							{ "coordId": 477, "tileId": 30, "flips": 1 },
+							{ "coordId": 557, "tileId": 30, "flips": 0 },
+							{ "coordId": 652, "tileId": 30, "flips": 0 },
+							{ "coordId": 794, "tileId": 30, "flips": 1 },
+							{ "coordId": 802, "tileId": 30, "flips": 0 },
+							{ "coordId": 985, "tileId": 30, "flips": 1 },
+							{ "coordId": 1017, "tileId": 30, "flips": 0 },
+							{ "coordId": 1170, "tileId": 30, "flips": 0 }
+						]
+					},
+					{
+						"ruleId": 66,
+						"tiles": [
+							{ "coordId": 459, "tileId": 19, "flips": 0 },
+							{ "coordId": 557, "tileId": 19, "flips": 0 },
+							{ "coordId": 1017, "tileId": 19, "flips": 0 }
+						]
+					},
+					{
+						"ruleId": 27,
+						"tiles": [
+							{ "coordId": 283, "tileId": 105, "flips": 0 },
+							{ "coordId": 284, "tileId": 105, "flips": 0 },
+							{ "coordId": 456, "tileId": 105, "flips": 0 },
+							{ "coordId": 457, "tileId": 105, "flips": 0 },
+							{ "coordId": 458, "tileId": 105, "flips": 0 },
+							{ "coordId": 459, "tileId": 105, "flips": 0 },
+							{ "coordId": 477, "tileId": 105, "flips": 0 },
+							{ "coordId": 557, "tileId": 105, "flips": 0 },
+							{ "coordId": 648, "tileId": 105, "flips": 0 },
+							{ "coordId": 649, "tileId": 105, "flips": 0 },
+							{ "coordId": 650, "tileId": 105, "flips": 0 },
+							{ "coordId": 651, "tileId": 105, "flips": 0 },
+							{ "coordId": 652, "tileId": 105, "flips": 0 },
+							{ "coordId": 794, "tileId": 105, "flips": 0 },
+							{ "coordId": 795, "tileId": 105, "flips": 0 },
+							{ "coordId": 796, "tileId": 105, "flips": 0 },
+							{ "coordId": 798, "tileId": 105, "flips": 0 },
+							{ "coordId": 799, "tileId": 105, "flips": 0 },
+							{ "coordId": 800, "tileId": 105, "flips": 0 },
+							{ "coordId": 801, "tileId": 105, "flips": 0 },
+							{ "coordId": 802, "tileId": 105, "flips": 0 },
+							{ "coordId": 985, "tileId": 105, "flips": 0 },
+							{ "coordId": 986, "tileId": 105, "flips": 0 },
+							{ "coordId": 1017, "tileId": 105, "flips": 0 },
+							{ "coordId": 1169, "tileId": 105, "flips": 0 },
+							{ "coordId": 1170, "tileId": 105, "flips": 0 }
+						]
 					},
 					{
 						"ruleId": 32,
@@ -1788,60 +1849,7 @@
 							{ "coordId": 1152, "tileId": 126, "flips": 0 }
 						]
 					},
-					{
-						"ruleId": 26,
-						"tiles": [
-							{ "coordId": 284, "tileId": 30, "flips": 0 },
-							{ "coordId": 459, "tileId": 30, "flips": 0 },
-							{ "coordId": 477, "tileId": 30, "flips": 1 },
-							{ "coordId": 557, "tileId": 30, "flips": 0 },
-							{ "coordId": 652, "tileId": 30, "flips": 0 },
-							{ "coordId": 794, "tileId": 30, "flips": 1 },
-							{ "coordId": 802, "tileId": 30, "flips": 0 },
-							{ "coordId": 985, "tileId": 30, "flips": 1 },
-							{ "coordId": 1017, "tileId": 30, "flips": 0 },
-							{ "coordId": 1170, "tileId": 30, "flips": 0 }
-						]
-					},
-					{
-						"ruleId": 66,
-						"tiles": [
-							{ "coordId": 459, "tileId": 19, "flips": 0 },
-							{ "coordId": 557, "tileId": 19, "flips": 0 },
-							{ "coordId": 1017, "tileId": 19, "flips": 0 }
-						]
-					},
-					{
-						"ruleId": 27,
-						"tiles": [
-							{ "coordId": 283, "tileId": 105, "flips": 0 },
-							{ "coordId": 284, "tileId": 105, "flips": 0 },
-							{ "coordId": 456, "tileId": 105, "flips": 0 },
-							{ "coordId": 457, "tileId": 105, "flips": 0 },
-							{ "coordId": 458, "tileId": 105, "flips": 0 },
-							{ "coordId": 459, "tileId": 105, "flips": 0 },
-							{ "coordId": 477, "tileId": 105, "flips": 0 },
-							{ "coordId": 557, "tileId": 105, "flips": 0 },
-							{ "coordId": 648, "tileId": 105, "flips": 0 },
-							{ "coordId": 649, "tileId": 105, "flips": 0 },
-							{ "coordId": 650, "tileId": 105, "flips": 0 },
-							{ "coordId": 651, "tileId": 105, "flips": 0 },
-							{ "coordId": 652, "tileId": 105, "flips": 0 },
-							{ "coordId": 794, "tileId": 105, "flips": 0 },
-							{ "coordId": 795, "tileId": 105, "flips": 0 },
-							{ "coordId": 796, "tileId": 105, "flips": 0 },
-							{ "coordId": 798, "tileId": 105, "flips": 0 },
-							{ "coordId": 799, "tileId": 105, "flips": 0 },
-							{ "coordId": 800, "tileId": 105, "flips": 0 },
-							{ "coordId": 801, "tileId": 105, "flips": 0 },
-							{ "coordId": 802, "tileId": 105, "flips": 0 },
-							{ "coordId": 985, "tileId": 105, "flips": 0 },
-							{ "coordId": 986, "tileId": 105, "flips": 0 },
-							{ "coordId": 1017, "tileId": 105, "flips": 0 },
-							{ "coordId": 1169, "tileId": 105, "flips": 0 },
-							{ "coordId": 1170, "tileId": 105, "flips": 0 }
-						]
-					},
+					{ "ruleId": 33, "tiles": [] },
 					{
 						"ruleId": 49,
 						"tiles": [
@@ -3390,7 +3398,6 @@
 							{ "coordId": 1405, "tileId": 0, "flips": 0 }
 						]
 					},
-					{ "ruleId": 33, "tiles": [] },
 					{
 						"ruleId": 35,
 						"tiles": [
