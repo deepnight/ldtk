@@ -111,15 +111,17 @@ class Home extends Page {
 
 		// Parse
 		var json = null;
-		var p = try {
+		var p = #if !debug try #end {
 			var raw = JsTools.readFileString(filePath);
 			json = haxe.Json.parse(raw);
 			led.Project.fromJson(json);
 		}
+		#if !debug
 		catch(e:Dynamic) {
 			N.error( Std.string(e) );
 			null;
 		}
+		#end
 
 		if( p==null ) {
 			N.error("Couldn't read project file!");
