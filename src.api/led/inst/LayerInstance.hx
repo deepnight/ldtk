@@ -97,6 +97,24 @@ class LayerInstance {
 		}
 	}
 
+
+	public function isEmpty() {
+		switch def.type {
+			case IntGrid:
+				for(e in intGrid)
+					return false;
+				return true;
+
+			case Entities:
+				return entityInstances.length==0;
+
+			case Tiles:
+				for(e in gridTiles)
+					return false;
+				return true;
+		}
+	}
+
 	public static function fromJson(p:Project, json:Dynamic) {
 		var li = new led.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
 

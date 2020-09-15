@@ -220,6 +220,8 @@ class EditLayerDefs extends ui.modal.Panel {
 							cur.ruleGroups = [];
 						}
 						cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
+						if( cur.autoTilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
+							cur.gridSize = project.defs.getTilesetDef(cur.autoTilesetDefUid).tileGridSize;
 						editor.ge.emit( LayerDefChanged);
 					}
 
