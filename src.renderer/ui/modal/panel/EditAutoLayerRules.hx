@@ -23,7 +23,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		super.onGlobalEvent(e);
 		switch e {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
-				close();
+				updatePanel();
 
 			case LayerInstanceRestoredFromHistory(li):
 				updatePanel();
@@ -34,6 +34,17 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			case LayerRuleChanged(r), LayerRuleRemoved(r), LayerRuleAdded(r):
 				updatePanel();
 				invalidatedRules.set(r.uid, r.uid);
+
+			case LayerRuleGroupRemoved:
+				// TODO invalidate rules
+				updatePanel();
+
+			case LayerRuleGroupSorted:
+				// TODO invalidate rules
+				updatePanel();
+
+			case LayerRuleGroupAdded, LayerRuleGroupChanged:
+				updatePanel();
 
 			case LayerRuleSorted:
 				updatePanel();
@@ -69,22 +80,32 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 		var jRuleGroupList = jContent.find("ul.ruleGroups").empty();
 
-		function createRuleAtIndex(idx:Int) { // HACK fix insert to support groups
-			var rg = ld.ruleGroups.length==0 ? ld.createRuleGroup("default") : ld.ruleGroups[0];
-			rg.rules.insert(idx, new led.def.AutoLayerRuleDef(project.makeUniqId(), 3));
-			lastRule = rg.rules[idx];
+		function createRule(rg:led.LedTypes.AutoLayerRuleGroup, insertIdx:Int) {
+			rg.rules.insert(insertIdx, new led.def.AutoLayerRuleDef( project.makeUniqId() ));
+
+			if( rg.collapsed )
+				rg.collapsed = false;
+
+			lastRule = rg.rules[insertIdx];
 			editor.ge.emit( LayerRuleAdded(lastRule) );
 
-			var jNewRule = jContent.find("ul.ruleGroups [idx="+idx+"]");
-			if( idx==0 )
-				jRuleGroupList.scrollTop(0);
+
+			var jNewRule = jContent.find("ul.ruleGroups [idx="+insertIdx+"]");
+			if( insertIdx==0 )
+				jRuleGroupList.scrollTop(0); // TODO fix that?
 
 			new ui.modal.dialog.AutoPatternEditor(jNewRule, ld, lastRule );
 		}
 
 		// Add rule
-		jContent.find("button.create").click( function(ev) {
-			createRuleAtIndex(0);
+		// jContent.find("button.createRule").click( function(ev) {
+		// 	createRuleAtIndex(0);
+		// });
+
+		// Add rule group
+		jContent.find("button.createGroup").click( function(ev) {
+			var rg = ld.createRuleGroup("default");
+			editor.ge.emit(LayerRuleGroupAdded);
 		});
 
 		// Render
@@ -95,25 +116,73 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		});
 
 
-		// Rules
+		// Rule groups
 		var groupidx = 0;
 		for( rg in ld.ruleGroups) {
-			var jGroup = new J('<li> <ul class="ruleGroup"/> </li>');
+			var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
 			jGroup.appendTo( jRuleGroupList );
 
-			var jGroupList = jGroup.find(">ul");
-			jGroupList.attr("idx", groupidx);
-			jGroupList.before('<div class="sortHandle"></div>');
-			jGroupList.before('<div class="groupName">${rg.name}</div>');
-			var jName = jGroup.find(".groupName");
-			jName.click( function(_) {
-				rg.collapsed = !rg.collapsed;
-				editor.ge.emit(LayerRuleSorted); // HACK not the right event
+			var jHeader = jGroup.find("header");
+
+			// Collapsing
+			jHeader.find("div.name")
+				.click( function(_) {
+					rg.collapsed = !rg.collapsed;
+					editor.ge.emit(LayerRuleGroupSorted);
+				})
+				.text(rg.name);
+
+			// Delete group
+			var i = groupidx;
+			jHeader.find(".delete").click( function(ev:js.jquery.Event) {
+				new ui.modal.dialog.Confirm(ev.getThis(), true, function() {
+					new LastChance(Lang.t._("Rule group removed"), project);
+					ld.ruleGroups.splice(i,1);
+					editor.ge.emit( LayerRuleGroupRemoved );
+				});
+			});
+
+			// Edit group
+			jHeader.find(".edit").click( function(ev:js.jquery.Event) {
+				jHeader.find("div.name").hide();
+				var jInput = jHeader.find("input.name");
+				jInput
+					.val( rg.name )
+					.off()
+					.show()
+					.focus()
+					.select()
+					.on("keydown", function(ev:js.jquery.Event) {
+						switch ev.key {
+							case "Escape":
+								ev.preventDefault();
+								ev.stopPropagation();
+								jInput.val(rg.name).blur();
+
+							case "Enter":
+								jInput.blur();
+
+							case _:
+						}
+					})
+					.on("blur", function(ev:js.jquery.Event) {
+						rg.name = jInput.val();
+						editor.ge.emit(LayerRuleGroupChanged);
+					});
+			});
+
+			// Add rule
+			jHeader.find(".addRule").click( function(ev:js.jquery.Event) {
+				createRule(rg, 0);
 			});
 
 			if( rg.collapsed )
 				jGroup.addClass("collapsed");
 
+			var jGroupList = jGroup.find(">ul");
+			jGroupList.attr("idx", groupidx);
+
+			// Rules
 			var ruleIdx = 0;
 			for( r in rg.rules) {
 				var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
@@ -123,12 +192,12 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				// Insert rule before
 				var i = ruleIdx;
 				jRule.find(".insert.before").click( function(_) {
-					createRuleAtIndex(i);
+					createRule(rg, i);
 				});
 
 				// Insert rule after
 				jRule.find(".insert.after").click( function(_) {
-					createRuleAtIndex(i+1);
+					createRule(rg, i+1);
 				});
 
 				// Last edited highlight
@@ -262,7 +331,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		// Make groups sortable
 		JsTools.makeSortable(jRuleGroupList, "allGroups", false, function(ev) {
 			project.defs.sortLayerAutoGroup(ld, ev.oldIndex, ev.newIndex);
-			editor.ge.emit(LayerRuleSorted);
+			editor.ge.emit(LayerRuleGroupSorted);
 		});
 
 		JsTools.parseComponents(jContent);

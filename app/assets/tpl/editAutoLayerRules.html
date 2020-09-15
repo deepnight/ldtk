@@ -1,5 +1,6 @@
 <header>
-	<button class="create">Add rule</button>
+	<button class="createGroup">Add group</button>
+	<!-- <button class="createRule">Add rule</button> -->
 	<label keys="R" title="Show/hide the render of this auto-layer.">
 		<input type="checkbox" name="renderRules"/>
 		Render
@@ -7,6 +8,21 @@
 </header>
 
 <ul class="ruleGroups"></ul>
+
+
+
+<xml id="ruleGroup">
+	<header class="sortHandle">
+		<div class="name"></div>
+		<input type="text" class="name"/>
+		<button class="edit transparent" title="Edit group">🖊</button>
+		<button class="addRule" title="Add a new rule in this group">+</button>
+		<button class="delete transparent" title="Delele group and rules">🗑️</button>
+	</header>
+
+	<ul class="ruleGroup"></ul>
+</xml>
+
 
 <xml id="rule">
 	<div class="sortHandle"></div>

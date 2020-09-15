@@ -184,6 +184,17 @@ class LevelRender extends dn.Process {
 				var li = editor.curLevel.getLayerInstanceFromRule(r);
 				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
+			case LayerRuleGroupAdded:
+
+			case LayerRuleGroupRemoved:
+				editor.curLayerInstance.applyAllAutoLayerRules();
+				invalidateLayer( editor.curLayerInstance );
+
+			case LayerRuleGroupChanged:
+
+			case LayerRuleGroupSorted:
+				invalidateLayer( editor.curLayerInstance );
+
 			case LayerInstanceChanged:
 
 			case TilesetSelectionSaved(td):

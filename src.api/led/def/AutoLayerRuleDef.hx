@@ -18,7 +18,7 @@ class AutoLayerRuleDef {
 	public var perlinOctaves = 2;
 	var _perlin(get,default) : Null<hxd.Perlin>;
 
-	public function new(uid, size) {
+	public function new(uid, size=3) {
 		if( !isValidSize(size) )
 			throw 'Invalid rule size ${size}x$size';
 
