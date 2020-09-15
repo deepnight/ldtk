@@ -2536,17 +2536,14 @@ canvas#webgl {
 			}
 		}
 
-		ul.rules {
-			position: relative;
-			display: grid;
-			overflow-y: auto;
-			align-items: flex-start;
-			grid-template-columns: auto;
-			grid-auto-rows: min-content;
-			gap: 2px;
-			margin-top: 4px;
+		ul.ruleGroups {
 			padding: 8px;
 			border: 1px solid $bgLight;
+			overflow-y: auto;
+
+			>li:last-child {
+				margin-bottom: 30px;
+			}
 
 			&:empty {
 				background-image: url("../img/stripes.png");
@@ -2556,162 +2553,201 @@ canvas#webgl {
 				border: 1px solid $bgLight;
 			}
 
-			li:last-child {
-				margin-bottom: 30px;
-			}
-
-			li {
-				position: relative;
+			>li {
 				display: grid;
-				box-sizing: border-box;
-				gap: 2px;
-				grid-template-columns: min-content 80px auto repeat(2, min-content);
+				grid-template-columns: 32px auto;
+				grid-template-rows: 32px;
+				grid-auto-rows: auto;
 				align-items: center;
-				padding: 2px;
+				border: 1px solid $bgLight;
+				padding: 4px;
+				margin-bottom: 10px;
+				box-shadow: 0px 2px 4px black;
 
-				background-color: $bgDark;
-				border-radius: 3px;
-				border: 1px dashed transparent;
-
-				button.insert {
-					position: absolute;
-					z-index: 2;
-					display: none;
-					left: 100px;
-					padding: 0;
-					width: 18px;
-					height: 18px;
-					font-weight: bold;
-					opacity: 0.6;
-					&:hover {
-						opacity: 1;
-					}
-					&.before {
-						top: -10px;
-					}
-					&.after {
-						bottom: -10px;
-					}
-				}
-				&:hover button.insert {
-					display: block;
-				}
-
-				&.last {
-					border-color: white;
-				}
-
-				.options {
+				.groupName {
 					display: grid;
-					grid-template-columns: repeat(4, auto);
+					align-content: center;
+					height: 100%;
+					padding-left: 8px;
+
+					font-weight: bold;
+					overflow-x: hidden;
+
+					background-color: $bgLight;
+					border-bottom: 2px solid $bgDark;
+				}
+
+				>.sortHandle:not(:hover) {
+					background-color: $bgLight;
+				}
+
+				ul.ruleGroup {
+					grid-column: 1/3;
+					position: relative;
+
+					display: grid;
+					align-items: flex-start;
+					grid-template-columns: auto;
+					grid-auto-rows: min-content;
 					gap: 2px;
 
-					&>* {
-						padding: 3px;
-						background-color: $bgMed;
-						border-radius: 4px;
-						&:hover {
-							background-color: $bgLight;
-						}
-					}
+					margin-top: 8px;
 
-					.random {
-						grid-column: 1/5;
-						display: flex;
-						flex-wrap: nowrap;
-						align-items: center;
-
-						input[name="random"] {
-							width: 40px;
-							font-size: 9pt;
-							padding-top: 1px;
-							padding-bottom: 1px;
-							background-color: $bgMed;
-							&:focus, &.editing {
-								background-color: $bgDark;
-							}
-							&.max {
-								color: $bgLight;
-							}
-							&.off {
-								color: $red;
-							}
-						}
-
-						span {
-							font-size: 8pt;
-							color: $bgLighter;
-							padding-right: 8px;
-						}
-					}
-
-					a {
-						flex: 0.5 1 auto;
+					li {
+						position: relative;
 						display: grid;
-						align-content: center;
-						border: 1px solid $bgLight;
-						text-align: center;
-						font-size: 8pt;
-						cursor: pointer;
+						box-sizing: border-box;
+						gap: 2px;
+						grid-template-columns: min-content 80px auto repeat(2, min-content);
+						align-items: center;
+						padding: 2px;
 
-						&:hover {
-							color: white !important;
-						}
+						background-color: $bgDark;
+						border-radius: 3px;
+						border: 1px dashed transparent;
 
-						&.on {
-							color: $green;
+						button.insert {
+							position: absolute;
+							z-index: 2;
+							display: none;
+							left: 100px;
+							padding: 0;
+							width: 18px;
+							height: 18px;
 							font-weight: bold;
-							text-shadow: 0px 0px 4px $green;
-							border-color: $green;
+							opacity: 0.6;
+							&:hover {
+								opacity: 1;
+							}
+							&.before {
+								top: -10px;
+							}
+							&.after {
+								bottom: -10px;
+							}
 						}
-						&.off {
-							opacity: 0.4;
-							color: $red;
-							font-style: italic;
-							border: 1px dashed $red;
-							background-color: $darkRed;
-						}
-
-						&.on span.off {
-							display: none;
-						}
-						&.off span.on {
-							display: none;
+						&:hover button.insert {
+							display: block;
 						}
 
-						&.active.on {
-							border-color: $orange;
+						&.last {
+							border-color: white;
 						}
+
+						.options {
+							display: grid;
+							grid-template-columns: repeat(4, auto);
+							gap: 2px;
+
+							&>* {
+								padding: 3px;
+								background-color: $bgMed;
+								border-radius: 4px;
+								&:hover {
+									background-color: $bgLight;
+								}
+							}
+
+							.random {
+								grid-column: 1/5;
+								display: flex;
+								flex-wrap: nowrap;
+								align-items: center;
+
+								input[name="random"] {
+									width: 40px;
+									font-size: 9pt;
+									padding-top: 1px;
+									padding-bottom: 1px;
+									background-color: $bgMed;
+									&:focus, &.editing {
+										background-color: $bgDark;
+									}
+									&.max {
+										color: $bgLight;
+									}
+									&.off {
+										color: $red;
+									}
+								}
+
+								span {
+									font-size: 8pt;
+									color: $bgLighter;
+									padding-right: 8px;
+								}
+							}
+
+							a {
+								flex: 0.5 1 auto;
+								display: grid;
+								align-content: center;
+								border: 1px solid $bgLight;
+								text-align: center;
+								font-size: 8pt;
+								cursor: pointer;
+
+								&:hover {
+									color: white !important;
+								}
+
+								&.on {
+									color: $green;
+									font-weight: bold;
+									text-shadow: 0px 0px 4px $green;
+									border-color: $green;
+								}
+								&.off {
+									opacity: 0.4;
+									color: $red;
+									font-style: italic;
+									border: 1px dashed $red;
+									background-color: $darkRed;
+								}
+
+								&.on span.off {
+									display: none;
+								}
+								&.off span.on {
+									display: none;
+								}
+
+								&.active.on {
+									border-color: $orange;
+								}
+							}
+						}
+
+						button {
+							padding: 4px;
+						}
+
+						input[type=text] {
+							border-color: transparent;
+							&:focus {
+								border-color: $orange;
+							}
+						}
+
+						>.preview {
+							margin-right: 8px;
+							cursor: pointer;
+							display: grid;
+							justify-items: center;
+
+							.autoPatternGrid {
+								border-color: $bgMed;
+							}
+
+							&:hover {
+								outline: 1px solid $orange;
+							}
+						}
+
 					}
 				}
-
-				button {
-					padding: 4px;
-				}
-
-				input[type=text] {
-					border-color: transparent;
-					&:focus {
-						border-color: $orange;
-					}
-				}
-
-				>.preview {
-					margin-right: 8px;
-					cursor: pointer;
-					display: grid;
-					justify-items: center;
-
-					.autoPatternGrid {
-						border-color: $bgMed;
-					}
-
-					&:hover {
-						outline: 1px solid $orange;
-					}
-				}
-
 			}
+
 		}
 	}
 }

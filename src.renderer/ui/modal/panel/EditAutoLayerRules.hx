@@ -67,7 +67,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		jContent.find("*").off();
 		ui.Tip.clear();
 
-		var jRuleList = jContent.find("ul.rules").empty();
+		var jRuleGroupList = jContent.find("ul.ruleGroups").empty();
 
 		function createRuleAtIndex(idx:Int) { // HACK fix insert to support groups
 			var rg = ld.ruleGroups.length==0 ? ld.createRuleGroup("default") : ld.ruleGroups[0];
@@ -75,9 +75,9 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			lastRule = rg.rules[idx];
 			editor.ge.emit( LayerRuleAdded(lastRule) );
 
-			var jNewRule = jContent.find("ul.rules [idx="+idx+"]");
+			var jNewRule = jContent.find("ul.ruleGroups [idx="+idx+"]");
 			if( idx==0 )
-				jRuleList.scrollTop(0);
+				jRuleGroupList.scrollTop(0);
 
 			new ui.modal.dialog.AutoPatternEditor(jNewRule, ld, lastRule );
 		}
@@ -94,16 +94,20 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			editor.levelRender.setAutoLayerRendering( li, chk.prop("checked") );
 		});
 
+
 		// Rules
 		var idx = 0;
 		for( rg in ld.ruleGroups) {
-			var jGroup = new J('<ul class="ruleGroup"/>');
-			jGroup.prepend('<h2>${rg.name}</h2>');
-			jRuleList.append(jGroup);
+			var jGroup = new J('<li> <ul class="ruleGroup"/> </li>');
+			jGroup.appendTo( jRuleGroupList );
+
+			jGroup.prepend('<div class="groupName">${rg.name}</div>');
+			jGroup.prepend('<div class="sortHandle"></div>');
+
 
 			for( r in rg.rules) {
 				var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
-				jRule.appendTo(jGroup);
+				jRule.appendTo( jGroup.find("ul") );
 				jRule.attr("idx", idx);
 
 				// Insert rule before
@@ -119,7 +123,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 				// Last edited highlight
 				jRule.mousedown( function(ev) {
-					jRuleList.find("li").removeClass("last");
+					jRuleGroupList.find("li").removeClass("last");
 					jRule.addClass("last");
 					lastRule = r;
 				});
@@ -229,11 +233,17 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				idx++;
 			}
 
-			JsTools.makeSortable(jGroup, false, function(from,to) {
+			JsTools.makeSortable(jGroup.find("ul"), "allRules", false, function(from,to) {
 				project.defs.sortLayerAutoRules(ld, from, to);
 				editor.ge.emit(LayerRuleSorted);
 			});
 		}
+
+
+		JsTools.makeSortable(jRuleGroupList, "allGroups", false, function(from,to) {
+			project.defs.sortLayerAutoRules(ld, from, to);
+			editor.ge.emit(LayerRuleSorted);
+		});
 
 		JsTools.parseComponents(jContent);
 
