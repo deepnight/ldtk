@@ -12,7 +12,7 @@
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 12,
+	"nextUid": 13,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -28,6 +28,7 @@
 					{
 						"uid": 11,
 						"name": "details",
+						"active": true,
 						"collapsed": false,
 						"rules": [
 							{
@@ -95,6 +96,7 @@
 					{
 						"uid": 10,
 						"name": "walls",
+						"active": true,
 						"collapsed": false,
 						"rules": [
 							{
