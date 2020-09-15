@@ -11,9 +11,10 @@ typedef SortableDragEvent = {
 typedef SortableOptions = {
 	var ?onStart: (SortableDragEvent)->Void;
 	var ?onEnd: (SortableDragEvent)->Void;
-	var ?handle: String;
-	var ?filter: String;
 
+	var ?handle: String; // selector for handle
+	var ?filter: String; // selector for excluded elements
+	var ?group: String; // group name for nested lists
 	var ?animation: Int; // ms
 
 	var ?scroll: js.html.Element;

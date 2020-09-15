@@ -4,10 +4,10 @@ import sortablejs.*;
 import sortablejs.Sortable;
 
 class JsTools {
-	public static function makeSortable(jElement:js.jquery.JQuery, anim=true, onSort:(from:Int, to:Int)->Void) {
-		if( jElement.length!=1 )
-			N.error("Used sortable on a set of "+jElement.length+" element(s)");
-		jElement.addClass("sortable");
+	public static function makeSortable(jSortable:js.jquery.JQuery, ?group:String, anim=true, onSort:(from:Int, to:Int)->Void) {
+		if( jSortable.length!=1 )
+			N.error("Used sortable on a set of "+jSortable.length+" element(s)");
+		jSortable.addClass("sortable");
 
 		// Base settings
 		var settings : SortableOptions = {
@@ -20,7 +20,8 @@ class JsTools {
 				else
 					new J(ev.item).click();
 			},
-			scroll: jElement.get(0),
+			group: group,
+			scroll: jSortable.get(0),
 			scrollSpeed: 40,
 			scrollSensitivity: 140,
 			filter: ".fixed",
@@ -28,12 +29,13 @@ class JsTools {
 		}
 
 		// Custom handle
-		if( jElement.find(".sortHandle").length>0 ) {
+		if( jSortable.children().children(".sortHandle").length>0 ) {
+			N.debug("found handle");
 			settings.handle = ".sortHandle";
-			jElement.addClass("customHandle");
+			jSortable.addClass("customHandle");
 		}
 
-		Sortable.create( jElement.get(0), settings);
+		Sortable.create( jSortable.get(0), settings);
 	}
 
 
