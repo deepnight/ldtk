@@ -203,9 +203,5 @@ class LayerDef {
 			for(r in rg.rules)
 				r.tileIds = [];
 		}
-
-		for(rg in ruleGroups)
-			if( rg.uid<0 )
-				rg.uid = p.makeUniqId(); // HACK tmp fix
 	}
 }
