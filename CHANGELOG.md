@@ -2,11 +2,12 @@
 
 ## 0.1.5-alpha
 
- - **Auto-layers**: IntGrid layers can now render themselves automatically by drawing tiles based on their content. You can create "patterns of IntGrid values" to decide when a specific (or group of random tiles) should appear. It can for example be used to:
+ - **Auto-layers**: IntGrid layers can now render themselves automatically by drawing tiles based on their content. You can create "patterns of IntGrid values" (called **Rules**) to decide when a specific tile, or group of random tiles, should appear. It can for example be used to:
    - add random grass or rocks on top of platforms,
    - add random ceiling props under platforms,
    - render ground/water/lava area,
    - etc.
+ - Auto-layer rules can be organized in groups.
  - **Samples**: click on the *Samples* button on home page to load some example projects.
  - **Smarter warning** when deleting something in a panel. ie. If the value you're removing isn't actually used in your project, you will get a "softer" warning.
  - **Large levels optimizations**: started an important rework of the way levels are rendered on-screen to make room for future optimizations on large levels. For now, it's still recommended to work on levels with smaller dimensions.
