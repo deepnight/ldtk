@@ -96,140 +96,146 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 		// Rules
 		var idx = 0;
-		for( rg in ld.ruleGroups)
-		for( r in rg.rules) {
-			var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
-			jRule.appendTo(jRuleList);
-			jRule.attr("idx", idx);
+		for( rg in ld.ruleGroups) {
+			var jGroup = new J('<ul class="ruleGroup"/>');
+			jGroup.prepend('<h2>${rg.name}</h2>');
+			jRuleList.append(jGroup);
 
-			// Insert rule before
-			var i = idx;
-			jRule.find(".insert.before").click( function(_) {
-				createRuleAtIndex(i);
-			});
+			for( r in rg.rules) {
+				var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
+				jRule.appendTo(jGroup);
+				jRule.attr("idx", idx);
 
-			// Insert rule after
-			jRule.find(".insert.after").click( function(_) {
-				createRuleAtIndex(i+1);
-			});
+				// Insert rule before
+				var i = idx;
+				jRule.find(".insert.before").click( function(_) {
+					createRuleAtIndex(i);
+				});
 
-			// Last edited highlight
-			jRule.mousedown( function(ev) {
-				jRuleList.find("li").removeClass("last");
-				jRule.addClass("last");
-				lastRule = r;
-			});
-			if( r==lastRule )
-				jRule.addClass("last");
+				// Insert rule after
+				jRule.find(".insert.after").click( function(_) {
+					createRuleAtIndex(i+1);
+				});
 
-			// Preview
-			var jPreview = jRule.find(".preview");
-			JsTools.createAutoPatternGrid(r, ld, true).appendTo(jPreview);
-			jPreview.click( function(ev) {
-				new ui.modal.dialog.AutoPatternEditor(jPreview, ld, r);
-			});
+				// Last edited highlight
+				jRule.mousedown( function(ev) {
+					jRuleList.find("li").removeClass("last");
+					jRule.addClass("last");
+					lastRule = r;
+				});
+				if( r==lastRule )
+					jRule.addClass("last");
 
-			// Random
-			var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
-			i.linkEvent( LayerRuleChanged(r) );
-			i.displayAsPct = true;
-			i.setBounds(0,1);
-			if( r.chance>=1 )
-				i.jInput.addClass("max");
-			else if( r.chance<=0 )
-				i.jInput.addClass("off");
+				// Preview
+				var jPreview = jRule.find(".preview");
+				JsTools.createAutoPatternGrid(r, ld, true).appendTo(jPreview);
+				jPreview.click( function(ev) {
+					new ui.modal.dialog.AutoPatternEditor(jPreview, ld, r);
+				});
 
-			// Flip-X
-			var jFlag = jRule.find("a.flipX");
-			jFlag.addClass( r.flipX ? "on" : "off" );
-			jFlag.click( function(ev:js.jquery.Event) {
-				ev.preventDefault();
-				if( r.isSymetricX() )
-					N.error("This option will have no effect on a symetric rule.");
-				else {
-					r.flipX = !r.flipX;
-					editor.ge.emit( LayerRuleChanged(r) );
-				}
-			});
+				// Random
+				var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
+				i.linkEvent( LayerRuleChanged(r) );
+				i.displayAsPct = true;
+				i.setBounds(0,1);
+				if( r.chance>=1 )
+					i.jInput.addClass("max");
+				else if( r.chance<=0 )
+					i.jInput.addClass("off");
 
-			// Flip-Y
-			var jFlag = jRule.find("a.flipY");
-			jFlag.addClass( r.flipY ? "on" : "off" );
-			jFlag.click( function(ev:js.jquery.Event) {
-				ev.preventDefault();
-				if( r.isSymetricY() )
-					N.error("This option will have no effect on a symetric rule.");
-				else {
-					r.flipY = !r.flipY;
-					editor.ge.emit( LayerRuleChanged(r) );
-				}
-			});
+				// Flip-X
+				var jFlag = jRule.find("a.flipX");
+				jFlag.addClass( r.flipX ? "on" : "off" );
+				jFlag.click( function(ev:js.jquery.Event) {
+					ev.preventDefault();
+					if( r.isSymetricX() )
+						N.error("This option will have no effect on a symetric rule.");
+					else {
+						r.flipX = !r.flipX;
+						editor.ge.emit( LayerRuleChanged(r) );
+					}
+				});
 
-			// Perlin
-			var jFlag = jRule.find("a.perlin");
-			jFlag.addClass( r.hasPerlin() ? "on" : "off" );
-			jFlag.mousedown( function(ev:js.jquery.Event) {
-				ev.preventDefault();
-				if( ev.button==2 ) {
-					if( !r.hasPerlin() ) {
-						N.error("Perlin isn't enabled");
+				// Flip-Y
+				var jFlag = jRule.find("a.flipY");
+				jFlag.addClass( r.flipY ? "on" : "off" );
+				jFlag.click( function(ev:js.jquery.Event) {
+					ev.preventDefault();
+					if( r.isSymetricY() )
+						N.error("This option will have no effect on a symetric rule.");
+					else {
+						r.flipY = !r.flipY;
+						editor.ge.emit( LayerRuleChanged(r) );
+					}
+				});
+
+				// Perlin
+				var jFlag = jRule.find("a.perlin");
+				jFlag.addClass( r.hasPerlin() ? "on" : "off" );
+				jFlag.mousedown( function(ev:js.jquery.Event) {
+					ev.preventDefault();
+					if( ev.button==2 ) {
+						if( !r.hasPerlin() ) {
+							N.error("Perlin isn't enabled");
+						}
+						else {
+							// Perlin settings
+							var m = new Dialog(jFlag, "perlinSettings");
+							m.addClose();
+							m.loadTemplate("perlinSettings");
+							m.setTransparentMask();
+
+							var i = Input.linkToHtmlInput(r.perlinSeed, m.jContent.find("#perlinSeed"));
+							i.linkEvent( LayerRuleChanged(r) );
+							i.jInput.siblings("button").click( function(_) {
+								r.perlinSeed = Std.random(99999999);
+								i.jInput.val(r.perlinSeed);
+								editor.ge.emit( LayerRuleChanged(r) );
+							});
+
+							var i = Input.linkToHtmlInput(r.perlinScale, m.jContent.find("#perlinScale"));
+							i.displayAsPct = true;
+							i.setBounds(0.01, 1);
+							i.linkEvent( LayerRuleChanged(r) );
+
+							var i = Input.linkToHtmlInput(r.perlinOctaves, m.jContent.find("#perlinOctaves"));
+							i.setBounds(1, 4);
+							i.linkEvent( LayerRuleChanged(r) );
+						}
 					}
 					else {
-						// Perlin settings
-						var m = new Dialog(jFlag, "perlinSettings");
-						m.addClose();
-						m.loadTemplate("perlinSettings");
-						m.setTransparentMask();
-
-						var i = Input.linkToHtmlInput(r.perlinSeed, m.jContent.find("#perlinSeed"));
-						i.linkEvent( LayerRuleChanged(r) );
-						i.jInput.siblings("button").click( function(_) {
-							r.perlinSeed = Std.random(99999999);
-							i.jInput.val(r.perlinSeed);
-							editor.ge.emit( LayerRuleChanged(r) );
-						});
-
-						var i = Input.linkToHtmlInput(r.perlinScale, m.jContent.find("#perlinScale"));
-						i.displayAsPct = true;
-						i.setBounds(0.01, 1);
-						i.linkEvent( LayerRuleChanged(r) );
-
-						var i = Input.linkToHtmlInput(r.perlinOctaves, m.jContent.find("#perlinOctaves"));
-						i.setBounds(1, 4);
-						i.linkEvent( LayerRuleChanged(r) );
+						r.setPerlin( !r.hasPerlin() );
+						editor.ge.emit( LayerRuleChanged(r) );
 					}
-				}
-				else {
-					r.setPerlin( !r.hasPerlin() );
-					editor.ge.emit( LayerRuleChanged(r) );
-				}
-			});
-
-			// Active
-			var jActive = jRule.find("a.active");
-			jActive.addClass( r.active ? "on" : "off" );
-			jActive.click( function(ev:js.jquery.Event) {
-				ev.preventDefault();
-				r.active = !r.active;
-				editor.ge.emit( LayerRuleChanged(r) );
-			});
-
-			// Delete
-			jRule.find("button.delete").click( function(ev) {
-				new ui.modal.dialog.Confirm( jRule, Lang.t._("Warning, this cannot be undone!"), true, function() {
-					rg.rules.remove(r);
-					editor.ge.emit( LayerRuleRemoved(r) );
 				});
-			});
 
-			idx++;
+				// Active
+				var jActive = jRule.find("a.active");
+				jActive.addClass( r.active ? "on" : "off" );
+				jActive.click( function(ev:js.jquery.Event) {
+					ev.preventDefault();
+					r.active = !r.active;
+					editor.ge.emit( LayerRuleChanged(r) );
+				});
+
+				// Delete
+				jRule.find("button.delete").click( function(ev) {
+					new ui.modal.dialog.Confirm( jRule, Lang.t._("Warning, this cannot be undone!"), true, function() {
+						rg.rules.remove(r);
+						editor.ge.emit( LayerRuleRemoved(r) );
+					});
+				});
+
+				idx++;
+			}
+
+			JsTools.makeSortable(jGroup, false, function(from,to) {
+				project.defs.sortLayerAutoRules(ld, from, to);
+				editor.ge.emit(LayerRuleSorted);
+			});
 		}
 
 		JsTools.parseComponents(jContent);
 
-		JsTools.makeSortable("ul.rules", false, function(from,to) {
-			project.defs.sortLayerAutoRules(ld, from, to);
-			editor.ge.emit(LayerRuleSorted);
-		});
 	}
 }

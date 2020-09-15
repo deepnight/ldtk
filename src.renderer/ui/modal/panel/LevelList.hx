@@ -89,7 +89,7 @@ class LevelList extends ui.modal.Panel {
 		}
 
 		// Make level list sortable
-		JsTools.makeSortable(".window ul.levels", function(from, to) {
+		JsTools.makeSortable(jList, function(from, to) {
 			var moved = project.sortLevel(from,to);
 			select(moved);
 			editor.ge.emit(LevelSorted);

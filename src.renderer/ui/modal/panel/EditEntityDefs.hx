@@ -485,8 +485,8 @@ class EditEntityDefs extends ui.modal.Panel {
 			elem.click( function(_) selectEntity(ed) );
 		}
 
-		// Make layer list sortable
-		JsTools.makeSortable(".entityList ul", function(from, to) {
+		// Make list sortable
+		JsTools.makeSortable(jEntityList, function(from, to) {
 			var moved = project.defs.sortEntityDef(from,to);
 			selectEntity(moved);
 			editor.ge.emit(EntityDefSorted);
@@ -510,7 +510,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 
 		// Make fields list sortable
-		JsTools.makeSortable(".window .fieldList ul", function(from, to) {
+		JsTools.makeSortable(jFieldList, function(from, to) {
 			var moved = curEntity.sortField(from,to);
 			selectField(moved);
 			editor.ge.emit( EntityFieldSorted );

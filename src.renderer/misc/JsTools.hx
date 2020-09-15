@@ -4,19 +4,23 @@ import sortablejs.*;
 import sortablejs.Sortable;
 
 class JsTools {
-	public static function makeSortable(selector:String, anim=true, onSort:(from:Int, to:Int)->Void) {
-		var j = new J(selector);
-		j.addClass("sortable");
+	public static function makeSortable(jElement:js.jquery.JQuery, anim=true, onSort:(from:Int, to:Int)->Void) {
+		if( jElement.length!=1 )
+			N.error("Used sortable on a set of "+jElement.length+" element(s)");
+		jElement.addClass("sortable");
 
 		// Base settings
 		var settings : SortableOptions = {
+			onStart: function(ev) {
+				// TODO set CSS draggable look at this point
+			},
 			onEnd: function(ev) {
 				if( ev.oldIndex!=ev.newIndex )
 					onSort( ev.oldIndex, ev.newIndex );
 				else
 					new J(ev.item).click();
 			},
-			scroll: j.get(0),
+			scroll: jElement.get(0),
 			scrollSpeed: 40,
 			scrollSensitivity: 140,
 			filter: ".fixed",
@@ -24,12 +28,12 @@ class JsTools {
 		}
 
 		// Custom handle
-		if( j.find(".sortHandle").length>0 ) {
+		if( jElement.find(".sortHandle").length>0 ) {
 			settings.handle = ".sortHandle";
-			j.addClass("customHandle");
+			jElement.addClass("customHandle");
 		}
 
-		Sortable.create( j.get(0), settings);
+		Sortable.create( jElement.get(0), settings);
 	}
 
 
