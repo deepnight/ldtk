@@ -32,21 +32,6 @@
 						"collapsed": false,
 						"rules": [
 							{
-								"uid": 74,
-								"active": true,
-								"size": 3,
-								"tileIds": [ 56, 57, 58, 59 ],
-								"chance": 0.79,
-								"seed": 7554198,
-								"pattern": [ 0, 0, 0, 0, -1, 0, 0, 1, 0 ],
-								"flipX": false,
-								"flipY": false,
-								"perlinActive": false,
-								"perlinSeed": 255854,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							},
-							{
 								"uid": 79,
 								"active": true,
 								"size": 3,
@@ -194,29 +179,6 @@
 								"flipY": false,
 								"perlinActive": false,
 								"perlinSeed": 3417420,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							}
-						]
-					},
-					{
-						"uid": 93,
-						"name": "Sky",
-						"active": true,
-						"collapsed": false,
-						"rules": [
-							{
-								"uid": 94,
-								"active": true,
-								"size": 3,
-								"tileIds": [ 216, 217, 218, 219 ],
-								"chance": 0.34,
-								"seed": 9525134,
-								"pattern": [ 0, 0, 0, 0, -1000001, 0, 0, -1000001, 0 ],
-								"flipX": false,
-								"flipY": false,
-								"perlinActive": false,
-								"perlinSeed": 4602550,
 								"perlinScale": 0.2,
 								"perlinOctaves": 2
 							}
@@ -393,30 +355,6 @@
 					{ "coordId": 288, "v": 0 }
 				],
 				"autoTiles": [
-					{
-						"ruleId": 74,
-						"tiles": [
-							{ "coordId": 35, "tileId": 58, "flips": 0 },
-							{ "coordId": 37, "tileId": 58, "flips": 0 },
-							{ "coordId": 38, "tileId": 57, "flips": 0 },
-							{ "coordId": 114, "tileId": 59, "flips": 0 },
-							{ "coordId": 115, "tileId": 58, "flips": 0 },
-							{ "coordId": 117, "tileId": 58, "flips": 0 },
-							{ "coordId": 118, "tileId": 57, "flips": 0 },
-							{ "coordId": 123, "tileId": 56, "flips": 0 },
-							{ "coordId": 124, "tileId": 56, "flips": 0 },
-							{ "coordId": 125, "tileId": 56, "flips": 0 },
-							{ "coordId": 139, "tileId": 58, "flips": 0 },
-							{ "coordId": 143, "tileId": 57, "flips": 0 },
-							{ "coordId": 162, "tileId": 59, "flips": 0 },
-							{ "coordId": 163, "tileId": 58, "flips": 0 },
-							{ "coordId": 164, "tileId": 56, "flips": 0 },
-							{ "coordId": 266, "tileId": 57, "flips": 0 },
-							{ "coordId": 267, "tileId": 57, "flips": 0 },
-							{ "coordId": 268, "tileId": 59, "flips": 0 },
-							{ "coordId": 270, "tileId": 57, "flips": 0 }
-						]
-					},
 					{
 						"ruleId": 79,
 						"tiles": [
@@ -694,59 +632,6 @@
 							{ "coordId": 286, "tileId": 4, "flips": 0 },
 							{ "coordId": 287, "tileId": 5, "flips": 0 },
 							{ "coordId": 288, "tileId": 2, "flips": 0 }
-						]
-					},
-					{
-						"ruleId": 94,
-						"tiles": [
-							{ "coordId": 0, "tileId": 219, "flips": 0 },
-							{ "coordId": 1, "tileId": 217, "flips": 0 },
-							{ "coordId": 3, "tileId": 219, "flips": 0 },
-							{ "coordId": 5, "tileId": 219, "flips": 0 },
-							{ "coordId": 20, "tileId": 216, "flips": 0 },
-							{ "coordId": 27, "tileId": 217, "flips": 0 },
-							{ "coordId": 42, "tileId": 216, "flips": 0 },
-							{ "coordId": 45, "tileId": 219, "flips": 0 },
-							{ "coordId": 58, "tileId": 217, "flips": 0 },
-							{ "coordId": 60, "tileId": 218, "flips": 0 },
-							{ "coordId": 61, "tileId": 218, "flips": 0 },
-							{ "coordId": 65, "tileId": 218, "flips": 0 },
-							{ "coordId": 66, "tileId": 216, "flips": 0 },
-							{ "coordId": 67, "tileId": 219, "flips": 0 },
-							{ "coordId": 75, "tileId": 217, "flips": 0 },
-							{ "coordId": 77, "tileId": 216, "flips": 0 },
-							{ "coordId": 78, "tileId": 217, "flips": 0 },
-							{ "coordId": 83, "tileId": 219, "flips": 0 },
-							{ "coordId": 88, "tileId": 217, "flips": 0 },
-							{ "coordId": 89, "tileId": 216, "flips": 0 },
-							{ "coordId": 92, "tileId": 219, "flips": 0 },
-							{ "coordId": 93, "tileId": 216, "flips": 0 },
-							{ "coordId": 94, "tileId": 218, "flips": 0 },
-							{ "coordId": 96, "tileId": 217, "flips": 0 },
-							{ "coordId": 100, "tileId": 218, "flips": 0 },
-							{ "coordId": 101, "tileId": 219, "flips": 0 },
-							{ "coordId": 108, "tileId": 218, "flips": 0 },
-							{ "coordId": 120, "tileId": 219, "flips": 0 },
-							{ "coordId": 121, "tileId": 216, "flips": 0 },
-							{ "coordId": 126, "tileId": 217, "flips": 0 },
-							{ "coordId": 127, "tileId": 216, "flips": 0 },
-							{ "coordId": 128, "tileId": 216, "flips": 0 },
-							{ "coordId": 129, "tileId": 219, "flips": 0 },
-							{ "coordId": 136, "tileId": 216, "flips": 0 },
-							{ "coordId": 154, "tileId": 216, "flips": 0 },
-							{ "coordId": 171, "tileId": 218, "flips": 0 },
-							{ "coordId": 215, "tileId": 216, "flips": 0 },
-							{ "coordId": 221, "tileId": 219, "flips": 0 },
-							{ "coordId": 230, "tileId": 218, "flips": 0 },
-							{ "coordId": 231, "tileId": 216, "flips": 0 },
-							{ "coordId": 232, "tileId": 217, "flips": 0 },
-							{ "coordId": 234, "tileId": 219, "flips": 0 },
-							{ "coordId": 235, "tileId": 216, "flips": 0 },
-							{ "coordId": 248, "tileId": 216, "flips": 0 },
-							{ "coordId": 249, "tileId": 219, "flips": 0 },
-							{ "coordId": 255, "tileId": 217, "flips": 0 },
-							{ "coordId": 258, "tileId": 217, "flips": 0 },
-							{ "coordId": 261, "tileId": 219, "flips": 0 }
 						]
 					}
 				],
