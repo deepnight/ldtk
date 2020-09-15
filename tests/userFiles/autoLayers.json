@@ -12,7 +12,7 @@
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,
 	"bgColor": "#1B2037",
-	"nextUid": 80,
+	"nextUid": 81,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -30,6 +30,7 @@
 				],
 				"autoTilesetDefUid": 9,
 				"rules": [ {
+					"uid": 80,
 					"name": "default",
 					"collapsed": false,
 					"rules": [

@@ -12,7 +12,7 @@
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 10,
+	"nextUid": 11,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -25,6 +25,7 @@
 				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
 				"autoTilesetDefUid": 1,
 				"rules": [ {
+					"uid": 10,
 					"name": "default",
 					"collapsed": false,
 					"rules": [

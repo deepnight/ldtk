@@ -58,7 +58,10 @@ class LayerDef {
 		// Read auto-layer rules
 		if( json.rules!=null ) {
 			for( ruleGroupJson in JsonTools.readArray(json.rules) ) {
-				var rg = o.createRuleGroup( JsonTools.readString(ruleGroupJson.name, "default") );
+				var rg = o.createRuleGroup(
+					JsonTools.readInt(ruleGroupJson.uid,-1),
+					JsonTools.readString(ruleGroupJson.name, "default")
+				);
 				rg.collapsed = JsonTools.readBool( ruleGroupJson.collapsed );
 				rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
 					return AutoLayerRuleDef.fromJson(dataVersion, ruleJson);
@@ -85,6 +88,7 @@ class LayerDef {
 
 			autoTilesetDefUid: autoTilesetDefUid,
 			rules: ruleGroups.map( function(rg) return {
+				uid: rg.uid,
 				name: rg.name,
 				collapsed: rg.collapsed,
 				rules: rg.rules.map( function(r) return r.toJson() ),
@@ -165,13 +169,17 @@ class LayerDef {
 		return null;
 	}
 
-	public function createRuleGroup(name:String) {
+	public function createRuleGroup(uid:Int, name:String, ?index:Int) {
 		var rg : AutoLayerRuleGroup = {
+			uid: uid,
 			name: name,
 			collapsed: false,
 			rules: [],
 		}
-		ruleGroups.push(rg);
+		if( index!=null )
+			ruleGroups.insert(index, rg);
+		else
+			ruleGroups.push(rg);
 		return rg;
 	}
 
@@ -183,5 +191,9 @@ class LayerDef {
 			for(r in rg.rules)
 				r.tileIds = [];
 		}
+
+		for(rg in ruleGroups)
+			if( rg.uid<0 )
+				rg.uid = p.makeUniqId(); // HACK tmp fix
 	}
 }
