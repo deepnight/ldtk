@@ -59,7 +59,7 @@ class LayerDef {
 		if( json.rules!=null ) {
 			for( rjson in JsonTools.readArray(json.rules) ) {
 				var groupName = JsonTools.readString(rjson.group, "default");
-				if( o.ruleGroups.length==0 || o.ruleGroups[o.ruleGroups.length-1].name!=groupName ) 
+				if( o.ruleGroups.length==0 || o.ruleGroups[o.ruleGroups.length-1].name!=groupName )
 					o.createRuleGroup(groupName);
 				var r = AutoLayerRuleDef.fromJson(dataVersion, rjson);
 				o.ruleGroups[ o.ruleGroups.length-1 ].rules.push(r);
@@ -168,10 +168,12 @@ class LayerDef {
 	}
 
 	public function createRuleGroup(name:String) {
-		ruleGroups.push({
+		var rg : AutoLayerRuleGroup = {
 			name: name,
 			rules: [],
-		});
+		}
+		ruleGroups.push(rg);
+		return rg;
 	}
 
 	public function tidy(p:led.Project) {
