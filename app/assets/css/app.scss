@@ -2577,6 +2577,7 @@ canvas#webgl {
 					opacity: 0.66;
 					box-shadow: none;
 					margin-bottom: 4px;
+					padding-bottom: 0;
 
 					header .name {
 						cursor: cell;
@@ -2615,6 +2616,7 @@ canvas#webgl {
 					}
 					input.name {
 						display: none;
+						width: 140px;
 					}
 
 					button {
