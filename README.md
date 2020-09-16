@@ -4,6 +4,8 @@ L-Ed is a **modern**, **lightweight** and **open-source** 2D level editor.
 
 Links: [Official website](https://deepnight.net/tools/led-2d-level-editor/) | [Haxe API (on GitHub)](https://github.com/deepnight/led-haxe-api)
 
+[![Build Status](https://travis-ci.com/deepnight/led.svg?branch=master)](https://travis-ci.com/deepnight/led)
+
 # Building from source
 
 ## Requirements
