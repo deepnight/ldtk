@@ -28,7 +28,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				var type = led.LedTypes.LayerType.createByName(k);
 				var b = new J("<button/>");
 				b.appendTo( w.jContent );
-				JsTools.createLayerTypeIcon(type, b);
+				b.append( JsTools.createLayerTypeIconAndName(type) );
 				b.click( function(_) {
 					_create(type);
 					w.close();
@@ -107,7 +107,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+cur.type);
 
-		jForm.find("span.typeIcon").empty().append( JsTools.createLayerTypeIcon(cur.type,true) );
+		jForm.find("span.typeIcon").empty().append( JsTools.createLayerTypeIconAndName(cur.type) );
 
 
 		// Fields
@@ -381,7 +381,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			var e = new J("<li/>");
 			jList.append(e);
 
-			e.append( JsTools.createLayerTypeIcon(ld.type, false) );
+			e.append( JsTools.createLayerTypeIcon2(ld.type) );
 
 			e.append('<span class="name">'+ld.identifier+'</span>');
 			if( cur==ld )

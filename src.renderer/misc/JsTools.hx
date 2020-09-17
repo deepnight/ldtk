@@ -66,26 +66,26 @@ class JsTools {
 		}
 	}
 
-	public static function createLayerTypeIcon(type:led.LedTypes.LayerType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
-		var wrapper = new J('<span class="layerType"/>');
-
+	public static function createLayerTypeIcon2(type:led.LedTypes.LayerType) : js.jquery.JQuery {
 		var icon = new J('<span class="icon"/>');
-		icon.appendTo(wrapper);
 		icon.addClass( switch type {
 			case IntGrid: "intGrid";
 			case AutoLayer: "autoLayer";
 			case Entities: "entity";
 			case Tiles: "tile";
 		});
+		return icon;
+	}
 
-		if( withName ) {
-			var name = new J('<span class="name"/>');
-			name.text( L.getLayerType(type) );
-			name.appendTo(wrapper);
-		}
+	public static function createLayerTypeIconAndName(type:led.LedTypes.LayerType) : js.jquery.JQuery {
+		var wrapper = new J('<span class="layerType"/>');
 
-		if( ctx!=null )
-			wrapper.appendTo(ctx);
+		wrapper.append( createLayerTypeIcon2(type) );
+
+		var name = new J('<span class="name"/>');
+		name.appendTo(wrapper);
+		name.text( L.getLayerType(type) );
+
 		return wrapper;
 	}
 
