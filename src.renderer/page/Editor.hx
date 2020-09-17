@@ -377,6 +377,7 @@ class Editor extends Page {
 
 		if( !allTools.exists(curLayerDef.uid) ) {
 			var t : Tool<Dynamic> = switch curLayerDef.type {
+				case AutoLayer: new tool.EmptyTool();
 				case IntGrid: new tool.IntGridTool();
 				case Entities: new tool.EntityTool();
 				case Tiles: new tool.TileTool();
@@ -519,11 +520,17 @@ class Editor extends Page {
 	}
 
 	function layerPickingNotification(l:led.inst.LayerInstance) {
+		if( ui.Modal.hasAnyOpen() )
+			return;
+		
 		App.ME.jBody.find(".layerPickNotif").remove();
 
 		var e = new J('<div class="layerPickNotif"/>');
 		App.ME.jBody.append(e);
-		e.append('<span>${l.def.identifier}</span>');
+		e.append('<div class="wrapper"/>');
+		e.find(".wrapper")
+			.append( JsTools.createLayerTypeIcon(l.def.type, false) )
+			.append('<span>${l.def.identifier}</span>');
 		e.css("left", (jMainPanel.outerWidth()+15)+"px");
 		e.fadeOut(1200);
 	}
@@ -531,6 +538,7 @@ class Editor extends Page {
 	function layerSupportsFreeMode() {
 		return switch curLayerDef.type {
 			case IntGrid: false;
+			case AutoLayer: false;
 			case Entities: true;
 			case Tiles: false;
 		}
@@ -800,6 +808,9 @@ class Editor extends Page {
 					_createGuideBlock([K.SHIFT], "mouseLeft", L.t._("Rectangle"));
 					_createGuideBlock([K.ALT], "mouseLeft", L.t._("Pick"));
 
+				case AutoLayer:
+					// TODO add some help?
+
 				case Entities:
 					_createGuideBlock([K.ALT], "mouseLeft", L.t._("Pick"));
 					_createGuideBlock([K.CTRL,K.ALT], "mouseLeft", L.t._("Copy"));
@@ -831,9 +842,10 @@ class Editor extends Page {
 			e.find(".index").text( Std.string(idx++) );
 
 			// Icon
-			var icon = e.find(".icon");
+			var icon = e.find(">.icon");
 			switch li.def.type {
 				case IntGrid: icon.addClass("intGrid");
+				case AutoLayer: icon.addClass("autoLayer");
 				case Entities: icon.addClass("entity");
 				case Tiles: icon.addClass("tile");
 			}

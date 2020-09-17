@@ -63,7 +63,7 @@ class LayerInstance {
 			autoTiles: {
 				var arr = [];
 				if( def.isAutoLayer() ) {
-					for(rg in def.ruleGroups)
+					for(rg in def.autoRuleGroups)
 					for(rule in rg.rules) {
 						var ruleTiles = autoTiles.get( rule.uid );
 						arr.push({
@@ -104,6 +104,12 @@ class LayerInstance {
 				for(e in intGrid)
 					return false;
 				return true;
+
+			case AutoLayer:
+				for(rg in def.autoRuleGroups)
+				for(r in rg.rules)
+					return false;
+				return false;
 
 			case Entities:
 				return entityInstances.length==0;
@@ -173,12 +179,13 @@ class LayerInstance {
 		_project = p;
 
 		switch def.type {
-			case IntGrid:
+			case IntGrid, AutoLayer:
 				// Remove lost intGrid values
-				for(cy in 0...cHei)
-				for(cx in 0...cWid)
-					if( getIntGrid(cx,cy) >= def.countIntGridValues() )
-						removeIntGrid(cx,cy);
+				if( def.type==IntGrid )
+					for(cy in 0...cHei)
+					for(cx in 0...cWid)
+						if( getIntGrid(cx,cy) >= def.countIntGridValues() )
+							removeIntGrid(cx,cy);
 
 				if( def.isAutoLayer() ) {
 					// Discard lost rules autoTiles
@@ -187,12 +194,11 @@ class LayerInstance {
 							autoTiles.remove(rUid);
 
 					// Fix missing autoTiles
-					for(rg in def.ruleGroups)
+					for(rg in def.autoRuleGroups)
 					for(r in rg.rules)
 						if( !autoTiles.exists(r.uid) )
 							applyAutoLayerRule(r);
 				}
-
 
 			case Entities:
 				// Remove lost entities (def removed)
@@ -239,6 +245,8 @@ class LayerInstance {
 					if( old.exists(coordId(cx,cy)) && newCx>=0 && newCx<newCWid && newCy>=0 && newCy<newCHei )
 						intGrid.set( newCoordId, old.get(coordId(cx,cy)) );
 				}
+
+			case AutoLayer:
 
 			case Entities:
 				var i = 0;
@@ -361,32 +369,28 @@ class LayerInstance {
 	}
 
 
-	inline function applyAutoLayerRuleAt(r:led.def.AutoLayerRuleDef, cx:Int, cy:Int) {
-		if( def.isAutoLayer() ) {
-			// Init
-			if( !autoTiles.exists(r.uid) )
-				autoTiles.set( r.uid, new Map() );
-			autoTiles.get(r.uid).remove( coordId(cx,cy) );
+	inline function applyAutoLayerRuleAt(source:LayerInstance, r:led.def.AutoLayerRuleDef, cx:Int, cy:Int) {
+		// Init
+		if( !autoTiles.exists(r.uid) )
+			autoTiles.set( r.uid, new Map() );
+		autoTiles.get(r.uid).remove( coordId(cx,cy) );
 
-			// Apply rule
-			if( r.matches(this, cx,cy) ) {
-				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:0 } );
-				return true;
-			}
-			else if( r.flipX && r.matches(this, cx,cy, -1) ) {
-				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:1 } );
-				return true;
-			}
-			else if( r.flipY && r.matches(this, cx,cy, 1, -1) ) {
-				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:2 } );
-				return true;
-			}
-			else if( r.flipX && r.flipY && r.matches(this, cx,cy, -1, -1) ) {
-				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:3 } );
-				return true;
-			}
-			else
-				return false;
+		// Apply rule
+		if( r.matches(source, cx,cy) ) {
+			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:0 } );
+			return true;
+		}
+		else if( r.flipX && r.matches(source, cx,cy, -1) ) {
+			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:1 } );
+			return true;
+		}
+		else if( r.flipY && r.matches(source, cx,cy, 1, -1) ) {
+			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:2 } );
+			return true;
+		}
+		else if( r.flipX && r.flipY && r.matches(source, cx,cy, -1, -1) ) {
+			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:3 } );
+			return true;
 		}
 		else
 			return false;
@@ -402,12 +406,17 @@ class LayerInstance {
 		var right = dn.M.imin( cWid-1, cx + wid-1 + Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
 		var bottom = dn.M.imin( cHei-1, cy + hei-1 + Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
 
+
 		// Apply rules
+		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
+		if( source==null )
+			return;
+
 		for(cx in left...right+1)
 		for(cy in top...bottom+1)
-		for(rg in def.ruleGroups)
+		for(rg in def.autoRuleGroups)
 		for(r in rg.rules)
-			applyAutoLayerRuleAt(r,cx,cy);
+			applyAutoLayerRuleAt(source, r,cx,cy);
 	}
 
 	public function applyAllAutoLayerRules() {
@@ -422,9 +431,13 @@ class LayerInstance {
 		if( !def.isAutoLayer() )
 			return;
 
+		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
+		if( source==null )
+			return;
+
 		for(cx in 0...cWid)
 		for(cy in 0...cHei)
-			applyAutoLayerRuleAt(r, cx,cy);
+			applyAutoLayerRuleAt(source, r, cx,cy);
 	}
 
 }

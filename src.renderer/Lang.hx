@@ -25,6 +25,7 @@ class Lang {
     public static function getLayerType(type:led.LedTypes.LayerType) : LocaleString {
         return switch type {
             case IntGrid: Lang.t._("Integer grid");
+            case AutoLayer: Lang.t._("Auto-layer");
             case Entities: Lang.t._("Entities");
             case Tiles: Lang.t._("Tiles");
         }

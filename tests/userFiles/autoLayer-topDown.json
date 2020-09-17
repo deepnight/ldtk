@@ -24,7 +24,7 @@
 				"displayOpacity": 1.0,
 				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
 				"autoTilesetDefUid": 1,
-				"rules": [
+				"autoRuleGroups": [
 					{
 						"uid": 11,
 						"name": "details",

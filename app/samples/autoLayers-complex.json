@@ -29,7 +29,7 @@
 					{ "identifier": "lava", "color": "#FF0000" }
 				],
 				"autoTilesetDefUid": 9,
-				"rules": [
+				"autoRuleGroups": [
 					{
 						"uid": 74,
 						"name": "Water",

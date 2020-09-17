@@ -246,14 +246,14 @@ class LevelRender extends dn.Process {
 	}
 
 	public inline function autoLayerRenderingEnabled(li:led.inst.LayerInstance) {
-		if( li==null || li.def.type!=IntGrid )
+		if( li==null || !li.def.isAutoLayer() )
 			return false;
 
 		return ( !autoLayerRendering.exists(li.layerDefUid) || autoLayerRendering.get(li.layerDefUid)==true );
 	}
 
 	public function setAutoLayerRendering(li:led.inst.LayerInstance, v:Bool) {
-		if( li==null || li.def.type!=IntGrid )
+		if( li==null || !li.def.isAutoLayer() )
 			return;
 
 		autoLayerRendering.set(li.layerDefUid, v);
@@ -386,20 +386,20 @@ class LevelRender extends dn.Process {
 
 		// Render
 		switch li.def.type {
-		case IntGrid:
+		case IntGrid, AutoLayer:
 			var g = new h2d.Graphics(wrapper);
 
-			if( li.def.isAutoLayer() && autoLayerRenderingEnabled(li) ) {
+			if( li.def.isAutoLayer() && li.def.autoTilesetDefUid!=null && autoLayerRenderingEnabled(li) ) {
 				// Auto-layer tiles
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper);
 
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
-					var groupIdx = li.def.ruleGroups.length-1;
+					var groupIdx = li.def.autoRuleGroups.length-1;
 					var anyTile = false;
 					while( groupIdx>=0 ) {
-						var rg = li.def.ruleGroups[groupIdx];
+						var rg = li.def.autoRuleGroups[groupIdx];
 						if( rg.active ) {
 							var ruleIdx = rg.rules.length-1;
 							while( ruleIdx>=0 ) {
@@ -424,14 +424,14 @@ class LevelRender extends dn.Process {
 
 						groupIdx--;
 					}
-					if( !anyTile && li.hasIntGrid(cx,cy) ) {
+					if( li.def.type==IntGrid && !anyTile && li.hasIntGrid(cx,cy) ) {
 						// Default render when no tile applies
 						g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
 						g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);
 					}
 				}
 			}
-			else {
+			else if( li.def.type==IntGrid ) {
 				// Normal intGrid
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {

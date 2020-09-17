@@ -80,7 +80,8 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		var jValues = jContent.find(">.values ul").empty();
 
 		var idx = 0;
-		for(v in layerDef.getAllIntGridValues()) {
+		var source = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef(layerDef.autoSourceLayerDefUid);
+		for(v in source.getAllIntGridValues()) {
 			var jVal = new J('<li/>');
 			jVal.appendTo(jValues);
 
@@ -115,7 +116,7 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		super.close();
 
 		if( rule.isEmpty() ) {
-			for(rg in layerDef.ruleGroups)
+			for(rg in layerDef.autoRuleGroups)
 				rg.rules.remove(rule);
 			editor.ge.emit( LayerRuleRemoved(rule) );
 		}

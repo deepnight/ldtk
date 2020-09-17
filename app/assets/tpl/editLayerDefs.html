@@ -71,11 +71,17 @@
 		<span class="long">This is only useful if the Tileset grid size is different from the layer grid size.</span>
 	</li>
 
-	<li class="IntGrid">
-		<label>Auto-paint</label>
+	<li class="AutoLayer">
+		<label>Auto-Layer source</label>
+		<select name="autoLayerSources"></select>
+		<div class="help">This auto-layer will use the INTGRID layer above to apply its rules.</div>
+	</li>
+
+	<li class="IntGrid AutoLayer">
+		<label>Auto-layer tileset</label>
 		<select name="autoTileset"></select>
-		<div class="help">
-			Selecting a Tileset above will turn this layer into an <strong>Auto-Layer</strong>, which can automatically render tiles based on the IntGrid values (eg. adding "grass" tiles above ground cells).
+		<div class="help IntGrid">
+			Selecting a Tileset above will enable Auto-Layer capabilities on this layer. This allows to render automatically tiles based on the IntGrid values (eg. adding "grass" tiles above cells with "walls" value).
 		</div>
 	</li>
 </ul>
