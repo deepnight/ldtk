@@ -1378,7 +1378,8 @@ textarea {
 		display: grid;
 		width: 100%;
 		gap: 2px;
-		grid-template-columns: repeat(3, 33.33%);
+		grid-auto-rows: 100px;
+		grid-template-columns: repeat(2, 100px);
 
 		button {
 			margin: 0;
