@@ -14,7 +14,7 @@ class LayerDef {
 
 	// IntGrid/AutoLayers
 	public var autoTilesetDefUid : Null<Int>;
-	// public var autoSourceLayerDefUid : Null<Int>; // JSON
+	public var autoSourceLayerDefUid : Null<Int>; // JSON
 	public var autoRuleGroups : Array<AutoLayerRuleGroup> = [];
 
 	// Tiles
@@ -56,6 +56,7 @@ class LayerDef {
 			});
 
 		o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
+		o.autoSourceLayerDefUid = JsonTools.readNullableInt(json.autoSourceLayerDefUid);
 
 		// Read auto-layer rules
 		if( json.autoRuleGroups!=null ) {
@@ -97,6 +98,7 @@ class LayerDef {
 				collapsed: rg.collapsed,
 				rules: rg.rules.map( function(r) return r.toJson() ),
 			}),
+			autoSourceLayerDefUid: autoSourceLayerDefUid,
 
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,
@@ -153,7 +155,7 @@ class LayerDef {
 
 
 	public inline function isAutoLayer() {
-		return autoTilesetDefUid!=null || type==AutoLayer;
+		return type==IntGrid && autoTilesetDefUid!=null || type==AutoLayer;
 	}
 
 

@@ -867,6 +867,8 @@ ul.form {
 		}
 
 		div.help {
+			margin-top: 8px;
+			margin-bottom: 16px;
 			flex: 1 0 100%;
 			box-sizing: border-box;
 		}
@@ -940,6 +942,18 @@ select {
 
 	option {
 		overflow: hidden;
+	}
+
+	&.noValue:not(:focus) {
+		background-color: $bgLight;
+		background-image: url("../img/stripes.png");
+		color: white;
+	}
+	&.required:not(:focus) {
+		color: white;
+		background-color: $darkRed;
+		border-color: $red;
+		box-shadow: 0px 0px 8px $red;
 	}
 }
 
@@ -2233,12 +2247,6 @@ canvas#webgl {
 			font-size: 10pt;
 			text-transform: none;
 		}
-		select.required {
-			border-color: $red;
-			color: white;
-			background-color: $darkRed;
-			box-shadow: 0px 0px 8px $red;
-		}
 
 		span.inputWithDefaultOption {
 			display: flex;
@@ -2524,11 +2532,18 @@ canvas#webgl {
 		}
 	}
 
-	ul.form:not(.type-IntGrid) .IntGrid,
-	ul.form:not(.type-AutoLayer) .AutoLayer,
-	ul.form:not(.type-Tiles) .Tiles,
-	ul.form:not(.type-Entities) .Entities {
+	ul.form .IntGrid,
+	ul.form .AutoLayer,
+	ul.form .Tiles,
+	ul.form .Entities {
 		display: none;
+	}
+
+	ul.form.type-IntGrid .IntGrid,
+	ul.form.type-AutoLayer .AutoLayer,
+	ul.form.type-Entities .Entities,
+	ul.form.type-Tiles .Tiles {
+		display: flex;
 	}
 }
 

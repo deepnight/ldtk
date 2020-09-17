@@ -126,6 +126,54 @@ class EditLayerDefs extends ui.modal.Panel {
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
 		// Layer-type specific inits
+		function initAutoTilesetSelect() {
+
+			var jTileset = jForm.find("[name=autoTileset]");
+			jTileset.empty();
+			jTileset.removeClass("required");
+			jTileset.removeClass("noValue");
+
+			var opt = new J("<option/>");
+			opt.appendTo(jTileset);
+			opt.attr("value", -1);
+			opt.text("-- Select a tileset --");
+
+			for(td in project.defs.tilesets) {
+				var opt = new J("<option/>");
+				opt.appendTo(jTileset);
+				opt.attr("value", td.uid);
+				opt.text( td.identifier );
+			}
+			jTileset.change( function(ev) {
+				function changeTileset(clear:Bool) {
+					if( clear ) {
+						new LastChance(Lang.t._("Deleted all auto-layer rules"), project);
+						cur.autoRuleGroups = [];
+					}
+					cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
+					if( cur.autoTilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
+						cur.gridSize = project.defs.getTilesetDef(cur.autoTilesetDefUid).tileGridSize;
+					editor.ge.emit( LayerDefChanged);
+				}
+
+				if( cur.autoRuleGroups.length==0 || cur.autoTilesetDefUid==null )
+					changeTileset(false);
+				else {
+					new ui.modal.dialog.Confirm(
+						jTileset,
+						Lang.t._("Warning: changing the tileset will DELETE all the existing rules in this auto-layer!"),
+						true,
+						changeTileset.bind(true),
+						updateForm
+					);
+				}
+			});
+			if( cur.autoTilesetDefUid!=null )
+				jTileset.val( cur.autoTilesetDefUid );
+			else
+				jTileset.addClass("noValue");
+		}
+
 		switch cur.type {
 
 			case IntGrid:
@@ -197,49 +245,53 @@ class EditLayerDefs extends ui.modal.Panel {
 					idx++;
 				}
 
-				// Auto-tileset selection
-				var jTileset = jForm.find("[name=autoTileset]");
-				jTileset.empty();
-
-				var opt = new J("<option/>");
-				opt.appendTo(jTileset);
-				opt.attr("value", -1);
-				opt.text("-- Select a tileset --");
-
-				for(td in project.defs.tilesets) {
-					var opt = new J("<option/>");
-					opt.appendTo(jTileset);
-					opt.attr("value", td.uid);
-					opt.text( td.identifier );
-				}
-				jTileset.change( function(ev) {
-					function changeTileset(clear:Bool) {
-						if( clear ) {
-							new LastChance(Lang.t._("Deleted all auto-layer rules"), project);
-							cur.autoRuleGroups = [];
-						}
-						cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
-						if( cur.autoTilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
-							cur.gridSize = project.defs.getTilesetDef(cur.autoTilesetDefUid).tileGridSize;
-						editor.ge.emit( LayerDefChanged);
-					}
-
-					if( cur.autoRuleGroups.length==0 )
-						changeTileset(false);
-					else {
-						new ui.modal.dialog.Confirm(
-							jTileset,
-							Lang.t._("Warning: changing the tileset will DELETE all the existing rules in this auto-layer!"),
-							true,
-							changeTileset.bind(true),
-							updateForm
-						);
-					}
-				});
-				if( cur.autoTilesetDefUid!=null )
-					jTileset.val( cur.autoTilesetDefUid );
+				initAutoTilesetSelect();
 
 			case AutoLayer:
+				// Linked layer
+				var jSelect = jForm.find("select[name=autoLayerSources]");
+				jSelect.empty();
+
+				var opt = new J("<option/>");
+				opt.appendTo(jSelect);
+				opt.attr("value", -1);
+				opt.text("-- Select an IntGrid layer --");
+
+				var intGridLayers = project.defs.layers.filter( function(ld) return ld.type==IntGrid );
+				for( ld in intGridLayers ) {
+					var opt = new J("<option/>");
+					opt.appendTo(jSelect);
+					opt.attr("value", ld.uid);
+					opt.text(ld.identifier);
+				}
+
+				jSelect.val( cur.autoSourceLayerDefUid==null ? -1 : cur.autoSourceLayerDefUid );
+				if( cur.autoSourceLayerDefUid==null )
+					jSelect.addClass("required");
+				else
+					jSelect.removeClass("required");
+
+				// Change linked layer
+				jSelect.change( function(ev) {
+					var v = Std.parseInt( jSelect.val() );
+					if( v<0 )
+						cur.autoSourceLayerDefUid = null;
+					else {
+						cur.autoSourceLayerDefUid = v;
+						cur.gridSize = project.defs.getLayerDef(v).gridSize;
+					}
+					editor.ge.emit(LayerDefChanged);
+				});
+
+				jForm.find("#gridSize").prop("readonly",true);
+
+				// Tileset
+				initAutoTilesetSelect();
+				var jSelect = jForm.find("[name=autoTileset]");
+				if( cur.autoTilesetDefUid==null )
+					jSelect.addClass("required");
+
+
 
 			case Entities:
 

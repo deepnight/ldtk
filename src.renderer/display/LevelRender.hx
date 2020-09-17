@@ -246,14 +246,14 @@ class LevelRender extends dn.Process {
 	}
 
 	public inline function autoLayerRenderingEnabled(li:led.inst.LayerInstance) {
-		if( li==null || li.def.type!=IntGrid )
+		if( li==null || !li.def.isAutoLayer() )
 			return false;
 
 		return ( !autoLayerRendering.exists(li.layerDefUid) || autoLayerRendering.get(li.layerDefUid)==true );
 	}
 
 	public function setAutoLayerRendering(li:led.inst.LayerInstance, v:Bool) {
-		if( li==null || li.def.type!=IntGrid )
+		if( li==null || !li.def.isAutoLayer() )
 			return;
 
 		autoLayerRendering.set(li.layerDefUid, v);
@@ -389,7 +389,7 @@ class LevelRender extends dn.Process {
 		case IntGrid, AutoLayer:
 			var g = new h2d.Graphics(wrapper);
 
-			if( li.def.isAutoLayer() && autoLayerRenderingEnabled(li) ) {
+			if( li.def.isAutoLayer() && li.def.autoTilesetDefUid!=null && autoLayerRenderingEnabled(li) ) {
 				// Auto-layer tiles
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper);

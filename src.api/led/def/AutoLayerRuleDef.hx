@@ -196,7 +196,7 @@ class AutoLayerRuleDef {
 		return tileIds.length==0;
 	}
 
-	public function matches(li:led.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
+	public function matches(source:led.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
 		if( tileIds.length==0 )
 			return false;
 
@@ -214,23 +214,23 @@ class AutoLayerRuleDef {
 			if( pattern[coordId]==0 )
 				continue;
 
-			if( !li.isValid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+			if( !source.isValid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
 				return false;
 
 			if( dn.M.iabs( pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
 				// "Anything" checks
-				if( pattern[coordId]>0 && !li.hasIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+				if( pattern[coordId]>0 && !source.hasIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
 					return false;
 
-				if( pattern[coordId]<0 && li.hasIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+				if( pattern[coordId]<0 && source.hasIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
 					return false;
 			}
 			else {
 				// Specific value checks
-				if( pattern[coordId]>0 && li.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius))!=pattern[coordId]-1 )
+				if( pattern[coordId]>0 && source.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius))!=pattern[coordId]-1 )
 					return false;
 
-				if( pattern[coordId]<0 && li.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius))==-pattern[coordId]-1 )
+				if( pattern[coordId]<0 && source.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius))==-pattern[coordId]-1 )
 					return false;
 			}
 		}

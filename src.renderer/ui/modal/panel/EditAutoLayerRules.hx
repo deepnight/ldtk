@@ -98,8 +98,13 @@ class EditAutoLayerRules extends ui.modal.Panel {
 		}
 
 
-		// Add rule group
+		// Add group
 		jContent.find("button.createGroup").click( function(ev) {
+			if( ld.isAutoLayer() && ld.autoTilesetDefUid==null ) {
+				N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
+				return;
+			}
+
 			var insertIdx = 0;
 			var rg = ld.createRuleGroup(project.makeUniqId(), "New group", insertIdx);
 			editor.ge.emit(LayerRuleGroupAdded);
