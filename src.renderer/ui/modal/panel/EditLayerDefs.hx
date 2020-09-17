@@ -107,8 +107,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+cur.type);
 
-		jForm.find("span.type").text( Lang.getLayerType(cur.type) );
-		jForm.find("span.typeIcon").empty().append( JsTools.createLayerTypeIcon(cur.type,false) );
+		jForm.find("span.typeIcon").empty().append( JsTools.createLayerTypeIcon(cur.type,true) );
 
 
 		// Fields

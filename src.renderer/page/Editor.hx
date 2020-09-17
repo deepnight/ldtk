@@ -520,11 +520,17 @@ class Editor extends Page {
 	}
 
 	function layerPickingNotification(l:led.inst.LayerInstance) {
+		if( ui.Modal.hasAnyOpen() )
+			return;
+		
 		App.ME.jBody.find(".layerPickNotif").remove();
 
 		var e = new J('<div class="layerPickNotif"/>');
 		App.ME.jBody.append(e);
-		e.append('<span>${l.def.identifier}</span>');
+		e.append('<div class="wrapper"/>');
+		e.find(".wrapper")
+			.append( JsTools.createLayerTypeIcon(l.def.type, false) )
+			.append('<span>${l.def.identifier}</span>');
 		e.css("left", (jMainPanel.outerWidth()+15)+"px");
 		e.fadeOut(1200);
 	}
@@ -836,7 +842,7 @@ class Editor extends Page {
 			e.find(".index").text( Std.string(idx++) );
 
 			// Icon
-			var icon = e.find(".icon");
+			var icon = e.find(">.icon");
 			switch li.def.type {
 				case IntGrid: icon.addClass("intGrid");
 				case AutoLayer: icon.addClass("autoLayer");
