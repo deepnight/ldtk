@@ -10,7 +10,7 @@ class Sync extends ui.modal.Dialog {
 
 		// Add "DateUpdated" line
 		log = log.copy();
-		log.push({ op:DateUpdated, str:'$fileName date' });
+		log.push({ op:DateUpdated, str:'$fileName "last file change date"' });
 
 		// Warning
 		jContent.find(".warning").hide();
