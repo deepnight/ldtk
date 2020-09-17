@@ -105,6 +105,12 @@ class LayerInstance {
 					return false;
 				return true;
 
+			case AutoLayer:
+				for(rg in def.ruleGroups)
+				for(r in rg.rules)
+					return false;
+				return false;
+
 			case Entities:
 				return entityInstances.length==0;
 
@@ -173,12 +179,13 @@ class LayerInstance {
 		_project = p;
 
 		switch def.type {
-			case IntGrid:
+			case IntGrid, AutoLayer:
 				// Remove lost intGrid values
-				for(cy in 0...cHei)
-				for(cx in 0...cWid)
-					if( getIntGrid(cx,cy) >= def.countIntGridValues() )
-						removeIntGrid(cx,cy);
+				if( def.type==IntGrid )
+					for(cy in 0...cHei)
+					for(cx in 0...cWid)
+						if( getIntGrid(cx,cy) >= def.countIntGridValues() )
+							removeIntGrid(cx,cy);
 
 				if( def.isAutoLayer() ) {
 					// Discard lost rules autoTiles
@@ -192,7 +199,6 @@ class LayerInstance {
 						if( !autoTiles.exists(r.uid) )
 							applyAutoLayerRule(r);
 				}
-
 
 			case Entities:
 				// Remove lost entities (def removed)
@@ -239,6 +245,8 @@ class LayerInstance {
 					if( old.exists(coordId(cx,cy)) && newCx>=0 && newCx<newCWid && newCy>=0 && newCy<newCHei )
 						intGrid.set( newCoordId, old.get(coordId(cx,cy)) );
 				}
+
+			case AutoLayer:
 
 			case Entities:
 				var i = 0;

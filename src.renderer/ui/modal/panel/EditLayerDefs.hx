@@ -240,7 +240,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				if( cur.autoTilesetDefUid!=null )
 					jTileset.val( cur.autoTilesetDefUid );
 
-
+			case AutoLayer:
 
 			case Entities:
 
@@ -330,10 +330,11 @@ class EditLayerDefs extends ui.modal.Panel {
 			var e = new J("<li/>");
 			jList.append(e);
 
-			var icon = new J('<div class="icon"/>');
+			var icon = new J('<div class="icon"/>'); // TODO unify this in JSTools?
 			e.append(icon);
 			switch ld.type {
 				case IntGrid: icon.addClass("intGrid");
+				case AutoLayer: icon.addClass("autoLayer");
 				case Entities: icon.addClass("entity");
 				case Tiles: icon.addClass("tile");
 			}

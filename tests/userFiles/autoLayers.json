@@ -12,10 +12,23 @@
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,
 	"bgColor": "#1B2037",
-	"nextUid": 81,
+	"nextUid": 82,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
+			{
+				"identifier": "AutoLayer",
+				"type": "AutoLayer",
+				"uid": 81,
+				"gridSize": 16,
+				"displayOpacity": 1.0,
+				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
+				"autoTilesetDefUid": null,
+				"rules": [],
+				"tilesetDefUid": null,
+				"tilePivotX": 0,
+				"tilePivotY": 0
+			},
 			{
 				"identifier": "IntGrid",
 				"type": "IntGrid",
@@ -32,6 +45,7 @@
 				"rules": [ {
 					"uid": 80,
 					"name": "default",
+					"active": true,
 					"collapsed": false,
 					"rules": [
 						{
@@ -686,6 +700,21 @@
 			"pxWid": 224,
 			"pxHei": 120,
 			"layerInstances": [
+				{
+					"__identifier": "AutoLayer",
+					"__type": "AutoLayer",
+					"__cWid": 14,
+					"__cHei": 8,
+					"__gridSize": 16,
+					"levelId": 18,
+					"layerDefUid": 81,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoTiles": [],
+					"gridTiles": [],
+					"entityInstances": []
+				},
 				{
 					"__identifier": "IntGrid",
 					"__type": "IntGrid",
@@ -1942,6 +1971,21 @@
 			"pxWid": 480,
 			"pxHei": 408,
 			"layerInstances": [
+				{
+					"__identifier": "AutoLayer",
+					"__type": "AutoLayer",
+					"__cWid": 30,
+					"__cHei": 26,
+					"__gridSize": 16,
+					"levelId": 0,
+					"layerDefUid": 81,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoTiles": [],
+					"gridTiles": [],
+					"entityInstances": []
+				},
 				{
 					"__identifier": "IntGrid",
 					"__type": "IntGrid",
@@ -7012,6 +7056,21 @@
 			"pxHei": 256,
 			"layerInstances": [
 				{
+					"__identifier": "AutoLayer",
+					"__type": "AutoLayer",
+					"__cWid": 16,
+					"__cHei": 16,
+					"__gridSize": 16,
+					"levelId": 70,
+					"layerDefUid": 81,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoTiles": [],
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
 					"__identifier": "IntGrid",
 					"__type": "IntGrid",
 					"__cWid": 32,
@@ -8626,6 +8685,21 @@
 			"pxHei": 256,
 			"layerInstances": [
 				{
+					"__identifier": "AutoLayer",
+					"__type": "AutoLayer",
+					"__cWid": 16,
+					"__cHei": 16,
+					"__gridSize": 16,
+					"levelId": 71,
+					"layerDefUid": 81,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoTiles": [],
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
 					"__identifier": "IntGrid",
 					"__type": "IntGrid",
 					"__cWid": 32,
@@ -10029,6 +10103,21 @@
 			"pxHei": 256,
 			"layerInstances": [
 				{
+					"__identifier": "AutoLayer",
+					"__type": "AutoLayer",
+					"__cWid": 16,
+					"__cHei": 16,
+					"__gridSize": 16,
+					"levelId": 72,
+					"layerDefUid": 81,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoTiles": [],
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
 					"__identifier": "IntGrid",
 					"__type": "IntGrid",
 					"__cWid": 32,
@@ -11421,6 +11510,21 @@
 			"pxWid": 256,
 			"pxHei": 256,
 			"layerInstances": [
+				{
+					"__identifier": "AutoLayer",
+					"__type": "AutoLayer",
+					"__cWid": 16,
+					"__cHei": 16,
+					"__gridSize": 16,
+					"levelId": 73,
+					"layerDefUid": 81,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoTiles": [],
+					"gridTiles": [],
+					"entityInstances": []
+				},
 				{
 					"__identifier": "IntGrid",
 					"__type": "IntGrid",

@@ -73,6 +73,7 @@ class JsTools {
 		icon.appendTo(wrapper);
 		icon.addClass( switch type {
 			case IntGrid: "intGrid";
+			case AutoLayer: "autoLayer";
 			case Entities: "entity";
 			case Tiles: "tile";
 		});

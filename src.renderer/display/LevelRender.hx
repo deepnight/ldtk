@@ -386,7 +386,7 @@ class LevelRender extends dn.Process {
 
 		// Render
 		switch li.def.type {
-		case IntGrid:
+		case IntGrid, AutoLayer:
 			var g = new h2d.Graphics(wrapper);
 
 			if( li.def.isAutoLayer() && autoLayerRenderingEnabled(li) ) {
@@ -424,14 +424,14 @@ class LevelRender extends dn.Process {
 
 						groupIdx--;
 					}
-					if( !anyTile && li.hasIntGrid(cx,cy) ) {
+					if( li.def.type==IntGrid && !anyTile && li.hasIntGrid(cx,cy) ) {
 						// Default render when no tile applies
 						g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
 						g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);
 					}
 				}
 			}
-			else {
+			else if( li.def.type==IntGrid ) {
 				// Normal intGrid
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {

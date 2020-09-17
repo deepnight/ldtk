@@ -711,6 +711,7 @@ ul.log {
 .icon.tile		{ background-image: url("../img/icons/tile.png"); }
 .icon.layer		{ background-image: url("../img/icons/layer.png"); }
 .icon.intGrid	{ background-image: url("../img/icons/intGrid.png"); }
+.icon.autoLayer	{ background-image: url("../img/icons/autoLayer.png") }
 .icon.level		{ background-image: url("../img/icons/level.png"); }
 .icon.project	{ background-image: url("../img/icons/projectSettings.png"); }
 .icon.enum		{ background-image: url("../img/icons/enum.png"); }
@@ -2498,6 +2499,7 @@ canvas#webgl {
 	}
 
 	ul.form:not(.type-IntGrid) .IntGrid,
+	ul.form:not(.type-AutoLayer) .AutoLayer,
 	ul.form:not(.type-Tiles) .Tiles,
 	ul.form:not(.type-Entities) .Entities {
 		display: none;

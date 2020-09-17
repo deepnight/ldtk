@@ -151,7 +151,7 @@ class LayerDef {
 
 
 	public inline function isAutoLayer() {
-		return autoTilesetDefUid!=null;
+		return autoTilesetDefUid!=null || type==AutoLayer;
 	}
 
 

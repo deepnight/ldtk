@@ -163,6 +163,8 @@ class Tool<T> extends dn.Process {
 					if( li.getIntGrid(cx,cy)>=0 )
 						ge = GenericLevelElement.IntGrid( li, cx, cy );
 
+				case AutoLayer:
+
 				case Entities:
 					for(ei in li.entityInstances)
 						if( ei.isOver(m.levelX, m.levelY) )
