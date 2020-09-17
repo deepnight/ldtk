@@ -1635,11 +1635,6 @@ canvas#webgl {
 					color: $darkOrange;
 				}
 
-				&.active>.icon {
-					background-color: $darkOrange;
-					border-radius: 2px;
-				}
-
 				.name {
 					font-size: 10pt;
 					display: block;
@@ -2472,6 +2467,14 @@ canvas#webgl {
 .window.panel.layerDefs {
 	.mainList {
 		grid-row: 2/4;
+		ul li {
+			grid-template-columns: min-content auto;
+
+			.icon {
+				width: 1.8em;
+				height: 1.8em;
+			}
+		}
 	}
 	.mainList ul:empty::before {
 		content: "No layer";
