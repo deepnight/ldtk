@@ -408,7 +408,10 @@ class LayerInstance {
 
 
 		// Apply rules
-		var source = def.type==IntGrid ? this : level.getLayerInstance(def.autoSourceLayerDefUid);
+		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
+		if( source==null )
+			return;
+
 		for(cx in left...right+1)
 		for(cy in top...bottom+1)
 		for(rg in def.autoRuleGroups)
@@ -428,7 +431,10 @@ class LayerInstance {
 		if( !def.isAutoLayer() )
 			return;
 
-		var source = def.type==IntGrid ? this : level.getLayerInstance(def.autoSourceLayerDefUid);
+		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
+		if( source==null )
+			return;
+
 		for(cx in 0...cWid)
 		for(cy in 0...cHei)
 			applyAutoLayerRuleAt(source, r, cx,cy);
