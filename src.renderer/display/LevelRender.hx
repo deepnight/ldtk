@@ -696,6 +696,12 @@ class LevelRender extends dn.Process {
 		}
 		else
 			layerInvalidations.set( li.layerDefUid, { left:left, right:right, top:top, bottom:bottom } );
+
+		// Invalidate linked auto-layers
+		if( li.def.type==IntGrid )
+			for(other in editor.curLevel.layerInstances)
+				if( other.def.type==AutoLayer && other.def.autoSourceLayerDefUid==li.layerDefUid )
+					invalidateLayerArea(other, left, right, top, bottom);
 	}
 
 	// public inline function invalidateAllLayers() {
