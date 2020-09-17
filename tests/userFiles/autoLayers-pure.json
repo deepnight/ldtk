@@ -12,7 +12,7 @@
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,
 	"bgColor": "#151C23",
-	"nextUid": 52,
+	"nextUid": 55,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -29,7 +29,7 @@
 						"uid": 18,
 						"name": "columns",
 						"active": true,
-						"collapsed": false,
+						"collapsed": true,
 						"rules": [
 							{
 								"uid": 16,
@@ -150,7 +150,7 @@
 						"uid": 4,
 						"name": "walls",
 						"active": true,
-						"collapsed": false,
+						"collapsed": true,
 						"rules": [
 							{
 								"uid": 5,
@@ -300,6 +300,21 @@
 				"height": 24,
 				"color": "#FF1A1A",
 				"renderMode": "Ellipse",
+				"tilesetId": null,
+				"tileId": null,
+				"maxPerLevel": 0,
+				"discardExcess": true,
+				"pivotX": 0.5,
+				"pivotY": 1.0,
+				"fieldDefs": []
+			},
+			{
+				"identifier": "Crate",
+				"uid": 54,
+				"width": 12,
+				"height": 8,
+				"color": "#D1AA85",
+				"renderMode": "Rectangle",
 				"tilesetId": null,
 				"tileId": null,
 				"maxPerLevel": 0,
@@ -1455,9 +1470,12 @@
 				"autoTiles": [],
 				"gridTiles": [],
 				"entityInstances": [
-					{ "__identifier": "Mob", "__cx": 11, "__cy": 16, "defUid": 26, "x": 184, "y": 272, "fieldInstances": [] },
+					{ "__identifier": "Mob", "__cx": 10, "__cy": 16, "defUid": 26, "x": 168, "y": 272, "fieldInstances": [] },
 					{ "__identifier": "Mob", "__cx": 17, "__cy": 20, "defUid": 26, "x": 280, "y": 336, "fieldInstances": [] },
-					{ "__identifier": "Mob", "__cx": 19, "__cy": 15, "defUid": 26, "x": 312, "y": 256, "fieldInstances": [] }
+					{ "__identifier": "Mob", "__cx": 22, "__cy": 15, "defUid": 26, "x": 360, "y": 256, "fieldInstances": [] },
+					{ "__identifier": "Crate", "__cx": 12, "__cy": 10, "defUid": 54, "x": 200, "y": 176, "fieldInstances": [] },
+					{ "__identifier": "Crate", "__cx": 26, "__cy": 15, "defUid": 54, "x": 424, "y": 256, "fieldInstances": [] },
+					{ "__identifier": "Crate", "__cx": 6, "__cy": 16, "defUid": 54, "x": 104, "y": 272, "fieldInstances": [] }
 				]
 			},
 			{
