@@ -164,6 +164,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			jHeader.find(".edit").click( function(ev:js.jquery.Event) {
 				jHeader.find("div.name").hide();
 				var jInput = jHeader.find("input.name");
+				var old = rg.name;
 				jInput
 					.val( rg.name )
 					.off()
@@ -184,8 +185,10 @@ class EditAutoLayerRules extends ui.modal.Panel {
 						}
 					})
 					.on("blur", function(ev:js.jquery.Event) {
-						rg.name = jInput.val();
-						editor.ge.emit(LayerRuleGroupChanged);
+						if( jInput.val()!=old ) {
+							rg.name = jInput.val();
+							editor.ge.emit(LayerRuleGroupChanged);
+						}
 					});
 			});
 
