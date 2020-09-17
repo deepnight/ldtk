@@ -405,11 +405,40 @@ div.key {
 	font-family: Roboto;
 	font-style: normal;
 
-	background-color: rgba(207, 197, 172, 0.45);
-	border: 1px solid rgba(235, 223, 195, 0.3);
-	border-bottom: 2px solid rgba(131, 114, 90, 0.3);
+	$keyColor: #CFC5AC;
+	$opacity: 0.45;
+	$lighten: 0.3;
+	$darken: 0.4;
+	background-color: transparentize( $keyColor, $opacity );
+	border: 1px solid transparentize( lighten( $keyColor, $lighten ), $opacity );
+	border-bottom: 2px solid transparentize( darken( $keyColor, $darken ), $opacity );
 	box-shadow: 0px 0px 4px black;
 	border-radius: 2px;
+
+	&.shift {
+		color: transparent;
+		background-image: url("../img/icons/shift.png");
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: contain;
+
+		$keyColor : #77B0FD;
+		background-color: transparentize( $keyColor, $opacity );
+		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
+		border-bottom-color: transparentize( darken( $keyColor, $darken ), $opacity );
+	}
+	&.ctrl {
+		$keyColor : #FD4F66;
+		background-color: transparentize( $keyColor, $opacity );
+		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
+		border-bottom-color: transparentize( darken( $keyColor, $darken ), $opacity );
+	}
+	&.alt {
+		$keyColor : #FDBE22;
+		background-color: transparentize( $keyColor, $opacity );
+		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
+		border-bottom-color: transparentize( darken( $keyColor, $darken ), $opacity );
+	}
 }
 
 

@@ -268,6 +268,36 @@ class JsTools {
 		return new J('<span class="key">$keyLabel</span>');
 	}
 
+	public static function parseKeys(rawKeys:String) : Array<js.jquery.JQuery> {
+		var jKeys = [];
+
+		for(k in rawKeys.split(" ")) {
+			if( k==null || k.length==0 )
+				continue;
+
+
+			jKeys.push( switch k.toLowerCase() {
+				case "mouseleft": new J('<span class="icon mouseleft"></span>');
+				case "mouseright": new J('<span class="icon mouseright"></span>');
+				case "mousewheel": new J('<span class="icon mousewheel"></span>');
+
+				case "+" : new J("<span/>").append("+");
+
+				case k.charAt(0) => "(": new J("<span/>").append(k);
+				case k.charAt(k.length-1) => ")": new J("<span/>").append(k);
+
+				case _:
+					var jKey = new J('<span class="key">${k.toUpperCase()}</span>');
+					switch k.toLowerCase() {
+						case "shift", "alt", "ctrl" : jKey.addClass( k.toLowerCase() );
+						case _:
+					}
+					jKey;
+			});
+		}
+		return jKeys;
+	}
+
 
 	public static function parseComponents(jCtx:js.jquery.JQuery) {
 		// (i) Info bubbles

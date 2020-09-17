@@ -569,6 +569,12 @@ class Editor extends Page {
 			app: Const.APP_NAME,
 			ver: Const.getAppVersion(),
 		});
+
+		m.jContent.find("dt").each( function(idx, e) {
+			var jDt = new J(e);
+			var jKeys = JsTools.parseKeys( jDt.text() );
+			jDt.empty().append(jKeys);
+		});
 	}
 
 	function onClose(?bt:js.jquery.JQuery) {
