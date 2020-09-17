@@ -63,7 +63,7 @@ class LayerInstance {
 			autoTiles: {
 				var arr = [];
 				if( def.isAutoLayer() ) {
-					for(rg in def.ruleGroups)
+					for(rg in def.autoRuleGroups)
 					for(rule in rg.rules) {
 						var ruleTiles = autoTiles.get( rule.uid );
 						arr.push({
@@ -106,7 +106,7 @@ class LayerInstance {
 				return true;
 
 			case AutoLayer:
-				for(rg in def.ruleGroups)
+				for(rg in def.autoRuleGroups)
 				for(r in rg.rules)
 					return false;
 				return false;
@@ -194,7 +194,7 @@ class LayerInstance {
 							autoTiles.remove(rUid);
 
 					// Fix missing autoTiles
-					for(rg in def.ruleGroups)
+					for(rg in def.autoRuleGroups)
 					for(r in rg.rules)
 						if( !autoTiles.exists(r.uid) )
 							applyAutoLayerRule(r);
@@ -413,7 +413,7 @@ class LayerInstance {
 		// Apply rules
 		for(cx in left...right+1)
 		for(cy in top...bottom+1)
-		for(rg in def.ruleGroups)
+		for(rg in def.autoRuleGroups)
 		for(r in rg.rules)
 			applyAutoLayerRuleAt(r,cx,cy);
 	}

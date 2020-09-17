@@ -118,7 +118,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 		// Rule groups
 		var groupIdx = 0;
-		for( rg in ld.ruleGroups) {
+		for( rg in ld.autoRuleGroups) {
 			var groupIdx = groupIdx++; // prevent memory pointer issues
 
 			var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();

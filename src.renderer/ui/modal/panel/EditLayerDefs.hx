@@ -216,7 +216,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					function changeTileset(clear:Bool) {
 						if( clear ) {
 							new LastChance(Lang.t._("Deleted all auto-layer rules"), project);
-							cur.ruleGroups = [];
+							cur.autoRuleGroups = [];
 						}
 						cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
 						if( cur.autoTilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
@@ -224,7 +224,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						editor.ge.emit( LayerDefChanged);
 					}
 
-					if( cur.ruleGroups.length==0 )
+					if( cur.autoRuleGroups.length==0 )
 						changeTileset(false);
 					else {
 						new ui.modal.dialog.Confirm(

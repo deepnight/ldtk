@@ -140,15 +140,15 @@ class Definitions {
 
 	public function sortLayerAutoRules(ld:led.def.LayerDef, fromGroupIdx:Int, toGroupIdx:Int, fromRuleIdx:Int, toRuleIdx:Int) : Null<led.def.AutoLayerRuleDef> {
 		// Group list bounds
-		if( fromGroupIdx<0 || fromGroupIdx>=ld.ruleGroups.length )
+		if( fromGroupIdx<0 || fromGroupIdx>=ld.autoRuleGroups.length )
 			return null;
 
-		if( toGroupIdx<0 || toGroupIdx>=ld.ruleGroups.length )
+		if( toGroupIdx<0 || toGroupIdx>=ld.autoRuleGroups.length )
 			return null;
 
 		// Rule list bounds
-		var fromGroup = ld.ruleGroups[fromGroupIdx];
-		var toGroup = ld.ruleGroups[toGroupIdx];
+		var fromGroup = ld.autoRuleGroups[fromGroupIdx];
+		var toGroup = ld.autoRuleGroups[toGroupIdx];
 
 		if( fromRuleIdx<0 || toRuleIdx<0 )
 			return null;
@@ -170,14 +170,14 @@ class Definitions {
 
 
 	public function sortLayerAutoGroup(ld:led.def.LayerDef, fromGroupIdx:Int, toGroupIdx:Int) : Null<AutoLayerRuleGroup> {
-		if( fromGroupIdx<0 || fromGroupIdx>=ld.ruleGroups.length )
+		if( fromGroupIdx<0 || fromGroupIdx>=ld.autoRuleGroups.length )
 			return null;
 
-		if( toGroupIdx<0 || toGroupIdx>=ld.ruleGroups.length )
+		if( toGroupIdx<0 || toGroupIdx>=ld.autoRuleGroups.length )
 			return null;
 
-		var moved = ld.ruleGroups.splice(fromGroupIdx,1)[0];
-		ld.ruleGroups.insert(toGroupIdx, moved);
+		var moved = ld.autoRuleGroups.splice(fromGroupIdx,1)[0];
+		ld.autoRuleGroups.insert(toGroupIdx, moved);
 		return moved;
 	}
 

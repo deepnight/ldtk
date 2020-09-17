@@ -396,10 +396,10 @@ class LevelRender extends dn.Process {
 
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
-					var groupIdx = li.def.ruleGroups.length-1;
+					var groupIdx = li.def.autoRuleGroups.length-1;
 					var anyTile = false;
 					while( groupIdx>=0 ) {
-						var rg = li.def.ruleGroups[groupIdx];
+						var rg = li.def.autoRuleGroups[groupIdx];
 						if( rg.active ) {
 							var ruleIdx = rg.rules.length-1;
 							while( ruleIdx>=0 ) {

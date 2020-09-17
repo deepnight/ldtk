@@ -11,9 +11,11 @@ class LayerDef {
 
 	// IntGrid
 	var intGridValues : Array<IntGridValueDef> = [];
+
+	// IntGrid/AutoLayers
 	public var autoTilesetDefUid : Null<Int>;
-	// public var rules : Array<AutoLayerRuleDef> = [];
-	public var ruleGroups : Array<AutoLayerRuleGroup> = [];
+	// public var autoSourceLayerDefUid : Null<Int>; // JSON
+	public var autoRuleGroups : Array<AutoLayerRuleGroup> = [];
 
 	// Tiles
 	public var tilesetDefUid : Null<Int>;
@@ -88,7 +90,7 @@ class LayerDef {
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
 
 			autoTilesetDefUid: autoTilesetDefUid,
-			rules: ruleGroups.map( function(rg) return {
+			rules: autoRuleGroups.map( function(rg) return {
 				uid: rg.uid,
 				name: rg.name,
 				active: rg.active,
@@ -156,7 +158,7 @@ class LayerDef {
 
 
 	public function hasRule(ruleUid:Int) : Bool {
-		for(rg in ruleGroups)
+		for(rg in autoRuleGroups)
 		for(r in rg.rules)
 			if( r.uid==ruleUid )
 				return true;
@@ -164,7 +166,7 @@ class LayerDef {
 	}
 
 	public function getRule(uid:Int) : Null<AutoLayerRuleDef> {
-		for( rg in ruleGroups )
+		for( rg in autoRuleGroups )
 		for( r in rg.rules )
 			if( r.uid==uid )
 				return r;
@@ -172,9 +174,9 @@ class LayerDef {
 	}
 
 	public function removeRuleGroup(rg:AutoLayerRuleGroup) {
-		for( g in ruleGroups )
+		for( g in autoRuleGroups )
 			if( g.uid==rg.uid ) {
-				ruleGroups.remove(g);
+				autoRuleGroups.remove(g);
 				return true;
 			}
 		return false;
@@ -189,9 +191,9 @@ class LayerDef {
 			rules: [],
 		}
 		if( index!=null )
-			ruleGroups.insert(index, rg);
+			autoRuleGroups.insert(index, rg);
 		else
-			ruleGroups.push(rg);
+			autoRuleGroups.push(rg);
 		return rg;
 	}
 
@@ -199,7 +201,7 @@ class LayerDef {
 		// Lost auto-layer tileset
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {
 			autoTilesetDefUid = null;
-			for(rg in ruleGroups)
+			for(rg in autoRuleGroups)
 			for(r in rg.rules)
 				r.tileIds = [];
 		}
