@@ -1,6 +1,6 @@
 {
 	"name": "led",
-	"version": "0.1.5-alpha",
+	"version": "0.1.6-alpha",
 	"main": "assets/main.js",
 	"productName": "LEd",
 	"author": "Sebastien Benard",
