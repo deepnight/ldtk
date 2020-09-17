@@ -24,7 +24,7 @@
 				"displayOpacity": 1.0,
 				"intGridValues": [ { "identifier": null, "color": "#FFFFFF" } ],
 				"autoTilesetDefUid": 9,
-				"rules": [
+				"autoRuleGroups": [
 					{
 						"uid": 86,
 						"name": "Plants",

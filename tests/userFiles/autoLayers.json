@@ -17,14 +17,14 @@
 	"defs": {
 		"layers": [
 			{
-				"identifier": "AutoLayer",
+				"identifier": "Pure_auto_layer",
 				"type": "AutoLayer",
 				"uid": 81,
 				"gridSize": 16,
 				"displayOpacity": 1.0,
 				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
 				"autoTilesetDefUid": null,
-				"rules": [],
+				"autoRuleGroups": [],
 				"tilesetDefUid": null,
 				"tilePivotX": 0,
 				"tilePivotY": 0
@@ -42,7 +42,7 @@
 					{ "identifier": "lava", "color": "#FF0000" }
 				],
 				"autoTilesetDefUid": 9,
-				"rules": [ {
+				"autoRuleGroups": [ {
 					"uid": 80,
 					"name": "default",
 					"active": true,
@@ -701,7 +701,7 @@
 			"pxHei": 120,
 			"layerInstances": [
 				{
-					"__identifier": "AutoLayer",
+					"__identifier": "Pure_auto_layer",
 					"__type": "AutoLayer",
 					"__cWid": 14,
 					"__cHei": 8,
@@ -1972,7 +1972,7 @@
 			"pxHei": 408,
 			"layerInstances": [
 				{
-					"__identifier": "AutoLayer",
+					"__identifier": "Pure_auto_layer",
 					"__type": "AutoLayer",
 					"__cWid": 30,
 					"__cHei": 26,
@@ -7056,7 +7056,7 @@
 			"pxHei": 256,
 			"layerInstances": [
 				{
-					"__identifier": "AutoLayer",
+					"__identifier": "Pure_auto_layer",
 					"__type": "AutoLayer",
 					"__cWid": 16,
 					"__cHei": 16,
@@ -8685,7 +8685,7 @@
 			"pxHei": 256,
 			"layerInstances": [
 				{
-					"__identifier": "AutoLayer",
+					"__identifier": "Pure_auto_layer",
 					"__type": "AutoLayer",
 					"__cWid": 16,
 					"__cHei": 16,
@@ -10103,7 +10103,7 @@
 			"pxHei": 256,
 			"layerInstances": [
 				{
-					"__identifier": "AutoLayer",
+					"__identifier": "Pure_auto_layer",
 					"__type": "AutoLayer",
 					"__cWid": 16,
 					"__cHei": 16,
@@ -11511,7 +11511,7 @@
 			"pxHei": 256,
 			"layerInstances": [
 				{
-					"__identifier": "AutoLayer",
+					"__identifier": "Pure_auto_layer",
 					"__type": "AutoLayer",
 					"__cWid": 16,
 					"__cHei": 16,
