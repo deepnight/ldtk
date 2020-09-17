@@ -305,7 +305,7 @@ class Editor extends Page {
 				if( !hasInputFocus() )
 					levelRender.setEnhanceActiveLayer( !levelRender.enhanceActiveLayer );
 
-			case K.G:
+			case K.L:
 				if( !hasInputFocus() ) {
 					gridSnapping = !gridSnapping;
 					levelRender.invalidateBg();
