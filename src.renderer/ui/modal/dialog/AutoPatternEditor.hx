@@ -19,6 +19,8 @@ class AutoPatternEditor extends ui.modal.Dialog {
 	function render() {
 		loadTemplate("autoPatternEditor");
 
+		var sourceDef = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef(layerDef.autoSourceLayerDefUid);
+
 		// Mini explanation tip
 		var jExplain = jContent.find(".explain");
 		function setExplain(?str:String) {
@@ -37,7 +39,7 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		jContent.find(">.tiles .wrapper").empty().append(jTile);
 
 		// Pattern grid editor
-		var jGrid = JsTools.createAutoPatternGrid(rule, layerDef, setExplain, function(cx,cy,button) {
+		var jGrid = JsTools.createAutoPatternGrid(rule, sourceDef, setExplain, function(cx,cy,button) {
 			var v = rule.get(cx,cy);
 			if( button==0 ) {
 				if( v==0 || v>0 )
@@ -80,8 +82,7 @@ class AutoPatternEditor extends ui.modal.Dialog {
 		var jValues = jContent.find(">.values ul").empty();
 
 		var idx = 0;
-		var source = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef(layerDef.autoSourceLayerDefUid);
-		for(v in source.getAllIntGridValues()) {
+		for(v in sourceDef.getAllIntGridValues()) {
 			var jVal = new J('<li/>');
 			jVal.appendTo(jValues);
 
