@@ -293,13 +293,23 @@ class Editor extends Page {
 
 			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() && curLayerInstance.def.isAutoLayer() ):
 				levelRender.toggleAutoLayerRendering(curLayerInstance);
+				N.quick( "Auto-layer rendering: "+( levelRender.autoLayerRenderingEnabled(curLayerInstance) ? "ON" : "off" ));
+
+			case K.R if( !hasInputFocus() && App.ME.isShiftDown() ):
+				var state : Null<Bool> = null;
+				for(li in curLevel.layerInstances)
+					if( li.def.isAutoLayer() ) {
+						if( state==null )
+							state = !levelRender.autoLayerRenderingEnabled(li);
+						levelRender.setAutoLayerRendering(li, state);
+					}
+				N.quick( "All auto-layers rendering: "+( state ? "ON" : "off" ));
 
 			case K.W if( App.ME.isCtrlDown() ):
 				onClose();
 
-			case K.Q:
-				if( App.ME.isCtrlDown() )
-					App.ME.exit();
+			case K.Q if( App.ME.isCtrlDown() ):
+				App.ME.exit();
 
 			case K.A if( !hasInputFocus() ):
 				levelRender.setEnhanceActiveLayer( !levelRender.enhanceActiveLayer );
@@ -315,9 +325,8 @@ class Editor extends Page {
 				levelRender.toggleGrid();
 				N.quick( "Show grid: "+( levelRender.isGridVisible() ? "ON" : "off" ));
 
-			case K.H:
-				if( !hasInputFocus() )
-					onHelp();
+			case K.H if( !hasInputFocus() ):
+				onHelp();
 
 			case k if( k>=48 && k<=57 && !hasInputFocus() ):
 				var idx = k==48 ? 9 : k-49;
