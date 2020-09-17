@@ -369,32 +369,28 @@ class LayerInstance {
 	}
 
 
-	inline function applyAutoLayerRuleAt(r:led.def.AutoLayerRuleDef, cx:Int, cy:Int) {
-		if( def.isAutoLayer() ) {
-			// Init
-			if( !autoTiles.exists(r.uid) )
-				autoTiles.set( r.uid, new Map() );
-			autoTiles.get(r.uid).remove( coordId(cx,cy) );
+	inline function applyAutoLayerRuleAt(source:LayerInstance, r:led.def.AutoLayerRuleDef, cx:Int, cy:Int) {
+		// Init
+		if( !autoTiles.exists(r.uid) )
+			autoTiles.set( r.uid, new Map() );
+		autoTiles.get(r.uid).remove( coordId(cx,cy) );
 
-			// Apply rule
-			if( r.matches(this, cx,cy) ) {
-				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:0 } );
-				return true;
-			}
-			else if( r.flipX && r.matches(this, cx,cy, -1) ) {
-				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:1 } );
-				return true;
-			}
-			else if( r.flipY && r.matches(this, cx,cy, 1, -1) ) {
-				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:2 } );
-				return true;
-			}
-			else if( r.flipX && r.flipY && r.matches(this, cx,cy, -1, -1) ) {
-				autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:3 } );
-				return true;
-			}
-			else
-				return false;
+		// Apply rule
+		if( r.matches(source, cx,cy) ) {
+			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:0 } );
+			return true;
+		}
+		else if( r.flipX && r.matches(source, cx,cy, -1) ) {
+			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:1 } );
+			return true;
+		}
+		else if( r.flipY && r.matches(source, cx,cy, 1, -1) ) {
+			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:2 } );
+			return true;
+		}
+		else if( r.flipX && r.flipY && r.matches(source, cx,cy, -1, -1) ) {
+			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:3 } );
+			return true;
 		}
 		else
 			return false;
@@ -410,12 +406,14 @@ class LayerInstance {
 		var right = dn.M.imin( cWid-1, cx + wid-1 + Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
 		var bottom = dn.M.imin( cHei-1, cy + hei-1 + Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
 
+
 		// Apply rules
+		var source = def.type==IntGrid ? this : level.getLayerInstance(def.autoSourceLayerDefUid);
 		for(cx in left...right+1)
 		for(cy in top...bottom+1)
 		for(rg in def.autoRuleGroups)
 		for(r in rg.rules)
-			applyAutoLayerRuleAt(r,cx,cy);
+			applyAutoLayerRuleAt(source, r,cx,cy);
 	}
 
 	public function applyAllAutoLayerRules() {
@@ -430,9 +428,10 @@ class LayerInstance {
 		if( !def.isAutoLayer() )
 			return;
 
+		var source = def.type==IntGrid ? this : level.getLayerInstance(def.autoSourceLayerDefUid);
 		for(cx in 0...cWid)
 		for(cy in 0...cHei)
-			applyAutoLayerRuleAt(r, cx,cy);
+			applyAutoLayerRuleAt(source, r, cx,cy);
 	}
 
 }
