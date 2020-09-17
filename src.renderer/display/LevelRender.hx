@@ -424,11 +424,12 @@ class LevelRender extends dn.Process {
 
 						groupIdx--;
 					}
-					if( li.def.type==IntGrid && !anyTile && li.hasIntGrid(cx,cy) ) {
-						// Default render when no tile applies
-						g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
-						g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);
-					}
+
+					// if( li.def.type==IntGrid && !anyTile && li.hasIntGrid(cx,cy) ) {
+					// 	// Default render when no tile applies
+					// 	g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
+					// 	g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);
+					// }
 				}
 			}
 			else if( li.def.type==IntGrid ) {
