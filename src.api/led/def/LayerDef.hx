@@ -58,8 +58,8 @@ class LayerDef {
 		o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
 
 		// Read auto-layer rules
-		if( json.rules!=null ) {
-			for( ruleGroupJson in JsonTools.readArray(json.rules) ) {
+		if( json.autoRuleGroups!=null ) {
+			for( ruleGroupJson in JsonTools.readArray(json.autoRuleGroups) ) {
 				var rg = o.createRuleGroup(
 					JsonTools.readInt(ruleGroupJson.uid,-1),
 					JsonTools.readString(ruleGroupJson.name, "default")
@@ -90,7 +90,7 @@ class LayerDef {
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
 
 			autoTilesetDefUid: autoTilesetDefUid,
-			rules: autoRuleGroups.map( function(rg) return {
+			autoRuleGroups: autoRuleGroups.map( function(rg) return {
 				uid: rg.uid,
 				name: rg.name,
 				active: rg.active,
