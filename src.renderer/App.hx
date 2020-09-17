@@ -45,8 +45,6 @@ class App extends dn.Process {
 		var fp = dn.FilePath.fromDir( JsTools.getAppResourceDir() );
 		fp.useSlashes();
 		APP_RESOURCE_DIR = fp.directoryWithSlash;
-		trace("rsc="+APP_RESOURCE_DIR);
-		trace("assets="+APP_ASSETS_DIR);
 
 		// Restore last stored project state
 		session = {
