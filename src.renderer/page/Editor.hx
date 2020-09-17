@@ -305,12 +305,13 @@ class Editor extends Page {
 				if( !hasInputFocus() )
 					levelRender.setEnhanceActiveLayer( !levelRender.enhanceActiveLayer );
 
-			case K.L:
-				if( !hasInputFocus() ) {
-					gridSnapping = !gridSnapping;
-					levelRender.invalidateBg();
-					jMainPanel.find("input#gridSnapping").prop("checked", gridSnapping);
-				}
+			case K.L if( !hasInputFocus() ):
+				gridSnapping = !gridSnapping;
+				levelRender.invalidateBg();
+				jMainPanel.find("input#gridSnapping").prop("checked", gridSnapping);
+
+			case K.G if( !hasInputFocus() ):
+				levelRender.toggleGrid();
 
 			case K.H:
 				if( !hasInputFocus() )

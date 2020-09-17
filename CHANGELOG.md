@@ -4,6 +4,7 @@
 
  - **"Pure" auto-layers**: these layers only have rules and use a separate IntGrid layer as source for their value checks. Very useful to have a separate auto-layer that contains drop-shadows of walls, for example. You can have any number of pure auto-layers using the same single IntGrid source.
  - Grid lock (formerly grid snap) now uses L key shortcut instead of G
+ - Grid visibility can be toggled using G key shortcut
 
 ## 0.1.5-alpha
 
