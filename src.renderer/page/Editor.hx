@@ -301,17 +301,19 @@ class Editor extends Page {
 				if( App.ME.isCtrlDown() )
 					App.ME.exit();
 
-			case K.A:
-				if( !hasInputFocus() )
-					levelRender.setEnhanceActiveLayer( !levelRender.enhanceActiveLayer );
+			case K.A if( !hasInputFocus() ):
+				levelRender.setEnhanceActiveLayer( !levelRender.enhanceActiveLayer );
+				N.quick( "Active layer enhancement: "+( levelRender.enhanceActiveLayer ? "ON" : "off" ));
 
 			case K.L if( !hasInputFocus() ):
 				gridSnapping = !gridSnapping;
 				levelRender.invalidateBg();
+				N.quick( "Grid lock: "+( gridSnapping ? "ON" : "off" ));
 				jMainPanel.find("input#gridSnapping").prop("checked", gridSnapping);
 
 			case K.G if( !hasInputFocus() ):
 				levelRender.toggleGrid();
+				N.quick( "Show grid: "+( levelRender.isGridVisible() ? "ON" : "off" ));
 
 			case K.H:
 				if( !hasInputFocus() )
@@ -505,12 +507,12 @@ class Editor extends Page {
 		ge.emit(LevelSelected);
 	}
 
-	public function selectLayerInstance(l:led.inst.LayerInstance) {
-		if( curLayerId==l.def.uid )
+	public function selectLayerInstance(li:led.inst.LayerInstance) {
+		if( curLayerId==li.def.uid )
 			return;
 
-		layerPickingNotification(l);
-		curLayerId = l.def.uid;
+		N.quick(li.def.identifier, JsTools.createLayerTypeIcon2(li.def.type));
+		curLayerId = li.def.uid;
 		ge.emit(LayerInstanceSelected);
 
 		var opt = jMainPanel.find("input#gridSnapping");
@@ -520,21 +522,21 @@ class Editor extends Page {
 			opt.addClass("unsupported");
 	}
 
-	function layerPickingNotification(l:led.inst.LayerInstance) {
-		if( ui.Modal.hasAnyOpen() )
-			return;
+	// function layerPickingNotification(l:led.inst.LayerInstance) {
+	// 	if( ui.Modal.hasAnyOpen() )
+	// 		return;
 
-		App.ME.jBody.find(".layerPickNotif").remove();
+	// 	App.ME.jBody.find(".layerPickNotif").remove();
 
-		var e = new J('<div class="layerPickNotif"/>');
-		App.ME.jBody.append(e);
-		e.append('<div class="wrapper"/>');
-		e.find(".wrapper")
-			.append( JsTools.createLayerTypeIcon2(l.def.type) )
-			.append('<span>${l.def.identifier}</span>');
-		e.css("left", (jMainPanel.outerWidth()+15)+"px");
-		e.fadeOut(1200);
-	}
+	// 	var e = new J('<div class="layerPickNotif"/>');
+	// 	App.ME.jBody.append(e);
+	// 	e.append('<div class="wrapper"/>');
+	// 	e.find(".wrapper")
+	// 		.append( JsTools.createLayerTypeIcon2(l.def.type) )
+	// 		.append('<span>${l.def.identifier}</span>');
+	// 	e.css("left", (jMainPanel.outerWidth()+15)+"px");
+	// 	e.fadeOut(1200);
+	// }
 
 	function layerSupportsFreeMode() {
 		return switch curLayerDef.type {

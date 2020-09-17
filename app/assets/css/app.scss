@@ -1112,7 +1112,7 @@ textarea {
 	}
 }
 
-.layerPickNotif {
+.quickNotif {
 	position: absolute;
 	z-index: 99;
 	display: grid;
@@ -1125,17 +1125,24 @@ textarea {
 
 
 	.wrapper {
-		display: grid;
-		grid-template-columns: min-content auto;
-		gap: 8px;
+		display: flex;
+		margin-left: 15px;
+		margin-top: 15px;
 		padding: 4px 16px;
+		align-items: center;
+
 		font-family: Roboto;
 		font-size: 30pt;
 		color: $orange;
+
 		background-color: rgba(0, 0, 0, 0.8);
 		border-radius: 8px;
 
-		animation: slideDown 1s;
+		animation: slidedown 1s;
+
+		.icon {
+			margin-right: 8px;
+		}
 	}
 }
 

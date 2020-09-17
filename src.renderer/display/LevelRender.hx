@@ -330,6 +330,7 @@ class LevelRender extends dn.Process {
 		boundsGlow.filter = shadow;
 	}
 
+	public inline function isGridVisible() return grid.visible;
 
 	public function toggleGrid() {
 		grid.visible = !grid.visible;

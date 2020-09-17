@@ -73,6 +73,24 @@ class Notification extends dn.Process {
 		#end
 	}
 
+	public static function quick(msg:String, ?jIcon:js.jquery.JQuery) {
+		App.ME.jBody.find(".quickNotif").remove();
+
+		var e = new J('<div class="quickNotif"/>');
+		App.ME.jBody.append(e);
+		e.append('<div class="wrapper"/>');
+
+		if( jIcon!=null && jIcon.length>0 )
+			e.find(".wrapper").append(jIcon);
+
+		e.find(".wrapper").append('<span>$msg</span>');
+
+		if( Editor.ME!=null )
+			e.css("left", (Editor.ME.jMainPanel.outerWidth()+15)+"px");
+
+		e.fadeOut(1200);
+	}
+
 	public function hide() {
 		if( destroyed || cd.hasSetS("hideOnce",Const.INFINITE) )
 			return;
