@@ -14,7 +14,7 @@ class LayerDef {
 
 	// IntGrid/AutoLayers
 	public var autoTilesetDefUid : Null<Int>;
-	public var autoSourceLayerDefUid : Null<Int>; // JSON
+	public var autoSourceLayerDefUid : Null<Int>;
 	public var autoRuleGroups : Array<AutoLayerRuleGroup> = [];
 
 	// Tiles

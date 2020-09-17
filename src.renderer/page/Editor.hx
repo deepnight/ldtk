@@ -809,7 +809,6 @@ class Editor extends Page {
 					_createGuideBlock([K.ALT], "mouseLeft", L.t._("Pick"));
 
 				case AutoLayer:
-					// TODO add some help?
 
 				case Entities:
 					_createGuideBlock([K.ALT], "mouseLeft", L.t._("Pick"));
