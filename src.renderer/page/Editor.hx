@@ -686,6 +686,7 @@ class Editor extends Page {
 			case LayerRuleGroupAdded:
 			case LayerRuleGroupRemoved(rg):
 			case LayerRuleGroupSorted:
+			case LayerRuleGroupCollapseChanged:
 
 			case BeforeProjectSaving:
 			case ProjectSaved:

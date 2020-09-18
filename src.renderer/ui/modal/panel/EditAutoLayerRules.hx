@@ -41,7 +41,15 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				updatePanel();
 
 			case LayerRuleGroupSorted:
-				// TODO invalidate rules
+				// WARNING: enable invalidation if breakOnMatch finally exists
+
+				// for(rg in ld.autoRuleGroups)
+				// for(r in rg.rules)
+				// 	invalidatedRules.set(r.uid, r.uid);
+
+				updatePanel();
+
+			case LayerRuleGroupCollapseChanged:
 				updatePanel();
 
 			case LayerRuleGroupAdded, LayerRuleGroupChanged:
@@ -71,6 +79,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				}
 				else if( r==null && li.autoTiles.exists(ruleUid) ) {
 					App.LOG.render('Rule ${ruleUid} in level "${l.identifier}"": removing autoTiles');
+					// WARNING: re-apply all rules here if breakOnMatch exists
 					li.autoTiles.remove(ruleUid);
 				}
 			}
@@ -88,6 +97,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 		// Create new rule
 		function createRule(rg:led.LedTypes.AutoLayerRuleGroup, insertIdx:Int) {
+			App.LOG.general("Added rule");
 			var r = new led.def.AutoLayerRuleDef( project.makeUniqId() );
 			rg.rules.insert(insertIdx, r);
 
@@ -109,6 +119,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
 				return;
 			}
+			App.LOG.general("Added rule group");
 
 			var insertIdx = 0;
 			var rg = ld.createRuleGroup(project.makeUniqId(), "New group", insertIdx);
@@ -144,7 +155,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			jHeader.find("div.name")
 				.click( function(_) {
 					rg.collapsed = !rg.collapsed;
-					editor.ge.emit(LayerRuleGroupSorted);
+					editor.ge.emit(LayerRuleGroupCollapseChanged);
 				})
 				.text(rg.name);
 
@@ -160,6 +171,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			jHeader.find(".delete").click( function(ev:js.jquery.Event) {
 				new ui.modal.dialog.Confirm(ev.getThis(), true, function() {
 					new LastChance(Lang.t._("Rule group removed"), project);
+					App.LOG.general("Deleted rule group");
 					ld.removeRuleGroup(rg);
 					editor.ge.emit( LayerRuleGroupRemoved(rg) );
 				});
@@ -333,6 +345,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				// Delete
 				jRule.find("button.delete").click( function(ev) {
 					new ui.modal.dialog.Confirm( jRule, Lang.t._("Warning, this cannot be undone!"), true, function() {
+						App.LOG.general("Deleted rule");
 						rg.rules.remove(r);
 						editor.ge.emit( LayerRuleRemoved(r) );
 					});

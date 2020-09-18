@@ -196,6 +196,8 @@ class LevelRender extends dn.Process {
 			case LayerRuleGroupSorted:
 				invalidateLayer( editor.curLayerInstance );
 
+			case LayerRuleGroupCollapseChanged:
+
 			case LayerInstanceChanged:
 
 			case TilesetSelectionSaved(td):

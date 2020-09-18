@@ -32,6 +32,7 @@ enum GlobalEvent {
 	LayerRuleGroupRemoved(group:led.LedTypes.AutoLayerRuleGroup);
 	LayerRuleGroupChanged;
 	LayerRuleGroupSorted;
+	LayerRuleGroupCollapseChanged;
 
 	LayerInstanceSelected;
 	LayerInstanceChanged;
