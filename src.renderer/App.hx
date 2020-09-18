@@ -2,6 +2,7 @@ import electron.renderer.IpcRenderer;
 
 class App extends dn.Process {
 	public static var ME : App;
+	public static var LOG : dn.Log = new dn.Log( #if debug 1000 #else 50 #end );
 	public static var APP_RESOURCE_DIR = "./"; // with trailing slash
 	public static var APP_ASSETS_DIR(get,never) : String;
 		static inline function get_APP_ASSETS_DIR() return APP_RESOURCE_DIR+"assets/";
@@ -19,6 +20,11 @@ class App extends dn.Process {
 
 	public function new() {
 		super();
+
+		#if debug
+		LOG.printOnAdd = true;
+		#end
+		LOG.general("App started");
 
 		ME = this;
 		createRoot(Boot.ME.s2d);
@@ -47,12 +53,14 @@ class App extends dn.Process {
 		APP_RESOURCE_DIR = fp.directoryWithSlash;
 
 		// Restore last stored project state
+		LOG.general("Loading session");
 		session = {
 			recentProjects: [],
 		}
 		session = dn.LocalStorage.readObject("session", session);
 
 		// Auto updater
+		LOG.general("Checking update");
 		miniNotif("Checking for update...", true);
 		dn.electron.ElectronUpdater.initRenderer();
 		dn.electron.ElectronUpdater.onUpdateFound = function(info) miniNotif('Downloading ${info.version}...');
@@ -132,6 +140,13 @@ class App extends dn.Process {
 	function onKeyPress(keyCode:Int) {
 		if( hasPage() )
 			curPageProcess.onKeyPress(keyCode);
+
+		switch keyCode {
+			case K.L if( isCtrlDown() && isShiftDown() ):
+				LOG.dump();
+
+			case _:
+		}
 	}
 
 
@@ -201,12 +216,14 @@ class App extends dn.Process {
 	}
 
 	public function openEditor(project:led.Project, path:String) {
+		LOG.general("Opening Editor");
 		clearCurPage();
 		curPageProcess = new Editor(project, path);
 		curPageProcess.onAppResize();
 	}
 
 	public function openHome() {
+		LOG.general("Opening Home");
 		clearCurPage();
 		curPageProcess = new page.Home();
 		curPageProcess.onAppResize();
@@ -260,6 +277,7 @@ class App extends dn.Process {
 		jCanvas.hide();
 
 		var path = APP_ASSETS_DIR + 'pages/$id.html';
+		LOG.fileOp("Loading page: "+id+" from "+path);
 		var raw = JsTools.readFileString(path);
 		if( raw==null )
 			throw "Page not found: "+id+" in "+path+"( cwd="+JsTools.getAppResourceDir()+")";

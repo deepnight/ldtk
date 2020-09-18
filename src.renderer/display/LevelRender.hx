@@ -186,7 +186,7 @@ class LevelRender extends dn.Process {
 
 			case LayerRuleGroupAdded:
 
-			case LayerRuleGroupRemoved:
+			case LayerRuleGroupRemoved(rg):
 				editor.curLayerInstance.applyAllAutoLayerRules();
 				invalidateLayer( editor.curLayerInstance );
 
@@ -738,12 +738,14 @@ class LevelRender extends dn.Process {
 		if( allInvalidated ) {
 			// Full
 			renderAll();
+			App.LOG.warning("Full render requested");
 		}
 		else {
 			// Bg
 			if( bgInvalidated ) {
 				renderBounds();
 				renderGrid();
+				App.LOG.render("Rendered bg");
 			}
 
 			// Layers

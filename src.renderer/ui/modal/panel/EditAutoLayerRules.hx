@@ -32,11 +32,12 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				updateAllLevels();
 
 			case LayerRuleChanged(r), LayerRuleRemoved(r), LayerRuleAdded(r):
-				updatePanel();
 				invalidatedRules.set(r.uid, r.uid);
+				updatePanel();
 
-			case LayerRuleGroupRemoved:
-				// TODO invalidate rules
+			case LayerRuleGroupRemoved(rg):
+				for(r in rg.rules)
+					invalidatedRules.set(r.uid, r.uid);
 				updatePanel();
 
 			case LayerRuleGroupSorted:
@@ -64,10 +65,14 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			for( l in project.levels )
 			for( li in l.layerInstances ) {
 				var r = li.def.getRule(ruleUid);
-				if( r!=null )
+				if( r!=null ) {
+					App.LOG.render('Rule ${ruleUid} in level "${l.identifier}"": applying');
 					li.applyAutoLayerRule(r);
-				else if( r==null && li.autoTiles.exists(ruleUid) )
+				}
+				else if( r==null && li.autoTiles.exists(ruleUid) ) {
+					App.LOG.render('Rule ${ruleUid} in level "${l.identifier}"": removing autoTiles');
 					li.autoTiles.remove(ruleUid);
+				}
 			}
 		}
 
@@ -156,7 +161,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				new ui.modal.dialog.Confirm(ev.getThis(), true, function() {
 					new LastChance(Lang.t._("Rule group removed"), project);
 					ld.removeRuleGroup(rg);
-					editor.ge.emit( LayerRuleGroupRemoved );
+					editor.ge.emit( LayerRuleGroupRemoved(rg) );
 				});
 			});
 

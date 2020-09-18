@@ -425,6 +425,7 @@ class LayerInstance {
 
 		autoTiles = new Map();
 		applyAllAutoLayerRulesAt(0, 0, cWid, cHei);
+		App.LOG.warning("All rules applied in "+toString());
 	}
 
 	public function applyAutoLayerRule(r:led.def.AutoLayerRuleDef) {

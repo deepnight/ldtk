@@ -29,7 +29,7 @@ enum GlobalEvent {
 	LayerRuleSorted;
 
 	LayerRuleGroupAdded;
-	LayerRuleGroupRemoved;
+	LayerRuleGroupRemoved(group:led.LedTypes.AutoLayerRuleGroup);
 	LayerRuleGroupChanged;
 	LayerRuleGroupSorted;
 

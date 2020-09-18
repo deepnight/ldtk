@@ -311,17 +311,17 @@ class Editor extends Page {
 			case K.Q if( App.ME.isCtrlDown() ):
 				App.ME.exit();
 
-			case K.A if( !hasInputFocus() ):
+			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				levelRender.setEnhanceActiveLayer( !levelRender.enhanceActiveLayer );
 				N.quick( "Active layer enhancement: "+( levelRender.enhanceActiveLayer ? "ON" : "off" ));
 
-			case K.L if( !hasInputFocus() ):
+			case K.L if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				gridSnapping = !gridSnapping;
 				levelRender.invalidateBg();
 				N.quick( "Grid lock: "+( gridSnapping ? "ON" : "off" ));
 				jMainPanel.find("input#gridSnapping").prop("checked", gridSnapping);
 
-			case K.G if( !hasInputFocus() ):
+			case K.G if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				levelRender.toggleGrid();
 				N.quick( "Show grid: "+( levelRender.isGridVisible() ? "ON" : "off" ));
 
@@ -684,7 +684,7 @@ class Editor extends Page {
 
 			case LayerRuleGroupChanged:
 			case LayerRuleGroupAdded:
-			case LayerRuleGroupRemoved:
+			case LayerRuleGroupRemoved(rg):
 			case LayerRuleGroupSorted:
 
 			case BeforeProjectSaving:

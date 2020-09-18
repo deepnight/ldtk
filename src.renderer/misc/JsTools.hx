@@ -204,7 +204,9 @@ class JsTools {
 	}
 
 	public static function getHtmlTemplate(name:String, ?vars:Dynamic) : Null<String> {
+		App.LOG.fileOp("Loading HTML template "+name);
 		if( !_fileCache.exists(name) ) {
+			App.LOG.fileOp("  => initializing cache");
 			var path = dn.FilePath.fromFile(App.APP_ASSETS_DIR + "tpl/" + name);
 			path.extension = "html";
 
@@ -213,6 +215,8 @@ class JsTools {
 
 			_fileCache.set( name, readFileString(path.full) );
 		}
+		else
+			App.LOG.fileOp("  => from cache");
 
 		var raw = _fileCache.get(name);
 		if( vars!=null ) {
