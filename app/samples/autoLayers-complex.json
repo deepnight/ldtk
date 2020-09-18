@@ -4,7 +4,7 @@
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
 		"appVersion": "0.1.6-alpha-debug",
-		"url": "https://deepnight.net/"
+		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
 	"name": "AutoLayer demo",
 	"jsonVersion": "0.1.6",
