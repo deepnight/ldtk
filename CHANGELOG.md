@@ -6,10 +6,13 @@
  - Grid lock (formerly grid snap) now uses L key shortcut instead of G
  - Grid visibility can be toggled using G key shortcut
  - Added SHIFT-R shortcut to show/hide all auto-layers
+ - Updated sample projects
  - Updated "help" window
  - Added quick notifications for some user actions
+ - Fixed render issues when deleting or updating auto-layer rules
  - Fixed Haxe API issues
  - Fixed bugs
+ - Added some internal app logging for debugging purpose (no sensitive data, don't worry)
 
 ## 0.1.5-alpha
 
