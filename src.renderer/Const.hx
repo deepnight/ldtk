@@ -82,8 +82,8 @@ class Const {
 		// Dump latest version notes to "build" release notes
 		var c = new dn.Changelog(raw);
 		var relNotes =
-			"## " + c.latest.fullVersion + ( c.latest.title!=null ? " -- *"+c.latest.title+"*" : "" ) + "\n"
-			+ c.latest.linesMd.join("\n");
+			"## " + c.latest.version.full + ( c.latest.title!=null ? " -- *"+c.latest.title+"*" : "" ) + "\n"
+			+ c.latest.allNoteLines.join("\n");
 
 		var relNotesPath = "app/build/release-notes.md";
 		try {
