@@ -335,7 +335,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			}
 
 			// Make rules sortable
-			JsTools.makeSortable(jGroupList, "allRules", false, function(ev) {
+			JsTools.makeSortable(jGroupList, jRuleGroupList, "allRules", false, function(ev) {
 				var fromUid = Std.parseInt( ev.from.getAttribute("groupUid") );
 				if( fromUid!=rg.uid )
 					return; // Prevent double "onSort" call (one for From, one for To)
