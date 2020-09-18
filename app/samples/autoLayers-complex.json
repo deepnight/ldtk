@@ -3,11 +3,11 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.1.5-alpha-debug",
+		"appVersion": "0.1.6-alpha-debug",
 		"url": "https://deepnight.net/"
 	},
 	"name": "AutoLayer demo",
-	"jsonVersion": 1,
+	"jsonVersion": "0.1.6",
 	"defaultPivotX": 0.0,
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,

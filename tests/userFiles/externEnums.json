@@ -1,374 +1,260 @@
 {
-	"__header__" : {
-		"fileType" : "LEd Project JSON",
-		"app" : "LEd",
-		"appAuthor" : "Sebastien Benard",
-		"appVersion" : "0.0.4-alpha-debug",
-		"url" : "https://deepnight.net/"
+	"__header__": {
+		"fileType": "LEd Project JSON",
+		"app": "LEd",
+		"appAuthor": "Sebastien Benard",
+		"appVersion": "0.1.6-alpha-debug",
+		"url": "https://deepnight.net/"
 	},
-	"name" : "externEnums",
-	"jsonVersion" : 1,
-	"defaultPivotX" : 0.0,
-	"defaultPivotY" : 0.0,
-	"defaultGridSize" : 16,
-	"bgColor" : "#7F8093",
-	"nextUid" : 52,
-	"defs" : {
-		"layers" : [
+	"name": "externEnums",
+	"jsonVersion": "0.1.6",
+	"defaultPivotX": 0.0,
+	"defaultPivotY": 0.0,
+	"defaultGridSize": 16,
+	"bgColor": "#7F8093",
+	"nextUid": 52,
+	"minifyJson": false,
+	"defs": {
+		"layers": [
 			{
-				"identifier" : "Entities",
-				"type" : "Entities",
-				"uid" : 19,
-				"gridSize" : 16,
-				"displayOpacity" : 1.0,
-				"intGridValues" : [
-					{ "identifier" : null, "color" : "#000000" }
-				],
-				"tilesetDefUid" : null,
-				"tilePivotX" : 0,
-				"tilePivotY" : 0
+				"identifier": "Entities",
+				"type": "Entities",
+				"uid": 19,
+				"gridSize": 16,
+				"displayOpacity": 1.0,
+				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
+				"autoTilesetDefUid": null,
+				"autoRuleGroups": [],
+				"autoSourceLayerDefUid": null,
+				"tilesetDefUid": null,
+				"tilePivotX": 0,
+				"tilePivotY": 0
 			},
 			{
-				"identifier" : "IntGrid",
-				"type" : "IntGrid",
-				"uid" : 43,
-				"gridSize" : 16,
-				"displayOpacity" : 1.0,
-				"intGridValues" : [
-					{ "identifier" : null, "color" : "#000000" }
-				],
-				"tilesetDefUid" : null,
-				"tilePivotX" : 0,
-				"tilePivotY" : 0
+				"identifier": "IntGrid",
+				"type": "IntGrid",
+				"uid": 43,
+				"gridSize": 16,
+				"displayOpacity": 1.0,
+				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
+				"autoTilesetDefUid": null,
+				"autoRuleGroups": [],
+				"autoSourceLayerDefUid": null,
+				"tilesetDefUid": null,
+				"tilePivotX": 0,
+				"tilePivotY": 0
 			}
 		],
-		"entities" : [
+		"entities": [
 			{
-				"identifier" : "Mob",
-				"uid" : 15,
-				"width" : 16,
-				"height" : 16,
-				"color" : "#FF0000",
-				"renderMode" : "Rectangle",
-				"tilesetId" : null,
-				"tileId" : null,
-				"maxPerLevel" : 0,
-				"discardExcess" : true,
-				"pivotX" : 0.5,
-				"pivotY" : 0.5,
-				"fieldDefs" : [
+				"identifier": "Mob",
+				"uid": 15,
+				"width": 16,
+				"height": 16,
+				"color": "#FF0000",
+				"renderMode": "Rectangle",
+				"tilesetId": null,
+				"tileId": null,
+				"maxPerLevel": 0,
+				"discardExcess": true,
+				"pivotX": 0.5,
+				"pivotY": 0.5,
+				"fieldDefs": [
 					{
-						"identifier" : "Local",
-						"__type" : "LocalEnum.SomeLocalEnum",
-						"uid" : 51,
-						"type" : { "id" : "F_Enum", "params" : [ 14 ] },
-						"canBeNull" : true,
-						"editorDisplayMode" : "NameAndValue",
-						"editorDisplayPos" : "Above",
-						"min" : null,
-						"max" : null,
-						"defaultOverride" : null
+						"identifier": "Local",
+						"__type": "LocalEnum.SomeLocalEnum",
+						"uid": 51,
+						"type": { "id": "F_Enum", "params": [ 14 ] },
+						"canBeNull": true,
+						"editorDisplayMode": "NameAndValue",
+						"editorDisplayPos": "Above",
+						"min": null,
+						"max": null,
+						"defaultOverride": null
 					},
 					{
-						"identifier" : "A",
-						"__type" : "ExternEnum.A",
-						"uid" : 47,
-						"type" : { "id" : "F_Enum", "params" : [ 44 ] },
-						"canBeNull" : false,
-						"editorDisplayMode" : "NameAndValue",
-						"editorDisplayPos" : "Above",
-						"min" : null,
-						"max" : null,
-						"defaultOverride" : null
+						"identifier": "A",
+						"__type": "ExternEnum.A",
+						"uid": 47,
+						"type": { "id": "F_Enum", "params": [ 44 ] },
+						"canBeNull": false,
+						"editorDisplayMode": "NameAndValue",
+						"editorDisplayPos": "Above",
+						"min": null,
+						"max": null,
+						"defaultOverride": null
 					},
 					{
-						"identifier" : "B",
-						"__type" : "ExternEnum.B",
-						"uid" : 48,
-						"type" : { "id" : "F_Enum", "params" : [ 45 ] },
-						"canBeNull" : true,
-						"editorDisplayMode" : "NameAndValue",
-						"editorDisplayPos" : "Above",
-						"min" : null,
-						"max" : null,
-						"defaultOverride" : null
+						"identifier": "B",
+						"__type": "ExternEnum.B",
+						"uid": 48,
+						"type": { "id": "F_Enum", "params": [ 45 ] },
+						"canBeNull": true,
+						"editorDisplayMode": "NameAndValue",
+						"editorDisplayPos": "Above",
+						"min": null,
+						"max": null,
+						"defaultOverride": null
 					}
 				]
 			}
 		],
-		"tilesets" : [],
-		"enums" : [
-			{
-				"identifier" : "SomeLocalEnum",
-				"uid" : 14,
-				"values" : [
-					{ "id" : "Value_A", "tileId" : null },
-					{ "id" : "Value_B", "tileId" : null },
-					{ "id" : "Value_C", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : null,
-				"externalFileChecksum" : null
-			},
-			{
-				"identifier" : "AnotherLocalEnum",
-				"uid" : 20,
-				"values" : [
-					{
-						"id" : "AnotherLocalEnum0",
-						"tileId" : null
-					},
-					{
-						"id" : "AnotherLocalEnum1",
-						"tileId" : null
-					}
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : null,
-				"externalFileChecksum" : null
-			}
+		"tilesets": [],
+		"enums": [
+			{ "identifier": "SomeLocalEnum", "uid": 14, "values": [ { "id": "Value_A", "tileId": null }, { "id": "Value_B", "tileId": null }, { "id": "Value_C", "tileId": null } ], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null },
+			{ "identifier": "AnotherLocalEnum", "uid": 20, "values": [ { "id": "AnotherLocalEnum0", "tileId": null }, { "id": "AnotherLocalEnum1", "tileId": null } ], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null }
 		],
-		"externalEnums" : [
-			{
-				"identifier" : "A",
-				"uid" : 44,
-				"values" : [
-					{ "id" : "A0", "tileId" : null },
-					{ "id" : "A1", "tileId" : null },
-					{ "id" : "A2", "tileId" : null },
-					{ "id" : "A3", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : "enumFiles/TypesTest.hx",
-				"externalFileChecksum" : "e01092ff71df428d14dc2d6018651a70"
-			},
-			{
-				"identifier" : "B",
-				"uid" : 45,
-				"values" : [
-					{ "id" : "B0", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : "enumFiles/TypesTest.hx",
-				"externalFileChecksum" : "e01092ff71df428d14dc2d6018651a70"
-			},
-			{
-				"identifier" : "C",
-				"uid" : 50,
-				"values" : [
-					{ "id" : "C0", "tileId" : null },
-					{ "id" : "C1", "tileId" : null },
-					{ "id" : "C2", "tileId" : null }
-				],
-				"iconTilesetUid" : null,
-				"externalRelPath" : "enumFiles/TypesTest.hx",
-				"externalFileChecksum" : "e01092ff71df428d14dc2d6018651a70"
-			}
+		"externalEnums": [
+			{ "identifier": "A", "uid": 44, "values": [
+				{ "id": "A0", "tileId": null },
+				{ "id": "A1", "tileId": null },
+				{ "id": "A2", "tileId": null },
+				{ "id": "A3", "tileId": null }
+			], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" },
+			{ "identifier": "B", "uid": 45, "values": [ { "id": "B0", "tileId": null } ], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" },
+			{ "identifier": "C", "uid": 50, "values": [ { "id": "C0", "tileId": null }, { "id": "C1", "tileId": null }, { "id": "C2", "tileId": null } ], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" }
 		]
 	},
-	"levels" : [
-		{
-			"identifier" : "Level",
-			"uid" : 0,
-			"pxWid" : 352,
-			"pxHei" : 256,
-			"layerInstances" : [
-				{
-					"__identifier" : "Entities",
-					"__type" : "Entities",
-					"__cWid" : 22,
-					"__cHei" : 16,
-					"__gridSize" : 16,
-					"levelId" : 0,
-					"layerDefUid" : 19,
-					"pxOffsetX" : 0,
-					"pxOffsetY" : 0,
-					"intGrid" : [],
-					"gridTiles" : [],
-					"entityInstances" : [
-						{
-							"__identifier" : "Mob",
-							"__cx" : 10,
-							"__cy" : 4,
-							"defUid" : 15,
-							"x" : 168,
-							"y" : 72,
-							"fieldInstances" : [
-								{
-									"__identifier" : "A",
-									"__value" : "A0",
-									"__type" : "ExternEnum.A",
-									"defUid" : 47,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "A0" ] }
-								},
-								{
-									"__identifier" : "B",
-									"__value" : null,
-									"__type" : "ExternEnum.B",
-									"defUid" : 48,
-									"realEditorValue" : null
-								},
-								{
-									"__identifier" : "Local",
-									"__value" : "Value_A",
-									"__type" : "LocalEnum.SomeLocalEnum",
-									"defUid" : 51,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "Value_A" ] }
-								}
-							]
-						},
-						{
-							"__identifier" : "Mob",
-							"__cx" : 10,
-							"__cy" : 7,
-							"defUid" : 15,
-							"x" : 168,
-							"y" : 120,
-							"fieldInstances" : [
-								{
-									"__identifier" : "A",
-									"__value" : "A1",
-									"__type" : "ExternEnum.A",
-									"defUid" : 47,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "A1" ] }
-								},
-								{
-									"__identifier" : "B",
-									"__value" : null,
-									"__type" : "ExternEnum.B",
-									"defUid" : 48,
-									"realEditorValue" : null
-								},
-								{
-									"__identifier" : "Local",
-									"__value" : null,
-									"__type" : "LocalEnum.SomeLocalEnum",
-									"defUid" : 51,
-									"realEditorValue" : null
-								}
-							]
-						},
-						{
-							"__identifier" : "Mob",
-							"__cx" : 10,
-							"__cy" : 10,
-							"defUid" : 15,
-							"x" : 168,
-							"y" : 168,
-							"fieldInstances" : [
-								{
-									"__identifier" : "A",
-									"__value" : "A2",
-									"__type" : "ExternEnum.A",
-									"defUid" : 47,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "A2" ] }
-								},
-								{
-									"__identifier" : "B",
-									"__value" : "B0",
-									"__type" : "ExternEnum.B",
-									"defUid" : 48,
-									"realEditorValue" : { "id" : "V_String", "params" : [ "B0" ] }
-								},
-								{
-									"__identifier" : "Local",
-									"__value" : null,
-									"__type" : "LocalEnum.SomeLocalEnum",
-									"defUid" : 51,
-									"realEditorValue" : null
-								}
-							]
-						}
-					]
-				},
-				{
-					"__identifier" : "IntGrid",
-					"__type" : "IntGrid",
-					"__cWid" : 22,
-					"__cHei" : 16,
-					"__gridSize" : 16,
-					"levelId" : 0,
-					"layerDefUid" : 43,
-					"pxOffsetX" : 0,
-					"pxOffsetY" : 0,
-					"intGrid" : [
-						{ "coordId" : 0, "v" : 0 },
-						{ "coordId" : 1, "v" : 0 },
-						{ "coordId" : 2, "v" : 0 },
-						{ "coordId" : 3, "v" : 0 },
-						{ "coordId" : 4, "v" : 0 },
-						{ "coordId" : 5, "v" : 0 },
-						{ "coordId" : 6, "v" : 0 },
-						{ "coordId" : 7, "v" : 0 },
-						{ "coordId" : 8, "v" : 0 },
-						{ "coordId" : 9, "v" : 0 },
-						{ "coordId" : 10, "v" : 0 },
-						{ "coordId" : 11, "v" : 0 },
-						{ "coordId" : 12, "v" : 0 },
-						{ "coordId" : 13, "v" : 0 },
-						{ "coordId" : 14, "v" : 0 },
-						{ "coordId" : 15, "v" : 0 },
-						{ "coordId" : 16, "v" : 0 },
-						{ "coordId" : 17, "v" : 0 },
-						{ "coordId" : 18, "v" : 0 },
-						{ "coordId" : 19, "v" : 0 },
-						{ "coordId" : 20, "v" : 0 },
-						{ "coordId" : 21, "v" : 0 },
-						{ "coordId" : 22, "v" : 0 },
-						{ "coordId" : 43, "v" : 0 },
-						{ "coordId" : 44, "v" : 0 },
-						{ "coordId" : 65, "v" : 0 },
-						{ "coordId" : 66, "v" : 0 },
-						{ "coordId" : 87, "v" : 0 },
-						{ "coordId" : 88, "v" : 0 },
-						{ "coordId" : 109, "v" : 0 },
-						{ "coordId" : 110, "v" : 0 },
-						{ "coordId" : 131, "v" : 0 },
-						{ "coordId" : 132, "v" : 0 },
-						{ "coordId" : 153, "v" : 0 },
-						{ "coordId" : 154, "v" : 0 },
-						{ "coordId" : 175, "v" : 0 },
-						{ "coordId" : 176, "v" : 0 },
-						{ "coordId" : 197, "v" : 0 },
-						{ "coordId" : 198, "v" : 0 },
-						{ "coordId" : 219, "v" : 0 },
-						{ "coordId" : 220, "v" : 0 },
-						{ "coordId" : 241, "v" : 0 },
-						{ "coordId" : 242, "v" : 0 },
-						{ "coordId" : 263, "v" : 0 },
-						{ "coordId" : 264, "v" : 0 },
-						{ "coordId" : 285, "v" : 0 },
-						{ "coordId" : 286, "v" : 0 },
-						{ "coordId" : 307, "v" : 0 },
-						{ "coordId" : 308, "v" : 0 },
-						{ "coordId" : 329, "v" : 0 },
-						{ "coordId" : 330, "v" : 0 },
-						{ "coordId" : 331, "v" : 0 },
-						{ "coordId" : 332, "v" : 0 },
-						{ "coordId" : 333, "v" : 0 },
-						{ "coordId" : 334, "v" : 0 },
-						{ "coordId" : 335, "v" : 0 },
-						{ "coordId" : 336, "v" : 0 },
-						{ "coordId" : 337, "v" : 0 },
-						{ "coordId" : 338, "v" : 0 },
-						{ "coordId" : 339, "v" : 0 },
-						{ "coordId" : 340, "v" : 0 },
-						{ "coordId" : 341, "v" : 0 },
-						{ "coordId" : 342, "v" : 0 },
-						{ "coordId" : 343, "v" : 0 },
-						{ "coordId" : 344, "v" : 0 },
-						{ "coordId" : 345, "v" : 0 },
-						{ "coordId" : 346, "v" : 0 },
-						{ "coordId" : 347, "v" : 0 },
-						{ "coordId" : 348, "v" : 0 },
-						{ "coordId" : 349, "v" : 0 },
-						{ "coordId" : 350, "v" : 0 },
-						{ "coordId" : 351, "v" : 0 }
-					],
-					"gridTiles" : [],
-					"entityInstances" : []
-				}
-			]
-		}
-	]
+	"levels": [ {
+		"identifier": "Level",
+		"uid": 0,
+		"pxWid": 352,
+		"pxHei": 256,
+		"layerInstances": [
+			{
+				"__identifier": "Entities",
+				"__type": "Entities",
+				"__cWid": 22,
+				"__cHei": 16,
+				"__gridSize": 16,
+				"levelId": 0,
+				"layerDefUid": 19,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGrid": [],
+				"autoTiles": [],
+				"gridTiles": [],
+				"entityInstances": [
+					{ "__identifier": "Mob", "__cx": 10, "__cy": 4, "defUid": 15, "x": 168, "y": 72, "fieldInstances": [
+						{ "__identifier": "A", "__value": "A0", "__type": "ExternEnum.A", "defUid": 47, "realEditorValue": {
+							"id": "V_String",
+							"params": [ "A0" ]
+						} },
+						{ "__identifier": "B", "__value": null, "__type": "ExternEnum.B", "defUid": 48, "realEditorValue": null },
+						{ "__identifier": "Local", "__value": "Value_A", "__type": "LocalEnum.SomeLocalEnum", "defUid": 51, "realEditorValue": {
+							"id": "V_String",
+							"params": [ "Value_A" ]
+						} }
+					] },
+					{ "__identifier": "Mob", "__cx": 10, "__cy": 7, "defUid": 15, "x": 168, "y": 120, "fieldInstances": [
+						{ "__identifier": "A", "__value": "A1", "__type": "ExternEnum.A", "defUid": 47, "realEditorValue": {
+							"id": "V_String",
+							"params": [ "A1" ]
+						} },
+						{ "__identifier": "B", "__value": null, "__type": "ExternEnum.B", "defUid": 48, "realEditorValue": null },
+						{ "__identifier": "Local", "__value": null, "__type": "LocalEnum.SomeLocalEnum", "defUid": 51, "realEditorValue": null }
+					] },
+					{ "__identifier": "Mob", "__cx": 10, "__cy": 10, "defUid": 15, "x": 168, "y": 168, "fieldInstances": [
+						{ "__identifier": "A", "__value": "A2", "__type": "ExternEnum.A", "defUid": 47, "realEditorValue": {
+							"id": "V_String",
+							"params": [ "A2" ]
+						} },
+						{ "__identifier": "B", "__value": "B0", "__type": "ExternEnum.B", "defUid": 48, "realEditorValue": {
+							"id": "V_String",
+							"params": [ "B0" ]
+						} },
+						{ "__identifier": "Local", "__value": null, "__type": "LocalEnum.SomeLocalEnum", "defUid": 51, "realEditorValue": null }
+					] }
+				]
+			},
+			{
+				"__identifier": "IntGrid",
+				"__type": "IntGrid",
+				"__cWid": 22,
+				"__cHei": 16,
+				"__gridSize": 16,
+				"levelId": 0,
+				"layerDefUid": 43,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGrid": [
+					{ "coordId": 0, "v": 0 },
+					{ "coordId": 1, "v": 0 },
+					{ "coordId": 2, "v": 0 },
+					{ "coordId": 3, "v": 0 },
+					{ "coordId": 4, "v": 0 },
+					{ "coordId": 5, "v": 0 },
+					{ "coordId": 6, "v": 0 },
+					{ "coordId": 7, "v": 0 },
+					{ "coordId": 8, "v": 0 },
+					{ "coordId": 9, "v": 0 },
+					{ "coordId": 10, "v": 0 },
+					{ "coordId": 11, "v": 0 },
+					{ "coordId": 12, "v": 0 },
+					{ "coordId": 13, "v": 0 },
+					{ "coordId": 14, "v": 0 },
+					{ "coordId": 15, "v": 0 },
+					{ "coordId": 16, "v": 0 },
+					{ "coordId": 17, "v": 0 },
+					{ "coordId": 18, "v": 0 },
+					{ "coordId": 19, "v": 0 },
+					{ "coordId": 20, "v": 0 },
+					{ "coordId": 21, "v": 0 },
+					{ "coordId": 22, "v": 0 },
+					{ "coordId": 43, "v": 0 },
+					{ "coordId": 44, "v": 0 },
+					{ "coordId": 65, "v": 0 },
+					{ "coordId": 66, "v": 0 },
+					{ "coordId": 87, "v": 0 },
+					{ "coordId": 88, "v": 0 },
+					{ "coordId": 109, "v": 0 },
+					{ "coordId": 110, "v": 0 },
+					{ "coordId": 131, "v": 0 },
+					{ "coordId": 132, "v": 0 },
+					{ "coordId": 153, "v": 0 },
+					{ "coordId": 154, "v": 0 },
+					{ "coordId": 175, "v": 0 },
+					{ "coordId": 176, "v": 0 },
+					{ "coordId": 197, "v": 0 },
+					{ "coordId": 198, "v": 0 },
+					{ "coordId": 219, "v": 0 },
+					{ "coordId": 220, "v": 0 },
+					{ "coordId": 241, "v": 0 },
+					{ "coordId": 242, "v": 0 },
+					{ "coordId": 263, "v": 0 },
+					{ "coordId": 264, "v": 0 },
+					{ "coordId": 285, "v": 0 },
+					{ "coordId": 286, "v": 0 },
+					{ "coordId": 307, "v": 0 },
+					{ "coordId": 308, "v": 0 },
+					{ "coordId": 329, "v": 0 },
+					{ "coordId": 330, "v": 0 },
+					{ "coordId": 331, "v": 0 },
+					{ "coordId": 332, "v": 0 },
+					{ "coordId": 333, "v": 0 },
+					{ "coordId": 334, "v": 0 },
+					{ "coordId": 335, "v": 0 },
+					{ "coordId": 336, "v": 0 },
+					{ "coordId": 337, "v": 0 },
+					{ "coordId": 338, "v": 0 },
+					{ "coordId": 339, "v": 0 },
+					{ "coordId": 340, "v": 0 },
+					{ "coordId": 341, "v": 0 },
+					{ "coordId": 342, "v": 0 },
+					{ "coordId": 343, "v": 0 },
+					{ "coordId": 344, "v": 0 },
+					{ "coordId": 345, "v": 0 },
+					{ "coordId": 346, "v": 0 },
+					{ "coordId": 347, "v": 0 },
+					{ "coordId": 348, "v": 0 },
+					{ "coordId": 349, "v": 0 },
+					{ "coordId": 350, "v": 0 },
+					{ "coordId": 351, "v": 0 }
+				],
+				"autoTiles": [],
+				"gridTiles": [],
+				"entityInstances": []
+			}
+		]
+	} ]
 }

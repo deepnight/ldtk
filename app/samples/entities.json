@@ -3,11 +3,11 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.1.5-alpha-debug",
+		"appVersion": "0.1.6-alpha-debug",
 		"url": "https://deepnight.net/"
 	},
 	"name": "Entities demo",
-	"jsonVersion": 1,
+	"jsonVersion": "0.1.6",
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1.0,
 	"defaultGridSize": 16,
@@ -24,7 +24,8 @@
 				"displayOpacity": 1.0,
 				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
 				"autoTilesetDefUid": null,
-				"rules": [],
+				"autoRuleGroups": [],
+				"autoSourceLayerDefUid": null,
 				"tilesetDefUid": null,
 				"tilePivotX": 0,
 				"tilePivotY": 0
@@ -37,7 +38,8 @@
 				"displayOpacity": 1.0,
 				"intGridValues": [ { "identifier": "walls", "color": "#000000" } ],
 				"autoTilesetDefUid": null,
-				"rules": [],
+				"autoRuleGroups": [],
+				"autoSourceLayerDefUid": null,
 				"tilesetDefUid": null,
 				"tilePivotX": 0,
 				"tilePivotY": 0
