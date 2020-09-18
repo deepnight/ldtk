@@ -119,7 +119,7 @@ class AutoLayerRuleDef {
 		}
 	}
 
-	public static function fromJson(dataVersion:Int, json:Dynamic) {
+	public static function fromJson(jsonVersion:String, json:Dynamic) {
 		var r = new AutoLayerRuleDef( json.uid, json.size );
 		r.active = JsonTools.readBool(json.active, true);
 		r.tileIds = json.tileIds;

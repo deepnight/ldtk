@@ -42,7 +42,7 @@ class LayerDef {
 		return '$identifier($type, ${gridSize}px)';
 	}
 
-	public static function fromJson(dataVersion:Int, json:Dynamic) {
+	public static function fromJson(jsonVersion:String, json:Dynamic) {
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
@@ -68,7 +68,7 @@ class LayerDef {
 				rg.active = JsonTools.readBool( ruleGroupJson.active, true );
 				rg.collapsed = JsonTools.readBool( ruleGroupJson.collapsed, false );
 				rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
-					return AutoLayerRuleDef.fromJson(dataVersion, ruleJson);
+					return AutoLayerRuleDef.fromJson(jsonVersion, ruleJson);
 				});
 			}
 		}

@@ -27,7 +27,7 @@ class EnumDef {
 		return '$identifier(' + values.join(",")+")";
 	}
 
-	public static function fromJson(dataVersion:Int, json:Dynamic) {
+	public static function fromJson(jsonVersion:String, json:Dynamic) {
 		var ed = new EnumDef(JsonTools.readInt(json.uid), json.identifier);
 
 		for(v in JsonTools.readArray(json.values)) {

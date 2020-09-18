@@ -6,10 +6,15 @@ class Const {
 			return APP_VERSION;
 		else
 			return [
-				Std.string(APP_VERSION),
-
+				APP_VERSION,
 				#if debug "debug", #end
 			].join("-");
+	}
+
+	public static function getJsonVersion() {
+		var r = ~/([0-9\.]*)/gi;
+		r.match( getAppVersion() );
+		return r.matched(1);
 	}
 
 	#if !macro
