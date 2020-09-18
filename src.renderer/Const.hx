@@ -28,7 +28,7 @@ class Const {
 		app: Const.APP_NAME,
 		appAuthor: "Sebastien Benard",
 		appVersion: getAppVersion(),
-		url: "https://deepnight.net/"
+		url: WEBSITE_URL,
 	}
 
 	public static var CHANGELOG_MD = getChangelog();
