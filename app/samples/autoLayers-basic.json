@@ -4,7 +4,7 @@
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
 		"appVersion": "0.1.6-alpha-debug",
-		"url": "https://deepnight.net/"
+		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
 	"name": "AutoLayer demo",
 	"jsonVersion": "0.1.6",
@@ -12,7 +12,7 @@
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,
 	"bgColor": "#1D2135",
-	"nextUid": 95,
+	"nextUid": 96,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -26,11 +26,41 @@
 				"autoTilesetDefUid": 9,
 				"autoRuleGroups": [
 					{
-						"uid": 86,
-						"name": "Plants",
+						"uid": 92,
+						"name": "Ceiling moss & vines",
 						"active": true,
 						"collapsed": false,
 						"rules": [
+							{
+								"uid": 91,
+								"active": true,
+								"size": 3,
+								"tileIds": [ 36 ],
+								"chance": 1.0,
+								"seed": 2912139,
+								"pattern": [ 0, 0, 0, -1, 1, 0, 0, -1, 0 ],
+								"flipX": true,
+								"flipY": false,
+								"perlinActive": false,
+								"perlinSeed": 1,
+								"perlinScale": 0.2,
+								"perlinOctaves": 2
+							},
+							{
+								"uid": 88,
+								"active": true,
+								"size": 3,
+								"tileIds": [ 37 ],
+								"chance": 1.0,
+								"seed": 5391883,
+								"pattern": [ 0, 0, 0, 0, 1, 1, 0, -1, 0 ],
+								"flipX": true,
+								"flipY": false,
+								"perlinActive": false,
+								"perlinSeed": 1,
+								"perlinScale": 0.2,
+								"perlinOctaves": 2
+							},
 							{
 								"uid": 79,
 								"active": true,
@@ -49,49 +79,26 @@
 						]
 					},
 					{
-						"uid": 92,
-						"name": "Ground grass",
+						"uid": 85,
+						"name": "Walls & ground",
 						"active": true,
 						"collapsed": false,
 						"rules": [
 							{
-								"uid": 91,
+								"uid": 95,
 								"active": true,
 								"size": 3,
-								"tileIds": [ 12 ],
-								"chance": 0.46,
-								"seed": 2912139,
-								"pattern": [ 0, -1, 0, -1, 1, 0, 0, 0, 0 ],
-								"flipX": true,
-								"flipY": true,
-								"perlinActive": true,
-								"perlinSeed": 1,
-								"perlinScale": 0.2,
+								"tileIds": [ 64 ],
+								"chance": 0.28,
+								"seed": 3301373,
+								"pattern": [ 0, 0, 0, 0, -1, 0, 0, 1, 0 ],
+								"flipX": false,
+								"flipY": false,
+								"perlinActive": false,
+								"perlinSeed": 336628,
+								"perlinScale": 0.28,
 								"perlinOctaves": 2
 							},
-							{
-								"uid": 88,
-								"active": true,
-								"size": 3,
-								"tileIds": [ 13 ],
-								"chance": 0.82,
-								"seed": 5391883,
-								"pattern": [ 0, -1, 0, 1, 1, 1, 0, 0, 0 ],
-								"flipX": false,
-								"flipY": true,
-								"perlinActive": true,
-								"perlinSeed": 1,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							}
-						]
-					},
-					{
-						"uid": 85,
-						"name": "Walls",
-						"active": true,
-						"collapsed": false,
-						"rules": [
 							{
 								"uid": 82,
 								"active": true,
@@ -357,6 +364,52 @@
 				],
 				"autoTiles": [
 					{
+						"ruleId": 91,
+						"tiles": [
+							{ "coordId": 9, "tileId": 36, "flips": 0 },
+							{ "coordId": 28, "tileId": 36, "flips": 0 },
+							{ "coordId": 49, "tileId": 36, "flips": 0 },
+							{ "coordId": 72, "tileId": 36, "flips": 1 },
+							{ "coordId": 86, "tileId": 36, "flips": 1 },
+							{ "coordId": 216, "tileId": 36, "flips": 0 },
+							{ "coordId": 229, "tileId": 36, "flips": 1 },
+							{ "coordId": 241, "tileId": 36, "flips": 0 },
+							{ "coordId": 244, "tileId": 36, "flips": 1 }
+						]
+					},
+					{
+						"ruleId": 88,
+						"tiles": [
+							{ "coordId": 9, "tileId": 37, "flips": 0 },
+							{ "coordId": 10, "tileId": 37, "flips": 0 },
+							{ "coordId": 28, "tileId": 37, "flips": 0 },
+							{ "coordId": 29, "tileId": 37, "flips": 0 },
+							{ "coordId": 30, "tileId": 37, "flips": 0 },
+							{ "coordId": 31, "tileId": 37, "flips": 0 },
+							{ "coordId": 49, "tileId": 37, "flips": 0 },
+							{ "coordId": 50, "tileId": 37, "flips": 1 },
+							{ "coordId": 70, "tileId": 37, "flips": 0 },
+							{ "coordId": 71, "tileId": 37, "flips": 0 },
+							{ "coordId": 72, "tileId": 37, "flips": 1 },
+							{ "coordId": 85, "tileId": 37, "flips": 0 },
+							{ "coordId": 86, "tileId": 37, "flips": 1 },
+							{ "coordId": 196, "tileId": 37, "flips": 0 },
+							{ "coordId": 197, "tileId": 37, "flips": 0 },
+							{ "coordId": 198, "tileId": 37, "flips": 0 },
+							{ "coordId": 216, "tileId": 37, "flips": 0 },
+							{ "coordId": 217, "tileId": 37, "flips": 0 },
+							{ "coordId": 218, "tileId": 37, "flips": 0 },
+							{ "coordId": 219, "tileId": 37, "flips": 0 },
+							{ "coordId": 220, "tileId": 37, "flips": 1 },
+							{ "coordId": 228, "tileId": 37, "flips": 0 },
+							{ "coordId": 229, "tileId": 37, "flips": 1 },
+							{ "coordId": 241, "tileId": 37, "flips": 0 },
+							{ "coordId": 242, "tileId": 37, "flips": 0 },
+							{ "coordId": 243, "tileId": 37, "flips": 0 },
+							{ "coordId": 244, "tileId": 37, "flips": 1 }
+						]
+					},
+					{
 						"ruleId": 79,
 						"tiles": [
 							{ "coordId": 45, "tileId": 126, "flips": 0 },
@@ -378,31 +431,12 @@
 						]
 					},
 					{
-						"ruleId": 91,
-						"tiles": [ { "coordId": 28, "tileId": 12, "flips": 2 }, { "coordId": 140, "tileId": 12, "flips": 0 } ]
-					},
-					{
-						"ruleId": 88,
+						"ruleId": 95,
 						"tiles": [
-							{ "coordId": 10, "tileId": 13, "flips": 2 },
-							{ "coordId": 29, "tileId": 13, "flips": 2 },
-							{ "coordId": 30, "tileId": 13, "flips": 2 },
-							{ "coordId": 31, "tileId": 13, "flips": 2 },
-							{ "coordId": 53, "tileId": 13, "flips": 0 },
-							{ "coordId": 54, "tileId": 13, "flips": 0 },
-							{ "coordId": 70, "tileId": 13, "flips": 2 },
-							{ "coordId": 71, "tileId": 13, "flips": 2 },
-							{ "coordId": 179, "tileId": 13, "flips": 0 },
-							{ "coordId": 180, "tileId": 13, "flips": 0 },
-							{ "coordId": 217, "tileId": 13, "flips": 2 },
-							{ "coordId": 218, "tileId": 13, "flips": 2 },
-							{ "coordId": 219, "tileId": 13, "flips": 2 },
-							{ "coordId": 228, "tileId": 13, "flips": 2 },
-							{ "coordId": 283, "tileId": 13, "flips": 0 },
-							{ "coordId": 284, "tileId": 13, "flips": 0 },
-							{ "coordId": 285, "tileId": 13, "flips": 0 },
-							{ "coordId": 286, "tileId": 13, "flips": 0 },
-							{ "coordId": 287, "tileId": 13, "flips": 0 }
+							{ "coordId": 35, "tileId": 64, "flips": 0 },
+							{ "coordId": 118, "tileId": 64, "flips": 0 },
+							{ "coordId": 265, "tileId": 64, "flips": 0 },
+							{ "coordId": 266, "tileId": 64, "flips": 0 }
 						]
 					},
 					{
