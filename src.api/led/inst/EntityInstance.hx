@@ -89,28 +89,28 @@ class EntityInstance {
 		return fieldInstances.get( fieldDef.uid );
 	}
 
-	public function getStringField(name:String) : Null<String> {
-		var fd = def.getFieldDef(name);
-		fd.require(F_String);
-		return getFieldInstance(fd).getString();
-	}
+	// public function getStringField(name:String) : Null<String> {
+	// 	var fd = def.getFieldDef(name);
+	// 	fd.require(F_String);
+	// 	return getFieldInstance(fd).getString();
+	// }
 
-	public function getFloatField(name:String) : Null<Float> {
-		var fd = def.getFieldDef(name);
-		fd.require(F_Float);
-		return getFieldInstance(fd).getFloat();
-	}
+	// public function getFloatField(name:String) : Null<Float> {
+	// 	var fd = def.getFieldDef(name);
+	// 	fd.require(F_Float);
+	// 	return getFieldInstance(fd).getFloat();
+	// }
 
-	public function getIntField(name:String) : Null<Int> {
-		var fd = def.getFieldDef(name);
-		fd.require(F_Int);
-		return getFieldInstance(fd).getInt();
-	}
+	// public function getIntField(name:String) : Null<Int> {
+	// 	var fd = def.getFieldDef(name);
+	// 	fd.require(F_Int);
+	// 	return getFieldInstance(fd).getInt(0); // field array
+	// }
 
-	public function getColorField(name:String) : Null<UInt> {
-		var fd = def.getFieldDef(name);
-		fd.require(F_Color);
-		return getFieldInstance(fd).getColorAsInt();
-	}
+	// public function getColorField(name:String) : Null<UInt> {
+	// 	var fd = def.getFieldDef(name);
+	// 	fd.require(F_Color);
+	// 	return getFieldInstance(fd).getColorAsInt();
+	// }
 
 }

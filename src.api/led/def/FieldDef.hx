@@ -7,6 +7,7 @@ class FieldDef {
 	public var canBeNull : Bool;
 	public var editorDisplayMode : led.LedTypes.FieldDisplayMode;
 	public var editorDisplayPos : led.LedTypes.FieldDisplayPosition;
+	public var isArray : Bool;
 
 	#if editor
 	@:allow(ui.modal.panel.EditEntityDefs)
@@ -27,6 +28,7 @@ class FieldDef {
 		editorDisplayPos = Above;
 		identifier = "NewField"+uid;
 		canBeNull = type==F_String;
+		isArray = false;
 		min = max = null;
 		defaultOverride = null;
 	}
@@ -48,6 +50,7 @@ class FieldDef {
 
 	public static function fromJson(p:Project, json:Dynamic) {
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), JsonTools.readEnum(led.LedTypes.FieldType, json.type, false) );
+		o.isArray = JsonTools.readBool(json.isArray, false);
 		o.identifier = JsonTools.readString(json.identifier);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.editorDisplayMode = JsonTools.readEnum(led.LedTypes.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
@@ -64,6 +67,7 @@ class FieldDef {
 			__type: getJsonTypeString(),
 			uid: uid,
 			type: JsonTools.writeEnum(type, false),
+			isArray: isArray,
 			canBeNull: canBeNull,
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
@@ -76,7 +80,7 @@ class FieldDef {
 
 	#if editor
 	public function getShortDescription() : String {
-		return switch type {
+		var desc = switch type {
 			case F_Int: "Int";
 			case F_Float: "Float";
 			case F_String: "String";
@@ -84,10 +88,11 @@ class FieldDef {
 			case F_Color: "Color";
 			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
 		}
+		return isArray ? 'Array<$desc>' : desc;
 	}
 
 	public function getJsonTypeString() {
-		return switch type {
+		var desc = switch type {
 			case F_Int: "Int";
 			case F_Float: "Float";
 			case F_String: "String";
@@ -97,6 +102,7 @@ class FieldDef {
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
 		}
+		return isArray ? 'Array<$desc>' : desc;
 	}
 
 	public function getLongDescription() {

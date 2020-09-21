@@ -502,8 +502,64 @@ class LevelRender extends dn.Process {
 	static function getFieldColor(ei:led.inst.EntityInstance, fd:led.def.FieldDef) {
 		for(fd in ei.def.fieldDefs)
 			if( fd.type==F_Color )
-				return ei.getColorField(fd.identifier);
+				return ei.getFieldInstance(fd).getColorAsInt(0); // HACK field array
 		return C.toWhite(ei.def.color, 0.5);
+	}
+
+
+	static function createFieldValuesRender(ei:led.inst.EntityInstance, fi:led.inst.FieldInstance) {
+		var font = Assets.fontPixelOutline;
+
+		var valuesFlow = new h2d.Flow();
+		valuesFlow.layout = Horizontal;
+		valuesFlow.verticalAlign = Middle;
+
+		if( fi.def.isArray ) {
+			var tf = new h2d.Text(font, valuesFlow);
+			tf.textColor = getFieldColor(ei, fi.def);
+			tf.text = "[";
+		}
+
+		for( idx in 0...fi.getArrayLength() ) {
+			if( !fi.valueIsNull(idx) && !( fi.def.type==F_Bool && fi.getBool(idx)==false ) ) {
+				if( fi.hasIconForDisplay(idx) ) {
+					var tile = fi.getIconForDisplay(idx);
+					var bmp = new h2d.Bitmap( tile, valuesFlow );
+					var s = M.fmin( ei.def.width/ tile.width, ei.def.height/tile.height );
+					bmp.setScale(s);
+				}
+				else if( fi.def.type==F_Color ) {
+					var g = new h2d.Graphics(valuesFlow);
+					var r = 4;
+					g.beginFill( fi.getColorAsInt(idx) );
+					g.lineStyle(1, 0x0, 0.8);
+					g.drawCircle(r,r,r, 16);
+				}
+				else {
+					var tf = new h2d.Text(font, valuesFlow);
+					tf.textColor = getFieldColor(ei, fi.def);
+					var v = fi.getForDisplay(idx);
+					if( fi.def.type==F_Bool )
+						tf.text = '<${fi.def.identifier}>';
+					else
+						tf.text = v;
+				}
+			}
+
+			if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
+				var tf = new h2d.Text(font, valuesFlow);
+				tf.textColor = getFieldColor(ei, fi.def);
+				tf.text = ",";
+			}
+		}
+
+		if( fi.def.isArray ) {
+			var tf = new h2d.Text(font, valuesFlow);
+			tf.textColor = getFieldColor(ei, fi.def);
+			tf.text = "]";
+		}
+
+		return valuesFlow;
 	}
 
 	public static function createEntityRender(?ei:led.inst.EntityInstance, ?def:led.def.EntityDef, ?parent:h2d.Object) {
@@ -588,7 +644,7 @@ class LevelRender extends dn.Process {
 				var fi = ei.getFieldInstance(fd);
 
 				// Null enum warning
-				if( fd.type.getIndex()==led.LedTypes.FieldType.F_Enum(null).getIndex() && fi.getEnumValue()==null && !fd.canBeNull ) {
+				if( fi.hasAnyErrorInValues() ) {
 					var tf = new h2d.Text(font, above);
 					tf.textColor = 0xffcc00;
 					tf.text = "!ERR!";
@@ -598,7 +654,7 @@ class LevelRender extends dn.Process {
 				if( fd.editorDisplayMode==Hidden )
 					continue;
 
-				if( fi.isUsingDefault() )
+				if( fi.def.isArray && fi.getArrayLength()==0 || fi.isUsingDefault(0) )
 					continue;
 
 				// Position
@@ -613,37 +669,20 @@ class LevelRender extends dn.Process {
 					case Hidden: // N/A
 
 					case NameAndValue:
-						var tf = new h2d.Text(font, fieldWrapper);
+						var f = new h2d.Flow(fieldWrapper);
+						f.verticalAlign = Middle;
+
+						var tf = new h2d.Text(font, f);
 						tf.textColor = getFieldColor(ei,fd);
-						var v = fi.getForDisplay();
-						tf.text = fd.identifier+" = "+v;
+						tf.text = fd.identifier+" = ";
+
+						f.addChild( createFieldValuesRender(ei,fi) );
 
 					case ValueOnly:
-						if( !fi.valueIsNull() && !( fd.type==F_Bool && fi.getBool()==false ) ) {
-							if( fi.hasIconForDisplay() ) {
-								var tile = fi.getIconForDisplay();
-								var bmp = new h2d.Bitmap( tile, fieldWrapper );
-								var s = M.fmin( ei.def.width/ tile.width, ei.def.height/tile.height );
-								bmp.setScale(s);
-							}
-							else if( fd.type==F_Color ) {
-								var g = new h2d.Graphics(fieldWrapper);
-								var r = 4;
-								g.beginFill(fi.getColorAsInt());
-								g.lineStyle(1, 0x0, 0.8);
-								g.drawCircle(r,r,r, 16);
-							}
-							else {
-								var tf = new h2d.Text(font, fieldWrapper);
-								tf.textColor = getFieldColor(ei,fd);
-								var v = fi.getForDisplay();
-								if( fd.type==F_Bool )
-									tf.text = '[${fd.identifier}]';
-								else
-									tf.text = v;
-							}
-						}
+						fieldWrapper.addChild( createFieldValuesRender(ei,fi) );
+
 				}
+
 			}
 
 			// Update wrappers pos

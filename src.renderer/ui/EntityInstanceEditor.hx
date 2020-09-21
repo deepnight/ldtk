@@ -93,28 +93,28 @@ class EntityInstanceEditor extends dn.Process {
 	}
 
 
-	function hideInputIfDefault(input:js.jquery.JQuery, fi:led.inst.FieldInstance) {
+	function hideInputIfDefault(arrayIdx:Int, input:js.jquery.JQuery, fi:led.inst.FieldInstance) {
 		input.off(".def").removeClass("usingDefault");
 
-		if( fi.isUsingDefault() ) {
+		if( fi.isUsingDefault(arrayIdx) ) {
 			if( !input.is("select") ) {
 				// General INPUT
 				var jRep = new J('<a class="usingDefault" href="#"/>');
 				if( input.is("[type=checkbox]") ) {
 					var chk = new J('<input type="checkbox"/>');
-					chk.prop("checked", fi.getBool());
+					chk.prop("checked", fi.getBool(arrayIdx));
 					jRep.append( chk.wrap('<span class="value"/>').parent() );
 					jRep.addClass("checkbox");
 				}
 				else
-					jRep.append('<span class="value">${fi.getForDisplay()}</span>');
+					jRep.append('<span class="value">${fi.getForDisplay(arrayIdx)}</span>');
 				jRep.append('<span class="label">Default</span>');
 				jRep.on("click.def", function(ev) {
 					ev.preventDefault();
 					jRep.remove();
 					input.show().focus();
 					if( input.is("[type=checkbox]") ) {
-						input.prop("checked", !fi.getBool());
+						input.prop("checked", !fi.getBool(arrayIdx));
 						input.change();
 					}
 				});
@@ -123,17 +123,17 @@ class EntityInstanceEditor extends dn.Process {
 
 				input.on("blur.def", function(ev) {
 					jRep.remove();
-					hideInputIfDefault(input,fi);
+					hideInputIfDefault(arrayIdx, input,fi);
 				});
 			}
-			else if( input.is("select") && ( fi.getEnumValue()!=null || fi.def.canBeNull ) ) {
+			else if( input.is("select") && ( fi.getEnumValue(arrayIdx)!=null || fi.def.canBeNull ) ) {
 				// SELECT case
 				input.addClass("usingDefault");
 				input.on("click.def", function(ev) {
 					input.removeClass("usingDefault");
 				});
 				input.on("blur.def", function(ev) {
-					hideInputIfDefault(input,fi);
+					hideInputIfDefault(arrayIdx, input,fi);
 				});
 			}
 		}
@@ -144,12 +144,122 @@ class EntityInstanceEditor extends dn.Process {
 			var defLink = new J('<a class="reset" href="#">[ Reset ]</a>');
 			defLink.appendTo(span);
 			defLink.on("click.def", function(ev) {
-				fi.parseValue(null);
+				fi.parseValue(arrayIdx, null);
 				onFieldChange();
 				ev.preventDefault();
 			});
 		}
 	}
+
+
+	function createInputFor(fi:led.inst.FieldInstance, arrayIdx:Int, jTarget:js.jquery.JQuery) {
+		switch fi.def.type {
+			case F_Int:
+				var input = new J("<input/>");
+				input.appendTo(jTarget);
+				input.attr("type","text");
+				input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
+				if( !fi.isUsingDefault(arrayIdx) )
+					input.val( Std.string(fi.getInt(arrayIdx)) );
+				input.change( function(ev) {
+					fi.parseValue( arrayIdx, input.val() );
+					onFieldChange();
+				});
+				hideInputIfDefault(arrayIdx, input, fi);
+
+			case F_Color:
+				var input = new J("<input/>");
+				input.appendTo(jTarget);
+				input.attr("type","color");
+				input.val( fi.getColorAsHexStr(arrayIdx) );
+				input.change( function(ev) {
+					fi.parseValue( arrayIdx, input.val() );
+					onFieldChange();
+				});
+				hideInputIfDefault(arrayIdx, input, fi);
+
+			case F_Float:
+				var input = new J("<input/>");
+				input.appendTo(jTarget);
+				input.attr("type","text");
+				input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
+				if( !fi.isUsingDefault(arrayIdx) )
+					input.val( Std.string(fi.getFloat(arrayIdx)) );
+				input.change( function(ev) {
+					fi.parseValue( arrayIdx, input.val() );
+					onFieldChange();
+				});
+				hideInputIfDefault(arrayIdx, input, fi);
+
+			case F_String:
+				var input = new J("<input/>");
+				input.appendTo(jTarget);
+				input.attr("type","text");
+				var def = fi.def.getStringDefault();
+				input.attr("placeholder", def==null ? "(null)" : def=="" ? "(empty string)" : def);
+				if( !fi.isUsingDefault(arrayIdx) )
+					input.val( fi.getString(arrayIdx) );
+				input.change( function(ev) {
+					fi.parseValue( arrayIdx, input.val() );
+					onFieldChange();
+				});
+				hideInputIfDefault(arrayIdx, input, fi);
+
+			case F_Enum(name):
+				var ed = Editor.ME.project.defs.getEnumDef(name);
+				var select = new J("<select/>");
+				select.appendTo(jTarget);
+
+				// Null value
+				if( fi.def.canBeNull || fi.getEnumValue(arrayIdx)==null ) {
+					var opt = new J('<option/>');
+					opt.appendTo(select);
+					opt.attr("value","");
+					if( fi.def.canBeNull )
+						opt.text("-- null --");
+					else {
+						// SELECT shouldn't be null
+						select.addClass("required");
+						opt.text("[ Select one ]");
+						select.click( function(ev) {
+							select.removeClass("required");
+							select.blur( function(ev) updateForm() );
+						});
+					}
+					if( fi.getEnumValue(arrayIdx)==null )
+						opt.attr("selected","selected");
+				}
+
+				for(v in ed.values) {
+					var opt = new J('<option/>');
+					opt.appendTo(select);
+					opt.attr("value",v.id);
+					opt.text(v.id);
+					if( fi.getEnumValue(arrayIdx)==v.id && !fi.isUsingDefault(arrayIdx) )
+						opt.attr("selected","selected");
+				}
+
+				select.change( function(ev) {
+					var v = select.val()=="" ? null : select.val();
+					fi.parseValue(arrayIdx, v);
+					onFieldChange();
+				});
+				hideInputIfDefault(arrayIdx, select, fi);
+
+			case F_Bool:
+				var input = new J("<input/>");
+				input.appendTo(jTarget);
+				input.attr("type","checkbox");
+				input.prop("checked",fi.getBool(arrayIdx));
+				input.change( function(ev) {
+					fi.parseValue( arrayIdx, Std.string( input.prop("checked") ) );
+					onFieldChange();
+				});
+
+				hideInputIfDefault(arrayIdx, input, fi);
+		}
+	}
+
 
 	function updateForm() {
 		jPanel.empty();
@@ -174,110 +284,29 @@ class EntityInstanceEditor extends dn.Process {
 				li.appendTo(form);
 				li.append('<label>${fi.def.identifier}</label>');
 
-				switch fi.def.type {
-					case F_Int:
-						var input = new J("<input/>");
-						input.appendTo(li);
-						input.attr("type","text");
-						input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
-						if( !fi.isUsingDefault() )
-							input.val( Std.string(fi.getInt()) );
-						input.change( function(ev) {
-							fi.parseValue( input.val() );
-							onFieldChange();
+				if( !fd.isArray )
+					createInputFor(fi, 0, li);
+				else {
+					var jArray = new J('<div class="array"/>');
+					jArray.appendTo(li);
+					for(i in 0...fi.getArrayLength()) {
+						createInputFor(fi, i, jArray);
+						var jRemove = new J('<button>x</button>');
+						jRemove.appendTo(jArray);
+						var idx = i;
+						jRemove.click( function(_) {
+							fi.removeArrayValue(idx);
+							Editor.ME.ge.emit( EntityInstanceFieldChanged(ei) );
+							updateForm();
 						});
-						hideInputIfDefault(input, fi);
-
-					case F_Color:
-						var input = new J("<input/>");
-						input.appendTo(li);
-						input.attr("type","color");
-						input.val( fi.getColorAsHexStr() );
-						input.change( function(ev) {
-							fi.parseValue( input.val() );
-							onFieldChange();
-						});
-						hideInputIfDefault(input, fi);
-
-					case F_Float:
-						var input = new J("<input/>");
-						input.appendTo(li);
-						input.attr("type","text");
-						input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
-						if( !fi.isUsingDefault() )
-							input.val( Std.string(fi.getFloat()) );
-						input.change( function(ev) {
-							fi.parseValue( input.val() );
-							onFieldChange();
-						});
-						hideInputIfDefault(input, fi);
-
-					case F_String:
-						var input = new J("<input/>");
-						input.appendTo(li);
-						input.attr("type","text");
-						var def = fi.def.getStringDefault();
-						input.attr("placeholder", def==null ? "(null)" : def=="" ? "(empty string)" : def);
-						if( !fi.isUsingDefault() )
-							input.val( fi.getString() );
-						input.change( function(ev) {
-							fi.parseValue( input.val() );
-							onFieldChange();
-						});
-						hideInputIfDefault(input, fi);
-
-					case F_Enum(name):
-						var ed = Editor.ME.project.defs.getEnumDef(name);
-						var select = new J("<select/>");
-						select.appendTo(li);
-
-						// Null value
-						if( fi.def.canBeNull || fi.getEnumValue()==null ) {
-							var opt = new J('<option/>');
-							opt.appendTo(select);
-							opt.attr("value","");
-							if( fi.def.canBeNull )
-								opt.text("-- null --");
-							else {
-								// SELECT shouldn't be null
-								select.addClass("required");
-								opt.text("[ Select one ]");
-								select.click( function(ev) {
-									select.removeClass("required");
-									select.blur( function(ev) updateForm() );
-								});
-							}
-							if( fi.getEnumValue()==null )
-								opt.attr("selected","selected");
-						}
-
-						for(v in ed.values) {
-							var opt = new J('<option/>');
-							opt.appendTo(select);
-							opt.attr("value",v.id);
-							opt.text(v.id);
-							if( fi.getEnumValue()==v.id && !fi.isUsingDefault() )
-								opt.attr("selected","selected");
-						}
-
-						select.change( function(ev) {
-							var v = select.val()=="" ? null : select.val();
-							fi.parseValue(v);
-							onFieldChange();
-						});
-						hideInputIfDefault(select, fi);
-
-					case F_Bool:
-						var input = new J("<input/>");
-						input.appendTo(li);
-						input.attr("type","checkbox");
-						input.prop("checked",fi.getBool());
-						input.change( function(ev) {
-							fi.parseValue( Std.string( input.prop("checked") ) );
-							onFieldChange();
-						});
-
-						hideInputIfDefault(input, fi);
+					}
+					var jAdd = new J('<button>+</button>');
+					jAdd.appendTo(jArray);
+					jAdd.click( function(_) {
+						fi.addArrayValue();
+						Editor.ME.ge.emit( EntityInstanceFieldChanged(ei) );
+						updateForm();
+					});
 				}
 			}
 		}

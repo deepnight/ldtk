@@ -168,8 +168,12 @@ class Project {
 			for( fi in ei.fieldInstances )
 				switch fi.def.type {
 					case F_Enum(enumDefUid):
-						if( enumDefUid==enumDef.uid && fi.getEnumValue()==val )
-							return true;
+						if( enumDefUid==enumDef.uid )
+							for(i in 0...fi.getArrayLength())
+								if( fi.getEnumValue(i)==val )
+									return true;
+						// if( enumDefUid==enumDef.uid && fi.getEnumValue()==val )
+							// return true;
 
 					case _:
 				}
