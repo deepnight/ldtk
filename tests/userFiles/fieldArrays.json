@@ -12,7 +12,7 @@
 	"defaultPivotY": 1.0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 22,
+	"nextUid": 26,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -219,7 +219,7 @@
 				"entityInstances": [
 					{ "__identifier": "Crate", "__cx": 13, "__cy": 11, "defUid": 8, "x": 216, "y": 192, "fieldInstances": [ {
 						"__identifier": "loot",
-						"__values": [ "Sword", "Bow" ],
+						"__values": [ "Sword", "HeavySword" ],
 						"__type": "Array<LocalEnum.Weapon>",
 						"defUid": 21,
 						"realEditorValues": [ {
@@ -227,7 +227,7 @@
 							"params": [ "Sword" ]
 						}, {
 							"id": "V_String",
-							"params": [ "Bow" ]
+							"params": [ "HeavySword" ]
 						} ]
 					} ] },
 					{ "__identifier": "LightEmitter", "__cx": 6, "__cy": 3, "defUid": 10, "x": 104, "y": 48, "fieldInstances": [
@@ -325,12 +325,15 @@
 					] },
 					{ "__identifier": "Crate", "__cx": 9, "__cy": 11, "defUid": 8, "x": 152, "y": 192, "fieldInstances": [ {
 						"__identifier": "loot",
-						"__values": [ "Wand" ],
+						"__values": [ "Wand", "Bow" ],
 						"__type": "Array<LocalEnum.Weapon>",
 						"defUid": 21,
 						"realEditorValues": [ {
 							"id": "V_String",
 							"params": [ "Wand" ]
+						}, {
+							"id": "V_String",
+							"params": [ "Bow" ]
 						} ]
 					} ] }
 				]
