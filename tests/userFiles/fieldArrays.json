@@ -90,19 +90,6 @@
 						}
 					},
 					{
-						"identifier": "startWeapon",
-						"__type": "LocalEnum.Weapon",
-						"uid": 6,
-						"type": { "id": "F_Enum", "params": [ 5 ] },
-						"isArray": false,
-						"canBeNull": true,
-						"editorDisplayMode": "NameAndValue",
-						"editorDisplayPos": "Above",
-						"min": null,
-						"max": null,
-						"defaultOverride": null
-					},
-					{
 						"identifier": "inv",
 						"__type": "Array<LocalEnum.Weapon>",
 						"uid": 19,
@@ -191,10 +178,10 @@
 		],
 		"tilesets": [
 			{
-				"identifier": "FoodIcons_by_Henry_Software",
+				"identifier": "RPG_Assets_by_ssugmi",
 				"uid": 20,
-				"relPath": "../../tests/userFiles/atlas/foodIcons_by_Henry_Software.png",
-				"pxWid": 128,
+				"relPath": "atlas/RPG_Assets_by_ssugmi.png",
+				"pxWid": 176,
 				"pxHei": 128,
 				"tileGridSize": 16,
 				"tileGridSpacing": 0,
@@ -202,11 +189,11 @@
 			}
 		],
 		"enums": [ { "identifier": "Weapon", "uid": 5, "values": [
-			{ "id": "SmallGun", "tileId": 39 },
-			{ "id": "Shotgun", "tileId": 41 },
-			{ "id": "Bow", "tileId": 51 },
-			{ "id": "Katana", "tileId": 36 },
-			{ "id": "Knife", "tileId": 16 }
+			{ "id": "Trout", "tileId": 70 },
+			{ "id": "Sword", "tileId": 39 },
+			{ "id": "HeavySword", "tileId": 40 },
+			{ "id": "Bow", "tileId": 46 },
+			{ "id": "Wand", "tileId": 44 }
 		], "iconTilesetUid": 20, "externalRelPath": null, "externalFileChecksum": null } ],
 		"externalEnums": []
 	},
@@ -232,15 +219,15 @@
 				"entityInstances": [
 					{ "__identifier": "Crate", "__cx": 13, "__cy": 11, "defUid": 8, "x": 216, "y": 192, "fieldInstances": [ {
 						"__identifier": "loot",
-						"__values": [ "Shotgun", "SmallGun" ],
+						"__values": [ "Sword", "Bow" ],
 						"__type": "Array<LocalEnum.Weapon>",
 						"defUid": 21,
 						"realEditorValues": [ {
 							"id": "V_String",
-							"params": [ "Shotgun" ]
+							"params": [ "Sword" ]
 						}, {
 							"id": "V_String",
-							"params": [ "SmallGun" ]
+							"params": [ "Bow" ]
 						} ]
 					} ] },
 					{ "__identifier": "LightEmitter", "__cx": 6, "__cy": 3, "defUid": 10, "x": 104, "y": 48, "fieldInstances": [
@@ -310,7 +297,7 @@
 							"realEditorValues": [ null ]
 						}
 					] },
-					{ "__identifier": "Player", "__cx": 4, "__cy": 11, "defUid": 1, "x": 72, "y": 192, "fieldInstances": [
+					{ "__identifier": "Player", "__cx": 3, "__cy": 11, "defUid": 1, "x": 56, "y": 192, "fieldInstances": [
 						{
 							"__identifier": "life",
 							"__values": 3,
@@ -326,29 +313,26 @@
 							"realEditorValues": [ null ]
 						},
 						{
-							"__identifier": "startWeapon",
-							"__values": "Knife",
-							"__type": "LocalEnum.Weapon",
-							"defUid": 6,
-							"realEditorValues": [ {
-								"id": "V_String",
-								"params": [ "Knife" ]
-							} ]
-						},
-						{
 							"__identifier": "inv",
-							"__values": [ "Knife", "Katana" ],
+							"__values": [ "Trout" ],
 							"__type": "Array<LocalEnum.Weapon>",
 							"defUid": 19,
 							"realEditorValues": [ {
 								"id": "V_String",
-								"params": [ "Knife" ]
-							}, {
-								"id": "V_String",
-								"params": [ "Katana" ]
+								"params": [ "Trout" ]
 							} ]
 						}
-					] }
+					] },
+					{ "__identifier": "Crate", "__cx": 9, "__cy": 11, "defUid": 8, "x": 152, "y": 192, "fieldInstances": [ {
+						"__identifier": "loot",
+						"__values": [ "Wand" ],
+						"__type": "Array<LocalEnum.Weapon>",
+						"defUid": 21,
+						"realEditorValues": [ {
+							"id": "V_String",
+							"params": [ "Wand" ]
+						} ]
+					} ] }
 				]
 			},
 			{
