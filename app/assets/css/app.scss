@@ -914,6 +914,7 @@ ul.form {
 
 			input {
 				visibility: hidden;
+				width: 32px !important;
 				position: absolute;
 			}
 		}
@@ -2395,14 +2396,15 @@ canvas#webgl {
 			display: grid;
 			grid-template-columns: auto min-content;
 			gap: 2px;
+			column-gap: 4px;
 			box-sizing: border-box;
 			margin-left: 4px;
 			padding: 8px;
 			padding-right: 2px;
 			overflow-x: hidden;
 			overflow-y: auto;
-			border-left: 1px solid $orange;
-			border-radius: 6px;
+			border-left: 1px solid white;
+			border-bottom-left-radius: 8px;
 
 			.warning,
 			button.add {
