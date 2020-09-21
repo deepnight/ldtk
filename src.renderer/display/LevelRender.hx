@@ -508,7 +508,7 @@ class LevelRender extends dn.Process {
 
 
 	static function createFieldValuesRender(ei:led.inst.EntityInstance, fi:led.inst.FieldInstance) {
-		var font = Assets.fontPixelOutline;
+		var font = Assets.fontPixel;
 
 		var valuesFlow = new h2d.Flow();
 		valuesFlow.layout = Horizontal;
@@ -542,6 +542,7 @@ class LevelRender extends dn.Process {
 					// Text render
 					var tf = new h2d.Text(font, valuesFlow);
 					tf.textColor = getFieldColor(ei, fi.def);
+					tf.filter = new dn.heaps.filter.PixelOutline();
 					var v = fi.getForDisplay(idx);
 					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
 						tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';
@@ -632,7 +633,7 @@ class LevelRender extends dn.Process {
 		// Display fields not marked as "Hidden"
 		if( ei!=null ) {
 			// Init field wrappers
-			var font = Assets.fontPixelOutline;
+			var font = Assets.fontPixel;
 			var above = new h2d.Flow(wrapper);
 			above.layout = Vertical;
 			above.horizontalAlign = Middle;
@@ -681,6 +682,7 @@ class LevelRender extends dn.Process {
 						var tf = new h2d.Text(font, f);
 						tf.textColor = getFieldColor(ei,fd);
 						tf.text = fd.identifier+" = ";
+						tf.filter = new dn.heaps.filter.PixelOutline();
 
 						f.addChild( createFieldValuesRender(ei,fi) );
 

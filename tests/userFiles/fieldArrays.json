@@ -84,7 +84,7 @@
 						"canBeNull": false,
 						"arrayMinLength": null,
 						"arrayMaxLength": null,
-						"editorDisplayMode": "NameAndValue",
+						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Above",
 						"min": null,
 						"max": null,
@@ -347,8 +347,7 @@
 							"id": "V_String",
 							"params": [ "Bow" ]
 						} ]
-					} ] },
-					{ "__identifier": "Crate", "__cx": 11, "__cy": 11, "defUid": 8, "x": 184, "y": 192, "fieldInstances": [ { "__identifier": "loot", "__values": [], "__type": "Array<LocalEnum.Weapon>", "defUid": 21, "realEditorValues": [] } ] }
+					} ] }
 				]
 			},
 			{
