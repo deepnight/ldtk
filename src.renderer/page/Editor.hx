@@ -239,6 +239,7 @@ class Editor extends Page {
 					var newRelPath = makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( getProjectDir(), newRelPath );
 					ge.emit( TilesetDefChanged(td) );
+					levelRender.invalidateAll();
 				});
 
 			case RemapLoss:
