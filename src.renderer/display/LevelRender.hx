@@ -515,7 +515,7 @@ class LevelRender extends dn.Process {
 		valuesFlow.verticalAlign = Middle;
 
 		// Array opening
-		if( fi.def.isArray ) {
+		if( fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = new h2d.Text(font, valuesFlow);
 			tf.textColor = getFieldColor(ei, fi.def);
 			tf.text = "[";
@@ -560,7 +560,7 @@ class LevelRender extends dn.Process {
 		}
 
 		// Array closing
-		if( fi.def.isArray ) {
+		if( fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = new h2d.Text(font, valuesFlow);
 			tf.textColor = getFieldColor(ei, fi.def);
 			tf.text = "]";
@@ -661,7 +661,7 @@ class LevelRender extends dn.Process {
 				if( fd.editorDisplayMode==Hidden )
 					continue;
 
-				if( fi.def.isArray && fi.getArrayLength()==0 || fi.isUsingDefault(0) )
+				if( fi.def.isArray && fi.getArrayLength()==0 || !fi.def.isArray && fi.isUsingDefault(0) )
 					continue;
 
 				// Position
