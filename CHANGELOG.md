@@ -3,7 +3,10 @@
 ## 0.1.7-alpha
 
  - **Array of entity fields**: any field type in an Entity can now be an Array. For example, you could have an Array of Enums to represent the items hidden inside a Cratebox entity.
+ - Added a confirmation when trying to update the app while having unsaved changes
+ - UI tweaks & fixes
  - Swapped Tileset and Enum buttons in main toolbar
+ - Bug fixes
 
 ## 0.1.6-alpha
 
