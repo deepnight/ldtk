@@ -5,6 +5,8 @@ class LostFile extends ui.modal.Dialog {
 	public function new(lostPath:String, onNewPath:(absPath:String)->Void) {
 		super("lostFile");
 
+		App.LOG.error("Lost file: "+lostPath);
+
 		this.onNewPath = onNewPath;
 
 		var fp = dn.FilePath.fromFile(lostPath);
@@ -41,6 +43,7 @@ class LostFile extends ui.modal.Dialog {
 
 	function pickNewPath(newPath:String) {
 		new LastChance( Lang.t._("Relocated a lost file"), editor.project );
+		App.LOG.fileOp("Relocated lost file: "+newPath);
 		onNewPath(newPath);
 		close();
 	}

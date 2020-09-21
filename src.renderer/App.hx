@@ -60,13 +60,22 @@ class App extends dn.Process {
 		session = dn.LocalStorage.readObject("session", session);
 
 		// Auto updater
-		LOG.general("Checking update");
 		miniNotif("Checking for update...", true);
 		dn.electron.ElectronUpdater.initRenderer();
-		dn.electron.ElectronUpdater.onUpdateFound = function(info) miniNotif('Downloading ${info.version}...');
+		dn.electron.ElectronUpdater.onUpdateCheckStart = function() {
+			LOG.network("Looking for update");
+		}
+		dn.electron.ElectronUpdater.onUpdateFound = function(info) {
+			LOG.network("Found update: "+info.version+" ("+info.releaseDate+")");
+			miniNotif('Downloading ${info.version}...');
+		}
 		dn.electron.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
-		dn.electron.ElectronUpdater.onError = function() miniNotif("Can't check for updates");
+		dn.electron.ElectronUpdater.onError = function() {
+			LOG.error("Couldn't check for updates");
+			miniNotif("Can't check for updates");
+		}
 		dn.electron.ElectronUpdater.onUpdateDownloaded = function(info) {
+			LOG.network("Update ready: "+info.version);
 			miniNotif('Update ${info.version} ready!');
 
 			var e = jBody.find("#updateInstall");
@@ -77,6 +86,7 @@ class App extends dn.Process {
 			bt.append('<em>Version ${info.version}</em>');
 			bt.click(function(_) {
 				function applyUpdate() {
+					LOG.general("Installing update");
 					bt.remove();
 					loadPage("updating", { app : Const.APP_NAME });
 					jBody.find("*").off();
