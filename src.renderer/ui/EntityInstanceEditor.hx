@@ -252,7 +252,7 @@ class EntityInstanceEditor extends dn.Process {
 				input.attr("type","checkbox");
 				input.prop("checked",fi.getBool(arrayIdx));
 				input.change( function(ev) {
-					fi.parseValue( Std.string( input.prop("checked") ) );
+					fi.parseValue( arrayIdx, Std.string( input.prop("checked") ) );
 					onFieldChange();
 				});
 

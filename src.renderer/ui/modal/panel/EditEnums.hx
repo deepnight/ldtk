@@ -288,8 +288,9 @@ class EditEnums extends ui.modal.Panel {
 					var oldV = eValue.id;
 					if( curEnum.renameValue(oldV, newV) ) {
 						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-							if( fi.getEnumValue(0)==oldV ) // HACK field array
-								fi.parseValue(newV);
+							for(i in 0...fi.getArrayLength())
+								if( fi.getEnumValue(i)==oldV )
+									fi.parseValue(i, newV);
 						});
 					}
 					else
@@ -324,8 +325,9 @@ class EditEnums extends ui.modal.Panel {
 							new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+eValue.id }), project);
 
 							project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-								if( fi.getEnumValue(0)==eValue.id ) // HACK field array
-									fi.parseValue(0, null); // HACK field array
+								for(i in 0...fi.getArrayLength())
+									if( fi.getEnumValue(i)==eValue.id )
+										fi.parseValue(i, null); 
 							});
 							project.defs.removeEnumDefValue(curEnum, eValue.id);
 							editor.ge.emit(EnumDefValueRemoved);

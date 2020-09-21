@@ -92,7 +92,7 @@ class FieldInstance {
 	}
 
 
-	public function parseValue(arrayIdx=0, raw:Null<String>) {
+	public function parseValue(arrayIdx:Int, raw:Null<String>) {
 		if( raw==null )
 			setInternal(arrayIdx, null);
 		else switch def.type {
@@ -172,7 +172,8 @@ class FieldInstance {
 		switch def.type {
 			case F_Enum(enumDefUid):
 				var ed = _project.defs.getEnumDef(enumDefUid);
-				return ed.iconTilesetUid!=null && ed.getValue( getEnumValue(arrayIdx) ).tileId!=null;
+				var e = getEnumValue(arrayIdx);
+				return ed.iconTilesetUid!=null && ed.getValue(e).tileId!=null;
 
 			case _:
 				return false;
@@ -187,7 +188,6 @@ class FieldInstance {
 			case F_Enum(enumDefUid):
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				var td = _project.defs.getTilesetDef(ed.iconTilesetUid);
-				ui.Notification.debug(td.isAtlasLoaded());
 				return td.getTile( ed.getValue( getEnumValue(arrayIdx) ).tileId );
 
 			case _:
