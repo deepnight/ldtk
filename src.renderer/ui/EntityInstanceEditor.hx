@@ -228,18 +228,33 @@ class EntityInstanceEditor extends dn.Process {
 				hideInputIfDefault(arrayIdx, input, fi);
 
 			case F_Point:
-				var input = new J("<input/>");
-				input.appendTo(jTarget);
-				input.attr("type","text");
-				var def = fi.def.getPointDefault();
-				input.attr("placeholder", def==null ? "(null)" : def=="" ? "(0;0)" : def);
-				if( !fi.isUsingDefault(arrayIdx) )
-					input.val( fi.getPoint(arrayIdx) );
-				input.change( function(ev) {
-					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange();
+				var jPick = new J('<button/>');
+				jPick.appendTo(jTarget);
+				if( fi.valueIsNull(arrayIdx) )
+					if( fi.def.canBeNull )
+						jPick.append( "--none--" );
+					else {
+						jPick.addClass("required");
+						jPick.append( "Point required" );
+					}
+				else
+					jPick.append( fi.getPoint(arrayIdx) );
+				jPick.click(function(_) {
+					N.notImplemented();
 				});
-				hideInputIfDefault(arrayIdx, input, fi);
+
+				// var input = new J("<input/>");
+				// input.appendTo(jTarget);
+				// input.attr("type","text");
+				// var def = fi.def.getPointDefault();
+				// input.attr("placeholder", def==null ? "(null)" : def=="" ? "(0;0)" : def);
+				// if( !fi.isUsingDefault(arrayIdx) )
+				// 	input.val( fi.getPoint(arrayIdx) );
+				// input.change( function(ev) {
+				// 	fi.parseValue( arrayIdx, input.val() );
+				// 	onFieldChange();
+				// });
+				// hideInputIfDefault(arrayIdx, jPick, fi);
 
 			case F_Enum(name):
 				var ed = Editor.ME.project.defs.getEnumDef(name);

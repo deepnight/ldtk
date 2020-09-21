@@ -167,6 +167,10 @@ class FieldInstance {
 			case F_Bool:
 			case F_Color:
 			case F_Point:
+				for( idx in 0...getArrayLength() )
+					if( !def.canBeNull && getPoint(idx)==null )
+						return true;
+
 			case F_Enum(enumDefUid):
 				if( !def.canBeNull )
 					for( idx in 0...getArrayLength() )

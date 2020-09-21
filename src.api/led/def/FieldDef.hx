@@ -29,7 +29,7 @@ class FieldDef {
 		editorDisplayMode = Hidden;
 		editorDisplayPos = Above;
 		identifier = "NewField"+uid;
-		canBeNull = type==F_String;
+		canBeNull = type==F_String || type==F_Point;
 		arrayMinLength = arrayMaxLength = null;
 		isArray = false;
 		min = max = null;
