@@ -214,11 +214,11 @@ class Editor extends Page {
 		levelHistory = new Map();
 		levelHistory.set( curLevelId, new LevelHistory(curLevelId) );
 
-		ge.emit(ProjectSelected);
-
 		// Load tilesets
 		for(td in project.defs.tilesets)
 			reloadTileset(td, true);
+
+		ge.emit(ProjectSelected);
 
 		// Tileset image hot-reloading
 		for( td in project.defs.tilesets )
