@@ -2315,6 +2315,10 @@ canvas#webgl {
 			}
 		}
 
+		input[type=color] {
+			width: 100%;
+		}
+
 		a.usingDefault {
 			display: flex;
 			text-decoration: none;
