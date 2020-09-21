@@ -7,13 +7,13 @@ class FieldInstance {
 	public var def(get,never) : led.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defUid);
 
 	public var defUid: Int;
-	var internalValue : Null<ValueWrapper>;
+	var internalValues : Array<ValueWrapper>;
 
 	@:allow(led.inst.EntityInstance)
 	private function new(p:Project, fieldDefUid:Int) {
 		_project = p;
 		defUid = fieldDefUid;
-		internalValue = null;
+		internalValues = [];
 	}
 
 	@:keep
@@ -21,12 +21,12 @@ class FieldInstance {
 		return
 			'${def.identifier} = '
 			+ getForDisplay()
-			+ ' [ $internalValue ]';
+			+ ' [ $internalValues ]';
 	}
 
 	public static function fromJson(project:Project, json:Dynamic) {
 		var o = new FieldInstance( project, JsonTools.readInt(json.defUid) );
-		o.internalValue = JsonTools.readEnum(ValueWrapper, json.realEditorValue, true);
+		o.internalValues = [ JsonTools.readEnum(ValueWrapper, json.realEditorValue, true) ];
 		return o;
 	}
 
@@ -45,7 +45,7 @@ class FieldInstance {
 			__type: def.getJsonTypeString(),
 
 			defUid: defUid,
-			realEditorValue: JsonTools.writeEnum(internalValue,true),
+			realEditorValue: JsonTools.writeEnum(internalValues[0],true),
 
 		}
 	}
@@ -56,11 +56,11 @@ class FieldInstance {
 	}
 
 	function setInternal(fv:Null<ValueWrapper>) {
-		internalValue = fv;
+		internalValues[0] = fv;
 	}
 
 	public function isUsingDefault() {
-		return internalValue==null;
+		return internalValues[0]==null;
 	}
 
 
@@ -170,7 +170,7 @@ class FieldInstance {
 
 	public function getInt() : Null<Int> {
 		require(F_Int);
-		return isUsingDefault() ? def.getIntDefault() : switch internalValue {
+		return isUsingDefault() ? def.getIntDefault() : switch internalValues[0] {
 			case V_Int(v): def.iClamp(v);
 			case _: throw "unexpected";
 		}
@@ -178,7 +178,7 @@ class FieldInstance {
 
 	public function getColorAsInt() : Null<Int> {
 		require(F_Color);
-		return isUsingDefault() ? def.getColorDefault() : switch internalValue {
+		return isUsingDefault() ? def.getColorDefault() : switch internalValues[0] {
 			case V_Int(v): v;
 			case _: throw "unexpected";
 		}
@@ -188,7 +188,7 @@ class FieldInstance {
 		require(F_Color);
 		return isUsingDefault()
 			? def.getColorDefault()==null ? null : dn.Color.intToHex(def.getColorDefault())
-			: switch internalValue {
+			: switch internalValues[0] {
 				case V_Int(v): dn.Color.intToHex(v);
 				case _: throw "unexpected";
 			}
@@ -196,7 +196,7 @@ class FieldInstance {
 
 	public function getFloat() : Null<Float> {
 		require(F_Float);
-		return isUsingDefault() ? def.getFloatDefault() : switch internalValue {
+		return isUsingDefault() ? def.getFloatDefault() : switch internalValues[0] {
 			case V_Float(v): def.fClamp(v);
 			case _: throw "unexpected";
 		}
@@ -204,7 +204,7 @@ class FieldInstance {
 
 	public function getBool() : Bool {
 		require(F_Bool);
-		return isUsingDefault() ? def.getBoolDefault() : switch internalValue {
+		return isUsingDefault() ? def.getBoolDefault() : switch internalValues[0] {
 			case V_Bool(v): v;
 			case _: throw "unexpected";
 		}
@@ -212,7 +212,7 @@ class FieldInstance {
 
 	public function getString() : String {
 		require(F_String);
-		return isUsingDefault() ? def.getStringDefault() : switch internalValue {
+		return isUsingDefault() ? def.getStringDefault() : switch internalValues[0] {
 			case V_String(v): v;
 			case _: throw "unexpected";
 		}
@@ -220,7 +220,7 @@ class FieldInstance {
 
 	public function getEnumValue() : String {
 		require( F_Enum(null) );
-		return isUsingDefault() ? def.getEnumDefault() : switch internalValue {
+		return isUsingDefault() ? def.getEnumDefault() : switch internalValues[0] {
 			case V_String(v): v;
 			case _: throw "unexpected";
 		}
