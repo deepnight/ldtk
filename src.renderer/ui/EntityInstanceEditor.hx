@@ -97,7 +97,16 @@ class EntityInstanceEditor extends dn.Process {
 		input.off(".def").removeClass("usingDefault");
 
 		if( fi.isUsingDefault(arrayIdx) ) {
-			if( !input.is("select") ) {
+			if( input.is("[type=color]") ) {
+				// Color input
+				input.addClass("usingDefault");
+				input.text("default");
+			}
+			if( input.is(".colorWrapper") ) {
+				// Wrapped color input
+				input.addClass("usingDefault");
+			}
+			else if( !input.is("select") ) {
 				// General INPUT
 				var jRep = new J('<a class="usingDefault" href="#"/>');
 				if( input.is("[type=checkbox]") ) {
@@ -168,15 +177,28 @@ class EntityInstanceEditor extends dn.Process {
 				hideInputIfDefault(arrayIdx, input, fi);
 
 			case F_Color:
+				var cHex = fi.getColorAsHexStr(arrayIdx);
+
+				var jWrapper = new J('<label class="colorWrapper"/>');
+				jWrapper.appendTo(jTarget);
+				jWrapper.css({
+					backgroundColor: cHex,
+					borderColor: C.intToHex( C.toWhite( C.hexToInt(cHex), 0.2 ) ),
+				});
+				if( fi.isUsingDefault(arrayIdx) )
+					jWrapper.append("(default)");
+
 				var input = new J("<input/>");
-				input.appendTo(jTarget);
+				input.appendTo(jWrapper);
 				input.attr("type","color");
-				input.val( fi.getColorAsHexStr(arrayIdx) );
+				input.addClass("advanced");
+				input.val(cHex);
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, input.val() );
 					onFieldChange();
 				});
-				hideInputIfDefault(arrayIdx, input, fi);
+
+				hideInputIfDefault(arrayIdx, jWrapper, fi);
 
 			case F_Float:
 				var input = new J("<input/>");
@@ -332,5 +354,8 @@ class EntityInstanceEditor extends dn.Process {
 		var wh = js.Browser.window.innerHeight;
 		var h = jPanel.outerHeight();
 		jPanel.css("top", Std.int(wh*0.5 - h*0.5)+"px");
+
+
+		JsTools.parseComponents(jPanel);
 	}
 }
