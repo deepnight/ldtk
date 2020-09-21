@@ -130,7 +130,7 @@
 				]
 			},
 			{
-				"identifier": "Light",
+				"identifier": "LightEmitter",
 				"uid": 10,
 				"width": 20,
 				"height": 6,
@@ -175,7 +175,8 @@
 			{ "id": "SmallGun", "tileId": null },
 			{ "id": "Shotgun", "tileId": null },
 			{ "id": "Bow", "tileId": null },
-			{ "id": "Katana", "tileId": null }
+			{ "id": "Katana", "tileId": null },
+			{ "id": "Knife", "tileId": null }
 		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null } ],
 		"externalEnums": []
 	},
@@ -199,35 +200,35 @@
 				"autoTiles": [],
 				"gridTiles": [],
 				"entityInstances": [
-					{ "__identifier": "Crate", "__cx": 13, "__cy": 11, "defUid": 8, "x": 216, "y": 192, "fieldInstances": [ { "__identifier": "content", "__value": "SmallGun", "__type": "LocalEnum.Weapon", "defUid": 9, "realEditorValue": {
+					{ "__identifier": "Crate", "__cx": 13, "__cy": 11, "defUid": 8, "x": 216, "y": 192, "fieldInstances": [ { "__identifier": "content", "__value": "Shotgun", "__type": "LocalEnum.Weapon", "defUid": 9, "realEditorValue": {
 						"id": "V_String",
-						"params": [ "SmallGun" ]
+						"params": [ "Shotgun" ]
 					} } ] },
-					{ "__identifier": "Light", "__cx": 6, "__cy": 3, "defUid": 10, "x": 104, "y": 48, "fieldInstances": [
+					{ "__identifier": "LightEmitter", "__cx": 6, "__cy": 3, "defUid": 10, "x": 104, "y": 48, "fieldInstances": [
 						{ "__identifier": "color", "__value": "#FBE889", "__type": "Color", "defUid": 11, "realEditorValue": { "id": "V_Int", "params": [ 16509065 ] } },
 						{ "__identifier": "flickering", "__value": false, "__type": "Bool", "defUid": 12, "realEditorValue": null }
 					] },
-					{ "__identifier": "Light", "__cx": 2, "__cy": 3, "defUid": 10, "x": 40, "y": 48, "fieldInstances": [
+					{ "__identifier": "LightEmitter", "__cx": 2, "__cy": 3, "defUid": 10, "x": 40, "y": 48, "fieldInstances": [
 						{ "__identifier": "color", "__value": "#FBE889", "__type": "Color", "defUid": 11, "realEditorValue": { "id": "V_Int", "params": [ 16509065 ] } },
 						{ "__identifier": "flickering", "__value": false, "__type": "Bool", "defUid": 12, "realEditorValue": null }
 					] },
-					{ "__identifier": "Light", "__cx": 10, "__cy": 3, "defUid": 10, "x": 168, "y": 48, "fieldInstances": [
+					{ "__identifier": "LightEmitter", "__cx": 10, "__cy": 3, "defUid": 10, "x": 168, "y": 48, "fieldInstances": [
 						{ "__identifier": "color", "__value": "#FBE889", "__type": "Color", "defUid": 11, "realEditorValue": { "id": "V_Int", "params": [ 16509065 ] } },
 						{ "__identifier": "flickering", "__value": true, "__type": "Bool", "defUid": 12, "realEditorValue": {
 							"id": "V_Bool",
 							"params": [ true ]
 						} }
 					] },
-					{ "__identifier": "Light", "__cx": 14, "__cy": 3, "defUid": 10, "x": 232, "y": 48, "fieldInstances": [
+					{ "__identifier": "LightEmitter", "__cx": 14, "__cy": 3, "defUid": 10, "x": 232, "y": 48, "fieldInstances": [
 						{ "__identifier": "color", "__value": "#FBE889", "__type": "Color", "defUid": 11, "realEditorValue": { "id": "V_Int", "params": [ 16509065 ] } },
 						{ "__identifier": "flickering", "__value": false, "__type": "Bool", "defUid": 12, "realEditorValue": null }
 					] },
 					{ "__identifier": "Player", "__cx": 4, "__cy": 11, "defUid": 1, "x": 72, "y": 192, "fieldInstances": [
 						{ "__identifier": "life", "__value": 3, "__type": "Int", "defUid": 2, "realEditorValue": null },
 						{ "__identifier": "isAwaken", "__value": true, "__type": "Bool", "defUid": 3, "realEditorValue": null },
-						{ "__identifier": "startWeapon", "__value": "Katana", "__type": "LocalEnum.Weapon", "defUid": 6, "realEditorValue": {
+						{ "__identifier": "startWeapon", "__value": "Knife", "__type": "LocalEnum.Weapon", "defUid": 6, "realEditorValue": {
 							"id": "V_String",
-							"params": [ "Katana" ]
+							"params": [ "Knife" ]
 						} }
 					] }
 				]
