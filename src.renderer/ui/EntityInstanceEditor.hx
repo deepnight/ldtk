@@ -258,8 +258,6 @@ class EntityInstanceEditor extends dn.Process {
 
 				hideInputIfDefault(input, fi);
 		}
-
-		N.debug(fi.def.getShortDescription()+" => "+jTarget.length);
 	}
 
 
