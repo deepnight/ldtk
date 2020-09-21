@@ -53,9 +53,8 @@ class EditEntityDefs extends ui.modal.Panel {
 			);
 		});
 
-		// Create field
-		jFieldList.parent().find("button.create").click( function(ev) {
-			var anchor = ev.getThis();
+
+		function createField(anchor:js.jquery.JQuery, isArray:Bool) {
 			function _create(type:led.LedTypes.FieldType) {
 				switch type {
 					case F_Enum(null):
@@ -94,6 +93,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					case _:
 				}
 				var f = curEntity.createFieldDef(project, type);
+				f.isArray = isArray;
 				editor.ge.emit( EntityFieldAdded(curEntity) );
 				selectField(f);
 				jFieldForm.find("input:not([readonly]):first").focus().select();
@@ -113,6 +113,16 @@ class EditEntityDefs extends ui.modal.Panel {
 					w.close();
 				});
 			}
+		}
+
+		// Create single field
+		jFieldList.parent().find("button.createSingle").click( function(ev) {
+			createField(ev.getThis(), false);
+		});
+
+		// Create single field
+		jFieldList.parent().find("button.createArray").click( function(ev) {
+			createField(ev.getThis(), true);
 		});
 
 		// Delete field
