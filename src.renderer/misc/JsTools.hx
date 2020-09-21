@@ -323,6 +323,9 @@ class JsTools {
 		links.each( function(idx,e) {
 			var link = new J(e);
 			var url = link.attr("href");
+			if( url=="#" )
+				return;
+
 			ui.Tip.attach(link, url, true);
 			link.click( function(ev) {
 				ev.preventDefault();
