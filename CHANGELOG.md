@@ -1,5 +1,9 @@
 # LEd release notes
 
+## 0.1.7-alpha
+
+ - **Array of entity fields**: any field type in an Entity can now be an Array. For example, you could have an Array of Enums to represent the items hidden inside a Cratebox entity.
+
 ## 0.1.6-alpha
 
  - **"Pure" auto-layers**: these layers only have rules and use a separate IntGrid layer as source for their value checks. Very useful to have a separate auto-layer that contains drop-shadows of walls, for example. You can have any number of pure auto-layers using the same single IntGrid source.
