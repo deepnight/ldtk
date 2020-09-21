@@ -13,7 +13,7 @@ class FieldInstance {
 	private function new(p:Project, fieldDefUid:Int) {
 		_project = p;
 		defUid = fieldDefUid;
-		internalValues = [];
+		internalValues = [null];
 	}
 
 	@:keep
@@ -49,6 +49,28 @@ class FieldInstance {
 
 		}
 	}
+
+
+
+	public inline function getArrayLength() {
+		return def.isArray ? internalValues.length : 1;
+	}
+
+	public function addArrayValue() {
+		if( def.isArray )
+			internalValues.push(null);
+	}
+
+	public function removeArrayValue(idx:Int) {
+		if( def.isArray && idx>=0 && idx<getArrayLength() )
+			internalValues.splice(idx,1);
+	}
+
+	public inline function removeLastArrayValue() {
+		removeArrayValue( getArrayLength()-1 );
+	}
+
+
 
 	inline function require(type:FieldType) {
 		if( def.type.getIndex()!=type.getIndex() )
