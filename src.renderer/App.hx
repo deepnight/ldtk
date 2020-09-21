@@ -76,12 +76,19 @@ class App extends dn.Process {
 			bt.append('<strong>Install update</strong>');
 			bt.append('<em>Version ${info.version}</em>');
 			bt.click(function(_) {
-				bt.remove();
-				loadPage("updating", { app : Const.APP_NAME });
-				jBody.find("*").off();
-				delayer.addS(function() {
-					IpcRenderer.invoke("installUpdate");
-				}, 1);
+				function applyUpdate() {
+					bt.remove();
+					loadPage("updating", { app : Const.APP_NAME });
+					jBody.find("*").off();
+					delayer.addS(function() {
+						IpcRenderer.invoke("installUpdate");
+					}, 1);
+				}
+
+				if( Editor.ME!=null && Editor.ME.needSaving )
+					new ui.modal.dialog.UnsavedChanges(Editor.ME.onSave.bind(false), applyUpdate);
+				else
+					applyUpdate();
 			});
 		}
 		dn.electron.ElectronUpdater.checkNow();
