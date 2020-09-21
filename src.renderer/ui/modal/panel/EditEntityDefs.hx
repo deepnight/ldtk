@@ -460,9 +460,41 @@ class EditEntityDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
 		i.onChange = editor.ge.emit.bind( EntityFieldDefChanged(curEntity) );
 
-		// Empty array option
-		var i = Input.linkToHtmlInput( curField.arrayCanBeEmpty, jFieldForm.find("input[name=arrayCanBeEmpty]") );
-		i.onChange = editor.ge.emit.bind( EntityFieldDefChanged(curEntity) );
+		// Array size constraints
+		if( curField.isArray ) {
+			// Min
+			var i = new form.input.IntInput(
+				jFieldForm.find("input[name=arrayMinLength]"),
+				function() return curField.arrayMinLength,
+				function(v) {
+					curField.arrayMinLength = v<=0 ? null : v;
+					if( curField.arrayMinLength!=null && curField.arrayMaxLength!=null )
+						curField.arrayMaxLength = M.imax( curField.arrayMaxLength, curField.arrayMinLength );
+				}
+			);
+			i.setBounds(0, 99999);
+			i.linkEvent( EntityFieldDefChanged(curEntity) );
+			// Max
+			var i = new form.input.IntInput(
+				jFieldForm.find("input[name=arrayMaxLength]"),
+				function() return curField.arrayMaxLength,
+				function(v) {
+					curField.arrayMaxLength = v<=0 ? null : v;
+					if( curField.arrayMinLength!=null && curField.arrayMaxLength!=null )
+						curField.arrayMinLength = M.imin( curField.arrayMaxLength, curField.arrayMinLength );
+				}
+			);
+			i.setBounds(0, 99999);
+			i.linkEvent( EntityFieldDefChanged(curEntity) );
+			// Max
+			// var i = new form.input.IntInput(
+			// 	jFieldForm.find("input[name=arrayMinLength]"),
+			// 	function() return curField.arrayMinLength,
+			// 	function(v) curField.arrayMinLength = v
+			// );
+		}
+		// var i = Input.linkToHtmlInput( curField.arrayMinLength, jFieldForm.find("input[name=arrayMinLength]") );
+		// i.onChange = editor.ge.emit.bind( EntityFieldDefChanged(curEntity) );
 
 		// Min
 		var input = jFieldForm.find("input[name=min]");

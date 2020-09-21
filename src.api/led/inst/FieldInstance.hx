@@ -141,7 +141,10 @@ class FieldInstance {
 	}
 
 	public function hasAnyErrorInValues() {
-		if( def.isArray && !def.arrayCanBeEmpty && getArrayLength()==0 )
+		if( def.isArray && def.arrayMinLength!=null && getArrayLength()<def.arrayMinLength )
+			return true;
+
+		if( def.isArray && def.arrayMaxLength!=null && getArrayLength()>def.arrayMaxLength )
 			return true;
 
 		switch def.type {

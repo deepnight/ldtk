@@ -3,11 +3,11 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.1.6-alpha-debug",
+		"appVersion": "0.1.7-alpha-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
 	"name": "Array of values",
-	"jsonVersion": "0.1.6",
+	"jsonVersion": "0.1.7",
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1.0,
 	"defaultGridSize": 16,
@@ -67,6 +67,8 @@
 						"type": "F_Int",
 						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Above",
 						"min": 1.0,
@@ -80,6 +82,8 @@
 						"type": "F_Bool",
 						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Above",
 						"min": null,
@@ -96,6 +100,8 @@
 						"type": { "id": "F_Enum", "params": [ 5 ] },
 						"isArray": true,
 						"canBeNull": false,
+						"arrayMinLength": 1,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Above",
 						"min": null,
@@ -125,6 +131,8 @@
 						"type": { "id": "F_Enum", "params": [ 5 ] },
 						"isArray": true,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Above",
 						"min": null,
@@ -154,6 +162,8 @@
 						"type": "F_Color",
 						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Beneath",
 						"min": null,
@@ -167,6 +177,8 @@
 						"type": "F_Bool",
 						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Beneath",
 						"min": null,
@@ -335,7 +347,8 @@
 							"id": "V_String",
 							"params": [ "Bow" ]
 						} ]
-					} ] }
+					} ] },
+					{ "__identifier": "Crate", "__cx": 11, "__cy": 11, "defUid": 8, "x": 184, "y": 192, "fieldInstances": [ { "__identifier": "loot", "__values": [], "__type": "Array<LocalEnum.Weapon>", "defUid": 21, "realEditorValues": [] } ] }
 				]
 			},
 			{

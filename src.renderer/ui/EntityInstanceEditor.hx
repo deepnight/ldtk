@@ -292,8 +292,14 @@ class EntityInstanceEditor extends dn.Process {
 					// Array
 					var jArray = new J('<div class="array"/>');
 					jArray.appendTo(li);
-					if( fi.getArrayLength()==0 && !fd.arrayCanBeEmpty )
-						jArray.append('<div class="warning">Array should not be empty</div>');
+					if( fd.arrayMinLength!=null && fi.getArrayLength()<fd.arrayMinLength
+						|| fd.arrayMaxLength!=null && fi.getArrayLength()>fd.arrayMaxLength ) {
+						var bounds : String =
+							fd.arrayMinLength==fd.arrayMaxLength ? Std.string(fd.arrayMinLength)
+							: fd.arrayMaxLength==null ? fd.arrayMinLength+"+"
+							: fd.arrayMinLength+"-"+fd.arrayMaxLength;
+						jArray.append('<div class="warning">Array should have $bounds value(s)</div>');
+					}
 
 					for(i in 0...fi.getArrayLength()) {
 						createInputFor(fi, i, jArray);
@@ -309,13 +315,15 @@ class EntityInstanceEditor extends dn.Process {
 						});
 					}
 					// "Add" button
-					var jAdd = new J('<button class="add">+</button>');
-					jAdd.appendTo(jArray);
-					jAdd.click( function(_) {
-						fi.addArrayValue();
-						Editor.ME.ge.emit( EntityInstanceFieldChanged(ei) );
-						updateForm();
-					});
+					if( fi.def.arrayMaxLength==null || fi.getArrayLength()<fi.def.arrayMaxLength ) {
+						var jAdd = new J('<button class="add">+</button>');
+						jAdd.appendTo(jArray);
+						jAdd.click( function(_) {
+							fi.addArrayValue();
+							Editor.ME.ge.emit( EntityInstanceFieldChanged(ei) );
+							updateForm();
+						});
+					}
 				}
 			}
 		}
