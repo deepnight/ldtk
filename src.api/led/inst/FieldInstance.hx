@@ -137,6 +137,19 @@ class FieldInstance {
 					setInternal(arrayIdx, null);
 				else
 					setInternal( arrayIdx, V_String(raw) );
+
+			case F_Point:
+				raw = StringTools.trim(raw);
+				if( raw.indexOf(Const.POINT_SEPARATOR)<0 )
+					setInternal(arrayIdx, null);
+				else {
+					var x = Std.parseInt( raw.split(Const.POINT_SEPARATOR)[0] );
+					var y = Std.parseInt( raw.split(Const.POINT_SEPARATOR)[1] );
+					if( dn.M.isValidNumber(x) && dn.M.isValidNumber(y) )
+						setInternal( arrayIdx, V_String(x+Const.POINT_SEPARATOR+y) );
+					else
+						setInternal(arrayIdx, null);
+				}
 		}
 	}
 
@@ -153,6 +166,7 @@ class FieldInstance {
 			case F_String:
 			case F_Bool:
 			case F_Color:
+			case F_Point:
 			case F_Enum(enumDefUid):
 				if( !def.canBeNull )
 					for( idx in 0...getArrayLength() )
@@ -169,6 +183,7 @@ class FieldInstance {
 			case F_Float: getFloat(arrayIdx);
 			case F_String: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
+			case F_Point: getPoint(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
 		}
 		return v == null;
@@ -209,12 +224,14 @@ class FieldInstance {
 			case F_String: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
+			case F_Point: getPoint(arrayIdx);
 		}
 		if( v==null )
 			return "null";
 		else switch def.type {
 			case F_Int, F_Float, F_Bool, F_Color: return Std.string(v);
 			case F_Enum(name): return '$v';
+			case F_Point: return '$v';
 			case F_String: return '"$v"';
 		}
 	}
@@ -226,6 +243,7 @@ class FieldInstance {
 			case F_String: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
+			case F_Point: getPoint(arrayIdx);
 			case F_Enum(enumDefUid): getEnumValue(arrayIdx);
 		}
 	}
@@ -288,6 +306,14 @@ class FieldInstance {
 		}
 	}
 
+	public function getPoint(arrayIdx:Int) : String {
+		require( F_Point );
+		return isUsingDefault(arrayIdx) ? def.getPointDefault() : switch internalValues[arrayIdx] {
+			case V_String(v): v;
+			case _: throw "unexpected";
+		}
+	}
+
 	public function tidy(p:Project) {
 		_project = p;
 
@@ -297,6 +323,8 @@ class FieldInstance {
 			case F_String:
 			case F_Bool:
 			case F_Color:
+
+			case F_Point: // TODO check bounds?
 
 			case F_Enum(enumDefUid):
 				// Lost enum value

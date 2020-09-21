@@ -22,6 +22,7 @@ class Const {
 	public static var WEBSITE_URL = "https://deepnight.net/tools/led-2d-level-editor/";
 	public static var DOCUMENTATION_URL = "https://deepnight.net/docs/led-documentation/";
 	public static var ISSUES_URL = "https://github.com/deepnight/led/issues";
+	public static var POINT_SEPARATOR = ",";
 
 	public static var JSON_HEADER = {
 		fileType: Const.APP_NAME+" Project JSON",

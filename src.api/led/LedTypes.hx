@@ -28,6 +28,7 @@ enum FieldType {
 	F_Bool;
 	F_Color;
 	F_Enum(enumDefUid:Int);
+	F_Point;
 }
 
 enum ValueWrapper {
