@@ -12,7 +12,7 @@
 	"defaultPivotY": 1.0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 39,
+	"nextUid": 41,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -74,6 +74,21 @@
 						"min": null,
 						"max": null,
 						"defaultOverride": null
+					},
+					{
+						"identifier": "path",
+						"__type": "Array<Point>",
+						"uid": 40,
+						"type": "F_Point",
+						"isArray": true,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "NameAndValue",
+						"editorDisplayPos": "Above",
+						"min": null,
+						"max": null,
+						"defaultOverride": null
 					}
 				]
 			}
@@ -121,16 +136,19 @@
 				"intGrid": [],
 				"autoTiles": [],
 				"gridTiles": [],
-				"entityInstances": [ { "__identifier": "Player", "__cx": 9, "__cy": 14, "defUid": 1, "x": 152, "y": 240, "fieldInstances": [ {
-					"__identifier": "coord",
-					"__values": "10,8",
-					"__type": "Point",
-					"defUid": 38,
-					"realEditorValues": [ {
-						"id": "V_String",
-						"params": [ "10,8" ]
-					} ]
-				} ] } ]
+				"entityInstances": [ { "__identifier": "Player", "__cx": 9, "__cy": 14, "defUid": 1, "x": 152, "y": 240, "fieldInstances": [
+					{
+						"__identifier": "coord",
+						"__values": "10,8",
+						"__type": "Point",
+						"defUid": 38,
+						"realEditorValues": [ {
+							"id": "V_String",
+							"params": [ "10,8" ]
+						} ]
+					},
+					{ "__identifier": "path", "__values": [], "__type": "Array<Point>", "defUid": 40, "realEditorValues": [] }
+				] } ]
 			},
 			{
 				"__identifier": "Collisions",
