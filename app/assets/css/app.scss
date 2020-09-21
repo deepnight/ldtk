@@ -2359,6 +2359,7 @@ canvas#webgl {
 		div.array {
 			display: grid;
 			grid-template-columns: auto min-content;
+			gap: 2px;
 			box-sizing: border-box;
 			margin-left: 4px;
 			padding: 8px;
@@ -2372,8 +2373,9 @@ canvas#webgl {
 				width: 100%;
 			}
 
-			>*+* {
-				margin-top: 2px;
+			button.remove {
+				padding: 0;
+				margin: 0;
 			}
 		}
 

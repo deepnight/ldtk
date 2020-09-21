@@ -284,14 +284,19 @@ class EntityInstanceEditor extends dn.Process {
 				li.appendTo(form);
 				li.append('<label>${fi.def.identifier}</label>');
 
-				if( !fd.isArray )
+				if( !fd.isArray ) {
+					// Single value
 					createInputFor(fi, 0, li);
+				}
 				else {
+					// Array
 					var jArray = new J('<div class="array"/>');
 					jArray.appendTo(li);
 					for(i in 0...fi.getArrayLength()) {
 						createInputFor(fi, i, jArray);
-						var jRemove = new J('<button>x</button>');
+
+						// "Remove" button
+						var jRemove = new J('<button class="remove dark">x</button>');
 						jRemove.appendTo(jArray);
 						var idx = i;
 						jRemove.click( function(_) {
@@ -300,6 +305,7 @@ class EntityInstanceEditor extends dn.Process {
 							updateForm();
 						});
 					}
+					// "Add" button
 					var jAdd = new J('<button>+</button>');
 					jAdd.appendTo(jArray);
 					jAdd.click( function(_) {
