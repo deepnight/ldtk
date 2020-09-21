@@ -141,6 +141,9 @@ class FieldInstance {
 	}
 
 	public function hasAnyErrorInValues() {
+		if( def.isArray && !def.arrayCanBeEmpty && getArrayLength()==0 )
+			return true;
+
 		switch def.type {
 			case F_Int:
 			case F_Float:

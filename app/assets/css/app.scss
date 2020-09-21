@@ -2369,6 +2369,11 @@ canvas#webgl {
 			border-left: 1px solid $orange;
 			border-radius: 6px;
 
+			.warning,
+			button.add {
+				grid-column: 1/3;
+			}
+
 			input[type=text] {
 				width: 100%;
 			}
@@ -3391,9 +3396,11 @@ $patternSize : 32px;
 			font-family: 'Courier New', Courier, monospace;
 		}
 
-		ul.form *[class*="F_"] {
+		ul.form *[class*="F_"],
+		ul.form *[class="Array"] {
 			display: none;
 		}
+		ul.form.type-Array .Array,
 		ul.form.type-F_Int .F_int,
 		ul.form.type-F_Float .F_Float,
 		ul.form.type-F_Bool .F_Bool,

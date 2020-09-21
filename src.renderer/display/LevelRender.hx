@@ -653,7 +653,7 @@ class LevelRender extends dn.Process {
 				if( fi.hasAnyErrorInValues() ) {
 					var tf = new h2d.Text(font, above);
 					tf.textColor = 0xffcc00;
-					tf.text = "!ERR!";
+					tf.text = "<ERROR>";
 					continue;
 				}
 

@@ -220,7 +220,7 @@ class EntityInstanceEditor extends dn.Process {
 					else {
 						// SELECT shouldn't be null
 						select.addClass("required");
-						opt.text("[ Select one ]");
+						opt.text("[ Value required ]");
 						select.click( function(ev) {
 							select.removeClass("required");
 							select.blur( function(ev) updateForm() );
@@ -292,6 +292,9 @@ class EntityInstanceEditor extends dn.Process {
 					// Array
 					var jArray = new J('<div class="array"/>');
 					jArray.appendTo(li);
+					if( fi.getArrayLength()==0 && !fd.arrayCanBeEmpty )
+						jArray.append('<div class="warning">Array should not be empty</div>');
+
 					for(i in 0...fi.getArrayLength()) {
 						createInputFor(fi, i, jArray);
 
@@ -306,7 +309,7 @@ class EntityInstanceEditor extends dn.Process {
 						});
 					}
 					// "Add" button
-					var jAdd = new J('<button>+</button>');
+					var jAdd = new J('<button class="add">+</button>');
 					jAdd.appendTo(jArray);
 					jAdd.click( function(_) {
 						fi.addArrayValue();

@@ -343,12 +343,19 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		JsTools.parseComponents(jFieldForm);
 
-		// Set form class
+		// Set form classes
 		for(k in Type.getEnumConstructs(led.LedTypes.FieldType))
 			jFieldForm.removeClass("type-"+k);
 		jFieldForm.addClass("type-"+curField.type.getName());
 
+		if( curField.isArray )
+			jFieldForm.addClass("type-Array");
+		else
+			jFieldForm.removeClass("type-Array");
+
+		// Type desc
 		jFieldForm.find(".type").val( curField.getShortDescription() );
+
 
 		var i = new form.input.EnumSelect(
 			jFieldForm.find("select[name=editorDisplayMode]"),
@@ -451,6 +458,10 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Nullable
 		var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
+		i.onChange = editor.ge.emit.bind( EntityFieldDefChanged(curEntity) );
+
+		// Empty array option
+		var i = Input.linkToHtmlInput( curField.arrayCanBeEmpty, jFieldForm.find("input[name=arrayCanBeEmpty]") );
 		i.onChange = editor.ge.emit.bind( EntityFieldDefChanged(curEntity) );
 
 		// Min

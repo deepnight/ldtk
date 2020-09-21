@@ -5,6 +5,7 @@ class FieldDef {
 	public var type(default,null) : led.LedTypes.FieldType;
 	public var identifier(default,set) : String;
 	public var canBeNull : Bool;
+	public var arrayCanBeEmpty : Bool;
 	public var editorDisplayMode : led.LedTypes.FieldDisplayMode;
 	public var editorDisplayPos : led.LedTypes.FieldDisplayPosition;
 	public var isArray : Bool;
@@ -28,6 +29,7 @@ class FieldDef {
 		editorDisplayPos = Above;
 		identifier = "NewField"+uid;
 		canBeNull = type==F_String;
+		arrayCanBeEmpty = true;
 		isArray = false;
 		min = max = null;
 		defaultOverride = null;
@@ -53,6 +55,7 @@ class FieldDef {
 		o.isArray = JsonTools.readBool(json.isArray, false);
 		o.identifier = JsonTools.readString(json.identifier);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
+		o.arrayCanBeEmpty = JsonTools.readBool(json.arrayCanBeEmpty, true);
 		o.editorDisplayMode = JsonTools.readEnum(led.LedTypes.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
 		o.editorDisplayPos = JsonTools.readEnum(led.LedTypes.FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.min = JsonTools.readNullableFloat(json.min);
@@ -69,6 +72,7 @@ class FieldDef {
 			type: JsonTools.writeEnum(type, false),
 			isArray: isArray,
 			canBeNull: canBeNull,
+			arrayCanBeEmpty: arrayCanBeEmpty,
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
 			min: min==null ? null : JsonTools.writeFloat(min),
