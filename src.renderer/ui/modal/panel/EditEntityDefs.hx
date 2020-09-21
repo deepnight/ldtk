@@ -97,8 +97,6 @@ class EditEntityDefs extends ui.modal.Panel {
 				editor.ge.emit( EntityFieldAdded(curEntity) );
 				selectField(f);
 				jFieldForm.find("input:not([readonly]):first").focus().select();
-
-				curField.isArray = true; // HACK
 			}
 
 			// Type picker
