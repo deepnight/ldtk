@@ -335,12 +335,17 @@ class Editor extends Page {
 
 
 			#if debug
+
 			case K.T:
 				if( !hasInputFocus() ) {
 					var t = haxe.Timer.stamp();
 					var json = project.levels[0].toJson();
 					App.ME.debug(dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
 				}
+
+			case K.U if( !hasInputFocus() && App.ME.isShiftDown() && App.ME.isCtrlDown() ):
+				dn.electron.ElectronUpdater.emulate();
+
 			#end
 		}
 
