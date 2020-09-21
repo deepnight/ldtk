@@ -12,7 +12,7 @@
 	"defaultPivotY": 1.0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 26,
+	"nextUid": 27,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -145,7 +145,7 @@
 				"identifier": "LightEmitter",
 				"uid": 10,
 				"width": 20,
-				"height": 6,
+				"height": 10,
 				"color": "#FFFFFF",
 				"renderMode": "Rectangle",
 				"tilesetId": null,
@@ -155,21 +155,6 @@
 				"pivotX": 0.5,
 				"pivotY": 0.0,
 				"fieldDefs": [
-					{
-						"identifier": "color",
-						"__type": "Color",
-						"uid": 11,
-						"type": "F_Color",
-						"isArray": false,
-						"canBeNull": false,
-						"arrayMinLength": null,
-						"arrayMaxLength": null,
-						"editorDisplayMode": "ValueOnly",
-						"editorDisplayPos": "Beneath",
-						"min": null,
-						"max": null,
-						"defaultOverride": { "id": "V_Int", "params": [ 0 ] }
-					},
 					{
 						"identifier": "flickering",
 						"__type": "Bool",
@@ -184,6 +169,21 @@
 						"min": null,
 						"max": null,
 						"defaultOverride": null
+					},
+					{
+						"identifier": "colors",
+						"__type": "Array<Color>",
+						"uid": 26,
+						"type": "F_Color",
+						"isArray": true,
+						"canBeNull": false,
+						"arrayMinLength": 1,
+						"arrayMaxLength": 2,
+						"editorDisplayMode": "ValueOnly",
+						"editorDisplayPos": "Beneath",
+						"min": null,
+						"max": null,
+						"defaultOverride": { "id": "V_Int", "params": [ 16772997 ] }
 					}
 				]
 			}
@@ -244,44 +244,37 @@
 					} ] },
 					{ "__identifier": "LightEmitter", "__cx": 6, "__cy": 3, "defUid": 10, "x": 104, "y": 48, "fieldInstances": [
 						{
-							"__identifier": "color",
-							"__values": "#FBE889",
-							"__type": "Color",
-							"defUid": 11,
-							"realEditorValues": [ { "id": "V_Int", "params": [ 16509065 ] } ]
-						},
-						{
 							"__identifier": "flickering",
 							"__values": false,
 							"__type": "Bool",
 							"defUid": 12,
+							"realEditorValues": [ null ]
+						},
+						{
+							"__identifier": "colors",
+							"__values": [ "#FFEF85" ],
+							"__type": "Array<Color>",
+							"defUid": 26,
 							"realEditorValues": [ null ]
 						}
 					] },
 					{ "__identifier": "LightEmitter", "__cx": 2, "__cy": 3, "defUid": 10, "x": 40, "y": 48, "fieldInstances": [
 						{
-							"__identifier": "color",
-							"__values": "#FBE889",
-							"__type": "Color",
-							"defUid": 11,
-							"realEditorValues": [ { "id": "V_Int", "params": [ 16509065 ] } ]
-						},
-						{
 							"__identifier": "flickering",
 							"__values": false,
 							"__type": "Bool",
 							"defUid": 12,
 							"realEditorValues": [ null ]
+						},
+						{
+							"__identifier": "colors",
+							"__values": [ "#FFEF85" ],
+							"__type": "Array<Color>",
+							"defUid": 26,
+							"realEditorValues": [ null ]
 						}
 					] },
 					{ "__identifier": "LightEmitter", "__cx": 10, "__cy": 3, "defUid": 10, "x": 168, "y": 48, "fieldInstances": [
-						{
-							"__identifier": "color",
-							"__values": "#FBE889",
-							"__type": "Color",
-							"defUid": 11,
-							"realEditorValues": [ { "id": "V_Int", "params": [ 16509065 ] } ]
-						},
 						{
 							"__identifier": "flickering",
 							"__values": true,
@@ -291,21 +284,28 @@
 								"id": "V_Bool",
 								"params": [ true ]
 							} ]
+						},
+						{
+							"__identifier": "colors",
+							"__values": [ "#FF7D1A", "#B20101" ],
+							"__type": "Array<Color>",
+							"defUid": 26,
+							"realEditorValues": [ { "id": "V_Int", "params": [ 16743706 ] }, { "id": "V_Int", "params": [ 11665665 ] } ]
 						}
 					] },
 					{ "__identifier": "LightEmitter", "__cx": 14, "__cy": 3, "defUid": 10, "x": 232, "y": 48, "fieldInstances": [
-						{
-							"__identifier": "color",
-							"__values": "#FBE889",
-							"__type": "Color",
-							"defUid": 11,
-							"realEditorValues": [ { "id": "V_Int", "params": [ 16509065 ] } ]
-						},
 						{
 							"__identifier": "flickering",
 							"__values": false,
 							"__type": "Bool",
 							"defUid": 12,
+							"realEditorValues": [ null ]
+						},
+						{
+							"__identifier": "colors",
+							"__values": [ "#FFEF85" ],
+							"__type": "Array<Color>",
+							"defUid": 26,
 							"realEditorValues": [ null ]
 						}
 					] },
