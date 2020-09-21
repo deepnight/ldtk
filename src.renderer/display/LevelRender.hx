@@ -514,6 +514,7 @@ class LevelRender extends dn.Process {
 		valuesFlow.layout = Horizontal;
 		valuesFlow.verticalAlign = Middle;
 
+		// Array opening
 		if( fi.def.isArray ) {
 			var tf = new h2d.Text(font, valuesFlow);
 			tf.textColor = getFieldColor(ei, fi.def);
@@ -521,14 +522,16 @@ class LevelRender extends dn.Process {
 		}
 
 		for( idx in 0...fi.getArrayLength() ) {
-			if( !fi.valueIsNull(idx) && !( fi.def.type==F_Bool && fi.getBool(idx)==false ) ) {
+			if( !fi.valueIsNull(idx) && !( fi.def.type==F_Bool && fi.isUsingDefault(idx) ) ) {
 				if( fi.hasIconForDisplay(idx) ) {
+					// Icon
 					var tile = fi.getIconForDisplay(idx);
 					var bmp = new h2d.Bitmap( tile, valuesFlow );
 					var s = M.fmin( ei.def.width/ tile.width, ei.def.height/tile.height );
 					bmp.setScale(s);
 				}
 				else if( fi.def.type==F_Color ) {
+					// Color disc
 					var g = new h2d.Graphics(valuesFlow);
 					var r = 4;
 					g.beginFill( fi.getColorAsInt(idx) );
@@ -536,16 +539,18 @@ class LevelRender extends dn.Process {
 					g.drawCircle(r,r,r, 16);
 				}
 				else {
+					// Text render
 					var tf = new h2d.Text(font, valuesFlow);
 					tf.textColor = getFieldColor(ei, fi.def);
 					var v = fi.getForDisplay(idx);
-					if( fi.def.type==F_Bool )
-						tf.text = '<${fi.def.identifier}>';
+					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
+						tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';
 					else
 						tf.text = v;
 				}
 			}
 
+			// Array separator
 			if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
 				var tf = new h2d.Text(font, valuesFlow);
 				tf.textColor = getFieldColor(ei, fi.def);
@@ -553,6 +558,7 @@ class LevelRender extends dn.Process {
 			}
 		}
 
+		// Array closing
 		if( fi.def.isArray ) {
 			var tf = new h2d.Text(font, valuesFlow);
 			tf.textColor = getFieldColor(ei, fi.def);
