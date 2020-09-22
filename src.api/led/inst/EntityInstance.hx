@@ -72,8 +72,8 @@ class EntityInstance {
 		return ( getCy(ld)+0.5 ) * ld.gridSize - y;
 	}
 
-	public function isOver(levelX:Int, levelY:Int) {
-		return levelX >= left && levelX <= right && levelY >= top && levelY <= bottom;
+	public function isOver(levelX:Int, levelY:Int, pad=0) {
+		return levelX >= left-pad && levelX <= right+pad && levelY >= top-pad && levelY <= bottom+pad;
 	}
 
 	public function tidy(p:led.Project) {

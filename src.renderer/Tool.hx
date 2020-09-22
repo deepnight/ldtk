@@ -170,9 +170,10 @@ class Tool<T> extends dn.Process {
 
 				case Entities:
 					for(ei in li.entityInstances) {
-						if( ei.isOver(m.levelX, m.levelY) )
+						if( ei.isOver(m.levelX, m.levelY, 8) )
 							ge = GenericLevelElement.Entity(li, ei);
 						else {
+							// Points
 							for(fi in ei.fieldInstances) {
 								if( fi.def.type!=F_Point )
 									continue;
