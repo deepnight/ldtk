@@ -7,8 +7,9 @@
  - Added a confirmation when trying to update the app while having unsaved changes
  - UI tweaks & fixes
  - Added some click tolerance when picking entities
- - Swapped Tileset and Enum buttons in main toolbar
+ - Swapped "Tileset" and "Enum" buttons in main toolbar
  - Fixed an infinite loop on undo/redo in some levels
+ - Updated Haxe API
  - Bug fixes
 
 ## 0.1.6-alpha
