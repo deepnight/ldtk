@@ -312,32 +312,6 @@ class EntityInstanceEditor extends dn.Process {
 					jPoint.appendTo(jTarget);
 					jPoint.text( fi.getPointStr(arrayIdx) );
 				}
-				// var jPick = new J('<button/>');
-				// jPick.addClass("point");
-				// jPick.appendTo(jTarget);
-				// if( fi.valueIsNull(arrayIdx) )
-				// 	if( fi.def.canBeNull )
-				// 		jPick.text( "--none--" );
-				// 	else {
-				// 		jPick.addClass("required");
-				// 		jPick.text( "Point required" );
-				// 	}
-				// else
-				// 	jPick.append( fi.getPointStr(arrayIdx) );
-				// jPick.click(function(_) {
-				// 	if( Editor.ME.isUsingSpecialTool(tool.PickPoint) ) {
-				// 		Editor.ME.clearSpecialTool();
-				// 		updateForm();
-				// 	}
-				// 	else if( fi.valueIsNull(arrayIdx) ) {
-				// 		// Start picking
-				// 		jPick.text("Cancel");
-				// 		jPanel.addClass("picking");
-
-				// 		startPointsEditing(fi, arrayIdx);
-				// 	}
-				// });
-				// hideInputIfDefault(arrayIdx, jPick, fi);
 
 
 			case F_Enum(name):
