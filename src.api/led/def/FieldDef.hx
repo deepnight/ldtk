@@ -29,7 +29,7 @@ class FieldDef {
 		editorDisplayMode = Hidden;
 		editorDisplayPos = Above;
 		identifier = "NewField"+uid;
-		canBeNull = type==F_String;
+		canBeNull = type==F_String || type==F_Point;
 		arrayMinLength = arrayMaxLength = null;
 		isArray = false;
 		min = max = null;
@@ -86,16 +86,17 @@ class FieldDef {
 
 
 	#if editor
-	public function getShortDescription() : String {
+	public function getShortDescription(includeArray=true) : String {
 		var desc = switch type {
 			case F_Int: "Int";
 			case F_Float: "Float";
 			case F_String: "String";
 			case F_Bool: "Bool";
 			case F_Color: "Color";
+			case F_Point: "Point";
 			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
 		}
-		return isArray ? 'Array<$desc>' : desc;
+		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
 
 	public function getJsonTypeString() {
@@ -105,6 +106,7 @@ class FieldDef {
 			case F_String: "String";
 			case F_Bool: "Bool";
 			case F_Color: "Color";
+			case F_Point: "Point";
 			case F_Enum(enumDefUid):
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
@@ -172,6 +174,11 @@ class FieldDef {
 			case V_Bool(v): v;
 			case _: null;
 		}
+	}
+
+	public function getPointDefault() : Null<String> {
+		require(F_Point);
+		return null;
 	}
 
 	public function getColorDefault() : Null<Int> {
@@ -245,6 +252,19 @@ class FieldDef {
 				else if( rawDef=="false" ) defaultOverride = V_Bool(false);
 				else defaultOverride = null;
 
+			case F_Point:
+				rawDef = StringTools.trim(rawDef);
+				if( rawDef.indexOf(Const.POINT_SEPARATOR)<0 )
+					defaultOverride = null;
+				else {
+					var x = Std.parseInt( rawDef.split(Const.POINT_SEPARATOR)[0] );
+					var y = Std.parseInt( rawDef.split(Const.POINT_SEPARATOR)[1] );
+					if( dn.M.isValidNumber(x) && dn.M.isValidNumber(y) )
+						defaultOverride = V_String(x+Const.POINT_SEPARATOR+y);
+					else
+						defaultOverride = null;
+				}
+
 			case F_Enum(name) :
 				defaultOverride = V_String(rawDef);
 		}
@@ -257,6 +277,7 @@ class FieldDef {
 			case F_Float: getFloatDefault();
 			case F_String: getStringDefault();
 			case F_Bool: getBoolDefault();
+			case F_Point: getPointDefault();
 			case F_Enum(name): getEnumDefault();
 		}
 	}

@@ -102,7 +102,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			// Type picker
 			var w = new ui.modal.Dialog(anchor,"fieldTypes");
 			var types : Array<led.LedTypes.FieldType> = [
-				F_Int, F_Float, F_Bool, F_String, F_Enum(null), F_Color
+				F_Int, F_Float, F_Bool, F_String, F_Enum(null), F_Color, F_Point
 			];
 			for(type in types) {
 				var b = new J("<button/>");
@@ -311,13 +311,21 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 
 		// Behavior when max is reached
-		var i = new form.input.BoolInput(
-			jEntityForm.find("select[name=discardExcess"),
-			function() return curEntity.discardExcess,
-			function(v) curEntity.discardExcess = v
+		var i = new form.input.EnumSelect(
+			jEntityForm.find("select[name=limitBehavior]"),
+			led.LedTypes.EntityLimitBehavior,
+			function() return curEntity.limitBehavior,
+			function(v) {
+				curEntity.limitBehavior = v;
+			},
+			function(k) {
+				return Lang.untranslated("... ") + switch k {
+					case DiscardOldOnes: Lang.t._("discard older ones");
+					case PreventAdding: Lang.t._("prevent adding more");
+					case MoveLastOne: Lang.t._("move the last one instead of adding");
+				}
+			}
 		);
-		i.setEnabled( curEntity.maxPerLevel>0 );
-		i.linkEvent(EntityDefChanged);
 
 		// Pivot
 		var jPivots = jEntityForm.find(".pivot");
@@ -361,9 +369,30 @@ class EditEntityDefs extends ui.modal.Panel {
 			jFieldForm.find("select[name=editorDisplayMode]"),
 			led.LedTypes.FieldDisplayMode,
 			function() return curField.editorDisplayMode,
-			function(v) return curField.editorDisplayMode = v
+			function(v) return curField.editorDisplayMode = v,
+
+			function(k) {
+				return switch k {
+					case Hidden: L.t._("Do not show");
+					case ValueOnly: L.t._("Show value only");
+					case NameAndValue: L.t._('Show "name=value"');
+					case PointStar: L.t._("Show point(s) in level");
+					case PointPath: L.t._("Show as a Path");
+				}
+			},
+
+			function(k) {
+				return switch k {
+					case Hidden: true;
+					case ValueOnly: curField.type!=F_Point;
+					case NameAndValue: true;
+					case PointStar: curField.type==F_Point;
+					case PointPath: curField.type==F_Point && curField.isArray;
+				}
+			}
 		);
 		i.linkEvent( EntityFieldDefChanged(curEntity) );
+
 
 		var i = new form.input.EnumSelect(
 			jFieldForm.find("select[name=editorDisplayPos]"),
@@ -371,8 +400,18 @@ class EditEntityDefs extends ui.modal.Panel {
 			function() return curField.editorDisplayPos,
 			function(v) return curField.editorDisplayPos = v
 		);
-		i.setEnabled( curField.editorDisplayMode!=Hidden );
+		switch curField.editorDisplayMode {
+			case Hidden:
+				i.setEnabled(false);
+
+			case ValueOnly, NameAndValue:
+				i.setEnabled(true);
+
+			case PointStar, PointPath:
+				i.setEnabled(false);
+		}
 		i.linkEvent( EntityFieldDefChanged(curEntity) );
+
 
 		var i = Input.linkToHtmlInput( curField.identifier, jFieldForm.find("input[name=name]") );
 		i.linkEvent( EntityFieldDefChanged(curEntity) );
@@ -383,7 +422,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Default value
 		switch curField.type {
-			case F_Int, F_Float, F_String:
+			case F_Int, F_Float, F_String, F_Point:
 				var defInput = jFieldForm.find("input[name=fDef]");
 				if( curField.defaultOverride != null )
 					defInput.val( Std.string( curField.getUntypedDefault() ) );
@@ -399,6 +438,7 @@ class EditEntityDefs extends ui.modal.Panel {
 						case F_Int: Std.string( curField.iClamp(0) );
 						case F_Float: Std.string( curField.fClamp(0) );
 						case F_String: "";
+						case F_Point: "0"+Const.POINT_SEPARATOR+"0";
 						case F_Bool, F_Color, F_Enum(_): "N/A";
 					});
 

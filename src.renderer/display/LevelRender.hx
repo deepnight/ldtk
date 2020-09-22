@@ -306,7 +306,7 @@ class LevelRender extends dn.Process {
 			cy*li.def.gridSize,
 			cWid*li.def.gridSize,
 			cHei*li.def.gridSize,
-			0xff00ff, 2
+			col, 2
 		);
 	}
 
@@ -456,7 +456,7 @@ class LevelRender extends dn.Process {
 		case Entities:
 			// not meant to be rendered
 			for(ei in li.entityInstances) {
-				var e = createEntityRender(ei);
+				var e = createEntityRender(ei, li);
 				e.setPosition(ei.x, ei.y);
 				wrapper.addChild(e);
 			}
@@ -569,7 +569,21 @@ class LevelRender extends dn.Process {
 		return valuesFlow;
 	}
 
-	public static function createEntityRender(?ei:led.inst.EntityInstance, ?def:led.def.EntityDef, ?parent:h2d.Object) {
+	static inline function dashedLine(g:h2d.Graphics, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=3) {
+		var a = Math.atan2(ty-fy, tx-fx);
+		var len = M.dist(fx,fy, tx,ty);
+		var cur = 0.;
+		var count = M.ceil( len/(dashLen*2) );
+		var dashLen = len / ( count%2==0 ? count+1 : count );
+
+		while( cur<len ) {
+			g.moveTo( fx+Math.cos(a)*cur, fy+Math.sin(a)*cur );
+			g.lineTo( fx+Math.cos(a)*(cur+dashLen), fy+Math.sin(a)*(cur+dashLen) );
+			cur+=dashLen*2;
+		}
+	}
+
+	public static function createEntityRender(?ei:led.inst.EntityInstance, ?def:led.def.EntityDef, ?li:led.inst.LayerInstance, ?parent:h2d.Object) {
 		if( def==null && ei==null )
 			throw "Need at least 1 parameter";
 
@@ -631,9 +645,13 @@ class LevelRender extends dn.Process {
 
 
 		// Display fields not marked as "Hidden"
-		if( ei!=null ) {
+		if( ei!=null && li!=null ) {
 			// Init field wrappers
 			var font = Assets.fontPixel;
+
+			var lines = new h2d.Graphics(wrapper);
+			lines.lineStyle(1, def.color, 0.66);
+
 			var above = new h2d.Flow(wrapper);
 			above.layout = Vertical;
 			above.horizontalAlign = Middle;
@@ -655,7 +673,7 @@ class LevelRender extends dn.Process {
 					var tf = new h2d.Text(font, above);
 					tf.textColor = 0xffcc00;
 					tf.text = "<ERROR>";
-					continue;
+					// continue;
 				}
 
 				if( fd.editorDisplayMode==Hidden )
@@ -689,6 +707,25 @@ class LevelRender extends dn.Process {
 					case ValueOnly:
 						fieldWrapper.addChild( createFieldValuesRender(ei,fi) );
 
+					case PointStar, PointPath:
+						var fx = ei.getCellCenterX(li.def);
+						var fy = ei.getCellCenterY(li.def);
+
+						for(i in 0...fi.getArrayLength()) {
+							var pt = fi.getPointGrid(i);
+							if( pt==null )
+								continue;
+
+							var tx = M.round( (pt.cx+0.5)*li.def.gridSize-ei.x );
+							var ty = M.round( (pt.cy+0.5)*li.def.gridSize-ei.y );
+							dashedLine(lines, fx,fy, tx,ty);
+							lines.drawRect( tx-2, ty-2, 4, 4 );
+
+							if( fd.editorDisplayMode==PointPath ) {
+								fx = tx;
+								fy = ty;
+							}
+						}
 				}
 
 			}

@@ -64,6 +64,14 @@ class EntityInstance {
 		return Std.int( ( y + (def.pivotY==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
+	public function getCellCenterX(ld:led.def.LayerDef) {
+		return ( getCx(ld)+0.5 ) * ld.gridSize - x;
+	}
+
+	public function getCellCenterY(ld:led.def.LayerDef) {
+		return ( getCy(ld)+0.5 ) * ld.gridSize - y;
+	}
+
 	public function isOver(levelX:Int, levelY:Int) {
 		return levelX >= left && levelX <= right && levelY >= top && levelY <= bottom;
 	}

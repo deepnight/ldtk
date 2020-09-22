@@ -28,6 +28,7 @@ enum FieldType {
 	F_Bool;
 	F_Color;
 	F_Enum(enumDefUid:Int);
+	F_Point;
 }
 
 enum ValueWrapper {
@@ -41,6 +42,8 @@ enum FieldDisplayMode {
 	Hidden;
 	ValueOnly;
 	NameAndValue;
+	PointStar;
+	PointPath;
 }
 
 enum FieldDisplayPosition {
@@ -76,4 +79,10 @@ typedef AutoLayerRuleGroup = {
 	var active : Bool;
 	var collapsed : Bool;
 	var rules : Array<led.def.AutoLayerRuleDef>;
+}
+
+enum EntityLimitBehavior {
+	DiscardOldOnes;
+	PreventAdding;
+	MoveLastOne;
 }

@@ -63,7 +63,7 @@ class EntityInstanceEditor extends dn.Process {
 		var win = js.Browser.window;
 		var render = Editor.ME.levelRender;
 		link.clear();
-		link.lineStyle(2*win.devicePixelRatio, ei.def.color);
+		link.lineStyle(4*win.devicePixelRatio, ei.def.color);
 		link.moveTo(
 			render.levelToUiX(ei.x),
 			render.levelToUiY(ei.y)
@@ -97,12 +97,17 @@ class EntityInstanceEditor extends dn.Process {
 		input.off(".def").removeClass("usingDefault");
 
 		if( fi.isUsingDefault(arrayIdx) ) {
-			if( input.is("[type=color]") ) {
+			if( input.is("button") ) {
+				// Button input
+				if( fi.def.type!=F_Point || fi.def.canBeNull )
+					input.addClass("gray usingDefault");
+			}
+			else if( input.is("[type=color]") ) {
 				// Color input
 				input.addClass("usingDefault");
 				input.text("default");
 			}
-			if( input.is(".colorWrapper") ) {
+			else if( input.is(".colorWrapper") ) {
 				// Wrapped color input
 				input.addClass("usingDefault");
 			}
@@ -146,8 +151,8 @@ class EntityInstanceEditor extends dn.Process {
 				});
 			}
 		}
-		else if( fi.def.type==F_Color || fi.def.type==F_Bool ) {
-			// BOOL or COLOR requiring a "Reset to default" link
+		else if( fi.def.type==F_Color || fi.def.type==F_Bool || fi.def.type==F_Point && fi.def.canBeNull ) {
+			// Require a "Reset to default" link
 			var span = input.wrap('<span class="inputWithDefaultOption"/>').parent();
 			span.find("input").wrap('<span class="value"/>');
 			var defLink = new J('<a class="reset" href="#">[ Reset ]</a>');
@@ -227,6 +232,82 @@ class EntityInstanceEditor extends dn.Process {
 				});
 				hideInputIfDefault(arrayIdx, input, fi);
 
+			case F_Point:
+				var jPick = new J('<button/>');
+				jPick.addClass("point");
+				jPick.appendTo(jTarget);
+				if( fi.valueIsNull(arrayIdx) )
+					if( fi.def.canBeNull )
+						jPick.text( "--none--" );
+					else {
+						jPick.addClass("required");
+						jPick.text( "Point required" );
+					}
+				else
+					jPick.append( fi.getPointStr(arrayIdx) );
+				jPick.click(function(_) {
+					if( Editor.ME.isUsingSpecialTool(tool.PickPoint) ) {
+						Editor.ME.clearSpecialTool();
+						updateForm();
+					}
+					else {
+						// Start picking
+						jPick.text("Cancel");
+						jPanel.addClass("picking");
+
+						var t = new tool.PickPoint();
+						t.pickOrigin = { cx:ei.getCx(Editor.ME.curLayerDef), cy:ei.getCy(Editor.ME.curLayerDef), color:ei.def.color }
+						if( fi.def.isArray ) {
+							var pt = fi.getPointGrid( arrayIdx-1 );
+							if( pt!=null )
+								t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:ei.def.color }
+						}
+
+						var editIdx = arrayIdx;
+						t.onPick = function(m) {
+							// Picking of a point
+							if( fi.def.isArray && editIdx>=fi.getArrayLength()-1 ) {
+								// Chain points in a path
+								fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+								editIdx = fi.getArrayLength();
+								var pt = fi.getPointGrid( editIdx-1 );
+								if( pt!=null )
+									t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:ei.def.color }
+							}
+							else {
+								// Edit a single point
+								Editor.ME.clearSpecialTool();
+								fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+							}
+							onFieldChange();
+						}
+						t.onDisposeCb = function() {
+							if( fi.def.isArray && editIdx>=fi.getArrayLength()-1 && fi.getPointStr(editIdx)==null ) {
+								// Trim last null point
+								fi.removeArrayValue(editIdx);
+								onFieldChange();
+							}
+							else
+								updateForm();
+						}
+						Editor.ME.setSpecialTool(t);
+					}
+				});
+				hideInputIfDefault(arrayIdx, jPick, fi);
+
+				// var input = new J("<input/>");
+				// input.appendTo(jTarget);
+				// input.attr("type","text");
+				// var def = fi.def.getPointDefault();
+				// input.attr("placeholder", def==null ? "(null)" : def=="" ? "(0;0)" : def);
+				// if( !fi.isUsingDefault(arrayIdx) )
+				// 	input.val( fi.getPoint(arrayIdx) );
+				// input.change( function(ev) {
+				// 	fi.parseValue( arrayIdx, input.val() );
+				// 	onFieldChange();
+				// });
+				// hideInputIfDefault(arrayIdx, jPick, fi);
+
 			case F_Enum(name):
 				var ed = Editor.ME.project.defs.getEnumDef(name);
 				var select = new J("<select/>");
@@ -285,6 +366,8 @@ class EntityInstanceEditor extends dn.Process {
 
 	function updateForm() {
 		jPanel.empty();
+		jPanel.removeClass("picking");
+
 		var jHeader = new J('<header/>');
 		jHeader.appendTo(jPanel);
 		jHeader.append('<div>${ei.def.identifier}</div>');
@@ -303,6 +386,7 @@ class EntityInstanceEditor extends dn.Process {
 			for(fd in ei.def.fieldDefs) {
 				var fi = ei.getFieldInstance(fd);
 				var li = new J("<li/>");
+				li.attr("defUid", fd.uid);
 				li.appendTo(form);
 				li.append('<label>${fi.def.identifier}</label>');
 
@@ -332,18 +416,21 @@ class EntityInstanceEditor extends dn.Process {
 						var idx = i;
 						jRemove.click( function(_) {
 							fi.removeArrayValue(idx);
-							Editor.ME.ge.emit( EntityInstanceFieldChanged(ei) );
+							onFieldChange();
 							updateForm();
 						});
 					}
 					// "Add" button
 					if( fi.def.arrayMaxLength==null || fi.getArrayLength()<fi.def.arrayMaxLength ) {
-						var jAdd = new J('<button class="add">+</button>');
+						var jAdd = new J('<button class="add"/>');
+						jAdd.text("Add "+fi.def.getShortDescription(false) );
 						jAdd.appendTo(jArray);
 						jAdd.click( function(_) {
 							fi.addArrayValue();
-							Editor.ME.ge.emit( EntityInstanceFieldChanged(ei) );
+							onFieldChange();
 							updateForm();
+							if( fi.def.type==F_Point )
+								jPanel.find('[defuid=${fd.uid}] button.point').last().css("outline","3px solid yellow").click();
 						});
 					}
 				}

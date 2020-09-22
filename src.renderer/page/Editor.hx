@@ -12,7 +12,7 @@ class Editor extends Page {
 		inline function get_curLevel() return project.getLevel(curLevelId);
 
 	public var curLayerDef(get,never) : Null<led.def.LayerDef>;
-		inline function get_curLayerDef() return project.defs.getLayerDef(curLayerId);
+		inline function get_curLayerDef() return project.defs.getLayerDef(curLayerDefUid);
 
 	public var curLayerInstance(get,never) : Null<led.inst.LayerInstance>;
 		function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
@@ -23,9 +23,10 @@ class Editor extends Page {
 	public var project : led.Project;
 	public var projectFilePath : String;
 	public var curLevelId : Int;
-	var curLayerId : Int;
+	var curLayerDefUid : Int;
 	public var curTool(get,never) : Tool<Dynamic>;
-	var allTools : Map<Int,Tool<Dynamic>> = new Map();
+	var allLayerTools : Map<Int,Tool<Dynamic>> = new Map();
+	var specialTool : Null< Tool<Dynamic> >; // is not null, will be used instead of default tool
 	var gridSnapping = true;
 	public var needSaving = false;
 
@@ -201,12 +202,12 @@ class Editor extends Page {
 
 
 		curLevelId = project.levels[0].uid;
-		curLayerId = -1;
+		curLayerDefUid = -1;
 
 		// Pick 1st layer in current level
 		if( project.defs.layers.length>0 ) {
 			for(li in curLevel.layerInstances) {
-				curLayerId = li.def.uid;
+				curLayerDefUid = li.def.uid;
 				break;
 			}
 		}
@@ -223,6 +224,8 @@ class Editor extends Page {
 		// Tileset image hot-reloading
 		for( td in project.defs.tilesets )
 			watcher.watchTileset(td);
+
+		clearSelection();
 	}
 
 
@@ -265,7 +268,9 @@ class Editor extends Page {
 
 		switch keyCode {
 			case K.ESCAPE:
-				if( ui.Modal.hasAnyOpen() )
+				if( specialTool!=null )
+					clearSpecialTool();
+				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeAll();
 				else
 					clearSelection();
@@ -362,6 +367,8 @@ class Editor extends Page {
 				clearSelection();
 				return;
 
+			case PointField(_):
+
 			case Entity(_):
 		}
 
@@ -370,6 +377,9 @@ class Editor extends Page {
 			case IntGrid(li, cx, cy): GridCell(li, cx,cy);
 			case Entity(li, instance): Entity(li, instance.def, instance.x, instance.y);
 			case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
+			case PointField(li, ei, fi, arrayIdx):
+				var pt = fi.getPointGrid(arrayIdx);
+				GridCell(li, pt.cx, pt.cy);
 		});
 
 		ui.EntityInstanceEditor.close();
@@ -377,6 +387,9 @@ class Editor extends Page {
 			case null:
 			case IntGrid(_):
 			case Tile(_):
+
+			case PointField(li, ei, fi, arrayIdx):
+				new ui.EntityInstanceEditor(ei);
 
 			case Entity(li, instance):
 				new ui.EntityInstanceEditor(instance);
@@ -386,14 +399,20 @@ class Editor extends Page {
 	public function clearSelection() {
 		selection = null;
 		selectionCursor.set(None);
-		ui.EntityInstanceEditor.close();
+
+		// Close if using default curLayer tool
+		if( curTool==allLayerTools.get(curLayerDefUid) )
+			ui.EntityInstanceEditor.close();
 	}
 
 	function get_curTool() : Tool<Dynamic> {
+		if( specialTool!=null )
+			return specialTool;
+
 		if( curLayerDef==null )
 			return new tool.EmptyTool();
 
-		if( !allTools.exists(curLayerDef.uid) ) {
+		if( !allLayerTools.exists(curLayerDef.uid) ) {
 			var t : Tool<Dynamic> = switch curLayerDef.type {
 				case AutoLayer: new tool.EmptyTool();
 				case IntGrid: new tool.IntGridTool();
@@ -401,22 +420,22 @@ class Editor extends Page {
 				case Tiles: new tool.TileTool();
 			}
 			t.initPalette();
-			allTools.set( curLayerInstance.layerDefUid, t );
+			allLayerTools.set( curLayerInstance.layerDefUid, t );
 		}
 
-		return allTools.get( curLayerDef.uid );
+		return allLayerTools.get( curLayerDef.uid );
 	}
 
 	function resetTools() {
-		for(t in allTools)
+		for(t in allLayerTools)
 			t.destroy();
-		allTools = new Map();
+		allLayerTools = new Map();
 		updateTool();
 	}
 
 	function updateTool() {
-		clearSelection();
-		for(t in allTools)
+		// clearSelection();
+		for(t in allLayerTools)
 			t.pause();
 
 		if( ui.modal.ToolPalettePopOut.isOpen() )
@@ -426,7 +445,27 @@ class Editor extends Page {
 		curTool.onToolActivation();
 	}
 
+	public function clearSpecialTool() {
+		if( specialTool!=null ) {
+			specialTool.destroy();
+			specialTool = null;
+			updateTool();
+		}
+	}
+
+	public inline function isUsingSpecialTool(?tClass:Class<Tool<Dynamic>>) {
+		return specialTool!=null && !specialTool.destroyed
+			&& ( tClass==null || Std.is(specialTool, tClass) );
+	}
+
+	public function setSpecialTool(t:Tool<Dynamic>) {
+		clearSpecialTool();
+		specialTool = t;
+		updateTool();
+	}
+
 	public function pickGenericLevelElement(ge:Null<GenericLevelElement>) {
+		clearSpecialTool();
 		switch ge {
 			case null:
 
@@ -440,9 +479,19 @@ class Editor extends Page {
 
 			case Entity(li, instance):
 				selectLayerInstance(li);
-				curTool.as(tool.EntityTool).selectValue(instance.defUid);
+				curTool.as(tool.EntityTool).selectValue(instance.defUid); // BUG might crash
 				levelRender.bleepRectPx( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
 				curTool.onValuePicking();
+				return true;
+
+			case PointField(li, ei, fi, arrayIdx):
+				selectLayerInstance(li);
+				curTool.as(tool.EntityTool).selectValue(ei.defUid); // BUG might crash
+				levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
+				curTool.onValuePicking();
+				if( fi.def.isArray && arrayIdx==fi.getArrayLength()-1 ) {
+					// TODO continue existing path
+				}
 				return true;
 
 			case Tile(li, cx, cy):
@@ -523,11 +572,11 @@ class Editor extends Page {
 	}
 
 	public function selectLayerInstance(li:led.inst.LayerInstance) {
-		if( curLayerId==li.def.uid )
+		if( curLayerDefUid==li.def.uid )
 			return;
 
 		N.quick(li.def.identifier, JsTools.createLayerTypeIcon2(li.def.type));
-		curLayerId = li.def.uid;
+		curLayerDefUid = li.def.uid;
 		ge.emit(LayerInstanceSelected);
 
 		var opt = jMainPanel.find("input#gridSnapping");
@@ -702,6 +751,7 @@ class Editor extends Page {
 				updateLayerList();
 				updateGuide();
 				Tool.clearSelectionMemory();
+				clearSpecialTool();
 				updateTool();
 
 			case LevelSettingsChanged:
@@ -715,11 +765,15 @@ class Editor extends Page {
 			case LevelSelected:
 				updateLayerList();
 				updateGuide();
+				clearSpecialTool();
+				clearSelection();
 				updateTool();
 				if( !levelHistory.exists(curLevelId) )
 					levelHistory.set(curLevelId, new LevelHistory(curLevelId) );
 
 			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory:
+				clearSelection();
+				clearSpecialTool();
 				updateAppBg();
 				updateLayerList();
 				updateGuide();

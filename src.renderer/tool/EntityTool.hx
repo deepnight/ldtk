@@ -82,13 +82,14 @@ class EntityTool extends Tool<Int> {
 				}
 
 			case Remove:
-				removeAnyEntityAt(m);
+				removeAnyEntityOrPointAt(m);
 
 			case Move:
 		}
 	}
 
-	function removeAnyEntityAt(m:MouseCoords) {
+
+	function removeAnyEntityOrPointAt(m:MouseCoords) {
 		var ge = getGenericLevelElementAt(m, curLayerInstance);
 		switch ge {
 			case Entity(curLayerInstance, instance):
@@ -96,16 +97,34 @@ class EntityTool extends Tool<Int> {
 				editor.ge.emit( EntityInstanceRemoved(instance) );
 				return true;
 
+			case PointField(li, ei, fi, arrayIdx):
+				var pt = fi.getPointGrid(arrayIdx);
+				if( pt!=null && pt.cx==m.cx && pt.cy==m.cy ) {
+					if( fi.def.isArray )
+						fi.removeArrayValue(arrayIdx);
+					else
+						fi.parseValue(arrayIdx, null);
+					editor.ge.emit( EntityInstanceFieldChanged(ei) );
+					editor.setSelection( GenericLevelElement.Entity(li,ei) );
+					return true;
+				}
+				else
+					return false;
+
 			case _:
 		}
 
 		return false;
 	}
 
+
 	function getPickedEntityInstance() : Null<led.inst.EntityInstance> {
 		switch editor.selection {
 			case null, IntGrid(_), Tile(_):
 				return null;
+
+			case PointField(li, ei, fi, arrayIdx):
+				return ei;
 
 			case Entity(curLayerInstance, instance):
 				return instance;
@@ -120,22 +139,39 @@ class EntityTool extends Tool<Int> {
 			case Add:
 
 			case Remove:
-				if( removeAnyEntityAt(m) )
+				if( removeAnyEntityOrPointAt(m) )
 					return true;
 
 			case Move:
 				if( moveStarted ) {
-					var ei = getPickedEntityInstance();
-					var oldX = ei.x;
-					var oldY = ei.y;
-					ei.x = getPlacementX(m);
-					ei.y = getPlacementY(m);
-					editor.setSelection( Entity(curLayerInstance, ei) );
-					var changed = oldX!=ei.x || oldY!=ei.y;
-					if( changed )
-						editor.ge.emit( EntityInstanceChanged(ei) );
-					
-					return changed;
+					switch editor.selection {
+						case Entity(li, instance):
+							var ei = getPickedEntityInstance();
+							var oldX = ei.x;
+							var oldY = ei.y;
+							ei.x = getPlacementX(m);
+							ei.y = getPlacementY(m);
+							var changed = oldX!=ei.x || oldY!=ei.y;
+							if( changed ) {
+								editor.setSelection( Entity(curLayerInstance, ei) );
+								editor.ge.emit( EntityInstanceChanged(ei) );
+							}
+
+							return changed;
+
+						case PointField(li, ei, fi, arrayIdx):
+							var old = fi.getPointStr(arrayIdx);
+							fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+
+							var changed = old!=fi.getPointStr(arrayIdx);
+							if( changed ) {
+								editor.setSelection( PointField(li,ei,fi,arrayIdx) );
+								editor.ge.emit( EntityInstanceChanged(ei) );
+							}
+							return changed;
+
+						case _:
+					}
 				}
 		}
 

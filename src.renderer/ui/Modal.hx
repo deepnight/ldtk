@@ -15,6 +15,9 @@ class Modal extends dn.Process {
 	public function new() {
 		super(Editor.ME);
 
+		editor.clearSpecialTool();
+		editor.clearSelection();
+
 		EntityInstanceEditor.close();
 		Tip.clear();
 		ALL.push(this);

@@ -69,11 +69,8 @@
 			<span>(0 = unlimited)</span>
 		</li>
 		<li>
-			<label for="discardExcess">When max is reached...</label>
-			<select name="discardExcess">
-				<option value="true">... remove extra instances</option>
-				<option value="false">... prevent adding more</option>
-			</select>
+			<label for="limitBehavior">When max is reached...</label>
+			<select name="limitBehavior"></select>
 		</li>
 	</ul>
 
@@ -122,7 +119,7 @@
 		<input type="text" name="max" id="max" placeholder="Max"/>
 	</li>
 
-	<li class="F_Int F_Float F_String F_Enum">
+	<li class="F_Int F_Float F_String F_Enum F_Point">
 		<label for="canBeNull">Can be null</label>
 		<input type="checkbox" name="canBeNull" id="canBeNull"/>
 	</li>

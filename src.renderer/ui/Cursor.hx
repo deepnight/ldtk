@@ -89,6 +89,11 @@ class Cursor extends dn.Process {
 				graphics.lineStyle(1, 0x880000, 1);
 				graphics.drawCircle(0,0, 8);
 
+			case Link(fx, fy, tx, ty, c):
+				graphics.lineStyle(1, c);
+				graphics.moveTo(0,0);
+				graphics.lineTo(tx-fx, ty-fy);
+
 			case GridCell(li, cx, cy, col):
 				if( col==null )
 					col = 0x0;
@@ -162,6 +167,7 @@ class Cursor extends dn.Process {
 				case Entity(li, def, x, y): !type.equals(t);
 				case Tiles(li, tileIds, cx, cy): !type.equals(t);
 				case Resize(p): !type.equals(t);
+				case Link(fx, fy, tx, ty, c): !type.equals(t);
 			}
 
 		type = t;
@@ -181,6 +187,9 @@ class Cursor extends dn.Process {
 
 			case Eraser(x, y):
 				wrapper.setPosition(x,y);
+
+			case Link(fx, fy, tx, ty, c):
+				wrapper.setPosition(fx,fy);
 
 			case GridCell(li, cx, cy), GridRect(li, cx,cy, _):
 				wrapper.setPosition( cx*li.def.gridSize, cy*li.def.gridSize );

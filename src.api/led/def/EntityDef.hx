@@ -13,7 +13,7 @@ class EntityDef {
 	public var tileId : Null<Int>;
 
 	public var maxPerLevel : Int;
-	public var discardExcess : Bool; // what to do when maxPerLevel is reached
+	public var limitBehavior : led.LedTypes.EntityLimitBehavior; // what to do when maxPerLevel is reached
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
 
@@ -26,7 +26,7 @@ class EntityDef {
 		renderMode = Rectangle;
 		width = height = 16;
 		maxPerLevel = 0;
-		discardExcess = true;
+		limitBehavior = DiscardOldOnes;
 		identifier = "Entity"+uid;
 		setPivot(0.5,1);
 	}
@@ -59,7 +59,10 @@ class EntityDef {
 		o.maxPerLevel = JsonTools.readInt( json.maxPerLevel, 0 );
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
 		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
-		o.discardExcess = JsonTools.readBool( json.discardExcess, true );
+
+		o.limitBehavior = JsonTools.readEnum( EntityLimitBehavior, json.limitBehavior, true, DiscardOldOnes );
+		if( JsonTools.readBool(json.discardExcess, true)==false )
+			o.limitBehavior = PreventAdding;
 
 		for(defJson in JsonTools.readArray(json.fieldDefs) )
 			o.fieldDefs.push( FieldDef.fromJson(p, defJson) );
@@ -80,7 +83,7 @@ class EntityDef {
 			tileId: tileId,
 
 			maxPerLevel: maxPerLevel,
-			discardExcess: discardExcess,
+			limitBehavior: JsonTools.writeEnum(limitBehavior, false),
 			pivotX: JsonTools.writeFloat( pivotX ),
 			pivotY: JsonTools.writeFloat( pivotY ),
 
