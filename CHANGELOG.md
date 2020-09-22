@@ -3,10 +3,12 @@
 ## 0.1.7-alpha
 
  - **Array of entity fields**: any field type in an Entity can now be an Array. For example, you could have an Array of Enums to represent the items hidden inside a Cratebox entity.
- - **Point coordinates**: this new entity field type allows you to pick a grid coordinates. And if you combine this with the new Array support, you can even build paths of points! See samples for some nice use cases.
+ - **Point coordinates & paths**: this new entity field type allows you to pick a grid coordinates. And if you combine this with the new Array support, you can even build paths of points! See samples for some nice use cases.
  - Added a confirmation when trying to update the app while having unsaved changes
  - UI tweaks & fixes
+ - Added some click tolerance when picking entities
  - Swapped Tileset and Enum buttons in main toolbar
+ - Fixed an infinite loop on undo/redo in some levels
  - Bug fixes
 
 ## 0.1.6-alpha
