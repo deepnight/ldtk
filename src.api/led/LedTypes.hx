@@ -78,3 +78,9 @@ typedef AutoLayerRuleGroup = {
 	var collapsed : Bool;
 	var rules : Array<led.def.AutoLayerRuleDef>;
 }
+
+enum EntityLimitBehavior {
+	DiscardOldOnes;
+	PreventAdding;
+	MoveLastOne;
+}

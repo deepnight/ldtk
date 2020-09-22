@@ -311,13 +311,29 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 
 		// Behavior when max is reached
-		var i = new form.input.BoolInput(
-			jEntityForm.find("select[name=discardExcess"),
-			function() return curEntity.discardExcess,
-			function(v) curEntity.discardExcess = v
+		var i = new form.input.EnumSelect(
+			jEntityForm.find("select[name=limitBehavior]"),
+			led.LedTypes.EntityLimitBehavior,
+			function() return curEntity.limitBehavior,
+			function(v) {
+				curEntity.limitBehavior = v;
+			},
+			function(k) {
+				return Lang.untranslated("... ") + switch k {
+					case DiscardOldOnes: Lang.t._("discard older ones");
+					case PreventAdding: Lang.t._("prevent adding more");
+					case MoveLastOne: Lang.t._("move the last one instead of adding");
+				}
+			}
 		);
-		i.setEnabled( curEntity.maxPerLevel>0 );
-		i.linkEvent(EntityDefChanged);
+		// TODO
+		// var i = new form.input.BoolInput(
+		// 	jEntityForm.find("select[name=discardExcess]"),
+		// 	function() return curEntity.discardExcess,
+		// 	function(v) curEntity.discardExcess = v
+		// );
+		// i.setEnabled( curEntity.maxPerLevel>0 );
+		// i.linkEvent(EntityDefChanged);
 
 		// Pivot
 		var jPivots = jEntityForm.find(".pivot");
