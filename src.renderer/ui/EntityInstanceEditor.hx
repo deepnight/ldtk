@@ -442,8 +442,20 @@ class EntityInstanceEditor extends dn.Process {
 								onFieldChange();
 								updateForm();
 							}
-							// if( fi.def.type==F_Point )
-								// jPanel.find('[defuid=${fd.uid}] button.point').last().css("outline","3px solid yellow").click();
+							var jArray = jPanel.find('[defuid=${fd.uid}] .array');
+							switch fi.def.type {
+								case F_Int, F_Float, F_String: jArray.find("a.usingDefault:last").click();
+								case F_Bool:
+								case F_Color:
+								case F_Enum(enumDefUid):
+									// see: https://stackoverflow.com/a/10453874
+									// var select = jArray.find("select:last").get(0);
+									// var ev : js.html.MouseEvent = cast js.Browser.document.createEvent("MouseEvents");
+									// ev.initMouseEvent("mousedown", true, true, js.Browser.window, 0, 5, 5, 5, 5, false, false, false, false, 0, null);
+									// var ok = select.dispatchEvent(ev);
+
+								case F_Point:
+							}
 						});
 					}
 				}
