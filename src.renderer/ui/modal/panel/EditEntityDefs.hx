@@ -369,9 +369,30 @@ class EditEntityDefs extends ui.modal.Panel {
 			jFieldForm.find("select[name=editorDisplayMode]"),
 			led.LedTypes.FieldDisplayMode,
 			function() return curField.editorDisplayMode,
-			function(v) return curField.editorDisplayMode = v
+			function(v) return curField.editorDisplayMode = v,
+
+			function(k) {
+				return switch k {
+					case Hidden: L.t._("Do not show");
+					case ValueOnly: L.t._("Show value only");
+					case NameAndValue: L.t._('Show "name=value"');
+					case PointStar: L.t._("Show point(s) in level");
+					case PointPath: L.t._("Show as a Path");
+				}
+			},
+
+			function(k) {
+				return switch k {
+					case Hidden: true;
+					case ValueOnly: curField.type!=F_Point;
+					case NameAndValue: true;
+					case PointStar: curField.type==F_Point;
+					case PointPath: curField.type==F_Point && curField.isArray;
+				}
+			}
 		);
 		i.linkEvent( EntityFieldDefChanged(curEntity) );
+
 
 		var i = new form.input.EnumSelect(
 			jFieldForm.find("select[name=editorDisplayPos]"),
@@ -379,8 +400,18 @@ class EditEntityDefs extends ui.modal.Panel {
 			function() return curField.editorDisplayPos,
 			function(v) return curField.editorDisplayPos = v
 		);
-		i.setEnabled( curField.editorDisplayMode!=Hidden );
+		switch curField.editorDisplayMode {
+			case Hidden:
+				i.setEnabled(false);
+
+			case ValueOnly, NameAndValue:
+				i.setEnabled(true);
+
+			case PointStar, PointPath:
+				i.setEnabled(false);
+		}
 		i.linkEvent( EntityFieldDefChanged(curEntity) );
+
 
 		var i = Input.linkToHtmlInput( curField.identifier, jFieldForm.find("input[name=name]") );
 		i.linkEvent( EntityFieldDefChanged(curEntity) );

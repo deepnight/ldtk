@@ -63,7 +63,7 @@ class EntityInstanceEditor extends dn.Process {
 		var win = js.Browser.window;
 		var render = Editor.ME.levelRender;
 		link.clear();
-		link.lineStyle(2*win.devicePixelRatio, ei.def.color);
+		link.lineStyle(4*win.devicePixelRatio, ei.def.color);
 		link.moveTo(
 			render.levelToUiX(ei.x),
 			render.levelToUiY(ei.y)
@@ -243,7 +243,7 @@ class EntityInstanceEditor extends dn.Process {
 						jPick.text( "Point required" );
 					}
 				else
-					jPick.append( fi.getPoint(arrayIdx) );
+					jPick.append( fi.getPointStr(arrayIdx) );
 				jPick.click(function(_) {
 					if( Editor.ME.isUsingSpecialTool(tool.PickPoint) ) {
 						Editor.ME.clearSpecialTool();

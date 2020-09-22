@@ -61,8 +61,8 @@ class EntityDef {
 		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
 
 		o.limitBehavior = JsonTools.readEnum( EntityLimitBehavior, json.limitBehavior, true, DiscardOldOnes );
-		if( JsonTools.readBool(json.discardExcess)!=null )
-			o.limitBehavior = JsonTools.readBool(json.discardExcess)==true ? DiscardOldOnes : PreventAdding;
+		if( JsonTools.readBool(json.discardExcess, true)==false )
+			o.limitBehavior = PreventAdding;
 
 		for(defJson in JsonTools.readArray(json.fieldDefs) )
 			o.fieldDefs.push( FieldDef.fromJson(p, defJson) );

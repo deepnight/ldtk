@@ -302,7 +302,7 @@ class FieldInstance {
 		}
 	}
 
-	public function getEnumValue(arrayIdx:Int) : String {
+	public function getEnumValue(arrayIdx:Int) : Null<String> {
 		require( F_Enum(null) );
 		return isUsingDefault(arrayIdx) ? def.getEnumDefault() : switch internalValues[arrayIdx] {
 			case V_String(v): v;
@@ -310,11 +310,20 @@ class FieldInstance {
 		}
 	}
 
-	public function getPoint(arrayIdx:Int) : String {
+	public function getPointStr(arrayIdx:Int) : Null<String> {
 		require( F_Point );
 		return isUsingDefault(arrayIdx) ? def.getPointDefault() : switch internalValues[arrayIdx] {
 			case V_String(v): v;
 			case _: throw "unexpected";
+		}
+	}
+
+	public function getPoint(arrayIdx:Int) : Null<{ x:Int, y:Int }> {
+		require( F_Point );
+		var raw = getPointStr(arrayIdx);
+		return raw==null ? null : { 
+			x : Std.parseInt( raw.split(Const.POINT_SEPARATOR)[0] ),
+			y : Std.parseInt( raw.split(Const.POINT_SEPARATOR)[1] ),
 		}
 	}
 

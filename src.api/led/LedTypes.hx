@@ -42,6 +42,8 @@ enum FieldDisplayMode {
 	Hidden;
 	ValueOnly;
 	NameAndValue;
+	PointStar;
+	PointPath;
 }
 
 enum FieldDisplayPosition {
