@@ -151,7 +151,7 @@ class EntityInstanceEditor extends dn.Process {
 				});
 			}
 		}
-		else if( fi.def.type==F_Color || fi.def.type==F_Bool || fi.def.type==F_Point ) {
+		else if( fi.def.type==F_Color || fi.def.type==F_Bool || fi.def.type==F_Point && fi.def.canBeNull ) {
 			// Require a "Reset to default" link
 			var span = input.wrap('<span class="inputWithDefaultOption"/>').parent();
 			span.find("input").wrap('<span class="value"/>');
@@ -255,15 +255,17 @@ class EntityInstanceEditor extends dn.Process {
 						var t = new tool.PickPoint();
 						t.pickOrigin = { cx:ei.getCx(Editor.ME.curLayerDef), cy:ei.getCy(Editor.ME.curLayerDef), color:ei.def.color }
 						if( fi.def.isArray && fi.getArrayLength()>0 ) {
-							var pt = fi.getPointGrid( fi.getArrayLength()-2 );
+							var pt = fi.getPointGrid( arrayIdx-1 );
 							if( pt!=null )
 								t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:ei.def.color }
 						}
 						t.onPick = function(m) {
-							if( fi.def.isArray ) {
+							if( fi.def.isArray && arrayIdx>=fi.getArrayLength()-1) {
 								fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
-								arrayIdx++;
-								t.pickOrigin = { cx:m.cx, cy:m.cy, color:ei.def.color }
+								arrayIdx = fi.getArrayLength();
+								var pt = fi.getPointGrid( arrayIdx-1 );
+								if( pt!=null )
+									t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:ei.def.color }
 							}
 							else {
 								Editor.ME.clearSpecialTool();
