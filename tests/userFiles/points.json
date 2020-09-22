@@ -137,35 +137,35 @@
 				"autoTiles": [],
 				"gridTiles": [],
 				"entityInstances": [
-					{ "__identifier": "Test", "__cx": 6, "__cy": 14, "defUid": 1, "x": 104, "y": 240, "fieldInstances": [
+					{ "__identifier": "Test", "__cx": 1, "__cy": 14, "defUid": 1, "x": 24, "y": 240, "fieldInstances": [
 						{
 							"__identifier": "path",
-							"__values": [ "7,10", "6,8" ],
+							"__values": [ "7,14", "7,8", "4,8" ],
 							"__type": "Array<Point>",
 							"defUid": 40,
 							"realEditorValues": [ {
 								"id": "V_String",
-								"params": [ "7,10" ]
+								"params": [ "7,14" ]
 							}, {
 								"id": "V_String",
-								"params": [ "6,8" ]
+								"params": [ "7,8" ]
+							}, {
+								"id": "V_String",
+								"params": [ "4,8" ]
 							} ]
 						},
 						{
 							"__identifier": "optional",
-							"__values": "11,8",
+							"__values": null,
 							"__type": "Point",
 							"defUid": 41,
-							"realEditorValues": [ {
-								"id": "V_String",
-								"params": [ "11,8" ]
-							} ]
+							"realEditorValues": [ null ]
 						}
 					] },
 					{ "__identifier": "Test", "__cx": 20, "__cy": 10, "defUid": 1, "x": 328, "y": 176, "fieldInstances": [
 						{
 							"__identifier": "path",
-							"__values": [ "11,10", "11,14", "18,14", "18,20", "14,20" ],
+							"__values": [ "11,10", "11,14", "18,14", "18,20", "13,20" ],
 							"__type": "Array<Point>",
 							"defUid": 40,
 							"realEditorValues": [
@@ -187,7 +187,7 @@
 								},
 								{
 									"id": "V_String",
-									"params": [ "14,20" ]
+									"params": [ "13,20" ]
 								}
 							]
 						},
