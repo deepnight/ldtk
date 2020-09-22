@@ -282,31 +282,18 @@ class EntityInstanceEditor extends dn.Process {
 							onFieldChange();
 						}
 						t.onDisposeCb = function() {
-							if( fi.def.isArray && editIdx>=fi.getArrayLength()-1 && fi.getPointStr(editIdx)==null ) {
-								// Trim last null point
+							// Trim last null point
+							if( fi.def.isArray && editIdx>=fi.getArrayLength()-1 && fi.getPointStr(editIdx)==null )
 								fi.removeArrayValue(editIdx);
+
+							if( ei!=null )
 								onFieldChange();
-							}
-							else
-								updateForm();
 						}
 						Editor.ME.setSpecialTool(t);
 					}
 				});
 				hideInputIfDefault(arrayIdx, jPick, fi);
 
-				// var input = new J("<input/>");
-				// input.appendTo(jTarget);
-				// input.attr("type","text");
-				// var def = fi.def.getPointDefault();
-				// input.attr("placeholder", def==null ? "(null)" : def=="" ? "(0;0)" : def);
-				// if( !fi.isUsingDefault(arrayIdx) )
-				// 	input.val( fi.getPoint(arrayIdx) );
-				// input.change( function(ev) {
-				// 	fi.parseValue( arrayIdx, input.val() );
-				// 	onFieldChange();
-				// });
-				// hideInputIfDefault(arrayIdx, jPick, fi);
 
 			case F_Enum(name):
 				var ed = Editor.ME.project.defs.getEnumDef(name);
@@ -367,6 +354,8 @@ class EntityInstanceEditor extends dn.Process {
 	function updateForm() {
 		jPanel.empty();
 		jPanel.removeClass("picking");
+		if( ei==null )
+			return;
 
 		var jHeader = new J('<header/>');
 		jHeader.appendTo(jPanel);
