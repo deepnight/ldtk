@@ -170,9 +170,7 @@ class LevelHistory {
 		for(i in curIndex+1...MAX_HISTORY)
 			states[i] = null;
 
-		// #if debug
-		// N.debug(toString());
-		// #end
+		App.LOG.debug(toString());
 	}
 
 
@@ -225,9 +223,7 @@ class LevelHistory {
 				applyState( before, true );
 			}
 
-			// #if debug
-			// N.debug("LH UNDO - "+toString());
-			// #end
+			App.LOG.debug("LH UNDO - "+toString());
 		}
 	}
 
@@ -245,9 +241,7 @@ class LevelHistory {
 						editor.levelRender.bleepHistoryBounds( layerId, bounds, 0x8ead4f );
 			}
 
-			// #if debug
-			// N.debug("LH REDO - "+toString());
-			// #end
+			App.LOG.debug("LH REDO - "+toString());
 		}
 	}
 
@@ -258,6 +252,8 @@ class LevelHistory {
 				while( lidx < editor.project.levels.length )
 					if( editor.project.levels[lidx].uid == editor.curLevelId )
 						break;
+					else
+						lidx++;
 
 				if( isUndo )
 					editor.project.levels[lidx] = led.Level.fromJson(editor.project, beforeJson);
