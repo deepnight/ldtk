@@ -136,28 +136,46 @@
 				"intGrid": [],
 				"autoTiles": [],
 				"gridTiles": [],
-				"entityInstances": [ { "__identifier": "Test", "__cx": 6, "__cy": 14, "defUid": 1, "x": 104, "y": 240, "fieldInstances": [
-					{
-						"__identifier": "path",
-						"__values": [ { "x": 12, "y": 10 }, { "x": 6, "y": 8 } ],
-						"__type": "Array<Point>",
-						"defUid": 40,
-						"realEditorValues": [ {
-							"id": "V_String",
-							"params": [ "12,10" ]
-						}, {
-							"id": "V_String",
-							"params": [ "6,8" ]
-						} ]
-					},
-					{
-						"__identifier": "optional",
-						"__values": null,
-						"__type": "Point",
-						"defUid": 41,
-						"realEditorValues": [ null ]
-					}
-				] } ]
+				"entityInstances": [
+					{ "__identifier": "Test", "__cx": 6, "__cy": 14, "defUid": 1, "x": 104, "y": 240, "fieldInstances": [
+						{
+							"__identifier": "path",
+							"__values": [ "6,8" ],
+							"__type": "Array<Point>",
+							"defUid": 40,
+							"realEditorValues": [ {
+								"id": "V_String",
+								"params": [ "6,8" ]
+							} ]
+						},
+						{
+							"__identifier": "optional",
+							"__values": null,
+							"__type": "Point",
+							"defUid": 41,
+							"realEditorValues": [ null ]
+						}
+					] },
+					{ "__identifier": "Test", "__cx": 20, "__cy": 10, "defUid": 1, "x": 328, "y": 176, "fieldInstances": [
+						{
+							"__identifier": "path",
+							"__values": [ "11,10", "11,14", "17,14" ],
+							"__type": "Array<Point>",
+							"defUid": 40,
+							"realEditorValues": [ {
+								"id": "V_String",
+								"params": [ "11,10" ]
+							}, {
+								"id": "V_String",
+								"params": [ "11,14" ]
+							}, {
+								"id": "V_String",
+								"params": [ "17,14" ]
+							} ]
+						},
+						{ "__identifier": "optional", "__values": null, "__type": "Point", "defUid": 41, "realEditorValues": [] }
+					] }
+				]
 			},
 			{
 				"__identifier": "Collisions",

@@ -363,9 +363,11 @@ class Editor extends Page {
 
 	public function setSelection(ge:GenericLevelElement) {
 		switch ge {
-			case IntGrid(_), Tile(_), PointField(_):
+			case IntGrid(_), Tile(_):
 				clearSelection();
 				return;
+
+			case PointField(_):
 
 			case Entity(_):
 		}
@@ -488,6 +490,8 @@ class Editor extends Page {
 				selectLayerInstance(li);
 				curTool.as(tool.EntityTool).selectValue(ei.defUid); // BUG might crash
 				levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
+				curTool.onValuePicking();
+				return true;
 
 			case Tile(li, cx, cy):
 				selectLayerInstance(li);

@@ -128,17 +128,34 @@ class EntityTool extends Tool<Int> {
 
 			case Move:
 				if( moveStarted ) {
-					var ei = getPickedEntityInstance();
-					var oldX = ei.x;
-					var oldY = ei.y;
-					ei.x = getPlacementX(m);
-					ei.y = getPlacementY(m);
-					editor.setSelection( Entity(curLayerInstance, ei) );
-					var changed = oldX!=ei.x || oldY!=ei.y;
-					if( changed )
-						editor.ge.emit( EntityInstanceChanged(ei) );
+					switch editor.selection {
+						case Entity(li, instance):
+							var ei = getPickedEntityInstance();
+							var oldX = ei.x;
+							var oldY = ei.y;
+							ei.x = getPlacementX(m);
+							ei.y = getPlacementY(m);
+							var changed = oldX!=ei.x || oldY!=ei.y;
+							if( changed ) {
+								editor.setSelection( Entity(curLayerInstance, ei) );
+								editor.ge.emit( EntityInstanceChanged(ei) );
+							}
 
-					return changed;
+							return changed;
+
+						case PointField(li, ei, fi, arrayIdx):
+							var old = fi.getPointStr(arrayIdx);
+							fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+
+							var changed = old!=fi.getPointStr(arrayIdx);
+							if( changed ) {
+								editor.setSelection( PointField(li,ei,fi,arrayIdx) );
+								editor.ge.emit( EntityInstanceChanged(ei) );
+							}
+							return changed;
+
+						case _:
+					}
 				}
 		}
 
