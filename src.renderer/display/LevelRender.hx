@@ -606,7 +606,7 @@ class LevelRender extends dn.Process {
 						g.drawRect(0, 0, def.width, def.height);
 
 					case Ellipse:
-						g.drawEllipse(def.width*0.5, def.height*0.5, def.width*0.5, def.height*0.5);
+						g.drawEllipse(def.width*0.5, def.height*0.5, def.width*0.5, def.height*0.5, 0, def.width<=16 || def.height<=16 ? 16 : 0);
 
 					case _:
 				}
