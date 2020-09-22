@@ -447,7 +447,6 @@ class Editor extends Page {
 
 	public function clearSpecialTool() {
 		if( specialTool!=null ) {
-			N.debug("clear special tool");
 			specialTool.destroy();
 			specialTool = null;
 			updateTool();
@@ -462,7 +461,6 @@ class Editor extends Page {
 	public function setSpecialTool(t:Tool<Dynamic>) {
 		clearSpecialTool();
 		specialTool = t;
-		N.debug("set tool: "+t);
 		updateTool();
 	}
 
