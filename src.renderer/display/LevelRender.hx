@@ -514,6 +514,13 @@ class LevelRender extends dn.Process {
 		valuesFlow.layout = Horizontal;
 		valuesFlow.verticalAlign = Middle;
 
+		if( fi.def.isArray ) {
+			valuesFlow.backgroundTile = hxd.Res.img.darkBg.toTile();
+			valuesFlow.borderWidth = 2;
+			valuesFlow.borderHeight = 2;
+			valuesFlow.padding = 1;
+		}
+
 		// Array opening
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = new h2d.Text(font, valuesFlow);
@@ -525,8 +532,9 @@ class LevelRender extends dn.Process {
 			if( !fi.valueIsNull(idx) && !( fi.def.type==F_Bool && fi.isUsingDefault(idx) ) ) {
 				if( fi.hasIconForDisplay(idx) ) {
 					// Icon
+					var w = new h2d.Flow(valuesFlow);
 					var tile = fi.getIconForDisplay(idx);
-					var bmp = new h2d.Bitmap( tile, valuesFlow );
+					var bmp = new h2d.Bitmap( tile, w );
 					var s = M.fmin( ei.def.width/ tile.width, ei.def.height/tile.height );
 					bmp.setScale(s);
 				}
@@ -569,7 +577,7 @@ class LevelRender extends dn.Process {
 		return valuesFlow;
 	}
 
-	static inline function dashedLine(g:h2d.Graphics, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=3) {
+	static inline function dashedLine(g:h2d.Graphics, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=4.) {
 		var a = Math.atan2(ty-fy, tx-fx);
 		var len = M.dist(fx,fy, tx,ty);
 		var cur = 0.;
@@ -718,7 +726,7 @@ class LevelRender extends dn.Process {
 
 							var tx = M.round( (pt.cx+0.5)*li.def.gridSize-ei.x );
 							var ty = M.round( (pt.cy+0.5)*li.def.gridSize-ei.y );
-							dashedLine(lines, fx,fy, tx,ty);
+							dashedLine(lines, fx,fy, tx,ty, li.def.gridSize/4);
 							lines.drawRect( tx-2, ty-2, 4, 4 );
 
 							if( fd.editorDisplayMode==PointPath ) {
