@@ -250,29 +250,34 @@ class EntityInstanceEditor extends dn.Process {
 						updateForm();
 					}
 					else {
+						// Start picking
 						jPick.text("Cancel");
 						jPanel.addClass("picking");
 						var t = new tool.PickPoint();
 						t.pickOrigin = { cx:ei.getCx(Editor.ME.curLayerDef), cy:ei.getCy(Editor.ME.curLayerDef), color:ei.def.color }
-						if( fi.def.isArray && fi.getArrayLength()>0 ) {
+						if( fi.def.isArray ) {
 							var pt = fi.getPointGrid( arrayIdx-1 );
 							if( pt!=null )
 								t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:ei.def.color }
 						}
+
+						var editIdx = arrayIdx;
 						t.onPick = function(m) {
-							if( fi.def.isArray && arrayIdx>=fi.getArrayLength()-1) {
-								fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
-								arrayIdx = fi.getArrayLength();
-								var pt = fi.getPointGrid( arrayIdx-1 );
+							// Picking of a point
+							if( fi.def.isArray && editIdx>=fi.getArrayLength()-1) {
+								fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+								editIdx = fi.getArrayLength();
+								var pt = fi.getPointGrid( editIdx-1 );
 								if( pt!=null )
 									t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:ei.def.color }
 							}
 							else {
 								Editor.ME.clearSpecialTool();
-								fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+								fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
 							}
 							onFieldChange();
 						}
+						t.onDisposeCb = updateForm;
 						Editor.ME.setSpecialTool(t);
 					}
 				});
