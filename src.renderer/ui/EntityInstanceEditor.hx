@@ -63,7 +63,7 @@ class EntityInstanceEditor extends dn.Process {
 		var win = js.Browser.window;
 		var render = Editor.ME.levelRender;
 		link.clear();
-		link.lineStyle(4*win.devicePixelRatio, ei.def.color);
+		link.lineStyle(4*win.devicePixelRatio, ei.def.color, 0.33);
 		link.moveTo(
 			render.levelToUiX(ei.x),
 			render.levelToUiY(ei.y)
@@ -84,7 +84,10 @@ class EntityInstanceEditor extends dn.Process {
 			return false;
 	}
 
-	function onFieldChange() {
+	function onFieldChange(keepEditingPoints=false) {
+		if( !keepEditingPoints )
+			Editor.ME.clearSpecialTool();
+
 		updateForm();
 		var editor = Editor.ME;
 		editor.curLevelHistory.saveLayerState( editor.curLayerInstance );
@@ -166,6 +169,52 @@ class EntityInstanceEditor extends dn.Process {
 	}
 
 
+	function startPointsEditing(fi:led.inst.FieldInstance, editIdx:Int) {
+		jPanel.addClass("picking");
+
+		var t = new tool.PickPoint();
+
+		t.pickOrigin = { cx:ei.getCx(Editor.ME.curLayerDef), cy:ei.getCy(Editor.ME.curLayerDef), color:ei.def.color }
+
+		// Connect to last of path
+		if( fi.def.isArray && fi.def.editorDisplayMode==PointPath ) {
+			var pt = fi.getPointGrid( editIdx-1 );
+			if( pt!=null )
+				t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:ei.def.color }
+		}
+
+		// Picking of a point
+		t.onPick = function(m) {
+			if( fi.def.isArray && editIdx>=fi.getArrayLength()-1 ) {
+				// Append points in an array
+				fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+				editIdx = fi.getArrayLength();
+
+				if( fi.def.editorDisplayMode==PointPath ) {
+					// Connect to path previous
+					var pt = fi.getPointGrid( editIdx-1 );
+					if( pt!=null )
+						t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:ei.def.color }
+				}
+			}
+			else {
+				// Edit a single point
+				Editor.ME.clearSpecialTool();
+				fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+			}
+			onFieldChange(true);
+		}
+
+		// Tool stopped
+		t.onDisposeCb = function() {
+			if( !destroyed )
+				updateForm();
+		}
+
+		Editor.ME.setSpecialTool(t);
+	}
+
+
 	function createInputFor(fi:led.inst.FieldInstance, arrayIdx:Int, jTarget:js.jquery.JQuery) {
 		switch fi.def.type {
 			case F_Int:
@@ -233,66 +282,62 @@ class EntityInstanceEditor extends dn.Process {
 				hideInputIfDefault(arrayIdx, input, fi);
 
 			case F_Point:
-				var jPick = new J('<button/>');
-				jPick.addClass("point");
-				jPick.appendTo(jTarget);
-				if( fi.valueIsNull(arrayIdx) )
-					if( fi.def.canBeNull )
-						jPick.text( "--none--" );
-					else {
+				if( fi.valueIsNull(arrayIdx) && !fi.def.canBeNull || !fi.def.isArray ) {
+					// Button mode
+					var jPick = new J('<button/>');
+					jPick.appendTo(jTarget);
+					jPick.addClass("point");
+					if( fi.valueIsNull(arrayIdx) && !fi.def.canBeNull ) {
 						jPick.addClass("required");
-						jPick.text( "Point required" );
+						jPick.text( "Point required!" );
 					}
-				else
-					jPick.append( fi.getPointStr(arrayIdx) );
-				jPick.click(function(_) {
-					if( Editor.ME.isUsingSpecialTool(tool.PickPoint) ) {
-						Editor.ME.clearSpecialTool();
-						updateForm();
-					}
-					else {
-						// Start picking
-						jPick.text("Cancel");
-						jPanel.addClass("picking");
-
-						var t = new tool.PickPoint();
-						t.pickOrigin = { cx:ei.getCx(Editor.ME.curLayerDef), cy:ei.getCy(Editor.ME.curLayerDef), color:ei.def.color }
-						if( fi.def.isArray ) {
-							var pt = fi.getPointGrid( arrayIdx-1 );
-							if( pt!=null )
-								t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:ei.def.color }
+					else
+						jPick.text( fi.valueIsNull(arrayIdx) ? "--none--" : fi.getPointStr(arrayIdx) );
+					jPick.click( function(_) {
+						if( Editor.ME.isUsingSpecialTool(tool.PickPoint) ) {
+							// Cancel
+							Editor.ME.clearSpecialTool();
+							updateForm();
 						}
-
-						var editIdx = arrayIdx;
-						t.onPick = function(m) {
-							// Picking of a point
-							if( fi.def.isArray && editIdx>=fi.getArrayLength()-1 ) {
-								// Chain points in a path
-								fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
-								editIdx = fi.getArrayLength();
-								var pt = fi.getPointGrid( editIdx-1 );
-								if( pt!=null )
-									t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:ei.def.color }
-							}
-							else {
-								// Edit a single point
-								Editor.ME.clearSpecialTool();
-								fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
-							}
-							onFieldChange();
+						else {
+							// Start picking
+							jPick.text("Cancel");
+							startPointsEditing(fi, arrayIdx);
 						}
-						t.onDisposeCb = function() {
-							// Trim last null point
-							if( fi.def.isArray && editIdx>=fi.getArrayLength()-1 && fi.getPointStr(editIdx)==null )
-								fi.removeArrayValue(editIdx);
+					});
+				}
+				else {
+					// Text mode
+					var jPoint = new J('<span class="point"/>');
+					jPoint.appendTo(jTarget);
+					jPoint.text( fi.getPointStr(arrayIdx) );
+				}
+				// var jPick = new J('<button/>');
+				// jPick.addClass("point");
+				// jPick.appendTo(jTarget);
+				// if( fi.valueIsNull(arrayIdx) )
+				// 	if( fi.def.canBeNull )
+				// 		jPick.text( "--none--" );
+				// 	else {
+				// 		jPick.addClass("required");
+				// 		jPick.text( "Point required" );
+				// 	}
+				// else
+				// 	jPick.append( fi.getPointStr(arrayIdx) );
+				// jPick.click(function(_) {
+				// 	if( Editor.ME.isUsingSpecialTool(tool.PickPoint) ) {
+				// 		Editor.ME.clearSpecialTool();
+				// 		updateForm();
+				// 	}
+				// 	else if( fi.valueIsNull(arrayIdx) ) {
+				// 		// Start picking
+				// 		jPick.text("Cancel");
+				// 		jPanel.addClass("picking");
 
-							if( ei!=null )
-								onFieldChange();
-						}
-						Editor.ME.setSpecialTool(t);
-					}
-				});
-				hideInputIfDefault(arrayIdx, jPick, fi);
+				// 		startPointsEditing(fi, arrayIdx);
+				// 	}
+				// });
+				// hideInputIfDefault(arrayIdx, jPick, fi);
 
 
 			case F_Enum(name):
@@ -415,11 +460,16 @@ class EntityInstanceEditor extends dn.Process {
 						jAdd.text("Add "+fi.def.getShortDescription(false) );
 						jAdd.appendTo(jArray);
 						jAdd.click( function(_) {
-							fi.addArrayValue();
-							onFieldChange();
-							updateForm();
-							if( fi.def.type==F_Point )
-								jPanel.find('[defuid=${fd.uid}] button.point').last().css("outline","3px solid yellow").click();
+							if( fi.def.type==F_Point ) {
+								startPointsEditing(fi, fi.getArrayLength());
+							}
+							else {
+								fi.addArrayValue();
+								onFieldChange();
+								updateForm();
+							}
+							// if( fi.def.type==F_Point )
+								// jPanel.find('[defuid=${fd.uid}] button.point').last().css("outline","3px solid yellow").click();
 						});
 					}
 				}

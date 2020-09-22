@@ -374,10 +374,13 @@ class EditEntityDefs extends ui.modal.Panel {
 			function(k) {
 				return switch k {
 					case Hidden: L.t._("Do not show");
-					case ValueOnly: L.t._("Show value only");
-					case NameAndValue: L.t._('Show "name=value"');
-					case PointStar: L.t._("Show point(s) in level");
-					case PointPath: L.t._("Show as a Path");
+					case ValueOnly: curField.isArray ? L.t._("Show values only") : L.t._("Show value only");
+					case NameAndValue:
+						curField.isArray
+						? L.t._('Show "::name::=[...values...]"', { name:curField.identifier })
+						: L.t._('Show "::name::=..."', { name:curField.identifier });
+					case PointStar: curField.isArray ? L.t._("Show star of points") : L.t._("Show point");
+					case PointPath: L.t._("Show path of points");
 				}
 			},
 

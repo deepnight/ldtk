@@ -2404,6 +2404,14 @@ canvas#webgl {
 			box-shadow: 0px 0px 32px $red;
 		}
 
+		span.point {
+			color: $bgLighter;
+			padding: 4px;
+			font-style: italic;
+			border-radius: 6px;
+			background-color: $bgMed;
+		}
+
 		div.array {
 			display: grid;
 			grid-template-columns: auto min-content;
