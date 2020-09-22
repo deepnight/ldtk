@@ -12,7 +12,7 @@
 	"defaultPivotY": 1.0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 41,
+	"nextUid": 42,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -61,12 +61,27 @@
 				"pivotY": 1.0,
 				"fieldDefs": [
 					{
-						"identifier": "coord",
+						"identifier": "required",
 						"__type": "Point",
 						"uid": 38,
 						"type": "F_Point",
 						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "NameAndValue",
+						"editorDisplayPos": "Above",
+						"min": null,
+						"max": null,
+						"defaultOverride": null
+					},
+					{
+						"identifier": "optional",
+						"__type": "Point",
+						"uid": 41,
+						"type": "F_Point",
+						"isArray": false,
+						"canBeNull": true,
 						"arrayMinLength": null,
 						"arrayMaxLength": null,
 						"editorDisplayMode": "NameAndValue",
@@ -138,16 +153,41 @@
 				"gridTiles": [],
 				"entityInstances": [ { "__identifier": "Player", "__cx": 9, "__cy": 14, "defUid": 1, "x": 152, "y": 240, "fieldInstances": [
 					{
-						"__identifier": "coord",
-						"__values": "10,8",
+						"__identifier": "required",
+						"__values": "12,10",
 						"__type": "Point",
 						"defUid": 38,
 						"realEditorValues": [ {
 							"id": "V_String",
-							"params": [ "10,8" ]
+							"params": [ "12,10" ]
 						} ]
 					},
-					{ "__identifier": "path", "__values": [], "__type": "Array<Point>", "defUid": 40, "realEditorValues": [] }
+					{
+						"__identifier": "path",
+						"__values": [ "16,14", "12,10", "6,8" ],
+						"__type": "Array<Point>",
+						"defUid": 40,
+						"realEditorValues": [ {
+							"id": "V_String",
+							"params": [ "16,14" ]
+						}, {
+							"id": "V_String",
+							"params": [ "12,10" ]
+						}, {
+							"id": "V_String",
+							"params": [ "6,8" ]
+						} ]
+					},
+					{
+						"__identifier": "optional",
+						"__values": "19,10",
+						"__type": "Point",
+						"defUid": 41,
+						"realEditorValues": [ {
+							"id": "V_String",
+							"params": [ "19,10" ]
+						} ]
+					}
 				] } ]
 			},
 			{

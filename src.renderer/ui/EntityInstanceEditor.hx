@@ -97,12 +97,17 @@ class EntityInstanceEditor extends dn.Process {
 		input.off(".def").removeClass("usingDefault");
 
 		if( fi.isUsingDefault(arrayIdx) ) {
-			if( input.is("[type=color]") ) {
+			if( input.is("button") ) {
+				// Button input
+				if( fi.def.type!=F_Point || fi.def.canBeNull )
+					input.addClass("gray usingDefault");
+			}
+			else if( input.is("[type=color]") ) {
 				// Color input
 				input.addClass("usingDefault");
 				input.text("default");
 			}
-			if( input.is(".colorWrapper") ) {
+			else if( input.is(".colorWrapper") ) {
 				// Wrapped color input
 				input.addClass("usingDefault");
 			}
@@ -146,8 +151,8 @@ class EntityInstanceEditor extends dn.Process {
 				});
 			}
 		}
-		else if( fi.def.type==F_Color || fi.def.type==F_Bool ) {
-			// BOOL or COLOR requiring a "Reset to default" link
+		else if( fi.def.type==F_Color || fi.def.type==F_Bool || fi.def.type==F_Point ) {
+			// Require a "Reset to default" link
 			var span = input.wrap('<span class="inputWithDefaultOption"/>').parent();
 			span.find("input").wrap('<span class="value"/>');
 			var defLink = new J('<a class="reset" href="#">[ Reset ]</a>');
@@ -232,16 +237,31 @@ class EntityInstanceEditor extends dn.Process {
 				jPick.appendTo(jTarget);
 				if( fi.valueIsNull(arrayIdx) )
 					if( fi.def.canBeNull )
-						jPick.append( "--none--" );
+						jPick.text( "--none--" );
 					else {
 						jPick.addClass("required");
-						jPick.append( "Point required" );
+						jPick.text( "Point required" );
 					}
 				else
 					jPick.append( fi.getPoint(arrayIdx) );
 				jPick.click(function(_) {
-					N.notImplemented();
+					if( Editor.ME.isUsingSpecialTool(tool.PickPoint) ) {
+						Editor.ME.clearSpecialTool();
+						updateForm();
+					}
+					else {
+						jPick.text("Cancel");
+						jPanel.addClass("picking");
+						var t = new tool.PickPoint();
+						t.onPick = function(m) {
+							Editor.ME.clearSpecialTool();
+							fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+							onFieldChange();
+						}
+						Editor.ME.setSpecialTool(t);
+					}
 				});
+				hideInputIfDefault(arrayIdx, jPick, fi);
 
 				// var input = new J("<input/>");
 				// input.appendTo(jTarget);
@@ -314,6 +334,8 @@ class EntityInstanceEditor extends dn.Process {
 
 	function updateForm() {
 		jPanel.empty();
+		jPanel.removeClass("picking");
+
 		var jHeader = new J('<header/>');
 		jHeader.appendTo(jPanel);
 		jHeader.append('<div>${ei.def.identifier}</div>');
@@ -361,7 +383,7 @@ class EntityInstanceEditor extends dn.Process {
 						var idx = i;
 						jRemove.click( function(_) {
 							fi.removeArrayValue(idx);
-							Editor.ME.ge.emit( EntityInstanceFieldChanged(ei) );
+							onFieldChange();
 							updateForm();
 						});
 					}
@@ -371,7 +393,7 @@ class EntityInstanceEditor extends dn.Process {
 						jAdd.appendTo(jArray);
 						jAdd.click( function(_) {
 							fi.addArrayValue();
-							Editor.ME.ge.emit( EntityInstanceFieldChanged(ei) );
+							onFieldChange();
 							updateForm();
 						});
 					}

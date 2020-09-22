@@ -306,7 +306,7 @@ class LevelRender extends dn.Process {
 			cy*li.def.gridSize,
 			cWid*li.def.gridSize,
 			cHei*li.def.gridSize,
-			0xff00ff, 2
+			col, 2
 		);
 	}
 

@@ -2281,6 +2281,10 @@ canvas#webgl {
 
 	background-color: $bgDark;
 
+	&.picking {
+		opacity: 0.5;
+	}
+
 	header {
 		display: grid;
 		grid-template-columns: auto min-content;
@@ -2390,6 +2394,14 @@ canvas#webgl {
 			color: white;
 			background-color: $bgMed;
 			background-image: url("../img/stripes.png");
+		}
+
+		button.usingDefault:not(.required) {
+			background-image: url("../img/stripes.png");
+		}
+		button.required {
+			outline: 1px solid $orange;
+			box-shadow: 0px 0px 32px $red;
 		}
 
 		div.array {
