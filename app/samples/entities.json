@@ -12,7 +12,7 @@
 	"defaultPivotY": 1.0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 44,
+	"nextUid": 45,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -308,13 +308,13 @@
 				"pivotY": 0.5,
 				"fieldDefs": [
 					{
-						"identifier": "activationTarget",
-						"__type": "Point",
-						"uid": 42,
+						"identifier": "activationTargets",
+						"__type": "Array<Point>",
+						"uid": 44,
 						"type": "F_Point",
-						"isArray": false,
-						"canBeNull": true,
-						"arrayMinLength": null,
+						"isArray": true,
+						"canBeNull": false,
+						"arrayMinLength": 1,
 						"arrayMaxLength": null,
 						"editorDisplayMode": "PointStar",
 						"editorDisplayPos": "Above",
@@ -509,12 +509,12 @@
 						},
 						{
 							"__identifier": "name",
-							"__values": "John",
+							"__values": "Player",
 							"__type": "String",
 							"defUid": 27,
 							"realEditorValues": [ {
 								"id": "V_String",
-								"params": [ "John" ]
+								"params": [ "Player" ]
 							} ]
 						},
 						{
@@ -547,22 +547,34 @@
 							"realEditorValues": [ null ]
 						}
 					] },
-					{ "__identifier": "Enemy", "__cx": 8, "__cy": 10, "defUid": 37, "x": 136, "y": 176, "fieldInstances": [
+					{ "__identifier": "Enemy", "__cx": 3, "__cy": 8, "defUid": 37, "x": 56, "y": 144, "fieldInstances": [
 						{
 							"__identifier": "patrol",
-							"__values": [ "12,10", "12,8", "16,8" ],
+							"__values": [ "5,8", "5,10", "12,10", "12,8", "14,8" ],
 							"__type": "Array<Point>",
 							"defUid": 38,
-							"realEditorValues": [ {
-								"id": "V_String",
-								"params": [ "12,10" ]
-							}, {
-								"id": "V_String",
-								"params": [ "12,8" ]
-							}, {
-								"id": "V_String",
-								"params": [ "16,8" ]
-							} ]
+							"realEditorValues": [
+								{
+									"id": "V_String",
+									"params": [ "5,8" ]
+								},
+								{
+									"id": "V_String",
+									"params": [ "5,10" ]
+								},
+								{
+									"id": "V_String",
+									"params": [ "12,10" ]
+								},
+								{
+									"id": "V_String",
+									"params": [ "12,8" ]
+								},
+								{
+									"id": "V_String",
+									"params": [ "14,8" ]
+								}
+							]
 						},
 						{
 							"__identifier": "loots",
@@ -586,12 +598,16 @@
 						}
 					] },
 					{ "__identifier": "Door", "__cx": 22, "__cy": 14, "defUid": 43, "x": 360, "y": 240, "fieldInstances": [] },
-					{ "__identifier": "Button", "__cx": 26, "__cy": 9, "defUid": 41, "x": 424, "y": 152, "fieldInstances": [ {
-						"__identifier": "activationTarget",
-						"__values": "22,14",
-						"__type": "Point",
-						"defUid": 42,
+					{ "__identifier": "Door", "__cx": 16, "__cy": 8, "defUid": 43, "x": 264, "y": 144, "fieldInstances": [] },
+					{ "__identifier": "Button", "__cx": 25, "__cy": 9, "defUid": 41, "x": 408, "y": 152, "fieldInstances": [ {
+						"__identifier": "activationTargets",
+						"__values": [ "16,8", "22,14" ],
+						"__type": "Array<Point>",
+						"defUid": 44,
 						"realEditorValues": [ {
+							"id": "V_String",
+							"params": [ "16,8" ]
+						}, {
 							"id": "V_String",
 							"params": [ "22,14" ]
 						} ]
@@ -755,11 +771,7 @@
 					{ "coordId": 143, "v": 0 },
 					{ "coordId": 144, "v": 0 },
 					{ "coordId": 145, "v": 0 },
-					{ "coordId": 146, "v": 0 },
-					{ "coordId": 147, "v": 0 },
-					{ "coordId": 148, "v": 0 },
-					{ "coordId": 149, "v": 0 },
-					{ "coordId": 150, "v": 0 },
+					{ "coordId": 160, "v": 0 },
 					{ "coordId": 173, "v": 0 },
 					{ "coordId": 174, "v": 0 },
 					{ "coordId": 175, "v": 0 },
@@ -769,11 +781,7 @@
 					{ "coordId": 179, "v": 0 },
 					{ "coordId": 180, "v": 0 },
 					{ "coordId": 181, "v": 0 },
-					{ "coordId": 182, "v": 0 },
-					{ "coordId": 183, "v": 0 },
-					{ "coordId": 184, "v": 0 },
-					{ "coordId": 185, "v": 0 },
-					{ "coordId": 186, "v": 0 },
+					{ "coordId": 196, "v": 0 },
 					{ "coordId": 209, "v": 0 },
 					{ "coordId": 210, "v": 0 },
 					{ "coordId": 211, "v": 0 },
@@ -783,11 +791,7 @@
 					{ "coordId": 215, "v": 0 },
 					{ "coordId": 216, "v": 0 },
 					{ "coordId": 217, "v": 0 },
-					{ "coordId": 218, "v": 0 },
-					{ "coordId": 219, "v": 0 },
-					{ "coordId": 220, "v": 0 },
-					{ "coordId": 221, "v": 0 },
-					{ "coordId": 222, "v": 0 },
+					{ "coordId": 232, "v": 0 },
 					{ "coordId": 245, "v": 0 },
 					{ "coordId": 246, "v": 0 },
 					{ "coordId": 247, "v": 0 },
@@ -797,11 +801,6 @@
 					{ "coordId": 251, "v": 0 },
 					{ "coordId": 252, "v": 0 },
 					{ "coordId": 253, "v": 0 },
-					{ "coordId": 254, "v": 0 },
-					{ "coordId": 255, "v": 0 },
-					{ "coordId": 256, "v": 0 },
-					{ "coordId": 257, "v": 0 },
-					{ "coordId": 258, "v": 0 },
 					{ "coordId": 281, "v": 0 },
 					{ "coordId": 282, "v": 0 },
 					{ "coordId": 283, "v": 0 },
@@ -811,11 +810,6 @@
 					{ "coordId": 287, "v": 0 },
 					{ "coordId": 288, "v": 0 },
 					{ "coordId": 289, "v": 0 },
-					{ "coordId": 290, "v": 0 },
-					{ "coordId": 291, "v": 0 },
-					{ "coordId": 292, "v": 0 },
-					{ "coordId": 293, "v": 0 },
-					{ "coordId": 294, "v": 0 },
 					{ "coordId": 320, "v": 0 },
 					{ "coordId": 321, "v": 0 },
 					{ "coordId": 322, "v": 0 },
@@ -825,12 +819,11 @@
 					{ "coordId": 326, "v": 0 },
 					{ "coordId": 327, "v": 0 },
 					{ "coordId": 328, "v": 0 },
-					{ "coordId": 329, "v": 0 },
-					{ "coordId": 330, "v": 0 },
 					{ "coordId": 337, "v": 0 },
 					{ "coordId": 338, "v": 0 },
 					{ "coordId": 339, "v": 0 },
 					{ "coordId": 340, "v": 0 },
+					{ "coordId": 341, "v": 0 },
 					{ "coordId": 356, "v": 0 },
 					{ "coordId": 357, "v": 0 },
 					{ "coordId": 358, "v": 0 },
@@ -840,8 +833,6 @@
 					{ "coordId": 362, "v": 0 },
 					{ "coordId": 363, "v": 0 },
 					{ "coordId": 364, "v": 0 },
-					{ "coordId": 365, "v": 0 },
-					{ "coordId": 366, "v": 0 },
 					{ "coordId": 373, "v": 0 },
 					{ "coordId": 374, "v": 0 },
 					{ "coordId": 375, "v": 0 },
