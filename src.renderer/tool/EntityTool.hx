@@ -82,13 +82,14 @@ class EntityTool extends Tool<Int> {
 				}
 
 			case Remove:
-				removeAnyEntityAt(m);
+				removeAnyEntityOrPointAt(m);
 
 			case Move:
 		}
 	}
 
-	function removeAnyEntityAt(m:MouseCoords) {
+
+	function removeAnyEntityOrPointAt(m:MouseCoords) {
 		var ge = getGenericLevelElementAt(m, curLayerInstance);
 		switch ge {
 			case Entity(curLayerInstance, instance):
@@ -96,11 +97,25 @@ class EntityTool extends Tool<Int> {
 				editor.ge.emit( EntityInstanceRemoved(instance) );
 				return true;
 
+			case PointField(li, ei, fi, arrayIdx):
+				var pt = fi.getPointGrid(arrayIdx);
+				if( pt!=null && pt.cx==m.cx && pt.cy==m.cy ) {
+					if( fi.def.isArray )
+						fi.removeArrayValue(arrayIdx);
+					else
+						fi.parseValue(arrayIdx, null);
+					editor.ge.emit( EntityInstanceFieldChanged(ei) );
+					return true;
+				}
+				else
+					return false;
+
 			case _:
 		}
 
 		return false;
 	}
+
 
 	function getPickedEntityInstance() : Null<led.inst.EntityInstance> {
 		switch editor.selection {
@@ -123,7 +138,7 @@ class EntityTool extends Tool<Int> {
 			case Add:
 
 			case Remove:
-				if( removeAnyEntityAt(m) )
+				if( removeAnyEntityOrPointAt(m) )
 					return true;
 
 			case Move:
