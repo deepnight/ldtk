@@ -726,7 +726,7 @@ class LevelRender extends dn.Process {
 
 							var tx = M.round( (pt.cx+0.5)*li.def.gridSize-ei.x );
 							var ty = M.round( (pt.cy+0.5)*li.def.gridSize-ei.y );
-							dashedLine(lines, fx,fy, tx,ty, li.def.gridSize/4);
+							dashedLine(lines, fx,fy, tx,ty, 3);
 							lines.drawRect( tx-2, ty-2, 4, 4 );
 
 							if( fd.editorDisplayMode==PointPath ) {
