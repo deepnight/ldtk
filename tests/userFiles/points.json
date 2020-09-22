@@ -56,7 +56,7 @@
 				"tilesetId": null,
 				"tileId": null,
 				"maxPerLevel": 1,
-				"discardExcess": true,
+				"limitBehavior": "MoveLastOne",
 				"pivotX": 0.5,
 				"pivotY": 1.0,
 				"fieldDefs": [
@@ -151,7 +151,7 @@
 				"intGrid": [],
 				"autoTiles": [],
 				"gridTiles": [],
-				"entityInstances": [ { "__identifier": "Player", "__cx": 9, "__cy": 14, "defUid": 1, "x": 152, "y": 240, "fieldInstances": [
+				"entityInstances": [ { "__identifier": "Player", "__cx": 7, "__cy": 14, "defUid": 1, "x": 120, "y": 240, "fieldInstances": [
 					{
 						"__identifier": "required",
 						"__values": "12,10",
