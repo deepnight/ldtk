@@ -296,8 +296,8 @@
 			{
 				"identifier": "Button",
 				"uid": 41,
-				"width": 8,
-				"height": 8,
+				"width": 13,
+				"height": 13,
 				"color": "#FFFFFF",
 				"renderMode": "Rectangle",
 				"tilesetId": null,
