@@ -489,6 +489,9 @@ class Editor extends Page {
 				curTool.as(tool.EntityTool).selectValue(ei.defUid); // BUG might crash
 				levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
 				curTool.onValuePicking();
+				if( fi.def.isArray && arrayIdx==fi.getArrayLength()-1 ) {
+					// TODO continue existing path
+				}
 				return true;
 
 			case Tile(li, cx, cy):

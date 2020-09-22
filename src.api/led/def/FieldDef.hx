@@ -86,7 +86,7 @@ class FieldDef {
 
 
 	#if editor
-	public function getShortDescription() : String {
+	public function getShortDescription(includeArray=true) : String {
 		var desc = switch type {
 			case F_Int: "Int";
 			case F_Float: "Float";
@@ -96,7 +96,7 @@ class FieldDef {
 			case F_Point: "Point";
 			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
 		}
-		return isArray ? 'Array<$desc>' : desc;
+		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
 
 	public function getJsonTypeString() {

@@ -234,6 +234,7 @@ class EntityInstanceEditor extends dn.Process {
 
 			case F_Point:
 				var jPick = new J('<button/>');
+				jPick.addClass("point");
 				jPick.appendTo(jTarget);
 				if( fi.valueIsNull(arrayIdx) )
 					if( fi.def.canBeNull )
@@ -253,6 +254,7 @@ class EntityInstanceEditor extends dn.Process {
 						// Start picking
 						jPick.text("Cancel");
 						jPanel.addClass("picking");
+
 						var t = new tool.PickPoint();
 						t.pickOrigin = { cx:ei.getCx(Editor.ME.curLayerDef), cy:ei.getCy(Editor.ME.curLayerDef), color:ei.def.color }
 						if( fi.def.isArray ) {
@@ -264,7 +266,8 @@ class EntityInstanceEditor extends dn.Process {
 						var editIdx = arrayIdx;
 						t.onPick = function(m) {
 							// Picking of a point
-							if( fi.def.isArray && editIdx>=fi.getArrayLength()-1) {
+							if( fi.def.isArray && editIdx>=fi.getArrayLength()-1 ) {
+								// Chain points in a path
 								fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
 								editIdx = fi.getArrayLength();
 								var pt = fi.getPointGrid( editIdx-1 );
@@ -272,12 +275,21 @@ class EntityInstanceEditor extends dn.Process {
 									t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:ei.def.color }
 							}
 							else {
+								// Edit a single point
 								Editor.ME.clearSpecialTool();
 								fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
 							}
 							onFieldChange();
 						}
-						t.onDisposeCb = updateForm;
+						t.onDisposeCb = function() {
+							if( fi.def.isArray && editIdx>=fi.getArrayLength()-1 && fi.getPointStr(editIdx)==null ) {
+								// Trim last null point
+								fi.removeArrayValue(editIdx);
+								onFieldChange();
+							}
+							else
+								updateForm();
+						}
 						Editor.ME.setSpecialTool(t);
 					}
 				});
@@ -374,6 +386,7 @@ class EntityInstanceEditor extends dn.Process {
 			for(fd in ei.def.fieldDefs) {
 				var fi = ei.getFieldInstance(fd);
 				var li = new J("<li/>");
+				li.attr("defUid", fd.uid);
 				li.appendTo(form);
 				li.append('<label>${fi.def.identifier}</label>');
 
@@ -409,12 +422,15 @@ class EntityInstanceEditor extends dn.Process {
 					}
 					// "Add" button
 					if( fi.def.arrayMaxLength==null || fi.getArrayLength()<fi.def.arrayMaxLength ) {
-						var jAdd = new J('<button class="add">+</button>');
+						var jAdd = new J('<button class="add"/>');
+						jAdd.text("Add "+fi.def.getShortDescription(false) );
 						jAdd.appendTo(jArray);
 						jAdd.click( function(_) {
 							fi.addArrayValue();
 							onFieldChange();
 							updateForm();
+							if( fi.def.type==F_Point )
+								jPanel.find('[defuid=${fd.uid}] button.point').last().css("outline","3px solid yellow").click();
 						});
 					}
 				}
