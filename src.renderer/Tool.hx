@@ -145,7 +145,10 @@ class Tool<T> extends dn.Process {
 				return GenericLevelElement.Entity(li, ei);
 
 			case Tile(li, cx, cy):
-				return null;
+				return null; // TODO support copy?
+
+			case PointField(li, ei, fi, arrayIdx):
+				return null; // TODO support copy?
 		}
 	}
 
@@ -166,9 +169,21 @@ class Tool<T> extends dn.Process {
 				case AutoLayer:
 
 				case Entities:
-					for(ei in li.entityInstances)
+					for(ei in li.entityInstances) {
 						if( ei.isOver(m.levelX, m.levelY) )
 							ge = GenericLevelElement.Entity(li, ei);
+						else {
+							for(fi in ei.fieldInstances) {
+								if( fi.def.type!=F_Point )
+									continue;
+								for(i in 0...fi.getArrayLength()) {
+									var pt = fi.getPointGrid(i);
+									if( pt!=null && m.cx==pt.cx && m.cy==pt.cy )
+										ge = GenericLevelElement.PointField(li, ei, fi, i);
+								}
+							}
+						}
+					}
 
 				case Tiles:
 					if( li.getGridTile(cx,cy)!=null )
@@ -366,6 +381,10 @@ class Tool<T> extends dn.Process {
 						Tiles(li, [li.getGridTile(cx,cy)], cx, cy),
 						"Tile "+li.getGridTile(cx,cy)
 					);
+
+				case PointField(li, ei, fi, arrayIdx):
+					var pt = fi.getPointGrid(arrayIdx);
+					editor.cursor.set( GridCell(li, pt.cx, pt.cy) );
 			}
 			if( ge!=null )
 				editor.cursor.setSystemCursor(Button);

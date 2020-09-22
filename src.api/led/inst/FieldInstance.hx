@@ -168,7 +168,7 @@ class FieldInstance {
 			case F_Color:
 			case F_Point:
 				for( idx in 0...getArrayLength() )
-					if( !def.canBeNull && getPoint(idx)==null )
+					if( !def.canBeNull && getPointStr(idx)==null )
 						return true;
 
 			case F_Enum(enumDefUid):
@@ -187,7 +187,7 @@ class FieldInstance {
 			case F_Float: getFloat(arrayIdx);
 			case F_String: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
-			case F_Point: getPoint(arrayIdx);
+			case F_Point: getPointStr(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
 		}
 		return v == null;
@@ -228,7 +228,7 @@ class FieldInstance {
 			case F_String: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
-			case F_Point: getPoint(arrayIdx);
+			case F_Point: getPointStr(arrayIdx);
 		}
 		if( v==null )
 			return "null";
@@ -247,7 +247,7 @@ class FieldInstance {
 			case F_String: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
-			case F_Point: getPoint(arrayIdx);
+			case F_Point: getPointStr(arrayIdx);
 			case F_Enum(enumDefUid): getEnumValue(arrayIdx);
 		}
 	}
@@ -318,12 +318,12 @@ class FieldInstance {
 		}
 	}
 
-	public function getPoint(arrayIdx:Int) : Null<{ x:Int, y:Int }> {
+	public function getPointGrid(arrayIdx:Int) : Null<{ cx:Int, cy:Int }> {
 		require( F_Point );
 		var raw = getPointStr(arrayIdx);
-		return raw==null ? null : { 
-			x : Std.parseInt( raw.split(Const.POINT_SEPARATOR)[0] ),
-			y : Std.parseInt( raw.split(Const.POINT_SEPARATOR)[1] ),
+		return raw==null ? null : {
+			cx : Std.parseInt( raw.split(Const.POINT_SEPARATOR)[0] ),
+			cy : Std.parseInt( raw.split(Const.POINT_SEPARATOR)[1] ),
 		}
 	}
 

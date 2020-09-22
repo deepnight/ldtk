@@ -107,6 +107,9 @@ class EntityTool extends Tool<Int> {
 			case null, IntGrid(_), Tile(_):
 				return null;
 
+			case PointField(li, ei, fi, arrayIdx):
+				return ei;
+
 			case Entity(curLayerInstance, instance):
 				return instance;
 		}
@@ -134,7 +137,7 @@ class EntityTool extends Tool<Int> {
 					var changed = oldX!=ei.x || oldY!=ei.y;
 					if( changed )
 						editor.ge.emit( EntityInstanceChanged(ei) );
-					
+
 					return changed;
 				}
 		}

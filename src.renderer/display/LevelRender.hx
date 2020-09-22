@@ -709,9 +709,9 @@ class LevelRender extends dn.Process {
 
 					case PointStar:
 						for(i in 0...fi.getArrayLength()) {
-							var pt = fi.getPoint(i);
-							var tx = M.round( (pt.x+0.5)*li.def.gridSize-ei.x );
-							var ty = M.round( (pt.y+0.5)*li.def.gridSize-ei.y );
+							var pt = fi.getPointGrid(i);
+							var tx = M.round( (pt.cx+0.5)*li.def.gridSize-ei.x );
+							var ty = M.round( (pt.cy+0.5)*li.def.gridSize-ei.y );
 							dashedLine(lines, 0,0, tx,ty);
 							lines.drawRect( tx-2, ty-2, 4, 4 );
 						}
@@ -721,12 +721,12 @@ class LevelRender extends dn.Process {
 						var fx = 0;
 						var fy = 0;
 						for(i in 0...fi.getArrayLength()) {
-							var pt = fi.getPoint(i);
+							var pt = fi.getPointGrid(i);
 							if( pt==null )
 								continue;
 
-							var tx = M.round( (pt.x+0.5)*li.def.gridSize-ei.x );
-							var ty = M.round( (pt.y+0.5)*li.def.gridSize-ei.y );
+							var tx = M.round( (pt.cx+0.5)*li.def.gridSize-ei.x );
+							var ty = M.round( (pt.cy+0.5)*li.def.gridSize-ei.y );
 							dashedLine(lines, fx,fy, tx,ty);
 							lines.drawRect( tx-2, ty-2, 4, 4 );
 							fx = tx;

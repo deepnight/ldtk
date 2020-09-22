@@ -363,7 +363,7 @@ class Editor extends Page {
 
 	public function setSelection(ge:GenericLevelElement) {
 		switch ge {
-			case IntGrid(_), Tile(_):
+			case IntGrid(_), Tile(_), PointField(_):
 				clearSelection();
 				return;
 
@@ -375,6 +375,9 @@ class Editor extends Page {
 			case IntGrid(li, cx, cy): GridCell(li, cx,cy);
 			case Entity(li, instance): Entity(li, instance.def, instance.x, instance.y);
 			case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
+			case PointField(li, ei, fi, arrayIdx):
+				var pt = fi.getPointGrid(arrayIdx);
+				GridCell(li, pt.cx, pt.cy);
 		});
 
 		ui.EntityInstanceEditor.close();
@@ -382,6 +385,9 @@ class Editor extends Page {
 			case null:
 			case IntGrid(_):
 			case Tile(_):
+
+			case PointField(li, ei, fi, arrayIdx):
+				new ui.EntityInstanceEditor(ei);
 
 			case Entity(li, instance):
 				new ui.EntityInstanceEditor(instance);
@@ -459,6 +465,7 @@ class Editor extends Page {
 	}
 
 	public function pickGenericLevelElement(ge:Null<GenericLevelElement>) {
+		clearSpecialTool();
 		switch ge {
 			case null:
 
@@ -472,10 +479,15 @@ class Editor extends Page {
 
 			case Entity(li, instance):
 				selectLayerInstance(li);
-				curTool.as(tool.EntityTool).selectValue(instance.defUid);
+				curTool.as(tool.EntityTool).selectValue(instance.defUid); // BUG might crash
 				levelRender.bleepRectPx( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
 				curTool.onValuePicking();
 				return true;
+
+			case PointField(li, ei, fi, arrayIdx):
+				selectLayerInstance(li);
+				curTool.as(tool.EntityTool).selectValue(ei.defUid); // BUG might crash
+				levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
 
 			case Tile(li, cx, cy):
 				selectLayerInstance(li);
