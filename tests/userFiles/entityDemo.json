@@ -317,7 +317,59 @@
 				"intGrid": [],
 				"autoTiles": [],
 				"gridTiles": [],
-				"entityInstances": []
+				"entityInstances": [ { "__identifier": "Enemy", "__cx": 24, "__cy": 7, "defUid": 1, "x": 196, "y": 64, "fieldInstances": [
+					{
+						"__identifier": "loots",
+						"__values": [ "Healling_potion", "Trout" ],
+						"__type": "Array<LocalEnum.Item>",
+						"defUid": 4,
+						"realEditorValues": [ {
+							"id": "V_String",
+							"params": [ "Healling_potion" ]
+						}, {
+							"id": "V_String",
+							"params": [ "Trout" ]
+						} ]
+					},
+					{
+						"__identifier": "patrol",
+						"__values": [ "18,7", "18,3", "7,3", "7,7", "3,7" ],
+						"__type": "Array<Point>",
+						"defUid": 5,
+						"realEditorValues": [
+							{
+								"id": "V_String",
+								"params": [ "18,7" ]
+							},
+							{
+								"id": "V_String",
+								"params": [ "18,3" ]
+							},
+							{
+								"id": "V_String",
+								"params": [ "7,3" ]
+							},
+							{
+								"id": "V_String",
+								"params": [ "7,7" ]
+							},
+							{
+								"id": "V_String",
+								"params": [ "3,7" ]
+							}
+						]
+					},
+					{
+						"__identifier": "enemyType",
+						"__values": "Fighter",
+						"__type": "LocalEnum.EnemyType",
+						"defUid": 19,
+						"realEditorValues": [ {
+							"id": "V_String",
+							"params": [ "Fighter" ]
+						} ]
+					}
+				] } ]
 			},
 			{
 				"__identifier": "Collisions",
