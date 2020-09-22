@@ -80,6 +80,7 @@ enum CursorType {
 	Entity(li:led.inst.LayerInstance, def:led.def.EntityDef, x:Int, y:Int);
 	Tiles(li:led.inst.LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int);
 	Resize(p:RulerPos);
+	Link(fx:Float, fy:Float, tx:Float, ty:Float, color:UInt);
 }
 
 enum GenericLevelElement {

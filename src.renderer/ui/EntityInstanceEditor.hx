@@ -253,9 +253,22 @@ class EntityInstanceEditor extends dn.Process {
 						jPick.text("Cancel");
 						jPanel.addClass("picking");
 						var t = new tool.PickPoint();
+						t.pickOrigin = { cx:ei.getCx(Editor.ME.curLayerDef), cy:ei.getCy(Editor.ME.curLayerDef), color:ei.def.color }
+						if( fi.def.isArray && fi.getArrayLength()>0 ) {
+							var pt = fi.getPointGrid( fi.getArrayLength()-2 );
+							if( pt!=null )
+								t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:ei.def.color }
+						}
 						t.onPick = function(m) {
-							Editor.ME.clearSpecialTool();
-							fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+							if( fi.def.isArray ) {
+								fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+								arrayIdx++;
+								t.pickOrigin = { cx:m.cx, cy:m.cy, color:ei.def.color }
+							}
+							else {
+								Editor.ME.clearSpecialTool();
+								fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+							}
 							onFieldChange();
 						}
 						Editor.ME.setSpecialTool(t);

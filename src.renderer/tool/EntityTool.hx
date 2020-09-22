@@ -105,6 +105,7 @@ class EntityTool extends Tool<Int> {
 					else
 						fi.parseValue(arrayIdx, null);
 					editor.ge.emit( EntityInstanceFieldChanged(ei) );
+					editor.setSelection( GenericLevelElement.Entity(li,ei) );
 					return true;
 				}
 				else
