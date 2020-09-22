@@ -12,7 +12,7 @@
 	"defaultPivotY": 1.0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 42,
+	"nextUid": 43,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -191,7 +191,13 @@
 								}
 							]
 						},
-						{ "__identifier": "optional", "__values": null, "__type": "Point", "defUid": 41, "realEditorValues": [] }
+						{
+							"__identifier": "optional",
+							"__values": null,
+							"__type": "Point",
+							"defUid": 41,
+							"realEditorValues": [ null ]
+						}
 					] }
 				]
 			},
