@@ -326,14 +326,6 @@ class EditEntityDefs extends ui.modal.Panel {
 				}
 			}
 		);
-		// TODO
-		// var i = new form.input.BoolInput(
-		// 	jEntityForm.find("select[name=discardExcess]"),
-		// 	function() return curEntity.discardExcess,
-		// 	function(v) curEntity.discardExcess = v
-		// );
-		// i.setEnabled( curEntity.maxPerLevel>0 );
-		// i.linkEvent(EntityDefChanged);
 
 		// Pivot
 		var jPivots = jEntityForm.find(".pivot");
