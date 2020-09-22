@@ -47,7 +47,7 @@ class FieldInstance {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
-			__value: def.isArray ? [ for(i in 0...getArrayLength()) getUntyped(i) ] : getUntyped(0),
+			__value: def.isArray ? [ for(i in 0...getArrayLength()) getJsonValue(i) ] : getJsonValue(0),
 			__type: def.getJsonTypeString(),
 
 			defUid: defUid,
@@ -240,14 +240,14 @@ class FieldInstance {
 		}
 	}
 
-	function getUntyped(arrayIdx:Int) : Dynamic {
+	function getJsonValue(arrayIdx:Int) : Dynamic {
 		return switch def.type {
 			case F_Int: getInt(arrayIdx);
 			case F_Float: JsonTools.writeFloat( getFloat(arrayIdx) );
 			case F_String: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
-			case F_Point: getPointStr(arrayIdx);
+			case F_Point: getPointGrid(arrayIdx);
 			case F_Enum(enumDefUid): getEnumValue(arrayIdx);
 		}
 	}
