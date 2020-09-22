@@ -47,7 +47,7 @@
 		],
 		"entities": [
 			{
-				"identifier": "Player",
+				"identifier": "Test",
 				"uid": 1,
 				"width": 16,
 				"height": 24,
@@ -55,21 +55,21 @@
 				"renderMode": "Ellipse",
 				"tilesetId": null,
 				"tileId": null,
-				"maxPerLevel": 1,
+				"maxPerLevel": 0,
 				"limitBehavior": "MoveLastOne",
 				"pivotX": 0.5,
 				"pivotY": 1.0,
 				"fieldDefs": [
 					{
-						"identifier": "required",
-						"__type": "Point",
-						"uid": 38,
+						"identifier": "path",
+						"__type": "Array<Point>",
+						"uid": 40,
 						"type": "F_Point",
-						"isArray": false,
+						"isArray": true,
 						"canBeNull": false,
 						"arrayMinLength": null,
 						"arrayMaxLength": null,
-						"editorDisplayMode": "NameAndValue",
+						"editorDisplayMode": "PointPath",
 						"editorDisplayPos": "Above",
 						"min": null,
 						"max": null,
@@ -84,22 +84,7 @@
 						"canBeNull": true,
 						"arrayMinLength": null,
 						"arrayMaxLength": null,
-						"editorDisplayMode": "NameAndValue",
-						"editorDisplayPos": "Above",
-						"min": null,
-						"max": null,
-						"defaultOverride": null
-					},
-					{
-						"identifier": "path",
-						"__type": "Array<Point>",
-						"uid": 40,
-						"type": "F_Point",
-						"isArray": true,
-						"canBeNull": false,
-						"arrayMinLength": null,
-						"arrayMaxLength": null,
-						"editorDisplayMode": "NameAndValue",
+						"editorDisplayMode": "PointStar",
 						"editorDisplayPos": "Above",
 						"min": null,
 						"max": null,
@@ -151,26 +136,13 @@
 				"intGrid": [],
 				"autoTiles": [],
 				"gridTiles": [],
-				"entityInstances": [ { "__identifier": "Player", "__cx": 7, "__cy": 14, "defUid": 1, "x": 120, "y": 240, "fieldInstances": [
-					{
-						"__identifier": "required",
-						"__values": "12,10",
-						"__type": "Point",
-						"defUid": 38,
-						"realEditorValues": [ {
-							"id": "V_String",
-							"params": [ "12,10" ]
-						} ]
-					},
+				"entityInstances": [ { "__identifier": "Test", "__cx": 6, "__cy": 14, "defUid": 1, "x": 104, "y": 240, "fieldInstances": [
 					{
 						"__identifier": "path",
-						"__values": [ "16,14", "12,10", "6,8" ],
+						"__values": [ { "x": 12, "y": 10 }, { "x": 6, "y": 8 } ],
 						"__type": "Array<Point>",
 						"defUid": 40,
 						"realEditorValues": [ {
-							"id": "V_String",
-							"params": [ "16,14" ]
-						}, {
 							"id": "V_String",
 							"params": [ "12,10" ]
 						}, {
@@ -180,13 +152,10 @@
 					},
 					{
 						"__identifier": "optional",
-						"__values": "19,10",
+						"__values": null,
 						"__type": "Point",
 						"defUid": 41,
-						"realEditorValues": [ {
-							"id": "V_String",
-							"params": [ "19,10" ]
-						} ]
+						"realEditorValues": [ null ]
 					}
 				] } ]
 			},
