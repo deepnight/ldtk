@@ -57,7 +57,7 @@ class EntityDef {
 		o.renderMode = JsonTools.readEnum(EntityRenderMode, json.renderMode, false, Rectangle);
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
 		o.tileId = JsonTools.readNullableInt(json.tileId);
-		o.tileRenderMode = JsonTools.readEnum(EntityTileRenderMode, o.tileRenderMode, false, Stretch);
+		o.tileRenderMode = JsonTools.readEnum(EntityTileRenderMode, json.tileRenderMode, false, Stretch);
 
 		o.maxPerLevel = JsonTools.readInt( json.maxPerLevel, 0 );
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
