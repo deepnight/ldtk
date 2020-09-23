@@ -36,7 +36,7 @@
 				"uid": 13,
 				"gridSize": 16,
 				"displayOpacity": 1.0,
-				"intGridValues": [ { "identifier": "walls", "color": "#000000" } ],
+				"intGridValues": [ { "identifier": "walls", "color": "#243047" } ],
 				"autoTilesetDefUid": null,
 				"autoRuleGroups": [],
 				"autoSourceLayerDefUid": null,
@@ -63,7 +63,7 @@
 				"fieldDefs": [
 					{
 						"identifier": "loot",
-						"__type": "Array<LocalEnum.Item>",
+						"__type": "Array<LocalEnum.ItemType>",
 						"uid": 21,
 						"type": { "id": "F_Enum", "params": [ 5 ] },
 						"isArray": true,
@@ -163,7 +163,7 @@
 					},
 					{
 						"identifier": "weapon",
-						"__type": "LocalEnum.Item",
+						"__type": "LocalEnum.ItemType",
 						"uid": 29,
 						"type": { "id": "F_Enum", "params": [ 5 ] },
 						"isArray": false,
@@ -179,7 +179,7 @@
 					},
 					{
 						"identifier": "bag",
-						"__type": "Array<LocalEnum.Item>",
+						"__type": "Array<LocalEnum.ItemType>",
 						"uid": 19,
 						"type": { "id": "F_Enum", "params": [ 5 ] },
 						"isArray": true,
@@ -309,7 +309,7 @@
 					},
 					{
 						"identifier": "loots",
-						"__type": "Array<LocalEnum.Item>",
+						"__type": "Array<LocalEnum.ItemType>",
 						"uid": 39,
 						"type": { "id": "F_Enum", "params": [ 5 ] },
 						"isArray": true,
@@ -431,13 +431,14 @@
 			}
 		],
 		"enums": [
-			{ "identifier": "Item", "uid": 5, "values": [
-				{ "id": "Gold", "tileId": 61 },
+			{ "identifier": "ItemType", "uid": 5, "values": [
+				{ "id": "Gold", "tileId": 58 },
 				{ "id": "Trout", "tileId": 70 },
 				{ "id": "Sword", "tileId": 39 },
 				{ "id": "Heavy_sword", "tileId": 40 },
 				{ "id": "Bow", "tileId": 46 },
-				{ "id": "Wand", "tileId": 44 },
+				{ "id": "Arrow", "tileId": 48 },
+				{ "id": "Staff", "tileId": 44 },
 				{ "id": "Magic_ring", "tileId": 51 },
 				{ "id": "Healing_potion", "tileId": 5 },
 				{ "id": "Mana_potion", "tileId": 6 }
@@ -475,7 +476,7 @@
 						{
 							"__identifier": "loot",
 							"__value": [ "Sword", "Heavy sword", "Bow" ],
-							"__type": "Array<LocalEnum.Item>",
+							"__type": "Array<LocalEnum.ItemType>",
 							"defUid": 21,
 							"realEditorValues": [ {
 								"id": "V_String",
@@ -589,7 +590,7 @@
 						{
 							"__identifier": "bag",
 							"__value": [ "Healing_potion", "Mana_potion" ],
-							"__type": "Array<LocalEnum.Item>",
+							"__type": "Array<LocalEnum.ItemType>",
 							"defUid": 19,
 							"realEditorValues": [ {
 								"id": "V_String",
@@ -612,7 +613,7 @@
 						{
 							"__identifier": "weapon",
 							"__value": "Trout",
-							"__type": "LocalEnum.Item",
+							"__type": "LocalEnum.ItemType",
 							"defUid": 29,
 							"realEditorValues": [ {
 								"id": "V_String",
@@ -620,15 +621,18 @@
 							} ]
 						}
 					] },
-					{ "__identifier": "Chest", "__cx": 30, "__cy": 13, "defUid": 8, "x": 488, "y": 224, "fieldInstances": [
+					{ "__identifier": "Chest", "__cx": 27, "__cy": 9, "defUid": 8, "x": 440, "y": 160, "fieldInstances": [
 						{
 							"__identifier": "loot",
-							"__value": [ "Gold" ],
-							"__type": "Array<LocalEnum.Item>",
+							"__value": [ "Bow", "Arrow" ],
+							"__type": "Array<LocalEnum.ItemType>",
 							"defUid": 21,
 							"realEditorValues": [ {
 								"id": "V_String",
-								"params": [ "Gold" ]
+								"params": [ "Bow" ]
+							}, {
+								"id": "V_String",
+								"params": [ "Arrow" ]
 							} ]
 						},
 						{
@@ -677,7 +681,7 @@
 						{
 							"__identifier": "loots",
 							"__value": [ "Gold", "Healing_potion" ],
-							"__type": "Array<LocalEnum.Item>",
+							"__type": "Array<LocalEnum.ItemType>",
 							"defUid": 39,
 							"realEditorValues": [ {
 								"id": "V_String",
@@ -725,7 +729,7 @@
 							"params": [ true ]
 						} ]
 					} ] },
-					{ "__identifier": "Button", "__cx": 27, "__cy": 8, "defUid": 41, "x": 440, "y": 136, "fieldInstances": [ {
+					{ "__identifier": "Button", "__cx": 30, "__cy": 12, "defUid": 41, "x": 488, "y": 200, "fieldInstances": [ {
 						"__identifier": "activationTargets",
 						"__value": [ { "cx": 16, "cy": 11 }, { "cx": 22, "cy": 17 } ],
 						"__type": "Array<Point>",
@@ -749,7 +753,7 @@
 								"params": [ "9,17" ]
 							} ]
 						},
-						{ "__identifier": "loots", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 39, "realEditorValues": [] },
+						{ "__identifier": "loots", "__value": [], "__type": "Array<LocalEnum.ItemType>", "defUid": 39, "realEditorValues": [] },
 						{ "__identifier": "hp", "__value": 3, "__type": "Int", "defUid": 40, "realEditorValues": [] },
 						{
 							"__identifier": "type",
@@ -767,7 +771,7 @@
 						{
 							"__identifier": "loots",
 							"__value": [ "Mana_potion" ],
-							"__type": "Array<LocalEnum.Item>",
+							"__type": "Array<LocalEnum.ItemType>",
 							"defUid": 39,
 							"realEditorValues": [ {
 								"id": "V_String",
@@ -786,12 +790,7 @@
 							} ]
 						}
 					] },
-					{ "__identifier": "Door", "__cx": 7, "__cy": 17, "defUid": 43, "x": 120, "y": 288, "fieldInstances": [ { "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 50, "realEditorValues": [] } ] },
-					{ "__identifier": "LightEmitter", "__cx": 30, "__cy": 11, "defUid": 10, "x": 488, "y": 176, "fieldInstances": [
-						{ "__identifier": "flickering", "__value": false, "__type": "Bool", "defUid": 12, "realEditorValues": [] },
-						{ "__identifier": "colors", "__value": [], "__type": "Array<Color>", "defUid": 26, "realEditorValues": [] },
-						{ "__identifier": "radius", "__value": 3.0, "__type": "Float", "defUid": 45, "realEditorValues": [] }
-					] }
+					{ "__identifier": "Door", "__cx": 7, "__cy": 17, "defUid": 43, "x": 120, "y": 288, "fieldInstances": [ { "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 50, "realEditorValues": [] } ] }
 				]
 			},
 			{
