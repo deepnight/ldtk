@@ -3407,10 +3407,10 @@ $patternSize : 32px;
 			}
 
 			select.renderMode {
-				flex: 0.5 1 0px;
+				flex: 1 1 0px;
 			}
 
-			canvas.tile {
+			.tilePicker {
 				flex: 0 0 auto;
 			}
 		}

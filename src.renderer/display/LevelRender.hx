@@ -614,9 +614,9 @@ class LevelRender extends dn.Process {
 				g.endFill();
 
 			case Tile:
-				var p = 2;
 				if( def.tileId==null || def.tilesetId==null ) {
 					// Missing tile
+					var p = 2;
 					g.lineStyle(3, 0xff0000);
 					g.moveTo(p,p);
 					g.lineTo(def.width-p, def.height-p);
@@ -625,7 +625,7 @@ class LevelRender extends dn.Process {
 				}
 				else {
 					g.beginFill(def.color, 0.4);
-					g.drawRect(-p, -p, def.width+p*2, def.height+p*2);
+					g.drawRect(0, 0, def.width, def.height);
 
 					var td = Editor.ME.project.defs.getTilesetDef(def.tilesetId);
 					var t = td.getTile(def.tileId);

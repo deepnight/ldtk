@@ -247,8 +247,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Display renderMode form fields based on current mode
 		var jRenderModeBlock = jEntityForm.find("li.renderMode");
 		JsTools.removeClassReg(jRenderModeBlock, ~/mode_\S+/g);
-		jRenderModeBlock.find("canvas").remove();
 		jRenderModeBlock.addClass("mode_"+curEntity.renderMode);
+		jRenderModeBlock.find(".tilePicker").empty();
 
 		// Color
 		var col = jEntityForm.find("input[name=color]");
@@ -259,42 +259,89 @@ class EditEntityDefs extends ui.modal.Panel {
 			updateEntityForm();
 		});
 
-		// Render mode
-		var i = new form.input.EnumSelect(
-			jEntityForm.find("select.renderMode"),
-			led.LedTypes.EntityRenderMode,
-			function() return curEntity.renderMode,
-			function(v) {
-				curEntity.tileId = null;
-				curEntity.tilesetId = null;
-				curEntity.renderMode = v;
-			}
-		);
-		i.linkEvent(EntityDefChanged);
+		// Entity render mode
+		var jSelect = jRenderModeBlock.find(".renderMode");
+		jSelect.empty();
+		for(k in led.LedTypes.EntityRenderMode.getConstructors()) {
+			var e = led.LedTypes.EntityRenderMode.createByName(k);
+			if( e==Tile )
+				continue;
 
-		// Tileset pick
-		var jTilesets = jEntityForm.find("select.tilesets");
-		jTilesets.find("option:not(:first)").remove();
-		if( curEntity.renderMode==Tile ) {
-			for( td in project.defs.tilesets ) {
-				var opt = new J('<option/>');
-				opt.appendTo(jTilesets);
-				opt.attr("value",td.uid);
-				opt.text( td.identifier );
-				if( td.uid==curEntity.tilesetId )
-					opt.attr("selected","selected");
-			}
-			jTilesets.change( function(_) {
-				var id = Std.parseInt( jTilesets.val() );
-				curEntity.tileId = null;
-				if( !M.isValidNumber(id) || id<0 )
-					curEntity.tilesetId = null;
-				else
-					curEntity.tilesetId = id;
-				editor.ge.emit(EntityDefChanged);
+			var jOpt = new J('<option value="$k"/>');
+			jOpt.appendTo(jSelect);
+			jOpt.text(switch e {
+				case Rectangle: Lang.t._("Rectangle");
+				case Ellipse: Lang.t._("Ellipse");
+				case Tile: null;
 			});
 		}
+		// Append tilesets
+		if( project.defs.tilesets.length==0 )
+			jSelect.append( new J('<option value="Tile">-- No tileset available --</option>') );
 
+		for( td in project.defs.tilesets ) {
+			var jOpt = new J('<option value="Tile.${td.uid}"/>');
+			jOpt.appendTo(jSelect);
+			jOpt.text( Lang.t._("Tile from ::name::", {name:td.identifier}) );
+		}
+
+		// Pick render mode
+		jSelect.change( function(ev) {
+			var v : String = jSelect.val();
+			var mode = led.LedTypes.EntityRenderMode.createByName( v.indexOf(".")<0 ? v : v.substr(0,v.indexOf(".")) );
+			curEntity.renderMode = mode;
+			curEntity.tileId = null;
+			if( mode==Tile ) {
+				var tdUid = Std.parseInt( v.substr(v.indexOf(".")+1) );
+				curEntity.tilesetId = tdUid;
+			}
+			else {
+				curEntity.tilesetId = null;
+				curEntity.tileRenderMode = Stretch;
+			}
+
+			N.debug(curEntity.renderMode+" => "+curEntity.tilesetId);
+			editor.ge.emit( EntityDefChanged );
+		});
+		jSelect.val( curEntity.renderMode.getName() + ( curEntity.renderMode==Tile ? "."+curEntity.tilesetId : "" ) );
+
+		// Render mode
+		// var i = new form.input.EnumSelect(
+		// 	jEntityForm.find("select.renderMode"),
+		// 	led.LedTypes.EntityRenderMode,
+		// 	function() return curEntity.renderMode,
+		// 	function(v) {
+		// 		curEntity.tileId = null;
+		// 		curEntity.tilesetId = null;
+		// 		curEntity.renderMode = v;
+		// 	}
+		// );
+		// i.linkEvent(EntityDefChanged);
+
+		// // Tileset pick
+		// var jTilesets = jEntityForm.find("select.tilesets");
+		// jTilesets.find("option:not(:first)").remove();
+		// if( curEntity.renderMode==Tile ) {
+		// 	for( td in project.defs.tilesets ) {
+		// 		var opt = new J('<option/>');
+		// 		opt.appendTo(jTilesets);
+		// 		opt.attr("value",td.uid);
+		// 		opt.text( td.identifier );
+		// 		if( td.uid==curEntity.tilesetId )
+		// 			opt.attr("selected","selected");
+		// 	}
+		// 	jTilesets.change( function(_) {
+		// 		var id = Std.parseInt( jTilesets.val() );
+		// 		curEntity.tileId = null;
+		// 		if( !M.isValidNumber(id) || id<0 )
+		// 			curEntity.tilesetId = null;
+		// 		else
+		// 			curEntity.tilesetId = id;
+		// 		editor.ge.emit(EntityDefChanged);
+		// 	});
+		// }
+
+		// Tile render mode
 		var i = new form.input.EnumSelect(
 			jEntityForm.find("select.tileRenderMode"),
 			led.LedTypes.EntityTileRenderMode,
@@ -309,7 +356,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				curEntity.tileId = tileIds[0];
 				editor.ge.emit(EntityDefChanged);
 			});
-			jRenderModeBlock.append(jPicker);
+			jPicker.appendTo( jRenderModeBlock.find(".tilePicker") );
 		}
 
 
