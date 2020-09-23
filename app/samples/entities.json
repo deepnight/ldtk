@@ -12,7 +12,7 @@
 	"defaultPivotY": 1.0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 45,
+	"nextUid": 47,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -71,6 +71,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": null
@@ -86,6 +87,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": null
@@ -117,6 +119,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Beneath",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": null
@@ -132,6 +135,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": 1.0,
 						"max": 10.0,
 						"defaultOverride": { "id": "V_Int", "params": [ 3 ] }
@@ -147,6 +151,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": {
@@ -165,6 +170,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Beneath",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": null
@@ -180,6 +186,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Beneath",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": null
@@ -190,7 +197,7 @@
 				"identifier": "LightEmitter",
 				"uid": 10,
 				"width": 16,
-				"height": 6,
+				"height": 8,
 				"color": "#FFFFFF",
 				"renderMode": "Ellipse",
 				"tilesetId": null,
@@ -211,6 +218,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Beneath",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": null
@@ -226,9 +234,26 @@
 						"arrayMaxLength": 2,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Beneath",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": { "id": "V_Int", "params": [ 16772997 ] }
+					},
+					{
+						"identifier": "radius",
+						"__type": "Float",
+						"uid": 45,
+						"type": "F_Float",
+						"isArray": false,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "RadiusGrid",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": true,
+						"min": 1.0,
+						"max": 10.0,
+						"defaultOverride": { "id": "V_Float", "params": [ 3 ] }
 					}
 				]
 			},
@@ -257,6 +282,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": 1.0,
 						"max": 10.0,
 						"defaultOverride": { "id": "V_Int", "params": [ 3 ] }
@@ -272,6 +298,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": null
@@ -287,6 +314,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "PointPath",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": null
@@ -318,6 +346,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "PointStar",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": null
@@ -387,7 +416,7 @@
 					{ "__identifier": "Chest", "__cx": 30, "__cy": 10, "defUid": 8, "x": 488, "y": 176, "fieldInstances": [
 						{
 							"__identifier": "loot",
-							"__values": [ "Sword", "Heavy sword", "Bow" ],
+							"__value": [ "Sword", "Heavy sword", "Bow" ],
 							"__type": "Array<LocalEnum.Item>",
 							"defUid": 21,
 							"realEditorValues": [ {
@@ -403,7 +432,7 @@
 						},
 						{
 							"__identifier": "requireKey",
-							"__values": true,
+							"__value": true,
 							"__type": "Bool",
 							"defUid": 28,
 							"realEditorValues": [ {
@@ -412,42 +441,56 @@
 							} ]
 						}
 					] },
-					{ "__identifier": "LightEmitter", "__cx": 15, "__cy": 4, "defUid": 10, "x": 248, "y": 64, "fieldInstances": [
+					{ "__identifier": "LightEmitter", "__cx": 11, "__cy": 4, "defUid": 10, "x": 184, "y": 64, "fieldInstances": [
 						{
 							"__identifier": "flickering",
-							"__values": false,
+							"__value": false,
 							"__type": "Bool",
 							"defUid": 12,
 							"realEditorValues": [ null ]
 						},
 						{
 							"__identifier": "colors",
-							"__values": [ "#FFEF85" ],
+							"__value": [ "#FFEF85" ],
 							"__type": "Array<Color>",
 							"defUid": 26,
+							"realEditorValues": [ null ]
+						},
+						{
+							"__identifier": "radius",
+							"__value": 3.0,
+							"__type": "Float",
+							"defUid": 45,
 							"realEditorValues": [ null ]
 						}
 					] },
-					{ "__identifier": "LightEmitter", "__cx": 10, "__cy": 4, "defUid": 10, "x": 168, "y": 64, "fieldInstances": [
+					{ "__identifier": "LightEmitter", "__cx": 6, "__cy": 4, "defUid": 10, "x": 104, "y": 64, "fieldInstances": [
 						{
 							"__identifier": "flickering",
-							"__values": false,
+							"__value": false,
 							"__type": "Bool",
 							"defUid": 12,
 							"realEditorValues": [ null ]
 						},
 						{
 							"__identifier": "colors",
-							"__values": [ "#FFEF85" ],
+							"__value": [ "#FFEF85" ],
 							"__type": "Array<Color>",
 							"defUid": 26,
+							"realEditorValues": [ null ]
+						},
+						{
+							"__identifier": "radius",
+							"__value": 3.0,
+							"__type": "Float",
+							"defUid": 45,
 							"realEditorValues": [ null ]
 						}
 					] },
 					{ "__identifier": "LightEmitter", "__cx": 20, "__cy": 4, "defUid": 10, "x": 328, "y": 64, "fieldInstances": [
 						{
 							"__identifier": "flickering",
-							"__values": true,
+							"__value": true,
 							"__type": "Bool",
 							"defUid": 12,
 							"realEditorValues": [ {
@@ -457,46 +500,54 @@
 						},
 						{
 							"__identifier": "colors",
-							"__values": [ "#FF7D1A", "#B20101" ],
+							"__value": [ "#FF7D1A", "#B20101" ],
 							"__type": "Array<Color>",
 							"defUid": 26,
 							"realEditorValues": [ { "id": "V_Int", "params": [ 16743706 ] }, { "id": "V_Int", "params": [ 11665665 ] } ]
+						},
+						{
+							"__identifier": "radius",
+							"__value": 2.0,
+							"__type": "Float",
+							"defUid": 45,
+							"realEditorValues": [ { "id": "V_Float", "params": [ 2 ] } ]
 						}
 					] },
 					{ "__identifier": "LightEmitter", "__cx": 25, "__cy": 4, "defUid": 10, "x": 408, "y": 64, "fieldInstances": [
 						{
 							"__identifier": "flickering",
-							"__values": false,
+							"__value": false,
 							"__type": "Bool",
 							"defUid": 12,
 							"realEditorValues": [ null ]
 						},
 						{
 							"__identifier": "colors",
-							"__values": [ "#FFEF85" ],
+							"__value": [ "#FFEF85" ],
 							"__type": "Array<Color>",
 							"defUid": 26,
 							"realEditorValues": [ null ]
-						}
+						},
+						{ "__identifier": "radius", "__value": 3.0, "__type": "Float", "defUid": 45, "realEditorValues": [] }
 					] },
 					{ "__identifier": "Player", "__cx": 3, "__cy": 14, "defUid": 1, "x": 56, "y": 240, "fieldInstances": [
 						{
 							"__identifier": "life",
-							"__values": 3,
+							"__value": 3,
 							"__type": "Int",
 							"defUid": 2,
 							"realEditorValues": [ null ]
 						},
 						{
 							"__identifier": "isAwaken",
-							"__values": true,
+							"__value": true,
 							"__type": "Bool",
 							"defUid": 3,
 							"realEditorValues": [ null ]
 						},
 						{
 							"__identifier": "bag",
-							"__values": [ "Magic_ring", "Healing_potion" ],
+							"__value": [ "Magic_ring", "Healing_potion" ],
 							"__type": "Array<LocalEnum.Item>",
 							"defUid": 19,
 							"realEditorValues": [ {
@@ -509,7 +560,7 @@
 						},
 						{
 							"__identifier": "name",
-							"__values": "Player",
+							"__value": "Player",
 							"__type": "String",
 							"defUid": 27,
 							"realEditorValues": [ {
@@ -519,7 +570,7 @@
 						},
 						{
 							"__identifier": "weapon",
-							"__values": "Trout",
+							"__value": "Trout",
 							"__type": "LocalEnum.Item",
 							"defUid": 29,
 							"realEditorValues": [ {
@@ -531,7 +582,7 @@
 					{ "__identifier": "Chest", "__cx": 26, "__cy": 14, "defUid": 8, "x": 424, "y": 240, "fieldInstances": [
 						{
 							"__identifier": "loot",
-							"__values": [ "Gold" ],
+							"__value": [ "Gold" ],
 							"__type": "Array<LocalEnum.Item>",
 							"defUid": 21,
 							"realEditorValues": [ {
@@ -541,7 +592,7 @@
 						},
 						{
 							"__identifier": "requireKey",
-							"__values": false,
+							"__value": false,
 							"__type": "Bool",
 							"defUid": 28,
 							"realEditorValues": [ null ]
@@ -550,7 +601,13 @@
 					{ "__identifier": "Enemy", "__cx": 3, "__cy": 8, "defUid": 37, "x": 56, "y": 144, "fieldInstances": [
 						{
 							"__identifier": "patrol",
-							"__values": [ "5,8", "5,10", "12,10", "12,8", "14,8" ],
+							"__value": [
+								{ "cx": 5, "cy": 8 },
+								{ "cx": 5, "cy": 10 },
+								{ "cx": 12, "cy": 10 },
+								{ "cx": 12, "cy": 8 },
+								{ "cx": 14, "cy": 8 }
+							],
 							"__type": "Array<Point>",
 							"defUid": 38,
 							"realEditorValues": [
@@ -578,7 +635,7 @@
 						},
 						{
 							"__identifier": "loots",
-							"__values": [ "Gold", "Healing_potion" ],
+							"__value": [ "Gold", "Healing_potion" ],
 							"__type": "Array<LocalEnum.Item>",
 							"defUid": 39,
 							"realEditorValues": [ {
@@ -591,7 +648,7 @@
 						},
 						{
 							"__identifier": "hp",
-							"__values": 5,
+							"__value": 5,
 							"__type": "Int",
 							"defUid": 40,
 							"realEditorValues": [ { "id": "V_Int", "params": [ 5 ] } ]
@@ -601,7 +658,7 @@
 					{ "__identifier": "Door", "__cx": 16, "__cy": 8, "defUid": 43, "x": 264, "y": 144, "fieldInstances": [] },
 					{ "__identifier": "Button", "__cx": 25, "__cy": 9, "defUid": 41, "x": 408, "y": 152, "fieldInstances": [ {
 						"__identifier": "activationTargets",
-						"__values": [ "16,8", "22,14" ],
+						"__value": [ { "cx": 16, "cy": 8 }, { "cx": 22, "cy": 14 } ],
 						"__type": "Array<Point>",
 						"defUid": 44,
 						"realEditorValues": [ {
