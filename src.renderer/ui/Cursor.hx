@@ -49,6 +49,7 @@ class Cursor extends dn.Process {
 			softHighlight = true;
 
 		wrapper.removeChildren();
+		wrapper.filter = null;
 		graphics.clear();
 		graphics.lineStyle(0);
 		graphics.endFill();
@@ -100,20 +101,20 @@ class Cursor extends dn.Process {
 
 			case GridCell(li, cx, cy, col):
 				if( col==null )
-					col = 0x0;
-				graphics.lineStyle(1, getOpposite(col), 0.8);
+					col = 0xffcc00;
+				graphics.lineStyle(1, softHighlight ? 0xffffff : getOpposite(col), 0.8);
 				graphics.drawRect(-pad, -pad, li.def.gridSize+pad*2, li.def.gridSize+pad*2);
 
-				graphics.lineStyle(1, col==null ? 0x0 : col);
+				graphics.lineStyle(1, col);
 				graphics.drawRect(0, 0, li.def.gridSize, li.def.gridSize);
 
 			case GridRect(li, cx, cy, wid, hei, col):
 				if( col==null )
-					col = 0x0;
-				graphics.lineStyle(1, getOpposite(col), 0.8);
+					col = 0xffcc00;
+				graphics.lineStyle(1, softHighlight ? 0xffffff : getOpposite(col), 0.8);
 				graphics.drawRect(-2, -2, li.def.gridSize*wid+4, li.def.gridSize*hei+4);
 
-				graphics.lineStyle(1, col==null ? 0x0 : col);
+				graphics.lineStyle(1, col);
 				graphics.drawRect(0, 0, li.def.gridSize*wid, li.def.gridSize*hei);
 
 			case Entity(li, def, ei, x, y):
@@ -149,6 +150,7 @@ class Cursor extends dn.Process {
 						bmp.x = (cx-left) * li.def.gridSize * gridDiffScale;
 						bmp.y = (cy-top) * li.def.gridSize * gridDiffScale;
 					}
+					wrapper.filter = new h2d.filter.Glow(0xffffff, 1, 2);
 				}
 		}
 
@@ -199,19 +201,22 @@ class Cursor extends dn.Process {
 				wrapper.setPosition(fx,fy);
 
 			case GridCell(li, cx, cy), GridRect(li, cx,cy, _):
-				wrapper.setPosition( cx*li.def.gridSize, cy*li.def.gridSize );
+				wrapper.setPosition( cx*li.def.gridSize + li.pxOffsetX, cy*li.def.gridSize + li.pxOffsetY );
 				labelWrapper.setPosition(wrapper.x + li.def.gridSize, wrapper.y);
 
 			case Entity(li, def, ei, x,y):
-				wrapper.setPosition(x,y);
+				wrapper.setPosition( x+li.pxOffsetX, y+li.pxOffsetY );
 				labelWrapper.setPosition(
 					( Std.int(x/li.def.gridSize) + 1 ) * li.def.gridSize,
 					Std.int(y/li.def.gridSize) * li.def.gridSize
 				);
 
 			case Tiles(li, tileIds, cx, cy):
-				wrapper.setPosition((cx+li.def.tilePivotX)*li.def.gridSize, (cy+li.def.tilePivotY)*li.def.gridSize);
-				labelWrapper.setPosition( (cx+1)*li.def.gridSize, cy*li.def.gridSize );
+				wrapper.setPosition(
+					(cx+li.def.tilePivotX)*li.def.gridSize + li.pxOffsetX,
+					(cy+li.def.tilePivotY)*li.def.gridSize + li.pxOffsetY
+				);
+				labelWrapper.setPosition( (cx+1)*li.def.gridSize + li.pxOffsetX, cy*li.def.gridSize + li.pxOffsetY );
 		}
 
 		graphics.setPosition(wrapper.x, wrapper.y);

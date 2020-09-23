@@ -295,7 +295,10 @@ class LevelRender extends dn.Process {
 		rectBleeps.push(g);
 		g.lineStyle(thickness, col);
 		g.drawRect( Std.int(-pad-w*0.5), Std.int(-pad-h*0.5), w+pad*2, h+pad*2 );
-		g.setPosition( Std.int(x+w*0.5), Std.int(y+h*0.5) );
+		g.setPosition(
+			Std.int(x+w*0.5) + editor.curLayerInstance.pxOffsetX,
+			Std.int(y+h*0.5) + editor.curLayerInstance.pxOffsetY
+		);
 		root.add(g, Const.DP_UI);
 	}
 
@@ -358,6 +361,9 @@ class LevelRender extends dn.Process {
 			grid.moveTo(0, cy*l.def.gridSize);
 			grid.lineTo(l.cWid*l.def.gridSize, cy*l.def.gridSize);
 		}
+
+		grid.x = editor.curLayerInstance.pxOffsetX;
+		grid.y = editor.curLayerInstance.pxOffsetY;
 	}
 
 

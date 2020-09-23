@@ -159,8 +159,8 @@ class Tool<T> extends dn.Process {
 			if( !editor.levelRender.isLayerVisible(li) )
 				return;
 
-			var cx = m.getLayerCx(li.def);
-			var cy = m.getLayerCy(li.def);
+			var cx = m.getLayerCx(li);
+			var cy = m.getLayerCy(li);
 			switch li.def.type {
 				case IntGrid:
 					if( li.getIntGrid(cx,cy)>=0 )
@@ -386,7 +386,7 @@ class Tool<T> extends dn.Process {
 
 				case PointField(li, ei, fi, arrayIdx):
 					var pt = fi.getPointGrid(arrayIdx);
-					editor.cursor.set( GridCell(li, pt.cx, pt.cy) );
+					editor.cursor.set( GridCell(li, pt.cx, pt.cy, ei.getSmartColor(false)) );
 			}
 			if( ge!=null )
 				editor.cursor.setSystemCursor(Button);
