@@ -146,12 +146,10 @@ class JsTools {
 				ctx.fill();
 
 			case Tile:
-				// ctx.strokeStyle = C.intToHex(ed.color);
 				ctx.fillStyle = C.intToHex(ed.color)+"66";
 				ctx.beginPath();
 				ctx.rect(0, 0, Std.int(ed.width*scale), Std.int(ed.height*scale));
 				ctx.fill();
-				// ctx.stroke();
 
 				if( ed.isTileValid() ) {
 					var td = project.defs.getTilesetDef(ed.tilesetId);
