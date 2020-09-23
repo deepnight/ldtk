@@ -77,7 +77,7 @@ enum CursorType {
 	Eraser(x:Int,y:Int);
 	GridCell(li:led.inst.LayerInstance, cx:Int, cy:Int, ?col:UInt);
 	GridRect(li:led.inst.LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
-	Entity(li:led.inst.LayerInstance, def:led.def.EntityDef, x:Int, y:Int);
+	Entity(li:led.inst.LayerInstance, def:led.def.EntityDef, ?ei:led.inst.EntityInstance, x:Int, y:Int);
 	Tiles(li:led.inst.LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int);
 	Resize(p:RulerPos);
 	Link(fx:Float, fy:Float, tx:Float, ty:Float, color:UInt);

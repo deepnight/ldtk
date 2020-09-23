@@ -268,7 +268,7 @@
 				"color": "#B80000",
 				"renderMode": "Tile",
 				"tilesetId": 20,
-				"tileId": 39,
+				"tileId": 69,
 				"tileRenderMode": "Stretch",
 				"maxPerLevel": 0,
 				"limitBehavior": "DiscardOldOnes",
@@ -786,7 +786,12 @@
 							} ]
 						}
 					] },
-					{ "__identifier": "Door", "__cx": 7, "__cy": 17, "defUid": 43, "x": 120, "y": 288, "fieldInstances": [ { "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 50, "realEditorValues": [] } ] }
+					{ "__identifier": "Door", "__cx": 7, "__cy": 17, "defUid": 43, "x": 120, "y": 288, "fieldInstances": [ { "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 50, "realEditorValues": [] } ] },
+					{ "__identifier": "LightEmitter", "__cx": 30, "__cy": 11, "defUid": 10, "x": 488, "y": 176, "fieldInstances": [
+						{ "__identifier": "flickering", "__value": false, "__type": "Bool", "defUid": 12, "realEditorValues": [] },
+						{ "__identifier": "colors", "__value": [], "__type": "Array<Color>", "defUid": 26, "realEditorValues": [] },
+						{ "__identifier": "radius", "__value": 3.0, "__type": "Float", "defUid": 45, "realEditorValues": [] }
+					] }
 				]
 			},
 			{

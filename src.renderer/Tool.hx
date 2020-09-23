@@ -373,8 +373,9 @@ class Tool<T> extends dn.Process {
 
 				case Entity(li, ei):
 					editor.cursor.set(
-						Entity(li, ei.def, ei.x, ei.y),
-						ei.def.identifier
+						Entity(li, ei.def, ei, ei.x, ei.y),
+						ei.def.identifier,
+						true
 					);
 
 				case Tile(li, cx,cy):

@@ -13,6 +13,7 @@ class Cursor extends dn.Process {
 	var labelWrapper : h2d.Flow;
 	var curLabel : Null<String>;
 	public var canChangeSystemCursors = false;
+	var permanentHighlight = false;
 
 	public function new() {
 		super(Editor.ME);
@@ -43,7 +44,10 @@ class Cursor extends dn.Process {
 			hxd.System.setCursor(c);
 	}
 
-	function render() {
+	function render(softHighlight:Bool) {
+		if( permanentHighlight )
+			softHighlight = true;
+
 		wrapper.removeChildren();
 		graphics.clear();
 		graphics.lineStyle(0);
@@ -112,8 +116,11 @@ class Cursor extends dn.Process {
 				graphics.lineStyle(1, col==null ? 0x0 : col);
 				graphics.drawRect(0, 0, li.def.gridSize*wid, li.def.gridSize*hei);
 
-			case Entity(li, def, x, y):
-				graphics.lineStyle(1, getOpposite(def.color), 0.8);
+			case Entity(li, def, ei, x, y):
+				if( softHighlight )
+					graphics.lineStyle(2, 0xffffff, 1);
+				else
+					graphics.lineStyle(1, getOpposite(def.color), 0.8);
 				graphics.drawRect(
 					-pad -def.width*def.pivotX,
 					-pad -def.height*def.pivotY,
@@ -121,7 +128,7 @@ class Cursor extends dn.Process {
 					def.height + pad*2
 				);
 
-				var o = display.LevelRender.createEntityRender(def, wrapper);
+				var o = display.LevelRender.createEntityRender(ei, def, wrapper);
 
 			case Tiles(li, tileIds, cx, cy):
 				var td = project.defs.getTilesetDef( li.def.tilesetDefUid );
@@ -156,7 +163,7 @@ class Cursor extends dn.Process {
 		return C.interpolateInt(c, C.getPerceivedLuminosityInt(c)>=0.7 ? 0x0 : 0xffffff, 0.5);
 	}
 
-	public function set(t:CursorType, ?label:String) {
+	public function set(t:CursorType, ?label:String, softHighlight=false) {
 		var changed = type==null || curLabel!=label || type.getIndex()!=t.getIndex();
 		if( !changed )
 			changed = switch t {
@@ -164,7 +171,7 @@ class Cursor extends dn.Process {
 				case Eraser(x, y): false;
 				case GridCell(li, cx, cy, col): !type.equals(t);
 				case GridRect(li, cx, cy, wid, hei, col): !type.equals(t);
-				case Entity(li, def, x, y): !type.equals(t);
+				case Entity(li, def, ei, x, y): !type.equals(t);
 				case Tiles(li, tileIds, cx, cy): !type.equals(t);
 				case Resize(p): !type.equals(t);
 				case Link(fx, fy, tx, ty, c): !type.equals(t);
@@ -173,7 +180,7 @@ class Cursor extends dn.Process {
 		type = t;
 		setLabel(label);
 		if( changed )
-			render();
+			render(softHighlight);
 	}
 
 	public function updatePosition() {
@@ -195,7 +202,7 @@ class Cursor extends dn.Process {
 				wrapper.setPosition( cx*li.def.gridSize, cy*li.def.gridSize );
 				labelWrapper.setPosition(wrapper.x + li.def.gridSize, wrapper.y);
 
-			case Entity(li, def, x,y):
+			case Entity(li, def, ei, x,y):
 				wrapper.setPosition(x,y);
 				labelWrapper.setPosition(
 					( Std.int(x/li.def.gridSize) + 1 ) * li.def.gridSize,
@@ -212,10 +219,10 @@ class Cursor extends dn.Process {
 		labelWrapper.setScale(1/editor.levelRender.zoom * js.Browser.window.devicePixelRatio*2);
 	}
 
-	public function highlight() {
+	public function enablePermanentHighlights() {
+		permanentHighlight = true;
 		root.filter = new h2d.filter.Group([
-			new h2d.filter.Glow(0x8effcb,1, 4, 2, 2, true),
-			new h2d.filter.Glow(0x6296ff,0.6, 8, 1, 2, true),
+			new h2d.filter.Glow(0xffcc00,1, 16, 1.4, 2, true),
 		]);
 	}
 

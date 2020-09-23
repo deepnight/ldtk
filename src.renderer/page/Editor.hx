@@ -67,7 +67,7 @@ class Editor extends Page {
 		cursor = new ui.Cursor();
 		cursor.canChangeSystemCursors = true;
 		selectionCursor = new ui.Cursor();
-		selectionCursor.highlight();
+		selectionCursor.enablePermanentHighlights();
 
 		levelRender = new display.LevelRender();
 		rulers = new display.Rulers();
@@ -375,7 +375,7 @@ class Editor extends Page {
 		selection = ge;
 		selectionCursor.set(switch selection {
 			case IntGrid(li, cx, cy): GridCell(li, cx,cy);
-			case Entity(li, instance): Entity(li, instance.def, instance.x, instance.y);
+			case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
 			case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
 			case PointField(li, ei, fi, arrayIdx):
 				var pt = fi.getPointGrid(arrayIdx);
