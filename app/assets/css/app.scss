@@ -2026,6 +2026,14 @@ canvas#webgl {
 					strong {
 						color: white;
 					}
+
+					a.discreet {
+						// text-decoration: none;
+						color: inherit;
+						&:hover {
+							color: $orange;
+						}
+					}
 				}
 
 				#changelogMd {

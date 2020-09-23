@@ -2,19 +2,19 @@
 
 ## 0.1.8-alpha
 
- - **Radius**: Integer and Float entity fields can now be displayed as a radius around the entity (eg. a "lightRadius" Float value can now be displayed accordingly right in the editor display).
+ - **Radius**: Integer and Float entity fields can now be displayed as a radius around the entity (eg. a "lightRadius" Float value can now be displayed accordingly right in the editor display). See `Samples` for some examples.
  - **Smart color use**: if you have a Color field in an entity, it will be used when displaying various values in the editor (eg. having a "lightColor" field will affect the color of the circle around the entity).
  - Entity tiles can now be displayed as "stretched" (default) or "cropped".
  - Updated appearance of selected entities
  - Added a field display option to use Enum tiles in place of Entity tiles
  - Better entity tile picking UI
- - Updated samples
+ - Updated `Samples`
  - Bug fixes
 
 ## 0.1.7-alpha
 
- - **Array of entity fields**: any field type in an Entity can now be an Array. For example, you could have an Array of Enums to represent the items hidden inside a Cratebox entity.
- - **Point coordinates & paths**: this new entity field type allows you to pick a grid coordinates. And if you combine this with the new Array support, you can even build paths of points! See samples for some nice use cases.
+ - **Array of entity fields**: any field type in an Entity can now be an Array. For example, you could have an Array of Enums to represent the items hidden inside a Cratebox entity. See `Samples` for some examples.
+ - **Point coordinates & paths**: this new entity field type allows you to pick a grid coordinates. And if you combine this with the new Array support, you can even build paths of points! See `Samples` for some examples.
  - Added a confirmation when trying to update the app while having unsaved changes
  - UI tweaks & fixes
  - Added some click tolerance when picking entities
@@ -45,7 +45,7 @@
    - render ground/water/lava area,
    - etc.
  - Auto-layer rules can be organized in groups.
- - **Samples**: click on the *Samples* button on home page to load some example projects.
+ - *`Samples`*: click on the `Samples` button on home page to load some example projects.
  - **Smarter warning** when deleting something in a panel. ie. If the value you're removing isn't actually used in your project, you will get a "softer" warning.
  - **Large levels optimizations**: started an important rework of the way levels are rendered on-screen to make room for future optimizations on large levels. For now, it's still recommended to work on levels with smaller dimensions.
  - Added a project option to minify the JSON file.
