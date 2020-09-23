@@ -251,7 +251,6 @@ class LayerInstance {
 			case AutoLayer:
 
 			case Entities:
-				ui.Notification.debug(totalOffsetX+" "+totalOffsetY);
 				var i = 0;
 				while( i<entityInstances.length ) {
 					var ei = entityInstances[i];
