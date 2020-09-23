@@ -638,8 +638,41 @@
 				"intGrid": [],
 				"autoTiles": [],
 				"gridTiles": [],
-				"entityInstances": [ { "__identifier": "Enemy", "__cx": 8, "__cy": 10, "defUid": 37, "x": 136, "y": 176, "fieldInstances": [
-					{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "defUid": 38, "realEditorValues": [] },
+				"entityInstances": [ { "__identifier": "Enemy", "__cx": 10, "__cy": 10, "defUid": 37, "x": 168, "y": 176, "fieldInstances": [
+					{
+						"__identifier": "patrol",
+						"__value": [
+							{ "cx": 5, "cy": 10 },
+							{ "cx": 5, "cy": 8 },
+							{ "cx": 2, "cy": 8 },
+							{ "cx": 2, "cy": 6 },
+							{ "cx": 0, "cy": 6 }
+						],
+						"__type": "Array<Point>",
+						"defUid": 38,
+						"realEditorValues": [
+							{
+								"id": "V_String",
+								"params": [ "5,10" ]
+							},
+							{
+								"id": "V_String",
+								"params": [ "5,8" ]
+							},
+							{
+								"id": "V_String",
+								"params": [ "2,8" ]
+							},
+							{
+								"id": "V_String",
+								"params": [ "2,6" ]
+							},
+							{
+								"id": "V_String",
+								"params": [ "0,6" ]
+							}
+						]
+					},
 					{ "__identifier": "loots", "__value": [], "__type": "Array<LocalEnum.ItemType>", "defUid": 39, "realEditorValues": [] },
 					{ "__identifier": "hp", "__value": 3, "__type": "Int", "defUid": 40, "realEditorValues": [] },
 					{
