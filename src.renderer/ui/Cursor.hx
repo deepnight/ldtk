@@ -49,6 +49,7 @@ class Cursor extends dn.Process {
 			softHighlight = true;
 
 		wrapper.removeChildren();
+		wrapper.filter = null;
 		graphics.clear();
 		graphics.lineStyle(0);
 		graphics.endFill();
@@ -149,6 +150,7 @@ class Cursor extends dn.Process {
 						bmp.x = (cx-left) * li.def.gridSize * gridDiffScale;
 						bmp.y = (cy-top) * li.def.gridSize * gridDiffScale;
 					}
+					wrapper.filter = new h2d.filter.Glow(0xffffff, 1, 2);
 				}
 		}
 
@@ -214,7 +216,7 @@ class Cursor extends dn.Process {
 					(cx+li.def.tilePivotX)*li.def.gridSize + li.pxOffsetX,
 					(cy+li.def.tilePivotY)*li.def.gridSize + li.pxOffsetY
 				);
-				labelWrapper.setPosition( (cx+1)*li.def.gridSize, cy*li.def.gridSize );
+				labelWrapper.setPosition( (cx+1)*li.def.gridSize + li.pxOffsetX, cy*li.def.gridSize + li.pxOffsetY );
 		}
 
 		graphics.setPosition(wrapper.x, wrapper.y);
