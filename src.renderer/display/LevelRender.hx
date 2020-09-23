@@ -614,9 +614,9 @@ class LevelRender extends dn.Process {
 				g.endFill();
 
 			case Tile:
+				var p = 2;
 				if( def.tileId==null || def.tilesetId==null ) {
 					// Missing tile
-					var p = 2;
 					g.lineStyle(3, 0xff0000);
 					g.moveTo(p,p);
 					g.lineTo(def.width-p, def.height-p);
@@ -624,13 +624,26 @@ class LevelRender extends dn.Process {
 					g.lineTo(p, def.height-p);
 				}
 				else {
-					g.lineStyle(1, def.color, 1);
-					g.drawRect(0,0,def.width,def.height);
+					g.beginFill(def.color, 0.4);
+					g.drawRect(-p, -p, def.width+p*2, def.height+p*2);
 
 					var td = Editor.ME.project.defs.getTilesetDef(def.tilesetId);
 					var t = td.getTile(def.tileId);
-					t.setCenterRatio(def.pivotX, def.pivotY);
 					var bmp = new h2d.Bitmap(t, wrapper);
+					switch def.tileRenderMode {
+						case Stretch:
+							bmp.scaleX = def.width / bmp.tile.width;
+							bmp.scaleY = def.height / bmp.tile.height;
+
+						case Crop:
+							if( bmp.tile.width>def.width || bmp.tile.height>def.height )
+								bmp.tile = bmp.tile.sub(
+									0, 0,
+									M.fmin( bmp.tile.width, def.width ),
+									M.fmin( bmp.tile.height, def.height )
+								);
+					}
+					bmp.tile.setCenterRatio(def.pivotX, def.pivotY);
 				}
 		}
 

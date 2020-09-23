@@ -295,6 +295,14 @@ class EditEntityDefs extends ui.modal.Panel {
 			});
 		}
 
+		var i = new form.input.EnumSelect(
+			jEntityForm.find("select.tileRenderMode"),
+			led.LedTypes.EntityTileRenderMode,
+			()->curEntity.tileRenderMode,
+			(v)->curEntity.tileRenderMode = v
+		);
+		i.linkEvent( EntityDefChanged );
+
 		// Tile pick
 		if( curEntity.renderMode==Tile ) {
 			var jPicker = JsTools.createTilePicker(curEntity.tilesetId, true, [curEntity.tileId], function(tileIds) {

@@ -59,6 +59,10 @@ enum EntityRenderMode {
 	Ellipse;
 	Tile;
 }
+enum EntityTileRenderMode {
+	Stretch;
+	Crop;
+}
 
 typedef TilesetSelection = {
 	var ids : Array<Int>;

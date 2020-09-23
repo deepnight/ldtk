@@ -9,6 +9,7 @@ class EntityDef {
 	public var height : Int;
 	public var color : UInt;
 	public var renderMode : EntityRenderMode;
+	public var tileRenderMode : EntityTileRenderMode;
 	public var tilesetId : Null<Int>;
 	public var tileId : Null<Int>;
 
@@ -27,6 +28,7 @@ class EntityDef {
 		width = height = 16;
 		maxPerLevel = 0;
 		limitBehavior = DiscardOldOnes;
+		tileRenderMode = Stretch;
 		identifier = "Entity"+uid;
 		setPivot(0.5,1);
 	}
@@ -55,6 +57,7 @@ class EntityDef {
 		o.renderMode = JsonTools.readEnum(EntityRenderMode, json.renderMode, false, Rectangle);
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
 		o.tileId = JsonTools.readNullableInt(json.tileId);
+		o.tileRenderMode = JsonTools.readEnum(EntityTileRenderMode, o.tileRenderMode, false, Stretch);
 
 		o.maxPerLevel = JsonTools.readInt( json.maxPerLevel, 0 );
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
@@ -81,6 +84,7 @@ class EntityDef {
 			renderMode: JsonTools.writeEnum(renderMode, false),
 			tilesetId: tilesetId,
 			tileId: tileId,
+			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),
 
 			maxPerLevel: maxPerLevel,
 			limitBehavior: JsonTools.writeEnum(limitBehavior, false),
