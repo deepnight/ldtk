@@ -1,5 +1,14 @@
 # LEd release notes
 
+## 0.1.8-alpha
+
+ - **Radius**: Integer and Float entity fields can now be displayed as a radius around the entity (eg. a "lightRadius" Float value can now be displayed accordingly right in the editor display).
+ - **Smart color use**: if you have a Color field in an entity, it will be used when displaying various values in the editor (eg. having a "lightColor" field will affect the color of the circle around the entity).
+ - Entity tiles can now be displayed as "stretched" (default) or "cropped".
+ - Better entity tile picking UI
+ - Updated samples
+ - Bug fixes
+
 ## 0.1.7-alpha
 
  - **Array of entity fields**: any field type in an Entity can now be an Array. For example, you could have an Array of Enums to represent the items hidden inside a Cratebox entity.
