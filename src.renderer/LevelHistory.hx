@@ -169,8 +169,6 @@ class LevelHistory {
 		// Trim history after
 		for(i in curIndex+1...MAX_HISTORY)
 			states[i] = null;
-
-		App.LOG.debug(toString());
 	}
 
 

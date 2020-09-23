@@ -300,7 +300,6 @@ class EditEntityDefs extends ui.modal.Panel {
 				curEntity.tileRenderMode = Stretch;
 			}
 
-			N.debug(curEntity.renderMode+" => "+curEntity.tilesetId);
 			editor.ge.emit( EntityDefChanged );
 		});
 		jSelect.val( curEntity.renderMode.getName() + ( curEntity.renderMode==Tile ? "."+curEntity.tilesetId : "" ) );
