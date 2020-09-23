@@ -9,7 +9,7 @@ class Home extends Page {
 		super();
 
 		ME = this;
-		App.ME.loadPage("home", {
+		loadPageTemplate("home", {
 			app: Const.APP_NAME,
 			appVer: Const.getAppVersion(),
 			jsonVer: Const.JSON_HEADER,
@@ -139,7 +139,7 @@ class Home extends Page {
 		}
 
 		// Open it
-		App.ME.openEditor(p, filePath);
+		App.ME.loadPage( ()->new page.Editor(p, filePath) );
 		N.success("Loaded project: "+dn.FilePath.extractFileWithExt(filePath));
 		return true;
 	}
@@ -155,7 +155,7 @@ class Home extends Page {
 			JsTools.writeFileBytes(fp.full, data.bytes);
 
 			N.msg("New project created: "+fp.full);
-			App.ME.openEditor(p, fp.full);
+			App.ME.loadPage( ()->new Editor(p, fp.full) );
 		});
 	}
 

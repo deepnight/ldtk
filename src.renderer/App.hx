@@ -63,6 +63,7 @@ class App extends dn.Process {
 		miniNotif("Checking for update...", true);
 		dn.electron.ElectronUpdater.initRenderer();
 		dn.electron.ElectronUpdater.onUpdateCheckStart = function() {
+			miniNotif("Looking for update...");
 			LOG.network("Looking for update");
 		}
 		dn.electron.ElectronUpdater.onUpdateFound = function(info) {
@@ -88,8 +89,8 @@ class App extends dn.Process {
 				function applyUpdate() {
 					LOG.general("Installing update");
 					bt.remove();
-					loadPage("updating", { app : Const.APP_NAME });
-					jBody.find("*").off();
+
+					loadPage( ()->new page.Updating() );
 					delayer.addS(function() {
 						IpcRenderer.invoke("installUpdate");
 					}, 1);
@@ -104,7 +105,7 @@ class App extends dn.Process {
 		dn.electron.ElectronUpdater.checkNow();
 
 		// Start
-		openHome();
+		loadPage( ()->new page.Home() );
 
 		IpcRenderer.invoke("appReady");
 	}
@@ -232,19 +233,25 @@ class App extends dn.Process {
 		saveSessionData();
 	}
 
-	public function openEditor(project:led.Project, path:String) {
-		LOG.general("Opening Editor");
+	public function loadPage( create:()->Page ) {
 		clearCurPage();
-		curPageProcess = new Editor(project, path);
+		curPageProcess = create();
 		curPageProcess.onAppResize();
 	}
 
-	public function openHome() {
-		LOG.general("Opening Home");
-		clearCurPage();
-		curPageProcess = new page.Home();
-		curPageProcess.onAppResize();
-	}
+	// public function openEditor(project:led.Project, path:String) {
+	// 	LOG.general("Opening Editor");
+	// 	clearCurPage();
+	// 	curPageProcess = new Editor(project, path);
+	// 	curPageProcess.onAppResize();
+	// }
+
+	// public function openHome() {
+	// 	LOG.general("Opening Home");
+	// 	clearCurPage();
+	// 	curPageProcess = new page.Home();
+	// 	curPageProcess.onAppResize();
+	// }
 
 	public function debug(msg:Dynamic, append=false) {
 		var wrapper = new J("#debug");
@@ -283,34 +290,6 @@ class App extends dn.Process {
 
 	public inline function hasPage() {
 		return curPageProcess!=null && !curPageProcess.destroyed;
-	}
-
-	public function loadPage(id:String, ?vars:Dynamic) {
-		ui.modal.Dialog.closeAll();
-		ui.Modal.closeAll();
-		ui.Tip.clear();
-		ui.LastChance.end();
-
-		jCanvas.hide();
-
-		var path = APP_ASSETS_DIR + 'pages/$id.html';
-		LOG.fileOp("Loading page: "+id+" from "+path);
-		var raw = JsTools.readFileString(path);
-		if( raw==null )
-			throw "Page not found: "+id+" in "+path+"( cwd="+JsTools.getAppResourceDir()+")";
-
-		if( vars!=null ) {
-			for(k in Reflect.fields(vars))
-				raw = StringTools.replace( raw, '::$k::', Reflect.field(vars,k) );
-		}
-
-		jPage
-			.off()
-			.removeClass()
-			.addClass(id)
-			.html(raw);
-
-		JsTools.parseComponents(jPage);
 	}
 
 	public function exit(force=false) {

@@ -45,7 +45,7 @@ class Editor extends Page {
 	public function new(p:led.Project, path:String) {
 		super();
 
-		App.ME.loadPage("editor");
+		loadPageTemplate("editor");
 
 		ME = this;
 		createRoot(parent.root);
@@ -635,9 +635,9 @@ class Editor extends Page {
 	function onClose(?bt:js.jquery.JQuery) {
 		ui.Modal.closeAll();
 		if( needSaving )
-			new ui.modal.dialog.UnsavedChanges(bt, onSave.bind(false), App.ME.openHome);
+			new ui.modal.dialog.UnsavedChanges( bt, onSave.bind(false), App.ME.loadPage.bind( ()->new Home() ) );
 		else
-			App.ME.openHome();
+			App.ME.loadPage( ()->new Home() );
 	}
 
 	public function onSave(?bypassMissing=false) {
@@ -987,6 +987,7 @@ class Editor extends Page {
 		ge.dispose();
 		ge = null;
 
+		App.ME.jCanvas.hide();
 		Boot.ME.s2d.removeEventListener(onHeapsEvent);
 		Tool.clearSelectionMemory();
 		ui.TilesetPicker.clearScrollMemory();
