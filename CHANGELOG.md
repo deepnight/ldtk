@@ -10,6 +10,7 @@
  - Added a new option for entities with count limits ("move last one instead of adding").
  - Fixed level resize issues which moved Entities and their Point fields in a strange way
  - Fixed panels/windows not closing during app update
+ - Fixed SaveAs shortcut (`CTRL+SHIFT+S`)
  - Better entity tile picking UI
  - Updated `Samples`
  - Bug fixes

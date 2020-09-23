@@ -292,7 +292,10 @@ class Editor extends Page {
 
 			case K.S:
 				if( !hasInputFocus() && App.ME.isCtrlDown() )
-					onSave();
+					if( App.ME.isShiftDown() )
+						onSaveAs();
+					else
+						onSave();
 
 			case K.F if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				levelRender.fit();
