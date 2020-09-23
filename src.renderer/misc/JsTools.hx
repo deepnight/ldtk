@@ -146,19 +146,30 @@ class JsTools {
 				ctx.fill();
 
 			case Tile:
-				ctx.strokeStyle = C.intToHex(ed.color);
+				// ctx.strokeStyle = C.intToHex(ed.color);
+				ctx.fillStyle = C.intToHex(ed.color)+"66";
 				ctx.beginPath();
 				ctx.rect(0, 0, Std.int(ed.width*scale), Std.int(ed.height*scale));
-				ctx.stroke();
+				ctx.fill();
+				// ctx.stroke();
 
 				if( ed.isTileValid() ) {
 					var td = project.defs.getTilesetDef(ed.tilesetId);
-					td.drawTileToCanvas(
-						jCanvas, ed.tileId,
-						Std.int(ed.width*ed.pivotX*scale - td.tileGridSize*ed.pivotX*scale),
-						Std.int(ed.height*ed.pivotY*scale - td.tileGridSize*ed.pivotY*scale),
-						scale
-					);
+					var x = 0;
+					var y = 0;
+					var scaleX = 1.;
+					var scaleY = 1.;
+					switch ed.tileRenderMode {
+						case Stretch:
+							scaleX = scale * ed.width / td.tileGridSize;
+							scaleY = scale * ed.height / td.tileGridSize;
+
+						case Crop:
+							scaleX = scaleY = scale;
+							x = Std.int(ed.width*ed.pivotX*scale - td.tileGridSize*ed.pivotX*scale);
+							y = Std.int(ed.height*ed.pivotY*scale - td.tileGridSize*ed.pivotY*scale);
+					}
+					td.drawTileToCanvas( jCanvas, ed.tileId, x, y, scaleX, scaleY );
 				}
 		}
 

@@ -333,7 +333,7 @@ class TilesetDef {
 		}
 	}
 
-	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scale=1.0) {
+	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
 		if( pixels==null )
 			return;
 
@@ -351,7 +351,7 @@ class TilesetDef {
 		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
 		img.src = 'data:image/png;base64,$b64';
 		img.onload = function() {
-			ctx.drawImage(img, toX, toY, subPixels.width*scale, subPixels.height*scale);
+			ctx.drawImage(img, toX, toY, subPixels.width*scaleX, subPixels.height*scaleY);
 		}
 	}
 	#end
