@@ -708,6 +708,15 @@ class Editor extends Page {
 			case EntityFieldSorted:
 			case EntityDefSorted:
 			case EntityInstanceFieldChanged(ei):
+				switch selection {
+					case Entity(li, sei):
+						if( sei==ei ) {
+							selectionCursor.set(None);
+							selectionCursor.set( Entity(li, ei.def, ei, ei.x, ei.y) );
+						}
+					case _:
+				}
+
 			case EntityInstanceAdded(ei):
 			case EntityInstanceRemoved(ei):
 			case EntityInstanceChanged(ei):
