@@ -44,6 +44,8 @@ enum FieldDisplayMode {
 	NameAndValue;
 	PointStar;
 	PointPath;
+	RadiusPx;
+	RadiusGrid;
 }
 
 enum FieldDisplayPosition {

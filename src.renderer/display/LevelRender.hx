@@ -499,13 +499,6 @@ class LevelRender extends dn.Process {
 	}
 
 
-	static function getFieldColor(ei:led.inst.EntityInstance, fd:led.def.FieldDef) {
-		for(fd in ei.def.fieldDefs)
-			if( fd.type==F_Color )
-				return ei.getFieldInstance(fd).getColorAsInt(0); // HACK field array
-		return C.toWhite(ei.def.color, 0.5);
-	}
-
 
 	static function createFieldValuesRender(ei:led.inst.EntityInstance, fi:led.inst.FieldInstance) {
 		var font = Assets.fontPixel;
@@ -524,12 +517,12 @@ class LevelRender extends dn.Process {
 		// Array opening
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = new h2d.Text(font, valuesFlow);
-			tf.textColor = getFieldColor(ei, fi.def);
+			tf.textColor = ei.getSmartColor(true);
 			tf.text = "[";
 		}
 
 		for( idx in 0...fi.getArrayLength() ) {
-			if( !fi.valueIsNull(idx) && !( fi.def.type==F_Bool && fi.isUsingDefault(idx) ) ) {
+			if( !fi.valueIsNull(idx) && !( !fi.def.editorAlwaysShow && fi.def.type==F_Bool && fi.isUsingDefault(idx) ) ) {
 				if( fi.hasIconForDisplay(idx) ) {
 					// Icon
 					var w = new h2d.Flow(valuesFlow);
@@ -549,7 +542,7 @@ class LevelRender extends dn.Process {
 				else {
 					// Text render
 					var tf = new h2d.Text(font, valuesFlow);
-					tf.textColor = getFieldColor(ei, fi.def);
+					tf.textColor = ei.getSmartColor(true);
 					tf.filter = new dn.heaps.filter.PixelOutline();
 					var v = fi.getForDisplay(idx);
 					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
@@ -562,7 +555,7 @@ class LevelRender extends dn.Process {
 			// Array separator
 			if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
 				var tf = new h2d.Text(font, valuesFlow);
-				tf.textColor = getFieldColor(ei, fi.def);
+				tf.textColor = ei.getSmartColor(true);
 				tf.text = ",";
 			}
 		}
@@ -570,7 +563,7 @@ class LevelRender extends dn.Process {
 		// Array closing
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = new h2d.Text(font, valuesFlow);
-			tf.textColor = getFieldColor(ei, fi.def);
+			tf.textColor = ei.getSmartColor(true);
 			tf.text = "]";
 		}
 
@@ -657,8 +650,7 @@ class LevelRender extends dn.Process {
 			// Init field wrappers
 			var font = Assets.fontPixel;
 
-			var lines = new h2d.Graphics(wrapper);
-			lines.lineStyle(1, def.color, 0.66);
+			var custom = new h2d.Graphics(wrapper);
 
 			var above = new h2d.Flow(wrapper);
 			above.layout = Vertical;
@@ -687,7 +679,7 @@ class LevelRender extends dn.Process {
 				if( fd.editorDisplayMode==Hidden )
 					continue;
 
-				if( fi.def.isArray && fi.getArrayLength()==0 || !fi.def.isArray && fi.isUsingDefault(0) )
+				if( !fi.def.editorAlwaysShow && ( fi.def.isArray && fi.getArrayLength()==0 || !fi.def.isArray && fi.isUsingDefault(0) ) )
 					continue;
 
 				// Position
@@ -706,11 +698,19 @@ class LevelRender extends dn.Process {
 						f.verticalAlign = Middle;
 
 						var tf = new h2d.Text(font, f);
-						tf.textColor = getFieldColor(ei,fd);
+						tf.textColor = ei.getSmartColor(true);
 						tf.text = fd.identifier+" = ";
 						tf.filter = new dn.heaps.filter.PixelOutline();
 
 						f.addChild( createFieldValuesRender(ei,fi) );
+
+					case RadiusPx:
+						custom.lineStyle(1, ei.getSmartColor(false), 0.33);
+						custom.drawCircle(0,0, fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0));
+
+					case RadiusGrid:
+						custom.lineStyle(1, ei.getSmartColor(false), 0.33);
+						custom.drawCircle(0,0, ( fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0) ) * li.def.gridSize);
 
 					case ValueOnly:
 						fieldWrapper.addChild( createFieldValuesRender(ei,fi) );
@@ -718,6 +718,7 @@ class LevelRender extends dn.Process {
 					case PointStar, PointPath:
 						var fx = ei.getCellCenterX(li.def);
 						var fy = ei.getCellCenterY(li.def);
+						custom.lineStyle(1, ei.getSmartColor(false), 0.66);
 
 						for(i in 0...fi.getArrayLength()) {
 							var pt = fi.getPointGrid(i);
@@ -726,8 +727,8 @@ class LevelRender extends dn.Process {
 
 							var tx = M.round( (pt.cx+0.5)*li.def.gridSize-ei.x );
 							var ty = M.round( (pt.cy+0.5)*li.def.gridSize-ei.y );
-							dashedLine(lines, fx,fy, tx,ty, 3);
-							lines.drawRect( tx-2, ty-2, 4, 4 );
+							dashedLine(custom, fx,fy, tx,ty, 3);
+							custom.drawRect( tx-2, ty-2, 4, 4 );
 
 							if( fd.editorDisplayMode==PointPath ) {
 								fx = tx;

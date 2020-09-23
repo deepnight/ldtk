@@ -381,6 +381,8 @@ class EditEntityDefs extends ui.modal.Panel {
 						: L.t._('Show "::name::=..."', { name:curField.identifier });
 					case PointStar: curField.isArray ? L.t._("Show star of points") : L.t._("Show point");
 					case PointPath: L.t._("Show path of points");
+					case RadiusPx: L.t._("As a radius (pixels)");
+					case RadiusGrid: L.t._("As a radius (grid-based)");
 				}
 			},
 
@@ -391,6 +393,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					case NameAndValue: true;
 					case PointStar: curField.type==F_Point;
 					case PointPath: curField.type==F_Point && curField.isArray;
+					case RadiusPx, RadiusGrid: !curField.isArray && ( curField.type==F_Int || curField.type==F_Float );
 				}
 			}
 		);
@@ -404,16 +407,17 @@ class EditEntityDefs extends ui.modal.Panel {
 			function(v) return curField.editorDisplayPos = v
 		);
 		switch curField.editorDisplayMode {
-			case Hidden:
-				i.setEnabled(false);
-
 			case ValueOnly, NameAndValue:
 				i.setEnabled(true);
 
-			case PointStar, PointPath:
+			case Hidden, PointStar, PointPath, RadiusPx, RadiusGrid:
 				i.setEnabled(false);
 		}
 		i.linkEvent( EntityFieldDefChanged(curEntity) );
+
+		var i = Input.linkToHtmlInput( curField.editorAlwaysShow, jFieldForm.find("input[name=editorAlwaysShow]") );
+		i.linkEvent( EntityFieldDefChanged(curEntity) );
+		i.setEnabled( curField.editorDisplayMode!=Hidden );
 
 
 		var i = Input.linkToHtmlInput( curField.identifier, jFieldForm.find("input[name=name]") );

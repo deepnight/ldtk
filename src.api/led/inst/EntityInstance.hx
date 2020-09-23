@@ -76,6 +76,16 @@ class EntityInstance {
 		return levelX >= left-pad && levelX <= right+pad && levelY >= top-pad && levelY <= bottom+pad;
 	}
 
+	public function getSmartColor(bright:Bool) {
+		for(fi in fieldInstances) {
+			if( fi.def.type==F_Color )
+				for(i in 0...fi.getArrayLength())
+					if( !fi.valueIsNull(i) )
+						return bright ? dn.Color.toWhite(fi.getColorAsInt(i), 0.5) : fi.getColorAsInt(i);
+		}
+		return bright ? dn.Color.toWhite(def.color, 0.5) : def.color;
+	}
+
 	public function tidy(p:led.Project) {
 		_project = p;
 

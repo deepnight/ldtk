@@ -9,6 +9,7 @@ class FieldDef {
 	public var arrayMaxLength : Null<Int>;
 	public var editorDisplayMode : led.LedTypes.FieldDisplayMode;
 	public var editorDisplayPos : led.LedTypes.FieldDisplayPosition;
+	public var editorAlwaysShow: Bool;
 	public var isArray : Bool;
 
 	#if editor
@@ -28,6 +29,7 @@ class FieldDef {
 		type = t;
 		editorDisplayMode = Hidden;
 		editorDisplayPos = Above;
+		editorAlwaysShow = false;
 		identifier = "NewField"+uid;
 		canBeNull = type==F_String || type==F_Point && !isArray;
 		arrayMinLength = arrayMaxLength = null;
@@ -60,6 +62,7 @@ class FieldDef {
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
 		o.editorDisplayMode = JsonTools.readEnum(led.LedTypes.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
 		o.editorDisplayPos = JsonTools.readEnum(led.LedTypes.FieldDisplayPosition, json.editorDisplayPos, false, Above);
+		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);
 		o.defaultOverride = JsonTools.readEnum(led.LedTypes.ValueWrapper, json.defaultOverride, true);
@@ -78,6 +81,7 @@ class FieldDef {
 			arrayMaxLength: arrayMaxLength,
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
+			editorAlwaysShow: editorAlwaysShow,
 			min: min==null ? null : JsonTools.writeFloat(min),
 			max: max==null ? null : JsonTools.writeFloat(max),
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
