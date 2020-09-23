@@ -86,6 +86,24 @@ class EntityInstance {
 		return bright ? dn.Color.toWhite(def.color, 0.5) : def.color;
 	}
 
+	public function getTileOverrideFromFields() {
+		for(fi in fieldInstances)
+			switch fi.def.type {
+				case F_Enum(enumDefUid):
+					if( fi.def.editorDisplayMode==EntityTile && !fi.valueIsNull(0) ) {
+						var ed = _project.defs.getEnumDef(enumDefUid);
+						if( ed.iconTilesetUid!=null )
+							return {
+								tilesetUid: ed.iconTilesetUid,
+								tileId: ed.getValue( fi.getEnumValue(0) ).tileId,
+							}
+					}
+				case _:
+			}
+
+		return null;
+	}
+
 	public function tidy(p:led.Project) {
 		_project = p;
 

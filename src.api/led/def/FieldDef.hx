@@ -221,6 +221,10 @@ class FieldDef {
 		}
 	}
 
+	public inline function isEnum() {
+		return type.getIndex() == led.LedTypes.FieldType.F_Enum(null).getIndex();
+	}
+
 	public function getEnumDefault() : Null<String> {
 		require(F_Enum(null));
 		return null;

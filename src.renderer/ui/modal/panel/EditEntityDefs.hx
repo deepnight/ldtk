@@ -438,6 +438,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					case PointPath: L.t._("Show path of points");
 					case RadiusPx: L.t._("As a radius (pixels)");
 					case RadiusGrid: L.t._("As a radius (grid-based)");
+					case EntityTile: L.t._("Replace entity tile");
 				}
 			},
 
@@ -446,6 +447,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					case Hidden: true;
 					case ValueOnly: curField.type!=F_Point;
 					case NameAndValue: true;
+					case EntityTile: curField.isEnum();
 					case PointStar: curField.type==F_Point;
 					case PointPath: curField.type==F_Point && curField.isArray;
 					case RadiusPx, RadiusGrid: !curField.isArray && ( curField.type==F_Int || curField.type==F_Float );
@@ -465,7 +467,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			case ValueOnly, NameAndValue:
 				i.setEnabled(true);
 
-			case Hidden, PointStar, PointPath, RadiusPx, RadiusGrid:
+			case Hidden, PointStar, PointPath, RadiusPx, RadiusGrid, EntityTile:
 				i.setEnabled(false);
 		}
 		i.linkEvent( EntityFieldDefChanged(curEntity) );

@@ -42,6 +42,7 @@ enum FieldDisplayMode {
 	Hidden;
 	ValueOnly;
 	NameAndValue;
+	EntityTile;
 	PointStar;
 	PointPath;
 	RadiusPx;

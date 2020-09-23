@@ -591,17 +591,57 @@ class LevelRender extends dn.Process {
 		if( def==null )
 			def = ei.def;
 
+		// Init
 		var wrapper = new h2d.Object(parent);
 
-		// Base render
 		var g = new h2d.Graphics(wrapper);
 		g.x = Std.int( -def.width*def.pivotX );
 		g.y = Std.int( -def.height*def.pivotY );
 
-		switch def.renderMode {
+		// Render a tile
+		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:led.LedTypes.EntityTileRenderMode) {
+			if( tileId==null || tilesetId==null ) {
+				// Missing tile
+				var p = 2;
+				g.lineStyle(3, 0xff0000);
+				g.moveTo(p,p);
+				g.lineTo(def.width-p, def.height-p);
+				g.moveTo(def.width-p, p);
+				g.lineTo(p, def.height-p);
+			}
+			else {
+				g.beginFill(def.color, 0.2);
+				g.drawRect(0, 0, def.width, def.height);
+
+				var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
+				var t = td.getTile(tileId);
+				var bmp = new h2d.Bitmap(t, wrapper);
+				switch mode {
+					case Stretch:
+						bmp.scaleX = def.width / bmp.tile.width;
+						bmp.scaleY = def.height / bmp.tile.height;
+
+					case Crop:
+						if( bmp.tile.width>def.width || bmp.tile.height>def.height )
+							bmp.tile = bmp.tile.sub(
+								0, 0,
+								M.fmin( bmp.tile.width, def.width ),
+								M.fmin( bmp.tile.height, def.height )
+							);
+				}
+				bmp.tile.setCenterRatio(def.pivotX, def.pivotY);
+			}
+		}
+
+		// Base render
+		var custTile = ei==null ? null : ei.getTileOverrideFromFields();
+		if( custTile!=null )
+			renderTile(custTile.tilesetUid, custTile.tileId, Stretch); // HACK specific other mode?
+		else
+			switch def.renderMode {
 			case Rectangle, Ellipse:
 				g.beginFill(def.color);
-				g.lineStyle(1, 0x0, 0.25);
+				g.lineStyle(1, 0x0, 0.4);
 				switch def.renderMode {
 					case Rectangle:
 						g.drawRect(0, 0, def.width, def.height);
@@ -614,38 +654,8 @@ class LevelRender extends dn.Process {
 				g.endFill();
 
 			case Tile:
-				if( def.tileId==null || def.tilesetId==null ) {
-					// Missing tile
-					var p = 2;
-					g.lineStyle(3, 0xff0000);
-					g.moveTo(p,p);
-					g.lineTo(def.width-p, def.height-p);
-					g.moveTo(def.width-p, p);
-					g.lineTo(p, def.height-p);
-				}
-				else {
-					g.beginFill(def.color, 0.4);
-					g.drawRect(0, 0, def.width, def.height);
-
-					var td = Editor.ME.project.defs.getTilesetDef(def.tilesetId);
-					var t = td.getTile(def.tileId);
-					var bmp = new h2d.Bitmap(t, wrapper);
-					switch def.tileRenderMode {
-						case Stretch:
-							bmp.scaleX = def.width / bmp.tile.width;
-							bmp.scaleY = def.height / bmp.tile.height;
-
-						case Crop:
-							if( bmp.tile.width>def.width || bmp.tile.height>def.height )
-								bmp.tile = bmp.tile.sub(
-									0, 0,
-									M.fmin( bmp.tile.width, def.width ),
-									M.fmin( bmp.tile.height, def.height )
-								);
-					}
-					bmp.tile.setCenterRatio(def.pivotX, def.pivotY);
-				}
-		}
+				renderTile(def.tilesetId, def.tileId, def.tileRenderMode);
+			}
 
 		// Pivot
 		g.beginFill(def.color);
@@ -727,6 +737,8 @@ class LevelRender extends dn.Process {
 
 					case ValueOnly:
 						fieldWrapper.addChild( createFieldValuesRender(ei,fi) );
+
+					case EntityTile:
 
 					case PointStar, PointPath:
 						var fx = ei.getCellCenterX(li.def);
