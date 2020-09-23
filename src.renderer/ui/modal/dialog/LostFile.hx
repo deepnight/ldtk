@@ -38,7 +38,10 @@ class LostFile extends ui.modal.Dialog {
 			});
 		});
 
-		addButton(Lang.t._("Fix that later"), "cancel", close);
+		addButton(Lang.t._("Fix that later"), "cancel", ()->{
+			App.LOG.general("Relocation canceled");
+			close();
+		});
 	}
 
 	function pickNewPath(newPath:String) {
