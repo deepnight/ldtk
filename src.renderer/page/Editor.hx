@@ -661,26 +661,21 @@ class Editor extends Page {
 		needSaving = false;
 		App.ME.registerRecentProject(projectFilePath);
 
-		if( neededSaving)
-			N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
-		else
-			N.msg("Nothing to save");
+		N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
 		updateTitle();
 
 		ge.emit(ProjectSaved);
 	}
 
 	public function onSaveAs() {
+		var oldDir = getProjectDir();
+
 		dn.electron.Dialogs.saveAs([".json"], getProjectDir(), function(filePath:String) {
-			if( JsTools.fileExists(filePath) )
-				new ui.modal.dialog.Confirm(Lang.t._("This file already exists and will be overwritten!"), function() {
-					this.projectFilePath = filePath;
-					onSave();
-				});
-			else {
-				this.projectFilePath = filePath;
-				onSave(true);
-			}
+			this.projectFilePath = filePath;
+			var newDir = getProjectDir();
+			App.LOG.fileOp("Remap project paths: "+oldDir+" => "+newDir);
+			project.remapAllRelativePaths(oldDir, newDir);
+			onSave(true);
 		});
 	}
 

@@ -251,6 +251,25 @@ class Project {
 			return null;
 	}
 
+
+	public function remapAllRelativePaths(oldProjectDir:String, newProjectDir:String) {
+		function _remapRelativePath(relPath:Null<String>) {
+			if( relPath==null )
+				return null;
+			var p = dn.FilePath.fromFile(oldProjectDir+"/"+relPath);
+			p.useSlashes();
+			p.makeRelativeTo(newProjectDir);
+			App.LOG.fileOp("Remap file path: "+relPath+" => "+p.full);
+			return p.full;
+		}
+
+		for( td in defs.tilesets )
+			td.unsafeRelPathChange( _remapRelativePath(td.relPath) );
+
+		for(ed in defs.externalEnums )
+			ed.externalRelPath = _remapRelativePath( ed.externalRelPath );
+	}
+
 	#if editor
 	public function iterateAllFieldInstances(?searchType:led.LedTypes.FieldType, run:led.inst.FieldInstance->Void) {
 		for(l in levels)

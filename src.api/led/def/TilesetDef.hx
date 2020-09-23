@@ -40,6 +40,11 @@ class TilesetDef {
 	public inline function hasAtlasPath() return relPath!=null;
 	public inline function isAtlasLoaded() return relPath!=null && bytes!=null;
 
+	@:allow(led.Project)
+	function unsafeRelPathChange(newRelPath:String) { // should ONLY be used in specific circonstances
+		relPath = newRelPath;
+	}
+
 	public function getMaxTileGridSize() {
 		return hasAtlasPath() ? dn.M.imin(pxWid, pxHei) : 100;
 	}

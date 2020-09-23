@@ -8,6 +8,7 @@
  - Updated appearance of selected entities
  - Added a field display option to use Enum tiles in place of Entity tiles
  - Added a new option for entities with count limits ("move last one instead of adding").
+ - Fixed relative paths remapping when "Saving As" project
  - Fixed level resize issues which moved Entities and their Point fields in a strange way
  - Fixed panels/windows not closing during app update
  - Fixed SaveAs shortcut (`CTRL+SHIFT+S`)
