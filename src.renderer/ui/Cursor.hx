@@ -100,20 +100,20 @@ class Cursor extends dn.Process {
 
 			case GridCell(li, cx, cy, col):
 				if( col==null )
-					col = 0x0;
-				graphics.lineStyle(1, getOpposite(col), 0.8);
+					col = 0xffcc00;
+				graphics.lineStyle(1, softHighlight ? 0xffffff : getOpposite(col), 0.8);
 				graphics.drawRect(-pad, -pad, li.def.gridSize+pad*2, li.def.gridSize+pad*2);
 
-				graphics.lineStyle(1, col==null ? 0x0 : col);
+				graphics.lineStyle(1, col);
 				graphics.drawRect(0, 0, li.def.gridSize, li.def.gridSize);
 
 			case GridRect(li, cx, cy, wid, hei, col):
 				if( col==null )
-					col = 0x0;
-				graphics.lineStyle(1, getOpposite(col), 0.8);
+					col = 0xffcc00;
+				graphics.lineStyle(1, softHighlight ? 0xffffff : getOpposite(col), 0.8);
 				graphics.drawRect(-2, -2, li.def.gridSize*wid+4, li.def.gridSize*hei+4);
 
-				graphics.lineStyle(1, col==null ? 0x0 : col);
+				graphics.lineStyle(1, col);
 				graphics.drawRect(0, 0, li.def.gridSize*wid, li.def.gridSize*hei);
 
 			case Entity(li, def, ei, x, y):

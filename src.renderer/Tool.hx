@@ -386,7 +386,7 @@ class Tool<T> extends dn.Process {
 
 				case PointField(li, ei, fi, arrayIdx):
 					var pt = fi.getPointGrid(arrayIdx);
-					editor.cursor.set( GridCell(li, pt.cx, pt.cy) );
+					editor.cursor.set( GridCell(li, pt.cx, pt.cy, ei.getSmartColor(false)) );
 			}
 			if( ge!=null )
 				editor.cursor.setSystemCursor(Button);
