@@ -454,7 +454,6 @@ class LevelRender extends dn.Process {
 			}
 
 		case Entities:
-			// not meant to be rendered
 			for(ei in li.entityInstances) {
 				var e = createEntityRender(ei, li);
 				e.setPosition(ei.x, ei.y);
