@@ -7,6 +7,8 @@
  - Entity tiles can now be displayed as "stretched" (default) or "cropped".
  - Updated appearance of selected entities
  - Added a field display option to use Enum tiles in place of Entity tiles
+ - Fixed level resize issues which moved Entities and their Point fields in a strange way
+ - Fixed panels/windows not closing during app update
  - Better entity tile picking UI
  - Updated `Samples`
  - Bug fixes
