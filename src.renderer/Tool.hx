@@ -159,8 +159,8 @@ class Tool<T> extends dn.Process {
 			if( !editor.levelRender.isLayerVisible(li) )
 				return;
 
-			var cx = m.getLayerCx(li.def);
-			var cy = m.getLayerCy(li.def);
+			var cx = m.getLayerCx(li);
+			var cy = m.getLayerCy(li);
 			switch li.def.type {
 				case IntGrid:
 					if( li.getIntGrid(cx,cy)>=0 )

@@ -64,7 +64,11 @@ class MouseCoords {
 		return Rect.fromMouseCoords(this, to);
 	}
 
-	public function getLayerCx(ld:led.def.LayerDef) return Std.int( levelX / ld.gridSize );
-	public function getLayerCy(ld:led.def.LayerDef) return Std.int( levelY / ld.gridSize );
+	public function getLayerCx(li:led.inst.LayerInstance) {
+		return Std.int( ( levelX + Editor.ME.curLayerInstance.pxOffsetX - li.pxOffsetX ) / li.def.gridSize );
+	}
+	public function getLayerCy(li:led.inst.LayerInstance) {
+		return Std.int( ( levelY + Editor.ME.curLayerInstance.pxOffsetY - li.pxOffsetY ) / li.def.gridSize );
+	}
 }
 
