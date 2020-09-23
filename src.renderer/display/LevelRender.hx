@@ -358,6 +358,9 @@ class LevelRender extends dn.Process {
 			grid.moveTo(0, cy*l.def.gridSize);
 			grid.lineTo(l.cWid*l.def.gridSize, cy*l.def.gridSize);
 		}
+
+		grid.x = editor.curLayerInstance.pxOffsetX;
+		grid.y = editor.curLayerInstance.pxOffsetY;
 	}
 
 

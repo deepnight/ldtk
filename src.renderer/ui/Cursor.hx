@@ -199,18 +199,21 @@ class Cursor extends dn.Process {
 				wrapper.setPosition(fx,fy);
 
 			case GridCell(li, cx, cy), GridRect(li, cx,cy, _):
-				wrapper.setPosition( cx*li.def.gridSize, cy*li.def.gridSize );
+				wrapper.setPosition( cx*li.def.gridSize + li.pxOffsetX, cy*li.def.gridSize + li.pxOffsetY );
 				labelWrapper.setPosition(wrapper.x + li.def.gridSize, wrapper.y);
 
 			case Entity(li, def, ei, x,y):
-				wrapper.setPosition(x,y);
+				wrapper.setPosition( x+li.pxOffsetX, y+li.pxOffsetY );
 				labelWrapper.setPosition(
 					( Std.int(x/li.def.gridSize) + 1 ) * li.def.gridSize,
 					Std.int(y/li.def.gridSize) * li.def.gridSize
 				);
 
 			case Tiles(li, tileIds, cx, cy):
-				wrapper.setPosition((cx+li.def.tilePivotX)*li.def.gridSize, (cy+li.def.tilePivotY)*li.def.gridSize);
+				wrapper.setPosition(
+					(cx+li.def.tilePivotX)*li.def.gridSize + li.pxOffsetX,
+					(cy+li.def.tilePivotY)*li.def.gridSize + li.pxOffsetY
+				);
 				labelWrapper.setPosition( (cx+1)*li.def.gridSize, cy*li.def.gridSize );
 		}
 

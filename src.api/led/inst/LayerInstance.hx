@@ -20,8 +20,8 @@ class LayerInstance {
 	/** < RuleUid, < coordId, {tileInfos} > > **/
 	public var autoTiles : Map<Int, Map<Int, { tileId:Int, flips:Int }> > = [];
 
-	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( level.pxWid / def.gridSize );
-	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( level.pxHei / def.gridSize );
+	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( ( level.pxWid-pxOffsetX ) / def.gridSize );
+	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( ( level.pxHei-pxOffsetY ) / def.gridSize );
 
 
 	public function new(p:Project, levelId:Int, layerDefUid:Int) {
@@ -224,14 +224,16 @@ class LayerInstance {
 
 	@:allow(led.Level)
 	function applyNewBounds(newPxLeft:Int, newPxTop:Int, newPxWid:Int, newPxHei:Int) {
-		var pxDeltaX = pxOffsetX - newPxLeft;
-		var pxDeltaY = pxOffsetY - newPxTop;
-		var newCWid = dn.M.ceil( newPxWid / def.gridSize );
-		var newCHei = dn.M.ceil( newPxHei/ def.gridSize );
+		var totalOffsetX = pxOffsetX - newPxLeft;
+		var totalOffsetY = pxOffsetY - newPxTop;
+		var newPxOffsetX = totalOffsetX % def.gridSize;
+		var newPxOffsetY = totalOffsetY % def.gridSize;
+		var newCWid = dn.M.ceil( (newPxWid-newPxOffsetX) / def.gridSize );
+		var newCHei = dn.M.ceil( (newPxHei-newPxOffsetY) / def.gridSize );
 
 		// Move data
-		var cDeltaX = Std.int(pxDeltaX/def.gridSize);
-		var cDeltaY = Std.int(pxDeltaY/def.gridSize);
+		var cDeltaX = Std.int( totalOffsetX / def.gridSize);
+		var cDeltaY = Std.int( totalOffsetY / def.gridSize);
 		switch def.type {
 			case IntGrid:
 				// Remap coords
@@ -249,11 +251,23 @@ class LayerInstance {
 			case AutoLayer:
 
 			case Entities:
+				ui.Notification.debug(totalOffsetX+" "+totalOffsetY);
 				var i = 0;
 				while( i<entityInstances.length ) {
 					var ei = entityInstances[i];
-					ei.x += pxDeltaX;
-					ei.y += pxDeltaY;
+					ei.x += cDeltaX*def.gridSize;
+					ei.y += cDeltaY*def.gridSize;
+
+					// Move points
+					for(fi in ei.fieldInstances)
+						if( fi.def.type==F_Point )
+							for(i in 0...fi.getArrayLength())  {
+								var pt = fi.getPointGrid(i);
+								pt.cx+=cDeltaX;
+								pt.cy+=cDeltaY;
+								fi.parseValue( i, pt.cx + Const.POINT_SEPARATOR + pt.cy );
+							}
+
 					if( ei.x<0 || ei.y<0 )
 						entityInstances.splice(i,1);
 					else
@@ -276,8 +290,8 @@ class LayerInstance {
 		}
 
 		// The remaining pixels are stored in offsets
-		pxOffsetX = pxDeltaX % def.gridSize;
-		pxOffsetY = pxDeltaY % def.gridSize;
+		pxOffsetX = newPxOffsetX;
+		pxOffsetY = newPxOffsetY;
 	}
 
 
