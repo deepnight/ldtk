@@ -1640,6 +1640,29 @@ div.sortHandle {
 	}
 }
 
+#mouseCoords {
+	display: flex;
+	flex-wrap: nowrap;
+	position: absolute;
+	z-index: 99;
+	right: 3px;
+	bottom: 3px;
+	pointer-events: none;
+
+	span {
+		padding: 4px 8px;
+		font-size: 9pt;
+		color:white;
+		text-shadow: 0px 1px 3px black;
+		background-color: rgba(0, 0, 0, 0.4);
+		border-radius: 6px;
+		pointer-events: none;
+	}
+	span+span {
+		margin-left: 8px;
+	}
+}
+
 canvas#webgl {
 	position: absolute;
 	top: 0;

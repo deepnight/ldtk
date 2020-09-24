@@ -7,6 +7,7 @@ class Editor extends Page {
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jLayerList(get,never) : J; inline function get_jLayerList() return new J("#layers");
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
+	var jMouseCoords : js.jquery.JQuery;
 
 	public var curLevel(get,never) : led.Level;
 		inline function get_curLevel() return project.getLevel(curLevelId);
@@ -79,7 +80,10 @@ class Editor extends Page {
 		needSaving = false;
 	}
 
-	public function initUI() {
+	function initUI() {
+		jMouseCoords = new J('<div id="mouseCoords"/>');
+		App.ME.jBody.append(jMouseCoords);
+
 		// Edit buttons
 		jMainPanel.find("button.editProject").click( function(_) {
 			if( ui.Modal.isOpen(ui.modal.panel.EditProject) )
@@ -550,8 +554,14 @@ class Editor extends Page {
 	}
 
 	function onMouseMove(e:hxd.Event) {
-		curTool.onMouseMove( getMouse() );
-		rulers.onMouseMove( getMouse() );
+		var m = getMouse();
+		curTool.onMouseMove(m);
+		rulers.onMouseMove(m);
+
+		jMouseCoords
+			.empty()
+			.append('<span>Grid = ${m.cx},${m.cy}</span>')
+			.append('<span>Pixels = ${m.levelX},${m.levelY}</span>');
 	}
 
 	function onMouseWheel(e:hxd.Event) {
@@ -985,6 +995,8 @@ class Editor extends Page {
 
 		ge.dispose();
 		ge = null;
+
+		jMouseCoords.remove();
 
 		App.ME.jCanvas.hide();
 		Boot.ME.s2d.removeEventListener(onHeapsEvent);
