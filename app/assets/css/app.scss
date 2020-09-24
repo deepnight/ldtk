@@ -2933,7 +2933,15 @@ body.sorting ul.collapsedSortTarget {
 					margin-top: 16px;
 
 					&:empty {
-						min-height: 50px;
+						background-image: url("../img/stripes.png");
+						box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.4) inset;
+						text-align: center;
+						padding-top: 30px;
+						padding-bottom: 30px;
+
+						&::before {
+							content: "Use [+] above to add a new rule";
+						}
 					}
 
 					li {
