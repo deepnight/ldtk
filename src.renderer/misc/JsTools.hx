@@ -135,6 +135,15 @@ class JsTools {
 				ctx.fillStyle = C.intToHex(ed.color);
 				ctx.fillRect(0, 0, ed.width*scale, ed.height*scale);
 
+			case Cross:
+				ctx.strokeStyle = C.intToHex(ed.color);
+				ctx.lineWidth = 5 * js.Browser.window.devicePixelRatio;
+				ctx.moveTo(0,0);
+				ctx.lineTo(ed.width*scale, ed.height*scale);
+				ctx.moveTo(0,ed.height*scale);
+				ctx.lineTo(ed.width*scale, 0);
+				ctx.stroke();
+
 			case Ellipse:
 				ctx.fillStyle = C.intToHex(ed.color);
 				ctx.beginPath();

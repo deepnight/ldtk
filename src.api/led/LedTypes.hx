@@ -59,6 +59,7 @@ enum EntityRenderMode {
 	Rectangle;
 	Ellipse;
 	Tile;
+	Cross;
 }
 enum EntityTileRenderMode {
 	Stretch;

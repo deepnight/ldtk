@@ -272,6 +272,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			jOpt.text(switch e {
 				case Rectangle: Lang.t._("Rectangle");
 				case Ellipse: Lang.t._("Ellipse");
+				case Cross: Lang.t._("Cross");
 				case Tile: null;
 			});
 		}

@@ -644,7 +644,7 @@ class LevelRender extends dn.Process {
 		// Base render
 		var custTile = ei==null ? null : ei.getTileOverrideFromFields();
 		if( custTile!=null )
-			renderTile(custTile.tilesetUid, custTile.tileId, Stretch); // HACK specific other mode?
+			renderTile(custTile.tilesetUid, custTile.tileId, Stretch); // HACK specify other mode?
 		else
 			switch def.renderMode {
 			case Rectangle, Ellipse:
@@ -660,6 +660,13 @@ class LevelRender extends dn.Process {
 					case _:
 				}
 				g.endFill();
+
+			case Cross:
+				g.lineStyle(5, def.color, 1);
+				g.moveTo(0,0);
+				g.lineTo(def.width, def.height);
+				g.moveTo(0,def.height);
+				g.lineTo(def.width, 0);
 
 			case Tile:
 				renderTile(def.tilesetId, def.tileId, def.tileRenderMode);
