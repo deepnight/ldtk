@@ -2,20 +2,20 @@ name: Haxe-Build
 on: push
 
 jobs:
-	haxe-build:
-		runs-on: ubuntu-latest
-		steps:
-			- uses: krdlab/setup-haxe@v1.1.3
-				with:
-					haxe-version: 4.0.5
-			- run: |
-				haxe -version
-				yes | haxelib install main.hxml
-				yes | haxelib install renderer.hxml
-				haxelib git heaps https://github.com/HeapsIO/heaps.git
-				haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
-				haxelib list
-				haxe main.debug.hxml
-				haxe renderer.debug.hxml
-				haxe main.hxml
-				haxe renderer.hxml
+  haxe-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: krdlab/setup-haxe@v1.1.3
+        with:
+          haxe-version: 4.0.5
+      - run: |
+        haxe -version
+        yes | haxelib install main.hxml
+        yes | haxelib install renderer.hxml
+        haxelib git heaps https://github.com/HeapsIO/heaps.git
+        haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+        haxelib list
+        haxe main.debug.hxml
+        haxe renderer.debug.hxml
+        haxe main.hxml
+        haxe renderer.hxml
