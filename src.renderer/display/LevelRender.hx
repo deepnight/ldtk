@@ -5,7 +5,7 @@ class LevelRender extends dn.Process {
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 
-	public var enhanceActiveLayer(default,null) = true;
+	public var enhanceActiveLayer(default,null) = false;
 	public var focusLevelX(default,set) : Float;
 	public var focusLevelY(default,set) : Float;
 	public var zoom(get,set) : Float;
