@@ -206,6 +206,10 @@ class EditAutoLayerRules extends ui.modal.Panel {
 							rg.name = jInput.val();
 							editor.ge.emit(LayerRuleGroupChanged);
 						}
+						else {
+							jHeader.find("div.name").show();
+							jInput.hide();
+						}
 					});
 			});
 
