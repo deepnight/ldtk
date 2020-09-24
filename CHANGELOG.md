@@ -8,6 +8,7 @@
  - Updated appearance of selected entities
  - Added a field display option to use Enum tiles in place of Entity tiles
  - Added a new option for entities with count limits ("move last one instead of adding").
+ - Various UI fixes in "Compact" mode (when pressing `TAB`)
  - Fixed relative paths remapping when "Saving As" project
  - Fixed level resize issues which moved Entities and their Point fields in a strange way
  - Fixed panels/windows not closing during app update
@@ -31,9 +32,9 @@
 ## 0.1.6-alpha
 
  - **"Pure" auto-layers**: these layers only have rules and use a separate IntGrid layer as source for their value checks. Very useful to have a separate auto-layer that contains drop-shadows of walls, for example. You can have any number of pure auto-layers using the same single IntGrid source.
- - Grid lock (formerly grid snap) now uses L key shortcut instead of G
- - Grid visibility can be toggled using G key shortcut
- - Added SHIFT-R shortcut to show/hide all auto-layers
+ - Grid lock (formerly grid snap) now uses `L` key shortcut instead of G
+ - Grid visibility can be toggled using `G` key shortcut
+ - Added `SHIFT-R` shortcut to show/hide all auto-layers
  - Updated sample projects
  - Updated "help" window
  - Added quick notifications for some user actions
@@ -60,7 +61,7 @@
  - Better element sorting (levels, layers etc.) experience using SortableJS lib
  - Closing a panel with a color picker will now validate color before closing the panel.
  - Better viewport centering when opening a level.
- - Fixed 0-9 keyboard shortcuts while focusing a field
+ - Fixed `0-9` keyboard shortcuts while focusing a field
  - Fixed save/load notifications
  - Many UI/UX fixes
  - Bug fixes
@@ -73,9 +74,9 @@
  - Nicer pixel font for Rulers around the level canvas
  - Added **0 to 9 key shortcuts** to quickly select layers
  - Added a convenient Edit link in Entity instance editor
- - Fixed **CTRL-W** shortcut (should only close current app page)
- - Added **CTRL-Q** shortcut to close the app
- - Added **F** shortcut to fit current level in screen
+ - Fixed `CTRL-W` shortcut (should only close current app page)
+ - Added `CTRL-Q` shortcut to close the app
+ - Added `F` shortcut to fit current level in screen
  - Fixed file path display in Enum panel
  - Fixed image path sometime disappearing in Tileset panel
  - Fixed load/save notifications
@@ -88,7 +89,7 @@
  - Better **auto-update UI**
  - Enhanced ALT-click picking cursor
  - Fixed Changelog display on Home page
- - ALT+click picking no longer picks in other layers by default (you can hold SHIFT key to pick in any layer)
+ - ALT+click picking no longer picks in other layers by default (you can hold `SHIFT` key to pick in any layer)
  - Fixed window closing not working sometimes
  - Added a brief notification when switching layers using picking
  - Code: Electron cleanup
