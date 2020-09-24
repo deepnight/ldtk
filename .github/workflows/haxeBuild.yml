@@ -1,0 +1,28 @@
+name: Haxe-Build
+
+# Run this workflow every time a new commit pushed to your repository
+on: push
+
+jobs:
+	# Set the job key. The key is displayed as the job name
+	# when a job name is not provided
+	haxe-build:
+		# Name the Job
+		name: Build LEd
+		# Set the type of machine to run on
+		runs-on: ubuntu-latest
+		steps:
+			- uses: krdlab/setup-haxe@v1
+				with:
+					haxe-version: 4.0.5
+			- run: |
+				haxe -version
+				yes | haxelib install main.hxml
+				yes | haxelib install renderer.hxml
+				haxelib git heaps https://github.com/HeapsIO/heaps.git
+				haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+				haxelib list
+				haxe main.debug.hxml
+				haxe renderer.debug.hxml
+				haxe main.hxml
+				haxe renderer.hxml
