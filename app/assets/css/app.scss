@@ -1666,6 +1666,10 @@ canvas#webgl {
 		#mainbar {
 			overflow: hidden; // for title
 
+			.buttons {
+				margin: 0;
+			}
+
 			button.showHelp {
 				flex: 0 1 0;
 			}
@@ -1715,6 +1719,7 @@ canvas#webgl {
 
 				.name {
 					font-size: 10pt;
+					overflow-x: hidden;
 					display: block;
 					cursor: pointer;
 				}
@@ -1722,8 +1727,6 @@ canvas#webgl {
 				.actions {
 					display: flex;
 					.vis {
-						// padding: 10px;
-						// margin: -10px;
 						color: white;
 						text-shadow: 0px 0px 4px black;
 						order: 2;
@@ -1737,11 +1740,10 @@ canvas#webgl {
 					}
 
 					a {
-						display: grid;
-						align-content: center;
 						padding: 4px;
 
 						color: white;
+						white-space: nowrap;
 						font-size: 8pt;
 						text-transform: uppercase;
 						text-decoration: none;
@@ -1797,6 +1799,74 @@ canvas#webgl {
 				height: 100%;
 				box-sizing: border-box;
 			}
+		}
+	}
+
+	&.compactPanel {
+		#mainPanel {
+			width: 150px;
+			grid-template-rows: min-content 200px min-content auto;
+
+			#mainBar {
+				.buttons {
+					display: grid;
+					grid-template-columns: repeat(4, 25%);
+					grid-template-rows: repeat(2, 32px);
+					.icon {
+						width: 1.1em;
+						height: 1.1em;
+					}
+					.icon.help {
+						font-size: inherit;
+						margin-left: auto;
+						margin-right: auto;
+					}
+				}
+			}
+
+			.notCompact {
+				display: none;
+			}
+			#guide {
+				display: none;
+			}
+
+			ul#layers li {
+				grid-template-columns: auto min-content;
+				.layerIcon,
+				.index {
+					display: none;
+				}
+				.name {
+					font-size: 8pt;
+				}
+				// .actions a {
+				// 	font-size: 7pt;
+				// 	padding: 2px;
+				// }
+				// .index {
+				// 	font-size: 9pt;
+				// 	min-width: 0.9em;
+				// }
+			}
+
+			ul.niceList li {
+				padding-top: 4px;
+				padding-bottom: 4px;
+				gap: 4px;
+
+				.icon {
+					width: 0.75em;
+					height: 0.75em;
+				}
+			}
+
+			h2#levelName {
+				font-size: 1.1em;
+			}
+		}
+		.window.panel {
+			width: calc( 100vw - 150px );
 		}
 	}
 }
@@ -2059,44 +2129,6 @@ canvas#webgl {
 			}
 		}
 
-	}
-}
-
-#page.editor.compactPanel {
-	#mainPanel {
-		width: 150px;
-		grid-template-rows: min-content 200px min-content auto;
-		.notCompact {
-			display: none;
-		}
-		#guide {
-			display: none;
-		}
-
-		ul#layers li {
-			.index {
-				font-size: 9pt;
-				min-width: 0.9em;
-			}
-		}
-
-		ul.niceList li {
-			padding-top: 4px;
-			padding-bottom: 4px;
-			gap: 4px;
-
-			.icon {
-				width: 0.75em;
-				height: 0.75em;
-			}
-		}
-
-		h2#levelName {
-			font-size: 1.1em;
-		}
-	}
-	.window.panel {
-		width: calc( 100vw - 150px );
 	}
 }
 
