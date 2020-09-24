@@ -129,6 +129,13 @@ class EditAutoLayerRules extends ui.modal.Panel {
 			jNewGroup.siblings("header").find(".edit").click();
 		});
 
+
+		// Randomize
+		jContent.find("button.seed").click( function(ev) {
+			li.seed = Std.random(9999999);
+			editor.ge.emit(LayerRuleSeedChanged);
+		});
+
 		// Render
 		var chk = jContent.find("[name=renderRules]");
 		chk.prop("checked", editor.levelRender.autoLayerRenderingEnabled(li) );

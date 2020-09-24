@@ -177,6 +177,9 @@ class LevelRender extends dn.Process {
 				li.applyAutoLayerRule(r);
 				invalidateLayer(li);
 
+			case LayerRuleSeedChanged:
+				invalidateLayer( editor.curLayerInstance );
+
 			case LayerRuleSorted:
 				invalidateLayer( editor.curLayerInstance );
 
@@ -426,7 +429,7 @@ class LevelRender extends dn.Process {
 											( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
 											( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
 											dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
-											td.getTile( r.tileIds[ dn.M.randSeedCoords( r.seed, cx,cy, r.tileIds.length ) ] )
+											td.getTile( r.tileIds[ dn.M.randSeedCoords( li.seed, cx,cy, r.tileIds.length ) ] )
 										);
 										anyTile = true;
 									}

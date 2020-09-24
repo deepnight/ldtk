@@ -7,7 +7,6 @@ class AutoLayerRuleDef {
 	public var chance : Float = 1.0;
 	public var size(default,null): Int;
 	var pattern : Array<Int> = [];
-	public var seed : Int;
 	public var flipX = false;
 	public var flipY = false;
 	public var active = true;
@@ -25,7 +24,6 @@ class AutoLayerRuleDef {
 		this.uid = uid;
 		this.size = size;
 		perlinSeed = Std.random(9999999);
-		seed = Std.random(9999999);
 		initPattern();
 	}
 
@@ -107,7 +105,6 @@ class AutoLayerRuleDef {
 			size: size,
 			tileIds: tileIds.copy(),
 			chance: JsonTools.writeFloat(chance),
-			seed: seed,
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
 			flipX: flipX,
 			flipY: flipY,
@@ -125,7 +122,6 @@ class AutoLayerRuleDef {
 		r.tileIds = json.tileIds;
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
-		r.seed = JsonTools.readInt(json.seed, 1);
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
 
@@ -200,7 +196,7 @@ class AutoLayerRuleDef {
 		if( tileIds.length==0 )
 			return false;
 
-		if( chance<=0 || chance<1 && dn.M.randSeedCoords(seed, cx,cy, 100) >= chance*100 )
+		if( chance<=0 || chance<1 && dn.M.randSeedCoords(source.seed, cx,cy, 100) >= chance*100 )
 			return false;
 
 		if( hasPerlin() && _perlin.perlin(perlinSeed, cx*perlinScale, cy*perlinScale, perlinOctaves) < 0 )
@@ -238,7 +234,7 @@ class AutoLayerRuleDef {
 	}
 
 
-	public function getRandomTileForCoord(cx:Int,cy:Int) : Int {
+	public function getRandomTileForCoord(seed:Int, cx:Int,cy:Int) : Int {
 		return tileIds[ dn.M.randSeedCoords( seed, cx,cy, tileIds.length ) ];
 	}
 

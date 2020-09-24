@@ -11,6 +11,7 @@ class LayerInstance {
 	public var layerDefUid : Int;
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
+	public var seed : Int;
 
 	// Layer content
 	var intGrid : Map<Int,Int> = new Map(); // <coordId, value>
@@ -28,6 +29,7 @@ class LayerInstance {
 		_project = p;
 		this.levelId = levelId;
 		this.layerDefUid = layerDefUid;
+		seed = Std.random(9999999);
 	}
 
 
@@ -83,6 +85,7 @@ class LayerInstance {
 				}
 				arr;
 			},
+			seed: seed,
 
 			gridTiles: {
 				var arr = [];
@@ -147,6 +150,7 @@ class LayerInstance {
 					);
 			}
 		}
+		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
 
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
@@ -398,19 +402,19 @@ class LayerInstance {
 
 		// Apply rule
 		if( r.matches(source, cx,cy) ) {
-			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:0 } );
+			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(seed, cx,cy), flips:0 } );
 			return true;
 		}
 		else if( r.flipX && r.matches(source, cx,cy, -1) ) {
-			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:1 } );
+			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(seed, cx,cy), flips:1 } );
 			return true;
 		}
 		else if( r.flipY && r.matches(source, cx,cy, 1, -1) ) {
-			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:2 } );
+			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(seed, cx,cy), flips:2 } );
 			return true;
 		}
 		else if( r.flipX && r.flipY && r.matches(source, cx,cy, -1, -1) ) {
-			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(cx,cy), flips:3 } );
+			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(seed, cx,cy), flips:3 } );
 			return true;
 		}
 		else
