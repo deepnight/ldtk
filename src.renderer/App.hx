@@ -215,6 +215,8 @@ class App extends dn.Process {
 
 	function clearCurPage() {
 		jPage.empty();
+		ui.Tip.clear();
+
 		if( curPageProcess!=null ) {
 			curPageProcess.destroy();
 			curPageProcess = null;
