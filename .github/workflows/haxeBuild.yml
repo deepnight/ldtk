@@ -1,15 +1,8 @@
 name: Haxe-Build
-
-# Run this workflow every time a new commit pushed to your repository
 on: push
 
 jobs:
-	# Set the job key. The key is displayed as the job name
-	# when a job name is not provided
 	haxe-build:
-		# Name the Job
-		name: Build LEd
-		# Set the type of machine to run on
 		runs-on: ubuntu-latest
 		steps:
 			- uses: krdlab/setup-haxe@v1.1.3
