@@ -13,6 +13,7 @@
  - Updated appearance of selected entities
  - Added a field display option to use Enum tiles in place of Entity tiles
  - Added a new option for entities with count limits ("move last one instead of adding").
+ - "Enhance active layer" option is now false by default (press `A` to toggle)
  - Entities can now be displayed as "Crosses"
  - Various UI fixes in "Compact" mode (when pressing `TAB`)
  - Fixed relative paths remapping when "Saving As" project
