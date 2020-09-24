@@ -1126,6 +1126,17 @@ textarea {
 		font-style: normal;
 		font-size: 1em;
 	}
+	&.link {
+		background-color: #425b83;
+		.content {
+			color: #acd6f7;
+			font-family: monospace;
+			white-space: nowrap;
+			.text {
+				font-style: normal;
+			}
+		}
+	}
 }
 
 #notificationList {
