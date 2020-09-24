@@ -103,7 +103,7 @@ class Definitions {
 			l.tilesetDefUid = td.uid;
 		}
 
-		layers.push(l);
+		layers.insert(0,l);
 		_project.tidy();
 		return l;
 	}
