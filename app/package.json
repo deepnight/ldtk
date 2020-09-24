@@ -4,7 +4,7 @@
 	"main": "assets/main.js",
 	"productName": "LEd",
 	"author": "Sebastien Benard",
-	"description": "Modern 2D level editor",
+	"description": "2D level editor",
 	"scripts": {
 		"start": "electron .",
 		"compile": "cd..  &&  haxe main.hxml  &&  haxe renderer.hxml",
@@ -39,7 +39,7 @@
 		],
 		"nsis": {
 			"oneClick": true,
-			"shortcutName": "LEd - Modern 2D level editor"
+			"shortcutName": "LEd - 2D level editor"
 		},
 		"win": {
 			"target": "nsis",
