@@ -204,8 +204,8 @@ class TilesetPicker {
 		cx+=0.5;
 		cy+=0.5;
 
-		tx = cx*(tilesetDef.tileGridSize+tilesetDef.spacing) - jPicker.outerWidth()*0.5/zoom;
-		ty = cy*(tilesetDef.tileGridSize+tilesetDef.spacing) - jPicker.outerHeight()*0.5/zoom;
+		tx = tilesetDef.padding + cx*(tilesetDef.tileGridSize+tilesetDef.spacing) - jPicker.outerWidth()*0.5/zoom;
+		ty = tilesetDef.padding + cy*(tilesetDef.tileGridSize+tilesetDef.spacing) - jPicker.outerHeight()*0.5/zoom;
 
 		saveScrollPos();
 	}
@@ -486,8 +486,9 @@ class TilesetPicker {
 
 		var grid = tilesetDef.tileGridSize;
 		var spacing = tilesetDef.spacing;
-		var cx = M.iclamp( Std.int( localX / ( grid+spacing ) ), 0, tilesetDef.cWid-1 );
-		var cy = M.iclamp( Std.int( localY / ( grid+spacing ) ), 0, tilesetDef.cHei-1 );
+		var padding = tilesetDef.padding;
+		var cx = M.iclamp( Std.int( (localX-padding) / ( grid+spacing ) ), 0, tilesetDef.cWid-1 );
+		var cy = M.iclamp( Std.int( (localY-padding) / ( grid+spacing ) ), 0, tilesetDef.cHei-1 );
 
 		if( dragStart==null || mode==SingleTile )
 			return {
@@ -497,8 +498,8 @@ class TilesetPicker {
 				hei: 1,
 			}
 		else {
-			var startCx = M.iclamp( Std.int( pageXtoLocal(dragStart.pageX) / ( grid+spacing ) ), 0, tilesetDef.cWid-1 );
-			var startCy = M.iclamp( Std.int( pageYtoLocal(dragStart.pageY) / ( grid+spacing ) ), 0, tilesetDef.cHei-1 );
+			var startCx = M.iclamp( Std.int( (pageXtoLocal(dragStart.pageX)-padding) / ( grid+spacing ) ), 0, tilesetDef.cWid-1 );
+			var startCy = M.iclamp( Std.int( (pageYtoLocal(dragStart.pageY)-padding) / ( grid+spacing ) ), 0, tilesetDef.cHei-1 );
 			return {
 				cx: M.imin(cx,startCx),
 				cy: M.imin(cy,startCy),

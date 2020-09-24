@@ -22,10 +22,10 @@ class TilesetDef {
 
 
 	public var cWid(get,never) : Int;
-	inline function get_cWid() return !hasAtlasPath() ? 0 : dn.M.ceil( pxWid / (tileGridSize+spacing) );
+	inline function get_cWid() return !hasAtlasPath() ? 0 : dn.M.ceil( (pxWid-padding*2) / (tileGridSize+spacing) );
 
 	public var cHei(get,never) : Int;
-	inline function get_cHei() return !hasAtlasPath() ? 0 : dn.M.ceil( pxHei / (tileGridSize+spacing) );
+	inline function get_cHei() return !hasAtlasPath() ? 0 : dn.M.ceil( (pxHei-padding*2) / (tileGridSize+spacing) );
 
 
 	public function new(p:Project, uid:Int) {
@@ -149,6 +149,7 @@ class TilesetDef {
 		pxHei = pixels.height;
 		tileGridSize = dn.M.imin( tileGridSize, getMaxTileGridSize() );
 		spacing = dn.M.imin( spacing, getMaxTileGridSize() );
+		padding = dn.M.imin( padding, getMaxTileGridSize() );
 
 		return true;
 	}
@@ -233,11 +234,11 @@ class TilesetDef {
 	}
 
 	public inline function getTileSourceX(tileId:Int) {
-		return getTileCx(tileId) * ( tileGridSize + spacing );
+		return padding + getTileCx(tileId) * ( tileGridSize + spacing );
 	}
 
 	public inline function getTileSourceY(tileId:Int) {
-		return getTileCy(tileId) * ( tileGridSize + spacing );
+		return padding + getTileCy(tileId) * ( tileGridSize + spacing );
 	}
 
 
