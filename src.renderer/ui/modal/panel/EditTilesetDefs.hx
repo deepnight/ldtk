@@ -86,6 +86,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			var picker = new TilesetPicker(jPickerWrapper, cur);
 			picker.renderGrid();
 			picker.resetScroll();
+			picker.mode = ViewOnly;
 		}
 
 		// Demo tiles

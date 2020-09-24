@@ -4,6 +4,7 @@ enum PickerMode {
 	ToolPicker;
 	MultiTiles;
 	SingleTile;
+	ViewOnly;
 }
 
 class TilesetPicker {
@@ -47,6 +48,7 @@ class TilesetPicker {
 			case ToolPicker:
 			case MultiTiles: jPicker.addClass("multiTilesMode");
 			case SingleTile: jPicker.addClass("singleTileMode");
+			case ViewOnly: jPicker.addClass("viewOnlyMode");
 		}
 
 		jAtlas = new J('<div class="wrapper"/>');
@@ -118,6 +120,9 @@ class TilesetPicker {
 
 			case MultiTiles, SingleTile:
 				_internalSelectedIds;
+
+			case ViewOnly:
+				[];
 		}
 	}
 
@@ -128,6 +133,9 @@ class TilesetPicker {
 
 			case MultiTiles, SingleTile:
 				_internalSelectedIds = tileIds;
+
+			case ViewOnly:
+				throw "unexpected";
 		}
 		renderSelection();
 	}
@@ -185,6 +193,8 @@ class TilesetPicker {
 			case MultiTiles, SingleTile:
 				if( getSelectedTileIds().length>0 )
 					jSelection.append( createCursor({ mode:Random, ids:getSelectedTileIds() },"selection") );
+
+			case ViewOnly:
 		}
 	}
 
@@ -257,7 +267,7 @@ class TilesetPicker {
 
 	var _lastRect = null;
 	function updateCursor(pageX:Float, pageY:Float, force=false) {
-		if( isScrolling() || App.ME.isKeyDown(K.SPACE) || !mouseOver ) {
+		if( mode==ViewOnly || isScrolling() || App.ME.isKeyDown(K.SPACE) || !mouseOver ) {
 			jCursor.hide();
 			return;
 		}
@@ -380,7 +390,7 @@ class TilesetPicker {
 
 		if( mode==SingleTile )
 			onSingleTileSelect( selIds[0] );
-		else {
+		else if( mode!=ViewOnly ) {
 			if( add ) {
 				if( !App.ME.isShiftDown() && !App.ME.isCtrlDown() ) {
 					// Replace active selection with this one
