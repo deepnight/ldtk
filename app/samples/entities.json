@@ -470,6 +470,7 @@
 				"pxOffsetY": 0,
 				"intGrid": [],
 				"autoTiles": [],
+				"seed": 3776513,
 				"gridTiles": [],
 				"entityInstances": [
 					{ "__identifier": "Chest", "__cx": 31, "__cy": 19, "defUid": 8, "x": 504, "y": 320, "fieldInstances": [
@@ -1410,6 +1411,7 @@
 					{ "coordId": 899, "v": 0 }
 				],
 				"autoTiles": [],
+				"seed": 1349990,
 				"gridTiles": [],
 				"entityInstances": []
 			}

@@ -3,11 +3,11 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.1.6-alpha-debug",
-		"url": "https://deepnight.net/"
+		"appVersion": "0.1.8-alpha-debug",
+		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
 	"name": "God",
-	"jsonVersion": "0.1.6",
+	"jsonVersion": "0.1.8",
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1.0,
 	"defaultGridSize": 16,
@@ -69,8 +69,9 @@
 				"renderMode": "Tile",
 				"tilesetId": 16,
 				"tileId": 32,
+				"tileRenderMode": "Stretch",
 				"maxPerLevel": 0,
-				"discardExcess": true,
+				"limitBehavior": "DiscardOldOnes",
 				"pivotX": 0.5,
 				"pivotY": 0.5,
 				"fieldDefs": [
@@ -79,9 +80,13 @@
 						"__type": "String",
 						"uid": 10,
 						"type": "F_String",
+						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": {
@@ -94,9 +99,13 @@
 						"__type": "LocalEnum.ItemType",
 						"uid": 47,
 						"type": { "id": "F_Enum", "params": [ 45 ] },
+						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": null
@@ -112,8 +121,9 @@
 				"renderMode": "Ellipse",
 				"tilesetId": null,
 				"tileId": null,
+				"tileRenderMode": "Stretch",
 				"maxPerLevel": 3,
-				"discardExcess": false,
+				"limitBehavior": "PreventAdding",
 				"pivotX": 0.5,
 				"pivotY": 1.0,
 				"fieldDefs": []
@@ -127,8 +137,9 @@
 				"renderMode": "Ellipse",
 				"tilesetId": null,
 				"tileId": null,
+				"tileRenderMode": "Stretch",
 				"maxPerLevel": 0,
-				"discardExcess": true,
+				"limitBehavior": "DiscardOldOnes",
 				"pivotX": 0.5,
 				"pivotY": 1.0,
 				"fieldDefs": [
@@ -137,9 +148,13 @@
 						"__type": "String",
 						"uid": 14,
 						"type": "F_String",
+						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": {
@@ -152,9 +167,13 @@
 						"__type": "LocalEnum.MobType",
 						"uid": 46,
 						"type": { "id": "F_Enum", "params": [ 44 ] },
+						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": null
@@ -170,8 +189,9 @@
 				"renderMode": "Tile",
 				"tilesetId": 16,
 				"tileId": 0,
+				"tileRenderMode": "Stretch",
 				"maxPerLevel": 0,
-				"discardExcess": true,
+				"limitBehavior": "DiscardOldOnes",
 				"pivotX": 0.5,
 				"pivotY": 1.0,
 				"fieldDefs": []
@@ -185,8 +205,9 @@
 				"renderMode": "Rectangle",
 				"tilesetId": null,
 				"tileId": null,
+				"tileRenderMode": "Stretch",
 				"maxPerLevel": 0,
-				"discardExcess": true,
+				"limitBehavior": "DiscardOldOnes",
 				"pivotX": 0.5,
 				"pivotY": 1.0,
 				"fieldDefs": []
@@ -200,8 +221,9 @@
 				"renderMode": "Rectangle",
 				"tilesetId": null,
 				"tileId": null,
+				"tileRenderMode": "Stretch",
 				"maxPerLevel": 0,
-				"discardExcess": true,
+				"limitBehavior": "DiscardOldOnes",
 				"pivotX": 0.5,
 				"pivotY": 0.5,
 				"fieldDefs": [
@@ -210,9 +232,13 @@
 						"__type": "Int",
 						"uid": 26,
 						"type": "F_Int",
+						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": 1.0,
 						"max": null,
 						"defaultOverride": { "id": "V_Int", "params": [ 3 ] }
@@ -222,9 +248,13 @@
 						"__type": "Int",
 						"uid": 27,
 						"type": "F_Int",
+						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": 1.0,
 						"max": null,
 						"defaultOverride": { "id": "V_Int", "params": [ 1 ] }
@@ -234,9 +264,13 @@
 						"__type": "Float",
 						"uid": 28,
 						"type": "F_Float",
+						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": 1.0,
 						"max": null,
 						"defaultOverride": { "id": "V_Float", "params": [ 5 ] }
@@ -252,8 +286,9 @@
 				"renderMode": "Rectangle",
 				"tilesetId": null,
 				"tileId": null,
+				"tileRenderMode": "Stretch",
 				"maxPerLevel": 1,
-				"discardExcess": false,
+				"limitBehavior": "PreventAdding",
 				"pivotX": 0.5,
 				"pivotY": 1.0,
 				"fieldDefs": [
@@ -262,9 +297,13 @@
 						"__type": "Int",
 						"uid": 25,
 						"type": "F_Int",
+						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": 1.0,
 						"max": null,
 						"defaultOverride": { "id": "V_Int", "params": [ 30 ] }
@@ -280,8 +319,9 @@
 				"renderMode": "Rectangle",
 				"tilesetId": null,
 				"tileId": null,
+				"tileRenderMode": "Stretch",
 				"maxPerLevel": 0,
-				"discardExcess": true,
+				"limitBehavior": "DiscardOldOnes",
 				"pivotX": 0.5,
 				"pivotY": 0.5,
 				"fieldDefs": [
@@ -290,9 +330,13 @@
 						"__type": "String",
 						"uid": 32,
 						"type": "F_String",
+						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Center",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": null
@@ -302,9 +346,13 @@
 						"__type": "Color",
 						"uid": 33,
 						"type": "F_Color",
+						"isArray": false,
 						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": { "id": "V_Int", "params": [ 16777215 ] }
@@ -320,8 +368,9 @@
 				"renderMode": "Ellipse",
 				"tilesetId": null,
 				"tileId": null,
+				"tileRenderMode": "Stretch",
 				"maxPerLevel": 0,
-				"discardExcess": true,
+				"limitBehavior": "DiscardOldOnes",
 				"pivotX": 0.5,
 				"pivotY": 1.0,
 				"fieldDefs": []
@@ -329,9 +378,9 @@
 		],
 		"tilesets": [
 			{
-				"identifier": "Tileset2",
+				"identifier": "Tileset",
 				"uid": 16,
-				"relPath": "../../../gmtk20-dumberDwarves/res/ld/tileset.png",
+				"relPath": "../../gmtk20-dumberDwarves/res/ld/tileset.png",
 				"pxWid": 512,
 				"pxHei": 512,
 				"tileGridSize": 16,
@@ -364,37 +413,86 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 2426868,
 					"gridTiles": [],
 					"entityInstances": [
 						{ "__identifier": "Hero", "__cx": 4, "__cy": 8, "defUid": 11, "x": 72, "y": 144, "fieldInstances": [] },
 						{ "__identifier": "Mob", "__cx": 12, "__cy": 7, "defUid": 13, "x": 200, "y": 128, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": "Goblin", "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Goblin" ]
-							} }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": "Goblin",
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Goblin" ]
+								} ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 12, "__cy": 9, "defUid": 13, "x": 200, "y": 160, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": "Goblin", "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Goblin" ]
-							} }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": "Goblin",
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Goblin" ]
+								} ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 14, "__cy": 8, "defUid": 9, "x": 232, "y": 136, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": "Gem", "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Gem" ]
-							} }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": "Gem",
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Gem" ]
+								} ]
+							}
 						] },
 						{ "__identifier": "Cart", "__cx": 2, "__cy": 8, "defUid": 19, "x": 40, "y": 144, "fieldInstances": [] },
 						{ "__identifier": "Label", "__cx": 9, "__cy": 2, "defUid": 31, "x": 152, "y": 40, "fieldInstances": [
-							{ "__identifier": "Text", "__value": "DUMBER DWARVES", "__type": "String", "defUid": 32, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "DUMBER DWARVES" ]
-							} },
-							{ "__identifier": "Color", "__value": "#FFD438", "__type": "Color", "defUid": 33, "realEditorValue": { "id": "V_Int", "params": [ 16766008 ] } }
+							{
+								"__identifier": "Text",
+								"__value": "DUMBER DWARVES",
+								"__type": "String",
+								"defUid": 32,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "DUMBER DWARVES" ]
+								} ]
+							},
+							{
+								"__identifier": "Color",
+								"__value": "#FFD438",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 16766008 ] } ]
+							}
 						] },
 						{ "__identifier": "Label", "__cx": 9, "__cy": 4, "defUid": 31, "x": 152, "y": 72, "fieldInstances": [
 							{
@@ -402,12 +500,18 @@
 								"__value": "A 48h game by Sebastien Benard (deepnight.net)",
 								"__type": "String",
 								"defUid": 32,
-								"realEditorValue": {
+								"realEditorValues": [ {
 									"id": "V_String",
 									"params": [ "A 48h game by Sebastien Benard (deepnight.net)" ]
-								}
+								} ]
 							},
-							{ "__identifier": "Color", "__value": "#918FB3", "__type": "Color", "defUid": 33, "realEditorValue": { "id": "V_Int", "params": [ 9539507 ] } }
+							{
+								"__identifier": "Color",
+								"__value": "#918FB3",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 9539507 ] } ]
+							}
 						] }
 					]
 				},
@@ -704,6 +808,7 @@
 						{ "coordId": 351, "v": 0 }
 					],
 					"autoTiles": [],
+					"seed": 7524254,
 					"gridTiles": [],
 					"entityInstances": []
 				},
@@ -719,6 +824,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 226432,
 					"gridTiles": [
 						{ "coordId": 177, "v": 0 },
 						{ "coordId": 178, "v": 0 },
@@ -750,36 +856,103 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 5703602,
 					"gridTiles": [],
 					"entityInstances": [
 						{ "__identifier": "Hero", "__cx": 5, "__cy": 11, "defUid": 11, "x": 88, "y": 192, "fieldInstances": [] },
 						{ "__identifier": "Cart", "__cx": 7, "__cy": 11, "defUid": 19, "x": 120, "y": 192, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 9, "__cy": 3, "defUid": 9, "x": 152, "y": 56, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Gem" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Gem" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 18, "__cy": 4, "defUid": 13, "x": 296, "y": 80, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 13, "__cy": 1, "defUid": 13, "x": 216, "y": 32, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "MobGen", "__cx": 14, "__cy": 2, "defUid": 23, "x": 232, "y": 40, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 2, "__type": "Int", "defUid": 26, "realEditorValue": { "id": "V_Int", "params": [ 2 ] } },
-							{ "__identifier": "PerSpawn", "__value": 1, "__type": "Int", "defUid": 27, "realEditorValue": { "id": "V_Int", "params": [ 1 ] } },
-							{ "__identifier": "Delay", "__value": 3.0, "__type": "Float", "defUid": 28, "realEditorValue": { "id": "V_Float", "params": [ 3 ] } }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 2,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 2 ] } ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 1 ] } ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 3.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ { "id": "V_Float", "params": [ 3 ] } ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 13, "__cy": 5, "defUid": 9, "x": 216, "y": 88, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Gem" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Gem" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Label", "__cx": 9, "__cy": 7, "defUid": 31, "x": 152, "y": 120, "fieldInstances": [
 							{
@@ -787,12 +960,18 @@
 								"__value": "Your dwarves collect GEMS automatically for you.",
 								"__type": "String",
 								"defUid": 32,
-								"realEditorValue": {
+								"realEditorValues": [ {
 									"id": "V_String",
 									"params": [ "Your dwarves collect GEMS automatically for you." ]
-								}
+								} ]
 							},
-							{ "__identifier": "Color", "__value": "#FFFFFF", "__type": "Color", "defUid": 33, "realEditorValue": null }
+							{
+								"__identifier": "Color",
+								"__value": "#FFFFFF",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ null ]
+							}
 						] }
 					]
 				},
@@ -972,6 +1151,7 @@
 						{ "coordId": 335, "v": 0 }
 					],
 					"autoTiles": [],
+					"seed": 4812757,
 					"gridTiles": [],
 					"entityInstances": []
 				},
@@ -987,6 +1167,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 3851983,
 					"gridTiles": [
 						{ "coordId": 233, "v": 0 },
 						{ "coordId": 234, "v": 0 },
@@ -1021,51 +1202,124 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 6887391,
 					"gridTiles": [],
 					"entityInstances": [
 						{ "__identifier": "Hero", "__cx": 3, "__cy": 5, "defUid": 11, "x": 56, "y": 96, "fieldInstances": [] },
 						{ "__identifier": "Cart", "__cx": 28, "__cy": 10, "defUid": 19, "x": 456, "y": 176, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 28, "__cy": 16, "defUid": 9, "x": 456, "y": 264, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": "Gem", "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Gem" ]
-							} }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": "Gem",
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Gem" ]
+								} ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 24, "__cy": 10, "defUid": 9, "x": 392, "y": 168, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": "Gem", "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Gem" ]
-							} }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": "Gem",
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Gem" ]
+								} ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 25, "__cy": 14, "defUid": 13, "x": 408, "y": 240, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": "Goblin", "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Goblin" ]
-							} }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": "Goblin",
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Goblin" ]
+								} ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 27, "__cy": 12, "defUid": 13, "x": 440, "y": 208, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": "Goblin", "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Goblin" ]
-							} }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": "Goblin",
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Goblin" ]
+								} ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 19, "__cy": 11, "defUid": 13, "x": 312, "y": 192, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": "Goblin", "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Goblin" ]
-							} }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": "Goblin",
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Goblin" ]
+								} ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 23, "__cy": 10, "defUid": 13, "x": 376, "y": 176, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": "Goblin", "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Goblin" ]
-							} }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": "Goblin",
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Goblin" ]
+								} ]
+							}
 						] },
 						{ "__identifier": "Label", "__cx": 22, "__cy": 6, "defUid": 31, "x": 360, "y": 104, "fieldInstances": [
 							{
@@ -1073,48 +1327,114 @@
 								"__value": "Click here to drop some FOOD to BAIT your dwarf.",
 								"__type": "String",
 								"defUid": 32,
-								"realEditorValue": {
+								"realEditorValues": [ {
 									"id": "V_String",
 									"params": [ "Click here to drop some FOOD to BAIT your dwarf." ]
-								}
+								} ]
 							},
-							{ "__identifier": "Color", "__value": "#FFFFFF", "__type": "Color", "defUid": 33, "realEditorValue": null }
+							{
+								"__identifier": "Color",
+								"__value": "#FFFFFF",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Pointer", "__cx": 15, "__cy": 5, "defUid": 34, "x": 248, "y": 96, "fieldInstances": [] },
 						{ "__identifier": "Label", "__cx": 5, "__cy": 3, "defUid": 31, "x": 88, "y": 56, "fieldInstances": [
-							{ "__identifier": "Text", "__value": "Dwarves are kind of stupid.", "__type": "String", "defUid": 32, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Dwarves are kind of stupid." ]
-							} },
-							{ "__identifier": "Color", "__value": "#FFFFFF", "__type": "Color", "defUid": 33, "realEditorValue": null }
+							{
+								"__identifier": "Text",
+								"__value": "Dwarves are kind of stupid.",
+								"__type": "String",
+								"defUid": 32,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Dwarves are kind of stupid." ]
+								} ]
+							},
+							{
+								"__identifier": "Color",
+								"__value": "#FFFFFF",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Label", "__cx": 17, "__cy": 18, "defUid": 31, "x": 280, "y": 296, "fieldInstances": [
-							{ "__identifier": "Text", "__value": "Use food to guide them.", "__type": "String", "defUid": 32, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Use food to guide them." ]
-							} },
-							{ "__identifier": "Color", "__value": "#FFFFFF", "__type": "Color", "defUid": 33, "realEditorValue": null }
+							{
+								"__identifier": "Text",
+								"__value": "Use food to guide them.",
+								"__type": "String",
+								"defUid": 32,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Use food to guide them." ]
+								} ]
+							},
+							{
+								"__identifier": "Color",
+								"__value": "#FFFFFF",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 25, "__cy": 17, "defUid": 13, "x": 408, "y": 288, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": "Goblin", "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Goblin" ]
-							} }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": "Goblin",
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Goblin" ]
+								} ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 27, "__cy": 18, "defUid": 13, "x": 440, "y": 304, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": "Goblin", "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Goblin" ]
-							} }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": "Goblin",
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Goblin" ]
+								} ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 29, "__cy": 17, "defUid": 13, "x": 472, "y": 288, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": "Goblin", "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Goblin" ]
-							} }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": "Goblin",
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Goblin" ]
+								} ]
+							}
 						] }
 					]
 				},
@@ -2067,6 +2387,7 @@
 						{ "coordId": 1119, "v": 0 }
 					],
 					"autoTiles": [],
+					"seed": 576934,
 					"gridTiles": [],
 					"entityInstances": []
 				},
@@ -2082,6 +2403,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 4819776,
 					"gridTiles": [
 						{ "coordId": 375, "v": 0 },
 						{ "coordId": 376, "v": 0 },
@@ -2111,23 +2433,48 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 4580764,
 					"gridTiles": [],
 					"entityInstances": [
 						{ "__identifier": "Hero", "__cx": 7, "__cy": 6, "defUid": 11, "x": 120, "y": 112, "fieldInstances": [] },
 						{ "__identifier": "Cart", "__cx": 8, "__cy": 4, "defUid": 19, "x": 136, "y": 80, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 13, "__cy": 5, "defUid": 9, "x": 216, "y": 88, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 20, "__cy": 6, "defUid": 9, "x": 328, "y": 104, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Gem" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Gem" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Label", "__cx": 13, "__cy": 8, "defUid": 31, "x": 216, "y": 136, "fieldInstances": [
 							{
@@ -2135,21 +2482,39 @@
 								"__value": "... except when they do something stupid, like picking a trap-bomb. Click ON THEM to slap them.",
 								"__type": "String",
 								"defUid": 32,
-								"realEditorValue": {
+								"realEditorValues": [ {
 									"id": "V_String",
 									"params": [
 										"... except when they do something stupid, like picking a trap-bomb. Click ON THEM to slap them."
 									]
-								}
+								} ]
 							},
-							{ "__identifier": "Color", "__value": "#FFFFFF", "__type": "Color", "defUid": 33, "realEditorValue": null }
+							{
+								"__identifier": "Color",
+								"__value": "#FFFFFF",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Label", "__cx": 13, "__cy": 3, "defUid": 31, "x": 216, "y": 56, "fieldInstances": [
-							{ "__identifier": "Text", "__value": "Dwarves cannot die...", "__type": "String", "defUid": 32, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Dwarves cannot die..." ]
-							} },
-							{ "__identifier": "Color", "__value": "#FFFFFF", "__type": "Color", "defUid": 33, "realEditorValue": null }
+							{
+								"__identifier": "Text",
+								"__value": "Dwarves cannot die...",
+								"__type": "String",
+								"defUid": 32,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Dwarves cannot die..." ]
+								} ]
+							},
+							{
+								"__identifier": "Color",
+								"__value": "#FFFFFF",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ null ]
+							}
 						] }
 					]
 				},
@@ -2481,6 +2846,7 @@
 						{ "coordId": 454, "v": 0 }
 					],
 					"autoTiles": [],
+					"seed": 5026736,
 					"gridTiles": [],
 					"entityInstances": []
 				},
@@ -2496,6 +2862,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 829484,
 					"gridTiles": [
 						{ "coordId": 145, "v": 0 },
 						{ "coordId": 146, "v": 0 },
@@ -2525,49 +2892,134 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 8349713,
 					"gridTiles": [],
 					"entityInstances": [
 						{ "__identifier": "Hero", "__cx": 5, "__cy": 7, "defUid": 11, "x": 88, "y": 128, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 13, "__cy": 13, "defUid": 9, "x": 216, "y": 216, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 17, "__cy": 9, "defUid": 9, "x": 280, "y": 152, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 20, "__cy": 13, "defUid": 9, "x": 328, "y": 216, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 17, "__cy": 12, "defUid": 9, "x": 280, "y": 200, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 20, "__cy": 8, "defUid": 9, "x": 328, "y": 136, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 4, "__cy": 14, "defUid": 9, "x": 72, "y": 232, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Hero", "__cx": 8, "__cy": 5, "defUid": 11, "x": 136, "y": 96, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 15, "__cy": 5, "defUid": 9, "x": 248, "y": 88, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Label", "__cx": 13, "__cy": 2, "defUid": 31, "x": 216, "y": 40, "fieldInstances": [
 							{
@@ -2575,27 +3027,57 @@
 								"__value": "Slap your dwarves when they do something you don't want.",
 								"__type": "String",
 								"defUid": 32,
-								"realEditorValue": {
+								"realEditorValues": [ {
 									"id": "V_String",
 									"params": [ "Slap your dwarves when they do something you don't want." ]
-								}
+								} ]
 							},
-							{ "__identifier": "Color", "__value": "#FFFFFF", "__type": "Color", "defUid": 33, "realEditorValue": null }
+							{
+								"__identifier": "Color",
+								"__value": "#FFFFFF",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Cart", "__cx": 4, "__cy": 11, "defUid": 19, "x": 72, "y": 192, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 12, "__cy": 9, "defUid": 9, "x": 200, "y": 152, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 9, "__cy": 13, "defUid": 9, "x": 152, "y": 216, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] }
 					]
 				},
@@ -2810,6 +3292,7 @@
 						{ "coordId": 449, "v": 0 }
 					],
 					"autoTiles": [],
+					"seed": 7646216,
 					"gridTiles": [],
 					"entityInstances": []
 				},
@@ -2825,6 +3308,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 3549277,
 					"gridTiles": [
 						{ "coordId": 277, "v": 0 },
 						{ "coordId": 278, "v": 0 },
@@ -2856,44 +3340,117 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 5858069,
 					"gridTiles": [],
 					"entityInstances": [
 						{ "__identifier": "Hero", "__cx": 5, "__cy": 14, "defUid": 11, "x": 88, "y": 240, "fieldInstances": [] },
 						{ "__identifier": "Hero", "__cx": 9, "__cy": 12, "defUid": 11, "x": 152, "y": 208, "fieldInstances": [] },
 						{ "__identifier": "Cart", "__cx": 6, "__cy": 13, "defUid": 19, "x": 104, "y": 224, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 8, "__cy": 10, "defUid": 9, "x": 136, "y": 168, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 13, "__cy": 15, "defUid": 9, "x": 216, "y": 248, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 2, "__cy": 15, "defUid": 9, "x": 40, "y": 248, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 6, "__cy": 4, "defUid": 9, "x": 104, "y": 72, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 10, "__cy": 4, "defUid": 9, "x": 168, "y": 72, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
-						{ "__identifier": "BossDoor", "__cx": 8, "__cy": 7, "defUid": 24, "x": 136, "y": 128, "fieldInstances": [ { "__identifier": "Time", "__value": 10, "__type": "Int", "defUid": 25, "realEditorValue": { "id": "V_Int", "params": [ 10 ] } } ] },
+						{ "__identifier": "BossDoor", "__cx": 8, "__cy": 7, "defUid": 24, "x": 136, "y": 128, "fieldInstances": [ {
+							"__identifier": "Time",
+							"__value": 10,
+							"__type": "Int",
+							"defUid": 25,
+							"realEditorValues": [ { "id": "V_Int", "params": [ 10 ] } ]
+						} ] },
 						{ "__identifier": "Label", "__cx": 8, "__cy": 2, "defUid": 31, "x": 136, "y": 40, "fieldInstances": [
 							{
 								"__identifier": "Text",
 								"__value": "You might sometime be in a hurry...",
 								"__type": "String",
 								"defUid": 32,
-								"realEditorValue": {
+								"realEditorValues": [ {
 									"id": "V_String",
 									"params": [ "You might sometime be in a hurry..." ]
-								}
+								} ]
 							},
-							{ "__identifier": "Color", "__value": "#FFFFFF", "__type": "Color", "defUid": 33, "realEditorValue": null }
+							{
+								"__identifier": "Color",
+								"__value": "#FFFFFF",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ null ]
+							}
 						] }
 					]
 				},
@@ -3015,6 +3572,7 @@
 						{ "coordId": 305, "v": 0 }
 					],
 					"autoTiles": [],
+					"seed": 4200720,
 					"gridTiles": [],
 					"entityInstances": []
 				},
@@ -3030,6 +3588,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 8638268,
 					"gridTiles": [
 						{ "coordId": 222, "v": 0 },
 						{ "coordId": 223, "v": 0 },
@@ -3061,45 +3620,136 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 6038568,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "BossDoor", "__cx": 13, "__cy": 5, "defUid": 24, "x": 216, "y": 96, "fieldInstances": [ { "__identifier": "Time", "__value": 30, "__type": "Int", "defUid": 25, "realEditorValue": null } ] },
+						{ "__identifier": "BossDoor", "__cx": 13, "__cy": 5, "defUid": 24, "x": 216, "y": 96, "fieldInstances": [ {
+							"__identifier": "Time",
+							"__value": 30,
+							"__type": "Int",
+							"defUid": 25,
+							"realEditorValues": [ null ]
+						} ] },
 						{ "__identifier": "Cart", "__cx": 8, "__cy": 2, "defUid": 19, "x": 136, "y": 48, "fieldInstances": [] },
 						{ "__identifier": "Hero", "__cx": 9, "__cy": 4, "defUid": 11, "x": 152, "y": 80, "fieldInstances": [] },
 						{ "__identifier": "Hero", "__cx": 13, "__cy": 6, "defUid": 11, "x": 216, "y": 112, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 2, "__cy": 6, "defUid": 9, "x": 40, "y": 104, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 21, "__cy": 16, "defUid": 9, "x": 344, "y": 264, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 3, "__cy": 14, "defUid": 9, "x": 56, "y": 232, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 5, "__cy": 5, "defUid": 9, "x": 88, "y": 88, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 19, "__cy": 18, "defUid": 9, "x": 312, "y": 296, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 15, "__cy": 17, "defUid": 9, "x": 248, "y": 280, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 16, "__cy": 4, "defUid": 9, "x": 264, "y": 72, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Crate", "__cx": 19, "__cy": 10, "defUid": 21, "x": 312, "y": 176, "fieldInstances": [] },
 						{ "__identifier": "Crate", "__cx": 20, "__cy": 10, "defUid": 21, "x": 328, "y": 176, "fieldInstances": [] },
@@ -3110,32 +3760,80 @@
 						{ "__identifier": "Crate", "__cx": 21, "__cy": 9, "defUid": 21, "x": 344, "y": 160, "fieldInstances": [] },
 						{ "__identifier": "Crate", "__cx": 21, "__cy": 10, "defUid": 21, "x": 344, "y": 176, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 19, "__cy": 18, "defUid": 9, "x": 312, "y": 296, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 19, "__cy": 2, "defUid": 9, "x": 312, "y": 40, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 22, "__cy": 3, "defUid": 9, "x": 360, "y": 56, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 20, "__cy": 4, "defUid": 9, "x": 328, "y": 72, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] }
 					]
 				},
@@ -3297,6 +3995,7 @@
 						{ "coordId": 479, "v": 0 }
 					],
 					"autoTiles": [],
+					"seed": 3807638,
 					"gridTiles": [],
 					"entityInstances": []
 				},
@@ -3312,6 +4011,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 2006349,
 					"gridTiles": [
 						{ "coordId": 56, "v": 0 },
 						{ "coordId": 57, "v": 0 },
@@ -3343,6 +4043,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 7927736,
 					"gridTiles": [],
 					"entityInstances": [
 						{ "__identifier": "Hero", "__cx": 7, "__cy": 13, "defUid": 11, "x": 120, "y": 224, "fieldInstances": [] },
@@ -3350,82 +4051,298 @@
 						{ "__identifier": "Hero", "__cx": 7, "__cy": 9, "defUid": 11, "x": 120, "y": 160, "fieldInstances": [] },
 						{ "__identifier": "Cart", "__cx": 6, "__cy": 11, "defUid": 19, "x": 104, "y": 192, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 11, "__cy": 7, "defUid": 9, "x": 184, "y": 120, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 11, "__cy": 16, "defUid": 9, "x": 184, "y": 264, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 8, "__cy": 22, "defUid": 9, "x": 136, "y": 360, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 8, "__cy": 2, "defUid": 9, "x": 136, "y": 40, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
-						{ "__identifier": "BossDoor", "__cx": 19, "__cy": 2, "defUid": 24, "x": 312, "y": 48, "fieldInstances": [ { "__identifier": "Time", "__value": 30, "__type": "Int", "defUid": 25, "realEditorValue": null } ] },
+						{ "__identifier": "BossDoor", "__cx": 19, "__cy": 2, "defUid": 24, "x": 312, "y": 48, "fieldInstances": [ {
+							"__identifier": "Time",
+							"__value": 30,
+							"__type": "Int",
+							"defUid": 25,
+							"realEditorValues": [ null ]
+						} ] },
 						{ "__identifier": "Item", "__cx": 19, "__cy": 17, "defUid": 9, "x": 312, "y": 280, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 16, "__cy": 12, "defUid": 9, "x": 264, "y": 200, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 22, "__cy": 2, "defUid": 9, "x": 360, "y": 40, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 16, "__cy": 23, "defUid": 9, "x": 264, "y": 376, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 22, "__cy": 23, "defUid": 9, "x": 360, "y": 376, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "MobGen", "__cx": 19, "__cy": 7, "defUid": 23, "x": 312, "y": 120, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 4, "__type": "Int", "defUid": 26, "realEditorValue": { "id": "V_Int", "params": [ 4 ] } },
-							{ "__identifier": "PerSpawn", "__value": 1, "__type": "Int", "defUid": 27, "realEditorValue": null },
-							{ "__identifier": "Delay", "__value": 3.0, "__type": "Float", "defUid": 28, "realEditorValue": { "id": "V_Float", "params": [ 3 ] } }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 4,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 4 ] } ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 3.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ { "id": "V_Float", "params": [ 3 ] } ]
+							}
 						] },
 						{ "__identifier": "MobGen", "__cx": 19, "__cy": 20, "defUid": 23, "x": 312, "y": 328, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 3, "__type": "Int", "defUid": 26, "realEditorValue": null },
-							{ "__identifier": "PerSpawn", "__value": 1, "__type": "Int", "defUid": 27, "realEditorValue": null },
-							{ "__identifier": "Delay", "__value": 3.0, "__type": "Float", "defUid": 28, "realEditorValue": { "id": "V_Float", "params": [ 3 ] } }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 3,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 3.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ { "id": "V_Float", "params": [ 3 ] } ]
+							}
 						] },
 						{ "__identifier": "MobGen", "__cx": 6, "__cy": 7, "defUid": 23, "x": 104, "y": 120, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 2, "__type": "Int", "defUid": 26, "realEditorValue": { "id": "V_Int", "params": [ 2 ] } },
-							{ "__identifier": "PerSpawn", "__value": 2, "__type": "Int", "defUid": 27, "realEditorValue": { "id": "V_Int", "params": [ 2 ] } },
-							{ "__identifier": "Delay", "__value": 10.0, "__type": "Float", "defUid": 28, "realEditorValue": { "id": "V_Float", "params": [ 10 ] } }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 2,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 2 ] } ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 2,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 2 ] } ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 10.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ { "id": "V_Float", "params": [ 10 ] } ]
+							}
 						] },
 						{ "__identifier": "MobGen", "__cx": 6, "__cy": 16, "defUid": 23, "x": 104, "y": 264, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 2, "__type": "Int", "defUid": 26, "realEditorValue": { "id": "V_Int", "params": [ 2 ] } },
-							{ "__identifier": "PerSpawn", "__value": 2, "__type": "Int", "defUid": 27, "realEditorValue": { "id": "V_Int", "params": [ 2 ] } },
-							{ "__identifier": "Delay", "__value": 10.0, "__type": "Float", "defUid": 28, "realEditorValue": { "id": "V_Float", "params": [ 10 ] } }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 2,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 2 ] } ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 2,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 2 ] } ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 10.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ { "id": "V_Float", "params": [ 10 ] } ]
+							}
 						] },
 						{ "__identifier": "MobGen", "__cx": 28, "__cy": 15, "defUid": 23, "x": 456, "y": 248, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 1, "__type": "Int", "defUid": 26, "realEditorValue": { "id": "V_Int", "params": [ 1 ] } },
-							{ "__identifier": "PerSpawn", "__value": 1, "__type": "Int", "defUid": 27, "realEditorValue": null },
-							{ "__identifier": "Delay", "__value": 10.0, "__type": "Float", "defUid": 28, "realEditorValue": { "id": "V_Float", "params": [ 10 ] } }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 1 ] } ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 10.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ { "id": "V_Float", "params": [ 10 ] } ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 31, "__cy": 15, "defUid": 9, "x": 504, "y": 248, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Crate", "__cx": 30, "__cy": 13, "defUid": 21, "x": 488, "y": 224, "fieldInstances": [] },
 						{ "__identifier": "Crate", "__cx": 30, "__cy": 16, "defUid": 21, "x": 488, "y": 272, "fieldInstances": [] },
@@ -3905,6 +4822,7 @@
 						{ "coordId": 883, "v": 0 }
 					],
 					"autoTiles": [],
+					"seed": 7076817,
 					"gridTiles": [],
 					"entityInstances": []
 				},
@@ -3920,6 +4838,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 9059673,
 					"gridTiles": [
 						{ "coordId": 379, "v": 0 },
 						{ "coordId": 380, "v": 0 },
@@ -3949,57 +4868,154 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 3071143,
 					"gridTiles": [],
 					"entityInstances": [
 						{ "__identifier": "Item", "__cx": 14, "__cy": 7, "defUid": 9, "x": 232, "y": 120, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Gem" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Gem" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 9, "__cy": 1, "defUid": 9, "x": 152, "y": 24, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Gem" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Gem" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 5, "__cy": 14, "defUid": 9, "x": 88, "y": 232, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Gem" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Gem" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 22, "__cy": 14, "defUid": 9, "x": 360, "y": 224, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Gem" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Gem" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 18, "__cy": 7, "defUid": 9, "x": 296, "y": 112, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Gem" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Gem" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 21, "__cy": 1, "defUid": 9, "x": 344, "y": 24, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Gem" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Gem" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 23, "__cy": 7, "defUid": 13, "x": 376, "y": 128, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 21, "__cy": 6, "defUid": 13, "x": 344, "y": 98, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Cart", "__cx": 4, "__cy": 8, "defUid": 19, "x": 72, "y": 144, "fieldInstances": [] },
 						{ "__identifier": "Hero", "__cx": 6, "__cy": 7, "defUid": 11, "x": 104, "y": 128, "fieldInstances": [] },
@@ -4012,45 +5028,141 @@
 						{ "__identifier": "Crate", "__cx": 7, "__cy": 12, "defUid": 21, "x": 120, "y": 208, "fieldInstances": [] },
 						{ "__identifier": "Hero", "__cx": 5, "__cy": 8, "defUid": 11, "x": 88, "y": 144, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 2, "__cy": 15, "defUid": 9, "x": 40, "y": 248, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Crate", "__cx": 12, "__cy": 7, "defUid": 21, "x": 200, "y": 128, "fieldInstances": [] },
 						{ "__identifier": "Crate", "__cx": 14, "__cy": 14, "defUid": 21, "x": 232, "y": 240, "fieldInstances": [] },
 						{ "__identifier": "Crate", "__cx": 17, "__cy": 15, "defUid": 21, "x": 280, "y": 256, "fieldInstances": [] },
 						{ "__identifier": "Crate", "__cx": 23, "__cy": 10, "defUid": 21, "x": 376, "y": 176, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 19, "__cy": 15, "defUid": 9, "x": 312, "y": 248, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Bomb", "__type": "String", "defUid": 10, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "Bomb" ]
-							} },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Bomb",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "Bomb" ]
+								} ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Crate", "__cx": 1, "__cy": 5, "defUid": 21, "x": 24, "y": 96, "fieldInstances": [] },
 						{ "__identifier": "Crate", "__cx": 2, "__cy": 5, "defUid": 21, "x": 40, "y": 96, "fieldInstances": [] },
 						{ "__identifier": "Crate", "__cx": 2, "__cy": 6, "defUid": 21, "x": 40, "y": 112, "fieldInstances": [] },
 						{ "__identifier": "MobGen", "__cx": 5, "__cy": 3, "defUid": 23, "x": 88, "y": 56, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 3, "__type": "Int", "defUid": 26, "realEditorValue": null },
-							{ "__identifier": "PerSpawn", "__value": 1, "__type": "Int", "defUid": 27, "realEditorValue": null },
-							{ "__identifier": "Delay", "__value": 5.0, "__type": "Float", "defUid": 28, "realEditorValue": null }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 3,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 5.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "MobGen", "__cx": 18, "__cy": 3, "defUid": 23, "x": 296, "y": 56, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 3, "__type": "Int", "defUid": 26, "realEditorValue": null },
-							{ "__identifier": "PerSpawn", "__value": 1, "__type": "Int", "defUid": 27, "realEditorValue": null },
-							{ "__identifier": "Delay", "__value": 5.0, "__type": "Float", "defUid": 28, "realEditorValue": null }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 3,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 5.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ null ]
+							}
 						] },
-						{ "__identifier": "BossDoor", "__cx": 12, "__cy": 7, "defUid": 24, "x": 200, "y": 128, "fieldInstances": [ { "__identifier": "Time", "__value": 30, "__type": "Int", "defUid": 25, "realEditorValue": null } ] },
+						{ "__identifier": "BossDoor", "__cx": 12, "__cy": 7, "defUid": 24, "x": 200, "y": 128, "fieldInstances": [ {
+							"__identifier": "Time",
+							"__value": 30,
+							"__type": "Int",
+							"defUid": 25,
+							"realEditorValues": [ null ]
+						} ] },
 						{ "__identifier": "MobGen", "__cx": 13, "__cy": 13, "defUid": 23, "x": 216, "y": 216, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 2, "__type": "Int", "defUid": 26, "realEditorValue": { "id": "V_Int", "params": [ 2 ] } },
-							{ "__identifier": "PerSpawn", "__value": 1, "__type": "Int", "defUid": 27, "realEditorValue": null },
-							{ "__identifier": "Delay", "__value": 5.0, "__type": "Float", "defUid": 28, "realEditorValue": null }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 2,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 2 ] } ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 5.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Mob", "__cx": 8, "__cy": 11, "defUid": 13, "x": 136, "y": 192, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gob", "__type": "String", "defUid": 14, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.MobType", "defUid": 46, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gob",
+								"__type": "String",
+								"defUid": 14,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.MobType",
+								"defUid": 46,
+								"realEditorValues": [ null ]
+							}
 						] }
 					]
 				},
@@ -4177,6 +5289,7 @@
 						{ "coordId": 441, "v": 0 }
 					],
 					"autoTiles": [],
+					"seed": 9063348,
 					"gridTiles": [],
 					"entityInstances": []
 				},
@@ -4192,6 +5305,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 8856941,
 					"gridTiles": [
 						{ "coordId": 209, "v": 0 },
 						{ "coordId": 210, "v": 0 },
@@ -4221,53 +5335,198 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 7605949,
 					"gridTiles": [],
 					"entityInstances": [
 						{ "__identifier": "Hero", "__cx": 7, "__cy": 2, "defUid": 11, "x": 120, "y": 48, "fieldInstances": [] },
 						{ "__identifier": "Hero", "__cx": 9, "__cy": 3, "defUid": 11, "x": 152, "y": 64, "fieldInstances": [] },
 						{ "__identifier": "Hero", "__cx": 7, "__cy": 5, "defUid": 11, "x": 120, "y": 96, "fieldInstances": [] },
 						{ "__identifier": "MobGen", "__cx": 7, "__cy": 15, "defUid": 23, "x": 120, "y": 248, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 3, "__type": "Int", "defUid": 26, "realEditorValue": { "id": "V_Int", "params": [ 3 ] } },
-							{ "__identifier": "PerSpawn", "__value": 1, "__type": "Int", "defUid": 27, "realEditorValue": { "id": "V_Int", "params": [ 1 ] } },
-							{ "__identifier": "Delay", "__value": 3.0, "__type": "Float", "defUid": 28, "realEditorValue": { "id": "V_Float", "params": [ 3 ] } }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 3,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 3 ] } ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 1 ] } ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 3.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ { "id": "V_Float", "params": [ 3 ] } ]
+							}
 						] },
 						{ "__identifier": "MobGen", "__cx": 20, "__cy": 15, "defUid": 23, "x": 328, "y": 248, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 4, "__type": "Int", "defUid": 26, "realEditorValue": { "id": "V_Int", "params": [ 4 ] } },
-							{ "__identifier": "PerSpawn", "__value": 2, "__type": "Int", "defUid": 27, "realEditorValue": { "id": "V_Int", "params": [ 2 ] } },
-							{ "__identifier": "Delay", "__value": 3.0, "__type": "Float", "defUid": 28, "realEditorValue": { "id": "V_Float", "params": [ 3 ] } }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 4,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 4 ] } ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 2,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 2 ] } ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 3.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ { "id": "V_Float", "params": [ 3 ] } ]
+							}
 						] },
 						{ "__identifier": "MobGen", "__cx": 20, "__cy": 4, "defUid": 23, "x": 328, "y": 72, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 3, "__type": "Int", "defUid": 26, "realEditorValue": { "id": "V_Int", "params": [ 3 ] } },
-							{ "__identifier": "PerSpawn", "__value": 1, "__type": "Int", "defUid": 27, "realEditorValue": { "id": "V_Int", "params": [ 1 ] } },
-							{ "__identifier": "Delay", "__value": 4.0, "__type": "Float", "defUid": 28, "realEditorValue": { "id": "V_Float", "params": [ 4 ] } }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 3,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 3 ] } ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 1 ] } ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 4.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ { "id": "V_Float", "params": [ 4 ] } ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 10, "__cy": 15, "defUid": 9, "x": 168, "y": 248, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 17, "__cy": 15, "defUid": 9, "x": 280, "y": 248, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 20, "__cy": 12, "defUid": 9, "x": 328, "y": 200, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 20, "__cy": 6, "defUid": 9, "x": 328, "y": 104, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Cart", "__cx": 5, "__cy": 4, "defUid": 19, "x": 88, "y": 80, "fieldInstances": [] },
 						{ "__identifier": "MobGen", "__cx": 13, "__cy": 2, "defUid": 23, "x": 216, "y": 40, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 4, "__type": "Int", "defUid": 26, "realEditorValue": { "id": "V_Int", "params": [ 4 ] } },
-							{ "__identifier": "PerSpawn", "__value": 2, "__type": "Int", "defUid": 27, "realEditorValue": { "id": "V_Int", "params": [ 2 ] } },
-							{ "__identifier": "Delay", "__value": 3.0, "__type": "Float", "defUid": 28, "realEditorValue": { "id": "V_Float", "params": [ 3 ] } }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 4,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 4 ] } ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 2,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 2 ] } ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 3.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ { "id": "V_Float", "params": [ 3 ] } ]
+							}
 						] },
-						{ "__identifier": "BossDoor", "__cx": 13, "__cy": 8, "defUid": 24, "x": 216, "y": 144, "fieldInstances": [ { "__identifier": "Time", "__value": 5, "__type": "Int", "defUid": 25, "realEditorValue": { "id": "V_Int", "params": [ 5 ] } } ] },
+						{ "__identifier": "BossDoor", "__cx": 13, "__cy": 8, "defUid": 24, "x": 216, "y": 144, "fieldInstances": [ {
+							"__identifier": "Time",
+							"__value": 5,
+							"__type": "Int",
+							"defUid": 25,
+							"realEditorValues": [ { "id": "V_Int", "params": [ 5 ] } ]
+						} ] },
 						{ "__identifier": "MobGen", "__cx": 20, "__cy": 4, "defUid": 23, "x": 328, "y": 72, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 3, "__type": "Int", "defUid": 26, "realEditorValue": null },
-							{ "__identifier": "PerSpawn", "__value": 2, "__type": "Int", "defUid": 27, "realEditorValue": { "id": "V_Int", "params": [ 2 ] } },
-							{ "__identifier": "Delay", "__value": 5.0, "__type": "Float", "defUid": 28, "realEditorValue": null }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 3,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 2,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 2 ] } ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 5.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ null ]
+							}
 						] }
 					]
 				},
@@ -4417,6 +5676,7 @@
 						{ "coordId": 413, "v": 0 }
 					],
 					"autoTiles": [],
+					"seed": 9049405,
 					"gridTiles": [],
 					"entityInstances": []
 				},
@@ -4432,6 +5692,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 4004277,
 					"gridTiles": [
 						{ "coordId": 94, "v": 0 },
 						{ "coordId": 95, "v": 0 },
@@ -4463,17 +5724,36 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 7783716,
 					"gridTiles": [],
 					"entityInstances": [
 						{ "__identifier": "Hero", "__cx": 11, "__cy": 15, "defUid": 11, "x": 184, "y": 256, "fieldInstances": [] },
 						{ "__identifier": "Hero", "__cx": 7, "__cy": 15, "defUid": 11, "x": 120, "y": 256, "fieldInstances": [] },
-						{ "__identifier": "BossDoor", "__cx": 9, "__cy": 5, "defUid": 24, "x": 152, "y": 96, "fieldInstances": [ { "__identifier": "Time", "__value": 5, "__type": "Int", "defUid": 25, "realEditorValue": { "id": "V_Int", "params": [ 5 ] } } ] },
+						{ "__identifier": "BossDoor", "__cx": 9, "__cy": 5, "defUid": 24, "x": 152, "y": 96, "fieldInstances": [ {
+							"__identifier": "Time",
+							"__value": 5,
+							"__type": "Int",
+							"defUid": 25,
+							"realEditorValues": [ { "id": "V_Int", "params": [ 5 ] } ]
+						} ] },
 						{ "__identifier": "Label", "__cx": 9, "__cy": 7, "defUid": 31, "x": 152, "y": 120, "fieldInstances": [
-							{ "__identifier": "Text", "__value": "THANK YOU FOR PLAYING", "__type": "String", "defUid": 32, "realEditorValue": {
-								"id": "V_String",
-								"params": [ "THANK YOU FOR PLAYING" ]
-							} },
-							{ "__identifier": "Color", "__value": "#FFFFFF", "__type": "Color", "defUid": 33, "realEditorValue": null }
+							{
+								"__identifier": "Text",
+								"__value": "THANK YOU FOR PLAYING",
+								"__type": "String",
+								"defUid": 32,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "THANK YOU FOR PLAYING" ]
+								} ]
+							},
+							{
+								"__identifier": "Color",
+								"__value": "#FFFFFF",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Label", "__cx": 9, "__cy": 12, "defUid": 31, "x": 152, "y": 200, "fieldInstances": [
 							{
@@ -4481,12 +5761,18 @@
 								"__value": "For more, please visit: deepnight.net",
 								"__type": "String",
 								"defUid": 32,
-								"realEditorValue": {
+								"realEditorValues": [ {
 									"id": "V_String",
 									"params": [ "For more, please visit: deepnight.net" ]
-								}
+								} ]
 							},
-							{ "__identifier": "Color", "__value": "#FFFFFF", "__type": "Color", "defUid": 33, "realEditorValue": null }
+							{
+								"__identifier": "Color",
+								"__value": "#FFFFFF",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Label", "__cx": 9, "__cy": 8, "defUid": 31, "x": 152, "y": 136, "fieldInstances": [
 							{
@@ -4494,58 +5780,208 @@
 								"__value": "Hope you liked this short game :)",
 								"__type": "String",
 								"defUid": 32,
-								"realEditorValue": {
+								"realEditorValues": [ {
 									"id": "V_String",
 									"params": [ "Hope you liked this short game :)" ]
-								}
+								} ]
 							},
-							{ "__identifier": "Color", "__value": "#FFFFFF", "__type": "Color", "defUid": 33, "realEditorValue": null }
+							{
+								"__identifier": "Color",
+								"__value": "#FFFFFF",
+								"__type": "Color",
+								"defUid": 33,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Hero", "__cx": 9, "__cy": 15, "defUid": 11, "x": 152, "y": 256, "fieldInstances": [] },
 						{ "__identifier": "MobGen", "__cx": 16, "__cy": 4, "defUid": 23, "x": 264, "y": 72, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 4, "__type": "Int", "defUid": 26, "realEditorValue": { "id": "V_Int", "params": [ 4 ] } },
-							{ "__identifier": "PerSpawn", "__value": 2, "__type": "Int", "defUid": 27, "realEditorValue": { "id": "V_Int", "params": [ 2 ] } },
-							{ "__identifier": "Delay", "__value": 5.0, "__type": "Float", "defUid": 28, "realEditorValue": null }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 4,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 4 ] } ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 2,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 2 ] } ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 5.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "MobGen", "__cx": 2, "__cy": 4, "defUid": 23, "x": 40, "y": 72, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 4, "__type": "Int", "defUid": 26, "realEditorValue": { "id": "V_Int", "params": [ 4 ] } },
-							{ "__identifier": "PerSpawn", "__value": 2, "__type": "Int", "defUid": 27, "realEditorValue": { "id": "V_Int", "params": [ 2 ] } },
-							{ "__identifier": "Delay", "__value": 5.0, "__type": "Float", "defUid": 28, "realEditorValue": null }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 4,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 4 ] } ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 2,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 2 ] } ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 5.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "MobGen", "__cx": 2, "__cy": 15, "defUid": 23, "x": 40, "y": 248, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 3, "__type": "Int", "defUid": 26, "realEditorValue": null },
-							{ "__identifier": "PerSpawn", "__value": 1, "__type": "Int", "defUid": 27, "realEditorValue": null },
-							{ "__identifier": "Delay", "__value": 2.0, "__type": "Float", "defUid": 28, "realEditorValue": { "id": "V_Float", "params": [ 2 ] } }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 3,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 2.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ { "id": "V_Float", "params": [ 2 ] } ]
+							}
 						] },
 						{ "__identifier": "MobGen", "__cx": 16, "__cy": 15, "defUid": 23, "x": 264, "y": 248, "fieldInstances": [
-							{ "__identifier": "MaxChildren", "__value": 3, "__type": "Int", "defUid": 26, "realEditorValue": null },
-							{ "__identifier": "PerSpawn", "__value": 1, "__type": "Int", "defUid": 27, "realEditorValue": null },
-							{ "__identifier": "Delay", "__value": 2.0, "__type": "Float", "defUid": 28, "realEditorValue": { "id": "V_Float", "params": [ 2 ] } }
+							{
+								"__identifier": "MaxChildren",
+								"__value": 3,
+								"__type": "Int",
+								"defUid": 26,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "PerSpawn",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 27,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "Delay",
+								"__value": 2.0,
+								"__type": "Float",
+								"defUid": 28,
+								"realEditorValues": [ { "id": "V_Float", "params": [ 2 ] } ]
+							}
 						] },
 						{ "__identifier": "Cart", "__cx": 9, "__cy": 17, "defUid": 19, "x": 152, "y": 288, "fieldInstances": [] },
 						{ "__identifier": "Item", "__cx": 1, "__cy": 3, "defUid": 9, "x": 24, "y": 56, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 17, "__cy": 3, "defUid": 9, "x": 280, "y": 56, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 5, "__cy": 3, "defUid": 9, "x": 88, "y": 56, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 8, "__cy": 3, "defUid": 9, "x": 136, "y": 56, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 10, "__cy": 3, "defUid": 9, "x": 168, "y": 56, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] },
 						{ "__identifier": "Item", "__cx": 13, "__cy": 3, "defUid": 9, "x": 216, "y": 56, "fieldInstances": [
-							{ "__identifier": "Type", "__value": "Gem", "__type": "String", "defUid": 10, "realEditorValue": null },
-							{ "__identifier": "type", "__value": null, "__type": "LocalEnum.ItemType", "defUid": 47, "realEditorValue": null }
+							{
+								"__identifier": "Type",
+								"__value": "Gem",
+								"__type": "String",
+								"defUid": 10,
+								"realEditorValues": [ null ]
+							},
+							{
+								"__identifier": "type",
+								"__value": null,
+								"__type": "LocalEnum.ItemType",
+								"defUid": 47,
+								"realEditorValues": [ null ]
+							}
 						] }
 					]
 				},
@@ -4689,6 +6125,7 @@
 						{ "coordId": 398, "v": 0 }
 					],
 					"autoTiles": [],
+					"seed": 9407008,
 					"gridTiles": [],
 					"entityInstances": []
 				},
@@ -4704,6 +6141,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoTiles": [],
+					"seed": 8241274,
 					"gridTiles": [
 						{ "coordId": 324, "v": 0 },
 						{ "coordId": 325, "v": 0 },
