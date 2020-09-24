@@ -12,7 +12,6 @@ class Home extends Page {
 		loadPageTemplate("home", {
 			app: Const.APP_NAME,
 			appVer: Const.getAppVersion(),
-			jsonVer: Const.JSON_HEADER,
 			docUrl: Const.DOCUMENTATION_URL,
 			websiteUrl : Const.WEBSITE_URL,
 			issueUrl : Const.ISSUES_URL,
