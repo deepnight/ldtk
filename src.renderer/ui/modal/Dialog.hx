@@ -20,15 +20,21 @@ class Dialog extends ui.Modal {
 
 
 		// Position near attach target
+		positionNear(target);
+	}
+
+	public function positionNear(?target:js.jquery.JQuery, toLeft=false) {
 		if( target==null )
 			jModalAndMask.addClass("centered");
 		else {
+			jModalAndMask.removeClass("centered");
 			var targetOff = target.offset();
+			var x = toLeft ? targetOff.left+target.outerWidth()-jContent.width() : targetOff.left;
 			var hei = App.ME.jDoc.innerHeight();
 			if( targetOff.top>=hei*0.7 ) {
 				// Place above target
 				jWrapper.offset({
-					left: targetOff.left,
+					left: x,
 					top: 0,
 				});
 				jWrapper.css("top", "auto");
@@ -37,7 +43,7 @@ class Dialog extends ui.Modal {
 			else {
 				// Place beneath target
 				jWrapper.offset({
-					left: targetOff.left,
+					left: x,
 					top: targetOff.top+target.outerHeight()
 				});
 			}

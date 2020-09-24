@@ -314,28 +314,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 							N.error("Perlin isn't enabled");
 						}
 						else {
-							// Perlin settings
-							var m = new Dialog(jFlag, "perlinSettings");
-							m.addClose();
-							m.loadTemplate("perlinSettings");
-							m.setTransparentMask();
-
-							var i = Input.linkToHtmlInput(r.perlinSeed, m.jContent.find("#perlinSeed"));
-							i.linkEvent( LayerRuleChanged(r) );
-							i.jInput.siblings("button").click( function(_) {
-								r.perlinSeed = Std.random(99999999);
-								i.jInput.val(r.perlinSeed);
-								editor.ge.emit( LayerRuleChanged(r) );
-							});
-
-							var i = Input.linkToHtmlInput(r.perlinScale, m.jContent.find("#perlinScale"));
-							i.displayAsPct = true;
-							i.setBounds(0.01, 1);
-							i.linkEvent( LayerRuleChanged(r) );
-
-							var i = Input.linkToHtmlInput(r.perlinOctaves, m.jContent.find("#perlinOctaves"));
-							i.setBounds(1, 4);
-							i.linkEvent( LayerRuleChanged(r) );
+							new ui.modal.dialog.RulePerlinSettings(jFlag, r);
 						}
 					}
 					else {
