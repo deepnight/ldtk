@@ -2778,10 +2778,15 @@ body.sorting ul.collapsedSortTarget {
 		header {
 			display: flex;
 			width: 100%;
-			align-items: center;
+			align-items: stretch;
 
 			>*+* {
 				margin-left: 4px;
+			}
+
+			button {
+				white-space: nowrap;
+				font-size: 9pt;
 			}
 
 			label {
