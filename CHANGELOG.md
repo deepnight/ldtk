@@ -4,6 +4,7 @@
 
  - **Radius**: Integer and Float entity fields can now be displayed as a radius around the entity (eg. a "lightRadius" Float value can now be displayed accordingly right in the editor display). See `Samples` for some examples.
  - **Smart color use**: if you have a Color field in an entity, it will be used when displaying various values in the editor (eg. having a "lightColor" field will affect the color of the circle around the entity).
+ - Added support for **tile spacing** and **padding** in Tilesets images.
  - Entity **Arrays** can now be sorted manually
  - Entity tiles can now be displayed as "stretched" (default) or "cropped".
  - A preview of the "Perlin noise" is displayed while editing the settings of an auto-layer rule perlin.
