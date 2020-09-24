@@ -6,6 +6,7 @@
  - **Smart color use**: if you have a Color field in an entity, it will be used when displaying various values in the editor (eg. having a "lightColor" field will affect the color of the circle around the entity).
  - Entity **Arrays** can now be sorted manually
  - Entity tiles can now be displayed as "stretched" (default) or "cropped".
+ - A preview of the "Perlin noise" is displayed while editing the settings of an auto-layer rule perlin.
  - Updated appearance of selected entities
  - Added a field display option to use Enum tiles in place of Entity tiles
  - Added a new option for entities with count limits ("move last one instead of adding").
