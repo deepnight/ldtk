@@ -62,7 +62,10 @@ class Home extends Page {
 
 		// Trim common path parts
 		var trimmedPaths = recents.copy();
-		if( trimmedPaths.length>1 ) {
+		if( trimmedPaths.length==1 ) {
+			trimmedPaths[0] = dn.FilePath.fromFile( trimmedPaths[0] ).fileWithExt;
+		}
+		else if( trimmedPaths.length>1 ) {
 			var splitPaths = trimmedPaths.map( function(p) return dn.FilePath.fromFile(p).getDirectoryAndFileArray() );
 
 			var same = true;
