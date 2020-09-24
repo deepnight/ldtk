@@ -76,6 +76,16 @@ class FieldInstance {
 		removeArrayValue( getArrayLength()-1 );
 	}
 
+	public function sortArrayValues(from:Int, to:Int) {
+		if( from<0 || from>=getArrayLength() || to<0 || to>=getArrayLength() || from==to )
+			return false;
+
+		var tmp = internalValues[from];
+		internalValues[from] = internalValues[to];
+		internalValues[to] = tmp;
+		return true;
+	}
+
 
 
 	inline function require(type:FieldType) {

@@ -990,7 +990,6 @@ ul.form {
 
 select {
 	display: block;
-	padding: 8px;
 	max-width: 100%;
 
 	&.gray {
@@ -1597,8 +1596,8 @@ ul.sortable li.dragging {
 div.sortHandle {
 	display: inline-block;
 	background: url("../img/icons/drag.png") no-repeat;
-	background-position: left center;
-	padding-left: 32px;
+	background-position: center center;
+	padding-left: 24px;
 	padding-top: 32px;
 	opacity: 0.3;
 	cursor: move;
@@ -2469,9 +2468,8 @@ canvas#webgl {
 
 		div.array {
 			display: grid;
-			grid-template-columns: auto min-content;
+			grid-template-columns: auto;
 			gap: 2px;
-			column-gap: 4px;
 			box-sizing: border-box;
 			margin-left: 4px;
 			padding: 8px;
@@ -2481,15 +2479,28 @@ canvas#webgl {
 			border-left: 1px solid white;
 			border-bottom-left-radius: 8px;
 
-			.warning,
-			button.add {
-				grid-column: 1/3;
+			ul.values {
+				li {
+					display: grid;
+					gap: 4px;
+					grid-template-columns: auto min-content;
+					overflow-x: hidden;
+
+					select {
+						width: 100%;
+					}
+
+					.colorWrapper,
+					input[type=text] {
+						width: 100%;
+					}
+
+				}
+				&.sortable li {
+					grid-template-columns: min-content auto min-content;
+				}
 			}
 
-			.colorWrapper,
-			input[type=text] {
-				width: 100%;
-			}
 
 			button.remove {
 				padding: 0;

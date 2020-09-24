@@ -415,12 +415,22 @@ class EntityInstanceEditor extends dn.Process {
 						jArray.append('<div class="warning">Array should have $bounds value(s)</div>');
 					}
 
+					var jArrayInputs = new J('<ul class="values"/>');
+					jArrayInputs.appendTo(jArray);
+
+					var sortable = fi.def.type!=F_Point;
 					for(i in 0...fi.getArrayLength()) {
-						createInputFor(fi, i, jArray);
+						var li = new J('<li/>');
+						li.appendTo(jArrayInputs);
+
+						if( sortable )
+							li.append('<div class="sortHandle"/>');
+
+						createInputFor(fi, i, li);
 
 						// "Remove" button
 						var jRemove = new J('<button class="remove dark">x</button>');
-						jRemove.appendTo(jArray);
+						jRemove.appendTo(li);
 						var idx = i;
 						jRemove.click( function(_) {
 							fi.removeArrayValue(idx);
@@ -428,6 +438,12 @@ class EntityInstanceEditor extends dn.Process {
 							updateForm();
 						});
 					}
+					if( sortable )
+						JsTools.makeSortable(jArrayInputs, function(ev:sortablejs.Sortable.SortableDragEvent) {
+							fi.sortArrayValues(ev.oldIndex, ev.newIndex);
+							onFieldChange();
+						});
+
 					// "Add" button
 					if( fi.def.arrayMaxLength==null || fi.getArrayLength()<fi.def.arrayMaxLength ) {
 						var jAdd = new J('<button class="add"/>');
