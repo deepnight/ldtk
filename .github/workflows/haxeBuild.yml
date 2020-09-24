@@ -10,10 +10,10 @@ jobs:
           haxe-version: 4.0.5
       - run: |
         haxe -version
-        yes | haxelib install main.hxml
-        yes | haxelib install renderer.hxml
-        haxelib git heaps https://github.com/HeapsIO/heaps.git
-        haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+        haxelib install main.hxml --always
+        haxelib install renderer.hxml --always
+        haxelib git heaps https://github.com/HeapsIO/heaps.git --always
+        haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
         haxelib list
         haxe main.debug.hxml
         haxe renderer.debug.hxml
