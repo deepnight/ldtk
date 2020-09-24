@@ -20,7 +20,9 @@ class MouseCoords {
 			if( Editor.ME==null || Editor.ME.destroyed )
 				return -1;
 			else
-				return M.round( ( canvasX/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.levelRender.zoom ) - Editor.ME.curLayerInstance.pxOffsetX;
+				return
+					M.round( ( canvasX/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.levelRender.zoom )
+					- ( Editor.ME.curLayerInstance!=null ? Editor.ME.curLayerInstance.pxOffsetX : 0 );
 		}
 
 	public var levelY(get,never) : Int;
@@ -28,7 +30,9 @@ class MouseCoords {
 			if( Editor.ME==null || Editor.ME.destroyed )
 				return -1;
 			else
-				return M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.levelRender.zoom ) - Editor.ME.curLayerInstance.pxOffsetY;
+				return
+					M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.levelRender.zoom )
+					- ( Editor.ME.curLayerInstance!=null ? Editor.ME.curLayerInstance.pxOffsetY : 0 );
 		}
 
 	// Level cell

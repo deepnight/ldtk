@@ -558,10 +558,10 @@ class Editor extends Page {
 		curTool.onMouseMove(m);
 		rulers.onMouseMove(m);
 
-		jMouseCoords
-			.empty()
-			.append('<span>Grid = ${m.cx},${m.cy}</span>')
-			.append('<span>Pixels = ${m.levelX},${m.levelY}</span>');
+		jMouseCoords.empty();
+		if( curLayerInstance!=null )
+			jMouseCoords.append('<span>Grid = ${m.cx},${m.cy}</span>');
+		jMouseCoords.append('<span>Pixels = ${m.levelX},${m.levelY}</span>');
 	}
 
 	function onMouseWheel(e:hxd.Event) {
