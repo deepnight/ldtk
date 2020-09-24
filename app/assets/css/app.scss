@@ -2284,8 +2284,8 @@ canvas#webgl {
 		z-index: 2;
 		div {
 			position: absolute;
-			outline: 1px solid white;
-			outline-offset: -1px;
+			border: 1px solid rgba(255, 255, 255, 0.8);
+			border-radius: 3px;
 		}
 	}
 
