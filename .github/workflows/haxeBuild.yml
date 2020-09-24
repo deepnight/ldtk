@@ -8,14 +8,13 @@ jobs:
       - uses: krdlab/setup-haxe@v1.1.3
         with:
           haxe-version: 4.0.5
-      - run: |
-        haxe -version
-        haxelib install main.hxml --always
-        haxelib install renderer.hxml --always
-        haxelib git heaps https://github.com/HeapsIO/heaps.git --always
-        haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
-        haxelib list
-        haxe main.debug.hxml
-        haxe renderer.debug.hxml
-        haxe main.hxml
-        haxe renderer.hxml
+      - run: haxe -version
+      - run: haxelib install main.hxml --always
+      - run: haxelib install renderer.hxml --always
+      - run: haxelib git heaps https://github.com/HeapsIO/heaps.git --always
+      - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
+      - run: haxelib list
+      - run: haxe main.debug.hxml
+      - run: haxe renderer.debug.hxml
+      - run: haxe main.hxml
+      - run: haxe renderer.hxml
