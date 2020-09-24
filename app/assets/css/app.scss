@@ -990,6 +990,7 @@ ul.form {
 
 select {
 	display: block;
+	padding: 8px;
 	max-width: 100%;
 
 	&.gray {
@@ -2488,6 +2489,7 @@ canvas#webgl {
 
 					select {
 						width: 100%;
+						padding: 0;
 					}
 
 					.colorWrapper,
