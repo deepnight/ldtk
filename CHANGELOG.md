@@ -12,6 +12,7 @@
  - Updated appearance of selected entities
  - Added a field display option to use Enum tiles in place of Entity tiles
  - Added a new option for entities with count limits ("move last one instead of adding").
+ - Entities can now be displayed as "Crosses"
  - Various UI fixes in "Compact" mode (when pressing `TAB`)
  - Fixed relative paths remapping when "Saving As" project
  - Fixed level resize issues which moved Entities and their Point fields in a strange way
