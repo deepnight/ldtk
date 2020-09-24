@@ -4,6 +4,7 @@
 
  - **Radius**: Integer and Float entity fields can now be displayed as a radius around the entity (eg. a "lightRadius" Float value can now be displayed accordingly right in the editor display). See `Samples` for some examples.
  - **Smart color use**: if you have a Color field in an entity, it will be used when displaying various values in the editor (eg. having a "lightColor" field will affect the color of the circle around the entity).
+ - Entity **Arrays** can now be sorted manually
  - Entity tiles can now be displayed as "stretched" (default) or "cropped".
  - Updated appearance of selected entities
  - Added a field display option to use Enum tiles in place of Entity tiles
