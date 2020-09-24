@@ -1930,9 +1930,13 @@ canvas#webgl {
 				}
 
 				li {
-					justify-items: right;
 					overflow: hidden;
-					grid-template-columns: auto min-content;
+					grid-template-columns: min-content auto min-content;
+					justify-items: right;
+					button.remove {
+						padding: 5px;
+						border-radius: 3px;
+					}
 					.exploreTo {
 						padding: 4px 8px;
 					}
