@@ -12,10 +12,24 @@
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 10,
+	"nextUid": 11,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
+			{
+				"identifier": "Tiles",
+				"type": "Tiles",
+				"uid": 10,
+				"gridSize": 16,
+				"displayOpacity": 1.0,
+				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
+				"autoTilesetDefUid": null,
+				"autoRuleGroups": [],
+				"autoSourceLayerDefUid": null,
+				"tilesetDefUid": 2,
+				"tilePivotX": 0,
+				"tilePivotY": 0
+			},
 			{
 				"identifier": "Collisions",
 				"type": "IntGrid",
@@ -34,13 +48,14 @@
 		"entities": [],
 		"tilesets": [
 			{
-				"identifier": "Sunnyland_tileset",
+				"identifier": "Sunnyland_tileset_no_padding",
 				"uid": 2,
-				"relPath": "../../tests/atlas/sunnyland_tileset.png",
-				"pxWid": 400,
-				"pxHei": 368,
+				"relPath": "../../tests/atlas/sunnyland_tileset_no_padding.png",
+				"pxWid": 368,
+				"pxHei": 336,
 				"tileGridSize": 16,
-				"tileGridSpacing": 0,
+				"spacing": 16,
+				"padding": 0,
 				"savedSelections": []
 			}
 		],
@@ -53,6 +68,22 @@
 		"pxWid": 416,
 		"pxHei": 256,
 		"layerInstances": [
+			{
+				"__identifier": "Tiles",
+				"__type": "Tiles",
+				"__cWid": 26,
+				"__cHei": 16,
+				"__gridSize": 16,
+				"levelId": 0,
+				"layerDefUid": 10,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGrid": [],
+				"autoTiles": [],
+				"seed": 2878444,
+				"gridTiles": [],
+				"entityInstances": []
+			},
 			{
 				"__identifier": "Collisions",
 				"__type": "IntGrid",
