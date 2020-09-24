@@ -53,6 +53,8 @@ class Home extends Page {
 	}
 
 	function updateRecents() {
+		ui.Tip.clear();
+
 		var jRecentList = jPage.find("ul.recents");
 		jRecentList.empty();
 
@@ -93,7 +95,7 @@ class Home extends Page {
 			jRemove.attr("title",Lang.t._("Remove from history"));
 			var remIdx = i;
 			jRemove.click( function(_) {
-				recents.splice(remIdx,1);
+				App.ME.unregisterRecentProject(p);
 				updateRecents();
 			});
 			li.append( jRemove );
