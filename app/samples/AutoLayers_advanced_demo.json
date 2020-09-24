@@ -6,7 +6,7 @@
 		"appVersion": "0.1.8-alpha-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
-	"name": "AutoLayer demo",
+	"name": "AutoLayers advanced demo",
 	"jsonVersion": "0.1.8",
 	"defaultPivotX": 0.0,
 	"defaultPivotY": 0.0,
@@ -698,7 +698,8 @@
 				"pxWid": 96,
 				"pxHei": 256,
 				"tileGridSize": 8,
-				"tileGridSpacing": 0,
+				"spacing": 0,
+				"padding": 0,
 				"savedSelections": [
 					{ "ids": [ 0, 1, 2, 3, 4, 5, 6 ], "mode": "Random" },
 					{ "ids": [ 120, 121, 122 ], "mode": "Random" },
@@ -728,7 +729,7 @@
 		"externalEnums": []
 	},
 	"levels": [ {
-		"identifier": "AutoLayer_demo",
+		"identifier": "AutoLayers_advanced_demo",
 		"uid": 70,
 		"pxWid": 296,
 		"pxHei": 304,
