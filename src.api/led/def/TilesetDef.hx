@@ -9,7 +9,8 @@ class TilesetDef {
 	public var identifier(default,set) : String;
 	public var relPath(default,null) : Null<String>;
 	public var tileGridSize : Int = Project.DEFAULT_GRID_SIZE;
-	public var tileGridSpacing : Int = 0;
+	public var padding : Int = 0; // px dist to atlas borders
+	public var spacing : Int = 0; // px space between consecutive tiles
 	public var savedSelections : Array<TilesetSelection> = [];
 
 	public var pxWid = 0;
@@ -88,7 +89,8 @@ class TilesetDef {
 			pxWid: pxWid,
 			pxHei: pxHei,
 			tileGridSize: tileGridSize,
-			tileGridSpacing: tileGridSpacing,
+			spacing: spacing,
+			padding: padding,
 			savedSelections: savedSelections.map( function(sel) {
 				return { ids:sel.ids, mode:JsonTools.writeEnum(sel.mode, false) }
 			}),
@@ -99,7 +101,8 @@ class TilesetDef {
 	public static function fromJson(p:Project, json:Dynamic) {
 		var td = new TilesetDef( p, JsonTools.readInt(json.uid) );
 		td.tileGridSize = JsonTools.readInt(json.tileGridSize, Project.DEFAULT_GRID_SIZE);
-		td.tileGridSpacing = JsonTools.readInt(json.tileGridSpacing, 0);
+		td.spacing = JsonTools.readInt(json.spacing, 0);
+		td.padding = JsonTools.readInt(json.padding, 0);
 		td.pxWid = JsonTools.readInt( json.pxWid );
 		td.pxHei = JsonTools.readInt( json.pxHei );
 		td.relPath = json.relPath;
@@ -145,7 +148,7 @@ class TilesetDef {
 		pxWid = pixels.width;
 		pxHei = pixels.height;
 		tileGridSize = dn.M.imin( tileGridSize, getMaxTileGridSize() );
-		tileGridSpacing = dn.M.imin( tileGridSpacing, getMaxTileGridSize() );
+		spacing = dn.M.imin( spacing, getMaxTileGridSize() );
 
 		return true;
 	}
@@ -230,11 +233,11 @@ class TilesetDef {
 	}
 
 	public inline function getTileSourceX(tileId:Int) {
-		return getTileCx(tileId) * ( tileGridSize + tileGridSpacing );
+		return getTileCx(tileId) * ( tileGridSize + spacing );
 	}
 
 	public inline function getTileSourceY(tileId:Int) {
-		return getTileCy(tileId) * ( tileGridSize + tileGridSpacing );
+		return getTileCy(tileId) * ( tileGridSize + spacing );
 	}
 
 
