@@ -22,10 +22,10 @@ class TilesetDef {
 
 
 	public var cWid(get,never) : Int;
-	inline function get_cWid() return !hasAtlasPath() ? 0 : dn.M.ceil( pxWid / tileGridSize );
+	inline function get_cWid() return !hasAtlasPath() ? 0 : dn.M.ceil( pxWid / (tileGridSize+spacing) );
 
 	public var cHei(get,never) : Int;
-	inline function get_cHei() return !hasAtlasPath() ? 0 : dn.M.ceil( pxHei / tileGridSize );
+	inline function get_cHei() return !hasAtlasPath() ? 0 : dn.M.ceil( pxHei / (tileGridSize+spacing) );
 
 
 	public function new(p:Project, uid:Int) {

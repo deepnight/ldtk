@@ -84,6 +84,25 @@ class TilesetPicker {
 		SCROLL_MEMORY = new Map();
 	}
 
+	public function renderGrid() {
+		jPicker.remove(".grid");
+		var jGrid = new J('<div class="grid"/>');
+		jGrid.prependTo(jAtlas);
+
+		for(cy in 0...tilesetDef.cHei)
+		for(cx in 0...tilesetDef.cWid) {
+			var jCell = new J('<div/>');
+			var tid = tilesetDef.getTileId(cx,cy);
+			jCell.offset({
+				left: tilesetDef.getTileSourceX(tid),
+				top: tilesetDef.getTileSourceY(tid),
+			});
+			jCell.css("width", tilesetDef.tileGridSize+"px");
+			jCell.css("height", tilesetDef.tileGridSize+"px");
+			jGrid.append(jCell);
+		}
+	}
+
 	public function resetScroll() {
 		tx = ty = null;
 		scrollX = 0;
