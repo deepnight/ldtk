@@ -3,16 +3,16 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.1.8-alpha-debug",
+		"appVersion": "0.2.0-beta-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
 	"name": "AutoLayers advanced demo",
-	"jsonVersion": "0.1.8",
+	"jsonVersion": "0.2.0",
 	"defaultPivotX": 0.0,
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,
 	"bgColor": "#1B2037",
-	"nextUid": 87,
+	"nextUid": 91,
 	"minifyJson": false,
 	"defs": {
 		"layers": [
@@ -664,15 +664,15 @@
 						"uid": 78,
 						"name": "Background",
 						"active": true,
-						"collapsed": true,
+						"collapsed": false,
 						"rules": [
 							{
 								"uid": 35,
 								"active": true,
-								"size": 3,
+								"size": 7,
 								"tileIds": [ 216, 217, 218, 219 ],
-								"chance": 0.22,
-								"pattern": [ -1000001, -1000001, -1000001, -1000001, -1000001, -1000001, -1000001, -1000001, -1000001 ],
+								"chance": 0.56,
+								"pattern": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1000001, -1000001, -1000001, 0, 0, 0, 0, -1000001, -1000001, -1000001, 0, 0, 0, 0, -1000001, -1000001, -1000001, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 ],
 								"flipX": false,
 								"flipY": false,
 								"perlinActive": true,
@@ -687,9 +687,73 @@
 				"tilesetDefUid": null,
 				"tilePivotX": 0,
 				"tilePivotY": 0
+			},
+			{
+				"identifier": "Entities",
+				"type": "Entities",
+				"uid": 89,
+				"gridSize": 16,
+				"displayOpacity": 1.0,
+				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
+				"autoTilesetDefUid": null,
+				"autoRuleGroups": [],
+				"autoSourceLayerDefUid": null,
+				"tilesetDefUid": null,
+				"tilePivotX": 0,
+				"tilePivotY": 0
 			}
 		],
-		"entities": [],
+		"entities": [
+			{
+				"identifier": "Tutorial",
+				"uid": 87,
+				"width": 16,
+				"height": 4,
+				"color": "#000000",
+				"renderMode": "Rectangle",
+				"tilesetId": null,
+				"tileId": null,
+				"tileRenderMode": "Stretch",
+				"maxPerLevel": 0,
+				"limitBehavior": "DiscardOldOnes",
+				"pivotX": 0.5,
+				"pivotY": 0.5,
+				"fieldDefs": [
+					{
+						"identifier": "text",
+						"__type": "String",
+						"uid": 88,
+						"type": "F_String",
+						"isArray": false,
+						"canBeNull": true,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "ValueOnly",
+						"editorDisplayPos": "Center",
+						"editorAlwaysShow": false,
+						"min": null,
+						"max": null,
+						"defaultOverride": null
+					},
+					{
+						"identifier": "color",
+						"__type": "Color",
+						"uid": 90,
+						"type": "F_Color",
+						"isArray": false,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "Hidden",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
+						"min": null,
+						"max": null,
+						"defaultOverride": { "id": "V_Int", "params": [ 16766208 ] }
+					}
+				]
+			}
+		],
 		"tilesets": [
 			{
 				"identifier": "Cavernas_by_Adam_Saltsman",
@@ -3590,44 +3654,61 @@
 					{
 						"ruleId": 35,
 						"tiles": [
-							{ "coordId": 47, "tileId": 217, "flips": 0 },
-							{ "coordId": 54, "tileId": 217, "flips": 0 },
-							{ "coordId": 64, "tileId": 217, "flips": 0 },
-							{ "coordId": 68, "tileId": 217, "flips": 0 },
 							{ "coordId": 85, "tileId": 217, "flips": 0 },
-							{ "coordId": 124, "tileId": 219, "flips": 0 },
-							{ "coordId": 125, "tileId": 217, "flips": 0 },
-							{ "coordId": 140, "tileId": 216, "flips": 0 },
-							{ "coordId": 143, "tileId": 217, "flips": 0 },
-							{ "coordId": 144, "tileId": 216, "flips": 0 },
-							{ "coordId": 151, "tileId": 219, "flips": 0 },
-							{ "coordId": 181, "tileId": 217, "flips": 0 },
-							{ "coordId": 182, "tileId": 216, "flips": 0 },
-							{ "coordId": 187, "tileId": 218, "flips": 0 },
+							{ "coordId": 86, "tileId": 219, "flips": 0 },
+							{ "coordId": 179, "tileId": 219, "flips": 0 },
 							{ "coordId": 214, "tileId": 219, "flips": 0 },
-							{ "coordId": 223, "tileId": 217, "flips": 0 },
-							{ "coordId": 226, "tileId": 216, "flips": 0 },
-							{ "coordId": 255, "tileId": 218, "flips": 0 },
+							{ "coordId": 215, "tileId": 218, "flips": 0 },
+							{ "coordId": 216, "tileId": 219, "flips": 0 },
+							{ "coordId": 263, "tileId": 217, "flips": 0 },
+							{ "coordId": 300, "tileId": 217, "flips": 0 },
 							{ "coordId": 307, "tileId": 217, "flips": 0 },
 							{ "coordId": 318, "tileId": 216, "flips": 0 },
 							{ "coordId": 344, "tileId": 218, "flips": 0 },
 							{ "coordId": 345, "tileId": 219, "flips": 0 },
-							{ "coordId": 367, "tileId": 218, "flips": 0 },
-							{ "coordId": 577, "tileId": 216, "flips": 0 },
-							{ "coordId": 607, "tileId": 217, "flips": 0 },
-							{ "coordId": 644, "tileId": 219, "flips": 0 },
-							{ "coordId": 645, "tileId": 216, "flips": 0 },
-							{ "coordId": 721, "tileId": 218, "flips": 0 },
-							{ "coordId": 1089, "tileId": 218, "flips": 0 },
-							{ "coordId": 1096, "tileId": 218, "flips": 0 },
-							{ "coordId": 1130, "tileId": 219, "flips": 0 },
-							{ "coordId": 1193, "tileId": 219, "flips": 0 }
+							{ "coordId": 346, "tileId": 219, "flips": 0 },
+							{ "coordId": 347, "tileId": 218, "flips": 0 },
+							{ "coordId": 348, "tileId": 216, "flips": 0 },
+							{ "coordId": 355, "tileId": 216, "flips": 0 },
+							{ "coordId": 659, "tileId": 217, "flips": 0 },
+							{ "coordId": 719, "tileId": 217, "flips": 0 },
+							{ "coordId": 915, "tileId": 218, "flips": 0 },
+							{ "coordId": 952, "tileId": 217, "flips": 0 },
+							{ "coordId": 1097, "tileId": 218, "flips": 0 }
 						]
 					}
 				],
 				"seed": 2914559,
 				"gridTiles": [],
 				"entityInstances": []
+			},
+			{
+				"__identifier": "Entities",
+				"__type": "Entities",
+				"__cWid": 19,
+				"__cHei": 19,
+				"__gridSize": 16,
+				"levelId": 70,
+				"layerDefUid": 89,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGrid": [],
+				"autoTiles": [],
+				"seed": 6291330,
+				"gridTiles": [],
+				"entityInstances": [ { "__identifier": "Tutorial", "__cx": 9, "__cy": 0, "defUid": 87, "x": 152, "y": 8, "fieldInstances": [
+					{
+						"__identifier": "text",
+						"__value": "Press SHIFT+R to toggle auto-layers rendering",
+						"__type": "String",
+						"defUid": 88,
+						"realEditorValues": [ {
+							"id": "V_String",
+							"params": [ "Press SHIFT+R to toggle auto-layers rendering" ]
+						} ]
+					},
+					{ "__identifier": "color", "__value": "#FFD500", "__type": "Color", "defUid": 90, "realEditorValues": [] }
+				] } ]
 			}
 		]
 	} ]
