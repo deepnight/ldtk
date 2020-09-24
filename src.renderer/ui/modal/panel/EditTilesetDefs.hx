@@ -84,6 +84,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		jPickerWrapper.show().empty();
 		if( cur.isAtlasLoaded() ) {
 			var picker = new TilesetPicker(jPickerWrapper, cur);
+			picker.renderGrid();
 			picker.resetScroll();
 		}
 
@@ -188,9 +189,13 @@ class EditTilesetDefs extends ui.modal.Panel {
 		i.linkEvent( TilesetDefChanged(cur) );
 		i.setBounds(2, cur.getMaxTileGridSize());
 
-		// var i = Input.linkToHtmlInput( cur.tileGridSpacing, jForm.find("input[name=tilesetGridSpacing]") );
-		// i.linkEvent(TilesetDefChanged);
-		// i.setBounds(0, cur.getMaxTileGridSize());
+		var i = Input.linkToHtmlInput( cur.spacing, jForm.find("input[name=spacing]") );
+		i.linkEvent( TilesetDefChanged(cur) );
+		i.setBounds(0, cur.getMaxTileGridSize());
+
+		var i = Input.linkToHtmlInput( cur.padding, jForm.find("input[name=padding]") );
+		i.linkEvent( TilesetDefChanged(cur) );
+		i.setBounds(0, cur.getMaxTileGridSize());
 	}
 
 
@@ -207,12 +212,5 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 			e.click( function(_) select(td) );
 		}
-
-		// Make layer list sortable
-		// JsTools.makeSortable(".window .mainList ul", function(from, to) {
-			// var moved = project.defs.sortLayerDef(from,to);
-			// select(moved);
-		// 	editor.ge.emit(LayerDefSorted);
-		// });
 	}
 }

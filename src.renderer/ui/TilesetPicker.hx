@@ -84,6 +84,25 @@ class TilesetPicker {
 		SCROLL_MEMORY = new Map();
 	}
 
+	public function renderGrid() {
+		jPicker.remove(".grid");
+		var jGrid = new J('<div class="grid"/>');
+		jGrid.prependTo(jAtlas);
+
+		for(cy in 0...tilesetDef.cHei)
+		for(cx in 0...tilesetDef.cWid) {
+			var jCell = new J('<div/>');
+			var tid = tilesetDef.getTileId(cx,cy);
+			jCell.offset({
+				left: tilesetDef.getTileSourceX(tid),
+				top: tilesetDef.getTileSourceY(tid),
+			});
+			jCell.css("width", (tilesetDef.tileGridSize-2)+"px");
+			jCell.css("height", (tilesetDef.tileGridSize-2)+"px");
+			jGrid.append(jCell);
+		}
+	}
+
 	public function resetScroll() {
 		tx = ty = null;
 		scrollX = 0;
@@ -185,14 +204,15 @@ class TilesetPicker {
 		cx+=0.5;
 		cy+=0.5;
 
-		tx = cx*tilesetDef.tileGridSize - jPicker.outerWidth()*0.5/zoom;
-		ty = cy*tilesetDef.tileGridSize - jPicker.outerHeight()*0.5/zoom;
+		tx = tilesetDef.padding + cx*(tilesetDef.tileGridSize+tilesetDef.spacing) - jPicker.outerWidth()*0.5/zoom;
+		ty = tilesetDef.padding + cy*(tilesetDef.tileGridSize+tilesetDef.spacing) - jPicker.outerHeight()*0.5/zoom;
 
 		saveScrollPos();
 	}
 
 	function createCursor(sel:led.LedTypes.TilesetSelection, ?subClass:String, ?cWid:Int, ?cHei:Int) {
 		var wrapper = new J("<div/>");
+
 		var idsMap = new Map();
 		for(tileId in sel.ids)
 			idsMap.set(tileId,true);
@@ -226,8 +246,8 @@ class TilesetPicker {
 			e.css("left", x+"px");
 			e.css("top", y+"px");
 			var grid = tilesetDef.tileGridSize;
-			e.css("width", ( cWid!=null ? cWid*grid : tilesetDef.tileGridSize )+"px");
-			e.css("height", ( cHei!=null ? cHei*grid : tilesetDef.tileGridSize )+"px");
+			e.css("width", ( cWid!=null ? cWid*grid + (cWid-1)*tilesetDef.spacing : tilesetDef.tileGridSize )+"px");
+			e.css("height", ( cHei!=null ? cHei*grid + (cHei-1)*tilesetDef.spacing: tilesetDef.tileGridSize )+"px");
 		}
 
 		return wrapper;
@@ -243,6 +263,7 @@ class TilesetPicker {
 		}
 
 		var r = getCursorRect(pageX, pageY);
+		App.ME.debug(r);
 
 		// Avoid re-render if it's the same rect
 		if( !force && _lastRect!=null && r.cx==_lastRect.cx && r.cy==_lastRect.cy && r.wid==_lastRect.wid && r.hei==_lastRect.hei )
@@ -464,8 +485,10 @@ class TilesetPicker {
 		var localY = pageYtoLocal(pageY);
 
 		var grid = tilesetDef.tileGridSize;
-		var cx = M.iclamp( Std.int( localX / grid ), 0, tilesetDef.cWid-1 );
-		var cy = M.iclamp( Std.int( localY / grid ), 0, tilesetDef.cHei-1 );
+		var spacing = tilesetDef.spacing;
+		var padding = tilesetDef.padding;
+		var cx = M.iclamp( Std.int( (localX-padding) / ( grid+spacing ) ), 0, tilesetDef.cWid-1 );
+		var cy = M.iclamp( Std.int( (localY-padding) / ( grid+spacing ) ), 0, tilesetDef.cHei-1 );
 
 		if( dragStart==null || mode==SingleTile )
 			return {
@@ -475,8 +498,8 @@ class TilesetPicker {
 				hei: 1,
 			}
 		else {
-			var startCx = M.iclamp( Std.int( pageXtoLocal(dragStart.pageX) / grid ), 0, tilesetDef.cWid-1 );
-			var startCy = M.iclamp( Std.int( pageYtoLocal(dragStart.pageY) / grid ), 0, tilesetDef.cHei-1 );
+			var startCx = M.iclamp( Std.int( (pageXtoLocal(dragStart.pageX)-padding) / ( grid+spacing ) ), 0, tilesetDef.cWid-1 );
+			var startCy = M.iclamp( Std.int( (pageYtoLocal(dragStart.pageY)-padding) / ( grid+spacing ) ), 0, tilesetDef.cHei-1 );
 			return {
 				cx: M.imin(cx,startCx),
 				cy: M.imin(cy,startCy),

@@ -2279,6 +2279,16 @@ canvas#webgl {
 		box-shadow: 0px 0px 16px $red;;
 	}
 
+	.grid {
+		position: absolute;
+		z-index: 2;
+		div {
+			position: absolute;
+			border: 1px solid rgba(255, 255, 255, 0.8);
+			border-radius: 3px;
+		}
+	}
+
 	.selectionsWrapper,
 	.cursorsWrapper {
 		pointer-events: none;
