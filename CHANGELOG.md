@@ -7,6 +7,7 @@
  - Entity **Arrays** can now be sorted manually
  - Entity tiles can now be displayed as "stretched" (default) or "cropped".
  - A preview of the "Perlin noise" is displayed while editing the settings of an auto-layer rule perlin.
+ - Added **mouse coords** in the bottom-right corner of the window.
  - Updated appearance of selected entities
  - Added a field display option to use Enum tiles in place of Entity tiles
  - Added a new option for entities with count limits ("move last one instead of adding").
