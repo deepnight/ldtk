@@ -273,7 +273,6 @@ class TilesetPicker {
 		}
 
 		var r = getCursorRect(pageX, pageY);
-		App.ME.debug(r);
 
 		// Avoid re-render if it's the same rect
 		if( !force && _lastRect!=null && r.cx==_lastRect.cx && r.cy==_lastRect.cy && r.wid==_lastRect.wid && r.hei==_lastRect.hei )
