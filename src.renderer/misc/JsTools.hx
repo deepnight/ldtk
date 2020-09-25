@@ -384,6 +384,20 @@ class JsTools {
 
 			ui.Tip.attach( jThis, tip, keys );
 		});
+
+		// Tabs
+		jCtx.find("ul.tabs").each( function(idx,e) {
+			var jTabs = new J(e);
+			jTabs.find("li").click( function(ev:js.jquery.Event) {
+				var jTab = ev.getThis();
+				jTabs.find("li").removeClass("active");
+				jTab.addClass("active");
+				jTabs
+					.siblings(".tab").hide()
+					.filter("[section="+jTab.attr("section")+"]").show();
+			});
+			jTabs.find("li:first").click();
+		});
 	}
 
 

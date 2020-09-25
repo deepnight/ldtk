@@ -23,10 +23,21 @@
 			<button href="::issueUrl::">Feedback</button>
 		</div>
 
-		<div class="changelog">
-			<h1>Release notes</h1>
-			<div class="markdown" id="changelogHtml"></div>
-			<div id="changelogMd">::changelog::</div>
+		<div class="changelogs">
+			<ul class="tabs">
+				<li section="app">App release notes</li>
+				<li section="json">JSON changes</li>
+			</ul>
+
+			<div class="tab" section="app">
+				<div class="markdown" id="appChangelogHtml"></div>
+				<div id="appChangelogMd" class="rawMarkdown">::appChangelog::</div>
+			</div>
+
+			<div class="tab" section="json">
+				<div class="markdown" id="jsonChangelogHtml"></div>
+				<div id="jsonChangelogMd" class="rawMarkdown">::jsonChangelog::</div>
+			</div>
 		</div>
 	</div>
 
@@ -35,8 +46,12 @@
 	</div>
 </div>
 
+<!-- Parse markdowns -->
 <script type="text/javascript" src="js/marked.min.js"></script>
 <script type="text/javascript">
-	document.getElementById("changelogHtml").innerHTML =
-		marked( document.getElementById("changelogMd").innerHTML );
+	document.getElementById("appChangelogHtml").innerHTML =
+		marked( document.getElementById("appChangelogMd").innerHTML );
+
+	document.getElementById("jsonChangelogHtml").innerHTML =
+		marked( document.getElementById("jsonChangelogMd").innerHTML );
 </script>

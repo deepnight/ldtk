@@ -32,9 +32,10 @@ class Const {
 		url: WEBSITE_URL,
 	}
 
-	public static var CHANGELOG_MD = getChangelog();
-	public static var CHANGELOG = new dn.Changelog(CHANGELOG_MD);
+	public static var APP_CHANGELOG_MD = getAppChangelogMarkdown();
+	public static var APP_CHANGELOG = new dn.Changelog(APP_CHANGELOG_MD);
 
+	public static var JSON_CHANGELOG_MD = getJsonChangelogMarkdown();
 
 	public static var FPS = 60;
 	public static var SCALE = 1.0;
@@ -76,24 +77,39 @@ class Const {
 		return macro $v{ getPackageVersion() };
 	}
 
-	static macro function getChangelog() {
+	static macro function getAppChangelogMarkdown() {
 		haxe.macro.Context.registerModuleDependency("Const","CHANGELOG.md");
+		return macro $v{ sys.io.File.getContent("CHANGELOG.md") };
+	}
+
+	static macro function getJsonChangelogMarkdown() {
+		haxe.macro.Context.registerModuleDependency("Const","JSON_CHANGELOG.md");
+		return macro $v{ sys.io.File.getContent("JSON_CHANGELOG.md") };
+	}
+
+	static macro function buildLatestReleaseNotes() {
+		// App latest changelog
 		var raw = sys.io.File.getContent("CHANGELOG.md");
+		var appCL = new dn.Changelog(raw);
+		var relNotes = [
+			"# " + appCL.latest.version.full + ( appCL.latest.title!=null ? " -- *"+appCL.latest.title+"*" : "" ),
+			"",
+			"## App changes",
+		].concat( appCL.latest.allNoteLines );
 
-		// Dump latest version notes to "build" release notes
-		var c = new dn.Changelog(raw);
-		var relNotes =
-			"## " + c.latest.version.full + ( c.latest.title!=null ? " -- *"+c.latest.title+"*" : "" ) + "\n"
-			+ c.latest.allNoteLines.join("\n");
+		// JSON corresponding changelog
+		var raw = sys.io.File.getContent("JSON_CHANGELOG.md");
+		var jsonCL = new dn.Changelog(raw);
+		if( jsonCL.latest.version.equals(appCL.latest.version) ) {
+			relNotes.push('## JSON format changes');
+			relNotes = relNotes.concat( jsonCL.latest.allNoteLines );
+		}
 
+		// Save file
 		var relNotesPath = "app/build/release-notes.md";
-		try {
-			sys.io.File.saveContent(relNotesPath, relNotes);
-		}
-		catch(e:Dynamic) {
-			haxe.macro.Context.warning("Couldn't write "+relNotesPath, haxe.macro.Context.currentPos());
-		}
+		try sys.io.File.saveContent(relNotesPath, relNotes.join("\n"))
+		catch(e:Dynamic) haxe.macro.Context.warning("Couldn't write "+relNotesPath, haxe.macro.Context.currentPos());
 
-		return macro $v{raw};
+		return macro {}
 	}
 }

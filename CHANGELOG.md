@@ -1,5 +1,11 @@
 # LEd release notes
 
+## 0.2.1-beta
+
+ - Updated JSON file format with some extra dev-friendly values
+ - Added a JSON CHANGELOG file for devs working on importers
+ - Add JSON changelog to app start page
+
 ## 0.2.0-beta
 
  - **Beta version!**: LEd is now stable enough to be used in production and retro-compatibility will be guaranteed from now on.

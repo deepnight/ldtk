@@ -15,7 +15,8 @@ class Home extends Page {
 			docUrl: Const.DOCUMENTATION_URL,
 			websiteUrl : Const.WEBSITE_URL,
 			issueUrl : Const.ISSUES_URL,
-			changelog: StringTools.htmlEscape( Const.CHANGELOG_MD ),
+			appChangelog: StringTools.htmlEscape( Const.APP_CHANGELOG_MD),
+			jsonChangelog: StringTools.htmlEscape( Const.JSON_CHANGELOG_MD ),
 		});
 		App.ME.setWindowTitle();
 
