@@ -91,11 +91,14 @@ class LayerInstance {
 			seed: seed,
 
 			gridTiles: {
+				var td = _project.defs.getTilesetDef(def.tilesetDefUid);
 				var arr = [];
 				for(e in gridTiles.keyValueIterator())
 					arr.push({
 						coordId: e.key,
 						v: e.value,
+						__tileX: td==null ? -1 : td.getTileSourceX(e.value),
+						__tileY: td==null ? -1 : td.getTileSourceY(e.value),
 					});
 				arr;
 			},
