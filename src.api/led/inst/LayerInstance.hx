@@ -387,7 +387,7 @@ class LayerInstance {
 	/** TILES *******************/
 
 	public function setGridTile(cx:Int, cy:Int, tileId:Int) {
-		if( isValid(cx,cy) )
+		if( isValid(cx,cy) && tileId!=null )
 			gridTiles.set( coordId(cx,cy), tileId );
 	}
 
