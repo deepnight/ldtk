@@ -32,7 +32,9 @@
 		"directories": {
 			"output": "redist"
 		},
-		"extraFiles": ["samples"],
+		"extraFiles": [
+			"samples"
+		],
 		"files": [
 			"assets",
 			"package.json"
