@@ -4,6 +4,7 @@ dump/
 res/.tmp
 .vscode/settings.json
 
+app/*.log
 app/package-lock.json
 app/redist
 app/node_modules
