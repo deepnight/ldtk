@@ -25,15 +25,23 @@ Install all other required dependencies:
 
 ## Compiling
 
-Run either:
+First, from the root of the repo, build the electron **Main**:
 
- - `haxe app.hxml` (release version)
- - `npm run compile` from the app folder (same effect as above)
- - `haxe app.debug.hxml` (debug version)*
+```
+haxe main.debug.hxml
+```
+
+This should create a `app/assets/main.js` file.
+
+Then, build the electron **Renderer**:
+
+```
+haxe renderer.debug.hxml
+```
+
+This should create `app/assets/js/renderer.js`.
 
 ## Running
-
-If compilation was successful, you should now have a `app/assets/main.js`, and a `app/assets/js/renderer.js`.
 
 From a command line in the `app` folder, run:
 
