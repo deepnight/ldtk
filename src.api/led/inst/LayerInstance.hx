@@ -94,12 +94,13 @@ class LayerInstance {
 				var td = _project.defs.getTilesetDef(def.tilesetDefUid);
 				var arr = [];
 				for(e in gridTiles.keyValueIterator())
-					arr.push({
-						coordId: e.key,
-						tileId: e.value,
-						__tileX: td==null ? -1 : td.getTileSourceX(e.value),
-						__tileY: td==null ? -1 : td.getTileSourceY(e.value),
-					});
+					if( e.value!=null )
+						arr.push({
+							coordId: e.key,
+							tileId: e.value,
+							__tileX: td==null ? -1 : td.getTileSourceX(e.value),
+							__tileY: td==null ? -1 : td.getTileSourceY(e.value),
+						});
 				arr;
 			},
 			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
@@ -137,7 +138,11 @@ class LayerInstance {
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );
 
 		for( gridTilesJson in JsonTools.readArray(json.gridTiles) )
-			li.gridTiles.set( gridTilesJson.coordId, gridTilesJson.tileId );
+			if( gridTilesJson.tileId!=null )
+				li.gridTiles.set(
+					JsonTools.readInt(gridTilesJson.coordId),
+					JsonTools.readInt(gridTilesJson.tileId)
+				);
 
 		for( entityJson in JsonTools.readArray(json.entityInstances) )
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
