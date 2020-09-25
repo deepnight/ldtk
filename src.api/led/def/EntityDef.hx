@@ -33,7 +33,7 @@ class EntityDef {
 		setPivot(0.5,1);
 	}
 
-	public function isTileValid() {
+	public function isTileDefined() {
 		return tilesetId!=null && tileId!=null;
 	}
 

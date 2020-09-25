@@ -160,7 +160,7 @@ class JsTools {
 				ctx.rect(0, 0, Std.int(ed.width*scale), Std.int(ed.height*scale));
 				ctx.fill();
 
-				if( ed.isTileValid() ) {
+				if( ed.isTileDefined() ) {
 					var td = project.defs.getTilesetDef(ed.tilesetId);
 					var x = 0;
 					var y = 0;
