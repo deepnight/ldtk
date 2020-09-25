@@ -29,4 +29,14 @@ Run either:
 
  - `haxe app.hxml` (release version)
  - `npm run compile` from the app folder (same effect as above)
- - `haxe app.debug.hxml` (debug version)
+ - `haxe app.debug.hxml` (debug version)*
+ 
+## Running
+
+If compilation was successful, you should now have a `main.js` file in the **app/** folder, and a `renderer.js` in **app/js/** folder.
+
+From a command line in **app/** folder, run:
+
+```
+npm run start
+```
