@@ -58,3 +58,12 @@ From a command line in the `app` folder, run:
 ```
 npm run start
 ```
+
+# Related tools
+
+ - Haxe: https://haxe.org/
+ - Heaps.io: https://heaps.io/
+ - Electron: https://www.electronjs.org/
+ - JQuery: https://jquery.com
+ - MarkedJS: https://github.com/markedjs/marked
+ 
