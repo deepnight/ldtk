@@ -2,7 +2,7 @@ package ui.modal.dialog;
 
 import led.LedTypes;
 
-class AutoPatternEditor extends ui.modal.Dialog {
+class AutoLayerRuleEditor extends ui.modal.Dialog {
 	var curValIdx = 0;
 	var layerDef : led.def.LayerDef;
 	var rule : led.def.AutoLayerRuleDef;
@@ -17,7 +17,7 @@ class AutoPatternEditor extends ui.modal.Dialog {
 	}
 
 	function render() {
-		loadTemplate("autoPatternEditor");
+		loadTemplate("autoLayerRuleEditor");
 
 		var sourceDef = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef(layerDef.autoSourceLayerDefUid);
 

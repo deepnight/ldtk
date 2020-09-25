@@ -109,7 +109,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 
 			var jNewRule = jContent.find("[ruleUid="+r.uid+"]"); // BUG fix scrollbar position
-			new ui.modal.dialog.AutoPatternEditor(jNewRule, ld, lastRule );
+			new ui.modal.dialog.AutoLayerRuleEditor(jNewRule, ld, lastRule );
 		}
 
 
@@ -265,7 +265,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				var jPreview = jRule.find(".preview");
 				JsTools.createAutoPatternGrid(r, ld, true).appendTo(jPreview);
 				jPreview.click( function(ev) {
-					new ui.modal.dialog.AutoPatternEditor(jPreview, ld, r);
+					new ui.modal.dialog.AutoLayerRuleEditor(jPreview, ld, r);
 				});
 
 				// Random
