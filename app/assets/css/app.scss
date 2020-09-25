@@ -3239,7 +3239,6 @@ $patternSize : 32px;
 		.cell.empty {
 			background: $bgMed;
 			box-shadow: none;
-			// border-color: $bgLighter;
 			border: none;
 		}
 		.cell.center {
@@ -3276,6 +3275,18 @@ $patternSize : 32px;
 			margin-left: -75%;
 			margin-top: -75%;
 		}
+	}
+
+	.stampPreview {
+		position: absolute;
+		z-index: 10;
+		box-sizing: border-box;
+		min-width: $patternSize * 1.8;
+		min-height: $patternSize * 1.8;
+
+		border-radius: 4px;
+		box-shadow: 0px 0px 8px black inset, 0px 0px 8px black;
+		border: 3px dashed white;
 	}
 
 	.cell {
@@ -3365,6 +3376,8 @@ $patternSize : 32px;
 		}
 	}
 }
+
+
 .window.dialog.autoPatternEditor {
 	.content {
 		padding: 4px;
@@ -3383,7 +3396,7 @@ $patternSize : 32px;
 			text-align: center;
 		}
 
-		label {
+		>div>label {
 			display: block;
 			margin-bottom: 4px;
 			color: $bgLighter;

@@ -47,13 +47,28 @@ class AutoLayerRuleEditor extends ui.modal.Dialog {
 			render();
 		}
 
+		var jTilesWrapper = jContent.find(">.tiles .wrapper");
+		jTilesWrapper.empty();
+
 		// Tile(s)
 		var jTile = JsTools.createTilePicker(layerDef.autoTilesetDefUid, rule.tileMode==Single?MultiTiles:RectOnly, rule.tileIds, function(tids) {
 			rule.tileIds = tids.copy();
 			editor.ge.emit( LayerRuleChanged(rule) );
 			render();
 		});
-		jContent.find(">.tiles .wrapper").empty().append(jTile);
+		jTilesWrapper.append(jTile);
+
+		switch rule.tileMode {
+			case Single:
+			case Stamp:
+				var jPivot = JsTools.createPivotEditor(rule.pivotX, rule.pivotY, (xr,yr)->{
+					rule.pivotX = xr;
+					rule.pivotY = yr;
+					editor.ge.emit( LayerRuleChanged(rule) );
+					render();
+				});
+				jTilesWrapper.append(jPivot);
+		}
 
 		// Pattern grid editor
 		var jGrid = JsTools.createAutoPatternGrid(rule, sourceDef, setExplain, function(cx,cy,button) {

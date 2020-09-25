@@ -11,6 +11,8 @@ class AutoLayerRuleDef {
 	public var flipY = false;
 	public var active = true;
 	public var tileMode : led.LedTypes.AutoLayerRuleTileMode = Single;
+	public var pivotX = 0.;
+	public var pivotY = 0.;
 
 	var perlinActive = false;
 	public var perlinSeed : Int;
@@ -110,6 +112,8 @@ class AutoLayerRuleDef {
 			flipX: flipX,
 			flipY: flipY,
 			tileMode: JsonTools.writeEnum(tileMode, false),
+			pivotX: JsonTools.writeFloat(pivotX),
+			pivotY: JsonTools.writeFloat(pivotY),
 
 			perlinActive: perlinActive,
 			perlinSeed: perlinSeed,
@@ -127,6 +131,8 @@ class AutoLayerRuleDef {
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
 		r.tileMode = JsonTools.readEnum(led.LedTypes.AutoLayerRuleTileMode, json.tileMode, false, Single);
+		r.pivotX = JsonTools.readFloat(json.pivotX, 0);
+		r.pivotY = JsonTools.readFloat(json.pivotY, 0);
 
 		r.perlinActive = JsonTools.readBool(json.perlinActive, false);
 		r.perlinScale = JsonTools.readFloat(json.perlinScale, 0.2);
