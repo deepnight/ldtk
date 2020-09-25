@@ -21,10 +21,12 @@ class App extends dn.Process {
 	public function new() {
 		super();
 
+		LOG.logFilePath = JsTools.getExeDir()+"/LEd.log";
 		#if debug
 		LOG.printOnAdd = true;
 		#end
-		LOG.general("App started");
+		LOG.emptyEntry();
+		LOG.add("BOOT","App started");
 
 		ME = this;
 		createRoot(Boot.ME.s2d);
@@ -161,7 +163,7 @@ class App extends dn.Process {
 
 		switch keyCode {
 			case K.L if( isCtrlDown() && isShiftDown() ):
-				LOG.dump();
+				LOG.printAll();
 
 			case _:
 		}
@@ -299,7 +301,16 @@ class App extends dn.Process {
 			ui.Modal.closeAll();
 			new ui.modal.dialog.UnsavedChanges(Editor.ME.onSave.bind(false), exit.bind(true));
 		}
-		else
+		else {
+			LOG.flushToFile();
 			IpcRenderer.invoke("exitApp");
+		}
+	}
+
+	override function update() {
+		super.update();
+
+		if( !cd.hasSetS("logFlush", 10) )
+			LOG.flushToFile();
 	}
 }
