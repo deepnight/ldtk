@@ -65,6 +65,7 @@ class LayerInstance {
 			autoTiles: {
 				var arr = [];
 				if( def.isAutoLayer() ) {
+					var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
 					for(rg in def.autoRuleGroups)
 					for(rule in rg.rules) {
 						var ruleTiles = autoTiles.get( rule.uid );
@@ -77,6 +78,8 @@ class LayerInstance {
 										coordId: tile.key,
 										tileId: tile.value.tileId,
 										flips: tile.value.flips,
+										__tileX: td==null ? -1 : td.getTileSourceX(tile.value.tileId),
+										__tileY: td==null ? -1 : td.getTileSourceY(tile.value.tileId),
 									});
 								tilesArr;
 							}
