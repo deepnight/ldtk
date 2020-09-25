@@ -137,7 +137,7 @@ class LayerInstance {
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );
 
 		for( gridTilesJson in JsonTools.readArray(json.gridTiles) )
-			li.gridTiles.set( gridTilesJson.coordId, gridTilesJson.v );
+			li.gridTiles.set( gridTilesJson.coordId, gridTilesJson.tileId );
 
 		for( entityJson in JsonTools.readArray(json.entityInstances) )
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
