@@ -10,6 +10,7 @@ class AutoLayerRuleDef {
 	public var flipX = false;
 	public var flipY = false;
 	public var active = true;
+	public var tileMode : led.LedTypes.AutoLayerRuleTileMode = Single;
 
 	var perlinActive = false;
 	public var perlinSeed : Int;
@@ -108,6 +109,7 @@ class AutoLayerRuleDef {
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
 			flipX: flipX,
 			flipY: flipY,
+			tileMode: JsonTools.writeEnum(tileMode, false),
 
 			perlinActive: perlinActive,
 			perlinSeed: perlinSeed,
@@ -124,6 +126,7 @@ class AutoLayerRuleDef {
 		r.pattern = json.pattern;
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
+		r.tileMode = JsonTools.readEnum(led.LedTypes.AutoLayerRuleTileMode, json.tileMode, false, Single);
 
 		r.perlinActive = JsonTools.readBool(json.perlinActive, false);
 		r.perlinScale = JsonTools.readFloat(json.perlinScale, 0.2);

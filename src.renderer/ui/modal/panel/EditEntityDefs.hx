@@ -352,7 +352,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Tile pick
 		if( curEntity.renderMode==Tile ) {
-			var jPicker = JsTools.createTilePicker(curEntity.tilesetId, true, [curEntity.tileId], function(tileIds) {
+			var jPicker = JsTools.createTilePicker(curEntity.tilesetId, SingleTile, [curEntity.tileId], function(tileIds) {
 				curEntity.tileId = tileIds[0];
 				editor.ge.emit(EntityDefChanged);
 			});

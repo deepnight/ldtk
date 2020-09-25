@@ -510,7 +510,7 @@ class JsTools {
 	}
 
 
-	public static function createTilePicker(tilesetId:Null<Int>, singleMode=false, tileIds:Array<Int>, onPick:(tileIds:Array<Int>)->Void) {
+	public static function createTilePicker(tilesetId:Null<Int>, mode:TilePickerMode=MultiTiles, tileIds:Array<Int>, onPick:(tileIds:Array<Int>)->Void) {
 		var jTileCanvas = new J('<canvas class="tile"></canvas>');
 
 		if( tilesetId!=null ) {
@@ -552,11 +552,9 @@ class JsTools {
 				var m = new ui.Modal();
 				m.addClass("singleTilePicker");
 
-				var tp = new ui.TilesetPicker(m.jContent, td);
-				if( singleMode )
-					tp.mode = SingleTile;
+				var tp = new ui.TilesetPicker(m.jContent, td, mode);
 				tp.setSelectedTileIds(tileIds);
-				if( singleMode )
+				if( mode==SingleTile )
 					tp.onSingleTileSelect = function(tileId) {
 						m.close();
 						onPick([tileId]);

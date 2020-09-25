@@ -145,3 +145,11 @@ enum ImageSyncResult {
 	RemapLoss;
 	RemapSuccessful;
 }
+
+enum TilePickerMode {
+	ToolPicker;
+	MultiTiles;
+	SingleTile;
+	ViewOnly;
+	RectOnly;
+}

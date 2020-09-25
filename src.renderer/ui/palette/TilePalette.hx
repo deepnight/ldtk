@@ -22,7 +22,7 @@ class TilePalette extends ui.ToolPalette {
 		jContent.removeClass("invalid");
 
 		// Picker
-		picker = new ui.TilesetPicker(jContent, tool.curTilesetDef, tool);
+		picker = new ui.TilesetPicker(jContent, tool.curTilesetDef, ToolPicker, tool);
 
 		var options = new J('<div class="toolOptions"/>');
 		options.appendTo(jContent);

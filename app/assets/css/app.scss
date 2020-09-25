@@ -3392,8 +3392,13 @@ $patternSize : 32px;
 
 		.tiles {
 			display: grid;
-			grid-template-rows: min-content auto;
+			justify-items: center;
+			grid-template-rows: repeat(2,min-content) auto;
 			height: 100%;
+
+			select {
+				margin-bottom: 4px;
+			}
 
 			canvas {
 				image-rendering: pixelated;

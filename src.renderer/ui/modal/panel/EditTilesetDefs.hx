@@ -83,10 +83,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 		// Main tileset view
 		jPickerWrapper.show().empty();
 		if( cur.isAtlasLoaded() ) {
-			var picker = new TilesetPicker(jPickerWrapper, cur);
+			var picker = new TilesetPicker(jPickerWrapper, cur, ViewOnly);
 			picker.renderGrid();
 			picker.resetScroll();
-			picker.mode = ViewOnly;
 		}
 
 		// Demo tiles

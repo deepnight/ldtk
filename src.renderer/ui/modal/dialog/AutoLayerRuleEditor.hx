@@ -30,8 +30,25 @@ class AutoLayerRuleEditor extends ui.modal.Dialog {
 				jExplain.html(str);
 		}
 
+		// Tile mode
+		var i = new form.input.EnumSelect(
+			jContent.find("select[name=tileMode]"),
+			AutoLayerRuleTileMode,
+			()->rule.tileMode,
+			(v)->rule.tileMode = v,
+			(v)->switch v {
+				case Single: Lang.t._("Single tiles");
+				case Stamp: Lang.t._("Group of tiles");
+			}
+		);
+		i.linkEvent( LayerRuleChanged(rule) );
+		i.onChange = function() {
+			rule.tileIds = [];
+			render();
+		}
+
 		// Tile(s)
-		var jTile = JsTools.createTilePicker(layerDef.autoTilesetDefUid, rule.tileIds, function(tids) {
+		var jTile = JsTools.createTilePicker(layerDef.autoTilesetDefUid, rule.tileMode==Single?MultiTiles:RectOnly, rule.tileIds, function(tids) {
 			rule.tileIds = tids.copy();
 			editor.ge.emit( LayerRuleChanged(rule) );
 			render();
