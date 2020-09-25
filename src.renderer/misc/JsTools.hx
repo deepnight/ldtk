@@ -373,11 +373,14 @@ class JsTools {
 						case "shift" : keys.push(K.SHIFT);
 						case "alt" : keys.push(K.ALT);
 						case _ :
+							var funcReg = ~/[fF]([0-9]+)/;
 							if( k.length==1 ) {
 								var cid = k.charCodeAt(0);
 								if( cid>="a".code && cid<="z".code )
 									keys.push( cid - "a".code + K.A );
 							}
+							else if( funcReg.match(k) )
+								keys.push( K.F1 + Std.parseInt(funcReg.matched(1)) - 1 );
 					}
 				}
 			}

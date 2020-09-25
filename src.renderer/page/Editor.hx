@@ -346,6 +346,8 @@ class Editor extends Page {
 				if( idx < curLevel.layerInstances.length )
 					selectLayerInstance( curLevel.layerInstances[idx] );
 
+			case k if( k>=K.F1 && k<=K.F6 && !hasInputFocus() ):
+				jMainPanel.find("#mainBar .buttons button:nth-of-type("+(k-K.F1+1)+")").click();
 
 			#if debug
 

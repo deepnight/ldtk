@@ -2,6 +2,7 @@
 
 ## 0.2.1-beta
 
+ - Added F1-F6 key shortcuts for all editor panels
  - Updated JSON file format with some extra dev-friendly values
  - Added a JSON CHANGELOG file for devs working on importers
  - Add JSON changelog to app start page
