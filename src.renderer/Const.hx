@@ -106,6 +106,8 @@ class Const {
 		}
 
 		// Save file
+		if( !sys.FileSystem.exists("./app/build") )
+			sys.FileSystem.createDirectory("./app/build");
 		var relNotesPath = "./app/build/release-notes.md";
 		try sys.io.File.saveContent(relNotesPath, relNotes.join("\n"))
 		catch(e:Dynamic) haxe.macro.Context.warning("Couldn't write "+relNotesPath, haxe.macro.Context.currentPos());
