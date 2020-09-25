@@ -1,0 +1,27 @@
+
+texturePacker.png
+size: 144,64
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+big-crate
+  rotate: false
+  xy: 16, 16
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+block-big
+  rotate: false
+  xy: 56, 16
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+face-block
+  rotate: false
+  xy: 96, 16
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
