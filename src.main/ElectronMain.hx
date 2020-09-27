@@ -25,6 +25,7 @@ class ElectronMain {
 			#end
 
 			// Start renderer part
+			mainWindow.show();
 			mainWindow.maximize();
 			mainWindow.loadURL('file://$__dirname/app.html');
 			mainWindow.on('closed', function() {
