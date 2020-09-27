@@ -3287,6 +3287,7 @@ $patternSize : 32px;
 		border-radius: 4px;
 		box-shadow: 0px 0px 8px black inset, 0px 0px 8px black;
 		border: 3px dashed white;
+		pointer-events: none;
 	}
 
 	.cell {
