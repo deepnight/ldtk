@@ -125,10 +125,11 @@ class TilesetDef {
 			return false;
 		}
 
-		relPath = dn.FilePath.fromFile( relFilePath ).useSlashes().full;
+		var newPath = dn.FilePath.fromFile( relFilePath ).useSlashes();
+		relPath = newPath.full;
 
 		try {
-			var fullFp = dn.FilePath.fromFile( projectDir +"/"+ relFilePath );
+			var fullFp = newPath.hasDriveLetter() ? newPath : dn.FilePath.fromFile( projectDir +"/"+ relFilePath );
 			var fullPath = fullFp.full;
 			bytes = misc.JsTools.readFileBytes(fullPath);
 
@@ -141,7 +142,7 @@ class TilesetDef {
 		}
 		catch(err:Dynamic) {
 			trace(err);
-			removeAtlasImage();
+			removeAtlasImage(); 
 			return false;
 		}
 

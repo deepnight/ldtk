@@ -170,8 +170,10 @@ class Editor extends Page {
 	}
 
 	public function makeFullFilePath(relPath:String) {
-		var fp = dn.FilePath.fromFile( getProjectDir() +"/"+ relPath );
-		return fp.full;
+		var fp = dn.FilePath.fromFile(relPath);
+		return fp.hasDriveLetter()
+			? fp.full 
+			: dn.FilePath.fromFile( getProjectDir() +"/"+ relPath ).full;
 	}
 
 	public function selectProject(p:led.Project) {

@@ -161,6 +161,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], Editor.ME.getProjectDir(), function(absPath) {
 				var oldRelPath = cur.relPath;
 				var relPath = Editor.ME.makeRelativeFilePath( absPath );
+				App.LOG.fileOp("Loading atlas: "+absPath);
 
 				if( !cur.importAtlasImage(editor.getProjectDir(), relPath) ) {
 					switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) {
@@ -176,7 +177,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 					return;
 				}
 
-				editor.watcher.stopWatching( editor.makeFullFilePath(oldRelPath) );
+				if( oldRelPath!=null )
+					editor.watcher.stopWatching( editor.makeFullFilePath(oldRelPath) );
 				editor.watcher.watchTileset(cur);
 
 				project.defs.autoRenameTilesetIdentifier(oldRelPath, cur);
