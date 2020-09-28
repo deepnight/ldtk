@@ -962,7 +962,7 @@ class Editor extends Page {
 				ev.preventDefault();
 				ev.stopPropagation();
 				selectLayerInstance(li);
-				new ui.modal.panel.EditAutoLayerRules();
+				new ui.modal.panel.EditAllAutoLayerRules();
 			});
 
 			// Visibility button

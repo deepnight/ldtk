@@ -1,6 +1,6 @@
 package ui.modal.panel;
 
-class EditAutoLayerRules extends ui.modal.Panel {
+class EditAllAutoLayerRules extends ui.modal.Panel {
 	var invalidatedRules : Map<Int,Int> = new Map();
 
 	public var li(get,never) : led.inst.LayerInstance;
@@ -14,7 +14,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 	public function new() {
 		super();
 
-		loadTemplate("editAutoLayerRules");
+		loadTemplate("editAllAutoLayerRules");
 		setTransparentMask();
 		updatePanel();
 	}
@@ -109,7 +109,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 
 			var jNewRule = jContent.find("[ruleUid="+r.uid+"]"); // BUG fix scrollbar position
-			new ui.modal.dialog.AutoLayerRuleEditor(jNewRule, ld, lastRule );
+			new ui.modal.dialog.RuleEditor(jNewRule, ld, lastRule );
 		}
 
 
@@ -265,7 +265,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				var jPreview = jRule.find(".preview");
 				JsTools.createAutoPatternGrid(r, ld, true).appendTo(jPreview);
 				jPreview.click( function(ev) {
-					new ui.modal.dialog.AutoLayerRuleEditor(jPreview, ld, r);
+					new ui.modal.dialog.RuleEditor(jPreview, ld, r);
 				});
 
 				// Random
@@ -277,6 +277,20 @@ class EditAutoLayerRules extends ui.modal.Panel {
 					i.jInput.addClass("max");
 				else if( r.chance<=0 )
 					i.jInput.addClass("off");
+
+				// X modulo
+				var i = Input.linkToHtmlInput( r.xModulo, jRule.find("[name=xModulo]"));
+				i.linkEvent( LayerRuleChanged(r) );
+				i.setBounds(1,10);
+				if( r.xModulo==1 )
+					i.jInput.addClass("default");
+
+				// Y modulo
+				var i = Input.linkToHtmlInput( r.yModulo, jRule.find("[name=yModulo]"));
+				i.linkEvent( LayerRuleChanged(r) );
+				i.setBounds(1,10);
+				if( r.yModulo==1 )
+					i.jInput.addClass("default");
 
 				// Flip-X
 				var jFlag = jRule.find("a.flipX");

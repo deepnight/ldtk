@@ -125,7 +125,6 @@ class JsTools {
 		jCanvas.appendTo(jWrapper);
 		jCanvas.attr("width", ed.width*scale);
 		jCanvas.attr("height", ed.height*scale);
-		// jCanvas.css("zoom", sizePx / M.fmax(ed.width, ed.height));
 
 		var cnv = Std.downcast( jCanvas.get(0), js.html.CanvasElement );
 		var ctx = cnv.getContext2d();
@@ -510,7 +509,7 @@ class JsTools {
 	}
 
 
-	public static function createTilePicker(tilesetId:Null<Int>, singleMode=false, tileIds:Array<Int>, onPick:(tileIds:Array<Int>)->Void) {
+	public static function createTilePicker(tilesetId:Null<Int>, mode:TilePickerMode=MultiTiles, tileIds:Array<Int>, onPick:(tileIds:Array<Int>)->Void) {
 		var jTileCanvas = new J('<canvas class="tile"></canvas>');
 
 		if( tilesetId!=null ) {
@@ -552,11 +551,9 @@ class JsTools {
 				var m = new ui.Modal();
 				m.addClass("singleTilePicker");
 
-				var tp = new ui.TilesetPicker(m.jContent, td);
-				if( singleMode )
-					tp.mode = SingleTile;
+				var tp = new ui.TilesetPicker(m.jContent, td, mode);
 				tp.setSelectedTileIds(tileIds);
-				if( singleMode )
+				if( mode==SingleTile )
 					tp.onSingleTileSelect = function(tileId) {
 						m.close();
 						onPick([tileId]);
@@ -565,6 +562,7 @@ class JsTools {
 					m.onCloseCb = function() {
 						onPick( tp.getSelectedTileIds() );
 					}
+				tp.focusOnSelection(true);
 			});
 		}
 		else
@@ -616,7 +614,17 @@ class JsTools {
 
 			// Center
 			if( isCenter ) {
-				jCell.addClass("center");
+				switch rule.tileMode {
+					case Single:
+						jCell.addClass("center");
+
+					case Stamp:
+						var jStampPreview = new J('<div class="stampPreview"/>');
+						jStampPreview.appendTo(jCell);
+						var size = 32; // HACK hard coded
+						jStampPreview.css("top", ( rule.pivotY * (size-size*1.8) ) + "px");
+						jStampPreview.css("left", ( rule.pivotX * (size-size*1.8) ) + "px");
+				}
 				if( previewMode ) {
 					var td = Editor.ME.project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
 					if( td!=null ) {
@@ -627,7 +635,6 @@ class JsTools {
 							jTile.addClass("multi");
 					}
 				}
-				// addExplain(jCell, "The tile(s) will be renderer here.");
 			}
 
 			// Cell color

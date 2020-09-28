@@ -19,7 +19,7 @@ class LayerInstance {
 	public var gridTiles : Map<Int,Int> = []; // <coordId, tileId>
 
 	/** < RuleUid, < coordId, {tileInfos} > > **/
-	public var autoTiles : Map<Int, Map<Int, { tileId:Int, flips:Int }> > = [];
+	public var autoTiles : Map<Int, Map<Int, { tileIds:Array<Int>, flips:Int }> > = [];
 
 	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( ( level.pxWid-pxOffsetX ) / def.gridSize );
 	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( ( level.pxHei-pxOffsetY ) / def.gridSize );
@@ -71,16 +71,25 @@ class LayerInstance {
 						var ruleTiles = autoTiles.get( rule.uid );
 						arr.push({
 							ruleId: rule.uid,
-							tiles: {
+							results: {
 								var tilesArr = [];
-								for( tile in ruleTiles.keyValueIterator() )
-									tilesArr.push({
-										coordId: tile.key,
-										tileId: tile.value.tileId,
-										flips: tile.value.flips,
-										__tileX: td==null ? -1 : td.getTileSourceX(tile.value.tileId),
-										__tileY: td==null ? -1 : td.getTileSourceY(tile.value.tileId),
+								for( ruleResult in ruleTiles.keyValueIterator() ) {
+									var stampRenderInfos = getRuleStampRenderInfos(rule, td, ruleResult.value.tileIds, ruleResult.value.flips);
+									var tiles = ruleResult.value.tileIds.map( (tid:Int)->{
+										return {
+											tileId: tid,
+											__xOff: stampRenderInfos.get(tid).xOff,
+											__yOff: stampRenderInfos.get(tid).yOff,
+											__srcX: td==null ? -1 : td.getTileSourceX(tid),
+											__srcY: td==null ? -1 : td.getTileSourceY(tid),
+										}
 									});
+									tilesArr.push({
+										coordId: ruleResult.key,
+										tiles: tiles,
+										flips: ruleResult.value.flips,
+									});
+								}
 								tilesArr;
 							}
 						});
@@ -105,6 +114,32 @@ class LayerInstance {
 			},
 			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
+	}
+
+	public function getRuleStampRenderInfos(rule:led.def.AutoLayerRuleDef, td:led.def.TilesetDef, tileIds:Array<Int>, flipBits:Int)
+	: Map<Int, { xOff:Int, yOff:Int }> {
+		if( td==null )
+			return null;
+
+		// Get stamp bounds in tileset
+		var top = 99999;
+		var left = 99999;
+		var right = 0;
+		var bottom = 0;
+		for(tid in tileIds) {
+			top = dn.M.imin( top, td.getTileCy(tid) );
+			bottom = dn.M.imax( bottom, td.getTileCy(tid) );
+			left = dn.M.imin( left, td.getTileCx(tid) );
+			right = dn.M.imax( right, td.getTileCx(tid) );
+		}
+
+		var out = new Map();
+		for( tid in tileIds )
+			out.set( tid, {
+				xOff: Std.int( ( td.getTileCx(tid)-left - rule.pivotX*(right-left) + def.tilePivotX ) * def.gridSize ) * (dn.M.hasBit(flipBits,0)?-1:1),
+				yOff: Std.int( ( td.getTileCy(tid)-top - rule.pivotY*(bottom-top) + def.tilePivotY ) * def.gridSize ) * (dn.M.hasBit(flipBits,1)?-1:1)
+			});
+		return out;
 	}
 
 
@@ -151,14 +186,33 @@ class LayerInstance {
 			var jsonAutoTiles = JsonTools.readArray(json.autoTiles);
 			for(ruleTiles in jsonAutoTiles) {
 				li.autoTiles.set(ruleTiles.ruleId, new Map());
-				for( t in JsonTools.readArray(ruleTiles.tiles) )
-					li.autoTiles.get(ruleTiles.ruleId).set(
-						JsonTools.readInt(t.coordId),
-						{
-							tileId: JsonTools.readInt(t.tileId),
-							flips: JsonTools.readInt(t.flips, 0),
-						}
-					);
+
+				// Hot-fix pre-0.2.2 naming
+				if( ruleTiles.results==null )
+					ruleTiles.results = ruleTiles.tiles;
+
+				for( jsonTileResult in JsonTools.readArray(ruleTiles.results) ) {
+					if( jsonTileResult.tiles!=null ) {
+						var jsonTiles = JsonTools.readArray(jsonTileResult.tiles);
+						li.autoTiles.get(ruleTiles.ruleId).set(
+							JsonTools.readInt(jsonTileResult.coordId),
+							{
+								tileIds: jsonTiles.map( (j)->j.tileId ),
+								flips: JsonTools.readInt(jsonTileResult.flips, 0),
+							}
+						);
+					}
+					else {
+						// Support for pre-0.2.2 format
+						li.autoTiles.get(ruleTiles.ruleId).set(
+							JsonTools.readInt(jsonTileResult.coordId),
+							{
+								tileIds: [ JsonTools.readInt(jsonTileResult.tileId) ],
+								flips: JsonTools.readInt(jsonTileResult.flips, 0),
+							}
+						);
+					}
+				}
 			}
 		}
 		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
@@ -411,21 +465,39 @@ class LayerInstance {
 			autoTiles.set( r.uid, new Map() );
 		autoTiles.get(r.uid).remove( coordId(cx,cy) );
 
+		// Modulos
+		if( cx%r.xModulo!=0 )
+			return false;
+		if( cy%r.yModulo!=0 )
+			return false;
+
 		// Apply rule
 		if( r.matches(source, cx,cy) ) {
-			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(seed, cx,cy), flips:0 } );
+			autoTiles.get(r.uid).set(
+				coordId(cx,cy),
+				{ tileIds: r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds.copy(), flips:0 }
+			);
 			return true;
 		}
 		else if( r.flipX && r.matches(source, cx,cy, -1) ) {
-			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(seed, cx,cy), flips:1 } );
+			autoTiles.get(r.uid).set(
+				coordId(cx,cy),
+				{ tileIds: r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds.copy(), flips:1 }
+			);
 			return true;
 		}
 		else if( r.flipY && r.matches(source, cx,cy, 1, -1) ) {
-			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(seed, cx,cy), flips:2 } );
+			autoTiles.get(r.uid).set(
+				coordId(cx,cy),
+				{ tileIds: r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds.copy(), flips:2 }
+			);
 			return true;
 		}
 		else if( r.flipX && r.flipY && r.matches(source, cx,cy, -1, -1) ) {
-			autoTiles.get(r.uid).set( coordId(cx,cy), { tileId:r.getRandomTileForCoord(seed, cx,cy), flips:3 } );
+			autoTiles.get(r.uid).set(
+				coordId(cx,cy),
+				{ tileIds: r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds.copy(), flips:3 }
+			);
 			return true;
 		}
 		else

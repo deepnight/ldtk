@@ -10,6 +10,11 @@ class AutoLayerRuleDef {
 	public var flipX = false;
 	public var flipY = false;
 	public var active = true;
+	public var tileMode : led.LedTypes.AutoLayerRuleTileMode = Single;
+	public var pivotX = 0.;
+	public var pivotY = 0.;
+	public var xModulo = 1;
+	public var yModulo = 1;
 
 	var perlinActive = false;
 	public var perlinSeed : Int;
@@ -108,6 +113,11 @@ class AutoLayerRuleDef {
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
 			flipX: flipX,
 			flipY: flipY,
+			xModulo: xModulo,
+			yModulo: yModulo,
+			tileMode: JsonTools.writeEnum(tileMode, false),
+			pivotX: JsonTools.writeFloat(pivotX),
+			pivotY: JsonTools.writeFloat(pivotY),
 
 			perlinActive: perlinActive,
 			perlinSeed: perlinSeed,
@@ -124,6 +134,11 @@ class AutoLayerRuleDef {
 		r.pattern = json.pattern;
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
+		r.tileMode = JsonTools.readEnum(led.LedTypes.AutoLayerRuleTileMode, json.tileMode, false, Single);
+		r.pivotX = JsonTools.readFloat(json.pivotX, 0);
+		r.pivotY = JsonTools.readFloat(json.pivotY, 0);
+		r.xModulo = JsonTools.readInt(json.xModulo, 1);
+		r.yModulo = JsonTools.readInt(json.yModulo, 1);
 
 		r.perlinActive = JsonTools.readBool(json.perlinActive, false);
 		r.perlinScale = JsonTools.readFloat(json.perlinScale, 0.2);
@@ -196,7 +211,7 @@ class AutoLayerRuleDef {
 		if( tileIds.length==0 )
 			return false;
 
-		if( chance<=0 || chance<1 && dn.M.randSeedCoords(source.seed, cx,cy, 100) >= chance*100 )
+		if( chance<=0 || chance<1 && dn.M.randSeedCoords(source.seed+uid, cx,cy, 100) >= chance*100 )
 			return false;
 
 		if( hasPerlin() && _perlin.perlin(perlinSeed, cx*perlinScale, cy*perlinScale, perlinOctaves) < 0 )

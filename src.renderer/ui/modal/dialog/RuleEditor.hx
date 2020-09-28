@@ -2,13 +2,13 @@ package ui.modal.dialog;
 
 import led.LedTypes;
 
-class AutoLayerRuleEditor extends ui.modal.Dialog {
+class RuleEditor extends ui.modal.Dialog {
 	var curValIdx = 0;
 	var layerDef : led.def.LayerDef;
 	var rule : led.def.AutoLayerRuleDef;
 
 	public function new(target:js.jquery.JQuery, layerDef:led.def.LayerDef, rule:led.def.AutoLayerRuleDef) {
-		super(target, "autoPatternEditor");
+		super(target, "ruleEditor");
 
 		this.layerDef = layerDef;
 		this.rule = rule;
@@ -17,9 +17,11 @@ class AutoLayerRuleEditor extends ui.modal.Dialog {
 	}
 
 	function render() {
-		loadTemplate("autoLayerRuleEditor");
+		loadTemplate("ruleEditor");
 
 		var sourceDef = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef(layerDef.autoSourceLayerDefUid);
+
+		jContent.find(".infos").text('#${rule.uid}');
 
 		// Mini explanation tip
 		var jExplain = jContent.find(".explain");
@@ -30,13 +32,50 @@ class AutoLayerRuleEditor extends ui.modal.Dialog {
 				jExplain.html(str);
 		}
 
-		// Tile(s)
-		var jTile = JsTools.createTilePicker(layerDef.autoTilesetDefUid, rule.tileIds, function(tids) {
-			rule.tileIds = tids.copy();
-			editor.ge.emit( LayerRuleChanged(rule) );
+		// Tile mode
+		var i = new form.input.EnumSelect(
+			jContent.find("select[name=tileMode]"),
+			AutoLayerRuleTileMode,
+			()->rule.tileMode,
+			(v)->rule.tileMode = v,
+			(v)->switch v {
+				case Single: Lang.t._("Single tiles");
+				case Stamp: Lang.t._("Group of tiles");
+			}
+		);
+		i.linkEvent( LayerRuleChanged(rule) );
+		i.onChange = function() {
+			rule.tileIds = [];
 			render();
-		});
-		jContent.find(">.tiles .wrapper").empty().append(jTile);
+		}
+
+		var jTilesWrapper = jContent.find(">.tiles .wrapper");
+		jTilesWrapper.empty();
+
+		// Tile(s)
+		var jTile = JsTools.createTilePicker(
+			layerDef.autoTilesetDefUid,
+			rule.tileMode==Single?MultiTiles:RectOnly,
+			rule.tileIds,
+			function(tids) {
+				rule.tileIds = tids.copy();
+				editor.ge.emit( LayerRuleChanged(rule) );
+				render();
+			}
+		);
+		jTilesWrapper.append(jTile);
+
+		switch rule.tileMode {
+			case Single:
+			case Stamp:
+				var jPivot = JsTools.createPivotEditor(rule.pivotX, rule.pivotY, (xr,yr)->{
+					rule.pivotX = xr;
+					rule.pivotY = yr;
+					editor.ge.emit( LayerRuleChanged(rule) );
+					render();
+				});
+				jTilesWrapper.append(jPivot);
+		}
 
 		// Pattern grid editor
 		var jGrid = JsTools.createAutoPatternGrid(rule, sourceDef, setExplain, function(cx,cy,button) {

@@ -1,12 +1,5 @@
 package ui;
 
-enum PickerMode {
-	ToolPicker;
-	MultiTiles;
-	SingleTile;
-	ViewOnly;
-}
-
 class TilesetPicker {
 	static var SCROLL_MEMORY : Map<String, { x:Float, y:Float, zoom:Float }> = new Map();
 
@@ -28,18 +21,15 @@ class TilesetPicker {
 	var ty : Null<Float>;
 	var mouseOver = false;
 
-	public var mode : PickerMode;
+	var mode : TilePickerMode;
 	var _internalSelectedIds : Array<Int> = [];
 
 
-	public function new(target:js.jquery.JQuery, td:led.def.TilesetDef, ?tool:tool.TileTool) {
+	public function new(target:js.jquery.JQuery, td:led.def.TilesetDef, mode:TilePickerMode, ?tool:tool.TileTool) {
 		tilesetDef = td;
 		this.tool = tool;
 
-		if( tool!=null )
-			mode = ToolPicker;
-		else
-			mode = MultiTiles;
+		this.mode = mode;
 
 		// Create picker elements
 		jPicker = new J('<div class="tilesetPicker"/>');
@@ -47,6 +37,7 @@ class TilesetPicker {
 		switch mode {
 			case ToolPicker:
 			case MultiTiles: jPicker.addClass("multiTilesMode");
+			case RectOnly: jPicker.addClass("rectangle");
 			case SingleTile: jPicker.addClass("singleTileMode");
 			case ViewOnly: jPicker.addClass("viewOnlyMode");
 		}
@@ -118,7 +109,7 @@ class TilesetPicker {
 			case ToolPicker:
 				tool.getSelectedValue().ids;
 
-			case MultiTiles, SingleTile:
+			case MultiTiles, SingleTile, RectOnly:
 				_internalSelectedIds;
 
 			case ViewOnly:
@@ -131,7 +122,7 @@ class TilesetPicker {
 			case ToolPicker:
 				tool.getSelectedValue().ids = tileIds;
 
-			case MultiTiles, SingleTile:
+			case MultiTiles, SingleTile, RectOnly:
 				_internalSelectedIds = tileIds;
 
 			case ViewOnly:
@@ -194,11 +185,15 @@ class TilesetPicker {
 				if( getSelectedTileIds().length>0 )
 					jSelection.append( createCursor({ mode:Random, ids:getSelectedTileIds() },"selection") );
 
+			case RectOnly:
+				if( getSelectedTileIds().length>0 )
+					jSelection.append( createCursor({ mode:Stamp, ids:getSelectedTileIds() },"selection") );
+
 			case ViewOnly:
 		}
 	}
 
-	public function focusOnSelection() {
+	public function focusOnSelection(instant=false) {
 		var tids = getSelectedTileIds();
 		if( tids.length==0 )
 			return;
@@ -214,8 +209,14 @@ class TilesetPicker {
 		cx+=0.5;
 		cy+=0.5;
 
+
 		tx = tilesetDef.padding + cx*(tilesetDef.tileGridSize+tilesetDef.spacing) - jPicker.outerWidth()*0.5/zoom;
 		ty = tilesetDef.padding + cy*(tilesetDef.tileGridSize+tilesetDef.spacing) - jPicker.outerHeight()*0.5/zoom;
+		if( instant ) {
+			scrollX = tx;
+			scrollY = ty;
+			tx = ty = null;
+		}
 
 		saveScrollPos();
 	}
@@ -292,7 +293,10 @@ class TilesetPicker {
 			var saved = mode==ToolPicker ? tilesetDef.getSavedSelectionFor(tileId) : null;
 			if( saved==null || dragStart!=null ) {
 				var c = createCursor(
-					{ mode:mode==ToolPicker ? tool.getMode() : Random, ids:[tileId] },
+					{
+						mode: mode==ToolPicker ? tool.getMode() : mode==RectOnly ? Stamp : Random,
+						ids:[tileId]
+					},
 					dragStart!=null && dragStart.bt==2?"remove":defaultClass,
 					r.wid,
 					r.hei
@@ -391,7 +395,7 @@ class TilesetPicker {
 			onSingleTileSelect( selIds[0] );
 		else if( mode!=ViewOnly ) {
 			if( add ) {
-				if( !App.ME.isShiftDown() && !App.ME.isCtrlDown() ) {
+				if( mode==RectOnly || !App.ME.isShiftDown() && !App.ME.isCtrlDown() ) {
 					// Replace active selection with this one
 					if( mode==ToolPicker )
 						tool.selectValue({ mode:tool.getMode(), ids:selIds });
@@ -417,7 +421,7 @@ class TilesetPicker {
 						setSelectedTileIds(arr);
 				}
 			}
-			else {
+			else if( mode!=RectOnly ) {
 				// Substract selection
 				var curSelIds = getSelectedTileIds();
 				var remMap = new Map();
@@ -466,7 +470,7 @@ class TilesetPicker {
 				jDoc.off(".pickerCtxCatcher");
 			});
 
-		if( ev.button==2 && mode==SingleTile )
+		if( ev.button==2 && ( mode==SingleTile || mode==RectOnly ) )
 			return;
 
 		// Start dragging
