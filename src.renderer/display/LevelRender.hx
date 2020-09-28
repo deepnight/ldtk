@@ -411,18 +411,18 @@ class LevelRender extends dn.Process {
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper);
 
-				for(cy in 0...li.cHei)
-				for(cx in 0...li.cWid) {
-					var groupIdx = li.def.autoRuleGroups.length-1;
-					var anyTile = false;
-					while( groupIdx>=0 ) {
-						var rg = li.def.autoRuleGroups[groupIdx];
-						if( rg.active ) {
-							var ruleIdx = rg.rules.length-1;
-							while( ruleIdx>=0 ) {
-								var r = rg.rules[ruleIdx];
-								if( r.active ) {
-									var ruleResults = li.autoTiles.get(r.uid);
+				var groupIdx = li.def.autoRuleGroups.length-1;
+				var anyTile = false;
+				while( groupIdx>=0 ) {
+					var rg = li.def.autoRuleGroups[groupIdx];
+					if( rg.active ) {
+						var ruleIdx = rg.rules.length-1;
+						while( ruleIdx>=0 ) {
+							var r = rg.rules[ruleIdx];
+							if( r.active ) {
+								var ruleResults = li.autoTiles.get(r.uid);
+								for(cy in 0...li.cHei)
+								for(cx in 0...li.cWid) {
 									var at = ruleResults.get( li.coordId(cx,cy) );
 									if( at!=null ) {
 										switch r.tileMode {
@@ -451,21 +451,21 @@ class LevelRender extends dn.Process {
 										anyTile = true;
 									}
 								}
-
-								ruleIdx--;
 							}
-						}
 
-						groupIdx--;
+							ruleIdx--;
+						}
 					}
 
-					// if( li.def.type==IntGrid && !anyTile && li.hasIntGrid(cx,cy) ) {
-					// 	// Default render when no tile applies
-					// 	g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
-					// 	g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);
-					// }
+					groupIdx--;
 				}
-			}
+
+				// if( li.def.type==IntGrid && !anyTile && li.hasIntGrid(cx,cy) ) {
+				// 	// Default render when no tile applies
+				// 	g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
+				// 	g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);
+				// }
+		}
 			else if( li.def.type==IntGrid ) {
 				// Normal intGrid
 				for(cy in 0...li.cHei)
