@@ -193,7 +193,7 @@ class TilesetPicker {
 		}
 	}
 
-	public function focusOnSelection() {
+	public function focusOnSelection(instant=false) {
 		var tids = getSelectedTileIds();
 		if( tids.length==0 )
 			return;
@@ -209,8 +209,14 @@ class TilesetPicker {
 		cx+=0.5;
 		cy+=0.5;
 
+
 		tx = tilesetDef.padding + cx*(tilesetDef.tileGridSize+tilesetDef.spacing) - jPicker.outerWidth()*0.5/zoom;
 		ty = tilesetDef.padding + cy*(tilesetDef.tileGridSize+tilesetDef.spacing) - jPicker.outerHeight()*0.5/zoom;
+		if( instant ) {
+			scrollX = tx;
+			scrollY = ty;
+			tx = ty = null;
+		}
 
 		saveScrollPos();
 	}

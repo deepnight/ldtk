@@ -562,6 +562,7 @@ class JsTools {
 					m.onCloseCb = function() {
 						onPick( tp.getSelectedTileIds() );
 					}
+				tp.focusOnSelection(true);
 			});
 		}
 		else
