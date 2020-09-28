@@ -74,26 +74,12 @@ class LayerInstance {
 							results: {
 								var tilesArr = [];
 								for( ruleResult in ruleTiles.keyValueIterator() ) {
-									// Get stamp bounds in tileset
-									var top = 99999;
-									var left = 99999;
-									var right = 0;
-									var bottom = 0;
-									for(tid in ruleResult.value.tileIds) {
-										top = dn.M.imin( top, td.getTileCy(tid) );
-										bottom = dn.M.imax( bottom, td.getTileCy(tid) );
-										left = dn.M.imin( left, td.getTileCx(tid) );
-										right = dn.M.imax( right, td.getTileCx(tid) );
-									}
-
+									var stampRenderInfos = getRuleStampRenderInfos(rule, td, ruleResult.value.tileIds);
 									var tiles = ruleResult.value.tileIds.map( (tid:Int)->{
-										var xOff = ( td.getTileCx(tid)-left - rule.pivotX*(right-left) + def.tilePivotX ) * def.gridSize;
-										var yOff = ( td.getTileCy(tid)-top - rule.pivotY*(bottom-top) + def.tilePivotY ) * def.gridSize;
-
 										return {
 											tileId: tid,
-											__xOff: xOff,
-											__yOff: yOff,
+											__xOff: stampRenderInfos.get(tid).xOff,
+											__yOff: stampRenderInfos.get(tid).yOff,
 											__srcX: td==null ? -1 : td.getTileSourceX(tid),
 											__srcY: td==null ? -1 : td.getTileSourceY(tid),
 										}
@@ -128,6 +114,32 @@ class LayerInstance {
 			},
 			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
+	}
+
+	public function getRuleStampRenderInfos(rule:led.def.AutoLayerRuleDef, td:led.def.TilesetDef, tileIds:Array<Int>)
+	: Map<Int, { xOff:Int, yOff:Int }> {
+		if( td==null )
+			return null;
+
+		// Get stamp bounds in tileset
+		var top = 99999;
+		var left = 99999;
+		var right = 0;
+		var bottom = 0;
+		for(tid in tileIds) {
+			top = dn.M.imin( top, td.getTileCy(tid) );
+			bottom = dn.M.imax( bottom, td.getTileCy(tid) );
+			left = dn.M.imin( left, td.getTileCx(tid) );
+			right = dn.M.imax( right, td.getTileCx(tid) );
+		}
+
+		var out = new Map();
+		for( tid in tileIds )
+			out.set( tid, {
+				xOff: Std.int( ( td.getTileCx(tid)-left - rule.pivotX*(right-left) + def.tilePivotX ) * def.gridSize ),
+				yOff: Std.int( ( td.getTileCy(tid)-top - rule.pivotY*(bottom-top) + def.tilePivotY ) * def.gridSize )
+			});
+		return out;
 	}
 
 

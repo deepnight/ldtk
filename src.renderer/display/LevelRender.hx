@@ -435,25 +435,14 @@ class LevelRender extends dn.Process {
 												);
 
 											case Stamp:
-												// Get stamp bounds in tileset
-												var top = 99999;
-												var left = 99999;
-												var right = 0;
-												var bottom = 0;
-												for(tid in at.tileIds) {
-													top = M.imin( top, td.getTileCy(tid) );
-													bottom = M.imax( bottom, td.getTileCy(tid) );
-													left = M.imin( left, td.getTileCx(tid) );
-													right = M.imax( right, td.getTileCx(tid) );
-												}
-
 												// Render stamp tiles
+												var stampRenderInfos = li.getRuleStampRenderInfos(r, td, at.tileIds);
 												for(tid in at.tileIds) {
 													var tcx = td.getTileCx(tid);
 													var tcy = td.getTileCy(tid);
 													tg.addTransform(
-														( cx + tcx-left - r.pivotX*(right-left) + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-														( cy + tcy-top - r.pivotY*(bottom-top) + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+														( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + stampRenderInfos.get(tid).xOff,
+														( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + stampRenderInfos.get(tid).yOff,
 														dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
 														td.getTile(tid)
 													);
