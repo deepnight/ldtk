@@ -1,6 +1,6 @@
 package ui.modal.panel;
 
-class EditAutoLayerRules extends ui.modal.Panel {
+class EditAllAutoLayerRules extends ui.modal.Panel {
 	var invalidatedRules : Map<Int,Int> = new Map();
 
 	public var li(get,never) : led.inst.LayerInstance;
@@ -14,7 +14,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 	public function new() {
 		super();
 
-		loadTemplate("editAutoLayerRules");
+		loadTemplate("editAllAutoLayerRules");
 		setTransparentMask();
 		updatePanel();
 	}
@@ -109,7 +109,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 
 
 			var jNewRule = jContent.find("[ruleUid="+r.uid+"]"); // BUG fix scrollbar position
-			new ui.modal.dialog.AutoLayerRuleEditor(jNewRule, ld, lastRule );
+			new ui.modal.dialog.RuleEditor(jNewRule, ld, lastRule );
 		}
 
 
@@ -265,7 +265,7 @@ class EditAutoLayerRules extends ui.modal.Panel {
 				var jPreview = jRule.find(".preview");
 				JsTools.createAutoPatternGrid(r, ld, true).appendTo(jPreview);
 				jPreview.click( function(ev) {
-					new ui.modal.dialog.AutoLayerRuleEditor(jPreview, ld, r);
+					new ui.modal.dialog.RuleEditor(jPreview, ld, r);
 				});
 
 				// Random
