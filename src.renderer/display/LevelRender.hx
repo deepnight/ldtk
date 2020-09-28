@@ -422,15 +422,43 @@ class LevelRender extends dn.Process {
 							while( ruleIdx>=0 ) {
 								var r = rg.rules[ruleIdx];
 								if( r.active ) {
-									var e = li.autoTiles.get(r.uid);
-									var at = e.get( li.coordId(cx,cy) );
+									var ruleResults = li.autoTiles.get(r.uid);
+									var at = ruleResults.get( li.coordId(cx,cy) );
 									if( at!=null ) {
-										tg.addTransform(
-											( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-											( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-											dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
-											td.getTile( r.tileIds[ dn.M.randSeedCoords( li.seed, cx,cy, r.tileIds.length ) ] )
-										);
+										switch r.tileMode {
+											case Single:
+												tg.addTransform(
+													( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+													( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+													dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
+													td.getTile(at.tileIds[0])
+												);
+
+											case Stamp:
+												// Get stamp bounds in tileset
+												var top = 99999;
+												var left = 99999;
+												var right = 0;
+												var bottom = 0;
+												for(tid in at.tileIds) {
+													top = M.imin( top, td.getTileCy(tid) );
+													bottom = M.imax( bottom, td.getTileCy(tid) );
+													left = M.imin( left, td.getTileCx(tid) );
+													right = M.imax( right, td.getTileCx(tid) );
+												}
+
+												// Render stamp tiles
+												for(tid in at.tileIds) {
+													var tcx = td.getTileCx(tid);
+													var tcy = td.getTileCy(tid);
+													tg.addTransform(
+														( cx + tcx-left - r.pivotX*(right-left) + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+														( cy + tcy-top - r.pivotY*(bottom-top) + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+														dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
+														td.getTile(tid)
+													);
+												}
+										}
 										anyTile = true;
 									}
 								}
