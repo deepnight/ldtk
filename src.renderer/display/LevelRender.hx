@@ -436,7 +436,7 @@ class LevelRender extends dn.Process {
 
 											case Stamp:
 												// Render stamp tiles
-												var stampRenderInfos = li.getRuleStampRenderInfos(r, td, at.tileIds);
+												var stampRenderInfos = li.getRuleStampRenderInfos(r, td, at.tileIds, at.flips);
 												for(tid in at.tileIds) {
 													var tcx = td.getTileCx(tid);
 													var tcy = td.getTileCy(tid);

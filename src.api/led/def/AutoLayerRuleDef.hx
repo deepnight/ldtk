@@ -211,7 +211,7 @@ class AutoLayerRuleDef {
 		if( tileIds.length==0 )
 			return false;
 
-		if( chance<=0 || chance<1 && dn.M.randSeedCoords(source.seed, cx,cy, 100) >= chance*100 )
+		if( chance<=0 || chance<1 && dn.M.randSeedCoords(source.seed+uid, cx,cy, 100) >= chance*100 )
 			return false;
 
 		if( hasPerlin() && _perlin.perlin(perlinSeed, cx*perlinScale, cy*perlinScale, perlinOctaves) < 0 )
