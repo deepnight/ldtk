@@ -1,5 +1,9 @@
 # LEd release notes
 
+## 0.2.2-beta
+ - **Group of tiles in auto-layer rules**: this new feature allows you to place larger objects (eg. *a tree, a big rock, etc.*) made of multiple tiles using just auto-layer rules.
+ - Bug fixes
+
 ## 0.2.1-beta
 
  - Added `F1`-`F6` key shortcuts for all editor panels
