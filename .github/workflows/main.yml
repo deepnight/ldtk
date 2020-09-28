@@ -41,3 +41,7 @@ jobs:
       - run: cd app && npm install
       - run: cd app && npm run compile
       - run: cd app && npm run pack-mac
+      - uses: actions/upload-artifact@v2
+        with:
+          name: mac-distribution
+          path: app/redist/LEd**installer.zip
