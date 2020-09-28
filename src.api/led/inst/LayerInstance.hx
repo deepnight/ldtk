@@ -71,7 +71,7 @@ class LayerInstance {
 						var ruleTiles = autoTiles.get( rule.uid );
 						arr.push({
 							ruleId: rule.uid,
-							tiles: {
+							results: {
 								var tilesArr = [];
 								for( ruleResult in ruleTiles.keyValueIterator() ) {
 									// Get stamp bounds in tileset
@@ -174,7 +174,12 @@ class LayerInstance {
 			var jsonAutoTiles = JsonTools.readArray(json.autoTiles);
 			for(ruleTiles in jsonAutoTiles) {
 				li.autoTiles.set(ruleTiles.ruleId, new Map());
-				for( jsonTileResult in JsonTools.readArray(ruleTiles.tiles) ) {
+
+				// Hot-fix pre-0.2.2 naming
+				if( ruleTiles.results==null )
+					ruleTiles.results = ruleTiles.tiles;
+
+				for( jsonTileResult in JsonTools.readArray(ruleTiles.results) ) {
 					if( jsonTileResult.tiles!=null ) {
 						var jsonTiles = JsonTools.readArray(jsonTileResult.tiles);
 						li.autoTiles.get(ruleTiles.ruleId).set(
