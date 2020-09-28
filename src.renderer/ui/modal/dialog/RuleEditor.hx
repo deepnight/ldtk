@@ -8,7 +8,7 @@ class RuleEditor extends ui.modal.Dialog {
 	var rule : led.def.AutoLayerRuleDef;
 
 	public function new(target:js.jquery.JQuery, layerDef:led.def.LayerDef, rule:led.def.AutoLayerRuleDef) {
-		super(target, "autoPatternEditor");
+		super(target, "ruleEditor");
 
 		this.layerDef = layerDef;
 		this.rule = rule;
@@ -20,6 +20,8 @@ class RuleEditor extends ui.modal.Dialog {
 		loadTemplate("ruleEditor");
 
 		var sourceDef = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef(layerDef.autoSourceLayerDefUid);
+
+		jContent.find(".infos").text('#${rule.uid}');
 
 		// Mini explanation tip
 		var jExplain = jContent.find(".explain");

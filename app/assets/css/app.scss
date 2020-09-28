@@ -3377,13 +3377,21 @@ $patternSize : 32px;
 }
 
 
-.window.dialog.autoPatternEditor {
+.window.dialog.ruleEditor {
 	.content {
 		padding: 4px;
 		display: grid;
 		gap: 16px;
 		grid-template-columns: repeat(3, min-content);
 		align-items: center;
+
+		.infos {
+			position: absolute;
+			right: 3px;
+			bottom: 3px;
+			font-size: 8pt;
+			color: $bgLighter;
+		}
 
 		.explain, .help {
 			grid-column: 1/4;
