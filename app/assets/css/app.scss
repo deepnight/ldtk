@@ -3088,7 +3088,7 @@ body.sorting ul.collapsedSortTarget {
 							}
 
 							.random {
-								grid-column: 1/5;
+								grid-column: 1/3;
 								display: flex;
 								flex-wrap: nowrap;
 								align-items: center;
@@ -3114,6 +3114,26 @@ body.sorting ul.collapsedSortTarget {
 									font-size: 8pt;
 									color: $bgLighter;
 									padding-right: 8px;
+								}
+							}
+
+							input[name=xModulo] {
+								grid-column: 3/4;
+							}
+							input[name=yModulo] {
+								grid-column: 4/5;
+							}
+							input[name=xModulo],
+							input[name=yModulo] {
+								width: 20px;
+								font-size: 9pt;
+								text-align: center;
+								color: $help;
+								&:not(.default) {
+									border: 1px solid $green;
+								}
+								&.default {
+									color: $bgLighter;
 								}
 							}
 

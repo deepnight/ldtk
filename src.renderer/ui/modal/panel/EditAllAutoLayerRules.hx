@@ -278,6 +278,20 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				else if( r.chance<=0 )
 					i.jInput.addClass("off");
 
+				// X modulo
+				var i = Input.linkToHtmlInput( r.xModulo, jRule.find("[name=xModulo]"));
+				i.linkEvent( LayerRuleChanged(r) );
+				i.setBounds(1,10);
+				if( r.xModulo==1 )
+					i.jInput.addClass("default");
+
+				// Y modulo
+				var i = Input.linkToHtmlInput( r.yModulo, jRule.find("[name=yModulo]"));
+				i.linkEvent( LayerRuleChanged(r) );
+				i.setBounds(1,10);
+				if( r.yModulo==1 )
+					i.jInput.addClass("default");
+
 				// Flip-X
 				var jFlag = jRule.find("a.flipX");
 				jFlag.addClass( r.flipX ? "on" : "off" );

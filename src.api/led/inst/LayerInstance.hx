@@ -465,6 +465,12 @@ class LayerInstance {
 			autoTiles.set( r.uid, new Map() );
 		autoTiles.get(r.uid).remove( coordId(cx,cy) );
 
+		// Modulos
+		if( cx%r.xModulo!=0 )
+			return false;
+		if( cy%r.yModulo!=0 )
+			return false;
+
 		// Apply rule
 		if( r.matches(source, cx,cy) ) {
 			autoTiles.get(r.uid).set(
