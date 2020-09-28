@@ -21,8 +21,8 @@ class App extends dn.Process {
 	public function new() {
 		super();
 
-		LOG.logFilePath = JsTools.getExeDir()+"/LEd.log";
 		#if debug
+		LOG.logFilePath = JsTools.getExeDir()+"/LEd.log";
 		LOG.printOnAdd = true;
 		#end
 		LOG.emptyEntry();
