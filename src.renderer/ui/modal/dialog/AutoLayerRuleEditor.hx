@@ -51,11 +51,16 @@ class AutoLayerRuleEditor extends ui.modal.Dialog {
 		jTilesWrapper.empty();
 
 		// Tile(s)
-		var jTile = JsTools.createTilePicker(layerDef.autoTilesetDefUid, rule.tileMode==Single?MultiTiles:RectOnly, rule.tileIds, function(tids) {
-			rule.tileIds = tids.copy();
-			editor.ge.emit( LayerRuleChanged(rule) );
-			render();
-		});
+		var jTile = JsTools.createTilePicker(
+			layerDef.autoTilesetDefUid,
+			rule.tileMode==Single?MultiTiles:RectOnly,
+			rule.tileIds,
+			function(tids) {
+				rule.tileIds = tids.copy();
+				editor.ge.emit( LayerRuleChanged(rule) );
+				render();
+			}
+		);
 		jTilesWrapper.append(jTile);
 
 		switch rule.tileMode {
