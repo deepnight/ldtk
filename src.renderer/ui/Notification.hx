@@ -53,6 +53,7 @@ class Notification extends dn.Process {
 	}
 
 	public static function error(str:String) {
+		App.LOG.error(str);
 		if( !sameAsLast(str) )
 			new Notification(str, 0xff0000);
 	}
