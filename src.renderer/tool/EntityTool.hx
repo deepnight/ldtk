@@ -21,7 +21,7 @@ class EntityTool extends Tool<Int> {
 	}
 
 	override function isPicking(m:MouseCoords):Bool {
-		var e = getGenericLevelElementAt(m, curLayerInstance);
+		var e = editor.getGenericLevelElementAt(m, curLayerInstance);
 		if( e!=null )
 			return true;
 		else
@@ -90,7 +90,7 @@ class EntityTool extends Tool<Int> {
 
 
 	function removeAnyEntityOrPointAt(m:MouseCoords) {
-		var ge = getGenericLevelElementAt(m, curLayerInstance);
+		var ge = editor.getGenericLevelElementAt(m, curLayerInstance);
 		switch ge {
 			case Entity(curLayerInstance, instance):
 				curLayerInstance.removeEntityInstance(instance);

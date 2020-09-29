@@ -172,7 +172,7 @@ class Editor extends Page {
 	public function makeFullFilePath(relPath:String) {
 		var fp = dn.FilePath.fromFile(relPath);
 		return fp.hasDriveLetter()
-			? fp.full 
+			? fp.full
 			: dn.FilePath.fromFile( getProjectDir() +"/"+ relPath ).full;
 	}
 
@@ -473,6 +473,59 @@ class Editor extends Page {
 		clearSpecialTool();
 		specialTool = t;
 		updateTool();
+	}
+
+	public function getGenericLevelElementAt(m:MouseCoords, ?limitToLayerInstance:led.inst.LayerInstance) : Null<GenericLevelElement> {
+		var ge : GenericLevelElement = null;
+
+		function getElement(li:led.inst.LayerInstance) {
+			if( !levelRender.isLayerVisible(li) )
+				return;
+
+			var cx = m.getLayerCx(li);
+			var cy = m.getLayerCy(li);
+			switch li.def.type {
+				case IntGrid:
+					if( li.getIntGrid(cx,cy)>=0 )
+						ge = GenericLevelElement.IntGrid( li, cx, cy );
+
+				case AutoLayer:
+
+				case Entities:
+					for(ei in li.entityInstances) {
+						if( ei.isOver(m.levelX, m.levelY, 8) )
+							ge = GenericLevelElement.Entity(li, ei);
+						else {
+							// Points
+							for(fi in ei.fieldInstances) {
+								if( fi.def.type!=F_Point )
+									continue;
+								for(i in 0...fi.getArrayLength()) {
+									var pt = fi.getPointGrid(i);
+									if( pt!=null && m.cx==pt.cx && m.cy==pt.cy )
+										ge = GenericLevelElement.PointField(li, ei, fi, i);
+								}
+							}
+						}
+					}
+
+				case Tiles:
+					if( li.getGridTile(cx,cy)!=null )
+						ge = GenericLevelElement.Tile(li, cx, cy);
+			}
+		}
+
+		if( limitToLayerInstance==null ) {
+			// Search in all layers
+			var all = project.defs.layers.copy();
+			all.reverse();
+			for(ld in all)
+				getElement( curLevel.getLayerInstance(ld) );
+		}
+		else
+			getElement(limitToLayerInstance);
+
+		return ge;
 	}
 
 	public function pickGenericLevelElement(ge:Null<GenericLevelElement>) {
