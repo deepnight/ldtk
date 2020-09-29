@@ -463,7 +463,7 @@ class LayerInstance {
 	}
 
 
-	inline function applyAutoLayerRuleAt(source:LayerInstance, r:led.def.AutoLayerRuleDef, cx:Int, cy:Int) {
+	inline function applyAutoLayerRuleAt(source:LayerInstance, r:led.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
 		// Init
 		if( !autoTiles.exists(r.uid) )
 			autoTiles.set( r.uid, new Map() );
@@ -472,6 +472,7 @@ class LayerInstance {
 		// Modulos
 		if( cx%r.xModulo!=0 )
 			return false;
+
 		if( cy%r.yModulo!=0 )
 			return false;
 
