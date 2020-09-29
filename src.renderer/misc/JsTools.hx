@@ -648,7 +648,7 @@ class JsTools {
 						}
 						else {
 							jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
-							addExplain(jCell, 'This cell should contain "${layerDef.getIntGridValueName(M.iabs(v)-1)}" to match.');
+							addExplain(jCell, 'This cell should contain "${layerDef.getIntGridValueDisplayName(M.iabs(v)-1)}" to match.');
 						}
 					}
 					else {
@@ -659,7 +659,7 @@ class JsTools {
 						}
 						else {
 							jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
-							addExplain(jCell, 'This cell should NOT contain "${layerDef.getIntGridValueName(M.iabs(v)-1)}" to match.');
+							addExplain(jCell, 'This cell should NOT contain "${layerDef.getIntGridValueDisplayName(M.iabs(v)-1)}" to match.');
 						}
 					}
 				}

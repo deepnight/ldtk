@@ -612,13 +612,37 @@ class Editor extends Page {
 
 	function onMouseMove(e:hxd.Event) {
 		var m = getMouse();
+
+		// Manual updates
 		curTool.onMouseMove(m);
 		rulers.onMouseMove(m);
 
+		// Mouse coords infos
 		jMouseCoords.empty();
 		if( curLayerInstance!=null )
 			jMouseCoords.append('<span>Grid = ${m.cx},${m.cy}</span>');
 		jMouseCoords.append('<span>Pixels = ${m.levelX},${m.levelY}</span>');
+
+		// Overed element infos
+		var overed = getGenericLevelElementAt(m, !App.ME.isAltDown() || !App.ME.isShiftDown() ? curLayerInstance : null);
+		switch overed {
+			case null:
+			case IntGrid(li, cx, cy):
+				var v = li.getIntGrid(cx,cy);
+				var c = C.intToHex( C.toWhite( li.def.getIntGridValueColor(v), 0.66 ) );
+				jMouseCoords.prepend('<span style="color:$c">${ li.def.getIntGridValueDisplayName(v) } (IntGrid)</span>');
+
+			case Entity(li, ei):
+				var c = C.intToHex( C.toWhite( ei.def.color, 0.66 ) );
+				jMouseCoords.prepend('<span style="color:$c">${ ei.def.identifier } (Entity)</span>');
+
+			case Tile(li, cx, cy):
+				jMouseCoords.prepend('<span>${ li.getGridTile(cx,cy) } (Tile)</span>');
+
+			case PointField(li, ei, fi, arrayIdx):
+				var c = C.intToHex( C.toWhite( ei.def.color, 0.66 ) );
+				jMouseCoords.prepend('<span style="color:$c">${ ei.def.identifier }.${ fi.def.identifier } (Entity point)</span>');
+		}
 	}
 
 	function onMouseWheel(e:hxd.Event) {
