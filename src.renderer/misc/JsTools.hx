@@ -599,11 +599,11 @@ class JsTools {
 
 
 	public static function createAutoPatternGrid(
-		rule:led.def.AutoLayerRuleDef,
-		layerDef:led.def.LayerDef,
+		rule: led.def.AutoLayerRuleDef,
+		layerDef: led.def.LayerDef,
 		previewMode=false,
 		?explainCell: (desc:Null<String>)->Void,
-		?onClick:(cx:Int, cy:Int, button:Int)->Void
+		?onClick: (cx:Int, cy:Int, button:Int)->Void
 	) {
 		var jGrid = new J('<div class="autoPatternGrid"/>');
 		jGrid.addClass("size-"+rule.size);
