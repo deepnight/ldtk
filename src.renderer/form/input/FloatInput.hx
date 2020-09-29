@@ -2,7 +2,7 @@ package form.input;
 
 class FloatInput extends form.Input<Float> {
 	var min : Float = M.T_INT16_MIN;
-	var max : Int = M.T_INT16_MAX;
+	var max : Float = M.T_INT16_MAX;
 	public var displayAsPct(default,set) : Bool;
 
 	public function new(j:js.jquery.JQuery, getter:Void->Float, setter:Float->Void) {
@@ -57,7 +57,7 @@ class FloatInput extends form.Input<Float> {
 		def( v / ( displayAsPct ? 100 : 1) );
 	}
 
-	public function setBounds(min,max) {
+	public function setBounds(min:Float, max:Float) {
 		this.min = min;
 		this.max = max;
 	}
