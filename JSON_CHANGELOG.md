@@ -4,7 +4,7 @@
    - Renamed `tiles` to `results`.
    - Replaced `tileId` from `layerInstances.autoTiles` with an array called `tiles`.
    - Renamed `__tileX` and `__tileY` in these sections with hopefully clearer names `__srcX` and `__srcY`. These are still X/Y pixel coordinates of corresponding tiles in the tileset image.
-   - Added `_xOff` and `_yOff` which are pre-computed pixel offsets to render the corresponding tile on screen
+   - Added `_x` and `_y` which are pre-computed pixel coordinates of tile on screen
    - Please refer to updated doc for more infos: https://deepnight.net/docs/led/json/
 
 Before, in layerInstances:
@@ -31,8 +31,8 @@ Now:
 		"results": [ {    // <--- Renamed!
 			"coordId": 90,
 			"tiles": [    // <---- Now an array!
-				{ "tileId": 169, "__xOff": 0, "__yOff": -8, "__srcX": 8, "__srcY": 112 },
-				{ "tileId": 181, "__xOff": 0, "__yOff": 0, "__srcX": 8, "__srcY": 120 }
+				{ "tileId": 169, "__x": 64, "__y": 8, "__srcX": 8, "__srcY": 112 },
+				{ "tileId": 181, "__x": 64, "__y": 16, "__srcX": 8, "__srcY": 120 }
 			],
 			"flips": 0
 		} ]

@@ -78,11 +78,13 @@ class LayerInstance {
 									var tilesArr = [];
 									for( ruleResult in ruleTiles.keyValueIterator() ) {
 										var stampRenderInfos = getRuleStampRenderInfos(rule, td, ruleResult.value.tileIds, ruleResult.value.flips);
+										var cx = getCx(ruleResult.key);
+										var cy = getCy(ruleResult.key);
 										var tiles = ruleResult.value.tileIds.map( (tid:Int)->{
 											return {
 												tileId: tid,
-												__xOff: stampRenderInfos.get(tid).xOff,
-												__yOff: stampRenderInfos.get(tid).yOff,
+												__x: cx*def.gridSize + stampRenderInfos.get(tid).xOff,
+												__y: cy*def.gridSize + stampRenderInfos.get(tid).yOff,
 												__srcX: td==null ? -1 : td.getTileSourceX(tid),
 												__srcY: td==null ? -1 : td.getTileSourceY(tid),
 											}
