@@ -8,6 +8,8 @@
  - Fixed rule `random` function giving identical results for different rules
  - Fixed a crash while editing rules in *pure* auto-layers.
  - Fixed a crash when Undo history reaches its max.
+ - Prepared support for Mac & Linux versions
+ - Minor fixes for Linux builds
  - Updated `Samples`
  - Bug fixes
 
