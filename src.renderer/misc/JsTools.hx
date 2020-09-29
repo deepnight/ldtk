@@ -344,7 +344,11 @@ class JsTools {
 
 			var cleanUrlReg = ~/(http[s]*:\/\/)*(.*)/g;
 			cleanUrlReg.match(url);
-			ui.Tip.attach(link, cleanUrlReg.matched(2), "link", true);
+			var displayUrl = cleanUrlReg.matched(2);
+			var cut = 40;
+			if( displayUrl.length>cut )
+				displayUrl = displayUrl.substr(0,cut)+"...";
+			ui.Tip.attach(link, displayUrl, "link", true);
 			link.click( function(ev) {
 				ev.preventDefault();
 				electron.Shell.openExternal(url);

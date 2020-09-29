@@ -1177,7 +1177,9 @@ textarea {
 		.content {
 			color: #acd6f7;
 			font-family: monospace;
+			font-size: 7pt;
 			white-space: nowrap;
+			overflow-x: hidden;
 			.text {
 				font-style: normal;
 			}
