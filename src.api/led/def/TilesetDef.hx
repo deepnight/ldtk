@@ -203,6 +203,15 @@ class TilesetDef {
 			if( ed.tilesetId==uid && ed.tileId!=null )
 				ed.tileId = remapTileId(oldCwid, ed.tileId);
 
+		// Auto-layer tiles remapping
+		for(ld in _project.defs.layers)
+			if( ld.isAutoLayer() && ld.autoTilesetDefUid==uid ) {
+				for(rg in ld.autoRuleGroups)
+				for(r in rg.rules) 
+				for(i in 0...r.tileIds.length)
+					r.tileIds[i] = remapTileId(oldCwid, r.tileIds[i]);
+			}
+
 
 		if( pxWid<oldWid || pxHei<oldHei )
 			return RemapLoss;

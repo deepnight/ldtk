@@ -255,11 +255,15 @@ class Editor extends Page {
 				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 				new ui.modal.dialog.Warning( Lang.t._("The image ::file:: was updated, but the new version is smaller than the previous one.\nSome tiles might have been lost in the process. It is recommended to check this carefully before saving this project!", { file:name } ) );
 
-			case RemapSuccessful, Ok:
-				if( !silentOk || result!=Ok ) {
+			case Ok:
+				if( !silentOk ) {
 					var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 					N.success(Lang.t._("Tileset image ::file:: updated.", { file:name } ) );
 				}
+
+			case RemapSuccessful:
+				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
+				new ui.modal.dialog.Message( Lang.t._("Tileset image \"::file::\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { file:name } )  );
 		}
 
 		ge.emit(TilesetDefChanged(td));

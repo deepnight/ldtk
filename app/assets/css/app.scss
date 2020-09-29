@@ -1387,6 +1387,10 @@ textarea {
 		border-color: $red;
 	}
 
+	&.message .wrapper {
+		max-width: 400px;
+	}
+
 	&.centered {
 		display: grid;
 		align-items: center;
