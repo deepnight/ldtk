@@ -50,10 +50,10 @@ class Input<T> {
 		setter( parseInputValue() );
 		writeValueToInput();
 		lastValidValue = getter();
-		for(e in linkedEvents.keys())
-			Editor.ME.ge.emit(e);
 		onChange();
 		onValueChange( getter() );
+		for(e in linkedEvents.keys())
+			Editor.ME.ge.emit(e);
 	}
 
 	public function linkEvent(eid:GlobalEvent) {
