@@ -72,25 +72,29 @@ class LayerInstance {
 						arr.push({
 							ruleId: rule.uid,
 							results: {
-								var tilesArr = [];
-								for( ruleResult in ruleTiles.keyValueIterator() ) {
-									var stampRenderInfos = getRuleStampRenderInfos(rule, td, ruleResult.value.tileIds, ruleResult.value.flips);
-									var tiles = ruleResult.value.tileIds.map( (tid:Int)->{
-										return {
-											tileId: tid,
-											__xOff: stampRenderInfos.get(tid).xOff,
-											__yOff: stampRenderInfos.get(tid).yOff,
-											__srcX: td==null ? -1 : td.getTileSourceX(tid),
-											__srcY: td==null ? -1 : td.getTileSourceY(tid),
-										}
-									});
-									tilesArr.push({
-										coordId: ruleResult.key,
-										tiles: tiles,
-										flips: ruleResult.value.flips,
-									});
+								if( ruleTiles==null )
+									[];
+								else {
+									var tilesArr = [];
+									for( ruleResult in ruleTiles.keyValueIterator() ) {
+										var stampRenderInfos = getRuleStampRenderInfos(rule, td, ruleResult.value.tileIds, ruleResult.value.flips);
+										var tiles = ruleResult.value.tileIds.map( (tid:Int)->{
+											return {
+												tileId: tid,
+												__xOff: stampRenderInfos.get(tid).xOff,
+												__yOff: stampRenderInfos.get(tid).yOff,
+												__srcX: td==null ? -1 : td.getTileSourceX(tid),
+												__srcY: td==null ? -1 : td.getTileSourceY(tid),
+											}
+										});
+										tilesArr.push({
+											coordId: ruleResult.key,
+											tiles: tiles,
+											flips: ruleResult.value.flips,
+										});
+									}
+									tilesArr;
 								}
-								tilesArr;
 							}
 						});
 					}

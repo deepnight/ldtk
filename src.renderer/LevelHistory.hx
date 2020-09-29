@@ -147,7 +147,7 @@ class LevelHistory {
 
 	function saveState(s:HistoryState) {
 		// Drop first element when max is reached
-		if( curIndex==MAX_HISTORY-1 ) {
+		if( curIndex==MAX_HISTORY-1 ) { // BUG seems to cause issues with auto-layers
 			var droppedState = states[0];
 			switch droppedState {
 				case ResizedLevel(beforeJson, afterJson):
