@@ -476,28 +476,28 @@ class LayerInstance {
 			return false;
 
 		// Apply rule
-		if( r.matches(source, cx,cy) ) {
+		if( r.matches(this, source, cx,cy) ) {
 			autoTiles.get(r.uid).set(
 				coordId(cx,cy),
 				{ tileIds: r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds.copy(), flips:0 }
 			);
 			return true;
 		}
-		else if( r.flipX && r.matches(source, cx,cy, -1) ) {
+		else if( r.flipX && r.matches(this, source, cx,cy, -1) ) {
 			autoTiles.get(r.uid).set(
 				coordId(cx,cy),
 				{ tileIds: r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds.copy(), flips:1 }
 			);
 			return true;
 		}
-		else if( r.flipY && r.matches(source, cx,cy, 1, -1) ) {
+		else if( r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
 			autoTiles.get(r.uid).set(
 				coordId(cx,cy),
 				{ tileIds: r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds.copy(), flips:2 }
 			);
 			return true;
 		}
-		else if( r.flipX && r.flipY && r.matches(source, cx,cy, -1, -1) ) {
+		else if( r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
 			autoTiles.get(r.uid).set(
 				coordId(cx,cy),
 				{ tileIds: r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds.copy(), flips:3 }

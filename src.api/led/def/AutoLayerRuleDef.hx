@@ -207,11 +207,11 @@ class AutoLayerRuleDef {
 		return tileIds.length==0;
 	}
 
-	public function matches(source:led.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
+	public function matches(li:led.inst.LayerInstance, source:led.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
 		if( tileIds.length==0 )
 			return false;
 
-		if( chance<=0 || chance<1 && dn.M.randSeedCoords(source.seed+uid, cx,cy, 100) >= chance*100 )
+		if( chance<=0 || chance<1 && dn.M.randSeedCoords(li.seed+uid, cx,cy, 100) >= chance*100 )
 			return false;
 
 		if( hasPerlin() && _perlin.perlin(perlinSeed, cx*perlinScale, cy*perlinScale, perlinOctaves) < 0 )
