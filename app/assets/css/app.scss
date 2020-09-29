@@ -3299,12 +3299,10 @@ $patternSize : 32px;
 		position: absolute;
 		z-index: 10;
 		box-sizing: border-box;
-		min-width: $patternSize * 1.8;
-		min-height: $patternSize * 1.8;
 
-		border-radius: 4px;
-		box-shadow: 0px 0px 8px black inset, 0px 0px 8px black;
-		border: 3px dashed white;
+		box-shadow: 0px 0px 4px black inset, 0px 0px 8px black inset, 0px 0px 8px black;
+		border: 3px solid $orange;
+		outline: 2px solid black;
 		pointer-events: none;
 	}
 

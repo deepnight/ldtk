@@ -552,11 +552,11 @@ class JsTools {
 					});
 				}
 			}
-			else if( mode==RectOnly ) {
+			else {
 				// Tile group stamp
 				var bounds = td.getTileGroupBounds(tileIds);
 				var wid = M.imax(bounds.wid, 1);
-				var hei = M.imax(bounds.wid, 1);
+				var hei = M.imax(bounds.hei, 1);
 				jTileCanvas.attr("width", td.tileGridSize * wid );
 				jTileCanvas.attr("height", td.tileGridSize * hei );
 				var scale = M.fmin(1, 48 / ( M.fmax(wid, hei)*td.tileGridSize ) );
@@ -568,8 +568,6 @@ class JsTools {
 					var tcy = td.getTileCy(tid);
 					td.drawTileToCanvas(jTileCanvas, tid, (tcx-bounds.left)*td.tileGridSize, (tcy-bounds.top)*td.tileGridSize);
 				}
-
-				N.debug("ok");
 			}
 
 			// Open picker
@@ -649,9 +647,22 @@ class JsTools {
 					case Stamp:
 						var jStampPreview = new J('<div class="stampPreview"/>');
 						jStampPreview.appendTo(jCell);
-						var size = 32; // HACK hard coded
-						jStampPreview.css("top", ( rule.pivotY * (size-size*1.8) ) + "px");
-						jStampPreview.css("left", ( rule.pivotX * (size-size*1.8) ) + "px");
+						var previewWid = 32;
+						var previewHei = 32;
+						if( rule.tileIds.length>1 ) {
+							var td = Editor.ME.project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
+							if( td!=null ) {
+								var bounds = td.getTileGroupBounds(rule.tileIds);
+								if( bounds.wid>1 )
+									previewWid = Std.int( previewWid * 1.9 );
+								if( bounds.hei>1 )
+									previewHei = Std.int( previewHei * 1.9 );
+							}
+						}
+						jStampPreview.css("width", previewWid + "px");
+						jStampPreview.css("height", previewHei + "px");
+						jStampPreview.css("left", ( rule.pivotX * (32-previewWid) ) + "px");
+						jStampPreview.css("top", ( rule.pivotY * (32-previewHei) ) + "px");
 				}
 				if( previewMode ) {
 					var td = Editor.ME.project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
