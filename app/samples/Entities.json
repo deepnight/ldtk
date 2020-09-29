@@ -3,11 +3,11 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.2.1-beta-debug",
+		"appVersion": "0.3.0-beta-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
 	"name": "Entities demo",
-	"jsonVersion": "0.2.1",
+	"jsonVersion": "0.3.0",
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1.0,
 	"defaultGridSize": 16,
