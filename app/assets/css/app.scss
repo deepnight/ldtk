@@ -2164,14 +2164,13 @@ canvas#webgl {
 					color: #b5becd;
 
 					h1 {
-						display: none;
-					}
-
-					h1+h2 {
-						margin-top: 0;
+						padding-bottom: 8px;
+						margin-bottom: 8px;
+						border-bottom: 1px solid $orange;
 					}
 
 					h2 {
+						border: none;
 						margin-top: 32px;
 						margin-bottom: 8px;
 						text-transform: none;

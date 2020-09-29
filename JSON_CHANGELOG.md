@@ -1,13 +1,13 @@
-## 0.3.0-beta
+# 0.3.0-beta
 
  - **BREAKING CHANGE**: some cleanup & renaming happened on this update, please check changes below.
 
-### Tiles layer
+## Tiles layer
 
  - `__tileX` / `__tileY` were renamed to `__srcX` / `__srcY` in `layerInstances.gridTiles`. These values are **pixel coordinates of the tile in the tileset atlas image**.
  - added `__x` / `__y` values, which are **pixel display coordinates of each tile**.
 
-### Auto-tile layers
+## Auto-tile layers
  To support new rule-based group of tiles (eg. "*placing a big object using just rules*"), some changes were introduced to the `layerInstances.autoLayers` structure (see example below):
    - Renamed `tiles` to `results`.
    - Replaced `tileId` from `layerInstances.autoTiles` with an array called `tiles`.
@@ -48,7 +48,7 @@ Now:
 ]
 ```
 
-## 0.2.1-beta
+# 0.2.1-beta
 
  - Added `__tileX` / `__tileY` to `layerInstances.autoTiles`
  - Added `__tileX` / `__tileY` to `layerInstances.gridTiles`
@@ -56,6 +56,6 @@ Now:
  - Renamed `tileSpacing` -> `spacing` in `tilesets` definitions
  - Added `padding` to `tilesets` definitions
 
-## 0.2.0-beta
+# 0.2.0-beta
 
  Initial beta release
