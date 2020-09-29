@@ -102,7 +102,9 @@ class Const {
 		var jsonCL = new dn.Changelog(raw);
 		if( jsonCL.latest.version.equals(appCL.latest.version) ) {
 			relNotes.push('## JSON format changes');
-			relNotes = relNotes.concat( jsonCL.latest.allNoteLines );
+			relNotes = relNotes.concat( jsonCL.latest.allNoteLines.map( function(str) {
+				return StringTools.replace(str, "## ", "### "); // Reduce title levels
+			}) );
 		}
 
 		// Save file

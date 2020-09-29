@@ -1,6 +1,6 @@
 # 0.3.0-beta
 
- - **BREAKING CHANGE**: some cleanup & renaming happened on this update, please check changes below.
+**BREAKING CHANGE**: some cleanup & renaming happened on this update, please check changes below.
 
 ## Tiles layer
 
