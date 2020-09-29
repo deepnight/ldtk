@@ -77,7 +77,7 @@ class Modal extends dn.Process {
 
 	public static function isOpen<T:Modal>(c:Class<T>) {
 		for(w in ALL)
-			if( !w.isClosing() && Std.isOfType(w,c) )
+			if( !w.isClosing() && #if( haxe_ver >= 4.1 ) Std.isOfType(w,c) #else Std.is(w,c) #end )
 				return true;
 		return false;
 	}
