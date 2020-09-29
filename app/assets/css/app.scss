@@ -3439,6 +3439,10 @@ $patternSize : 32px;
 			select {
 				margin-bottom: 4px;
 			}
+			.wrapper {
+				display: grid;
+				justify-items: center;
+			}
 
 			canvas {
 				image-rendering: pixelated;

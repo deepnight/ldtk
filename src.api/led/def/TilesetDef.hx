@@ -142,7 +142,7 @@ class TilesetDef {
 		}
 		catch(err:Dynamic) {
 			trace(err);
-			removeAtlasImage(); 
+			removeAtlasImage();
 			return false;
 		}
 
@@ -268,6 +268,59 @@ class TilesetDef {
 				if( stid==tid )
 					return sel;
 		return null;
+	}
+
+
+	public function getTileGroupBounds(tileIds:Array<Int>) { // Warning: not good for real-time!
+		if( tileIds==null || tileIds.length==0 )
+			return {
+				top: -1,
+				bottom: -1,
+				left: -1,
+				right: -1,
+				wid: 0,
+				hei: 0,
+			}
+
+		var top = 99999;
+		var left = 99999;
+		var right = 0;
+		var bottom = 0;
+		for(tid in tileIds) {
+			top = dn.M.imin( top, getTileCy(tid) );
+			bottom = dn.M.imax( bottom, getTileCy(tid) );
+			left = dn.M.imin( left, getTileCx(tid) );
+			right = dn.M.imax( right, getTileCx(tid) );
+		}
+		return {
+			top: top,
+			bottom: bottom,
+			left: left,
+			right: right,
+			wid: right-left+1,
+			hei: bottom-top+1,
+		}
+	}
+
+
+	public function getTileGroupWidth(tileIds:Array<Int>) : Int {
+		var min = 99999;
+		var max = 0;
+		for(tid in tileIds) {
+			min = dn.M.imin( min, getTileCx(tid) );
+			max = dn.M.imax( max, getTileCx(tid) );
+		}
+		return max-min+1;
+	}
+
+	public function getTileGroupHeight(tileIds:Array<Int>) : Int {
+		var min = 99999;
+		var max = 0;
+		for(tid in tileIds) {
+			min = dn.M.imin( min, getTileCy(tid) );
+			max = dn.M.imax( max, getTileCy(tid) );
+		}
+		return max-min+1;
 	}
 
 

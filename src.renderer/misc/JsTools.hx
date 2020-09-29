@@ -509,20 +509,29 @@ class JsTools {
 	}
 
 
-	public static function createTilePicker(tilesetId:Null<Int>, mode:TilePickerMode=MultiTiles, tileIds:Array<Int>, onPick:(tileIds:Array<Int>)->Void) {
+	public static function createTilePicker(
+		tilesetId: Null<Int>,
+		mode: TilePickerMode=MultiTiles,
+		tileIds: Array<Int>,
+		onPick: (tileIds:Array<Int>)->Void
+	) {
 		var jTileCanvas = new J('<canvas class="tile"></canvas>');
 
 		if( tilesetId!=null ) {
 			jTileCanvas.addClass("active");
 			var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
 
-			// Render tile
-			if( tileIds.length>0 ) {
+			if( tileIds.length==0 ) {
+				// No tile selected
+				jTileCanvas.addClass("empty");
+			}
+			else if( mode!=RectOnly ) {
+				// Single/random tiles
 				jTileCanvas.removeClass("empty");
 				jTileCanvas.attr("width", td.tileGridSize);
 				jTileCanvas.attr("height", td.tileGridSize);
 				td.drawTileToCanvas(jTileCanvas, tileIds[0]);
-				if( tileIds.length>1 ) {
+				if( tileIds.length>1 && mode!=RectOnly ) {
 					// Cycling animation among multiple tiles
 					jTileCanvas.addClass("multi");
 					var idx = 0;
@@ -543,8 +552,25 @@ class JsTools {
 					});
 				}
 			}
-			else
-				jTileCanvas.addClass("empty");
+			else if( mode==RectOnly ) {
+				// Tile group stamp
+				var bounds = td.getTileGroupBounds(tileIds);
+				var wid = M.imax(bounds.wid, 1);
+				var hei = M.imax(bounds.wid, 1);
+				jTileCanvas.attr("width", td.tileGridSize * wid );
+				jTileCanvas.attr("height", td.tileGridSize * hei );
+				var scale = M.fmin(1, 48 / ( M.fmax(wid, hei)*td.tileGridSize ) );
+				jTileCanvas.css("width", td.tileGridSize * wid * scale );
+				jTileCanvas.css("height", td.tileGridSize * hei * scale );
+
+				for(tid in tileIds) {
+					var tcx = td.getTileCx(tid);
+					var tcy = td.getTileCy(tid);
+					td.drawTileToCanvas(jTileCanvas, tid, (tcx-bounds.left)*td.tileGridSize, (tcy-bounds.top)*td.tileGridSize);
+				}
+
+				N.debug("ok");
+			}
 
 			// Open picker
 			jTileCanvas.click( function(ev) {
@@ -565,8 +591,10 @@ class JsTools {
 				tp.focusOnSelection(true);
 			});
 		}
-		else
+		else {
+			// Invalid tileset
 			jTileCanvas.addClass("empty");
+		}
 
 		return jTileCanvas;
 	}
