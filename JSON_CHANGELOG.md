@@ -1,4 +1,4 @@
-## 0.2.2-beta
+## 0.3.0-beta
 
  - **BREAKING CHANGE**: to support new rule-based group of tiles (eg. "*placing a big object using just rules*"), some changes were introduced to the `layerInstances.autoLayers` structure (see example below):
    - Renamed `tiles` to `results`.

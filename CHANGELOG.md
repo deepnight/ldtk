@@ -1,14 +1,14 @@
 # LEd release notes
 
-## 0.2.2-beta
+## 0.3.0-beta
  - **Group of tiles in auto-layer rules**: this new feature allows you to place larger objects (eg. *a tree, a big rock, etc.*) made of multiple tiles using just auto-layer rules.
  - Added **Modulo** options for auto-layer rules: this allows a rule to only apply every X columns or Y rows.
  - Added **Checker mode** for auto-layer rules: this makes effects like "brick walls" or "Sonic checker effect" possible ;)
- - **Better hot-reloading**: when a tileset images changes on the disk, LEd will remap tile coordinates if the image size changes. This feature now also works to remap auto-layer tiles.
+ - **Better hot-reloading**: when a tileset images changes on the disk, LEd will automatically remap tile coordinates if the image size changes. This feature now also works to remap auto-layer tiles.
  - Fixed image import that failed if the image file was standing on a different drive than the project file.
  - Fixed rule `random` function giving identical results for different rules
  - Fixed a crash while editing rules in *pure* auto-layers.
- - Fixed a crash when Undo history reaches its max.
+ - Fixed a crash when Undo history reaches its max (might need more rework).
  - Prepared support for Mac & Linux versions
  - Minor fixes for Linux builds
  - Updated `Samples`
