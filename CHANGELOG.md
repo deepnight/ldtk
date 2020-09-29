@@ -2,7 +2,9 @@
 
 ## 0.2.2-beta
  - **Group of tiles in auto-layer rules**: this new feature allows you to place larger objects (eg. *a tree, a big rock, etc.*) made of multiple tiles using just auto-layer rules.
- - Fixed rule "randoms" giving same results for different rules
+ - Added **modulo** options for auto-layer rules: this allows a rule to only apply every X columns or Y rows.
+ - Fixed image import that failed if the image file was standing on a different drive than the project file.
+ - Fixed rule `random` function giving identical results for different rules
  - Bug fixes
 
 
