@@ -263,7 +263,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 				// Preview
 				var jPreview = jRule.find(".preview");
-				JsTools.createAutoPatternGrid(r, ld, true).appendTo(jPreview);
+				var sourceDef = ld.type==AutoLayer ? project.defs.getLayerDef(ld.autoSourceLayerDefUid) : ld;
+				JsTools.createAutoPatternGrid(r, sourceDef, true).appendTo(jPreview);
 				jPreview.click( function(ev) {
 					new ui.modal.dialog.RuleEditor(jPreview, ld, r);
 				});
