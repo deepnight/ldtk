@@ -3,11 +3,11 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.2.2-beta-debug",
+		"appVersion": "0.3.0-beta-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
 	"name": "AutoLayers_stamps",
-	"jsonVersion": "0.2.2",
+	"jsonVersion": "0.3.0",
 	"defaultPivotX": 0.0,
 	"defaultPivotY": 0.0,
 	"defaultGridSize": 16,
@@ -331,22 +331,22 @@
 						"results": [ {
 							"coordId": 168,
 							"tiles": [
-								{ "tileId": 10, "__xOff": 0, "__yOff": 0, "__srcX": 160, "__srcY": 0 },
-								{ "tileId": 30, "__xOff": 0, "__yOff": 16, "__srcX": 160, "__srcY": 16 },
-								{ "tileId": 50, "__xOff": 0, "__yOff": 32, "__srcX": 160, "__srcY": 32 },
-								{ "tileId": 70, "__xOff": 0, "__yOff": 48, "__srcX": 160, "__srcY": 48 },
-								{ "tileId": 11, "__xOff": 16, "__yOff": 0, "__srcX": 176, "__srcY": 0 },
-								{ "tileId": 31, "__xOff": 16, "__yOff": 16, "__srcX": 176, "__srcY": 16 },
-								{ "tileId": 51, "__xOff": 16, "__yOff": 32, "__srcX": 176, "__srcY": 32 },
-								{ "tileId": 71, "__xOff": 16, "__yOff": 48, "__srcX": 176, "__srcY": 48 },
-								{ "tileId": 12, "__xOff": 32, "__yOff": 0, "__srcX": 192, "__srcY": 0 },
-								{ "tileId": 32, "__xOff": 32, "__yOff": 16, "__srcX": 192, "__srcY": 16 },
-								{ "tileId": 52, "__xOff": 32, "__yOff": 32, "__srcX": 192, "__srcY": 32 },
-								{ "tileId": 72, "__xOff": 32, "__yOff": 48, "__srcX": 192, "__srcY": 48 },
-								{ "tileId": 13, "__xOff": 48, "__yOff": 0, "__srcX": 208, "__srcY": 0 },
-								{ "tileId": 33, "__xOff": 48, "__yOff": 16, "__srcX": 208, "__srcY": 16 },
-								{ "tileId": 53, "__xOff": 48, "__yOff": 32, "__srcX": 208, "__srcY": 32 },
-								{ "tileId": 73, "__xOff": 48, "__yOff": 48, "__srcX": 208, "__srcY": 48 }
+								{ "tileId": 10, "__x": 128, "__y": 128, "__srcX": 160, "__srcY": 0 },
+								{ "tileId": 30, "__x": 128, "__y": 144, "__srcX": 160, "__srcY": 16 },
+								{ "tileId": 50, "__x": 128, "__y": 160, "__srcX": 160, "__srcY": 32 },
+								{ "tileId": 70, "__x": 128, "__y": 176, "__srcX": 160, "__srcY": 48 },
+								{ "tileId": 11, "__x": 144, "__y": 128, "__srcX": 176, "__srcY": 0 },
+								{ "tileId": 31, "__x": 144, "__y": 144, "__srcX": 176, "__srcY": 16 },
+								{ "tileId": 51, "__x": 144, "__y": 160, "__srcX": 176, "__srcY": 32 },
+								{ "tileId": 71, "__x": 144, "__y": 176, "__srcX": 176, "__srcY": 48 },
+								{ "tileId": 12, "__x": 160, "__y": 128, "__srcX": 192, "__srcY": 0 },
+								{ "tileId": 32, "__x": 160, "__y": 144, "__srcX": 192, "__srcY": 16 },
+								{ "tileId": 52, "__x": 160, "__y": 160, "__srcX": 192, "__srcY": 32 },
+								{ "tileId": 72, "__x": 160, "__y": 176, "__srcX": 192, "__srcY": 48 },
+								{ "tileId": 13, "__x": 176, "__y": 128, "__srcX": 208, "__srcY": 0 },
+								{ "tileId": 33, "__x": 176, "__y": 144, "__srcX": 208, "__srcY": 16 },
+								{ "tileId": 53, "__x": 176, "__y": 160, "__srcX": 208, "__srcY": 32 },
+								{ "tileId": 73, "__x": 176, "__y": 176, "__srcX": 208, "__srcY": 48 }
 							],
 							"flips": 0
 						} ]
@@ -358,40 +358,40 @@
 							{
 								"coordId": 144,
 								"tiles": [
-									{ "tileId": 82, "__xOff": 0, "__yOff": 0, "__srcX": 32, "__srcY": 64 },
-									{ "tileId": 83, "__xOff": 16, "__yOff": 0, "__srcX": 48, "__srcY": 64 }
+									{ "tileId": 82, "__x": 64, "__y": 112, "__srcX": 32, "__srcY": 64 },
+									{ "tileId": 83, "__x": 80, "__y": 112, "__srcX": 48, "__srcY": 64 }
 								],
 								"flips": 0
 							},
 							{
 								"coordId": 146,
 								"tiles": [
-									{ "tileId": 82, "__xOff": 0, "__yOff": 0, "__srcX": 32, "__srcY": 64 },
-									{ "tileId": 83, "__xOff": 16, "__yOff": 0, "__srcX": 48, "__srcY": 64 }
+									{ "tileId": 82, "__x": 96, "__y": 112, "__srcX": 32, "__srcY": 64 },
+									{ "tileId": 83, "__x": 112, "__y": 112, "__srcX": 48, "__srcY": 64 }
 								],
 								"flips": 0
 							},
 							{
 								"coordId": 148,
 								"tiles": [
-									{ "tileId": 82, "__xOff": 0, "__yOff": 0, "__srcX": 32, "__srcY": 64 },
-									{ "tileId": 83, "__xOff": 16, "__yOff": 0, "__srcX": 48, "__srcY": 64 }
+									{ "tileId": 82, "__x": 128, "__y": 112, "__srcX": 32, "__srcY": 64 },
+									{ "tileId": 83, "__x": 144, "__y": 112, "__srcX": 48, "__srcY": 64 }
 								],
 								"flips": 0
 							},
 							{
 								"coordId": 150,
 								"tiles": [
-									{ "tileId": 82, "__xOff": 0, "__yOff": 0, "__srcX": 32, "__srcY": 64 },
-									{ "tileId": 83, "__xOff": 16, "__yOff": 0, "__srcX": 48, "__srcY": 64 }
+									{ "tileId": 82, "__x": 160, "__y": 112, "__srcX": 32, "__srcY": 64 },
+									{ "tileId": 83, "__x": 176, "__y": 112, "__srcX": 48, "__srcY": 64 }
 								],
 								"flips": 0
 							},
 							{
 								"coordId": 224,
 								"tiles": [
-									{ "tileId": 82, "__xOff": 0, "__yOff": 0, "__srcX": 32, "__srcY": 64 },
-									{ "tileId": 83, "__xOff": 16, "__yOff": 0, "__srcX": 48, "__srcY": 64 }
+									{ "tileId": 82, "__x": 64, "__y": 176, "__srcX": 32, "__srcY": 64 },
+									{ "tileId": 83, "__x": 80, "__y": 176, "__srcX": 48, "__srcY": 64 }
 								],
 								"flips": 0
 							}
@@ -402,10 +402,10 @@
 						"results": [ {
 							"coordId": 168,
 							"tiles": [
-								{ "tileId": 6, "__xOff": 0, "__yOff": 0, "__srcX": 96, "__srcY": 0 },
-								{ "tileId": 26, "__xOff": 0, "__yOff": 16, "__srcX": 96, "__srcY": 16 },
-								{ "tileId": 7, "__xOff": 16, "__yOff": 0, "__srcX": 112, "__srcY": 0 },
-								{ "tileId": 27, "__xOff": 16, "__yOff": 16, "__srcX": 112, "__srcY": 16 }
+								{ "tileId": 6, "__x": 128, "__y": 128, "__srcX": 96, "__srcY": 0 },
+								{ "tileId": 26, "__x": 128, "__y": 144, "__srcX": 96, "__srcY": 16 },
+								{ "tileId": 7, "__x": 144, "__y": 128, "__srcX": 112, "__srcY": 0 },
+								{ "tileId": 27, "__x": 144, "__y": 144, "__srcX": 112, "__srcY": 16 }
 							],
 							"flips": 0
 						} ]
@@ -415,117 +415,117 @@
 						"results": [
 							{
 								"coordId": 165,
-								"tiles": [ { "tileId": 148, "__xOff": 0, "__yOff": 0, "__srcX": 128, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 148, "__x": 80, "__y": 128, "__srcX": 128, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 167,
-								"tiles": [ { "tileId": 164, "__xOff": 0, "__yOff": 0, "__srcX": 64, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 164, "__x": 112, "__y": 128, "__srcX": 64, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 171,
-								"tiles": [ { "tileId": 163, "__xOff": 0, "__yOff": 0, "__srcX": 48, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 163, "__x": 176, "__y": 128, "__srcX": 48, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 186,
-								"tiles": [ { "tileId": 168, "__xOff": 0, "__yOff": 0, "__srcX": 128, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 168, "__x": 96, "__y": 144, "__srcX": 128, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 188,
-								"tiles": [ { "tileId": 169, "__xOff": 0, "__yOff": 0, "__srcX": 144, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 169, "__x": 128, "__y": 144, "__srcX": 144, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 190,
-								"tiles": [ { "tileId": 163, "__xOff": 0, "__yOff": 0, "__srcX": 48, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 163, "__x": 160, "__y": 144, "__srcX": 48, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 191,
-								"tiles": [ { "tileId": 166, "__xOff": 0, "__yOff": 0, "__srcX": 96, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 166, "__x": 176, "__y": 144, "__srcX": 96, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 192,
-								"tiles": [ { "tileId": 164, "__xOff": 0, "__yOff": 0, "__srcX": 64, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 164, "__x": 192, "__y": 144, "__srcX": 64, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 206,
-								"tiles": [ { "tileId": 146, "__xOff": 0, "__yOff": 0, "__srcX": 96, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 146, "__x": 96, "__y": 160, "__srcX": 96, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 210,
-								"tiles": [ { "tileId": 143, "__xOff": 0, "__yOff": 0, "__srcX": 48, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 143, "__x": 160, "__y": 160, "__srcX": 48, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 211,
-								"tiles": [ { "tileId": 169, "__xOff": 0, "__yOff": 0, "__srcX": 144, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 169, "__x": 176, "__y": 160, "__srcX": 144, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 212,
-								"tiles": [ { "tileId": 169, "__xOff": 0, "__yOff": 0, "__srcX": 144, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 169, "__x": 192, "__y": 160, "__srcX": 144, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 228,
-								"tiles": [ { "tileId": 146, "__xOff": 0, "__yOff": 0, "__srcX": 96, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 146, "__x": 128, "__y": 176, "__srcX": 96, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 229,
-								"tiles": [ { "tileId": 143, "__xOff": 0, "__yOff": 0, "__srcX": 48, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 143, "__x": 144, "__y": 176, "__srcX": 48, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 232,
-								"tiles": [ { "tileId": 165, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 165, "__x": 192, "__y": 176, "__srcX": 80, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 244,
-								"tiles": [ { "tileId": 165, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 165, "__x": 64, "__y": 192, "__srcX": 80, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 245,
-								"tiles": [ { "tileId": 143, "__xOff": 0, "__yOff": 0, "__srcX": 48, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 143, "__x": 80, "__y": 192, "__srcX": 48, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 247,
-								"tiles": [ { "tileId": 169, "__xOff": 0, "__yOff": 0, "__srcX": 144, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 169, "__x": 112, "__y": 192, "__srcX": 144, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 248,
-								"tiles": [ { "tileId": 145, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 145, "__x": 128, "__y": 192, "__srcX": 80, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 249,
-								"tiles": [ { "tileId": 147, "__xOff": 0, "__yOff": 0, "__srcX": 112, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 147, "__x": 144, "__y": 192, "__srcX": 112, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 251,
-								"tiles": [ { "tileId": 147, "__xOff": 0, "__yOff": 0, "__srcX": 112, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 147, "__x": 176, "__y": 192, "__srcX": 112, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 268,
-								"tiles": [ { "tileId": 143, "__xOff": 0, "__yOff": 0, "__srcX": 48, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 143, "__x": 128, "__y": 208, "__srcX": 48, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 284,
-								"tiles": [ { "tileId": 169, "__xOff": 0, "__yOff": 0, "__srcX": 144, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 169, "__x": 64, "__y": 224, "__srcX": 144, "__srcY": 128 } ],
 								"flips": 0
 							}
 						]
@@ -535,27 +535,27 @@
 						"results": [
 							{
 								"coordId": 144,
-								"tiles": [ { "tileId": 161, "__xOff": 0, "__yOff": 0, "__srcX": 16, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 161, "__x": 64, "__y": 112, "__srcX": 16, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 151,
-								"tiles": [ { "tileId": 161, "__xOff": 0, "__yOff": 0, "__srcX": 16, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 161, "__x": 176, "__y": 112, "__srcX": 16, "__srcY": 128 } ],
 								"flips": 1
 							},
 							{
 								"coordId": 172,
-								"tiles": [ { "tileId": 161, "__xOff": 0, "__yOff": 0, "__srcX": 16, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 161, "__x": 192, "__y": 128, "__srcX": 16, "__srcY": 128 } ],
 								"flips": 1
 							},
 							{
 								"coordId": 193,
-								"tiles": [ { "tileId": 161, "__xOff": 0, "__yOff": 0, "__srcX": 16, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 161, "__x": 208, "__y": 144, "__srcX": 16, "__srcY": 128 } ],
 								"flips": 1
 							},
 							{
 								"coordId": 224,
-								"tiles": [ { "tileId": 161, "__xOff": 0, "__yOff": 0, "__srcX": 16, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 161, "__x": 64, "__y": 176, "__srcX": 16, "__srcY": 128 } ],
 								"flips": 0
 							}
 						]
@@ -565,42 +565,42 @@
 						"results": [
 							{
 								"coordId": 164,
-								"tiles": [ { "tileId": 160, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 160, "__x": 64, "__y": 128, "__srcX": 0, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 233,
-								"tiles": [ { "tileId": 160, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 160, "__x": 208, "__y": 176, "__srcX": 0, "__srcY": 128 } ],
 								"flips": 1
 							},
 							{
 								"coordId": 252,
-								"tiles": [ { "tileId": 160, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 160, "__x": 192, "__y": 192, "__srcX": 0, "__srcY": 128 } ],
 								"flips": 1
 							},
 							{
 								"coordId": 271,
-								"tiles": [ { "tileId": 160, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 160, "__x": 176, "__y": 208, "__srcX": 0, "__srcY": 128 } ],
 								"flips": 1
 							},
 							{
 								"coordId": 284,
-								"tiles": [ { "tileId": 160, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 160, "__x": 64, "__y": 224, "__srcX": 0, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 285,
-								"tiles": [ { "tileId": 160, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 160, "__x": 80, "__y": 224, "__srcX": 0, "__srcY": 128 } ],
 								"flips": 1
 							},
 							{
 								"coordId": 288,
-								"tiles": [ { "tileId": 160, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 160, "__x": 128, "__y": 224, "__srcX": 0, "__srcY": 128 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 289,
-								"tiles": [ { "tileId": 160, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 128 } ],
+								"tiles": [ { "tileId": 160, "__x": 144, "__y": 224, "__srcX": 0, "__srcY": 128 } ],
 								"flips": 1
 							}
 						]
@@ -610,162 +610,162 @@
 						"results": [
 							{
 								"coordId": 145,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 80, "__y": 112, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 147,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 112, "__y": 112, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 149,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 144, "__y": 112, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 151,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 176, "__y": 112, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 164,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 64, "__y": 128, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 166,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 96, "__y": 128, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 168,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 128, "__y": 128, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 170,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 160, "__y": 128, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 172,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 192, "__y": 128, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 187,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 112, "__y": 144, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 189,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 144, "__y": 144, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 191,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 176, "__y": 144, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 193,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 208, "__y": 144, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 206,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 96, "__y": 160, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 208,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 128, "__y": 160, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 210,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 160, "__y": 160, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 212,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 192, "__y": 160, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 225,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 80, "__y": 176, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 227,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 112, "__y": 176, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 229,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 144, "__y": 176, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 231,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 176, "__y": 176, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 233,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 208, "__y": 176, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 244,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 64, "__y": 192, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 246,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 96, "__y": 192, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 248,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 128, "__y": 192, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 250,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 160, "__y": 192, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 252,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 192, "__y": 192, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 265,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 80, "__y": 208, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 269,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 144, "__y": 208, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 271,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 176, "__y": 208, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 284,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 64, "__y": 224, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 288,
-								"tiles": [ { "tileId": 185, "__xOff": 0, "__yOff": 0, "__srcX": 80, "__srcY": 144 } ],
+								"tiles": [ { "tileId": 185, "__x": 128, "__y": 224, "__srcX": 80, "__srcY": 144 } ],
 								"flips": 0
 							}
 						]
@@ -775,312 +775,312 @@
 						"results": [
 							{
 								"coordId": 144,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 64, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 145,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 80, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 146,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 96, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 147,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 112, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 148,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 128, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 149,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 144, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 150,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 160, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 151,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 176, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 164,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 64, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 165,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 80, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 166,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 96, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 167,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 112, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 168,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 128, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 169,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 144, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 170,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 160, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 171,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 176, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 172,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 192, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 186,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 96, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 187,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 112, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 188,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 128, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 189,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 144, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 190,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 160, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 191,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 176, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 192,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 192, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 193,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 208, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 206,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 96, "__y": 160, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 207,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 112, "__y": 160, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 208,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 128, "__y": 160, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 209,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 144, "__y": 160, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 210,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 160, "__y": 160, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 211,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 176, "__y": 160, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 212,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 192, "__y": 160, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 213,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 208, "__y": 160, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 224,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 64, "__y": 176, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 225,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 80, "__y": 176, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 226,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 96, "__y": 176, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 227,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 112, "__y": 176, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 228,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 128, "__y": 176, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 229,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 144, "__y": 176, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 230,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 160, "__y": 176, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 231,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 176, "__y": 176, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 232,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 192, "__y": 176, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 233,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 208, "__y": 176, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 244,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 64, "__y": 192, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 245,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 80, "__y": 192, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 246,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 96, "__y": 192, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 247,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 112, "__y": 192, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 248,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 128, "__y": 192, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 249,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 144, "__y": 192, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 250,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 160, "__y": 192, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 251,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 176, "__y": 192, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 252,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 192, "__y": 192, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 264,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 64, "__y": 208, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 265,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 80, "__y": 208, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 268,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 128, "__y": 208, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 269,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 144, "__y": 208, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 270,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 160, "__y": 208, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 271,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 176, "__y": 208, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 284,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 64, "__y": 224, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 285,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 80, "__y": 224, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 288,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 128, "__y": 224, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							},
 							{
 								"coordId": 289,
-								"tiles": [ { "tileId": 140, "__xOff": 0, "__yOff": 0, "__srcX": 0, "__srcY": 112 } ],
+								"tiles": [ { "tileId": 140, "__x": 144, "__y": 224, "__srcX": 0, "__srcY": 112 } ],
 								"flips": 0
 							}
 						]
