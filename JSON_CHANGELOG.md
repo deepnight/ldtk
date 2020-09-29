@@ -1,6 +1,14 @@
 ## 0.3.0-beta
 
- - **BREAKING CHANGE**: to support new rule-based group of tiles (eg. "*placing a big object using just rules*"), some changes were introduced to the `layerInstances.autoLayers` structure (see example below):
+ - **BREAKING CHANGE**: some cleanup & renaming happened on this update, please check changes below.
+
+### Tiles layer
+
+ - `__tileX` / `__tileY` were renamed to `__srcX` / `__srcY` in `layerInstances.gridTiles`. These values are **pixel coordinates of the tile in the tileset atlas image**.
+ - added `__x` / `__y` values, which are **pixel display coordinates of each tile**.
+
+### Auto-tile layers
+ To support new rule-based group of tiles (eg. "*placing a big object using just rules*"), some changes were introduced to the `layerInstances.autoLayers` structure (see example below):
    - Renamed `tiles` to `results`.
    - Replaced `tileId` from `layerInstances.autoTiles` with an array called `tiles`.
    - Renamed `__tileX` and `__tileY` in these sections with hopefully clearer names `__srcX` and `__srcY`. These are still X/Y pixel coordinates of corresponding tiles in the tileset image.

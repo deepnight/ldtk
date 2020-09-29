@@ -113,8 +113,10 @@ class LayerInstance {
 						arr.push({
 							coordId: e.key,
 							tileId: e.value,
-							__tileX: td==null ? -1 : td.getTileSourceX(e.value),
-							__tileY: td==null ? -1 : td.getTileSourceY(e.value),
+							__x: getCx(e.key) * def.gridSize,
+							__y: getCy(e.key) * def.gridSize,
+							__srcX: td==null ? -1 : td.getTileSourceX(e.value),
+							__srcY: td==null ? -1 : td.getTileSourceY(e.value),
 						});
 				arr;
 			},
