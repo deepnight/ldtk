@@ -31,7 +31,7 @@ class RulePerlinSettings extends ui.modal.Dialog {
 
 		var i = Input.linkToHtmlInput(r.perlinScale, jContent.find("#perlinScale"));
 		i.displayAsPct = true;
-		i.setBounds(0.01, 1);
+		i.setBounds(0.01, 0.99);
 		i.linkEvent( LayerRuleChanged(r) );
 
 		var i = Input.linkToHtmlInput(r.perlinOctaves, jContent.find("#perlinOctaves"));

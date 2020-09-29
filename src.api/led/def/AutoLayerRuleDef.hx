@@ -15,6 +15,7 @@ class AutoLayerRuleDef {
 	public var pivotY = 0.;
 	public var xModulo = 1;
 	public var yModulo = 1;
+	public var checker : led.LedTypes.AutoLayerRuleCheckerMode = None;
 
 	var perlinActive = false;
 	public var perlinSeed : Int;
@@ -98,11 +99,7 @@ class AutoLayerRuleDef {
 	}
 
 	public function toJson() {
-		if( flipX && isSymetricX() )
-			flipX = false;
-
-		if( flipY && isSymetricY() )
-			flipY = false;
+		tidy();
 
 		return {
 			uid: uid,
@@ -115,6 +112,7 @@ class AutoLayerRuleDef {
 			flipY: flipY,
 			xModulo: xModulo,
 			yModulo: yModulo,
+			checker: JsonTools.writeEnum(checker, false),
 			tileMode: JsonTools.writeEnum(tileMode, false),
 			pivotX: JsonTools.writeFloat(pivotX),
 			pivotY: JsonTools.writeFloat(pivotY),
@@ -134,6 +132,7 @@ class AutoLayerRuleDef {
 		r.pattern = json.pattern;
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
+		r.checker = JsonTools.readEnum(led.LedTypes.AutoLayerRuleCheckerMode, json.checker, false, None);
 		r.tileMode = JsonTools.readEnum(led.LedTypes.AutoLayerRuleTileMode, json.tileMode, false, Single);
 		r.pivotX = JsonTools.readFloat(json.pivotX, 0);
 		r.pivotY = JsonTools.readFloat(json.pivotY, 0);
@@ -248,6 +247,29 @@ class AutoLayerRuleDef {
 		return true;
 	}
 
+	public function tidy() {
+		var anyFix = false;
+
+		if( flipX && isSymetricX() ) {
+			flipX = false;
+			anyFix = true;
+		}
+
+		if( flipY && isSymetricY() ) {
+			flipY = false;
+			anyFix = true;
+		}
+
+		if( xModulo==1 && yModulo==1 && checker!=None ) {
+			checker = None;
+			anyFix = true;
+		}
+
+		if( trim() )
+			anyFix = true;
+
+		return anyFix;
+	}
 
 	public function getRandomTileForCoord(seed:Int, cx:Int,cy:Int) : Int {
 		return tileIds[ dn.M.randSeedCoords( seed, cx,cy, tileIds.length ) ];
