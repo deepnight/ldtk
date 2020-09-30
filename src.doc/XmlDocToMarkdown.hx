@@ -75,6 +75,10 @@ class XmlDocToMarkdown {
 						md.push('*Hexadecimal integer using 0xrrggbb format*');
 				}
 
+				// Helpers
+				if( field.name.indexOf("__")==0 )
+					md.push("*This field only exists to facilitate JSON parsing.*");
+
 
 				// Field desc
 				if( field.hasNode.haxe_doc )
