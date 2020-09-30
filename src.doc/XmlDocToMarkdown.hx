@@ -106,7 +106,7 @@ class XmlDocToMarkdown {
 
 				md.push('${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}**');
 
-				// Colors
+				// Color
 				if( hasMeta(field.xml,"color") ) {
 					if( type.equals(Base("String")) )
 						md.push('*Hexadecimal string using "#rrggbb" format*');
@@ -120,7 +120,7 @@ class XmlDocToMarkdown {
 
 
 				// Anonymous object
-				var objMd = getObjectMarkdown(type);
+				var objMd = getInlineObjectMd(type);
 				if( objMd.length>0 )
 					md = md.concat(objMd);
 
@@ -147,17 +147,30 @@ class XmlDocToMarkdown {
 	}
 
 
-	static function getObjectMarkdown(type:Field) {
+	/**
+		Return the markdown of an anonymous object
+	**/
+	static function getInlineObjectMd(type:Field, depth=0) {
 		switch type {
 		case Arr(Obj(fields)), Obj(fields):
 			var md = [];
-			if( type.getIndex()==Arr(null).getIndex() )
-				md.push("This array contains objects with all the following fields:");
-			else
-				md.push("This object contains all the following fields:");
+			if( depth==0 )
+				if( type.getIndex()==Arr(null).getIndex() )
+					md.push("This array contains objects with all the following fields:");
+				else
+					md.push("This object contains all the following fields:");
 
 			for(f in fields) {
-				md.push(' - `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- "+f.doc}');
+				var indent = " -";
+				for(i in 0...depth)
+					indent = "  "+indent;
+				md.push('$indent `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- "+f.doc}');
+				switch f.type {
+					case Arr(Obj(fields)), Obj(fields):
+						md = md.concat( getInlineObjectMd(f.type, depth+1) );
+
+					case _:
+				}
 			}
 
 			return md;
