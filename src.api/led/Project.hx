@@ -16,6 +16,7 @@ class Project {
 	public var bgColor : UInt;
 
 	public var minifyJson = false;
+	public var exportTiled = false;
 
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
@@ -48,6 +49,7 @@ class Project {
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
 		p.bgColor = JsonTools.readColor( json.bgColor, 0xffffff );
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
+		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
@@ -67,6 +69,7 @@ class Project {
 			bgColor: JsonTools.writeColor(bgColor),
 			nextUid: nextUid,
 			minifyJson: minifyJson,
+			exportTiled: exportTiled,
 
 			defs: defs.toJson(),
 			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),

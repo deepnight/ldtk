@@ -30,6 +30,9 @@ class EditProject extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( project.minifyJson, jForm.find("[name=minify]") );
 		i.linkEvent(ProjectSettingsChanged);
 
+		var i = Input.linkToHtmlInput( project.exportTiled, jForm.find("[name=tiled]") );
+		i.linkEvent(ProjectSettingsChanged);
+
 		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.linkEvent(ProjectSettingsChanged);

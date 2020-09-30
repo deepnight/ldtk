@@ -24,6 +24,9 @@ typedef ProjectJson = {
 	/** If TRUE, the Json is partially minified (no indentation, nor line breaks) **/
 	var minifyJson: Bool;
 
+	/** If TRUE, a Tiled compatible file will also be generated along with the LEd JSON file. **/
+	var exportTiled: Bool;
+
 	/** A structure containing all the definitions of this project **/
 	var defs: DefinitionsJson;
 
@@ -218,7 +221,36 @@ typedef DefinitionsJson = {
 /** Not available yet**/
 @section("2.1")
 @display("Layer definition")
-typedef LayerDefJson = Dynamic;
+typedef LayerDefJson = {
+	var identifier: String;
+
+	var type: Dynamic; // TODO
+	var uid: Int;
+	var gridSize: Int;
+	var displayOpacity: Float;
+
+	var intGridValues: Array<{
+		var identifier:String;
+
+		@color
+		var color:String ;
+	}>;
+
+	var autoTilesetDefUid: Int;
+	var autoRuleGroups: Array<{
+		var uid: Int;
+		var name: String;
+		var active: Bool;
+		var collapsed: Bool;
+		var rules: Array<Dynamic>;
+	}>;
+	var autoSourceLayerDefUid: Int;
+
+	var tilesetDefUid: Int;
+	var tilePivotX: Float;
+	var tilePivotY: Float;
+
+}
 
 /** Not available yet**/
 @section("2.2")
@@ -228,7 +260,23 @@ typedef EntityDefJson = Dynamic;
 /** Not available yet**/
 @section("2.3")
 @display("Tileset definition")
-typedef TilesetDefJson = Dynamic;
+typedef TilesetDefJson = {
+	var identifier: String;
+	var uid: Int;
+
+	/** Path to the source file, relative to the current project JSON file **/
+	var relPath: String;
+	var pxWid: Int;
+	var pxHei: Int;
+	var tileGridSize: Int;
+	/** Space in pixels between all tiles **/
+	var spacing: Int;
+
+	/** Distance in pixels from image borders **/
+	var padding: Int;
+
+	var savedSelections: Array<{ ids:Array<Int>, mode:Dynamic }>;
+}
 
 /** Not available yet**/
 @section("2.4")

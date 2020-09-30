@@ -42,7 +42,7 @@ class LayerDef {
 		return '$identifier($type, ${gridSize}px)';
 	}
 
-	public static function fromJson(jsonVersion:String, json:Dynamic) {
+	public static function fromJson(jsonVersion:String, json:led.Json.LayerDefJson) {
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
@@ -80,7 +80,7 @@ class LayerDef {
 		return o;
 	}
 
-	public function toJson() {
+	public function toJson() : led.Json.LayerDefJson {
 		return {
 			identifier: identifier,
 			type: JsonTools.writeEnum(type, false),

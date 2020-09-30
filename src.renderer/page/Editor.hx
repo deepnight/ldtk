@@ -753,6 +753,14 @@ class Editor extends Page {
 
 		var data = JsTools.prepareProjectFile(project);
 		JsTools.writeFileBytes(projectFilePath, data.bytes);
+
+		if( project.exportTiled ) {
+			var data = exporter.Tiled.convert( data.json );
+			var fp = dn.FilePath.fromFile(projectFilePath);
+			fp.extension = "tmx";
+			JsTools.writeFileBytes(fp.full, data);
+		}
+
 		needSaving = false;
 		App.ME.registerRecentProject(projectFilePath);
 

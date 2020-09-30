@@ -81,7 +81,7 @@ class TilesetDef {
 	}
 
 
-	public function toJson() {
+	public function toJson() : led.Json.TilesetDefJson {
 		return {
 			identifier: identifier,
 			uid: uid,
@@ -98,7 +98,7 @@ class TilesetDef {
 	}
 
 
-	public static function fromJson(p:Project, json:Dynamic) {
+	public static function fromJson(p:Project, json:led.Json.TilesetDefJson) {
 		var td = new TilesetDef( p, JsonTools.readInt(json.uid) );
 		td.tileGridSize = JsonTools.readInt(json.tileGridSize, Project.DEFAULT_GRID_SIZE);
 		td.spacing = JsonTools.readInt(json.spacing, 0);
@@ -207,7 +207,7 @@ class TilesetDef {
 		for(ld in _project.defs.layers)
 			if( ld.isAutoLayer() && ld.autoTilesetDefUid==uid ) {
 				for(rg in ld.autoRuleGroups)
-				for(r in rg.rules) 
+				for(r in rg.rules)
 				for(i in 0...r.tileIds.length)
 					r.tileIds[i] = remapTileId(oldCwid, r.tileIds[i]);
 			}
