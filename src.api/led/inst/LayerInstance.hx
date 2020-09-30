@@ -120,6 +120,7 @@ class LayerInstance {
 						});
 				arr;
 			},
+
 			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
 	}
