@@ -39,9 +39,9 @@ class Project {
 		return 'Project(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
 	}
 
-	public static function fromJson(json:Dynamic) {
+	public static function fromJson(json:led.Json.ProjectJson) {
 		var p = new Project();
-		p.jsonVersion = JsonTools.readString(json.jsonAppVersion, Const.getJsonVersion());
+		p.jsonVersion = JsonTools.readString(json.jsonVersion, Const.getJsonVersion());
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
