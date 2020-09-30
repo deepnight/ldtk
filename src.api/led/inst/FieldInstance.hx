@@ -28,7 +28,7 @@ class FieldInstance {
 			+ ' [ $internalValues ]';
 	}
 
-	public static function fromJson(project:Project, json:Dynamic) {
+	public static function fromJson(project:Project, json:led.Json.FieldInstanceJson) {
 		var o = new FieldInstance( project, JsonTools.readInt(json.defUid) );
 		o.internalValues = [];
 		if( json.realEditorValues!=null ) {
@@ -37,13 +37,13 @@ class FieldInstance {
 		}
 		else {
 			// pre-array support
-			o.internalValues = [ JsonTools.readEnum(ValueWrapper, json.realEditorValue, true) ];
+			o.internalValues = [ JsonTools.readEnum(ValueWrapper, (cast json).realEditorValue, true) ];
 		}
 
 		return o;
 	}
 
-	public function toJson() {
+	public function toJson() : led.Json.FieldInstanceJson {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,

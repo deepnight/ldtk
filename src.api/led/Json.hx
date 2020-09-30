@@ -147,10 +147,52 @@ typedef LayerInstanceJson = {
 	}>;
 
 	@only("Entity layers")
-	var entityInstances: Dynamic;
+	var entityInstances: Array<EntityInstanceJson>;
+}
+
+@section("1.2")
+@display("Entity instance")
+typedef EntityInstanceJson = {
+	/** Unique String identifier **/
+	var __identifier: String;
+
+	/** Grid-based X coordinate **/
+	var __cx: Int;
+
+	/** Grid-based Y coordinate **/
+	var __cy: Int;
+
+	/** Reference of the **Entity definition** UID **/
+	var defUid: Int;
+
+	/** Pixel X coordinate **/
+	var x: Int;
+
+	/** Pixel Y coordinate **/
+	var y: Int;
+
+	var fieldInstances: Array<Dynamic>;
 }
 
 
+@section("1.3")
+@display("Field instance")
+typedef FieldInstanceJson = {
+	/** Unique String identifier **/
+	var __identifier: String;
+
+	/** Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.) **/
+	var __value: Dynamic;
+
+	/** Type of the field, such as Int, Float, Enum(enum_name), Bool, etc. **/
+	var __type: String;
+
+	/** Reference of the **Field definition** UID **/
+	var defUid: Int;
+
+	@hide
+	var realEditorValues: Array<Dynamic>;
+}
 
 
 @section("2")
