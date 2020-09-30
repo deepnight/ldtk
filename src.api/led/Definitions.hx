@@ -26,7 +26,7 @@ class Definitions {
 		}
 	}
 
-	public static function fromJson(p:Project, json:Dynamic) {
+	public static function fromJson(p:Project, json:led.Json.DefinitionsJson) {
 		var d = new Definitions(p);
 
 		for( layerJson in JsonTools.readArray(json.layers) )

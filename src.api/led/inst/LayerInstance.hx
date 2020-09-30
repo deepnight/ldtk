@@ -174,7 +174,7 @@ class LayerInstance {
 		}
 	}
 
-	public static function fromJson(p:Project, json:Dynamic) {
+	public static function fromJson(p:Project, json:led.Json.LayerInstanceJson) {
 		var li = new led.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
 
 		for( intGridJson in JsonTools.readArray(json.intGrid) )
