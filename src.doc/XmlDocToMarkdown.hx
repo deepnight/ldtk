@@ -10,7 +10,7 @@ enum Field {
 class XmlDocToMarkdown {
 	static var typeDisplayNames: Map<String,{ section:Null<String>, name:String }>;
 
-	public static function run(xmlPath) {
+	public static function run(xmlPath:String, ?mdPath:String, deleteXml=false) {
 		typeDisplayNames = [];
 
 		Sys.println('Parsing $xmlPath...');
@@ -138,13 +138,20 @@ class XmlDocToMarkdown {
 
 
 		// Write markdown
-		var fp = dn.FilePath.fromFile(xmlPath);
-		fp.extension = "md";
+		if( mdPath==null ) {
+			var fp = dn.FilePath.fromFile(xmlPath);
+			fp.extension = "md";
+			mdPath = fp.full;
+		}
 
-		Sys.println('Writing markdown: ${fp.full}...');
-		var fo = sys.io.File.write(fp.full, false);
+		Sys.println('Writing markdown: ${mdPath}...');
+		var fo = sys.io.File.write(mdPath, false);
 		fo.writeString(md.join("\n\n"));
 		fo.close();
+
+		// Cleanup
+		if( deleteXml )
+			sys.FileSystem.deleteFile(xmlPath);
 	}
 
 

@@ -1,12 +1,10 @@
--dce full
--cp src.api
 led/Json.hx
-
+-cp src.api
+-dce full
 -D doc-gen
--xml doc/json.xml
-
+-xml json_doc.xml
 
 --next
 -cp src.doc
 -lib deepnightLibs
---macro XmlDocToMarkdown.run("doc/json.xml")
+--macro XmlDocToMarkdown.run("json_doc.xml", "JSON_DOC.md")
