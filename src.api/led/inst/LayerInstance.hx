@@ -38,7 +38,7 @@ class LayerInstance {
 	}
 
 
-	public function toJson() {
+	public function toJson() : led.Json.LayerInstanceJson {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,

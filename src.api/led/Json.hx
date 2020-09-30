@@ -31,6 +31,7 @@ typedef ProjectJson = {
 }
 
 
+@section("1")
 @display("Level")
 typedef LevelJson = {
 
@@ -50,32 +51,78 @@ typedef LevelJson = {
 }
 
 
+@section("1.1")
 @display("Layer instance")
-typedef LayerInstanceJson = Dynamic; // TODO
+typedef LayerInstanceJson = {
+	/** Unique String identifier **/
+	var __identifier: String;
+
+	/** Layer type (possible values: IntGrid, Entities, Tiles or AutoLayer) **/
+	var __type: String;
+
+	/** Grid-based width **/
+	var __cWid: Int;
+
+	/** Grid-based height **/
+	var __cHei: Int;
+
+	/** Grid size **/
+	var __gridSize: Int;
+
+	/** Reference to the UID of the level containing this layer instance **/
+	var levelId: Int;
+
+	/** Reference the Layer definition UID **/
+	var layerDefUid: Int;
+
+	/** Horizontal offset in pixels to render this layer, usually 0 **/
+	var pxOffsetX: Int;
+
+	/** Vertical offset in pixels to render this layer, usually 0 **/
+	var pxOffsetY: Int;
+
+	/** Random seed used for Auto-Layers rendering **/
+	@only("Auto-layers (pure or IntGrid based)")
+	var seed: Int;
+
+	@only("IntGrid layers")
+	var intGrid: Array<{ coordId:Int, v:Int }>;
+
+	var autoTiles: Dynamic;
+	var gridTiles: Dynamic;
+	var entityInstances: Dynamic;
+
+}
 
 
+@section("2")
 @display("Definitions")
 typedef DefinitionsJson = {
 	var layers : Array<LayerDefJson>;
 	var entities : Array<EntityDefJson>;
 	var tilesets : Array<TilesetDefJson>;
 	var enums : Array<EnumDefJson>;
-	/** Note: external enums are exactly the same as `enums`, except they have a `relPath` to point to an external source file. **/
+
+	/**
+		Note: external enums are exactly the same as `enums`, except they
+		have a `relPath` to point to an external source file.
+	**/
 	var externalEnums : Array<EnumDefJson>;
 }
 
 
+@section("2.1")
 @display("Layer definition")
 typedef LayerDefJson = Dynamic;
 
-
+@section("2.2")
 @display("Entity definition")
 typedef EntityDefJson = Dynamic;
 
-
+@section("2.3")
 @display("Tileset definition")
 typedef TilesetDefJson = Dynamic;
 
-
+@section("2.4")
 @display("Enum definition")
 typedef EnumDefJson = Dynamic;
