@@ -1,7 +1,6 @@
 -cp src.api
 -cp src.externs
 -cp src.renderer
--cp src.doc
 
 -lib heaps
 -lib castle
@@ -19,3 +18,6 @@
 --macro Const.dumpBuildVersionToFile()
 --macro Const.buildLatestReleaseNotes()
 --macro Assets.enableXmlFonts()
+
+--next
+doc.hxml
