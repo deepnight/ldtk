@@ -27,9 +27,6 @@ class EditProject extends ui.modal.Panel {
 	function updateProjectForm() {
 		var jForm = jContent.find("ul.form:first");
 
-		var i = Input.linkToHtmlInput( project.name, jForm.find("[name=pName]") );
-		i.linkEvent(ProjectSettingsChanged);
-
 		var i = Input.linkToHtmlInput( project.minifyJson, jForm.find("[name=minify]") );
 		i.linkEvent(ProjectSettingsChanged);
 

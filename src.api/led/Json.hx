@@ -1,7 +1,6 @@
 package led;
 
 typedef ProjectJson = {
-	var name: String;
 	var jsonVersion: String;
 	var defaultPivotX: Float;
 	var defaultPivotY: Float;

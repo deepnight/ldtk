@@ -10,7 +10,6 @@ class Project {
 	public var levels : Array<Level> = [];
 
 	public var jsonVersion : String;
-	public var name : String;
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
 	public var defaultGridSize : Int;
@@ -19,7 +18,6 @@ class Project {
 	public var minifyJson = false;
 
 	private function new() {
-		name = "New project";
 		jsonVersion = Const.getJsonVersion();
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
 		bgColor = 0x7f8093;
@@ -38,14 +36,13 @@ class Project {
 	public function makeUniqId() return nextUid++;
 
 	@:keep public function toString() {
-		return '$name(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
+		return 'Project(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
 	}
 
 	public static function fromJson(json:Dynamic) {
 		var p = new Project();
 		p.jsonVersion = JsonTools.readString(json.jsonAppVersion, Const.getJsonVersion());
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
-		p.name = JsonTools.readString( json.name );
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
@@ -63,7 +60,6 @@ class Project {
 
 	public function toJson(excludeLevels=false) : led.Json.ProjectJson {
 		return {
-			name: name,
 			jsonVersion: jsonVersion,
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
