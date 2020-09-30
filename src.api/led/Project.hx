@@ -61,7 +61,7 @@ class Project {
 		return p;
 	}
 
-	public function toJson(excludeLevels=false) {
+	public function toJson(excludeLevels=false) : led.Json.ProjectJson {
 		return {
 			name: name,
 			jsonVersion: jsonVersion,
