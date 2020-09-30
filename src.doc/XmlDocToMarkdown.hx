@@ -6,7 +6,7 @@ enum FieldType {
 }
 
 class XmlDocToMarkdown {
-	static var typeDisplayNames: Map<String,String>;
+	static var typeDisplayNames: Map<String,{ section:Null<String>, name:String }>;
 
 	public static function run(xmlPath) {
 		typeDisplayNames = [];
@@ -26,21 +26,48 @@ class XmlDocToMarkdown {
 				continue;
 
 			allTypesXml.push(type);
-			typeDisplayNames.set(
-				type.att.path,
-				hasMeta(type,"display") ? getMeta(type,"display") : type.att.path
-			);
+
+			var displayName = type.att.path;
+			if( hasMeta(type,"display") )
+				displayName = getMeta(type,"display");
+
+			typeDisplayNames.set(type.att.path, {
+				name: displayName,
+				section: getMeta(type,"section"),
+			});
 		}
+
+		// Sort
+		allTypesXml.sort( (a,b)->{
+			var a = typeDisplayNames.get(a.att.path);
+			var b = typeDisplayNames.get(b.att.path);
+			if( a.section!=null && b.section==null ) return 1;
+			if( a.section==null && b.section!=null ) return -1;
+			if( a.section==null && b.section==null )
+				return Reflect.compare(a.name, b.name);
+			else
+				return Reflect.compare(a.section, b.section);
+		 });
 
 
 		// Parse types
 		var md = [];
 		for(type in allTypesXml) {
+			var depth = 0;
 			Sys.println('Found ${type.name}: ${type.att.path}');
+
+			if( hasMeta(type,"section") ) {
+				var s = getMeta(type,"section");
+				depth = s.split(".").length-1;
+			}
 
 			// Type name
 			md.push( makeAnchor(type.att.path) );
-			md.push('# ${typeDisplayNames.get(type.att.path)}');
+			var display = typeDisplayNames.get(type.att.path);
+			if( display.section!=null )
+				md.push('${makeMdTitlePrefix(depth)} ${display.section} - ${display.name}');
+			else
+				md.push('${makeMdTitlePrefix(depth)} ${display.name}');
 
 			// Type desc
 			if( type.hasNode.haxe_doc )
@@ -65,15 +92,19 @@ class XmlDocToMarkdown {
 				if( hasMeta(field, "display") )
 					name = getMeta(field,"display");
 
-				md.push('## `$name` : **${printType(type)}**');
+				md.push('${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}**');
 
-				// Type details
+				// Colors
 				if( hasMeta(field,"color") ) {
 					if( type.equals(Standard("String")) )
 						md.push('*Hexadecimal string using "#rrggbb" format*');
 					else if( type.equals(Standard("UInt")) )
 						md.push('*Hexadecimal integer using 0xrrggbb format*');
 				}
+
+				// Colors
+				if( hasMeta(field,"only") )
+					md.push('**Only available for ${getMeta(field,"only")}**');
 
 				// Helpers
 				if( field.name.indexOf("__")==0 )
@@ -139,7 +170,7 @@ class XmlDocToMarkdown {
 				Standard("Anonymous structure");
 			else if( fieldXml.hasNode.t ) {
 				var name = fieldXml.node.t.att.path;
-				Ref( typeDisplayNames.get(name), name );
+				Ref( typeDisplayNames.get(name).name, name );
 			}
 			else if( fieldXml.hasNode.c ) {
 				switch fieldXml.node.c.att.path {
@@ -169,6 +200,13 @@ class XmlDocToMarkdown {
 	}
 
 
+	static function makeMdTitlePrefix(depth:Int) {
+		var out = "";
+		for(i in 0...depth+1)
+			out+="#";
+		return out;
+	}
+
 	/**
 		Create an anchor name
 	**/
@@ -179,6 +217,9 @@ class XmlDocToMarkdown {
 		return r.replace(str,"-");
 	}
 
+	/**
+		Create an anchor tag
+	**/
 	static function makeAnchor(str:String) {
 		return '<a id="${anchorId(str)}" name="${anchorId(str)}"></a>';
 	}
