@@ -1,10 +1,12 @@
 -dce full
 -cp src.api
-
 led/Json.hx
 
 -D doc-gen
 -xml doc/json.xml
 
-# --next
-# --cmd haxelib run dox -i doc -o doc/pages
+
+--next
+-cp src.doc
+-lib deepnightLibs
+--macro XmlDocToMarkdown.run("doc/json.xml")
