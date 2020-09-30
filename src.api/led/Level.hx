@@ -30,7 +30,7 @@ class Level {
 		return Type.getClassName(Type.getClass(this));
 	}
 
-	public function toJson() {
+	public function toJson() : led.Json.LevelJson {
 		return {
 			identifier: identifier,
 			uid: uid,
@@ -40,7 +40,7 @@ class Level {
 		}
 	}
 
-	public static function fromJson(p:Project, json:Dynamic) {
+	public static function fromJson(p:Project, json:led.Json.LevelJson) {
 		var l = new Level( p, JsonTools.readInt(json.uid) );
 		l.pxWid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_WIDTH );
 		l.pxHei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_HEIGHT );

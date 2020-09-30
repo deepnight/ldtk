@@ -27,8 +27,32 @@ typedef ProjectJson = {
 	/** A structure containing all the definitions of this project **/
 	var defs: DefinitionsJson;
 
-	var levels: Array<Dynamic>; // TODO
+	var levels: Array<LevelJson>;
 }
+
+
+@display("Level")
+typedef LevelJson = {
+
+	/** Unique Int identifier **/
+	var uid: Int;
+
+	/** Unique String identifier **/
+	var identifier: String;
+
+	/** Width of the level in pixels **/
+	var pxWid: Int;
+
+	/** Height of the level in pixels **/
+	var pxHei: Int;
+
+	var layerInstances: Array<LayerInstanceJson>;
+}
+
+
+@display("Layer instance")
+typedef LayerInstanceJson = Dynamic; // TODO
+
 
 @display("Definitions")
 typedef DefinitionsJson = {
@@ -40,14 +64,18 @@ typedef DefinitionsJson = {
 	var externalEnums : Array<EnumDefJson>;
 }
 
+
 @display("Layer definition")
 typedef LayerDefJson = Dynamic;
+
 
 @display("Entity definition")
 typedef EntityDefJson = Dynamic;
 
+
 @display("Tileset definition")
 typedef TilesetDefJson = Dynamic;
+
 
 @display("Enum definition")
 typedef EnumDefJson = Dynamic;
