@@ -86,13 +86,39 @@ typedef LayerInstanceJson = {
 	var seed: Int;
 
 	@only("IntGrid layers")
-	var intGrid: Array<{ coordId:Int, v:Int }>;
+	var intGrid: Array<{
+		/** Coordinate ID in the layer grid **/
+		var coordId:Int;
+
+		/** IntGrid value **/
+		var v:Int;
+	}>;
 
 	var autoTiles: Dynamic;
-	var gridTiles: Dynamic;
-	var entityInstances: Dynamic;
 
+	var gridTiles: Array<{
+		/** Coordinate ID in the layer grid **/
+		var coordId: Int;
+
+		/** Tile ID in the corresponding tileset **/
+		var tileId: Int;
+
+		/** X pixel coordinate of the tile in the **layer** **/
+		var __x: Int;
+
+		/** Y pixel coordinate of the tile in the **layer** **/
+		var __y: Int;
+
+		/** X pixel coordinate of the tile in the **tileset** **/
+		var __srcX: Int;
+
+		/** Y pixel coordinate of the tile in the **tileset** **/
+		var __srcY: Int;
+	}>;
+
+	var entityInstances: Dynamic;
 }
+
 
 
 @section("2")
