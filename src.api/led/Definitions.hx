@@ -16,7 +16,7 @@ class Definitions {
 		this._project = project;
 	}
 
-	public function toJson() : Dynamic {
+	public function toJson() : led.Json.DefinitionsJson {
 		return {
 			layers: layers.map( function(ld) return ld.toJson() ),
 			entities: entities.map( function(ed) return ed.toJson() ),
