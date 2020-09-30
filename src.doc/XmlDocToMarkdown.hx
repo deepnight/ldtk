@@ -18,13 +18,20 @@ class XmlDocToMarkdown {
 				continue;
 
 			Sys.println('Found ${type.name}: ${type.att.path}');
+
+			// Type name
 			var name = type.att.path.substr(4);
+			if( hasMeta(type,"display") )
+				name = getMeta(type,"display");
 			md.push('# $name');
-			md.push( type.node.haxe_doc.innerHTML );
+
+			// Type desc
+			if( type.hasNode.haxe_doc )
+				md.push( type.node.haxe_doc.innerHTML );
 
 			// Parse fields
 			for(field in type.node.a.elements) {
-				if( field.hasNode.meta && field.node.meta.hasNode.m && field.node.meta.node.m.att.n==":hide")
+				if( hasMeta(field,"hide") )
 					continue;
 
 				// Get type
@@ -37,7 +44,7 @@ class XmlDocToMarkdown {
 						Unknown;
 
 				Sys.println('  -> ${field.name}: $type');
-				md.push('## `${field.name}` : **${getTypeStr(type)}**');
+				md.push('## `${field.name}` : **${printType(type)}**');
 				if( field.hasNode.haxe_doc )
 					md.push('${field.node.haxe_doc.innerHTML}');
 			}
@@ -53,7 +60,46 @@ class XmlDocToMarkdown {
 		fo.close();
 	}
 
-	static function getTypeStr(t:FieldType) {
+
+	/**
+		Return TRUE if field has specified meta data
+	**/
+	static function hasMeta(xml:haxe.xml.Access, name:String) {
+		if( !xml.hasNode.meta || !xml.node.meta.hasNode.m )
+			return false;
+
+		for(m in xml.node.meta.nodes.m )
+			if( m.att.n == name )
+				return true;
+
+		return false;
+	}
+
+
+	/**
+		Get meta data of a field
+	**/
+	static function getMeta(xml:haxe.xml.Access, name:String) {
+		if( !hasMeta(xml,name) )
+			return null;
+
+		for(m in xml.node.meta.nodes.m )
+			if( m.att.n == name ) {
+				var v = m.node.e.innerHTML;
+				if( v.charAt(0)=="\"" )
+					return v.substring(1, v.length-1);
+				else
+					return v;
+			}
+
+		throw "Malformed meta?";
+	}
+
+
+	/**
+		Human readable type
+	**/
+	static function printType(t:FieldType) {
 		return switch t {
 			case Standard(name): name;
 			case Unknown: "???";

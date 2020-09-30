@@ -1,6 +1,9 @@
 package led;
 
-/** Root of the Json file **/
+/**
+	Root of the Json file
+**/
+@display("Json root")
 typedef ProjectJson = {
 	/** File format version **/
 	var jsonVersion: String;
@@ -17,12 +20,16 @@ typedef ProjectJson = {
 	/** Project BG color **/
 	var bgColor: String;
 
-	@:hide
+	@hide
 	var nextUid: Int;
 
 	/** If TRUE, the Json is partially minified (no indentation, nor line breaks) **/
 	var minifyJson: Bool;
 
-	var defs: Dynamic; // JSON
-	var levels: Array<Dynamic>; // JSON
+	var defs: DefinitionsJson;
+	var levels: Array<Dynamic>; // TODO
+}
+
+typedef DefinitionsJson = {
+	var layers : Dynamic; // TODO
 }
