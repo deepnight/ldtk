@@ -1,4 +1,9 @@
+# 0.3.1-beta
+
+ - Added an automated JSON format documentation generator (see [JSON_DOC.md](https://github.com/deepnight/led/blob/master/JSON_DOC.md) in sources)
+
 # 0.3.0-beta
+
  - **Group of tiles in auto-layer rules**: this new feature allows you to place larger objects (eg. *a tree, a big rock, etc.*) made of multiple tiles using just auto-layer rules.
  - Added **Modulo** options for auto-layer rules: this allows a rule to only apply every X columns or Y rows.
  - Added **Checker mode** for auto-layer rules: this makes effects like "brick walls" or "Sonic checker effect" possible ;)
