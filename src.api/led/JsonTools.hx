@@ -134,10 +134,15 @@ class JsonTools {
 		}
 	}
 
-	public static function writeFloat(v:Float, maxPrecision=3) : String {
+	public static function writeFloat(v:Float, maxPrecision=3) : Float {
 		var p = Math.pow(10, maxPrecision);
-		return dn.M.round(v*p)/p + "f"; // the "f" suffix will be dropped by the JSON stringifier
+		return dn.M.round(v*p)/p;
 	}
+
+	// public static function writeFloat(v:Float, maxPrecision=3) : String {
+	// 	var p = Math.pow(10, maxPrecision);
+	// 	return dn.M.round(v*p)/p + "f"; // the "f" suffix will be dropped by the JSON stringifier
+	// }
 
 	public static function readBool(v:Dynamic, ?defaultIfMissing:Bool) : Bool {
 		if( v==null && defaultIfMissing!=null )

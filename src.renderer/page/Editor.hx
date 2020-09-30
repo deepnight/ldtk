@@ -956,9 +956,9 @@ class Editor extends Page {
 
 	function updateTitle() {
 		App.ME.setWindowTitle(
-			project.name
+			dn.FilePath.extractFileName(projectFilePath)
 			+ ( needSaving ? " [UNSAVED]" : "" )
-			+ ( curLevel!=null ? " ("+curLevel.identifier+")" : "" )
+			+ ( curLevel!=null ? "  @ "+curLevel.identifier : "" )
 		);
 		// jMainPanel.find("h2#levelName").text( curLevel.getName() );
 	}

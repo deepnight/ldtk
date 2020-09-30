@@ -169,7 +169,6 @@ class Home extends Page {
 			fp.extension = "json";
 
 			var p = led.Project.createEmpty();
-			p.name = fp.fileName;
 			var data = JsTools.prepareProjectFile(p);
 			JsTools.writeFileBytes(fp.full, data.bytes);
 

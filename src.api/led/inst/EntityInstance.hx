@@ -24,7 +24,7 @@ class EntityInstance {
 		return 'Instance<${def.identifier}>@$x,$y';
 	}
 
-	public function toJson(li:led.inst.LayerInstance) {
+	public function toJson(li:led.inst.LayerInstance) : led.Json.EntityInstanceJson {
 		var fieldsJson = [];
 		for(fi in fieldInstances)
 			fieldsJson.push( fi.toJson() );

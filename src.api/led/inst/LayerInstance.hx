@@ -38,7 +38,7 @@ class LayerInstance {
 	}
 
 
-	public function toJson() {
+	public function toJson() : led.Json.LayerInstanceJson {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
@@ -120,6 +120,7 @@ class LayerInstance {
 						});
 				arr;
 			},
+
 			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
 	}
@@ -174,7 +175,7 @@ class LayerInstance {
 		}
 	}
 
-	public static function fromJson(p:Project, json:Dynamic) {
+	public static function fromJson(p:Project, json:led.Json.LayerInstanceJson) {
 		var li = new led.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
 
 		for( intGridJson in JsonTools.readArray(json.intGrid) )

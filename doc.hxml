@@ -1,0 +1,10 @@
+led/Json.hx
+-cp src.api
+-dce full
+-D doc-gen
+-xml json_doc.xml
+
+--next
+-cp src.doc
+-lib deepnightLibs
+--macro XmlDocToMarkdown.run("json_doc.xml", "JSON_DOC.md")
