@@ -1,6 +1,6 @@
 {
 	"name": "led",
-	"version": "0.3.0-beta",
+	"version": "0.3.1-beta",
 	"main": "assets/main.js",
 	"productName": "LEd",
 	"author": "Sebastien Benard",
@@ -34,7 +34,8 @@
 			"output": "redist"
 		},
 		"extraFiles": [
-			"samples"
+			"samples",
+			"README.txt"
 		],
 		"files": [
 			"assets",
