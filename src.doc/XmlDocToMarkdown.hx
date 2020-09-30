@@ -3,6 +3,7 @@ enum Field {
 	Arr(t:Field);
 	Obj(fields:Array<{ name:String, type:Field, doc:Null<String> }>);
 	Ref(display:String, typeName:String);
+	Dyn;
 	Unknown;
 }
 
@@ -221,7 +222,7 @@ class XmlDocToMarkdown {
 			if( fieldXml.hasNode.x )
 				Base(fieldXml.node.x.att.path);
 			else if( fieldXml.hasNode.d )
-				Base("Anonymous structure");
+				Dyn;
 			else if( fieldXml.hasNode.t ) {
 				var name = fieldXml.node.t.att.path;
 				Ref( typeDisplayNames.get(name).name, name );
@@ -259,7 +260,7 @@ class XmlDocToMarkdown {
 			case Ref(display, name): '[$display](#${anchorId(name)})';
 			case Arr(t): 'Array of ${printType(t)}';
 			case Obj(fields): "Object";
-			// case Obj(fields): "Object<"+fields.map( (f)->f.name+" : "+printType(f.type) ).join(", ")+">";
+			case Dyn: "Dynamic (anything)";
 			case Unknown: "???";
 		}
 	}
