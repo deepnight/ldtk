@@ -19,7 +19,7 @@ class XmlDocToMarkdown {
 
 			Sys.println('Found ${type.name}: ${type.att.path}');
 			var name = type.att.path.substr(4);
-			md.push('## $name');
+			md.push('# $name');
 			md.push( type.node.haxe_doc.innerHTML );
 
 			// Parse fields
@@ -37,7 +37,7 @@ class XmlDocToMarkdown {
 						Unknown;
 
 				Sys.println('  -> ${field.name}: $type');
-				md.push('### `${field.name}` : **${getTypeStr(type)}**');
+				md.push('## `${field.name}` : **${getTypeStr(type)}**');
 				if( field.hasNode.haxe_doc )
 					md.push('${field.node.haxe_doc.innerHTML}');
 			}

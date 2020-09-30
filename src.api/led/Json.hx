@@ -1,6 +1,6 @@
 package led;
 
-/** Root of the Json file **bold** **/
+/** Root of the Json file **/
 typedef ProjectJson = {
 	/** File format version **/
 	var jsonVersion: String;
