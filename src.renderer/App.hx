@@ -1,4 +1,5 @@
 import electron.renderer.IpcRenderer;
+import XmlDocToMarkdown;
 
 class App extends dn.Process {
 	public static var ME : App;
