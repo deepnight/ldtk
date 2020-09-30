@@ -150,7 +150,7 @@ typedef LayerInstanceJson = {
 	var entityInstances: Array<EntityInstanceJson>;
 }
 
-@section("1.2")
+@section("1.1.1")
 @display("Entity instance")
 typedef EntityInstanceJson = {
 	/** Unique String identifier **/
@@ -175,7 +175,7 @@ typedef EntityInstanceJson = {
 }
 
 
-@section("1.3")
+@section("1.1.2")
 @display("Field instance")
 typedef FieldInstanceJson = {
 	/** Unique String identifier **/
@@ -195,6 +195,10 @@ typedef FieldInstanceJson = {
 }
 
 
+/**
+	Many useful data found in `definitions` are duplicated in fields
+	prefixed with a double "_".
+**/
 @section("2")
 @display("Definitions")
 typedef DefinitionsJson = {
@@ -211,18 +215,22 @@ typedef DefinitionsJson = {
 }
 
 
+/** Not available yet**/
 @section("2.1")
 @display("Layer definition")
 typedef LayerDefJson = Dynamic;
 
+/** Not available yet**/
 @section("2.2")
 @display("Entity definition")
 typedef EntityDefJson = Dynamic;
 
+/** Not available yet**/
 @section("2.3")
 @display("Tileset definition")
 typedef TilesetDefJson = Dynamic;
 
+/** Not available yet**/
 @section("2.4")
 @display("Enum definition")
 typedef EnumDefJson = Dynamic;

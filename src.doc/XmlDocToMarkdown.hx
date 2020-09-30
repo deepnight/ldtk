@@ -1,5 +1,5 @@
 enum Field {
-	Base(name:String);
+	Basic(name:String);
 	Arr(t:Field);
 	Obj(fields:Array<{ name:String, type:Field, doc:Null<String> }>);
 	Ref(display:String, typeName:String);
@@ -49,8 +49,9 @@ class XmlDocToMarkdown {
 				return Reflect.compare(a.name, b.name);
 			else
 				return Reflect.compare(a.section, b.section);
-		 });
+		});
 
+		var toc = [];
 
 		// Parse types
 		var md = [];
@@ -65,11 +66,18 @@ class XmlDocToMarkdown {
 
 			// Type name
 			md.push( makeAnchor(type.att.path) );
+			md.push("&nbsp;");
 			var display = typeDisplayNames.get(type.att.path);
-			if( display.section!=null )
-				md.push('${makeMdTitlePrefix(depth)} ${display.section} - ${display.name}');
-			else
+			// if( display.section!=null )
+			// 	md.push('${makeMdTitlePrefix(depth)} ${display.section} - ${display.name}');
+			// else
 				md.push('${makeMdTitlePrefix(depth)} ${display.name}');
+
+			toc.push({
+				depth: depth,
+				name: display.name,
+				anchor: anchorId(type.att.path),
+			});
 
 			// Type desc
 			if( type.hasNode.haxe_doc )
@@ -107,18 +115,17 @@ class XmlDocToMarkdown {
 
 				md.push('${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}**');
 
-				// Color
-				if( hasMeta(field.xml,"color") ) {
-					if( type.equals(Base("String")) )
-						md.push('*Hexadecimal string using "#rrggbb" format*');
-					else if( type.equals(Base("UInt")) )
-						md.push('*Hexadecimal integer using 0xrrggbb format*');
-				}
-
 				// "Only for" limitation
 				if( hasMeta(field.xml,"only") )
-					md.push('**Only available for ${getMeta(field.xml,"only")}**');
+					md.push(' - **Only available for ${getMeta(field.xml,"only")}**');
 
+				// Color
+				if( hasMeta(field.xml,"color") ) {
+					if( type.equals(Basic("String")) )
+						md.push(' - *Hexadecimal string using "#rrggbb" format*');
+					else if( type.equals(Basic("UInt")) )
+						md.push(' - *Hexadecimal integer using 0xrrggbb format*');
+				}
 
 				// Anonymous object
 				var objMd = getInlineObjectMd(type);
@@ -126,18 +133,29 @@ class XmlDocToMarkdown {
 					md = md.concat(objMd);
 
 				// Helpers
-				if( field.xml.name.indexOf("__")==0 )
-					md.push("*This field only exists to facilitate JSON parsing.*");
+				// if( field.xml.name.indexOf("__")==0 )
+				// 	md.push(" - *This field only exists to facilitate JSON parsing.*");
 
 
 				// Field desc
 				if( field.xml.hasNode.haxe_doc )
-					md.push('${field.xml.node.haxe_doc.innerHTML}');
+					md.push(' - ${field.xml.node.haxe_doc.innerHTML}');
 			}
 		}
 
 
-		// Write markdown
+		// Table of content
+		var tocMd = ["# Table of content"];
+		for(e in toc) {
+			var indent = " -";
+			for(i in 0...e.depth)
+				indent = "  "+indent;
+			tocMd.push('$indent [${e.name}](#${e.anchor})');
+		}
+		md = tocMd.concat(md);
+
+
+		// Write markdown file
 		if( mdPath==null ) {
 			var fp = dn.FilePath.fromFile(xmlPath);
 			fp.extension = "md";
@@ -160,22 +178,22 @@ class XmlDocToMarkdown {
 	**/
 	static function getInlineObjectMd(type:Field, depth=0) {
 		switch type {
+
 		case Arr(Obj(fields)), Obj(fields):
 			var md = [];
+
 			if( depth==0 )
 				if( type.getIndex()==Arr(null).getIndex() )
-					md.push("This array contains objects with all the following fields:");
+					md.push(" - This array contains objects with all the following fields:");
 				else
-					md.push("This object contains all the following fields:");
+					md.push(" - This object contains all the following fields:");
+			depth++;
 
 			for(f in fields) {
-				var indent = " -";
-				for(i in 0...depth)
-					indent = "  "+indent;
-				md.push('$indent `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- "+f.doc}');
+				md.push('${makeIndent("-",depth)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- "+f.doc}');
 				switch f.type {
 					case Arr(Obj(fields)), Obj(fields):
-						md = md.concat( getInlineObjectMd(f.type, depth+1) );
+						md = md.concat( getInlineObjectMd(f.type, depth) );
 
 					case _:
 				}
@@ -227,7 +245,7 @@ class XmlDocToMarkdown {
 	static function getType(fieldXml:haxe.xml.Access) : Field {
 		return
 			if( fieldXml.hasNode.x )
-				Base(fieldXml.node.x.att.path);
+				Basic(fieldXml.node.x.att.path);
 			else if( fieldXml.hasNode.d )
 				Dyn;
 			else if( fieldXml.hasNode.t ) {
@@ -235,17 +253,24 @@ class XmlDocToMarkdown {
 				Ref( typeDisplayNames.get(name).name, name );
 			}
 			else if( fieldXml.hasNode.a ) {
+				// List fields
 				var fields = [];
 				for(n in fieldXml.node.a.elements) {
 					var doc = n.hasNode.haxe_doc ? n.node.haxe_doc.innerHTML : null;
 					fields.push({ name:n.name, type:getType(n), doc:doc });
 				}
-				fields.sort( (a,b)->Reflect.compare(a.name, b.name) );
+				// Sort
+				var basic = Basic(null).getIndex();
+				fields.sort( (a,b)->{
+					if( a.type.getIndex()==basic && b.type.getIndex()!=basic ) return -1;
+					if( a.type.getIndex()!=basic && b.type.getIndex()==basic ) return 1;
+					return Reflect.compare(a.name, b.name);
+				});
 				Obj(fields);
 			}
 			else if( fieldXml.hasNode.c ) {
 				switch fieldXml.node.c.att.path {
-					case "String": Base("String");
+					case "String": Basic("String");
 					case "Array": Arr( getType(fieldXml.node.c) );
 					case _: Unknown;
 				}
@@ -259,7 +284,7 @@ class XmlDocToMarkdown {
 	**/
 	static function printType(t:Field) {
 		return switch t {
-			case Base(name):
+			case Basic(name):
 				switch name {
 					case "UInt": "Unsigned integer";
 					case _: name;
@@ -278,6 +303,13 @@ class XmlDocToMarkdown {
 		for(i in 0...depth+1)
 			out+="#";
 		return out;
+	}
+
+	static function makeIndent(char:String, depth:Int) {
+		var out = "";
+		for(i in 0...depth+1)
+			out+="  ";
+		return out + char;
 	}
 
 	/**
