@@ -171,7 +171,7 @@ typedef EntityInstanceJson = {
 	/** Pixel Y coordinate **/
 	var y: Int;
 
-	var fieldInstances: Array<Dynamic>;
+	var fieldInstances: Array<FieldInstanceJson>;
 }
 
 
