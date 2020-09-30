@@ -1,5 +1,6 @@
 lastBuildVersion.txt
 
+doc/
 dump/
 res/.tmp
 .vscode/settings.json

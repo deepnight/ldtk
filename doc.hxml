@@ -1,0 +1,10 @@
+-dce full
+-cp src.api
+
+led/Json.hx
+
+-D doc-gen
+-xml doc/json.xml
+
+# --next
+# --cmd haxelib run dox -i doc -o doc/pages
