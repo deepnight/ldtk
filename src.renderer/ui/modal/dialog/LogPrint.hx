@@ -1,13 +1,31 @@
 package ui.modal.dialog;
 
 class LogPrint extends ui.modal.Dialog {
+	var log : dn.Log;
+
 	public function new(log:dn.Log) {
 		super();
+		this.log = log;
 		loadTemplate("logPrint");
 
+		// Show all
+		var jCheck = jContent.find("#showAll");
+		jCheck.change( function(ev) {
+			renderLog( jCheck.prop("checked")==true );
+		});
+
+		renderLog(false);
+
+		addClose();
+	}
+
+	function renderLog(full:Bool) {
 		var jList = jContent.find(".log");
-		jList.appendTo(jContent);
+		jList.empty();
 		for(l in log.entries) {
+			if( !full && !l.critical )
+				continue;
+
 			var li = new J('<li></li>');
 			if( l.critical )
 				li.addClass("critical");
@@ -20,6 +38,5 @@ class LogPrint extends ui.modal.Dialog {
 			li.appendTo(jList);
 		}
 
-		addClose();
 	}
 }

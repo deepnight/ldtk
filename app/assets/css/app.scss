@@ -1443,11 +1443,13 @@ textarea {
 
 .window.logPrint {
 	.wrapper .content {
-		max-width: none;
+		max-width: 500px;
+
 		ul.log {
+			min-width: auto;
 			li {
 				font-family: monospace;
-				white-space: pre;
+				white-space: pre-wrap;
 				border-left: 4px solid $bgLight;
 				padding-left: 8px;
 				color: white;
