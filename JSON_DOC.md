@@ -2,14 +2,6 @@
 
  - [Json root](#led-ProjectJson)
 
- - [led.AutoLayerRuleGroup](#led-AutoLayerRuleGroup)
-
- - [led.EnumDefValue](#led-EnumDefValue)
-
- - [led.IntGridValueDef](#led-IntGridValueDef)
-
- - [led.TilesetSelection](#led-TilesetSelection)
-
  - [Level](#led-LevelJson)
 
    - [Layer instance](#led-LayerInstanceJson)
@@ -88,74 +80,6 @@
 
     If TRUE, the Json is partially minified (no indentation, nor line breaks)
 
-<a id="led-AutoLayerRuleGroup" name="led-AutoLayerRuleGroup"></a>
-
-&nbsp;
-
-# led.AutoLayerRuleGroup
-
-<a id="led-AutoLayerRuleGroup-active" name="led-AutoLayerRuleGroup-active"></a>
-
- - ## `active` : **Bool**
-
-<a id="led-AutoLayerRuleGroup-collapsed" name="led-AutoLayerRuleGroup-collapsed"></a>
-
- - ## `collapsed` : **Bool**
-
-<a id="led-AutoLayerRuleGroup-name" name="led-AutoLayerRuleGroup-name"></a>
-
- - ## `name` : **String**
-
-<a id="led-AutoLayerRuleGroup-rules" name="led-AutoLayerRuleGroup-rules"></a>
-
- - ## `rules` : **Array of ???**
-
-<a id="led-AutoLayerRuleGroup-uid" name="led-AutoLayerRuleGroup-uid"></a>
-
- - ## `uid` : **Int**
-
-<a id="led-EnumDefValue" name="led-EnumDefValue"></a>
-
-&nbsp;
-
-# led.EnumDefValue
-
-<a id="led-EnumDefValue-id" name="led-EnumDefValue-id"></a>
-
- - ## `id` : **String**
-
-<a id="led-EnumDefValue-tileId" name="led-EnumDefValue-tileId"></a>
-
- - ## `tileId` : **Null**
-
-<a id="led-IntGridValueDef" name="led-IntGridValueDef"></a>
-
-&nbsp;
-
-# led.IntGridValueDef
-
-<a id="led-IntGridValueDef-color" name="led-IntGridValueDef-color"></a>
-
- - ## `color` : **Unsigned integer**
-
-<a id="led-IntGridValueDef-identifier" name="led-IntGridValueDef-identifier"></a>
-
- - ## `identifier` : **Null**
-
-<a id="led-TilesetSelection" name="led-TilesetSelection"></a>
-
-&nbsp;
-
-# led.TilesetSelection
-
-<a id="led-TilesetSelection-ids" name="led-TilesetSelection-ids"></a>
-
- - ## `ids` : **Array of Int**
-
-<a id="led-TilesetSelection-mode" name="led-TilesetSelection-mode"></a>
-
- - ## `mode` : **???**
-
 <a id="led-LevelJson" name="led-LevelJson"></a>
 
 &nbsp;
@@ -230,7 +154,7 @@
 
  - ### `autoTiles` : **Array of Object**
 
-    **Only available for Auto-layers**
+    ***Only relevant for Auto-layers***
 
     This array contains objects with all the following fields:
 
@@ -258,13 +182,13 @@
 
  - ### `entityInstances` : **Array of [Entity instance](#led-EntityInstanceJson)**
 
-    **Only available for Entity layers**
+    ***Only relevant for Entity layers***
 
 <a id="led-LayerInstanceJson-gridTiles" name="led-LayerInstanceJson-gridTiles"></a>
 
  - ### `gridTiles` : **Array of Object**
 
-    **Only available for Tile layers**
+    ***Only relevant for Tile layers***
 
     This array contains objects with all the following fields:
 
@@ -284,7 +208,7 @@
 
  - ### `intGrid` : **Array of Object**
 
-    **Only available for IntGrid layers**
+    ***Only relevant for IntGrid layers***
 
     This array contains objects with all the following fields:
 
@@ -320,7 +244,7 @@
 
  - ### `seed` : **Int**
 
-    **Only available for Auto-layers (pure or IntGrid based)**
+    ***Only relevant for Auto-layers (pure or IntGrid based)***
 
     Random seed used for Auto-Layers rendering
 
@@ -438,11 +362,17 @@ Many useful data found in `definitions` are duplicated in fields
 
 ## Layer definition
 
+<a id="led-LayerDefJson-__type" name="led-LayerDefJson-__type"></a>
+
+ - ### `__type` : **String**
+
+    Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)
+
 <a id="led-LayerDefJson-autoRuleGroups" name="led-LayerDefJson-autoRuleGroups"></a>
 
  - ### `autoRuleGroups` : **Array of Object**
 
-    **Only available for Auto-layers**
+    ***Only relevant for Auto-layers***
 
     This array contains all the auto-layer rule definitions
 
@@ -462,13 +392,13 @@ Many useful data found in `definitions` are duplicated in fields
 
  - ### `autoSourceLayerDefUid` : **Int**
 
-    **Only available for Auto-layers**
+    ***Only relevant for Auto-layers***
 
 <a id="led-LayerDefJson-autoTilesetDefUid" name="led-LayerDefJson-autoTilesetDefUid"></a>
 
  - ### `autoTilesetDefUid` : **Int**
 
-    **Only available for Auto-layers**
+    ***Only relevant for Auto-layers***
 
     Reference to the Tileset UID being used by this auto-layer rules
 
@@ -492,7 +422,7 @@ Many useful data found in `definitions` are duplicated in fields
 
  - ### `intGridValues` : **Array of Object**
 
-    **Only available for IntGrid layer**
+    ***Only relevant for IntGrid layer***
 
     This array contains objects with all the following fields:
 
@@ -504,7 +434,7 @@ Many useful data found in `definitions` are duplicated in fields
 
  - ### `tilePivotX` : **Float**
 
-    **Only available for Tile layers**
+    ***Only relevant for Tile layers***
 
     If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 
@@ -512,7 +442,7 @@ Many useful data found in `definitions` are duplicated in fields
 
  - ### `tilePivotY` : **Float**
 
-    **Only available for Tile layers**
+    ***Only relevant for Tile layers***
 
     If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 
@@ -520,15 +450,9 @@ Many useful data found in `definitions` are duplicated in fields
 
  - ### `tilesetDefUid` : **Int**
 
-    **Only available for Tile layers**
+    ***Only relevant for Tile layers***
 
     Reference to the Tileset UID being used by this tile layer
-
-<a id="led-LayerDefJson-type" name="led-LayerDefJson-type"></a>
-
- - ### `type` : **???**
-
-    Type of the layer as Haxe Enum
 
 <a id="led-LayerDefJson-uid" name="led-LayerDefJson-uid"></a>
 

@@ -224,8 +224,12 @@ typedef LayerDefJson = {
 	/** Unique String identifier **/
 	var identifier: String;
 
+	/** Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*) **/
+	var __type: String;
+
 	/** Type of the layer as Haxe Enum **/
-	var type: led.LedTypes.LayerType; // TODO
+	@hide
+	var type: led.LedTypes.LayerType;
 
 	/** Unique Int identifier **/
 	var uid: Int;

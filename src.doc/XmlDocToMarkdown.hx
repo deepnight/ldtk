@@ -1,5 +1,6 @@
 enum Field {
 	Basic(name:String);
+	Enu(name:String);
 	Arr(t:Field);
 	Obj(fields:Array<{ name:String, type:Field, doc:Null<String> }>);
 	Ref(display:String, typeName:String);
@@ -10,7 +11,7 @@ enum Field {
 class XmlDocToMarkdown {
 	static var typeDisplayNames: Map<String,{ section:Null<String>, name:String }>;
 
-	public static function run(xmlPath:String, ?mdPath:String, deleteXml=false) {
+	public static function run(className:String, xmlPath:String, ?mdPath:String, deleteXml=false) {
 		typeDisplayNames = [];
 
 		Sys.println('Parsing $xmlPath...');
@@ -21,7 +22,8 @@ class XmlDocToMarkdown {
 		// List types
 		var allTypesXml = [];
 		for(type in xml.node.haxe.elements) {
-			if( type.att.path.indexOf("led.")<0 )
+			// if( type.att.path.indexOf("led.")<0 )
+			if( type.att.file.indexOf(className)<0 )
 				continue;
 
 			if( hasMeta(type,"hide") )
@@ -117,7 +119,7 @@ class XmlDocToMarkdown {
 
 				// "Only for" limitation
 				if( hasMeta(field.xml,"only") )
-					md.push('    **Only available for ${getMeta(field.xml,"only")}**');
+					md.push('    ***Only relevant for ${getMeta(field.xml,"only")}***');
 
 				// Color
 				if( hasMeta(field.xml,"color") ) {
@@ -252,6 +254,9 @@ class XmlDocToMarkdown {
 				var name = fieldXml.node.t.att.path;
 				Ref( typeDisplayNames.get(name).name, name );
 			}
+			else if( fieldXml.hasNode.e ) {
+				Enu(fieldXml.node.e.att.path);
+			}
 			else if( fieldXml.hasNode.a ) {
 				// List fields
 				var fields = [];
@@ -289,6 +294,7 @@ class XmlDocToMarkdown {
 					case "UInt": "Unsigned integer";
 					case _: name;
 				}
+			case Enu(name): 'Haxe editor enum $name';
 			case Ref(display, name): '[$display](#${anchorId(name)})';
 			case Arr(t): 'Array of ${printType(t)}';
 			case Obj(fields): "Object";

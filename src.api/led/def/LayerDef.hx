@@ -82,6 +82,8 @@ class LayerDef {
 
 	public function toJson() : led.Json.LayerDefJson {
 		return {
+			__type: Std.string(type),
+
 			identifier: identifier,
 			type: JsonTools.writeEnum(type, false),
 			uid: uid,

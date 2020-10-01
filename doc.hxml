@@ -7,4 +7,4 @@ led/Json.hx
 --next
 -cp src.doc
 -lib deepnightLibs
---macro XmlDocToMarkdown.run("json_doc.xml", "JSON_DOC.md")
+--macro XmlDocToMarkdown.run("led/Json.hx", "json_doc.xml", "JSON_DOC.md")
