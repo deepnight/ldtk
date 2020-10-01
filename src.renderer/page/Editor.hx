@@ -756,6 +756,8 @@ class Editor extends Page {
 
 		if( project.exportTiled ) {
 			var data = exporter.Tiled.convert( data.json );
+			if( exporter.Tiled.LOG.containsAnyCriticalEntry() )
+				new ui.modal.dialog.LogPrint(exporter.Tiled.LOG);
 			var fp = dn.FilePath.fromFile(projectFilePath);
 			fp.extension = "tmx";
 			JsTools.writeFileBytes(fp.full, data);
