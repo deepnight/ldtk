@@ -142,6 +142,7 @@ enum SyncOp {
 enum ImageSyncResult {
 	Ok;
 	FileNotFound;
+	TrimmedPadding;
 	RemapLoss;
 	RemapSuccessful;
 }

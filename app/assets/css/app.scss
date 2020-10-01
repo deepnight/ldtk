@@ -1391,6 +1391,29 @@ textarea {
 
 	&.message .wrapper {
 		max-width: 400px;
+		p {
+			margin: 0;
+		}
+		*+p {
+			margin-top: 1em;
+		}
+	}
+	&.message.hasIcon .content {
+		display: grid;
+		gap: 16px;
+		grid-template-columns: min-content auto;
+		align-items: stretch;
+
+		.iconWrapper {
+			padding: 16px;
+			background-color: black;
+			border-radius: 8px;
+
+			.icon {
+				width: 4em;
+				height: 4em;
+			}
+		}
 	}
 
 	&.centered {

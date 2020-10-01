@@ -165,6 +165,11 @@ class TilesetDef {
 		if( oldWid==pxWid && oldHei==pxHei )
 			return Ok;
 
+		if( padding>0 && oldWid>pxWid && oldHei>pxHei && dn.M.iabs(oldWid-pxWid)<=padding*2 && dn.M.iabs(oldHei-pxHei)<=padding*2 && pxWid%2==0 && pxHei%2==0 ) {
+			padding -= Std.int( dn.M.imin( oldWid-pxWid, oldHei-pxHei ) / 2 );
+			return TrimmedPadding;
+		}
+
 		var oldCwid = dn.M.ceil( oldWid / tileGridSize );
 
 		// Layers remapping

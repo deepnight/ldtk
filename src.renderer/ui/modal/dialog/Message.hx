@@ -1,11 +1,19 @@
 package ui.modal.dialog;
 
 class Message extends ui.modal.Dialog {
-	public function new(str:dn.data.GetText.LocaleString) {
+	public function new(str:dn.data.GetText.LocaleString, ?iconId:String) {
 		super("message");
 
+		if( iconId!=null ) {
+			jContent.append('<div class="iconWrapper"> <div class="icon $iconId"/> </div>');
+			jModalAndMask.addClass("hasIcon");
+		}
+
+		var jMsg = new J('<div class="message"/>');
+		jMsg.appendTo(jContent);
+
 		var p = '<p>' + StringTools.replace(str,"\n","</p><p>") + '</p>';
-		jContent.append(p);
+		jMsg.append(p);
 
 		addClose();
 	}
