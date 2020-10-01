@@ -218,17 +218,24 @@ typedef DefinitionsJson = {
 }
 
 
-/** Not available yet**/
 @section("2.1")
 @display("Layer definition")
 typedef LayerDefJson = {
+	/** Unique String identifier **/
 	var identifier: String;
 
-	var type: Dynamic; // TODO
+	/** Type of the layer as Haxe Enum **/
+	var type: led.LedTypes.LayerType; // TODO
+
+	/** Unique Int identifier **/
 	var uid: Int;
+
 	var gridSize: Int;
+
+	/** Opacity of the layer (0 to 1.0) **/
 	var displayOpacity: Float;
 
+	@only("IntGrid layer")
 	var intGridValues: Array<{
 		var identifier:String;
 
@@ -236,7 +243,12 @@ typedef LayerDefJson = {
 		var color:String ;
 	}>;
 
+	/** Reference to the Tileset UID being used by this auto-layer rules **/
+	@only("Auto-layers")
 	var autoTilesetDefUid: Int;
+
+	/** This array contains all the auto-layer rule definitions **/
+	@only("Auto-layers")
 	var autoRuleGroups: Array<{
 		var uid: Int;
 		var name: String;
@@ -244,10 +256,19 @@ typedef LayerDefJson = {
 		var collapsed: Bool;
 		var rules: Array<Dynamic>;
 	}>;
+	@only("Auto-layers")
 	var autoSourceLayerDefUid: Int;
 
+	/** Reference to the Tileset UID being used by this tile layer **/
+	@only("Tile layers")
 	var tilesetDefUid: Int;
+
+	/** If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell. **/
+	@only("Tile layers")
 	var tilePivotX: Float;
+
+	/** If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell. **/
+	@only("Tile layers")
 	var tilePivotY: Float;
 
 }
@@ -257,24 +278,34 @@ typedef LayerDefJson = {
 @display("Entity definition")
 typedef EntityDefJson = Dynamic;
 
-/** Not available yet**/
 @section("2.3")
 @display("Tileset definition")
 typedef TilesetDefJson = {
+	/** Unique String identifier **/
 	var identifier: String;
+
+	/** Unique Intidentifier **/
 	var uid: Int;
 
 	/** Path to the source file, relative to the current project JSON file **/
 	var relPath: String;
+
+	/** Image width in pixels **/
 	var pxWid: Int;
+
+	/** Image width in pixels **/
 	var pxHei: Int;
+
 	var tileGridSize: Int;
+
 	/** Space in pixels between all tiles **/
 	var spacing: Int;
 
 	/** Distance in pixels from image borders **/
 	var padding: Int;
 
+	/** Array of group of tiles selections, only meant to be used in the editor **/
+	@hide
 	var savedSelections: Array<{ ids:Array<Int>, mode:Dynamic }>;
 }
 
