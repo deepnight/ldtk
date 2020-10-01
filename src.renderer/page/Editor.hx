@@ -759,7 +759,7 @@ class Editor extends Page {
 		JsTools.writeFileBytes(projectFilePath, data.bytes);
 
 		if( project.exportTiled )
-			exporter.Tiled.export( project, projectFilePath );
+			new exporter.Tiled( project, projectFilePath );
 
 		needSaving = false;
 		App.ME.registerRecentProject(projectFilePath);

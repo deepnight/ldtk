@@ -5,21 +5,60 @@ import led.Json;
 class Tiled {
 	static var TILED_VERSION = "1.4.2";
 	static var MAP_VERSION = "1.4";
+	static var LOG = new dn.Log(500);
 
-	public static var LOG = new dn.Log(100);
-	public static function export(p:led.Project) : haxe.io.Bytes {
+	var p : led.Project;
+	var projectPath : dn.FilePath;
+	var outputDir : String;
+
+	public function new(p:led.Project, projectFilePath:String) {
+		this.p = p;
+		this.projectPath = dn.FilePath.fromFile(projectFilePath);
+
 		LOG.clear();
 		LOG.general("Converting project...");
-		return exportLevel(p, p.levels[0]);
+
+		var fp = dn.FilePath.fromFile(projectFilePath);
+		outputDir = fp.fileName+"_tiled";
+		JsTools.createDir(fp.directory, outputDir);
+
+		// Export each level to a separate TMX file
+		var i = 1;
+		for(l in p.levels) {
+			var bytes = exportLevel(l);
+
+			var fp = dn.FilePath.fromFile(projectFilePath);
+			fp.appendDirectory(outputDir);
+			if( p.levels.length>1 )
+				fp.fileName += '-$i-'+l.identifier;
+			fp.extension = "tmx";
+			JsTools.writeFileBytes(fp.full, bytes);
+			i++;
+		}
+
+		if( exporter.Tiled.LOG.containsAnyCriticalEntry() )
+			new ui.modal.dialog.LogPrint(exporter.Tiled.LOG);
 	}
 
 
-	static function exportLevel(p:led.Project, level:led.Level) : haxe.io.Bytes {
+	function remapRelativePath(relPath:String) : String {
+		var fp = dn.FilePath.fromFile(relPath);
+		if( fp.hasDriveLetter() )
+			return relPath;
+
+		var abs = dn.FilePath.fromFile( projectPath.directory + "/" + relPath );
+		return abs.makeRelativeTo(projectPath.directory+"/"+outputDir).full;
+	}
+
+
+	function exportLevel(level:led.Level) : haxe.io.Bytes {
 		LOG.general("Converting level "+level.identifier+"...");
+
 		var xml = Xml.createDocument();
 		var layerId = 1;
 		var objectId = 1;
 		var gid = 1;
+
 
 		/**
 			Tiled a unique "grid size" value because it doesn't support different
@@ -78,10 +117,11 @@ class Tiled {
 			tileset.set("margin", "0" );
 			tileset.set("spacing", ""+td.spacing );
 
-			LOG.general('  Adding image ${td.relPath}...');
+			var relPath = remapRelativePath(td.relPath);
+			LOG.general('  Adding image ${relPath}...');
 			var image = Xml.createElement("image");
 			tileset.addChild(image);
-			image.set("source", td.relPath);
+			image.set("source", relPath);
 			image.set("width", ""+td.pxWid);
 			image.set("height", ""+td.pxHei);
 
@@ -132,6 +172,17 @@ class Tiled {
 			return layer;
 		}
 
+		function _createTileObject(tilesetDefUid:Int, tileId:Int, x:Int, y:Int, flips=0) : Xml {
+			var o = Xml.createElement("object");
+			o.set("id", Std.string(objectId++));
+			o.set("gid", ""+_remapTileId(tilesetDefUid, tileId, flips));
+			o.set("x", ""+x);
+			o.set("y", ""+y);
+			o.set("width", ""+p.defs.getTilesetDef(tilesetDefUid).tileGridSize);
+			o.set("height", ""+p.defs.getTilesetDef(tilesetDefUid).tileGridSize);
+			return o;
+		}
+
 		var allInst = level.layerInstances.copy();
 		allInst.reverse();
 		for(li in allInst) {
@@ -141,29 +192,51 @@ class Tiled {
 
 			switch ld.type {
 				case IntGrid:
-					if( ld.autoTilesetDefUid==null && ld.gridSize!=mapGrid ) {
-						LOG.error("IntGrid layer "+ld.identifier+" was not exported because it has a different gridSize (not supported by Tiled).");
-						continue;
-					}
+					LOG.warning("  Unsupported layer type "+ld.type);
+					// if( ld.autoTilesetDefUid==null && ld.gridSize!=mapGrid ) {
+					// 	LOG.error("IntGrid layer "+ld.identifier+" was not exported because it has a different gridSize (not supported by Tiled).");
+					// 	continue;
+					// }
 
 					// IntGrid values
-					LOG.general("  Exporting IntGrid values...");
-					var layer = _createLayer("layer", li, "_values");
-					var data = Xml.createElement("data");
-					layer.addChild(data);
-					data.set("encoding","csv");
-					var csv = new Csv(li.cWid, li.cHei);
-					for(cy in 0...li.cHei)
-					for(cx in 0...li.cWid)
-						if( li.hasIntGrid(cx,cy) )
-							csv.set(cx,cy, li.getIntGrid(cx,cy)+1);
-					data.addChild( Xml.createPCData(csv.getString()) );
+					// LOG.general("  Exporting IntGrid values...");
+					// var layer = _createLayer("layer", li, "_values");
+					// var data = Xml.createElement("data");
+					// layer.addChild(data);
+					// data.set("encoding","csv");
+					// var csv = new Csv(li.cWid, li.cHei);
+					// for(cy in 0...li.cHei)
+					// for(cx in 0...li.cWid)
+					// 	if( li.hasIntGrid(cx,cy) )
+					// 		csv.set(cx,cy, li.getIntGrid(cx,cy)+1);
+					// data.addChild( Xml.createPCData(csv.getString()) );
 
 				case Entities:
-					LOG.error("Unsupported layer type "+ld.type);
+					LOG.error("  Not available yet: "+ld.type);
 
 				case Tiles:
-					LOG.error("Unsupported layer type "+ld.type);
+					// var layer = _createLayer("layer", li);
+					// var csv = new Csv(li.cWid, li.cHei);
+					// for(coordId in li.gridTiles.keys())
+					// 	csv.setCoordId( coordId, _remapTileId(ld.tilesetDefUid, li.gridTiles.get(coordId)) );
+
+					// var data = Xml.createElement("data");
+					// layer.addChild(data);
+					// data.set("encoding","csv");
+					// data.addChild( Xml.createPCData(csv.getString()) );
+
+					var layer = _createLayer("objectgroup", li);
+					for(coordId in li.gridTiles.keys()) {
+						var tileId = li.gridTiles.get(coordId);
+						var o = _createTileObject(
+							ld.tilesetDefUid,
+							tileId,
+							li.getCx(coordId)*ld.gridSize,
+							li.getCy(coordId)*ld.gridSize
+						);
+						layer.insertChild(o,0);
+					}
+
 
 				case AutoLayer:
 			}
@@ -172,29 +245,20 @@ class Tiled {
 			// Auto-layer tiles
 			if( ld.autoTilesetDefUid!=null ) {
 				LOG.general("  Exporting Auto-Layer tiles...");
-				var layer = _createLayer("objectgroup", li, "_tiles");
-
 				var td = p.defs.getTilesetDef(ld.autoTilesetDefUid);
+				var layer = _createLayer("objectgroup", li, "_tiles");
+				var json = li.toJson(); // much easier to rely on LEd JSON here
 
-				var json = li.toJson(); // much easier to rely on JSON here
 				for(at in json.autoTiles)
 				for(r in at.results)
 				for(t in r.tiles) {
-					var o = Xml.createElement("object");
+					var o = _createTileObject(ld.autoTilesetDefUid, t.tileId, t.__x, t.__y, r.flips);
 					layer.insertChild(o,0);
-					o.set("id", Std.string(objectId++));
-					o.set("gid", ""+_remapTileId(ld.autoTilesetDefUid, t.tileId, r.flips));
-					o.set("x", ""+t.__x);
-					o.set("y", ""+t.__y);
-					o.set("width", ""+td.tileGridSize);
-					o.set("height", ""+td.tileGridSize);
 				}
 			}
 		}
 
 		map.set("nextlayerid", ""+layerId);
-
-		LOG.error("hack"); // HACK
 
 		return haxe.io.Bytes.ofString( xml.toString() );
 	}
