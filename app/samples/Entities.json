@@ -3,25 +3,26 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.3.0-beta-debug",
+		"appVersion": "0.3.1-beta-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
-	"name": "Entities demo",
-	"jsonVersion": "0.3.0",
+	"jsonVersion": "0.3.1",
 	"defaultPivotX": 0.5,
-	"defaultPivotY": 1.0,
+	"defaultPivotY": 1,
 	"defaultGridSize": 16,
 	"bgColor": "#79799A",
 	"nextUid": 53,
 	"minifyJson": false,
+	"exportTiled": false,
 	"defs": {
 		"layers": [
 			{
+				"__type": "Entities",
 				"identifier": "Entities",
 				"type": "Entities",
 				"uid": 7,
 				"gridSize": 16,
-				"displayOpacity": 1.0,
+				"displayOpacity": 1,
 				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
 				"autoTilesetDefUid": null,
 				"autoRuleGroups": [],
@@ -31,11 +32,12 @@
 				"tilePivotY": 0
 			},
 			{
+				"__type": "IntGrid",
 				"identifier": "Collisions",
 				"type": "IntGrid",
 				"uid": 13,
 				"gridSize": 16,
-				"displayOpacity": 1.0,
+				"displayOpacity": 1,
 				"intGridValues": [ { "identifier": "walls", "color": "#243047" } ],
 				"autoTilesetDefUid": null,
 				"autoRuleGroups": [],
@@ -59,7 +61,7 @@
 				"maxPerLevel": 0,
 				"limitBehavior": "DiscardOldOnes",
 				"pivotX": 0.5,
-				"pivotY": 1.0,
+				"pivotY": 1,
 				"fieldDefs": [
 					{
 						"identifier": "loot",
@@ -108,7 +110,7 @@
 				"maxPerLevel": 1,
 				"limitBehavior": "MoveLastOne",
 				"pivotX": 0.5,
-				"pivotY": 1.0,
+				"pivotY": 1,
 				"fieldDefs": [
 					{
 						"identifier": "name",
@@ -138,8 +140,8 @@
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Above",
 						"editorAlwaysShow": false,
-						"min": 1.0,
-						"max": 10.0,
+						"min": 1,
+						"max": 10,
 						"defaultOverride": { "id": "V_Int", "params": [ 3 ] }
 					},
 					{
@@ -208,7 +210,7 @@
 				"maxPerLevel": 6,
 				"limitBehavior": "PreventAdding",
 				"pivotX": 0.5,
-				"pivotY": 0.0,
+				"pivotY": 0,
 				"fieldDefs": [
 					{
 						"identifier": "radius",
@@ -222,8 +224,8 @@
 						"editorDisplayMode": "RadiusGrid",
 						"editorDisplayPos": "Above",
 						"editorAlwaysShow": true,
-						"min": 1.0,
-						"max": 10.0,
+						"min": 1,
+						"max": 10,
 						"defaultOverride": { "id": "V_Float", "params": [ 3 ] }
 					},
 					{
@@ -273,7 +275,7 @@
 				"maxPerLevel": 0,
 				"limitBehavior": "DiscardOldOnes",
 				"pivotX": 0.5,
-				"pivotY": 1.0,
+				"pivotY": 1,
 				"fieldDefs": [
 					{
 						"identifier": "type",
@@ -303,8 +305,8 @@
 						"editorDisplayMode": "NameAndValue",
 						"editorDisplayPos": "Above",
 						"editorAlwaysShow": false,
-						"min": 1.0,
-						"max": 10.0,
+						"min": 1,
+						"max": 10,
 						"defaultOverride": { "id": "V_Int", "params": [ 3 ] }
 					},
 					{
@@ -387,7 +389,7 @@
 				"maxPerLevel": 0,
 				"limitBehavior": "DiscardOldOnes",
 				"pivotX": 0.5,
-				"pivotY": 1.0,
+				"pivotY": 1,
 				"fieldDefs": [
 					{
 						"identifier": "locked",
@@ -520,7 +522,7 @@
 						},
 						{
 							"__identifier": "radius",
-							"__value": 4.0,
+							"__value": 4,
 							"__type": "Float",
 							"defUid": 45,
 							"realEditorValues": [ { "id": "V_Float", "params": [ 4 ] } ]
@@ -543,7 +545,7 @@
 						},
 						{
 							"__identifier": "radius",
-							"__value": 3.0,
+							"__value": 3,
 							"__type": "Float",
 							"defUid": 45,
 							"realEditorValues": [ null ]

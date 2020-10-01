@@ -3,7 +3,7 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.3.1-beta",
+		"appVersion": "0.3.1-beta-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
 	"jsonVersion": "0.3.1",
