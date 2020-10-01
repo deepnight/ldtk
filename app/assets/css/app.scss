@@ -793,6 +793,9 @@ ul.log {
 .icon.close		{ background-image: url("../img/icons/close.png"); }
 .icon.visible	{ background-image: url("../img/icons/visible.png"); }
 .icon.hidden	{ background-image: url("../img/icons/hidden.png"); }
+.icon.active	{ background-image: url("../img/icons/active.png"); }
+.icon.inactive	{ background-image: url("../img/icons/inactive.png"); }
+.icon.partial	{ background-image: url("../img/icons/partial.png"); }
 
 .icon.mouseLeft		{ background-image: url("../img/icons/mouseLeft.png"); image-rendering: pixelated; }
 .icon.mouseRight	{ background-image: url("../img/icons/mouseRight.png"); image-rendering: pixelated; }
@@ -2975,6 +2978,18 @@ body.sorting ul.collapsedSortTarget {
 				box-shadow: 0px 2px 4px black;
 				background-color: $bgMed;
 
+				&.inactive {
+					background-image: url("../img/stripes.png");
+					background-color: $darkRed;
+					header {
+						background-color: $darkRed;
+						background-image: url("../img/stripes.png");
+					}
+					ul.ruleGroup {
+						opacity: 0.66;
+					}
+				}
+
 				&.collapsed {
 					border-style: dashed;
 					opacity: 0.66;
@@ -3096,6 +3111,11 @@ body.sorting ul.collapsedSortTarget {
 						background-color: $bgDark;
 						border-radius: 3px;
 						border: 1px dashed transparent;
+
+						&.inactive {
+							background-image: url("../img/stripes.png");
+							background-color: $darkRed;
+						}
 
 						button.insert {
 							position: absolute;

@@ -153,15 +153,16 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
 			jGroup.appendTo( jRuleGroupList );
+			jGroup.addClass(rg.active ? "active" : "inactive");
 
 			var jGroupList = jGroup.find(">ul");
 			jGroupList.attr("groupUid", rg.uid);
 			jGroupList.attr("groupIdx", groupIdx);
 
-			var jHeader = jGroup.find("header");
+			var jGroupHeader = jGroup.find("header");
 
 			// Collapsing
-			jHeader.find("div.name")
+			jGroupHeader.find("div.name")
 				.click( function(_) {
 					rg.collapsed = !rg.collapsed;
 					editor.ge.emit(LayerRuleGroupCollapseChanged);
@@ -177,7 +178,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			}
 
 			// Delete group
-			jHeader.find(".delete").click( function(ev:js.jquery.Event) {
+			jGroupHeader.find(".delete").click( function(ev:js.jquery.Event) {
 				new ui.modal.dialog.Confirm(ev.getThis(), true, function() {
 					new LastChance(Lang.t._("Rule group removed"), project);
 					App.LOG.general("Deleted rule group");
@@ -187,9 +188,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			});
 
 			// Edit group
-			jHeader.find(".edit").click( function(ev:js.jquery.Event) {
-				jHeader.find("div.name").hide();
-				var jInput = jHeader.find("input.name");
+			jGroupHeader.find(".edit").click( function(ev:js.jquery.Event) {
+				jGroupHeader.find("div.name").hide();
+				var jInput = jGroupHeader.find("input.name");
 				var old = rg.name;
 				jInput
 					.val( rg.name )
@@ -216,33 +217,37 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 							editor.ge.emit(LayerRuleGroupChanged);
 						}
 						else {
-							jHeader.find("div.name").show();
+							jGroupHeader.find("div.name").show();
 							jInput.hide();
 						}
 					});
 			});
 
 			// Edit group
-			jHeader.find(".active").click( function(ev:js.jquery.Event) {
+			jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {
 				rg.active = !rg.active;
 				editor.ge.emit(LayerRuleGroupChanged);
 			});
-			jHeader.find(".active .icon").addClass( rg.active ? "visible" : "hidden" );
 
 			// Add rule
-			jHeader.find(".addRule").click( function(ev:js.jquery.Event) {
+			jGroupHeader.find(".addRule").click( function(ev:js.jquery.Event) {
 				createRule(rg, 0);
 			});
 
 
 			// Rules
 			var ruleIdx = 0;
+			var allActive = true;
 			for( r in rg.rules) {
 				var ruleIdx = ruleIdx++; // prevent memory pointer issues
+
+				if( !r.active )
+					allActive = false;
 
 				var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
 				jRule.appendTo( jGroupList );
 				jRule.attr("ruleUid", r.uid);
+				jRule.addClass(r.active ? "active" : "inactive");
 
 				// Insert rule before
 				jRule.find(".insert.before").click( function(_) {
@@ -266,7 +271,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				// Preview
 				var jPreview = jRule.find(".preview");
 				var sourceDef = ld.type==AutoLayer ? project.defs.getLayerDef(ld.autoSourceLayerDefUid) : ld;
-				JsTools.createAutoPatternGrid(r, sourceDef, true).appendTo(jPreview);
+				JsTools.createAutoPatternGrid(r, sourceDef, ld, true).appendTo(jPreview);
 				jPreview.click( function(ev) {
 					new ui.modal.dialog.RuleEditor(jPreview, ld, r);
 				});
@@ -375,7 +380,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 				// Active
 				var jActive = jRule.find("a.active");
-				jActive.find(".icon").addClass( r.active ? "visible" : "hidden" );
+				jActive.find(".icon").addClass( r.active ? "active" : "inactive" );
 				jActive.click( function(ev:js.jquery.Event) {
 					ev.preventDefault();
 					r.active = !r.active;
@@ -391,6 +396,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					});
 				});
 			}
+
+			jGroupHeader.find(".active .icon").addClass( rg.active ? ( allActive ? "active" : "partial" ) : "inactive" );
+
 
 			// Make rules sortable
 			JsTools.makeSortable(jGroupList, jRuleGroupList, "allRules", false, function(ev) {

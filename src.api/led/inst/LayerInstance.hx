@@ -66,41 +66,48 @@ class LayerInstance {
 				var arr = [];
 				if( def.isAutoLayer() ) {
 					var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
-					for(rg in def.autoRuleGroups)
-					for(rule in rg.rules) {
-						var ruleTiles = autoTiles.get( rule.uid );
-						arr.push({
-							ruleId: rule.uid,
-							results: {
-								if( ruleTiles==null )
-									[];
-								else {
-									var tilesArr = [];
-									for( ruleResult in ruleTiles.keyValueIterator() ) {
-										var stampRenderInfos = getRuleStampRenderInfos(rule, td, ruleResult.value.tileIds, ruleResult.value.flips);
-										var cx = getCx(ruleResult.key);
-										var cy = getCy(ruleResult.key);
-										var tiles = ruleResult.value.tileIds.map( (tid:Int)->{
-											return {
-												tileId: tid,
-												__x: cx*def.gridSize + stampRenderInfos.get(tid).xOff,
-												__y: cy*def.gridSize + stampRenderInfos.get(tid).yOff,
-												__srcX: td==null ? -1 : td.getTileSourceX(tid),
-												__srcY: td==null ? -1 : td.getTileSourceY(tid),
-											}
-										});
-										tilesArr.push({
-											__cx: cx,
-											__cy: cy,
-											coordId: ruleResult.key,
-											tiles: tiles,
-											flips: ruleResult.value.flips,
-										});
+					for(rg in def.autoRuleGroups) {
+						if( !rg.active )
+							continue;
+						
+						for(rule in rg.rules) {
+							if( !rule.active )
+								continue;
+
+							var ruleTiles = autoTiles.get( rule.uid );
+							arr.push({
+								ruleId: rule.uid,
+								results: {
+									if( ruleTiles==null )
+										[];
+									else {
+										var tilesArr = [];
+										for( ruleResult in ruleTiles.keyValueIterator() ) {
+											var stampRenderInfos = getRuleStampRenderInfos(rule, td, ruleResult.value.tileIds, ruleResult.value.flips);
+											var cx = getCx(ruleResult.key);
+											var cy = getCy(ruleResult.key);
+											var tiles = ruleResult.value.tileIds.map( (tid:Int)->{
+												return {
+													tileId: tid,
+													__x: cx*def.gridSize + stampRenderInfos.get(tid).xOff,
+													__y: cy*def.gridSize + stampRenderInfos.get(tid).yOff,
+													__srcX: td==null ? -1 : td.getTileSourceX(tid),
+													__srcY: td==null ? -1 : td.getTileSourceY(tid),
+												}
+											});
+											tilesArr.push({
+												__cx: cx,
+												__cy: cy,
+												coordId: ruleResult.key,
+												tiles: tiles,
+												flips: ruleResult.value.flips,
+											});
+										}
+										tilesArr;
 									}
-									tilesArr;
 								}
-							}
-						});
+							});
+						}
 					}
 				}
 				arr;
