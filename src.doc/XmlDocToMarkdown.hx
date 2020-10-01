@@ -10,6 +10,7 @@ enum Field {
 
 class XmlDocToMarkdown {
 	static var typeDisplayNames: Map<String,{ section:Null<String>, name:String }>;
+	static var verbose = false;
 
 	public static function run(className:String, xmlPath:String, ?mdPath:String, deleteXml=false) {
 		typeDisplayNames = [];
@@ -110,7 +111,8 @@ class XmlDocToMarkdown {
 				var type = getType(field.xml);
 
 				// Field name & type
-				Sys.println('  -> ${field.xml.name}: $type');
+				if( verbose )
+					Sys.println('  -> ${field.xml.name}: $type');
 				var name = field.xml.name;
 				if( hasMeta(field.xml, "display") )
 					name = getMeta(field.xml,"display");
@@ -172,6 +174,9 @@ class XmlDocToMarkdown {
 		// Cleanup
 		if( deleteXml )
 			sys.FileSystem.deleteFile(xmlPath);
+
+		Sys.println('Done!');
+		Sys.println('');
 	}
 
 

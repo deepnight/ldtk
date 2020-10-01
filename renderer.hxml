@@ -18,6 +18,3 @@
 --macro Const.dumpBuildVersionToFile()
 --macro Const.buildLatestReleaseNotes()
 --macro Assets.enableXmlFonts()
-
---next
-doc.hxml
