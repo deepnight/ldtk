@@ -14,9 +14,6 @@ class Tiled {
 	}
 
 
-	public static function verify(p:led.Project) {} // TODO should return recommendations & issues
-
-
 	static function exportLevel(p:led.Project, level:led.Level) : haxe.io.Bytes {
 		LOG.general("Converting level "+level.identifier+"...");
 		var xml = Xml.createDocument();
@@ -54,7 +51,6 @@ class Tiled {
 		map.set("infinite", "0");
 		map.set("backgroundcolor", C.intToHex(p.bgColor));
 		map.set("nextobjectid", "1"); // TODO
-
 
 		/**
 			TILESETS
@@ -136,7 +132,9 @@ class Tiled {
 			return layer;
 		}
 
-		for(li in level.layerInstances) {
+		var allInst = level.layerInstances.copy();
+		allInst.reverse();
+		for(li in allInst) {
 			var ld = p.defs.layers.filter( (ld)->ld.uid==li.layerDefUid )[0];
 			LOG.general("Layer "+ld.identifier+"...");
 
@@ -162,7 +160,11 @@ class Tiled {
 					data.addChild( Xml.createPCData(csv.getString()) );
 
 				case Entities:
+					LOG.error("Unsupported layer type "+ld.type);
+
 				case Tiles:
+					LOG.error("Unsupported layer type "+ld.type);
+
 				case AutoLayer:
 			}
 
@@ -191,6 +193,8 @@ class Tiled {
 		}
 
 		map.set("nextlayerid", ""+layerId);
+
+		LOG.error("hack"); // HACK
 
 		return haxe.io.Bytes.ofString( xml.toString() );
 	}
