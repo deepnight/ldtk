@@ -9,9 +9,10 @@ class LogPrint extends ui.modal.Dialog {
 		loadTemplate("logPrint");
 
 		// Show all
-		var jCheck = jContent.find("#showAll");
-		jCheck.change( function(ev) {
-			renderLog( jCheck.prop("checked")==true );
+		var jShowAll= jContent.find(".showAll");
+		jShowAll.click( function(_) {
+			renderLog(true);
+			jShowAll.remove();
 		});
 
 		renderLog(false);
