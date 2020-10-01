@@ -19,8 +19,10 @@ class Tiled {
 		LOG.general("Converting project...");
 
 		var fp = dn.FilePath.fromFile(projectFilePath);
+		fp.useSlashes();
 		outputDir = fp.fileName+"_tiled";
-		JsTools.createDir(fp.directory, outputDir);
+		JsTools.emptyDir(fp.directory+"/"+outputDir);
+		JsTools.createDir(fp.directory+"/"+outputDir);
 
 		// Export each level to a separate TMX file
 		var i = 1;
@@ -29,14 +31,15 @@ class Tiled {
 
 			var fp = dn.FilePath.fromFile(projectFilePath);
 			fp.appendDirectory(outputDir);
-			if( p.levels.length>1 )
-				fp.fileName += '-$i-'+l.identifier;
+			fp.fileName = ( p.levels.length>1 ? '${i}_' : '' ) + l.identifier;
 			fp.extension = "tmx";
 			JsTools.writeFileBytes(fp.full, bytes);
 			i++;
 		}
 
+		#if !debug
 		if( exporter.Tiled.LOG.containsAnyCriticalEntry() )
+		#end
 			new ui.modal.dialog.LogPrint(exporter.Tiled.LOG);
 	}
 
@@ -89,7 +92,6 @@ class Tiled {
 		map.set("tileheight", ""+mapGrid);
 		map.set("infinite", "0");
 		map.set("backgroundcolor", C.intToHex(p.bgColor));
-		map.set("nextobjectid", "1"); // TODO
 
 		/**
 			TILESETS
@@ -212,7 +214,71 @@ class Tiled {
 					// data.addChild( Xml.createPCData(csv.getString()) );
 
 				case Entities:
-					LOG.error("  Not available yet: "+ld.type);
+					function _createProperty(props:Xml, name:String, type:Null<String>, val:Dynamic) {
+						var prop = Xml.createElement("property");
+						props.addChild(prop);
+						prop.set("name", name);
+						if( type!=null )
+							prop.set("type", type);
+						prop.set("value", Std.string(val));
+						return prop;
+					}
+
+					var layer = _createLayer("objectgroup", li);
+					for(e in li.entityInstances) {
+						var object = Xml.createElement("object");
+						layer.addChild(object);
+						var x = e.x;
+						var y = e.y;
+						if( e.def.pivotX!=0 || e.def.pivotY!=0 ) {
+							LOG.warning('${e.def.identifier} entity uses a non-"topleft" pivot point which Tiled does not support.');
+							x -= M.round(e.def.pivotX*e.def.width);
+							y -= M.round(e.def.pivotY*e.def.height);
+						}
+
+						object.set("name",e.def.identifier);
+						object.set("x",""+x);
+						object.set("y",""+y);
+						object.set("width",""+e.def.width);
+						object.set("height",""+e.def.height);
+
+						var props = Xml.createElement("properties");
+						object.addChild(props);
+
+						_createProperty(props, "__anchorX", "int", ""+e.x);
+						_createProperty(props, "__anchorY", "int", ""+e.y);
+						_createProperty(props, "__cx", "int", ""+e.getCx(ld));
+						_createProperty(props, "__cy", "int", ""+e.getCy(ld));
+
+						// Entity fields
+						for(fi in e.fieldInstances)
+						for( i in 0...fi.getArrayLength() ) {
+							// Type
+							var type = switch fi.def.type {
+								case F_Int: "int";
+								case F_Float: "float";
+								case F_String: null;
+								case F_Bool: "bool";
+								case F_Color: "color";
+								case F_Enum(enumDefUid): null;
+								case F_Point: null;
+							}
+							// Value
+							var v : Dynamic = switch fi.def.type {
+								case F_Int: fi.getInt(i);
+								case F_Float: fi.getFloat(i);
+								case F_String: fi.getString(i);
+								case F_Bool: fi.getBool(i);
+								case F_Color:
+									var c = fi.getColorAsHexStr(i);
+									c = c.substr(1);
+									"#ff"+c;
+								case F_Enum(enumDefUid): fi.getEnumValue(i);
+								case F_Point: fi.getPointStr(i);
+							}
+							_createProperty(props, fi.def.identifier + (fi.getArrayLength()<=1 ? "" : "_"+i), type, v);
+						}
+					}
 
 				case Tiles:
 					// var layer = _createLayer("layer", li);
@@ -259,6 +325,7 @@ class Tiled {
 		}
 
 		map.set("nextlayerid", ""+layerId);
+		map.set("nextobjectid", ""+objectId);
 
 		return haxe.io.Bytes.ofString( xml.toString() );
 	}
