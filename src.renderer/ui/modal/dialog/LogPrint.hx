@@ -15,7 +15,7 @@ class LogPrint extends ui.modal.Dialog {
 			jShowAll.remove();
 		});
 
-		renderLog(false);
+		renderLog( !log.containsAnyCriticalEntry() ? true : false );
 
 		addClose();
 	}
