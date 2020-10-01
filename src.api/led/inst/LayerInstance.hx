@@ -90,6 +90,8 @@ class LayerInstance {
 											}
 										});
 										tilesArr.push({
+											__cx: cx,
+											__cy: cy,
 											coordId: ruleResult.key,
 											tiles: tiles,
 											flips: ruleResult.value.flips,

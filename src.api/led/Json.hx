@@ -126,6 +126,12 @@ typedef LayerInstanceJson = {
 			/** Coordinate ID in the layer grid **/
 			var coordId: Int;
 
+			/** Grid-based X coordinate of the cell **/
+			var __cx: Int;
+
+			/** Grid-based Y coordinate of the cell **/
+			var __cy: Int;
+
 			/** A 2-bits integer: Bit 0 = X flip, Bit 1 = Y flip **/
 			var flips: Int;
 
