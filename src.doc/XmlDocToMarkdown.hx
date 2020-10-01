@@ -39,7 +39,7 @@ class XmlDocToMarkdown {
 			});
 		}
 
-		// Sort
+		// Sort types
 		allTypesXml.sort( (a,b)->{
 			var a = typeDisplayNames.get(a.att.path);
 			var b = typeDisplayNames.get(b.att.path);
@@ -113,18 +113,18 @@ class XmlDocToMarkdown {
 				if( hasMeta(field.xml, "display") )
 					name = getMeta(field.xml,"display");
 
-				md.push('${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}**');
+				md.push(' - ${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}**');
 
 				// "Only for" limitation
 				if( hasMeta(field.xml,"only") )
-					md.push(' - **Only available for ${getMeta(field.xml,"only")}**');
+					md.push('    **Only available for ${getMeta(field.xml,"only")}**');
 
 				// Color
 				if( hasMeta(field.xml,"color") ) {
 					if( type.equals(Basic("String")) )
-						md.push(' - *Hexadecimal string using "#rrggbb" format*');
+						md.push('    *Hexadecimal string using "#rrggbb" format*');
 					else if( type.equals(Basic("UInt")) )
-						md.push(' - *Hexadecimal integer using 0xrrggbb format*');
+						md.push('    *Hexadecimal integer using 0xrrggbb format*');
 				}
 
 				// Anonymous object
@@ -139,7 +139,7 @@ class XmlDocToMarkdown {
 
 				// Field desc
 				if( field.xml.hasNode.haxe_doc )
-					md.push(' - ${field.xml.node.haxe_doc.innerHTML}');
+					md.push('    ${field.xml.node.haxe_doc.innerHTML}');
 			}
 		}
 
@@ -184,13 +184,13 @@ class XmlDocToMarkdown {
 
 			if( depth==0 )
 				if( type.getIndex()==Arr(null).getIndex() )
-					md.push(" - This array contains objects with all the following fields:");
+					md.push("    This array contains objects with all the following fields:");
 				else
-					md.push(" - This object contains all the following fields:");
+					md.push("    This object contains all the following fields:");
 			depth++;
 
 			for(f in fields) {
-				md.push('${makeIndent("-",depth)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- "+f.doc}');
+				md.push('${addIndent(" -",1)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- "+f.doc}');
 				switch f.type {
 					case Arr(Obj(fields)), Obj(fields):
 						md = md.concat( getInlineObjectMd(f.type, depth) );
@@ -305,10 +305,10 @@ class XmlDocToMarkdown {
 		return out;
 	}
 
-	static function makeIndent(char:String, depth:Int) {
+	static function addIndent(char:String, depth:Int) {
 		var out = "";
 		for(i in 0...depth+1)
-			out+="  ";
+			out+=" ";
 		return out + char;
 	}
 
