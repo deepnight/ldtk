@@ -1441,6 +1441,28 @@ textarea {
 	}
 }
 
+.window.logPrint {
+	.wrapper .content {
+		max-width: none;
+		ul.log {
+			li {
+				font-family: monospace;
+				white-space: pre;
+				border-left: 4px solid $bgLight;
+				padding-left: 8px;
+				color: white;
+			}
+			li.critical {
+				border-top: 1px solid $bgLight;
+				border-bottom: 1px solid $bgLight;
+				border-right: 1px solid $bgLight;
+				padding-top: 8px;
+				padding-bottom: 8px;
+			}
+		}
+	}
+}
+
 
 .window.lostFile {
 	.wrapper .content {
