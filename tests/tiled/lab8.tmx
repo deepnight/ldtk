@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="90" height="50" tilewidth="8" tileheight="8" infinite="0" backgroundcolor="#21263f" nextlayerid="19" nextobjectid="83">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="90" height="50" tilewidth="8" tileheight="8" infinite="0" backgroundcolor="#21263f" nextlayerid="19" nextobjectid="83">
  <tileset firstgid="1" source="cavesofgallet_tiles.tsx"/>
  <tileset firstgid="385" source="collisions.tsx"/>
  <layer id="17" name="collisions" width="90" height="50">
