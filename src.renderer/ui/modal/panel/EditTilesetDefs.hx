@@ -135,7 +135,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var jLocate = jForm.find(".locate");
 		if( cur.relPath!=null ) {
 			jPath.empty().show().append( JsTools.makePath(cur.relPath) );
-			jLocate.empty().show().append( JsTools.makeExploreLink( Editor.ME.makeFullFilePath(cur.relPath) ) );
+			jLocate.empty().show().append( JsTools.makeExploreLink( Editor.ME.makeAbsoluteFilePath(cur.relPath) ) );
 		}
 		else {
 			jLocate.hide();
@@ -178,7 +178,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				}
 
 				if( oldRelPath!=null )
-					editor.watcher.stopWatching( editor.makeFullFilePath(oldRelPath) );
+					editor.watcher.stopWatching( editor.makeAbsoluteFilePath(oldRelPath) );
 				editor.watcher.watchTileset(cur);
 
 				project.defs.autoRenameTilesetIdentifier(oldRelPath, cur);

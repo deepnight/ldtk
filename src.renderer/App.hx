@@ -22,7 +22,7 @@ class App extends dn.Process {
 		super();
 
 		#if debug
-		LOG.logFilePath = JsTools.getExeDir()+"/LEd.log";
+		// LOG.logFilePath = JsTools.getExeDir()+"/LEd.log";
 		LOG.printOnAdd = true;
 		#end
 		LOG.emptyEntry();

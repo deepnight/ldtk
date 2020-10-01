@@ -1,6 +1,8 @@
 package led.def;
 
 class AutoLayerRuleDef {
+	#if heaps // Required to avoid doc generator to explore code too deeply
+
 	public var uid(default,null) : Int;
 
 	public var tileIds : Array<Int> = [];
@@ -275,4 +277,5 @@ class AutoLayerRuleDef {
 		return tileIds[ dn.M.randSeedCoords( seed, cx,cy, tileIds.length ) ];
 	}
 
+	#end
 }

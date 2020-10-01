@@ -169,7 +169,7 @@ class Editor extends Page {
 		return relativePath.full;
 	}
 
-	public function makeFullFilePath(relPath:String) {
+	public function makeAbsoluteFilePath(relPath:String) {
 		var fp = dn.FilePath.fromFile(relPath);
 		return fp.hasDriveLetter()
 			? fp.full
@@ -185,7 +185,7 @@ class Editor extends Page {
 
 		// Check external enums
 		for( relPath in project.defs.getExternalEnumPaths() ) {
-			if( !JsTools.fileExists( makeFullFilePath(relPath) ) ) {
+			if( !JsTools.fileExists( makeAbsoluteFilePath(relPath) ) ) {
 				// File not found
 				new ui.modal.dialog.LostFile(relPath, function(newAbsPath) {
 					var newRel = makeRelativeFilePath(newAbsPath);
@@ -194,7 +194,7 @@ class Editor extends Page {
 			}
 			else {
 				// Verify checksum
-				var f = JsTools.readFileString( makeFullFilePath(relPath) );
+				var f = JsTools.readFileString( makeAbsoluteFilePath(relPath) );
 				var checksum = haxe.crypto.Md5.encode(f);
 				for(ed in project.defs.getAllExternalEnumsFrom(relPath) )
 					if( ed.externalFileChecksum!=checksum ) {
@@ -255,6 +255,10 @@ class Editor extends Page {
 				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 				new ui.modal.dialog.Warning( Lang.t._("The image ::file:: was updated, but the new version is smaller than the previous one.\nSome tiles might have been lost in the process. It is recommended to check this carefully before saving this project!", { file:name } ) );
 
+			case TrimmedPadding:
+				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
+				new ui.modal.dialog.Message( Lang.t._("\"::file::\" image was modified but it was SMALLER than the old version.\nLuckily, the tileset had some PADDING, so I was able to use it to compensate the difference.\nSo everything is ok, have a nice day ♥️", { file:name } ), "tile" );
+
 			case Ok:
 				if( !silentOk ) {
 					var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
@@ -263,7 +267,7 @@ class Editor extends Page {
 
 			case RemapSuccessful:
 				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
-				new ui.modal.dialog.Message( Lang.t._("Tileset image \"::file::\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { file:name } )  );
+				new ui.modal.dialog.Message( Lang.t._("Tileset image \"::file::\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { file:name } ), "tile" );
 		}
 
 		ge.emit(TilesetDefChanged(td));
@@ -753,6 +757,10 @@ class Editor extends Page {
 
 		var data = JsTools.prepareProjectFile(project);
 		JsTools.writeFileBytes(projectFilePath, data.bytes);
+
+		if( project.exportTiled )
+			new exporter.Tiled( project, projectFilePath );
+
 		needSaving = false;
 		App.ME.registerRecentProject(projectFilePath);
 

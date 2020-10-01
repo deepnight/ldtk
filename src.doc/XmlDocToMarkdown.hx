@@ -1,5 +1,6 @@
 enum Field {
 	Basic(name:String);
+	Enu(name:String);
 	Arr(t:Field);
 	Obj(fields:Array<{ name:String, type:Field, doc:Null<String> }>);
 	Ref(display:String, typeName:String);
@@ -9,8 +10,9 @@ enum Field {
 
 class XmlDocToMarkdown {
 	static var typeDisplayNames: Map<String,{ section:Null<String>, name:String }>;
+	static var verbose = false;
 
-	public static function run(xmlPath:String, ?mdPath:String, deleteXml=false) {
+	public static function run(className:String, xmlPath:String, ?mdPath:String, deleteXml=false) {
 		typeDisplayNames = [];
 
 		Sys.println('Parsing $xmlPath...');
@@ -21,7 +23,8 @@ class XmlDocToMarkdown {
 		// List types
 		var allTypesXml = [];
 		for(type in xml.node.haxe.elements) {
-			if( type.att.path.indexOf("led.")<0 )
+			// if( type.att.path.indexOf("led.")<0 )
+			if( type.att.file.indexOf(className)<0 )
 				continue;
 
 			if( hasMeta(type,"hide") )
@@ -39,7 +42,7 @@ class XmlDocToMarkdown {
 			});
 		}
 
-		// Sort
+		// Sort types
 		allTypesXml.sort( (a,b)->{
 			var a = typeDisplayNames.get(a.att.path);
 			var b = typeDisplayNames.get(b.att.path);
@@ -108,38 +111,39 @@ class XmlDocToMarkdown {
 				var type = getType(field.xml);
 
 				// Field name & type
-				Sys.println('  -> ${field.xml.name}: $type');
+				if( verbose )
+					Sys.println('  -> ${field.xml.name}: $type');
 				var name = field.xml.name;
 				if( hasMeta(field.xml, "display") )
 					name = getMeta(field.xml,"display");
 
-				md.push('${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}**');
+				md.push(' - ${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}**');
 
 				// "Only for" limitation
 				if( hasMeta(field.xml,"only") )
-					md.push(' - **Only available for ${getMeta(field.xml,"only")}**');
+					md.push('    ***Only relevant for ${getMeta(field.xml,"only")}***');
 
 				// Color
 				if( hasMeta(field.xml,"color") ) {
 					if( type.equals(Basic("String")) )
-						md.push(' - *Hexadecimal string using "#rrggbb" format*');
+						md.push('    *Hexadecimal string using "#rrggbb" format*');
 					else if( type.equals(Basic("UInt")) )
-						md.push(' - *Hexadecimal integer using 0xrrggbb format*');
+						md.push('    *Hexadecimal integer using 0xrrggbb format*');
 				}
+
+				// Helpers
+				// if( field.xml.name.indexOf("__")==0 )
+				// 	md.push(" - *This field only exists to facilitate JSON parsing.*");
+
+				// Field desc
+				if( field.xml.hasNode.haxe_doc )
+					md.push('    ${field.xml.node.haxe_doc.innerHTML}');
 
 				// Anonymous object
 				var objMd = getInlineObjectMd(type);
 				if( objMd.length>0 )
 					md = md.concat(objMd);
 
-				// Helpers
-				// if( field.xml.name.indexOf("__")==0 )
-				// 	md.push(" - *This field only exists to facilitate JSON parsing.*");
-
-
-				// Field desc
-				if( field.xml.hasNode.haxe_doc )
-					md.push(' - ${field.xml.node.haxe_doc.innerHTML}');
 			}
 		}
 
@@ -170,6 +174,9 @@ class XmlDocToMarkdown {
 		// Cleanup
 		if( deleteXml )
 			sys.FileSystem.deleteFile(xmlPath);
+
+		Sys.println('Done!');
+		Sys.println('');
 	}
 
 
@@ -184,13 +191,13 @@ class XmlDocToMarkdown {
 
 			if( depth==0 )
 				if( type.getIndex()==Arr(null).getIndex() )
-					md.push(" - This array contains objects with all the following fields:");
+					md.push("    This array contains objects with all the following fields:");
 				else
-					md.push(" - This object contains all the following fields:");
+					md.push("    This object contains all the following fields:");
 			depth++;
 
 			for(f in fields) {
-				md.push('${makeIndent("-",depth)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- "+f.doc}');
+				md.push('${addIndent(" -",depth)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- "+f.doc}');
 				switch f.type {
 					case Arr(Obj(fields)), Obj(fields):
 						md = md.concat( getInlineObjectMd(f.type, depth) );
@@ -252,6 +259,9 @@ class XmlDocToMarkdown {
 				var name = fieldXml.node.t.att.path;
 				Ref( typeDisplayNames.get(name).name, name );
 			}
+			else if( fieldXml.hasNode.e ) {
+				Enu(fieldXml.node.e.att.path);
+			}
 			else if( fieldXml.hasNode.a ) {
 				// List fields
 				var fields = [];
@@ -289,6 +299,7 @@ class XmlDocToMarkdown {
 					case "UInt": "Unsigned integer";
 					case _: name;
 				}
+			case Enu(name): 'Haxe editor enum $name';
 			case Ref(display, name): '[$display](#${anchorId(name)})';
 			case Arr(t): 'Array of ${printType(t)}';
 			case Obj(fields): "Object";
@@ -305,7 +316,7 @@ class XmlDocToMarkdown {
 		return out;
 	}
 
-	static function makeIndent(char:String, depth:Int) {
+	static function addIndent(char:String, depth:Int) {
 		var out = "";
 		for(i in 0...depth+1)
 			out+="  ";

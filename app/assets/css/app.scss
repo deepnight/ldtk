@@ -1391,6 +1391,29 @@ textarea {
 
 	&.message .wrapper {
 		max-width: 400px;
+		p {
+			margin: 0;
+		}
+		*+p {
+			margin-top: 1em;
+		}
+	}
+	&.message.hasIcon .content {
+		display: grid;
+		gap: 16px;
+		grid-template-columns: min-content auto;
+		align-items: stretch;
+
+		.iconWrapper {
+			padding: 16px;
+			background-color: black;
+			border-radius: 8px;
+
+			.icon {
+				width: 4em;
+				height: 4em;
+			}
+		}
 	}
 
 	&.centered {
@@ -1437,6 +1460,30 @@ textarea {
 		h2 .file {
 			color: white;
 			text-transform: none;
+		}
+	}
+}
+
+.window.logPrint {
+	.wrapper .content {
+		max-width: 500px;
+
+		ul.log {
+			min-width: auto;
+			li {
+				font-family: monospace;
+				white-space: pre-wrap;
+				border-left: 4px solid $bgLight;
+				padding-left: 8px;
+				color: white;
+			}
+			li.critical {
+				border-top: 1px solid $bgLight;
+				border-bottom: 1px solid $bgLight;
+				border-right: 1px solid $bgLight;
+				padding-top: 8px;
+				padding-bottom: 8px;
+			}
 		}
 	}
 }
