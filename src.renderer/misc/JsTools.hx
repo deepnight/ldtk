@@ -625,6 +625,7 @@ class JsTools {
 
 	public static function createAutoPatternGrid(
 		rule: led.def.AutoLayerRuleDef,
+		sourceDef: led.def.LayerDef,
 		layerDef: led.def.LayerDef,
 		previewMode=false,
 		?explainCell: (desc:Null<String>)->Void,
@@ -711,8 +712,8 @@ class JsTools {
 							addExplain(jCell, 'This cell should contain any IntGrid value to match.');
 						}
 						else {
-							jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
-							addExplain(jCell, 'This cell should contain "${layerDef.getIntGridValueDisplayName(M.iabs(v)-1)}" to match.');
+							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(M.iabs(v)-1).color ) );
+							addExplain(jCell, 'This cell should contain "${sourceDef.getIntGridValueDisplayName(M.iabs(v)-1)}" to match.');
 						}
 					}
 					else {
@@ -722,8 +723,8 @@ class JsTools {
 							addExplain(jCell, 'This cell should NOT contain any IntGrid value to match.');
 						}
 						else {
-							jCell.css("background-color", C.intToHex( layerDef.getIntGridValueDef(M.iabs(v)-1).color ) );
-							addExplain(jCell, 'This cell should NOT contain "${layerDef.getIntGridValueDisplayName(M.iabs(v)-1)}" to match.');
+							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(M.iabs(v)-1).color ) );
+							addExplain(jCell, 'This cell should NOT contain "${sourceDef.getIntGridValueDisplayName(M.iabs(v)-1)}" to match.');
 						}
 					}
 				}

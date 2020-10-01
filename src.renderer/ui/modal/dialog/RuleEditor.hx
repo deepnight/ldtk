@@ -78,7 +78,7 @@ class RuleEditor extends ui.modal.Dialog {
 		}
 
 		// Pattern grid editor
-		var jGrid = JsTools.createAutoPatternGrid(rule, sourceDef, setExplain, function(cx,cy,button) {
+		var jGrid = JsTools.createAutoPatternGrid(rule, sourceDef, layerDef, setExplain, function(cx,cy,button) {
 			var v = rule.get(cx,cy);
 			if( button==0 ) {
 				if( v==0 || v>0 )
