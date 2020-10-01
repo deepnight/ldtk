@@ -450,6 +450,14 @@ class JsTools {
 		js.node.Fs.writeFileSync( path, js.node.Buffer.hxFromBytes(bytes) );
 	}
 
+	public static function createDir(path:String, dirName:String) {
+		var fp = dn.FilePath.fromDir(path+"/"+dirName);
+		if( fileExists(fp.full) )
+			return;
+		js.node.Require.require("fs");
+		js.node.Fs.mkdirSync(fp.full);
+	}
+
 	public static function getExeDir() {
 		var path = electron.renderer.IpcRenderer.sendSync("getExeDir");
 		#if debug
