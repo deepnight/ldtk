@@ -3,16 +3,21 @@ package exporter;
 import led.Json;
 
 class Tiled {
+	static var TILED_VERSION = "1.4.2";
+	static var MAP_VERSION = "1.4";
+
 	public static var LOG = new dn.Log(100);
-	public static function convert(p:led.Json.ProjectJson) : haxe.io.Bytes {
+	public static function export(p:led.Project) : haxe.io.Bytes {
 		LOG.clear();
 		LOG.general("Converting project...");
-		return convertLevel(p, p.levels[0]);
+		return exportLevel(p, p.levels[0]);
 	}
+
 
 	public static function verify(p:led.Project) {} // TODO should return recommendations & issues
 
-	public static function convertLevel(p:led.Json.ProjectJson, level:led.Json.LevelJson) : haxe.io.Bytes {
+
+	static function exportLevel(p:led.Project, level:led.Level) : haxe.io.Bytes {
 		LOG.general("Converting level "+level.identifier+"...");
 		var xml = Xml.createDocument();
 		var layerId = 1;
@@ -26,7 +31,7 @@ class Tiled {
 		**/
 		var mapGrid = level.layerInstances.length==0 ? p.defaultGridSize : Const.INFINITE;
 		for(li in level.layerInstances)
-			mapGrid = M.imin(mapGrid, li.__gridSize);
+			mapGrid = M.imin(mapGrid, li.def.gridSize);
 		var mapWidth = M.ceil( level.pxWid/mapGrid );
 		var mapHeight = M.ceil( level.pxHei/mapGrid );
 
@@ -37,8 +42,8 @@ class Tiled {
 		**/
 		var map = Xml.createElement("map");
 		xml.addChild(map);
-		map.set("version", "1.2");
-		map.set("tiledversion", "1.3.1");
+		map.set("version", MAP_VERSION);
+		map.set("tiledversion", TILED_VERSION);
 		map.set("orientation", "orthogonal");
 		map.set("renderorder", "right-down");
 		map.set("compressionlevel", "0");
@@ -47,7 +52,7 @@ class Tiled {
 		map.set("tilewidth", ""+mapGrid);
 		map.set("tileheight", ""+mapGrid);
 		map.set("infinite", "0");
-		map.set("backgroundcolor", p.bgColor);
+		map.set("backgroundcolor", C.intToHex(p.bgColor));
 		map.set("nextobjectid", "1"); // TODO
 
 
@@ -60,6 +65,10 @@ class Tiled {
 		**/
 		var tilesetGids = new Map();
 		for( td in p.defs.tilesets ) {
+			LOG.general('Adding tileset ${td.identifier}...');
+			if( td.padding!=0 )
+				LOG.error('Tileset ${td.identifier} has padding, which isn\'t supported by Tiled which sucks bla fbklea lkez klz.');
+
 			var count = M.ceil(td.pxWid/td.tileGridSize) * M.ceil(td.pxHei/td.tileGridSize);
 			var tileset = Xml.createElement("tileset");
 			map.addChild(tileset);
@@ -70,8 +79,10 @@ class Tiled {
 			tileset.set("tilecount", "" + count);
 			tileset.set("columns", "" + M.ceil(td.pxWid/td.tileGridSize) );
 			tileset.set("objectalignment", "topleft" );
+			tileset.set("margin", "0" );
+			tileset.set("spacing", ""+td.spacing );
 
-
+			LOG.general('  Adding image ${td.relPath}...');
 			var image = Xml.createElement("image");
 			tileset.addChild(image);
 			image.set("source", td.relPath);
@@ -82,8 +93,20 @@ class Tiled {
 			gid+=count;
 		}
 
-		function _remapTileId(tilesetUid:Int, tileId:Int) {
-			return tilesetGids.get(tilesetUid) + tileId;
+		function _remapTileId(tilesetUid:Int, tileId:Int, flips=0) : UInt {
+			if( flips==0 )
+				return tilesetGids.get(tilesetUid) + tileId;
+			else {
+				var gid : UInt = tilesetGids.get(tilesetUid) + tileId;
+
+				if( M.hasBit(flips,0) )
+					gid = M.setUnsignedBit(gid, 31);
+
+				if( M.hasBit(flips,1) )
+					gid = M.setUnsignedBit(gid, 30);
+
+				return gid;
+			}
 		}
 
 
@@ -97,61 +120,74 @@ class Tiled {
 				<data encoding="csv">...</data>
 			</layer>
 		**/
+		function _createLayer(type:String, li:led.inst.LayerInstance, nameSuffix="") {
+			var layer = Xml.createElement(type);
+			map.addChild(layer);
+			layer.set("id", Std.string(layerId++));
+			layer.set("name", li.def.identifier + nameSuffix);
+			switch type {
+				case "layer":
+					layer.set("width",""+li.cWid);
+					layer.set("height",""+li.cHei);
+					layer.set("opacity",""+li.def.displayOpacity);
+
+				case "objectgroup":
+			}
+			return layer;
+		}
+
 		for(li in level.layerInstances) {
 			var ld = p.defs.layers.filter( (ld)->ld.uid==li.layerDefUid )[0];
 			LOG.general("Layer "+ld.identifier+"...");
 
-			switch ld.__type {
-				case "IntGrid":
+
+			switch ld.type {
+				case IntGrid:
 					if( ld.autoTilesetDefUid==null && ld.gridSize!=mapGrid ) {
-						LOG.error("IntGrid layer "+ld.identifier+" wasn't exported because it has a different gridSize (unsupported by Tiled).");
+						LOG.error("IntGrid layer "+ld.identifier+" was not exported because it has a different gridSize (not supported by Tiled).");
 						continue;
 					}
+
+					// IntGrid values
+					LOG.general("  Exporting IntGrid values...");
+					var layer = _createLayer("layer", li, "_values");
+					var data = Xml.createElement("data");
+					layer.addChild(data);
+					data.set("encoding","csv");
+					var csv = new Csv(li.cWid, li.cHei);
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid)
+						if( li.hasIntGrid(cx,cy) )
+							csv.set(cx,cy, li.getIntGrid(cx,cy)+1);
+					data.addChild( Xml.createPCData(csv.getString()) );
+
+				case Entities:
+				case Tiles:
+				case AutoLayer:
 			}
 
-			// Layer node
-			var layer = Xml.createElement("layer");
-			map.addChild(layer);
-			layer.set("id", Std.string(layerId++));
-			layer.set("name",ld.identifier);
-			layer.set("width",""+li.__cWid);
-			layer.set("height",""+li.__cHei);
-			layer.set("opacity",""+ld.displayOpacity);
 
-			// IntGrid values
-			if( ld.__type=="IntGrid" ) {
-				LOG.general("  Exporting IntGrid values...");
-				var data = Xml.createElement("data");
-				layer.addChild(data);
-				data.set("encoding","csv");
-				var csv = new Csv(li.__cWid, li.__cHei);
-				for(iv in li.intGrid)
-					csv.setCoordId(iv.coordId, iv.v);
-				data.addChild( Xml.createPCData(csv.getString()) );
-			}
-
-			// Auto-layer tiles in a separate layer
+			// Auto-layer tiles
 			if( ld.autoTilesetDefUid!=null ) {
 				LOG.general("  Exporting Auto-Layer tiles...");
-				var tileLayer = Xml.createElement("objectgroup");
-				map.addChild(tileLayer);
-				tileLayer.set("id", Std.string(layerId++));
-				tileLayer.set("name", ld.identifier+"_Tiles");
+				var layer = _createLayer("objectgroup", li, "_tiles");
 
-				for(at in li.autoTiles)
+				var td = p.defs.getTilesetDef(ld.autoTilesetDefUid);
+
+				var json = li.toJson(); // much easier to rely on JSON here
+				for(at in json.autoTiles)
 				for(r in at.results)
 				for(t in r.tiles) {
 					var o = Xml.createElement("object");
-					tileLayer.addChild(o);
+					layer.insertChild(o,0);
 					o.set("id", Std.string(objectId++));
-					o.set("gid", ""+_remapTileId(ld.autoTilesetDefUid, t.tileId));
+					o.set("gid", ""+_remapTileId(ld.autoTilesetDefUid, t.tileId, r.flips));
 					o.set("x", ""+t.__x);
 					o.set("y", ""+t.__y);
-					o.set("width", ""+ld.gridSize); // HACK
-					o.set("height", ""+ld.gridSize); // HACK
+					o.set("width", ""+td.tileGridSize);
+					o.set("height", ""+td.tileGridSize);
 				}
 			}
-
 		}
 
 		map.set("nextlayerid", ""+layerId);
