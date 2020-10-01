@@ -450,12 +450,25 @@ class JsTools {
 		js.node.Fs.writeFileSync( path, js.node.Buffer.hxFromBytes(bytes) );
 	}
 
-	public static function createDir(path:String, dirName:String) {
-		var fp = dn.FilePath.fromDir(path+"/"+dirName);
-		if( fileExists(fp.full) )
+	public static function createDir(path:String) {
+		if( fileExists(path) )
 			return;
 		js.node.Require.require("fs");
-		js.node.Fs.mkdirSync(fp.full);
+		js.node.Fs.mkdirSync(path);
+	}
+
+	public static function emptyDir(path:String) {
+		js.node.Require.require("fs");
+		if( !fileExists(path) )
+			return;
+
+		for(f in js.node.Fs.readdirSync(path)) {
+			var fp = dn.FilePath.fromDir(path);
+			fp.fileWithExt = f;
+			trace(fp);
+			if( js.node.Fs.lstatSync(fp.full).isFile() )
+				js.node.Fs.unlinkSync(fp.full);
+		}
 	}
 
 	public static function getExeDir() {
