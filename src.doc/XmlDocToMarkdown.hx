@@ -127,19 +127,19 @@ class XmlDocToMarkdown {
 						md.push('    *Hexadecimal integer using 0xrrggbb format*');
 				}
 
+				// Helpers
+				// if( field.xml.name.indexOf("__")==0 )
+				// 	md.push(" - *This field only exists to facilitate JSON parsing.*");
+
+				// Field desc
+				if( field.xml.hasNode.haxe_doc )
+					md.push('    ${field.xml.node.haxe_doc.innerHTML}');
+
 				// Anonymous object
 				var objMd = getInlineObjectMd(type);
 				if( objMd.length>0 )
 					md = md.concat(objMd);
 
-				// Helpers
-				// if( field.xml.name.indexOf("__")==0 )
-				// 	md.push(" - *This field only exists to facilitate JSON parsing.*");
-
-
-				// Field desc
-				if( field.xml.hasNode.haxe_doc )
-					md.push('    ${field.xml.node.haxe_doc.innerHTML}');
 			}
 		}
 
