@@ -32,6 +32,10 @@ class EditProject extends ui.modal.Panel {
 
 		var i = Input.linkToHtmlInput( project.exportTiled, jForm.find("[name=tiled]") );
 		i.linkEvent(ProjectSettingsChanged);
+		i.onValueChange = function(v) {
+			if( v )
+				new ui.modal.dialog.Message(Lang.t._("Disclaimer: Tiled export is only meant to load your LEd project in a game framework that only supports Tiled files. It is recommended to write your own LEd JSON parser, as some LEd features may not be supported.\nIt's not so complicated, I promise :)"), "project");
+		}
 
 		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
