@@ -24,8 +24,15 @@ class Tiled {
 		JsTools.emptyDir(fp.directory+"/"+outputDir);
 		JsTools.createDir(fp.directory+"/"+outputDir);
 
+		// Prepare world object
+		var world = {
+			maps: [],
+			type: "world",
+		};
+
 		// Export each level to a separate TMX file
 		var i = 1;
+		var wx = 0;
 		for(l in p.levels) {
 			var bytes = exportLevel(l);
 
@@ -34,8 +41,22 @@ class Tiled {
 			fp.fileName = ( p.levels.length>1 ? '${i}_' : '' ) + l.identifier;
 			fp.extension = "tmx";
 			JsTools.writeFileBytes(fp.full, bytes);
+
+			world.maps.push({
+				fileName: fp.fileWithExt,
+				x:wx,
+				y:0,
+			});
+			wx += l.pxWid;
 			i++;
 		}
+
+		// Create "world" JSON file
+		var json = dn.JsonPretty.stringify(world);
+		var fp = dn.FilePath.fromFile(projectFilePath);
+		fp.appendDirectory(outputDir);
+		fp.extension = "world";
+		JsTools.writeFileBytes(fp.full, haxe.io.Bytes.ofString(json));
 
 		#if !debug
 		if( exporter.Tiled.LOG.containsAnyCriticalEntry() )
