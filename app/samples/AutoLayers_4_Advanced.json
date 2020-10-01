@@ -703,7 +703,7 @@
 						"uid": 76,
 						"name": "Walls",
 						"active": true,
-						"collapsed": false,
+						"collapsed": true,
 						"rules": [
 							{
 								"uid": 67,
@@ -911,7 +911,7 @@
 						"uid": 78,
 						"name": "Background",
 						"active": true,
-						"collapsed": false,
+						"collapsed": true,
 						"rules": [
 							{
 								"uid": 35,
