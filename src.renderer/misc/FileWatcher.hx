@@ -27,7 +27,7 @@ class FileWatcher extends dn.Process {
 	public function watchTileset(td:led.def.TilesetDef) {
 		if( td.relPath!=null )
 			watch(
-				Editor.ME.makeFullFilePath(td.relPath),
+				Editor.ME.makeAbsoluteFilePath(td.relPath),
 				Editor.ME.reloadTileset.bind(td)
 			);
 	}

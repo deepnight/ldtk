@@ -169,7 +169,7 @@ class Editor extends Page {
 		return relativePath.full;
 	}
 
-	public function makeFullFilePath(relPath:String) {
+	public function makeAbsoluteFilePath(relPath:String) {
 		var fp = dn.FilePath.fromFile(relPath);
 		return fp.hasDriveLetter()
 			? fp.full
@@ -185,7 +185,7 @@ class Editor extends Page {
 
 		// Check external enums
 		for( relPath in project.defs.getExternalEnumPaths() ) {
-			if( !JsTools.fileExists( makeFullFilePath(relPath) ) ) {
+			if( !JsTools.fileExists( makeAbsoluteFilePath(relPath) ) ) {
 				// File not found
 				new ui.modal.dialog.LostFile(relPath, function(newAbsPath) {
 					var newRel = makeRelativeFilePath(newAbsPath);
@@ -194,7 +194,7 @@ class Editor extends Page {
 			}
 			else {
 				// Verify checksum
-				var f = JsTools.readFileString( makeFullFilePath(relPath) );
+				var f = JsTools.readFileString( makeAbsoluteFilePath(relPath) );
 				var checksum = haxe.crypto.Md5.encode(f);
 				for(ed in project.defs.getAllExternalEnumsFrom(relPath) )
 					if( ed.externalFileChecksum!=checksum ) {
@@ -758,14 +758,8 @@ class Editor extends Page {
 		var data = JsTools.prepareProjectFile(project);
 		JsTools.writeFileBytes(projectFilePath, data.bytes);
 
-		if( project.exportTiled ) {
-			var bytes = exporter.Tiled.export( project );
-			if( exporter.Tiled.LOG.containsAnyCriticalEntry() )
-				new ui.modal.dialog.LogPrint(exporter.Tiled.LOG);
-			var fp = dn.FilePath.fromFile(projectFilePath);
-			fp.extension = "tmx";
-			JsTools.writeFileBytes(fp.full, bytes);
-		}
+		if( project.exportTiled )
+			exporter.Tiled.export( project, projectFilePath );
 
 		needSaving = false;
 		App.ME.registerRecentProject(projectFilePath);

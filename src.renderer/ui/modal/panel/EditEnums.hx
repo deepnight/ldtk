@@ -129,7 +129,7 @@ class EditEnums extends ui.modal.Panel {
 
 		var grouped = project.defs.getGroupedExternalEnums();
 		for( group in grouped.keyValueIterator() ) {
-			var fullPath = editor.makeFullFilePath(group.key);
+			var fullPath = editor.makeAbsoluteFilePath(group.key);
 
 			// Source name
 			var e = new J("<li/>");
@@ -223,7 +223,7 @@ class EditEnums extends ui.modal.Panel {
 			jForm.find(".source")
 				.show()
 				.append( JsTools.makePath(curEnum.externalRelPath) )
-				.append( JsTools.makeExploreLink( editor.makeFullFilePath(curEnum.externalRelPath) ) );
+				.append( JsTools.makeExploreLink( editor.makeAbsoluteFilePath(curEnum.externalRelPath) ) );
 		}
 		else
 			jForm.find(".source").hide();
