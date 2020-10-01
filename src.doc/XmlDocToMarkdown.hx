@@ -192,7 +192,7 @@ class XmlDocToMarkdown {
 			depth++;
 
 			for(f in fields) {
-				md.push('${addIndent(" -",1)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- "+f.doc}');
+				md.push('${addIndent(" -",depth)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- "+f.doc}');
 				switch f.type {
 					case Arr(Obj(fields)), Obj(fields):
 						md = md.concat( getInlineObjectMd(f.type, depth) );
@@ -314,7 +314,7 @@ class XmlDocToMarkdown {
 	static function addIndent(char:String, depth:Int) {
 		var out = "";
 		for(i in 0...depth+1)
-			out+=" ";
+			out+="  ";
 		return out + char;
 	}
 
