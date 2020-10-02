@@ -24,6 +24,8 @@ haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
 haxelib git electron https://github.com/tong/hxelectron.git
 
 haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+
+haxelib git castle https://github.com/ncannasse/castle.git
 ```
 
 ### Installing Node dependencies
