@@ -20,10 +20,10 @@ class Home extends Page {
 		});
 		App.ME.setWindowTitle();
 
-		jPage.find(".changelog code").each( function(idx,e) {
+		jPage.find(".changelogs code").each( function(idx,e) {
 			var jCode = new J(e);
-			if( jCode.text().toLowerCase()=="samples" ) {
-				var jLink = new J('<a href="#" class="discreet">Samples</a>');
+			if( (~/sample/i).match( jCode.text().toLowerCase() ) ) {
+				var jLink = new J('<a href="#" class="discreet">${jCode.text()}</a>');
 				jLink.click( function(ev:js.jquery.Event) {
 					ev.preventDefault();
 					onLoadSamples();
