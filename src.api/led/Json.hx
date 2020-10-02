@@ -120,6 +120,7 @@ typedef LayerInstanceJson = {
 
 
 	@only("Auto-layers")
+	@changed("0.3.0")
 	var autoTiles: Array<{
 		var ruleId: Int;
 		var results: Array<{
@@ -127,9 +128,11 @@ typedef LayerInstanceJson = {
 			var coordId: Int;
 
 			/** Grid-based X coordinate of the cell **/
+			@added("0.3.1")
 			var __cx: Int;
 
 			/** Grid-based Y coordinate of the cell **/
+			@added("0.3.1")
 			var __cy: Int;
 
 			/** A 2-bits integer: Bit 0 = X flip, Bit 1 = Y flip **/

@@ -2,7 +2,7 @@ enum Field {
 	Basic(name:String);
 	Enu(name:String);
 	Arr(t:Field);
-	Obj(fields:Array<{ name:String, type:Field, doc:Null<String> }>);
+	Obj(fields:Array<{ xml:haxe.xml.Access, name:String, type:Field, doc:Null<String> }>);
 	Ref(display:String, typeName:String);
 	Dyn;
 	Unknown;
@@ -117,7 +117,7 @@ class XmlDocToMarkdown {
 				if( hasMeta(field.xml, "display") )
 					name = getMeta(field.xml,"display");
 
-				md.push(' - ${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}**');
+				md.push(' - ${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}** ${versionMeta(field.xml)}');
 
 				// "Only for" limitation
 				if( hasMeta(field.xml,"only") )
@@ -179,6 +179,28 @@ class XmlDocToMarkdown {
 		Sys.println('');
 	}
 
+	static function versionMeta(xml:haxe.xml.Access) {
+		var version = [];
+
+		if( hasMeta(xml,"added") )
+			version.push( badge('Added in ${getMeta(xml,"added")}') );
+
+		if( hasMeta(xml,"changed") )
+			version.push( badge('Changed in ${getMeta(xml,"changed")}') );
+
+		return version.join(" ");
+	}
+
+	static function badge(content:String) {
+		var style = [
+			"float: right",
+			"font-size: 0.8em",
+			"padding: 0px 6px",
+			"background: black",
+			"border-radius: 3px",
+		];
+		return '<span style="${style.join(";")}"> $content </span>';
+	}
 
 	/**
 		Return the markdown of an anonymous object
@@ -197,7 +219,7 @@ class XmlDocToMarkdown {
 			depth++;
 
 			for(f in fields) {
-				md.push('${addIndent(" -",depth)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- "+f.doc}');
+				md.push('${addIndent(" -",depth)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- " + f.doc + versionMeta(f.xml)}');
 				switch f.type {
 					case Arr(Obj(fields)), Obj(fields):
 						md = md.concat( getInlineObjectMd(f.type, depth) );
@@ -267,7 +289,7 @@ class XmlDocToMarkdown {
 				var fields = [];
 				for(n in fieldXml.node.a.elements) {
 					var doc = n.hasNode.haxe_doc ? n.node.haxe_doc.innerHTML : null;
-					fields.push({ name:n.name, type:getType(n), doc:doc });
+					fields.push({ xml:n, name:n.name, type:getType(n), doc:doc });
 				}
 				// Sort
 				var basic = Basic(null).getIndex();
