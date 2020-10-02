@@ -1,3 +1,7 @@
+# 0.3.1-beta
+
+ - Added `__cx`/`__cy` to `layerInstance.autoTiles.results`
+
 # 0.3.0-beta
 
 **BREAKING CHANGE**: some cleanup & renaming happened on this update, please check changes below.
