@@ -2077,6 +2077,10 @@ canvas#webgl {
 			white-space: nowrap;
 			display: flex;
 			justify-content: center;
+			.icon {
+				margin-right: 4px;
+				opacity: 0.5;
+			}
 		}
 
 		.header {
