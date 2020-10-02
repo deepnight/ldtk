@@ -2,27 +2,18 @@ package exporter;
 
 import led.Json;
 
-class Tiled {
+class Tiled extends Exporter {
 	static var TILED_VERSION = "1.4.2";
 	static var MAP_VERSION = "1.4";
-	var log : dn.Log;
 
-	var p : led.Project;
-	var projectPath : dn.FilePath;
-	var outputDir : String;
+	public function new() {
+		super();
+	}
 
-	public function new(p:led.Project, projectFilePath:String) {
-		this.p = p;
-		this.projectPath = dn.FilePath.fromFile(projectFilePath);
+	override function run(p:led.Project, projectFilePath:String) {
+		super.run(p, projectFilePath);
 
-		log = new dn.Log(500);
-		log.general("Converting project...");
-
-		var fp = dn.FilePath.fromFile(projectFilePath);
-		fp.useSlashes();
-		outputDir = fp.fileName+"_tiled";
-		JsTools.emptyDir(fp.directory+"/"+outputDir);
-		JsTools.createDir(fp.directory+"/"+outputDir);
+		setOutputPath( projectPath.directory + "/" + projectPath.fileName+"_tiled", true );
 
 		// Prepare world object
 		var world = {
@@ -36,8 +27,7 @@ class Tiled {
 		for(l in p.levels) {
 			var bytes = exportLevel(l);
 
-			var fp = dn.FilePath.fromFile(projectFilePath);
-			fp.appendDirectory(outputDir);
+			var fp = outputPath.clone();
 			fp.fileName = ( p.levels.length>1 ? '${i}_' : '' ) + l.identifier;
 			fp.extension = "tmx";
 			JsTools.writeFileBytes(fp.full, bytes);
@@ -53,8 +43,8 @@ class Tiled {
 
 		// Create "world" JSON file
 		var json = dn.JsonPretty.stringify(world);
-		var fp = dn.FilePath.fromFile(projectFilePath);
-		fp.appendDirectory(outputDir);
+		var fp = outputPath.clone();
+		fp.fileName = projectPath.fileName;
 		fp.extension = "world";
 		JsTools.writeFileBytes(fp.full, haxe.io.Bytes.ofString(json));
 
@@ -62,16 +52,6 @@ class Tiled {
 		if( log.containsAnyCriticalEntry() )
 		#end
 			new ui.modal.dialog.LogPrint(log);
-	}
-
-
-	function remapRelativePath(relPath:String) : String {
-		var fp = dn.FilePath.fromFile(relPath);
-		if( fp.hasDriveLetter() )
-			return relPath;
-
-		var abs = dn.FilePath.fromFile( projectPath.directory + "/" + relPath );
-		return abs.makeRelativeTo(projectPath.directory+"/"+outputDir).full;
 	}
 
 

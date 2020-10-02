@@ -758,8 +758,11 @@ class Editor extends Page {
 		var data = JsTools.prepareProjectFile(project);
 		JsTools.writeFileBytes(projectFilePath, data.bytes);
 
-		if( project.exportTiled )
-			new exporter.Tiled( project, projectFilePath );
+		if( project.exportTiled ) {
+			var e = new exporter.Tiled();
+			e.run( project, projectFilePath );
+		}
+
 
 		needSaving = false;
 		App.ME.registerRecentProject(projectFilePath);
