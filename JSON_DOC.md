@@ -196,13 +196,13 @@
 
     This array contains objects with all the following fields:
 
-     - `__srcX` : **Int**   -- X pixel coordinate of the tile in the **tileset**
+     - `__srcX` : **Int** [![Generic badge](https://img.shields.io/badge/Changed-0.3.0-gray.svg)](JSON_CHANGELOG.md)  -- X pixel coordinate of the tile in the **tileset**
 
-     - `__srcY` : **Int**   -- Y pixel coordinate of the tile in the **tileset**
+     - `__srcY` : **Int** [![Generic badge](https://img.shields.io/badge/Changed-0.3.0-gray.svg)](JSON_CHANGELOG.md)  -- Y pixel coordinate of the tile in the **tileset**
 
-     - `__x` : **Int**   -- X pixel coordinate of the tile in the **layer**
+     - `__x` : **Int** [![Generic badge](https://img.shields.io/badge/Added-0.3.0-gray.svg)](JSON_CHANGELOG.md)  -- X pixel coordinate of the tile in the **layer**
 
-     - `__y` : **Int**   -- Y pixel coordinate of the tile in the **layer**
+     - `__y` : **Int** [![Generic badge](https://img.shields.io/badge/Added-0.3.0-gray.svg)](JSON_CHANGELOG.md)  -- Y pixel coordinate of the tile in the **layer**
 
      - `coordId` : **Int**   -- Coordinate ID in the layer grid
 

@@ -106,15 +106,19 @@ typedef LayerInstanceJson = {
 		var tileId: Int;
 
 		/** X pixel coordinate of the tile in the **layer** **/
+		@added("0.3.0")
 		var __x: Int;
 
 		/** Y pixel coordinate of the tile in the **layer** **/
+		@added("0.3.0")
 		var __y: Int;
 
 		/** X pixel coordinate of the tile in the **tileset** **/
+		@changed("0.3.0")
 		var __srcX: Int;
 
 		/** Y pixel coordinate of the tile in the **tileset** **/
+		@changed("0.3.0")
 		var __srcY: Int;
 	}>;
 
