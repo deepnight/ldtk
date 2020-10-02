@@ -19,6 +19,7 @@ class Const {
 
 	#if !macro
 	public static var APP_NAME = "LEd";
+	public static var DEEPNIGHT_URL = "https://deepnight.net/";
 	public static var WEBSITE_URL = "https://deepnight.net/tools/led-2d-level-editor/";
 	public static var DOCUMENTATION_URL = "https://deepnight.net/docs/led/";
 	public static var ISSUES_URL = "https://github.com/deepnight/led/issues";

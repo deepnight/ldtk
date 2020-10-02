@@ -12,6 +12,7 @@ class Home extends Page {
 		loadPageTemplate("home", {
 			app: Const.APP_NAME,
 			appVer: Const.getAppVersion(),
+			deepnightUrl: Const.DEEPNIGHT_URL,
 			docUrl: Const.DOCUMENTATION_URL,
 			websiteUrl : Const.WEBSITE_URL,
 			issueUrl : Const.ISSUES_URL,
@@ -45,9 +46,9 @@ class Home extends Page {
 			onNew();
 		});
 
-		jPage.find(".exit").click( function(ev) {
-			App.ME.exit(true);
-		});
+		// jPage.find(".exit").click( function(ev) {
+		// 	App.ME.exit(true);
+		// });
 
 		updateRecents();
 	}

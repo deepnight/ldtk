@@ -767,18 +767,18 @@ ul.log {
 	background-repeat: no-repeat;
 	background-size: contain;
 }
-.icon.help {
-	display: grid;
-	align-items: center;
-	width: auto;
-	height: auto;
-	font-size: 2em;
-	font-family: Roboto;
-	font-weight: bold;
-	&::before {
-		content: "?";
-	}
-}
+// .icon.help {
+// 	display: grid;
+// 	align-items: center;
+// 	width: auto;
+// 	height: auto;
+// 	font-size: 2em;
+// 	font-family: Roboto;
+// 	font-weight: bold;
+// 	&::before {
+// 		content: "?";
+// 	}
+// }
 .icon.entity	{ background-image: url("../img/icons/entity.png"); }
 .icon.tile		{ background-image: url("../img/icons/tile.png"); }
 .icon.layer		{ background-image: url("../img/icons/layer.png"); }
@@ -793,6 +793,13 @@ ul.log {
 .icon.active	{ background-image: url("../img/icons/active.png"); }
 .icon.inactive	{ background-image: url("../img/icons/inactive.png"); }
 .icon.partial	{ background-image: url("../img/icons/partial.png"); }
+.icon.help		{ background-image: url("../img/icons/help.svg"); }
+.icon.manual	{ background-image: url("../img/icons/manual.svg"); }
+.icon.new		{ background-image: url("../img/icons/new.svg"); }
+.icon.open		{ background-image: url("../img/icons/open.svg"); }
+.icon.web		{ background-image: url("../img/icons/web.svg"); }
+.icon.community	{ background-image: url("../img/icons/community.svg"); }
+.icon.tutorial	{ background-image: url("../img/icons/tutorial.svg"); }
 
 .icon.mouseLeft		{ background-image: url("../img/icons/mouseLeft.png"); image-rendering: pixelated; }
 .icon.mouseRight	{ background-image: url("../img/icons/mouseRight.png"); image-rendering: pixelated; }
@@ -2059,6 +2066,21 @@ canvas#webgl {
 		align-items: center;
 		justify-content: center;
 
+		button {
+			white-space: nowrap;
+			display: flex;
+			justify-content: center;
+
+			.icon {
+				margin-right: 4px;
+				vertical-align: middle;
+				opacity: 0.5;
+			}
+			&[href] {
+				text-decoration: none;
+			}
+		}
+
 		.header {
 			grid-column: 1/3;
 
@@ -2124,6 +2146,7 @@ canvas#webgl {
 			ul.recents {
 				overflow-y: auto;
 				margin-top: 8px;
+				margin-bottom: 0;
 
 				&:empty {
 					padding: 40px;
@@ -2136,6 +2159,8 @@ canvas#webgl {
 
 				.path {
 					white-space: nowrap;
+					overflow-x: hidden;
+					width: 100%;
 					span:not(:last-of-type):not(.slash) {
 						font-size: 8pt;
 						opacity: 0.5;
@@ -2260,11 +2285,21 @@ canvas#webgl {
 
 
 		.footer {
+			display: grid;
 			grid-column: 1/3;
-			color: $bgLighter;
-			text-align: center;
-			margin-top: 20px;
-			font-size: 0.8em;
+			grid-template-columns: min-content auto;
+			margin-top: 16px;
+
+			a img {
+				height: 2em;
+			}
+
+			span {
+				color: $bgLighter;
+				text-align: right;
+				margin-top: 20px;
+				font-size: 0.8em;
+			}
 		}
 
 	}
