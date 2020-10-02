@@ -117,7 +117,7 @@ class XmlDocToMarkdown {
 				if( hasMeta(field.xml, "display") )
 					name = getMeta(field.xml,"display");
 
-				md.push(' - ${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}** ${versionMeta(field.xml)}');
+				md.push(' - ${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}** ${versionBadge(field.xml)}');
 
 				// "Only for" limitation
 				if( hasMeta(field.xml,"only") )
@@ -179,27 +179,34 @@ class XmlDocToMarkdown {
 		Sys.println('');
 	}
 
-	static function versionMeta(xml:haxe.xml.Access) {
-		var version = [];
+	static function versionBadge(xml:haxe.xml.Access) {
+		var badges = [];
 
-		if( hasMeta(xml,"added") )
-			version.push( badge('Added in ${getMeta(xml,"added")}') );
+		if( hasMeta(xml,"added") ) {
+			var version = getMeta(xml,"added");
+			badges.push( badge("Added", version ) );
+		}
 
-		if( hasMeta(xml,"changed") )
-			version.push( badge('Changed in ${getMeta(xml,"changed")}') );
+		if( hasMeta(xml,"changed") ) {
+			var version = getMeta(xml,"changed");
+			badges.push( badge("Changed", version, "orange") );
 
-		return version.join(" ");
+		}
+
+		return " "+badges.join(" ")+" ";
 	}
 
-	static function badge(content:String) {
-		var style = [
-			"float: right",
-			"font-size: 0.8em",
-			"padding: 0px 6px",
-			"background: black",
-			"border-radius: 3px",
-		];
-		return '<span style="${style.join(";")}"> $content </span>';
+	static function badge(name:String, value:String, ?color:String) {
+		return '[![Generic badge](https://img.shields.io/badge/$name-$value-$color.svg)](JSON_CHANGELOG.md)';
+
+		// var style = [
+		// 	"float: right",
+		// 	"font-size: 0.8em",
+		// 	"padding: 0px 6px",
+		// 	"background: black",
+		// 	"border-radius: 3px",
+		// ];
+		// return '<span style="${style.join(";")}"> $content </span>';
 	}
 
 	/**
@@ -219,7 +226,7 @@ class XmlDocToMarkdown {
 			depth++;
 
 			for(f in fields) {
-				md.push('${addIndent(" -",depth)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- " + f.doc + versionMeta(f.xml)}');
+				md.push('${addIndent(" -",depth)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : versionBadge(f.xml) + " -- " + f.doc}');
 				switch f.type {
 					case Arr(Obj(fields)), Obj(fields):
 						md = md.concat( getInlineObjectMd(f.type, depth) );
