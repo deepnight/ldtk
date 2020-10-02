@@ -6,6 +6,7 @@
 
  - Better active/inactive visual state for rules and groups of rules in auto-layers
  - Inactive rules are no longer exported in the JSON file
+ - Pressing `F` key twice fits the current level in view but with less padding
  - Added an automated JSON format documentation generator (see [JSON_DOC.md](https://github.com/deepnight/led/blob/master/JSON_DOC.md) in sources)
  - Updated `sample` maps
 

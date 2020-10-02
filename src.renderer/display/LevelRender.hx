@@ -65,11 +65,21 @@ class LevelRender extends dn.Process {
 		focusLevelX = editor.curLevel.pxWid*0.5;
 		focusLevelY = editor.curLevel.pxHei*0.5;
 
+		var old = zoom;
 		var pad = 100 * js.Browser.window.devicePixelRatio;
 		zoom = M.fmin(
 			editor.canvasWid() / ( editor.curLevel.pxWid + pad ),
 			editor.canvasHei() / ( editor.curLevel.pxHei + pad )
 		);
+
+		// Fit closer if repeated
+		if( old==zoom ) {
+			var pad = 16 * js.Browser.window.devicePixelRatio;
+			zoom = M.fmin(
+				editor.canvasWid() / ( editor.curLevel.pxWid + pad ),
+				editor.canvasHei() / ( editor.curLevel.pxHei + pad )
+			);
+		}
 	}
 
 	inline function set_focusLevelX(v) {
