@@ -2,7 +2,7 @@ enum Field {
 	Basic(name:String);
 	Enu(name:String);
 	Arr(t:Field);
-	Obj(fields:Array<{ name:String, type:Field, doc:Null<String> }>);
+	Obj(fields:Array<{ xml:haxe.xml.Access, name:String, type:Field, doc:Null<String> }>);
 	Ref(display:String, typeName:String);
 	Dyn;
 	Unknown;
@@ -11,10 +11,19 @@ enum Field {
 class XmlDocToMarkdown {
 	static var typeDisplayNames: Map<String,{ section:Null<String>, name:String }>;
 	static var verbose = false;
+	static var appVersion = new dn.VersionNumber();
 
 	public static function run(className:String, xmlPath:String, ?mdPath:String, deleteXml=false) {
 		typeDisplayNames = [];
 
+		// Get app version from "package.json"
+		var raw = sys.io.File.getContent("app/package.json");
+		var versionReg = ~/"version"[ \t]*:[ \t]*"(.*)"/gim;
+		versionReg.match(raw);
+		appVersion.set( versionReg.matched(1) );
+		Sys.println('App version is $appVersion...');
+
+		// Read XML file
 		Sys.println('Parsing $xmlPath...');
 		var raw = sys.io.File.getContent(xmlPath);
 		var xml = Xml.parse( raw );
@@ -117,7 +126,7 @@ class XmlDocToMarkdown {
 				if( hasMeta(field.xml, "display") )
 					name = getMeta(field.xml,"display");
 
-				md.push(' - ${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}**');
+				md.push(' - ${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}** ${versionBadge(field.xml)}');
 
 				// "Only for" limitation
 				if( hasMeta(field.xml,"only") )
@@ -179,6 +188,35 @@ class XmlDocToMarkdown {
 		Sys.println('');
 	}
 
+	static function versionBadge(xml:haxe.xml.Access) {
+		var badges = [];
+
+		if( hasMeta(xml,"added") ) {
+			var version = getMeta(xml,"added");
+			badges.push( badge("Added", version, appVersion.equals(version, true) ? "green" : "gray" ) );
+		}
+
+		if( hasMeta(xml,"changed") ) {
+			var version = getMeta(xml,"changed");
+			badges.push( badge("Changed", version, appVersion.equals(version, true) ? "orange" : "gray" ) );
+
+		}
+
+		return " "+badges.join(" ")+" ";
+	}
+
+	static function badge(name:String, value:String, ?color:String) {
+		return '[![Generic badge](https://img.shields.io/badge/$name-$value-$color.svg)](JSON_CHANGELOG.md)';
+
+		// var style = [
+		// 	"float: right",
+		// 	"font-size: 0.8em",
+		// 	"padding: 0px 6px",
+		// 	"background: black",
+		// 	"border-radius: 3px",
+		// ];
+		// return '<span style="${style.join(";")}"> $content </span>';
+	}
 
 	/**
 		Return the markdown of an anonymous object
@@ -197,7 +235,7 @@ class XmlDocToMarkdown {
 			depth++;
 
 			for(f in fields) {
-				md.push('${addIndent(" -",depth)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : " -- "+f.doc}');
+				md.push('${addIndent(" -",depth)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : versionBadge(f.xml) + " -- " + f.doc}');
 				switch f.type {
 					case Arr(Obj(fields)), Obj(fields):
 						md = md.concat( getInlineObjectMd(f.type, depth) );
@@ -267,7 +305,7 @@ class XmlDocToMarkdown {
 				var fields = [];
 				for(n in fieldXml.node.a.elements) {
 					var doc = n.hasNode.haxe_doc ? n.node.haxe_doc.innerHTML : null;
-					fields.push({ name:n.name, type:getType(n), doc:doc });
+					fields.push({ xml:n, name:n.name, type:getType(n), doc:doc });
 				}
 				// Sort
 				var basic = Basic(null).getIndex();
