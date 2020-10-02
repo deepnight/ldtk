@@ -1,4 +1,4 @@
-# Table of content
+# JSON structure (version 0.3.1-beta)
 
  - [Json root](#led-ProjectJson)
 
