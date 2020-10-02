@@ -5,7 +5,7 @@ import led.Json;
 class Tiled {
 	static var TILED_VERSION = "1.4.2";
 	static var MAP_VERSION = "1.4";
-	static var LOG = new dn.Log(500);
+	var log : dn.Log;
 
 	var p : led.Project;
 	var projectPath : dn.FilePath;
@@ -15,8 +15,8 @@ class Tiled {
 		this.p = p;
 		this.projectPath = dn.FilePath.fromFile(projectFilePath);
 
-		LOG.clear();
-		LOG.general("Converting project...");
+		log = new dn.Log(500);
+		log.general("Converting project...");
 
 		var fp = dn.FilePath.fromFile(projectFilePath);
 		fp.useSlashes();
@@ -59,9 +59,9 @@ class Tiled {
 		JsTools.writeFileBytes(fp.full, haxe.io.Bytes.ofString(json));
 
 		#if !debug
-		if( exporter.Tiled.LOG.containsAnyCriticalEntry() )
+		if( log.containsAnyCriticalEntry() )
 		#end
-			new ui.modal.dialog.LogPrint(exporter.Tiled.LOG);
+			new ui.modal.dialog.LogPrint(log);
 	}
 
 
@@ -76,7 +76,7 @@ class Tiled {
 
 
 	function exportLevel(level:led.Level) : haxe.io.Bytes {
-		LOG.general("Converting level "+level.identifier+"...");
+		log.general("Converting level "+level.identifier+"...");
 
 		var xml = Xml.createDocument();
 		var layerId = 1;
@@ -123,9 +123,9 @@ class Tiled {
 		**/
 		var tilesetGids = new Map();
 		for( td in p.defs.tilesets ) {
-			LOG.general('Adding tileset ${td.identifier}...');
+			log.general('Adding tileset ${td.identifier}...');
 			if( td.padding!=0 )
-				LOG.error('Tileset ${td.identifier} has padding, which isn\'t supported by Tiled which sucks bla fbklea lkez klz.');
+				log.error('Tileset ${td.identifier} has padding, which isn\'t supported by Tiled which sucks bla fbklea lkez klz.');
 
 			var count = M.ceil(td.pxWid/td.tileGridSize) * M.ceil(td.pxHei/td.tileGridSize);
 			var tileset = Xml.createElement("tileset");
@@ -141,7 +141,7 @@ class Tiled {
 			tileset.set("spacing", ""+td.spacing );
 
 			var relPath = remapRelativePath(td.relPath);
-			LOG.general('  Adding image ${relPath}...');
+			log.general('  Adding image ${relPath}...');
 			var image = Xml.createElement("image");
 			tileset.addChild(image);
 			image.set("source", relPath);
@@ -210,19 +210,19 @@ class Tiled {
 		allInst.reverse();
 		for(li in allInst) {
 			var ld = p.defs.layers.filter( (ld)->ld.uid==li.layerDefUid )[0];
-			LOG.general("Layer "+ld.identifier+"...");
+			log.general("Layer "+ld.identifier+"...");
 
 
 			switch ld.type {
 				case IntGrid:
-					LOG.warning("  Unsupported layer type "+ld.type);
+					log.warning("  Unsupported layer type "+ld.type);
 					// if( ld.autoTilesetDefUid==null && ld.gridSize!=mapGrid ) {
-					// 	LOG.error("IntGrid layer "+ld.identifier+" was not exported because it has a different gridSize (not supported by Tiled).");
+					// 	log.error("IntGrid layer "+ld.identifier+" was not exported because it has a different gridSize (not supported by Tiled).");
 					// 	continue;
 					// }
 
 					// IntGrid values
-					// LOG.general("  Exporting IntGrid values...");
+					// log.general("  Exporting IntGrid values...");
 					// var layer = _createLayer("layer", li, "_values");
 					// var data = Xml.createElement("data");
 					// layer.addChild(data);
@@ -252,7 +252,7 @@ class Tiled {
 						var x = e.x;
 						var y = e.y;
 						if( e.def.pivotX!=0 || e.def.pivotY!=0 ) {
-							LOG.warning('${e.def.identifier} entity uses a non-"topleft" pivot point which Tiled does not support.');
+							log.warning('${e.def.identifier} entity uses a non-"topleft" pivot point which Tiled does not support.');
 							x -= M.round(e.def.pivotX*e.def.width);
 							y -= M.round(e.def.pivotY*e.def.height);
 						}
@@ -331,7 +331,7 @@ class Tiled {
 
 			// Auto-layer tiles
 			if( ld.autoTilesetDefUid!=null ) {
-				LOG.general("  Exporting Auto-Layer tiles...");
+				log.general("  Exporting Auto-Layer tiles...");
 				var td = p.defs.getTilesetDef(ld.autoTilesetDefUid);
 				var layer = _createLayer("objectgroup", li, "_tiles");
 				var json = li.toJson(); // much easier to rely on LEd JSON here
