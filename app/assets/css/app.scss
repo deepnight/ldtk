@@ -716,7 +716,7 @@ ul.log {
 	overflow: auto;
 
 	li {
-		padding: 4px;
+		padding: 8px;
 	}
 	li:hover {
 		outline: 1px dashed $bgLight;
@@ -755,9 +755,6 @@ ul.log {
 	}
 	li.opChecksumFix {
 		color: $bgLighter;
-	}
-	li+li {
-		margin-top: 8px;
 	}
 }
 
@@ -1469,7 +1466,7 @@ textarea {
 
 .window.logPrint {
 	.wrapper .content {
-		max-width: 500px;
+		max-width: 70vw;
 
 		ul.log {
 			min-width: auto;

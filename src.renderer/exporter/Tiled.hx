@@ -10,8 +10,8 @@ class Tiled extends Exporter {
 		super();
 	}
 
-	override function run(p:led.Project, projectFilePath:String) {
-		super.run(p, projectFilePath);
+	override function convert() {
+		super.convert();
 
 		setOutputPath( projectPath.directory + "/" + projectPath.fileName+"_tiled", true );
 
@@ -30,7 +30,7 @@ class Tiled extends Exporter {
 			var fp = outputPath.clone();
 			fp.fileName = ( p.levels.length>1 ? '${i}_' : '' ) + l.identifier;
 			fp.extension = "tmx";
-			JsTools.writeFileBytes(fp.full, bytes);
+			addOuputFile(fp.full, bytes);
 
 			world.maps.push({
 				fileName: fp.fileWithExt,
@@ -42,21 +42,17 @@ class Tiled extends Exporter {
 		}
 
 		// Create "world" JSON file
+		log.fileOp("Creating world JSON...");
 		var json = dn.JsonPretty.stringify(world);
 		var fp = outputPath.clone();
 		fp.fileName = projectPath.fileName;
 		fp.extension = "world";
-		JsTools.writeFileBytes(fp.full, haxe.io.Bytes.ofString(json));
-
-		#if !debug
-		if( log.containsAnyCriticalEntry() )
-		#end
-			new ui.modal.dialog.LogPrint(log);
+		addOuputFile(fp.full, haxe.io.Bytes.ofString(json));
 	}
 
 
 	function exportLevel(level:led.Level) : haxe.io.Bytes {
-		log.general("Converting level "+level.identifier+"...");
+		log.add("level", "Converting level "+level.identifier+"...");
 
 		var xml = Xml.createDocument();
 		var layerId = 1;
@@ -103,7 +99,7 @@ class Tiled extends Exporter {
 		**/
 		var tilesetGids = new Map();
 		for( td in p.defs.tilesets ) {
-			log.general('Adding tileset ${td.identifier}...');
+			log.add("tileset", 'Adding tileset ${td.identifier}...');
 			if( td.padding!=0 )
 				log.error('Tileset ${td.identifier} has padding, which isn\'t supported by Tiled which sucks bla fbklea lkez klz.');
 
@@ -121,7 +117,7 @@ class Tiled extends Exporter {
 			tileset.set("spacing", ""+td.spacing );
 
 			var relPath = remapRelativePath(td.relPath);
-			log.general('  Adding image ${relPath}...');
+			log.add("tileset", '  Adding image ${relPath}...');
 			var image = Xml.createElement("image");
 			tileset.addChild(image);
 			image.set("source", relPath);
@@ -190,7 +186,7 @@ class Tiled extends Exporter {
 		allInst.reverse();
 		for(li in allInst) {
 			var ld = p.defs.layers.filter( (ld)->ld.uid==li.layerDefUid )[0];
-			log.general("Layer "+ld.identifier+"...");
+			log.add("layer", "Layer "+ld.identifier+"...");
 
 
 			switch ld.type {
@@ -202,7 +198,7 @@ class Tiled extends Exporter {
 					// }
 
 					// IntGrid values
-					// log.general("  Exporting IntGrid values...");
+					// log.add("layer", "  Exporting IntGrid values...");
 					// var layer = _createLayer("layer", li, "_values");
 					// var data = Xml.createElement("data");
 					// layer.addChild(data);
@@ -232,7 +228,7 @@ class Tiled extends Exporter {
 						var x = e.x;
 						var y = e.y;
 						if( e.def.pivotX!=0 || e.def.pivotY!=0 ) {
-							log.warning('${e.def.identifier} entity uses a non-"topleft" pivot point which Tiled does not support.');
+							// log.warning('${e.def.identifier} entity uses a non-"topleft" pivot point which Tiled does not support.');
 							x -= M.round(e.def.pivotX*e.def.width);
 							y -= M.round(e.def.pivotY*e.def.height);
 						}
@@ -311,7 +307,7 @@ class Tiled extends Exporter {
 
 			// Auto-layer tiles
 			if( ld.autoTilesetDefUid!=null ) {
-				log.general("  Exporting Auto-Layer tiles...");
+				log.add("layer", "  Exporting Auto-Layer tiles...");
 				var td = p.defs.getTilesetDef(ld.autoTilesetDefUid);
 				var layer = _createLayer("objectgroup", li, "_tiles");
 				var json = li.toJson(); // much easier to rely on LEd JSON here
