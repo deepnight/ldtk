@@ -1,0 +1,4 @@
+{
+	"maps": [ { "fileName": "MyLevel.tmx", "x": 0, "y": 0 } ],
+	"type": "world"
+}

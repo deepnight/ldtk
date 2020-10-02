@@ -229,7 +229,7 @@
 		"externalEnums": []
 	},
 	"levels": [ {
-		"identifier": "Tiled_export_test",
+		"identifier": "MyLevel",
 		"uid": 70,
 		"pxWid": 200,
 		"pxHei": 152,
