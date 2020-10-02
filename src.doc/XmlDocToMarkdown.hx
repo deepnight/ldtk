@@ -11,10 +11,19 @@ enum Field {
 class XmlDocToMarkdown {
 	static var typeDisplayNames: Map<String,{ section:Null<String>, name:String }>;
 	static var verbose = false;
+	static var appVersion = new dn.VersionNumber();
 
 	public static function run(className:String, xmlPath:String, ?mdPath:String, deleteXml=false) {
 		typeDisplayNames = [];
 
+		// Get app version from "package.json"
+		var raw = sys.io.File.getContent("app/package.json");
+		var versionReg = ~/"version"[ \t]*:[ \t]*"(.*)"/gim;
+		versionReg.match(raw);
+		appVersion.set( versionReg.matched(1) );
+		Sys.println('App version is $appVersion...');
+
+		// Read XML file
 		Sys.println('Parsing $xmlPath...');
 		var raw = sys.io.File.getContent(xmlPath);
 		var xml = Xml.parse( raw );
@@ -184,12 +193,12 @@ class XmlDocToMarkdown {
 
 		if( hasMeta(xml,"added") ) {
 			var version = getMeta(xml,"added");
-			badges.push( badge("Added", version ) );
+			badges.push( badge("Added", version, appVersion.equals(version, true) ? "green" : "gray" ) );
 		}
 
 		if( hasMeta(xml,"changed") ) {
 			var version = getMeta(xml,"changed");
-			badges.push( badge("Changed", version, "orange") );
+			badges.push( badge("Changed", version, appVersion.equals(version, true) ? "orange" : "gray" ) );
 
 		}
 
