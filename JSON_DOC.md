@@ -1,4 +1,4 @@
-# JSON structure (version 0.3.1-beta)
+# JSON structure (version 0.3.2-beta)
 
  - [Json root](#led-ProjectJson)
 
@@ -162,9 +162,9 @@
 
      - `results` : **Array of Object**
 
-       - `__cx` : **Int** [![Generic badge](https://img.shields.io/badge/Added-0.3.1-green.svg)](JSON_CHANGELOG.md)  -- Grid-based X coordinate of the cell
+       - `__cx` : **Int** [![Generic badge](https://img.shields.io/badge/Added-0.3.1-gray.svg)](JSON_CHANGELOG.md)  -- Grid-based X coordinate of the cell
 
-       - `__cy` : **Int** [![Generic badge](https://img.shields.io/badge/Added-0.3.1-green.svg)](JSON_CHANGELOG.md)  -- Grid-based Y coordinate of the cell
+       - `__cy` : **Int** [![Generic badge](https://img.shields.io/badge/Added-0.3.1-gray.svg)](JSON_CHANGELOG.md)  -- Grid-based Y coordinate of the cell
 
        - `coordId` : **Int**   -- Coordinate ID in the layer grid
 

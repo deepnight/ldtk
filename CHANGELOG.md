@@ -1,3 +1,8 @@
+# 0.3.2-beta
+
+ - Fixed a crash when resizing level with an Entity having a null Point value
+ - Added button icons in Help window
+
 # 0.3.1-beta
 
  - **Tiled (TMX) export option**: from the project settings (`F1`), check the *Tiled export* option to save Tiled compatible files along with the LEd JSON.
