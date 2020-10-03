@@ -69,7 +69,7 @@ class LayerInstance {
 					for(rg in def.autoRuleGroups) {
 						if( !rg.active )
 							continue;
-						
+
 						for(rule in rg.rules) {
 							if( !rule.active )
 								continue;
@@ -349,6 +349,8 @@ class LayerInstance {
 						if( fi.def.type==F_Point )
 							for(i in 0...fi.getArrayLength())  {
 								var pt = fi.getPointGrid(i);
+								if( pt==null )
+									continue;
 								pt.cx+=cDeltaX;
 								pt.cy+=cDeltaY;
 								fi.parseValue( i, pt.cx + Const.POINT_SEPARATOR + pt.cy );
