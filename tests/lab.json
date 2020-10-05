@@ -11,7 +11,7 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 5,
+	"nextUid": 6,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -78,6 +78,22 @@
 						"min": null,
 						"max": null,
 						"defaultOverride": null
+					},
+					{
+						"identifier": "color",
+						"__type": "Color",
+						"uid": 5,
+						"type": "F_Color",
+						"isArray": false,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "Hidden",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
+						"min": null,
+						"max": null,
+						"defaultOverride": { "id": "V_Int", "params": [ 16777215 ] }
 					}
 				]
 			}
@@ -106,7 +122,16 @@
 				"autoTiles": [],
 				"seed": 4518871,
 				"gridTiles": [],
-				"entityInstances": []
+				"entityInstances": [ { "__identifier": "Text", "__cx": 7, "__cy": 7, "defUid": 2, "x": 120, "y": 120, "fieldInstances": [
+					{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
+					{
+						"__identifier": "color",
+						"__value": "#E10909",
+						"__type": "Color",
+						"defUid": 5,
+						"realEditorValues": [ { "id": "V_Int", "params": [ 14747913 ] } ]
+					}
+				] } ]
 			},
 			{
 				"__identifier": "IntGrid",
