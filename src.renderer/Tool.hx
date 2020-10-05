@@ -93,7 +93,7 @@ class Tool<T> extends dn.Process {
 			editor.pickGenericLevelElement(ge);
 			editor.setSelection(ge);
 
-			// If layer changed, client curTool was re-created
+			// If layer changed, client curTool also switched
 			if( editor.curTool!=this ) {
 				editor.curTool.startUsing(m,buttonId);
 				return;
