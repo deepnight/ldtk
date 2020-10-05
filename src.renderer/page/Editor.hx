@@ -26,6 +26,7 @@ class Editor extends Page {
 	public var curLevelId : Int;
 	var curLayerDefUid : Int;
 	public var curTool(get,never) : Tool<Dynamic>;
+	public var selectionTool: tool.SelectionTool;
 	var allLayerTools : Map<Int,Tool<Dynamic>> = new Map();
 	var specialTool : Null< Tool<Dynamic> >; // is not null, will be used instead of default tool
 	var gridSnapping = true;
@@ -36,7 +37,6 @@ class Editor extends Page {
 	var bg : h2d.Bitmap;
 	public var cursor : ui.Cursor;
 	public var selection : Null<GenericLevelElement>;
-	var selectionCursor : ui.Cursor;
 
 	var levelHistory : Map<Int,LevelHistory> = new Map();
 	public var curLevelHistory(get,never) : LevelHistory;
@@ -67,11 +67,11 @@ class Editor extends Page {
 
 		cursor = new ui.Cursor();
 		cursor.canChangeSystemCursors = true;
-		selectionCursor = new ui.Cursor();
-		selectionCursor.enablePermanentHighlights();
 
 		levelRender = new display.LevelRender();
 		rulers = new display.Rulers();
+
+		selectionTool = new tool.SelectionTool();
 
 		initUI();
 		updateCanvasSize();
@@ -392,14 +392,14 @@ class Editor extends Page {
 		}
 
 		selection = ge;
-		selectionCursor.set(switch selection {
-			case IntGrid(li, cx, cy): GridCell(li, cx,cy);
-			case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
-			case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
-			case PointField(li, ei, fi, arrayIdx):
-				var pt = fi.getPointGrid(arrayIdx);
-				GridCell(li, pt.cx, pt.cy);
-		});
+		// selectionCursor.set(switch selection {
+		// 	case IntGrid(li, cx, cy): GridCell(li, cx,cy);
+		// 	case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
+		// 	case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
+		// 	case PointField(li, ei, fi, arrayIdx):
+		// 		var pt = fi.getPointGrid(arrayIdx);
+		// 		GridCell(li, pt.cx, pt.cy);
+		// });
 
 		ui.EntityInstanceEditor.close();
 		switch selection {
@@ -417,7 +417,7 @@ class Editor extends Page {
 
 	public function clearSelection() {
 		selection = null;
-		selectionCursor.set(None);
+		// selectionCursor.set(None);
 
 		// Close if using default curLayer tool
 		if( curTool==allLayerTools.get(curLayerDefUid) )
@@ -608,12 +608,18 @@ class Editor extends Page {
 	}
 
 	function onMouseDown(e:hxd.Event) {
-		curTool.startUsing( getMouse(), e.button );
+		if( App.ME.isAltDown() )
+			selectionTool.startUsing( getMouse(), e.button );
+		else
+			curTool.startUsing( getMouse(), e.button );
+
 		rulers.onMouseDown( getMouse(), e.button );
 	}
 
 	function onMouseUp() {
-		if( curTool.isRunning() )
+		if( selectionTool.isRunning() )
+			selectionTool.stopUsing( getMouse() );
+		else if( curTool.isRunning() )
 			curTool.stopUsing( getMouse() );
 		rulers.onMouseUp( getMouse() );
 	}
@@ -622,7 +628,10 @@ class Editor extends Page {
 		var m = getMouse();
 
 		// Manual updates
-		curTool.onMouseMove(m);
+		if( App.ME.isAltDown() )
+			selectionTool.onMouseMove( getMouse() );
+		else
+			curTool.onMouseMove(m);
 		rulers.onMouseMove(m);
 
 		// Mouse coords infos
@@ -631,26 +640,26 @@ class Editor extends Page {
 			jMouseCoords.append('<span>Grid = ${m.cx},${m.cy}</span>');
 		jMouseCoords.append('<span>Pixels = ${m.levelX},${m.levelY}</span>');
 
-		// Overed element infos
-		var overed = getGenericLevelElementAt(m, !App.ME.isAltDown() || !App.ME.isShiftDown() ? curLayerInstance : null);
-		switch overed {
-			case null:
-			case IntGrid(li, cx, cy):
-				var v = li.getIntGrid(cx,cy);
-				var c = C.intToHex( C.toWhite( li.def.getIntGridValueColor(v), 0.66 ) );
-				jMouseCoords.prepend('<span style="color:$c">${ li.def.getIntGridValueDisplayName(v) } (IntGrid)</span>');
+		// // Overed element infos
+		// var overed = getGenericLevelElementAt(m, !App.ME.isAltDown() || !App.ME.isShiftDown() ? curLayerInstance : null);
+		// switch overed {
+		// 	case null:
+		// 	case IntGrid(li, cx, cy):
+		// 		var v = li.getIntGrid(cx,cy);
+		// 		var c = C.intToHex( C.toWhite( li.def.getIntGridValueColor(v), 0.66 ) );
+		// 		jMouseCoords.prepend('<span style="color:$c">${ li.def.getIntGridValueDisplayName(v) } (IntGrid)</span>');
 
-			case Entity(li, ei):
-				var c = C.intToHex( C.toWhite( ei.def.color, 0.66 ) );
-				jMouseCoords.prepend('<span style="color:$c">${ ei.def.identifier } (Entity)</span>');
+		// 	case Entity(li, ei):
+		// 		var c = C.intToHex( C.toWhite( ei.def.color, 0.66 ) );
+		// 		jMouseCoords.prepend('<span style="color:$c">${ ei.def.identifier } (Entity)</span>');
 
-			case Tile(li, cx, cy):
-				jMouseCoords.prepend('<span>${ li.getGridTile(cx,cy) } (Tile)</span>');
+		// 	case Tile(li, cx, cy):
+		// 		jMouseCoords.prepend('<span>${ li.getGridTile(cx,cy) } (Tile)</span>');
 
-			case PointField(li, ei, fi, arrayIdx):
-				var c = C.intToHex( C.toWhite( ei.def.color, 0.66 ) );
-				jMouseCoords.prepend('<span style="color:$c">${ ei.def.identifier }.${ fi.def.identifier } (Entity point)</span>');
-		}
+		// 	case PointField(li, ei, fi, arrayIdx):
+		// 		var c = C.intToHex( C.toWhite( ei.def.color, 0.66 ) );
+		// 		jMouseCoords.prepend('<span style="color:$c">${ ei.def.identifier }.${ fi.def.identifier } (Entity point)</span>');
+		// }
 	}
 
 	function onMouseWheel(e:hxd.Event) {
@@ -812,14 +821,14 @@ class Editor extends Page {
 			case EntityFieldSorted:
 			case EntityDefSorted:
 			case EntityInstanceFieldChanged(ei):
-				switch selection {
-					case Entity(li, sei):
-						if( sei==ei ) {
-							selectionCursor.set(None);
-							selectionCursor.set( Entity(li, ei.def, ei, ei.x, ei.y) );
-						}
-					case _:
-				}
+				// switch selection {
+				// case Entity(li, sei):
+				// 	if( sei==ei ) {
+				// 		selectionCursor.set(None); // TODO selection
+				// 		selectionCursor.set( Entity(li, ei.def, ei, ei.x, ei.y) );
+				// 	}
+				// case _:
+				// }
 
 			case EntityInstanceAdded(ei):
 			case EntityInstanceRemoved(ei):
