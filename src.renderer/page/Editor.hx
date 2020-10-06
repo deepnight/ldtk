@@ -470,7 +470,7 @@ class Editor extends Page {
 		}
 	}
 
-	public inline function isUsingSpecialTool(?tClass:Class<Tool<Dynamic>>) {
+	public inline function isSpecialToolActive(?tClass:Class<Tool<Dynamic>>) {
 		return specialTool!=null && !specialTool.destroyed
 			&& ( tClass==null || Std.is(specialTool, tClass) );
 	}
@@ -609,7 +609,7 @@ class Editor extends Page {
 		var m = getMouse();
 		if( App.ME.isAltDown() )
 			selectionTool.startUsing( m, e.button );
-		else if( isUsingSpecialTool() )
+		else if( isSpecialToolActive() )
 			specialTool.startUsing( m, e.button )
 		else
 			curTool.startUsing( m, e.button );
@@ -623,7 +623,7 @@ class Editor extends Page {
 		// Tool updates
 		if( selectionTool.isRunning() )
 			selectionTool.stopUsing( m );
-		else if( isUsingSpecialTool() && specialTool.isRunning() )
+		else if( isSpecialToolActive() && specialTool.isRunning() )
 			specialTool.stopUsing( m );
 		else if( curTool.isRunning() )
 			curTool.stopUsing( m );
@@ -637,7 +637,7 @@ class Editor extends Page {
 		// Tool updates
 		if( App.ME.isAltDown() || selectionTool.isRunning() )
 			selectionTool.onMouseMove(m);
-		else if( isUsingSpecialTool() )
+		else if( isSpecialToolActive() )
 			specialTool.onMouseMove(m);
 		else
 			curTool.onMouseMove(m);

@@ -330,7 +330,7 @@ class EntityInstanceEditor extends dn.Process {
 					else
 						jPick.text( fi.valueIsNull(arrayIdx) ? "--none--" : fi.getPointStr(arrayIdx) );
 					jPick.click( function(_) {
-						if( Editor.ME.isUsingSpecialTool(tool.PickPoint) ) {
+						if( Editor.ME.isSpecialToolActive(tool.PickPoint) ) {
 							// Cancel
 							Editor.ME.clearSpecialTool();
 							updateForm();
