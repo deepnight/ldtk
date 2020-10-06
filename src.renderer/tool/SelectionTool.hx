@@ -4,6 +4,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	var selectionCursor : ui.Cursor;
 	var moveStarted = false;
 	var movePreview : h2d.Graphics;
+	var isCopy = false;
 
 	public function new() {
 		super();
@@ -111,6 +112,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	}
 
 	override function startUsing(m:MouseCoords, buttonId:Int) {
+		isCopy = App.ME.isCtrlDown();
 		moveStarted = false;
 		editor.clearSpecialTool();
 		movePreview.clear();
@@ -171,15 +173,14 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 			moveStarted = true;
 
 			// Copy selection
-			if( App.ME.isCtrlDown() && any() ) {
+			if( any() && isCopy ) {
 				var copy = duplicateSelection();
-				N.success("copy: "+copy);
 				if( copy!=null )
 					selectValue(copy);
 			}
 		}
 
-		if( isRunning() && moveStarted ) {
+		if( any() && isRunning() && moveStarted ) {
 			switch getSelectedValue()[0] {
 				case IntGrid(_), Tile(_):
 					movePreview.clear();
@@ -306,7 +307,8 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 				if( isOnStop ) {
 					editor.curLevelHistory.markChange(m.cx,m.cy);
 					var v = li.getIntGrid(cx,cy);
-					li.removeIntGrid(cx,cy);
+					if( !isCopy )
+						li.removeIntGrid(cx,cy);
 					li.setIntGrid(m.cx, m.cy, v);
 					editor.selectionTool.selectValue([ IntGrid(li, m.cx, m.cy) ]);
 					return true;
@@ -316,7 +318,8 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 				if( isOnStop ) {
 					editor.curLevelHistory.markChange(m.cx,m.cy);
 					var v = li.getGridTile(cx,cy);
-					li.removeGridTile(cx,cy);
+					if( !isCopy )
+						li.removeGridTile(cx,cy);
 					li.setGridTile(m.cx, m.cy, v);
 					editor.selectionTool.selectValue([ Tile(li, m.cx, m.cy) ]);
 					return true;
