@@ -3,13 +3,22 @@ package tool;
 class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	var selectionCursor : ui.Cursor;
 	var moveStarted = false;
+	var movePreview : h2d.Graphics;
 
 	public function new() {
 		super();
 
+		movePreview = new h2d.Graphics();
+		editor.levelRender.root.add(movePreview, Const.DP_UI);
+
 		selectionCursor = new ui.Cursor();
 		selectionCursor.set(None);
 		selectionCursor.enablePermanentHighlights();
+	}
+
+	override function onDispose() {
+		super.onDispose();
+		movePreview.remove();
 	}
 
 	override function getDefaultValue():Array<GenericLevelElement> {
@@ -104,6 +113,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	override function startUsing(m:MouseCoords, buttonId:Int) {
 		moveStarted = false;
 		editor.clearSpecialTool();
+		movePreview.clear();
 
 		super.startUsing(m, buttonId);
 
@@ -119,6 +129,11 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 					selectValue([]);
 			}
 		}
+	}
+
+	override function stopUsing(m:MouseCoords) {
+		super.stopUsing(m);
+		movePreview.clear();
 	}
 
 	public inline function get() return getSelectedValue();
@@ -162,6 +177,31 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 				if( copy!=null )
 					selectValue(copy);
 			}
+		}
+
+		if( isRunning() && moveStarted ) {
+			switch getSelectedValue()[0] {
+				case IntGrid(_), Tile(_), Entity(_):
+					movePreview.clear();
+					var fx = (origin.cx+0.5) * editor.curLayerDef.gridSize;
+					var fy = (origin.cy+0.5) * editor.curLayerDef.gridSize;
+					var tx = (m.cx+0.5) * editor.curLayerDef.gridSize;
+					var ty = (m.cy+0.5) * editor.curLayerDef.gridSize;
+					var a = Math.atan2(ty-fy, tx-fx);
+					var arrow = 10;
+					movePreview.lineStyle(1, 0xffffff, 1);
+					movePreview.moveTo(fx,fy);
+					movePreview.lineTo(tx,ty);
+
+					movePreview.moveTo(tx,ty);
+					movePreview.lineTo( tx + Math.cos(a+M.PI*0.8)*arrow, ty + Math.sin(a+M.PI*0.8)*arrow );
+
+					movePreview.moveTo(tx,ty);
+					movePreview.lineTo( tx + Math.cos(a-M.PI*0.8)*arrow, ty + Math.sin(a-M.PI*0.8)*arrow );
+
+				case _:
+			}
+
 		}
 
 		// Preview picking
