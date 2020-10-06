@@ -430,14 +430,14 @@ class Editor extends Page {
 			return specialTool;
 
 		if( curLayerDef==null )
-			return new tool.EmptyTool();
+			return new tool.DoNothing();
 
 		if( !allLayerTools.exists(curLayerDef.uid) ) {
 			var t : Tool<Dynamic> = switch curLayerDef.type {
-				case AutoLayer: new tool.EmptyTool();
-				case IntGrid: new tool.IntGridTool();
-				case Entities: new tool.EntityTool();
-				case Tiles: new tool.TileTool();
+				case AutoLayer: new tool.DoNothing();
+				case IntGrid: new tool.lt.IntGridTool();
+				case Entities: new tool.lt.EntityTool();
+				case Tiles: new tool.lt.TileTool();
 			}
 			t.initPalette();
 			allLayerTools.set( curLayerInstance.layerDefUid, t );

@@ -60,23 +60,23 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 			switch v[0] {
 				case IntGrid(li, cx, cy):
 					var v = li.getIntGrid(cx,cy);
-					editor.curTool.as(tool.IntGridTool).selectValue(v);
+					editor.curTool.as(tool.lt.IntGridTool).selectValue(v);
 					editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
 
 				case Entity(li, ei):
-					editor.curTool.as(tool.EntityTool).selectValue(ei.defUid); // BUG might crash
+					editor.curTool.as(tool.lt.EntityTool).selectValue(ei.defUid); // BUG might crash
 					editor.levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
 
 				case Tile(li, cx, cy):
 					var tid = li.getGridTile(cx,cy);
 
-					var t = editor.curTool.as(tool.TileTool);
+					var t = editor.curTool.as(tool.lt.TileTool);
 					t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking saved selections?
 
 					editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
 
 				case PointField(li, ei, fi, arrayIdx):
-					editor.curTool.as(tool.EntityTool).selectValue(ei.defUid); // BUG might crash
+					editor.curTool.as(tool.lt.EntityTool).selectValue(ei.defUid); // BUG might crash
 					var pt = fi.getPointGrid(arrayIdx);
 					if( pt!=null)
 						editor.levelRender.bleepRectCase( pt.cx, pt.cy, 1, 1, ei.def.color );

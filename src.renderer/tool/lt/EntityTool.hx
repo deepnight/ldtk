@@ -1,6 +1,6 @@
-package tool;
+package tool.lt;
 
-class EntityTool extends Tool<Int> {
+class EntityTool extends tool.LayerTool<Int> {
 	public var curEntityDef(get,never) : Null<led.def.EntityDef>;
 
 	public function new() {

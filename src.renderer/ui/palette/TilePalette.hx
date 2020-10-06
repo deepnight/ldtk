@@ -11,7 +11,7 @@ class TilePalette extends ui.ToolPalette {
 	override function doRender() {
 		super.doRender();
 
-		var tool : tool.TileTool = cast tool;
+		var tool : tool.lt.TileTool = cast tool;
 
 		if( tool.curTilesetDef==null ) {
 			jContent.addClass("invalid");

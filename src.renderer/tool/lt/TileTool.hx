@@ -1,6 +1,6 @@
-package tool;
+package tool.lt;
 
-class TileTool extends Tool<led.LedTypes.TilesetSelection> {
+class TileTool extends tool.LayerTool<led.LedTypes.TilesetSelection> {
 	public var curTilesetDef(get,never) : Null<led.def.TilesetDef>;
 	inline function get_curTilesetDef() return editor.project.defs.getTilesetDef( editor.curLayerInstance.def.tilesetDefUid );
 

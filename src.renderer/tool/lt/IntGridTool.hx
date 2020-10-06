@@ -1,6 +1,6 @@
-package tool;
+package tool.lt;
 
-class IntGridTool extends Tool<Int> {
+class IntGridTool extends tool.LayerTool<Int> {
 	public function new() {
 		super();
 	}
