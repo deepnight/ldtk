@@ -228,7 +228,7 @@ class Tool<T> extends dn.Process {
 	}
 
 	var needHistorySaving = false;
-	inline function onEditAnything() {
+	final function onEditAnything() {
 		editor.ge.emit(LayerInstanceChanged);
 		needHistorySaving = true;
 	}
