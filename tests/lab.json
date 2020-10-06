@@ -11,7 +11,7 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 6,
+	"nextUid": 7,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -53,7 +53,7 @@
 				"uid": 2,
 				"width": 16,
 				"height": 16,
-				"color": "#94D9B3",
+				"color": "#D4D4D4",
 				"renderMode": "Rectangle",
 				"tilesetId": null,
 				"tileId": null,
@@ -96,6 +96,22 @@
 						"defaultOverride": { "id": "V_Int", "params": [ 16777215 ] }
 					}
 				]
+			},
+			{
+				"identifier": "B",
+				"uid": 6,
+				"width": 16,
+				"height": 16,
+				"color": "#C08A16",
+				"renderMode": "Rectangle",
+				"tilesetId": null,
+				"tileId": null,
+				"tileRenderMode": "Stretch",
+				"maxPerLevel": 0,
+				"limitBehavior": "DiscardOldOnes",
+				"pivotX": 0.5,
+				"pivotY": 0.5,
+				"fieldDefs": []
 			}
 		],
 		"tilesets": [],
@@ -123,13 +139,22 @@
 				"seed": 4518871,
 				"gridTiles": [],
 				"entityInstances": [ { "__identifier": "Text", "__cx": 7, "__cy": 7, "defUid": 2, "x": 120, "y": 120, "fieldInstances": [
-					{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
+					{
+						"__identifier": "text",
+						"__value": "pouet",
+						"__type": "String",
+						"defUid": 3,
+						"realEditorValues": [ {
+							"id": "V_String",
+							"params": [ "pouet" ]
+						} ]
+					},
 					{
 						"__identifier": "color",
-						"__value": "#E10909",
+						"__value": "#FFFFFF",
 						"__type": "Color",
 						"defUid": 5,
-						"realEditorValues": [ { "id": "V_Int", "params": [ 14747913 ] } ]
+						"realEditorValues": [ null ]
 					}
 				] } ]
 			},

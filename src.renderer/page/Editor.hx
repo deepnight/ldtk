@@ -36,7 +36,6 @@ class Editor extends Page {
 	public var rulers : display.Rulers;
 	var bg : h2d.Bitmap;
 	public var cursor : ui.Cursor;
-	public var selection : Null<GenericLevelElement>;
 
 	var levelHistory : Map<Int,LevelHistory> = new Map();
 	public var curLevelHistory(get,never) : LevelHistory;
@@ -231,7 +230,7 @@ class Editor extends Page {
 		for( td in project.defs.tilesets )
 			watcher.watchTileset(td);
 
-		clearSelection();
+		selectionTool.clear();
 	}
 
 
@@ -286,8 +285,8 @@ class Editor extends Page {
 					clearSpecialTool();
 				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeAll();
-				else
-					clearSelection();
+				else if( selectionTool.any() )
+					selectionTool.clear();
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() ) {
@@ -380,49 +379,49 @@ class Editor extends Page {
 	}
 
 
-	public function setSelection(ge:GenericLevelElement) {
-		switch ge {
-			case IntGrid(_), Tile(_):
-				clearSelection();
-				return;
+	// public function setSelection(ge:GenericLevelElement) {
+	// 	switch ge {
+	// 		case IntGrid(_), Tile(_):
+	// 			clearSelection();
+	// 			return;
 
-			case PointField(_):
+	// 		case PointField(_):
 
-			case Entity(_):
-		}
+	// 		case Entity(_):
+	// 	}
 
-		selection = ge;
-		// selectionCursor.set(switch selection {
-		// 	case IntGrid(li, cx, cy): GridCell(li, cx,cy);
-		// 	case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
-		// 	case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
-		// 	case PointField(li, ei, fi, arrayIdx):
-		// 		var pt = fi.getPointGrid(arrayIdx);
-		// 		GridCell(li, pt.cx, pt.cy);
-		// });
+	// 	selection = ge;
+	// 	// selectionCursor.set(switch selection {
+	// 	// 	case IntGrid(li, cx, cy): GridCell(li, cx,cy);
+	// 	// 	case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
+	// 	// 	case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
+	// 	// 	case PointField(li, ei, fi, arrayIdx):
+	// 	// 		var pt = fi.getPointGrid(arrayIdx);
+	// 	// 		GridCell(li, pt.cx, pt.cy);
+	// 	// });
 
-		ui.EntityInstanceEditor.close();
-		switch selection {
-			case null:
-			case IntGrid(_):
-			case Tile(_):
+	// 	ui.EntityInstanceEditor.close();
+	// 	switch selection {
+	// 		case null:
+	// 		case IntGrid(_):
+	// 		case Tile(_):
 
-			case PointField(li, ei, fi, arrayIdx):
-				new ui.EntityInstanceEditor(ei);
+	// 		case PointField(li, ei, fi, arrayIdx):
+	// 			new ui.EntityInstanceEditor(ei);
 
-			case Entity(li, instance):
-				new ui.EntityInstanceEditor(instance);
-		}
-	}
+	// 		case Entity(li, instance):
+	// 			new ui.EntityInstanceEditor(instance);
+	// 	}
+	// }
 
-	public function clearSelection() {
-		selection = null;
-		// selectionCursor.set(None);
+	// public function clearSelection() {
+	// 	selection = null;
+	// 	// selectionCursor.set(None);
 
-		// Close if using default curLayer tool
-		if( curTool==allLayerTools.get(curLayerDefUid) )
-			ui.EntityInstanceEditor.close();
-	}
+	// 	// Close if using default curLayer tool
+	// 	if( curTool==allLayerTools.get(curLayerDefUid) )
+	// 		ui.EntityInstanceEditor.close();
+	// }
 
 	function get_curTool() : Tool<Dynamic> {
 		if( specialTool!=null )
@@ -628,6 +627,7 @@ class Editor extends Page {
 		var m = getMouse();
 
 		// Manual updates
+		App.ME.debug("selection:"+selectionTool.getSelectedValue()+" tool="+curTool);
 		if( App.ME.isAltDown() )
 			selectionTool.onMouseMove( getMouse() );
 		else
@@ -844,7 +844,7 @@ class Editor extends Page {
 			case LayerInstanceAutoRenderingChanged(li):
 
 			case LayerInstanceVisiblityChanged(li):
-				clearSelection();
+				selectionTool.clear();
 				updateLayerList();
 
 			case EntityFieldAdded(ed), EntityFieldRemoved(ed):
@@ -889,13 +889,13 @@ class Editor extends Page {
 				updateLayerList();
 				updateGuide();
 				clearSpecialTool();
-				clearSelection();
+				selectionTool.clear();
 				updateTool();
 				if( !levelHistory.exists(curLevelId) )
 					levelHistory.set(curLevelId, new LevelHistory(curLevelId) );
 
 			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory:
-				clearSelection();
+				selectionTool.clear();
 				clearSpecialTool();
 				updateAppBg();
 				updateLayerList();

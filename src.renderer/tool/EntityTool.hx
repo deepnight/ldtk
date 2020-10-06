@@ -6,14 +6,18 @@ class EntityTool extends Tool<Int> {
 	public function new() {
 		super();
 
+		trace("new entity tool: "+curEntityDef);
+		trace(getSelectedValue());
+
 		if( curEntityDef==null && project.defs.entities.length>0 )
 			selectValue( project.defs.entities[0].uid );
 	}
 
-	inline function get_curEntityDef() return project.defs.getEntityDef(getSelectedValue());
+	inline function get_curEntityDef() return project.defs.getEntityDef( getSelectedValue() );
 
 	override function selectValue(v:Int) {
 		super.selectValue(v);
+		trace(v);
 	}
 
 	override function canEdit():Bool {
@@ -74,7 +78,7 @@ class EntityTool extends Tool<Int> {
 					else {
 						ei.x = getPlacementX(m);
 						ei.y = getPlacementY(m);
-						editor.setSelection( Entity(curLayerInstance, ei) );
+						editor.selectionTool.selectValue([ Entity(curLayerInstance, ei) ]);
 						onEditAnything();
 						curMode = Move;
 						editor.ge.emit( EntityInstanceAdded(ei) );
@@ -105,7 +109,7 @@ class EntityTool extends Tool<Int> {
 					else
 						fi.parseValue(arrayIdx, null);
 					editor.ge.emit( EntityInstanceFieldChanged(ei) );
-					editor.setSelection( GenericLevelElement.Entity(li,ei) );
+					editor.selectionTool.selectValue([ GenericLevelElement.Entity(li,ei) ]);
 					return true;
 				}
 				else
@@ -117,77 +121,21 @@ class EntityTool extends Tool<Int> {
 		return false;
 	}
 
-
-	function getPickedEntityInstance() : Null<led.inst.EntityInstance> {
-		switch editor.selection {
-			case null, IntGrid(_), Tile(_):
-				return null;
-
-			case PointField(li, ei, fi, arrayIdx):
-				return ei;
-
-			case Entity(curLayerInstance, instance):
-				return instance;
-		}
-	}
-
 	override function useAt(m:MouseCoords) {
 		super.useAt(m);
 
 		switch curMode {
 			case null, PanView:
 			case Add:
+			case Move:
 
 			case Remove:
 				if( removeAnyEntityOrPointAt(m) )
 					return true;
-
-			case Move:
-				if( moveStarted ) {
-					switch editor.selection {
-						case Entity(li, instance):
-							var ei = getPickedEntityInstance();
-							var oldX = ei.x;
-							var oldY = ei.y;
-							ei.x = getPlacementX(m);
-							ei.y = getPlacementY(m);
-							var changed = oldX!=ei.x || oldY!=ei.y;
-							if( changed ) {
-								editor.setSelection( Entity(curLayerInstance, ei) );
-								editor.ge.emit( EntityInstanceChanged(ei) );
-							}
-
-							return changed;
-
-						case PointField(li, ei, fi, arrayIdx):
-							var old = fi.getPointStr(arrayIdx);
-							fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
-
-							var changed = old!=fi.getPointStr(arrayIdx);
-							if( changed ) {
-								editor.setSelection( PointField(li,ei,fi,arrayIdx) );
-								editor.ge.emit( EntityInstanceChanged(ei) );
-							}
-							return changed;
-
-						case _:
-					}
-				}
 		}
 
 		return false;
 	}
-
-	override function onHistorySaving() {
-		super.onHistorySaving();
-
-		if( curMode==Move ) {
-			var ei = getPickedEntityInstance();
-			if( ei!=null )
-				editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
-		}
-	}
-
 
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(left, right, top, bottom);

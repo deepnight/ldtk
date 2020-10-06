@@ -18,7 +18,6 @@ class Tool<T> extends dn.Process {
 	var lastMouse : Null<MouseCoords>;
 	var button = -1;
 	var rectangle = false;
-	var moveStarted = false;
 	var startTime = 0.;
 	var palette : ui.ToolPalette;
 
@@ -76,8 +75,7 @@ class Tool<T> extends dn.Process {
 		curMode = null;
 		startTime = haxe.Timer.stamp();
 		if( buttonId!=2 )
-			editor.clearSelection();
-		moveStarted = false;
+			editor.selectionTool.clear();
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
 
 		// Picking an existing element
@@ -286,16 +284,6 @@ class Tool<T> extends dn.Process {
 		editor.cursor.setLabel();
 		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )
 			clickingOutsideBounds = false;
-
-		// Start moving elements only after a small elapsed mouse distance
-		if( curMode==Move && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {
-			moveStarted = true;
-			if( App.ME.isCtrlDown() && editor.selection!=null ) {
-				var copy = duplicateElement(editor.selection);
-				if( copy!=null )
-					editor.setSelection(copy);
-			}
-		}
 
 		// Execute the tool
 		if( !clickingOutsideBounds && isRunning() && !rectangle && useAt(m) )
