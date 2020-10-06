@@ -289,7 +289,7 @@
 				"seed": 4518871,
 				"gridTiles": [],
 				"entityInstances": [
-					{ "__identifier": "Text", "__cx": 4, "__cy": 9, "defUid": 2, "x": 72, "y": 152, "fieldInstances": [
+					{ "__identifier": "Text", "__cx": 5, "__cy": 9, "defUid": 2, "x": 88, "y": 152, "fieldInstances": [
 						{
 							"__identifier": "text",
 							"__value": "A",
@@ -309,15 +309,15 @@
 						},
 						{
 							"__identifier": "path",
-							"__value": [ { "cx": 2, "cy": 11 }, { "cx": 4, "cy": 14 } ],
+							"__value": [ { "cx": 5, "cy": 12 }, { "cx": 8, "cy": 12 } ],
 							"__type": "Array<Point>",
 							"defUid": 7,
 							"realEditorValues": [ {
 								"id": "V_String",
-								"params": [ "2,11" ]
+								"params": [ "5,12" ]
 							}, {
 								"id": "V_String",
-								"params": [ "4,14" ]
+								"params": [ "8,12" ]
 							} ]
 						}
 					] },
@@ -340,38 +340,6 @@
 							"realEditorValues": [ { "id": "V_Int", "params": [ 5523455 ] } ]
 						},
 						{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] }
-					] },
-					{ "__identifier": "Text", "__cx": 11, "__cy": 3, "defUid": 2, "x": 184, "y": 56, "fieldInstances": [
-						{
-							"__identifier": "text",
-							"__value": "A",
-							"__type": "String",
-							"defUid": 3,
-							"realEditorValues": [ {
-								"id": "V_String",
-								"params": [ "A" ]
-							} ]
-						},
-						{
-							"__identifier": "color",
-							"__value": "#FF3D3D",
-							"__type": "Color",
-							"defUid": 5,
-							"realEditorValues": [ { "id": "V_Int", "params": [ 16727357 ] } ]
-						},
-						{
-							"__identifier": "path",
-							"__value": [ { "cx": 2, "cy": 11 }, { "cx": 4, "cy": 14 } ],
-							"__type": "Array<Point>",
-							"defUid": 7,
-							"realEditorValues": [ {
-								"id": "V_String",
-								"params": [ "2,11" ]
-							}, {
-								"id": "V_String",
-								"params": [ "4,14" ]
-							} ]
-						}
 					] }
 				]
 			},
