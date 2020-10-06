@@ -107,23 +107,6 @@ class Tool<T> extends dn.Process {
 	}
 
 
-	function duplicateElement(ge:GenericLevelElement) : Null<GenericLevelElement> {
-		switch ge {
-			case IntGrid(li, cx, cy):
-				return null;
-
-			case Entity(li, instance):
-				var ei = li.duplicateEntityInstance( instance );
-				return GenericLevelElement.Entity(li, ei);
-
-			case Tile(li, cx, cy):
-				return null; // TODO support copy?
-
-			case PointField(li, ei, fi, arrayIdx):
-				return null; // TODO support copy?
-		}
-	}
-
 	function updateCursor(m:MouseCoords) {}
 
 	function useFloodfillAt(m:MouseCoords) {
