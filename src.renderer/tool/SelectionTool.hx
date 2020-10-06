@@ -38,21 +38,27 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 					GridCell(li, pt.cx, pt.cy);
 			});
 
-		ui.EntityInstanceEditor.close();
 
-		if( v.length==1 ) {
+
+		if( isSingle() ) {
+			// Change layer
 			switch v[0] {
-			case null:
-			case IntGrid(_):
-			case Tile(_):
-
-			case PointField(li, ei, fi, arrayIdx):
-				new ui.EntityInstanceEditor(ei);
-
-			case Entity(li, instance):
-				new ui.EntityInstanceEditor(instance);
+				case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
+					if( li!=editor.curLayerInstance )
+						editor.selectLayerInstance(li);
+				case null:
 			}
 
+			// Open instance editor
+			switch v[0] {
+				case PointField(li, ei, fi, arrayIdx):
+					ui.EntityInstanceEditor.openFor(ei);
+
+				case Entity(li, instance):
+					ui.EntityInstanceEditor.openFor(instance);
+
+				case _:
+			}
 		}
 	}
 
@@ -63,9 +69,8 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	}
 
 	override function startUsing(m:MouseCoords, buttonId:Int) {
-		super.startUsing(m, buttonId);
-
 		moveStarted = false;
+		editor.clearSpecialTool();
 
 		var ge = editor.getGenericLevelElementAt(m);
 		if( ge!=null )
@@ -73,18 +78,20 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		else
 			selectValue([]);
 
-		N.debug("select: START");
+		super.startUsing(m, buttonId);
 	}
 
 	public inline function get() return getSelectedValue();
-	public inline function clear() selectValue([]);
+	public function clear() {
+		if( !isEmpty() )
+			selectValue([]);
+	}
 	public inline function any() return getSelectedValue().length>0;
 	public inline function isEmpty() return getSelectedValue().length==0;
 	public inline function isSingle() return getSelectedValue().length==1;
 
 	override function stopUsing(m:MouseCoords) {
 		super.stopUsing(m);
-		N.debug("select: STOP");
 	}
 
 
@@ -123,7 +130,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 
 		// Preview picking
 		if( !isRunning() ) {
-			var ge = editor.getGenericLevelElementAt(m, App.ME.isShiftDown() ? null : curLayerInstance);
+			var ge = editor.getGenericLevelElementAt(m);
 			switch ge {
 			case null:
 				editor.cursor.set(PickNothing);
@@ -185,10 +192,8 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	}
 
 
-	override function useAt(m:MouseCoords):Bool {
-		// Move selection
-		if( any() && moveStarted ) {
-			switch getSelectedValue()[0] {
+	function moveSelection(m:MouseCoords, isFinal:Bool) : Bool {
+		switch getSelectedValue()[0] {
 			case Entity(li, instance):
 				var ei = getSelectedEntityInstance();
 				var oldX = ei.x;
@@ -204,7 +209,6 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 					editor.selectionTool.selectValue([ Entity(curLayerInstance, ei) ]);
 					editor.ge.emit( EntityInstanceChanged(ei) );
 				}
-
 				return changed;
 
 			case PointField(li, ei, fi, arrayIdx):
@@ -219,9 +223,19 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 				return changed;
 
 			case _:
-			}
+				// TODO support
+				return false;
 		}
-		return super.useAt(m);
+	}
+
+
+	override function useAt(m:MouseCoords):Bool {
+		if( any() && moveStarted ) {
+			// Move selection
+			return moveSelection(m, false);
+		}
+		else
+			return super.useAt(m);
 	}
 
 	override function update() {

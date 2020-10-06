@@ -26,10 +26,13 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 
 		if( buttonId==1 )
 			editor.clearSpecialTool();
+		else if( buttonId==0 )
+			curMode = Add;
 	}
 
 	override function stopUsing(m:MouseCoords) {
 		super.stopUsing(m);
+
 		if( button==0 ) {
 			editor.levelRender.bleepRectCase(m.cx,m.cy, 1,1, 0xffcc00);
 			onPick(m);

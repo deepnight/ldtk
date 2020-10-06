@@ -285,8 +285,10 @@ class Editor extends Page {
 					clearSpecialTool();
 				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeAll();
-				else if( selectionTool.any() )
+				else if( selectionTool.any() ) {
+					ui.EntityInstanceEditor.close2();
 					selectionTool.clear();
+				}
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() ) {

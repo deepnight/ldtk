@@ -11,7 +11,7 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 7,
+	"nextUid": 8,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -94,6 +94,22 @@
 						"min": null,
 						"max": null,
 						"defaultOverride": { "id": "V_Int", "params": [ 16777215 ] }
+					},
+					{
+						"identifier": "path",
+						"__type": "Array<Point>",
+						"uid": 7,
+						"type": "F_Point",
+						"isArray": true,
+						"canBeNull": true,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "PointPath",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
+						"min": null,
+						"max": null,
+						"defaultOverride": null
 					}
 				]
 			},
@@ -156,7 +172,8 @@
 							"__type": "Color",
 							"defUid": 5,
 							"realEditorValues": [ { "id": "V_Int", "params": [ 16727357 ] } ]
-						}
+						},
+						{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] }
 					] },
 					{ "__identifier": "Text", "__cx": 7, "__cy": 9, "defUid": 2, "x": 120, "y": 152, "fieldInstances": [
 						{
@@ -175,7 +192,8 @@
 							"__type": "Color",
 							"defUid": 5,
 							"realEditorValues": [ { "id": "V_Int", "params": [ 5523455 ] } ]
-						}
+						},
+						{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] }
 					] }
 				]
 			},

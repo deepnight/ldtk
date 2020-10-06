@@ -60,6 +60,9 @@ class EntityTool extends Tool<Int> {
 	override function startUsing(m:MouseCoords, buttonId:Int) {
 		super.startUsing(m, buttonId);
 
+		if( buttonId!=2 )
+			editor.selectionTool.clear();
+
 		switch curMode {
 			case null, PanView:
 			case Add:
