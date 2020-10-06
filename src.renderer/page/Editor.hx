@@ -28,7 +28,7 @@ class Editor extends Page {
 	public var curTool(get,never) : Tool<Dynamic>;
 	public var selectionTool: tool.SelectionTool;
 	var allLayerTools : Map<Int,Tool<Dynamic>> = new Map();
-	var specialTool : Null< Tool<Dynamic> >; // is not null, will be used instead of default tool
+	var specialTool : Null< Tool<Dynamic> >; // if not null, will be used instead of default tool
 	var gridSnapping = true;
 	public var needSaving = false;
 
