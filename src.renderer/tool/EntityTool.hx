@@ -133,7 +133,6 @@ class EntityTool extends Tool<Int> {
 	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(left, right, top, bottom);
 		return false;
-		// editor.ge.emit(LayerInstanceChanged);
 	}
 
 
