@@ -72,7 +72,7 @@
 						"canBeNull": false,
 						"arrayMinLength": null,
 						"arrayMaxLength": null,
-						"editorDisplayMode": "NameAndValue",
+						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Above",
 						"editorAlwaysShow": true,
 						"min": null,
@@ -88,8 +88,8 @@
 						"canBeNull": false,
 						"arrayMinLength": null,
 						"arrayMaxLength": null,
-						"editorDisplayMode": "Hidden",
-						"editorDisplayPos": "Above",
+						"editorDisplayMode": "ValueOnly",
+						"editorDisplayPos": "Center",
 						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
@@ -138,25 +138,46 @@
 				"autoTiles": [],
 				"seed": 4518871,
 				"gridTiles": [],
-				"entityInstances": [ { "__identifier": "Text", "__cx": 7, "__cy": 7, "defUid": 2, "x": 120, "y": 120, "fieldInstances": [
-					{
-						"__identifier": "text",
-						"__value": "pouet",
-						"__type": "String",
-						"defUid": 3,
-						"realEditorValues": [ {
-							"id": "V_String",
-							"params": [ "pouet" ]
-						} ]
-					},
-					{
-						"__identifier": "color",
-						"__value": "#FFFFFF",
-						"__type": "Color",
-						"defUid": 5,
-						"realEditorValues": [ null ]
-					}
-				] } ]
+				"entityInstances": [
+					{ "__identifier": "Text", "__cx": 4, "__cy": 8, "defUid": 2, "x": 72, "y": 136, "fieldInstances": [
+						{
+							"__identifier": "text",
+							"__value": "A",
+							"__type": "String",
+							"defUid": 3,
+							"realEditorValues": [ {
+								"id": "V_String",
+								"params": [ "A" ]
+							} ]
+						},
+						{
+							"__identifier": "color",
+							"__value": "#FF3D3D",
+							"__type": "Color",
+							"defUid": 5,
+							"realEditorValues": [ { "id": "V_Int", "params": [ 16727357 ] } ]
+						}
+					] },
+					{ "__identifier": "Text", "__cx": 9, "__cy": 9, "defUid": 2, "x": 152, "y": 152, "fieldInstances": [
+						{
+							"__identifier": "text",
+							"__value": "B",
+							"__type": "String",
+							"defUid": 3,
+							"realEditorValues": [ {
+								"id": "V_String",
+								"params": [ "B" ]
+							} ]
+						},
+						{
+							"__identifier": "color",
+							"__value": "#5447FF",
+							"__type": "Color",
+							"defUid": 5,
+							"realEditorValues": [ { "id": "V_Int", "params": [ 5523455 ] } ]
+						}
+					] }
+				]
 			},
 			{
 				"__identifier": "IntGrid",
