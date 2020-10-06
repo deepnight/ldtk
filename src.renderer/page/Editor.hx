@@ -484,8 +484,11 @@ class Editor extends Page {
 		updateTool();
 	}
 
-	public function getGenericLevelElementAt(m:MouseCoords, ?limitToLayerInstance:led.inst.LayerInstance) : Null<GenericLevelElement> {
+	public function getGenericLevelElementAt(m:MouseCoords, ?limitToCurLayer:Bool) : Null<GenericLevelElement> {
 		var ge : GenericLevelElement = null;
+
+		if( limitToCurLayer==null )
+			limitToCurLayer = levelRender.enhanceActiveLayer;
 
 		function getElement(li:led.inst.LayerInstance) {
 			if( !levelRender.isLayerVisible(li) )
@@ -524,7 +527,7 @@ class Editor extends Page {
 			}
 		}
 
-		if( limitToLayerInstance==null ) {
+		if( !limitToCurLayer ) {
 			// Search in all layers
 			var all = project.defs.layers.copy();
 			all.reverse();
@@ -532,7 +535,7 @@ class Editor extends Page {
 				getElement( curLevel.getLayerInstance(ld) );
 		}
 		else
-			getElement(limitToLayerInstance);
+			getElement(curLayerInstance);
 
 		return ge;
 	}
@@ -626,7 +629,6 @@ class Editor extends Page {
 		var m = getMouse();
 
 		// Manual updates
-		App.ME.debug("selection:"+selectionTool.getSelectedValue()+" tool="+curTool);
 		if( App.ME.isAltDown() || selectionTool.isRunning() )
 			selectionTool.onMouseMove( getMouse() );
 		else
@@ -639,26 +641,26 @@ class Editor extends Page {
 			jMouseCoords.append('<span>Grid = ${m.cx},${m.cy}</span>');
 		jMouseCoords.append('<span>Pixels = ${m.levelX},${m.levelY}</span>');
 
-		// // Overed element infos
-		// var overed = getGenericLevelElementAt(m, !App.ME.isAltDown() || !App.ME.isShiftDown() ? curLayerInstance : null);
-		// switch overed {
-		// 	case null:
-		// 	case IntGrid(li, cx, cy):
-		// 		var v = li.getIntGrid(cx,cy);
-		// 		var c = C.intToHex( C.toWhite( li.def.getIntGridValueColor(v), 0.66 ) );
-		// 		jMouseCoords.prepend('<span style="color:$c">${ li.def.getIntGridValueDisplayName(v) } (IntGrid)</span>');
+		// Overed element infos
+		var overed = getGenericLevelElementAt(m);
+		switch overed {
+			case null:
+			case IntGrid(li, cx, cy):
+				var v = li.getIntGrid(cx,cy);
+				var c = C.intToHex( C.toWhite( li.def.getIntGridValueColor(v), 0.66 ) );
+				jMouseCoords.prepend('<span style="color:$c">${ li.def.getIntGridValueDisplayName(v) } (IntGrid)</span>');
 
-		// 	case Entity(li, ei):
-		// 		var c = C.intToHex( C.toWhite( ei.def.color, 0.66 ) );
-		// 		jMouseCoords.prepend('<span style="color:$c">${ ei.def.identifier } (Entity)</span>');
+			case Entity(li, ei):
+				var c = C.intToHex( C.toWhite( ei.def.color, 0.66 ) );
+				jMouseCoords.prepend('<span style="color:$c">${ ei.def.identifier } (Entity)</span>');
 
-		// 	case Tile(li, cx, cy):
-		// 		jMouseCoords.prepend('<span>${ li.getGridTile(cx,cy) } (Tile)</span>');
+			case Tile(li, cx, cy):
+				jMouseCoords.prepend('<span>${ li.getGridTile(cx,cy) } (Tile)</span>');
 
-		// 	case PointField(li, ei, fi, arrayIdx):
-		// 		var c = C.intToHex( C.toWhite( ei.def.color, 0.66 ) );
-		// 		jMouseCoords.prepend('<span style="color:$c">${ ei.def.identifier }.${ fi.def.identifier } (Entity point)</span>');
-		// }
+			case PointField(li, ei, fi, arrayIdx):
+				var c = C.intToHex( C.toWhite( ei.def.color, 0.66 ) );
+				jMouseCoords.prepend('<span style="color:$c">${ ei.def.identifier }.${ fi.def.identifier } (Entity point)</span>');
+		}
 	}
 
 	function onMouseWheel(e:hxd.Event) {

@@ -98,7 +98,7 @@ class EntityTool extends tool.LayerTool<Int> {
 
 
 	function removeAnyEntityOrPointAt(m:MouseCoords) {
-		var ge = editor.getGenericLevelElementAt(m, curLayerInstance);
+		var ge = editor.getGenericLevelElementAt(m, true);
 		switch ge {
 			case Entity(curLayerInstance, instance):
 				curLayerInstance.removeEntityInstance(instance);
