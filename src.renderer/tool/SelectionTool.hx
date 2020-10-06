@@ -65,20 +65,29 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	override function updateCursor(m:MouseCoords) {
 		super.updateCursor(m);
 
-		editor.cursor.set(None);
+		if( isRunning() && rectangle ) {
+			var r = Rect.fromMouseCoords(origin, m);
+			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, 0xffffff) );
+		}
+		else
+			editor.cursor.set(None);
 	}
 
 	override function startUsing(m:MouseCoords, buttonId:Int) {
 		moveStarted = false;
 		editor.clearSpecialTool();
 
-		var ge = editor.getGenericLevelElementAt(m);
-		if( ge!=null )
-			selectValue([ge]);
-		else
-			selectValue([]);
-
 		super.startUsing(m, buttonId);
+
+		if( rectangle ) {
+		}
+		else {
+			var ge = editor.getGenericLevelElementAt(m);
+			if( ge!=null )
+				selectValue([ge]);
+			else
+				selectValue([]);
+		}
 	}
 
 	public inline function get() return getSelectedValue();
@@ -89,10 +98,6 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	public inline function any() return getSelectedValue().length>0;
 	public inline function isEmpty() return getSelectedValue().length==0;
 	public inline function isSingle() return getSelectedValue().length==1;
-
-	override function stopUsing(m:MouseCoords) {
-		super.stopUsing(m);
-	}
 
 
 	function duplicateSelection() : Null< Array<GenericLevelElement> > {
@@ -192,50 +197,62 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	}
 
 
-	function moveSelection(m:MouseCoords, isFinal:Bool) : Bool {
+	function moveSelection(m:MouseCoords, isOnStop:Bool) : Bool {
 		switch getSelectedValue()[0] {
 			case Entity(li, instance):
-				var ei = getSelectedEntityInstance();
-				var oldX = ei.x;
-				var oldY = ei.y;
-				ei.x = snapToGrid()
-					? M.round( ( m.cx + ei.def.pivotX ) * curLayerInstance.def.gridSize )
-					: m.levelX;
-				ei.y = snapToGrid()
-					? M.round( ( m.cy + ei.def.pivotY ) * curLayerInstance.def.gridSize )
-					: m.levelY;
-				var changed = oldX!=ei.x || oldY!=ei.y;
-				if( changed ) {
-					editor.selectionTool.selectValue([ Entity(curLayerInstance, ei) ]);
-					editor.ge.emit( EntityInstanceChanged(ei) );
+				if( !isOnStop ) {
+					var ei = getSelectedEntityInstance();
+					var oldX = ei.x;
+					var oldY = ei.y;
+					ei.x = snapToGrid()
+						? M.round( ( m.cx + ei.def.pivotX ) * curLayerInstance.def.gridSize )
+						: m.levelX;
+					ei.y = snapToGrid()
+						? M.round( ( m.cy + ei.def.pivotY ) * curLayerInstance.def.gridSize )
+						: m.levelY;
+					var changed = oldX!=ei.x || oldY!=ei.y;
+					if( changed ) {
+						editor.selectionTool.selectValue([ Entity(curLayerInstance, ei) ]);
+						editor.ge.emit( EntityInstanceChanged(ei) );
+					}
+					return changed;
 				}
-				return changed;
 
 			case PointField(li, ei, fi, arrayIdx):
-				var old = fi.getPointStr(arrayIdx);
-				fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+				if( !isOnStop ) {
+					var old = fi.getPointStr(arrayIdx);
+					fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
 
-				var changed = old!=fi.getPointStr(arrayIdx);
-				if( changed ) {
-					editor.selectionTool.selectValue([ PointField(li,ei,fi,arrayIdx) ]);
-					editor.ge.emit( EntityInstanceChanged(ei) );
+					var changed = old!=fi.getPointStr(arrayIdx);
+					if( changed ) {
+						editor.selectionTool.selectValue([ PointField(li,ei,fi,arrayIdx) ]);
+						editor.ge.emit( EntityInstanceChanged(ei) );
+					}
+					return changed;
 				}
-				return changed;
+
+			case IntGrid(li, cx,cy):
+				if( isOnStop ) {
+					editor.curLevelHistory.markChange(m.cx,m.cy);
+					var v = li.getIntGrid(cx,cy);
+					li.removeIntGrid(cx,cy);
+					li.setIntGrid(m.cx,m.cy,v);
+					editor.selectionTool.selectValue([ IntGrid(li, m.cx, m.cy) ]);
+					return true;
+				}
 
 			case _:
 				// TODO support
-				return false;
 		}
+		return false;
 	}
 
 
-	override function useAt(m:MouseCoords):Bool {
-		if( any() && moveStarted ) {
-			// Move selection
-			return moveSelection(m, false);
-		}
+	override function useAt(m:MouseCoords, isOnStop:Bool):Bool {
+		if( any() && isRunning() && moveStarted )
+			return moveSelection(m, isOnStop);
 		else
-			return super.useAt(m);
+			return super.useAt(m,isOnStop);
 	}
 
 	override function update() {

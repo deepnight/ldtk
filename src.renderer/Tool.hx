@@ -100,7 +100,7 @@ class Tool<T> extends dn.Process {
 		rectangle = App.ME.isShiftDown();
 		origin = m;
 		lastMouse = m;
-		if( !clickingOutsideBounds && !rectangle && useAt(m) )
+		if( !clickingOutsideBounds && !rectangle && useAt(m,false) )
 			onEditAnything();
 	}
 
@@ -157,7 +157,7 @@ class Tool<T> extends dn.Process {
 		return true;
 	}
 
-	function useAt(m:MouseCoords) : Bool {
+	function useAt(m:MouseCoords, isOnStop:Bool) : Bool {
 		if( curMode==PanView ) {
 			editor.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
 			editor.levelRender.focusLevelY -= m.levelY-lastMouse.levelY;
@@ -203,7 +203,9 @@ class Tool<T> extends dn.Process {
 						editor.levelRender.invalidateLayerArea(curLayerInstance, left, right, top, bottom);
 				}
 				else {
-					anyChange = useAt(m);
+					anyChange = useAt(m,true);
+					if( anyChange )
+						editor.levelRender.invalidateLayer(curLayerInstance);
 				}
 			}
 
@@ -241,7 +243,7 @@ class Tool<T> extends dn.Process {
 			clickingOutsideBounds = false;
 
 		// Execute the tool
-		if( !clickingOutsideBounds && isRunning() && !rectangle && useAt(m) )
+		if( !clickingOutsideBounds && isRunning() && !rectangle && useAt(m, false) )
 			onEditAnything();
 
 		// Render cursor

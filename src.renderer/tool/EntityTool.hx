@@ -115,8 +115,8 @@ class EntityTool extends Tool<Int> {
 		return false;
 	}
 
-	override function useAt(m:MouseCoords) {
-		super.useAt(m);
+	override function useAt(m:MouseCoords, isOnStop) {
+		super.useAt(m,isOnStop);
 
 		switch curMode {
 			case null, PanView:
