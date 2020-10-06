@@ -25,9 +25,9 @@ class Editor extends Page {
 	public var projectFilePath : String;
 	public var curLevelId : Int;
 	var curLayerDefUid : Int;
-	public var curTool(get,never) : Tool<Dynamic>;
+	public var curTool(get,never) : tool.LayerTool<Dynamic>;
 	public var selectionTool: tool.SelectionTool;
-	var allLayerTools : Map<Int,Tool<Dynamic>> = new Map();
+	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();
 	var specialTool : Null< Tool<Dynamic> >; // if not null, will be used instead of default tool
 	var gridSnapping = true;
 	public var needSaving = false;
@@ -425,16 +425,13 @@ class Editor extends Page {
 	// 		ui.EntityInstanceEditor.close();
 	// }
 
-	function get_curTool() : Tool<Dynamic> {
-		if( specialTool!=null )
-			return specialTool;
-
+	function get_curTool() : tool.LayerTool<Dynamic> {
 		if( curLayerDef==null )
-			return new tool.DoNothing();
+			return new tool.lt.DoNothing();
 
 		if( !allLayerTools.exists(curLayerDef.uid) ) {
-			var t : Tool<Dynamic> = switch curLayerDef.type {
-				case AutoLayer: new tool.DoNothing();
+			var t : tool.LayerTool<Dynamic> = switch curLayerDef.type {
+				case AutoLayer: new tool.lt.DoNothing();
 				case IntGrid: new tool.lt.IntGridTool();
 				case Entities: new tool.lt.EntityTool();
 				case Tiles: new tool.lt.TileTool();
@@ -609,28 +606,39 @@ class Editor extends Page {
 	}
 
 	function onMouseDown(e:hxd.Event) {
+		var m = getMouse();
 		if( App.ME.isAltDown() )
-			selectionTool.startUsing( getMouse(), e.button );
+			selectionTool.startUsing( m, e.button );
+		else if( isUsingSpecialTool() )
+			specialTool.startUsing( m, e.button )
 		else
-			curTool.startUsing( getMouse(), e.button );
+			curTool.startUsing( m, e.button );
 
-		rulers.onMouseDown( getMouse(), e.button );
+		rulers.onMouseDown( m, e.button );
 	}
 
 	function onMouseUp() {
+		var m = getMouse();
+
+		// Tool updates
 		if( selectionTool.isRunning() )
-			selectionTool.stopUsing( getMouse() );
+			selectionTool.stopUsing( m );
+		else if( isUsingSpecialTool() && specialTool.isRunning() )
+			specialTool.stopUsing( m );
 		else if( curTool.isRunning() )
-			curTool.stopUsing( getMouse() );
-		rulers.onMouseUp( getMouse() );
+			curTool.stopUsing( m );
+
+		rulers.onMouseUp( m );
 	}
 
 	function onMouseMove(e:hxd.Event) {
 		var m = getMouse();
 
-		// Manual updates
+		// Tool updates
 		if( App.ME.isAltDown() || selectionTool.isRunning() )
-			selectionTool.onMouseMove( getMouse() );
+			selectionTool.onMouseMove(m);
+		else if( isUsingSpecialTool() )
+			specialTool.onMouseMove(m);
 		else
 			curTool.onMouseMove(m);
 		rulers.onMouseMove(m);
