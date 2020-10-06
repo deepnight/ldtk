@@ -11,26 +11,11 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 10,
+	"nextUid": 16,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
 		"layers": [
-			{
-				"__type": "Tiles",
-				"identifier": "Tiles",
-				"type": "Tiles",
-				"uid": 9,
-				"gridSize": 16,
-				"displayOpacity": 1,
-				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
-				"autoTilesetDefUid": null,
-				"autoRuleGroups": [],
-				"autoSourceLayerDefUid": null,
-				"tilesetDefUid": 8,
-				"tilePivotX": 0,
-				"tilePivotY": 0
-			},
 			{
 				"__type": "Entities",
 				"identifier": "Entities",
@@ -47,6 +32,21 @@
 				"tilePivotY": 0
 			},
 			{
+				"__type": "Tiles",
+				"identifier": "Tiles",
+				"type": "Tiles",
+				"uid": 9,
+				"gridSize": 16,
+				"displayOpacity": 1,
+				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
+				"autoTilesetDefUid": null,
+				"autoRuleGroups": [],
+				"autoSourceLayerDefUid": null,
+				"tilesetDefUid": 8,
+				"tilePivotX": 0,
+				"tilePivotY": 0
+			},
+			{
 				"__type": "IntGrid",
 				"identifier": "IntGrid",
 				"type": "IntGrid",
@@ -54,8 +54,115 @@
 				"gridSize": 16,
 				"displayOpacity": 1,
 				"intGridValues": [ { "identifier": "walls", "color": "#000000" }, { "identifier": "water", "color": "#0091FF" } ],
-				"autoTilesetDefUid": null,
-				"autoRuleGroups": [],
+				"autoTilesetDefUid": 8,
+				"autoRuleGroups": [ {
+					"uid": 10,
+					"name": "New group",
+					"active": true,
+					"collapsed": false,
+					"rules": [
+						{
+							"uid": 15,
+							"active": true,
+							"size": 3,
+							"tileIds": [ 134 ],
+							"chance": 1,
+							"pattern": [ -1, 1, 0, 1, 1, 0, 0, 0, 0 ],
+							"flipX": true,
+							"flipY": true,
+							"xModulo": 1,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 4096276,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						},
+						{
+							"uid": 12,
+							"active": true,
+							"size": 3,
+							"tileIds": [ 117 ],
+							"chance": 1,
+							"pattern": [ 0, -1, 0, -1, 1, 0, 0, 0, 0 ],
+							"flipX": true,
+							"flipY": true,
+							"xModulo": 1,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 9571853,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						},
+						{
+							"uid": 14,
+							"active": true,
+							"size": 3,
+							"tileIds": [ 119, 135, 151 ],
+							"chance": 1,
+							"pattern": [ 0, 0, 0, -1, 1, 0, 0, 0, 0 ],
+							"flipX": true,
+							"flipY": false,
+							"xModulo": 1,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 2919056,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						},
+						{
+							"uid": 11,
+							"active": true,
+							"size": 3,
+							"tileIds": [ 152, 153, 154 ],
+							"chance": 1,
+							"pattern": [ 0, -1, 0, 0, 1, 0, 0, 0, 0 ],
+							"flipX": false,
+							"flipY": true,
+							"xModulo": 1,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 8627774,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						},
+						{
+							"uid": 13,
+							"active": true,
+							"size": 1,
+							"tileIds": [ 147, 148, 149, 150 ],
+							"chance": 1,
+							"pattern": [ 1 ],
+							"flipX": false,
+							"flipY": false,
+							"xModulo": 1,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 9793943,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						}
+					]
+				} ],
 				"autoSourceLayerDefUid": null,
 				"tilesetDefUid": null,
 				"tilePivotX": 0,
@@ -168,25 +275,6 @@
 		"pxHei": 256,
 		"layerInstances": [
 			{
-				"__identifier": "Tiles",
-				"__type": "Tiles",
-				"__cWid": 16,
-				"__cHei": 16,
-				"__gridSize": 16,
-				"levelId": 0,
-				"layerDefUid": 9,
-				"pxOffsetX": 0,
-				"pxOffsetY": 0,
-				"intGrid": [],
-				"autoTiles": [],
-				"seed": 6405339,
-				"gridTiles": [
-					{ "coordId": 33, "tileId": 142, "__x": 16, "__y": 32, "__srcX": 224, "__srcY": 128 },
-					{ "coordId": 91, "tileId": 6, "__x": 176, "__y": 80, "__srcX": 96, "__srcY": 0 }
-				],
-				"entityInstances": []
-			},
-			{
 				"__identifier": "Entities",
 				"__type": "Entities",
 				"__cWid": 16,
@@ -221,7 +309,7 @@
 						},
 						{
 							"__identifier": "path",
-							"__value": [ { "cx": 2, "cy": 11 }, { "cx": 12, "cy": 13 } ],
+							"__value": [ { "cx": 2, "cy": 11 }, { "cx": 4, "cy": 14 } ],
 							"__type": "Array<Point>",
 							"defUid": 7,
 							"realEditorValues": [ {
@@ -229,7 +317,7 @@
 								"params": [ "2,11" ]
 							}, {
 								"id": "V_String",
-								"params": [ "12,13" ]
+								"params": [ "4,14" ]
 							} ]
 						}
 					] },
@@ -256,6 +344,25 @@
 				]
 			},
 			{
+				"__identifier": "Tiles",
+				"__type": "Tiles",
+				"__cWid": 16,
+				"__cHei": 16,
+				"__gridSize": 16,
+				"levelId": 0,
+				"layerDefUid": 9,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGrid": [],
+				"autoTiles": [],
+				"seed": 6405339,
+				"gridTiles": [
+					{ "coordId": 33, "tileId": 142, "__x": 16, "__y": 32, "__srcX": 224, "__srcY": 128 },
+					{ "coordId": 91, "tileId": 6, "__x": 176, "__y": 80, "__srcX": 96, "__srcY": 0 }
+				],
+				"entityInstances": []
+			},
+			{
 				"__identifier": "IntGrid",
 				"__type": "IntGrid",
 				"__cWid": 16,
@@ -265,8 +372,237 @@
 				"layerDefUid": 1,
 				"pxOffsetX": 0,
 				"pxOffsetY": 0,
-				"intGrid": [ { "coordId": 69, "v": 0 } ],
-				"autoTiles": [],
+				"intGrid": [
+					{ "coordId": 67, "v": 0 },
+					{ "coordId": 68, "v": 0 },
+					{ "coordId": 69, "v": 0 },
+					{ "coordId": 70, "v": 0 },
+					{ "coordId": 71, "v": 0 },
+					{ "coordId": 83, "v": 0 },
+					{ "coordId": 84, "v": 0 },
+					{ "coordId": 85, "v": 0 },
+					{ "coordId": 86, "v": 0 },
+					{ "coordId": 87, "v": 0 }
+				],
+				"autoTiles": [
+					{ "ruleId": 15, "results": [] },
+					{
+						"ruleId": 12,
+						"results": [
+							{
+								"__cx": 3,
+								"__cy": 4,
+								"coordId": 67,
+								"tiles": [ { "tileId": 117, "__x": 48, "__y": 64, "__srcX": 80, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 7,
+								"__cy": 4,
+								"coordId": 71,
+								"tiles": [ { "tileId": 117, "__x": 112, "__y": 64, "__srcX": 80, "__srcY": 112 } ],
+								"flips": 1
+							},
+							{
+								"__cx": 3,
+								"__cy": 5,
+								"coordId": 83,
+								"tiles": [ { "tileId": 117, "__x": 48, "__y": 80, "__srcX": 80, "__srcY": 112 } ],
+								"flips": 2
+							},
+							{
+								"__cx": 7,
+								"__cy": 5,
+								"coordId": 87,
+								"tiles": [ { "tileId": 117, "__x": 112, "__y": 80, "__srcX": 80, "__srcY": 112 } ],
+								"flips": 3
+							}
+						]
+					},
+					{
+						"ruleId": 14,
+						"results": [
+							{
+								"__cx": 3,
+								"__cy": 4,
+								"coordId": 67,
+								"tiles": [ { "tileId": 151, "__x": 48, "__y": 64, "__srcX": 112, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 7,
+								"__cy": 4,
+								"coordId": 71,
+								"tiles": [ { "tileId": 151, "__x": 112, "__y": 64, "__srcX": 112, "__srcY": 144 } ],
+								"flips": 1
+							},
+							{
+								"__cx": 3,
+								"__cy": 5,
+								"coordId": 83,
+								"tiles": [ { "tileId": 151, "__x": 48, "__y": 80, "__srcX": 112, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 7,
+								"__cy": 5,
+								"coordId": 87,
+								"tiles": [ { "tileId": 151, "__x": 112, "__y": 80, "__srcX": 112, "__srcY": 144 } ],
+								"flips": 1
+							}
+						]
+					},
+					{
+						"ruleId": 11,
+						"results": [
+							{
+								"__cx": 3,
+								"__cy": 4,
+								"coordId": 67,
+								"tiles": [ { "tileId": 153, "__x": 48, "__y": 64, "__srcX": 144, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 4,
+								"__cy": 4,
+								"coordId": 68,
+								"tiles": [ { "tileId": 153, "__x": 64, "__y": 64, "__srcX": 144, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 5,
+								"__cy": 4,
+								"coordId": 69,
+								"tiles": [ { "tileId": 153, "__x": 80, "__y": 64, "__srcX": 144, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 6,
+								"__cy": 4,
+								"coordId": 70,
+								"tiles": [ { "tileId": 154, "__x": 96, "__y": 64, "__srcX": 160, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 7,
+								"__cy": 4,
+								"coordId": 71,
+								"tiles": [ { "tileId": 153, "__x": 112, "__y": 64, "__srcX": 144, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 3,
+								"__cy": 5,
+								"coordId": 83,
+								"tiles": [ { "tileId": 154, "__x": 48, "__y": 80, "__srcX": 160, "__srcY": 144 } ],
+								"flips": 2
+							},
+							{
+								"__cx": 4,
+								"__cy": 5,
+								"coordId": 84,
+								"tiles": [ { "tileId": 154, "__x": 64, "__y": 80, "__srcX": 160, "__srcY": 144 } ],
+								"flips": 2
+							},
+							{
+								"__cx": 5,
+								"__cy": 5,
+								"coordId": 85,
+								"tiles": [ { "tileId": 152, "__x": 80, "__y": 80, "__srcX": 128, "__srcY": 144 } ],
+								"flips": 2
+							},
+							{
+								"__cx": 6,
+								"__cy": 5,
+								"coordId": 86,
+								"tiles": [ { "tileId": 154, "__x": 96, "__y": 80, "__srcX": 160, "__srcY": 144 } ],
+								"flips": 2
+							},
+							{
+								"__cx": 7,
+								"__cy": 5,
+								"coordId": 87,
+								"tiles": [ { "tileId": 154, "__x": 112, "__y": 80, "__srcX": 160, "__srcY": 144 } ],
+								"flips": 2
+							}
+						]
+					},
+					{
+						"ruleId": 13,
+						"results": [
+							{
+								"__cx": 3,
+								"__cy": 4,
+								"coordId": 67,
+								"tiles": [ { "tileId": 149, "__x": 48, "__y": 64, "__srcX": 80, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 4,
+								"__cy": 4,
+								"coordId": 68,
+								"tiles": [ { "tileId": 149, "__x": 64, "__y": 64, "__srcX": 80, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 5,
+								"__cy": 4,
+								"coordId": 69,
+								"tiles": [ { "tileId": 148, "__x": 80, "__y": 64, "__srcX": 64, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 6,
+								"__cy": 4,
+								"coordId": 70,
+								"tiles": [ { "tileId": 148, "__x": 96, "__y": 64, "__srcX": 64, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 7,
+								"__cy": 4,
+								"coordId": 71,
+								"tiles": [ { "tileId": 150, "__x": 112, "__y": 64, "__srcX": 96, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 3,
+								"__cy": 5,
+								"coordId": 83,
+								"tiles": [ { "tileId": 148, "__x": 48, "__y": 80, "__srcX": 64, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 4,
+								"__cy": 5,
+								"coordId": 84,
+								"tiles": [ { "tileId": 147, "__x": 64, "__y": 80, "__srcX": 48, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 5,
+								"__cy": 5,
+								"coordId": 85,
+								"tiles": [ { "tileId": 147, "__x": 80, "__y": 80, "__srcX": 48, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 6,
+								"__cy": 5,
+								"coordId": 86,
+								"tiles": [ { "tileId": 149, "__x": 96, "__y": 80, "__srcX": 80, "__srcY": 144 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 7,
+								"__cy": 5,
+								"coordId": 87,
+								"tiles": [ { "tileId": 150, "__x": 112, "__y": 80, "__srcX": 96, "__srcY": 144 } ],
+								"flips": 0
+							}
+						]
+					}
+				],
 				"seed": 9731808,
 				"gridTiles": [],
 				"entityInstances": []

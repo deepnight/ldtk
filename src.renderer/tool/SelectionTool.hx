@@ -109,7 +109,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 
 		if( buttonId==0 ) {
 			if( rectangle ) {
-				// TODO
+				selectValue([]);
 			}
 			else {
 				var ge = editor.getGenericLevelElementAt(m);
@@ -267,14 +267,20 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 					editor.curLevelHistory.markChange(m.cx,m.cy);
 					var v = li.getIntGrid(cx,cy);
 					li.removeIntGrid(cx,cy);
-					li.setIntGrid(m.cx,m.cy,v);
-					if( isOnStop )
-						editor.selectionTool.selectValue([ IntGrid(li, m.cx, m.cy) ]);
+					li.setIntGrid(m.cx, m.cy, v);
+					editor.selectionTool.selectValue([ IntGrid(li, m.cx, m.cy) ]);
 					return true;
 				}
 
-			case _:
-				// TODO support
+			case Tile(li,cx,cy):
+				if( isOnStop ) {
+					editor.curLevelHistory.markChange(m.cx,m.cy);
+					var v = li.getGridTile(cx,cy);
+					li.removeGridTile(cx,cy);
+					li.setGridTile(m.cx, m.cy, v);
+					editor.selectionTool.selectValue([ Tile(li, m.cx, m.cy) ]);
+					return true;
+				}
 		}
 		return false;
 	}

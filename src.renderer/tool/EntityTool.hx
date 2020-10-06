@@ -60,6 +60,16 @@ class EntityTool extends Tool<Int> {
 	override function startUsing(m:MouseCoords, buttonId:Int) {
 		super.startUsing(m, buttonId);
 
+		var ge = editor.getGenericLevelElementAt(m);
+		switch ge {
+			case Entity(_) if( buttonId==0 ):
+				editor.selectionTool.startUsing(m, buttonId);
+				stopUsing(m);
+				return;
+
+			case _:
+		}
+
 		if( buttonId!=2 )
 			editor.selectionTool.clear();
 
@@ -113,6 +123,17 @@ class EntityTool extends Tool<Int> {
 		}
 
 		return false;
+	}
+
+
+	override function onMouseMove(m:MouseCoords) {
+		super.onMouseMove(m);
+
+		var ge = editor.getGenericLevelElementAt(m);
+		switch ge {
+			case Entity(_): editor.selectionTool.onMouseMove(m);
+			case _:
+		}
 	}
 
 	override function useAt(m:MouseCoords, isOnStop) {
