@@ -18,6 +18,11 @@ class IntGridTool extends Tool<Int> {
 		return curLayerInstance.def.getIntGridValueDef( getSelectedValue() ).color;
 	}
 
+	override function startUsing(m:MouseCoords, buttonId:Int) {
+		super.startUsing(m, buttonId);
+		editor.selectionTool.clear();
+	}
+
 
 	override function updateCursor(m:MouseCoords) {
 		super.updateCursor(m);
