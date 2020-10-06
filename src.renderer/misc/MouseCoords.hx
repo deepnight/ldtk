@@ -59,6 +59,10 @@ class MouseCoords {
 		}
 	}
 
+	public function clone() {
+		return new MouseCoords(pageX, pageY);
+	}
+
 
 	@:keep public function toString() {
 		return 'Page:$pageX,$pageY, Canvas:$canvasX,$canvasY, Level:$levelX,$levelY, Scale:${Const.SCALE}';
