@@ -8,7 +8,7 @@ class EntityPalette extends ui.ToolPalette {
 	override function doRender() {
 		super.doRender();
 
-		var tool : tool.EntityTool = cast tool;
+		var tool : tool.lt.EntityTool = cast tool;
 
 		jList = new J('<ul class="niceList"/>');
 		jList.appendTo(jContent);

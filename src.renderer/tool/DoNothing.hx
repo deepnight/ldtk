@@ -1,6 +1,6 @@
 package tool;
 
-class EmptyTool extends Tool<Int> {
+class DoNothing extends Tool<Int> {
 	public function new() {
 		super();
 	}

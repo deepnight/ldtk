@@ -18,7 +18,6 @@ class Tool<T> extends dn.Process {
 	var lastMouse : Null<MouseCoords>;
 	var button = -1;
 	var rectangle = false;
-	var moveStarted = false;
 	var startTime = 0.;
 	var palette : ui.ToolPalette;
 
@@ -68,37 +67,10 @@ class Tool<T> extends dn.Process {
 	public function canEdit() return getSelectedValue()!=null && editor.isCurrentLayerVisible();
 	public function isRunning() return curMode!=null;
 
-	function isPicking(m:MouseCoords) {
-		return App.ME.isAltDown();
-	}
-
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		curMode = null;
 		startTime = haxe.Timer.stamp();
-		if( buttonId!=2 )
-			editor.clearSelection();
-		moveStarted = false;
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
-
-		// Picking an existing element
-		if( isPicking(m) && buttonId==0 ) {
-			if( !editor.isCurrentLayerVisible() )
-				return;
-
-			var ge = editor.getGenericLevelElementAt(m, App.ME.isShiftDown() ? null : curLayerInstance);
-
-			if( ge==null )
-				return;
-
-			editor.pickGenericLevelElement(ge);
-			editor.setSelection(ge);
-
-			// If layer changed, client curTool also switched
-			if( editor.curTool!=this ) {
-				editor.curTool.startUsing(m,buttonId);
-				return;
-			}
-		}
 
 		// Start tool
 		button = buttonId;
@@ -106,8 +78,6 @@ class Tool<T> extends dn.Process {
 			case 0:
 				if( App.ME.isKeyDown(K.SPACE) )
 					curMode = PanView;
-				else if( isPicking(m) )
-					curMode = Move;
 				else
 					curMode = Add;
 
@@ -130,27 +100,10 @@ class Tool<T> extends dn.Process {
 		rectangle = App.ME.isShiftDown();
 		origin = m;
 		lastMouse = m;
-		if( !clickingOutsideBounds && !rectangle && useAt(m) )
+		if( !clickingOutsideBounds && !rectangle && useAt(m,false) )
 			onEditAnything();
 	}
 
-
-	function duplicateElement(ge:GenericLevelElement) : Null<GenericLevelElement> {
-		switch ge {
-			case IntGrid(li, cx, cy):
-				return null;
-
-			case Entity(li, instance):
-				var ei = li.duplicateEntityInstance( instance );
-				return GenericLevelElement.Entity(li, ei);
-
-			case Tile(li, cx, cy):
-				return null; // TODO support copy?
-
-			case PointField(li, ei, fi, arrayIdx):
-				return null; // TODO support copy?
-		}
-	}
 
 	function updateCursor(m:MouseCoords) {}
 
@@ -204,7 +157,7 @@ class Tool<T> extends dn.Process {
 		return true;
 	}
 
-	function useAt(m:MouseCoords) : Bool {
+	function useAt(m:MouseCoords, isOnStop:Bool) : Bool {
 		if( curMode==PanView ) {
 			editor.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
 			editor.levelRender.focusLevelY -= m.levelY-lastMouse.levelY;
@@ -236,7 +189,7 @@ class Tool<T> extends dn.Process {
 		if( isRunning() && !clickingOutsideBounds ) {
 			var anyChange = false;
 
-			if( rectangle && m.cx==origin.cx && m.cy==origin.cy && clickTime<=0.22 && !isPicking(m) ) {
+			if( rectangle && m.cx==origin.cx && m.cy==origin.cy && clickTime<=0.22 && !App.ME.isAltDown() ) {
 				anyChange = useFloodfillAt(m);
 			}
 			else {
@@ -250,7 +203,9 @@ class Tool<T> extends dn.Process {
 						editor.levelRender.invalidateLayerArea(curLayerInstance, left, right, top, bottom);
 				}
 				else {
-					anyChange = useAt(m);
+					anyChange = useAt(m,true);
+					if( anyChange )
+						editor.levelRender.invalidateLayer(curLayerInstance);
 				}
 			}
 
@@ -275,7 +230,7 @@ class Tool<T> extends dn.Process {
 	}
 
 	var needHistorySaving = false;
-	inline function onEditAnything() {
+	final function onEditAnything() {
 		editor.ge.emit(LayerInstanceChanged);
 		needHistorySaving = true;
 	}
@@ -287,61 +242,51 @@ class Tool<T> extends dn.Process {
 		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )
 			clickingOutsideBounds = false;
 
-		// Start moving elements only after a small elapsed mouse distance
-		if( curMode==Move && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {
-			moveStarted = true;
-			if( App.ME.isCtrlDown() && editor.selection!=null ) {
-				var copy = duplicateElement(editor.selection);
-				if( copy!=null )
-					editor.setSelection(copy);
-			}
-		}
-
 		// Execute the tool
-		if( !clickingOutsideBounds && isRunning() && !rectangle && useAt(m) )
+		if( !clickingOutsideBounds && isRunning() && !rectangle && useAt(m, false) )
 			onEditAnything();
 
 		// Render cursor
 		if( isRunning() && clickingOutsideBounds )
 			editor.cursor.set(None);
-		else if( !isRunning() && isPicking(m) ) {
-			// Preview picking
-			var ge = editor.getGenericLevelElementAt(m, App.ME.isShiftDown() ? null : curLayerInstance);
-			switch ge {
-				case null:
-					editor.cursor.set(PickNothing);
+		// else if( !isRunning() && isPicking(m) ) {
+		// 	// Preview picking
+		// 	var ge = editor.getGenericLevelElementAt(m, App.ME.isShiftDown() ? null : curLayerInstance);
+		// 	switch ge {
+		// 		case null:
+		// 			editor.cursor.set(PickNothing);
 
-				case IntGrid(li, cx, cy):
-					var id = li.getIntGridIdentifierAt(cx,cy);
-					editor.cursor.set(
-						GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ),
-						id==null ? "#"+li.getIntGrid(cx,cy) : id
-					);
+		// 		case IntGrid(li, cx, cy):
+		// 			var id = li.getIntGridIdentifierAt(cx,cy);
+		// 			editor.cursor.set(
+		// 				GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ),
+		// 				id==null ? "#"+li.getIntGrid(cx,cy) : id
+		// 			);
 
-				case Entity(li, ei):
-					editor.cursor.set(
-						Entity(li, ei.def, ei, ei.x, ei.y),
-						ei.def.identifier,
-						true
-					);
+		// 		case Entity(li, ei):
+		// 			editor.cursor.set(
+		// 				Entity(li, ei.def, ei, ei.x, ei.y),
+		// 				ei.def.identifier,
+		// 				true
+		// 			);
 
-				case Tile(li, cx,cy):
-					editor.cursor.set(
-						Tiles(li, [li.getGridTile(cx,cy)], cx, cy),
-						"Tile "+li.getGridTile(cx,cy)
-					);
+		// 		case Tile(li, cx,cy):
+		// 			editor.cursor.set(
+		// 				Tiles(li, [li.getGridTile(cx,cy)], cx, cy),
+		// 				"Tile "+li.getGridTile(cx,cy)
+		// 			);
 
-				case PointField(li, ei, fi, arrayIdx):
-					var pt = fi.getPointGrid(arrayIdx);
-					editor.cursor.set( GridCell(li, pt.cx, pt.cy, ei.getSmartColor(false)) );
-			}
-			if( ge!=null )
-				editor.cursor.setSystemCursor(Button);
-		}
+		// 		case PointField(li, ei, fi, arrayIdx):
+		// 			var pt = fi.getPointGrid(arrayIdx);
+		// 			editor.cursor.set( GridCell(li, pt.cx, pt.cy, ei.getSmartColor(false)) );
+		// 	}
+		// 	if( ge!=null )
+		// 		editor.cursor.setSystemCursor(Button);
+		// }
 		else if( App.ME.isKeyDown(K.SPACE) )
 			editor.cursor.set(Move);
 		else switch curMode {
-			case PanView, Move:
+			case PanView:
 				editor.cursor.set(Move);
 
 			case null, Add, Remove:

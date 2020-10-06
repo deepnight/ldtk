@@ -95,7 +95,6 @@ enum ToolEditMode {
 	PanView;
 	Add;
 	Remove;
-	Move;
 }
 
 enum HistoryState {

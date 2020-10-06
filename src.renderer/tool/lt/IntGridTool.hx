@@ -1,6 +1,6 @@
-package tool;
+package tool.lt;
 
-class IntGridTool extends Tool<Int> {
+class IntGridTool extends tool.LayerTool<Int> {
 	public function new() {
 		super();
 	}
@@ -16,6 +16,11 @@ class IntGridTool extends Tool<Int> {
 
 	inline function getSelectedColor() {
 		return curLayerInstance.def.getIntGridValueDef( getSelectedValue() ).color;
+	}
+
+	override function startUsing(m:MouseCoords, buttonId:Int) {
+		super.startUsing(m, buttonId);
+		editor.selectionTool.clear();
 	}
 
 
@@ -47,8 +52,6 @@ class IntGridTool extends Tool<Int> {
 
 			case Remove:
 				curLayerInstance.removeIntGrid(cx, cy);
-
-			case Move:
 		}
 
 		if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
@@ -74,8 +77,6 @@ class IntGridTool extends Tool<Int> {
 
 				case Remove:
 					curLayerInstance.removeIntGrid(cx,cy);
-
-				case Move:
 			}
 
 			if( old!=curLayerInstance.getIntGrid(cx,cy) ) {

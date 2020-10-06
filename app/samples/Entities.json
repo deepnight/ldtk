@@ -3,10 +3,10 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.3.1-beta-debug",
+		"appVersion": "0.3.2-beta-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
-	"jsonVersion": "0.3.1",
+	"jsonVersion": "0.3.2",
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1,
 	"defaultGridSize": 16,
@@ -123,10 +123,13 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Beneath",
-						"editorAlwaysShow": false,
+						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
-						"defaultOverride": null
+						"defaultOverride": {
+							"id": "V_String",
+							"params": [ "Player" ]
+						}
 					},
 					{
 						"identifier": "life",
@@ -610,10 +613,7 @@
 							"__value": "Player",
 							"__type": "String",
 							"defUid": 27,
-							"realEditorValues": [ {
-								"id": "V_String",
-								"params": [ "Player" ]
-							} ]
+							"realEditorValues": [ null ]
 						},
 						{
 							"__identifier": "weapon",
