@@ -1,3 +1,9 @@
+# 0.4.0-beta
+
+ - **Selection**: you can now select any element in a level by using `ALT` + left click. You can move it around by holding left click.
+ - **Duplicate**: you can duplicate any element in the level by drag it with `CTRL`+`ALT` keys.
+ - Many bug fixes
+
 # 0.3.2-beta
 
  - Fixed a crash when resizing level with an Entity having a null Point value
