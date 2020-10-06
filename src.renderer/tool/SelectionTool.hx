@@ -181,7 +181,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 
 		if( isRunning() && moveStarted ) {
 			switch getSelectedValue()[0] {
-				case IntGrid(_), Tile(_), Entity(_):
+				case IntGrid(_), Tile(_):
 					movePreview.clear();
 					var fx = (origin.cx+0.5) * editor.curLayerDef.gridSize;
 					var fy = (origin.cy+0.5) * editor.curLayerDef.gridSize;
