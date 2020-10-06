@@ -43,8 +43,6 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 			case Remove:
 				if( removeSelectedTileAt(cx, cy) )
 					return true;
-
-			case Move:
 		}
 
 		return false;
@@ -84,8 +82,6 @@ class TileTool extends Tool<led.LedTypes.TilesetSelection> {
 						editor.curLayerInstance.removeGridTile(cx,cy);
 						anyChange = true;
 					}
-
-				case Move:
 			}
 		}
 

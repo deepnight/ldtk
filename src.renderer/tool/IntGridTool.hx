@@ -47,8 +47,6 @@ class IntGridTool extends Tool<Int> {
 
 			case Remove:
 				curLayerInstance.removeIntGrid(cx, cy);
-
-			case Move:
 		}
 
 		if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
@@ -74,8 +72,6 @@ class IntGridTool extends Tool<Int> {
 
 				case Remove:
 					curLayerInstance.removeIntGrid(cx,cy);
-
-				case Move:
 			}
 
 			if( old!=curLayerInstance.getIntGrid(cx,cy) ) {

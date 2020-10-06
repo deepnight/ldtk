@@ -67,10 +67,6 @@ class Tool<T> extends dn.Process {
 	public function canEdit() return getSelectedValue()!=null && editor.isCurrentLayerVisible();
 	public function isRunning() return curMode!=null;
 
-	function isPicking(m:MouseCoords) {
-		return App.ME.isAltDown();
-	}
-
 	public function startUsing(m:MouseCoords, buttonId:Int) {
 		curMode = null;
 		startTime = haxe.Timer.stamp();
@@ -78,34 +74,12 @@ class Tool<T> extends dn.Process {
 			editor.selectionTool.clear();
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
 
-		// Picking an existing element
-		// if( isPicking(m) && buttonId==0 ) {
-		// 	if( !editor.isCurrentLayerVisible() )
-		// 		return;
-
-		// 	var ge = editor.getGenericLevelElementAt(m, App.ME.isShiftDown() ? null : curLayerInstance);
-
-		// 	if( ge==null )
-		// 		return;
-
-		// 	editor.pickGenericLevelElement(ge);
-		// 	editor.setSelection(ge);
-
-		// 	// If layer changed, client curTool also switched
-		// 	if( editor.curTool!=this ) {
-		// 		editor.curTool.startUsing(m,buttonId);
-		// 		return;
-		// 	}
-		// }
-
 		// Start tool
 		button = buttonId;
 		switch button {
 			case 0:
 				if( App.ME.isKeyDown(K.SPACE) )
 					curMode = PanView;
-				else if( isPicking(m) )
-					curMode = Move;
 				else
 					curMode = Add;
 
@@ -234,7 +208,7 @@ class Tool<T> extends dn.Process {
 		if( isRunning() && !clickingOutsideBounds ) {
 			var anyChange = false;
 
-			if( rectangle && m.cx==origin.cx && m.cy==origin.cy && clickTime<=0.22 && !isPicking(m) ) {
+			if( rectangle && m.cx==origin.cx && m.cy==origin.cy && clickTime<=0.22 && !App.ME.isAltDown() ) {
 				anyChange = useFloodfillAt(m);
 			}
 			else {
@@ -329,7 +303,7 @@ class Tool<T> extends dn.Process {
 		else if( App.ME.isKeyDown(K.SPACE) )
 			editor.cursor.set(Move);
 		else switch curMode {
-			case PanView, Move:
+			case PanView:
 				editor.cursor.set(Move);
 
 			case null, Add, Remove:

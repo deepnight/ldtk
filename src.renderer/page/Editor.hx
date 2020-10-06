@@ -628,7 +628,7 @@ class Editor extends Page {
 
 		// Manual updates
 		App.ME.debug("selection:"+selectionTool.getSelectedValue()+" tool="+curTool);
-		if( App.ME.isAltDown() )
+		if( App.ME.isAltDown() || selectionTool.isRunning() )
 			selectionTool.onMouseMove( getMouse() );
 		else
 			curTool.onMouseMove(m);

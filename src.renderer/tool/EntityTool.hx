@@ -24,14 +24,6 @@ class EntityTool extends Tool<Int> {
 		return super.canEdit() && getSelectedValue()>=0;
 	}
 
-	override function isPicking(m:MouseCoords):Bool {
-		var e = editor.getGenericLevelElementAt(m, curLayerInstance);
-		if( e!=null )
-			return true;
-		else
-			return super.isPicking(m);
-	}
-
 	override function getDefaultValue():Int{
 		if( project.defs.entities.length>0 )
 			return project.defs.entities[0].uid;
@@ -80,15 +72,14 @@ class EntityTool extends Tool<Int> {
 						ei.y = getPlacementY(m);
 						editor.selectionTool.selectValue([ Entity(curLayerInstance, ei) ]);
 						onEditAnything();
-						curMode = Move;
+						stopUsing(m);
+						editor.selectionTool.startUsing(m, button);
 						editor.ge.emit( EntityInstanceAdded(ei) );
 					}
 				}
 
 			case Remove:
 				removeAnyEntityOrPointAt(m);
-
-			case Move:
 		}
 	}
 
@@ -127,7 +118,6 @@ class EntityTool extends Tool<Int> {
 		switch curMode {
 			case null, PanView:
 			case Add:
-			case Move:
 
 			case Remove:
 				if( removeAnyEntityOrPointAt(m) )
