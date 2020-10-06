@@ -11,11 +11,26 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 8,
+	"nextUid": 10,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
 		"layers": [
+			{
+				"__type": "Tiles",
+				"identifier": "Tiles",
+				"type": "Tiles",
+				"uid": 9,
+				"gridSize": 16,
+				"displayOpacity": 1,
+				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
+				"autoTilesetDefUid": null,
+				"autoRuleGroups": [],
+				"autoSourceLayerDefUid": null,
+				"tilesetDefUid": 8,
+				"tilePivotX": 0,
+				"tilePivotY": 0
+			},
 			{
 				"__type": "Entities",
 				"identifier": "Entities",
@@ -130,7 +145,19 @@
 				"fieldDefs": []
 			}
 		],
-		"tilesets": [],
+		"tilesets": [
+			{
+				"identifier": "SystemShock",
+				"uid": 8,
+				"relPath": "atlas/SystemShock.png",
+				"pxWid": 256,
+				"pxHei": 1024,
+				"tileGridSize": 16,
+				"spacing": 0,
+				"padding": 0,
+				"savedSelections": []
+			}
+		],
 		"enums": [],
 		"externalEnums": []
 	},
@@ -140,6 +167,25 @@
 		"pxWid": 256,
 		"pxHei": 256,
 		"layerInstances": [
+			{
+				"__identifier": "Tiles",
+				"__type": "Tiles",
+				"__cWid": 16,
+				"__cHei": 16,
+				"__gridSize": 16,
+				"levelId": 0,
+				"layerDefUid": 9,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGrid": [],
+				"autoTiles": [],
+				"seed": 6405339,
+				"gridTiles": [
+					{ "coordId": 33, "tileId": 142, "__x": 16, "__y": 32, "__srcX": 224, "__srcY": 128 },
+					{ "coordId": 91, "tileId": 6, "__x": 176, "__y": 80, "__srcX": 96, "__srcY": 0 }
+				],
+				"entityInstances": []
+			},
 			{
 				"__identifier": "Entities",
 				"__type": "Entities",
