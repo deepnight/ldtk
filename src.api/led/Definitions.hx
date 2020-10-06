@@ -275,6 +275,14 @@ class Definitions {
 		return null;
 	}
 
+	public function getEntityDefUsingField(fd:led.def.FieldDef) : Null<led.def.EntityDef> {
+		for(ed in entities)
+		for(efd in ed.fieldDefs)
+			if( efd==fd )
+				return ed;
+		return null;
+	}
+
 
 	/**  TILESET DEFS  *****************************************/
 
