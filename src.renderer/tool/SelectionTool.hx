@@ -24,8 +24,6 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	override function selectValue(v:Array<GenericLevelElement>) {
 		super.selectValue(v);
 
-		trace(v);
-
 		if( isEmpty() )
 			selectionCursor.set(None);
 		else
@@ -49,6 +47,34 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 				case null:
 			}
 
+			// Selection effect
+			switch v[0] {
+				case IntGrid(li, cx, cy):
+					var v = li.getIntGrid(cx,cy);
+					editor.curTool.as(tool.IntGridTool).selectValue(v);
+					editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
+
+				case Entity(li, ei):
+					editor.curTool.as(tool.EntityTool).selectValue(ei.defUid); // BUG might crash
+					editor.levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
+
+				case Tile(li, cx, cy):
+					var tid = li.getGridTile(cx,cy);
+
+					var t = editor.curTool.as(tool.TileTool);
+					t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking saved selections?
+
+					editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
+
+				case PointField(li, ei, fi, arrayIdx):
+					editor.curTool.as(tool.EntityTool).selectValue(ei.defUid); // BUG might crash
+					var pt = fi.getPointGrid(arrayIdx);
+					if( pt!=null)
+						editor.levelRender.bleepRectCase( pt.cx, pt.cy, 1, 1, ei.def.color );
+			}
+
+			editor.curTool.onValuePicking();
+
 			// Open instance editor
 			switch v[0] {
 				case PointField(li, ei, fi, arrayIdx):
@@ -65,6 +91,8 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	override function updateCursor(m:MouseCoords) {
 		super.updateCursor(m);
 
+		selectionCursor.root.visible = !isRunning();
+
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromMouseCoords(origin, m);
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, 0xffffff) );
@@ -79,14 +107,17 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 
 		super.startUsing(m, buttonId);
 
-		if( rectangle ) {
-		}
-		else {
-			var ge = editor.getGenericLevelElementAt(m);
-			if( ge!=null )
-				selectValue([ge]);
-			else
-				selectValue([]);
+		if( buttonId==0 ) {
+			if( rectangle ) {
+				// TODO
+			}
+			else {
+				var ge = editor.getGenericLevelElementAt(m);
+				if( ge!=null )
+					selectValue([ge]);
+				else
+					selectValue([]);
+			}
 		}
 	}
 
@@ -121,7 +152,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		super.onMouseMove(m);
 
 		// Start moving elements only after a small elapsed mouse distance
-		if( isRunning() && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {
+		if( isRunning() && button==0 && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {
 			moveStarted = true;
 
 			// Copy selection
@@ -199,9 +230,8 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 
 	function moveSelection(m:MouseCoords, isOnStop:Bool) : Bool {
 		switch getSelectedValue()[0] {
-			case Entity(li, instance):
+			case Entity(li, ei):
 				if( !isOnStop ) {
-					var ei = getSelectedEntityInstance();
 					var oldX = ei.x;
 					var oldY = ei.y;
 					ei.x = snapToGrid()
@@ -212,11 +242,12 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 						: m.levelY;
 					var changed = oldX!=ei.x || oldY!=ei.y;
 					if( changed ) {
-						editor.selectionTool.selectValue([ Entity(curLayerInstance, ei) ]);
 						editor.ge.emit( EntityInstanceChanged(ei) );
 					}
 					return changed;
 				}
+				else
+					selectValue([ Entity(curLayerInstance, ei) ]);
 
 			case PointField(li, ei, fi, arrayIdx):
 				if( !isOnStop ) {
@@ -224,12 +255,12 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 					fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
 
 					var changed = old!=fi.getPointStr(arrayIdx);
-					if( changed ) {
-						editor.selectionTool.selectValue([ PointField(li,ei,fi,arrayIdx) ]);
+					if( changed )
 						editor.ge.emit( EntityInstanceChanged(ei) );
-					}
 					return changed;
 				}
+				else
+					selectValue([ PointField(li,ei,fi,arrayIdx) ]);
 
 			case IntGrid(li, cx,cy):
 				if( isOnStop ) {
@@ -237,7 +268,8 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 					var v = li.getIntGrid(cx,cy);
 					li.removeIntGrid(cx,cy);
 					li.setIntGrid(m.cx,m.cy,v);
-					editor.selectionTool.selectValue([ IntGrid(li, m.cx, m.cy) ]);
+					if( isOnStop )
+						editor.selectionTool.selectValue([ IntGrid(li, m.cx, m.cy) ]);
 					return true;
 				}
 
