@@ -53,7 +53,7 @@ class FieldInstance {
 			defUid: defUid,
 			realEditorValues: internalValues.map( (e)->{
 				return switch e {
-					case V_Int(_), V_Float(_), V_Bool(_):
+					case null, V_Int(_), V_Float(_), V_Bool(_):
 						JsonTools.writeEnum(e,true);
 
 					case V_String(v):
