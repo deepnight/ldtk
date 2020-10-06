@@ -88,23 +88,21 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	}
 
 
+	function duplicateSelection() : Null< Array<GenericLevelElement> > {
+		switch getSelectedValue()[0] { // TODO support groups
+			case IntGrid(li, cx, cy):
+				return null;
 
+			case Entity(li, instance):
+				var ei = li.duplicateEntityInstance( instance );
+				return [ GenericLevelElement.Entity(li, ei) ];
 
-function duplicateSelection() : Null< Array<GenericLevelElement> > {
-	switch getSelectedValue()[0] { // TODO support groups
-		case IntGrid(li, cx, cy):
-			return null;
+			case Tile(li, cx, cy):
+				return null; // TODO support copy?
 
-		case Entity(li, instance):
-			var ei = li.duplicateEntityInstance( instance );
-			return [ GenericLevelElement.Entity(li, ei) ];
-
-		case Tile(li, cx, cy):
-			return null; // TODO support copy?
-
-		case PointField(li, ei, fi, arrayIdx):
-			return null; // TODO support copy?
-	}
+			case PointField(li, ei, fi, arrayIdx):
+				return null; // TODO support copy?
+		}
 	}
 
 	override function onMouseMove(m:MouseCoords) {
@@ -113,6 +111,8 @@ function duplicateSelection() : Null< Array<GenericLevelElement> > {
 		// Start moving elements only after a small elapsed mouse distance
 		if( isRunning() && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {
 			moveStarted = true;
+
+			// Copy selection
 			if( App.ME.isCtrlDown() && any() ) {
 				var copy = duplicateSelection();
 				N.success("copy: "+copy);
@@ -186,38 +186,39 @@ function duplicateSelection() : Null< Array<GenericLevelElement> > {
 
 
 	override function useAt(m:MouseCoords):Bool {
+		// Move selection
 		if( any() && moveStarted ) {
 			switch getSelectedValue()[0] {
-				case Entity(li, instance):
-					var ei = getSelectedEntityInstance();
-					var oldX = ei.x;
-					var oldY = ei.y;
-					ei.x = snapToGrid()
-						? M.round( ( m.cx + ei.def.pivotX ) * curLayerInstance.def.gridSize )
-						: m.levelX;
-					ei.y = snapToGrid()
-						? M.round( ( m.cy + ei.def.pivotY ) * curLayerInstance.def.gridSize )
-						: m.levelY;
-					var changed = oldX!=ei.x || oldY!=ei.y;
-					if( changed ) {
-						editor.selectionTool.selectValue([ Entity(curLayerInstance, ei) ]);
-						editor.ge.emit( EntityInstanceChanged(ei) );
-					}
+			case Entity(li, instance):
+				var ei = getSelectedEntityInstance();
+				var oldX = ei.x;
+				var oldY = ei.y;
+				ei.x = snapToGrid()
+					? M.round( ( m.cx + ei.def.pivotX ) * curLayerInstance.def.gridSize )
+					: m.levelX;
+				ei.y = snapToGrid()
+					? M.round( ( m.cy + ei.def.pivotY ) * curLayerInstance.def.gridSize )
+					: m.levelY;
+				var changed = oldX!=ei.x || oldY!=ei.y;
+				if( changed ) {
+					editor.selectionTool.selectValue([ Entity(curLayerInstance, ei) ]);
+					editor.ge.emit( EntityInstanceChanged(ei) );
+				}
 
-					return changed;
+				return changed;
 
-				case PointField(li, ei, fi, arrayIdx):
-					var old = fi.getPointStr(arrayIdx);
-					fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
+			case PointField(li, ei, fi, arrayIdx):
+				var old = fi.getPointStr(arrayIdx);
+				fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
 
-					var changed = old!=fi.getPointStr(arrayIdx);
-					if( changed ) {
-						editor.selectionTool.selectValue([ PointField(li,ei,fi,arrayIdx) ]);
-						editor.ge.emit( EntityInstanceChanged(ei) );
-					}
-					return changed;
+				var changed = old!=fi.getPointStr(arrayIdx);
+				if( changed ) {
+					editor.selectionTool.selectValue([ PointField(li,ei,fi,arrayIdx) ]);
+					editor.ge.emit( EntityInstanceChanged(ei) );
+				}
+				return changed;
 
-				case _:
+			case _:
 			}
 		}
 		return super.useAt(m);
