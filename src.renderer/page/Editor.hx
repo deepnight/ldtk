@@ -571,7 +571,7 @@ class Editor extends Page {
 
 	function onMouseDown(e:hxd.Event) {
 		var m = getMouse();
-		if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) )
+		if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && e.button==0 )
 			selectionTool.startUsing( m, e.button );
 		else if( isSpecialToolActive() )
 			specialTool.startUsing( m, e.button )
