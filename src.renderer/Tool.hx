@@ -249,40 +249,6 @@ class Tool<T> extends dn.Process {
 		// Render cursor
 		if( isRunning() && clickingOutsideBounds )
 			editor.cursor.set(None);
-		// else if( !isRunning() && isPicking(m) ) {
-		// 	// Preview picking
-		// 	var ge = editor.getGenericLevelElementAt(m, App.ME.isShiftDown() ? null : curLayerInstance);
-		// 	switch ge {
-		// 		case null:
-		// 			editor.cursor.set(PickNothing);
-
-		// 		case IntGrid(li, cx, cy):
-		// 			var id = li.getIntGridIdentifierAt(cx,cy);
-		// 			editor.cursor.set(
-		// 				GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ),
-		// 				id==null ? "#"+li.getIntGrid(cx,cy) : id
-		// 			);
-
-		// 		case Entity(li, ei):
-		// 			editor.cursor.set(
-		// 				Entity(li, ei.def, ei, ei.x, ei.y),
-		// 				ei.def.identifier,
-		// 				true
-		// 			);
-
-		// 		case Tile(li, cx,cy):
-		// 			editor.cursor.set(
-		// 				Tiles(li, [li.getGridTile(cx,cy)], cx, cy),
-		// 				"Tile "+li.getGridTile(cx,cy)
-		// 			);
-
-		// 		case PointField(li, ei, fi, arrayIdx):
-		// 			var pt = fi.getPointGrid(arrayIdx);
-		// 			editor.cursor.set( GridCell(li, pt.cx, pt.cy, ei.getSmartColor(false)) );
-		// 	}
-		// 	if( ge!=null )
-		// 		editor.cursor.setSystemCursor(Button);
-		// }
 		else if( App.ME.isKeyDown(K.SPACE) )
 			editor.cursor.set(Pan);
 		else switch curMode {

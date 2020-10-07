@@ -381,50 +381,6 @@ class Editor extends Page {
 	}
 
 
-	// public function setSelection(ge:GenericLevelElement) {
-	// 	switch ge {
-	// 		case IntGrid(_), Tile(_):
-	// 			clearSelection();
-	// 			return;
-
-	// 		case PointField(_):
-
-	// 		case Entity(_):
-	// 	}
-
-	// 	selection = ge;
-	// 	// selectionCursor.set(switch selection {
-	// 	// 	case IntGrid(li, cx, cy): GridCell(li, cx,cy);
-	// 	// 	case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
-	// 	// 	case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
-	// 	// 	case PointField(li, ei, fi, arrayIdx):
-	// 	// 		var pt = fi.getPointGrid(arrayIdx);
-	// 	// 		GridCell(li, pt.cx, pt.cy);
-	// 	// });
-
-	// 	ui.EntityInstanceEditor.close();
-	// 	switch selection {
-	// 		case null:
-	// 		case IntGrid(_):
-	// 		case Tile(_):
-
-	// 		case PointField(li, ei, fi, arrayIdx):
-	// 			new ui.EntityInstanceEditor(ei);
-
-	// 		case Entity(li, instance):
-	// 			new ui.EntityInstanceEditor(instance);
-	// 	}
-	// }
-
-	// public function clearSelection() {
-	// 	selection = null;
-	// 	// selectionCursor.set(None);
-
-	// 	// Close if using default curLayer tool
-	// 	if( curTool==allLayerTools.get(curLayerDefUid) )
-	// 		ui.EntityInstanceEditor.close();
-	// }
-
 	function get_curTool() : tool.LayerTool<Dynamic> {
 		if( curLayerDef==null )
 			return new tool.lt.DoNothing();
@@ -838,14 +794,6 @@ class Editor extends Page {
 			case EntityFieldSorted:
 			case EntityDefSorted:
 			case EntityInstanceFieldChanged(ei):
-				// switch selection {
-				// case Entity(li, sei):
-				// 	if( sei==ei ) {
-				// 		selectionCursor.set(None); // TODO selection
-				// 		selectionCursor.set( Entity(li, ei.def, ei, ei.x, ei.y) );
-				// 	}
-				// case _:
-				// }
 
 			case EntityInstanceAdded(ei):
 			case EntityInstanceRemoved(ei):
