@@ -170,6 +170,7 @@ class GenericLevelElementGroup {
 		ghost.y = origin.levelY + getDeltaY(origin,now);
 
 		// Render movement arrow
+		// TODO hide arrow if only moving points?
 		arrow.clear();
 		arrow.visible = true;
 		var grid = getSnapGrid();
@@ -235,7 +236,16 @@ class GenericLevelElementGroup {
 					changedLayers.set(li,li);
 					anyChange = true;
 
-				case _: // HACK
+				case PointField(li, ei, fi, arrayIdx):
+					var pt = fi.getPointGrid(arrayIdx);
+					inserts.push( ()-> {
+						pt.cx += Std.int( getDeltaX(origin, to) / li.def.gridSize );
+						pt.cy += Std.int( getDeltaY(origin, to) / li.def.gridSize );
+						fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
+						editor.ge.emit( EntityInstanceChanged(ei) );
+					} );
+					changedLayers.set(li,li);
+					anyChange = true;
 
 				// case PointField(li, ei, fi, arrayIdx):
 				// 	if( !isOnStop ) {

@@ -238,9 +238,19 @@ class SelectionTool extends Tool<Int> {
 							all.push( Tile(li,cx,cy) );
 					}
 					if( li.def.type==Entities )
-						for(ei in li.entityInstances)
+						for(ei in li.entityInstances) {
 							if( ei.x>=left && ei.x<=right && ei.y>=top && ei.y<=bottom )
 								all.push( Entity(li,ei) );
+							for(fi in ei.fieldInstances)
+							for(i in 0...fi.getArrayLength())
+								if( fi.def.type==F_Point ) {
+									var pt = fi.getPointGrid(i);
+									var x = (pt.cx+0.5)*li.def.gridSize;
+									var y = (pt.cy+0.5)*li.def.gridSize;
+									if( x>=left && x<=right && y>=top && y<=bottom )
+										all.push( PointField(li, ei, fi, i) );
+								}
+						}
 				}
 
 				if( editor.levelRender.enhanceActiveLayer )
@@ -373,7 +383,6 @@ class SelectionTool extends Tool<Int> {
 		if( isOnStop ) {
 			var changed = group.move(origin, m);
 			updateSelectionCursors();
-			N.debug(changed);
 			return changed;
 		}
 		else {
