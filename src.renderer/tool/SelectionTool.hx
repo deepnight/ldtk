@@ -1,7 +1,7 @@
 package tool;
 
 class SelectionTool extends Tool< Array<GenericLevelElement> > {
-	var selectionCursor : ui.Cursor;
+	var selectionCursors : Array<ui.Cursor>;
 	var moveStarted = false;
 	var movePreview : h2d.Graphics;
 	var isCopy = false;
@@ -12,9 +12,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		movePreview = new h2d.Graphics();
 		editor.levelRender.root.add(movePreview, Const.DP_UI);
 
-		selectionCursor = new ui.Cursor();
-		selectionCursor.set(None);
-		selectionCursor.enablePermanentHighlights();
+		selectionCursors = [];
 	}
 
 	override function onDispose() {
@@ -30,14 +28,21 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		return "selection";
 	}
 
+	function clearCursors() {
+		for(c in selectionCursors)
+			c.destroy();
+		selectionCursors = [];
+	}
 
 	override function selectValue(v:Array<GenericLevelElement>) {
 		super.selectValue(v);
 
-		if( isEmpty() )
-			selectionCursor.set(None);
-		else
-			selectionCursor.set(switch getSelectedValue()[0] {
+		clearCursors();
+		for(ge in getSelectedValue()) {
+			var c = new ui.Cursor();
+			selectionCursors.push(c);
+			c.enablePermanentHighlights();
+			c.set(switch ge {
 				case IntGrid(li, cx, cy): GridCell(li, cx,cy);
 				case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
 				case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
@@ -45,7 +50,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 					var pt = fi.getPointGrid(arrayIdx);
 					GridCell(li, pt.cx, pt.cy);
 			});
-
+		}
 
 
 		if( isSingle() ) {
@@ -101,7 +106,8 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	override function updateCursor(m:MouseCoords) {
 		super.updateCursor(m);
 
-		selectionCursor.root.visible = !isRunning();
+		for( c in selectionCursors )
+			c.root.visible = !isRunning();
 
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromMouseCoords(origin, m);
@@ -135,6 +141,21 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 
 	override function stopUsing(m:MouseCoords) {
 		super.stopUsing(m);
+
+		if( rectangle ) {
+			var r = Rect.fromMouseCoords(origin, m);
+			if( r.wid==1 && r.hei==1 ) {
+				// Pick single value, in the end
+				var ge = editor.getGenericLevelElementAt(m);
+				if( ge!=null )
+					selectValue([ge]);
+				else
+					selectValue([]);
+			}
+			else {
+				N.notImplemented();
+			}
+		}
 		movePreview.clear();
 	}
 

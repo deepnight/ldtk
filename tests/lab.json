@@ -303,26 +303,7 @@
 				"autoTiles": [],
 				"seed": 3752655,
 				"gridTiles": [],
-				"entityInstances": [ { "__identifier": "Text", "__cx": 6, "__cy": 8, "defUid": 2, "x": 104, "y": 136, "fieldInstances": [
-					{
-						"__identifier": "text",
-						"__value": "D",
-						"__type": "String",
-						"defUid": 3,
-						"realEditorValues": [ {
-							"id": "V_String",
-							"params": [ "D" ]
-						} ]
-					},
-					{
-						"__identifier": "color",
-						"__value": "#44FF00",
-						"__type": "Color",
-						"defUid": 5,
-						"realEditorValues": [ { "id": "V_Int", "params": [ 4521728 ] } ]
-					},
-					{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] }
-				] } ]
+				"entityInstances": []
 			},
 			{
 				"__identifier": "Tiles",
