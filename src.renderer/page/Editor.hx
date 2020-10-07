@@ -25,10 +25,13 @@ class Editor extends Page {
 	public var projectFilePath : String;
 	public var curLevelId : Int;
 	var curLayerDefUid : Int;
+
+	// Tools
 	public var curTool(get,never) : tool.LayerTool<Dynamic>;
 	public var selectionTool: tool.SelectionTool;
 	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();
 	var specialTool : Null< Tool<Dynamic> >; // if not null, will be used instead of default tool
+
 	var gridSnapping = true;
 	public var needSaving = false;
 
