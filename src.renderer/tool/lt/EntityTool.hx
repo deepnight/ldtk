@@ -60,7 +60,7 @@ class EntityTool extends tool.LayerTool<Int> {
 	override function startUsing(m:MouseCoords, buttonId:Int) {
 		super.startUsing(m, buttonId);
 
-		var ge = editor.getGenericLevelElementAt(m);
+		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 		switch ge {
 			case Entity(_) if( buttonId==0 ):
 				editor.selectionTool.startUsing(m, buttonId);
@@ -98,7 +98,7 @@ class EntityTool extends tool.LayerTool<Int> {
 
 
 	function removeAnyEntityOrPointAt(m:MouseCoords) {
-		var ge = editor.getGenericLevelElementAt(m, true);
+		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, true);
 		switch ge {
 			case Entity(curLayerInstance, instance):
 				curLayerInstance.removeEntityInstance(instance);
@@ -129,7 +129,7 @@ class EntityTool extends tool.LayerTool<Int> {
 	override function onMouseMove(m:MouseCoords) {
 		super.onMouseMove(m);
 
-		var ge = editor.getGenericLevelElementAt(m);
+		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 		switch ge {
 			case Entity(_): editor.selectionTool.onMouseMove(m);
 			case _:

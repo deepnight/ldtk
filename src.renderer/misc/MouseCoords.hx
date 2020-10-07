@@ -75,6 +75,7 @@ class MouseCoords {
 	public function getLayerCx(li:led.inst.LayerInstance) {
 		return Std.int( ( levelX + Editor.ME.curLayerInstance.pxOffsetX - li.pxOffsetX ) / li.def.gridSize );
 	}
+
 	public function getLayerCy(li:led.inst.LayerInstance) {
 		return Std.int( ( levelY + Editor.ME.curLayerInstance.pxOffsetY - li.pxOffsetY ) / li.def.gridSize );
 	}

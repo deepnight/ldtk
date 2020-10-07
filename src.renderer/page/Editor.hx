@@ -481,15 +481,17 @@ class Editor extends Page {
 		updateTool();
 	}
 
-	public function getGenericLevelElementAt(m:MouseCoords, limitToActiveLayer=false) : Null<GenericLevelElement> {
+	public function getGenericLevelElementAt(levelX:Int, levelY:Int, limitToActiveLayer=false) : Null<GenericLevelElement> {
 		function getElement(li:led.inst.LayerInstance) {
 			var ge : GenericLevelElement = null;
 
 			if( !levelRender.isLayerVisible(li) )
 				return null;
 
-			var cx = m.getLayerCx(li);
-			var cy = m.getLayerCy(li);
+			var cx = Std.int( ( levelX - li.pxOffsetX ) / li.def.gridSize );
+			var cy = Std.int( ( levelY - li.pxOffsetY ) / li.def.gridSize );
+			// var cx = m.getLayerCx(li);
+			// var cy = m.getLayerCy(li);
 			switch li.def.type {
 				case IntGrid:
 					if( li.getIntGrid(cx,cy)>=0 )
@@ -499,7 +501,7 @@ class Editor extends Page {
 
 				case Entities:
 					for(ei in li.entityInstances) {
-						if( ei.isOver(m.levelX, m.levelY, 0) )
+						if( ei.isOver(levelX, levelY, 0) )
 							ge = GenericLevelElement.Entity(li, ei);
 						else {
 							// Points
@@ -656,7 +658,7 @@ class Editor extends Page {
 		jMouseCoords.append('<span>Pixels = ${m.levelX},${m.levelY}</span>');
 
 		// Overed element infos
-		var overed = getGenericLevelElementAt(m);
+		var overed = getGenericLevelElementAt(m.levelX, m.levelY);
 		switch overed {
 			case null:
 			case IntGrid(li, cx, cy):

@@ -130,7 +130,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 				selectValue([]);
 			}
 			else {
-				var ge = editor.getGenericLevelElementAt(m);
+				var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 				if( ge!=null )
 					selectValue([ge]);
 				else
@@ -146,13 +146,14 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 			var r = Rect.fromMouseCoords(origin, m);
 			if( r.wid==1 && r.hei==1 ) {
 				// Pick single value, in the end
-				var ge = editor.getGenericLevelElementAt(m);
+				var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 				if( ge!=null )
 					selectValue([ge]);
 				else
 					selectValue([]);
 			}
 			else {
+				// Pick every objects under rectangle
 				N.notImplemented();
 			}
 		}
@@ -228,7 +229,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 
 		// Preview picking
 		if( !isRunning() ) {
-			var ge = editor.getGenericLevelElementAt(m);
+			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 			switch ge {
 			case null:
 				editor.cursor.set(PickNothing);
