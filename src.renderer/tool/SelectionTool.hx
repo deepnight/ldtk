@@ -260,10 +260,10 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 				return [ GenericLevelElement.Entity(li, ei) ];
 
 			case Tile(li, cx, cy):
-				return null; // TODO support copy?
+				return null;
 
 			case PointField(li, ei, fi, arrayIdx):
-				return null; // TODO support copy?
+				return null;
 		}
 	}
 
