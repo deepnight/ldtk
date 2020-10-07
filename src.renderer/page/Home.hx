@@ -19,6 +19,7 @@ class Home extends Page {
 			issueUrl : Const.ISSUES_URL,
 			appChangelog: StringTools.htmlEscape( Const.APP_CHANGELOG_MD),
 			jsonChangelog: StringTools.htmlEscape( Const.JSON_CHANGELOG_MD ),
+			jsonFormat: StringTools.htmlEscape( Const.JSON_FORMAT_MD ),
 		});
 		App.ME.setWindowTitle();
 
@@ -45,6 +46,19 @@ class Home extends Page {
 
 		jPage.find(".new").click( function(ev) {
 			onNew();
+		});
+
+		var jFullscreenBt = jPage.find("button.fullscreen");
+		var jChangelogs = jPage.find(".changelogsWrapper");
+
+		jFullscreenBt.click( function(ev) {
+			jChangelogs.toggleClass("fullscreen");
+			var btIcon = jFullscreenBt.find(".icon");
+			btIcon.removeClass();
+			if( jChangelogs.hasClass("fullscreen") )
+				btIcon.addClass("icon fullscreen_exit");
+			else
+				btIcon.addClass("icon fullscreen");
 		});
 
 		// jPage.find(".exit").click( function(ev) {
@@ -187,6 +201,10 @@ class Home extends Page {
 			case K.W, K.Q:
 				if( App.ME.isCtrlDown() )
 					App.ME.exit();
+
+			case K.ESCAPE:
+				if( jPage.find(".changelogsWrapper").hasClass("fullscreen") )
+					jPage.find("button.fullscreen").click();
 		}
 	}
 

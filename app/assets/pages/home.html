@@ -23,22 +23,31 @@
 			<button href="::issueUrl::"><span class="icon community"></span> Feedback</button>
 		</div>
 
-		<div class="changelogs">
-			<ul class="tabs">
-				<li section="app">App release notes</li>
-				<li section="json">JSON changes</li>
-			</ul>
+		<div class="changelogsWrapper">
+			<div class="changelogs">
+				<ul class="tabs">
+					<li section="app">App release notes</li>
+					<li section="jsonChangelog">JSON changes</li>
+					<li section="jsonFormat">JSON format</li>
+				</ul>
 
-			<div class="tab" section="app">
-				<div class="markdown" id="appChangelogHtml"></div>
-				<div id="appChangelogMd" class="rawMarkdown">::appChangelog::</div>
-			</div>
+				<div class="tab" section="app">
+					<div class="markdown" id="appChangelogHtml"></div>
+					<div id="appChangelogMd" class="rawMarkdown">::appChangelog::</div>
+				</div>
 
-			<div class="tab" section="json">
-				<button href="::jsonDocUrl::"><span class="icon manual"></span> Open JSON structure documentation</button>
-				<div class="markdown" id="jsonChangelogHtml"></div>
-				<div id="jsonChangelogMd" class="rawMarkdown">::jsonChangelog::</div>
+				<div class="tab" section="jsonChangelog">
+					<div class="markdown" id="jsonChangelogHtml"></div>
+					<div id="jsonChangelogMd" class="rawMarkdown">::jsonChangelog::</div>
+				</div>
+
+				<div class="tab" section="jsonFormat">
+					<div class="markdown" id="jsonFormatHtml"></div>
+					<div id="jsonFormatMd" class="rawMarkdown">::jsonFormat::</div>
+				</div>
+
 			</div>
+			<button class="fullscreen transparent"> <span class="icon fullscreen"></span> </button>
 		</div>
 	</div>
 
@@ -54,8 +63,11 @@
 <script type="text/javascript" src="js/marked.min.js"></script>
 <script type="text/javascript">
 	document.getElementById("appChangelogHtml").innerHTML =
-		marked( document.getElementById("appChangelogMd").innerHTML );
+		marked( document.getElementById("appChangelogMd").textContent );
 
 	document.getElementById("jsonChangelogHtml").innerHTML =
-		marked( document.getElementById("jsonChangelogMd").innerHTML );
+		marked( document.getElementById("jsonChangelogMd").textContent );
+
+	document.getElementById("jsonFormatHtml").innerHTML =
+		marked( document.getElementById("jsonFormatMd").textContent );
 </script>

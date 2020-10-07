@@ -38,6 +38,7 @@ class Const {
 	public static var APP_CHANGELOG = new dn.Changelog(APP_CHANGELOG_MD);
 
 	public static var JSON_CHANGELOG_MD = getJsonChangelogMarkdown();
+	public static var JSON_FORMAT_MD = getJsonFormatMarkdown();
 
 	public static var FPS = 60;
 	public static var SCALE = 1.0;
@@ -87,6 +88,11 @@ class Const {
 	static macro function getJsonChangelogMarkdown() {
 		haxe.macro.Context.registerModuleDependency("Const","JSON_CHANGELOG.md");
 		return macro $v{ sys.io.File.getContent("JSON_CHANGELOG.md") };
+	}
+
+	static macro function getJsonFormatMarkdown() {
+		haxe.macro.Context.registerModuleDependency("Const","JSON_DOC.md");
+		return macro $v{ sys.io.File.getContent("JSON_DOC.md") };
 	}
 
 	static macro function buildLatestReleaseNotes() {
