@@ -11,7 +11,7 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 17,
+	"nextUid": 18,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -61,6 +61,26 @@
 					"active": true,
 					"collapsed": false,
 					"rules": [
+						{
+							"uid": 17,
+							"active": true,
+							"size": 1,
+							"tileIds": [ 212, 228, 213, 229, 214, 230, 215, 231 ],
+							"chance": 1,
+							"pattern": [ 2 ],
+							"flipX": false,
+							"flipY": false,
+							"xModulo": 1,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 2311277,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						},
 						{
 							"uid": 15,
 							"active": true,
@@ -319,7 +339,7 @@
 				"autoTiles": [],
 				"seed": 6405339,
 				"gridTiles": [
-					{ "coordId": 300, "tileId": 6, "__x": 224, "__y": 208, "__srcX": 96, "__srcY": 0 },
+					{ "coordId": 322, "tileId": 6, "__x": 224, "__y": 224, "__srcX": 96, "__srcY": 0 },
 					{ "coordId": 324, "tileId": 142, "__x": 256, "__y": 224, "__srcX": 224, "__srcY": 128 }
 				],
 				"entityInstances": []
@@ -358,9 +378,94 @@
 					{ "coordId": 181, "v": 0 },
 					{ "coordId": 182, "v": 0 },
 					{ "coordId": 183, "v": 0 },
-					{ "coordId": 184, "v": 0 }
+					{ "coordId": 184, "v": 0 },
+					{ "coordId": 191, "v": 1 },
+					{ "coordId": 192, "v": 1 },
+					{ "coordId": 193, "v": 1 },
+					{ "coordId": 194, "v": 1 },
+					{ "coordId": 195, "v": 1 },
+					{ "coordId": 213, "v": 1 },
+					{ "coordId": 214, "v": 1 },
+					{ "coordId": 215, "v": 1 },
+					{ "coordId": 216, "v": 1 },
+					{ "coordId": 217, "v": 1 }
 				],
 				"autoTiles": [
+					{
+						"ruleId": 17,
+						"results": [
+							{
+								"__cx": 15,
+								"__cy": 8,
+								"coordId": 191,
+								"tiles": [ { "tileId": 214, "__x": 240, "__y": 128, "__srcX": 96, "__srcY": 208 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 16,
+								"__cy": 8,
+								"coordId": 192,
+								"tiles": [ { "tileId": 229, "__x": 256, "__y": 128, "__srcX": 80, "__srcY": 224 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 17,
+								"__cy": 8,
+								"coordId": 193,
+								"tiles": [ { "tileId": 230, "__x": 272, "__y": 128, "__srcX": 96, "__srcY": 224 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 18,
+								"__cy": 8,
+								"coordId": 194,
+								"tiles": [ { "tileId": 231, "__x": 288, "__y": 128, "__srcX": 112, "__srcY": 224 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 19,
+								"__cy": 8,
+								"coordId": 195,
+								"tiles": [ { "tileId": 229, "__x": 304, "__y": 128, "__srcX": 80, "__srcY": 224 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 15,
+								"__cy": 9,
+								"coordId": 213,
+								"tiles": [ { "tileId": 214, "__x": 240, "__y": 144, "__srcX": 96, "__srcY": 208 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 16,
+								"__cy": 9,
+								"coordId": 214,
+								"tiles": [ { "tileId": 213, "__x": 256, "__y": 144, "__srcX": 80, "__srcY": 208 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 17,
+								"__cy": 9,
+								"coordId": 215,
+								"tiles": [ { "tileId": 228, "__x": 272, "__y": 144, "__srcX": 64, "__srcY": 224 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 18,
+								"__cy": 9,
+								"coordId": 216,
+								"tiles": [ { "tileId": 229, "__x": 288, "__y": 144, "__srcX": 80, "__srcY": 224 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 19,
+								"__cy": 9,
+								"coordId": 217,
+								"tiles": [ { "tileId": 213, "__x": 304, "__y": 144, "__srcX": 80, "__srcY": 208 } ],
+								"flips": 0
+							}
+						]
+					},
 					{ "ruleId": 15, "results": [] },
 					{
 						"ruleId": 12,
@@ -822,7 +927,7 @@
 				"seed": 4518871,
 				"gridTiles": [],
 				"entityInstances": [
-					{ "__identifier": "Text", "__cx": 7, "__cy": 13, "defUid": 2, "x": 120, "y": 216, "fieldInstances": [
+					{ "__identifier": "Text", "__cx": 3, "__cy": 10, "defUid": 2, "x": 56, "y": 168, "fieldInstances": [
 						{
 							"__identifier": "text",
 							"__value": "A",
@@ -842,19 +947,19 @@
 						},
 						{
 							"__identifier": "path",
-							"__value": [ { "cx": 7, "cy": 16 }, { "cx": 10, "cy": 16 } ],
+							"__value": [ { "cx": 7, "cy": 17 }, { "cx": 12, "cy": 17 } ],
 							"__type": "Array<Point>",
 							"defUid": 7,
 							"realEditorValues": [ {
 								"id": "V_String",
-								"params": [ "7,16" ]
+								"params": [ "7,17" ]
 							}, {
 								"id": "V_String",
-								"params": [ "10,16" ]
+								"params": [ "12,17" ]
 							} ]
 						}
 					] },
-					{ "__identifier": "Text", "__cx": 11, "__cy": 12, "defUid": 2, "x": 184, "y": 200, "fieldInstances": [
+					{ "__identifier": "Text", "__cx": 11, "__cy": 10, "defUid": 2, "x": 184, "y": 168, "fieldInstances": [
 						{
 							"__identifier": "text",
 							"__value": "B",
@@ -874,7 +979,7 @@
 						},
 						{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] }
 					] },
-					{ "__identifier": "Text", "__cx": 13, "__cy": 9, "defUid": 2, "x": 216, "y": 152, "fieldInstances": [
+					{ "__identifier": "Text", "__cx": 16, "__cy": 5, "defUid": 2, "x": 264, "y": 88, "fieldInstances": [
 						{
 							"__identifier": "text",
 							"__value": "C",
