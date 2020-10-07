@@ -6,6 +6,7 @@
  - Added the up-to-date JSON format doc to the app Home page.
  - Added fullscreen button to view Home changelogs
  - Removed duplicate sample map
+ - Fixed "color" field size in Entity instance editor when the value isn't default.
  - Many bug fixes
 
 # 0.3.2-beta
