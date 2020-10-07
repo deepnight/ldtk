@@ -1,20 +1,30 @@
 class GenericLevelElementGroup {
 	var editor(get,never): Editor; inline function get_editor() return Editor.ME;
 
+	var renderWrapper : h2d.Object;
 	var ghost : h2d.Graphics;
+	var arrow : h2d.Graphics;
 	var elements : Array<GenericLevelElement> = [];
 
 	public function new(?elems:Array<GenericLevelElement>) {
 		if( elems!=null )
 			elements = elems.copy();
 
-		ghost = new h2d.Graphics();
-		editor.levelRender.root.add(ghost, Const.DP_UI);
+		renderWrapper = new h2d.Object();
+		editor.levelRender.root.add(renderWrapper, Const.DP_UI);
+
+		ghost = new h2d.Graphics(renderWrapper);
+		arrow = new h2d.Graphics(renderWrapper);
 	}
 
 	public function clear() {
 		elements = [];
 		clearGhost();
+	}
+
+	public function dispose() {
+		renderWrapper.remove();
+		elements = null;
 	}
 
 	public inline function length() return elements.length;
@@ -113,6 +123,8 @@ class GenericLevelElementGroup {
 
 	public inline function hideGhost() {
 		clearGhost();
+		arrow.clear();
+		arrow.visible = false;
 	}
 
 	function getDeltaX(origin:MouseCoords, now:MouseCoords) {
@@ -137,6 +149,18 @@ class GenericLevelElementGroup {
 		return grid;
 	}
 
+	public function hasMixedGridSizes() {
+		var grid = getSnapGrid();
+		for( ge in elements )
+			switch ge {
+			case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
+				if( li.def.gridSize!=grid )
+					return true;
+			}
+
+		return false;
+	}
+
 	public function showGhost(origin:MouseCoords, now:MouseCoords) {
 		if(! ghost.visible )
 			renderGhost(origin);
@@ -144,6 +168,28 @@ class GenericLevelElementGroup {
 		ghost.visible = true;
 		ghost.x = origin.levelX + getDeltaX(origin,now);
 		ghost.y = origin.levelY + getDeltaY(origin,now);
+
+		// Render movement arrow
+		arrow.clear();
+		arrow.visible = true;
+		var grid = getSnapGrid();
+		var fx = (origin.cx+0.5) * grid;
+		var fy = (origin.cy+0.5) * grid;
+		var tx = (now.cx+0.5) * grid;
+		var ty = (now.cy+0.5) * grid;
+
+		var a = Math.atan2(ty-fy, tx-fx);
+		var size = 10;
+		arrow.lineStyle(1, 0xffffff, 1);
+		arrow.moveTo(fx,fy);
+		arrow.lineTo(tx,ty);
+
+		arrow.moveTo(tx,ty);
+		arrow.lineTo( tx + Math.cos(a+M.PI*0.8)*size, ty + Math.sin(a+M.PI*0.8)*size );
+
+		arrow.moveTo(tx,ty);
+		arrow.lineTo( tx + Math.cos(a-M.PI*0.8)*size, ty + Math.sin(a-M.PI*0.8)*size );
+
 	}
 
 

@@ -9,6 +9,8 @@ class Panel extends ui.Modal {
 
 		super();
 
+		editor.selectionTool.clear();
+
 		var mainPanel = new J("#mainPanel");
 
 		jModalAndMask.addClass("panel");

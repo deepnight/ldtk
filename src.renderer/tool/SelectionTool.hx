@@ -20,6 +20,7 @@ class SelectionTool extends Tool<Int> {
 	override function onDispose() {
 		super.onDispose();
 		movePreview.remove();
+		group.dispose();
 	}
 
 	override function getDefaultValue() return -1; // Not actually used
@@ -187,7 +188,10 @@ class SelectionTool extends Tool<Int> {
 		if( buttonId==0 ) {
 			if( isOveringSelection(m) ) {
 				// Move existing selection
-				// getSelectedValue().makeGhost();
+				if( group.hasMixedGridSizes() ) {
+					new ui.modal.dialog.Message(L.t._("This selection can't be moved around because it contains elements from using different grid sizes."));
+					stopUsing(m);
+				}
 			}
 			else {
 				// Start a new selection
