@@ -481,15 +481,12 @@ class Editor extends Page {
 		updateTool();
 	}
 
-	public function getGenericLevelElementAt(m:MouseCoords, ?limitToCurLayer:Bool) : Null<GenericLevelElement> {
-		var ge : GenericLevelElement = null;
-
-		if( limitToCurLayer==null )
-			limitToCurLayer = levelRender.enhanceActiveLayer;
-
+	public function getGenericLevelElementAt(m:MouseCoords, limitToActiveLayer=false) : Null<GenericLevelElement> {
 		function getElement(li:led.inst.LayerInstance) {
+			var ge : GenericLevelElement = null;
+
 			if( !levelRender.isLayerVisible(li) )
-				return;
+				return null;
 
 			var cx = m.getLayerCx(li);
 			var cy = m.getLayerCy(li);
@@ -502,7 +499,7 @@ class Editor extends Page {
 
 				case Entities:
 					for(ei in li.entityInstances) {
-						if( ei.isOver(m.levelX, m.levelY, 8) )
+						if( ei.isOver(m.levelX, m.levelY, 0) )
 							ge = GenericLevelElement.Entity(li, ei);
 						else {
 							// Points
@@ -522,19 +519,28 @@ class Editor extends Page {
 					if( li.getGridTile(cx,cy)!=null )
 						ge = GenericLevelElement.Tile(li, cx, cy);
 			}
+			return ge;
 		}
 
-		if( !limitToCurLayer ) {
+
+		if( limitToActiveLayer )
+			return getElement(curLayerInstance);
+		else {
 			// Search in all layers
 			var all = project.defs.layers.copy();
 			all.reverse();
-			for(ld in all)
-				getElement( curLevel.getLayerInstance(ld) );
-		}
-		else
-			getElement(curLayerInstance);
+			var best = null;
+			for(ld in all) {
+				var ge = getElement( curLevel.getLayerInstance(ld) );
+				if( ld==curLayerDef && ge!=null && levelRender.enhanceActiveLayer ) // prioritize active layer
+					return ge;
 
-		return ge;
+				if( ge!=null )
+					best = ge;
+			}
+
+			return best;
+		}
 	}
 
 	// public function pickGenericLevelElement(ge:Null<GenericLevelElement>) {
