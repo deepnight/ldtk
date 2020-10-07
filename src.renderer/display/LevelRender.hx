@@ -824,6 +824,7 @@ class LevelRender extends dn.Process {
 		enhanceActiveLayer = v;
 		editor.jMainPanel.find("input#enhanceActiveLayer").prop("checked", v);
 		applyAllLayersVisibility();
+		editor.selectionTool.clear();
 	}
 
 	function applyLayerVisibility(li:led.inst.LayerInstance) {
