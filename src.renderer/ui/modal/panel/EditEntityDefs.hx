@@ -14,7 +14,7 @@ class EditEntityDefs extends ui.modal.Panel {
 	var curEntity : Null<led.def.EntityDef>;
 	var curField : Null<led.def.FieldDef>;
 
-	public function new() {
+	public function new(?editDef:led.def.EntityDef) {
 		super();
 
 		loadTemplate( "editEntityDefs", "defEditor entityDefs" );
@@ -146,7 +146,9 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Select same entity as current client selection
 		var lastFieldId = LAST_FIELD_ID; // because selectEntity changes it
-		if( editor.curLayerDef!=null && editor.curLayerDef.type==Entities )
+		if( editDef!=null )
+			selectEntity( editDef );
+		else if( editor.curLayerDef!=null && editor.curLayerDef.type==Entities )
 			selectEntity( project.defs.getEntityDef(editor.curTool.getSelectedValue()) );
 		else if( LAST_ENTITY_ID>=0 && project.defs.getEntityDef(LAST_ENTITY_ID)!=null )
 			selectEntity( project.defs.getEntityDef(LAST_ENTITY_ID) );

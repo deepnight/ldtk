@@ -420,7 +420,7 @@ class EntityInstanceEditor extends dn.Process {
 		var jEdit = new J('<a class="edit">Edit</a>');
 		jEdit.click( function(ev) {
 			ev.preventDefault();
-			new ui.modal.panel.EditEntityDefs();
+			new ui.modal.panel.EditEntityDefs(ei.def);
 		});
 		jHeader.append(jEdit);
 
