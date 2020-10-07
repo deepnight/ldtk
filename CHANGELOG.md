@@ -5,6 +5,7 @@
  - `Alt`+`left click` now picks elements in *all* layers. If you have the *Enhance active layer* option activated (`A` key), it will make a smarter choice than before. TLDR; you should always pick what is expected with this action.
  - Added the up-to-date JSON format doc to the app Home page.
  - Added fullscreen button to view Home changelogs
+ - Removed duplicate sample map
  - Many bug fixes
 
 # 0.3.2-beta
