@@ -88,7 +88,7 @@ class EntityTool extends tool.LayerTool<Int> {
 					else {
 						ei.x = getPlacementX(m);
 						ei.y = getPlacementY(m);
-						editor.selectionTool.selectValue( new GenericLevelElementGroup([ Entity(curLayerInstance, ei) ]) );
+						editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);
 						onEditAnything();
 						stopUsing(m);
 						editor.selectionTool.startUsing(m, button);
@@ -118,7 +118,7 @@ class EntityTool extends tool.LayerTool<Int> {
 					else
 						fi.parseValue(arrayIdx, null);
 					editor.ge.emit( EntityInstanceFieldChanged(ei) );
-					editor.selectionTool.selectValue( new GenericLevelElementGroup([ GenericLevelElement.Entity(li,ei) ]) );
+					editor.selectionTool.select([ GenericLevelElement.Entity(li,ei) ]);
 					return true;
 				}
 				else
