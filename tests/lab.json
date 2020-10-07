@@ -338,8 +338,8 @@
 				"autoTiles": [],
 				"seed": 6405339,
 				"gridTiles": [
-					{ "coordId": 33, "tileId": 142, "__x": 16, "__y": 32, "__srcX": 224, "__srcY": 128 },
-					{ "coordId": 172, "tileId": 6, "__x": 192, "__y": 160, "__srcX": 96, "__srcY": 0 }
+					{ "coordId": 172, "tileId": 6, "__x": 192, "__y": 160, "__srcX": 96, "__srcY": 0 },
+					{ "coordId": 174, "tileId": 142, "__x": 224, "__y": 160, "__srcX": 224, "__srcY": 128 }
 				],
 				"entityInstances": []
 			},
@@ -919,7 +919,7 @@
 							} ]
 						}
 					] },
-					{ "__identifier": "Text", "__cx": 10, "__cy": 10, "defUid": 2, "x": 168, "y": 168, "fieldInstances": [
+					{ "__identifier": "Text", "__cx": 9, "__cy": 8, "defUid": 2, "x": 152, "y": 136, "fieldInstances": [
 						{
 							"__identifier": "text",
 							"__value": "B",
