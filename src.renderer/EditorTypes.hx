@@ -73,7 +73,7 @@ enum GlobalEvent {
 enum CursorType {
 	None;
 	Forbidden;
-	Move;
+	Pan;
 	PickNothing;
 	Eraser(x:Int,y:Int);
 	GridCell(li:led.inst.LayerInstance, cx:Int, cy:Int, ?col:UInt);

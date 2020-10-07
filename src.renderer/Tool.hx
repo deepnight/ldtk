@@ -284,10 +284,10 @@ class Tool<T> extends dn.Process {
 		// 		editor.cursor.setSystemCursor(Button);
 		// }
 		else if( App.ME.isKeyDown(K.SPACE) )
-			editor.cursor.set(Move);
+			editor.cursor.set(Pan);
 		else switch curMode {
 			case PanView:
-				editor.cursor.set(Move);
+				editor.cursor.set(Pan);
 
 			case null, Add, Remove:
 				if( editor.isCurrentLayerVisible() )

@@ -113,6 +113,8 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 			var r = Rect.fromMouseCoords(origin, m);
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, 0xffffff) );
 		}
+		else if( isOveringSelection(m) )
+			editor.cursor.set(Pan); // HACK
 		else
 			editor.cursor.set(None);
 	}
@@ -153,9 +155,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		super.startUsing(m, buttonId);
 
 		if( buttonId==0 ) {
-			if( isOveringSelection(m) ) {
-			}
-			else if( rectangle )
+			if( rectangle )
 				selectValue([]);
 			else {
 				var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
@@ -403,6 +403,5 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 
 	override function update() {
 		super.update();
-		App.ME.debug("over selection = "+isOveringSelection(editor.getMouse()));
 	}
 }
