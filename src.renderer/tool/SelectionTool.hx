@@ -226,8 +226,12 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 						Std.int( (cy+0.5)*editor.curLayerDef.gridSize ),
 						editor.levelRender.enhanceActiveLayer
 					);
-					if( ge!=null )
-						all.push(ge);
+					switch ge {
+						case null:
+						case PointField(_): // not supported
+						case _:
+							all.push(ge);
+					}
 				}
 
 				selectValue(all);
