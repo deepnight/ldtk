@@ -1,6 +1,6 @@
 package tool;
 
-class SelectionTool extends Tool< Array<GenericLevelElement> > {
+class SelectionTool extends Tool< GenericLevelElementGroup > {
 	var selectionCursors : Array<ui.Cursor>;
 	var moveStarted = false;
 	var movePreview : h2d.Graphics;
@@ -20,8 +20,8 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		movePreview.remove();
 	}
 
-	override function getDefaultValue():Array<GenericLevelElement> {
-		return [];
+	override function getDefaultValue() : GenericLevelElementGroup {
+		return new GenericLevelElementGroup();
 	}
 
 	override function getSelectionMemoryKey():Null<String> {
@@ -34,14 +34,14 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		selectionCursors = [];
 	}
 
-	override function selectValue(v:Array<GenericLevelElement>) {
-		super.selectValue(v);
+	override function selectValue(group:GenericLevelElementGroup) {
+		super.selectValue(group);
 
 		clearCursors();
-		for(ge in getSelectedValue()) {
+		for(ge in getSelectedValue().elements) {
 			var c = new ui.Cursor();
 			selectionCursors.push(c);
-			c.enablePermanentHighlights();
+			// c.enablePermanentHighlights();
 			c.set(switch ge {
 				case IntGrid(li, cx, cy): GridCell(li, cx,cy);
 				case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
@@ -55,7 +55,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 
 		if( isSingle() ) {
 			// Change layer
-			switch v[0] {
+			switch group.elements[0] {
 				case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
 					if( li!=editor.curLayerInstance )
 						editor.selectLayerInstance(li);
@@ -63,7 +63,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 			}
 
 			// Selection effect
-			switch v[0] {
+			switch group.elements[0] {
 				case IntGrid(li, cx, cy):
 					var v = li.getIntGrid(cx,cy);
 					editor.curTool.as(tool.lt.IntGridTool).selectValue(v);
@@ -72,6 +72,8 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 				case Entity(li, ei):
 					editor.curTool.as(tool.lt.EntityTool).selectValue(ei.defUid); // BUG might crash
 					editor.levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
+					ui.EntityInstanceEditor.openFor(ei);
+
 
 				case Tile(li, cx, cy):
 					var tid = li.getGridTile(cx,cy);
@@ -86,20 +88,10 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 					var pt = fi.getPointGrid(arrayIdx);
 					if( pt!=null)
 						editor.levelRender.bleepRectCase( pt.cx, pt.cy, 1, 1, ei.def.color );
+					ui.EntityInstanceEditor.openFor(ei);
 			}
 
 			editor.curTool.onValuePicking();
-
-			// Open instance editor
-			switch v[0] {
-				case PointField(li, ei, fi, arrayIdx):
-					ui.EntityInstanceEditor.openFor(ei);
-
-				case Entity(li, instance):
-					ui.EntityInstanceEditor.openFor(instance);
-
-				case _:
-			}
 		}
 	}
 
@@ -159,7 +151,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		if( isEmpty() )
 			return false;
 
-		for(ge in getSelectedValue()) {
+		for(ge in getSelectedValue().elements) {
 			switch ge {
 				case IntGrid(li, cx, cy):
 					if( m.getLayerCx(li)==cx && m.getLayerCy(li)==cy )
@@ -192,13 +184,13 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 
 		if( buttonId==0 ) {
 			if( rectangle )
-				selectValue([]);
+				selectValue( new GenericLevelElementGroup() );
 			else {
 				var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 				if( ge!=null )
-					selectValue([ge]);
+					selectValue( new GenericLevelElementGroup([ge]) );
 				else
-					selectValue([]);
+					selectValue( new GenericLevelElementGroup() );
 			}
 		}
 	}
@@ -212,13 +204,13 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 				// Pick single value, in the end
 				var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 				if( ge!=null )
-					selectValue([ge]);
+					selectValue( new GenericLevelElementGroup([ge]) );
 				else
-					selectValue([]);
+					selectValue( new GenericLevelElementGroup() );
 			}
 			else {
 				// Pick every objects under rectangle
-				var all = [];
+				var group = new GenericLevelElementGroup();
 				for(cy in r.top...r.bottom+1)
 				for(cx in r.left...r.right+1) {
 					var ge = editor.getGenericLevelElementAt(
@@ -230,11 +222,11 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 						case null:
 						case PointField(_): // not supported
 						case _:
-							all.push(ge);
+							group.elements.push(ge);
 					}
 				}
 
-				selectValue(all);
+				selectValue(group);
 			}
 		}
 		movePreview.clear();
@@ -243,21 +235,21 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	public inline function get() return getSelectedValue();
 	public function clear() {
 		if( !isEmpty() )
-			selectValue([]);
+			selectValue( new GenericLevelElementGroup() );
 	}
-	public inline function any() return getSelectedValue().length>0;
-	public inline function isEmpty() return getSelectedValue().length==0;
-	public inline function isSingle() return getSelectedValue().length==1;
+	public inline function any() return getSelectedValue().elements.length>0;
+	public inline function isEmpty() return getSelectedValue().elements.length==0;
+	public inline function isSingle() return getSelectedValue().elements.length==1;
 
 
-	function duplicateSelection() : Null< Array<GenericLevelElement> > {
-		switch getSelectedValue()[0] { // TODO support groups
+	function duplicateSelection() : Null< GenericLevelElementGroup > {
+		switch getSelectedValue().elements[0] { // TODO support groups
 			case IntGrid(li, cx, cy):
 				return null;
 
 			case Entity(li, instance):
 				var ei = li.duplicateEntityInstance( instance );
-				return [ GenericLevelElement.Entity(li, ei) ];
+				return new GenericLevelElementGroup([ GenericLevelElement.Entity(li, ei) ]);
 
 			case Tile(li, cx, cy):
 				return null;
@@ -282,8 +274,9 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 			}
 		}
 
+		// Render "move arrow" preview
 		if( any() && isRunning() && moveStarted ) {
-			switch getSelectedValue()[0] {
+			switch getSelectedValue().elements[0] {
 				case IntGrid(_), Tile(_):
 					movePreview.clear();
 					var fx = (origin.cx+0.5) * editor.curLayerDef.gridSize;
@@ -313,7 +306,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		if( isEmpty() )
 			return null;
 
-		switch getSelectedValue()[0] {
+		switch getSelectedValue().elements[0] {
 			case null, IntGrid(_), Tile(_):
 				return null;
 
@@ -329,7 +322,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	override function onHistorySaving() {
 		super.onHistorySaving();
 
-		var ei = getSelectedEntityInstance();
+		var ei = getSelectedEntityInstance(); // TODO still needed?
 		if( ei!=null )
 			editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
 	}
@@ -338,7 +331,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 	function moveSelection(m:MouseCoords, isOnStop:Bool) : Bool {
 		var anyChange = false;
 
-		for( ge in getSelectedValue() ) {
+		for( ge in getSelectedValue().elements ) {
 			switch ge {
 				case Entity(li, ei):
 					if( !isOnStop ) {
@@ -356,7 +349,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 						anyChange = anyChange || changed;
 					}
 					else
-						selectValue([ Entity(curLayerInstance, ei) ]);
+						selectValue( new GenericLevelElementGroup([ Entity(curLayerInstance, ei) ]) );
 
 				case PointField(li, ei, fi, arrayIdx):
 					if( !isOnStop ) {
@@ -369,7 +362,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 						anyChange = anyChange || changed;
 					}
 					else
-						selectValue([ PointField(li,ei,fi,arrayIdx) ]);
+						selectValue( new GenericLevelElementGroup([ PointField(li,ei,fi,arrayIdx) ]) );
 
 				case IntGrid(li, cx,cy):
 					if( isOnStop ) {
@@ -378,7 +371,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 						if( !isCopy )
 							li.removeIntGrid(cx,cy);
 						li.setIntGrid(m.cx, m.cy, v);
-						editor.selectionTool.selectValue([ IntGrid(li, m.cx, m.cy) ]);
+						editor.selectionTool.selectValue( new GenericLevelElementGroup([ IntGrid(li, m.cx, m.cy) ]) );
 						anyChange = true;
 					}
 
@@ -389,7 +382,7 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 						if( !isCopy )
 							li.removeGridTile(cx,cy);
 						li.setGridTile(m.cx, m.cy, v);
-						editor.selectionTool.selectValue([ Tile(li, m.cx, m.cy) ]);
+						editor.selectionTool.selectValue( new GenericLevelElementGroup([ Tile(li, m.cx, m.cy) ]) );
 						anyChange = true;
 					}
 			}
@@ -405,7 +398,19 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 			return super.useAt(m,isOnStop);
 	}
 
+	var g : h2d.Graphics;
 	override function update() {
 		super.update();
+
+		if( g==null ) {
+			g = new h2d.Graphics();
+			editor.levelRender.root.add(g, Const.DP_TOP);
+		}
+		g.clear();
+		if( any() ) {
+			var b = getSelectedValue().getBoundsPx();
+			g.lineStyle(4, 0xff00ff);
+			g.drawRect(b.left, b.top, b.right-b.left+1, b.bottom-b.top+1);
+		}
 	}
 }
