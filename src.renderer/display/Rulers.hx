@@ -258,6 +258,7 @@ class Rulers extends dn.Process {
 					editor.levelRender.focusLevelX -= b.newLeft;
 					editor.levelRender.focusLevelY -= b.newTop;
 					curLevel.applyNewBounds(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
+					editor.selectionTool.clear();
 					editor.ge.emit(LevelResized);
 					editor.curLevelHistory.saveResizedState( before, curLevel.toJson() );
 				}
