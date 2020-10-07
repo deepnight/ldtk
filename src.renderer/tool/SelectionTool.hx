@@ -109,14 +109,50 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		for( c in selectionCursors )
 			c.root.visible = !isRunning();
 
+		// Default cursor
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromMouseCoords(origin, m);
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, 0xffffff) );
 		}
+		else if( isRunning() )
+			editor.cursor.set(Moving);
 		else if( isOveringSelection(m) )
-			editor.cursor.set(Pan); // HACK
-		else
-			editor.cursor.set(None);
+			editor.cursor.set(Move);
+		else if( !isRunning() ) {
+			// Preview picking
+			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
+			switch ge {
+			case null:
+				editor.cursor.set(PickNothing);
+
+			case IntGrid(li, cx, cy):
+				var id = li.getIntGridIdentifierAt(cx,cy);
+				editor.cursor.set(
+					GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ),
+					id==null ? "#"+li.getIntGrid(cx,cy) : id
+				);
+
+			case Entity(li, ei):
+				editor.cursor.set(
+					Entity(li, ei.def, ei, ei.x, ei.y),
+					ei.def.identifier,
+					true
+				);
+
+			case Tile(li, cx,cy):
+				editor.cursor.set(
+					Tiles(li, [li.getGridTile(cx,cy)], cx, cy),
+					"Tile "+li.getGridTile(cx,cy)
+				);
+
+			case PointField(li, ei, fi, arrayIdx):
+				var pt = fi.getPointGrid(arrayIdx);
+				editor.cursor.set( GridCell(li, pt.cx, pt.cy, ei.getSmartColor(false)) );
+			}
+
+			if( ge!=null )
+				editor.cursor.setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("grab") );
+		}
 	}
 
 	public function isOveringSelection(m:MouseCoords) {
@@ -265,42 +301,6 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 				case _:
 			}
 
-		}
-
-		// Preview picking
-		if( !isRunning() ) {
-			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
-			switch ge {
-			case null:
-				editor.cursor.set(PickNothing);
-
-			case IntGrid(li, cx, cy):
-				var id = li.getIntGridIdentifierAt(cx,cy);
-				editor.cursor.set(
-					GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ),
-					id==null ? "#"+li.getIntGrid(cx,cy) : id
-				);
-
-			case Entity(li, ei):
-				editor.cursor.set(
-					Entity(li, ei.def, ei, ei.x, ei.y),
-					ei.def.identifier,
-					true
-				);
-
-			case Tile(li, cx,cy):
-				editor.cursor.set(
-					Tiles(li, [li.getGridTile(cx,cy)], cx, cy),
-					"Tile "+li.getGridTile(cx,cy)
-				);
-
-			case PointField(li, ei, fi, arrayIdx):
-				var pt = fi.getPointGrid(arrayIdx);
-				editor.cursor.set( GridCell(li, pt.cx, pt.cy, ei.getSmartColor(false)) );
-			}
-
-			if( ge!=null )
-				editor.cursor.setSystemCursor(Button);
 		}
 	}
 

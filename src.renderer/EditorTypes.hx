@@ -74,6 +74,8 @@ enum CursorType {
 	None;
 	Forbidden;
 	Pan;
+	Move;
+	Moving;
 	PickNothing;
 	Eraser(x:Int,y:Int);
 	GridCell(li:led.inst.LayerInstance, cx:Int, cy:Int, ?col:UInt);
