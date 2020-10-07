@@ -508,7 +508,7 @@ class Editor extends Page {
 									continue;
 								for(i in 0...fi.getArrayLength()) {
 									var pt = fi.getPointGrid(i);
-									if( pt!=null && m.cx==pt.cx && m.cy==pt.cy )
+									if( pt!=null && cx==pt.cx && cy==pt.cy )
 										ge = GenericLevelElement.PointField(li, ei, fi, i);
 								}
 							}
