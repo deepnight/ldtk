@@ -447,10 +447,11 @@ class Editor extends Page {
 			if( !levelRender.isLayerVisible(li) )
 				return null;
 
-			var cx = Std.int( ( levelX - li.pxOffsetX ) / li.def.gridSize );
-			var cy = Std.int( ( levelY - li.pxOffsetY ) / li.def.gridSize );
-			// var cx = m.getLayerCx(li);
-			// var cy = m.getLayerCy(li);
+			App.ME.debug(levelX+","+levelY);
+
+			var cx = Std.int( ( levelX + li.pxOffsetX ) / li.def.gridSize );
+			var cy = Std.int( ( levelY + li.pxOffsetY ) / li.def.gridSize );
+
 			switch li.def.type {
 				case IntGrid:
 					if( li.getIntGrid(cx,cy)>=0 )
@@ -614,11 +615,12 @@ class Editor extends Page {
 		jMouseCoords.empty();
 		if( curLayerInstance!=null )
 			jMouseCoords.append('<span>Grid = ${m.cx},${m.cy}</span>');
-		jMouseCoords.append('<span>Pixels = ${m.levelX},${m.levelY}</span>');
+		// jMouseCoords.append('<span>Layer = ${m.layerX},${m.layerY}</span>');
+		jMouseCoords.append('<span>Level = ${m.levelX},${m.levelY}</span>');
 
 		// Overed element infos
 		var overed = getGenericLevelElementAt(m.levelX, m.levelY);
-		switch overed {
+		switch overed { // TODO update that?
 			case null:
 			case IntGrid(li, cx, cy):
 				var v = li.getIntGrid(cx,cy);
@@ -647,7 +649,7 @@ class Editor extends Page {
 		ge.emit(ViewportChanged);
 
 		levelRender.focusLevelX += ( oldLevelX - m.levelX );
-		levelRender.focusLevelY += ( oldLevelY - m.levelY);
+		levelRender.focusLevelY += ( oldLevelY - m.levelY );
 	}
 
 	public function selectLevel(l:led.Level) {

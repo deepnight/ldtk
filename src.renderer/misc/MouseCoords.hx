@@ -22,7 +22,7 @@ class MouseCoords {
 			else
 				return
 					M.round( ( canvasX/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.levelRender.zoom )
-					- ( Editor.ME.curLayerInstance!=null ? Editor.ME.curLayerInstance.pxOffsetX : 0 );
+					- ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetX : 0 );
 		}
 
 	public var levelY(get,never) : Int;
@@ -32,21 +32,32 @@ class MouseCoords {
 			else
 				return
 					M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.levelRender.zoom )
-					- ( Editor.ME.curLayerInstance!=null ? Editor.ME.curLayerInstance.pxOffsetY : 0 );
+					- ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetY : 0 );
 		}
+
+	// Level
+	// public var levelX2(get,never) : Int;
+	// 	inline function get_levelX2() {
+	// 		return layerX + ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetX : 0 );
+	// 	}
+
+	// public var levelY2(get,never) : Int;
+	// inline function get_levelY2() {
+	// 	return layerY + ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetY : 0 );
+	// }
 
 	// Level cell
 	public var cx(get,never) : Int;
 		inline function get_cx() {
-			return M.floor( levelX / Editor.ME.curLayerInstance.def.gridSize );
+			return M.floor( levelX / getRelativeLayerInst().def.gridSize );
 		}
 
 	public var cy(get,never) : Int;
 		inline function get_cy() {
-			return M.floor( levelY / Editor.ME.curLayerInstance.def.gridSize );
+			return M.floor( levelY / getRelativeLayerInst().def.gridSize );
 		}
 
-
+	var _relativeLayerInst : Null<led.inst.LayerInstance>;
 
 	public function new(?pageX, ?pageY) {
 		if( pageX==null ) {
@@ -57,6 +68,17 @@ class MouseCoords {
 			this.pageX = pageX;
 			this.pageY = pageY;
 		}
+	}
+
+
+	inline function getRelativeLayerInst() {
+		return _relativeLayerInst==null ? Editor.ME.curLayerInstance : _relativeLayerInst;
+	}
+
+	public function cloneRelativeToLayer(li:led.inst.LayerInstance) {
+		var m = clone();
+		m._relativeLayerInst = li;
+		return m;
 	}
 
 	public function clone() {
@@ -73,11 +95,11 @@ class MouseCoords {
 	}
 
 	public function getLayerCx(li:led.inst.LayerInstance) {
-		return Std.int( ( levelX + Editor.ME.curLayerInstance.pxOffsetX - li.pxOffsetX ) / li.def.gridSize );
+		return Std.int( ( levelX + getRelativeLayerInst().pxOffsetX - li.pxOffsetX ) / li.def.gridSize );
 	}
 
 	public function getLayerCy(li:led.inst.LayerInstance) {
-		return Std.int( ( levelY + Editor.ME.curLayerInstance.pxOffsetY - li.pxOffsetY ) / li.def.gridSize );
+		return Std.int( ( levelY + getRelativeLayerInst().pxOffsetY - li.pxOffsetY ) / li.def.gridSize );
 	}
 }
 

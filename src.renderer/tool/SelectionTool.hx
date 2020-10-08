@@ -188,7 +188,7 @@ class SelectionTool extends Tool<Int> {
 		if( buttonId==0 ) {
 			if( isOveringSelection(m) ) {
 				// Move existing selection
-				if( group.hasMixedGridSizes() ) {
+				if( group.hasIncompatibleGridSizes() ) {
 					new ui.modal.dialog.Message(L.t._("This selection can't be moved around because it contains elements from using different grid sizes."));
 					stopUsing(m);
 				}
@@ -308,31 +308,30 @@ class SelectionTool extends Tool<Int> {
 			// }
 		}
 
-		// Render "move arrow" preview
-		if( any() && isRunning() && moveStarted ) { // TODO should be done in Group?
-			switch group.get(0) {
-				case IntGrid(_), Tile(_):
-					movePreview.clear();
-					var fx = (origin.cx+0.5) * editor.curLayerDef.gridSize;
-					var fy = (origin.cy+0.5) * editor.curLayerDef.gridSize;
-					var tx = (m.cx+0.5) * editor.curLayerDef.gridSize;
-					var ty = (m.cy+0.5) * editor.curLayerDef.gridSize;
-					var a = Math.atan2(ty-fy, tx-fx);
-					var arrow = 10;
-					movePreview.lineStyle(1, 0xffffff, 1);
-					movePreview.moveTo(fx,fy);
-					movePreview.lineTo(tx,ty);
+		// // Render "move arrow" preview
+		// if( any() && isRunning() && moveStarted ) { // TODO should be done in Group?
+		// 	switch group.get(0) {
+		// 		case IntGrid(_), Tile(_):
+		// 			movePreview.clear();
+		// 			var fx = (origin.cx+0.5) * editor.curLayerDef.gridSize;
+		// 			var fy = (origin.cy+0.5) * editor.curLayerDef.gridSize;
+		// 			var tx = (m.cx+0.5) * editor.curLayerDef.gridSize;
+		// 			var ty = (m.cy+0.5) * editor.curLayerDef.gridSize;
+		// 			var a = Math.atan2(ty-fy, tx-fx);
+		// 			var arrow = 10;
+		// 			movePreview.lineStyle(1, 0xffffff, 1);
+		// 			movePreview.moveTo(fx,fy);
+		// 			movePreview.lineTo(tx,ty);
 
-					movePreview.moveTo(tx,ty);
-					movePreview.lineTo( tx + Math.cos(a+M.PI*0.8)*arrow, ty + Math.sin(a+M.PI*0.8)*arrow );
+		// 			movePreview.moveTo(tx,ty);
+		// 			movePreview.lineTo( tx + Math.cos(a+M.PI*0.8)*arrow, ty + Math.sin(a+M.PI*0.8)*arrow );
 
-					movePreview.moveTo(tx,ty);
-					movePreview.lineTo( tx + Math.cos(a-M.PI*0.8)*arrow, ty + Math.sin(a-M.PI*0.8)*arrow );
+		// 			movePreview.moveTo(tx,ty);
+		// 			movePreview.lineTo( tx + Math.cos(a-M.PI*0.8)*arrow, ty + Math.sin(a-M.PI*0.8)*arrow );
 
-				case _:
-			}
-
-		}
+		// 		case _:
+		// 	}
+		// }
 	}
 
 

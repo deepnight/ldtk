@@ -155,32 +155,38 @@ class GenericLevelElementGroup {
 
 	function getDeltaX(origin:MouseCoords, now:MouseCoords) {
 		return snapToGrid()
-			? ( now.cx - origin.cx ) * getSnapGrid()
+			? ( now.cx - origin.cx ) * getSmartSnapGrid()
 			: now.levelX - origin.levelX;
 	}
 
 	function getDeltaY(origin:MouseCoords, now:MouseCoords) {
 		return snapToGrid()
-			? ( now.cy - origin.cy ) * getSnapGrid()
+			? ( now.cy - origin.cy ) * getSmartSnapGrid()
 			: now.levelY - origin.levelY;
 	}
 
-	function getSnapGrid() {
-		var grid = 0;
+	function getSmartRelativeLayerInstance() : Null<led.inst.LayerInstance> {
+		var l : led.inst.LayerInstance = null;
 		for(ge in elements)
 			switch ge {
 				case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
-					grid = M.imax( grid, li.def.gridSize );
+					if( l==null || li.def.gridSize>l.def.gridSize )
+						l = li;
 			}
-		return grid;
+		return l;
 	}
 
-	public function hasMixedGridSizes() {
-		var grid = getSnapGrid();
+	inline function getSmartSnapGrid() {
+		var li = getSmartRelativeLayerInstance();
+		return li==null ? 1 : li.def.gridSize;
+	}
+
+	public function hasIncompatibleGridSizes() {
+		var grid = getSmartSnapGrid();
 		for( ge in elements )
 			switch ge {
 			case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
-				if( li.def.gridSize!=grid )
+				if( li.def.gridSize<grid && grid % li.def.gridSize != 0 )
 					return true;
 			}
 
@@ -222,6 +228,11 @@ class GenericLevelElementGroup {
 	}
 
 	public function showGhost(origin:MouseCoords, now:MouseCoords) {
+		var rel = getSmartRelativeLayerInstance();
+		origin = origin.cloneRelativeToLayer(rel);
+		now = now.cloneRelativeToLayer(rel);
+
+		// Update ghost
 		if( !ghost.visible )
 			renderGhost(origin);
 
@@ -233,17 +244,19 @@ class GenericLevelElementGroup {
 		ghost.y = offY + origin.levelY + getDeltaY(origin,now);
 
 
-		// Render movement arrow
-		var showArrow = false;
+		// Movement arrow
+		var onlyMovingPoints = true;
 		for(ge in elements)
 			if( !ge.match(PointField(_)) ) {
-				showArrow = true;
+				onlyMovingPoints = false;
 				break;
 			}
-		arrow.visible = showArrow;
-		if( showArrow ) {
+		if( onlyMovingPoints || now.cx==origin.cx && now.cy==origin.cy )
+			arrow.visible = false;
+		else {
 			arrow.clear();
-			var grid = getSnapGrid();
+			arrow.visible = true;
+			var grid = getSmartSnapGrid();
 			var fx = (origin.cx+0.5) * grid;
 			var fy = (origin.cy+0.5) * grid;
 			var tx = (now.cx+0.5) * grid;
@@ -286,20 +299,23 @@ class GenericLevelElementGroup {
 							var pt = fi.getPointGrid(i);
 							if( isPointSelected(fi,i) ) {
 								pointLinks.lineTo(
-									levelToGhostX( (pt.cx+0.5)*li.def.gridSize ),
-									levelToGhostY( (pt.cy+0.5)*li.def.gridSize )
+									levelToGhostX( li.pxOffsetX+(pt.cx+0.5)*li.def.gridSize ),
+									levelToGhostY( li.pxOffsetY+(pt.cy+0.5)*li.def.gridSize )
 								);
 							}
 							else
-								pointLinks.lineTo( (pt.cx+0.5)*li.def.gridSize, (pt.cy+0.5)*li.def.gridSize );
+								pointLinks.lineTo(
+									li.pxOffsetX+(pt.cx+0.5)*li.def.gridSize,
+									li.pxOffsetY+(pt.cy+0.5)*li.def.gridSize
+								);
 						}
 					}
 
 				case PointField(li, ei, fi, arrayIdx):
 					pointLinks.lineStyle(1,ei.getSmartColor(true));
 					var pt = fi.getPointGrid(arrayIdx);
-					var x = levelToGhostX( (pt.cx+0.5)*li.def.gridSize );
-					var y = levelToGhostY( (pt.cy+0.5)*li.def.gridSize );
+					var x = levelToGhostX( li.pxOffsetX+(pt.cx+0.5)*li.def.gridSize );
+					var y = levelToGhostY( li.pxOffsetY+(pt.cy+0.5)*li.def.gridSize );
 
 					// Link to entity
 					if( fi.def.editorDisplayMode==PointStar || arrayIdx==0 ) {
@@ -318,11 +334,14 @@ class GenericLevelElementGroup {
 								pointLinks.moveTo(x,y);
 								if( isPointSelected(fi,arrayIdx-1) )
 									pointLinks.lineTo(
-										levelToGhostX( (prev.cx+0.5)*li.def.gridSize ),
-										levelToGhostY( (prev.cy+0.5)*li.def.gridSize )
+										levelToGhostX( li.pxOffsetX+(prev.cx+0.5)*li.def.gridSize ),
+										levelToGhostY( li.pxOffsetY+(prev.cy+0.5)*li.def.gridSize )
 									);
 								else
-									pointLinks.lineTo( (prev.cx+0.5)*li.def.gridSize, (prev.cy+0.5)*li.def.gridSize );
+									pointLinks.lineTo(
+										li.pxOffsetX+(prev.cx+0.5)*li.def.gridSize,
+										li.pxOffsetY+(prev.cy+0.5)*li.def.gridSize
+									);
 							}
 						}
 
@@ -333,11 +352,14 @@ class GenericLevelElementGroup {
 								pointLinks.moveTo(x,y);
 								if( isPointSelected(fi,arrayIdx+1) )
 									pointLinks.lineTo(
-										levelToGhostX( (next.cx+0.5)*li.def.gridSize ),
-										levelToGhostY( (next.cy+0.5)*li.def.gridSize )
+										levelToGhostX( li.pxOffsetX+(next.cx+0.5)*li.def.gridSize ),
+										levelToGhostY( li.pxOffsetX+(next.cy+0.5)*li.def.gridSize )
 									);
 								else
-									pointLinks.lineTo( (next.cx+0.5)*li.def.gridSize, (next.cy+0.5)*li.def.gridSize );
+									pointLinks.lineTo(
+										li.pxOffsetX+(next.cx+0.5)*li.def.gridSize,
+										li.pxOffsetY+(next.cy+0.5)*li.def.gridSize
+									);
 							}
 						}
 					}
@@ -353,6 +375,10 @@ class GenericLevelElementGroup {
 
 
 	public function move(origin:MouseCoords, to:MouseCoords) : Bool {
+		var rel = getSmartRelativeLayerInstance();
+		origin = origin.cloneRelativeToLayer(rel);
+		to = to.cloneRelativeToLayer(rel);
+
 		if( elements.length==0 )
 			return false;
 
@@ -376,17 +402,21 @@ class GenericLevelElementGroup {
 
 				case IntGrid(li, cx,cy):
 					var v = li.getIntGrid(cx,cy);
+					var gridRatio = Std.int( getSmartSnapGrid() / li.def.gridSize );
 					removals.push( ()-> li.removeIntGrid(cx,cy) );
-					inserts.push( ()-> li.setIntGrid(cx + to.cx-origin.cx, cy + to.cy-origin.cy, v) );
-					elements[i] = IntGrid(li, cx + to.cx-origin.cx, cy + to.cy-origin.cy); // remap selection
+					inserts.push( ()-> li.setIntGrid(cx + (to.cx-origin.cx)*gridRatio, cy + (to.cy-origin.cy)*gridRatio, v) );
+
+					elements[i] = IntGrid(li, cx + (to.cx-origin.cx)*gridRatio, cy + (to.cy-origin.cy)*gridRatio); // remap sel
 					changedLayers.set(li,li);
 					anyChange = true;
 
 				case Tile(li, cx,cy):
 					var v = li.getGridTile(cx,cy);
+					var gridRatio = Std.int( getSmartSnapGrid() / li.def.gridSize );
 					removals.push( ()-> li.removeGridTile(cx,cy) );
-					inserts.push( ()-> li.setGridTile(cx + to.cx-origin.cx, cy + to.cy-origin.cy, v) );
-					elements[i] = Tile(li, cx + to.cx-origin.cx, cy + to.cy-origin.cy); // remap selection
+					inserts.push( ()-> li.setGridTile(cx + (to.cx-origin.cx)*gridRatio, cy + (to.cy-origin.cy)*gridRatio, v) );
+
+					elements[i] = Tile(li, cx + (to.cx-origin.cx)*gridRatio, cy + (to.cy-origin.cy)*gridRatio); // remap sel
 					changedLayers.set(li,li);
 					anyChange = true;
 
