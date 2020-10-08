@@ -88,6 +88,7 @@ class GenericLevelElementGroup {
 		for(ge in elements) {
 			switch ge {
 				case IntGrid(li, cx, cy):
+					ghost.lineStyle();
 					ghost.beginFill( li.getIntGridColorAt(cx,cy) );
 					ghost.drawRect(
 						offX + li.pxOffsetX + cx*li.def.gridSize - b.left,
@@ -112,11 +113,22 @@ class GenericLevelElementGroup {
 					bmp.y = offY + li.pxOffsetY + cy*li.def.gridSize - b.top;
 
 				case PointField(li, ei, fi, arrayIdx):
+					var pt = fi.getPointGrid(arrayIdx);
+					var x = offX + li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize - b.left;
+					var y = offY + li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize - b.top;
+					ghost.lineStyle(1, ei.getSmartColor(false));
+					ghost.drawCircle(x, y, li.def.gridSize*0.5);
+
+					ghost.lineStyle();
+					ghost.beginFill(ei.getSmartColor(false) );
+					ghost.drawCircle(x, y, li.def.gridSize*0.3);
+					ghost.endFill();
+					fi.def.editorDisplayMode
 			}
 		}
 
-		ghost.beginFill(0xffcc00);
-		ghost.drawCircle(0,0,8);
+		// ghost.beginFill(0xffcc00);
+		// ghost.drawCircle(0,0,8);
 
 		return ghost;
 	}
@@ -170,27 +182,33 @@ class GenericLevelElementGroup {
 		ghost.y = origin.levelY + getDeltaY(origin,now);
 
 		// Render movement arrow
-		// TODO hide arrow if only moving points?
-		arrow.clear();
-		arrow.visible = true;
-		var grid = getSnapGrid();
-		var fx = (origin.cx+0.5) * grid;
-		var fy = (origin.cy+0.5) * grid;
-		var tx = (now.cx+0.5) * grid;
-		var ty = (now.cy+0.5) * grid;
+		var showArrow = false;
+		for(ge in elements)
+			if( !ge.match(PointField(_)) ) {
+				showArrow = true;
+				break;
+			}
+		arrow.visible = showArrow;
+		if( showArrow ) {
+			arrow.clear();
+			var grid = getSnapGrid();
+			var fx = (origin.cx+0.5) * grid;
+			var fy = (origin.cy+0.5) * grid;
+			var tx = (now.cx+0.5) * grid;
+			var ty = (now.cy+0.5) * grid;
 
-		var a = Math.atan2(ty-fy, tx-fx);
-		var size = 10;
-		arrow.lineStyle(1, 0xffffff, 1);
-		arrow.moveTo(fx,fy);
-		arrow.lineTo(tx,ty);
+			var a = Math.atan2(ty-fy, tx-fx);
+			var size = 10;
+			arrow.lineStyle(1, 0xffffff, 1);
+			arrow.moveTo(fx,fy);
+			arrow.lineTo(tx,ty);
 
-		arrow.moveTo(tx,ty);
-		arrow.lineTo( tx + Math.cos(a+M.PI*0.8)*size, ty + Math.sin(a+M.PI*0.8)*size );
+			arrow.moveTo(tx,ty);
+			arrow.lineTo( tx + Math.cos(a+M.PI*0.8)*size, ty + Math.sin(a+M.PI*0.8)*size );
 
-		arrow.moveTo(tx,ty);
-		arrow.lineTo( tx + Math.cos(a-M.PI*0.8)*size, ty + Math.sin(a-M.PI*0.8)*size );
-
+			arrow.moveTo(tx,ty);
+			arrow.lineTo( tx + Math.cos(a-M.PI*0.8)*size, ty + Math.sin(a-M.PI*0.8)*size );
+		}
 	}
 
 
@@ -246,30 +264,6 @@ class GenericLevelElementGroup {
 					} );
 					changedLayers.set(li,li);
 					anyChange = true;
-
-				// case PointField(li, ei, fi, arrayIdx):
-				// 	if( !isOnStop ) {
-				// 		var old = fi.getPointStr(arrayIdx);
-				// 		fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
-
-				// 		var changed = old!=fi.getPointStr(arrayIdx);
-				// 		if( changed )
-				// 			editor.ge.emit( EntityInstanceChanged(ei) );
-				// 		anyChange = anyChange || changed;
-				// 	}
-				// 	else
-				// 		selectValue( new GenericLevelElementGroup([ PointField(li,ei,fi,arrayIdx) ]) );
-
-				// case Tile(li,cx,cy):
-				// 	if( isOnStop ) {
-				// 		editor.curLevelHistory.markChange(m.cx,m.cy);
-				// 		var v = li.getGridTile(cx,cy);
-				// 		if( !isCopy )
-				// 			li.removeGridTile(cx,cy);
-				// 		li.setGridTile(m.cx, m.cy, v);
-				// 		editor.selectionTool.selectValue( new GenericLevelElementGroup([ Tile(li, m.cx, m.cy) ]) );
-				// 		anyChange = true;
-				// 	}
 			}
 			i++;
 		}

@@ -389,7 +389,13 @@
 						] },
 						{ "__identifier": "Text", "__cx": 6, "__cy": 17, "defUid": 2, "x": 104, "y": 280, "fieldInstances": [
 							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
-							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
+							{
+								"__identifier": "color",
+								"__value": "#94DBFF",
+								"__type": "Color",
+								"defUid": 5,
+								"realEditorValues": [ { "id": "V_Int", "params": [ 9755647 ] } ]
+							},
 							{
 								"__identifier": "path",
 								"__value": [
