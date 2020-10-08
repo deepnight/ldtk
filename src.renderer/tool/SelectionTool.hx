@@ -36,7 +36,7 @@ class SelectionTool extends Tool<Int> {
 		for( ge in group.all() ) {
 			var c = new ui.Cursor();
 			selectionCursors.push(c);
-			// c.enablePermanentHighlights();
+			c.enablePermanentHighlights();
 			c.set(switch ge {
 				case IntGrid(li, cx, cy): GridCell(li, cx,cy);
 				case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
@@ -223,37 +223,39 @@ class SelectionTool extends Tool<Int> {
 			}
 			else {
 				// Pick every objects under rectangle
-				var left = M.imin( origin.levelX, m.levelX );
-				var right = M.imax( origin.levelX, m.levelX );
-				var top = M.imin( origin.levelY, m.levelY );
-				var bottom = M.imax( origin.levelY, m.levelY );
+				var r = Rect.fromMouseCoords(origin, m);
 				var all = [];
 				function selectAllInLayer(li:led.inst.LayerInstance) {
 					if( !editor.levelRender.isLayerVisible(li) )
 						return;
 
-					for( cy in Std.int(top/li.def.gridSize)...Std.int(bottom/li.def.gridSize)+1 )
-					for( cx in Std.int(left/li.def.gridSize)...Std.int(right/li.def.gridSize)+1 ) {
+					for( cy in r.top...r.bottom+1 )
+					for( cx in r.left...r.right+1 ) {
+						// IntGrid
 						if( li.def.type==IntGrid && li.hasIntGrid(cx,cy) )
 							all.push( IntGrid(li,cx,cy) );
 
+						// Tiles
 						if( li.def.type==Tiles && li.hasGridTile(cx,cy) )
 							all.push( Tile(li,cx,cy) );
 					}
-					if( li.def.type==Entities )
+
+					// Entities
+					if( li.def.type==Entities ) {
 						for(ei in li.entityInstances) {
-							if( ei.x>=left && ei.x<=right && ei.y>=top && ei.y<=bottom )
+							if( ei.getCx(li.def)>=r.left && ei.getCx(li.def)<=r.right && ei.getCy(li.def)>=r.top && ei.getCy(li.def)<=r.bottom ) {
 								all.push( Entity(li,ei) );
-							for(fi in ei.fieldInstances)
-							for(i in 0...fi.getArrayLength())
-								if( fi.def.type==F_Point ) {
-									var pt = fi.getPointGrid(i);
-									var x = (pt.cx+0.5)*li.def.gridSize;
-									var y = (pt.cy+0.5)*li.def.gridSize;
-									if( x>=left && x<=right && y>=top && y<=bottom )
-										all.push( PointField(li, ei, fi, i) );
-								}
+								// Entity points
+								for(fi in ei.fieldInstances)
+								for(i in 0...fi.getArrayLength())
+									if( fi.def.type==F_Point ) {
+										var pt = fi.getPointGrid(i);
+										if( pt.cx>=r.left && pt.cx<=r.right && pt.cy>=r.top && pt.cy<=r.bottom )
+											all.push( PointField(li, ei, fi, i) );
+									}
+							}
 						}
+					}
 				}
 
 				if( editor.levelRender.enhanceActiveLayer )
