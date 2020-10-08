@@ -33,19 +33,19 @@ class SelectionTool extends Tool<Int> {
 
 	function updateSelectionCursors() { // TODO should be done by Group
 		clearCursors();
-		for( ge in group.all() ) {
-			var c = new ui.Cursor();
-			selectionCursors.push(c);
-			c.enablePermanentHighlights();
-			c.set(switch ge {
-				case IntGrid(li, cx, cy): GridCell(li, cx,cy);
-				case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
-				case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
-				case PointField(li, ei, fi, arrayIdx):
-					var pt = fi.getPointGrid(arrayIdx);
-					GridCell(li, pt.cx, pt.cy);
-			});
-		}
+		// for( ge in group.all() ) {
+		// 	var c = new ui.Cursor();
+		// 	selectionCursors.push(c);
+		// 	c.enablePermanentHighlights();
+		// 	c.set(switch ge {
+		// 		case IntGrid(li, cx, cy): GridCell(li, cx,cy);
+		// 		case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
+		// 		case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
+		// 		case PointField(li, ei, fi, arrayIdx):
+		// 			var pt = fi.getPointGrid(arrayIdx);
+		// 			GridCell(li, pt.cx, pt.cy);
+		// 	});
+		// }
 	}
 
 	public function select(?elems:Array<GenericLevelElement>) {
@@ -268,7 +268,7 @@ class SelectionTool extends Tool<Int> {
 
 								for(i in 0...fi.getArrayLength()) {
 									var pt = fi.getPointGrid(i);
-									if( pt.cx>=cLeft && pt.cx<=cRight && pt.cy>=cTop && pt.cy<=cBottom )
+									if( pt!=null && pt.cx>=cLeft && pt.cx<=cRight && pt.cy>=cTop && pt.cy<=cBottom )
 										all.push( PointField(li, ei, fi, i) );
 								}
 							}
@@ -371,5 +371,11 @@ class SelectionTool extends Tool<Int> {
 
 	override function update() {
 		super.update();
+	}
+
+	override function postUpdate() {
+		super.postUpdate();
+
+		group.onPostUpdate();
 	}
 }

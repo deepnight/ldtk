@@ -5,11 +5,14 @@ class GenericLevelElementGroup {
 
 	var renderWrapper : h2d.Object;
 	var ghost : h2d.Graphics;
+	var selectRender : h2d.Graphics;
 	var arrow : h2d.Graphics;
 	var pointLinks : h2d.Graphics;
-	var elements : Array<GenericLevelElement> = [];
+	var elements : Array< Null<GenericLevelElement> > = [];
 	var bounds(get,never) : SelectionBounds;
 	var _cachedBounds : SelectionBounds;
+
+	var invalidatedSelectRender = true;
 
 	public function new(?elems:Array<GenericLevelElement>) {
 		if( elems!=null )
@@ -21,13 +24,22 @@ class GenericLevelElementGroup {
 		ghost = new h2d.Graphics(renderWrapper);
 		arrow = new h2d.Graphics(renderWrapper);
 		pointLinks = new h2d.Graphics(renderWrapper);
+		selectRender = new h2d.Graphics(renderWrapper);
+		// var f = new h2d.filter.Glow(0xffcc00, 1, 4, true);
+		// f.knockout = true;
+		// selectRender.filter = f;
+		selectRender.filter = new h2d.filter.Group([
+			new dn.heaps.filter.PixelOutline(0xffcc00, true),
+			new dn.heaps.filter.PixelOutline(0x0),
+		]);
 		invalidateBounds();
 	}
 
 	public function clear() {
 		elements = [];
-		clearRender();
+		clearGhost();
 		invalidateBounds();
+		invalidateSelectRender();
 	}
 
 	public function dispose() {
@@ -46,6 +58,7 @@ class GenericLevelElementGroup {
 				return;
 		elements.push(ge);
 		invalidateBounds();
+		invalidateSelectRender();
 	}
 
 	public function getSelectedLayerInstances() {
@@ -62,6 +75,9 @@ class GenericLevelElementGroup {
 		return lis;
 	}
 
+	inline function invalidateSelectRender() {
+		invalidatedSelectRender = true;
+	}
 	inline function invalidateBounds() {
 		_cachedBounds = null;
 	}
@@ -99,7 +115,7 @@ class GenericLevelElementGroup {
 		return _cachedBounds;
 	}
 
-	function clearRender() {
+	function clearGhost() {
 		pointLinks.clear();
 		pointLinks.visible = false;
 
@@ -111,11 +127,43 @@ class GenericLevelElementGroup {
 		ghost.removeChildren();
 	}
 
-	function renderGhost(origin:MouseCoords, isCopy:Bool) {
-		clearRender();
+	function renderSelection() {
+		selectRender.clear();
+		selectRender.beginFill(0xff00ff, 0.5);
 
 		for(ge in elements) {
 			switch ge {
+				case null:
+				case IntGrid(li, cx, cy), Tile(li, cx, cy):
+					selectRender.drawRect(
+						li.pxOffsetX + cx*li.def.gridSize,
+						li.pxOffsetY + cy*li.def.gridSize,
+						li.def.gridSize,
+						li.def.gridSize
+					);
+
+				case Entity(li, ei):
+					// TODO
+
+				case PointField(li, ei, fi, arrayIdx):
+					var pt = fi.getPointGrid(arrayIdx);
+					if( pt!=null )
+						selectRender.drawCircle(
+							li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize,
+							li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize,
+							li.def.gridSize*0.6
+						);
+			}
+		}
+	}
+
+	function renderGhost() {
+		clearGhost();
+
+		for(ge in elements) {
+			switch ge {
+				case null:
+
 				case IntGrid(li, cx, cy):
 					ghost.lineStyle();
 					ghost.beginFill( li.getIntGridColorAt(cx,cy) );
@@ -159,7 +207,7 @@ class GenericLevelElementGroup {
 	}
 
 	public inline function hideGhost() {
-		clearRender();
+		clearGhost();
 		arrow.clear();
 		arrow.visible = false;
 	}
@@ -198,6 +246,7 @@ class GenericLevelElementGroup {
 		var grid = getSmartSnapGrid();
 		for( ge in elements )
 			switch ge {
+			case null:
 			case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
 				if( li.def.gridSize<grid && grid % li.def.gridSize != 0 )
 					return true;
@@ -247,7 +296,7 @@ class GenericLevelElementGroup {
 
 		// Update ghost
 		if( !ghost.visible )
-			renderGhost(origin, isCopy);
+			renderGhost();
 
 		var offX = bounds.left - origin.levelX;
 		var offY = bounds.top - origin.levelY;
@@ -429,6 +478,8 @@ class GenericLevelElementGroup {
 		var i = 0;
 		for( ge in elements ) {
 			switch ge {
+				case null:
+
 				case Entity(li, ei):
 					var i = i;
 					inserts.push( ()->{
@@ -535,6 +586,8 @@ class GenericLevelElementGroup {
 	public function deleteSelecteds() {
 		for(ge in elements)
 			switch ge {
+				case null:
+
 				case IntGrid(li, cx, cy):
 					li.removeIntGrid(cx,cy);
 
@@ -551,4 +604,8 @@ class GenericLevelElementGroup {
 		clear();
 	}
 
+	public function onPostUpdate() {
+		if( invalidatedSelectRender )
+			renderSelection();
+	}
 }
