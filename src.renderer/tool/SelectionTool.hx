@@ -239,8 +239,13 @@ class SelectionTool extends Tool<Int> {
 					if( !editor.levelRender.isLayerVisible(li) )
 						return;
 
-					for( cy in Std.int(topPx/li.def.gridSize)...Std.int(bottomPx/li.def.gridSize)+1 )
-					for( cx in Std.int(leftPx/li.def.gridSize)...Std.int(rightPx/li.def.gridSize)+1 ) {
+					var cLeft = Std.int( (leftPx-li.pxOffsetX) / li.def.gridSize );
+					var cRight = Std.int( (rightPx-li.pxOffsetX) / li.def.gridSize );
+					var cTop = Std.int( (topPx-li.pxOffsetY) /li.def.gridSize );
+					var cBottom = Std.int( (bottomPx-li.pxOffsetY) /li.def.gridSize );
+
+					for( cy in cTop...cBottom+1 )
+					for( cx in cLeft...cRight+1 ) {
 						// IntGrid
 						if( li.def.type==IntGrid && li.hasIntGrid(cx,cy) )
 							all.push( IntGrid(li,cx,cy) );
@@ -252,10 +257,6 @@ class SelectionTool extends Tool<Int> {
 
 					// Entities
 					if( li.def.type==Entities ) {
-						var cLeft = Std.int( leftPx/li.def.gridSize );
-						var cRight = Std.int( rightPx/li.def.gridSize );
-						var cTop = Std.int( topPx/li.def.gridSize );
-						var cBottom = Std.int( bottomPx/li.def.gridSize );
 						for(ei in li.entityInstances) {
 							if( ei.getCx(li.def)>=cLeft && ei.getCx(li.def)<=cRight && ei.getCy(li.def)>=cTop && ei.getCy(li.def)<=cBottom )
 								all.push( Entity(li,ei) );
