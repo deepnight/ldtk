@@ -229,6 +229,9 @@ class SelectionTool extends Tool<Int> {
 				var bottom = M.imax( origin.levelY, m.levelY );
 				var all = [];
 				function selectAllInLayer(li:led.inst.LayerInstance) {
+					if( !editor.levelRender.isLayerVisible(li) )
+						return;
+
 					for( cy in Std.int(top/li.def.gridSize)...Std.int(bottom/li.def.gridSize)+1 )
 					for( cx in Std.int(left/li.def.gridSize)...Std.int(right/li.def.gridSize)+1 ) {
 						if( li.def.type==IntGrid && li.hasIntGrid(cx,cy) )
@@ -260,23 +263,6 @@ class SelectionTool extends Tool<Int> {
 						selectAllInLayer(li);
 				}
 				select(all);
-
-				// var all = [];
-				// for(cy in r.top...r.bottom+1)
-				// for(cx in r.left...r.right+1) {
-				// 	var ge = editor.getGenericLevelElementAt(
-				// 		Std.int( (cx+0.5)*editor.curLayerDef.gridSize ),
-				// 		Std.int( (cy+0.5)*editor.curLayerDef.gridSize ),
-				// 		editor.levelRender.enhanceActiveLayer
-				// 	);
-				// 	switch ge {
-				// 		case null:
-				// 		case PointField(_): // not supported
-				// 		case _:
-				// 			all.push(ge);
-				// 	}
-				// }
-				// select(all);
 			}
 		}
 		movePreview.clear();
@@ -292,23 +278,6 @@ class SelectionTool extends Tool<Int> {
 	public inline function isEmpty() return group.length()==0;
 	public inline function isSingle() return group.length()==1;
 
-
-	// function duplicateSelection() : Null< GenericLevelElementGroup > {
-	// 	switch group.get(0) { // TODO support groups
-	// 		case IntGrid(li, cx, cy):
-	// 			return null;
-
-	// 		case Entity(li, instance):
-	// 			var ei = li.duplicateEntityInstance( instance );
-	// 			return new GenericLevelElementGroup([ GenericLevelElement.Entity(li, ei) ]);
-
-	// 		case Tile(li, cx, cy):
-	// 			return null;
-
-	// 		case PointField(li, ei, fi, arrayIdx):
-	// 			return null;
-	// 	}
-	// }
 
 	override function onMouseMove(m:MouseCoords) {
 		super.onMouseMove(m);
@@ -389,65 +358,6 @@ class SelectionTool extends Tool<Int> {
 			group.showGhost(origin, m);
 			return false;
 		}
-		// var anyChange = false;
-
-		// for( ge in getSelectedValue().elements ) {
-		// 	switch ge {
-		// 		case Entity(li, ei):
-		// 			if( !isOnStop ) {
-		// 				var oldX = ei.x;
-		// 				var oldY = ei.y;
-		// 				ei.x = snapToGrid()
-		// 					? M.round( ( m.cx + ei.def.pivotX ) * curLayerInstance.def.gridSize )
-		// 					: m.levelX;
-		// 				ei.y = snapToGrid()
-		// 					? M.round( ( m.cy + ei.def.pivotY ) * curLayerInstance.def.gridSize )
-		// 					: m.levelY;
-		// 				var changed = oldX!=ei.x || oldY!=ei.y;
-		// 				if( changed )
-		// 					editor.ge.emit( EntityInstanceChanged(ei) );
-		// 				anyChange = anyChange || changed;
-		// 			}
-		// 			else
-		// 				selectValue( new GenericLevelElementGroup([ Entity(curLayerInstance, ei) ]) );
-
-		// 		case PointField(li, ei, fi, arrayIdx):
-		// 			if( !isOnStop ) {
-		// 				var old = fi.getPointStr(arrayIdx);
-		// 				fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
-
-		// 				var changed = old!=fi.getPointStr(arrayIdx);
-		// 				if( changed )
-		// 					editor.ge.emit( EntityInstanceChanged(ei) );
-		// 				anyChange = anyChange || changed;
-		// 			}
-		// 			else
-		// 				selectValue( new GenericLevelElementGroup([ PointField(li,ei,fi,arrayIdx) ]) );
-
-		// 		case IntGrid(li, cx,cy):
-		// 			if( isOnStop ) {
-		// 				editor.curLevelHistory.markChange(m.cx,m.cy);
-		// 				var v = li.getIntGrid(cx,cy);
-		// 				if( !isCopy )
-		// 					li.removeIntGrid(cx,cy);
-		// 				li.setIntGrid(m.cx, m.cy, v);
-		// 				editor.selectionTool.selectValue( new GenericLevelElementGroup([ IntGrid(li, m.cx, m.cy) ]) );
-		// 				anyChange = true;
-		// 			}
-
-		// 		case Tile(li,cx,cy):
-		// 			if( isOnStop ) {
-		// 				editor.curLevelHistory.markChange(m.cx,m.cy);
-		// 				var v = li.getGridTile(cx,cy);
-		// 				if( !isCopy )
-		// 					li.removeGridTile(cx,cy);
-		// 				li.setGridTile(m.cx, m.cy, v);
-		// 				editor.selectionTool.selectValue( new GenericLevelElementGroup([ Tile(li, m.cx, m.cy) ]) );
-		// 				anyChange = true;
-		// 			}
-		// 	}
-		// }
-		// return anyChange;
 	}
 
 
@@ -458,19 +368,7 @@ class SelectionTool extends Tool<Int> {
 			return super.useAt(m,isOnStop);
 	}
 
-	var g : h2d.Graphics;
 	override function update() {
 		super.update();
-
-		if( g==null ) {
-			g = new h2d.Graphics();
-			editor.levelRender.root.add(g, Const.DP_TOP);
-		}
-		g.clear();
-		if( any() ) {
-			var b = group.getBoundsPx();
-			g.lineStyle(4, 0xff00ff);
-			g.drawRect(b.left, b.top, b.right-b.left+1, b.bottom-b.top+1);
-		}
 	}
 }

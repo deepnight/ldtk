@@ -233,7 +233,7 @@
 				"maxPerLevel": 0,
 				"limitBehavior": "DiscardOldOnes",
 				"pivotX": 0.5,
-				"pivotY": 0.5,
+				"pivotY": 1,
 				"fieldDefs": [
 					{
 						"identifier": "text",
