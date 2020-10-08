@@ -272,8 +272,6 @@ class GenericLevelElementGroup {
 		if( onlyMovingPoints || now.cx==origin.cx && now.cy==origin.cy )
 			arrow.visible = false;
 		else {
-			arrow.clear();
-			arrow.visible = true;
 			var grid = getSmartSnapGrid();
 			var fx = rel.pxOffsetX + (origin.cx+0.5) * grid;
 			var fy = rel.pxOffsetY + (origin.cy+0.5) * grid;
@@ -281,16 +279,40 @@ class GenericLevelElementGroup {
 			var ty = rel.pxOffsetY + (now.cy+0.5) * grid;
 
 			var a = Math.atan2(ty-fy, tx-fx);
-			var size = 10;
-			arrow.lineStyle(1, 0xffffff, 1);
-			arrow.moveTo(fx,fy);
-			arrow.lineTo(tx,ty);
+			var size = 6;
 
-			arrow.moveTo(tx,ty);
+			// Main line
+			var c = isCopy ? 0xffcc00 : 0xffffff;
+			arrow.clear();
+			arrow.visible = true;
+			arrow.lineStyle(1, c);
+			if( !isCopy ) {
+				arrow.moveTo(fx,fy);
+				arrow.lineTo(tx,ty);
+			}
+			else {
+				var d = 2;
+				arrow.moveTo( fx+Math.cos(a+M.PIHALF)*d*0.5, fy+Math.sin(a+M.PIHALF)*d*0.5 );
+				arrow.lineTo( tx+Math.cos(a+M.PIHALF)*d*0.5, ty+Math.sin(a+M.PIHALF)*d*0.5 );
+
+				arrow.moveTo( fx+Math.cos(a-M.PIHALF)*d*0.5, fy+Math.sin(a-M.PIHALF)*d*0.5 );
+				arrow.lineTo( tx+Math.cos(a-M.PIHALF)*d*0.5, ty+Math.sin(a-M.PIHALF)*d*0.5 );
+			}
+
+			// "Wings"
+			arrow.lineStyle(2, c, 1);
+			arrow.moveTo( tx, ty );
 			arrow.lineTo( tx + Math.cos(a+M.PI*0.8)*size, ty + Math.sin(a+M.PI*0.8)*size );
 
 			arrow.moveTo(tx,ty);
 			arrow.lineTo( tx + Math.cos(a-M.PI*0.8)*size, ty + Math.sin(a-M.PI*0.8)*size );
+
+			// Arrow peak fix
+			arrow.beginFill(c);
+			arrow.lineStyle();
+			arrow.drawCircle(tx,ty,1,8);
+			arrow.endFill();
+
 		}
 
 
