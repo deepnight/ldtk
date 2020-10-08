@@ -449,8 +449,8 @@ class Editor extends Page {
 
 			App.ME.debug(levelX+","+levelY);
 
-			var cx = Std.int( ( levelX + li.pxOffsetX ) / li.def.gridSize );
-			var cy = Std.int( ( levelY + li.pxOffsetY ) / li.def.gridSize );
+			var cx = Std.int( ( levelX - li.pxOffsetX ) / li.def.gridSize );
+			var cy = Std.int( ( levelY - li.pxOffsetY ) / li.def.gridSize );
 
 			switch li.def.type {
 				case IntGrid:
