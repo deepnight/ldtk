@@ -6,6 +6,7 @@ class GenericLevelElementGroup {
 	var renderWrapper : h2d.Object;
 	var ghost : h2d.Graphics;
 	var arrow : h2d.Graphics;
+	var pointLinks : h2d.Graphics;
 	var elements : Array<GenericLevelElement> = [];
 	var bounds(get,never) : SelectionBounds;
 	var _cachedBounds : SelectionBounds;
@@ -19,12 +20,13 @@ class GenericLevelElementGroup {
 
 		ghost = new h2d.Graphics(renderWrapper);
 		arrow = new h2d.Graphics(renderWrapper);
+		pointLinks = new h2d.Graphics(renderWrapper);
 		invalidateBounds();
 	}
 
 	public function clear() {
 		elements = [];
-		clearGhost();
+		clearRender();
 		invalidateBounds();
 	}
 
@@ -83,21 +85,20 @@ class GenericLevelElementGroup {
 		return _cachedBounds;
 	}
 
-	function clearGhost() {
+	function clearRender() {
+		pointLinks.clear();
+		pointLinks.visible = false;
+
+		arrow.clear();
+		arrow.visible = false;
+
 		ghost.visible = false;
 		ghost.clear();
 		ghost.removeChildren();
 	}
 
-	function levelToGhostX(v:Float) {
-		return v - bounds.left;
-	}
-
 	function renderGhost(origin:MouseCoords) {
-		clearGhost();
-
-		var offX = bounds.left - origin.levelX;
-		var offY = bounds.top - origin.levelY;
+		clearRender();
 
 		for(ge in elements) {
 			switch ge {
@@ -105,8 +106,8 @@ class GenericLevelElementGroup {
 					ghost.lineStyle();
 					ghost.beginFill( li.getIntGridColorAt(cx,cy) );
 					ghost.drawRect(
-						offX + li.pxOffsetX + cx*li.def.gridSize - bounds.left,
-						offY + li.pxOffsetY + cy*li.def.gridSize - bounds.top,
+						li.pxOffsetX + cx*li.def.gridSize - bounds.left,
+						li.pxOffsetY + cy*li.def.gridSize - bounds.top,
 						li.def.gridSize,
 						li.def.gridSize
 					);
@@ -116,20 +117,20 @@ class GenericLevelElementGroup {
 					var e = display.LevelRender.createEntityRender(ei);
 					ghost.addChild(e);
 					e.alpha = 0.5;
-					e.x = offX + ei.x - bounds.left;
-					e.y = offY + ei.y - bounds.top;
+					e.x = ei.x - bounds.left;
+					e.y = ei.y - bounds.top;
 
 				case Tile(li, cx, cy):
 					var tid = li.getGridTile(cx,cy);
 					var td = editor.project.defs.getTilesetDef( li.def.tilesetDefUid );
 					var bmp = new h2d.Bitmap( td.getTile(tid), ghost );
-					bmp.x = offX + li.pxOffsetX + cx*li.def.gridSize - bounds.left;
-					bmp.y = offY + li.pxOffsetY + cy*li.def.gridSize - bounds.top;
+					bmp.x = li.pxOffsetX + cx*li.def.gridSize - bounds.left;
+					bmp.y = li.pxOffsetY + cy*li.def.gridSize - bounds.top;
 
 				case PointField(li, ei, fi, arrayIdx):
 					var pt = fi.getPointGrid(arrayIdx);
-					var x = offX + li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize - bounds.left;
-					var y = offY + li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize - bounds.top;
+					var x = li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize - bounds.left;
+					var y = li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize - bounds.top;
 					ghost.lineStyle(1, ei.getSmartColor(false));
 					ghost.drawCircle(x, y, li.def.gridSize*0.5);
 
@@ -147,7 +148,7 @@ class GenericLevelElementGroup {
 	}
 
 	public inline function hideGhost() {
-		clearGhost();
+		clearRender();
 		arrow.clear();
 		arrow.visible = false;
 	}
@@ -186,59 +187,163 @@ class GenericLevelElementGroup {
 		return false;
 	}
 
+	function isEntitySelected(e:led.inst.EntityInstance) {
+		for( ge in elements)
+			switch ge {
+				case Entity(li, ei):
+					if( ei==e )
+						return true;
+
+				case _:
+			}
+
+		return false;
+	}
+
+	function isPointSelected(f:led.inst.FieldInstance, idx:Int) {
+		for( ge in elements)
+			switch ge {
+				case PointField(li, ei, fi, arrayIdx):
+					if( fi==f && arrayIdx==idx )
+						return true;
+
+				case _:
+			}
+
+		return false;
+	}
+
+	inline function levelToGhostX(v:Float) {
+		return v - bounds.left + ghost.x;
+	}
+
+	inline function levelToGhostY(v:Float) {
+		return v - bounds.top + ghost.y;
+	}
+
 	public function showGhost(origin:MouseCoords, now:MouseCoords) {
 		if( !ghost.visible )
 			renderGhost(origin);
 
+		var offX = bounds.left - origin.levelX;
+		var offY = bounds.top - origin.levelY;
+
 		ghost.visible = true;
-		ghost.x = origin.levelX + getDeltaX(origin,now);
-		ghost.y = origin.levelY + getDeltaY(origin,now);
+		ghost.x = offX + origin.levelX + getDeltaX(origin,now);
+		ghost.y = offY + origin.levelY + getDeltaY(origin,now);
+
 
 		// Render movement arrow
-		var showArrow = false;
-		for(ge in elements)
-			if( !ge.match(PointField(_)) ) {
-				showArrow = true;
-				break;
-			}
-		arrow.visible = showArrow;
-		if( showArrow ) {
-			arrow.clear();
-			var grid = getSnapGrid();
-			var fx = (origin.cx+0.5) * grid;
-			var fy = (origin.cy+0.5) * grid;
-			var tx = (now.cx+0.5) * grid;
-			var ty = (now.cy+0.5) * grid;
+		// var showArrow = false;
+		// for(ge in elements)
+		// 	if( !ge.match(PointField(_)) ) {
+		// 		showArrow = true;
+		// 		break;
+		// 	}
+		// arrow.visible = showArrow;
+		// if( showArrow ) {
+		// 	arrow.clear();
+		// 	var grid = getSnapGrid();
+		// 	var fx = (origin.cx+0.5) * grid;
+		// 	var fy = (origin.cy+0.5) * grid;
+		// 	var tx = (now.cx+0.5) * grid;
+		// 	var ty = (now.cy+0.5) * grid;
 
-			var a = Math.atan2(ty-fy, tx-fx);
-			var size = 10;
-			arrow.lineStyle(1, 0xffffff, 1);
-			arrow.moveTo(fx,fy);
-			arrow.lineTo(tx,ty);
+		// 	var a = Math.atan2(ty-fy, tx-fx);
+		// 	var size = 10;
+		// 	arrow.lineStyle(1, 0xffffff, 1);
+		// 	arrow.moveTo(fx,fy);
+		// 	arrow.lineTo(tx,ty);
 
-			arrow.moveTo(tx,ty);
-			arrow.lineTo( tx + Math.cos(a+M.PI*0.8)*size, ty + Math.sin(a+M.PI*0.8)*size );
+		// 	arrow.moveTo(tx,ty);
+		// 	arrow.lineTo( tx + Math.cos(a+M.PI*0.8)*size, ty + Math.sin(a+M.PI*0.8)*size );
 
-			arrow.moveTo(tx,ty);
-			arrow.lineTo( tx + Math.cos(a-M.PI*0.8)*size, ty + Math.sin(a-M.PI*0.8)*size );
-		}
+		// 	arrow.moveTo(tx,ty);
+		// 	arrow.lineTo( tx + Math.cos(a-M.PI*0.8)*size, ty + Math.sin(a-M.PI*0.8)*size );
+		// }
+
 
 		// Render point links
-		// for(ge in elements)
-		// 	switch ge {
-		// 		case PointField(li, ei, fi, arrayIdx):
-		// 			if( fi.def.editorDisplayMode==PointStar ) {
-		// 				var b = getBoundsPx();
-		// 				ghost.lineStyle(3,0xff00ff);
-		// 				ghost.moveTo(x,y);
-		// 				ghost.lineTo(
-		// 					offX + ei.x - b.left,
-		// 					offY + ei.y - b.top
-		// 				);
-		// 			}
+		pointLinks.clear();
+		pointLinks.visible = true;
+		for(ge in elements)
+			switch ge {
+				case Entity(li,ei):
+					for(fi in ei.fieldInstances) {
+						if( fi.def.type!=F_Point )
+							continue;
 
-		// 		case _:
-		// 	}
+						if( fi.def.editorDisplayMode!=PointPath && fi.def.editorDisplayMode!=PointStar )
+							continue;
+
+						// Links to Entity own field points
+						for( i in 0...fi.getArrayLength() ) {
+							if( i>0 && fi.def.editorDisplayMode==PointPath )
+								continue;
+
+							pointLinks.lineStyle(1,ei.getSmartColor(true));
+							pointLinks.moveTo( levelToGhostX(ei.x), levelToGhostY(ei.y) );
+							var pt = fi.getPointGrid(i);
+							if( isPointSelected(fi,i) ) {
+								pointLinks.lineTo(
+									levelToGhostX( (pt.cx+0.5)*li.def.gridSize ),
+									levelToGhostY( (pt.cy+0.5)*li.def.gridSize )
+								);
+							}
+							else
+								pointLinks.lineTo( (pt.cx+0.5)*li.def.gridSize, (pt.cy+0.5)*li.def.gridSize );
+						}
+					}
+
+				case PointField(li, ei, fi, arrayIdx):
+					pointLinks.lineStyle(1,ei.getSmartColor(true));
+					var pt = fi.getPointGrid(arrayIdx);
+					var x = levelToGhostX( (pt.cx+0.5)*li.def.gridSize );
+					var y = levelToGhostY( (pt.cy+0.5)*li.def.gridSize );
+
+					// Link to entity
+					if( fi.def.editorDisplayMode==PointStar || arrayIdx==0 ) {
+						pointLinks.moveTo(x,y);
+						if( !isEntitySelected(ei) )
+							pointLinks.lineTo(ei.x, ei.y);
+						else
+							pointLinks.lineTo( levelToGhostX(ei.x), levelToGhostY(ei.y) );
+					}
+
+					if( fi.def.editorDisplayMode==PointPath ) {
+						// Link to previous point in path
+						if( arrayIdx>0 ) {
+							var prev = fi.getPointGrid(arrayIdx-1);
+							if( prev!=null ) {
+								pointLinks.moveTo(x,y);
+								if( isPointSelected(fi,arrayIdx-1) )
+									pointLinks.lineTo(
+										levelToGhostX( (prev.cx+0.5)*li.def.gridSize ),
+										levelToGhostY( (prev.cy+0.5)*li.def.gridSize )
+									);
+								else
+									pointLinks.lineTo( (prev.cx+0.5)*li.def.gridSize, (prev.cy+0.5)*li.def.gridSize );
+							}
+						}
+
+						// Link to next point in path
+						if( arrayIdx<fi.getArrayLength()-1 ) {
+							var next = fi.getPointGrid(arrayIdx+1);
+							if( next!=null ) {
+								pointLinks.moveTo(x,y);
+								if( isPointSelected(fi,arrayIdx+1) )
+									pointLinks.lineTo(
+										levelToGhostX( (next.cx+0.5)*li.def.gridSize ),
+										levelToGhostY( (next.cy+0.5)*li.def.gridSize )
+									);
+								else
+									pointLinks.lineTo( (next.cx+0.5)*li.def.gridSize, (next.cy+0.5)*li.def.gridSize );
+							}
+						}
+					}
+
+				case _:
+			}
 	}
 
 
@@ -252,6 +357,7 @@ class GenericLevelElementGroup {
 			return false;
 
 		var anyChange = false;
+		invalidateBounds();
 
 		var removals : Array< Void->Void > = [];
 		var inserts : Array< Void->Void > = [];
