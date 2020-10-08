@@ -63,33 +63,42 @@ class SelectionTool extends Tool<Int> {
 				editor.selectLayerInstance(li);
 
 			// Selection effect
-			switch group.get(0) {
-				case IntGrid(li, cx, cy):
-					var v = li.getIntGrid(cx,cy);
-					editor.curTool.as(tool.lt.IntGridTool).selectValue(v);
-					editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
+			if( group.length()==1 )
+				switch group.get(0) {
+					case IntGrid(li, cx, cy):
+						var v = li.getIntGrid(cx,cy);
+						var t = editor.curTool.as(tool.lt.IntGridTool);
+						if( t!=null )
+							t.selectValue(v);
+						editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
 
-				case Entity(li, ei):
-					editor.curTool.as(tool.lt.EntityTool).selectValue(ei.defUid); // BUG might crash
-					editor.levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
-					ui.EntityInstanceEditor.openFor(ei);
+					case Entity(li, ei):
+						var t = editor.curTool.as(tool.lt.EntityTool);
+						if( t!=null )
+							t.selectValue(ei.defUid);
+						editor.levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
+						ui.EntityInstanceEditor.openFor(ei);
 
 
-				case Tile(li, cx, cy):
-					var tid = li.getGridTile(cx,cy);
+					case Tile(li, cx, cy):
+						var tid = li.getGridTile(cx,cy);
 
-					var t = editor.curTool.as(tool.lt.TileTool);
-					t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking saved selections?
+						var t = editor.curTool.as(tool.lt.TileTool);
+						if( t!=null )
+							t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking saved selections?
 
-					editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
+						editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
 
-				case PointField(li, ei, fi, arrayIdx):
-					editor.curTool.as(tool.lt.EntityTool).selectValue(ei.defUid); // BUG might crash
-					var pt = fi.getPointGrid(arrayIdx);
-					if( pt!=null)
-						editor.levelRender.bleepRectCase( pt.cx, pt.cy, 1, 1, ei.def.color );
-					ui.EntityInstanceEditor.openFor(ei);
-			}
+					case PointField(li, ei, fi, arrayIdx):
+						var t = editor.curTool.as(tool.lt.EntityTool);
+						if( t!=null )
+							t.selectValue(ei.defUid);
+
+						var pt = fi.getPointGrid(arrayIdx);
+						if( pt!=null)
+							editor.levelRender.bleepRectCase( pt.cx, pt.cy, 1, 1, ei.def.color );
+						ui.EntityInstanceEditor.openFor(ei);
+				}
 
 			editor.curTool.onValuePicking();
 		}
