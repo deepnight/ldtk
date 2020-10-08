@@ -97,11 +97,11 @@ class MouseCoords {
 	}
 
 	public function getLayerCx(li:led.inst.LayerInstance) {
-		return Std.int( ( levelX + getRelativeLayerInst().pxOffsetX - li.pxOffsetX ) / li.def.gridSize );
+		return Std.int( ( layerX + getRelativeLayerInst().pxOffsetX - li.pxOffsetX ) / li.def.gridSize );
 	}
 
 	public function getLayerCy(li:led.inst.LayerInstance) {
-		return Std.int( ( levelY + getRelativeLayerInst().pxOffsetY - li.pxOffsetY ) / li.def.gridSize );
+		return Std.int( ( layerY + getRelativeLayerInst().pxOffsetY - li.pxOffsetY ) / li.def.gridSize );
 	}
 }
 
