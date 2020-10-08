@@ -58,12 +58,9 @@ class SelectionTool extends Tool<Int> {
 
 		if( isSingle() ) {
 			// Change layer
-			switch group.get(0) {
-				case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
-					if( li!=editor.curLayerInstance )
-						editor.selectLayerInstance(li);
-				case null:
-			}
+			var li = group.getSmartRelativeLayerInstance();
+			if( li!=editor.curLayerInstance )
+				editor.selectLayerInstance(li);
 
 			// Selection effect
 			switch group.get(0) {
