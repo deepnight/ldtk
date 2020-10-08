@@ -234,33 +234,33 @@ class GenericLevelElementGroup {
 
 
 		// Render movement arrow
-		// var showArrow = false;
-		// for(ge in elements)
-		// 	if( !ge.match(PointField(_)) ) {
-		// 		showArrow = true;
-		// 		break;
-		// 	}
-		// arrow.visible = showArrow;
-		// if( showArrow ) {
-		// 	arrow.clear();
-		// 	var grid = getSnapGrid();
-		// 	var fx = (origin.cx+0.5) * grid;
-		// 	var fy = (origin.cy+0.5) * grid;
-		// 	var tx = (now.cx+0.5) * grid;
-		// 	var ty = (now.cy+0.5) * grid;
+		var showArrow = false;
+		for(ge in elements)
+			if( !ge.match(PointField(_)) ) {
+				showArrow = true;
+				break;
+			}
+		arrow.visible = showArrow;
+		if( showArrow ) {
+			arrow.clear();
+			var grid = getSnapGrid();
+			var fx = (origin.cx+0.5) * grid;
+			var fy = (origin.cy+0.5) * grid;
+			var tx = (now.cx+0.5) * grid;
+			var ty = (now.cy+0.5) * grid;
 
-		// 	var a = Math.atan2(ty-fy, tx-fx);
-		// 	var size = 10;
-		// 	arrow.lineStyle(1, 0xffffff, 1);
-		// 	arrow.moveTo(fx,fy);
-		// 	arrow.lineTo(tx,ty);
+			var a = Math.atan2(ty-fy, tx-fx);
+			var size = 10;
+			arrow.lineStyle(1, 0xffffff, 1);
+			arrow.moveTo(fx,fy);
+			arrow.lineTo(tx,ty);
 
-		// 	arrow.moveTo(tx,ty);
-		// 	arrow.lineTo( tx + Math.cos(a+M.PI*0.8)*size, ty + Math.sin(a+M.PI*0.8)*size );
+			arrow.moveTo(tx,ty);
+			arrow.lineTo( tx + Math.cos(a+M.PI*0.8)*size, ty + Math.sin(a+M.PI*0.8)*size );
 
-		// 	arrow.moveTo(tx,ty);
-		// 	arrow.lineTo( tx + Math.cos(a-M.PI*0.8)*size, ty + Math.sin(a-M.PI*0.8)*size );
-		// }
+			arrow.moveTo(tx,ty);
+			arrow.lineTo( tx + Math.cos(a-M.PI*0.8)*size, ty + Math.sin(a-M.PI*0.8)*size );
+		}
 
 
 		// Render point links
