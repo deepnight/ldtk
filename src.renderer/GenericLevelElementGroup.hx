@@ -123,7 +123,6 @@ class GenericLevelElementGroup {
 					ghost.beginFill(ei.getSmartColor(false) );
 					ghost.drawCircle(x, y, li.def.gridSize*0.3);
 					ghost.endFill();
-					fi.def.editorDisplayMode
 			}
 		}
 
