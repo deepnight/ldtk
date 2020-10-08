@@ -365,7 +365,7 @@ class SelectionTool extends Tool<Int> {
 			return changed;
 		}
 		else {
-			group.showGhost(origin, m);
+			group.showGhost(origin, m, isCopy);
 			return false;
 		}
 	}

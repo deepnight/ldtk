@@ -111,7 +111,7 @@ class GenericLevelElementGroup {
 		ghost.removeChildren();
 	}
 
-	function renderGhost(origin:MouseCoords) {
+	function renderGhost(origin:MouseCoords, isCopy:Bool) {
 		clearRender();
 
 		for(ge in elements) {
@@ -142,16 +142,18 @@ class GenericLevelElementGroup {
 					bmp.y = li.pxOffsetY + cy*li.def.gridSize - bounds.top;
 
 				case PointField(li, ei, fi, arrayIdx):
-					var pt = fi.getPointGrid(arrayIdx);
-					var x = li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize - bounds.left;
-					var y = li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize - bounds.top;
-					ghost.lineStyle(1, ei.getSmartColor(false));
-					ghost.drawCircle(x, y, li.def.gridSize*0.5);
+					if( !isCopy ) {
+						var pt = fi.getPointGrid(arrayIdx);
+						var x = li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize - bounds.left;
+						var y = li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize - bounds.top;
+						ghost.lineStyle(1, ei.getSmartColor(false));
+						ghost.drawCircle(x, y, li.def.gridSize*0.5);
 
-					ghost.lineStyle();
-					ghost.beginFill(ei.getSmartColor(false) );
-					ghost.drawCircle(x, y, li.def.gridSize*0.3);
-					ghost.endFill();
+						ghost.lineStyle();
+						ghost.beginFill(ei.getSmartColor(false) );
+						ghost.drawCircle(x, y, li.def.gridSize*0.3);
+						ghost.endFill();
+					}
 			}
 		}
 
@@ -179,7 +181,7 @@ class GenericLevelElementGroup {
 			: now.levelY - origin.levelY;
 	}
 
-	function getSmartRelativeLayerInstance() : Null<led.inst.LayerInstance> {
+	public function getSmartRelativeLayerInstance() : Null<led.inst.LayerInstance> {
 		var l : led.inst.LayerInstance = null;
 		for(ge in elements)
 			switch ge {
@@ -243,14 +245,14 @@ class GenericLevelElementGroup {
 		return v - bounds.top + ghost.y;
 	}
 
-	public function showGhost(origin:MouseCoords, now:MouseCoords) {
+	public function showGhost(origin:MouseCoords, now:MouseCoords, isCopy:Bool) {
 		var rel = getSmartRelativeLayerInstance();
 		origin = origin.cloneRelativeToLayer(rel);
 		now = now.cloneRelativeToLayer(rel);
 
 		// Update ghost
 		if( !ghost.visible )
-			renderGhost(origin);
+			renderGhost(origin, isCopy);
 
 		var offX = bounds.left - origin.levelX;
 		var offY = bounds.top - origin.levelY;
@@ -294,7 +296,7 @@ class GenericLevelElementGroup {
 
 		// Render point links
 		pointLinks.clear();
-		pointLinks.visible = true;
+		pointLinks.visible = !isCopy;
 		for(ge in elements)
 			switch ge {
 				case Entity(li,ei):
@@ -386,11 +388,11 @@ class GenericLevelElementGroup {
 
 
 	function snapToGrid() {
-		return true; // TODO
+		return true;
 	}
 
 
-	public function moveSelecteds(origin:MouseCoords, to:MouseCoords, copy:Bool) : Bool {
+	public function moveSelecteds(origin:MouseCoords, to:MouseCoords, isCopy:Bool) : Bool {
 		var rel = getSmartRelativeLayerInstance();
 		origin = origin.cloneRelativeToLayer(rel);
 		to = to.cloneRelativeToLayer(rel);
@@ -410,7 +412,14 @@ class GenericLevelElementGroup {
 		for( ge in elements ) {
 			switch ge {
 				case Entity(li, ei):
+					var i = i;
 					inserts.push( ()->{
+						if( isCopy ) {
+							ei = li.duplicateEntityInstance(ei);
+							elements[i] = Entity(li,ei);
+							if( ui.EntityInstanceEditor.isOpen() )
+								ui.EntityInstanceEditor.openFor(ei);
+						}
 						ei.x += getDeltaX(origin, to);
 						ei.y += getDeltaY(origin, to);
 						editor.ge.emit( EntityInstanceChanged(ei) );
@@ -422,7 +431,8 @@ class GenericLevelElementGroup {
 					var gridRatio = Std.int( moveGrid / li.def.gridSize );
 					var tcx = cx + (to.cx-origin.cx)*gridRatio;
 					var tcy = cy + (to.cy-origin.cy)*gridRatio;
-					removals.push( ()-> li.removeIntGrid(cx,cy) );
+					if( !isCopy )
+						removals.push( ()-> li.removeIntGrid(cx,cy) );
 					inserts.push( ()-> li.setIntGrid(tcx, tcy, v) );
 
 					elements[i] = li.isValid(tcx,tcy) ? IntGrid(li, tcx, tcy) : null; // update selection
@@ -435,7 +445,8 @@ class GenericLevelElementGroup {
 					var gridRatio = Std.int( moveGrid / li.def.gridSize );
 					var tcx = cx + (to.cx-origin.cx)*gridRatio;
 					var tcy = cy + (to.cy-origin.cy)*gridRatio;
-					removals.push( ()-> li.removeGridTile(cx,cy) );
+					if( !isCopy )
+						removals.push( ()-> li.removeGridTile(cx,cy) );
 					inserts.push( ()-> li.setGridTile(tcx, tcy, v) );
 
 					elements[i] = li.isValid(tcx,tcy) ? Tile(li, tcx, tcy) : null; // update selection
@@ -444,15 +455,20 @@ class GenericLevelElementGroup {
 					anyChange = true;
 
 				case PointField(li, ei, fi, arrayIdx):
-					var pt = fi.getPointGrid(arrayIdx);
-					inserts.push( ()-> {
-						pt.cx += Std.int( getDeltaX(origin, to) / li.def.gridSize );
-						pt.cy += Std.int( getDeltaY(origin, to) / li.def.gridSize );
-						fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
-						editor.ge.emit( EntityInstanceChanged(ei) );
-					} );
-					changedLayers.set(li,li);
-					anyChange = true;
+					if( isCopy ) {
+						elements[i] = null;
+					}
+					else {
+						var pt = fi.getPointGrid(arrayIdx);
+						inserts.push( ()-> {
+							pt.cx += Std.int( getDeltaX(origin, to) / li.def.gridSize );
+							pt.cy += Std.int( getDeltaY(origin, to) / li.def.gridSize );
+							fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
+							editor.ge.emit( EntityInstanceChanged(ei) );
+						} );
+						changedLayers.set(li,li);
+						anyChange = true;
+					}
 			}
 			i++;
 		}
