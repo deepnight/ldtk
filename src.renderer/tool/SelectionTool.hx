@@ -223,14 +223,19 @@ class SelectionTool extends Tool<Int> {
 			}
 			else {
 				// Pick every objects under rectangle
-				var r = Rect.fromMouseCoords(origin, m);
+				// var r = Rect.fromMouseCoords(origin, m);
+				var leftPx = M.imin( origin.levelX, m.levelX );
+				var rightPx = M.imax( origin.levelX, m.levelX );
+				var topPx = M.imin( origin.levelY, m.levelY );
+				var bottomPx = M.imax( origin.levelY, m.levelY );
+
 				var all = [];
 				function selectAllInLayer(li:led.inst.LayerInstance) {
 					if( !editor.levelRender.isLayerVisible(li) )
 						return;
 
-					for( cy in r.top...r.bottom+1 )
-					for( cx in r.left...r.right+1 ) {
+					for( cy in Std.int(topPx/li.def.gridSize)...Std.int(bottomPx/li.def.gridSize)+1 )
+					for( cx in Std.int(leftPx/li.def.gridSize)...Std.int(rightPx/li.def.gridSize)+1 ) {
 						// IntGrid
 						if( li.def.type==IntGrid && li.hasIntGrid(cx,cy) )
 							all.push( IntGrid(li,cx,cy) );
@@ -242,17 +247,24 @@ class SelectionTool extends Tool<Int> {
 
 					// Entities
 					if( li.def.type==Entities ) {
+						var cLeft = Std.int( leftPx/li.def.gridSize );
+						var cRight = Std.int( rightPx/li.def.gridSize );
+						var cTop = Std.int( topPx/li.def.gridSize );
+						var cBottom = Std.int( bottomPx/li.def.gridSize );
 						for(ei in li.entityInstances) {
-							if( ei.getCx(li.def)>=r.left && ei.getCx(li.def)<=r.right && ei.getCy(li.def)>=r.top && ei.getCy(li.def)<=r.bottom ) {
+							if( ei.getCx(li.def)>=cLeft && ei.getCx(li.def)<=cRight && ei.getCy(li.def)>=cTop && ei.getCy(li.def)<=cBottom )
 								all.push( Entity(li,ei) );
-								// Entity points
-								for(fi in ei.fieldInstances)
-								for(i in 0...fi.getArrayLength())
-									if( fi.def.type==F_Point ) {
-										var pt = fi.getPointGrid(i);
-										if( pt.cx>=r.left && pt.cx<=r.right && pt.cy>=r.top && pt.cy<=r.bottom )
-											all.push( PointField(li, ei, fi, i) );
-									}
+
+							// Entity points
+							for(fi in ei.fieldInstances) {
+								if( fi.def.type!=F_Point )
+									continue;
+
+								for(i in 0...fi.getArrayLength()) {
+									var pt = fi.getPointGrid(i);
+									if( pt.cx>=cLeft && pt.cx<=cRight && pt.cy>=cTop && pt.cy<=cBottom )
+										all.push( PointField(li, ei, fi, i) );
+								}
 							}
 						}
 					}
