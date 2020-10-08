@@ -5,7 +5,6 @@ class LevelRender extends dn.Process {
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 
-	public var enhanceActiveLayer(default,null) = false;
 	public var focusLevelX(default,set) : Float;
 	public var focusLevelY(default,set) : Float;
 	public var zoom(get,set) : Float;
@@ -820,23 +819,20 @@ class LevelRender extends dn.Process {
 		return wrapper;
 	}
 
-	public function setEnhanceActiveLayer(v:Bool) {
-		enhanceActiveLayer = v;
-		editor.jMainPanel.find("input#enhanceActiveLayer").prop("checked", v);
-		applyAllLayersVisibility();
-		editor.selectionTool.clear();
-	}
-
 	function applyLayerVisibility(li:led.inst.LayerInstance) {
 		var wrapper = layerRenders.get(li.layerDefUid);
 		if( wrapper==null )
 			return;
 
 		wrapper.visible = isLayerVisible(li);
-		wrapper.alpha = li.def.displayOpacity * ( !enhanceActiveLayer || li==editor.curLayerInstance ? 1 : 0.4 );
-		wrapper.filter = !enhanceActiveLayer || li==editor.curLayerInstance ? null : new h2d.filter.Blur(4);
+		wrapper.alpha = li.def.displayOpacity * ( !editor.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
+		wrapper.filter = !editor.singleLayerMode || li==editor.curLayerInstance ? null : new h2d.filter.Group([
+			C.getColorizeFilterH2d(0x8c99c1, 0.9),
+			new h2d.filter.Blur(2),
+		]);
 	}
 
+	@:allow(page.Editor)
 	function applyAllLayersVisibility() {
 		for(ld in editor.project.defs.layers) {
 			var li = editor.curLevel.getLayerInstance(ld);

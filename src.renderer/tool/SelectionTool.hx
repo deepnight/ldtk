@@ -270,7 +270,7 @@ class SelectionTool extends Tool<Int> {
 					}
 				}
 
-				if( editor.levelRender.enhanceActiveLayer )
+				if( editor.singleLayerMode )
 					selectAllInLayer( editor.curLayerInstance );
 				else {
 					for(li in editor.curLevel.layerInstances)

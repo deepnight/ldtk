@@ -34,6 +34,7 @@ class Editor extends Page {
 
 	var gridSnapping = true;
 	public var needSaving = false;
+	public var singleLayerMode(default,null) = false;
 
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
@@ -137,10 +138,10 @@ class Editor extends Page {
 			onHelp();
 		});
 
-		jMainPanel.find("input#enhanceActiveLayer")
-			.prop("checked", levelRender.enhanceActiveLayer)
+		jMainPanel.find("input#singleLayerMode")
+			.prop("checked", singleLayerMode)
 			.change( function(ev) {
-				levelRender.setEnhanceActiveLayer( ev.getThis().prop("checked") );
+				setSingleLayerMode( ev.getThis().prop("checked") );
 			});
 
 
@@ -339,8 +340,8 @@ class Editor extends Page {
 				App.ME.exit();
 
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				levelRender.setEnhanceActiveLayer( !levelRender.enhanceActiveLayer );
-				N.quick( "Active layer enhancement: "+( levelRender.enhanceActiveLayer ? "ON" : "off" ));
+				setSingleLayerMode( !singleLayerMode );
+				N.quick( "Single layer mode: "+( singleLayerMode ? "ON" : "off" ));
 
 			case K.L if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				gridSnapping = !gridSnapping;
@@ -496,7 +497,7 @@ class Editor extends Page {
 			var best = null;
 			for(ld in all) {
 				var ge = getElement( curLevel.getLayerInstance(ld) );
-				if( ld==curLayerDef && ge!=null && levelRender.enhanceActiveLayer ) // prioritize active layer
+				if( ld==curLayerDef && ge!=null && singleLayerMode ) // prioritize active layer
 					return ge;
 
 				if( ge!=null )
@@ -704,6 +705,13 @@ class Editor extends Page {
 
 	public function getGridSnapping() {
 		return gridSnapping || !layerSupportsFreeMode();
+	}
+
+	public function setSingleLayerMode(v:Bool) {
+		singleLayerMode = v;
+		jMainPanel.find("input#singleLayerMode").prop("checked", v);
+		levelRender.applyAllLayersVisibility();
+		selectionTool.clear();
 	}
 
 	function onHelp() {
