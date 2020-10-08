@@ -117,8 +117,8 @@ class GenericLevelElementGroup {
 					var e = display.LevelRender.createEntityRender(ei);
 					ghost.addChild(e);
 					e.alpha = 0.5;
-					e.x = ei.x - bounds.left;
-					e.y = ei.y - bounds.top;
+					e.x = li.pxOffsetX + ei.x - bounds.left;
+					e.y = li.pxOffsetY + ei.y - bounds.top;
 
 				case Tile(li, cx, cy):
 					var tid = li.getGridTile(cx,cy);
@@ -257,10 +257,10 @@ class GenericLevelElementGroup {
 			arrow.clear();
 			arrow.visible = true;
 			var grid = getSmartSnapGrid();
-			var fx = (origin.cx+0.5) * grid;
-			var fy = (origin.cy+0.5) * grid;
-			var tx = (now.cx+0.5) * grid;
-			var ty = (now.cy+0.5) * grid;
+			var fx = rel.pxOffsetX + (origin.cx+0.5) * grid;
+			var fy = rel.pxOffsetY + (origin.cy+0.5) * grid;
+			var tx = rel.pxOffsetX + (now.cx+0.5) * grid;
+			var ty = rel.pxOffsetY + (now.cy+0.5) * grid;
 
 			var a = Math.atan2(ty-fy, tx-fx);
 			var size = 10;
