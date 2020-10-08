@@ -229,7 +229,6 @@ class SelectionTool extends Tool<Int> {
 			}
 			else {
 				// Pick every objects under rectangle
-				// var r = Rect.fromMouseCoords(origin, m);
 				var leftPx = M.imin( origin.levelX, m.levelX );
 				var rightPx = M.imax( origin.levelX, m.levelX );
 				var topPx = M.imin( origin.levelY, m.levelY );
@@ -303,41 +302,8 @@ class SelectionTool extends Tool<Int> {
 		super.onMouseMove(m);
 
 		// Start moving elements only after a small elapsed mouse distance
-		if( isRunning() && button==0 && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {
+		if( isRunning() && button==0 && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE )
 			moveStarted = true;
-
-			// Copy selection
-			// if( any() && isCopy ) {
-			// 	var copy = duplicateSelection();
-			// 	if( copy!=null )
-			// 		selectValue(copy);
-			// }
-		}
-
-		// // Render "move arrow" preview
-		// if( any() && isRunning() && moveStarted ) { // TODO should be done in Group?
-		// 	switch group.get(0) {
-		// 		case IntGrid(_), Tile(_):
-		// 			movePreview.clear();
-		// 			var fx = (origin.cx+0.5) * editor.curLayerDef.gridSize;
-		// 			var fy = (origin.cy+0.5) * editor.curLayerDef.gridSize;
-		// 			var tx = (m.cx+0.5) * editor.curLayerDef.gridSize;
-		// 			var ty = (m.cy+0.5) * editor.curLayerDef.gridSize;
-		// 			var a = Math.atan2(ty-fy, tx-fx);
-		// 			var arrow = 10;
-		// 			movePreview.lineStyle(1, 0xffffff, 1);
-		// 			movePreview.moveTo(fx,fy);
-		// 			movePreview.lineTo(tx,ty);
-
-		// 			movePreview.moveTo(tx,ty);
-		// 			movePreview.lineTo( tx + Math.cos(a+M.PI*0.8)*arrow, ty + Math.sin(a+M.PI*0.8)*arrow );
-
-		// 			movePreview.moveTo(tx,ty);
-		// 			movePreview.lineTo( tx + Math.cos(a-M.PI*0.8)*arrow, ty + Math.sin(a-M.PI*0.8)*arrow );
-
-		// 		case _:
-		// 	}
-		// }
 	}
 
 
