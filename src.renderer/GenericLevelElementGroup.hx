@@ -1,3 +1,5 @@
+typedef SelectionBounds = { top:Int, left:Int, right:Int, bottom:Int }
+
 class GenericLevelElementGroup {
 	var editor(get,never): Editor; inline function get_editor() return Editor.ME;
 
@@ -5,6 +7,8 @@ class GenericLevelElementGroup {
 	var ghost : h2d.Graphics;
 	var arrow : h2d.Graphics;
 	var elements : Array<GenericLevelElement> = [];
+	var bounds(get,never) : SelectionBounds;
+	var _cachedBounds : SelectionBounds;
 
 	public function new(?elems:Array<GenericLevelElement>) {
 		if( elems!=null )
@@ -15,15 +19,18 @@ class GenericLevelElementGroup {
 
 		ghost = new h2d.Graphics(renderWrapper);
 		arrow = new h2d.Graphics(renderWrapper);
+		invalidateBounds();
 	}
 
 	public function clear() {
 		elements = [];
 		clearGhost();
+		invalidateBounds();
 	}
 
 	public function dispose() {
 		renderWrapper.remove();
+		_cachedBounds = null;
 		elements = null;
 	}
 
@@ -36,40 +43,44 @@ class GenericLevelElementGroup {
 			if( ge.equals(e) )
 				return;
 		elements.push(ge);
+		invalidateBounds();
 	}
 
-	public function getBoundsPx() {
-		if( elements.length==0 )
-			return null;
+	inline function invalidateBounds() {
+		_cachedBounds = null;
+	}
 
-		var top = Const.INFINITE;
-		var left = Const.INFINITE;
-		var right = -Const.INFINITE;
-		var bottom = -Const.INFINITE;
+	function get_bounds() {
+		if( _cachedBounds==null ) {
+			if( elements.length==0 )
+				_cachedBounds = { top:0, left:0, right:0, bottom:0 }
+			else {
+				_cachedBounds = {
+					top : Const.INFINITE,
+					left : Const.INFINITE,
+					right : -Const.INFINITE,
+					bottom : -Const.INFINITE,
+				}
 
-		for(e in elements) {
-			var x = switch e {
-				case IntGrid(li, cx, cy), Tile(li,cx,cy): li.pxOffsetX + cx*li.def.gridSize;
-				case Entity(li, ei): li.pxOffsetX + ei.x;
-				case PointField(li, ei, fi, arrayIdx): li.pxOffsetX + fi.getPointGrid(arrayIdx).cx*li.def.gridSize;
+				for(e in elements) {
+					var x = switch e {
+						case IntGrid(li, cx, cy), Tile(li,cx,cy): li.pxOffsetX + cx*li.def.gridSize;
+						case Entity(li, ei): li.pxOffsetX + ei.x;
+						case PointField(li, ei, fi, arrayIdx): li.pxOffsetX + fi.getPointGrid(arrayIdx).cx*li.def.gridSize;
+					}
+					var y = switch e {
+						case IntGrid(li, cx, cy), Tile(li,cx,cy): li.pxOffsetY + cy*li.def.gridSize;
+						case Entity(li, ei): li.pxOffsetY +  ei.y;
+						case PointField(li, ei, fi, arrayIdx): li.pxOffsetY + fi.getPointGrid(arrayIdx).cy*li.def.gridSize;
+					}
+					_cachedBounds.top = M.imin( _cachedBounds.top, y );
+					_cachedBounds.bottom = M.imax( _cachedBounds.bottom, y );
+					_cachedBounds.left = M.imin( _cachedBounds.left, x );
+					_cachedBounds.right = M.imax( _cachedBounds.right, x );
+				}
 			}
-			var y = switch e {
-				case IntGrid(li, cx, cy), Tile(li,cx,cy): li.pxOffsetY + cy*li.def.gridSize;
-				case Entity(li, ei): li.pxOffsetY +  ei.y;
-				case PointField(li, ei, fi, arrayIdx): li.pxOffsetY + fi.getPointGrid(arrayIdx).cy*li.def.gridSize;
-			}
-			top = M.imin( top, y );
-			bottom = M.imax( top, y );
-			left = M.imin( left, x );
-			right = M.imax( right, x );
 		}
-
-		return {
-			top: top,
-			right: right,
-			bottom: bottom,
-			left: left,
-		}
+		return _cachedBounds;
 	}
 
 	function clearGhost() {
@@ -78,12 +89,15 @@ class GenericLevelElementGroup {
 		ghost.removeChildren();
 	}
 
+	function levelToGhostX(v:Float) {
+		return v - bounds.left;
+	}
+
 	function renderGhost(origin:MouseCoords) {
 		clearGhost();
 
-		var b = getBoundsPx();
-		var offX = b.left - origin.levelX;
-		var offY = b.top - origin.levelY;
+		var offX = bounds.left - origin.levelX;
+		var offY = bounds.top - origin.levelY;
 
 		for(ge in elements) {
 			switch ge {
@@ -91,8 +105,8 @@ class GenericLevelElementGroup {
 					ghost.lineStyle();
 					ghost.beginFill( li.getIntGridColorAt(cx,cy) );
 					ghost.drawRect(
-						offX + li.pxOffsetX + cx*li.def.gridSize - b.left,
-						offY + li.pxOffsetY + cy*li.def.gridSize - b.top,
+						offX + li.pxOffsetX + cx*li.def.gridSize - bounds.left,
+						offY + li.pxOffsetY + cy*li.def.gridSize - bounds.top,
 						li.def.gridSize,
 						li.def.gridSize
 					);
@@ -102,20 +116,20 @@ class GenericLevelElementGroup {
 					var e = display.LevelRender.createEntityRender(ei);
 					ghost.addChild(e);
 					e.alpha = 0.5;
-					e.x = offX + ei.x - b.left;
-					e.y = offY + ei.y - b.top;
+					e.x = offX + ei.x - bounds.left;
+					e.y = offY + ei.y - bounds.top;
 
 				case Tile(li, cx, cy):
 					var tid = li.getGridTile(cx,cy);
 					var td = editor.project.defs.getTilesetDef( li.def.tilesetDefUid );
 					var bmp = new h2d.Bitmap( td.getTile(tid), ghost );
-					bmp.x = offX + li.pxOffsetX + cx*li.def.gridSize - b.left;
-					bmp.y = offY + li.pxOffsetY + cy*li.def.gridSize - b.top;
+					bmp.x = offX + li.pxOffsetX + cx*li.def.gridSize - bounds.left;
+					bmp.y = offY + li.pxOffsetY + cy*li.def.gridSize - bounds.top;
 
 				case PointField(li, ei, fi, arrayIdx):
 					var pt = fi.getPointGrid(arrayIdx);
-					var x = offX + li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize - b.left;
-					var y = offY + li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize - b.top;
+					var x = offX + li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize - bounds.left;
+					var y = offY + li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize - bounds.top;
 					ghost.lineStyle(1, ei.getSmartColor(false));
 					ghost.drawCircle(x, y, li.def.gridSize*0.5);
 
