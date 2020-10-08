@@ -449,8 +449,10 @@ class Editor extends Page {
 
 			App.ME.debug(levelX+","+levelY);
 
-			var cx = Std.int( ( levelX - li.pxOffsetX ) / li.def.gridSize );
-			var cy = Std.int( ( levelY - li.pxOffsetY ) / li.def.gridSize );
+			var layerX = levelX - li.pxOffsetX;
+			var layerY = levelY - li.pxOffsetY;
+			var cx = Std.int( layerX / li.def.gridSize );
+			var cy = Std.int( layerY / li.def.gridSize );
 
 			switch li.def.type {
 				case IntGrid:
@@ -461,7 +463,7 @@ class Editor extends Page {
 
 				case Entities:
 					for(ei in li.entityInstances) {
-						if( ei.isOver(levelX, levelY, 0) )
+						if( ei.isOver(layerX, layerY, 0) )
 							ge = GenericLevelElement.Entity(li, ei);
 						else {
 							// Points

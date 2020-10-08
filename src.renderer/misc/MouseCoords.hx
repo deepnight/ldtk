@@ -20,9 +20,7 @@ class MouseCoords {
 			if( Editor.ME==null || Editor.ME.destroyed )
 				return -1;
 			else
-				return
-					M.round( ( canvasX/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.levelRender.zoom )
-					- ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetX : 0 );
+				return M.round( ( canvasX/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.levelRender.zoom );
 		}
 
 	public var levelY(get,never) : Int;
@@ -30,31 +28,35 @@ class MouseCoords {
 			if( Editor.ME==null || Editor.ME.destroyed )
 				return -1;
 			else
-				return
-					M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.levelRender.zoom )
-					- ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetY : 0 );
+				return M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.levelRender.zoom );
 		}
 
-	// Level
-	// public var levelX2(get,never) : Int;
-	// 	inline function get_levelX2() {
-	// 		return layerX + ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetX : 0 );
-	// 	}
+	// Layer
+	public var layerX(get,never) : Int;
+		inline function get_layerX() {
+			if( Editor.ME==null || Editor.ME.destroyed )
+				return -1;
+			else
+				return levelX - ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetX : 0 );
+		}
 
-	// public var levelY2(get,never) : Int;
-	// inline function get_levelY2() {
-	// 	return layerY + ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetY : 0 );
-	// }
+	public var layerY(get,never) : Int;
+		inline function get_layerY() {
+			if( Editor.ME==null || Editor.ME.destroyed )
+				return -1;
+			else
+				return levelY - ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetY : 0 );
+		}
 
 	// Level cell
 	public var cx(get,never) : Int;
 		inline function get_cx() {
-			return M.floor( levelX / getRelativeLayerInst().def.gridSize );
+			return M.floor( layerX / getRelativeLayerInst().def.gridSize );
 		}
 
 	public var cy(get,never) : Int;
 		inline function get_cy() {
-			return M.floor( levelY / getRelativeLayerInst().def.gridSize );
+			return M.floor( layerY / getRelativeLayerInst().def.gridSize );
 		}
 
 	var _relativeLayerInst : Null<led.inst.LayerInstance>;

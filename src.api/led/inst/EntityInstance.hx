@@ -72,8 +72,8 @@ class EntityInstance {
 		return ( getCy(ld)+0.5 ) * ld.gridSize - y;
 	}
 
-	public function isOver(levelX:Int, levelY:Int, pad=0) {
-		return levelX >= left-pad && levelX <= right+pad && levelY >= top-pad && levelY <= bottom+pad;
+	public function isOver(layerX:Int, layerY:Int, pad=0) { // HACK rename
+		return layerX >= left-pad && layerX <= right+pad && layerY >= top-pad && layerY <= bottom+pad;
 	}
 
 	public function getSmartColor(bright:Bool) {

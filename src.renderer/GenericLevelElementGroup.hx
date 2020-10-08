@@ -389,6 +389,7 @@ class GenericLevelElementGroup {
 		var inserts : Array< Void->Void > = [];
 		var changedLayers : Map<led.inst.LayerInstance, led.inst.LayerInstance> = [];
 
+		var moveGrid = getSmartSnapGrid();
 		var i = 0;
 		for( ge in elements ) {
 			switch ge {
@@ -402,21 +403,27 @@ class GenericLevelElementGroup {
 
 				case IntGrid(li, cx,cy):
 					var v = li.getIntGrid(cx,cy);
-					var gridRatio = Std.int( getSmartSnapGrid() / li.def.gridSize );
+					var gridRatio = Std.int( moveGrid / li.def.gridSize );
+					var tcx = cx + (to.cx-origin.cx)*gridRatio;
+					var tcy = cy + (to.cy-origin.cy)*gridRatio;
 					removals.push( ()-> li.removeIntGrid(cx,cy) );
-					inserts.push( ()-> li.setIntGrid(cx + (to.cx-origin.cx)*gridRatio, cy + (to.cy-origin.cy)*gridRatio, v) );
+					inserts.push( ()-> li.setIntGrid(tcx, tcy, v) );
 
-					elements[i] = IntGrid(li, cx + (to.cx-origin.cx)*gridRatio, cy + (to.cy-origin.cy)*gridRatio); // remap sel
+					elements[i] = li.isValid(tcx,tcy) ? IntGrid(li, tcx, tcy) : null; // update selection
+
 					changedLayers.set(li,li);
 					anyChange = true;
 
 				case Tile(li, cx,cy):
 					var v = li.getGridTile(cx,cy);
-					var gridRatio = Std.int( getSmartSnapGrid() / li.def.gridSize );
+					var gridRatio = Std.int( moveGrid / li.def.gridSize );
+					var tcx = cx + (to.cx-origin.cx)*gridRatio;
+					var tcy = cy + (to.cy-origin.cy)*gridRatio;
 					removals.push( ()-> li.removeGridTile(cx,cy) );
-					inserts.push( ()-> li.setGridTile(cx + (to.cx-origin.cx)*gridRatio, cy + (to.cy-origin.cy)*gridRatio, v) );
+					inserts.push( ()-> li.setGridTile(tcx, tcy, v) );
 
-					elements[i] = Tile(li, cx + (to.cx-origin.cx)*gridRatio, cy + (to.cy-origin.cy)*gridRatio); // remap sel
+					elements[i] = li.isValid(tcx,tcy) ? Tile(li, tcx, tcy) : null; // update selection
+
 					changedLayers.set(li,li);
 					anyChange = true;
 
@@ -434,12 +441,23 @@ class GenericLevelElementGroup {
 			i++;
 		}
 
+		// Execute move
 		for(cb in removals) cb();
 		for(cb in inserts) cb();
+
+		// Call refresh events
 		for(li in changedLayers) {
 			editor.ge.emit( LayerInstanceChanged );
 			editor.levelRender.invalidateLayer(li);
 		}
+
+		// Drop null selections
+		var i = 0;
+		while( i<elements.length )
+			if( elements[i]==null )
+				elements.splice(i,1);
+			else
+				i++;
 
 		return anyChange;
 	}

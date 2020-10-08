@@ -161,7 +161,7 @@ class SelectionTool extends Tool<Int> {
 						return true;
 
 				case Entity(li, ei):
-					if( ei.isOver(m.levelX,m.levelY) )
+					if( ei.isOver(m.layerX, m.layerY) )
 						return true;
 
 				case Tile(li, cx, cy):
