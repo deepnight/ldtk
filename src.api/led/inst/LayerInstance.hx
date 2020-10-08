@@ -448,10 +448,6 @@ class LayerInstance {
 		var copy = EntityInstance.fromJson( _project, ei.toJson(this) );
 		entityInstances.push(copy);
 
-		for(fi in copy.fieldInstances)
-			if( fi.def.type==F_Point )
-				fi.clearValue();
-
 		return copy;
 	}
 

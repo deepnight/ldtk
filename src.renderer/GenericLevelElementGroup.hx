@@ -142,23 +142,18 @@ class GenericLevelElementGroup {
 					bmp.y = li.pxOffsetY + cy*li.def.gridSize - bounds.top;
 
 				case PointField(li, ei, fi, arrayIdx):
-					if( !isCopy ) {
-						var pt = fi.getPointGrid(arrayIdx);
-						var x = li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize - bounds.left;
-						var y = li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize - bounds.top;
-						ghost.lineStyle(1, ei.getSmartColor(false));
-						ghost.drawCircle(x, y, li.def.gridSize*0.5);
+					var pt = fi.getPointGrid(arrayIdx);
+					var x = li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize - bounds.left;
+					var y = li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize - bounds.top;
+					ghost.lineStyle(1, ei.getSmartColor(false));
+					ghost.drawCircle(x, y, li.def.gridSize*0.5);
 
-						ghost.lineStyle();
-						ghost.beginFill(ei.getSmartColor(false) );
-						ghost.drawCircle(x, y, li.def.gridSize*0.3);
-						ghost.endFill();
-					}
+					ghost.lineStyle();
+					ghost.beginFill(ei.getSmartColor(false) );
+					ghost.drawCircle(x, y, li.def.gridSize*0.3);
+					ghost.endFill();
 			}
 		}
-
-		// ghost.beginFill(0xffcc00);
-		// ghost.drawCircle(0,0,8);
 
 		return ghost;
 	}
@@ -429,6 +424,7 @@ class GenericLevelElementGroup {
 		var inserts : Array< Void->Void > = [];
 		var changedLayers : Map<led.inst.LayerInstance, led.inst.LayerInstance> = [];
 
+		// Prepare movement effects
 		var moveGrid = getSmartSnapGrid();
 		var i = 0;
 		for( ge in elements ) {
@@ -445,6 +441,18 @@ class GenericLevelElementGroup {
 						ei.x += getDeltaX(origin, to);
 						ei.y += getDeltaY(origin, to);
 						editor.ge.emit( EntityInstanceChanged(ei) );
+
+						// Remap points
+						var dcx = Std.int( getDeltaX(origin,to) / li.def.gridSize );
+						var dcy = Std.int( getDeltaY(origin,to) / li.def.gridSize );
+						for(fi in ei.fieldInstances)
+							if( fi.def.type==F_Point )
+								for( i in 0...fi.getArrayLength() ) {
+									var pt = fi.getPointGrid(i);
+									pt.cx+=dcx;
+									pt.cy+=dcy;
+									fi.parseValue(i, pt.cx+Const.POINT_SEPARATOR+pt.cy);
+								}
 					});
 					anyChange = true;
 
@@ -477,12 +485,19 @@ class GenericLevelElementGroup {
 					anyChange = true;
 
 				case PointField(li, ei, fi, arrayIdx):
-					if( isCopy ) {
+					if( isCopy )
 						elements[i] = null;
-					}
 					else {
 						var pt = fi.getPointGrid(arrayIdx);
 						inserts.push( ()-> {
+							if( isCopy ) {
+								N.debug("dup");
+								fi.addArrayValue();
+								var newIdx = fi.getArrayLength()-1;
+								fi.parseValue( newIdx, fi.getPointStr(arrayIdx) );
+								pt = fi.getPointGrid(newIdx);
+								elements[i] = PointField(li,ei,fi,newIdx);
+							}
 							pt.cx += Std.int( getDeltaX(origin, to) / li.def.gridSize );
 							pt.cy += Std.int( getDeltaY(origin, to) / li.def.gridSize );
 							fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
