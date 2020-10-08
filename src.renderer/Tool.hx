@@ -180,9 +180,6 @@ class Tool<T> extends dn.Process {
 		return false;
 	}
 
-	function onHistorySaving() {
-	}
-
 	public function stopUsing(m:MouseCoords) {
 		var clickTime = haxe.Timer.stamp() - startTime;
 
@@ -215,19 +212,19 @@ class Tool<T> extends dn.Process {
 		}
 
 		if( needHistorySaving ) {
-			editor.curLevelHistory.saveLayerState( curLayerInstance );
-			editor.curLevelHistory.flushChangeMarks();
-			// editor.curLevelHistory.setLastStateBounds(
-			// 	M.imin(origin.cx, m.cx) * curLayerInstance.def.gridSize,
-			// 	M.imin(origin.cy, m.cy) * curLayerInstance.def.gridSize,
-			// 	( M.iabs(origin.cx-m.cx) + 1 ) * curLayerInstance.def.gridSize,
-			// 	( M.iabs(origin.cy-m.cy) + 1 ) * curLayerInstance.def.gridSize
-			// );
+			saveToHistory();
 			needHistorySaving = false;
-			onHistorySaving();
 		}
 		curMode = null;
 	}
+
+
+	function saveToHistory() {
+		editor.curLevelHistory.saveLayerState( curLayerInstance );
+		editor.curLevelHistory.flushChangeMarks();
+		needHistorySaving = false;
+	}
+
 
 	var needHistorySaving = false;
 	final function onEditAnything() {

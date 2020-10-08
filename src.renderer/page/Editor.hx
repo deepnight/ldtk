@@ -379,9 +379,15 @@ class Editor extends Page {
 			#end
 		}
 
-		// Propagate to current tool
-		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() )
-			curTool.onKeyPress(keyCode);
+		// Propagate to tools
+		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() ) {
+			if( isSpecialToolActive() )
+				specialTool.onKeyPress(keyCode);
+			else {
+				selectionTool.onKeyPress(keyCode);
+				curTool.onKeyPress(keyCode);
+			}
+		}
 	}
 
 

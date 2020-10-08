@@ -48,6 +48,20 @@ class GenericLevelElementGroup {
 		invalidateBounds();
 	}
 
+	public function getSelectedLayerInstances() {
+		var map = new Map();
+		for(ge in elements)
+			switch ge {
+				case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
+					map.set(li,li);
+			}
+
+		var lis = [];
+		for(li in map)
+			lis.push(li);
+		return lis;
+	}
+
 	inline function invalidateBounds() {
 		_cachedBounds = null;
 	}
@@ -169,6 +183,8 @@ class GenericLevelElementGroup {
 		var l : led.inst.LayerInstance = null;
 		for(ge in elements)
 			switch ge {
+				case null:
+
 				case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
 					if( l==null || li.def.gridSize>l.def.gridSize )
 						l = li;
@@ -374,7 +390,7 @@ class GenericLevelElementGroup {
 	}
 
 
-	public function move(origin:MouseCoords, to:MouseCoords) : Bool {
+	public function moveSelecteds(origin:MouseCoords, to:MouseCoords, copy:Bool) : Bool {
 		var rel = getSmartRelativeLayerInstance();
 		origin = origin.cloneRelativeToLayer(rel);
 		to = to.cloneRelativeToLayer(rel);
@@ -460,6 +476,26 @@ class GenericLevelElementGroup {
 				i++;
 
 		return anyChange;
+	}
+
+
+	public function deleteSelecteds() {
+		for(ge in elements)
+			switch ge {
+				case IntGrid(li, cx, cy):
+					li.removeIntGrid(cx,cy);
+
+				case Entity(li, ei):
+					li.removeEntityInstance(ei);
+
+				case Tile(li, cx, cy):
+					li.removeGridTile(cx,cy);
+
+				case PointField(li, ei, fi, arrayIdx):
+					fi.removeArrayValue(arrayIdx);
+			}
+
+		clear();
 	}
 
 }

@@ -335,35 +335,35 @@ class SelectionTool extends Tool<Int> {
 	}
 
 
-	public function getSelectedEntityInstance() : Null<led.inst.EntityInstance> {
-		if( isEmpty() )
-			return null;
+	override function saveToHistory() {
+		// No super() call
 
-		switch group.get(0) {
-			case null, IntGrid(_), Tile(_):
-				return null;
+		var allInsts = group.getSelectedLayerInstances();
 
-			case PointField(li, ei, fi, arrayIdx):
-				return ei;
+		for(ge in group.all())
+			switch ge {
+				case IntGrid(li, cx, cy), Tile(li, cx, cy):
+					editor.curLevelHistory.markChange(cx,cy);
 
-			case Entity(curLayerInstance, instance):
-				return instance;
-		}
-	}
+				case Entity(li, ei):
+					// TODO
 
+				case PointField(li, ei, fi, arrayIdx):
+					var pt = fi.getPointGrid(arrayIdx);
+					if( pt!=null )
+						editor.curLevelHistory.markChange(pt.cx, pt.cy);
+			}
 
-	override function onHistorySaving() {
-		super.onHistorySaving();
+		for(li in allInsts)
+			editor.curLevelHistory.saveLayerState(li);
 
-		var ei = getSelectedEntityInstance(); // TODO still needed?
-		if( ei!=null )
-			editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
+		editor.curLevelHistory.flushChangeMarks();
 	}
 
 
 	function moveSelection(m:MouseCoords, isOnStop:Bool) : Bool {
 		if( isOnStop ) {
-			var changed = group.move(origin, m);
+			var changed = group.moveSelecteds(origin, m, isCopy);
 			updateSelectionCursors();
 			return changed;
 		}
@@ -373,6 +373,21 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
+	override function onKeyPress(keyId:Int) {
+		super.onKeyPress(keyId);
+
+		switch keyId {
+			case K.DELETE:
+				var layerInsts = group.getSelectedLayerInstances();
+				group.deleteSelecteds();
+				for(li in layerInsts) {
+					editor.curLevelHistory.saveLayerState(li);
+					editor.levelRender.invalidateLayer(li);
+				}
+				editor.ge.emit(LayerInstanceChanged);
+				select();
+		}
+	}
 
 	override function useAt(m:MouseCoords, isOnStop:Bool):Bool {
 		if( any() && isRunning() && moveStarted )
