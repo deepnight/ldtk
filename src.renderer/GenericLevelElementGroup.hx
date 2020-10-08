@@ -173,7 +173,7 @@ class GenericLevelElementGroup {
 	}
 
 	public function showGhost(origin:MouseCoords, now:MouseCoords) {
-		if(! ghost.visible )
+		if( !ghost.visible )
 			renderGhost(origin);
 
 		ghost.visible = true;
@@ -208,6 +208,23 @@ class GenericLevelElementGroup {
 			arrow.moveTo(tx,ty);
 			arrow.lineTo( tx + Math.cos(a-M.PI*0.8)*size, ty + Math.sin(a-M.PI*0.8)*size );
 		}
+
+		// Render point links
+		// for(ge in elements)
+		// 	switch ge {
+		// 		case PointField(li, ei, fi, arrayIdx):
+		// 			if( fi.def.editorDisplayMode==PointStar ) {
+		// 				var b = getBoundsPx();
+		// 				ghost.lineStyle(3,0xff00ff);
+		// 				ghost.moveTo(x,y);
+		// 				ghost.lineTo(
+		// 					offX + ei.x - b.left,
+		// 					offY + ei.y - b.top
+		// 				);
+		// 			}
+
+		// 		case _:
+		// 	}
 	}
 
 

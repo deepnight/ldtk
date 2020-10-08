@@ -11,7 +11,7 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 20,
+	"nextUid": 21,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -282,6 +282,22 @@
 						"min": null,
 						"max": null,
 						"defaultOverride": null
+					},
+					{
+						"identifier": "star",
+						"__type": "Array<Point>",
+						"uid": 20,
+						"type": "F_Point",
+						"isArray": true,
+						"canBeNull": true,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "PointStar",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
+						"min": null,
+						"max": null,
+						"defaultOverride": null
 					}
 				]
 			},
@@ -352,7 +368,8 @@
 								} ]
 							},
 							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
-							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] }
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
 						] },
 						{ "__identifier": "Text", "__cx": 11, "__cy": 9, "defUid": 2, "x": 184, "y": 152, "fieldInstances": [
 							{
@@ -366,7 +383,8 @@
 								} ]
 							},
 							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
-							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] }
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
 						] },
 						{ "__identifier": "Text", "__cx": 7, "__cy": 11, "defUid": 2, "x": 120, "y": 184, "fieldInstances": [
 							{
@@ -380,12 +398,14 @@
 								} ]
 							},
 							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
-							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] }
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
 						] },
 						{ "__identifier": "Text", "__cx": 2, "__cy": 4, "defUid": 2, "x": 40, "y": 72, "fieldInstances": [
 							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
 							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
-							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] }
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
 						] },
 						{ "__identifier": "Text", "__cx": 6, "__cy": 17, "defUid": 2, "x": 104, "y": 280, "fieldInstances": [
 							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
@@ -444,6 +464,22 @@
 										"params": [ "17,16" ]
 									}
 								]
+							},
+							{
+								"__identifier": "star",
+								"__value": [ { "cx": 9, "cy": 13 }, { "cx": 3, "cy": 14 }, { "cx": 4, "cy": 19 } ],
+								"__type": "Array<Point>",
+								"defUid": 20,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": [ "9,13" ]
+								}, {
+									"id": "V_String",
+									"params": [ "3,14" ]
+								}, {
+									"id": "V_String",
+									"params": [ "4,19" ]
+								} ]
 							}
 						] }
 					]
