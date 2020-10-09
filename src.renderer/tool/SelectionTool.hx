@@ -218,7 +218,9 @@ class SelectionTool extends Tool<Int> {
 	override function stopUsing(m:MouseCoords) {
 		super.stopUsing(m);
 
-		if( rectangle ) {
+		if( !rectangle && !moveStarted )
+			select()
+		else if( rectangle ) {
 			var r = Rect.fromMouseCoords(origin, m);
 			if( r.wid==1 && r.hei==1 ) {
 				// Pick single value, in the end
