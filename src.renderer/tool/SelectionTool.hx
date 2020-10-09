@@ -315,37 +315,28 @@ class SelectionTool extends Tool<Int> {
 	override function saveToHistory() {
 		// No super() call
 
-		var allInsts = group.getSelectedLayerInstances();
+		// var allInsts = group.getSelectedLayerInstances(); // BUG doesn't work if selection becomes empty after some discards
 
-		for(ge in group.all())
-			switch ge {
-				case IntGrid(li, cx, cy), Tile(li, cx, cy):
-					editor.curLevelHistory.markChange(cx,cy);
+		// for(ge in group.all())
+		// 	switch ge {
+		// 		case IntGrid(li, cx, cy), Tile(li, cx, cy):
+		// 			editor.curLevelHistory.markChange(cx,cy);
 
-				case Entity(li, ei):
-					// TODO
+		// 		case Entity(li, ei):
+		// 			// TODO
 
-				case PointField(li, ei, fi, arrayIdx):
-					var pt = fi.getPointGrid(arrayIdx);
-					if( pt!=null )
-						editor.curLevelHistory.markChange(pt.cx, pt.cy);
-			}
+		// 		case PointField(li, ei, fi, arrayIdx):
+		// 			var pt = fi.getPointGrid(arrayIdx);
+		// 			if( pt!=null )
+		// 				editor.curLevelHistory.markChange(pt.cx, pt.cy);
+		// 	}
 
-		for(li in allInsts)
-			editor.curLevelHistory.saveLayerState(li);
+		// for(li in allInsts)
+		// 	editor.curLevelHistory.saveLayerState(li);
 
 		editor.curLevelHistory.flushChangeMarks();
 	}
 
-
-	function moveSelection(m:MouseCoords, isOnStop:Bool) : Bool {
-		if( isOnStop )
-			return group.moveSelecteds(origin, m, isCopy);
-		else {
-			group.showGhost(origin, m, isCopy);
-			return false;
-		}
-	}
 
 	override function onKeyPress(keyId:Int) {
 		super.onKeyPress(keyId);
@@ -364,8 +355,21 @@ class SelectionTool extends Tool<Int> {
 	}
 
 	override function useAt(m:MouseCoords, isOnStop:Bool):Bool {
-		if( any() && isRunning() && moveStarted )
-			return moveSelection(m, isOnStop);
+		if( any() && isRunning() && moveStarted ) {
+			if( isOnStop ) {
+				// Move actual data
+				var changedLayers = group.moveSelecteds(origin, m, isCopy);
+				for(li in changedLayers)
+					editor.curLevelHistory.saveLayerState(li);
+
+				return changedLayers.length>0;
+			}
+			else {
+				// Just move the ghost
+				group.showGhost(origin, m, isCopy);
+				return false;
+			}
+		}
 		else
 			return super.useAt(m,isOnStop);
 	}

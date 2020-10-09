@@ -479,15 +479,14 @@ class GenericLevelElementGroup {
 	}
 
 
-	public function moveSelecteds(origin:MouseCoords, to:MouseCoords, isCopy:Bool) : Bool {
+	public function moveSelecteds(origin:MouseCoords, to:MouseCoords, isCopy:Bool) : Array<led.inst.LayerInstance> {
+		if( elements.length==0 )
+			return [];
+
 		var rel = getSmartRelativeLayerInstance();
 		origin = origin.cloneRelativeToLayer(rel);
 		to = to.cloneRelativeToLayer(rel);
 
-		if( elements.length==0 )
-			return false;
-
-		var anyChange = false;
 		invalidateBounds();
 		invalidateSelectRender();
 
@@ -513,10 +512,10 @@ class GenericLevelElementGroup {
 					ei.x += getDeltaX(origin, to);
 					ei.y += getDeltaY(origin, to);
 					changedLayers.set(li,li);
-					anyChange = true;
 
 					// Out of bounds
-					if( !li.isValid(ei.getCx(li.def), ei.getCy(li.def)) ) {
+					if( ei.x<li.pxOffsetX || ei.x>=li.pxOffsetX+li.cWid*li.def.gridSize
+					|| ei.y<li.pxOffsetY || ei.y>=li.pxOffsetY+li.cHei*li.def.gridSize ) {
 						li.removeEntityInstance(ei);
 						elements[i] = null;
 
@@ -547,7 +546,6 @@ class GenericLevelElementGroup {
 									}
 								}
 					}
-					anyChange = true;
 
 				case IntGrid(li, cx,cy):
 					var v = li.getIntGrid(cx,cy);
@@ -559,9 +557,7 @@ class GenericLevelElementGroup {
 					postInserts.push( ()-> li.setIntGrid(tcx, tcy, v) );
 
 					elements[i] = li.isValid(tcx,tcy) ? IntGrid(li, tcx, tcy) : null; // update selection
-
 					changedLayers.set(li,li);
-					anyChange = true;
 
 				case Tile(li, cx,cy):
 					var v = li.getGridTile(cx,cy);
@@ -573,9 +569,7 @@ class GenericLevelElementGroup {
 					postInserts.push( ()-> li.setGridTile(tcx, tcy, v) );
 
 					elements[i] = li.isValid(tcx,tcy) ? Tile(li, tcx, tcy) : null; // update selection
-
 					changedLayers.set(li,li);
-					anyChange = true;
 
 				case PointField(li, ei, fi, arrayIdx):
 					if( isCopy )
@@ -605,7 +599,6 @@ class GenericLevelElementGroup {
 						editor.ge.emit( EntityInstanceChanged(ei) );
 
 						changedLayers.set(li,li);
-						anyChange = true;
 					}
 			}
 		}
@@ -614,33 +607,12 @@ class GenericLevelElementGroup {
 		for(cb in postRemovals) cb();
 		for(cb in postInserts) cb();
 
-		// Cleanup values out of bounds
-		// for(i in 0...elements.length)
-		// 	switch elements[i] {
-		// 		case null:
-		// 		case IntGrid(li, cx, cy):
-		// 		case Tile(li, cx, cy):
-
-		// 		case Entity(li, ei):
-		// 			if( !li.isValid(ei.getCx(li.def), ei.getCy(li.def)) )  {
-		// 				li.removeEntityInstance(ei);
-		// 				elements[i] = null;
-		// 				editor.ge.emit( EntityInstanceChanged(ei) );
-		// 			}
-
-		// 		case PointField(li, ei, fi, arrayIdx):
-		// 			var pt = fi.getPointGrid(arrayIdx);
-		// 			if( pt!=null && !li.isValid(pt.cx,pt.cy) )  {
-		// 				fi.removeArrayValue(arrayIdx);
-		// 				elements[i] = null;
-		// 				editor.ge.emit( EntityInstanceChanged(ei) );
-		// 			}
-		// 	}
-
 		// Call refresh events
+		var affectedLayers = [];
 		for(li in changedLayers) {
 			editor.ge.emit( LayerInstanceChanged );
 			editor.levelRender.invalidateLayer(li);
+			affectedLayers.push(li);
 		}
 
 		// Grabage collect "null" selections
@@ -651,7 +623,7 @@ class GenericLevelElementGroup {
 			else
 				i++;
 
-		return anyChange;
+		return affectedLayers;
 	}
 
 
