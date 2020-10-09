@@ -51,12 +51,12 @@ class MouseCoords {
 	// Level cell
 	public var cx(get,never) : Int;
 		inline function get_cx() {
-			return M.floor( layerX / getRelativeLayerInst().def.gridSize );
+			return M.floor( layerX / ( getRelativeLayerInst()!=null ? getRelativeLayerInst().def.gridSize : 16 ) );
 		}
 
 	public var cy(get,never) : Int;
 		inline function get_cy() {
-			return M.floor( layerY / getRelativeLayerInst().def.gridSize );
+			return M.floor( layerY / ( getRelativeLayerInst()!=null ? getRelativeLayerInst().def.gridSize : 16 ) );
 		}
 
 	var _relativeLayerInst : Null<led.inst.LayerInstance>;
