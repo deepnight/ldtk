@@ -22,6 +22,7 @@ class GenericLevelElementGroup {
 		editor.levelRender.root.add(renderWrapper, Const.DP_UI);
 
 		ghost = new h2d.Graphics(renderWrapper);
+
 		arrow = new h2d.Graphics(renderWrapper);
 		pointLinks = new h2d.Graphics(renderWrapper);
 		selectRender = new h2d.Graphics(renderWrapper);
@@ -72,12 +73,8 @@ class GenericLevelElementGroup {
 		return lis;
 	}
 
-	inline function invalidateSelectRender() {
-		invalidatedSelectRender = true;
-	}
-	inline function invalidateBounds() {
-		_cachedBounds = null;
-	}
+	inline function invalidateSelectRender()  invalidatedSelectRender = true;
+	inline function invalidateBounds()  _cachedBounds = null;
 
 	function get_bounds() {
 		if( _cachedBounds==null ) {
@@ -134,9 +131,9 @@ class GenericLevelElementGroup {
 
 	function renderSelection() {
 		selectRender.clear();
+		selectRender.visible = true;
 		selectRender.beginFill(0xffcc00, 0.3);
 
-		var pad = 3;
 		for(ge in elements) {
 			switch ge {
 				case null:
@@ -150,10 +147,10 @@ class GenericLevelElementGroup {
 
 				case Entity(li, ei):
 					selectRender.drawRect(
-						li.pxOffsetX + ei.x - ei.def.width * ei.def.pivotX - pad,
-						li.pxOffsetY + ei.y - ei.def.height * ei.def.pivotY - pad,
-						ei.def.width + pad*2,
-						ei.def.height + pad*2
+						li.pxOffsetX + ei.x - ei.def.width * ei.def.pivotX,
+						li.pxOffsetY + ei.y - ei.def.height * ei.def.pivotY,
+						ei.def.width,
+						ei.def.height
 					);
 
 				case PointField(li, ei, fi, arrayIdx):
@@ -162,7 +159,7 @@ class GenericLevelElementGroup {
 						selectRender.drawCircle(
 							li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize,
 							li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize,
-							li.def.gridSize*0.6
+							li.def.gridSize*0.4
 						);
 			}
 		}
@@ -217,12 +214,6 @@ class GenericLevelElementGroup {
 		}
 
 		return ghost;
-	}
-
-	public inline function hideGhost() {
-		clearGhost();
-		arrow.clear();
-		arrow.visible = false;
 	}
 
 	function getDeltaX(origin:MouseCoords, now:MouseCoords) {
@@ -302,14 +293,22 @@ class GenericLevelElementGroup {
 		return v - bounds.top + ghost.y;
 	}
 
+	public function onMoveStart() {
+		renderGhost();
+	}
+
+	public function onMoveEnd() {
+		clearGhost();
+		arrow.clear();
+		arrow.visible = false;
+	}
+
 	public function showGhost(origin:MouseCoords, now:MouseCoords, isCopy:Bool) {
 		var rel = getSmartRelativeLayerInstance();
 		origin = origin.cloneRelativeToLayer(rel);
 		now = now.cloneRelativeToLayer(rel);
 
-		// Update ghost
-		if( !ghost.visible )
-			renderGhost();
+		selectRender.visible = false;
 
 		var offX = bounds.left - origin.levelX;
 		var offY = bounds.top - origin.levelY;
@@ -484,6 +483,7 @@ class GenericLevelElementGroup {
 
 		var anyChange = false;
 		invalidateBounds();
+		invalidateSelectRender();
 
 		var removals : Array< Void->Void > = [];
 		var inserts : Array< Void->Void > = [];
@@ -625,7 +625,9 @@ class GenericLevelElementGroup {
 	}
 
 	public function onPostUpdate() {
-		if( invalidatedSelectRender )
+		if( invalidatedSelectRender ) {
+			invalidatedSelectRender = false;
 			renderSelection();
+		}
 	}
 }

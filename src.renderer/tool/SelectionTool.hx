@@ -53,8 +53,10 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
-	public function select(?elems:Array<GenericLevelElement>) {
-		group.clear();
+	public function select(?elems:Array<GenericLevelElement>, append=false) {
+		if( !append )
+			group.clear();
+
 		if( elems!=null )
 			for(ge in elems)
 				group.add(ge);
@@ -202,9 +204,7 @@ class SelectionTool extends Tool<Int> {
 			}
 			else {
 				// Start a new selection
-				if( rectangle )
-					select();
-				else {
+				if( !rectangle ) {
 					var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 					if( ge!=null )
 						select([ ge ]);
@@ -224,7 +224,7 @@ class SelectionTool extends Tool<Int> {
 				// Pick single value, in the end
 				var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 				if( ge!=null )
-					select([ ge ]);
+					select([ ge ], true);
 				else
 					select();
 			}
@@ -236,7 +236,7 @@ class SelectionTool extends Tool<Int> {
 				var bottomPx = M.imax( origin.levelY, m.levelY );
 
 				var all = [];
-				function selectAllInLayer(li:led.inst.LayerInstance) {
+				function _addRectFromLayer(li:led.inst.LayerInstance) {
 					if( !editor.levelRender.isLayerVisible(li) )
 						return;
 
@@ -278,16 +278,17 @@ class SelectionTool extends Tool<Int> {
 				}
 
 				if( editor.singleLayerMode )
-					selectAllInLayer( editor.curLayerInstance );
+					_addRectFromLayer( editor.curLayerInstance );
 				else {
 					for(li in editor.curLevel.layerInstances)
-						selectAllInLayer(li);
+						_addRectFromLayer(li);
 				}
-				select(all);
+				select(all, true);
 			}
 		}
 		movePreview.clear();
-		group.hideGhost();
+		if( moveStarted )
+			group.onMoveEnd();
 	}
 
 	public inline function get() return getSelectedValue();
@@ -304,8 +305,10 @@ class SelectionTool extends Tool<Int> {
 		super.onMouseMove(m);
 
 		// Start moving elements only after a small elapsed mouse distance
-		if( isRunning() && button==0 && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE )
+		if( isRunning() && button==0 && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {
+			group.onMoveStart();
 			moveStarted = true;
+		}
 	}
 
 
