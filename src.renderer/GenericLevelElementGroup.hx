@@ -272,18 +272,24 @@ class GenericLevelElementGroup {
 		return false;
 	}
 
-	function isPointSelected(f:led.inst.FieldInstance, idx:Int) {
-		for( ge in elements)
-			switch ge {
+	function isFieldValueSelected(f:led.inst.FieldInstance, idx:Int) {
+		return getFieldValueSelectionIdx(f,idx) >= 0;
+	}
+
+	function getFieldValueSelectionIdx(f:led.inst.FieldInstance, idx:Int) : Int {
+		for( i in 0...elements.length )
+			switch elements[i] {
 				case PointField(li, ei, fi, arrayIdx):
 					if( fi==f && arrayIdx==idx )
-						return true;
+						return i;
 
 				case _:
 			}
 
-		return false;
+		return -1;
 	}
+
+
 
 	inline function levelToGhostX(v:Float) {
 		return v - bounds.left + ghost.x;
@@ -394,7 +400,7 @@ class GenericLevelElementGroup {
 							pointLinks.moveTo( levelToGhostX(ei.x), levelToGhostY(ei.y) );
 							var pt = fi.getPointGrid(i);
 							if( pt!=null )
-								if( isPointSelected(fi,i) ) {
+								if( isFieldValueSelected(fi,i) ) {
 									pointLinks.lineTo(
 										levelToGhostX( li.pxOffsetX+(pt.cx+0.5)*li.def.gridSize ),
 										levelToGhostY( li.pxOffsetY+(pt.cy+0.5)*li.def.gridSize )
@@ -430,7 +436,7 @@ class GenericLevelElementGroup {
 								var prev = fi.getPointGrid(arrayIdx-1);
 								if( prev!=null ) {
 									pointLinks.moveTo(x,y);
-									if( isPointSelected(fi,arrayIdx-1) )
+									if( isFieldValueSelected(fi,arrayIdx-1) )
 										pointLinks.lineTo(
 											levelToGhostX( li.pxOffsetX+(prev.cx+0.5)*li.def.gridSize ),
 											levelToGhostY( li.pxOffsetY+(prev.cy+0.5)*li.def.gridSize )
@@ -448,7 +454,7 @@ class GenericLevelElementGroup {
 								var next = fi.getPointGrid(arrayIdx+1);
 								if( next!=null ) {
 									pointLinks.moveTo(x,y);
-									if( isPointSelected(fi,arrayIdx+1) )
+									if( isFieldValueSelected(fi,arrayIdx+1) )
 										pointLinks.lineTo(
 											levelToGhostX( li.pxOffsetX+(next.cx+0.5)*li.def.gridSize ),
 											levelToGhostY( li.pxOffsetX+(next.cy+0.5)*li.def.gridSize )
@@ -485,46 +491,62 @@ class GenericLevelElementGroup {
 		invalidateBounds();
 		invalidateSelectRender();
 
-		var removals : Array< Void->Void > = [];
-		var inserts : Array< Void->Void > = [];
+		var postRemovals : Array< Void->Void > = [];
+		var postInserts : Array< Void->Void > = [];
 		var changedLayers : Map<led.inst.LayerInstance, led.inst.LayerInstance> = [];
 
 		// Prepare movement effects
 		var moveGrid = getSmartSnapGrid();
-		var i = 0;
-		for( ge in elements ) {
+		for( i in 0...elements.length ) {
+			var ge = elements[i];
 			switch ge {
 				case null:
 
 				case Entity(li, ei):
 					var i = i;
-					inserts.push( ()->{
-						if( isCopy ) {
-							ei = li.duplicateEntityInstance(ei);
-							elements[i] = Entity(li,ei);
-							if( ui.EntityInstanceEditor.isOpen() )
-								ui.EntityInstanceEditor.openFor(ei);
+					if( isCopy ) {
+						ei = li.duplicateEntityInstance(ei);
+						elements[i] = Entity(li,ei);
+						if( ui.EntityInstanceEditor.isOpen() )
+							ui.EntityInstanceEditor.openFor(ei);
+					}
+					ei.x += getDeltaX(origin, to);
+					ei.y += getDeltaY(origin, to);
+					changedLayers.set(li,li);
+					anyChange = true;
+
+					// Out of bounds
+					if( !li.isValid(ei.getCx(li.def), ei.getCy(li.def)) ) {
+						li.removeEntityInstance(ei);
+						elements[i] = null;
+
+						// Unselect lost entity points
+						for(fi in ei.fieldInstances)
+						for(i in 0...fi.getArrayLength()) {
+							var selIdx = getFieldValueSelectionIdx(fi,i);
+							elements[selIdx] = null;
 						}
-						ei.x += getDeltaX(origin, to);
-						ei.y += getDeltaY(origin, to);
+
+						editor.ge.emit( EntityInstanceRemoved(ei) );
+					}
+					else
 						editor.ge.emit( EntityInstanceChanged(ei) );
 
-						// Remap points
-						if( isCopy ) {
-							var dcx = Std.int( getDeltaX(origin,to) / li.def.gridSize );
-							var dcy = Std.int( getDeltaY(origin,to) / li.def.gridSize );
-							for(fi in ei.fieldInstances)
-								if( fi.def.type==F_Point )
-									for( i in 0...fi.getArrayLength() ) {
-										var pt = fi.getPointGrid(i);
-										if( pt!=null ) {
-											pt.cx+=dcx;
-											pt.cy+=dcy;
-											fi.parseValue(i, pt.cx+Const.POINT_SEPARATOR+pt.cy);
-										}
+					// Remap points
+					if( isCopy ) {
+						var dcx = Std.int( getDeltaX(origin,to) / li.def.gridSize );
+						var dcy = Std.int( getDeltaY(origin,to) / li.def.gridSize );
+						for(fi in ei.fieldInstances)
+							if( fi.def.type==F_Point )
+								for( i in 0...fi.getArrayLength() ) {
+									var pt = fi.getPointGrid(i);
+									if( pt!=null ) {
+										pt.cx+=dcx;
+										pt.cy+=dcy;
+										fi.parseValue(i, pt.cx+Const.POINT_SEPARATOR+pt.cy);
 									}
-						}
-					});
+								}
+					}
 					anyChange = true;
 
 				case IntGrid(li, cx,cy):
@@ -533,8 +555,8 @@ class GenericLevelElementGroup {
 					var tcx = cx + (to.cx-origin.cx)*gridRatio;
 					var tcy = cy + (to.cy-origin.cy)*gridRatio;
 					if( !isCopy )
-						removals.push( ()-> li.removeIntGrid(cx,cy) );
-					inserts.push( ()-> li.setIntGrid(tcx, tcy, v) );
+						postRemovals.push( ()-> li.removeIntGrid(cx,cy) );
+					postInserts.push( ()-> li.setIntGrid(tcx, tcy, v) );
 
 					elements[i] = li.isValid(tcx,tcy) ? IntGrid(li, tcx, tcy) : null; // update selection
 
@@ -547,8 +569,8 @@ class GenericLevelElementGroup {
 					var tcx = cx + (to.cx-origin.cx)*gridRatio;
 					var tcy = cy + (to.cy-origin.cy)*gridRatio;
 					if( !isCopy )
-						removals.push( ()-> li.removeGridTile(cx,cy) );
-					inserts.push( ()-> li.setGridTile(tcx, tcy, v) );
+						postRemovals.push( ()-> li.removeGridTile(cx,cy) );
+					postInserts.push( ()-> li.setGridTile(tcx, tcy, v) );
 
 					elements[i] = li.isValid(tcx,tcy) ? Tile(li, tcx, tcy) : null; // update selection
 
@@ -560,30 +582,60 @@ class GenericLevelElementGroup {
 						elements[i] = null;
 					else {
 						var pt = fi.getPointGrid(arrayIdx);
-						inserts.push( ()-> {
-							if( isCopy ) {
-								N.debug("dup");
-								fi.addArrayValue();
-								var newIdx = fi.getArrayLength()-1;
-								fi.parseValue( newIdx, fi.getPointStr(arrayIdx) );
-								pt = fi.getPointGrid(newIdx);
-								elements[i] = PointField(li,ei,fi,newIdx);
-							}
-							pt.cx += Std.int( getDeltaX(origin, to) / li.def.gridSize );
-							pt.cy += Std.int( getDeltaY(origin, to) / li.def.gridSize );
+						// Duplicate
+						if( isCopy ) {
+							fi.addArrayValue();
+							var newIdx = fi.getArrayLength()-1;
+							fi.parseValue( newIdx, fi.getPointStr(arrayIdx) );
+							pt = fi.getPointGrid(newIdx);
+							elements[i] = PointField(li,ei,fi,newIdx);
+						}
+
+						pt.cx += Std.int( getDeltaX(origin, to) / li.def.gridSize );
+						pt.cy += Std.int( getDeltaY(origin, to) / li.def.gridSize );
+
+						if( li.isValid(pt.cx,pt.cy) )
 							fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
-							editor.ge.emit( EntityInstanceChanged(ei) );
-						} );
+						else {
+							// Out of bounds
+							fi.removeArrayValue(arrayIdx);
+							decrementAllFieldArrayIdxAbove(fi, arrayIdx);
+							elements[i] = null;
+						}
+						editor.ge.emit( EntityInstanceChanged(ei) );
+
 						changedLayers.set(li,li);
 						anyChange = true;
 					}
 			}
-			i++;
 		}
 
 		// Execute move
-		for(cb in removals) cb();
-		for(cb in inserts) cb();
+		for(cb in postRemovals) cb();
+		for(cb in postInserts) cb();
+
+		// Cleanup values out of bounds
+		// for(i in 0...elements.length)
+		// 	switch elements[i] {
+		// 		case null:
+		// 		case IntGrid(li, cx, cy):
+		// 		case Tile(li, cx, cy):
+
+		// 		case Entity(li, ei):
+		// 			if( !li.isValid(ei.getCx(li.def), ei.getCy(li.def)) )  {
+		// 				li.removeEntityInstance(ei);
+		// 				elements[i] = null;
+		// 				editor.ge.emit( EntityInstanceChanged(ei) );
+		// 			}
+
+		// 		case PointField(li, ei, fi, arrayIdx):
+		// 			var pt = fi.getPointGrid(arrayIdx);
+		// 			if( pt!=null && !li.isValid(pt.cx,pt.cy) )  {
+		// 				fi.removeArrayValue(arrayIdx);
+		// 				elements[i] = null;
+		// 				editor.ge.emit( EntityInstanceChanged(ei) );
+		// 			}
+		// 	}
 
 		// Call refresh events
 		for(li in changedLayers) {
@@ -591,7 +643,7 @@ class GenericLevelElementGroup {
 			editor.levelRender.invalidateLayer(li);
 		}
 
-		// Drop null selections
+		// Grabage collect "null" selections
 		var i = 0;
 		while( i<elements.length )
 			if( elements[i]==null )
@@ -602,6 +654,17 @@ class GenericLevelElementGroup {
 		return anyChange;
 	}
 
+
+	function decrementAllFieldArrayIdxAbove(f:led.inst.FieldInstance, above:Int) {
+		for(i in 0...elements.length)
+			switch elements[i] {
+				case PointField(li, ei, fi, arrayIdx):
+					if( fi==f && arrayIdx>=above )
+						elements[i] = PointField(li,ei,fi,arrayIdx-1);
+
+				case _:
+			}
+	}
 
 	public function deleteSelecteds() {
 		for(ge in elements)
@@ -619,6 +682,7 @@ class GenericLevelElementGroup {
 
 				case PointField(li, ei, fi, arrayIdx):
 					fi.removeArrayValue(arrayIdx);
+					decrementAllFieldArrayIdxAbove(fi, arrayIdx);
 			}
 
 		clear();
