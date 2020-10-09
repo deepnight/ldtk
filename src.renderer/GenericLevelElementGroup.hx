@@ -507,18 +507,20 @@ class GenericLevelElementGroup {
 						editor.ge.emit( EntityInstanceChanged(ei) );
 
 						// Remap points
-						var dcx = Std.int( getDeltaX(origin,to) / li.def.gridSize );
-						var dcy = Std.int( getDeltaY(origin,to) / li.def.gridSize );
-						for(fi in ei.fieldInstances)
-							if( fi.def.type==F_Point )
-								for( i in 0...fi.getArrayLength() ) {
-									var pt = fi.getPointGrid(i);
-									if( pt!=null ) {
-										pt.cx+=dcx;
-										pt.cy+=dcy;
-										fi.parseValue(i, pt.cx+Const.POINT_SEPARATOR+pt.cy);
+						if( isCopy ) {
+							var dcx = Std.int( getDeltaX(origin,to) / li.def.gridSize );
+							var dcy = Std.int( getDeltaY(origin,to) / li.def.gridSize );
+							for(fi in ei.fieldInstances)
+								if( fi.def.type==F_Point )
+									for( i in 0...fi.getArrayLength() ) {
+										var pt = fi.getPointGrid(i);
+										if( pt!=null ) {
+											pt.cx+=dcx;
+											pt.cy+=dcy;
+											fi.parseValue(i, pt.cx+Const.POINT_SEPARATOR+pt.cy);
+										}
 									}
-								}
+						}
 					});
 					anyChange = true;
 
