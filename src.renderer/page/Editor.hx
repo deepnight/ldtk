@@ -31,6 +31,7 @@ class Editor extends Page {
 	public var selectionTool: tool.SelectionTool;
 	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();
 	var specialTool : Null< Tool<Dynamic> >; // if not null, will be used instead of default tool
+	var doNothingTool : tool.lt.DoNothing;
 
 	var gridSnapping = true;
 	public var needSaving = false;
@@ -76,6 +77,7 @@ class Editor extends Page {
 		rulers = new display.Rulers();
 
 		selectionTool = new tool.SelectionTool();
+		doNothingTool = new tool.lt.DoNothing();
 
 		initUI();
 		updateCanvasSize();
@@ -359,7 +361,7 @@ class Editor extends Page {
 					selectionTool.selectAllInLayers(curLevel, [curLayerInstance]);
 				else
 					selectionTool.selectAllInLayers(curLevel, curLevel.layerInstances);
-				
+
 				if( !selectionTool.isEmpty() ) {
 					if( singleLayerMode )
 						N.quick( L.t._("Selected all in layer") );
@@ -419,7 +421,7 @@ class Editor extends Page {
 
 	function get_curTool() : tool.LayerTool<Dynamic> {
 		if( curLayerDef==null )
-			return new tool.lt.DoNothing();
+			return doNothingTool;
 
 		if( !allLayerTools.exists(curLayerDef.uid) ) {
 			var t : tool.LayerTool<Dynamic> = switch curLayerDef.type {
