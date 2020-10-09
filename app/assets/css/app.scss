@@ -1914,26 +1914,43 @@ canvas#webgl {
 			justify-content: flex-end;
 
 			li {
-				display: flex;
+				flex: 1 1 auto;
 				margin-right: 4px;
 				align-items: center;
 				font-size: 8pt;
 
+				label {
+					cursor: pointer;
+				}
+
+				input[type=checkbox]+label {
+					display: block;
+					text-align: center;
+					padding: 3px 3px;
+					color: $bgLight;
+					border: 1px solid $bgMed;
+					border-radius: 3px;
+					background-color: $bgDark;
+				}
+
+				input[type=checkbox]:checked+label {
+					color: $green;
+					border-color: $green;
+					background-color: $helpDark;
+				}
+
 				input[type=checkbox] {
-					flex: 0 1 auto;
-					width: 16px;
-					height: 16px;
-					cursor: pointer;
+					display: none;
 				}
-				input:hover+label {
-					color: $orange;
-					cursor: pointer;
-				}
-				input.unsupported {
-					opacity: 0.3;
+				label:hover {
+					color: white;
 				}
 				input.unsupported+label {
-					color: $bgLight;
+					opacity: 0.3;
+				}
+
+				.onlyCompact {
+					display: none;
 				}
 			}
 		}
@@ -1967,11 +1984,19 @@ canvas#webgl {
 				}
 			}
 
-			.notCompact {
-				display: none;
-			}
 			#guide {
 				display: none;
+			}
+
+			ul.options {
+				li {
+					.onlyCompact {
+						display: inline;
+					}
+					.notCompact {
+						display: none;
+					}
+				}
 			}
 
 			ul#layers li {
