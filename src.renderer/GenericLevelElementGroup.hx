@@ -384,10 +384,7 @@ class GenericLevelElementGroup {
 		for(ge in elements)
 			switch ge {
 				case Entity(li,ei):
-					for(fi in ei.fieldInstances) {
-						if( fi.def.type!=F_Point )
-							continue;
-
+					for(fi in ei.getFieldInstancesOfType(F_Point)) {
 						if( fi.def.editorDisplayMode!=PointPath && fi.def.editorDisplayMode!=PointStar )
 							continue;
 
@@ -535,16 +532,16 @@ class GenericLevelElementGroup {
 					if( isCopy ) {
 						var dcx = Std.int( getDeltaX(origin,to) / li.def.gridSize );
 						var dcy = Std.int( getDeltaY(origin,to) / li.def.gridSize );
-						for(fi in ei.fieldInstances)
-							if( fi.def.type==F_Point )
-								for( i in 0...fi.getArrayLength() ) {
-									var pt = fi.getPointGrid(i);
-									if( pt!=null ) {
-										pt.cx+=dcx;
-										pt.cy+=dcy;
-										fi.parseValue(i, pt.cx+Const.POINT_SEPARATOR+pt.cy);
-									}
-								}
+
+						for(fi in ei.getFieldInstancesOfType(F_Point))
+						for( i in 0...fi.getArrayLength() ) {
+							var pt = fi.getPointGrid(i);
+							if( pt!=null ) {
+								pt.cx+=dcx;
+								pt.cy+=dcy;
+								fi.parseValue(i, pt.cx+Const.POINT_SEPARATOR+pt.cy);
+							}
+						}
 					}
 
 				case IntGrid(li, cx,cy):
