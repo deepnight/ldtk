@@ -335,7 +335,7 @@ class JsTools {
 		});
 
 		// External links
-		var links = jCtx.find("a[href], button[href]");
+		var links = jCtx.find("a[href^=http], button[href]");
 		links.each( function(idx,e) {
 			var link = new J(e);
 			var url = link.attr("href");
