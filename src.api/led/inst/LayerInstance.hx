@@ -412,7 +412,10 @@ class LayerInstance {
 	public function setIntGrid(cx:Int, cy:Int, v:Int) {
 		requireType(IntGrid);
 		if( isValid(cx,cy) )
-			intGrid.set( coordId(cx,cy), v );
+			if( v>=0 )
+				intGrid.set( coordId(cx,cy), v );
+			else
+				removeIntGrid(cx,cy);
 	}
 
 	public inline function hasIntGrid(cx:Int, cy:Int) {
@@ -470,9 +473,12 @@ class LayerInstance {
 
 	/** TILES *******************/
 
-	public function setGridTile(cx:Int, cy:Int, tileId:Int) {
-		if( isValid(cx,cy) && tileId!=null )
-			gridTiles.set( coordId(cx,cy), tileId );
+	public function setGridTile(cx:Int, cy:Int, tileId:Null<Int>) {
+		if( isValid(cx,cy) )
+			if( tileId!=null )
+				gridTiles.set( coordId(cx,cy), tileId );
+			else
+				removeGridTile(cx,cy);
 	}
 
 	public function removeGridTile(cx:Int, cy:Int) {
