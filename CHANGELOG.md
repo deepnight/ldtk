@@ -1,12 +1,18 @@
 # 0.4.0-beta
 
- - **Selection**: you can now select any element in a level by using `ALT` + left click. You can move it around by holding left click.
+ - **Selection**: you can now select any element in a level by using `ALT` + left click. You can move it around by holding left click. To select a **rectangle area**, use `ALT` + `SHIFT` + left click.
  - **Duplicate**: you can duplicate any element in the level by drag it with `CTRL`+`ALT` keys.
- - `Alt`+`left click` now picks elements in *all* layers. If you have the *Enhance active layer* option activated (`A` key), it will make a smarter choice than before. TLDR; you should always pick what is expected with this action.
- - Added the up-to-date JSON format doc to the app Home page.
- - Added fullscreen button to view Home changelogs
+ - Renamed the old *Enhance active layer* option to **Single layer mode**
+ - `Alt`+`left click` now picks elements in *all* layers. If you have the *Single layer mode* activated (`A` key), it will make a smarter choice than before, and prioritize current layer. TLDR; you should always pick what is expected with this action.
+ - Use `DELETE` key to delete selected elements
+ - Use `CTRL`+`A` shortcut to select everything (limited to current layer in *Single Layer Mode*).
+ - **Note:** Undo/Redo will need a major rework, but this will only happen in a future update (see [#151](https://github.com/deepnight/led/issues/151)). For now, undoing a selection move will have to be done in multiple steps: one per affected layer.
+ - Added the up-to-date *JSON format doc* to the app Home page.
+ - Added fullscreen button to view Home *changelogs*
+ - Pressing `ENTER` on the Home screen now opens last edited map.
  - Removed duplicate sample map
- - Fixed "color" field size in Entity instance editor when the value isn't default.
+ - Fixed "color" field size in Entity instance editor when the value wasn't default.
+ - Updated help window
  - Many bug fixes
 
 # 0.3.2-beta

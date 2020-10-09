@@ -75,6 +75,11 @@ class FieldInstance {
 			internalValues.push(null);
 	}
 
+	public function clearValue() {
+		if( def.isArray )
+			internalValues = [];
+	}
+
 	public function removeArrayValue(idx:Int) {
 		if( def.isArray && idx>=0 && idx<getArrayLength() )
 			internalValues.splice(idx,1);

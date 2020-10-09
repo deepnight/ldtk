@@ -25,12 +25,16 @@ class Editor extends Page {
 	public var projectFilePath : String;
 	public var curLevelId : Int;
 	var curLayerDefUid : Int;
+
+	// Tools
 	public var curTool(get,never) : tool.LayerTool<Dynamic>;
 	public var selectionTool: tool.SelectionTool;
 	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();
 	var specialTool : Null< Tool<Dynamic> >; // if not null, will be used instead of default tool
+
 	var gridSnapping = true;
 	public var needSaving = false;
+	public var singleLayerMode(default,null) = false;
 
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
@@ -134,10 +138,10 @@ class Editor extends Page {
 			onHelp();
 		});
 
-		jMainPanel.find("input#enhanceActiveLayer")
-			.prop("checked", levelRender.enhanceActiveLayer)
+		jMainPanel.find("input#singleLayerMode")
+			.prop("checked", singleLayerMode)
 			.change( function(ev) {
-				levelRender.setEnhanceActiveLayer( ev.getThis().prop("checked") );
+				setSingleLayerMode( ev.getThis().prop("checked") );
 			});
 
 
@@ -336,8 +340,25 @@ class Editor extends Page {
 				App.ME.exit();
 
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				levelRender.setEnhanceActiveLayer( !levelRender.enhanceActiveLayer );
-				N.quick( "Active layer enhancement: "+( levelRender.enhanceActiveLayer ? "ON" : "off" ));
+				setSingleLayerMode( !singleLayerMode );
+				N.quick( "Single layer mode: "+( singleLayerMode ? "ON" : "off" ));
+
+			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() ):
+				if( singleLayerMode )
+					selectionTool.selectAllInLayer(curLayerInstance);
+				else {
+					selectionTool.clear();
+					for(li in curLevel.layerInstances)
+						selectionTool.selectAllInLayer(li, true);
+				}
+				if( !selectionTool.isEmpty() ) {
+					if( singleLayerMode )
+						N.quick( L.t._("Selected all in layer") );
+					else
+						N.quick( L.t._("Selected all") );
+				}
+				else
+					N.error("Nothing to select");
 
 			case K.L if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				gridSnapping = !gridSnapping;
@@ -375,9 +396,15 @@ class Editor extends Page {
 			#end
 		}
 
-		// Propagate to current tool
-		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() )
-			curTool.onKeyPress(keyCode);
+		// Propagate to tools
+		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() ) {
+			if( isSpecialToolActive() )
+				specialTool.onKeyPress(keyCode);
+			else {
+				selectionTool.onKeyPress(keyCode);
+				curTool.onKeyPress(keyCode);
+			}
+		}
 	}
 
 
@@ -444,10 +471,11 @@ class Editor extends Page {
 			if( !levelRender.isLayerVisible(li) )
 				return null;
 
-			var cx = Std.int( ( levelX - li.pxOffsetX ) / li.def.gridSize );
-			var cy = Std.int( ( levelY - li.pxOffsetY ) / li.def.gridSize );
-			// var cx = m.getLayerCx(li);
-			// var cy = m.getLayerCy(li);
+			var layerX = levelX - li.pxOffsetX;
+			var layerY = levelY - li.pxOffsetY;
+			var cx = Std.int( layerX / li.def.gridSize );
+			var cy = Std.int( layerY / li.def.gridSize );
+
 			switch li.def.type {
 				case IntGrid:
 					if( li.getIntGrid(cx,cy)>=0 )
@@ -457,7 +485,7 @@ class Editor extends Page {
 
 				case Entities:
 					for(ei in li.entityInstances) {
-						if( ei.isOver(levelX, levelY, 0) )
+						if( ei.isOver(layerX, layerY, 0) )
 							ge = GenericLevelElement.Entity(li, ei);
 						else {
 							// Points
@@ -490,7 +518,7 @@ class Editor extends Page {
 			var best = null;
 			for(ld in all) {
 				var ge = getElement( curLevel.getLayerInstance(ld) );
-				if( ld==curLayerDef && ge!=null && levelRender.enhanceActiveLayer ) // prioritize active layer
+				if( ld==curLayerDef && ge!=null && singleLayerMode ) // prioritize active layer
 					return ge;
 
 				if( ge!=null )
@@ -571,7 +599,7 @@ class Editor extends Page {
 
 	function onMouseDown(e:hxd.Event) {
 		var m = getMouse();
-		if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) )
+		if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && e.button==0 )
 			selectionTool.startUsing( m, e.button );
 		else if( isSpecialToolActive() )
 			specialTool.startUsing( m, e.button )
@@ -611,11 +639,12 @@ class Editor extends Page {
 		jMouseCoords.empty();
 		if( curLayerInstance!=null )
 			jMouseCoords.append('<span>Grid = ${m.cx},${m.cy}</span>');
-		jMouseCoords.append('<span>Pixels = ${m.levelX},${m.levelY}</span>');
+		// jMouseCoords.append('<span>Layer = ${m.layerX},${m.layerY}</span>');
+		jMouseCoords.append('<span>Level = ${m.levelX},${m.levelY}</span>');
 
 		// Overed element infos
 		var overed = getGenericLevelElementAt(m.levelX, m.levelY);
-		switch overed {
+		switch overed { // TODO update that?
 			case null:
 			case IntGrid(li, cx, cy):
 				var v = li.getIntGrid(cx,cy);
@@ -644,7 +673,7 @@ class Editor extends Page {
 		ge.emit(ViewportChanged);
 
 		levelRender.focusLevelX += ( oldLevelX - m.levelX );
-		levelRender.focusLevelY += ( oldLevelY - m.levelY);
+		levelRender.focusLevelY += ( oldLevelY - m.levelY );
 	}
 
 	public function selectLevel(l:led.Level) {
@@ -697,6 +726,13 @@ class Editor extends Page {
 
 	public function getGridSnapping() {
 		return gridSnapping || !layerSupportsFreeMode();
+	}
+
+	public function setSingleLayerMode(v:Bool) {
+		singleLayerMode = v;
+		jMainPanel.find("input#singleLayerMode").prop("checked", v);
+		levelRender.applyAllLayersVisibility();
+		selectionTool.clear();
 	}
 
 	function onHelp() {

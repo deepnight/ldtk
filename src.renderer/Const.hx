@@ -51,6 +51,7 @@ class Const {
 	public static var DP_BG = _inc++;
 	public static var DP_MAIN = _inc++;
 	public static var DP_UI = _inc++;
+	public static var DP_TOP = _inc++;
 
 	public static var DEFAULT_LEVEL_WIDTH = 512;
 	public static var DEFAULT_LEVEL_HEIGHT = 256;

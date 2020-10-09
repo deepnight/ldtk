@@ -20,9 +20,7 @@ class MouseCoords {
 			if( Editor.ME==null || Editor.ME.destroyed )
 				return -1;
 			else
-				return
-					M.round( ( canvasX/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.levelRender.zoom )
-					- ( Editor.ME.curLayerInstance!=null ? Editor.ME.curLayerInstance.pxOffsetX : 0 );
+				return M.round( ( canvasX/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.levelRender.zoom );
 		}
 
 	public var levelY(get,never) : Int;
@@ -30,23 +28,38 @@ class MouseCoords {
 			if( Editor.ME==null || Editor.ME.destroyed )
 				return -1;
 			else
-				return
-					M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.levelRender.zoom )
-					- ( Editor.ME.curLayerInstance!=null ? Editor.ME.curLayerInstance.pxOffsetY : 0 );
+				return M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.levelRender.zoom );
+		}
+
+	// Layer
+	public var layerX(get,never) : Int;
+		inline function get_layerX() {
+			if( Editor.ME==null || Editor.ME.destroyed )
+				return -1;
+			else
+				return levelX - ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetX : 0 );
+		}
+
+	public var layerY(get,never) : Int;
+		inline function get_layerY() {
+			if( Editor.ME==null || Editor.ME.destroyed )
+				return -1;
+			else
+				return levelY - ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetY : 0 );
 		}
 
 	// Level cell
 	public var cx(get,never) : Int;
 		inline function get_cx() {
-			return M.floor( levelX / Editor.ME.curLayerInstance.def.gridSize );
+			return M.floor( layerX / getRelativeLayerInst().def.gridSize );
 		}
 
 	public var cy(get,never) : Int;
 		inline function get_cy() {
-			return M.floor( levelY / Editor.ME.curLayerInstance.def.gridSize );
+			return M.floor( layerY / getRelativeLayerInst().def.gridSize );
 		}
 
-
+	var _relativeLayerInst : Null<led.inst.LayerInstance>;
 
 	public function new(?pageX, ?pageY) {
 		if( pageX==null ) {
@@ -57,6 +70,17 @@ class MouseCoords {
 			this.pageX = pageX;
 			this.pageY = pageY;
 		}
+	}
+
+
+	inline function getRelativeLayerInst() {
+		return _relativeLayerInst==null ? Editor.ME.curLayerInstance : _relativeLayerInst;
+	}
+
+	public function cloneRelativeToLayer(li:led.inst.LayerInstance) {
+		var m = clone();
+		m._relativeLayerInst = li;
+		return m;
 	}
 
 	public function clone() {
@@ -73,11 +97,11 @@ class MouseCoords {
 	}
 
 	public function getLayerCx(li:led.inst.LayerInstance) {
-		return Std.int( ( levelX + Editor.ME.curLayerInstance.pxOffsetX - li.pxOffsetX ) / li.def.gridSize );
+		return Std.int( ( layerX + getRelativeLayerInst().pxOffsetX - li.pxOffsetX ) / li.def.gridSize );
 	}
 
 	public function getLayerCy(li:led.inst.LayerInstance) {
-		return Std.int( ( levelY + Editor.ME.curLayerInstance.pxOffsetY - li.pxOffsetY ) / li.def.gridSize );
+		return Std.int( ( layerY + getRelativeLayerInst().pxOffsetY - li.pxOffsetY ) / li.def.gridSize );
 	}
 }
 

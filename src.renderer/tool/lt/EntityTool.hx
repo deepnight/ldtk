@@ -67,6 +67,11 @@ class EntityTool extends tool.LayerTool<Int> {
 				stopUsing(m);
 				return;
 
+			case PointField(_) if( buttonId==0 ):
+				editor.selectionTool.startUsing(m, buttonId);
+				stopUsing(m);
+				return;
+
 			case _:
 		}
 
@@ -83,7 +88,7 @@ class EntityTool extends tool.LayerTool<Int> {
 					else {
 						ei.x = getPlacementX(m);
 						ei.y = getPlacementY(m);
-						editor.selectionTool.selectValue([ Entity(curLayerInstance, ei) ]);
+						editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);
 						onEditAnything();
 						stopUsing(m);
 						editor.selectionTool.startUsing(m, button);
@@ -113,7 +118,7 @@ class EntityTool extends tool.LayerTool<Int> {
 					else
 						fi.parseValue(arrayIdx, null);
 					editor.ge.emit( EntityInstanceFieldChanged(ei) );
-					editor.selectionTool.selectValue([ GenericLevelElement.Entity(li,ei) ]);
+					editor.selectionTool.select([ GenericLevelElement.Entity(li,ei) ]);
 					return true;
 				}
 				else
@@ -132,6 +137,7 @@ class EntityTool extends tool.LayerTool<Int> {
 		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 		switch ge {
 			case Entity(_): editor.selectionTool.onMouseMove(m);
+			case PointField(_): editor.selectionTool.onMouseMove(m);
 			case _:
 		}
 	}

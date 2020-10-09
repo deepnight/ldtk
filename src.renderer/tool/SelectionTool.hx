@@ -1,10 +1,10 @@
 package tool;
 
-class SelectionTool extends Tool< Array<GenericLevelElement> > {
-	var selectionCursors : Array<ui.Cursor>;
+class SelectionTool extends Tool<Int> {
 	var moveStarted = false;
 	var movePreview : h2d.Graphics;
 	var isCopy = false;
+	var group : GenericLevelElementGroup;
 
 	public function new() {
 		super();
@@ -12,102 +12,103 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		movePreview = new h2d.Graphics();
 		editor.levelRender.root.add(movePreview, Const.DP_UI);
 
-		selectionCursors = [];
+		group = new GenericLevelElementGroup();
 	}
 
 	override function onDispose() {
 		super.onDispose();
 		movePreview.remove();
+		group.dispose();
 	}
 
-	override function getDefaultValue():Array<GenericLevelElement> {
-		return [];
-	}
+	override function getDefaultValue() return -1; // Not actually used
 
-	override function getSelectionMemoryKey():Null<String> {
-		return "selection";
-	}
+	public function selectAllInLayer(li:led.inst.LayerInstance, append=false) {
+		if( !append )
+			group.clear();
 
-	function clearCursors() {
-		for(c in selectionCursors)
-			c.destroy();
-		selectionCursors = [];
-	}
+		switch li.def.type {
+			case IntGrid, Tiles:
+				for(cy in 0...li.cHei)
+				for(cx in 0...li.cWid) {
+					if( li.def.type==IntGrid && li.hasIntGrid(cx,cy) )
+						group.add( IntGrid(li,cx,cy) );
 
-	override function selectValue(v:Array<GenericLevelElement>) {
-		super.selectValue(v);
+					if( li.def.type==Tiles && li.hasGridTile(cx,cy) )
+						group.add( Tile(li,cx,cy) );
+				}
 
-		clearCursors();
-		for(ge in getSelectedValue()) {
-			var c = new ui.Cursor();
-			selectionCursors.push(c);
-			c.enablePermanentHighlights();
-			c.set(switch ge {
-				case IntGrid(li, cx, cy): GridCell(li, cx,cy);
-				case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
-				case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
-				case PointField(li, ei, fi, arrayIdx):
-					var pt = fi.getPointGrid(arrayIdx);
-					GridCell(li, pt.cx, pt.cy);
-			});
+			case Entities:
+				for(ei in li.entityInstances) {
+					group.add( Entity(li,ei) );
+
+					for(fi in ei.fieldInstances)
+						if( fi.def.type==F_Point )
+							for(i in 0...fi.getArrayLength())
+								if( !fi.valueIsNull(i) )
+									group.add( PointField(li,ei,fi,i) );
+				}
+
+			case AutoLayer:
 		}
+	}
 
+	public function select(?elems:Array<GenericLevelElement>) {
+		group.clear();
+		if( elems!=null )
+			for(ge in elems)
+				group.add(ge);
 
 		if( isSingle() ) {
 			// Change layer
-			switch v[0] {
-				case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
-					if( li!=editor.curLayerInstance )
-						editor.selectLayerInstance(li);
-				case null:
-			}
+			var li = group.getSmartRelativeLayerInstance();
+			if( li!=editor.curLayerInstance )
+				editor.selectLayerInstance(li);
 
 			// Selection effect
-			switch v[0] {
-				case IntGrid(li, cx, cy):
-					var v = li.getIntGrid(cx,cy);
-					editor.curTool.as(tool.lt.IntGridTool).selectValue(v);
-					editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
+			if( group.length()==1 )
+				switch group.get(0) {
+					case IntGrid(li, cx, cy):
+						var v = li.getIntGrid(cx,cy);
+						var t = editor.curTool.as(tool.lt.IntGridTool);
+						if( t!=null )
+							t.selectValue(v);
+						editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
 
-				case Entity(li, ei):
-					editor.curTool.as(tool.lt.EntityTool).selectValue(ei.defUid); // BUG might crash
-					editor.levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
+					case Entity(li, ei):
+						var t = editor.curTool.as(tool.lt.EntityTool);
+						if( t!=null )
+							t.selectValue(ei.defUid);
+						editor.levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
+						ui.EntityInstanceEditor.openFor(ei);
 
-				case Tile(li, cx, cy):
-					var tid = li.getGridTile(cx,cy);
 
-					var t = editor.curTool.as(tool.lt.TileTool);
-					t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking saved selections?
+					case Tile(li, cx, cy):
+						var tid = li.getGridTile(cx,cy);
 
-					editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
+						var t = editor.curTool.as(tool.lt.TileTool);
+						if( t!=null )
+							t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking saved selections?
 
-				case PointField(li, ei, fi, arrayIdx):
-					editor.curTool.as(tool.lt.EntityTool).selectValue(ei.defUid); // BUG might crash
-					var pt = fi.getPointGrid(arrayIdx);
-					if( pt!=null)
-						editor.levelRender.bleepRectCase( pt.cx, pt.cy, 1, 1, ei.def.color );
-			}
+						editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
+
+					case PointField(li, ei, fi, arrayIdx):
+						var t = editor.curTool.as(tool.lt.EntityTool);
+						if( t!=null )
+							t.selectValue(ei.defUid);
+
+						var pt = fi.getPointGrid(arrayIdx);
+						if( pt!=null)
+							editor.levelRender.bleepRectCase( pt.cx, pt.cy, 1, 1, ei.def.color );
+						ui.EntityInstanceEditor.openFor(ei);
+				}
 
 			editor.curTool.onValuePicking();
-
-			// Open instance editor
-			switch v[0] {
-				case PointField(li, ei, fi, arrayIdx):
-					ui.EntityInstanceEditor.openFor(ei);
-
-				case Entity(li, instance):
-					ui.EntityInstanceEditor.openFor(instance);
-
-				case _:
-			}
 		}
 	}
 
 	override function updateCursor(m:MouseCoords) {
 		super.updateCursor(m);
-
-		for( c in selectionCursors )
-			c.root.visible = !isRunning();
 
 		// Default cursor
 		if( isRunning() && rectangle ) {
@@ -147,7 +148,8 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 
 			case PointField(li, ei, fi, arrayIdx):
 				var pt = fi.getPointGrid(arrayIdx);
-				editor.cursor.set( GridCell(li, pt.cx, pt.cy, ei.getSmartColor(false)) );
+				if( pt!=null )
+					editor.cursor.set( GridCell(li, pt.cx, pt.cy, ei.getSmartColor(false)) );
 			}
 
 			if( ge!=null )
@@ -159,14 +161,14 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		if( isEmpty() )
 			return false;
 
-		for(ge in getSelectedValue()) {
+		for(ge in group.all()) {
 			switch ge {
 				case IntGrid(li, cx, cy):
 					if( m.getLayerCx(li)==cx && m.getLayerCy(li)==cy )
 						return true;
 
 				case Entity(li, ei):
-					if( ei.isOver(m.levelX,m.levelY) )
+					if( ei.isOver(m.layerX, m.layerY) )
 						return true;
 
 				case Tile(li, cx, cy):
@@ -191,14 +193,24 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 		super.startUsing(m, buttonId);
 
 		if( buttonId==0 ) {
-			if( rectangle )
-				selectValue([]);
+			if( isOveringSelection(m) ) {
+				// Move existing selection
+				if( group.hasIncompatibleGridSizes() ) {
+					new ui.modal.dialog.Message(L.t._("This selection can't be moved around because it contains elements from using different grid sizes."));
+					stopUsing(m);
+				}
+			}
 			else {
-				var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
-				if( ge!=null )
-					selectValue([ge]);
-				else
-					selectValue([]);
+				// Start a new selection
+				if( rectangle )
+					select();
+				else {
+					var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
+					if( ge!=null )
+						select([ ge ]);
+					else
+						select();
+				}
 			}
 		}
 	}
@@ -212,187 +224,141 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 				// Pick single value, in the end
 				var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 				if( ge!=null )
-					selectValue([ge]);
+					select([ ge ]);
 				else
-					selectValue([]);
+					select();
 			}
 			else {
 				// Pick every objects under rectangle
+				var leftPx = M.imin( origin.levelX, m.levelX );
+				var rightPx = M.imax( origin.levelX, m.levelX );
+				var topPx = M.imin( origin.levelY, m.levelY );
+				var bottomPx = M.imax( origin.levelY, m.levelY );
+
 				var all = [];
-				for(cy in r.top...r.bottom+1)
-				for(cx in r.left...r.right+1) {
-					var ge = editor.getGenericLevelElementAt(
-						Std.int( (cx+0.5)*editor.curLayerDef.gridSize ),
-						Std.int( (cy+0.5)*editor.curLayerDef.gridSize ),
-						editor.levelRender.enhanceActiveLayer
-					);
-					if( ge!=null )
-						all.push(ge);
+				function selectAllInLayer(li:led.inst.LayerInstance) {
+					if( !editor.levelRender.isLayerVisible(li) )
+						return;
+
+					var cLeft = Std.int( (leftPx-li.pxOffsetX) / li.def.gridSize );
+					var cRight = Std.int( (rightPx-li.pxOffsetX) / li.def.gridSize );
+					var cTop = Std.int( (topPx-li.pxOffsetY) /li.def.gridSize );
+					var cBottom = Std.int( (bottomPx-li.pxOffsetY) /li.def.gridSize );
+
+					for( cy in cTop...cBottom+1 )
+					for( cx in cLeft...cRight+1 ) {
+						// IntGrid
+						if( li.def.type==IntGrid && li.hasIntGrid(cx,cy) )
+							all.push( IntGrid(li,cx,cy) );
+
+						// Tiles
+						if( li.def.type==Tiles && li.hasGridTile(cx,cy) )
+							all.push( Tile(li,cx,cy) );
+					}
+
+					// Entities
+					if( li.def.type==Entities ) {
+						for(ei in li.entityInstances) {
+							if( ei.getCx(li.def)>=cLeft && ei.getCx(li.def)<=cRight && ei.getCy(li.def)>=cTop && ei.getCy(li.def)<=cBottom )
+								all.push( Entity(li,ei) );
+
+							// Entity points
+							for(fi in ei.fieldInstances) {
+								if( fi.def.type!=F_Point )
+									continue;
+
+								for(i in 0...fi.getArrayLength()) {
+									var pt = fi.getPointGrid(i);
+									if( pt!=null && pt.cx>=cLeft && pt.cx<=cRight && pt.cy>=cTop && pt.cy<=cBottom )
+										all.push( PointField(li, ei, fi, i) );
+								}
+							}
+						}
+					}
 				}
 
-				selectValue(all);
+				if( editor.singleLayerMode )
+					selectAllInLayer( editor.curLayerInstance );
+				else {
+					for(li in editor.curLevel.layerInstances)
+						selectAllInLayer(li);
+				}
+				select(all);
 			}
 		}
 		movePreview.clear();
+		group.hideGhost();
 	}
 
 	public inline function get() return getSelectedValue();
 	public function clear() {
 		if( !isEmpty() )
-			selectValue([]);
+			select();
 	}
-	public inline function any() return getSelectedValue().length>0;
-	public inline function isEmpty() return getSelectedValue().length==0;
-	public inline function isSingle() return getSelectedValue().length==1;
+	public inline function any() return group.length()>0;
+	public inline function isEmpty() return group.length()==0;
+	public inline function isSingle() return group.length()==1;
 
-
-	function duplicateSelection() : Null< Array<GenericLevelElement> > {
-		switch getSelectedValue()[0] { // TODO support groups
-			case IntGrid(li, cx, cy):
-				return null;
-
-			case Entity(li, instance):
-				var ei = li.duplicateEntityInstance( instance );
-				return [ GenericLevelElement.Entity(li, ei) ];
-
-			case Tile(li, cx, cy):
-				return null; // TODO support copy?
-
-			case PointField(li, ei, fi, arrayIdx):
-				return null; // TODO support copy?
-		}
-	}
 
 	override function onMouseMove(m:MouseCoords) {
 		super.onMouseMove(m);
 
 		// Start moving elements only after a small elapsed mouse distance
-		if( isRunning() && button==0 && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {
+		if( isRunning() && button==0 && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE )
 			moveStarted = true;
-
-			// Copy selection
-			if( any() && isCopy ) {
-				var copy = duplicateSelection();
-				if( copy!=null )
-					selectValue(copy);
-			}
-		}
-
-		if( any() && isRunning() && moveStarted ) {
-			switch getSelectedValue()[0] {
-				case IntGrid(_), Tile(_):
-					movePreview.clear();
-					var fx = (origin.cx+0.5) * editor.curLayerDef.gridSize;
-					var fy = (origin.cy+0.5) * editor.curLayerDef.gridSize;
-					var tx = (m.cx+0.5) * editor.curLayerDef.gridSize;
-					var ty = (m.cy+0.5) * editor.curLayerDef.gridSize;
-					var a = Math.atan2(ty-fy, tx-fx);
-					var arrow = 10;
-					movePreview.lineStyle(1, 0xffffff, 1);
-					movePreview.moveTo(fx,fy);
-					movePreview.lineTo(tx,ty);
-
-					movePreview.moveTo(tx,ty);
-					movePreview.lineTo( tx + Math.cos(a+M.PI*0.8)*arrow, ty + Math.sin(a+M.PI*0.8)*arrow );
-
-					movePreview.moveTo(tx,ty);
-					movePreview.lineTo( tx + Math.cos(a-M.PI*0.8)*arrow, ty + Math.sin(a-M.PI*0.8)*arrow );
-
-				case _:
-			}
-
-		}
 	}
 
 
-	public function getSelectedEntityInstance() : Null<led.inst.EntityInstance> {
-		if( isEmpty() )
-			return null;
+	override function saveToHistory() {
+		// No super() call
 
-		switch getSelectedValue()[0] {
-			case null, IntGrid(_), Tile(_):
-				return null;
+		var allInsts = group.getSelectedLayerInstances();
 
-			case PointField(li, ei, fi, arrayIdx):
-				return ei;
+		for(ge in group.all())
+			switch ge {
+				case IntGrid(li, cx, cy), Tile(li, cx, cy):
+					editor.curLevelHistory.markChange(cx,cy);
 
-			case Entity(curLayerInstance, instance):
-				return instance;
-		}
-	}
+				case Entity(li, ei):
+					// TODO
 
+				case PointField(li, ei, fi, arrayIdx):
+					var pt = fi.getPointGrid(arrayIdx);
+					if( pt!=null )
+						editor.curLevelHistory.markChange(pt.cx, pt.cy);
+			}
 
-	override function onHistorySaving() {
-		super.onHistorySaving();
+		for(li in allInsts)
+			editor.curLevelHistory.saveLayerState(li);
 
-		var ei = getSelectedEntityInstance();
-		if( ei!=null )
-			editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
+		editor.curLevelHistory.flushChangeMarks();
 	}
 
 
 	function moveSelection(m:MouseCoords, isOnStop:Bool) : Bool {
-		var anyChange = false;
-
-		for( ge in getSelectedValue() ) {
-			switch ge {
-				case Entity(li, ei):
-					if( !isOnStop ) {
-						var oldX = ei.x;
-						var oldY = ei.y;
-						ei.x = snapToGrid()
-							? M.round( ( m.cx + ei.def.pivotX ) * curLayerInstance.def.gridSize )
-							: m.levelX;
-						ei.y = snapToGrid()
-							? M.round( ( m.cy + ei.def.pivotY ) * curLayerInstance.def.gridSize )
-							: m.levelY;
-						var changed = oldX!=ei.x || oldY!=ei.y;
-						if( changed )
-							editor.ge.emit( EntityInstanceChanged(ei) );
-						anyChange = anyChange || changed;
-					}
-					else
-						selectValue([ Entity(curLayerInstance, ei) ]);
-
-				case PointField(li, ei, fi, arrayIdx):
-					if( !isOnStop ) {
-						var old = fi.getPointStr(arrayIdx);
-						fi.parseValue(arrayIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
-
-						var changed = old!=fi.getPointStr(arrayIdx);
-						if( changed )
-							editor.ge.emit( EntityInstanceChanged(ei) );
-						anyChange = anyChange || changed;
-					}
-					else
-						selectValue([ PointField(li,ei,fi,arrayIdx) ]);
-
-				case IntGrid(li, cx,cy):
-					if( isOnStop ) {
-						editor.curLevelHistory.markChange(m.cx,m.cy);
-						var v = li.getIntGrid(cx,cy);
-						if( !isCopy )
-							li.removeIntGrid(cx,cy);
-						li.setIntGrid(m.cx, m.cy, v);
-						editor.selectionTool.selectValue([ IntGrid(li, m.cx, m.cy) ]);
-						anyChange = true;
-					}
-
-				case Tile(li,cx,cy):
-					if( isOnStop ) {
-						editor.curLevelHistory.markChange(m.cx,m.cy);
-						var v = li.getGridTile(cx,cy);
-						if( !isCopy )
-							li.removeGridTile(cx,cy);
-						li.setGridTile(m.cx, m.cy, v);
-						editor.selectionTool.selectValue([ Tile(li, m.cx, m.cy) ]);
-						anyChange = true;
-					}
-			}
+		if( isOnStop )
+			return group.moveSelecteds(origin, m, isCopy);
+		else {
+			group.showGhost(origin, m, isCopy);
+			return false;
 		}
-		return anyChange;
 	}
 
+	override function onKeyPress(keyId:Int) {
+		super.onKeyPress(keyId);
+
+		switch keyId {
+			case K.DELETE:
+				var layerInsts = group.getSelectedLayerInstances();
+				group.deleteSelecteds();
+				for(li in layerInsts) {
+					editor.curLevelHistory.saveLayerState(li);
+					editor.levelRender.invalidateLayer(li);
+				}
+				editor.ge.emit(LayerInstanceChanged);
+				select();
+		}
+	}
 
 	override function useAt(m:MouseCoords, isOnStop:Bool):Bool {
 		if( any() && isRunning() && moveStarted )
@@ -403,5 +369,11 @@ class SelectionTool extends Tool< Array<GenericLevelElement> > {
 
 	override function update() {
 		super.update();
+	}
+
+	override function postUpdate() {
+		super.postUpdate();
+
+		group.onPostUpdate();
 	}
 }

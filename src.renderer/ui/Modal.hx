@@ -16,7 +16,6 @@ class Modal extends dn.Process {
 		super(Editor.ME);
 
 		editor.clearSpecialTool();
-		editor.selectionTool.clear();
 
 		EntityInstanceEditor.close2();
 		Tip.clear();

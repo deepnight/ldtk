@@ -202,6 +202,9 @@ class Home extends Page {
 				if( App.ME.isCtrlDown() )
 					App.ME.exit();
 
+			case K.ENTER:
+				jPage.find("ul.recents li:first").click();
+
 			case K.ESCAPE:
 				if( jPage.find(".changelogsWrapper").hasClass("fullscreen") )
 					jPage.find("button.fullscreen").click();
