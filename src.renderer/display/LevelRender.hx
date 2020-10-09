@@ -845,6 +845,11 @@ class LevelRender extends dn.Process {
 		if( li==null )
 			li = editor.curLevel.getLayerInstance(layerDefUid);
 		layerInvalidations.set( li.layerDefUid, { left:0, right:li.cWid-1, top:0, bottom:li.cHei-1 } );
+
+		if( li.def.type==IntGrid )
+			for(l in editor.curLevel.layerInstances)
+				if( l.def.type==AutoLayer && l.def.autoSourceLayerDefUid==li.def.uid )
+					invalidateLayer(l);
 	}
 
 	public inline function invalidateLayerArea(li:led.inst.LayerInstance, left:Int, right:Int, top:Int, bottom:Int) {
