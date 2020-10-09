@@ -45,13 +45,15 @@ class GenericLevelElementGroup {
 
 	public function dispose() {
 		renderWrapper.remove();
+		originalRects = null;
 		_cachedBounds = null;
 		elements = null;
 	}
 
-	public inline function length() return elements.length;
-	public inline function all() return elements;
-	public inline function get(idx:Int) return elements[idx];
+	public inline function isEmpty() return elements.length==0 && originalRects.length==0;
+	public inline function selectedElementsCount() return elements.length;
+	public inline function allElements() return elements;
+	public inline function getElement(idx:Int) return elements[idx];
 
 	public function add(ge:GenericLevelElement) {
 		for(e in elements)
@@ -65,10 +67,10 @@ class GenericLevelElementGroup {
 
 	public function addSelectionRect(l,r,t,b) {
 		originalRects.push({
-			leftPx: l,
-			rightPx: r,
-			topPx: t,
-			bottomPx: b,
+			leftPx: M.imax(l, 0),
+			rightPx: M.imin(r, editor.curLevel.pxWid),
+			topPx: M.imax(t, 0),
+			bottomPx: M.imin(b, editor.curLevel.pxHei),
 		});
 		invalidateBounds();
 		invalidateSelectRender();
@@ -158,11 +160,9 @@ class GenericLevelElementGroup {
 		var c = 0xffcc00;
 		var a = 0.3;
 
-		if( editor.emptySpaceSelection ) {
-			for(r in originalRects) {
-				selectRender.beginFill(0x8ab7ff, a);
-				selectRender.drawRect(r.leftPx, r.topPx, r.rightPx-r.leftPx, r.bottomPx-r.topPx);
-			}
+		for(r in originalRects) {
+			selectRender.beginFill(0x8ab7ff, a);
+			selectRender.drawRect(r.leftPx, r.topPx, r.rightPx-r.leftPx, r.bottomPx-r.topPx);
 		}
 
 		for(ge in elements) {
@@ -258,11 +258,10 @@ class GenericLevelElementGroup {
 		}
 
 		ghost.endFill();
-		if( editor.emptySpaceSelection )
-			for(r in originalRects) {
-				ghost.lineStyle(1,0xffcc00,0.5);
-				ghost.drawRect(r.leftPx-bounds.left, r.topPx-bounds.top, r.rightPx-r.leftPx, r.bottomPx-r.topPx);
-			}
+		for(r in originalRects) {
+			ghost.lineStyle(1,0xffcc00,0.5);
+			ghost.drawRect(r.leftPx-bounds.left, r.topPx-bounds.top, r.rightPx-r.leftPx, r.bottomPx-r.topPx);
+		}
 
 		return ghost;
 	}
@@ -522,6 +521,32 @@ class GenericLevelElementGroup {
 	}
 
 
+	public function isOveringSelection(m:MouseCoords) {
+		for(ge in elements) {
+			switch ge {
+				case GridCell(li, cx, cy):
+					if( m.getLayerCx(li)==cx && m.getLayerCy(li)==cy )
+						return true;
+
+				case Entity(li, ei):
+					if( ei.isOver(m.layerX, m.layerY) )
+						return true;
+
+				case PointField(li, ei, fi, arrayIdx):
+					var pt = fi.getPointGrid(arrayIdx);
+					if( pt!=null && m.getLayerCx(li)==pt.cx && m.getLayerCy(li)==pt.cy )
+						return true;
+			}
+		}
+
+		for(r in originalRects)
+			if( m.levelX>=r.leftPx && m.levelX<=r.rightPx && m.levelY>=r.topPx && m.levelY<=r.bottomPx )
+				return true;
+
+		return false;
+	}
+
+
 	function snapToGrid() {
 		return true;
 	}
@@ -543,7 +568,7 @@ class GenericLevelElementGroup {
 		var changedLayers : Map<led.inst.LayerInstance, led.inst.LayerInstance> = [];
 
 		// Clear arrival to emulate "empty cell selection" mode
-		if( editor.emptySpaceSelection ) {
+		if( originalRects.length>0 ) {
 			for(r in originalRects) {
 				r.leftPx += getDeltaX(origin,to);
 				r.rightPx += getDeltaX(origin,to);
@@ -557,8 +582,8 @@ class GenericLevelElementGroup {
 			for(li in layers)
 				if( editor.levelRender.isLayerVisible(li) && ( li.def.type==IntGrid || li.def.type==Tiles ) ) {
 					for(r in originalRects) {
-						for(cx in li.levelToLayerCx(r.leftPx)...li.levelToLayerCx(r.rightPx))
-						for(cy in li.levelToLayerCy(r.topPx)...li.levelToLayerCy(r.bottomPx)) {
+						for(cx in li.levelToLayerCx(r.leftPx)...li.levelToLayerCx(r.rightPx+1))
+						for(cy in li.levelToLayerCy(r.topPx)...li.levelToLayerCy(r.bottomPx+1)) {
 							if( li.def.type==IntGrid )
 								postRemovals.push( li.removeIntGrid.bind(cx,cy) );
 
@@ -624,7 +649,7 @@ class GenericLevelElementGroup {
 					}
 
 				case GridCell(li, cx,cy):
-					if( li.hasAnyGridValue(cx,cy) || editor.emptySpaceSelection )
+					if( li.hasAnyGridValue(cx,cy) )
 						switch li.def.type {
 							case IntGrid:
 								var v = li.getIntGrid(cx,cy);

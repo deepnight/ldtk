@@ -348,20 +348,18 @@ class Editor extends Page {
 			case K.Q if( App.ME.isCtrlDown() ):
 				App.ME.exit();
 
-			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setSingleLayerMode( !singleLayerMode );
-
 			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setEmptySpaceSelection( !emptySpaceSelection );
 
+			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				setSingleLayerMode( !singleLayerMode );
+
 			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() ):
 				if( singleLayerMode )
-					selectionTool.selectAllInLayer(curLayerInstance);
-				else {
-					selectionTool.clear();
-					for(li in curLevel.layerInstances)
-						selectionTool.selectAllInLayer(li, true);
-				}
+					selectionTool.selectAllInLayers(curLevel, [curLayerInstance]);
+				else
+					selectionTool.selectAllInLayers(curLevel, curLevel.layerInstances);
+				
 				if( !selectionTool.isEmpty() ) {
 					if( singleLayerMode )
 						N.quick( L.t._("Selected all in layer") );
