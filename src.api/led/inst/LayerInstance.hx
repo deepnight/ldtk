@@ -254,12 +254,20 @@ class LayerInstance {
 		return cx + cy*cWid;
 	}
 
-	public function getCx(coordId:Int) {
+	public inline function getCx(coordId:Int) {
 		return coordId - Std.int(coordId/cWid)*cWid;
 	}
 
 	public inline function getCy(coordId:Int) {
 		return Std.int(coordId/cWid);
+	}
+
+	public inline function levelToLayerCx(levelX:Int) {
+		return Std.int( ( levelX - pxOffsetX ) / def.gridSize );
+	}
+
+	public inline function levelToLayerCy(levelY:Int) {
+		return Std.int( ( levelY - pxOffsetY ) / def.gridSize );
 	}
 
 	public function tidy(p:Project) {
