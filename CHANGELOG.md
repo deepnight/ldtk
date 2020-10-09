@@ -8,6 +8,7 @@
 
  - Renamed the old *Enhance active layer* option to **Single layer mode**
  - `Alt`+`left click` now picks elements in *all* layers. If you have the *Single layer mode* activated (`A` key), it will make a smarter choice than before, and prioritize current layer. TLDR; you should always pick what is expected with this action.
+ - Added an option to allow selection of empty spaces
  - Use `DELETE` key to delete selected elements
  - Use `CTRL`+`A` shortcut to select everything (limited to current layer in *Single Layer Mode*).
  - Added the up-to-date *JSON format doc* to the app Home page.
