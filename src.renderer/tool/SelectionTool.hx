@@ -49,7 +49,7 @@ class SelectionTool extends Tool<Int> {
 				case AutoLayer:
 			}
 
-		if( editor.emptySpaceSelection )
+		if( editor.emptySpaceSelection && !group.isEmpty() )
 			group.addSelectionRect(0, level.pxWid, 0, level.pxHei);
 	}
 
@@ -273,7 +273,7 @@ class SelectionTool extends Tool<Int> {
 				}
 				select(all, true);
 
-				if( editor.emptySpaceSelection )
+				if( editor.emptySpaceSelection && !group.isEmpty() )
 					group.addSelectionRect(leftPx, rightPx, topPx, bottomPx);
 			}
 		}
