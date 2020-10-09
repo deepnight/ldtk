@@ -8,6 +8,7 @@
  - **Note:** Undo/Redo will need a major rework, but this will only happen in a future update (see [#151](https://github.com/deepnight/led/issues/151)). For now, undoing a selection move will have to be done in multiple steps: one per affected layer.
  - Added the up-to-date *JSON format doc* to the app Home page.
  - Added fullscreen button to view Home *changelogs*
+ - Pressing `ENTER` on the Home screen now opens last edited map.
  - Removed duplicate sample map
  - Fixed "color" field size in Entity instance editor when the value wasn't default.
  - Updated help window
