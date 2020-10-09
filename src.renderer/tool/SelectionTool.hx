@@ -48,6 +48,36 @@ class SelectionTool extends Tool<Int> {
 		// }
 	}
 
+	public function selectAllInLayer(li:led.inst.LayerInstance, append=false) {
+		if( !append )
+			group.clear();
+
+		switch li.def.type {
+			case IntGrid, Tiles:
+				for(cy in 0...li.cHei)
+				for(cx in 0...li.cWid) {
+					if( li.def.type==IntGrid && li.hasIntGrid(cx,cy) )
+						group.add( IntGrid(li,cx,cy) );
+
+					if( li.def.type==Tiles && li.hasGridTile(cx,cy) )
+						group.add( Tile(li,cx,cy) );
+				}
+
+			case Entities:
+				for(ei in li.entityInstances) {
+					group.add( Entity(li,ei) );
+
+					for(fi in ei.fieldInstances)
+						if( fi.def.type==F_Point )
+							for(i in 0...fi.getArrayLength())
+								if( !fi.valueIsNull(i) )
+									group.add( PointField(li,ei,fi,i) );
+				}
+
+			case AutoLayer:
+		}
+	}
+
 	public function select(?elems:Array<GenericLevelElement>) {
 		group.clear();
 		if( elems!=null )

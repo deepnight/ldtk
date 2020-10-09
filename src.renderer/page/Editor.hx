@@ -343,6 +343,23 @@ class Editor extends Page {
 				setSingleLayerMode( !singleLayerMode );
 				N.quick( "Single layer mode: "+( singleLayerMode ? "ON" : "off" ));
 
+			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() ):
+				if( singleLayerMode )
+					selectionTool.selectAllInLayer(curLayerInstance);
+				else {
+					selectionTool.clear();
+					for(li in curLevel.layerInstances)
+						selectionTool.selectAllInLayer(li, true);
+				}
+				if( !selectionTool.isEmpty() ) {
+					if( singleLayerMode )
+						N.quick( L.t._("Selected all in layer") );
+					else
+						N.quick( L.t._("Selected all") );
+				}
+				else
+					N.error("Nothing to select");
+
 			case K.L if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				gridSnapping = !gridSnapping;
 				levelRender.invalidateBg();
@@ -453,8 +470,6 @@ class Editor extends Page {
 
 			if( !levelRender.isLayerVisible(li) )
 				return null;
-
-			App.ME.debug(levelX+","+levelY);
 
 			var layerX = levelX - li.pxOffsetX;
 			var layerY = levelY - li.pxOffsetY;
