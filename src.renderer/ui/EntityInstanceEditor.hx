@@ -11,7 +11,7 @@ class EntityInstanceEditor extends dn.Process {
 		super(Editor.ME);
 
 		if( CURRENT!=null )
-			close2();
+			close();
 
 		CURRENT = this;
 		this.ei = ei;
@@ -51,21 +51,21 @@ class EntityInstanceEditor extends dn.Process {
 					updateForm();
 
 			case LayerInstanceSelected:
-				close2();
+				close();
 
 			case EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 				updateForm();
 
 			case EntityInstanceRemoved(ei):
 				if( ei==this.ei )
-					close2();
+					close();
 
 			case EntityInstanceChanged(ei):
 				if( ei==this.ei )
 					updateForm();
 
 			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory:
-				close2(); // TODO do softer refresh
+				close(); // TODO do softer refresh
 
 
 			case ViewportChanged :
@@ -106,7 +106,7 @@ class EntityInstanceEditor extends dn.Process {
 		return CURRENT!=null && !CURRENT.destroyed;
 	}
 
-	public static function close2() {
+	public static function close() {
 		if( isOpen() ) {
 			CURRENT.destroy();
 			CURRENT = null;
@@ -410,7 +410,7 @@ class EntityInstanceEditor extends dn.Process {
 		jPanel.empty();
 		jPanel.removeClass("picking");
 		if( ei==null ) {
-			close2();
+			close();
 			return;
 		}
 
