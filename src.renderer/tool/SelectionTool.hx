@@ -58,7 +58,7 @@ class SelectionTool extends Tool<Int> {
 			for(ge in elems)
 				group.add(ge);
 
-		if( isSingle() ) {
+		if( group.length()==1 ) {
 			// Change layer
 			var li = group.getSmartRelativeLayerInstance();
 			if( li!=editor.curLayerInstance )
@@ -239,10 +239,15 @@ class SelectionTool extends Tool<Int> {
 			}
 			else {
 				// Pick every objects under rectangle
-				var leftPx = M.imin( origin.levelX, m.levelX );
-				var rightPx = M.imax( origin.levelX, m.levelX );
-				var topPx = M.imin( origin.levelY, m.levelY );
-				var bottomPx = M.imax( origin.levelY, m.levelY );
+				var r = Rect.fromMouseCoords(origin,m);
+				var leftPx = curLayerInstance.pxOffsetX + r.left * curLayerInstance.def.gridSize;
+				var rightPx = curLayerInstance.pxOffsetX + (r.right+1) * curLayerInstance.def.gridSize - 1;
+				var topPx = curLayerInstance.pxOffsetY + r.top * curLayerInstance.def.gridSize;
+				var bottomPx = curLayerInstance.pxOffsetY + (r.bottom+1) * curLayerInstance.def.gridSize - 1;
+				// var leftPx = M.imin( origin.levelX, m.levelX );
+				// var rightPx = M.imax( origin.levelX, m.levelX );
+				// var topPx = M.imin( origin.levelY, m.levelY );
+				// var bottomPx = M.imax( origin.levelY, m.levelY );
 
 				var all : Array<GenericLevelElement> = [];
 				function _addRectFromLayer(li:led.inst.LayerInstance) {
@@ -256,6 +261,13 @@ class SelectionTool extends Tool<Int> {
 
 					for( cy in cTop...cBottom+1 )
 					for( cx in cLeft...cRight+1 ) {
+						// if( editor.emptySpaceSelection && li.isValid(cx,cy) )
+						// 	switch li.def.type {
+						// 		case IntGrid, Tiles: all.push( GridCell(li,cx,cy) );
+						// 		case Entities:
+						// 		case AutoLayer:
+						// 	}
+						// else if( li.hasAnyGridValue(cx,cy) )
 						if( li.hasAnyGridValue(cx,cy) )
 							all.push( GridCell(li,cx,cy) );
 					}
@@ -288,6 +300,8 @@ class SelectionTool extends Tool<Int> {
 						_addRectFromLayer(li);
 				}
 				select(all, true);
+
+				group.addSelectionRect(leftPx, rightPx, topPx, bottomPx);
 			}
 		}
 		movePreview.clear();
@@ -363,8 +377,11 @@ class SelectionTool extends Tool<Int> {
 			if( isOnStop ) {
 				// Move actual data
 				var changedLayers = group.moveSelecteds(origin, m, isCopy);
-				for(li in changedLayers)
+				for(li in changedLayers) {
 					editor.curLevelHistory.saveLayerState(li);
+					if( li!=curLayerInstance )
+						editor.levelRender.invalidateLayer(li); // cur is invalidated by Tool
+				}
 
 				return changedLayers.length>0;
 			}

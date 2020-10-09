@@ -14,6 +14,8 @@ class GenericLevelElementGroup {
 
 	var invalidatedSelectRender = true;
 
+	var originalRects : Array< { leftPx:Int, rightPx:Int, topPx:Int, bottomPx:Int } > = [];
+
 	public function new(?elems:Array<GenericLevelElement>) {
 		if( elems!=null )
 			elements = elems.copy();
@@ -35,6 +37,7 @@ class GenericLevelElementGroup {
 
 	public function clear() {
 		elements = [];
+		originalRects = [];
 		clearGhost();
 		invalidateBounds();
 		invalidateSelectRender();
@@ -53,8 +56,20 @@ class GenericLevelElementGroup {
 	public function add(ge:GenericLevelElement) {
 		for(e in elements)
 			if( ge.equals(e) )
-				return;
+				return false;
 		elements.push(ge);
+		invalidateBounds();
+		invalidateSelectRender();
+		return true;
+	}
+
+	public function addSelectionRect(l,r,t,b) {
+		originalRects.push({
+			leftPx: l,
+			rightPx: r,
+			topPx: t,
+			bottomPx: b,
+		});
 		invalidateBounds();
 		invalidateSelectRender();
 	}
@@ -111,6 +126,14 @@ class GenericLevelElementGroup {
 					_cachedBounds.bottom = M.imax( _cachedBounds.bottom, y );
 					_cachedBounds.left = M.imin( _cachedBounds.left, x );
 					_cachedBounds.right = M.imax( _cachedBounds.right, x );
+
+					for(r in originalRects) {
+						_cachedBounds.top = M.imin( _cachedBounds.top, r.topPx );
+						_cachedBounds.bottom = M.imax( _cachedBounds.bottom, r.bottomPx );
+						_cachedBounds.left = M.imin( _cachedBounds.left, r.leftPx );
+						_cachedBounds.right = M.imax( _cachedBounds.right, r.rightPx );
+					}
+
 				}
 			}
 		}
@@ -132,12 +155,24 @@ class GenericLevelElementGroup {
 	function renderSelection() {
 		selectRender.clear();
 		selectRender.visible = true;
-		selectRender.beginFill(0xffcc00, 0.3);
+		var c = 0xffcc00;
+		var a = 0.3;
+
+		if( editor.emptySpaceSelection ) {
+			for(r in originalRects) {
+				selectRender.beginFill(0x8ab7ff, a);
+				selectRender.drawRect(r.leftPx, r.topPx, r.rightPx-r.leftPx, r.bottomPx-r.topPx);
+			}
+		}
 
 		for(ge in elements) {
 			switch ge {
 				case null:
 				case GridCell(li, cx, cy):
+					if( li.hasAnyGridValue(cx,cy) )
+						selectRender.beginFill(c, a);
+					else
+						selectRender.beginFill(0x8ab7ff, a*0.6);
 					selectRender.drawRect(
 						li.pxOffsetX + cx*li.def.gridSize,
 						li.pxOffsetY + cy*li.def.gridSize,
@@ -146,6 +181,7 @@ class GenericLevelElementGroup {
 					);
 
 				case Entity(li, ei):
+					selectRender.beginFill(c, a);
 					selectRender.drawRect(
 						li.pxOffsetX + ei.x - ei.def.width * ei.def.pivotX,
 						li.pxOffsetY + ei.y - ei.def.height * ei.def.pivotY,
@@ -154,6 +190,7 @@ class GenericLevelElementGroup {
 					);
 
 				case PointField(li, ei, fi, arrayIdx):
+					selectRender.beginFill(c, a);
 					var pt = fi.getPointGrid(arrayIdx);
 					if( pt!=null )
 						selectRender.drawCircle(
@@ -219,6 +256,13 @@ class GenericLevelElementGroup {
 					}
 			}
 		}
+
+		ghost.endFill();
+		if( editor.emptySpaceSelection )
+			for(r in originalRects) {
+				ghost.lineStyle(1,0xffcc00,0.5);
+				ghost.drawRect(r.leftPx-bounds.left, r.topPx-bounds.top, r.rightPx-r.leftPx, r.bottomPx-r.topPx);
+			}
 
 		return ghost;
 	}
@@ -498,6 +542,34 @@ class GenericLevelElementGroup {
 		var postInserts : Array< Void->Void > = [];
 		var changedLayers : Map<led.inst.LayerInstance, led.inst.LayerInstance> = [];
 
+		// Clear arrival to emulate "empty cell selection" mode
+		if( editor.emptySpaceSelection ) {
+			for(r in originalRects) {
+				r.leftPx += getDeltaX(origin,to);
+				r.rightPx += getDeltaX(origin,to);
+				r.topPx += getDeltaY(origin,to);
+				r.bottomPx += getDeltaY(origin,to);
+			}
+
+			var layers = editor.singleLayerMode
+				? [ editor.curLayerInstance ]
+				: editor.curLevel.layerInstances;
+			for(li in layers)
+				if( editor.levelRender.isLayerVisible(li) && ( li.def.type==IntGrid || li.def.type==Tiles ) ) {
+					for(r in originalRects) {
+						for(cx in li.levelToLayerCx(r.leftPx)...li.levelToLayerCx(r.rightPx))
+						for(cy in li.levelToLayerCy(r.topPx)...li.levelToLayerCy(r.bottomPx)) {
+							if( li.def.type==IntGrid )
+								postRemovals.push( li.removeIntGrid.bind(cx,cy) );
+
+							if( li.def.type==Tiles )
+								postRemovals.push( li.removeGridTile.bind(cx,cy) );
+						}
+					}
+					changedLayers.set(li,li);
+				}
+		}
+
 		// Prepare movement effects
 		var moveGrid = getSmartSnapGrid();
 		for( i in 0...elements.length ) {
@@ -552,14 +624,14 @@ class GenericLevelElementGroup {
 					}
 
 				case GridCell(li, cx,cy):
-					if( li.hasAnyGridValue(cx,cy) )
+					if( li.hasAnyGridValue(cx,cy) || editor.emptySpaceSelection )
 						switch li.def.type {
 							case IntGrid:
 								var v = li.getIntGrid(cx,cy);
 								var gridRatio = Std.int( moveGrid / li.def.gridSize );
 								var tcx = cx + (to.cx-origin.cx)*gridRatio;
 								var tcy = cy + (to.cy-origin.cy)*gridRatio;
-								if( !isCopy )
+								if( !isCopy && li.hasIntGrid(cx,cy) )
 									postRemovals.push( ()-> li.removeIntGrid(cx,cy) );
 								postInserts.push( ()-> li.setIntGrid(tcx, tcy, v) );
 
@@ -571,7 +643,7 @@ class GenericLevelElementGroup {
 								var gridRatio = Std.int( moveGrid / li.def.gridSize );
 								var tcx = cx + (to.cx-origin.cx)*gridRatio;
 								var tcy = cy + (to.cy-origin.cy)*gridRatio;
-								if( !isCopy )
+								if( !isCopy && li.hasGridTile(cx,cy) )
 									postRemovals.push( ()-> li.removeGridTile(cx,cy) );
 								postInserts.push( ()-> li.setGridTile(tcx, tcy, v) );
 
