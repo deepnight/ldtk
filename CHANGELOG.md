@@ -4,7 +4,8 @@
  - **Duplicate**: you can duplicate any element in the level by drag it with `CTRL`+`ALT` keys.
  - Renamed the old *Enhance active layer* option to **Single layer mode**
  - `Alt`+`left click` now picks elements in *all* layers. If you have the *Single layer mode* activated (`A` key), it will make a smarter choice than before, and prioritize current layer. TLDR; you should always pick what is expected with this action.
- - You can delete selected elements by pressing `DELETE` key
+ - Use `DELETE` key to delete selected elements
+ - Use `CTRL`+`A` shortcut to select everything (limited to current layer in *Single Layer Mode*).
  - **Note:** Undo/Redo will need a major rework, but this will only happen in a future update (see [#151](https://github.com/deepnight/led/issues/151)). For now, undoing a selection move will have to be done in multiple steps: one per affected layer.
  - Added the up-to-date *JSON format doc* to the app Home page.
  - Added fullscreen button to view Home *changelogs*
