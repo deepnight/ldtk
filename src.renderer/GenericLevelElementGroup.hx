@@ -25,11 +25,8 @@ class GenericLevelElementGroup {
 		arrow = new h2d.Graphics(renderWrapper);
 		pointLinks = new h2d.Graphics(renderWrapper);
 		selectRender = new h2d.Graphics(renderWrapper);
-		// var f = new h2d.filter.Glow(0xffcc00, 1, 4, true);
-		// f.knockout = true;
-		// selectRender.filter = f;
 		selectRender.filter = new h2d.filter.Group([
-			new dn.heaps.filter.PixelOutline(0xffcc00, true),
+			new dn.heaps.filter.PixelOutline(0xffcc00),
 			new dn.heaps.filter.PixelOutline(0x0),
 		]);
 		invalidateBounds();
@@ -137,8 +134,9 @@ class GenericLevelElementGroup {
 
 	function renderSelection() {
 		selectRender.clear();
-		selectRender.beginFill(0xff00ff, 0.5);
+		selectRender.beginFill(0xffcc00, 0.3);
 
+		var pad = 3;
 		for(ge in elements) {
 			switch ge {
 				case null:
@@ -151,7 +149,12 @@ class GenericLevelElementGroup {
 					);
 
 				case Entity(li, ei):
-					// TODO
+					selectRender.drawRect(
+						li.pxOffsetX + ei.x - ei.def.width * ei.def.pivotX - pad,
+						li.pxOffsetY + ei.y - ei.def.height * ei.def.pivotY - pad,
+						ei.def.width + pad*2,
+						ei.def.height + pad*2
+					);
 
 				case PointField(li, ei, fi, arrayIdx):
 					var pt = fi.getPointGrid(arrayIdx);

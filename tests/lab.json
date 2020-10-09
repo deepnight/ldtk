@@ -395,36 +395,36 @@
 							},
 							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Text", "__cx": 8, "__cy": 8, "defUid": 2, "x": 136, "y": 144, "fieldInstances": [
+						{ "__identifier": "Text", "__cx": 8, "__cy": 10, "defUid": 2, "x": 136, "y": 176, "fieldInstances": [
 							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
 							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
 							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
 							{
 								"__identifier": "star",
 								"__value": [
-									{ "cx": 11, "cy": 7 },
-									{ "cx": 8, "cy": 6 },
-									{ "cx": 4, "cy": 10 },
-									{ "cx": 10, "cy": 10 }
+									{ "cx": 11, "cy": 9 },
+									{ "cx": 7, "cy": 7 },
+									{ "cx": 4, "cy": 12 },
+									{ "cx": 10, "cy": 12 }
 								],
 								"__type": "Array<Point>",
 								"defUid": 20,
 								"realEditorValues": [
 									{
 										"id": "V_String",
-										"params": [ "11,7" ]
+										"params": [ "11,9" ]
 									},
 									{
 										"id": "V_String",
-										"params": [ "8,6" ]
+										"params": [ "7,7" ]
 									},
 									{
 										"id": "V_String",
-										"params": [ "4,10" ]
+										"params": [ "4,12" ]
 									},
 									{
 										"id": "V_String",
-										"params": [ "10,10" ]
+										"params": [ "10,12" ]
 									}
 								]
 							}
