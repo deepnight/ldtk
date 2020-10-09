@@ -479,7 +479,7 @@ class Editor extends Page {
 			switch li.def.type {
 				case IntGrid:
 					if( li.getIntGrid(cx,cy)>=0 )
-						ge = GenericLevelElement.IntGrid( li, cx, cy );
+						ge = GenericLevelElement.GridCell( li, cx, cy );
 
 				case AutoLayer:
 
@@ -503,7 +503,7 @@ class Editor extends Page {
 
 				case Tiles:
 					if( li.getGridTile(cx,cy)!=null )
-						ge = GenericLevelElement.Tile(li, cx, cy);
+						ge = GenericLevelElement.GridCell(li, cx, cy);
 			}
 			return ge;
 		}
@@ -646,17 +646,24 @@ class Editor extends Page {
 		var overed = getGenericLevelElementAt(m.levelX, m.levelY);
 		switch overed { // TODO update that?
 			case null:
-			case IntGrid(li, cx, cy):
-				var v = li.getIntGrid(cx,cy);
-				var c = C.intToHex( C.toWhite( li.def.getIntGridValueColor(v), 0.66 ) );
-				jMouseCoords.prepend('<span style="color:$c">${ li.def.getIntGridValueDisplayName(v) } (IntGrid)</span>');
+			case GridCell(li, cx, cy):
+				if( li.hasAnyGridValue(cx,cy) )
+					switch li.def.type {
+						case IntGrid:
+							var v = li.getIntGrid(cx,cy);
+							var c = C.intToHex( C.toWhite( li.def.getIntGridValueColor(v), 0.66 ) );
+							jMouseCoords.prepend('<span style="color:$c">${ li.def.getIntGridValueDisplayName(v) } (IntGrid)</span>');
+
+						case Tiles:
+							jMouseCoords.prepend('<span>${ li.getGridTile(cx,cy) } (Tile)</span>');
+
+						case Entities:
+						case AutoLayer:
+					}
 
 			case Entity(li, ei):
 				var c = C.intToHex( C.toWhite( ei.def.color, 0.66 ) );
 				jMouseCoords.prepend('<span style="color:$c">${ ei.def.identifier } (Entity)</span>');
-
-			case Tile(li, cx, cy):
-				jMouseCoords.prepend('<span>${ li.getGridTile(cx,cy) } (Tile)</span>');
 
 			case PointField(li, ei, fi, arrayIdx):
 				var c = C.intToHex( C.toWhite( ei.def.color, 0.66 ) );

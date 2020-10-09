@@ -63,7 +63,7 @@ class GenericLevelElementGroup {
 		var map = new Map();
 		for(ge in elements)
 			switch ge {
-				case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
+				case GridCell(li, _), Entity(li, _), PointField(li, _):
 					map.set(li,li);
 			}
 
@@ -90,7 +90,7 @@ class GenericLevelElementGroup {
 
 				for(e in elements) {
 					var x = switch e {
-						case IntGrid(li, cx, cy), Tile(li,cx,cy): li.pxOffsetX + cx*li.def.gridSize;
+						case GridCell(li, cx, cy): li.pxOffsetX + cx*li.def.gridSize;
 						case Entity(li, ei): li.pxOffsetX + ei.x;
 						case PointField(li, ei, fi, arrayIdx):
 							var pt = fi.getPointGrid(arrayIdx);
@@ -99,7 +99,7 @@ class GenericLevelElementGroup {
 							else 0; // HACK should not happen? Need checks
 					}
 					var y = switch e {
-						case IntGrid(li, cx, cy), Tile(li,cx,cy): li.pxOffsetY + cy*li.def.gridSize;
+						case GridCell(li, cx, cy): li.pxOffsetY + cy*li.def.gridSize;
 						case Entity(li, ei): li.pxOffsetY +  ei.y;
 						case PointField(li, ei, fi, arrayIdx):
 							var pt = fi.getPointGrid(arrayIdx);
@@ -137,7 +137,7 @@ class GenericLevelElementGroup {
 		for(ge in elements) {
 			switch ge {
 				case null:
-				case IntGrid(li, cx, cy), Tile(li, cx, cy):
+				case GridCell(li, cx, cy):
 					selectRender.drawRect(
 						li.pxOffsetX + cx*li.def.gridSize,
 						li.pxOffsetY + cy*li.def.gridSize,
@@ -172,16 +172,30 @@ class GenericLevelElementGroup {
 			switch ge {
 				case null:
 
-				case IntGrid(li, cx, cy):
-					ghost.lineStyle();
-					ghost.beginFill( li.getIntGridColorAt(cx,cy) );
-					ghost.drawRect(
-						li.pxOffsetX + cx*li.def.gridSize - bounds.left,
-						li.pxOffsetY + cy*li.def.gridSize - bounds.top,
-						li.def.gridSize,
-						li.def.gridSize
-					);
-					ghost.endFill();
+				case GridCell(li, cx, cy):
+					if( li.hasAnyGridValue(cx,cy) ) // TODO render empty cells
+						switch li.def.type {
+							case IntGrid:
+								ghost.lineStyle();
+								ghost.beginFill( li.getIntGridColorAt(cx,cy) );
+								ghost.drawRect(
+									li.pxOffsetX + cx*li.def.gridSize - bounds.left,
+									li.pxOffsetY + cy*li.def.gridSize - bounds.top,
+									li.def.gridSize,
+									li.def.gridSize
+								);
+								ghost.endFill();
+
+							case Tiles:
+								var tid = li.getGridTile(cx,cy);
+								var td = editor.project.defs.getTilesetDef( li.def.tilesetDefUid );
+								var bmp = new h2d.Bitmap( td.getTile(tid), ghost );
+								bmp.x = li.pxOffsetX + cx*li.def.gridSize - bounds.left;
+								bmp.y = li.pxOffsetY + cy*li.def.gridSize - bounds.top;
+
+							case Entities:
+							case AutoLayer:
+						}
 
 				case Entity(li, ei):
 					var e = display.LevelRender.createEntityRender(ei);
@@ -189,13 +203,6 @@ class GenericLevelElementGroup {
 					e.alpha = 0.5;
 					e.x = li.pxOffsetX + ei.x - bounds.left;
 					e.y = li.pxOffsetY + ei.y - bounds.top;
-
-				case Tile(li, cx, cy):
-					var tid = li.getGridTile(cx,cy);
-					var td = editor.project.defs.getTilesetDef( li.def.tilesetDefUid );
-					var bmp = new h2d.Bitmap( td.getTile(tid), ghost );
-					bmp.x = li.pxOffsetX + cx*li.def.gridSize - bounds.left;
-					bmp.y = li.pxOffsetY + cy*li.def.gridSize - bounds.top;
 
 				case PointField(li, ei, fi, arrayIdx):
 					var pt = fi.getPointGrid(arrayIdx);
@@ -234,7 +241,7 @@ class GenericLevelElementGroup {
 			switch ge {
 				case null:
 
-				case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
+				case GridCell(li, _), Entity(li, _), PointField(li, _):
 					if( l==null || li.def.gridSize>l.def.gridSize )
 						l = li;
 			}
@@ -251,7 +258,7 @@ class GenericLevelElementGroup {
 		for( ge in elements )
 			switch ge {
 			case null:
-			case IntGrid(li, _), Entity(li, _), Tile(li, _), PointField(li, _):
+			case GridCell(li, _), Entity(li, _), PointField(li, _):
 				if( li.def.gridSize<grid && grid % li.def.gridSize != 0 )
 					return true;
 			}
@@ -544,29 +551,36 @@ class GenericLevelElementGroup {
 						}
 					}
 
-				case IntGrid(li, cx,cy):
-					var v = li.getIntGrid(cx,cy);
-					var gridRatio = Std.int( moveGrid / li.def.gridSize );
-					var tcx = cx + (to.cx-origin.cx)*gridRatio;
-					var tcy = cy + (to.cy-origin.cy)*gridRatio;
-					if( !isCopy )
-						postRemovals.push( ()-> li.removeIntGrid(cx,cy) );
-					postInserts.push( ()-> li.setIntGrid(tcx, tcy, v) );
+				case GridCell(li, cx,cy):
+					if( li.hasAnyGridValue(cx,cy) )
+						switch li.def.type {
+							case IntGrid:
+								var v = li.getIntGrid(cx,cy);
+								var gridRatio = Std.int( moveGrid / li.def.gridSize );
+								var tcx = cx + (to.cx-origin.cx)*gridRatio;
+								var tcy = cy + (to.cy-origin.cy)*gridRatio;
+								if( !isCopy )
+									postRemovals.push( ()-> li.removeIntGrid(cx,cy) );
+								postInserts.push( ()-> li.setIntGrid(tcx, tcy, v) );
 
-					elements[i] = li.isValid(tcx,tcy) ? IntGrid(li, tcx, tcy) : null; // update selection
-					changedLayers.set(li,li);
+								elements[i] = li.isValid(tcx,tcy) ? GridCell(li, tcx, tcy) : null; // update selection
+								changedLayers.set(li,li);
 
-				case Tile(li, cx,cy):
-					var v = li.getGridTile(cx,cy);
-					var gridRatio = Std.int( moveGrid / li.def.gridSize );
-					var tcx = cx + (to.cx-origin.cx)*gridRatio;
-					var tcy = cy + (to.cy-origin.cy)*gridRatio;
-					if( !isCopy )
-						postRemovals.push( ()-> li.removeGridTile(cx,cy) );
-					postInserts.push( ()-> li.setGridTile(tcx, tcy, v) );
+							case Tiles:
+								var v = li.getGridTile(cx,cy);
+								var gridRatio = Std.int( moveGrid / li.def.gridSize );
+								var tcx = cx + (to.cx-origin.cx)*gridRatio;
+								var tcy = cy + (to.cy-origin.cy)*gridRatio;
+								if( !isCopy )
+									postRemovals.push( ()-> li.removeGridTile(cx,cy) );
+								postInserts.push( ()-> li.setGridTile(tcx, tcy, v) );
 
-					elements[i] = li.isValid(tcx,tcy) ? Tile(li, tcx, tcy) : null; // update selection
-					changedLayers.set(li,li);
+								elements[i] = li.isValid(tcx,tcy) ? GridCell(li, tcx, tcy) : null; // update selection
+								changedLayers.set(li,li);
+
+							case Entities:
+							case AutoLayer:
+						}
 
 				case PointField(li, ei, fi, arrayIdx):
 					if( isCopy )
@@ -640,14 +654,17 @@ class GenericLevelElementGroup {
 			switch ge {
 				case null:
 
-				case IntGrid(li, cx, cy):
-					li.removeIntGrid(cx,cy);
+				case GridCell(li, cx, cy):
+					if( li.hasAnyGridValue(cx,cy) )
+						switch li.def.type {
+							case IntGrid: li.removeIntGrid(cx,cy);
+							case Tiles: li.removeGridTile(cx,cy);
+							case Entities:
+							case AutoLayer:
+						}
 
 				case Entity(li, ei):
 					li.removeEntityInstance(ei);
-
-				case Tile(li, cx, cy):
-					li.removeGridTile(cx,cy);
 
 				case PointField(li, ei, fi, arrayIdx):
 					fi.removeArrayValue(arrayIdx);

@@ -31,11 +31,8 @@ class SelectionTool extends Tool<Int> {
 			case IntGrid, Tiles:
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
-					if( li.def.type==IntGrid && li.hasIntGrid(cx,cy) )
-						group.add( IntGrid(li,cx,cy) );
-
-					if( li.def.type==Tiles && li.hasGridTile(cx,cy) )
-						group.add( Tile(li,cx,cy) );
+					if( li.hasAnyGridValue(cx,cy) )
+						group.add( GridCell(li,cx,cy) );
 				}
 
 			case Entities:
@@ -70,12 +67,28 @@ class SelectionTool extends Tool<Int> {
 			// Selection effect
 			if( group.length()==1 )
 				switch group.get(0) {
-					case IntGrid(li, cx, cy):
-						var v = li.getIntGrid(cx,cy);
-						var t = editor.curTool.as(tool.lt.IntGridTool);
-						if( t!=null )
-							t.selectValue(v);
-						editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
+					case GridCell(li, cx, cy):
+						if( li.hasAnyGridValue(cx,cy) )
+							switch li.def.type {
+								case IntGrid:
+									var v = li.getIntGrid(cx,cy);
+									var t = editor.curTool.as(tool.lt.IntGridTool);
+									if( t!=null )
+										t.selectValue(v);
+									editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
+
+								case Tiles:
+									var tid = li.getGridTile(cx,cy);
+
+									var t = editor.curTool.as(tool.lt.TileTool);
+									if( t!=null )
+										t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking saved selections?
+
+									editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
+
+								case AutoLayer:
+								case Entities:
+							}
 
 					case Entity(li, ei):
 						var t = editor.curTool.as(tool.lt.EntityTool);
@@ -83,16 +96,6 @@ class SelectionTool extends Tool<Int> {
 							t.selectValue(ei.defUid);
 						editor.levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
 						ui.EntityInstanceEditor.openFor(ei);
-
-
-					case Tile(li, cx, cy):
-						var tid = li.getGridTile(cx,cy);
-
-						var t = editor.curTool.as(tool.lt.TileTool);
-						if( t!=null )
-							t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking saved selections?
-
-						editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
 
 					case PointField(li, ei, fi, arrayIdx):
 						var t = editor.curTool.as(tool.lt.EntityTool);
@@ -128,24 +131,32 @@ class SelectionTool extends Tool<Int> {
 			case null:
 				editor.cursor.set(PickNothing);
 
-			case IntGrid(li, cx, cy):
-				var id = li.getIntGridIdentifierAt(cx,cy);
-				editor.cursor.set(
-					GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ),
-					id==null ? "#"+li.getIntGrid(cx,cy) : id
-				);
+			case GridCell(li, cx, cy):
+				if( li.hasAnyGridValue(cx,cy) )
+					switch li.def.type {
+						case IntGrid:
+							var id = li.getIntGridIdentifierAt(cx,cy);
+							editor.cursor.set(
+								GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ),
+								id==null ? "#"+li.getIntGrid(cx,cy) : id
+							);
+
+						case Tiles:
+							editor.cursor.set(
+								Tiles(li, [li.getGridTile(cx,cy)], cx, cy),
+								"Tile "+li.getGridTile(cx,cy)
+							);
+
+						case Entities:
+						case AutoLayer:
+					}
+
 
 			case Entity(li, ei):
 				editor.cursor.set(
 					Entity(li, ei.def, ei, ei.x, ei.y),
 					ei.def.identifier,
 					true
-				);
-
-			case Tile(li, cx,cy):
-				editor.cursor.set(
-					Tiles(li, [li.getGridTile(cx,cy)], cx, cy),
-					"Tile "+li.getGridTile(cx,cy)
 				);
 
 			case PointField(li, ei, fi, arrayIdx):
@@ -165,16 +176,12 @@ class SelectionTool extends Tool<Int> {
 
 		for(ge in group.all()) {
 			switch ge {
-				case IntGrid(li, cx, cy):
+				case GridCell(li, cx, cy):
 					if( m.getLayerCx(li)==cx && m.getLayerCy(li)==cy )
 						return true;
 
 				case Entity(li, ei):
 					if( ei.isOver(m.layerX, m.layerY) )
-						return true;
-
-				case Tile(li, cx, cy):
-					if( m.getLayerCx(li)==cx && m.getLayerCy(li)==cy )
 						return true;
 
 				case PointField(li, ei, fi, arrayIdx):
@@ -237,7 +244,7 @@ class SelectionTool extends Tool<Int> {
 				var topPx = M.imin( origin.levelY, m.levelY );
 				var bottomPx = M.imax( origin.levelY, m.levelY );
 
-				var all = [];
+				var all : Array<GenericLevelElement> = [];
 				function _addRectFromLayer(li:led.inst.LayerInstance) {
 					if( !editor.levelRender.isLayerVisible(li) )
 						return;
@@ -249,13 +256,8 @@ class SelectionTool extends Tool<Int> {
 
 					for( cy in cTop...cBottom+1 )
 					for( cx in cLeft...cRight+1 ) {
-						// IntGrid
-						if( li.def.type==IntGrid && li.hasIntGrid(cx,cy) )
-							all.push( IntGrid(li,cx,cy) );
-
-						// Tiles
-						if( li.def.type==Tiles && li.hasGridTile(cx,cy) )
-							all.push( Tile(li,cx,cy) );
+						if( li.hasAnyGridValue(cx,cy) )
+							all.push( GridCell(li,cx,cy) );
 					}
 
 					// Entities

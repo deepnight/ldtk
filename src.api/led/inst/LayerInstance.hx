@@ -382,6 +382,15 @@ class LayerInstance {
 		pxOffsetY = newPxOffsetY;
 	}
 
+	public inline function hasAnyGridValue(cx:Int, cy:Int) {
+		return switch def.type {
+			case IntGrid: hasIntGrid(cx,cy);
+			case Tiles: hasGridTile(cx,cy);
+			case Entities: false;
+			case AutoLayer: false;
+		}
+	}
+
 
 	/** INT GRID *******************/
 

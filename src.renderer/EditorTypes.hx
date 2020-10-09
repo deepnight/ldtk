@@ -87,9 +87,8 @@ enum CursorType {
 }
 
 enum GenericLevelElement {
-	IntGrid(li:led.inst.LayerInstance, cx:Int, cy:Int);
+	GridCell(li:led.inst.LayerInstance, cx:Int, cy:Int);
 	Entity(li:led.inst.LayerInstance, ei:led.inst.EntityInstance);
-	Tile(li:led.inst.LayerInstance, cx:Int, cy:Int);
 	PointField(li:led.inst.LayerInstance, ei:led.inst.EntityInstance, fi:led.inst.FieldInstance, arrayIdx:Int);
 }
 
