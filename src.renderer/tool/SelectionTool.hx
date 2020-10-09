@@ -1,7 +1,6 @@
 package tool;
 
 class SelectionTool extends Tool<Int> {
-	var selectionCursors : Array<ui.Cursor>; // TODO should be done by Group
 	var moveStarted = false;
 	var movePreview : h2d.Graphics;
 	var isCopy = false;
@@ -14,7 +13,6 @@ class SelectionTool extends Tool<Int> {
 		editor.levelRender.root.add(movePreview, Const.DP_UI);
 
 		group = new GenericLevelElementGroup();
-		selectionCursors = [];
 	}
 
 	override function onDispose() {
@@ -24,29 +22,6 @@ class SelectionTool extends Tool<Int> {
 	}
 
 	override function getDefaultValue() return -1; // Not actually used
-
-	function clearCursors() {
-		for(c in selectionCursors)
-			c.destroy();
-		selectionCursors = [];
-	}
-
-	function updateSelectionCursors() { // TODO should be done by Group
-		clearCursors();
-		// for( ge in group.all() ) {
-		// 	var c = new ui.Cursor();
-		// 	selectionCursors.push(c);
-		// 	c.enablePermanentHighlights();
-		// 	c.set(switch ge {
-		// 		case IntGrid(li, cx, cy): GridCell(li, cx,cy);
-		// 		case Entity(li, ei): Entity(li, ei.def, ei, ei.x, ei.y);
-		// 		case Tile(li,cx,cy): Tiles(li, [li.getGridTile(cx,cy)], cx,cy);
-		// 		case PointField(li, ei, fi, arrayIdx):
-		// 			var pt = fi.getPointGrid(arrayIdx);
-		// 			GridCell(li, pt.cx, pt.cy);
-		// 	});
-		// }
-	}
 
 	public function selectAllInLayer(li:led.inst.LayerInstance, append=false) {
 		if( !append )
@@ -83,8 +58,6 @@ class SelectionTool extends Tool<Int> {
 		if( elems!=null )
 			for(ge in elems)
 				group.add(ge);
-
-		updateSelectionCursors();
 
 		if( isSingle() ) {
 			// Change layer
@@ -136,9 +109,6 @@ class SelectionTool extends Tool<Int> {
 
 	override function updateCursor(m:MouseCoords) {
 		super.updateCursor(m);
-
-		for( c in selectionCursors )
-			c.root.visible = !isRunning();
 
 		// Default cursor
 		if( isRunning() && rectangle ) {
@@ -366,11 +336,8 @@ class SelectionTool extends Tool<Int> {
 
 
 	function moveSelection(m:MouseCoords, isOnStop:Bool) : Bool {
-		if( isOnStop ) {
-			var changed = group.moveSelecteds(origin, m, isCopy);
-			updateSelectionCursors();
-			return changed;
-		}
+		if( isOnStop )
+			return group.moveSelecteds(origin, m, isCopy);
 		else {
 			group.showGhost(origin, m, isCopy);
 			return false;
