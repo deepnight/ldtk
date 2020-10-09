@@ -35,6 +35,7 @@ class Editor extends Page {
 	var gridSnapping = true;
 	public var needSaving = false;
 	public var singleLayerMode(default,null) = false;
+	public var emptySpaceSelection(default,null) = true;
 
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
@@ -142,6 +143,12 @@ class Editor extends Page {
 			.prop("checked", singleLayerMode)
 			.change( function(ev) {
 				setSingleLayerMode( ev.getThis().prop("checked") );
+			});
+
+		jMainPanel.find("input#emptySpaceSelection")
+			.prop("checked", emptySpaceSelection)
+			.change( function(ev) {
+				setEmptySpaceSelection( ev.getThis().prop("checked") );
 			});
 
 
@@ -293,6 +300,8 @@ class Editor extends Page {
 					ui.EntityInstanceEditor.close2();
 					selectionTool.clear();
 				}
+				else if( ui.EntityInstanceEditor.isOpen() )
+					ui.EntityInstanceEditor.close2();
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() ) {
@@ -341,7 +350,9 @@ class Editor extends Page {
 
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setSingleLayerMode( !singleLayerMode );
-				N.quick( "Single layer mode: "+( singleLayerMode ? "ON" : "off" ));
+
+			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				setEmptySpaceSelection( !emptySpaceSelection );
 
 			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() ):
 				if( singleLayerMode )
@@ -740,6 +751,14 @@ class Editor extends Page {
 		jMainPanel.find("input#singleLayerMode").prop("checked", v);
 		levelRender.applyAllLayersVisibility();
 		selectionTool.clear();
+		N.quick( "Single layer mode: "+( singleLayerMode ? "ON" : "off" ));
+	}
+
+	public function setEmptySpaceSelection(v:Bool) {
+		emptySpaceSelection = v;
+		jMainPanel.find("input#emptySpaceSelection").prop("checked", v);
+		selectionTool.clear();
+		N.quick( "Select empty spaces: "+( emptySpaceSelection ? "ON" : "off" ));
 	}
 
 	function onHelp() {
