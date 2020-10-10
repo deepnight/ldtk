@@ -15,7 +15,6 @@ class App extends dn.Process {
 	public var lastKnownMouse : { pageX:Int, pageY:Int };
 	var curPageProcess : Null<Page>;
 	public var session : SessionData;
-	var metaKeyDown = false;
 	var keyDowns : Map<Int,Bool> = new Map();
 
 
@@ -131,13 +130,11 @@ class App extends dn.Process {
 		if( ev.keyCode==K.ALT )
 			ev.preventDefault();
 
-		metaKeyDown = ev.metaKey;
 		keyDowns.set(ev.keyCode, true);
 		onKeyPress(ev.keyCode);
 	}
 
 	function onJsKeyUp(ev:js.jquery.Event) {
-		metaKeyDown = false;
 		keyDowns.remove(ev.keyCode);
 	}
 
@@ -154,9 +151,10 @@ class App extends dn.Process {
 		exit(false);
 	}
 
+	public inline function isMac() return js.Browser.window.navigator.userAgent.indexOf('Mac') != -1;
 	public inline function isKeyDown(keyId:Int) return keyDowns.get(keyId)==true;
 	public inline function isShiftDown() return keyDowns.get(K.SHIFT)==true;
-	public inline function isCtrlDown() return keyDowns.get(K.CTRL)==true || metaKeyDown;
+	public inline function isCtrlDown() return keyDowns.get(isMac() ? K.LEFT_WINDOW_KEY : K.CTRL)==true;
 	public inline function isAltDown() return keyDowns.get(K.ALT)==true;
 	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlDown() || isAltDown();
 
@@ -198,14 +196,12 @@ class App extends dn.Process {
 
 	function onAppFocus(ev:js.html.Event) {
 		keyDowns = new Map();
-		metaKeyDown = false;
 		if( hasPage() )
 			curPageProcess.onAppFocus();
 	}
 
 	function onAppBlur(ev:js.html.Event) {
 		keyDowns = new Map();
-		metaKeyDown = false;
 		if( hasPage() )
 			curPageProcess.onAppBlur();
 	}
