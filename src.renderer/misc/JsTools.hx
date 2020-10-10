@@ -284,6 +284,8 @@ class JsTools {
 
 		if( keyLabel.toLowerCase()=="shift" )
 			keyLabel = "⇧";
+		else if ( App.isMac() && keyLabel.toLowerCase()=="ctrl")
+			keyLabel = "⌘";
 
 		return new J('<span class="key">$keyLabel</span>');
 	}
