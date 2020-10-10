@@ -439,6 +439,18 @@ div.key {
 		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
 		border-bottom-color: transparentize( darken( $keyColor, $darken ), $opacity );
 	}
+	&.meta {
+		color: transparent;
+		background-image: url("../img/icons/meta.png");
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: contain;
+
+		$keyColor : #FD4F66;
+		background-color: transparentize( $keyColor, $opacity );
+		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
+		border-bottom-color: transparentize( darken( $keyColor, $darken ), $opacity );
+	}
 	&.ctrl {
 		$keyColor : #FD4F66;
 		background-color: transparentize( $keyColor, $opacity );

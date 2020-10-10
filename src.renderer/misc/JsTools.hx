@@ -309,7 +309,8 @@ class JsTools {
 				case _:
 					var jKey = new J('<span class="key">${k.toUpperCase()}</span>');
 					switch k.toLowerCase() {
-						case "shift", "alt", "ctrl" : jKey.addClass( k.toLowerCase() );
+						case "shift", "alt" : jKey.addClass( k.toLowerCase() );
+						case "ctrl" : jKey.addClass( App.isMac() ? 'meta' : k.toLowerCase() );
 						case _:
 					}
 					jKey;
