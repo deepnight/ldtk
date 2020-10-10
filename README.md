@@ -10,7 +10,7 @@ Links: [Official website](https://deepnight.net/tools/led-2d-level-editor/) | [H
 
 ## Requirements
 
- - **[Haxe compiler](https://haxe.org)**: you need an up-to-date and working Haxe install  to build L-Ed.
+ - **[Haxe compiler](https://haxe.org)**: you need an up-to-date and working Haxe install to build L-Ed.
  - **[NPM](https://www.npmjs.com/)**: this package manager is used for various install and packaging scripts
 
 ### Installing Haxe libs
@@ -30,9 +30,8 @@ haxelib git castle https://github.com/ncannasse/castle.git
 
 ### Installing Node dependencies
 
-Run the following command in the `app` folder:
 ```
-npm i
+npm i --prefix app
 ```
 
 ## Compiling
@@ -55,10 +54,8 @@ This should create `app/assets/js/renderer.js`.
 
 ## Running
 
-From a command line in the `app` folder, run:
-
 ```
-npm run start
+npm start --prefix app
 ```
 
 # Related tools & licences

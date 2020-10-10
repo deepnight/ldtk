@@ -47,6 +47,8 @@ class Editor extends Page {
 	public var curLevelHistory(get,never) : LevelHistory;
 		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
+	public var rectangleX : Int = -1;
+	public var rectangleY : Int = -1;
 
 	public function new(p:led.Project, path:String) {
 		super();
@@ -618,6 +620,11 @@ class Editor extends Page {
 			curTool.startUsing( m, e.button );
 
 		rulers.onMouseDown( m, e.button );
+
+		if (App.ME.isShiftDown()) {
+			rectangleX = m.cx;
+			rectangleY = m.cy;
+		}
 	}
 
 	function onMouseUp() {
@@ -632,6 +639,11 @@ class Editor extends Page {
 			curTool.stopUsing( m );
 
 		rulers.onMouseUp( m );
+
+		if (rectangleX != -1 || rectangleY != -1) {
+			rectangleX = -1;
+			rectangleY = -1;
+		}
 	}
 
 	function onMouseMove(e:hxd.Event) {
@@ -652,6 +664,11 @@ class Editor extends Page {
 			jMouseCoords.append('<span>Grid = ${m.cx},${m.cy}</span>');
 		// jMouseCoords.append('<span>Layer = ${m.layerX},${m.layerY}</span>');
 		jMouseCoords.append('<span>Level = ${m.levelX},${m.levelY}</span>');
+
+		// Rectangle infos
+		if (rectangleX != -1 || rectangleY != -1) {
+			jMouseCoords.prepend('<span style="color:lightgrey">Rectangle = ${m.cx - rectangleX},${m.cy - rectangleY}</span>');
+		}
 
 		// Overed element infos
 		var overed = getGenericLevelElementAt(m.levelX, m.levelY);
