@@ -6,7 +6,7 @@
 
    - [Layer instance](#led-LayerInstanceJson)
 
-     - [Auto-layer tile instance](#led-AutoLayerTile)
+     - [Auto-layer tile instance](#led-Tile)
 
      - [Entity instance](#led-EntityInstanceJson)
 
@@ -154,7 +154,7 @@
 
 <a id="led-LayerInstanceJson-autoLayerTiles" name="led-LayerInstanceJson-autoLayerTiles"></a>
 
- - ### `autoLayerTiles` : **Array of [Auto-layer tile instance](#led-AutoLayerTile)**  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
+ - ### `autoLayerTiles` : **Array of [Auto-layer tile instance](#led-Tile)**  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
 
     ***Only relevant for Auto-layers***
 
@@ -231,43 +231,43 @@
 
     Random seed used for Auto-Layers rendering
 
-<a id="led-AutoLayerTile" name="led-AutoLayerTile"></a>
+<a id="led-Tile" name="led-Tile"></a>
 
 &nbsp;
 
 ### Auto-layer tile instance
 
-<a id="led-AutoLayerTile-d" name="led-AutoLayerTile-d"></a>
+<a id="led-Tile-d" name="led-Tile-d"></a>
 
  - #### `d` : **Array of Int**   
 
     Internal data used by the editor
 
-<a id="led-AutoLayerTile-f" name="led-AutoLayerTile-f"></a>
+<a id="led-Tile-f" name="led-Tile-f"></a>
 
  - #### `f` : **Int**   
 
     "Flip flags", a 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip
 
-<a id="led-AutoLayerTile-srcX" name="led-AutoLayerTile-srcX"></a>
+<a id="led-Tile-srcX" name="led-Tile-srcX"></a>
 
  - #### `srcX` : **Int**   
 
     X pixel coordinate of the tile in the **tileset**
 
-<a id="led-AutoLayerTile-srcY" name="led-AutoLayerTile-srcY"></a>
+<a id="led-Tile-srcY" name="led-Tile-srcY"></a>
 
  - #### `srcY` : **Int**   
 
     Y pixel coordinate of the tile in the **tileset**
 
-<a id="led-AutoLayerTile-x" name="led-AutoLayerTile-x"></a>
+<a id="led-Tile-x" name="led-Tile-x"></a>
 
  - #### `x` : **Int**   
 
     X pixel coordinate of the tile in the **layer**
 
-<a id="led-AutoLayerTile-y" name="led-AutoLayerTile-y"></a>
+<a id="led-Tile-y" name="led-Tile-y"></a>
 
  - #### `y` : **Int**   
 

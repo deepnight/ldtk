@@ -129,7 +129,7 @@ typedef LayerInstanceJson = {
 	**/
 	@only("Auto-layers")
 	@added("0.4.0")
-	var autoLayerTiles: Array<AutoLayerTile>;
+	var autoLayerTiles: Array<Tile>;
 
 	@only("Entity layers")
 	var entityInstances: Array<EntityInstanceJson>;
@@ -139,7 +139,7 @@ typedef LayerInstanceJson = {
 
 @section("1.1.1")
 @display("Auto-layer tile instance")
-typedef AutoLayerTile = {
+typedef Tile = {
 	/** X pixel coordinate of the tile in the **layer** **/
 	var x: Int;
 

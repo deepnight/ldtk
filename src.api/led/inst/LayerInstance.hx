@@ -180,7 +180,7 @@ class LayerInstance {
 
 		if( json.autoLayerTiles!=null ) {
 			try {
-				var jsonAutoLayerTiles : Array<Json.AutoLayerTile> = JsonTools.readArray(json.autoLayerTiles);
+				var jsonAutoLayerTiles : Array<Json.Tile> = JsonTools.readArray(json.autoLayerTiles);
 				li.autoTilesCache = new Map();
 
 				for(at in jsonAutoLayerTiles) {
