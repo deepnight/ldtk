@@ -207,40 +207,6 @@ class LayerInstance {
 			}
 		}
 
-		// if( json.autoTiles!=null ) {
-			// var jsonAutoTiles = JsonTools.readArray(json.autoTiles);
-			// for(ruleTiles in jsonAutoTiles) {
-			// 	li.autoTilesCache.set(ruleTiles.ruleId, new Map());
-
-			// 	// Hot-fix pre-0.2.2 naming
-			// 	if( ruleTiles.results==null )
-			// 		ruleTiles.results = ruleTiles.tiles;
-
-			// 	for( jsonTileResult in JsonTools.readArray(ruleTiles.results) ) {
-			// 		if( jsonTileResult.tiles!=null ) {
-			// 			var jsonTiles = JsonTools.readArray(jsonTileResult.tiles);
-			// 			li.autoTilesCache.get(ruleTiles.ruleId).set(
-			// 				JsonTools.readInt(jsonTileResult.coordId),
-			// 				{
-			// 					tileIds: jsonTiles.map( (j)->j.tileId ),
-			// 					flips: JsonTools.readInt(jsonTileResult.flips, 0),
-			// 				}
-			// 			);
-			// 		}
-			// 		else {
-			// 			// Support for pre-0.2.2 format
-			// 			li.autoTilesCache.get(ruleTiles.ruleId).set(
-			// 				JsonTools.readInt(jsonTileResult.coordId),
-			// 				{
-			// 					tileIds: [ JsonTools.readInt(jsonTileResult.tileId) ],
-			// 					flips: JsonTools.readInt(jsonTileResult.flips, 0),
-			// 				}
-			// 			);
-			// 		}
-			// 	}
-			// }
-		// }
-
 		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
 
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
