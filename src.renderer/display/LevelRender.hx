@@ -429,7 +429,7 @@ class LevelRender extends dn.Process {
 						while( ruleIdx>=0 ) {
 							var r = rg.rules[ruleIdx];
 							if( r.active ) {
-								var ruleResults = li.autoTiles.get(r.uid);
+								var ruleResults = li.autoTilesCache.get(r.uid);
 								for(cy in 0...li.cHei)
 								for(cx in 0...li.cWid) {
 									var at = ruleResults.get( li.coordId(cx,cy) );

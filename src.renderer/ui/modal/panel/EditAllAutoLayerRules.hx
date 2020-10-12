@@ -79,10 +79,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					App.LOG.render('Rule ${ruleUid} in level "${l.identifier}"": applying');
 					li.applyAutoLayerRule(r);
 				}
-				else if( r==null && li.autoTiles.exists(ruleUid) ) {
+				else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
 					App.LOG.render('Rule ${ruleUid} in level "${l.identifier}"": removing autoTiles');
 					// WARNING: re-apply all rules here if breakOnMatch exists
-					li.autoTiles.remove(ruleUid);
+					li.autoTilesCache.remove(ruleUid);
 				}
 			}
 		}
