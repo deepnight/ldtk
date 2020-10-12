@@ -249,16 +249,25 @@ class Editor extends Page {
 			watcher.watchTileset(td);
 
 		selectionTool.clear();
+		checkAutoLayersCache();
+	}
 
+
+	function checkAutoLayersCache(?onDone:Void->Void) {
 		var ops = [];
+
 		for(l in project.levels)
 		for(li in l.layerInstances)
-			if( li.def.isAutoLayer() )
+			if( li.def.isAutoLayer() && li.autoTilesCache==null )
 				ops.push({
 					label:l.identifier+"."+li.def.identifier,
 					cb:li.applyAllAutoLayerRules,
 				});
-		new ui.modal.Progress("Updating auto-layers...", ops);
+
+		if( ops.length>0 )
+			new ui.modal.Progress("Updating auto-layers...", ops, onDone);
+		else if( onDone!=null )
+			onDone();
 	}
 
 
@@ -848,23 +857,24 @@ class Editor extends Page {
 		}
 
 		ge.emit(BeforeProjectSaving);
+		checkAutoLayersCache( ()->{
+			var data = JsTools.prepareProjectFile(project);
+			JsTools.writeFileBytes(projectFilePath, data.bytes);
 
-		var data = JsTools.prepareProjectFile(project);
-		JsTools.writeFileBytes(projectFilePath, data.bytes);
-
-		if( project.exportTiled ) {
-			var e = new exporter.Tiled();
-			e.run( project, projectFilePath );
-		}
+			if( project.exportTiled ) {
+				var e = new exporter.Tiled();
+				e.run( project, projectFilePath );
+			}
 
 
-		needSaving = false;
-		App.ME.registerRecentProject(projectFilePath);
+			needSaving = false;
+			App.ME.registerRecentProject(projectFilePath);
 
-		N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
-		updateTitle();
+			N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
+			updateTitle();
 
-		ge.emit(ProjectSaved);
+			ge.emit(ProjectSaved);
+		});
 	}
 
 	public function onSaveAs() {

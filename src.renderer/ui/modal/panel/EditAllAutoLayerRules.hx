@@ -82,11 +82,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						cb: li.applyAutoLayerRule.bind(r),
 					});
 				}
-				else if( r==null && li.autoTilesNewCache.exists(ruleUid) ) {
+				else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
 					// WARNING: re-apply all rules here if breakOnMatch exists
 					ops.push({
 						label: "Removing rule from "+l.identifier,
-						cb: li.autoTilesNewCache.remove.bind(ruleUid),
+						cb: li.autoTilesCache.remove.bind(ruleUid),
 					});
 				}
 			}

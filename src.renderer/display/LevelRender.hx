@@ -421,8 +421,8 @@ class LevelRender extends dn.Process {
 				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper);
 
 				li.def.iterateActiveRulesInDisplayOrder( (r)-> {
-					if( li.autoTilesNewCache.exists( r.uid ) ) {
-						for(allTiles in li.autoTilesNewCache.get( r.uid ))
+					if( li.autoTilesCache.exists( r.uid ) ) {
+						for(allTiles in li.autoTilesCache.get( r.uid ))
 						for(tileInfos in allTiles)
 							tg.addTransform(
 								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
