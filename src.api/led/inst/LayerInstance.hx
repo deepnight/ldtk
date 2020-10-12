@@ -202,7 +202,6 @@ class LayerInstance {
 
 		if( json.autoLayerTiles!=null ) {
 			var jsonAutoTiles = JsonTools.readArray(json.autoLayerTiles);
-			li.autoTilesNewCache = new Map();
 			for(at in jsonAutoTiles) {
 				if( !li.autoTilesNewCache.exists(at.r) )
 					li.autoTilesNewCache.set(at.r, new Map());
@@ -309,10 +308,10 @@ class LayerInstance {
 							autoTilesNewCache.remove(rUid);
 
 					// Fix missing autoTiles
-					for(rg in def.autoRuleGroups)
-					for(r in rg.rules)
-						if( !autoTilesNewCache.exists(r.uid) )
-							applyAutoLayerRule(r);
+					// for(rg in def.autoRuleGroups)
+					// for(r in rg.rules)
+					// 	if( !autoTilesNewCache.exists(r.uid) )
+					// 		applyAutoLayerRule(r);
 				}
 
 			case Entities:
