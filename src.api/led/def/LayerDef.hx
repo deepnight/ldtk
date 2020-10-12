@@ -206,6 +206,25 @@ class LayerDef {
 		return rg;
 	}
 
+	public inline function iterateActiveRulesInDisplayOrder( cbEachRule:(r:AutoLayerRuleDef)->Void ) {
+		var ruleGroupIdx = autoRuleGroups.length-1;
+		while( ruleGroupIdx>=0 ) {
+			// Groups
+			if( autoRuleGroups[ruleGroupIdx].active ) {
+				var rg = autoRuleGroups[ruleGroupIdx];
+				var ruleIdx = rg.rules.length-1;
+				while( ruleIdx>=0 ) {
+					// Rules
+					if( rg.rules[ruleIdx].active )
+						cbEachRule( rg.rules[ruleIdx] );
+
+					ruleIdx--;
+				}
+			}
+			ruleGroupIdx--;
+		}
+	}
+
 	public function tidy(p:led.Project) {
 		// Lost auto-layer tileset
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {

@@ -420,83 +420,20 @@ class LevelRender extends dn.Process {
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper);
 
-				// Iterate backward to match display order
-				var ruleGroupIdx = li.def.autoRuleGroups.length-1;
-				while( ruleGroupIdx>=0 ) {
-					var rg = li.def.autoRuleGroups[ruleGroupIdx];
-					var ruleIdx = rg.rules.length-1;
-					while( ruleIdx>=0 ) {
-						if( li.autoTilesNewCache.exists( rg.rules[ruleIdx].uid ) ) {
-							for(allTiles in li.autoTilesNewCache.get( rg.rules[ruleIdx].uid ))
-							for(tileInfos in allTiles)
-								tg.addTransform(
-									tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-									tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
-									dn.M.hasBit(tileInfos.flips,0)?-1:1,
-									dn.M.hasBit(tileInfos.flips,1)?-1:1,
-									0,
-									td.getTile(tileInfos.tid)
-								);
-						}
-						ruleIdx--;
+				li.def.iterateActiveRulesInDisplayOrder( (r)-> {
+					if( li.autoTilesNewCache.exists( r.uid ) ) {
+						for(allTiles in li.autoTilesNewCache.get( r.uid ))
+						for(tileInfos in allTiles)
+							tg.addTransform(
+								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
+								dn.M.hasBit(tileInfos.flips,0)?-1:1,
+								dn.M.hasBit(tileInfos.flips,1)?-1:1,
+								0,
+								td.getTile(tileInfos.tid)
+							);
 					}
-					ruleGroupIdx--;
-				}
-
-				// var groupIdx = li.def.autoRuleGroups.length-1;
-				// var anyTile = false;
-				// while( groupIdx>=0 ) {
-				// 	var rg = li.def.autoRuleGroups[groupIdx];
-				// 	if( rg.active ) {
-				// 		var ruleIdx = rg.rules.length-1;
-				// 		while( ruleIdx>=0 ) {
-				// 			var r = rg.rules[ruleIdx];
-				// 			if( r.active ) {
-				// 				var ruleResults = li.autoTilesCache.get(r.uid);
-				// 				for(cy in 0...li.cHei)
-				// 				for(cx in 0...li.cWid) {
-				// 					var at = ruleResults.get( li.coordId(cx,cy) );
-				// 					if( at!=null ) {
-				// 						switch r.tileMode {
-				// 							case Single:
-				// 								tg.addTransform(
-				// 									( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-				// 									( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-				// 									dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
-				// 									td.getTile(at.tileIds[0])
-				// 								);
-
-				// 							case Stamp:
-				// 								// Render stamp tiles
-				// 								var stampRenderInfos = li.getRuleStampRenderInfos(r, td, at.tileIds, at.flips);
-				// 								for(tid in at.tileIds) {
-				// 									var tcx = td.getTileCx(tid);
-				// 									var tcy = td.getTileCy(tid);
-				// 									tg.addTransform(
-				// 										( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + stampRenderInfos.get(tid).xOff,
-				// 										( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + stampRenderInfos.get(tid).yOff,
-				// 										dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
-				// 										td.getTile(tid)
-				// 									);
-				// 								}
-				// 						}
-				// 						anyTile = true;
-				// 					}
-				// 				}
-				// 			}
-
-				// 			ruleIdx--;
-				// 		}
-				// 	}
-
-				// 	groupIdx--;
-				// }
-
-				// if( li.def.type==IntGrid && !anyTile && li.hasIntGrid(cx,cy) ) {
-				// 	// Default render when no tile applies
-				// 	g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
-				// 	g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);
-				// }
+				});
 		}
 			else if( li.def.type==IntGrid ) {
 				// Normal intGrid

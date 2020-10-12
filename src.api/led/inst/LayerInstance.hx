@@ -72,28 +72,43 @@ class LayerInstance {
 
 				// Iterate backward to match display order
 				var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
-				var ruleGroupIdx = def.autoRuleGroups.length-1;
-				while( ruleGroupIdx>=0 ) {
-					var rg = def.autoRuleGroups[ruleGroupIdx];
-					var ruleIdx = rg.rules.length-1;
-					while( ruleIdx>=0 ) {
-						if( autoTilesNewCache.exists( rg.rules[ruleIdx].uid ) ) {
-							for( allTiles in autoTilesNewCache.get( rg.rules[ruleIdx].uid ).keyValueIterator() )
-							for( tileInfos in allTiles.value )
-								arr.push({
-									x: tileInfos.x,
-									y: tileInfos.y,
-									srcX: td.getTileSourceX(tileInfos.tid),
-									srcY: td.getTileSourceY(tileInfos.tid),
-									f: tileInfos.flips,
-									r: rg.rules[ruleIdx].uid,
-									c: allTiles.key,
-								});
-						}
-						ruleIdx--;
+				def.iterateActiveRulesInDisplayOrder( (r)->{
+					if( autoTilesNewCache.exists( r.uid ) ) {
+						for( allTiles in autoTilesNewCache.get( r.uid ).keyValueIterator() )
+						for( tileInfos in allTiles.value )
+							arr.push({
+								x: tileInfos.x,
+								y: tileInfos.y,
+								srcX: td.getTileSourceX(tileInfos.tid),
+								srcY: td.getTileSourceY(tileInfos.tid),
+								f: tileInfos.flips,
+								r: r.uid,
+								c: allTiles.key,
+							});
 					}
-					ruleGroupIdx--;
-				}
+				});
+				// var ruleGroupIdx = def.autoRuleGroups.length-1;
+				// while( ruleGroupIdx>=0 ) {
+				// 	var rg = def.autoRuleGroups[ruleGroupIdx];
+				// 	var ruleIdx = rg.rules.length-1;
+				// 	while( ruleIdx>=0 ) {
+				// 		if( autoTilesNewCache.exists( rg.rules[ruleIdx].uid ) ) {
+				// 			for( allTiles in autoTilesNewCache.get( rg.rules[ruleIdx].uid ).keyValueIterator() )
+				// 			for( tileInfos in allTiles.value )
+				// 				arr.push({
+				// 					x: tileInfos.x,
+				// 					y: tileInfos.y,
+				// 					srcX: td.getTileSourceX(tileInfos.tid),
+				// 					srcY: td.getTileSourceY(tileInfos.tid),
+				// 					f: tileInfos.flips,
+				// 					r: rg.rules[ruleIdx].uid,
+				// 					c: allTiles.key,
+				// 				});
+				// 		}
+				// 		ruleIdx--;
+				// 	}
+				// 	ruleGroupIdx--;
+				// }
 				arr;
 			},
 
@@ -119,7 +134,7 @@ class LayerInstance {
 		}
 	}
 
-	public function getRuleStampRenderInfos(rule:led.def.AutoLayerRuleDef, td:led.def.TilesetDef, tileIds:Array<Int>, flipBits:Int)
+	public inline function getRuleStampRenderInfos(rule:led.def.AutoLayerRuleDef, td:led.def.TilesetDef, tileIds:Array<Int>, flipBits:Int)
 	: Map<Int, { xOff:Int, yOff:Int }> {
 		if( td==null )
 			return null;
