@@ -70,37 +70,32 @@ class LayerInstance {
 
 			autoTiles2: {
 				var arr = [];
-				if( def.isAutoLayer() ) {
-					var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
 
-					for(rg in def.autoRuleGroups) {
-						if( !rg.active )
-							continue;
-
-						for(rule in rg.rules) {
-							if( !rule.active )
-								continue;
-
-							var ruleTiles = autoTilesCache.get( rule.uid );
-							for( ruleResult in ruleTiles.keyValueIterator() ) {
-								var stampRenderInfos = getRuleStampRenderInfos(rule, td, ruleResult.value.tileIds, ruleResult.value.flips);
-								var cx = getCx(ruleResult.key);
-								var cy = getCy(ruleResult.key);
-
-								for( tid in ruleResult.value.tileIds ) {
-									arr.push({
-										x: cx*def.gridSize + stampRenderInfos.get(tid).xOff,
-										y: cy*def.gridSize + stampRenderInfos.get(tid).yOff,
-										srcX: td==null ? -1 : td.getTileSourceX(tid),
-										srcY: td==null ? -1 : td.getTileSourceY(tid),
-										f: ruleResult.value.flips,
-										// t: tid,
-										r: rule.uid,
-									});
-								}
+				// Iterate backward to match display order
+				var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
+				var ruleGroupIdx = def.autoRuleGroups.length-1;
+				while( ruleGroupIdx>=0 ) {
+					var rg = def.autoRuleGroups[ruleGroupIdx];
+					var ruleIdx = rg.rules.length-1;
+					while( ruleIdx>=0 ) {
+						if( autoTilesNewCache.exists( rg.rules[ruleIdx].uid ) ) {
+							for( allTiles in autoTilesNewCache.get( rg.rules[ruleIdx].uid ).keyValueIterator() ) {
+								trace(allTiles);
+							for( tileInfos in allTiles.value )
+								arr.push({
+									x: tileInfos.x,
+									y: tileInfos.y,
+									srcX: td.getTileSourceX(tileInfos.tid),
+									srcY: td.getTileSourceY(tileInfos.tid),
+									f: tileInfos.flips,
+									r: rg.rules[ruleIdx].uid,
+									c: allTiles.key,
+								});
 							}
 						}
+						ruleIdx--;
 					}
+					ruleGroupIdx--;
 				}
 				arr;
 			},
@@ -244,50 +239,57 @@ class LayerInstance {
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
 
 		if( json.autoTiles2!=null ) {
-			// var jsonAutoTiles = JsonTools.readArray(json.autoTiles2);
-			// for(at in jsonAutoTiles) {
-			// 	if( !li.autoTiles.exists(at.rule) )
-			// 		li.autoTiles.set(at.rule, new Map());
-			// 	if( !li.autoTiles.get(at.rule).exists(at.c) )
-			// 		li.autoTiles.get(at.rule).set(at.c, { flips:0, tileIds: [] });
-			// 	li.autoTiles.get(at.rule).get(at.c).flips = at.flips;
-			// 	li.autoTiles.get(at.rule).get(at.c).tileIds.push( at.t );
-			// }
-		}
+			var jsonAutoTiles = JsonTools.readArray(json.autoTiles2);
+			for(at in jsonAutoTiles) {
+				if( !li.autoTilesNewCache.exists(at.r) )
+					li.autoTilesNewCache.set(at.r, new Map());
 
-		if( json.autoTiles!=null ) {
-			var jsonAutoTiles = JsonTools.readArray(json.autoTiles);
-			for(ruleTiles in jsonAutoTiles) {
-				li.autoTilesCache.set(ruleTiles.ruleId, new Map());
+				if( !li.autoTilesNewCache.get(at.r).exists(at.c) )
+					li.autoTilesNewCache.get(at.r).set(at.c, []);
 
-				// Hot-fix pre-0.2.2 naming
-				if( ruleTiles.results==null )
-					ruleTiles.results = ruleTiles.tiles;
-
-				for( jsonTileResult in JsonTools.readArray(ruleTiles.results) ) {
-					if( jsonTileResult.tiles!=null ) {
-						var jsonTiles = JsonTools.readArray(jsonTileResult.tiles);
-						li.autoTilesCache.get(ruleTiles.ruleId).set(
-							JsonTools.readInt(jsonTileResult.coordId),
-							{
-								tileIds: jsonTiles.map( (j)->j.tileId ),
-								flips: JsonTools.readInt(jsonTileResult.flips, 0),
-							}
-						);
-					}
-					else {
-						// Support for pre-0.2.2 format
-						li.autoTilesCache.get(ruleTiles.ruleId).set(
-							JsonTools.readInt(jsonTileResult.coordId),
-							{
-								tileIds: [ JsonTools.readInt(jsonTileResult.tileId) ],
-								flips: JsonTools.readInt(jsonTileResult.flips, 0),
-							}
-						);
-					}
-				}
+				li.autoTilesNewCache.get(at.r).get(at.c).push({
+					tid: at.t,
+					x: at.x,
+					y: at.y,
+					flips: at.f,
+				});
 			}
 		}
+
+		// if( json.autoTiles!=null ) {
+			// var jsonAutoTiles = JsonTools.readArray(json.autoTiles);
+			// for(ruleTiles in jsonAutoTiles) {
+			// 	li.autoTilesCache.set(ruleTiles.ruleId, new Map());
+
+			// 	// Hot-fix pre-0.2.2 naming
+			// 	if( ruleTiles.results==null )
+			// 		ruleTiles.results = ruleTiles.tiles;
+
+			// 	for( jsonTileResult in JsonTools.readArray(ruleTiles.results) ) {
+			// 		if( jsonTileResult.tiles!=null ) {
+			// 			var jsonTiles = JsonTools.readArray(jsonTileResult.tiles);
+			// 			li.autoTilesCache.get(ruleTiles.ruleId).set(
+			// 				JsonTools.readInt(jsonTileResult.coordId),
+			// 				{
+			// 					tileIds: jsonTiles.map( (j)->j.tileId ),
+			// 					flips: JsonTools.readInt(jsonTileResult.flips, 0),
+			// 				}
+			// 			);
+			// 		}
+			// 		else {
+			// 			// Support for pre-0.2.2 format
+			// 			li.autoTilesCache.get(ruleTiles.ruleId).set(
+			// 				JsonTools.readInt(jsonTileResult.coordId),
+			// 				{
+			// 					tileIds: [ JsonTools.readInt(jsonTileResult.tileId) ],
+			// 					flips: JsonTools.readInt(jsonTileResult.flips, 0),
+			// 				}
+			// 			);
+			// 		}
+			// 	}
+			// }
+		// }
+
 		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
 
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);

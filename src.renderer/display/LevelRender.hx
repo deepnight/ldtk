@@ -420,13 +420,27 @@ class LevelRender extends dn.Process {
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper);
 
-				for(ruleResults in li.autoTilesNewCache.keyValueIterator()) {
-					var ruleId = ruleResults.key;
-					for(allTiles in ruleResults.value)
-					for(tileInfos in allTiles) {
-						var t = td.getTile(tileInfos.tid);
-						tg.add(tileInfos.x, tileInfos.y, t);
+				// Iterate backward to match display order
+				var ruleGroupIdx = li.def.autoRuleGroups.length-1;
+				while( ruleGroupIdx>=0 ) {
+					var rg = li.def.autoRuleGroups[ruleGroupIdx];
+					var ruleIdx = rg.rules.length-1;
+					while( ruleIdx>=0 ) {
+						if( li.autoTilesNewCache.exists( rg.rules[ruleIdx].uid ) ) {
+							for(allTiles in li.autoTilesNewCache.get( rg.rules[ruleIdx].uid ))
+							for(tileInfos in allTiles)
+								tg.addTransform(
+									tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+									tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
+									dn.M.hasBit(tileInfos.flips,0)?-1:1,
+									dn.M.hasBit(tileInfos.flips,1)?-1:1,
+									0,
+									td.getTile(tileInfos.tid)
+								);
+						}
+						ruleIdx--;
 					}
+					ruleGroupIdx--;
 				}
 
 				// var groupIdx = li.def.autoRuleGroups.length-1;

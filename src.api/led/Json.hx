@@ -147,6 +147,9 @@ typedef LayerInstanceJson = {
 
 		/** The rule UID that created this tile **/
 		var r: Int;
+
+		/** The coordinate ID of the grid cell that triggered the rule **/
+		var c: Int;
 	}>;
 
 	@only("Auto-layers")
