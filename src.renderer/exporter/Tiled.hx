@@ -311,6 +311,18 @@ class Tiled extends Exporter {
 				var td = p.defs.getTilesetDef(ld.autoTilesetDefUid);
 				var layer = _createLayer("objectgroup", li, "_tiles");
 
+				ld.iterateActiveRulesInDisplayOrder( (r)->{
+					if( !li.autoTilesCache.exists(r.uid) )
+						return;
+
+					var ruleResults = li.autoTilesCache.get(r.uid);
+					for(tiles in ruleResults)
+					for( at in tiles ) {
+						var o = _createTileObject(td.uid, at.tid, at.x, at.y, at.flips);
+						layer.addChild(o);
+					}
+				});
+
 				// TODO fix autolayer exports in Tiled
 				// var json = li.toJson(); // much easier to rely on LEd JSON here
 				// for(at in json.autoTiles)

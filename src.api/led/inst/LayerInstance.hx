@@ -22,7 +22,7 @@ class LayerInstance {
 	public var autoTilesCache :
 		Null< Map<Int, // RuleUID
 			Map<Int, // CoordID
-				Array<{ x:Int, y:Int, flips:Int, srcX:Int, srcY:Int }>
+				Array<{ x:Int, y:Int, flips:Int, srcX:Int, srcY:Int, tid:Int }>
 			>
 		> > = null;
 
@@ -82,8 +82,7 @@ class LayerInstance {
 									srcX: tileInfos.srcX,
 									srcY: tileInfos.srcY,
 									f: tileInfos.flips,
-									r: r.uid,
-									c: allTiles.key,
+									d: [r.uid,allTiles.key,tileInfos.tid],
 								});
 							}
 					});
@@ -180,24 +179,31 @@ class LayerInstance {
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
 
 		if( json.autoLayerTiles!=null ) {
-			var jsonAutoLayerTiles : Array<Json.AutoLayerTile> = JsonTools.readArray(json.autoLayerTiles);
-			if( li.autoTilesCache==null )
+			try {
+				var jsonAutoLayerTiles : Array<Json.AutoLayerTile> = JsonTools.readArray(json.autoLayerTiles);
 				li.autoTilesCache = new Map();
 
-			for(at in jsonAutoLayerTiles) {
-				if( !li.autoTilesCache.exists(at.r) )
-					li.autoTilesCache.set(at.r, new Map());
+				for(at in jsonAutoLayerTiles) {
+					var ruleId = at.d[0];
+					var coordId = at.d[1];
+					if( !li.autoTilesCache.exists(ruleId) )
+						li.autoTilesCache.set(ruleId, new Map());
 
-				if( !li.autoTilesCache.get(at.r).exists(at.c) )
-					li.autoTilesCache.get(at.r).set(at.c, []);
+					if( !li.autoTilesCache.get(ruleId).exists(coordId) )
+						li.autoTilesCache.get(ruleId).set(coordId, []);
 
-				li.autoTilesCache.get(at.r).get(at.c).push({
-					x: at.x,
-					y: at.y,
-					srcX: at.srcX,
-					srcY: at.srcY,
-					flips: at.f,
-				});
+					li.autoTilesCache.get(ruleId).get(coordId).push({
+						x: at.x,
+						y: at.y,
+						srcX: at.srcX,
+						srcY: at.srcY,
+						flips: at.f,
+						tid: at.d[2],
+					});
+				}
+			}
+			catch(e:Dynamic) {
+				li.autoTilesCache = null;
 			}
 		}
 
@@ -514,6 +520,7 @@ class LayerInstance {
 				y: cy*def.gridSize + pxOffsetY + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ),
 				srcX: td.getTileSourceX(tid),
 				srcY: td.getTileSourceY(tid),
+				tid: tid,
 				flips: flips,
 			}
 		} ) );
