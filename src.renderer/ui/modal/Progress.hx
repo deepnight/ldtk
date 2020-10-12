@@ -1,12 +1,11 @@
 package ui.modal;
 
 class Progress extends ui.Modal {
-	public function new(?title:String, ops:Array< Void->String >, ?onComplete:Void->Void) {
+	public function new(?title:String, ops:Array<{ label:String, cb:Void->Void }>, ?onComplete:Void->Void) {
 		super();
 
 		canBeClosedManually = false;
 		jModalAndMask.addClass("progress");
-		jWrapper.hide().slideDown(60);
 
 		if( title==null )
 			title = L.t._("Please wait...");
@@ -21,12 +20,13 @@ class Progress extends ui.Modal {
 			if( ops.length==0 )
 				close();
 			else {
-				var label = ops.shift()();
-				cur++;
+				var op = ops.shift();
+				delayer.addF(op.cb, 1);
 				var pct = 100 * cur/total;
 				jBar.find(".bar").css({ width:pct+"%" });
-				jBar.find(".label").text(label);
+				jBar.find(".label").text( op.label );
+				cur++;
 			}
-		});
+		}, true);
 	}
 }

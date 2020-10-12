@@ -254,9 +254,9 @@ class Editor extends Page {
 		for(l in project.levels)
 		for(li in l.layerInstances)
 			if( li.def.isAutoLayer() )
-				ops.push( ()->{
-					li.applyAllAutoLayerRules();
-					return l.identifier;
+				ops.push({
+					label:l.identifier+"."+li.def.identifier,
+					cb:li.applyAllAutoLayerRules,
 				});
 		new ui.modal.Progress("Updating auto-layers...", ops);
 	}
