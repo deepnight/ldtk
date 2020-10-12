@@ -321,6 +321,44 @@ a.exploreTo {
 	}
 }
 
+.progressBar {
+	position: relative;
+	margin-bottom: 8px;
+	min-width: 400px;
+	height: 8px;
+	background-color: $bgDark;
+	border: 1px solid $orange;
+	padding: 1px;
+	border-radius: 2px;
+
+	.barWrapper {
+		position: absolute;
+		z-index: 1;
+		width: calc( 100% - 2px );
+		height: calc( 100% - 2px );
+		top: 1px;
+		left: 1px;
+		.bar {
+			min-width: 1px;
+			width: 1px;
+			height: 100%;
+			background-color: $orange;
+			box-shadow: 0px 0px 8px $darkOrange, 0px 0px 16px $darkRed;
+			box-sizing: border-box;
+			border-radius: 3px;
+		}
+	}
+	.label {
+		position: absolute;
+		z-index: 2;
+		right: 1px;
+		top: 12px;
+		color: white;
+		font-size: 9pt;
+		color: $bgLighter;
+	}
+}
+
 #guide {
 	display: flex;
 	padding: 2px;
@@ -1396,6 +1434,15 @@ textarea {
 		.content {
 			width: 700px;
 		}
+	}
+}
+
+.window.progress {
+	display: grid;
+	align-items: center;
+	justify-items: center;
+	>.wrapper {
+		position: static;
 	}
 }
 
