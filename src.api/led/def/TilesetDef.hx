@@ -379,6 +379,14 @@ class TilesetDef {
 	}
 
 
+	public inline function extractTile(tileX:Int, tileY:Int) : h2d.Tile {
+		if( isAtlasLoaded() )
+			return getAtlasTile().sub( tileX, tileY, tileGridSize, tileGridSize );
+		else
+			return makeErrorTile(tileGridSize);
+	}
+
+
 
 	/*** JS API *********************************/
 	#if js

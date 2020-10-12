@@ -158,9 +158,6 @@ typedef AutoLayerTile = {
 	/** The rule UID that created this tile **/
 	var r: Int;
 
-	/** Tile ID in the tileset **/
-	var t: Int;
-
 	/** The coordinate ID of the grid cell that triggered the rule **/
 	var c: Int;
 }

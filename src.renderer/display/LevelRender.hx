@@ -430,7 +430,7 @@ class LevelRender extends dn.Process {
 								dn.M.hasBit(tileInfos.flips,0)?-1:1,
 								dn.M.hasBit(tileInfos.flips,1)?-1:1,
 								0,
-								td.getTile(tileInfos.tid)
+								td.extractTile(tileInfos.srcX, tileInfos.srcY)
 							);
 					}
 				});

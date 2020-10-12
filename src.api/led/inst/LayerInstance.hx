@@ -22,7 +22,7 @@ class LayerInstance {
 	public var autoTilesCache :
 		Null< Map<Int, // RuleUID
 			Map<Int, // CoordID
-				Array<{ tid:Int, flips:Int, x:Int, y:Int }>
+				Array<{ x:Int, y:Int, flips:Int, srcX:Int, srcY:Int }>
 			>
 		> > = null;
 
@@ -79,13 +79,13 @@ class LayerInstance {
 								arr.push({
 									x: tileInfos.x,
 									y: tileInfos.y,
-									srcX: td.getTileSourceX(tileInfos.tid),
-									srcY: td.getTileSourceY(tileInfos.tid),
+									srcX: tileInfos.srcX,
+									srcY: tileInfos.srcY,
 									f: tileInfos.flips,
 									r: r.uid,
 									c: allTiles.key,
 								});
-						}
+							}
 					});
 				}
 				arr;
@@ -180,11 +180,11 @@ class LayerInstance {
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
 
 		if( json.autoLayerTiles!=null ) {
-			var jsonAutoTiles = JsonTools.readArray(json.autoLayerTiles);
+			var jsonAutoLayerTiles : Array<Json.AutoLayerTile> = JsonTools.readArray(json.autoLayerTiles);
 			if( li.autoTilesCache==null )
 				li.autoTilesCache = new Map();
 
-			for(at in jsonAutoTiles) {
+			for(at in jsonAutoLayerTiles) {
 				if( !li.autoTilesCache.exists(at.r) )
 					li.autoTilesCache.set(at.r, new Map());
 
@@ -192,9 +192,10 @@ class LayerInstance {
 					li.autoTilesCache.get(at.r).set(at.c, []);
 
 				li.autoTilesCache.get(at.r).get(at.c).push({
-					tid: at.t,
 					x: at.x,
 					y: at.y,
+					srcX: at.srcX,
+					srcY: at.srcY,
 					flips: at.f,
 				});
 			}
@@ -509,9 +510,10 @@ class LayerInstance {
 		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
 		autoTilesCache.get(r.uid).set( coordId(cx,cy), tileIds.map( (tid)->{
 			return {
-				tid: tid,
 				x: cx*def.gridSize + pxOffsetX + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ),
 				y: cy*def.gridSize + pxOffsetY + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ),
+				srcX: td.getTileSourceX(tid),
+				srcY: td.getTileSourceY(tid),
 				flips: flips,
 			}
 		} ) );
