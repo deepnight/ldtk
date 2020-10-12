@@ -182,6 +182,24 @@
 
          - `tileId` : **Int**   -- Tile ID in the corresponding tileset
 
+<a id="led-LayerInstanceJson-autoTiles2" name="led-LayerInstanceJson-autoTiles2"></a>
+
+ - ### `autoTiles2` : **Array of Object**  [![Generic badge](https://img.shields.io/badge/Changed-0.4.0-orange.svg)](JSON_CHANGELOG.md) 
+
+    ***Only relevant for Auto-layers***
+
+    This array contains objects with all the following fields:
+
+     - `flips` : **Int**   -- A 2-bits integer: Bit 0 = X flip, Bit 1 = Y flip
+
+     - `srcX` : **Int**   -- X pixel coordinate of the tile in the **tileset**
+
+     - `srcY` : **Int**   -- Y pixel coordinate of the tile in the **tileset**
+
+     - `x` : **Int**   -- X pixel coordinate of the tile in the **layer**
+
+     - `y` : **Int**   -- Y pixel coordinate of the tile in the **layer**
+
 <a id="led-LayerInstanceJson-entityInstances" name="led-LayerInstanceJson-entityInstances"></a>
 
  - ### `entityInstances` : **Array of [Entity instance](#led-EntityInstanceJson)**   

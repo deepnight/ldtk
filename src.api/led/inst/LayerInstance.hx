@@ -62,6 +62,44 @@ class LayerInstance {
 				arr;
 			},
 
+			autoTiles2: {
+				var arr = [];
+				if( def.isAutoLayer() ) {
+					var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
+
+					for(rg in def.autoRuleGroups) {
+						if( !rg.active )
+							continue;
+
+						for(rule in rg.rules) {
+							if( !rule.active )
+								continue;
+
+							var ruleTiles = autoTiles.get( rule.uid );
+							for( ruleResult in ruleTiles.keyValueIterator() ) {
+								var stampRenderInfos = getRuleStampRenderInfos(rule, td, ruleResult.value.tileIds, ruleResult.value.flips);
+								var cx = getCx(ruleResult.key);
+								var cy = getCy(ruleResult.key);
+
+								for( tid in ruleResult.value.tileIds ) {
+									arr.push({
+										x: cx*def.gridSize + stampRenderInfos.get(tid).xOff,
+										y: cy*def.gridSize + stampRenderInfos.get(tid).yOff,
+										srcX: td==null ? -1 : td.getTileSourceX(tid),
+										srcY: td==null ? -1 : td.getTileSourceY(tid),
+										flips: ruleResult.value.flips,
+										// t: tid,
+										// r: rule.uid,
+										// c: ruleResult.key,
+									});
+								}
+							}
+						}
+					}
+				}
+				arr;
+			},
+
 			autoTiles: {
 				var arr = [];
 				if( def.isAutoLayer() ) {
@@ -199,6 +237,18 @@ class LayerInstance {
 
 		for( entityJson in JsonTools.readArray(json.entityInstances) )
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
+
+		if( json.autoTiles2!=null ) {
+			// var jsonAutoTiles = JsonTools.readArray(json.autoTiles2);
+			// for(at in jsonAutoTiles) {
+			// 	if( !li.autoTiles.exists(at.rule) )
+			// 		li.autoTiles.set(at.rule, new Map());
+			// 	if( !li.autoTiles.get(at.rule).exists(at.c) )
+			// 		li.autoTiles.get(at.rule).set(at.c, { flips:0, tileIds: [] });
+			// 	li.autoTiles.get(at.rule).get(at.c).flips = at.flips;
+			// 	li.autoTiles.get(at.rule).get(at.c).tileIds.push( at.t );
+			// }
+		}
 
 		if( json.autoTiles!=null ) {
 			var jsonAutoTiles = JsonTools.readArray(json.autoTiles);

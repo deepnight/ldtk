@@ -124,6 +124,25 @@ typedef LayerInstanceJson = {
 
 
 	@only("Auto-layers")
+	@changed("0.4.0")
+	var autoTiles2: Array<{
+		/** X pixel coordinate of the tile in the **layer** **/
+		var x: Int;
+
+		/** Y pixel coordinate of the tile in the **layer** **/
+		var y: Int;
+
+		/** X pixel coordinate of the tile in the **tileset** **/
+		var srcX: Int;
+
+		/** Y pixel coordinate of the tile in the **tileset** **/
+		var srcY: Int;
+
+		/** A 2-bits integer: Bit 0 = X flip, Bit 1 = Y flip **/
+		var flips: Int;
+	}>;
+
+	@only("Auto-layers")
 	var autoTiles: Array<{
 		var ruleId: Int;
 		@changed("0.3.0")
