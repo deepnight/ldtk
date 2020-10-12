@@ -10,6 +10,8 @@ class Progress extends ui.Modal {
 		if( title==null )
 			title = L.t._("Please wait...");
 		jContent.append('<h2>$title</h2>');
+		
+		jMask.hide().fadeIn(500);
 
 		var jBar = App.ME.jBody.find("xml#progressBar").children().clone();
 		jBar.appendTo(jContent);
@@ -17,8 +19,9 @@ class Progress extends ui.Modal {
 		var cur = 0;
 		var total = ops.length;
 		createChildProcess( (p)->{
-			if( ops.length==0 )
+			if( ops.length==0 ) {
 				close();
+			}
 			else {
 				var op = ops.shift();
 				delayer.addF(op.cb, 1);

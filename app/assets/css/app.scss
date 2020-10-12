@@ -1439,10 +1439,16 @@ textarea {
 
 .window.progress {
 	display: grid;
-	align-items: center;
+	align-items: flex-start;
 	justify-items: center;
 	>.wrapper {
+		margin-top: 8px;
 		position: static;
+		padding: 8px;
+		h2 {
+			margin: 0;
+			border: none;
+		}
 	}
 }
 
