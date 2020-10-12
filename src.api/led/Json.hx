@@ -152,14 +152,11 @@ typedef AutoLayerTile = {
 	/** Y pixel coordinate of the tile in the **tileset** **/
 	var srcY: Int;
 
-	/** A 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip **/
+	/** "Flip flags", a 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip **/
 	var f: Int;
 
-	/** The rule UID that created this tile **/
-	var r: Int;
-
-	/** The coordinate ID of the grid cell that triggered the rule **/
-	var c: Int;
+	/** Internal data used by the editor **/
+	var d: Array<Int>;
 }
 
 

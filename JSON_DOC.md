@@ -237,23 +237,17 @@
 
 ### Auto-layer tile instance
 
-<a id="led-AutoLayerTile-c" name="led-AutoLayerTile-c"></a>
+<a id="led-AutoLayerTile-d" name="led-AutoLayerTile-d"></a>
 
- - #### `c` : **Int**   
+ - #### `d` : **Array of Int**   
 
-    The coordinate ID of the grid cell that triggered the rule
+    Internal data used by the editor
 
 <a id="led-AutoLayerTile-f" name="led-AutoLayerTile-f"></a>
 
  - #### `f` : **Int**   
 
-    A 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip
-
-<a id="led-AutoLayerTile-r" name="led-AutoLayerTile-r"></a>
-
- - #### `r` : **Int**   
-
-    The rule UID that created this tile
+    "Flip flags", a 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip
 
 <a id="led-AutoLayerTile-srcX" name="led-AutoLayerTile-srcX"></a>
 
