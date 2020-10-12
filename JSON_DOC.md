@@ -267,12 +267,6 @@
 
     Y pixel coordinate of the tile in the **tileset**
 
-<a id="led-AutoLayerTile-t" name="led-AutoLayerTile-t"></a>
-
- - #### `t` : **Int**   
-
-    Tile ID in the tileset
-
 <a id="led-AutoLayerTile-x" name="led-AutoLayerTile-x"></a>
 
  - #### `x` : **Int**   
