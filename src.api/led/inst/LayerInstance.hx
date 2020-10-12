@@ -87,28 +87,6 @@ class LayerInstance {
 							});
 					}
 				});
-				// var ruleGroupIdx = def.autoRuleGroups.length-1;
-				// while( ruleGroupIdx>=0 ) {
-				// 	var rg = def.autoRuleGroups[ruleGroupIdx];
-				// 	var ruleIdx = rg.rules.length-1;
-				// 	while( ruleIdx>=0 ) {
-				// 		if( autoTilesNewCache.exists( rg.rules[ruleIdx].uid ) ) {
-				// 			for( allTiles in autoTilesNewCache.get( rg.rules[ruleIdx].uid ).keyValueIterator() )
-				// 			for( tileInfos in allTiles.value )
-				// 				arr.push({
-				// 					x: tileInfos.x,
-				// 					y: tileInfos.y,
-				// 					srcX: td.getTileSourceX(tileInfos.tid),
-				// 					srcY: td.getTileSourceY(tileInfos.tid),
-				// 					f: tileInfos.flips,
-				// 					r: rg.rules[ruleIdx].uid,
-				// 					c: allTiles.key,
-				// 				});
-				// 		}
-				// 		ruleIdx--;
-				// 	}
-				// 	ruleGroupIdx--;
-				// }
 				arr;
 			},
 
