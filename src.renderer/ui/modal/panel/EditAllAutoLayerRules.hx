@@ -70,22 +70,30 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 	function updateAllLevels() {
+		var ops = [];
 		// Apply edited rules to all other levels
 		for(ruleUid in invalidatedRules) {
 			for( l in project.levels )
 			for( li in l.layerInstances ) {
 				var r = li.def.getRule(ruleUid);
 				if( r!=null ) {
-					App.LOG.render('Applying rule ${ruleUid} in level "${l.identifier}"...');
-					li.applyAutoLayerRule(r);
+					ops.push({
+						label: "Updating "+l.identifier,
+						cb: li.applyAutoLayerRule.bind(r),
+					});
 				}
 				else if( r==null && li.autoTilesNewCache.exists(ruleUid) ) {
-					App.LOG.render('Removing cached tiles from rule ${ruleUid} in level "${l.identifier}"...');
 					// WARNING: re-apply all rules here if breakOnMatch exists
-					li.autoTilesNewCache.remove(ruleUid);
+					ops.push({
+						label: "Removing rule from "+l.identifier,
+						cb: li.autoTilesNewCache.remove.bind(ruleUid),
+					});
 				}
 			}
 		}
+
+		if( ops.length>0 )
+			new Progress(L.t._("Updating auto layers..."), ops);
 
 		invalidatedRules = new Map();
 	}
