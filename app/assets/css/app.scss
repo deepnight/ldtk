@@ -1930,10 +1930,6 @@ canvas#webgl {
 				font-size: 8pt;
 
 				label {
-					cursor: pointer;
-				}
-
-				input[type=checkbox]+label {
 					display: block;
 					text-align: center;
 					padding: 3px 3px;
@@ -1941,22 +1937,33 @@ canvas#webgl {
 					border: 1px solid $bgMed;
 					border-radius: 3px;
 					background-color: $bgDark;
+					cursor: pointer;
+
+					&:hover {
+						color: white;
+					}
+
+					&.checked {
+						color: $green;
+						border-color: $green;
+						background-color: $helpDark;
+					}
+					input[type=checkbox] {
+						width: 12px;
+						height: 12px;
+						vertical-align: middle;
+					}
+					input[type=checkbox]:not(:checked) {
+						opacity: 0.2;
+					}
 				}
 
-				input[type=checkbox]:checked+label {
-					color: $green;
-					border-color: $green;
-					background-color: $helpDark;
-				}
 
-				input[type=checkbox] {
-					display: none;
-				}
-				label:hover {
-					color: white;
-				}
-				input.unsupported+label {
-					opacity: 0.3;
+				label.unsupported {
+					background-image: url("../img/stripes.png");
+					background-color: $bgMed;
+					border-color: $bgLight;
+					color: $bgLighter;
 				}
 
 				.onlyCompact {
