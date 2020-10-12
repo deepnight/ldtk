@@ -25,7 +25,6 @@ class LayerInstance {
 				Array<{ tid:Int, flips:Int, x:Int, y:Int }>
 			>
 		> = new Map();
-	public var autoTilesCache : Map<Int, Map<Int, { tileIds:Array<Int>, flips:Int }> > = [];
 
 	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( ( level.pxWid-pxOffsetX ) / def.gridSize );
 	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( ( level.pxHei-pxOffsetY ) / def.gridSize );
@@ -68,7 +67,7 @@ class LayerInstance {
 				arr;
 			},
 
-			autoTiles2: {
+			autoLayerTiles: {
 				var arr = [];
 
 				// Iterate backward to match display order
@@ -79,8 +78,7 @@ class LayerInstance {
 					var ruleIdx = rg.rules.length-1;
 					while( ruleIdx>=0 ) {
 						if( autoTilesNewCache.exists( rg.rules[ruleIdx].uid ) ) {
-							for( allTiles in autoTilesNewCache.get( rg.rules[ruleIdx].uid ).keyValueIterator() ) {
-								trace(allTiles);
+							for( allTiles in autoTilesNewCache.get( rg.rules[ruleIdx].uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value )
 								arr.push({
 									x: tileInfos.x,
@@ -91,7 +89,6 @@ class LayerInstance {
 									r: rg.rules[ruleIdx].uid,
 									c: allTiles.key,
 								});
-							}
 						}
 						ruleIdx--;
 					}
@@ -100,56 +97,6 @@ class LayerInstance {
 				arr;
 			},
 
-			autoTiles: {
-				var arr = [];
-				if( def.isAutoLayer() ) {
-					var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
-					for(rg in def.autoRuleGroups) {
-						if( !rg.active )
-							continue;
-
-						for(rule in rg.rules) {
-							if( !rule.active )
-								continue;
-
-							var ruleTiles = autoTilesCache.get( rule.uid );
-							arr.push({
-								ruleId: rule.uid,
-								results: {
-									if( ruleTiles==null )
-										[];
-									else {
-										var tilesArr = [];
-										for( ruleResult in ruleTiles.keyValueIterator() ) {
-											var stampRenderInfos = getRuleStampRenderInfos(rule, td, ruleResult.value.tileIds, ruleResult.value.flips);
-											var cx = getCx(ruleResult.key);
-											var cy = getCy(ruleResult.key);
-											var tiles = ruleResult.value.tileIds.map( (tid:Int)->{
-												return {
-													tileId: tid,
-													__x: cx*def.gridSize + stampRenderInfos.get(tid).xOff,
-													__y: cy*def.gridSize + stampRenderInfos.get(tid).yOff,
-													__srcX: td==null ? -1 : td.getTileSourceX(tid),
-													__srcY: td==null ? -1 : td.getTileSourceY(tid),
-												}
-											});
-											tilesArr.push({
-												__cx: cx,
-												__cy: cy,
-												coordId: ruleResult.key,
-												tiles: tiles,
-												flips: ruleResult.value.flips,
-											});
-										}
-										tilesArr;
-									}
-								}
-							});
-						}
-					}
-				}
-				arr;
-			},
 			seed: seed,
 
 			gridTiles: {
@@ -238,8 +185,9 @@ class LayerInstance {
 		for( entityJson in JsonTools.readArray(json.entityInstances) )
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
 
-		if( json.autoTiles2!=null ) {
-			var jsonAutoTiles = JsonTools.readArray(json.autoTiles2);
+		if( json.autoLayerTiles!=null ) {
+			var jsonAutoTiles = JsonTools.readArray(json.autoLayerTiles);
+			li.autoTilesNewCache = new Map();
 			for(at in jsonAutoTiles) {
 				if( !li.autoTilesNewCache.exists(at.r) )
 					li.autoTilesNewCache.set(at.r, new Map());
@@ -341,14 +289,14 @@ class LayerInstance {
 
 				if( def.isAutoLayer() ) {
 					// Discard lost rules autoTiles
-					for( rUid in autoTilesCache.keys() )
+					for( rUid in autoTilesNewCache.keys() )
 						if( !def.hasRule(rUid) )
-							autoTilesCache.remove(rUid);
+							autoTilesNewCache.remove(rUid);
 
 					// Fix missing autoTiles
 					for(rg in def.autoRuleGroups)
 					for(r in rg.rules)
-						if( !autoTilesCache.exists(r.uid) )
+						if( !autoTilesNewCache.exists(r.uid) )
 							applyAutoLayerRule(r);
 				}
 
@@ -571,23 +519,13 @@ class LayerInstance {
 				flips: flips,
 			}
 		} ) );
-
-		// Old
-		// autoTilesCache.get(r.uid).set(
-		// 	coordId(cx,cy),
-		// 	{ tileIds:tileIds, flips:flips }
-		// );
 	}
 
-	function applyAutoLayerRuleAt(source:LayerInstance, r:led.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
+	inline function applyAutoLayerRuleAt(source:LayerInstance, r:led.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
 		// Init
 		if( !autoTilesNewCache.exists(r.uid) )
 			autoTilesNewCache.set( r.uid, [] );
 		autoTilesNewCache.get(r.uid).remove( coordId(cx,cy) );
-
-		if( !autoTilesCache.exists(r.uid) )
-			autoTilesCache.set( r.uid, new Map() );
-		autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
 
 		// Modulos
 		if( r.checker!=Vertical && cy%r.yModulo!=0 )
@@ -652,12 +590,13 @@ class LayerInstance {
 			return;
 
 		autoTilesNewCache = new Map();
-		autoTilesCache = new Map();
+		// autoTilesCache = new Map();
 		applyAllAutoLayerRulesAt(0, 0, cWid, cHei);
 		App.LOG.warning("All rules applied in "+toString());
 	}
 
 	public function applyAutoLayerRule(r:led.def.AutoLayerRuleDef) {
+		// TODO use cache invalidation?
 		if( !def.isAutoLayer() )
 			return;
 
