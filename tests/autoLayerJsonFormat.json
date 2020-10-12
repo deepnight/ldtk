@@ -1,0 +1,435 @@
+{
+	"__header__": {
+		"fileType": "LEd Project JSON",
+		"app": "LEd",
+		"appAuthor": "Sebastien Benard",
+		"appVersion": "0.4.0-beta-debug",
+		"url": "https://deepnight.net/tools/led-2d-level-editor/"
+	},
+	"jsonVersion": "0.4.0",
+	"defaultPivotX": 0,
+	"defaultPivotY": 0,
+	"defaultGridSize": 16,
+	"bgColor": "#7F8093",
+	"nextUid": 8,
+	"minifyJson": false,
+	"exportTiled": false,
+	"defs": {
+		"layers": [
+			{
+				"__type": "IntGrid",
+				"identifier": "Collisions",
+				"type": "IntGrid",
+				"uid": 2,
+				"gridSize": 16,
+				"displayOpacity": 1,
+				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
+				"autoTilesetDefUid": 1,
+				"autoRuleGroups": [ {
+					"uid": 3,
+					"name": "Walls",
+					"active": true,
+					"collapsed": false,
+					"rules": [
+						{
+							"uid": 7,
+							"active": true,
+							"size": 3,
+							"tileIds": [ 162 ],
+							"chance": 1,
+							"pattern": [ 0, -1, 0, -1, 1, 0, 0, 0, 0 ],
+							"flipX": true,
+							"flipY": false,
+							"xModulo": 1,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 667213,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						},
+						{
+							"uid": 5,
+							"active": true,
+							"size": 5,
+							"tileIds": [ 80, 81 ],
+							"chance": 1,
+							"pattern": [ 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+							"flipX": false,
+							"flipY": false,
+							"xModulo": 2,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Stamp",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 732844,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						},
+						{
+							"uid": 6,
+							"active": true,
+							"size": 3,
+							"tileIds": [ 8, 28, 9, 29 ],
+							"chance": 1,
+							"pattern": [ 0, 1, 0, 0, 1, 1, 0, 1, 1 ],
+							"flipX": false,
+							"flipY": false,
+							"xModulo": 2,
+							"yModulo": 2,
+							"checker": "None",
+							"tileMode": "Stamp",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 2817259,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						},
+						{
+							"uid": 4,
+							"active": true,
+							"size": 1,
+							"tileIds": [ 140 ],
+							"chance": 1,
+							"pattern": [ 1 ],
+							"flipX": false,
+							"flipY": false,
+							"xModulo": 1,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 3436964,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						}
+					]
+				} ],
+				"autoSourceLayerDefUid": null,
+				"tilesetDefUid": null,
+				"tilePivotX": 0,
+				"tilePivotY": 0
+			}
+		],
+		"entities": [],
+		"tilesets": [
+			{
+				"identifier": "Inca_extended_front_by_Kronbits",
+				"uid": 1,
+				"relPath": "atlas/Inca_extended_front_by_Kronbits.png",
+				"pxWid": 320,
+				"pxHei": 224,
+				"tileGridSize": 16,
+				"spacing": 0,
+				"padding": 0,
+				"savedSelections": []
+			}
+		],
+		"enums": [],
+		"externalEnums": []
+	},
+	"levels": [ {
+		"identifier": "Level",
+		"uid": 0,
+		"pxWid": 256,
+		"pxHei": 256,
+		"layerInstances": [
+			{
+				"__identifier": "Collisions",
+				"__type": "IntGrid",
+				"__cWid": 16,
+				"__cHei": 16,
+				"__gridSize": 16,
+				"levelId": 0,
+				"layerDefUid": 2,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGrid": [
+					{ "coordId": 101, "v": 0 },
+					{ "coordId": 102, "v": 0 },
+					{ "coordId": 103, "v": 0 },
+					{ "coordId": 104, "v": 0 },
+					{ "coordId": 105, "v": 0 },
+					{ "coordId": 106, "v": 0 },
+					{ "coordId": 117, "v": 0 },
+					{ "coordId": 118, "v": 0 },
+					{ "coordId": 119, "v": 0 },
+					{ "coordId": 120, "v": 0 },
+					{ "coordId": 121, "v": 0 },
+					{ "coordId": 122, "v": 0 },
+					{ "coordId": 133, "v": 0 },
+					{ "coordId": 134, "v": 0 },
+					{ "coordId": 135, "v": 0 },
+					{ "coordId": 136, "v": 0 },
+					{ "coordId": 137, "v": 0 },
+					{ "coordId": 138, "v": 0 },
+					{ "coordId": 149, "v": 0 },
+					{ "coordId": 150, "v": 0 },
+					{ "coordId": 151, "v": 0 },
+					{ "coordId": 152, "v": 0 },
+					{ "coordId": 153, "v": 0 },
+					{ "coordId": 154, "v": 0 }
+				],
+				"autoTiles": [
+					{
+						"ruleId": 7,
+						"results": [
+							{
+								"__cx": 5,
+								"__cy": 6,
+								"coordId": 101,
+								"tiles": [ { "tileId": 162, "__x": 80, "__y": 96, "__srcX": 32, "__srcY": 128 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 10,
+								"__cy": 6,
+								"coordId": 106,
+								"tiles": [ { "tileId": 162, "__x": 160, "__y": 96, "__srcX": 32, "__srcY": 128 } ],
+								"flips": 1
+							}
+						]
+					},
+					{
+						"ruleId": 5,
+						"results": [
+							{
+								"__cx": 6,
+								"__cy": 6,
+								"coordId": 102,
+								"tiles": [
+									{ "tileId": 80, "__x": 96, "__y": 96, "__srcX": 0, "__srcY": 64 },
+									{ "tileId": 81, "__x": 112, "__y": 96, "__srcX": 16, "__srcY": 64 }
+								],
+								"flips": 0
+							},
+							{
+								"__cx": 8,
+								"__cy": 6,
+								"coordId": 104,
+								"tiles": [
+									{ "tileId": 80, "__x": 128, "__y": 96, "__srcX": 0, "__srcY": 64 },
+									{ "tileId": 81, "__x": 144, "__y": 96, "__srcX": 16, "__srcY": 64 }
+								],
+								"flips": 0
+							}
+						]
+					},
+					{
+						"ruleId": 6,
+						"results": [
+							{
+								"__cx": 6,
+								"__cy": 8,
+								"coordId": 134,
+								"tiles": [
+									{ "tileId": 8, "__x": 96, "__y": 128, "__srcX": 128, "__srcY": 0 },
+									{ "tileId": 28, "__x": 96, "__y": 144, "__srcX": 128, "__srcY": 16 },
+									{ "tileId": 9, "__x": 112, "__y": 128, "__srcX": 144, "__srcY": 0 },
+									{ "tileId": 29, "__x": 112, "__y": 144, "__srcX": 144, "__srcY": 16 }
+								],
+								"flips": 0
+							},
+							{
+								"__cx": 8,
+								"__cy": 8,
+								"coordId": 136,
+								"tiles": [
+									{ "tileId": 8, "__x": 128, "__y": 128, "__srcX": 128, "__srcY": 0 },
+									{ "tileId": 28, "__x": 128, "__y": 144, "__srcX": 128, "__srcY": 16 },
+									{ "tileId": 9, "__x": 144, "__y": 128, "__srcX": 144, "__srcY": 0 },
+									{ "tileId": 29, "__x": 144, "__y": 144, "__srcX": 144, "__srcY": 16 }
+								],
+								"flips": 0
+							}
+						]
+					},
+					{
+						"ruleId": 4,
+						"results": [
+							{
+								"__cx": 5,
+								"__cy": 6,
+								"coordId": 101,
+								"tiles": [ { "tileId": 140, "__x": 80, "__y": 96, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 6,
+								"__cy": 6,
+								"coordId": 102,
+								"tiles": [ { "tileId": 140, "__x": 96, "__y": 96, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 7,
+								"__cy": 6,
+								"coordId": 103,
+								"tiles": [ { "tileId": 140, "__x": 112, "__y": 96, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 8,
+								"__cy": 6,
+								"coordId": 104,
+								"tiles": [ { "tileId": 140, "__x": 128, "__y": 96, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 9,
+								"__cy": 6,
+								"coordId": 105,
+								"tiles": [ { "tileId": 140, "__x": 144, "__y": 96, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 10,
+								"__cy": 6,
+								"coordId": 106,
+								"tiles": [ { "tileId": 140, "__x": 160, "__y": 96, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 5,
+								"__cy": 7,
+								"coordId": 117,
+								"tiles": [ { "tileId": 140, "__x": 80, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 6,
+								"__cy": 7,
+								"coordId": 118,
+								"tiles": [ { "tileId": 140, "__x": 96, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 7,
+								"__cy": 7,
+								"coordId": 119,
+								"tiles": [ { "tileId": 140, "__x": 112, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 8,
+								"__cy": 7,
+								"coordId": 120,
+								"tiles": [ { "tileId": 140, "__x": 128, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 9,
+								"__cy": 7,
+								"coordId": 121,
+								"tiles": [ { "tileId": 140, "__x": 144, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 10,
+								"__cy": 7,
+								"coordId": 122,
+								"tiles": [ { "tileId": 140, "__x": 160, "__y": 112, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 5,
+								"__cy": 8,
+								"coordId": 133,
+								"tiles": [ { "tileId": 140, "__x": 80, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 6,
+								"__cy": 8,
+								"coordId": 134,
+								"tiles": [ { "tileId": 140, "__x": 96, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 7,
+								"__cy": 8,
+								"coordId": 135,
+								"tiles": [ { "tileId": 140, "__x": 112, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 8,
+								"__cy": 8,
+								"coordId": 136,
+								"tiles": [ { "tileId": 140, "__x": 128, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 9,
+								"__cy": 8,
+								"coordId": 137,
+								"tiles": [ { "tileId": 140, "__x": 144, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 10,
+								"__cy": 8,
+								"coordId": 138,
+								"tiles": [ { "tileId": 140, "__x": 160, "__y": 128, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 5,
+								"__cy": 9,
+								"coordId": 149,
+								"tiles": [ { "tileId": 140, "__x": 80, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 6,
+								"__cy": 9,
+								"coordId": 150,
+								"tiles": [ { "tileId": 140, "__x": 96, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 7,
+								"__cy": 9,
+								"coordId": 151,
+								"tiles": [ { "tileId": 140, "__x": 112, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 8,
+								"__cy": 9,
+								"coordId": 152,
+								"tiles": [ { "tileId": 140, "__x": 128, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 9,
+								"__cy": 9,
+								"coordId": 153,
+								"tiles": [ { "tileId": 140, "__x": 144, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							},
+							{
+								"__cx": 10,
+								"__cy": 9,
+								"coordId": 154,
+								"tiles": [ { "tileId": 140, "__x": 160, "__y": 144, "__srcX": 0, "__srcY": 112 } ],
+								"flips": 0
+							}
+						]
+					}
+				],
+				"seed": 2022427,
+				"gridTiles": [],
+				"entityInstances": []
+			}
+		]
+	} ]
+}
