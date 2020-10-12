@@ -161,7 +161,7 @@
 						{ "coordId": 48, "v": 0 },
 						{ "coordId": 49, "v": 0 }
 					],
-					"autoTiles2": [
+					"autoLayerTiles": [
 						{ "x": 0, "y": 16, "srcX": 0, "srcY": 112, "f": 0, "r": 4, "c": 16 },
 						{ "x": 16, "y": 16, "srcX": 0, "srcY": 112, "f": 0, "r": 4, "c": 17 },
 						{ "x": 0, "y": 32, "srcX": 0, "srcY": 112, "f": 0, "r": 4, "c": 32 },
@@ -173,12 +173,6 @@
 						{ "x": 16, "y": 32, "srcX": 144, "srcY": 0, "f": 0, "r": 6, "c": 32 },
 						{ "x": 16, "y": 48, "srcX": 144, "srcY": 16, "f": 0, "r": 6, "c": 32 },
 						{ "x": 16, "y": 16, "srcX": 32, "srcY": 128, "f": 1, "r": 7, "c": 17 }
-					],
-					"autoTiles": [
-						{ "ruleId": 7, "results": [] },
-						{ "ruleId": 5, "results": [] },
-						{ "ruleId": 6, "results": [] },
-						{ "ruleId": 4, "results": [] }
 					],
 					"seed": 2022427,
 					"gridTiles": [],
@@ -203,13 +197,7 @@
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
 					"intGrid": [ { "coordId": 0, "v": 0 } ],
-					"autoTiles2": [ { "x": 0, "y": 0, "srcX": 0, "srcY": 112, "f": 0, "r": 4, "c": 0 } ],
-					"autoTiles": [
-						{ "ruleId": 7, "results": [] },
-						{ "ruleId": 5, "results": [] },
-						{ "ruleId": 6, "results": [] },
-						{ "ruleId": 4, "results": [] }
-					],
+					"autoLayerTiles": [ { "x": 0, "y": 0, "srcX": 0, "srcY": 112, "f": 0, "r": 4, "c": 0 } ],
 					"seed": 629516,
 					"gridTiles": [],
 					"entityInstances": []
