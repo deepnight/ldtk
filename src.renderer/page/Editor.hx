@@ -398,14 +398,14 @@ class Editor extends Page {
 
 			case K.T:
 				if( !hasInputFocus() ) {
-					var t = haxe.Timer.stamp();
-					var json = curLevel.toJson();
-					App.ME.debug("level.toJson() => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
+					// var t = haxe.Timer.stamp();
+					// var json = curLevel.toJson();
+					// App.ME.debug("level.toJson() => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
 
 					var t = haxe.Timer.stamp();
 					for( li in curLevel.layerInstances )
 						li.applyAllAutoLayerRules();
-					App.ME.debug("all rules => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
+					App.ME.debug("all curLevel rules => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
 				}
 
 			case K.U if( !hasInputFocus() && App.ME.isShiftDown() && App.ME.isCtrlDown() ):
