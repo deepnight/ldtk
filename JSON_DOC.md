@@ -193,6 +193,8 @@
 
     This array contains objects with all the following fields:
 
+     - `c` : **Int**   -- The coordinate ID of the grid cell that triggered the rule
+
      - `f` : **Int**   -- A 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip
 
      - `r` : **Int**   -- The rule UID that created this tile
