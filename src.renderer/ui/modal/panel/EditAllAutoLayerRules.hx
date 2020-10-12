@@ -76,11 +76,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			for( li in l.layerInstances ) {
 				var r = li.def.getRule(ruleUid);
 				if( r!=null ) {
-					App.LOG.render('Rule ${ruleUid} in level "${l.identifier}"": applying');
+					App.LOG.render('Applying rule ${ruleUid} in level "${l.identifier}"...');
 					li.applyAutoLayerRule(r);
 				}
 				else if( r==null && li.autoTilesNewCache.exists(ruleUid) ) {
-					App.LOG.render('Rule ${ruleUid} in level "${l.identifier}"": removing autoTiles');
+					App.LOG.render('Removing cached tiles from rule ${ruleUid} in level "${l.identifier}"...');
 					// WARNING: re-apply all rules here if breakOnMatch exists
 					li.autoTilesNewCache.remove(ruleUid);
 				}
