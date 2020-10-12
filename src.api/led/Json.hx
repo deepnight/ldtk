@@ -129,34 +129,45 @@ typedef LayerInstanceJson = {
 	**/
 	@only("Auto-layers")
 	@added("0.4.0")
-	var autoLayerTiles: Array<{
-		/** X pixel coordinate of the tile in the **layer** **/
-		var x: Int;
-
-		/** Y pixel coordinate of the tile in the **layer** **/
-		var y: Int;
-
-		/** X pixel coordinate of the tile in the **tileset** **/
-		var srcX: Int;
-
-		/** Y pixel coordinate of the tile in the **tileset** **/
-		var srcY: Int;
-
-		/** A 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip **/
-		var f: Int;
-
-		/** The rule UID that created this tile **/
-		var r: Int;
-
-		/** The coordinate ID of the grid cell that triggered the rule **/
-		var c: Int;
-	}>;
+	var autoLayerTiles: Array<AutoLayerTile>;
 
 	@only("Entity layers")
 	var entityInstances: Array<EntityInstanceJson>;
 }
 
+
+
 @section("1.1.1")
+@display("Auto-layer tile instance")
+typedef AutoLayerTile = {
+	/** X pixel coordinate of the tile in the **layer** **/
+	var x: Int;
+
+	/** Y pixel coordinate of the tile in the **layer** **/
+	var y: Int;
+
+	/** X pixel coordinate of the tile in the **tileset** **/
+	var srcX: Int;
+
+	/** Y pixel coordinate of the tile in the **tileset** **/
+	var srcY: Int;
+
+	/** A 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip **/
+	var f: Int;
+
+	/** The rule UID that created this tile **/
+	var r: Int;
+
+	/** Tile ID in the tileset **/
+	var t: Int;
+
+	/** The coordinate ID of the grid cell that triggered the rule **/
+	var c: Int;
+}
+
+
+
+@section("1.1.2")
 @display("Entity instance")
 typedef EntityInstanceJson = {
 	/** Unique String identifier **/
@@ -181,7 +192,8 @@ typedef EntityInstanceJson = {
 }
 
 
-@section("1.1.2")
+
+@section("1.1.3")
 @display("Field instance")
 typedef FieldInstanceJson = {
 	/** Unique String identifier **/
@@ -199,6 +211,7 @@ typedef FieldInstanceJson = {
 	@hide
 	var realEditorValues: Array<Dynamic>;
 }
+
 
 
 /**
@@ -219,6 +232,7 @@ typedef DefinitionsJson = {
 	**/
 	var externalEnums : Array<EnumDefJson>;
 }
+
 
 
 @section("2.1")
@@ -280,7 +294,9 @@ typedef LayerDefJson = {
 
 }
 
-/** Not available yet**/
+
+
+/** Not available yet **/
 @section("2.2")
 @display("Entity definition")
 typedef EntityDefJson = Dynamic;
@@ -316,7 +332,7 @@ typedef TilesetDefJson = {
 	var savedSelections: Array<{ ids:Array<Int>, mode:Dynamic }>;
 }
 
-/** Not available yet**/
+/** Not available yet **/
 @section("2.4")
 @display("Enum definition")
 typedef EnumDefJson = Dynamic;
