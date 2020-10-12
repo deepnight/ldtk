@@ -87,9 +87,9 @@ class LayerInstance {
 										y: cy*def.gridSize + stampRenderInfos.get(tid).yOff,
 										srcX: td==null ? -1 : td.getTileSourceX(tid),
 										srcY: td==null ? -1 : td.getTileSourceY(tid),
-										flips: ruleResult.value.flips,
+										f: ruleResult.value.flips,
 										// t: tid,
-										// r: rule.uid,
+										r: rule.uid,
 										// c: ruleResult.key,
 									});
 								}

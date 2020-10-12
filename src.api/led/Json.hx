@@ -138,8 +138,11 @@ typedef LayerInstanceJson = {
 		/** Y pixel coordinate of the tile in the **tileset** **/
 		var srcY: Int;
 
-		/** A 2-bits integer: Bit 0 = X flip, Bit 1 = Y flip **/
-		var flips: Int;
+		/** A 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip **/
+		var f: Int;
+
+		/** The rule UID that created this tile **/
+		var r: Int;
 	}>;
 
 	@only("Auto-layers")
