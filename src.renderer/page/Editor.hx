@@ -249,6 +249,16 @@ class Editor extends Page {
 			watcher.watchTileset(td);
 
 		selectionTool.clear();
+
+		var ops = [];
+		for(l in project.levels)
+		for(li in l.layerInstances)
+			if( li.def.isAutoLayer() )
+				ops.push( ()->{
+					li.applyAllAutoLayerRules();
+					return l.identifier;
+				});
+		new ui.modal.Progress("Updating auto-layers...", ops);
 	}
 
 
@@ -296,6 +306,9 @@ class Editor extends Page {
 
 	override function onKeyPress(keyCode:Int) {
 		super.onKeyPress(keyCode);
+
+		if( ui.Modal.hasAnyUnclosable() )
+			return;
 
 		switch keyCode {
 			case K.ESCAPE:

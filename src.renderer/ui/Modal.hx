@@ -11,6 +11,7 @@ class Modal extends dn.Process {
 	var jWrapper: js.jquery.JQuery;
 	public var jContent : js.jquery.JQuery;
 	var jMask: js.jquery.JQuery;
+	public var canBeClosedManually = true;
 
 	public function new() {
 		super(Editor.ME);
@@ -28,7 +29,7 @@ class Modal extends dn.Process {
 		jContent = jModalAndMask.find(".content");
 
 		jMask = jModalAndMask.find(".mask");
-		jMask.mousedown( function(_) close() );
+		jMask.mousedown( function(_) if( canBeClosedManually ) close() );
 		jMask.hide().fadeIn(100);
 
 		editor.ge.addGlobalListener(onGlobalEvent);
@@ -60,11 +61,18 @@ class Modal extends dn.Process {
 	public static function closeAll(?except:Modal) {
 		var any = false;
 		for(w in ALL)
-			if( !w.isClosing() && ( except==null || w!=except ) ) {
+			if( !w.isClosing() && ( except==null || w!=except ) && w.canBeClosedManually ) {
 				w.close();
 				any = true;
 			}
 		return any;
+	}
+
+	public static function hasAnyUnclosable() {
+		for(e in ALL)
+			if( !e.isClosing() && e.countAsModal() && !e.canBeClosedManually )
+				return true;
+		return false;
 	}
 
 	public static function hasAnyOpen() {

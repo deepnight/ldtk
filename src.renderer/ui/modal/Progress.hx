@@ -4,6 +4,7 @@ class Progress extends ui.Modal {
 	public function new(?title:String, ops:Array< Void->String >, ?onComplete:Void->Void) {
 		super();
 
+		canBeClosedManually = false;
 		jModalAndMask.addClass("progress");
 		jWrapper.hide().slideDown(60);
 
