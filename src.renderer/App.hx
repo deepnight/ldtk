@@ -244,7 +244,7 @@ class App extends dn.Process {
 		curPageProcess.onAppResize();
 	}
 
-	// public function openEditor(project:led.Project, path:String) {
+	// public function openEditor(project:data.Project, path:String) {
 	// 	LOG.general("Opening Editor");
 	// 	clearCurPage();
 	// 	curPageProcess = new Editor(project, path);

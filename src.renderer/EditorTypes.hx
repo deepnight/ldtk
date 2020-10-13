@@ -23,43 +23,43 @@ enum GlobalEvent {
 	LayerDefChanged;
 	LayerDefSorted;
 
-	LayerRuleChanged(rule:led.def.AutoLayerRuleDef);
-	LayerRuleAdded(rule:led.def.AutoLayerRuleDef);
-	LayerRuleRemoved(rule:led.def.AutoLayerRuleDef);
+	LayerRuleChanged(rule:data.def.AutoLayerRuleDef);
+	LayerRuleAdded(rule:data.def.AutoLayerRuleDef);
+	LayerRuleRemoved(rule:data.def.AutoLayerRuleDef);
 	LayerRuleSeedChanged;
 	LayerRuleSorted;
 
 	LayerRuleGroupAdded;
-	LayerRuleGroupRemoved(rg:led.LedTypes.AutoLayerRuleGroup);
-	LayerRuleGroupChanged(rg:led.LedTypes.AutoLayerRuleGroup);
-	LayerRuleGroupChangedActiveState(rg:led.LedTypes.AutoLayerRuleGroup);
+	LayerRuleGroupRemoved(rg:data.LedTypes.AutoLayerRuleGroup);
+	LayerRuleGroupChanged(rg:data.LedTypes.AutoLayerRuleGroup);
+	LayerRuleGroupChangedActiveState(rg:data.LedTypes.AutoLayerRuleGroup);
 	LayerRuleGroupSorted;
 	LayerRuleGroupCollapseChanged;
 
 	LayerInstanceSelected;
 	LayerInstanceChanged;
-	LayerInstanceVisiblityChanged(li:led.inst.LayerInstance);
-	LayerInstanceRestoredFromHistory(li:led.inst.LayerInstance);
-	LayerInstanceAutoRenderingChanged(li:led.inst.LayerInstance);
+	LayerInstanceVisiblityChanged(li:data.inst.LayerInstance);
+	LayerInstanceRestoredFromHistory(li:data.inst.LayerInstance);
+	LayerInstanceAutoRenderingChanged(li:data.inst.LayerInstance);
 
-	TilesetDefChanged(td:led.def.TilesetDef);
-	TilesetDefAdded(td:led.def.TilesetDef);
-	TilesetDefRemoved(td:led.def.TilesetDef);
-	TilesetSelectionSaved(td:led.def.TilesetDef);
+	TilesetDefChanged(td:data.def.TilesetDef);
+	TilesetDefAdded(td:data.def.TilesetDef);
+	TilesetDefRemoved(td:data.def.TilesetDef);
+	TilesetSelectionSaved(td:data.def.TilesetDef);
 
-	EntityInstanceAdded(ei:led.inst.EntityInstance);
-	EntityInstanceRemoved(ei:led.inst.EntityInstance);
-	EntityInstanceChanged(ei:led.inst.EntityInstance);
-	EntityInstanceFieldChanged(ei:led.inst.EntityInstance);
+	EntityInstanceAdded(ei:data.inst.EntityInstance);
+	EntityInstanceRemoved(ei:data.inst.EntityInstance);
+	EntityInstanceChanged(ei:data.inst.EntityInstance);
+	EntityInstanceFieldChanged(ei:data.inst.EntityInstance);
 
 	EntityDefAdded;
 	EntityDefRemoved;
 	EntityDefChanged;
 	EntityDefSorted;
 
-	EntityFieldAdded(ed:led.def.EntityDef);
-	EntityFieldRemoved(ed:led.def.EntityDef);
-	EntityFieldDefChanged(ed:led.def.EntityDef);
+	EntityFieldAdded(ed:data.def.EntityDef);
+	EntityFieldRemoved(ed:data.def.EntityDef);
+	EntityFieldDefChanged(ed:data.def.EntityDef);
 	EntityFieldSorted;
 
 	EnumDefAdded;
@@ -79,18 +79,18 @@ enum CursorType {
 	Moving;
 	PickNothing;
 	Eraser(x:Int,y:Int);
-	GridCell(li:led.inst.LayerInstance, cx:Int, cy:Int, ?col:UInt);
-	GridRect(li:led.inst.LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
-	Entity(li:led.inst.LayerInstance, def:led.def.EntityDef, ?ei:led.inst.EntityInstance, x:Int, y:Int);
-	Tiles(li:led.inst.LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int);
+	GridCell(li:data.inst.LayerInstance, cx:Int, cy:Int, ?col:UInt);
+	GridRect(li:data.inst.LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
+	Entity(li:data.inst.LayerInstance, def:data.def.EntityDef, ?ei:data.inst.EntityInstance, x:Int, y:Int);
+	Tiles(li:data.inst.LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int);
 	Resize(p:RulerPos);
 	Link(fx:Float, fy:Float, tx:Float, ty:Float, color:UInt);
 }
 
 enum GenericLevelElement {
-	GridCell(li:led.inst.LayerInstance, cx:Int, cy:Int);
-	Entity(li:led.inst.LayerInstance, ei:led.inst.EntityInstance);
-	PointField(li:led.inst.LayerInstance, ei:led.inst.EntityInstance, fi:led.inst.FieldInstance, arrayIdx:Int);
+	GridCell(li:data.inst.LayerInstance, cx:Int, cy:Int);
+	Entity(li:data.inst.LayerInstance, ei:data.inst.EntityInstance);
+	PointField(li:data.inst.LayerInstance, ei:data.inst.EntityInstance, fi:data.inst.FieldInstance, arrayIdx:Int);
 }
 
 enum ToolEditMode {

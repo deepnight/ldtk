@@ -4,10 +4,10 @@ class EntityInstanceEditor extends dn.Process {
 	public static var CURRENT : Null<EntityInstanceEditor> = null;
 
 	var jPanel : js.jquery.JQuery;
-	var ei : led.inst.EntityInstance;
+	var ei : data.inst.EntityInstance;
 	var link : h2d.Graphics;
 
-	private function new(ei:led.inst.EntityInstance) {
+	private function new(ei:data.inst.EntityInstance) {
 		super(Editor.ME);
 
 		if( CURRENT!=null )
@@ -91,14 +91,14 @@ class EntityInstanceEditor extends dn.Process {
 		);
 	}
 
-	public static function openFor(ei:led.inst.EntityInstance) {
+	public static function openFor(ei:data.inst.EntityInstance) {
 		if( existsFor(ei) )
 			return CURRENT;
 		else
 			return new EntityInstanceEditor(ei);
 	}
 
-	public static inline function existsFor(ei:led.inst.EntityInstance) {
+	public static inline function existsFor(ei:data.inst.EntityInstance) {
 		return isOpen() && CURRENT.ei==ei;
 	}
 
@@ -128,7 +128,7 @@ class EntityInstanceEditor extends dn.Process {
 	}
 
 
-	function hideInputIfDefault(arrayIdx:Int, input:js.jquery.JQuery, fi:led.inst.FieldInstance) {
+	function hideInputIfDefault(arrayIdx:Int, input:js.jquery.JQuery, fi:data.inst.FieldInstance) {
 		input.off(".def").removeClass("usingDefault");
 
 		if( fi.isUsingDefault(arrayIdx) ) {
@@ -201,7 +201,7 @@ class EntityInstanceEditor extends dn.Process {
 	}
 
 
-	function startPointsEditing(fi:led.inst.FieldInstance, editIdx:Int) {
+	function startPointsEditing(fi:data.inst.FieldInstance, editIdx:Int) {
 		jPanel.addClass("picking");
 
 		var t = new tool.PickPoint();
@@ -251,7 +251,7 @@ class EntityInstanceEditor extends dn.Process {
 	}
 
 
-	function createInputFor(fi:led.inst.FieldInstance, arrayIdx:Int, jTarget:js.jquery.JQuery) {
+	function createInputFor(fi:data.inst.FieldInstance, arrayIdx:Int, jTarget:js.jquery.JQuery) {
 		switch fi.def.type {
 			case F_Int:
 				var input = new J("<input/>");

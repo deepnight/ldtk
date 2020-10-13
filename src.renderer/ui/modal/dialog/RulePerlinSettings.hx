@@ -3,9 +3,9 @@ package ui.modal.dialog;
 class RulePerlinSettings extends ui.modal.Dialog {
 	var perlin: hxd.Perlin;
 	var preview : h2d.Graphics;
-	var rule : led.def.AutoLayerRuleDef;
+	var rule : data.def.AutoLayerRuleDef;
 
-	public function new(?target:js.jquery.JQuery, r:led.def.AutoLayerRuleDef) {
+	public function new(?target:js.jquery.JQuery, r:data.def.AutoLayerRuleDef) {
 		super();
 
 		rule = r;

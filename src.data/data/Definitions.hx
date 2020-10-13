@@ -1,22 +1,22 @@
-package led;
+package data;
 
-import led.LedTypes;
+import data.LedTypes;
 
 class Definitions {
 	var _project : Project;
 
-	public var layers: Array<led.def.LayerDef> = [];
-	public var entities: Array<led.def.EntityDef> = [];
-	public var tilesets: Array<led.def.TilesetDef> = [];
-	public var enums: Array<led.def.EnumDef> = [];
-	public var externalEnums: Array<led.def.EnumDef> = [];
+	public var layers: Array<data.def.LayerDef> = [];
+	public var entities: Array<data.def.EntityDef> = [];
+	public var tilesets: Array<data.def.TilesetDef> = [];
+	public var enums: Array<data.def.EnumDef> = [];
+	public var externalEnums: Array<data.def.EnumDef> = [];
 
 
 	public function new(project:Project) {
 		this._project = project;
 	}
 
-	public function toJson() : led.Json.DefinitionsJson {
+	public function toJson() : data.Json.DefinitionsJson {
 		return {
 			layers: layers.map( function(ld) return ld.toJson() ),
 			entities: entities.map( function(ed) return ed.toJson() ),
@@ -26,23 +26,23 @@ class Definitions {
 		}
 	}
 
-	public static function fromJson(p:Project, json:led.Json.DefinitionsJson) {
+	public static function fromJson(p:Project, json:data.Json.DefinitionsJson) {
 		var d = new Definitions(p);
 
 		for( layerJson in JsonTools.readArray(json.layers) )
-			d.layers.push( led.def.LayerDef.fromJson(p.jsonVersion, layerJson) );
+			d.layers.push( data.def.LayerDef.fromJson(p.jsonVersion, layerJson) );
 
 		for( entityJson in JsonTools.readArray(json.entities) )
-			d.entities.push( led.def.EntityDef.fromJson(p, entityJson) );
+			d.entities.push( data.def.EntityDef.fromJson(p, entityJson) );
 
 		for( tilesetJson in JsonTools.readArray(json.tilesets) )
-			d.tilesets.push( led.def.TilesetDef.fromJson(p, tilesetJson) );
+			d.tilesets.push( data.def.TilesetDef.fromJson(p, tilesetJson) );
 
 		for( enumJson in JsonTools.readArray(json.enums) )
-			d.enums.push( led.def.EnumDef.fromJson(p.jsonVersion, enumJson) );
+			d.enums.push( data.def.EnumDef.fromJson(p.jsonVersion, enumJson) );
 
 		for( enumJson in JsonTools.readArray(json.externalEnums) )
-			d.externalEnums.push( led.def.EnumDef.fromJson(p.jsonVersion, enumJson) );
+			d.externalEnums.push( data.def.EnumDef.fromJson(p.jsonVersion, enumJson) );
 
 		return d;
 	}
@@ -75,15 +75,15 @@ class Definitions {
 		return false;
 	}
 
-	public function getLayerDef(id:haxe.extern.EitherType<String,Int>) : Null<led.def.LayerDef> {
+	public function getLayerDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.LayerDef> {
 		for(ld in layers)
 			if( ld.uid==id || ld.identifier==id )
 				return ld;
 		return null;
 	}
 
-	public function createLayerDef(type:LayerType, ?id:String) : led.def.LayerDef {
-		var l = new led.def.LayerDef(_project.makeUniqId(), type);
+	public function createLayerDef(type:LayerType, ?id:String) : data.def.LayerDef {
+		var l = new data.def.LayerDef(_project.makeUniqId(), type);
 
 		id = Project.cleanupIdentifier(id, true);
 		if( id==null ) {
@@ -116,14 +116,14 @@ class Definitions {
 		return true;
 	}
 
-	public function removeLayerDef(ld:led.def.LayerDef) {
+	public function removeLayerDef(ld:data.def.LayerDef) {
 		if( !layers.remove(ld) )
 			throw "Unknown layerDef";
 
 		_project.tidy();
 	}
 
-	public function sortLayerDef(from:Int, to:Int) : Null<led.def.LayerDef> {
+	public function sortLayerDef(from:Int, to:Int) : Null<data.def.LayerDef> {
 		if( from<0 || from>=layers.length || from==to )
 			return null;
 
@@ -138,7 +138,7 @@ class Definitions {
 	}
 
 
-	public function sortLayerAutoRules(ld:led.def.LayerDef, fromGroupIdx:Int, toGroupIdx:Int, fromRuleIdx:Int, toRuleIdx:Int) : Null<led.def.AutoLayerRuleDef> {
+	public function sortLayerAutoRules(ld:data.def.LayerDef, fromGroupIdx:Int, toGroupIdx:Int, fromRuleIdx:Int, toRuleIdx:Int) : Null<data.def.AutoLayerRuleDef> {
 		// Group list bounds
 		if( fromGroupIdx<0 || fromGroupIdx>=ld.autoRuleGroups.length )
 			return null;
@@ -169,7 +169,7 @@ class Definitions {
 	}
 
 
-	public function sortLayerAutoGroup(ld:led.def.LayerDef, fromGroupIdx:Int, toGroupIdx:Int) : Null<AutoLayerRuleGroup> {
+	public function sortLayerAutoGroup(ld:data.def.LayerDef, fromGroupIdx:Int, toGroupIdx:Int) : Null<AutoLayerRuleGroup> {
 		if( fromGroupIdx<0 || fromGroupIdx>=ld.autoRuleGroups.length )
 			return null;
 
@@ -181,7 +181,7 @@ class Definitions {
 		return moved;
 	}
 
-	public function getLayerDefFromRule(?r:led.def.AutoLayerRuleDef, ?ruleUid:Int) : Null<led.def.LayerDef> {
+	public function getLayerDefFromRule(?r:data.def.AutoLayerRuleDef, ?ruleUid:Int) : Null<data.def.LayerDef> {
 		if( r==null && ruleUid==null )
 			throw "Need 1 parameter";
 
@@ -196,7 +196,7 @@ class Definitions {
 	}
 
 
-	public function getLayerDepth(ld:led.def.LayerDef) {
+	public function getLayerDepth(ld:data.def.LayerDef) {
 		var i = 0;
 		while( i<layers.length && layers[i]!=ld )
 			i++;
@@ -210,15 +210,15 @@ class Definitions {
 
 	/**  ENTITY DEFS  *****************************************/
 
-	public function getEntityDef(id:haxe.extern.EitherType<String,Int>) : Null<led.def.EntityDef> {
+	public function getEntityDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.EntityDef> {
 		for(ed in entities)
 			if( ed.uid==id || ed.identifier==id )
 				return ed;
 		return null;
 	}
 
-	public function createEntityDef() : led.def.EntityDef {
-		var ed = new led.def.EntityDef(_project.makeUniqId());
+	public function createEntityDef() : data.def.EntityDef {
+		var ed = new data.def.EntityDef(_project.makeUniqId());
 		entities.push(ed);
 
 		ed.setPivot( _project.defaultPivotX, _project.defaultPivotY );
@@ -232,7 +232,7 @@ class Definitions {
 		return ed;
 	}
 
-	public function removeEntityDef(ed:led.def.EntityDef) {
+	public function removeEntityDef(ed:data.def.EntityDef) {
 		entities.remove(ed);
 		_project.tidy();
 	}
@@ -247,7 +247,7 @@ class Definitions {
 		return true;
 	}
 
-	public function sortEntityDef(from:Int, to:Int) : Null<led.def.EntityDef> {
+	public function sortEntityDef(from:Int, to:Int) : Null<data.def.EntityDef> {
 		if( from<0 || from>=entities.length || from==to )
 			return null;
 
@@ -266,7 +266,7 @@ class Definitions {
 
 	/**  FIELD DEFS  *****************************************/
 
-	public function getFieldDef(id:haxe.extern.EitherType<String,Int>) : Null<led.def.FieldDef> {
+	public function getFieldDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.FieldDef> {
 		for(ed in entities)
 		for(fd in ed.fieldDefs)
 			if( fd.uid==id || fd.identifier==id )
@@ -275,7 +275,7 @@ class Definitions {
 		return null;
 	}
 
-	public function getEntityDefUsingField(fd:led.def.FieldDef) : Null<led.def.EntityDef> {
+	public function getEntityDefUsingField(fd:data.def.FieldDef) : Null<data.def.EntityDef> {
 		for(ed in entities)
 		for(efd in ed.fieldDefs)
 			if( efd==fd )
@@ -286,8 +286,8 @@ class Definitions {
 
 	/**  TILESET DEFS  *****************************************/
 
-	public function createTilesetDef() : led.def.TilesetDef {
-		var td = new led.def.TilesetDef( _project, _project.makeUniqId() );
+	public function createTilesetDef() : data.def.TilesetDef {
+		var td = new data.def.TilesetDef( _project, _project.makeUniqId() );
 		tilesets.push(td);
 
 		var id = "Tileset";
@@ -300,14 +300,14 @@ class Definitions {
 		return td;
 	}
 
-	public function removeTilesetDef(td:led.def.TilesetDef) {
+	public function removeTilesetDef(td:data.def.TilesetDef) {
 		if( !tilesets.remove(td) )
 			throw "Unknown tilesetDef";
 
 		_project.tidy();
 	}
 
-	public function getTilesetDef(id:haxe.extern.EitherType<String,Int>) : Null<led.def.TilesetDef> {
+	public function getTilesetDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.TilesetDef> {
 		for(td in tilesets)
 			if( td.uid==id || td.identifier==id )
 				return td;
@@ -322,7 +322,7 @@ class Definitions {
 		return true;
 	}
 
-	public function autoRenameTilesetIdentifier(oldPath:Null<String>, td:led.def.TilesetDef) {
+	public function autoRenameTilesetIdentifier(oldPath:Null<String>, td:data.def.TilesetDef) {
 		var defIdReg = ~/^Tileset[0-9]*/g;
 		var oldFileName = oldPath==null ? null : Project.cleanupIdentifier(dn.FilePath.extractFileName(oldPath), true);
 		if( defIdReg.match(td.identifier) || oldFileName!=null && td.identifier.indexOf(oldFileName)>=0 ) {
@@ -338,9 +338,9 @@ class Definitions {
 
 	/**  ENUM DEFS  *****************************************/
 
-	public function createEnumDef(?externalRelPath:String) : led.def.EnumDef {
+	public function createEnumDef(?externalRelPath:String) : data.def.EnumDef {
 		var uid = _project.makeUniqId();
-		var ed = new led.def.EnumDef(uid, "LedEnum"+uid);
+		var ed = new data.def.EnumDef(uid, "LedEnum"+uid);
 		if( externalRelPath!=null ) {
 			ed.externalRelPath = externalRelPath;
 			externalEnums.push(ed);
@@ -365,13 +365,13 @@ class Definitions {
 		return ed;
 	}
 
-	public function removeEnumDef(ed:led.def.EnumDef) {
+	public function removeEnumDef(ed:data.def.EnumDef) {
 		if( ed.isExternal() && !externalEnums.remove(ed) || !ed.isExternal() && !enums.remove(ed) )
 			throw "EnumDef not found";
 		_project.tidy();
 	}
 
-	public function removeEnumDefValue(ed:led.def.EnumDef, id:String) {
+	public function removeEnumDefValue(ed:data.def.EnumDef, id:String) {
 		for(e in ed.values)
 			if( e.id==id ) {
 				ed.values.remove(e);
@@ -398,7 +398,7 @@ class Definitions {
 		return true;
 	}
 
-	public function getEnumDef(id:haxe.extern.EitherType<String,Int>) : Null<led.def.EnumDef> {
+	public function getEnumDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.EnumDef> {
 		for(ed in enums)
 			if( ed.uid==id || ed.identifier==id )
 				return ed;
@@ -410,7 +410,7 @@ class Definitions {
 		return null;
 	}
 
-	public function sortEnumDef(from:Int, to:Int) : Null<led.def.EnumDef> {
+	public function sortEnumDef(from:Int, to:Int) : Null<data.def.EnumDef> {
 		if( from<0 || from>=enums.length || from==to )
 			return null;
 
@@ -427,7 +427,7 @@ class Definitions {
 
 
 
-	public function getGroupedExternalEnums() : Map<String,Array<led.def.EnumDef>> {
+	public function getGroupedExternalEnums() : Map<String,Array<data.def.EnumDef>> {
 		var map = new Map();
 		for(ed in externalEnums) {
 			if( !map.exists(ed.externalRelPath) )

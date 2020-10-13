@@ -1,6 +1,6 @@
-package led.def;
+package data.def;
 
-import led.LedTypes;
+import data.LedTypes;
 
 class TilesetDef {
 	var _project : Project;
@@ -41,7 +41,7 @@ class TilesetDef {
 	public inline function hasAtlasPath() return relPath!=null;
 	public inline function isAtlasLoaded() return relPath!=null && bytes!=null;
 
-	@:allow(led.Project)
+	@:allow(data.Project)
 	function unsafeRelPathChange(newRelPath:String) { // should ONLY be used in specific circonstances
 		relPath = newRelPath;
 	}
@@ -81,7 +81,7 @@ class TilesetDef {
 	}
 
 
-	public function toJson() : led.Json.TilesetDefJson {
+	public function toJson() : data.Json.TilesetDefJson {
 		return {
 			identifier: identifier,
 			uid: uid,
@@ -98,7 +98,7 @@ class TilesetDef {
 	}
 
 
-	public static function fromJson(p:Project, json:led.Json.TilesetDefJson) {
+	public static function fromJson(p:Project, json:data.Json.TilesetDefJson) {
 		var td = new TilesetDef( p, JsonTools.readInt(json.uid) );
 		td.tileGridSize = JsonTools.readInt(json.tileGridSize, Project.DEFAULT_GRID_SIZE);
 		td.spacing = JsonTools.readInt(json.spacing, 0);
@@ -443,7 +443,7 @@ class TilesetDef {
 
 	#end
 
-	public function tidy(p:led.Project) {
+	public function tidy(p:data.Project) {
 		_project = p;
 	}
 }

@@ -1,4 +1,4 @@
-package led;
+package data;
 
 class Level {
 	var _project : Project;
@@ -7,10 +7,10 @@ class Level {
 	public var identifier(default,set): String;
 	public var pxWid : Int;
 	public var pxHei : Int;
-	public var layerInstances : Array<led.inst.LayerInstance> = [];
+	public var layerInstances : Array<data.inst.LayerInstance> = [];
 
 
-	@:allow(led.Project)
+	@:allow(data.Project)
 	private function new(project:Project, uid:Int) {
 		this.uid = uid;
 		pxWid = Project.DEFAULT_LEVEL_WIDTH;
@@ -19,7 +19,7 @@ class Level {
 		this.identifier = "Level"+uid;
 
 		for(ld in _project.defs.layers)
-			layerInstances.push( new led.inst.LayerInstance(_project, uid, ld.uid) );
+			layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
 	}
 
 	function set_identifier(id:String) {
@@ -30,7 +30,7 @@ class Level {
 		return Type.getClassName(Type.getClass(this));
 	}
 
-	public function toJson() : led.Json.LevelJson {
+	public function toJson() : data.Json.LevelJson {
 		return {
 			identifier: identifier,
 			uid: uid,
@@ -40,7 +40,7 @@ class Level {
 		}
 	}
 
-	public static function fromJson(p:Project, json:led.Json.LevelJson) {
+	public static function fromJson(p:Project, json:data.Json.LevelJson) {
 		var l = new Level( p, JsonTools.readInt(json.uid) );
 		l.pxWid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_WIDTH );
 		l.pxHei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_HEIGHT );
@@ -48,7 +48,7 @@ class Level {
 
 		l.layerInstances = [];
 		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
-			var li = led.inst.LayerInstance.fromJson(p, layerJson);
+			var li = data.inst.LayerInstance.fromJson(p, layerJson);
 			l.layerInstances.push(li);
 		}
 
@@ -59,7 +59,7 @@ class Level {
 		return x>=0 && x<pxWid && y>=0 && y<pxHei;
 	}
 
-	public function getLayerInstance(?layerDefUid:Int, ?layerDef:led.def.LayerDef) : led.inst.LayerInstance {
+	public function getLayerInstance(?layerDefUid:Int, ?layerDef:data.def.LayerDef) : data.inst.LayerInstance {
 		if( layerDefUid==null && layerDef==null )
 			throw "Need 1 parameter";
 
@@ -73,12 +73,12 @@ class Level {
 		throw "Missing layer instance for "+layerDefUid;
 	}
 
-	public function getLayerInstanceFromRule(r:led.def.AutoLayerRuleDef) {
+	public function getLayerInstanceFromRule(r:data.def.AutoLayerRuleDef) {
 		var ld = _project.defs.getLayerDefFromRule(r);
 		return ld!=null ? getLayerInstance(ld) : null;
 	}
 
-	public function getLayerInstanceFromEntity(?ei:led.inst.EntityInstance, ?ed:led.def.EntityDef) : Null<led.inst.LayerInstance> {
+	public function getLayerInstanceFromEntity(?ei:data.inst.EntityInstance, ?ed:data.def.EntityDef) : Null<data.inst.LayerInstance> {
 		if( ei==null && ed==null )
 			return null;
 
@@ -112,7 +112,7 @@ class Level {
 					if( existing.exists(ld.uid) )
 						layerInstances.push( existing.get(ld.uid) );
 					else
-						layerInstances.push( new led.inst.LayerInstance(_project, uid, ld.uid) );
+						layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
 				break;
 			}
 
@@ -134,7 +134,7 @@ class Level {
 
 	/** RENDERING *******************/
 
-	public function iterateLayerInstancesInRenderOrder( eachLayer:led.inst.LayerInstance->Void ) {
+	public function iterateLayerInstancesInRenderOrder( eachLayer:data.inst.LayerInstance->Void ) {
 		var i = _project.defs.layers.length-1;
 		while( i>=0 ) {
 			eachLayer( getLayerInstance(_project.defs.layers[i]) );

@@ -1,7 +1,7 @@
 package ui.modal.panel;
 
 class EditEnums extends ui.modal.Panel {
-	var curEnum : Null<led.def.EnumDef>;
+	var curEnum : Null<data.def.EnumDef>;
 
 	public function new() {
 		super();
@@ -106,7 +106,7 @@ class EditEnums extends ui.modal.Panel {
 	}
 
 
-	function selectEnum(ed:led.def.EnumDef) {
+	function selectEnum(ed:data.def.EnumDef) {
 		curEnum = ed;
 		updateEnumList();
 		updateEnumForm();

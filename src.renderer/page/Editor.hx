@@ -9,19 +9,19 @@ class Editor extends Page {
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 	var jMouseCoords : js.jquery.JQuery;
 
-	public var curLevel(get,never) : led.Level;
+	public var curLevel(get,never) : data.Level;
 		inline function get_curLevel() return project.getLevel(curLevelId);
 
-	public var curLayerDef(get,never) : Null<led.def.LayerDef>;
+	public var curLayerDef(get,never) : Null<data.def.LayerDef>;
 		inline function get_curLayerDef() return project.defs.getLayerDef(curLayerDefUid);
 
-	public var curLayerInstance(get,never) : Null<led.inst.LayerInstance>;
+	public var curLayerInstance(get,never) : Null<data.inst.LayerInstance>;
 		function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
 
 
 	public var ge : GlobalEventDispatcher;
 	public var watcher : misc.FileWatcher;
-	public var project : led.Project;
+	public var project : data.Project;
 	public var projectFilePath : String;
 	public var curLevelId : Int;
 	var curLayerDefUid : Int;
@@ -48,7 +48,7 @@ class Editor extends Page {
 		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
 
-	public function new(p:led.Project, path:String) {
+	public function new(p:data.Project, path:String) {
 		super();
 
 		loadPageTemplate("editor");
@@ -193,7 +193,7 @@ class Editor extends Page {
 			: dn.FilePath.fromFile( getProjectDir() +"/"+ relPath ).full;
 	}
 
-	public function selectProject(p:led.Project) {
+	public function selectProject(p:data.Project) {
 		watcher.clearAllWatches();
 		ui.modal.Dialog.closeAll();
 
@@ -274,7 +274,7 @@ class Editor extends Page {
 	}
 
 
-	public function reloadTileset(td:led.def.TilesetDef, silentOk=false) {
+	public function reloadTileset(td:data.def.TilesetDef, silentOk=false) {
 		if( !td.hasAtlasPath() )
 			return;
 
@@ -512,7 +512,7 @@ class Editor extends Page {
 	}
 
 	public function getGenericLevelElementAt(levelX:Int, levelY:Int, limitToActiveLayer=false) : Null<GenericLevelElement> {
-		function getElement(li:led.inst.LayerInstance) {
+		function getElement(li:data.inst.LayerInstance) {
 			var ge : GenericLevelElement = null;
 
 			if( !levelRender.isLayerVisible(li) )
@@ -730,7 +730,7 @@ class Editor extends Page {
 		levelRender.focusLevelY += ( oldLevelY - m.levelY );
 	}
 
-	public function selectLevel(l:led.Level) {
+	public function selectLevel(l:data.Level) {
 		if( curLevelId==l.uid )
 			return;
 
@@ -738,7 +738,7 @@ class Editor extends Page {
 		ge.emit(LevelSelected);
 	}
 
-	public function selectLayerInstance(li:led.inst.LayerInstance, notify=true) {
+	public function selectLayerInstance(li:data.inst.LayerInstance, notify=true) {
 		if( curLayerDefUid==li.def.uid )
 			return;
 
@@ -751,7 +751,7 @@ class Editor extends Page {
 		setGridSnapping(gridSnapping, false); // update checkbox
 	}
 
-	// function layerPickingNotification(l:led.inst.LayerInstance) {
+	// function layerPickingNotification(l:data.inst.LayerInstance) {
 	// 	if( ui.Modal.hasAnyOpen() )
 	// 		return;
 

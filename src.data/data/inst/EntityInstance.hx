@@ -1,13 +1,13 @@
-package led.inst;
+package data.inst;
 
 class EntityInstance {
 	public var _project : Project;
-	public var def(get,never) : led.def.EntityDef; inline function get_def() return _project.defs.getEntityDef(defUid);
+	public var def(get,never) : data.def.EntityDef; inline function get_def() return _project.defs.getEntityDef(defUid);
 
 	public var defUid(default,null) : Int;
 	public var x : Int;
 	public var y : Int;
-	public var fieldInstances : Map<Int, led.inst.FieldInstance> = new Map();
+	public var fieldInstances : Map<Int, data.inst.FieldInstance> = new Map();
 
 	public var left(get,never) : Int; inline function get_left() return Std.int( x - def.width*def.pivotX );
 	public var right(get,never) : Int; inline function get_right() return left + def.width-1;
@@ -24,7 +24,7 @@ class EntityInstance {
 		return 'Instance<${def.identifier}>@$x,$y';
 	}
 
-	public function toJson(li:led.inst.LayerInstance) : led.Json.EntityInstanceJson {
+	public function toJson(li:data.inst.LayerInstance) : data.Json.EntityInstanceJson {
 		var fieldsJson = [];
 		for(fi in fieldInstances)
 			fieldsJson.push( fi.toJson() );
@@ -40,7 +40,7 @@ class EntityInstance {
 		}
 	}
 
-	public static function fromJson(project:Project, json:led.Json.EntityInstanceJson) {
+	public static function fromJson(project:Project, json:data.Json.EntityInstanceJson) {
 		// Convert old coordinates
 		if( (cast json).x!=null )
 			json.px = [ JsonTools.readInt( (cast json).x, 0 ), JsonTools.readInt((cast json).y,0) ];
@@ -57,19 +57,19 @@ class EntityInstance {
 		return ei;
 	}
 
-	public function getCx(ld:led.def.LayerDef) {
+	public function getCx(ld:data.def.LayerDef) {
 		return Std.int( ( x + (def.pivotX==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
-	public function getCy(ld:led.def.LayerDef) {
+	public function getCy(ld:data.def.LayerDef) {
 		return Std.int( ( y + (def.pivotY==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
-	public function getCellCenterX(ld:led.def.LayerDef) {
+	public function getCellCenterX(ld:data.def.LayerDef) {
 		return ( getCx(ld)+0.5 ) * ld.gridSize - x;
 	}
 
-	public function getCellCenterY(ld:led.def.LayerDef) {
+	public function getCellCenterY(ld:data.def.LayerDef) {
 		return ( getCy(ld)+0.5 ) * ld.gridSize - y;
 	}
 
@@ -105,7 +105,7 @@ class EntityInstance {
 		return null;
 	}
 
-	public function tidy(p:led.Project) {
+	public function tidy(p:data.Project) {
 		_project = p;
 
 		// Remove field instances whose def was removed
@@ -120,13 +120,13 @@ class EntityInstance {
 
 	// ** FIELDS **********************************
 
-	public function getFieldInstance(fieldDef:led.def.FieldDef) {
+	public function getFieldInstance(fieldDef:data.def.FieldDef) {
 		if( !fieldInstances.exists(fieldDef.uid) )
-			fieldInstances.set(fieldDef.uid, new led.inst.FieldInstance(_project, fieldDef.uid));
+			fieldInstances.set(fieldDef.uid, new data.inst.FieldInstance(_project, fieldDef.uid));
 		return fieldInstances.get( fieldDef.uid );
 	}
 
-	public function getFieldInstancesOfType(type:led.LedTypes.FieldType) {
+	public function getFieldInstancesOfType(type:data.LedTypes.FieldType) {
 		var all = [];
 		for(fi in fieldInstances)
 			if( fi.def.type.getIndex() == type.getIndex() )

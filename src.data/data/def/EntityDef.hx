@@ -1,6 +1,6 @@
-package led.def;
+package data.def;
 
-import led.LedTypes;
+import data.LedTypes;
 
 class EntityDef {
 	public var uid(default,null) : Int;
@@ -14,11 +14,11 @@ class EntityDef {
 	public var tileId : Null<Int>;
 
 	public var maxPerLevel : Int;
-	public var limitBehavior : led.LedTypes.EntityLimitBehavior; // what to do when maxPerLevel is reached
+	public var limitBehavior : data.LedTypes.EntityLimitBehavior; // what to do when maxPerLevel is reached
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
 
-	public var fieldDefs : Array<led.def.FieldDef> = [];
+	public var fieldDefs : Array<data.def.FieldDef> = [];
 
 
 	public function new(uid:Int) {
@@ -151,7 +151,7 @@ class EntityDef {
 	}
 
 
-	public function tidy(p:led.Project) {
+	public function tidy(p:data.Project) {
 		// Remove Enum-based field defs whose EnumDef is lost
 		var i = 0;
 		while( i<fieldDefs.length ) {

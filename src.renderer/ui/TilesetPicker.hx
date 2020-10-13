@@ -5,7 +5,7 @@ class TilesetPicker {
 
 	var jDoc(get,never) : js.jquery.JQuery; inline function get_jDoc() return new J(js.Browser.document);
 
-	var tilesetDef : led.def.TilesetDef;
+	var tilesetDef : data.def.TilesetDef;
 	var tool : Null<tool.lt.TileTool>;
 
 	var jPicker : js.jquery.JQuery;
@@ -25,7 +25,7 @@ class TilesetPicker {
 	var _internalSelectedIds : Array<Int> = [];
 
 
-	public function new(target:js.jquery.JQuery, td:led.def.TilesetDef, mode:TilePickerMode, ?tool:tool.lt.TileTool) {
+	public function new(target:js.jquery.JQuery, td:data.def.TilesetDef, mode:TilePickerMode, ?tool:tool.lt.TileTool) {
 		tilesetDef = td;
 		this.tool = tool;
 
@@ -221,7 +221,7 @@ class TilesetPicker {
 		saveScrollPos();
 	}
 
-	function createCursor(sel:led.LedTypes.TilesetSelection, ?subClass:String, ?cWid:Int, ?cHei:Int) {
+	function createCursor(sel:data.LedTypes.TilesetSelection, ?subClass:String, ?cWid:Int, ?cHei:Int) {
 		var wrapper = new J("<div/>");
 
 		var idsMap = new Map();

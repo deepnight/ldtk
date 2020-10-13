@@ -1,6 +1,6 @@
 package exporter;
 
-import led.Json;
+import data.Json;
 
 class Tiled extends Exporter {
 	static var TILED_VERSION = "1.4.2";
@@ -51,7 +51,7 @@ class Tiled extends Exporter {
 	}
 
 
-	function exportLevel(level:led.Level) : haxe.io.Bytes {
+	function exportLevel(level:data.Level) : haxe.io.Bytes {
 		log.add("level", "Converting level "+level.identifier+"...");
 
 		var xml = Xml.createDocument();
@@ -155,7 +155,7 @@ class Tiled extends Exporter {
 				<data encoding="csv">...</data>
 			</layer>
 		**/
-		function _createLayer(type:String, li:led.inst.LayerInstance, nameSuffix="") {
+		function _createLayer(type:String, li:data.inst.LayerInstance, nameSuffix="") {
 			var layer = Xml.createElement(type);
 			map.addChild(layer);
 			layer.set("id", Std.string(layerId++));

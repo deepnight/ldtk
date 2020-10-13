@@ -1,7 +1,7 @@
 package tool.lt;
 
-class TileTool extends tool.LayerTool<led.LedTypes.TilesetSelection> {
-	public var curTilesetDef(get,never) : Null<led.def.TilesetDef>;
+class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
+	public var curTilesetDef(get,never) : Null<data.def.TilesetDef>;
 	inline function get_curTilesetDef() return editor.project.defs.getTilesetDef( editor.curLayerInstance.def.tilesetDefUid );
 
 	public function new() {
@@ -13,7 +13,7 @@ class TileTool extends tool.LayerTool<led.LedTypes.TilesetSelection> {
 		return curTilesetDef==null ? super.getSelectionMemoryKey() : curTilesetDef.relPath;
 	}
 
-	override function getDefaultValue():led.LedTypes.TilesetSelection {
+	override function getDefaultValue():data.LedTypes.TilesetSelection {
 		return { mode:Stamp, ids:[0] };
 	}
 
@@ -24,7 +24,7 @@ class TileTool extends tool.LayerTool<led.LedTypes.TilesetSelection> {
 
 	public function getMode() return getSelectedValue().mode;
 
-	public function setMode(m:led.LedTypes.TileEditMode) {
+	public function setMode(m:data.LedTypes.TileEditMode) {
 		getSelectedValue().mode = m;
 	}
 

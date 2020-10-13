@@ -1,10 +1,10 @@
-package led.inst;
+package data.inst;
 
-import led.LedTypes;
+import data.LedTypes;
 
 class LayerInstance {
 	var _project : Project;
-	public var def(get,never) : led.def.LayerDef; inline function get_def() return _project.defs.getLayerDef(layerDefUid);
+	public var def(get,never) : data.def.LayerDef; inline function get_def() return _project.defs.getLayerDef(layerDefUid);
 	public var level(get,never) : Level; function get_level() return _project.getLevel(levelId);
 
 	public var levelId : Int;
@@ -43,7 +43,7 @@ class LayerInstance {
 	}
 
 
-	public function toJson() : led.Json.LayerInstanceJson {
+	public function toJson() : data.Json.LayerInstanceJson {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
@@ -110,7 +110,7 @@ class LayerInstance {
 		}
 	}
 
-	public inline function getRuleStampRenderInfos(rule:led.def.AutoLayerRuleDef, td:led.def.TilesetDef, tileIds:Array<Int>, flipBits:Int)
+	public inline function getRuleStampRenderInfos(rule:data.def.AutoLayerRuleDef, td:data.def.TilesetDef, tileIds:Array<Int>, flipBits:Int)
 	: Map<Int, { xOff:Int, yOff:Int }> {
 		if( td==null )
 			return null;
@@ -160,8 +160,8 @@ class LayerInstance {
 		}
 	}
 
-	public static function fromJson(p:Project, json:led.Json.LayerInstanceJson) {
-		var li = new led.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
+	public static function fromJson(p:Project, json:data.Json.LayerInstanceJson) {
+		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
 
 		for( intGridJson in JsonTools.readArray(json.intGrid) )
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );
@@ -289,7 +289,7 @@ class LayerInstance {
 	}
 
 
-	@:allow(led.Level)
+	@:allow(data.Level)
 	function applyNewBounds(newPxLeft:Int, newPxTop:Int, newPxWid:Int, newPxHei:Int) {
 		var totalOffsetX = pxOffsetX - newPxLeft;
 		var totalOffsetY = pxOffsetY - newPxTop;
@@ -412,7 +412,7 @@ class LayerInstance {
 
 	/** ENTITY INSTANCE *******************/
 
-	public function createEntityInstance(ed:led.def.EntityDef) : Null<EntityInstance> {
+	public function createEntityInstance(ed:data.def.EntityDef) : Null<EntityInstance> {
 		requireType(Entities);
 		if( ed.maxPerLevel>0 ) {
 			var all = entityInstances.filter( function(ei) return ei.defUid==ed.uid );
@@ -474,7 +474,7 @@ class LayerInstance {
 		return getGridTile(cx,cy)!=null;
 	}
 
-	inline function applyMatchedRule(r:led.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
+	inline function applyMatchedRule(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
 		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds;
 		var td = _project.defs.getTilesetDef( def.autoTilesetDefUid );
 		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
@@ -490,7 +490,7 @@ class LayerInstance {
 		} ) );
 	}
 
-	inline function applyAutoLayerRuleAt(source:LayerInstance, r:led.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
+	inline function applyAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
 		// Init
 		if( !autoTilesCache.exists(r.uid) )
 			autoTilesCache.set( r.uid, [] );
@@ -563,7 +563,7 @@ class LayerInstance {
 		App.LOG.warning("All rules applied in "+toString());
 	}
 
-	public function applyAutoLayerRule(r:led.def.AutoLayerRuleDef) {
+	public function applyAutoLayerRule(r:data.def.AutoLayerRuleDef) {
 		// TODO use cache invalidation?
 		if( !def.isAutoLayer() )
 			return;

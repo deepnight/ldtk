@@ -4,8 +4,8 @@ class Modal extends dn.Process {
 	static var ALL : Array<Modal> = [];
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
-	public var project(get,never) : led.Project; inline function get_project() return Editor.ME.project;
-	public var curLevel(get,never) : led.Level; inline function get_curLevel() return Editor.ME.curLevel;
+	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+	public var curLevel(get,never) : data.Level; inline function get_curLevel() return Editor.ME.curLevel;
 
 	var jModalAndMask: js.jquery.JQuery;
 	var jWrapper: js.jquery.JQuery;

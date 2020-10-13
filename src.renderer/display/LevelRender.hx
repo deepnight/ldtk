@@ -262,14 +262,14 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	public inline function autoLayerRenderingEnabled(li:led.inst.LayerInstance) {
+	public inline function autoLayerRenderingEnabled(li:data.inst.LayerInstance) {
 		if( li==null || !li.def.isAutoLayer() )
 			return false;
 
 		return ( !autoLayerRendering.exists(li.layerDefUid) || autoLayerRendering.get(li.layerDefUid)==true );
 	}
 
-	public function setAutoLayerRendering(li:led.inst.LayerInstance, v:Bool) {
+	public function setAutoLayerRendering(li:data.inst.LayerInstance, v:Bool) {
 		if( li==null || !li.def.isAutoLayer() )
 			return;
 
@@ -277,16 +277,16 @@ class LevelRender extends dn.Process {
 		editor.ge.emit( LayerInstanceAutoRenderingChanged(li) );
 	}
 
-	public function toggleAutoLayerRendering(li:led.inst.LayerInstance) {
+	public function toggleAutoLayerRendering(li:data.inst.LayerInstance) {
 		if( li!=null && li.def.isAutoLayer() )
 			setAutoLayerRendering( li, !autoLayerRenderingEnabled(li) );
 	}
 
-	public inline function isLayerVisible(l:led.inst.LayerInstance) {
+	public inline function isLayerVisible(l:data.inst.LayerInstance) {
 		return l!=null && ( !layerVis.exists(l.layerDefUid) || layerVis.get(l.layerDefUid)==true );
 	}
 
-	public function toggleLayer(li:led.inst.LayerInstance) {
+	public function toggleLayer(li:data.inst.LayerInstance) {
 		layerVis.set(li.layerDefUid, !isLayerVisible(li));
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 
@@ -294,12 +294,12 @@ class LevelRender extends dn.Process {
 			invalidateLayer(li);
 	}
 
-	public function showLayer(li:led.inst.LayerInstance) {
+	public function showLayer(li:data.inst.LayerInstance) {
 		layerVis.set(li.layerDefUid, true);
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 	}
 
-	public function hideLayer(li:led.inst.LayerInstance) {
+	public function hideLayer(li:data.inst.LayerInstance) {
 		layerVis.set(li.layerDefUid, false);
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 	}
@@ -397,7 +397,7 @@ class LevelRender extends dn.Process {
 	}
 
 
-	function renderLayer(li:led.inst.LayerInstance) {
+	function renderLayer(li:data.inst.LayerInstance) {
 		layerInvalidations.remove(li.layerDefUid);
 
 		// Create wrapper
@@ -479,7 +479,7 @@ class LevelRender extends dn.Process {
 			}
 			else {
 				// Missing tileset
-				var tileError = led.def.TilesetDef.makeErrorTile(li.def.gridSize);
+				var tileError = data.def.TilesetDef.makeErrorTile(li.def.gridSize);
 				var tg = new h2d.TileGroup( tileError, wrapper );
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid)
@@ -497,7 +497,7 @@ class LevelRender extends dn.Process {
 
 
 
-	static function createFieldValuesRender(ei:led.inst.EntityInstance, fi:led.inst.FieldInstance) {
+	static function createFieldValuesRender(ei:data.inst.EntityInstance, fi:data.inst.FieldInstance) {
 		var font = Assets.fontPixel;
 
 		var valuesFlow = new h2d.Flow();
@@ -581,7 +581,7 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	public static function createEntityRender(?ei:led.inst.EntityInstance, ?def:led.def.EntityDef, ?li:led.inst.LayerInstance, ?parent:h2d.Object) {
+	public static function createEntityRender(?ei:data.inst.EntityInstance, ?def:data.def.EntityDef, ?li:data.inst.LayerInstance, ?parent:h2d.Object) {
 		if( def==null && ei==null )
 			throw "Need at least 1 parameter";
 
@@ -596,7 +596,7 @@ class LevelRender extends dn.Process {
 		g.y = Std.int( -def.height*def.pivotY );
 
 		// Render a tile
-		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:led.LedTypes.EntityTileRenderMode) {
+		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:data.LedTypes.EntityTileRenderMode) {
 			if( tileId==null || tilesetId==null ) {
 				// Missing tile
 				var p = 2;
@@ -782,7 +782,7 @@ class LevelRender extends dn.Process {
 		return wrapper;
 	}
 
-	function applyLayerVisibility(li:led.inst.LayerInstance) {
+	function applyLayerVisibility(li:data.inst.LayerInstance) {
 		var wrapper = layerRenders.get(li.layerDefUid);
 		if( wrapper==null )
 			return;
@@ -804,7 +804,7 @@ class LevelRender extends dn.Process {
 	}
 
 
-	public inline function invalidateLayer(?li:led.inst.LayerInstance, ?layerDefUid:Int) {
+	public inline function invalidateLayer(?li:data.inst.LayerInstance, ?layerDefUid:Int) {
 		if( li==null )
 			li = editor.curLevel.getLayerInstance(layerDefUid);
 		layerInvalidations.set( li.layerDefUid, { left:0, right:li.cWid-1, top:0, bottom:li.cHei-1 } );
@@ -815,7 +815,7 @@ class LevelRender extends dn.Process {
 					invalidateLayer(l);
 	}
 
-	public inline function invalidateLayerArea(li:led.inst.LayerInstance, left:Int, right:Int, top:Int, bottom:Int) {
+	public inline function invalidateLayerArea(li:data.inst.LayerInstance, left:Int, right:Int, top:Int, bottom:Int) {
 		if( layerInvalidations.exists(li.layerDefUid) ) {
 			var bounds = layerInvalidations.get(li.layerDefUid);
 			bounds.left = M.imin(bounds.left, left);

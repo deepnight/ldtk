@@ -1,4 +1,4 @@
-package led;
+package data;
 
 @display("Json root")
 typedef ProjectJson = {
@@ -231,7 +231,7 @@ typedef LayerDefJson = {
 
 	/** Type of the layer as Haxe Enum **/
 	@hide
-	var type: led.LedTypes.LayerType;
+	var type: data.LedTypes.LayerType;
 
 	/** Unique Int identifier **/
 	var uid: Int;

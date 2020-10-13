@@ -1,6 +1,6 @@
 # Build XML
-led/Json.hx
--cp src.api
+data/Json.hx
+-cp src.data
 -dce full
 -D doc-gen
 -xml json_doc.xml
@@ -9,4 +9,4 @@ led/Json.hx
 --next
 -cp src.doc
 -lib deepnightLibs
---macro XmlDocToMarkdown.run("led/Json", "json_doc.xml", "JSON_DOC.md")
+--macro XmlDocToMarkdown.run("data/Json", "json_doc.xml", "JSON_DOC.md")

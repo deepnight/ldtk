@@ -7,10 +7,10 @@ class Rulers extends dn.Process {
 	var levelRender(get,never) : LevelRender;
 		inline function get_levelRender() return Editor.ME.levelRender;
 
-	var curLevel(get,never) : led.Level;
+	var curLevel(get,never) : data.Level;
 		inline function get_curLevel() return Editor.ME.curLevel;
 
-	var curLayerInstance(get,never) : Null<led.inst.LayerInstance>;
+	var curLayerInstance(get,never) : Null<data.inst.LayerInstance>;
 		inline function get_curLayerInstance() return Editor.ME.curLayerInstance;
 
 	// Render

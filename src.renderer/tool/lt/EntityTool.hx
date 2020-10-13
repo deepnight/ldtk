@@ -1,7 +1,7 @@
 package tool.lt;
 
 class EntityTool extends tool.LayerTool<Int> {
-	public var curEntityDef(get,never) : Null<led.def.EntityDef>;
+	public var curEntityDef(get,never) : Null<data.def.EntityDef>;
 
 	public function new() {
 		super();

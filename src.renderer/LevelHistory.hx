@@ -4,7 +4,7 @@ class LevelHistory {
 	var editor(get,never): Editor; inline function get_editor() return Editor.ME;
 
 	var levelId : Int;
-	var level(get,never): led.Level; inline function get_level() return Editor.ME.project.getLevel(levelId);
+	var level(get,never): data.Level; inline function get_level() return Editor.ME.project.getLevel(levelId);
 
 	var curIndex = -1;
 	var states : haxe.ds.Vector< HistoryState >;
@@ -138,7 +138,7 @@ class LevelHistory {
 		}
 	}
 
-	public function saveLayerState(li:led.inst.LayerInstance) {
+	public function saveLayerState(li:data.inst.LayerInstance) {
 		saveState( Layer(li.layerDefUid, null, li.toJson()) );
 	}
 
@@ -152,7 +152,7 @@ class LevelHistory {
 			var droppedState = states[0];
 			switch droppedState {
 				case ResizedLevel(beforeJson, afterJson):
-					var level = led.Level.fromJson(editor.project, afterJson);
+					var level = data.Level.fromJson(editor.project, afterJson);
 					for(li in level.layerInstances)
 						mostAncientLayerStates.set( li.layerDefUid, Layer(li.layerDefUid, null, li.toJson()) );
 
@@ -197,7 +197,7 @@ class LevelHistory {
 				while( sid>=0 && before==null ) {
 					switch states[sid] {
 					case ResizedLevel(beforeJson, afterJson):
-						var level = led.Level.fromJson(editor.project, afterJson);
+						var level = data.Level.fromJson(editor.project, afterJson);
 						for(li in level.layerInstances)
 							if( li.layerDefUid==undoneLayerId ) {
 								before = Layer(li.layerDefUid, null, li.toJson());
@@ -256,13 +256,13 @@ class LevelHistory {
 						lidx++;
 
 				if( isUndo )
-					editor.project.levels[lidx] = led.Level.fromJson(editor.project, beforeJson);
+					editor.project.levels[lidx] = data.Level.fromJson(editor.project, beforeJson);
 				else
-					editor.project.levels[lidx] = led.Level.fromJson(editor.project, afterJson);
+					editor.project.levels[lidx] = data.Level.fromJson(editor.project, afterJson);
 				editor.ge.emit(LevelRestoredFromHistory);
 
 			case Layer(layerId, bounds, json):
-				var li = led.inst.LayerInstance.fromJson(editor.project, json);
+				var li = data.inst.LayerInstance.fromJson(editor.project, json);
 				for( i in 0...level.layerInstances.length )
 					if( level.layerInstances[i].layerDefUid==layerId )
 						level.layerInstances[i] = li;

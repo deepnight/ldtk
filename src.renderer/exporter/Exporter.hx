@@ -1,10 +1,10 @@
 package exporter;
 
-import led.Json;
+import data.Json;
 
 class Exporter {
 	var log : dn.Log;
-	var p : led.Project;
+	var p : data.Project;
 	var projectPath : dn.FilePath;
 	var outputPath : Null<dn.FilePath>;
 	var outputFiles : Array<{ path:String, bytes:haxe.io.Bytes }>;
@@ -16,7 +16,7 @@ class Exporter {
 		log.tagColors.set("tileset","#b1ff56");
 	}
 
-	public final function run(p:led.Project, projectFilePath:String) {
+	public final function run(p:data.Project, projectFilePath:String) {
 		this.p = p;
 		projectPath = dn.FilePath.fromFile(projectFilePath);
 		outputFiles = [];

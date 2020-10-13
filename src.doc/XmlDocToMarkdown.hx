@@ -36,7 +36,7 @@ class XmlDocToMarkdown {
 		// List types
 		var allTypesXml = [];
 		for(type in xml.node.haxe.elements) {
-			// if( type.att.path.indexOf("led.")<0 )
+			// if( type.att.path.indexOf("data.")<0 )
 			if( type.att.file.indexOf(className)<0 )
 				continue;
 

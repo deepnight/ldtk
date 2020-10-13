@@ -3,9 +3,9 @@ package ui.modal.panel;
 class EditTilesetDefs extends ui.modal.Panel {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
-	public var cur : Null<led.def.TilesetDef>;
+	public var cur : Null<data.def.TilesetDef>;
 
-	public function new(?selectedDef:led.def.TilesetDef) {
+	public function new(?selectedDef:data.def.TilesetDef) {
 		super();
 
 		loadTemplate( "editTilesetDefs", "defEditor tilesetDefs" );
@@ -60,7 +60,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		}
 	}
 
-	function select(td:led.def.TilesetDef) {
+	function select(td:data.def.TilesetDef) {
 		cur = td;
 		updateList();
 		updateForm();
@@ -144,7 +144,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Fields
 		var i = Input.linkToHtmlInput(cur.identifier, jForm.find("input[name='name']") );
-		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.defs.isTilesetIdentifierUnique(id);
+		i.validityCheck = function(id) return data.Project.isValidIdentifier(id) && project.defs.isTilesetIdentifierUnique(id);
 		i.validityError = N.invalidIdentifier;
 		i.onChange = editor.ge.emit.bind( TilesetDefChanged(cur) );
 

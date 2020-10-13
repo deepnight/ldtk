@@ -1,6 +1,6 @@
-package led.def;
+package data.def;
 
-import led.LedTypes;
+import data.LedTypes;
 
 class LayerDef {
 	public var uid(default,null) : Int;
@@ -42,7 +42,7 @@ class LayerDef {
 		return '$identifier($type, ${gridSize}px)';
 	}
 
-	public static function fromJson(jsonVersion:String, json:led.Json.LayerDefJson) {
+	public static function fromJson(jsonVersion:String, json:data.Json.LayerDefJson) {
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
@@ -80,7 +80,7 @@ class LayerDef {
 		return o;
 	}
 
-	public function toJson() : led.Json.LayerDefJson {
+	public function toJson() : data.Json.LayerDefJson {
 		return {
 			__type: Std.string(type),
 
@@ -225,7 +225,7 @@ class LayerDef {
 		}
 	}
 
-	public function tidy(p:led.Project) {
+	public function tidy(p:data.Project) {
 		// Lost auto-layer tileset
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {
 			autoTilesetDefUid = null;

@@ -1,4 +1,4 @@
-package led;
+package data;
 
 class Project {
 	public static var DEFAULT_LEVEL_WIDTH = 256; // px
@@ -40,7 +40,7 @@ class Project {
 		return 'Project(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
 	}
 
-	public static function fromJson(json:led.Json.ProjectJson) {
+	public static function fromJson(json:data.Json.ProjectJson) {
 		var p = new Project();
 		p.jsonVersion = JsonTools.readString(json.jsonVersion, Const.getJsonVersion());
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
@@ -60,7 +60,7 @@ class Project {
 		return p;
 	}
 
-	public function toJson(excludeLevels=false) : led.Json.ProjectJson {
+	public function toJson(excludeLevels=false) : data.Json.ProjectJson {
 		return {
 			jsonVersion: jsonVersion,
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
@@ -76,7 +76,7 @@ class Project {
 		}
 	}
 
-	public function clone() : led.Project {
+	public function clone() : data.Project {
 		return fromJson( toJson() );
 	}
 
@@ -126,7 +126,7 @@ class Project {
 		return null;
 	}
 
-	public function sortLevel(from:Int, to:Int) : Null<led.Level> {
+	public function sortLevel(from:Int, to:Int) : Null<data.Level> {
 		if( from<0 || from>=levels.length || from==to )
 			return null;
 
@@ -143,7 +143,7 @@ class Project {
 
 	/**  USED CHECKS  *****************************************/
 
-	public function isEnumDefUsed(enumDef:led.def.EnumDef) {
+	public function isEnumDefUsed(enumDef:data.def.EnumDef) {
 		for( ed in defs.entities )
 		for( fd in ed.fieldDefs )
 			switch fd.type {
@@ -157,7 +157,7 @@ class Project {
 		return false;
 	}
 
-	public function isEnumValueUsed(enumDef:led.def.EnumDef, val:String) {
+	public function isEnumValueUsed(enumDef:data.def.EnumDef, val:String) {
 		for( l in levels )
 		for( li in l.layerInstances ) {
 			if( li.def.type!=Entities )
@@ -181,7 +181,7 @@ class Project {
 		return false;
 	}
 
-	public function isEntityDefUsed(ed:led.def.EntityDef) {
+	public function isEntityDefUsed(ed:data.def.EntityDef) {
 		for(l in levels)
 		for(li in l.layerInstances) {
 			if( li.def.type!=Entities )
@@ -194,7 +194,7 @@ class Project {
 		return false;
 	}
 
-	public function isIntGridValueUsed(layer:led.def.LayerDef, valueId:Int) {
+	public function isIntGridValueUsed(layer:data.def.LayerDef, valueId:Int) {
 		for(l in levels) {
 			var li = l.getLayerInstance(layer);
 			if( li!=null ) {
@@ -270,7 +270,7 @@ class Project {
 	}
 
 	#if editor
-	public function iterateAllFieldInstances(?searchType:led.LedTypes.FieldType, run:led.inst.FieldInstance->Void) {
+	public function iterateAllFieldInstances(?searchType:data.LedTypes.FieldType, run:data.inst.FieldInstance->Void) {
 		for(l in levels)
 		for(li in l.layerInstances)
 		for(ei in li.entityInstances)

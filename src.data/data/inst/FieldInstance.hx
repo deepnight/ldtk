@@ -1,15 +1,15 @@
-package led.inst;
+package data.inst;
 
-import led.LedTypes;
+import data.LedTypes;
 
 class FieldInstance {
 	public var _project : Project;
-	public var def(get,never) : led.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defUid);
+	public var def(get,never) : data.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defUid);
 
 	public var defUid: Int;
 	var internalValues : Array<ValueWrapper>;
 
-	@:allow(led.inst.EntityInstance)
+	@:allow(data.inst.EntityInstance)
 	private function new(p:Project, fieldDefUid:Int) {
 		_project = p;
 		defUid = fieldDefUid;
@@ -28,7 +28,7 @@ class FieldInstance {
 			+ ' [ $internalValues ]';
 	}
 
-	public static function fromJson(project:Project, json:led.Json.FieldInstanceJson) {
+	public static function fromJson(project:Project, json:data.Json.FieldInstanceJson) {
 		var o = new FieldInstance( project, JsonTools.readInt(json.defUid) );
 		o.internalValues = [];
 		if( json.realEditorValues!=null ) {
@@ -43,7 +43,7 @@ class FieldInstance {
 		return o;
 	}
 
-	public function toJson() : led.Json.FieldInstanceJson {
+	public function toJson() : data.Json.FieldInstanceJson {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,

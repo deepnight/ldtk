@@ -1,4 +1,4 @@
-package led;
+package data;
 
 /*
 	WARNING: all the follow types are serialized when saving a Project:
@@ -86,7 +86,7 @@ typedef AutoLayerRuleGroup = {
 	var name : String;
 	var active : Bool;
 	var collapsed : Bool;
-	var rules : Array<led.def.AutoLayerRuleDef>;
+	var rules : Array<data.def.AutoLayerRuleDef>;
 }
 
 enum EntityLimitBehavior {

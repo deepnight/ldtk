@@ -1,29 +1,29 @@
-package led.def;
+package data.def;
 
 class FieldDef {
 	public var uid(default,null) : Int;
-	public var type(default,null) : led.LedTypes.FieldType;
+	public var type(default,null) : data.LedTypes.FieldType;
 	public var identifier(default,set) : String;
 	public var canBeNull : Bool;
 	public var arrayMinLength : Null<Int>;
 	public var arrayMaxLength : Null<Int>;
-	public var editorDisplayMode : led.LedTypes.FieldDisplayMode;
-	public var editorDisplayPos : led.LedTypes.FieldDisplayPosition;
+	public var editorDisplayMode : data.LedTypes.FieldDisplayMode;
+	public var editorDisplayPos : data.LedTypes.FieldDisplayPosition;
 	public var editorAlwaysShow: Bool;
 	public var isArray : Bool;
 
 	#if editor
 	@:allow(ui.modal.panel.EditEntityDefs)
 	#end
-	var defaultOverride : Null<led.LedTypes.ValueWrapper>;
+	var defaultOverride : Null<data.LedTypes.ValueWrapper>;
 
 	public var min : Null<Float>;
 	public var max : Null<Float>;
 
-	var _project : led.Project;
+	var _project : data.Project;
 
-	@:allow(led.def.EntityDef)
-	private function new(p:led.Project, uid:Int, t:led.LedTypes.FieldType) {
+	@:allow(data.def.EntityDef)
+	private function new(p:data.Project, uid:Int, t:data.LedTypes.FieldType) {
 		_project = p;
 		this.uid = uid;
 		type = t;
@@ -54,18 +54,18 @@ class FieldDef {
 	}
 
 	public static function fromJson(p:Project, json:Dynamic) {
-		var o = new FieldDef( p, JsonTools.readInt(json.uid), JsonTools.readEnum(led.LedTypes.FieldType, json.type, false) );
+		var o = new FieldDef( p, JsonTools.readInt(json.uid), JsonTools.readEnum(data.LedTypes.FieldType, json.type, false) );
 		o.isArray = JsonTools.readBool(json.isArray, false);
 		o.identifier = JsonTools.readString(json.identifier);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.arrayMinLength = JsonTools.readNullableInt(json.arrayMinLength);
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
-		o.editorDisplayMode = JsonTools.readEnum(led.LedTypes.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
-		o.editorDisplayPos = JsonTools.readEnum(led.LedTypes.FieldDisplayPosition, json.editorDisplayPos, false, Above);
+		o.editorDisplayMode = JsonTools.readEnum(data.LedTypes.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
+		o.editorDisplayPos = JsonTools.readEnum(data.LedTypes.FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);
-		o.defaultOverride = JsonTools.readEnum(led.LedTypes.ValueWrapper, json.defaultOverride, true);
+		o.defaultOverride = JsonTools.readEnum(data.LedTypes.ValueWrapper, json.defaultOverride, true);
 		return o;
 	}
 
@@ -130,7 +130,7 @@ class FieldDef {
 	}
 	#end
 
-	public inline function require(type:led.LedTypes.FieldType) {
+	public inline function require(type:data.LedTypes.FieldType) {
 		if( this.type.getIndex()!=type.getIndex() )
 			throw "Only available on "+type+" fields";
 	}
@@ -222,7 +222,7 @@ class FieldDef {
 	}
 
 	public inline function isEnum() {
-		return type.getIndex() == led.LedTypes.FieldType.F_Enum(null).getIndex();
+		return type.getIndex() == data.LedTypes.FieldType.F_Enum(null).getIndex();
 	}
 
 	public function getEnumDefault() : Null<String> {
@@ -361,7 +361,7 @@ class FieldDef {
 	}
 
 
-	public function tidy(p:led.Project) {
+	public function tidy(p:data.Project) {
 		_project = p;
 	}
 }

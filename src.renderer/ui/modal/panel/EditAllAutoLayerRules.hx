@@ -1,17 +1,17 @@
 package ui.modal.panel;
 
-import led.LedTypes;
+import data.LedTypes;
 
 class EditAllAutoLayerRules extends ui.modal.Panel {
 	var invalidatedRules : Map<Int,Int> = new Map();
 
-	public var li(get,never) : led.inst.LayerInstance;
+	public var li(get,never) : data.inst.LayerInstance;
 		inline function get_li() return Editor.ME.curLayerInstance;
 
-	public var ld(get,never) : led.def.LayerDef;
+	public var ld(get,never) : data.def.LayerDef;
 		inline function get_ld() return Editor.ME.curLayerDef;
 
-	var lastRule : Null<led.def.AutoLayerRuleDef>;
+	var lastRule : Null<data.def.AutoLayerRuleDef>;
 
 	public function new() {
 		super();
@@ -111,9 +111,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 		// Create new rule
-		function createRule(rg:led.LedTypes.AutoLayerRuleGroup, insertIdx:Int) {
+		function createRule(rg:data.LedTypes.AutoLayerRuleGroup, insertIdx:Int) {
 			App.LOG.general("Added rule");
-			var r = new led.def.AutoLayerRuleDef( project.makeUniqId() );
+			var r = new data.def.AutoLayerRuleDef( project.makeUniqId() );
 			rg.rules.insert(insertIdx, r);
 
 			if( rg.collapsed )

@@ -23,7 +23,7 @@ class SelectionTool extends Tool<Int> {
 
 	override function getDefaultValue() return -1; // Not actually used
 
-	public function selectAllInLayers(level:led.Level, lis:Array<led.inst.LayerInstance>) {
+	public function selectAllInLayers(level:data.Level, lis:Array<data.inst.LayerInstance>) {
 		group.clear();
 
 		for(li in lis)
@@ -229,7 +229,7 @@ class SelectionTool extends Tool<Int> {
 				// var bottomPx = M.imax( origin.levelY, m.levelY );
 
 				var all : Array<GenericLevelElement> = [];
-				function _addRectFromLayer(li:led.inst.LayerInstance) {
+				function _addRectFromLayer(li:data.inst.LayerInstance) {
 					if( !editor.levelRender.isLayerVisible(li) )
 						return;
 

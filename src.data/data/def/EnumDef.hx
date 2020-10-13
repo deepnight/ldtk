@@ -1,9 +1,9 @@
-package led.def;
+package data.def;
 
 class EnumDef {
 	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
-	public var values : Array<led.LedTypes.EnumDefValue> = [];
+	public var values : Array<data.LedTypes.EnumDefValue> = [];
 	public var iconTilesetUid : Null<Int>;
 	public var externalRelPath : Null<String>;
 	public var externalFileChecksum : Null<String>;
@@ -59,7 +59,7 @@ class EnumDef {
 		return getValue(v)!=null;
 	}
 
-	public function getValue(v:String) : Null<led.LedTypes.EnumDefValue> {
+	public function getValue(v:String) : Null<data.LedTypes.EnumDefValue> {
 		v = Project.cleanupIdentifier(v,true);
 		for(ev in values)
 			if( ev.id==v )
