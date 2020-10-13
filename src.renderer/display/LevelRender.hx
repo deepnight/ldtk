@@ -75,7 +75,7 @@ class LevelRender extends dn.Process {
 
 		// Fit closer if repeated
 		if( old==rawZoom ) {
-			var pad = 16 * js.Browser.window.devicePixelRatio;
+			var pad = 8 * js.Browser.window.devicePixelRatio;
 			adjustedZoom = M.fmin(
 				editor.canvasWid() / ( editor.curLevel.pxWid + pad ),
 				editor.canvasHei() / ( editor.curLevel.pxHei + pad )
