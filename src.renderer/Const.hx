@@ -106,11 +106,11 @@ class Const {
 			"## App changes",
 		].concat( appCL.latest.allNoteLines );
 
-		// JSON corresponding changelog
+		// Json corresponding changelog
 		var raw = sys.io.File.getContent("JSON_CHANGELOG.md");
 		var jsonCL = new dn.Changelog(raw);
 		if( jsonCL.latest.version.isEqual(appCL.latest.version) ) {
-			relNotes.push('## JSON format changes');
+			relNotes.push('## Json format changes');
 			relNotes = relNotes.concat( jsonCL.latest.allNoteLines.map( function(str) {
 				return StringTools.replace(str, "## ", "### "); // Reduce title levels
 			}) );

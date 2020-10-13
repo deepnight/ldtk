@@ -159,7 +159,7 @@ class XmlDocToMarkdown {
 
 
 		// Table of content
-		var tocMd = ['# JSON structure (version $appVersion)'];
+		var tocMd = ['# Json structure (version $appVersion)'];
 		for(e in toc) {
 			var indent = " -";
 			for(i in 0...e.depth)
