@@ -62,13 +62,15 @@ class SelectionTool extends Tool<Int> {
 				group.add(ge);
 
 		if( group.selectedElementsCount()==1 ) {
-			// Change layer
+			var ge = group.getElement(0);
 			var li = group.getSmartRelativeLayerInstance();
+
+			// Change layer
 			if( li!=editor.curLayerInstance )
 				editor.selectLayerInstance(li);
 
 			// Selection effect
-			switch group.getElement(0) {
+			switch ge {
 				case GridCell(li, cx, cy):
 					if( li.hasAnyGridValue(cx,cy) )
 						switch li.def.type {
