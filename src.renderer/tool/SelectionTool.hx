@@ -203,86 +203,9 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
-	override function stopUsing(m:MouseCoords) {
-		super.stopUsing(m);
-
-		if( !rectangle && !moveStarted )
-			select()
-		else if( rectangle ) {
-			var r = Rect.fromMouseCoords(origin, m);
-			if( r.wid==1 && r.hei==1 ) {
-				// Pick single value, in the end
-				var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
-				if( ge!=null )
-					select([ ge ], true);
-				else
-					select();
-			}
-			else {
-				// Pick every objects under rectangle
-				var r = Rect.fromMouseCoords(origin,m);
-				var leftPx = curLayerInstance.pxOffsetX + r.left * curLayerInstance.def.gridSize;
-				var rightPx = curLayerInstance.pxOffsetX + (r.right+1) * curLayerInstance.def.gridSize - 1;
-				var topPx = curLayerInstance.pxOffsetY + r.top * curLayerInstance.def.gridSize;
-				var bottomPx = curLayerInstance.pxOffsetY + (r.bottom+1) * curLayerInstance.def.gridSize - 1;
-				// var leftPx = M.imin( origin.levelX, m.levelX );
-				// var rightPx = M.imax( origin.levelX, m.levelX );
-				// var topPx = M.imin( origin.levelY, m.levelY );
-				// var bottomPx = M.imax( origin.levelY, m.levelY );
-
-				var all : Array<GenericLevelElement> = [];
-				function _addRectFromLayer(li:data.inst.LayerInstance) {
-					if( !editor.levelRender.isLayerVisible(li) )
-						return;
-
-					var cLeft = Std.int( (leftPx-li.pxOffsetX) / li.def.gridSize );
-					var cRight = Std.int( (rightPx-li.pxOffsetX) / li.def.gridSize );
-					var cTop = Std.int( (topPx-li.pxOffsetY) /li.def.gridSize );
-					var cBottom = Std.int( (bottomPx-li.pxOffsetY) /li.def.gridSize );
-
-					for( cy in cTop...cBottom+1 )
-					for( cx in cLeft...cRight+1 ) {
-						if( li.hasAnyGridValue(cx,cy) )
-							all.push( GridCell(li,cx,cy) );
-					}
-
-					// Entities
-					if( li.def.type==Entities ) {
-						for(ei in li.entityInstances) {
-							if( ei.getCx(li.def)>=cLeft && ei.getCx(li.def)<=cRight && ei.getCy(li.def)>=cTop && ei.getCy(li.def)<=cBottom )
-								all.push( Entity(li,ei) );
-
-							// Entity points
-							for(fi in ei.fieldInstances) {
-								if( fi.def.type!=F_Point )
-									continue;
-
-								for(i in 0...fi.getArrayLength()) {
-									var pt = fi.getPointGrid(i);
-									if( pt!=null && pt.cx>=cLeft && pt.cx<=cRight && pt.cy>=cTop && pt.cy<=cBottom )
-										all.push( PointField(li, ei, fi, i) );
-								}
-							}
-						}
-					}
-				}
-
-				if( editor.singleLayerMode )
-					_addRectFromLayer( editor.curLayerInstance );
-				else {
-					for(li in editor.curLevel.layerInstances)
-						_addRectFromLayer(li);
-				}
-				select(all, true);
-
-				if( editor.emptySpaceSelection && !group.isEmpty() )
-					group.addSelectionRect(leftPx, rightPx, topPx, bottomPx);
-			}
-		}
-		movePreview.clear();
-		if( moveStarted )
-			group.onMoveEnd();
-	}
+	// override function stopUsing(m:MouseCoords) {
+	// 	super.stopUsing(m);
+	// }
 
 	public inline function get() return getSelectedValue();
 	public function clear() {
@@ -308,26 +231,6 @@ class SelectionTool extends Tool<Int> {
 
 	override function saveToHistory() {
 		// No super() call
-
-		// var allInsts = group.getSelectedLayerInstances(); // BUG doesn't work if selection becomes empty after some discards
-
-		// for(ge in group.all())
-		// 	switch ge {
-		// 		case IntGrid(li, cx, cy), Tile(li, cx, cy):
-		// 			editor.curLevelHistory.markChange(cx,cy);
-
-		// 		case Entity(li, ei):
-		// 			// TODO
-
-		// 		case PointField(li, ei, fi, arrayIdx):
-		// 			var pt = fi.getPointGrid(arrayIdx);
-		// 			if( pt!=null )
-		// 				editor.curLevelHistory.markChange(pt.cx, pt.cy);
-		// 	}
-
-		// for(li in allInsts)
-		// 	editor.curLevelHistory.saveLayerState(li);
-
 		editor.curLevelHistory.flushChangeMarks();
 	}
 
@@ -348,8 +251,18 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
+	override function stopUsing(m:MouseCoords) {
+		super.stopUsing(m);
+
+		movePreview.clear();
+		if( moveStarted )
+			group.onMoveEnd();
+	}
+
+
 	override function useAt(m:MouseCoords, isOnStop:Bool):Bool {
 		if( any() && isRunning() && moveStarted ) {
+			// Moving a selection
 			if( isOnStop ) {
 				// Move actual data
 				var changedLayers = group.moveSelecteds(origin, m, isCopy);
@@ -367,17 +280,86 @@ class SelectionTool extends Tool<Int> {
 				return false;
 			}
 		}
-		else
-			return super.useAt(m,isOnStop);
+		else if( isOnStop && curMode!=PanView ) {
+			// Single quick pick
+			select();
+		}
+
+		return super.useAt(m,isOnStop);
 	}
 
-	override function update() {
-		super.update();
+
+	override function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int):Bool {
+		if( left==right && top==bottom ) {
+			// Actually picking a single value, even though "rectangle" was triggered
+			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
+			if( ge!=null )
+				select([ ge ], true);
+			else
+				select();
+		}
+		else {
+			// Pick every objects under rectangle
+			var leftPx = curLayerInstance.pxOffsetX + left * curLayerInstance.def.gridSize;
+			var rightPx = curLayerInstance.pxOffsetX + (right+1) * curLayerInstance.def.gridSize - 1;
+			var topPx = curLayerInstance.pxOffsetY + top * curLayerInstance.def.gridSize;
+			var bottomPx = curLayerInstance.pxOffsetY + (bottom+1) * curLayerInstance.def.gridSize - 1;
+
+			var all : Array<GenericLevelElement> = [];
+			function _addRectFromLayer(li:data.inst.LayerInstance) {
+				if( !editor.levelRender.isLayerVisible(li) )
+					return;
+
+				var cLeft = Std.int( (leftPx-li.pxOffsetX) / li.def.gridSize );
+				var cRight = Std.int( (rightPx-li.pxOffsetX) / li.def.gridSize );
+				var cTop = Std.int( (topPx-li.pxOffsetY) /li.def.gridSize );
+				var cBottom = Std.int( (bottomPx-li.pxOffsetY) /li.def.gridSize );
+
+				for( cy in cTop...cBottom+1 )
+				for( cx in cLeft...cRight+1 ) {
+					if( li.hasAnyGridValue(cx,cy) )
+						all.push( GridCell(li,cx,cy) );
+				}
+
+				// Entities
+				if( li.def.type==Entities ) {
+					for(ei in li.entityInstances) {
+						if( ei.getCx(li.def)>=cLeft && ei.getCx(li.def)<=cRight && ei.getCy(li.def)>=cTop && ei.getCy(li.def)<=cBottom )
+							all.push( Entity(li,ei) );
+
+						// Entity points
+						for(fi in ei.fieldInstances) {
+							if( fi.def.type!=F_Point )
+								continue;
+
+							for(i in 0...fi.getArrayLength()) {
+								var pt = fi.getPointGrid(i);
+								if( pt!=null && pt.cx>=cLeft && pt.cx<=cRight && pt.cy>=cTop && pt.cy<=cBottom )
+									all.push( PointField(li, ei, fi, i) );
+							}
+						}
+					}
+				}
+			}
+
+			if( editor.singleLayerMode )
+				_addRectFromLayer( editor.curLayerInstance );
+			else {
+				for(li in editor.curLevel.layerInstances)
+					_addRectFromLayer(li);
+			}
+			select(all, true);
+
+			if( editor.emptySpaceSelection && !group.isEmpty() )
+				group.addSelectionRect(leftPx, rightPx, topPx, bottomPx);
+		}
+
+		return super.useOnRectangle(m, left, right, top, bottom);
 	}
+
 
 	override function postUpdate() {
 		super.postUpdate();
-
 		group.onPostUpdate();
 	}
 }

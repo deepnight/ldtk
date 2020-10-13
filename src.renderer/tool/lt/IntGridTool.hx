@@ -63,8 +63,8 @@ class IntGridTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
-		super.useOnRectangle(left, right, top, bottom);
+	override function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int) {
+		super.useOnRectangle(m, left, right, top, bottom);
 
 		var anyChange = false;
 		for(cx in left...right+1)

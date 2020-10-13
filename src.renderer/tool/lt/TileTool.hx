@@ -61,8 +61,8 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		);
 	}
 
-	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
-		super.useOnRectangle(left, right, top, bottom);
+	override function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int) {
+		super.useOnRectangle(m, left, right, top, bottom);
 
 		if( curMode==Add && !isRandomMode() )
 			return drawSelectionInRectangle(left,top, right-left+1, bottom-top+1);

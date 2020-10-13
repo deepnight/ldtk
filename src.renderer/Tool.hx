@@ -176,7 +176,7 @@ class Tool<T> extends dn.Process {
 		return false;
 	}
 
-	function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) : Bool {
+	function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int) : Bool {
 		return false;
 	}
 
@@ -195,7 +195,7 @@ class Tool<T> extends dn.Process {
 					var right = M.imax(origin.cx, m.cx);
 					var top = M.imin(origin.cy, m.cy);
 					var bottom = M.imax(origin.cy, m.cy);
-					anyChange = useOnRectangle(left, right, top, bottom);
+					anyChange = useOnRectangle(m, left, right, top, bottom);
 					if( anyChange )
 						editor.levelRender.invalidateLayerArea(curLayerInstance, left, right, top, bottom);
 				}

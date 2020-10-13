@@ -153,8 +153,8 @@ class EntityTool extends tool.LayerTool<Int> {
 		return false;
 	}
 
-	override function useOnRectangle(left:Int, right:Int, top:Int, bottom:Int) {
-		super.useOnRectangle(left, right, top, bottom);
+	override function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int) {
+		super.useOnRectangle(m, left, right, top, bottom);
 		return false;
 	}
 
