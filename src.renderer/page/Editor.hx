@@ -576,56 +576,6 @@ class Editor extends Page {
 		}
 	}
 
-	// public function pickGenericLevelElement(ge:Null<GenericLevelElement>) {
-	// 	clearSpecialTool();
-	// 	switch ge {
-	// 		case null:
-
-	// 		case IntGrid(li, cx, cy):
-	// 			selectLayerInstance(li);
-	// 			var v = li.getIntGrid(cx,cy);
-	// 			curTool.as(tool.IntGridTool).selectValue(v);
-	// 			levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
-	// 			curTool.onValuePicking();
-	// 			return true;
-
-	// 		case Entity(li, instance):
-	// 			selectLayerInstance(li);
-	// 			curTool.as(tool.EntityTool).selectValue(instance.defUid); // BUG might crash
-	// 			levelRender.bleepRectPx( instance.left, instance.top, instance.def.width, instance.def.height, instance.def.color );
-	// 			curTool.onValuePicking();
-	// 			return true;
-
-	// 		case PointField(li, ei, fi, arrayIdx):
-	// 			selectLayerInstance(li);
-	// 			curTool.as(tool.EntityTool).selectValue(ei.defUid); // BUG might crash
-	// 			levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
-	// 			curTool.onValuePicking();
-	// 			return true;
-
-	// 		case Tile(li, cx, cy):
-	// 			selectLayerInstance(li);
-	// 			var tid = li.getGridTile(cx,cy);
-	// 			var td = project.defs.getTilesetDef(li.def.tilesetDefUid);
-	// 			if( td==null )
-	// 				return false;
-
-	// 			var t = curTool.as(tool.TileTool);
-	// 			t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking saved selections?
-	// 			curTool.onValuePicking();
-
-	// 			// var savedSel = td.getSavedSelectionFor(tid);
-	// 			// if( savedSel==null || !isShiftDown() && !isCtrlDown() )
-	// 			// 	t.selectValue( { ids:[tid], mode:t.getMode() } );
-	// 			// else
-	// 			// 	t.selectValue( savedSel );
-	// 			levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
-	// 			return true;
-	// 	}
-
-	// 	return false;
-	// }
-
 	function onHeapsEvent(e:hxd.Event) {
 		switch e.kind {
 			case EPush: onMouseDown(e);
@@ -750,22 +700,6 @@ class Editor extends Page {
 
 		setGridSnapping(gridSnapping, false); // update checkbox
 	}
-
-	// function layerPickingNotification(l:data.inst.LayerInstance) {
-	// 	if( ui.Modal.hasAnyOpen() )
-	// 		return;
-
-	// 	App.ME.jBody.find(".layerPickNotif").remove();
-
-	// 	var e = new J('<div class="layerPickNotif"/>');
-	// 	App.ME.jBody.append(e);
-	// 	e.append('<div class="wrapper"/>');
-	// 	e.find(".wrapper")
-	// 		.append( JsTools.createLayerTypeIcon2(l.def.type) )
-	// 		.append('<span>${l.def.identifier}</span>');
-	// 	e.css("left", (jMainPanel.outerWidth()+15)+"px");
-	// 	e.fadeOut(1200);
-	// }
 
 	function layerSupportsFreeMode() {
 		return switch curLayerDef.type {
