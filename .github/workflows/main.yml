@@ -44,4 +44,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: mac-distribution
-          path: app/redist/LEd**installer.zip
+          path: app/redist/LEd**installer.dmg
