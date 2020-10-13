@@ -81,7 +81,7 @@ class TilesetDef {
 	}
 
 
-	public function toJson() : data.Json.TilesetDefJson {
+	public function toJson() : led.Json.TilesetDefJson {
 		return {
 			identifier: identifier,
 			uid: uid,
@@ -98,7 +98,7 @@ class TilesetDef {
 	}
 
 
-	public static function fromJson(p:Project, json:data.Json.TilesetDefJson) {
+	public static function fromJson(p:Project, json:led.Json.TilesetDefJson) {
 		var td = new TilesetDef( p, JsonTools.readInt(json.uid) );
 		td.tileGridSize = JsonTools.readInt(json.tileGridSize, Project.DEFAULT_GRID_SIZE);
 		td.spacing = JsonTools.readInt(json.spacing, 0);

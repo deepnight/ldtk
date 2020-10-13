@@ -1,6 +1,6 @@
 package exporter;
 
-import data.Json;
+import led.Json;
 
 class Tiled extends Exporter {
 	static var TILED_VERSION = "1.4.2";

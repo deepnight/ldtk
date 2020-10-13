@@ -43,7 +43,7 @@ class LayerInstance {
 	}
 
 
-	public function toJson() : data.Json.LayerInstanceJson {
+	public function toJson() : led.Json.LayerInstanceJson {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
@@ -160,7 +160,7 @@ class LayerInstance {
 		}
 	}
 
-	public static function fromJson(p:Project, json:data.Json.LayerInstanceJson) {
+	public static function fromJson(p:Project, json:led.Json.LayerInstanceJson) {
 		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
 
 		for( intGridJson in JsonTools.readArray(json.intGrid) )
@@ -178,7 +178,7 @@ class LayerInstance {
 
 		if( json.autoLayerTiles!=null ) {
 			try {
-				var jsonAutoLayerTiles : Array<Json.Tile> = JsonTools.readArray(json.autoLayerTiles);
+				var jsonAutoLayerTiles : Array<led.Json.Tile> = JsonTools.readArray(json.autoLayerTiles);
 				li.autoTilesCache = new Map();
 
 				for(at in jsonAutoLayerTiles) {

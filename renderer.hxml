@@ -7,6 +7,7 @@
 -lib deepnightLibs
 -lib hxnodejs
 -lib electron
+-lib led-haxe-api
 
 -D editor
 -D electron

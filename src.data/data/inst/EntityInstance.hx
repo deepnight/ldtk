@@ -24,7 +24,7 @@ class EntityInstance {
 		return 'Instance<${def.identifier}>@$x,$y';
 	}
 
-	public function toJson(li:data.inst.LayerInstance) : data.Json.EntityInstanceJson {
+	public function toJson(li:data.inst.LayerInstance) : led.Json.EntityInstanceJson {
 		var fieldsJson = [];
 		for(fi in fieldInstances)
 			fieldsJson.push( fi.toJson() );
@@ -40,7 +40,7 @@ class EntityInstance {
 		}
 	}
 
-	public static function fromJson(project:Project, json:data.Json.EntityInstanceJson) {
+	public static function fromJson(project:Project, json:led.Json.EntityInstanceJson) {
 		// Convert old coordinates
 		if( (cast json).x!=null )
 			json.px = [ JsonTools.readInt( (cast json).x, 0 ), JsonTools.readInt((cast json).y,0) ];

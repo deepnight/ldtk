@@ -1,34 +1,34 @@
 # JSON structure (version 0.4.0-beta)
 
- - [Json root](#data-ProjectJson)
+ - [Json root hello](#led-ProjectJson)
 
- - [Level](#data-LevelJson)
+ - [Level](#led-LevelJson)
 
-   - [Layer instance](#data-LayerInstanceJson)
+   - [Layer instance](#led-LayerInstanceJson)
 
-     - [Auto-layer tile instance](#data-Tile)
+     - [Auto-layer tile instance](#led-Tile)
 
-     - [Entity instance](#data-EntityInstanceJson)
+     - [Entity instance](#led-EntityInstanceJson)
 
-     - [Field instance](#data-FieldInstanceJson)
+     - [Field instance](#led-FieldInstanceJson)
 
- - [Definitions](#data-DefinitionsJson)
+ - [Definitions](#led-DefinitionsJson)
 
-   - [Layer definition](#data-LayerDefJson)
+   - [Layer definition](#led-LayerDefJson)
 
-   - [Entity definition](#data-EntityDefJson)
+   - [Entity definition](#led-EntityDefJson)
 
-   - [Tileset definition](#data-TilesetDefJson)
+   - [Tileset definition](#led-TilesetDefJson)
 
-   - [Enum definition](#data-EnumDefJson)
+   - [Enum definition](#led-EnumDefJson)
 
-<a id="data-ProjectJson" name="data-ProjectJson"></a>
+<a id="led-ProjectJson" name="led-ProjectJson"></a>
 
 &nbsp;
 
-# Json root   
+# Json root hello   
 
-<a id="data-ProjectJson-bgColor" name="data-ProjectJson-bgColor"></a>
+<a id="led-ProjectJson-bgColor" name="led-ProjectJson-bgColor"></a>
 
  - ## `bgColor` : **String**   
 
@@ -36,138 +36,138 @@
 
     Project background color
 
-<a id="data-ProjectJson-defaultGridSize" name="data-ProjectJson-defaultGridSize"></a>
+<a id="led-ProjectJson-defaultGridSize" name="led-ProjectJson-defaultGridSize"></a>
 
  - ## `defaultGridSize` : **Int**   
 
     Default grid size for new layers
 
-<a id="data-ProjectJson-defaultPivotX" name="data-ProjectJson-defaultPivotX"></a>
+<a id="led-ProjectJson-defaultPivotX" name="led-ProjectJson-defaultPivotX"></a>
 
  - ## `defaultPivotX` : **Float**   
 
     Default X pivot (0 to 1) for new entities
 
-<a id="data-ProjectJson-defaultPivotY" name="data-ProjectJson-defaultPivotY"></a>
+<a id="led-ProjectJson-defaultPivotY" name="led-ProjectJson-defaultPivotY"></a>
 
  - ## `defaultPivotY` : **Float**   
 
     Default Y pivot (0 to 1) for new entities
 
-<a id="data-ProjectJson-defs" name="data-ProjectJson-defs"></a>
+<a id="led-ProjectJson-defs" name="led-ProjectJson-defs"></a>
 
- - ## `defs` : **[Definitions](#data-DefinitionsJson)**   
+ - ## `defs` : **[Definitions](#led-DefinitionsJson)**   
 
     A structure containing all the definitions of this project
 
-<a id="data-ProjectJson-exportTiled" name="data-ProjectJson-exportTiled"></a>
+<a id="led-ProjectJson-exportTiled" name="led-ProjectJson-exportTiled"></a>
 
  - ## `exportTiled` : **Bool**   
 
     If TRUE, a Tiled compatible file will also be generated along with the LEd JSON file.
 
-<a id="data-ProjectJson-jsonVersion" name="data-ProjectJson-jsonVersion"></a>
+<a id="led-ProjectJson-jsonVersion" name="led-ProjectJson-jsonVersion"></a>
 
  - ## `jsonVersion` : **String**   
 
     File format version
 
-<a id="data-ProjectJson-levels" name="data-ProjectJson-levels"></a>
+<a id="led-ProjectJson-levels" name="led-ProjectJson-levels"></a>
 
- - ## `levels` : **Array of [Level](#data-LevelJson)**   
+ - ## `levels` : **Array of [Level](#led-LevelJson)**   
 
-<a id="data-ProjectJson-minifyJson" name="data-ProjectJson-minifyJson"></a>
+<a id="led-ProjectJson-minifyJson" name="led-ProjectJson-minifyJson"></a>
 
  - ## `minifyJson` : **Bool**   
 
     If TRUE, the Json is partially minified (no indentation, nor line breaks)
 
-<a id="data-LevelJson" name="data-LevelJson"></a>
+<a id="led-LevelJson" name="led-LevelJson"></a>
 
 &nbsp;
 
 # Level   
 
-<a id="data-LevelJson-identifier" name="data-LevelJson-identifier"></a>
+<a id="led-LevelJson-identifier" name="led-LevelJson-identifier"></a>
 
  - ## `identifier` : **String**   
 
     Unique String identifier
 
-<a id="data-LevelJson-layerInstances" name="data-LevelJson-layerInstances"></a>
+<a id="led-LevelJson-layerInstances" name="led-LevelJson-layerInstances"></a>
 
- - ## `layerInstances` : **Array of [Layer instance](#data-LayerInstanceJson)**   
+ - ## `layerInstances` : **Array of [Layer instance](#led-LayerInstanceJson)**   
 
-<a id="data-LevelJson-pxHei" name="data-LevelJson-pxHei"></a>
+<a id="led-LevelJson-pxHei" name="led-LevelJson-pxHei"></a>
 
  - ## `pxHei` : **Int**   
 
     Height of the level in pixels
 
-<a id="data-LevelJson-pxWid" name="data-LevelJson-pxWid"></a>
+<a id="led-LevelJson-pxWid" name="led-LevelJson-pxWid"></a>
 
  - ## `pxWid` : **Int**   
 
     Width of the level in pixels
 
-<a id="data-LevelJson-uid" name="data-LevelJson-uid"></a>
+<a id="led-LevelJson-uid" name="led-LevelJson-uid"></a>
 
  - ## `uid` : **Int**   
 
     Unique Int identifier
 
-<a id="data-LayerInstanceJson" name="data-LayerInstanceJson"></a>
+<a id="led-LayerInstanceJson" name="led-LayerInstanceJson"></a>
 
 &nbsp;
 
 ## Layer instance   
 
-<a id="data-LayerInstanceJson-__cHei" name="data-LayerInstanceJson-__cHei"></a>
+<a id="led-LayerInstanceJson-__cHei" name="led-LayerInstanceJson-__cHei"></a>
 
  - ### `__cHei` : **Int**   
 
     Grid-based height
 
-<a id="data-LayerInstanceJson-__cWid" name="data-LayerInstanceJson-__cWid"></a>
+<a id="led-LayerInstanceJson-__cWid" name="led-LayerInstanceJson-__cWid"></a>
 
  - ### `__cWid` : **Int**   
 
     Grid-based width
 
-<a id="data-LayerInstanceJson-__gridSize" name="data-LayerInstanceJson-__gridSize"></a>
+<a id="led-LayerInstanceJson-__gridSize" name="led-LayerInstanceJson-__gridSize"></a>
 
  - ### `__gridSize` : **Int**   
 
     Grid size
 
-<a id="data-LayerInstanceJson-__identifier" name="data-LayerInstanceJson-__identifier"></a>
+<a id="led-LayerInstanceJson-__identifier" name="led-LayerInstanceJson-__identifier"></a>
 
  - ### `__identifier` : **String**   
 
     Unique String identifier
 
-<a id="data-LayerInstanceJson-__type" name="data-LayerInstanceJson-__type"></a>
+<a id="led-LayerInstanceJson-__type" name="led-LayerInstanceJson-__type"></a>
 
  - ### `__type` : **String**   
 
     Layer type (possible values: IntGrid, Entities, Tiles or AutoLayer)
 
-<a id="data-LayerInstanceJson-autoLayerTiles" name="data-LayerInstanceJson-autoLayerTiles"></a>
+<a id="led-LayerInstanceJson-autoLayerTiles" name="led-LayerInstanceJson-autoLayerTiles"></a>
 
- - ### `autoLayerTiles` : **Array of [Auto-layer tile instance](#data-Tile)**  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
+ - ### `autoLayerTiles` : **Array of [Auto-layer tile instance](#led-Tile)**  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
 
     ***Only relevant for Auto-layers***
 
     An array containing all tiles generated by Auto-layer rules. The array is already
 		sorted in display order (ie. 1st tile is beneath 2nd, which is beneath 3rd etc.)
 
-<a id="data-LayerInstanceJson-entityInstances" name="data-LayerInstanceJson-entityInstances"></a>
+<a id="led-LayerInstanceJson-entityInstances" name="led-LayerInstanceJson-entityInstances"></a>
 
- - ### `entityInstances` : **Array of [Entity instance](#data-EntityInstanceJson)**   
+ - ### `entityInstances` : **Array of [Entity instance](#led-EntityInstanceJson)**   
 
     ***Only relevant for Entity layers***
 
-<a id="data-LayerInstanceJson-gridTiles" name="data-LayerInstanceJson-gridTiles"></a>
+<a id="led-LayerInstanceJson-gridTiles" name="led-LayerInstanceJson-gridTiles"></a>
 
  - ### `gridTiles` : **Array of Object**   
 
@@ -187,7 +187,7 @@
 
      - `tileId` : **Int**   -- Tile ID in the corresponding tileset
 
-<a id="data-LayerInstanceJson-intGrid" name="data-LayerInstanceJson-intGrid"></a>
+<a id="led-LayerInstanceJson-intGrid" name="led-LayerInstanceJson-intGrid"></a>
 
  - ### `intGrid` : **Array of Object**   
 
@@ -199,31 +199,31 @@
 
      - `v` : **Int**   -- IntGrid value
 
-<a id="data-LayerInstanceJson-layerDefUid" name="data-LayerInstanceJson-layerDefUid"></a>
+<a id="led-LayerInstanceJson-layerDefUid" name="led-LayerInstanceJson-layerDefUid"></a>
 
  - ### `layerDefUid` : **Int**   
 
     Reference the Layer definition UID
 
-<a id="data-LayerInstanceJson-levelId" name="data-LayerInstanceJson-levelId"></a>
+<a id="led-LayerInstanceJson-levelId" name="led-LayerInstanceJson-levelId"></a>
 
  - ### `levelId` : **Int**   
 
     Reference to the UID of the level containing this layer instance
 
-<a id="data-LayerInstanceJson-pxOffsetX" name="data-LayerInstanceJson-pxOffsetX"></a>
+<a id="led-LayerInstanceJson-pxOffsetX" name="led-LayerInstanceJson-pxOffsetX"></a>
 
  - ### `pxOffsetX` : **Int**   
 
     Horizontal offset in pixels to render this layer, usually 0
 
-<a id="data-LayerInstanceJson-pxOffsetY" name="data-LayerInstanceJson-pxOffsetY"></a>
+<a id="led-LayerInstanceJson-pxOffsetY" name="led-LayerInstanceJson-pxOffsetY"></a>
 
  - ### `pxOffsetY` : **Int**   
 
     Vertical offset in pixels to render this layer, usually 0
 
-<a id="data-LayerInstanceJson-seed" name="data-LayerInstanceJson-seed"></a>
+<a id="led-LayerInstanceJson-seed" name="led-LayerInstanceJson-seed"></a>
 
  - ### `seed` : **Int**   
 
@@ -231,101 +231,101 @@
 
     Random seed used for Auto-Layers rendering
 
-<a id="data-Tile" name="data-Tile"></a>
+<a id="led-Tile" name="led-Tile"></a>
 
 &nbsp;
 
 ### Auto-layer tile instance  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
 
-<a id="data-Tile-d" name="data-Tile-d"></a>
+<a id="led-Tile-d" name="led-Tile-d"></a>
 
  - #### `d` : **Array of Int**   
 
     Internal data used by the editor
 
-<a id="data-Tile-f" name="data-Tile-f"></a>
+<a id="led-Tile-f" name="led-Tile-f"></a>
 
  - #### `f` : **Int**   
 
     "Flip flags", a 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip
 
-<a id="data-Tile-px" name="data-Tile-px"></a>
+<a id="led-Tile-px" name="led-Tile-px"></a>
 
  - #### `px` : **Array of Int**   
 
     Pixel coordinates of the tile in the **layer** (`[x,y]` format)
 
-<a id="data-Tile-src" name="data-Tile-src"></a>
+<a id="led-Tile-src" name="led-Tile-src"></a>
 
  - #### `src` : **Array of Int**   
 
     Pixel coordinates of the tile in the **tileset** (`[x,y]` format)
 
-<a id="data-EntityInstanceJson" name="data-EntityInstanceJson"></a>
+<a id="led-EntityInstanceJson" name="led-EntityInstanceJson"></a>
 
 &nbsp;
 
 ### Entity instance   
 
-<a id="data-EntityInstanceJson-__grid" name="data-EntityInstanceJson-__grid"></a>
+<a id="led-EntityInstanceJson-__grid" name="led-EntityInstanceJson-__grid"></a>
 
  - #### `__grid` : **Array of Int**  [![Generic badge](https://img.shields.io/badge/Changed-0.4.0-green.svg)](JSON_CHANGELOG.md) 
 
     Grid-based coordinates (`[x,y]` format)
 
-<a id="data-EntityInstanceJson-__identifier" name="data-EntityInstanceJson-__identifier"></a>
+<a id="led-EntityInstanceJson-__identifier" name="led-EntityInstanceJson-__identifier"></a>
 
  - #### `__identifier` : **String**   
 
     Unique String identifier
 
-<a id="data-EntityInstanceJson-defUid" name="data-EntityInstanceJson-defUid"></a>
+<a id="led-EntityInstanceJson-defUid" name="led-EntityInstanceJson-defUid"></a>
 
  - #### `defUid` : **Int**   
 
     Reference of the **Entity definition** UID
 
-<a id="data-EntityInstanceJson-fieldInstances" name="data-EntityInstanceJson-fieldInstances"></a>
+<a id="led-EntityInstanceJson-fieldInstances" name="led-EntityInstanceJson-fieldInstances"></a>
 
- - #### `fieldInstances` : **Array of [Field instance](#data-FieldInstanceJson)**   
+ - #### `fieldInstances` : **Array of [Field instance](#led-FieldInstanceJson)**   
 
-<a id="data-EntityInstanceJson-px" name="data-EntityInstanceJson-px"></a>
+<a id="led-EntityInstanceJson-px" name="led-EntityInstanceJson-px"></a>
 
  - #### `px` : **Array of Int**  [![Generic badge](https://img.shields.io/badge/Changed-0.4.0-green.svg)](JSON_CHANGELOG.md) 
 
     Pixel coordinates (`[x,y]` format)
 
-<a id="data-FieldInstanceJson" name="data-FieldInstanceJson"></a>
+<a id="led-FieldInstanceJson" name="led-FieldInstanceJson"></a>
 
 &nbsp;
 
 ### Field instance   
 
-<a id="data-FieldInstanceJson-__identifier" name="data-FieldInstanceJson-__identifier"></a>
+<a id="led-FieldInstanceJson-__identifier" name="led-FieldInstanceJson-__identifier"></a>
 
  - #### `__identifier` : **String**   
 
     Unique String identifier
 
-<a id="data-FieldInstanceJson-__type" name="data-FieldInstanceJson-__type"></a>
+<a id="led-FieldInstanceJson-__type" name="led-FieldInstanceJson-__type"></a>
 
  - #### `__type` : **String**   
 
     Type of the field, such as Int, Float, Enum(enum_name), Bool, etc.
 
-<a id="data-FieldInstanceJson-__value" name="data-FieldInstanceJson-__value"></a>
+<a id="led-FieldInstanceJson-__value" name="led-FieldInstanceJson-__value"></a>
 
  - #### `__value` : **Dynamic (anything)**   
 
     Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)
 
-<a id="data-FieldInstanceJson-defUid" name="data-FieldInstanceJson-defUid"></a>
+<a id="led-FieldInstanceJson-defUid" name="led-FieldInstanceJson-defUid"></a>
 
  - #### `defUid` : **Int**   
 
     Reference of the **Field definition** UID
 
-<a id="data-DefinitionsJson" name="data-DefinitionsJson"></a>
+<a id="led-DefinitionsJson" name="led-DefinitionsJson"></a>
 
 &nbsp;
 
@@ -334,42 +334,42 @@
 Many useful data found in `definitions` are duplicated in fields
 	prefixed with a double "_".
 
-<a id="data-DefinitionsJson-entities" name="data-DefinitionsJson-entities"></a>
+<a id="led-DefinitionsJson-entities" name="led-DefinitionsJson-entities"></a>
 
- - ## `entities` : **Array of [Entity definition](#data-EntityDefJson)**   
+ - ## `entities` : **Array of [Entity definition](#led-EntityDefJson)**   
 
-<a id="data-DefinitionsJson-enums" name="data-DefinitionsJson-enums"></a>
+<a id="led-DefinitionsJson-enums" name="led-DefinitionsJson-enums"></a>
 
- - ## `enums` : **Array of [Enum definition](#data-EnumDefJson)**   
+ - ## `enums` : **Array of [Enum definition](#led-EnumDefJson)**   
 
-<a id="data-DefinitionsJson-externalEnums" name="data-DefinitionsJson-externalEnums"></a>
+<a id="led-DefinitionsJson-externalEnums" name="led-DefinitionsJson-externalEnums"></a>
 
- - ## `externalEnums` : **Array of [Enum definition](#data-EnumDefJson)**   
+ - ## `externalEnums` : **Array of [Enum definition](#led-EnumDefJson)**   
 
     Note: external enums are exactly the same as `enums`, except they
 		have a `relPath` to point to an external source file.
 
-<a id="data-DefinitionsJson-layers" name="data-DefinitionsJson-layers"></a>
+<a id="led-DefinitionsJson-layers" name="led-DefinitionsJson-layers"></a>
 
- - ## `layers` : **Array of [Layer definition](#data-LayerDefJson)**   
+ - ## `layers` : **Array of [Layer definition](#led-LayerDefJson)**   
 
-<a id="data-DefinitionsJson-tilesets" name="data-DefinitionsJson-tilesets"></a>
+<a id="led-DefinitionsJson-tilesets" name="led-DefinitionsJson-tilesets"></a>
 
- - ## `tilesets` : **Array of [Tileset definition](#data-TilesetDefJson)**   
+ - ## `tilesets` : **Array of [Tileset definition](#led-TilesetDefJson)**   
 
-<a id="data-LayerDefJson" name="data-LayerDefJson"></a>
+<a id="led-LayerDefJson" name="led-LayerDefJson"></a>
 
 &nbsp;
 
 ## Layer definition   
 
-<a id="data-LayerDefJson-__type" name="data-LayerDefJson-__type"></a>
+<a id="led-LayerDefJson-__type" name="led-LayerDefJson-__type"></a>
 
  - ### `__type` : **String**   
 
     Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)
 
-<a id="data-LayerDefJson-autoRuleGroups" name="data-LayerDefJson-autoRuleGroups"></a>
+<a id="led-LayerDefJson-autoRuleGroups" name="led-LayerDefJson-autoRuleGroups"></a>
 
  - ### `autoRuleGroups` : **Array of Object**   
 
@@ -389,13 +389,13 @@ Many useful data found in `definitions` are duplicated in fields
 
      - `rules` : **Array of Dynamic (anything)**
 
-<a id="data-LayerDefJson-autoSourceLayerDefUid" name="data-LayerDefJson-autoSourceLayerDefUid"></a>
+<a id="led-LayerDefJson-autoSourceLayerDefUid" name="led-LayerDefJson-autoSourceLayerDefUid"></a>
 
  - ### `autoSourceLayerDefUid` : **Int**   
 
     ***Only relevant for Auto-layers***
 
-<a id="data-LayerDefJson-autoTilesetDefUid" name="data-LayerDefJson-autoTilesetDefUid"></a>
+<a id="led-LayerDefJson-autoTilesetDefUid" name="led-LayerDefJson-autoTilesetDefUid"></a>
 
  - ### `autoTilesetDefUid` : **Int**   
 
@@ -403,23 +403,23 @@ Many useful data found in `definitions` are duplicated in fields
 
     Reference to the Tileset UID being used by this auto-layer rules
 
-<a id="data-LayerDefJson-displayOpacity" name="data-LayerDefJson-displayOpacity"></a>
+<a id="led-LayerDefJson-displayOpacity" name="led-LayerDefJson-displayOpacity"></a>
 
  - ### `displayOpacity` : **Float**   
 
     Opacity of the layer (0 to 1.0)
 
-<a id="data-LayerDefJson-gridSize" name="data-LayerDefJson-gridSize"></a>
+<a id="led-LayerDefJson-gridSize" name="led-LayerDefJson-gridSize"></a>
 
  - ### `gridSize` : **Int**   
 
-<a id="data-LayerDefJson-identifier" name="data-LayerDefJson-identifier"></a>
+<a id="led-LayerDefJson-identifier" name="led-LayerDefJson-identifier"></a>
 
  - ### `identifier` : **String**   
 
     Unique String identifier
 
-<a id="data-LayerDefJson-intGridValues" name="data-LayerDefJson-intGridValues"></a>
+<a id="led-LayerDefJson-intGridValues" name="led-LayerDefJson-intGridValues"></a>
 
  - ### `intGridValues` : **Array of Object**   
 
@@ -431,7 +431,7 @@ Many useful data found in `definitions` are duplicated in fields
 
      - `identifier` : **String**
 
-<a id="data-LayerDefJson-tilePivotX" name="data-LayerDefJson-tilePivotX"></a>
+<a id="led-LayerDefJson-tilePivotX" name="led-LayerDefJson-tilePivotX"></a>
 
  - ### `tilePivotX` : **Float**   
 
@@ -439,7 +439,7 @@ Many useful data found in `definitions` are duplicated in fields
 
     If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 
-<a id="data-LayerDefJson-tilePivotY" name="data-LayerDefJson-tilePivotY"></a>
+<a id="led-LayerDefJson-tilePivotY" name="led-LayerDefJson-tilePivotY"></a>
 
  - ### `tilePivotY` : **Float**   
 
@@ -447,7 +447,7 @@ Many useful data found in `definitions` are duplicated in fields
 
     If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 
-<a id="data-LayerDefJson-tilesetDefUid" name="data-LayerDefJson-tilesetDefUid"></a>
+<a id="led-LayerDefJson-tilesetDefUid" name="led-LayerDefJson-tilesetDefUid"></a>
 
  - ### `tilesetDefUid` : **Int**   
 
@@ -455,13 +455,13 @@ Many useful data found in `definitions` are duplicated in fields
 
     Reference to the Tileset UID being used by this tile layer
 
-<a id="data-LayerDefJson-uid" name="data-LayerDefJson-uid"></a>
+<a id="led-LayerDefJson-uid" name="led-LayerDefJson-uid"></a>
 
  - ### `uid` : **Int**   
 
     Unique Int identifier
 
-<a id="data-EntityDefJson" name="data-EntityDefJson"></a>
+<a id="led-EntityDefJson" name="led-EntityDefJson"></a>
 
 &nbsp;
 
@@ -469,59 +469,59 @@ Many useful data found in `definitions` are duplicated in fields
 
 Not available yet
 
-<a id="data-TilesetDefJson" name="data-TilesetDefJson"></a>
+<a id="led-TilesetDefJson" name="led-TilesetDefJson"></a>
 
 &nbsp;
 
 ## Tileset definition   
 
-<a id="data-TilesetDefJson-identifier" name="data-TilesetDefJson-identifier"></a>
+<a id="led-TilesetDefJson-identifier" name="led-TilesetDefJson-identifier"></a>
 
  - ### `identifier` : **String**   
 
     Unique String identifier
 
-<a id="data-TilesetDefJson-padding" name="data-TilesetDefJson-padding"></a>
+<a id="led-TilesetDefJson-padding" name="led-TilesetDefJson-padding"></a>
 
  - ### `padding` : **Int**   
 
     Distance in pixels from image borders
 
-<a id="data-TilesetDefJson-pxHei" name="data-TilesetDefJson-pxHei"></a>
+<a id="led-TilesetDefJson-pxHei" name="led-TilesetDefJson-pxHei"></a>
 
  - ### `pxHei` : **Int**   
 
     Image width in pixels
 
-<a id="data-TilesetDefJson-pxWid" name="data-TilesetDefJson-pxWid"></a>
+<a id="led-TilesetDefJson-pxWid" name="led-TilesetDefJson-pxWid"></a>
 
  - ### `pxWid` : **Int**   
 
     Image width in pixels
 
-<a id="data-TilesetDefJson-relPath" name="data-TilesetDefJson-relPath"></a>
+<a id="led-TilesetDefJson-relPath" name="led-TilesetDefJson-relPath"></a>
 
  - ### `relPath` : **String**   
 
     Path to the source file, relative to the current project JSON file
 
-<a id="data-TilesetDefJson-spacing" name="data-TilesetDefJson-spacing"></a>
+<a id="led-TilesetDefJson-spacing" name="led-TilesetDefJson-spacing"></a>
 
  - ### `spacing` : **Int**   
 
     Space in pixels between all tiles
 
-<a id="data-TilesetDefJson-tileGridSize" name="data-TilesetDefJson-tileGridSize"></a>
+<a id="led-TilesetDefJson-tileGridSize" name="led-TilesetDefJson-tileGridSize"></a>
 
  - ### `tileGridSize` : **Int**   
 
-<a id="data-TilesetDefJson-uid" name="data-TilesetDefJson-uid"></a>
+<a id="led-TilesetDefJson-uid" name="led-TilesetDefJson-uid"></a>
 
  - ### `uid` : **Int**   
 
     Unique Intidentifier
 
-<a id="data-EnumDefJson" name="data-EnumDefJson"></a>
+<a id="led-EnumDefJson" name="led-EnumDefJson"></a>
 
 &nbsp;
 
