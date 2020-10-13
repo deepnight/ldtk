@@ -1,4 +1,4 @@
-# JSON structure (version 0.4.0-beta)
+# Json structure (version 0.4.0-beta)
 
  - [Json root](#led-ProjectJson)
 
