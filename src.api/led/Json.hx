@@ -138,12 +138,13 @@ typedef LayerInstanceJson = {
 
 
 @section("1.1.1")
+@added("0.4.0")
 @display("Auto-layer tile instance")
 typedef Tile = {
-	/** Pixel coordinates of the tile in the **layer** (using the `[x,y]` array format) **/
-	var coord: Array<Int>;
+	/** Pixel coordinates of the tile in the **layer** (`[x,y]` format) **/
+	var px: Array<Int>;
 
-	/** Pixel coordinates of the tile in the **tileset** (using the `[x,y]` array format) **/
+	/** Pixel coordinates of the tile in the **tileset** (`[x,y]` format) **/
 	var src: Array<Int>;
 
 	/** "Flip flags", a 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip **/
@@ -161,20 +162,16 @@ typedef EntityInstanceJson = {
 	/** Unique String identifier **/
 	var __identifier: String;
 
-	/** Grid-based X coordinate **/
-	var __cx: Int;
-
-	/** Grid-based Y coordinate **/
-	var __cy: Int;
+	/** Grid-based coordinates (`[x,y]` format) **/
+	@changed("0.4.0")
+	var __grid: Array<Int>;
 
 	/** Reference of the **Entity definition** UID **/
 	var defUid: Int;
 
-	/** Pixel X coordinate **/
-	var x: Int;
-
-	/** Pixel Y coordinate **/
-	var y: Int;
+	/** Pixel coordinates (`[x,y]` format) **/
+	@changed("0.4.0")
+	var px: Array<Int>;
 
 	var fieldInstances: Array<FieldInstanceJson>;
 }

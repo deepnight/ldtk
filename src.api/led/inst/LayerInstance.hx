@@ -77,7 +77,7 @@ class LayerInstance {
 							for( allTiles in autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value )
 								arr.push({
-									coord: [ tileInfos.x, tileInfos.y ],
+									px: [ tileInfos.x, tileInfos.y ],
 									src: [ tileInfos.srcX, tileInfos.srcY ],
 									f: tileInfos.flips,
 									d: [r.uid,allTiles.key,tileInfos.tid],
@@ -191,8 +191,8 @@ class LayerInstance {
 						li.autoTilesCache.get(ruleId).set(coordId, []);
 
 					li.autoTilesCache.get(ruleId).get(coordId).push({
-						x: at.coord[0],
-						y: at.coord[1],
+						x: at.px[0],
+						y: at.px[1],
 						srcX: at.src[0],
 						srcY: at.src[1],
 						flips: at.f,

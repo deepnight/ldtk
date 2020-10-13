@@ -32,21 +32,22 @@ class EntityInstance {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
-			__cx: getCx(li.def),
-			__cy: getCy(li.def),
+			__grid: [ getCx(li.def), getCy(li.def) ],
 
 			defUid: defUid,
-			x: x,
-			y: y,
+			px: [x,y],
 			fieldInstances: fieldsJson,
-
 		}
 	}
 
-	public static function fromJson(project:Project, json:Dynamic) {
+	public static function fromJson(project:Project, json:led.Json.EntityInstanceJson) {
+		// Convert old coordinates
+		if( (cast json).x!=null )
+			json.px = [ JsonTools.readInt( (cast json).x, 0 ), JsonTools.readInt((cast json).y,0) ];
+
 		var ei = new EntityInstance(project, JsonTools.readInt(json.defUid));
-		ei.x = JsonTools.readInt( json.x, 0 );
-		ei.y = JsonTools.readInt( json.y, 0 );
+		ei.x = JsonTools.readInt( json.px[0], 0 );
+		ei.y = JsonTools.readInt( json.px[1], 0 );
 
 		for( fieldJson in JsonTools.readArray(json.fieldInstances) ) {
 			var fi = FieldInstance.fromJson(project, fieldJson);

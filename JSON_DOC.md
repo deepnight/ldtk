@@ -26,7 +26,7 @@
 
 &nbsp;
 
-# Json root
+# Json root   
 
 <a id="led-ProjectJson-bgColor" name="led-ProjectJson-bgColor"></a>
 
@@ -86,7 +86,7 @@
 
 &nbsp;
 
-# Level
+# Level   
 
 <a id="led-LevelJson-identifier" name="led-LevelJson-identifier"></a>
 
@@ -120,7 +120,7 @@
 
 &nbsp;
 
-## Layer instance
+## Layer instance   
 
 <a id="led-LayerInstanceJson-__cHei" name="led-LayerInstanceJson-__cHei"></a>
 
@@ -235,13 +235,7 @@
 
 &nbsp;
 
-### Auto-layer tile instance
-
-<a id="led-Tile-coord" name="led-Tile-coord"></a>
-
- - #### `coord` : **Array of Int**   
-
-    Pixel coordinates of the tile in the **layer** (using the `[x,y]` array format)
+### Auto-layer tile instance  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
 
 <a id="led-Tile-d" name="led-Tile-d"></a>
 
@@ -255,29 +249,29 @@
 
     "Flip flags", a 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip
 
+<a id="led-Tile-px" name="led-Tile-px"></a>
+
+ - #### `px` : **Array of Int**   
+
+    Pixel coordinates of the tile in the **layer** (`[x,y]` format)
+
 <a id="led-Tile-src" name="led-Tile-src"></a>
 
  - #### `src` : **Array of Int**   
 
-    Pixel coordinates of the tile in the **tileset** (using the `[x,y]` array format)
+    Pixel coordinates of the tile in the **tileset** (`[x,y]` format)
 
 <a id="led-EntityInstanceJson" name="led-EntityInstanceJson"></a>
 
 &nbsp;
 
-### Entity instance
+### Entity instance   
 
-<a id="led-EntityInstanceJson-__cx" name="led-EntityInstanceJson-__cx"></a>
+<a id="led-EntityInstanceJson-__grid" name="led-EntityInstanceJson-__grid"></a>
 
- - #### `__cx` : **Int**   
+ - #### `__grid` : **Array of Int**  [![Generic badge](https://img.shields.io/badge/Changed-0.4.0-green.svg)](JSON_CHANGELOG.md) 
 
-    Grid-based X coordinate
-
-<a id="led-EntityInstanceJson-__cy" name="led-EntityInstanceJson-__cy"></a>
-
- - #### `__cy` : **Int**   
-
-    Grid-based Y coordinate
+    Grid-based coordinates (`[x,y]` format)
 
 <a id="led-EntityInstanceJson-__identifier" name="led-EntityInstanceJson-__identifier"></a>
 
@@ -295,23 +289,17 @@
 
  - #### `fieldInstances` : **Array of [Field instance](#led-FieldInstanceJson)**   
 
-<a id="led-EntityInstanceJson-x" name="led-EntityInstanceJson-x"></a>
+<a id="led-EntityInstanceJson-px" name="led-EntityInstanceJson-px"></a>
 
- - #### `x` : **Int**   
+ - #### `px` : **Array of Int**  [![Generic badge](https://img.shields.io/badge/Changed-0.4.0-green.svg)](JSON_CHANGELOG.md) 
 
-    Pixel X coordinate
-
-<a id="led-EntityInstanceJson-y" name="led-EntityInstanceJson-y"></a>
-
- - #### `y` : **Int**   
-
-    Pixel Y coordinate
+    Pixel coordinates (`[x,y]` format)
 
 <a id="led-FieldInstanceJson" name="led-FieldInstanceJson"></a>
 
 &nbsp;
 
-### Field instance
+### Field instance   
 
 <a id="led-FieldInstanceJson-__identifier" name="led-FieldInstanceJson-__identifier"></a>
 
@@ -341,7 +329,7 @@
 
 &nbsp;
 
-# Definitions
+# Definitions   
 
 Many useful data found in `definitions` are duplicated in fields
 	prefixed with a double "_".
@@ -373,7 +361,7 @@ Many useful data found in `definitions` are duplicated in fields
 
 &nbsp;
 
-## Layer definition
+## Layer definition   
 
 <a id="led-LayerDefJson-__type" name="led-LayerDefJson-__type"></a>
 
@@ -477,7 +465,7 @@ Many useful data found in `definitions` are duplicated in fields
 
 &nbsp;
 
-## Entity definition
+## Entity definition   
 
 Not available yet
 
@@ -485,7 +473,7 @@ Not available yet
 
 &nbsp;
 
-## Tileset definition
+## Tileset definition   
 
 <a id="led-TilesetDefJson-identifier" name="led-TilesetDefJson-identifier"></a>
 
@@ -537,6 +525,6 @@ Not available yet
 
 &nbsp;
 
-## Enum definition
+## Enum definition   
 
 Not available yet
