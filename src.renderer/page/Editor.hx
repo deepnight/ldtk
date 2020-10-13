@@ -434,7 +434,7 @@ class Editor extends Page {
 					for(l in project.levels)
 					for(li in l.layerInstances)
 						li.autoTilesCache = null;
-					N.debug("cleared");
+					N.debug("cleared caches");
 				}
 
 			case K.U if( !hasInputFocus() && App.ME.isShiftDown() && App.ME.isCtrlDown() ):
