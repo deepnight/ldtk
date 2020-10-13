@@ -48,6 +48,7 @@ class Progress extends ui.Modal {
 				jBar.find(".bar").css({ width:pct+"%" });
 				jBar.find(".label").text( op.label );
 				log.push(op.label);
+				App.LOG.general(Std.int(pct)+"% => "+op.label);
 			}
 		}, true);
 	}
