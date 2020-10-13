@@ -72,6 +72,27 @@ class GenericLevelElementGroup {
 			topPx: M.imax(t, 0),
 			bottomPx: M.imin(b, editor.curLevel.pxHei),
 		});
+
+		// Discard rectangles included in other ones
+		var i = 0;
+		while( i<originalRects.length ) {
+			var a = originalRects[i];
+
+			var j = 0;
+			while( j<originalRects.length ) {
+				if( j!=i ) {
+					var b = originalRects[j];
+					if( b.leftPx>=a.leftPx && b.rightPx<=a.rightPx && b.topPx>=a.topPx && b.bottomPx<=a.bottomPx ) {
+						originalRects.splice(j,1);
+						j--;
+					}
+				}
+				j++;
+			}
+
+			i++;
+		}
+
 		invalidateBounds();
 		invalidateSelectRender();
 	}
