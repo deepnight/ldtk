@@ -109,7 +109,7 @@ class Const {
 		// JSON corresponding changelog
 		var raw = sys.io.File.getContent("JSON_CHANGELOG.md");
 		var jsonCL = new dn.Changelog(raw);
-		if( jsonCL.latest.version.equals(appCL.latest.version) ) {
+		if( jsonCL.latest.version.isEqual(appCL.latest.version) ) {
 			relNotes.push('## JSON format changes');
 			relNotes = relNotes.concat( jsonCL.latest.allNoteLines.map( function(str) {
 				return StringTools.replace(str, "## ", "### "); // Reduce title levels
