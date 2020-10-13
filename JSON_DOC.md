@@ -6,7 +6,7 @@
 
    - [Layer instance](#led-LayerInstanceJson)
 
-     - [Auto-layer tile instance](#led-Tile)
+     - [Tile instance](#led-Tile)
 
      - [Entity instance](#led-EntityInstanceJson)
 
@@ -156,7 +156,7 @@
 
 <a id="led-LayerInstanceJson-autoLayerTiles" name="led-LayerInstanceJson-autoLayerTiles"></a>
 
- - ### `autoLayerTiles` : **Array of [Auto-layer tile instance](#led-Tile)**  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
+ - ### `autoLayerTiles` : **Array of [Tile instance](#led-Tile)**  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
 
     ***Only relevant for Auto-layers***
 
@@ -171,23 +171,9 @@
 
 <a id="led-LayerInstanceJson-gridTiles" name="led-LayerInstanceJson-gridTiles"></a>
 
- - ### `gridTiles` : **Array of Object**   
+ - ### `gridTiles` : **Array of [Tile instance](#led-Tile)**   
 
     ***Only relevant for Tile layers***
-
-    This array contains objects with all the following fields:
-
-     - `__srcX` : **Int** [![Generic badge](https://img.shields.io/badge/Changed-0.3.0-gray.svg)](JSON_CHANGELOG.md)  -- X pixel coordinate of the tile in the **tileset**
-
-     - `__srcY` : **Int** [![Generic badge](https://img.shields.io/badge/Changed-0.3.0-gray.svg)](JSON_CHANGELOG.md)  -- Y pixel coordinate of the tile in the **tileset**
-
-     - `__x` : **Int** [![Generic badge](https://img.shields.io/badge/Added-0.3.0-gray.svg)](JSON_CHANGELOG.md)  -- X pixel coordinate of the tile in the **layer**
-
-     - `__y` : **Int** [![Generic badge](https://img.shields.io/badge/Added-0.3.0-gray.svg)](JSON_CHANGELOG.md)  -- Y pixel coordinate of the tile in the **layer**
-
-     - `coordId` : **Int**   -- Coordinate ID in the layer grid
-
-     - `tileId` : **Int**   -- Tile ID in the corresponding tileset
 
 <a id="led-LayerInstanceJson-intGrid" name="led-LayerInstanceJson-intGrid"></a>
 
@@ -237,13 +223,15 @@
 
 &nbsp;
 
-### Auto-layer tile instance  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
+### Tile instance  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
 
 <a id="led-Tile-d" name="led-Tile-d"></a>
 
  - #### `d` : **Array of Int**   
 
-    Internal data used by the editor: [ruleId, coordId, tileId]
+    Internal data used by the editor.
+
+		For auto-layer tiles: `[ruleId, coordId, tileId]`
 
 <a id="led-Tile-f" name="led-Tile-f"></a>
 

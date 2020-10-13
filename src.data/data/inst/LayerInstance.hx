@@ -92,16 +92,24 @@ class LayerInstance {
 
 			gridTiles: {
 				var td = _project.defs.getTilesetDef(def.tilesetDefUid);
-				var arr = [];
+				var arr : Array<led.Json.Tile> = [];
 				for(e in gridTiles.keyValueIterator())
 					if( e.value!=null )
 						arr.push({
-							coordId: e.key,
-							tileId: e.value,
-							__x: getCx(e.key) * def.gridSize,
-							__y: getCy(e.key) * def.gridSize,
-							__srcX: td==null ? -1 : td.getTileSourceX(e.value),
-							__srcY: td==null ? -1 : td.getTileSourceY(e.value),
+							px: [
+								pxOffsetX + getCx(e.key) * def.gridSize,
+								pxOffsetY + getCy(e.key) * def.gridSize,
+							],
+							src: [
+								td==null ? -1 : td.getTileSourceX(e.value),
+								td==null ? -1 : td.getTileSourceY(e.value),
+							],
+							f: 0, // flips
+							d: [
+								-1,
+								e.key,
+								e.value,
+							],
 						});
 				arr;
 			},
@@ -163,17 +171,13 @@ class LayerInstance {
 	public static function fromJson(p:Project, json:led.Json.LayerInstanceJson) {
 		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
 
-		for( intGridJson in JsonTools.readArray(json.intGrid) )
+		for( intGridJson in json.intGrid )
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );
 
-		for( gridTilesJson in JsonTools.readArray(json.gridTiles) )
-			if( gridTilesJson.tileId!=null )
-				li.gridTiles.set(
-					JsonTools.readInt(gridTilesJson.coordId),
-					JsonTools.readInt(gridTilesJson.tileId)
-				);
+		for( gridTilesJson in json.gridTiles )
+			li.gridTiles.set( gridTilesJson.d[1], gridTilesJson.d[2] );
 
-		for( entityJson in JsonTools.readArray(json.entityInstances) )
+		for( entityJson in json.entityInstances )
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
 
 		if( json.autoLayerTiles!=null ) {
