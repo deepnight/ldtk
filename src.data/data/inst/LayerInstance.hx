@@ -105,11 +105,7 @@ class LayerInstance {
 								td==null ? -1 : td.getTileSourceY(e.value),
 							],
 							f: 0, // flips
-							d: [
-								-1,
-								e.key,
-								e.value,
-							],
+							d: [ e.key, e.value ],
 						});
 				arr;
 			},
@@ -174,8 +170,11 @@ class LayerInstance {
 		for( intGridJson in json.intGrid )
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );
 
-		for( gridTilesJson in json.gridTiles )
-			li.gridTiles.set( gridTilesJson.d[1], gridTilesJson.d[2] );
+		for( gridTilesJson in json.gridTiles ) {
+			if( (cast gridTilesJson).coordId!=null ) // pre-0.4.0 format
+				gridTilesJson.d = [ (cast gridTilesJson).coordId, (cast gridTilesJson).tileId ];
+			li.gridTiles.set( gridTilesJson.d[0], gridTilesJson.d[1] );
+		}
 
 		for( entityJson in json.entityInstances )
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );

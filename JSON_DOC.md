@@ -232,6 +232,7 @@
     Internal data used by the editor.
 
 		For auto-layer tiles: `[ruleId, coordId, tileId]`
+		For tile-layer tiles: `[coordId, tileId]`
 
 <a id="led-Tile-f" name="led-Tile-f"></a>
 
