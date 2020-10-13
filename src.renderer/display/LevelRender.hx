@@ -7,8 +7,8 @@ class LevelRender extends dn.Process {
 
 	public var focusLevelX(default,set) : Float;
 	public var focusLevelY(default,set) : Float;
-	public var zoom(get,set) : Float;
-	public var unclampedZoom : Float;
+	public var adjustedZoom(get,set) : Float;
+	var rawZoom : Float;
 
 	/** <LayerDefUID, Bool> **/
 	var autoLayerRendering : Map<Int,Bool> = new Map();
@@ -52,7 +52,7 @@ class LevelRender extends dn.Process {
 
 		focusLevelX = 0;
 		focusLevelY = 0;
-		zoom = 3;
+		adjustedZoom = 3;
 	}
 
 	public function setFocus(x,y) {
@@ -64,17 +64,17 @@ class LevelRender extends dn.Process {
 		focusLevelX = editor.curLevel.pxWid*0.5;
 		focusLevelY = editor.curLevel.pxHei*0.5;
 
-		var old = zoom;
+		var old = rawZoom;
 		var pad = 100 * js.Browser.window.devicePixelRatio;
-		zoom = M.fmin(
+		adjustedZoom = M.fmin(
 			editor.canvasWid() / ( editor.curLevel.pxWid + pad ),
 			editor.canvasHei() / ( editor.curLevel.pxHei + pad )
 		);
 
 		// Fit closer if repeated
-		if( old==zoom ) {
+		if( old==rawZoom ) {
 			var pad = 16 * js.Browser.window.devicePixelRatio;
-			zoom = M.fmin(
+			adjustedZoom = M.fmin(
 				editor.canvasWid() / ( editor.curLevel.pxWid + pad ),
 				editor.canvasHei() / ( editor.curLevel.pxHei + pad )
 			);
@@ -84,7 +84,7 @@ class LevelRender extends dn.Process {
 	inline function set_focusLevelX(v) {
 		focusLevelX = editor.curLevelId==null
 			? v
-			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING/zoom );
+			: M.fclamp( v, -MAX_FOCUS_PADDING/adjustedZoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING/adjustedZoom );
 		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
 		return focusLevelX;
 	}
@@ -92,30 +92,34 @@ class LevelRender extends dn.Process {
 	inline function set_focusLevelY(v) {
 		focusLevelY = editor.curLevelId==null
 			? v
-			: M.fclamp( v, -MAX_FOCUS_PADDING/zoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING/zoom );
+			: M.fclamp( v, -MAX_FOCUS_PADDING/adjustedZoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING/adjustedZoom );
 		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
 		return focusLevelY;
 	}
 
-	inline function set_zoom(v) {
-		unclampedZoom = M.fclamp(v, 0.2, 16);
+	inline function set_adjustedZoom(v) {
+		rawZoom = M.fclamp(v, 0.2, 16);
 		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
-		return unclampedZoom;
+		return rawZoom;
 	}
 
-	inline function get_zoom() {
-		if( unclampedZoom<=js.Browser.window.devicePixelRatio )
-			return unclampedZoom;
+	inline function get_adjustedZoom() {
+		if( rawZoom<=js.Browser.window.devicePixelRatio )
+			return rawZoom;
 		else
-			return M.round(unclampedZoom*2)/2; // reduces tile flickering (#71)
+			return M.round(rawZoom*2)/2; // reduces tile flickering (#71)
+	}
+
+	public function deltaZoom(delta:Float) {
+		rawZoom += delta * rawZoom;
 	}
 
 	public inline function levelToUiX(x:Float) {
-		return M.round( x*zoom + root.x );
+		return M.round( x*adjustedZoom + root.x );
 	}
 
 	public inline function levelToUiY(y:Float) {
-		return M.round( y*zoom + root.y );
+		return M.round( y*adjustedZoom + root.y );
 	}
 
 	override function onDispose() {
@@ -126,9 +130,9 @@ class LevelRender extends dn.Process {
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case ViewportChanged:
-				root.setScale(zoom);
-				root.x = M.round( editor.canvasWid()*0.5 - focusLevelX * zoom );
-				root.y = M.round( editor.canvasHei()*0.5 - focusLevelY * zoom );
+				root.setScale(adjustedZoom);
+				root.x = M.round( editor.canvasWid()*0.5 - focusLevelX * adjustedZoom );
+				root.y = M.round( editor.canvasHei()*0.5 - focusLevelY * adjustedZoom );
 
 			case ProjectSaved, BeforeProjectSaving:
 

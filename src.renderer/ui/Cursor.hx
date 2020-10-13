@@ -227,7 +227,7 @@ class Cursor extends dn.Process {
 
 		graphics.setPosition(wrapper.x, wrapper.y);
 
-		labelWrapper.setScale(1/editor.levelRender.zoom * js.Browser.window.devicePixelRatio*2);
+		labelWrapper.setScale(1/editor.levelRender.adjustedZoom * js.Browser.window.devicePixelRatio*2);
 	}
 
 	public function enablePermanentHighlights() {
@@ -242,7 +242,7 @@ class Cursor extends dn.Process {
 
 		root.x = editor.levelRender.root.x;
 		root.y = editor.levelRender.root.y;
-		root.setScale(editor.levelRender.zoom);
+		root.setScale(editor.levelRender.adjustedZoom);
 
 		updatePosition();
 	}

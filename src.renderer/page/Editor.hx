@@ -723,7 +723,7 @@ class Editor extends Page {
 		var oldLevelX = m.levelX;
 		var oldLevelY = m.levelY;
 
-		levelRender.unclampedZoom += -e.wheelDelta*0.1 * levelRender.unclampedZoom;
+		levelRender.deltaZoom( -e.wheelDelta*0.1 );
 		ge.emit(ViewportChanged);
 
 		levelRender.focusLevelX += ( oldLevelX - m.levelX );
