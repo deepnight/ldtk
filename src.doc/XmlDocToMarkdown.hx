@@ -84,10 +84,7 @@ class XmlDocToMarkdown {
 			md.push( makeAnchor(type.att.path) );
 			md.push("&nbsp;");
 			var display = typeDisplayNames.get(type.att.path);
-			// if( display.section!=null )
-			// 	md.push('${makeMdTitlePrefix(depth)} ${display.section} - ${display.name}');
-			// else
-				md.push('${makeMdTitlePrefix(depth)} ${display.name}');
+			md.push('${makeMdTitlePrefix(depth)} ${display.name} ${versionBadge(type)}');
 
 			toc.push({
 				depth: depth,
