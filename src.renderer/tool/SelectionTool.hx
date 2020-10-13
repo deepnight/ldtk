@@ -66,7 +66,8 @@ class SelectionTool extends Tool<Int> {
 			var li = group.getSmartRelativeLayerInstance();
 
 			// Change layer
-			if( li!=editor.curLayerInstance )
+			var changedLayer = li!=editor.curLayerInstance;
+			if( changedLayer )
 				editor.selectLayerInstance(li);
 
 			// Selection effect
@@ -95,6 +96,8 @@ class SelectionTool extends Tool<Int> {
 						}
 
 				case Entity(li, ei):
+					if( changedLayer )
+						select([ge]);
 					var t = editor.curTool.as(tool.lt.EntityTool);
 					if( t!=null )
 						t.selectValue(ei.defUid);
