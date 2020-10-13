@@ -47,7 +47,8 @@ class LevelHistory {
 
 			case LayerRuleGroupAdded:
 			case LayerRuleGroupRemoved(rg):
-			case LayerRuleGroupChanged:
+			case LayerRuleGroupChanged(rg):
+			case LayerRuleGroupChangedActiveState(rg):
 			case LayerRuleGroupSorted:
 			case LayerRuleGroupCollapseChanged:
 

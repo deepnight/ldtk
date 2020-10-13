@@ -99,7 +99,7 @@ class App extends dn.Process {
 				}
 
 				if( Editor.ME!=null && Editor.ME.needSaving )
-					new ui.modal.dialog.UnsavedChanges(Editor.ME.onSave.bind(false), applyUpdate);
+					new ui.modal.dialog.UnsavedChanges(applyUpdate);
 				else
 					applyUpdate();
 			});
@@ -300,7 +300,7 @@ class App extends dn.Process {
 	public function exit(force=false) {
 		if( !force && Editor.ME!=null && Editor.ME.needSaving ) {
 			ui.Modal.closeAll();
-			new ui.modal.dialog.UnsavedChanges(Editor.ME.onSave.bind(false), exit.bind(true));
+			new ui.modal.dialog.UnsavedChanges( exit.bind(true) );
 		}
 		else {
 			LOG.flushToFile();

@@ -249,25 +249,28 @@ class Editor extends Page {
 			watcher.watchTileset(td);
 
 		selectionTool.clear();
-		checkAutoLayersCache();
+		checkAutoLayersCache( (anychange)->{
+			if( anychange )
+				needSaving = true;
+		});
 	}
 
 
-	function checkAutoLayersCache(?onDone:Void->Void) {
+	function checkAutoLayersCache(?onDone:(anyChange:Bool)->Void) {
 		var ops = [];
 
 		for(l in project.levels)
 		for(li in l.layerInstances)
 			if( li.def.isAutoLayer() && li.autoTilesCache==null )
 				ops.push({
-					label:l.identifier+"."+li.def.identifier,
-					cb:li.applyAllAutoLayerRules,
+					label: l.identifier+"."+li.def.identifier,
+					cb: li.applyAllAutoLayerRules,
 				});
 
 		if( ops.length>0 )
-			new ui.modal.Progress("Updating auto-layers...", ops, onDone);
+			new ui.modal.Progress("Updating auto-layers...", ops, onDone.bind(true));
 		else if( onDone!=null )
-			onDone();
+			onDone(false);
 	}
 
 
@@ -424,10 +427,14 @@ class Editor extends Page {
 					// var json = curLevel.toJson();
 					// App.ME.debug("level.toJson() => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
 
-					var t = haxe.Timer.stamp();
-					for( li in curLevel.layerInstances )
-						li.applyAllAutoLayerRules();
-					App.ME.debug("all curLevel rules => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
+					// var t = haxe.Timer.stamp();
+					// for( li in curLevel.layerInstances )
+						// li.applyAllAutoLayerRules();
+					// App.ME.debug("all curLevel rules => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
+					for(l in project.levels)
+					for(li in l.layerInstances)
+						li.autoTilesCache = null;
+					N.debug("cleared");
 				}
 
 			case K.U if( !hasInputFocus() && App.ME.isShiftDown() && App.ME.isCtrlDown() ):
@@ -840,13 +847,13 @@ class Editor extends Page {
 	function onClose(?bt:js.jquery.JQuery) {
 		ui.Modal.closeAll();
 		if( needSaving )
-			new ui.modal.dialog.UnsavedChanges( bt, onSave.bind(false), App.ME.loadPage.bind( ()->new Home() ) );
+			new ui.modal.dialog.UnsavedChanges( bt, App.ME.loadPage.bind( ()->new Home() ) );
 		else
 			App.ME.loadPage( ()->new Home() );
 	}
 
-	public function onSave(?bypassMissing=false) {
-		var neededSaving = needSaving;
+	public function onSave(?bypassMissing=false, ?onComplete:Void->Void) {
+		// var neededSaving = needSaving;
 		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
@@ -857,7 +864,7 @@ class Editor extends Page {
 		}
 
 		ge.emit(BeforeProjectSaving);
-		checkAutoLayersCache( ()->{
+		checkAutoLayersCache( (anyChange)->{
 			var data = JsTools.prepareProjectFile(project);
 			JsTools.writeFileBytes(projectFilePath, data.bytes);
 
@@ -866,14 +873,16 @@ class Editor extends Page {
 				e.run( project, projectFilePath );
 			}
 
-
-			needSaving = false;
 			App.ME.registerRecentProject(projectFilePath);
 
 			N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
 			updateTitle();
 
+			this.needSaving = false;
 			ge.emit(ProjectSaved);
+
+			if( onComplete!=null )
+				onComplete();
 		});
 	}
 
@@ -947,7 +956,8 @@ class Editor extends Page {
 			case LayerRuleSorted:
 			case LayerRuleSeedChanged:
 
-			case LayerRuleGroupChanged:
+			case LayerRuleGroupChanged(rg):
+			case LayerRuleGroupChangedActiveState(rg):
 			case LayerRuleGroupAdded:
 			case LayerRuleGroupRemoved(rg):
 			case LayerRuleGroupSorted:

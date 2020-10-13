@@ -54,7 +54,12 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			case LayerRuleGroupCollapseChanged:
 				updatePanel();
 
-			case LayerRuleGroupAdded, LayerRuleGroupChanged:
+			case LayerRuleGroupChangedActiveState(rg):
+				for(r in rg.rules)
+					invalidatedRules.set(r.uid, r.uid);
+				updatePanel();
+
+			case LayerRuleGroupAdded, LayerRuleGroupChanged(_):
 				updatePanel();
 
 			case LayerRuleSorted:
@@ -78,14 +83,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				var r = li.def.getRule(ruleUid);
 				if( r!=null ) {
 					ops.push({
-						label: "Updating "+l.identifier,
+						label: 'Updating rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
 						cb: li.applyAutoLayerRule.bind(r),
 					});
 				}
 				else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
 					// WARNING: re-apply all rules here if breakOnMatch exists
 					ops.push({
-						label: "Removing rule from "+l.identifier,
+						label: 'Removing rule #$ruleUid from ${l.identifier}',
 						cb: li.autoTilesCache.remove.bind(ruleUid),
 					});
 				}
@@ -222,7 +227,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					.on("blur", function(ev:js.jquery.Event) {
 						if( jInput.val()!=old ) {
 							rg.name = jInput.val();
-							editor.ge.emit(LayerRuleGroupChanged);
+							editor.ge.emit( LayerRuleGroupChanged(rg) );
 						}
 						else {
 							jGroupHeader.find("div.name").show();
@@ -231,10 +236,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					});
 			});
 
-			// Edit group
+			// Enable/disable group
 			jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {
 				rg.active = !rg.active;
-				editor.ge.emit(LayerRuleGroupChanged);
+				editor.ge.emit( LayerRuleGroupChangedActiveState(rg) );
 			});
 
 			// Add rule

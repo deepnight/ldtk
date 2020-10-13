@@ -202,7 +202,10 @@ class LevelRender extends dn.Process {
 				editor.curLayerInstance.applyAllAutoLayerRules();
 				invalidateLayer( editor.curLayerInstance );
 
-			case LayerRuleGroupChanged:
+			case LayerRuleGroupChanged(rg):
+				invalidateLayer( editor.curLayerInstance );
+
+			case LayerRuleGroupChangedActiveState(rg):
 				invalidateLayer( editor.curLayerInstance );
 
 			case LayerRuleGroupSorted:
