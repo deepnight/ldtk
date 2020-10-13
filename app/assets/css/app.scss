@@ -2078,25 +2078,16 @@ canvas#webgl {
 				.name {
 					font-size: 8pt;
 				}
-				// .actions a {
-				// 	font-size: 7pt;
-				// 	padding: 2px;
-				// }
-				// .index {
-				// 	font-size: 9pt;
-				// 	min-width: 0.9em;
-				// }
 			}
 
 			ul.niceList li {
-				padding-top: 4px;
-				padding-bottom: 4px;
+				padding: 4px 2px;
 				gap: 4px;
 
-				.icon {
-					width: 0.75em;
-					height: 0.75em;
-				}
+				// .icon {
+				// 	width: 0.75em;
+				// 	height: 0.75em;
+				// }
 			}
 
 			h2#levelName {
