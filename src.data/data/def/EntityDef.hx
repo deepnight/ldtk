@@ -47,7 +47,7 @@ class EntityDef {
 			+ "]";
 	}
 
-	public static function fromJson(p:Project, json:Dynamic) {
+	public static function fromJson(p:Project, json:led.Json.EntityDefJson) {
 		var o = new EntityDef( JsonTools.readInt(json.uid) );
 		o.identifier = JsonTools.readString( json.identifier );
 		o.width = JsonTools.readInt( json.width, 16 );
@@ -64,7 +64,7 @@ class EntityDef {
 		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
 
 		o.limitBehavior = JsonTools.readEnum( EntityLimitBehavior, json.limitBehavior, true, DiscardOldOnes );
-		if( JsonTools.readBool(json.discardExcess, true)==false )
+		if( JsonTools.readBool( (cast json).discardExcess, true)==false )
 			o.limitBehavior = PreventAdding;
 
 		for(defJson in JsonTools.readArray(json.fieldDefs) )
@@ -73,7 +73,7 @@ class EntityDef {
 		return o;
 	}
 
-	public function toJson() {
+	public function toJson() : led.Json.EntityDefJson {
 		return {
 			identifier: identifier,
 			uid: uid,
