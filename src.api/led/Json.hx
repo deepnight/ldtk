@@ -140,17 +140,11 @@ typedef LayerInstanceJson = {
 @section("1.1.1")
 @display("Auto-layer tile instance")
 typedef Tile = {
-	/** X pixel coordinate of the tile in the **layer** **/
-	var x: Int;
+	/** Pixel coordinates of the tile in the **layer** (using the `[x,y]` array format) **/
+	var coord: Array<Int>;
 
-	/** Y pixel coordinate of the tile in the **layer** **/
-	var y: Int;
-
-	/** X pixel coordinate of the tile in the **tileset** **/
-	var srcX: Int;
-
-	/** Y pixel coordinate of the tile in the **tileset** **/
-	var srcY: Int;
+	/** Pixel coordinates of the tile in the **tileset** (using the `[x,y]` array format) **/
+	var src: Array<Int>;
 
 	/** "Flip flags", a 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip **/
 	var f: Int;

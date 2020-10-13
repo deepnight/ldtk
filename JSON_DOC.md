@@ -237,6 +237,12 @@
 
 ### Auto-layer tile instance
 
+<a id="led-Tile-coord" name="led-Tile-coord"></a>
+
+ - #### `coord` : **Array of Int**   
+
+    Pixel coordinates of the tile in the **layer** (using the `[x,y]` array format)
+
 <a id="led-Tile-d" name="led-Tile-d"></a>
 
  - #### `d` : **Array of Int**   
@@ -249,29 +255,11 @@
 
     "Flip flags", a 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip
 
-<a id="led-Tile-srcX" name="led-Tile-srcX"></a>
+<a id="led-Tile-src" name="led-Tile-src"></a>
 
- - #### `srcX` : **Int**   
+ - #### `src` : **Array of Int**   
 
-    X pixel coordinate of the tile in the **tileset**
-
-<a id="led-Tile-srcY" name="led-Tile-srcY"></a>
-
- - #### `srcY` : **Int**   
-
-    Y pixel coordinate of the tile in the **tileset**
-
-<a id="led-Tile-x" name="led-Tile-x"></a>
-
- - #### `x` : **Int**   
-
-    X pixel coordinate of the tile in the **layer**
-
-<a id="led-Tile-y" name="led-Tile-y"></a>
-
- - #### `y` : **Int**   
-
-    Y pixel coordinate of the tile in the **layer**
+    Pixel coordinates of the tile in the **tileset** (using the `[x,y]` array format)
 
 <a id="led-EntityInstanceJson" name="led-EntityInstanceJson"></a>
 
