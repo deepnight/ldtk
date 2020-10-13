@@ -1,6 +1,8 @@
 package display;
 
 class LevelRender extends dn.Process {
+	static var MIN_ZOOM = 0.2;
+	static var MAX_ZOOM = 32;
 	static var MAX_FOCUS_PADDING = 200;
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
@@ -98,7 +100,7 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function set_adjustedZoom(v) {
-		rawZoom = M.fclamp(v, 0.2, 16);
+		rawZoom = M.fclamp(v, MIN_ZOOM, MAX_ZOOM);
 		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
 		return rawZoom;
 	}
@@ -112,6 +114,7 @@ class LevelRender extends dn.Process {
 
 	public function deltaZoom(delta:Float) {
 		rawZoom += delta * rawZoom;
+		rawZoom = M.fclamp(rawZoom, MIN_ZOOM, MAX_ZOOM);
 	}
 
 	public inline function levelToUiX(x:Float) {
