@@ -18,6 +18,15 @@ The JSON format was optimized to reduce its size (should be approximately 40-50%
 - Added `entityInstance.px`: an array of 2 values representing [x,y] pixel coordinates of the entity.
 - Added `entityInstance.__grid`: an array of 2 values representing [cx,cy] grid-based coordinates of the entity.
 
+## Tile layers
+
+ - The format of *tile-layer* tiles was unified with *auto-layer* tiles.
+ - `layerInstance.gridTiles` is now an array of:
+   - `px: [x,y]`: an array of 2 values representing the **level** [x,y] pixel coordinates of the tile.
+   - `src: [x,y]`: an array of 2 values representing the **tileset** [x,y] pixel coordinates of the tile.
+   - `f`: a 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip
+   - `d`: this field contains internal data used by the Editor.
+
 # 0.3.1-beta
 
  - Added `__cx`/`__cy` to `layerInstance.autoTiles.results`
