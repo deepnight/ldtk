@@ -6,6 +6,7 @@
    - `srcX/srcY`: pixel coordinates of the tile in the **source tileset**
    - `f`: a 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip
    - `d`: this field contains internal data used by the Editor.
+ - Optimized the JSON format to reduce its size (should be approximately 40-50% smaller).
 
 # 0.3.1-beta
 

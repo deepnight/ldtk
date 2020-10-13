@@ -11,6 +11,7 @@
  - Added an option to allow selection of empty spaces
  - Use `DELETE` key to delete selected elements
  - Use `CTRL`+`A` shortcut to select everything (limited to current layer in *Single Layer Mode*).
+ - Optimized the JSON format to reduce its size (should be approximately 40-50% smaller).
  - Added the up-to-date *JSON format doc* to the app Home page.
  - Added fullscreen button to view Home *changelogs*
  - Pressing `ENTER` on the Home screen now opens last edited map.
