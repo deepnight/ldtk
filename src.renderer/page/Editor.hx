@@ -674,7 +674,7 @@ class Editor extends Page {
 		var m = getMouse();
 
 		// Tool updates
-		if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) )
+		if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
 			selectionTool.onMouseMove(m);
 		else if( isSpecialToolActive() )
 			specialTool.onMouseMove(m);
