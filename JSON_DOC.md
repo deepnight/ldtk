@@ -1,6 +1,6 @@
 # JSON structure (version 0.4.0-beta)
 
- - [Json root hello](#led-ProjectJson)
+ - [Json root](#led-ProjectJson)
 
  - [Level](#led-LevelJson)
 
@@ -18,6 +18,8 @@
 
    - [Entity definition](#led-EntityDefJson)
 
+     - [Field definition](#led-FieldDefJson)
+
    - [Tileset definition](#led-TilesetDefJson)
 
    - [Enum definition](#led-EnumDefJson)
@@ -26,7 +28,7 @@
 
 &nbsp;
 
-# Json root hello   
+# Json root   
 
 <a id="led-ProjectJson-bgColor" name="led-ProjectJson-bgColor"></a>
 
@@ -241,7 +243,7 @@
 
  - #### `d` : **Array of Int**   
 
-    Internal data used by the editor
+    Internal data used by the editor: [ruleId, coordId, tileId]
 
 <a id="led-Tile-f" name="led-Tile-f"></a>
 
@@ -466,6 +468,82 @@ Many useful data found in `definitions` are duplicated in fields
 &nbsp;
 
 ## Entity definition   
+
+Not available yet
+
+<a id="led-EntityDefJson-color" name="led-EntityDefJson-color"></a>
+
+ - ### `color` : **String**   
+
+    *Hexadecimal string using "#rrggbb" format*
+
+    Base entity color
+
+<a id="led-EntityDefJson-fieldDefs" name="led-EntityDefJson-fieldDefs"></a>
+
+ - ### `fieldDefs` : **Array of [Field definition](#led-FieldDefJson)**   
+
+    Array of field definitions
+
+<a id="led-EntityDefJson-height" name="led-EntityDefJson-height"></a>
+
+ - ### `height` : **Int**   
+
+    Pixel height
+
+<a id="led-EntityDefJson-identifier" name="led-EntityDefJson-identifier"></a>
+
+ - ### `identifier` : **String**   
+
+    Unique String identifier
+
+<a id="led-EntityDefJson-maxPerLevel" name="led-EntityDefJson-maxPerLevel"></a>
+
+ - ### `maxPerLevel` : **Int**   
+
+    Max instances per level
+
+<a id="led-EntityDefJson-pivotX" name="led-EntityDefJson-pivotX"></a>
+
+ - ### `pivotX` : **Float**   
+
+    Pivot X coordinate (from 0 to 1.0)
+
+<a id="led-EntityDefJson-pivotY" name="led-EntityDefJson-pivotY"></a>
+
+ - ### `pivotY` : **Float**   
+
+    Pivot Y coordinate (from 0 to 1.0)
+
+<a id="led-EntityDefJson-tileId" name="led-EntityDefJson-tileId"></a>
+
+ - ### `tileId` : **Int**   
+
+    Tile ID used for optional tile display
+
+<a id="led-EntityDefJson-tilesetId" name="led-EntityDefJson-tilesetId"></a>
+
+ - ### `tilesetId` : **Int**   
+
+    Tileset ID used for optional tile display
+
+<a id="led-EntityDefJson-uid" name="led-EntityDefJson-uid"></a>
+
+ - ### `uid` : **Int**   
+
+    Unique Int identifier
+
+<a id="led-EntityDefJson-width" name="led-EntityDefJson-width"></a>
+
+ - ### `width` : **Int**   
+
+    Pixel width
+
+<a id="led-FieldDefJson" name="led-FieldDefJson"></a>
+
+&nbsp;
+
+### Field definition   
 
 Not available yet
 
