@@ -99,7 +99,7 @@ class App extends dn.Process {
 				}
 
 				if( Editor.ME!=null && Editor.ME.needSaving )
-					new ui.modal.dialog.UnsavedChanges(Editor.ME.onSave.bind(false), applyUpdate);
+					new ui.modal.dialog.UnsavedChanges(applyUpdate);
 				else
 					applyUpdate();
 			});
@@ -244,7 +244,7 @@ class App extends dn.Process {
 		curPageProcess.onAppResize();
 	}
 
-	// public function openEditor(project:led.Project, path:String) {
+	// public function openEditor(project:data.Project, path:String) {
 	// 	LOG.general("Opening Editor");
 	// 	clearCurPage();
 	// 	curPageProcess = new Editor(project, path);
@@ -300,7 +300,7 @@ class App extends dn.Process {
 	public function exit(force=false) {
 		if( !force && Editor.ME!=null && Editor.ME.needSaving ) {
 			ui.Modal.closeAll();
-			new ui.modal.dialog.UnsavedChanges(Editor.ME.onSave.bind(false), exit.bind(true));
+			new ui.modal.dialog.UnsavedChanges( exit.bind(true) );
 		}
 		else {
 			LOG.flushToFile();

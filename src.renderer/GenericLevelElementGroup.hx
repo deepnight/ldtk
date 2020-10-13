@@ -278,8 +278,8 @@ class GenericLevelElementGroup {
 			: now.levelY - origin.levelY;
 	}
 
-	public function getSmartRelativeLayerInstance() : Null<led.inst.LayerInstance> {
-		var l : led.inst.LayerInstance = null;
+	public function getSmartRelativeLayerInstance() : Null<data.inst.LayerInstance> {
+		var l : data.inst.LayerInstance = null;
 		for(ge in elements)
 			switch ge {
 				case null:
@@ -309,7 +309,7 @@ class GenericLevelElementGroup {
 		return false;
 	}
 
-	function isEntitySelected(e:led.inst.EntityInstance) {
+	function isEntitySelected(e:data.inst.EntityInstance) {
 		for( ge in elements)
 			switch ge {
 				case Entity(li, ei):
@@ -322,11 +322,11 @@ class GenericLevelElementGroup {
 		return false;
 	}
 
-	function isFieldValueSelected(f:led.inst.FieldInstance, idx:Int) {
+	function isFieldValueSelected(f:data.inst.FieldInstance, idx:Int) {
 		return getFieldValueSelectionIdx(f,idx) >= 0;
 	}
 
-	function getFieldValueSelectionIdx(f:led.inst.FieldInstance, idx:Int) : Int {
+	function getFieldValueSelectionIdx(f:data.inst.FieldInstance, idx:Int) : Int {
 		for( i in 0...elements.length )
 			switch elements[i] {
 				case PointField(li, ei, fi, arrayIdx):
@@ -552,7 +552,7 @@ class GenericLevelElementGroup {
 	}
 
 
-	public function moveSelecteds(origin:MouseCoords, to:MouseCoords, isCopy:Bool) : Array<led.inst.LayerInstance> {
+	public function moveSelecteds(origin:MouseCoords, to:MouseCoords, isCopy:Bool) : Array<data.inst.LayerInstance> {
 		if( elements.length==0 )
 			return [];
 
@@ -565,7 +565,7 @@ class GenericLevelElementGroup {
 
 		var postRemovals : Array< Void->Void > = [];
 		var postInserts : Array< Void->Void > = [];
-		var changedLayers : Map<led.inst.LayerInstance, led.inst.LayerInstance> = [];
+		var changedLayers : Map<data.inst.LayerInstance, data.inst.LayerInstance> = [];
 
 		// Clear arrival to emulate "empty cell selection" mode
 		if( originalRects.length>0 ) {
@@ -735,7 +735,7 @@ class GenericLevelElementGroup {
 	}
 
 
-	function decrementAllFieldArrayIdxAbove(f:led.inst.FieldInstance, above:Int) {
+	function decrementAllFieldArrayIdxAbove(f:data.inst.FieldInstance, above:Int) {
 		for(i in 0...elements.length)
 			switch elements[i] {
 				case PointField(li, ei, fi, arrayIdx):

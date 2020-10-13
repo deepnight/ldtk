@@ -11,10 +11,10 @@ class EditEntityDefs extends ui.modal.Panel {
 	var jFieldForm(get,never) : js.jquery.JQuery; inline function get_jFieldForm() return jContent.find(".fieldForm>ul.form");
 	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jContent.find(".previewWrapper");
 
-	var curEntity : Null<led.def.EntityDef>;
-	var curField : Null<led.def.FieldDef>;
+	var curEntity : Null<data.def.EntityDef>;
+	var curField : Null<data.def.FieldDef>;
 
-	public function new(?editDef:led.def.EntityDef) {
+	public function new(?editDef:data.def.EntityDef) {
 		super();
 
 		loadTemplate( "editEntityDefs", "defEditor entityDefs" );
@@ -55,7 +55,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 
 		function createField(anchor:js.jquery.JQuery, isArray:Bool) {
-			function _create(type:led.LedTypes.FieldType) {
+			function _create(type:data.LedTypes.FieldType) {
 				switch type {
 					case F_Enum(null):
 						// Enum picker
@@ -101,7 +101,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 			// Type picker
 			var w = new ui.modal.Dialog(anchor,"fieldTypes");
-			var types : Array<led.LedTypes.FieldType> = [
+			var types : Array<data.LedTypes.FieldType> = [
 				F_Int, F_Float, F_Bool, F_String, F_Enum(null), F_Color, F_Point
 			];
 			for(type in types) {
@@ -189,7 +189,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 	}
 
-	function selectEntity(ed:Null<led.def.EntityDef>) {
+	function selectEntity(ed:Null<data.def.EntityDef>) {
 		if( ed==null )
 			ed = editor.project.defs.entities[0];
 
@@ -203,7 +203,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		updateLists();
 	}
 
-	function selectField(fd:led.def.FieldDef) {
+	function selectField(fd:data.def.FieldDef) {
 		curField = fd;
 		LAST_FIELD_ID = curField==null ? -1 : curField.uid;
 		updateFieldForm();
@@ -233,7 +233,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Name
 		var i = Input.linkToHtmlInput(curEntity.identifier, jEntityForm.find("input[name='name']") );
-		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.defs.isEntityIdentifierUnique(id);
+		i.validityCheck = function(id) return data.Project.isValidIdentifier(id) && project.defs.isEntityIdentifierUnique(id);
 		i.validityError = N.invalidIdentifier;
 		i.linkEvent(EntityDefChanged);
 
@@ -264,8 +264,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Entity render mode
 		var jSelect = jRenderModeBlock.find(".renderMode");
 		jSelect.empty();
-		for(k in led.LedTypes.EntityRenderMode.getConstructors()) {
-			var e = led.LedTypes.EntityRenderMode.createByName(k);
+		for(k in data.LedTypes.EntityRenderMode.getConstructors()) {
+			var e = data.LedTypes.EntityRenderMode.createByName(k);
 			if( e==Tile )
 				continue;
 
@@ -291,7 +291,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Pick render mode
 		jSelect.change( function(ev) {
 			var v : String = jSelect.val();
-			var mode = led.LedTypes.EntityRenderMode.createByName( v.indexOf(".")<0 ? v : v.substr(0,v.indexOf(".")) );
+			var mode = data.LedTypes.EntityRenderMode.createByName( v.indexOf(".")<0 ? v : v.substr(0,v.indexOf(".")) );
 			curEntity.renderMode = mode;
 			curEntity.tileId = null;
 			if( mode==Tile ) {
@@ -310,7 +310,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Render mode
 		// var i = new form.input.EnumSelect(
 		// 	jEntityForm.find("select.renderMode"),
-		// 	led.LedTypes.EntityRenderMode,
+		// 	data.LedTypes.EntityRenderMode,
 		// 	function() return curEntity.renderMode,
 		// 	function(v) {
 		// 		curEntity.tileId = null;
@@ -346,7 +346,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Tile render mode
 		var i = new form.input.EnumSelect(
 			jEntityForm.find("select.tileRenderMode"),
-			led.LedTypes.EntityTileRenderMode,
+			data.LedTypes.EntityTileRenderMode,
 			()->curEntity.tileRenderMode,
 			(v)->curEntity.tileRenderMode = v
 		);
@@ -370,7 +370,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Behavior when max is reached
 		var i = new form.input.EnumSelect(
 			jEntityForm.find("select[name=limitBehavior]"),
-			led.LedTypes.EntityLimitBehavior,
+			data.LedTypes.EntityLimitBehavior,
 			function() return curEntity.limitBehavior,
 			function(v) {
 				curEntity.limitBehavior = v;
@@ -409,7 +409,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		JsTools.parseComponents(jFieldForm);
 
 		// Set form classes
-		for(k in Type.getEnumConstructs(led.LedTypes.FieldType))
+		for(k in Type.getEnumConstructs(data.LedTypes.FieldType))
 			jFieldForm.removeClass("type-"+k);
 		jFieldForm.addClass("type-"+curField.type.getName());
 
@@ -424,7 +424,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		var i = new form.input.EnumSelect(
 			jFieldForm.find("select[name=editorDisplayMode]"),
-			led.LedTypes.FieldDisplayMode,
+			data.LedTypes.FieldDisplayMode,
 			function() return curField.editorDisplayMode,
 			function(v) return curField.editorDisplayMode = v,
 
@@ -461,7 +461,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		var i = new form.input.EnumSelect(
 			jFieldForm.find("select[name=editorDisplayPos]"),
-			led.LedTypes.FieldDisplayPosition,
+			data.LedTypes.FieldDisplayPosition,
 			function() return curField.editorDisplayPos,
 			function(v) return curField.editorDisplayPos = v
 		);
@@ -482,7 +482,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( curField.identifier, jFieldForm.find("input[name=name]") );
 		i.linkEvent( EntityFieldDefChanged(curEntity) );
 		i.validityCheck = function(id) {
-			return led.Project.isValidIdentifier(id) && curEntity.isFieldIdentifierUnique(id);
+			return data.Project.isValidIdentifier(id) && curEntity.isFieldIdentifierUnique(id);
 		}
 		i.validityError = N.invalidIdentifier;
 

@@ -9,19 +9,19 @@ class Editor extends Page {
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 	var jMouseCoords : js.jquery.JQuery;
 
-	public var curLevel(get,never) : led.Level;
+	public var curLevel(get,never) : data.Level;
 		inline function get_curLevel() return project.getLevel(curLevelId);
 
-	public var curLayerDef(get,never) : Null<led.def.LayerDef>;
+	public var curLayerDef(get,never) : Null<data.def.LayerDef>;
 		inline function get_curLayerDef() return project.defs.getLayerDef(curLayerDefUid);
 
-	public var curLayerInstance(get,never) : Null<led.inst.LayerInstance>;
+	public var curLayerInstance(get,never) : Null<data.inst.LayerInstance>;
 		function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
 
 
 	public var ge : GlobalEventDispatcher;
 	public var watcher : misc.FileWatcher;
-	public var project : led.Project;
+	public var project : data.Project;
 	public var projectFilePath : String;
 	public var curLevelId : Int;
 	var curLayerDefUid : Int;
@@ -48,7 +48,7 @@ class Editor extends Page {
 		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
 
-	public function new(p:led.Project, path:String) {
+	public function new(p:data.Project, path:String) {
 		super();
 
 		loadPageTemplate("editor");
@@ -193,7 +193,7 @@ class Editor extends Page {
 			: dn.FilePath.fromFile( getProjectDir() +"/"+ relPath ).full;
 	}
 
-	public function selectProject(p:led.Project) {
+	public function selectProject(p:data.Project) {
 		watcher.clearAllWatches();
 		ui.modal.Dialog.closeAll();
 
@@ -249,10 +249,32 @@ class Editor extends Page {
 			watcher.watchTileset(td);
 
 		selectionTool.clear();
+		checkAutoLayersCache( (anychange)->{
+			if( anychange )
+				needSaving = true;
+		});
 	}
 
 
-	public function reloadTileset(td:led.def.TilesetDef, silentOk=false) {
+	function checkAutoLayersCache(?onDone:(anyChange:Bool)->Void) {
+		var ops = [];
+
+		for(l in project.levels)
+		for(li in l.layerInstances)
+			if( li.def.isAutoLayer() && li.autoTilesCache==null )
+				ops.push({
+					label: l.identifier+"."+li.def.identifier,
+					cb: li.applyAllAutoLayerRules,
+				});
+
+		if( ops.length>0 )
+			new ui.modal.Progress("Updating auto-layers...", ops, onDone.bind(true));
+		else if( onDone!=null )
+			onDone(false);
+	}
+
+
+	public function reloadTileset(td:data.def.TilesetDef, silentOk=false) {
 		if( !td.hasAtlasPath() )
 			return;
 
@@ -296,6 +318,9 @@ class Editor extends Page {
 
 	override function onKeyPress(keyCode:Int) {
 		super.onKeyPress(keyCode);
+
+		if( ui.Modal.hasAnyUnclosable() )
+			return;
 
 		switch keyCode {
 			case K.ESCAPE:
@@ -398,9 +423,18 @@ class Editor extends Page {
 
 			case K.T:
 				if( !hasInputFocus() ) {
-					var t = haxe.Timer.stamp();
-					var json = project.levels[0].toJson();
-					App.ME.debug(dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
+					// var t = haxe.Timer.stamp();
+					// var json = curLevel.toJson();
+					// App.ME.debug("level.toJson() => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
+
+					// var t = haxe.Timer.stamp();
+					// for( li in curLevel.layerInstances )
+						// li.applyAllAutoLayerRules();
+					// App.ME.debug("all curLevel rules => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
+					for(l in project.levels)
+					for(li in l.layerInstances)
+						li.autoTilesCache = null;
+					N.debug("cleared");
 				}
 
 			case K.U if( !hasInputFocus() && App.ME.isShiftDown() && App.ME.isCtrlDown() ):
@@ -478,7 +512,7 @@ class Editor extends Page {
 	}
 
 	public function getGenericLevelElementAt(levelX:Int, levelY:Int, limitToActiveLayer=false) : Null<GenericLevelElement> {
-		function getElement(li:led.inst.LayerInstance) {
+		function getElement(li:data.inst.LayerInstance) {
 			var ge : GenericLevelElement = null;
 
 			if( !levelRender.isLayerVisible(li) )
@@ -696,7 +730,7 @@ class Editor extends Page {
 		levelRender.focusLevelY += ( oldLevelY - m.levelY );
 	}
 
-	public function selectLevel(l:led.Level) {
+	public function selectLevel(l:data.Level) {
 		if( curLevelId==l.uid )
 			return;
 
@@ -704,7 +738,7 @@ class Editor extends Page {
 		ge.emit(LevelSelected);
 	}
 
-	public function selectLayerInstance(li:led.inst.LayerInstance, notify=true) {
+	public function selectLayerInstance(li:data.inst.LayerInstance, notify=true) {
 		if( curLayerDefUid==li.def.uid )
 			return;
 
@@ -717,7 +751,7 @@ class Editor extends Page {
 		setGridSnapping(gridSnapping, false); // update checkbox
 	}
 
-	// function layerPickingNotification(l:led.inst.LayerInstance) {
+	// function layerPickingNotification(l:data.inst.LayerInstance) {
 	// 	if( ui.Modal.hasAnyOpen() )
 	// 		return;
 
@@ -813,13 +847,13 @@ class Editor extends Page {
 	function onClose(?bt:js.jquery.JQuery) {
 		ui.Modal.closeAll();
 		if( needSaving )
-			new ui.modal.dialog.UnsavedChanges( bt, onSave.bind(false), App.ME.loadPage.bind( ()->new Home() ) );
+			new ui.modal.dialog.UnsavedChanges( bt, App.ME.loadPage.bind( ()->new Home() ) );
 		else
 			App.ME.loadPage( ()->new Home() );
 	}
 
-	public function onSave(?bypassMissing=false) {
-		var neededSaving = needSaving;
+	public function onSave(?bypassMissing=false, ?onComplete:Void->Void) {
+		// var neededSaving = needSaving;
 		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
@@ -830,23 +864,26 @@ class Editor extends Page {
 		}
 
 		ge.emit(BeforeProjectSaving);
+		checkAutoLayersCache( (anyChange)->{
+			var data = JsTools.prepareProjectFile(project);
+			JsTools.writeFileBytes(projectFilePath, data.bytes);
 
-		var data = JsTools.prepareProjectFile(project);
-		JsTools.writeFileBytes(projectFilePath, data.bytes);
+			if( project.exportTiled ) {
+				var e = new exporter.Tiled();
+				e.run( project, projectFilePath );
+			}
 
-		if( project.exportTiled ) {
-			var e = new exporter.Tiled();
-			e.run( project, projectFilePath );
-		}
+			App.ME.registerRecentProject(projectFilePath);
 
+			N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
+			updateTitle();
 
-		needSaving = false;
-		App.ME.registerRecentProject(projectFilePath);
+			this.needSaving = false;
+			ge.emit(ProjectSaved);
 
-		N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
-		updateTitle();
-
-		ge.emit(ProjectSaved);
+			if( onComplete!=null )
+				onComplete();
+		});
 	}
 
 	public function onSaveAs() {
@@ -919,7 +956,8 @@ class Editor extends Page {
 			case LayerRuleSorted:
 			case LayerRuleSeedChanged:
 
-			case LayerRuleGroupChanged:
+			case LayerRuleGroupChanged(rg):
+			case LayerRuleGroupChangedActiveState(rg):
 			case LayerRuleGroupAdded:
 			case LayerRuleGroupRemoved(rg):
 			case LayerRuleGroupSorted:

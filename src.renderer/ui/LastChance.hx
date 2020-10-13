@@ -4,7 +4,7 @@ class LastChance extends dn.Process {
 	static var CUR : Null<LastChance>;
 	var elem : js.jquery.JQuery;
 
-	public function new(str:dn.data.GetText.LocaleString, project:led.Project) {
+	public function new(str:dn.data.GetText.LocaleString, project:data.Project) {
 		super(Editor.ME);
 
 		LastChance.end();
@@ -18,7 +18,7 @@ class LastChance extends dn.Process {
 		elem.find("button").click( function(ev) {
 			if( !isActive() )
 				return;
-			Editor.ME.selectProject( led.Project.fromJson(json) );
+			Editor.ME.selectProject( data.Project.fromJson(json) );
 			ui.modal.Dialog.closeAll();
 			N.msg( L.t._("Canceled action: \"::act::\"", {act:str}) );
 			hide();

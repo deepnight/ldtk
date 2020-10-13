@@ -4,11 +4,11 @@ class Tool<T> extends dn.Process {
 	static var SELECTION_MEMORY : Map<String, Dynamic> = new Map();
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
-	var project(get,never) : led.Project; inline function get_project() return Editor.ME.project;
-	var curLevel(get,never) : led.Level; inline function get_curLevel() return Editor.ME.curLevel;
+	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+	var curLevel(get,never) : data.Level; inline function get_curLevel() return Editor.ME.curLevel;
 
 	@:allow(ui.ToolPalette)
-	var curLayerInstance(get,never) : led.inst.LayerInstance; inline function get_curLayerInstance() return Editor.ME.curLayerInstance;
+	var curLayerInstance(get,never) : data.inst.LayerInstance; inline function get_curLayerInstance() return Editor.ME.curLayerInstance;
 
 	var jPalette(get,never) : J; inline function get_jPalette() return editor.jPalette;
 

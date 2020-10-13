@@ -1,13 +1,10 @@
 package tool.lt;
 
 class EntityTool extends tool.LayerTool<Int> {
-	public var curEntityDef(get,never) : Null<led.def.EntityDef>;
+	public var curEntityDef(get,never) : Null<data.def.EntityDef>;
 
 	public function new() {
 		super();
-
-		trace("new entity tool: "+curEntityDef);
-		trace(getSelectedValue());
 
 		if( curEntityDef==null && project.defs.entities.length>0 )
 			selectValue( project.defs.entities[0].uid );
@@ -17,7 +14,6 @@ class EntityTool extends tool.LayerTool<Int> {
 
 	override function selectValue(v:Int) {
 		super.selectValue(v);
-		trace(v);
 	}
 
 	override function canEdit():Bool {

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>JSON structure (version 0.4.0-beta)</title>
+        <style>
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        
+        
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="json-structure-version-040-beta">JSON structure (version 0.4.0-beta)</h1>
+<ul>
+<li>
+<p><a href="#data-ProjectJson">Json root</a></p>
+</li>
+<li>
+<p><a href="#data-LevelJson">Level</a></p>
+<ul>
+<li>
+<p><a href="#data-LayerInstanceJson">Layer instance</a></p>
+<ul>
+<li>
+<p><a href="#data-Tile">Auto-layer tile instance</a></p>
+</li>
+<li>
+<p><a href="#data-EntityInstanceJson">Entity instance</a></p>
+</li>
+<li>
+<p><a href="#data-FieldInstanceJson">Field instance</a></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="#data-DefinitionsJson">Definitions</a></p>
+<ul>
+<li>
+<p><a href="#data-LayerDefJson">Layer definition</a></p>
+</li>
+<li>
+<p><a href="#data-EntityDefJson">Entity definition</a></p>
+</li>
+<li>
+<p><a href="#data-TilesetDefJson">Tileset definition</a></p>
+</li>
+<li>
+<p><a href="#data-EnumDefJson">Enum definition</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<p><a id="data-ProjectJson" name="data-ProjectJson"></a></p>
+<p> </p>
+<h1 id="json-root">Json root</h1>
+<p><a id="data-ProjectJson-bgColor" name="data-ProjectJson-bgColor"></a></p>
+<ul>
+<li>
+<h2 id="bgcolor--string"><code>bgColor</code> : <strong>String</strong></h2>
+<p><em>Hexadecimal string using &quot;#rrggbb&quot; format</em></p>
+<p>Project background color</p>
+</li>
+</ul>
+<p><a id="data-ProjectJson-defaultGridSize" name="data-ProjectJson-defaultGridSize"></a></p>
+<ul>
+<li>
+<h2 id="defaultgridsize--int"><code>defaultGridSize</code> : <strong>Int</strong></h2>
+<p>Default grid size for new layers</p>
+</li>
+</ul>
+<p><a id="data-ProjectJson-defaultPivotX" name="data-ProjectJson-defaultPivotX"></a></p>
+<ul>
+<li>
+<h2 id="defaultpivotx--float"><code>defaultPivotX</code> : <strong>Float</strong></h2>
+<p>Default X pivot (0 to 1) for new entities</p>
+</li>
+</ul>
+<p><a id="data-ProjectJson-defaultPivotY" name="data-ProjectJson-defaultPivotY"></a></p>
+<ul>
+<li>
+<h2 id="defaultpivoty--float"><code>defaultPivotY</code> : <strong>Float</strong></h2>
+<p>Default Y pivot (0 to 1) for new entities</p>
+</li>
+</ul>
+<p><a id="data-ProjectJson-defs" name="data-ProjectJson-defs"></a></p>
+<ul>
+<li>
+<h2 id="defs--definitions"><code>defs</code> : <strong><a href="#data-DefinitionsJson">Definitions</a></strong></h2>
+<p>A structure containing all the definitions of this project</p>
+</li>
+</ul>
+<p><a id="data-ProjectJson-exportTiled" name="data-ProjectJson-exportTiled"></a></p>
+<ul>
+<li>
+<h2 id="exporttiled--bool"><code>exportTiled</code> : <strong>Bool</strong></h2>
+<p>If TRUE, a Tiled compatible file will also be generated along with the LEd JSON file.</p>
+</li>
+</ul>
+<p><a id="data-ProjectJson-jsonVersion" name="data-ProjectJson-jsonVersion"></a></p>
+<ul>
+<li>
+<h2 id="jsonversion--string"><code>jsonVersion</code> : <strong>String</strong></h2>
+<p>File format version</p>
+</li>
+</ul>
+<p><a id="data-ProjectJson-levels" name="data-ProjectJson-levels"></a></p>
+<ul>
+<li>
+<h2 id="levels--array-of-level"><code>levels</code> : <strong>Array of <a href="#data-LevelJson">Level</a></strong></h2>
+</li>
+</ul>
+<p><a id="data-ProjectJson-minifyJson" name="data-ProjectJson-minifyJson"></a></p>
+<ul>
+<li>
+<h2 id="minifyjson--bool"><code>minifyJson</code> : <strong>Bool</strong></h2>
+<p>If TRUE, the Json is partially minified (no indentation, nor line breaks)</p>
+</li>
+</ul>
+<p><a id="data-LevelJson" name="data-LevelJson"></a></p>
+<p> </p>
+<h1 id="level">Level</h1>
+<p><a id="data-LevelJson-identifier" name="data-LevelJson-identifier"></a></p>
+<ul>
+<li>
+<h2 id="identifier--string"><code>identifier</code> : <strong>String</strong></h2>
+<p>Unique String identifier</p>
+</li>
+</ul>
+<p><a id="data-LevelJson-layerInstances" name="data-LevelJson-layerInstances"></a></p>
+<ul>
+<li>
+<h2 id="layerinstances--array-of-layer-instance"><code>layerInstances</code> : <strong>Array of <a href="#data-LayerInstanceJson">Layer instance</a></strong></h2>
+</li>
+</ul>
+<p><a id="data-LevelJson-pxHei" name="data-LevelJson-pxHei"></a></p>
+<ul>
+<li>
+<h2 id="pxhei--int"><code>pxHei</code> : <strong>Int</strong></h2>
+<p>Height of the level in pixels</p>
+</li>
+</ul>
+<p><a id="data-LevelJson-pxWid" name="data-LevelJson-pxWid"></a></p>
+<ul>
+<li>
+<h2 id="pxwid--int"><code>pxWid</code> : <strong>Int</strong></h2>
+<p>Width of the level in pixels</p>
+</li>
+</ul>
+<p><a id="data-LevelJson-uid" name="data-LevelJson-uid"></a></p>
+<ul>
+<li>
+<h2 id="uid--int"><code>uid</code> : <strong>Int</strong></h2>
+<p>Unique Int identifier</p>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson" name="data-LayerInstanceJson"></a></p>
+<p> </p>
+<h2 id="layer-instance">Layer instance</h2>
+<p><a id="data-LayerInstanceJson-__cHei" name="data-LayerInstanceJson-__cHei"></a></p>
+<ul>
+<li>
+<h3 id="__chei--int"><code>__cHei</code> : <strong>Int</strong></h3>
+<p>Grid-based height</p>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-__cWid" name="data-LayerInstanceJson-__cWid"></a></p>
+<ul>
+<li>
+<h3 id="__cwid--int"><code>__cWid</code> : <strong>Int</strong></h3>
+<p>Grid-based width</p>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-__gridSize" name="data-LayerInstanceJson-__gridSize"></a></p>
+<ul>
+<li>
+<h3 id="__gridsize--int"><code>__gridSize</code> : <strong>Int</strong></h3>
+<p>Grid size</p>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-__identifier" name="data-LayerInstanceJson-__identifier"></a></p>
+<ul>
+<li>
+<h3 id="__identifier--string"><code>__identifier</code> : <strong>String</strong></h3>
+<p>Unique String identifier</p>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-__type" name="data-LayerInstanceJson-__type"></a></p>
+<ul>
+<li>
+<h3 id="__type--string"><code>__type</code> : <strong>String</strong></h3>
+<p>Layer type (possible values: IntGrid, Entities, Tiles or AutoLayer)</p>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-autoLayerTiles" name="data-LayerInstanceJson-autoLayerTiles"></a></p>
+<ul>
+<li>
+<h3 id="autolayertiles--array-of-auto-layer-tile-instance-generic-badge"><code>autoLayerTiles</code> : <strong>Array of <a href="#data-Tile">Auto-layer tile instance</a></strong>  <a href="JSON_CHANGELOG.html"><img src="https://img.shields.io/badge/Added-0.4.0-green.svg" alt="Generic badge"></a></h3>
+<p><em><strong>Only relevant for Auto-layers</strong></em></p>
+<p>An array containing all tiles generated by Auto-layer rules. The array is already
+sorted in display order (ie. 1st tile is beneath 2nd, which is beneath 3rd etc.)</p>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-entityInstances" name="data-LayerInstanceJson-entityInstances"></a></p>
+<ul>
+<li>
+<h3 id="entityinstances--array-of-entity-instance"><code>entityInstances</code> : <strong>Array of <a href="#data-EntityInstanceJson">Entity instance</a></strong></h3>
+<p><em><strong>Only relevant for Entity layers</strong></em></p>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-gridTiles" name="data-LayerInstanceJson-gridTiles"></a></p>
+<ul>
+<li>
+<h3 id="gridtiles--array-of-object"><code>gridTiles</code> : <strong>Array of Object</strong></h3>
+<p><em><strong>Only relevant for Tile layers</strong></em></p>
+<p>This array contains objects with all the following fields:</p>
+<ul>
+<li>
+<p><code>__srcX</code> : <strong>Int</strong> <a href="JSON_CHANGELOG.html"><img src="https://img.shields.io/badge/Changed-0.3.0-gray.svg" alt="Generic badge"></a>  -- X pixel coordinate of the tile in the <strong>tileset</strong></p>
+</li>
+<li>
+<p><code>__srcY</code> : <strong>Int</strong> <a href="JSON_CHANGELOG.html"><img src="https://img.shields.io/badge/Changed-0.3.0-gray.svg" alt="Generic badge"></a>  -- Y pixel coordinate of the tile in the <strong>tileset</strong></p>
+</li>
+<li>
+<p><code>__x</code> : <strong>Int</strong> <a href="JSON_CHANGELOG.html"><img src="https://img.shields.io/badge/Added-0.3.0-gray.svg" alt="Generic badge"></a>  -- X pixel coordinate of the tile in the <strong>layer</strong></p>
+</li>
+<li>
+<p><code>__y</code> : <strong>Int</strong> <a href="JSON_CHANGELOG.html"><img src="https://img.shields.io/badge/Added-0.3.0-gray.svg" alt="Generic badge"></a>  -- Y pixel coordinate of the tile in the <strong>layer</strong></p>
+</li>
+<li>
+<p><code>coordId</code> : <strong>Int</strong>   -- Coordinate ID in the layer grid</p>
+</li>
+<li>
+<p><code>tileId</code> : <strong>Int</strong>   -- Tile ID in the corresponding tileset</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-intGrid" name="data-LayerInstanceJson-intGrid"></a></p>
+<ul>
+<li>
+<h3 id="intgrid--array-of-object"><code>intGrid</code> : <strong>Array of Object</strong></h3>
+<p><em><strong>Only relevant for IntGrid layers</strong></em></p>
+<p>This array contains objects with all the following fields:</p>
+<ul>
+<li>
+<p><code>coordId</code> : <strong>Int</strong>   -- Coordinate ID in the layer grid</p>
+</li>
+<li>
+<p><code>v</code> : <strong>Int</strong>   -- IntGrid value</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-layerDefUid" name="data-LayerInstanceJson-layerDefUid"></a></p>
+<ul>
+<li>
+<h3 id="layerdefuid--int"><code>layerDefUid</code> : <strong>Int</strong></h3>
+<p>Reference the Layer definition UID</p>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-levelId" name="data-LayerInstanceJson-levelId"></a></p>
+<ul>
+<li>
+<h3 id="levelid--int"><code>levelId</code> : <strong>Int</strong></h3>
+<p>Reference to the UID of the level containing this layer instance</p>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-pxOffsetX" name="data-LayerInstanceJson-pxOffsetX"></a></p>
+<ul>
+<li>
+<h3 id="pxoffsetx--int"><code>pxOffsetX</code> : <strong>Int</strong></h3>
+<p>Horizontal offset in pixels to render this layer, usually 0</p>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-pxOffsetY" name="data-LayerInstanceJson-pxOffsetY"></a></p>
+<ul>
+<li>
+<h3 id="pxoffsety--int"><code>pxOffsetY</code> : <strong>Int</strong></h3>
+<p>Vertical offset in pixels to render this layer, usually 0</p>
+</li>
+</ul>
+<p><a id="data-LayerInstanceJson-seed" name="data-LayerInstanceJson-seed"></a></p>
+<ul>
+<li>
+<h3 id="seed--int"><code>seed</code> : <strong>Int</strong></h3>
+<p><em><strong>Only relevant for Auto-layers (pure or IntGrid based)</strong></em></p>
+<p>Random seed used for Auto-Layers rendering</p>
+</li>
+</ul>
+<p><a id="data-Tile" name="data-Tile"></a></p>
+<p> </p>
+<h3 id="auto-layer-tile-instance-generic-badge">Auto-layer tile instance  <a href="JSON_CHANGELOG.html"><img src="https://img.shields.io/badge/Added-0.4.0-green.svg" alt="Generic badge"></a></h3>
+<p><a id="data-Tile-d" name="data-Tile-d"></a></p>
+<ul>
+<li>
+<h4 id="d--array-of-int"><code>d</code> : <strong>Array of Int</strong></h4>
+<p>Internal data used by the editor</p>
+</li>
+</ul>
+<p><a id="data-Tile-f" name="data-Tile-f"></a></p>
+<ul>
+<li>
+<h4 id="f--int"><code>f</code> : <strong>Int</strong></h4>
+<p>&quot;Flip flags&quot;, a 2-bits integer to represent the mirror transformations of the tile: Bit 0 = X flip, Bit 1 = Y flip</p>
+</li>
+</ul>
+<p><a id="data-Tile-px" name="data-Tile-px"></a></p>
+<ul>
+<li>
+<h4 id="px--array-of-int"><code>px</code> : <strong>Array of Int</strong></h4>
+<p>Pixel coordinates of the tile in the <strong>layer</strong> (<code>[x,y]</code> format)</p>
+</li>
+</ul>
+<p><a id="data-Tile-src" name="data-Tile-src"></a></p>
+<ul>
+<li>
+<h4 id="src--array-of-int"><code>src</code> : <strong>Array of Int</strong></h4>
+<p>Pixel coordinates of the tile in the <strong>tileset</strong> (<code>[x,y]</code> format)</p>
+</li>
+</ul>
+<p><a id="data-EntityInstanceJson" name="data-EntityInstanceJson"></a></p>
+<p> </p>
+<h3 id="entity-instance">Entity instance</h3>
+<p><a id="data-EntityInstanceJson-__grid" name="data-EntityInstanceJson-__grid"></a></p>
+<ul>
+<li>
+<h4 id="__grid--array-of-int-generic-badge"><code>__grid</code> : <strong>Array of Int</strong>  <a href="JSON_CHANGELOG.html"><img src="https://img.shields.io/badge/Changed-0.4.0-green.svg" alt="Generic badge"></a></h4>
+<p>Grid-based coordinates (<code>[x,y]</code> format)</p>
+</li>
+</ul>
+<p><a id="data-EntityInstanceJson-__identifier" name="data-EntityInstanceJson-__identifier"></a></p>
+<ul>
+<li>
+<h4 id="__identifier--string-1"><code>__identifier</code> : <strong>String</strong></h4>
+<p>Unique String identifier</p>
+</li>
+</ul>
+<p><a id="data-EntityInstanceJson-defUid" name="data-EntityInstanceJson-defUid"></a></p>
+<ul>
+<li>
+<h4 id="defuid--int"><code>defUid</code> : <strong>Int</strong></h4>
+<p>Reference of the <strong>Entity definition</strong> UID</p>
+</li>
+</ul>
+<p><a id="data-EntityInstanceJson-fieldInstances" name="data-EntityInstanceJson-fieldInstances"></a></p>
+<ul>
+<li>
+<h4 id="fieldinstances--array-of-field-instance"><code>fieldInstances</code> : <strong>Array of <a href="#data-FieldInstanceJson">Field instance</a></strong></h4>
+</li>
+</ul>
+<p><a id="data-EntityInstanceJson-px" name="data-EntityInstanceJson-px"></a></p>
+<ul>
+<li>
+<h4 id="px--array-of-int-generic-badge"><code>px</code> : <strong>Array of Int</strong>  <a href="JSON_CHANGELOG.html"><img src="https://img.shields.io/badge/Changed-0.4.0-green.svg" alt="Generic badge"></a></h4>
+<p>Pixel coordinates (<code>[x,y]</code> format)</p>
+</li>
+</ul>
+<p><a id="data-FieldInstanceJson" name="data-FieldInstanceJson"></a></p>
+<p> </p>
+<h3 id="field-instance">Field instance</h3>
+<p><a id="data-FieldInstanceJson-__identifier" name="data-FieldInstanceJson-__identifier"></a></p>
+<ul>
+<li>
+<h4 id="__identifier--string-2"><code>__identifier</code> : <strong>String</strong></h4>
+<p>Unique String identifier</p>
+</li>
+</ul>
+<p><a id="data-FieldInstanceJson-__type" name="data-FieldInstanceJson-__type"></a></p>
+<ul>
+<li>
+<h4 id="__type--string-1"><code>__type</code> : <strong>String</strong></h4>
+<p>Type of the field, such as Int, Float, Enum(enum_name), Bool, etc.</p>
+</li>
+</ul>
+<p><a id="data-FieldInstanceJson-__value" name="data-FieldInstanceJson-__value"></a></p>
+<ul>
+<li>
+<h4 id="__value--dynamic-anything"><code>__value</code> : <strong>Dynamic (anything)</strong></h4>
+<p>Actual value of the field instance. The value type may vary, depending on <code>__type</code> (Integer, Boolean, String etc.)</p>
+</li>
+</ul>
+<p><a id="data-FieldInstanceJson-defUid" name="data-FieldInstanceJson-defUid"></a></p>
+<ul>
+<li>
+<h4 id="defuid--int-1"><code>defUid</code> : <strong>Int</strong></h4>
+<p>Reference of the <strong>Field definition</strong> UID</p>
+</li>
+</ul>
+<p><a id="data-DefinitionsJson" name="data-DefinitionsJson"></a></p>
+<p> </p>
+<h1 id="definitions">Definitions</h1>
+<p>Many useful data found in <code>definitions</code> are duplicated in fields
+prefixed with a double &quot;_&quot;.</p>
+<p><a id="data-DefinitionsJson-entities" name="data-DefinitionsJson-entities"></a></p>
+<ul>
+<li>
+<h2 id="entities--array-of-entity-definition"><code>entities</code> : <strong>Array of <a href="#data-EntityDefJson">Entity definition</a></strong></h2>
+</li>
+</ul>
+<p><a id="data-DefinitionsJson-enums" name="data-DefinitionsJson-enums"></a></p>
+<ul>
+<li>
+<h2 id="enums--array-of-enum-definition"><code>enums</code> : <strong>Array of <a href="#data-EnumDefJson">Enum definition</a></strong></h2>
+</li>
+</ul>
+<p><a id="data-DefinitionsJson-externalEnums" name="data-DefinitionsJson-externalEnums"></a></p>
+<ul>
+<li>
+<h2 id="externalenums--array-of-enum-definition"><code>externalEnums</code> : <strong>Array of <a href="#data-EnumDefJson">Enum definition</a></strong></h2>
+<p>Note: external enums are exactly the same as <code>enums</code>, except they
+have a <code>relPath</code> to point to an external source file.</p>
+</li>
+</ul>
+<p><a id="data-DefinitionsJson-layers" name="data-DefinitionsJson-layers"></a></p>
+<ul>
+<li>
+<h2 id="layers--array-of-layer-definition"><code>layers</code> : <strong>Array of <a href="#data-LayerDefJson">Layer definition</a></strong></h2>
+</li>
+</ul>
+<p><a id="data-DefinitionsJson-tilesets" name="data-DefinitionsJson-tilesets"></a></p>
+<ul>
+<li>
+<h2 id="tilesets--array-of-tileset-definition"><code>tilesets</code> : <strong>Array of <a href="#data-TilesetDefJson">Tileset definition</a></strong></h2>
+</li>
+</ul>
+<p><a id="data-LayerDefJson" name="data-LayerDefJson"></a></p>
+<p> </p>
+<h2 id="layer-definition">Layer definition</h2>
+<p><a id="data-LayerDefJson-__type" name="data-LayerDefJson-__type"></a></p>
+<ul>
+<li>
+<h3 id="__type--string-2"><code>__type</code> : <strong>String</strong></h3>
+<p>Type of the layer (<em>IntGrid, Entities, Tiles or AutoLayer</em>)</p>
+</li>
+</ul>
+<p><a id="data-LayerDefJson-autoRuleGroups" name="data-LayerDefJson-autoRuleGroups"></a></p>
+<ul>
+<li>
+<h3 id="autorulegroups--array-of-object"><code>autoRuleGroups</code> : <strong>Array of Object</strong></h3>
+<p><em><strong>Only relevant for Auto-layers</strong></em></p>
+<p>This array contains all the auto-layer rule definitions</p>
+<p>This array contains objects with all the following fields:</p>
+<ul>
+<li>
+<p><code>active</code> : <strong>Bool</strong></p>
+</li>
+<li>
+<p><code>collapsed</code> : <strong>Bool</strong></p>
+</li>
+<li>
+<p><code>name</code> : <strong>String</strong></p>
+</li>
+<li>
+<p><code>uid</code> : <strong>Int</strong></p>
+</li>
+<li>
+<p><code>rules</code> : <strong>Array of Dynamic (anything)</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<p><a id="data-LayerDefJson-autoSourceLayerDefUid" name="data-LayerDefJson-autoSourceLayerDefUid"></a></p>
+<ul>
+<li>
+<h3 id="autosourcelayerdefuid--int"><code>autoSourceLayerDefUid</code> : <strong>Int</strong></h3>
+<p><em><strong>Only relevant for Auto-layers</strong></em></p>
+</li>
+</ul>
+<p><a id="data-LayerDefJson-autoTilesetDefUid" name="data-LayerDefJson-autoTilesetDefUid"></a></p>
+<ul>
+<li>
+<h3 id="autotilesetdefuid--int"><code>autoTilesetDefUid</code> : <strong>Int</strong></h3>
+<p><em><strong>Only relevant for Auto-layers</strong></em></p>
+<p>Reference to the Tileset UID being used by this auto-layer rules</p>
+</li>
+</ul>
+<p><a id="data-LayerDefJson-displayOpacity" name="data-LayerDefJson-displayOpacity"></a></p>
+<ul>
+<li>
+<h3 id="displayopacity--float"><code>displayOpacity</code> : <strong>Float</strong></h3>
+<p>Opacity of the layer (0 to 1.0)</p>
+</li>
+</ul>
+<p><a id="data-LayerDefJson-gridSize" name="data-LayerDefJson-gridSize"></a></p>
+<ul>
+<li>
+<h3 id="gridsize--int"><code>gridSize</code> : <strong>Int</strong></h3>
+</li>
+</ul>
+<p><a id="data-LayerDefJson-identifier" name="data-LayerDefJson-identifier"></a></p>
+<ul>
+<li>
+<h3 id="identifier--string-1"><code>identifier</code> : <strong>String</strong></h3>
+<p>Unique String identifier</p>
+</li>
+</ul>
+<p><a id="data-LayerDefJson-intGridValues" name="data-LayerDefJson-intGridValues"></a></p>
+<ul>
+<li>
+<h3 id="intgridvalues--array-of-object"><code>intGridValues</code> : <strong>Array of Object</strong></h3>
+<p><em><strong>Only relevant for IntGrid layer</strong></em></p>
+<p>This array contains objects with all the following fields:</p>
+<ul>
+<li>
+<p><code>color</code> : <strong>String</strong></p>
+</li>
+<li>
+<p><code>identifier</code> : <strong>String</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<p><a id="data-LayerDefJson-tilePivotX" name="data-LayerDefJson-tilePivotX"></a></p>
+<ul>
+<li>
+<h3 id="tilepivotx--float"><code>tilePivotX</code> : <strong>Float</strong></h3>
+<p><em><strong>Only relevant for Tile layers</strong></em></p>
+<p>If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.</p>
+</li>
+</ul>
+<p><a id="data-LayerDefJson-tilePivotY" name="data-LayerDefJson-tilePivotY"></a></p>
+<ul>
+<li>
+<h3 id="tilepivoty--float"><code>tilePivotY</code> : <strong>Float</strong></h3>
+<p><em><strong>Only relevant for Tile layers</strong></em></p>
+<p>If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.</p>
+</li>
+</ul>
+<p><a id="data-LayerDefJson-tilesetDefUid" name="data-LayerDefJson-tilesetDefUid"></a></p>
+<ul>
+<li>
+<h3 id="tilesetdefuid--int"><code>tilesetDefUid</code> : <strong>Int</strong></h3>
+<p><em><strong>Only relevant for Tile layers</strong></em></p>
+<p>Reference to the Tileset UID being used by this tile layer</p>
+</li>
+</ul>
+<p><a id="data-LayerDefJson-uid" name="data-LayerDefJson-uid"></a></p>
+<ul>
+<li>
+<h3 id="uid--int-1"><code>uid</code> : <strong>Int</strong></h3>
+<p>Unique Int identifier</p>
+</li>
+</ul>
+<p><a id="data-EntityDefJson" name="data-EntityDefJson"></a></p>
+<p> </p>
+<h2 id="entity-definition">Entity definition</h2>
+<p>Not available yet</p>
+<p><a id="data-TilesetDefJson" name="data-TilesetDefJson"></a></p>
+<p> </p>
+<h2 id="tileset-definition">Tileset definition</h2>
+<p><a id="data-TilesetDefJson-identifier" name="data-TilesetDefJson-identifier"></a></p>
+<ul>
+<li>
+<h3 id="identifier--string-2"><code>identifier</code> : <strong>String</strong></h3>
+<p>Unique String identifier</p>
+</li>
+</ul>
+<p><a id="data-TilesetDefJson-padding" name="data-TilesetDefJson-padding"></a></p>
+<ul>
+<li>
+<h3 id="padding--int"><code>padding</code> : <strong>Int</strong></h3>
+<p>Distance in pixels from image borders</p>
+</li>
+</ul>
+<p><a id="data-TilesetDefJson-pxHei" name="data-TilesetDefJson-pxHei"></a></p>
+<ul>
+<li>
+<h3 id="pxhei--int-1"><code>pxHei</code> : <strong>Int</strong></h3>
+<p>Image width in pixels</p>
+</li>
+</ul>
+<p><a id="data-TilesetDefJson-pxWid" name="data-TilesetDefJson-pxWid"></a></p>
+<ul>
+<li>
+<h3 id="pxwid--int-1"><code>pxWid</code> : <strong>Int</strong></h3>
+<p>Image width in pixels</p>
+</li>
+</ul>
+<p><a id="data-TilesetDefJson-relPath" name="data-TilesetDefJson-relPath"></a></p>
+<ul>
+<li>
+<h3 id="relpath--string"><code>relPath</code> : <strong>String</strong></h3>
+<p>Path to the source file, relative to the current project JSON file</p>
+</li>
+</ul>
+<p><a id="data-TilesetDefJson-spacing" name="data-TilesetDefJson-spacing"></a></p>
+<ul>
+<li>
+<h3 id="spacing--int"><code>spacing</code> : <strong>Int</strong></h3>
+<p>Space in pixels between all tiles</p>
+</li>
+</ul>
+<p><a id="data-TilesetDefJson-tileGridSize" name="data-TilesetDefJson-tileGridSize"></a></p>
+<ul>
+<li>
+<h3 id="tilegridsize--int"><code>tileGridSize</code> : <strong>Int</strong></h3>
+</li>
+</ul>
+<p><a id="data-TilesetDefJson-uid" name="data-TilesetDefJson-uid"></a></p>
+<ul>
+<li>
+<h3 id="uid--int-2"><code>uid</code> : <strong>Int</strong></h3>
+<p>Unique Intidentifier</p>
+</li>
+</ul>
+<p><a id="data-EnumDefJson" name="data-EnumDefJson"></a></p>
+<p> </p>
+<h2 id="enum-definition">Enum definition</h2>
+<p>Not available yet</p>
+
+    </body>
+    </html>

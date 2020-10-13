@@ -112,7 +112,7 @@ class HxEnum {
 
 
 
-	static function importToProject(project:led.Project, relSourcePath:String, checksum:String, parseds:Array<EditorTypes.ParsedExternalEnum>) : SyncLog {
+	static function importToProject(project:data.Project, relSourcePath:String, checksum:String, parseds:Array<EditorTypes.ParsedExternalEnum>) : SyncLog {
 		var log : SyncLog = [];
 
 		var isNew = true;

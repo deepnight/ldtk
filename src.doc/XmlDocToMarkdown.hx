@@ -9,6 +9,8 @@ enum Field {
 }
 
 class XmlDocToMarkdown {
+	#if macro
+
 	static var typeDisplayNames: Map<String,{ section:Null<String>, name:String }>;
 	static var verbose = false;
 	static var appVersion = new dn.VersionNumber();
@@ -17,6 +19,7 @@ class XmlDocToMarkdown {
 		typeDisplayNames = [];
 
 		// Get app version from "package.json"
+		haxe.macro.Context.registerModuleDependency("XmlDocToMarkdown", "app/package.json");
 		var raw = sys.io.File.getContent("app/package.json");
 		var versionReg = ~/"version"[ \t]*:[ \t]*"(.*)"/gim;
 		versionReg.match(raw);
@@ -25,6 +28,7 @@ class XmlDocToMarkdown {
 
 		// Read XML file
 		Sys.println('Parsing $xmlPath...');
+		haxe.macro.Context.registerModuleDependency("XmlDocToMarkdown", xmlPath);
 		var raw = sys.io.File.getContent(xmlPath);
 		var xml = Xml.parse( raw );
 		var xml = new haxe.xml.Access(xml);
@@ -32,7 +36,7 @@ class XmlDocToMarkdown {
 		// List types
 		var allTypesXml = [];
 		for(type in xml.node.haxe.elements) {
-			// if( type.att.path.indexOf("led.")<0 )
+			// if( type.att.path.indexOf("data.")<0 )
 			if( type.att.file.indexOf(className)<0 )
 				continue;
 
@@ -80,10 +84,7 @@ class XmlDocToMarkdown {
 			md.push( makeAnchor(type.att.path) );
 			md.push("&nbsp;");
 			var display = typeDisplayNames.get(type.att.path);
-			// if( display.section!=null )
-			// 	md.push('${makeMdTitlePrefix(depth)} ${display.section} - ${display.name}');
-			// else
-				md.push('${makeMdTitlePrefix(depth)} ${display.name}');
+			md.push('${makeMdTitlePrefix(depth)} ${display.name} ${versionBadge(type)}');
 
 			toc.push({
 				depth: depth,
@@ -193,12 +194,12 @@ class XmlDocToMarkdown {
 
 		if( hasMeta(xml,"added") ) {
 			var version = getMeta(xml,"added");
-			badges.push( badge("Added", version, appVersion.equals(version, true) ? "green" : "gray" ) );
+			badges.push( badge("Added", version, appVersion.sameMajorAndMinor(version) ? "green" : "gray" ) );
 		}
 
 		if( hasMeta(xml,"changed") ) {
 			var version = getMeta(xml,"changed");
-			badges.push( badge("Changed", version, appVersion.equals(version, true) ? "orange" : "gray" ) );
+			badges.push( badge("Changed", version, appVersion.sameMajorAndMinor(version) ? "green" : "gray" ) );
 
 		}
 
@@ -378,4 +379,5 @@ class XmlDocToMarkdown {
 		return '<a id="${anchorId(str)}" name="${anchorId(str)}"></a>';
 	}
 
+	#end
 }

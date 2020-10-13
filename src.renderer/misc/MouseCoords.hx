@@ -59,7 +59,7 @@ class MouseCoords {
 			return M.floor( layerY / ( getRelativeLayerInst()!=null ? getRelativeLayerInst().def.gridSize : 16 ) );
 		}
 
-	var _relativeLayerInst : Null<led.inst.LayerInstance>;
+	var _relativeLayerInst : Null<data.inst.LayerInstance>;
 
 	public function new(?pageX, ?pageY) {
 		if( pageX==null ) {
@@ -77,7 +77,7 @@ class MouseCoords {
 		return _relativeLayerInst==null ? Editor.ME.curLayerInstance : _relativeLayerInst;
 	}
 
-	public function cloneRelativeToLayer(li:led.inst.LayerInstance) {
+	public function cloneRelativeToLayer(li:data.inst.LayerInstance) {
 		var m = clone();
 		m._relativeLayerInst = li;
 		return m;
@@ -96,11 +96,11 @@ class MouseCoords {
 		return Rect.fromMouseCoords(this, to);
 	}
 
-	public function getLayerCx(li:led.inst.LayerInstance) {
+	public function getLayerCx(li:data.inst.LayerInstance) {
 		return Std.int( ( layerX + getRelativeLayerInst().pxOffsetX - li.pxOffsetX ) / li.def.gridSize );
 	}
 
-	public function getLayerCy(li:led.inst.LayerInstance) {
+	public function getLayerCy(li:data.inst.LayerInstance) {
 		return Std.int( ( layerY + getRelativeLayerInst().pxOffsetY - li.pxOffsetY ) / li.def.gridSize );
 	}
 }

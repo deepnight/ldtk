@@ -202,7 +202,10 @@ class LevelRender extends dn.Process {
 				editor.curLayerInstance.applyAllAutoLayerRules();
 				invalidateLayer( editor.curLayerInstance );
 
-			case LayerRuleGroupChanged:
+			case LayerRuleGroupChanged(rg):
+				invalidateLayer( editor.curLayerInstance );
+
+			case LayerRuleGroupChangedActiveState(rg):
 				invalidateLayer( editor.curLayerInstance );
 
 			case LayerRuleGroupSorted:
@@ -259,14 +262,14 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	public inline function autoLayerRenderingEnabled(li:led.inst.LayerInstance) {
+	public inline function autoLayerRenderingEnabled(li:data.inst.LayerInstance) {
 		if( li==null || !li.def.isAutoLayer() )
 			return false;
 
 		return ( !autoLayerRendering.exists(li.layerDefUid) || autoLayerRendering.get(li.layerDefUid)==true );
 	}
 
-	public function setAutoLayerRendering(li:led.inst.LayerInstance, v:Bool) {
+	public function setAutoLayerRendering(li:data.inst.LayerInstance, v:Bool) {
 		if( li==null || !li.def.isAutoLayer() )
 			return;
 
@@ -274,16 +277,16 @@ class LevelRender extends dn.Process {
 		editor.ge.emit( LayerInstanceAutoRenderingChanged(li) );
 	}
 
-	public function toggleAutoLayerRendering(li:led.inst.LayerInstance) {
+	public function toggleAutoLayerRendering(li:data.inst.LayerInstance) {
 		if( li!=null && li.def.isAutoLayer() )
 			setAutoLayerRendering( li, !autoLayerRenderingEnabled(li) );
 	}
 
-	public inline function isLayerVisible(l:led.inst.LayerInstance) {
+	public inline function isLayerVisible(l:data.inst.LayerInstance) {
 		return l!=null && ( !layerVis.exists(l.layerDefUid) || layerVis.get(l.layerDefUid)==true );
 	}
 
-	public function toggleLayer(li:led.inst.LayerInstance) {
+	public function toggleLayer(li:data.inst.LayerInstance) {
 		layerVis.set(li.layerDefUid, !isLayerVisible(li));
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 
@@ -291,12 +294,12 @@ class LevelRender extends dn.Process {
 			invalidateLayer(li);
 	}
 
-	public function showLayer(li:led.inst.LayerInstance) {
+	public function showLayer(li:data.inst.LayerInstance) {
 		layerVis.set(li.layerDefUid, true);
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 	}
 
-	public function hideLayer(li:led.inst.LayerInstance) {
+	public function hideLayer(li:data.inst.LayerInstance) {
 		layerVis.set(li.layerDefUid, false);
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 	}
@@ -394,7 +397,7 @@ class LevelRender extends dn.Process {
 	}
 
 
-	function renderLayer(li:led.inst.LayerInstance) {
+	function renderLayer(li:data.inst.LayerInstance) {
 		layerInvalidations.remove(li.layerDefUid);
 
 		// Create wrapper
@@ -420,60 +423,20 @@ class LevelRender extends dn.Process {
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper);
 
-				var groupIdx = li.def.autoRuleGroups.length-1;
-				var anyTile = false;
-				while( groupIdx>=0 ) {
-					var rg = li.def.autoRuleGroups[groupIdx];
-					if( rg.active ) {
-						var ruleIdx = rg.rules.length-1;
-						while( ruleIdx>=0 ) {
-							var r = rg.rules[ruleIdx];
-							if( r.active ) {
-								var ruleResults = li.autoTiles.get(r.uid);
-								for(cy in 0...li.cHei)
-								for(cx in 0...li.cWid) {
-									var at = ruleResults.get( li.coordId(cx,cy) );
-									if( at!=null ) {
-										switch r.tileMode {
-											case Single:
-												tg.addTransform(
-													( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-													( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-													dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
-													td.getTile(at.tileIds[0])
-												);
-
-											case Stamp:
-												// Render stamp tiles
-												var stampRenderInfos = li.getRuleStampRenderInfos(r, td, at.tileIds, at.flips);
-												for(tid in at.tileIds) {
-													var tcx = td.getTileCx(tid);
-													var tcy = td.getTileCy(tid);
-													tg.addTransform(
-														( cx + ( dn.M.hasBit(at.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + stampRenderInfos.get(tid).xOff,
-														( cy + ( dn.M.hasBit(at.flips,1)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + stampRenderInfos.get(tid).yOff,
-														dn.M.hasBit(at.flips,0)?-1:1, dn.M.hasBit(at.flips,1)?-1:1, 0,
-														td.getTile(tid)
-													);
-												}
-										}
-										anyTile = true;
-									}
-								}
-							}
-
-							ruleIdx--;
-						}
+				li.def.iterateActiveRulesInDisplayOrder( (r)-> {
+					if( li.autoTilesCache.exists( r.uid ) ) {
+						for(allTiles in li.autoTilesCache.get( r.uid ))
+						for(tileInfos in allTiles)
+							tg.addTransform(
+								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
+								dn.M.hasBit(tileInfos.flips,0)?-1:1,
+								dn.M.hasBit(tileInfos.flips,1)?-1:1,
+								0,
+								td.extractTile(tileInfos.srcX, tileInfos.srcY)
+							);
 					}
-
-					groupIdx--;
-				}
-
-				// if( li.def.type==IntGrid && !anyTile && li.hasIntGrid(cx,cy) ) {
-				// 	// Default render when no tile applies
-				// 	g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
-				// 	g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);
-				// }
+				});
 		}
 			else if( li.def.type==IntGrid ) {
 				// Normal intGrid
@@ -516,7 +479,7 @@ class LevelRender extends dn.Process {
 			}
 			else {
 				// Missing tileset
-				var tileError = led.def.TilesetDef.makeErrorTile(li.def.gridSize);
+				var tileError = data.def.TilesetDef.makeErrorTile(li.def.gridSize);
 				var tg = new h2d.TileGroup( tileError, wrapper );
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid)
@@ -534,7 +497,7 @@ class LevelRender extends dn.Process {
 
 
 
-	static function createFieldValuesRender(ei:led.inst.EntityInstance, fi:led.inst.FieldInstance) {
+	static function createFieldValuesRender(ei:data.inst.EntityInstance, fi:data.inst.FieldInstance) {
 		var font = Assets.fontPixel;
 
 		var valuesFlow = new h2d.Flow();
@@ -618,7 +581,7 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	public static function createEntityRender(?ei:led.inst.EntityInstance, ?def:led.def.EntityDef, ?li:led.inst.LayerInstance, ?parent:h2d.Object) {
+	public static function createEntityRender(?ei:data.inst.EntityInstance, ?def:data.def.EntityDef, ?li:data.inst.LayerInstance, ?parent:h2d.Object) {
 		if( def==null && ei==null )
 			throw "Need at least 1 parameter";
 
@@ -633,7 +596,7 @@ class LevelRender extends dn.Process {
 		g.y = Std.int( -def.height*def.pivotY );
 
 		// Render a tile
-		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:led.LedTypes.EntityTileRenderMode) {
+		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:data.LedTypes.EntityTileRenderMode) {
 			if( tileId==null || tilesetId==null ) {
 				// Missing tile
 				var p = 2;
@@ -819,7 +782,7 @@ class LevelRender extends dn.Process {
 		return wrapper;
 	}
 
-	function applyLayerVisibility(li:led.inst.LayerInstance) {
+	function applyLayerVisibility(li:data.inst.LayerInstance) {
 		var wrapper = layerRenders.get(li.layerDefUid);
 		if( wrapper==null )
 			return;
@@ -841,7 +804,7 @@ class LevelRender extends dn.Process {
 	}
 
 
-	public inline function invalidateLayer(?li:led.inst.LayerInstance, ?layerDefUid:Int) {
+	public inline function invalidateLayer(?li:data.inst.LayerInstance, ?layerDefUid:Int) {
 		if( li==null )
 			li = editor.curLevel.getLayerInstance(layerDefUid);
 		layerInvalidations.set( li.layerDefUid, { left:0, right:li.cWid-1, top:0, bottom:li.cHei-1 } );
@@ -852,7 +815,7 @@ class LevelRender extends dn.Process {
 					invalidateLayer(l);
 	}
 
-	public inline function invalidateLayerArea(li:led.inst.LayerInstance, left:Int, right:Int, top:Int, bottom:Int) {
+	public inline function invalidateLayerArea(li:data.inst.LayerInstance, left:Int, right:Int, top:Int, bottom:Int) {
 		if( layerInvalidations.exists(li.layerDefUid) ) {
 			var bounds = layerInvalidations.get(li.layerDefUid);
 			bounds.left = M.imin(bounds.left, left);

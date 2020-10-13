@@ -68,7 +68,7 @@ class LevelList extends ui.modal.Panel {
 	function updateForm() {
 		var i = Input.linkToHtmlInput( curLevel.identifier, jForm.find("[name=name]") );
 		i.linkEvent(LevelSettingsChanged);
-		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.isLevelIdentifierUnique(id);
+		i.validityCheck = function(id) return data.Project.isValidIdentifier(id) && project.isLevelIdentifierUnique(id);
 		i.validityError = N.invalidIdentifier;
 	}
 
@@ -97,7 +97,7 @@ class LevelList extends ui.modal.Panel {
 
 	}
 
-	function select(l:led.Level) {
+	function select(l:data.Level) {
 		editor.selectLevel(l);
 	}
 }

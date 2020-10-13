@@ -1,7 +1,7 @@
 package ui.modal.dialog;
 
 class Sync extends ui.modal.Dialog {
-	public function new(log:SyncLog, filePath:String, newProject:led.Project) {
+	public function new(log:SyncLog, filePath:String, newProject:data.Project) {
 		super();
 
 		var fileName = dn.FilePath.fromFile(filePath).fileWithExt;

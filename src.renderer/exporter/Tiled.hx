@@ -51,7 +51,7 @@ class Tiled extends Exporter {
 	}
 
 
-	function exportLevel(level:led.Level) : haxe.io.Bytes {
+	function exportLevel(level:data.Level) : haxe.io.Bytes {
 		log.add("level", "Converting level "+level.identifier+"...");
 
 		var xml = Xml.createDocument();
@@ -155,7 +155,7 @@ class Tiled extends Exporter {
 				<data encoding="csv">...</data>
 			</layer>
 		**/
-		function _createLayer(type:String, li:led.inst.LayerInstance, nameSuffix="") {
+		function _createLayer(type:String, li:data.inst.LayerInstance, nameSuffix="") {
 			var layer = Xml.createElement(type);
 			map.addChild(layer);
 			layer.set("id", Std.string(layerId++));
@@ -310,14 +310,18 @@ class Tiled extends Exporter {
 				log.add("layer", "  Exporting Auto-Layer tiles...");
 				var td = p.defs.getTilesetDef(ld.autoTilesetDefUid);
 				var layer = _createLayer("objectgroup", li, "_tiles");
-				var json = li.toJson(); // much easier to rely on LEd JSON here
 
-				for(at in json.autoTiles)
-				for(r in at.results)
-				for(t in r.tiles) {
-					var o = _createTileObject(ld.autoTilesetDefUid, t.tileId, t.__x, t.__y, r.flips);
-					layer.insertChild(o,0);
-				}
+				ld.iterateActiveRulesInDisplayOrder( (r)->{
+					if( !li.autoTilesCache.exists(r.uid) )
+						return;
+
+					var ruleResults = li.autoTilesCache.get(r.uid);
+					for(tiles in ruleResults)
+					for( at in tiles ) {
+						var o = _createTileObject(td.uid, at.tid, at.x, at.y, at.flips);
+						layer.addChild(o);
+					}
+				});
 			}
 		}
 

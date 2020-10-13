@@ -1,17 +1,17 @@
 package ui.modal.panel;
 
-import led.LedTypes;
+import data.LedTypes;
 
 class EditAllAutoLayerRules extends ui.modal.Panel {
 	var invalidatedRules : Map<Int,Int> = new Map();
 
-	public var li(get,never) : led.inst.LayerInstance;
+	public var li(get,never) : data.inst.LayerInstance;
 		inline function get_li() return Editor.ME.curLayerInstance;
 
-	public var ld(get,never) : led.def.LayerDef;
+	public var ld(get,never) : data.def.LayerDef;
 		inline function get_ld() return Editor.ME.curLayerDef;
 
-	var lastRule : Null<led.def.AutoLayerRuleDef>;
+	var lastRule : Null<data.def.AutoLayerRuleDef>;
 
 	public function new() {
 		super();
@@ -54,7 +54,12 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			case LayerRuleGroupCollapseChanged:
 				updatePanel();
 
-			case LayerRuleGroupAdded, LayerRuleGroupChanged:
+			case LayerRuleGroupChangedActiveState(rg):
+				for(r in rg.rules)
+					invalidatedRules.set(r.uid, r.uid);
+				updatePanel();
+
+			case LayerRuleGroupAdded, LayerRuleGroupChanged(_):
 				updatePanel();
 
 			case LayerRuleSorted:
@@ -70,22 +75,30 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 	function updateAllLevels() {
+		var ops = [];
 		// Apply edited rules to all other levels
 		for(ruleUid in invalidatedRules) {
 			for( l in project.levels )
 			for( li in l.layerInstances ) {
 				var r = li.def.getRule(ruleUid);
 				if( r!=null ) {
-					App.LOG.render('Rule ${ruleUid} in level "${l.identifier}"": applying');
-					li.applyAutoLayerRule(r);
+					ops.push({
+						label: 'Updating rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
+						cb: li.applyAutoLayerRule.bind(r),
+					});
 				}
-				else if( r==null && li.autoTiles.exists(ruleUid) ) {
-					App.LOG.render('Rule ${ruleUid} in level "${l.identifier}"": removing autoTiles');
+				else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
 					// WARNING: re-apply all rules here if breakOnMatch exists
-					li.autoTiles.remove(ruleUid);
+					ops.push({
+						label: 'Removing rule #$ruleUid from ${l.identifier}',
+						cb: li.autoTilesCache.remove.bind(ruleUid),
+					});
 				}
 			}
 		}
+
+		if( ops.length>0 )
+			new Progress(L.t._("Updating auto layers..."), ops);
 
 		invalidatedRules = new Map();
 	}
@@ -98,9 +111,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 		// Create new rule
-		function createRule(rg:led.LedTypes.AutoLayerRuleGroup, insertIdx:Int) {
+		function createRule(rg:data.LedTypes.AutoLayerRuleGroup, insertIdx:Int) {
 			App.LOG.general("Added rule");
-			var r = new led.def.AutoLayerRuleDef( project.makeUniqId() );
+			var r = new data.def.AutoLayerRuleDef( project.makeUniqId() );
 			rg.rules.insert(insertIdx, r);
 
 			if( rg.collapsed )
@@ -214,7 +227,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					.on("blur", function(ev:js.jquery.Event) {
 						if( jInput.val()!=old ) {
 							rg.name = jInput.val();
-							editor.ge.emit(LayerRuleGroupChanged);
+							editor.ge.emit( LayerRuleGroupChanged(rg) );
 						}
 						else {
 							jGroupHeader.find("div.name").show();
@@ -223,10 +236,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					});
 			});
 
-			// Edit group
+			// Enable/disable group
 			jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {
 				rg.active = !rg.active;
-				editor.ge.emit(LayerRuleGroupChanged);
+				editor.ge.emit( LayerRuleGroupChangedActiveState(rg) );
 			});
 
 			// Add rule

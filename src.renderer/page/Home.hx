@@ -159,7 +159,7 @@ class Home extends Page {
 		var p = #if !debug try #end {
 			var raw = JsTools.readFileString(filePath);
 			json = haxe.Json.parse(raw);
-			led.Project.fromJson(json);
+			data.Project.fromJson(json);
 		}
 		#if !debug
 		catch(e:Dynamic) {
@@ -184,7 +184,7 @@ class Home extends Page {
 			var fp = dn.FilePath.fromFile(filePath);
 			fp.extension = "json";
 
-			var p = led.Project.createEmpty();
+			var p = data.Project.createEmpty();
 			var data = JsTools.prepareProjectFile(p);
 			JsTools.writeFileBytes(fp.full, data.bytes);
 

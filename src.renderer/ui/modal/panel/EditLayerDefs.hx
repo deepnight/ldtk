@@ -3,7 +3,7 @@ package ui.modal.panel;
 class EditLayerDefs extends ui.modal.Panel {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
-	public var cur : Null<led.def.LayerDef>;
+	public var cur : Null<data.def.LayerDef>;
 
 	public function new() {
 		super();
@@ -15,7 +15,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		// Create layer
 		jModalAndMask.find(".mainList button.create").click( function(ev) {
-			function _create(type:led.LedTypes.LayerType) {
+			function _create(type:data.LedTypes.LayerType) {
 				var ld = project.defs.createLayerDef(type);
 				select(ld);
 				editor.ge.emit(LayerDefAdded);
@@ -24,8 +24,8 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			// Type picker
 			var w = new ui.modal.Dialog(ev.getThis(),"layerTypes");
-			for(k in led.LedTypes.LayerType.getConstructors()) {
-				var type = led.LedTypes.LayerType.createByName(k);
+			for(k in data.LedTypes.LayerType.getConstructors()) {
+				var type = data.LedTypes.LayerType.createByName(k);
 				var b = new J("<button/>");
 				b.appendTo( w.jContent );
 				b.append( JsTools.createLayerTypeIconAndName(type) );
@@ -83,7 +83,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		}
 	}
 
-	function select(ld:Null<led.def.LayerDef>) {
+	function select(ld:Null<data.def.LayerDef>) {
 		cur = ld;
 		updateForm();
 		updateList();
@@ -103,7 +103,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		jForm.show();
 
 		// Set form class
-		for(k in Type.getEnumConstructs(led.LedTypes.LayerType))
+		for(k in Type.getEnumConstructs(data.LedTypes.LayerType))
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+cur.type);
 
@@ -112,7 +112,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		// Fields
 		var i = Input.linkToHtmlInput( cur.identifier, jForm.find("input[name='name']") );
-		i.validityCheck = function(id) return led.Project.isValidIdentifier(id) && project.defs.isLayerNameUnique(id);
+		i.validityCheck = function(id) return data.Project.isValidIdentifier(id) && project.defs.isLayerNameUnique(id);
 		i.validityError = N.invalidIdentifier;
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
@@ -204,7 +204,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						function(v) {
 							if( v!=null && StringTools.trim(v).length==0 )
 								v = null;
-							intGridVal.identifier = led.Project.cleanupIdentifier(v, false);
+							intGridVal.identifier = data.Project.cleanupIdentifier(v, false);
 						}
 					);
 					i.validityCheck = cur.isIntGridValueIdentifierValid;

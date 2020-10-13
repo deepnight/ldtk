@@ -56,7 +56,7 @@ class JsTools {
 	}
 
 
-	public static function prepareProjectFile(p:led.Project) : { bytes:haxe.io.Bytes, json:led.Json.ProjectJson } {
+	public static function prepareProjectFile(p:data.Project) : { bytes:haxe.io.Bytes, json:led.Json.ProjectJson } {
 		var json = p.toJson();
 		var jsonStr = dn.JsonPretty.stringify(p.minifyJson, json, Const.JSON_HEADER);
 
@@ -66,7 +66,7 @@ class JsTools {
 		}
 	}
 
-	public static function createLayerTypeIcon2(type:led.LedTypes.LayerType) : js.jquery.JQuery {
+	public static function createLayerTypeIcon2(type:data.LedTypes.LayerType) : js.jquery.JQuery {
 		var icon = new J('<span class="icon"/>');
 		icon.addClass( switch type {
 			case IntGrid: "intGrid";
@@ -77,7 +77,7 @@ class JsTools {
 		return icon;
 	}
 
-	public static function createLayerTypeIconAndName(type:led.LedTypes.LayerType) : js.jquery.JQuery {
+	public static function createLayerTypeIconAndName(type:data.LedTypes.LayerType) : js.jquery.JQuery {
 		var wrapper = new J('<span class="layerType"/>');
 
 		wrapper.append( createLayerTypeIcon2(type) );
@@ -89,7 +89,7 @@ class JsTools {
 		return wrapper;
 	}
 
-	public static function createFieldTypeIcon(type:led.LedTypes.FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
+	public static function createFieldTypeIcon(type:data.LedTypes.FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
 		var icon = new J("<span/>");
 		icon.addClass("icon fieldType");
 		icon.addClass(type.getName());
@@ -103,7 +103,7 @@ class JsTools {
 		return icon;
 	}
 
-	public static function createTile(td:led.def.TilesetDef, tileId:Int, size:Int) {
+	public static function createTile(td:data.def.TilesetDef, tileId:Int, size:Int) {
 		var jCanvas = new J('<canvas></canvas>');
 		jCanvas.attr("width",td.tileGridSize);
 		jCanvas.attr("height",td.tileGridSize);
@@ -114,7 +114,7 @@ class JsTools {
 	}
 
 
-	public static function createEntityPreview(project:led.Project, ed:led.def.EntityDef, sizePx=24) {
+	public static function createEntityPreview(project:data.Project, ed:data.def.EntityDef, sizePx=24) {
 		var jWrapper = new J('<div class="entityPreview icon"></div>');
 		jWrapper.css("width", sizePx+"px");
 		jWrapper.css("height", sizePx+"px");
@@ -627,9 +627,9 @@ class JsTools {
 
 
 	public static function createAutoPatternGrid(
-		rule: led.def.AutoLayerRuleDef,
-		sourceDef: led.def.LayerDef,
-		layerDef: led.def.LayerDef,
+		rule: data.def.AutoLayerRuleDef,
+		sourceDef: data.def.LayerDef,
+		layerDef: data.def.LayerDef,
 		previewMode=false,
 		?explainCell: (desc:Null<String>)->Void,
 		?onClick: (cx:Int, cy:Int, button:Int)->Void

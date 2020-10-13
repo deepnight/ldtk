@@ -1,13 +1,13 @@
 package ui.modal.dialog;
 
-import led.LedTypes;
+import data.LedTypes;
 
 class RuleEditor extends ui.modal.Dialog {
 	var curValIdx = 0;
-	var layerDef : led.def.LayerDef;
-	var rule : led.def.AutoLayerRuleDef;
+	var layerDef : data.def.LayerDef;
+	var rule : data.def.AutoLayerRuleDef;
 
-	public function new(target:js.jquery.JQuery, layerDef:led.def.LayerDef, rule:led.def.AutoLayerRuleDef) {
+	public function new(target:js.jquery.JQuery, layerDef:data.def.LayerDef, rule:data.def.AutoLayerRuleDef) {
 		super(target, "ruleEditor");
 
 		this.layerDef = layerDef;
