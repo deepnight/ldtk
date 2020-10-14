@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: CI-mac-osx
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -35,6 +35,8 @@ jobs:
           haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
           haxelib git electron https://github.com/tong/hxelectron.git
           haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+          # need to say no when installing led-haxe-api : see https://github.com/deepnight/led/commit/95b9118c3a21eea9709a6cc98f64a197ef54ab36
+          haxelib --never git led-haxe-api https://github.com/deepnight/led-haxe-api.git
       - uses: actions/setup-node@v1
         with:
           node-version: '14'
