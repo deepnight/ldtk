@@ -225,6 +225,15 @@ class FieldDef {
 		return type.getIndex() == data.LedTypes.FieldType.F_Enum(null).getIndex();
 	}
 
+	public function getEnumDef() : Null<EnumDef> {
+		return !isEnum()
+			?  _project.defs.getEnumDef(switch type {
+				case F_Enum(enumDefUid): enumDefUid;
+				case _: throw "unexpected";
+			})
+			: null;
+	}
+
 	public function getEnumDefault() : Null<String> {
 		require(F_Enum(null));
 		return null;
