@@ -115,6 +115,8 @@ class HxEnum {
 	static function importToProject(project:data.Project, relSourcePath:String, checksum:String, parseds:Array<EditorTypes.ParsedExternalEnum>) : SyncLog {
 		var log : SyncLog = [];
 
+		var shownEnums = new Map();
+
 		var isNew = true;
 		for(ed in project.defs.externalEnums)
 			if( ed.externalRelPath==relSourcePath ) {
@@ -125,7 +127,7 @@ class HxEnum {
 		if( isNew ) {
 			// Source file is completely new
 			for(pe in parseds) {
-				log.push({ op:Add, str:pe.enumId+".*" });
+				log.push({ op:Add, str:'New enum: "${pe.enumId}"' });
 				project.defs.createExternalEnumDef(relSourcePath, checksum, pe);
 			}
 		}
@@ -136,14 +138,15 @@ class HxEnum {
 				if( existing==null ) {
 					// New enum found
 					project.defs.createExternalEnumDef(relSourcePath, checksum, pe);
-					log.push({ op:Add, str:pe.enumId+".*" });
+					log.push({ op:Add, str:'New enum: "${pe.enumId}"' });
 				}
 				else {
 					// Add new values on existing
 					for(v in pe.values)
 						if( !existing.hasValue(v) ) {
 							existing.addValue(v);
-							log.push({ op:Add, str:pe.enumId+"."+v });
+							log.push({ op:Add, str:'New value: "${pe.enumId}.$v"' });
+							shownEnums.set(pe.enumId,true);
 						}
 
 					// Remove lost values
@@ -156,8 +159,13 @@ class HxEnum {
 							}
 
 						if( !found ) {
+							var ed = project.defs.getEnumDef(pe.enumId);
+							log.push({
+								op:Remove( project.isEnumValueUsed(ed,v.id) ),
+								str:'Removed value: "${pe.enumId}.${v.id}"'
+							});
+							shownEnums.set(pe.enumId,true);
 							project.defs.removeEnumDefValue(existing, v.id);
-							log.push({ op:Remove(true), str:pe.enumId+"."+v.id });
 						}
 					}
 
@@ -176,7 +184,7 @@ class HxEnum {
 						}
 
 					if( !found ) {
-						log.push({ op:Remove(project.isEnumDefUsed(ed)), str:ed.identifier+".*" });
+						log.push({ op:Remove(project.isEnumDefUsed(ed)), str:'Removed enum: ${ed.identifier}' });
 						project.defs.removeEnumDef(ed);
 					}
 				}
@@ -186,7 +194,8 @@ class HxEnum {
 		for( ed in project.defs.externalEnums )
 			if( ed.externalRelPath==relSourcePath && ed.externalFileChecksum!=checksum ) {
 				ed.externalFileChecksum = checksum;
-				log.push({ op:ChecksumUpdated, str:ed.identifier+".*" });
+				if( !shownEnums.exists(ed.identifier) )
+					log.push({ op:ChecksumUpdated, str:ed.identifier });
 			}
 
 

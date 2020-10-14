@@ -15,6 +15,8 @@
  - Added the up-to-date *JSON format doc* to the app Home page.
  - Added fullscreen button to view Home *changelogs*
  - Pressing `ENTER` on the Home screen now opens last edited map.
+ - Better "Enum sync" window
+ - Fixed "Enum value in use" detection
  - Removed duplicate sample map
  - Fixed mouse wheel zoom limits
  - Fixed "color" field size in Entity instance editor when the value wasn't default.

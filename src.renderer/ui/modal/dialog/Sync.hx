@@ -10,7 +10,7 @@ class Sync extends ui.modal.Dialog {
 
 		// Add "DateUpdated" line
 		log = log.copy();
-		log.push({ op:DateUpdated, str:'$fileName "last file change date"' });
+		log.push({ op:DateUpdated, str:'File date of $fileName' });
 
 		// Warning
 		jContent.find(".warning").hide();
@@ -31,21 +31,23 @@ class Sync extends ui.modal.Dialog {
 		jList.appendTo(jContent); // BUG isn't that weird?
 		for(l in log) {
 			var li = new J('<li></li>');
-			li.append(l.str);
+			var label = l.str;
 			switch l.op {
 				case Add: li.append('<span class="op">New</op>');
 
 				case Remove(used):
-					li.append('<span class="op">${ used ? "Removed (USED IN PROJECT)" : "Removed (but not actually used in project)" }</op>');
+					li.append('<span class="op">Removed</op>');
 					if( !used )
 						li.addClass("unused");
+					label += used ? L.t._(" (USED IN PROJECT!)") : L.t._(" (not used in this project)");
 
 				case ChecksumUpdated:
 					li.append('<span class="op">No change</op>');
 
 				case DateUpdated:
-					li.append('<span class="op">updated</op>');
+					li.append('<span class="op">Updated</op>');
 			}
+			li.append(label);
 			li.addClass("op"+l.op.getName());
 			li.appendTo(jList);
 		}

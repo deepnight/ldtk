@@ -792,26 +792,34 @@ ul.log {
 		padding-right: 4px;
 		font-size: 8pt;
 		color: white;
-		background-color: $bgLight;
+		background-color: $bgMed;
+		color: $bgLighter;
 		border-radius: 2px;
 	}
-	li.opAdd,
-	li.opDateUpdated {
+	li.opAdd {
 		color: #a7d93d;
 		span.op {
 			color: black;
 			background-color: #a7d93d;
 		}
 	}
+	li.opDateUpdated {
+		color: #58d395;
+		span.op {
+			color: black;
+			background-color: #58d395;
+		}
+	}
 	li.opRemove {
 		color: $red;
 		span.op {
+			color: white;
 			background-color: $red;
 		}
 		&.unused {
-			color: $darkOrange;
+			color: $bgLighter;
 			span.op {
-				background-color: $darkOrange;
+				background-color: $darkRed;
 			}
 		}
 	}
@@ -1535,6 +1543,19 @@ textarea {
 		h2 .file {
 			color: white;
 			text-transform: none;
+		}
+		ul.log {
+			li {
+				display: grid;
+				grid-template-columns: 100px auto;
+				gap: 8px;
+				align-items: center;
+
+				.op {
+					text-align: center;
+					margin: 0;
+				}
+			}
 		}
 	}
 }
