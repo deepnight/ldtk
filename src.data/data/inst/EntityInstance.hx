@@ -33,6 +33,18 @@ class EntityInstance {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
 			__grid: [ getCx(li.def), getCy(li.def) ],
+			__tile: {
+				var t = getSmartTile();
+				if( t!=null ) {
+					var td = _project.defs.getTilesetDef(t.tilesetUid);
+					{
+						tilesetUid: t.tilesetUid,
+						srcRect: [ td.getTileSourceX(t.tileId), td.getTileSourceY(t.tileId), td.tileGridSize, td.tileGridSize ],
+					}
+				}
+				else
+					null;
+			},
 
 			defUid: defUid,
 			px: [x,y],
@@ -87,7 +99,7 @@ class EntityInstance {
 		return bright ? dn.Color.toWhite(def.color, 0.5) : def.color;
 	}
 
-	public function getSmartTile() {
+	public function getSmartTile() : Null<{ tilesetUid:Int, tileId:Int }> {
 		for(fi in fieldInstances)
 			switch fi.def.type {
 				case F_Enum(enumDefUid):
@@ -102,7 +114,13 @@ class EntityInstance {
 				case _:
 			}
 
-		return null;
+		if( def.isTileDefined() )
+			return {
+				tilesetUid: def.tilesetId,
+				tileId: def.tileId,
+			}
+		else
+			return null;
 	}
 
 	public function tidy(p:data.Project) {
