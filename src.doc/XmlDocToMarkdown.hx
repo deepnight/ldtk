@@ -339,7 +339,7 @@ class XmlDocToMarkdown {
 	**/
 	static function printType(t:Field) {
 		return switch t {
-			case Nullable(f): "Optional "+printType(f)+" (ie. can be *null*)";
+			case Nullable(f): printType(f)+" (optional, can be *null*)";
 			case Basic(name):
 				switch name {
 					case "UInt": "Unsigned integer";

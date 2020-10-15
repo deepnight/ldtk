@@ -269,7 +269,7 @@
 
 <a id="led-EntityInstanceJson-__tile" name="led-EntityInstanceJson-__tile"></a>
 
- - #### `__tile` : **Optional Object (ie. can be *null*)**  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
+ - #### `__tile` : **Object (optional, can be *null*)**  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
 
     Optional Tile used to display this entity (it could either be the default Entity tile,
 		or some tile provided by a field value, like an Enum).
@@ -604,13 +604,13 @@ Not available yet
 
 <a id="led-EnumDefJson-externalRelPath" name="led-EnumDefJson-externalRelPath"></a>
 
- - ### `externalRelPath` : **Optional String (ie. can be *null*)**   
+ - ### `externalRelPath` : **String (optional, can be *null*)**   
 
     Relative path to the external file providing this Enum
 
 <a id="led-EnumDefJson-iconTilesetUid" name="led-EnumDefJson-iconTilesetUid"></a>
 
- - ### `iconTilesetUid` : **Optional Int (ie. can be *null*)**   
+ - ### `iconTilesetUid` : **Int (optional, can be *null*)**   
 
     Tileset UID if provided
 
@@ -638,4 +638,4 @@ Not available yet
 
      - `__tileSrcRect` : **Array of Int** [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md)  -- An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`
 
-     - `tileId` : **Optional Int (ie. can be *null*)**   -- The optional ID of the tile
+     - `tileId` : **Int (optional, can be *null*)**   -- The optional ID of the tile
