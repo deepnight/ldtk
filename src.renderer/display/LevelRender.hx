@@ -640,7 +640,7 @@ class LevelRender extends dn.Process {
 		}
 
 		// Base render
-		var custTile = ei==null ? null : ei.getTileOverrideFromFields();
+		var custTile = ei==null ? null : ei.getSmartTile();
 		if( custTile!=null )
 			renderTile(custTile.tilesetUid, custTile.tileId, Stretch); // HACK specify other mode?
 		else
