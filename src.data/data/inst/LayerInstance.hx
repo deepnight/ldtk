@@ -51,6 +51,7 @@ class LayerInstance {
 			__cWid: cWid,
 			__cHei: cHei,
 			__gridSize: def.gridSize,
+			__opacity: def.displayOpacity,
 
 			levelId: levelId,
 			layerDefUid: layerDefUid,

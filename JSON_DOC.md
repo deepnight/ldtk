@@ -148,6 +148,12 @@
 
     Unique String identifier
 
+<a id="led-LayerInstanceJson-__opacity" name="led-LayerInstanceJson-__opacity"></a>
+
+ - ### `__opacity` : **Float**  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
+
+    Layer opacity as Float [0-1]
+
 <a id="led-LayerInstanceJson-__type" name="led-LayerInstanceJson-__type"></a>
 
  - ### `__type` : **String**   
