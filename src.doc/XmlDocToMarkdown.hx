@@ -1,4 +1,5 @@
 enum Field {
+	Nullable(f:Field);
 	Basic(name:String);
 	Enu(name:String);
 	Arr(t:Field);
@@ -36,7 +37,6 @@ class XmlDocToMarkdown {
 		// List types
 		var allTypesXml = [];
 		for(type in xml.node.haxe.elements) {
-			// if( type.att.path.indexOf("data.")<0 )
 			if( type.att.file.indexOf(className)<0 )
 				continue;
 
@@ -225,6 +225,8 @@ class XmlDocToMarkdown {
 	static function getInlineObjectMd(type:Field, depth=0) {
 		switch type {
 
+		case Nullable(f): return getInlineObjectMd(f, depth);
+
 		case Arr(Obj(fields)), Obj(fields):
 			var md = [];
 
@@ -290,8 +292,12 @@ class XmlDocToMarkdown {
 
 	static function getType(fieldXml:haxe.xml.Access) : Field {
 		return
-			if( fieldXml.hasNode.x )
-				Basic(fieldXml.node.x.att.path);
+			if( fieldXml.hasNode.x ) {
+				if( fieldXml.node.x.att.path=="Null" )
+					Nullable( getType(fieldXml.node.x) );
+				else
+					Basic(fieldXml.node.x.att.path);
+			}
 			else if( fieldXml.hasNode.d )
 				Dyn;
 			else if( fieldXml.hasNode.t ) {
@@ -333,6 +339,7 @@ class XmlDocToMarkdown {
 	**/
 	static function printType(t:Field) {
 		return switch t {
+			case Nullable(f): "Optional "+printType(f)+" (ie. can be *null*)";
 			case Basic(name):
 				switch name {
 					case "UInt": "Unsigned integer";

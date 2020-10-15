@@ -229,10 +229,7 @@
 
  - #### `d` : **Array of Int**   
 
-    Internal data used by the editor.
-
-		For auto-layer tiles: `[ruleId, coordId, tileId]`
-		For tile-layer tiles: `[coordId, tileId]`
+    Internal data used by the editor. For auto-layer tiles: `[ruleId, coordId, tileId]`. For tile-layer tiles: `[coordId, tileId]`
 
 <a id="led-Tile-f" name="led-Tile-f"></a>
 
@@ -269,6 +266,19 @@
  - #### `__identifier` : **String**   
 
     Unique String identifier
+
+<a id="led-EntityInstanceJson-__tile" name="led-EntityInstanceJson-__tile"></a>
+
+ - #### `__tile` : **Optional Object (ie. can be *null*)**  [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md) 
+
+    Optional Tile used to display this entity (it could either be the default Entity tile,
+		or some tile provided by a field value, like an Enum).
+
+    This object contains all the following fields:
+
+     - `tilesetUid` : **Int**   -- Tileset ID
+
+     - `srcRect` : **Array of Int**   -- An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`
 
 <a id="led-EntityInstanceJson-defUid" name="led-EntityInstanceJson-defUid"></a>
 
@@ -323,7 +333,7 @@
 # Definitions   
 
 Many useful data found in `definitions` are duplicated in fields
-	prefixed with a double "_".
+	prefixed with a double underscore (ie. "__").
 
 <a id="led-DefinitionsJson-entities" name="led-DefinitionsJson-entities"></a>
 
@@ -457,8 +467,6 @@ Many useful data found in `definitions` are duplicated in fields
 &nbsp;
 
 ## Entity definition   
-
-Not available yet
 
 <a id="led-EntityDefJson-color" name="led-EntityDefJson-color"></a>
 
@@ -594,4 +602,40 @@ Not available yet
 
 ## Enum definition   
 
-Not available yet
+<a id="led-EnumDefJson-externalRelPath" name="led-EnumDefJson-externalRelPath"></a>
+
+ - ### `externalRelPath` : **Optional String (ie. can be *null*)**   
+
+    Relative path to the external file providing this Enum
+
+<a id="led-EnumDefJson-iconTilesetUid" name="led-EnumDefJson-iconTilesetUid"></a>
+
+ - ### `iconTilesetUid` : **Optional Int (ie. can be *null*)**   
+
+    Tileset UID if provided
+
+<a id="led-EnumDefJson-identifier" name="led-EnumDefJson-identifier"></a>
+
+ - ### `identifier` : **String**   
+
+    Unique String identifier
+
+<a id="led-EnumDefJson-uid" name="led-EnumDefJson-uid"></a>
+
+ - ### `uid` : **Int**   
+
+    Unique Int identifier
+
+<a id="led-EnumDefJson-values" name="led-EnumDefJson-values"></a>
+
+ - ### `values` : **Array of Object**   
+
+    All possible enum values, with their optional Tile infos
+
+    This array contains objects with all the following fields:
+
+     - `id` : **String**   -- Enum value
+
+     - `__tileSrcRect` : **Array of Int** [![Generic badge](https://img.shields.io/badge/Added-0.4.0-green.svg)](JSON_CHANGELOG.md)  -- An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`
+
+     - `tileId` : **Optional Int (ie. can be *null*)**   -- The optional ID of the tile
