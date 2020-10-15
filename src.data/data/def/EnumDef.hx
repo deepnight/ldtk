@@ -27,7 +27,7 @@ class EnumDef {
 		return '$identifier(' + values.join(",")+")";
 	}
 
-	public static function fromJson(jsonVersion:String, json:Dynamic) {
+	public static function fromJson(jsonVersion:String, json:led.Json.EnumDefJson) {
 		var ed = new EnumDef(JsonTools.readInt(json.uid), json.identifier);
 
 		for(v in JsonTools.readArray(json.values)) {
@@ -44,15 +44,29 @@ class EnumDef {
 		return ed;
 	}
 
-	public function toJson() {
+	public function toJson(p:Project) : led.Json.EnumDefJson {
 		return {
 			identifier: identifier,
 			uid: uid,
-			values: values.map( function(v) return { id:v.id, tileId:v.tileId } ), // breaks memory refs
+			values: values.map( function(v) return { // breaks memory refs
+				id: v.id,
+				tileId: v.tileId,
+				__tileSrcRect: v.tileId==null ? null : {
+					var td = p.defs.getTilesetDef(iconTilesetUid);
+					if( td==null )
+						null;
+					else [
+						td.getTileSourceX(v.tileId),
+						td.getTileSourceY(v.tileId),
+						td.tileGridSize,
+						td.tileGridSize,
+					];
+				}
+			} ),
 			iconTilesetUid: iconTilesetUid,
 			externalRelPath: JsonTools.writePath(externalRelPath),
 			externalFileChecksum: externalFileChecksum,
-		};
+		}
 	}
 
 	public inline function hasValue(v:String) {

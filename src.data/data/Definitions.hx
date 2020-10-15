@@ -16,13 +16,13 @@ class Definitions {
 		this._project = project;
 	}
 
-	public function toJson() : led.Json.DefinitionsJson {
+	public function toJson(p:Project) : led.Json.DefinitionsJson {
 		return {
 			layers: layers.map( function(ld) return ld.toJson() ),
 			entities: entities.map( function(ed) return ed.toJson() ),
 			tilesets: tilesets.map( function(td) return td.toJson() ),
-			enums: enums.map( function(ed) return ed.toJson() ),
-			externalEnums: externalEnums.map( function(ed) return ed.toJson() ),
+			enums: enums.map( function(ed) return ed.toJson(p) ),
+			externalEnums: externalEnums.map( function(ed) return ed.toJson(p) ),
 		}
 	}
 

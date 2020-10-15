@@ -71,7 +71,7 @@ class Project {
 			minifyJson: minifyJson,
 			exportTiled: exportTiled,
 
-			defs: defs.toJson(),
+			defs: defs.toJson(this),
 			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
 		}
 	}
