@@ -219,6 +219,18 @@ button.transparent {
 	}
 }
 
+button.context {
+	border: 1px solid rgba(0,0,0, 0.2);
+	border-radius: 2px;
+	&:hover {
+		border-color: black;
+		background: black;
+	}
+	&.open {
+		background-color: black;
+	}
+}
+
 #miniNotif {
 	position: absolute;
 	z-index: 98;
@@ -611,7 +623,7 @@ ul.niceList {
 		display: grid;
 		justify-items: left;
 		align-items: center;
-		grid-template-columns: auto auto;
+		grid-template-columns: auto min-content;
 		gap: 0px 8px;
 		padding: 8px;
 
@@ -858,6 +870,8 @@ ul.log {
 .icon.web		{ background-image: url("../img/icons/web.svg"); }
 .icon.community	{ background-image: url("../img/icons/community.svg"); }
 .icon.tutorial	{ background-image: url("../img/icons/tutorial.svg"); }
+.icon.contextMenu		{ background-image: url("../img/icons/contextMenu.svg"); }
+.icon.contextMenuOpen	{ background-image: url("../img/icons/contextMenuOpen.svg"); }
 .icon.fullscreen		{ background-image: url("../img/icons/fullscreen.svg"); }
 .icon.fullscreen_exit	{ background-image: url("../img/icons/fullscreen_exit.svg"); }
 
@@ -1412,6 +1426,15 @@ textarea {
 		}
 	}
 
+	&.centered {
+		display: grid;
+		align-items: center;
+		justify-items: center;
+		>.wrapper {
+			position: static;
+		}
+	}
+
 	&>.wrapper {
 		display: block;
 		position: absolute;
@@ -1460,6 +1483,26 @@ textarea {
 	}
 }
 
+.window.contextMenu {
+	.wrapper {
+		padding: 0px;
+		border-radius: 2px;
+
+		button {
+			background-color: $bgDark;
+			border-bottom: 1px solid $bgMed;
+			margin: 0;
+			padding: 8px 8px;
+			font-size: 10pt;
+			color: $orange;
+			&:hover {
+				background-color: $orange;
+				color: black;
+			}
+		}
+	}
+}
+
 .window.dialog {
 	overflow: hidden;
 
@@ -1496,15 +1539,6 @@ textarea {
 				width: 4em;
 				height: 4em;
 			}
-		}
-	}
-
-	&.centered {
-		display: grid;
-		align-items: center;
-		justify-items: center;
-		>.wrapper {
-			position: static;
 		}
 	}
 

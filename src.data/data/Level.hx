@@ -3,7 +3,7 @@ package data;
 class Level {
 	var _project : Project;
 
-	public var uid(default,null) : Int;
+	public var uid : Int;
 	public var identifier(default,set): String;
 	public var pxWid : Int;
 	public var pxHei : Int;

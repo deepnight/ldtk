@@ -104,6 +104,17 @@ class Project {
 		return l;
 	}
 
+	public function duplicateLevel(l:data.Level) {
+		var copy : data.Level = Level.fromJson( this, l.toJson() );
+		copy.uid = makeUniqId();
+		var idx = 2;
+		while( !isLevelIdentifierUnique(copy.identifier) )
+			copy.identifier = l.identifier+(idx++);
+		levels.push(copy);
+		tidy();
+		return l;
+	}
+
 	public function isLevelIdentifierUnique(id:String) {
 		id = cleanupIdentifier(id,true);
 		for(l in levels)

@@ -18,29 +18,35 @@ class LevelList extends ui.modal.Panel {
 
 		// Delete level
 		jContent.find(".mainList button.delete").click( function(ev) {
-			if( project.levels.length==1 )
-				N.error(L.t._("Can't delete the last level."));
-			else {
-				new ui.modal.dialog.Confirm(ev.getThis(), function() {
-					new LastChance(Lang.t._("Level ::name:: deleted", { name:curLevel.identifier }), project);
-					var idx = 0;
-					for( l in project.levels)
-						if( l==curLevel )
-							break;
-						else
-							idx++;
-					project.removeLevel( curLevel );
-					if( idx==0 )
-						editor.selectLevel( project.levels[0] );
-					else
-						editor.selectLevel( project.levels[idx-1] );
-					editor.ge.emit(LevelRemoved);
-				});
-			}
+			new ui.modal.dialog.Confirm(ev.getThis(), function() {
+				deleteLevel(curLevel);
+			});
 		});
 
 		updateList();
 		updateForm();
+	}
+
+	function deleteLevel(l:data.Level) {
+		if( project.levels.length==1 ) {
+			N.error(L.t._("Can't delete the last level."));
+			return false;
+		}
+
+		new LastChance(Lang.t._("Level ::name:: deleted", { name:l.identifier }), project);
+		var idx = 0;
+		for( pl in project.levels)
+			if( pl==l )
+				break;
+			else
+				idx++;
+		project.removeLevel( l );
+		if( idx==0 )
+			editor.selectLevel( project.levels[0] );
+		else
+			editor.selectLevel( project.levels[idx-1] );
+		editor.ge.emit(LevelRemoved);
+		return true;
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -82,6 +88,17 @@ class LevelList extends ui.modal.Panel {
 			e.text( l.identifier );
 			if( curLevel==l )
 				e.addClass("active");
+
+			ContextMenu.addTo(e, [
+				{
+					label: L.t._("Duplicate"),
+					cb:()->{
+						project.duplicateLevel(l);
+						editor.ge.emit(LevelAdded);
+					}
+				},
+				{ label: L.t._("Delete"), cb:deleteLevel.bind(l) },
+			]);
 
 			e.click( function(_) {
 				select(l);
