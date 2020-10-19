@@ -375,6 +375,7 @@ a.exploreTo {
 	display: flex;
 	padding: 2px;
 	min-height: 1.3em;
+	flex-wrap: wrap;
 
 	vertical-align: middle;
 	font-family: Roboto;
@@ -391,6 +392,7 @@ a.exploreTo {
 		white-space: nowrap;
 		flex: 0 1 auto;
 		margin-right: 2px;
+		margin-bottom: 1px;
 		background-color: $bgMed;
 		border-radius: 3px;
 		border-left: 1px solid $bgLight;
@@ -1455,7 +1457,7 @@ textarea {
 
 .window.panel {
 	left: 0px; // set on opening
-	width: calc( 100vw - 400px );
+	width: calc( 100vw - 300px );
 	&>.wrapper {
 		top: 0px;
 		left: 0px;
