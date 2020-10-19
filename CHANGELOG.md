@@ -15,6 +15,7 @@
  - Added the up-to-date *JSON format doc* to the app Home page.
  - Added fullscreen button to view Home *changelogs*
  - Pressing `ENTER` on the Home screen now opens last edited map.
+ - Side bar is now more compact
  - Better "Enum sync" window
  - Fixed "Enum value in use" detection
  - Removed duplicate sample map

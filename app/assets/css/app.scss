@@ -1917,7 +1917,7 @@ canvas#webgl {
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: 400px;
+		width: 300px;
 		height: 100vh;
 
 		display: grid;
@@ -1931,6 +1931,11 @@ canvas#webgl {
 
 		#mainbar {
 			overflow: hidden; // for title
+
+			.icon {
+				width: 1.5em;
+				height: 1.5em;
+			}
 
 			.buttons {
 				margin: 0;
