@@ -23,33 +23,6 @@ class Dialog extends ui.Modal {
 		positionNear(target);
 	}
 
-	public function positionNear(?target:js.jquery.JQuery, toLeft=false) {
-		if( target==null )
-			jModalAndMask.addClass("centered");
-		else {
-			jModalAndMask.removeClass("centered");
-			var targetOff = target.offset();
-			var x = toLeft ? targetOff.left+target.outerWidth()-jContent.width() : targetOff.left;
-			var hei = App.ME.jDoc.innerHeight();
-			if( targetOff.top>=hei*0.7 ) {
-				// Place above target
-				jWrapper.offset({
-					left: x,
-					top: 0,
-				});
-				jWrapper.css("top", "auto");
-				jWrapper.css("bottom", (hei-targetOff.top)+"px");
-			}
-			else {
-				// Place beneath target
-				jWrapper.offset({
-					left: x,
-					top: targetOff.top+target.outerHeight()
-				});
-			}
-		}
-	}
-
 	public static function closeAll() {
 		for(m in Modal.ALL)
 			if( !m.isClosing() && Std.is(m, Dialog) )
