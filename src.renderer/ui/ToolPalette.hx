@@ -58,6 +58,9 @@ class ToolPalette {
 
 	@:allow(ui.modal.ToolPalettePopOut)
 	function onPopBackIn() {
+		if( !isPoppedOut )
+			return;
+
 		isPoppedOut = false;
 
 		jContent.insertBefore(jPlaceholder);
