@@ -639,9 +639,9 @@ class Editor extends Page {
 		// jMouseCoords.append('<span>Layer = ${m.layerX},${m.layerY}</span>');
 		jMouseCoords.append('<span>Level = ${m.levelX},${m.levelY}</span>');
 
-		// Overed element infos
-		var overed = getGenericLevelElementAt(m.levelX, m.levelY);
-		switch overed { // TODO update that?
+		// Overed element infos in footer
+		var overed = getGenericLevelElementAt(m.levelX, m.levelY, singleLayerMode);
+		switch overed { // TODO move that to SelectionTool
 			case null:
 			case GridCell(li, cx, cy):
 				if( li.hasAnyGridValue(cx,cy) )

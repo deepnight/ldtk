@@ -133,7 +133,7 @@ class SelectionTool extends Tool<Int> {
 			editor.cursor.set(Move);
 		else if( !isRunning() ) {
 			// Preview picking
-			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
+			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, editor.singleLayerMode);
 			switch ge {
 			case null:
 				editor.cursor.set(PickNothing);
@@ -196,7 +196,7 @@ class SelectionTool extends Tool<Int> {
 			else {
 				// Start a new selection
 				if( !rectangle ) {
-					var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
+					var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, editor.singleLayerMode);
 					if( ge!=null )
 						select([ ge ]);
 					else

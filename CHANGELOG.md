@@ -15,6 +15,7 @@
  - Added the up-to-date *JSON format doc* to the app Home page.
  - Added fullscreen button to view Home *changelogs*
  - Pressing `ENTER` on the Home screen now opens last edited map.
+ - Alt-picking will no longer pick in other layers when *SingleLayer* mode is ON
  - Side bar is now more compact
  - Better "Enum sync" window
  - Fixed "Enum value in use" detection
