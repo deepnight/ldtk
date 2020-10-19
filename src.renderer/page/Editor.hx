@@ -1051,7 +1051,7 @@ class Editor extends Page {
 				case Tiles:
 					_createGuideBlock([K.SHIFT], "mouseLeft", L.t._("Rectangle"));
 					_createGuideBlock([K.ALT], "mouseLeft", L.t._("Pick"));
-					_createGuideBlock([K.SHIFT,K.ALT], "mouseLeft", L.t._("Pick saved selection"));
+					// _createGuideBlock([K.SHIFT,K.ALT], "mouseLeft", L.t._("Pick saved selection"));
 			}
 		}
 	}
