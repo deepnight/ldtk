@@ -3030,7 +3030,7 @@ canvas#webgl {
 	.mainList {
 		grid-row: 2/4;
 		ul li {
-			grid-template-columns: min-content auto;
+			grid-template-columns: min-content auto min-content;
 
 			.icon {
 				width: 1.8em;

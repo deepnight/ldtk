@@ -44,15 +44,19 @@ class EditLayerDefs extends ui.modal.Panel {
 				return;
 			}
 			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
-				new ui.LastChance( L.t._("Layer ::name:: deleted", { name:cur.identifier }), project );
-				var oldUid = cur.uid;
-				project.defs.removeLayerDef(cur);
-				select(project.defs.layers[0]);
-				editor.ge.emit( LayerDefRemoved(oldUid) );
+				deleteLayer(cur);
 			});
 		});
 
 		select(editor.curLayerDef);
+	}
+
+	function deleteLayer(ld:data.def.LayerDef) {
+		new ui.LastChance( L.t._("Layer ::name:: deleted", { name:ld.identifier }), project );
+		var oldUid = ld.uid;
+		project.defs.removeLayerDef(ld);
+		select(project.defs.layers[0]);
+		editor.ge.emit( LayerDefRemoved(oldUid) );
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -386,6 +390,20 @@ class EditLayerDefs extends ui.modal.Panel {
 			e.append('<span class="name">'+ld.identifier+'</span>');
 			if( cur==ld )
 				e.addClass("active");
+
+			ContextMenu.addTo(e, [
+				{
+					label: L.t._("Duplicate"),
+					cb: ()->{
+						project.defs.duplicateLayerDef(ld);
+						editor.ge.emit(LayerDefAdded);
+					},
+				},
+				{
+					label: L.t._("Delete"),
+					cb: ()->deleteLayer(ld),
+				}
+			]);
 
 			e.click( function(_) select(ld) );
 		}

@@ -3,7 +3,7 @@ package data.def;
 import data.LedTypes;
 
 class LayerDef {
-	public var uid(default,null) : Int;
+	public var uid : Int;
 	public var type : LayerType;
 	public var identifier(default,set) : String;
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;

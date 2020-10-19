@@ -110,7 +110,8 @@ class Project {
 		var idx = 2;
 		while( !isLevelIdentifierUnique(copy.identifier) )
 			copy.identifier = l.identifier+(idx++);
-		levels.push(copy);
+
+		levels.insert( dn.Lib.getArrayIdx(l,levels), copy );
 		tidy();
 		return l;
 	}

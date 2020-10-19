@@ -108,6 +108,18 @@ class Definitions {
 		return l;
 	}
 
+	public function duplicateLayerDef(ld:data.def.LayerDef) {
+		var copy = data.def.LayerDef.fromJson( _project.jsonVersion, ld.toJson() );
+		copy.uid = _project.makeUniqId();
+
+		var idx = 2;
+		while( !isLayerNameUnique(copy.identifier) )
+			copy.identifier = ld.identifier+(idx++);
+
+		layers.insert( dn.Lib.getArrayIdx(ld, layers), copy );
+		_project.tidy();
+	}
+
 	public function isLayerNameUnique(id:String) {
 		var id = Project.cleanupIdentifier(id, true);
 		for(ld in layers)
