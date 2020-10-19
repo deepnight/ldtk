@@ -431,10 +431,10 @@ class Editor extends Page {
 					// for( li in curLevel.layerInstances )
 						// li.applyAllAutoLayerRules();
 					// App.ME.debug("all curLevel rules => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
-					for(l in project.levels)
-					for(li in l.layerInstances)
-						li.autoTilesCache = null;
-					N.debug("cleared caches");
+					// for(l in project.levels)
+					// for(li in l.layerInstances)
+					// 	li.autoTilesCache = null;
+					// N.debug("cleared caches");
 				}
 
 			case K.U if( !hasInputFocus() && App.ME.isShiftDown() && App.ME.isCtrlDown() ):
