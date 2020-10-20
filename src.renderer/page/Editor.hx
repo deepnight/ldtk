@@ -324,7 +324,11 @@ class Editor extends Page {
 
 		switch keyCode {
 			case K.ESCAPE:
-				if( specialTool!=null )
+				if( hasInputFocus() )
+					App.ME.jBody.find(":focus").blur();
+				else if( ui.modal.ContextMenu.isOpen() )
+					ui.modal.ContextMenu.ME.close();
+				else if( specialTool!=null )
 					clearSpecialTool();
 				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeAll();

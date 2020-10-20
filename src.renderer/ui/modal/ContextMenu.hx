@@ -8,10 +8,13 @@ typedef ContextAction = {
 }
 
 class ContextMenu extends ui.Modal {
+	public static var ME : ContextMenu;
 	var jAttachTarget : Null<js.jquery.JQuery>;
 
 	public function new(?openEvent:js.jquery.Event) {
 		super();
+
+		ME = this;
 
 		var jEventTarget = new J(openEvent.currentTarget);
 		jAttachTarget = jEventTarget;
@@ -28,9 +31,19 @@ class ContextMenu extends ui.Modal {
 		addClass("contextMenu");
 	}
 
+	public static inline function isOpen() return ME!=null && !ME.destroyed;
+
+	override function onDispose() {
+		super.onDispose();
+		if( ME==this )
+			ME = null;
+	}
+
 	override function onClose() {
 		super.onClose();
 		jAttachTarget.removeClass("contextMenuOpen");
+		if( ME==this )
+			ME = null;
 	}
 
 	public static function addTo(jTarget:js.jquery.JQuery, actions:Array<ContextAction>) {
