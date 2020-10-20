@@ -5,7 +5,7 @@ import data.LedTypes;
 class TilesetDef {
 	var _project : Project;
 
-	public var uid : Int;
+	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
 	public var relPath(default,null) : Null<String>;
 	public var tileGridSize : Int = Project.DEFAULT_GRID_SIZE;
