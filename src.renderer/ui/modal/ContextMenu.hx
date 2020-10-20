@@ -46,7 +46,7 @@ class ContextMenu extends ui.Modal {
 			ME = null;
 	}
 
-	public static function addTo(jTarget:js.jquery.JQuery, actions:Array<ContextAction>) {
+	public static function addTo(jTarget:js.jquery.JQuery, ?jButtonContext:js.jquery.JQuery, actions:Array<ContextAction>) {
 		// Cleanup
 		jTarget
 			.off(".context")
@@ -54,7 +54,7 @@ class ContextMenu extends ui.Modal {
 
 		// Init arrow button
 		var jButton = new J('<button class="transparent context"></button>');
-		jButton.appendTo(jTarget);
+		jButton.appendTo(jButtonContext==null ? jTarget : jButtonContext);
 		jButton.append('<div class="icon contextMenu"/>');
 
 		// Open

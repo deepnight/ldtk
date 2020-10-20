@@ -191,14 +191,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			}
 
 			// Delete group
-			jGroupHeader.find(".delete").click( function(ev:js.jquery.Event) {
-				new ui.modal.dialog.Confirm(ev.getThis(), true, function() {
-					new LastChance(Lang.t._("Rule group removed"), project);
-					App.LOG.general("Deleted rule group");
-					ld.removeRuleGroup(rg);
-					editor.ge.emit( LayerRuleGroupRemoved(rg) );
-				});
-			});
+			// jGroupHeader.find(".delete").click( function(ev:js.jquery.Event) {
+			// 	deleteRuleGroup(rg);
+			// });
 
 			// Edit group
 			jGroupHeader.find(".edit").click( function(ev:js.jquery.Event) {
@@ -247,6 +242,21 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				createRule(rg, 0);
 			});
 
+			// Group context menu
+			ContextMenu.addTo(jGroup, jGroupHeader, [
+				{
+					label: L.t._("Duplicate group"),
+					cb: ()->{
+						var copy = ld.duplicateRuleGroup(project, rg);
+						lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
+						editor.ge.emit( LayerRuleGroupAdded );
+					},
+				},
+				{
+					label: L._Delete(),
+					cb: deleteRuleGroup.bind(rg),
+				},
+			]);
 
 			// Rules
 			var ruleIdx = 0;
@@ -401,25 +411,18 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				});
 
 				// Delete
-				jRule.find("button.delete").click( function(ev) {
-					deleteRule(rg, r);
-				});
+				// jRule.find("button.delete").click( function(ev) {
+				// 	deleteRule(rg, r);
+				// });
 
+				// Rule context menu
 				ContextMenu.addTo(jRule, [
 					{
-						label: L._Duplicate(),
+						label: L.t._("Duplicate rule"),
 						cb: ()->{
 							var copy = ld.duplicateRule(project, rg, r);
 							lastRule = copy;
 							editor.ge.emit( LayerRuleAdded(copy) );
-						},
-					},
-					{
-						label: L.t._("Dup group"), // HACK
-						cb: ()->{
-							var copy = ld.duplicateRuleGroup(project, rg);
-							lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
-							editor.ge.emit( LayerRuleGroupAdded );
 						},
 					},
 					{
@@ -458,6 +461,15 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		JsTools.parseComponents(jContent);
 
+	}
+
+	function deleteRuleGroup(rg:AutoLayerRuleGroup) {
+		new ui.modal.dialog.Confirm(true, function() {
+			new LastChance(Lang.t._("Rule group removed"), project);
+			App.LOG.general("Deleted rule group "+rg.name);
+			ld.removeRuleGroup(rg);
+			editor.ge.emit( LayerRuleGroupRemoved(rg) );
+		});
 	}
 
 	function deleteRule(rg:AutoLayerRuleGroup, r:data.def.AutoLayerRuleDef) {
