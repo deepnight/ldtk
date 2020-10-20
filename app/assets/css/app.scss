@@ -1824,7 +1824,7 @@ textarea {
 }
 
 ul.sortable:not(.customHandle) li:not(.fixed) {
-	background-image: url("../img/icons/drag.png");
+	background-image: url("../img/icons/dragAlpha.svg");
 	background-repeat: no-repeat;
 	background-position: left center;
 	padding-left: 32px !important;
@@ -1851,7 +1851,7 @@ ul.sortable li.dragging {
 
 div.sortHandle {
 	display: inline-block;
-	background: url("../img/icons/drag.png") no-repeat;
+	background: url("../img/icons/drag.svg") no-repeat;
 	background-position: center center;
 	padding-left: 24px;
 	padding-top: 32px;
