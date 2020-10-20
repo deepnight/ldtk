@@ -329,6 +329,20 @@ class Definitions {
 		return td;
 	}
 
+	public function duplicateTilesetDef(td:data.def.TilesetDef) {
+		var copy = data.def.TilesetDef.fromJson( _project, td.toJson() );
+		copy.uid = _project.makeUniqId();
+
+		var idx = 2;
+		while( !isTilesetIdentifierUnique(copy.identifier) )
+			copy.identifier = td.identifier+(idx++);
+
+		tilesets.insert( dn.Lib.getArrayIdx(td, tilesets)+1, copy );
+
+		_project.tidy();
+		return copy;
+	}
+
 	public function removeTilesetDef(td:data.def.TilesetDef) {
 		if( !tilesets.remove(td) )
 			throw "Unknown tilesetDef";

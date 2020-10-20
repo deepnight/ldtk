@@ -16,7 +16,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		// Create tileset
 		jModalAndMask.find(".mainList button.create").click( function(ev) {
 			var td = project.defs.createTilesetDef();
-			select(td);
+			selectTileset(td);
 			editor.ge.emit( TilesetDefAdded(td) );
 			jForm.find("input").first().focus().select();
 		});
@@ -33,14 +33,14 @@ class EditTilesetDefs extends ui.modal.Panel {
 		});
 
 
-		select(selectedDef!=null ? selectedDef : project.defs.tilesets[0]);
+		selectTileset(selectedDef!=null ? selectedDef : project.defs.tilesets[0]);
 	}
 
 	function deleteTilesetDef(td:data.def.TilesetDef) {
 		new LastChance(L.t._("Tileset ::name:: deleted", { name:td.identifier }), project);
 		var old = td;
 		project.defs.removeTilesetDef(td);
-		select(project.defs.tilesets[0]);
+		selectTileset(project.defs.tilesets[0]);
 		editor.ge.emit( TilesetDefRemoved(old) );
 	}
 
@@ -64,7 +64,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		}
 	}
 
-	function select(td:data.def.TilesetDef) {
+	function selectTileset(td:data.def.TilesetDef) {
 		curTd = td;
 		updateList();
 		updateForm();
@@ -216,7 +216,22 @@ class EditTilesetDefs extends ui.modal.Panel {
 			if( curTd==td )
 				e.addClass("active");
 
-			e.click( function(_) select(td) );
+			e.click( function(_) selectTileset(td) );
+
+			ContextMenu.addTo(e, [
+				{
+					label: L._Duplicate(),
+					cb: ()-> {
+						var copy = project.defs.duplicateTilesetDef(td);
+						editor.ge.emit( TilesetDefAdded(copy) );
+						selectTileset(copy);
+					},
+				},
+				{
+					label: L._Delete(),
+					cb: deleteTilesetDef.bind(td),
+				},
+			]);
 		}
 	}
 }

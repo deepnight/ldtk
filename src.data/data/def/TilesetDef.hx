@@ -5,6 +5,7 @@ import data.LedTypes;
 class TilesetDef {
 	var _project : Project;
 
+	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
 	public var relPath(default,null) : Null<String>;
