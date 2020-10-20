@@ -119,10 +119,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				ev.getThis(),
 				true,
 				function() {
-					new ui.LastChance( L.t._("Entity field ::name:: deleted", { name:curField.identifier }), project );
-					curEntity.removeField(project, curField);
-					editor.ge.emit( EntityFieldRemoved(curEntity) );
-					selectField( curEntity.fieldDefs[0] );
+					deleteFieldDef(curField);
 				}
 			);
 		});
@@ -165,11 +162,25 @@ class EditEntityDefs extends ui.modal.Panel {
 			selectEntity(null);
 	}
 
+	function deleteFieldDef(fd:data.def.FieldDef) {
+		new ui.LastChance( L.t._("Entity field ::name:: deleted", { name:fd.identifier }), project );
+		curEntity.removeField(project, fd);
+		editor.ge.emit( EntityFieldRemoved(curEntity) );
+		selectField( curEntity.fieldDefs[0] );
+	}
+
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
-			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
+			case ProjectSettingsChanged, LevelSettingsChanged, LevelSelected:
 				close();
+
+			case ProjectSelected:
+				updatePreview();
+				updateEntityForm();
+				updateFieldForm();
+				updateLists();
+				selectEntity(project.defs.entities[0]);
 
 			case LayerInstanceRestoredFromHistory(li):
 				updatePreview();
@@ -672,18 +683,30 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Fields
 		if( curEntity!=null ) {
-			for(f in curEntity.fieldDefs) {
+			for(fd in curEntity.fieldDefs) {
 				var li = new J("<li/>");
 				li.appendTo(jFieldList);
-				li.append('<span class="name">'+f.identifier+'</span>');
-				if( curField==f )
+				li.append('<span class="name">'+fd.identifier+'</span>');
+				if( curField==fd )
 					li.addClass("active");
 
 				var sub = new J('<span class="sub"></span>');
 				sub.appendTo(li);
-				sub.text( f.getShortDescription() );
+				sub.text( fd.getShortDescription() );
 
-				li.click( function(_) selectField(f) );
+				ContextMenu.addTo(li, [
+					{
+						label: L._Duplicate(),
+						cb:()->{
+							var copy = curEntity.duplicateFieldDef(project, fd);
+							editor.ge.emit( EntityFieldAdded(curEntity) );
+							selectField(copy);
+						}
+					},
+					{ label: L._Delete(), cb:deleteFieldDef.bind(fd) },
+				]);
+
+				li.click( function(_) selectField(fd) );
 			}
 		}
 

@@ -116,6 +116,18 @@ class EntityDef {
 		return f;
 	}
 
+	public function duplicateFieldDef(p:Project, fd:FieldDef) {
+		var copy = FieldDef.fromJson( p, fd.toJson() );
+		copy.uid = p.makeUniqId();
+
+		var idx = 2;
+		while( !isFieldIdentifierUnique(copy.identifier) )
+			copy.identifier = fd.identifier+(idx++);
+
+		fieldDefs.insert( dn.Lib.getArrayIdx(fd,fieldDefs), copy );
+		return copy;
+	}
+
 	public function removeField(project:Project, fd:FieldDef) {
 		if( !fieldDefs.remove(fd) )
 			throw "Unknown fieldDef";
