@@ -204,7 +204,7 @@ class EditEnums extends ui.modal.Panel {
 
 				ContextMenu.addTo(e, [
 					{
-						label: L._Delete(),
+						label: L.t._("Remove extern source"),
 						cb: deleteEnumDef.bind(ed,true),
 					}
 				]);

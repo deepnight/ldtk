@@ -352,20 +352,7 @@
 			{ "id": "MetalCrate", "tileId": 22, "__tileSrcRect": [96,16,16,16] },
 			{ "id": "Cart", "tileId": 48, "__tileSrcRect": [0,48,16,16] }
 		], "iconTilesetUid": 8, "externalRelPath": null, "externalFileChecksum": null }],
-		"externalEnums": [
-			{ "identifier": "A", "uid": 28, "values": [
-				{ "id": "A0", "tileId": null, "__tileSrcRect": null },
-				{ "id": "A1", "tileId": null, "__tileSrcRect": null },
-				{ "id": "A2", "tileId": null, "__tileSrcRect": null },
-				{ "id": "A3", "tileId": null, "__tileSrcRect": null }
-			], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" },
-			{ "identifier": "B", "uid": 29, "values": [{ "id": "B0", "tileId": null, "__tileSrcRect": null }], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" },
-			{ "identifier": "C", "uid": 30, "values": [
-				{ "id": "C0", "tileId": null, "__tileSrcRect": null },
-				{ "id": "C1", "tileId": null, "__tileSrcRect": null },
-				{ "id": "C2", "tileId": null, "__tileSrcRect": null }
-			], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" }
-		]
+		"externalEnums": []
 	},
 	"levels": [
 		{
