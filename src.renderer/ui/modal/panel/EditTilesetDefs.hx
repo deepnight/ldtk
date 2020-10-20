@@ -3,7 +3,7 @@ package ui.modal.panel;
 class EditTilesetDefs extends ui.modal.Panel {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
-	public var cur : Null<data.def.TilesetDef>;
+	public var curTd : Null<data.def.TilesetDef>;
 
 	public function new(?selectedDef:data.def.TilesetDef) {
 		super();
@@ -23,21 +23,25 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Delete tileset
 		jModalAndMask.find(".mainList button.delete").click( function(ev) {
-			if( cur==null ) {
+			if( curTd==null ) {
 				N.error("No tileset selected.");
 				return;
 			}
 			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this tileset, it will be deleted in all levels and corresponding layers as well. Are you sure?", function() {
-				new LastChance(L.t._("Tileset ::name:: deleted", { name:cur.identifier }), project);
-				var old = cur;
-				project.defs.removeTilesetDef(cur);
-				select(project.defs.tilesets[0]);
-				editor.ge.emit( TilesetDefRemoved(old) );
+				deleteTilesetDef(curTd);
 			});
 		});
 
 
 		select(selectedDef!=null ? selectedDef : project.defs.tilesets[0]);
+	}
+
+	function deleteTilesetDef(td:data.def.TilesetDef) {
+		new LastChance(L.t._("Tileset ::name:: deleted", { name:td.identifier }), project);
+		var old = td;
+		project.defs.removeTilesetDef(td);
+		select(project.defs.tilesets[0]);
+		editor.ge.emit( TilesetDefRemoved(old) );
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -61,7 +65,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 	}
 
 	function select(td:data.def.TilesetDef) {
-		cur = td;
+		curTd = td;
 		updateList();
 		updateForm();
 		updateTilesetPreview();
@@ -72,7 +76,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 	function updateTilesetPreview() {
 		var jPickerWrapper = jContent.find(".pickerWrapper");
 
-		if( cur==null ) {
+		if( curTd==null ) {
 			jPickerWrapper.hide();
 			jContent.find(".tilesDemo").hide();
 			return;
@@ -82,8 +86,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Main tileset view
 		jPickerWrapper.show().empty();
-		if( cur.isAtlasLoaded() ) {
-			var picker = new TilesetPicker(jPickerWrapper, cur, ViewOnly);
+		if( curTd.isAtlasLoaded() ) {
+			var picker = new TilesetPicker(jPickerWrapper, curTd, ViewOnly);
 			picker.renderGrid();
 			picker.resetScroll();
 		}
@@ -93,13 +97,13 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var jDemo = jContent.find(".tilesDemo canvas");
 		JsTools.clearCanvas(jDemo);
 
-		if( cur!=null && cur.isAtlasLoaded() ) {
-			jDemo.attr("width", cur.tileGridSize*8 + padding*7);
-			jDemo.attr("height", cur.tileGridSize);
+		if( curTd!=null && curTd.isAtlasLoaded() ) {
+			jDemo.attr("width", curTd.tileGridSize*8 + padding*7);
+			jDemo.attr("height", curTd.tileGridSize);
 
 			var idx = 0;
 			function renderDemoTile(tcx,tcy) {
-				cur.drawTileToCanvas(jDemo, cur.getTileId(tcx,tcy), (idx++)*(cur.tileGridSize+padding), 0);
+				curTd.drawTileToCanvas(jDemo, curTd.getTileId(tcx,tcy), (idx++)*(curTd.tileGridSize+padding), 0);
 			}
 			renderDemoTile(0,0);
 			renderDemoTile(1,0);
@@ -115,7 +119,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 	function updateForm() {
 		jForm.find("*").off(); // cleanup event listeners
 
-		if( cur==null ) {
+		if( curTd==null ) {
 			jForm.hide();
 			jContent.find(".noTileLayer").hide();
 			jContent.find(".none").show();
@@ -133,9 +137,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 		// Image path
 		var jPath = jForm.find(".path");
 		var jLocate = jForm.find(".locate");
-		if( cur.relPath!=null ) {
-			jPath.empty().show().append( JsTools.makePath(cur.relPath) );
-			jLocate.empty().show().append( JsTools.makeExploreLink( Editor.ME.makeAbsoluteFilePath(cur.relPath) ) );
+		if( curTd.relPath!=null ) {
+			jPath.empty().show().append( JsTools.makePath(curTd.relPath) );
+			jLocate.empty().show().append( JsTools.makeExploreLink( Editor.ME.makeAbsoluteFilePath(curTd.relPath) ) );
 		}
 		else {
 			jLocate.hide();
@@ -143,27 +147,27 @@ class EditTilesetDefs extends ui.modal.Panel {
 		}
 
 		// Fields
-		var i = Input.linkToHtmlInput(cur.identifier, jForm.find("input[name='name']") );
+		var i = Input.linkToHtmlInput(curTd.identifier, jForm.find("input[name='name']") );
 		i.validityCheck = function(id) return data.Project.isValidIdentifier(id) && project.defs.isTilesetIdentifierUnique(id);
 		i.validityError = N.invalidIdentifier;
-		i.onChange = editor.ge.emit.bind( TilesetDefChanged(cur) );
+		i.onChange = editor.ge.emit.bind( TilesetDefChanged(curTd) );
 
 		// "Import image" button
 		var b = jForm.find("#tilesetFile");
-		if( !cur.hasAtlasPath() )
+		if( !curTd.hasAtlasPath() )
 			b.text( Lang.t._("Select an image file") );
-		else if( !cur.isAtlasLoaded() )
+		else if( !curTd.isAtlasLoaded() )
 			b.text("ERROR: Couldn't read image data");
 		else
 			b.text("Replace image");
 
 		b.click( function(ev) {
 			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], Editor.ME.getProjectDir(), function(absPath) {
-				var oldRelPath = cur.relPath;
+				var oldRelPath = curTd.relPath;
 				var relPath = Editor.ME.makeRelativeFilePath( absPath );
 				App.LOG.fileOp("Loading atlas: "+absPath);
 
-				if( !cur.importAtlasImage(editor.getProjectDir(), relPath) ) {
+				if( !curTd.importAtlasImage(editor.getProjectDir(), relPath) ) {
 					switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) {
 						case Unknown:
 							N.error("ERROR: I don't think this is an actual image");
@@ -179,25 +183,25 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 				if( oldRelPath!=null )
 					editor.watcher.stopWatching( editor.makeAbsoluteFilePath(oldRelPath) );
-				editor.watcher.watchTileset(cur);
+				editor.watcher.watchTileset(curTd);
 
-				project.defs.autoRenameTilesetIdentifier(oldRelPath, cur);
+				project.defs.autoRenameTilesetIdentifier(oldRelPath, curTd);
 				updateTilesetPreview();
-				editor.ge.emit( TilesetDefChanged(cur) );
+				editor.ge.emit( TilesetDefChanged(curTd) );
 			});
 		});
 
-		var i = Input.linkToHtmlInput( cur.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
-		i.linkEvent( TilesetDefChanged(cur) );
-		i.setBounds(2, cur.getMaxTileGridSize());
+		var i = Input.linkToHtmlInput( curTd.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
+		i.linkEvent( TilesetDefChanged(curTd) );
+		i.setBounds(2, curTd.getMaxTileGridSize());
 
-		var i = Input.linkToHtmlInput( cur.spacing, jForm.find("input[name=spacing]") );
-		i.linkEvent( TilesetDefChanged(cur) );
-		i.setBounds(0, cur.getMaxTileGridSize());
+		var i = Input.linkToHtmlInput( curTd.spacing, jForm.find("input[name=spacing]") );
+		i.linkEvent( TilesetDefChanged(curTd) );
+		i.setBounds(0, curTd.getMaxTileGridSize());
 
-		var i = Input.linkToHtmlInput( cur.padding, jForm.find("input[name=padding]") );
-		i.linkEvent( TilesetDefChanged(cur) );
-		i.setBounds(0, cur.getMaxTileGridSize());
+		var i = Input.linkToHtmlInput( curTd.padding, jForm.find("input[name=padding]") );
+		i.linkEvent( TilesetDefChanged(curTd) );
+		i.setBounds(0, curTd.getMaxTileGridSize());
 	}
 
 
@@ -209,7 +213,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			jList.append(e);
 
 			e.append('<span class="name">'+td.identifier+'</span>');
-			if( cur==td )
+			if( curTd==td )
 				e.addClass("active");
 
 			e.click( function(_) select(td) );
