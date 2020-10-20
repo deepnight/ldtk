@@ -11,7 +11,7 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 26,
+	"nextUid": 28,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -331,7 +331,11 @@
 				"savedSelections": [ { "ids": [176,177,178], "mode": "Random" }, { "ids": [164,165,166], "mode": "Random" } ]
 			}
 		],
-		"enums": [],
+		"enums": [{ "identifier": "Test", "uid": 27, "values": [
+			{ "id": "WoodCrate", "tileId": 6, "__tileSrcRect": [96,0,16,16] },
+			{ "id": "MetalCrate", "tileId": 22, "__tileSrcRect": [96,16,16,16] },
+			{ "id": "Cart", "tileId": 48, "__tileSrcRect": [0,48,16,16] }
+		], "iconTilesetUid": 8, "externalRelPath": null, "externalFileChecksum": null }],
 		"externalEnums": []
 	},
 	"levels": [
@@ -347,6 +351,7 @@
 					"__cWid": 22,
 					"__cHei": 20,
 					"__gridSize": 16,
+					"__opacity": 1,
 					"levelId": 22,
 					"layerDefUid": 16,
 					"pxOffsetX": 8,
@@ -356,96 +361,84 @@
 					"seed": 6639060,
 					"gridTiles": [],
 					"entityInstances": [
-						{
-							"__identifier": "Text",
-							"__grid": [7,5],
-							"defUid": 2,
-							"px": [120,96],
-							"fieldInstances": [
-								{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
-								{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
-								{
-									"__identifier": "path",
-									"__value": [
-										{ "cx": 4, "cy": 5 },
-										{ "cx": 4, "cy": 3 },
-										{ "cx": 9, "cy": 3 },
-										{ "cx": 9, "cy": 7 },
-										{ "cx": 4, "cy": 7 }
-									],
-									"__type": "Array<Point>",
-									"defUid": 7,
-									"realEditorValues": [
-										{
-											"id": "V_String",
-											"params": ["4,5"]
-										},
-										{
-											"id": "V_String",
-											"params": ["4,3"]
-										},
-										{
-											"id": "V_String",
-											"params": ["9,3"]
-										},
-										{
-											"id": "V_String",
-											"params": ["9,7"]
-										},
-										{
-											"id": "V_String",
-											"params": ["4,7"]
-										}
-									]
-								},
-								{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Text",
-							"__grid": [11,14],
-							"defUid": 2,
-							"px": [184,240],
-							"fieldInstances": [
-								{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
-								{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
-								{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
-								{
-									"__identifier": "star",
-									"__value": [
-										{ "cx": 8, "cy": 13 },
-										{ "cx": 6, "cy": 15 },
-										{ "cx": 7, "cy": 14 },
-										{ "cx": 14, "cy": 13 },
-										{ "cx": 14, "cy": 16 }
-									],
-									"__type": "Array<Point>",
-									"defUid": 20,
-									"realEditorValues": [
-										{
-											"id": "V_String",
-											"params": ["8,13"]
-										},
-										{
-											"id": "V_String",
-											"params": ["6,15"]
-										},
-										{
-											"id": "V_String",
-											"params": ["7,14"]
-										},
-										{
-											"id": "V_String",
-											"params": ["14,13"]
-										},
-										{
-											"id": "V_String",
-											"params": ["14,16"]
-										}
-									]
-								}
-							]
-						}
+						{ "__identifier": "Text", "__grid": [7,5], "__tile": null, "defUid": 2, "px": [120,96], "fieldInstances": [
+							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
+							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
+							{
+								"__identifier": "path",
+								"__value": [
+									{ "cx": 4, "cy": 5 },
+									{ "cx": 4, "cy": 3 },
+									{ "cx": 9, "cy": 3 },
+									{ "cx": 9, "cy": 7 },
+									{ "cx": 4, "cy": 7 }
+								],
+								"__type": "Array<Point>",
+								"defUid": 7,
+								"realEditorValues": [
+									{
+										"id": "V_String",
+										"params": ["4,5"]
+									},
+									{
+										"id": "V_String",
+										"params": ["4,3"]
+									},
+									{
+										"id": "V_String",
+										"params": ["9,3"]
+									},
+									{
+										"id": "V_String",
+										"params": ["9,7"]
+									},
+									{
+										"id": "V_String",
+										"params": ["4,7"]
+									}
+								]
+							},
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
+						] },
+						{ "__identifier": "Text", "__grid": [11,14], "__tile": null, "defUid": 2, "px": [184,240], "fieldInstances": [
+							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
+							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
+							{
+								"__identifier": "star",
+								"__value": [
+									{ "cx": 8, "cy": 13 },
+									{ "cx": 6, "cy": 15 },
+									{ "cx": 7, "cy": 14 },
+									{ "cx": 14, "cy": 13 },
+									{ "cx": 14, "cy": 16 }
+								],
+								"__type": "Array<Point>",
+								"defUid": 20,
+								"realEditorValues": [
+									{
+										"id": "V_String",
+										"params": ["8,13"]
+									},
+									{
+										"id": "V_String",
+										"params": ["6,15"]
+									},
+									{
+										"id": "V_String",
+										"params": ["7,14"]
+									},
+									{
+										"id": "V_String",
+										"params": ["14,13"]
+									},
+									{
+										"id": "V_String",
+										"params": ["14,16"]
+									}
+								]
+							}
+						] }
 					]
 				},
 				{
@@ -454,6 +447,7 @@
 					"__cWid": 22,
 					"__cHei": 20,
 					"__gridSize": 16,
+					"__opacity": 1,
 					"levelId": 22,
 					"layerDefUid": 9,
 					"pxOffsetX": 8,
@@ -470,6 +464,7 @@
 					"__cWid": 22,
 					"__cHei": 20,
 					"__gridSize": 16,
+					"__opacity": 1,
 					"levelId": 22,
 					"layerDefUid": 1,
 					"pxOffsetX": 8,
@@ -586,6 +581,7 @@
 					"__cWid": 22,
 					"__cHei": 20,
 					"__gridSize": 16,
+					"__opacity": 1,
 					"levelId": 22,
 					"layerDefUid": 4,
 					"pxOffsetX": 8,
@@ -602,6 +598,7 @@
 					"__cWid": 90,
 					"__cHei": 82,
 					"__gridSize": 4,
+					"__opacity": 1,
 					"levelId": 22,
 					"layerDefUid": 18,
 					"pxOffsetX": 0,
@@ -761,6 +758,7 @@
 					"__cWid": 24,
 					"__cHei": 21,
 					"__gridSize": 16,
+					"__opacity": 1,
 					"levelId": 19,
 					"layerDefUid": 16,
 					"pxOffsetX": 0,
@@ -770,157 +768,127 @@
 					"seed": 7015219,
 					"gridTiles": [],
 					"entityInstances": [
-						{
-							"__identifier": "Text",
-							"__grid": [3,9],
-							"defUid": 2,
-							"px": [56,152],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "L",
-									"__type": "String",
-									"defUid": 3,
-									"realEditorValues": [{
+						{ "__identifier": "Text", "__grid": [3,9], "__tile": null, "defUid": 2, "px": [56,152], "fieldInstances": [
+							{
+								"__identifier": "text",
+								"__value": "L",
+								"__type": "String",
+								"defUid": 3,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["L"]
+								}]
+							},
+							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
+						] },
+						{ "__identifier": "Text", "__grid": [11,9], "__tile": null, "defUid": 2, "px": [184,152], "fieldInstances": [
+							{
+								"__identifier": "text",
+								"__value": "R",
+								"__type": "String",
+								"defUid": 3,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["R"]
+								}]
+							},
+							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
+						] },
+						{ "__identifier": "Text", "__grid": [7,11], "__tile": null, "defUid": 2, "px": [120,184], "fieldInstances": [
+							{
+								"__identifier": "text",
+								"__value": "C",
+								"__type": "String",
+								"defUid": 3,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["C"]
+								}]
+							},
+							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
+						] },
+						{ "__identifier": "Text", "__grid": [2,4], "__tile": null, "defUid": 2, "px": [40,72], "fieldInstances": [
+							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
+							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
+						] },
+						{ "__identifier": "Text", "__grid": [8,17], "__tile": null, "defUid": 2, "px": [136,280], "fieldInstances": [
+							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
+							{
+								"__identifier": "color",
+								"__value": "#94DBFF",
+								"__type": "Color",
+								"defUid": 5,
+								"realEditorValues": [{ "id": "V_Int", "params": [9755647] }]
+							},
+							{
+								"__identifier": "path",
+								"__value": [
+									{ "cx": 13, "cy": 17 },
+									{ "cx": 13, "cy": 13 },
+									{ "cx": 18, "cy": 13 },
+									{ "cx": 18, "cy": 17 },
+									{ "cx": 15, "cy": 17 },
+									{ "cx": 15, "cy": 15 },
+									{ "cx": 17, "cy": 15 }
+								],
+								"__type": "Array<Point>",
+								"defUid": 7,
+								"realEditorValues": [
+									{
 										"id": "V_String",
-										"params": ["L"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
-								{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
-								{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Text",
-							"__grid": [11,9],
-							"defUid": 2,
-							"px": [184,152],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "R",
-									"__type": "String",
-									"defUid": 3,
-									"realEditorValues": [{
+										"params": ["13,17"]
+									},
+									{
 										"id": "V_String",
-										"params": ["R"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
-								{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
-								{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Text",
-							"__grid": [7,11],
-							"defUid": 2,
-							"px": [120,184],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "C",
-									"__type": "String",
-									"defUid": 3,
-									"realEditorValues": [{
+										"params": ["13,13"]
+									},
+									{
 										"id": "V_String",
-										"params": ["C"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
-								{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
-								{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Text",
-							"__grid": [2,4],
-							"defUid": 2,
-							"px": [40,72],
-							"fieldInstances": [
-								{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
-								{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
-								{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
-								{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Text",
-							"__grid": [8,17],
-							"defUid": 2,
-							"px": [136,280],
-							"fieldInstances": [
-								{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
-								{
-									"__identifier": "color",
-									"__value": "#94DBFF",
-									"__type": "Color",
-									"defUid": 5,
-									"realEditorValues": [{ "id": "V_Int", "params": [9755647] }]
-								},
-								{
-									"__identifier": "path",
-									"__value": [
-										{ "cx": 13, "cy": 17 },
-										{ "cx": 13, "cy": 13 },
-										{ "cx": 18, "cy": 13 },
-										{ "cx": 18, "cy": 17 },
-										{ "cx": 15, "cy": 17 },
-										{ "cx": 15, "cy": 15 },
-										{ "cx": 17, "cy": 15 }
-									],
-									"__type": "Array<Point>",
-									"defUid": 7,
-									"realEditorValues": [
-										{
-											"id": "V_String",
-											"params": ["13,17"]
-										},
-										{
-											"id": "V_String",
-											"params": ["13,13"]
-										},
-										{
-											"id": "V_String",
-											"params": ["18,13"]
-										},
-										{
-											"id": "V_String",
-											"params": ["18,17"]
-										},
-										{
-											"id": "V_String",
-											"params": ["15,17"]
-										},
-										{
-											"id": "V_String",
-											"params": ["15,15"]
-										},
-										{
-											"id": "V_String",
-											"params": ["17,15"]
-										}
-									]
-								},
-								{
-									"__identifier": "star",
-									"__value": [ { "cx": 4, "cy": 13 }, { "cx": 1, "cy": 16 }, { "cx": 2, "cy": 19 } ],
-									"__type": "Array<Point>",
-									"defUid": 20,
-									"realEditorValues": [ {
+										"params": ["18,13"]
+									},
+									{
 										"id": "V_String",
-										"params": ["4,13"]
-									}, {
+										"params": ["18,17"]
+									},
+									{
 										"id": "V_String",
-										"params": ["1,16"]
-									}, {
+										"params": ["15,17"]
+									},
+									{
 										"id": "V_String",
-										"params": ["2,19"]
-									} ]
-								}
-							]
-						}
+										"params": ["15,15"]
+									},
+									{
+										"id": "V_String",
+										"params": ["17,15"]
+									}
+								]
+							},
+							{
+								"__identifier": "star",
+								"__value": [ { "cx": 4, "cy": 13 }, { "cx": 1, "cy": 16 }, { "cx": 2, "cy": 19 } ],
+								"__type": "Array<Point>",
+								"defUid": 20,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": ["4,13"]
+								}, {
+									"id": "V_String",
+									"params": ["1,16"]
+								}, {
+									"id": "V_String",
+									"params": ["2,19"]
+								} ]
+							}
+						] }
 					]
 				},
 				{
@@ -929,6 +897,7 @@
 					"__cWid": 24,
 					"__cHei": 21,
 					"__gridSize": 16,
+					"__opacity": 1,
 					"levelId": 19,
 					"layerDefUid": 9,
 					"pxOffsetX": 0,
@@ -961,6 +930,7 @@
 					"__cWid": 24,
 					"__cHei": 21,
 					"__gridSize": 16,
+					"__opacity": 1,
 					"levelId": 19,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -1061,6 +1031,7 @@
 					"__cWid": 24,
 					"__cHei": 21,
 					"__gridSize": 16,
+					"__opacity": 1,
 					"levelId": 19,
 					"layerDefUid": 4,
 					"pxOffsetX": 0,
@@ -1077,6 +1048,7 @@
 					"__cWid": 96,
 					"__cHei": 84,
 					"__gridSize": 4,
+					"__opacity": 1,
 					"levelId": 19,
 					"layerDefUid": 18,
 					"pxOffsetX": 0,
