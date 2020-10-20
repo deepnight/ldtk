@@ -647,6 +647,15 @@ ul.niceList {
 			outline: 1px solid #586279;
 			outline-offset: -1px;
 		}
+
+		button.context {
+			padding: 0;
+			min-width: 16px;
+			height: 100%;
+			.icon {
+				width: 1em;
+			}
+		}
 	}
 
 	li.title {
