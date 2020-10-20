@@ -3856,7 +3856,7 @@ $patternSize : 32px;
 		height: 100%;
 		justify-content: stretch;
 		gap: 16px;
-		grid-template-rows: min-content auto auto;
+		grid-template-rows: min-content min-content auto;
 		grid-template-columns: 200px 200px auto;
 
 		>.header {
@@ -3899,6 +3899,13 @@ $patternSize : 32px;
 			overflow: hidden;
 			ul {
 				overflow: auto;
+				li {
+					grid-template-columns: auto min-content min-content;
+					.name {
+						width: 100%;
+						overflow: hidden;
+					}
+				}
 			}
 			ul:empty::before {
 				content: "No custom field";
