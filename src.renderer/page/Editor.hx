@@ -256,7 +256,7 @@ class Editor extends Page {
 	}
 
 
-	function checkAutoLayersCache(?onDone:(anyChange:Bool)->Void) {
+	public function checkAutoLayersCache(onDone:(anyChange:Bool)->Void) {
 		var ops = [];
 
 		for(l in project.levels)
