@@ -223,11 +223,13 @@ class LayerDef {
 	}
 
 	public function duplicateRuleGroup(p:data.Project, rg:AutoLayerRuleGroup) {
-		return null;
-		// var copy = AutoLayerRuleDef.fromJson( p.jsonVersion, r.toJson() );
-		// copy.uid = p.makeUniqId();
-		// rg.rules.insert( dn.Lib.getArrayIdx(r, rg.rules)+1, copy );
-		// return copy;
+		var copy = parseJsonRuleGroup( p.jsonVersion, toJsonRuleGroup(rg) );
+
+		copy.uid = p.makeUniqId();
+		for(r in copy.rules)
+			r.uid = p.makeUniqId();
+
+		return copy;
 	}
 
 	public inline function iterateActiveRulesInDisplayOrder( cbEachRule:(r:AutoLayerRuleDef)->Void ) {

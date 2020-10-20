@@ -415,6 +415,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						},
 					},
 					{
+						label: L.t._("Dup group"), // HACK
+						cb: ()->{
+							var copy = ld.duplicateRuleGroup(project, rg);
+							lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
+							editor.ge.emit( LayerRuleGroupAdded );
+						},
+					},
+					{
 						label: L._Delete(),
 						cb: deleteRule.bind(rg, r),
 					},
