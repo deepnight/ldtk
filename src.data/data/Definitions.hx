@@ -244,6 +244,23 @@ class Definitions {
 		return ed;
 	}
 
+	public function duplicateEntityDef(ed:data.def.EntityDef) {
+		var copy = data.def.EntityDef.fromJson( _project, ed.toJson() );
+		copy.uid = _project.makeUniqId();
+
+		for(fd in copy.fieldDefs)
+			fd.uid = _project.makeUniqId();
+
+		var idx = 2;
+		while( !isEntityIdentifierUnique(copy.identifier) )
+			copy.identifier = ed.identifier+(idx++);
+
+		entities.insert( dn.Lib.getArrayIdx(ed, entities), copy );
+		_project.tidy();
+
+		return copy;
+	}
+
 	public function removeEntityDef(ed:data.def.EntityDef) {
 		entities.remove(ed);
 		_project.tidy();

@@ -1,6 +1,7 @@
 package data.def;
 
 class FieldDef {
+	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
 	public var type(default,null) : data.LedTypes.FieldType;
 	public var identifier(default,set) : String;

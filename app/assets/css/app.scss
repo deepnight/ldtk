@@ -3877,6 +3877,9 @@ $patternSize : 32px;
 			overflow: hidden;
 			ul {
 				overflow: auto;
+				li {
+					grid-template-columns: min-content auto min-content;
+				}
 			}
 			ul:empty::before {
 				content: "No entity";

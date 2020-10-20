@@ -3,7 +3,9 @@ package data.def;
 import data.LedTypes;
 
 class EntityDef {
+	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
+
 	public var identifier(default,set) : String;
 	public var width : Int;
 	public var height : Int;

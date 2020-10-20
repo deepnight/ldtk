@@ -34,25 +34,8 @@ class EditEntityDefs extends ui.modal.Panel {
 				N.error("No entity selected.");
 				return;
 			}
-			var isUsed = project.isEntityDefUsed(curEntity);
-			new ui.modal.dialog.Confirm(
-				ev.getThis(),
-				isUsed
-					? Lang.t._("WARNING! This entity is used in one more levels. They will also be removed!")
-					: Lang.t._("This entity is not used and can be safely removed."),
-				isUsed,
-				function() {
-					new ui.LastChance( L.t._("Entity ::name:: deleted", { name:curEntity.identifier }), project );
-					project.defs.removeEntityDef(curEntity);
-					editor.ge.emit(EntityDefRemoved);
-					if( project.defs.entities.length>0 )
-						selectEntity(project.defs.entities[0]);
-					else
-						selectEntity(null);
-				}
-			);
+			deleteEntityDef(curEntity);
 		});
-
 
 		function createField(anchor:js.jquery.JQuery, isArray:Bool) {
 			function _create(type:data.LedTypes.FieldType) {
@@ -158,6 +141,28 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Re-select last field
 		if( lastFieldId>=0 && curEntity!=null && curEntity.getFieldDef(lastFieldId)!=null )
 			selectField( curEntity.getFieldDef(lastFieldId) );
+	}
+
+
+	function deleteEntityDef(ed:data.def.EntityDef, bypassConfirm=false) {
+		var isUsed = project.isEntityDefUsed(ed);
+		if( isUsed && !bypassConfirm) {
+			new ui.modal.dialog.Confirm(
+				Lang.t._("WARNING! This entity is used in one more levels. The corresponding instances will also be deleted!"),
+				true,
+				deleteEntityDef.bind(ed,true)
+			);
+			return;
+		}
+			// : Lang.t._("This entity is not used and can be safely removed."),
+
+		new ui.LastChance( L.t._("Entity ::name:: deleted", { name:ed.identifier }), project );
+		project.defs.removeEntityDef(ed);
+		editor.ge.emit(EntityDefRemoved);
+		if( project.defs.entities.length>0 )
+			selectEntity(project.defs.entities[0]);
+		else
+			selectEntity(null);
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -640,6 +645,20 @@ class EditEntityDefs extends ui.modal.Panel {
 			}
 			else
 				elem.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
+
+
+			ContextMenu.addTo(elem, [
+				{
+					label: L._Duplicate(),
+					cb:()->{
+						var copy = project.defs.duplicateEntityDef(ed);
+						editor.ge.emit(EntityDefAdded);
+						selectEntity(copy);
+					}
+				},
+				{ label: L._Delete(), cb:deleteEntityDef.bind(ed) },
+			]);
+
 
 			elem.click( function(_) selectEntity(ed) );
 		}
