@@ -116,7 +116,7 @@ class Definitions {
 		while( !isLayerNameUnique(copy.identifier) )
 			copy.identifier = ld.identifier+(idx++);
 
-		layers.insert( dn.Lib.getArrayIdx(ld, layers), copy );
+		layers.insert( dn.Lib.getArrayIdx(ld, layers)+1, copy );
 		_project.tidy();
 	}
 
@@ -255,7 +255,7 @@ class Definitions {
 		while( !isEntityIdentifierUnique(copy.identifier) )
 			copy.identifier = ed.identifier+(idx++);
 
-		entities.insert( dn.Lib.getArrayIdx(ed, entities), copy );
+		entities.insert( dn.Lib.getArrayIdx(ed, entities)+1, copy );
 		_project.tidy();
 
 		return copy;

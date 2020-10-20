@@ -124,7 +124,7 @@ class EntityDef {
 		while( !isFieldIdentifierUnique(copy.identifier) )
 			copy.identifier = fd.identifier+(idx++);
 
-		fieldDefs.insert( dn.Lib.getArrayIdx(fd,fieldDefs), copy );
+		fieldDefs.insert( dn.Lib.getArrayIdx(fd,fieldDefs)+1, copy );
 		return copy;
 	}
 
