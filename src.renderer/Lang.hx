@@ -1,10 +1,17 @@
 import dn.data.GetText;
 
 class Lang {
+    // Text constants
+    public static var _Duplicate = ()->t._("Duplicate");
+    public static var _Delete = ()->t._("Delete");
+
+
+    // Misc
     static var _initDone = false;
     static var DEFAULT = "en";
     public static var CUR = "??";
     public static var t : GetText;
+
 
     public static function init(?lid:String) {
         if( _initDone )

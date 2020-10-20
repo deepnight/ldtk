@@ -91,13 +91,13 @@ class LevelList extends ui.modal.Panel {
 
 			ContextMenu.addTo(e, [
 				{
-					label: L.t._("Duplicate"),
+					label: L._Duplicate(),
 					cb:()->{
 						project.duplicateLevel(l);
 						editor.ge.emit(LevelAdded);
 					}
 				},
-				{ label: L.t._("Delete"), cb:deleteLevel.bind(l) },
+				{ label: L._Delete(), cb:deleteLevel.bind(l) },
 			]);
 
 			e.click( function(_) {

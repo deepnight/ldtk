@@ -393,14 +393,14 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			ContextMenu.addTo(e, [
 				{
-					label: L.t._("Duplicate"),
+					label: L._Duplicate(),
 					cb: ()->{
 						project.defs.duplicateLayerDef(ld);
 						editor.ge.emit(LayerDefAdded);
 					},
 				},
 				{
-					label: L.t._("Delete"),
+					label: L._Delete(),
 					cb: ()->deleteLayer(ld),
 				}
 			]);
