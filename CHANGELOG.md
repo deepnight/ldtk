@@ -24,6 +24,7 @@
  - Fixed mouse wheel zoom limits
  - Fixed "color" field size in Entity instance editor when the value wasn't default.
  - Updated help window
+ - Pressing `Escape` key now leaves focused inputs first instead of closing panels.
  - Many bug fixes
 
 # 0.3.2-beta
