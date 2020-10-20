@@ -76,10 +76,21 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 	function updateAllLevels() {
 		var ops = [];
+
 		// Apply edited rules to all other levels
-		for(ruleUid in invalidatedRules) {
-			for( l in project.levels )
-			for( li in l.layerInstances ) {
+		for(ruleUid in invalidatedRules)
+		for( l in project.levels )
+		for( li in l.layerInstances ) {
+			if( !li.def.isAutoLayer() )
+				continue;
+
+			if( li.autoTilesCache==null ) {
+				ops.push({
+					label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
+					cb: li.applyAllAutoLayerRules
+				});
+			}
+			else {
 				var r = li.def.getRule(ruleUid);
 				if( r!=null ) {
 					ops.push({
@@ -250,6 +261,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						var copy = ld.duplicateRuleGroup(project, rg);
 						lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
 						editor.ge.emit( LayerRuleGroupAdded );
+						for(r in copy.rules)
+							invalidatedRules.set(r.uid, r.uid);
 					},
 				},
 				{
@@ -423,6 +436,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 							var copy = ld.duplicateRule(project, rg, r);
 							lastRule = copy;
 							editor.ge.emit( LayerRuleAdded(copy) );
+							invalidatedRules.set(copy.uid, copy.uid);
 						},
 					},
 					{

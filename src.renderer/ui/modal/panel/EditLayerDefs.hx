@@ -396,8 +396,8 @@ class EditLayerDefs extends ui.modal.Panel {
 					label: L._Duplicate(),
 					cb: ()->{
 						project.defs.duplicateLayerDef(ld);
-						editor.ge.emit(LayerDefAdded);
 						editor.checkAutoLayersCache( (_)->{} );
+						editor.ge.emit(LayerDefAdded);
 					},
 				},
 				{
