@@ -1506,7 +1506,8 @@ textarea {
 	.wrapper {
 		padding: 0px;
 		border-radius: 2px;
-		box-shadow: 0px 4px 8px black;
+		box-shadow: 0px 0px 16px black, 0px 4px 8px black;
+		outline: 1px solid black;
 
 		button {
 			background-color: $bgDark;
