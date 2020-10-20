@@ -61,17 +61,8 @@ class LayerDef {
 
 		// Read auto-layer rules
 		if( json.autoRuleGroups!=null ) {
-			for( ruleGroupJson in JsonTools.readArray(json.autoRuleGroups) ) {
-				var rg = o.createRuleGroup(
-					JsonTools.readInt(ruleGroupJson.uid,-1),
-					JsonTools.readString(ruleGroupJson.name, "default")
-				);
-				rg.active = JsonTools.readBool( ruleGroupJson.active, true );
-				rg.collapsed = JsonTools.readBool( ruleGroupJson.collapsed, false );
-				rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
-					return AutoLayerRuleDef.fromJson(jsonVersion, ruleJson);
-				});
-			}
+			for( ruleGroupJson in json.autoRuleGroups )
+				o.parseJsonRuleGroup(jsonVersion, ruleGroupJson);
 		}
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
@@ -94,19 +85,36 @@ class LayerDef {
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
 
 			autoTilesetDefUid: autoTilesetDefUid,
-			autoRuleGroups: autoRuleGroups.map( function(rg) return {
-				uid: rg.uid,
-				name: rg.name,
-				active: rg.active,
-				collapsed: rg.collapsed,
-				rules: rg.rules.map( function(r) return r.toJson() ),
-			}),
+			autoRuleGroups: autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)),
 			autoSourceLayerDefUid: autoSourceLayerDefUid,
 
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,
 			tilePivotY: tilePivotY,
 		}
+	}
+
+	function toJsonRuleGroup(rg:AutoLayerRuleGroup) {
+		return {
+			uid: rg.uid,
+			name: rg.name,
+			active: rg.active,
+			collapsed: rg.collapsed,
+			rules: rg.rules.map( function(r) return r.toJson() ),
+		}
+	}
+
+	public function parseJsonRuleGroup(jsonVersion:String, ruleGroupJson:Dynamic) : AutoLayerRuleGroup {
+		var rg = createRuleGroup(
+			JsonTools.readInt(ruleGroupJson.uid,-1),
+			JsonTools.readString(ruleGroupJson.name, "default")
+		);
+		rg.active = JsonTools.readBool( ruleGroupJson.active, true );
+		rg.collapsed = JsonTools.readBool( ruleGroupJson.collapsed, false );
+		rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
+			return AutoLayerRuleDef.fromJson(jsonVersion, ruleJson);
+		});
+		return rg;
 	}
 
 
@@ -212,6 +220,14 @@ class LayerDef {
 		copy.uid = p.makeUniqId();
 		rg.rules.insert( dn.Lib.getArrayIdx(r, rg.rules)+1, copy );
 		return copy;
+	}
+
+	public function duplicateRuleGroup(p:data.Project, rg:AutoLayerRuleGroup) {
+		return null;
+		// var copy = AutoLayerRuleDef.fromJson( p.jsonVersion, r.toJson() );
+		// copy.uid = p.makeUniqId();
+		// rg.rules.insert( dn.Lib.getArrayIdx(r, rg.rules)+1, copy );
+		// return copy;
 	}
 
 	public inline function iterateActiveRulesInDisplayOrder( cbEachRule:(r:AutoLayerRuleDef)->Void ) {
