@@ -141,7 +141,7 @@ class TilesetDef {
 			texture = h3d.mat.Texture.fromPixels(pixels);
 		}
 		catch(err:Dynamic) {
-			trace(err);
+			App.LOG.error(err);
 			removeAtlasImage();
 			return false;
 		}

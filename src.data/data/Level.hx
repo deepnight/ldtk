@@ -27,7 +27,7 @@ class Level {
 	}
 
 	@:keep public function toString() {
-		return Type.getClassName(Type.getClass(this));
+		return Type.getClassName( Type.getClass(this) ) + '.$identifier(#$uid)';
 	}
 
 	public function toJson() : led.Json.LevelJson {

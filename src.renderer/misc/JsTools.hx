@@ -468,7 +468,6 @@ class JsTools {
 		for(f in js.node.Fs.readdirSync(path)) {
 			var fp = dn.FilePath.fromDir(path);
 			fp.fileWithExt = f;
-			trace(fp);
 			if( js.node.Fs.lstatSync(fp.full).isFile() )
 				js.node.Fs.unlinkSync(fp.full);
 		}

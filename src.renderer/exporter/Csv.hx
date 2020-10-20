@@ -10,7 +10,6 @@ class Csv {
 		hei = h;
 		bytes = haxe.io.Bytes.alloc(wid*hei);
 		bytes.fill(0, bytes.length, 0);
-		trace('$wid x $hei => ${bytes.length}');
 	}
 
 	public inline function set(cx,cy, v:Int) {
