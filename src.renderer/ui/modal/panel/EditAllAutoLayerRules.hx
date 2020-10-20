@@ -402,12 +402,23 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 				// Delete
 				jRule.find("button.delete").click( function(ev) {
-					new ui.modal.dialog.Confirm( jRule, Lang.t._("Warning, this cannot be undone!"), true, function() {
-						App.LOG.general("Deleted rule");
-						rg.rules.remove(r);
-						editor.ge.emit( LayerRuleRemoved(r) );
-					});
+					deleteRule(rg, r);
 				});
+
+				ContextMenu.addTo(jRule, [
+					{
+						label: L._Duplicate(),
+						cb: ()->{
+							var copy = ld.duplicateRule(project, rg, r);
+							lastRule = copy;
+							editor.ge.emit( LayerRuleAdded(copy) );
+						},
+					},
+					{
+						label: L._Delete(),
+						cb: deleteRule.bind(rg, r),
+					},
+				]);
 			}
 
 			jGroupHeader.find(".active .icon").addClass( rg.active ? ( allActive ? "active" : "partial" ) : "inactive" );
@@ -440,4 +451,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		JsTools.parseComponents(jContent);
 
 	}
+
+	function deleteRule(rg:AutoLayerRuleGroup, r:data.def.AutoLayerRuleDef) {
+		new ui.modal.dialog.Confirm( Lang.t._("Warning, this cannot be undone!"), true, function() {
+			App.LOG.general("Deleted rule "+r);
+			rg.rules.remove(r);
+			editor.ge.emit( LayerRuleRemoved(r) );
+		});
+	}
+
 }

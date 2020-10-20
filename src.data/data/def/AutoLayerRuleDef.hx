@@ -3,6 +3,7 @@ package data.def;
 class AutoLayerRuleDef {
 	#if heaps // Required to avoid doc generator to explore code too deeply
 
+	@:allow(data.def.LayerDef)
 	public var uid(default,null) : Int;
 
 	public var tileIds : Array<Int> = [];
