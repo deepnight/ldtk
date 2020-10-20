@@ -227,9 +227,6 @@ button.context {
 		border-color: black;
 		background: black;
 	}
-	&.open {
-		background-color: black;
-	}
 }
 
 #miniNotif {
@@ -1495,10 +1492,21 @@ textarea {
 	}
 }
 
+
+*.contextMenuOpen {
+	outline: 1px solid $orange !important;
+	// background-color: $darkOrange !important;
+	button.context {
+		background: black !important;
+		outline: 1px solid $orange;
+	}
+}
+
 .window.contextMenu {
 	.wrapper {
 		padding: 0px;
 		border-radius: 2px;
+		box-shadow: 0px 4px 8px black;
 
 		button {
 			background-color: $bgDark;

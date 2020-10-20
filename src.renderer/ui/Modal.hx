@@ -35,29 +35,54 @@ class Modal extends dn.Process {
 		editor.ge.addGlobalListener(onGlobalEvent);
 	}
 
-	public function positionNear(?target:js.jquery.JQuery, toLeft=false) {
-		if( target==null )
+	public function positionNear(?target:js.jquery.JQuery, ?m:MouseCoords, toLeft=false) {
+		if( target==null && m==null )
 			jModalAndMask.addClass("centered");
 		else {
 			jModalAndMask.removeClass("centered");
-			var targetOff = target.offset();
-			var x = toLeft ? targetOff.left+target.outerWidth()-jContent.width() : targetOff.left;
 			var hei = App.ME.jDoc.innerHeight();
-			if( targetOff.top>=hei*0.7 ) {
-				// Place above target
-				jWrapper.offset({
-					left: x,
-					top: 0,
-				});
-				jWrapper.css("top", "auto");
-				jWrapper.css("bottom", (hei-targetOff.top)+"px");
+
+			if( m!=null ) {
+				// Use mouse coords
+				var x = m.pageX;
+				var y = m.pageY;
+				if( y>=hei*0.7 ) {
+					// Above coords
+					jWrapper.offset({
+						left: x,
+						top: 0,
+					});
+					jWrapper.css("top", "auto");
+					jWrapper.css("bottom", (hei-y+10)+"px");
+				}
+				else {
+					// Beneath
+					jWrapper.offset({
+						left: x,
+						top: y+10,
+					});
+				}
 			}
 			else {
-				// Place beneath target
-				jWrapper.offset({
-					left: x,
-					top: targetOff.top+target.outerHeight()
-				});
+				// Use DOM element
+				var targetOff = target.offset();
+				var x = toLeft ? targetOff.left+target.outerWidth()-jContent.width() : targetOff.left;
+				if( targetOff.top>=hei*0.7 ) {
+					// Place above target
+					jWrapper.offset({
+						left: x,
+						top: 0,
+					});
+					jWrapper.css("top", "auto");
+					jWrapper.css("bottom", (hei-targetOff.top)+"px");
+				}
+				else {
+					// Place beneath target
+					jWrapper.offset({
+						left: x,
+						top: targetOff.top+target.outerHeight()
+					});
+				}
 			}
 		}
 	}

@@ -61,14 +61,14 @@ class MouseCoords {
 
 	var _relativeLayerInst : Null<data.inst.LayerInstance>;
 
-	public function new(?pageX, ?pageY) {
+	public function new(?pageX:Float, ?pageY:Float) {
 		if( pageX==null ) {
 			this.pageX = App.ME.lastKnownMouse.pageX;
 			this.pageY = App.ME.lastKnownMouse.pageY;
 		}
 		else {
-			this.pageX = pageX;
-			this.pageY = pageY;
+			this.pageX = Std.int(pageX);
+			this.pageY = Std.int(pageY);
 		}
 	}
 
