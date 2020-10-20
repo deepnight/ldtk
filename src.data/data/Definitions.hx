@@ -394,6 +394,17 @@ class Definitions {
 		return ed;
 	}
 
+	public function duplicateEnumDef(ed:data.def.EnumDef) {
+		var copy = data.def.EnumDef.fromJson( _project.jsonVersion, ed.toJson(_project) );
+		copy.uid = _project.makeUniqId();
+
+		var idx = 2;
+		while( !isEnumIdentifierUnique(copy.identifier) )
+			copy.identifier = ed.identifier+(idx++);
+
+		return copy;
+	}
+
 	public function removeEnumDef(ed:data.def.EnumDef) {
 		if( ed.isExternal() && !externalEnums.remove(ed) || !ed.isExternal() && !enums.remove(ed) )
 			throw "EnumDef not found";

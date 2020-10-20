@@ -11,7 +11,7 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 28,
+	"nextUid": 33,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -298,6 +298,22 @@
 						"min": null,
 						"max": null,
 						"defaultOverride": null
+					},
+					{
+						"identifier": "Enum",
+						"__type": "LocalEnum.Test",
+						"uid": 31,
+						"type": { "id": "F_Enum", "params": [27] },
+						"isArray": false,
+						"canBeNull": true,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "EntityTile",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
+						"min": null,
+						"max": null,
+						"defaultOverride": null
 					}
 				]
 			},
@@ -336,7 +352,20 @@
 			{ "id": "MetalCrate", "tileId": 22, "__tileSrcRect": [96,16,16,16] },
 			{ "id": "Cart", "tileId": 48, "__tileSrcRect": [0,48,16,16] }
 		], "iconTilesetUid": 8, "externalRelPath": null, "externalFileChecksum": null }],
-		"externalEnums": []
+		"externalEnums": [
+			{ "identifier": "A", "uid": 28, "values": [
+				{ "id": "A0", "tileId": null, "__tileSrcRect": null },
+				{ "id": "A1", "tileId": null, "__tileSrcRect": null },
+				{ "id": "A2", "tileId": null, "__tileSrcRect": null },
+				{ "id": "A3", "tileId": null, "__tileSrcRect": null }
+			], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" },
+			{ "identifier": "B", "uid": 29, "values": [{ "id": "B0", "tileId": null, "__tileSrcRect": null }], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" },
+			{ "identifier": "C", "uid": 30, "values": [
+				{ "id": "C0", "tileId": null, "__tileSrcRect": null },
+				{ "id": "C1", "tileId": null, "__tileSrcRect": null },
+				{ "id": "C2", "tileId": null, "__tileSrcRect": null }
+			], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" }
+		]
 	},
 	"levels": [
 		{
@@ -361,7 +390,7 @@
 					"seed": 6639060,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Text", "__grid": [7,5], "__tile": null, "defUid": 2, "px": [120,96], "fieldInstances": [
+						{ "__identifier": "Text", "__grid": [7,5], "__tile": { "tilesetUid": 8, "srcRect": [96,16,16,16] }, "defUid": 2, "px": [120,96], "fieldInstances": [
 							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
 							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
 							{
@@ -398,9 +427,19 @@
 									}
 								]
 							},
-							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] },
+							{
+								"__identifier": "Enum",
+								"__value": "MetalCrate",
+								"__type": "LocalEnum.Test",
+								"defUid": 31,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["MetalCrate"]
+								}]
+							}
 						] },
-						{ "__identifier": "Text", "__grid": [11,14], "__tile": null, "defUid": 2, "px": [184,240], "fieldInstances": [
+						{ "__identifier": "Text", "__grid": [11,14], "__tile": { "tilesetUid": 8, "srcRect": [96,0,16,16] }, "defUid": 2, "px": [184,240], "fieldInstances": [
 							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
 							{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
 							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
@@ -437,6 +476,16 @@
 										"params": ["14,16"]
 									}
 								]
+							},
+							{
+								"__identifier": "Enum",
+								"__value": "WoodCrate",
+								"__type": "LocalEnum.Test",
+								"defUid": 31,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["WoodCrate"]
+								}]
 							}
 						] }
 					]

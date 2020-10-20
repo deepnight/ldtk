@@ -1,6 +1,7 @@
 package data.def;
 
 class EnumDef {
+	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
 	public var values : Array<data.LedTypes.EnumDefValue> = [];

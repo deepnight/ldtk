@@ -23,40 +23,7 @@ class EditEnums extends ui.modal.Panel {
 				N.error(L.t._("No enum selected."));
 				return;
 			}
-
-			if( curEnum.isExternal() ) {
-				// Extern enum removal
-				new ui.modal.dialog.Confirm(
-					ev.getThis(),
-					L.t._("WARNING: removing this external enum will also remove ALL the external enums from the same source! Please note that this will also affect all Entities using any of these enums in ALL levels."),
-					true,
-					function() {
-						var name = dn.FilePath.fromFile(curEnum.externalRelPath).fileWithExt;
-						new ui.LastChance( L.t._("::file:: enums deleted", { file:name }), project );
-						project.defs.removeExternalEnumSource(curEnum.externalRelPath);
-						editor.ge.emit(EnumDefRemoved);
-						selectEnum( project.defs.enums[0] );
-					}
-				);
-			}
-			else {
-				// Local enum removal
-				var isUsed = project.isEnumDefUsed(curEnum);
-				new ui.modal.dialog.Confirm(
-					ev.getThis(),
-					isUsed
-						? Lang.t._("WARNING! This ENUM is used in one or more entity fields. These fields will also be removed!")
-						: Lang.t._("This enum is not used and can be safely removed."),
-					isUsed,
-					function() {
-						new ui.LastChance( L.t._("Enum ::name:: deleted", { name: curEnum.identifier}), project );
-						project.defs.removeEnumDef(curEnum);
-						editor.ge.emit(EnumDefRemoved);
-						selectEnum( project.defs.enums[0] );
-					}
-				);
-			}
-
+			deleteEnumDef(curEnum,false);
 		});
 
 		// Import HX
@@ -86,6 +53,44 @@ class EditEnums extends ui.modal.Panel {
 
 		updateEnumList();
 		updateEnumForm();
+	}
+
+	function deleteEnumDef(ed:data.def.EnumDef, fromContext:Bool) {
+		if( ed.isExternal() ) {
+			// Extern enum removal
+			new ui.modal.dialog.Confirm(
+				L.t._("WARNING: removing this external enum will also remove ALL the external enums from the same source! Please note that this will also affect all Entities using any of these enums in ALL levels."),
+				true,
+				function() {
+					var name = dn.FilePath.fromFile(ed.externalRelPath).fileWithExt;
+					new ui.LastChance( L.t._("::file:: enums deleted", { file:name }), project );
+					project.defs.removeExternalEnumSource(ed.externalRelPath);
+					editor.ge.emit(EnumDefRemoved);
+					selectEnum( project.defs.enums[0] );
+				}
+			);
+		}
+		else {
+			// Local enum removal
+			function _delete() {
+				new ui.LastChance( L.t._("Enum ::name:: deleted", { name: ed.identifier}), project );
+				project.defs.removeEnumDef(ed);
+				editor.ge.emit(EnumDefRemoved);
+				selectEnum( project.defs.enums[0] );
+			}
+			var isUsed = project.isEnumDefUsed(ed);
+			if( !isUsed && !fromContext )
+				new ui.modal.dialog.Confirm(Lang.t._("This enum is not used and can be safely removed."), _delete);
+			else if( isUsed )
+				new ui.modal.dialog.Confirm(
+					Lang.t._("WARNING! This ENUM is used in one or more entity fields. These fields will also be deleted!"),
+					true,
+					_delete
+				);
+			else
+				_delete();
+		}
+
 	}
 
 	override function onGlobalEvent(ge:GlobalEvent) {
@@ -125,6 +130,21 @@ class EditEnums extends ui.modal.Panel {
 			e.click( function(_) {
 				selectEnum(ed);
 			});
+
+			ContextMenu.addTo(e, [
+				{
+					label: L._Duplicate(),
+					cb: ()->{
+						var copy = project.defs.duplicateEnumDef(ed);
+						editor.ge.emit(EnumDefAdded);
+						selectEnum(copy);
+					},
+				},
+				{
+					label: L._Delete(),
+					cb: deleteEnumDef.bind(ed,true),
+				}
+			]);
 		}
 
 		var grouped = project.defs.getGroupedExternalEnums();
@@ -180,6 +200,14 @@ class EditEnums extends ui.modal.Panel {
 				e.click( function(_) {
 					selectEnum(ed);
 				});
+
+
+				ContextMenu.addTo(e, [
+					{
+						label: L._Delete(),
+						cb: deleteEnumDef.bind(ed,true),
+					}
+				]);
 			}
 		}
 
