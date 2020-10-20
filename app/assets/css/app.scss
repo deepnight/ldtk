@@ -222,6 +222,7 @@ button.transparent {
 button.context {
 	border: 1px solid rgba(0,0,0, 0.2);
 	border-radius: 2px;
+	background-color: rgba(0, 0, 0, 0.1);
 	&:hover {
 		border-color: black;
 		background: black;
@@ -3901,6 +3902,7 @@ $patternSize : 32px;
 				overflow: auto;
 				li {
 					grid-template-columns: auto min-content min-content;
+					gap: 0px 2px;
 					.name {
 						width: 100%;
 						overflow: hidden;
