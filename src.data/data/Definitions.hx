@@ -112,6 +112,12 @@ class Definitions {
 		var copy = data.def.LayerDef.fromJson( _project.jsonVersion, ld.toJson() );
 		copy.uid = _project.makeUniqId();
 
+		for(rg in copy.autoRuleGroups) {
+			rg.uid = _project.makeUniqId();
+			for(r in rg.rules)
+				r.uid = _project.makeUniqId();
+		}
+
 		var idx = 2;
 		while( !isLayerNameUnique(copy.identifier) )
 			copy.identifier = ld.identifier+(idx++);
