@@ -402,6 +402,8 @@ class Definitions {
 		while( !isEnumIdentifierUnique(copy.identifier) )
 			copy.identifier = ed.identifier+(idx++);
 
+		enums.insert( dn.Lib.getArrayIdx(ed, enums)+1, copy );
+		_project.tidy();
 		return copy;
 	}
 
