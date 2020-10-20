@@ -219,6 +219,8 @@ class LayerDef {
 		var copy = AutoLayerRuleDef.fromJson( p.jsonVersion, r.toJson() );
 		copy.uid = p.makeUniqId();
 		rg.rules.insert( dn.Lib.getArrayIdx(r, rg.rules)+1, copy );
+
+		p.tidy();
 		return copy;
 	}
 
@@ -229,6 +231,7 @@ class LayerDef {
 		for(r in copy.rules)
 			r.uid = p.makeUniqId();
 
+		p.tidy();
 		return copy;
 	}
 
