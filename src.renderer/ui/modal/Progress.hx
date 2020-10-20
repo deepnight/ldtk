@@ -1,15 +1,17 @@
 package ui.modal;
 
 class Progress extends ui.Modal {
-	public function new(?title:String, ops:Array<{ label:String, cb:Void->Void }>, ?onComplete:Void->Void) {
+	public function new(title:String, ops:Array<{ label:String, cb:Void->Void }>, ?onComplete:Void->Void) {
 		super();
+
+		App.LOG.general('"$title", ${ops.length} operation(s):');
 
 		canBeClosedManually = false;
 		jModalAndMask.addClass("progress");
 		jMask.hide().fadeIn(500);
 
-		if( title==null )
-			title = L.t._("Please wait...");
+		// if( title==null )
+			// title = L.t._("Please wait...");
 		jContent.append('<h2>$title</h2>');
 
 		var jBar = App.ME.jBody.find("xml#progressBar").children().clone();
