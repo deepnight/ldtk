@@ -465,7 +465,7 @@ class EditEntityDefs extends ui.modal.Panel {
 						}
 						else
 							new ui.modal.dialog.Confirm(
-								L.t._("This conversion will TRANSFORM EXISTING VALUES because the target type isn't fully compatible with the previous one! Please make sure that you known what you're doing here."),
+								L.t._("This conversion will TRANSFORM EXISTING VALUES because the target type isn't fully compatible with the previous one!\nSome data might be lost in the process.\nPlease make sure that you known what you're doing here."),
 								true,
 								()->{
 									w.close();

@@ -384,22 +384,6 @@
 						"defaultOverride": { "id": "V_Int", "params": [3] }
 					},
 					{
-						"identifier": "array",
-						"__type": "Array<Int>",
-						"uid": 36,
-						"type": "F_Int",
-						"isArray": true,
-						"canBeNull": false,
-						"arrayMinLength": null,
-						"arrayMaxLength": null,
-						"editorDisplayMode": "ValueOnly",
-						"editorDisplayPos": "Above",
-						"editorAlwaysShow": false,
-						"min": null,
-						"max": null,
-						"defaultOverride": { "id": "V_Int", "params": [1] }
-					},
-					{
 						"identifier": "scale",
 						"__type": "Float",
 						"uid": 39,
@@ -414,6 +398,22 @@
 						"min": 0.1,
 						"max": 2,
 						"defaultOverride": { "id": "V_Float", "params": [1] }
+					},
+					{
+						"identifier": "array",
+						"__type": "Array<Int>",
+						"uid": 36,
+						"type": "F_Int",
+						"isArray": true,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "ValueOnly",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
+						"min": null,
+						"max": null,
+						"defaultOverride": { "id": "V_Int", "params": [1] }
 					}
 				]
 			}
