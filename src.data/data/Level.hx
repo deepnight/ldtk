@@ -136,6 +136,23 @@ class Level {
 	}
 
 
+	public function hasAnyError() {
+		for(li in layerInstances)
+			switch li.def.type {
+				case IntGrid:
+				case Entities:
+					for(ei in li.entityInstances)
+						if( ei.hasAnyFieldError() )
+							return true;
+
+				case Tiles:
+				case AutoLayer:
+			}
+			
+		return false;
+	}
+
+
 
 	/** RENDERING *******************/
 

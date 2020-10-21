@@ -138,6 +138,14 @@ class EntityInstance {
 	}
 
 
+	public function hasAnyFieldError() {
+		for(fi in fieldInstances)
+			if( fi.hasAnyErrorInValues() )
+				return true;
+		return false;
+	}
+
+
 	// ** FIELDS **********************************
 
 	public function getFieldInstance(fieldDef:data.def.FieldDef) {

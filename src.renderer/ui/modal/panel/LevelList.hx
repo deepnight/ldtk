@@ -100,6 +100,9 @@ class LevelList extends ui.modal.Panel {
 				{ label: L._Delete(), cb:deleteLevel.bind(l) },
 			]);
 
+			if( l.hasAnyError() )
+				e.append('<div class="error">Contains errors</div>');
+
 			e.click( function(_) {
 				select(l);
 			});

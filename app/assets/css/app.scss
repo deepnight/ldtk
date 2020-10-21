@@ -2934,6 +2934,10 @@ canvas#webgl {
 		>.mainList {
 			display: grid;
 			grid-template-rows: auto min-content;
+			.error {
+				padding: 2px 8px;
+				font-size: 8pt;
+			}
 		}
 	}
 }
