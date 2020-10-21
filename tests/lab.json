@@ -11,7 +11,7 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 38,
+	"nextUid": 40,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -221,9 +221,9 @@
 		],
 		"entities": [
 			{
-				"identifier": "Text",
+				"identifier": "Tutorial",
 				"uid": 2,
-				"width": 14,
+				"width": 24,
 				"height": 24,
 				"color": "#D4D4D4",
 				"renderMode": "Rectangle",
@@ -237,10 +237,26 @@
 				"pivotY": 1,
 				"fieldDefs": [
 					{
-						"identifier": "text",
+						"identifier": "label",
 						"__type": "String",
 						"uid": 3,
-						"type": "F_String",
+						"type": "F_Text",
+						"isArray": false,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "ValueOnly",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
+						"min": null,
+						"max": null,
+						"defaultOverride": null
+					},
+					{
+						"identifier": "desc",
+						"__type": "String",
+						"uid": 38,
+						"type": "F_Text",
 						"isArray": false,
 						"canBeNull": false,
 						"arrayMinLength": null,
@@ -263,7 +279,7 @@
 						"arrayMaxLength": null,
 						"editorDisplayMode": "ValueOnly",
 						"editorDisplayPos": "Center",
-						"editorAlwaysShow": true,
+						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
 						"defaultOverride": { "id": "V_Int", "params": [8562879] }
@@ -321,8 +337,8 @@
 			{
 				"identifier": "B",
 				"uid": 6,
-				"width": 8,
-				"height": 8,
+				"width": 12,
+				"height": 12,
 				"color": "#C08A16",
 				"renderMode": "Cross",
 				"showName": true,
@@ -382,6 +398,22 @@
 						"min": null,
 						"max": null,
 						"defaultOverride": { "id": "V_Int", "params": [1] }
+					},
+					{
+						"identifier": "scale",
+						"__type": "Float",
+						"uid": 39,
+						"type": "F_Float",
+						"isArray": false,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "NameAndValue",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
+						"min": 0.1,
+						"max": 2,
+						"defaultOverride": { "id": "V_Float", "params": [1] }
 					}
 				]
 			}
@@ -429,9 +461,9 @@
 					"seed": 8476847,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Text", "__grid": [3,3], "__tile": null, "defUid": 2, "px": [56,64], "fieldInstances": [
+						{ "__identifier": "Tutorial", "__grid": [3,3], "__tile": null, "defUid": 2, "px": [56,64], "fieldInstances": [
 							{
-								"__identifier": "text",
+								"__identifier": "label",
 								"__value": "test",
 								"__type": "String",
 								"defUid": 3,
@@ -443,7 +475,8 @@
 							{ "__identifier": "color", "__value": "#82A8BF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
 							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
 							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] },
-							{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] }
+							{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] },
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 38, "realEditorValues": [] }
 						] },
 						{ "__identifier": "B", "__grid": [5,2], "__tile": null, "defUid": 6, "px": [88,40], "fieldInstances": [] },
 						{ "__identifier": "Hero", "__grid": [12,6], "__tile": null, "defUid": 34, "px": [200,112], "fieldInstances": [
@@ -454,14 +487,22 @@
 								"__type": "Array<Int>",
 								"defUid": 36,
 								"realEditorValues": [ null, null, null ]
-							}
+							},
+							{ "__identifier": "scale", "__value": 1, "__type": "Float", "defUid": 39, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Text", "__grid": [13,2], "__tile": null, "defUid": 2, "px": [216,48], "fieldInstances": [
-							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
-							{ "__identifier": "color", "__value": "#82A8BF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
+						{ "__identifier": "Tutorial", "__grid": [10,2], "__tile": null, "defUid": 2, "px": [168,48], "fieldInstances": [
+							{ "__identifier": "label", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
+							{
+								"__identifier": "color",
+								"__value": "#82A8BF",
+								"__type": "Color",
+								"defUid": 5,
+								"realEditorValues": [null]
+							},
 							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
 							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] },
-							{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] }
+							{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] },
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 38, "realEditorValues": [] }
 						] }
 					]
 				},
@@ -669,8 +710,8 @@
 					"seed": 6639060,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Text", "__grid": [7,5], "__tile": { "tilesetUid": 8, "srcRect": [96,16,16,16] }, "defUid": 2, "px": [120,96], "fieldInstances": [
-							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
+						{ "__identifier": "Tutorial", "__grid": [7,5], "__tile": { "tilesetUid": 8, "srcRect": [96,16,16,16] }, "defUid": 2, "px": [120,96], "fieldInstances": [
+							{ "__identifier": "label", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
 							{ "__identifier": "color", "__value": "#82A8BF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
 							{
 								"__identifier": "path",
@@ -716,10 +757,11 @@
 									"id": "V_String",
 									"params": ["MetalCrate"]
 								}]
-							}
+							},
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 38, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Text", "__grid": [11,14], "__tile": { "tilesetUid": 8, "srcRect": [96,0,16,16] }, "defUid": 2, "px": [184,240], "fieldInstances": [
-							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
+						{ "__identifier": "Tutorial", "__grid": [11,14], "__tile": { "tilesetUid": 8, "srcRect": [96,0,16,16] }, "defUid": 2, "px": [184,240], "fieldInstances": [
+							{ "__identifier": "label", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
 							{ "__identifier": "color", "__value": "#82A8BF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
 							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
 							{
@@ -765,7 +807,8 @@
 									"id": "V_String",
 									"params": ["WoodCrate"]
 								}]
-							}
+							},
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 38, "realEditorValues": [] }
 						] }
 					]
 				},
@@ -1096,9 +1139,9 @@
 					"seed": 7015219,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Text", "__grid": [3,9], "__tile": null, "defUid": 2, "px": [56,152], "fieldInstances": [
+						{ "__identifier": "Tutorial", "__grid": [3,9], "__tile": null, "defUid": 2, "px": [56,152], "fieldInstances": [
 							{
-								"__identifier": "text",
+								"__identifier": "label",
 								"__value": "L",
 								"__type": "String",
 								"defUid": 3,
@@ -1109,11 +1152,13 @@
 							},
 							{ "__identifier": "color", "__value": "#82A8BF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
 							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
-							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] },
+							{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] },
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 38, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Text", "__grid": [11,9], "__tile": null, "defUid": 2, "px": [184,152], "fieldInstances": [
+						{ "__identifier": "Tutorial", "__grid": [11,9], "__tile": null, "defUid": 2, "px": [184,152], "fieldInstances": [
 							{
-								"__identifier": "text",
+								"__identifier": "label",
 								"__value": "R",
 								"__type": "String",
 								"defUid": 3,
@@ -1124,11 +1169,13 @@
 							},
 							{ "__identifier": "color", "__value": "#82A8BF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
 							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
-							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] },
+							{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] },
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 38, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Text", "__grid": [7,11], "__tile": null, "defUid": 2, "px": [120,184], "fieldInstances": [
+						{ "__identifier": "Tutorial", "__grid": [7,11], "__tile": null, "defUid": 2, "px": [120,184], "fieldInstances": [
 							{
-								"__identifier": "text",
+								"__identifier": "label",
 								"__value": "C",
 								"__type": "String",
 								"defUid": 3,
@@ -1139,16 +1186,20 @@
 							},
 							{ "__identifier": "color", "__value": "#82A8BF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
 							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
-							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] },
+							{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] },
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 38, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Text", "__grid": [2,4], "__tile": null, "defUid": 2, "px": [40,72], "fieldInstances": [
-							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
+						{ "__identifier": "Tutorial", "__grid": [2,4], "__tile": null, "defUid": 2, "px": [40,72], "fieldInstances": [
+							{ "__identifier": "label", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
 							{ "__identifier": "color", "__value": "#82A8BF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
 							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
-							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }
+							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] },
+							{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] },
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 38, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Text", "__grid": [8,17], "__tile": null, "defUid": 2, "px": [136,280], "fieldInstances": [
-							{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
+						{ "__identifier": "Tutorial", "__grid": [8,17], "__tile": null, "defUid": 2, "px": [136,280], "fieldInstances": [
+							{ "__identifier": "label", "__value": "", "__type": "String", "defUid": 3, "realEditorValues": [] },
 							{
 								"__identifier": "color",
 								"__value": "#94DBFF",
@@ -1215,7 +1266,9 @@
 									"id": "V_String",
 									"params": ["2,19"]
 								} ]
-							}
+							},
+							{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] },
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 38, "realEditorValues": [] }
 						] }
 					]
 				},

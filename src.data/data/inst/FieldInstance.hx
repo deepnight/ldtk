@@ -7,6 +7,8 @@ class FieldInstance {
 	public var def(get,never) : data.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defUid);
 
 	public var defUid: Int;
+
+	@:allow(misc.FieldTypeConverter)
 	var internalValues : Array<ValueWrapper>;
 
 	@:allow(data.inst.EntityInstance)

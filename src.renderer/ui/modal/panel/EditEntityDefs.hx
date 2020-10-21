@@ -443,7 +443,43 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Type desc
 		jFieldForm.find(".type").val( curField.getShortDescription() );
 
-		jFieldForm.find("button.convert").click( (_)->N.notImplemented() );
+		// Type conversion
+		jFieldForm.find("button.convert").click( (ev)->{
+			#if !debug
+			N.notImplemented(); // HACK remove this before distrib!
+			return;
+			#end
+
+			var w = new Dialog(ev.getThis());
+			var types : Array<data.LedTypes.FieldType> = [
+				F_Int, F_Float, F_Bool, F_String, F_Text, F_Color, F_Point
+			];
+			for(type in types) {
+				if( misc.FieldTypeConverter.canConvert(curField.type, type) ) {
+					var jButton = new J('<button>$type</button>');
+					jButton.appendTo(w.jContent);
+					jButton.click( (_)->{
+						if( FieldTypeConverter.isLossless(curField.type, type) ) {
+							w.close();
+							misc.FieldTypeConverter.convert(project, curEntity, curField, type);
+						}
+						else
+							new ui.modal.dialog.Confirm(
+								L.t._("This conversion will TRANSFORM EXISTING VALUES because the target type isn't fully compatible with the previous one! Please make sure that you known what you're doing here."),
+								true,
+								()->{
+									w.close();
+									misc.FieldTypeConverter.convert(project, curEntity, curField, type);
+								}
+							);
+					});
+				}
+
+			}
+
+			// 	v
+			// misc.FieldTypeConverter.convert(project, curField, F_Text); // HACK
+		} );
 
 
 		var i = new form.input.EnumSelect(

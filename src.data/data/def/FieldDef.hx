@@ -5,6 +5,8 @@ import data.LedTypes;
 class FieldDef {
 	@:allow(data.Definitions, data.def.EntityDef)
 	public var uid(default,null) : Int;
+
+	@:allow(misc.FieldTypeConverter)
 	public var type(default,null) : data.LedTypes.FieldType;
 	public var identifier(default,set) : String;
 	public var canBeNull : Bool;
@@ -90,33 +92,6 @@ class FieldDef {
 			max: max==null ? null : JsonTools.writeFloat(max),
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
 		}
-	}
-
-
-	public function convertType(newType:FieldType) {
-		var convertors : Array<{ from:FieldType, to:FieldType, convert:data.inst.FieldInstance->Void }>= [
-			{ from:F_Int, to:F_Float, convert:(fi)->{} },
-			{ from:F_String, to:F_Text, convert:(fi)->{} },
-			{ from:F_Text, to:F_String, convert:(fi)->{} },
-		];
-
-		for(c in convertors)
-			if( c.from.equals(type) && c.to.equals(newType) ) {
-				for(l in _project.levels)
-				for(li in l.layerInstances)
-					if( li.def.type==Entities )
-						for( ei in li.entityInstances )
-						for(fi in ei.fieldInstances)
-							if( fi.defUid==uid ) {
-								App.LOG.general('Converting ${l.identifier}.${ei.def.identifier}.$identifier to $newType');
-								c.convert(fi);
-							}
-
-				type = newType;
-				return true;
-			}
-
-		return false;
 	}
 
 
