@@ -303,7 +303,7 @@ class EntityInstanceEditor extends dn.Process {
 				});
 				hideInputIfDefault(arrayIdx, input, fi);
 
-			case F_String:
+			case F_String(multilines): // TODO multilines editor
 				var input = new J("<input/>");
 				input.appendTo(jTarget);
 				input.attr("type","text");
@@ -498,7 +498,7 @@ class EntityInstanceEditor extends dn.Process {
 							}
 							var jArray = jPanel.find('[defuid=${fd.uid}] .array');
 							switch fi.def.type {
-								case F_Int, F_Float, F_String: jArray.find("a.usingDefault:last").click();
+								case F_Int, F_Float, F_String(_): jArray.find("a.usingDefault:last").click();
 								case F_Bool:
 								case F_Color:
 								case F_Enum(enumDefUid):

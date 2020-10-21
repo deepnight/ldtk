@@ -1,5 +1,7 @@
 package ui.modal.panel;
 
+import data.LedTypes;
+
 class EditEntityDefs extends ui.modal.Panel {
 	static var LAST_ENTITY_ID = -1;
 	static var LAST_FIELD_ID = -1;
@@ -85,7 +87,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			// Type picker
 			var w = new ui.modal.Dialog(anchor,"fieldTypes");
 			var types : Array<data.LedTypes.FieldType> = [
-				F_Int, F_Float, F_Bool, F_String, F_Enum(null), F_Color, F_Point
+				F_Int, F_Float, F_Bool, F_String(null), F_Enum(null), F_Color, F_Point
 			];
 			for(type in types) {
 				var b = new J("<button/>");
@@ -508,14 +510,14 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Default value
 		switch curField.type {
-			case F_Int, F_Float, F_String, F_Point:
+			case F_Int, F_Float, F_String(_), F_Point:
 				var defInput = jFieldForm.find("input[name=fDef]");
 				if( curField.defaultOverride != null )
 					defInput.val( Std.string( curField.getUntypedDefault() ) );
 				else
 					defInput.val("");
 
-				if( curField.type==F_String && !curField.canBeNull )
+				if( curField.type.getIndex()==F_String(null).getIndex() && !curField.canBeNull )
 					defInput.attr("placeholder", "(empty string)");
 				else if( curField.canBeNull )
 					defInput.attr("placeholder", "(null)");
@@ -523,7 +525,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					defInput.attr("placeholder", switch curField.type {
 						case F_Int: Std.string( curField.iClamp(0) );
 						case F_Float: Std.string( curField.fClamp(0) );
-						case F_String: "";
+						case F_String(multilines): "";
 						case F_Point: "0"+Const.POINT_SEPARATOR+"0";
 						case F_Bool, F_Color, F_Enum(_): "N/A";
 					});

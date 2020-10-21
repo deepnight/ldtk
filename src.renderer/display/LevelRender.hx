@@ -804,7 +804,7 @@ class LevelRender extends dn.Process {
 							case RadiusPx, RadiusGrid: false;
 							case _: true;
 						};
-					case F_String, F_Bool: true;
+					case F_String(_), F_Bool: true;
 					case F_Color, F_Point: false;
 					case F_Enum(enumDefUid): fd.editorDisplayMode!=EntityTile;
 				}

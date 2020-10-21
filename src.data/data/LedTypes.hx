@@ -24,7 +24,7 @@ typedef IntGridValueDef = {
 enum FieldType {
 	F_Int;
 	F_Float;
-	F_String;
+	F_String(multilines:Bool);
 	F_Bool;
 	F_Color;
 	F_Enum(enumDefUid:Int);

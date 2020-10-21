@@ -1,5 +1,7 @@
 package data.def;
 
+import data.LedTypes;
+
 class FieldDef {
 	@:allow(data.Definitions, data.def.EntityDef)
 	public var uid(default,null) : Int;
@@ -32,7 +34,7 @@ class FieldDef {
 		editorDisplayPos = Above;
 		editorAlwaysShow = false;
 		identifier = "NewField"+uid;
-		canBeNull = type==F_String || type==F_Point && !isArray;
+		canBeNull = type.getIndex()==F_String(null).getIndex() || type==F_Point && !isArray;
 		arrayMinLength = arrayMaxLength = null;
 		isArray = false;
 		min = max = null;
@@ -55,7 +57,11 @@ class FieldDef {
 	}
 
 	public static function fromJson(p:Project, json:Dynamic) {
-		var o = new FieldDef( p, JsonTools.readInt(json.uid), JsonTools.readEnum(data.LedTypes.FieldType, json.type, false) );
+		if( json.type=="F_String" )
+			json.type = { id:"F_String", params:[false] }
+
+		var type = JsonTools.readEnum(data.LedTypes.FieldType, json.type, false);
+		var o = new FieldDef( p, JsonTools.readInt(json.uid), type );
 		o.isArray = JsonTools.readBool(json.isArray, false);
 		o.identifier = JsonTools.readString(json.identifier);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
@@ -95,7 +101,7 @@ class FieldDef {
 		var desc = switch type {
 			case F_Int: "Int";
 			case F_Float: "Float";
-			case F_String: "String";
+			case F_String(multi): multi?"Multi-lines":"String";
 			case F_Bool: "Bool";
 			case F_Color: "Color";
 			case F_Point: "Point";
@@ -108,7 +114,7 @@ class FieldDef {
 		var desc = switch type {
 			case F_Int: "Int";
 			case F_Float: "Float";
-			case F_String: "String";
+			case F_String(multilines): "String";
 			case F_Bool: "Bool";
 			case F_Color: "Color";
 			case F_Point: "Point";
@@ -123,7 +129,7 @@ class FieldDef {
 		var infinity = "∞";
 		return getShortDescription()
 			+ ( canBeNull ? " (nullable)" : "" )
-			+ ", default = " + ( type==F_String && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
+			+ ", default = " + ( type.getIndex()==F_String(null).getIndex() && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
 			+ ( min==null && max==null ? "" :
 				( type==F_Int ? " ["+(min==null?"-"+infinity:""+dn.M.round(min))+";"+(max==null?"+"+infinity:""+dn.M.round(max))+"]" : "" )
 				+ ( type==F_Float ? " ["+(min==null?"-"+infinity:""+min)+";"+(max==null?infinity:""+max)+"]" : "" )
@@ -214,7 +220,7 @@ class FieldDef {
 	}
 
 	public function getStringDefault() : Null<String> {
-		require(F_String);
+		require( F_String(null) );
 		return switch defaultOverride {
 			case null: canBeNull ? null : "";
 			case V_String(v): v;
@@ -260,7 +266,7 @@ class FieldDef {
 				var def = Std.parseFloat(rawDef);
 				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Float( fClamp(def) );
 
-			case F_String:
+			case F_String(multilines):
 				rawDef = StringTools.trim(rawDef);
 				defaultOverride = rawDef=="" ? null : V_String(rawDef);
 
@@ -293,7 +299,7 @@ class FieldDef {
 			case F_Int: getIntDefault();
 			case F_Color: getColorDefault();
 			case F_Float: getFloatDefault();
-			case F_String: getStringDefault();
+			case F_String(multilines): getStringDefault();
 			case F_Bool: getBoolDefault();
 			case F_Point: getPointDefault();
 			case F_Enum(name): getEnumDefault();
