@@ -3,15 +3,15 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.3.2-beta-debug",
+		"appVersion": "0.4.0-beta-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
-	"jsonVersion": "0.3.2",
+	"jsonVersion": "0.4.0",
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1,
 	"defaultGridSize": 16,
 	"bgColor": "#79799A",
-	"nextUid": 53,
+	"nextUid": 56,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -23,7 +23,7 @@
 				"uid": 7,
 				"gridSize": 16,
 				"displayOpacity": 1,
-				"intGridValues": [ { "identifier": null, "color": "#000000" } ],
+				"intGridValues": [{ "identifier": null, "color": "#000000" }],
 				"autoTilesetDefUid": null,
 				"autoRuleGroups": [],
 				"autoSourceLayerDefUid": null,
@@ -38,7 +38,7 @@
 				"uid": 13,
 				"gridSize": 16,
 				"displayOpacity": 1,
-				"intGridValues": [ { "identifier": "walls", "color": "#243047" } ],
+				"intGridValues": [{ "identifier": "walls", "color": "#243047" }],
 				"autoTilesetDefUid": null,
 				"autoRuleGroups": [],
 				"autoSourceLayerDefUid": null,
@@ -55,6 +55,7 @@
 				"height": 24,
 				"color": "#8A5B38",
 				"renderMode": "Tile",
+				"showName": true,
 				"tilesetId": 20,
 				"tileId": 56,
 				"tileRenderMode": "Stretch",
@@ -67,7 +68,7 @@
 						"identifier": "loot",
 						"__type": "Array<LocalEnum.ItemType>",
 						"uid": 21,
-						"type": { "id": "F_Enum", "params": [ 5 ] },
+						"type": { "id": "F_Enum", "params": [5] },
 						"isArray": true,
 						"canBeNull": false,
 						"arrayMinLength": null,
@@ -104,6 +105,7 @@
 				"height": 20,
 				"color": "#B8DE4F",
 				"renderMode": "Tile",
+				"showName": true,
 				"tilesetId": 47,
 				"tileId": 306,
 				"tileRenderMode": "Stretch",
@@ -112,25 +114,6 @@
 				"pivotX": 0.5,
 				"pivotY": 1,
 				"fieldDefs": [
-					{
-						"identifier": "name",
-						"__type": "String",
-						"uid": 27,
-						"type": "F_String",
-						"isArray": false,
-						"canBeNull": false,
-						"arrayMinLength": null,
-						"arrayMaxLength": null,
-						"editorDisplayMode": "ValueOnly",
-						"editorDisplayPos": "Beneath",
-						"editorAlwaysShow": true,
-						"min": null,
-						"max": null,
-						"defaultOverride": {
-							"id": "V_String",
-							"params": [ "Player" ]
-						}
-					},
 					{
 						"identifier": "life",
 						"__type": "Int",
@@ -145,7 +128,7 @@
 						"editorAlwaysShow": false,
 						"min": 1,
 						"max": 10,
-						"defaultOverride": { "id": "V_Int", "params": [ 3 ] }
+						"defaultOverride": { "id": "V_Int", "params": [3] }
 					},
 					{
 						"identifier": "isAwaken",
@@ -170,7 +153,7 @@
 						"identifier": "weapon",
 						"__type": "LocalEnum.ItemType",
 						"uid": 29,
-						"type": { "id": "F_Enum", "params": [ 5 ] },
+						"type": { "id": "F_Enum", "params": [5] },
 						"isArray": false,
 						"canBeNull": false,
 						"arrayMinLength": null,
@@ -186,7 +169,7 @@
 						"identifier": "bag",
 						"__type": "Array<LocalEnum.ItemType>",
 						"uid": 19,
-						"type": { "id": "F_Enum", "params": [ 5 ] },
+						"type": { "id": "F_Enum", "params": [5] },
 						"isArray": true,
 						"canBeNull": false,
 						"arrayMinLength": null,
@@ -207,6 +190,7 @@
 				"height": 8,
 				"color": "#FFFFFF",
 				"renderMode": "Tile",
+				"showName": true,
 				"tilesetId": 20,
 				"tileId": 51,
 				"tileRenderMode": "Stretch",
@@ -229,7 +213,7 @@
 						"editorAlwaysShow": true,
 						"min": 1,
 						"max": 10,
-						"defaultOverride": { "id": "V_Float", "params": [ 3 ] }
+						"defaultOverride": { "id": "V_Float", "params": [3] }
 					},
 					{
 						"identifier": "colors",
@@ -245,7 +229,7 @@
 						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
-						"defaultOverride": { "id": "V_Int", "params": [ 16772997 ] }
+						"defaultOverride": { "id": "V_Int", "params": [16772997] }
 					},
 					{
 						"identifier": "flickering",
@@ -272,6 +256,7 @@
 				"height": 32,
 				"color": "#B80000",
 				"renderMode": "Tile",
+				"showName": true,
 				"tilesetId": 20,
 				"tileId": 69,
 				"tileRenderMode": "Stretch",
@@ -284,7 +269,7 @@
 						"identifier": "type",
 						"__type": "LocalEnum.MonsterType",
 						"uid": 49,
-						"type": { "id": "F_Enum", "params": [ 48 ] },
+						"type": { "id": "F_Enum", "params": [48] },
 						"isArray": false,
 						"canBeNull": false,
 						"arrayMinLength": null,
@@ -310,13 +295,13 @@
 						"editorAlwaysShow": false,
 						"min": 1,
 						"max": 10,
-						"defaultOverride": { "id": "V_Int", "params": [ 3 ] }
+						"defaultOverride": { "id": "V_Int", "params": [3] }
 					},
 					{
 						"identifier": "loots",
 						"__type": "Array<LocalEnum.ItemType>",
 						"uid": 39,
-						"type": { "id": "F_Enum", "params": [ 5 ] },
+						"type": { "id": "F_Enum", "params": [5] },
 						"isArray": true,
 						"canBeNull": false,
 						"arrayMinLength": null,
@@ -353,6 +338,7 @@
 				"height": 13,
 				"color": "#FFFFFF",
 				"renderMode": "Cross",
+				"showName": true,
 				"tilesetId": null,
 				"tileId": null,
 				"tileRenderMode": "Stretch",
@@ -386,6 +372,7 @@
 				"height": 32,
 				"color": "#A98B70",
 				"renderMode": "Rectangle",
+				"showName": true,
 				"tilesetId": null,
 				"tileId": null,
 				"tileRenderMode": "Stretch",
@@ -439,27 +426,27 @@
 		],
 		"enums": [
 			{ "identifier": "ItemType", "uid": 5, "values": [
-				{ "id": "Gold", "tileId": 58 },
-				{ "id": "Trout", "tileId": 70 },
-				{ "id": "Sword", "tileId": 39 },
-				{ "id": "Heavy_sword", "tileId": 40 },
-				{ "id": "Bow", "tileId": 46 },
-				{ "id": "Arrow", "tileId": 48 },
-				{ "id": "Staff", "tileId": 44 },
-				{ "id": "Magic_ring", "tileId": 51 },
-				{ "id": "Healing_potion", "tileId": 5 },
-				{ "id": "Mana_potion", "tileId": 6 }
+				{ "id": "Gold", "tileId": 58, "__tileSrcRect": [48,80,16,16] },
+				{ "id": "Trout", "tileId": 70, "__tileSrcRect": [64,96,16,16] },
+				{ "id": "Sword", "tileId": 39, "__tileSrcRect": [96,48,16,16] },
+				{ "id": "Heavy_sword", "tileId": 40, "__tileSrcRect": [112,48,16,16] },
+				{ "id": "Bow", "tileId": 46, "__tileSrcRect": [32,64,16,16] },
+				{ "id": "Arrow", "tileId": 48, "__tileSrcRect": [64,64,16,16] },
+				{ "id": "Staff", "tileId": 44, "__tileSrcRect": [0,64,16,16] },
+				{ "id": "Magic_ring", "tileId": 51, "__tileSrcRect": [112,64,16,16] },
+				{ "id": "Healing_potion", "tileId": 5, "__tileSrcRect": [80,0,16,16] },
+				{ "id": "Mana_potion", "tileId": 6, "__tileSrcRect": [96,0,16,16] }
 			], "iconTilesetUid": 20, "externalRelPath": null, "externalFileChecksum": null },
 			{ "identifier": "MonsterType", "uid": 48, "values": [
-				{ "id": "Fighter", "tileId": 204 },
-				{ "id": "Rat", "tileId": 75 },
-				{ "id": "Snek", "tileId": 46 },
-				{ "id": "Beholder", "tileId": 146 }
+				{ "id": "Fighter", "tileId": 204, "__tileSrcRect": [128,320,32,32] },
+				{ "id": "Rat", "tileId": 75, "__tileSrcRect": [480,96,32,32] },
+				{ "id": "Snek", "tileId": 46, "__tileSrcRect": [192,64,32,32] },
+				{ "id": "Beholder", "tileId": 146, "__tileSrcRect": [192,224,32,32] }
 			], "iconTilesetUid": 47, "externalRelPath": null, "externalFileChecksum": null }
 		],
 		"externalEnums": []
 	},
-	"levels": [ {
+	"levels": [{
 		"identifier": "Entities_demo",
 		"uid": 0,
 		"pxWid": 576,
@@ -471,16 +458,17 @@
 				"__cWid": 36,
 				"__cHei": 25,
 				"__gridSize": 16,
+				"__opacity": 1,
 				"levelId": 0,
 				"layerDefUid": 7,
 				"pxOffsetX": 0,
 				"pxOffsetY": 0,
 				"intGrid": [],
-				"autoTiles": [],
+				"autoLayerTiles": [],
 				"seed": 3776513,
 				"gridTiles": [],
 				"entityInstances": [
-					{ "__identifier": "Chest", "__cx": 31, "__cy": 19, "defUid": 8, "x": 504, "y": 320, "fieldInstances": [
+					{ "__identifier": "Chest", "__grid": [31,19], "__tile": { "tilesetUid": 20, "srcRect": [16,80,16,16] }, "defUid": 8, "px": [504,320], "fieldInstances": [
 						{
 							"__identifier": "loot",
 							"__value": [ "Sword", "Heavy sword", "Bow" ],
@@ -488,13 +476,13 @@
 							"defUid": 21,
 							"realEditorValues": [ {
 								"id": "V_String",
-								"params": [ "Sword" ]
+								"params": ["Sword"]
 							}, {
 								"id": "V_String",
-								"params": [ "Heavy sword" ]
+								"params": ["Heavy sword"]
 							}, {
 								"id": "V_String",
-								"params": [ "Bow" ]
+								"params": ["Bow"]
 							} ]
 						},
 						{
@@ -502,98 +490,98 @@
 							"__value": true,
 							"__type": "Bool",
 							"defUid": 28,
-							"realEditorValues": [ {
+							"realEditorValues": [{
 								"id": "V_Bool",
 								"params": [ true ]
-							} ]
+							}]
 						}
 					] },
-					{ "__identifier": "LightEmitter", "__cx": 11, "__cy": 7, "defUid": 10, "x": 184, "y": 112, "fieldInstances": [
+					{ "__identifier": "LightEmitter", "__grid": [11,7], "__tile": { "tilesetUid": 20, "srcRect": [112,64,16,16] }, "defUid": 10, "px": [184,112], "fieldInstances": [
 						{
 							"__identifier": "flickering",
 							"__value": false,
 							"__type": "Bool",
 							"defUid": 12,
-							"realEditorValues": [ null ]
+							"realEditorValues": [null]
 						},
 						{
 							"__identifier": "colors",
-							"__value": [ "#FFEF85" ],
+							"__value": ["#FFEF85"],
 							"__type": "Array<Color>",
 							"defUid": 26,
-							"realEditorValues": [ null ]
+							"realEditorValues": [null]
 						},
 						{
 							"__identifier": "radius",
 							"__value": 4,
 							"__type": "Float",
 							"defUid": 45,
-							"realEditorValues": [ { "id": "V_Float", "params": [ 4 ] } ]
+							"realEditorValues": [{ "id": "V_Float", "params": [4] }]
 						}
 					] },
-					{ "__identifier": "LightEmitter", "__cx": 6, "__cy": 7, "defUid": 10, "x": 104, "y": 112, "fieldInstances": [
+					{ "__identifier": "LightEmitter", "__grid": [6,7], "__tile": { "tilesetUid": 20, "srcRect": [112,64,16,16] }, "defUid": 10, "px": [104,112], "fieldInstances": [
 						{
 							"__identifier": "flickering",
 							"__value": false,
 							"__type": "Bool",
 							"defUid": 12,
-							"realEditorValues": [ null ]
+							"realEditorValues": [null]
 						},
 						{
 							"__identifier": "colors",
-							"__value": [ "#FFEF85" ],
+							"__value": ["#FFEF85"],
 							"__type": "Array<Color>",
 							"defUid": 26,
-							"realEditorValues": [ null ]
+							"realEditorValues": [null]
 						},
 						{
 							"__identifier": "radius",
 							"__value": 3,
 							"__type": "Float",
 							"defUid": 45,
-							"realEditorValues": [ null ]
+							"realEditorValues": [null]
 						}
 					] },
-					{ "__identifier": "LightEmitter", "__cx": 21, "__cy": 7, "defUid": 10, "x": 344, "y": 112, "fieldInstances": [
+					{ "__identifier": "LightEmitter", "__grid": [21,7], "__tile": { "tilesetUid": 20, "srcRect": [112,64,16,16] }, "defUid": 10, "px": [344,112], "fieldInstances": [
 						{
 							"__identifier": "flickering",
 							"__value": true,
 							"__type": "Bool",
 							"defUid": 12,
-							"realEditorValues": [ {
+							"realEditorValues": [{
 								"id": "V_Bool",
 								"params": [ true ]
-							} ]
+							}]
 						},
 						{
 							"__identifier": "colors",
 							"__value": [ "#FF7D1A", "#B20101" ],
 							"__type": "Array<Color>",
 							"defUid": 26,
-							"realEditorValues": [ { "id": "V_Int", "params": [ 16743706 ] }, { "id": "V_Int", "params": [ 11665665 ] } ]
+							"realEditorValues": [ { "id": "V_Int", "params": [16743706] }, { "id": "V_Int", "params": [11665665] } ]
 						},
 						{
 							"__identifier": "radius",
 							"__value": 2.5,
 							"__type": "Float",
 							"defUid": 45,
-							"realEditorValues": [ { "id": "V_Float", "params": [ 2.5 ] } ]
+							"realEditorValues": [{ "id": "V_Float", "params": [2.5] }]
 						}
 					] },
-					{ "__identifier": "Player", "__cx": 3, "__cy": 17, "defUid": 1, "x": 56, "y": 288, "fieldInstances": [
+					{ "__identifier": "Player", "__grid": [3,17], "__tile": { "tilesetUid": 47, "srcRect": [192,480,32,32] }, "defUid": 1, "px": [56,288], "fieldInstances": [
 						{
 							"__identifier": "life",
 							"__value": 3,
 							"__type": "Int",
 							"defUid": 2,
-							"realEditorValues": [ null ]
+							"realEditorValues": [null]
 						},
 						{
 							"__identifier": "isAwaken",
 							"__value": true,
 							"__type": "Bool",
 							"defUid": 3,
-							"realEditorValues": [ null ]
+							"realEditorValues": [null]
 						},
 						{
 							"__identifier": "bag",
@@ -602,31 +590,24 @@
 							"defUid": 19,
 							"realEditorValues": [ {
 								"id": "V_String",
-								"params": [ "Healing_potion" ]
+								"params": ["Healing_potion"]
 							}, {
 								"id": "V_String",
-								"params": [ "Mana_potion" ]
+								"params": ["Mana_potion"]
 							} ]
-						},
-						{
-							"__identifier": "name",
-							"__value": "Player",
-							"__type": "String",
-							"defUid": 27,
-							"realEditorValues": [ null ]
 						},
 						{
 							"__identifier": "weapon",
 							"__value": "Trout",
 							"__type": "LocalEnum.ItemType",
 							"defUid": 29,
-							"realEditorValues": [ {
+							"realEditorValues": [{
 								"id": "V_String",
-								"params": [ "Trout" ]
-							} ]
+								"params": ["Trout"]
+							}]
 						}
 					] },
-					{ "__identifier": "Chest", "__cx": 27, "__cy": 9, "defUid": 8, "x": 440, "y": 160, "fieldInstances": [
+					{ "__identifier": "Chest", "__grid": [27,9], "__tile": { "tilesetUid": 20, "srcRect": [16,80,16,16] }, "defUid": 8, "px": [440,160], "fieldInstances": [
 						{
 							"__identifier": "loot",
 							"__value": [ "Bow", "Arrow" ],
@@ -634,10 +615,10 @@
 							"defUid": 21,
 							"realEditorValues": [ {
 								"id": "V_String",
-								"params": [ "Bow" ]
+								"params": ["Bow"]
 							}, {
 								"id": "V_String",
-								"params": [ "Arrow" ]
+								"params": ["Arrow"]
 							} ]
 						},
 						{
@@ -645,10 +626,10 @@
 							"__value": false,
 							"__type": "Bool",
 							"defUid": 28,
-							"realEditorValues": [ null ]
+							"realEditorValues": [null]
 						}
 					] },
-					{ "__identifier": "Enemy", "__cx": 3, "__cy": 11, "defUid": 37, "x": 56, "y": 192, "fieldInstances": [
+					{ "__identifier": "Enemy", "__grid": [3,11], "__tile": { "tilesetUid": 47, "srcRect": [128,320,32,32] }, "defUid": 37, "px": [56,192], "fieldInstances": [
 						{
 							"__identifier": "patrol",
 							"__value": [
@@ -663,23 +644,23 @@
 							"realEditorValues": [
 								{
 									"id": "V_String",
-									"params": [ "5,11" ]
+									"params": ["5,11"]
 								},
 								{
 									"id": "V_String",
-									"params": [ "5,13" ]
+									"params": ["5,13"]
 								},
 								{
 									"id": "V_String",
-									"params": [ "12,13" ]
+									"params": ["12,13"]
 								},
 								{
 									"id": "V_String",
-									"params": [ "12,11" ]
+									"params": ["12,11"]
 								},
 								{
 									"id": "V_String",
-									"params": [ "14,11" ]
+									"params": ["14,11"]
 								}
 							]
 						},
@@ -690,98 +671,104 @@
 							"defUid": 39,
 							"realEditorValues": [ {
 								"id": "V_String",
-								"params": [ "Gold" ]
+								"params": ["Gold"]
 							}, {
 								"id": "V_String",
-								"params": [ "Healing_potion" ]
+								"params": ["Healing_potion"]
 							} ]
 						},
 						{
 							"__identifier": "hp",
-							"__value": 5,
+							"__value": 10,
 							"__type": "Int",
 							"defUid": 40,
-							"realEditorValues": [ { "id": "V_Int", "params": [ 5 ] } ]
+							"realEditorValues": [{ "id": "V_Int", "params": [10] }]
 						},
 						{
 							"__identifier": "type",
 							"__value": "Fighter",
 							"__type": "LocalEnum.MonsterType",
 							"defUid": 49,
-							"realEditorValues": [ {
+							"realEditorValues": [{
 								"id": "V_String",
-								"params": [ "Fighter" ]
-							} ]
+								"params": ["Fighter"]
+							}]
 						}
 					] },
-					{ "__identifier": "Door", "__cx": 22, "__cy": 17, "defUid": 43, "x": 360, "y": 288, "fieldInstances": [ {
+					{ "__identifier": "Door", "__grid": [22,17], "__tile": null, "defUid": 43, "px": [360,288], "fieldInstances": [{
 						"__identifier": "locked",
 						"__value": true,
 						"__type": "Bool",
 						"defUid": 50,
-						"realEditorValues": [ {
+						"realEditorValues": [{
 							"id": "V_Bool",
 							"params": [ true ]
-						} ]
-					} ] },
-					{ "__identifier": "Door", "__cx": 16, "__cy": 11, "defUid": 43, "x": 264, "y": 192, "fieldInstances": [ {
+						}]
+					}] },
+					{ "__identifier": "Door", "__grid": [16,11], "__tile": null, "defUid": 43, "px": [264,192], "fieldInstances": [{
 						"__identifier": "locked",
 						"__value": true,
 						"__type": "Bool",
 						"defUid": 50,
-						"realEditorValues": [ {
+						"realEditorValues": [{
 							"id": "V_Bool",
 							"params": [ true ]
-						} ]
-					} ] },
-					{ "__identifier": "Button", "__cx": 30, "__cy": 12, "defUid": 41, "x": 488, "y": 200, "fieldInstances": [ {
+						}]
+					}] },
+					{ "__identifier": "Button", "__grid": [30,12], "__tile": null, "defUid": 41, "px": [488,200], "fieldInstances": [{
 						"__identifier": "activationTargets",
 						"__value": [ { "cx": 16, "cy": 11 }, { "cx": 22, "cy": 17 } ],
 						"__type": "Array<Point>",
 						"defUid": 44,
 						"realEditorValues": [ {
 							"id": "V_String",
-							"params": [ "16,11" ]
+							"params": ["16,11"]
 						}, {
 							"id": "V_String",
-							"params": [ "22,17" ]
+							"params": ["22,17"]
 						} ]
-					} ] },
-					{ "__identifier": "Enemy", "__cx": 20, "__cy": 17, "defUid": 37, "x": 328, "y": 288, "fieldInstances": [
+					}] },
+					{ "__identifier": "Enemy", "__grid": [20,17], "__tile": { "tilesetUid": 47, "srcRect": [192,64,32,32] }, "defUid": 37, "px": [328,288], "fieldInstances": [
 						{
 							"__identifier": "patrol",
-							"__value": [ { "cx": 9, "cy": 17 } ],
+							"__value": [{ "cx": 9, "cy": 17 }],
 							"__type": "Array<Point>",
 							"defUid": 38,
-							"realEditorValues": [ {
+							"realEditorValues": [{
 								"id": "V_String",
-								"params": [ "9,17" ]
-							} ]
+								"params": ["9,17"]
+							}]
 						},
 						{ "__identifier": "loots", "__value": [], "__type": "Array<LocalEnum.ItemType>", "defUid": 39, "realEditorValues": [] },
-						{ "__identifier": "hp", "__value": 3, "__type": "Int", "defUid": 40, "realEditorValues": [] },
+						{
+							"__identifier": "hp",
+							"__value": 3,
+							"__type": "Int",
+							"defUid": 40,
+							"realEditorValues": [null]
+						},
 						{
 							"__identifier": "type",
 							"__value": "Snek",
 							"__type": "LocalEnum.MonsterType",
 							"defUid": 49,
-							"realEditorValues": [ {
+							"realEditorValues": [{
 								"id": "V_String",
-								"params": [ "Snek" ]
-							} ]
+								"params": ["Snek"]
+							}]
 						}
 					] },
-					{ "__identifier": "Enemy", "__cx": 27, "__cy": 19, "defUid": 37, "x": 440, "y": 320, "fieldInstances": [
+					{ "__identifier": "Enemy", "__grid": [27,19], "__tile": { "tilesetUid": 47, "srcRect": [192,224,32,32] }, "defUid": 37, "px": [440,320], "fieldInstances": [
 						{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "defUid": 38, "realEditorValues": [] },
 						{
 							"__identifier": "loots",
-							"__value": [ "Mana_potion" ],
+							"__value": ["Mana_potion"],
 							"__type": "Array<LocalEnum.ItemType>",
 							"defUid": 39,
-							"realEditorValues": [ {
+							"realEditorValues": [{
 								"id": "V_String",
-								"params": [ "Mana_potion" ]
-							} ]
+								"params": ["Mana_potion"]
+							}]
 						},
 						{ "__identifier": "hp", "__value": 3, "__type": "Int", "defUid": 40, "realEditorValues": [] },
 						{
@@ -789,13 +776,13 @@
 							"__value": "Beholder",
 							"__type": "LocalEnum.MonsterType",
 							"defUid": 49,
-							"realEditorValues": [ {
+							"realEditorValues": [{
 								"id": "V_String",
-								"params": [ "Beholder" ]
-							} ]
+								"params": ["Beholder"]
+							}]
 						}
 					] },
-					{ "__identifier": "Door", "__cx": 7, "__cy": 17, "defUid": 43, "x": 120, "y": 288, "fieldInstances": [ { "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 50, "realEditorValues": [] } ] }
+					{ "__identifier": "Door", "__grid": [7,17], "__tile": null, "defUid": 43, "px": [120,288], "fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 50, "realEditorValues": [] }] }
 				]
 			},
 			{
@@ -804,6 +791,7 @@
 				"__cWid": 36,
 				"__cHei": 25,
 				"__gridSize": 16,
+				"__opacity": 1,
 				"levelId": 0,
 				"layerDefUid": 13,
 				"pxOffsetX": 0,
@@ -1414,11 +1402,11 @@
 					{ "coordId": 898, "v": 0 },
 					{ "coordId": 899, "v": 0 }
 				],
-				"autoTiles": [],
+				"autoLayerTiles": [],
 				"seed": 1349990,
 				"gridTiles": [],
 				"entityInstances": []
 			}
 		]
-	} ]
+	}]
 }
