@@ -443,6 +443,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Type desc
 		jFieldForm.find(".type").val( curField.getShortDescription() );
 
+		jFieldForm.find("button.convert").click( (_)->N.notImplemented() );
+
 
 		var i = new form.input.EnumSelect(
 			jFieldForm.find("select[name=editorDisplayMode]"),

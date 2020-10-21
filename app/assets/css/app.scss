@@ -3959,6 +3959,12 @@ $patternSize : 32px;
 			grid-column: 3/4;
 			grid-row: 3/4;
 			overflow: auto;
+
+			button.convert {
+				padding: 4px;
+				flex: 0 1 0px;
+				align-self: stretch;
+			}
 		}
 
 
