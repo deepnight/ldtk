@@ -922,7 +922,9 @@ ul.log {
 	overflow: hidden;
 	box-sizing: border-box;
 
+	text-transform: none;
 	font-family: Roboto;
+
 	border: 1px dashed rgba(255, 255, 255, 0.8);
 
 	.typeName {
@@ -4033,6 +4035,7 @@ $patternSize : 32px;
 		ul.form.type-F_Color .F_Color,
 		ul.form.type-F_Enum .F_Enum,
 		ul.form.type-F_Point .F_Point,
+		ul.form.type-F_Text .F_Text,
 		ul.form.type-F_String .F_String {
 			display: flex;
 		}
