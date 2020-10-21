@@ -476,9 +476,6 @@ class EditEntityDefs extends ui.modal.Panel {
 				}
 
 			}
-
-			// 	v
-			// misc.FieldTypeConverter.convert(project, curField, F_Text); // HACK
 		} );
 
 
