@@ -134,7 +134,7 @@ class EnumDef {
 	public function tidy(p:Project) {
 		// Lost tileset
 		if( iconTilesetUid!=null && p.defs.getTilesetDef(iconTilesetUid)==null ) {
-			App.LOG.add("tidy", 'Removed lost tileset in $this');
+			App.LOG.add("tidy", 'Removed lost enum tileset in $this');
 			iconTilesetUid = null;
 			clearAllTileIds();
 		}

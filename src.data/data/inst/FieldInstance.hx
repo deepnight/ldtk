@@ -374,7 +374,7 @@ class FieldInstance {
 				// Lost enum value
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				for( i in 0...getArrayLength() )
-					if( !ed.hasValue( getEnumValue(i) ) ) {
+					if( getEnumValue(i)!=null && !ed.hasValue( getEnumValue(i) ) ) {
 						App.LOG.add("tidy", 'Removed enum value in $this');
 						parseValue(i, null);
 					}

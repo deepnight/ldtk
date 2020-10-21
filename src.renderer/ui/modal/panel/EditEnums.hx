@@ -351,12 +351,6 @@ class EditEnums extends ui.modal.Panel {
 						isUsed,
 						function() {
 							new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+eValue.id }), project);
-
-							project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-								for(i in 0...fi.getArrayLength())
-									if( fi.getEnumValue(i)==eValue.id )
-										fi.parseValue(i, null);
-							});
 							project.defs.removeEnumDefValue(curEnum, eValue.id);
 							editor.ge.emit(EnumDefValueRemoved);
 						}
