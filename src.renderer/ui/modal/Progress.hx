@@ -10,8 +10,6 @@ class Progress extends ui.Modal {
 		jModalAndMask.addClass("progress");
 		jMask.hide().fadeIn(500);
 
-		// if( title==null )
-			// title = L.t._("Please wait...");
 		jContent.append('<h2>$title</h2>');
 
 		var jBar = App.ME.jBody.find("xml#progressBar").children().clone();
@@ -50,7 +48,7 @@ class Progress extends ui.Modal {
 				jBar.find(".bar").css({ width:pct+"%" });
 				jBar.find(".label").text( op.label );
 				log.push(op.label);
-				App.LOG.general(Std.int(pct)+"% => "+op.label);
+				App.LOG.general('  - ${op.label} (${Std.int(pct)}%)');
 			}
 		}, true);
 	}
