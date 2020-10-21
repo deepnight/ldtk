@@ -16,7 +16,8 @@ class Modal extends dn.Process {
 	public function new() {
 		super(Editor.ME);
 
-		editor.clearSpecialTool();
+		if( editor!=null )
+			editor.clearSpecialTool();
 
 		EntityInstanceEditor.close();
 		Tip.clear();
@@ -32,7 +33,8 @@ class Modal extends dn.Process {
 		jMask.mousedown( function(_) if( canBeClosedManually ) close() );
 		jMask.hide().fadeIn(100);
 
-		editor.ge.addGlobalListener(onGlobalEvent);
+		if( editor!=null )
+			editor.ge.addGlobalListener(onGlobalEvent);
 	}
 
 	public function positionNear(?target:js.jquery.JQuery, ?m:MouseCoords, toLeft=false) {
@@ -99,7 +101,8 @@ class Modal extends dn.Process {
 		super.onDispose();
 
 		ALL.remove(this);
-		editor.ge.removeListener(onGlobalEvent);
+		if( editor!=null )
+			editor.ge.removeListener(onGlobalEvent);
 
 		jModalAndMask.remove();
 		jModalAndMask = null;

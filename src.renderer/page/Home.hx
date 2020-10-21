@@ -110,22 +110,43 @@ class Home extends Page {
 			var li = new J('<li/>');
 			li.appendTo(jRecentList);
 
-			var jRemove = new J('<button class="remove dark">x</button>');
-			jRemove.attr("title",Lang.t._("Remove from history"));
-			var remIdx = i;
-			jRemove.click( function(_) {
-				App.ME.unregisterRecentProject(p);
-				updateRecents();
-			});
-			li.append( jRemove );
+			// var jRemove = new J('<button class="remove dark">x</button>');
+			// jRemove.attr("title",Lang.t._("Remove from history"));
+			// var remIdx = i;
+			// jRemove.click( function(_) {
+			// 	App.ME.unregisterRecentProject(p);
+			// 	updateRecents();
+			// });
+			// li.append( jRemove );
 
 			li.append( JsTools.makePath(trimmedPaths[i], C.fromStringLight(dn.FilePath.fromFile(trimmedPaths[i]).directory)) );
-			li.append( JsTools.makeExploreLink(p) );
+			// li.append( JsTools.makeExploreLink(p) );
 
 			li.click( function(ev) loadProject(p) );
 
 			if( !JsTools.fileExists(p) )
 				li.addClass("missing");
+
+			ui.modal.ContextMenu.addTo(li, [
+				{
+					label: L.t._("Locate file"),
+					cb: JsTools.exploreToFile.bind(p),
+				},
+				{
+					label: L.t._("Remove from history"),
+					cb: ()->{
+						App.ME.unregisterRecentProject(p);
+						updateRecents();
+					}
+				},
+				{
+					label: L.t._("Clear all history"),
+					cb: ()->{
+						App.ME.clearRecentProjects();
+						updateRecents();
+					}
+				},
+			]);
 			i--;
 		}
 

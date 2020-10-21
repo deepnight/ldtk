@@ -1509,18 +1509,24 @@ textarea {
 		box-shadow: 0px 0px 16px black, 0px 4px 8px black;
 		outline: 1px solid black;
 
-		button {
-			background-color: $bgDark;
-			border-bottom: 1px solid $bgMed;
-			margin: 0;
-			padding: 8px 8px;
-			font-size: 10pt;
-			color: $orange;
-			&:hover {
-				background-color: $orange;
-				color: black;
+		.content {
+			display: grid;
+			grid-auto-rows: auto;
+
+			button {
+				background-color: $bgDark;
+				border-bottom: 1px solid $bgMed;
+				margin: 0;
+				padding: 8px 20px;
+				font-size: 10pt;
+				color: $orange;
+				&:hover {
+					background-color: $orange;
+					color: black;
+				}
 			}
 		}
+
 	}
 }
 
@@ -2221,7 +2227,7 @@ canvas#webgl {
 	align-content: center;
 	background-color: $bgDark;
 
-	.wrapper {
+	&>.wrapper {
 		display: grid;
 		grid-template-columns: 30% 40%;
 		grid-template-rows: min-content 50vh min-content;
@@ -2329,7 +2335,7 @@ canvas#webgl {
 
 				li {
 					overflow: hidden;
-					grid-template-columns: min-content auto min-content;
+					grid-template-columns: auto min-content;
 					justify-items: right;
 					button.remove {
 						padding: 5px;

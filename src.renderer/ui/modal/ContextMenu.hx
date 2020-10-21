@@ -65,7 +65,10 @@ class ContextMenu extends ui.Modal {
 		}
 
 		// Arrow button
-		jButton.click( (ev)->_open(ev) );
+		jButton.click( (ev:js.jquery.Event)->{
+			ev.stopPropagation();
+			_open(ev);
+		});
 
 		// Right click
 		jTarget.on("contextmenu.context", (ev:js.jquery.Event)->{
