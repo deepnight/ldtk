@@ -1544,6 +1544,11 @@ textarea {
 
 	&.confirm .wrapper {
 		max-width: 400px;
+		.content {
+			p:first-of-type {
+				margin-top: 0;
+			}
+		}
 	}
 
 	&.warning .wrapper {
