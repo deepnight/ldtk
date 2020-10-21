@@ -12,6 +12,7 @@ class EntityDef {
 	public var color : UInt;
 	public var renderMode : EntityRenderMode;
 	public var tileRenderMode : EntityTileRenderMode;
+	public var showName : Bool;
 	public var tilesetId : Null<Int>;
 	public var tileId : Null<Int>;
 
@@ -29,6 +30,7 @@ class EntityDef {
 		renderMode = Rectangle;
 		width = height = 16;
 		maxPerLevel = 0;
+		showName = true;
 		limitBehavior = DiscardOldOnes;
 		tileRenderMode = Stretch;
 		identifier = "Entity"+uid;
@@ -49,14 +51,18 @@ class EntityDef {
 			+ "]";
 	}
 
-	public function getShortIdentifier(maxlen=4) {
-		if( identifier.length<=maxlen )
-			return identifier;
+	// public function getShortIdentifier(maxlen=8) {
+	// 	if( identifier.length<=maxlen )
+	// 		return identifier;
 
-		var dropReg = ~/[aeiouy0-9_-]/gi;
-		var short = identifier.charAt(0);
-		return short + dropReg.replace( identifier.substr(1), "" ).substr(0,maxlen-1);
-	}
+	// 	var dropReg = ~/[aeiouy0-9_-]/gi;
+	// 	var base = 4;
+	// 	return
+	// 		identifier.charAt(0)
+	// 		+ identifier.substr(1,base-1)
+	// 		+ dropReg.replace( identifier.substr(base), "" ).substr(0,maxlen-base-1)
+	// 		+ identifier.charAt( identifier.length-1 );
+	// }
 
 	public static function fromJson(p:Project, json:led.Json.EntityDefJson) {
 		var o = new EntityDef( JsonTools.readInt(json.uid) );
@@ -66,6 +72,7 @@ class EntityDef {
 
 		o.color = JsonTools.readColor( json.color, 0x0 );
 		o.renderMode = JsonTools.readEnum(EntityRenderMode, json.renderMode, false, Rectangle);
+		o.showName = JsonTools.readBool(json.showName, true);
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
 		o.tileId = JsonTools.readNullableInt(json.tileId);
 		o.tileRenderMode = JsonTools.readEnum(EntityTileRenderMode, json.tileRenderMode, false, Stretch);
@@ -93,6 +100,7 @@ class EntityDef {
 
 			color: JsonTools.writeColor(color),
 			renderMode: JsonTools.writeEnum(renderMode, false),
+			showName: showName,
 			tilesetId: tilesetId,
 			tileId: tileId,
 			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),

@@ -668,17 +668,6 @@ class LevelRender extends dn.Process {
 				renderTile(def.tilesetId, def.tileId, def.tileRenderMode);
 			}
 
-		// Identifier label
-		// if( def.renderMode!=Cross ) {
-		// 	var tf = new h2d.Text(Assets.fontPixel, g);
-		// 	tf.textColor = C.autoContrast( def.color, C.toBlack(def.color,0.3), C.toWhite(def.color,0.3) );
-		// 	tf.text = def.getShortIdentifier();
-		// 	tf.scale(0.5);
-		// 	tf.x = Std.int( def.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
-		// 	tf.y = 0;
-		// }
-
-
 		// Pivot
 		g.beginFill(def.color);
 		g.lineStyle(1, 0x0, 0.5);
@@ -689,6 +678,17 @@ class LevelRender extends dn.Process {
 			pivotSize, pivotSize
 		);
 
+		function _addBg(f:h2d.Flow, dark=0.5) {
+			var bg = new h2d.ScaleGrid(hxd.Res.img.fieldBg.toTile(), 2,2);
+			f.addChildAt(bg, 0);
+			f.getProperties(bg).isAbsolute = true;
+			bg.colorMatrix = C.getColorizeMatrixH2d( C.toBlack( ei.getSmartColor(false), dark ) );
+			bg.alpha = 0.8;
+			bg.x = -2;
+			bg.y = 1;
+			bg.width = f.outerWidth + M.fabs(bg.x)*2;
+			bg.height = f.outerHeight;
+		}
 
 		// Display fields not marked as "Hidden"
 		if( ei!=null && li!=null ) {
@@ -736,12 +736,6 @@ class LevelRender extends dn.Process {
 					case Above: above.addChild(fieldWrapper);
 					case Center: center.addChild(fieldWrapper);
 					case Beneath: beneath.addChild(fieldWrapper);
-				}
-
-				var needBg = switch fd.type {
-					case F_Int, F_Float, F_String, F_Bool: true;
-					case F_Color, F_Point: false;
-					case F_Enum(enumDefUid): !fi.hasIconForDisplay(0);
 				}
 
 				switch fd.editorDisplayMode {
@@ -794,18 +788,29 @@ class LevelRender extends dn.Process {
 						}
 				}
 
-				if( needBg ) {
-					var bg = new h2d.ScaleGrid(hxd.Res.img.fieldBg.toTile(), 2,2);
-					fieldWrapper.addChildAt(bg, 0);
-					fieldWrapper.getProperties(bg).isAbsolute = true;
-					bg.colorMatrix = C.getColorizeMatrixH2d( C.toBlack( ei.getSmartColor(false), 0.5 ) );
-					bg.alpha = 0.5;
-					bg.x = -2;
-					bg.y = 1;
-					bg.width = fieldWrapper.outerWidth + M.fabs(bg.x)*2;
-					bg.height = fieldWrapper.outerHeight;
+				// Field bg
+				var needBg = switch fd.type {
+					case F_Int, F_Float, F_String, F_Bool: true;
+					case F_Color, F_Point: false;
+					case F_Enum(enumDefUid): !fi.hasIconForDisplay(0);
 				}
 
+				if( needBg )
+					_addBg(fieldWrapper);
+
+			}
+
+			// Identifier label
+			if( ei.def.showName ) {
+				var f = new h2d.Flow(above);
+				var tf = new h2d.Text(Assets.fontPixel, f);
+				tf.textColor = ei.getSmartColor(true);
+				tf.text = def.identifier.substr(0,16);
+				tf.scale(0.5);
+				tf.x = Std.int( def.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
+				tf.y = 0;
+				tf.filter = new dn.heaps.filter.PixelOutline();
+				_addBg(f, 0.8);
 			}
 
 			// Update wrappers pos

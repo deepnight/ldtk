@@ -400,6 +400,10 @@ class EditEntityDefs extends ui.modal.Panel {
 			}
 		);
 
+		// Show name
+		var i = Input.linkToHtmlInput(curEntity.showName, jEntityForm.find("#showIdentifier"));
+		i.linkEvent(EntityDefChanged);
+
 		// Pivot
 		var jPivots = jEntityForm.find(".pivot");
 		jPivots.empty();
