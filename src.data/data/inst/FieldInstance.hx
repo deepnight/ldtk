@@ -371,7 +371,7 @@ class FieldInstance {
 				var i = 0;
 				while( i<getArrayLength() ) {
 					var pt = getPointGrid(i);
-					if( pt.cx<0 || pt.cx>=li.cWid || pt.cy<0 || pt.cy>=li.cHei ) {
+					if( pt!=null && ( pt.cx<0 || pt.cx>=li.cWid || pt.cy<0 || pt.cy>=li.cHei ) ) {
 						App.LOG.add("tidy", 'Removed out-of-bounds point field $pt in $this');
 						removeArrayValue(i);
 					}
