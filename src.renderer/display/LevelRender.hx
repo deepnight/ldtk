@@ -678,11 +678,12 @@ class LevelRender extends dn.Process {
 			pivotSize, pivotSize
 		);
 
-		function _addBg(f:h2d.Flow, dark=0.5) {
+
+		function _addBg(f:h2d.Flow, dark:Float) {
 			var bg = new h2d.ScaleGrid(hxd.Res.img.fieldBg.toTile(), 2,2);
 			f.addChildAt(bg, 0);
 			f.getProperties(bg).isAbsolute = true;
-			bg.colorMatrix = C.getColorizeMatrixH2d( C.toBlack( ei.getSmartColor(false), dark ) );
+			bg.color.setColor( C.addAlphaF( C.toBlack( ei.getSmartColor(false), dark ) ) );
 			bg.alpha = 0.8;
 			bg.x = -2;
 			bg.y = 1;
@@ -796,7 +797,7 @@ class LevelRender extends dn.Process {
 				}
 
 				if( needBg )
-					_addBg(fieldWrapper);
+					_addBg(fieldWrapper, 0.15);
 
 			}
 
@@ -810,7 +811,7 @@ class LevelRender extends dn.Process {
 				tf.x = Std.int( def.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
 				tf.y = 0;
 				tf.filter = new dn.heaps.filter.PixelOutline();
-				_addBg(f, 0.8);
+				_addBg(f, 0.5);
 			}
 
 			// Update wrappers pos
