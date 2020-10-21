@@ -27,6 +27,7 @@ class LastChance extends dn.Process {
 		delayer.addS(hide, 20);
 		cd.setF("ignoreFrame",1);
 
+		App.LOG.warning('Last chance for: $str');
 		Editor.ME.ge.addGlobalListener(onGlobalEvent);
 	}
 
