@@ -43,7 +43,7 @@ class Lang {
             case F_Int: t._("Integer");
             case F_Color: t._("Color");
             case F_Float: t._("Float");
-            case F_String(multilines): multilines ? t._("Multi-lines") : t._("String");
+            case F_String(multilines): multilines ? t._("Multilines") : t._("String");
             case F_Bool: t._("Boolean");
             case F_Point: t._("Point");
             case F_Enum(name): name==null ? t._("Enum") : t._("Enum.::e::", { e:name });

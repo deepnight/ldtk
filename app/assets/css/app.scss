@@ -2814,6 +2814,10 @@ canvas#webgl {
 			width: 100%;
 		}
 
+		textarea {
+			height: auto;
+		}
+
 		a.usingDefault {
 			display: flex;
 			text-decoration: none;

@@ -588,6 +588,21 @@ class EditEntityDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
 		i.onChange = editor.ge.emit.bind( EntityFieldDefChanged(curEntity) );
 
+		// Multi-lines
+		if( curField.isString() ) {
+			var i = new form.input.BoolInput(
+				jFieldForm.find("input[name=multiLines]"),
+				()->switch curField.type {
+					case F_String(multilines): multilines;
+					case _: false;
+				},
+				(v)->{
+					curField.changeType( F_String(v) );
+				}
+			);
+			i.linkEvent( EntityFieldDefChanged(curEntity) );
+		}
+
 		// Array size constraints
 		if( curField.isArray ) {
 			// Min

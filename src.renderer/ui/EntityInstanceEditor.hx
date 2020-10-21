@@ -303,10 +303,23 @@ class EntityInstanceEditor extends dn.Process {
 				});
 				hideInputIfDefault(arrayIdx, input, fi);
 
-			case F_String(multilines): // TODO multilines editor
-				var input = new J("<input/>");
-				input.appendTo(jTarget);
-				input.attr("type","text");
+			case F_String(multilines):
+				var input = if( multilines ) {
+					var input = new J("<textarea/>");
+					input.appendTo(jTarget);
+					input.keyup( (ev)-> {
+						input.css("height","auto");
+						if( input.height() < input.get(0).scrollHeight )
+							input.height( input.get(0).scrollHeight+5 );
+					});
+					input;
+				}
+				else {
+					var input = new J("<input/>");
+					input.appendTo(jTarget);
+					input.attr("type","text");
+					input;
+				}
 				var def = fi.def.getStringDefault();
 				input.attr("placeholder", def==null ? "(null)" : def=="" ? "(empty string)" : def);
 				if( !fi.isUsingDefault(arrayIdx) )
@@ -315,6 +328,8 @@ class EntityInstanceEditor extends dn.Process {
 					fi.parseValue( arrayIdx, input.val() );
 					onFieldChange();
 				});
+				if( multilines )
+					input.keyup();
 				hideInputIfDefault(arrayIdx, input, fi);
 
 			case F_Point:

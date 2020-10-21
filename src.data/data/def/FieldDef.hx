@@ -96,12 +96,30 @@ class FieldDef {
 	}
 
 
+	public function changeType(newType:FieldType) {
+		switch type {
+			case F_Int:
+			case F_Float:
+			case F_String(multilines):
+				switch newType {
+					case F_String(_): type = newType;
+					case _:
+				}
+
+			case F_Bool:
+			case F_Color:
+			case F_Enum(enumDefUid):
+			case F_Point:
+		}
+	}
+
+
 	#if editor
 	public function getShortDescription(includeArray=true) : String {
 		var desc = switch type {
 			case F_Int: "Int";
 			case F_Float: "Float";
-			case F_String(multi): multi?"Multi-lines":"String";
+			case F_String(multi): multi?"MultiLines":"String";
 			case F_Bool: "Bool";
 			case F_Color: "Color";
 			case F_Point: "Point";
@@ -140,6 +158,13 @@ class FieldDef {
 	public inline function require(type:data.LedTypes.FieldType) {
 		if( this.type.getIndex()!=type.getIndex() )
 			throw "Only available on "+type+" fields";
+	}
+
+	public inline function isString() {
+		return switch type {
+			case F_String(_): true;
+			case _: false;
+		}
 	}
 
 	public function iClamp(v:Null<Int>) {
