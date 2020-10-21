@@ -27,6 +27,7 @@ class App extends dn.Process {
 		#end
 		LOG.emptyEntry();
 		LOG.add("BOOT","App started");
+		LOG.tagColors.set("tidy", "#8ed1ac");
 
 		ME = this;
 		createRoot(Boot.ME.s2d);

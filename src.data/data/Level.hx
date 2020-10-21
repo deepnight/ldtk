@@ -97,8 +97,10 @@ class Level {
 		// Remove layerInstances without layerDefs
 		var i = 0;
 		while( i<layerInstances.length )
-			if( layerInstances[i].def==null )
+			if( layerInstances[i].def==null ) {
+				App.LOG.add("tidy", 'Removed lost layer instance in $this');
 				layerInstances.splice(i,1);
+			}
 			else
 				i++;
 
@@ -112,8 +114,10 @@ class Level {
 				for(ld in _project.defs.layers)
 					if( existing.exists(ld.uid) )
 						layerInstances.push( existing.get(ld.uid) );
-					else
+					else {
+						App.LOG.add("tidy", 'Added missing layer instance ${ld.identifier} in $this');
 						layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
+					}
 				break;
 			}
 

@@ -168,6 +168,13 @@ class EntityDef {
 
 
 	public function tidy(p:data.Project) {
+		// Lost tileset
+		if( tilesetId!=null && p.defs.getTilesetDef(tilesetId)==null ) {
+			App.LOG.add("tidy", 'Removed lost tileset of $this');
+			tilesetId = null;
+			renderMode = Rectangle;
+		}
+
 		// Remove Enum-based field defs whose EnumDef is lost
 		var i = 0;
 		while( i<fieldDefs.length ) {
@@ -175,6 +182,7 @@ class EntityDef {
 			switch fd.type {
 				case F_Enum(enumDefUid):
 					if( p.defs.getEnumDef(enumDefUid)==null ) {
+						App.LOG.add("tidy", 'Removed lost enum field of $fd in $this');
 						fieldDefs.splice(i,1);
 						continue;
 					}

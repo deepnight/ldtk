@@ -255,8 +255,15 @@ class LayerDef {
 	}
 
 	public function tidy(p:data.Project) {
+		// Lost tileset
+		if( tilesetDefUid!=null && p.defs.getTilesetDef(tilesetDefUid)==null ) {
+			App.LOG.add("tidy", 'Removed lost tileset in $this');
+			tilesetDefUid = null;
+		}
+
 		// Lost auto-layer tileset
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {
+			App.LOG.add("tidy", 'Removed lost autoTileset in $this');
 			autoTilesetDefUid = null;
 			for(rg in autoRuleGroups)
 			for(r in rg.rules)

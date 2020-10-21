@@ -128,8 +128,10 @@ class EntityInstance {
 
 		// Remove field instances whose def was removed
 		for(e in fieldInstances.keyValueIterator())
-			if( e.value.def==null )
+			if( e.value.def==null ) {
+				App.LOG.add("tidy", 'Removed lost fieldInstance in $this');
 				fieldInstances.remove(e.key);
+			}
 
 		for(fi in fieldInstances)
 			fi.tidy(_project);

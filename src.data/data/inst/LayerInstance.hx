@@ -261,8 +261,10 @@ class LayerInstance {
 				if( def.isAutoLayer() && autoTilesCache!=null ) {
 					// Discard lost rules autoTiles
 					for( rUid in autoTilesCache.keys() )
-						if( !def.hasRule(rUid) )
+						if( !def.hasRule(rUid) ) {
+							App.LOG.add("tidy", 'Removed lost rule cache in $this');
 							autoTilesCache.remove(rUid);
+						}
 
 					// Fix missing autoTiles
 					// for(rg in def.autoRuleGroups)
@@ -275,8 +277,10 @@ class LayerInstance {
 				// Remove lost entities (def removed)
 				var i = 0;
 				while( i<entityInstances.length ) {
-					if( entityInstances[i].def==null )
+					if( entityInstances[i].def==null ) {
+						App.LOG.add("tidy", 'Removed lost entity in $this');
 						entityInstances.splice(i,1);
+					}
 					else
 						i++;
 				}
@@ -286,9 +290,6 @@ class LayerInstance {
 					ei.tidy(_project);
 
 			case Tiles:
-				// Lost tileset
-				if( _project.defs.getTilesetDef(def.tilesetDefUid)==null )
-					def.tilesetDefUid = null;
 		}
 	}
 

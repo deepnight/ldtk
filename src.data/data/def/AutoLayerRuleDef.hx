@@ -254,16 +254,19 @@ class AutoLayerRuleDef {
 		var anyFix = false;
 
 		if( flipX && isSymetricX() ) {
+			App.LOG.add("tidy", 'Fixed X symetry of Rule#$uid');
 			flipX = false;
 			anyFix = true;
 		}
 
 		if( flipY && isSymetricY() ) {
+			App.LOG.add("tidy", 'Fixed Y symetry of Rule#$uid');
 			flipY = false;
 			anyFix = true;
 		}
 
 		if( xModulo==1 && yModulo==1 && checker!=None ) {
+			App.LOG.add("tidy", 'Fixed checker mode of Rule#$uid');
 			checker = None;
 			anyFix = true;
 		}

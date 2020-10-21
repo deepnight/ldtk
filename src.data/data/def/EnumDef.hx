@@ -25,7 +25,7 @@ class EnumDef {
 	}
 
 	@:keep public function toString() {
-		return '$identifier(' + values.join(",")+")";
+		return 'Enum#$uid.$identifier(${values.length} values)';
 	}
 
 	public static function fromJson(jsonVersion:String, json:led.Json.EnumDefJson) {
@@ -134,6 +134,7 @@ class EnumDef {
 	public function tidy(p:Project) {
 		// Lost tileset
 		if( iconTilesetUid!=null && p.defs.getTilesetDef(iconTilesetUid)==null ) {
+			App.LOG.add("tidy", 'Removed lost tileset in $this');
 			iconTilesetUid = null;
 			clearAllTileIds();
 		}
