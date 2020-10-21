@@ -12,6 +12,7 @@ class LevelRender extends dn.Process {
 	public var focusLevelY(default,set) : Float;
 	public var adjustedZoom(get,set) : Float;
 	var rawZoom : Float;
+	var isFit = false;
 
 	/** <LayerDefUID, Bool> **/
 	var autoLayerRendering : Map<Int,Bool> = new Map();
@@ -64,6 +65,7 @@ class LevelRender extends dn.Process {
 	}
 
 	public function fit() {
+		var wasFit = isFit;
 		focusLevelX = editor.curLevel.pxWid*0.5;
 		focusLevelY = editor.curLevel.pxHei*0.5;
 
@@ -75,16 +77,19 @@ class LevelRender extends dn.Process {
 		);
 
 		// Fit closer if repeated
-		if( old==rawZoom ) {
+		if( wasFit ) {
 			var pad = 8 * js.Browser.window.devicePixelRatio;
 			adjustedZoom = M.fmin(
 				editor.canvasWid() / ( editor.curLevel.pxWid + pad ),
 				editor.canvasHei() / ( editor.curLevel.pxHei + pad )
 			);
 		}
+
+		isFit = true;
 	}
 
 	inline function set_focusLevelX(v) {
+		isFit = false;
 		focusLevelX = editor.curLevelId==null
 			? v
 			: M.fclamp( v, -MAX_FOCUS_PADDING/adjustedZoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING/adjustedZoom );
@@ -93,6 +98,7 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function set_focusLevelY(v) {
+		isFit = false;
 		focusLevelY = editor.curLevelId==null
 			? v
 			: M.fclamp( v, -MAX_FOCUS_PADDING/adjustedZoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING/adjustedZoom );
@@ -101,6 +107,7 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function set_adjustedZoom(v) {
+		isFit = false;
 		rawZoom = M.fclamp(v, MIN_ZOOM, MAX_ZOOM);
 		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
 		return rawZoom;
@@ -114,6 +121,7 @@ class LevelRender extends dn.Process {
 	}
 
 	public function deltaZoom(delta:Float) {
+		isFit = false;
 		rawZoom += delta * rawZoom;
 		rawZoom = M.fclamp(rawZoom, MIN_ZOOM, MAX_ZOOM);
 	}
