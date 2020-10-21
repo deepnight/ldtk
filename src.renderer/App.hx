@@ -2,7 +2,7 @@ import electron.renderer.IpcRenderer;
 
 class App extends dn.Process {
 	public static var ME : App;
-	public static var LOG : dn.Log = new dn.Log( #if debug 1000 #else 50 #end );
+	public static var LOG : dn.Log = new dn.Log( #if debug 1000 #else 500 #end );
 	public static var APP_RESOURCE_DIR = "./"; // with trailing slash
 	public static var APP_ASSETS_DIR(get,never) : String;
 		static inline function get_APP_ASSETS_DIR() return APP_RESOURCE_DIR+"assets/";
@@ -21,19 +21,22 @@ class App extends dn.Process {
 	public function new() {
 		super();
 
+		// Init logging
+		LOG.logFilePath = JsTools.getExeDir()+"/LEd.log";
+		LOG.trimFileLines();
+		LOG.emptyEntry();
 		#if debug
-		// LOG.logFilePath = JsTools.getExeDir()+"/LEd.log";
 		LOG.printOnAdd = true;
 		#end
-		LOG.emptyEntry();
-		LOG.add("BOOT","App started");
-		LOG.tagColors.set("tidy", "#8ed1ac");
 
 		ME = this;
 		createRoot(Boot.ME.s2d);
 		lastKnownMouse = { pageX:0, pageY:0 }
 		jCanvas.hide();
 		clearMiniNotif();
+
+		LOG.add("BOOT","App started");
+		LOG.tagColors.set("tidy", "#8ed1ac");
 
 		// Init window
 		IpcRenderer.on("winClose", onWindowCloseButton);
@@ -239,6 +242,11 @@ class App extends dn.Process {
 		saveSessionData();
 	}
 
+	public function clearRecentProjects() {
+		session.recentProjects = [];
+		saveSessionData();
+	}
+
 	public function loadPage( create:()->Page ) {
 		clearCurPage();
 		curPageProcess = create();
@@ -298,12 +306,19 @@ class App extends dn.Process {
 		return curPageProcess!=null && !curPageProcess.destroyed;
 	}
 
+	inline function editorNeedSaving() {
+		return Editor.ME!=null && !Editor.ME.destroyed && Editor.ME.needSaving;
+	}
+
 	public function exit(force=false) {
-		if( !force && Editor.ME!=null && Editor.ME.needSaving ) {
+		if( !force && editorNeedSaving() ) {
 			ui.Modal.closeAll();
 			new ui.modal.dialog.UnsavedChanges( exit.bind(true) );
 		}
 		else {
+			if( editorNeedSaving() )
+				LOG.fileOp("Exit without saving");
+			LOG.trimFileLines();
 			LOG.flushToFile();
 			IpcRenderer.invoke("exitApp");
 		}
@@ -312,7 +327,8 @@ class App extends dn.Process {
 	override function update() {
 		super.update();
 
-		if( !cd.hasSetS("logFlush", 10) )
+		// Auto flush log every X seconds
+		if( !cd.hasSetS("logFlush",10) )
 			LOG.flushToFile();
 	}
 }
