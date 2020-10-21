@@ -49,6 +49,15 @@ class EntityDef {
 			+ "]";
 	}
 
+	public function getShortIdentifier(maxlen=4) {
+		if( identifier.length<=maxlen )
+			return identifier;
+
+		var dropReg = ~/[aeiouy0-9_-]/gi;
+		var short = identifier.charAt(0);
+		return short + dropReg.replace( identifier.substr(1), "" ).substr(0,maxlen-1);
+	}
+
 	public static function fromJson(p:Project, json:led.Json.EntityDefJson) {
 		var o = new EntityDef( JsonTools.readInt(json.uid) );
 		o.identifier = JsonTools.readString( json.identifier );
