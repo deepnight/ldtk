@@ -134,7 +134,8 @@ class GenericLevelElementGroup {
 							var pt = fi.getPointGrid(arrayIdx);
 							if( pt!=null )
 								li.pxOffsetX + pt.cx*li.def.gridSize;
-							else 0; // HACK should not happen? Need checks
+							else
+								0;
 					}
 					var y = switch e {
 						case GridCell(li, cx, cy): li.pxOffsetY + cy*li.def.gridSize;
@@ -143,7 +144,8 @@ class GenericLevelElementGroup {
 							var pt = fi.getPointGrid(arrayIdx);
 							if( pt!=null )
 								li.pxOffsetY + pt.cy*li.def.gridSize;
-							else 0; // HACK should not happen? Need checks
+							else
+								0;
 					}
 					_cachedBounds.top = M.imin( _cachedBounds.top, y );
 					_cachedBounds.bottom = M.imax( _cachedBounds.bottom, y );

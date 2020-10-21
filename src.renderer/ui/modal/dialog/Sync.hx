@@ -28,7 +28,6 @@ class Sync extends ui.modal.Dialog {
 
 		// Log
 		var jList = jContent.find(".log");
-		jList.appendTo(jContent); // BUG isn't that weird?
 		for(l in log) {
 			var li = new J('<li></li>');
 			var label = l.str;
