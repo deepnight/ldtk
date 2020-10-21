@@ -791,9 +791,14 @@ class LevelRender extends dn.Process {
 
 				// Field bg
 				var needBg = switch fd.type {
-					case F_Int, F_Float, F_String, F_Bool: true;
+					case F_Int, F_Float:
+						switch fd.editorDisplayMode {
+							case RadiusPx, RadiusGrid: false;
+							case _: true;
+						};
+					case F_String, F_Bool: true;
 					case F_Color, F_Point: false;
-					case F_Enum(enumDefUid): !fi.hasIconForDisplay(0);
+					case F_Enum(enumDefUid): fd.editorDisplayMode!=EntityTile;
 				}
 
 				if( needBg )
