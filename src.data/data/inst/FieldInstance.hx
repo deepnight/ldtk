@@ -16,13 +16,12 @@ class FieldInstance {
 		internalValues = [];
 	}
 
-	@:keep
-	public function toString() {
+	@:keep public function toString() {
 		var disp = [];
 		for(i in 0...getArrayLength())
 			disp.push( getForDisplay(i) );
 		return
-			'${def.identifier} = '
+			'Instance<${def.identifier}> = '
 			+ disp.join(',')
 			// + getForDisplay()
 			+ ' [ $internalValues ]';

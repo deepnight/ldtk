@@ -48,7 +48,7 @@ class FieldDef {
 	}
 
 	@:keep public function toString() {
-		return '$identifier('
+		return 'FieldDef.$identifier('
 			+ ( canBeNull ? 'Null<$type>' : '$type' )
 			+ ', default=${getDefault()})'
 			+ ( type==F_Int || type==F_Float ? '[$min-$max]' : "" );

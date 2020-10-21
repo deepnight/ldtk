@@ -89,7 +89,7 @@ class MouseCoords {
 
 
 	@:keep public function toString() {
-		return 'Page:$pageX,$pageY, Canvas:$canvasX,$canvasY, Level:$levelX,$levelY, Scale:${Const.SCALE}';
+		return 'MouseCoords: Page=$pageX,$pageY, Canvas=$canvasX,$canvasY, Level=$levelX,$levelY, Scale=${Const.SCALE}';
 	}
 
 	public inline function getRect(to:MouseCoords) : Rect {

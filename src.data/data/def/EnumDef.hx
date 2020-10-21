@@ -25,7 +25,7 @@ class EnumDef {
 	}
 
 	@:keep public function toString() {
-		return 'Enum#$uid.$identifier(${values.length} values)';
+		return 'EnumDef#$uid.$identifier(${values.length} values)';
 	}
 
 	public static function fromJson(jsonVersion:String, json:led.Json.EnumDefJson) {

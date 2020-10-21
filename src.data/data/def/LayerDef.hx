@@ -40,7 +40,7 @@ class LayerDef {
 	}
 
 	@:keep public function toString() {
-		return '$identifier($type, ${gridSize}px)';
+		return 'LayerDef.$identifier($type,${gridSize}px)';
 	}
 
 	public static function fromJson(jsonVersion:String, json:led.Json.LayerDefJson) {

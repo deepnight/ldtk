@@ -36,7 +36,7 @@ class TilesetDef {
 	}
 
 	public function toString() {
-		return identifier+"("+relPath+")";
+		return 'TilesetDef.$identifier($relPath)';
 	}
 
 	public inline function hasAtlasPath() return relPath!=null;

@@ -39,7 +39,7 @@ class LayerInstance {
 
 
 	@:keep public function toString() {
-		return 'LayerInstance#<${def.identifier}:${def.type}>';
+		return 'Instance<${def.identifier}:${def.type}>';
 	}
 
 

@@ -98,7 +98,7 @@ class AutoLayerRuleDef {
 	}
 
 	@:keep public function toString() {
-		return 'Rule(${size}x$size):$pattern';
+		return 'Rule#$uid(${size}x$size)';
 	}
 
 	public function toJson() {

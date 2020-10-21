@@ -44,8 +44,8 @@ class EntityDef {
 	}
 
 	@:keep public function toString() {
-		return '$identifier($width x $height)['
-			+ fieldDefs.map( function(fd) return fd.identifier+":"+fd.type ).join(",")
+		return 'EntityDef.$identifier($width x $height)['
+			+ fieldDefs.map( function(fd) return fd.identifier ).join(",")
 			+ "]";
 	}
 
