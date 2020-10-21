@@ -791,7 +791,6 @@ class Editor extends Page {
 	}
 
 	public function onSave(?bypassMissing=false, ?onComplete:Void->Void) {
-		// var neededSaving = needSaving;
 		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
@@ -803,8 +802,12 @@ class Editor extends Page {
 
 		ge.emit(BeforeProjectSaving);
 		checkAutoLayersCache( (anyChange)->{
+			App.LOG.fileOp('Saving $projectFilePath...');
 			var data = JsTools.prepareProjectFile(project);
 			JsTools.writeFileBytes(projectFilePath, data.bytes);
+
+			var size = dn.Lib.prettyBytesSize(data.bytes.length);
+			App.LOG.fileOp('Saved $size.');
 
 			if( project.exportTiled ) {
 				var e = new exporter.Tiled();
@@ -813,7 +816,7 @@ class Editor extends Page {
 
 			App.ME.registerRecentProject(projectFilePath);
 
-			N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath));
+			N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath)+' ($size)');
 			updateTitle();
 
 			this.needSaving = false;
