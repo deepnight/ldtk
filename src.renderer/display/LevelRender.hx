@@ -4,6 +4,7 @@ class LevelRender extends dn.Process {
 	static var MIN_ZOOM = 0.2;
 	static var MAX_ZOOM = 32;
 	static var MAX_FOCUS_PADDING = 200;
+	static var FIELD_TEXT_SCALE = 0.666;
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 
@@ -513,18 +514,12 @@ class LevelRender extends dn.Process {
 		valuesFlow.layout = Horizontal;
 		valuesFlow.verticalAlign = Middle;
 
-		if( fi.def.isArray ) {
-			valuesFlow.backgroundTile = hxd.Res.img.darkBg.toTile();
-			valuesFlow.borderWidth = 2;
-			valuesFlow.borderHeight = 2;
-			valuesFlow.padding = 1;
-		}
-
 		// Array opening
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = new h2d.Text(font, valuesFlow);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = "[";
+			tf.scale(FIELD_TEXT_SCALE);
 		}
 
 		for( idx in 0...fi.getArrayLength() ) {
@@ -540,7 +535,7 @@ class LevelRender extends dn.Process {
 				else if( fi.def.type==F_Color ) {
 					// Color disc
 					var g = new h2d.Graphics(valuesFlow);
-					var r = 4;
+					var r = 6;
 					g.beginFill( fi.getColorAsInt(idx) );
 					g.lineStyle(1, 0x0, 0.8);
 					g.drawCircle(r,r,r, 16);
@@ -550,6 +545,7 @@ class LevelRender extends dn.Process {
 					var tf = new h2d.Text(font, valuesFlow);
 					tf.textColor = ei.getSmartColor(true);
 					tf.filter = new dn.heaps.filter.PixelOutline();
+					tf.scale(FIELD_TEXT_SCALE);
 					var v = fi.getForDisplay(idx);
 					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
 						tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';
@@ -563,6 +559,7 @@ class LevelRender extends dn.Process {
 				var tf = new h2d.Text(font, valuesFlow);
 				tf.textColor = ei.getSmartColor(true);
 				tf.text = ",";
+				tf.scale(FIELD_TEXT_SCALE);
 			}
 		}
 
@@ -571,6 +568,7 @@ class LevelRender extends dn.Process {
 			var tf = new h2d.Text(font, valuesFlow);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = "]";
+			tf.scale(FIELD_TEXT_SCALE);
 		}
 
 		return valuesFlow;
@@ -670,6 +668,17 @@ class LevelRender extends dn.Process {
 				renderTile(def.tilesetId, def.tileId, def.tileRenderMode);
 			}
 
+		// Identifier label
+		// if( def.renderMode!=Cross ) {
+		// 	var tf = new h2d.Text(Assets.fontPixel, g);
+		// 	tf.textColor = C.autoContrast( def.color, C.toBlack(def.color,0.3), C.toWhite(def.color,0.3) );
+		// 	tf.text = def.getShortIdentifier();
+		// 	tf.scale(0.5);
+		// 	tf.x = Std.int( def.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
+		// 	tf.y = 0;
+		// }
+
+
 		// Pivot
 		g.beginFill(def.color);
 		g.lineStyle(1, 0x0, 0.5);
@@ -691,14 +700,17 @@ class LevelRender extends dn.Process {
 			var above = new h2d.Flow(wrapper);
 			above.layout = Vertical;
 			above.horizontalAlign = Middle;
+			above.verticalSpacing = 1;
 
 			var center = new h2d.Flow(wrapper);
 			center.layout = Vertical;
 			center.horizontalAlign = Middle;
+			center.verticalSpacing = 1;
 
 			var beneath = new h2d.Flow(wrapper);
 			beneath.layout = Vertical;
 			beneath.horizontalAlign = Middle;
+			beneath.verticalSpacing = 1;
 
 			// Attach fields
 			for(fd in ei.def.fieldDefs) {
@@ -719,11 +731,17 @@ class LevelRender extends dn.Process {
 					continue;
 
 				// Position
-				var fieldWrapper = new h2d.Object();
+				var fieldWrapper = new h2d.Flow();
 				switch fd.editorDisplayPos {
 					case Above: above.addChild(fieldWrapper);
 					case Center: center.addChild(fieldWrapper);
 					case Beneath: beneath.addChild(fieldWrapper);
+				}
+
+				var needBg = switch fd.type {
+					case F_Int, F_Float, F_String, F_Bool: true;
+					case F_Color, F_Point: false;
+					case F_Enum(enumDefUid): !fi.hasIconForDisplay(0);
 				}
 
 				switch fd.editorDisplayMode {
@@ -736,9 +754,13 @@ class LevelRender extends dn.Process {
 						var tf = new h2d.Text(font, f);
 						tf.textColor = ei.getSmartColor(true);
 						tf.text = fd.identifier+" = ";
+						tf.scale(FIELD_TEXT_SCALE);
 						tf.filter = new dn.heaps.filter.PixelOutline();
 
 						f.addChild( createFieldValuesRender(ei,fi) );
+
+					case ValueOnly:
+						fieldWrapper.addChild( createFieldValuesRender(ei,fi) );
 
 					case RadiusPx:
 						custom.lineStyle(1, ei.getSmartColor(false), 0.33);
@@ -747,9 +769,6 @@ class LevelRender extends dn.Process {
 					case RadiusGrid:
 						custom.lineStyle(1, ei.getSmartColor(false), 0.33);
 						custom.drawCircle(0,0, ( fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0) ) * li.def.gridSize);
-
-					case ValueOnly:
-						fieldWrapper.addChild( createFieldValuesRender(ei,fi) );
 
 					case EntityTile:
 
@@ -775,17 +794,29 @@ class LevelRender extends dn.Process {
 						}
 				}
 
+				if( needBg ) {
+					var bg = new h2d.ScaleGrid(hxd.Res.img.fieldBg.toTile(), 2,2);
+					fieldWrapper.addChildAt(bg, 0);
+					fieldWrapper.getProperties(bg).isAbsolute = true;
+					bg.colorMatrix = C.getColorizeMatrixH2d( C.toBlack( ei.getSmartColor(false), 0.5 ) );
+					bg.alpha = 0.5;
+					bg.x = -2;
+					bg.y = 1;
+					bg.width = fieldWrapper.outerWidth + M.fabs(bg.x)*2;
+					bg.height = fieldWrapper.outerHeight;
+				}
+
 			}
 
 			// Update wrappers pos
 			above.x = Std.int( -def.width*def.pivotX - above.outerWidth*0.5 + def.width*0.5 );
-			above.y = Std.int( -above.outerHeight - def.height*def.pivotY );
+			above.y = Std.int( -above.outerHeight - def.height*def.pivotY - 1 );
 
 			center.x = Std.int( -def.width*def.pivotX - center.outerWidth*0.5 + def.width*0.5 );
 			center.y = Std.int( -def.height*def.pivotY - center.outerHeight*0.5 + def.height*0.5);
 
 			beneath.x = Std.int( -def.width*def.pivotX - beneath.outerWidth*0.5 + def.width*0.5 );
-			beneath.y = Std.int( def.height*(1-def.pivotY) );
+			beneath.y = Std.int( def.height*(1-def.pivotY) + 1 );
 		}
 
 		return wrapper;
