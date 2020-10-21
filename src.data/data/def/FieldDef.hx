@@ -96,21 +96,32 @@ class FieldDef {
 	}
 
 
-	public function changeType(newType:FieldType) {
-		switch type {
-			case F_Int:
-			case F_Float:
-			case F_String(multilines):
-				switch newType {
-					case F_String(_): type = newType;
-					case _:
-				}
+	public function convertType(newType:FieldType) {
+		var convertors : Array<{ from:FieldType, to:FieldType, convert:data.inst.FieldInstance->Void }>= [
+			{ from:F_Int, to:F_Float, convert:(fi)->{} },
+			{ from:F_String(true), to:F_String(false), convert:(fi)->{
+				App.ME.debug("   dark magic");
+			} },
+			{ from:F_String(false), to:F_String(true), convert:(fi)->{} },
+		];
 
-			case F_Bool:
-			case F_Color:
-			case F_Enum(enumDefUid):
-			case F_Point:
-		}
+		for(c in convertors)
+			if( c.from.equals(type) && c.to.equals(newType) ) {
+				for(l in _project.levels)
+				for(li in l.layerInstances)
+					if( li.def.type==Entities )
+						for( ei in li.entityInstances )
+						for(fi in ei.fieldInstances)
+							if( fi.defUid==uid ) {
+								App.LOG.general('Converting ${l.identifier}.${ei.def.identifier}.$identifier to $newType');
+								c.convert(fi);
+							}
+
+				type = newType;
+				return true;
+			}
+
+		return false;
 	}
 
 

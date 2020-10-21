@@ -597,7 +597,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					case _: false;
 				},
 				(v)->{
-					curField.changeType( F_String(v) );
+					curField.convertType( F_String(v) );
 				}
 			);
 			i.linkEvent( EntityFieldDefChanged(curEntity) );
