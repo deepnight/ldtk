@@ -110,6 +110,9 @@ class Home extends Page {
 			var li = new J('<li/>');
 			li.appendTo(jRecentList);
 
+			if( i==recents.length-1 )
+				li.append( JsTools.createKey(K.ENTER) );
+
 			// var jRemove = new J('<button class="remove dark">x</button>');
 			// jRemove.attr("title",Lang.t._("Remove from history"));
 			// var remIdx = i;

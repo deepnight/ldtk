@@ -466,6 +466,7 @@ div.key {
 	text-transform: uppercase;
 	font-family: Roboto;
 	font-style: normal;
+	text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.3);
 
 	$keyColor: #CFC5AC;
 	$opacity: 0.45;
@@ -473,7 +474,7 @@ div.key {
 	$darken: 0.4;
 	background-color: transparentize( $keyColor, $opacity );
 	border: 1px solid transparentize( lighten( $keyColor, $lighten ), $opacity );
-	border-bottom: 2px solid transparentize( darken( $keyColor, $darken ), $opacity );
+	border-bottom: 4px solid transparentize( darken( $keyColor, $darken ), $opacity );
 	box-shadow: 0px 0px 4px black;
 	border-radius: 2px;
 
@@ -2237,7 +2238,7 @@ canvas#webgl {
 		align-items: center;
 		justify-content: center;
 
-		button {
+		.buttons button {
 			white-space: nowrap;
 			display: flex;
 			justify-content: center;
@@ -2313,6 +2314,7 @@ canvas#webgl {
 				overflow-y: auto;
 				margin-top: 8px;
 				margin-bottom: 0;
+				padding: 4px;
 
 				&:empty {
 					padding: 40px;
@@ -2324,9 +2326,12 @@ canvas#webgl {
 				}
 
 				.path {
+					padding-top: 4px;
+					padding-bottom: 4px;
 					white-space: nowrap;
 					overflow-x: hidden;
 					width: 100%;
+
 					span:not(:last-of-type):not(.slash) {
 						font-size: 8pt;
 						opacity: 0.5;
@@ -2337,12 +2342,21 @@ canvas#webgl {
 					overflow: hidden;
 					grid-template-columns: auto min-content;
 					justify-items: right;
+
+					&:first-child {
+						grid-template-columns: min-content auto min-content;
+					}
+
 					button.remove {
 						padding: 5px;
 						border-radius: 3px;
 					}
+
 					.exploreTo {
 						padding: 4px 8px;
+					}
+
+					button.context {
 					}
 				}
 
