@@ -546,6 +546,12 @@ div.key {
 		font-weight: bold;
 		font-size: 12pt;
 	}
+	span.highlight {
+		padding: 2px 4px;
+		border-radius: 2px;
+		color: white;
+		text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.3);
+	}
 }
 
 
@@ -2334,7 +2340,6 @@ canvas#webgl {
 
 					span:not(:last-of-type):not(.slash) {
 						font-size: 8pt;
-						opacity: 0.5;
 					}
 				}
 

@@ -79,27 +79,20 @@ class Home extends Page {
 
 		// Trim common path parts
 		var trimmedPaths = recents.copy();
-		if( trimmedPaths.length==1 ) {
+		if( trimmedPaths.length==1 )
 			trimmedPaths[0] = dn.FilePath.fromFile( trimmedPaths[0] ).fileWithExt;
-		}
 		else if( trimmedPaths.length>1 ) {
 			var splitPaths = trimmedPaths.map( function(p) return dn.FilePath.fromFile(p).getDirectoryAndFileArray() );
 
-			var same = true;
-			var trim = 0;
-			while( same ) {
-				for( i in 1...splitPaths.length )
-					if( trim>=splitPaths[0].length || splitPaths[0][trim] != splitPaths[i][trim] ) {
-						same = false;
-						break;
-					}
-				if( same )
-					trim++;
+			for(i in 0...splitPaths.length) {
+				var refPath = splitPaths[i];
+				var sameRoot = splitPaths.filter( (p) -> p.length>2 && p[0]==refPath[0] );
+				while( sameRoot.length>1 ) {
+					for(p in sameRoot )
+						p.shift();
+					sameRoot = splitPaths.filter( (p) -> p.length>2 && p[0]==refPath[0] );
+				}
 			}
-
-			for(i in 0...trim)
-			for(p in splitPaths)
-				p.shift();
 
 			trimmedPaths = splitPaths.map( function(p) return p.join("/") );
 		}
@@ -113,7 +106,8 @@ class Home extends Page {
 			if( i==recents.length-1 )
 				li.append( JsTools.createKey(K.ENTER) );
 
-			li.append( JsTools.makePath(trimmedPaths[i], C.fromStringLight(dn.FilePath.fromFile(trimmedPaths[i]).directory)) );
+			var col = C.toBlack( C.fromStringLight( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] ), 0.3 );
+			li.append( JsTools.makePath(trimmedPaths[i], col, true) );
 
 			li.click( function(ev) loadProject(p) );
 
