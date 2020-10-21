@@ -85,7 +85,7 @@ class EntityInstance {
 		return ( getCy(ld)+0.5 ) * ld.gridSize - y;
 	}
 
-	public function isOver(layerX:Int, layerY:Int, pad=0) { // HACK rename
+	public function isOver(layerX:Int, layerY:Int, pad=0) {
 		return layerX >= left-pad && layerX <= right+pad && layerY >= top-pad && layerY <= bottom+pad;
 	}
 
@@ -123,7 +123,7 @@ class EntityInstance {
 			return null;
 	}
 
-	public function tidy(p:data.Project) {
+	public function tidy(p:data.Project, li:LayerInstance) {
 		_project = p;
 
 		// Remove field instances whose def was removed
@@ -134,7 +134,7 @@ class EntityInstance {
 			}
 
 		for(fi in fieldInstances)
-			fi.tidy(_project);
+			fi.tidy(_project, li, this);
 	}
 
 

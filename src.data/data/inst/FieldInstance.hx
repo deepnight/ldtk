@@ -357,7 +357,7 @@ class FieldInstance {
 		}
 	}
 
-	public function tidy(p:Project) {
+	public function tidy(p:Project, li:LayerInstance, ei:EntityInstance) {
 		_project = p;
 
 		switch def.type {
@@ -367,7 +367,17 @@ class FieldInstance {
 			case F_Bool:
 			case F_Color:
 
-			case F_Point: // TODO check bounds?
+			case F_Point:
+				var i = 0;
+				while( i<getArrayLength() ) {
+					var pt = getPointGrid(i);
+					if( pt.cx<0 || pt.cx>=li.cWid || pt.cy<0 || pt.cy>=li.cHei ) {
+						App.LOG.add("tidy", 'Removed out-of-bounds point field $pt in $this');
+						removeArrayValue(i);
+					}
+					else
+						i++;
+				}
 
 			case F_Enum(enumDefUid):
 				// Lost enum value

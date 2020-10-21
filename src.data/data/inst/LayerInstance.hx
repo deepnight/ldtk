@@ -287,7 +287,7 @@ class LayerInstance {
 
 				// Cleanup field instances
 				for(ei in entityInstances)
-					ei.tidy(_project);
+					ei.tidy(_project, this);
 
 			case Tiles:
 		}

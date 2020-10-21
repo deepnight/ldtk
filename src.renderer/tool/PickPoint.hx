@@ -35,7 +35,8 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 	override function stopUsing(m:MouseCoords) {
 		super.stopUsing(m);
 
-		if( button==0 ) {
+		var li = editor.curLayerInstance;
+		if( button==0 && m.cx>=0 && m.cx<li.cWid && m.cy>=0 && m.cy<li.cHei ) {
 			editor.levelRender.bleepRectCase(m.cx,m.cy, 1,1, 0xffcc00);
 			onPick(m);
 		}
