@@ -34,7 +34,7 @@ class FieldDef {
 		editorDisplayPos = Above;
 		editorAlwaysShow = false;
 		identifier = "NewField"+uid;
-		canBeNull = type.getIndex()==F_String(null).getIndex() || type==F_Point && !isArray;
+		canBeNull = type==F_String || type==F_Text || type==F_Point && !isArray;
 		arrayMinLength = arrayMaxLength = null;
 		isArray = false;
 		min = max = null;
@@ -57,9 +57,6 @@ class FieldDef {
 	}
 
 	public static function fromJson(p:Project, json:Dynamic) {
-		if( json.type=="F_String" )
-			json.type = { id:"F_String", params:[false] }
-
 		var type = JsonTools.readEnum(data.LedTypes.FieldType, json.type, false);
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), type );
 		o.isArray = JsonTools.readBool(json.isArray, false);
@@ -99,10 +96,8 @@ class FieldDef {
 	public function convertType(newType:FieldType) {
 		var convertors : Array<{ from:FieldType, to:FieldType, convert:data.inst.FieldInstance->Void }>= [
 			{ from:F_Int, to:F_Float, convert:(fi)->{} },
-			{ from:F_String(true), to:F_String(false), convert:(fi)->{
-				App.ME.debug("   dark magic");
-			} },
-			{ from:F_String(false), to:F_String(true), convert:(fi)->{} },
+			{ from:F_String, to:F_Text, convert:(fi)->{} },
+			{ from:F_Text, to:F_String, convert:(fi)->{} },
 		];
 
 		for(c in convertors)
@@ -130,7 +125,8 @@ class FieldDef {
 		var desc = switch type {
 			case F_Int: "Int";
 			case F_Float: "Float";
-			case F_String(multi): multi?"MultiLines":"String";
+			case F_String: "String";
+			case F_Text: "MultiLines";
 			case F_Bool: "Bool";
 			case F_Color: "Color";
 			case F_Point: "Point";
@@ -143,7 +139,8 @@ class FieldDef {
 		var desc = switch type {
 			case F_Int: "Int";
 			case F_Float: "Float";
-			case F_String(multilines): "String";
+			case F_String: "String";
+			case F_Text: "String";
 			case F_Bool: "Bool";
 			case F_Color: "Color";
 			case F_Point: "Point";
@@ -158,7 +155,7 @@ class FieldDef {
 		var infinity = "∞";
 		return getShortDescription()
 			+ ( canBeNull ? " (nullable)" : "" )
-			+ ", default = " + ( type.getIndex()==F_String(null).getIndex() && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
+			+ ", default = " + ( ( type==F_String || type==F_Text ) && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
 			+ ( min==null && max==null ? "" :
 				( type==F_Int ? " ["+(min==null?"-"+infinity:""+dn.M.round(min))+";"+(max==null?"+"+infinity:""+dn.M.round(max))+"]" : "" )
 				+ ( type==F_Float ? " ["+(min==null?"-"+infinity:""+min)+";"+(max==null?infinity:""+max)+"]" : "" )
@@ -171,11 +168,12 @@ class FieldDef {
 			throw "Only available on "+type+" fields";
 	}
 
-	public inline function isString() {
-		return switch type {
-			case F_String(_): true;
-			case _: false;
-		}
+	public function requireAny(types:Array<data.LedTypes.FieldType>) {
+		for(type in types)
+			if( this.type.getIndex()==type.getIndex() )
+				return true;
+
+		throw "Only available on "+type+" fields";
 	}
 
 	public function iClamp(v:Null<Int>) {
@@ -256,7 +254,7 @@ class FieldDef {
 	}
 
 	public function getStringDefault() : Null<String> {
-		require( F_String(null) );
+		requireAny([ F_String, F_Text ]);
 		return switch defaultOverride {
 			case null: canBeNull ? null : "";
 			case V_String(v): v;
@@ -302,7 +300,7 @@ class FieldDef {
 				var def = Std.parseFloat(rawDef);
 				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Float( fClamp(def) );
 
-			case F_String(multilines):
+			case F_String, F_Text:
 				rawDef = StringTools.trim(rawDef);
 				defaultOverride = rawDef=="" ? null : V_String(rawDef);
 
@@ -335,7 +333,7 @@ class FieldDef {
 			case F_Int: getIntDefault();
 			case F_Color: getColorDefault();
 			case F_Float: getFloatDefault();
-			case F_String(multilines): getStringDefault();
+			case F_String, F_Text: getStringDefault();
 			case F_Bool: getBoolDefault();
 			case F_Point: getPointDefault();
 			case F_Enum(name): getEnumDefault();

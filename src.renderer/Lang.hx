@@ -43,7 +43,8 @@ class Lang {
             case F_Int: t._("Integer");
             case F_Color: t._("Color");
             case F_Float: t._("Float");
-            case F_String(multilines): multilines ? t._("Multilines") : t._("String");
+            case F_String: t._("String");
+            case F_Text: t._("Multilines");
             case F_Bool: t._("Boolean");
             case F_Point: t._("Point");
             case F_Enum(name): name==null ? t._("Enum") : t._("Enum.::e::", { e:name });
@@ -55,7 +56,8 @@ class Lang {
             case F_Int: t._("123");
             case F_Color: t._("Red");
             case F_Float: t._("1.0");
-            case F_String(multilines): t._("\"Ab\"");
+            case F_String: t._("\"Ab\"");
+            case F_Text: t._("\"\\n\\n\"");
             case F_Bool: t._("✔");
             case F_Point: t._("X::sep::Y", { sep:Const.POINT_SEPARATOR });
             case F_Enum(name): t._("Enu");

@@ -254,7 +254,8 @@ class Tiled extends Exporter {
 							var type = switch fi.def.type {
 								case F_Int: "int";
 								case F_Float: "float";
-								case F_String(multilines): null;
+								case F_String: null;
+								case F_Text: null;
 								case F_Bool: "bool";
 								case F_Color: "color";
 								case F_Enum(enumDefUid): null;
@@ -264,7 +265,7 @@ class Tiled extends Exporter {
 							var v : Dynamic = switch fi.def.type {
 								case F_Int: fi.getInt(i);
 								case F_Float: fi.getFloat(i);
-								case F_String(multilines): fi.getString(i);
+								case F_String, F_Text: fi.getString(i);
 								case F_Bool: fi.getBool(i);
 								case F_Color:
 									var c = fi.getColorAsHexStr(i);

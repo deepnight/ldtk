@@ -303,8 +303,8 @@ class EntityInstanceEditor extends dn.Process {
 				});
 				hideInputIfDefault(arrayIdx, input, fi);
 
-			case F_String(multilines):
-				var input = if( multilines ) {
+			case F_String, F_Text:
+				var input = if( fi.def.type==F_Text ) {
 					var input = new J("<textarea/>");
 					input.appendTo(jTarget);
 					input.keyup( (ev)-> {
@@ -328,7 +328,7 @@ class EntityInstanceEditor extends dn.Process {
 					fi.parseValue( arrayIdx, input.val() );
 					onFieldChange();
 				});
-				if( multilines )
+				if( fi.def.type==F_Text )
 					input.keyup();
 				hideInputIfDefault(arrayIdx, input, fi);
 
@@ -513,7 +513,7 @@ class EntityInstanceEditor extends dn.Process {
 							}
 							var jArray = jPanel.find('[defuid=${fd.uid}] .array');
 							switch fi.def.type {
-								case F_Int, F_Float, F_String(_): jArray.find("a.usingDefault:last").click();
+								case F_Int, F_Float, F_String, F_Text: jArray.find("a.usingDefault:last").click();
 								case F_Bool:
 								case F_Color:
 								case F_Enum(enumDefUid):

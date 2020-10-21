@@ -139,7 +139,7 @@ class FieldInstance {
 					setInternal( arrayIdx, V_Float(v) );
 				}
 
-			case F_String(multilines):
+			case F_String, F_Text:
 				raw = StringTools.trim(raw);
 				if( raw.length==0 )
 					setInternal(arrayIdx, null);
@@ -185,7 +185,8 @@ class FieldInstance {
 		switch def.type {
 			case F_Int:
 			case F_Float:
-			case F_String(multilines):
+			case F_String:
+			case F_Text:
 			case F_Bool:
 			case F_Color:
 			case F_Point:
@@ -207,7 +208,7 @@ class FieldInstance {
 			case F_Int: getInt(arrayIdx);
 			case F_Color: getColorAsInt(arrayIdx);
 			case F_Float: getFloat(arrayIdx);
-			case F_String(multilines): getString(arrayIdx);
+			case F_String, F_Text: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
@@ -247,7 +248,7 @@ class FieldInstance {
 			case F_Int: getInt(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Float: getFloat(arrayIdx);
-			case F_String(multilines): getString(arrayIdx);
+			case F_String, F_Text: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
@@ -258,7 +259,7 @@ class FieldInstance {
 			case F_Int, F_Float, F_Bool, F_Color: return Std.string(v);
 			case F_Enum(name): return '$v';
 			case F_Point: return '$v';
-			case F_String(multilines): return '"$v"';
+			case F_String, F_Text: return '"$v"';
 		}
 	}
 
@@ -266,7 +267,8 @@ class FieldInstance {
 		return switch def.type {
 			case F_Int: getInt(arrayIdx);
 			case F_Float: JsonTools.writeFloat( getFloat(arrayIdx) );
-			case F_String(multilines): escapeStringForJson( getString(arrayIdx) );
+			case F_String: escapeStringForJson( getString(arrayIdx) );
+			case F_Text: escapeStringForJson( getString(arrayIdx) ); // TODO multilines escaping
 			case F_Bool: getBool(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Point: getPointGrid(arrayIdx);
@@ -317,7 +319,7 @@ class FieldInstance {
 	}
 
 	public function getString(arrayIdx:Int) : String {
-		require( F_String(null) );
+		def.requireAny([ F_String, F_Text ]);
 		var out = isUsingDefault(arrayIdx) ? def.getStringDefault() : switch internalValues[arrayIdx] {
 			case V_String(v): v;
 			case _: throw "unexpected";
@@ -365,7 +367,8 @@ class FieldInstance {
 		switch def.type {
 			case F_Int:
 			case F_Float:
-			case F_String(multilines):
+			case F_String:
+			case F_Text:
 			case F_Bool:
 			case F_Color:
 
