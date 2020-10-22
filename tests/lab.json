@@ -11,7 +11,7 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 46,
+	"nextUid": 49,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -434,6 +434,22 @@
 				"pivotY": 0.5,
 				"fieldDefs": [
 					{
+						"identifier": "desc",
+						"__type": "String",
+						"uid": 46,
+						"type": "F_Text",
+						"isArray": false,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "ValueOnly",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": true,
+						"min": null,
+						"max": null,
+						"defaultOverride": null
+					},
+					{
 						"identifier": "scale",
 						"__type": "Float",
 						"uid": 43,
@@ -483,6 +499,38 @@
 							"id": "V_Bool",
 							"params": [ true ]
 						}
+					},
+					{
+						"identifier": "point",
+						"__type": "Point",
+						"uid": 47,
+						"type": "F_Point",
+						"isArray": false,
+						"canBeNull": true,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "PointStar",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
+						"min": null,
+						"max": null,
+						"defaultOverride": null
+					},
+					{
+						"identifier": "path",
+						"__type": "Array<Point>",
+						"uid": 48,
+						"type": "F_Point",
+						"isArray": true,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "PointPath",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
+						"min": null,
+						"max": null,
+						"defaultOverride": null
 					}
 				]
 			}
@@ -512,13 +560,13 @@
 			"identifier": "Field_conversions",
 			"uid": 41,
 			"pxWid": 224,
-			"pxHei": 112,
+			"pxHei": 144,
 			"layerInstances": [
 				{
 					"__identifier": "Entities2",
 					"__type": "Entities",
 					"__cWid": 14,
-					"__cHei": 7,
+					"__cHei": 9,
 					"__gridSize": 16,
 					"__opacity": 1,
 					"levelId": 41,
@@ -530,7 +578,7 @@
 					"seed": 9970226,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Convert_test", "__grid": [5,3], "__tile": null, "defUid": 42, "px": [88,56], "fieldInstances": [
+						{ "__identifier": "Convert_test", "__grid": [5,5], "__tile": null, "defUid": 42, "px": [88,88], "fieldInstances": [
 							{ "__identifier": "scale", "__value": 0.66, "__type": "Float", "defUid": 43, "realEditorValues": [] },
 							{
 								"__identifier": "hp",
@@ -539,9 +587,21 @@
 								"defUid": 44,
 								"realEditorValues": [null]
 							},
-							{ "__identifier": "flag", "__value": true, "__type": "Bool", "defUid": 45, "realEditorValues": [] }
+							{ "__identifier": "flag", "__value": true, "__type": "Bool", "defUid": 45, "realEditorValues": [] },
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 46, "realEditorValues": [] },
+							{
+								"__identifier": "point",
+								"__value": { "cx": 4, "cy": 8 },
+								"__type": "Point",
+								"defUid": 47,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["4,8"]
+								}]
+							},
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 48, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Convert_test", "__grid": [11,3], "__tile": null, "defUid": 42, "px": [184,56], "fieldInstances": [
+						{ "__identifier": "Convert_test", "__grid": [11,5], "__tile": null, "defUid": 42, "px": [184,88], "fieldInstances": [
 							{
 								"__identifier": "scale",
 								"__value": 1.5,
@@ -565,35 +625,21 @@
 									"id": "V_Bool",
 									"params": [ true ]
 								}]
-							}
-						] },
-						{ "__identifier": "Convert_test", "__grid": [2,3], "__tile": null, "defUid": 42, "px": [40,56], "fieldInstances": [
-							{
-								"__identifier": "scale",
-								"__value": 0.2,
-								"__type": "Float",
-								"defUid": 43,
-								"realEditorValues": [{ "id": "V_Float", "params": [0.2] }]
 							},
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 46, "realEditorValues": [] },
 							{
-								"__identifier": "hp",
-								"__value": 1,
-								"__type": "Int",
-								"defUid": 44,
-								"realEditorValues": [{ "id": "V_Int", "params": [1] }]
-							},
-							{
-								"__identifier": "flag",
-								"__value": false,
-								"__type": "Bool",
-								"defUid": 45,
+								"__identifier": "point",
+								"__value": { "cx": 13, "cy": 8 },
+								"__type": "Point",
+								"defUid": 47,
 								"realEditorValues": [{
-									"id": "V_Bool",
-									"params": [ false ]
+									"id": "V_String",
+									"params": ["13,8"]
 								}]
-							}
+							},
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 48, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Convert_test", "__grid": [8,3], "__tile": null, "defUid": 42, "px": [136,56], "fieldInstances": [
+						{ "__identifier": "Convert_test", "__grid": [8,5], "__tile": null, "defUid": 42, "px": [136,88], "fieldInstances": [
 							{
 								"__identifier": "scale",
 								"__value": 1.2,
@@ -614,7 +660,36 @@
 								"__type": "Bool",
 								"defUid": 45,
 								"realEditorValues": [null]
-							}
+							},
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 46, "realEditorValues": [] },
+							{
+								"__identifier": "point",
+								"__value": { "cx": 10, "cy": 8 },
+								"__type": "Point",
+								"defUid": 47,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["10,8"]
+								}]
+							},
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 48, "realEditorValues": [] }
+						] },
+						{ "__identifier": "Convert_test", "__grid": [2,5], "__tile": null, "defUid": 42, "px": [40,88], "fieldInstances": [
+							{ "__identifier": "scale", "__value": 0.66, "__type": "Float", "defUid": 43, "realEditorValues": [] },
+							{ "__identifier": "hp", "__value": 3, "__type": "Int", "defUid": 44, "realEditorValues": [] },
+							{ "__identifier": "flag", "__value": true, "__type": "Bool", "defUid": 45, "realEditorValues": [] },
+							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 46, "realEditorValues": [] },
+							{
+								"__identifier": "point",
+								"__value": { "cx": 0, "cy": 8 },
+								"__type": "Point",
+								"defUid": 47,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["0,8"]
+								}]
+							},
+							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 48, "realEditorValues": [] }
 						] }
 					]
 				},
@@ -622,7 +697,7 @@
 					"__identifier": "Tiles",
 					"__type": "Tiles",
 					"__cWid": 14,
-					"__cHei": 7,
+					"__cHei": 9,
 					"__gridSize": 16,
 					"__opacity": 1,
 					"levelId": 41,
@@ -639,7 +714,7 @@
 					"__identifier": "IntGrid",
 					"__type": "IntGrid",
 					"__cWid": 14,
-					"__cHei": 7,
+					"__cHei": 9,
 					"__gridSize": 16,
 					"__opacity": 1,
 					"levelId": 41,
@@ -656,7 +731,7 @@
 					"__identifier": "Entities",
 					"__type": "Entities",
 					"__cWid": 14,
-					"__cHei": 7,
+					"__cHei": 9,
 					"__gridSize": 16,
 					"__opacity": 1,
 					"levelId": 41,
@@ -673,7 +748,7 @@
 					"__identifier": "Grid8",
 					"__type": "IntGrid",
 					"__cWid": 56,
-					"__cHei": 28,
+					"__cHei": 36,
 					"__gridSize": 4,
 					"__opacity": 1,
 					"levelId": 41,
