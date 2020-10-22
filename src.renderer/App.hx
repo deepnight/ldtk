@@ -46,6 +46,10 @@ class App extends dn.Process {
 		win.onfocus = onAppFocus;
 		win.onresize = onAppResize;
 		win.onmousemove = onAppMouseMove;
+		win.onerror = (msg, url, lineNo, columnNo, error)->{
+			new ui.modal.dialog.CrashReport(msg,error);
+			return false;
+		}
 
 		// Keyboard events
 		jBody
