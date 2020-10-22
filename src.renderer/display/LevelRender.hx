@@ -734,6 +734,7 @@ class LevelRender extends dn.Process {
 					// continue;
 				}
 
+				// Skip hiddens
 				if( fd.editorDisplayMode==Hidden )
 					continue;
 
@@ -812,6 +813,8 @@ class LevelRender extends dn.Process {
 
 				if( needBg )
 					_addBg(fieldWrapper, 0.15);
+
+				fieldWrapper.visible = fieldWrapper.numChildren>0;
 
 			}
 
