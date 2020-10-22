@@ -11,7 +11,7 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 40,
+	"nextUid": 41,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -240,7 +240,7 @@
 						"identifier": "label",
 						"__type": "String",
 						"uid": 3,
-						"type": "F_Text",
+						"type": "F_String",
 						"isArray": false,
 						"canBeNull": false,
 						"arrayMinLength": null,
@@ -440,8 +440,126 @@
 	},
 	"levels": [
 		{
-			"identifier": "Level",
+			"identifier": "MultiLines",
 			"uid": 33,
+			"pxWid": 80,
+			"pxHei": 80,
+			"layerInstances": [
+				{
+					"__identifier": "Entities2",
+					"__type": "Entities",
+					"__cWid": 5,
+					"__cHei": 5,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"levelId": 33,
+					"layerDefUid": 16,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 8476847,
+					"gridTiles": [],
+					"entityInstances": [{ "__identifier": "Tutorial", "__grid": [2,2], "__tile": null, "defUid": 2, "px": [40,48], "fieldInstances": [
+						{
+							"__identifier": "label",
+							"__value": "Bob",
+							"__type": "String",
+							"defUid": 3,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": ["Bob"]
+							}]
+						},
+						{ "__identifier": "color", "__value": "#82A8BF", "__type": "Color", "defUid": 5, "realEditorValues": [] },
+						{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
+						{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] },
+						{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] },
+						{
+							"__identifier": "desc",
+							"__value": "some desc\\n...on multiple\\n...lines!",
+							"__type": "String",
+							"defUid": 38,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": ["some desc\\n...on multiple\\n...lines!"]
+							}]
+						}
+					] }]
+				},
+				{
+					"__identifier": "Tiles",
+					"__type": "Tiles",
+					"__cWid": 5,
+					"__cHei": 5,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"levelId": 33,
+					"layerDefUid": 9,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 7294231,
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
+					"__identifier": "IntGrid",
+					"__type": "IntGrid",
+					"__cWid": 5,
+					"__cHei": 5,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"levelId": 33,
+					"layerDefUid": 1,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 7722421,
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
+					"__identifier": "Entities",
+					"__type": "Entities",
+					"__cWid": 5,
+					"__cHei": 5,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"levelId": 33,
+					"layerDefUid": 4,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 9164037,
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
+					"__identifier": "Grid8",
+					"__type": "IntGrid",
+					"__cWid": 20,
+					"__cHei": 20,
+					"__gridSize": 4,
+					"__opacity": 1,
+					"levelId": 33,
+					"layerDefUid": 18,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 7066297,
+					"gridTiles": [],
+					"entityInstances": []
+				}
+			]
+		},
+		{
+			"identifier": "Level2",
+			"uid": 40,
 			"pxWid": 256,
 			"pxHei": 256,
 			"layerInstances": [
@@ -452,7 +570,7 @@
 					"__cHei": 16,
 					"__gridSize": 16,
 					"__opacity": 1,
-					"levelId": 33,
+					"levelId": 40,
 					"layerDefUid": 16,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
@@ -502,7 +620,16 @@
 							{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 7, "realEditorValues": [] },
 							{ "__identifier": "star", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] },
 							{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] },
-							{ "__identifier": "desc", "__value": "", "__type": "String", "defUid": 38, "realEditorValues": [] }
+							{
+								"__identifier": "desc",
+								"__value": "line1\\\\nline2",
+								"__type": "String",
+								"defUid": 38,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["line1\\\\nline2"]
+								}]
+							}
 						] }
 					]
 				},
@@ -513,7 +640,7 @@
 					"__cHei": 16,
 					"__gridSize": 16,
 					"__opacity": 1,
-					"levelId": 33,
+					"levelId": 40,
 					"layerDefUid": 9,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
@@ -530,7 +657,7 @@
 					"__cHei": 16,
 					"__gridSize": 16,
 					"__opacity": 1,
-					"levelId": 33,
+					"levelId": 40,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
@@ -659,7 +786,7 @@
 					"__cHei": 16,
 					"__gridSize": 16,
 					"__opacity": 1,
-					"levelId": 33,
+					"levelId": 40,
 					"layerDefUid": 4,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
@@ -676,7 +803,7 @@
 					"__cHei": 64,
 					"__gridSize": 4,
 					"__opacity": 1,
-					"levelId": 33,
+					"levelId": 40,
 					"layerDefUid": 18,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
