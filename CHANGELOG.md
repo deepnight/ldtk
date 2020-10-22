@@ -12,6 +12,8 @@
  - Renamed the old *Enhance active layer* option to **Single layer mode**
  - `Alt`+`left click` now picks elements in *all* layers. If you have the *Single layer mode* activated (`A` key), it will make a smarter choice than before, and prioritize current layer. TLDR; you should always pick what is expected with this action.
  - Added an option to allow selection of empty spaces
+ - Better mouse coordinates display in editor footer
+ - Added *rectangle selection size* to editor footer
  - Use `DELETE` key to delete selected elements
  - Use `CTRL`+`A` shortcut to select everything (limited to current layer in *Single Layer Mode*).
  - Optimized the JSON format to reduce its size (should be approximately 40-50% smaller).
