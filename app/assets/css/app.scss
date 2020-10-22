@@ -480,6 +480,7 @@ div.key {
 
 	&.shift {
 		color: transparent;
+		text-shadow: none;
 		background-image: url("../img/icons/shift.png");
 		background-repeat: no-repeat;
 		background-position: center;
