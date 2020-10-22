@@ -5,6 +5,7 @@ import data.LedTypes;
 typedef Convertor = {
 	var from: FieldType;
 	var to: FieldType;
+	var ?displayName: String;
 	var ?mode: Null<String>;
 	var lossless : Bool;
 	var convertInst: (fi:data.inst.FieldInstance, arrayIdx:Int) -> Void;
@@ -14,6 +15,29 @@ typedef Convertor = {
 
 class FieldTypeConverter {
 	static var CONVERTORS : Array<Convertor> = [
+		{
+			from:F_String, to:F_Text, lossless:true,
+			convertInst:(fi,i)->{},
+		},
+		{
+			from:F_Text, to:F_String, lossless:false, mode:"Remove line breaks",
+			convertInst:(fi,i)->{
+				if( !fi.isUsingDefault(i) ) {
+					var v = fi.getString(i);
+					v = StringTools.replace(v, "\n", " ");
+					fi.parseValue(i, v);
+				}
+			},
+			convertDef: (fd)->{
+				if( fd.defaultOverride!=null ) {
+					var v = fd.getStringDefault();
+					v = StringTools.replace(v, "\n", " ");
+					fd.defaultOverride = V_String(v);
+				}
+			}
+		},
+
+
 		{
 			from:F_Int, to:F_Float, lossless:true,
 			convertInst:(fi,i)->{
@@ -57,28 +81,23 @@ class FieldTypeConverter {
 	];
 
 
-
-	static function getConvertor(from:FieldType, to:FieldType, ?mode:String) {
-		for(c in CONVERTORS)
-			if( c.from.equals(from) && c.to.equals(to) && mode==c.mode )
-				return c;
-		return null;
-	}
-
-	public static inline function getAllConvertors(type:FieldType) {
-		return CONVERTORS.filter( (c)->c.from.equals(type) );
-	}
-
-	public static inline function canConvert(from:FieldType, to:FieldType) {
-		return getConvertor(from,to) != null;
-	}
-
-	public static inline function isLossless(from:FieldType, to:FieldType) {
-		var c = getConvertor(from,to);
-		return c!=null && c.lossless;
+	static var TO_ARRAY_CONVERTOR : Convertor = {
+		displayName: "Turn into array",
+		from:null, to:null, lossless:true,
+		convertInst:(fi,i)->{},
+		convertDef: (fd)->{
+			fd.isArray = true;
+		}
 	}
 
 
+
+	public static inline function getAllConvertors(fd:data.def.FieldDef) {
+		var all = CONVERTORS.filter( (c)->c.from==null || c.from.equals(fd.type) );
+		if( !fd.isArray )
+			all.insert(0,TO_ARRAY_CONVERTOR);
+		return all;
+	}
 
 	public static function convert(p:data.Project, ed:data.def.EntityDef, fd:data.def.FieldDef, c:Convertor) {
 		if( c==null )
@@ -86,6 +105,8 @@ class FieldTypeConverter {
 
 		var oldProject = data.Project.fromJson( p.toJson() );
 		var ops = [];
+
+		var toType = c.to!=null ? c.to : fd.type;
 
 		// Convert field instances
 		for(l in Editor.ME.project.levels)
@@ -96,7 +117,7 @@ class FieldTypeConverter {
 					if( fi.defUid==fd.uid ) {
 						for(i in 0...fi.getArrayLength())
 							ops.push({
-								label: 'Converting ${l.identifier}.${ei.def.identifier}.${fd.identifier} to ${c.to}',
+								label: 'Converting ${l.identifier}.${ei.def.identifier}.${fd.identifier} to $toType',
 								cb: c.convertInst.bind(fi,i),
 							});
 					}
@@ -107,12 +128,13 @@ class FieldTypeConverter {
 			cb: ()-> {
 				if( c.convertDef!=null )
 					c.convertDef(fd);
-				fd.type = c.to;
+				if( c.to!=null )
+					fd.type = c.to;
 			},
 		});
 
 		new ui.modal.Progress("Type conversion", ops, ()->{
-			N.success("Type changed to "+c.to);
+			N.success("Type changed to "+toType);
 			Editor.ME.ge.emit( EntityFieldDefChanged(ed) );
 			new ui.LastChance(L.t._("Type conversion"), oldProject);
 		});

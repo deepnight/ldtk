@@ -309,8 +309,10 @@ class EntityInstanceEditor extends dn.Process {
 					input.appendTo(jTarget);
 					input.keyup( (ev)-> {
 						input.css("height","auto");
-						if( input.height() < input.get(0).scrollHeight )
-							input.height( input.get(0).scrollHeight+5 );
+						if( input.height() < input.get(0).scrollHeight ) {
+							var padding = input.innerHeight() - input.height();
+							input.height( input.get(0).scrollHeight+3 - padding );
+						}
 					});
 					input;
 				}
@@ -336,6 +338,8 @@ class EntityInstanceEditor extends dn.Process {
 				if( fi.valueIsNull(arrayIdx) && !fi.def.canBeNull || !fi.def.isArray ) {
 					// Button mode
 					var jPick = new J('<button/>');
+					if( !fi.valueIsNull(arrayIdx) )
+						jPick.addClass("gray");
 					jPick.appendTo(jTarget);
 					jPick.addClass("point");
 					if( fi.valueIsNull(arrayIdx) && !fi.def.canBeNull ) {
@@ -356,6 +360,15 @@ class EntityInstanceEditor extends dn.Process {
 							startPointsEditing(fi, arrayIdx);
 						}
 					});
+
+					if( fi.def.canBeNull && !fi.valueIsNull(arrayIdx) ) {
+						var jRem = new J('<button class="dark removePoint">x</button>');
+						jRem.appendTo(jTarget);
+						jRem.click( (_)->{
+							fi.parseValue(arrayIdx,null);
+							onFieldChange();
+						});
+					}
 				}
 				else {
 					// Text mode

@@ -77,8 +77,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 					case _:
 				}
-				var f = curEntity.createFieldDef(project, type);
-				f.isArray = isArray;
+				var f = curEntity.createFieldDef(project, type, isArray);
 				editor.ge.emit( EntityFieldAdded(curEntity) );
 				selectField(f);
 				jFieldForm.find("input:not([readonly]):first").focus().select();
@@ -450,7 +449,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			return;
 			#end
 
-			var convertors = FieldTypeConverter.getAllConvertors(curField.type);
+			var convertors = FieldTypeConverter.getAllConvertors(curField);
 			if( convertors.length==0 ) {
 				// No convertor
 				new ui.modal.dialog.Message(
@@ -461,9 +460,18 @@ class EditEntityDefs extends ui.modal.Panel {
 				// Convertor picker
 				var w = new Dialog(ev.getThis(), "convertFieldType");
 				for(c in convertors) {
-					var jButton = new J('<button>To ${Lang.getFieldType(c.to)}</button>');
+					var toName = Lang.getFieldType(c.to!=null ? c.to : curField.type);
+					var jButton = new J('<button class="dark"/>');
+					if( c.displayName!=null )
+						jButton.text(c.displayName);
+					else if( c.to!=null )
+						jButton.text('To '+L.getFieldType(c.to));
+					else
+						jButton.text('???');
+
 					if( c.mode!=null )
 						jButton.append(' (${c.mode})');
+
 					jButton.appendTo(w.jContent);
 					jButton.click( (_)->{
 						function _convert() {
@@ -475,7 +483,7 @@ class EditEntityDefs extends ui.modal.Panel {
 							_convert();
 						else
 							new ui.modal.dialog.Confirm(
-								L.t._("This conversion will TRANSFORM EXISTING VALUES because the target type isn't fully compatible with the previous one!\nSome data might be lost in the process.\nPlease make sure that you known what you're doing here."),
+								L.t._("This conversion will TRANSFORM EXISTING VALUES because the target type isn't fully compatible with the previous one!\nSome data might be lost in the process because of this conversion.\nPlease make sure that you known what you're doing here."),
 								true,
 								_convert
 							);

@@ -26,17 +26,17 @@ class FieldDef {
 	var _project : data.Project;
 
 	@:allow(data.def.EntityDef)
-	private function new(p:data.Project, uid:Int, t:data.LedTypes.FieldType) {
+	private function new(p:data.Project, uid:Int, t:data.LedTypes.FieldType, array:Bool) {
 		_project = p;
 		this.uid = uid;
 		type = t;
+		isArray = array;
 		editorDisplayMode = Hidden;
 		editorDisplayPos = Above;
 		editorAlwaysShow = false;
 		identifier = "NewField"+uid;
 		canBeNull = type==F_String || type==F_Text || type==F_Point && !isArray;
 		arrayMinLength = arrayMaxLength = null;
-		isArray = false;
 		min = max = null;
 		defaultOverride = null;
 	}
@@ -58,8 +58,7 @@ class FieldDef {
 
 	public static function fromJson(p:Project, json:Dynamic) {
 		var type = JsonTools.readEnum(data.LedTypes.FieldType, json.type, false);
-		var o = new FieldDef( p, JsonTools.readInt(json.uid), type );
-		o.isArray = JsonTools.readBool(json.isArray, false);
+		var o = new FieldDef( p, JsonTools.readInt(json.uid), type, JsonTools.readBool(json.isArray, false) );
 		o.identifier = JsonTools.readString(json.identifier);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.arrayMinLength = JsonTools.readNullableInt(json.arrayMinLength);

@@ -127,8 +127,8 @@ class EntityDef {
 
 	/** FIELDS ****************************/
 
-	public function createFieldDef(project:Project, type:FieldType) : FieldDef {
-		var f = new FieldDef(project, project.makeUniqId(), type);
+	public function createFieldDef(project:Project, type:FieldType, isArray:Bool) : FieldDef {
+		var f = new FieldDef(project, project.makeUniqId(), type, isArray);
 		fieldDefs.push(f);
 		return f;
 	}

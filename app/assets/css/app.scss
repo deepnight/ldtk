@@ -1777,6 +1777,7 @@ textarea {
 
 			button {
 				margin: 0;
+				margin-bottom: 1px;
 				text-transform: none;
 				white-space: nowrap;
 			}
@@ -2830,12 +2831,18 @@ canvas#webgl {
 			}
 		}
 
+		button.removePoint {
+			flex: 0.2 1 0px;
+		}
+
 		input[type=color] {
 			width: 100%;
 		}
 
 		textarea {
 			height: auto;
+			overflow-x: auto;
+			overflow-y: hidden;
 		}
 
 		a.usingDefault {
