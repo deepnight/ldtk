@@ -180,6 +180,15 @@ class Tool<T> extends dn.Process {
 		return false;
 	}
 
+
+	public inline function getRunningRectCWid(m:MouseCoords) : Int {
+		return isRunning() && rectangle && curMode!=PanView ? M.iabs(m.cx-origin.cx)+1 : 0;
+	}
+
+	public inline function getRunningRectCHei(m:MouseCoords) : Int {
+		return isRunning() && rectangle && curMode!=PanView ? M.iabs(m.cy-origin.cy)+1 : 0;
+	}
+
 	public function stopUsing(m:MouseCoords) {
 		var clickTime = haxe.Timer.stamp() - startTime;
 

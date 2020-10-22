@@ -1955,6 +1955,13 @@ div.sortHandle {
 	span+span {
 		margin-left: 8px;
 	}
+
+	span.grid {
+		background-color: transparentize($color: #3fc3a5, $amount: 0.6);
+	}
+	span.pixels {
+		background-color: transparentize($color: #257361, $amount: 0.6);
+	}
 }
 
 canvas#webgl {
