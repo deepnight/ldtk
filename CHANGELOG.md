@@ -21,16 +21,15 @@
  - Added the up-to-date *JSON format doc* to the app Home page.
  - Added fullscreen button to view Home *changelogs*
  - Pressing `ENTER` on the Home screen now opens last edited map.
- - Alt-picking will no longer pick in other layers when *SingleLayer* mode is ON
  - Side bar is now more compact
  - Better "Enum sync" window
  - Fixed "Enum value in use" detection
- - Removed duplicate sample map
+ - Removed duplicate sample map file
  - Fixed mouse wheel zoom limits
  - Fixed "color" field size in Entity instance editor when the value wasn't default.
  - Updated help window
  - Pressing `Escape` key now leaves focused inputs first instead of closing panels.
- - Many bug fixes
+ - Many bug fixes & minor enhancements
 
 # 0.3.2-beta
 
