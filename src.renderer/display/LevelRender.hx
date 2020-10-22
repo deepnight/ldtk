@@ -553,6 +553,7 @@ class LevelRender extends dn.Process {
 					var tf = new h2d.Text(font, valuesFlow);
 					tf.textColor = ei.getSmartColor(true);
 					tf.filter = new dn.heaps.filter.PixelOutline();
+					tf.maxWidth = 300;
 					tf.scale(FIELD_TEXT_SCALE);
 					var v = fi.getForDisplay(idx);
 					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
