@@ -86,8 +86,13 @@ class SelectionTool extends Tool<Int> {
 								var tid = li.getGridTile(cx,cy);
 
 								var t = editor.curTool.as(tool.lt.TileTool);
-								if( t!=null )
-									t.selectValue( { ids:[tid], mode:t.getMode() } ); // TODO re-support picking saved selections?
+								if( t!=null ) {
+									var savedTileSel = t.curTilesetDef.getSavedSelectionFor(tid);
+									if( savedTileSel!=null && t.getSelectedValue()!=savedTileSel )
+										t.selectValue(savedTileSel);
+									else
+										t.selectValue( { ids:[tid], mode:t.getMode() } );
+								}
 
 								editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
 
