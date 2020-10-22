@@ -324,8 +324,12 @@ class Editor extends Page {
 
 		switch keyCode {
 			case K.ESCAPE:
-				if( hasInputFocus() )
-					App.ME.jBody.find(":focus").blur();
+				if( hasInputFocus() ) {
+					// BUG jquery crashes on blur if element is removed in  the process
+					// see: https://github.com/jquery/jquery/issues/4417
+					try App.ME.jBody.find("input:focus, textarea:focus").blur()
+					catch(e:Dynamic) {}
+				}
 				else if( ui.modal.ContextMenu.isOpen() )
 					ui.modal.ContextMenu.ME.close();
 				else if( specialTool!=null )
