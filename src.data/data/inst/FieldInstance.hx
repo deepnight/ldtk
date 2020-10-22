@@ -7,6 +7,8 @@ class FieldInstance {
 	public var def(get,never) : data.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defUid);
 
 	public var defUid: Int;
+
+	@:allow(misc.FieldTypeConverter)
 	var internalValues : Array<ValueWrapper>;
 
 	@:allow(data.inst.EntityInstance)
@@ -31,11 +33,22 @@ class FieldInstance {
 		var o = new FieldInstance( project, JsonTools.readInt(json.defUid) );
 		o.internalValues = [];
 		if( json.realEditorValues!=null ) {
-			for( jsonVal in JsonTools.readArray(json.realEditorValues) )
-				o.internalValues.push( JsonTools.readEnum(ValueWrapper, jsonVal, true) );
+			for( jsonVal in JsonTools.readArray(json.realEditorValues) ) {
+				var val = JsonTools.readEnum(ValueWrapper, jsonVal, true);
+
+				if( o.def.type==F_Text ) // Restore end-of-lines
+					switch val {
+						case V_String(v):
+							v = StringTools.replace(v, "\\n", "\n");
+							val = V_String(v);
+						case _:
+					}
+
+				o.internalValues.push( val );
+			}
 		}
 		else {
-			// pre-array support
+			// Old pre-Array format support
 			o.internalValues = [ JsonTools.readEnum(ValueWrapper, (cast json).realEditorValue, true) ];
 		}
 
@@ -56,7 +69,7 @@ class FieldInstance {
 						JsonTools.writeEnum(e,true);
 
 					case V_String(v):
-						JsonTools.writeEnum( V_String(escapeStringForJson(v)), true);
+						JsonTools.writeEnum( V_String( escapeStringForJson(v) ), true);
 				}
 			}),
 
@@ -143,8 +156,20 @@ class FieldInstance {
 				raw = StringTools.trim(raw);
 				if( raw.length==0 )
 					setInternal(arrayIdx, null);
-				else
+				else {
+					raw = StringTools.replace(raw, "\\r", " ");
+					raw = StringTools.replace(raw, "\\n", " ");
 					setInternal(arrayIdx, V_String(raw) );
+				}
+
+			case F_Text:
+				raw = StringTools.trim(raw);
+				if( raw.length==0 )
+					setInternal(arrayIdx, null);
+				else {
+					raw = StringTools.replace(raw, "\\n", "\n");
+					setInternal(arrayIdx, V_String(raw) );
+				}
 
 			case F_Bool:
 				raw = StringTools.trim(raw).toLowerCase();
@@ -186,6 +211,7 @@ class FieldInstance {
 			case F_Int:
 			case F_Float:
 			case F_String:
+			case F_Text:
 			case F_Bool:
 			case F_Color:
 			case F_Point:
@@ -207,7 +233,7 @@ class FieldInstance {
 			case F_Int: getInt(arrayIdx);
 			case F_Color: getColorAsInt(arrayIdx);
 			case F_Float: getFloat(arrayIdx);
-			case F_String: getString(arrayIdx);
+			case F_String, F_Text: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
@@ -247,7 +273,7 @@ class FieldInstance {
 			case F_Int: getInt(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Float: getFloat(arrayIdx);
-			case F_String: getString(arrayIdx);
+			case F_String, F_Text: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
@@ -258,7 +284,7 @@ class FieldInstance {
 			case F_Int, F_Float, F_Bool, F_Color: return Std.string(v);
 			case F_Enum(name): return '$v';
 			case F_Point: return '$v';
-			case F_String: return '"$v"';
+			case F_String, F_Text: return '"$v"';
 		}
 	}
 
@@ -267,6 +293,7 @@ class FieldInstance {
 			case F_Int: getInt(arrayIdx);
 			case F_Float: JsonTools.writeFloat( getFloat(arrayIdx) );
 			case F_String: escapeStringForJson( getString(arrayIdx) );
+			case F_Text: escapeStringForJson( getString(arrayIdx) );
 			case F_Bool: getBool(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Point: getPointGrid(arrayIdx);
@@ -317,7 +344,7 @@ class FieldInstance {
 	}
 
 	public function getString(arrayIdx:Int) : String {
-		require(F_String);
+		def.requireAny([ F_String, F_Text ]);
 		var out = isUsingDefault(arrayIdx) ? def.getStringDefault() : switch internalValues[arrayIdx] {
 			case V_String(v): v;
 			case _: throw "unexpected";
@@ -326,6 +353,9 @@ class FieldInstance {
 	}
 
 	public static inline function escapeStringForJson(s:String) {
+		if( s==null )
+			return null;
+		s = StringTools.replace(s, "\n", "\\n");
 		s = StringTools.replace(s, "\\", "\\\\");
 		s = StringTools.replace(s, '"', '\\"');
 		s = StringTools.replace(s, "'", "\'");
@@ -364,6 +394,7 @@ class FieldInstance {
 			case F_Int:
 			case F_Float:
 			case F_String:
+			case F_Text:
 			case F_Bool:
 			case F_Color:
 

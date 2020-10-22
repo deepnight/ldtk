@@ -80,11 +80,15 @@
 	</div>
 </div>
 
+
+
+
 <div class="fieldForm">
 	<ul class="form">
 	<li>
 		<label>Type</label>
 		<input type="text" readonly="readonly" class="type"/>
+		<button class="convert">Convert</button>
 	</li>
 	<li>
 		<label for="fName">Field identifier</label>
@@ -92,7 +96,7 @@
 		<div class="info identifier"></div>
 	</li>
 
-	<li class="F_Int F_Float F_String">
+	<li class="F_Int F_Float F_String F_Text">
 		<label for="fDef">Default value</label>
 		<input type="text" name="fDef" placeholder="" id="fDef"/>
 	</li>
@@ -114,7 +118,8 @@
 		<input type="text" name="max" id="max" placeholder="Max"/>
 	</li>
 
-	<li class="F_Int F_Float F_String F_Enum F_Point">
+
+	<li class="F_Int F_Float F_String F_Text F_Enum F_Point">
 		<label for="canBeNull">Can be null</label>
 		<input type="checkbox" name="canBeNull" id="canBeNull"/>
 	</li>

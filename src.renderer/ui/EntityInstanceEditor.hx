@@ -303,10 +303,23 @@ class EntityInstanceEditor extends dn.Process {
 				});
 				hideInputIfDefault(arrayIdx, input, fi);
 
-			case F_String:
-				var input = new J("<input/>");
-				input.appendTo(jTarget);
-				input.attr("type","text");
+			case F_String, F_Text:
+				var input = if( fi.def.type==F_Text ) {
+					var input = new J("<textarea/>");
+					input.appendTo(jTarget);
+					input.keyup( (ev)-> {
+						input.css("height","auto");
+						if( input.height() < input.get(0).scrollHeight )
+							input.height( input.get(0).scrollHeight+5 );
+					});
+					input;
+				}
+				else {
+					var input = new J("<input/>");
+					input.appendTo(jTarget);
+					input.attr("type","text");
+					input;
+				}
 				var def = fi.def.getStringDefault();
 				input.attr("placeholder", def==null ? "(null)" : def=="" ? "(empty string)" : def);
 				if( !fi.isUsingDefault(arrayIdx) )
@@ -315,6 +328,8 @@ class EntityInstanceEditor extends dn.Process {
 					fi.parseValue( arrayIdx, input.val() );
 					onFieldChange();
 				});
+				if( fi.def.type==F_Text )
+					input.keyup();
 				hideInputIfDefault(arrayIdx, input, fi);
 
 			case F_Point:
@@ -498,7 +513,7 @@ class EntityInstanceEditor extends dn.Process {
 							}
 							var jArray = jPanel.find('[defuid=${fd.uid}] .array');
 							switch fi.def.type {
-								case F_Int, F_Float, F_String: jArray.find("a.usingDefault:last").click();
+								case F_Int, F_Float, F_String, F_Text: jArray.find("a.usingDefault:last").click();
 								case F_Bool:
 								case F_Color:
 								case F_Enum(enumDefUid):

@@ -553,6 +553,7 @@ class LevelRender extends dn.Process {
 					var tf = new h2d.Text(font, valuesFlow);
 					tf.textColor = ei.getSmartColor(true);
 					tf.filter = new dn.heaps.filter.PixelOutline();
+					tf.maxWidth = 300;
 					tf.scale(FIELD_TEXT_SCALE);
 					var v = fi.getForDisplay(idx);
 					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
@@ -804,7 +805,7 @@ class LevelRender extends dn.Process {
 							case RadiusPx, RadiusGrid: false;
 							case _: true;
 						};
-					case F_String, F_Bool: true;
+					case F_String, F_Text, F_Bool: true;
 					case F_Color, F_Point: false;
 					case F_Enum(enumDefUid): fd.editorDisplayMode!=EntityTile;
 				}

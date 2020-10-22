@@ -11,7 +11,7 @@
 	"defaultPivotY": 1,
 	"defaultGridSize": 16,
 	"bgColor": "#79799A",
-	"nextUid": 56,
+	"nextUid": 59,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -55,7 +55,7 @@
 				"height": 24,
 				"color": "#8A5B38",
 				"renderMode": "Tile",
-				"showName": true,
+				"showName": false,
 				"tilesetId": 20,
 				"tileId": 56,
 				"tileRenderMode": "Stretch",
@@ -256,7 +256,7 @@
 				"height": 32,
 				"color": "#B80000",
 				"renderMode": "Tile",
-				"showName": true,
+				"showName": false,
 				"tilesetId": 20,
 				"tileId": 69,
 				"tileRenderMode": "Stretch",
@@ -396,6 +396,56 @@
 						"min": null,
 						"max": null,
 						"defaultOverride": null
+					}
+				]
+			},
+			{
+				"identifier": "Tutorial",
+				"uid": 56,
+				"width": 16,
+				"height": 16,
+				"color": "#000000",
+				"renderMode": "Rectangle",
+				"showName": false,
+				"tilesetId": null,
+				"tileId": null,
+				"tileRenderMode": "Stretch",
+				"maxPerLevel": 0,
+				"limitBehavior": "DiscardOldOnes",
+				"pivotX": 0.5,
+				"pivotY": 0.5,
+				"fieldDefs": [
+					{
+						"identifier": "desc",
+						"__type": "String",
+						"uid": 57,
+						"type": "F_Text",
+						"isArray": false,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "ValueOnly",
+						"editorDisplayPos": "Center",
+						"editorAlwaysShow": true,
+						"min": null,
+						"max": null,
+						"defaultOverride": null
+					},
+					{
+						"identifier": "color",
+						"__type": "Color",
+						"uid": 58,
+						"type": "F_Color",
+						"isArray": false,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "Hidden",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
+						"min": null,
+						"max": null,
+						"defaultOverride": { "id": "V_Int", "params": [16766208] }
 					}
 				]
 			}
@@ -782,7 +832,22 @@
 							}]
 						}
 					] },
-					{ "__identifier": "Door", "__grid": [7,17], "__tile": null, "defUid": 43, "px": [120,288], "fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 50, "realEditorValues": [] }] }
+					{ "__identifier": "Door", "__grid": [7,17], "__tile": null, "defUid": 43, "px": [120,288], "fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 50, "realEditorValues": [] }] },
+					{ "__identifier": "Tutorial", "__grid": [17,2], "__tile": null, "defUid": 56, "px": [280,40], "fieldInstances": [
+						{
+							"__identifier": "desc",
+							"__value": "Entities can be used to represent any gameplay element, such as player, enemies, items etc.\\n\\nThey can have many kind of customizable properties, including arrays, enums or coordinates.",
+							"__type": "String",
+							"defUid": 57,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": [
+									"Entities can be used to represent any gameplay element, such as player, enemies, items etc.\\n\\nThey can have many kind of customizable properties, including arrays, enums or coordinates."
+								]
+							}]
+						},
+						{ "__identifier": "color", "__value": "#FFD500", "__type": "Color", "defUid": 58, "realEditorValues": [] }
+					] }
 				]
 			},
 			{

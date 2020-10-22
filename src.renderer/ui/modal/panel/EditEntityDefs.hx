@@ -1,5 +1,7 @@
 package ui.modal.panel;
 
+import data.LedTypes;
+
 class EditEntityDefs extends ui.modal.Panel {
 	static var LAST_ENTITY_ID = -1;
 	static var LAST_FIELD_ID = -1;
@@ -85,7 +87,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			// Type picker
 			var w = new ui.modal.Dialog(anchor,"fieldTypes");
 			var types : Array<data.LedTypes.FieldType> = [
-				F_Int, F_Float, F_Bool, F_String, F_Enum(null), F_Color, F_Point
+				F_Int, F_Float, F_Bool, F_String, F_Text, F_Enum(null), F_Color, F_Point
 			];
 			for(type in types) {
 				var b = new J("<button/>");
@@ -441,6 +443,41 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Type desc
 		jFieldForm.find(".type").val( curField.getShortDescription() );
 
+		// Type conversion
+		jFieldForm.find("button.convert").click( (ev)->{
+			#if !debug
+			N.notImplemented(); // HACK remove this before distrib!
+			return;
+			#end
+
+			var w = new Dialog(ev.getThis());
+			var types : Array<data.LedTypes.FieldType> = [
+				F_Int, F_Float, F_Bool, F_String, F_Text, F_Color, F_Point
+			];
+			for(type in types) {
+				if( misc.FieldTypeConverter.canConvert(curField.type, type) ) {
+					var jButton = new J('<button>$type</button>');
+					jButton.appendTo(w.jContent);
+					jButton.click( (_)->{
+						if( FieldTypeConverter.isLossless(curField.type, type) ) {
+							w.close();
+							misc.FieldTypeConverter.convert(project, curEntity, curField, type);
+						}
+						else
+							new ui.modal.dialog.Confirm(
+								L.t._("This conversion will TRANSFORM EXISTING VALUES because the target type isn't fully compatible with the previous one!\nSome data might be lost in the process.\nPlease make sure that you known what you're doing here."),
+								true,
+								()->{
+									w.close();
+									misc.FieldTypeConverter.convert(project, curEntity, curField, type);
+								}
+							);
+					});
+				}
+
+			}
+		} );
+
 
 		var i = new form.input.EnumSelect(
 			jFieldForm.find("select[name=editorDisplayMode]"),
@@ -508,14 +545,14 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Default value
 		switch curField.type {
-			case F_Int, F_Float, F_String, F_Point:
+			case F_Int, F_Float, F_String, F_Text, F_Point:
 				var defInput = jFieldForm.find("input[name=fDef]");
 				if( curField.defaultOverride != null )
 					defInput.val( Std.string( curField.getUntypedDefault() ) );
 				else
 					defInput.val("");
 
-				if( curField.type==F_String && !curField.canBeNull )
+				if( ( curField.type==F_String || curField.type==F_Text ) && !curField.canBeNull )
 					defInput.attr("placeholder", "(empty string)");
 				else if( curField.canBeNull )
 					defInput.attr("placeholder", "(null)");
@@ -523,7 +560,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					defInput.attr("placeholder", switch curField.type {
 						case F_Int: Std.string( curField.iClamp(0) );
 						case F_Float: Std.string( curField.fClamp(0) );
-						case F_String: "";
+						case F_String, F_Text: "";
 						case F_Point: "0"+Const.POINT_SEPARATOR+"0";
 						case F_Bool, F_Color, F_Enum(_): "N/A";
 					});
@@ -585,6 +622,21 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Nullable
 		var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
 		i.onChange = editor.ge.emit.bind( EntityFieldDefChanged(curEntity) );
+
+		// Multi-lines
+		// if( curField.isString() ) {
+		// 	var i = new form.input.BoolInput(
+		// 		jFieldForm.find("input[name=multiLines]"),
+		// 		()->switch curField.type {
+		// 			case F_String(multilines): multilines;
+		// 			case _: false;
+		// 		},
+		// 		(v)->{
+		// 			curField.convertType( F_String(v) );
+		// 		}
+		// 	);
+		// 	i.linkEvent( EntityFieldDefChanged(curEntity) );
+		// }
 
 		// Array size constraints
 		if( curField.isArray ) {

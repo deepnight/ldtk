@@ -975,7 +975,7 @@
 						"identifier": "text",
 						"__type": "String",
 						"uid": 67,
-						"type": "F_String",
+						"type": "F_Text",
 						"isArray": false,
 						"canBeNull": false,
 						"arrayMinLength": null,
@@ -1143,31 +1143,26 @@
 						},
 						{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] }
 					] },
-					{ "__identifier": "Tutorial", "__grid": [23,4], "__tile": null, "defUid": 66, "px": [376,72], "fieldInstances": [
+					{ "__identifier": "Tutorial", "__grid": [22,1], "__tile": null, "defUid": 66, "px": [360,24], "fieldInstances": [
 						{
 							"__identifier": "text",
-							"__value": "Press SHIFT+R to toggle auto-layers",
+							"__value": "Press SHIFT+R to toggle auto-layers rendering.\\n\\nPress A to toggle \"Single layer mode.\"",
 							"__type": "String",
 							"defUid": 67,
 							"realEditorValues": [{
 								"id": "V_String",
-								"params": ["Press SHIFT+R to toggle auto-layers"]
+								"params": [
+									"Press SHIFT+R to toggle auto-layers rendering.\\n\\nPress A to toggle \"Single layer mode.\""
+								]
 							}]
 						},
-						{ "__identifier": "color", "__value": "#FFDD00", "__type": "Color", "defUid": 68, "realEditorValues": [] }
-					] },
-					{ "__identifier": "Tutorial", "__grid": [23,5], "__tile": null, "defUid": 66, "px": [376,88], "fieldInstances": [
 						{
-							"__identifier": "text",
-							"__value": "Press A to enhance active layer",
-							"__type": "String",
-							"defUid": 67,
-							"realEditorValues": [{
-								"id": "V_String",
-								"params": ["Press A to enhance active layer"]
-							}]
-						},
-						{ "__identifier": "color", "__value": "#FFDD00", "__type": "Color", "defUid": 68, "realEditorValues": [] }
+							"__identifier": "color",
+							"__value": "#FFDD00",
+							"__type": "Color",
+							"defUid": 68,
+							"realEditorValues": [null]
+						}
 					] }
 				]
 			},

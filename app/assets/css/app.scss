@@ -922,7 +922,9 @@ ul.log {
 	overflow: hidden;
 	box-sizing: border-box;
 
+	text-transform: none;
 	font-family: Roboto;
+
 	border: 1px dashed rgba(255, 255, 255, 0.8);
 
 	.typeName {
@@ -1542,6 +1544,11 @@ textarea {
 
 	&.confirm .wrapper {
 		max-width: 400px;
+		.content {
+			p:first-of-type {
+				margin-top: 0;
+			}
+		}
 	}
 
 	&.warning .wrapper {
@@ -2348,10 +2355,6 @@ canvas#webgl {
 					grid-template-columns: auto min-content;
 					justify-items: right;
 
-					&:first-child {
-						grid-template-columns: min-content auto min-content;
-					}
-
 					button.remove {
 						padding: 5px;
 						border-radius: 3px;
@@ -2812,6 +2815,10 @@ canvas#webgl {
 
 		input[type=color] {
 			width: 100%;
+		}
+
+		textarea {
+			height: auto;
 		}
 
 		a.usingDefault {
@@ -3953,6 +3960,12 @@ $patternSize : 32px;
 			grid-column: 3/4;
 			grid-row: 3/4;
 			overflow: auto;
+
+			button.convert {
+				padding: 4px;
+				flex: 0 1 0px;
+				align-self: stretch;
+			}
 		}
 
 
@@ -4029,6 +4042,7 @@ $patternSize : 32px;
 		ul.form.type-F_Color .F_Color,
 		ul.form.type-F_Enum .F_Enum,
 		ul.form.type-F_Point .F_Point,
+		ul.form.type-F_Text .F_Text,
 		ul.form.type-F_String .F_String {
 			display: flex;
 		}
