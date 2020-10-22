@@ -525,7 +525,7 @@ class TilesetPicker {
 	public function update() {
 		// Focus scrolling animation
 		if( tx!=null ) {
-			var spd = 0.07;
+			var spd = 0.19;
 			scrollX += (tx-scrollX) * spd;
 			scrollY += (ty-scrollY) * spd;
 		}
