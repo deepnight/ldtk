@@ -1767,6 +1767,23 @@ textarea {
 	}
 }
 
+.window.dialog.convertFieldType {
+	&>.wrapper {
+		width: auto;
+		padding: 2px;
+		.content {
+			width: 100%;
+			gap: 2px;
+
+			button {
+				margin: 0;
+				text-transform: none;
+				white-space: nowrap;
+			}
+		}
+	}
+}
+
 .window.dialog.fieldTypes {
 	.content {
 		grid-template-columns: repeat(3, min-content);

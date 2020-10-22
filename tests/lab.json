@@ -11,7 +11,7 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
-	"nextUid": 41,
+	"nextUid": 46,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
@@ -416,6 +416,75 @@
 						"defaultOverride": { "id": "V_Int", "params": [1] }
 					}
 				]
+			},
+			{
+				"identifier": "Convert_test",
+				"uid": 42,
+				"width": 32,
+				"height": 32,
+				"color": "#94D9B3",
+				"renderMode": "Rectangle",
+				"showName": false,
+				"tilesetId": null,
+				"tileId": null,
+				"tileRenderMode": "Stretch",
+				"maxPerLevel": 0,
+				"limitBehavior": "DiscardOldOnes",
+				"pivotX": 0.5,
+				"pivotY": 0.5,
+				"fieldDefs": [
+					{
+						"identifier": "scale",
+						"__type": "Float",
+						"uid": 43,
+						"type": "F_Float",
+						"isArray": false,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "NameAndValue",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": true,
+						"min": 0.1,
+						"max": 2,
+						"defaultOverride": { "id": "V_Float", "params": [0.66] }
+					},
+					{
+						"identifier": "hp",
+						"__type": "Int",
+						"uid": 44,
+						"type": "F_Int",
+						"isArray": false,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "NameAndValue",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": true,
+						"min": 1,
+						"max": 100,
+						"defaultOverride": { "id": "V_Int", "params": [3] }
+					},
+					{
+						"identifier": "flag",
+						"__type": "Bool",
+						"uid": 45,
+						"type": "F_Bool",
+						"isArray": false,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "ValueOnly",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": true,
+						"min": null,
+						"max": null,
+						"defaultOverride": {
+							"id": "V_Bool",
+							"params": [ true ]
+						}
+					}
+				]
 			}
 		],
 		"tilesets": [
@@ -439,6 +508,186 @@
 		"externalEnums": []
 	},
 	"levels": [
+		{
+			"identifier": "Field_conversions",
+			"uid": 41,
+			"pxWid": 224,
+			"pxHei": 112,
+			"layerInstances": [
+				{
+					"__identifier": "Entities2",
+					"__type": "Entities",
+					"__cWid": 14,
+					"__cHei": 7,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"levelId": 41,
+					"layerDefUid": 16,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 9970226,
+					"gridTiles": [],
+					"entityInstances": [
+						{ "__identifier": "Convert_test", "__grid": [5,3], "__tile": null, "defUid": 42, "px": [88,56], "fieldInstances": [
+							{ "__identifier": "scale", "__value": 0.66, "__type": "Float", "defUid": 43, "realEditorValues": [] },
+							{
+								"__identifier": "hp",
+								"__value": 3,
+								"__type": "Int",
+								"defUid": 44,
+								"realEditorValues": [null]
+							},
+							{ "__identifier": "flag", "__value": true, "__type": "Bool", "defUid": 45, "realEditorValues": [] }
+						] },
+						{ "__identifier": "Convert_test", "__grid": [11,3], "__tile": null, "defUid": 42, "px": [184,56], "fieldInstances": [
+							{
+								"__identifier": "scale",
+								"__value": 1.5,
+								"__type": "Float",
+								"defUid": 43,
+								"realEditorValues": [{ "id": "V_Float", "params": [1.5] }]
+							},
+							{
+								"__identifier": "hp",
+								"__value": 100,
+								"__type": "Int",
+								"defUid": 44,
+								"realEditorValues": [{ "id": "V_Int", "params": [100] }]
+							},
+							{
+								"__identifier": "flag",
+								"__value": true,
+								"__type": "Bool",
+								"defUid": 45,
+								"realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}]
+							}
+						] },
+						{ "__identifier": "Convert_test", "__grid": [2,3], "__tile": null, "defUid": 42, "px": [40,56], "fieldInstances": [
+							{
+								"__identifier": "scale",
+								"__value": 0.2,
+								"__type": "Float",
+								"defUid": 43,
+								"realEditorValues": [{ "id": "V_Float", "params": [0.2] }]
+							},
+							{
+								"__identifier": "hp",
+								"__value": 1,
+								"__type": "Int",
+								"defUid": 44,
+								"realEditorValues": [{ "id": "V_Int", "params": [1] }]
+							},
+							{
+								"__identifier": "flag",
+								"__value": false,
+								"__type": "Bool",
+								"defUid": 45,
+								"realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ false ]
+								}]
+							}
+						] },
+						{ "__identifier": "Convert_test", "__grid": [8,3], "__tile": null, "defUid": 42, "px": [136,56], "fieldInstances": [
+							{
+								"__identifier": "scale",
+								"__value": 1.2,
+								"__type": "Float",
+								"defUid": 43,
+								"realEditorValues": [{ "id": "V_Float", "params": [1.2] }]
+							},
+							{
+								"__identifier": "hp",
+								"__value": 10,
+								"__type": "Int",
+								"defUid": 44,
+								"realEditorValues": [{ "id": "V_Int", "params": [10] }]
+							},
+							{
+								"__identifier": "flag",
+								"__value": true,
+								"__type": "Bool",
+								"defUid": 45,
+								"realEditorValues": [null]
+							}
+						] }
+					]
+				},
+				{
+					"__identifier": "Tiles",
+					"__type": "Tiles",
+					"__cWid": 14,
+					"__cHei": 7,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"levelId": 41,
+					"layerDefUid": 9,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 8368500,
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
+					"__identifier": "IntGrid",
+					"__type": "IntGrid",
+					"__cWid": 14,
+					"__cHei": 7,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"levelId": 41,
+					"layerDefUid": 1,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 8769024,
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
+					"__identifier": "Entities",
+					"__type": "Entities",
+					"__cWid": 14,
+					"__cHei": 7,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"levelId": 41,
+					"layerDefUid": 4,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 6173211,
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
+					"__identifier": "Grid8",
+					"__type": "IntGrid",
+					"__cWid": 56,
+					"__cHei": 28,
+					"__gridSize": 4,
+					"__opacity": 1,
+					"levelId": 41,
+					"layerDefUid": 18,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 15193,
+					"gridTiles": [],
+					"entityInstances": []
+				}
+			]
+		},
 		{
 			"identifier": "MultiLines",
 			"uid": 33,

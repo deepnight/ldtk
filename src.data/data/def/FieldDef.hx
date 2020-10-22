@@ -17,9 +17,7 @@ class FieldDef {
 	public var editorAlwaysShow: Bool;
 	public var isArray : Bool;
 
-	#if editor
-	@:allow(ui.modal.panel.EditEntityDefs)
-	#end
+	@:allow(ui.modal.panel.EditEntityDefs, misc.FieldTypeConverter)
 	var defaultOverride : Null<data.LedTypes.ValueWrapper>;
 
 	public var min : Null<Float>;

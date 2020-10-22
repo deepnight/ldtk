@@ -450,31 +450,37 @@ class EditEntityDefs extends ui.modal.Panel {
 			return;
 			#end
 
-			var w = new Dialog(ev.getThis());
-			var types : Array<data.LedTypes.FieldType> = [
-				F_Int, F_Float, F_Bool, F_String, F_Text, F_Color, F_Point
-			];
-			for(type in types) {
-				if( misc.FieldTypeConverter.canConvert(curField.type, type) ) {
-					var jButton = new J('<button>$type</button>');
+			var convertors = FieldTypeConverter.getAllConvertors(curField.type);
+			if( convertors.length==0 ) {
+				// No convertor
+				new ui.modal.dialog.Message(
+					L.t._('Sorry, there\'s no conversion option available for the type "::name::".', { name:L.getFieldType(curField.type) })
+				);
+			}
+			else {
+				// Convertor picker
+				var w = new Dialog(ev.getThis(), "convertFieldType");
+				for(c in convertors) {
+					var jButton = new J('<button>To ${Lang.getFieldType(c.to)}</button>');
+					if( c.mode!=null )
+						jButton.append(' (${c.mode})');
 					jButton.appendTo(w.jContent);
 					jButton.click( (_)->{
-						if( FieldTypeConverter.isLossless(curField.type, type) ) {
+						function _convert() {
 							w.close();
-							misc.FieldTypeConverter.convert(project, curEntity, curField, type);
+							misc.FieldTypeConverter.convert(project, curEntity, curField, c);
 						}
+
+						if( c.lossless )
+							_convert();
 						else
 							new ui.modal.dialog.Confirm(
 								L.t._("This conversion will TRANSFORM EXISTING VALUES because the target type isn't fully compatible with the previous one!\nSome data might be lost in the process.\nPlease make sure that you known what you're doing here."),
 								true,
-								()->{
-									w.close();
-									misc.FieldTypeConverter.convert(project, curEntity, curField, type);
-								}
+								_convert
 							);
 					});
 				}
-
 			}
 		} );
 
