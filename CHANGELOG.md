@@ -11,7 +11,7 @@
  - **Type conversions**: Entity fields can now be converted to different types (like turning an *Integer* value to a *Float*, or into an *Array*). Some conversions might not be lossless.
 
  - Renamed the old *Enhance active layer* option to **Single layer mode**
- - `Alt`+`left click` now picks elements in *all* layers. If you have the *Single layer mode* activated (`A` key), it will make a smarter choice than before, and prioritize current layer. TLDR; you should always pick what is expected with this action.
+ - `Alt`+`left click` now picks elements in *all* layers. If you have the *Single layer mode* activated (`A` key), it will pick in current layer only.
  - Added an option to allow selection of empty spaces
  - Better mouse coordinates display in editor footer
  - Added *rectangle selection size* to editor footer
