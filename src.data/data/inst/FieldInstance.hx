@@ -33,11 +33,22 @@ class FieldInstance {
 		var o = new FieldInstance( project, JsonTools.readInt(json.defUid) );
 		o.internalValues = [];
 		if( json.realEditorValues!=null ) {
-			for( jsonVal in JsonTools.readArray(json.realEditorValues) )
-				o.internalValues.push( JsonTools.readEnum(ValueWrapper, jsonVal, true) );
+			for( jsonVal in JsonTools.readArray(json.realEditorValues) ) {
+				var val = JsonTools.readEnum(ValueWrapper, jsonVal, true);
+
+				if( o.def.type==F_Text ) // Restore end-of-lines
+					switch val {
+						case V_String(v):
+							v = StringTools.replace(v, "\\n", "\n");
+							val = V_String(v);
+						case _:
+					}
+
+				o.internalValues.push( val );
+			}
 		}
 		else {
-			// pre-array support
+			// Old pre-Array format support
 			o.internalValues = [ JsonTools.readEnum(ValueWrapper, (cast json).realEditorValue, true) ];
 		}
 
@@ -58,7 +69,7 @@ class FieldInstance {
 						JsonTools.writeEnum(e,true);
 
 					case V_String(v):
-						JsonTools.writeEnum( V_String(escapeStringForJson(v)), true);
+						JsonTools.writeEnum( V_String( escapeStringForJson(v) ), true);
 				}
 			}),
 
@@ -141,12 +152,24 @@ class FieldInstance {
 					setInternal( arrayIdx, V_Float(v) );
 				}
 
-			case F_String, F_Text:
+			case F_String:
 				raw = StringTools.trim(raw);
 				if( raw.length==0 )
 					setInternal(arrayIdx, null);
-				else
+				else {
+					raw = StringTools.replace(raw, "\\r", " ");
+					raw = StringTools.replace(raw, "\\n", " ");
 					setInternal(arrayIdx, V_String(raw) );
+				}
+
+			case F_Text:
+				raw = StringTools.trim(raw);
+				if( raw.length==0 )
+					setInternal(arrayIdx, null);
+				else {
+					raw = StringTools.replace(raw, "\\n", "\n");
+					setInternal(arrayIdx, V_String(raw) );
+				}
 
 			case F_Bool:
 				raw = StringTools.trim(raw).toLowerCase();
@@ -270,7 +293,7 @@ class FieldInstance {
 			case F_Int: getInt(arrayIdx);
 			case F_Float: JsonTools.writeFloat( getFloat(arrayIdx) );
 			case F_String: escapeStringForJson( getString(arrayIdx) );
-			case F_Text: escapeStringForJson( getString(arrayIdx) ); // TODO multilines escaping
+			case F_Text: escapeStringForJson( getString(arrayIdx) );
 			case F_Bool: getBool(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Point: getPointGrid(arrayIdx);
@@ -332,6 +355,7 @@ class FieldInstance {
 	public static inline function escapeStringForJson(s:String) {
 		if( s==null )
 			return null;
+		s = StringTools.replace(s, "\n", "\\n");
 		s = StringTools.replace(s, "\\", "\\\\");
 		s = StringTools.replace(s, '"', '\\"');
 		s = StringTools.replace(s, "'", "\'");
