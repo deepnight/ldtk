@@ -103,9 +103,6 @@ class Home extends Page {
 			var li = new J('<li/>');
 			li.appendTo(jRecentList);
 
-			if( i==recents.length-1 )
-				li.append( JsTools.createKey(K.ENTER) );
-
 			var col = C.toBlack( C.fromStringLight( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] ), 0.3 );
 			li.append( JsTools.makePath(trimmedPaths[i], col, true) );
 

@@ -2355,10 +2355,6 @@ canvas#webgl {
 					grid-template-columns: auto min-content;
 					justify-items: right;
 
-					&:first-child {
-						grid-template-columns: min-content auto min-content;
-					}
-
 					button.remove {
 						padding: 5px;
 						border-radius: 3px;
