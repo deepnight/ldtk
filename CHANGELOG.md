@@ -5,7 +5,7 @@
 
     **NOTE: For now, "undoing" a *selection move or duplication* will require multiple undos (one per affected layer).** Undo/Redo features need a *major* rework, but this will only happen in a future update (see [#151](https://github.com/deepnight/led/issues/151)). Sorry for the inconvenience until this update!
 
- - **Duplicate anything**: you can duplicate any *Definition* (layers, enums, entities etc.) by using the new context menu (right click or use "3-dots" buttons) in all panels.
+ - **Duplicate definitions**: you can duplicate any *Definition* (layers, enums, entities etc.) by using the new context menu (right click or use "3-dots" buttons) in all panels.
  - **Duplicate rules or rule groups**: another much needed addition.
  - **Multi-lines texts** added to Entity custom field types.
  - **Type conversions**: Entity fields can now be converted to different types (like turning an *Integer* value to a *Float*, or into an *Array*). Some conversions might not be lossless.
