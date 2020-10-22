@@ -325,6 +325,7 @@
  - #### `__value` : **Dynamic (anything)**   
 
     Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)
+		It can also be an `Array` of various types.
 
 <a id="led-FieldInstanceJson-defUid" name="led-FieldInstanceJson-defUid"></a>
 
