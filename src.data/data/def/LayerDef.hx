@@ -134,7 +134,7 @@ class LayerDef {
 
 	public inline function getIntGridValueDisplayName(idx:Int) : Null<String> {
 		var vd = getIntGridValueDef(idx);
-		return vd==null ? null : vd.identifier==null ? '#$idx' : '#$idx (${vd.identifier})';
+		return vd==null ? null : vd.identifier==null ? '#$idx' : '#$idx "${vd.identifier}"';
 	}
 
 	public inline function getIntGridValueColor(idx:Int) : Null<UInt> {
