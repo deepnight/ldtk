@@ -3,9 +3,10 @@
  - **Selections**: you can now select any element in a level by using `ALT` + left click. You can move it around by holding left click. To select a **rectangle area**, use `ALT` + `SHIFT` + left click.
  - **Duplicate**: you can duplicate any element in the level by drag it with `CTRL`+`ALT` keys.
 
-    **NOTE: For now, "undoing" a *selection move* will require multiple undos (one per affected layer).** Undo/Redo features need a *major* rework, but this will only happen in a future update (see [#151](https://github.com/deepnight/led/issues/151)). Sorry for the inconvenience until this update!
+    **NOTE: For now, "undoing" a *selection move or duplication* will require multiple undos (one per affected layer).** Undo/Redo features need a *major* rework, but this will only happen in a future update (see [#151](https://github.com/deepnight/led/issues/151)). Sorry for the inconvenience until this update!
 
- - **Duplicate anything**: you can duplicate any *Definition* (layers, enums, entities etc.) by using the new context menu (or "tiny arrow" button) from the various panels.
+ - **Duplicate anything**: you can duplicate any *Definition* (layers, enums, entities etc.) by using the new context menu (right click or use "3-dots" buttons) in all panels.
+ - **Duplicate rules or rule groups**: another much needed addition.
  - **Multi-lines texts** added to Entity custom field types.
  - **Type conversions**: Entity fields can now be converted to different types (like turning an *Integer* value to a *Float*, or into an *Array*). Some conversions might not be lossless.
 
