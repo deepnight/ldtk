@@ -1,23 +1,52 @@
-enum Field {
-	Nullable(f:Field);
+typedef ObjectField = {
+	var xml : haxe.xml.Access;
+	var name : String;
+	var type : FieldType;
+	var doc:Null<String>;
+}
+
+typedef FieldInfos = {
+	var xml: haxe.xml.Access;
+	var subFields: Array<FieldInfos>;
+
+	var displayName: String;
+	var type: FieldType;
+	var descMd: Array<String>;
+
+	var only: Null<String>;
+	var hasVersion: Bool;
+	var isColor: Bool;
+}
+
+typedef TypeInfos = {
+	var rawName : String;
+	var displayName : String;
+	var xml : haxe.xml.Access;
+	var section : String;
+}
+
+enum FieldType {
+	Nullable(f:FieldType);
 	Basic(name:String);
 	Enu(name:String);
-	Arr(t:Field);
-	Obj(fields:Array<{ xml:haxe.xml.Access, name:String, type:Field, doc:Null<String> }>);
+	Arr(t:FieldType);
+	Obj(fields:Array<FieldInfos>);
 	Ref(display:String, typeName:String);
 	Dyn;
 	Unknown;
 }
 
+
+
 class XmlDocToMarkdown {
 	#if macro
 
-	static var typeDisplayNames: Map<String,{ section:Null<String>, name:String }>;
+	static var allTypes: Array<TypeInfos>;
 	static var verbose = false;
 	static var appVersion = new dn.VersionNumber();
 
 	public static function run(className:String, xmlPath:String, ?mdPath:String, deleteXml=false) {
-		typeDisplayNames = [];
+		allTypes = [];
 
 		// Get app version from "package.json"
 		haxe.macro.Context.registerModuleDependency("XmlDocToMarkdown", "app/package.json");
@@ -35,7 +64,6 @@ class XmlDocToMarkdown {
 		var xml = new haxe.xml.Access(xml);
 
 		// List types
-		var allTypesXml = [];
 		for(type in xml.node.haxe.elements) {
 			if( type.att.file.indexOf(className)<0 )
 				continue;
@@ -43,119 +71,111 @@ class XmlDocToMarkdown {
 			if( hasMeta(type,"hide") )
 				continue;
 
-			allTypesXml.push(type);
-
 			var displayName = type.att.path;
 			if( hasMeta(type,"display") )
 				displayName = getMeta(type,"display");
 
-			typeDisplayNames.set(type.att.path, {
-				name: displayName,
-				section: getMeta(type,"section"),
+			allTypes.push({
+				xml: type,
+				rawName: type.att.path,
+				displayName: displayName,
+				section: hasMeta(type,"section") ? getMeta(type,"section") : "",
 			});
 		}
 
 		// Sort types
-		allTypesXml.sort( (a,b)->{
-			var a = typeDisplayNames.get(a.att.path);
-			var b = typeDisplayNames.get(b.att.path);
+		allTypes.sort( (a,b)->{
+			// var a = displayNames.get(a.att.path);
+			// var b = displayNames.get(b.att.path);
 			if( a.section!=null && b.section==null ) return 1;
 			if( a.section==null && b.section!=null ) return -1;
 			if( a.section==null && b.section==null )
-				return Reflect.compare(a.name, b.name);
+				return Reflect.compare(a.displayName, b.displayName);
 			else
 				return Reflect.compare(a.section, b.section);
 		});
 
+
+
+		// Print types
 		var toc = [];
-
-		// Parse types
 		var md = [];
-		for(type in allTypesXml) {
+		for(type in allTypes) {
+			md.push("");
 			var depth = 0;
-			Sys.println('Found ${type.name}: ${type.att.path}');
+			Sys.println('Found ${type.xml.name}: ${type.displayName}');
 
-			if( hasMeta(type,"section") ) {
-				var s = getMeta(type,"section");
-				depth = s.split(".").length-1;
-			}
+			// Anchor
+			md.push( getAnchorHtml(type.xml.att.path) );
 
-			// Type name
-			md.push( makeAnchor(type.att.path) );
-			md.push("&nbsp;");
-			var display = typeDisplayNames.get(type.att.path);
-			md.push('${makeMdTitlePrefix(depth)} ${display.name} ${versionBadge(type)}');
+			// Type title
+			var title = '${type.displayName} ${versionBadge(type.xml)}';
+			if( type.section!="" )
+				title = type.section+". "+title;
+			md.push('## $title');
 
+			// Add to ToC
 			toc.push({
-				depth: depth,
-				name: display.name,
-				anchor: anchorId(type.att.path),
+				name: type.displayName,
+				anchor: anchorId(type.xml.att.path),
+				depth: type.section.split(".").length,
 			});
 
-			// Type desc
-			if( type.hasNode.haxe_doc )
-				md.push( type.node.haxe_doc.innerHTML );
-
-			if( !type.hasNode.a )
+			// No field informations for this type
+			if( !type.xml.hasNode.a )
 				continue;
 
 
 			// List fields
-			var allFields = [];
-			for(field in type.node.a.elements) {
-				if( hasMeta(field,"hide") )
-					continue;
-				allFields.push({
-					displayName: field.name,
-					xml: field,
-				});
-			}
-			allFields.sort( (a,b)->Reflect.compare(a.displayName, b.displayName) );
+			var allFields = getFieldsInfos(type.xml.node.a);
+
+			// Table header
+			var header = ["Value","Type","Description"];
+			md.push( header.join(" | ") );
+			var line = [ for(i in 0...header.length) "--" ];
+			md.push( line.join(" | ") );
 
 
-			// Parse fields
-			for(field in allFields) {
-				md.push( makeAnchor(type.att.path+" "+field.xml.name) );
+			// List fields
+			for(f in allFields) {
+				var tableCols = [];
+				var subRows = [];
 
-				// Get type
-				var type = getType(field.xml);
-
-				// Field name & type
 				if( verbose )
-					Sys.println('  -> ${field.xml.name}: $type');
-				var name = field.xml.name;
-				if( hasMeta(field.xml, "display") )
-					name = getMeta(field.xml,"display");
+					Sys.println('  -> ${f.displayName} : ${getTypeMd(f.type)}');
 
-				md.push(' - ${makeMdTitlePrefix(depth+1)} `$name` : **${printType(type)}** ${versionBadge(field.xml)}');
+				// Name
+				var cell = [ '`${f.displayName}`' ];
+				if( f.only!=null )
+					cell.push('<sup>Only *${f.only}*</sup>');
 
-				// "Only for" limitation
-				if( hasMeta(field.xml,"only") )
-					md.push('    ***Only relevant for ${getMeta(field.xml,"only")}***');
+				if( f.hasVersion )
+					cell.push( versionBadge(f.xml) );
 
-				// Color
-				if( hasMeta(field.xml,"color") ) {
-					if( type.equals(Basic("String")) )
-						md.push('    *Hexadecimal string using "#rrggbb" format*');
-					else if( type.equals(Basic("UInt")) )
-						md.push('    *Hexadecimal integer using 0xrrggbb format*');
+				tableCols.push( cell.join("<br/>") );
+
+				// Type
+				var type = '${getTypeMd(f.type)}';
+				type = StringTools.replace(type," ","&nbsp;");
+				tableCols.push(type);
+
+				// Desc
+				var cell = f.descMd;
+
+				if( f.subFields.length>0 ) {
+					cell.push("This object contains the following fields:");
+					cell.push( getSubFieldsHtml( f.subFields ) );
 				}
 
-				// Helpers
-				// if( field.xml.name.indexOf("__")==0 )
-				// 	md.push(" - *This field only exists to facilitate JSON parsing.*");
+				tableCols.push( cell.join("<br/>") );
 
-				// Field desc
-				if( field.xml.hasNode.haxe_doc )
-					md.push('    ${field.xml.node.haxe_doc.innerHTML}');
-
-				// Anonymous object
-				var objMd = getInlineObjectMd(type);
-				if( objMd.length>0 )
-					md = md.concat(objMd);
-
+				md.push( tableCols.join(" | "));
+				for(row in subRows)
+					md.push("| "+row+" |");
 			}
 		}
+
+
 
 
 		// Table of content
@@ -178,7 +198,7 @@ class XmlDocToMarkdown {
 
 		Sys.println('Writing markdown: ${mdPath}...');
 		var fo = sys.io.File.write(mdPath, false);
-		fo.writeString(md.join("\n\n"));
+		fo.writeString(md.join("\n"));
 		fo.close();
 
 		// Cleanup
@@ -189,6 +209,100 @@ class XmlDocToMarkdown {
 		Sys.println('');
 	}
 
+
+	static function getColorInfosMd(f:FieldInfos) {
+		if( f.type.equals(Basic("String")) )
+			return '*Hex color "#rrggbb"*';
+		else if( f.type.equals(Basic("UInt")) )
+			return '*Hex color 0xrrggbb*';
+		else
+			return "???";
+	}
+
+	static function getSubFieldsHtml(fields:Array<FieldInfos>) {
+		var list = [];
+		for(f in fields) {
+			var li = [];
+			// Name
+			li.push('**`${f.displayName}`**');
+
+			// Type
+			li.push('**(${getTypeMd(f.type)}**)');
+
+			// Version badges
+			if( f.hasVersion )
+				li.push( versionBadge(f.xml) );
+
+			// Color
+			if( f.isColor )
+				li.push( getColorInfosMd(f) );
+
+			// Desc
+			if( f.descMd.length>0 ) {
+				li.push(":");
+				for( descLine in f.descMd )
+					li.push('*$descLine*');
+			}
+
+			// Sub fields
+			if( f.subFields.length>0 )
+				li.push( getSubFieldsHtml(f.subFields) );
+
+			list.push( li.join(" ") );
+		}
+
+		return "<ul><li>" + list.join("</li><li>") + "</li></ul>";
+	}
+
+
+	/**
+		Extract all field informations
+	**/
+	static function getFieldsInfos(fieldsXml:haxe.xml.Access) : Array<FieldInfos> {
+		var allFields : Array<FieldInfos> = [];
+		for(fieldXml in fieldsXml.elements) {
+			if( hasMeta(fieldXml,"hide") )
+				continue;
+
+			var displayName = hasMeta(fieldXml, "display") ? getMeta(fieldXml, "display") : fieldXml.name;
+
+			var descMd = [];
+			if( fieldXml.hasNode.haxe_doc ) {
+				var html = fieldXml.node.haxe_doc.innerHTML;
+				html = StringTools.replace(html, "\n", "<br/>");
+				descMd.push(html);
+			}
+
+			var type = getFieldType(fieldXml);
+			var subFields = switch type {
+				case Obj(f): f;
+				case Arr(Obj(f)): f;
+				case Nullable( Obj(f) ): f;
+				case Nullable( Arr(Obj(f)) ): f;
+				case _: [];
+			}
+
+			allFields.push({
+				xml: fieldXml,
+				displayName: displayName,
+				type: type,
+				subFields: subFields,
+
+				only: getMeta(fieldXml, "only"),
+				hasVersion: hasMeta(fieldXml, "changed") || hasMeta(fieldXml, "added"),
+				descMd: descMd,
+				isColor: hasMeta(fieldXml, "color"),
+			});
+		}
+		allFields.sort( (a,b)->Reflect.compare(a.displayName, b.displayName) );
+
+		return allFields;
+	}
+
+
+	/**
+		Create a version info badge ("added/changed" meta)
+	**/
 	static function versionBadge(xml:haxe.xml.Access) {
 		var badges = [];
 
@@ -206,53 +320,12 @@ class XmlDocToMarkdown {
 		return " "+badges.join(" ")+" ";
 	}
 
-	static function badge(name:String, value:String, ?color:String) {
-		return '[![Generic badge](https://img.shields.io/badge/$name-$value-$color.svg)](JSON_CHANGELOG.md)';
-
-		// var style = [
-		// 	"float: right",
-		// 	"font-size: 0.8em",
-		// 	"padding: 0px 6px",
-		// 	"background: black",
-		// 	"border-radius: 3px",
-		// ];
-		// return '<span style="${style.join(";")}"> $content </span>';
-	}
 
 	/**
-		Return the markdown of an anonymous object
+		Create a badge markdown
 	**/
-	static function getInlineObjectMd(type:Field, depth=0) {
-		switch type {
-
-		case Nullable(f): return getInlineObjectMd(f, depth);
-
-		case Arr(Obj(fields)), Obj(fields):
-			var md = [];
-
-			if( depth==0 )
-				if( type.getIndex()==Arr(null).getIndex() )
-					md.push("    This array contains objects with all the following fields:");
-				else
-					md.push("    This object contains all the following fields:");
-			depth++;
-
-			for(f in fields) {
-				md.push('${addIndent(" -",depth)} `${f.name}` : **${printType(f.type)}**${ f.doc==null ? "" : versionBadge(f.xml) + " -- " + f.doc}');
-				switch f.type {
-					case Arr(Obj(fields)), Obj(fields):
-						md = md.concat( getInlineObjectMd(f.type, depth) );
-
-					case _:
-				}
-			}
-
-			return md;
-
-		case _:
-			return [];
-		}
-
+	static function badge(name:String, value:String, ?color:String) {
+		return '[![Generic badge](https://img.shields.io/badge/$name-$value-$color.svg)](JSON_CHANGELOG.md)';
 	}
 
 
@@ -290,11 +363,15 @@ class XmlDocToMarkdown {
 		throw "Malformed meta?";
 	}
 
-	static function getType(fieldXml:haxe.xml.Access) : Field {
+
+	/**
+		Return the type Enum of a specific field XML
+	**/
+	static function getFieldType(fieldXml:haxe.xml.Access) : FieldType {
 		return
 			if( fieldXml.hasNode.x ) {
 				if( fieldXml.node.x.att.path=="Null" )
-					Nullable( getType(fieldXml.node.x) );
+					Nullable( getFieldType(fieldXml.node.x) );
 				else
 					Basic(fieldXml.node.x.att.path);
 			}
@@ -302,31 +379,19 @@ class XmlDocToMarkdown {
 				Dyn;
 			else if( fieldXml.hasNode.t ) {
 				var name = fieldXml.node.t.att.path;
-				Ref( typeDisplayNames.get(name).name, name );
+				var dispName = allTypes.filter( (t)->t.rawName==name )[0].displayName;
+				Ref( dispName, name );
 			}
 			else if( fieldXml.hasNode.e ) {
 				Enu(fieldXml.node.e.att.path);
 			}
 			else if( fieldXml.hasNode.a ) {
-				// List fields
-				var fields = [];
-				for(n in fieldXml.node.a.elements) {
-					var doc = n.hasNode.haxe_doc ? n.node.haxe_doc.innerHTML : null;
-					fields.push({ xml:n, name:n.name, type:getType(n), doc:doc });
-				}
-				// Sort
-				var basic = Basic(null).getIndex();
-				fields.sort( (a,b)->{
-					if( a.type.getIndex()==basic && b.type.getIndex()!=basic ) return -1;
-					if( a.type.getIndex()!=basic && b.type.getIndex()==basic ) return 1;
-					return Reflect.compare(a.name, b.name);
-				});
-				Obj(fields);
+				Obj( getFieldsInfos(fieldXml.node.a) );
 			}
 			else if( fieldXml.hasNode.c ) {
 				switch fieldXml.node.c.att.path {
 					case "String": Basic("String");
-					case "Array": Arr( getType(fieldXml.node.c) );
+					case "Array": Arr( getFieldType(fieldXml.node.c) );
 					case _: Unknown;
 				}
 			}
@@ -337,9 +402,9 @@ class XmlDocToMarkdown {
 	/**
 		Human readable type
 	**/
-	static function printType(t:Field) {
-		return switch t {
-			case Nullable(f): printType(f)+" (optional, can be *null*)";
+	static function getTypeMd(t:FieldType) {
+		var str = switch t {
+			case Nullable(f): getTypeMd(f)+" *(can be `null`)*";
 			case Basic(name):
 				switch name {
 					case "UInt": "Unsigned integer";
@@ -347,27 +412,14 @@ class XmlDocToMarkdown {
 				}
 			case Enu(name): 'Haxe editor enum $name';
 			case Ref(display, name): '[$display](#${anchorId(name)})';
-			case Arr(t): 'Array of ${printType(t)}';
+			case Arr(t): 'Array of ${getTypeMd(t)}';
 			case Obj(fields): "Object";
 			case Dyn: "Dynamic (anything)";
 			case Unknown: "???";
 		}
+		return str;
 	}
 
-
-	static function makeMdTitlePrefix(depth:Int) {
-		var out = "";
-		for(i in 0...depth+1)
-			out+="#";
-		return out;
-	}
-
-	static function addIndent(char:String, depth:Int) {
-		var out = "";
-		for(i in 0...depth+1)
-			out+="  ";
-		return out + char;
-	}
 
 	/**
 		Create an anchor name
@@ -379,10 +431,11 @@ class XmlDocToMarkdown {
 		return r.replace(str,"-");
 	}
 
+
 	/**
 		Create an anchor tag
 	**/
-	static function makeAnchor(str:String) {
+	static function getAnchorHtml(str:String) {
 		return '<a id="${anchorId(str)}" name="${anchorId(str)}"></a>';
 	}
 
