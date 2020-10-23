@@ -122,8 +122,10 @@ class XmlDocToMarkdown {
 			});
 
 			// No field informations for this type
-			if( !type.xml.hasNode.a )
+			if( !type.xml.hasNode.a ) {
+				md.push('Sorry this type has no documentation yet.');
 				continue;
+			}
 
 
 			// List fields
