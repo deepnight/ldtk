@@ -69,7 +69,7 @@ class CrashReport extends ui.modal.Dialog {
 
 			// Try to save
 			var jBackup = jContent.find(".backup");
-			if( editor!=null && !editor.destroyed ) {
+			if( editor!=null && !editor.destroyed && editor.needSaving ) {
 				var fp = dn.FilePath.fromFile(editor.projectFilePath);
 				fp.fileName += Const.CRASH_NAME_SUFFIX;
 				var data = JsTools.prepareProjectFile(editor.project);

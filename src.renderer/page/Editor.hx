@@ -819,6 +819,10 @@ class Editor extends Page {
 			new ui.modal.dialog.Confirm(
 				Lang.t._("This file seems to be a CRASH BACKUP. Do you want to save your changes to the original file instead?"),
 				()->{
+					// Remove backup
+					JsTools.removeFile(projectFilePath);
+					App.ME.unregisterRecentProject(projectFilePath);
+					// Save
 					projectFilePath = StringTools.replace(projectFilePath, Const.CRASH_NAME_SUFFIX, "");
 					updateTitle();
 					onSave(onComplete);
