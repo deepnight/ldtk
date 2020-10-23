@@ -810,7 +810,19 @@ class Editor extends Page {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
 				Lang.t._("The project file is no longer in ::path::. Save to this path anyway?", { path:projectFilePath }),
-				onSave.bind(true)
+				onSave.bind(true, onComplete)
+			);
+			return;
+		}
+		if( !bypassMissing && projectFilePath.indexOf(Const.CRASH_NAME_SUFFIX)>=0 ) {
+			needSaving = true;
+			new ui.modal.dialog.Confirm(
+				Lang.t._("This file seems to be a CRASH BACKUP. Do you want to save your changes to the original file instead?"),
+				()->{
+					projectFilePath = StringTools.replace(projectFilePath, Const.CRASH_NAME_SUFFIX, "");
+					updateTitle();
+					onSave(onComplete);
+				}
 			);
 			return;
 		}

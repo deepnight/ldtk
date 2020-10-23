@@ -25,6 +25,8 @@ class Const {
 	public static var ISSUES_URL = "https://github.com/deepnight/led/issues";
 	public static var JSON_DOC_URL = "https://github.com/deepnight/led/blob/master/JSON_DOC.md";
 	public static var POINT_SEPARATOR = ",";
+	public static var CRASH_NAME_SUFFIX = ".crash";
+
 
 	public static var JSON_HEADER = {
 		fileType: Const.APP_NAME+" Project JSON",

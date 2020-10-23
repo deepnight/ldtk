@@ -5,6 +5,7 @@ import dn.data.GetText.LocaleString;
 typedef ContextAction = {
 	var label : LocaleString;
 	var cb : Void->Void;
+	var ?cond : Void->Bool;
 }
 
 class ContextMenu extends ui.Modal {
@@ -61,7 +62,8 @@ class ContextMenu extends ui.Modal {
 		function _open(event:js.jquery.Event) {
 			var ctx = new ContextMenu(event);
 			for(a in actions)
-				ctx.add( a.label, a.cb );
+				if( a.cond==null || a.cond() )
+					ctx.add( a.label, a.cb );
 		}
 
 		// Arrow button

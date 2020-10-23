@@ -74,7 +74,20 @@ class Home extends Page {
 		var jRecentList = jPage.find("ul.recents");
 		jRecentList.empty();
 
-		var recents = App.ME.session.recentProjects;
+		var recents = App.ME.session.recentProjects.copy();
+
+		// Automatically detects crash backups
+		var i = 0;
+		while( i<recents.length ) {
+			var fp = dn.FilePath.fromFile(recents[i]);
+			var crash = fp.clone();
+			crash.fileName+=Const.CRASH_NAME_SUFFIX;
+			if( !App.ME.recentProjectsContains(crash.full) && JsTools.fileExists(crash.full) ) {
+				recents.insert(i+1, crash.full);
+				// i++;
+			}
+			i++;
+		}
 
 
 		// Trim common path parts
@@ -100,6 +113,7 @@ class Home extends Page {
 		var i = recents.length-1;
 		while( i>=0 ) {
 			var p = recents[i];
+			var isCrashFile = p.indexOf( Const.CRASH_NAME_SUFFIX )>=0;
 			var li = new J('<li/>');
 			li.appendTo(jRecentList);
 
@@ -111,20 +125,35 @@ class Home extends Page {
 			if( !JsTools.fileExists(p) )
 				li.addClass("missing");
 
+			if( isCrashFile )
+				li.addClass("crash");
+
 			ui.modal.ContextMenu.addTo(li, [
 				{
 					label: L.t._("Locate file"),
+					cond: null,
 					cb: JsTools.exploreToFile.bind(p),
 				},
 				{
 					label: L.t._("Remove from history"),
+					cond: ()->!isCrashFile,
 					cb: ()->{
 						App.ME.unregisterRecentProject(p);
 						updateRecents();
 					}
 				},
 				{
+					label: L.t._("Delete this crash backup file"),
+					cond: ()->isCrashFile,
+					cb: ()->{
+						JsTools.removeFile(p);
+						App.ME.unregisterRecentProject(p);
+						updateRecents();
+					}
+				},
+				{
 					label: L.t._("Clear all history"),
+					cond: null,
 					cb: ()->{
 						App.ME.clearRecentProjects();
 						updateRecents();

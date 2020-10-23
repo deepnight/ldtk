@@ -247,6 +247,13 @@ class App extends dn.Process {
 		}
 	}
 
+	public function recentProjectsContains(path:String) {
+		for(p in session.recentProjects)
+			if( p==path )
+				return true;
+		return false;
+	}
+
 	public function registerRecentProject(path:String) {
 		session.recentProjects.remove(path);
 		session.recentProjects.push(path);

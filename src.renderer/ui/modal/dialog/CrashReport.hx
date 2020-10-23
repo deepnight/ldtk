@@ -71,7 +71,7 @@ class CrashReport extends ui.modal.Dialog {
 			var jBackup = jContent.find(".backup");
 			if( editor!=null && !editor.destroyed ) {
 				var fp = dn.FilePath.fromFile(editor.projectFilePath);
-				fp.fileName += ".crash";
+				fp.fileName += Const.CRASH_NAME_SUFFIX;
 				var data = JsTools.prepareProjectFile(editor.project);
 				JsTools.writeFileBytes(fp.full, data.bytes);
 				jBackup.html('I saved your current work in <a>${fp.fileWithExt}</a>.');
