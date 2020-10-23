@@ -436,6 +436,17 @@ class JsTools {
 		}
 	}
 
+	public static function removeFile(path:String) {
+		if( !fileExists(path) )
+			return false;
+		else {
+			js.node.Require.require("fs");
+			return
+				try { js.node.Fs.unlinkSync(path); true; }
+				catch(e:Dynamic) false;
+		}
+	}
+
 	public static function readFileString(path:String) : Null<String> {
 		if( !fileExists(path) )
 			return null;
