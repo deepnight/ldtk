@@ -444,11 +444,6 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Type conversion
 		jFieldForm.find("button.convert").click( (ev)->{
-			#if !debug
-			N.notImplemented(); // HACK remove this before distrib!
-			return;
-			#end
-
 			var convertors = FieldTypeConverter.getAllConvertors(curField);
 			if( convertors.length==0 ) {
 				// No convertor
