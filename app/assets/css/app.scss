@@ -2584,6 +2584,58 @@ canvas#webgl {
 							}
 						}
 
+						table {
+							width: 100%;
+							max-width: 900px;
+							margin-left: 16px;
+							margin-bottom: 32px;
+
+							tr {
+								th {
+									padding: 4px;;
+									font-variant: small-caps;
+									text-align: left;
+									color: $bgLighter;
+									border-bottom: 1px solid $bgLight;
+								}
+
+								td {
+									vertical-align: top;
+									padding: 8px 8px;
+									border-bottom: 1px solid $bgMed;
+
+									br {
+										display: block;
+										margin-bottom: 10px;
+										content: " ";
+									}
+
+									ul {
+										list-style: circle;
+										li {
+											margin: 0;
+											padding: 4px 4px;
+											&:first-child {
+												padding-top: 0px;
+											}
+										}
+									}
+									&:nth-child(1) {
+										width: 150px;
+									}
+									&:nth-child(2) {
+										width: 150px;
+									}
+								}
+
+								code {
+									background-color: black;
+									padding: 2px 3px;
+									border-radius: 3px;
+								}
+							}
+						}
+
 						strong {
 							color: white;
 						}
