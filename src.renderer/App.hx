@@ -46,8 +46,14 @@ class App extends dn.Process {
 		win.onfocus = onAppFocus;
 		win.onresize = onAppResize;
 		win.onmousemove = onAppMouseMove;
-		win.onerror = (msg, url, lineNo, columnNo, error)->{
-			new ui.modal.dialog.CrashReport(msg,error);
+		win.onerror = (msg, url, lineNo, columnNo, error:js.lib.Error)->{
+			trace(msg);
+			trace(url);
+			trace(lineNo);
+			trace(columnNo);
+			trace(error);
+			trace(error.stack);
+			new ui.modal.dialog.CrashReport(error);
 			return false;
 		}
 
@@ -173,6 +179,13 @@ class App extends dn.Process {
 		switch keyCode {
 			case K.L if( isCtrlDown() && isShiftDown() ):
 				LOG.printAll();
+
+			#if debug
+			case K.T if( isCtrlDown() ):
+				// Emulate a crash
+				var a : Dynamic = null;
+				trace(a.crash);
+			#end
 
 			case _:
 		}

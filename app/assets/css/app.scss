@@ -1751,19 +1751,73 @@ textarea {
 	}
 }
 
+.window.dialog.crash {
+	&>.wrapper {
+		width: 700px;
+		max-width: 90vw;
+
+		.content {
+			a {
+				text-decoration: underline;
+				cursor: pointer;
+				&:hover {
+					color: white;
+				}
+			}
+			ul.log {
+				min-width: auto;
+				user-select: text;
+				margin-top: 16px;
+				li {
+					display: grid;
+					grid-template-columns: auto min-content;
+
+					user-select: inherit;
+					font-family: monospace;
+
+					&.desc {
+						padding: 16px 8px;
+						border: 1px solid $help;
+						color: white;
+						background-color: $helpDark;
+						box-shadow: 0px 0px 16px $helpDark;
+					}
+					&.stack {
+						font-family: monospace;
+						white-space: pre-wrap;
+					}
+
+					span.file {
+						padding: 2px 4px;
+						border-radius: 3px;
+						color: white;
+						font-size: 8pt;
+						white-space: nowrap;
+						background: $bgMed;
+					}
+				}
+			}
+			button.done {
+				opacity: 0.35;
+			}
+		}
+	}
+}
+
 .window.dialog.fieldTypes,
 .window.dialog.layerTypes {
 	&>.wrapper {
 		width: auto;
 		padding: 4px;
-	}
-	.content {
-		display: grid;
-		width: 100%;
-		gap: 2px;
 
-		button {
-			margin: 0;
+		.content {
+			display: grid;
+			width: 100%;
+			gap: 2px;
+
+			button {
+				margin: 0;
+			}
 		}
 	}
 }
