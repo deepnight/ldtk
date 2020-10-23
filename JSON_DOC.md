@@ -1,4 +1,5 @@
 # Json structure (version 0.4.0-beta)
+Please refer to the [README.md](https://github.com/deepnight/led/blob/master/README.md) for more informations.
    - [Json root](#led-ProjectJson)
    - [Level](#led-LevelJson)
      - [Layer instance](#led-LayerInstanceJson)

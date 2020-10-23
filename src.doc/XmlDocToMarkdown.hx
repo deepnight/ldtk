@@ -180,15 +180,20 @@ class XmlDocToMarkdown {
 
 
 
+		// Header
+		var headerMd = [
+			'# Json structure (version $appVersion)',
+			'Please refer to the [README.md](https://github.com/deepnight/led/blob/master/README.md) for more informations.'
+		];
+
 		// Table of content
-		var tocMd = ['# Json structure (version $appVersion)'];
 		for(e in toc) {
 			var indent = " -";
 			for(i in 0...e.depth)
 				indent = "  "+indent;
-			tocMd.push('$indent [${e.name}](#${e.anchor})');
+			headerMd.push('$indent [${e.name}](#${e.anchor})');
 		}
-		md = tocMd.concat(md);
+		md = headerMd.concat(md);
 
 
 		// Write markdown file
