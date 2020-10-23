@@ -23,7 +23,7 @@
 				"uid": 72,
 				"gridSize": 8,
 				"displayOpacity": 1,
-				"intGridValues": [{ "identifier": null, "color": "#FFFFFF" }],
+				"intGridValues": [{ "identifier": "walls", "color": "#FFFFFF" }],
 				"autoTilesetDefUid": 9,
 				"autoRuleGroups": [
 					{
