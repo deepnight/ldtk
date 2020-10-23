@@ -1,5 +1,6 @@
 # 0.4.0-beta
 
+ - Experimental **Ubuntu** and **MacOS** versions (thanks to the community!)
  - **Selections**: you can now select any element in a level by using `ALT` + left click. You can move it around by holding left click. To select a **rectangle area**, use `ALT` + `SHIFT` + left click.
  - **Duplicate**: you can duplicate any element in the level by drag it with `CTRL`+`ALT` keys.
 
