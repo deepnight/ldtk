@@ -488,7 +488,7 @@ class Editor extends Page {
 		return allLayerTools.get( curLayerDef.uid );
 	}
 
-	function resetTools() {
+	public function resetTools() {
 		for(t in allLayerTools)
 			t.destroy();
 		allLayerTools = new Map();
@@ -897,6 +897,7 @@ class Editor extends Page {
 				case LevelRestoredFromHistory:
 				case LevelSorted:
 				case LayerDefAdded:
+				case LayerDefConverted:
 				case LayerDefRemoved(defUid):
 				case LayerDefChanged:
 				case LayerDefSorted:
@@ -990,6 +991,11 @@ class Editor extends Page {
 				updateLayerList();
 
 			case EntityFieldAdded(ed), EntityFieldRemoved(ed):
+				updateTool();
+
+			case LayerDefConverted:
+				updateLayerList();
+				resetTools();
 				updateTool();
 
 			case LayerDefAdded, LayerDefRemoved(_):

@@ -22,6 +22,7 @@ enum GlobalEvent {
 	LayerDefRemoved(defUid:Int);
 	LayerDefChanged;
 	LayerDefSorted;
+	LayerDefConverted;
 
 	LayerRuleChanged(rule:data.def.AutoLayerRuleDef);
 	LayerRuleAdded(rule:data.def.AutoLayerRuleDef);

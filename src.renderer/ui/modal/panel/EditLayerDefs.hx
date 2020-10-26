@@ -52,12 +52,76 @@ class EditLayerDefs extends ui.modal.Panel {
 	}
 
 	function deleteLayer(ld:data.def.LayerDef) {
-		new ui.LastChance( L.t._("Layer ::name:: deleted", { name:ld.identifier }), project );
+		new ui.LastChance(
+			L.t._("Layer ::name:: deleted", { name:ld.identifier }),
+			project
+		);
 		var oldUid = ld.uid;
 		project.defs.removeLayerDef(ld);
 		select(project.defs.layers[0]);
 		editor.ge.emit( LayerDefRemoved(oldUid) );
 	}
+
+
+
+	function bakeLayer(ld:data.def.LayerDef) {
+		for(other in project.defs.layers)
+			if( other.autoSourceLayerDefUid==ld.uid ) {
+				new ui.modal.dialog.Message(L.t._("This layer cannot be baked, as other auto-layers rely on this one as source for their data."));
+				return;
+			}
+		// Backup project
+		var oldProject = data.Project.fromJson( project.toJson() );
+
+		// Update layer instances
+		var ops : Array<ui.modal.Progress.ProgressOp> = [];
+		for(l in project.levels) {
+			var li = l.getLayerInstance(ld);
+			ops.push({
+				label: l.identifier,
+				cb: ()->{
+					ld.iterateActiveRulesInDisplayOrder( (r)->{
+						if( li.autoTilesCache.exists( r.uid ) ) {
+							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
+							for( tileInfos in allTiles.value ) {
+								li.setGridTile(
+									Std.int(tileInfos.x/ld.gridSize),
+									Std.int(tileInfos.y/ld.gridSize),
+									tileInfos.tid,
+									tileInfos.flips
+								);
+							}
+						}
+					});
+					li.autoTilesCache = null;
+				}
+			});
+		}
+
+		// Execute ops
+		new Progress(
+			L.t._("Baking layer instances"),
+			ops,
+			()->{
+				// Done, update layer def
+				ld.type = Tiles;
+				var ref = ld.autoSourceLayerDefUid!=null
+					? project.defs.getLayerDef(ld.autoSourceLayerDefUid)
+					: ld;
+				ld.tilesetDefUid = ref.autoTilesetDefUid;
+				ld.autoRuleGroups = [];
+				ld.autoSourceLayerDefUid = null;
+				ld.autoTilesetDefUid = null;
+
+				select(ld);
+				editor.ge.emit( LayerInstanceChanged );
+				editor.ge.emit( LayerDefConverted );
+				new LastChance( L.t._("Baked layer ::name::", {name:ld.identifier}), oldProject );
+			}
+		);
+	}
+
+
 
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
@@ -128,6 +192,21 @@ class EditLayerDefs extends ui.modal.Panel {
 		i.displayAsPct = true;
 		i.setBounds(0.1, 1);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+
+
+		// Baking
+		if( cur.isAutoLayer() ) {
+			var jButton = jForm.find("button.bake");
+			jButton.click( (_)->{
+				new ui.modal.dialog.Confirm(
+					jButton,
+					L.t._("Transform this layer into a traditional Tile layer?"),
+					true,
+					()->bakeLayer(cur)
+				);
+			});
+		}
+
 
 		// Layer-type specific inits
 		function initAutoTilesetSelect() {

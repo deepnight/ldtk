@@ -194,7 +194,7 @@ class LevelRender extends dn.Process {
 						layersWrapper.add( layerRenders.get(li.layerDefUid), depth );
 				}
 
-			case LayerDefChanged:
+			case LayerDefChanged, LayerDefConverted:
 				invalidateAll();
 
 			case LayerRuleChanged(r), LayerRuleAdded(r):
