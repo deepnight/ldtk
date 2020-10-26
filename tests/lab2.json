@@ -3,15 +3,15 @@
 		"fileType": "LEd Project JSON",
 		"app": "LEd",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.4.1-beta-debug",
+		"appVersion": "0.5.0-beta-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
-	"jsonVersion": "0.4.1",
+	"jsonVersion": "0.5.0",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
 	"bgColor": "#0D0E2B",
-	"nextUid": 3,
+	"nextUid": 10,
 	"minifyJson": false,
 	"exportTiled": false,
 	"defs": {
