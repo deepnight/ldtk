@@ -1,0 +1,77 @@
+{
+	"__header__": {
+		"fileType": "LEd Project JSON",
+		"app": "LEd",
+		"appAuthor": "Sebastien Benard",
+		"appVersion": "0.5.0-beta-debug",
+		"url": "https://deepnight.net/tools/led-2d-level-editor/"
+	},
+	"jsonVersion": "0.5.0",
+	"defaultPivotX": 0,
+	"defaultPivotY": 0,
+	"defaultGridSize": 16,
+	"bgColor": "#7F8093",
+	"nextUid": 3,
+	"minifyJson": false,
+	"exportTiled": false,
+	"defs": {
+		"layers": [
+			{
+				"__type": "Tiles",
+				"identifier": "Tiles",
+				"type": "Tiles",
+				"uid": 2,
+				"gridSize": 16,
+				"displayOpacity": 1,
+				"intGridValues": [{ "identifier": null, "color": "#000000" }],
+				"autoTilesetDefUid": null,
+				"autoRuleGroups": [],
+				"autoSourceLayerDefUid": null,
+				"tilesetDefUid": 1,
+				"tilePivotX": 0,
+				"tilePivotY": 0
+			}
+		],
+		"entities": [],
+		"tilesets": [
+			{
+				"identifier": "Tractor",
+				"uid": 1,
+				"relPath": "atlas/tractor.png",
+				"pxWid": 512,
+				"pxHei": 512,
+				"tileGridSize": 16,
+				"spacing": 0,
+				"padding": 0,
+				"savedSelections": []
+			}
+		],
+		"enums": [],
+		"externalEnums": []
+	},
+	"levels": [{
+		"identifier": "Level",
+		"uid": 0,
+		"pxWid": 256,
+		"pxHei": 256,
+		"layerInstances": [
+			{
+				"__identifier": "Tiles",
+				"__type": "Tiles",
+				"__cWid": 16,
+				"__cHei": 16,
+				"__gridSize": 16,
+				"__opacity": 1,
+				"levelId": 0,
+				"layerDefUid": 2,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGrid": [],
+				"autoLayerTiles": [],
+				"seed": 4839200,
+				"gridTiles": [],
+				"entityInstances": []
+			}
+		]
+	}]
+}
