@@ -1,3 +1,7 @@
+# 0.4.1-beta
+
+ - Fixed a jQuery related crash
+
 # 0.4.0-beta
 
  - Experimental **Ubuntu** and **MacOS** versions (thanks to the community!)
