@@ -180,9 +180,9 @@ class App extends dn.Process {
 			case K.L if( isCtrlDown() && isShiftDown() ):
 				LOG.printAll();
 
+			// Emulate a crash
 			#if debug
-			case K.T if( isCtrlDown() ):
-				// Emulate a crash
+			case K.T if( isCtrlDown() && isShiftDown() ):
 				LOG.warning("Emulating crash...");
 				var a : Dynamic = null;
 				trace(a.crash);
