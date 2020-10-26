@@ -1,7 +1,12 @@
 package ui.modal;
 
+typedef ProgressOp = {
+	var label : String;
+	var cb : Void->Void;
+}
+
 class Progress extends ui.Modal {
-	public function new(title:String, ops:Array<{ label:String, cb:Void->Void }>, ?onComplete:Void->Void) {
+	public function new(title:String, ops:Array<ProgressOp>, ?onComplete:Void->Void) {
 		super();
 
 		App.LOG.general('"$title", ${ops.length} operation(s):');
