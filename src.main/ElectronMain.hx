@@ -33,7 +33,7 @@ class ElectronMain {
 			});
 
 			// Misc bindings
-			dn.electron.Dialogs.initMain();
+			dn.electron.Dialogs.initMain(mainWindow);
 			dn.electron.ElectronUpdater.initMain(mainWindow);
 		});
 
