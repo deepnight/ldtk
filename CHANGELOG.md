@@ -1,3 +1,7 @@
+# 0.5.0-beta
+
+ - **Tiles flipping**: in Tile Layers, you can mirror tiles before painting them by pressing `X` or `Y`. This also works from stamps of tiles.
+
 # 0.4.1-beta
 
  - Fixed a jQuery related crash
