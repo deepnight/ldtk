@@ -39,7 +39,7 @@ class LayerInstance {
 
 
 	@:keep public function toString() {
-		return 'Instance<${def.identifier}:${def.type}>';
+		return 'Instance[#$layerDefUid,${def.identifier}:${def.type}]';
 	}
 
 

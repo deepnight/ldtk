@@ -183,6 +183,7 @@ class App extends dn.Process {
 			#if debug
 			case K.T if( isCtrlDown() ):
 				// Emulate a crash
+				LOG.warning("Emulating crash...");
 				var a : Dynamic = null;
 				trace(a.crash);
 			#end
