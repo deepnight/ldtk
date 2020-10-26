@@ -5,6 +5,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 	inline function get_curTilesetDef() return editor.project.defs.getTilesetDef( editor.curLayerInstance.def.tilesetDefUid );
 
 	public var flipX = false;
+	public var flipY = false;
 
 	public function new() {
 		super();
@@ -140,12 +141,13 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 	function drawSelectionAt(cx:Int, cy:Int) {
 		var anyChange = false;
 		var sel = getSelectedValue();
+		var flips = M.makeBitsFromBools(flipX, flipY);
 
 		if( isRandomMode() ) {
 			// Single random tile
 			var tid = sel.ids[Std.random(sel.ids.length)];
 			if( curLayerInstance.isValid(cx,cy) && tid!=curLayerInstance.getGridTileId(cx,cy) ) {
-				curLayerInstance.setGridTile(cx,cy, tid);
+				curLayerInstance.setGridTile(cx,cy, tid, flips);
 				anyChange = true;
 			}
 		}
@@ -160,11 +162,12 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			}
 
 			var gridDiffScale = M.imax(1, M.round( curTilesetDef.tileGridSize / curLayerInstance.def.gridSize ) );
+			var li = curLayerInstance;
 			for(tid in sel.ids) {
 				var tcx = cx + ( curTilesetDef.getTileCx(tid) - left ) * gridDiffScale;
 				var tcy = cy + ( curTilesetDef.getTileCy(tid) - top ) * gridDiffScale;
-				if( curLayerInstance.isValid(tcx,tcy) && curLayerInstance.getGridTileId(tcx,tcy)!=tid ) {
-					curLayerInstance.setGridTile(tcx,tcy,tid);
+				if( li.isValid(tcx,tcy) && ( li.getGridTileId(tcx,tcy)!=tid || li.getGridTileFlips(tcx,tcy)!=flips ) ) {
+					li.setGridTile(tcx,tcy,tid, flips);
 					editor.curLevelHistory.markChange(tcx,tcy);
 					anyChange = true;
 				}
@@ -244,7 +247,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 	override function onKeyPress(keyId:Int) {
 		super.onKeyPress(keyId);
 
-		if( !App.ME.hasAnyToggleKeyDown() )
+		if( !App.ME.hasAnyToggleKeyDown() && !Editor.ME.hasInputFocus() )
 			switch keyId {
 				case K.R :
 					setMode( isRandomMode() ? Stamp : Random );
@@ -253,6 +256,14 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 
 				case K.S:
 					saveSelection();
+
+				case K.X:
+					flipX = !flipX;
+					N.quick("X-flip: "+L.onOff(flipX));
+
+				case K.Y:
+					flipY = !flipY;
+					N.quick("Y-flip: "+L.onOff(flipY));
 			}
 	}
 }

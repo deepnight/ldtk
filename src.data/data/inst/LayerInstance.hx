@@ -492,6 +492,10 @@ class LayerInstance {
 		return !hasGridTile(cx,cy) ? null : getGridTileInfos(cx,cy).tileId;
 	}
 
+	public inline function getGridTileFlips(cx:Int, cy:Int) : Null<Int> {
+		return !hasGridTile(cx,cy) ? null : getGridTileInfos(cx,cy).flips;
+	}
+
 	public inline function hasGridTile(cx:Int, cy:Int) : Bool {
 		return getGridTileInfos(cx,cy)!=null;
 	}

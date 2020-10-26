@@ -319,7 +319,7 @@ class Editor extends Page {
 		ge.emit(TilesetDefChanged(td));
 	}
 
-	inline function hasInputFocus() {
+	public inline function hasInputFocus() {
 		return App.ME.jBody.find("input:focus, textarea:focus").length>0;
 	}
 

@@ -489,9 +489,14 @@ class LevelRender extends dn.Process {
 					var tileInf = li.getGridTileInfos(cx,cy);
 					var t = td.getTile(tileInf.tileId);
 					t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
-					tg.add( // TODO support flips
-						(cx + li.def.tilePivotX) * li.def.gridSize,
-						(cy + li.def.tilePivotX) * li.def.gridSize,
+					var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
+					var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;
+					tg.addTransform(
+						(cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize,
+						(cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize,
+						sx,
+						sy,
+						0,
 						t
 					);
 				}
