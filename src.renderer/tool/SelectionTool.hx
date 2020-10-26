@@ -92,6 +92,8 @@ class SelectionTool extends Tool<Int> {
 										t.selectValue(savedTileSel);
 									else
 										t.selectValue( { ids:[tileInf.tileId], mode:t.getMode() } );
+									t.flipX = M.hasBit(tileInf.flips,0);
+									t.flipY = M.hasBit(tileInf.flips,1);
 								}
 
 								editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
@@ -154,8 +156,9 @@ class SelectionTool extends Tool<Int> {
 							);
 
 						case Tiles:
+							var t = li.getGridTileInfos(cx,cy);
 							editor.cursor.set(
-								Tiles(li, [li.getGridTileInfos(cx,cy).tileId], cx, cy),
+								Tiles(li, [t.tileId], cx, cy, t.flips),
 								"Tile "+li.getGridTileInfos(cx,cy).tileId
 							);
 
