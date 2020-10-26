@@ -1147,8 +1147,9 @@ class Editor extends Page {
 			return block;
 		}
 
-		if( project.defs.layers.length==0 )
-			jGuide.append( _createGuideBlock([], null, Lang.t._("You should start by adding at least ONE layer from the Layer panel.")) );
+		if( project.defs.layers.length==0 ) {
+			jGuide.append( _createGuideBlock([], null, Lang.t._("Need at least 1 layer")) );
+		}
 		else if( curLayerDef!=null ) {
 			switch curLayerDef.type {
 				case IntGrid:

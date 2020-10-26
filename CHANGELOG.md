@@ -4,6 +4,7 @@
  - Smarter extern Enum file update (ie. silent if changes don't break anything).
  - Better logging in case of crash
  - Open/save dialogs are now modal to the application
+ - Fixed distorted left panel in new projects
 
 # 0.4.0-beta
 
