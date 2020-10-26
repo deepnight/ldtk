@@ -96,7 +96,6 @@ class LayerInstance {
 				var arr : Array<led.Json.Tile> = [];
 				for(e in gridTiles.keyValueIterator())
 					if( e.value!=null ) {
-						var flips = 0; // TODO store flips
 						arr.push({
 							px: [
 								pxOffsetX + getCx(e.key) * def.gridSize,
@@ -106,7 +105,7 @@ class LayerInstance {
 								td==null ? -1 : td.getTileSourceX(e.value.tileId),
 								td==null ? -1 : td.getTileSourceY(e.value.tileId),
 							],
-							f: flips, // flips
+							f: e.value.flips,
 							d: [ e.key, e.value.tileId ],
 						});
 					}
@@ -178,7 +177,7 @@ class LayerInstance {
 				gridTilesJson.d = [ (cast gridTilesJson).coordId, (cast gridTilesJson).tileId ];
 			li.gridTiles.set( gridTilesJson.d[0], {
 				tileId: gridTilesJson.d[1],
-				flips: 0, // TODO json flips
+				flips: gridTilesJson.f,
 			});
 		}
 
