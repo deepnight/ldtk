@@ -303,7 +303,7 @@ class JsTools {
 				case "mouseright": new J('<span class="icon mouseright"></span>');
 				case "mousewheel": new J('<span class="icon mousewheel"></span>');
 
-				case "+", "-", "to" : new J('<span class="misc">$k</span>');
+				case "+", "-", "to", "/", "or" : new J('<span class="misc">$k</span>');
 
 				case k.charAt(0) => "(": new J("<span/>").append(k);
 				case k.charAt(k.length-1) => ")": new J("<span/>").append(k);
