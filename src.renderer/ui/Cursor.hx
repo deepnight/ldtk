@@ -137,24 +137,32 @@ class Cursor extends dn.Process {
 
 				var o = display.LevelRender.createEntityRender(ei, def, wrapper);
 
-			case Tiles(li, tileIds, cx, cy):
+			case Tiles(li, tileIds, cx, cy, flips):
 				var td = project.defs.getTilesetDef( li.def.tilesetDefUid );
 				if( td!=null ) {
 					var left = Const.INFINITE;
+					var right = 0;
 					var top = Const.INFINITE;
+					var bottom = 0;
 					for(tid in tileIds) {
 						left = M.imin( left, td.getTileCx(tid) );
+						right = M.imax( right, td.getTileCx(tid) );
 						top = M.imin( top, td.getTileCy(tid) );
+						bottom = M.imax( bottom, td.getTileCy(tid) );
 					}
 
 					var gridDiffScale = M.imax(1, M.round( td.tileGridSize / li.def.gridSize ) );
+					var flipX = M.hasBit(flips,0);
+					var flipY = M.hasBit(flips,1);
 					for(tid in tileIds) {
 						var cx = td.getTileCx(tid);
 						var cy = td.getTileCy(tid);
 						var bmp = new h2d.Bitmap( td.getTile(tid), wrapper );
 						bmp.tile.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
-						bmp.x = (cx-left) * li.def.gridSize * gridDiffScale;
-						bmp.y = (cy-top) * li.def.gridSize * gridDiffScale;
+						bmp.x = (flipX ? right-cx+1 : cx-left) * li.def.gridSize * gridDiffScale;
+						bmp.y = (flipY ? bottom-cy+1 : cy-top) * li.def.gridSize * gridDiffScale;
+						bmp.scaleX = flipX ? -1 : 1;
+						bmp.scaleY = flipY ? -1 : 1;
 					}
 					wrapper.filter = new h2d.filter.Glow(0xffffff, 1, 2);
 				}
@@ -180,7 +188,7 @@ class Cursor extends dn.Process {
 				case GridCell(li, cx, cy, col): !type.equals(t);
 				case GridRect(li, cx, cy, wid, hei, col): !type.equals(t);
 				case Entity(li, def, ei, x, y): !type.equals(t);
-				case Tiles(li, tileIds, cx, cy): !type.equals(t);
+				case Tiles(li, tileIds, cx, cy, flips): !type.equals(t);
 				case Resize(p): !type.equals(t);
 				case Link(fx, fy, tx, ty, c): !type.equals(t);
 			}
@@ -217,7 +225,7 @@ class Cursor extends dn.Process {
 					Std.int(y/li.def.gridSize) * li.def.gridSize
 				);
 
-			case Tiles(li, tileIds, cx, cy):
+			case Tiles(li, tileIds, cx, cy, flips):
 				wrapper.setPosition(
 					(cx+li.def.tilePivotX)*li.def.gridSize + li.pxOffsetX,
 					(cy+li.def.tilePivotY)*li.def.gridSize + li.pxOffsetY

@@ -154,18 +154,24 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		else {
 			// Stamp
 			var left = Const.INFINITE;
+			var right = 0;
 			var top = Const.INFINITE;
+			var bottom = 0;
 
 			for(tid in sel.ids) {
 				left = M.imin(left, curTilesetDef.getTileCx(tid));
+				right = M.imax(right, curTilesetDef.getTileCx(tid));
 				top = M.imin(top, curTilesetDef.getTileCy(tid));
+				bottom = M.imax(bottom, curTilesetDef.getTileCy(tid));
 			}
 
 			var gridDiffScale = M.imax(1, M.round( curTilesetDef.tileGridSize / curLayerInstance.def.gridSize ) );
 			var li = curLayerInstance;
 			for(tid in sel.ids) {
-				var tcx = cx + ( curTilesetDef.getTileCx(tid) - left ) * gridDiffScale;
-				var tcy = cy + ( curTilesetDef.getTileCy(tid) - top ) * gridDiffScale;
+				var tdCx = curTilesetDef.getTileCx(tid);
+				var tdCy = curTilesetDef.getTileCy(tid);
+				var tcx = cx + ( flipX ? right-tdCx : tdCx-left ) * gridDiffScale;
+				var tcy = cy + ( flipY ? bottom-tdCy : tdCy-top ) * gridDiffScale;
 				if( li.isValid(tcx,tcy) && ( li.getGridTileId(tcx,tcy)!=tid || li.getGridTileFlips(tcx,tcy)!=flips ) ) {
 					li.setGridTile(tcx,tcy,tid, flips);
 					editor.curLevelHistory.markChange(tcx,tcy);
@@ -225,10 +231,11 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
 			var sel = getSelectedValue();
+			var flips = M.makeBitsFromBools(flipX, flipY);
 			if( isRandomMode() )
-				editor.cursor.set( Tiles(curLayerInstance, [ sel.ids[Std.random(sel.ids.length)] ], m.cx, m.cy) );
+				editor.cursor.set( Tiles(curLayerInstance, [ sel.ids[Std.random(sel.ids.length)] ], m.cx, m.cy, flips) );
 			else
-				editor.cursor.set( Tiles(curLayerInstance, sel.ids, m.cx, m.cy) );
+				editor.cursor.set( Tiles(curLayerInstance, sel.ids, m.cx, m.cy, flips) );
 		}
 		else
 			editor.cursor.set(None);
