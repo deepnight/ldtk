@@ -105,3 +105,8 @@ enum AutoLayerRuleCheckerMode {
 	Horizontal;
 	Vertical;
 }
+
+typedef GridTileInfos = {
+	var tileId : Int;
+	var flips : Int;
+}

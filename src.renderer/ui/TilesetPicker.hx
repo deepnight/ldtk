@@ -397,8 +397,10 @@ class TilesetPicker {
 			if( add ) {
 				if( mode==RectOnly || !App.ME.isShiftDown() && !App.ME.isCtrlDown() ) {
 					// Replace active selection with this one
-					if( mode==ToolPicker )
+					if( mode==ToolPicker ) {
+						tool.flipX = tool.flipY = false;
 						tool.selectValue({ mode:tool.getMode(), ids:selIds });
+					}
 					else
 						setSelectedTileIds(selIds);
 				}

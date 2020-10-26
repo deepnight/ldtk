@@ -83,15 +83,17 @@ class SelectionTool extends Tool<Int> {
 								editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
 
 							case Tiles:
-								var tid = li.getGridTile(cx,cy);
+								var tileInf = li.getGridTileInfos(cx,cy);
 
 								var t = editor.curTool.as(tool.lt.TileTool);
 								if( t!=null ) {
-									var savedTileSel = t.curTilesetDef.getSavedSelectionFor(tid);
+									var savedTileSel = t.curTilesetDef.getSavedSelectionFor(tileInf.tileId);
 									if( savedTileSel!=null && t.getSelectedValue()!=savedTileSel )
 										t.selectValue(savedTileSel);
 									else
-										t.selectValue( { ids:[tid], mode:t.getMode() } );
+										t.selectValue( { ids:[tileInf.tileId], mode:t.getMode() } );
+									t.flipX = M.hasBit(tileInf.flips,0);
+									t.flipY = M.hasBit(tileInf.flips,1);
 								}
 
 								editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
@@ -154,9 +156,10 @@ class SelectionTool extends Tool<Int> {
 							);
 
 						case Tiles:
+							var t = li.getGridTileInfos(cx,cy);
 							editor.cursor.set(
-								Tiles(li, [li.getGridTile(cx,cy)], cx, cy),
-								"Tile "+li.getGridTile(cx,cy)
+								Tiles(li, [t.tileId], cx, cy, t.flips),
+								"Tile "+li.getGridTileInfos(cx,cy).tileId
 							);
 
 						case Entities:

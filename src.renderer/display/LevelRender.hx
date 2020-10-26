@@ -483,14 +483,20 @@ class LevelRender extends dn.Process {
 
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
-					if( li.getGridTile(cx,cy)==null )
+					if( !li.hasGridTile(cx,cy) )
 						continue;
 
-					var t = td.getTile( li.getGridTile(cx,cy) );
+					var tileInf = li.getGridTileInfos(cx,cy);
+					var t = td.getTile(tileInf.tileId);
 					t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
-					tg.add(
-						(cx + li.def.tilePivotX) * li.def.gridSize,
-						(cy + li.def.tilePivotX) * li.def.gridSize,
+					var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
+					var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;
+					tg.addTransform(
+						(cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize,
+						(cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize,
+						sx,
+						sy,
+						0,
 						t
 					);
 				}
@@ -501,7 +507,7 @@ class LevelRender extends dn.Process {
 				var tg = new h2d.TileGroup( tileError, wrapper );
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid)
-					if( li.getGridTile(cx,cy)!=null )
+					if( li.hasGridTile(cx,cy) )
 						tg.add(
 							(cx + li.def.tilePivotX) * li.def.gridSize,
 							(cy + li.def.tilePivotX) * li.def.gridSize,

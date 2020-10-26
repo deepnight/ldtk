@@ -291,10 +291,10 @@ class Tiled extends Exporter {
 
 					var layer = _createLayer("objectgroup", li);
 					for(coordId in li.gridTiles.keys()) {
-						var tileId = li.gridTiles.get(coordId);
+						var tileInfos = li.gridTiles.get(coordId);
 						var o = _createTileObject(
 							ld.tilesetDefUid,
-							tileId,
+							tileInfos.tileId,
 							li.getCx(coordId)*ld.gridSize,
 							li.getCy(coordId)*ld.gridSize
 						);

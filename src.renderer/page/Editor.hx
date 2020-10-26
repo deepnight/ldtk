@@ -319,7 +319,7 @@ class Editor extends Page {
 		ge.emit(TilesetDefChanged(td));
 	}
 
-	inline function hasInputFocus() {
+	public inline function hasInputFocus() {
 		return App.ME.jBody.find("input:focus, textarea:focus").length>0;
 	}
 
@@ -377,7 +377,7 @@ class Editor extends Page {
 
 			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() && curLayerInstance.def.isAutoLayer() ):
 				levelRender.toggleAutoLayerRendering(curLayerInstance);
-				N.quick( "Auto-layer rendering: "+( levelRender.autoLayerRenderingEnabled(curLayerInstance) ? "ON" : "off" ));
+				N.quick( "Auto-layer rendering: "+L.onOff( levelRender.autoLayerRenderingEnabled(curLayerInstance) ));
 
 			case K.R if( !hasInputFocus() && App.ME.isShiftDown() ):
 				var state : Null<Bool> = null;
@@ -387,7 +387,7 @@ class Editor extends Page {
 							state = !levelRender.autoLayerRenderingEnabled(li);
 						levelRender.setAutoLayerRendering(li, state);
 					}
-				N.quick( "All auto-layers rendering: "+( state ? "ON" : "off" ));
+				N.quick( "All auto-layers rendering: "+L.onOff(state));
 
 			case K.W if( App.ME.isCtrlDown() ):
 				onClose();
@@ -421,7 +421,7 @@ class Editor extends Page {
 
 			case K.G if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				levelRender.toggleGrid();
-				N.quick( "Show grid: "+( levelRender.isGridVisible() ? "ON" : "off" ));
+				N.quick( "Show grid: "+L.onOff(levelRender.isGridVisible()));
 
 			case K.H if( !hasInputFocus() ):
 				onHelp();
@@ -564,7 +564,7 @@ class Editor extends Page {
 					}
 
 				case Tiles:
-					if( li.getGridTile(cx,cy)!=null )
+					if( li.hasGridTile(cx,cy) )
 						ge = GenericLevelElement.GridCell(li, cx, cy);
 			}
 			return ge;
@@ -678,7 +678,7 @@ class Editor extends Page {
 							jElement.text('${ li.def.getIntGridValueDisplayName(v) } (IntGrid)');
 
 						case Tiles:
-							jElement.text('${ li.getGridTile(cx,cy) } (Tile)');
+							jElement.text('Tile ${ li.getGridTileInfos(cx,cy).tileId }');
 
 						case Entities:
 						case AutoLayer:
@@ -761,7 +761,7 @@ class Editor extends Page {
 		selectionTool.clear();
 		levelRender.invalidateBg();
 		if( notify )
-			N.quick( "Grid lock: "+( gridSnapping ? "ON" : "off" ));
+			N.quick( "Grid lock: "+L.onOff( gridSnapping ));
 	}
 
 	public function setSingleLayerMode(v:Bool) {
@@ -773,7 +773,7 @@ class Editor extends Page {
 			chk.parent().removeClass("checked");
 		levelRender.applyAllLayersVisibility();
 		selectionTool.clear();
-		N.quick( "Single layer mode: "+( singleLayerMode ? "ON" : "off" ));
+		N.quick( "Single layer mode: "+L.onOff( singleLayerMode ));
 	}
 
 	public function setEmptySpaceSelection(v:Bool) {
@@ -784,7 +784,7 @@ class Editor extends Page {
 		else
 			chk.parent().removeClass("checked");
 		selectionTool.clear();
-		N.quick( "Select empty spaces: "+( emptySpaceSelection ? "ON" : "off" ));
+		N.quick( "Select empty spaces: "+L.onOff( emptySpaceSelection ));
 	}
 
 	function onHelp() {

@@ -247,11 +247,13 @@ class GenericLevelElementGroup {
 								ghost.endFill();
 
 							case Tiles:
-								var tid = li.getGridTile(cx,cy);
+								var t = li.getGridTileInfos(cx,cy);
 								var td = editor.project.defs.getTilesetDef( li.def.tilesetDefUid );
-								var bmp = new h2d.Bitmap( td.getTile(tid), ghost );
-								bmp.x = li.pxOffsetX + cx*li.def.gridSize - bounds.left;
-								bmp.y = li.pxOffsetY + cy*li.def.gridSize - bounds.top;
+								var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
+								bmp.x = li.pxOffsetX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.gridSize - bounds.left;
+								bmp.y = li.pxOffsetY + ( cy + (M.hasBit(t.flips,1)?1:0) ) * li.def.gridSize - bounds.top;
+								bmp.scaleX = M.hasBit(t.flips, 0) ? -1 : 1;
+								bmp.scaleY = M.hasBit(t.flips, 1) ? -1 : 1;
 
 							case Entities:
 							case AutoLayer:
@@ -687,13 +689,13 @@ class GenericLevelElementGroup {
 								changedLayers.set(li,li);
 
 							case Tiles:
-								var v = li.getGridTile(cx,cy);
+								var t = li.getGridTileInfos(cx,cy);
 								var gridRatio = Std.int( moveGrid / li.def.gridSize );
 								var tcx = cx + (to.cx-origin.cx)*gridRatio;
 								var tcy = cy + (to.cy-origin.cy)*gridRatio;
 								if( !isCopy && li.hasGridTile(cx,cy) )
 									postRemovals.push( ()-> li.removeGridTile(cx,cy) );
-								postInserts.push( ()-> li.setGridTile(tcx, tcy, v) );
+								postInserts.push( ()-> li.setGridTile(tcx, tcy, t.tileId, t.flips) );
 
 								elements[i] = li.isValid(tcx,tcy) ? GridCell(li, tcx, tcy) : null; // update selection
 								changedLayers.set(li,li);
