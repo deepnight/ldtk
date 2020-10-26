@@ -871,6 +871,72 @@ class Editor extends Page {
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
+		// Logging
+		if( e==null )
+			App.LOG.error("Received null global event!");
+		else if( e!=ViewportChanged ) {
+			var extra : Dynamic = null;
+			switch e {
+				case ViewportChanged:
+				case ProjectSelected:
+				case ProjectSettingsChanged:
+				case BeforeProjectSaving:
+				case ProjectSaved:
+				case LevelSelected:
+				case LevelSettingsChanged:
+				case LevelAdded:
+				case LevelRemoved:
+				case LevelResized:
+				case LevelRestoredFromHistory:
+				case LevelSorted:
+				case LayerDefAdded:
+				case LayerDefRemoved(defUid):
+				case LayerDefChanged:
+				case LayerDefSorted:
+				case LayerRuleChanged(rule): extra = rule.uid;
+				case LayerRuleAdded(rule): extra = rule.uid;
+				case LayerRuleRemoved(rule): extra = rule.uid;
+				case LayerRuleSeedChanged:
+				case LayerRuleSorted:
+				case LayerRuleGroupAdded:
+				case LayerRuleGroupRemoved(rg): extra = rg.uid;
+				case LayerRuleGroupChanged(rg): extra = rg.uid;
+				case LayerRuleGroupChangedActiveState(rg): extra = rg.uid;
+				case LayerRuleGroupSorted:
+				case LayerRuleGroupCollapseChanged:
+				case LayerInstanceSelected:
+				case LayerInstanceChanged:
+				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
+				case LayerInstanceRestoredFromHistory(li): extra = li.layerDefUid;
+				case LayerInstanceAutoRenderingChanged(li): extra = li.layerDefUid;
+				case TilesetDefChanged(td): extra = td.uid;
+				case TilesetDefAdded(td): extra = td.uid;
+				case TilesetDefRemoved(td): extra = td.uid;
+				case TilesetSelectionSaved(td): extra = td.uid;
+				case EntityInstanceAdded(ei): extra = ei.defUid;
+				case EntityInstanceRemoved(ei): extra = ei.defUid;
+				case EntityInstanceChanged(ei): extra = ei.defUid;
+				case EntityInstanceFieldChanged(ei): extra = ei.defUid;
+				case EntityDefAdded:
+				case EntityDefRemoved:
+				case EntityDefChanged:
+				case EntityDefSorted:
+				case EntityFieldAdded(ed): extra = ed.uid;
+				case EntityFieldRemoved(ed): extra = ed.uid;
+				case EntityFieldDefChanged(ed): extra = ed.uid;
+				case EntityFieldSorted:
+				case EnumDefAdded:
+				case EnumDefRemoved:
+				case EnumDefChanged:
+				case EnumDefSorted:
+				case EnumDefValueRemoved:
+				case ToolOptionChanged:
+			}
+			App.LOG.add( "event", e.getName() + (extra==null ? "" : " "+Std.string(extra)) );
+		}
+
+
+		// Check if events changes the NeedSaving flag
 		switch e {
 			case ViewportChanged:
 			case LayerInstanceSelected:
@@ -886,6 +952,7 @@ class Editor extends Page {
 		}
 
 
+		// Use event
 		switch e {
 			case ViewportChanged:
 
@@ -1001,11 +1068,13 @@ class Editor extends Page {
 				updateLayerList();
 		}
 
+		// Broadcast to LevelHistory
 		if( curLevelHistory!=null )
 			curLevelHistory.manualOnGlobalEvent(e);
 
 		updateTitle();
 	}
+
 
 	function updateCanvasSize() {
 		var panelWid = jMainPanel.outerWidth();
