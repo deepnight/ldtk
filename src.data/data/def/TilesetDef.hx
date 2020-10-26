@@ -177,11 +177,15 @@ class TilesetDef {
 		for(l in _project.levels)
 		for(li in l.layerInstances)
 		for( coordId in li.gridTiles.keys() ) {
-			var remap = remapTileId( oldCwid, li.gridTiles.get(coordId) );
+			var tileInfos = li.gridTiles.get(coordId);
+			if( tileInfos==null )
+				continue;
+
+			var remap = remapTileId( oldCwid, tileInfos.tileId );
 			if( remap==null )
 				li.gridTiles.remove(coordId);
 			else
-				li.gridTiles.set( coordId, remap );
+				tileInfos.tileId = remap;
 		}
 
 		// Save selections remapping

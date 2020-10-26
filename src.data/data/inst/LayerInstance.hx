@@ -16,7 +16,7 @@ class LayerInstance {
 	// Layer content
 	var intGrid : Map<Int,Int> = new Map(); // <coordId, value>
 	public var entityInstances : Array<EntityInstance> = [];
-	public var gridTiles : Map<Int,Int> = []; // <coordId, tileId>
+	public var gridTiles : Map<Int, GridTileInfos> = []; // <coordId, tileinfos>
 
 	/** < RuleUid, < coordId, { tiles } > > **/
 	public var autoTilesCache :
@@ -95,19 +95,21 @@ class LayerInstance {
 				var td = _project.defs.getTilesetDef(def.tilesetDefUid);
 				var arr : Array<led.Json.Tile> = [];
 				for(e in gridTiles.keyValueIterator())
-					if( e.value!=null )
+					if( e.value!=null ) {
+						var flips = 0; // TODO store flips
 						arr.push({
 							px: [
 								pxOffsetX + getCx(e.key) * def.gridSize,
 								pxOffsetY + getCy(e.key) * def.gridSize,
 							],
 							src: [
-								td==null ? -1 : td.getTileSourceX(e.value),
-								td==null ? -1 : td.getTileSourceY(e.value),
+								td==null ? -1 : td.getTileSourceX(e.value.tileId),
+								td==null ? -1 : td.getTileSourceY(e.value.tileId),
 							],
-							f: 0, // flips
-							d: [ e.key, e.value ],
+							f: flips, // flips
+							d: [ e.key, e.value.tileId ],
 						});
+					}
 				arr;
 			},
 
@@ -174,7 +176,10 @@ class LayerInstance {
 		for( gridTilesJson in json.gridTiles ) {
 			if( (cast gridTilesJson).coordId!=null ) // pre-0.4.0 format
 				gridTilesJson.d = [ (cast gridTilesJson).coordId, (cast gridTilesJson).tileId ];
-			li.gridTiles.set( gridTilesJson.d[0], gridTilesJson.d[1] );
+			li.gridTiles.set( gridTilesJson.d[0], {
+				tileId: gridTilesJson.d[1],
+				flips: 0, // TODO json flips
+			});
 		}
 
 		for( entityJson in json.entityInstances )
@@ -458,12 +463,20 @@ class LayerInstance {
 
 	/** TILES *******************/
 
-	public function setGridTile(cx:Int, cy:Int, tileId:Null<Int>) {
-		if( isValid(cx,cy) )
-			if( tileId!=null )
-				gridTiles.set( coordId(cx,cy), tileId );
+	public function setGridTile(cx:Int, cy:Int, tileId:Null<Int>, flips=0) {
+		if( !isValid(cx,cy) )
+			return;
+
+		if( tileId!=null ) {
+			if( gridTiles.exists(coordId(cx,cy)) ) { // reduce allocations
+				getGridTileInfos(cx,cy).tileId = tileId;
+				getGridTileInfos(cx,cy).flips = flips;
+			}
 			else
-				removeGridTile(cx,cy);
+				gridTiles.set( coordId(cx,cy), { tileId:tileId, flips:flips });
+		}
+		else
+			removeGridTile(cx,cy);
 	}
 
 	public function removeGridTile(cx:Int, cy:Int) {
@@ -471,12 +484,16 @@ class LayerInstance {
 			gridTiles.remove( coordId(cx,cy) );
 	}
 
-	public function getGridTile(cx:Int, cy:Int) : Null<Int> {
+	public function getGridTileInfos(cx:Int, cy:Int) : Null<GridTileInfos> {
 		return !isValid(cx,cy) || !gridTiles.exists( coordId(cx,cy) ) ? null : gridTiles.get( coordId(cx,cy) );
 	}
 
+	public inline function getGridTileId(cx:Int, cy:Int) : Null<Int> {
+		return !hasGridTile(cx,cy) ? null : getGridTileInfos(cx,cy).tileId;
+	}
+
 	public inline function hasGridTile(cx:Int, cy:Int) : Bool {
-		return getGridTile(cx,cy)!=null;
+		return getGridTileInfos(cx,cy)!=null;
 	}
 
 	inline function applyMatchedRule(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {

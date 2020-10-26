@@ -564,7 +564,7 @@ class Editor extends Page {
 					}
 
 				case Tiles:
-					if( li.getGridTile(cx,cy)!=null )
+					if( li.hasGridTile(cx,cy) )
 						ge = GenericLevelElement.GridCell(li, cx, cy);
 			}
 			return ge;
@@ -678,7 +678,7 @@ class Editor extends Page {
 							jElement.text('${ li.def.getIntGridValueDisplayName(v) } (IntGrid)');
 
 						case Tiles:
-							jElement.text('${ li.getGridTile(cx,cy) } (Tile)');
+							jElement.text('Tile ${ li.getGridTileInfos(cx,cy).tileId }');
 
 						case Entities:
 						case AutoLayer:

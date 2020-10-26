@@ -4,6 +4,8 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 	public var curTilesetDef(get,never) : Null<data.def.TilesetDef>;
 	inline function get_curTilesetDef() return editor.project.defs.getTilesetDef( editor.curLayerInstance.def.tilesetDefUid );
 
+	public var flipX = false;
+
 	public function new() {
 		super();
 		selectValue( getSelectedValue() );
@@ -49,14 +51,14 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 	}
 
 	override function useFloodfillAt(m:MouseCoords):Bool {
-		var initial = curLayerInstance.getGridTile(m.cx,m.cy);
+		var initial : Null<Int> = curLayerInstance.getGridTileId(m.cx,m.cy);
 
 		if( initial==getSelectedValue().ids[0] )
 			return false;
 
 		return _floodFillImpl(
 			m,
-			function(cx,cy) return curLayerInstance.getGridTile(cx,cy) != initial,
+			function(cx,cy) return curLayerInstance.getGridTileId(cx,cy) != initial,
 			function(cx,cy,v) curLayerInstance.setGridTile(cx,cy, v.ids[0])
 		);
 	}
@@ -125,7 +127,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				selTop + Std.int(dy/gridDiffScale)%selHei
 			);
 
-			if( curLayerInstance.isValid(x,y) && curLayerInstance.getGridTile(x,y)!=tid && selMap.exists(tid) ) {
+			if( curLayerInstance.isValid(x,y) && curLayerInstance.getGridTileId(x,y)!=tid && selMap.exists(tid) ) {
 				curLayerInstance.setGridTile(x,y, tid);
 				editor.curLevelHistory.markChange(x,y);
 				anyChange = true;
@@ -142,7 +144,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		if( isRandomMode() ) {
 			// Single random tile
 			var tid = sel.ids[Std.random(sel.ids.length)];
-			if( curLayerInstance.isValid(cx,cy) && tid!=curLayerInstance.getGridTile(cx,cy) ) {
+			if( curLayerInstance.isValid(cx,cy) && tid!=curLayerInstance.getGridTileId(cx,cy) ) {
 				curLayerInstance.setGridTile(cx,cy, tid);
 				anyChange = true;
 			}
@@ -161,7 +163,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			for(tid in sel.ids) {
 				var tcx = cx + ( curTilesetDef.getTileCx(tid) - left ) * gridDiffScale;
 				var tcy = cy + ( curTilesetDef.getTileCy(tid) - top ) * gridDiffScale;
-				if( curLayerInstance.isValid(tcx,tcy) && curLayerInstance.getGridTile(tcx,tcy)!=tid ) {
+				if( curLayerInstance.isValid(tcx,tcy) && curLayerInstance.getGridTileId(tcx,tcy)!=tid ) {
 					curLayerInstance.setGridTile(tcx,tcy,tid);
 					editor.curLevelHistory.markChange(tcx,tcy);
 					anyChange = true;
