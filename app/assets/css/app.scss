@@ -848,11 +848,11 @@ ul.log {
 		&.unused {
 			color: $bgLighter;
 			span.op {
-				background-color: $darkRed;
+				background-color: $bgLight;
 			}
 		}
 	}
-	li.opChecksumFix {
+	li.opChecksumUpdated {
 		color: $bgLighter;
 	}
 }

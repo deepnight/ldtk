@@ -248,6 +248,9 @@ class Editor extends Page {
 		for( td in project.defs.tilesets )
 			watcher.watchTileset(td);
 
+		for( ed in project.defs.externalEnums )
+			watcher.watchEnum(ed);
+
 		selectionTool.clear();
 		checkAutoLayersCache( (anychange)->{
 			if( anychange )
@@ -273,6 +276,10 @@ class Editor extends Page {
 			onDone(false);
 	}
 
+
+	public function reloadEnum(ed:data.def.EnumDef) {
+		importer.HxEnum.load(ed.externalRelPath, true);
+	}
 
 	public function reloadTileset(td:data.def.TilesetDef, silentOk=false) {
 		if( !td.hasAtlasPath() )

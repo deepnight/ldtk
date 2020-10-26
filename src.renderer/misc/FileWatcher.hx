@@ -24,6 +24,14 @@ class FileWatcher extends dn.Process {
 		});
 	}
 
+	public function watchEnum(ed:data.def.EnumDef) {
+		if( ed.externalRelPath!=null )
+			watch(
+				Editor.ME.makeAbsoluteFilePath(ed.externalRelPath),
+				Editor.ME.reloadEnum.bind(ed)
+			);
+	}
+
 	public function watchTileset(td:data.def.TilesetDef) {
 		if( td.relPath!=null )
 			watch(

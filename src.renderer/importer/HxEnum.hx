@@ -41,10 +41,29 @@ class HxEnum {
 			var copy = curProject.clone();
 			var checksum = haxe.crypto.Md5.encode(fileContent);
 			var log = importToProject(copy, relPath, checksum, parseds);
-			if( log.length>0 )
+
+			// Show sync window, if relevant
+			var needConfirm = false;
+			for(l in log)
+				switch l.op {
+					case Remove(used):
+						if( used ) {
+							needConfirm = true;
+							break;
+						}
+					case Add:
+					case ChecksumUpdated:
+					case DateUpdated:
+				}
+			if( needConfirm )
 				new ui.modal.dialog.Sync(log, relPath, copy);
+			else if( log.length>0 ) {
+				var fp = dn.FilePath.fromFile(relPath);
+				N.success( L.t._("::file:: updated successfully.", { file:fp.fileWithExt }));
+				Editor.ME.selectProject(copy);
+			}
 			else
-				N.msg("File is up-to-date!");
+				N.msg(L.t._("File is already up-to-date."));
 		}
 	}
 
@@ -145,7 +164,7 @@ class HxEnum {
 					for(v in pe.values)
 						if( !existing.hasValue(v) ) {
 							existing.addValue(v);
-							log.push({ op:Add, str:'New value: "${pe.enumId}.$v"' });
+							log.push({ op:Add, str:'New enum value: "${pe.enumId}.$v"' });
 							shownEnums.set(pe.enumId,true);
 						}
 
@@ -162,7 +181,7 @@ class HxEnum {
 							var ed = project.defs.getEnumDef(pe.enumId);
 							log.push({
 								op:Remove( project.isEnumValueUsed(ed,v.id) ),
-								str:'Removed value: "${pe.enumId}.${v.id}"'
+								str:'Removed enum value: "${pe.enumId}.${v.id}"'
 							});
 							shownEnums.set(pe.enumId,true);
 							project.defs.removeEnumDefValue(existing, v.id);
@@ -195,7 +214,7 @@ class HxEnum {
 			if( ed.externalRelPath==relSourcePath && ed.externalFileChecksum!=checksum ) {
 				ed.externalFileChecksum = checksum;
 				if( !shownEnums.exists(ed.identifier) )
-					log.push({ op:ChecksumUpdated, str:ed.identifier });
+					log.push({ op:ChecksumUpdated, str:"Enum "+ed.identifier });
 			}
 
 
