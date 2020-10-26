@@ -24,6 +24,10 @@ class Lang {
 		t.readMo( hxd.Res.load("lang/"+CUR+".mo").entry.getBytes() );
     }
 
+    public static inline function onOff(v:Null<Bool>) {
+        return v==true ? t._("ON") : t._("off");
+    }
+
     public static function untranslated(str:Dynamic) : LocaleString {
         init();
         return t.untranslated(str);
