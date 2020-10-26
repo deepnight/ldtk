@@ -25,6 +25,7 @@ class CrashReport extends ui.modal.Dialog {
 			// Logging
 			App.LOG.error('${error.message} (${error.name})');
 			App.LOG.error('${error.stack})');
+			App.LOG.emptyEntry();
 			App.LOG.flushToFile();
 
 			// Error description
@@ -33,10 +34,22 @@ class CrashReport extends ui.modal.Dialog {
 			// Copy to clipboard
 			jContent.find("button.copy").click( (ev:js.jquery.Event)->{
 				var txt = [
+					"",
+					"Stack:",
+					"```",
+					"LEd version: "+Const.getAppVersion(),
 					error.message,
 					error.name,
 					error.stack,
+					"```",
+					"",
+					"Log:",
+					"```",
+					// App.LOG.getLasts(50),
+					// "```",
 				];
+				txt = txt.concat( App.LOG.getLasts(50) );
+				txt.push("```");
 				electron.Clipboard.write({ text:txt.join("\n") });
 				ev.getThis()
 					.addClass("done")
