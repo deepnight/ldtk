@@ -142,12 +142,13 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		var anyChange = false;
 		var sel = getSelectedValue();
 		var flips = M.makeBitsFromBools(flipX, flipY);
+		var li = curLayerInstance;
 
 		if( isRandomMode() ) {
 			// Single random tile
 			var tid = sel.ids[Std.random(sel.ids.length)];
-			if( curLayerInstance.isValid(cx,cy) && tid!=curLayerInstance.getGridTileId(cx,cy) ) {
-				curLayerInstance.setGridTile(cx,cy, tid, flips);
+			if( li.isValid(cx,cy) && ( li.getGridTileId(cx,cy)!=tid || li.getGridTileFlips(cx,cy)!=flips ) ) {
+				li.setGridTile(cx,cy, tid, flips);
 				anyChange = true;
 			}
 		}
@@ -165,8 +166,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				bottom = M.imax(bottom, curTilesetDef.getTileCy(tid));
 			}
 
-			var gridDiffScale = M.imax(1, M.round( curTilesetDef.tileGridSize / curLayerInstance.def.gridSize ) );
-			var li = curLayerInstance;
+			var gridDiffScale = M.imax(1, M.round( curTilesetDef.tileGridSize / li.def.gridSize ) );
 			for(tid in sel.ids) {
 				var tdCx = curTilesetDef.getTileCx(tid);
 				var tdCy = curTilesetDef.getTileCy(tid);
