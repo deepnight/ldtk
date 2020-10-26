@@ -3,6 +3,7 @@
  - Fixed a jQuery related crash
  - Smarter extern Enum file update (ie. silent if changes don't break anything).
  - Better logging in case of crash
+ - Open/save dialogs are now modal to the application
 
 # 0.4.0-beta
 
