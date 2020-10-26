@@ -267,10 +267,12 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				case K.X:
 					flipX = !flipX;
 					N.quick("X-flip: "+L.onOff(flipX));
+					updateCursor(lastMouse);
 
 				case K.Y:
 					flipY = !flipY;
 					N.quick("Y-flip: "+L.onOff(flipY));
+					updateCursor(lastMouse);
 			}
 	}
 }
