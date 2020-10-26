@@ -1797,8 +1797,14 @@ textarea {
 					}
 				}
 			}
-			button.done {
-				opacity: 0.35;
+			.buttons {
+				button.copy,
+				button.report {
+					flex-grow: 0.66;
+				}
+				button.done {
+					opacity: 0.35;
+				}
 			}
 		}
 	}
