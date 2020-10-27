@@ -2194,6 +2194,11 @@ canvas#webgl {
 		display: grid;
 		gap: 1px;
 		background-color: $bgDark;
+		padding: 3px;
+		padding-left: 0;
+		border-radius: 4px;
+		border-top-left-radius: 0px;
+		border-bottom-left-radius: 0px;
 
 		li {
 			align-items: center;
