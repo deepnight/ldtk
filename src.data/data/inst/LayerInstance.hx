@@ -510,6 +510,20 @@ class LayerInstance {
 		}
 	}
 
+	public inline function removeGridTileAtStackIndex(cx:Int, cy:Int, stackIdx:Int) {
+		if( hasAnyGridTile(cx,cy) && getGridTileStack(cx,cy).length>stackIdx )
+			gridTiles.get( coordId(cx,cy) ).splice( stackIdx, 1 );
+	}
+
+	public function getHighestGridTileStack(left:Int, top:Int, right:Int, bottom:Int) {
+		var highest = 0;
+		for(cx in left...right+1)
+		for(cy in top...bottom+1)
+			if( hasAnyGridTile(cx,cy) )
+				highest = dn.M.imax( highest, getGridTileStack(cx,cy).length );
+		return highest;
+	}
+
 	public inline function getGridTileStack(cx:Int, cy:Int) : Array<GridTileInfos> {
 		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) ? gridTiles.get( coordId(cx,cy) ) : [];
 	}
