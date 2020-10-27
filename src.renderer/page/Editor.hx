@@ -34,7 +34,7 @@ class Editor extends Page {
 	var specialTool : Null< Tool<Dynamic> >; // if not null, will be used instead of default tool
 	var doNothingTool : tool.lt.DoNothing;
 
-	var gridSnapping = true;
+	public var gridEnabled = true;
 	public var needSaving = false;
 	public var singleLayerMode(default,null) = false;
 	public var emptySpaceSelection(default,null) = false;
@@ -150,11 +150,10 @@ class Editor extends Page {
 		if( singleLayerMode )
 			jOpt.addClass("active");
 
-		var jOpt = jEditOptions.find("li.gridSnapping").click( ev->{
-			if( layerSupportsFreeMode() )
-				setGridSnapping( !ev.getThis().hasClass("active") );
+		var jOpt = jEditOptions.find("li.grid").click( ev->{
+			setGrid( !ev.getThis().hasClass("active") );
 		});
-		if( gridSnapping )
+		if( gridEnabled )
 			jOpt.addClass("active");
 
 		var jOpt = jEditOptions.find("li.emptySpaceSelection").click( ev->{
@@ -413,12 +412,8 @@ class Editor extends Page {
 				else
 					N.error("Nothing to select");
 
-			case K.L if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() && layerSupportsFreeMode() ):
-				setGridSnapping( !gridSnapping );
-
 			case K.G if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				levelRender.toggleGrid();
-				N.quick( "Show grid: "+L.onOff(levelRender.isGridVisible()));
+				setGrid( !gridEnabled );
 
 			case K.H if( !hasInputFocus() ):
 				onHelp();
@@ -725,7 +720,7 @@ class Editor extends Page {
 		curLayerDefUid = li.def.uid;
 		ge.emit(LayerInstanceSelected);
 
-		setGridSnapping(gridSnapping, false); // update checkbox
+		setGrid(gridEnabled, false); // update checkbox
 	}
 
 	function layerSupportsFreeMode() {
@@ -738,29 +733,29 @@ class Editor extends Page {
 	}
 
 
-	public function getGridSnapping() {
-		return gridSnapping || !layerSupportsFreeMode();
+	public function isSnappingToGrid() {
+		return gridEnabled || !layerSupportsFreeMode();
 	}
 
 
-	public function setGridSnapping(v:Bool, notify=true) {
-		gridSnapping= v;
+	public function setGrid(v:Bool, notify=true) {
+		gridEnabled= v;
 
-		var jOpt = jEditOptions.find("li.gridSnapping");
-		if( v || !layerSupportsFreeMode() )
+		var jOpt = jEditOptions.find("li.grid");
+		if( v )
 			jOpt.addClass("active");
 		else
 			jOpt.removeClass("active");
 
-		if( !layerSupportsFreeMode() )
-			jOpt.addClass("unsupported");
-		else
-			jOpt.removeClass("unsupported");
+		// if( !layerSupportsFreeMode() )
+		// 	jOpt.addClass("unsupported");
+		// else
+		// 	jOpt.removeClass("unsupported");
 
 		selectionTool.clear();
-		levelRender.invalidateBg();
+		levelRender.applyGridVisibility();
 		if( notify )
-			N.quick( "Grid lock: "+L.onOff( gridSnapping ));
+			N.quick( "Grid: "+L.onOff( gridEnabled ));
 	}
 
 	public function setSingleLayerMode(v:Bool) {

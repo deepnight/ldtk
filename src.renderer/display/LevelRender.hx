@@ -366,16 +366,14 @@ class LevelRender extends dn.Process {
 		boundsGlow.filter = shadow;
 	}
 
-	public inline function isGridVisible() return grid.visible;
-
-	public function toggleGrid() {
-		grid.visible = !grid.visible;
+	public inline function applyGridVisibility() {
+		grid.visible = editor.gridEnabled;
 	}
 
 	function renderGrid() {
 		bgInvalidated = false;
-
 		grid.clear();
+		applyGridVisibility();
 
 		if( editor.curLayerInstance==null )
 			return;
@@ -383,7 +381,7 @@ class LevelRender extends dn.Process {
 		var col = C.getPerceivedLuminosityInt( editor.project.bgColor) >= 0.8 ? 0x0 : 0xffffff;
 
 		var l = editor.curLayerInstance;
-		grid.lineStyle(1, editor.getGridSnapping() ? col : 0xff0000, editor.getGridSnapping() ? 0.07 : 0.07);
+		grid.lineStyle(1, col, 0.07);
 		for( cx in 0...editor.curLayerInstance.cWid+1 ) {
 			grid.moveTo(cx*l.def.gridSize, 0);
 			grid.lineTo(cx*l.def.gridSize, l.cHei*l.def.gridSize);
