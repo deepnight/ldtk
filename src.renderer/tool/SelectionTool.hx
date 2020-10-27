@@ -88,7 +88,7 @@ class SelectionTool extends Tool<Int> {
 								var t = editor.curTool.as(tool.lt.TileTool);
 								if( t!=null ) {
 									var savedTileSel = t.curTilesetDef.getSavedSelectionFor(tileInf.tileId);
-									if( savedTileSel!=null && t.getSelectedValue()!=savedTileSel )
+									if( savedTileSel!=null && !t.sameSelectedTileIds(savedTileSel.ids) )
 										t.selectValue({
 											ids: savedTileSel.ids.copy(),
 											mode: savedTileSel.mode,

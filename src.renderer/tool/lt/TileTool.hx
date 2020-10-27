@@ -41,6 +41,24 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		});
 	}
 
+	public function sameSelectedTileIds(ids:Array<Int>) {
+		if( ids.length!=getSelectedValue().ids.length )
+			return false;
+
+		var found : Bool;
+		for( tid in getSelectedValue().ids ) {
+			found = false;
+			for( tid2 in ids )
+				if( tid==tid2 ) {
+					found = true;
+					break;
+				}
+				if( !found )
+					return false;
+		}
+		return true;
+	}
+
 	override function startUsing(m:MouseCoords, buttonId:Int) {
 		paintedCells = new Map();
 		super.startUsing(m, buttonId);
