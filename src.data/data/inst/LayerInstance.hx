@@ -489,9 +489,12 @@ class LayerInstance {
 	}
 
 
-	public function removeTopMostGridTiles(cx:Int, cy:Int) {
-		if( hasAnyGridTile(cx,cy) )
+	public function removeTopMostGridTile(cx:Int, cy:Int) {
+		if( hasAnyGridTile(cx,cy) ) {
 			gridTiles.get( coordId(cx,cy) ).pop();
+			if( gridTiles.get( coordId(cx,cy) ).length==0 )
+				gridTiles.remove( coordId(cx,cy) );
+		}
 	}
 
 	public function getGridTileStack(cx:Int, cy:Int) : Array<GridTileInfos> {

@@ -38,7 +38,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 	}
 
 	inline function markAsPainted(cx,cy) paintedCells.set( curLayerInstance.coordId(cx,cy), true );
-	inline function wasAlreadyPainted(cx,cy) return paintedCells.exists( curLayerInstance.coordId(cx,cy) );
+	inline function hasAlreadyPaintedAt(cx,cy) return paintedCells.exists( curLayerInstance.coordId(cx,cy) );
 
 	public function isRandomMode() return getSelectedValue().mode==Random;
 
@@ -93,7 +93,10 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				case Remove:
 					if( editor.curLayerInstance.hasAnyGridTile(cx,cy) ) {
 						editor.curLevelHistory.markChange(cx,cy);
-						editor.curLayerInstance.removeAllGridTiles(cx,cy);
+						if( editor.tileStacking )
+							editor.curLayerInstance.removeTopMostGridTile(cx,cy);
+						else
+							editor.curLayerInstance.removeAllGridTiles(cx,cy);
 						anyChange = true;
 					}
 			}
@@ -160,7 +163,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			// Single random tile
 			var tid = sel.ids[Std.random(sel.ids.length)];
 			// if( li.isValid(cx,cy) && ( li.getGridTileId(cx,cy)!=tid || li.getGridTileFlips(cx,cy)!=flips ) ) {
-			if( li.isValid(cx,cy) && !li.hasSpecificGridTile(cx,cy,tid,flips) && !wasAlreadyPainted(cx,cy) ) {
+			if( li.isValid(cx,cy) && !li.hasSpecificGridTile(cx,cy,tid,flips) && !hasAlreadyPaintedAt(cx,cy) ) {
 				// TODO move tile to top if repeating same tileId
 				li.addGridTile(cx,cy, tid, flips, editor.tileStacking);
 				if( editor.tileStacking )
@@ -188,7 +191,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				var tdCy = curTilesetDef.getTileCy(tid);
 				var tcx = cx + ( flipX ? right-tdCx : tdCx-left ) * gridDiffScale;
 				var tcy = cy + ( flipY ? bottom-tdCy : tdCy-top ) * gridDiffScale;
-				if( li.isValid(tcx,tcy) && !li.hasSpecificGridTile(tcx,tcy, tid, flips) && !wasAlreadyPainted(tcx,tcy	) ) {
+				if( li.isValid(tcx,tcy) && !li.hasSpecificGridTile(tcx,tcy, tid, flips) && !hasAlreadyPaintedAt(tcx,tcy	) ) {
 				// if( li.isValid(tcx,tcy) && ( li.getGridTileId(tcx,tcy)!=tid || li.getGridTileFlips(tcx,tcy)!=flips ) ) {
 					li.addGridTile(tcx,tcy,tid, flips, editor.tileStacking);
 					if( editor.tileStacking )
@@ -207,8 +210,13 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 
 		var anyChange = false;
 		if( isRandomMode() ) {
-			if( editor.curLayerInstance.hasAnyGridTile(cx,cy) ) {
-				editor.curLayerInstance.removeAllGridTiles(cx,cy);
+			if( editor.curLayerInstance.hasAnyGridTile(cx,cy) && !hasAlreadyPaintedAt(cx,cy) ) {
+				if( editor.tileStacking ) {
+					markAsPainted(cx,cy);
+					editor.curLayerInstance.removeTopMostGridTile(cx,cy);
+				}
+				else
+					editor.curLayerInstance.removeAllGridTiles(cx,cy);
 				anyChange = true;
 			}
 		}
@@ -225,8 +233,13 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			for(tid in sel.ids) {
 				var tcx = cx + ( curTilesetDef.getTileCx(tid) - left ) * gridDiffScale;
 				var tcy = cy + ( curTilesetDef.getTileCy(tid) - top ) * gridDiffScale;
-				if( editor.curLayerInstance.hasAnyGridTile(tcx,tcy) ) {
-					editor.curLayerInstance.removeAllGridTiles(tcx,tcy);
+				if( editor.curLayerInstance.hasAnyGridTile(tcx,tcy) && !hasAlreadyPaintedAt(tcx,tcy) ) {
+					if( editor.tileStacking ) {
+						markAsPainted(tcx,tcy);
+						editor.curLayerInstance.removeTopMostGridTile(tcx,tcy);
+					}
+					else
+						editor.curLayerInstance.removeAllGridTiles(tcx,tcy);
 					editor.curLevelHistory.markChange(tcx,tcy);
 					anyChange = true;
 				}
