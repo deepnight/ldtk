@@ -71,7 +71,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			m,
 			function(cx,cy) return !curLayerInstance.hasSpecificGridTile(cx,cy, initialTileId),
 			// function(cx,cy) return curLayerInstance.getGridTileId(cx,cy) != initial,
-			function(cx,cy,v) curLayerInstance.addGridTile(cx,cy, v.ids[0])
+			function(cx,cy,v) curLayerInstance.addGridTile(cx,cy, v.ids[0], editor.tileStacking)
 		);
 	}
 
@@ -141,7 +141,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 
 			if( curLayerInstance.isValid(x,y) && !curLayerInstance.hasSpecificGridTile(x,y,tid) && selMap.exists(tid) ) {
 				// TODO move tile to top if repeating same tileId
-				curLayerInstance.addGridTile(x,y, tid);
+				curLayerInstance.addGridTile(x,y, tid, editor.tileStacking);
 				editor.curLevelHistory.markChange(x,y);
 				anyChange = true;
 			}
@@ -162,8 +162,9 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			// if( li.isValid(cx,cy) && ( li.getGridTileId(cx,cy)!=tid || li.getGridTileFlips(cx,cy)!=flips ) ) {
 			if( li.isValid(cx,cy) && !li.hasSpecificGridTile(cx,cy,tid,flips) && !wasAlreadyPainted(cx,cy) ) {
 				// TODO move tile to top if repeating same tileId
-				li.addGridTile(cx,cy, tid, flips);
-				markAsPainted(cx,cy);
+				li.addGridTile(cx,cy, tid, flips, editor.tileStacking);
+				if( editor.tileStacking )
+					markAsPainted(cx,cy);
 				anyChange = true;
 			}
 		}
@@ -189,8 +190,9 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				var tcy = cy + ( flipY ? bottom-tdCy : tdCy-top ) * gridDiffScale;
 				if( li.isValid(tcx,tcy) && !li.hasSpecificGridTile(tcx,tcy, tid, flips) && !wasAlreadyPainted(tcx,tcy	) ) {
 				// if( li.isValid(tcx,tcy) && ( li.getGridTileId(tcx,tcy)!=tid || li.getGridTileFlips(tcx,tcy)!=flips ) ) {
-					markAsPainted(tcx,tcy);
-					li.addGridTile(tcx,tcy,tid, flips);
+					li.addGridTile(tcx,tcy,tid, flips, editor.tileStacking);
+					if( editor.tileStacking )
+						markAsPainted(tcx,tcy);
 					editor.curLevelHistory.markChange(tcx,tcy);
 					anyChange = true;
 				}
