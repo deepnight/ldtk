@@ -60,7 +60,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		return _floodFillImpl(
 			m,
 			function(cx,cy) return curLayerInstance.getGridTileId(cx,cy) != initial,
-			function(cx,cy,v) curLayerInstance.setGridTile(cx,cy, v.ids[0])
+			function(cx,cy,v) curLayerInstance.addGridTile(cx,cy, v.ids[0])
 		);
 	}
 
@@ -129,7 +129,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			);
 
 			if( curLayerInstance.isValid(x,y) && curLayerInstance.getGridTileId(x,y)!=tid && selMap.exists(tid) ) {
-				curLayerInstance.setGridTile(x,y, tid);
+				curLayerInstance.addGridTile(x,y, tid);
 				editor.curLevelHistory.markChange(x,y);
 				anyChange = true;
 			}
@@ -148,7 +148,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			// Single random tile
 			var tid = sel.ids[Std.random(sel.ids.length)];
 			if( li.isValid(cx,cy) && ( li.getGridTileId(cx,cy)!=tid || li.getGridTileFlips(cx,cy)!=flips ) ) {
-				li.setGridTile(cx,cy, tid, flips);
+				li.addGridTile(cx,cy, tid, flips);
 				anyChange = true;
 			}
 		}
@@ -173,7 +173,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				var tcx = cx + ( flipX ? right-tdCx : tdCx-left ) * gridDiffScale;
 				var tcy = cy + ( flipY ? bottom-tdCy : tdCy-top ) * gridDiffScale;
 				if( li.isValid(tcx,tcy) && ( li.getGridTileId(tcx,tcy)!=tid || li.getGridTileFlips(tcx,tcy)!=flips ) ) {
-					li.setGridTile(tcx,tcy,tid, flips);
+					li.addGridTile(tcx,tcy,tid, flips);
 					editor.curLevelHistory.markChange(tcx,tcy);
 					anyChange = true;
 				}

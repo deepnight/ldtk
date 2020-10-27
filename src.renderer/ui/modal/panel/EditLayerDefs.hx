@@ -84,7 +84,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						if( li.autoTilesCache.exists( r.uid ) ) {
 							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value ) {
-								li.setGridTile(
+								li.addGridTile(
 									Std.int(tileInfos.x/ld.gridSize),
 									Std.int(tileInfos.y/ld.gridSize),
 									tileInfos.tid,

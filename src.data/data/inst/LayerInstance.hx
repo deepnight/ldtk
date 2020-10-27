@@ -467,7 +467,7 @@ class LayerInstance {
 
 	/** TILES *******************/
 
-	public function setGridTile(cx:Int, cy:Int, tileId:Null<Int>, flips=0) {
+	public function addGridTile(cx:Int, cy:Int, tileId:Null<Int>, flips=0, stack=false) {
 		if( !isValid(cx,cy) )
 			return;
 
