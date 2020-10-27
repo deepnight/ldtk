@@ -1,6 +1,8 @@
 # 0.5.0-beta
 
  - **Tiles flipping**: in Tile Layers, you can mirror tiles before painting them by pressing `X` or `Y`. This also works from stamps of tiles.
+ - **New editing options bar**: *Grid locking*, *Single layer mode* and *Empty space selection* moved to a new more streamlined button bar.
+ - Unified "Show/hide grid" and "Grid locking" options. You can now just press `G` to toggle grid (which also implies "grid locking" in supported layer types).
 
 # 0.4.1-beta
 
