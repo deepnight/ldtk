@@ -697,8 +697,9 @@ class GenericLevelElementGroup {
 								if( !isCopy && li.hasAnyGridTile(cx,cy) )
 									postRemovals.push( ()-> li.removeAllGridTiles(cx,cy) );
 
-								for( t in li.getGridTileStack(cx,cy) )
-									postInserts.push( ()-> li.addGridTile(tcx, tcy, t.tileId, t.flips) );
+								var stack = li.getGridTileStack(cx,cy);
+								for( t in stack )
+									postInserts.push( ()-> li.addGridTile(tcx, tcy, t.tileId, t.flips, stack.length>0) );
 
 								elements[i] = li.isValid(tcx,tcy) ? GridCell(li, tcx, tcy) : null; // update selection
 								changedLayers.set(li,li);
