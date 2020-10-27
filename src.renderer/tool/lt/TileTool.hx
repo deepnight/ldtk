@@ -18,7 +18,12 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 	}
 
 	override function getDefaultValue():data.LedTypes.TilesetSelection {
-		return { mode:Stamp, ids:[0] };
+		if( curTilesetDef!=null && curTilesetDef.hasSavedSelectionFor(0) ) {
+			var saved = curTilesetDef.getSavedSelectionFor(0);
+			return { ids:saved.ids.copy(), mode:saved.mode }
+		}
+		else
+			return { mode:Stamp, ids:[0] };
 	}
 
 	override function canEdit():Bool {
@@ -29,7 +34,11 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 	public function getMode() return getSelectedValue().mode;
 
 	public function setMode(m:data.LedTypes.TileEditMode) {
-		getSelectedValue().mode = m;
+		var s = getSelectedValue();
+		selectValue({
+			ids: s.ids.copy(),
+			mode: m,
+		});
 	}
 
 	override function startUsing(m:MouseCoords, buttonId:Int) {

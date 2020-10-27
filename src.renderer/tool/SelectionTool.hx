@@ -89,7 +89,10 @@ class SelectionTool extends Tool<Int> {
 								if( t!=null ) {
 									var savedTileSel = t.curTilesetDef.getSavedSelectionFor(tileInf.tileId);
 									if( savedTileSel!=null && t.getSelectedValue()!=savedTileSel )
-										t.selectValue(savedTileSel);
+										t.selectValue({
+											ids: savedTileSel.ids.copy(),
+											mode: savedTileSel.mode,
+										});
 									else
 										t.selectValue( { ids:[tileInf.tileId], mode:t.getMode() } );
 									t.flipX = M.hasBit(tileInf.flips,0);
