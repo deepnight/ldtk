@@ -132,13 +132,18 @@ class TilesetDef {
 		try {
 			var fullFp = newPath.hasDriveLetter() ? newPath : dn.FilePath.fromFile( projectDir +"/"+ relFilePath );
 			var fullPath = fullFp.full;
+			App.LOG.fileOp("Loading atlas image: "+fullPath);
 			bytes = misc.JsTools.readFileBytes(fullPath);
 
-			if( bytes==null )
+			if( bytes==null ) {
+				App.LOG.error("No bytes");
 				return false;
+			}
 
+			App.LOG.fileOp(' -> Loaded ${bytes.length} bytes.');
 			base64 = haxe.crypto.Base64.encode(bytes);
 			pixels = dn.ImageDecoder.decodePixels(bytes);
+			App.LOG.fileOp(' -> Decoded ${pixels.width}x${pixels.height} pixels.');
 			texture = h3d.mat.Texture.fromPixels(pixels);
 		}
 		catch(err:Dynamic) {
