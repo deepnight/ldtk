@@ -247,13 +247,14 @@ class GenericLevelElementGroup {
 								ghost.endFill();
 
 							case Tiles:
-								var t = li.getGridTileInfos(cx,cy);
 								var td = editor.project.defs.getTilesetDef( li.def.tilesetDefUid );
-								var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
-								bmp.x = li.pxOffsetX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.gridSize - bounds.left;
-								bmp.y = li.pxOffsetY + ( cy + (M.hasBit(t.flips,1)?1:0) ) * li.def.gridSize - bounds.top;
-								bmp.scaleX = M.hasBit(t.flips, 0) ? -1 : 1;
-								bmp.scaleY = M.hasBit(t.flips, 1) ? -1 : 1;
+								for( t in li.getGridTileStack(cx,cy) ) {
+									var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
+									bmp.x = li.pxOffsetX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.gridSize - bounds.left;
+									bmp.y = li.pxOffsetY + ( cy + (M.hasBit(t.flips,1)?1:0) ) * li.def.gridSize - bounds.top;
+									bmp.scaleX = M.hasBit(t.flips, 0) ? -1 : 1;
+									bmp.scaleY = M.hasBit(t.flips, 1) ? -1 : 1;
+								}
 
 							case Entities:
 							case AutoLayer:
@@ -613,7 +614,7 @@ class GenericLevelElementGroup {
 								postRemovals.push( li.removeIntGrid.bind(cx,cy) );
 
 							if( li.def.type==Tiles )
-								postRemovals.push( li.removeGridTile.bind(cx,cy) );
+								postRemovals.push( li.removeAllGridTiles.bind(cx,cy) );
 						}
 					}
 					changedLayers.set(li,li);
@@ -689,13 +690,15 @@ class GenericLevelElementGroup {
 								changedLayers.set(li,li);
 
 							case Tiles:
-								var t = li.getGridTileInfos(cx,cy);
 								var gridRatio = Std.int( moveGrid / li.def.gridSize );
 								var tcx = cx + (to.cx-origin.cx)*gridRatio;
 								var tcy = cy + (to.cy-origin.cy)*gridRatio;
-								if( !isCopy && li.hasGridTile(cx,cy) )
-									postRemovals.push( ()-> li.removeGridTile(cx,cy) );
-								postInserts.push( ()-> li.addGridTile(tcx, tcy, t.tileId, t.flips) );
+
+								if( !isCopy && li.hasAnyGridTile(cx,cy) )
+									postRemovals.push( ()-> li.removeAllGridTiles(cx,cy) );
+
+								for( t in li.getGridTileStack(cx,cy) )
+									postInserts.push( ()-> li.addGridTile(tcx, tcy, t.tileId, t.flips) );
 
 								elements[i] = li.isValid(tcx,tcy) ? GridCell(li, tcx, tcy) : null; // update selection
 								changedLayers.set(li,li);
@@ -780,7 +783,7 @@ class GenericLevelElementGroup {
 					if( li.hasAnyGridValue(cx,cy) )
 						switch li.def.type {
 							case IntGrid: li.removeIntGrid(cx,cy);
-							case Tiles: li.removeGridTile(cx,cy);
+							case Tiles: li.removeAllGridTiles(cx,cy);
 							case Entities:
 							case AutoLayer:
 						}

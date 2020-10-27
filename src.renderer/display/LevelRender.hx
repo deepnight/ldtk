@@ -483,22 +483,23 @@ class LevelRender extends dn.Process {
 
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
-					if( !li.hasGridTile(cx,cy) )
+					if( !li.hasAnyGridTile(cx,cy) )
 						continue;
 
-					var tileInf = li.getGridTileInfos(cx,cy);
-					var t = td.getTile(tileInf.tileId);
-					t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
-					var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
-					var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;
-					tg.addTransform(
-						(cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize,
-						(cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize,
-						sx,
-						sy,
-						0,
-						t
-					);
+					for( tileInf in li.getGridTileStack(cx,cy) ) {
+						var t = td.getTile(tileInf.tileId);
+						t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
+						var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
+						var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;
+						tg.addTransform(
+							(cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize,
+							(cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize,
+							sx,
+							sy,
+							0,
+							t
+						);
+					}
 				}
 			}
 			else {
@@ -507,7 +508,7 @@ class LevelRender extends dn.Process {
 				var tg = new h2d.TileGroup( tileError, wrapper );
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid)
-					if( li.hasGridTile(cx,cy) )
+					if( li.hasAnyGridTile(cx,cy) )
 						tg.add(
 							(cx + li.def.tilePivotX) * li.def.gridSize,
 							(cy + li.def.tilePivotX) * li.def.gridSize,

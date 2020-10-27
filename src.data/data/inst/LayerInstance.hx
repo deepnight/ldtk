@@ -379,7 +379,7 @@ class LayerInstance {
 	public inline function hasAnyGridValue(cx:Int, cy:Int) {
 		return switch def.type {
 			case IntGrid: hasIntGrid(cx,cy);
-			case Tiles: hasGridTile(cx,cy);
+			case Tiles: hasAnyGridTile(cx,cy);
 			case Entities: false;
 			case AutoLayer: false;
 		}
@@ -471,37 +471,52 @@ class LayerInstance {
 		if( !isValid(cx,cy) )
 			return;
 
-		if( tileId!=null ) {
-			if( gridTiles.exists(coordId(cx,cy)) ) { // reduce allocations
-				getGridTileInfos(cx,cy).tileId = tileId;
-				getGridTileInfos(cx,cy).flips = flips;
-			}
-			else
-				gridTiles.set( coordId(cx,cy), [{ tileId:tileId, flips:flips }]); // TODO support stacking
+		if( tileId==null ) {
+			removeAllGridTiles(cx,cy);
+			return;
 		}
+
+		if( !gridTiles.exists(coordId(cx,cy)) || !stack )
+			gridTiles.set( coordId(cx,cy), [{ tileId:tileId, flips:flips }]);
 		else
-			removeGridTile(cx,cy);
+			gridTiles.get( coordId(cx,cy) ).push({ tileId:tileId, flips:flips });
 	}
 
-	public function removeGridTile(cx:Int, cy:Int) {
+
+	public function removeAllGridTiles(cx:Int, cy:Int) {
 		if( isValid(cx,cy) )
 			gridTiles.remove( coordId(cx,cy) );
 	}
 
-	public function getGridTileInfos(cx:Int, cy:Int) : Null<GridTileInfos> {
-		return !isValid(cx,cy) || !gridTiles.exists( coordId(cx,cy) ) ? null : gridTiles.get( coordId(cx,cy) )[0]; // TODO support stacking
+	public function getGridTileStack(cx:Int, cy:Int) : Array<GridTileInfos> {
+		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) ? gridTiles.get( coordId(cx,cy) ) : [];
 	}
 
-	public inline function getGridTileId(cx:Int, cy:Int) : Null<Int> {
-		return !hasGridTile(cx,cy) ? null : getGridTileInfos(cx,cy).tileId;
+	public function getTopMostGridTile(cx:Int, cy:Int) : Null<GridTileInfos> {
+		return hasAnyGridTile(cx,cy) ? gridTiles.get(coordId(cx,cy))[ gridTiles.get(coordId(cx,cy)).length-1 ] : null;
 	}
 
-	public inline function getGridTileFlips(cx:Int, cy:Int) : Null<Int> {
-		return !hasGridTile(cx,cy) ? null : getGridTileInfos(cx,cy).flips;
+	public function hasSpecificGridTile(cx:Int, cy:Int, tileId:Int, ?flips:Null<Int>) {
+		if( !hasAnyGridTile(cx,cy) )
+			return false;
+
+		for( t in getGridTileStack(cx,cy) )
+			if( t.tileId==tileId && ( flips==null || t.flips==flips ) )
+				return true;
+
+		return false;
 	}
 
-	public inline function hasGridTile(cx:Int, cy:Int) : Bool {
-		return getGridTileInfos(cx,cy)!=null;
+	// public inline function getGridTileId(cx:Int, cy:Int) : Null<Int> {
+	// 	return !hasGridTile(cx,cy) ? null : getGridTileInfos(cx,cy).tileId;
+	// }
+
+	// public inline function getGridTileFlips(cx:Int, cy:Int) : Null<Int> {
+	// 	return !hasGridTile(cx,cy) ? null : getGridTileInfos(cx,cy).flips;
+	// }
+
+	public inline function hasAnyGridTile(cx:Int, cy:Int) : Bool {
+		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) && gridTiles.get(coordId(cx,cy)).length>0;
 	}
 
 	inline function applyMatchedRule(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {

@@ -83,7 +83,7 @@ class SelectionTool extends Tool<Int> {
 								editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
 
 							case Tiles:
-								var tileInf = li.getGridTileInfos(cx,cy);
+								var tileInf = li.getTopMostGridTile(cx,cy);
 
 								var t = editor.curTool.as(tool.lt.TileTool);
 								if( t!=null ) {
@@ -156,10 +156,13 @@ class SelectionTool extends Tool<Int> {
 							);
 
 						case Tiles:
-							var t = li.getGridTileInfos(cx,cy);
+							var stack = li.getGridTileStack(cx,cy);
+							var topTile = stack[stack.length-1];
 							editor.cursor.set(
-								Tiles(li, [t.tileId], cx, cy, t.flips),
-								"Tile "+li.getGridTileInfos(cx,cy).tileId
+								Tiles(li, [topTile.tileId], cx, cy, topTile.flips),
+								stack.length==1
+									? "Tile "+stack[0].tileId
+									: "Tiles "+stack.map( t->t.tileId ).join(", ")
 							);
 
 						case Entities:

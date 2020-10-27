@@ -51,15 +51,17 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		return false;
 	}
 
-	override function useFloodfillAt(m:MouseCoords):Bool {
-		var initial : Null<Int> = curLayerInstance.getGridTileId(m.cx,m.cy);
+	override function useFloodfillAt(m:MouseCoords):Bool { // TODO test flood fill with stacking
+		var topTile = curLayerInstance.getTopMostGridTile(m.cx, m.cy);
+		var initialTileId : Null<Int> = topTile!=null ? topTile.tileId : null;
 
-		if( initial==getSelectedValue().ids[0] )
+		if( initialTileId==getSelectedValue().ids[0] )
 			return false;
 
 		return _floodFillImpl(
 			m,
-			function(cx,cy) return curLayerInstance.getGridTileId(cx,cy) != initial,
+			function(cx,cy) return !curLayerInstance.hasSpecificGridTile(cx,cy, initialTileId),
+			// function(cx,cy) return curLayerInstance.getGridTileId(cx,cy) != initial,
 			function(cx,cy,v) curLayerInstance.addGridTile(cx,cy, v.ids[0])
 		);
 	}
@@ -80,9 +82,9 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 						anyChange = true;
 
 				case Remove:
-					if( editor.curLayerInstance.hasGridTile(cx,cy) ) {
+					if( editor.curLayerInstance.hasAnyGridTile(cx,cy) ) {
 						editor.curLevelHistory.markChange(cx,cy);
-						editor.curLayerInstance.removeGridTile(cx,cy);
+						editor.curLayerInstance.removeAllGridTiles(cx,cy);
 						anyChange = true;
 					}
 			}
@@ -128,7 +130,8 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				selTop + Std.int(dy/gridDiffScale)%selHei
 			);
 
-			if( curLayerInstance.isValid(x,y) && curLayerInstance.getGridTileId(x,y)!=tid && selMap.exists(tid) ) {
+			if( curLayerInstance.isValid(x,y) && !curLayerInstance.hasSpecificGridTile(x,y,tid) && selMap.exists(tid) ) {
+				// TODO move tile to top if repeating same tileId
 				curLayerInstance.addGridTile(x,y, tid);
 				editor.curLevelHistory.markChange(x,y);
 				anyChange = true;
@@ -147,7 +150,9 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		if( isRandomMode() ) {
 			// Single random tile
 			var tid = sel.ids[Std.random(sel.ids.length)];
-			if( li.isValid(cx,cy) && ( li.getGridTileId(cx,cy)!=tid || li.getGridTileFlips(cx,cy)!=flips ) ) {
+			// if( li.isValid(cx,cy) && ( li.getGridTileId(cx,cy)!=tid || li.getGridTileFlips(cx,cy)!=flips ) ) {
+			if( li.isValid(cx,cy) && !li.hasSpecificGridTile(cx,cy,tid,flips) ) {
+				// TODO move tile to top if repeating same tileId
 				li.addGridTile(cx,cy, tid, flips);
 				anyChange = true;
 			}
@@ -172,7 +177,8 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				var tdCy = curTilesetDef.getTileCy(tid);
 				var tcx = cx + ( flipX ? right-tdCx : tdCx-left ) * gridDiffScale;
 				var tcy = cy + ( flipY ? bottom-tdCy : tdCy-top ) * gridDiffScale;
-				if( li.isValid(tcx,tcy) && ( li.getGridTileId(tcx,tcy)!=tid || li.getGridTileFlips(tcx,tcy)!=flips ) ) {
+				if( li.isValid(tcx,tcy) && !li.hasSpecificGridTile(tcx,tcy, tid, flips) ) {
+				// if( li.isValid(tcx,tcy) && ( li.getGridTileId(tcx,tcy)!=tid || li.getGridTileFlips(tcx,tcy)!=flips ) ) {
 					li.addGridTile(tcx,tcy,tid, flips);
 					editor.curLevelHistory.markChange(tcx,tcy);
 					anyChange = true;
@@ -188,8 +194,8 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 
 		var anyChange = false;
 		if( isRandomMode() ) {
-			if( editor.curLayerInstance.hasGridTile(cx,cy) ) {
-				editor.curLayerInstance.removeGridTile(cx,cy);
+			if( editor.curLayerInstance.hasAnyGridTile(cx,cy) ) {
+				editor.curLayerInstance.removeAllGridTiles(cx,cy);
 				anyChange = true;
 			}
 		}
@@ -206,8 +212,8 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			for(tid in sel.ids) {
 				var tcx = cx + ( curTilesetDef.getTileCx(tid) - left ) * gridDiffScale;
 				var tcy = cy + ( curTilesetDef.getTileCy(tid) - top ) * gridDiffScale;
-				if( editor.curLayerInstance.hasGridTile(tcx,tcy) ) {
-					editor.curLayerInstance.removeGridTile(tcx,tcy);
+				if( editor.curLayerInstance.hasAnyGridTile(tcx,tcy) ) {
+					editor.curLayerInstance.removeAllGridTiles(tcx,tcy);
 					editor.curLevelHistory.markChange(tcx,tcy);
 					anyChange = true;
 				}
