@@ -478,18 +478,31 @@ class LayerInstance {
 
 		if( !gridTiles.exists(coordId(cx,cy)) || !stack )
 			gridTiles.set( coordId(cx,cy), [{ tileId:tileId, flips:flips }]);
-		else
+		else {
+			removeSpecificGridTile(cx, cy, tileId, flips);
 			gridTiles.get( coordId(cx,cy) ).push({ tileId:tileId, flips:flips });
+		}
 	}
 
 
-	public function removeAllGridTiles(cx:Int, cy:Int) {
+	public inline function removeAllGridTiles(cx:Int, cy:Int) {
 		if( isValid(cx,cy) )
 			gridTiles.remove( coordId(cx,cy) );
 	}
 
 
-	public function removeTopMostGridTile(cx:Int, cy:Int) {
+	public inline function removeSpecificGridTile(cx:Int, cy:Int, tileId:Int, flips:Int) {
+		if( hasAnyGridTile(cx,cy) ) {
+			var stack = gridTiles.get(coordId(cx,cy));
+			for( i in 0...stack.length )
+				if( stack[i].tileId==tileId && stack[i].flips==flips ) {
+					stack.splice(i,1);
+					break;
+				}
+		}
+	}
+
+	public inline function removeTopMostGridTile(cx:Int, cy:Int) {
 		if( hasAnyGridTile(cx,cy) ) {
 			gridTiles.get( coordId(cx,cy) ).pop();
 			if( gridTiles.get( coordId(cx,cy) ).length==0 )
@@ -497,11 +510,11 @@ class LayerInstance {
 		}
 	}
 
-	public function getGridTileStack(cx:Int, cy:Int) : Array<GridTileInfos> {
+	public inline function getGridTileStack(cx:Int, cy:Int) : Array<GridTileInfos> {
 		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) ? gridTiles.get( coordId(cx,cy) ) : [];
 	}
 
-	public function getTopMostGridTile(cx:Int, cy:Int) : Null<GridTileInfos> {
+	public inline function getTopMostGridTile(cx:Int, cy:Int) : Null<GridTileInfos> {
 		return hasAnyGridTile(cx,cy) ? gridTiles.get(coordId(cx,cy))[ gridTiles.get(coordId(cx,cy)).length-1 ] : null;
 	}
 
@@ -515,14 +528,6 @@ class LayerInstance {
 
 		return false;
 	}
-
-	// public inline function getGridTileId(cx:Int, cy:Int) : Null<Int> {
-	// 	return !hasGridTile(cx,cy) ? null : getGridTileInfos(cx,cy).tileId;
-	// }
-
-	// public inline function getGridTileFlips(cx:Int, cy:Int) : Null<Int> {
-	// 	return !hasGridTile(cx,cy) ? null : getGridTileInfos(cx,cy).flips;
-	// }
 
 	public inline function hasAnyGridTile(cx:Int, cy:Int) : Bool {
 		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) && gridTiles.get(coordId(cx,cy)).length>0;

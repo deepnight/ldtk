@@ -91,6 +91,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 						anyChange = true;
 
 				case Remove:
+					// Erase rectangle
 					if( editor.curLayerInstance.hasAnyGridTile(cx,cy) ) {
 						editor.curLevelHistory.markChange(cx,cy);
 						if( editor.tileStacking )
@@ -142,8 +143,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				selTop + Std.int(dy/gridDiffScale)%selHei
 			);
 
-			if( curLayerInstance.isValid(x,y) && !curLayerInstance.hasSpecificGridTile(x,y,tid) && selMap.exists(tid) ) {
-				// TODO move tile to top if repeating same tileId
+			if( curLayerInstance.isValid(x,y) && selMap.exists(tid) ) {
 				curLayerInstance.addGridTile(x,y, tid, editor.tileStacking);
 				editor.curLevelHistory.markChange(x,y);
 				anyChange = true;
@@ -163,8 +163,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			// Single random tile
 			var tid = sel.ids[Std.random(sel.ids.length)];
 			// if( li.isValid(cx,cy) && ( li.getGridTileId(cx,cy)!=tid || li.getGridTileFlips(cx,cy)!=flips ) ) {
-			if( li.isValid(cx,cy) && !li.hasSpecificGridTile(cx,cy,tid,flips) && !hasAlreadyPaintedAt(cx,cy) ) {
-				// TODO move tile to top if repeating same tileId
+			if( li.isValid(cx,cy) && !hasAlreadyPaintedAt(cx,cy) ) {
 				li.addGridTile(cx,cy, tid, flips, editor.tileStacking);
 				if( editor.tileStacking )
 					markAsPainted(cx,cy);
@@ -191,8 +190,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				var tdCy = curTilesetDef.getTileCy(tid);
 				var tcx = cx + ( flipX ? right-tdCx : tdCx-left ) * gridDiffScale;
 				var tcy = cy + ( flipY ? bottom-tdCy : tdCy-top ) * gridDiffScale;
-				if( li.isValid(tcx,tcy) && !li.hasSpecificGridTile(tcx,tcy, tid, flips) && !hasAlreadyPaintedAt(tcx,tcy	) ) {
-				// if( li.isValid(tcx,tcy) && ( li.getGridTileId(tcx,tcy)!=tid || li.getGridTileFlips(tcx,tcy)!=flips ) ) {
+				if( li.isValid(tcx,tcy) && !hasAlreadyPaintedAt(tcx,tcy	) ) {
 					li.addGridTile(tcx,tcy,tid, flips, editor.tileStacking);
 					if( editor.tileStacking )
 						markAsPainted(tcx,tcy);
@@ -210,6 +208,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 
 		var anyChange = false;
 		if( isRandomMode() ) {
+			// Remove tiles one-by-one
 			if( editor.curLayerInstance.hasAnyGridTile(cx,cy) && !hasAlreadyPaintedAt(cx,cy) ) {
 				if( editor.tileStacking ) {
 					markAsPainted(cx,cy);
@@ -221,6 +220,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			}
 		}
 		else {
+			// Stamp erasing
 			var left = Const.INFINITE;
 			var top = Const.INFINITE;
 
