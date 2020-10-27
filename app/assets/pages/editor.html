@@ -14,30 +14,38 @@
 
 	<ul id="layers" class="niceList"></ul>
 
-	<ul class="options">
-		<li>
-			<label for="singleLayerMode" title="Enable to focus on active layer only. This will also affect the Selection tool (ie. when holding ALT key)." keys="A">
-				<input type="checkbox" id="singleLayerMode" />
-				Single <span class="notCompact">layer mode</span>
-			</label>
-		</li>
-		<li>
-			<label for="gridSnapping" title="Snap editing to the layer grid. Not supported in all layer types." keys="L">
-				<input type="checkbox" id="gridSnapping" />
-				<span class="notCompact">Grid lock</span> <span class="onlyCompact">Lock</span>
-			</label>
-		</li>
-		<li>
-			<label for="emptySpaceSelection" title="Enable this to select empty grid cells too, when using ALT+SHIFT+click." keys="E">
-				<input type="checkbox" id="emptySpaceSelection" />
-				<span class="notCompact">Select</span> Empty</span> <span class="notCompact">cells</span>
-			</label>
-		</li>
-	</ul>
-
 	<div id="guide">some useful tips</div>
 	<div id="mainPaletteWrapper"></div>
 </div>
+
+<ul id="editingOptions">
+	<li class="singleLayerMode" title="**Single layer mode** Enable to focus on active layer only. This will also affect the Selection tool (ie. when holding ALT key)." keys="A">
+		<div class="icon singleLayer"></div>
+	</li>
+
+	<li class="emptySpaceSelection" title="**Select empty spaces** Enable this to include empty grid cells in selections, when using ALT+SHIFT+click." keys="E">
+		<div class="icon emptySpaceOn on"></div>
+		<div class="icon emptySpaceOff off"></div>
+	</li>
+
+	<li class="gridSnapping" title="**Grid snapping** Snap editing to the layer grid. Not supported in all layer types." keys="L">
+		<div class="icon gridOn on"></div>
+		<div class="icon gridOff off"></div>
+	</li>
+
+	<!-- <li>
+		<label for="gridSnapping" title="Snap editing to the layer grid. Not supported in all layer types." keys="L">
+			<input type="checkbox" id="gridSnapping" />
+			<span class="notCompact">Grid lock</span> <span class="onlyCompact">Lock</span>
+		</label>
+	</li> -->
+	<!-- <li>
+		<label for="emptySpaceSelection" title="Enable this to select empty grid cells too, when using ALT+SHIFT+click." keys="E">
+			<input type="checkbox" id="emptySpaceSelection" />
+			<span class="notCompact">Select</span> Empty</span> <span class="notCompact">cells</span>
+		</label>
+	</li> -->
+</ul>
 
 
 <!-- Element templates -->

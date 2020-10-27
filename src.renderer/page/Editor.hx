@@ -4,6 +4,7 @@ class Editor extends Page {
 	public static var ME : Editor;
 
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
+	public var jEditOptions(get,never) : J; inline function get_jEditOptions() return new J("#editingOptions");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jLayerList(get,never) : J; inline function get_jLayerList() return new J("#layers");
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
@@ -36,7 +37,7 @@ class Editor extends Page {
 	var gridSnapping = true;
 	public var needSaving = false;
 	public var singleLayerMode(default,null) = false;
-	public var emptySpaceSelection(default,null) = true;
+	public var emptySpaceSelection(default,null) = false;
 
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
@@ -143,29 +144,25 @@ class Editor extends Page {
 
 
 		// Option checkboxes
-		var chk = jMainPanel.find("input#singleLayerMode")
-			.prop("checked", singleLayerMode)
-			.change( function(ev) {
-				setSingleLayerMode( ev.getThis().prop("checked") );
-			});
+		var jOpt = jEditOptions.find("li.singleLayerMode").click( ev->{
+			setSingleLayerMode( !ev.getThis().hasClass("active") );
+		});
 		if( singleLayerMode )
-			chk.parent().addClass("checked");
+			jOpt.addClass("active");
 
-		var chk = jMainPanel.find("input#emptySpaceSelection")
-			.prop("checked", emptySpaceSelection)
-			.change( function(ev) {
-				setEmptySpaceSelection( ev.getThis().prop("checked") );
-			});
-		if( emptySpaceSelection )
-			chk.parent().addClass("checked");
-
-		var chk = jMainPanel.find("input#gridSnapping")
-			.prop("checked", gridSnapping)
-			.change( function(ev) {
-				setGridSnapping( ev.getThis().prop("checked") );
-			});
+		var jOpt = jEditOptions.find("li.gridSnapping").click( ev->{
+			if( layerSupportsFreeMode() )
+				setGridSnapping( !ev.getThis().hasClass("active") );
+		});
 		if( gridSnapping )
-			chk.parent().addClass("checked");
+			jOpt.addClass("active");
+
+		var jOpt = jEditOptions.find("li.emptySpaceSelection").click( ev->{
+			setEmptySpaceSelection( !ev.getThis().hasClass("active") );
+		});
+		if( emptySpaceSelection )
+			jOpt.addClass("active");
+
 
 		// Space bar blocking
 		new J(js.Browser.window).off().keydown( function(ev) {
@@ -740,27 +737,25 @@ class Editor extends Page {
 		}
 	}
 
+
 	public function getGridSnapping() {
 		return gridSnapping || !layerSupportsFreeMode();
 	}
 
+
 	public function setGridSnapping(v:Bool, notify=true) {
 		gridSnapping= v;
 
-		var chk = jMainPanel.find("input#gridSnapping").prop("checked", v);
+		var jOpt = jEditOptions.find("li.gridSnapping");
 		if( v || !layerSupportsFreeMode() )
-			chk.parent().addClass("checked");
+			jOpt.addClass("active");
 		else
-			chk.parent().removeClass("checked");
+			jOpt.removeClass("active");
 
-		if( layerSupportsFreeMode() ) {
-			chk.prop("disabled",false);
-			chk.parent().removeClass("unsupported");
-		}
-		else {
-			chk.prop("disabled",true);
-			chk.parent().addClass("unsupported");
-		}
+		if( !layerSupportsFreeMode() )
+			jOpt.addClass("unsupported");
+		else
+			jOpt.removeClass("unsupported");
 
 		selectionTool.clear();
 		levelRender.invalidateBg();
@@ -770,11 +765,13 @@ class Editor extends Page {
 
 	public function setSingleLayerMode(v:Bool) {
 		singleLayerMode = v;
-		var chk = jMainPanel.find("input#singleLayerMode").prop("checked", v);
+
+		var jOpt = jEditOptions.find("li.singleLayerMode");
 		if( v )
-			chk.parent().addClass("checked");
+			jOpt.addClass("active");
 		else
-			chk.parent().removeClass("checked");
+			jOpt.removeClass("active");
+
 		levelRender.applyAllLayersVisibility();
 		selectionTool.clear();
 		N.quick( "Single layer mode: "+L.onOff( singleLayerMode ));
@@ -782,14 +779,18 @@ class Editor extends Page {
 
 	public function setEmptySpaceSelection(v:Bool) {
 		emptySpaceSelection = v;
-		var chk = jMainPanel.find("input#emptySpaceSelection").prop("checked", v);
+
+		var jOpt = jEditOptions.find("li.emptySpaceSelection");
 		if( v )
-			chk.parent().addClass("checked");
+			jOpt.addClass("active");
 		else
-			chk.parent().removeClass("checked");
+			jOpt.removeClass("active");
+
 		selectionTool.clear();
 		N.quick( "Select empty spaces: "+L.onOff( emptySpaceSelection ));
 	}
+
+
 
 	function onHelp() {
 		ui.Modal.closeAll();

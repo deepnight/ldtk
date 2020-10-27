@@ -10,6 +10,8 @@ $darkOrange: #d56932;
 $green: #cfdd40;
 $help: #79dd8a;
 $helpDark: #3c6148;
+$mainPanelNormalWid: 300px;
+$mainPanelCompactWid: 150px;
 
 // Shortcuts
 @mixin resetMargin() {
@@ -887,6 +889,11 @@ ul.log {
 .icon.web		{ background-image: url("../img/icons/web.svg"); }
 .icon.community	{ background-image: url("../img/icons/community.svg"); }
 .icon.tutorial	{ background-image: url("../img/icons/tutorial.svg"); }
+.icon.gridOn	{ background-image: url("../img/icons/gridOn.svg"); }
+.icon.gridOff	{ background-image: url("../img/icons/gridOff.svg"); }
+.icon.singleLayer		{ background-image: url("../img/icons/singleLayer.svg"); }
+.icon.emptySpaceOn		{ background-image: url("../img/icons/emptySpaceOn.png"); }
+.icon.emptySpaceOff		{ background-image: url("../img/icons/emptySpaceOff.png"); }
 .icon.contextMenu		{ background-image: url("../img/icons/contextMenu.svg"); }
 .icon.contextMenuOpen	{ background-image: url("../img/icons/contextMenuOpen.svg"); }
 .icon.fullscreen		{ background-image: url("../img/icons/fullscreen.svg"); }
@@ -1255,6 +1262,12 @@ textarea {
 			max-width: 250px;
 			text-shadow: 0px 1px 0px rgba(0,0,0, 0.5), 0px 2px 4px rgba(0,0,0, 0.5);
 			font-style: italic;
+			strong {
+				display: block;
+				color: white;
+				font-style: normal;
+				margin-bottom: 2px;
+			}
 		}
 
 		.keys {
@@ -1347,7 +1360,7 @@ textarea {
 
 	.wrapper {
 		display: flex;
-		margin-left: 15px;
+		margin-left: 35px;
 		margin-top: 15px;
 		padding: 4px 16px;
 		align-items: center;
@@ -1474,7 +1487,7 @@ textarea {
 
 .window.panel {
 	left: 0px; // set on opening
-	width: calc( 100vw - 300px );
+	width: calc( 100vw - #{ $mainPanelNormalWid } );
 	&>.wrapper {
 		top: 0px;
 		left: 0px;
@@ -2044,12 +2057,12 @@ canvas#webgl {
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: 300px;
+		width: $mainPanelNormalWid;
 		height: 100vh;
 
 		display: grid;
 		overflow: hidden;
-		grid-template-rows: min-content 250px min-content min-content auto;
+		grid-template-rows: min-content 250px min-content auto;
 		padding: 5px;
 		gap: 5px;
 		background: $bgDark;
@@ -2159,59 +2172,6 @@ canvas#webgl {
 			}
 		}
 
-		ul.options {
-			display: flex;
-			justify-content: flex-end;
-
-			li {
-				flex: 1 1 auto;
-				margin-right: 4px;
-				align-items: center;
-				font-size: 8pt;
-
-				label {
-					display: block;
-					text-align: center;
-					padding: 3px 3px;
-					color: $bgLight;
-					border: 1px solid $bgMed;
-					border-radius: 3px;
-					background-color: $bgDark;
-					cursor: pointer;
-
-					&:hover {
-						color: white;
-					}
-
-					&.checked {
-						color: $green;
-						border-color: $green;
-						background-color: $helpDark;
-					}
-					input[type=checkbox] {
-						width: 12px;
-						height: 12px;
-						vertical-align: middle;
-					}
-					input[type=checkbox]:not(:checked) {
-						opacity: 0.2;
-					}
-				}
-
-
-				label.unsupported {
-					background-image: url("../img/stripes.png");
-					background-color: $bgMed;
-					border-color: $bgLight;
-					color: $bgLighter;
-				}
-
-				.onlyCompact {
-					display: none;
-				}
-			}
-		}
-
 		#mainPaletteWrapper {
 			overflow: auto;
 			position: relative;
@@ -2224,9 +2184,65 @@ canvas#webgl {
 		}
 	}
 
+
+
+	ul#editingOptions {
+		position: absolute;
+		top: 46px;
+		left: $mainPanelNormalWid;
+
+		display: grid;
+		gap: 1px;
+		background-color: $bgDark;
+
+		li {
+			align-items: center;
+			border: 1px solid $bgLight;
+			border-radius: 3px;
+			padding: 4px;
+			cursor: pointer;
+
+			.icon {
+				width: 24px;
+				height: 24px;
+			}
+
+			&.active {
+				border-color: $green;
+				background-color: $helpDark;
+				box-shadow: 0px 0px 4px $help, 0px 0px 16px $green inset;
+				.off {
+					display: none;
+				}
+			}
+
+			&:hover {
+				border-color: white;
+			}
+
+			&:not(.active) {
+				.on {
+					display: none;
+				}
+				.icon {
+					opacity: 0.66;
+				}
+			}
+
+			&.unsupported {
+				cursor: not-allowed;
+				border-color: $red;
+				opacity: 0.4;
+				background-image: url("../img/stripes.png");
+				box-shadow: none;
+			}
+		}
+	}
+
+
 	&.compactPanel {
 		#mainPanel {
-			width: 150px;
+			width: $mainPanelCompactWid;
 			grid-template-rows: min-content 200px min-content auto;
 
 			#mainBar {
@@ -2245,17 +2261,6 @@ canvas#webgl {
 				display: none;
 			}
 
-			ul.options {
-				li {
-					.onlyCompact {
-						display: inline;
-					}
-					.notCompact {
-						display: none;
-					}
-				}
-			}
-
 			ul#layers li {
 				grid-template-columns: auto min-content;
 				.layerIcon,
@@ -2270,22 +2275,24 @@ canvas#webgl {
 			ul.niceList li {
 				padding: 4px 2px;
 				gap: 4px;
-
-				// .icon {
-				// 	width: 0.75em;
-				// 	height: 0.75em;
-				// }
 			}
 
 			h2#levelName {
 				font-size: 1.1em;
 			}
 		}
+
+		ul#editingOptions {
+			left: $mainPanelCompactWid;
+			top: 74px;
+		}
+
 		.window.panel {
-			width: calc( 100vw - 150px );
+			width: calc( 100vw - #{ $mainPanelCompactWid } );
 		}
 	}
 }
+
 
 
 #page.updating {
