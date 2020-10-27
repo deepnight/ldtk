@@ -488,6 +488,12 @@ class LayerInstance {
 			gridTiles.remove( coordId(cx,cy) );
 	}
 
+
+	public function removeTopMostGridTiles(cx:Int, cy:Int) {
+		if( hasAnyGridTile(cx,cy) )
+			gridTiles.get( coordId(cx,cy) ).pop();
+	}
+
 	public function getGridTileStack(cx:Int, cy:Int) : Array<GridTileInfos> {
 		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) ? gridTiles.get( coordId(cx,cy) ) : [];
 	}
