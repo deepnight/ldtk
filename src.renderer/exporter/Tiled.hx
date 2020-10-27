@@ -291,14 +291,15 @@ class Tiled extends Exporter {
 
 					var layer = _createLayer("objectgroup", li);
 					for(coordId in li.gridTiles.keys()) {
-						var tileInfos = li.gridTiles.get(coordId);
-						var o = _createTileObject(
-							ld.tilesetDefUid,
-							tileInfos.tileId,
-							li.getCx(coordId)*ld.gridSize,
-							li.getCy(coordId)*ld.gridSize
-						);
-						layer.insertChild(o,0);
+						for( tileInf in li.gridTiles.get(coordId) ) {
+							var o = _createTileObject(
+								ld.tilesetDefUid,
+								tileInf.tileId,
+								li.getCx(coordId)*ld.gridSize,
+								li.getCy(coordId)*ld.gridSize
+							);
+							layer.insertChild(o,0);
+						}
 					}
 
 

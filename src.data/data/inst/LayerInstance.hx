@@ -16,7 +16,7 @@ class LayerInstance {
 	// Layer content
 	var intGrid : Map<Int,Int> = new Map(); // <coordId, value>
 	public var entityInstances : Array<EntityInstance> = [];
-	public var gridTiles : Map<Int, GridTileInfos> = []; // <coordId, tileinfos>
+	public var gridTiles : Map<Int, Array<GridTileInfos>> = []; // <coordId, tileinfos>
 
 	/** < RuleUid, < coordId, { tiles } > > **/
 	public var autoTilesCache :
@@ -94,19 +94,19 @@ class LayerInstance {
 			gridTiles: {
 				var td = _project.defs.getTilesetDef(def.tilesetDefUid);
 				var arr : Array<led.Json.Tile> = [];
-				for(e in gridTiles.keyValueIterator())
-					if( e.value!=null ) {
+				for( e in gridTiles.keyValueIterator() )
+					for( tileInf in e.value ) {
 						arr.push({
 							px: [
 								pxOffsetX + getCx(e.key) * def.gridSize,
 								pxOffsetY + getCy(e.key) * def.gridSize,
 							],
 							src: [
-								td==null ? -1 : td.getTileSourceX(e.value.tileId),
-								td==null ? -1 : td.getTileSourceY(e.value.tileId),
+								td==null ? -1 : td.getTileSourceX(tileInf.tileId),
+								td==null ? -1 : td.getTileSourceY(tileInf.tileId),
 							],
-							f: e.value.flips,
-							d: [ e.key, e.value.tileId ],
+							f: tileInf.flips,
+							d: [ e.key, tileInf.tileId ],
 						});
 					}
 				arr;
@@ -175,7 +175,12 @@ class LayerInstance {
 		for( gridTilesJson in json.gridTiles ) {
 			if( (cast gridTilesJson).coordId!=null ) // pre-0.4.0 format
 				gridTilesJson.d = [ (cast gridTilesJson).coordId, (cast gridTilesJson).tileId ];
-			li.gridTiles.set( gridTilesJson.d[0], {
+
+			var coordId = gridTilesJson.d[0];
+			if( !li.gridTiles.exists(coordId) )
+				li.gridTiles.set(coordId, []);
+
+			li.gridTiles.get(coordId).push({
 				tileId: gridTilesJson.d[1],
 				flips: gridTilesJson.f,
 			});
@@ -472,7 +477,7 @@ class LayerInstance {
 				getGridTileInfos(cx,cy).flips = flips;
 			}
 			else
-				gridTiles.set( coordId(cx,cy), { tileId:tileId, flips:flips });
+				gridTiles.set( coordId(cx,cy), [{ tileId:tileId, flips:flips }]); // TODO support stacking
 		}
 		else
 			removeGridTile(cx,cy);
@@ -484,7 +489,7 @@ class LayerInstance {
 	}
 
 	public function getGridTileInfos(cx:Int, cy:Int) : Null<GridTileInfos> {
-		return !isValid(cx,cy) || !gridTiles.exists( coordId(cx,cy) ) ? null : gridTiles.get( coordId(cx,cy) );
+		return !isValid(cx,cy) || !gridTiles.exists( coordId(cx,cy) ) ? null : gridTiles.get( coordId(cx,cy) )[0]; // TODO support stacking
 	}
 
 	public inline function getGridTileId(cx:Int, cy:Int) : Null<Int> {

@@ -177,15 +177,27 @@ class TilesetDef {
 		for(l in _project.levels)
 		for(li in l.layerInstances)
 		for( coordId in li.gridTiles.keys() ) {
-			var tileInfos = li.gridTiles.get(coordId);
-			if( tileInfos==null )
+			if( !li.gridTiles.exists(coordId) )
 				continue;
 
-			var remap = remapTileId( oldCwid, tileInfos.tileId );
-			if( remap==null )
-				li.gridTiles.remove(coordId);
-			else
-				tileInfos.tileId = remap;
+			var i = 0;
+			while( i < li.gridTiles.get(coordId).length ) {
+				var tileInf = li.gridTiles.get(coordId)[i];
+				var remappedTileId = remapTileId( oldCwid, tileInf.tileId );
+				if( remappedTileId==null )
+					li.gridTiles.get(coordId).splice(i,1);
+				else {
+					tileInf.tileId = remappedTileId;
+					i++;
+				}
+			}
+			// for( tileInf in li.gridTiles.get(coordId) ) {
+			// 	var remap = remapTileId( oldCwid, tileInf.tileId );
+			// 	if( remap==null )
+			// 		li.gridTiles.remove(coordId);
+			// 	else
+			// 		tileInf.tileId = remap;
+			// }
 		}
 
 		// Save selections remapping
