@@ -362,11 +362,11 @@ class JsTools {
 		// Auto tool-tips
 		jCtx.find("[title], [data-title]").each( function(idx,e) {
 			var jThis = new J(e);
-			var tip = jThis.attr("data-title");
-			if( tip==null ) {
-				tip =  jThis.attr("title");
+			var tipStr = jThis.attr("data-title");
+			if( tipStr==null ) {
+				tipStr =  jThis.attr("title");
 				jThis.removeAttr("title");
-				jThis.attr("data-title", tip);
+				jThis.attr("data-title", tipStr);
 			}
 
 			// Parse key shortcut
@@ -391,7 +391,7 @@ class JsTools {
 				}
 			}
 
-			ui.Tip.attach( jThis, tip, keys );
+			ui.Tip.attach( jThis, tipStr, keys );
 		});
 
 		// Tabs

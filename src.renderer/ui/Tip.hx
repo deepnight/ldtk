@@ -13,7 +13,17 @@ class Tip extends dn.Process {
 			jTip.addClass(className);
 
 		var jContent = jTip.find(".content");
-		jContent.find(".text").text(str);
+		var parts = str.split("**");
+		if( parts.length>1 && parts.length%2!=0 ) {
+			var jText = jContent.find(".text");
+			for(i in 0...parts.length)
+				if( i%2!=0 )
+					jText.append( '<strong>${parts[i]}</strong>' );
+				else
+					jText.append( parts[i] );
+		}
+		else
+			jContent.find(".text").text(str);
 
 
 		if( keys!=null && keys.length>0 ) {
