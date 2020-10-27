@@ -2236,10 +2236,13 @@ canvas#webgl {
 
 			&.unsupported {
 				cursor: not-allowed;
-				border-color: $red;
-				opacity: 0.4;
+				border-color: transparent;
 				background-image: url("../img/stripes.png");
 				box-shadow: none;
+
+				.icon {
+					opacity: 0.2;
+				}
 			}
 		}
 	}
@@ -2290,6 +2293,10 @@ canvas#webgl {
 		ul#editingOptions {
 			left: $mainPanelCompactWid;
 			top: 74px;
+			.icon {
+				width: 18px;
+				height: 18px;
+			}
 		}
 
 		.window.panel {

@@ -38,6 +38,7 @@ class Editor extends Page {
 	public var needSaving = false;
 	public var singleLayerMode(default,null) = false;
 	public var emptySpaceSelection(default,null) = false;
+	public var tileStacking(default,null) = false;
 
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
@@ -144,24 +145,15 @@ class Editor extends Page {
 
 
 		// Option checkboxes
-		var jOpt = jEditOptions.find("li.singleLayerMode").click( ev->{
-			setSingleLayerMode( !ev.getThis().hasClass("active") );
-		});
-		if( singleLayerMode )
-			jOpt.addClass("active");
-
-		var jOpt = jEditOptions.find("li.grid").click( ev->{
-			setGrid( !ev.getThis().hasClass("active") );
-		});
-		if( gridEnabled )
-			jOpt.addClass("active");
-
-		var jOpt = jEditOptions.find("li.emptySpaceSelection").click( ev->{
-			setEmptySpaceSelection( !ev.getThis().hasClass("active") );
-		});
-		if( emptySpaceSelection )
-			jOpt.addClass("active");
-
+		linkOption( jEditOptions.find("li.singleLayerMode"), ()->singleLayerMode, (v)->setSingleLayerMode(v) );
+		linkOption( jEditOptions.find("li.grid"), ()->gridEnabled, (v)->setGrid(v) );
+		linkOption( jEditOptions.find("li.emptySpaceSelection"), ()->emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
+		linkOption(
+			jEditOptions.find("li.tileStacking"),
+			()->tileStacking,
+			(v)->setTileStacking(v),
+			()->curLayerDef!=null && curLayerDef.type==Tiles
+		);
 
 		// Space bar blocking
 		new J(js.Browser.window).off().keydown( function(ev) {
@@ -393,6 +385,9 @@ class Editor extends Page {
 
 			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setEmptySpaceSelection( !emptySpaceSelection );
+
+			case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				setTileStacking( !tileStacking );
 
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setSingleLayerMode( !singleLayerMode );
@@ -738,20 +733,42 @@ class Editor extends Page {
 	}
 
 
-	public function setGrid(v:Bool, notify=true) {
-		gridEnabled= v;
+	function linkOption( jOpt:js.jquery.JQuery, getter:()->Bool, setter:Bool->Void, ?isSupported:Void->Bool ) {
+		createChildProcess( (p)->{
+			if( jOpt.parents("body").length==0 ) {
+				p.destroy();
+				return;
+			}
 
-		var jOpt = jEditOptions.find("li.grid");
-		if( v )
+			if( jOpt.hasClass("active") && !getter() )
+				jOpt.removeClass("active");
+
+			if( !jOpt.hasClass("active") && getter() )
+				jOpt.addClass("active");
+
+			if( isSupported!=null ) {
+				if( jOpt.hasClass("unsupported") && isSupported() )
+					jOpt.removeClass("unsupported");
+
+				if( !jOpt.hasClass("unsupported") && !isSupported() )
+					jOpt.addClass("unsupported");
+			}
+		});
+
+		// Init
+		if( getter() )
 			jOpt.addClass("active");
 		else
 			jOpt.removeClass("active");
 
-		// if( !layerSupportsFreeMode() )
-		// 	jOpt.addClass("unsupported");
-		// else
-		// 	jOpt.removeClass("unsupported");
+		jOpt.off(".option").on("click.option", (ev)->{
+			setter( !getter() );
+		});
+	}
 
+
+	public function setGrid(v:Bool, notify=true) {
+		gridEnabled= v;
 		selectionTool.clear();
 		levelRender.applyGridVisibility();
 		if( notify )
@@ -760,13 +777,6 @@ class Editor extends Page {
 
 	public function setSingleLayerMode(v:Bool) {
 		singleLayerMode = v;
-
-		var jOpt = jEditOptions.find("li.singleLayerMode");
-		if( v )
-			jOpt.addClass("active");
-		else
-			jOpt.removeClass("active");
-
 		levelRender.applyAllLayersVisibility();
 		selectionTool.clear();
 		N.quick( "Single layer mode: "+L.onOff( singleLayerMode ));
@@ -774,15 +784,14 @@ class Editor extends Page {
 
 	public function setEmptySpaceSelection(v:Bool) {
 		emptySpaceSelection = v;
-
-		var jOpt = jEditOptions.find("li.emptySpaceSelection");
-		if( v )
-			jOpt.addClass("active");
-		else
-			jOpt.removeClass("active");
-
 		selectionTool.clear();
 		N.quick( "Select empty spaces: "+L.onOff( emptySpaceSelection ));
+	}
+
+	public function setTileStacking(v:Bool) {
+		tileStacking = v;
+		selectionTool.clear();
+		N.quick( "Tile stacking: "+L.onOff( tileStacking ));
 	}
 
 
