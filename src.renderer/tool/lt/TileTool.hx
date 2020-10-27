@@ -91,7 +91,6 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		if( curMode==Add && !isRandomMode() )
 			return drawSelectionInRectangle(left,top, right-left+1, bottom-top+1);
 
-		// var highestStack = editor.tileStacking ? curLayerInstance.getHighestGridTileStack(left,top,right,bottom) : -1;
 		var anyChange = false;
 		for(cx in left...right+1)
 		for(cy in top...bottom+1) {
@@ -105,9 +104,9 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 					// Erase rectangle
 					if( editor.curLayerInstance.hasAnyGridTile(cx,cy) ) {
 						editor.curLevelHistory.markChange(cx,cy);
-						// if( editor.tileStacking )
-						// 	editor.curLayerInstance.removeGridTileAtStackIndex(cx,cy, highestStack-1);
-						// else
+						if( editor.tileStacking )
+							editor.curLayerInstance.removeTopMostGridTile(cx,cy);
+						else
 							editor.curLayerInstance.removeAllGridTiles(cx,cy);
 						anyChange = true;
 					}
@@ -245,12 +244,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				var tcx = cx + ( curTilesetDef.getTileCx(tid) - left ) * gridDiffScale;
 				var tcy = cy + ( curTilesetDef.getTileCy(tid) - top ) * gridDiffScale;
 				if( editor.curLayerInstance.hasAnyGridTile(tcx,tcy) && !hasAlreadyPaintedAt(tcx,tcy) ) {
-					// if( editor.tileStacking ) {
-					// 	markAsPainted(tcx,tcy);
-					// 	editor.curLayerInstance.removeTopMostGridTile(tcx,tcy);
-					// }
-					// else
-						editor.curLayerInstance.removeAllGridTiles(tcx,tcy);
+					editor.curLayerInstance.removeAllGridTiles(tcx,tcy);
 					editor.curLevelHistory.markChange(tcx,tcy);
 					anyChange = true;
 				}
