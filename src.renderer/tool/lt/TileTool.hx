@@ -6,6 +6,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 
 	public var flipX = false;
 	public var flipY = false;
+	var paintedCells : Map<Int,Bool> = new Map();
 
 	public function new() {
 		super();
@@ -30,6 +31,14 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 	public function setMode(m:data.LedTypes.TileEditMode) {
 		getSelectedValue().mode = m;
 	}
+
+	override function startUsing(m:MouseCoords, buttonId:Int) {
+		paintedCells = new Map();
+		super.startUsing(m, buttonId);
+	}
+
+	inline function markAsPainted(cx,cy) paintedCells.set( curLayerInstance.coordId(cx,cy), true );
+	inline function wasAlreadyPainted(cx,cy) return paintedCells.exists( curLayerInstance.coordId(cx,cy) );
 
 	public function isRandomMode() return getSelectedValue().mode==Random;
 
@@ -151,9 +160,10 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			// Single random tile
 			var tid = sel.ids[Std.random(sel.ids.length)];
 			// if( li.isValid(cx,cy) && ( li.getGridTileId(cx,cy)!=tid || li.getGridTileFlips(cx,cy)!=flips ) ) {
-			if( li.isValid(cx,cy) && !li.hasSpecificGridTile(cx,cy,tid,flips) ) {
+			if( li.isValid(cx,cy) && !li.hasSpecificGridTile(cx,cy,tid,flips) && !wasAlreadyPainted(cx,cy) ) {
 				// TODO move tile to top if repeating same tileId
 				li.addGridTile(cx,cy, tid, flips);
+				markAsPainted(cx,cy);
 				anyChange = true;
 			}
 		}
@@ -177,8 +187,9 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				var tdCy = curTilesetDef.getTileCy(tid);
 				var tcx = cx + ( flipX ? right-tdCx : tdCx-left ) * gridDiffScale;
 				var tcy = cy + ( flipY ? bottom-tdCy : tdCy-top ) * gridDiffScale;
-				if( li.isValid(tcx,tcy) && !li.hasSpecificGridTile(tcx,tcy, tid, flips) ) {
+				if( li.isValid(tcx,tcy) && !li.hasSpecificGridTile(tcx,tcy, tid, flips) && !wasAlreadyPainted(tcx,tcy	) ) {
 				// if( li.isValid(tcx,tcy) && ( li.getGridTileId(tcx,tcy)!=tid || li.getGridTileFlips(tcx,tcy)!=flips ) ) {
+					markAsPainted(tcx,tcy);
 					li.addGridTile(tcx,tcy,tid, flips);
 					editor.curLevelHistory.markChange(tcx,tcy);
 					anyChange = true;
