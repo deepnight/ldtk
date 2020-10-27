@@ -276,6 +276,9 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		}
 		else
 			editor.cursor.set(None);
+
+		if( editor.tileStacking )
+			editor.cursor.setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("cell") );
 	}
 
 	override function createToolPalette():ui.ToolPalette {
