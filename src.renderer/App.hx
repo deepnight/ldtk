@@ -81,9 +81,10 @@ class App extends dn.Process {
 			miniNotif('Downloading ${info.version}...');
 		}
 		dn.electron.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
-		dn.electron.ElectronUpdater.onError = function() {
-			LOG.error("Couldn't check for updates");
-			miniNotif("Can't check for updates");
+		dn.electron.ElectronUpdater.onError = function(err) {
+			LOG.error("Couldn't check for updates: "+err);
+			// miniNotif("Can't check for updates");
+			miniNotif(err, 2);
 		}
 		dn.electron.ElectronUpdater.onUpdateDownloaded = function(info) {
 			LOG.network("Update ready: "+info.version);
@@ -187,8 +188,9 @@ class App extends dn.Process {
 	}
 
 
-	public function miniNotif(html:String, persist=false) {
+	public function miniNotif(html:String, fadeDelayS=0.5, persist=false) {
 		var e = jBody.find("#miniNotif");
+		delayer.cancelById("miniNotifFadeOut");
 		e.empty()
 			.stop(false,true)
 			.hide()
@@ -196,7 +198,7 @@ class App extends dn.Process {
 			.html(html);
 
 		if( !persist )
-			e.delay(1000).fadeOut(2000);
+			delayer.addS( "miniNotifFadeOut", ()->e.fadeOut(2000), fadeDelayS );
 	}
 
 	function clearMiniNotif() {
