@@ -23,12 +23,22 @@ class Progress extends ui.Modal {
 		var log = [];
 		var cur = 0;
 		var total = ops.length;
+		var time = haxe.Timer.stamp();
 		createChildProcess( (p)->{
-			if( ops.length==0 ) {
-				// Done!
+			if( ops.length>0 ) {
+				// Execute operation
+				var op = ops.shift();
+				delayer.addF(op.cb, 1);
+				cur++;
+				var pct = 100 * cur/total;
+				jBar.find(".bar").css({ width:pct+"%" });
+				jBar.find(".label").text( op.label );
+				log.push(op.label);
+			}
+			else {
+				// All done!
 				canBeClosedManually = true;
-				if( onComplete!=null )
-					onComplete();
+				App.LOG.general('Done "$title" (${M.pretty(haxe.Timer.stamp()-time)}s)');
 
 				if( !App.ME.isCtrlDown() || !App.ME.isShiftDown() )
 					close();
@@ -43,17 +53,9 @@ class Progress extends ui.Modal {
 					jButton.click( (_)->close() );
 					p.destroy();
 				}
-			}
-			else {
-				// Execute operation
-				var op = ops.shift();
-				delayer.addF(op.cb, 1);
-				cur++;
-				var pct = 100 * cur/total;
-				jBar.find(".bar").css({ width:pct+"%" });
-				jBar.find(".label").text( op.label );
-				log.push(op.label);
-				App.LOG.general('  - ${op.label} (${Std.int(pct)}%)');
+
+				if( onComplete!=null )
+					onComplete();
 			}
 		}, true);
 	}
