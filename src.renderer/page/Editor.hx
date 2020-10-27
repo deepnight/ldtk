@@ -269,7 +269,7 @@ class Editor extends Page {
 		importer.HxEnum.load(ed.externalRelPath, true);
 	}
 
-	public function reloadTileset(td:data.def.TilesetDef, silentOk=false) {
+	public function reloadTileset(td:data.def.TilesetDef, isInitialLoading=false) {
 		if( !td.hasAtlasPath() )
 			return;
 
@@ -294,7 +294,7 @@ class Editor extends Page {
 				new ui.modal.dialog.Message( Lang.t._("\"::file::\" image was modified but it was SMALLER than the old version.\nLuckily, the tileset had some PADDING, so I was able to use it to compensate the difference.\nSo everything is ok, have a nice day ♥️", { file:name } ), "tile" );
 
 			case Ok:
-				if( !silentOk ) {
+				if( !isInitialLoading ) {
 					var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 					N.success(Lang.t._("Tileset image ::file:: updated.", { file:name } ) );
 				}
@@ -303,6 +303,19 @@ class Editor extends Page {
 				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 				new ui.modal.dialog.Message( Lang.t._("Tileset image \"::file::\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { file:name } ), "tile" );
 		}
+
+		// Force "opaque" cache building
+		var ops = [];
+		for(cy in 0...td.cHei) {
+			ops.push({
+				label: "cy="+cy,
+				cb : function() {
+					for(cx in 0...td.cWid)
+						td.isTileOpaque( td.getTileId(cx,cy) );
+				}
+			});
+		}
+		new ui.modal.Progress("Detecting opaque tiles in "+td.identifier, ops);
 
 		ge.emit(TilesetDefChanged(td));
 	}

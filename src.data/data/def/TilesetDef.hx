@@ -13,6 +13,7 @@ class TilesetDef {
 	public var padding : Int = 0; // px dist to atlas borders
 	public var spacing : Int = 0; // px space between consecutive tiles
 	public var savedSelections : Array<TilesetSelection> = [];
+	var opaqueTilesCache : Map<Int,Bool> = new Map();
 
 	public var pxWid = 0;
 	public var pxHei = 0;
@@ -126,6 +127,7 @@ class TilesetDef {
 			return false;
 		}
 
+		opaqueTilesCache = new Map();
 		var newPath = dn.FilePath.fromFile( relFilePath ).useSlashes();
 		relPath = newPath.full;
 
@@ -406,6 +408,25 @@ class TilesetDef {
 			return getAtlasTile().sub( tileX, tileY, tileGridSize, tileGridSize );
 		else
 			return makeErrorTile(tileGridSize);
+	}
+
+
+	public function isTileOpaque(tid:Int) {
+		if( opaqueTilesCache.exists(tid) )
+			return opaqueTilesCache.get(tid);
+		else {
+			var x = getTileSourceX(tid);
+			var y = getTileSourceY(tid);
+			for(py in y...y+tileGridSize)
+			for(px in x...x+tileGridSize) {
+				if( dn.Color.getAlpha( pixels.getPixel(px,py) ) < 255 ) {
+					opaqueTilesCache.set(tid, false);
+					return false;
+				}
+			}
+			opaqueTilesCache.set(tid, true);
+			return true;
+		}
 	}
 
 
