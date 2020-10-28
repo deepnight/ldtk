@@ -3,6 +3,7 @@ typedef AppSettings = {
 	var grid : Bool;
 	var singleLayerMode : Bool;
 	var emptySpaceSelection : Bool;
+	var tileStacking : Bool;
 }
 
 enum GlobalEvent {

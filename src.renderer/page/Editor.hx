@@ -37,7 +37,6 @@ class Editor extends Page {
 	var doNothingTool : tool.lt.DoNothing;
 
 	public var needSaving = false;
-	public var tileStacking(default,null) = false;
 
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
@@ -148,7 +147,7 @@ class Editor extends Page {
 		linkOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
 		linkOption(
 			jEditOptions.find("li.tileStacking"),
-			()->tileStacking,
+			()->settings.tileStacking,
 			(v)->setTileStacking(v),
 			()->curLayerDef!=null && curLayerDef.type==Tiles
 		);
@@ -407,7 +406,7 @@ class Editor extends Page {
 				setEmptySpaceSelection( !settings.emptySpaceSelection );
 
 			case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setTileStacking( !tileStacking );
+				setTileStacking( !settings.tileStacking );
 
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setSingleLayerMode( !settings.singleLayerMode );
@@ -812,9 +811,10 @@ class Editor extends Page {
 	}
 
 	public function setTileStacking(v:Bool) {
-		tileStacking = v;
+		settings.tileStacking = v;
+		App.ME.saveSettings();
 		selectionTool.clear();
-		N.quick( "Tile stacking: "+L.onOff( tileStacking ));
+		N.quick( "Tile stacking: "+L.onOff( settings.tileStacking ));
 	}
 
 

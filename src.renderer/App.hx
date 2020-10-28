@@ -87,6 +87,7 @@ class App extends dn.Process {
 			grid: true,
 			singleLayerMode: false,
 			emptySpaceSelection: false,
+			tileStacking: false,
 		});
 		saveSettings();
 
