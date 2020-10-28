@@ -9,6 +9,8 @@ class LayerDef {
 	public var identifier(default,set) : String;
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var displayOpacity : Float = 1.0;
+	public var pxOffsetX : Int = 0; // JSON offsets
+	public var pxOffsetY : Int = 0;
 
 	// IntGrid
 	var intGridValues : Array<IntGridValueDef> = [];
