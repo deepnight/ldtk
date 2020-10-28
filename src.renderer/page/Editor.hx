@@ -36,7 +36,6 @@ class Editor extends Page {
 	var specialTool : Null< Tool<Dynamic> >; // if not null, will be used instead of default tool
 	var doNothingTool : tool.lt.DoNothing;
 
-	public var gridEnabled = true;
 	public var needSaving = false;
 	public var tileStacking(default,null) = false;
 
@@ -145,7 +144,7 @@ class Editor extends Page {
 
 		// Option checkboxes
 		linkOption( jEditOptions.find("li.singleLayerMode"), ()->settings.singleLayerMode, (v)->setSingleLayerMode(v) );
-		linkOption( jEditOptions.find("li.grid"), ()->gridEnabled, (v)->setGrid(v) );
+		linkOption( jEditOptions.find("li.grid"), ()->settings.grid, (v)->setGrid(v) );
 		linkOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
 		linkOption(
 			jEditOptions.find("li.tileStacking"),
@@ -429,7 +428,7 @@ class Editor extends Page {
 					N.error("Nothing to select");
 
 			case K.G if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setGrid( !gridEnabled );
+				setGrid( !settings.grid );
 
 			case K.H if( !hasInputFocus() ):
 				onHelp();
@@ -736,7 +735,7 @@ class Editor extends Page {
 		curLayerDefUid = li.def.uid;
 		ge.emit(LayerInstanceSelected);
 
-		setGrid(gridEnabled, false); // update checkbox
+		setGrid(settings.grid, false); // update checkbox
 	}
 
 	function layerSupportsFreeMode() {
@@ -750,7 +749,7 @@ class Editor extends Page {
 
 
 	public function isSnappingToGrid() {
-		return gridEnabled || !layerSupportsFreeMode();
+		return settings.grid || !layerSupportsFreeMode();
 	}
 
 
@@ -789,11 +788,12 @@ class Editor extends Page {
 
 
 	public function setGrid(v:Bool, notify=true) {
-		gridEnabled= v;
+		settings.grid = v;
+		App.ME.saveSettings();
 		selectionTool.clear();
 		levelRender.applyGridVisibility();
 		if( notify )
-			N.quick( "Grid: "+L.onOff( gridEnabled ));
+			N.quick( "Grid: "+L.onOff( settings.grid ));
 	}
 
 	public function setSingleLayerMode(v:Bool) {

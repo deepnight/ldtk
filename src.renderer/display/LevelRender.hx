@@ -369,7 +369,7 @@ class LevelRender extends dn.Process {
 	}
 
 	public inline function applyGridVisibility() {
-		grid.visible = editor.gridEnabled;
+		grid.visible = settings.grid;
 	}
 
 	function renderGrid() {

@@ -1,5 +1,6 @@
 typedef AppSettings = {
 	var recentProjects : Array<String>;
+	var grid : Bool;
 	var singleLayerMode : Bool;
 	var emptySpaceSelection : Bool;
 }
