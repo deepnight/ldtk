@@ -171,6 +171,9 @@ class LayerInstance {
 
 	public static function fromJson(p:Project, json:led.Json.LayerInstanceJson) {
 		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
+		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
+		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
+		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
 		for( intGridJson in json.intGrid )
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );
@@ -206,6 +209,12 @@ class LayerInstance {
 					if( !li.autoTilesCache.get(ruleId).exists(coordId) )
 						li.autoTilesCache.get(ruleId).set(coordId, []);
 
+					if( dn.VersionNumber.isLowerStr(p.jsonVersion, "0.5.0") && ( li.pxOffsetX!=0 || li.pxOffsetY!=0 ) ) {
+						// Fix old coords that included offsets
+						at.px[0]-=li.pxOffsetX;
+						at.px[1]-=li.pxOffsetY;
+					}
+
 					li.autoTilesCache.get(ruleId).get(coordId).push({
 						x: at.px[0],
 						y: at.px[1],
@@ -220,11 +229,6 @@ class LayerInstance {
 				li.autoTilesCache = null;
 			}
 		}
-
-		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
-
-		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
-		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
 		return li;
 	}
