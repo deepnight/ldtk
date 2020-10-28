@@ -24,6 +24,7 @@ class LayerInstance {
 	public var autoTilesCache :
 		Null< Map<Int, // RuleUID
 			Map<Int, // CoordID
+				// WARNING: x/y don't contain layerDef.pxOffsetX/Y (to avoid the need of a global update when changing these values). They are added in the JSON though.
 				Array<{ x:Int, y:Int, flips:Int, srcX:Int, srcY:Int, tid:Int }>
 			>
 		> > = null;
@@ -100,8 +101,8 @@ class LayerInstance {
 					for( tileInf in e.value ) {
 						arr.push({
 							px: [
-								pxOffsetX + getCx(e.key) * def.gridSize,
-								pxOffsetY + getCy(e.key) * def.gridSize,
+								pxTotalOffsetX + getCx(e.key) * def.gridSize,
+								pxTotalOffsetY + getCy(e.key) * def.gridSize,
 							],
 							src: [
 								td==null ? -1 : td.getTileSourceX(tileInf.tileId),
