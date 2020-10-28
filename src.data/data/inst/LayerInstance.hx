@@ -9,8 +9,10 @@ class LayerInstance {
 
 	public var levelId : Int;
 	public var layerDefUid : Int;
-	public var pxOffsetX : Int = 0;
-	public var pxOffsetY : Int = 0;
+	var pxOffsetX : Int = 0;
+	var pxOffsetY : Int = 0;
+	public var pxTotalOffsetX(get,never) : Int; inline function get_pxTotalOffsetX() return pxOffsetX + def.pxOffsetX;
+	public var pxTotalOffsetY(get,never) : Int; inline function get_pxTotalOffsetY() return pxOffsetY + def.pxOffsetY;
 	public var seed : Int;
 
 	// Layer content
@@ -78,7 +80,7 @@ class LayerInstance {
 							for( allTiles in autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value )
 								arr.push({
-									px: [ tileInfos.x, tileInfos.y ],
+									px: [ tileInfos.x + def.pxOffsetX, tileInfos.y + def.pxOffsetY ],
 									src: [ tileInfos.srcX, tileInfos.srcY ],
 									f: tileInfos.flips,
 									d: [r.uid,allTiles.key,tileInfos.tid],
@@ -204,8 +206,8 @@ class LayerInstance {
 						li.autoTilesCache.get(ruleId).set(coordId, []);
 
 					li.autoTilesCache.get(ruleId).get(coordId).push({
-						x: at.px[0],
-						y: at.px[1],
+						x: at.px[0] - li.def.pxOffsetX,
+						y: at.px[1] - li.def.pxOffsetY,
 						srcX: at.src[0],
 						srcY: at.src[1],
 						flips: at.f,

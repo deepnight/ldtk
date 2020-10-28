@@ -317,20 +317,20 @@ class SelectionTool extends Tool<Int> {
 		}
 		else {
 			// Pick every objects under rectangle
-			var leftPx = curLayerInstance.pxOffsetX + left * curLayerInstance.def.gridSize;
-			var rightPx = curLayerInstance.pxOffsetX + (right+1) * curLayerInstance.def.gridSize - 1;
-			var topPx = curLayerInstance.pxOffsetY + top * curLayerInstance.def.gridSize;
-			var bottomPx = curLayerInstance.pxOffsetY + (bottom+1) * curLayerInstance.def.gridSize - 1;
+			var leftPx = curLayerInstance.pxTotalOffsetX + left * curLayerInstance.def.gridSize;
+			var rightPx = curLayerInstance.pxTotalOffsetX + (right+1) * curLayerInstance.def.gridSize - 1;
+			var topPx = curLayerInstance.pxTotalOffsetY + top * curLayerInstance.def.gridSize;
+			var bottomPx = curLayerInstance.pxTotalOffsetY + (bottom+1) * curLayerInstance.def.gridSize - 1;
 
 			var all : Array<GenericLevelElement> = [];
 			function _addRectFromLayer(li:data.inst.LayerInstance) {
 				if( !editor.levelRender.isLayerVisible(li) )
 					return;
 
-				var cLeft = Std.int( (leftPx-li.pxOffsetX) / li.def.gridSize );
-				var cRight = Std.int( (rightPx-li.pxOffsetX) / li.def.gridSize );
-				var cTop = Std.int( (topPx-li.pxOffsetY) /li.def.gridSize );
-				var cBottom = Std.int( (bottomPx-li.pxOffsetY) /li.def.gridSize );
+				var cLeft = Std.int( (leftPx-li.pxTotalOffsetX) / li.def.gridSize );
+				var cRight = Std.int( (rightPx-li.pxTotalOffsetX) / li.def.gridSize );
+				var cTop = Std.int( (topPx-li.pxTotalOffsetY) /li.def.gridSize );
+				var cBottom = Std.int( (bottomPx-li.pxTotalOffsetY) /li.def.gridSize );
 
 				for( cy in cTop...cBottom+1 )
 				for( cx in cLeft...cRight+1 ) {
