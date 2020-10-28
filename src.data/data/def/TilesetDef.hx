@@ -456,7 +456,7 @@ class TilesetDef {
 		var ops = [];
 		for(tcy in 0...cHei)
 			ops.push({
-				label: Std.string(tcy),
+				label: "Row "+tcy,
 				cb : ()->{
 					for(tcx in 0...cWid)
 						parseTileOpacity( getTileId(tcx,tcy) );
