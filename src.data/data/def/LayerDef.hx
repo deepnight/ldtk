@@ -9,6 +9,8 @@ class LayerDef {
 	public var identifier(default,set) : String;
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var displayOpacity : Float = 1.0;
+	public var pxOffsetX : Int = 0; // JSON offsets
+	public var pxOffsetY : Int = 0;
 
 	// IntGrid
 	var intGridValues : Array<IntGridValueDef> = [];
@@ -48,6 +50,8 @@ class LayerDef {
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
+		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
+		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
 		o.intGridValues = [];
 		for( v in JsonTools.readArray(json.intGridValues) )
@@ -81,6 +85,8 @@ class LayerDef {
 			uid: uid,
 			gridSize: gridSize,
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
+			pxOffsetX: pxOffsetX,
+			pxOffsetY: pxOffsetY,
 
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
 

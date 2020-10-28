@@ -193,6 +193,12 @@ class EditLayerDefs extends ui.modal.Panel {
 		i.setBounds(0.1, 1);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
+		var i = Input.linkToHtmlInput( cur.pxOffsetX, jForm.find("input[name='offsetX']") );
+		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+
+		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForm.find("input[name='offsetY']") );
+		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+
 
 		// Baking
 		if( cur.isAutoLayer() ) {

@@ -37,7 +37,7 @@ class MouseCoords {
 			if( Editor.ME==null || Editor.ME.destroyed )
 				return -1;
 			else
-				return levelX - ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetX : 0 );
+				return levelX - ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxTotalOffsetX : 0 );
 		}
 
 	public var layerY(get,never) : Int;
@@ -45,7 +45,7 @@ class MouseCoords {
 			if( Editor.ME==null || Editor.ME.destroyed )
 				return -1;
 			else
-				return levelY - ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxOffsetY : 0 );
+				return levelY - ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxTotalOffsetY : 0 );
 		}
 
 	// Level cell
@@ -97,11 +97,11 @@ class MouseCoords {
 	}
 
 	public function getLayerCx(li:data.inst.LayerInstance) {
-		return Std.int( ( layerX + getRelativeLayerInst().pxOffsetX - li.pxOffsetX ) / li.def.gridSize );
+		return Std.int( ( layerX + getRelativeLayerInst().pxTotalOffsetX - li.pxTotalOffsetX ) / li.def.gridSize );
 	}
 
 	public function getLayerCy(li:data.inst.LayerInstance) {
-		return Std.int( ( layerY + getRelativeLayerInst().pxOffsetY - li.pxOffsetY ) / li.def.gridSize );
+		return Std.int( ( layerY + getRelativeLayerInst().pxTotalOffsetY - li.pxTotalOffsetY ) / li.def.gridSize );
 	}
 }
 

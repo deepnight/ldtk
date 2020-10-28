@@ -280,7 +280,7 @@ class Editor extends Page {
 		App.LOG.fileOp("Reloading tileset: "+td.relPath);
 		var result = td.reloadImage( getProjectDir() );
 		App.LOG.fileOp(" -> "+result);
-		App.LOG.fileOp(" -> opaqueCache: "+(td.opaqueTilesCache));
+		App.LOG.fileOp(" -> opaqueCache: "+(td.opaqueTilesCache==null ? "null" : "not null"));
 
 		var changed = false;
 		switch result {
@@ -541,8 +541,8 @@ class Editor extends Page {
 			if( !levelRender.isLayerVisible(li) )
 				return null;
 
-			var layerX = levelX - li.pxOffsetX;
-			var layerY = levelY - li.pxOffsetY;
+			var layerX = levelX - li.pxTotalOffsetX;
+			var layerY = levelY - li.pxTotalOffsetY;
 			var cx = Std.int( layerX / li.def.gridSize );
 			var cy = Std.int( layerY / li.def.gridSize );
 

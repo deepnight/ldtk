@@ -123,7 +123,6 @@ class TilesetDef {
 		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
 
-		trace(json.opaqueTiles);
 		if( json.opaqueTiles!=null ) {
 			td.opaqueTilesCache = new Map();
 			for(tid in json.opaqueTiles)
@@ -457,7 +456,7 @@ class TilesetDef {
 		var ops = [];
 		for(tcy in 0...cHei)
 			ops.push({
-				label: Std.string(tcy),
+				label: "Row "+tcy,
 				cb : ()->{
 					for(tcx in 0...cWid)
 						parseTileOpacity( getTileId(tcx,tcy) );

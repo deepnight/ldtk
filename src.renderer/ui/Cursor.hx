@@ -215,11 +215,11 @@ class Cursor extends dn.Process {
 				wrapper.setPosition(fx,fy);
 
 			case GridCell(li, cx, cy), GridRect(li, cx,cy, _):
-				wrapper.setPosition( cx*li.def.gridSize + li.pxOffsetX, cy*li.def.gridSize + li.pxOffsetY );
+				wrapper.setPosition( cx*li.def.gridSize + li.pxTotalOffsetX, cy*li.def.gridSize + li.pxTotalOffsetY );
 				labelWrapper.setPosition(wrapper.x + li.def.gridSize, wrapper.y);
 
 			case Entity(li, def, ei, x,y):
-				wrapper.setPosition( x+li.pxOffsetX, y+li.pxOffsetY );
+				wrapper.setPosition( x+li.pxTotalOffsetX, y+li.pxTotalOffsetY );
 				labelWrapper.setPosition(
 					( Std.int(x/li.def.gridSize) + 1 ) * li.def.gridSize,
 					Std.int(y/li.def.gridSize) * li.def.gridSize
@@ -227,10 +227,10 @@ class Cursor extends dn.Process {
 
 			case Tiles(li, tileIds, cx, cy, flips):
 				wrapper.setPosition(
-					(cx+li.def.tilePivotX)*li.def.gridSize + li.pxOffsetX,
-					(cy+li.def.tilePivotY)*li.def.gridSize + li.pxOffsetY
+					(cx+li.def.tilePivotX)*li.def.gridSize + li.pxTotalOffsetX,
+					(cy+li.def.tilePivotY)*li.def.gridSize + li.pxTotalOffsetY
 				);
-				labelWrapper.setPosition( (cx+1)*li.def.gridSize + li.pxOffsetX, cy*li.def.gridSize + li.pxOffsetY );
+				labelWrapper.setPosition( (cx+1)*li.def.gridSize + li.pxTotalOffsetX, cy*li.def.gridSize + li.pxTotalOffsetY );
 		}
 
 		graphics.setPosition(wrapper.x, wrapper.y);

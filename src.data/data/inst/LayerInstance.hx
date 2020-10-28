@@ -9,8 +9,10 @@ class LayerInstance {
 
 	public var levelId : Int;
 	public var layerDefUid : Int;
-	public var pxOffsetX : Int = 0;
-	public var pxOffsetY : Int = 0;
+	var pxOffsetX : Int = 0;
+	var pxOffsetY : Int = 0;
+	public var pxTotalOffsetX(get,never) : Int; inline function get_pxTotalOffsetX() return pxOffsetX + def.pxOffsetX;
+	public var pxTotalOffsetY(get,never) : Int; inline function get_pxTotalOffsetY() return pxOffsetY + def.pxOffsetY;
 	public var seed : Int;
 
 	// Layer content
@@ -22,6 +24,7 @@ class LayerInstance {
 	public var autoTilesCache :
 		Null< Map<Int, // RuleUID
 			Map<Int, // CoordID
+				// WARNING: x/y don't contain layerDef.pxOffsetX/Y (to avoid the need of a global update when changing these values). They are added in the JSON though.
 				Array<{ x:Int, y:Int, flips:Int, srcX:Int, srcY:Int, tid:Int }>
 			>
 		> > = null;
@@ -52,6 +55,8 @@ class LayerInstance {
 			__cHei: cHei,
 			__gridSize: def.gridSize,
 			__opacity: def.displayOpacity,
+			__pxTotalOffsetX: pxOffsetX + def.pxOffsetX,
+			__pxTotalOffsetY: pxOffsetY + def.pxOffsetY,
 
 			levelId: levelId,
 			layerDefUid: layerDefUid,
@@ -98,8 +103,8 @@ class LayerInstance {
 					for( tileInf in e.value ) {
 						arr.push({
 							px: [
-								pxOffsetX + getCx(e.key) * def.gridSize,
-								pxOffsetY + getCy(e.key) * def.gridSize,
+								getCx(e.key) * def.gridSize,
+								getCy(e.key) * def.gridSize,
 							],
 							src: [
 								td==null ? -1 : td.getTileSourceX(tileInf.tileId),
@@ -168,6 +173,9 @@ class LayerInstance {
 
 	public static function fromJson(p:Project, json:led.Json.LayerInstanceJson) {
 		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
+		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
+		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
+		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
 		for( intGridJson in json.intGrid )
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );
@@ -203,6 +211,12 @@ class LayerInstance {
 					if( !li.autoTilesCache.get(ruleId).exists(coordId) )
 						li.autoTilesCache.get(ruleId).set(coordId, []);
 
+					if( dn.VersionNumber.isLowerStr(p.jsonVersion, "0.5.0") && ( li.pxOffsetX!=0 || li.pxOffsetY!=0 ) ) {
+						// Fix old coords that included offsets
+						at.px[0]-=li.pxOffsetX;
+						at.px[1]-=li.pxOffsetY;
+					}
+
 					li.autoTilesCache.get(ruleId).get(coordId).push({
 						x: at.px[0],
 						y: at.px[1],
@@ -217,11 +231,6 @@ class LayerInstance {
 				li.autoTilesCache = null;
 			}
 		}
-
-		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
-
-		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
-		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
 		return li;
 	}
@@ -248,11 +257,11 @@ class LayerInstance {
 	}
 
 	public inline function levelToLayerCx(levelX:Int) {
-		return Std.int( ( levelX - pxOffsetX ) / def.gridSize );
+		return Std.int( ( levelX - pxTotalOffsetX ) / def.gridSize ); // TODO not tested: check if this works with the new layerDef offsets
 	}
 
 	public inline function levelToLayerCy(levelY:Int) {
-		return Std.int( ( levelY - pxOffsetY ) / def.gridSize );
+		return Std.int( ( levelY - pxTotalOffsetY ) / def.gridSize );
 	}
 
 	public function tidy(p:Project) {
@@ -553,8 +562,8 @@ class LayerInstance {
 		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
 		autoTilesCache.get(r.uid).set( coordId(cx,cy), tileIds.map( (tid)->{
 			return {
-				x: cx*def.gridSize + pxOffsetX + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ),
-				y: cy*def.gridSize + pxOffsetY + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ),
+				x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ),
+				y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ),
 				srcX: td.getTileSourceX(tid),
 				srcY: td.getTileSourceY(tid),
 				tid: tid,

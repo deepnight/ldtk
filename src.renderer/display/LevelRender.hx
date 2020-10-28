@@ -328,8 +328,8 @@ class LevelRender extends dn.Process {
 		g.lineStyle(thickness, col);
 		g.drawRect( Std.int(-pad-w*0.5), Std.int(-pad-h*0.5), w+pad*2, h+pad*2 );
 		g.setPosition(
-			Std.int(x+w*0.5) + editor.curLayerInstance.pxOffsetX,
-			Std.int(y+h*0.5) + editor.curLayerInstance.pxOffsetY
+			Std.int(x+w*0.5) + editor.curLayerInstance.pxTotalOffsetX,
+			Std.int(y+h*0.5) + editor.curLayerInstance.pxTotalOffsetY
 		);
 		root.add(g, Const.DP_UI);
 	}
@@ -392,8 +392,8 @@ class LevelRender extends dn.Process {
 			grid.lineTo(l.cWid*l.def.gridSize, cy*l.def.gridSize);
 		}
 
-		grid.x = editor.curLayerInstance.pxOffsetX;
-		grid.y = editor.curLayerInstance.pxOffsetY;
+		grid.x = editor.curLayerInstance.pxTotalOffsetX;
+		grid.y = editor.curLayerInstance.pxTotalOffsetY;
 	}
 
 
@@ -420,8 +420,8 @@ class LevelRender extends dn.Process {
 			layerRenders.get(li.layerDefUid).remove();
 
 		var wrapper = new h2d.Object();
-		wrapper.x = li.pxOffsetX;
-		wrapper.y = li.pxOffsetY;
+		wrapper.x = li.pxTotalOffsetX;
+		wrapper.y = li.pxTotalOffsetY;
 
 		// Register it
 		layerRenders.set(li.layerDefUid, wrapper);
@@ -442,10 +442,9 @@ class LevelRender extends dn.Process {
 					if( li.autoTilesCache.exists( r.uid ) ) {
 						for(allTiles in li.autoTilesCache.get( r.uid ))
 						for(tileInfos in allTiles) {
-							// Note: tileInfos already apply layer offsets, so we need to substract them here
 							tg.addTransform(
-								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize - li.pxOffsetX,
-								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize - li.pxOffsetY,
+								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
 								dn.M.hasBit(tileInfos.flips,0)?-1:1,
 								dn.M.hasBit(tileInfos.flips,1)?-1:1,
 								0,
