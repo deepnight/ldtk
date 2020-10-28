@@ -74,7 +74,7 @@ class Home extends Page {
 		var jRecentList = jPage.find("ul.recents");
 		jRecentList.empty();
 
-		var recents = App.ME.session.recentProjects.copy();
+		var recents = App.ME.settings.recentProjects.copy();
 
 		// Automatically detects crash backups
 		var i = 0;

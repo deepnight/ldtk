@@ -1,4 +1,4 @@
-typedef SessionData = {
+typedef AppSettings = {
 	var recentProjects : Array<String>;
 }
 

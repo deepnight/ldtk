@@ -14,7 +14,7 @@ class App extends dn.Process {
 
 	public var lastKnownMouse : { pageX:Int, pageY:Int };
 	var curPageProcess : Null<Page>;
-	public var session : SessionData;
+	public var settings : AppSettings;
 	var keyDowns : Map<Int,Bool> = new Map();
 
 
@@ -62,12 +62,18 @@ class App extends dn.Process {
 		fp.useSlashes();
 		APP_RESOURCE_DIR = fp.directoryWithSlash;
 
-		// Restore last stored project state
-		LOG.general("Loading session");
-		session = {
-			recentProjects: [],
+		// Restore settings
+		LOG.general("Loading settings");
+		if( dn.LocalStorage.exists("session") ) {
+			// Migrate old sessionData
+			LOG.general("Migrating old session to settings");
+			dn.LocalStorage.writeObject("settings", dn.LocalStorage.readObject("settings", {}));
+			dn.LocalStorage.delete("session");
 		}
-		session = dn.LocalStorage.readObject("session", session);
+		settings = dn.LocalStorage.readObject("settings", {
+			recentProjects: [],
+		});
+		LOG.general(settings);
 
 		// Auto updater
 		miniNotif("Checking for update...", true);
@@ -230,8 +236,13 @@ class App extends dn.Process {
 	}
 
 
-	public function saveSessionData() {
-		dn.LocalStorage.writeObject("session", session);
+	public inline function changeSettings(doChange:Void->Void) {
+		doChange();
+		saveSettings();
+	}
+
+	public function saveSettings() {
+		dn.LocalStorage.writeObject("settings", settings);
 	}
 
 	function clearCurPage() {
@@ -245,27 +256,27 @@ class App extends dn.Process {
 	}
 
 	public function recentProjectsContains(path:String) {
-		for(p in session.recentProjects)
+		for(p in settings.recentProjects)
 			if( p==path )
 				return true;
 		return false;
 	}
 
 	public function registerRecentProject(path:String) {
-		session.recentProjects.remove(path);
-		session.recentProjects.push(path);
-		saveSessionData();
+		settings.recentProjects.remove(path);
+		settings.recentProjects.push(path);
+		saveSettings();
 		return true;
 	}
 
 	public function unregisterRecentProject(path:String) {
-		session.recentProjects.remove(path);
-		saveSessionData();
+		settings.recentProjects.remove(path);
+		saveSettings();
 	}
 
 	public function clearRecentProjects() {
-		session.recentProjects = [];
-		saveSessionData();
+		settings.recentProjects = [];
+		saveSettings();
 	}
 
 	public function loadPage( create:()->Page ) {
@@ -306,10 +317,10 @@ class App extends dn.Process {
 	}
 
 	public function getDefaultDialogDir() {
-		if( session.recentProjects.length==0 )
+		if( settings.recentProjects.length==0 )
 			return #if debug JsTools.getAppResourceDir() #else JsTools.getExeDir() #end;
 
-		var last = session.recentProjects[session.recentProjects.length-1];
+		var last = settings.recentProjects[settings.recentProjects.length-1];
 		return dn.FilePath.fromFile(last).directory;
 	}
 
