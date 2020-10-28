@@ -442,10 +442,9 @@ class LevelRender extends dn.Process {
 					if( li.autoTilesCache.exists( r.uid ) ) {
 						for(allTiles in li.autoTilesCache.get( r.uid ))
 						for(tileInfos in allTiles) {
-							// Note: tileInfos already apply layer offsets, so we need to substract them here
 							tg.addTransform(
-								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize - @:privateAccess li.pxOffsetX,
-								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize - @:privateAccess li.pxOffsetY,
+								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
 								dn.M.hasBit(tileInfos.flips,0)?-1:1,
 								dn.M.hasBit(tileInfos.flips,1)?-1:1,
 								0,

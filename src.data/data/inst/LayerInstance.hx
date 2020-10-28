@@ -81,7 +81,7 @@ class LayerInstance {
 							for( allTiles in autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value )
 								arr.push({
-									px: [ tileInfos.x + def.pxOffsetX, tileInfos.y + def.pxOffsetY ],
+									px: [ tileInfos.x, tileInfos.y ],
 									src: [ tileInfos.srcX, tileInfos.srcY ],
 									f: tileInfos.flips,
 									d: [r.uid,allTiles.key,tileInfos.tid],
@@ -101,8 +101,8 @@ class LayerInstance {
 					for( tileInf in e.value ) {
 						arr.push({
 							px: [
-								pxTotalOffsetX + getCx(e.key) * def.gridSize,
-								pxTotalOffsetY + getCy(e.key) * def.gridSize,
+								getCx(e.key) * def.gridSize,
+								getCy(e.key) * def.gridSize,
 							],
 							src: [
 								td==null ? -1 : td.getTileSourceX(tileInf.tileId),
@@ -207,8 +207,8 @@ class LayerInstance {
 						li.autoTilesCache.get(ruleId).set(coordId, []);
 
 					li.autoTilesCache.get(ruleId).get(coordId).push({
-						x: at.px[0] - li.def.pxOffsetX,
-						y: at.px[1] - li.def.pxOffsetY,
+						x: at.px[0],
+						y: at.px[1],
 						srcX: at.src[0],
 						srcY: at.src[1],
 						flips: at.f,
@@ -251,11 +251,11 @@ class LayerInstance {
 	}
 
 	public inline function levelToLayerCx(levelX:Int) {
-		return Std.int( ( levelX - pxOffsetX ) / def.gridSize );
+		return Std.int( ( levelX - pxTotalOffsetX ) / def.gridSize ); // TODO not tested: check if this works with the new layerDef offsets
 	}
 
 	public inline function levelToLayerCy(levelY:Int) {
-		return Std.int( ( levelY - pxOffsetY ) / def.gridSize );
+		return Std.int( ( levelY - pxTotalOffsetY ) / def.gridSize );
 	}
 
 	public function tidy(p:Project) {
@@ -556,8 +556,8 @@ class LayerInstance {
 		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
 		autoTilesCache.get(r.uid).set( coordId(cx,cy), tileIds.map( (tid)->{
 			return {
-				x: cx*def.gridSize + pxOffsetX + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ),
-				y: cy*def.gridSize + pxOffsetY + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ),
+				x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ),
+				y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ),
 				srcX: td.getTileSourceX(tid),
 				srcY: td.getTileSourceY(tid),
 				tid: tid,
