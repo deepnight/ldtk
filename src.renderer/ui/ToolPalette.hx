@@ -29,7 +29,7 @@ class ToolPalette {
 
 		// Pop-out
 		jContent.mouseover( function(ev) {
-			if( canPopOut && !isPoppedOut )
+			if( canPopOut && !isPoppedOut && !Editor.ME.curTool.isRunning() )
 				popOut();
 		});
 
