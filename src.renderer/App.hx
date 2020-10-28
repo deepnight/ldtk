@@ -63,17 +63,29 @@ class App extends dn.Process {
 		APP_RESOURCE_DIR = fp.directoryWithSlash;
 
 		// Restore settings
-		LOG.general("Loading settings");
-		if( dn.LocalStorage.exists("session") ) {
+		LOG.fileOp("Loading settings...");
+		dn.LocalStorage.BASE_PATH = JsTools.getExeDir();
+		if( js.Browser.window.localStorage.getItem("session")!=null ) {
 			// Migrate old sessionData
-			LOG.general("Migrating old session to settings");
-			dn.LocalStorage.writeObject("settings", dn.LocalStorage.readObject("settings", {}));
-			dn.LocalStorage.delete("session");
+			LOG.fileOp("Migrating old session to settings files...");
+			var raw = js.Browser.window.localStorage.getItem("session");
+			var old : AppSettings =
+				try haxe.Unserializer.run(raw)
+				catch( err:Dynamic ) null;
+			if( old!=null )
+				try {
+					if( old.recentProjects!=null )
+						for(i in 0...old.recentProjects.length)
+							old.recentProjects[i] = StringTools.replace(old.recentProjects[i], "\\", "/");
+					dn.LocalStorage.writeObject("settings", true, old);
+				} catch(e) {}
+
+			js.Browser.window.localStorage.removeItem("session");
 		}
-		settings = dn.LocalStorage.readObject("settings", {
+		settings = dn.LocalStorage.readObject("settings", true, {
 			recentProjects: [],
 		});
-		LOG.general(settings);
+		saveSettings();
 
 		// Auto updater
 		miniNotif("Checking for update...", true);
@@ -242,7 +254,8 @@ class App extends dn.Process {
 	}
 
 	public function saveSettings() {
-		dn.LocalStorage.writeObject("settings", settings);
+		LOG.fileOp("Saving settings...");
+		dn.LocalStorage.writeObject("settings", true, settings);
 	}
 
 	function clearCurPage() {
@@ -256,6 +269,7 @@ class App extends dn.Process {
 	}
 
 	public function recentProjectsContains(path:String) {
+		path = StringTools.replace(path, "\\", "/");
 		for(p in settings.recentProjects)
 			if( p==path )
 				return true;
@@ -263,6 +277,7 @@ class App extends dn.Process {
 	}
 
 	public function registerRecentProject(path:String) {
+		path = StringTools.replace(path, "\\", "/");
 		settings.recentProjects.remove(path);
 		settings.recentProjects.push(path);
 		saveSettings();
@@ -270,6 +285,7 @@ class App extends dn.Process {
 	}
 
 	public function unregisterRecentProject(path:String) {
+		path = StringTools.replace(path, "\\", "/");
 		settings.recentProjects.remove(path);
 		saveSettings();
 	}
