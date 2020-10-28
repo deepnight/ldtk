@@ -53,8 +53,8 @@ Value | Type | Description
 `intGrid`<br/><sup>Only *IntGrid layers*</sup> | Array&nbsp;of&nbsp;Object | This object contains the following fields:<br/><ul><li>**`coordId`** **(Int**) : *Coordinate ID in the layer grid*</li><li>**`v`** **(Int**) : *IntGrid value*</li></ul>
 `layerDefUid` | Int | Reference the Layer definition UID
 `levelId` | Int | Reference to the UID of the level containing this layer instance
-`pxOffsetX` | Int | Horizontal offset in pixels to render this layer, usually 0
-`pxOffsetY` | Int | Vertical offset in pixels to render this layer, usually 0
+`pxOffsetX`<br/> [![Generic badge](https://img.shields.io/badge/Changed-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Int | X offset in pixels to render this layer, usually 0 (this should be added to the `LayerDef` optional offset)
+`pxOffsetY`<br/> [![Generic badge](https://img.shields.io/badge/Changed-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Int | Y offset in pixels to render this layer, usually 0 (this should be added to the `LayerDef` optional offset)
 `seed`<br/><sup>Only *Auto-layers*</sup> | Int | Random seed used for Auto-Layers rendering
 
 <a id="led-Tile" name="led-Tile"></a>
@@ -105,9 +105,11 @@ Value | Type | Description
 `autoSourceLayerDefUid`<br/><sup>Only *Auto-layers*</sup> | Int | 
 `autoTilesetDefUid`<br/><sup>Only *Auto-layers*</sup> | Int | Reference to the Tileset UID being used by this auto-layer rules
 `displayOpacity` | Float | Opacity of the layer (0 to 1.0)
-`gridSize` | Int | 
+`gridSize` | Int | Width and height of the grid in pixels
 `identifier` | String | Unique String identifier
 `intGridValues`<br/><sup>Only *IntGrid layer*</sup> | Array&nbsp;of&nbsp;Object | This object contains the following fields:<br/><ul><li>**`color`** **(String**) *Hex color "#rrggbb"*</li><li>**`identifier`** **(String**)</li></ul>
+`pxOffsetX`<br/> [![Generic badge](https://img.shields.io/badge/Added-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Int | X offset of the layer, in pixels (this should be added to the `LayerInstance` optional offset)
+`pxOffsetY`<br/> [![Generic badge](https://img.shields.io/badge/Added-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Int | Y offset of the layer, in pixels (this should be added to the `LayerInstance` optional offset)
 `tilePivotX`<br/><sup>Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilePivotY`<br/><sup>Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilesetDefUid`<br/><sup>Only *Tile layers*</sup> | Int | Reference to the Tileset UID being used by this tile layer
