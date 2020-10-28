@@ -6,16 +6,18 @@ typedef ProgressOp = {
 }
 
 class Progress extends ui.Modal {
+	static var ALL: Array<Progress> = [];
+
 	public function new(title:String, ops:Array<ProgressOp>, ?onComplete:Void->Void) {
 		super();
 
-		App.LOG.general('"$title", ${ops.length} operation(s):');
-
+		ALL.push(this);
 		canBeClosedManually = false;
 		jModalAndMask.addClass("progress");
 		jMask.hide().fadeIn(500);
+		App.LOG.general('"$title", ${ops.length} operation(s):');
 
-		jContent.append('<h2>$title</h2>');
+		jContent.append('<div class="title">$title</div>');
 
 		var jBar = App.ME.jBody.find("xml#progressBar").children().clone();
 		jBar.appendTo(jContent);
@@ -58,5 +60,29 @@ class Progress extends ui.Modal {
 					onComplete();
 			}
 		}, true);
+
+		updateAllPositions();
+	}
+
+	static function updateAllPositions() {
+		for(w in ALL)
+			if( !w.destroyed )
+				w.jWrapper.css({ marginTop:(8 + w.getStackIndex()*100)+"px" });
+	}
+
+	function getStackIndex() {
+		var i = 0;
+		for(e in ALL)
+			if( e==this )
+				return i;
+			else
+				i++;
+		return 0;
+	}
+
+	override function onDispose() {
+		super.onDispose();
+		ALL.remove(this);
+		updateAllPositions();
 	}
 }

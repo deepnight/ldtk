@@ -1505,12 +1505,15 @@ textarea {
 	align-items: flex-start;
 	justify-items: center;
 	>.wrapper {
-		margin-top: 8px;
 		position: static;
 		padding: 8px;
-		h2 {
-			margin: 0;
-			border: none;
+		.title {
+			font-family: Roboto;
+			color: $orange;
+			font-size: 14pt;
+			margin-bottom: 8px;
+			// margin: 0;
+			// border: none;
 		}
 	}
 }
@@ -2822,8 +2825,11 @@ canvas#webgl {
 		z-index: 2;
 		div {
 			position: absolute;
-			border: 1px solid rgba(255, 255, 255, 0.8);
-			border-radius: 3px;
+			border: 0.5px solid rgba(255, 255, 255, 0.8);
+			border-radius: 1px;
+			&.opaque {
+				border-color: $orange;
+			}
 		}
 	}
 
