@@ -55,8 +55,8 @@ Value | Type | Description
 `intGrid`<br/><sup>Only *IntGrid layers*</sup> | Array&nbsp;of&nbsp;Object | This object contains the following fields:<br/><ul><li>**`coordId`** **(Int**) : *Coordinate ID in the layer grid*</li><li>**`v`** **(Int**) : *IntGrid value*</li></ul>
 `layerDefUid` | Int | Reference the Layer definition UID
 `levelId` | Int | Reference to the UID of the level containing this layer instance
-`pxOffsetX`<br/> [![Generic badge](https://img.shields.io/badge/Changed-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Int | X offset in pixels to render this layer, usually 0 (this should be added to the `LayerDef` optional offset)
-`pxOffsetY`<br/> [![Generic badge](https://img.shields.io/badge/Changed-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Int | Y offset in pixels to render this layer, usually 0 (this should be added to the `LayerDef` optional offset)
+`pxOffsetX`<br/> [![Generic badge](https://img.shields.io/badge/Changed-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Int | X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset)
+`pxOffsetY`<br/> [![Generic badge](https://img.shields.io/badge/Changed-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Int | Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset)
 `seed`<br/><sup>Only *Auto-layers*</sup> | Int | Random seed used for Auto-Layers rendering
 
 <a id="led-Tile" name="led-Tile"></a>
@@ -64,8 +64,8 @@ Value | Type | Description
 Value | Type | Description
 -- | -- | --
 `d` | Array&nbsp;of&nbsp;Int | Internal data used by the editor.<br/>		For auto-layer tiles: `[ruleId, coordId, tileId]`.<br/>		For tile-layer tiles: `[coordId, tileId]`.
-`f` | Int | "Flip flags", a 2-bits integer to represent the mirror transformations of the tile.<br/>		 - Bit 0 = X flip<br/>		 - Bit 1 = Y flip<br/>		 Examples: f=0 (no flip), f=1 (X flip only), f=2 (Y flip only), f=3 (both flips)
-`px` | Array&nbsp;of&nbsp;Int | Pixel coordinates of the tile in the **layer** (`[x,y]` format)
+`f` | Int | "Flip bits", a 2-bits integer to represent the mirror transformations of the tile.<br/>		 - Bit 0 = X flip<br/>		 - Bit 1 = Y flip<br/>		 Examples: f=0 (no flip), f=1 (X flip only), f=2 (Y flip only), f=3 (both flips)
+`px`<br/> [![Generic badge](https://img.shields.io/badge/Changed-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Array&nbsp;of&nbsp;Int | Pixel coordinates of the tile in the **layer** (`[x,y]` format). Don't forget optional layer offsets, if they exist!
 `src` | Array&nbsp;of&nbsp;Int | Pixel coordinates of the tile in the **tileset** (`[x,y]` format)
 
 <a id="led-EntityInstanceJson" name="led-EntityInstanceJson"></a>
@@ -77,7 +77,7 @@ Value | Type | Description
 `__tile`<br/> [![Generic badge](https://img.shields.io/badge/Added-0.4.0-gray.svg)](JSON_CHANGELOG.md)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).<br/>This object contains the following fields:<br/><ul><li>**`srcRect`** **(Array of Int**) : *An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`*</li><li>**`tilesetUid`** **(Int**) : *Tileset ID*</li></ul>
 `defUid` | Int | Reference of the **Entity definition** UID
 `fieldInstances` | Array&nbsp;of&nbsp;[Field&nbsp;instance](#led-FieldInstanceJson) | 
-`px`<br/> [![Generic badge](https://img.shields.io/badge/Changed-0.4.0-gray.svg)](JSON_CHANGELOG.md)  | Array&nbsp;of&nbsp;Int | Pixel coordinates (`[x,y]` format)
+`px`<br/> [![Generic badge](https://img.shields.io/badge/Changed-0.4.0-gray.svg)](JSON_CHANGELOG.md)  | Array&nbsp;of&nbsp;Int | Pixel coordinates (`[x,y]` format). Don't forget optional layer offsets, if they exist!
 
 <a id="led-FieldInstanceJson" name="led-FieldInstanceJson"></a>
 ## 1.1.3. Field instance   
@@ -110,8 +110,8 @@ Value | Type | Description
 `gridSize` | Int | Width and height of the grid in pixels
 `identifier` | String | Unique String identifier
 `intGridValues`<br/><sup>Only *IntGrid layer*</sup> | Array&nbsp;of&nbsp;Object | This object contains the following fields:<br/><ul><li>**`color`** **(String**) *Hex color "#rrggbb"*</li><li>**`identifier`** **(String**)</li></ul>
-`pxOffsetX`<br/> [![Generic badge](https://img.shields.io/badge/Added-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Int | X offset of the layer, in pixels (this should be added to the `LayerInstance` optional offset)
-`pxOffsetY`<br/> [![Generic badge](https://img.shields.io/badge/Added-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Int | Y offset of the layer, in pixels (this should be added to the `LayerInstance` optional offset)
+`pxOffsetX`<br/> [![Generic badge](https://img.shields.io/badge/Added-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Int | X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
+`pxOffsetY`<br/> [![Generic badge](https://img.shields.io/badge/Added-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Int | Y offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
 `tilePivotX`<br/><sup>Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilePivotY`<br/><sup>Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilesetDefUid`<br/><sup>Only *Tile layers*</sup> | Int | Reference to the Tileset UID being used by this tile layer
