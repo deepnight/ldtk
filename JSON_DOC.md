@@ -138,6 +138,7 @@ Sorry this type has no documentation yet.
 Value | Type | Description
 -- | -- | --
 `identifier` | String | Unique String identifier
+`opaqueTiles`<br/> [![Generic badge](https://img.shields.io/badge/Added-0.5.0-green.svg)](JSON_CHANGELOG.md)  | Array&nbsp;of&nbsp;Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array of all tiles that are fully opaque (ie. no transparent pixel). Used internally for optimizations.
 `padding` | Int | Distance in pixels from image borders
 `pxHei` | Int | Image width in pixels
 `pxWid` | Int | Image width in pixels
