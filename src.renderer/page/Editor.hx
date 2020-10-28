@@ -289,7 +289,7 @@ class Editor extends Page {
 				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
 					var newRelPath = makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( getProjectDir(), newRelPath );
-					td.buildOpaqueTileCache();
+					td.buildOpaqueTileCache( ge.emit.bind(TilesetDefOpaqueCacheRebuilt(td)) );
 					ge.emit( TilesetDefChanged(td) );
 					levelRender.invalidateAll();
 				});
@@ -320,7 +320,7 @@ class Editor extends Page {
 		// Rebuild "opaque tiles" cache
 		if( td.opaqueTilesCache==null || !isInitialLoading || result!=Ok ) {
 			changed = true;
-			td.buildOpaqueTileCache();
+			td.buildOpaqueTileCache( ge.emit.bind(TilesetDefOpaqueCacheRebuilt(td)) );
 		}
 
 		ge.emit( TilesetDefChanged(td) );
@@ -951,6 +951,7 @@ class Editor extends Page {
 				case TilesetDefAdded(td): extra = td.uid;
 				case TilesetDefRemoved(td): extra = td.uid;
 				case TilesetSelectionSaved(td): extra = td.uid;
+				case TilesetDefOpaqueCacheRebuilt(td): extra = td.uid;
 				case EntityInstanceAdded(ei): extra = ei.defUid;
 				case EntityInstanceRemoved(ei): extra = ei.defUid;
 				case EntityInstanceChanged(ei): extra = ei.defUid;
@@ -1091,6 +1092,7 @@ class Editor extends Page {
 				updateGuide();
 
 			case TilesetSelectionSaved(td):
+			case TilesetDefOpaqueCacheRebuilt(td):
 
 			case TilesetDefAdded(td):
 

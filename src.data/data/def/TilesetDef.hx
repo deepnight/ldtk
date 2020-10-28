@@ -451,7 +451,7 @@ class TilesetDef {
 		opaqueTilesCache.set(tid, true);
 	}
 
-	public function buildOpaqueTileCache(?onComplete:Void->Void) {
+	public function buildOpaqueTileCache(onComplete:Void->Void) {
 		App.LOG.general("Init opaque cache for "+relPath);
 		opaqueTilesCache = new Map();
 		var ops = [];

@@ -232,6 +232,7 @@ class LevelRender extends dn.Process {
 			case LayerInstanceChanged:
 
 			case TilesetSelectionSaved(td):
+			case TilesetDefOpaqueCacheRebuilt(td):
 
 			case TilesetDefRemoved(td):
 				invalidateAll();

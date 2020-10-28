@@ -60,6 +60,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 				updateForm();
 				updateTilesetPreview();
 
+			case TilesetDefOpaqueCacheRebuilt(td):
+				if( td==curTd )
+					updateTilesetPreview();
+
 			case _:
 		}
 	}
@@ -168,7 +172,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				App.LOG.fileOp("Loading atlas: "+absPath);
 
 				if( curTd.importAtlasImage(editor.getProjectDir(), relPath) )
-					curTd.buildOpaqueTileCache();
+					curTd.buildOpaqueTileCache( Editor.ME.ge.emit.bind(TilesetDefOpaqueCacheRebuilt(curTd)) );
 				else {
 					switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) {
 						case Unknown:
