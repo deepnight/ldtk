@@ -55,6 +55,8 @@ class LayerInstance {
 			__cHei: cHei,
 			__gridSize: def.gridSize,
 			__opacity: def.displayOpacity,
+			__pxTotalOffsetX: pxOffsetX + def.pxOffsetX,
+			__pxTotalOffsetY: pxOffsetY + def.pxOffsetY,
 
 			levelId: levelId,
 			layerDefUid: layerDefUid,
