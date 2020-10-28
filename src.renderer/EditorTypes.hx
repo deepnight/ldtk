@@ -1,6 +1,7 @@
 typedef AppSettings = {
 	var recentProjects : Array<String>;
-	var singleLayerMode: Bool;
+	var singleLayerMode : Bool;
+	var emptySpaceSelection : Bool;
 }
 
 enum GlobalEvent {

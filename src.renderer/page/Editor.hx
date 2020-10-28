@@ -38,7 +38,6 @@ class Editor extends Page {
 
 	public var gridEnabled = true;
 	public var needSaving = false;
-	public var emptySpaceSelection(default,null) = false;
 	public var tileStacking(default,null) = false;
 
 	public var levelRender : display.LevelRender;
@@ -147,7 +146,7 @@ class Editor extends Page {
 		// Option checkboxes
 		linkOption( jEditOptions.find("li.singleLayerMode"), ()->settings.singleLayerMode, (v)->setSingleLayerMode(v) );
 		linkOption( jEditOptions.find("li.grid"), ()->gridEnabled, (v)->setGrid(v) );
-		linkOption( jEditOptions.find("li.emptySpaceSelection"), ()->emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
+		linkOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
 		linkOption(
 			jEditOptions.find("li.tileStacking"),
 			()->tileStacking,
@@ -406,7 +405,7 @@ class Editor extends Page {
 				App.ME.exit();
 
 			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setEmptySpaceSelection( !emptySpaceSelection );
+				setEmptySpaceSelection( !settings.emptySpaceSelection );
 
 			case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setTileStacking( !tileStacking );
@@ -806,9 +805,10 @@ class Editor extends Page {
 	}
 
 	public function setEmptySpaceSelection(v:Bool) {
-		emptySpaceSelection = v;
+		settings.emptySpaceSelection = v;
+		App.ME.saveSettings();
 		selectionTool.clear();
-		N.quick( "Select empty spaces: "+L.onOff( emptySpaceSelection ));
+		N.quick( "Select empty spaces: "+L.onOff( settings.emptySpaceSelection ));
 	}
 
 	public function setTileStacking(v:Bool) {

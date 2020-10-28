@@ -85,6 +85,7 @@ class App extends dn.Process {
 		settings = dn.LocalStorage.readObject("settings", true, {
 			recentProjects: [],
 			singleLayerMode: false,
+			emptySpaceSelection: false,
 		});
 		saveSettings();
 
