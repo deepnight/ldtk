@@ -10,6 +10,8 @@ class Editor extends Page {
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 	var jMouseCoords : js.jquery.JQuery;
 
+	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
+
 	public var curLevel(get,never) : data.Level;
 		inline function get_curLevel() return project.getLevel(curLevelId);
 
@@ -36,7 +38,6 @@ class Editor extends Page {
 
 	public var gridEnabled = true;
 	public var needSaving = false;
-	public var singleLayerMode(default,null) = false;
 	public var emptySpaceSelection(default,null) = false;
 	public var tileStacking(default,null) = false;
 
@@ -144,7 +145,7 @@ class Editor extends Page {
 
 
 		// Option checkboxes
-		linkOption( jEditOptions.find("li.singleLayerMode"), ()->singleLayerMode, (v)->setSingleLayerMode(v) );
+		linkOption( jEditOptions.find("li.singleLayerMode"), ()->settings.singleLayerMode, (v)->setSingleLayerMode(v) );
 		linkOption( jEditOptions.find("li.grid"), ()->gridEnabled, (v)->setGrid(v) );
 		linkOption( jEditOptions.find("li.emptySpaceSelection"), ()->emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
 		linkOption(
@@ -411,16 +412,16 @@ class Editor extends Page {
 				setTileStacking( !tileStacking );
 
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setSingleLayerMode( !singleLayerMode );
+				setSingleLayerMode( !settings.singleLayerMode );
 
 			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() ):
-				if( singleLayerMode )
+				if( settings.singleLayerMode )
 					selectionTool.selectAllInLayers(curLevel, [curLayerInstance]);
 				else
 					selectionTool.selectAllInLayers(curLevel, curLevel.layerInstances);
 
 				if( !selectionTool.isEmpty() ) {
-					if( singleLayerMode )
+					if( settings.singleLayerMode )
 						N.quick( L.t._("Selected all in layer") );
 					else
 						N.quick( L.t._("Selected all") );
@@ -588,7 +589,7 @@ class Editor extends Page {
 			var best = null;
 			for(ld in all) {
 				var ge = getElement( curLevel.getLayerInstance(ld) );
-				if( ld==curLayerDef && ge!=null && singleLayerMode ) // prioritize active layer
+				if( ld==curLayerDef && ge!=null && settings.singleLayerMode ) // prioritize active layer
 					return ge;
 
 				if( ge!=null )
@@ -674,7 +675,7 @@ class Editor extends Page {
 			jElement.css("color", C.intToHex( C.toWhite( c, 0.66 ) ));
 			jElement.css("background-color", C.intToHex( C.toBlack( c, 0.5 ) ));
 		}
-		var overed = getGenericLevelElementAt(m.levelX, m.levelY, singleLayerMode);
+		var overed = getGenericLevelElementAt(m.levelX, m.levelY, settings.singleLayerMode);
 		switch overed {
 			case null:
 			case GridCell(li, cx, cy):
@@ -797,10 +798,11 @@ class Editor extends Page {
 	}
 
 	public function setSingleLayerMode(v:Bool) {
-		singleLayerMode = v;
+		settings.singleLayerMode = v;
+		App.ME.saveSettings();
 		levelRender.applyAllLayersVisibility();
 		selectionTool.clear();
-		N.quick( "Single layer mode: "+L.onOff( singleLayerMode ));
+		N.quick( "Single layer mode: "+L.onOff( settings.singleLayerMode ));
 	}
 
 	public function setEmptySpaceSelection(v:Bool) {

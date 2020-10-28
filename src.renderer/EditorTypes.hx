@@ -1,5 +1,6 @@
 typedef AppSettings = {
 	var recentProjects : Array<String>;
+	var singleLayerMode: Bool;
 }
 
 enum GlobalEvent {

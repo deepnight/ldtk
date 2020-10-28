@@ -602,7 +602,7 @@ class GenericLevelElementGroup {
 				r.bottomPx += getDeltaY(origin,to);
 			}
 
-			var layers = editor.singleLayerMode
+			var layers = App.ME.settings.singleLayerMode
 				? [ editor.curLayerInstance ]
 				: editor.curLevel.layerInstances;
 			for(li in layers)

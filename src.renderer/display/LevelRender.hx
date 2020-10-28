@@ -7,6 +7,7 @@ class LevelRender extends dn.Process {
 	static var FIELD_TEXT_SCALE = 0.666;
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
+	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
 	public var focusLevelX(default,set) : Float;
 	public var focusLevelY(default,set) : Float;
@@ -856,8 +857,8 @@ class LevelRender extends dn.Process {
 			return;
 
 		wrapper.visible = isLayerVisible(li);
-		wrapper.alpha = li.def.displayOpacity * ( !editor.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
-		wrapper.filter = !editor.singleLayerMode || li==editor.curLayerInstance ? null : new h2d.filter.Group([
+		wrapper.alpha = li.def.displayOpacity * ( !settings.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
+		wrapper.filter = !settings.singleLayerMode || li==editor.curLayerInstance ? null : new h2d.filter.Group([
 			C.getColorizeFilterH2d(0x8c99c1, 0.9),
 			new h2d.filter.Blur(2),
 		]);

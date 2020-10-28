@@ -143,7 +143,7 @@ class SelectionTool extends Tool<Int> {
 			editor.cursor.set(Move);
 		else if( !isRunning() ) {
 			// Preview picking
-			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, editor.singleLayerMode);
+			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.singleLayerMode);
 			switch ge {
 			case null:
 				editor.cursor.set(PickNothing);
@@ -210,7 +210,7 @@ class SelectionTool extends Tool<Int> {
 			else {
 				// Start a new selection
 				if( !rectangle ) {
-					var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, editor.singleLayerMode);
+					var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.singleLayerMode);
 					if( ge!=null )
 						select([ ge ]);
 					else
@@ -359,7 +359,7 @@ class SelectionTool extends Tool<Int> {
 				}
 			}
 
-			if( editor.singleLayerMode )
+			if( settings.singleLayerMode )
 				_addRectFromLayer( editor.curLayerInstance );
 			else {
 				for(li in editor.curLevel.layerInstances)

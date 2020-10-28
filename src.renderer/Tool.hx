@@ -6,6 +6,7 @@ class Tool<T> extends dn.Process {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	var curLevel(get,never) : data.Level; inline function get_curLevel() return Editor.ME.curLevel;
+	var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
 	@:allow(ui.ToolPalette)
 	var curLayerInstance(get,never) : data.inst.LayerInstance; inline function get_curLayerInstance() return Editor.ME.curLayerInstance;

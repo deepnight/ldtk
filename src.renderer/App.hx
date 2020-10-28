@@ -84,6 +84,7 @@ class App extends dn.Process {
 		}
 		settings = dn.LocalStorage.readObject("settings", true, {
 			recentProjects: [],
+			singleLayerMode: false,
 		});
 		saveSettings();
 
@@ -254,7 +255,6 @@ class App extends dn.Process {
 	}
 
 	public function saveSettings() {
-		LOG.fileOp("Saving settings...");
 		dn.LocalStorage.writeObject("settings", true, settings);
 	}
 
