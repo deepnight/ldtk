@@ -85,7 +85,6 @@ class Editor extends Page {
 		updateCanvasSize();
 
 		selectProject(p);
-		needSaving = false;
 	}
 
 	function initUI() {
@@ -227,8 +226,10 @@ class Editor extends Page {
 		levelHistory.set( curLevelId, new LevelHistory(curLevelId) );
 
 		// Load tilesets
+		var tilesetChanged = false;
 		for(td in project.defs.tilesets)
-			reloadTileset(td, true);
+			if( reloadTileset(td, true) )
+				tilesetChanged = true;
 
 		ge.emit(ProjectSelected);
 
@@ -244,6 +245,8 @@ class Editor extends Page {
 			if( anychange )
 				needSaving = true;
 		});
+
+		needSaving = tilesetChanged;
 	}
 
 
@@ -271,54 +274,59 @@ class Editor extends Page {
 
 	public function reloadTileset(td:data.def.TilesetDef, isInitialLoading=false) {
 		if( !td.hasAtlasPath() )
-			return;
+			return false;
 
 		var oldRelPath = td.relPath;
+		App.LOG.fileOp("Reloading tileset: "+td.relPath);
 		var result = td.reloadImage( getProjectDir() );
+		App.LOG.fileOp(" -> "+result);
+		App.LOG.fileOp(" -> opaqueCache: "+(td.opaqueTilesCache));
 
+		var changed = false;
 		switch result {
 			case FileNotFound:
+				changed = true;
 				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
 					var newRelPath = makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( getProjectDir(), newRelPath );
+					td.buildOpaqueTileCache();
 					ge.emit( TilesetDefChanged(td) );
 					levelRender.invalidateAll();
 				});
 
 			case RemapLoss:
+				changed = true;
 				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 				new ui.modal.dialog.Warning( Lang.t._("The image ::file:: was updated, but the new version is smaller than the previous one.\nSome tiles might have been lost in the process. It is recommended to check this carefully before saving this project!", { file:name } ) );
 
 			case TrimmedPadding:
+				changed = true;
 				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 				new ui.modal.dialog.Message( Lang.t._("\"::file::\" image was modified but it was SMALLER than the old version.\nLuckily, the tileset had some PADDING, so I was able to use it to compensate the difference.\nSo everything is ok, have a nice day ♥️", { file:name } ), "tile" );
 
 			case Ok:
 				if( !isInitialLoading ) {
+					changed = true;
 					var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 					N.success(Lang.t._("Tileset image ::file:: updated.", { file:name } ) );
 				}
 
 			case RemapSuccessful:
+				changed = true;
 				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 				new ui.modal.dialog.Message( Lang.t._("Tileset image \"::file::\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { file:name } ), "tile" );
 		}
 
-		// Force "opaque" cache building
-		var ops = [];
-		for(cy in 0...td.cHei) {
-			ops.push({
-				label: "cy="+cy,
-				cb : function() {
-					for(cx in 0...td.cWid)
-						td.isTileOpaque( td.getTileId(cx,cy) );
-				}
-			});
+		// Rebuild "opaque tiles" cache
+		if( td.opaqueTilesCache==null || !isInitialLoading || result!=Ok ) {
+			changed = true;
+			td.buildOpaqueTileCache();
 		}
-		new ui.modal.Progress("Detecting opaque tiles in "+td.identifier, ops);
 
-		ge.emit(TilesetDefChanged(td));
+		ge.emit( TilesetDefChanged(td) );
+		return changed;
 	}
+
 
 	public inline function hasInputFocus() {
 		return App.ME.jBody.find("input:focus, textarea:focus").length>0;

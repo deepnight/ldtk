@@ -86,6 +86,8 @@ class TilesetPicker {
 		for(cx in 0...tilesetDef.cWid) {
 			var jCell = new J('<div/>');
 			var tid = tilesetDef.getTileId(cx,cy);
+			if( tilesetDef.isTileOpaque(tid) )
+				jCell.addClass("opaque");
 			jCell.offset({
 				left: tilesetDef.getTileSourceX(tid),
 				top: tilesetDef.getTileSourceY(tid),

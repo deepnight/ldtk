@@ -99,7 +99,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			m,
 			function(cx,cy) return !curLayerInstance.hasSpecificGridTile(cx,cy, initialTileId),
 			// function(cx,cy) return curLayerInstance.getGridTileId(cx,cy) != initial,
-			function(cx,cy,v) curLayerInstance.addGridTile(cx,cy, v.ids[0], editor.tileStacking)
+			function(cx,cy,v) curLayerInstance.addGridTile(cx,cy, v.ids[0], editor.tileStacking && !curTilesetDef.isTileOpaque(v.ids[0]))
 		);
 	}
 
@@ -172,7 +172,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			);
 
 			if( curLayerInstance.isValid(x,y) && selMap.exists(tid) ) {
-				curLayerInstance.addGridTile(x,y, tid, editor.tileStacking);
+				curLayerInstance.addGridTile(x,y, tid, editor.tileStacking && curTilesetDef.isTileOpaque(tid));
 				editor.curLevelHistory.markChange(x,y);
 				anyChange = true;
 			}
@@ -192,7 +192,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			var tid = sel.ids[Std.random(sel.ids.length)];
 			// if( li.isValid(cx,cy) && ( li.getGridTileId(cx,cy)!=tid || li.getGridTileFlips(cx,cy)!=flips ) ) {
 			if( li.isValid(cx,cy) && !hasAlreadyPaintedAt(cx,cy) ) {
-				li.addGridTile(cx,cy, tid, flips, editor.tileStacking);
+				li.addGridTile(cx,cy, tid, flips, editor.tileStacking && !curTilesetDef.isTileOpaque(tid));
 				if( editor.tileStacking )
 					markAsPainted(cx,cy);
 				anyChange = true;
@@ -219,7 +219,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				var tcx = cx + ( flipX ? right-tdCx : tdCx-left ) * gridDiffScale;
 				var tcy = cy + ( flipY ? bottom-tdCy : tdCy-top ) * gridDiffScale;
 				if( li.isValid(tcx,tcy) && !hasAlreadyPaintedAt(tcx,tcy	) ) {
-					li.addGridTile(tcx,tcy,tid, flips, editor.tileStacking);
+					li.addGridTile(tcx,tcy,tid, flips, editor.tileStacking && !curTilesetDef.isTileOpaque(tid));
 					if( editor.tileStacking )
 						markAsPainted(tcx,tcy);
 					editor.curLevelHistory.markChange(tcx,tcy);

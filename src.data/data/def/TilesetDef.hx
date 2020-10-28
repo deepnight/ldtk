@@ -13,7 +13,8 @@ class TilesetDef {
 	public var padding : Int = 0; // px dist to atlas borders
 	public var spacing : Int = 0; // px space between consecutive tiles
 	public var savedSelections : Array<TilesetSelection> = [];
-	var opaqueTilesCache : Map<Int,Bool> = new Map();
+	@:allow(page.Editor)
+	var opaqueTilesCache : Null< Map<Int,Bool> >;
 
 	public var pxWid = 0;
 	public var pxHei = 0;
@@ -93,6 +94,18 @@ class TilesetDef {
 			tileGridSize: tileGridSize,
 			spacing: spacing,
 			padding: padding,
+			opaqueTiles: {
+				if( opaqueTilesCache==null )
+					null;
+				else {
+					var arr = [];
+					for(cy in 0...cHei)
+					for(cx in 0...cWid)
+						if( opaqueTilesCache.get( getTileId(cx,cy) )==true )
+							arr.push( getTileId(cx,cy) );
+					arr;
+				}
+			},
 			savedSelections: savedSelections.map( function(sel) {
 				return { ids:sel.ids, mode:JsonTools.writeEnum(sel.mode, false) }
 			}),
@@ -109,6 +122,15 @@ class TilesetDef {
 		td.pxHei = JsonTools.readInt( json.pxHei );
 		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
+
+		trace(json.opaqueTiles);
+		if( json.opaqueTiles!=null ) {
+			td.opaqueTilesCache = new Map();
+			for(tid in json.opaqueTiles)
+				td.opaqueTilesCache.set(tid, true);
+		}
+		else
+			td.opaqueTilesCache = null;
 
 		var arr = JsonTools.readArray( json.savedSelections );
 		td.savedSelections = json.savedSelections==null ? [] : arr.map( function(jsonSel:Dynamic) {
@@ -127,7 +149,6 @@ class TilesetDef {
 			return false;
 		}
 
-		opaqueTilesCache = new Map();
 		var newPath = dn.FilePath.fromFile( relFilePath ).useSlashes();
 		relPath = newPath.full;
 
@@ -166,6 +187,7 @@ class TilesetDef {
 	public inline function reloadImage(projectDir:String) : EditorTypes.ImageSyncResult {
 		var oldWid = pxWid;
 		var oldHei = pxHei;
+		App.LOG.fileOp("Reloading tileset image "+relPath);
 
 		if( !importAtlasImage(projectDir, relPath) )
 			return FileNotFound;
@@ -411,22 +433,38 @@ class TilesetDef {
 	}
 
 
-	public function isTileOpaque(tid:Int) {
-		if( opaqueTilesCache.exists(tid) )
-			return opaqueTilesCache.get(tid);
-		else {
-			var x = getTileSourceX(tid);
-			var y = getTileSourceY(tid);
-			for(py in y...y+tileGridSize)
-			for(px in x...x+tileGridSize) {
-				if( dn.Color.getAlpha( pixels.getPixel(px,py) ) < 255 ) {
-					opaqueTilesCache.set(tid, false);
-					return false;
-				}
+	public inline function isTileOpaque(tid:Int) {
+		return opaqueTilesCache!=null ? opaqueTilesCache.get(tid)==true : false;
+	}
+
+
+	function parseTileOpacity(tid:Int) {
+		var x = getTileSourceX(tid);
+		var y = getTileSourceY(tid);
+		for(py in y...y+tileGridSize)
+		for(px in x...x+tileGridSize) {
+			if( dn.Color.getAlpha( pixels.getPixel(px,py) ) < 255 ) {
+				opaqueTilesCache.set(tid, false);
+				return;
 			}
-			opaqueTilesCache.set(tid, true);
-			return true;
 		}
+		opaqueTilesCache.set(tid, true);
+	}
+
+	public function buildOpaqueTileCache(?onComplete:Void->Void) {
+		App.LOG.general("Init opaque cache for "+relPath);
+		opaqueTilesCache = new Map();
+		var ops = [];
+		for(tcy in 0...cHei)
+			ops.push({
+				label: Std.string(tcy),
+				cb : ()->{
+					for(tcx in 0...cWid)
+						parseTileOpacity( getTileId(tcx,tcy) );
+				}
+			});
+
+		new ui.modal.Progress('Detecting opaque tiles in "${getFileName(true)}"', ops, onComplete);
 	}
 
 
