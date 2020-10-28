@@ -123,7 +123,6 @@ class TilesetDef {
 		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
 
-		trace(json.opaqueTiles);
 		if( json.opaqueTiles!=null ) {
 			td.opaqueTilesCache = new Map();
 			for(tid in json.opaqueTiles)
