@@ -280,7 +280,7 @@ class Editor extends Page {
 		App.LOG.fileOp("Reloading tileset: "+td.relPath);
 		var result = td.reloadImage( getProjectDir() );
 		App.LOG.fileOp(" -> "+result);
-		App.LOG.fileOp(" -> opaqueCache: "+(td.opaqueTilesCache));
+		App.LOG.fileOp(" -> opaqueCache: "+(td.opaqueTilesCache==null ? "null" : "not null"));
 
 		var changed = false;
 		switch result {
