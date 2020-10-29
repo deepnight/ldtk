@@ -169,6 +169,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		JsTools.parseComponents(jForm);
 		editor.selectLayerInstance( editor.curLevel.getLayerInstance(cur) );
 		jForm.show();
+		jForm.find("#gridSize").prop("readonly",false);
 
 		// Set form class
 		for(k in Type.getEnumConstructs(data.LedTypes.LayerType))
