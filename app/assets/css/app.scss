@@ -3917,8 +3917,10 @@ $patternSize : 32px;
 		}
 
 		&.unknown {
-			background-color: #ff00ff;
+			background-color: $darkRed;
 			border-color: $red;
+			outline: 2px dashed $red;
+			outline-offset: -4px;
 			&::before {
 				content: "!";
 			}
