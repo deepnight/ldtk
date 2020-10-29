@@ -1,8 +1,11 @@
 package ui.modal.dialog;
 
 class Confirm extends ui.modal.Dialog {
+	var onCancel : Null<Void->Void>;
+
 	public function new(?target:js.jquery.JQuery, ?str:String, warning=false, onConfirm:Void->Void, ?onCancel:Void->Void) {
 		super(target);
+		this.onCancel = onCancel;
 
 		jModalAndMask.addClass("confirm");
 
@@ -17,5 +20,11 @@ class Confirm extends ui.modal.Dialog {
 
 		addConfirm(onConfirm);
 		addCancel(onCancel);
+	}
+
+	override function onClickMask() {
+		if( onCancel!=null )
+			onCancel();
+		super.onClickMask();
 	}
 }

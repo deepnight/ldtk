@@ -31,11 +31,15 @@ class Modal extends dn.Process {
 		jContent = jModalAndMask.find(".content");
 
 		jMask = jModalAndMask.find(".mask");
-		jMask.mousedown( function(_) if( canBeClosedManually ) close() );
+		jMask.mousedown( function(_) if( canBeClosedManually ) onClickMask() );
 		jMask.hide().fadeIn(100);
 
 		if( editor!=null )
 			editor.ge.addGlobalListener(onGlobalEvent);
+	}
+
+	function onClickMask() {
+		close();
 	}
 
 	public function positionNear(?target:js.jquery.JQuery, ?m:MouseCoords, toLeft=false) {
