@@ -3332,6 +3332,7 @@ canvas#webgl {
 	}
 
 	ul.form .IntGrid,
+	ul.form .IntGridAutoLayer,
 	ul.form .AutoLayer,
 	ul.form .Tiles,
 	ul.form .Entities {
@@ -3339,6 +3340,7 @@ canvas#webgl {
 	}
 
 	ul.form.type-IntGrid .IntGrid,
+	ul.form.type-IntGridAutoLayer .IntGridAutoLayer,
 	ul.form.type-AutoLayer .AutoLayer,
 	ul.form.type-Entities .Entities,
 	ul.form.type-Tiles .Tiles {
@@ -3362,7 +3364,6 @@ body.sorting ul.collapsedSortTarget {
 		gap: 8px;
 		height: 100%;
 		width: auto;
-		min-width: 250px;
 
 		header {
 			display: flex;
@@ -3411,6 +3412,10 @@ body.sorting ul.collapsedSortTarget {
 
 			>li:last-child {
 				margin-bottom: 30px;
+			}
+
+			li div.warning {
+				max-width: 300px;
 			}
 
 			&:empty {
@@ -3598,7 +3603,7 @@ body.sorting ul.collapsedSortTarget {
 
 						.options {
 							display: grid;
-							grid-template-columns: repeat(5, auto);
+							grid-template-columns: repeat(5, 28px);
 							gap: 2px;
 
 							&>* {
@@ -3648,7 +3653,7 @@ body.sorting ul.collapsedSortTarget {
 							}
 							input[name=xModulo],
 							input[name=yModulo] {
-								width: 20px;
+								// width: 20px;
 								font-size: 9pt;
 								text-align: center;
 								color: $help;

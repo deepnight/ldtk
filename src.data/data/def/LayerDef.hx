@@ -177,7 +177,20 @@ class LayerDef {
 
 
 	public inline function isAutoLayer() {
-		return type==IntGrid && autoTilesetDefUid!=null || type==AutoLayer;
+		return type==IntGrid && autoTilesetDefUid!=null || type==AutoLayer || autoRuleGroups.length>0;
+	}
+
+	public function autoLayerRulesCanBeUsed() {
+		if( !isAutoLayer() )
+			return false;
+
+		if( autoTilesetDefUid==null )
+			return false;
+
+		if( type==AutoLayer && autoSourceLayerDefUid==null )
+			return false;
+
+		return true;
 	}
 
 
@@ -271,6 +284,14 @@ class LayerDef {
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {
 			App.LOG.add("tidy", 'Removed lost autoTileset in $this');
 			autoTilesetDefUid = null;
+			for(rg in autoRuleGroups)
+			for(r in rg.rules)
+				r.tileIds = [];
+		}
+
+		// Lost source intGrid layer
+		if( autoSourceLayerDefUid!=null && p.defs.getLayerDef(autoSourceLayerDefUid)==null ) {
+			autoSourceLayerDefUid = null;
 			for(rg in autoRuleGroups)
 			for(r in rg.rules)
 				r.tileIds = [];

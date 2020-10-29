@@ -120,6 +120,16 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		var jRuleGroupList = jContent.find("ul.ruleGroups").empty();
 
+		if( !ld.autoLayerRulesCanBeUsed() ) {
+			var jError = new J('<li> <div class="warning"/> </li>');
+			jError.appendTo(jRuleGroupList);
+			jError.find("div").append( L.t._("This layer settings prevent its rules to work. Please check the layer settings.") );
+			var jButton = new J('<button>Edit settings</button>');
+			jButton.click( ev->new EditLayerDefs() );
+			jError.find("div").append(jButton);
+			return;
+		}
+
 
 		// Create new rule
 		function createRule(rg:data.LedTypes.AutoLayerRuleGroup, insertIdx:Int) {

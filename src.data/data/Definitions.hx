@@ -141,6 +141,14 @@ class Definitions {
 		_project.tidy();
 	}
 
+	public function isLayerSourceOfAnotherOne(ld:data.def.LayerDef) {
+		for( other in layers )
+			if( other.autoSourceLayerDefUid==ld.uid )
+				return true;
+
+		return false;
+	}
+
 	public function sortLayerDef(from:Int, to:Int) : Null<data.def.LayerDef> {
 		if( from<0 || from>=layers.length || from==to )
 			return null;

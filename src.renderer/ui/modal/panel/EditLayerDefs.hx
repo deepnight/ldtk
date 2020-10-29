@@ -51,7 +51,15 @@ class EditLayerDefs extends ui.modal.Panel {
 		select(editor.curLayerDef);
 	}
 
-	function deleteLayer(ld:data.def.LayerDef) {
+	function deleteLayer(ld:data.def.LayerDef, bypassConfirm=false) {
+		if( !bypassConfirm && project.defs.isLayerSourceOfAnotherOne(ld) ) {
+			new ui.modal.dialog.Confirm(
+				L.t._("Warning! This IntGrid layer is used by another one as SOURCE. Deleting it will also delete all rules in the corresponding auto-layer(s)!\n You may want to change these layers source to another one before..."),
+				true,
+				deleteLayer.bind(ld,true)
+			);
+			return;
+		}
 		new ui.LastChance(
 			L.t._("Layer ::name:: deleted", { name:ld.identifier }),
 			project
@@ -105,10 +113,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			()->{
 				// Done, update layer def
 				ld.type = Tiles;
-				var ref = ld.autoSourceLayerDefUid!=null
-					? project.defs.getLayerDef(ld.autoSourceLayerDefUid)
-					: ld;
-				ld.tilesetDefUid = ref.autoTilesetDefUid;
+				ld.tilesetDefUid = ld.autoTilesetDefUid;
 				ld.autoRuleGroups = [];
 				ld.autoSourceLayerDefUid = null;
 				ld.autoTilesetDefUid = null;
@@ -175,6 +180,8 @@ class EditLayerDefs extends ui.modal.Panel {
 		for(k in Type.getEnumConstructs(data.LedTypes.LayerType))
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+cur.type);
+		if( cur.type==IntGrid && cur.isAutoLayer() )
+			jForm.addClass("type-IntGridAutoLayer");
 
 		jForm.find("span.typeIcon").empty().append( JsTools.createLayerTypeIconAndName(cur.type) );
 
@@ -205,12 +212,15 @@ class EditLayerDefs extends ui.modal.Panel {
 		if( cur.isAutoLayer() ) {
 			var jButton = jForm.find("button.bake");
 			jButton.click( (_)->{
-				new ui.modal.dialog.Confirm(
-					jButton,
-					L.t._("Transform this layer into a traditional Tile layer?"),
-					true,
-					()->bakeLayer(cur)
-				);
+				if( !cur.autoLayerRulesCanBeUsed() )
+					new ui.modal.dialog.Message(L.t._("Errors in current layer settings prevent rules to be applied. It can't be baked now."));
+				else
+					new ui.modal.dialog.Confirm(
+						jButton,
+						L.t._("Transform this layer into a traditional Tile layer?"),
+						true,
+						()->bakeLayer(cur)
+					);
 			});
 		}
 
