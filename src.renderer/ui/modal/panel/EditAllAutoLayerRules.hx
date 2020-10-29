@@ -24,6 +24,12 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
+
+		if( project.defs.getLayerDef(li.layerDefUid)==null ) {
+			close();
+			return;
+		}
+
 		switch e {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
 				updatePanel();
