@@ -172,6 +172,7 @@ class Modal extends dn.Process {
 
 		// Close
 		jModalAndMask.find("*").off();
+		Tip.clear();
 		onClose();
 		doCloseAnimation();
 		onCloseCb();
