@@ -654,53 +654,60 @@ class Editor extends Page {
 		rulers.onMouseMove(m);
 
 		// Mouse coords infos
-		if( curLayerInstance!=null )
-			jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
-		else
-			jMouseCoords.find(".grid").hide();
-		jMouseCoords.find(".pixels").text('Level = ${m.levelX},${m.levelY}');
-		if( curTool.getRunningRectCWid(m)>0 || selectionTool.getRunningRectCWid(m)>0 ) {
-			var wid = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCWid(m);
-			var hei = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCHei(m);
-			jMouseCoords.find(".grid").append(' / ${wid} x $hei');
-		}
+		if( ui.Modal.hasAnyOpen() )
+			jMouseCoords.hide();
+		else {
+			jMouseCoords.show();
 
-		// Overed element infos in footer
-		var jElement = jMouseCoords.find(".element");
-		jElement.removeAttr("style");
-		inline function _colorizeElement(c:UInt) {
-			jElement.css("color", C.intToHex( C.toWhite( c, 0.66 ) ));
-			jElement.css("background-color", C.intToHex( C.toBlack( c, 0.5 ) ));
-		}
-		var overed = getGenericLevelElementAt(m.levelX, m.levelY, settings.singleLayerMode);
-		switch overed {
-			case null:
-			case GridCell(li, cx, cy):
-				if( li.hasAnyGridValue(cx,cy) )
-					switch li.def.type {
-						case IntGrid:
-							var v = li.getIntGrid(cx,cy);
-							_colorizeElement( li.def.getIntGridValueColor(v) );
-							jElement.text('${ li.def.getIntGridValueDisplayName(v) } (IntGrid)');
+			// Coordinates
+			if( curLayerInstance!=null )
+				jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
+			else
+				jMouseCoords.find(".grid").hide();
+			jMouseCoords.find(".pixels").text('Level = ${m.levelX},${m.levelY}');
+			if( curTool.getRunningRectCWid(m)>0 || selectionTool.getRunningRectCWid(m)>0 ) {
+				var wid = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCWid(m);
+				var hei = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCHei(m);
+				jMouseCoords.find(".grid").append(' / ${wid} x $hei');
+			}
 
-						case Tiles:
-							var stack = li.getGridTileStack(cx,cy);
-							if( stack.length==1 )
-								jElement.text('Tile ${ stack[0].tileId }');
-							else
-								jElement.text('Tiles ${ stack.map(t->t.tileId).join(", ") }');
+			// Overed element infos in footer
+			var jElement = jMouseCoords.find(".element");
+			jElement.removeAttr("style");
+			inline function _colorizeElement(c:UInt) {
+				jElement.css("color", C.intToHex( C.toWhite( c, 0.66 ) ));
+				jElement.css("background-color", C.intToHex( C.toBlack( c, 0.5 ) ));
+			}
+			var overed = getGenericLevelElementAt(m.levelX, m.levelY, settings.singleLayerMode);
+			switch overed {
+				case null:
+				case GridCell(li, cx, cy):
+					if( li.hasAnyGridValue(cx,cy) )
+						switch li.def.type {
+							case IntGrid:
+								var v = li.getIntGrid(cx,cy);
+								_colorizeElement( li.def.getIntGridValueColor(v) );
+								jElement.text('${ li.def.getIntGridValueDisplayName(v) } (IntGrid)');
 
-						case Entities:
-						case AutoLayer:
-					}
+							case Tiles:
+								var stack = li.getGridTileStack(cx,cy);
+								if( stack.length==1 )
+									jElement.text('Tile ${ stack[0].tileId }');
+								else
+									jElement.text('Tiles ${ stack.map(t->t.tileId).join(", ") }');
 
-			case Entity(li, ei):
-				_colorizeElement( ei.getSmartColor(false) );
-				jElement.text('${ ei.def.identifier } (Entity)');
+							case Entities:
+							case AutoLayer:
+						}
 
-			case PointField(li, ei, fi, arrayIdx):
-				_colorizeElement( ei.getSmartColor(false) );
-				jElement.text('${ ei.def.identifier }.${ fi.def.identifier } (Entity point)');
+				case Entity(li, ei):
+					_colorizeElement( ei.getSmartColor(false) );
+					jElement.text('${ ei.def.identifier } (Entity)');
+
+				case PointField(li, ei, fi, arrayIdx):
+					_colorizeElement( ei.getSmartColor(false) );
+					jElement.text('${ ei.def.identifier }.${ fi.def.identifier } (Entity point)');
+			}
 		}
 	}
 
