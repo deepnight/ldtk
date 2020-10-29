@@ -1,6 +1,8 @@
 lastBuildVersion.txt
 json_doc.xml
 
+**/*.crash.json
+
 dump/
 res/.tmp
 .vscode/settings.json
