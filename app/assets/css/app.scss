@@ -2826,7 +2826,7 @@ canvas#webgl {
 		div {
 			position: absolute;
 			border: 0.5px solid rgba(255, 255, 255, 0.8);
-			border-radius: 1px;
+			border-radius: 2.5px;
 			&.opaque {
 				border-color: $orange;
 			}

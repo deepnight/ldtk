@@ -92,8 +92,8 @@ class TilesetPicker {
 				left: tilesetDef.getTileSourceX(tid),
 				top: tilesetDef.getTileSourceY(tid),
 			});
-			jCell.css("width", (tilesetDef.tileGridSize-2)+"px");
-			jCell.css("height", (tilesetDef.tileGridSize-2)+"px");
+			jCell.css("width", (tilesetDef.tileGridSize-1)+"px");
+			jCell.css("height", (tilesetDef.tileGridSize-1)+"px");
 			jGrid.append(jCell);
 		}
 	}
