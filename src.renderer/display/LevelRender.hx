@@ -437,6 +437,8 @@ class LevelRender extends dn.Process {
 		case IntGrid, AutoLayer:
 			var g = new h2d.Graphics(wrapper);
 
+			var doneCoords = new Map();
+
 			if( li.def.isAutoLayer() && li.def.autoTilesetDefUid!=null && autoLayerRenderingEnabled(li) ) {
 				// Auto-layer tiles
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
@@ -444,26 +446,36 @@ class LevelRender extends dn.Process {
 
 				li.def.iterateActiveRulesInDisplayOrder( (r)-> {
 					if( li.autoTilesCache.exists( r.uid ) ) {
-						for(allTiles in li.autoTilesCache.get( r.uid ))
-						for(tileInfos in allTiles) {
-							tg.addTransform(
-								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
-								dn.M.hasBit(tileInfos.flips,0)?-1:1,
-								dn.M.hasBit(tileInfos.flips,1)?-1:1,
-								0,
-								td.extractTile(tileInfos.srcX, tileInfos.srcY)
-							);
+						for(coordId in li.autoTilesCache.get( r.uid ).keys()) {
+							doneCoords.set(coordId, true);
+							for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
+								tg.addTransform(
+									tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+									tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
+									dn.M.hasBit(tileInfos.flips,0)?-1:1,
+									dn.M.hasBit(tileInfos.flips,1)?-1:1,
+									0,
+									td.extractTile(tileInfos.srcX, tileInfos.srcY)
+								);
+							}
 						}
 					}
 				});
-		}
+
+				if( li.def.type==IntGrid )
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid) {
+						if( doneCoords.exists(li.coordId(cx,cy)) || li.getIntGrid(cx,cy)<0 )
+							continue;
+						g.lineStyle(1, li.getIntGridColorAt(cx,cy), 0.6 );
+						g.drawRect(cx*li.def.gridSize+2, cy*li.def.gridSize+2, li.def.gridSize-4, li.def.gridSize-4);
+					}
+			}
 			else if( li.def.type==IntGrid ) {
 				// Normal intGrid
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
-					var id = li.getIntGrid(cx,cy);
-					if( id<0 )
+					if( !li.hasIntGrid(cx,cy) )
 						continue;
 
 					g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
