@@ -8,7 +8,7 @@ typedef ProgressOp = {
 class Progress extends ui.Modal {
 	static var ALL: Array<Progress> = [];
 
-	public function new(title:String, ops:Array<ProgressOp>, ?onComplete:Void->Void) {
+	public function new(title:String, opsPerCycle=1, ops:Array<ProgressOp>, ?onComplete:Void->Void) {
 		super();
 
 		ALL.push(this);
@@ -27,8 +27,9 @@ class Progress extends ui.Modal {
 		var total = ops.length;
 		var time = haxe.Timer.stamp();
 		createChildProcess( (p)->{
-			if( ops.length>0 ) {
-				// Execute operation
+			var i = 0;
+			while( i++<opsPerCycle && ops.length>0 ) {
+				// Execute one operation
 				var op = ops.shift();
 				delayer.addF(op.cb, 1);
 				cur++;
@@ -37,7 +38,8 @@ class Progress extends ui.Modal {
 				jBar.find(".label").text( op.label );
 				log.push(op.label);
 			}
-			else {
+
+			if( ops.length==0 ) {
 				// All done!
 				canBeClosedManually = true;
 				App.LOG.general('Done "$title" (${M.pretty(haxe.Timer.stamp()-time)}s)');
