@@ -83,6 +83,7 @@ class Editor extends Page {
 		updateCanvasSize();
 
 		selectProject(p);
+		setCompactMode( settings.compactMode, true );
 	}
 
 	function initUI() {
@@ -358,11 +359,8 @@ class Editor extends Page {
 					ui.EntityInstanceEditor.close();
 
 			case K.TAB:
-				if( !ui.Modal.hasAnyOpen() ) {
-					App.ME.jPage.toggleClass("compactPanel");
-					updateCanvasSize();
-					updateAppBg();
-				}
+				if( !ui.Modal.hasAnyOpen() )
+					setCompactMode( !settings.compactMode );
 
 			case K.Z:
 				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() )
@@ -673,7 +671,7 @@ class Editor extends Page {
 
 			// Overed element infos in footer
 			var jElement = jMouseCoords.find(".element");
-			jElement.removeAttr("style");
+			jElement.removeAttr("style").empty();
 			inline function _colorizeElement(c:UInt) {
 				jElement.css("color", C.intToHex( C.toWhite( c, 0.66 ) ));
 				jElement.css("background-color", C.intToHex( C.toBlack( c, 0.5 ) ));
@@ -822,6 +820,22 @@ class Editor extends Page {
 		App.ME.saveSettings();
 		selectionTool.clear();
 		N.quick( "Tile stacking: "+L.onOff( settings.tileStacking ));
+	}
+
+	public function setCompactMode(v:Bool, init=true) {
+		settings.compactMode = v;
+		if( !init )
+			App.ME.saveSettings();
+
+		if( settings.compactMode )
+			App.ME.jPage.addClass("compactPanel");
+		else
+			App.ME.jPage.removeClass("compactPanel");
+
+		updateCanvasSize();
+		updateAppBg();
+		if( !init )
+			N.quick("Compact UI: "+L.onOff(settings.compactMode));
 	}
 
 
