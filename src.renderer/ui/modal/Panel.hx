@@ -1,7 +1,7 @@
 package ui.modal;
 
 class Panel extends ui.Modal {
-	var jPanelMask: js.jquery.JQuery;
+	var jPanelMask: js.jquery.JQuery; // mask over main panel
 	var jLinkedButton : Null<js.jquery.JQuery>;
 
 	public function new() {

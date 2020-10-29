@@ -23,8 +23,9 @@ class Confirm extends ui.modal.Dialog {
 	}
 
 	override function onClickMask() {
+		super.onClickMask();
+		
 		if( onCancel!=null )
 			onCancel();
-		super.onClickMask();
 	}
 }

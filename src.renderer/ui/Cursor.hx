@@ -54,7 +54,8 @@ class Cursor extends dn.Process {
 		graphics.lineStyle(0);
 		graphics.endFill();
 
-		wrapper.visible = type!=None && !Modal.hasAnyOpen() && editor.isCurrentLayerVisible();
+		wrapper.visible = type!=None && editor.isCurrentLayerVisible();
+		// wrapper.visible = type!=None && !Modal.hasAnyOpen() && editor.isCurrentLayerVisible();
 		graphics.visible = wrapper.visible;
 		labelWrapper.visible = curLabel!=null;
 

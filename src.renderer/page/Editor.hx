@@ -1258,7 +1258,7 @@ class Editor extends Page {
 				ev.preventDefault();
 				ev.stopPropagation();
 				selectLayerInstance(li);
-				new ui.modal.panel.EditAllAutoLayerRules();
+				new ui.modal.panel.EditAllAutoLayerRules(li);
 			});
 
 			// Visibility button

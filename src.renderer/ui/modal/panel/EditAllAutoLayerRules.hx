@@ -5,19 +5,20 @@ import data.LedTypes;
 class EditAllAutoLayerRules extends ui.modal.Panel {
 	var invalidatedRules : Map<Int,Int> = new Map();
 
-	public var li(get,never) : data.inst.LayerInstance;
-		inline function get_li() return Editor.ME.curLayerInstance;
+	var li : data.inst.LayerInstance;
+	// public var li(get,never) : data.inst.LayerInstance;
+	// 	inline function get_li() return Editor.ME.curLayerInstance;
 
 	public var ld(get,never) : data.def.LayerDef;
-		inline function get_ld() return Editor.ME.curLayerDef;
+		inline function get_ld() return li.def;
 
 	var lastRule : Null<data.def.AutoLayerRuleDef>;
 
-	public function new() {
+	public function new(li:data.inst.LayerInstance) {
 		super();
+		this.li = li;
 
 		loadTemplate("editAllAutoLayerRules");
-		setTransparentMask();
 		updatePanel();
 	}
 
