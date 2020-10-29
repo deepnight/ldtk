@@ -209,6 +209,21 @@ class AutoLayerRuleDef {
 		return tileIds.length==0;
 	}
 
+	public function isUsingUnknownIntGridValues(ld:LayerDef) {
+		if( ld.type!=IntGrid )
+			throw "Invalid layer type";
+
+		var v = 0;
+		for(px in 0...size)
+		for(py in 0...size) {
+			v = pattern[px+py*size];
+			if( v!=0 && !ld.hasIntGridValue( dn.M.iabs(v)-1 ) )
+				return true;
+		}
+
+		return false;
+	}
+
 	public function matches(li:data.inst.LayerInstance, source:data.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
 		if( tileIds.length==0 )
 			return false;

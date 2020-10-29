@@ -245,28 +245,18 @@ class EditLayerDefs extends ui.modal.Panel {
 				opt.text( td.identifier );
 			}
 			jTileset.change( function(ev) {
-				function changeTileset(clear:Bool) {
-					if( clear ) {
-						new LastChance(Lang.t._("Deleted all auto-layer rules"), project);
-						cur.autoRuleGroups = [];
-					}
-					cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
-					if( cur.autoTilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
-						cur.gridSize = project.defs.getTilesetDef(cur.autoTilesetDefUid).tileGridSize;
-					editor.ge.emit( LayerDefChanged);
-				}
+				var newTilesetUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
 
-				if( cur.autoRuleGroups.length==0 || cur.autoTilesetDefUid==null )
-					changeTileset(false);
-				else {
-					new ui.modal.dialog.Confirm(
-						jTileset,
-						Lang.t._("Warning: changing the tileset will DELETE all the existing rules in this auto-layer!"),
-						true,
-						changeTileset.bind(true),
-						updateForm
-					);
-				}
+				if( cur.autoRuleGroups.length!=0 )
+					new LastChance(Lang.t._("Changed auto-layer tileset"), project);
+
+				cur.autoTilesetDefUid = newTilesetUid;
+				if( cur.autoTilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
+					cur.gridSize = project.defs.getTilesetDef(cur.autoTilesetDefUid).tileGridSize;
+
+				// TODO cleanup rules with invalid tileIDs
+
+				editor.ge.emit( LayerDefChanged);
 			});
 			if( cur.autoTilesetDefUid!=null )
 				jTileset.val( cur.autoTilesetDefUid );
@@ -377,6 +367,14 @@ class EditLayerDefs extends ui.modal.Panel {
 					if( v<0 )
 						cur.autoSourceLayerDefUid = null;
 					else {
+						// TODO detect rules that refer to invalid IntGrid values
+						var source = project.defs.getLayerDef(v);
+						for(rg in cur.autoRuleGroups)
+						for(r in rg.rules) {
+							if( r.isUsingUnknownIntGridValues(source) )
+								App.LOG.error(r+" intGrid value not found in "+source);
+						}
+
 						cur.autoSourceLayerDefUid = v;
 						cur.gridSize = project.defs.getLayerDef(v).gridSize;
 					}

@@ -134,6 +134,10 @@ class LayerDef {
 		});
 	}
 
+	public inline function hasIntGridValue(v:Int) {
+		return v>=0 && v<intGridValues.length;
+	}
+
 	public inline function getIntGridValueDef(idx:Int) : Null<IntGridValueDef> {
 		return intGridValues[idx];
 	}
@@ -193,6 +197,13 @@ class LayerDef {
 		return true;
 	}
 
+	public function hasAnyRuleUsingUnknownIntGridValues(source:LayerDef) {
+		for(rg in autoRuleGroups)
+		for(r in rg.rules)
+			if( r.isUsingUnknownIntGridValues(source) )
+				return true;
+		return false;
+	}
 
 	public function hasRule(ruleUid:Int) : Bool {
 		for(rg in autoRuleGroups)

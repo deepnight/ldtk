@@ -3735,6 +3735,22 @@ body.sorting ul.collapsedSortTarget {
 							display: grid;
 							justify-items: center;
 
+							.error {
+								display: grid;
+								justify-content: center;
+								align-content: center;
+
+								box-sizing: border-box;
+								padding: 10px;
+								min-width: 32px;
+								min-height: 32px;
+								color: $red;
+
+								background-color: $darkRed;
+								background-image: url("../img/stripes.png");
+								border: 1px solid $red;
+							}
+
 							.autoPatternGrid {
 								border-color: $bgMed;
 							}
@@ -3897,6 +3913,14 @@ $patternSize : 32px;
 		&.anything {
 			&::before {
 				content: "?";
+			}
+		}
+
+		&.unknown {
+			background-color: #ff00ff;
+			border-color: $red;
+			&::before {
+				content: "!";
 			}
 		}
 

@@ -721,26 +721,31 @@ class JsTools {
 			if( !isCenter || !previewMode ) {
 				var v = rule.get(cx,cy);
 				if( v!=0 ) {
+					var intGridVal = M.iabs(v)-1;
 					if( v>0 ) {
-						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING ) {
+						if( intGridVal == Const.AUTO_LAYER_ANYTHING ) {
 							jCell.addClass("anything");
 							addExplain(jCell, 'This cell should contain any IntGrid value to match.');
 						}
-						else {
-							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(M.iabs(v)-1).color ) );
-							addExplain(jCell, 'This cell should contain "${sourceDef.getIntGridValueDisplayName(M.iabs(v)-1)}" to match.');
+						else if( sourceDef.hasIntGridValue(intGridVal) ) {
+							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(intGridVal).color ) );
+							addExplain(jCell, 'This cell should contain "${sourceDef.getIntGridValueDisplayName(intGridVal)}" to match.');
 						}
+						else
+							jCell.addClass("unknown");
 					}
 					else {
 						jCell.addClass("not").append('<span class="cross"></span>');
-						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING ) {
+						if( intGridVal == Const.AUTO_LAYER_ANYTHING ) {
 							jCell.addClass("anything");
 							addExplain(jCell, 'This cell should NOT contain any IntGrid value to match.');
 						}
-						else {
-							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(M.iabs(v)-1).color ) );
-							addExplain(jCell, 'This cell should NOT contain "${sourceDef.getIntGridValueDisplayName(M.iabs(v)-1)}" to match.');
+						else if( sourceDef.hasIntGridValue(intGridVal) ) {
+							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(intGridVal).color ) );
+							addExplain(jCell, 'This cell should NOT contain "${sourceDef.getIntGridValueDisplayName(intGridVal)}" to match.');
 						}
+						else
+							jCell.addClass("unknown");
 					}
 				}
 				else {
