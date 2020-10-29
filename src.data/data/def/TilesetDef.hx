@@ -423,7 +423,6 @@ class TilesetDef {
 			return makeErrorTile(tileGridSize);
 	}
 
-
 	public inline function extractTile(tileX:Int, tileY:Int) : h2d.Tile {
 		if( isAtlasLoaded() )
 			return getAtlasTile().sub( tileX, tileY, tileGridSize, tileGridSize );
@@ -438,16 +437,20 @@ class TilesetDef {
 
 
 	function parseTileOpacity(tid:Int) {
-		var x = getTileSourceX(tid);
-		var y = getTileSourceY(tid);
-		for(py in y...y+tileGridSize)
-		for(px in x...x+tileGridSize) {
-			if( dn.Color.getAlpha( pixels.getPixel(px,py) ) < 255 ) {
-				opaqueTilesCache.set(tid, false);
-				return;
+		opaqueTilesCache.set(tid, true);
+
+		var tx = getTileSourceX(tid);
+		var ty = getTileSourceY(tid);
+
+		if( tx+tileGridSize<=pxWid && ty+tileGridSize<=pxHei ) {
+			for(py in ty...ty+tileGridSize)
+			for(px in tx...tx+tileGridSize) {
+				if( dn.Color.getAlpha( pixels.getPixel(px,py) ) < 255 ) {
+					opaqueTilesCache.set(tid, false);
+					return;
+				}
 			}
 		}
-		opaqueTilesCache.set(tid, true);
 	}
 
 	public function buildOpaqueTileCache(onComplete:Void->Void) {
@@ -463,7 +466,7 @@ class TilesetDef {
 				}
 			});
 
-		new ui.modal.Progress('Detecting opaque tiles in "${getFileName(true)}"', ops, onComplete);
+		new ui.modal.Progress('Detecting opaque tiles in "${getFileName(true)}"', 10, ops, onComplete);
 	}
 
 
