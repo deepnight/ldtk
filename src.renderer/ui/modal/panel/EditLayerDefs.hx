@@ -317,6 +317,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					e.find("a.remove").click( function(ev) {
 						function run() {
 							cur.getAllIntGridValues().splice(curIdx,1);
+							project.tidy();
 							editor.ge.emit(LayerDefChanged);
 							updateForm();
 						}
