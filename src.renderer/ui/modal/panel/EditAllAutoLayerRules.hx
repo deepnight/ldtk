@@ -3,16 +3,13 @@ package ui.modal.panel;
 import data.LedTypes;
 
 class EditAllAutoLayerRules extends ui.modal.Panel {
-	var invalidatedRules : Map<Int,Int> = new Map();
-
 	var li : data.inst.LayerInstance;
-	// public var li(get,never) : data.inst.LayerInstance;
-	// 	inline function get_li() return Editor.ME.curLayerInstance;
+	var invalidatedRules : Map<Int,Int> = new Map();
+	var lastRule : Null<data.def.AutoLayerRuleDef>;
 
 	public var ld(get,never) : data.def.LayerDef;
 		inline function get_ld() return li.def;
 
-	var lastRule : Null<data.def.AutoLayerRuleDef>;
 
 	public function new(li:data.inst.LayerInstance) {
 		super();
@@ -20,6 +17,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		loadTemplate("editAllAutoLayerRules");
 		updatePanel();
+		enableCloseButton();
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
