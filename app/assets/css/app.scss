@@ -2659,6 +2659,7 @@ canvas#webgl {
 							max-width: 900px;
 							margin-left: 16px;
 							margin-bottom: 32px;
+							border-spacing: 0;
 
 							tr {
 								th {
@@ -2671,8 +2672,9 @@ canvas#webgl {
 
 								td {
 									vertical-align: top;
-									padding: 8px 8px;
-									border-bottom: 1px solid $bgMed;
+									padding: 16px 8px;
+									border-bottom: 1px solid $bgDark;
+									background-color: $bgMed;
 
 									br {
 										display: block;
