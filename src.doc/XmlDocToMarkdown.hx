@@ -332,7 +332,7 @@ class XmlDocToMarkdown {
 		Create a badge markdown
 	**/
 	static function badge(name:String, value:String, ?color:String) {
-		return '[![Generic badge](https://img.shields.io/badge/$name-$value-$color.svg)](JSON_CHANGELOG.md)';
+		return '![Generic badge](https://img.shields.io/badge/${name}_${value}-${color}.svg)';
 	}
 
 
