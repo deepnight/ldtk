@@ -178,9 +178,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				var relPath = Editor.ME.makeRelativeFilePath( absPath );
 				App.LOG.fileOp("Loading atlas: "+absPath);
 
-				if( curTd.importAtlasImage(editor.getProjectDir(), relPath) )
-					rebuildOpaqueCache();
-				else {
+				if( !curTd.importAtlasImage(editor.getProjectDir(), relPath) ) {
 					switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) {
 						case Unknown:
 							N.error("ERROR: I don't think this is an actual image");
