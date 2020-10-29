@@ -186,6 +186,9 @@ class LevelRender extends dn.Process {
 				if( layerRenders.exists(uid) ) {
 					layerRenders.get(uid).remove();
 					layerRenders.remove(uid);
+					for(li in editor.curLevel.layerInstances)
+						if( !li.def.autoLayerRulesCanBeUsed() )
+							invalidateLayer(li);
 				}
 
 			case LayerDefSorted:

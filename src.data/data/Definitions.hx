@@ -141,9 +141,9 @@ class Definitions {
 		_project.tidy();
 	}
 
-	public function isLayerSourceOfAnotherOne(ld:data.def.LayerDef) {
+	public function isLayerSourceOfAnotherOne(?ld:data.def.LayerDef, ?layerDefUid:Int) {
 		for( other in layers )
-			if( other.autoSourceLayerDefUid==ld.uid )
+			if( ld!=null && other.autoSourceLayerDefUid==ld.uid || layerDefUid!=null && other.autoSourceLayerDefUid==layerDefUid )
 				return true;
 
 		return false;

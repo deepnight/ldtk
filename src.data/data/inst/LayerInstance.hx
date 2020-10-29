@@ -284,6 +284,10 @@ class LayerInstance {
 							autoTilesCache.remove(rUid);
 						}
 
+					if( !def.autoLayerRulesCanBeUsed() ) {
+						App.LOG.add("tidy", 'Removed all autoTilesCache in $this (rules can no longer be applied)');
+						autoTilesCache = new Map();
+					}
 					// Fix missing autoTiles
 					// for(rg in def.autoRuleGroups)
 					// for(r in rg.rules)

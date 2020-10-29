@@ -127,6 +127,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			var jButton = new J('<button>Edit settings</button>');
 			jButton.click( ev->new EditLayerDefs() );
 			jError.find("div").append(jButton);
+
+			for(rg in ld.autoRuleGroups) {
+				var jLi = new J('<li class="placeholder"/>');
+				jLi.appendTo(jRuleGroupList);
+				jLi.append('<strong>"${rg.name}"</strong>');
+				jLi.append('<em>${rg.rules.length} rule(s)</em>');
+			}
 			return;
 		}
 

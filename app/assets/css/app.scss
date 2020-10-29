@@ -3414,6 +3414,17 @@ body.sorting ul.collapsedSortTarget {
 				margin-bottom: 30px;
 			}
 
+			li.placeholder {
+				display: grid;
+				cursor: not-allowed;
+				strong {
+					font-weight: bold;
+				}
+				em {
+					color: $bgLighter;
+				}
+			}
+
 			li div.warning {
 				max-width: 300px;
 			}
