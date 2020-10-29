@@ -573,48 +573,52 @@ class LayerInstance {
 	}
 
 	inline function applyAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
-		// Init
-		if( !autoTilesCache.exists(r.uid) )
-			autoTilesCache.set( r.uid, [] );
-		autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
-
-		// Modulos
-		if( r.checker!=Vertical && cy%r.yModulo!=0 )
+		if( !def.autoLayerRulesCanBeUsed() )
 			return false;
+		else {
+			// Init
+			if( !autoTilesCache.exists(r.uid) )
+				autoTilesCache.set( r.uid, [] );
+			autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
 
-		if( r.checker==Vertical && ( cy + ( Std.int(cx/r.xModulo)%2 ) )%r.yModulo!=0 )
-			return false;
+			// Modulos
+			if( r.checker!=Vertical && cy%r.yModulo!=0 )
+				return false;
 
-		if( r.checker!=Horizontal && cx%r.xModulo!=0 )
-			return false;
+			if( r.checker==Vertical && ( cy + ( Std.int(cx/r.xModulo)%2 ) )%r.yModulo!=0 )
+				return false;
 
-		if( r.checker==Horizontal && ( cx + ( Std.int(cy/r.yModulo)%2 ) )%r.xModulo!=0 )
-			return false;
+			if( r.checker!=Horizontal && cx%r.xModulo!=0 )
+				return false;
+
+			if( r.checker==Horizontal && ( cx + ( Std.int(cy/r.yModulo)%2 ) )%r.xModulo!=0 )
+				return false;
 
 
-		// Apply rule
-		if( r.matches(this, source, cx,cy) ) {
-			applyMatchedRule(r, cx,cy, 0);
-			return true;
+			// Apply rule
+			if( r.matches(this, source, cx,cy) ) {
+				applyMatchedRule(r, cx,cy, 0);
+				return true;
+			}
+			else if( r.flipX && r.matches(this, source, cx,cy, -1) ) {
+				applyMatchedRule(r, cx,cy, 1);
+				return true;
+			}
+			else if( r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
+				applyMatchedRule(r, cx,cy, 2);
+				return true;
+			}
+			else if( r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
+				applyMatchedRule(r, cx,cy, 3);
+				return true;
+			}
+			else
+				return false;
 		}
-		else if( r.flipX && r.matches(this, source, cx,cy, -1) ) {
-			applyMatchedRule(r, cx,cy, 1);
-			return true;
-		}
-		else if( r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
-			applyMatchedRule(r, cx,cy, 2);
-			return true;
-		}
-		else if( r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
-			applyMatchedRule(r, cx,cy, 3);
-			return true;
-		}
-		else
-			return false;
 	}
 
 	public function applyAllAutoLayerRulesAt(cx:Int, cy:Int, wid:Int, hei:Int) {
-		if( !def.isAutoLayer() )
+		if( !def.isAutoLayer() || !def.autoLayerRulesCanBeUsed() )
 			return;
 
 		// Adjust bounds to also redraw nearby cells
