@@ -877,6 +877,7 @@ ul.log {
 .icon.project	{ background-image: url("../img/icons/projectSettings.png"); }
 .icon.enum		{ background-image: url("../img/icons/enum.png"); }
 .icon.close		{ background-image: url("../img/icons/close.png"); }
+.icon.exit		{ background-image: url("../img/icons/exit.svg"); }
 .icon.visible	{ background-image: url("../img/icons/visible.png"); }
 .icon.hidden	{ background-image: url("../img/icons/hidden.png"); }
 .icon.active	{ background-image: url("../img/icons/active.png"); }
@@ -2135,10 +2136,13 @@ canvas#webgl {
 
 			li {
 				grid-template-columns: min-content min-content auto min-content;
-				padding-top: 4px;
-				padding-bottom: 4px;
+				padding: 0;
+				padding-left: 8px;
+				align-items: stretch;
 
 				.index {
+					display: flex;
+					align-items: center;
 					min-width: 1.2em;
 					text-align: center;
 					color: $bgLighter;
@@ -2149,20 +2153,31 @@ canvas#webgl {
 					color: $darkOrange;
 				}
 
+				.layerIcon {
+					display: flex;
+					align-items: center;
+				}
+
 				.name {
-					font-size: 10pt;
+					display: flex;
+					align-items: center;
 					overflow-x: hidden;
-					display: block;
-					cursor: pointer;
+					padding-top: 8px;
+					padding-bottom: 8px;
+					font-size: 10pt;
 				}
 
 				.actions {
 					display: flex;
+
 					.vis {
+						display: flex;
+						align-items: center;
+						padding: 0px 4px;
+
 						color: white;
 						text-shadow: 0px 0px 4px black;
 						order: 2;
-						display: block;
 						border-radius: 3px;
 						cursor: zoom-out;
 
@@ -2172,7 +2187,11 @@ canvas#webgl {
 					}
 
 					a {
+						display: flex;
+						align-items: center;
 						padding: 4px;
+						margin-top: 1px;
+						margin-bottom: 1px;
 
 						color: white;
 						white-space: nowrap;
@@ -2298,6 +2317,11 @@ canvas#webgl {
 				}
 				.name {
 					font-size: 8pt;
+				}
+				.actions a {
+					padding: 2px;
+					font-size: 7pt;
+					text-transform: none;
 				}
 			}
 
@@ -3385,8 +3409,8 @@ body.sorting ul.collapsedSortTarget {
 	.wrapper {
 		padding: 8px;
 		border-left: 2px solid $bgLighter;
-		border-right: 1px solid black;
-		box-shadow: -8px 0px 0px rgba(0, 0, 0, 0.5);
+		border-right: 1px solid $bgLight;
+		box-shadow: -8px 0px 0px rgba(0, 0, 0, 0.5), 2px 0px 0px rgba(0, 0, 0, 0.5);
 	}
 
 	.content {
