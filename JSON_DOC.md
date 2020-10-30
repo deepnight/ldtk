@@ -123,7 +123,8 @@ Value | Type | Description
 Value | Type | Description
 -- | -- | --
 `active` | Bool | If FALSE, the rule effect isn't applied, and no tiles are generated.
-`chance` | Float | When TRUE, the rule will prevent other rules to be applied in the same cell if it matches (TRUE by default).
+`breakOnMatch` | Bool | When TRUE, the rule will prevent other rules to be applied in the same cell if it matches (TRUE by default).
+`chance` | Float | Chances for this rule to be applied (0 to 1)
 `checker` | Bool | If TRUE, enable checker mode
 `flipX` | Bool | If TRUE, allow rule to be matched by flipping its pattern horizontally
 `flipY` | Bool | If TRUE, allow rule to be matched by flipping its pattern vertically

@@ -8,6 +8,7 @@ class AutoLayerRuleDef {
 
 	public var tileIds : Array<Int> = [];
 	public var chance : Float = 1.0;
+	public var breakOnMatch = true;
 	public var size(default,null): Int;
 	var pattern : Array<Int> = [];
 	public var flipX = false;
@@ -110,6 +111,7 @@ class AutoLayerRuleDef {
 			size: size,
 			tileIds: tileIds.copy(),
 			chance: JsonTools.writeFloat(chance),
+			breakOnMatch: breakOnMatch,
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
 			flipX: flipX,
 			flipY: flipY,
@@ -131,6 +133,7 @@ class AutoLayerRuleDef {
 		var r = new AutoLayerRuleDef( json.uid, json.size );
 		r.active = JsonTools.readBool(json.active, true);
 		r.tileIds = json.tileIds;
+		r.breakOnMatch = JsonTools.readBool(json.breakOnMatch, false); // default to FALSE to avoid breaking old maps
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
 		r.flipX = JsonTools.readBool(json.flipX, false);
@@ -216,9 +219,11 @@ class AutoLayerRuleDef {
 		var v = 0;
 		for(px in 0...size)
 		for(py in 0...size) {
-			v = pattern[px+py*size];
-			if( v!=0 && !ld.hasIntGridValue( dn.M.iabs(v)-1 ) )
+			v = dn.M.iabs( pattern[px+py*size] ) - 1;
+			if( v>=0 && v!=Const.AUTO_LAYER_ANYTHING && !ld.hasIntGridValue(v) ) {
+				trace(v);
 				return true;
+			}
 		}
 
 		return false;

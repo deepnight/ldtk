@@ -284,6 +284,14 @@ class LayerDef {
 		}
 	}
 
+	public inline function iterateActiveRulesInEvalOrder( cbEachRule:(r:AutoLayerRuleDef)->Void ) {
+		for(rg in autoRuleGroups)
+			if( rg.active )
+				for(r in rg.rules)
+					if( r.active)
+						cbEachRule(r);
+	}
+
 	public function tidy(p:data.Project) {
 		// Lost tileset
 		if( tilesetDefUid!=null && p.defs.getTilesetDef(tilesetDefUid)==null ) {

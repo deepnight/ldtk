@@ -621,6 +621,28 @@ class LayerInstance {
 		}
 	}
 
+
+	function applyBreakOnMatches() {
+		var coordLocks = new Map();
+
+		for( cy in 0...cHei )
+		for( cx in 0...cWid ) {
+			def.iterateActiveRulesInEvalOrder( (r)->{
+				if( !r.breakOnMatch )
+					return;
+
+				if( autoTilesCache.exists(r.uid) && autoTilesCache.get(r.uid).exists(coordId(cx,cy)) ) {
+					if( coordLocks.exists( coordId(cx,cy) ) )
+						autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
+					else
+						coordLocks.set( coordId(cx,cy), true );
+				}
+
+			});
+		}
+	}
+
+
 	public function applyAllAutoLayerRulesAt(cx:Int, cy:Int, wid:Int, hei:Int) {
 		if( !def.isAutoLayer() || !def.autoLayerRulesCanBeUsed() )
 			return;
@@ -642,15 +664,16 @@ class LayerInstance {
 		for(rg in def.autoRuleGroups)
 		for(r in rg.rules)
 			runAutoLayerRuleAt(source, r,cx,cy);
+
+		applyBreakOnMatches();
 	}
 
-	public function applyAllAutoLayerRules() {
-		if( !def.isAutoLayer() )
-			return;
-
-		autoTilesCache = new Map();
-		applyAllAutoLayerRulesAt(0, 0, cWid, cHei);
-		App.LOG.warning("All rules applied in "+toString());
+	public inline function applyAllAutoLayerRules() {
+		if( def.isAutoLayer() ) {
+			autoTilesCache = new Map();
+			applyAllAutoLayerRulesAt(0, 0, cWid, cHei);
+			App.LOG.warning("All rules applied in "+toString());
+		}
 	}
 
 	public function applyAutoLayerRuleEverywhere(r:data.def.AutoLayerRuleDef) {
@@ -665,6 +688,8 @@ class LayerInstance {
 		for(cx in 0...cWid)
 		for(cy in 0...cHei)
 			runAutoLayerRuleAt(source, r, cx,cy);
+
+		applyBreakOnMatches();
 	}
 
 }

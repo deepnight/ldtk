@@ -3464,7 +3464,7 @@ body.sorting ul.collapsedSortTarget {
 		grid-template-rows: min-content auto;
 		gap: 8px;
 		height: 100%;
-		width: 290px;
+		width: 320px;
 
 		header {
 			display: flex;
@@ -3715,7 +3715,7 @@ body.sorting ul.collapsedSortTarget {
 
 						.options {
 							display: grid;
-							grid-template-columns: repeat(5, 22px);
+							grid-template-columns: repeat(6, 22px);
 							gap: 2px;
 
 							&>* {
@@ -3728,7 +3728,7 @@ body.sorting ul.collapsedSortTarget {
 							}
 
 							.random {
-								grid-column: 1/4;
+								grid-column: 1/5;
 								display: flex;
 								flex-wrap: nowrap;
 								align-items: center;
@@ -3758,10 +3758,10 @@ body.sorting ul.collapsedSortTarget {
 							}
 
 							input[name=xModulo] {
-								grid-column: 4/5;
+								grid-column: 5/6;
 							}
 							input[name=yModulo] {
-								grid-column: 5/6;
+								grid-column: 6/7;
 							}
 							input[name=xModulo],
 							input[name=yModulo] {
@@ -3810,6 +3810,12 @@ body.sorting ul.collapsedSortTarget {
 								}
 								&.off span.on {
 									display: none;
+								}
+
+								&.break.on {
+									color: #009dff;
+									border-color: #009dff;
+									text-shadow: 0px 0px 4px #009dff;
 								}
 
 								&.active.on {
