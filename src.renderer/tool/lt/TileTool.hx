@@ -100,8 +100,8 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		var topTile = curLayerInstance.getTopMostGridTile(m.cx, m.cy);
 		var initialTileId : Null<Int> = topTile!=null ? topTile.tileId : null;
 
-		if( initialTileId==getSelectedValue().ids[0] && curMode==Add )
-			return false;
+		// if( initialTileId==getSelectedValue().ids[0] && curMode==Add )
+		// 	return false;
 
 		return _floodFillImpl(
 			m,
