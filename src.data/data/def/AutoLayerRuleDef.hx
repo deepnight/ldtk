@@ -101,7 +101,7 @@ class AutoLayerRuleDef {
 		return 'Rule#$uid(${size}x$size)';
 	}
 
-	public function toJson() {
+	public function toJson() : led.Json.AutoRuleDef {
 		tidy();
 
 		return {
@@ -127,7 +127,7 @@ class AutoLayerRuleDef {
 		}
 	}
 
-	public static function fromJson(jsonVersion:String, json:Dynamic) {
+	public static function fromJson(jsonVersion:String, json:led.Json.AutoRuleDef) {
 		var r = new AutoLayerRuleDef( json.uid, json.size );
 		r.active = JsonTools.readBool(json.active, true);
 		r.tileIds = json.tileIds;
