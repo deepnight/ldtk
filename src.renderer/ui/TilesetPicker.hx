@@ -378,16 +378,8 @@ class TilesetPicker {
 		// Auto-pick saved selection
 		if( mode==ToolPicker && selIds.length==1 && tilesetDef.hasSavedSelectionFor(selIds[0]) && !App.ME.isCtrlDown() ) {
 			// Check if the saved selection isn't already picked. If so, just pick the sub-tile
-			var sel = tool.getSelectedValue();
 			var saved = tilesetDef.getSavedSelectionFor( selIds[0] );
-			var same = true;
-			var i = 0;
-			while( i<saved.ids.length ) {
-				if( sel.ids[i]!=saved.ids[i] )
-					same = false;
-				i++;
-			}
-			if( !same ) {
+			if( !tool.selectedValueHasAny(saved.ids) ) {
 				selIds = saved.ids.copy();
 				tool.setMode( saved.mode );
 			}
