@@ -886,7 +886,6 @@ class Editor extends Page {
 
 		ge.emit(BeforeProjectSaving);
 		createChildProcess( (p)->{
-			if( !cd.hasSetS("debug",0.1) ) N.debug("waiting...");
 			if( !saveLocked() ) {
 				checkAutoLayersCache( (anyChange)->{
 					App.LOG.fileOp('Saving $projectFilePath...');

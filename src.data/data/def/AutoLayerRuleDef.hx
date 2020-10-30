@@ -220,10 +220,8 @@ class AutoLayerRuleDef {
 		for(px in 0...size)
 		for(py in 0...size) {
 			v = dn.M.iabs( pattern[px+py*size] ) - 1;
-			if( v>=0 && v!=Const.AUTO_LAYER_ANYTHING && !ld.hasIntGridValue(v) ) {
-				trace(v);
+			if( v>=0 && v!=Const.AUTO_LAYER_ANYTHING && !ld.hasIntGridValue(v) )
 				return true;
-			}
 		}
 
 		return false;
