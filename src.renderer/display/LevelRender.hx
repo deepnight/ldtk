@@ -462,14 +462,15 @@ class LevelRender extends dn.Process {
 					}
 				});
 
-				if( li.def.type==IntGrid )
-					for(cy in 0...li.cHei)
-					for(cx in 0...li.cWid) {
-						if( doneCoords.exists(li.coordId(cx,cy)) || li.getIntGrid(cx,cy)<0 )
-							continue;
-						g.lineStyle(1, li.getIntGridColorAt(cx,cy), 0.6 );
-						g.drawRect(cx*li.def.gridSize+2, cy*li.def.gridSize+2, li.def.gridSize-4, li.def.gridSize-4);
-					}
+				// Default render when no rule match here
+				// if( li.def.type==IntGrid )
+				// 	for(cy in 0...li.cHei)
+				// 	for(cx in 0...li.cWid) {
+				// 		if( doneCoords.exists(li.coordId(cx,cy)) || li.getIntGrid(cx,cy)<0 )
+				// 			continue;
+				// 		g.lineStyle(1, li.getIntGridColorAt(cx,cy), 0.6 );
+				// 		g.drawRect(cx*li.def.gridSize+2, cy*li.def.gridSize+2, li.def.gridSize-4, li.def.gridSize-4);
+				// 	}
 			}
 			else if( li.def.type==IntGrid ) {
 				// Normal intGrid
