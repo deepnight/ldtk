@@ -21,9 +21,18 @@ class EntityInstanceEditor extends dn.Process {
 		Editor.ME.root.add(link, Const.DP_UI);
 
 		jPanel = new J('<div class="entityInstanceEditor"/>');
-		App.ME.jBody.append(jPanel);
+		App.ME.jPage.append(jPanel);
 
 		updateForm();
+	}
+
+	override function onResize() {
+		super.onResize();
+
+		jPanel.css({
+			left : js.Browser.window.innerWidth - jPanel.outerWidth(),
+			top : Std.int(js.Browser.window.innerHeight*0.5 - jPanel.outerHeight()*0.5)+"px",
+		});
 	}
 
 	override function onDispose() {
@@ -545,9 +554,7 @@ class EntityInstanceEditor extends dn.Process {
 		}
 
 		// Position panel
-		var wh = js.Browser.window.innerHeight;
-		var h = jPanel.outerHeight();
-		jPanel.css("top", Std.int(wh*0.5 - h*0.5)+"px");
+		onResize();
 
 
 		JsTools.parseComponents(jPanel);

@@ -2991,11 +2991,9 @@ canvas#webgl {
 	position: absolute;
 	overflow: auto;
 	z-index: 10;
-	top: 0px;
-	right: 0px;
 
 	width: 200px;
-	max-height: 90%;
+	max-height: 90vh;
 	box-sizing: border-box;
 	padding: 10px;
 	border-left: 4px solid $orange;
