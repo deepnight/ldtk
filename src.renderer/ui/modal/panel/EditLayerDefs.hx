@@ -171,7 +171,6 @@ class EditLayerDefs extends ui.modal.Panel {
 			return;
 		}
 
-		JsTools.parseComponents(jForm);
 		editor.selectLayerInstance( editor.curLevel.getLayerInstance(cur) );
 		jForm.show();
 		jForm.find("#gridSize").prop("readonly",false);
@@ -470,6 +469,9 @@ class EditLayerDefs extends ui.modal.Panel {
 				});
 				p.appendTo(jPivots);
 		}
+
+		JsTools.parseComponents(jForm);
+
 	}
 
 
