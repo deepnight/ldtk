@@ -20,7 +20,6 @@ class Modal extends dn.Process {
 		if( editor!=null )
 			editor.clearSpecialTool();
 
-		EntityInstanceEditor.close();
 		Tip.clear();
 		ALL.push(this);
 
@@ -136,6 +135,24 @@ class Modal extends dn.Process {
 		for(e in ALL)
 			if( !e.isClosing() && e.countAsModal() && !e.canBeClosedManually )
 				return true;
+		return false;
+	}
+
+	public static function closeLatest() {
+		if( !hasAnyOpen() )
+			return false;
+
+		var i = ALL.length-1;
+		while( i>=0 )
+			if( ALL[i].destroyed )
+				i--;
+			else if( !ALL[i].canBeClosedManually )
+				return false;
+			else {
+				ALL[i].close();
+				return true;
+			}
+
 		return false;
 	}
 

@@ -345,12 +345,11 @@ class Editor extends Page {
 					try App.ME.jBody.find("input:focus, textarea:focus").blur()
 					catch(e:Dynamic) {}
 				}
-				else if( ui.modal.ContextMenu.isOpen() )
-					ui.modal.ContextMenu.ME.close();
 				else if( specialTool!=null )
 					clearSpecialTool();
-				else if( ui.Modal.hasAnyOpen() )
-					ui.Modal.closeAll();
+				else if( ui.Modal.hasAnyOpen() ) {
+					ui.Modal.closeLatest();
+				}
 				else if( selectionTool.any() ) {
 					ui.EntityInstanceEditor.close();
 					selectionTool.clear();
