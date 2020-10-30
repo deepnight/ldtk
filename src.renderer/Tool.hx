@@ -112,7 +112,12 @@ class Tool<T> extends dn.Process {
 		return false;
 	}
 
-	function _floodFillImpl(m:MouseCoords, isBlocking:(cx:Int,cy:Int)->Bool, setter:(cx:Int,cy:Int,v:T)->Void) {
+	function _floodFillImpl(
+		m:MouseCoords,
+		isBlocking:(cx:Int,cy:Int)->Bool,
+		setter:(cx:Int,cy:Int,v:T)->Void,
+		?onFill:(left:Int, right:Int, top:Int, bottom:Int, affectedPoints:Array<{ cx:Int, cy:Int }>)->Void
+	) {
 		var li = curLayerInstance;
 
 		if( isBlocking(m.cx,m.cy) )
@@ -132,6 +137,7 @@ class Tool<T> extends dn.Process {
 		var right = left;
 		var top = m.cy;
 		var bottom = top;
+		var affectedPoints = [];
 
 		while( pending.length>0 ) {
 			var cur = pending.pop();
@@ -145,6 +151,7 @@ class Tool<T> extends dn.Process {
 			// Apply
 			editor.curLevelHistory.markChange(cur.cx, cur.cy);
 			setter( cur.cx, cur.cy, getSelectedValue() );
+			affectedPoints.push(cur);
 
 			// Update bounds
 			left = M.imin( left, cur.cx );
@@ -154,6 +161,9 @@ class Tool<T> extends dn.Process {
 		}
 
 		editor.levelRender.invalidateLayerArea(curLayerInstance, left, right, top, bottom);
+
+		if( onFill!=null )
+			onFill(left,right,top,bottom, affectedPoints);
 
 		return true;
 	}

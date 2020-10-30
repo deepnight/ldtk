@@ -96,7 +96,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		return false;
 	}
 
-	override function useFloodfillAt(m:MouseCoords):Bool { // TODO test flood fill with stacking
+	override function useFloodfillAt(m:MouseCoords):Bool {
 		var topTile = curLayerInstance.getTopMostGridTile(m.cx, m.cy);
 		var initialTileId : Null<Int> = topTile!=null ? topTile.tileId : null;
 
@@ -111,8 +111,24 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				else
 					return !curLayerInstance.hasSpecificGridTile(cx,cy, initialTileId);
 			},
-			// function(cx,cy) return curLayerInstance.getGridTileId(cx,cy) != initial,
-			function(cx,cy,v) curLayerInstance.addGridTile(cx,cy, v.ids[0], settings.tileStacking && !curTilesetDef.isTileOpaque(v.ids[0]))
+			function(cx,cy,v) {
+				switch v.mode {
+					case Stamp:
+						// Painting is done when all filled cells are listed
+						// var id = v.ids[0];
+						// curLayerInstance.addGridTile( cx,cy, id, settings.tileStacking && !curTilesetDef.isTileOpaque(id) );
+
+					case Random:
+						var id = v.ids[ Std.random(v.ids.length) ];
+						curLayerInstance.addGridTile( cx,cy, id, settings.tileStacking && !curTilesetDef.isTileOpaque(id) );
+				}
+			},
+			function(left,right,top,bottom,pts) {
+				var mask = new Map();
+				for(pt in pts)
+					mask.set( curLayerInstance.coordId(pt.cx,pt.cy), true );
+				drawSelectionInRectangle(left,top, right-left+1, bottom-top+1, mask);
+			}
 		);
 	}
 
@@ -148,7 +164,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 	}
 
 
-	function drawSelectionInRectangle(cx:Int, cy:Int, wid:Int, hei:Int) {
+	function drawSelectionInRectangle(cx:Int, cy:Int, wid:Int, hei:Int, ?onlyCoordsMask:Map<Int,Bool>) {
 		var anyChange = false;
 		var sel = getSelectedValue();
 		var selMap = new Map();
@@ -184,8 +200,9 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				selTop + Std.int(dy/gridDiffScale)%selHei
 			);
 
+			if( onlyCoordsMask==null || onlyCoordsMask.exists(curLayerInstance.coordId(x,y)) )
 			if( curLayerInstance.isValid(x,y) && selMap.exists(tid) ) {
-				curLayerInstance.addGridTile(x,y, tid, settings.tileStacking && curTilesetDef.isTileOpaque(tid));
+				curLayerInstance.addGridTile(x,y, tid, settings.tileStacking && !curTilesetDef.isTileOpaque(tid));
 				editor.curLevelHistory.markChange(x,y);
 				anyChange = true;
 			}
