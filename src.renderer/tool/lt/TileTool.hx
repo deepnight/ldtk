@@ -105,7 +105,12 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 
 		return _floodFillImpl(
 			m,
-			function(cx,cy) return !curLayerInstance.hasSpecificGridTile(cx,cy, initialTileId),
+			function(cx,cy) {
+				if( initialTileId==null )
+					return curLayerInstance.hasAnyGridTile(cx,cy);
+				else
+					return !curLayerInstance.hasSpecificGridTile(cx,cy, initialTileId);
+			},
 			// function(cx,cy) return curLayerInstance.getGridTileId(cx,cy) != initial,
 			function(cx,cy,v) curLayerInstance.addGridTile(cx,cy, v.ids[0], settings.tileStacking && !curTilesetDef.isTileOpaque(v.ids[0]))
 		);
