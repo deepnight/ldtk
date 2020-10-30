@@ -100,7 +100,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				if( r!=null ) {
 					ops.push({
 						label: 'Updating rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
-						cb: li.applyAutoLayerRule.bind(r),
+						cb: li.applyAutoLayerRuleEverywhere.bind(r),
 					});
 				}
 				else if( r==null && li.autoTilesCache.exists(ruleUid) ) {

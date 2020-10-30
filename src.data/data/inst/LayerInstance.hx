@@ -560,7 +560,7 @@ class LayerInstance {
 		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) && gridTiles.get(coordId(cx,cy)).length>0;
 	}
 
-	inline function applyMatchedRule(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
+	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
 		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds;
 		var td = _project.defs.getTilesetDef( def.autoTilesetDefUid );
 		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
@@ -576,7 +576,7 @@ class LayerInstance {
 		} ) );
 	}
 
-	inline function applyAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
+	inline function runAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
 		if( !def.autoLayerRulesCanBeUsed() )
 			return false;
 		else {
@@ -601,19 +601,19 @@ class LayerInstance {
 
 			// Apply rule
 			if( r.matches(this, source, cx,cy) ) {
-				applyMatchedRule(r, cx,cy, 0);
+				addRuleTilesAt(r, cx,cy, 0);
 				return true;
 			}
 			else if( r.flipX && r.matches(this, source, cx,cy, -1) ) {
-				applyMatchedRule(r, cx,cy, 1);
+				addRuleTilesAt(r, cx,cy, 1);
 				return true;
 			}
 			else if( r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
-				applyMatchedRule(r, cx,cy, 2);
+				addRuleTilesAt(r, cx,cy, 2);
 				return true;
 			}
 			else if( r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
-				applyMatchedRule(r, cx,cy, 3);
+				addRuleTilesAt(r, cx,cy, 3);
 				return true;
 			}
 			else
@@ -641,7 +641,7 @@ class LayerInstance {
 		for(cy in top...bottom+1)
 		for(rg in def.autoRuleGroups)
 		for(r in rg.rules)
-			applyAutoLayerRuleAt(source, r,cx,cy);
+			runAutoLayerRuleAt(source, r,cx,cy);
 	}
 
 	public function applyAllAutoLayerRules() {
@@ -653,7 +653,7 @@ class LayerInstance {
 		App.LOG.warning("All rules applied in "+toString());
 	}
 
-	public function applyAutoLayerRule(r:data.def.AutoLayerRuleDef) {
+	public function applyAutoLayerRuleEverywhere(r:data.def.AutoLayerRuleDef) {
 		// TODO use cache invalidation?
 		if( !def.isAutoLayer() )
 			return;
@@ -664,7 +664,7 @@ class LayerInstance {
 
 		for(cx in 0...cWid)
 		for(cy in 0...cHei)
-			applyAutoLayerRuleAt(source, r, cx,cy);
+			runAutoLayerRuleAt(source, r, cx,cy);
 	}
 
 }
