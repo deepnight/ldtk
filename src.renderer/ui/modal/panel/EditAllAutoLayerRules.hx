@@ -375,6 +375,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				jFlag.click( function(ev:js.jquery.Event) {
 					ev.preventDefault();
 					r.breakOnMatch = !r.breakOnMatch;
+					var isAfter = false;
+					li.def.iterateActiveRulesInEvalOrder( (or)->{
+						if( or.uid==r.uid )
+							isAfter = true;
+						else if( isAfter )
+							invalidateRule(or);
+					} );
 					editor.ge.emit( LayerRuleChanged(r) );
 				});
 
