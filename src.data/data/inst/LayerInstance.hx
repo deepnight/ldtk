@@ -317,7 +317,7 @@ class LayerInstance {
 
 
 	@:allow(data.Level)
-	function applyNewBounds(newPxLeft:Int, newPxTop:Int, newPxWid:Int, newPxHei:Int) {
+	private function applyNewBounds(newPxLeft:Int, newPxTop:Int, newPxWid:Int, newPxHei:Int) {
 		var totalOffsetX = pxOffsetX - newPxLeft;
 		var totalOffsetY = pxOffsetY - newPxTop;
 		var newPxOffsetX = totalOffsetX % def.gridSize;
