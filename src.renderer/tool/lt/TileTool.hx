@@ -100,7 +100,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		var topTile = curLayerInstance.getTopMostGridTile(m.cx, m.cy);
 		var initialTileId : Null<Int> = topTile!=null ? topTile.tileId : null;
 
-		if( initialTileId==getSelectedValue().ids[0] )
+		if( initialTileId==getSelectedValue().ids[0] && curMode==Add )
 			return false;
 
 		return _floodFillImpl(
@@ -112,22 +112,29 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 					return !curLayerInstance.hasSpecificGridTile(cx,cy, initialTileId);
 			},
 			function(cx,cy,v) {
-				switch v.mode {
-					case Stamp:
-						// Painting is done when all filled cells are listed
-						// var id = v.ids[0];
-						// curLayerInstance.addGridTile( cx,cy, id, settings.tileStacking && !curTilesetDef.isTileOpaque(id) );
+				switch curMode {
+					case Add:
+						switch v.mode {
+							case Stamp: // Painting is done at the end, when the filled area is known
 
-					case Random:
-						var id = v.ids[ Std.random(v.ids.length) ];
-						curLayerInstance.addGridTile( cx,cy, id, settings.tileStacking && !curTilesetDef.isTileOpaque(id) );
+							case Random:
+								var id = v.ids[ Std.random(v.ids.length) ];
+								curLayerInstance.addGridTile( cx,cy, id, settings.tileStacking && !curTilesetDef.isTileOpaque(id) );
+						}
+
+					case Remove:
+						curLayerInstance.removeAllGridTiles(cx,cy);
+
+					case _:
 				}
 			},
 			function(left,right,top,bottom,pts) {
-				var mask = new Map();
-				for(pt in pts)
-					mask.set( curLayerInstance.coordId(pt.cx,pt.cy), true );
-				drawSelectionInRectangle(left,top, right-left+1, bottom-top+1, mask);
+				if( getMode()==Stamp && curMode==Add ) {
+					var mask = new Map();
+					for(pt in pts)
+						mask.set( curLayerInstance.coordId(pt.cx,pt.cy), true );
+					drawSelectionInRectangle(left,top, right-left+1, bottom-top+1, mask);
+				}
 			}
 		);
 	}

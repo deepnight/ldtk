@@ -91,13 +91,23 @@ class IntGridTool extends tool.LayerTool<Int> {
 
 	override function useFloodfillAt(m:MouseCoords):Bool {
 		var initial = curLayerInstance.getIntGrid(m.cx,m.cy);
-		if( initial==getSelectedValue() )
+		if( initial==getSelectedValue() && curMode==Add )
 			return false;
 
 		return _floodFillImpl(
 			m,
-			function(cx,cy) return curLayerInstance.getIntGrid(cx,cy)!=initial,
-			curLayerInstance.setIntGrid
+			(cx,cy)->curLayerInstance.getIntGrid(cx,cy)!=initial,
+			(cx,cy, v)->{
+				switch curMode {
+					case null:
+					case PanView:
+					case Add:
+						curLayerInstance.setIntGrid(cx,cy, v);
+
+					case Remove:
+						curLayerInstance.removeIntGrid(cx,cy);
+				}
+			}
 		);
 	}
 
