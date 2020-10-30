@@ -12,7 +12,7 @@ extern class ColorPicker {
 	public function remove() : Void;
 
 	public function setColor( color : haxe.extern.EitherType<String,UInt> ) : Void;
-	public function setSize(width:Int, height:Int) : Void;
+	public function setSize(width:Float, height:Float) : Void;
 	public function setBackgroundColor( color : haxe.extern.EitherType<String,UInt> ) : Void;
 	public function setNoBackground() : Void;
 	public function getColor() : haxe.extern.EitherType<String,UInt>;

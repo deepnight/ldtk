@@ -407,6 +407,18 @@ class JsTools {
 			});
 			jTabs.find("li:first").click();
 		});
+
+		// Color pickers
+		jCtx.find("input[type=color]").each( function(idx,e) {
+			var jInput = new J(e);
+			jInput
+				.off(".picker")
+				.on("click.picker", (ev:js.jquery.Event)->{
+					ev.stopPropagation();
+					ev.preventDefault();
+					new ui.modal.dialog.ColorPicker( jInput );
+				});
+		});
 	}
 
 

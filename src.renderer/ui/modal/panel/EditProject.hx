@@ -56,5 +56,7 @@ class EditProject extends ui.modal.Panel {
 				editor.ge.emit(ProjectSettingsChanged);
 			}
 		));
+
+		JsTools.parseComponents(jForm);
 	}
 }

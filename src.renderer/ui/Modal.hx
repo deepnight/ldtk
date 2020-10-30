@@ -1,7 +1,7 @@
 package ui;
 
 class Modal extends dn.Process {
-	static var ALL : Array<Modal> = [];
+	public static var ALL : Array<Modal> = [];
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
@@ -186,6 +186,9 @@ class Modal extends dn.Process {
 	}
 
 	public dynamic function onCloseCb() {}
+
+	@:allow(App)
+	function onKeyPress(keyCode:Int) {}
 
 	public function loadTemplate(tplName:String, ?className:String, ?vars:Dynamic) {
 		if( className==null )

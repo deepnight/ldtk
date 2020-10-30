@@ -877,6 +877,8 @@ ul.log {
 .icon.project	{ background-image: url("../img/icons/projectSettings.png"); }
 .icon.enum		{ background-image: url("../img/icons/enum.png"); }
 .icon.close		{ background-image: url("../img/icons/close.png"); }
+.icon.copy		{ background-image: url("../img/icons/copy.svg"); }
+.icon.paste		{ background-image: url("../img/icons/paste.svg"); }
 .icon.exit		{ background-image: url("../img/icons/exit.svg"); }
 .icon.visible	{ background-image: url("../img/icons/visible.png"); }
 .icon.hidden	{ background-image: url("../img/icons/hidden.png"); }
@@ -1858,6 +1860,48 @@ textarea {
 
 			button {
 				margin: 0;
+			}
+		}
+	}
+}
+
+.window.dialog.colorPicker {
+	>.wrapper {
+		padding: 4px;
+		background-color: $bgDark;
+		border: 1px solid $bgMed;
+		border-radius: 3px;
+
+		.content {
+			display: grid;
+			grid-template-rows: 32px min-content auto;
+			gap: 4px;
+			.preview {
+				border: 1px solid $bgLight;
+				outline: 1px solid black;
+				outline-offset: -2px;
+			}
+			.input {
+				display: grid;
+				grid-template-columns: auto min-content min-content;
+				position: relative;
+				span {
+					display: flex;
+					align-items: center;
+					height: 100%;
+					color: $bgLight;
+					position: absolute;
+					margin-left: 7px;
+				}
+				input {
+					padding-left: 17px;
+				}
+				.copy.done {
+					opacity: 0.2;
+				}
+				.paste:not(.enabled) {
+					opacity: 0.2;
+				}
 			}
 		}
 	}

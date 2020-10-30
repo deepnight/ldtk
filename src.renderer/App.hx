@@ -194,6 +194,10 @@ class App extends dn.Process {
 		if( hasPage() )
 			curPageProcess.onKeyPress(keyCode);
 
+		for(m in ui.Modal.ALL)
+			if( !m.destroyed )
+				m.onKeyPress(keyCode);
+
 		switch keyCode {
 			case K.L if( isCtrlDown() && isShiftDown() ):
 				LOG.printAll();
