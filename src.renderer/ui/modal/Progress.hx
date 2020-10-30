@@ -66,6 +66,13 @@ class Progress extends ui.Modal {
 		updateAllPositions();
 	}
 
+	public static function hasAny() {
+		for(e in ALL)
+			if( !e.destroyed )
+				return true;
+		return false;
+	}
+
 	static function updateAllPositions() {
 		for(w in ALL)
 			if( !w.destroyed )

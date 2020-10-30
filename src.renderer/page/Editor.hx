@@ -86,6 +86,10 @@ class Editor extends Page {
 		setCompactMode( settings.compactMode, true );
 	}
 
+	function saveLocked() {
+		return ui.modal.Progress.hasAny();
+	}
+
 	function initUI() {
 		jMouseCoords = App.ME.jBody.find("xml.mouseCoords").clone().children().first();
 		App.ME.jBody.append(jMouseCoords);
@@ -852,6 +856,9 @@ class Editor extends Page {
 	}
 
 	public function onSave(?bypassMissing=false, ?onComplete:Void->Void) {
+		if( saveLocked() )
+			return;
+
 		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
@@ -878,30 +885,36 @@ class Editor extends Page {
 		}
 
 		ge.emit(BeforeProjectSaving);
-		checkAutoLayersCache( (anyChange)->{
-			App.LOG.fileOp('Saving $projectFilePath...');
-			var data = JsTools.prepareProjectFile(project);
-			JsTools.writeFileBytes(projectFilePath, data.bytes);
+		createChildProcess( (p)->{
+			if( !cd.hasSetS("debug",0.1) ) N.debug("waiting...");
+			if( !saveLocked() ) {
+				checkAutoLayersCache( (anyChange)->{
+					App.LOG.fileOp('Saving $projectFilePath...');
+					var data = JsTools.prepareProjectFile(project);
+					JsTools.writeFileBytes(projectFilePath, data.bytes);
 
-			var size = dn.Lib.prettyBytesSize(data.bytes.length);
-			App.LOG.fileOp('Saved $size.');
+					var size = dn.Lib.prettyBytesSize(data.bytes.length);
+					App.LOG.fileOp('Saved $size.');
 
-			if( project.exportTiled ) {
-				var e = new exporter.Tiled();
-				e.run( project, projectFilePath );
+					if( project.exportTiled ) {
+						var e = new exporter.Tiled();
+						e.run( project, projectFilePath );
+					}
+
+					App.ME.registerRecentProject(projectFilePath);
+
+					N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath)+' ($size)');
+					updateTitle();
+
+					this.needSaving = false;
+					ge.emit(ProjectSaved);
+
+					if( onComplete!=null )
+						onComplete();
+				});
+				p.destroy();
 			}
-
-			App.ME.registerRecentProject(projectFilePath);
-
-			N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath)+' ($size)');
-			updateTitle();
-
-			this.needSaving = false;
-			ge.emit(ProjectSaved);
-
-			if( onComplete!=null )
-				onComplete();
-		});
+		}, true);
 	}
 
 	public function onSaveAs() {
