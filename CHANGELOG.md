@@ -7,6 +7,7 @@
  - **Flood-fill fixes**: if you hold `SHIFT` while clicking in a Tile layer, it will flood-fill the area using currently selected tiles (randomly, or by stamping group of tiles, depending on the current mode).
  - **Flood-fill erasing**: just use `SHIFT`+`Right click` to erase a whole contiguous area.
  - The layer Rule editor now overlaps left panel and allows level editing while being open (makes rule testing much easier). Press `Escape` to close it.
+ - In Tile layers, you can press `L` to load a saved tileset selection (using `S` key)
  - It's now possible to change the tileset or even the source layer of an Auto-Layer without loosing your rules.
  - **Auto-layer baking**: turn a complex Auto-Layer into a standard Tile layer (think of it as the *flatten* feature in Photoshop). Be careful, it's a one-way operation.
  - Unified "Show/hide grid" and "Grid locking" options. You can now just press `G` to toggle grid (which also implies "grid locking" in supported layer types).

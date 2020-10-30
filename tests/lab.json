@@ -1334,7 +1334,10 @@
 					{ "ids": [12,28,13,29], "mode": "Stamp" },
 					{ "ids": [11,27], "mode": "Stamp" },
 					{ "ids": [160,161,162,163], "mode": "Random" },
-					{ "ids": [147,148,149,150], "mode": "Random" }
+					{ "ids": [147,148,149,150], "mode": "Random" },
+					{ "ids": [57,58,59,63], "mode": "Random" },
+					{ "ids": [44,45,46], "mode": "Stamp" },
+					{ "ids": [60,61,62], "mode": "Stamp" }
 				]
 			}
 		],

@@ -362,6 +362,18 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 				case K.S:
 					saveSelection();
 
+				case K.L:
+					var saved = curTilesetDef.getSavedSelectionFor( getSelectedValue().ids[0] );
+					if( saved!=null && !selectedValuesIdentical(saved.ids) ) {
+						if( saved.ids.length>1 )
+							N.quick( L.t._("Loaded selection of ::n:: tiles", { n:saved.ids.length }) );
+						selectValue({
+							ids: saved.ids.copy(),
+							mode: saved.mode,
+						});
+						onValuePicking();
+					}
+
 				case K.X:
 					flipX = !flipX;
 					N.quick("X-flip: "+L.onOff(flipX));
