@@ -39,12 +39,12 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				updateAllLevels();
 
 			case LayerRuleChanged(r), LayerRuleRemoved(r), LayerRuleAdded(r):
-				invalidatedRules.set(r.uid, r.uid);
+				invalidateRule(r);
 				updatePanel();
 
 			case LayerRuleGroupRemoved(rg):
 				for(r in rg.rules)
-					invalidatedRules.set(r.uid, r.uid);
+					invalidateRule(r);
 				updatePanel();
 
 			case LayerRuleGroupSorted:
@@ -52,7 +52,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 				// for(rg in ld.autoRuleGroups)
 				// for(r in rg.rules)
-				// 	invalidatedRules.set(r.uid, r.uid);
+				// 	invalidateRule(r);
 
 				updatePanel();
 
@@ -61,7 +61,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			case LayerRuleGroupChangedActiveState(rg):
 				for(r in rg.rules)
-					invalidatedRules.set(r.uid, r.uid);
+					invalidateRule(r);
 				updatePanel();
 
 			case LayerRuleGroupAdded, LayerRuleGroupChanged(_):
@@ -78,6 +78,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		super.onClose();
 		updateAllLevels();
 	}
+
+	inline function invalidateRule(r:data.def.AutoLayerRuleDef) {
+		invalidatedRules.set(r.uid, r.uid);
+	}
+
 
 	function updateAllLevels() {
 		var ops = [];
@@ -284,7 +289,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
 						editor.ge.emit( LayerRuleGroupAdded );
 						for(r in copy.rules)
-							invalidatedRules.set(r.uid, r.uid);
+							invalidateRule(r);
 					},
 				},
 				{
@@ -471,7 +476,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 							var copy = ld.duplicateRule(project, rg, r);
 							lastRule = copy;
 							editor.ge.emit( LayerRuleAdded(copy) );
-							invalidatedRules.set(copy.uid, copy.uid);
+							invalidateRule(copy);
 						},
 					},
 					{
