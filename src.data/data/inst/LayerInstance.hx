@@ -628,14 +628,11 @@ class LayerInstance {
 		for( cy in 0...cHei )
 		for( cx in 0...cWid ) {
 			def.iterateActiveRulesInEvalOrder( (r)->{
-				if( !r.breakOnMatch )
-					return;
-
 				if( autoTilesCache.exists(r.uid) && autoTilesCache.get(r.uid).exists(coordId(cx,cy)) ) {
 					if( coordLocks.exists( coordId(cx,cy) ) )
-						autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
-					else
-						coordLocks.set( coordId(cx,cy), true );
+						autoTilesCache.get(r.uid).remove( coordId(cx,cy) ); // remove cached rendering
+					else if( r.breakOnMatch )
+						coordLocks.set( coordId(cx,cy), true ); // mark cell as locked
 				}
 
 			});
