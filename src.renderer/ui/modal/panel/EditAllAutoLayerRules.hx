@@ -364,6 +364,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					i.jInput.addClass("default");
 
 				// Break on match
+				// TODO use opaque-tiles infos here to force flag
 				var jFlag = jRule.find("a.break");
 				jFlag.addClass( r.breakOnMatch ? "on" : "off" );
 				jFlag.click( function(ev:js.jquery.Event) {
