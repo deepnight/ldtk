@@ -24,6 +24,7 @@
 	},
 	"dependencies": {
 		"electron-updater": "^4.3.4",
+		"simple-color-picker": "^1.0.4",
 		"sortablejs": "^1.10.2"
 	},
 	"devDependencies": {
