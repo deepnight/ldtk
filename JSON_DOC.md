@@ -8,6 +8,7 @@ Please refer to the [README.md](https://github.com/deepnight/led/blob/master/REA
        - [Field instance](#led-FieldInstanceJson)
    - [Definitions](#led-DefinitionsJson)
      - [Layer definition](#led-LayerDefJson)
+       - [Auto-layer rule definition](#led-AutoRuleDef)
      - [Entity definition](#led-EntityDefJson)
        - [Field definition](#led-FieldDefJson)
      - [Tileset definition](#led-TilesetDefJson)
@@ -103,7 +104,7 @@ Value | Type | Description
 Value | Type | Description
 -- | -- | --
 `__type` | String | Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)
-`autoRuleGroups`<br/><sup>Only *Auto-layers*</sup> | Array&nbsp;of&nbsp;Object | Contains all the auto-layer rule definitions.<br/>This object contains the following fields:<br/><ul><li>**`active`** **(Bool**)</li><li>**`collapsed`** **(Bool**)</li><li>**`name`** **(String**)</li><li>**`rules`** **(Array of Dynamic (anything)**)</li><li>**`uid`** **(Int**)</li></ul>
+`autoRuleGroups`<br/><sup>Only *Auto-layers*</sup> | Array&nbsp;of&nbsp;Object | Contains all the auto-layer rule definitions.<br/>This object contains the following fields:<br/><ul><li>**`active`** **(Bool**)</li><li>**`collapsed`** **(Bool**)</li><li>**`name`** **(String**)</li><li>**`rules`** **(Array of [Auto-layer rule definition](#led-AutoRuleDef)**)</li><li>**`uid`** **(Int**)</li></ul>
 `autoSourceLayerDefUid`<br/><sup>Only *Auto-layers*</sup> | Int | 
 `autoTilesetDefUid`<br/><sup>Only *Auto-layers*</sup> | Int | Reference to the Tileset UID being used by this auto-layer rules
 `displayOpacity` | Float | Opacity of the layer (0 to 1.0)
@@ -116,6 +117,29 @@ Value | Type | Description
 `tilePivotY`<br/><sup>Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilesetDefUid`<br/><sup>Only *Tile layers*</sup> | Int | Reference to the Tileset UID being used by this tile layer
 `uid` | Int | Unique Int identifier
+
+<a id="led-AutoRuleDef" name="led-AutoRuleDef"></a>
+## 2.1.1. Auto-layer rule definition   
+Value | Type | Description
+-- | -- | --
+`active` | Bool | If FALSE, the rule effect isn't applied, and no tiles are generated.
+`chance` | Float | When TRUE, the rule will prevent other rules to be applied in the same cell if it matches (TRUE by default).
+`checker` | Bool | If TRUE, enable checker mode
+`flipX` | Bool | If TRUE, allow rule to be matched by flipping its pattern horizontally
+`flipY` | Bool | If TRUE, allow rule to be matched by flipping its pattern vertically
+`pattern` | Array&nbsp;of&nbsp;Int | Rule pattern (size x size)
+`perlinActive` | Bool | If TRUE, enable Perlin filtering to only apply rule on specific random area
+`perlinOctaves` | Float | 
+`perlinScale` | Float | 
+`perlinSeed` | Float | 
+`pivotX`<br/><sup>Only *'Stamp' tile mode*</sup> | Float | X pivot of a tile stamp (0-1)
+`pivotY`<br/><sup>Only *'Stamp' tile mode*</sup> | Float | Y pivot of a tile stamp (0-1)
+`size` | Int | <![CDATA[Pattern width & height. Should only be 1,3,5 or 7.]]>
+`tileIds` | Array&nbsp;of&nbsp;Int | Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
+`tileMode` | Enum | Defines how tileIds array is used
+`uid` | Int | Unique Int identifier
+`xModulo` | Int | X cell coord modulo
+`yModulo` | Int | Y cell coord modulo
 
 <a id="led-EntityDefJson" name="led-EntityDefJson"></a>
 ## 2.2. Entity definition   
