@@ -89,6 +89,7 @@ class ColorPicker extends ui.modal.Dialog {
 
 		switch keyCode {
 			case K.ESCAPE:
+				onCancel();
 				close();
 
 			case K.ENTER:
@@ -99,12 +100,17 @@ class ColorPicker extends ui.modal.Dialog {
 
 	function validate() {
 		if( jTargetInput!=null )
-			jTargetInput.val( picker.getHexString() );
+			jTargetInput.val( picker.getHexString() ).change();
+
+		onValidate( picker.getHexNumber() );
 	}
 
+	public dynamic function onValidate(c:UInt) {}
+	public dynamic function onCancel() {}
+
 	override function onClickMask() {
-		super.onClickMask();
 		validate();
+		super.onClickMask();
 	}
 
 	override function onDispose() {
