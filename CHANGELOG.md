@@ -12,6 +12,7 @@
  - **Auto-layer baking**: turn a complex Auto-Layer into a standard Tile layer (think of it as the *flatten* feature in Photoshop). Be careful, it's a one-way operation.
  - Unified "Show/hide grid" and "Grid locking" options. You can now just press `G` to toggle grid (which also implies "grid locking" in supported layer types).
  - All options (such as "Grid on/off", or "Compact panel mode") are now saved to a JSON file in your app folder, in `userSettings/`.
+ - Help window is now a side panel.
  - Opaque tiles are detected in tilesets for use in various optimizations (mostly related to the new tile stacking feature).
  - Fixed a crash when deleting IntGrid layer while an AutoLayer uses it as source.
  - New exit button icon.

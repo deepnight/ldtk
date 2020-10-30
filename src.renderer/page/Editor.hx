@@ -840,20 +840,7 @@ class Editor extends Page {
 
 
 	function onHelp() {
-		ui.Modal.closeAll();
-		var m = new ui.Modal();
-		m.loadTemplate("help","helpWindow", {
-			appUrl: Const.WEBSITE_URL,
-			docUrl: Const.DOCUMENTATION_URL,
-			app: Const.APP_NAME,
-			ver: Const.getAppVersion(),
-		});
-
-		m.jContent.find("dt").each( function(idx, e) {
-			var jDt = new J(e);
-			var jKeys = JsTools.parseKeys( jDt.text() );
-			jDt.empty().append(jKeys);
-		});
+		new ui.modal.panel.Help();
 	}
 
 	function onClose(?bt:js.jquery.JQuery) {

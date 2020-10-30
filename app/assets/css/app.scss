@@ -1724,10 +1724,11 @@ textarea {
 }
 
 
-.window.helpWindow {
+.window.panel.helpWindow {
 	.wrapper {
-		max-height: 85vh;
-		max-width: 60vw;
+		.content {
+			width: 500px;
+		}
 	}
 	dl {
 		display: grid;

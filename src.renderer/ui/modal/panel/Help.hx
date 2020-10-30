@@ -1,0 +1,21 @@
+package ui.modal.panel;
+
+class Help extends ui.modal.Panel {
+	public function new() {
+		super();
+
+		loadTemplate( "help", "helpWindow", {
+			appUrl: Const.WEBSITE_URL,
+			docUrl: Const.DOCUMENTATION_URL,
+			app: Const.APP_NAME,
+			ver: Const.getAppVersion(),
+		});
+
+		jContent.find("dt").each( function(idx, e) {
+			var jDt = new J(e);
+			var jKeys = JsTools.parseKeys( jDt.text() );
+			jDt.empty().append(jKeys);
+		});
+	}
+
+}
