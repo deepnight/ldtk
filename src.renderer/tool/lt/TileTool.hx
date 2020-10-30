@@ -297,8 +297,8 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 			var flips = M.makeBitsFromBools(flipX, flipY);
 			if( isRandomMode() )
 				editor.cursor.set(
-					Tiles(curLayerInstance, [ sel.ids[Std.random(sel.ids.length)] ], m.cx, m.cy, flips),
-					sel.ids.length>1 ? "R" : null
+					Tiles(curLayerInstance, [ sel.ids[Std.random(sel.ids.length)] ], m.cx, m.cy, flips)
+					// sel.ids.length>1 ? "R" : null
 				);
 			else
 				editor.cursor.set( Tiles(curLayerInstance, sel.ids, m.cx, m.cy, flips) );
