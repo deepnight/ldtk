@@ -1873,6 +1873,7 @@ textarea {
 		border-radius: 3px;
 
 		.content {
+			overflow: hidden;
 			display: grid;
 			grid-template-rows: 32px min-content auto;
 			gap: 4px;

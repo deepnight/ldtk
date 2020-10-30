@@ -26,12 +26,8 @@ class ColorPicker extends ui.modal.Dialog {
 
 				if( C.isValidHex( jInput.val() ) )
 					picker.setColor( C.sanitizeHexStr( jInput.val() ) );
-
-				if( ev.key=="Enter" )
-					jInput.blur();
 			})
-			.on( "blur", ev->jInput.val( picker.getHexString().substr(1) ) )
-			.focus();
+			.on( "blur", ev->jInput.val( picker.getHexString().substr(1) ) );
 
 		// Paste from clipboard
 		jContent.find(".paste").click( (ev:js.jquery.Event)->{
@@ -70,7 +66,10 @@ class ColorPicker extends ui.modal.Dialog {
 			picker.setColor( jTargetInput.val() );
 
 		// Init elements
-		jInput.val( picker.getHexString().substr(1) );
+		jInput
+			.val( picker.getHexString().substr(1) )
+			.focus()
+			.select();
 		jPreview.css({ backgroundColor:picker.getHexString() });
 		picker.setSize(jContent.innerWidth(), 150);
 	}
@@ -89,7 +88,11 @@ class ColorPicker extends ui.modal.Dialog {
 		super.onKeyPress(keyCode);
 
 		switch keyCode {
-			case K.ENTER if( jContent.find("input:focus").length==0 ):
+			case K.ESCAPE:
+				close();
+
+			case K.ENTER:
+				validate();
 				close();
 		}
 	}
