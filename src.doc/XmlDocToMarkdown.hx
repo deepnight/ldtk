@@ -386,7 +386,8 @@ class XmlDocToMarkdown {
 				Dyn;
 			else if( fieldXml.hasNode.t ) {
 				var name = fieldXml.node.t.att.path;
-				var dispName = allTypes.filter( (t)->t.rawName==name )[0].displayName;
+				var typeInfos = allTypes.filter( (t)->t.rawName==name )[0];
+				var dispName = typeInfos==null ? name : typeInfos.displayName;
 				Ref( dispName, name );
 			}
 			else if( fieldXml.hasNode.e ) {
