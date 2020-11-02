@@ -8,6 +8,7 @@
  - **Flood-fill erasing**: just use `SHIFT`+`Right click` to erase a whole contiguous area.
  - The layer Rule editor now overlaps left panel and allows level editing while being open (makes rule testing much easier). Press `Escape` to close it.
  - In Tile layers, you can press `L` to load a saved tileset selection (using `S` key)
+ - Renamed the *Level* panel to *World* (for the 0.6.x future update).
  - It's now possible to change the tileset or even the source layer of an Auto-Layer without loosing your rules.
  - **Auto-layer baking**: turn a complex Auto-Layer into a standard Tile layer (think of it as the *flatten* feature in Photoshop). Be careful, it's a one-way operation.
  - Unified "Show/hide grid" and "Grid locking" options. You can now just press `G` to toggle grid (which also implies "grid locking" in supported layer types).
@@ -15,6 +16,7 @@
  - Help window is now a side panel.
  - Opaque tiles are detected in tilesets for use in various optimizations (mostly related to the new tile stacking feature).
  - Fixed a crash when deleting IntGrid layer while an AutoLayer uses it as source.
+ - Added some colors to UI buttons
  - New exit button icon.
 
 # 0.4.1-beta
