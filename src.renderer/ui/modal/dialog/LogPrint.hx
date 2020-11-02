@@ -3,10 +3,13 @@ package ui.modal.dialog;
 class LogPrint extends ui.modal.Dialog {
 	var log : dn.Log;
 
-	public function new(log:dn.Log) {
+	public function new(log:dn.Log, ?title:LocaleString) {
 		super();
 		this.log = log;
 		loadTemplate("logPrint");
+
+		if( title!=null )
+			jContent.find("h2.title").text( title );
 
 		// Show all
 		var jShowAll= jContent.find(".showAll");
