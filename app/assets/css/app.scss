@@ -140,9 +140,10 @@ button {
 	color: white;
 	text-transform: uppercase;
 	text-align: center;
-
-	border: 1px solid #ff5d4a;
-	box-shadow: 0px 2px 0px #b53d00;
+	border: none;
+	box-shadow: 0px -2px 0px rgba(0,0,0, 0.3) inset,
+		0px 0px 2px rgba(255, 255, 255, 0.22) inset,
+		0px 2px 2px rgba(0,0,0, 0.4);
 	background-color: $red;
 	cursor: pointer;
 
@@ -170,10 +171,24 @@ button.cancel,
 button.gray,
 button.grey {
 	background-color: $bgLight;
-	border-color: $bgLighter;
-	box-shadow: 0px 2px 0px $bgLight;
 	&:hover {
 		background-color: $bgLighter;
+	}
+}
+
+button.dark,
+button.close {
+	background-color: $bgDark;
+	&:hover {
+		background-color: $bgLight;
+	}
+}
+
+button.transparent {
+	box-shadow: none;
+	background-color: transparent;
+	&:hover {
+		background-color: $orange;
 	}
 }
 
@@ -186,8 +201,6 @@ button[href] {
 			}
 
 	background-color: $bgMed;
-	border-color: $bgLight;
-	box-shadow: 0px 0px 0px $bgLight;
 	text-decoration: none;
 	text-transform: none;
 
@@ -198,26 +211,6 @@ button[href] {
 
 	&:hover {
 		background-color: $bgLight;
-	}
-}
-
-button.dark,
-button.close {
-	background-color: $bgDark;
-	border-color: $bgMed;
-	box-shadow: 0px 2px 0px $bgMed;
-	&:hover {
-		background-color: $bgLight;
-	}
-}
-
-button.transparent {
-	border: none;
-	outline: none;
-	box-shadow: none;
-	background-color: transparent;
-	&:hover {
-		background-color: $orange;
 	}
 }
 
