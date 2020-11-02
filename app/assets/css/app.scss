@@ -9,6 +9,7 @@ $orange: #ffcc00;
 $darkOrange: #d56932;
 $green: #cfdd40;
 $help: #79dd8a;
+$helpMed: #5eab6b;
 $helpDark: #3c6148;
 $mainPanelNormalWid: 300px;
 $mainPanelCompactWid: 150px;
@@ -146,6 +147,7 @@ button {
 		0px 2px 2px rgba(0,0,0, 0.4);
 	background-color: $red;
 	cursor: pointer;
+	text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.28);
 
 	>.icon {
 		margin: -4px;
@@ -165,64 +167,82 @@ button {
 		background-color: $orange;
 		border-color: #ffff00;
 	}
-}
 
-button.cancel,
-button.gray,
-button.grey {
-	background-color: $bgLight;
-	&:hover {
-		background-color: $bgLighter;
-	}
-}
-
-button.dark,
-button.close {
-	background-color: $bgDark;
-	&:hover {
+	&.cancel,
+	&.gray,
+	&.grey {
 		background-color: $bgLight;
+		&:hover {
+			background-color: $bgLighter;
+		}
+	}
+
+	&.blue {
+		background-color: #2a73ab;
+		&:hover {
+			background-color: #348fd5;
+		}
+	}
+
+	&.green {
+		background-color: $helpMed;
+		&:hover {
+			background-color: $help;
+		}
+	}
+
+	&.dark {
+		background-color: $bgDark;
+		&:hover {
+			background-color: $bgLight;
+		}
+	}
+
+	&.transparent {
+		box-shadow: none;
+		background-color: transparent;
+		&:hover {
+			background-color: $orange;
+		}
+	}
+
+	&[href] {
+		display: flex;
+		justify-content: center;
+
+		background-color: $bgMed;
+		text-decoration: underline;
+		text-transform: none;
+
+		box-shadow: 0px -2px 0px rgba(0,0,0, 0.3) inset,
+			0px 2px 2px rgba(0,0,0, 0.4);
+
+		.icon {
+			margin-right: 4px;
+			opacity: 0.5;
+		}
+
+		&:hover {
+			background-color: $bgLight;
+		}
+	}
+
+	&.context {
+		border: 1px solid rgba(0,0,0, 0.2);
+		border-radius: 2px;
+		background-color: rgba(0, 0, 0, 0.1);
+		&:hover {
+			border-color: black;
+			background: black;
+		}
 	}
 }
 
-button.transparent {
-	box-shadow: none;
-	background-color: transparent;
-	&:hover {
-		background-color: $orange;
-	}
-}
 
-button[href] {
-	display: flex;
-	justify-content: center;
-			.icon {
-				margin-right: 4px;
-				opacity: 0.5;
-			}
 
-	background-color: $bgMed;
-	text-decoration: none;
-	text-transform: none;
 
-	.icon {
-		margin-right: 4px;
-		opacity: 0.5;
-	}
 
-	&:hover {
-		background-color: $bgLight;
-	}
-}
 
-button.context {
-	border: 1px solid rgba(0,0,0, 0.2);
-	border-radius: 2px;
-	background-color: rgba(0, 0, 0, 0.1);
-	&:hover {
-		border-color: black;
-		background: black;
-	}
-}
 
 #miniNotif {
 	position: absolute;
@@ -2259,6 +2279,16 @@ canvas#webgl {
 			position: relative;
 			outline: 1px solid white;
 
+			&:empty {
+				outline-color: $bgLight
+			}
+
+			&:empty,
+			.palette:empty {
+				background-image: url("../img/stripes.png");
+				box-shadow: 0px 0px 8px $bgDark inset;
+			}
+
 			ul.niceList {
 				height: 100%;
 				box-sizing: border-box;
@@ -2333,7 +2363,7 @@ canvas#webgl {
 	&.compactPanel {
 		#mainPanel {
 			width: $mainPanelCompactWid;
-			grid-template-rows: min-content 200px min-content auto;
+			grid-template-rows: min-content 200px auto;
 
 			#mainBar {
 				.buttons {
