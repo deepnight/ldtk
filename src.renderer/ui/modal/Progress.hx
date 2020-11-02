@@ -27,18 +27,6 @@ class Progress extends ui.Modal {
 		var total = ops.length;
 		var time = haxe.Timer.stamp();
 		createChildProcess( (p)->{
-			var i = 0;
-			while( i++<opsPerCycle && ops.length>0 ) {
-				// Execute one operation
-				var op = ops.shift();
-				delayer.addF(op.cb, 1);
-				cur++;
-				var pct = 100 * cur/total;
-				jBar.find(".bar").css({ width:pct+"%" });
-				jBar.find(".label").text( op.label );
-				log.push(op.label);
-			}
-
 			if( ops.length==0 ) {
 				// All done!
 				canBeClosedManually = true;
@@ -61,6 +49,20 @@ class Progress extends ui.Modal {
 				if( onComplete!=null )
 					onComplete();
 			}
+			else {
+				// Execute "opsPerCycle" operation(s)
+				var i = 0;
+				while( i++<opsPerCycle && ops.length>0 ) {
+					var op = ops.shift();
+					delayer.addF(op.cb, 1);
+					cur++;
+					var pct = 100 * cur/total;
+					jBar.find(".bar").css({ width:pct+"%" });
+					jBar.find(".label").text( op.label );
+					log.push(op.label);
+				}
+			}
+
 		}, true);
 
 		updateAllPositions();
