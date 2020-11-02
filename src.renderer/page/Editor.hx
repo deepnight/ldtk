@@ -825,7 +825,7 @@ class Editor extends Page {
 		N.quick( "Tile stacking: "+L.onOff( settings.tileStacking ));
 	}
 
-	public function setCompactMode(v:Bool, init=true) {
+	public function setCompactMode(v:Bool, init=false) {
 		settings.compactMode = v;
 		if( !init )
 			App.ME.saveSettings();

@@ -2370,6 +2370,9 @@ canvas#webgl {
 					display: grid;
 					grid-template-columns: repeat(4, 25%);
 					grid-template-rows: repeat(2, 32px);
+					button {
+						margin: 0px;
+					}
 					.icon {
 						width: 1.1em;
 						height: 1.1em;
