@@ -3227,7 +3227,7 @@ canvas#webgl {
 	}
 }
 
-.window.panel.levelList,
+.window.panel.worldPanel,
 .window.panel.layerDefs,
 .window.panel.tilesetDefs {
 	.content{
@@ -3261,7 +3261,7 @@ canvas#webgl {
 	}
 }
 
-.window.panel.levelList {
+.window.panel.worldPanel {
 	.content {
 		grid-template-columns: auto;
 		width: 250px;

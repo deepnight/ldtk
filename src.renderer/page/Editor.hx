@@ -102,11 +102,11 @@ class Editor extends Page {
 				new ui.modal.panel.EditProject();
 		});
 
-		jMainPanel.find("button.levelList").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.panel.LevelList) )
+		jMainPanel.find("button.world").click( function(_) {
+			if( ui.Modal.isOpen(ui.modal.panel.WorldPanel) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.panel.LevelList();
+				new ui.modal.panel.WorldPanel();
 		});
 
 		jMainPanel.find("button.editLayers").click( function(_) {

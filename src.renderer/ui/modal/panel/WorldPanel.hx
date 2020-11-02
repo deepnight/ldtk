@@ -1,14 +1,14 @@
 package ui.modal.panel;
 
-class LevelList extends ui.modal.Panel {
+class WorldPanel extends ui.modal.Panel {
 	var jList(get,never) : js.jquery.JQuery; inline function get_jList() return jContent.find(".mainList ul");
 	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jContent.find("ul.form:first");
 
 	public function new() {
 		super();
 
-		loadTemplate( "levelList", "levelList" );
-		linkToButton("button.levelList");
+		loadTemplate( "worldPanel" );
+		linkToButton("button.world");
 
 		jContent.find(".mainList button.create").click( function(ev) {
 			var l = project.createLevel();
