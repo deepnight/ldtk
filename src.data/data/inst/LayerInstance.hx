@@ -625,14 +625,27 @@ class LayerInstance {
 	function applyBreakOnMatches() {
 		var coordLocks = new Map();
 
+		var td = _project.defs.getTilesetDef( def.autoTilesetDefUid );
 		for( cy in 0...cHei )
 		for( cx in 0...cWid ) {
 			def.iterateActiveRulesInEvalOrder( (r)->{
 				if( autoTilesCache.exists(r.uid) && autoTilesCache.get(r.uid).exists(coordId(cx,cy)) ) {
-					if( coordLocks.exists( coordId(cx,cy) ) )
-						autoTilesCache.get(r.uid).remove( coordId(cx,cy) ); // remove cached rendering
-					else if( r.breakOnMatch )
+					if( coordLocks.exists( coordId(cx,cy) ) ) {
+						// Tiles below locks are discarded
+						autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
+					}
+					else if( r.breakOnMatch ) {
+						// Break on match is ON
 						coordLocks.set( coordId(cx,cy), true ); // mark cell as locked
+					}
+					else {
+						// Check for opaque tiles
+						for( t in autoTilesCache.get(r.uid).get( coordId(cx,cy) ) )
+							if( td.isTileOpaque(t.tid) ) {
+								coordLocks.set( coordId(cx,cy), true ); // mark cell as locked
+								break;
+							}
+					}
 				}
 
 			});
