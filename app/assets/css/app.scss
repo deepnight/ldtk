@@ -2371,6 +2371,19 @@ canvas#webgl {
 					grid-template-columns: repeat(4, 25%);
 					grid-template-rows: repeat(2, 32px);
 					button {
+						z-index: 1; // fix box-shadow depth
+					}
+					button.showHelp {
+						grid-row: 1/2;
+						grid-column: 3/4;
+						z-index: 0;
+					}
+					button.close {
+						grid-row: 1/2;
+						grid-column: 4/5;
+						z-index: 0;
+					}
+					button {
 						margin: 0px;
 					}
 					.icon {
