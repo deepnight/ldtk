@@ -62,14 +62,13 @@ class Tiled extends Exporter {
 
 		/**
 			Tiled a unique "grid size" value because it doesn't support different
-			grid sizes in the same map file. So let's invent some arbitrary grid size
-			for it to be happy :facepalm:
+			grid sizes in the same map file.
 		**/
-		var mapGrid = level.layerInstances.length==0 ? p.defaultGridSize : Const.INFINITE;
+		var tiledGridSize = level.layerInstances.length==0 ? p.defaultGridSize : Const.INFINITE;
 		for(li in level.layerInstances)
-			mapGrid = M.imin(mapGrid, li.def.gridSize);
-		var mapWidth = M.ceil( level.pxWid/mapGrid );
-		var mapHeight = M.ceil( level.pxHei/mapGrid );
+			tiledGridSize = M.imin(tiledGridSize, li.def.gridSize);
+		var mapWidth = M.ceil( level.pxWid/tiledGridSize );
+		var mapHeight = M.ceil( level.pxHei/tiledGridSize );
 
 		/**
 			MAP
@@ -85,8 +84,8 @@ class Tiled extends Exporter {
 		map.set("compressionlevel", "0");
 		map.set("width", ""+mapWidth);
 		map.set("height", ""+mapHeight);
-		map.set("tilewidth", ""+mapGrid);
-		map.set("tileheight", ""+mapGrid);
+		map.set("tilewidth", ""+tiledGridSize);
+		map.set("tileheight", ""+tiledGridSize);
 		map.set("infinite", "0");
 		map.set("backgroundcolor", C.intToHex(p.bgColor));
 
@@ -133,12 +132,17 @@ class Tiled extends Exporter {
 				return tilesetGids.get(tilesetUid) + tileId;
 			else {
 				var gid : UInt = tilesetGids.get(tilesetUid) + tileId;
+				log.debug("gid="+gid);
 
-				if( M.hasBit(flips,0) )
+				if( M.hasBit(flips,0) ) {
 					gid = M.setUnsignedBit(gid, 31);
+					log.debug("flipX gid="+gid);
+				}
 
-				if( M.hasBit(flips,1) )
+				if( M.hasBit(flips,1) ) {
 					gid = M.setUnsignedBit(gid, 30);
+					log.debug("flipY gid="+gid);
+				}
 
 				return gid;
 			}
@@ -192,7 +196,7 @@ class Tiled extends Exporter {
 			switch ld.type {
 				case IntGrid:
 					log.warning("  Unsupported layer type "+ld.type);
-					// if( ld.autoTilesetDefUid==null && ld.gridSize!=mapGrid ) {
+					// if( ld.autoTilesetDefUid==null && ld.gridSize!=tiledGridSize ) {
 					// 	log.error("IntGrid layer "+ld.identifier+" was not exported because it has a different gridSize (not supported by Tiled).");
 					// 	continue;
 					// }
@@ -279,28 +283,45 @@ class Tiled extends Exporter {
 					}
 
 				case Tiles:
-					// var layer = _createLayer("layer", li);
-					// var csv = new Csv(li.cWid, li.cHei);
-					// for(coordId in li.gridTiles.keys())
-					// 	csv.setCoordId( coordId, _remapTileId(ld.tilesetDefUid, li.gridTiles.get(coordId)) );
+					// Detect stacked tiles
+					var maxStack = 1;
+					for( coordId in li.gridTiles.keys() )
+						maxStack = M.imax(maxStack, li.gridTiles.get(coordId).length);
+					log.debug(li.toString()+" => maxStack="+maxStack);
 
-					// var data = Xml.createElement("data");
-					// layer.addChild(data);
-					// data.set("encoding","csv");
-					// data.addChild( Xml.createPCData(csv.getString()) );
-
-					var layer = _createLayer("objectgroup", li);
-					for(coordId in li.gridTiles.keys()) {
-						for( tileInf in li.gridTiles.get(coordId) ) {
-							var o = _createTileObject(
-								ld.tilesetDefUid,
-								tileInf.tileId,
-								li.getCx(coordId)*ld.gridSize,
-								li.getCy(coordId)*ld.gridSize
-							);
-							layer.insertChild(o,0);
+					// One Tiled-layer per "stack-layer"
+					for( stackIdx in 0...maxStack ) {
+						// Build CSV
+						var layer = _createLayer("layer", li, maxStack>1 ? "_"+(stackIdx+1) : "");
+						var csv = new Csv(li.cWid, li.cHei);
+						for( coordId in li.gridTiles.keys() ) {
+							var stack = li.gridTiles.get(coordId);
+							if( stackIdx < stack.length ) {
+								log.debug( stack[stackIdx].tileId+" f="+stack[stackIdx].flips );
+								csv.setCoordId( coordId, _remapTileId(ld.tilesetDefUid, stack[stackIdx].tileId, stack[stackIdx].flips) );
+							}
 						}
+
+						// Create layer XML
+						var data = Xml.createElement("data");
+						layer.addChild(data);
+						data.set("encoding","csv");
+						data.addChild( Xml.createPCData( csv.getString() ) );
 					}
+
+
+					// var layer = _createLayer("objectgroup", li);
+					// for(coordId in li.gridTiles.keys()) {
+					// 	for( tileInf in li.gridTiles.get(coordId) ) {
+					// 		var o = _createTileObject(
+					// 			ld.tilesetDefUid,
+					// 			tileInf.tileId,
+					// 			li.getCx(coordId)*ld.gridSize,
+					// 			li.getCy(coordId)*ld.gridSize
+					// 		);
+					// 		layer.insertChild(o,0);
+					// 	}
+					// }
 
 
 				case AutoLayer:
@@ -338,30 +359,37 @@ class Tiled extends Exporter {
 private class Csv {
 	var wid: Int;
 	var hei: Int;
-	var bytes: haxe.io.Bytes;
+	var data: Map<Int, UInt>;
 
 	public function new(w,h) {
 		wid = w;
 		hei = h;
-		bytes = haxe.io.Bytes.alloc(wid*hei);
-		bytes.fill(0, bytes.length, 0);
+		data = new Map();
 	}
 
-	public inline function set(cx,cy, v:Int) {
+	public inline function set(cx,cy, v:UInt) {
 		if( cx>=0 && cy>=0 )
 			setCoordId(cx+cy*wid, v);
 	}
 
-	public inline function setCoordId(coordId, v:Int) {
+	public inline function get(cx,cy) : UInt {
+		return data.exists( cx+cy*wid ) ? data.get(cx+cy*wid) : 0;
+	}
+
+	public inline function getCoordId(coordId:Int) : UInt {
+		return data.exists( coordId ) ? data.get( coordId ) : 0;
+	}
+
+	public inline function setCoordId(coordId:Int, v:UInt) {
 		if( coordId<wid*hei )
-			bytes.set(coordId, v);
+			data.set(coordId, v);
 	}
 
 	public function getString() {
-		var out = [];
+		var out : Array<String> = [];
 		for(cy in 0...hei)
 		for(cx in 0...wid)
-			out.push( bytes.get(cx+cy*wid) );
+			out.push( Std.string( get(cx,cy) ) );
 		return out.join(",");
 	}
 }
