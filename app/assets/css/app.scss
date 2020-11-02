@@ -894,6 +894,9 @@ ul.log {
 .icon.tutorial	{ background-image: url("../img/icons/tutorial.svg"); }
 .icon.gridOn	{ background-image: url("../img/icons/gridOn.svg"); }
 .icon.gridOff	{ background-image: url("../img/icons/gridOff.svg"); }
+.icon.stop		{ background-image: url("../img/icons/stop.svg"); }
+.icon.world		{ background-image: url("../img/icons/world.svg"); }
+.icon.checker	{ background-image: url("../img/icons/checker.svg"); }
 .icon.singleLayer		{ background-image: url("../img/icons/singleLayer.svg"); }
 .icon.emptySpaceOn		{ background-image: url("../img/icons/emptySpaceOn.png"); }
 .icon.emptySpaceOff		{ background-image: url("../img/icons/emptySpaceOff.png"); }
@@ -2672,6 +2675,10 @@ canvas#webgl {
 						font-size: 10pt;
 						color: #b5becd;
 
+						* {
+							user-select: text;
+						}
+
 						h1 {
 							padding-bottom: 8px;
 							margin-bottom: 8px;
@@ -3803,6 +3810,9 @@ body.sorting ul.collapsedSortTarget {
 									font-style: italic;
 									border: 1px dashed $red;
 									background-color: $darkRed;
+									.icon {
+										opacity: 0.5;
+									}
 								}
 
 								&.on span.off {
