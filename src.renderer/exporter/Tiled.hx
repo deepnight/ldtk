@@ -6,6 +6,8 @@ class Tiled extends Exporter {
 	static var TILED_VERSION = "1.4.2";
 	static var MAP_VERSION = "1.4";
 
+	var tiledGridSize = 16;
+
 	public function new() {
 		super();
 	}
@@ -20,6 +22,16 @@ class Tiled extends Exporter {
 			maps: [],
 			type: "world",
 		};
+
+		/**
+			Determine a unique "grid size" value because it doesn't support different
+			grid sizes in the same map file.
+		**/
+		tiledGridSize = p.defs.layers.length==0 ? p.defaultGridSize : p.defs.layers[0].gridSize;
+		log.general("Automatic gridSize: "+tiledGridSize+"px (determined from 1st layer)");
+		for(ld in p.defs.layers)
+			if( ld.gridSize!=tiledGridSize )
+				log.error("Layer "+ld.identifier+" uses a specific grid size ("+ld.gridSize+"px). Tiled only supports a single grid size for all layers (here, "+tiledGridSize+"px).");
 
 		// Export each level to a separate TMX file
 		var i = 1;
@@ -42,6 +54,7 @@ class Tiled extends Exporter {
 		}
 
 		// Create "world" JSON file
+		log.emptyEntry();
 		log.fileOp("Creating world JSON...");
 		var json = dn.JsonPretty.stringify(world);
 		var fp = outputPath.clone();
@@ -52,21 +65,14 @@ class Tiled extends Exporter {
 
 
 	function exportLevel(level:data.Level) : haxe.io.Bytes {
-		log.add("level", "Converting level "+level.identifier+"...");
+		log.emptyEntry();
+		log.add("level", "Exporting level "+level.identifier+"...");
 
 		var xml = Xml.createDocument();
 		var layerId = 1;
 		var objectId = 1;
 		var gid = 1;
 
-
-		/**
-			Tiled a unique "grid size" value because it doesn't support different
-			grid sizes in the same map file.
-		**/
-		var tiledGridSize = level.layerInstances.length==0 ? p.defaultGridSize : Const.INFINITE;
-		for(li in level.layerInstances)
-			tiledGridSize = M.imin(tiledGridSize, li.def.gridSize);
 		var mapWidth = M.ceil( level.pxWid/tiledGridSize );
 		var mapHeight = M.ceil( level.pxHei/tiledGridSize );
 
@@ -100,7 +106,7 @@ class Tiled extends Exporter {
 		for( td in p.defs.tilesets ) {
 			log.add("tileset", 'Adding tileset ${td.identifier}...');
 			if( td.padding!=0 )
-				log.error('Tileset ${td.identifier} has padding, which isn\'t supported by Tiled which sucks bla fbklea lkez klz.');
+				log.error('Tileset ${td.identifier} has padding, which isn\'t supported by Tiled.');
 
 			var count = M.ceil(td.pxWid/td.tileGridSize) * M.ceil(td.pxHei/td.tileGridSize);
 			var tileset = Xml.createElement("tileset");
@@ -184,13 +190,18 @@ class Tiled extends Exporter {
 		var allInst = level.layerInstances.copy();
 		allInst.reverse();
 		for(li in allInst) {
+			if( li.def.gridSize!=tiledGridSize ) {
+				log.warning("Discarded layer "+li.def.identifier+" (incompatible grid size)");
+				continue;
+			}
 			var ld = p.defs.layers.filter( (ld)->ld.uid==li.layerDefUid )[0];
 			log.add("layer", "Layer "+ld.identifier+"...");
 
 
 			switch ld.type {
 				case IntGrid:
-					log.warning("  Unsupported layer type "+ld.type);
+					if( !ld.isAutoLayer() && !li.isEmpty() )
+						log.error("Unsupported layer type "+ld.type+" in level "+level.identifier);
 					// if( ld.autoTilesetDefUid==null && ld.gridSize!=tiledGridSize ) {
 					// 	log.error("IntGrid layer "+ld.identifier+" was not exported because it has a different gridSize (not supported by Tiled).");
 					// 	continue;
@@ -344,7 +355,7 @@ class Tiled extends Exporter {
 
 				// Warn for freely positioned tiles
 				if( hasIncompatibleTiles )
-					log.error("  This layer contains tiles that are not aligned with the grid, which isn't supported in Tiled. They will appear shifted in the TMX file.");
+					log.error("Layer "+li.def.identifier+" in level "+level.identifier+" contains tiles that are not aligned with the grid, which isn't supported in Tiled. They will appear shifted in the TMX file.");
 
 				// Create one XML layer per CSV
 				var layerIdx = 0;

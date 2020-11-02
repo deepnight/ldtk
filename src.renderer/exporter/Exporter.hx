@@ -11,8 +11,9 @@ class Exporter {
 
 	private function new() {
 		log = new dn.Log(500);
+		log.tagColors.set("warning","#ff0000");
 		log.tagColors.set("level","#ffcc00");
-		log.tagColors.set("layer","#46b8ff");
+		log.tagColors.set("layer","#0ef1ff");
 		log.tagColors.set("tileset","#b1ff56");
 	}
 
@@ -43,7 +44,7 @@ class Exporter {
 		#if !debug
 		if( log.containsAnyCriticalEntry() )
 		#end
-			new ui.modal.dialog.LogPrint(log);
+			new ui.modal.dialog.LogPrint(log, "Level exporter errors");
 	}
 
 	function addOuputFile(path:String, bytes:haxe.io.Bytes) {
