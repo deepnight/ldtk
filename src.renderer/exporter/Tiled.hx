@@ -132,17 +132,12 @@ class Tiled extends Exporter {
 				return tilesetGids.get(tilesetUid) + tileId;
 			else {
 				var gid : UInt = tilesetGids.get(tilesetUid) + tileId;
-				log.debug("gid="+gid);
 
-				if( M.hasBit(flips,0) ) {
+				if( M.hasBit(flips,0) )
 					gid = M.setUnsignedBit(gid, 31);
-					log.debug("flipX gid="+gid);
-				}
 
-				if( M.hasBit(flips,1) ) {
+				if( M.hasBit(flips,1) )
 					gid = M.setUnsignedBit(gid, 30);
-					log.debug("flipY gid="+gid);
-				}
 
 				return gid;
 			}
@@ -284,44 +279,29 @@ class Tiled extends Exporter {
 
 				case Tiles:
 					// Detect stacked tiles
-					var maxStack = 1;
+					var maxStack = 0;
 					for( coordId in li.gridTiles.keys() )
 						maxStack = M.imax(maxStack, li.gridTiles.get(coordId).length);
-					log.debug(li.toString()+" => maxStack="+maxStack);
 
 					// One Tiled-layer per "stack-layer"
-					for( stackIdx in 0...maxStack ) {
+					for( layerIdx in 0...maxStack ) {
 						// Build CSV
-						var layer = _createLayer("layer", li, maxStack>1 ? "_"+(stackIdx+1) : "");
 						var csv = new Csv(li.cWid, li.cHei);
+						log.add("layer", "    Building CSV "+(layerIdx+1)+"...");
 						for( coordId in li.gridTiles.keys() ) {
 							var stack = li.gridTiles.get(coordId);
-							if( stackIdx < stack.length ) {
-								log.debug( stack[stackIdx].tileId+" f="+stack[stackIdx].flips );
-								csv.setCoordId( coordId, _remapTileId(ld.tilesetDefUid, stack[stackIdx].tileId, stack[stackIdx].flips) );
+							if( layerIdx < stack.length ) {
+								csv.setCoordId( coordId, _remapTileId(ld.tilesetDefUid, stack[layerIdx].tileId, stack[layerIdx].flips) );
 							}
 						}
 
 						// Create layer XML
+						var layer = _createLayer("layer", li, maxStack>1 ? "_"+(layerIdx+1) : "");
 						var data = Xml.createElement("data");
 						layer.addChild(data);
 						data.set("encoding","csv");
 						data.addChild( Xml.createPCData( csv.getString() ) );
 					}
-
-
-					// var layer = _createLayer("objectgroup", li);
-					// for(coordId in li.gridTiles.keys()) {
-					// 	for( tileInf in li.gridTiles.get(coordId) ) {
-					// 		var o = _createTileObject(
-					// 			ld.tilesetDefUid,
-					// 			tileInf.tileId,
-					// 			li.getCx(coordId)*ld.gridSize,
-					// 			li.getCy(coordId)*ld.gridSize
-					// 		);
-					// 		layer.insertChild(o,0);
-					// 	}
-					// }
 
 
 				case AutoLayer:
@@ -332,19 +312,51 @@ class Tiled extends Exporter {
 			if( ld.autoTilesetDefUid!=null ) {
 				log.add("layer", "  Exporting Auto-Layer tiles...");
 				var td = p.defs.getTilesetDef(ld.autoTilesetDefUid);
-				var layer = _createLayer("objectgroup", li, "_tiles");
+				var csvLayers : Array<Csv> = [];
+				var hasIncompatibleTiles = false;
 
 				ld.iterateActiveRulesInDisplayOrder( (r)->{
 					if( !li.autoTilesCache.exists(r.uid) )
 						return;
 
 					var ruleResults = li.autoTilesCache.get(r.uid);
-					for(tiles in ruleResults)
-					for( at in tiles ) {
-						var o = _createTileObject(td.uid, at.tid, at.x, at.y, at.flips);
-						layer.addChild(o);
+					for( coordId in ruleResults.keys() ) {
+						for(t in ruleResults.get(coordId)) {
+							// Create csv layers if this coordId already has a tile
+							var layerIdx = 0;
+							var cx = Std.int( t.x / li.def.gridSize );
+							var cy = Std.int( t.y / li.def.gridSize );
+							if( !hasIncompatibleTiles && ( t.x%li.def.gridSize!=0 || t.y%li.def.gridSize!=0 ) )
+								hasIncompatibleTiles = true;
+							while( layerIdx < csvLayers.length && csvLayers[layerIdx].has(cx,cy) )
+								layerIdx++;
+							if( csvLayers[layerIdx] == null )
+								csvLayers[layerIdx] = new Csv(li.cWid, li.cHei);
+
+							// Add tile
+							csvLayers[layerIdx].set(
+								cx, cy,
+								_remapTileId( td.uid, t.tid, t.flips )
+							);
+						}
 					}
 				});
+
+				// Warn for freely positioned tiles
+				if( hasIncompatibleTiles )
+					log.error("  This layer contains tiles that are not aligned with the grid, which isn't supported in Tiled. They will appear shifted in the TMX file.");
+
+				// Create one XML layer per CSV
+				var layerIdx = 0;
+				for(csv in csvLayers) {
+					var layer = _createLayer("layer", li, csvLayers.length>1 ? "_"+(layerIdx+1) : "");
+					log.add("layer", "    Building CSV "+(layerIdx+1)+"...");
+					var data = Xml.createElement("data");
+					layer.addChild(data);
+					data.set("encoding","csv");
+					data.addChild( Xml.createPCData( csv.getString() ) );
+					layerIdx++;
+				}
 			}
 		}
 
@@ -367,22 +379,26 @@ private class Csv {
 		data = new Map();
 	}
 
-	public inline function set(cx,cy, v:UInt) {
-		if( cx>=0 && cy>=0 )
+	public inline function set(cx:Int, cy:Int, v:UInt) {
+		if( cx>=0 && cy>=0 && cx<wid && cy<hei )
 			setCoordId(cx+cy*wid, v);
+	}
+
+	public inline function setCoordId(coordId:Int, v:UInt) {
+		if( coordId>=0 && coordId<wid*hei )
+			data.set(coordId, v);
 	}
 
 	public inline function get(cx,cy) : UInt {
 		return data.exists( cx+cy*wid ) ? data.get(cx+cy*wid) : 0;
 	}
 
-	public inline function getCoordId(coordId:Int) : UInt {
-		return data.exists( coordId ) ? data.get( coordId ) : 0;
+	public inline function has(cx,cy) : Bool {
+		return data.exists( cx+cy*wid );
 	}
 
-	public inline function setCoordId(coordId:Int, v:UInt) {
-		if( coordId<wid*hei )
-			data.set(coordId, v);
+	public inline function getCoordId(coordId:Int) : UInt {
+		return data.exists( coordId ) ? data.get( coordId ) : 0;
 	}
 
 	public function getString() {
