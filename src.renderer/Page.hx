@@ -12,7 +12,7 @@ class Page extends dn.Process {
 	public function onKeyPress(keyCode:Int) {}
 
 	public function loadPageTemplate(id:String, ?vars:Dynamic) {
-		var path = App.APP_ASSETS_DIR + 'pages/$id.html';
+		var path = App.APP_ASSETS_DIR + 'tpl/pages/$id.html';
 		App.LOG.fileOp("Loading page template: "+id+" from "+path);
 		var raw = JsTools.readFileString(path);
 		if( raw==null )
