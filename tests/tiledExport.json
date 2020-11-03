@@ -11,11 +11,28 @@
 	"defaultPivotY": 0,
 	"defaultGridSize": 8,
 	"bgColor": "#1A1B1E",
-	"nextUid": 116,
+	"nextUid": 119,
 	"minifyJson": false,
 	"exportTiled": true,
 	"defs": {
 		"layers": [
+			{
+				"__type": "IntGrid",
+				"identifier": "IntGrid",
+				"type": "IntGrid",
+				"uid": 118,
+				"gridSize": 8,
+				"displayOpacity": 1,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGridValues": [{ "identifier": null, "color": "#000000" }],
+				"autoTilesetDefUid": null,
+				"autoRuleGroups": [],
+				"autoSourceLayerDefUid": null,
+				"tilesetDefUid": null,
+				"tilePivotX": 0,
+				"tilePivotY": 0
+			},
 			{
 				"__type": "IntGrid",
 				"identifier": "Auto_layer",
@@ -201,23 +218,6 @@
 				"autoRuleGroups": [],
 				"autoSourceLayerDefUid": null,
 				"tilesetDefUid": 9,
-				"tilePivotX": 0,
-				"tilePivotY": 0
-			},
-			{
-				"__type": "IntGrid",
-				"identifier": "IntGrid",
-				"type": "IntGrid",
-				"uid": 115,
-				"gridSize": 16,
-				"displayOpacity": 1,
-				"pxOffsetX": 0,
-				"pxOffsetY": 0,
-				"intGridValues": [{ "identifier": null, "color": "#000000" }],
-				"autoTilesetDefUid": null,
-				"autoRuleGroups": [],
-				"autoSourceLayerDefUid": null,
-				"tilesetDefUid": null,
 				"tilePivotX": 0,
 				"tilePivotY": 0
 			}
@@ -461,6 +461,25 @@
 		"pxHei": 80,
 		"layerInstances": [
 			{
+				"__identifier": "IntGrid",
+				"__type": "IntGrid",
+				"__cWid": 13,
+				"__cHei": 10,
+				"__gridSize": 8,
+				"__opacity": 1,
+				"__pxTotalOffsetX": 0,
+				"__pxTotalOffsetY": 0,
+				"levelId": 70,
+				"layerDefUid": 118,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGrid": [ { "coordId": 15, "v": 0 }, { "coordId": 16, "v": 0 }, { "coordId": 17, "v": 0 } ],
+				"autoLayerTiles": [],
+				"seed": 9336407,
+				"gridTiles": [],
+				"entityInstances": []
+			},
+			{
 				"__identifier": "Auto_layer",
 				"__type": "IntGrid",
 				"__cWid": 13,
@@ -522,25 +541,6 @@
 					{ "px": [40,56], "src": [24,48], "f": 1, "d": [96,75] },
 					{ "px": [24,64], "src": [48,40], "f": 2, "d": [107,66] }
 				],
-				"entityInstances": []
-			},
-			{
-				"__identifier": "IntGrid",
-				"__type": "IntGrid",
-				"__cWid": 7,
-				"__cHei": 5,
-				"__gridSize": 16,
-				"__opacity": 1,
-				"__pxTotalOffsetX": 0,
-				"__pxTotalOffsetY": 0,
-				"levelId": 70,
-				"layerDefUid": 115,
-				"pxOffsetX": 0,
-				"pxOffsetY": 0,
-				"intGrid": [{ "coordId": 8, "v": 0 }],
-				"autoLayerTiles": [],
-				"seed": 8193841,
-				"gridTiles": [],
 				"entityInstances": []
 			}
 		]

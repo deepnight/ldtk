@@ -27,8 +27,10 @@ class Tiled extends Exporter {
 			Determine a unique "grid size" value because it doesn't support different
 			grid sizes in the same map file.
 		**/
-		tiledGridSize = p.defs.layers.length==0 ? p.defaultGridSize : p.defs.layers[0].gridSize;
-		log.general("Automatic gridSize: "+tiledGridSize+"px (determined from 1st layer)");
+		tiledGridSize = p.defaultGridSize;
+		if( p.defs.layers.length>0 )
+			tiledGridSize = dn.Lib.findMostFrequentValueInArray( p.defs.layers.map( (ld)->ld.gridSize ) );
+		log.general("Guessed gridSize: "+tiledGridSize+"px");
 		for(ld in p.defs.layers)
 			if( ld.gridSize!=tiledGridSize )
 				log.error("Layer "+ld.identifier+" uses a specific grid size ("+ld.gridSize+"px). Tiled only supports a single grid size for all layers (here, "+tiledGridSize+"px).");
@@ -201,7 +203,7 @@ class Tiled extends Exporter {
 			switch ld.type {
 				case IntGrid:
 					if( !ld.isAutoLayer() && !li.isEmpty() )
-						log.error("Unsupported layer type "+ld.type+" in level "+level.identifier);
+						log.error("Unsupported layer type "+ld.type+" in level "+level.identifier+"."+ld.identifier);
 					// if( ld.autoTilesetDefUid==null && ld.gridSize!=tiledGridSize ) {
 					// 	log.error("IntGrid layer "+ld.identifier+" was not exported because it has a different gridSize (not supported by Tiled).");
 					// 	continue;
