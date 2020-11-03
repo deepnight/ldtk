@@ -36,7 +36,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				updatePanel();
 
 			case BeforeProjectSaving:
-				updateAllLevels();
+				updateInvalidatedRulesInAllLevels();
 
 			case LayerRuleChanged(r), LayerRuleRemoved(r), LayerRuleAdded(r):
 				invalidateRule(r);
@@ -76,7 +76,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 	override function onClose() {
 		super.onClose();
-		updateAllLevels();
+		updateInvalidatedRulesInAllLevels();
 		editor.levelRender.clearTemp();
 	}
 
@@ -85,7 +85,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function updateAllLevels() {
+	function updateInvalidatedRulesInAllLevels() {
 		var ops = [];
 
 		// Apply edited rules to all other levels
@@ -106,7 +106,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				if( r!=null ) {
 					ops.push({
 						label: 'Updating rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
-						cb: li.applyAutoLayerRuleEverywhere.bind(r),
+						cb: li.applyAutoLayerRuleToAllLayer.bind(r),
 					});
 				}
 				else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
@@ -128,6 +128,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	function updatePanel() {
 		jContent.find("*").off();
 		ui.Tip.clear();
+		editor.levelRender.clearTemp();
 
 		var jRuleGroupList = jContent.find("ul.ruleGroups").empty();
 
@@ -484,12 +485,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					}
 				});
 
-				// Active
+				// Enable/disable rule
 				var jActive = jRule.find("a.active");
 				jActive.find(".icon").addClass( r.active ? "active" : "inactive" );
 				jActive.click( function(ev:js.jquery.Event) {
 					ev.preventDefault();
 					r.active = !r.active;
+					invalidateRule(r);
 					editor.ge.emit( LayerRuleChanged(r) );
 				});
 

@@ -653,6 +653,7 @@ class LayerInstance {
 	}
 
 
+	/** Apply all rules to specific cell **/
 	public function applyAllAutoLayerRulesAt(cx:Int, cy:Int, wid:Int, hei:Int) {
 		if( !def.isAutoLayer() || !def.autoLayerRulesCanBeUsed() )
 			return;
@@ -669,15 +670,16 @@ class LayerInstance {
 		if( source==null )
 			return;
 
-		for(cx in left...right+1)
-		for(cy in top...bottom+1)
-		for(rg in def.autoRuleGroups)
-		for(r in rg.rules)
-			runAutoLayerRuleAt(source, r,cx,cy);
+		def.iterateActiveRulesInEvalOrder( (r)->{
+			for(cx in left...right+1)
+			for(cy in top...bottom+1)
+				runAutoLayerRuleAt(source, r,cx,cy);
+		});
 
 		applyBreakOnMatches();
 	}
 
+	/** Apply all rules to all cells **/
 	public inline function applyAllAutoLayerRules() {
 		if( def.isAutoLayer() ) {
 			autoTilesCache = new Map();
@@ -686,10 +688,16 @@ class LayerInstance {
 		}
 	}
 
-	public function applyAutoLayerRuleEverywhere(r:data.def.AutoLayerRuleDef) {
-		// TODO use cache invalidation?
+	/** Apply the rule to all layer cells **/
+	public function applyAutoLayerRuleToAllLayer(r:data.def.AutoLayerRuleDef) {
 		if( !def.isAutoLayer() )
 			return;
+
+		// Clear tiles if rule is disabled
+		if( !r.active || !def.getRuleGroup(r).active ) {
+			autoTilesCache.remove(r.uid);
+			return;
+		}
 
 		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
 		if( source==null )
