@@ -46,7 +46,7 @@ class LayerInstance {
 	}
 
 
-	public function toJson() : led.Json.LayerInstanceJson {
+	public function toJson() : ldtk.Json.LayerInstanceJson {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
@@ -98,7 +98,7 @@ class LayerInstance {
 
 			gridTiles: {
 				var td = _project.defs.getTilesetDef(def.tilesetDefUid);
-				var arr : Array<led.Json.Tile> = [];
+				var arr : Array<ldtk.Json.Tile> = [];
 				for( e in gridTiles.keyValueIterator() )
 					for( tileInf in e.value ) {
 						arr.push({
@@ -171,7 +171,7 @@ class LayerInstance {
 		}
 	}
 
-	public static function fromJson(p:Project, json:led.Json.LayerInstanceJson) {
+	public static function fromJson(p:Project, json:ldtk.Json.LayerInstanceJson) {
 		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
 		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
@@ -199,7 +199,7 @@ class LayerInstance {
 
 		if( json.autoLayerTiles!=null ) {
 			try {
-				var jsonAutoLayerTiles : Array<led.Json.Tile> = JsonTools.readArray(json.autoLayerTiles);
+				var jsonAutoLayerTiles : Array<ldtk.Json.Tile> = JsonTools.readArray(json.autoLayerTiles);
 				li.autoTilesCache = new Map();
 
 				for(at in jsonAutoLayerTiles) {

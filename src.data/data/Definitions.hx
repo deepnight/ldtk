@@ -16,7 +16,7 @@ class Definitions {
 		this._project = project;
 	}
 
-	public function toJson(p:Project) : led.Json.DefinitionsJson {
+	public function toJson(p:Project) : ldtk.Json.DefinitionsJson {
 		return {
 			layers: layers.map( function(ld) return ld.toJson() ),
 			entities: entities.map( function(ed) return ed.toJson() ),
@@ -26,7 +26,7 @@ class Definitions {
 		}
 	}
 
-	public static function fromJson(p:Project, json:led.Json.DefinitionsJson) {
+	public static function fromJson(p:Project, json:ldtk.Json.DefinitionsJson) {
 		var d = new Definitions(p);
 
 		for( layerJson in JsonTools.readArray(json.layers) )

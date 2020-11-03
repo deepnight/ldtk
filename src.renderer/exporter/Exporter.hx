@@ -1,6 +1,6 @@
 package exporter;
 
-import led.Json;
+import ldtk.Json;
 
 class Exporter {
 	var log : dn.Log;

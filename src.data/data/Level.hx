@@ -31,7 +31,7 @@ class Level {
 		return Type.getClassName( Type.getClass(this) ) + '.$identifier(#$uid)';
 	}
 
-	public function toJson() : led.Json.LevelJson {
+	public function toJson() : ldtk.Json.LevelJson {
 		return {
 			identifier: identifier,
 			uid: uid,
@@ -41,7 +41,7 @@ class Level {
 		}
 	}
 
-	public static function fromJson(p:Project, json:led.Json.LevelJson) {
+	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {
 		var l = new Level( p, JsonTools.readInt(json.uid) );
 		l.pxWid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_WIDTH );
 		l.pxHei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_HEIGHT );
@@ -148,7 +148,7 @@ class Level {
 				case Tiles:
 				case AutoLayer:
 			}
-			
+
 		return false;
 	}
 

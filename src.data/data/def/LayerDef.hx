@@ -9,7 +9,7 @@ class LayerDef {
 	public var identifier(default,set) : String;
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var displayOpacity : Float = 1.0;
-	public var pxOffsetX : Int = 0; // JSON offsets
+	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
 
 	// IntGrid
@@ -45,7 +45,7 @@ class LayerDef {
 		return 'LayerDef.$identifier($type,${gridSize}px)';
 	}
 
-	public static function fromJson(jsonVersion:String, json:led.Json.LayerDefJson) {
+	public static function fromJson(jsonVersion:String, json:ldtk.Json.LayerDefJson) {
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
@@ -76,7 +76,7 @@ class LayerDef {
 		return o;
 	}
 
-	public function toJson() : led.Json.LayerDefJson {
+	public function toJson() : ldtk.Json.LayerDefJson {
 		return {
 			__type: Std.string(type),
 

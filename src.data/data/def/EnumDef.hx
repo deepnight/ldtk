@@ -28,7 +28,7 @@ class EnumDef {
 		return 'EnumDef#$uid.$identifier(${values.length} values)';
 	}
 
-	public static function fromJson(jsonVersion:String, json:led.Json.EnumDefJson) {
+	public static function fromJson(jsonVersion:String, json:ldtk.Json.EnumDefJson) {
 		var ed = new EnumDef(JsonTools.readInt(json.uid), json.identifier);
 
 		for(v in JsonTools.readArray(json.values)) {
@@ -45,7 +45,7 @@ class EnumDef {
 		return ed;
 	}
 
-	public function toJson(p:Project) : led.Json.EnumDefJson {
+	public function toJson(p:Project) : ldtk.Json.EnumDefJson {
 		return {
 			identifier: identifier,
 			uid: uid,
