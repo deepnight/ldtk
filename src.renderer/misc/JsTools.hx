@@ -424,10 +424,11 @@ class JsTools {
 
 	public static function makePath(path:String, ?pathColor:UInt, highlightFirst=false) {
 		path = StringTools.replace(path,"\\","/");
+		var parts = path.split("/");
 		var i = 0;
-		var parts = path.split("/").map( function(p) {
+		parts = parts.map( function(p) {
 			var col = pathColor==null ? C.fromStringLight(p) : pathColor;
-			if( (i++)==0 && highlightFirst )
+			if( (i++)==0 && highlightFirst && parts.length>1 )
 				return '<span style="background-color:${C.intToHex(C.toBlack(col,0.3))}" class="highlight">$p</span>';
 			else
 				return '<span style="color:${C.intToHex(col)}">$p</span>';

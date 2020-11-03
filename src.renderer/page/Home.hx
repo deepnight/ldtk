@@ -90,26 +90,52 @@ class Home extends Page {
 		}
 
 
+
 		// Trim common path parts
 		var trimmedPaths = recents.copy();
-		if( trimmedPaths.length==1 )
-			trimmedPaths[0] = dn.FilePath.fromFile( trimmedPaths[0] ).fileWithExt;
-		else if( trimmedPaths.length>1 ) {
-			var splitPaths = trimmedPaths.map( function(p) return dn.FilePath.fromFile(p).getDirectoryAndFileArray() );
 
-			for(i in 0...splitPaths.length) {
-				var refPath = splitPaths[i];
-				var sameRoot = splitPaths.filter( (p) -> p.length>2 && p[0]==refPath[0] );
-				while( sameRoot.length>1 ) {
-					for(p in sameRoot )
-						p.shift();
-					sameRoot = splitPaths.filter( (p) -> p.length>2 && p[0]==refPath[0] );
-				}
-			}
-
-			trimmedPaths = splitPaths.map( function(p) return p.join("/") );
+		// List drive letters
+		var driveLetters = new Map();
+		for(path in trimmedPaths ) {
+			var d = dn.FilePath.fromFile(path).getDriveLetter();
+			driveLetters.set(d,d);
 		}
 
+		// Trim paths beginnings, grouped by drive
+		var splitPaths = trimmedPaths.map( function(p) return dn.FilePath.fromFile(p).getDirectoryAndFileArray() );
+		for(d in driveLetters) {
+			// List path indexes in original array
+			var sameDriveIndexes = [];
+			for(i in 0...trimmedPaths.length)
+				if( dn.FilePath.fromFile( trimmedPaths[i] ).getDriveLetter() == d )
+					sameDriveIndexes.push(i);
+
+			// Trim while beginning is the same
+			var trimMore = true;
+			var trim = 0;
+			while( trimMore ) {
+				var firstIdx = sameDriveIndexes[0];
+				for( idx in sameDriveIndexes )
+					if( trim>=splitPaths[idx].length-2 || splitPaths[idx][trim] != splitPaths[firstIdx][trim] ) {
+						trimMore = false;
+						break;
+					}
+				if( trimMore )
+					trim++;
+			}
+
+			// Apply trimming to array
+			while( trim>0 ) {
+				for( idx in sameDriveIndexes )
+					splitPaths[idx].shift();
+				trim--;
+			}
+		}
+		trimmedPaths = splitPaths.map( arr->arr.join("/") );
+
+
+
+		// List files
 		var i = recents.length-1;
 		while( i>=0 ) {
 			var p = recents[i];
