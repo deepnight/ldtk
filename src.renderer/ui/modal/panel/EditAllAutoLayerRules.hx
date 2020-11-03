@@ -316,9 +316,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 				// Show affect level cells
 				jRule.mouseenter( (ev)->{
-					// if( !r.active || !rg.active )
-					// 	return;
-
 					if( li.autoTilesCache!=null && li.autoTilesCache.exists(r.uid) ) {
 						editor.levelRender.clearTemp();
 						editor.levelRender.temp.lineStyle(1, 0xff00ff, 1);
