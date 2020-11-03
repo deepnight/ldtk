@@ -1,10 +1,11 @@
-# 0.5.0-beta - It's about tile!
+# 0.5.0-beta - LDtk: it's about tile!
 
+ - **LDtk** (for *Level Designer Toolkit*) is the new app name :) I hope you'll like it! The logo was updated, as well as source code, GitHub repo and various other things.
  - **Tiles flipping**: in Tile Layers, you can mirror tiles before painting them by pressing `X` or `Y` (or `Z`). This also works from group of tiles.
  - **Tiles stacking**: you can now optionaly *stack multiple tiles in a single cell of a Tile layer*, reducing the need for multiple layers. For example, you could paint a brick wall, then enable stack mode (`T`), and add details like cracks or vines over the same wall. Be careful though: erasing of stacked elements can be tricky, so you should use a mix of multiple layers and stacking to get the best results.
  - **New editing options bar**: *Grid locking*, *Single layer mode* and *Empty space selection* moved to a new more streamlined button bar.
  - **Auto-layer rule preview**: when you move your mouse over a rule, you will now see which cells in the current layer are affected, making their testing *MUCH* easier.
- - **Tiled (TMX) export**: this optional export now generates proper standard tile layers. However, to support LEd stacked tiles feature (see above), multiple Tiled layers might be generated per single LEd layer. Also, IntGrid layers are now properly exported to Tiled (as standard tile layers, with an auto-generated tileset image).
+ - **Tiled (TMX) export**: this optional export now generates proper standard tile layers. However, to support LDtk stacked tiles feature (see above), multiple Tiled layers might be generated per single LDtk layer. Also, IntGrid layers are now properly exported to Tiled (as standard tile layers, with an auto-generated tileset image).
  - **New color picker**: it supports copy/paste, manual hex value editing and a much better UI (thanks to [simple-color-picker](https://github.com/superguigui/simple-color-picker)).
  - **Flood-fill fixes**: if you hold `SHIFT` while clicking in a Tile layer, it will flood-fill the area using currently selected tiles (randomly, or by stamping group of tiles, depending on the current mode).
  - **Flood-fill erasing**: just use `SHIFT`+`Right click` to erase a whole contiguous area.
