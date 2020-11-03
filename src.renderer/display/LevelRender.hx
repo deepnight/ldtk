@@ -30,6 +30,8 @@ class LevelRender extends dn.Process {
 	var grid : h2d.Graphics;
 	var rectBleeps : Array<h2d.Object> = [];
 
+	public var temp : h2d.Graphics;
+
 	// Invalidation system (ie. render calls)
 	var allInvalidated = true;
 	var bgInvalidated = false;
@@ -54,6 +56,9 @@ class LevelRender extends dn.Process {
 
 		layersWrapper = new h2d.Layers();
 		root.add(layersWrapper, Const.DP_MAIN);
+
+		temp = new h2d.Graphics();
+		root.add(temp, Const.DP_TOP);
 
 		focusLevelX = 0;
 		focusLevelY = 0;
@@ -404,6 +409,7 @@ class LevelRender extends dn.Process {
 	public function renderAll() {
 		allInvalidated = false;
 
+		clearTemp();
 		renderBounds();
 		renderGrid();
 
@@ -413,6 +419,10 @@ class LevelRender extends dn.Process {
 				li.applyAllAutoLayerRules();
 			renderLayer(li);
 		}
+	}
+
+	public inline function clearTemp() {
+		temp.clear();
 	}
 
 

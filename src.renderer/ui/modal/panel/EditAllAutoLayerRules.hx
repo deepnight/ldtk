@@ -77,6 +77,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	override function onClose() {
 		super.onClose();
 		updateAllLevels();
+		editor.levelRender.clearTemp();
 	}
 
 	inline function invalidateRule(r:data.def.AutoLayerRuleDef) {
@@ -311,6 +312,29 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				jRule.appendTo( jGroupList );
 				jRule.attr("ruleUid", r.uid);
 				jRule.addClass(r.active ? "active" : "inactive");
+
+				// Show affect level cells
+				jRule.mouseenter( (ev)->{
+					// if( !r.active || !rg.active )
+					// 	return;
+
+					if( li.autoTilesCache!=null && li.autoTilesCache.exists(r.uid) ) {
+						editor.levelRender.clearTemp();
+						editor.levelRender.temp.lineStyle(1, 0xff00ff, 1);
+						editor.levelRender.temp.beginFill(0x5a36a7, 0.6);
+						for( coordId in li.autoTilesCache.get(r.uid).keys() ) {
+							var cx = ( coordId % li.cWid );
+							var cy = Std.int( coordId / li.cWid );
+							editor.levelRender.temp.drawRect(
+								cx*li.def.gridSize,
+								cy*li.def.gridSize,
+								li.def.gridSize,
+								li.def.gridSize
+							);
+						}
+					}
+				} );
+				jRule.mouseleave( (ev)->editor.levelRender.clearTemp() );
 
 				// Insert rule before
 				jRule.find(".insert.before").click( function(_) {
