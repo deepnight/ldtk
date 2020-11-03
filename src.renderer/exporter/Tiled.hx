@@ -135,7 +135,53 @@ class Tiled extends Exporter {
 			gid+=count;
 		}
 
-		function _remapTileId(tilesetUid:Int, tileId:Int, flips=0) : UInt {
+		/**
+			Create IntGrid fake tilesets (basically, just colored squares)
+		**/
+		for(ld in p.defs.layers) {
+			if( ld.type==IntGrid ) {
+				var count = ld.countIntGridValues();
+
+				// Create image data
+				var bd = new hxd.BitmapData( count*ld.gridSize, ld.gridSize );
+				var i = 0;
+				for(v in ld.getAllIntGridValues())  {
+					bd.fill( i*ld.gridSize, 0, ld.gridSize, ld.gridSize, C.addAlphaF(v.color) );
+					i++;
+				}
+
+				// Save PNG
+				var fp = outputPath.clone();
+				fp.fileName = ld.identifier;
+				fp.extension = "png";
+				addOuputFile(fp.full, bd.toPNG());
+
+				// Build tileset XML
+				var tileset = Xml.createElement("tileset");
+				map.addChild(tileset);
+				tileset.set("firstgid",""+gid);
+				tileset.set("name", ld.identifier);
+				tileset.set("tilewidth", ""+ld.gridSize);
+				tileset.set("tileheight", ""+ld.gridSize);
+				tileset.set("tilecount", "" + count);
+				tileset.set("columns", "" + count);
+				tileset.set("objectalignment", "topleft" );
+
+				// Build image XML
+				var image = Xml.createElement("image");
+				tileset.addChild(image);
+				image.set("source", fp.fileWithExt);
+				image.set("width", ""+bd.width);
+				image.set("height", ""+bd.height);
+
+				tilesetGids.set(ld.uid, gid);
+				gid+=count;
+			}
+		}
+
+
+		/** Create a Tiled "tileId" from a LEd "tileId" **/
+		function _makeTiledTileId(tilesetUid:Int, tileId:Int, flips=0) : UInt {
 			if( flips==0 )
 				return tilesetGids.get(tilesetUid) + tileId;
 			else {
@@ -181,7 +227,7 @@ class Tiled extends Exporter {
 		function _createTileObject(tilesetDefUid:Int, tileId:Int, x:Int, y:Int, flips=0) : Xml {
 			var o = Xml.createElement("object");
 			o.set("id", Std.string(objectId++));
-			o.set("gid", ""+_remapTileId(tilesetDefUid, tileId, flips));
+			o.set("gid", ""+_makeTiledTileId(tilesetDefUid, tileId, flips));
 			o.set("x", ""+x);
 			o.set("y", ""+y);
 			o.set("width", ""+p.defs.getTilesetDef(tilesetDefUid).tileGridSize);
@@ -202,25 +248,20 @@ class Tiled extends Exporter {
 
 			switch ld.type {
 				case IntGrid:
-					if( !ld.isAutoLayer() && !li.isEmpty() )
-						log.error("Unsupported layer type "+ld.type+" in level "+level.identifier+"."+ld.identifier);
-					// if( ld.autoTilesetDefUid==null && ld.gridSize!=tiledGridSize ) {
-					// 	log.error("IntGrid layer "+ld.identifier+" was not exported because it has a different gridSize (not supported by Tiled).");
-					// 	continue;
-					// }
+					// Prepare CSV
+					var csv = new Csv(li.cWid, li.cHei);
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid)
+						if( li.hasIntGrid(cx,cy) )
+							csv.set( cx, cy, _makeTiledTileId(li.def.uid, li.getIntGrid(cx,cy), 0) );
 
-					// IntGrid values
-					// log.add("layer", "  Exporting IntGrid values...");
-					// var layer = _createLayer("layer", li, "_values");
-					// var data = Xml.createElement("data");
-					// layer.addChild(data);
-					// data.set("encoding","csv");
-					// var csv = new Csv(li.cWid, li.cHei);
-					// for(cy in 0...li.cHei)
-					// for(cx in 0...li.cWid)
-					// 	if( li.hasIntGrid(cx,cy) )
-					// 		csv.set(cx,cy, li.getIntGrid(cx,cy)+1);
-					// data.addChild( Xml.createPCData(csv.getString()) );
+					// Build layer XML
+					log.add("layer", "  Exporting IntGrid values...");
+					var layer = _createLayer("layer", li, li.def.isAutoLayer() ? "_values" : null);
+					var data = Xml.createElement("data");
+					layer.addChild(data);
+					data.set("encoding","csv");
+					data.addChild( Xml.createPCData( csv.getString() ) );
 
 				case Entities:
 					function _createProperty(props:Xml, name:String, type:Null<String>, val:Dynamic) {
@@ -304,7 +345,7 @@ class Tiled extends Exporter {
 						for( coordId in li.gridTiles.keys() ) {
 							var stack = li.gridTiles.get(coordId);
 							if( layerIdx < stack.length ) {
-								csv.setCoordId( coordId, _remapTileId(ld.tilesetDefUid, stack[layerIdx].tileId, stack[layerIdx].flips) );
+								csv.setCoordId( coordId, _makeTiledTileId(ld.tilesetDefUid, stack[layerIdx].tileId, stack[layerIdx].flips) );
 							}
 						}
 
@@ -349,7 +390,7 @@ class Tiled extends Exporter {
 							// Add tile
 							csvLayers[layerIdx].set(
 								cx, cy,
-								_remapTileId( td.uid, t.tid, t.flips )
+								_makeTiledTileId( td.uid, t.tid, t.flips )
 							);
 						}
 					}
