@@ -367,7 +367,6 @@ class EditLayerDefs extends ui.modal.Panel {
 					if( v<0 )
 						cur.autoSourceLayerDefUid = null;
 					else {
-						// TODO detect rules that refer to invalid IntGrid values
 						var source = project.defs.getLayerDef(v);
 						for(rg in cur.autoRuleGroups)
 						for(r in rg.rules) {

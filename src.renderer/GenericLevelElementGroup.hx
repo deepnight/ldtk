@@ -233,7 +233,7 @@ class GenericLevelElementGroup {
 				case null:
 
 				case GridCell(li, cx, cy):
-					if( li.hasAnyGridValue(cx,cy) ) // TODO render empty cells
+					if( li.hasAnyGridValue(cx,cy) )
 						switch li.def.type {
 							case IntGrid:
 								ghost.lineStyle();

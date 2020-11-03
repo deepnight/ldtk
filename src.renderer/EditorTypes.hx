@@ -95,7 +95,7 @@ enum CursorType {
 }
 
 enum GenericLevelElement {
-	GridCell(li:data.inst.LayerInstance, cx:Int, cy:Int); // TODO rename to GridCellStack
+	GridCell(li:data.inst.LayerInstance, cx:Int, cy:Int);
 	Entity(li:data.inst.LayerInstance, ei:data.inst.EntityInstance);
 	PointField(li:data.inst.LayerInstance, ei:data.inst.EntityInstance, fi:data.inst.FieldInstance, arrayIdx:Int);
 }
