@@ -36,6 +36,14 @@ class EditProject extends ui.modal.Panel {
 			if( v )
 				new ui.modal.dialog.Message(Lang.t._("Disclaimer: Tiled export is only meant to load your LEd project in a game framework that only supports Tiled files. It is recommended to write your own LEd JSON parser, as some LEd features may not be supported.\nIt's not so complicated, I promise :)"), "project");
 		}
+		var fp = dn.FilePath.fromFile( editor.projectFilePath );
+		fp.appendDirectory(fp.fileName+"_tiled");
+		fp.fileWithExt = null;
+		if( !JsTools.fileExists(fp.full) )
+			fp.parseFilePath( editor.projectFilePath );
+		var jLocate = jForm.find("[name=tiled]").siblings(".locate").empty();
+		if( project.exportTiled )
+			jLocate.append( JsTools.makeExploreLink(fp.full) );
 
 		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
