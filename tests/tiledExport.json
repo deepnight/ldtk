@@ -18,14 +18,14 @@
 		"layers": [
 			{
 				"__type": "IntGrid",
-				"identifier": "IntGrid",
+				"identifier": "Pure_IntGrid",
 				"type": "IntGrid",
 				"uid": 118,
 				"gridSize": 8,
 				"displayOpacity": 1,
 				"pxOffsetX": 0,
 				"pxOffsetY": 0,
-				"intGridValues": [{ "identifier": null, "color": "#000000" }],
+				"intGridValues": [ { "identifier": null, "color": "#A00EF7" }, { "identifier": null, "color": "#DB6A6A" }, { "identifier": null, "color": "#FFBC00" } ],
 				"autoTilesetDefUid": null,
 				"autoRuleGroups": [],
 				"autoSourceLayerDefUid": null,
@@ -461,7 +461,7 @@
 		"pxHei": 80,
 		"layerInstances": [
 			{
-				"__identifier": "IntGrid",
+				"__identifier": "Pure_IntGrid",
 				"__type": "IntGrid",
 				"__cWid": 13,
 				"__cHei": 10,
@@ -473,7 +473,7 @@
 				"layerDefUid": 118,
 				"pxOffsetX": 0,
 				"pxOffsetY": 0,
-				"intGrid": [ { "coordId": 15, "v": 0 }, { "coordId": 16, "v": 0 }, { "coordId": 17, "v": 0 } ],
+				"intGrid": [ { "coordId": 15, "v": 0 }, { "coordId": 16, "v": 1 }, { "coordId": 17, "v": 2 } ],
 				"autoLayerTiles": [],
 				"seed": 9336407,
 				"gridTiles": [],
