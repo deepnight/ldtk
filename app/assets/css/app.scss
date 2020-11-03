@@ -2678,9 +2678,22 @@ canvas#webgl {
 
 					border: none;
 					background-color: $bgDark;
+					background-image: url("../img/logo.svg");
+					background-repeat: no-repeat;
+					background-position: center 15px;
+					background-size: 200px;
+					padding-top: 100px;
+					// background-size: ;
 
 					.changelogs {
 						padding: 32px;
+						max-width: 960px;
+						margin: auto;
+					}
+
+					button.fullscreen {
+						background: $orange;
+						box-shadow: 0px 0px 32px $orange;
 					}
 				}
 
@@ -2694,6 +2707,7 @@ canvas#webgl {
 					border: 1px solid $bgLight;
 					border-radius: 3px;
 					width: auto;
+
 					.icon {
 						width: 32px;
 						height: 32px;
