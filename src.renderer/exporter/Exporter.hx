@@ -47,6 +47,14 @@ class Exporter {
 			new ui.modal.dialog.LogPrint(log, "Level exporter errors");
 	}
 
+	public function addExtraLogger(l:dn.Log, ?tag:String) {
+		log.onAdd = (e)->l.add(tag==null ? "export" : tag, e.str, e.color, e.critical);
+	}
+
+	public function hasErrors() {
+		return log.containsAnyCriticalEntry();
+	}
+
 	function addOuputFile(path:String, bytes:haxe.io.Bytes) {
 		outputFiles.push({
 			path: path,
