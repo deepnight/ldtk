@@ -529,6 +529,7 @@ class JsTools {
 
 	public static function makeExploreLink(filePath:String) {
 		var a = new J('<a class="exploreTo"/>');
+		a.append('<span class="icon locate"/>');
 		a.click( function(ev) {
 			ev.preventDefault();
 			ev.stopPropagation();

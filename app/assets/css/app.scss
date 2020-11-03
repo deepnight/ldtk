@@ -144,7 +144,7 @@ button {
 	border: none;
 	box-shadow: 0px -2px 0px rgba(0,0,0, 0.3) inset,
 		0px 0px 2px rgba(255, 255, 255, 0.22) inset,
-		0px 2px 2px rgba(0,0,0, 0.4);
+		0px 2px 1px rgba(0,0,0, 0.3);
 	background-color: $red;
 	cursor: pointer;
 	text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.28);
@@ -210,12 +210,12 @@ button {
 		display: flex;
 		justify-content: center;
 
-		background-color: $bgMed;
+		background-color: $bgLight;
 		text-decoration: underline;
 		text-transform: none;
 
 		box-shadow: 0px -2px 0px rgba(0,0,0, 0.3) inset,
-			0px 2px 2px rgba(0,0,0, 0.4);
+			0px 2px 0px rgba(0,0,0, 0.4);
 
 		.icon {
 			margin-right: 4px;
@@ -223,7 +223,7 @@ button {
 		}
 
 		&:hover {
-			background-color: $bgLight;
+			background-color: $bgLighter;
 		}
 	}
 
@@ -331,8 +331,13 @@ button {
 }
 
 a.exploreTo {
+	display: flex;
+	max-width: 24px;
+	align-items: center;
+	justify-items: center;
+
 	flex: 0 0 auto !important;
-	padding: 8px;
+	padding: 4px;
 	background-color: $bgLight;
 	border-radius: 3px;
 	cursor: pointer;
@@ -341,8 +346,10 @@ a.exploreTo {
 		color: black;
 		background-color: $orange;
 	}
-	&::before {
-		content: "📁";
+
+	.icon {
+		width: 1.5em;
+		height: 1.5em;
 	}
 }
 
@@ -701,6 +708,9 @@ ul.niceList {
 		}
 
 		a {
+			display: flex;
+			justify-items: center;
+			align-items: center;
 			font-size: 1.1em;
 			padding: 3px;
 			background-color: $bgMed;
@@ -908,6 +918,7 @@ ul.log {
 .icon.gridOn	{ background-image: url("../icons/gridOn.svg"); }
 .icon.gridOff	{ background-image: url("../icons/gridOff.svg"); }
 .icon.stop		{ background-image: url("../icons/stop.svg"); }
+.icon.locate	{ background-image: url("../icons/locate.svg"); }
 .icon.world		{ background-image: url("../icons/world.svg"); }
 .icon.checker	{ background-image: url("../icons/checker.svg"); }
 .icon.singleLayer		{ background-image: url("../icons/singleLayer.svg"); }
