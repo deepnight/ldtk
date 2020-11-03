@@ -37,7 +37,7 @@ class CrashReport extends ui.modal.Dialog {
 					"",
 					"Stack:",
 					"```",
-					"LEd version: "+Const.getAppVersion(),
+					"LDtk version: "+Const.getAppVersion(),
 					error.message,
 					error.name,
 					error.stack,

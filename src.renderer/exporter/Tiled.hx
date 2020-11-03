@@ -180,7 +180,7 @@ class Tiled extends Exporter {
 		}
 
 
-		/** Create a Tiled "tileId" from a LEd "tileId" **/
+		/** Create a Tiled "tileId" from a LDtk "tileId" **/
 		function _makeTiledTileId(tilesetUid:Int, tileId:Int, flips=0) : UInt {
 			if( flips==0 )
 				return tilesetGids.get(tilesetUid) + tileId;

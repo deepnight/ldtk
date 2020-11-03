@@ -34,7 +34,7 @@ class EditProject extends ui.modal.Panel {
 		i.linkEvent(ProjectSettingsChanged);
 		i.onValueChange = function(v) {
 			if( v )
-				new ui.modal.dialog.Message(Lang.t._("Disclaimer: Tiled export is only meant to load your LEd project in a game framework that only supports Tiled files. It is recommended to write your own LEd JSON parser, as some LEd features may not be supported.\nIt's not so complicated, I promise :)"), "project");
+				new ui.modal.dialog.Message(Lang.t._("Disclaimer: Tiled export is only meant to load your LDtk project in a game framework that only supports Tiled files. It is recommended to write your own LDtk JSON parser, as some LDtk features may not be supported.\nIt's not so complicated, I promise :)"), "project");
 		}
 		var fp = dn.FilePath.fromFile( editor.projectFilePath );
 		fp.appendDirectory(fp.fileName+"_tiled");
