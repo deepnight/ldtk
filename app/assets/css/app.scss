@@ -239,6 +239,18 @@ button {
 }
 
 
+.appLogo { // remember to update "Updating" page
+	min-width: 300px;
+	min-height: 100px;
+	background-image: url("../img/logo.svg");
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+	&.full {
+		background-image: url("../img/logoFull.svg");
+	}
+}
+
 
 
 
@@ -2463,22 +2475,19 @@ canvas#webgl {
 		display: grid;
 		padding-top: 32px;
 
-		.logo {
-			margin-bottom: 32px;
-			font-family: Roboto;
-			font-size: 110pt;
-			line-height: 85%;
-			text-align: center;
-			color: $bgLight;
+		.appLogo {
+			margin-bottom: 16px;
 		}
 
 		.updating {
 			padding: 16px;
-			font-size: 1.2em;
+			font-size: 1.3em;
 			color: black;
+			text-align: center;
 			border-radius: 3px;
 			background-color: $orange;
 			animation: slideUp 1s;
+
 		}
 	}
 }
@@ -2512,20 +2521,10 @@ canvas#webgl {
 
 		.header {
 			grid-column: 1/3;
+			padding-bottom: 40px;
 
-			.logo { // remember to update "Updating" page
-				font-family: Roboto;
-				font-size: 110pt;
-				line-height: 85%;
-				text-align: center;
-				color: $orange;
-			}
-
-			.sub {
-				font-family: Roboto;
-				font-size: 18pt;
-				text-align: center;
-				color: $orange;
+			.appLogo {
+				min-height: 160px;
 			}
 
 			.version {
@@ -2533,7 +2532,6 @@ canvas#webgl {
 				color: $bgLighter;
 				text-align: center;
 				margin-top: 8px;
-				margin-bottom: 20px;
 			}
 
 			.disclaimer {

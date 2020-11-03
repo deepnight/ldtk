@@ -6,7 +6,7 @@ class Updating extends Page {
 	public function new() {
 		super();
 
-		loadPageTemplate("updating", { app:Const.APP_NAME });
+		loadPageTemplate("updating");
 		App.ME.setWindowTitle();
 	}
 }
