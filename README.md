@@ -25,6 +25,8 @@ haxelib git electron https://github.com/tong/hxelectron.git
 
 haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
 
+haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
+
 haxelib git castle https://github.com/ncannasse/castle.git
 ```
 
