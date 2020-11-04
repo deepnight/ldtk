@@ -168,6 +168,27 @@ button {
 		border-color: #ffff00;
 	}
 
+	&[href] {
+		display: flex;
+		justify-content: center;
+
+		background-color: $bgLight;
+		text-decoration: none;
+		text-transform: none;
+
+		box-shadow: 0px -2px 0px rgba(0,0,0, 0.3) inset,
+			0px 2px 0px rgba(0,0,0, 0.4);
+
+		.icon {
+			margin-right: 4px;
+			opacity: 0.5;
+		}
+
+		&:hover {
+			background-color: $bgLighter;
+		}
+	}
+
 	&.cancel,
 	&.gray,
 	&.grey {
@@ -203,27 +224,6 @@ button {
 		background-color: transparent;
 		&:hover {
 			background-color: $orange;
-		}
-	}
-
-	&[href] {
-		display: flex;
-		justify-content: center;
-
-		background-color: $bgLight;
-		text-decoration: underline;
-		text-transform: none;
-
-		box-shadow: 0px -2px 0px rgba(0,0,0, 0.3) inset,
-			0px 2px 0px rgba(0,0,0, 0.4);
-
-		.icon {
-			margin-right: 4px;
-			opacity: 0.5;
-		}
-
-		&:hover {
-			background-color: $bgLighter;
 		}
 	}
 
@@ -930,6 +930,7 @@ ul.log {
 .icon.gridOn	{ background-image: url("../icons/gridOn.svg"); }
 .icon.gridOff	{ background-image: url("../icons/gridOff.svg"); }
 .icon.stop		{ background-image: url("../icons/stop.svg"); }
+.icon.love		{ background-image: url("../icons/love.svg"); }
 .icon.folder	{ background-image: url("../icons/folder.svg"); }
 .icon.locate	{ background-image: url("../icons/locate.svg"); }
 .icon.world		{ background-image: url("../icons/world.svg"); }
@@ -2525,6 +2526,9 @@ canvas#webgl {
 			.icon {
 				margin-right: 4px;
 				opacity: 0.5;
+			}
+			&.support {
+				background-color: $red;
 			}
 		}
 

@@ -13,6 +13,7 @@ class Home extends Page {
 			app: Const.APP_NAME,
 			appVer: Const.getAppVersion(),
 			deepnightUrl: Const.DEEPNIGHT_URL,
+			itchUrl: Const.ITCH_IO_URL,
 			jsonDocUrl: Const.JSON_DOC_URL,
 			docUrl: Const.DOCUMENTATION_URL,
 			websiteUrl : Const.WEBSITE_URL,
