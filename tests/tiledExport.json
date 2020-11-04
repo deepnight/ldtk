@@ -1,7 +1,7 @@
 {
 	"__header__": {
-		"fileType": "LEd Project JSON",
-		"app": "LEd",
+		"fileType": "LDtk Project JSON",
+		"app": "LDtk",
 		"appAuthor": "Sebastien Benard",
 		"appVersion": "0.5.0-beta-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
@@ -18,7 +18,7 @@
 		"layers": [
 			{
 				"__type": "IntGrid",
-				"identifier": "Pure_IntGrid",
+				"identifier": "PureIntGrid",
 				"type": "IntGrid",
 				"uid": 118,
 				"gridSize": 8,
@@ -461,7 +461,7 @@
 		"pxHei": 80,
 		"layerInstances": [
 			{
-				"__identifier": "Pure_IntGrid",
+				"__identifier": "PureIntGrid",
 				"__type": "IntGrid",
 				"__cWid": 13,
 				"__cHei": 10,

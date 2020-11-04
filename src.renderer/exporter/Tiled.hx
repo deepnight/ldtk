@@ -152,7 +152,7 @@ class Tiled extends Exporter {
 
 				// Save PNG
 				var fp = outputPath.clone();
-				fp.fileName = ld.identifier;
+				fp.fileName = ld.identifier+".intgrid";
 				fp.extension = "png";
 				addOuputFile(fp.full, bd.toPNG());
 
