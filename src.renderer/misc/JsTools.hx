@@ -449,6 +449,17 @@ class JsTools {
 		}
 	}
 
+	public static function renameFile(oldPath:String, newPath:String) {
+		if( !fileExists(oldPath) || fileExists(newPath) )
+			return false;
+		else {
+			js.node.Require.require("fs");
+			return
+				try { js.node.Fs.renameSync(oldPath,newPath); true; }
+				catch(e:Dynamic) false;
+		}
+	}
+
 	public static function removeFile(path:String) {
 		if( !fileExists(path) )
 			return false;

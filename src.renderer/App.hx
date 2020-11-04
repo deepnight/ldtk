@@ -298,6 +298,13 @@ class App extends dn.Process {
 		saveSettings();
 	}
 
+	public function renameRecentProject(oldPath:String, newPath:String) {
+		for(i in 0...settings.recentProjects.length)
+			if( settings.recentProjects[i]==oldPath )
+				settings.recentProjects[i] = newPath;
+		saveSettings();
+	}
+
 	public function clearRecentProjects() {
 		settings.recentProjects = [];
 		saveSettings();

@@ -7,6 +7,7 @@ class EditProject extends ui.modal.Panel {
 
 		loadTemplate("editProject", "editProject", {
 			app: Const.APP_NAME,
+			ext: Const.FILE_EXTENSION,
 		});
 		linkToButton("button.editProject");
 
@@ -28,6 +29,18 @@ class EditProject extends ui.modal.Panel {
 
 	function updateProjectForm() {
 		var jForm = jContent.find("ul.form:first");
+
+		var i = Input.linkToHtmlInput( project.useAppExtension, jForm.find("[name=useAppExtension]") );
+		i.linkEvent(ProjectSettingsChanged);
+		i.onValueChange = (v)->{
+			var old = editor.projectFilePath;
+			var fp = dn.FilePath.fromFile( editor.projectFilePath );
+			fp.extension = v ? Const.FILE_EXTENSION : "json";
+			editor.projectFilePath = fp.full;
+			if( JsTools.fileExists(old) )
+				JsTools.renameFile(old, fp.full);
+			App.ME.renameRecentProject(old,fp.full);
+		}
 
 		var i = Input.linkToHtmlInput( project.minifyJson, jForm.find("[name=minify]") );
 		i.linkEvent(ProjectSettingsChanged);
