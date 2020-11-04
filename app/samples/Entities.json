@@ -1,12 +1,12 @@
 {
 	"__header__": {
-		"fileType": "LEd Project JSON",
-		"app": "LEd",
+		"fileType": "LDtk Project JSON",
+		"app": "LDtk",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.4.0-beta-debug",
+		"appVersion": "0.5.0-beta-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
 	},
-	"jsonVersion": "0.4.0",
+	"jsonVersion": "0.5.0",
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1,
 	"defaultGridSize": 16,
@@ -23,6 +23,8 @@
 				"uid": 7,
 				"gridSize": 16,
 				"displayOpacity": 1,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
 				"intGridValues": [{ "identifier": null, "color": "#000000" }],
 				"autoTilesetDefUid": null,
 				"autoRuleGroups": [],
@@ -38,6 +40,8 @@
 				"uid": 13,
 				"gridSize": 16,
 				"displayOpacity": 1,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
 				"intGridValues": [{ "identifier": "walls", "color": "#243047" }],
 				"autoTilesetDefUid": null,
 				"autoRuleGroups": [],
@@ -460,6 +464,7 @@
 				"tileGridSize": 16,
 				"spacing": 0,
 				"padding": 0,
+				"opaqueTiles": [],
 				"savedSelections": []
 			},
 			{
@@ -471,6 +476,7 @@
 				"tileGridSize": 32,
 				"spacing": 0,
 				"padding": 0,
+				"opaqueTiles": [],
 				"savedSelections": []
 			}
 		],
@@ -509,6 +515,8 @@
 				"__cHei": 25,
 				"__gridSize": 16,
 				"__opacity": 1,
+				"__pxTotalOffsetX": 0,
+				"__pxTotalOffsetY": 0,
 				"levelId": 0,
 				"layerDefUid": 7,
 				"pxOffsetX": 0,
@@ -857,6 +865,8 @@
 				"__cHei": 25,
 				"__gridSize": 16,
 				"__opacity": 1,
+				"__pxTotalOffsetX": 0,
+				"__pxTotalOffsetY": 0,
 				"levelId": 0,
 				"layerDefUid": 13,
 				"pxOffsetX": 0,

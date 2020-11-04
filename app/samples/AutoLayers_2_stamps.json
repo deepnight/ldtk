@@ -1,7 +1,7 @@
 {
 	"__header__": {
-		"fileType": "LEd Project JSON",
-		"app": "LEd",
+		"fileType": "LDtk Project JSON",
+		"app": "LDtk",
 		"appAuthor": "Sebastien Benard",
 		"appVersion": "0.5.0-beta-debug",
 		"url": "https://deepnight.net/tools/led-2d-level-editor/"
