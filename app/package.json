@@ -35,6 +35,7 @@
 		"appId": "com.deepnight.ldtk",
 		"artifactName": "${productName} ${version} installer.${ext}",
 		"directories": {
+			"buildResources": "buildAssets",
 			"output": "redist"
 		},
 		"extraFiles": [
@@ -44,6 +45,15 @@
 		"files": [
 			"assets",
 			"package.json"
+		],
+		"fileAssociations": [
+			{
+				"ext": "ldtk",
+				"name": "LDTK Project File",
+				"mimeType": "application/json",
+				"icon": "project.ico",
+				"role": "Editor"
+			}
 		],
 		"nsis": {
 			"oneClick": true,
@@ -55,14 +65,7 @@
 				"github"
 			]
 		},
-		"fileAssociations": [
-			{
-				"ext": "ldtk",
-				"name": "LDTK Project File",
-				"mimeType": "application/json",
-				"role": "Editor"
-			}
-		],
-		"mac": {}
+		"mac": {
+		}
 	}
 }
