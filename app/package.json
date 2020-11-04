@@ -51,8 +51,7 @@
 				"ext": "ldtk",
 				"name": "LDTK Project File",
 				"mimeType": "application/json",
-				"icon": "project.ico",
-				"role": "Editor"
+				"icon": "project.ico"
 			}
 		],
 		"nsis": {
@@ -66,6 +65,15 @@
 			]
 		},
 		"mac": {
+			"fileAssociations": [
+				{
+					"ext": "ldtk",
+					"name": "LDTK Project File",
+					"mimeType": "application/json",
+					"icon": "project.icns",
+					"role": "Editor"
+				}
+			]
 		}
 	}
 }
