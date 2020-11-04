@@ -1,6 +1,6 @@
 package data.def;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class LayerDef {
 	@:allow(data.Definitions)

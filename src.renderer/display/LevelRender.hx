@@ -644,7 +644,7 @@ class LevelRender extends dn.Process {
 		g.y = Std.int( -def.height*def.pivotY );
 
 		// Render a tile
-		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:data.LedTypes.EntityTileRenderMode) {
+		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:data.DataTypes.EntityTileRenderMode) {
 			if( tileId==null || tilesetId==null ) {
 				// Missing tile
 				var p = 2;

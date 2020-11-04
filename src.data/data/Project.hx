@@ -287,7 +287,7 @@ class Project {
 	}
 
 	#if editor
-	public function iterateAllFieldInstances(?searchType:data.LedTypes.FieldType, run:data.inst.FieldInstance->Void) {
+	public function iterateAllFieldInstances(?searchType:data.DataTypes.FieldType, run:data.inst.FieldInstance->Void) {
 		for(l in levels)
 		for(li in l.layerInstances)
 		for(ei in li.entityInstances)

@@ -4,7 +4,7 @@ class EnumDef {
 	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
-	public var values : Array<data.LedTypes.EnumDefValue> = [];
+	public var values : Array<data.DataTypes.EnumDefValue> = [];
 	public var iconTilesetUid : Null<Int>;
 	public var externalRelPath : Null<String>;
 	public var externalFileChecksum : Null<String>;
@@ -74,7 +74,7 @@ class EnumDef {
 		return getValue(v)!=null;
 	}
 
-	public function getValue(v:String) : Null<data.LedTypes.EnumDefValue> {
+	public function getValue(v:String) : Null<data.DataTypes.EnumDefValue> {
 		v = Project.cleanupIdentifier(v,true);
 		for(ev in values)
 			if( ev.id==v )

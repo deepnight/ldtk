@@ -14,12 +14,12 @@ class AutoLayerRuleDef {
 	public var flipX = false;
 	public var flipY = false;
 	public var active = true;
-	public var tileMode : data.LedTypes.AutoLayerRuleTileMode = Single;
+	public var tileMode : data.DataTypes.AutoLayerRuleTileMode = Single;
 	public var pivotX = 0.;
 	public var pivotY = 0.;
 	public var xModulo = 1;
 	public var yModulo = 1;
-	public var checker : data.LedTypes.AutoLayerRuleCheckerMode = None;
+	public var checker : data.DataTypes.AutoLayerRuleCheckerMode = None;
 
 	var perlinActive = false;
 	public var perlinSeed : Int;
@@ -138,8 +138,8 @@ class AutoLayerRuleDef {
 		r.pattern = json.pattern;
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
-		r.checker = JsonTools.readEnum(data.LedTypes.AutoLayerRuleCheckerMode, json.checker, false, None);
-		r.tileMode = JsonTools.readEnum(data.LedTypes.AutoLayerRuleTileMode, json.tileMode, false, Single);
+		r.checker = JsonTools.readEnum(data.DataTypes.AutoLayerRuleCheckerMode, json.checker, false, None);
+		r.tileMode = JsonTools.readEnum(data.DataTypes.AutoLayerRuleTileMode, json.tileMode, false, Single);
 		r.pivotX = JsonTools.readFloat(json.pivotX, 0);
 		r.pivotY = JsonTools.readFloat(json.pivotY, 0);
 		r.xModulo = JsonTools.readInt(json.xModulo, 1);

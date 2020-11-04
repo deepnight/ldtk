@@ -1,6 +1,6 @@
 package misc;
 
-import data.LedTypes;
+import data.DataTypes;
 
 typedef Convertor = {
 	var from: FieldType;

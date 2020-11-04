@@ -1,6 +1,6 @@
 package data.inst;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class LayerInstance {
 	var _project : Project;

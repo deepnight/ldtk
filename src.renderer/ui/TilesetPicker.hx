@@ -223,7 +223,7 @@ class TilesetPicker {
 		saveScrollPos();
 	}
 
-	function createCursor(sel:data.LedTypes.TilesetSelection, ?subClass:String, ?cWid:Int, ?cHei:Int) {
+	function createCursor(sel:data.DataTypes.TilesetSelection, ?subClass:String, ?cWid:Int, ?cHei:Int) {
 		var wrapper = new J("<div/>");
 
 		var idsMap = new Map();

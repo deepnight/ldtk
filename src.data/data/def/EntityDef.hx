@@ -1,6 +1,6 @@
 package data.def;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class EntityDef {
 	@:allow(data.Definitions)
@@ -17,7 +17,7 @@ class EntityDef {
 	public var tileId : Null<Int>;
 
 	public var maxPerLevel : Int;
-	public var limitBehavior : data.LedTypes.EntityLimitBehavior; // what to do when maxPerLevel is reached
+	public var limitBehavior : data.DataTypes.EntityLimitBehavior; // what to do when maxPerLevel is reached
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
 

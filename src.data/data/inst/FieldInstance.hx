@@ -1,6 +1,6 @@
 package data.inst;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class FieldInstance {
 	public var _project : Project;

@@ -36,9 +36,9 @@ enum GlobalEvent {
 	LayerRuleSorted;
 
 	LayerRuleGroupAdded;
-	LayerRuleGroupRemoved(rg:data.LedTypes.AutoLayerRuleGroup);
-	LayerRuleGroupChanged(rg:data.LedTypes.AutoLayerRuleGroup);
-	LayerRuleGroupChangedActiveState(rg:data.LedTypes.AutoLayerRuleGroup);
+	LayerRuleGroupRemoved(rg:data.DataTypes.AutoLayerRuleGroup);
+	LayerRuleGroupChanged(rg:data.DataTypes.AutoLayerRuleGroup);
+	LayerRuleGroupChangedActiveState(rg:data.DataTypes.AutoLayerRuleGroup);
 	LayerRuleGroupSorted;
 	LayerRuleGroupCollapseChanged;
 

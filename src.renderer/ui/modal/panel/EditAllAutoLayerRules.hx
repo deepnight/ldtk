@@ -1,6 +1,6 @@
 package ui.modal.panel;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class EditAllAutoLayerRules extends ui.modal.Panel {
 	var li : data.inst.LayerInstance;
@@ -151,7 +151,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 		// Create new rule
-		function createRule(rg:data.LedTypes.AutoLayerRuleGroup, insertIdx:Int) {
+		function createRule(rg:data.DataTypes.AutoLayerRuleGroup, insertIdx:Int) {
 			App.LOG.general("Added rule");
 			var r = new data.def.AutoLayerRuleDef( project.makeUniqId() );
 			rg.rules.insert(insertIdx, r);

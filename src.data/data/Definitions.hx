@@ -1,6 +1,6 @@
 package data;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class Definitions {
 	var _project : Project;

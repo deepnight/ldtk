@@ -154,7 +154,7 @@ class EntityInstance {
 		return fieldInstances.get( fieldDef.uid );
 	}
 
-	public function getFieldInstancesOfType(type:data.LedTypes.FieldType) {
+	public function getFieldInstancesOfType(type:data.DataTypes.FieldType) {
 		var all = [];
 		for(fi in fieldInstances)
 			if( fi.def.type.getIndex() == type.getIndex() )

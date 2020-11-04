@@ -1,6 +1,6 @@
 package tool.lt;
 
-class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
+class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 	public var curTilesetDef(get,never) : Null<data.def.TilesetDef>;
 	inline function get_curTilesetDef() return editor.project.defs.getTilesetDef( editor.curLayerInstance.def.tilesetDefUid );
 
@@ -17,7 +17,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 		return curTilesetDef==null ? super.getSelectionMemoryKey() : curTilesetDef.relPath;
 	}
 
-	override function getDefaultValue():data.LedTypes.TilesetSelection {
+	override function getDefaultValue():data.DataTypes.TilesetSelection {
 		if( curTilesetDef!=null && curTilesetDef.hasSavedSelectionFor(0) ) {
 			var saved = curTilesetDef.getSavedSelectionFor(0);
 			return { ids:saved.ids.copy(), mode:saved.mode }
@@ -33,7 +33,7 @@ class TileTool extends tool.LayerTool<data.LedTypes.TilesetSelection> {
 
 	public function getMode() return getSelectedValue().mode;
 
-	public function setMode(m:data.LedTypes.TileEditMode) {
+	public function setMode(m:data.DataTypes.TileEditMode) {
 		var s = getSelectedValue();
 		selectValue({
 			ids: s.ids.copy(),

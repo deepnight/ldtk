@@ -1,6 +1,6 @@
 package data.def;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class TilesetDef {
 	var _project : Project;
