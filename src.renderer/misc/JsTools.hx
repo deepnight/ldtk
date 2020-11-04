@@ -517,25 +517,32 @@ class JsTools {
 		return dn.FilePath.fromDir( path ).useSlashes().directory;
 	}
 
-	public static function exploreToFile(filePath:String) {
-		var fp = dn.FilePath.fromFile(filePath);
+	public static function exploreToFile(path:String, isFile:Bool) {
+		var fp = isFile ? dn.FilePath.fromFile(path) : dn.FilePath.fromDir(path);
+
 		if( isWindows() )
 			fp.useBackslashes();
 
 		if( !fileExists(fp.full) )
 			fp.fileWithExt = null;
 
-		electron.Shell.showItemInFolder(fp.full);
+		trace(fp.debug());
+		if( fp.fileWithExt==null )
+			electron.Shell.openPath(fp.full);
+		else
+			electron.Shell.showItemInFolder(fp.full);
 	}
 
-	public static function makeExploreLink(filePath:String) {
+	public static function makeExploreLink(filePath:String, isFile:Bool) {
 		var a = new J('<a class="exploreTo"/>');
-		a.append('<span class="icon locate"/>');
+		a.append('<span class="icon"/>');
+		a.find(".icon").addClass( isFile ? "locate" : "folder" );
 		a.click( function(ev) {
 			ev.preventDefault();
 			ev.stopPropagation();
-			exploreToFile(filePath);
+			exploreToFile(filePath, isFile);
 		});
+		ui.Tip.attach( a, isFile ? L.t._("Locate file") : L.t._("Locate folder") );
 		return a;
 	}
 

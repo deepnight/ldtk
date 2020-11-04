@@ -39,11 +39,13 @@ class EditProject extends ui.modal.Panel {
 		var fp = dn.FilePath.fromFile( editor.projectFilePath );
 		fp.appendDirectory(fp.fileName+"_tiled");
 		fp.fileWithExt = null;
-		if( !JsTools.fileExists(fp.full) )
+		if( !JsTools.fileExists(fp.full) ) {
 			fp.parseFilePath( editor.projectFilePath );
+			fp.fileWithExt = null;
+		}
 		var jLocate = jForm.find("[name=tiled]").siblings(".locate").empty();
 		if( project.exportTiled )
-			jLocate.append( JsTools.makeExploreLink(fp.full) );
+			jLocate.append( JsTools.makeExploreLink(fp.full, false) );
 
 		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);

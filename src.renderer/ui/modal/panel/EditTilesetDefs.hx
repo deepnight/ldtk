@@ -150,7 +150,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var jLocate = jForm.find(".locate");
 		if( curTd.relPath!=null ) {
 			jPath.empty().show().append( JsTools.makePath(curTd.relPath) );
-			jLocate.empty().show().append( JsTools.makeExploreLink( Editor.ME.makeAbsoluteFilePath(curTd.relPath) ) );
+			jLocate.empty().show().append( JsTools.makeExploreLink( Editor.ME.makeAbsoluteFilePath(curTd.relPath), true ) );
 		}
 		else {
 			jLocate.hide();

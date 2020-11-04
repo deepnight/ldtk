@@ -90,7 +90,7 @@ class CrashReport extends ui.modal.Dialog {
 				jBackup.html('I saved your current work in <a>${fp.fileWithExt}</a>.');
 				jBackup.find("a").click( (ev)->{
 					ev.preventDefault();
-					JsTools.exploreToFile(fp.full);
+					JsTools.exploreToFile(fp.full, true);
 				});
 			}
 			else

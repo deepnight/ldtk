@@ -158,7 +158,7 @@ class Home extends Page {
 				{
 					label: L.t._("Locate file"),
 					cond: null,
-					cb: JsTools.exploreToFile.bind(p),
+					cb: JsTools.exploreToFile.bind(p, true),
 				},
 				{
 					label: L.t._("Remove from history"),
