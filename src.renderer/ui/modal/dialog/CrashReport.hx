@@ -4,7 +4,9 @@ class CrashReport extends ui.modal.Dialog {
 	public function new(error:js.lib.Error) {
 		super("crash");
 
-		loadTemplate("crash");
+		loadTemplate("crash", {
+			app: Const.APP_NAME,
+		});
 		canBeClosedManually = false;
 		var jLog = jContent.find(".log");
 

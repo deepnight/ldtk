@@ -5,7 +5,9 @@ class EditProject extends ui.modal.Panel {
 	public function new() {
 		super();
 
-		loadTemplate("editProject", "editProject");
+		loadTemplate("editProject", "editProject", {
+			app: Const.APP_NAME,
+		});
 		linkToButton("button.editProject");
 
 		jContent.find("button.save").click( function(ev) {
