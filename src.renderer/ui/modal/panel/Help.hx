@@ -4,7 +4,7 @@ class Help extends ui.modal.Panel {
 	public function new() {
 		super();
 
-		loadTemplate( "help", "helpWindow", {
+		loadTemplate( "help", "helpPanel", {
 			appUrl: Const.WEBSITE_URL,
 			docUrl: Const.DOCUMENTATION_URL,
 			app: Const.APP_NAME,

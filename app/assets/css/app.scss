@@ -1115,6 +1115,10 @@ ul.form {
 			}
 		}
 
+		.locate {
+			flex: 0 0 auto;
+		}
+
 		.small {
 			flex: 0 1 60px;
 		}
@@ -1162,9 +1166,10 @@ ul.form {
 		}
 
 		> span {
+			margin: 2px;
 			flex: 0 0 20px;
+			align-self: center;
 			opacity: 0.5;
-			padding: 8px;
 			text-align: center;
 			white-space: nowrap;
 		}
@@ -1763,10 +1768,13 @@ textarea {
 }
 
 
-.window.panel.helpWindow {
+.window.panel.helpPanel {
 	.wrapper {
 		.content {
 			width: 500px;
+			.appLogo {
+				margin-bottom: 16px;
+			}
 		}
 	}
 	dl {

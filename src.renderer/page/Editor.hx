@@ -142,7 +142,10 @@ class Editor extends Page {
 
 
 		jMainPanel.find("button.showHelp").click( function(_) {
-			onHelp();
+			if( ui.Modal.isOpen(ui.modal.panel.Help) )
+				ui.Modal.closeAll();
+			else
+				onHelp();
 		});
 
 
