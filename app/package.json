@@ -55,6 +55,14 @@
 				"github"
 			]
 		},
+		"fileAssociations": [
+			{
+				"ext": "ldtk",
+				"name": "LDTK Project File",
+				"mimeType": "application/json",
+				"role": "Editor"
+			}
+		],
 		"mac": {}
 	}
 }
