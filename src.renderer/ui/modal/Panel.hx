@@ -17,6 +17,7 @@ class Panel extends ui.Modal {
 
 		jModalAndMask.addClass("panel");
 		jModalAndMask.offset({ top:0, left:mainPanel.outerWidth() });
+		jModalAndMask.removeClass("centered");
 
 		jCloseButton = new J('<button class="close gray"> <div class="icon close"/> </button>');
 		jModalAndMask.append(jCloseButton);

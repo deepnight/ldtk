@@ -149,14 +149,14 @@ button {
 	cursor: pointer;
 	text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.28);
 
+	&:hover {
+		background-color: #ff5d4a;
+	}
+
 	>.icon {
 		margin: -4px;
 		width: 1.7em;
 		height: 1.7em;
-	}
-
-	&:hover {
-		background-color: #ff5d4a;
 	}
 
 	&:focus {
@@ -195,6 +195,13 @@ button {
 		background-color: $bgLight;
 		&:hover {
 			background-color: $bgLighter;
+		}
+	}
+
+	&.blue {
+		background-color: #2a73ab;
+		&:hover {
+			background-color: #348fd5;
 		}
 	}
 
@@ -1513,6 +1520,10 @@ textarea {
 		justify-items: center;
 		>.wrapper {
 			position: static;
+			border-radius: 4px;
+			border: none;
+			box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3),
+				0px 8px 32px rgba(0, 0, 0, 1);
 		}
 	}
 
@@ -1563,6 +1574,28 @@ textarea {
 
 		.content {
 			width: 700px;
+		}
+	}
+}
+
+.window.buy {
+	.wrapper .content {
+		max-width: 380px;
+
+		header {
+			display: grid;
+			justify-items: center;
+			align-items: center;
+
+			margin: -16px;
+			margin-bottom: 16px;
+			padding: 8px;
+
+			background-color: $bgDark;
+		}
+		.icon {
+			width: 70px;
+			height: 70px;
 		}
 	}
 }
@@ -2527,8 +2560,8 @@ canvas#webgl {
 				margin-right: 4px;
 				opacity: 0.5;
 			}
-			&.support {
-				background-color: $red;
+			&.buy {
+				text-transform: none;
 			}
 		}
 

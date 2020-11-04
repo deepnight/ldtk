@@ -13,7 +13,6 @@ class Home extends Page {
 			app: Const.APP_NAME,
 			appVer: Const.getAppVersion(),
 			deepnightUrl: Const.DEEPNIGHT_URL,
-			itchUrl: Const.ITCH_IO_URL,
 			jsonDocUrl: Const.JSON_DOC_URL,
 			docUrl: Const.DOCUMENTATION_URL,
 			websiteUrl : Const.WEBSITE_URL,
@@ -47,6 +46,20 @@ class Home extends Page {
 
 		jPage.find(".new").click( function(ev) {
 			onNew();
+		});
+
+		jPage.find(".buy").click( (ev)->{
+			var w = new ui.Modal();
+			w.loadTemplate("buy", {
+				app: Const.APP_NAME,
+				itchUrl: Const.ITCH_IO_BUY_URL,
+				gitHubSponsorUrl: Const.GITHUB_SPONSOR_URL,
+			});
+			w.jContent.find("[data-link]").click((ev:js.jquery.Event)->{
+				var jButton = ev.getThis();
+				var url = jButton.attr("data-link");
+				electron.Shell.openExternal(url);
+			});
 		});
 
 		var jFullscreenBt = jPage.find("button.fullscreen");

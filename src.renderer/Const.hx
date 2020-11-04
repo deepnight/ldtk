@@ -22,9 +22,10 @@ class Const {
 	public static var FILE_EXTENSION = "ldtk";
 	public static var DEEPNIGHT_URL = "https://deepnight.net/";
 	public static var WEBSITE_URL = "https://deepnight.net/tools/led-2d-level-editor/";
-	public static var ITCH_IO_URL = "https://deepnight.itch.io/ldtk";
+	public static var ITCH_IO_BUY_URL = "https://deepnight.itch.io/ldtk/purchase";
 	public static var DOCUMENTATION_URL = "https://deepnight.net/docs/led/";
 	public static var ISSUES_URL = "https://github.com/deepnight/ldtk/issues";
+	public static var GITHUB_SPONSOR_URL = "https://github.com/sponsors/deepnight";
 	public static var JSON_DOC_URL = "https://github.com/deepnight/ldtk/blob/master/JSON_DOC.md";
 	public static var POINT_SEPARATOR = ",";
 	public static var CRASH_NAME_SUFFIX = ".crash";
