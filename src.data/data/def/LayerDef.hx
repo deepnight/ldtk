@@ -1,6 +1,6 @@
 package data.def;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class LayerDef {
 	@:allow(data.Definitions)
@@ -9,6 +9,8 @@ class LayerDef {
 	public var identifier(default,set) : String;
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var displayOpacity : Float = 1.0;
+	public var pxOffsetX : Int = 0;
+	public var pxOffsetY : Int = 0;
 
 	// IntGrid
 	var intGridValues : Array<IntGridValueDef> = [];
@@ -43,11 +45,13 @@ class LayerDef {
 		return 'LayerDef.$identifier($type,${gridSize}px)';
 	}
 
-	public static function fromJson(jsonVersion:String, json:led.Json.LayerDefJson) {
+	public static function fromJson(jsonVersion:String, json:ldtk.Json.LayerDefJson) {
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
+		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
+		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
 		o.intGridValues = [];
 		for( v in JsonTools.readArray(json.intGridValues) )
@@ -72,7 +76,7 @@ class LayerDef {
 		return o;
 	}
 
-	public function toJson() : led.Json.LayerDefJson {
+	public function toJson() : ldtk.Json.LayerDefJson {
 		return {
 			__type: Std.string(type),
 
@@ -81,6 +85,8 @@ class LayerDef {
 			uid: uid,
 			gridSize: gridSize,
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
+			pxOffsetX: pxOffsetX,
+			pxOffsetY: pxOffsetY,
 
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
 
@@ -128,13 +134,17 @@ class LayerDef {
 		});
 	}
 
+	public inline function hasIntGridValue(v:Int) {
+		return v>=0 && v<intGridValues.length;
+	}
+
 	public inline function getIntGridValueDef(idx:Int) : Null<IntGridValueDef> {
 		return intGridValues[idx];
 	}
 
 	public inline function getIntGridValueDisplayName(idx:Int) : Null<String> {
 		var vd = getIntGridValueDef(idx);
-		return vd==null ? null : vd.identifier==null ? '#$idx' : '#$idx "${vd.identifier}"';
+		return vd==null ? null : vd.identifier==null ? '#$idx' : '${vd.identifier} #$idx';
 	}
 
 	public inline function getIntGridValueColor(idx:Int) : Null<UInt> {
@@ -171,9 +181,29 @@ class LayerDef {
 
 
 	public inline function isAutoLayer() {
-		return type==IntGrid && autoTilesetDefUid!=null || type==AutoLayer;
+		return type==IntGrid && autoTilesetDefUid!=null || type==AutoLayer || autoRuleGroups.length>0;
 	}
 
+	public function autoLayerRulesCanBeUsed() {
+		if( !isAutoLayer() )
+			return false;
+
+		if( autoTilesetDefUid==null )
+			return false;
+
+		if( type==AutoLayer && autoSourceLayerDefUid==null )
+			return false;
+
+		return true;
+	}
+
+	public function hasAnyRuleUsingUnknownIntGridValues(source:LayerDef) {
+		for(rg in autoRuleGroups)
+		for(r in rg.rules)
+			if( r.isUsingUnknownIntGridValues(source) )
+				return true;
+		return false;
+	}
 
 	public function hasRule(ruleUid:Int) : Bool {
 		for(rg in autoRuleGroups)
@@ -188,6 +218,14 @@ class LayerDef {
 		for( r in rg.rules )
 			if( r.uid==uid )
 				return r;
+		return null;
+	}
+
+	public function getRuleGroup(r:AutoLayerRuleDef) : Null<AutoLayerRuleGroup> {
+		for( rg in autoRuleGroups )
+		for( rr in rg.rules )
+			if( rr.uid==r.uid )
+				return rg;
 		return null;
 	}
 
@@ -254,6 +292,14 @@ class LayerDef {
 		}
 	}
 
+	public inline function iterateActiveRulesInEvalOrder( cbEachRule:(r:AutoLayerRuleDef)->Void ) {
+		for(rg in autoRuleGroups)
+			if( rg.active )
+				for(r in rg.rules)
+					if( r.active)
+						cbEachRule(r);
+	}
+
 	public function tidy(p:data.Project) {
 		// Lost tileset
 		if( tilesetDefUid!=null && p.defs.getTilesetDef(tilesetDefUid)==null ) {
@@ -265,9 +311,17 @@ class LayerDef {
 		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {
 			App.LOG.add("tidy", 'Removed lost autoTileset in $this');
 			autoTilesetDefUid = null;
-			for(rg in autoRuleGroups)
-			for(r in rg.rules)
-				r.tileIds = [];
+			// for(rg in autoRuleGroups)
+			// for(r in rg.rules)
+			// 	r.tileIds = [];
+		}
+
+		// Lost source intGrid layer
+		if( autoSourceLayerDefUid!=null && p.defs.getLayerDef(autoSourceLayerDefUid)==null ) {
+			autoSourceLayerDefUid = null;
+			// for(rg in autoRuleGroups)
+			// for(r in rg.rules)
+			// 	r.tileIds = [];
 		}
 	}
 }

@@ -14,7 +14,7 @@ class ElectronMain {
 				webPreferences: { nodeIntegration:true },
 				fullscreenable: true,
 				show: false,
-				title: "L-Ed",
+				title: "LDtk",
 			});
 
 			// Menu

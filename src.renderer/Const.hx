@@ -18,7 +18,8 @@ class Const {
 	}
 
 	#if !macro
-	public static var APP_NAME = "LEd";
+	public static var APP_NAME = "LDtk";
+	public static var FILE_EXTENSION = "ldtk";
 	public static var DEEPNIGHT_URL = "https://deepnight.net/";
 	public static var WEBSITE_URL = "https://deepnight.net/tools/led-2d-level-editor/";
 	public static var DOCUMENTATION_URL = "https://deepnight.net/docs/led/";
@@ -119,9 +120,9 @@ class Const {
 		}
 
 		// Save file
-		if( !sys.FileSystem.exists("./app/build") )
-			sys.FileSystem.createDirectory("./app/build");
-		var relNotesPath = "./app/build/release-notes.md";
+		if( !sys.FileSystem.exists("./app/buildAssets") )
+			sys.FileSystem.createDirectory("./app/buildAssets");
+		var relNotesPath = "./app/buildAssets/release-notes.md";
 		try sys.io.File.saveContent(relNotesPath, relNotes.join("\n"))
 		catch(e:Dynamic) haxe.macro.Context.warning("Couldn't write "+relNotesPath, haxe.macro.Context.currentPos());
 

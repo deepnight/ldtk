@@ -1,24 +1,24 @@
 package data.def;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class FieldDef {
 	@:allow(data.Definitions, data.def.EntityDef)
 	public var uid(default,null) : Int;
 
 	@:allow(misc.FieldTypeConverter)
-	public var type(default,null) : data.LedTypes.FieldType;
+	public var type(default,null) : data.DataTypes.FieldType;
 	public var identifier(default,set) : String;
 	public var canBeNull : Bool;
 	public var arrayMinLength : Null<Int>;
 	public var arrayMaxLength : Null<Int>;
-	public var editorDisplayMode : data.LedTypes.FieldDisplayMode;
-	public var editorDisplayPos : data.LedTypes.FieldDisplayPosition;
+	public var editorDisplayMode : data.DataTypes.FieldDisplayMode;
+	public var editorDisplayPos : data.DataTypes.FieldDisplayPosition;
 	public var editorAlwaysShow: Bool;
 	public var isArray : Bool;
 
 	@:allow(ui.modal.panel.EditEntityDefs, misc.FieldTypeConverter)
-	var defaultOverride : Null<data.LedTypes.ValueWrapper>;
+	var defaultOverride : Null<data.DataTypes.ValueWrapper>;
 
 	public var min : Null<Float>;
 	public var max : Null<Float>;
@@ -26,7 +26,7 @@ class FieldDef {
 	var _project : data.Project;
 
 	@:allow(data.def.EntityDef)
-	private function new(p:data.Project, uid:Int, t:data.LedTypes.FieldType, array:Bool) {
+	private function new(p:data.Project, uid:Int, t:data.DataTypes.FieldType, array:Bool) {
 		_project = p;
 		this.uid = uid;
 		type = t;
@@ -57,18 +57,18 @@ class FieldDef {
 	}
 
 	public static function fromJson(p:Project, json:Dynamic) {
-		var type = JsonTools.readEnum(data.LedTypes.FieldType, json.type, false);
+		var type = JsonTools.readEnum(data.DataTypes.FieldType, json.type, false);
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), type, JsonTools.readBool(json.isArray, false) );
 		o.identifier = JsonTools.readString(json.identifier);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.arrayMinLength = JsonTools.readNullableInt(json.arrayMinLength);
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
-		o.editorDisplayMode = JsonTools.readEnum(data.LedTypes.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
-		o.editorDisplayPos = JsonTools.readEnum(data.LedTypes.FieldDisplayPosition, json.editorDisplayPos, false, Above);
+		o.editorDisplayMode = JsonTools.readEnum(data.DataTypes.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
+		o.editorDisplayPos = JsonTools.readEnum(data.DataTypes.FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);
-		o.defaultOverride = JsonTools.readEnum(data.LedTypes.ValueWrapper, json.defaultOverride, true);
+		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
 		return o;
 	}
 
@@ -135,12 +135,12 @@ class FieldDef {
 	}
 	#end
 
-	public inline function require(type:data.LedTypes.FieldType) {
+	public inline function require(type:data.DataTypes.FieldType) {
 		if( this.type.getIndex()!=type.getIndex() )
 			throw "Only available on "+type+" fields";
 	}
 
-	public function requireAny(types:Array<data.LedTypes.FieldType>) {
+	public function requireAny(types:Array<data.DataTypes.FieldType>) {
 		for(type in types)
 			if( this.type.getIndex()==type.getIndex() )
 				return true;
@@ -235,7 +235,7 @@ class FieldDef {
 	}
 
 	public inline function isEnum() {
-		return type.getIndex() == data.LedTypes.FieldType.F_Enum(null).getIndex();
+		return type.getIndex() == data.DataTypes.FieldType.F_Enum(null).getIndex();
 	}
 
 	public function getEnumDef() : Null<EnumDef> {

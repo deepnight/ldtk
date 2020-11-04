@@ -1,11 +1,12 @@
 package ui;
 
 class Modal extends dn.Process {
-	static var ALL : Array<Modal> = [];
+	public static var ALL : Array<Modal> = [];
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	public var curLevel(get,never) : data.Level; inline function get_curLevel() return Editor.ME.curLevel;
+	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
 	var jModalAndMask: js.jquery.JQuery;
 	var jWrapper: js.jquery.JQuery;
@@ -19,7 +20,6 @@ class Modal extends dn.Process {
 		if( editor!=null )
 			editor.clearSpecialTool();
 
-		EntityInstanceEditor.close();
 		Tip.clear();
 		ALL.push(this);
 
@@ -30,12 +30,20 @@ class Modal extends dn.Process {
 		jContent = jModalAndMask.find(".content");
 
 		jMask = jModalAndMask.find(".mask");
-		jMask.mousedown( function(_) if( canBeClosedManually ) close() );
+		jMask.mousedown( function(ev:js.jquery.Event) {
+			if( canBeClosedManually ) {
+				ev.stopPropagation();
+				onClickMask();
+				close();
+			}
+		} );
 		jMask.hide().fadeIn(100);
 
 		if( editor!=null )
 			editor.ge.addGlobalListener(onGlobalEvent);
 	}
+
+	function onClickMask() {}
 
 	public function positionNear(?target:js.jquery.JQuery, ?m:MouseCoords, toLeft=false) {
 		if( target==null && m==null )
@@ -130,6 +138,24 @@ class Modal extends dn.Process {
 		return false;
 	}
 
+	public static function closeLatest() {
+		if( !hasAnyOpen() )
+			return false;
+
+		var i = ALL.length-1;
+		while( i>=0 )
+			if( ALL[i].destroyed )
+				i--;
+			else if( !ALL[i].canBeClosedManually )
+				return false;
+			else {
+				ALL[i].close();
+				return true;
+			}
+
+		return false;
+	}
+
 	public static function hasAnyOpen() {
 		for(e in ALL)
 			if( !e.isClosing() && e.countAsModal() )
@@ -163,6 +189,7 @@ class Modal extends dn.Process {
 
 		// Close
 		jModalAndMask.find("*").off();
+		Tip.clear();
 		onClose();
 		doCloseAnimation();
 		onCloseCb();
@@ -176,6 +203,9 @@ class Modal extends dn.Process {
 	}
 
 	public dynamic function onCloseCb() {}
+
+	@:allow(App)
+	function onKeyPress(keyCode:Int) {}
 
 	public function loadTemplate(tplName:String, ?className:String, ?vars:Dynamic) {
 		if( className==null )

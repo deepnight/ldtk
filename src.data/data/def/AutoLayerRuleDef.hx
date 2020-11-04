@@ -8,17 +8,18 @@ class AutoLayerRuleDef {
 
 	public var tileIds : Array<Int> = [];
 	public var chance : Float = 1.0;
+	public var breakOnMatch = true;
 	public var size(default,null): Int;
 	var pattern : Array<Int> = [];
 	public var flipX = false;
 	public var flipY = false;
 	public var active = true;
-	public var tileMode : data.LedTypes.AutoLayerRuleTileMode = Single;
+	public var tileMode : data.DataTypes.AutoLayerRuleTileMode = Single;
 	public var pivotX = 0.;
 	public var pivotY = 0.;
 	public var xModulo = 1;
 	public var yModulo = 1;
-	public var checker : data.LedTypes.AutoLayerRuleCheckerMode = None;
+	public var checker : data.DataTypes.AutoLayerRuleCheckerMode = None;
 
 	var perlinActive = false;
 	public var perlinSeed : Int;
@@ -101,7 +102,7 @@ class AutoLayerRuleDef {
 		return 'Rule#$uid(${size}x$size)';
 	}
 
-	public function toJson() {
+	public function toJson() : ldtk.Json.AutoRuleDef {
 		tidy();
 
 		return {
@@ -110,6 +111,7 @@ class AutoLayerRuleDef {
 			size: size,
 			tileIds: tileIds.copy(),
 			chance: JsonTools.writeFloat(chance),
+			breakOnMatch: breakOnMatch,
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
 			flipX: flipX,
 			flipY: flipY,
@@ -127,16 +129,17 @@ class AutoLayerRuleDef {
 		}
 	}
 
-	public static function fromJson(jsonVersion:String, json:Dynamic) {
+	public static function fromJson(jsonVersion:String, json:ldtk.Json.AutoRuleDef) {
 		var r = new AutoLayerRuleDef( json.uid, json.size );
 		r.active = JsonTools.readBool(json.active, true);
 		r.tileIds = json.tileIds;
+		r.breakOnMatch = JsonTools.readBool(json.breakOnMatch, false); // default to FALSE to avoid breaking old maps
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
-		r.checker = JsonTools.readEnum(data.LedTypes.AutoLayerRuleCheckerMode, json.checker, false, None);
-		r.tileMode = JsonTools.readEnum(data.LedTypes.AutoLayerRuleTileMode, json.tileMode, false, Single);
+		r.checker = JsonTools.readEnum(data.DataTypes.AutoLayerRuleCheckerMode, json.checker, false, None);
+		r.tileMode = JsonTools.readEnum(data.DataTypes.AutoLayerRuleTileMode, json.tileMode, false, Single);
 		r.pivotX = JsonTools.readFloat(json.pivotX, 0);
 		r.pivotY = JsonTools.readFloat(json.pivotY, 0);
 		r.xModulo = JsonTools.readInt(json.xModulo, 1);
@@ -207,6 +210,21 @@ class AutoLayerRuleDef {
 				return false;
 
 		return tileIds.length==0;
+	}
+
+	public function isUsingUnknownIntGridValues(ld:LayerDef) {
+		if( ld.type!=IntGrid )
+			throw "Invalid layer type";
+
+		var v = 0;
+		for(px in 0...size)
+		for(py in 0...size) {
+			v = dn.M.iabs( pattern[px+py*size] ) - 1;
+			if( v>=0 && v!=Const.AUTO_LAYER_ANYTHING && !ld.hasIntGridValue(v) )
+				return true;
+		}
+
+		return false;
 	}
 
 	public function matches(li:data.inst.LayerInstance, source:data.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {

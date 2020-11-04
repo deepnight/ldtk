@@ -1,6 +1,6 @@
 package data;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class Definitions {
 	var _project : Project;
@@ -16,7 +16,7 @@ class Definitions {
 		this._project = project;
 	}
 
-	public function toJson(p:Project) : led.Json.DefinitionsJson {
+	public function toJson(p:Project) : ldtk.Json.DefinitionsJson {
 		return {
 			layers: layers.map( function(ld) return ld.toJson() ),
 			entities: entities.map( function(ed) return ed.toJson() ),
@@ -26,7 +26,7 @@ class Definitions {
 		}
 	}
 
-	public static function fromJson(p:Project, json:led.Json.DefinitionsJson) {
+	public static function fromJson(p:Project, json:ldtk.Json.DefinitionsJson) {
 		var d = new Definitions(p);
 
 		for( layerJson in JsonTools.readArray(json.layers) )
@@ -139,6 +139,14 @@ class Definitions {
 			throw "Unknown layerDef";
 
 		_project.tidy();
+	}
+
+	public function isLayerSourceOfAnotherOne(?ld:data.def.LayerDef, ?layerDefUid:Int) {
+		for( other in layers )
+			if( ld!=null && other.autoSourceLayerDefUid==ld.uid || layerDefUid!=null && other.autoSourceLayerDefUid==layerDefUid )
+				return true;
+
+		return false;
 	}
 
 	public function sortLayerDef(from:Int, to:Int) : Null<data.def.LayerDef> {
@@ -388,8 +396,12 @@ class Definitions {
 	/**  ENUM DEFS  *****************************************/
 
 	public function createEnumDef(?externalRelPath:String) : data.def.EnumDef {
-		var uid = _project.makeUniqId();
-		var ed = new data.def.EnumDef(uid, "LedEnum"+uid);
+		var ed = new data.def.EnumDef(_project.makeUniqId(), "Enum");
+
+		var idx = 2;
+		while( !isEnumIdentifierUnique(ed.identifier) )
+			ed.identifier = "Enum"+(idx++);
+
 		if( externalRelPath!=null ) {
 			ed.externalRelPath = externalRelPath;
 			externalEnums.push(ed);

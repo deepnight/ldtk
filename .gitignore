@@ -1,15 +1,18 @@
 lastBuildVersion.txt
 json_doc.xml
 
+**/*.crash.json
+
 dump/
 res/.tmp
 .vscode/settings.json
 
 app/*.log
 app/package-lock.json
+app/userSettings
 app/redist
 app/node_modules
-app/build/release-notes.md
+app/buildAssets/release-notes.md
 app/assets/main.js
 app/assets/main.js.map
 app/assets/css/app.css

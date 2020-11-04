@@ -1,6 +1,6 @@
 package data.inst;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class LayerInstance {
 	var _project : Project;
@@ -9,19 +9,22 @@ class LayerInstance {
 
 	public var levelId : Int;
 	public var layerDefUid : Int;
-	public var pxOffsetX : Int = 0;
-	public var pxOffsetY : Int = 0;
+	var pxOffsetX : Int = 0;
+	var pxOffsetY : Int = 0;
+	public var pxTotalOffsetX(get,never) : Int; inline function get_pxTotalOffsetX() return pxOffsetX + def.pxOffsetX;
+	public var pxTotalOffsetY(get,never) : Int; inline function get_pxTotalOffsetY() return pxOffsetY + def.pxOffsetY;
 	public var seed : Int;
 
 	// Layer content
 	var intGrid : Map<Int,Int> = new Map(); // <coordId, value>
 	public var entityInstances : Array<EntityInstance> = [];
-	public var gridTiles : Map<Int, GridTileInfos> = []; // <coordId, tileinfos>
+	public var gridTiles : Map<Int, Array<GridTileInfos>> = []; // <coordId, tileinfos>
 
 	/** < RuleUid, < coordId, { tiles } > > **/
 	public var autoTilesCache :
 		Null< Map<Int, // RuleUID
 			Map<Int, // CoordID
+				// WARNING: x/y don't contain layerDef.pxOffsetX/Y (to avoid the need of a global update when changing these values). They are added in the JSON though.
 				Array<{ x:Int, y:Int, flips:Int, srcX:Int, srcY:Int, tid:Int }>
 			>
 		> > = null;
@@ -43,7 +46,7 @@ class LayerInstance {
 	}
 
 
-	public function toJson() : led.Json.LayerInstanceJson {
+	public function toJson() : ldtk.Json.LayerInstanceJson {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
@@ -52,6 +55,8 @@ class LayerInstance {
 			__cHei: cHei,
 			__gridSize: def.gridSize,
 			__opacity: def.displayOpacity,
+			__pxTotalOffsetX: pxOffsetX + def.pxOffsetX,
+			__pxTotalOffsetY: pxOffsetY + def.pxOffsetY,
 
 			levelId: levelId,
 			layerDefUid: layerDefUid,
@@ -93,20 +98,20 @@ class LayerInstance {
 
 			gridTiles: {
 				var td = _project.defs.getTilesetDef(def.tilesetDefUid);
-				var arr : Array<led.Json.Tile> = [];
-				for(e in gridTiles.keyValueIterator())
-					if( e.value!=null ) {
+				var arr : Array<ldtk.Json.Tile> = [];
+				for( e in gridTiles.keyValueIterator() )
+					for( tileInf in e.value ) {
 						arr.push({
 							px: [
-								pxOffsetX + getCx(e.key) * def.gridSize,
-								pxOffsetY + getCy(e.key) * def.gridSize,
+								getCx(e.key) * def.gridSize,
+								getCy(e.key) * def.gridSize,
 							],
 							src: [
-								td==null ? -1 : td.getTileSourceX(e.value.tileId),
-								td==null ? -1 : td.getTileSourceY(e.value.tileId),
+								td==null ? -1 : td.getTileSourceX(tileInf.tileId),
+								td==null ? -1 : td.getTileSourceY(tileInf.tileId),
 							],
-							f: e.value.flips,
-							d: [ e.key, e.value.tileId ],
+							f: tileInf.flips,
+							d: [ e.key, tileInf.tileId ],
 						});
 					}
 				arr;
@@ -166,8 +171,11 @@ class LayerInstance {
 		}
 	}
 
-	public static function fromJson(p:Project, json:led.Json.LayerInstanceJson) {
+	public static function fromJson(p:Project, json:ldtk.Json.LayerInstanceJson) {
 		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
+		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
+		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
+		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
 		for( intGridJson in json.intGrid )
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );
@@ -175,7 +183,12 @@ class LayerInstance {
 		for( gridTilesJson in json.gridTiles ) {
 			if( (cast gridTilesJson).coordId!=null ) // pre-0.4.0 format
 				gridTilesJson.d = [ (cast gridTilesJson).coordId, (cast gridTilesJson).tileId ];
-			li.gridTiles.set( gridTilesJson.d[0], {
+
+			var coordId = gridTilesJson.d[0];
+			if( !li.gridTiles.exists(coordId) )
+				li.gridTiles.set(coordId, []);
+
+			li.gridTiles.get(coordId).push({
 				tileId: gridTilesJson.d[1],
 				flips: gridTilesJson.f,
 			});
@@ -186,7 +199,7 @@ class LayerInstance {
 
 		if( json.autoLayerTiles!=null ) {
 			try {
-				var jsonAutoLayerTiles : Array<led.Json.Tile> = JsonTools.readArray(json.autoLayerTiles);
+				var jsonAutoLayerTiles : Array<ldtk.Json.Tile> = JsonTools.readArray(json.autoLayerTiles);
 				li.autoTilesCache = new Map();
 
 				for(at in jsonAutoLayerTiles) {
@@ -197,6 +210,12 @@ class LayerInstance {
 
 					if( !li.autoTilesCache.get(ruleId).exists(coordId) )
 						li.autoTilesCache.get(ruleId).set(coordId, []);
+
+					if( dn.VersionNumber.isLowerStr(p.jsonVersion, "0.5.0") && ( li.pxOffsetX!=0 || li.pxOffsetY!=0 ) ) {
+						// Fix old coords that included offsets
+						at.px[0]-=li.pxOffsetX;
+						at.px[1]-=li.pxOffsetY;
+					}
 
 					li.autoTilesCache.get(ruleId).get(coordId).push({
 						x: at.px[0],
@@ -212,11 +231,6 @@ class LayerInstance {
 				li.autoTilesCache = null;
 			}
 		}
-
-		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
-
-		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
-		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
 		return li;
 	}
@@ -243,11 +257,11 @@ class LayerInstance {
 	}
 
 	public inline function levelToLayerCx(levelX:Int) {
-		return Std.int( ( levelX - pxOffsetX ) / def.gridSize );
+		return Std.int( ( levelX - pxTotalOffsetX ) / def.gridSize ); // TODO not tested: check if this works with the new layerDef offsets
 	}
 
 	public inline function levelToLayerCy(levelY:Int) {
-		return Std.int( ( levelY - pxOffsetY ) / def.gridSize );
+		return Std.int( ( levelY - pxTotalOffsetY ) / def.gridSize );
 	}
 
 	public function tidy(p:Project) {
@@ -270,6 +284,10 @@ class LayerInstance {
 							autoTilesCache.remove(rUid);
 						}
 
+					if( !def.autoLayerRulesCanBeUsed() ) {
+						App.LOG.add("tidy", 'Removed all autoTilesCache in $this (rules can no longer be applied)');
+						autoTilesCache = new Map();
+					}
 					// Fix missing autoTiles
 					// for(rg in def.autoRuleGroups)
 					// for(r in rg.rules)
@@ -299,7 +317,7 @@ class LayerInstance {
 
 
 	@:allow(data.Level)
-	function applyNewBounds(newPxLeft:Int, newPxTop:Int, newPxWid:Int, newPxHei:Int) {
+	private function applyNewBounds(newPxLeft:Int, newPxTop:Int, newPxWid:Int, newPxHei:Int) {
 		var totalOffsetX = pxOffsetX - newPxLeft;
 		var totalOffsetY = pxOffsetY - newPxTop;
 		var newPxOffsetX = totalOffsetX % def.gridSize;
@@ -374,7 +392,7 @@ class LayerInstance {
 	public inline function hasAnyGridValue(cx:Int, cy:Int) {
 		return switch def.type {
 			case IntGrid: hasIntGrid(cx,cy);
-			case Tiles: hasGridTile(cx,cy);
+			case Tiles: hasAnyGridTile(cx,cy);
 			case Entities: false;
 			case AutoLayer: false;
 		}
@@ -462,51 +480,94 @@ class LayerInstance {
 
 	/** TILES *******************/
 
-	public function setGridTile(cx:Int, cy:Int, tileId:Null<Int>, flips=0) {
+	public function addGridTile(cx:Int, cy:Int, tileId:Null<Int>, flips=0, stack=false) {
 		if( !isValid(cx,cy) )
 			return;
 
-		if( tileId!=null ) {
-			if( gridTiles.exists(coordId(cx,cy)) ) { // reduce allocations
-				getGridTileInfos(cx,cy).tileId = tileId;
-				getGridTileInfos(cx,cy).flips = flips;
-			}
-			else
-				gridTiles.set( coordId(cx,cy), { tileId:tileId, flips:flips });
+		if( tileId==null ) {
+			removeAllGridTiles(cx,cy);
+			return;
 		}
-		else
-			removeGridTile(cx,cy);
+
+		if( !gridTiles.exists(coordId(cx,cy)) || !stack )
+			gridTiles.set( coordId(cx,cy), [{ tileId:tileId, flips:flips }]);
+		else {
+			removeSpecificGridTile(cx, cy, tileId, flips);
+			gridTiles.get( coordId(cx,cy) ).push({ tileId:tileId, flips:flips });
+		}
 	}
 
-	public function removeGridTile(cx:Int, cy:Int) {
+
+	public inline function removeAllGridTiles(cx:Int, cy:Int) {
 		if( isValid(cx,cy) )
 			gridTiles.remove( coordId(cx,cy) );
 	}
 
-	public function getGridTileInfos(cx:Int, cy:Int) : Null<GridTileInfos> {
-		return !isValid(cx,cy) || !gridTiles.exists( coordId(cx,cy) ) ? null : gridTiles.get( coordId(cx,cy) );
+
+	public inline function removeSpecificGridTile(cx:Int, cy:Int, tileId:Int, flips:Int) {
+		if( hasAnyGridTile(cx,cy) ) {
+			var stack = gridTiles.get(coordId(cx,cy));
+			for( i in 0...stack.length )
+				if( stack[i].tileId==tileId && stack[i].flips==flips ) {
+					stack.splice(i,1);
+					break;
+				}
+		}
 	}
 
-	public inline function getGridTileId(cx:Int, cy:Int) : Null<Int> {
-		return !hasGridTile(cx,cy) ? null : getGridTileInfos(cx,cy).tileId;
+	public inline function removeTopMostGridTile(cx:Int, cy:Int) {
+		if( hasAnyGridTile(cx,cy) ) {
+			gridTiles.get( coordId(cx,cy) ).pop();
+			if( gridTiles.get( coordId(cx,cy) ).length==0 )
+				gridTiles.remove( coordId(cx,cy) );
+		}
 	}
 
-	public inline function getGridTileFlips(cx:Int, cy:Int) : Null<Int> {
-		return !hasGridTile(cx,cy) ? null : getGridTileInfos(cx,cy).flips;
+	public inline function removeGridTileAtStackIndex(cx:Int, cy:Int, stackIdx:Int) {
+		if( hasAnyGridTile(cx,cy) && getGridTileStack(cx,cy).length>stackIdx )
+			gridTiles.get( coordId(cx,cy) ).splice( stackIdx, 1 );
 	}
 
-	public inline function hasGridTile(cx:Int, cy:Int) : Bool {
-		return getGridTileInfos(cx,cy)!=null;
+	public function getHighestGridTileStack(left:Int, top:Int, right:Int, bottom:Int) {
+		var highest = 0;
+		for(cx in left...right+1)
+		for(cy in top...bottom+1)
+			if( hasAnyGridTile(cx,cy) )
+				highest = dn.M.imax( highest, getGridTileStack(cx,cy).length );
+		return highest;
 	}
 
-	inline function applyMatchedRule(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
+	public inline function getGridTileStack(cx:Int, cy:Int) : Array<GridTileInfos> {
+		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) ? gridTiles.get( coordId(cx,cy) ) : [];
+	}
+
+	public inline function getTopMostGridTile(cx:Int, cy:Int) : Null<GridTileInfos> {
+		return hasAnyGridTile(cx,cy) ? gridTiles.get(coordId(cx,cy))[ gridTiles.get(coordId(cx,cy)).length-1 ] : null;
+	}
+
+	public function hasSpecificGridTile(cx:Int, cy:Int, tileId:Int, ?flips:Null<Int>) {
+		if( !hasAnyGridTile(cx,cy) )
+			return false;
+
+		for( t in getGridTileStack(cx,cy) )
+			if( t.tileId==tileId && ( flips==null || t.flips==flips ) )
+				return true;
+
+		return false;
+	}
+
+	public inline function hasAnyGridTile(cx:Int, cy:Int) : Bool {
+		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) && gridTiles.get(coordId(cx,cy)).length>0;
+	}
+
+	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
 		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds;
 		var td = _project.defs.getTilesetDef( def.autoTilesetDefUid );
 		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
 		autoTilesCache.get(r.uid).set( coordId(cx,cy), tileIds.map( (tid)->{
 			return {
-				x: cx*def.gridSize + pxOffsetX + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ),
-				y: cy*def.gridSize + pxOffsetY + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ),
+				x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ),
+				y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ),
 				srcX: td.getTileSourceX(tid),
 				srcY: td.getTileSourceY(tid),
 				tid: tid,
@@ -515,49 +576,86 @@ class LayerInstance {
 		} ) );
 	}
 
-	inline function applyAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
-		// Init
-		if( !autoTilesCache.exists(r.uid) )
-			autoTilesCache.set( r.uid, [] );
-		autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
-
-		// Modulos
-		if( r.checker!=Vertical && cy%r.yModulo!=0 )
+	inline function runAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
+		if( !def.autoLayerRulesCanBeUsed() )
 			return false;
+		else {
+			// Init
+			if( !autoTilesCache.exists(r.uid) )
+				autoTilesCache.set( r.uid, [] );
+			autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
 
-		if( r.checker==Vertical && ( cy + ( Std.int(cx/r.xModulo)%2 ) )%r.yModulo!=0 )
-			return false;
+			// Modulos
+			if( r.checker!=Vertical && cy%r.yModulo!=0 )
+				return false;
 
-		if( r.checker!=Horizontal && cx%r.xModulo!=0 )
-			return false;
+			if( r.checker==Vertical && ( cy + ( Std.int(cx/r.xModulo)%2 ) )%r.yModulo!=0 )
+				return false;
 
-		if( r.checker==Horizontal && ( cx + ( Std.int(cy/r.yModulo)%2 ) )%r.xModulo!=0 )
-			return false;
+			if( r.checker!=Horizontal && cx%r.xModulo!=0 )
+				return false;
+
+			if( r.checker==Horizontal && ( cx + ( Std.int(cy/r.yModulo)%2 ) )%r.xModulo!=0 )
+				return false;
 
 
-		// Apply rule
-		if( r.matches(this, source, cx,cy) ) {
-			applyMatchedRule(r, cx,cy, 0);
-			return true;
+			// Apply rule
+			if( r.matches(this, source, cx,cy) ) {
+				addRuleTilesAt(r, cx,cy, 0);
+				return true;
+			}
+			else if( r.flipX && r.matches(this, source, cx,cy, -1) ) {
+				addRuleTilesAt(r, cx,cy, 1);
+				return true;
+			}
+			else if( r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
+				addRuleTilesAt(r, cx,cy, 2);
+				return true;
+			}
+			else if( r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
+				addRuleTilesAt(r, cx,cy, 3);
+				return true;
+			}
+			else
+				return false;
 		}
-		else if( r.flipX && r.matches(this, source, cx,cy, -1) ) {
-			applyMatchedRule(r, cx,cy, 1);
-			return true;
-		}
-		else if( r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
-			applyMatchedRule(r, cx,cy, 2);
-			return true;
-		}
-		else if( r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
-			applyMatchedRule(r, cx,cy, 3);
-			return true;
-		}
-		else
-			return false;
 	}
 
+
+	function applyBreakOnMatches() {
+		var coordLocks = new Map();
+
+		var td = _project.defs.getTilesetDef( def.autoTilesetDefUid );
+		for( cy in 0...cHei )
+		for( cx in 0...cWid ) {
+			def.iterateActiveRulesInEvalOrder( (r)->{
+				if( autoTilesCache.exists(r.uid) && autoTilesCache.get(r.uid).exists(coordId(cx,cy)) ) {
+					if( coordLocks.exists( coordId(cx,cy) ) ) {
+						// Tiles below locks are discarded
+						autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
+					}
+					else if( r.breakOnMatch ) {
+						// Break on match is ON
+						coordLocks.set( coordId(cx,cy), true ); // mark cell as locked
+					}
+					else {
+						// Check for opaque tiles
+						for( t in autoTilesCache.get(r.uid).get( coordId(cx,cy) ) )
+							if( td.isTileOpaque(t.tid) ) {
+								coordLocks.set( coordId(cx,cy), true ); // mark cell as locked
+								break;
+							}
+					}
+				}
+
+			});
+		}
+	}
+
+
+	/** Apply all rules to specific cell **/
 	public function applyAllAutoLayerRulesAt(cx:Int, cy:Int, wid:Int, hei:Int) {
-		if( !def.isAutoLayer() )
+		if( !def.isAutoLayer() || !def.autoLayerRulesCanBeUsed() )
 			return;
 
 		// Adjust bounds to also redraw nearby cells
@@ -572,26 +670,34 @@ class LayerInstance {
 		if( source==null )
 			return;
 
-		for(cx in left...right+1)
-		for(cy in top...bottom+1)
-		for(rg in def.autoRuleGroups)
-		for(r in rg.rules)
-			applyAutoLayerRuleAt(source, r,cx,cy);
+		def.iterateActiveRulesInEvalOrder( (r)->{
+			for(cx in left...right+1)
+			for(cy in top...bottom+1)
+				runAutoLayerRuleAt(source, r,cx,cy);
+		});
+
+		applyBreakOnMatches();
 	}
 
-	public function applyAllAutoLayerRules() {
+	/** Apply all rules to all cells **/
+	public inline function applyAllAutoLayerRules() {
+		if( def.isAutoLayer() ) {
+			autoTilesCache = new Map();
+			applyAllAutoLayerRulesAt(0, 0, cWid, cHei);
+			App.LOG.warning("All rules applied in "+toString());
+		}
+	}
+
+	/** Apply the rule to all layer cells **/
+	public function applyAutoLayerRuleToAllLayer(r:data.def.AutoLayerRuleDef) {
 		if( !def.isAutoLayer() )
 			return;
 
-		autoTilesCache = new Map();
-		applyAllAutoLayerRulesAt(0, 0, cWid, cHei);
-		App.LOG.warning("All rules applied in "+toString());
-	}
-
-	public function applyAutoLayerRule(r:data.def.AutoLayerRuleDef) {
-		// TODO use cache invalidation?
-		if( !def.isAutoLayer() )
+		// Clear tiles if rule is disabled
+		if( !r.active || !def.getRuleGroup(r).active ) {
+			autoTilesCache.remove(r.uid);
 			return;
+		}
 
 		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
 		if( source==null )
@@ -599,7 +705,9 @@ class LayerInstance {
 
 		for(cx in 0...cWid)
 		for(cy in 0...cHei)
-			applyAutoLayerRuleAt(source, r, cx,cy);
+			runAutoLayerRuleAt(source, r, cx,cy);
+
+		applyBreakOnMatches();
 	}
 
 }

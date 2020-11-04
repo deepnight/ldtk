@@ -34,7 +34,7 @@ jobs:
           haxelib git heaps https://github.com/HeapsIO/heaps.git
           haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
           haxelib git electron https://github.com/tong/hxelectron.git
-          haxelib git led-haxe-api https://github.com/deepnight/led-haxe-api.git
+          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
           haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
       - uses: actions/setup-node@v1
         with:
@@ -45,4 +45,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ubuntu-distribution
-          path: app/redist/LEd**installer.AppImage
+          path: app/redist/LDtk**installer.AppImage

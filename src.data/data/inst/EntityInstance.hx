@@ -24,7 +24,7 @@ class EntityInstance {
 		return 'Instance<${def.identifier}>@$x,$y';
 	}
 
-	public function toJson(li:data.inst.LayerInstance) : led.Json.EntityInstanceJson {
+	public function toJson(li:data.inst.LayerInstance) : ldtk.Json.EntityInstanceJson {
 		var fieldsJson = [];
 		for(fi in fieldInstances)
 			fieldsJson.push( fi.toJson() );
@@ -52,7 +52,7 @@ class EntityInstance {
 		}
 	}
 
-	public static function fromJson(project:Project, json:led.Json.EntityInstanceJson) {
+	public static function fromJson(project:Project, json:ldtk.Json.EntityInstanceJson) {
 		// Convert old coordinates
 		if( (cast json).x!=null )
 			json.px = [ JsonTools.readInt( (cast json).x, 0 ), JsonTools.readInt((cast json).y,0) ];
@@ -154,7 +154,7 @@ class EntityInstance {
 		return fieldInstances.get( fieldDef.uid );
 	}
 
-	public function getFieldInstancesOfType(type:data.LedTypes.FieldType) {
+	public function getFieldInstancesOfType(type:data.DataTypes.FieldType) {
 		var all = [];
 		for(fi in fieldInstances)
 			if( fi.def.type.getIndex() == type.getIndex() )

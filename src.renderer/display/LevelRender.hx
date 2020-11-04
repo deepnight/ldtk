@@ -7,6 +7,7 @@ class LevelRender extends dn.Process {
 	static var FIELD_TEXT_SCALE = 0.666;
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
+	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
 	public var focusLevelX(default,set) : Float;
 	public var focusLevelY(default,set) : Float;
@@ -28,6 +29,8 @@ class LevelRender extends dn.Process {
 	var boundsGlow : h2d.Graphics;
 	var grid : h2d.Graphics;
 	var rectBleeps : Array<h2d.Object> = [];
+
+	public var temp : h2d.Graphics;
 
 	// Invalidation system (ie. render calls)
 	var allInvalidated = true;
@@ -53,6 +56,9 @@ class LevelRender extends dn.Process {
 
 		layersWrapper = new h2d.Layers();
 		root.add(layersWrapper, Const.DP_MAIN);
+
+		temp = new h2d.Graphics();
+		root.add(temp, Const.DP_TOP);
 
 		focusLevelX = 0;
 		focusLevelY = 0;
@@ -185,6 +191,9 @@ class LevelRender extends dn.Process {
 				if( layerRenders.exists(uid) ) {
 					layerRenders.get(uid).remove();
 					layerRenders.remove(uid);
+					for(li in editor.curLevel.layerInstances)
+						if( !li.def.autoLayerRulesCanBeUsed() )
+							invalidateLayer(li);
 				}
 
 			case LayerDefSorted:
@@ -199,7 +208,7 @@ class LevelRender extends dn.Process {
 
 			case LayerRuleChanged(r), LayerRuleAdded(r):
 				var li = editor.curLevel.getLayerInstanceFromRule(r);
-				li.applyAutoLayerRule(r);
+				li.applyAutoLayerRuleToAllLayer(r);
 				invalidateLayer(li);
 
 			case LayerRuleSeedChanged:
@@ -232,6 +241,7 @@ class LevelRender extends dn.Process {
 			case LayerInstanceChanged:
 
 			case TilesetSelectionSaved(td):
+			case TilesetDefOpaqueCacheRebuilt(td):
 
 			case TilesetDefRemoved(td):
 				invalidateAll();
@@ -327,8 +337,8 @@ class LevelRender extends dn.Process {
 		g.lineStyle(thickness, col);
 		g.drawRect( Std.int(-pad-w*0.5), Std.int(-pad-h*0.5), w+pad*2, h+pad*2 );
 		g.setPosition(
-			Std.int(x+w*0.5) + editor.curLayerInstance.pxOffsetX,
-			Std.int(y+h*0.5) + editor.curLayerInstance.pxOffsetY
+			Std.int(x+w*0.5) + editor.curLayerInstance.pxTotalOffsetX,
+			Std.int(y+h*0.5) + editor.curLayerInstance.pxTotalOffsetY
 		);
 		root.add(g, Const.DP_UI);
 	}
@@ -366,16 +376,14 @@ class LevelRender extends dn.Process {
 		boundsGlow.filter = shadow;
 	}
 
-	public inline function isGridVisible() return grid.visible;
-
-	public function toggleGrid() {
-		grid.visible = !grid.visible;
+	public inline function applyGridVisibility() {
+		grid.visible = settings.grid;
 	}
 
 	function renderGrid() {
 		bgInvalidated = false;
-
 		grid.clear();
+		applyGridVisibility();
 
 		if( editor.curLayerInstance==null )
 			return;
@@ -383,7 +391,7 @@ class LevelRender extends dn.Process {
 		var col = C.getPerceivedLuminosityInt( editor.project.bgColor) >= 0.8 ? 0x0 : 0xffffff;
 
 		var l = editor.curLayerInstance;
-		grid.lineStyle(1, editor.getGridSnapping() ? col : 0xff0000, editor.getGridSnapping() ? 0.07 : 0.07);
+		grid.lineStyle(1, col, 0.07);
 		for( cx in 0...editor.curLayerInstance.cWid+1 ) {
 			grid.moveTo(cx*l.def.gridSize, 0);
 			grid.lineTo(cx*l.def.gridSize, l.cHei*l.def.gridSize);
@@ -393,14 +401,15 @@ class LevelRender extends dn.Process {
 			grid.lineTo(l.cWid*l.def.gridSize, cy*l.def.gridSize);
 		}
 
-		grid.x = editor.curLayerInstance.pxOffsetX;
-		grid.y = editor.curLayerInstance.pxOffsetY;
+		grid.x = editor.curLayerInstance.pxTotalOffsetX;
+		grid.y = editor.curLayerInstance.pxTotalOffsetY;
 	}
 
 
 	public function renderAll() {
 		allInvalidated = false;
 
+		clearTemp();
 		renderBounds();
 		renderGrid();
 
@@ -412,6 +421,10 @@ class LevelRender extends dn.Process {
 		}
 	}
 
+	public inline function clearTemp() {
+		temp.clear();
+	}
+
 
 	function renderLayer(li:data.inst.LayerInstance) {
 		layerInvalidations.remove(li.layerDefUid);
@@ -421,8 +434,8 @@ class LevelRender extends dn.Process {
 			layerRenders.get(li.layerDefUid).remove();
 
 		var wrapper = new h2d.Object();
-		wrapper.x = li.pxOffsetX;
-		wrapper.y = li.pxOffsetY;
+		wrapper.x = li.pxTotalOffsetX;
+		wrapper.y = li.pxTotalOffsetY;
 
 		// Register it
 		layerRenders.set(li.layerDefUid, wrapper);
@@ -434,6 +447,8 @@ class LevelRender extends dn.Process {
 		case IntGrid, AutoLayer:
 			var g = new h2d.Graphics(wrapper);
 
+			var doneCoords = new Map();
+
 			if( li.def.isAutoLayer() && li.def.autoTilesetDefUid!=null && autoLayerRenderingEnabled(li) ) {
 				// Auto-layer tiles
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
@@ -441,27 +456,37 @@ class LevelRender extends dn.Process {
 
 				li.def.iterateActiveRulesInDisplayOrder( (r)-> {
 					if( li.autoTilesCache.exists( r.uid ) ) {
-						for(allTiles in li.autoTilesCache.get( r.uid ))
-						for(tileInfos in allTiles) {
-							// Note: tileInfos already apply layer offsets, so we need to substract them here
-							tg.addTransform(
-								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize - li.pxOffsetX,
-								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize - li.pxOffsetY,
-								dn.M.hasBit(tileInfos.flips,0)?-1:1,
-								dn.M.hasBit(tileInfos.flips,1)?-1:1,
-								0,
-								td.extractTile(tileInfos.srcX, tileInfos.srcY)
-							);
+						for(coordId in li.autoTilesCache.get( r.uid ).keys()) {
+							doneCoords.set(coordId, true);
+							for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
+								tg.addTransform(
+									tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+									tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
+									dn.M.hasBit(tileInfos.flips,0)?-1:1,
+									dn.M.hasBit(tileInfos.flips,1)?-1:1,
+									0,
+									td.extractTile(tileInfos.srcX, tileInfos.srcY)
+								);
+							}
 						}
 					}
 				});
-		}
+
+				// Default render when no rule match here
+				// if( li.def.type==IntGrid )
+				// 	for(cy in 0...li.cHei)
+				// 	for(cx in 0...li.cWid) {
+				// 		if( doneCoords.exists(li.coordId(cx,cy)) || li.getIntGrid(cx,cy)<0 )
+				// 			continue;
+				// 		g.lineStyle(1, li.getIntGridColorAt(cx,cy), 0.6 );
+				// 		g.drawRect(cx*li.def.gridSize+2, cy*li.def.gridSize+2, li.def.gridSize-4, li.def.gridSize-4);
+				// 	}
+			}
 			else if( li.def.type==IntGrid ) {
 				// Normal intGrid
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
-					var id = li.getIntGrid(cx,cy);
-					if( id<0 )
+					if( !li.hasIntGrid(cx,cy) )
 						continue;
 
 					g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
@@ -483,22 +508,23 @@ class LevelRender extends dn.Process {
 
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
-					if( !li.hasGridTile(cx,cy) )
+					if( !li.hasAnyGridTile(cx,cy) )
 						continue;
 
-					var tileInf = li.getGridTileInfos(cx,cy);
-					var t = td.getTile(tileInf.tileId);
-					t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
-					var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
-					var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;
-					tg.addTransform(
-						(cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize,
-						(cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize,
-						sx,
-						sy,
-						0,
-						t
-					);
+					for( tileInf in li.getGridTileStack(cx,cy) ) {
+						var t = td.getTile(tileInf.tileId);
+						t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
+						var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
+						var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;
+						tg.addTransform(
+							(cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize,
+							(cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize,
+							sx,
+							sy,
+							0,
+							t
+						);
+					}
 				}
 			}
 			else {
@@ -507,7 +533,7 @@ class LevelRender extends dn.Process {
 				var tg = new h2d.TileGroup( tileError, wrapper );
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid)
-					if( li.hasGridTile(cx,cy) )
+					if( li.hasAnyGridTile(cx,cy) )
 						tg.add(
 							(cx + li.def.tilePivotX) * li.def.gridSize,
 							(cy + li.def.tilePivotX) * li.def.gridSize,
@@ -618,7 +644,7 @@ class LevelRender extends dn.Process {
 		g.y = Std.int( -def.height*def.pivotY );
 
 		// Render a tile
-		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:data.LedTypes.EntityTileRenderMode) {
+		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:data.DataTypes.EntityTileRenderMode) {
 			if( tileId==null || tilesetId==null ) {
 				// Missing tile
 				var p = 2;
@@ -857,8 +883,8 @@ class LevelRender extends dn.Process {
 			return;
 
 		wrapper.visible = isLayerVisible(li);
-		wrapper.alpha = li.def.displayOpacity * ( !editor.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
-		wrapper.filter = !editor.singleLayerMode || li==editor.curLayerInstance ? null : new h2d.filter.Group([
+		wrapper.alpha = li.def.displayOpacity * ( !settings.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
+		wrapper.filter = !settings.singleLayerMode || li==editor.curLayerInstance ? null : new h2d.filter.Group([
 			C.getColorizeFilterH2d(0x8c99c1, 0.9),
 			new h2d.filter.Blur(2),
 		]);

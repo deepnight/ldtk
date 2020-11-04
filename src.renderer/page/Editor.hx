@@ -4,10 +4,13 @@ class Editor extends Page {
 	public static var ME : Editor;
 
 	public var jMainPanel(get,never) : J; inline function get_jMainPanel() return new J("#mainPanel");
+	public var jEditOptions(get,never) : J; inline function get_jEditOptions() return new J("#editingOptions");
 	public var jInstancePanel(get,never) : J; inline function get_jInstancePanel() return new J("#instancePanel");
 	public var jLayerList(get,never) : J; inline function get_jLayerList() return new J("#layers");
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 	var jMouseCoords : js.jquery.JQuery;
+
+	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
 	public var curLevel(get,never) : data.Level;
 		inline function get_curLevel() return project.getLevel(curLevelId);
@@ -33,10 +36,7 @@ class Editor extends Page {
 	var specialTool : Null< Tool<Dynamic> >; // if not null, will be used instead of default tool
 	var doNothingTool : tool.lt.DoNothing;
 
-	var gridSnapping = true;
 	public var needSaving = false;
-	public var singleLayerMode(default,null) = false;
-	public var emptySpaceSelection(default,null) = true;
 
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
@@ -83,7 +83,11 @@ class Editor extends Page {
 		updateCanvasSize();
 
 		selectProject(p);
-		needSaving = false;
+		setCompactMode( settings.compactMode, true );
+	}
+
+	function saveLocked() {
+		return ui.modal.Progress.hasAny();
 	}
 
 	function initUI() {
@@ -98,11 +102,11 @@ class Editor extends Page {
 				new ui.modal.panel.EditProject();
 		});
 
-		jMainPanel.find("button.levelList").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.panel.LevelList) )
+		jMainPanel.find("button.world").click( function(_) {
+			if( ui.Modal.isOpen(ui.modal.panel.WorldPanel) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.panel.LevelList();
+				new ui.modal.panel.WorldPanel();
 		});
 
 		jMainPanel.find("button.editLayers").click( function(_) {
@@ -138,34 +142,23 @@ class Editor extends Page {
 
 
 		jMainPanel.find("button.showHelp").click( function(_) {
-			onHelp();
+			if( ui.Modal.isOpen(ui.modal.panel.Help) )
+				ui.Modal.closeAll();
+			else
+				onHelp();
 		});
 
 
 		// Option checkboxes
-		var chk = jMainPanel.find("input#singleLayerMode")
-			.prop("checked", singleLayerMode)
-			.change( function(ev) {
-				setSingleLayerMode( ev.getThis().prop("checked") );
-			});
-		if( singleLayerMode )
-			chk.parent().addClass("checked");
-
-		var chk = jMainPanel.find("input#emptySpaceSelection")
-			.prop("checked", emptySpaceSelection)
-			.change( function(ev) {
-				setEmptySpaceSelection( ev.getThis().prop("checked") );
-			});
-		if( emptySpaceSelection )
-			chk.parent().addClass("checked");
-
-		var chk = jMainPanel.find("input#gridSnapping")
-			.prop("checked", gridSnapping)
-			.change( function(ev) {
-				setGridSnapping( ev.getThis().prop("checked") );
-			});
-		if( gridSnapping )
-			chk.parent().addClass("checked");
+		linkOption( jEditOptions.find("li.singleLayerMode"), ()->settings.singleLayerMode, (v)->setSingleLayerMode(v) );
+		linkOption( jEditOptions.find("li.grid"), ()->settings.grid, (v)->setGrid(v) );
+		linkOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
+		linkOption(
+			jEditOptions.find("li.tileStacking"),
+			()->settings.tileStacking,
+			(v)->setTileStacking(v),
+			()->curLayerDef!=null && curLayerDef.type==Tiles
+		);
 
 		// Space bar blocking
 		new J(js.Browser.window).off().keydown( function(ev) {
@@ -239,8 +232,10 @@ class Editor extends Page {
 		levelHistory.set( curLevelId, new LevelHistory(curLevelId) );
 
 		// Load tilesets
+		var tilesetChanged = false;
 		for(td in project.defs.tilesets)
-			reloadTileset(td, true);
+			if( reloadTileset(td, true) )
+				tilesetChanged = true;
 
 		ge.emit(ProjectSelected);
 
@@ -256,6 +251,8 @@ class Editor extends Page {
 			if( anychange )
 				needSaving = true;
 		});
+
+		needSaving = tilesetChanged;
 	}
 
 
@@ -281,43 +278,61 @@ class Editor extends Page {
 		importer.HxEnum.load(ed.externalRelPath, true);
 	}
 
-	public function reloadTileset(td:data.def.TilesetDef, silentOk=false) {
+	public function reloadTileset(td:data.def.TilesetDef, isInitialLoading=false) {
 		if( !td.hasAtlasPath() )
-			return;
+			return false;
 
 		var oldRelPath = td.relPath;
+		App.LOG.fileOp("Reloading tileset: "+td.relPath);
 		var result = td.reloadImage( getProjectDir() );
+		App.LOG.fileOp(" -> "+result);
+		App.LOG.fileOp(" -> opaqueCache: "+(td.opaqueTilesCache==null ? "null" : "not null"));
 
+		var changed = false;
 		switch result {
 			case FileNotFound:
+				changed = true;
 				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
 					var newRelPath = makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( getProjectDir(), newRelPath );
+					td.buildOpaqueTileCache( ge.emit.bind(TilesetDefOpaqueCacheRebuilt(td)) );
 					ge.emit( TilesetDefChanged(td) );
 					levelRender.invalidateAll();
 				});
 
 			case RemapLoss:
+				changed = true;
 				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 				new ui.modal.dialog.Warning( Lang.t._("The image ::file:: was updated, but the new version is smaller than the previous one.\nSome tiles might have been lost in the process. It is recommended to check this carefully before saving this project!", { file:name } ) );
 
 			case TrimmedPadding:
+				changed = true;
 				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 				new ui.modal.dialog.Message( Lang.t._("\"::file::\" image was modified but it was SMALLER than the old version.\nLuckily, the tileset had some PADDING, so I was able to use it to compensate the difference.\nSo everything is ok, have a nice day ♥️", { file:name } ), "tile" );
 
 			case Ok:
-				if( !silentOk ) {
+				if( !isInitialLoading ) {
+					changed = true;
 					var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 					N.success(Lang.t._("Tileset image ::file:: updated.", { file:name } ) );
 				}
 
 			case RemapSuccessful:
+				changed = true;
 				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
 				new ui.modal.dialog.Message( Lang.t._("Tileset image \"::file::\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { file:name } ), "tile" );
 		}
 
-		ge.emit(TilesetDefChanged(td));
+		// Rebuild "opaque tiles" cache
+		if( td.opaqueTilesCache==null || !isInitialLoading || result!=Ok ) {
+			changed = true;
+			td.buildOpaqueTileCache( ge.emit.bind(TilesetDefOpaqueCacheRebuilt(td)) );
+		}
+
+		ge.emit( TilesetDefChanged(td) );
+		return changed;
 	}
+
 
 	public inline function hasInputFocus() {
 		return App.ME.jBody.find("input:focus, textarea:focus").length>0;
@@ -337,12 +352,11 @@ class Editor extends Page {
 					try App.ME.jBody.find("input:focus, textarea:focus").blur()
 					catch(e:Dynamic) {}
 				}
-				else if( ui.modal.ContextMenu.isOpen() )
-					ui.modal.ContextMenu.ME.close();
 				else if( specialTool!=null )
 					clearSpecialTool();
-				else if( ui.Modal.hasAnyOpen() )
-					ui.Modal.closeAll();
+				else if( ui.Modal.hasAnyOpen() ) {
+					ui.Modal.closeLatest();
+				}
 				else if( selectionTool.any() ) {
 					ui.EntityInstanceEditor.close();
 					selectionTool.clear();
@@ -351,11 +365,8 @@ class Editor extends Page {
 					ui.EntityInstanceEditor.close();
 
 			case K.TAB:
-				if( !ui.Modal.hasAnyOpen() ) {
-					App.ME.jPage.toggleClass("compactPanel");
-					updateCanvasSize();
-					updateAppBg();
-				}
+				if( !ui.Modal.hasAnyOpen() )
+					setCompactMode( !settings.compactMode );
 
 			case K.Z:
 				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() )
@@ -396,19 +407,22 @@ class Editor extends Page {
 				App.ME.exit();
 
 			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setEmptySpaceSelection( !emptySpaceSelection );
+				setEmptySpaceSelection( !settings.emptySpaceSelection );
+
+			case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				setTileStacking( !settings.tileStacking );
 
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setSingleLayerMode( !singleLayerMode );
+				setSingleLayerMode( !settings.singleLayerMode );
 
 			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() ):
-				if( singleLayerMode )
+				if( settings.singleLayerMode )
 					selectionTool.selectAllInLayers(curLevel, [curLayerInstance]);
 				else
 					selectionTool.selectAllInLayers(curLevel, curLevel.layerInstances);
 
 				if( !selectionTool.isEmpty() ) {
-					if( singleLayerMode )
+					if( settings.singleLayerMode )
 						N.quick( L.t._("Selected all in layer") );
 					else
 						N.quick( L.t._("Selected all") );
@@ -416,12 +430,8 @@ class Editor extends Page {
 				else
 					N.error("Nothing to select");
 
-			case K.L if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() && layerSupportsFreeMode() ):
-				setGridSnapping( !gridSnapping );
-
 			case K.G if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				levelRender.toggleGrid();
-				N.quick( "Show grid: "+L.onOff(levelRender.isGridVisible()));
+				setGrid( !settings.grid );
 
 			case K.H if( !hasInputFocus() ):
 				onHelp();
@@ -533,8 +543,8 @@ class Editor extends Page {
 			if( !levelRender.isLayerVisible(li) )
 				return null;
 
-			var layerX = levelX - li.pxOffsetX;
-			var layerY = levelY - li.pxOffsetY;
+			var layerX = levelX - li.pxTotalOffsetX;
+			var layerY = levelY - li.pxTotalOffsetY;
 			var cx = Std.int( layerX / li.def.gridSize );
 			var cy = Std.int( layerY / li.def.gridSize );
 
@@ -564,7 +574,7 @@ class Editor extends Page {
 					}
 
 				case Tiles:
-					if( li.hasGridTile(cx,cy) )
+					if( li.hasAnyGridTile(cx,cy) )
 						ge = GenericLevelElement.GridCell(li, cx, cy);
 			}
 			return ge;
@@ -580,7 +590,7 @@ class Editor extends Page {
 			var best = null;
 			for(ld in all) {
 				var ge = getElement( curLevel.getLayerInstance(ld) );
-				if( ld==curLayerDef && ge!=null && singleLayerMode ) // prioritize active layer
+				if( ld==curLayerDef && ge!=null && settings.singleLayerMode ) // prioritize active layer
 					return ge;
 
 				if( ge!=null )
@@ -648,49 +658,60 @@ class Editor extends Page {
 		rulers.onMouseMove(m);
 
 		// Mouse coords infos
-		if( curLayerInstance!=null )
-			jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
-		else
-			jMouseCoords.find(".grid").hide();
-		jMouseCoords.find(".pixels").text('Level = ${m.levelX},${m.levelY}');
-		if( curTool.getRunningRectCWid(m)>0 || selectionTool.getRunningRectCWid(m)>0 ) {
-			var wid = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCWid(m);
-			var hei = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCHei(m);
-			jMouseCoords.find(".grid").append(' / ${wid} x $hei');
-		}
+		if( ui.Modal.hasAnyOpen() )
+			jMouseCoords.hide();
+		else {
+			jMouseCoords.show();
 
-		// Overed element infos in footer
-		var jElement = jMouseCoords.find(".element");
-		jElement.removeAttr("style");
-		inline function _colorizeElement(c:UInt) {
-			jElement.css("color", C.intToHex( C.toWhite( c, 0.66 ) ));
-			jElement.css("background-color", C.intToHex( C.toBlack( c, 0.5 ) ));
-		}
-		var overed = getGenericLevelElementAt(m.levelX, m.levelY, singleLayerMode);
-		switch overed {
-			case null:
-			case GridCell(li, cx, cy):
-				if( li.hasAnyGridValue(cx,cy) )
-					switch li.def.type {
-						case IntGrid:
-							var v = li.getIntGrid(cx,cy);
-							_colorizeElement( li.def.getIntGridValueColor(v) );
-							jElement.text('${ li.def.getIntGridValueDisplayName(v) } (IntGrid)');
+			// Coordinates
+			if( curLayerInstance!=null )
+				jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
+			else
+				jMouseCoords.find(".grid").hide();
+			jMouseCoords.find(".pixels").text('Level = ${m.levelX},${m.levelY}');
+			if( curTool.getRunningRectCWid(m)>0 || selectionTool.getRunningRectCWid(m)>0 ) {
+				var wid = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCWid(m);
+				var hei = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCHei(m);
+				jMouseCoords.find(".grid").append(' / ${wid} x $hei');
+			}
 
-						case Tiles:
-							jElement.text('Tile ${ li.getGridTileInfos(cx,cy).tileId }');
+			// Overed element infos in footer
+			var jElement = jMouseCoords.find(".element");
+			jElement.removeAttr("style").empty();
+			inline function _colorizeElement(c:UInt) {
+				jElement.css("color", C.intToHex( C.toWhite( c, 0.66 ) ));
+				jElement.css("background-color", C.intToHex( C.toBlack( c, 0.5 ) ));
+			}
+			var overed = getGenericLevelElementAt(m.levelX, m.levelY, settings.singleLayerMode);
+			switch overed {
+				case null:
+				case GridCell(li, cx, cy):
+					if( li.hasAnyGridValue(cx,cy) )
+						switch li.def.type {
+							case IntGrid:
+								var v = li.getIntGrid(cx,cy);
+								_colorizeElement( li.def.getIntGridValueColor(v) );
+								jElement.text('${ li.def.getIntGridValueDisplayName(v) } (IntGrid)');
 
-						case Entities:
-						case AutoLayer:
-					}
+							case Tiles:
+								var stack = li.getGridTileStack(cx,cy);
+								if( stack.length==1 )
+									jElement.text('Tile ${ stack[0].tileId }');
+								else
+									jElement.text('Tiles ${ stack.map(t->t.tileId).join(", ") }');
 
-			case Entity(li, ei):
-				_colorizeElement( ei.getSmartColor(false) );
-				jElement.text('${ ei.def.identifier } (Entity)');
+							case Entities:
+							case AutoLayer:
+						}
 
-			case PointField(li, ei, fi, arrayIdx):
-				_colorizeElement( ei.getSmartColor(false) );
-				jElement.text('${ ei.def.identifier }.${ fi.def.identifier } (Entity point)');
+				case Entity(li, ei):
+					_colorizeElement( ei.getSmartColor(false) );
+					jElement.text('${ ei.def.identifier } (Entity)');
+
+				case PointField(li, ei, fi, arrayIdx):
+					_colorizeElement( ei.getSmartColor(false) );
+					jElement.text('${ ei.def.identifier }.${ fi.def.identifier } (Entity point)');
+			}
 		}
 	}
 
@@ -724,7 +745,7 @@ class Editor extends Page {
 		curLayerDefUid = li.def.uid;
 		ge.emit(LayerInstanceSelected);
 
-		setGridSnapping(gridSnapping, false); // update checkbox
+		setGrid(settings.grid, false); // update checkbox
 	}
 
 	function layerSupportsFreeMode() {
@@ -736,72 +757,97 @@ class Editor extends Page {
 		}
 	}
 
-	public function getGridSnapping() {
-		return gridSnapping || !layerSupportsFreeMode();
+
+	public function isSnappingToGrid() {
+		return settings.grid || !layerSupportsFreeMode();
 	}
 
-	public function setGridSnapping(v:Bool, notify=true) {
-		gridSnapping= v;
 
-		var chk = jMainPanel.find("input#gridSnapping").prop("checked", v);
-		if( v || !layerSupportsFreeMode() )
-			chk.parent().addClass("checked");
+	function linkOption( jOpt:js.jquery.JQuery, getter:()->Bool, setter:Bool->Void, ?isSupported:Void->Bool ) {
+		createChildProcess( (p)->{
+			if( jOpt.parents("body").length==0 ) {
+				p.destroy();
+				return;
+			}
+
+			if( jOpt.hasClass("active") && !getter() )
+				jOpt.removeClass("active");
+
+			if( !jOpt.hasClass("active") && getter() )
+				jOpt.addClass("active");
+
+			if( isSupported!=null ) {
+				if( jOpt.hasClass("unsupported") && isSupported() )
+					jOpt.removeClass("unsupported");
+
+				if( !jOpt.hasClass("unsupported") && !isSupported() )
+					jOpt.addClass("unsupported");
+			}
+		});
+
+		// Init
+		if( getter() )
+			jOpt.addClass("active");
 		else
-			chk.parent().removeClass("checked");
+			jOpt.removeClass("active");
 
-		if( layerSupportsFreeMode() ) {
-			chk.prop("disabled",false);
-			chk.parent().removeClass("unsupported");
-		}
-		else {
-			chk.prop("disabled",true);
-			chk.parent().addClass("unsupported");
-		}
+		jOpt.off(".option").on("click.option", (ev)->{
+			setter( !getter() );
+		});
+	}
 
+
+	public function setGrid(v:Bool, notify=true) {
+		settings.grid = v;
+		App.ME.saveSettings();
 		selectionTool.clear();
-		levelRender.invalidateBg();
+		levelRender.applyGridVisibility();
 		if( notify )
-			N.quick( "Grid lock: "+L.onOff( gridSnapping ));
+			N.quick( "Grid: "+L.onOff( settings.grid ));
 	}
 
 	public function setSingleLayerMode(v:Bool) {
-		singleLayerMode = v;
-		var chk = jMainPanel.find("input#singleLayerMode").prop("checked", v);
-		if( v )
-			chk.parent().addClass("checked");
-		else
-			chk.parent().removeClass("checked");
+		settings.singleLayerMode = v;
+		App.ME.saveSettings();
 		levelRender.applyAllLayersVisibility();
 		selectionTool.clear();
-		N.quick( "Single layer mode: "+L.onOff( singleLayerMode ));
+		N.quick( "Single layer mode: "+L.onOff( settings.singleLayerMode ));
 	}
 
 	public function setEmptySpaceSelection(v:Bool) {
-		emptySpaceSelection = v;
-		var chk = jMainPanel.find("input#emptySpaceSelection").prop("checked", v);
-		if( v )
-			chk.parent().addClass("checked");
-		else
-			chk.parent().removeClass("checked");
+		settings.emptySpaceSelection = v;
+		App.ME.saveSettings();
 		selectionTool.clear();
-		N.quick( "Select empty spaces: "+L.onOff( emptySpaceSelection ));
+		N.quick( "Select empty spaces: "+L.onOff( settings.emptySpaceSelection ));
 	}
 
-	function onHelp() {
-		ui.Modal.closeAll();
-		var m = new ui.Modal();
-		m.loadTemplate("help","helpWindow", {
-			appUrl: Const.WEBSITE_URL,
-			docUrl: Const.DOCUMENTATION_URL,
-			app: Const.APP_NAME,
-			ver: Const.getAppVersion(),
-		});
+	public function setTileStacking(v:Bool) {
+		settings.tileStacking = v;
+		App.ME.saveSettings();
+		selectionTool.clear();
+		N.quick( "Tile stacking: "+L.onOff( settings.tileStacking ));
+	}
 
-		m.jContent.find("dt").each( function(idx, e) {
-			var jDt = new J(e);
-			var jKeys = JsTools.parseKeys( jDt.text() );
-			jDt.empty().append(jKeys);
-		});
+	public function setCompactMode(v:Bool, init=false) {
+		settings.compactMode = v;
+		if( !init )
+			App.ME.saveSettings();
+
+		if( settings.compactMode )
+			App.ME.jPage.addClass("compactPanel");
+		else
+			App.ME.jPage.removeClass("compactPanel");
+
+		updateCanvasSize();
+		updateAppBg();
+		if( !init )
+			N.quick("Compact UI: "+L.onOff(settings.compactMode));
+	}
+
+
+
+	function onHelp() {
+		new ui.modal.panel.Help();
 	}
 
 	function onClose(?bt:js.jquery.JQuery) {
@@ -813,6 +859,9 @@ class Editor extends Page {
 	}
 
 	public function onSave(?bypassMissing=false, ?onComplete:Void->Void) {
+		if( saveLocked() )
+			return;
+
 		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
@@ -839,36 +888,48 @@ class Editor extends Page {
 		}
 
 		ge.emit(BeforeProjectSaving);
-		checkAutoLayersCache( (anyChange)->{
-			App.LOG.fileOp('Saving $projectFilePath...');
-			var data = JsTools.prepareProjectFile(project);
-			JsTools.writeFileBytes(projectFilePath, data.bytes);
+		createChildProcess( (p)->{
+			if( !saveLocked() ) {
+				checkAutoLayersCache( (anyChange)->{
+					App.LOG.fileOp('Saving $projectFilePath...');
+					var data = JsTools.prepareProjectFile(project);
+					JsTools.writeFileBytes(projectFilePath, data.bytes);
 
-			var size = dn.Lib.prettyBytesSize(data.bytes.length);
-			App.LOG.fileOp('Saved $size.');
+					var size = dn.Lib.prettyBytesSize(data.bytes.length);
+					App.LOG.fileOp('Saved $size.');
 
-			if( project.exportTiled ) {
-				var e = new exporter.Tiled();
-				e.run( project, projectFilePath );
+					var fileName = dn.FilePath.extractFileWithExt(projectFilePath);
+					if( project.exportTiled ) {
+						var e = new exporter.Tiled();
+						e.addExtraLogger( App.LOG, "TiledExport" );
+						e.run( project, projectFilePath );
+						if( e.hasErrors() )
+							N.error('Saved $fileName ($size) but Tiled export has errors.');
+						else
+							N.success('Saved $fileName ($size) and Tiled files.');
+					}
+					else
+						N.success('Saved $fileName ($size)');
+
+					App.ME.registerRecentProject(projectFilePath);
+
+					updateTitle();
+
+					this.needSaving = false;
+					ge.emit(ProjectSaved);
+
+					if( onComplete!=null )
+						onComplete();
+				});
+				p.destroy();
 			}
-
-			App.ME.registerRecentProject(projectFilePath);
-
-			N.success("Saved to "+dn.FilePath.extractFileWithExt(projectFilePath)+' ($size)');
-			updateTitle();
-
-			this.needSaving = false;
-			ge.emit(ProjectSaved);
-
-			if( onComplete!=null )
-				onComplete();
-		});
+		}, true);
 	}
 
 	public function onSaveAs() {
 		var oldDir = getProjectDir();
 
-		dn.electron.Dialogs.saveAs([".json"], getProjectDir(), function(filePath:String) {
+		dn.electron.Dialogs.saveAs(["."+Const.FILE_EXTENSION, ".json"], getProjectDir(), function(filePath:String) {
 			this.projectFilePath = filePath;
 			var newDir = getProjectDir();
 			App.LOG.fileOp("Remap project paths: "+oldDir+" => "+newDir);
@@ -921,6 +982,7 @@ class Editor extends Page {
 				case TilesetDefAdded(td): extra = td.uid;
 				case TilesetDefRemoved(td): extra = td.uid;
 				case TilesetSelectionSaved(td): extra = td.uid;
+				case TilesetDefOpaqueCacheRebuilt(td): extra = td.uid;
 				case EntityInstanceAdded(ei): extra = ei.defUid;
 				case EntityInstanceRemoved(ei): extra = ei.defUid;
 				case EntityInstanceChanged(ei): extra = ei.defUid;
@@ -1061,6 +1123,7 @@ class Editor extends Page {
 				updateGuide();
 
 			case TilesetSelectionSaved(td):
+			case TilesetDefOpaqueCacheRebuilt(td):
 
 			case TilesetDefAdded(td):
 
@@ -1217,7 +1280,7 @@ class Editor extends Page {
 				ev.preventDefault();
 				ev.stopPropagation();
 				selectLayerInstance(li);
-				new ui.modal.panel.EditAllAutoLayerRules();
+				new ui.modal.panel.EditAllAutoLayerRules(li);
 			});
 
 			// Visibility button

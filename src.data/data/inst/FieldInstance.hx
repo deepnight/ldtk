@@ -1,6 +1,6 @@
 package data.inst;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class FieldInstance {
 	public var _project : Project;
@@ -29,7 +29,7 @@ class FieldInstance {
 			+ ' [ $internalValues ]';
 	}
 
-	public static function fromJson(project:Project, json:led.Json.FieldInstanceJson) {
+	public static function fromJson(project:Project, json:ldtk.Json.FieldInstanceJson) {
 		var o = new FieldInstance( project, JsonTools.readInt(json.defUid) );
 		o.internalValues = [];
 		if( json.realEditorValues!=null ) {
@@ -55,7 +55,7 @@ class FieldInstance {
 		return o;
 	}
 
-	public function toJson() : led.Json.FieldInstanceJson {
+	public function toJson() : ldtk.Json.FieldInstanceJson {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,

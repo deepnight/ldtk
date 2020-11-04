@@ -12,7 +12,7 @@ install:
   - yes | haxelib install renderer.hxml
   - haxelib git heaps https://github.com/HeapsIO/heaps.git
   - haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
-  - no | haxelib git led-haxe-api https://github.com/deepnight/led-haxe-api.git
+  - no | haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
   - haxelib list
 
 script:

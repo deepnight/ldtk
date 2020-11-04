@@ -128,22 +128,22 @@ class GenericLevelElementGroup {
 
 				for(e in elements) {
 					var x = switch e {
-						case GridCell(li, cx, cy): li.pxOffsetX + cx*li.def.gridSize;
-						case Entity(li, ei): li.pxOffsetX + ei.x;
+						case GridCell(li, cx, cy): li.pxTotalOffsetX + cx*li.def.gridSize;
+						case Entity(li, ei): li.pxTotalOffsetX + ei.x;
 						case PointField(li, ei, fi, arrayIdx):
 							var pt = fi.getPointGrid(arrayIdx);
 							if( pt!=null )
-								li.pxOffsetX + pt.cx*li.def.gridSize;
+								li.pxTotalOffsetX + pt.cx*li.def.gridSize;
 							else
 								0;
 					}
 					var y = switch e {
-						case GridCell(li, cx, cy): li.pxOffsetY + cy*li.def.gridSize;
-						case Entity(li, ei): li.pxOffsetY +  ei.y;
+						case GridCell(li, cx, cy): li.pxTotalOffsetY + cy*li.def.gridSize;
+						case Entity(li, ei): li.pxTotalOffsetY +  ei.y;
 						case PointField(li, ei, fi, arrayIdx):
 							var pt = fi.getPointGrid(arrayIdx);
 							if( pt!=null )
-								li.pxOffsetY + pt.cy*li.def.gridSize;
+								li.pxTotalOffsetY + pt.cy*li.def.gridSize;
 							else
 								0;
 					}
@@ -197,8 +197,8 @@ class GenericLevelElementGroup {
 					else
 						selectRender.beginFill(0x8ab7ff, a*0.6);
 					selectRender.drawRect(
-						li.pxOffsetX + cx*li.def.gridSize,
-						li.pxOffsetY + cy*li.def.gridSize,
+						li.pxTotalOffsetX + cx*li.def.gridSize,
+						li.pxTotalOffsetY + cy*li.def.gridSize,
 						li.def.gridSize,
 						li.def.gridSize
 					);
@@ -206,8 +206,8 @@ class GenericLevelElementGroup {
 				case Entity(li, ei):
 					selectRender.beginFill(c, a);
 					selectRender.drawRect(
-						li.pxOffsetX + ei.x - ei.def.width * ei.def.pivotX,
-						li.pxOffsetY + ei.y - ei.def.height * ei.def.pivotY,
+						li.pxTotalOffsetX + ei.x - ei.def.width * ei.def.pivotX,
+						li.pxTotalOffsetY + ei.y - ei.def.height * ei.def.pivotY,
 						ei.def.width,
 						ei.def.height
 					);
@@ -217,8 +217,8 @@ class GenericLevelElementGroup {
 					var pt = fi.getPointGrid(arrayIdx);
 					if( pt!=null )
 						selectRender.drawCircle(
-							li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize,
-							li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize,
+							li.pxTotalOffsetX + (pt.cx+0.5)*li.def.gridSize,
+							li.pxTotalOffsetY + (pt.cy+0.5)*li.def.gridSize,
 							li.def.gridSize*0.4
 						);
 			}
@@ -233,27 +233,28 @@ class GenericLevelElementGroup {
 				case null:
 
 				case GridCell(li, cx, cy):
-					if( li.hasAnyGridValue(cx,cy) ) // TODO render empty cells
+					if( li.hasAnyGridValue(cx,cy) )
 						switch li.def.type {
 							case IntGrid:
 								ghost.lineStyle();
 								ghost.beginFill( li.getIntGridColorAt(cx,cy) );
 								ghost.drawRect(
-									li.pxOffsetX + cx*li.def.gridSize - bounds.left,
-									li.pxOffsetY + cy*li.def.gridSize - bounds.top,
+									li.pxTotalOffsetX + cx*li.def.gridSize - bounds.left,
+									li.pxTotalOffsetY + cy*li.def.gridSize - bounds.top,
 									li.def.gridSize,
 									li.def.gridSize
 								);
 								ghost.endFill();
 
 							case Tiles:
-								var t = li.getGridTileInfos(cx,cy);
 								var td = editor.project.defs.getTilesetDef( li.def.tilesetDefUid );
-								var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
-								bmp.x = li.pxOffsetX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.gridSize - bounds.left;
-								bmp.y = li.pxOffsetY + ( cy + (M.hasBit(t.flips,1)?1:0) ) * li.def.gridSize - bounds.top;
-								bmp.scaleX = M.hasBit(t.flips, 0) ? -1 : 1;
-								bmp.scaleY = M.hasBit(t.flips, 1) ? -1 : 1;
+								for( t in li.getGridTileStack(cx,cy) ) {
+									var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
+									bmp.x = li.pxTotalOffsetX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.gridSize - bounds.left;
+									bmp.y = li.pxTotalOffsetY + ( cy + (M.hasBit(t.flips,1)?1:0) ) * li.def.gridSize - bounds.top;
+									bmp.scaleX = M.hasBit(t.flips, 0) ? -1 : 1;
+									bmp.scaleY = M.hasBit(t.flips, 1) ? -1 : 1;
+								}
 
 							case Entities:
 							case AutoLayer:
@@ -263,14 +264,14 @@ class GenericLevelElementGroup {
 					var e = display.LevelRender.createEntityRender(ei);
 					ghost.addChild(e);
 					e.alpha = 0.5;
-					e.x = li.pxOffsetX + ei.x - bounds.left;
-					e.y = li.pxOffsetY + ei.y - bounds.top;
+					e.x = li.pxTotalOffsetX + ei.x - bounds.left;
+					e.y = li.pxTotalOffsetY + ei.y - bounds.top;
 
 				case PointField(li, ei, fi, arrayIdx):
 					var pt = fi.getPointGrid(arrayIdx);
 					if( pt!=null ) {
-						var x = li.pxOffsetX + (pt.cx+0.5)*li.def.gridSize - bounds.left;
-						var y = li.pxOffsetY + (pt.cy+0.5)*li.def.gridSize - bounds.top;
+						var x = li.pxTotalOffsetX + (pt.cx+0.5)*li.def.gridSize - bounds.left;
+						var y = li.pxTotalOffsetY + (pt.cy+0.5)*li.def.gridSize - bounds.top;
 						ghost.lineStyle(1, ei.getSmartColor(false));
 						ghost.drawCircle(x, y, li.def.gridSize*0.5);
 
@@ -410,10 +411,10 @@ class GenericLevelElementGroup {
 			arrow.visible = false;
 		else {
 			var grid = getSmartSnapGrid();
-			var fx = rel.pxOffsetX + (origin.cx+0.5) * grid;
-			var fy = rel.pxOffsetY + (origin.cy+0.5) * grid;
-			var tx = rel.pxOffsetX + (now.cx+0.5) * grid;
-			var ty = rel.pxOffsetY + (now.cy+0.5) * grid;
+			var fx = rel.pxTotalOffsetX + (origin.cx+0.5) * grid;
+			var fy = rel.pxTotalOffsetY + (origin.cy+0.5) * grid;
+			var tx = rel.pxTotalOffsetX + (now.cx+0.5) * grid;
+			var ty = rel.pxTotalOffsetY + (now.cy+0.5) * grid;
 
 			var a = Math.atan2(ty-fy, tx-fx);
 			var size = 6;
@@ -474,14 +475,14 @@ class GenericLevelElementGroup {
 							if( pt!=null )
 								if( isFieldValueSelected(fi,i) ) {
 									pointLinks.lineTo(
-										levelToGhostX( li.pxOffsetX+(pt.cx+0.5)*li.def.gridSize ),
-										levelToGhostY( li.pxOffsetY+(pt.cy+0.5)*li.def.gridSize )
+										levelToGhostX( li.pxTotalOffsetX+(pt.cx+0.5)*li.def.gridSize ),
+										levelToGhostY( li.pxTotalOffsetY+(pt.cy+0.5)*li.def.gridSize )
 									);
 								}
 								else
 									pointLinks.lineTo(
-										li.pxOffsetX+(pt.cx+0.5)*li.def.gridSize,
-										li.pxOffsetY+(pt.cy+0.5)*li.def.gridSize
+										li.pxTotalOffsetX+(pt.cx+0.5)*li.def.gridSize,
+										li.pxTotalOffsetY+(pt.cy+0.5)*li.def.gridSize
 									);
 						}
 					}
@@ -490,8 +491,8 @@ class GenericLevelElementGroup {
 					pointLinks.lineStyle(1,ei.getSmartColor(true));
 					var pt = fi.getPointGrid(arrayIdx);
 					if( pt!=null ) {
-						var x = levelToGhostX( li.pxOffsetX+(pt.cx+0.5)*li.def.gridSize );
-						var y = levelToGhostY( li.pxOffsetY+(pt.cy+0.5)*li.def.gridSize );
+						var x = levelToGhostX( li.pxTotalOffsetX+(pt.cx+0.5)*li.def.gridSize );
+						var y = levelToGhostY( li.pxTotalOffsetY+(pt.cy+0.5)*li.def.gridSize );
 
 						// Link to entity
 						if( fi.def.editorDisplayMode==PointStar || arrayIdx==0 ) {
@@ -510,13 +511,13 @@ class GenericLevelElementGroup {
 									pointLinks.moveTo(x,y);
 									if( isFieldValueSelected(fi,arrayIdx-1) )
 										pointLinks.lineTo(
-											levelToGhostX( li.pxOffsetX+(prev.cx+0.5)*li.def.gridSize ),
-											levelToGhostY( li.pxOffsetY+(prev.cy+0.5)*li.def.gridSize )
+											levelToGhostX( li.pxTotalOffsetX+(prev.cx+0.5)*li.def.gridSize ),
+											levelToGhostY( li.pxTotalOffsetX+(prev.cy+0.5)*li.def.gridSize )
 										);
 									else
 										pointLinks.lineTo(
-											li.pxOffsetX+(prev.cx+0.5)*li.def.gridSize,
-											li.pxOffsetY+(prev.cy+0.5)*li.def.gridSize
+											li.pxTotalOffsetX+(prev.cx+0.5)*li.def.gridSize,
+											li.pxTotalOffsetY+(prev.cy+0.5)*li.def.gridSize
 										);
 								}
 							}
@@ -528,13 +529,13 @@ class GenericLevelElementGroup {
 									pointLinks.moveTo(x,y);
 									if( isFieldValueSelected(fi,arrayIdx+1) )
 										pointLinks.lineTo(
-											levelToGhostX( li.pxOffsetX+(next.cx+0.5)*li.def.gridSize ),
-											levelToGhostY( li.pxOffsetX+(next.cy+0.5)*li.def.gridSize )
+											levelToGhostX( li.pxTotalOffsetX+(next.cx+0.5)*li.def.gridSize ),
+											levelToGhostY( li.pxTotalOffsetX+(next.cy+0.5)*li.def.gridSize )
 										);
 									else
 										pointLinks.lineTo(
-											li.pxOffsetX+(next.cx+0.5)*li.def.gridSize,
-											li.pxOffsetY+(next.cy+0.5)*li.def.gridSize
+											li.pxTotalOffsetX+(next.cx+0.5)*li.def.gridSize,
+											li.pxTotalOffsetY+(next.cy+0.5)*li.def.gridSize
 										);
 								}
 							}
@@ -601,7 +602,7 @@ class GenericLevelElementGroup {
 				r.bottomPx += getDeltaY(origin,to);
 			}
 
-			var layers = editor.singleLayerMode
+			var layers = App.ME.settings.singleLayerMode
 				? [ editor.curLayerInstance ]
 				: editor.curLevel.layerInstances;
 			for(li in layers)
@@ -613,7 +614,7 @@ class GenericLevelElementGroup {
 								postRemovals.push( li.removeIntGrid.bind(cx,cy) );
 
 							if( li.def.type==Tiles )
-								postRemovals.push( li.removeGridTile.bind(cx,cy) );
+								postRemovals.push( li.removeAllGridTiles.bind(cx,cy) );
 						}
 					}
 					changedLayers.set(li,li);
@@ -640,8 +641,8 @@ class GenericLevelElementGroup {
 					changedLayers.set(li,li);
 
 					// Out of bounds
-					if( ei.x<li.pxOffsetX || ei.x>=li.pxOffsetX+li.cWid*li.def.gridSize
-					|| ei.y<li.pxOffsetY || ei.y>=li.pxOffsetY+li.cHei*li.def.gridSize ) {
+					if( ei.x<li.pxTotalOffsetX || ei.x>=li.pxTotalOffsetX+li.cWid*li.def.gridSize
+					|| ei.y<li.pxTotalOffsetY || ei.y>=li.pxTotalOffsetY+li.cHei*li.def.gridSize ) {
 						li.removeEntityInstance(ei);
 						elements[i] = null;
 
@@ -689,13 +690,16 @@ class GenericLevelElementGroup {
 								changedLayers.set(li,li);
 
 							case Tiles:
-								var t = li.getGridTileInfos(cx,cy);
 								var gridRatio = Std.int( moveGrid / li.def.gridSize );
 								var tcx = cx + (to.cx-origin.cx)*gridRatio;
 								var tcy = cy + (to.cy-origin.cy)*gridRatio;
-								if( !isCopy && li.hasGridTile(cx,cy) )
-									postRemovals.push( ()-> li.removeGridTile(cx,cy) );
-								postInserts.push( ()-> li.setGridTile(tcx, tcy, t.tileId, t.flips) );
+
+								if( !isCopy && li.hasAnyGridTile(cx,cy) )
+									postRemovals.push( ()-> li.removeAllGridTiles(cx,cy) );
+
+								var stacking = li.getGridTileStack(cx,cy).length>1 || App.ME.settings.tileStacking;
+								for( t in li.getGridTileStack(cx,cy) )
+									postInserts.push( ()-> li.addGridTile(tcx, tcy, t.tileId, t.flips, stacking) );
 
 								elements[i] = li.isValid(tcx,tcy) ? GridCell(li, tcx, tcy) : null; // update selection
 								changedLayers.set(li,li);
@@ -780,7 +784,7 @@ class GenericLevelElementGroup {
 					if( li.hasAnyGridValue(cx,cy) )
 						switch li.def.type {
 							case IntGrid: li.removeIntGrid(cx,cy);
-							case Tiles: li.removeGridTile(cx,cy);
+							case Tiles: li.removeAllGridTiles(cx,cy);
 							case Entities:
 							case AutoLayer:
 						}

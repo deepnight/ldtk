@@ -1,10 +1,10 @@
 # About
 
-L-Ed is a **modern**, **lightweight** and **open-source** 2D level editor.
+**Level Designer Toolkit** (*LDtk*) is a **modern**, **efficient** and **open-source** 2D level editor.
 
 Links: [Official website](https://deepnight.net/tools/led-2d-level-editor/) | [Haxe API (on GitHub)](https://github.com/deepnight/led-haxe-api)
 
-[![Build Status](https://travis-ci.com/deepnight/led.svg?branch=master)](https://travis-ci.com/deepnight/led)
+[![Build Status](https://travis-ci.com/deepnight/ldtk.svg?branch=master)](https://travis-ci.com/deepnight/ldtk)
 
 # Building from source
 
@@ -24,6 +24,8 @@ haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
 haxelib git electron https://github.com/tong/hxelectron.git
 
 haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+
+haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
 
 haxelib git castle https://github.com/ncannasse/castle.git
 ```

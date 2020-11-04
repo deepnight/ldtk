@@ -6,6 +6,7 @@ class Tool<T> extends dn.Process {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	var curLevel(get,never) : data.Level; inline function get_curLevel() return Editor.ME.curLevel;
+	var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
 	@:allow(ui.ToolPalette)
 	var curLayerInstance(get,never) : data.inst.LayerInstance; inline function get_curLayerInstance() return Editor.ME.curLayerInstance;
@@ -59,7 +60,7 @@ class Tool<T> extends dn.Process {
 	}
 
 
-	function snapToGrid() return editor.getGridSnapping();
+	function snapToGrid() return editor.isSnappingToGrid();
 
 
 	public function as<E:Tool<X>,X>(c:Class<E>) : E return cast this;
@@ -111,7 +112,12 @@ class Tool<T> extends dn.Process {
 		return false;
 	}
 
-	function _floodFillImpl(m:MouseCoords, isBlocking:(cx:Int,cy:Int)->Bool, setter:(cx:Int,cy:Int,v:T)->Void) {
+	function _floodFillImpl(
+		m:MouseCoords,
+		isBlocking:(cx:Int,cy:Int)->Bool,
+		setter:(cx:Int,cy:Int,v:T)->Void,
+		?onFill:(left:Int, right:Int, top:Int, bottom:Int, affectedPoints:Array<{ cx:Int, cy:Int }>)->Void
+	) {
 		var li = curLayerInstance;
 
 		if( isBlocking(m.cx,m.cy) )
@@ -131,6 +137,7 @@ class Tool<T> extends dn.Process {
 		var right = left;
 		var top = m.cy;
 		var bottom = top;
+		var affectedPoints = [];
 
 		while( pending.length>0 ) {
 			var cur = pending.pop();
@@ -144,6 +151,7 @@ class Tool<T> extends dn.Process {
 			// Apply
 			editor.curLevelHistory.markChange(cur.cx, cur.cy);
 			setter( cur.cx, cur.cy, getSelectedValue() );
+			affectedPoints.push(cur);
 
 			// Update bounds
 			left = M.imin( left, cur.cx );
@@ -153,6 +161,9 @@ class Tool<T> extends dn.Process {
 		}
 
 		editor.levelRender.invalidateLayerArea(curLayerInstance, left, right, top, bottom);
+
+		if( onFill!=null )
+			onFill(left,right,top,bottom, affectedPoints);
 
 		return true;
 	}

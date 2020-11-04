@@ -1,28 +1,33 @@
 package ui.modal.panel;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class EditAllAutoLayerRules extends ui.modal.Panel {
+	var li : data.inst.LayerInstance;
 	var invalidatedRules : Map<Int,Int> = new Map();
-
-	public var li(get,never) : data.inst.LayerInstance;
-		inline function get_li() return Editor.ME.curLayerInstance;
-
-	public var ld(get,never) : data.def.LayerDef;
-		inline function get_ld() return Editor.ME.curLayerDef;
-
 	var lastRule : Null<data.def.AutoLayerRuleDef>;
 
-	public function new() {
+	public var ld(get,never) : data.def.LayerDef;
+		inline function get_ld() return li.def;
+
+
+	public function new(li:data.inst.LayerInstance) {
 		super();
+		this.li = li;
 
 		loadTemplate("editAllAutoLayerRules");
-		setTransparentMask();
 		updatePanel();
+		enableCloseButton();
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
+
+		if( project.defs.getLayerDef(li.layerDefUid)==null ) {
+			close();
+			return;
+		}
+
 		switch e {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
 				updatePanel();
@@ -31,15 +36,15 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				updatePanel();
 
 			case BeforeProjectSaving:
-				updateAllLevels();
+				updateInvalidatedRulesInAllLevels();
 
 			case LayerRuleChanged(r), LayerRuleRemoved(r), LayerRuleAdded(r):
-				invalidatedRules.set(r.uid, r.uid);
+				invalidateRule(r);
 				updatePanel();
 
 			case LayerRuleGroupRemoved(rg):
 				for(r in rg.rules)
-					invalidatedRules.set(r.uid, r.uid);
+					invalidateRule(r);
 				updatePanel();
 
 			case LayerRuleGroupSorted:
@@ -47,7 +52,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 				// for(rg in ld.autoRuleGroups)
 				// for(r in rg.rules)
-				// 	invalidatedRules.set(r.uid, r.uid);
+				// 	invalidateRule(r);
 
 				updatePanel();
 
@@ -56,7 +61,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			case LayerRuleGroupChangedActiveState(rg):
 				for(r in rg.rules)
-					invalidatedRules.set(r.uid, r.uid);
+					invalidateRule(r);
 				updatePanel();
 
 			case LayerRuleGroupAdded, LayerRuleGroupChanged(_):
@@ -71,10 +76,16 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 	override function onClose() {
 		super.onClose();
-		updateAllLevels();
+		updateInvalidatedRulesInAllLevels();
+		editor.levelRender.clearTemp();
 	}
 
-	function updateAllLevels() {
+	inline function invalidateRule(r:data.def.AutoLayerRuleDef) {
+		invalidatedRules.set(r.uid, r.uid);
+	}
+
+
+	function updateInvalidatedRulesInAllLevels() {
 		var ops = [];
 
 		// Apply edited rules to all other levels
@@ -95,7 +106,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				if( r!=null ) {
 					ops.push({
 						label: 'Updating rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
-						cb: li.applyAutoLayerRule.bind(r),
+						cb: li.applyAutoLayerRuleToAllLayer.bind(r),
 					});
 				}
 				else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
@@ -117,12 +128,30 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	function updatePanel() {
 		jContent.find("*").off();
 		ui.Tip.clear();
+		editor.levelRender.clearTemp();
 
 		var jRuleGroupList = jContent.find("ul.ruleGroups").empty();
 
+		if( !ld.autoLayerRulesCanBeUsed() ) {
+			var jError = new J('<li> <div class="warning"/> </li>');
+			jError.appendTo(jRuleGroupList);
+			jError.find("div").append( L.t._("This layer settings prevent its rules to work. Please check the layer settings.") );
+			var jButton = new J('<button>Edit settings</button>');
+			jButton.click( ev->new EditLayerDefs() );
+			jError.find("div").append(jButton);
+
+			for(rg in ld.autoRuleGroups) {
+				var jLi = new J('<li class="placeholder"/>');
+				jLi.appendTo(jRuleGroupList);
+				jLi.append('<strong>"${rg.name}"</strong>');
+				jLi.append('<em>${rg.rules.length} rule(s)</em>');
+			}
+			return;
+		}
+
 
 		// Create new rule
-		function createRule(rg:data.LedTypes.AutoLayerRuleGroup, insertIdx:Int) {
+		function createRule(rg:data.DataTypes.AutoLayerRuleGroup, insertIdx:Int) {
 			App.LOG.general("Added rule");
 			var r = new data.def.AutoLayerRuleDef( project.makeUniqId() );
 			rg.rules.insert(insertIdx, r);
@@ -262,7 +291,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
 						editor.ge.emit( LayerRuleGroupAdded );
 						for(r in copy.rules)
-							invalidatedRules.set(r.uid, r.uid);
+							invalidateRule(r);
 					},
 				},
 				{
@@ -284,6 +313,26 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				jRule.appendTo( jGroupList );
 				jRule.attr("ruleUid", r.uid);
 				jRule.addClass(r.active ? "active" : "inactive");
+
+				// Show affect level cells
+				jRule.mouseenter( (ev)->{
+					if( li.autoTilesCache!=null && li.autoTilesCache.exists(r.uid) ) {
+						editor.levelRender.clearTemp();
+						editor.levelRender.temp.lineStyle(1, 0xff00ff, 1);
+						editor.levelRender.temp.beginFill(0x5a36a7, 0.6);
+						for( coordId in li.autoTilesCache.get(r.uid).keys() ) {
+							var cx = ( coordId % li.cWid );
+							var cy = Std.int( coordId / li.cWid );
+							editor.levelRender.temp.drawRect(
+								cx*li.def.gridSize,
+								cy*li.def.gridSize,
+								li.def.gridSize,
+								li.def.gridSize
+							);
+						}
+					}
+				} );
+				jRule.mouseleave( (ev)->editor.levelRender.clearTemp() );
 
 				// Insert rule before
 				jRule.find(".insert.before").click( function(_) {
@@ -307,7 +356,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				// Preview
 				var jPreview = jRule.find(".preview");
 				var sourceDef = ld.type==AutoLayer ? project.defs.getLayerDef(ld.autoSourceLayerDefUid) : ld;
-				JsTools.createAutoPatternGrid(r, sourceDef, ld, true).appendTo(jPreview);
+				if( r.isUsingUnknownIntGridValues(sourceDef) )
+					jPreview.append('<div class="error">Error</div>');
+				else
+					jPreview.append( JsTools.createAutoPatternGrid(r, sourceDef, ld, true) );
 				jPreview.click( function(ev) {
 					new ui.modal.dialog.RuleEditor(jPreview, ld, r);
 				});
@@ -337,6 +389,22 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				i.setBounds(1,10);
 				if( r.yModulo==1 )
 					i.jInput.addClass("default");
+
+				// Break on match
+				var jFlag = jRule.find("a.break");
+				jFlag.addClass( r.breakOnMatch ? "on" : "off" );
+				jFlag.click( function(ev:js.jquery.Event) {
+					ev.preventDefault();
+					r.breakOnMatch = !r.breakOnMatch;
+					var isAfter = false;
+					li.def.iterateActiveRulesInEvalOrder( (or)->{
+						if( or.uid==r.uid )
+							isAfter = true;
+						else if( isAfter )
+							invalidateRule(or);
+					} );
+					editor.ge.emit( LayerRuleChanged(r) );
+				});
 
 				// Flip-X
 				var jFlag = jRule.find("a.flipX");
@@ -414,12 +482,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					}
 				});
 
-				// Active
+				// Enable/disable rule
 				var jActive = jRule.find("a.active");
 				jActive.find(".icon").addClass( r.active ? "active" : "inactive" );
 				jActive.click( function(ev:js.jquery.Event) {
 					ev.preventDefault();
 					r.active = !r.active;
+					invalidateRule(r);
 					editor.ge.emit( LayerRuleChanged(r) );
 				});
 
@@ -436,7 +505,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 							var copy = ld.duplicateRule(project, rg, r);
 							lastRule = copy;
 							editor.ge.emit( LayerRuleAdded(copy) );
-							invalidatedRules.set(copy.uid, copy.uid);
+							invalidateRule(copy);
 						},
 					},
 					{

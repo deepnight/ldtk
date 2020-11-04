@@ -86,12 +86,14 @@ class TilesetPicker {
 		for(cx in 0...tilesetDef.cWid) {
 			var jCell = new J('<div/>');
 			var tid = tilesetDef.getTileId(cx,cy);
+			if( tilesetDef.isTileOpaque(tid) )
+				jCell.addClass("opaque");
 			jCell.offset({
 				left: tilesetDef.getTileSourceX(tid),
 				top: tilesetDef.getTileSourceY(tid),
 			});
-			jCell.css("width", (tilesetDef.tileGridSize-2)+"px");
-			jCell.css("height", (tilesetDef.tileGridSize-2)+"px");
+			jCell.css("width", (tilesetDef.tileGridSize-1)+"px");
+			jCell.css("height", (tilesetDef.tileGridSize-1)+"px");
 			jGrid.append(jCell);
 		}
 	}
@@ -221,7 +223,7 @@ class TilesetPicker {
 		saveScrollPos();
 	}
 
-	function createCursor(sel:data.LedTypes.TilesetSelection, ?subClass:String, ?cWid:Int, ?cHei:Int) {
+	function createCursor(sel:data.DataTypes.TilesetSelection, ?subClass:String, ?cWid:Int, ?cHei:Int) {
 		var wrapper = new J("<div/>");
 
 		var idsMap = new Map();
@@ -376,16 +378,8 @@ class TilesetPicker {
 		// Auto-pick saved selection
 		if( mode==ToolPicker && selIds.length==1 && tilesetDef.hasSavedSelectionFor(selIds[0]) && !App.ME.isCtrlDown() ) {
 			// Check if the saved selection isn't already picked. If so, just pick the sub-tile
-			var sel = tool.getSelectedValue();
 			var saved = tilesetDef.getSavedSelectionFor( selIds[0] );
-			var same = true;
-			var i = 0;
-			while( i<saved.ids.length ) {
-				if( sel.ids[i]!=saved.ids[i] )
-					same = false;
-				i++;
-			}
-			if( !same ) {
+			if( !tool.selectedValueHasAny(saved.ids) ) {
 				selIds = saved.ids.copy();
 				tool.setMode( saved.mode );
 			}

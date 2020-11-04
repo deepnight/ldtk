@@ -1,6 +1,6 @@
 package ui.modal.dialog;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class RuleEditor extends ui.modal.Dialog {
 	var curValIdx = 0;

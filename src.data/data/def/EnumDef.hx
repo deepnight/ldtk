@@ -4,7 +4,7 @@ class EnumDef {
 	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
-	public var values : Array<data.LedTypes.EnumDefValue> = [];
+	public var values : Array<data.DataTypes.EnumDefValue> = [];
 	public var iconTilesetUid : Null<Int>;
 	public var externalRelPath : Null<String>;
 	public var externalFileChecksum : Null<String>;
@@ -28,7 +28,7 @@ class EnumDef {
 		return 'EnumDef#$uid.$identifier(${values.length} values)';
 	}
 
-	public static function fromJson(jsonVersion:String, json:led.Json.EnumDefJson) {
+	public static function fromJson(jsonVersion:String, json:ldtk.Json.EnumDefJson) {
 		var ed = new EnumDef(JsonTools.readInt(json.uid), json.identifier);
 
 		for(v in JsonTools.readArray(json.values)) {
@@ -45,7 +45,7 @@ class EnumDef {
 		return ed;
 	}
 
-	public function toJson(p:Project) : led.Json.EnumDefJson {
+	public function toJson(p:Project) : ldtk.Json.EnumDefJson {
 		return {
 			identifier: identifier,
 			uid: uid,
@@ -74,7 +74,7 @@ class EnumDef {
 		return getValue(v)!=null;
 	}
 
-	public function getValue(v:String) : Null<data.LedTypes.EnumDefValue> {
+	public function getValue(v:String) : Null<data.DataTypes.EnumDefValue> {
 		v = Project.cleanupIdentifier(v,true);
 		for(ev in values)
 			if( ev.id==v )

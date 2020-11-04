@@ -4,7 +4,9 @@ class CrashReport extends ui.modal.Dialog {
 	public function new(error:js.lib.Error) {
 		super("crash");
 
-		loadTemplate("crash");
+		loadTemplate("crash", {
+			app: Const.APP_NAME,
+		});
 		canBeClosedManually = false;
 		var jLog = jContent.find(".log");
 
@@ -37,7 +39,7 @@ class CrashReport extends ui.modal.Dialog {
 					"",
 					"Stack:",
 					"```",
-					"LEd version: "+Const.getAppVersion(),
+					"LDtk version: "+Const.getAppVersion(),
 					error.message,
 					error.name,
 					error.stack,
@@ -90,7 +92,7 @@ class CrashReport extends ui.modal.Dialog {
 				jBackup.html('I saved your current work in <a>${fp.fileWithExt}</a>.');
 				jBackup.find("a").click( (ev)->{
 					ev.preventDefault();
-					JsTools.exploreToFile(fp.full);
+					JsTools.exploreToFile(fp.full, true);
 				});
 			}
 			else

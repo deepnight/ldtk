@@ -56,7 +56,7 @@ class JsTools {
 	}
 
 
-	public static function prepareProjectFile(p:data.Project) : { bytes:haxe.io.Bytes, json:led.Json.ProjectJson } {
+	public static function prepareProjectFile(p:data.Project) : { bytes:haxe.io.Bytes, json:ldtk.Json.ProjectJson } {
 		var json = p.toJson();
 		var jsonStr = dn.JsonPretty.stringify(p.minifyJson, json, Const.JSON_HEADER);
 
@@ -66,7 +66,7 @@ class JsTools {
 		}
 	}
 
-	public static function createLayerTypeIcon2(type:data.LedTypes.LayerType) : js.jquery.JQuery {
+	public static function createLayerTypeIcon2(type:data.DataTypes.LayerType) : js.jquery.JQuery {
 		var icon = new J('<span class="icon"/>');
 		icon.addClass( switch type {
 			case IntGrid: "intGrid";
@@ -77,7 +77,7 @@ class JsTools {
 		return icon;
 	}
 
-	public static function createLayerTypeIconAndName(type:data.LedTypes.LayerType) : js.jquery.JQuery {
+	public static function createLayerTypeIconAndName(type:data.DataTypes.LayerType) : js.jquery.JQuery {
 		var wrapper = new J('<span class="layerType"/>');
 
 		wrapper.append( createLayerTypeIcon2(type) );
@@ -89,7 +89,7 @@ class JsTools {
 		return wrapper;
 	}
 
-	public static function createFieldTypeIcon(type:data.LedTypes.FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
+	public static function createFieldTypeIcon(type:data.DataTypes.FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
 		var icon = new J("<span/>");
 		icon.addClass("icon fieldType");
 		icon.addClass(type.getName());
@@ -362,11 +362,11 @@ class JsTools {
 		// Auto tool-tips
 		jCtx.find("[title], [data-title]").each( function(idx,e) {
 			var jThis = new J(e);
-			var tip = jThis.attr("data-title");
-			if( tip==null ) {
-				tip =  jThis.attr("title");
+			var tipStr = jThis.attr("data-title");
+			if( tipStr==null ) {
+				tipStr =  jThis.attr("title");
 				jThis.removeAttr("title");
-				jThis.attr("data-title", tip);
+				jThis.attr("data-title", tipStr);
 			}
 
 			// Parse key shortcut
@@ -391,7 +391,7 @@ class JsTools {
 				}
 			}
 
-			ui.Tip.attach( jThis, tip, keys );
+			ui.Tip.attach( jThis, tipStr, keys );
 		});
 
 		// Tabs
@@ -407,15 +407,28 @@ class JsTools {
 			});
 			jTabs.find("li:first").click();
 		});
+
+		// Color pickers
+		jCtx.find("input[type=color]").each( function(idx,e) {
+			var jInput = new J(e);
+			jInput
+				.off(".picker")
+				.on("click.picker", (ev:js.jquery.Event)->{
+					ev.stopPropagation();
+					ev.preventDefault();
+					new ui.modal.dialog.ColorPicker( jInput );
+				});
+		});
 	}
 
 
 	public static function makePath(path:String, ?pathColor:UInt, highlightFirst=false) {
 		path = StringTools.replace(path,"\\","/");
+		var parts = path.split("/");
 		var i = 0;
-		var parts = path.split("/").map( function(p) {
+		parts = parts.map( function(p) {
 			var col = pathColor==null ? C.fromStringLight(p) : pathColor;
-			if( (i++)==0 && highlightFirst )
+			if( (i++)==0 && highlightFirst && parts.length>1 )
 				return '<span style="background-color:${C.intToHex(C.toBlack(col,0.3))}" class="highlight">$p</span>';
 			else
 				return '<span style="color:${C.intToHex(col)}">$p</span>';
@@ -433,6 +446,17 @@ class JsTools {
 		else {
 			js.node.Require.require("fs");
 			return js.node.Fs.existsSync(path);
+		}
+	}
+
+	public static function renameFile(oldPath:String, newPath:String) {
+		if( !fileExists(oldPath) || fileExists(newPath) )
+			return false;
+		else {
+			js.node.Require.require("fs");
+			return
+				try { js.node.Fs.renameSync(oldPath,newPath); true; }
+				catch(e:Dynamic) false;
 		}
 	}
 
@@ -504,24 +528,32 @@ class JsTools {
 		return dn.FilePath.fromDir( path ).useSlashes().directory;
 	}
 
-	public static function exploreToFile(filePath:String) {
-		var fp = dn.FilePath.fromFile(filePath);
+	public static function exploreToFile(path:String, isFile:Bool) {
+		var fp = isFile ? dn.FilePath.fromFile(path) : dn.FilePath.fromDir(path);
+
 		if( isWindows() )
 			fp.useBackslashes();
 
 		if( !fileExists(fp.full) )
 			fp.fileWithExt = null;
 
-		electron.Shell.showItemInFolder(fp.full);
+		trace(fp.debug());
+		if( fp.fileWithExt==null )
+			electron.Shell.openPath(fp.full);
+		else
+			electron.Shell.showItemInFolder(fp.full);
 	}
 
-	public static function makeExploreLink(filePath:String) {
+	public static function makeExploreLink(filePath:String, isFile:Bool) {
 		var a = new J('<a class="exploreTo"/>');
+		a.append('<span class="icon"/>');
+		a.find(".icon").addClass( isFile ? "locate" : "folder" );
 		a.click( function(ev) {
 			ev.preventDefault();
 			ev.stopPropagation();
-			exploreToFile(filePath);
+			exploreToFile(filePath, isFile);
 		});
+		ui.Tip.attach( a, isFile ? L.t._("Locate file") : L.t._("Locate folder") );
 		return a;
 	}
 
@@ -721,26 +753,31 @@ class JsTools {
 			if( !isCenter || !previewMode ) {
 				var v = rule.get(cx,cy);
 				if( v!=0 ) {
+					var intGridVal = M.iabs(v)-1;
 					if( v>0 ) {
-						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING ) {
+						if( intGridVal == Const.AUTO_LAYER_ANYTHING ) {
 							jCell.addClass("anything");
 							addExplain(jCell, 'This cell should contain any IntGrid value to match.');
 						}
-						else {
-							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(M.iabs(v)-1).color ) );
-							addExplain(jCell, 'This cell should contain "${sourceDef.getIntGridValueDisplayName(M.iabs(v)-1)}" to match.');
+						else if( sourceDef.hasIntGridValue(intGridVal) ) {
+							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(intGridVal).color ) );
+							addExplain(jCell, 'This cell should contain "${sourceDef.getIntGridValueDisplayName(intGridVal)}" to match.');
 						}
+						else
+							jCell.addClass("unknown");
 					}
 					else {
 						jCell.addClass("not").append('<span class="cross"></span>');
-						if( M.iabs(v)-1 == Const.AUTO_LAYER_ANYTHING ) {
+						if( intGridVal == Const.AUTO_LAYER_ANYTHING ) {
 							jCell.addClass("anything");
 							addExplain(jCell, 'This cell should NOT contain any IntGrid value to match.');
 						}
-						else {
-							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(M.iabs(v)-1).color ) );
-							addExplain(jCell, 'This cell should NOT contain "${sourceDef.getIntGridValueDisplayName(M.iabs(v)-1)}" to match.');
+						else if( sourceDef.hasIntGridValue(intGridVal) ) {
+							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(intGridVal).color ) );
+							addExplain(jCell, 'This cell should NOT contain "${sourceDef.getIntGridValueDisplayName(intGridVal)}" to match.');
 						}
+						else
+							jCell.addClass("unknown");
 					}
 				}
 				else {

@@ -1,0 +1,74 @@
+<div class="wrapper">
+	<div class="header">
+		<div class="appLogo full"></div>
+		<!-- <div class="logo">::app::</div> -->
+		<!-- <div class="sub">Modern 2D level editor</div> -->
+		<div class="version">::appVer::</div>
+	</div>
+
+	<div class="files">
+		<div class="buttons">
+			<button class="new"><span class="icon new"></span> New</button>
+			<button class="load"><span class="icon open"></span> Load</button>
+			<button class="samples green" title="Some examples to discover the app functionalities."><span class="icon tutorial"></span> Samples</button>
+			<!-- <button class="exit gray">Exit</button> -->
+		</div>
+
+		<ul class="niceList recents"></ul>
+	</div>
+
+	<div class="about">
+		<div class="buttons">
+			<button href="::docUrl::"><span class="icon manual"></span> Documentation</button>
+			<button href="::websiteUrl::"><span class="icon web"></span> Official website</button>
+			<button href="::issueUrl::"><span class="icon community"></span> Feedback</button>
+		</div>
+
+		<div class="changelogsWrapper">
+			<div class="changelogs">
+				<ul class="tabs">
+					<li section="app">App release notes</li>
+					<li section="jsonChangelog">JSON changes</li>
+					<li section="jsonFormat">JSON format</li>
+				</ul>
+
+				<div class="tab" section="app">
+					<div class="markdown" id="appChangelogHtml"></div>
+					<div id="appChangelogMd" class="rawMarkdown">::appChangelog::</div>
+				</div>
+
+				<div class="tab" section="jsonChangelog">
+					<div class="markdown" id="jsonChangelogHtml"></div>
+					<div id="jsonChangelogMd" class="rawMarkdown">::jsonChangelog::</div>
+				</div>
+
+				<div class="tab" section="jsonFormat">
+					<div class="markdown" id="jsonFormatHtml"></div>
+					<div id="jsonFormatMd" class="rawMarkdown">::jsonFormat::</div>
+				</div>
+
+			</div>
+			<button class="fullscreen transparent"> <span class="icon fullscreen"></span> </button>
+		</div>
+	</div>
+
+	<div class="footer">
+		<a href="::deepnightUrl::">
+			<img src="img/deepnight.png"/>
+		</a>
+		<span>If you read this, you're awesome! Have a nice day &lt;3</span>
+	</div>
+</div>
+
+<!-- Parse markdowns -->
+<script type="text/javascript" src="js/marked.min.js"></script>
+<script type="text/javascript">
+	document.getElementById("appChangelogHtml").innerHTML =
+		marked( document.getElementById("appChangelogMd").textContent );
+
+	document.getElementById("jsonChangelogHtml").innerHTML =
+		marked( document.getElementById("jsonChangelogMd").textContent );
+
+	document.getElementById("jsonFormatHtml").innerHTML =
+		marked( document.getElementById("jsonFormatMd").textContent );
+</script>

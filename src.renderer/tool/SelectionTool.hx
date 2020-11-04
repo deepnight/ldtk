@@ -49,7 +49,7 @@ class SelectionTool extends Tool<Int> {
 				case AutoLayer:
 			}
 
-		if( editor.emptySpaceSelection && !group.isEmpty() )
+		if( settings.emptySpaceSelection && !group.isEmpty() )
 			group.addSelectionRect(0, level.pxWid, 0, level.pxHei);
 	}
 
@@ -83,13 +83,16 @@ class SelectionTool extends Tool<Int> {
 								editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
 
 							case Tiles:
-								var tileInf = li.getGridTileInfos(cx,cy);
+								var tileInf = li.getTopMostGridTile(cx,cy);
 
 								var t = editor.curTool.as(tool.lt.TileTool);
 								if( t!=null ) {
 									var savedTileSel = t.curTilesetDef.getSavedSelectionFor(tileInf.tileId);
-									if( savedTileSel!=null && t.getSelectedValue()!=savedTileSel )
-										t.selectValue(savedTileSel);
+									if( savedTileSel!=null && !t.selectedValueHasAny(savedTileSel.ids) )
+										t.selectValue({
+											ids: savedTileSel.ids.copy(),
+											mode: savedTileSel.mode,
+										});
 									else
 										t.selectValue( { ids:[tileInf.tileId], mode:t.getMode() } );
 									t.flipX = M.hasBit(tileInf.flips,0);
@@ -140,7 +143,7 @@ class SelectionTool extends Tool<Int> {
 			editor.cursor.set(Move);
 		else if( !isRunning() ) {
 			// Preview picking
-			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, editor.singleLayerMode);
+			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.singleLayerMode);
 			switch ge {
 			case null:
 				editor.cursor.set(PickNothing);
@@ -156,10 +159,13 @@ class SelectionTool extends Tool<Int> {
 							);
 
 						case Tiles:
-							var t = li.getGridTileInfos(cx,cy);
+							var stack = li.getGridTileStack(cx,cy);
+							var topTile = stack[stack.length-1];
 							editor.cursor.set(
-								Tiles(li, [t.tileId], cx, cy, t.flips),
-								"Tile "+li.getGridTileInfos(cx,cy).tileId
+								Tiles(li, [topTile.tileId], cx, cy, topTile.flips),
+								stack.length==1
+									? "Tile "+stack[0].tileId
+									: "Tiles "+stack.map( t->t.tileId ).join(", ")
 							);
 
 						case Entities:
@@ -204,7 +210,7 @@ class SelectionTool extends Tool<Int> {
 			else {
 				// Start a new selection
 				if( !rectangle ) {
-					var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, editor.singleLayerMode);
+					var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.singleLayerMode);
 					if( ge!=null )
 						select([ ge ]);
 					else
@@ -311,20 +317,20 @@ class SelectionTool extends Tool<Int> {
 		}
 		else {
 			// Pick every objects under rectangle
-			var leftPx = curLayerInstance.pxOffsetX + left * curLayerInstance.def.gridSize;
-			var rightPx = curLayerInstance.pxOffsetX + (right+1) * curLayerInstance.def.gridSize - 1;
-			var topPx = curLayerInstance.pxOffsetY + top * curLayerInstance.def.gridSize;
-			var bottomPx = curLayerInstance.pxOffsetY + (bottom+1) * curLayerInstance.def.gridSize - 1;
+			var leftPx = curLayerInstance.pxTotalOffsetX + left * curLayerInstance.def.gridSize;
+			var rightPx = curLayerInstance.pxTotalOffsetX + (right+1) * curLayerInstance.def.gridSize - 1;
+			var topPx = curLayerInstance.pxTotalOffsetY + top * curLayerInstance.def.gridSize;
+			var bottomPx = curLayerInstance.pxTotalOffsetY + (bottom+1) * curLayerInstance.def.gridSize - 1;
 
 			var all : Array<GenericLevelElement> = [];
 			function _addRectFromLayer(li:data.inst.LayerInstance) {
 				if( !editor.levelRender.isLayerVisible(li) )
 					return;
 
-				var cLeft = Std.int( (leftPx-li.pxOffsetX) / li.def.gridSize );
-				var cRight = Std.int( (rightPx-li.pxOffsetX) / li.def.gridSize );
-				var cTop = Std.int( (topPx-li.pxOffsetY) /li.def.gridSize );
-				var cBottom = Std.int( (bottomPx-li.pxOffsetY) /li.def.gridSize );
+				var cLeft = Std.int( (leftPx-li.pxTotalOffsetX) / li.def.gridSize );
+				var cRight = Std.int( (rightPx-li.pxTotalOffsetX) / li.def.gridSize );
+				var cTop = Std.int( (topPx-li.pxTotalOffsetY) /li.def.gridSize );
+				var cBottom = Std.int( (bottomPx-li.pxTotalOffsetY) /li.def.gridSize );
 
 				for( cy in cTop...cBottom+1 )
 				for( cx in cLeft...cRight+1 ) {
@@ -353,7 +359,7 @@ class SelectionTool extends Tool<Int> {
 				}
 			}
 
-			if( editor.singleLayerMode )
+			if( settings.singleLayerMode )
 				_addRectFromLayer( editor.curLayerInstance );
 			else {
 				for(li in editor.curLevel.layerInstances)
@@ -361,7 +367,7 @@ class SelectionTool extends Tool<Int> {
 			}
 			select(all, true);
 
-			if( editor.emptySpaceSelection && !group.isEmpty() )
+			if( settings.emptySpaceSelection && !group.isEmpty() )
 				group.addSelectionRect(leftPx, rightPx, topPx, bottomPx);
 		}
 

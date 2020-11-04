@@ -40,7 +40,7 @@ class Project {
 		return 'Project(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
 	}
 
-	public static function fromJson(json:led.Json.ProjectJson) {
+	public static function fromJson(json:ldtk.Json.ProjectJson) {
 		var p = new Project();
 		p.jsonVersion = JsonTools.readString(json.jsonVersion, Const.getJsonVersion());
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
@@ -60,7 +60,7 @@ class Project {
 		return p;
 	}
 
-	public function toJson(excludeLevels=false) : led.Json.ProjectJson {
+	public function toJson(excludeLevels=false) : ldtk.Json.ProjectJson {
 		return {
 			jsonVersion: jsonVersion,
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
@@ -287,7 +287,7 @@ class Project {
 	}
 
 	#if editor
-	public function iterateAllFieldInstances(?searchType:data.LedTypes.FieldType, run:data.inst.FieldInstance->Void) {
+	public function iterateAllFieldInstances(?searchType:data.DataTypes.FieldType, run:data.inst.FieldInstance->Void) {
 		for(l in levels)
 		for(li in l.layerInstances)
 		for(ei in li.entityInstances)

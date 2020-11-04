@@ -182,8 +182,8 @@ class XmlDocToMarkdown {
 
 		// Header
 		var headerMd = [
-			'# Json structure (version $appVersion)',
-			'Please refer to the [README.md](https://github.com/deepnight/led/blob/master/README.md) for more informations.'
+			'# LDtk Json structure (version $appVersion)',
+			'Please refer to the [README.md](https://github.com/deepnight/ldtk/blob/master/README.md) for more informations.'
 		];
 
 		// Table of content
@@ -332,7 +332,7 @@ class XmlDocToMarkdown {
 		Create a badge markdown
 	**/
 	static function badge(name:String, value:String, ?color:String) {
-		return '[![Generic badge](https://img.shields.io/badge/$name-$value-$color.svg)](JSON_CHANGELOG.md)';
+		return '![Generic badge](https://img.shields.io/badge/${name}_${value}-${color}.svg)';
 	}
 
 
@@ -386,7 +386,8 @@ class XmlDocToMarkdown {
 				Dyn;
 			else if( fieldXml.hasNode.t ) {
 				var name = fieldXml.node.t.att.path;
-				var dispName = allTypes.filter( (t)->t.rawName==name )[0].displayName;
+				var typeInfos = allTypes.filter( (t)->t.rawName==name )[0];
+				var dispName = typeInfos==null ? name : typeInfos.displayName;
 				Ref( dispName, name );
 			}
 			else if( fieldXml.hasNode.e ) {

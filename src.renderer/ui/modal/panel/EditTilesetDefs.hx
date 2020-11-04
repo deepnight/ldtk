@@ -59,6 +59,12 @@ class EditTilesetDefs extends ui.modal.Panel {
 				updateList();
 				updateForm();
 				updateTilesetPreview();
+				if( td==curTd )
+					rebuildOpaqueCache();
+
+			case TilesetDefOpaqueCacheRebuilt(td):
+				if( td==curTd )
+					updateTilesetPreview();
 
 			case _:
 		}
@@ -116,6 +122,11 @@ class EditTilesetDefs extends ui.modal.Panel {
 	}
 
 
+	function rebuildOpaqueCache() {
+		curTd.buildOpaqueTileCache( Editor.ME.ge.emit.bind(TilesetDefOpaqueCacheRebuilt(curTd)) );
+	}
+
+
 	function updateForm() {
 		jForm.find("*").off(); // cleanup event listeners
 
@@ -139,7 +150,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var jLocate = jForm.find(".locate");
 		if( curTd.relPath!=null ) {
 			jPath.empty().show().append( JsTools.makePath(curTd.relPath) );
-			jLocate.empty().show().append( JsTools.makeExploreLink( Editor.ME.makeAbsoluteFilePath(curTd.relPath) ) );
+			jLocate.empty().show().append( JsTools.makeExploreLink( Editor.ME.makeAbsoluteFilePath(curTd.relPath), true ) );
 		}
 		else {
 			jLocate.hide();

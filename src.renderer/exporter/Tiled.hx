@@ -1,10 +1,12 @@
 package exporter;
 
-import led.Json;
+import ldtk.Json;
 
 class Tiled extends Exporter {
 	static var TILED_VERSION = "1.4.2";
 	static var MAP_VERSION = "1.4";
+
+	var tiledGridSize = 16;
 
 	public function new() {
 		super();
@@ -20,6 +22,18 @@ class Tiled extends Exporter {
 			maps: [],
 			type: "world",
 		};
+
+		/**
+			Determine a unique "grid size" value because it doesn't support different
+			grid sizes in the same map file.
+		**/
+		tiledGridSize = p.defaultGridSize;
+		if( p.defs.layers.length>0 )
+			tiledGridSize = dn.Lib.findMostFrequentValueInArray( p.defs.layers.map( (ld)->ld.gridSize ) );
+		log.general("Guessed gridSize: "+tiledGridSize+"px");
+		for(ld in p.defs.layers)
+			if( ld.gridSize!=tiledGridSize )
+				log.error("Layer "+ld.identifier+" uses a specific grid size ("+ld.gridSize+"px). Tiled only supports a single grid size for all layers (here, "+tiledGridSize+"px).");
 
 		// Export each level to a separate TMX file
 		var i = 1;
@@ -42,6 +56,7 @@ class Tiled extends Exporter {
 		}
 
 		// Create "world" JSON file
+		log.emptyEntry();
 		log.fileOp("Creating world JSON...");
 		var json = dn.JsonPretty.stringify(world);
 		var fp = outputPath.clone();
@@ -52,24 +67,16 @@ class Tiled extends Exporter {
 
 
 	function exportLevel(level:data.Level) : haxe.io.Bytes {
-		log.add("level", "Converting level "+level.identifier+"...");
+		log.emptyEntry();
+		log.add("level", "Exporting level "+level.identifier+"...");
 
 		var xml = Xml.createDocument();
 		var layerId = 1;
 		var objectId = 1;
 		var gid = 1;
 
-
-		/**
-			Tiled a unique "grid size" value because it doesn't support different
-			grid sizes in the same map file. So let's invent some arbitrary grid size
-			for it to be happy :facepalm:
-		**/
-		var mapGrid = level.layerInstances.length==0 ? p.defaultGridSize : Const.INFINITE;
-		for(li in level.layerInstances)
-			mapGrid = M.imin(mapGrid, li.def.gridSize);
-		var mapWidth = M.ceil( level.pxWid/mapGrid );
-		var mapHeight = M.ceil( level.pxHei/mapGrid );
+		var mapWidth = M.ceil( level.pxWid/tiledGridSize );
+		var mapHeight = M.ceil( level.pxHei/tiledGridSize );
 
 		/**
 			MAP
@@ -85,8 +92,8 @@ class Tiled extends Exporter {
 		map.set("compressionlevel", "0");
 		map.set("width", ""+mapWidth);
 		map.set("height", ""+mapHeight);
-		map.set("tilewidth", ""+mapGrid);
-		map.set("tileheight", ""+mapGrid);
+		map.set("tilewidth", ""+tiledGridSize);
+		map.set("tileheight", ""+tiledGridSize);
 		map.set("infinite", "0");
 		map.set("backgroundcolor", C.intToHex(p.bgColor));
 
@@ -101,7 +108,7 @@ class Tiled extends Exporter {
 		for( td in p.defs.tilesets ) {
 			log.add("tileset", 'Adding tileset ${td.identifier}...');
 			if( td.padding!=0 )
-				log.error('Tileset ${td.identifier} has padding, which isn\'t supported by Tiled which sucks bla fbklea lkez klz.');
+				log.error('Tileset ${td.identifier} has padding, which isn\'t supported by Tiled.');
 
 			var count = M.ceil(td.pxWid/td.tileGridSize) * M.ceil(td.pxHei/td.tileGridSize);
 			var tileset = Xml.createElement("tileset");
@@ -128,7 +135,53 @@ class Tiled extends Exporter {
 			gid+=count;
 		}
 
-		function _remapTileId(tilesetUid:Int, tileId:Int, flips=0) : UInt {
+		/**
+			Create IntGrid fake tilesets (basically, just colored squares)
+		**/
+		for(ld in p.defs.layers) {
+			if( ld.type==IntGrid ) {
+				var count = ld.countIntGridValues();
+
+				// Create image data
+				var bd = new hxd.BitmapData( count*ld.gridSize, ld.gridSize );
+				var i = 0;
+				for(v in ld.getAllIntGridValues())  {
+					bd.fill( i*ld.gridSize, 0, ld.gridSize, ld.gridSize, C.addAlphaF(v.color) );
+					i++;
+				}
+
+				// Save PNG
+				var fp = outputPath.clone();
+				fp.fileName = ld.identifier+".intgrid";
+				fp.extension = "png";
+				addOuputFile(fp.full, bd.toPNG());
+
+				// Build tileset XML
+				var tileset = Xml.createElement("tileset");
+				map.addChild(tileset);
+				tileset.set("firstgid",""+gid);
+				tileset.set("name", ld.identifier);
+				tileset.set("tilewidth", ""+ld.gridSize);
+				tileset.set("tileheight", ""+ld.gridSize);
+				tileset.set("tilecount", "" + count);
+				tileset.set("columns", "" + count);
+				tileset.set("objectalignment", "topleft" );
+
+				// Build image XML
+				var image = Xml.createElement("image");
+				tileset.addChild(image);
+				image.set("source", fp.fileWithExt);
+				image.set("width", ""+bd.width);
+				image.set("height", ""+bd.height);
+
+				tilesetGids.set(ld.uid, gid);
+				gid+=count;
+			}
+		}
+
+
+		/** Create a Tiled "tileId" from a LDtk "tileId" **/
+		function _makeTiledTileId(tilesetUid:Int, tileId:Int, flips=0) : UInt {
 			if( flips==0 )
 				return tilesetGids.get(tilesetUid) + tileId;
 			else {
@@ -174,7 +227,7 @@ class Tiled extends Exporter {
 		function _createTileObject(tilesetDefUid:Int, tileId:Int, x:Int, y:Int, flips=0) : Xml {
 			var o = Xml.createElement("object");
 			o.set("id", Std.string(objectId++));
-			o.set("gid", ""+_remapTileId(tilesetDefUid, tileId, flips));
+			o.set("gid", ""+_makeTiledTileId(tilesetDefUid, tileId, flips));
 			o.set("x", ""+x);
 			o.set("y", ""+y);
 			o.set("width", ""+p.defs.getTilesetDef(tilesetDefUid).tileGridSize);
@@ -185,30 +238,30 @@ class Tiled extends Exporter {
 		var allInst = level.layerInstances.copy();
 		allInst.reverse();
 		for(li in allInst) {
+			if( li.def.gridSize!=tiledGridSize ) {
+				log.warning("Discarded layer "+li.def.identifier+" (incompatible grid size)");
+				continue;
+			}
 			var ld = p.defs.layers.filter( (ld)->ld.uid==li.layerDefUid )[0];
 			log.add("layer", "Layer "+ld.identifier+"...");
 
 
 			switch ld.type {
 				case IntGrid:
-					log.warning("  Unsupported layer type "+ld.type);
-					// if( ld.autoTilesetDefUid==null && ld.gridSize!=mapGrid ) {
-					// 	log.error("IntGrid layer "+ld.identifier+" was not exported because it has a different gridSize (not supported by Tiled).");
-					// 	continue;
-					// }
+					// Prepare CSV
+					var csv = new Csv(li.cWid, li.cHei);
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid)
+						if( li.hasIntGrid(cx,cy) )
+							csv.set( cx, cy, _makeTiledTileId(li.def.uid, li.getIntGrid(cx,cy), 0) );
 
-					// IntGrid values
-					// log.add("layer", "  Exporting IntGrid values...");
-					// var layer = _createLayer("layer", li, "_values");
-					// var data = Xml.createElement("data");
-					// layer.addChild(data);
-					// data.set("encoding","csv");
-					// var csv = new Csv(li.cWid, li.cHei);
-					// for(cy in 0...li.cHei)
-					// for(cx in 0...li.cWid)
-					// 	if( li.hasIntGrid(cx,cy) )
-					// 		csv.set(cx,cy, li.getIntGrid(cx,cy)+1);
-					// data.addChild( Xml.createPCData(csv.getString()) );
+					// Build layer XML
+					log.add("layer", "  Exporting IntGrid values...");
+					var layer = _createLayer("layer", li, li.def.isAutoLayer() ? "_values" : null);
+					var data = Xml.createElement("data");
+					layer.addChild(data);
+					data.set("encoding","csv");
+					data.addChild( Xml.createPCData( csv.getString() ) );
 
 				case Entities:
 					function _createProperty(props:Xml, name:String, type:Null<String>, val:Dynamic) {
@@ -279,26 +332,29 @@ class Tiled extends Exporter {
 					}
 
 				case Tiles:
-					// var layer = _createLayer("layer", li);
-					// var csv = new Csv(li.cWid, li.cHei);
-					// for(coordId in li.gridTiles.keys())
-					// 	csv.setCoordId( coordId, _remapTileId(ld.tilesetDefUid, li.gridTiles.get(coordId)) );
+					// Detect stacked tiles
+					var maxStack = 0;
+					for( coordId in li.gridTiles.keys() )
+						maxStack = M.imax(maxStack, li.gridTiles.get(coordId).length);
 
-					// var data = Xml.createElement("data");
-					// layer.addChild(data);
-					// data.set("encoding","csv");
-					// data.addChild( Xml.createPCData(csv.getString()) );
+					// One Tiled-layer per "stack-layer"
+					for( layerIdx in 0...maxStack ) {
+						// Build CSV
+						var csv = new Csv(li.cWid, li.cHei);
+						log.add("layer", "    Building CSV "+(layerIdx+1)+"...");
+						for( coordId in li.gridTiles.keys() ) {
+							var stack = li.gridTiles.get(coordId);
+							if( layerIdx < stack.length ) {
+								csv.setCoordId( coordId, _makeTiledTileId(ld.tilesetDefUid, stack[layerIdx].tileId, stack[layerIdx].flips) );
+							}
+						}
 
-					var layer = _createLayer("objectgroup", li);
-					for(coordId in li.gridTiles.keys()) {
-						var tileInfos = li.gridTiles.get(coordId);
-						var o = _createTileObject(
-							ld.tilesetDefUid,
-							tileInfos.tileId,
-							li.getCx(coordId)*ld.gridSize,
-							li.getCy(coordId)*ld.gridSize
-						);
-						layer.insertChild(o,0);
+						// Create layer XML
+						var layer = _createLayer("layer", li, maxStack>1 ? "_"+(layerIdx+1) : "");
+						var data = Xml.createElement("data");
+						layer.addChild(data);
+						data.set("encoding","csv");
+						data.addChild( Xml.createPCData( csv.getString() ) );
 					}
 
 
@@ -310,19 +366,51 @@ class Tiled extends Exporter {
 			if( ld.autoTilesetDefUid!=null ) {
 				log.add("layer", "  Exporting Auto-Layer tiles...");
 				var td = p.defs.getTilesetDef(ld.autoTilesetDefUid);
-				var layer = _createLayer("objectgroup", li, "_tiles");
+				var csvLayers : Array<Csv> = [];
+				var hasIncompatibleTiles = false;
 
 				ld.iterateActiveRulesInDisplayOrder( (r)->{
 					if( !li.autoTilesCache.exists(r.uid) )
 						return;
 
 					var ruleResults = li.autoTilesCache.get(r.uid);
-					for(tiles in ruleResults)
-					for( at in tiles ) {
-						var o = _createTileObject(td.uid, at.tid, at.x, at.y, at.flips);
-						layer.addChild(o);
+					for( coordId in ruleResults.keys() ) {
+						for(t in ruleResults.get(coordId)) {
+							// Create csv layers if this coordId already has a tile
+							var layerIdx = 0;
+							var cx = Std.int( t.x / li.def.gridSize );
+							var cy = Std.int( t.y / li.def.gridSize );
+							if( !hasIncompatibleTiles && ( t.x%li.def.gridSize!=0 || t.y%li.def.gridSize!=0 ) )
+								hasIncompatibleTiles = true;
+							while( layerIdx < csvLayers.length && csvLayers[layerIdx].has(cx,cy) )
+								layerIdx++;
+							if( csvLayers[layerIdx] == null )
+								csvLayers[layerIdx] = new Csv(li.cWid, li.cHei);
+
+							// Add tile
+							csvLayers[layerIdx].set(
+								cx, cy,
+								_makeTiledTileId( td.uid, t.tid, t.flips )
+							);
+						}
 					}
 				});
+
+				// Warn for freely positioned tiles
+				if( hasIncompatibleTiles )
+					log.error("Layer "+li.def.identifier+" in level "+level.identifier+" contains tiles that are not aligned with the grid, which isn't supported in Tiled. They will appear shifted in the TMX file.");
+
+				// Create one XML layer per CSV
+				var layerIdx = 0;
+				for(csv in csvLayers) {
+					var layer = _createLayer("layer", li, csvLayers.length>1 ? "_"+(layerIdx+1) : "");
+					log.add("layer", "    Building CSV "+(layerIdx+1)+"...");
+					var data = Xml.createElement("data");
+					layer.addChild(data);
+					data.set("encoding","csv");
+					data.addChild( Xml.createPCData( csv.getString() ) );
+					layerIdx++;
+				}
 			}
 		}
 
@@ -337,30 +425,41 @@ class Tiled extends Exporter {
 private class Csv {
 	var wid: Int;
 	var hei: Int;
-	var bytes: haxe.io.Bytes;
+	var data: Map<Int, UInt>;
 
 	public function new(w,h) {
 		wid = w;
 		hei = h;
-		bytes = haxe.io.Bytes.alloc(wid*hei);
-		bytes.fill(0, bytes.length, 0);
+		data = new Map();
 	}
 
-	public inline function set(cx,cy, v:Int) {
-		if( cx>=0 && cy>=0 )
+	public inline function set(cx:Int, cy:Int, v:UInt) {
+		if( cx>=0 && cy>=0 && cx<wid && cy<hei )
 			setCoordId(cx+cy*wid, v);
 	}
 
-	public inline function setCoordId(coordId, v:Int) {
-		if( coordId<wid*hei )
-			bytes.set(coordId, v);
+	public inline function setCoordId(coordId:Int, v:UInt) {
+		if( coordId>=0 && coordId<wid*hei )
+			data.set(coordId, v);
+	}
+
+	public inline function get(cx,cy) : UInt {
+		return data.exists( cx+cy*wid ) ? data.get(cx+cy*wid) : 0;
+	}
+
+	public inline function has(cx,cy) : Bool {
+		return data.exists( cx+cy*wid );
+	}
+
+	public inline function getCoordId(coordId:Int) : UInt {
+		return data.exists( coordId ) ? data.get( coordId ) : 0;
 	}
 
 	public function getString() {
-		var out = [];
+		var out : Array<String> = [];
 		for(cy in 0...hei)
 		for(cx in 0...wid)
-			out.push( bytes.get(cx+cy*wid) );
+			out.push( Std.string( get(cx,cy) ) );
 		return out.join(",");
 	}
 }

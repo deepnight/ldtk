@@ -1,3 +1,8 @@
+# 0.5.0-beta
+
+ - The pixel coordinates of AutoLayer tiles no longer include the layer `pxOffsetX/Y` values. They should be added manually on display.
+ - In auto-layers, all tiles that are hidden (ie. behind an opaque tile) are discarded from the `autoLayerTiles` array.
+
 # 0.4.0-beta
 
 The JSON format was optimized to reduce its size (should be approximately 40-50% smaller). See changes below, or check the [JSON_DOC.md](JSON_DOC.md).

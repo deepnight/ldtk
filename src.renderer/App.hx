@@ -14,7 +14,7 @@ class App extends dn.Process {
 
 	public var lastKnownMouse : { pageX:Int, pageY:Int };
 	var curPageProcess : Null<Page>;
-	public var session : SessionData;
+	public var settings : AppSettings;
 	var keyDowns : Map<Int,Bool> = new Map();
 
 
@@ -22,7 +22,7 @@ class App extends dn.Process {
 		super();
 
 		// Init logging
-		LOG.logFilePath = JsTools.getExeDir()+"/LEd.log";
+		LOG.logFilePath = JsTools.getExeDir()+"/LDtk.log";
 		LOG.trimFileLines();
 		LOG.emptyEntry();
 		#if debug
@@ -62,12 +62,35 @@ class App extends dn.Process {
 		fp.useSlashes();
 		APP_RESOURCE_DIR = fp.directoryWithSlash;
 
-		// Restore last stored project state
-		LOG.general("Loading session");
-		session = {
-			recentProjects: [],
+		// Restore settings
+		LOG.fileOp("Loading settings...");
+		dn.LocalStorage.BASE_PATH = JsTools.getExeDir();
+		if( js.Browser.window.localStorage.getItem("session")!=null ) {
+			// Migrate old sessionData
+			LOG.fileOp("Migrating old session to settings files...");
+			var raw = js.Browser.window.localStorage.getItem("session");
+			var old : AppSettings =
+				try haxe.Unserializer.run(raw)
+				catch( err:Dynamic ) null;
+			if( old!=null )
+				try {
+					if( old.recentProjects!=null )
+						for(i in 0...old.recentProjects.length)
+							old.recentProjects[i] = StringTools.replace(old.recentProjects[i], "\\", "/");
+					dn.LocalStorage.writeObject("settings", true, old);
+				} catch(e) {}
+
+			js.Browser.window.localStorage.removeItem("session");
 		}
-		session = dn.LocalStorage.readObject("session", session);
+		settings = dn.LocalStorage.readObject("settings", true, {
+			recentProjects: [],
+			compactMode: false,
+			grid: true,
+			singleLayerMode: false,
+			emptySpaceSelection: false,
+			tileStacking: false,
+		});
+		saveSettings();
 
 		// Auto updater
 		miniNotif("Checking for update...", true);
@@ -81,9 +104,10 @@ class App extends dn.Process {
 			miniNotif('Downloading ${info.version}...');
 		}
 		dn.electron.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
-		dn.electron.ElectronUpdater.onError = function() {
-			LOG.error("Couldn't check for updates");
-			miniNotif("Can't check for updates");
+		dn.electron.ElectronUpdater.onError = function(err) {
+			LOG.error("Couldn't check for updates: "+err);
+			// miniNotif("Can't check for updates");
+			miniNotif(err, 2);
 		}
 		dn.electron.ElectronUpdater.onUpdateDownloaded = function(info) {
 			LOG.network("Update ready: "+info.version);
@@ -170,6 +194,10 @@ class App extends dn.Process {
 		if( hasPage() )
 			curPageProcess.onKeyPress(keyCode);
 
+		for(m in ui.Modal.ALL)
+			if( !m.destroyed )
+				m.onKeyPress(keyCode);
+
 		switch keyCode {
 			case K.L if( isCtrlDown() && isShiftDown() ):
 				LOG.printAll();
@@ -179,7 +207,7 @@ class App extends dn.Process {
 			case K.T if( isCtrlDown() && isShiftDown() ):
 				LOG.warning("Emulating crash...");
 				var a : Dynamic = null;
-				trace(a.crash);
+				a.crash = 5;
 			#end
 
 			case _:
@@ -187,8 +215,9 @@ class App extends dn.Process {
 	}
 
 
-	public function miniNotif(html:String, persist=false) {
+	public function miniNotif(html:String, fadeDelayS=0.5, persist=false) {
 		var e = jBody.find("#miniNotif");
+		delayer.cancelById("miniNotifFadeOut");
 		e.empty()
 			.stop(false,true)
 			.hide()
@@ -196,7 +225,7 @@ class App extends dn.Process {
 			.html(html);
 
 		if( !persist )
-			e.delay(1000).fadeOut(2000);
+			delayer.addS( "miniNotifFadeOut", ()->e.fadeOut(2000), fadeDelayS );
 	}
 
 	function clearMiniNotif() {
@@ -228,8 +257,13 @@ class App extends dn.Process {
 	}
 
 
-	public function saveSessionData() {
-		dn.LocalStorage.writeObject("session", session);
+	public inline function changeSettings(doChange:Void->Void) {
+		doChange();
+		saveSettings();
+	}
+
+	public function saveSettings() {
+		dn.LocalStorage.writeObject("settings", true, settings);
 	}
 
 	function clearCurPage() {
@@ -243,27 +277,37 @@ class App extends dn.Process {
 	}
 
 	public function recentProjectsContains(path:String) {
-		for(p in session.recentProjects)
+		path = StringTools.replace(path, "\\", "/");
+		for(p in settings.recentProjects)
 			if( p==path )
 				return true;
 		return false;
 	}
 
 	public function registerRecentProject(path:String) {
-		session.recentProjects.remove(path);
-		session.recentProjects.push(path);
-		saveSessionData();
+		path = StringTools.replace(path, "\\", "/");
+		settings.recentProjects.remove(path);
+		settings.recentProjects.push(path);
+		saveSettings();
 		return true;
 	}
 
 	public function unregisterRecentProject(path:String) {
-		session.recentProjects.remove(path);
-		saveSessionData();
+		path = StringTools.replace(path, "\\", "/");
+		settings.recentProjects.remove(path);
+		saveSettings();
+	}
+
+	public function renameRecentProject(oldPath:String, newPath:String) {
+		for(i in 0...settings.recentProjects.length)
+			if( settings.recentProjects[i]==oldPath )
+				settings.recentProjects[i] = newPath;
+		saveSettings();
 	}
 
 	public function clearRecentProjects() {
-		session.recentProjects = [];
-		saveSessionData();
+		settings.recentProjects = [];
+		saveSettings();
 	}
 
 	public function loadPage( create:()->Page ) {
@@ -304,10 +348,10 @@ class App extends dn.Process {
 	}
 
 	public function getDefaultDialogDir() {
-		if( session.recentProjects.length==0 )
+		if( settings.recentProjects.length==0 )
 			return #if debug JsTools.getAppResourceDir() #else JsTools.getExeDir() #end;
 
-		var last = session.recentProjects[session.recentProjects.length-1];
+		var last = settings.recentProjects[settings.recentProjects.length-1];
 		return dn.FilePath.fromFile(last).directory;
 	}
 

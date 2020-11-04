@@ -1,6 +1,6 @@
 package data.def;
 
-import data.LedTypes;
+import data.DataTypes;
 
 class TilesetDef {
 	var _project : Project;
@@ -13,6 +13,8 @@ class TilesetDef {
 	public var padding : Int = 0; // px dist to atlas borders
 	public var spacing : Int = 0; // px space between consecutive tiles
 	public var savedSelections : Array<TilesetSelection> = [];
+	@:allow(page.Editor)
+	var opaqueTilesCache : Null< Map<Int,Bool> >;
 
 	public var pxWid = 0;
 	public var pxHei = 0;
@@ -82,7 +84,7 @@ class TilesetDef {
 	}
 
 
-	public function toJson() : led.Json.TilesetDefJson {
+	public function toJson() : ldtk.Json.TilesetDefJson {
 		return {
 			identifier: identifier,
 			uid: uid,
@@ -92,6 +94,18 @@ class TilesetDef {
 			tileGridSize: tileGridSize,
 			spacing: spacing,
 			padding: padding,
+			opaqueTiles: {
+				if( opaqueTilesCache==null )
+					null;
+				else {
+					var arr = [];
+					for(cy in 0...cHei)
+					for(cx in 0...cWid)
+						if( opaqueTilesCache.get( getTileId(cx,cy) )==true )
+							arr.push( getTileId(cx,cy) );
+					arr;
+				}
+			},
 			savedSelections: savedSelections.map( function(sel) {
 				return { ids:sel.ids, mode:JsonTools.writeEnum(sel.mode, false) }
 			}),
@@ -99,7 +113,7 @@ class TilesetDef {
 	}
 
 
-	public static function fromJson(p:Project, json:led.Json.TilesetDefJson) {
+	public static function fromJson(p:Project, json:ldtk.Json.TilesetDefJson) {
 		var td = new TilesetDef( p, JsonTools.readInt(json.uid) );
 		td.tileGridSize = JsonTools.readInt(json.tileGridSize, Project.DEFAULT_GRID_SIZE);
 		td.spacing = JsonTools.readInt(json.spacing, 0);
@@ -108,6 +122,14 @@ class TilesetDef {
 		td.pxHei = JsonTools.readInt( json.pxHei );
 		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
+
+		if( json.opaqueTiles!=null ) {
+			td.opaqueTilesCache = new Map();
+			for(tid in json.opaqueTiles)
+				td.opaqueTilesCache.set(tid, true);
+		}
+		else
+			td.opaqueTilesCache = null;
 
 		var arr = JsonTools.readArray( json.savedSelections );
 		td.savedSelections = json.savedSelections==null ? [] : arr.map( function(jsonSel:Dynamic) {
@@ -132,13 +154,18 @@ class TilesetDef {
 		try {
 			var fullFp = newPath.hasDriveLetter() ? newPath : dn.FilePath.fromFile( projectDir +"/"+ relFilePath );
 			var fullPath = fullFp.full;
+			App.LOG.fileOp("Loading atlas image: "+fullPath);
 			bytes = misc.JsTools.readFileBytes(fullPath);
 
-			if( bytes==null )
+			if( bytes==null ) {
+				App.LOG.error("No bytes");
 				return false;
+			}
 
+			App.LOG.fileOp(' -> Loaded ${bytes.length} bytes.');
 			base64 = haxe.crypto.Base64.encode(bytes);
 			pixels = dn.ImageDecoder.decodePixels(bytes);
+			App.LOG.fileOp(' -> Decoded ${pixels.width}x${pixels.height} pixels.');
 			texture = h3d.mat.Texture.fromPixels(pixels);
 		}
 		catch(err:Dynamic) {
@@ -159,6 +186,7 @@ class TilesetDef {
 	public inline function reloadImage(projectDir:String) : EditorTypes.ImageSyncResult {
 		var oldWid = pxWid;
 		var oldHei = pxHei;
+		App.LOG.fileOp("Reloading tileset image "+relPath);
 
 		if( !importAtlasImage(projectDir, relPath) )
 			return FileNotFound;
@@ -177,15 +205,27 @@ class TilesetDef {
 		for(l in _project.levels)
 		for(li in l.layerInstances)
 		for( coordId in li.gridTiles.keys() ) {
-			var tileInfos = li.gridTiles.get(coordId);
-			if( tileInfos==null )
+			if( !li.gridTiles.exists(coordId) )
 				continue;
 
-			var remap = remapTileId( oldCwid, tileInfos.tileId );
-			if( remap==null )
-				li.gridTiles.remove(coordId);
-			else
-				tileInfos.tileId = remap;
+			var i = 0;
+			while( i < li.gridTiles.get(coordId).length ) {
+				var tileInf = li.gridTiles.get(coordId)[i];
+				var remappedTileId = remapTileId( oldCwid, tileInf.tileId );
+				if( remappedTileId==null )
+					li.gridTiles.get(coordId).splice(i,1);
+				else {
+					tileInf.tileId = remappedTileId;
+					i++;
+				}
+			}
+			// for( tileInf in li.gridTiles.get(coordId) ) {
+			// 	var remap = remapTileId( oldCwid, tileInf.tileId );
+			// 	if( remap==null )
+			// 		li.gridTiles.remove(coordId);
+			// 	else
+			// 		tileInf.tileId = remap;
+			// }
 		}
 
 		// Save selections remapping
@@ -383,12 +423,50 @@ class TilesetDef {
 			return makeErrorTile(tileGridSize);
 	}
 
-
 	public inline function extractTile(tileX:Int, tileY:Int) : h2d.Tile {
 		if( isAtlasLoaded() )
 			return getAtlasTile().sub( tileX, tileY, tileGridSize, tileGridSize );
 		else
 			return makeErrorTile(tileGridSize);
+	}
+
+
+	public inline function isTileOpaque(tid:Int) {
+		return opaqueTilesCache!=null ? opaqueTilesCache.get(tid)==true : false;
+	}
+
+
+	function parseTileOpacity(tid:Int) {
+		opaqueTilesCache.set(tid, true);
+
+		var tx = getTileSourceX(tid);
+		var ty = getTileSourceY(tid);
+
+		if( tx+tileGridSize<=pxWid && ty+tileGridSize<=pxHei ) {
+			for(py in ty...ty+tileGridSize)
+			for(px in tx...tx+tileGridSize) {
+				if( dn.Color.getAlpha( pixels.getPixel(px,py) ) < 255 ) {
+					opaqueTilesCache.set(tid, false);
+					return;
+				}
+			}
+		}
+	}
+
+	public function buildOpaqueTileCache(onComplete:Void->Void) {
+		App.LOG.general("Init opaque cache for "+relPath);
+		opaqueTilesCache = new Map();
+		var ops = [];
+		for(tcy in 0...cHei)
+			ops.push({
+				label: "Row "+tcy,
+				cb : ()->{
+					for(tcx in 0...cWid)
+						parseTileOpacity( getTileId(tcx,tcy) );
+				}
+			});
+
+		new ui.modal.Progress('Detecting opaque tiles in "${getFileName(true)}"', 10, ops, onComplete);
 	}
 
 

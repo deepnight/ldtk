@@ -15,7 +15,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		// Create layer
 		jModalAndMask.find(".mainList button.create").click( function(ev) {
-			function _create(type:data.LedTypes.LayerType) {
+			function _create(type:data.DataTypes.LayerType) {
 				var ld = project.defs.createLayerDef(type);
 				select(ld);
 				editor.ge.emit(LayerDefAdded);
@@ -24,8 +24,8 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			// Type picker
 			var w = new ui.modal.Dialog(ev.getThis(),"layerTypes");
-			for(k in data.LedTypes.LayerType.getConstructors()) {
-				var type = data.LedTypes.LayerType.createByName(k);
+			for(k in data.DataTypes.LayerType.getConstructors()) {
+				var type = data.DataTypes.LayerType.createByName(k);
 				var b = new J("<button/>");
 				b.appendTo( w.jContent );
 				b.append( JsTools.createLayerTypeIconAndName(type) );
@@ -51,7 +51,15 @@ class EditLayerDefs extends ui.modal.Panel {
 		select(editor.curLayerDef);
 	}
 
-	function deleteLayer(ld:data.def.LayerDef) {
+	function deleteLayer(ld:data.def.LayerDef, bypassConfirm=false) {
+		if( !bypassConfirm && project.defs.isLayerSourceOfAnotherOne(ld) ) {
+			new ui.modal.dialog.Confirm(
+				L.t._("Warning! This IntGrid layer is used by another one as SOURCE. Deleting it will also delete all rules in the corresponding auto-layer(s)!\n You may want to change these layers source to another one before..."),
+				true,
+				deleteLayer.bind(ld,true)
+			);
+			return;
+		}
 		new ui.LastChance(
 			L.t._("Layer ::name:: deleted", { name:ld.identifier }),
 			project
@@ -84,7 +92,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						if( li.autoTilesCache.exists( r.uid ) ) {
 							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value ) {
-								li.setGridTile(
+								li.addGridTile(
 									Std.int(tileInfos.x/ld.gridSize),
 									Std.int(tileInfos.y/ld.gridSize),
 									tileInfos.tid,
@@ -105,10 +113,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			()->{
 				// Done, update layer def
 				ld.type = Tiles;
-				var ref = ld.autoSourceLayerDefUid!=null
-					? project.defs.getLayerDef(ld.autoSourceLayerDefUid)
-					: ld;
-				ld.tilesetDefUid = ref.autoTilesetDefUid;
+				ld.tilesetDefUid = ld.autoTilesetDefUid;
 				ld.autoRuleGroups = [];
 				ld.autoSourceLayerDefUid = null;
 				ld.autoTilesetDefUid = null;
@@ -166,14 +171,16 @@ class EditLayerDefs extends ui.modal.Panel {
 			return;
 		}
 
-		JsTools.parseComponents(jForm);
 		editor.selectLayerInstance( editor.curLevel.getLayerInstance(cur) );
 		jForm.show();
+		jForm.find("#gridSize").prop("readonly",false);
 
 		// Set form class
-		for(k in Type.getEnumConstructs(data.LedTypes.LayerType))
+		for(k in Type.getEnumConstructs(data.DataTypes.LayerType))
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+cur.type);
+		if( cur.type==IntGrid && cur.isAutoLayer() )
+			jForm.addClass("type-IntGridAutoLayer");
 
 		jForm.find("span.typeIcon").empty().append( JsTools.createLayerTypeIconAndName(cur.type) );
 
@@ -193,17 +200,26 @@ class EditLayerDefs extends ui.modal.Panel {
 		i.setBounds(0.1, 1);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
+		var i = Input.linkToHtmlInput( cur.pxOffsetX, jForm.find("input[name='offsetX']") );
+		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+
+		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForm.find("input[name='offsetY']") );
+		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+
 
 		// Baking
 		if( cur.isAutoLayer() ) {
 			var jButton = jForm.find("button.bake");
 			jButton.click( (_)->{
-				new ui.modal.dialog.Confirm(
-					jButton,
-					L.t._("Transform this layer into a traditional Tile layer?"),
-					true,
-					()->bakeLayer(cur)
-				);
+				if( !cur.autoLayerRulesCanBeUsed() )
+					new ui.modal.dialog.Message(L.t._("Errors in current layer settings prevent rules to be applied. It can't be baked now."));
+				else
+					new ui.modal.dialog.Confirm(
+						jButton,
+						L.t._("Transform this layer into a traditional Tile layer?"),
+						true,
+						()->bakeLayer(cur)
+					);
 			});
 		}
 
@@ -228,28 +244,18 @@ class EditLayerDefs extends ui.modal.Panel {
 				opt.text( td.identifier );
 			}
 			jTileset.change( function(ev) {
-				function changeTileset(clear:Bool) {
-					if( clear ) {
-						new LastChance(Lang.t._("Deleted all auto-layer rules"), project);
-						cur.autoRuleGroups = [];
-					}
-					cur.autoTilesetDefUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
-					if( cur.autoTilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
-						cur.gridSize = project.defs.getTilesetDef(cur.autoTilesetDefUid).tileGridSize;
-					editor.ge.emit( LayerDefChanged);
-				}
+				var newTilesetUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
 
-				if( cur.autoRuleGroups.length==0 || cur.autoTilesetDefUid==null )
-					changeTileset(false);
-				else {
-					new ui.modal.dialog.Confirm(
-						jTileset,
-						Lang.t._("Warning: changing the tileset will DELETE all the existing rules in this auto-layer!"),
-						true,
-						changeTileset.bind(true),
-						updateForm
-					);
-				}
+				if( cur.autoRuleGroups.length!=0 )
+					new LastChance(Lang.t._("Changed auto-layer tileset"), project);
+
+				cur.autoTilesetDefUid = newTilesetUid;
+				if( cur.autoTilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
+					cur.gridSize = project.defs.getTilesetDef(cur.autoTilesetDefUid).tileGridSize;
+
+				// TODO cleanup rules with invalid tileIDs
+
+				editor.ge.emit( LayerDefChanged);
 			});
 			if( cur.autoTilesetDefUid!=null )
 				jTileset.val( cur.autoTilesetDefUid );
@@ -310,6 +316,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					e.find("a.remove").click( function(ev) {
 						function run() {
 							cur.getAllIntGridValues().splice(curIdx,1);
+							project.tidy();
 							editor.ge.emit(LayerDefChanged);
 							updateForm();
 						}
@@ -360,6 +367,13 @@ class EditLayerDefs extends ui.modal.Panel {
 					if( v<0 )
 						cur.autoSourceLayerDefUid = null;
 					else {
+						var source = project.defs.getLayerDef(v);
+						for(rg in cur.autoRuleGroups)
+						for(r in rg.rules) {
+							if( r.isUsingUnknownIntGridValues(source) )
+								App.LOG.error(r+" intGrid value not found in "+source);
+						}
+
 						cur.autoSourceLayerDefUid = v;
 						cur.gridSize = project.defs.getLayerDef(v).gridSize;
 					}
@@ -454,6 +468,9 @@ class EditLayerDefs extends ui.modal.Panel {
 				});
 				p.appendTo(jPivots);
 		}
+
+		JsTools.parseComponents(jForm);
+
 	}
 
 

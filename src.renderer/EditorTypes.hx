@@ -1,5 +1,10 @@
-typedef SessionData = {
+typedef AppSettings = {
 	var recentProjects : Array<String>;
+	var compactMode : Bool;
+	var grid : Bool;
+	var singleLayerMode : Bool;
+	var emptySpaceSelection : Bool;
+	var tileStacking : Bool;
 }
 
 enum GlobalEvent {
@@ -31,9 +36,9 @@ enum GlobalEvent {
 	LayerRuleSorted;
 
 	LayerRuleGroupAdded;
-	LayerRuleGroupRemoved(rg:data.LedTypes.AutoLayerRuleGroup);
-	LayerRuleGroupChanged(rg:data.LedTypes.AutoLayerRuleGroup);
-	LayerRuleGroupChangedActiveState(rg:data.LedTypes.AutoLayerRuleGroup);
+	LayerRuleGroupRemoved(rg:data.DataTypes.AutoLayerRuleGroup);
+	LayerRuleGroupChanged(rg:data.DataTypes.AutoLayerRuleGroup);
+	LayerRuleGroupChangedActiveState(rg:data.DataTypes.AutoLayerRuleGroup);
 	LayerRuleGroupSorted;
 	LayerRuleGroupCollapseChanged;
 
@@ -47,6 +52,7 @@ enum GlobalEvent {
 	TilesetDefAdded(td:data.def.TilesetDef);
 	TilesetDefRemoved(td:data.def.TilesetDef);
 	TilesetSelectionSaved(td:data.def.TilesetDef);
+	TilesetDefOpaqueCacheRebuilt(td:data.def.TilesetDef);
 
 	EntityInstanceAdded(ei:data.inst.EntityInstance);
 	EntityInstanceRemoved(ei:data.inst.EntityInstance);
