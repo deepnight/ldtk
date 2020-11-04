@@ -15,7 +15,6 @@ class Project {
 	public var defaultGridSize : Int;
 	public var bgColor : UInt;
 
-	public var useAppExtension = true;
 	public var minifyJson = false;
 	public var exportTiled = false;
 
@@ -51,7 +50,6 @@ class Project {
 		p.bgColor = JsonTools.readColor( json.bgColor, 0xffffff );
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
-		p.useAppExtension = JsonTools.readBool( json.useAppExtension, false); // existing file extensions are unchanged
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
@@ -72,7 +70,6 @@ class Project {
 			nextUid: nextUid,
 			minifyJson: minifyJson,
 			exportTiled: exportTiled,
-			useAppExtension: useAppExtension,
 
 			defs: defs.toJson(this),
 			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),

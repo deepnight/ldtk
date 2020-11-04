@@ -30,16 +30,21 @@ class EditProject extends ui.modal.Panel {
 	function updateProjectForm() {
 		var jForm = jContent.find("ul.form:first");
 
-		var i = Input.linkToHtmlInput( project.useAppExtension, jForm.find("[name=useAppExtension]") );
-		i.linkEvent(ProjectSettingsChanged);
+		var ext = dn.FilePath.extractExtension( editor.projectFilePath );
+		var usesAppDefault = ext==Const.FILE_EXTENSION;
+		var i = Input.linkToHtmlInput( usesAppDefault, jForm.find("[name=useAppExtension]") );
 		i.onValueChange = (v)->{
 			var old = editor.projectFilePath;
 			var fp = dn.FilePath.fromFile( editor.projectFilePath );
 			fp.extension = v ? Const.FILE_EXTENSION : "json";
-			editor.projectFilePath = fp.full;
-			if( JsTools.fileExists(old) )
-				JsTools.renameFile(old, fp.full);
-			App.ME.renameRecentProject(old,fp.full);
+			if( JsTools.fileExists(old) && JsTools.renameFile(old, fp.full) ) {
+				App.ME.renameRecentProject(old, fp.full);
+				editor.projectFilePath = fp.full;
+				N.success(L.t._("Changed file extension to ::ext::", { ext:fp.extWithDot }));
+			}
+			else {
+				N.error(L.t._("Couldn't rename project file!"));
+			}
 		}
 
 		var i = Input.linkToHtmlInput( project.minifyJson, jForm.find("[name=minify]") );

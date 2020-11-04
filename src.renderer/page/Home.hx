@@ -194,14 +194,14 @@ class Home extends Page {
 
 
 	public function onLoad() {
-		dn.electron.Dialogs.open([".json"], App.ME.getDefaultDialogDir(), function(filePath) {
+		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION,".json"], App.ME.getDefaultDialogDir(), function(filePath) {
 			loadProject(filePath);
 		});
 	}
 
 	public function onLoadSamples() {
 		var path = JsTools.getExeDir()+"/samples";
-		dn.electron.Dialogs.open([".json"], path, function(filePath) {
+		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION], path, function(filePath) {
 			loadProject(filePath);
 		});
 	}
@@ -240,9 +240,9 @@ class Home extends Page {
 	}
 
 	public function onNew() {
-		dn.electron.Dialogs.saveAs([".json"], App.ME.getDefaultDialogDir(), function(filePath) {
+		dn.electron.Dialogs.saveAs(["."+Const.FILE_EXTENSION], App.ME.getDefaultDialogDir(), function(filePath) {
 			var fp = dn.FilePath.fromFile(filePath);
-			fp.extension = "json";
+			fp.extension = "ldtk";
 
 			var p = data.Project.createEmpty();
 			var data = JsTools.prepareProjectFile(p);
