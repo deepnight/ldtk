@@ -23,10 +23,10 @@ Value | Type | Description
 `defaultPivotX` | Float | Default X pivot (0 to 1) for new entities
 `defaultPivotY` | Float | Default Y pivot (0 to 1) for new entities
 `defs` | [Definitions](#ldtk-DefinitionsJson) | A structure containing all the definitions of this project
-`exportTiled` | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file.
+`exportTiled` | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)
 `jsonVersion` | String | File format version
 `levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | 
-`minifyJson` | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks)
+`minifyJson` | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
 
 <a id="ldtk-LevelJson" name="ldtk-LevelJson"></a>
 ## 1. Level   
