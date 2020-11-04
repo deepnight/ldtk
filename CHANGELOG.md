@@ -1,6 +1,14 @@
 # 0.5.0-beta - LDtk: it's about tile!
 
- - **LDtk** (for *Level Designer Toolkit*) is the new app name :) I hope you'll like it! The logo was updated, as well as source code, GitHub repo and various other things.
+**Level Designer Toolkit** (*LDtk*) is now the new app name :) I hope you'll like it! The logo was updated, as well as source code, GitHub repo and various other things.
+
+Because of the renaming, users of the Haxe API will have to run the following commands:
+
+```
+haxelib remove led-haxe-api
+haxelib install ldtk-haxe-api
+```
+
  - **Tiles flipping**: in Tile Layers, you can mirror tiles before painting them by pressing `X` or `Y` (or `Z`). This also works from group of tiles.
  - **Tiles stacking**: you can now optionaly *stack multiple tiles in a single cell of a Tile layer*, reducing the need for multiple layers. For example, you could paint a brick wall, then enable stack mode (`T`), and add details like cracks or vines over the same wall. Be careful though: erasing of stacked elements can be tricky, so you should use a mix of multiple layers and stacking to get the best results.
  - **New editing options bar**: *Grid locking*, *Single layer mode* and *Empty space selection* moved to a new more streamlined button bar.
