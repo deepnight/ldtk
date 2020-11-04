@@ -6,9 +6,9 @@ name: CI-macos
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [ master, 0.5.0 ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, 0.5.0 ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
