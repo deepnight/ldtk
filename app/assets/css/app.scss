@@ -1592,10 +1592,15 @@ textarea {
 			padding: 8px;
 
 			background-color: $bgDark;
+
+			.icon {
+				width: 70px;
+				height: 70px;
+			}
 		}
-		.icon {
-			width: 70px;
-			height: 70px;
+
+		strong {
+			color: $orange;
 		}
 	}
 }
