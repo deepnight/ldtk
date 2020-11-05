@@ -430,7 +430,7 @@ class LevelRender extends dn.Process {
 				continue;
 
 			grid.moveTo( M.fmax(0,li.pxTotalOffsetX), y );
-			grid.lineTo( M.fmin(li.cWid*li.def.gridSize, level.pxHei), y );
+			grid.lineTo( M.fmin(li.cWid*li.def.gridSize, level.pxWid), y );
 		}
 	}
 
