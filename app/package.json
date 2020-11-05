@@ -23,13 +23,13 @@
 		"url": "https://github.com/deepnight/ldtk.git"
 	},
 	"dependencies": {
-		"electron-updater": "^4.3.4",
+		"electron-updater": "^4.3.5",
 		"simple-color-picker": "^1.0.4",
 		"sortablejs": "^1.10.2"
 	},
 	"devDependencies": {
-		"electron": "^10.0.0",
-		"electron-builder": "^22.8.0"
+		"electron": "^10.1.5",
+		"electron-builder": "^22.9.1"
 	},
 	"build": {
 		"appId": "com.deepnight.ldtk",
