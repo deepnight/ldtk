@@ -2731,15 +2731,16 @@ canvas#webgl {
 
 					border: none;
 					background-color: $bgDark;
-					background-image: url("../img/logo.svg");
+					background-image: url("../img/LDtk-simple.svg");
 					background-repeat: no-repeat;
 					background-position: center 15px;
 					background-size: 200px;
-					padding-top: 100px;
+					padding-top: 120px;
 					// background-size: ;
 
 					.changelogs {
 						padding: 32px;
+						padding-top: 0;
 						max-width: 960px;
 						margin: auto;
 					}
