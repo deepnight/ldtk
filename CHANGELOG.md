@@ -5,7 +5,7 @@
 Because of the renaming, users of the Haxe API will have to run the following commands:
 
 ```
-haxelib remove led-haxe-api 
+haxelib remove led-haxe-api
 haxelib install ldtk-haxe-api
 ```
 
@@ -14,6 +14,7 @@ You might also need to **manually uninstall any previous installation of LEd**.
  - **Tiles flipping**: in Tile Layers, you can mirror tiles before painting them by pressing `X` or `Y` (or `Z`). This also works from group of tiles.
  - **Tiles stacking**: you can now optionaly *stack multiple tiles in a single cell of a Tile layer*, reducing the need for multiple layers. For example, you could paint a brick wall, then enable stack mode (`T`), and add details like cracks or vines over the same wall. Be careful though: erasing of stacked elements can be tricky, so you should use a mix of multiple layers and stacking to get the best results.
  - **New editing options bar**: *Grid locking*, *Single layer mode* and *Empty space selection* moved to a new more streamlined button bar.
+ - **File association**: project files now use the extension `*.ldtk` instead of `*.json`. Therefore, on Windows, double-clicking such files will open the app accordingly. If you prefer the `.json` extension, you can force it in each project settings (but will lose benefit of the file association).
  - **Auto-layer rule preview**: when you move your mouse over a rule, you will now see which cells in the current layer are affected, making their testing *MUCH* easier.
  - **Tiled (TMX) export**: this optional export now generates proper standard tile layers. However, to support LDtk stacked tiles feature (see above), multiple Tiled layers might be generated per single LDtk layer. Also, IntGrid layers are now properly exported to Tiled (as standard tile layers, with an auto-generated tileset image).
  - **New color picker**: it supports copy/paste, manual hex value editing and a much better UI (thanks to [simple-color-picker](https://github.com/superguigui/simple-color-picker)).
