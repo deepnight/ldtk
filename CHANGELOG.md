@@ -5,9 +5,11 @@
 Because of the renaming, users of the Haxe API will have to run the following commands:
 
 ```
-haxelib remove led-haxe-api
+haxelib remove led-haxe-api 
 haxelib install ldtk-haxe-api
 ```
+
+You might also need to **manually uninstall any previous installation of LEd**.
 
  - **Tiles flipping**: in Tile Layers, you can mirror tiles before painting them by pressing `X` or `Y` (or `Z`). This also works from group of tiles.
  - **Tiles stacking**: you can now optionaly *stack multiple tiles in a single cell of a Tile layer*, reducing the need for multiple layers. For example, you could paint a brick wall, then enable stack mode (`T`), and add details like cracks or vines over the same wall. Be careful though: erasing of stacked elements can be tricky, so you should use a mix of multiple layers and stacking to get the best results.
