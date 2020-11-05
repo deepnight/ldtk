@@ -25,18 +25,18 @@ class App extends dn.Process {
 		LOG.logFilePath = JsTools.getExeDir()+"/LDtk.log";
 		LOG.trimFileLines();
 		LOG.emptyEntry();
+		LOG.tagColors.set("tidy", "#8ed1ac");
 		#if debug
 		LOG.printOnAdd = true;
 		#end
+		LOG.add("BOOT","App started");
+		LOG.add("BOOT", "Args="+JsTools.getArgs());
 
 		ME = this;
 		createRoot(Boot.ME.s2d);
 		lastKnownMouse = { pageX:0, pageY:0 }
 		jCanvas.hide();
 		clearMiniNotif();
-
-		LOG.add("BOOT","App started");
-		LOG.tagColors.set("tidy", "#8ed1ac");
 
 		// Init window
 		IpcRenderer.on("winClose", onWindowCloseButton);

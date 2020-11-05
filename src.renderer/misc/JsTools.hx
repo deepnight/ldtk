@@ -528,6 +528,10 @@ class JsTools {
 		return dn.FilePath.fromDir( path ).useSlashes().directory;
 	}
 
+	public static function getArgs() : Array<String> {
+		return electron.renderer.IpcRenderer.sendSync("getArgs");
+	}
+
 	public static function exploreToFile(path:String, isFile:Bool) {
 		var fp = isFile ? dn.FilePath.fromFile(path) : dn.FilePath.fromDir(path);
 

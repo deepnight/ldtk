@@ -80,6 +80,14 @@ class Home extends Page {
 		// });
 
 		updateRecents();
+
+		// Load provided file via app args
+		var args = JsTools.getArgs();
+		if( args.length>1 ) {
+			var fp = dn.FilePath.fromFile( args[1] );
+			if( fp.fileWithExt!=null )
+				loadProject(fp.full);
+		}
 	}
 
 	function updateRecents() {
