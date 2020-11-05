@@ -357,6 +357,24 @@ class LevelRender extends dn.Process {
 	public inline function bleepHistoryBounds(layerId:Int, bounds:HistoryStateBounds, col:UInt) {
 		bleepRectPx(bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
 	}
+	public inline function bleepEntity(ei:data.inst.EntityInstance) {
+		bleepRectPx(
+			Std.int( ei.x-ei.def.width*ei.def.pivotX ),
+			Std.int( ei.y-ei.def.height*ei.def.pivotY ),
+			ei.def.width,
+			ei.def.height,
+			ei.getSmartColor(true), 2
+		);
+	}
+
+	public inline function bleepPoint(x:Float, y:Float, col:UInt, thickness=2) {
+		var g = new h2d.Graphics();
+		rectBleeps.push(g);
+		g.lineStyle(thickness, col);
+		g.drawCircle( 0,0, 16 );
+		g.setPosition( M.round(x), M.round(y) );
+		root.add(g, Const.DP_UI);
+	}
 
 
 	function renderBounds() {
@@ -946,7 +964,7 @@ class LevelRender extends dn.Process {
 		var i = 0;
 		while( i<rectBleeps.length ) {
 			var o = rectBleeps[i];
-			o.alpha-=tmod*0.05;
+			o.alpha-=tmod*0.042;
 			o.setScale( 1 + 0.2 * (1-o.alpha) );
 			if( o.alpha<=0 ) {
 				o.remove();

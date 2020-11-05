@@ -104,6 +104,7 @@ class EntityTool extends tool.LayerTool<Int> {
 			case Entity(curLayerInstance, instance):
 				curLayerInstance.removeEntityInstance(instance);
 				editor.ge.emit( EntityInstanceRemoved(instance) );
+				editor.levelRender.bleepEntity(instance);
 				return true;
 
 			case PointField(li, ei, fi, arrayIdx):
@@ -115,6 +116,11 @@ class EntityTool extends tool.LayerTool<Int> {
 						fi.parseValue(arrayIdx, null);
 					editor.ge.emit( EntityInstanceFieldChanged(ei) );
 					editor.selectionTool.select([ GenericLevelElement.Entity(li,ei) ]);
+					editor.levelRender.bleepPoint(
+						(pt.cx+0.5) * li.def.gridSize,
+						(pt.cy+0.5) * li.def.gridSize,
+						ei.getSmartColor(true)
+					);
 					return true;
 				}
 				else
