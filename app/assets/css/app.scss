@@ -249,12 +249,12 @@ button {
 .appLogo { // remember to update "Updating" page
 	min-width: 300px;
 	min-height: 100px;
-	background-image: url("../img/logo.svg");
+	background-image: url("../img/LDtk-simple.svg");
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
 	&.full {
-		background-image: url("../img/logoFull.svg");
+		background-image: url("../img/LDtk.svg");
 	}
 }
 
