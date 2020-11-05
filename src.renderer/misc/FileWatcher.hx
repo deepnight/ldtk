@@ -12,7 +12,10 @@ class FileWatcher extends dn.Process {
 		if( !JsTools.fileExists(absFilePath) )
 			return;
 
+		App.LOG.fileOp("Started watching file: "+absFilePath);
+
 		var w = js.node.Fs.watch(absFilePath, function(event,f) {
+			App.LOG.fileOp("Changed on disk: "+absFilePath);
 			delayer.cancelById(absFilePath);
 			delayer.addS(absFilePath, onChange, 1);
 		});
@@ -46,6 +49,7 @@ class FileWatcher extends dn.Process {
 	}
 
 	public function clearAllWatches() {
+		App.LOG.fileOp("Cleared all file watches");
 		for( w in all )
 			w.watcher.close();
 		all = [];
@@ -55,6 +59,7 @@ class FileWatcher extends dn.Process {
 		var i = 0;
 		while( i<all.length )
 			if( all[i].path==absFilePath ) {
+				App.LOG.fileOp("Stopped watching: "+absFilePath);
 				all[i].watcher.close();
 				all.splice(i,1);
 			}
