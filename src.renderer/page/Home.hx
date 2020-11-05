@@ -83,8 +83,8 @@ class Home extends Page {
 
 		// Load provided file via app args
 		var args = JsTools.getArgs();
-		if( args.length>1 ) {
-			var fp = dn.FilePath.fromFile( args[1] );
+		if( args.length>0 ) {
+			var fp = dn.FilePath.fromFile( args[args.length-1] );
 			if( fp.fileWithExt!=null )
 				loadProject(fp.full);
 		}
