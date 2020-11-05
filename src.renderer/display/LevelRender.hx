@@ -408,19 +408,30 @@ class LevelRender extends dn.Process {
 
 		var col = C.getPerceivedLuminosityInt( editor.project.bgColor) >= 0.8 ? 0x0 : 0xffffff;
 
-		var l = editor.curLayerInstance;
+		var li = editor.curLayerInstance;
+		var level = editor.curLevel;
 		grid.lineStyle(1, col, 0.07);
-		for( cx in 0...editor.curLayerInstance.cWid+1 ) {
-			grid.moveTo(cx*l.def.gridSize, 0);
-			grid.lineTo(cx*l.def.gridSize, l.cHei*l.def.gridSize);
-		}
-		for( cy in 0...editor.curLayerInstance.cHei+1 ) {
-			grid.moveTo(0, cy*l.def.gridSize);
-			grid.lineTo(l.cWid*l.def.gridSize, cy*l.def.gridSize);
-		}
 
-		grid.x = editor.curLayerInstance.pxTotalOffsetX;
-		grid.y = editor.curLayerInstance.pxTotalOffsetY;
+		// Verticals
+		var x = 0;
+		for( cx in 0...editor.curLayerInstance.cWid+1 ) {
+			x = cx*li.def.gridSize + li.pxTotalOffsetX;
+			if( x<0 || x>=level.pxWid )
+				continue;
+
+			grid.moveTo( x, M.fmax(0,li.pxTotalOffsetY) );
+			grid.lineTo( x, M.fmin(li.cHei*li.def.gridSize, level.pxHei) );
+		}
+		// Horizontals
+		var y = 0;
+		for( cy in 0...editor.curLayerInstance.cHei+1 ) {
+			y = cy*li.def.gridSize + li.pxTotalOffsetY;
+			if( y<0 || y>=level.pxHei)
+				continue;
+
+			grid.moveTo( M.fmax(0,li.pxTotalOffsetX), y );
+			grid.lineTo( M.fmin(li.cWid*li.def.gridSize, level.pxHei), y );
+		}
 	}
 
 
