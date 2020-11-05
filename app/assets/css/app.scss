@@ -2618,12 +2618,13 @@ canvas#webgl {
 		.files {
 			grid-column: 1/2;
 			display: grid;
-			height: 100%;
 			grid-template-rows: min-content auto;
+			gap: 8px;
+			height: 100%;
 
 			ul.recents {
 				overflow-y: auto;
-				margin-top: 8px;
+				margin-top: 0;
 				margin-bottom: 0;
 				padding: 4px;
 
@@ -2699,6 +2700,7 @@ canvas#webgl {
 			grid-column: 2/3;
 			display: grid;
 			grid-template-rows: min-content auto;
+			gap: 8px;
 			height: 100%;
 			margin-left: 16px;
 
@@ -2710,8 +2712,8 @@ canvas#webgl {
 				position: relative;
 				overflow: hidden;
 				height: 100%;
-				margin-top: 8px;
 
+				box-sizing: border-box;
 				border: 1px solid $bgLight;
 				border-radius: 3px;
 
