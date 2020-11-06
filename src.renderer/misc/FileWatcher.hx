@@ -29,6 +29,8 @@ class FileWatcher extends dn.Process {
 							App.LOG.fileOp("Changed on disk: "+absFilePath);
 							onChange();
 						}, 1);
+
+					case _:
 				}
 			});
 
