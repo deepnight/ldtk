@@ -16,7 +16,7 @@ class App extends dn.Process {
 	var curPageProcess : Null<Page>;
 	public var settings : AppSettings;
 	var keyDowns : Map<Int,Bool> = new Map();
-
+	public var args: dn.Args;
 
 	public function new() {
 		super();
@@ -30,8 +30,14 @@ class App extends dn.Process {
 		LOG.printOnAdd = true;
 		#end
 		LOG.add("BOOT","App started");
-		LOG.add("BOOT", "Args="+JsTools.getArgs());
 
+		// App arguments
+		var electronArgs : Array<String> = try electron.renderer.IpcRenderer.sendSync("getArgs") catch(_) [];
+		electronArgs.shift();
+		args = new dn.Args( electronArgs.join(" "), true );
+		LOG.add("BOOT", args.toString());
+
+		// Init
 		ME = this;
 		createRoot(Boot.ME.s2d);
 		lastKnownMouse = { pageX:0, pageY:0 }

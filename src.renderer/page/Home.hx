@@ -82,11 +82,14 @@ class Home extends Page {
 		updateRecents();
 
 		// Load provided file via app args
-		var args = JsTools.getArgs();
-		if( args.length>0 ) {
-			var fp = dn.FilePath.fromFile( args[args.length-1] );
-			if( fp.fileWithExt!=null )
-				loadProject(fp.full);
+		if( App.ME.args.getLastSoloValue()!=null ) {
+			for( v in App.ME.args.getAllSoloValues() ) {
+				if( v.indexOf(".json")>=0 || v.indexOf("."+Const.FILE_EXTENSION)>=0 ) {
+					var fp = dn.FilePath.fromFile( App.ME.args.getLastSoloValue() );
+					if( fp.fileWithExt!=null && loadProject(fp.full) )
+						break;
+				}
+			}
 		}
 	}
 
