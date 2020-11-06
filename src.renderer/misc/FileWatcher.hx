@@ -12,16 +12,39 @@ class FileWatcher extends dn.Process {
 		if( !JsTools.fileExists(absFilePath) )
 			return;
 
-		var w = js.node.Fs.watch(absFilePath, function(event,f) {
-			delayer.cancelById(absFilePath);
-			delayer.addS(absFilePath, onChange, 1);
-		});
+		stopWatching(absFilePath);
 
-		all.push({
-			watcher: w,
-			path: absFilePath,
-			cb: onChange,
-		});
+		try {
+			App.LOG.fileOp("Watching file: "+absFilePath);
+			var w = js.node.Fs.watch(absFilePath, (eventType:String,name)->{
+				switch eventType {
+					case null:
+
+					case "rename":
+						// TODO support renaming?
+
+					case "change":
+						delayer.cancelById(absFilePath);
+						delayer.addS(absFilePath, ()->{
+							App.LOG.fileOp("Changed on disk: "+absFilePath);
+							onChange();
+						}, 1);
+				}
+			});
+
+			w.on("error", function(event,f) {
+				App.LOG.error("FSWatcher failed for: "+absFilePath);
+			});
+
+			all.push({
+				watcher: w,
+				path: absFilePath,
+				cb: onChange,
+			});
+		}
+		catch(e:Dynamic) {
+			App.LOG.error("Couldn't initialize FSWatcher for "+absFilePath);
+		}
 	}
 
 	public function watchEnum(ed:data.def.EnumDef) {
@@ -46,6 +69,7 @@ class FileWatcher extends dn.Process {
 	}
 
 	public function clearAllWatches() {
+		App.LOG.fileOp("Cleared all file watches");
 		for( w in all )
 			w.watcher.close();
 		all = [];
@@ -55,6 +79,7 @@ class FileWatcher extends dn.Process {
 		var i = 0;
 		while( i<all.length )
 			if( all[i].path==absFilePath ) {
+				App.LOG.fileOp("Stopped watching: "+absFilePath);
 				all[i].watcher.close();
 				all.splice(i,1);
 			}

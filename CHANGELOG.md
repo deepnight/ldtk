@@ -1,3 +1,13 @@
+# 0.5.1-beta
+
+ - Added "top-down" sample map
+ - Fixed "File not found" message at startup
+ - Fixed a potential crash at startup
+ - Fixed auto-reloading of modified tileset images
+ - Minor bug fixes
+ - Updated external libs used by LDtk (Electron, NodeJS etc.)
+
+
 # 0.5.0-beta - LDtk: it's about tile!
 
 **Level Designer Toolkit** (*LDtk*) is now the new app name :) I hope you'll like it! The logo was updated, as well as source code, GitHub repo and various other things.

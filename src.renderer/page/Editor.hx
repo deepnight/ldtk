@@ -764,7 +764,8 @@ class Editor extends Page {
 
 
 	function linkOption( jOpt:js.jquery.JQuery, getter:()->Bool, setter:Bool->Void, ?isSupported:Void->Bool ) {
-		createChildProcess( (p)->{
+		var p = createChildProcess( (p)->{
+			// Loop
 			if( jOpt.parents("body").length==0 ) {
 				p.destroy();
 				return;
@@ -784,6 +785,8 @@ class Editor extends Page {
 					jOpt.addClass("unsupported");
 			}
 		});
+
+		p.name = "Option watcher ("+jOpt.attr("class")+")";
 
 		// Init
 		if( getter() )
