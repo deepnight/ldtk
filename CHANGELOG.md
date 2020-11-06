@@ -3,6 +3,7 @@
  - Added "top-down" sample map
  - Fixed "File not found" message at startup
  - Fixed a potential crash at startup
+ - Fixed auto-reloading of modified tileset images
  - Minor bug fixes
  - Updated external libs used by LDtk (Electron, NodeJS etc.)
 
