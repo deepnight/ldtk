@@ -5,7 +5,7 @@ import hxd.Key;
 class Home extends Page {
 	public static var ME : Home;
 
-	public function new() {
+	public function new(?autoLoadProject:String) {
 		super();
 
 		ME = this;
@@ -82,15 +82,8 @@ class Home extends Page {
 		updateRecents();
 
 		// Load provided file via app args
-		if( App.ME.args.getLastSoloValue()!=null ) {
-			for( v in App.ME.args.getAllSoloValues() ) {
-				if( v.indexOf(".json")>=0 || v.indexOf("."+Const.FILE_EXTENSION)>=0 ) {
-					var fp = dn.FilePath.fromFile( App.ME.args.getLastSoloValue() );
-					if( fp.fileWithExt!=null && loadProject(fp.full) )
-						break;
-				}
-			}
-		}
+		if( autoLoadProject!=null )
+			loadProject( autoLoadProject );
 	}
 
 	function updateRecents() {

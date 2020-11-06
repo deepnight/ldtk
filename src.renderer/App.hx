@@ -145,9 +145,24 @@ class App extends dn.Process {
 		dn.electron.ElectronUpdater.checkNow();
 
 		// Start
-		loadPage( ()->new page.Home() );
+		loadPage( ()->new page.Home( getProjectArg() ) );
 
 		IpcRenderer.invoke("appReady");
+	}
+
+	function getProjectArg() : Null<String> {
+		if( args.getLastSoloValue()==null )
+			return null;
+
+		for( v in args.getAllSoloValues() ) {
+			if( v.indexOf(".json")>=0 || v.indexOf("."+Const.FILE_EXTENSION)>=0 ) {
+				var fp = dn.FilePath.fromFile( args.getLastSoloValue() );
+				if( fp.fileWithExt!=null )
+					return fp.full;
+			}
+		}
+
+		return null;
 	}
 
 
