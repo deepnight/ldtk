@@ -1,5 +1,6 @@
 # 0.5.1-beta
 
+ - Added "top-down" sample map
  - Fixed "File not found" message at startup
  - Fixed a potential crash at startup
  - Minor bug fixes
