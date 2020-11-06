@@ -5,7 +5,7 @@ import hxd.Key;
 class Home extends Page {
 	public static var ME : Home;
 
-	public function new(?autoLoadProject:String) {
+	public function new() {
 		super();
 
 		ME = this;
@@ -80,10 +80,6 @@ class Home extends Page {
 		// });
 
 		updateRecents();
-
-		// Load provided file via app args
-		if( autoLoadProject!=null )
-			loadProject( autoLoadProject );
 	}
 
 	function updateRecents() {
@@ -164,7 +160,10 @@ class Home extends Page {
 			var col = C.toBlack( C.fromStringLight( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] ), 0.3 );
 			li.append( JsTools.makePath(trimmedPaths[i], col, true) );
 
-			li.click( function(ev) loadProject(p) );
+			li.click( function(ev) {
+				if( !App.ME.loadProject(p) )
+					updateRecents();
+			});
 
 			if( !JsTools.fileExists(p) )
 				li.addClass("missing");
@@ -213,48 +212,16 @@ class Home extends Page {
 
 	public function onLoad() {
 		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION,".json"], App.ME.getDefaultDialogDir(), function(filePath) {
-			loadProject(filePath);
+			if( !App.ME.loadProject(filePath) )
+				updateRecents();
 		});
 	}
 
 	public function onLoadSamples() {
 		var path = JsTools.getExeDir()+"/samples";
 		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION], path, function(filePath) {
-			loadProject(filePath);
+			App.ME.loadProject(filePath);
 		});
-	}
-
-	function loadProject(filePath:String) {
-		if( !JsTools.fileExists(filePath) ) {
-			N.error("File not found: "+filePath);
-			App.ME.unregisterRecentProject(filePath);
-			updateRecents();
-			return false;
-		}
-
-		// Parse
-		var json = null;
-		var p = #if !debug try #end {
-			var raw = JsTools.readFileString(filePath);
-			json = haxe.Json.parse(raw);
-			data.Project.fromJson(json);
-		}
-		#if !debug
-		catch(e:Dynamic) {
-			N.error( Std.string(e) );
-			null;
-		}
-		#end
-
-		if( p==null ) {
-			N.error("Couldn't read project file!");
-			return false;
-		}
-
-		// Open it
-		App.ME.loadPage( ()->new page.Editor(p, filePath) );
-		N.success("Loaded project: "+dn.FilePath.extractFileWithExt(filePath));
-		return true;
 	}
 
 	public function onNew() {

@@ -11,6 +11,14 @@ class CrashReport extends ui.modal.Dialog {
 		var jLog = jContent.find(".log");
 
 		try {
+			// Logging
+			App.LOG.error('${error.message} (${error.name})');
+			App.LOG.error('${error.stack})');
+			App.LOG.emptyEntry();
+			App.LOG.general("\n"+dn.Process.rprintAll());
+			App.LOG.emptyEntry();
+			App.LOG.flushToFile();
+
 			// Parse stack
 			var stackReg = ~/ at (.*?) \((.*?):([0-9]+):([0-9]+)\)/gim;
 			var raw = error.stack;
@@ -23,12 +31,6 @@ class CrashReport extends ui.modal.Dialog {
 				});
 				raw = stackReg.matchedRight();
 			}
-
-			// Logging
-			App.LOG.error('${error.message} (${error.name})');
-			App.LOG.error('${error.stack})');
-			App.LOG.emptyEntry();
-			App.LOG.flushToFile();
 
 			// Error description
 			jLog.append('<li class="desc"> ${error.message} (${error.name})</li>');

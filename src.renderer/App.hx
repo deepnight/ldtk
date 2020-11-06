@@ -145,12 +145,14 @@ class App extends dn.Process {
 		dn.electron.ElectronUpdater.checkNow();
 
 		// Start
-		loadPage( ()->new page.Home( getProjectArg() ) );
+		var path = getArgPath();
+		if( path==null || !loadProject(path) )
+			loadPage( ()->new page.Home() );
 
 		IpcRenderer.invoke("appReady");
 	}
 
-	function getProjectArg() : Null<String> {
+	function getArgPath() : Null<String> {
 		if( args.getLastSoloValue()==null )
 			return null;
 
@@ -229,6 +231,12 @@ class App extends dn.Process {
 				LOG.warning("Emulating crash...");
 				var a : Dynamic = null;
 				a.crash = 5;
+			#end
+
+			#if debug
+			case K.P if( isCtrlDown() && isShiftDown() ):
+				App.LOG.general( "\n"+dn.Process.rprintAll() );
+				App.LOG.flushToFile();
 			#end
 
 			case _:
@@ -335,6 +343,39 @@ class App extends dn.Process {
 		clearCurPage();
 		curPageProcess = create();
 		curPageProcess.onAppResize();
+	}
+
+	public function loadProject(filePath:String) {
+		if( !JsTools.fileExists(filePath) ) {
+			N.error("File not found: "+filePath);
+			unregisterRecentProject(filePath);
+			// updateRecents();
+			return false;
+		}
+
+		// Parse
+		var json = null;
+		var p = #if !debug try #end {
+			var raw = JsTools.readFileString(filePath);
+			json = haxe.Json.parse(raw);
+			data.Project.fromJson(json);
+		}
+		#if !debug
+		catch(e:Dynamic) {
+			N.error( Std.string(e) );
+			null;
+		}
+		#end
+
+		if( p==null ) {
+			N.error("Couldn't read project file!");
+			return false;
+		}
+
+		// Open it
+		loadPage( ()->new page.Editor(p, filePath) );
+		N.success("Loaded project: "+dn.FilePath.extractFileWithExt(filePath));
+		return true;
 	}
 
 	// public function openEditor(project:data.Project, path:String) {
