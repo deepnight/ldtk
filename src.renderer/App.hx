@@ -107,7 +107,7 @@ class App extends dn.Process {
 		}
 		dn.electron.ElectronUpdater.onUpdateFound = function(info) {
 			LOG.network("Found update: "+info.version+" ("+info.releaseDate+")");
-			miniNotif('Downloading ${info.version}...');
+			miniNotif('Downloading ${info.version}...', true);
 		}
 		dn.electron.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
 		dn.electron.ElectronUpdater.onError = function(err) {
