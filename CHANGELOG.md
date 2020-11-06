@@ -1,6 +1,9 @@
 # 0.5.1-beta
 
  - Fixed "File not found" message at startup
+ - Fixed a potential crash at startup
+ - Minor bug fixes
+ - Updated external libs used by LDtk (Electron, NodeJS etc.)
 
 
 # 0.5.0-beta - LDtk: it's about tile!
