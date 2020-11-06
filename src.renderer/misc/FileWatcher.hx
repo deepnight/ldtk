@@ -12,19 +12,39 @@ class FileWatcher extends dn.Process {
 		if( !JsTools.fileExists(absFilePath) )
 			return;
 
-		App.LOG.fileOp("Started watching file: "+absFilePath);
+		stopWatching(absFilePath);
 
-		var w = js.node.Fs.watch(absFilePath, function(event,f) {
-			App.LOG.fileOp("Changed on disk: "+absFilePath);
-			delayer.cancelById(absFilePath);
-			delayer.addS(absFilePath, onChange, 1);
-		});
+		try {
+			App.LOG.fileOp("Watching file: "+absFilePath);
+			var w = js.node.Fs.watch(absFilePath, (eventType:String,name)->{
+				switch eventType {
+					case null:
 
-		all.push({
-			watcher: w,
-			path: absFilePath,
-			cb: onChange,
-		});
+					case "rename":
+						// TODO support renaming?
+
+					case "change":
+						delayer.cancelById(absFilePath);
+						delayer.addS(absFilePath, ()->{
+							App.LOG.fileOp("Changed on disk: "+absFilePath);
+							onChange();
+						}, 1);
+				}
+			});
+
+			w.on("error", function(event,f) {
+				App.LOG.error("FSWatcher failed for: "+absFilePath);
+			});
+
+			all.push({
+				watcher: w,
+				path: absFilePath,
+				cb: onChange,
+			});
+		}
+		catch(e:Dynamic) {
+			App.LOG.error("Couldn't initialize FSWatcher for "+absFilePath);
+		}
 	}
 
 	public function watchEnum(ed:data.def.EnumDef) {
