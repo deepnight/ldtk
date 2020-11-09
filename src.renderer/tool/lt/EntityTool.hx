@@ -75,7 +75,7 @@ class EntityTool extends tool.LayerTool<Int> {
 			editor.selectionTool.clear();
 
 		switch curMode {
-			case null, PanView:
+			case null:
 			case Add:
 				if( curLevel.inBounds(m.levelX, m.levelY) ) {
 					var ei = curLayerInstance.createEntityInstance(curEntityDef);
@@ -148,7 +148,7 @@ class EntityTool extends tool.LayerTool<Int> {
 		super.useAt(m,isOnStop);
 
 		switch curMode {
-			case null, PanView:
+			case null:
 			case Add:
 
 			case Remove:

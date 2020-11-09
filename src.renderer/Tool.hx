@@ -32,7 +32,9 @@ class Tool<T> extends dn.Process {
 
 	override function toString():String {
 		return Type.getClassName(Type.getClass(this))
-			+ "[" + ( curMode==null ? "--" : curMode.getName() ) + "]";
+			+ "[" + ( curMode==null ? "--" : curMode.getName() ) + "]"
+			+ ( isRunning() ? " (RUNNING)" : "" );
+
 	}
 
 	function getSelectionMemoryKey() {
@@ -77,20 +79,11 @@ class Tool<T> extends dn.Process {
 		button = buttonId;
 		switch button {
 			case 0:
-				if( App.ME.isKeyDown(K.SPACE) )
-					curMode = PanView;
-				else
-					curMode = Add;
+				curMode = Add;
 
 			case 1:
 				curMode = Remove;
-
-			case 2:
-				curMode = PanView;
 		}
-
-		if( curMode==PanView )
-			clickingOutsideBounds = false;
 
 		if( !canEdit() && ( curMode==Add || curMode==Remove ) ) {
 			curMode = null;
@@ -169,11 +162,6 @@ class Tool<T> extends dn.Process {
 	}
 
 	function useAt(m:MouseCoords, isOnStop:Bool) : Bool {
-		if( curMode==PanView ) {
-			editor.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
-			editor.levelRender.focusLevelY -= m.levelY-lastMouse.levelY;
-		}
-
 		var anyChange = false;
 		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
 			anyChange = useAtInterpolatedGrid(cx,cy) || anyChange;
@@ -193,11 +181,11 @@ class Tool<T> extends dn.Process {
 
 
 	public inline function getRunningRectCWid(m:MouseCoords) : Int {
-		return isRunning() && rectangle && curMode!=PanView ? M.iabs(m.cx-origin.cx)+1 : 0;
+		return isRunning() && rectangle ? M.iabs(m.cx-origin.cx)+1 : 0;
 	}
 
 	public inline function getRunningRectCHei(m:MouseCoords) : Int {
-		return isRunning() && rectangle && curMode!=PanView ? M.iabs(m.cy-origin.cy)+1 : 0;
+		return isRunning() && rectangle ? M.iabs(m.cy-origin.cy)+1 : 0;
 	}
 
 	public function stopUsing(m:MouseCoords) {
@@ -256,6 +244,7 @@ class Tool<T> extends dn.Process {
 
 	public function onMouseMove(m:MouseCoords) {
 		editor.cursor.setLabel();
+
 		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )
 			clickingOutsideBounds = false;
 
@@ -266,12 +255,7 @@ class Tool<T> extends dn.Process {
 		// Render cursor
 		if( isRunning() && clickingOutsideBounds )
 			editor.cursor.set(None);
-		else if( App.ME.isKeyDown(K.SPACE) )
-			editor.cursor.set(Pan);
 		else switch curMode {
-			case PanView:
-				editor.cursor.set(Pan);
-
 			case null, Add, Remove:
 				if( editor.isCurrentLayerVisible() )
 					updateCursor(m);

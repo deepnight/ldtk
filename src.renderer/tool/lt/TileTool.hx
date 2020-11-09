@@ -82,7 +82,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		super.useAtInterpolatedGrid(cx, cy);
 
 		switch curMode {
-			case null, PanView:
+			case null:
 
 			case Add:
 				if( drawSelectionAt(cx, cy) )
@@ -149,7 +149,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		for(cx in left...right+1)
 		for(cy in top...bottom+1) {
 			switch curMode {
-				case null, PanView:
+				case null:
 				case Add:
 					if( drawSelectionAt(cx,cy) ) // random mode only
 						anyChange = true;

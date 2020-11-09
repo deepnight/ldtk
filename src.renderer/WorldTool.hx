@@ -14,6 +14,11 @@ class WorldTool extends dn.Process {
 		super(Editor.ME);
 	}
 
+	override function toString() {
+		return Type.getClassName( Type.getClass(this) )
+			+ ( isTakingPriority() ? " (PRIORITY)" : "" );
+	}
+
 	public function onMouseDown(m:MouseCoords, buttonId:Int) {
 		if( buttonId!=0 || App.ME.hasAnyToggleKeyDown() )
 			return;

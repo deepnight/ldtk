@@ -101,7 +101,6 @@ enum GenericLevelElement {
 }
 
 enum ToolEditMode {
-	PanView;
 	Add;
 	Remove;
 }

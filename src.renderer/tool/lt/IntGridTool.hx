@@ -46,7 +46,7 @@ class IntGridTool extends tool.LayerTool<Int> {
 
 		var old = curLayerInstance.getIntGrid(cx,cy);
 		switch curMode {
-			case null, PanView:
+			case null:
 			case Add:
 				curLayerInstance.setIntGrid(cx, cy, getSelectedValue());
 
@@ -71,7 +71,7 @@ class IntGridTool extends tool.LayerTool<Int> {
 		for(cy in top...bottom+1) {
 			var old = curLayerInstance.getIntGrid(cx,cy);
 			switch curMode {
-				case null, PanView:
+				case null:
 				case Add:
 					curLayerInstance.setIntGrid(cx,cy, getSelectedValue());
 
@@ -100,7 +100,6 @@ class IntGridTool extends tool.LayerTool<Int> {
 			(cx,cy, v)->{
 				switch curMode {
 					case null:
-					case PanView:
 					case Add:
 						curLayerInstance.setIntGrid(cx,cy, v);
 

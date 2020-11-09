@@ -199,7 +199,7 @@ class SelectionTool extends Tool<Int> {
 
 		super.startUsing(m, buttonId);
 
-		if( buttonId==0 && curMode!=PanView ) {
+		if( buttonId==0 ) {
 			if( group.isOveringSelection(m) ) {
 				// Move existing selection
 				if( group.hasIncompatibleGridSizes() ) {
@@ -239,7 +239,7 @@ class SelectionTool extends Tool<Int> {
 		super.onMouseMove(m);
 
 		// Start moving elements only after a small elapsed mouse distance
-		if( isRunning() && button==0 && curMode!=PanView && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {
+		if( isRunning() && button==0 && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {
 			group.onMoveStart();
 			moveStarted = true;
 		}
@@ -297,7 +297,7 @@ class SelectionTool extends Tool<Int> {
 				return false;
 			}
 		}
-		else if( isOnStop && curMode!=PanView ) {
+		else if( isOnStop ) {
 			// Single quick pick
 			select();
 		}

@@ -31,6 +31,7 @@ class Editor extends Page {
 
 	// Tools
 	var worldTool : WorldTool;
+	var panTool : tool.PanView;
 	public var curTool(get,never) : tool.LayerTool<Dynamic>;
 	public var selectionTool: tool.SelectionTool;
 	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();
@@ -81,6 +82,7 @@ class Editor extends Page {
 		selectionTool = new tool.SelectionTool();
 		doNothingTool = new tool.lt.DoNothing();
 		worldTool = new WorldTool();
+		panTool = new tool.PanView();
 
 		showCanvas();
 		initUI();
@@ -450,21 +452,11 @@ class Editor extends Page {
 
 			#if debug
 
-			case K.T:
-				if( !hasInputFocus() ) {
-					// var t = haxe.Timer.stamp();
-					// var json = curLevel.toJson();
-					// App.ME.debug("level.toJson() => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
-
-					// var t = haxe.Timer.stamp();
-					// for( li in curLevel.layerInstances )
-						// li.applyAllAutoLayerRules();
-					// App.ME.debug("all curLevel rules => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
-					// for(l in project.levels)
-					// for(li in l.layerInstances)
-					// 	li.autoTilesCache = null;
-					// N.debug("cleared caches");
-				}
+			case K.T if( App.ME.isAltDown() && !hasInputFocus() ):
+				if( cd.has("debugTools") )
+					cd.unset("debugTools");
+				else
+					cd.setS("debugTools", Const.INFINITE);
 
 			case K.U if( !hasInputFocus() && App.ME.isShiftDown() && App.ME.isCtrlDown() ):
 				dn.electron.ElectronUpdater.emulate();
@@ -475,6 +467,7 @@ class Editor extends Page {
 		// Propagate to tools
 		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() ) {
 			worldTool.onKeyPress(keyCode);
+			panTool.onKeyPress(keyCode);
 
 			if( isSpecialToolActive() )
 				specialTool.onKeyPress(keyCode);
@@ -628,24 +621,28 @@ class Editor extends Page {
 	function onMouseDown(e:hxd.Event) {
 		var m = getMouse();
 
-		worldTool.onMouseDown(m, e.button);
+		panTool.startUsing(m, e.button);
 
-		if( !worldTool.isTakingPriority() ) {
-			if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && e.button==0 )
-				selectionTool.startUsing( m, e.button );
-			else if( isSpecialToolActive() )
-				specialTool.startUsing( m, e.button )
-			else
-				curTool.startUsing( m, e.button );
+		if( !panTool.isRunning() ) {
+			worldTool.onMouseDown(m, e.button);
 
-			rulers.onMouseDown( m, e.button );
+			if( !worldTool.isTakingPriority() ) {
+				if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && e.button==0 )
+					selectionTool.startUsing( m, e.button );
+				else if( isSpecialToolActive() )
+					specialTool.startUsing( m, e.button )
+				else
+					curTool.startUsing( m, e.button );
+
+				rulers.onMouseDown( m, e.button );
+			}
 		}
-
 	}
 
 	function onMouseUp() {
 		var m = getMouse();
 
+		panTool.stopUsing(m);
 		worldTool.onMouseUp(m);
 
 		// Tool updates
@@ -663,15 +660,18 @@ class Editor extends Page {
 		var m = getMouse();
 
 		// Tool updates
-		worldTool.onMouseMove(m);
-		if( !worldTool.isTakingPriority() ) {
-			if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
-				selectionTool.onMouseMove(m);
-			else if( isSpecialToolActive() )
-				specialTool.onMouseMove(m);
-			else
-				curTool.onMouseMove(m);
-			rulers.onMouseMove(m);
+		panTool.onMouseMove(m);
+		if( !panTool.isRunning() ) {
+			worldTool.onMouseMove(m);
+			if( !worldTool.isTakingPriority() ) {
+				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
+					selectionTool.onMouseMove(m);
+				else if( isSpecialToolActive() )
+					specialTool.onMouseMove(m);
+				else
+					curTool.onMouseMove(m);
+				rulers.onMouseMove(m);
+			}
 		}
 
 		// Mouse coords infos
@@ -1357,5 +1357,14 @@ class Editor extends Page {
 
 	override function update() {
 		super.update();
+
+		if( cd.has("debugTools") ) {
+			App.ME.debug("-- Tools ----------------------------------------");
+			App.ME.debug("  "+worldTool, true);
+			App.ME.debug("  "+panTool, true);
+			App.ME.debug("  "+selectionTool, true);
+			for(t in allLayerTools)
+				App.ME.debug("  "+t, true);
+		}
 	}
 }
