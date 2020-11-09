@@ -66,6 +66,10 @@ class Level {
 		return x>=0 && x<pxWid && y>=0 && y<pxHei;
 	}
 
+	public function isWorldOver(wx:Int, wy:Int) {
+		return wx>=worldX && wx<worldX+pxWid && wy>=worldY && wy<worldY+pxHei;
+	}
+
 	public function getLayerInstance(?layerDefUid:Int, ?layerDef:data.def.LayerDef) : data.inst.LayerInstance {
 		if( layerDefUid==null && layerDef==null )
 			throw "Need 1 parameter";

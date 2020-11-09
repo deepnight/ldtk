@@ -745,6 +745,9 @@ class Editor extends Page {
 		if( curLevelId==l.uid )
 			return;
 
+		if( curLevel!=null )
+			levelRender.invalidateWorldLevel(curLevel);
+
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
 	}

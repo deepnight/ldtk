@@ -416,7 +416,12 @@ class LevelRender extends dn.Process {
 
 		for( l in editor.project.levels )
 			if( worldLevels.exists(l.uid) )
-				worldLevels.get(l.uid).setPosition( l.worldX, l.worldY );
+				if( l.uid==editor.curLevelId )
+					worldLevels.get(l.uid).visible = false;
+				else {
+					worldLevels.get(l.uid).setPosition( l.worldX, l.worldY );
+					worldLevels.get(l.uid).visible = true;
+				}
 
 	}
 

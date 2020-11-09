@@ -89,10 +89,13 @@ class WorldTool extends dn.Process {
 	}
 
 	function getLevelAt(worldX:Int, worldY:Int, allowSelf:Bool) {
+		if( !allowSelf && editor.curLevel.isWorldOver(worldX,worldY) )
+			return null;
+
 		for(l in project.levels)
-			if( worldX>=l.worldX && worldX<l.worldX+l.pxWid && worldY>=l.worldY && worldY<l.worldY+l.pxHei )
-				if( allowSelf || !allowSelf && l!=editor.curLevel )
-					return l;
+			if( l.isWorldOver(worldX,worldY) )
+				return l;
+		
 		return null;
 	}
 }
