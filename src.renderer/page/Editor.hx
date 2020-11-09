@@ -624,15 +624,20 @@ class Editor extends Page {
 
 	function onMouseDown(e:hxd.Event) {
 		var m = getMouse();
-		worldTool.onMouseDown(m);
-		if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && e.button==0 )
-			selectionTool.startUsing( m, e.button );
-		else if( isSpecialToolActive() )
-			specialTool.startUsing( m, e.button )
-		else
-			curTool.startUsing( m, e.button );
 
-		rulers.onMouseDown( m, e.button );
+		worldTool.onMouseDown(m, e.button);
+
+		if( !worldTool.isRunning() ) {
+			if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && e.button==0 )
+				selectionTool.startUsing( m, e.button );
+			else if( isSpecialToolActive() )
+				specialTool.startUsing( m, e.button )
+			else
+				curTool.startUsing( m, e.button );
+
+			rulers.onMouseDown( m, e.button );
+		}
+
 	}
 
 	function onMouseUp() {
@@ -656,13 +661,15 @@ class Editor extends Page {
 
 		// Tool updates
 		worldTool.onMouseMove(m);
-		if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
-			selectionTool.onMouseMove(m);
-		else if( isSpecialToolActive() )
-			specialTool.onMouseMove(m);
-		else
-			curTool.onMouseMove(m);
-		rulers.onMouseMove(m);
+		if( !worldTool.isRunning() ) {
+			if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
+				selectionTool.onMouseMove(m);
+			else if( isSpecialToolActive() )
+				specialTool.onMouseMove(m);
+			else
+				curTool.onMouseMove(m);
+			rulers.onMouseMove(m);
+		}
 
 		// Mouse coords infos
 		if( ui.Modal.hasAnyOpen() )
