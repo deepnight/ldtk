@@ -60,6 +60,13 @@ class WorldTool extends dn.Process {
 			clickedLevel.worldX = levelOriginX + ( m.worldX - origin.worldX );
 			clickedLevel.worldY = levelOriginY + ( m.worldY - origin.worldY );
 
+			// Snap to grid
+			if( settings.grid ) {
+				var g = getWorldGrid();
+				clickedLevel.worldX = Std.int( clickedLevel.worldX/g ) * g;
+				clickedLevel.worldY = Std.int( clickedLevel.worldY/g ) * g;
+			}
+
 			// Snapping
 			var snapDist = getWorldGrid();
 			for(l in project.levels) {
@@ -95,7 +102,7 @@ class WorldTool extends dn.Process {
 		for(l in project.levels)
 			if( l.isWorldOver(worldX,worldY) )
 				return l;
-		
+
 		return null;
 	}
 }
