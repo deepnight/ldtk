@@ -103,7 +103,7 @@ class LevelRender extends dn.Process {
 
 	inline function set_focusLevelX(v) {
 		isFit = false;
-		focusLevelX = editor.curLevelId==null
+		focusLevelX = editor.curLevelId==null || editor.worldMode
 			? v
 			: M.fclamp( v, -MAX_FOCUS_PADDING/adjustedZoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING/adjustedZoom );
 		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
@@ -112,7 +112,7 @@ class LevelRender extends dn.Process {
 
 	inline function set_focusLevelY(v) {
 		isFit = false;
-		focusLevelY = editor.curLevelId==null
+		focusLevelY = editor.curLevelId==null || editor.worldMode
 			? v
 			: M.fclamp( v, -MAX_FOCUS_PADDING/adjustedZoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING/adjustedZoom );
 		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
