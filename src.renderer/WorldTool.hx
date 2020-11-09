@@ -1,4 +1,6 @@
 class WorldTool extends dn.Process {
+	static var DRAG_THRESHOLD = 4;
+
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
@@ -35,11 +37,16 @@ class WorldTool extends dn.Process {
 
 	public function onMouseUp(m:MouseCoords) {
 		if( clickedLevel!=null )
-			if( dragStarted )
+			if( dragStarted ) {
+				// Drag complete
 				editor.ge.emit( LevelSettingsChanged(clickedLevel) );
-			else {
+			}
+			else if( origin.getPageDist(m)<=DRAG_THRESHOLD ) {
 				// Pick level
+				var old = editor.curLevel;
 				editor.selectLevel(clickedLevel);
+				editor.levelRender.focusLevelX -= ( editor.curLevel.worldX-old.worldX );
+				editor.levelRender.focusLevelY -= ( editor.curLevel.worldY-old.worldY );
 				editor.worldMode = false;
 			}
 
@@ -69,7 +76,7 @@ class WorldTool extends dn.Process {
 
 	public function onMouseMove(m:MouseCoords) {
 		// Start dragging
-		if( worldMode && !dragStarted && clickedLevel!=null && origin.getPageDist(m)>=4 )
+		if( worldMode && !dragStarted && clickedLevel!=null && origin.getPageDist(m)>=DRAG_THRESHOLD )
 			dragStarted = true;
 
 		// Drag

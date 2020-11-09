@@ -745,9 +745,6 @@ class Editor extends Page {
 	}
 
 	public function selectLevel(l:data.Level) {
-		if( curLevelId==l.uid )
-			return;
-
 		if( curLevel!=null )
 			levelRender.invalidateWorldLevel(curLevel);
 

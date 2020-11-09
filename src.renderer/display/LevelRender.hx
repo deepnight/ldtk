@@ -3,7 +3,8 @@ package display;
 class LevelRender extends dn.Process {
 	static var MIN_ZOOM = 0.2;
 	static var MAX_ZOOM = 32;
-	static var MAX_FOCUS_PADDING = 200;
+	static var MAX_FOCUS_PADDING_X = 450;
+	static var MAX_FOCUS_PADDING_Y = 400;
 	static var FIELD_TEXT_SCALE = 0.666;
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
@@ -11,6 +12,8 @@ class LevelRender extends dn.Process {
 
 	public var focusLevelX(default,set) : Float;
 	public var focusLevelY(default,set) : Float;
+	var targetLevelX: Null<Float>;
+	var targetLevelY: Null<Float>;
 	public var adjustedZoom(get,set) : Float;
 	var rawZoom : Float;
 	var isFit = false;
@@ -105,7 +108,7 @@ class LevelRender extends dn.Process {
 		isFit = false;
 		focusLevelX = editor.curLevelId==null || editor.worldMode
 			? v
-			: M.fclamp( v, -MAX_FOCUS_PADDING/adjustedZoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING/adjustedZoom );
+			: M.fclamp( v, -MAX_FOCUS_PADDING_X/adjustedZoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING_X/adjustedZoom );
 		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
 		return focusLevelX;
 	}
@@ -114,7 +117,7 @@ class LevelRender extends dn.Process {
 		isFit = false;
 		focusLevelY = editor.curLevelId==null || editor.worldMode
 			? v
-			: M.fclamp( v, -MAX_FOCUS_PADDING/adjustedZoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING/adjustedZoom );
+			: M.fclamp( v, -MAX_FOCUS_PADDING_Y/adjustedZoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING_Y/adjustedZoom );
 		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
 		return focusLevelY;
 	}
