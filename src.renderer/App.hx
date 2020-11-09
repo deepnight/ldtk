@@ -248,7 +248,7 @@ class App extends dn.Process {
 	}
 
 	public function fadeOutMask() {
-		jBody.find("#appMask").fadeOut(300);
+		jBody.find("#appMask").fadeOut(200);
 	}
 
 	public function miniNotif(html:String, fadeDelayS=0.5, persist=false) {
