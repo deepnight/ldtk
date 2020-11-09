@@ -38,7 +38,7 @@ class MouseCoords {
 		if( Editor.ME==null || Editor.ME.destroyed )
 			return -1;
 		else
-			return levelX + ( Editor.ME.curLevel==null ? 0 : Editor.ME.curLevel.worldX );
+			return levelX + Editor.ME.curLevel.worldX;
 	}
 
 	public var worldY(get,never) : Int;
@@ -46,7 +46,7 @@ class MouseCoords {
 		if( Editor.ME==null || Editor.ME.destroyed )
 			return -1;
 		else
-			return levelY + ( Editor.ME.curLevel==null ? 0 : Editor.ME.curLevel.worldY );
+			return levelY + Editor.ME.curLevel.worldY;
 	}
 
 	// Layer
