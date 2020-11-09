@@ -1,3 +1,7 @@
+# 0.6.0
+
+- **New splash screen**: to reduce screen flickering and dirty window flashes on startup, a new splash screen was added, among other minor changes. The app window should now feel a little more "stable".
+
 # 0.5.1-beta
 
  - Added "top-down" sample map
