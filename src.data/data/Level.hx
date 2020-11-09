@@ -16,6 +16,7 @@ class Level {
 	@:allow(data.Project)
 	private function new(project:Project, uid:Int) {
 		this.uid = uid;
+		worldX = worldY = 0;
 		pxWid = Project.DEFAULT_LEVEL_WIDTH;
 		pxHei = Project.DEFAULT_LEVEL_HEIGHT;
 		this._project = project;
