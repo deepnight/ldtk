@@ -30,6 +30,7 @@ class Editor extends Page {
 	var curLayerDefUid : Int;
 
 	// Tools
+	var worldTool : WorldTool;
 	public var curTool(get,never) : tool.LayerTool<Dynamic>;
 	public var selectionTool: tool.SelectionTool;
 	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();
@@ -78,8 +79,9 @@ class Editor extends Page {
 
 		selectionTool = new tool.SelectionTool();
 		doNothingTool = new tool.lt.DoNothing();
-		showCanvas();
+		worldTool = new WorldTool();
 
+		showCanvas();
 		initUI();
 		updateCanvasSize();
 
@@ -622,6 +624,7 @@ class Editor extends Page {
 
 	function onMouseDown(e:hxd.Event) {
 		var m = getMouse();
+		worldTool.onMouseDown(m);
 		if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && e.button==0 )
 			selectionTool.startUsing( m, e.button );
 		else if( isSpecialToolActive() )
@@ -634,6 +637,8 @@ class Editor extends Page {
 
 	function onMouseUp() {
 		var m = getMouse();
+
+		worldTool.onMouseUp(m);
 
 		// Tool updates
 		if( selectionTool.isRunning() )
@@ -650,6 +655,7 @@ class Editor extends Page {
 		var m = getMouse();
 
 		// Tool updates
+		worldTool.onMouseMove(m);
 		if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
 			selectionTool.onMouseMove(m);
 		else if( isSpecialToolActive() )

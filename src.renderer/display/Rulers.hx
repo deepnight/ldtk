@@ -200,7 +200,7 @@ class Rulers extends dn.Process {
 					editor.cursor.set( Resize(p) );
 
 		// Drag only starts after a short threshold
-		if( isClicking() && draggedPos!=null && !dragStarted && M.dist(m.pageX, m.pageY, dragOrigin.pageX, dragOrigin.pageY)>=4 )
+		if( isClicking() && draggedPos!=null && !dragStarted && m.getPageDist(dragOrigin)>=4 )
 			dragStarted = true;
 
 		// Preview resizing

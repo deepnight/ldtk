@@ -121,5 +121,9 @@ class MouseCoords {
 	public function getLayerCy(li:data.inst.LayerInstance) {
 		return Std.int( ( layerY + getRelativeLayerInst().pxTotalOffsetY - li.pxTotalOffsetY ) / li.def.gridSize );
 	}
+
+	public inline function getPageDist(with:MouseCoords) {
+		return M.dist(pageX, pageY, with.pageX, with.pageY);
+	}
 }
 
