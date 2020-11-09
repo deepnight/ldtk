@@ -1358,6 +1358,7 @@ class Editor extends Page {
 	override function update() {
 		super.update();
 
+		#if debug
 		if( cd.has("debugTools") ) {
 			App.ME.debug("-- Tools ----------------------------------------");
 			App.ME.debug("  "+worldTool, true);
@@ -1366,5 +1367,6 @@ class Editor extends Page {
 			for(t in allLayerTools)
 				App.ME.debug("  "+t, true);
 		}
+		#end
 	}
 }
