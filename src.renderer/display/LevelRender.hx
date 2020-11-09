@@ -37,6 +37,8 @@ class LevelRender extends dn.Process {
 	var bgInvalidated = false;
 	var layerInvalidations : Map<Int, { left:Int, right:Int, top:Int, bottom:Int }> = new Map();
 
+	var otherLevels : Map<Int, h2d.Object> = new Map();
+
 
 	public function new() {
 		super(editor);

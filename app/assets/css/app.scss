@@ -34,7 +34,7 @@ $mainPanelCompactWid: 150px;
 body {
 	margin: 0;
 	padding: 0;
-	background: $bgMed;
+	background: $bgDark;
 	color: white;
 	font-family: "Arial";
 	font-size: 11pt;
@@ -2192,12 +2192,32 @@ div.sortHandle {
 	}
 }
 
+#appMask {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	width: 100vw;
+	height: 100vh;
+	background-color: $bgDark;
+	pointer-events: none;
+}
+
 canvas#webgl {
 	position: absolute;
 	top: 0;
 	left: 0;
-	height: 100vh !important;
 	z-index: 1;
+
+	&:not(.active) {
+		visibility: hidden;
+		width: 100px !important;
+		height: 100px !important;
+	}
+
+	&.active {
+		height: 100vh !important;
+	}
 }
 
 #page {

@@ -145,9 +145,11 @@ class App extends dn.Process {
 		dn.electron.ElectronUpdater.checkNow();
 
 		// Start
-		var path = getArgPath();
-		if( path==null || !loadProject(path) )
-			loadPage( ()->new page.Home() );
+		delayer.addS( ()->{
+			var path = getArgPath();
+			if( path==null || !loadProject(path) )
+				loadPage( ()->new page.Home() );
+		}, 0.2);
 
 		IpcRenderer.invoke("appReady");
 	}
@@ -243,6 +245,15 @@ class App extends dn.Process {
 		}
 	}
 
+
+	public function addMask() {
+		jBody.find("#appMask").remove();
+		jBody.append('<div id="appMask"/>');
+	}
+
+	public function fadeOutMask() {
+		jBody.find("#appMask").fadeOut(300);
+	}
 
 	public function miniNotif(html:String, fadeDelayS=0.5, persist=false) {
 		var e = jBody.find("#miniNotif");

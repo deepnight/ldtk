@@ -78,6 +78,7 @@ class Editor extends Page {
 
 		selectionTool = new tool.SelectionTool();
 		doNothingTool = new tool.lt.DoNothing();
+		showCanvas();
 
 		initUI();
 		updateCanvasSize();

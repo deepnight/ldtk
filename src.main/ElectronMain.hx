@@ -15,6 +15,11 @@ class ElectronMain {
 				fullscreenable: true,
 				show: false,
 				title: "LDtk",
+				backgroundColor: '#1e2229'
+			});
+
+			mainWindow.on('closed', function() {
+				mainWindow = null;
 			});
 
 			// Menu
@@ -24,12 +29,23 @@ class ElectronMain {
 			mainWindow.setMenu(null);
 			#end
 
-			// Start renderer part
-			mainWindow.show();
-			mainWindow.maximize();
-			mainWindow.loadURL('file://$__dirname/app.html');
-			mainWindow.on('closed', function() {
-				mainWindow = null;
+			// Prepare splash window
+			var splash = new electron.main.BrowserWindow({
+				width: 600,
+				height: 400,
+				alwaysOnTop: true,
+				transparent: true,
+				frame: false,
+			});
+			splash.loadURL('file://$__dirname/splash.html');
+
+			// Load app page
+			var p = mainWindow.loadURL('file://$__dirname/app.html');
+			p.then( (_)->{
+				// Display window when ready
+				mainWindow.maximize();
+				splash.destroy();
+
 			});
 
 			// Misc bindings
@@ -87,7 +103,9 @@ class ElectronMain {
 		});
 	}
 
+
 	#if debug
+	// Create a custom debug menu
 	static function enableDebugMenu() {
 		var menu = electron.main.Menu.buildFromTemplate([{
 			label: "Debug tools",

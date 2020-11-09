@@ -4,6 +4,13 @@ class Page extends dn.Process {
 	public function new() {
 		super(App.ME);
 		App.LOG.general("Page started: "+Type.getClassName( Type.getClass(this) )+"()" );
+		App.ME.jCanvas.removeClass("active");
+		App.ME.addMask();
+		delayer.addS( App.ME.fadeOutMask, 0.1 );
+	}
+
+	function showCanvas() {
+		App.ME.jCanvas.addClass("active");
 	}
 
 	public function onAppBlur() {}
