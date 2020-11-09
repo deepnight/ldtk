@@ -74,6 +74,8 @@ class WorldTool extends dn.Process {
 
 		// Drag
 		if( clickedLevel!=null && dragStarted ) {
+			var initialX = clickedLevel.worldX;
+			var initialY = clickedLevel.worldY;
 			clickedLevel.worldX = levelOriginX + ( m.worldX - origin.worldX );
 			clickedLevel.worldY = levelOriginY + ( m.worldY - origin.worldY );
 
@@ -106,6 +108,12 @@ class WorldTool extends dn.Process {
 					clickedLevel.worldY = checkSnap( clickedLevel.worldY, l.worldY, clickedLevel.pxHei );
 				}
 
+			}
+
+			// Compensate viewport induced movement
+			if( clickedLevel==editor.curLevel ) {
+				editor.levelRender.focusLevelX -= ( clickedLevel.worldX - initialX );
+				editor.levelRender.focusLevelY -= ( clickedLevel.worldY - initialY );
 			}
 
 			editor.levelRender.updateWorld();
