@@ -45,13 +45,13 @@ class Rulers extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
-			case ProjectSelected, LevelSelected, LayerInstanceSelected, ProjectSettingsChanged:
+			case ProjectSelected, LevelSelected(_), LayerInstanceSelected, ProjectSettingsChanged:
 				invalidate();
 
-			case LayerDefChanged, LayerDefRemoved(_), LevelResized, LevelRestoredFromHistory:
+			case LayerDefChanged, LayerDefRemoved(_), LevelResized(_), LevelRestoredFromHistory(_):
 				invalidate();
 
-			case LevelSettingsChanged:
+			case LevelSettingsChanged(_):
 				invalidate();
 
 			case ViewportChanged:
@@ -259,7 +259,7 @@ class Rulers extends dn.Process {
 					editor.levelRender.focusLevelY -= b.newTop;
 					curLevel.applyNewBounds(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
 					editor.selectionTool.clear();
-					editor.ge.emit(LevelResized);
+					editor.ge.emit( LevelResized(curLevel) );
 					editor.curLevelHistory.saveResizedState( before, curLevel.toJson() );
 				}
 			}

@@ -25,6 +25,7 @@ class LevelRender extends dn.Process {
 	/** <LayerDefUID, h2d.Object> **/
 	var layerRenders : Map<Int,h2d.Object> = new Map();
 
+	var worldWrapper : h2d.Object;
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
 	var grid : h2d.Graphics;
@@ -36,8 +37,9 @@ class LevelRender extends dn.Process {
 	var allInvalidated = true;
 	var bgInvalidated = false;
 	var layerInvalidations : Map<Int, { left:Int, right:Int, top:Int, bottom:Int }> = new Map();
+	var worldLevelsInvalidations : Map<Int,Bool> = new Map();
 
-	var otherLevels : Map<Int, h2d.Object> = new Map();
+	var worldLevels : Map<Int, h2d.Graphics> = new Map();
 
 
 	public function new() {
@@ -46,6 +48,9 @@ class LevelRender extends dn.Process {
 		editor.ge.addGlobalListener(onGlobalEvent);
 
 		createRootInLayers(editor.root, Const.DP_MAIN);
+
+		worldWrapper = new h2d.Graphics();
+		root.add(worldWrapper, Const.DP_MAIN);
 
 		bounds = new h2d.Graphics();
 		root.add(bounds, Const.DP_UI);
@@ -159,22 +164,27 @@ class LevelRender extends dn.Process {
 			case ProjectSelected:
 				renderAll();
 				fit();
+				resetWorldRender();
+				updateWorldPosition();
 
 			case ProjectSettingsChanged:
 				invalidateBg();
 
-			case LevelRestoredFromHistory:
+			case LevelRestoredFromHistory(l):
 				invalidateAll();
+				invalidateWorldLevel(l);
 
 			case LayerInstanceRestoredFromHistory(li):
 				invalidateLayer(li);
 
-			case LevelSelected:
+			case LevelSelected(l):
 				renderAll();
 				fit();
+				updateWorldPosition();
 
-			case LevelResized:
+			case LevelResized(l):
 				invalidateAll();
+				invalidateWorldLevel(l);
 
 			case LayerInstanceVisiblityChanged(li):
 				applyLayerVisibility(li);
@@ -186,8 +196,9 @@ class LevelRender extends dn.Process {
 				applyAllLayersVisibility();
 				invalidateBg();
 
-			case LevelSettingsChanged:
+			case LevelSettingsChanged(l):
 				invalidateBg();
+				invalidateWorldLevel(l);
 
 			case LayerDefRemoved(uid):
 				if( layerRenders.exists(uid) ) {
@@ -275,8 +286,11 @@ class LevelRender extends dn.Process {
 				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
 				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
-			case LevelAdded:
-			case LevelRemoved:
+			case LevelAdded(l):
+				invalidateWorldLevel(l);
+
+			case LevelRemoved(l):
+
 			case LevelSorted:
 			case LayerDefAdded:
 
@@ -376,6 +390,72 @@ class LevelRender extends dn.Process {
 		g.drawCircle( 0,0, 16 );
 		g.setPosition( M.round(x), M.round(y) );
 		root.add(g, Const.DP_UI);
+	}
+
+
+
+	public inline function invalidateWorldLevel(l:data.Level) {
+		worldLevelsInvalidations.set(l.uid, true);
+	}
+
+	public function resetWorldRender() {
+		for(e in worldLevels)
+			e.remove();
+		worldLevels = new Map();
+		worldWrapper.removeChildren();
+
+		for(l in editor.project.levels)
+			invalidateWorldLevel(l);
+	}
+
+	function updateWorldPosition() {
+		if( editor.curLevel==null )
+			return;
+		worldWrapper.x = -editor.curLevel.worldX;
+		worldWrapper.y = -editor.curLevel.worldY;
+	}
+
+	function renderWorldLevel(l:data.Level) {
+		if( l==null )
+			throw "Unknown level";
+
+		if( worldLevels.exists(l.uid) )
+			worldLevels.get(l.uid).remove();
+
+		var wrapper = new h2d.Graphics(worldWrapper);
+		worldLevels.set(l.uid, wrapper);
+		wrapper.x = l.worldX;
+		wrapper.y = l.worldY;
+		wrapper.filter = new h2d.filter.Blur(2, 1, 2);
+		wrapper.alpha = 0.5;
+
+		// Render level
+		for(li in l.layerInstances) {
+			switch li.def.type {
+				case IntGrid:
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid) {
+						if( li.hasAnyGridValue(cx,cy) ) {
+							wrapper.beginFill( li.getIntGridColorAt(cx,cy) );
+							wrapper.drawRect(
+								li.pxTotalOffsetX + cx*li.def.gridSize,
+								li.pxTotalOffsetY + cy*li.def.gridSize,
+								li.def.gridSize,
+								li.def.gridSize
+							);
+							wrapper.endFill();
+						}
+					}
+				case Entities:
+				case Tiles:
+				case AutoLayer:
+			}
+		}
+
+		// Bounds
+		wrapper.lineStyle(1,0xffcc00,1);
+		wrapper.drawRect(0,0,l.pxWid,l.pxHei);
+		wrapper.lineStyle(0);
 	}
 
 
@@ -929,7 +1009,6 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-
 	public inline function invalidateLayer(?li:data.inst.LayerInstance, ?layerDefUid:Int) {
 		if( li==null )
 			li = editor.curLevel.getLayerInstance(layerDefUid);
@@ -986,6 +1065,10 @@ class LevelRender extends dn.Process {
 			else
 				i++;
 		}
+
+		// World levels invalidation
+		for(uid in worldLevelsInvalidations.keys())
+			renderWorldLevel( editor.project.getLevel(uid) );
 
 		// Render invalidation system
 		if( allInvalidated ) {

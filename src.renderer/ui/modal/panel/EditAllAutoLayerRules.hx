@@ -29,7 +29,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 		switch e {
-			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
+			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged(_), LevelSelected(_):
 				updatePanel();
 
 			case LayerInstanceRestoredFromHistory(li):

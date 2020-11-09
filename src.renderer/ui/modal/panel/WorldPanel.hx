@@ -12,7 +12,7 @@ class WorldPanel extends ui.modal.Panel {
 
 		jContent.find(".mainList button.create").click( function(ev) {
 			var l = project.createLevel();
-			editor.ge.emit(LevelAdded);
+			editor.ge.emit( LevelAdded(l) );
 			select(l);
 		});
 
@@ -45,7 +45,7 @@ class WorldPanel extends ui.modal.Panel {
 			editor.selectLevel( project.levels[0] );
 		else
 			editor.selectLevel( project.levels[idx-1] );
-		editor.ge.emit(LevelRemoved);
+		editor.ge.emit( LevelRemoved(l) );
 		return true;
 	}
 
@@ -58,11 +58,11 @@ class WorldPanel extends ui.modal.Panel {
 
 			case LayerInstanceSelected, LayerInstanceVisiblityChanged(_):
 
-			case LevelSelected, LevelSettingsChanged:
+			case LevelSelected(l), LevelSettingsChanged(l):
 				updateList();
 				updateForm();
 
-			case LevelAdded, LevelSorted:
+			case LevelAdded(_), LevelSorted:
 				updateList();
 
 			case _:
@@ -73,9 +73,15 @@ class WorldPanel extends ui.modal.Panel {
 
 	function updateForm() {
 		var i = Input.linkToHtmlInput( curLevel.identifier, jForm.find("[name=name]") );
-		i.linkEvent(LevelSettingsChanged);
+		i.linkEvent( LevelSettingsChanged(curLevel) );
 		i.validityCheck = function(id) return data.Project.isValidIdentifier(id) && project.isLevelIdentifierUnique(id);
 		i.validityError = N.invalidIdentifier;
+
+		var i = Input.linkToHtmlInput( curLevel.worldX, jForm.find("[name=worldX]") );
+		i.linkEvent( LevelSettingsChanged(curLevel) );
+
+		var i = Input.linkToHtmlInput( curLevel.worldY, jForm.find("[name=worldY]") );
+		i.linkEvent( LevelSettingsChanged(curLevel) );
 	}
 
 	function updateList() {
@@ -94,7 +100,7 @@ class WorldPanel extends ui.modal.Panel {
 					label: L._Duplicate(),
 					cb:()->{
 						project.duplicateLevel(l);
-						editor.ge.emit(LevelAdded);
+						editor.ge.emit( LevelAdded(l) );
 					}
 				},
 				{ label: L._Delete(), cb:deleteLevel.bind(l) },

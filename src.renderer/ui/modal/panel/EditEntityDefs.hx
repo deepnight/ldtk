@@ -173,7 +173,7 @@ class EditEntityDefs extends ui.modal.Panel {
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
-			case ProjectSettingsChanged, LevelSettingsChanged, LevelSelected:
+			case ProjectSettingsChanged, LevelSettingsChanged(_), LevelSelected(_):
 				close();
 
 			case ProjectSelected:

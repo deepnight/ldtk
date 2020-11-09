@@ -58,12 +58,12 @@ class LevelHistory {
 			case EnumDefChanged:
 			case EnumDefSorted:
 
-			case LevelResized:
+			case LevelResized(l):
 			case LevelSorted:
-			case LevelSelected:
-			case LevelAdded:
-			case LevelRemoved:
-			case LevelSettingsChanged:
+			case LevelSelected(l):
+			case LevelAdded(l):
+			case LevelRemoved(l):
+			case LevelSettingsChanged(l):
 
 			case ProjectSettingsChanged:
 			case LayerDefChanged, EntityDefChanged:
@@ -85,7 +85,7 @@ class LevelHistory {
 			case LayerInstanceAutoRenderingChanged(_):
 
 			case LayerInstanceRestoredFromHistory(_):
-			case LevelRestoredFromHistory:
+			case LevelRestoredFromHistory(l):
 			case ToolOptionChanged:
 		}
 	}
@@ -260,7 +260,7 @@ class LevelHistory {
 					editor.project.levels[lidx] = data.Level.fromJson(editor.project, beforeJson);
 				else
 					editor.project.levels[lidx] = data.Level.fromJson(editor.project, afterJson);
-				editor.ge.emit(LevelRestoredFromHistory);
+				editor.ge.emit( LevelRestoredFromHistory(editor.project.levels[lidx]) );
 
 			case Layer(layerId, bounds, json):
 				var li = data.inst.LayerInstance.fromJson(editor.project, json);

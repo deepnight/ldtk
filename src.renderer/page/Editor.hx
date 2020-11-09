@@ -733,7 +733,7 @@ class Editor extends Page {
 			return;
 
 		curLevelId = l.uid;
-		ge.emit(LevelSelected);
+		ge.emit( LevelSelected(l) );
 	}
 
 	public function selectLayerInstance(li:data.inst.LayerInstance, notify=true) {
@@ -954,12 +954,12 @@ class Editor extends Page {
 				case ProjectSettingsChanged:
 				case BeforeProjectSaving:
 				case ProjectSaved:
-				case LevelSelected:
-				case LevelSettingsChanged:
-				case LevelAdded:
-				case LevelRemoved:
-				case LevelResized:
-				case LevelRestoredFromHistory:
+				case LevelSelected(l):
+				case LevelSettingsChanged(l):
+				case LevelAdded(l):
+				case LevelRemoved(l):
+				case LevelResized(l):
+				case LevelRestoredFromHistory(l):
 				case LevelSorted:
 				case LayerDefAdded:
 				case LayerDefConverted:
@@ -1014,7 +1014,7 @@ class Editor extends Page {
 		switch e {
 			case ViewportChanged:
 			case LayerInstanceSelected:
-			case LevelSelected:
+			case LevelSelected(_):
 			case LayerInstanceVisiblityChanged(_):
 			case LayerInstanceAutoRenderingChanged(_):
 			case ToolOptionChanged:
@@ -1092,24 +1092,24 @@ class Editor extends Page {
 				clearSpecialTool();
 				updateTool();
 
-			case LevelSettingsChanged:
+			case LevelSettingsChanged(l):
 				updateGuide();
 
-			case LevelAdded:
-			case LevelRemoved:
-			case LevelResized:
+			case LevelAdded(l):
+			case LevelRemoved(l):
+			case LevelResized(l):
 			case LevelSorted:
 
-			case LevelSelected:
+			case LevelSelected(l):
 				updateLayerList();
 				updateGuide();
 				clearSpecialTool();
 				selectionTool.clear();
 				updateTool();
-				if( !levelHistory.exists(curLevelId) )
-					levelHistory.set(curLevelId, new LevelHistory(curLevelId) );
+				if( !levelHistory.exists(l.uid) )
+					levelHistory.set(l.uid, new LevelHistory(l.uid) );
 
-			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory:
+			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				selectionTool.clear();
 				clearSpecialTool();
 				updateAppBg();

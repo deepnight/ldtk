@@ -15,12 +15,12 @@ enum GlobalEvent {
 	BeforeProjectSaving;
 	ProjectSaved;
 
-	LevelSelected;
-	LevelSettingsChanged;
-	LevelAdded;
-	LevelRemoved;
-	LevelResized;
-	LevelRestoredFromHistory;
+	LevelSelected(level:data.Level);
+	LevelSettingsChanged(level:data.Level);
+	LevelAdded(level:data.Level);
+	LevelRemoved(level:data.Level);
+	LevelResized(level:data.Level);
+	LevelRestoredFromHistory(level:data.Level);
 	LevelSorted;
 
 	LayerDefAdded;
