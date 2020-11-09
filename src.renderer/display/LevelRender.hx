@@ -165,7 +165,7 @@ class LevelRender extends dn.Process {
 				renderAll();
 				fit();
 				resetWorldRender();
-				updateWorldPosition();
+				updateWorldPositions();
 
 			case ProjectSettingsChanged:
 				invalidateBg();
@@ -180,7 +180,7 @@ class LevelRender extends dn.Process {
 			case LevelSelected(l):
 				renderAll();
 				fit();
-				updateWorldPosition();
+				updateWorldPositions();
 
 			case LevelResized(l):
 				invalidateAll();
@@ -408,24 +408,29 @@ class LevelRender extends dn.Process {
 			invalidateWorldLevel(l);
 	}
 
-	function updateWorldPosition() {
+	public function updateWorldPositions() {
 		if( editor.curLevel==null )
 			return;
 		worldWrapper.x = -editor.curLevel.worldX;
 		worldWrapper.y = -editor.curLevel.worldY;
+
+		for( l in editor.project.levels )
+			if( worldLevels.exists(l.uid) )
+				worldLevels.get(l.uid).setPosition( l.worldX, l.worldY );
+
 	}
 
 	function renderWorldLevel(l:data.Level) {
 		if( l==null )
 			throw "Unknown level";
 
+		worldLevelsInvalidations.remove(l.uid);
+
 		if( worldLevels.exists(l.uid) )
 			worldLevels.get(l.uid).remove();
 
 		var wrapper = new h2d.Graphics(worldWrapper);
 		worldLevels.set(l.uid, wrapper);
-		wrapper.x = l.worldX;
-		wrapper.y = l.worldY;
 		wrapper.filter = new h2d.filter.Blur(2, 1, 2);
 		wrapper.alpha = 0.5;
 
@@ -1067,8 +1072,13 @@ class LevelRender extends dn.Process {
 		}
 
 		// World levels invalidation
-		for(uid in worldLevelsInvalidations.keys())
+		var any = false;
+		for(uid in worldLevelsInvalidations.keys()) {
 			renderWorldLevel( editor.project.getLevel(uid) );
+			any = true;
+		}
+		if( any )
+			updateWorldPositions();
 
 		// Render invalidation system
 		if( allInvalidated ) {
