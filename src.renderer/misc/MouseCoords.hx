@@ -14,6 +14,7 @@ class MouseCoords {
 	public var canvasY(get,never) : Int;
 		inline function get_canvasY() return M.round( ( pageY - App.ME.jCanvas.offset().top ) * pixelRatio );
 
+
 	// Level
 	public var levelX(get,never) : Int;
 		inline function get_levelX() {
@@ -30,6 +31,23 @@ class MouseCoords {
 			else
 				return M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.levelRender.adjustedZoom );
 		}
+
+	// World
+	public var worldX(get,never) : Int;
+	inline function get_worldX() {
+		if( Editor.ME==null || Editor.ME.destroyed )
+			return -1;
+		else
+			return levelX + ( Editor.ME.curLevel==null ? 0 : Editor.ME.curLevel.worldX );
+	}
+
+	public var worldY(get,never) : Int;
+	inline function get_worldY() {
+		if( Editor.ME==null || Editor.ME.destroyed )
+			return -1;
+		else
+			return levelY + ( Editor.ME.curLevel==null ? 0 : Editor.ME.curLevel.worldY );
+	}
 
 	// Layer
 	public var layerX(get,never) : Int;
