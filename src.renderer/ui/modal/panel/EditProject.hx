@@ -19,6 +19,10 @@ class EditProject extends ui.modal.Panel {
 			editor.onSaveAs();
 		});
 
+		jContent.find("button.close").click( function(ev) {
+			editor.onClose();
+		});
+
 		updateProjectForm();
 	}
 

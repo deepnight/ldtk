@@ -854,7 +854,7 @@ class Editor extends Page {
 		new ui.modal.panel.Help();
 	}
 
-	function onClose(?bt:js.jquery.JQuery) {
+	public function onClose(?bt:js.jquery.JQuery) {
 		ui.Modal.closeAll();
 		if( needSaving )
 			new ui.modal.dialog.UnsavedChanges( bt, App.ME.loadPage.bind( ()->new Home() ) );
