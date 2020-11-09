@@ -30,6 +30,7 @@ class ElectronMain {
 			#end
 
 			// Prepare splash window
+			#if !debug
 			var splash = new electron.main.BrowserWindow({
 				width: 600,
 				height: 400,
@@ -38,15 +39,19 @@ class ElectronMain {
 				frame: false,
 			});
 			splash.loadURL('file://$__dirname/splash.html');
+			#end
 
 			// Load app page
 			var p = mainWindow.loadURL('file://$__dirname/app.html');
+			#if debug
+			mainWindow.maximize();
+			#else
 			p.then( (_)->{
 				// Display window when ready
 				mainWindow.maximize();
 				splash.destroy();
-
 			});
+			#end
 
 			// Misc bindings
 			dn.electron.Dialogs.initMain(mainWindow);
