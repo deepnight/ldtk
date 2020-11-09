@@ -6,6 +6,8 @@ class Level {
 	@:allow(data.Project)
 	public var uid(default,null) : Int;
 	public var identifier(default,set): String;
+	public var worldX : Int;
+	public var worldY : Int;
 	public var pxWid : Int;
 	public var pxHei : Int;
 	public var layerInstances : Array<data.inst.LayerInstance> = [];
@@ -35,6 +37,8 @@ class Level {
 		return {
 			identifier: identifier,
 			uid: uid,
+			worldX: worldX,
+			worldY: worldY,
 			pxWid: pxWid,
 			pxHei: pxHei,
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),
@@ -43,6 +47,8 @@ class Level {
 
 	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {
 		var l = new Level( p, JsonTools.readInt(json.uid) );
+		l.worldX = JsonTools.readInt( json.worldX, 0 );
+		l.worldY = JsonTools.readInt( json.worldY, 0 );
 		l.pxWid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_WIDTH );
 		l.pxHei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_HEIGHT );
 		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
