@@ -8,6 +8,7 @@ class WorldTool extends dn.Process {
 	var levelOriginY : Int;
 	var origin : MouseCoords;
 	var dragStarted = false;
+	var worldMode(get,never) : Bool; inline function get_worldMode() return editor.worldMode;
 
 	public function new() {
 		super(Editor.ME);
@@ -19,7 +20,7 @@ class WorldTool extends dn.Process {
 
 		origin = m;
 		dragStarted = false;
-		clickedLevel = getLevelAt(m.worldX, m.worldY, false);
+		clickedLevel = getLevelAt(m.worldX, m.worldY, worldMode);
 
 		if( clickedLevel!=null ) {
 			levelOriginX = clickedLevel.worldX;
@@ -31,14 +32,17 @@ class WorldTool extends dn.Process {
 		if( clickedLevel!=null )
 			if( dragStarted )
 				editor.ge.emit( LevelSettingsChanged(clickedLevel) );
-			else
+			else {
+				// Pick level
 				editor.selectLevel(clickedLevel);
+				editor.worldMode = false;
+			}
 
 		clickedLevel = null;
 	}
 
-	public function isRunning() {
-		return clickedLevel!=null;
+	public function isTakingPriority() {
+		return clickedLevel!=null || worldMode;
 	}
 
 	inline function getWorldGrid() return 16;
@@ -50,9 +54,17 @@ class WorldTool extends dn.Process {
 			return cur;
 	}
 
+	public function onKeyPress(keyCode:Int) {
+		switch keyCode {
+			case K.W:
+				editor.worldMode = !worldMode;
+				editor.levelRender.updateWorld();
+		}
+	}
+
 	public function onMouseMove(m:MouseCoords) {
 		// Start dragging
-		if( !dragStarted && clickedLevel!=null && origin.getPageDist(m)>=4 )
+		if( worldMode && !dragStarted && clickedLevel!=null && origin.getPageDist(m)>=4 )
 			dragStarted = true;
 
 		// Drag
@@ -91,7 +103,7 @@ class WorldTool extends dn.Process {
 
 			}
 
-			editor.levelRender.updateWorldPositions();
+			editor.levelRender.updateWorld();
 		}
 	}
 

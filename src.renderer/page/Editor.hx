@@ -38,6 +38,7 @@ class Editor extends Page {
 	var doNothingTool : tool.lt.DoNothing;
 
 	public var needSaving = false;
+	public var worldMode = false;
 
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
@@ -473,6 +474,8 @@ class Editor extends Page {
 
 		// Propagate to tools
 		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() ) {
+			worldTool.onKeyPress(keyCode);
+
 			if( isSpecialToolActive() )
 				specialTool.onKeyPress(keyCode);
 			else {
@@ -627,7 +630,7 @@ class Editor extends Page {
 
 		worldTool.onMouseDown(m, e.button);
 
-		if( !worldTool.isRunning() ) {
+		if( !worldTool.isTakingPriority() ) {
 			if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && e.button==0 )
 				selectionTool.startUsing( m, e.button );
 			else if( isSpecialToolActive() )
@@ -661,7 +664,7 @@ class Editor extends Page {
 
 		// Tool updates
 		worldTool.onMouseMove(m);
-		if( !worldTool.isRunning() ) {
+		if( !worldTool.isTakingPriority() ) {
 			if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
 				selectionTool.onMouseMove(m);
 			else if( isSpecialToolActive() )
