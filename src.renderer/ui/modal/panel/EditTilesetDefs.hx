@@ -60,9 +60,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 				updateForm();
 				updateTilesetPreview();
 				if( td==curTd )
-					rebuildOpaqueCache();
+					rebuildPixelDataCache();
 
-			case TilesetDefOpaqueCacheRebuilt(td):
+			case TilesetDefPixelDataCacheRebuilt(td):
 				if( td==curTd )
 					updateTilesetPreview();
 
@@ -122,8 +122,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 	}
 
 
-	function rebuildOpaqueCache() {
-		curTd.buildOpaqueTileCache( Editor.ME.ge.emit.bind(TilesetDefOpaqueCacheRebuilt(curTd)) );
+	inline function rebuildPixelDataCache() {
+		curTd.buildPixelDataCache( Editor.ME.ge.emit.bind(TilesetDefPixelDataCacheRebuilt(curTd)) );
 	}
 
 

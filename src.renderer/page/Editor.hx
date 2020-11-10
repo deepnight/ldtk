@@ -259,6 +259,17 @@ class Editor extends Page {
 				needSaving = true;
 		});
 
+		// HACK: test average pixel colors
+		for(td in project.defs.tilesets) {
+			var avg = new h2d.Graphics();
+			root.add(avg, Const.DP_TOP);
+			for(cy in 0...td.cHei)
+			for(cx in 0...td.cWid) {
+				avg.beginFill( td.getAverageTileColor( td.getTileId(cx,cy) ) );
+				avg.drawRect( cx*td.tileGridSize, cy*td.tileGridSize, td.tileGridSize, td.tileGridSize );
+			}
+		}
+
 		needSaving = tilesetChanged;
 	}
 
@@ -302,7 +313,7 @@ class Editor extends Page {
 				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
 					var newRelPath = makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( getProjectDir(), newRelPath );
-					td.buildOpaqueTileCache( ge.emit.bind(TilesetDefOpaqueCacheRebuilt(td)) );
+					td.buildPixelDataCache( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 					ge.emit( TilesetDefChanged(td) );
 					levelRender.invalidateAll();
 				});
@@ -331,9 +342,9 @@ class Editor extends Page {
 		}
 
 		// Rebuild "opaque tiles" cache
-		if( td.opaqueTilesCache==null || !isInitialLoading || result!=Ok ) {
+		if( td.opaqueTilesCache==null || td.averageColorsCache==null || !isInitialLoading || result!=Ok ) {
 			changed = true;
-			td.buildOpaqueTileCache( ge.emit.bind(TilesetDefOpaqueCacheRebuilt(td)) );
+			td.buildPixelDataCache( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 		}
 
 		ge.emit( TilesetDefChanged(td) );
@@ -1010,7 +1021,7 @@ class Editor extends Page {
 				case TilesetDefAdded(td): extra = td.uid;
 				case TilesetDefRemoved(td): extra = td.uid;
 				case TilesetSelectionSaved(td): extra = td.uid;
-				case TilesetDefOpaqueCacheRebuilt(td): extra = td.uid;
+				case TilesetDefPixelDataCacheRebuilt(td): extra = td.uid;
 				case EntityInstanceAdded(ei): extra = ei.defUid;
 				case EntityInstanceRemoved(ei): extra = ei.defUid;
 				case EntityInstanceChanged(ei): extra = ei.defUid;
@@ -1151,7 +1162,7 @@ class Editor extends Page {
 				updateGuide();
 
 			case TilesetSelectionSaved(td):
-			case TilesetDefOpaqueCacheRebuilt(td):
+			case TilesetDefPixelDataCacheRebuilt(td):
 
 			case TilesetDefAdded(td):
 

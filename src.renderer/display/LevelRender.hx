@@ -291,7 +291,7 @@ class LevelRender extends dn.Process {
 			case LayerInstanceChanged:
 
 			case TilesetSelectionSaved(td):
-			case TilesetDefOpaqueCacheRebuilt(td):
+			case TilesetDefPixelDataCacheRebuilt(td):
 
 			case TilesetDefRemoved(td):
 				invalidateAll();
@@ -1148,7 +1148,7 @@ class LevelRender extends dn.Process {
 		// World
 		worldBg.wrapper.alpha += ( ( editor.worldMode ? 0.3 : 0 ) - worldBg.wrapper.alpha ) * 0.1;
 		worldBg.wrapper.visible = worldBg.wrapper.alpha>=0.02;
-		worldBg.wrapper.visible = false;
+		worldBg.wrapper.visible = false; // HACK
 
 		// Fade-out temporary rects
 		var i = 0;

@@ -52,7 +52,7 @@ enum GlobalEvent {
 	TilesetDefAdded(td:data.def.TilesetDef);
 	TilesetDefRemoved(td:data.def.TilesetDef);
 	TilesetSelectionSaved(td:data.def.TilesetDef);
-	TilesetDefOpaqueCacheRebuilt(td:data.def.TilesetDef);
+	TilesetDefPixelDataCacheRebuilt(td:data.def.TilesetDef);
 
 	EntityInstanceAdded(ei:data.inst.EntityInstance);
 	EntityInstanceRemoved(ei:data.inst.EntityInstance);

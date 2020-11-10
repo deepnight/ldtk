@@ -168,6 +168,7 @@ Sorry this type has no documentation yet.
 ## 2.3. Tileset definition   
 Value | Type | Description
 -- | -- | --
+`averageColors`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Array&nbsp;of&nbsp;Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array containing the average color code (0xrrggbb) of each tile
 `identifier` | String | Unique String identifier
 `opaqueTiles`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Array&nbsp;of&nbsp;Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array of all tiles that are fully opaque (ie. no transparent pixel). Used internally for optimizations.
 `padding` | Int | Distance in pixels from image borders

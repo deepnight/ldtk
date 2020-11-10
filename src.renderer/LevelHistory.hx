@@ -72,7 +72,7 @@ class LevelHistory {
 			case TilesetDefChanged(td):
 			case TilesetSelectionSaved(td):
 			case TilesetDefAdded(td):
-			case TilesetDefOpaqueCacheRebuilt(td):
+			case TilesetDefPixelDataCacheRebuilt(td):
 
 			case EntityDefSorted, EntityFieldSorted, EntityFieldDefChanged(_):
 			case EntityInstanceFieldChanged(ei):
