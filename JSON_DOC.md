@@ -37,6 +37,8 @@ Value | Type | Description
 `pxHei` | Int | Height of the level in pixels
 `pxWid` | Int | Width of the level in pixels
 `uid` | Int | Unique Int identifier
+`worldX`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Int | World X coordinate in pixels
+`worldY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Int | World Y coordinate in pixels
 
 <a id="ldtk-LayerInstanceJson" name="ldtk-LayerInstanceJson"></a>
 ## 1.1. Layer instance   
