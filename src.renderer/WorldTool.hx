@@ -48,7 +48,7 @@ class WorldTool extends dn.Process {
 				editor.levelRender.focusLevelX -= ( editor.curLevel.worldX-old.worldX );
 				editor.levelRender.focusLevelY -= ( editor.curLevel.worldY-old.worldY );
 				editor.levelRender.autoScrollToLevel(clickedLevel);
-				editor.worldMode = false;
+				editor.setWorldMode(false);
 			}
 
 		clickedLevel = null;
@@ -70,8 +70,7 @@ class WorldTool extends dn.Process {
 	public function onKeyPress(keyCode:Int) {
 		switch keyCode {
 			case K.W:
-				editor.worldMode = !worldMode;
-				editor.levelRender.updateWorld();
+				editor.setWorldMode( !worldMode );
 				if( !editor.worldMode ) {
 					// Recenter on active level
 					var l = editor.curLevel;

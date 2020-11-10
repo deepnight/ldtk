@@ -39,7 +39,7 @@ class Editor extends Page {
 	var doNothingTool : tool.lt.DoNothing;
 
 	public var needSaving = false;
-	public var worldMode = false;
+	public var worldMode(default,null) = false;
 
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
@@ -90,6 +90,7 @@ class Editor extends Page {
 
 		selectProject(p);
 		setCompactMode( settings.compactMode, true );
+		dn.Process.resizeAll();
 	}
 
 	function saveLocked() {
@@ -819,6 +820,10 @@ class Editor extends Page {
 		});
 	}
 
+	public function setWorldMode(v:Bool) {
+		worldMode = v;
+		levelRender.updateWorld();
+	}
 
 	public function setGrid(v:Bool, notify=true) {
 		settings.grid = v;
@@ -1201,6 +1206,7 @@ class Editor extends Page {
 			bg.scaleY = canvasHei();
 		}
 		ge.emit(ViewportChanged);
+		dn.Process.resizeAll();
 	}
 
 	public inline function canvasWid() {

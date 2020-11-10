@@ -1,7 +1,7 @@
 package display;
 
 class LevelRender extends dn.Process {
-	static var WORLD_LEVEL_SCALE = 0.25;
+	static var WORLD_LEVEL_SCALE = 0.1;
 	static var MIN_ZOOM = 0.2;
 	static var MAX_ZOOM = 32;
 	static var MAX_FOCUS_PADDING_X = 450;
@@ -31,7 +31,7 @@ class LevelRender extends dn.Process {
 	var layerRenders : Map<Int,h2d.Object> = new Map();
 
 	var worldLevels : Map<Int, { wrapper:h2d.Object, render:h2d.Graphics }> = new Map();
-	var worldBg : dn.heaps.TiledTexture;
+	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
 	var worldWrapper : h2d.Object;
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
@@ -51,13 +51,18 @@ class LevelRender extends dn.Process {
 		super(editor);
 
 		editor.ge.addGlobalListener(onGlobalEvent);
-
 		createRootInLayers(editor.root, Const.DP_MAIN);
 
-		worldBg = new dn.heaps.TiledTexture(Assets.elements.getTile("largeStripes"), 1, 1);
-		editor.root.add(worldBg, Const.DP_MAIN);
-		editor.root.under(worldBg);
-		worldBg.alpha = 0;
+		var w = new h2d.Object();
+		worldBg = {
+			wrapper : w,
+			col: new h2d.Bitmap(w),
+			tex: new dn.heaps.TiledTexture(Assets.elements.getTile("largeStripes"), 1, 1, w),
+		}
+		worldBg.tex.alpha = 0.5;
+		editor.root.add(worldBg.wrapper, Const.DP_MAIN);
+		editor.root.under(worldBg.wrapper);
+		worldBg.wrapper.alpha = 0;
 
 		worldWrapper = new h2d.Graphics();
 		root.add(worldWrapper, Const.DP_MAIN);
@@ -174,8 +179,13 @@ class LevelRender extends dn.Process {
 
 	override function onDispose() {
 		super.onDispose();
-		worldBg.remove();
+		worldBg.wrapper.remove();
 		editor.ge.removeListener(onGlobalEvent);
+	}
+
+	override function onResize() {
+		super.onResize();
+		renderWorldBg();
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
@@ -184,7 +194,6 @@ class LevelRender extends dn.Process {
 				root.setScale(adjustedZoom);
 				root.x = M.round( editor.canvasWid()*0.5 - focusLevelX * adjustedZoom );
 				root.y = M.round( editor.canvasHei()*0.5 - focusLevelY * adjustedZoom );
-				worldBg.resize( Std.int(editor.canvasWid()-20), Std.int(editor.canvasHei()-20) );
 
 			case ProjectSaved, BeforeProjectSaving:
 
@@ -196,6 +205,7 @@ class LevelRender extends dn.Process {
 
 			case ProjectSettingsChanged:
 				invalidateBg();
+				renderWorldBg();
 
 			case LevelRestoredFromHistory(l):
 				invalidateAll();
@@ -438,6 +448,13 @@ class LevelRender extends dn.Process {
 			invalidateWorldLevel(l);
 	}
 
+	function renderWorldBg() {
+		worldBg.tex.resize( Std.int(editor.canvasWid()), Std.int(editor.canvasHei()) );
+		worldBg.col.tile = h2d.Tile.fromColor( C.interpolateInt(editor.project.bgColor, 0x8187bd, 0.85) );
+		worldBg.col.scaleX = editor.canvasWid();
+		worldBg.col.scaleY = editor.canvasHei();
+	}
+
 	public function updateWorld() {
 		worldWrapper.x = -editor.curLevel.worldX;
 		worldWrapper.y = -editor.curLevel.worldY;
@@ -452,10 +469,7 @@ class LevelRender extends dn.Process {
 					e.wrapper.visible = true;
 				}
 
-				e.render.filter = editor.worldMode
-					? null
-					: new h2d.filter.Blur(2,1,2);
-				e.wrapper.alpha = editor.worldMode ? 1 : 0.33;
+				e.wrapper.alpha = editor.worldMode ? 1 : 0.2;
 			}
 
 	}
@@ -503,9 +517,9 @@ class LevelRender extends dn.Process {
 		}
 
 		// Bounds
-		render.lineStyle(1, l==editor.curLevel ? 0xffffff : 0xffcc00,1);
-		render.drawRect(0, 0, l.pxWid*scale, l.pxHei*scale);
-		render.lineStyle(0);
+		var g = new h2d.Graphics(wrapper);
+		g.lineStyle(3, l==editor.curLevel ? 0xffffff : 0xffcc00, 1);
+		g.drawRect(0, 0, l.pxWid, l.pxHei);
 
 		// Identifier
 		var bg = new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2, wrapper );
@@ -1132,8 +1146,9 @@ class LevelRender extends dn.Process {
 			editor.ge.emitAtTheEndOfFrame(ViewportChanged);
 
 		// World
-		worldBg.alpha += ( ( editor.worldMode ? 0.3 : 0 ) - worldBg.alpha ) * 0.1;
-		worldBg.visible = worldBg.alpha>=0.02;
+		worldBg.wrapper.alpha += ( ( editor.worldMode ? 0.3 : 0 ) - worldBg.wrapper.alpha ) * 0.1;
+		worldBg.wrapper.visible = worldBg.wrapper.alpha>=0.02;
+		worldBg.wrapper.visible = false;
 
 		// Fade-out temporary rects
 		var i = 0;
