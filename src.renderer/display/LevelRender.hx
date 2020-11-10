@@ -154,7 +154,7 @@ class LevelRender extends dn.Process {
 		// reduces tile flickering (#71)
 		return
 			( rawZoom<=js.Browser.window.devicePixelRatio ? rawZoom : M.round(rawZoom*2)/2 )
-			+ worldZoom*-0.3;
+			+ worldZoom*-0.3*rawZoom;
 	}
 
 	public function deltaZoom(delta:Float) {
