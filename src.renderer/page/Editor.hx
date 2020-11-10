@@ -459,6 +459,11 @@ class Editor extends Page {
 				else
 					cd.setS("debugTools", Const.INFINITE);
 
+			case K.C if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
+				N.debug("Rebuilding pixel caches...");
+				for(td in project.defs.tilesets)
+					td.buildPixelDataCache( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
+
 			case K.U if( !hasInputFocus() && App.ME.isShiftDown() && App.ME.isCtrlDown() ):
 				dn.electron.ElectronUpdater.emulate();
 
