@@ -1,3 +1,9 @@
+# 0.5.2-beta
+
+ - Fixed a crash when loading a project with a "lost" tileset image (ie. path not found).
+ - Fixed crash window that looped forever
+ - Better crash report window
+
 # 0.5.1-beta
 
  - Added "top-down" sample map
