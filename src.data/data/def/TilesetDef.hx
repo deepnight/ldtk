@@ -454,6 +454,9 @@ class TilesetDef {
 	}
 
 	public function buildOpaqueTileCache(onComplete:Void->Void) {
+		if( !isAtlasLoaded() )
+			return;
+
 		App.LOG.general("Init opaque cache for "+relPath);
 		opaqueTilesCache = new Map();
 		var ops = [];
