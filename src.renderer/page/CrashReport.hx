@@ -3,7 +3,7 @@ package page;
 import hxd.Key;
 
 class CrashReport extends Page {
-	public function new(error:js.lib.Error, ?unsavedProject:data.Project, ?projectFilePath:String) {
+	public function new(error:js.lib.Error, activeProcesses:String, ?unsavedProject:data.Project, ?projectFilePath:String) {
 		super();
 
 		// Init
@@ -50,6 +50,10 @@ class CrashReport extends Page {
 					error.message,
 					error.name,
 					error.stack,
+					"```",
+					"Processes:",
+					"```",
+					activeProcesses,
 					"```",
 					"",
 					"Log:",
