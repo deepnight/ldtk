@@ -1,0 +1,13 @@
+
+appElements.png
+size: 236,236
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+largeStripes
+  rotate: false
+  xy: 1, 1
+  size: 234, 234
+  orig: 234, 234
+  offset: 0, 0
+  index: -1

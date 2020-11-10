@@ -17,6 +17,7 @@ class LevelRender extends dn.Process {
 	var targetLevelY: Null<Float>;
 	public var adjustedZoom(get,set) : Float;
 	var rawZoom : Float;
+	var worldZoom = 0.;
 	var isFit = false;
 
 	/** <LayerDefUID, Bool> **/
@@ -29,6 +30,7 @@ class LevelRender extends dn.Process {
 	/** <LayerDefUID, h2d.Object> **/
 	var layerRenders : Map<Int,h2d.Object> = new Map();
 
+	var worldBg : dn.heaps.TiledTexture;
 	var worldWrapper : h2d.Object;
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
@@ -52,6 +54,11 @@ class LevelRender extends dn.Process {
 		editor.ge.addGlobalListener(onGlobalEvent);
 
 		createRootInLayers(editor.root, Const.DP_MAIN);
+
+		worldBg = new dn.heaps.TiledTexture(Assets.elements.getTile("largeStripes"), 1, 1);
+		editor.root.add(worldBg, Const.DP_MAIN);
+		editor.root.under(worldBg);
+		worldBg.alpha = 0;
 
 		worldWrapper = new h2d.Graphics();
 		root.add(worldWrapper, Const.DP_MAIN);
@@ -131,10 +138,10 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function get_adjustedZoom() {
-		if( rawZoom<=js.Browser.window.devicePixelRatio )
-			return rawZoom;
-		else
-			return M.round(rawZoom*2)/2; // reduces tile flickering (#71)
+		// reduces tile flickering (#71)
+		return
+			( rawZoom<=js.Browser.window.devicePixelRatio ? rawZoom : M.round(rawZoom*2)/2 )
+			+ worldZoom * -0.3;
 	}
 
 	public function deltaZoom(delta:Float) {
@@ -153,6 +160,7 @@ class LevelRender extends dn.Process {
 
 	override function onDispose() {
 		super.onDispose();
+		worldBg.remove();
 		editor.ge.removeListener(onGlobalEvent);
 	}
 
@@ -162,6 +170,7 @@ class LevelRender extends dn.Process {
 				root.setScale(adjustedZoom);
 				root.x = M.round( editor.canvasWid()*0.5 - focusLevelX * adjustedZoom );
 				root.y = M.round( editor.canvasHei()*0.5 - focusLevelY * adjustedZoom );
+				worldBg.resize( Std.int(editor.canvasWid()-20), Std.int(editor.canvasHei()-20) );
 
 			case ProjectSaved, BeforeProjectSaving:
 
@@ -432,7 +441,7 @@ class LevelRender extends dn.Process {
 				e.filter = editor.worldMode
 					? new h2d.filter.DropShadow(8*WORLD_LEVEL_SCALE, M.PIHALF, 0x0, 0.3)
 					: new h2d.filter.Blur(2,1,2);
-				e.alpha = editor.worldMode ? 0.75 : 0.33;
+				e.alpha = editor.worldMode ? 1 : 0.33;
 			}
 
 	}
@@ -1075,6 +1084,15 @@ class LevelRender extends dn.Process {
 
 	override function postUpdate() {
 		super.postUpdate();
+
+		// Animate world zoom
+		worldZoom += ( ( editor.worldMode ? 1 : 0 ) - worldZoom ) * 0.1;
+		if( worldZoom>0.05 && worldZoom<0.95 )
+			editor.ge.emit(ViewportChanged);
+
+		// World
+		worldBg.alpha += ( ( editor.worldMode ? 0.3 : 0 ) - worldBg.alpha ) * 0.1;
+		worldBg.visible = worldBg.alpha>=0.02;
 
 		// Fade-out temporary rects
 		var i = 0;

@@ -3,11 +3,13 @@
 class Assets {
 	public static var fontPixelOutline : h2d.Font;
 	public static var fontPixel : h2d.Font;
+	public static var elements : dn.heaps.slib.SpriteLib;
 
 	public static function init() {
 		fontPixelOutline = hxd.Res.fonts.minecraftiaOutline.toFont();
 		fontPixel = hxd.Res.fonts.pixel_berry_xml.toFont();
-		// fontPixel = hxd.Res.fonts.pixel_unicode_regular_12_xml.toFont();
+
+		elements = dn.heaps.assets.Atlas.load("appElements.atlas");
 	}
 }
 

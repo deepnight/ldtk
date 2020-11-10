@@ -18,3 +18,5 @@ app/assets/main.js.map
 app/assets/css/app.css
 app/assets/js/renderer.js
 app/assets/js/*.map
+
+art/export_appElements
