@@ -1,15 +1,20 @@
-package ui.modal.dialog;
+package page;
 
-class CrashReport extends ui.modal.Dialog {
-	public function new(error:js.lib.Error) {
-		super("crash");
+import hxd.Key;
 
-		loadTemplate("crash", {
+class CrashReport extends Page {
+	public function new(error:js.lib.Error, activeProcesses:String, ?unsavedProject:data.Project, ?projectFilePath:String) {
+		super();
+
+		// Init
+		loadPageTemplate("crashReport", {
 			app: Const.APP_NAME,
 		});
-		canBeClosedManually = false;
-		var jLog = jContent.find(".log");
+		App.ME.setWindowTitle();
 
+
+		var jContent = jPage.find(".wrapper");
+		var jError = jContent.find(".error");
 		try {
 			// Logging
 			App.LOG.error('${error.message} (${error.name})');
@@ -33,7 +38,7 @@ class CrashReport extends ui.modal.Dialog {
 			}
 
 			// Error description
-			jLog.append('<li class="desc"> ${error.message} (${error.name})</li>');
+			jError.html('${error.message} (${error.name})');
 
 			// Copy to clipboard
 			jContent.find("button.copy").click( (ev:js.jquery.Event)->{
@@ -46,11 +51,13 @@ class CrashReport extends ui.modal.Dialog {
 					error.name,
 					error.stack,
 					"```",
+					"Processes:",
+					"```",
+					activeProcesses,
+					"```",
 					"",
 					"Log:",
 					"```",
-					// App.LOG.getLasts(50),
-					// "```",
 				];
 				txt = txt.concat( App.LOG.getLasts(50) );
 				txt.push("```");
@@ -70,26 +77,12 @@ class CrashReport extends ui.modal.Dialog {
 				js.Browser.window.location.reload();
 			});
 
-			// Stack
-			if( niceStack.length==0 ) {
-				jLog.html("No extra information available");
-			}
-			else {
-				// var fileNameReg = ~/.*\/(.*\.*.*)/gi;
-				for(s in niceStack) {
-					var fp = dn.FilePath.fromFile( s.file );
-					var jLi = new J('<li class="stack">in: ${s.func}</li>');
-					jLi.append('<span class="file">${fp.fileWithExt}</span>');
-					jLog.append(jLi);
-				}
-			}
-
 			// Try to save
 			var jBackup = jContent.find(".backup");
-			if( editor!=null && !editor.destroyed && editor.needSaving ) {
-				var fp = dn.FilePath.fromFile(editor.projectFilePath);
+			if( unsavedProject!=null ) {
+				var fp = dn.FilePath.fromFile(projectFilePath);
 				fp.fileName += Const.CRASH_NAME_SUFFIX;
-				var data = JsTools.prepareProjectFile(editor.project);
+				var data = JsTools.prepareProjectFile(unsavedProject);
 				JsTools.writeFileBytes(fp.full, data.bytes);
 				jBackup.html('I saved your current work in <a>${fp.fileWithExt}</a>.');
 				jBackup.find("a").click( (ev)->{
@@ -102,8 +95,7 @@ class CrashReport extends ui.modal.Dialog {
 
 		}
 		catch(e:Dynamic) {
-			jLog.append('<li>$e</li>');
-			jLog.append('<li>${error.stack}</li>');
+			jError.html( "Double error: "+Std.string(e) + "\n" + error.stack  );
 		}
 	}
 }

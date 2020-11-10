@@ -3,6 +3,7 @@ $bgDark: #1e2229;
 $bgMed: #2e333f;
 $bgLight: #545d73;
 $bgLighter: #737f9d;
+$lightRed: #ffa386;
 $red: #e34d00;
 $darkRed: #791105;
 $orange: #ffcc00;
@@ -937,6 +938,7 @@ ul.log {
 .icon.gridOn	{ background-image: url("../icons/gridOn.svg"); }
 .icon.gridOff	{ background-image: url("../icons/gridOff.svg"); }
 .icon.stop		{ background-image: url("../icons/stop.svg"); }
+.icon.ghost		{ background-image: url("../icons/ghost.svg"); }
 .icon.love		{ background-image: url("../icons/love.svg"); }
 .icon.folder	{ background-image: url("../icons/folder.svg"); }
 .icon.locate	{ background-image: url("../icons/locate.svg"); }
@@ -1876,65 +1878,6 @@ textarea {
 	}
 }
 
-.window.dialog.crash {
-	&>.wrapper {
-		width: 700px;
-		max-width: 90vw;
-
-		.content {
-			a {
-				text-decoration: underline;
-				cursor: pointer;
-				&:hover {
-					color: white;
-				}
-			}
-			ul.log {
-				min-width: auto;
-				user-select: text;
-				margin-top: 16px;
-				li {
-					display: grid;
-					grid-template-columns: auto min-content;
-
-					user-select: inherit;
-					font-family: monospace;
-
-					&.desc {
-						padding: 16px 8px;
-						border: 1px solid $help;
-						color: white;
-						background-color: $helpDark;
-						box-shadow: 0px 0px 16px $helpDark;
-					}
-					&.stack {
-						font-family: monospace;
-						white-space: pre-wrap;
-					}
-
-					span.file {
-						padding: 2px 4px;
-						border-radius: 3px;
-						color: white;
-						font-size: 8pt;
-						white-space: nowrap;
-						background: $bgMed;
-					}
-				}
-			}
-			.buttons {
-				button.copy,
-				button.report {
-					flex-grow: 0.66;
-				}
-				button.done {
-					opacity: 0.35;
-				}
-			}
-		}
-	}
-}
-
 .window.dialog.fieldTypes,
 .window.dialog.layerTypes {
 	&>.wrapper {
@@ -2556,6 +2499,85 @@ canvas#webgl {
 			background-color: $orange;
 			animation: slideUp 1s;
 
+		}
+	}
+}
+
+#page.crashReport {
+	width: 100vw;
+	height: 100vh;
+	display: grid;
+	align-items: center;
+	justify-items: center;
+	background-color: $bgDark;
+	background-image: url("../img/stripes.png");
+
+	&>.wrapper {
+		background-color: $bgMed;
+		padding: 32px;
+		width: 700px;
+		max-width: 90vw;
+		border-radius: 4px;
+		box-shadow: 0px 8px 0px rgba(0, 0, 0, 0.2), 0px 0px 32px rgba(0, 0, 0, 0.3);
+
+
+		a {
+			text-decoration: underline;
+			cursor: pointer;
+			&:hover {
+				color: white;
+			}
+		}
+
+		.desc {
+			display: grid;
+			grid-template-columns: min-content auto;
+			align-items: center;
+			gap: 16px;
+			margin-top: 16px;
+
+			.ghost {
+				width: 100px;
+				height: 100px;
+			}
+			.text {
+				border-left: 1px solid $bgLight;
+				padding-left: 16px;
+				border-radius: 16px;
+				.arrow {
+					position: absolute;
+					margin-left: -32px;
+					margin-top: 24px;
+					width: 0;
+					height: 0;
+					border-top: 16px solid transparent;
+					border-right: 16px solid $bgLight;
+					border-bottom: 16px solid transparent;
+				}
+			}
+		}
+
+		.error {
+			padding: 16px;
+			margin-top: 16px;
+			margin-bottom: 16px;
+			color: white;
+			text-shadow: 0px 0px 8px $red, 0px 0px 16px $red;
+			font-family: monospace;
+			white-space: pre-wrap;
+			background-color: $darkRed;
+			border: 1px solid $orange;
+			box-shadow: 0px 0px 16px $red;
+		}
+
+		.buttons {
+			button.copy,
+			button.report {
+				flex-grow: 0.66;
+			}
+			button.done {
+				opacity: 0.35;
+			}
 		}
 	}
 }
