@@ -75,6 +75,12 @@ class Progress extends ui.Modal {
 		return false;
 	}
 
+	@:allow(App)
+	static function stopAll() {
+		for(e in ALL)
+			e.destroy();
+	}
+
 	static function updateAllPositions() {
 		for(w in ALL)
 			if( !w.destroyed )

@@ -53,7 +53,10 @@ class App extends dn.Process {
 		win.onresize = onAppResize;
 		win.onmousemove = onAppMouseMove;
 		win.onerror = (msg, url, lineNo, columnNo, error:js.lib.Error)->{
-			new ui.modal.dialog.CrashReport(error);
+			ui.modal.Progress.stopAll();
+			var project : data.Project = Editor.ME!=null && Editor.ME.needSaving ? Editor.ME.project : null;
+			var path : String = Editor.ME!=null && Editor.ME.needSaving ? Editor.ME.projectFilePath : null;
+			loadPage( ()->new page.CrashReport(error, project, path) );
 			return false;
 		}
 
