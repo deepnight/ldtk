@@ -47,7 +47,8 @@ class WorldTool extends dn.Process {
 				editor.selectLevel(clickedLevel);
 				editor.levelRender.focusLevelX -= ( editor.curLevel.worldX-old.worldX );
 				editor.levelRender.focusLevelY -= ( editor.curLevel.worldY-old.worldY );
-				editor.worldMode = false;
+				if( old==clickedLevel )
+					editor.worldMode = false;
 			}
 
 		clickedLevel = null;

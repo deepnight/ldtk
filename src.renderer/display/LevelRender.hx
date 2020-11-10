@@ -1,6 +1,7 @@
 package display;
 
 class LevelRender extends dn.Process {
+	static var WORLD_LEVEL_SCALE = 0.25;
 	static var MIN_ZOOM = 0.2;
 	static var MAX_ZOOM = 32;
 	static var MAX_FOCUS_PADDING_X = 450;
@@ -428,7 +429,9 @@ class LevelRender extends dn.Process {
 					e.visible = true;
 				}
 
-				e.filter = editor.worldMode ? null : e.filter = new h2d.filter.Blur(2,1,2);
+				e.filter = editor.worldMode
+					? new h2d.filter.DropShadow(8*WORLD_LEVEL_SCALE, M.PIHALF, 0x0, 0.3)
+					: new h2d.filter.Blur(2,1,2);
 				e.alpha = editor.worldMode ? 0.75 : 0.33;
 			}
 
@@ -445,7 +448,7 @@ class LevelRender extends dn.Process {
 		if( worldLevels.exists(l.uid) )
 			worldLevels.get(l.uid).remove();
 
-		var scale = 0.25;
+		var scale = WORLD_LEVEL_SCALE;
 		var wrapper = new h2d.Graphics(worldWrapper);
 		worldLevels.set(l.uid, wrapper);
 		wrapper.setScale(1/scale);
@@ -474,7 +477,7 @@ class LevelRender extends dn.Process {
 		}
 
 		// Bounds
-		wrapper.lineStyle(1,0xffcc00,1);
+		wrapper.lineStyle(1, l==editor.curLevel ? 0xffffff : 0xffcc00,1);
 		wrapper.drawRect(0, 0, l.pxWid*scale, l.pxHei*scale);
 		wrapper.lineStyle(0);
 	}
