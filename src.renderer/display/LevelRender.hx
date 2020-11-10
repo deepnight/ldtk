@@ -291,7 +291,9 @@ class LevelRender extends dn.Process {
 			case LayerInstanceChanged:
 
 			case TilesetSelectionSaved(td):
+
 			case TilesetDefPixelDataCacheRebuilt(td):
+				resetWorldRender();
 
 			case TilesetDefRemoved(td):
 				invalidateAll();
@@ -494,25 +496,44 @@ class LevelRender extends dn.Process {
 		worldLevels.set(l.uid, { wrapper:wrapper, render:render });
 
 		// Render level
-		for(li in l.layerInstances) {
-			switch li.def.type {
-				case IntGrid:
-					var g = li.def.gridSize*scale;
-					for(cy in 0...li.cHei)
-					for(cx in 0...li.cWid) {
-						if( li.hasAnyGridValue(cx,cy) ) {
-							render.beginFill( li.getIntGridColorAt(cx,cy) );
-							render.drawRect(
-								li.pxTotalOffsetX*scale + cx*g,
-								li.pxTotalOffsetY*scale + cy*g,
-								g, g
-							);
-							render.endFill();
-						}
+		var i = l.layerInstances.length-1;
+		while( i>=0 ) {
+			var li = l.layerInstances[i--];
+
+			if( li.def.type==Entities )
+				continue;
+
+			var g = li.def.gridSize*scale;
+
+			if( li.def.type==IntGrid ) {
+				// Pure intGrid
+				for(cy in 0...li.cHei)
+				for(cx in 0...li.cWid) {
+					if( li.hasAnyGridValue(cx,cy) ) {
+						render.beginFill( li.getIntGridColorAt(cx,cy) );
+						render.drawRect(
+							li.pxTotalOffsetX*scale + cx*g,
+							li.pxTotalOffsetY*scale + cy*g,
+							g, g
+						);
+						render.endFill();
 					}
-				case Entities:
-				case Tiles:
-				case AutoLayer:
+				}
+			}
+			else if( li.def.type==Tiles ) {
+				// Classic tiles
+				var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
+				for(cy in 0...li.cHei)
+				for(cx in 0...li.cWid) {
+					if( li.hasAnyGridTile(cx,cy) ) {
+						render.beginFill( td.getAverageTileColor( li.getTopMostGridTile(cx,cy).tileId ) );
+						render.drawRect(
+							li.pxTotalOffsetX*scale + cx*g,
+							li.pxTotalOffsetY*scale + cy*g,
+							g, g
+						);
+					}
+				}
 			}
 		}
 
@@ -638,7 +659,7 @@ class LevelRender extends dn.Process {
 		case IntGrid, AutoLayer:
 			var g = new h2d.Graphics(wrapper);
 
-			var doneCoords = new Map();
+			// var doneCoords = new Map();
 
 			if( li.def.isAutoLayer() && li.def.autoTilesetDefUid!=null && autoLayerRenderingEnabled(li) ) {
 				// Auto-layer tiles
@@ -648,7 +669,7 @@ class LevelRender extends dn.Process {
 				li.def.iterateActiveRulesInDisplayOrder( (r)-> {
 					if( li.autoTilesCache.exists( r.uid ) ) {
 						for(coordId in li.autoTilesCache.get( r.uid ).keys()) {
-							doneCoords.set(coordId, true);
+							// doneCoords.set(coordId, true);
 							for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
 								tg.addTransform(
 									tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,

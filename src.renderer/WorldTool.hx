@@ -79,6 +79,8 @@ class WorldTool extends dn.Process {
 					if( fx<l.pxWid*0.2 || fx>l.pxWid*0.8 || fy<l.pxHei*0.2 || fy>l.pxHei*0.8 )
 						editor.levelRender.autoScrollToLevel(l);
 				}
+				else
+					editor.levelRender.invalidateWorldLevel(editor.curLevel);
 		}
 	}
 
