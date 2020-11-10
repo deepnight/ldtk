@@ -47,8 +47,10 @@ class WorldTool extends dn.Process {
 				editor.selectLevel(clickedLevel);
 				editor.levelRender.focusLevelX -= ( editor.curLevel.worldX-old.worldX );
 				editor.levelRender.focusLevelY -= ( editor.curLevel.worldY-old.worldY );
-				if( old==clickedLevel )
+				if( old==clickedLevel ) {
+					editor.levelRender.autoScrollToLevel(clickedLevel);
 					editor.worldMode = false;
+				}
 			}
 
 		clickedLevel = null;
@@ -72,6 +74,14 @@ class WorldTool extends dn.Process {
 			case K.W:
 				editor.worldMode = !worldMode;
 				editor.levelRender.updateWorld();
+				if( !editor.worldMode ) {
+					// Recenter on active level
+					var l = editor.curLevel;
+					var fx = editor.levelRender.focusLevelX;
+					var fy = editor.levelRender.focusLevelY;
+					if( fx<l.pxWid*0.2 || fx>l.pxWid*0.8 || fy<l.pxHei*0.2 || fy>l.pxHei*0.8 )
+						editor.levelRender.autoScrollToLevel(l);
+				}
 		}
 	}
 

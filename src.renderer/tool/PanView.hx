@@ -34,6 +34,7 @@ class PanView extends Tool<Int> {
 
 		editor.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
 		editor.levelRender.focusLevelY -= m.levelY-lastMouse.levelY;
+		editor.levelRender.cancelAutoScrolling();
 
 		return false;
 	}

@@ -750,6 +750,8 @@ class Editor extends Page {
 
 		curLevelId = l.uid;
 		levelRender.invalidateWorldLevel(l);
+		if( !worldMode )
+			levelRender.autoScrollToLevel( curLevel );
 		ge.emit( LevelSelected(l) );
 	}
 
