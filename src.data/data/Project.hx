@@ -56,6 +56,19 @@ class Project {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( Level.fromJson(p, lvlJson) );
 
+		if( dn.VersionNumber.isLowerStr(json.jsonVersion, "0.6") ) {
+			// Initialize world coords
+			var wx = 0;
+			var maxHei = 0;
+			for(l in p.levels) {
+				l.worldX = wx;
+				wx += l.pxWid + p.defaultGridSize;
+				maxHei = dn.M.imax(maxHei, l.pxHei);
+			}
+			for(l in p.levels)
+				l.worldY = Std.int( maxHei*0.5 - l.pxHei*0.5 ); // vertical center
+		}
+
 		p.jsonVersion = Const.getJsonVersion(); // always uses latest version
 		return p;
 	}
