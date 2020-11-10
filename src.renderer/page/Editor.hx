@@ -259,17 +259,6 @@ class Editor extends Page {
 				needSaving = true;
 		});
 
-		// HACK: test average pixel colors
-		for(td in project.defs.tilesets) {
-			var avg = new h2d.Graphics();
-			root.add(avg, Const.DP_TOP);
-			for(cy in 0...td.cHei)
-			for(cx in 0...td.cWid) {
-				avg.beginFill( td.getAverageTileColor( td.getTileId(cx,cy) ) );
-				avg.drawRect( cx*td.tileGridSize, cy*td.tileGridSize, td.tileGridSize, td.tileGridSize );
-			}
-		}
-
 		needSaving = tilesetChanged;
 	}
 
