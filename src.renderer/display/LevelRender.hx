@@ -30,6 +30,7 @@ class LevelRender extends dn.Process {
 	/** <LayerDefUID, h2d.Object> **/
 	var layerRenders : Map<Int,h2d.Object> = new Map();
 
+	var worldLevels : Map<Int, { wrapper:h2d.Object, render:h2d.Graphics }> = new Map();
 	var worldBg : dn.heaps.TiledTexture;
 	var worldWrapper : h2d.Object;
 	var bounds : h2d.Graphics;
@@ -44,8 +45,6 @@ class LevelRender extends dn.Process {
 	var bgInvalidated = false;
 	var layerInvalidations : Map<Int, { left:Int, right:Int, top:Int, bottom:Int }> = new Map();
 	var worldLevelsInvalidations : Map<Int,Bool> = new Map();
-
-	var worldLevels : Map<Int, h2d.Graphics> = new Map();
 
 
 	public function new() {
@@ -431,7 +430,7 @@ class LevelRender extends dn.Process {
 	public function resetWorldRender() {
 		App.LOG.render("Reset world render");
 		for(e in worldLevels)
-			e.remove();
+			e.wrapper.remove();
 		worldLevels = new Map();
 		worldWrapper.removeChildren();
 
@@ -447,16 +446,16 @@ class LevelRender extends dn.Process {
 			if( worldLevels.exists(l.uid) ) {
 				var e = worldLevels.get(l.uid);
 				if( l.uid==editor.curLevelId && !editor.worldMode )
-					e.visible = false;
+					e.wrapper.visible = false;
 				else {
-					e.setPosition( l.worldX, l.worldY );
-					e.visible = true;
+					e.wrapper.setPosition( l.worldX, l.worldY );
+					e.wrapper.visible = true;
 				}
 
-				e.filter = editor.worldMode
-					? new h2d.filter.DropShadow(8*WORLD_LEVEL_SCALE, M.PIHALF, 0x0, 0.3)
+				e.render.filter = editor.worldMode
+					? null
 					: new h2d.filter.Blur(2,1,2);
-				e.alpha = editor.worldMode ? 1 : 0.33;
+				e.wrapper.alpha = editor.worldMode ? 1 : 0.33;
 			}
 
 	}
@@ -470,12 +469,15 @@ class LevelRender extends dn.Process {
 		// Cleanup
 		worldLevelsInvalidations.remove(l.uid);
 		if( worldLevels.exists(l.uid) )
-			worldLevels.get(l.uid).remove();
+			worldLevels.get(l.uid).wrapper.remove();
 
 		var scale = WORLD_LEVEL_SCALE;
-		var wrapper = new h2d.Graphics(worldWrapper);
-		worldLevels.set(l.uid, wrapper);
-		wrapper.setScale(1/scale);
+		var wrapper = new h2d.Object(worldWrapper);
+
+		var render = new h2d.Graphics(wrapper);
+		render.setScale(1/scale);
+
+		worldLevels.set(l.uid, { wrapper:wrapper, render:render });
 
 		// Render level
 		for(li in l.layerInstances) {
@@ -485,13 +487,13 @@ class LevelRender extends dn.Process {
 					for(cy in 0...li.cHei)
 					for(cx in 0...li.cWid) {
 						if( li.hasAnyGridValue(cx,cy) ) {
-							wrapper.beginFill( li.getIntGridColorAt(cx,cy) );
-							wrapper.drawRect(
+							render.beginFill( li.getIntGridColorAt(cx,cy) );
+							render.drawRect(
 								li.pxTotalOffsetX*scale + cx*g,
 								li.pxTotalOffsetY*scale + cy*g,
 								g, g
 							);
-							wrapper.endFill();
+							render.endFill();
 						}
 					}
 				case Entities:
@@ -501,9 +503,25 @@ class LevelRender extends dn.Process {
 		}
 
 		// Bounds
-		wrapper.lineStyle(1, l==editor.curLevel ? 0xffffff : 0xffcc00,1);
-		wrapper.drawRect(0, 0, l.pxWid*scale, l.pxHei*scale);
-		wrapper.lineStyle(0);
+		render.lineStyle(1, l==editor.curLevel ? 0xffffff : 0xffcc00,1);
+		render.drawRect(0, 0, l.pxWid*scale, l.pxHei*scale);
+		render.lineStyle(0);
+
+		// Identifier
+		var bg = new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2, wrapper );
+		bg.color.setColor( C.addAlphaF(0x464e79) );
+		bg.alpha = 0.8;
+
+		var tf = new h2d.Text(Assets.fontPixel, bg);
+		tf.text = l.identifier;
+		tf.textColor = 0xffcc00;
+		tf.x = 4;
+
+		bg.setScale(2);
+		bg.width = tf.x*2 + tf.textWidth;
+		bg.height = tf.textHeight;
+		bg.x = Std.int( l.pxWid*0.5 - bg.width*bg.scaleX*0.5 );
+		bg.y = 8;
 	}
 
 
@@ -880,7 +898,7 @@ class LevelRender extends dn.Process {
 
 
 		function _addBg(f:h2d.Flow, dark:Float) {
-			var bg = new h2d.ScaleGrid(hxd.Res.img.fieldBg.toTile(), 2,2);
+			var bg = new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2,2);
 			f.addChildAt(bg, 0);
 			f.getProperties(bg).isAbsolute = true;
 			bg.color.setColor( C.addAlphaF( C.toBlack( ei.getSmartColor(false), dark ) ) );
