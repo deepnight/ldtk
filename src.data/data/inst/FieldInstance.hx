@@ -200,12 +200,16 @@ class FieldInstance {
 		}
 	}
 
-	public function hasAnyErrorInValues() {
+	public inline function hasAnyErrorInValues() {
+		return getFirstErrorInValues()!=null;
+	}
+
+	public function getFirstErrorInValues() : Null<String> {
 		if( def.isArray && def.arrayMinLength!=null && getArrayLength()<def.arrayMinLength )
-			return true;
+			return "ArraySize";
 
 		if( def.isArray && def.arrayMaxLength!=null && getArrayLength()>def.arrayMaxLength )
-			return true;
+			return "ArraySize";
 
 		switch def.type {
 			case F_Int:
@@ -217,15 +221,15 @@ class FieldInstance {
 			case F_Point:
 				for( idx in 0...getArrayLength() )
 					if( !def.canBeNull && getPointStr(idx)==null )
-						return true;
+						return def.identifier;
 
 			case F_Enum(enumDefUid):
 				if( !def.canBeNull )
 					for( idx in 0...getArrayLength() )
 						if( getEnumValue(idx)==null )
-							return true;
+							return def.identifier;
 		}
-		return false;
+		return null;
 	}
 
 	public function valueIsNull(arrayIdx:Int) {

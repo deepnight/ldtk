@@ -997,12 +997,12 @@ class LevelRender extends dn.Process {
 			for(fd in ei.def.fieldDefs) {
 				var fi = ei.getFieldInstance(fd);
 
-				// Null enum warning
-				if( fi.hasAnyErrorInValues() ) {
+				// Value error
+				var err = fi.getFirstErrorInValues();
+				if( err!=null ) {
 					var tf = new h2d.Text(font, above);
 					tf.textColor = 0xffcc00;
-					tf.text = "<ERROR>";
-					// continue;
+					tf.text = '<$err?>';
 				}
 
 				// Skip hiddens
