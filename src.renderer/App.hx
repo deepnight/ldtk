@@ -34,7 +34,7 @@ class App extends dn.Process {
 		// App arguments
 		var electronArgs : Array<String> = try electron.renderer.IpcRenderer.sendSync("getArgs") catch(_) [];
 		electronArgs.shift();
-		args = new dn.Args( electronArgs.join(" "), true );
+		args = new dn.Args( electronArgs.join(" ") );
 		LOG.add("BOOT", args.toString());
 
 		// Init
@@ -90,7 +90,7 @@ class App extends dn.Process {
 						for(i in 0...old.recentProjects.length)
 							old.recentProjects[i] = StringTools.replace(old.recentProjects[i], "\\", "/");
 					dn.LocalStorage.writeObject("settings", true, old);
-				} catch(e) {}
+				} catch(e:Dynamic) {}
 
 			js.Browser.window.localStorage.removeItem("session");
 		}
