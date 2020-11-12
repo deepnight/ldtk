@@ -651,8 +651,8 @@ class LevelRender extends dn.Process {
 
 		for(ld in editor.project.defs.layers) {
 			var li = editor.curLevel.getLayerInstance(ld);
-			if( li.def.isAutoLayer() )
-				li.applyAllAutoLayerRules();
+			// if( li.def.isAutoLayer() )
+			// 	li.applyAllAutoLayerRules();
 			renderLayer(li);
 		}
 	}
