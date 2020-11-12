@@ -422,7 +422,7 @@ class Editor extends Page {
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setSingleLayerMode( !settings.singleLayerMode );
 
-			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() ):
+			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() && !App.ME.isShiftDown() ):
 				if( settings.singleLayerMode )
 					selectionTool.selectAllInLayers(curLevel, [curLayerInstance]);
 				else
@@ -463,6 +463,13 @@ class Editor extends Page {
 				N.debug("Rebuilding pixel caches...");
 				for(td in project.defs.tilesets)
 					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
+
+			case K.A if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
+				N.debug("Rebuilding auto layers...");
+				for(l in project.levels)
+				for(li in l.layerInstances)
+					li.autoTilesCache = null;
+				checkAutoLayersCache( (_)->N.success("Done") );
 
 			case K.U if( !hasInputFocus() && App.ME.isShiftDown() && App.ME.isCtrlDown() ):
 				dn.electron.ElectronUpdater.emulate();
