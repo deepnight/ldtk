@@ -14,10 +14,10 @@ class TilesetDef {
 	public var spacing : Int = 0; // px space between consecutive tiles
 	public var savedSelections : Array<TilesetSelection> = [];
 
-	@:allow(page.Editor)
-	var opaqueTilesCache : Null< Map<Int,Bool> >;
+	// @:allow(page.Editor)
+	// var opaqueTilesCache : Null< Map<Int,Bool> >;
 
-	@:allow(page.Editor)
+	var opaqueTiles : Null< haxe.ds.Vector<Bool> >;
 	var averageColorsCache : Null< Map<Int,Int> >;
 
 	public var pxWid = 0;
@@ -98,18 +98,7 @@ class TilesetDef {
 			tileGridSize: tileGridSize,
 			spacing: spacing,
 			padding: padding,
-			opaqueTiles: {
-				if( opaqueTilesCache==null )
-					null;
-				else {
-					var arr = [];
-					for(cy in 0...cHei)
-					for(cx in 0...cWid)
-						if( opaqueTilesCache.get( getTileId(cx,cy) )==true )
-							arr.push( getTileId(cx,cy) );
-					arr;
-				}
-			},
+
 			averageColors: {
 				if( averageColorsCache==null )
 					null;
@@ -124,6 +113,16 @@ class TilesetDef {
 			savedSelections: savedSelections.map( function(sel) {
 				return { ids:sel.ids, mode:JsonTools.writeEnum(sel.mode, false) }
 			}),
+
+			cachedPixelData: !hasValidPixelData() ? null : {
+				opaqueTiles: {
+					var buf = new StringBuf();
+					var zero = "0".charCodeAt(0);
+					for(v in opaqueTiles)
+						buf.addChar( v==true ? zero+1 : zero );
+					buf.toString();
+				},
+			},
 		}
 	}
 
@@ -138,13 +137,25 @@ class TilesetDef {
 		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
 
-		if( json.opaqueTiles!=null ) {
-			td.opaqueTilesCache = new Map();
-			for(tid in json.opaqueTiles)
-				td.opaqueTilesCache.set(tid, true);
+		if( json.cachedPixelData!=null ) {
+			var size = td.cWid*td.cHei;
+			if( json.cachedPixelData.opaqueTiles.length==size ) {
+				td.opaqueTiles = new haxe.ds.Vector(size);
+				var one = "1".code;
+				for(i in 0...size)
+					td.opaqueTiles[i] = json.cachedPixelData.opaqueTiles.charCodeAt(i)==one;
+			}
 		}
 		else
-			td.opaqueTilesCache = null;
+			td.opaqueTiles = null;
+
+		// if( json.opaqueTiles!=null ) {
+		// 	td.opaqueTilesCache = new Map();
+		// 	for(tid in json.opaqueTiles)
+		// 		td.opaqueTilesCache.set(tid, true);
+		// }
+		// else
+		// 	td.opaqueTilesCache = null;
 
 		if( json.averageColors!=null ) {
 			td.averageColorsCache = new Map();
@@ -459,12 +470,13 @@ class TilesetDef {
 
 
 	public inline function isTileOpaque(tid:Int) {
-		return opaqueTilesCache!=null ? opaqueTilesCache.get(tid)==true : false;
+		return opaqueTiles!=null ? opaqueTiles[tid]==true : false;
+		// return opaqueTilesCache!=null ? opaqueTilesCache.get(tid)==true : false;
 	}
 
 
 	function _parseTilePixels(tid:Int) {
-		opaqueTilesCache.set(tid, true);
+		opaqueTiles[tid] = true;
 		averageColorsCache.set(tid, 0x0);
 
 		var tx = getTileSourceX(tid);
@@ -482,8 +494,8 @@ class TilesetDef {
 				pixel = pixels.getPixel(px,py);
 
 				// Detect opacity
-				if( opaqueTilesCache.get(tid)==true && dn.Color.getA(pixel) < 1 )
-					opaqueTilesCache.set(tid, false);
+				if( opaqueTiles[tid]!=false && dn.Color.getA(pixel) < 1 )
+					opaqueTiles[tid] = false;
 
 				// Average color
 				if( dn.Color.getA(pixel)>0.3 ) {
@@ -499,12 +511,18 @@ class TilesetDef {
 		}
 	}
 
-	public function buildPixelDataCache(onComplete:Void->Void) {
+	public inline function hasValidPixelData() {
+		return isAtlasLoaded()
+			&& opaqueTiles!=null && opaqueTiles.length==cWid*cHei
+			&& averageColorsCache!=null; // TODO length check
+	}
+
+	public function buildPixelData(onComplete:Void->Void) {
 		if( !isAtlasLoaded() )
 			return;
 
 		App.LOG.general("Init pixel data cache for "+relPath);
-		opaqueTilesCache = new Map();
+		opaqueTiles = new haxe.ds.Vector( cWid*cHei );
 		averageColorsCache = new Map();
 		var ops = [];
 		for(tcy in 0...cHei)
@@ -516,6 +534,7 @@ class TilesetDef {
 				}
 			});
 
+		// new ui.modal.Progress('Initializing pixel data cache for "${getFileName(true)}"', 3, ops, onComplete);
 		new ui.modal.Progress('Initializing pixel data cache for "${getFileName(true)}"', 3, ops, onComplete);
 	}
 

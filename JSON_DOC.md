@@ -169,9 +169,9 @@ Sorry this type has no documentation yet.
 ## 2.3. Tileset definition   
 Value | Type | Description
 -- | -- | --
-`averageColors`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Array&nbsp;of&nbsp;Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array containing the average color code (0xrrggbb) of each tile
+`averageColors`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Array&nbsp;of&nbsp;Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array of all tiles that are fully opaque (ie. no transparent pixel). Used internally for optimizations.
+`cachedPixelData`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | The following data is used internally for various optimizations. It's always synced with source image changes.<br/>This object contains the following fields:<br/><ul><li>**`opaqueTiles`** **(String**) : *An array of 0/1 bytes, encoded in Base64, that tells if a specific TileID is fully opaque (1) or not (0)*</li></ul>
 `identifier` | String | Unique String identifier
-`opaqueTiles`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Array&nbsp;of&nbsp;Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array of all tiles that are fully opaque (ie. no transparent pixel). Used internally for optimizations.
 `padding` | Int | Distance in pixels from image borders
 `pxHei` | Int | Image width in pixels
 `pxWid` | Int | Image width in pixels

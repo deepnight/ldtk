@@ -292,8 +292,8 @@ class Editor extends Page {
 		var oldRelPath = td.relPath;
 		App.LOG.fileOp("Reloading tileset: "+td.relPath);
 		var result = td.reloadImage( getProjectDir() );
-		App.LOG.fileOp(" -> "+result);
-		App.LOG.fileOp(" -> opaqueCache: "+(td.opaqueTilesCache==null ? "null" : "not null"));
+		App.LOG.fileOp(" -> Reload result: "+result);
+		App.LOG.fileOp(" -> pixelData: "+(td.hasValidPixelData() ? "Ok" : "need rebuild"));
 
 		var changed = false;
 		switch result {
@@ -302,7 +302,7 @@ class Editor extends Page {
 				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
 					var newRelPath = makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( getProjectDir(), newRelPath );
-					td.buildPixelDataCache( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
+					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 					ge.emit( TilesetDefChanged(td) );
 					levelRender.invalidateAll();
 				});
@@ -331,9 +331,9 @@ class Editor extends Page {
 		}
 
 		// Rebuild "opaque tiles" cache
-		if( td.opaqueTilesCache==null || td.averageColorsCache==null || !isInitialLoading || result!=Ok ) {
+		if( !td.hasValidPixelData() || !isInitialLoading || result!=Ok ) {
 			changed = true;
-			td.buildPixelDataCache( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
+			td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 		}
 
 		ge.emit( TilesetDefChanged(td) );
@@ -462,7 +462,7 @@ class Editor extends Page {
 			case K.C if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
 				N.debug("Rebuilding pixel caches...");
 				for(td in project.defs.tilesets)
-					td.buildPixelDataCache( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
+					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 
 			case K.U if( !hasInputFocus() && App.ME.isShiftDown() && App.ME.isCtrlDown() ):
 				dn.electron.ElectronUpdater.emulate();

@@ -60,7 +60,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				updateForm();
 				updateTilesetPreview();
 				if( td==curTd )
-					rebuildPixelDataCache();
+					rebuildPixelData();
 
 			case TilesetDefPixelDataCacheRebuilt(td):
 				if( td==curTd )
@@ -122,8 +122,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 	}
 
 
-	inline function rebuildPixelDataCache() {
-		curTd.buildPixelDataCache( Editor.ME.ge.emit.bind(TilesetDefPixelDataCacheRebuilt(curTd)) );
+	inline function rebuildPixelData() {
+		curTd.buildPixelData( Editor.ME.ge.emit.bind(TilesetDefPixelDataCacheRebuilt(curTd)) );
 	}
 
 
