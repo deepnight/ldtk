@@ -509,25 +509,22 @@ class LevelRender extends dn.Process {
 			// 	// Auto layer
 			// 	var source = li.def.type==IntGrid ? li : l.getLayerInstance(li.def.autoSourceLayerDefUid);
 			// 	var td = editor.project.defs.getTilesetDef(li.def.autoTilesetDefUid);
+			// 	var doneCoords = new Map();
 			// 	li.def.iterateActiveRulesInDisplayOrder( (r)->{
 			// 		if( li.autoTilesCache.exists( r.uid ) ) {
-			// 			for(coordId in li.autoTilesCache.get( r.uid ).keys()) {
-			// 				if( source.hasIntGrid( li.getCx(coordId), li.getCy(coordId) ) ) {
-			// 					var t = li.autoTilesCache.get( r.uid ).get(coordId)[0];
-			// 					render.beginFill( td.getAverageTileColor(t.tid) );
-			// 					render.drawRect(t.x*scale, t.y*scale, td.tileGridSize*scale, td.tileGridSize*scale);
-			// 					// break;
+			// 			for( coordId in li.autoTilesCache.get( r.uid ).keys() ) {
+			// 				if( doneCoords.exists(coordId) )
+			// 					continue;
+
+			// 				for( t in li.autoTilesCache.get( r.uid ).get(coordId) ) {
+			// 					if( td.isTileOpaque(t.tid) ) {
+			// 						var c = td.getAverageTileColor(t.tid);
+			// 						render.beginFill( C.removeAlpha(c), 1 );
+			// 						render.drawRect(t.x*scale, t.y*scale, td.tileGridSize*scale, td.tileGridSize*scale);
+			// 						doneCoords.set(coordId,true);
+			// 						break;
+			// 					}
 			// 				}
-			// 			// for(t in li.autoTilesCache.get( r.uid ).get(coordId)) {
-			// 			// 	if( td.isTileOpaque(t.tid) ) {
-			// 			// 		render.beginFill( td.getAverageTileColor(t.tid) );
-			// 			// 		render.drawRect(t.x*scale, t.y*scale, td.tileGridSize*scale, td.tileGridSize*scale);
-			// 			// 		break;
-			// 			// 	}
-			// 			// }
-			// 				// var t = li.autoTilesCache.get( r.uid ).get(coordId)[0];
-			// 				// render.beginFill( td.getAverageTileColor(t.tid) );
-			// 				// render.drawRect(t.x*scale, t.y*scale, td.tileGridSize*scale, td.tileGridSize*scale);
 			// 			}
 			// 		}
 			// 	});
