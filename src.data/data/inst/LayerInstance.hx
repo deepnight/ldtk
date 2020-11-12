@@ -86,7 +86,8 @@ class LayerInstance {
 									px: [ tileInfos.x, tileInfos.y ],
 									src: [ tileInfos.srcX, tileInfos.srcY ],
 									f: tileInfos.flips,
-									d: [r.uid,allTiles.key,tileInfos.tid],
+									t: tileInfos.tid,
+									d: [r.uid,allTiles.key],
 								});
 							}
 					});
@@ -111,7 +112,8 @@ class LayerInstance {
 								td==null ? -1 : td.getTileSourceY(tileInf.tileId),
 							],
 							f: tileInf.flips,
-							d: [ e.key, tileInf.tileId ],
+							t: tileInf.tileId,
+							d: [ e.key ],
 						});
 					}
 				arr;
@@ -189,7 +191,7 @@ class LayerInstance {
 				li.gridTiles.set(coordId, []);
 
 			li.gridTiles.get(coordId).push({
-				tileId: gridTilesJson.d[1],
+				tileId: gridTilesJson.t,
 				flips: gridTilesJson.f,
 			});
 		}
@@ -223,7 +225,7 @@ class LayerInstance {
 						srcX: at.src[0],
 						srcY: at.src[1],
 						flips: at.f,
-						tid: at.d[2],
+						tid: at.t,
 					});
 				}
 			}

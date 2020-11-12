@@ -1,3 +1,9 @@
+# 0.6.0-beta
+
+ - Added `worldX/worldY` to **Level Instance**
+ - Added `t` (tile ID) to **Tile Instance**
+ - Added `averageColors` to **Tileset definition**
+
 # 0.5.0-beta
 
  - The pixel coordinates of AutoLayer tiles no longer include the layer `pxOffsetX/Y` values. They should be added manually on display.
