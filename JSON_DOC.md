@@ -169,7 +169,7 @@ Sorry this type has no documentation yet.
 ## 2.3. Tileset definition   
 Value | Type | Description
 -- | -- | --
-`cachedPixelData`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | The following data is used internally for various optimizations. It's always synced with source image changes.<br/>This object contains the following fields:<br/><ul><li>**`averageColors`** **(String *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  : *An array containing the average color code (0xrrggbb) of each tile*</li><li>**`opaqueTiles`** **(String**) : *An array of 0/1 bytes, encoded in Base64, that tells if a specific TileID is fully opaque (1) or not (0)*</li></ul>
+`cachedPixelData`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | The following data is used internally for various optimizations. It's always synced with source image changes.<br/>This object contains the following fields:<br/><ul><li>**`averageColors`** **(String *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  : *Average color codes for each tileset tile (ARGB format)*</li><li>**`opaqueTiles`** **(String**)  ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-green.svg)  : *An array of 0/1 bytes, encoded in Base64, that tells if a specific TileID is fully opaque (1) or not (0)*</li></ul>
 `identifier` | String | Unique String identifier
 `padding` | Int | Distance in pixels from image borders
 `pxHei` | Int | Image width in pixels
