@@ -18,7 +18,7 @@ class TilesetDef {
 	// var opaqueTilesCache : Null< Map<Int,Bool> >;
 
 	var opaqueTiles : Null< haxe.ds.Vector<Bool> >;
-	var averageColorsCache : Null< Map<Int,Int> >;
+	var averageColorsCache : Null< Map<Int,Int> >; // ARGB
 
 	public var pxWid = 0;
 	public var pxHei = 0;
@@ -99,17 +99,6 @@ class TilesetDef {
 			spacing: spacing,
 			padding: padding,
 
-			averageColors: {
-				if( averageColorsCache==null )
-					null;
-				else {
-					var arr = [];
-					for(cy in 0...cHei)
-					for(cx in 0...cWid)
-						arr.push( averageColorsCache.get(getTileId(cx,cy)) );
-					arr;
-				}
-			},
 			savedSelections: savedSelections.map( function(sel) {
 				return { ids:sel.ids, mode:JsonTools.writeEnum(sel.mode, false) }
 			}),
@@ -120,6 +109,13 @@ class TilesetDef {
 					var zero = "0".charCodeAt(0);
 					for(v in opaqueTiles)
 						buf.addChar( v==true ? zero+1 : zero );
+					buf.toString();
+				},
+
+				averageColors: {
+					var buf = new StringBuf();
+					for(tid in 0...cWid*cHei)
+						buf.add( dn.Color.intToARGBHex3( averageColorsCache.get(tid) ) );
 					buf.toString();
 				},
 			},
@@ -139,15 +135,24 @@ class TilesetDef {
 
 		if( json.cachedPixelData!=null ) {
 			var size = td.cWid*td.cHei;
-			if( json.cachedPixelData.opaqueTiles.length==size ) {
+			var data = json.cachedPixelData;
+			if( data.opaqueTiles!=null && data.opaqueTiles.length==size && data.averageColors!=null && data.averageColors.length%4==0 ) {
 				td.opaqueTiles = new haxe.ds.Vector(size);
 				var one = "1".code;
 				for(i in 0...size)
-					td.opaqueTiles[i] = json.cachedPixelData.opaqueTiles.charCodeAt(i)==one;
+					td.opaqueTiles[i] = data.opaqueTiles.charCodeAt(i)==one;
+
+				td.averageColorsCache = new Map();
+				var pos = 0;
+				var tid = 0;
+				while( pos<data.averageColors.length ) {
+					td.averageColorsCache.set( tid, dn.Color.ARGBHex3ToInt( data.averageColors.substr(pos,4) ) );
+					tid++;
+					pos+=4;
+				}
 			}
 		}
-		else
-			td.opaqueTiles = null;
+
 
 		// if( json.opaqueTiles!=null ) {
 		// 	td.opaqueTilesCache = new Map();
@@ -156,14 +161,6 @@ class TilesetDef {
 		// }
 		// else
 		// 	td.opaqueTilesCache = null;
-
-		if( json.averageColors!=null ) {
-			td.averageColorsCache = new Map();
-			for(tid in 0...json.averageColors.length)
-				td.averageColorsCache.set(tid, json.averageColors[tid]);
-		}
-		else
-			td.averageColorsCache = null;
 
 		var arr = JsonTools.readArray( json.savedSelections );
 		td.savedSelections = json.savedSelections==null ? [] : arr.map( function(jsonSel:Dynamic) {
@@ -483,6 +480,7 @@ class TilesetDef {
 		var ty = getTileSourceY(tid);
 
 		if( tx+tileGridSize<=pxWid && ty+tileGridSize<=pxHei ) {
+			var a = 0.;
 			var r = 0.;
 			var g = 0.;
 			var b = 0.;
@@ -498,16 +496,13 @@ class TilesetDef {
 					opaqueTiles[tid] = false;
 
 				// Average color
-				if( dn.Color.getA(pixel)>0.3 ) {
-					r += dn.Color.getR(pixel) * dn.Color.getR(pixel);
-					g += dn.Color.getG(pixel) * dn.Color.getG(pixel);
-					b += dn.Color.getB(pixel) * dn.Color.getB(pixel);
-					n++;
-				}
-				else
-					n+=0.3;
+				a += dn.Color.getA(pixel);
+				r += dn.Color.getR(pixel) * dn.Color.getR(pixel);
+				g += dn.Color.getG(pixel) * dn.Color.getG(pixel);
+				b += dn.Color.getB(pixel) * dn.Color.getB(pixel);
+				n++;
 			}
-			averageColorsCache.set(tid, dn.Color.makeColor( Math.sqrt(r/n), Math.sqrt(g/n), Math.sqrt(b/n) ));
+			averageColorsCache.set(tid, dn.Color.makeColor( Math.sqrt(r/n), Math.sqrt(g/n), Math.sqrt(b/n), a/n ));
 		}
 	}
 

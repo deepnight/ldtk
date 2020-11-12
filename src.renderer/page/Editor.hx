@@ -459,7 +459,7 @@ class Editor extends Page {
 				else
 					cd.setS("debugTools", Const.INFINITE);
 
-			case K.C if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
+			case K.P if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
 				N.debug("Rebuilding pixel caches...");
 				for(td in project.defs.tilesets)
 					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
