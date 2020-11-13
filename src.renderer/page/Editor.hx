@@ -983,7 +983,7 @@ class Editor extends Page {
 		// Logging
 		if( e==null )
 			App.LOG.error("Received null global event!");
-		else if( e!=ViewportChanged ) {
+		else if( e!=ViewportChanged && e!=LayerInstanceChanged ) {
 			var extra : Dynamic = null;
 			switch e {
 				case WorldMode(active):
