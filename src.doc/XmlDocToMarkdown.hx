@@ -43,7 +43,7 @@ class XmlDocToMarkdown {
 
 	static var allTypes: Array<TypeInfos>;
 	static var verbose = false;
-	static var appVersion = new dn.VersionNumber();
+	static var appVersion = new dn.Version();
 
 	public static function run(className:String, xmlPath:String, ?mdPath:String, deleteXml=false) {
 		allTypes = [];

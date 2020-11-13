@@ -56,7 +56,7 @@ class Project {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( Level.fromJson(p, lvlJson) );
 
-		if( dn.VersionNumber.isLowerStr(json.jsonVersion, "0.6") ) {
+		if( dn.Version.lower(json.jsonVersion, "0.6") ) {
 			// Initialize world coords
 			var wx = 0;
 			var maxHei = 0;
