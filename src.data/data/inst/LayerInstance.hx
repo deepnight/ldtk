@@ -667,6 +667,11 @@ class LayerInstance {
 		if( !def.isAutoLayer() || !def.autoLayerRulesCanBeUsed() )
 			return;
 
+		if( autoTilesCache==null ) {
+			applyAllAutoLayerRules();
+			return;
+		}
+
 		// Adjust bounds to also redraw nearby cells
 		var left = dn.M.imax( 0, cx - Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
 		var top = dn.M.imax( 0, cy - Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
