@@ -90,11 +90,11 @@ class LevelRender extends dn.Process {
 		focusLevelY = y;
 	}
 
-	function getFitZoom() : Float {
-		var pad = 32 * js.Browser.window.devicePixelRatio;
+	function getFitZoom(l:data.Level) : Float {
+		var pad = 80 * js.Browser.window.devicePixelRatio;
 		return M.fmin(
-			editor.canvasWid() / ( editor.curLevel.pxWid + pad ),
-			editor.canvasHei() / ( editor.curLevel.pxHei + pad )
+			editor.canvasWid() / ( l.pxWid + pad ),
+			editor.canvasHei() / ( l.pxHei + pad )
 		);
 	}
 
@@ -105,7 +105,7 @@ class LevelRender extends dn.Process {
 		targetLevelX = editor.curLevel.pxWid*0.5;
 		targetLevelY = editor.curLevel.pxHei*0.5;
 
-		targetZoom = getFitZoom();
+		targetZoom = getFitZoom(editor.curLevel);
 
 		if( immediate ) {
 			focusLevelX = targetLevelX;
@@ -132,13 +132,10 @@ class LevelRender extends dn.Process {
 		return focusLevelY;
 	}
 
-	public function autoScrollTo(levelX:Float,levelY:Float) {
-		targetLevelX = levelX;
-		targetLevelY = levelY;
-	}
-
 	public inline function autoScrollToLevel(l:data.Level) {
-		autoScrollTo( l.pxWid*0.5, l.pxHei*0.5 );
+		targetZoom = getFitZoom(l);
+		targetLevelX = l.pxWid*0.5;
+		targetLevelY = l.pxHei*0.5;
 	}
 
 	public inline function cancelAutoScrolling() {
@@ -197,7 +194,8 @@ class LevelRender extends dn.Process {
 				if( active ) {
 					// Zoom out
 					cancelAutoScrolling();
-					targetZoom = getFitZoom() * 0.5;
+					targetZoom = M.fmin( 1, getFitZoom(editor.curLevel) * 0.5 );
+					N.debug(targetZoom);
 
 					// Remove hidden render
 					for(l in layerRenders)
@@ -1189,12 +1187,12 @@ class LevelRender extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
-		var spd = 0.17;
+		var spd = 0.19;
 
 		// Animated zoom
 		if( targetZoom!=null ) {
 			deltaZoomTo( focusLevelX, focusLevelY, ( targetZoom - rawZoom ) * spd / rawZoom );
-			if( M.fabs(targetZoom-rawZoom)<=0.02 ) {
+			if( M.fabs(targetZoom-rawZoom) <= 0.04/rawZoom ) {
 				setZoom(targetZoom);
 				cancelAutoZoom();
 			}
