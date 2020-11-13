@@ -5,8 +5,8 @@
 Links: [Official website](https://deepnight.net/tools/ldtk-2d-level-editor/) | [Haxe API (on GitHub)](https://github.com/deepnight/ldtk-haxe-api)
 
 ![GitHub All Releases](https://img.shields.io/github/downloads/deepnight/ldtk/total?color=%2389b&label=Downloads)
-![Travis (.org)](https://img.shields.io/travis/deepnight/ldtk?label=LDtk%20editor)
-![Travis (.org)](https://img.shields.io/travis/deepnight/ldtk-haxe-api?label=Haxe%20API)
+[![Travis (.com)](https://img.shields.io/travis/com/deepnight/ldtk?label=LDtk%20editor)](https://travis-ci.com/github/deepnight/ldtk)
+[![Travis (.com)](https://img.shields.io/travis/com/deepnight/ldtk-haxe-api?label=Haxe%20API)](https://travis-ci.com/github/deepnight/ldtk-haxe-api)
 
 # Building from source
 
