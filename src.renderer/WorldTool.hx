@@ -73,11 +73,7 @@ class WorldTool extends dn.Process {
 				editor.setWorldMode( !worldMode );
 				if( !editor.worldMode ) {
 					// Recenter on active level
-					var l = editor.curLevel;
-					var fx = editor.levelRender.focusLevelX;
-					var fy = editor.levelRender.focusLevelY;
-					if( fx<l.pxWid*0.2 || fx>l.pxWid*0.8 || fy<l.pxHei*0.2 || fy>l.pxHei*0.8 )
-						editor.levelRender.autoScrollToLevel(l);
+					editor.levelRender.autoScrollToLevel(editor.curLevel);
 				}
 				else
 					editor.levelRender.invalidateWorldLevel(editor.curLevel);
