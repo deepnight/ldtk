@@ -500,8 +500,7 @@ class LevelRender extends dn.Process {
 			return doneCoords.exists(li.def.gridSize) && doneCoords.get(li.def.gridSize).exists( li.coordId(cx,cy) );
 		}
 
-		// Render level
-
+		// Render world level
 		for(li in l.layerInstances) {
 			if( li.def.type==Entities )
 				continue;
@@ -674,14 +673,15 @@ class LevelRender extends dn.Process {
 		// Render
 		switch li.def.type {
 		case IntGrid, AutoLayer:
-			var g = new h2d.Graphics(wrapper);
-
 			// var doneCoords = new Map();
 
 			if( li.def.isAutoLayer() && li.def.autoTilesetDefUid!=null && autoLayerRenderingEnabled(li) ) {
 				// Auto-layer tiles
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper);
+
+				if( li.autoTilesCache==null )
+					li.applyAllAutoLayerRules();
 
 				li.def.iterateActiveRulesInDisplayOrder( (r)-> {
 					if( li.autoTilesCache.exists( r.uid ) ) {
@@ -713,14 +713,12 @@ class LevelRender extends dn.Process {
 			}
 			else if( li.def.type==IntGrid ) {
 				// Normal intGrid
-				for(cy in 0...li.cHei)
-				for(cx in 0...li.cWid) {
-					if( !li.hasIntGrid(cx,cy) )
-						continue;
+				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wrapper);
 
-					g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
-					g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);
-				}
+				for(cy in 0...li.cHei)
+				for(cx in 0...li.cWid)
+					if( li.hasIntGrid(cx,cy) )
+						pixelGrid.setPixel( cx, cy, li.getIntGridColorAt(cx,cy) );
 			}
 
 		case Entities:
