@@ -1203,17 +1203,15 @@ class LevelRender extends dn.Process {
 
 		// Animated zoom
 		if( targetZoom!=null ) {
-			deltaZoomTo( focusLevelX, focusLevelY, ( targetZoom - rawZoom ) * 0.17 / rawZoom );
-			if( M.fabs(targetZoom-rawZoom) <= 0.04/rawZoom ) {
-				setZoom(targetZoom);
+			deltaZoomTo( focusLevelX, focusLevelY, ( targetZoom - rawZoom ) * 0.07 );
+			if( M.fabs(targetZoom-rawZoom) <= 0.04/rawZoom )
 				cancelAutoZoom();
-			}
 		}
 
 		// Animated scrolling
 		if( targetLevelX!=null ) {
-			focusLevelX += ( targetLevelX - focusLevelX ) * 0.2;
-			focusLevelY += ( targetLevelY - focusLevelY ) * 0.2;
+			focusLevelX += ( targetLevelX - focusLevelX ) * 0.16;
+			focusLevelY += ( targetLevelY - focusLevelY ) * 0.16;
 			if( M.dist(targetLevelX, targetLevelY, focusLevelX, focusLevelY)<=4 )
 				cancelAutoScrolling();
 		}
