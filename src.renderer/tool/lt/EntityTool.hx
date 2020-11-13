@@ -27,19 +27,19 @@ class EntityTool extends tool.LayerTool<Int> {
 			return -1;
 	}
 
-	function getPlacementX(m:MouseCoords) {
+	function getPlacementX(m:Coords) {
 		return snapToGrid()
 			? M.round( ( m.cx + curEntityDef.pivotX ) * curLayerInstance.def.gridSize )
 			: m.levelX;
 	}
 
-	function getPlacementY(m:MouseCoords) {
+	function getPlacementY(m:Coords) {
 		return snapToGrid()
 			? M.round( ( m.cy + curEntityDef.pivotY ) * curLayerInstance.def.gridSize )
 			: m.levelY;
 	}
 
-	override function updateCursor(m:MouseCoords) {
+	override function updateCursor(m:Coords) {
 		super.updateCursor(m);
 
 		if( curEntityDef==null )
@@ -53,7 +53,7 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function startUsing(m:MouseCoords, buttonId:Int) {
+	override function startUsing(m:Coords, buttonId:Int) {
 		super.startUsing(m, buttonId);
 
 		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
@@ -98,7 +98,7 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 
-	function removeAnyEntityOrPointAt(m:MouseCoords) {
+	function removeAnyEntityOrPointAt(m:Coords) {
 		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, true);
 		switch ge {
 			case Entity(curLayerInstance, instance):
@@ -133,7 +133,7 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function onMouseMove(m:MouseCoords) {
+	override function onMouseMove(m:Coords) {
 		super.onMouseMove(m);
 
 		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
@@ -144,7 +144,7 @@ class EntityTool extends tool.LayerTool<Int> {
 		}
 	}
 
-	override function useAt(m:MouseCoords, isOnStop) {
+	override function useAt(m:Coords, isOnStop) {
 		super.useAt(m,isOnStop);
 
 		switch curMode {
@@ -159,7 +159,7 @@ class EntityTool extends tool.LayerTool<Int> {
 		return false;
 	}
 
-	override function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int) {
+	override function useOnRectangle(m:Coords, left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(m, left, right, top, bottom);
 		return false;
 	}

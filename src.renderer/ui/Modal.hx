@@ -41,13 +41,13 @@ class Modal extends dn.Process {
 
 		if( editor!=null )
 			editor.ge.addGlobalListener(onGlobalEvent);
-		
+
 		positionNear();
 	}
 
 	function onClickMask() {}
 
-	public function positionNear(?target:js.jquery.JQuery, ?m:MouseCoords, toLeft=false) {
+	public function positionNear(?target:js.jquery.JQuery, ?m:Coords, toLeft=false) {
 		if( target==null && m==null )
 			jModalAndMask.addClass("centered");
 		else {

@@ -8,7 +8,7 @@ class WorldTool extends dn.Process {
 	var clickedLevel : Null<data.Level>;
 	var levelOriginX : Int;
 	var levelOriginY : Int;
-	var origin : MouseCoords;
+	var origin : Coords;
 	var dragStarted = false;
 	var worldMode(get,never) : Bool; inline function get_worldMode() return editor.worldMode;
 
@@ -21,7 +21,7 @@ class WorldTool extends dn.Process {
 			+ ( isTakingPriority() ? " (PRIORITY)" : "" );
 	}
 
-	public function onMouseDown(m:MouseCoords, buttonId:Int) {
+	public function onMouseDown(m:Coords, buttonId:Int) {
 		if( buttonId!=0 || App.ME.hasAnyToggleKeyDown() )
 			return;
 
@@ -35,7 +35,7 @@ class WorldTool extends dn.Process {
 		}
 	}
 
-	public function onMouseUp(m:MouseCoords) {
+	public function onMouseUp(m:Coords) {
 		if( clickedLevel!=null )
 			if( dragStarted ) {
 				// Drag complete
@@ -84,7 +84,7 @@ class WorldTool extends dn.Process {
 		}
 	}
 
-	public function onMouseMove(m:MouseCoords) {
+	public function onMouseMove(m:Coords) {
 		// Start dragging
 		if( worldMode && !dragStarted && clickedLevel!=null && origin.getPageDist(m)>=DRAG_THRESHOLD )
 			dragStarted = true;

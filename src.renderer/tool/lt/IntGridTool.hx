@@ -18,17 +18,17 @@ class IntGridTool extends tool.LayerTool<Int> {
 		return curLayerInstance.def.getIntGridValueDef( getSelectedValue() ).color;
 	}
 
-	override function startUsing(m:MouseCoords, buttonId:Int) {
+	override function startUsing(m:Coords, buttonId:Int) {
 		super.startUsing(m, buttonId);
 		editor.selectionTool.clear();
 	}
 
 
-	override function updateCursor(m:MouseCoords) {
+	override function updateCursor(m:Coords) {
 		super.updateCursor(m);
 
 		if( isRunning() && rectangle ) {
-			var r = Rect.fromMouseCoords(origin, m);
+			var r = Rect.fromCoords(origin, m);
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, getSelectedColor()) );
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) )
@@ -37,7 +37,7 @@ class IntGridTool extends tool.LayerTool<Int> {
 			editor.cursor.set(None);
 	}
 
-	override function onMouseMove(m:MouseCoords) {
+	override function onMouseMove(m:Coords) {
 		super.onMouseMove(m);
 	}
 
@@ -63,7 +63,7 @@ class IntGridTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int) {
+	override function useOnRectangle(m:Coords, left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(m, left, right, top, bottom);
 
 		var anyChange = false;
@@ -89,7 +89,7 @@ class IntGridTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function useFloodfillAt(m:MouseCoords):Bool {
+	override function useFloodfillAt(m:Coords):Bool {
 		var initial = curLayerInstance.getIntGrid(m.cx,m.cy);
 		if( initial==getSelectedValue() && curMode==Add )
 			return false;

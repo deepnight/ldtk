@@ -25,7 +25,7 @@ class ContextMenu extends ui.Modal {
 		if( jEventTarget.is("button.context") )
 			positionNear(jEventTarget);
 		else if( openEvent!=null )
-			positionNear( new MouseCoords(openEvent.pageX, openEvent.pageY) );
+			positionNear( new Coords(openEvent.pageX, openEvent.pageY) );
 
 		jAttachTarget.addClass("contextMenuOpen");
 		setTransparentMask();

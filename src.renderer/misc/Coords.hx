@@ -1,6 +1,6 @@
 package misc;
 
-class MouseCoords {
+class Coords {
 	static var pixelRatio(get,never): Float;
 		static inline function get_pixelRatio() return js.Browser.window.devicePixelRatio;
 
@@ -101,7 +101,7 @@ class MouseCoords {
 		var canvasY = ( ly * render.adjustedZoom + render.root.y ) * Const.SCALE;
 		var pageY = canvasY / pixelRatio + App.ME.jCanvas.offset().top;
 
-		return new MouseCoords(pageX, pageY);
+		return new Coords(pageX, pageY);
 	}
 
 
@@ -116,16 +116,16 @@ class MouseCoords {
 	}
 
 	public function clone() {
-		return new MouseCoords(pageX, pageY);
+		return new Coords(pageX, pageY);
 	}
 
 
 	@:keep public function toString() {
-		return 'MouseCoords: Page=$pageX,$pageY, Canvas=$canvasX,$canvasY, Level=$levelX,$levelY, Scale=${Const.SCALE}';
+		return 'Coords: Page=$pageX,$pageY, Canvas=$canvasX,$canvasY, Level=$levelX,$levelY, Scale=${Const.SCALE}';
 	}
 
-	public inline function getRect(to:MouseCoords) : Rect {
-		return Rect.fromMouseCoords(this, to);
+	public inline function makeRect(to:Coords) : Rect {
+		return Rect.fromCoords(this, to);
 	}
 
 	public function getLayerCx(li:data.inst.LayerInstance) {
@@ -136,7 +136,7 @@ class MouseCoords {
 		return Std.int( ( layerY + getRelativeLayerInst().pxTotalOffsetY - li.pxTotalOffsetY ) / li.def.gridSize );
 	}
 
-	public inline function getPageDist(with:MouseCoords) {
+	public inline function getPageDist(with:Coords) {
 		return M.dist(pageX, pageY, with.pageX, with.pageY);
 	}
 }

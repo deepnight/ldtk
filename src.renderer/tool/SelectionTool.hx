@@ -129,12 +129,12 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
-	override function updateCursor(m:MouseCoords) {
+	override function updateCursor(m:Coords) {
 		super.updateCursor(m);
 
 		// Default cursor
 		if( isRunning() && rectangle ) {
-			var r = Rect.fromMouseCoords(origin, m);
+			var r = Rect.fromCoords(origin, m);
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, 0xffffff) );
 		}
 		else if( isRunning() )
@@ -191,7 +191,7 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
-	override function startUsing(m:MouseCoords, buttonId:Int) {
+	override function startUsing(m:Coords, buttonId:Int) {
 		isCopy = App.ME.isCtrlDown() && App.ME.isAltDown();
 		moveStarted = false;
 		editor.clearSpecialTool();
@@ -220,7 +220,7 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
-	// override function stopUsing(m:MouseCoords) {
+	// override function stopUsing(m:Coords) {
 	// 	super.stopUsing(m);
 	// }
 
@@ -235,7 +235,7 @@ class SelectionTool extends Tool<Int> {
 	public inline function isOveringSelection(m) return group.isOveringSelection(m);
 
 
-	override function onMouseMove(m:MouseCoords) {
+	override function onMouseMove(m:Coords) {
 		super.onMouseMove(m);
 
 		// Start moving elements only after a small elapsed mouse distance
@@ -268,7 +268,7 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
-	override function stopUsing(m:MouseCoords) {
+	override function stopUsing(m:Coords) {
 		super.stopUsing(m);
 
 		movePreview.clear();
@@ -277,7 +277,7 @@ class SelectionTool extends Tool<Int> {
 	}
 
 
-	override function useAt(m:MouseCoords, isOnStop:Bool):Bool {
+	override function useAt(m:Coords, isOnStop:Bool):Bool {
 		if( any() && isRunning() && moveStarted ) {
 			// Moving a selection
 			if( isOnStop ) {
@@ -306,7 +306,7 @@ class SelectionTool extends Tool<Int> {
 	}
 
 
-	override function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int):Bool {
+	override function useOnRectangle(m:Coords, left:Int, right:Int, top:Int, bottom:Int):Bool {
 		if( left==right && top==bottom ) {
 			// Actually picking a single value, even though "rectangle" was triggered
 			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);

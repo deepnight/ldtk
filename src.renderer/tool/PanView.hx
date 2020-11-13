@@ -11,7 +11,7 @@ class PanView extends Tool<Int> {
 		return panning;
 	}
 
-	override function startUsing(m:MouseCoords, buttonId:Int) {
+	override function startUsing(m:Coords, buttonId:Int) {
 		super.startUsing(m, buttonId);
 
 		curMode = null;
@@ -22,14 +22,14 @@ class PanView extends Tool<Int> {
 		}
 	}
 
-	override function stopUsing(m:MouseCoords) {
+	override function stopUsing(m:Coords) {
 		super.stopUsing(m);
 
 		if( panning )
 			panning = false;
 	}
 
-	override function useAt(m:MouseCoords, isOnStop:Bool):Bool {
+	override function useAt(m:Coords, isOnStop:Bool):Bool {
 		super.useAt(m, isOnStop);
 
 		editor.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
@@ -39,7 +39,7 @@ class PanView extends Tool<Int> {
 		return false;
 	}
 
-	override function updateCursor(m:MouseCoords) {
+	override function updateCursor(m:Coords) {
 		super.updateCursor(m);
 		if( isRunning() )
 			editor.cursor.set(Pan);

@@ -67,7 +67,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		return true;
 	}
 
-	override function startUsing(m:MouseCoords, buttonId:Int) {
+	override function startUsing(m:Coords, buttonId:Int) {
 		paintedCells = new Map();
 		super.startUsing(m, buttonId);
 	}
@@ -96,7 +96,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		return false;
 	}
 
-	override function useFloodfillAt(m:MouseCoords):Bool {
+	override function useFloodfillAt(m:Coords):Bool {
 		var topTile = curLayerInstance.getTopMostGridTile(m.cx, m.cy);
 		var initialTileId : Null<Int> = topTile!=null ? topTile.tileId : null;
 
@@ -139,7 +139,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		);
 	}
 
-	override function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int) {
+	override function useOnRectangle(m:Coords, left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(m, left, right, top, bottom);
 
 		if( curMode==Add && !isRandomMode() )
@@ -309,7 +309,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		return anyChange;
 	}
 
-	override function updateCursor(m:MouseCoords) {
+	override function updateCursor(m:Coords) {
 		super.updateCursor(m);
 
 		if( curTilesetDef==null || !curTilesetDef.isAtlasLoaded() ) {
@@ -318,7 +318,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		}
 
 		if( isRunning() && rectangle ) {
-			var r = Rect.fromMouseCoords(origin, m);
+			var r = Rect.fromCoords(origin, m);
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei) );
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) ) {

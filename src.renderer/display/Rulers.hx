@@ -21,7 +21,7 @@ class Rulers extends dn.Process {
 	// Drag & drop
 	var draggables : Array<RulerPos>;
 	var draggedPos : Null<RulerPos>;
-	var dragOrigin : Null<MouseCoords>;
+	var dragOrigin : Null<Coords>;
 	var dragStarted = false;
 	var resizePreview : h2d.Graphics;
 
@@ -165,7 +165,7 @@ class Rulers extends dn.Process {
 
 	inline function isClicking() return dragOrigin!=null;
 
-	public function onMouseDown(m:MouseCoords, buttonId:Int) {
+	public function onMouseDown(m:Coords, buttonId:Int) {
 		resizePreview.clear();
 		dragOrigin = null;
 		dragStarted = false;
@@ -189,7 +189,7 @@ class Rulers extends dn.Process {
 			&& !App.ME.isKeyDown(K.SPACE) && !App.ME.hasAnyToggleKeyDown();
 	}
 
-	public function onMouseMove(m:MouseCoords) {
+	public function onMouseMove(m:Coords) {
 		if( curLayerInstance==null)
 			return;
 
@@ -217,7 +217,7 @@ class Rulers extends dn.Process {
 		return b.newRight>b.newLeft+min && b.newBottom>b.newTop+min;
 	}
 
-	function getResizedBounds(m:MouseCoords) {
+	function getResizedBounds(m:Coords) {
 		if( draggedPos==null )
 			return null;
 
@@ -249,7 +249,7 @@ class Rulers extends dn.Process {
 		}
 	}
 
-	public function onMouseUp(m:MouseCoords) {
+	public function onMouseUp(m:Coords) {
 		if( dragStarted ) {
 			var b = getResizedBounds(m);
 			if( b.newLeft!=0 || b.newTop!=0 || b.newRight!=curLevel.pxWid || b.newBottom!=curLevel.pxHei ) {

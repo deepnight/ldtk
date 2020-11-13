@@ -18,7 +18,7 @@ class Rect {
 		hei = h;
 	}
 
-	public static inline function fromMouseCoords(a:MouseCoords, b:MouseCoords) : Rect {
+	public static inline function fromCoords(a:Coords, b:Coords) : Rect {
 		return new Rect(
 			M.imin(a.cx, b.cx),
 			M.imin(a.cy, b.cy),

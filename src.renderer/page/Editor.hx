@@ -1347,8 +1347,8 @@ class Editor extends Page {
 		return curLayerInstance!=null && levelRender.isLayerVisible(curLayerInstance);
 	}
 
-	public inline function getMouse() : MouseCoords {
-		return new MouseCoords();
+	public inline function getMouse() : Coords {
+		return new Coords();
 	}
 
 	override function onDispose() {

@@ -15,8 +15,8 @@ class Tool<T> extends dn.Process {
 
 	var clickingOutsideBounds = false;
 	var curMode : Null<ToolEditMode> = null;
-	var origin : MouseCoords;
-	var lastMouse : Null<MouseCoords>;
+	var origin : Coords;
+	var lastMouse : Null<Coords>;
 	var button = -1;
 	var rectangle = false;
 	var startTime = 0.;
@@ -70,7 +70,7 @@ class Tool<T> extends dn.Process {
 	public function canEdit() return getSelectedValue()!=null && editor.isCurrentLayerVisible();
 	public function isRunning() return curMode!=null;
 
-	public function startUsing(m:MouseCoords, buttonId:Int) {
+	public function startUsing(m:Coords, buttonId:Int) {
 		curMode = null;
 		startTime = haxe.Timer.stamp();
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
@@ -99,14 +99,14 @@ class Tool<T> extends dn.Process {
 	}
 
 
-	function updateCursor(m:MouseCoords) {}
+	function updateCursor(m:Coords) {}
 
-	function useFloodfillAt(m:MouseCoords) {
+	function useFloodfillAt(m:Coords) {
 		return false;
 	}
 
 	function _floodFillImpl(
-		m:MouseCoords,
+		m:Coords,
 		isBlocking:(cx:Int,cy:Int)->Bool,
 		setter:(cx:Int,cy:Int,v:T)->Void,
 		?onFill:(left:Int, right:Int, top:Int, bottom:Int, affectedPoints:Array<{ cx:Int, cy:Int }>)->Void
@@ -161,7 +161,7 @@ class Tool<T> extends dn.Process {
 		return true;
 	}
 
-	function useAt(m:MouseCoords, isOnStop:Bool) : Bool {
+	function useAt(m:Coords, isOnStop:Bool) : Bool {
 		var anyChange = false;
 		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
 			anyChange = useAtInterpolatedGrid(cx,cy) || anyChange;
@@ -175,20 +175,20 @@ class Tool<T> extends dn.Process {
 		return false;
 	}
 
-	function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int) : Bool {
+	function useOnRectangle(m:Coords, left:Int, right:Int, top:Int, bottom:Int) : Bool {
 		return false;
 	}
 
 
-	public inline function getRunningRectCWid(m:MouseCoords) : Int {
+	public inline function getRunningRectCWid(m:Coords) : Int {
 		return isRunning() && rectangle ? M.iabs(m.cx-origin.cx)+1 : 0;
 	}
 
-	public inline function getRunningRectCHei(m:MouseCoords) : Int {
+	public inline function getRunningRectCHei(m:Coords) : Int {
 		return isRunning() && rectangle ? M.iabs(m.cy-origin.cy)+1 : 0;
 	}
 
-	public function stopUsing(m:MouseCoords) {
+	public function stopUsing(m:Coords) {
 		var clickTime = haxe.Timer.stamp() - startTime;
 
 		if( isRunning() && !clickingOutsideBounds ) {
@@ -242,7 +242,7 @@ class Tool<T> extends dn.Process {
 
 	public function onKeyPress(keyId:Int) {}
 
-	public function onMouseMove(m:MouseCoords) {
+	public function onMouseMove(m:Coords) {
 		editor.cursor.setLabel();
 
 		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )
