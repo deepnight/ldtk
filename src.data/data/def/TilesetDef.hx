@@ -115,7 +115,7 @@ class TilesetDef {
 				averageColors: {
 					var buf = new StringBuf();
 					for(tid in 0...cWid*cHei)
-						buf.add( dn.Color.intToARGBHex3( averageColorsCache.get(tid) ) );
+						buf.add( dn.Color.intToHex3_ARGB( averageColorsCache.get(tid) ) );
 					buf.toString();
 				},
 			},
@@ -146,7 +146,7 @@ class TilesetDef {
 				var pos = 0;
 				var tid = 0;
 				while( pos<data.averageColors.length ) {
-					td.averageColorsCache.set( tid, dn.Color.ARGBHex3ToInt( data.averageColors.substr(pos,4) ) );
+					td.averageColorsCache.set( tid, dn.Color.hex3ToInt_ARGB( data.averageColors.substr(pos,4) ) );
 					tid++;
 					pos+=4;
 				}
