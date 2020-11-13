@@ -211,7 +211,7 @@ class LayerInstance {
 					if( !li.autoTilesCache.get(ruleId).exists(coordId) )
 						li.autoTilesCache.get(ruleId).set(coordId, []);
 
-					if( dn.VersionNumber.isLowerStr(p.jsonVersion, "0.5.0") && ( li.pxOffsetX!=0 || li.pxOffsetY!=0 ) ) {
+					if( dn.Version.lower(p.jsonVersion, "0.5.0") && ( li.pxOffsetX!=0 || li.pxOffsetY!=0 ) ) {
 						// Fix old coords that included offsets
 						at.px[0]-=li.pxOffsetX;
 						at.px[1]-=li.pxOffsetY;
