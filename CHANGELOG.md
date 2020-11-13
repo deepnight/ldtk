@@ -1,6 +1,10 @@
 # 0.6.0
 
+- **World map**: TODO
 - **New splash screen**: to reduce screen flickering and dirty window flashes on startup, a new splash screen was added, among other minor changes. The app window should now feel a little more "stable".
+- **Smooth zooming/panning**.
+- Many *under-the-hood* optimizations to support the new World map feature.
+- Removed the "double" *Fit* mode when pressing `F`. Now pressing this key just fits the whole level in the viewport.
 - Fixed loading of files with spaces in name, when using file association on Windows
 - Better "invalid value" error display in entity fields (previously, you only had `<error>`).
 - Added a "Close" button to Project panel
