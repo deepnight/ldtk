@@ -93,7 +93,7 @@ class Coords {
 	}
 
 	/** Create from Level coords **/
-	public static function fromLevelCoords(lx:Int, ly:Int) {
+	public static function fromLevelCoords(lx:Float, ly:Float) {
 		var render = Editor.ME.levelRender;
 
 		var canvasX = ( lx * render.adjustedZoom + render.root.x ) * Const.SCALE;
