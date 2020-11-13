@@ -42,7 +42,7 @@
 				"displayOpacity": 1,
 				"pxOffsetX": 0,
 				"pxOffsetY": 0,
-				"intGridValues": [ { "identifier": "dirt", "color": "#93573E" }, { "identifier": "ladder", "color": "#BBAA96" }, { "identifier": "stone", "color": "#D6C361" } ],
+				"intGridValues": [ { "identifier": "dirt", "color": "#93573E" }, { "identifier": "ladder", "color": "#BBAA96" }, { "identifier": "stone", "color": "#BD9261" } ],
 				"autoTilesetDefUid": 2,
 				"autoRuleGroups": [
 					{
