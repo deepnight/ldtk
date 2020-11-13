@@ -495,11 +495,20 @@ class LevelRender extends dn.Process {
 
 		worldLevels.set(l.uid, { wrapper:wrapper, render:render });
 
-		// Render level
-		var i = l.layerInstances.length-1;
-		while( i>=0 ) {
-			var li = l.layerInstances[i--];
+		// Per-coord limit
+		var doneCoords = new Map();
+		inline function markCoordAsDone(li:data.inst.LayerInstance, cx:Int, cy:Int) {
+			if( !doneCoords.exists(li.def.gridSize) )
+				doneCoords.set(li.def.gridSize, new Map());
+			doneCoords.get(li.def.gridSize).set( li.coordId(cx,cy), true);
+		}
+		inline function isCoordDone(li:data.inst.LayerInstance, cx:Int, cy:Int) {
+			return doneCoords.exists(li.def.gridSize) && doneCoords.get(li.def.gridSize).exists( li.coordId(cx,cy) );
+		}
 
+		// Render level
+
+		for(li in l.layerInstances) {
 			if( li.def.type==Entities )
 				continue;
 
@@ -533,7 +542,8 @@ class LevelRender extends dn.Process {
 				// Pure intGrid
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
-					if( li.hasAnyGridValue(cx,cy) ) {
+					if( !isCoordDone(li,cx,cy) && li.hasAnyGridValue(cx,cy) ) {
+						markCoordAsDone(li, cx,cy);
 						render.beginFill( li.getIntGridColorAt(cx,cy) );
 						render.drawRect(
 							li.pxTotalOffsetX*scale + cx*g,
@@ -549,7 +559,8 @@ class LevelRender extends dn.Process {
 				var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
-					if( li.hasAnyGridTile(cx,cy) ) {
+					if( !isCoordDone(li,cx,cy) && li.hasAnyGridTile(cx,cy) ) {
+						markCoordAsDone(li, cx,cy);
 						render.beginFill( td.getAverageTileColor( li.getTopMostGridTile(cx,cy).tileId ) );
 						render.drawRect(
 							li.pxTotalOffsetX*scale + cx*g,
