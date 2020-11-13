@@ -602,7 +602,7 @@ class LevelRender extends dn.Process {
 	}
 
 	public inline function applyGridVisibility() {
-		grid.visible = settings.grid;
+		grid.visible = settings.grid && !editor.worldMode;
 	}
 
 	function renderGrid() {
@@ -1241,6 +1241,7 @@ class LevelRender extends dn.Process {
 				}
 		}
 
+		applyGridVisibility();
 		layersWrapper.visible = !editor.worldMode;
 	}
 
