@@ -7,6 +7,8 @@
 - Removed the "double" *Fit* mode when pressing `F`. Now pressing this key just fits the whole level in the viewport.
 - Fixed loading of files with spaces in name, when using file association on Windows
 - Better "invalid value" error display in entity fields (previously, you only had `<error>`).
+- Application samples will now display a warning if you try to save them (not recommended as they will be overwritten by future app updates).
+- Better display of samples in recent files list on app Home.
 - Added a "Close" button to Project panel
 
 # 0.5.2-beta
