@@ -44,11 +44,11 @@ class WorldTool extends dn.Process {
 			else if( origin.getPageDist(m)<=DRAG_THRESHOLD ) {
 				// Pick level
 				var old = editor.curLevel;
+				editor.setWorldMode(false);
 				editor.selectLevel(clickedLevel);
 				editor.levelRender.focusLevelX -= ( editor.curLevel.worldX-old.worldX );
 				editor.levelRender.focusLevelY -= ( editor.curLevel.worldY-old.worldY );
 				editor.levelRender.autoScrollToLevel(clickedLevel);
-				editor.setWorldMode(false);
 			}
 
 		clickedLevel = null;

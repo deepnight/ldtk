@@ -189,6 +189,16 @@ class LevelRender extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
+			case WorldMode(active):
+				if( active ) {
+					for(l in layerRenders)
+						l.remove();
+					layerRenders = new Map();
+					grid.clear();
+				}
+				else
+					invalidateAll();
+
 			case ViewportChanged:
 				root.setScale(adjustedZoom);
 				root.x = M.round( editor.canvasWid()*0.5 - focusLevelX * adjustedZoom );
@@ -214,7 +224,7 @@ class LevelRender extends dn.Process {
 				invalidateLayer(li);
 
 			case LevelSelected(l):
-				renderAll();
+				invalidateAll();
 				// fit();
 				updateWorld();
 

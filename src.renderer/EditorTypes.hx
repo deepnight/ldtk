@@ -76,6 +76,8 @@ enum GlobalEvent {
 	EnumDefValueRemoved;
 
 	ToolOptionChanged;
+
+	WorldMode(active:Bool);
 }
 
 enum CursorType {

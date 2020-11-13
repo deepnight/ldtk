@@ -30,6 +30,8 @@ class LevelHistory {
 		switch e {
 			case ProjectSaved, BeforeProjectSaving:
 
+			case WorldMode(active):
+
 			case ProjectSelected:
 				clearHistory();
 

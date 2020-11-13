@@ -835,6 +835,7 @@ class Editor extends Page {
 	public function setWorldMode(v:Bool) {
 		worldMode = v;
 		levelRender.updateWorld();
+		ge.emit( WorldMode(worldMode) );
 	}
 
 	public function setGrid(v:Bool, notify=true) {
@@ -985,6 +986,7 @@ class Editor extends Page {
 		else if( e!=ViewportChanged ) {
 			var extra : Dynamic = null;
 			switch e {
+				case WorldMode(active):
 				case ViewportChanged:
 				case ProjectSelected:
 				case ProjectSettingsChanged:
@@ -1048,6 +1050,7 @@ class Editor extends Page {
 
 		// Check if events changes the NeedSaving flag
 		switch e {
+			case WorldMode(_):
 			case ViewportChanged:
 			case LayerInstanceSelected:
 			case LevelSelected(_):
@@ -1064,6 +1067,8 @@ class Editor extends Page {
 
 		// Use event
 		switch e {
+			case WorldMode(active):
+
 			case ViewportChanged:
 
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
