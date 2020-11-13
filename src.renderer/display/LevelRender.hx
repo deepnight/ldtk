@@ -332,6 +332,7 @@ class LevelRender extends dn.Process {
 				updateWorld();
 
 			case LevelRemoved(l):
+				removeWorldLevel(l);
 				updateWorld();
 
 			case LevelSorted:
@@ -476,6 +477,13 @@ class LevelRender extends dn.Process {
 				e.alpha = editor.worldMode ? 1 : 0.2;
 			}
 
+	}
+
+	function removeWorldLevel(l:data.Level) {
+		if( worldLevels.exists(l.uid) ) {
+			worldLevels.get(l.uid).remove();
+			worldLevels.remove(l.uid);
+		}
 	}
 
 	function renderWorldLevel(l:data.Level) {
