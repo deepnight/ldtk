@@ -18,7 +18,7 @@ class TilesetDef {
 	// var opaqueTilesCache : Null< Map<Int,Bool> >;
 
 	var opaqueTiles : Null< haxe.ds.Vector<Bool> >;
-	var averageColorsCache : Null< Map<Int,Int> >; // ARGB
+	var averageColorsCache : Null< Map<Int,Int> >; // ARGB Int
 
 	public var pxWid = 0;
 	public var pxHei = 0;
@@ -502,6 +502,8 @@ class TilesetDef {
 				b += dn.Color.getB(pixel) * dn.Color.getB(pixel);
 				n++;
 			}
+
+			// WARNING: actual color precision will later be reduced upon saving to 4-chars "argb"" String
 			averageColorsCache.set(tid, dn.Color.makeColor( Math.sqrt(r/n), Math.sqrt(g/n), Math.sqrt(b/n), a/n ));
 		}
 	}
