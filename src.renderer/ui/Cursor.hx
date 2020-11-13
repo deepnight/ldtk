@@ -252,8 +252,10 @@ class Cursor extends dn.Process {
 		root.x = editor.levelRender.root.x;
 		root.y = editor.levelRender.root.y;
 		root.setScale(editor.levelRender.adjustedZoom);
+		root.visible = !editor.worldMode;
 
 		updatePosition();
+
 	}
 
 	override function update() {
