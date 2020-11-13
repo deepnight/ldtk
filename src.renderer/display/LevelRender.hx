@@ -195,7 +195,6 @@ class LevelRender extends dn.Process {
 					// Zoom out
 					cancelAutoScrolling();
 					targetZoom = M.fmin( 1, getFitZoom(editor.curLevel) * 0.5 );
-					N.debug(targetZoom);
 
 					// Remove hidden render
 					for(l in layerRenders)
@@ -481,9 +480,25 @@ class LevelRender extends dn.Process {
 		worldWrapper.x = -editor.curLevel.worldX;
 		worldWrapper.y = -editor.curLevel.worldY;
 
+		var cur = editor.curLevel;
 		for( l in editor.project.levels )
 			if( worldLevels.exists(l.uid) ) {
 				var e = worldLevels.get(l.uid);
+
+				if( editor.worldMode )
+					e.alpha = 1;
+				else {
+					var dist = M.fmax(
+						M.fmax(0, cur.worldX - (l.worldX+l.pxWid)) + M.fmax( 0, l.worldX - (cur.worldX+cur.pxWid) ),
+						M.fmax(0, cur.worldY - (l.worldY+l.pxHei)) + M.fmax( 0, l.worldY - (cur.worldY+cur.pxHei) )
+					);
+					e.visible = dist<=800;
+					if( !e.visible )
+						continue;
+
+					e.alpha = dist<=500 ? 0.2 : 0.033;
+				}
+
 				if( l.uid==editor.curLevelId && !editor.worldMode )
 					e.visible = false;
 				else {
@@ -491,7 +506,6 @@ class LevelRender extends dn.Process {
 					e.visible = true;
 				}
 
-				e.alpha = editor.worldMode ? 1 : 0.2;
 			}
 
 	}
