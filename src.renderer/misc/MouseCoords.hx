@@ -1,7 +1,8 @@
 package misc;
 
 class MouseCoords {
-	var pixelRatio(get,never): Float; inline function get_pixelRatio() return js.Browser.window.devicePixelRatio;
+	static var pixelRatio(get,never): Float;
+		static inline function get_pixelRatio() return js.Browser.window.devicePixelRatio;
 
 	// HTML Page
 	public var pageX : Int;
@@ -13,7 +14,6 @@ class MouseCoords {
 
 	public var canvasY(get,never) : Int;
 		inline function get_canvasY() return M.round( ( pageY - App.ME.jCanvas.offset().top ) * pixelRatio );
-
 
 	// Level
 	public var levelX(get,never) : Int;
@@ -79,6 +79,8 @@ class MouseCoords {
 
 	var _relativeLayerInst : Null<data.inst.LayerInstance>;
 
+
+	/** Construct from Page coords **/
 	public function new(?pageX:Float, ?pageY:Float) {
 		if( pageX==null ) {
 			this.pageX = App.ME.lastKnownMouse.pageX;
@@ -88,6 +90,18 @@ class MouseCoords {
 			this.pageX = Std.int(pageX);
 			this.pageY = Std.int(pageY);
 		}
+	}
+
+	/** Create from Level coords **/
+	public static function fromLevelCoords(lx:Int, ly:Int) {
+		var render = Editor.ME.levelRender;
+
+		var canvasX = ( lx * render.adjustedZoom + render.root.x ) * Const.SCALE;
+		var pageX = canvasX / pixelRatio + App.ME.jCanvas.offset().left;
+		var canvasY = ( ly * render.adjustedZoom + render.root.y ) * Const.SCALE;
+		var pageY = canvasY / pixelRatio + App.ME.jCanvas.offset().top;
+
+		return new MouseCoords(pageX, pageY);
 	}
 
 
