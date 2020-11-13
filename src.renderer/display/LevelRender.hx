@@ -170,9 +170,6 @@ class LevelRender extends dn.Process {
 		rawZoom = M.fclamp(rawZoom, MIN_ZOOM, MAX_ZOOM);
 
 		editor.ge.emit(ViewportChanged);
-
-		// focusLevelX += ( zoomFocusX - c.levelX );
-		// focusLevelY += ( zoomFocusY - c.levelY );
 	}
 
 	public inline function levelToUiX(x:Float) {
@@ -674,12 +671,8 @@ class LevelRender extends dn.Process {
 		renderBounds();
 		renderGrid();
 
-		for(ld in editor.project.defs.layers) {
-			var li = editor.curLevel.getLayerInstance(ld);
-			// if( li.def.isAutoLayer() )
-			// 	li.applyAllAutoLayerRules();
-			renderLayer(li);
-		}
+		for(ld in editor.project.defs.layers)
+			renderLayer( editor.curLevel.getLayerInstance(ld) );
 	}
 
 	public inline function clearTemp() {
@@ -1185,11 +1178,6 @@ class LevelRender extends dn.Process {
 					invalidateLayerArea(other, left, right, top, bottom);
 	}
 
-	// public inline function invalidateAllLayers() {
-	// 	for(li in editor.curLevel.layerInstances)
-	// 		invalidateLayer(li);
-	// }
-
 	public inline function invalidateBg() {
 		bgInvalidated = true;
 	}
@@ -1219,16 +1207,6 @@ class LevelRender extends dn.Process {
 			if( M.dist(targetLevelX, targetLevelY, focusLevelX, focusLevelY)<=4 )
 				cancelAutoScrolling();
 		}
-
-		// Animate world zoom
-		// worldZoom += ( ( editor.worldMode ? 1 : 0 ) - worldZoom ) * 0.17;
-		// if( worldZoom>0 && worldZoom<1 ) {
-		// 	editor.ge.emitAtTheEndOfFrame(ViewportChanged);
-		// 	if( !editor.worldMode && worldZoom<=0.01 )
-		// 		worldZoom = 0;
-		// 	else if( editor.worldMode && worldZoom>=0.99 )
-		// 		worldZoom = 1;
-		// }
 
 		// World
 		worldBg.wrapper.alpha += ( ( editor.worldMode ? 0.3 : 0 ) - worldBg.wrapper.alpha ) * 0.1;
