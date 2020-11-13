@@ -326,6 +326,10 @@ class App extends dn.Process {
 		return false;
 	}
 
+	public inline function isSample(path:String) {
+		return path!=null && path.indexOf( JsTools.getSamplesDir() )==0;
+	}
+
 	public function registerRecentProject(path:String) {
 		path = StringTools.replace(path, "\\", "/");
 		settings.recentProjects.remove(path);

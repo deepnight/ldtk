@@ -518,6 +518,10 @@ class JsTools {
 		return dn.FilePath.fromFile( path ).useSlashes().directory;
 	}
 
+	public static function getSamplesDir() {
+		return dn.FilePath.fromDir( getExeDir()+"/samples" ).directory;
+	}
+
 	public static function getAppResourceDir() {
 		var path = electron.renderer.IpcRenderer.sendSync("getAppResourceDir");
 		return dn.FilePath.fromDir( path ).useSlashes().directory;

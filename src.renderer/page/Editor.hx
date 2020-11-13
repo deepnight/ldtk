@@ -898,6 +898,17 @@ class Editor extends Page {
 		if( saveLocked() )
 			return;
 
+		if( App.ME.isSample(projectFilePath) ) {
+			new ui.modal.dialog.Choice(
+				Lang.t._("The file you're trying to save is a ::app:: sample map.\nAny change to it will be lost during automatic updates, so it's NOT recommended to modify it.", { app:Const.APP_NAME }),
+				true,
+				[
+					{ label:"Save as...", cb:onSaveAs },
+				]
+			);
+			return;
+		}
+
 		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
@@ -906,6 +917,7 @@ class Editor extends Page {
 			);
 			return;
 		}
+
 		if( !bypassMissing && projectFilePath.indexOf(Const.CRASH_NAME_SUFFIX)>=0 ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(

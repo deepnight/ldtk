@@ -157,8 +157,19 @@ class Home extends Page {
 			var li = new J('<li/>');
 			li.appendTo(jRecentList);
 
-			var col = C.toBlack( C.fromStringLight( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] ), 0.3 );
-			li.append( JsTools.makePath(trimmedPaths[i], col, true) );
+
+			if( !App.ME.isSample(p) ) {
+				var col = C.toBlack( C.fromStringLight( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] ), 0.3 );
+				li.append( JsTools.makePath(trimmedPaths[i], col, true) );
+			}
+			else {
+				// Sample file
+				li.addClass("sample");
+				var jPath = new J('<div class="path"/>');
+				jPath.append('<span class="highlight">${Const.APP_NAME} sample</span>');
+				jPath.append('<span>${dn.FilePath.extractFileWithExt(p)}</span>');
+				jPath.appendTo(li);
+			}
 
 			li.click( function(ev) {
 				if( !App.ME.loadProject(p) )
@@ -218,8 +229,7 @@ class Home extends Page {
 	}
 
 	public function onLoadSamples() {
-		var path = JsTools.getExeDir()+"/samples";
-		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION], path, function(filePath) {
+		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION], JsTools.getSamplesDir(), function(filePath) {
 			App.ME.loadProject(filePath);
 		});
 	}

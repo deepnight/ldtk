@@ -1680,6 +1680,10 @@ textarea {
 		border-color: $red;
 	}
 
+	&.choice .wrapper {
+		max-width: 500px;
+	}
+
 	&.message .wrapper {
 		max-width: 400px;
 		p {
@@ -2703,6 +2707,20 @@ canvas#webgl {
 
 					.exploreTo {
 						padding: 4px 8px;
+					}
+
+					&.sample {
+						.path {
+							.highlight {
+								margin-right: 8px;
+								font-style: italic;
+								background-color: $helpDark;
+								color: $help;
+							}
+							span:last-of-type {
+								color: $help !important;
+							}
+						}
 					}
 
 					&.missing .path span {
