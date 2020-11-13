@@ -460,12 +460,12 @@ class Editor extends Page {
 					cd.setS("debugTools", Const.INFINITE);
 
 			case K.P if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
-				N.debug("Rebuilding pixel caches...");
+				N.msg("Rebuilding pixel caches...");
 				for(td in project.defs.tilesets)
 					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 
 			case K.A if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
-				N.debug("Rebuilding auto layers...");
+				N.msg("Rebuilding auto layers...");
 				for(l in project.levels)
 				for(li in l.layerInstances)
 					li.autoTilesCache = null;
