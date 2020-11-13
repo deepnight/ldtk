@@ -1,7 +1,6 @@
 package display;
 
 class LevelRender extends dn.Process {
-	static var WORLD_LEVEL_SCALE = 0.1;
 	static var MIN_ZOOM = 0.2;
 	static var MAX_ZOOM = 32;
 	static var MAX_FOCUS_PADDING_X = 450;
@@ -30,7 +29,7 @@ class LevelRender extends dn.Process {
 	/** <LayerDefUID, h2d.Object> **/
 	var layerRenders : Map<Int,h2d.Object> = new Map();
 
-	var worldLevels : Map<Int, { wrapper:h2d.Object, render:h2d.Graphics }> = new Map();
+	var worldLevels : Map<Int, h2d.Object> = new Map();
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
 	var worldWrapper : h2d.Object;
 	var bounds : h2d.Graphics;
@@ -442,7 +441,7 @@ class LevelRender extends dn.Process {
 	public function resetWorldRender() {
 		App.LOG.render("Reset world render");
 		for(e in worldLevels)
-			e.wrapper.remove();
+			e.remove();
 		worldLevels = new Map();
 		worldWrapper.removeChildren();
 
@@ -465,13 +464,13 @@ class LevelRender extends dn.Process {
 			if( worldLevels.exists(l.uid) ) {
 				var e = worldLevels.get(l.uid);
 				if( l.uid==editor.curLevelId && !editor.worldMode )
-					e.wrapper.visible = false;
+					e.visible = false;
 				else {
-					e.wrapper.setPosition( l.worldX, l.worldY );
-					e.wrapper.visible = true;
+					e.setPosition( l.worldX, l.worldY );
+					e.visible = true;
 				}
 
-				e.wrapper.alpha = editor.worldMode ? 1 : 0.2;
+				e.alpha = editor.worldMode ? 1 : 0.2;
 			}
 
 	}
@@ -485,15 +484,10 @@ class LevelRender extends dn.Process {
 		// Cleanup
 		worldLevelsInvalidations.remove(l.uid);
 		if( worldLevels.exists(l.uid) )
-			worldLevels.get(l.uid).wrapper.remove();
+			worldLevels.get(l.uid).remove();
 
-		var scale = WORLD_LEVEL_SCALE;
 		var wrapper = new h2d.Object(worldWrapper);
-
-		var render = new h2d.Graphics(wrapper);
-		render.setScale(1/scale);
-
-		worldLevels.set(l.uid, { wrapper:wrapper, render:render });
+		worldLevels.set(l.uid, wrapper);
 
 		// Per-coord limit
 		var doneCoords = new Map();
@@ -511,8 +505,6 @@ class LevelRender extends dn.Process {
 		for(li in l.layerInstances) {
 			if( li.def.type==Entities )
 				continue;
-
-			var g = li.def.gridSize*scale;
 
 			// if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
 			// 	// Auto layer
@@ -540,35 +532,25 @@ class LevelRender extends dn.Process {
 			// }
 			if( li.def.type==IntGrid ) {
 				// Pure intGrid
+				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wrapper);
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
 					if( !isCoordDone(li,cx,cy) && li.hasAnyGridValue(cx,cy) ) {
 						markCoordAsDone(li, cx,cy);
-						render.beginFill( li.getIntGridColorAt(cx,cy) );
-						render.drawRect(
-							li.pxTotalOffsetX*scale + cx*g,
-							li.pxTotalOffsetY*scale + cy*g,
-							g, g
-						);
-						render.endFill();
+						pixelGrid.setPixel(cx,cy, li.getIntGridColorAt(cx,cy) );
 					}
 				}
 			}
 			else if( li.def.type==Tiles ) {
 				// Classic tiles
+				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wrapper);
 				var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
 				for(cy in 0...li.cHei)
-				for(cx in 0...li.cWid) {
+				for(cx in 0...li.cWid)
 					if( !isCoordDone(li,cx,cy) && li.hasAnyGridTile(cx,cy) ) {
 						markCoordAsDone(li, cx,cy);
-						render.beginFill( td.getAverageTileColor( li.getTopMostGridTile(cx,cy).tileId ) );
-						render.drawRect(
-							li.pxTotalOffsetX*scale + cx*g,
-							li.pxTotalOffsetY*scale + cy*g,
-							g, g
-						);
+						pixelGrid.setPixel(cx,cy, td.getAverageTileColor( li.getTopMostGridTile(cx,cy).tileId ) );
 					}
-				}
 			}
 		}
 
