@@ -219,6 +219,9 @@ class LevelRender extends dn.Process {
 				updateWorld();
 
 			case LevelResized(l):
+				for(li in l.layerInstances)
+					if( li.def.isAutoLayer() )
+						li.applyAllAutoLayerRules();
 				invalidateAll();
 				invalidateWorldLevel(l);
 

@@ -33,8 +33,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				updatePanel();
 
 			case LevelSelected(l):
-				this.li = editor.curLayerInstance;
-				updatePanel();
+				close();
 
 			case LayerInstanceRestoredFromHistory(li):
 				if( li.layerDefUid==this.li.layerDefUid )
@@ -90,6 +89,18 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		invalidatedRules.set(r.uid, r.uid);
 	}
 
+	function invalidateRuleAndOnesBelow(r:data.def.AutoLayerRuleDef) {
+		invalidateRule(r);
+
+		var isAfter = false;
+		li.def.iterateActiveRulesInEvalOrder( (or)->{
+			if( or.uid==r.uid )
+				isAfter = true;
+			else if( isAfter )
+				invalidateRule(or);
+		} );
+	}
+
 
 	function updateInvalidatedRulesInAllLevels() {
 		var ops = [];
@@ -126,7 +137,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 		if( ops.length>0 )
-			new Progress(L.t._("Updating auto layers..."), ops);
+			new Progress(L.t._("Updating auto layers..."), 5, ops, editor.levelRender.renderAll);
 
 		invalidatedRules = new Map();
 	}
@@ -279,6 +290,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			// Enable/disable group
 			jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {
+				if( rg.rules.length>0 )
+					invalidateRuleAndOnesBelow( rg.rules[0] );
 				rg.active = !rg.active;
 				editor.ge.emit( LayerRuleGroupChangedActiveState(rg) );
 			});
@@ -401,14 +414,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				jFlag.addClass( r.breakOnMatch ? "on" : "off" );
 				jFlag.click( function(ev:js.jquery.Event) {
 					ev.preventDefault();
+					invalidateRuleAndOnesBelow(r);
 					r.breakOnMatch = !r.breakOnMatch;
-					var isAfter = false;
-					li.def.iterateActiveRulesInEvalOrder( (or)->{
-						if( or.uid==r.uid )
-							isAfter = true;
-						else if( isAfter )
-							invalidateRule(or);
-					} );
 					editor.ge.emit( LayerRuleChanged(r) );
 				});
 
@@ -493,8 +500,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				jActive.find(".icon").addClass( r.active ? "active" : "inactive" );
 				jActive.click( function(ev:js.jquery.Event) {
 					ev.preventDefault();
+					invalidateRuleAndOnesBelow(r);
 					r.active = !r.active;
-					invalidateRule(r);
 					editor.ge.emit( LayerRuleChanged(r) );
 				});
 
@@ -533,7 +540,16 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				var fromGroupIdx = Std.parseInt( ev.from.getAttribute("groupIdx") );
 				var toGroupIdx = Std.parseInt( ev.to.getAttribute("groupIdx") );
 
+				var ruleUid = Std.parseInt( ev.item.getAttribute("ruleUid") );
+
+				if( ev.newIndex>ev.oldIndex || toGroupIdx>fromGroupIdx)
+					invalidateRuleAndOnesBelow( ld.getRule(ruleUid) );
+
 				project.defs.sortLayerAutoRules(ld, fromGroupIdx, toGroupIdx, ev.oldIndex, ev.newIndex);
+
+				if( ev.newIndex<ev.oldIndex || toGroupIdx<fromGroupIdx )
+					invalidateRuleAndOnesBelow( ld.getRule(ruleUid) );
+
 				editor.ge.emit(LayerRuleSorted);
 			});
 
