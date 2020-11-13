@@ -747,14 +747,9 @@ class Editor extends Page {
 
 	function onMouseWheel(e:hxd.Event) {
 		var m = getMouse();
-		var oldLevelX = m.levelX;
-		var oldLevelY = m.levelY;
-
-		levelRender.deltaZoom( -e.wheelDelta*0.1 );
-		ge.emit(ViewportChanged);
-
-		levelRender.focusLevelX += ( oldLevelX - m.levelX );
-		levelRender.focusLevelY += ( oldLevelY - m.levelY );
+		levelRender.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta*0.1 );
+		levelRender.cancelAutoScrolling();
+		levelRender.cancelAutoZoom();
 	}
 
 	public function selectLevel(l:data.Level) {
@@ -834,7 +829,6 @@ class Editor extends Page {
 
 	public function setWorldMode(v:Bool) {
 		worldMode = v;
-		levelRender.updateWorld();
 		ge.emit( WorldMode(worldMode) );
 	}
 

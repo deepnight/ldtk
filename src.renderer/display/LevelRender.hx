@@ -14,10 +14,9 @@ class LevelRender extends dn.Process {
 	public var focusLevelY(default,set) : Float;
 	var targetLevelX: Null<Float>;
 	var targetLevelY: Null<Float>;
-	public var adjustedZoom(get,set) : Float;
+	var targetZoom: Null<Float>;
+	public var adjustedZoom(get,never) : Float;
 	var rawZoom : Float;
-	var worldZoom = 0.;
-	var isFit = false;
 
 	/** <LayerDefUID, Bool> **/
 	var autoLayerRendering : Map<Int,Bool> = new Map();
@@ -83,7 +82,7 @@ class LevelRender extends dn.Process {
 
 		focusLevelX = 0;
 		focusLevelY = 0;
-		adjustedZoom = 3;
+		setZoom(3);
 	}
 
 	public function setFocus(x,y) {
@@ -91,33 +90,33 @@ class LevelRender extends dn.Process {
 		focusLevelY = y;
 	}
 
-	public function fit() {
-		cancelAutoScrolling();
-		var wasFit = isFit;
-		focusLevelX = editor.curLevel.pxWid*0.5;
-		focusLevelY = editor.curLevel.pxHei*0.5;
-
-		var old = rawZoom;
-		var pad = 100 * js.Browser.window.devicePixelRatio;
-		adjustedZoom = M.fmin(
+	function getFitZoom() : Float {
+		var pad = 32 * js.Browser.window.devicePixelRatio;
+		return M.fmin(
 			editor.canvasWid() / ( editor.curLevel.pxWid + pad ),
 			editor.canvasHei() / ( editor.curLevel.pxHei + pad )
 		);
+	}
 
-		// Fit closer if repeated
-		if( wasFit ) {
-			var pad = 8 * js.Browser.window.devicePixelRatio;
-			adjustedZoom = M.fmin(
-				editor.canvasWid() / ( editor.curLevel.pxWid + pad ),
-				editor.canvasHei() / ( editor.curLevel.pxHei + pad )
-			);
+	public function fit(immediate=false) {
+		cancelAutoScrolling();
+		cancelAutoZoom();
+
+		targetLevelX = editor.curLevel.pxWid*0.5;
+		targetLevelY = editor.curLevel.pxHei*0.5;
+
+		targetZoom = getFitZoom();
+
+		if( immediate ) {
+			focusLevelX = targetLevelX;
+			focusLevelY = targetLevelY;
+			setZoom(targetZoom);
+			cancelAutoScrolling();
+			cancelAutoZoom();
 		}
-
-		isFit = true;
 	}
 
 	inline function set_focusLevelX(v) {
-		isFit = false;
 		focusLevelX = editor.curLevelId==null || editor.worldMode
 			? v
 			: M.fclamp( v, -MAX_FOCUS_PADDING_X/adjustedZoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING_X/adjustedZoom );
@@ -126,7 +125,6 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function set_focusLevelY(v) {
-		isFit = false;
 		focusLevelY = editor.curLevelId==null || editor.worldMode
 			? v
 			: M.fclamp( v, -MAX_FOCUS_PADDING_Y/adjustedZoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING_Y/adjustedZoom );
@@ -147,25 +145,34 @@ class LevelRender extends dn.Process {
 		targetLevelX = targetLevelY = null;
 	}
 
-	inline function set_adjustedZoom(v) {
-		isFit = false;
+	public inline function cancelAutoZoom() {
+		targetZoom = null;
+	}
+
+	public function setZoom(v) {
+		cancelAutoZoom();
 		rawZoom = M.fclamp(v, MIN_ZOOM, MAX_ZOOM);
 		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
-		return rawZoom;
 	}
 
 	inline function get_adjustedZoom() {
-		// reduces tile flickering (#71)
+		// Reduces tile flickering (issue #71)
 		return
-			( rawZoom<=js.Browser.window.devicePixelRatio ? rawZoom : M.round(rawZoom*2)/2 )
-			+ worldZoom*-0.3*rawZoom;
+			rawZoom; // TODO fix flickering again
+			// ( rawZoom<=js.Browser.window.devicePixelRatio ? rawZoom : M.round(rawZoom*2)/2 )
+			// * ( 1 - worldZoom*0.5 ) ;
 	}
 
-	public function deltaZoom(delta:Float) {
-		isFit = false;
-		cancelAutoScrolling();
+	public function deltaZoomTo(zoomFocusX:Float, zoomFocusY:Float, delta:Float) {
+		var c = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
+
 		rawZoom += delta * rawZoom;
 		rawZoom = M.fclamp(rawZoom, MIN_ZOOM, MAX_ZOOM);
+
+		editor.ge.emit(ViewportChanged);
+
+		// focusLevelX += ( zoomFocusX - c.levelX );
+		// focusLevelY += ( zoomFocusY - c.levelY );
 	}
 
 	public inline function levelToUiX(x:Float) {
@@ -191,6 +198,11 @@ class LevelRender extends dn.Process {
 		switch e {
 			case WorldMode(active):
 				if( active ) {
+					// Zoom out
+					cancelAutoScrolling();
+					targetZoom = getFitZoom() * 0.5;
+
+					// Remove hidden render
 					for(l in layerRenders)
 						l.remove();
 					layerRenders = new Map();
@@ -198,6 +210,7 @@ class LevelRender extends dn.Process {
 				}
 				else
 					invalidateAll();
+				updateWorld();
 
 			case ViewportChanged:
 				root.setScale(adjustedZoom);
@@ -208,7 +221,7 @@ class LevelRender extends dn.Process {
 
 			case ProjectSelected:
 				renderAll();
-				fit();
+				fit(true);
 				resetWorldRender();
 				updateWorld();
 
@@ -225,7 +238,6 @@ class LevelRender extends dn.Process {
 
 			case LevelSelected(l):
 				invalidateAll();
-				// fit();
 				updateWorld();
 
 			case LevelResized(l):
@@ -1189,18 +1201,34 @@ class LevelRender extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
+		var spd = 0.17;
+
+		// Animated zoom
+		if( targetZoom!=null ) {
+			deltaZoomTo( focusLevelX, focusLevelY, ( targetZoom - rawZoom ) * spd / rawZoom );
+			if( M.fabs(targetZoom-rawZoom)<=0.02 ) {
+				setZoom(targetZoom);
+				cancelAutoZoom();
+			}
+		}
+
 		// Animated scrolling
 		if( targetLevelX!=null ) {
-			focusLevelX += ( targetLevelX - focusLevelX ) * 0.1;
-			focusLevelY += ( targetLevelY - focusLevelY ) * 0.1;
+			focusLevelX += ( targetLevelX - focusLevelX ) * spd;
+			focusLevelY += ( targetLevelY - focusLevelY ) * spd;
 			if( M.dist(targetLevelX, targetLevelY, focusLevelX, focusLevelY)<=4 )
 				cancelAutoScrolling();
 		}
 
 		// Animate world zoom
-		worldZoom += ( ( editor.worldMode ? 1 : 0 ) - worldZoom ) * 0.1;
-		if( worldZoom>0.05 && worldZoom<0.95 )
-			editor.ge.emitAtTheEndOfFrame(ViewportChanged);
+		// worldZoom += ( ( editor.worldMode ? 1 : 0 ) - worldZoom ) * 0.17;
+		// if( worldZoom>0 && worldZoom<1 ) {
+		// 	editor.ge.emitAtTheEndOfFrame(ViewportChanged);
+		// 	if( !editor.worldMode && worldZoom<=0.01 )
+		// 		worldZoom = 0;
+		// 	else if( editor.worldMode && worldZoom>=0.99 )
+		// 		worldZoom = 1;
+		// }
 
 		// World
 		worldBg.wrapper.alpha += ( ( editor.worldMode ? 0.3 : 0 ) - worldBg.wrapper.alpha ) * 0.1;
