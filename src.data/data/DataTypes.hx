@@ -16,6 +16,12 @@ enum LayerType {
 }
 
 
+enum WorldLayout {
+	Free;
+	LinearHorizontal;
+}
+
+
 typedef IntGridValueDef = {
 	var identifier : Null<String>;
 	var color : UInt;

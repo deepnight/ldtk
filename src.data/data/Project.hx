@@ -14,6 +14,7 @@ class Project {
 	public var defaultPivotY : Float;
 	public var defaultGridSize : Int;
 	public var bgColor : UInt;
+	public var worldLayout : data.DataTypes.WorldLayout;
 
 	public var minifyJson = false;
 	public var exportTiled = false;
@@ -23,6 +24,7 @@ class Project {
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
 		bgColor = 0x7f8093;
 		defaultPivotX = defaultPivotY = 0;
+		worldLayout = Free;
 
 		defs = new Definitions(this);
 	}
@@ -48,6 +50,7 @@ class Project {
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
 		p.bgColor = JsonTools.readColor( json.bgColor, 0xffffff );
+
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
 
@@ -56,18 +59,11 @@ class Project {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( Level.fromJson(p, lvlJson) );
 
-		if( dn.Version.lower(json.jsonVersion, "0.6") ) {
-			// Initialize world coords
-			var wx = 0;
-			var maxHei = 0;
-			for(l in p.levels) {
-				l.worldX = wx;
-				wx += l.pxWid + p.defaultGridSize;
-				maxHei = dn.M.imax(maxHei, l.pxHei);
-			}
-			for(l in p.levels)
-				l.worldY = Std.int( maxHei*0.5 - l.pxHei*0.5 ); // vertical center
-		}
+		// World
+		var defLayout : data.DataTypes.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
+		p.worldLayout = JsonTools.readEnum( data.DataTypes.WorldLayout, json.worldLayout, false, defLayout );
+		if( dn.Version.lower(json.jsonVersion, "0.6") )
+			p.reorganizeWorld();
 
 		p.jsonVersion = Const.getJsonVersion(); // always uses latest version
 		return p;
@@ -83,6 +79,7 @@ class Project {
 			nextUid: nextUid,
 			minifyJson: minifyJson,
 			exportTiled: exportTiled,
+			worldLayout: JsonTools.writeEnum(worldLayout, false),
 
 			defs: defs.toJson(this),
 			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
@@ -93,9 +90,28 @@ class Project {
 		return fromJson( toJson() );
 	}
 
+	public function reorganizeWorld() {
+		var spacing = 32;
+		switch worldLayout {
+			case Free:
+
+			case LinearHorizontal:
+				var wx = 0;
+				var maxHei = 0;
+				for(l in levels) {
+					l.worldX = wx;
+					wx += l.pxWid + spacing;
+					maxHei = dn.M.imax(maxHei, l.pxHei);
+				}
+				for(l in levels)
+					l.worldY = Std.int( maxHei*0.5 - l.pxHei*0.5 ); // center vertically
+		}
+	}
+
 	public function tidy() {
 		defs.tidy(this);
 
+		reorganizeWorld();
 		for(level in levels)
 			level.tidy(this);
 	}
