@@ -9,29 +9,26 @@ class Camera extends dn.Process {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
-	public var levelX(default,set) : Float;
-	public var levelY(default,set) : Float;
+	public var levelX(get,set) : Float;
+	public var levelY(get,set) : Float;
+
+	public var worldX(default,set) : Float;
+	public var worldY(default,set) : Float;
 
 	public var pixelRatio(get,never) : Float;
 		inline function get_pixelRatio() {
 			return js.Browser.window.devicePixelRatio;
 		}
 
-	var targetLevelX: Null<Float>;
-	var targetLevelY: Null<Float>;
+	var targetWorldX: Null<Float>;
+	var targetWorldY: Null<Float>;
 	var targetZoom: Null<Float>;
 	public var adjustedZoom(get,never) : Float;
 	var rawZoom : Float;
 
-	public var worldX(get,never) : Float;
-		inline function get_worldX() return levelX - editor.curLevel.worldX;
-
-	public var worldY(get,never) : Float;
-		inline function get_worldY() return levelY - editor.curLevel.worldY;
-
 	public function new() {
 		super(Editor.ME);
-		levelX = levelY = 0;
+		worldX = worldY = 0;
 		setZoom(3);
 		editor.ge.addGlobalListener(onGlobalEvent);
 	}
@@ -68,9 +65,8 @@ class Camera extends dn.Process {
 	}
 
 	public function setWorldPos(x,y) {
-		// TODO
-		// levelX = x;
-		// levelY = y;
+		worldX = x;
+		worldY = y;
 	}
 
 	function getFitZoom(l:data.Level) : Float {
@@ -85,44 +81,64 @@ class Camera extends dn.Process {
 		cancelAutoScrolling();
 		cancelAutoZoom();
 
-		targetLevelX = editor.curLevel.pxWid*0.5;
-		targetLevelY = editor.curLevel.pxHei*0.5;
+		targetWorldX = editor.curLevel.worldX + editor.curLevel.pxWid*0.5;
+		targetWorldY = editor.curLevel.worldY + editor.curLevel.pxHei*0.5;
 
 		targetZoom = getFitZoom(editor.curLevel);
 
 		if( immediate ) {
-			levelX = targetLevelX;
-			levelY = targetLevelY;
+			worldX = targetWorldX;
+			worldY = targetWorldY;
 			setZoom(targetZoom);
 			cancelAutoScrolling();
 			cancelAutoZoom();
 		}
 	}
 
-	inline function set_levelX(v) {
-		levelX = editor.curLevelId==null || editor.worldMode
-			? v
-			: M.fclamp( v, -MAX_FOCUS_PADDING_X/adjustedZoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING_X/adjustedZoom );
+	inline function set_worldX(v) {
+		worldX = v;
 		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
-		return levelX;
+		return worldX;
 	}
 
-	inline function set_levelY(v) {
-		levelY = editor.curLevelId==null || editor.worldMode
-			? v
-			: M.fclamp( v, -MAX_FOCUS_PADDING_Y/adjustedZoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING_Y/adjustedZoom );
+	inline function set_worldY(v) {
+		worldY = v;
 		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
-		return levelY;
+		return worldY;
+	}
+
+
+	inline function set_levelX(v:Float) {
+		if( editor.curLevelId!=null && !editor.worldMode )
+			v = M.fclamp( v, -MAX_FOCUS_PADDING_X/adjustedZoom, editor.curLevel.pxWid + MAX_FOCUS_PADDING_X/adjustedZoom );
+
+		return worldX = v + editor.curLevel.worldX;
+	}
+
+	inline function get_levelX() {
+		return worldX - editor.curLevel.worldX;
+	}
+
+
+	inline function set_levelY(v:Float) {
+		if( editor.curLevelId!=null && !editor.worldMode )
+			v = M.fclamp( v, -MAX_FOCUS_PADDING_Y/adjustedZoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING_Y/adjustedZoom );
+
+		return worldY = v + editor.curLevel.worldY;
+	}
+
+	inline function get_levelY() {
+		return worldY - editor.curLevel.worldY;
 	}
 
 	public inline function autoScrollToLevel(l:data.Level) {
 		targetZoom = getFitZoom(l);
-		targetLevelX = l.pxWid*0.5;
-		targetLevelY = l.pxHei*0.5;
+		targetWorldX = l.worldX + l.pxWid*0.5;
+		targetWorldY = l.worldY + l.pxHei*0.5;
 	}
 
 	public inline function cancelAutoScrolling() {
-		targetLevelX = targetLevelY = null;
+		targetWorldX = targetWorldX = null;
 	}
 
 	public inline function cancelAutoZoom() {
@@ -159,19 +175,19 @@ class Camera extends dn.Process {
 		// Animated zoom
 		if( targetZoom!=null ) {
 			deltaZoomTo( levelX, levelY, ( targetZoom - rawZoom ) * M.fmin(1, 0.07 * tmod) );
-			N.debug(tmod);
 			if( M.fabs(targetZoom-rawZoom) <= 0.04/rawZoom )
 				cancelAutoZoom();
 		}
 
 		// Animated scrolling
-		if( targetLevelX!=null ) {
-			levelX += ( targetLevelX - levelX ) * M.fmin(1, 0.16*tmod);
-			levelY += ( targetLevelY - levelY ) * M.fmin(1, 0.16*tmod);
-			if( M.dist(targetLevelX, targetLevelY, levelX, levelY)<=4 )
+		if( targetWorldX!=null ) {
+			worldX += ( targetWorldX - worldX ) * M.fmin(1, 0.16*tmod);
+			worldY += ( targetWorldY - worldY ) * M.fmin(1, 0.16*tmod);
+			if( M.dist(targetWorldX, targetWorldY, worldX, worldY)<=4 )
 				cancelAutoScrolling();
 		}
 
+		App.ME.debug('world=${Std.int(worldX)},${Std.int(worldY)}, level=${Std.int(levelX)},${Std.int(levelY)}');
 	}
 
 }
