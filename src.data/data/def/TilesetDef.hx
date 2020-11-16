@@ -511,7 +511,7 @@ class TilesetDef {
 	public inline function hasValidPixelData() {
 		return isAtlasLoaded()
 			&& opaqueTiles!=null && opaqueTiles.length==cWid*cHei
-			&& averageColorsCache!=null; // TODO length check
+			&& averageColorsCache!=null; 
 	}
 
 	public function buildPixelData(onComplete:Void->Void) {

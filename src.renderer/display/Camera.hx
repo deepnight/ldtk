@@ -155,7 +155,7 @@ class Camera extends dn.Process {
 	inline function get_adjustedZoom() {
 		// Reduces tile flickering (issue #71)
 		return
-			rawZoom; // TODO fix flickering again
+			rawZoom; // TODO fix flickering again?
 			// ( rawZoom<=pixelRatio ? rawZoom : M.round(rawZoom*2)/2 )
 			// * ( 1 - worldZoom*0.5 ) ;
 	}
