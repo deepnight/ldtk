@@ -386,7 +386,7 @@ class Editor extends Page {
 			case K.S:
 				if( !hasInputFocus() && App.ME.isCtrlDown() )
 					if( App.ME.isShiftDown() )
-						onSaveAs();
+						onSave(true);
 					else
 						onSave();
 
@@ -894,31 +894,55 @@ class Editor extends Page {
 			App.ME.loadPage( ()->new Home() );
 	}
 
-	public function onSave(?bypassMissing=false, ?onComplete:Void->Void) {
+	public function onSave(saveAs=false, ?bypasses:Map<String,Bool>, ?onComplete:Void->Void) {
 		if( saveLocked() )
 			return;
 
-		if( App.ME.isSample(projectFilePath) ) {
+		if( bypasses==null )
+			bypasses = new Map();
+
+		// Save as...
+		if( saveAs ) {
+			var oldDir = getProjectDir();
+
+			dn.electron.Dialogs.saveAs(["."+Const.FILE_EXTENSION, ".json"], getProjectDir(), function(filePath:String) {
+				this.projectFilePath = filePath;
+				var newDir = getProjectDir();
+				App.LOG.fileOp("Remap project paths: "+oldDir+" => "+newDir);
+				project.remapAllRelativePaths(oldDir, newDir);
+				bypasses.set("missing",true);
+				onSave(false, bypasses, onComplete);
+			});
+			return;
+		}
+
+		// Check sample file
+		if( !bypasses.exists("sample") && App.ME.isSample(projectFilePath, true) ) {
+			bypasses.set("sample",true);
 			new ui.modal.dialog.Choice(
 				Lang.t._("The file you're trying to save is a ::app:: sample map.\nAny change to it will be lost during automatic updates, so it's NOT recommended to modify it.", { app:Const.APP_NAME }),
 				true,
 				[
-					{ label:"Save as...", cb:onSaveAs },
+					{ label:"Save to another file", cb:onSave.bind(true, bypasses, onComplete) },
+					{ label:"Ignore", className:"gray", cb:()->onSave.bind(false, bypasses, onComplete) },
 				]
 			);
 			return;
 		}
 
-		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
+		// Check missing file
+		if( !bypasses.exists("missing") && !JsTools.fileExists(projectFilePath) ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
+				null,
 				Lang.t._("The project file is no longer in ::path::. Save to this path anyway?", { path:projectFilePath }),
-				onSave.bind(true, onComplete)
+				onSave.bind(true, bypasses, onComplete)
 			);
 			return;
 		}
 
-		if( !bypassMissing && projectFilePath.indexOf(Const.CRASH_NAME_SUFFIX)>=0 ) {
+		// Save
+		if( projectFilePath.indexOf(Const.CRASH_NAME_SUFFIX)>=0 ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
 				Lang.t._("This file seems to be a CRASH BACKUP. Do you want to save your changes to the original file instead?"),
@@ -929,12 +953,13 @@ class Editor extends Page {
 					// Save
 					projectFilePath = StringTools.replace(projectFilePath, Const.CRASH_NAME_SUFFIX, "");
 					updateTitle();
-					onSave(onComplete);
+					onSave(bypasses, onComplete);
 				}
 			);
 			return;
 		}
 
+		// Pre-save operations followed by actual saving
 		ge.emit(BeforeProjectSaving);
 		createChildProcess( (p)->{
 			if( !saveLocked() ) {
@@ -972,18 +997,6 @@ class Editor extends Page {
 				p.destroy();
 			}
 		}, true);
-	}
-
-	public function onSaveAs() {
-		var oldDir = getProjectDir();
-
-		dn.electron.Dialogs.saveAs(["."+Const.FILE_EXTENSION, ".json"], getProjectDir(), function(filePath:String) {
-			this.projectFilePath = filePath;
-			var newDir = getProjectDir();
-			App.LOG.fileOp("Remap project paths: "+oldDir+" => "+newDir);
-			project.remapAllRelativePaths(oldDir, newDir);
-			onSave(true);
-		});
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {

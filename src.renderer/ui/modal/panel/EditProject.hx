@@ -16,7 +16,7 @@ class EditProject extends ui.modal.Panel {
 		});
 
 		jContent.find("button.saveAs").click( function(ev) {
-			editor.onSaveAs();
+			editor.onSave(true);
 		});
 
 		jContent.find("button.close").click( function(ev) {

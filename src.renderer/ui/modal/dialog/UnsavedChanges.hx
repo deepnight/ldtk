@@ -7,7 +7,7 @@ class UnsavedChanges extends ui.modal.Dialog {
 		jContent.text( L.t._("Do you want to save before leaving?") );
 
 		addButton(L.t._("Yes"), "save", function() {
-			Editor.ME.onSave(false, after);
+			Editor.ME.onSave(after);
 		});
 
 		addButton(L.t._("No"), after);

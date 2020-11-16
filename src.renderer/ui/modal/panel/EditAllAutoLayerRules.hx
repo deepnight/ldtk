@@ -569,7 +569,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 	function deleteRuleGroup(rg:AutoLayerRuleGroup) {
-		new ui.modal.dialog.Confirm(true, function() {
+		new ui.modal.dialog.Confirm(Lang.t._("Confirm this action?"), true, function() {
 			new LastChance(Lang.t._("Rule group removed"), project);
 			App.LOG.general("Deleted rule group "+rg.name);
 			ld.removeRuleGroup(rg);

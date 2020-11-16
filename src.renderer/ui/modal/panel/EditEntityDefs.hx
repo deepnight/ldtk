@@ -118,6 +118,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 			new ui.modal.dialog.Confirm(
 				ev.getThis(),
+				Lang.t._("Confirm this action?"),
 				true,
 				function() {
 					deleteFieldDef(curField);

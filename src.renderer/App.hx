@@ -326,8 +326,14 @@ class App extends dn.Process {
 		return false;
 	}
 
-	public inline function isSample(path:String) {
-		return path!=null && path.indexOf( JsTools.getSamplesDir() )==0;
+	public inline function isSample(path:String, isFile:Bool) {
+		if( path==null )
+			return false;
+		else {
+			var fp = isFile ? dn.FilePath.fromFile(path) : dn.FilePath.fromDir(path);
+			fp.useSlashes();
+			return fp.directory.indexOf( JsTools.getSamplesDir() )==0;
+		}
 	}
 
 	public function registerRecentProject(path:String) {

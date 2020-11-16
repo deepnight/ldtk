@@ -1,8 +1,8 @@
 package ui.modal.dialog;
 
 class Choice extends ui.modal.Dialog {
-	public function new(?target:js.jquery.JQuery, str:LocaleString, hasCancel:Bool, choices:Array<{ label:String, cb:Void->Void }>) {
-		super(target);
+	public function new(str:LocaleString, hasCancel:Bool, choices:Array<{ label:String, cb:Void->Void, ?className:String }>) {
+		super();
 
 		jModalAndMask.addClass("choice");
 		canBeClosedManually = hasCancel;
@@ -11,7 +11,10 @@ class Choice extends ui.modal.Dialog {
 		jContent.html(str);
 
 		for(c in choices)
-			addButton(c.label, c.cb);
+			addButton(c.label, c.className, ()->{
+				close();
+				c.cb();
+			});
 
 		if( hasCancel )
 			addCancel();

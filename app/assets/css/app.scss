@@ -1682,6 +1682,9 @@ textarea {
 
 	&.choice .wrapper {
 		max-width: 500px;
+		button {
+			white-space: nowrap;
+		}
 	}
 
 	&.message .wrapper {

@@ -18,9 +18,11 @@ class WorldPanel extends ui.modal.Panel {
 
 		// Delete level
 		jContent.find(".mainList button.delete").click( function(ev) {
-			new ui.modal.dialog.Confirm(ev.getThis(), function() {
-				deleteLevel(curLevel);
-			});
+			new ui.modal.dialog.Confirm(
+				ev.getThis(),
+				Lang.t._("Confirm this action?"),
+				()->deleteLevel(curLevel)
+			);
 		});
 
 		updateList();
