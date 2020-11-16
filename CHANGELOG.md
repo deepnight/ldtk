@@ -11,6 +11,7 @@
 - Better display of samples in recent files list on app Home.
 - Added a "Close" button to Project panel
 - Removed "Loaded" useless notification
+- Fixed an infinite loop when resizing a level
 
 # 0.5.2-beta
 

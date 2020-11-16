@@ -93,7 +93,7 @@ class FieldInstance {
 	}
 
 	public function removeArrayValue(idx:Int) {
-		if( def.isArray && idx>=0 && idx<getArrayLength() )
+		if( idx>=0 && idx<getArrayLength() )
 			internalValues.splice(idx,1);
 	}
 
@@ -407,7 +407,7 @@ class FieldInstance {
 				while( i<getArrayLength() ) {
 					var pt = getPointGrid(i);
 					if( pt!=null && ( pt.cx<0 || pt.cx>=li.cWid || pt.cy<0 || pt.cy>=li.cHei ) ) {
-						App.LOG.add("tidy", 'Removed out-of-bounds point field $pt in $this');
+						App.LOG.add("tidy", 'Removed pt ${pt.cx},${pt.cy} in $this (out of bounds)');
 						removeArrayValue(i);
 					}
 					else
