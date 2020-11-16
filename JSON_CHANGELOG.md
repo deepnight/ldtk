@@ -3,6 +3,7 @@
  - Added `worldX/worldY` to **Level Instance**
  - Added `t` (tile ID) to **Tile Instance**
  - Added `averageColors` to **Tileset definition**
+ - Added `__tilesetDefUid` and`__tilesetRelPath` to **Layer instance**
 
 # 0.5.0-beta
 

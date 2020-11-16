@@ -47,6 +47,10 @@ class LayerInstance {
 
 
 	public function toJson() : ldtk.Json.LayerInstanceJson {
+		var td : Null<data.def.TilesetDef> = def.tilesetDefUid!=null ? _project.defs.getTilesetDef(def.tilesetDefUid)
+			: def.autoTilesetDefUid!=null ? _project.defs.getTilesetDef(def.autoTilesetDefUid)
+			: null;
+
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
@@ -57,6 +61,8 @@ class LayerInstance {
 			__opacity: def.displayOpacity,
 			__pxTotalOffsetX: pxOffsetX + def.pxOffsetX,
 			__pxTotalOffsetY: pxOffsetY + def.pxOffsetY,
+			__tilesetDefUid: td!=null ? td.uid : null,
+			__tilesetRelPath: td!=null ? td.relPath : null,
 
 			levelId: levelId,
 			layerDefUid: layerDefUid,
