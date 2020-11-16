@@ -2137,8 +2137,11 @@ div.sortHandle {
 	span.grid {
 		background-color: transparentize($color: #3fc3a5, $amount: 0.6);
 	}
-	span.pixels {
+	span.level {
 		background-color: transparentize($color: #257361, $amount: 0.6);
+	}
+	span.world {
+		background-color: transparentize($color: #233373, $amount: 0.6);
 	}
 }
 

@@ -698,11 +698,19 @@ class Editor extends Page {
 			jMouseCoords.show();
 
 			// Coordinates
-			if( curLayerInstance!=null )
-				jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
-			else
+			if( worldMode ) {
+				jMouseCoords.find(".world").text('World = ${m.worldX},${m.worldY}');
 				jMouseCoords.find(".grid").hide();
-			jMouseCoords.find(".pixels").text('Level = ${m.levelX},${m.levelY}');
+				jMouseCoords.find(".level").hide();
+			}
+			else {
+				if( curLayerInstance!=null )
+					jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
+				else
+					jMouseCoords.find(".grid").hide();
+				jMouseCoords.find(".level").text('Level = ${m.levelX},${m.levelY}');
+				jMouseCoords.find(".world").text('World = ${m.worldX},${m.worldY}');
+			}
 			if( curTool.getRunningRectCWid(m)>0 || selectionTool.getRunningRectCWid(m)>0 ) {
 				var wid = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCWid(m);
 				var hei = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCHei(m);
