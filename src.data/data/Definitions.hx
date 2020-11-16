@@ -122,7 +122,7 @@ class Definitions {
 		while( !isLayerNameUnique(copy.identifier) )
 			copy.identifier = ld.identifier+(idx++);
 
-		layers.insert( dn.Lib.getArrayIdx(ld, layers)+1, copy );
+		layers.insert( dn.Lib.getArrayIndex(ld, layers)+1, copy );
 		_project.tidy();
 	}
 
@@ -269,7 +269,7 @@ class Definitions {
 		while( !isEntityIdentifierUnique(copy.identifier) )
 			copy.identifier = ed.identifier+(idx++);
 
-		entities.insert( dn.Lib.getArrayIdx(ed, entities)+1, copy );
+		entities.insert( dn.Lib.getArrayIndex(ed, entities)+1, copy );
 		_project.tidy();
 
 		return copy;
@@ -351,7 +351,7 @@ class Definitions {
 		while( !isTilesetIdentifierUnique(copy.identifier) )
 			copy.identifier = td.identifier+(idx++);
 
-		tilesets.insert( dn.Lib.getArrayIdx(td, tilesets)+1, copy );
+		tilesets.insert( dn.Lib.getArrayIndex(td, tilesets)+1, copy );
 
 		_project.tidy();
 		return copy;
@@ -434,7 +434,7 @@ class Definitions {
 		while( !isEnumIdentifierUnique(copy.identifier) )
 			copy.identifier = ed.identifier+(idx++);
 
-		enums.insert( dn.Lib.getArrayIdx(ed, enums)+1, copy );
+		enums.insert( dn.Lib.getArrayIndex(ed, enums)+1, copy );
 		_project.tidy();
 		return copy;
 	}
