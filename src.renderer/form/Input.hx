@@ -15,6 +15,7 @@ class Input<T> {
 	public var validityCheck : Null<T->Bool>;
 	public var validityError : Null<T->Void>;
 	var linkedEvents : Map<GlobalEvent,Bool> = new Map();
+	public var confirmMessage: Null<LocaleString>;
 
 	private function new(jElement:js.jquery.JQuery, getter, setter) {
 		if( jElement.length==0 )
@@ -35,7 +36,21 @@ class Input<T> {
 		});
 	}
 
-	function onInputChange() {
+	function onInputChange(bypassConfirm=false) {
+		if( !bypassConfirm && confirmMessage!=null ) {
+			new ui.modal.dialog.Confirm(
+				jInput,
+				confirmMessage,
+				true,
+				onInputChange.bind(true),
+				()->{
+					setter(lastValidValue);
+					writeValueToInput();
+				}
+			);
+			return;
+		}
+
 		if( validityCheck!=null && !validityCheck(parseInputValue()) ) {
 			var err = parseInputValue();
 			setter( lastValidValue );
