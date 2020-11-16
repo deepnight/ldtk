@@ -90,10 +90,8 @@ class EntityInstanceEditor extends dn.Process {
 		var render = Editor.ME.levelRender;
 		link.clear();
 		link.lineStyle(4*win.devicePixelRatio, ei.def.color, 0.33);
-		link.moveTo(
-			render.levelToUiX(ei.x),
-			render.levelToUiY(ei.y)
-		);
+		var coords = Coords.fromLevelCoords(ei.x, ei.y);
+		link.moveTo(coords.canvasX, coords.canvasY);
 		link.lineTo(
 			Editor.ME.canvasWid() - jPanel.outerWidth()*win.devicePixelRatio,
 			Editor.ME.canvasHei()*0.5

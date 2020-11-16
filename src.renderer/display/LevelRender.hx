@@ -52,14 +52,6 @@ class LevelRender extends dn.Process {
 		root.add(temp, Const.DP_TOP);
 	}
 
-	public inline function levelToUiX(x:Float) {
-		return M.round( x*editor.camera.adjustedZoom + root.x ); // TODO use Coords
-	}
-
-	public inline function levelToUiY(y:Float) {
-		return M.round( y*editor.camera.adjustedZoom + root.y ); // TODO use coords
-	}
-
 	override function onDispose() {
 		super.onDispose();
 		editor.ge.removeListener(onGlobalEvent);
