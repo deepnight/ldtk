@@ -85,7 +85,7 @@ class EditProject extends ui.modal.Panel {
 			()->project.worldLayout,
 			(l)->project.worldLayout = l,
 			(l)->switch l {
-				case Free: L.t._("2D map: freely positioned in space");
+				case Free: L.t._("FREE - freely positioned in space");
 				case LinearHorizontal: L.t._("LINEAR (horizontal) - one level after the other");
 			}
 		);
