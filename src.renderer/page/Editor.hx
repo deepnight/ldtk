@@ -924,7 +924,7 @@ class Editor extends Page {
 				true,
 				[
 					{ label:"Save to another file", cb:onSave.bind(true, bypasses, onComplete) },
-					{ label:"Ignore", className:"gray", cb:()->onSave.bind(false, bypasses, onComplete) },
+					{ label:"Ignore", className:"gray", cb:onSave.bind(false, bypasses, onComplete) },
 				]
 			);
 			return;
