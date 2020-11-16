@@ -79,6 +79,23 @@ class EditProject extends ui.modal.Panel {
 		i.isColorCode = true;
 		i.linkEvent(ProjectSettingsChanged);
 
+		var e = new form.input.EnumSelect(
+			jForm.find("[name=worldLayout]"),
+			data.DataTypes.WorldLayout,
+			()->project.worldLayout,
+			(l)->project.worldLayout = l,
+			(l)->switch l {
+				case Free: L.t._("2D map: freely positioned in space");
+				case LinearHorizontal: L.t._("LINEAR (horizontal) - one level after the other");
+			}
+		);
+		if( project.levels.length>2 )
+			e.confirmMessage = L.t._("Changing this might affect ALL the levels layout, so please make sure you know what you're doing :)");
+		e.onValueChange = (l)->{
+			project.reorganizeWorld();
+		}
+
+
 		var pivot = jForm.find(".pivot");
 		pivot.empty();
 		pivot.append( JsTools.createPivotEditor(
