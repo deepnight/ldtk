@@ -41,6 +41,7 @@ class Editor extends Page {
 	public var needSaving = false;
 	public var worldMode(default,null) = false;
 
+	public var camera : display.Camera;
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
 	var bg : h2d.Bitmap;
@@ -77,6 +78,7 @@ class Editor extends Page {
 		cursor.canChangeSystemCursors = true;
 
 		levelRender = new display.LevelRender();
+		camera = new display.Camera();
 		rulers = new display.Rulers();
 
 		selectionTool = new tool.SelectionTool();
@@ -391,7 +393,7 @@ class Editor extends Page {
 						onSave();
 
 			case K.F if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				levelRender.fit();
+				camera.fit();
 
 			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() && curLayerInstance.def.isAutoLayer() ):
 				levelRender.toggleAutoLayerRendering(curLayerInstance);
@@ -747,9 +749,9 @@ class Editor extends Page {
 
 	function onMouseWheel(e:hxd.Event) {
 		var m = getMouse();
-		levelRender.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta*0.1 );
-		levelRender.cancelAutoScrolling();
-		levelRender.cancelAutoZoom();
+		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta*0.1 );
+		camera.cancelAutoScrolling();
+		camera.cancelAutoZoom();
 	}
 
 	public function selectLevel(l:data.Level) {
@@ -759,7 +761,7 @@ class Editor extends Page {
 		curLevelId = l.uid;
 		levelRender.invalidateWorldLevel(l);
 		if( !worldMode )
-			levelRender.autoScrollToLevel( curLevel );
+			camera.autoScrollToLevel( curLevel );
 		ge.emit( LevelSelected(l) );
 	}
 

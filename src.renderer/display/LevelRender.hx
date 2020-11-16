@@ -1,22 +1,11 @@
 package display;
 
 class LevelRender extends dn.Process {
-	static var MIN_ZOOM = 0.2;
-	static var MAX_ZOOM = 32;
-	static var MAX_FOCUS_PADDING_X = 450;
-	static var MAX_FOCUS_PADDING_Y = 400;
 	static var FIELD_TEXT_SCALE = 0.666;
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
+	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
 	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
-
-	public var focusLevelX(default,set) : Float;
-	public var focusLevelY(default,set) : Float;
-	var targetLevelX: Null<Float>;
-	var targetLevelY: Null<Float>;
-	var targetZoom: Null<Float>;
-	public var adjustedZoom(get,never) : Float;
-	var rawZoom : Float;
 
 	/** <LayerDefUID, Bool> **/
 	var autoLayerRendering : Map<Int,Bool> = new Map();
@@ -25,6 +14,7 @@ class LevelRender extends dn.Process {
 	var layerVis : Map<Int,Bool> = new Map();
 
 	var layersWrapper : h2d.Layers;
+
 	/** <LayerDefUID, h2d.Object> **/
 	var layerRenders : Map<Int,h2d.Object> = new Map();
 
@@ -79,102 +69,14 @@ class LevelRender extends dn.Process {
 
 		temp = new h2d.Graphics();
 		root.add(temp, Const.DP_TOP);
-
-		focusLevelX = 0;
-		focusLevelY = 0;
-		setZoom(3);
-	}
-
-	public function setFocus(x,y) {
-		focusLevelX = x;
-		focusLevelY = y;
-	}
-
-	function getFitZoom(l:data.Level) : Float {
-		var pad = 80 * js.Browser.window.devicePixelRatio;
-		return M.fmin(
-			editor.canvasWid() / ( l.pxWid + pad ),
-			editor.canvasHei() / ( l.pxHei + pad )
-		);
-	}
-
-	public function fit(immediate=false) {
-		cancelAutoScrolling();
-		cancelAutoZoom();
-
-		targetLevelX = editor.curLevel.pxWid*0.5;
-		targetLevelY = editor.curLevel.pxHei*0.5;
-
-		targetZoom = getFitZoom(editor.curLevel);
-
-		if( immediate ) {
-			focusLevelX = targetLevelX;
-			focusLevelY = targetLevelY;
-			setZoom(targetZoom);
-			cancelAutoScrolling();
-			cancelAutoZoom();
-		}
-	}
-
-	inline function set_focusLevelX(v) {
-		focusLevelX = editor.curLevelId==null || editor.worldMode
-			? v
-			: M.fclamp( v, -MAX_FOCUS_PADDING_X/adjustedZoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING_X/adjustedZoom );
-		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
-		return focusLevelX;
-	}
-
-	inline function set_focusLevelY(v) {
-		focusLevelY = editor.curLevelId==null || editor.worldMode
-			? v
-			: M.fclamp( v, -MAX_FOCUS_PADDING_Y/adjustedZoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING_Y/adjustedZoom );
-		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
-		return focusLevelY;
-	}
-
-	public inline function autoScrollToLevel(l:data.Level) {
-		targetZoom = getFitZoom(l);
-		targetLevelX = l.pxWid*0.5;
-		targetLevelY = l.pxHei*0.5;
-	}
-
-	public inline function cancelAutoScrolling() {
-		targetLevelX = targetLevelY = null;
-	}
-
-	public inline function cancelAutoZoom() {
-		targetZoom = null;
-	}
-
-	public function setZoom(v) {
-		cancelAutoZoom();
-		rawZoom = M.fclamp(v, MIN_ZOOM, MAX_ZOOM);
-		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
-	}
-
-	inline function get_adjustedZoom() {
-		// Reduces tile flickering (issue #71)
-		return
-			rawZoom; // TODO fix flickering again
-			// ( rawZoom<=js.Browser.window.devicePixelRatio ? rawZoom : M.round(rawZoom*2)/2 )
-			// * ( 1 - worldZoom*0.5 ) ;
-	}
-
-	public function deltaZoomTo(zoomFocusX:Float, zoomFocusY:Float, delta:Float) {
-		var c = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
-
-		rawZoom += delta * rawZoom;
-		rawZoom = M.fclamp(rawZoom, MIN_ZOOM, MAX_ZOOM);
-
-		editor.ge.emit(ViewportChanged);
 	}
 
 	public inline function levelToUiX(x:Float) {
-		return M.round( x*adjustedZoom + root.x );
+		return M.round( x*editor.camera.adjustedZoom + root.x ); // TODO use Coords
 	}
 
 	public inline function levelToUiY(y:Float) {
-		return M.round( y*adjustedZoom + root.y );
+		return M.round( y*editor.camera.adjustedZoom + root.y ); // TODO use coords
 	}
 
 	override function onDispose() {
@@ -192,10 +94,6 @@ class LevelRender extends dn.Process {
 		switch e {
 			case WorldMode(active):
 				if( active ) {
-					// Zoom out
-					cancelAutoScrolling();
-					targetZoom = M.fmin( 1, getFitZoom(editor.curLevel) * 0.5 );
-
 					// Remove hidden render
 					for(l in layerRenders)
 						l.remove();
@@ -207,15 +105,14 @@ class LevelRender extends dn.Process {
 				updateWorld();
 
 			case ViewportChanged:
-				root.setScale(adjustedZoom);
-				root.x = M.round( editor.canvasWid()*0.5 - focusLevelX * adjustedZoom );
-				root.y = M.round( editor.canvasHei()*0.5 - focusLevelY * adjustedZoom );
+				root.setScale( camera.adjustedZoom );
+				root.x = M.round( editor.canvasWid()*0.5 - camera.levelX * camera.adjustedZoom );
+				root.y = M.round( editor.canvasHei()*0.5 - camera.levelY * camera.adjustedZoom );
 
 			case ProjectSaved, BeforeProjectSaving:
 
 			case ProjectSelected:
 				renderAll();
-				fit(true);
 				resetWorldRender();
 				updateWorld();
 
@@ -1224,21 +1121,6 @@ class LevelRender extends dn.Process {
 
 	override function postUpdate() {
 		super.postUpdate();
-
-		// Animated zoom
-		if( targetZoom!=null ) {
-			deltaZoomTo( focusLevelX, focusLevelY, ( targetZoom - rawZoom ) * 0.07 );
-			if( M.fabs(targetZoom-rawZoom) <= 0.04/rawZoom )
-				cancelAutoZoom();
-		}
-
-		// Animated scrolling
-		if( targetLevelX!=null ) {
-			focusLevelX += ( targetLevelX - focusLevelX ) * 0.16;
-			focusLevelY += ( targetLevelY - focusLevelY ) * 0.16;
-			if( M.dist(targetLevelX, targetLevelY, focusLevelX, focusLevelY)<=4 )
-				cancelAutoScrolling();
-		}
 
 		// World
 		worldBg.wrapper.alpha += ( ( editor.worldMode ? 0.3 : 0 ) - worldBg.wrapper.alpha ) * 0.1;

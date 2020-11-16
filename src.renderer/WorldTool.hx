@@ -87,8 +87,8 @@ class WorldTool extends dn.Process {
 				editor.ge.emit( LevelSettingsChanged(clickedLevel) );
 
 				if( clickedLevel==editor.curLevel ) {
-					editor.levelRender.focusLevelX -= ( clickedLevel.worldX - initialX );
-					editor.levelRender.focusLevelY -= ( clickedLevel.worldY - initialY );
+					editor.camera.levelX -= ( clickedLevel.worldX - initialX );
+					editor.camera.levelY -= ( clickedLevel.worldY - initialY );
 				}
 			}
 			else if( origin.getPageDist(m)<=DRAG_THRESHOLD ) {
@@ -96,9 +96,9 @@ class WorldTool extends dn.Process {
 				var old = editor.curLevel;
 				editor.setWorldMode(false);
 				editor.selectLevel(clickedLevel);
-				editor.levelRender.focusLevelX -= ( editor.curLevel.worldX-old.worldX );
-				editor.levelRender.focusLevelY -= ( editor.curLevel.worldY-old.worldY );
-				editor.levelRender.autoScrollToLevel(clickedLevel);
+				editor.camera.levelX -= ( editor.curLevel.worldX-old.worldX );
+				editor.camera.levelY -= ( editor.curLevel.worldY-old.worldY );
+				editor.camera.autoScrollToLevel(clickedLevel);
 			}
 
 		clickedLevel = null;
@@ -123,7 +123,7 @@ class WorldTool extends dn.Process {
 				editor.setWorldMode( !worldMode );
 				if( !editor.worldMode ) {
 					// Recenter on active level
-					editor.levelRender.autoScrollToLevel(editor.curLevel);
+					editor.camera.autoScrollToLevel(editor.curLevel);
 				}
 				else
 					editor.levelRender.invalidateWorldLevel(editor.curLevel);
@@ -207,8 +207,8 @@ class WorldTool extends dn.Process {
 
 			// Compensate viewport induced movement
 			if( clickedLevel==editor.curLevel ) {
-				editor.levelRender.focusLevelX -= ( clickedLevel.worldX - initialX );
-				editor.levelRender.focusLevelY -= ( clickedLevel.worldY - initialY );
+				editor.camera.levelX -= ( clickedLevel.worldX - initialX );
+				editor.camera.levelY -= ( clickedLevel.worldY - initialY );
 			}
 
 			// Refresh render

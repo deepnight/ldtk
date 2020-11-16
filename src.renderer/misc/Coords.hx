@@ -2,7 +2,7 @@ package misc;
 
 class Coords {
 	static var pixelRatio(get,never): Float;
-		static inline function get_pixelRatio() return js.Browser.window.devicePixelRatio;
+		static inline function get_pixelRatio() return Editor.ME.camera.pixelRatio;
 
 	// HTML Page
 	public var pageX : Int;
@@ -21,7 +21,7 @@ class Coords {
 			if( Editor.ME==null || Editor.ME.destroyed )
 				return -1;
 			else
-				return M.round( ( canvasX/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.levelRender.adjustedZoom );
+				return M.round( ( canvasX/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.camera.adjustedZoom );
 		}
 
 	public var levelY(get,never) : Int;
@@ -29,7 +29,7 @@ class Coords {
 			if( Editor.ME==null || Editor.ME.destroyed )
 				return -1;
 			else
-				return M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.levelRender.adjustedZoom );
+				return M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.camera.adjustedZoom );
 		}
 
 	// World
@@ -95,10 +95,11 @@ class Coords {
 	/** Create from Level coords **/
 	public static function fromLevelCoords(lx:Float, ly:Float) {
 		var render = Editor.ME.levelRender;
+		var camera = Editor.ME.camera;
 
-		var canvasX = ( lx * render.adjustedZoom + render.root.x ) * Const.SCALE;
+		var canvasX = ( lx * camera.adjustedZoom + render.root.x ) * Const.SCALE;
 		var pageX = canvasX / pixelRatio + App.ME.jCanvas.offset().left;
-		var canvasY = ( ly * render.adjustedZoom + render.root.y ) * Const.SCALE;
+		var canvasY = ( ly * camera.adjustedZoom + render.root.y ) * Const.SCALE;
 		var pageY = canvasY / pixelRatio + App.ME.jCanvas.offset().top;
 
 		return new Coords(pageX, pageY);

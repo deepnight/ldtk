@@ -32,9 +32,9 @@ class PanView extends Tool<Int> {
 	override function useAt(m:Coords, isOnStop:Bool):Bool {
 		super.useAt(m, isOnStop);
 
-		editor.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
-		editor.levelRender.focusLevelY -= m.levelY-lastMouse.levelY;
-		editor.levelRender.cancelAutoScrolling();
+		editor.camera.levelX -= m.levelX-lastMouse.levelX;
+		editor.camera.levelY -= m.levelY-lastMouse.levelY;
+		editor.camera.cancelAutoScrolling();
 
 		return false;
 	}
