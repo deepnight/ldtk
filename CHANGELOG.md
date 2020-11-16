@@ -10,6 +10,7 @@
 - Application samples will now display a warning if you try to save them (not recommended as they will be overwritten by future app updates).
 - Better display of samples in recent files list on app Home.
 - Added a "Close" button to Project panel
+- Removed "Loaded" useless notification
 
 # 0.5.2-beta
 

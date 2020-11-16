@@ -397,7 +397,6 @@ class App extends dn.Process {
 
 		// Open it
 		loadPage( ()->new page.Editor(p, filePath) );
-		N.success("Loaded project: "+dn.FilePath.extractFileWithExt(filePath));
 		return true;
 	}
 
