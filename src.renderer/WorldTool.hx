@@ -23,7 +23,7 @@ class WorldTool extends dn.Process {
 	public function new() {
 		super(Editor.ME);
 		helpers = new h2d.Graphics();
-		editor.root.add(helpers, Const.DP_UI);
+		editor.worldRender.root.add(helpers, Const.DP_UI);
 	}
 
 	override function onDispose() {
@@ -47,6 +47,7 @@ class WorldTool extends dn.Process {
 			case LinearHorizontal:
 				var idx = 0;
 				linearInsertPoints = project.levels.map( (l)->{ pos:l.worldX, idx:idx++ } );
+
 				var last = project.levels[project.levels.length-1];
 				linearInsertPoints.push({ pos:last.worldX+last.pxWid, idx:idx });
 		}
@@ -78,18 +79,12 @@ class WorldTool extends dn.Process {
 						if( i!=null ) {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
-							N.debug(curIdx+" => "+toIdx);
 							project.sortLevel(curIdx, toIdx);
+							project.reorganizeWorld();
 						}
 				}
 
-				project.reorganizeWorld();
 				editor.ge.emit( LevelSettingsChanged(clickedLevel) );
-
-				if( clickedLevel==editor.curLevel ) {
-					editor.camera.worldX -= ( clickedLevel.worldX - initialX );
-					editor.camera.worldY -= ( clickedLevel.worldY - initialY );
-				}
 			}
 			else if( origin.getPageDist(m)<=DRAG_THRESHOLD ) {
 				// Pick level
@@ -137,9 +132,6 @@ class WorldTool extends dn.Process {
 		if( clickedLevel!=null && dragStarted ) {
 			// Init helpers render
 			helpers.clear();
-			helpers.setScale( editor.levelRender.root.scaleX );
-			helpers.x = editor.levelRender.root.x - editor.curLevel.worldX*helpers.scaleX;
-			helpers.y = editor.levelRender.root.y - editor.curLevel.worldY*helpers.scaleY;
 			helpers.lineStyle(10, 0x72feff, 0.5);
 
 			// Drag

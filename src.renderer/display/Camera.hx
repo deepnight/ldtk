@@ -131,8 +131,9 @@ class Camera extends dn.Process {
 		return worldY - editor.curLevel.worldY;
 	}
 
-	public inline function autoScrollToLevel(l:data.Level) {
-		targetZoom = getFitZoom(l);
+	public inline function autoScrollToLevel(l:data.Level, zoomIn=true) {
+		if( zoomIn )
+			targetZoom = getFitZoom(l);
 		targetWorldX = l.worldX + l.pxWid*0.5;
 		targetWorldY = l.worldY + l.pxHei*0.5;
 	}
