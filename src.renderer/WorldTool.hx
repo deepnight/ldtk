@@ -96,8 +96,6 @@ class WorldTool extends dn.Process {
 				var old = editor.curLevel;
 				editor.setWorldMode(false);
 				editor.selectLevel(clickedLevel);
-				// editor.camera.levelX -= ( editor.curLevel.worldX-old.worldX );
-				// editor.camera.levelY -= ( editor.curLevel.worldY-old.worldY );
 				editor.camera.autoScrollToLevel(clickedLevel);
 			}
 
@@ -126,7 +124,7 @@ class WorldTool extends dn.Process {
 					editor.camera.autoScrollToLevel(editor.curLevel);
 				}
 				else
-					editor.levelRender.invalidateWorldLevel(editor.curLevel);
+					editor.worldRender.invalidateWorldLevel(editor.curLevel);
 		}
 	}
 
@@ -205,14 +203,8 @@ class WorldTool extends dn.Process {
 					}
 			}
 
-			// Compensate viewport induced movement
-			// if( clickedLevel==editor.curLevel ) {
-				// editor.camera.levelX -= ( clickedLevel.worldX - initialX );
-				// editor.camera.levelY -= ( clickedLevel.worldY - initialY );
-			// }
-
 			// Refresh render
-			editor.levelRender.updateWorld();
+			editor.worldRender.updateWorld();
 		}
 
 		// Cursor

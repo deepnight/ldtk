@@ -42,6 +42,7 @@ class Editor extends Page {
 	public var worldMode(default,null) = false;
 
 	public var camera : display.Camera;
+	public var worldRender : display.WorldRender;
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
 	var bg : h2d.Bitmap;
@@ -77,6 +78,7 @@ class Editor extends Page {
 		cursor = new ui.Cursor();
 		cursor.canChangeSystemCursors = true;
 
+		worldRender = new display.WorldRender();
 		levelRender = new display.LevelRender();
 		camera = new display.Camera();
 		rulers = new display.Rulers();
@@ -756,10 +758,9 @@ class Editor extends Page {
 
 	public function selectLevel(l:data.Level) {
 		if( curLevel!=null )
-			levelRender.invalidateWorldLevel(curLevel);
+			worldRender.invalidateWorldLevel(curLevel);
 
 		curLevelId = l.uid;
-		levelRender.invalidateWorldLevel(l);
 		if( !worldMode )
 			camera.autoScrollToLevel( curLevel );
 		ge.emit( LevelSelected(l) );
