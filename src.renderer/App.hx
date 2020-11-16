@@ -400,20 +400,6 @@ class App extends dn.Process {
 		return true;
 	}
 
-	// public function openEditor(project:data.Project, path:String) {
-	// 	LOG.general("Opening Editor");
-	// 	clearCurPage();
-	// 	curPageProcess = new Editor(project, path);
-	// 	curPageProcess.onAppResize();
-	// }
-
-	// public function openHome() {
-	// 	LOG.general("Opening Home");
-	// 	clearCurPage();
-	// 	curPageProcess = new page.Home();
-	// 	curPageProcess.onAppResize();
-	// }
-
 	public function debug(msg:Dynamic, append=false) {
 		var wrapper = new J("#debug");
 		if( !append )
