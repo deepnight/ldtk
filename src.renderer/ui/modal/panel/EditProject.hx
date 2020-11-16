@@ -94,6 +94,7 @@ class EditProject extends ui.modal.Panel {
 		e.onValueChange = (l)->{
 			project.reorganizeWorld();
 		}
+		e.linkEvent( ProjectSettingsChanged );
 
 
 		var pivot = jForm.find(".pivot");
