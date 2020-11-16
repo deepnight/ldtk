@@ -114,12 +114,7 @@ class WorldTool extends dn.Process {
 		switch keyCode {
 			case K.W:
 				editor.setWorldMode( !worldMode );
-				if( !editor.worldMode ) {
-					// Recenter on active level
-					editor.camera.autoScrollToLevel(editor.curLevel);
-				}
-				else
-					editor.worldRender.invalidateLevel(editor.curLevel);
+
 		}
 	}
 

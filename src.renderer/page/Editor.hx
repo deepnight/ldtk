@@ -835,6 +835,7 @@ class Editor extends Page {
 		worldMode = v;
 		ui.EntityInstanceEditor.close();
 		ge.emit( WorldMode(worldMode) );
+		camera.fit();
 	}
 
 	public function setGrid(v:Bool, notify=true) {

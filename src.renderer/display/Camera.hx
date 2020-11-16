@@ -69,20 +69,57 @@ class Camera extends dn.Process {
 		worldY = y;
 	}
 
+	function getWorldBounds() {
+		var left = Const.INFINITE;
+		var right = -Const.INFINITE;
+		var top = Const.INFINITE;
+		var bottom = -Const.INFINITE;
+
+		for(l in editor.project.levels) {
+			left = M.imin(left, l.worldX);
+			right = M.imax(right, l.worldX+l.pxWid);
+			top = M.imin(top, l.worldY);
+			bottom = M.imax(bottom, l.worldY+l.pxHei);
+		}
+
+		return {
+			left: left,
+			right: right,
+			top: top,
+			bottom: bottom,
+		}
+	}
+
 	function getFitZoom(l:data.Level) : Float {
 		var pad = 80 * pixelRatio;
-		return M.fmin(
-			editor.canvasWid() / ( l.pxWid + pad ),
-			editor.canvasHei() / ( l.pxHei + pad )
-		);
+		if( editor.worldMode) {
+			var bounds = getWorldBounds();
+			return M.fmin(
+				editor.canvasWid() / ( bounds.right-bounds.left + pad ),
+				editor.canvasHei() / ( bounds.bottom-bounds.top + pad )
+			);
+		}
+		else {
+			return M.fmin(
+				editor.canvasWid() / ( l.pxWid + pad ),
+				editor.canvasHei() / ( l.pxHei + pad )
+			);
+		}
 	}
 
 	public function fit(immediate=false) {
 		cancelAutoScrolling();
 		cancelAutoZoom();
 
-		targetWorldX = editor.curLevel.worldX + editor.curLevel.pxWid*0.5;
-		targetWorldY = editor.curLevel.worldY + editor.curLevel.pxHei*0.5;
+		if( editor.worldMode ) {
+			var b = getWorldBounds();
+			targetWorldX = 0.5 * (b.left + b.right);
+			targetWorldY = 0.5 * (b.top + b.bottom);
+		}
+		else {
+			targetWorldX = editor.curLevel.worldX + editor.curLevel.pxWid*0.5;
+			targetWorldY = editor.curLevel.worldY + editor.curLevel.pxHei*0.5;
+		}
 
 		targetZoom = getFitZoom(editor.curLevel);
 
