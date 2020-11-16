@@ -941,7 +941,7 @@ class Editor extends Page {
 			return;
 		}
 
-		// Save
+		// Check crash backups
 		if( projectFilePath.indexOf(Const.CRASH_NAME_SUFFIX)>=0 ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
