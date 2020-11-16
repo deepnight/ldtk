@@ -15,30 +15,13 @@ class Coords {
 	public var canvasY(get,never) : Int;
 		inline function get_canvasY() return M.round( ( pageY - App.ME.jCanvas.offset().top ) * pixelRatio );
 
-	// Level
-	public var levelX(get,never) : Int;
-		inline function get_levelX() {
-			if( Editor.ME==null || Editor.ME.destroyed )
-				return -1;
-			else
-				return M.round( ( canvasX/Const.SCALE - Editor.ME.levelRender.root.x ) / Editor.ME.camera.adjustedZoom );
-		}
-
-	public var levelY(get,never) : Int;
-		inline function get_levelY() {
-			if( Editor.ME==null || Editor.ME.destroyed )
-				return -1;
-			else
-				return M.round( ( canvasY/Const.SCALE - Editor.ME.levelRender.root.y ) / Editor.ME.camera.adjustedZoom );
-		}
-
 	// World
 	public var worldX(get,never) : Int;
 	inline function get_worldX() {
 		if( Editor.ME==null || Editor.ME.destroyed )
 			return -1;
 		else
-			return levelX + Editor.ME.curLevel.worldX;
+			return M.round( ( canvasX/Const.SCALE - Editor.ME.worldRender.root.x ) / Editor.ME.camera.adjustedZoom );
 	}
 
 	public var worldY(get,never) : Int;
@@ -46,8 +29,25 @@ class Coords {
 		if( Editor.ME==null || Editor.ME.destroyed )
 			return -1;
 		else
-			return levelY + Editor.ME.curLevel.worldY;
+			return M.round( ( canvasY/Const.SCALE - Editor.ME.worldRender.root.y ) / Editor.ME.camera.adjustedZoom );
 	}
+
+	// Level
+	public var levelX(get,never) : Int;
+		inline function get_levelX() {
+			if( Editor.ME==null || Editor.ME.destroyed )
+				return -1;
+			else
+				return worldX - Editor.ME.curLevel.worldX;
+		}
+
+	public var levelY(get,never) : Int;
+		inline function get_levelY() {
+			if( Editor.ME==null || Editor.ME.destroyed )
+				return -1;
+			else
+				return worldY - Editor.ME.curLevel.worldY;
+		}
 
 	// Layer
 	public var layerX(get,never) : Int;
