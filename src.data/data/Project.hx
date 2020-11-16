@@ -146,7 +146,7 @@ class Project {
 		while( !isLevelIdentifierUnique(copy.identifier) )
 			copy.identifier = l.identifier+(idx++);
 
-		levels.insert( dn.Lib.getArrayIdx(l,levels)+1, copy );
+		levels.insert( dn.Lib.getArrayIndex(l,levels)+1, copy );
 		tidy();
 		return l;
 	}

@@ -30,7 +30,7 @@ class LevelRender extends dn.Process {
 
 	var worldLevels : Map<Int, { bounds:h2d.Graphics, render:h2d.Object }> = new Map();
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
-	var worldWrapper : h2d.Layers;
+	public var worldWrapper : h2d.Layers;
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
 	var grid : h2d.Graphics;
@@ -467,6 +467,15 @@ class LevelRender extends dn.Process {
 		}
 		worldLevels = new Map();
 		worldWrapper.removeChildren();
+
+		// World origin axes
+		var origin = new h2d.Graphics(worldWrapper);
+		origin.lineStyle(3, 0x0, 0.3);
+		var size = 2048;
+		origin.moveTo(0, -size*0.5);
+		origin.lineTo(0, size*0.5);
+		origin.moveTo(-size*0.5, 0);
+		origin.lineTo(size*0.5, 0);
 
 		for(l in editor.project.levels)
 			invalidateWorldLevel(l);

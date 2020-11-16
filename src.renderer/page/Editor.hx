@@ -828,6 +828,7 @@ class Editor extends Page {
 	}
 
 	public function setWorldMode(v:Bool) {
+		project.reorganizeWorld();
 		worldMode = v;
 		ui.EntityInstanceEditor.close();
 		ge.emit( WorldMode(worldMode) );
