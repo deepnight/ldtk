@@ -1,7 +1,8 @@
 package display;
 
 class Camera extends dn.Process {
-	static var MIN_ZOOM = 0.2;
+	static var MIN_LEVEL_ZOOM = 0.4;
+	static var MIN_WORLD_ZOOM = 0.03;
 	static var MAX_ZOOM = 32;
 	static var MAX_FOCUS_PADDING_X = 450;
 	static var MAX_FOCUS_PADDING_Y = 400;
@@ -91,15 +92,17 @@ class Camera extends dn.Process {
 	}
 
 	function getFitZoom(l:data.Level) : Float {
-		var pad = 80 * pixelRatio;
 		if( editor.worldMode) {
-			var bounds = getWorldBounds();
+			var b = getWorldBounds();
+			var padX = (b.right-b.left) * 0.1;
+			var padY = (b.bottom-b.top) * 0.1;
 			return M.fmin(
-				editor.canvasWid() / ( bounds.right-bounds.left + pad ),
-				editor.canvasHei() / ( bounds.bottom-bounds.top + pad )
+				editor.canvasWid() / ( b.right-b.left + padX ),
+				editor.canvasHei() / ( b.bottom-b.top + padY )
 			);
 		}
 		else {
+			var pad = 80 * pixelRatio;
 			return M.fmin(
 				editor.canvasWid() / ( l.pxWid + pad ),
 				editor.canvasHei() / ( l.pxHei + pad )
@@ -183,9 +186,13 @@ class Camera extends dn.Process {
 		targetZoom = null;
 	}
 
+	inline function getMinZoom() {
+		return editor.worldMode ? MIN_WORLD_ZOOM : MIN_LEVEL_ZOOM;
+	}
+
 	public function setZoom(v) {
 		cancelAutoZoom();
-		rawZoom = M.fclamp(v, MIN_ZOOM, MAX_ZOOM);
+		rawZoom = M.fclamp(v, getMinZoom(), MAX_ZOOM);
 		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
 	}
 
@@ -201,7 +208,7 @@ class Camera extends dn.Process {
 		var c = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
 
 		rawZoom += delta * rawZoom;
-		rawZoom = M.fclamp(rawZoom, MIN_ZOOM, MAX_ZOOM);
+		rawZoom = M.fclamp(rawZoom, getMinZoom(), MAX_ZOOM);
 
 		editor.ge.emit(ViewportChanged);
 	}
@@ -212,8 +219,8 @@ class Camera extends dn.Process {
 
 		// Animated zoom
 		if( targetZoom!=null ) {
-			deltaZoomTo( levelX, levelY, ( targetZoom - rawZoom ) * M.fmin(1, 0.07 * tmod) );
-			if( M.fabs(targetZoom-rawZoom) <= 0.04/rawZoom )
+			deltaZoomTo( levelX, levelY, ( targetZoom - rawZoom ) * M.fmin(1, 0.08 * tmod / rawZoom) );
+			if( M.fabs(targetZoom-rawZoom) <= 0.01*rawZoom )
 				cancelAutoZoom();
 		}
 
