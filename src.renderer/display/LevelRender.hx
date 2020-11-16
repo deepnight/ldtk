@@ -28,9 +28,9 @@ class LevelRender extends dn.Process {
 	/** <LayerDefUID, h2d.Object> **/
 	var layerRenders : Map<Int,h2d.Object> = new Map();
 
-	var worldLevels : Map<Int, h2d.Object> = new Map();
+	var worldLevels : Map<Int, { bounds:h2d.Graphics, render:h2d.Object }> = new Map();
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
-	var worldWrapper : h2d.Object;
+	var worldWrapper : h2d.Layers;
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
 	var grid : h2d.Graphics;
@@ -62,7 +62,7 @@ class LevelRender extends dn.Process {
 		editor.root.under(worldBg.wrapper);
 		worldBg.wrapper.alpha = 0;
 
-		worldWrapper = new h2d.Graphics();
+		worldWrapper = new h2d.Layers();
 		root.add(worldWrapper, Const.DP_MAIN);
 
 		bounds = new h2d.Graphics();
@@ -220,6 +220,7 @@ class LevelRender extends dn.Process {
 				updateWorld();
 
 			case ProjectSettingsChanged:
+				resetWorldRender();
 				invalidateBg();
 				renderWorldBg();
 
@@ -460,8 +461,10 @@ class LevelRender extends dn.Process {
 
 	public function resetWorldRender() {
 		App.LOG.render("Reset world render");
-		for(e in worldLevels)
-			e.remove();
+		for(e in worldLevels) {
+			e.bounds.remove();
+			e.render.remove();
+		}
 		worldLevels = new Map();
 		worldWrapper.removeChildren();
 
@@ -485,34 +488,39 @@ class LevelRender extends dn.Process {
 			if( worldLevels.exists(l.uid) ) {
 				var e = worldLevels.get(l.uid);
 
-				if( editor.worldMode )
-					e.alpha = 1;
+				if( l.uid==editor.curLevelId && !editor.worldMode ) {
+					// Hide current level in editor mode
+					e.bounds.visible = false;
+					e.render.visible = false;
+				}
+				else if( editor.worldMode ) {
+					// Show everything in world mode
+					e.render.visible = true;
+					e.render.alpha = 1;
+					e.bounds.alpha = 1;
+				}
 				else {
+					// Fade other levels in editor mode
 					var dist = M.fmax(
 						M.fmax(0, cur.worldX - (l.worldX+l.pxWid)) + M.fmax( 0, l.worldX - (cur.worldX+cur.pxWid) ),
 						M.fmax(0, cur.worldY - (l.worldY+l.pxHei)) + M.fmax( 0, l.worldY - (cur.worldY+cur.pxHei) )
 					);
-					e.visible = dist<=800;
-					if( !e.visible )
-						continue;
-
-					e.alpha = dist<=500 ? 0.2 : 0.033;
+					e.bounds.alpha = 0.33;
+					e.render.alpha = 0.33;
+					e.render.visible = dist<=100;
 				}
 
-				if( l.uid==editor.curLevelId && !editor.worldMode )
-					e.visible = false;
-				else {
-					e.setPosition( l.worldX, l.worldY );
-					e.visible = true;
-				}
-
+				// Position
+				e.render.setPosition( l.worldX, l.worldY );
+				e.bounds.setPosition( l.worldX, l.worldY );
 			}
 
 	}
 
 	function removeWorldLevel(l:data.Level) {
 		if( worldLevels.exists(l.uid) ) {
-			worldLevels.get(l.uid).remove();
+			worldLevels.get(l.uid).render.remove();
+			worldLevels.get(l.uid).bounds.remove();
 			worldLevels.remove(l.uid);
 		}
 	}
@@ -525,11 +533,19 @@ class LevelRender extends dn.Process {
 
 		// Cleanup
 		worldLevelsInvalidations.remove(l.uid);
-		if( worldLevels.exists(l.uid) )
-			worldLevels.get(l.uid).remove();
+		if( worldLevels.exists(l.uid) ) {
+			worldLevels.get(l.uid).render.remove();
+			worldLevels.get(l.uid).bounds.remove();
+		}
 
-		var wrapper = new h2d.Object(worldWrapper);
-		worldLevels.set(l.uid, wrapper);
+		// Init
+		var wl = {
+			render : new h2d.Object(),
+			bounds : new h2d.Graphics()
+		}
+		worldWrapper.add(wl.render, 0);
+		worldWrapper.add(wl.bounds, 1);
+		worldLevels.set(l.uid, wl);
 
 		// Per-coord limit
 		var doneCoords = new Map();
@@ -573,7 +589,7 @@ class LevelRender extends dn.Process {
 			// }
 			if( li.def.type==IntGrid ) {
 				// Pure intGrid
-				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wrapper);
+				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
 					if( !isCoordDone(li,cx,cy) && li.hasAnyGridValue(cx,cy) ) {
@@ -584,7 +600,7 @@ class LevelRender extends dn.Process {
 			}
 			else if( li.def.type==Tiles ) {
 				// Classic tiles
-				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wrapper);
+				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 				var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid)
@@ -596,12 +612,11 @@ class LevelRender extends dn.Process {
 		}
 
 		// Bounds
-		var g = new h2d.Graphics(wrapper);
-		g.lineStyle(3, l==editor.curLevel ? 0xffffff : 0xffcc00, 1);
-		g.drawRect(0, 0, l.pxWid, l.pxHei);
+		wl.bounds.lineStyle(3, l==editor.curLevel ? 0xffffff : 0xffcc00, 1);
+		wl.bounds.drawRect(0, 0, l.pxWid, l.pxHei);
 
 		// Identifier
-		var bg = new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2, wrapper );
+		var bg = new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2, wl.bounds );
 		bg.color.setColor( C.addAlphaF(0x464e79) );
 		bg.alpha = 0.8;
 
