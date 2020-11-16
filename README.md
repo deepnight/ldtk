@@ -57,6 +57,16 @@ haxe renderer.debug.hxml
 
 This should create `app/assets/js/renderer.js`.
 
+## Compiling another branch
+
+If you want to try a future version of LDtk, you can check branches name `dev-x.y.z` where x.y.z is version number. 
+
+**IMPORTANT**: you will also need to switch the Haxe API to the branch with the same name (change the branch name at the end accordingly):
+
+```
+haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git dev-0.6.0
+```
+
 ## Running
 
 From a command line in the `app` folder, run:
