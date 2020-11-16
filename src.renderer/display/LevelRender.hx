@@ -834,7 +834,7 @@ class LevelRender extends dn.Process {
 					var w = new h2d.Flow(valuesFlow);
 					var tile = fi.getIconForDisplay(idx);
 					var bmp = new h2d.Bitmap( tile, w );
-					var s = M.fmin( ei.def.width/ tile.width, ei.def.height/tile.height );
+					var s = M.fmin(1, M.fmin( ei.def.width/ tile.width, ei.def.height/tile.height ));
 					bmp.setScale(s);
 				}
 				else if( fi.def.type==F_Color ) {
