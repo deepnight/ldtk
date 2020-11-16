@@ -758,7 +758,7 @@ class Editor extends Page {
 
 	public function selectLevel(l:data.Level) {
 		if( curLevel!=null )
-			worldRender.invalidateWorldLevel(curLevel);
+			worldRender.invalidateLevel(curLevel);
 
 		curLevelId = l.uid;
 		if( !worldMode )

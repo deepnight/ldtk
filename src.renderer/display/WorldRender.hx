@@ -5,13 +5,9 @@ class WorldRender extends dn.Process {
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
 	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
-	var worldLevels : Map<Int, { bounds:h2d.Graphics, render:h2d.Object }> = new Map();
+	var levels : Map<Int, { bounds:h2d.Graphics, render:h2d.Object }> = new Map();
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
-	public var worldWrapper : h2d.Layers;
-	var bounds : h2d.Graphics;
-	var boundsGlow : h2d.Graphics;
-	var grid : h2d.Graphics;
-	var rectBleeps : Array<h2d.Object> = [];
+	public var levelsWrapper : h2d.Layers;
 
 	var levelInvalidations : Map<Int,Bool> = new Map();
 
@@ -33,8 +29,8 @@ class WorldRender extends dn.Process {
 		editor.root.under(worldBg.wrapper);
 		worldBg.wrapper.alpha = 0;
 
-		worldWrapper = new h2d.Layers();
-		root.add(worldWrapper, Const.DP_MAIN);
+		levelsWrapper = new h2d.Layers();
+		root.add(levelsWrapper, Const.DP_MAIN);
 	}
 
 	override function onDispose() {
@@ -51,7 +47,7 @@ class WorldRender extends dn.Process {
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case WorldMode(active):
-				updateWorld();
+				updateLayout();
 
 			case ViewportChanged:
 				root.setScale( camera.adjustedZoom );
@@ -59,43 +55,43 @@ class WorldRender extends dn.Process {
 				root.y = M.round( editor.canvasHei()*0.5 - camera.worldY * camera.adjustedZoom );
 
 			case ProjectSelected:
-				resetWorldRender();
-				updateWorld();
+				renderAll();
+				updateLayout();
 
 			case ProjectSettingsChanged:
-				resetWorldRender();
+				renderAll();
 				renderBg();
 
 			case LevelRestoredFromHistory(l):
-				invalidateWorldLevel(l);
+				invalidateLevel(l);
 
 			case LevelSelected(l):
-				updateWorld();
+				updateLayout();
 
 			case LevelResized(l):
-				invalidateWorldLevel(l);
+				invalidateLevel(l);
 
 			case LevelSettingsChanged(l):
-				invalidateWorldLevel(l);
+				invalidateLevel(l);
 
 			case LayerDefRemoved(uid):
-				resetWorldRender();
+				renderAll();
 
 			case LayerDefSorted:
-				resetWorldRender();
+				renderAll();
 
 			case LayerDefChanged, LayerDefConverted:
-				resetWorldRender();
+				renderAll();
 
 			case TilesetDefPixelDataCacheRebuilt(td):
-				resetWorldRender();
+				renderAll();
 
 			case LevelAdded(l):
-				updateWorld();
+				updateLayout();
 
 			case LevelRemoved(l):
-				removeWorldLevel(l);
-				updateWorld();
+				removeLevel(l);
+				updateLayout();
 
 			case LevelSorted:
 				// TODO render here instead of from worldTool ?
@@ -104,21 +100,21 @@ class WorldRender extends dn.Process {
 		}
 	}
 
-	public inline function invalidateWorldLevel(l:data.Level) {
+	public inline function invalidateLevel(l:data.Level) {
 		levelInvalidations.set(l.uid, true);
 	}
 
-	public function resetWorldRender() {
+	public function renderAll() {
 		App.LOG.render("Reset world render");
-		for(e in worldLevels) {
+		for(e in levels) {
 			e.bounds.remove();
 			e.render.remove();
 		}
-		worldLevels = new Map();
-		worldWrapper.removeChildren();
+		levels = new Map();
+		levelsWrapper.removeChildren();
 
 		// World origin axes
-		var origin = new h2d.Graphics(worldWrapper);
+		var origin = new h2d.Graphics(levelsWrapper);
 		origin.lineStyle(3, 0x0, 0.3);
 		var size = 2048;
 		origin.moveTo(0, -size*0.5);
@@ -127,7 +123,7 @@ class WorldRender extends dn.Process {
 		origin.lineTo(size*0.5, 0);
 
 		for(l in editor.project.levels)
-			invalidateWorldLevel(l);
+			invalidateLevel(l);
 	}
 
 	function renderBg() {
@@ -137,11 +133,11 @@ class WorldRender extends dn.Process {
 		worldBg.col.scaleY = editor.canvasHei();
 	}
 
-	public function updateWorld() {
+	public function updateLayout() {
 		var cur = editor.curLevel;
 		for( l in editor.project.levels )
-			if( worldLevels.exists(l.uid) ) {
-				var e = worldLevels.get(l.uid);
+			if( levels.exists(l.uid) ) {
+				var e = levels.get(l.uid);
 
 				if( l.uid==editor.curLevelId && !editor.worldMode ) {
 					// Hide current level in editor mode
@@ -172,11 +168,11 @@ class WorldRender extends dn.Process {
 
 	}
 
-	function removeWorldLevel(l:data.Level) {
-		if( worldLevels.exists(l.uid) ) {
-			worldLevels.get(l.uid).render.remove();
-			worldLevels.get(l.uid).bounds.remove();
-			worldLevels.remove(l.uid);
+	function removeLevel(l:data.Level) {
+		if( levels.exists(l.uid) ) {
+			levels.get(l.uid).render.remove();
+			levels.get(l.uid).bounds.remove();
+			levels.remove(l.uid);
 		}
 	}
 
@@ -188,9 +184,9 @@ class WorldRender extends dn.Process {
 
 		// Cleanup
 		levelInvalidations.remove(l.uid);
-		if( worldLevels.exists(l.uid) ) {
-			worldLevels.get(l.uid).render.remove();
-			worldLevels.get(l.uid).bounds.remove();
+		if( levels.exists(l.uid) ) {
+			levels.get(l.uid).render.remove();
+			levels.get(l.uid).bounds.remove();
 		}
 
 		// Init
@@ -198,9 +194,9 @@ class WorldRender extends dn.Process {
 			render : new h2d.Object(),
 			bounds : new h2d.Graphics()
 		}
-		worldWrapper.add(wl.render, 0);
-		worldWrapper.add(wl.bounds, 1);
-		worldLevels.set(l.uid, wl);
+		levelsWrapper.add(wl.render, 0);
+		levelsWrapper.add(wl.bounds, 1);
+		levels.set(l.uid, wl);
 
 		// Per-coord limit
 		var doneCoords = new Map();
@@ -298,7 +294,7 @@ class WorldRender extends dn.Process {
 		// World levels invalidation (max one per frame)
 		for( uid in levelInvalidations.keys() ) {
 			renderWorldLevel( editor.project.getLevel(uid) );
-			updateWorld();
+			updateLayout();
 			break;
 		}
 	}

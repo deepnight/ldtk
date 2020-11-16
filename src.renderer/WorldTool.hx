@@ -119,7 +119,7 @@ class WorldTool extends dn.Process {
 					editor.camera.autoScrollToLevel(editor.curLevel);
 				}
 				else
-					editor.worldRender.invalidateWorldLevel(editor.curLevel);
+					editor.worldRender.invalidateLevel(editor.curLevel);
 		}
 	}
 
@@ -196,7 +196,7 @@ class WorldTool extends dn.Process {
 			}
 
 			// Refresh render
-			editor.worldRender.updateWorld();
+			editor.worldRender.updateLayout();
 		}
 
 		// Cursor
