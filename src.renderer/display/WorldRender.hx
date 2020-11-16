@@ -7,6 +7,7 @@ class WorldRender extends dn.Process {
 
 	var levels : Map<Int, { bounds:h2d.Graphics, render:h2d.Object }> = new Map();
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
+	var axes : h2d.Graphics;
 	public var levelsWrapper : h2d.Layers;
 
 	var levelInvalidations : Map<Int,Bool> = new Map();
@@ -29,6 +30,9 @@ class WorldRender extends dn.Process {
 		editor.root.under(worldBg.wrapper);
 		worldBg.wrapper.alpha = 0;
 
+		axes = new h2d.Graphics();
+		editor.root.add(axes, Const.DP_MAIN);
+
 		levelsWrapper = new h2d.Layers();
 		root.add(levelsWrapper, Const.DP_MAIN);
 	}
@@ -36,11 +40,13 @@ class WorldRender extends dn.Process {
 	override function onDispose() {
 		super.onDispose();
 		worldBg.wrapper.remove();
+		axes.remove();
 		editor.ge.removeListener(onGlobalEvent);
 	}
 
 	override function onResize() {
 		super.onResize();
+		renderAxes();
 		renderBg();
 	}
 
@@ -55,6 +61,7 @@ class WorldRender extends dn.Process {
 				root.setScale( camera.adjustedZoom );
 				root.x = M.round( editor.canvasWid()*0.5 - camera.worldX * camera.adjustedZoom );
 				root.y = M.round( editor.canvasHei()*0.5 - camera.worldY * camera.adjustedZoom );
+				renderAxes();
 
 			case ProjectSelected:
 				renderAll();
@@ -108,6 +115,7 @@ class WorldRender extends dn.Process {
 
 	public function renderAll() {
 		App.LOG.render("Reset world render");
+
 		for(e in levels) {
 			e.bounds.remove();
 			e.render.remove();
@@ -115,17 +123,11 @@ class WorldRender extends dn.Process {
 		levels = new Map();
 		levelsWrapper.removeChildren();
 
-		// World origin axes
-		var origin = new h2d.Graphics(levelsWrapper);
-		origin.lineStyle(3, 0x0, 0.3);
-		var size = 2048;
-		origin.moveTo(0, -size*0.5);
-		origin.lineTo(0, size*0.5);
-		origin.moveTo(-size*0.5, 0);
-		origin.lineTo(size*0.5, 0);
-
 		for(l in editor.project.levels)
 			invalidateLevel(l);
+
+		renderBg();
+		renderAxes();
 	}
 
 	function renderBg() {
@@ -135,8 +137,23 @@ class WorldRender extends dn.Process {
 		worldBg.col.scaleY = editor.canvasHei();
 	}
 
+	function renderAxes() {
+		axes.clear();
+		axes.lineStyle(2*editor.camera.pixelRatio, 0x0, 0.15);
+
+		// Horizontal
+		axes.moveTo(0, root.y);
+		axes.lineTo(editor.canvasWid(), root.y);
+
+		// Vertical
+		axes.moveTo(root.x, 0);
+		axes.lineTo(root.x, editor.canvasHei());
+	}
+
 	public function updateLayout() {
 		var cur = editor.curLevel;
+		axes.visible = editor.worldMode;
+
 		for( l in editor.project.levels )
 			if( levels.exists(l.uid) ) {
 				var e = levels.get(l.uid);
