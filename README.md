@@ -12,7 +12,7 @@ Links: [Official website](https://deepnight.net/tools/ldtk-2d-level-editor/) | [
 
 ## Requirements
 
- - **[Haxe compiler](https://haxe.org)**: you need an up-to-date and working Haxe install  to build L-Ed.
+ - **[Haxe compiler](https://haxe.org)**: you need an up-to-date and working Haxe install  to build LDtk.
  - **[NPM](https://www.npmjs.com/)**: this package manager is used for various install and packaging scripts
 
 ### Installing Haxe libs
