@@ -4,7 +4,9 @@
 
 Links: [Official website](https://deepnight.net/tools/ldtk-2d-level-editor/) | [Haxe API (on GitHub)](https://github.com/deepnight/ldtk-haxe-api)
 
-[![Build Status](https://travis-ci.com/deepnight/ldtk.svg?branch=master)](https://travis-ci.com/deepnight/ldtk)
+[![GitHub All Releases](https://img.shields.io/github/downloads/deepnight/ldtk/total?color=%2389b&label=Downloads)](https://github.com/deepnight/ldtk/releases/latest)
+[![Travis (.com)](https://img.shields.io/travis/com/deepnight/ldtk?label=LDtk%20editor)](https://travis-ci.com/github/deepnight/ldtk)
+[![Travis (.com)](https://img.shields.io/travis/com/deepnight/ldtk-haxe-api?label=Haxe%20API)](https://travis-ci.com/github/deepnight/ldtk-haxe-api)
 
 # Building from source
 
@@ -54,6 +56,16 @@ haxe renderer.debug.hxml
 ```
 
 This should create `app/assets/js/renderer.js`.
+
+## Compiling another branch
+
+If you want to try a future version of LDtk, you can check branches name `dev-x.y.z` where x.y.z is version number. 
+
+**IMPORTANT**: you will also need to switch the Haxe API to the branch with the same name (change the branch name at the end accordingly):
+
+```
+haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git dev-0.6.0
+```
 
 ## Running
 
