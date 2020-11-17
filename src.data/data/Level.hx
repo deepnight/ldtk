@@ -45,6 +45,7 @@ class Level {
 			worldY: worldY,
 			pxWid: pxWid,
 			pxHei: pxHei,
+			__bgColor: JsonTools.writeColor( getBgColor() ),
 			bgColor: JsonTools.writeColor(bgColor, true),
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),
 		}

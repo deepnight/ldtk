@@ -7,6 +7,7 @@
  - Added `__tilesetDefUid` and`__tilesetRelPath` to **Layer instance**
  - Added `defaultLevelBgColor` to **Project root**
  - Added optional `bgColor` to **Level instance** (if value is `null`, the project `defaultLevelBgColor` should be used instead).
+ - Added optional `__bgColor` to **Level instance** (same as `bgColor`, except the default project value is automatically used here if its value is `null`).
 
 # 0.5.0-beta
 

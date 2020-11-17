@@ -34,7 +34,8 @@ Value | Type | Description
 ## 1. Level   
 Value | Type | Description
 -- | -- | --
-`bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)*<br/><small>*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Background color of the level. If `null`, the project `defaultLevelBgColor` is used.
+`__bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String<br/><small>*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Background color of the level (same as `bgColor`, except the default value is automatically used here)
+`bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)*<br/><small>*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Background color of the level. If `null`, the project `defaultLevelBgColor` should be used.
 `identifier` | String | Unique String identifier
 `layerInstances` | Array&nbsp;of&nbsp;[Layer&nbsp;instance](#ldtk-LayerInstanceJson) | 
 `pxHei` | Int | Height of the level in pixels
