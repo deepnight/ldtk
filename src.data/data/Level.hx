@@ -81,6 +81,26 @@ class Level {
 		return wx>=worldX && wx<worldX+pxWid && wy>=worldY && wy<worldY+pxHei;
 	}
 
+	public inline function touches(l:Level) {
+		return l!=null
+			&& l!=this
+			&& dn.Lib.rectangleTouches(worldX, worldY, pxWid, pxHei, l.worldX, l.worldY, l.pxWid, l.pxHei);
+	}
+
+	public inline function overlaps(l:Level) {
+		return l!=null
+			&& l!=this
+			&& dn.Lib.rectangleOverlaps(worldX, worldY, pxWid, pxHei, l.worldX, l.worldY, l.pxWid, l.pxHei);
+	}
+
+	public function overlapsAnyLevel() {
+		for(l in _project.levels)
+			if( overlaps(l) )
+				return true;
+
+		return false;
+	}
+
 	public function getLayerInstance(?layerDefUid:Int, ?layerDef:data.def.LayerDef) : data.inst.LayerInstance {
 		if( layerDefUid==null && layerDef==null )
 			throw "Need 1 parameter";

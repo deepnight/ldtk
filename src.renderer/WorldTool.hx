@@ -177,6 +177,8 @@ class WorldTool extends dn.Process {
 							clickedLevel.worldX = checkSnap( clickedLevel.worldX, l.worldX+l.pxWid, clickedLevel.pxWid );
 							clickedLevel.worldX = checkSnap( clickedLevel.worldX, l.worldX  );
 							clickedLevel.worldX = checkSnap( clickedLevel.worldX, l.worldX, clickedLevel.pxWid );
+							if( clickedLevel.overlapsAnyLevel() )
+								clickedLevel.worldX = oldX;
 						}
 
 						// Y
@@ -185,6 +187,8 @@ class WorldTool extends dn.Process {
 							clickedLevel.worldY = checkSnap( clickedLevel.worldY, l.worldY+l.pxHei, clickedLevel.pxHei );
 							clickedLevel.worldY = checkSnap( clickedLevel.worldY, l.worldY );
 							clickedLevel.worldY = checkSnap( clickedLevel.worldY, l.worldY, clickedLevel.pxHei );
+							if( clickedLevel.overlapsAnyLevel() )
+								clickedLevel.worldY = oldY;
 						}
 					}
 
