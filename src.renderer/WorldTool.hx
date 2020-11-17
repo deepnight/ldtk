@@ -156,17 +156,16 @@ class WorldTool extends dn.Process {
 		}
 
 		// Rollover
-		for( l in project.levels )
-			if( ( l!=editor.curLevel || worldMode ) && l.isWorldOver(m.worldX, m.worldY) ) {
-				ev.cancel = true;
-				cursor.clear();
-				editor.cursor.set(Move);
-				cursor.lineStyle(1*editor.camera.pixelRatio, 0xffffff);
-				cursor.beginFill(0xffcc00, 0.15);
-				cursor.drawRect(l.worldX, l.worldY, l.pxWid, l.pxHei);
-				break;
-			}
-		if( !ev.cancel )
+		var over = getLevelAt(m.worldX, m.worldY, worldMode);
+		if( over!=null ) {
+			ev.cancel = true;
+			cursor.clear();
+			editor.cursor.set(Move);
+			cursor.lineStyle(1*editor.camera.pixelRatio, 0xffffff);
+			cursor.beginFill(0xffcc00, 0.15);
+			cursor.drawRect(over.worldX, over.worldY, over.pxWid, over.pxHei);
+		}
+		else
 			cursor.clear();
 
 		// Drag
