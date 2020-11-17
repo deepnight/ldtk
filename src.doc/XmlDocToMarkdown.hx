@@ -158,6 +158,8 @@ class XmlDocToMarkdown {
 
 				// Type
 				var type = '${getTypeMd(f.type)}';
+				if( f.isColor )
+					type+="<br/>"+getColorInfosMd(f);
 				type = StringTools.replace(type," ","&nbsp;");
 				tableCols.push(type);
 
@@ -217,13 +219,17 @@ class XmlDocToMarkdown {
 	}
 
 
-	static function getColorInfosMd(f:FieldInfos) {
-		if( f.type.equals(Basic("String")) )
-			return '*Hex color "#rrggbb"*';
-		else if( f.type.equals(Basic("UInt")) )
-			return '*Hex color 0xrrggbb*';
-		else
-			return "???";
+	static function getColorInfosMd(f:FieldInfos) : String {
+		return '<small>*' + ( switch f.type {
+			case Nullable(Basic("String")), Basic("String"):
+				'Hex color "#rrggbb"';
+
+			case Nullable(Basic("UInt")), Basic("UInt"), Nullable(Basic("Int")), Basic("Int"):
+				'Hex color 0xrrggbb';
+
+			case _:
+				'???';
+		} ) + '*</small>';
 	}
 
 	static function getSubFieldsHtml(fields:Array<FieldInfos>) {
