@@ -10,7 +10,7 @@
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
-	"bgColor": "#37494E",
+	"bgColor": "#132A3F",
 	"defaultLevelBgColor": "#37494E",
 	"nextUid": 43,
 	"minifyJson": false,
@@ -408,7 +408,7 @@
 			"worldY": 80,
 			"pxWid": 368,
 			"pxHei": 256,
-			"__bgColor": "#37494E",
+			"__bgColor": "#132A3F",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -917,7 +917,7 @@
 			"worldY": 0,
 			"pxWid": 464,
 			"pxHei": 416,
-			"__bgColor": "#37494E",
+			"__bgColor": "#132A3F",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -1814,7 +1814,7 @@
 			"worldY": 80,
 			"pxWid": 256,
 			"pxHei": 256,
-			"__bgColor": "#37494E",
+			"__bgColor": "#132A3F",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -2201,7 +2201,7 @@
 			"worldY": 112,
 			"pxWid": 256,
 			"pxHei": 192,
-			"__bgColor": "#37494E",
+			"__bgColor": "#132A3F",
 			"bgColor": null,
 			"layerInstances": [
 				{
