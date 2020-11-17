@@ -38,6 +38,13 @@ class Rulers extends dn.Process {
 		resizePreview = new h2d.Graphics(root);
 	}
 
+	override function toString():String {
+		return Type.getClassName(Type.getClass(this))
+			+ "[" + ( draggedPos==null ? "--" : draggedPos.getName() ) + "]"
+			+ ( dragStarted ? " (RESIZING)" : "" );
+
+	}
+
 	override function onDispose() {
 		super.onDispose();
 		editor.ge.removeListener(onGlobalEvent);
@@ -180,8 +187,10 @@ class Rulers extends dn.Process {
 			if( isOver(m.levelX, m.levelY, p) )
 				draggedPos = p;
 
-		if( draggedPos!=null )
-			editor.curTool.stopUsing(m);
+		if( draggedPos!=null ) {
+			ev.cancel = true;
+			// editor.curTool.stopUsing(m);
+		}
 	}
 
 	function canUseResizers() {
