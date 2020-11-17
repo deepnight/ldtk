@@ -18,6 +18,7 @@ class LevelRender extends dn.Process {
 	/** <LayerDefUID, h2d.Object> **/
 	var layerRenders : Map<Int,h2d.Object> = new Map();
 
+	var bg : h2d.Bitmap;
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
 	var grid : h2d.Graphics;
@@ -26,7 +27,7 @@ class LevelRender extends dn.Process {
 
 	// Invalidation system (ie. render calls)
 	var allInvalidated = true;
-	var bgInvalidated = false;
+	var uiInvalidated = false;
 	var layerInvalidations : Map<Int, { left:Int, right:Int, top:Int, bottom:Int }> = new Map();
 
 
@@ -35,6 +36,9 @@ class LevelRender extends dn.Process {
 
 		editor.ge.addGlobalListener(onGlobalEvent);
 		createRootInLayers(editor.root, Const.DP_MAIN);
+
+		bg = new h2d.Bitmap();
+		root.add(bg, Const.DP_BG);
 
 		bounds = new h2d.Graphics();
 		root.add(bounds, Const.DP_UI);
@@ -89,7 +93,7 @@ class LevelRender extends dn.Process {
 				renderAll();
 
 			case ProjectSettingsChanged:
-				invalidateBg();
+				invalidateUi();
 
 			case LevelRestoredFromHistory(l):
 				invalidateAll();
@@ -114,10 +118,10 @@ class LevelRender extends dn.Process {
 
 			case LayerInstanceSelected:
 				applyAllLayersVisibility();
-				invalidateBg();
+				invalidateUi();
 
 			case LevelSettingsChanged(l):
-				invalidateBg();
+				invalidateUi();
 
 			case LayerDefRemoved(uid):
 				if( layerRenders.exists(uid) ) {
@@ -312,9 +316,14 @@ class LevelRender extends dn.Process {
 	}
 
 
-	function renderBounds() {
-		bgInvalidated = false;
+	function renderBg() {
+		var c = editor.curLevel.getBgColor();
+		bg.tile = h2d.Tile.fromColor(c);
+		bg.scaleX = editor.curLevel.pxWid;
+		bg.scaleY = editor.curLevel.pxHei;
+	}
 
+	function renderBounds() {
 		// Bounds
 		bounds.clear();
 		bounds.lineStyle(1, 0xffffff, 0.7);
@@ -334,7 +343,6 @@ class LevelRender extends dn.Process {
 	}
 
 	function renderGrid() {
-		bgInvalidated = false;
 		grid.clear();
 		applyGridVisibility();
 
@@ -376,6 +384,7 @@ class LevelRender extends dn.Process {
 		clearTemp();
 		renderBounds();
 		renderGrid();
+		renderBg();
 
 		for(ld in editor.project.defs.layers)
 			renderLayer( editor.curLevel.getLayerInstance(ld) );
@@ -884,8 +893,8 @@ class LevelRender extends dn.Process {
 					invalidateLayerArea(other, left, right, top, bottom);
 	}
 
-	public inline function invalidateBg() {
-		bgInvalidated = true;
+	public inline function invalidateUi() {
+		uiInvalidated = true;
 	}
 
 	public inline function invalidateAll() {
@@ -917,11 +926,13 @@ class LevelRender extends dn.Process {
 			App.LOG.warning("Full render requested");
 		}
 		else {
-			// Bg
-			if( bgInvalidated ) {
+			// UI & bg elements
+			if( uiInvalidated ) {
+				renderBg();
 				renderBounds();
 				renderGrid();
-				App.LOG.render("Rendered bg");
+				uiInvalidated = false;
+				App.LOG.render("Rendered level UI");
 			}
 
 			// Layers
