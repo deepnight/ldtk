@@ -10,6 +10,7 @@ class Panel extends ui.Modal {
 
 		super();
 
+		editor.setWorldMode(false);
 		EntityInstanceEditor.close();
 		editor.selectionTool.clear();
 
