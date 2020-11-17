@@ -6,6 +6,7 @@ class Help extends ui.modal.Panel {
 
 		loadTemplate( "help", "helpPanel", {
 			appUrl: Const.WEBSITE_URL,
+			discordUrl: Const.DISCORD_URL,
 			docUrl: Const.DOCUMENTATION_URL,
 			app: Const.APP_NAME,
 			ver: Const.getAppVersion(),
