@@ -368,9 +368,8 @@ class Editor extends Page {
 				}
 				else if( specialTool!=null )
 					clearSpecialTool();
-				else if( ui.Modal.hasAnyOpen() ) {
+				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeLatest();
-				}
 				else if( selectionTool.any() ) {
 					ui.EntityInstanceEditor.close();
 					selectionTool.clear();
@@ -647,12 +646,14 @@ class Editor extends Page {
 			worldTool.onMouseDown(m, e.button);
 
 			if( !worldTool.isTakingPriority() ) {
-				if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && e.button==0 )
-					selectionTool.startUsing( m, e.button );
-				else if( isSpecialToolActive() )
-					specialTool.startUsing( m, e.button )
-				else
-					curTool.startUsing( m, e.button );
+				if( !worldMode ) {
+					if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && e.button==0 )
+						selectionTool.startUsing( m, e.button );
+					else if( isSpecialToolActive() )
+						specialTool.startUsing( m, e.button )
+					else
+						curTool.startUsing( m, e.button );
+				}
 
 				rulers.onMouseDown( m, e.button );
 			}
@@ -684,12 +685,15 @@ class Editor extends Page {
 		if( !panTool.isRunning() ) {
 			worldTool.onMouseMove(m);
 			if( !worldTool.isTakingPriority() ) {
-				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
-					selectionTool.onMouseMove(m);
-				else if( isSpecialToolActive() )
-					specialTool.onMouseMove(m);
-				else
-					curTool.onMouseMove(m);
+				if( !worldMode ) {
+					if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
+						selectionTool.onMouseMove(m);
+					else if( isSpecialToolActive() )
+						specialTool.onMouseMove(m);
+					else
+						curTool.onMouseMove(m);
+				}
+
 				rulers.onMouseMove(m);
 			}
 		}
@@ -1015,11 +1019,20 @@ class Editor extends Page {
 		}, true);
 	}
 
+	inline function shouldLogEvent(e:GlobalEvent) {
+		return switch(e) {
+			case ViewportChanged: false;
+			case WorldLevelMoved: false;
+			case LayerInstanceChanged: false;
+			case _: true;
+		}
+	}
+
 	function onGlobalEvent(e:GlobalEvent) {
 		// Logging
 		if( e==null )
 			App.LOG.error("Received null global event!");
-		else if( e!=ViewportChanged && e!=LayerInstanceChanged ) {
+		else if( shouldLogEvent(e) ) {
 			var extra : Dynamic = null;
 			switch e {
 				case WorldMode(active):
@@ -1035,6 +1048,7 @@ class Editor extends Page {
 				case LevelResized(l):
 				case LevelRestoredFromHistory(l):
 				case LevelSorted:
+				case WorldLevelMoved:
 				case LayerDefAdded:
 				case LayerDefConverted:
 				case LayerDefRemoved(defUid):
@@ -1176,6 +1190,7 @@ class Editor extends Page {
 			case LevelRemoved(l):
 			case LevelResized(l):
 			case LevelSorted:
+			case WorldLevelMoved:
 
 			case LevelSelected(l):
 				updateLayerList();

@@ -82,7 +82,7 @@ class LevelRender extends dn.Process {
 					resume();
 				}
 
-			case ViewportChanged:
+			case ViewportChanged, WorldLevelMoved:
 				root.setScale( camera.adjustedZoom );
 				root.x = M.round( editor.camera.width*0.5 - camera.levelX * camera.adjustedZoom );
 				root.y = M.round( editor.camera.height*0.5 - camera.levelY * camera.adjustedZoom );

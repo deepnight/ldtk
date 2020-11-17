@@ -81,7 +81,7 @@ class WorldTool extends dn.Process {
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
 							project.sortLevel(curIdx, toIdx);
 							project.reorganizeWorld();
-							editor.ge.emit(LevelSorted);
+							editor.ge.emit(WorldLevelMoved);
 						}
 				}
 
@@ -207,7 +207,6 @@ class WorldTool extends dn.Process {
 						snapLevelX(clickedLevel, 0, l.worldX+l.pxWid);
 						snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX);
 						snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX+l.pxWid);
-
 					}
 
 				case LinearHorizontal:
@@ -219,7 +218,7 @@ class WorldTool extends dn.Process {
 			}
 
 			// Refresh render
-			editor.worldRender.updateLayout();
+			editor.ge.emit( WorldLevelMoved );
 		}
 
 		// Cursor

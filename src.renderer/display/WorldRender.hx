@@ -66,6 +66,9 @@ class WorldRender extends dn.Process {
 				root.y = M.round( camera.height*0.5 - camera.worldY * camera.adjustedZoom );
 				renderAxes();
 
+			case WorldLevelMoved:
+				updateLayout();
+
 			case ProjectSelected:
 				renderAll();
 
