@@ -644,21 +644,19 @@ class Editor extends Page {
 
 		panTool.startUsing(ev,m);
 
-		if( !panTool.isRunning() ) {
+		if( !ev.cancel )
+			rulers.onMouseDown( ev, m );
+
+		if( !ev.cancel )
 			worldTool.onMouseDown(ev, m);
 
-			if( !worldTool.isTakingPriority() ) {
-				if( !worldMode ) {
-					if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && ev.button==0 )
-						selectionTool.startUsing( ev, m );
-					else if( isSpecialToolActive() )
-						specialTool.startUsing( ev, m )
-					else
-						curTool.startUsing( ev, m );
-				}
-
-				rulers.onMouseDown( ev, m );
-			}
+		if( !ev.cancel && !worldMode ) {
+			if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && ev.button==0 )
+				selectionTool.startUsing( ev, m );
+			else if( isSpecialToolActive() )
+				specialTool.startUsing( ev, m )
+			else
+				curTool.startUsing( ev, m );
 		}
 	}
 
@@ -1424,12 +1422,13 @@ class Editor extends Page {
 
 		#if debug
 		if( cd.has("debugTools") ) {
-			App.ME.debug("-- Tools ----------------------------------------");
+			App.ME.debug("-- Tools & UI ----------------------------------------");
 			App.ME.debug("  "+worldTool, true);
 			App.ME.debug("  "+panTool, true);
 			App.ME.debug("  "+selectionTool, true);
 			for(t in allLayerTools)
 				App.ME.debug("  "+t, true);
+			App.ME.debug("  "+rulers, true);
 		}
 		#end
 	}

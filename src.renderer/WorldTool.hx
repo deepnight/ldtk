@@ -62,6 +62,8 @@ class WorldTool extends dn.Process {
 			levelOriginX = clickedLevel.worldX;
 			levelOriginY = clickedLevel.worldY;
 		}
+
+		ev.cancel = true;
 	}
 
 	public function onMouseUp(m:Coords) {

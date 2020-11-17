@@ -19,6 +19,7 @@ class PanView extends Tool<Int> {
 		if( ev.button==2 || ev.button==0 && App.ME.isKeyDown(K.SPACE) ) {
 			clickingOutsideBounds = false;
 			panning = true;
+			ev.cancel = true;
 		}
 	}
 

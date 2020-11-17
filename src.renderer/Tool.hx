@@ -96,6 +96,8 @@ class Tool<T> extends dn.Process {
 		lastMouse = m;
 		if( !clickingOutsideBounds && !rectangle && useAt(m,false) )
 			onEditAnything();
+		
+		ev.cancel = true;
 	}
 
 
