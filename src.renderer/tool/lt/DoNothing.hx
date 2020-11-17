@@ -5,8 +5,8 @@ class DoNothing extends tool.LayerTool<Int> {
 		super();
 	}
 
-	override function onMouseMove(m:Coords) {
-		super.onMouseMove(m);
+	override function onMouseMove(ev:hxd.Event, m:Coords) {
+		super.onMouseMove(ev,m);
 		editor.cursor.set(Forbidden);
 	}
 }

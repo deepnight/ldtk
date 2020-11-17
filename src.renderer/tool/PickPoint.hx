@@ -7,8 +7,9 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 		super();
 	}
 
-	override function onMouseMove(m:Coords) {
-		super.onMouseMove(m);
+	override function onMouseMove(ev:hxd.Event, m:Coords) {
+		super.onMouseMove(ev,m);
+		
 		if( pickOrigin!=null ) {
 			var grid = curLayerInstance.def.gridSize;
 			editor.cursor.set( Link(

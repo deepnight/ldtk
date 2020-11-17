@@ -23,6 +23,15 @@ class PanView extends Tool<Int> {
 		}
 	}
 
+	override function onMouseMove(ev:hxd.Event, m:Coords) {
+		super.onMouseMove(ev, m);
+
+		if( App.ME.isKeyDown(K.SPACE) || panning )  {
+			editor.cursor.set(Pan);
+			ev.cancel = true;
+		}
+	}
+
 	override function stopUsing(m:Coords) {
 		super.stopUsing(m);
 

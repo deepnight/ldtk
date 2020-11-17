@@ -677,26 +677,27 @@ class Editor extends Page {
 		rulers.onMouseUp( m );
 	}
 
-	function onMouseMove(e:hxd.Event) {
+	function onMouseMove(ev:hxd.Event) {
 		var m = getMouse();
 
-		// Tool updates
-		panTool.onMouseMove(m);
-		if( !panTool.isRunning() ) {
-			worldTool.onMouseMove(m);
-			if( !worldTool.isTakingPriority() ) {
-				if( !worldMode ) {
-					if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
-						selectionTool.onMouseMove(m);
-					else if( isSpecialToolActive() )
-						specialTool.onMouseMove(m);
-					else
-						curTool.onMouseMove(m);
-				}
+		// Propagate event to tools & UI components
+		panTool.onMouseMove(ev,m);
 
-				rulers.onMouseMove(m);
-			}
+		if( !ev.cancel )
+			rulers.onMouseMove(ev,m);
+
+		if( !ev.cancel )
+			worldTool.onMouseMove(ev,m);
+
+		if( !ev.cancel && !worldMode ) {
+			if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
+				selectionTool.onMouseMove(ev,m);
+			else if( isSpecialToolActive() )
+				specialTool.onMouseMove(ev,m);
+			else
+				curTool.onMouseMove(ev,m);
 		}
+
 
 		// Mouse coords infos
 		if( ui.Modal.hasAnyOpen() )

@@ -133,13 +133,13 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function onMouseMove(m:Coords) {
-		super.onMouseMove(m);
+	override function onMouseMove(ev:hxd.Event, m:Coords) {
+		super.onMouseMove(ev,m);
 
 		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 		switch ge {
-			case Entity(_): editor.selectionTool.onMouseMove(m);
-			case PointField(_): editor.selectionTool.onMouseMove(m);
+			case Entity(_): editor.selectionTool.onMouseMove(ev,m);
+			case PointField(_): editor.selectionTool.onMouseMove(ev,m);
 			case _:
 		}
 	}

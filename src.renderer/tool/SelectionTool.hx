@@ -235,8 +235,8 @@ class SelectionTool extends Tool<Int> {
 	public inline function isOveringSelection(m) return group.isOveringSelection(m);
 
 
-	override function onMouseMove(m:Coords) {
-		super.onMouseMove(m);
+	override function onMouseMove(ev:hxd.Event, m:Coords) {
+		super.onMouseMove(ev,m);
 
 		// Start moving elements only after a small elapsed mouse distance
 		if( isRunning() && button==0 && !moveStarted && M.dist(origin.pageX, origin.pageY, m.pageX, m.pageY) >= 10*Const.SCALE ) {

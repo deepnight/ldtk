@@ -37,10 +37,6 @@ class IntGridTool extends tool.LayerTool<Int> {
 			editor.cursor.set(None);
 	}
 
-	override function onMouseMove(m:Coords) {
-		super.onMouseMove(m);
-	}
-
 	override function useAtInterpolatedGrid(cx:Int, cy:Int):Bool {
 		super.useAtInterpolatedGrid(cx, cy);
 

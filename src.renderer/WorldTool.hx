@@ -33,7 +33,7 @@ class WorldTool extends dn.Process {
 
 	override function toString() {
 		return Type.getClassName( Type.getClass(this) )
-			+ ( isTakingPriority() ? " (PRIORITY)" : "" );
+			+ ( dragStarted ? " (DRAGGING)" : "" );
 	}
 
 	public function onMouseDown(ev:hxd.Event, m:Coords) {
@@ -100,10 +100,6 @@ class WorldTool extends dn.Process {
 		clickedLevel = null;
 	}
 
-	public function isTakingPriority() {
-		return clickedLevel!=null && worldMode;
-	}
-
 	inline function getWorldGrid() return 16;
 	inline function getLevelSnapDist() return getWorldGrid() / ( editor.camera.adjustedZoom * 0.4 );
 
@@ -142,10 +138,20 @@ class WorldTool extends dn.Process {
 		}
 	}
 
-	public function onMouseMove(m:Coords) {
+	public function onMouseMove(ev:hxd.Event, m:Coords) {
 		// Start dragging
-		if( worldMode && !dragStarted && clickedLevel!=null && origin.getPageDist(m)>=DRAG_THRESHOLD )
+		if( worldMode && !dragStarted && clickedLevel!=null && origin.getPageDist(m)>=DRAG_THRESHOLD ) {
 			dragStarted = true;
+			ev.cancel = true;
+		}
+
+		// Rollover
+		for( l in project.levels )
+			if( ( l!=editor.curLevel || worldMode ) && l.isWorldOver(m.worldX, m.worldY) ) {
+				ev.cancel = true;
+				editor.cursor.set(Move);
+				break;
+			}
 
 		// Drag
 		if( clickedLevel!=null && dragStarted ) {
@@ -221,12 +227,8 @@ class WorldTool extends dn.Process {
 
 			// Refresh render
 			editor.ge.emit( WorldLevelMoved );
+			ev.cancel = true;
 		}
-
-		// Cursor
-		// for( l in editor.project.levels )
-		// 	if( l.isWorldOver(m.worldX, m.worldY) )
-		// 		editor.cursor.set(Move);
 	}
 
 	function getInsertPoint(m:Coords) : Null<LinearInsertPoint> {

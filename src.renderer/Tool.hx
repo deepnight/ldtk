@@ -96,7 +96,7 @@ class Tool<T> extends dn.Process {
 		lastMouse = m;
 		if( !clickingOutsideBounds && !rectangle && useAt(m,false) )
 			onEditAnything();
-		
+
 		ev.cancel = true;
 	}
 
@@ -244,7 +244,7 @@ class Tool<T> extends dn.Process {
 
 	public function onKeyPress(keyId:Int) {}
 
-	public function onMouseMove(m:Coords) {
+	public function onMouseMove(ev:hxd.Event, m:Coords) {
 		editor.cursor.setLabel();
 
 		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )
