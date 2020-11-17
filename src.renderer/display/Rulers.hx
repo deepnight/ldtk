@@ -199,7 +199,7 @@ class Rulers extends dn.Process {
 	}
 
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
-		if( curLayerInstance==null)
+		if( curLayerInstance==null || ev.cancel )
 			return;
 
 		// Cursor

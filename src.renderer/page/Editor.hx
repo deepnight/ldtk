@@ -682,12 +682,8 @@ class Editor extends Page {
 
 		// Propagate event to tools & UI components
 		panTool.onMouseMove(ev,m);
-
-		if( !ev.cancel )
-			rulers.onMouseMove(ev,m);
-
-		if( !ev.cancel )
-			worldTool.onMouseMove(ev,m);
+		rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
+		worldTool.onMouseMove(ev,m);
 
 		if( !ev.cancel && !worldMode ) {
 			if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
