@@ -99,7 +99,7 @@ class WorldTool extends dn.Process {
 	}
 
 	public function isTakingPriority() {
-		return clickedLevel!=null || worldMode;
+		return clickedLevel!=null && worldMode;
 	}
 
 	inline function getWorldGrid() return 16;
