@@ -206,6 +206,13 @@ button {
 		}
 	}
 
+	&.discord {
+		background-color: #7289DA;
+		&:hover {
+			background-color: #85A0FF;
+		}
+	}
+
 	&.blue {
 		background-color: #2a73ab;
 		&:hover {
@@ -938,6 +945,7 @@ ul.log {
 .icon.gridOn	{ background-image: url("../icons/gridOn.svg"); }
 .icon.gridOff	{ background-image: url("../icons/gridOff.svg"); }
 .icon.stop		{ background-image: url("../icons/stop.svg"); }
+.icon.discord	{ background-image: url("../icons/discord.svg"); }
 .icon.ghost		{ background-image: url("../icons/ghost.svg"); }
 .icon.love		{ background-image: url("../icons/love.svg"); }
 .icon.folder	{ background-image: url("../icons/folder.svg"); }
@@ -2772,6 +2780,9 @@ canvas#webgl {
 
 			.buttons {
 				margin: 0;
+				button {
+					font-size: 9pt;
+				}
 			}
 
 			.changelogsWrapper {

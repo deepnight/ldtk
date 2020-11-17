@@ -20,10 +20,11 @@ class Const {
 	#if !macro
 	public static var APP_NAME = "LDtk";
 	public static var FILE_EXTENSION = "ldtk";
-	public static var DEEPNIGHT_URL = "https://deepnight.net/";
-	public static var WEBSITE_URL = "https://deepnight.net/tools/ldtk-2d-level-editor/";
+	public static var DEEPNIGHT_URL = "https://deepnight.net";
+	public static var WEBSITE_URL = DEEPNIGHT_URL+"/tools/ldtk-2d-level-editor/";
+	public static var DOCUMENTATION_URL = DEEPNIGHT_URL+"/docs/ldtk/";
+	public static var DISCORD_URL = DEEPNIGHT_URL+"/go/ldtk-discord";
 	public static var ITCH_IO_BUY_URL = "https://deepnight.itch.io/ldtk/purchase";
-	public static var DOCUMENTATION_URL = "https://deepnight.net/docs/ldtk/";
 	public static var ISSUES_URL = "https://github.com/deepnight/ldtk/issues";
 	public static var GITHUB_SPONSOR_URL = "https://github.com/sponsors/deepnight";
 	public static var JSON_DOC_URL = "https://github.com/deepnight/ldtk/blob/master/JSON_DOC.md";
