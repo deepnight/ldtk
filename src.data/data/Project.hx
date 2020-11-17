@@ -193,6 +193,27 @@ class Project {
 		return moved;
 	}
 
+	public function getWorldBounds() {
+		var left = Const.INFINITE;
+		var right = -Const.INFINITE;
+		var top = Const.INFINITE;
+		var bottom = -Const.INFINITE;
+
+		for(l in levels) {
+			left = dn.M.imin(left, l.worldX);
+			right = dn.M.imax(right, l.worldX+l.pxWid);
+			top = dn.M.imin(top, l.worldY);
+			bottom = dn.M.imax(bottom, l.worldY+l.pxHei);
+		}
+
+		return {
+			left: left,
+			right: right,
+			top: top,
+			bottom: bottom,
+		}
+	}
+
 
 	/**  USED CHECKS  *****************************************/
 

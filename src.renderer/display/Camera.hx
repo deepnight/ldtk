@@ -84,30 +84,9 @@ class Camera extends dn.Process {
 		worldY = y;
 	}
 
-	function getWorldBounds() {
-		var left = Const.INFINITE;
-		var right = -Const.INFINITE;
-		var top = Const.INFINITE;
-		var bottom = -Const.INFINITE;
-
-		for(l in editor.project.levels) {
-			left = M.imin(left, l.worldX);
-			right = M.imax(right, l.worldX+l.pxWid);
-			top = M.imin(top, l.worldY);
-			bottom = M.imax(bottom, l.worldY+l.pxHei);
-		}
-
-		return {
-			left: left,
-			right: right,
-			top: top,
-			bottom: bottom,
-		}
-	}
-
 	function getFitZoom(l:data.Level) : Float {
 		if( editor.worldMode) {
-			var b = getWorldBounds();
+			var b = editor.project.getWorldBounds();
 			var padX = (b.right-b.left) * 0.1;
 			var padY = (b.bottom-b.top) * 0.1;
 			return M.fmin(
@@ -129,7 +108,7 @@ class Camera extends dn.Process {
 		cancelAutoZoom();
 
 		if( editor.worldMode ) {
-			var b = getWorldBounds();
+			var b = editor.project.getWorldBounds();
 			targetWorldX = 0.5 * (b.left + b.right);
 			targetWorldY = 0.5 * (b.top + b.bottom);
 		}

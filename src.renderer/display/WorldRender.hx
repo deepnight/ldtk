@@ -7,6 +7,7 @@ class WorldRender extends dn.Process {
 
 	var levels : Map<Int, { bounds:h2d.Graphics, render:h2d.Object }> = new Map();
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
+	var worldBounds : h2d.Graphics;
 	var axes : h2d.Graphics;
 	public var levelsWrapper : h2d.Layers;
 
@@ -31,6 +32,9 @@ class WorldRender extends dn.Process {
 
 		axes = new h2d.Graphics();
 		editor.root.add(axes, Const.DP_BG);
+
+		worldBounds = new h2d.Graphics();
+		root.add(worldBounds, Const.DP_BG);
 
 		levelsWrapper = new h2d.Layers();
 		root.add(levelsWrapper, Const.DP_MAIN);
@@ -64,11 +68,9 @@ class WorldRender extends dn.Process {
 
 			case ProjectSelected:
 				renderAll();
-				updateLayout();
 
 			case ProjectSettingsChanged:
 				renderAll();
-				renderBg();
 
 			case LevelRestoredFromHistory(l):
 				invalidateLevel(l);
@@ -81,6 +83,7 @@ class WorldRender extends dn.Process {
 
 			case LevelSettingsChanged(l):
 				invalidateLevel(l);
+				renderWorldBounds();
 
 			case LayerDefRemoved(uid):
 				renderAll();
@@ -95,14 +98,20 @@ class WorldRender extends dn.Process {
 				renderAll();
 
 			case LevelAdded(l):
+				invalidateLevel(l);
 				updateLayout();
+				renderWorldBounds();
+				if( editor.worldMode )
+					camera.fit();
 
 			case LevelRemoved(l):
 				removeLevel(l);
 				updateLayout();
+				renderWorldBounds();
 
 			case LevelSorted:
 				updateLayout();
+				renderWorldBounds();
 
 			case _:
 		}
@@ -127,6 +136,8 @@ class WorldRender extends dn.Process {
 
 		renderBg();
 		renderAxes();
+		renderWorldBounds();
+		updateLayout();
 	}
 
 	function renderBg() {
@@ -149,10 +160,25 @@ class WorldRender extends dn.Process {
 		axes.lineTo(root.x, camera.iHeight);
 	}
 
+	function renderWorldBounds() {
+		var pad = 10;
+		var b = editor.project.getWorldBounds();
+		worldBounds.clear();
+		worldBounds.beginFill(0x0, 0.1);
+		worldBounds.lineStyle(1, 0xffffff, 0.4);
+		worldBounds.drawRect( b.left-pad, b.top-pad, b.right-b.left+1+pad*2, b.bottom-b.top+1+pad*2 );
+	}
+
 	public function updateLayout() {
 		var cur = editor.curLevel;
-		axes.visible = editor.worldMode;
 
+		// Axes visibility
+		axes.visible = editor.worldMode && switch editor.project.worldLayout {
+			case Free: true;
+			case LinearHorizontal: false;
+		};
+
+		// Level layout
 		for( l in editor.project.levels )
 			if( levels.exists(l.uid) ) {
 				var e = levels.get(l.uid);
@@ -183,7 +209,6 @@ class WorldRender extends dn.Process {
 				e.render.setPosition( l.worldX, l.worldY );
 				e.bounds.setPosition( l.worldX, l.worldY );
 			}
-
 	}
 
 	function removeLevel(l:data.Level) {

@@ -80,6 +80,7 @@ class WorldTool extends dn.Process {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
 							project.sortLevel(curIdx, toIdx);
+							project.reorganizeWorld();
 							editor.ge.emit(LevelSorted);
 						}
 				}
@@ -102,9 +103,11 @@ class WorldTool extends dn.Process {
 	}
 
 	inline function getWorldGrid() return 16;
+	inline function getLevelSnapDist() return getWorldGrid() / ( editor.camera.adjustedZoom * 0.4 );
 
 	inline function checkSnap(cur:Int, with:Int, curOffset=0) {
-		if( M.fabs(cur+curOffset-with) <= getWorldGrid() )
+		App.ME.debug(M.pretty(editor.camera.adjustedZoom));
+		if( M.fabs(cur+curOffset-with) <= getLevelSnapDist() )
 			return with-curOffset;
 		else
 			return cur;
@@ -164,6 +167,9 @@ class WorldTool extends dn.Process {
 					for(l in project.levels) {
 						if( l==clickedLevel )
 							continue;
+
+						var oldX = clickedLevel.worldX;
+						var oldY = clickedLevel.worldY;
 
 						// X
 						if( clickedLevel.worldY+clickedLevel.pxHei >= l.worldY-snapDist && clickedLevel.worldY <= l.worldY+l.pxHei+snapDist ) {
