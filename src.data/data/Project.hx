@@ -189,6 +189,7 @@ class Project {
 
 		var moved = levels.splice(from,1)[0];
 		levels.insert(to, moved);
+		reorganizeWorld();
 		return moved;
 	}
 

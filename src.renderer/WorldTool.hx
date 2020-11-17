@@ -80,7 +80,7 @@ class WorldTool extends dn.Process {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
 							project.sortLevel(curIdx, toIdx);
-							project.reorganizeWorld();
+							editor.ge.emit(LevelSorted);
 						}
 				}
 

@@ -102,7 +102,7 @@ class WorldRender extends dn.Process {
 				updateLayout();
 
 			case LevelSorted:
-				// TODO render here instead of from worldTool ?
+				updateLayout();
 
 			case _:
 		}
