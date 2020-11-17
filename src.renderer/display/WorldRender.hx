@@ -196,10 +196,7 @@ class WorldRender extends dn.Process {
 				}
 				else {
 					// Fade other levels in editor mode
-					var dist = M.fmax(
-						M.fmax(0, cur.worldX - (l.worldX+l.pxWid)) + M.fmax( 0, l.worldX - (cur.worldX+cur.pxWid) ),
-						M.fmax(0, cur.worldY - (l.worldY+l.pxHei)) + M.fmax( 0, l.worldY - (cur.worldY+cur.pxHei) )
-					);
+					var dist = cur.getBoundsDist(l);
 					e.bounds.alpha = 0.33;
 					e.render.alpha = 0.33;
 					e.render.visible = dist<=100;

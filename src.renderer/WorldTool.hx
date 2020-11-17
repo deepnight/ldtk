@@ -17,18 +17,18 @@ class WorldTool extends dn.Process {
 	var dragStarted = false;
 	var worldMode(get,never) : Bool; inline function get_worldMode() return editor.worldMode;
 
-	var helpers : h2d.Graphics;
+	var tmpRender : h2d.Graphics;
 	var linearInsertPoints : Array<LinearInsertPoint> = [];
 
 	public function new() {
 		super(Editor.ME);
-		helpers = new h2d.Graphics();
-		editor.worldRender.root.add(helpers, Const.DP_UI);
+		tmpRender = new h2d.Graphics();
+		editor.worldRender.root.add(tmpRender, Const.DP_UI);
 	}
 
 	override function onDispose() {
 		super.onDispose();
-		helpers.remove();
+		tmpRender.remove();
 	}
 
 	override function toString() {
@@ -53,7 +53,7 @@ class WorldTool extends dn.Process {
 		}
 
 
-		helpers.clear();
+		tmpRender.clear();
 		origin = m;
 		dragStarted = false;
 		clickedLevel = getLevelAt(m.worldX, m.worldY, worldMode);
@@ -65,7 +65,7 @@ class WorldTool extends dn.Process {
 	}
 
 	public function onMouseUp(m:Coords) {
-		helpers.clear();
+		tmpRender.clear();
 		if( clickedLevel!=null )
 			if( dragStarted ) {
 				// Drag complete
@@ -105,13 +105,32 @@ class WorldTool extends dn.Process {
 	inline function getWorldGrid() return 16;
 	inline function getLevelSnapDist() return getWorldGrid() / ( editor.camera.adjustedZoom * 0.4 );
 
-	inline function checkSnap(cur:Int, with:Int, curOffset=0) {
-		App.ME.debug(M.pretty(editor.camera.adjustedZoom));
-		if( M.fabs(cur+curOffset-with) <= getLevelSnapDist() )
-			return with-curOffset;
+	inline function snapLevelX(l:data.Level, offset:Int, with:Int) {
+		if( M.fabs(l.worldX + offset - with) <= getLevelSnapDist() ) {
+			if( l.willOverlapAnyLevel(with-offset, l.worldY) )
+				return false;
+			else {
+				l.worldX = with-offset;
+				return true;
+			}
+		}
 		else
-			return cur;
+			return false;
 	}
+
+	inline function snapLevelY(l:data.Level, offset:Int, with:Int) {
+		if( M.fabs(l.worldY + offset - with) <= getLevelSnapDist() ) {
+			if( l.willOverlapAnyLevel(l.worldX, with-offset) )
+				return false;
+			else {
+				l.worldY = with-offset;
+				return true;
+			}
+		}
+		else
+			return false;
+	}
+
 
 	public function onKeyPress(keyCode:Int) {
 		switch keyCode {
@@ -128,9 +147,9 @@ class WorldTool extends dn.Process {
 
 		// Drag
 		if( clickedLevel!=null && dragStarted ) {
-			// Init helpers render
-			helpers.clear();
-			helpers.lineStyle(10, 0x72feff, 0.5);
+			// Init tmpRender render
+			tmpRender.clear();
+			tmpRender.lineStyle(10, 0x72feff, 0.5);
 
 			// Drag
 			var allowX = switch project.worldLayout {
@@ -168,35 +187,37 @@ class WorldTool extends dn.Process {
 						if( l==clickedLevel )
 							continue;
 
-						var oldX = clickedLevel.worldX;
-						var oldY = clickedLevel.worldY;
-
 						// X
-						if( clickedLevel.worldY+clickedLevel.pxHei >= l.worldY-snapDist && clickedLevel.worldY <= l.worldY+l.pxHei+snapDist ) {
-							clickedLevel.worldX = checkSnap( clickedLevel.worldX, l.worldX+l.pxWid );
-							clickedLevel.worldX = checkSnap( clickedLevel.worldX, l.worldX+l.pxWid, clickedLevel.pxWid );
-							clickedLevel.worldX = checkSnap( clickedLevel.worldX, l.worldX  );
-							clickedLevel.worldX = checkSnap( clickedLevel.worldX, l.worldX, clickedLevel.pxWid );
-							if( clickedLevel.overlapsAnyLevel() )
-								clickedLevel.worldX = oldX;
+						if( clickedLevel.getBoundsDist(l) <= getLevelSnapDist() ) {
+							snapLevelX(clickedLevel, 0, l.worldX);
+							snapLevelX(clickedLevel, 0, l.worldX+l.pxWid);
+							snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX);
+							snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX+l.pxWid);
 						}
 
 						// Y
-						if( clickedLevel.worldX+clickedLevel.pxWid>= l.worldX-snapDist && clickedLevel.worldX < l.worldX+l.pxWid+snapDist ) {
-							clickedLevel.worldY = checkSnap( clickedLevel.worldY, l.worldY+l.pxHei );
-							clickedLevel.worldY = checkSnap( clickedLevel.worldY, l.worldY+l.pxHei, clickedLevel.pxHei );
-							clickedLevel.worldY = checkSnap( clickedLevel.worldY, l.worldY );
-							clickedLevel.worldY = checkSnap( clickedLevel.worldY, l.worldY, clickedLevel.pxHei );
-							if( clickedLevel.overlapsAnyLevel() )
-								clickedLevel.worldY = oldY;
+						if( clickedLevel.getBoundsDist(l) <= getLevelSnapDist() ) {
+							snapLevelY(clickedLevel, 0, l.worldY);
+							snapLevelY(clickedLevel, 0, l.worldY+l.pxHei);
+							snapLevelY(clickedLevel, clickedLevel.pxHei, l.worldY);
+							snapLevelY(clickedLevel, clickedLevel.pxHei, l.worldY+l.pxHei);
 						}
+
+						// X again because if Y snapped, X snapping result might change
+						if( clickedLevel.getBoundsDist(l) <= getLevelSnapDist() ) {
+							snapLevelX(clickedLevel, 0, l.worldX);
+							snapLevelX(clickedLevel, 0, l.worldX+l.pxWid);
+							snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX);
+							snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX+l.pxWid);
+						}
+
 					}
 
 				case LinearHorizontal:
 					var i = getInsertPoint(m);
 					if( i!=null ) {
-						helpers.moveTo(i.pos, -1000);
-						helpers.lineTo(i.pos, 1000);
+						tmpRender.moveTo(i.pos, -1000);
+						tmpRender.lineTo(i.pos, 1000);
 					}
 			}
 

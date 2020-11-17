@@ -81,6 +81,13 @@ class Level {
 		return wx>=worldX && wx<worldX+pxWid && wy>=worldY && wy<worldY+pxHei;
 	}
 
+	public function getBoundsDist(l:Level) : Int {
+		return dn.M.imax(
+			dn.M.imax(0, worldX - (l.worldX+l.pxWid)) + dn.M.imax( 0, l.worldX - (worldX+pxWid) ),
+			dn.M.imax(0, worldY - (l.worldY+l.pxHei)) + dn.M.imax( 0, l.worldY - (worldY+pxHei) )
+		);
+	}
+
 	public inline function touches(l:Level) {
 		return l!=null
 			&& l!=this
@@ -96,6 +103,14 @@ class Level {
 	public function overlapsAnyLevel() {
 		for(l in _project.levels)
 			if( overlaps(l) )
+				return true;
+
+		return false;
+	}
+
+	public function willOverlapAnyLevel(newWorldX:Int, newWorldY:Int) {
+		for(l in _project.levels)
+			if( l!=this && dn.Lib.rectangleOverlaps(newWorldX, newWorldY, pxWid, pxHei, l.worldX, l.worldY, l.pxWid, l.pxHei) )
 				return true;
 
 		return false;
