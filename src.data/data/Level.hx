@@ -70,7 +70,7 @@ class Level {
 	}
 
 	public inline function getBgColor() : UInt {
-		return bgColor!=null ? bgColor : _project.bgColor;
+		return bgColor!=null ? bgColor : _project.defaultLevelbgColor;
 	}
 
 	public inline function inBounds(x:Int, y:Int) {
