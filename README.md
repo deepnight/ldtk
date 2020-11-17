@@ -12,7 +12,7 @@ Links: [Official website](https://deepnight.net/tools/ldtk-2d-level-editor/) | [
 
 ## Requirements
 
- - **[Haxe compiler](https://haxe.org)**: you need an up-to-date and working Haxe install  to build L-Ed.
+ - **[Haxe compiler](https://haxe.org)**: you need an up-to-date and working Haxe install  to build LDtk.
  - **[NPM](https://www.npmjs.com/)**: this package manager is used for various install and packaging scripts
 
 ### Installing Haxe libs
@@ -39,7 +39,7 @@ Run the following command in the `app` folder:
 npm i
 ```
 
-## Compiling
+## Compiling *master* branch
 
 First, from the root of the repo, build the electron **Main**:
 
@@ -59,9 +59,9 @@ This should create `app/assets/js/renderer.js`.
 
 ## Compiling another branch
 
-If you want to try a future version of LDtk, you can check branches name `dev-x.y.z` where x.y.z is version number. 
+If you want to try a future version of LDtk, you can checkout branches named `dev-x.y.z` where x.y.z is version number. 
 
-**IMPORTANT**: you will also need to switch the Haxe API to the branch with the same name (change the branch name at the end accordingly):
+**IMPORTANT**: you will also need to switch the *LDtk haxe API* to the **same** branch as LDtk repo. (adapt the branch name below accordingly):
 
 ```
 haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git dev-0.6.0
