@@ -383,13 +383,11 @@ class Editor extends Page {
 				if( !ui.Modal.hasAnyOpen() )
 					setCompactMode( !settings.compactMode );
 
-			case K.Z:
-				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() )
-					curLevelHistory.undo();
+			case K.Z if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
+				curLevelHistory.undo();
 
-			case K.Y:
-				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() )
-					curLevelHistory.redo();
+			case K.Y if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
+				curLevelHistory.redo();
 
 			case K.S:
 				if( !hasInputFocus() && App.ME.isCtrlDown() )
@@ -490,11 +488,13 @@ class Editor extends Page {
 			worldTool.onKeyPress(keyCode);
 			panTool.onKeyPress(keyCode);
 
-			if( isSpecialToolActive() )
-				specialTool.onKeyPress(keyCode);
-			else {
-				selectionTool.onKeyPress(keyCode);
-				curTool.onKeyPress(keyCode);
+			if( !worldMode ) {
+				if( isSpecialToolActive() )
+					specialTool.onKeyPress(keyCode);
+				else {
+					selectionTool.onKeyPress(keyCode);
+					curTool.onKeyPress(keyCode);
+				}
 			}
 		}
 	}
@@ -639,7 +639,7 @@ class Editor extends Page {
 		}
 	}
 
-	function onMouseDown(e:hxd.Event) {
+	function onMouseDown(ev:hxd.Event) {
 		var m = getMouse();
 
 		panTool.startUsing(m, e.button);
