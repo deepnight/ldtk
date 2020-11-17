@@ -773,8 +773,6 @@ class Editor extends Page {
 			worldRender.invalidateLevel(curLevel);
 
 		curLevelId = l.uid;
-		if( !worldMode )
-			camera.autoScrollToLevel( curLevel );
 		ge.emit( LevelSelected(l) );
 	}
 
@@ -843,11 +841,13 @@ class Editor extends Page {
 	}
 
 	public function setWorldMode(v:Bool) {
+		if( worldMode==v )
+			return;
+
 		project.reorganizeWorld();
-		worldMode = v;
 		ui.EntityInstanceEditor.close();
+		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
-		camera.fit();
 	}
 
 	public function setGrid(v:Bool, notify=true) {

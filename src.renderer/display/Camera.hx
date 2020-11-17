@@ -58,11 +58,13 @@ class Camera extends dn.Process {
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case WorldMode(active):
-				if( active ) {
-					// Zoom out
-					cancelAutoScrolling();
-					targetZoom = M.fmin( 0.5, getFitZoom(editor.curLevel) * 0.5 );
-				}
+				if( active )
+					targetZoom = M.fmax(0.3, getFitZoom()*0.8);
+				else
+					fit();
+
+			case LevelSelected(level):
+				fit();
 
 			case ViewportChanged:
 
@@ -84,7 +86,7 @@ class Camera extends dn.Process {
 		worldY = y;
 	}
 
-	function getFitZoom(l:data.Level) : Float {
+	function getFitZoom() : Float {
 		if( editor.worldMode) {
 			var b = editor.project.getWorldBounds();
 			var padX = (b.right-b.left) * 0.1;
@@ -97,8 +99,8 @@ class Camera extends dn.Process {
 		else {
 			var pad = 80 * pixelRatio;
 			return M.fmin(
-				width / ( l.pxWid + pad ),
-				height / ( l.pxHei + pad )
+				width / ( editor.curLevel.pxWid + pad ),
+				height / ( editor.curLevel.pxHei + pad )
 			);
 		}
 	}
@@ -117,7 +119,7 @@ class Camera extends dn.Process {
 			targetWorldY = editor.curLevel.worldY + editor.curLevel.pxHei*0.5;
 		}
 
-		targetZoom = getFitZoom(editor.curLevel);
+		targetZoom = getFitZoom();
 
 		if( immediate ) {
 			worldX = targetWorldX;
@@ -162,13 +164,6 @@ class Camera extends dn.Process {
 
 	inline function get_levelY() {
 		return worldY - editor.curLevel.worldY;
-	}
-
-	public inline function autoScrollToLevel(l:data.Level, zoomIn=true) {
-		if( zoomIn )
-			targetZoom = getFitZoom(l);
-		targetWorldX = l.worldX + l.pxWid*0.5;
-		targetWorldY = l.worldY + l.pxHei*0.5;
 	}
 
 	public inline function cancelAutoScrolling() {
@@ -219,8 +214,8 @@ class Camera extends dn.Process {
 
 		// Animated scrolling
 		if( targetWorldX!=null ) {
-			worldX += ( targetWorldX - worldX ) * M.fmin(1, 0.16*tmod);
-			worldY += ( targetWorldY - worldY ) * M.fmin(1, 0.16*tmod);
+			worldX += ( targetWorldX - worldX ) * M.fmin(1, 0.12*tmod);
+			worldY += ( targetWorldY - worldY ) * M.fmin(1, 0.12*tmod);
 			if( M.dist(targetWorldX, targetWorldY, worldX, worldY)<=4 )
 				cancelAutoScrolling();
 		}

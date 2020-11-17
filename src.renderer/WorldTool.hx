@@ -99,7 +99,6 @@ class WorldTool extends dn.Process {
 				var old = editor.curLevel;
 				editor.setWorldMode(false);
 				editor.selectLevel(clickedLevel);
-				editor.camera.autoScrollToLevel(clickedLevel);
 			}
 
 		clickedLevel = null;
