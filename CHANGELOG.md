@@ -1,8 +1,15 @@
-# 0.6.0
+# 0.6.0 - World editor
+
+## Discord
+
+We now have an official 💬 **[Discord](https://deepnight.net/go/ldtk-discord)**! Join us, with have cookies:
+
+## Release notes
 
 - **World map**: TODO
 - **New splash screen**: to reduce screen flickering and dirty window flashes on startup, a new splash screen was added, among other minor changes. The app window should now feel a little more "stable".
-- **Smooth zooming/panning**.
+- **Smooth zooming/panning**: TODO
+- LDtk is no longer considered *Beta* as it's now stable & mature enough to be used in production.
 - Many *under-the-hood* optimizations to support the new World map feature.
 - Removed the "double" *Fit* mode when pressing `F`. Now pressing this key just fits the whole level in the viewport.
 - Fixed loading of files with spaces in name, when using file association on Windows
