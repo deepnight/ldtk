@@ -39,7 +39,7 @@ Run the following command in the `app` folder:
 npm i
 ```
 
-## Compiling
+## Compiling *master* branch
 
 First, from the root of the repo, build the electron **Main**:
 
