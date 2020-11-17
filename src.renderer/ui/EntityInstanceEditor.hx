@@ -86,15 +86,15 @@ class EntityInstanceEditor extends dn.Process {
 
 	function renderLink() {
 		jPanel.css("border-color", C.intToHex(ei.def.color));
-		var win = js.Browser.window;
+		var cam = Editor.ME.camera;
 		var render = Editor.ME.levelRender;
 		link.clear();
-		link.lineStyle(4*win.devicePixelRatio, ei.def.color, 0.33);
+		link.lineStyle(4*cam.pixelRatio, ei.def.color, 0.33);
 		var coords = Coords.fromLevelCoords(ei.x, ei.y);
 		link.moveTo(coords.canvasX, coords.canvasY);
 		link.lineTo(
-			Editor.ME.canvasWid() - jPanel.outerWidth()*win.devicePixelRatio,
-			Editor.ME.canvasHei()*0.5
+			cam.width - jPanel.outerWidth() * cam.pixelRatio,
+			cam.height*0.5
 		);
 	}
 

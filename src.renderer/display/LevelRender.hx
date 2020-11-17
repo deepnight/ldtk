@@ -80,8 +80,8 @@ class LevelRender extends dn.Process {
 
 			case ViewportChanged:
 				root.setScale( camera.adjustedZoom );
-				root.x = M.round( editor.canvasWid()*0.5 - camera.levelX * camera.adjustedZoom );
-				root.y = M.round( editor.canvasHei()*0.5 - camera.levelY * camera.adjustedZoom );
+				root.x = M.round( editor.camera.width*0.5 - camera.levelX * camera.adjustedZoom );
+				root.y = M.round( editor.camera.height*0.5 - camera.levelY * camera.adjustedZoom );
 
 			case ProjectSaved, BeforeProjectSaving:
 

@@ -70,6 +70,9 @@ class Editor extends Page {
 
 		Boot.ME.s2d.addEventListener( onHeapsEvent );
 
+		bg = new h2d.Bitmap();
+		root.add(bg, Const.DP_BG);
+
 		ge = new GlobalEventDispatcher();
 		ge.addGlobalListener( onGlobalEvent );
 
@@ -1238,11 +1241,7 @@ class Editor extends Page {
 	}
 
 	function updateAppBg() {
-		if( bg!=null )
-			bg.remove();
-
-		bg = new h2d.Bitmap( h2d.Tile.fromColor(project.bgColor) );
-		root.add(bg, Const.DP_BG);
+		bg.tile = h2d.Tile.fromColor(project.bgColor);
 		onAppResize();
 	}
 
@@ -1252,19 +1251,11 @@ class Editor extends Page {
 		updateCanvasSize();
 
 		if( bg!=null ) {
-			bg.scaleX = canvasWid();
-			bg.scaleY = canvasHei();
+			bg.scaleX = camera.width;
+			bg.scaleY = camera.height;
 		}
 		ge.emit(ViewportChanged);
 		dn.Process.resizeAll();
-	}
-
-	public inline function canvasWid() {
-		return App.ME.jCanvas.outerWidth() * js.Browser.window.devicePixelRatio;
-	}
-
-	public inline function canvasHei() {
-		return App.ME.jCanvas.outerHeight() * js.Browser.window.devicePixelRatio;
 	}
 
 	function updateTitle() {

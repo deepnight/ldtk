@@ -10,22 +10,36 @@ class Camera extends dn.Process {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
+	public var worldX(default,set) : Float;
+	public var worldY(default,set) : Float;
+
 	public var levelX(get,set) : Float;
 	public var levelY(get,set) : Float;
 
-	public var worldX(default,set) : Float;
-	public var worldY(default,set) : Float;
+	public var adjustedZoom(get,never) : Float;
+	var rawZoom : Float;
 
 	public var pixelRatio(get,never) : Float;
 		inline function get_pixelRatio() {
 			return js.Browser.window.devicePixelRatio;
 		}
 
+	public var width(get,never) : Float;
+		inline function get_width() return App.ME.jCanvas.outerWidth() * pixelRatio;
+
+	public var height(get,never) : Float;
+		inline function get_height() return App.ME.jCanvas.outerHeight() * pixelRatio;
+
+	public var iWidth(get,never) : Int;
+		inline function get_iWidth() return M.ceil(width);
+
+	public var iHeight(get,never) : Int;
+		inline function get_iHeight() return M.ceil(height);
+
+
 	var targetWorldX: Null<Float>;
 	var targetWorldY: Null<Float>;
 	var targetZoom: Null<Float>;
-	public var adjustedZoom(get,never) : Float;
-	var rawZoom : Float;
 
 	public function new() {
 		super(Editor.ME);
@@ -97,15 +111,15 @@ class Camera extends dn.Process {
 			var padX = (b.right-b.left) * 0.1;
 			var padY = (b.bottom-b.top) * 0.1;
 			return M.fmin(
-				editor.canvasWid() / ( b.right-b.left + padX ),
-				editor.canvasHei() / ( b.bottom-b.top + padY )
+				width / ( b.right-b.left + padX ),
+				height / ( b.bottom-b.top + padY )
 			);
 		}
 		else {
 			var pad = 80 * pixelRatio;
 			return M.fmin(
-				editor.canvasWid() / ( l.pxWid + pad ),
-				editor.canvasHei() / ( l.pxHei + pad )
+				width / ( l.pxWid + pad ),
+				height / ( l.pxHei + pad )
 			);
 		}
 	}

@@ -26,12 +26,11 @@ class WorldRender extends dn.Process {
 			tex: new dn.heaps.TiledTexture(Assets.elements.getTile("largeStripes"), 1, 1, w),
 		}
 		worldBg.tex.alpha = 0.5;
-		editor.root.add(worldBg.wrapper, Const.DP_MAIN);
-		editor.root.under(worldBg.wrapper);
+		editor.root.add(worldBg.wrapper, Const.DP_BG);
 		worldBg.wrapper.alpha = 0;
 
 		axes = new h2d.Graphics();
-		editor.root.add(axes, Const.DP_MAIN);
+		editor.root.add(axes, Const.DP_BG);
 
 		levelsWrapper = new h2d.Layers();
 		root.add(levelsWrapper, Const.DP_MAIN);
@@ -59,8 +58,8 @@ class WorldRender extends dn.Process {
 
 			case ViewportChanged:
 				root.setScale( camera.adjustedZoom );
-				root.x = M.round( editor.canvasWid()*0.5 - camera.worldX * camera.adjustedZoom );
-				root.y = M.round( editor.canvasHei()*0.5 - camera.worldY * camera.adjustedZoom );
+				root.x = M.round( camera.width*0.5 - camera.worldX * camera.adjustedZoom );
+				root.y = M.round( camera.height*0.5 - camera.worldY * camera.adjustedZoom );
 				renderAxes();
 
 			case ProjectSelected:
@@ -131,10 +130,10 @@ class WorldRender extends dn.Process {
 	}
 
 	function renderBg() {
-		worldBg.tex.resize( Std.int(editor.canvasWid()), Std.int(editor.canvasHei()) );
+		worldBg.tex.resize( camera.iWidth, camera.iHeight );
 		worldBg.col.tile = h2d.Tile.fromColor( C.interpolateInt(editor.project.bgColor, 0x8187bd, 0.85) );
-		worldBg.col.scaleX = editor.canvasWid();
-		worldBg.col.scaleY = editor.canvasHei();
+		worldBg.col.scaleX = camera.width;
+		worldBg.col.scaleY = camera.height;
 	}
 
 	function renderAxes() {
@@ -143,11 +142,11 @@ class WorldRender extends dn.Process {
 
 		// Horizontal
 		axes.moveTo(0, root.y);
-		axes.lineTo(editor.canvasWid(), root.y);
+		axes.lineTo(camera.iWidth, root.y);
 
 		// Vertical
 		axes.moveTo(root.x, 0);
-		axes.lineTo(root.x, editor.canvasHei());
+		axes.lineTo(root.x, camera.iHeight);
 	}
 
 	public function updateLayout() {
