@@ -105,12 +105,12 @@ class WorldTool extends dn.Process {
 	inline function getWorldGrid() return 16;
 	inline function getLevelSnapDist() return getWorldGrid() / ( editor.camera.adjustedZoom * 0.4 );
 
-	inline function snapLevelX(l:data.Level, offset:Int, with:Int) {
-		if( M.fabs(l.worldX + offset - with) <= getLevelSnapDist() ) {
-			if( l.willOverlapAnyLevel(with-offset, l.worldY) )
+	inline function snapLevelX(cur:data.Level, offset:Int, at:Int) {
+		if( M.fabs(cur.worldX + offset - at) <= getLevelSnapDist() ) {
+			if( cur.willOverlapAnyLevel(at-offset, cur.worldY) )
 				return false;
 			else {
-				l.worldX = with-offset;
+				cur.worldX = at-offset;
 				return true;
 			}
 		}
@@ -187,29 +187,26 @@ class WorldTool extends dn.Process {
 						if( l==clickedLevel )
 							continue;
 
+						if( clickedLevel.getBoundsDist(l) > getLevelSnapDist() )
+							continue;
+
 						// X
-						if( clickedLevel.getBoundsDist(l) <= getLevelSnapDist() ) {
-							snapLevelX(clickedLevel, 0, l.worldX);
-							snapLevelX(clickedLevel, 0, l.worldX+l.pxWid);
-							snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX);
-							snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX+l.pxWid);
-						}
+						snapLevelX(clickedLevel, 0, l.worldX);
+						snapLevelX(clickedLevel, 0, l.worldX+l.pxWid);
+						snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX);
+						snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX+l.pxWid);
 
 						// Y
-						if( clickedLevel.getBoundsDist(l) <= getLevelSnapDist() ) {
-							snapLevelY(clickedLevel, 0, l.worldY);
-							snapLevelY(clickedLevel, 0, l.worldY+l.pxHei);
-							snapLevelY(clickedLevel, clickedLevel.pxHei, l.worldY);
-							snapLevelY(clickedLevel, clickedLevel.pxHei, l.worldY+l.pxHei);
-						}
+						snapLevelY(clickedLevel, 0, l.worldY);
+						snapLevelY(clickedLevel, 0, l.worldY+l.pxHei);
+						snapLevelY(clickedLevel, clickedLevel.pxHei, l.worldY);
+						snapLevelY(clickedLevel, clickedLevel.pxHei, l.worldY+l.pxHei);
 
 						// X again because if Y snapped, X snapping result might change
-						if( clickedLevel.getBoundsDist(l) <= getLevelSnapDist() ) {
-							snapLevelX(clickedLevel, 0, l.worldX);
-							snapLevelX(clickedLevel, 0, l.worldX+l.pxWid);
-							snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX);
-							snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX+l.pxWid);
-						}
+						snapLevelX(clickedLevel, 0, l.worldX);
+						snapLevelX(clickedLevel, 0, l.worldX+l.pxWid);
+						snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX);
+						snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX+l.pxWid);
 
 					}
 
