@@ -219,11 +219,11 @@ class WorldRender extends dn.Process {
 		}
 	}
 
-	function renderWorldLevel(l:data.Level) {
+	function renderLevel(l:data.Level) {
 		if( l==null )
 			throw "Unknown level";
 
-		App.LOG.render("Rendered WorldLevel "+l);
+		App.LOG.render("Rendered world level "+l);
 
 		// Cleanup
 		levelInvalidations.remove(l.uid);
@@ -336,7 +336,7 @@ class WorldRender extends dn.Process {
 
 		// World levels invalidation (max one per frame)
 		for( uid in levelInvalidations.keys() ) {
-			renderWorldLevel( editor.project.getLevel(uid) );
+			renderLevel( editor.project.getLevel(uid) );
 			updateLayout();
 			break;
 		}
