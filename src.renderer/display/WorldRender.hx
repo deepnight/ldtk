@@ -80,6 +80,7 @@ class WorldRender extends dn.Process {
 
 			case LevelResized(l):
 				invalidateLevel(l);
+				updateLayout();
 
 			case LevelSettingsChanged(l):
 				invalidateLevel(l);
@@ -199,7 +200,7 @@ class WorldRender extends dn.Process {
 					var dist = cur.getBoundsDist(l);
 					e.bounds.alpha = 0.33;
 					e.render.alpha = 0.33;
-					e.render.visible = dist<=100;
+					e.render.visible = dist<=300;
 				}
 
 				// Position

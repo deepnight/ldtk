@@ -255,12 +255,13 @@ class Rulers extends dn.Process {
 			if( b.newLeft!=0 || b.newTop!=0 || b.newRight!=curLevel.pxWid || b.newBottom!=curLevel.pxHei ) {
 				if( resizeBoundsValid(b) ) {
 					var before = curLevel.toJson();
-					editor.camera.levelX -= b.newLeft;
-					editor.camera.levelY -= b.newTop;
+					curLevel.worldX += b.newLeft;
+					curLevel.worldY += b.newTop;
 					curLevel.applyNewBounds(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
 					editor.selectionTool.clear();
 					editor.ge.emit( LevelResized(curLevel) );
 					editor.curLevelHistory.saveResizedState( before, curLevel.toJson() );
+					editor.ge.emit( ViewportChanged );
 				}
 			}
 		}
