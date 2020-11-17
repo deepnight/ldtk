@@ -376,6 +376,8 @@ class Editor extends Page {
 				}
 				else if( ui.EntityInstanceEditor.isOpen() )
 					ui.EntityInstanceEditor.close();
+				else if( worldMode )
+					setWorldMode(false);
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() )
