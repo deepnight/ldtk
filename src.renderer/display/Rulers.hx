@@ -289,6 +289,6 @@ class Rulers extends dn.Process {
 		if( invalidated )
 			render();
 
-		// root.visible = !editor.worldMode;
+		labels.visible = !editor.worldMode;
 	}
 }
