@@ -61,7 +61,10 @@ This should create `app/assets/js/renderer.js`.
 
 If you want to try a future version of LDtk, you can checkout branches named `dev-x.y.z` where x.y.z is version number. 
 
-**IMPORTANT**: you will also need to switch the *LDtk haxe API* to the **same** branch as LDtk repo. (adapt the branch name below accordingly):
+**IMPORTANT**:
+ - these *dev* branches might be unstables, or even broken. Therefore, it's not recommended to use, unless you plan to add or fix something on LDtk.
+ - because *dev* branches might change quickly, you will need to update haxelibs often.
+ - you will need to switch the *LDtk haxe API* to the **same** branch as LDtk repo. (adapt the branch name below accordingly):
 
 ```
 haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git dev-0.6.0
