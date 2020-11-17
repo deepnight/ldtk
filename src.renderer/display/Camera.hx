@@ -231,8 +231,6 @@ class Camera extends dn.Process {
 			if( M.dist(targetWorldX, targetWorldY, worldX, worldY)<=4 )
 				cancelAutoScrolling();
 		}
-
-		App.ME.debug('world=${Std.int(worldX)},${Std.int(worldY)}, level=${Std.int(levelX)},${Std.int(levelY)}');
 	}
 
 }
