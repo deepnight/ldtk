@@ -5,7 +5,7 @@ class WorldRender extends dn.Process {
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
 	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
-	var levels : Map<Int, { bounds:h2d.Graphics, render:h2d.Object }> = new Map();
+	var levels : Map<Int, { bg:h2d.Bitmap, bounds:h2d.Graphics, render:h2d.Object }> = new Map();
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
 	var worldBounds : h2d.Graphics;
 	var axes : h2d.Graphics;
@@ -208,6 +208,7 @@ class WorldRender extends dn.Process {
 				// Position
 				e.render.setPosition( l.worldX, l.worldY );
 				e.bounds.setPosition( l.worldX, l.worldY );
+				e.bg.setPosition( l.worldX, l.worldY );
 			}
 	}
 
@@ -228,18 +229,27 @@ class WorldRender extends dn.Process {
 		// Cleanup
 		levelInvalidations.remove(l.uid);
 		if( levels.exists(l.uid) ) {
+			levels.get(l.uid).bg.remove();
 			levels.get(l.uid).render.remove();
 			levels.get(l.uid).bounds.remove();
 		}
 
 		// Init
 		var wl = {
+			bg : new h2d.Bitmap(),
 			render : new h2d.Object(),
 			bounds : new h2d.Graphics()
 		}
-		levelsWrapper.add(wl.render, 0);
-		levelsWrapper.add(wl.bounds, 1);
+		var _depth = 0;
+		levelsWrapper.add(wl.bg, _depth++);
+		levelsWrapper.add(wl.render, _depth++);
+		levelsWrapper.add(wl.bounds, _depth++);
 		levels.set(l.uid, wl);
+
+		// Bg
+		wl.bg.tile = h2d.Tile.fromColor(l.getBgColor());
+		wl.bg.scaleX = l.pxWid;
+		wl.bg.scaleY = l.pxHei;
 
 		// Per-coord limit
 		var doneCoords = new Map();
