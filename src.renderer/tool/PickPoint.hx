@@ -23,12 +23,12 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 			editor.cursor.set( GridCell(curLayerInstance, m.cx, m.cy) );
 	}
 
-	override function startUsing(m:Coords, buttonId:Int) {
-		super.startUsing(m, buttonId);
+	override function startUsing(ev:hxd.Event, m:Coords) {
+		super.startUsing(ev,m);
 
-		if( buttonId==1 )
+		if( ev.button==1 )
 			editor.clearSpecialTool();
-		else if( buttonId==0 )
+		else if( ev.button==0 )
 			curMode = Add;
 	}
 

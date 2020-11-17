@@ -18,8 +18,8 @@ class IntGridTool extends tool.LayerTool<Int> {
 		return curLayerInstance.def.getIntGridValueDef( getSelectedValue() ).color;
 	}
 
-	override function startUsing(m:Coords, buttonId:Int) {
-		super.startUsing(m, buttonId);
+	override function startUsing(ev:hxd.Event, m:Coords) {
+		super.startUsing(ev,m);
 		editor.selectionTool.clear();
 	}
 

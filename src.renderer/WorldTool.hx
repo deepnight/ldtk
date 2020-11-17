@@ -36,8 +36,8 @@ class WorldTool extends dn.Process {
 			+ ( isTakingPriority() ? " (PRIORITY)" : "" );
 	}
 
-	public function onMouseDown(m:Coords, buttonId:Int) {
-		if( buttonId!=0 || App.ME.hasAnyToggleKeyDown() )
+	public function onMouseDown(ev:hxd.Event, m:Coords) {
+		if( ev.button!=0 || App.ME.hasAnyToggleKeyDown() )
 			return;
 
 		// Init possible insert points in linear modes

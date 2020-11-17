@@ -642,22 +642,22 @@ class Editor extends Page {
 	function onMouseDown(ev:hxd.Event) {
 		var m = getMouse();
 
-		panTool.startUsing(m, e.button);
+		panTool.startUsing(ev,m);
 
 		if( !panTool.isRunning() ) {
-			worldTool.onMouseDown(m, e.button);
+			worldTool.onMouseDown(ev, m);
 
 			if( !worldTool.isTakingPriority() ) {
 				if( !worldMode ) {
-					if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && e.button==0 )
-						selectionTool.startUsing( m, e.button );
+					if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && ev.button==0 )
+						selectionTool.startUsing( ev, m );
 					else if( isSpecialToolActive() )
-						specialTool.startUsing( m, e.button )
+						specialTool.startUsing( ev, m )
 					else
-						curTool.startUsing( m, e.button );
+						curTool.startUsing( ev, m );
 				}
 
-				rulers.onMouseDown( m, e.button );
+				rulers.onMouseDown( ev, m );
 			}
 		}
 	}

@@ -165,13 +165,13 @@ class Rulers extends dn.Process {
 
 	inline function isClicking() return dragOrigin!=null;
 
-	public function onMouseDown(m:Coords, buttonId:Int) {
+	public function onMouseDown(ev:hxd.Event, m:Coords) {
 		resizePreview.clear();
 		dragOrigin = null;
 		dragStarted = false;
 		draggedPos = null;
 
-		if( buttonId!=0 || !canUseResizers() )
+		if( ev.button!=0 || !canUseResizers() )
 			return;
 
 		dragOrigin = m;

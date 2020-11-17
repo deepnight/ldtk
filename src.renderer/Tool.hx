@@ -70,13 +70,13 @@ class Tool<T> extends dn.Process {
 	public function canEdit() return getSelectedValue()!=null && editor.isCurrentLayerVisible();
 	public function isRunning() return curMode!=null;
 
-	public function startUsing(m:Coords, buttonId:Int) {
+	public function startUsing(ev:hxd.Event, m:Coords) {
 		curMode = null;
 		startTime = haxe.Timer.stamp();
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
 
 		// Start tool
-		button = buttonId;
+		button = ev.button;
 		switch button {
 			case 0:
 				curMode = Add;

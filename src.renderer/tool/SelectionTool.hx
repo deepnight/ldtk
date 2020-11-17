@@ -191,15 +191,15 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
-	override function startUsing(m:Coords, buttonId:Int) {
+	override function startUsing(ev:hxd.Event, m:Coords) {
 		isCopy = App.ME.isCtrlDown() && App.ME.isAltDown();
 		moveStarted = false;
 		editor.clearSpecialTool();
 		movePreview.clear();
 
-		super.startUsing(m, buttonId);
+		super.startUsing(ev,m);
 
-		if( buttonId==0 ) {
+		if( ev.button==0 ) {
 			if( group.isOveringSelection(m) ) {
 				// Move existing selection
 				if( group.hasIncompatibleGridSizes() ) {

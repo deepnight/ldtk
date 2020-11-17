@@ -67,9 +67,9 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		return true;
 	}
 
-	override function startUsing(m:Coords, buttonId:Int) {
+	override function startUsing(ev:hxd.Event, m:Coords) {
 		paintedCells = new Map();
-		super.startUsing(m, buttonId);
+		super.startUsing(ev,m);
 	}
 
 	inline function markAsPainted(cx,cy) paintedCells.set( curLayerInstance.coordId(cx,cy), true );

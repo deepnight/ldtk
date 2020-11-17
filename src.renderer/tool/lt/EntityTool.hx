@@ -53,25 +53,25 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function startUsing(m:Coords, buttonId:Int) {
-		super.startUsing(m, buttonId);
+	override function startUsing(ev:hxd.Event, m:Coords) {
+		super.startUsing(ev,m);
 
 		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 		switch ge {
-			case Entity(_) if( buttonId==0 ):
-				editor.selectionTool.startUsing(m, buttonId);
+			case Entity(_) if( ev.button==0 ):
+				editor.selectionTool.startUsing(ev,m);
 				stopUsing(m);
 				return;
 
-			case PointField(_) if( buttonId==0 ):
-				editor.selectionTool.startUsing(m, buttonId);
+			case PointField(_) if( ev.button==0 ):
+				editor.selectionTool.startUsing(ev,m);
 				stopUsing(m);
 				return;
 
 			case _:
 		}
 
-		if( buttonId!=2 )
+		if( ev.button!=2 )
 			editor.selectionTool.clear();
 
 		switch curMode {
@@ -87,7 +87,7 @@ class EntityTool extends tool.LayerTool<Int> {
 						editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);
 						onEditAnything();
 						stopUsing(m);
-						editor.selectionTool.startUsing(m, button);
+						editor.selectionTool.startUsing(ev, m);
 						editor.ge.emit( EntityInstanceAdded(ei) );
 					}
 				}

@@ -11,12 +11,12 @@ class PanView extends Tool<Int> {
 		return panning;
 	}
 
-	override function startUsing(m:Coords, buttonId:Int) {
-		super.startUsing(m, buttonId);
+	override function startUsing(ev:hxd.Event, m:Coords) {
+		super.startUsing(ev,m);
 
 		curMode = null;
 
-		if( buttonId==2 || buttonId==0 && App.ME.isKeyDown(K.SPACE) ) {
+		if( ev.button==2 || ev.button==0 && App.ME.isKeyDown(K.SPACE) ) {
 			clickingOutsideBounds = false;
 			panning = true;
 		}
