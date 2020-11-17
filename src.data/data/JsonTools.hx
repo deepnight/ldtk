@@ -43,14 +43,17 @@ class JsonTools {
 		}
 	}
 
-	public static function readColor(v:Dynamic, ?defaultIfMissing:UInt) : UInt {
+	public static function readColor(v:Dynamic, ?defaultIfMissing:UInt, allowNull=false) : Null<UInt> {
 		if( v==null && defaultIfMissing!=null )
 			return defaultIfMissing;
 
-		if( v==null )
+		if( v==null && !allowNull )
 			throw "Missing color value";
 
 		switch Type.typeof(v) {
+			case TNull:
+				return null;
+
 			case TClass(String):
 				var c = dn.Color.hexToInt(v);
 				if( !dn.M.isValidNumber(c) ) {
@@ -67,8 +70,8 @@ class JsonTools {
 		}
 	}
 
-	public static function writeColor(c:UInt) : String {
-		return dn.Color.intToHex(c);
+	public static function writeColor(c:UInt, allowNull=false) : Null<String> {
+		return c==null ? ( allowNull ? null : "#000000" ) : dn.Color.intToHex(c);
 	}
 
 	public static function writePath(path:Null<String>) : Null<String> {

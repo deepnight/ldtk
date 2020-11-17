@@ -18,8 +18,9 @@ Please refer to the [README.md](https://github.com/deepnight/ldtk/blob/master/RE
 ## LDtk Json root   
 Value | Type | Description
 -- | -- | --
-`bgColor` | String | Project background color
+`bgColor` | String<br/><small>*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Project background color
 `defaultGridSize` | Int | Default grid size for new layers
+`defaultLevelBgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String<br/><small>*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Default background color of levels
 `defaultPivotX` | Float | Default X pivot (0 to 1) for new entities
 `defaultPivotY` | Float | Default Y pivot (0 to 1) for new entities
 `defs` | [Definitions](#ldtk-DefinitionsJson) | A structure containing all the definitions of this project
@@ -33,6 +34,7 @@ Value | Type | Description
 ## 1. Level   
 Value | Type | Description
 -- | -- | --
+`bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)*<br/><small>*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Background color of the level. If `null`, the project `defaultLevelBgColor` is used.
 `identifier` | String | Unique String identifier
 `layerInstances` | Array&nbsp;of&nbsp;[Layer&nbsp;instance](#ldtk-LayerInstanceJson) | 
 `pxHei` | Int | Height of the level in pixels
@@ -116,7 +118,7 @@ Value | Type | Description
 `displayOpacity` | Float | Opacity of the layer (0 to 1.0)
 `gridSize` | Int | Width and height of the grid in pixels
 `identifier` | String | Unique String identifier
-`intGridValues`<br/><sup>Only *IntGrid layer*</sup> | Array&nbsp;of&nbsp;Object | This object contains the following fields:<br/><ul><li>**`color`** **(String**) *Hex color "#rrggbb"*</li><li>**`identifier`** **(String**)</li></ul>
+`intGridValues`<br/><sup>Only *IntGrid layer*</sup> | Array&nbsp;of&nbsp;Object | This object contains the following fields:<br/><ul><li>**`color`** **(String**) <small>*Hex color "#rrggbb"*</small></li><li>**`identifier`** **(String**)</li></ul>
 `pxOffsetX`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Int | X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
 `pxOffsetY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Int | Y offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
 `tilePivotX`<br/><sup>Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
@@ -152,7 +154,7 @@ Value | Type | Description
 ## 2.2. Entity definition   
 Value | Type | Description
 -- | -- | --
-`color` | String | Base entity color
+`color` | String<br/><small>*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Base entity color
 `fieldDefs` | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | Array of field definitions
 `height` | Int | Pixel height
 `identifier` | String | Unique String identifier

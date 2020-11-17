@@ -5,6 +5,8 @@
  - Added `t` (tile ID) to **Tile Instance**
  - Added `averageColors` to **Tileset definition**
  - Added `__tilesetDefUid` and`__tilesetRelPath` to **Layer instance**
+ - Added `defaultLevelBgColor` to **Project root**
+ - Added optional `bgColor` to **Level instance** (if value is `null`, the project `defaultLevelBgColor` should be used instead).
 
 # 0.5.0-beta
 

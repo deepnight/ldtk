@@ -12,6 +12,8 @@ class Level {
 	public var pxHei : Int;
 	public var layerInstances : Array<data.inst.LayerInstance> = [];
 
+	var bgColor : Null<UInt>;
+
 
 	@:allow(data.Project)
 	private function new(project:Project, uid:Int) {
@@ -21,6 +23,7 @@ class Level {
 		pxHei = Project.DEFAULT_LEVEL_HEIGHT;
 		this._project = project;
 		this.identifier = "Level"+uid;
+		this.bgColor = null;
 
 		for(ld in _project.defs.layers)
 			layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
@@ -42,6 +45,7 @@ class Level {
 			worldY: worldY,
 			pxWid: pxWid,
 			pxHei: pxHei,
+			bgColor: JsonTools.writeColor(bgColor, true),
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),
 		}
 	}
@@ -53,6 +57,7 @@ class Level {
 		l.pxWid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_WIDTH );
 		l.pxHei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_HEIGHT );
 		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
+		l.bgColor = JsonTools.readColor(json.bgColor, true);
 
 		l.layerInstances = [];
 		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
@@ -61,6 +66,10 @@ class Level {
 		}
 
 		return l;
+	}
+
+	public inline function getBgColor() : UInt {
+		return bgColor!=null ? bgColor : _project.bgColor;
 	}
 
 	public inline function inBounds(x:Int, y:Int) {
