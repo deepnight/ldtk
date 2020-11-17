@@ -18,17 +18,23 @@ class WorldTool extends dn.Process {
 	var worldMode(get,never) : Bool; inline function get_worldMode() return editor.worldMode;
 
 	var tmpRender : h2d.Graphics;
+	var cursor : h2d.Graphics;
 	var linearInsertPoints : Array<LinearInsertPoint> = [];
 
 	public function new() {
 		super(Editor.ME);
+
 		tmpRender = new h2d.Graphics();
 		editor.worldRender.root.add(tmpRender, Const.DP_UI);
+
+		cursor = new h2d.Graphics();
+		editor.worldRender.root.add(cursor, Const.DP_UI);
 	}
 
 	override function onDispose() {
 		super.onDispose();
 		tmpRender.remove();
+		cursor.remove();
 	}
 
 	override function toString() {
@@ -61,9 +67,8 @@ class WorldTool extends dn.Process {
 		if( clickedLevel!=null ) {
 			levelOriginX = clickedLevel.worldX;
 			levelOriginY = clickedLevel.worldY;
+			ev.cancel = true;
 		}
-
-		ev.cancel = true;
 	}
 
 	public function onMouseUp(m:Coords) {
@@ -139,6 +144,11 @@ class WorldTool extends dn.Process {
 	}
 
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
+		if( ev.cancel ) {
+			cursor.clear();
+			return;
+		}
+
 		// Start dragging
 		if( worldMode && !dragStarted && clickedLevel!=null && origin.getPageDist(m)>=DRAG_THRESHOLD ) {
 			dragStarted = true;
@@ -149,9 +159,15 @@ class WorldTool extends dn.Process {
 		for( l in project.levels )
 			if( ( l!=editor.curLevel || worldMode ) && l.isWorldOver(m.worldX, m.worldY) ) {
 				ev.cancel = true;
+				cursor.clear();
 				editor.cursor.set(Move);
+				cursor.lineStyle(1*editor.camera.pixelRatio, 0xffffff);
+				cursor.beginFill(0xffcc00, 0.15);
+				cursor.drawRect(l.worldX, l.worldY, l.pxWid, l.pxHei);
 				break;
 			}
+		if( !ev.cancel )
+			cursor.clear();
 
 		// Drag
 		if( clickedLevel!=null && dragStarted ) {
