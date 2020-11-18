@@ -75,7 +75,11 @@ class EditProject extends ui.modal.Panel {
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.linkEvent(ProjectSettingsChanged);
 
-		var i = Input.linkToHtmlInput( project.bgColor, jForm.find("[name=color]"));
+		var i = Input.linkToHtmlInput( project.bgColor, jForm.find("[name=bgColor]"));
+		i.isColorCode = true;
+		i.linkEvent(ProjectSettingsChanged);
+
+		var i = Input.linkToHtmlInput( project.defaultLevelbgColor, jForm.find("[name=defaultLevelbgColor]"));
 		i.isColorCode = true;
 		i.linkEvent(ProjectSettingsChanged);
 

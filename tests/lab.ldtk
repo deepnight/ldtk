@@ -10,8 +10,8 @@
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
-	"bgColor": "#2A2C59",
-	"defaultLevelBgColor": "#7F8093",
+	"bgColor": "#0E0E15",
+	"defaultLevelBgColor": "#262737",
 	"nextUid": 78,
 	"minifyJson": false,
 	"exportTiled": false,
@@ -738,7 +738,7 @@
 			"worldY": 40,
 			"pxWid": 256,
 			"pxHei": 256,
-			"__bgColor": "#7F8093",
+			"__bgColor": "#262737",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -1016,7 +1016,7 @@
 			"worldY": 40,
 			"pxWid": 256,
 			"pxHei": 256,
-			"__bgColor": "#7F8093",
+			"__bgColor": "#262737",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -1164,7 +1164,7 @@
 			"worldY": 24,
 			"pxWid": 368,
 			"pxHei": 288,
-			"__bgColor": "#7F8093",
+			"__bgColor": "#262737",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -1510,7 +1510,7 @@
 			"worldY": 4,
 			"pxWid": 360,
 			"pxHei": 328,
-			"__bgColor": "#7F8093",
+			"__bgColor": "#262737",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -1921,7 +1921,7 @@
 			"worldY": 40,
 			"pxWid": 256,
 			"pxHei": 256,
-			"__bgColor": "#7F8093",
+			"__bgColor": "#262737",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -2122,7 +2122,7 @@
 			"worldY": 96,
 			"pxWid": 224,
 			"pxHei": 144,
-			"__bgColor": "#7F8093",
+			"__bgColor": "#262737",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -2353,7 +2353,7 @@
 			"worldY": 128,
 			"pxWid": 80,
 			"pxHei": 80,
-			"__bgColor": "#7F8093",
+			"__bgColor": "#262737",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -2495,7 +2495,7 @@
 			"worldY": 40,
 			"pxWid": 256,
 			"pxHei": 256,
-			"__bgColor": "#7F8093",
+			"__bgColor": "#262737",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -2746,7 +2746,7 @@
 			"worldY": 0,
 			"pxWid": 384,
 			"pxHei": 336,
-			"__bgColor": "#7F8093",
+			"__bgColor": "#262737",
 			"bgColor": null,
 			"layerInstances": [
 				{
