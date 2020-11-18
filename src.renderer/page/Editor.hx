@@ -845,9 +845,10 @@ class Editor extends Page {
 			return;
 
 		project.reorganizeWorld();
-		ui.EntityInstanceEditor.close();
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
+		if( worldMode )
+			ui.EntityInstanceEditor.close();
 	}
 
 	public function setGrid(v:Bool, notify=true) {

@@ -6,7 +6,8 @@ import sortablejs.Sortable;
 class JsTools {
 	public static function makeSortable(jSortable:js.jquery.JQuery, ?jScrollRoot:js.jquery.JQuery, ?group:String, anim=true, onSort:(event:SortableDragEvent)->Void) {
 		if( jSortable.length!=1 )
-			N.error("Used sortable on a set of "+jSortable.length+" element(s)");
+			throw "Used sortable on a set of "+jSortable.length+" element(s)";
+
 		jSortable.addClass("sortable");
 
 		// Base settings

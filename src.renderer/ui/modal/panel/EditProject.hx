@@ -28,7 +28,12 @@ class EditProject extends ui.modal.Panel {
 
 	override function onGlobalEvent(ge:GlobalEvent) {
 		super.onGlobalEvent(ge);
-		updateProjectForm();
+		switch( ge ) {
+			case ProjectSettingsChanged:
+				updateProjectForm();
+
+			case _:
+		}
 	}
 
 	function updateProjectForm() {

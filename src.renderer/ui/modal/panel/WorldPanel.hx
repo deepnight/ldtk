@@ -69,8 +69,6 @@ class WorldPanel extends ui.modal.Panel {
 
 			case _:
 		}
-		updateList();
-		updateForm();
 	}
 
 	function updateForm() {
