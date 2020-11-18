@@ -10,6 +10,13 @@ class EntityTool extends tool.LayerTool<Int> {
 			selectValue( project.defs.entities[0].uid );
 	}
 
+	override function onBeforeToolActivation() {
+		super.onBeforeToolActivation();
+
+		if( curEntityDef==null )
+			selectValue( getDefaultValue() );
+	}
+
 	inline function get_curEntityDef() return project.defs.getEntityDef( getSelectedValue() );
 
 	override function selectValue(v:Int) {
