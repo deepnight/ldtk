@@ -9,7 +9,7 @@ res/.tmp
 
 app/*.log
 app/package-lock.json
-app/userSettings
+app/settings
 app/redist
 app/node_modules
 app/buildAssets/release-notes.md
