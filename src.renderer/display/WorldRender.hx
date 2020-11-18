@@ -84,6 +84,7 @@ class WorldRender extends dn.Process {
 			case LevelResized(l):
 				invalidateLevel(l);
 				updateLayout();
+				renderWorldBounds();
 
 			case LevelSettingsChanged(l):
 				invalidateLevel(l);
@@ -341,9 +342,9 @@ class WorldRender extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
-		// World
 		worldBg.wrapper.alpha += ( ( editor.worldMode ? 0.3 : 0 ) - worldBg.wrapper.alpha ) * 0.1;
 		worldBg.wrapper.visible = worldBg.wrapper.alpha>=0.02;
+		worldBounds.visible = editor.worldMode && editor.project.levels.length>1;
 
 		// World levels invalidation (max one per frame)
 		for( uid in levelInvalidations.keys() ) {
