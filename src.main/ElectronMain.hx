@@ -106,6 +106,10 @@ class ElectronMain {
 		IpcMain.on("getExeDir", function(event) {
 			event.returnValue = App.getPath("exe");
 		});
+
+		IpcMain.on("getUserDataDir", function(event) {
+			event.returnValue = App.getPath("userData");
+		});
 	}
 
 

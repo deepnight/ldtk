@@ -75,33 +75,9 @@ class App extends dn.Process {
 		APP_RESOURCE_DIR = fp.directoryWithSlash;
 
 		// Restore settings
-		LOG.fileOp("Loading settings...");
-		dn.LocalStorage.BASE_PATH = JsTools.getExeDir();
-		if( js.Browser.window.localStorage.getItem("session")!=null ) {
-			// Migrate old sessionData
-			LOG.fileOp("Migrating old session to settings files...");
-			var raw = js.Browser.window.localStorage.getItem("session");
-			var old : AppSettings =
-				try haxe.Unserializer.run(raw)
-				catch( err:Dynamic ) null;
-			if( old!=null )
-				try {
-					if( old.recentProjects!=null )
-						for(i in 0...old.recentProjects.length)
-							old.recentProjects[i] = StringTools.replace(old.recentProjects[i], "\\", "/");
-					dn.LocalStorage.writeObject("settings", true, old);
-				} catch(e:Dynamic) {}
-
-			js.Browser.window.localStorage.removeItem("session");
-		}
-		settings = dn.LocalStorage.readObject("settings", true, {
-			recentProjects: [],
-			compactMode: false,
-			grid: true,
-			singleLayerMode: false,
-			emptySpaceSelection: false,
-			tileStacking: false,
-		});
+		dn.LocalStorage.BASE_PATH = JsTools.getSettingsDir();
+		dn.LocalStorage.SUB_FOLDER_NAME = null;
+		loadSettings();
 		saveSettings();
 
 		// Auto updater
@@ -302,6 +278,37 @@ class App extends dn.Process {
 	public inline function changeSettings(doChange:Void->Void) {
 		doChange();
 		saveSettings();
+	}
+
+	public function loadSettings() {
+		trace(JsTools.getExeDir());
+		trace(JsTools.getAppResourceDir());
+		LOG.fileOp("Loading settings from "+JsTools.getSettingsDir()+"...");
+		if( js.Browser.window.localStorage.getItem("session")!=null ) {
+			// Migrate old sessionData
+			LOG.fileOp("Migrating old session to settings files...");
+			var raw = js.Browser.window.localStorage.getItem("session");
+			var old : AppSettings =
+				try haxe.Unserializer.run(raw)
+				catch( err:Dynamic ) null;
+			if( old!=null )
+				try {
+					if( old.recentProjects!=null )
+						for(i in 0...old.recentProjects.length)
+							old.recentProjects[i] = StringTools.replace(old.recentProjects[i], "\\", "/");
+					dn.LocalStorage.writeObject("settings", true, old);
+				} catch(e:Dynamic) {}
+
+			js.Browser.window.localStorage.removeItem("session");
+		}
+		settings = dn.LocalStorage.readObject("settings", true, {
+			recentProjects: [],
+			compactMode: false,
+			grid: true,
+			singleLayerMode: false,
+			emptySpaceSelection: false,
+			tileStacking: false,
+		});
 	}
 
 	public function saveSettings() {

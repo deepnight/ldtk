@@ -10,6 +10,7 @@ We now have an official 💬 **[Discord](https://deepnight.net/go/ldtk-discord)*
 - **New splash screen**: to reduce screen flickering and dirty window flashes on startup, a new splash screen was added, among other minor changes. The app window should now feel a little more "stable".
 - **Smooth zooming/panning**: TODO
 - **New rule editor window**: this UI component really needed some love, so it now features a more streamlined interface and a much better integrated help.
+- User settings are now stored in AppData OS folder to prevent from losing them on each future update. Unfortunately, this will only apply starting from this version, so settings will be reset one last time :) Sorry!
 - LDtk is no longer considered *Beta* as it's now stable & mature enough to be used in production.
 - Many *under-the-hood* optimizations to support the new World map feature.
 - Removed the "double" *Fit* mode when pressing `F`. Now pressing this key just fits the whole level in the viewport.

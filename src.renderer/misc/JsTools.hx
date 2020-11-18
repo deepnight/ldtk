@@ -517,11 +517,21 @@ class JsTools {
 	}
 
 	public static function getExeDir() {
+		#if !debug
 		var path = electron.renderer.IpcRenderer.sendSync("getExeDir");
-		#if debug
-		path = getAppResourceDir()+"/app";
+		#else
+		var path = getAppResourceDir()+"/foo.exe";
 		#end
 		return dn.FilePath.fromFile( path ).useSlashes().directory;
+	}
+
+	public static function getSettingsDir() {
+		#if !debug
+		var path = electron.renderer.IpcRenderer.sendSync("getUserDataDir") + "/settings";
+		#else
+		var path = getAppResourceDir()+"/settings";
+		#end
+		return dn.FilePath.fromDir( path ).useSlashes().directory;
 	}
 
 	public static function getSamplesDir() {
