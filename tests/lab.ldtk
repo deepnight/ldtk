@@ -12,7 +12,7 @@
 	"defaultGridSize": 16,
 	"bgColor": "#0E0E15",
 	"defaultLevelBgColor": "#262737",
-	"nextUid": 78,
+	"nextUid": 79,
 	"minifyJson": false,
 	"exportTiled": false,
 	"worldLayout": "LinearHorizontal",
@@ -723,11 +723,15 @@
 				}
 			}
 		],
-		"enums": [{ "identifier": "Test", "uid": 27, "values": [
-			{ "id": "WoodCrate", "tileId": 6, "__tileSrcRect": [96,0,16,16] },
-			{ "id": "MetalCrate", "tileId": 22, "__tileSrcRect": [96,16,16,16] },
-			{ "id": "Cart", "tileId": 48, "__tileSrcRect": [0,48,16,16] }
-		], "iconTilesetUid": 8, "externalRelPath": null, "externalFileChecksum": null }],
+		"enums": [
+			{ "identifier": "Test", "uid": 27, "values": [
+				{ "id": "WoodCrate", "tileId": 6, "__tileSrcRect": [96,0,16,16] },
+				{ "id": "MetalCrate", "tileId": 22, "__tileSrcRect": [96,16,16,16] },
+				{ "id": "Cart", "tileId": 48, "__tileSrcRect": [0,48,16,16] },
+				{ "id": "Test", "tileId": null, "__tileSrcRect": null }
+			], "iconTilesetUid": 8, "externalRelPath": null, "externalFileChecksum": null },
+			{ "identifier": "Enum", "uid": 78, "values": [], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null }
+		],
 		"externalEnums": []
 	},
 	"levels": [
