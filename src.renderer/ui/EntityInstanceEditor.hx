@@ -469,7 +469,12 @@ class EntityInstanceEditor extends dn.Process {
 				var li = new J("<li/>");
 				li.attr("defUid", fd.uid);
 				li.appendTo(form);
-				li.append('<label>${fi.def.identifier}</label>');
+
+				// Name
+				if( !fd.isArray )
+					li.append('<label>${fi.def.identifier}</label>');
+				else
+					li.append('<label>${fi.def.identifier} (${fi.getArrayLength()})</label>');
 
 				if( !fd.isArray ) {
 					// Single value
@@ -491,31 +496,42 @@ class EntityInstanceEditor extends dn.Process {
 					var jArrayInputs = new J('<ul class="values"/>');
 					jArrayInputs.appendTo(jArray);
 
-					var sortable = fi.def.type!=F_Point;
-					for(i in 0...fi.getArrayLength()) {
-						var li = new J('<li/>');
-						li.appendTo(jArrayInputs);
-
-						if( sortable )
-							li.append('<div class="sortHandle"/>');
-
-						createInputFor(fi, i, li);
-
-						// "Remove" button
-						var jRemove = new J('<button class="remove dark">x</button>');
-						jRemove.appendTo(li);
-						var idx = i;
-						jRemove.click( function(_) {
-							fi.removeArrayValue(idx);
-							onFieldChange();
-							updateForm();
-						});
+					if( fi.def.type==F_Point && ( fi.def.editorDisplayMode==PointPath || fi.def.editorDisplayMode==PointStar ) ) {
+						// No points listing if displayed as path
+						var jLi = new J('<li class="compact"/>');
+						var vals = [];
+						for(i in 0...fi.getArrayLength())
+							vals.push('<${fi.getPointStr(i)}>');
+						jArrayInputs.append('<li class="compact">${vals.join(", ")}</li>');
+						// jArrayInputs.append('<li class="compact">${fi.getArrayLength()} value(s)</li>');
 					}
-					if( sortable )
-						JsTools.makeSortable(jArrayInputs, function(ev:sortablejs.Sortable.SortableDragEvent) {
-							fi.sortArrayValues(ev.oldIndex, ev.newIndex);
-							onFieldChange();
-						});
+					else {
+						var sortable = fi.def.type!=F_Point;
+						for(i in 0...fi.getArrayLength()) {
+							var li = new J('<li/>');
+							li.appendTo(jArrayInputs);
+
+							if( sortable )
+								li.append('<div class="sortHandle"/>');
+
+							createInputFor(fi, i, li);
+
+							// "Remove" button
+							var jRemove = new J('<button class="remove dark">x</button>');
+							jRemove.appendTo(li);
+							var idx = i;
+							jRemove.click( function(_) {
+								fi.removeArrayValue(idx);
+								onFieldChange();
+								updateForm();
+							});
+						}
+						if( sortable )
+							JsTools.makeSortable(jArrayInputs, function(ev:sortablejs.Sortable.SortableDragEvent) {
+								fi.sortArrayValues(ev.oldIndex, ev.newIndex);
+								onFieldChange();
+							});
+					}
 
 					// "Add" button
 					if( fi.def.arrayMaxLength==null || fi.getArrayLength()<fi.def.arrayMaxLength ) {

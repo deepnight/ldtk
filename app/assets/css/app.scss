@@ -3387,6 +3387,11 @@ canvas#webgl {
 						width: 100%;
 					}
 
+					&.compact {
+						color: $bgLighter;
+						font-size: 9pt;
+						padding-bottom: 4px;
+					}
 				}
 				&.sortable li {
 					grid-template-columns: min-content auto min-content;
