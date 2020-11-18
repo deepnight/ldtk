@@ -1,6 +1,7 @@
-private typedef LinearInsertPoint = {
+private typedef WorldInsertPoint = {
 	var idx:Int;
-	var pos:Int;
+	var x:Int;
+	var y:Int;
 }
 
 class WorldTool extends dn.Process {
@@ -19,7 +20,7 @@ class WorldTool extends dn.Process {
 
 	var tmpRender : h2d.Graphics;
 	var cursor : h2d.Graphics;
-	var linearInsertPoints : Array<LinearInsertPoint> = [];
+	var insertPoints : Array<WorldInsertPoint> = [];
 
 	public function new() {
 		super(Editor.ME);
@@ -52,17 +53,17 @@ class WorldTool extends dn.Process {
 
 			case LinearHorizontal:
 				var idx = 0;
-				linearInsertPoints = project.levels.map( (l)->{ pos:l.worldX, idx:idx++ } );
+				insertPoints = project.levels.map( (l)->{ x:l.worldX, y:0, idx:idx++ } );
 
 				var last = project.levels[project.levels.length-1];
-				linearInsertPoints.push({ pos:last.worldX+last.pxWid, idx:idx });
+				insertPoints.push({ x:last.worldX+last.pxWid, y:0, idx:idx });
 
 			case LinearVertical:
 				var idx = 0;
-				linearInsertPoints = project.levels.map( (l)->{ pos:l.worldY, idx:idx++ } );
+				insertPoints = project.levels.map( (l)->{ x:0, y:l.worldY, idx:idx++ } );
 
 				var last = project.levels[project.levels.length-1];
-				linearInsertPoints.push({ pos:last.worldY+last.pxHei, idx:idx });
+				insertPoints.push({ x:0, y:last.worldY+last.pxHei, idx:idx });
 		}
 
 
@@ -253,15 +254,15 @@ class WorldTool extends dn.Process {
 				case LinearHorizontal:
 					var i = getInsertPoint(m);
 					if( i!=null ) {
-						tmpRender.moveTo(i.pos, -100);
-						tmpRender.lineTo(i.pos, project.getWorldHeight(clickedLevel)+100);
+						tmpRender.moveTo(i.x, -100);
+						tmpRender.lineTo(i.x, project.getWorldHeight(clickedLevel)+100);
 					}
 
 				case LinearVertical:
 					var i = getInsertPoint(m);
 					if( i!=null ) {
-						tmpRender.moveTo(-100, i.pos);
-						tmpRender.lineTo(project.getWorldHeight(clickedLevel)+100, i.pos);
+						tmpRender.moveTo(-100, i.y);
+						tmpRender.lineTo(project.getWorldWidth(clickedLevel)+100, i.y);
 					}
 			}
 
@@ -271,12 +272,12 @@ class WorldTool extends dn.Process {
 		}
 	}
 
-	function getInsertPoint(m:Coords) : Null<LinearInsertPoint> {
+	function getInsertPoint(m:Coords) : Null<WorldInsertPoint> {
 		if( project.levels.length<=1 )
 			return null;
 
 		var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
-		var dh = new dn.DecisionHelper(linearInsertPoints);
+		var dh = new dn.DecisionHelper(insertPoints);
 		dh.remove( (i)->i.idx==curIdx+1 );
 
 		switch project.worldLayout {
@@ -284,10 +285,10 @@ class WorldTool extends dn.Process {
 				// N/A
 
 			case LinearHorizontal:
-				dh.score( (i)->return -M.fabs(m.worldX-i.pos) );
+				dh.score( (i)->return -M.fabs(m.worldX-i.x) );
 
 			case LinearVertical:
-				dh.score( (i)->return -M.fabs(m.worldY-i.pos) );
+				dh.score( (i)->return -M.fabs(m.worldY-i.y) );
 		}
 		return dh.getBest();
 	}

@@ -15,7 +15,7 @@
 	"nextUid": 43,
 	"minifyJson": false,
 	"exportTiled": false,
-	"worldLayout": "LinearVertical",
+	"worldLayout": "LinearHorizontal",
 	"defs": {
 		"layers": [
 			{
@@ -913,8 +913,8 @@
 		{
 			"identifier": "B",
 			"uid": 4,
-			"worldX": 0,
-			"worldY": 288,
+			"worldX": 400,
+			"worldY": 0,
 			"pxWid": 464,
 			"pxHei": 416,
 			"__bgColor": "#37494E",
@@ -1810,8 +1810,8 @@
 		{
 			"identifier": "C",
 			"uid": 41,
-			"worldX": 0,
-			"worldY": 736,
+			"worldX": 896,
+			"worldY": 0,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#37494E",
@@ -2197,8 +2197,8 @@
 		{
 			"identifier": "D",
 			"uid": 42,
-			"worldX": 0,
-			"worldY": 1024,
+			"worldX": 1184,
+			"worldY": 0,
 			"pxWid": 256,
 			"pxHei": 192,
 			"__bgColor": "#37494E",
