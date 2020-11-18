@@ -9,12 +9,14 @@ We now have an official 💬 **[Discord](https://deepnight.net/go/ldtk-discord)*
 - **World map**: TODO
 - **New splash screen**: to reduce screen flickering and dirty window flashes on startup, a new splash screen was added, among other minor changes. The app window should now feel a little more "stable".
 - **Smooth zooming/panning**: TODO
+- **New rule editor window**: this UI component really needed some love, so it now features a more streamlined interface and a much better integrated help.
 - LDtk is no longer considered *Beta* as it's now stable & mature enough to be used in production.
 - Many *under-the-hood* optimizations to support the new World map feature.
 - Removed the "double" *Fit* mode when pressing `F`. Now pressing this key just fits the whole level in the viewport.
 - Fixed loading of files with spaces in name, when using file association on Windows
 - Better "invalid value" error display in entity fields (previously, you only had `<error>`).
 - Application samples will now display a warning if you try to save them (not recommended as they will be overwritten by future app updates).
+- Updated the Enum panel icon.
 - Better display of samples in recent files list on app Home.
 - Added a "Close" button to Project panel
 - Removed "Loaded" useless notification
