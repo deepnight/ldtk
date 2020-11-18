@@ -5,6 +5,13 @@ class IntGridTool extends tool.LayerTool<Int> {
 		super();
 	}
 
+	override function onBeforeToolActivation() {
+		super.onBeforeToolActivation();
+
+		if( !editor.curLayerDef.hasIntGridValue(getSelectedValue()) )
+			selectValue(0);
+	}
+
 	override function selectValue(v:Int) {
 		v = M.iclamp(v, 0, curLayerInstance.def.countIntGridValues()-1);
 		super.selectValue(v);

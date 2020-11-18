@@ -266,7 +266,11 @@ class Tool<T> extends dn.Process {
 		lastMouse = m;
 	}
 
+	function onBeforeToolActivation() {}
+
 	public final function onToolActivation() {
+		onBeforeToolActivation();
+
 		resume();
 
 		if( palette!=null ) {
