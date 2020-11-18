@@ -242,7 +242,7 @@ class Home extends Page {
 
 			var p = data.Project.createEmpty();
 			var data = JsTools.prepareProjectFile(p);
-			JsTools.writeFileBytes(fp.full, data.bytes);
+			JsTools.writeFileString(fp.full, data.str);
 
 			N.msg("New project created: "+fp.full);
 			App.ME.loadPage( ()->new Editor(p, fp.full) );

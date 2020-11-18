@@ -359,8 +359,8 @@ class FieldInstance {
 	public static inline function escapeStringForJson(s:String) {
 		if( s==null )
 			return null;
-		s = StringTools.replace(s, "\n", "\\n");
 		s = StringTools.replace(s, "\\", "\\\\");
+		s = StringTools.replace(s, "\n", "\\n");
 		s = StringTools.replace(s, '"', '\\"');
 		s = StringTools.replace(s, "'", "\'");
 		return s;

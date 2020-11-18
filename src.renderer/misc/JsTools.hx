@@ -57,12 +57,12 @@ class JsTools {
 	}
 
 
-	public static function prepareProjectFile(p:data.Project) : { bytes:haxe.io.Bytes, json:ldtk.Json.ProjectJson } {
+	public static function prepareProjectFile(p:data.Project) : { str:String, json:ldtk.Json.ProjectJson } {
 		var json = p.toJson();
 		var jsonStr = dn.JsonPretty.stringify(p.minifyJson, json, Const.JSON_HEADER);
 
 		return {
-			bytes: haxe.io.Bytes.ofString( jsonStr ),
+			str: jsonStr,
 			json: json,
 		}
 	}
@@ -477,6 +477,11 @@ class JsTools {
 			return null;
 		else
 			return js.node.Fs.readFileSync(path).toString();
+	}
+
+	public static function writeFileString(path:String, str:String) {
+		js.node.Require.require("fs");
+		js.node.Fs.writeFileSync( path, str );
 	}
 
 	public static function readFileBytes(path:String) : Null<haxe.io.Bytes> {
