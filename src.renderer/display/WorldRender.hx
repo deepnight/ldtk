@@ -181,6 +181,7 @@ class WorldRender extends dn.Process {
 		axes.visible = editor.worldMode && switch editor.project.worldLayout {
 			case Free: true;
 			case LinearHorizontal: false;
+			case LinearVertical: false;
 		};
 
 		// Level layout

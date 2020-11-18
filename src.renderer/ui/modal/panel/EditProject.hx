@@ -100,6 +100,7 @@ class EditProject extends ui.modal.Panel {
 			(l)->switch l {
 				case Free: L.t._("FREE - freely positioned in space");
 				case LinearHorizontal: L.t._("LINEAR (horizontal) - one level after the other");
+				case LinearVertical: L.t._("LINEAR (vertical) - one level after the other");
 			}
 		);
 		if( project.levels.length>2 )

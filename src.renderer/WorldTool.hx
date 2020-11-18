@@ -56,6 +56,13 @@ class WorldTool extends dn.Process {
 
 				var last = project.levels[project.levels.length-1];
 				linearInsertPoints.push({ pos:last.worldX+last.pxWid, idx:idx });
+
+			case LinearVertical:
+				var idx = 0;
+				linearInsertPoints = project.levels.map( (l)->{ pos:l.worldY, idx:idx++ } );
+
+				var last = project.levels[project.levels.length-1];
+				linearInsertPoints.push({ pos:last.worldY+last.pxHei, idx:idx });
 		}
 
 
@@ -82,6 +89,16 @@ class WorldTool extends dn.Process {
 				switch project.worldLayout {
 					case Free:
 					case LinearHorizontal:
+						var i = getInsertPoint(m);
+						if( i!=null ) {
+							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
+							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
+							project.sortLevel(curIdx, toIdx);
+							project.reorganizeWorld();
+							editor.ge.emit(WorldLevelMoved);
+						}
+
+					case LinearVertical:
 						var i = getInsertPoint(m);
 						if( i!=null ) {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
@@ -177,10 +194,12 @@ class WorldTool extends dn.Process {
 			var allowX = switch project.worldLayout {
 				case Free: true;
 				case LinearHorizontal: true;
+				case LinearVertical: false;
 			}
 			var allowY = switch project.worldLayout {
 				case Free: true;
 				case LinearHorizontal: false;
+				case LinearVertical: true;
 			}
 			var initialX = clickedLevel.worldX;
 			var initialY = clickedLevel.worldY;
@@ -234,8 +253,15 @@ class WorldTool extends dn.Process {
 				case LinearHorizontal:
 					var i = getInsertPoint(m);
 					if( i!=null ) {
-						tmpRender.moveTo(i.pos, -1000);
-						tmpRender.lineTo(i.pos, 1000);
+						tmpRender.moveTo(i.pos, -100);
+						tmpRender.lineTo(i.pos, project.getWorldHeight(clickedLevel)+100);
+					}
+
+				case LinearVertical:
+					var i = getInsertPoint(m);
+					if( i!=null ) {
+						tmpRender.moveTo(-100, i.pos);
+						tmpRender.lineTo(project.getWorldHeight(clickedLevel)+100, i.pos);
 					}
 			}
 
@@ -252,7 +278,17 @@ class WorldTool extends dn.Process {
 		var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
 		var dh = new dn.DecisionHelper(linearInsertPoints);
 		dh.remove( (i)->i.idx==curIdx+1 );
-		dh.score( (i)->return -M.fabs(m.worldX-i.pos) );
+
+		switch project.worldLayout {
+			case Free:
+				// N/A
+
+			case LinearHorizontal:
+				dh.score( (i)->return -M.fabs(m.worldX-i.pos) );
+
+			case LinearVertical:
+				dh.score( (i)->return -M.fabs(m.worldY-i.pos) );
+		}
 		return dh.getBest();
 	}
 
