@@ -1,24 +1,37 @@
-<div class="infos"></div>
+<div class="debugInfos"></div>
 
-<div class="tiles">
-	<label>Tile(s):</label>
-	<select name="tileMode"></select>
-	<div class="wrapper"></div>
+<button class="guide">Never used LDtk rule system?</button>
+
+<div class="help">
+	First pick which tile(s) you would like to automatically render:
 </div>
 
-<div class="grid">
-	<label>Pattern:</label>
-	<div class="wrapper"></div>
-	<select name="size"></select>
+<div class="tileSettings">
+	<select name="tileMode" title="**RANDOM** One tile among selected ones will be rendered in matched layer cells\n **RECTANGLE** A rectangle of tiles will be be rendered in matched layer cells"></select>
+	<div class="picker" title="**Choose tile(s)** You can hold mouse button to select multiple tiles."></div>
+	<div class="options" title="For rectangle of tiles, you can adjust the PIVOT point of the rendered rectangle."></div>
 </div>
 
-<div class="values">
-	<label>Layer values:</label>
-	<ul></ul>
+<div class="help">
+	<p>
+		The center of the PATTERN below is where your TILE(s) will be rendered. Edit the pattern to describe in which situation the tile(s) should be displayed.
+	</p>
+	<ul>
+		<li><span class="icon mouseLeft"></span>: set "This value is required" in a cell</li>
+		<li><span class="icon mouseRight"></span>: set "This value should not be here".</li>
+		<li>Use the <strong>Anything</strong> special value to match "All values" or "No value"</li>
+	</ul>
+</div>
+
+<div class="pattern">
+	<div class="values" title="This panel shows all the IntGrid values defined in this layer">
+		<ul></ul>
+	</div>
+
+	<div class="editor">
+		<select name="size" title="Choose the pattern size. WARNING: patterns larger than 5x5 might slow down the app!"></select>
+		<div class="grid"></div>
+	</div>
 </div>
 
 <div class="explain"></div>
-
-<div class="help">
-	The center of the PATTERN above is where the TILE will be rendered. Paint the pattern to describe in which situation the tile should be displayed. LEFT CLICK to set "This value is required" in a cell, RIGHT CLICK to set "This value should not be here".
-</div>

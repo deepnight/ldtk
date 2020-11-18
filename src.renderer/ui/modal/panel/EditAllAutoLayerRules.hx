@@ -113,6 +113,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				continue;
 
 			if( li.autoTilesCache==null ) {
+				// Run all rules
 				ops.push({
 					label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
 					cb: li.applyAllAutoLayerRules
@@ -120,18 +121,21 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			}
 			else {
 				var r = li.def.getRule(ruleUid);
-				if( r!=null ) {
-					ops.push({
-						label: 'Updating rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
-						cb: li.applyAutoLayerRuleToAllLayer.bind(r),
-					});
-				}
-				else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
-					// WARNING: re-apply all rules here if breakOnMatch exists
-					ops.push({
-						label: 'Removing rule #$ruleUid from ${l.identifier}',
-						cb: li.autoTilesCache.remove.bind(ruleUid),
-					});
+				if( r!=null && !r.isEmpty() ) { // Could be null for garbaged empty rules
+					// Run invalidated rules
+					if( r!=null ) {
+						ops.push({
+							label: 'Updating rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
+							cb: li.applyAutoLayerRuleToAllLayer.bind(r),
+						});
+					}
+					else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
+						// WARNING: re-apply all rules here if breakOnMatch exists
+						ops.push({
+							label: 'Removing rule #$ruleUid from ${l.identifier}',
+							cb: li.autoTilesCache.remove.bind(ruleUid),
+						});
+					}
 				}
 			}
 		}
@@ -181,7 +185,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 			var jNewRule = jContent.find("[ruleUid="+r.uid+"]"); // BUG fix scrollbar position
-			new ui.modal.dialog.RuleEditor(jNewRule, ld, lastRule );
+			new ui.modal.dialog.RuleEditor(ld, lastRule );
 		}
 
 
@@ -380,7 +384,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				else
 					jPreview.append( JsTools.createAutoPatternGrid(r, sourceDef, ld, true) );
 				jPreview.click( function(ev) {
-					new ui.modal.dialog.RuleEditor(jPreview, ld, r);
+					new ui.modal.dialog.RuleEditor(ld, r);
 				});
 
 				// Random

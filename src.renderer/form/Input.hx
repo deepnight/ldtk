@@ -24,14 +24,14 @@ class Input<T> {
 		this.getter = getter;
 		this.setter = setter;
 		jInput = jElement;
-		jInput.off();
+		jInput.off(".input");
 		writeValueToInput();
 		lastValidValue = getter();
 
-		jInput.focus( function(ev) {
+		jInput.on("focus.input", function(ev) {
 			jInput.select();
 		});
-		jInput.change( function(_) {
+		jInput.on("change.input", function(_) {
 			onInputChange();
 		});
 	}

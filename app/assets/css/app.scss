@@ -213,6 +213,18 @@ button {
 		}
 	}
 
+	&.guide {
+		padding: 8px;
+		font-size: 8.5pt;
+		text-transform: none;
+		background-color: $helpDark;
+		color: $help;
+		&:hover {
+			background-color: $helpMed;
+			color: white;
+		}
+	}
+
 	&.blue {
 		background-color: #2a73ab;
 		&:hover {
@@ -4272,14 +4284,47 @@ $patternSize : 32px;
 
 
 .window.dialog.ruleEditor {
-	.content {
-		padding: 4px;
-		display: grid;
-		gap: 16px;
-		grid-template-columns: repeat(3, min-content);
-		align-items: center;
+	$gutter: 8px;
 
-		.infos {
+	>.wrapper {
+		padding: $gutter;
+		justify-self: left;
+		margin-left: 80px;
+	}
+
+	>.wrapper .content {
+		display: grid;
+		gap: $gutter;
+		grid-template-rows: repeat(3, min-content);
+		padding: 4px;
+		width: min-content;
+		min-width: 300px;
+
+		&:not(.guided) {
+			.explain,
+			.help {
+				display: none;
+			}
+		}
+		&.guided {
+			button.guide {
+				display: none;
+			}
+		}
+
+		.explain,
+		.tileSettings,
+		.pattern .editor,
+		.pattern .values {
+			width: 100%;
+			height: 100%;
+			padding: 16px;
+			box-sizing: border-box;
+			background-color: $bgDark;
+			border-radius: 3px;
+		}
+
+		.debugInfos {
 			position: absolute;
 			right: 3px;
 			bottom: 3px;
@@ -4287,102 +4332,138 @@ $patternSize : 32px;
 			color: $bgLighter;
 		}
 
-		.explain, .help {
-			grid-column: 1/4;
-		}
 		.explain {
-			padding: 4px;
-			min-height: 1.2em;
-			color: $bgLighter;
+			display: grid;
+			align-items: center;
+			min-height: calc( 4em + 16px * 2 );
+			color: $help;
+			font-size: 8.5pt;
 			text-align: center;
+			transition: background-color 0.3s;
+
+			&:not(:empty) {
+				transition: background-color 0.1s;
+				background-color: $helpDark;
+			}
+
+			p {
+				margin: 0;
+				padding: 0;
+			}
 		}
 
-		>div>label {
-			display: block;
-			margin-bottom: 4px;
-			color: $bgLighter;
-			font-size: 9pt;
-		}
-
-		.tiles {
+		.tileSettings {
 			display: grid;
-			justify-items: center;
-			grid-template-rows: repeat(2,min-content) auto;
-			height: 100%;
+			justify-items: stretch;
+			grid-template-columns: auto min-content min-content;
 
-			select {
-				margin-bottom: 4px;
-			}
-			.wrapper {
-				display: grid;
-				justify-items: center;
-			}
-
-			canvas {
-				image-rendering: pixelated;
-				zoom: 2;
-				border: 1px solid $orange;
-				cursor: pointer;
-
-				&:hover {
-					border-color: white;
-				}
-			}
-		}
-
-		.grid {
-			display: grid;
-			min-width: 80px;
-			justify-items: center;
-
-			select {
-				width: 100%;
-				margin-top: 2px;
-			}
-		}
-
-
-		.values {
-			align-self: stretch;
-			display: grid;
-			min-height: 125px;
-			grid-template-rows: min-content auto;
-
-			ul {
-				display: grid;
-				grid-template-columns: repeat( 2, 100px );
-				gap: 2px;
-				padding: 4px;
-				border: 1px solid $bgLight;
-
-				li {
-					display: grid;
-					align-content: center;
-					justify-content: center;
-
-					text-shadow: 0px 2px 1px black, 0px 0px 4px black;
-
-					border: 1px solid $bgMed;
+			.picker {
+				margin-left: $gutter;
+				canvas {
+					image-rendering: pixelated;
+					zoom: 2;
+					border: 1px solid $orange;
 					cursor: pointer;
+					width: 24px !important;
+					height: 24px !important;
 
 					&:hover {
-						outline: 1px solid white;
-						outline-offset: -1px;
+						border-color: white;
 					}
-
-					&.active {
-						border-color: $orange;
-						outline: 1px solid black;
-						outline-offset: -2px;
-						box-shadow: 0px 0px 8px $red;
+					&.empty {
+						border-color: $red;
+						box-shadow: 0px 0px 32px $red;
 					}
-				}
-				li.any {
-					font-style: italic;
-					background-image: url("../img/any.png");
 				}
 			}
 
+			.options:not(:empty) {
+				margin-left: $gutter;
+			}
+		}
+
+		.pattern {
+			display: grid;
+			grid-template-columns: min-content auto;
+			gap: $gutter;
+
+			.editor{
+				display: grid;
+				grid-template-rows: min-content auto;
+				gap: 4px;
+
+				select {
+					width: 100%;
+					overflow: hidden;
+				}
+
+				.grid {
+					display: grid;
+					justify-items: center;
+					align-items: center;
+				}
+			}
+
+			.values {
+				ul {
+					display: grid;
+					height: 100%;
+					gap: 2px;
+
+					li {
+						display: grid;
+						align-content: center;
+						justify-content: center;
+						padding: 8px;
+
+						text-shadow: 0px 2px 1px black, 0px 0px 4px black;
+
+						border: 1px solid $bgMed;
+						cursor: pointer;
+
+						&:hover {
+							outline: 1px solid white;
+							outline-offset: -1px;
+						}
+
+						&.active {
+							border-color: $orange;
+							outline: 1px solid black;
+							outline-offset: -2px;
+							box-shadow: 0px 0px 8px $red;
+						}
+					}
+					li.any {
+						font-style: italic;
+						background-image: url("../img/any.png");
+					}
+				}
+
+			}
+		}
+
+		.help {
+			margin-top: 8px;
+			p {
+				margin: 0;
+				padding: 0;
+			}
+			ul {
+				display: grid;
+				gap: 2px;
+				width: 100%;
+				margin-top: 8px;
+
+				li {
+					font-size: 9pt;
+					padding: 6px;
+					border-radius: 3px;
+					background-color: $bgDark;
+				}
+				li+li {
+					margin-left: 4px;
+				}
+			}
 		}
 	}
 }
