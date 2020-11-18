@@ -3,7 +3,7 @@
 		"fileType": "LDtk Project JSON",
 		"app": "LDtk",
 		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.6.0-beta-debug",
+		"appVersion": "0.6.0-debug",
 		"url": "https://deepnight.net/tools/ldtk-2d-level-editor/"
 	},
 	"jsonVersion": "0.6.0",
@@ -15,7 +15,7 @@
 	"nextUid": 43,
 	"minifyJson": false,
 	"exportTiled": false,
-	"worldLayout": "LinearHorizontal",
+	"worldLayout": "LinearVertical",
 	"defs": {
 		"layers": [
 			{
@@ -405,10 +405,10 @@
 			"identifier": "A",
 			"uid": 0,
 			"worldX": 0,
-			"worldY": 80,
+			"worldY": 0,
 			"pxWid": 368,
 			"pxHei": 256,
-			"__bgColor": "#132A3F",
+			"__bgColor": "#37494E",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -913,11 +913,11 @@
 		{
 			"identifier": "B",
 			"uid": 4,
-			"worldX": 400,
-			"worldY": 0,
+			"worldX": 0,
+			"worldY": 288,
 			"pxWid": 464,
 			"pxHei": 416,
-			"__bgColor": "#132A3F",
+			"__bgColor": "#37494E",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -1810,11 +1810,11 @@
 		{
 			"identifier": "C",
 			"uid": 41,
-			"worldX": 896,
-			"worldY": 80,
+			"worldX": 0,
+			"worldY": 736,
 			"pxWid": 256,
 			"pxHei": 256,
-			"__bgColor": "#132A3F",
+			"__bgColor": "#37494E",
 			"bgColor": null,
 			"layerInstances": [
 				{
@@ -2197,11 +2197,11 @@
 		{
 			"identifier": "D",
 			"uid": 42,
-			"worldX": 1184,
-			"worldY": 112,
+			"worldX": 0,
+			"worldY": 1024,
 			"pxWid": 256,
 			"pxHei": 192,
-			"__bgColor": "#132A3F",
+			"__bgColor": "#37494E",
 			"bgColor": null,
 			"layerInstances": [
 				{
