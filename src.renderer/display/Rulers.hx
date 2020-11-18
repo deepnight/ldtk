@@ -233,7 +233,7 @@ class Rulers extends dn.Process {
 			return null;
 
 		var grid = curLayerInstance.def.gridSize;
-		return {
+		var b = {
 			newLeft :
 				switch draggedPos {
 					case Left, TopLeft, BottomLeft : M.floor( ( m.levelX - dragOrigin.levelX ) / grid ) * grid;
@@ -258,6 +258,16 @@ class Rulers extends dn.Process {
 				},
 
 		}
+
+		if( editor.project.worldLayout==WorldGrid) {
+			// Snap to world grid
+			var p = editor.project;
+			b.newLeft = dn.M.round( b.newLeft/p.worldGridWidth ) * p.worldGridWidth;
+			b.newRight = dn.M.round( b.newRight/p.worldGridWidth ) * p.worldGridWidth;
+			b.newTop = dn.M.round( b.newTop/p.worldGridHeight ) * p.worldGridHeight;
+			b.newBottom = dn.M.round( b.newBottom/p.worldGridHeight ) * p.worldGridHeight;
+		}
+		return b;
 	}
 
 	public function onMouseUp(m:Coords) {
