@@ -19,6 +19,10 @@ class EditProject extends ui.modal.Panel {
 			editor.onSave(true);
 		});
 
+		jContent.find("button.locate").click( function(ev) {
+			JsTools.exploreToFile(editor.projectFilePath, true);
+		});
+
 		jContent.find("button.close").click( function(ev) {
 			editor.onClose();
 		});
