@@ -10,7 +10,7 @@ class ColorPicker extends ui.modal.Dialog {
 		loadTemplate("colorPicker");
 
 		if( target!=null ) {
-			positionNear(target);
+			positionNear(target, true);
 			if( target.is("input") )
 				jTargetInput = target;
 		}
