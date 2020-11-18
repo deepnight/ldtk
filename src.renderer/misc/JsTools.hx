@@ -625,6 +625,7 @@ class JsTools {
 						if( idx>=tileIds.length )
 							idx = 0;
 
+						clearCanvas(jTileCanvas);
 						td.drawTileToCanvas(jTileCanvas, tileIds[idx]);
 					});
 				}
