@@ -102,27 +102,19 @@ class Project {
 
 			case LinearHorizontal:
 				var wx = 0;
-				// var maxHei = 0;
 				for(l in levels) {
 					l.worldX = wx;
 					l.worldY = 0;
 					wx += l.pxWid + spacing;
-				// 	maxHei = dn.M.imax(maxHei, l.pxHei);
 				}
-				// for(l in levels)
-				// 	l.worldY = Std.int( maxHei*0.5 - l.pxHei*0.5 ); // center vertically
 
 			case LinearVertical:
 				var wy = 0;
-				// var maxWid = 0;
 				for(l in levels) {
 					l.worldX = 0;
 					l.worldY = wy;
 					wy += l.pxHei + spacing;
-					// maxHei = dn.M.imax(maxHei, l.pxHei);
 				}
-				// for(l in levels)
-				// 	l.worldY = Std.int( maxHei*0.5 - l.pxHei*0.5 ); // center vertically
 		}
 	}
 
