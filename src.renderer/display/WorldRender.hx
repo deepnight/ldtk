@@ -180,6 +180,7 @@ class WorldRender extends dn.Process {
 		// Axes visibility
 		axes.visible = editor.worldMode && switch editor.project.worldLayout {
 			case Free: true;
+			case WorldGrid: true;
 			case LinearHorizontal: false;
 			case LinearVertical: false;
 		};

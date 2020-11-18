@@ -20,6 +20,7 @@ enum WorldLayout {
 	Free;
 	LinearHorizontal;
 	LinearVertical;
+	WorldGrid;
 }
 
 

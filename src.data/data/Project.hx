@@ -115,6 +115,9 @@ class Project {
 					l.worldY = wy;
 					wy += l.pxHei + spacing;
 				}
+
+			case WorldGrid:
+				// TODO auto organize?
 		}
 	}
 

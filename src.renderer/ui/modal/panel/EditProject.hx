@@ -99,6 +99,7 @@ class EditProject extends ui.modal.Panel {
 			(l)->project.worldLayout = l,
 			(l)->switch l {
 				case Free: L.t._("FREE - freely positioned in space");
+				case WorldGrid: L.t._("WORLD GRID - freely positioned inside a large world-scale grid");
 				case LinearHorizontal: L.t._("LINEAR (horizontal) - one level after the other");
 				case LinearVertical: L.t._("LINEAR (vertical) - one level after the other");
 			}

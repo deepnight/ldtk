@@ -51,6 +51,8 @@ class WorldTool extends dn.Process {
 		switch project.worldLayout {
 			case Free:
 
+			case WorldGrid:
+
 			case LinearHorizontal:
 				var idx = 0;
 				insertPoints = project.levels.map( (l)->{ x:l.worldX, y:0, idx:idx++ } );
@@ -88,7 +90,7 @@ class WorldTool extends dn.Process {
 				var initialY = clickedLevel.worldY;
 
 				switch project.worldLayout {
-					case Free:
+					case Free, WorldGrid:
 					case LinearHorizontal:
 						var i = getInsertPoint(m);
 						if( i!=null ) {
@@ -194,11 +196,13 @@ class WorldTool extends dn.Process {
 			// Drag
 			var allowX = switch project.worldLayout {
 				case Free: true;
+				case WorldGrid: true;
 				case LinearHorizontal: true;
 				case LinearVertical: false;
 			}
 			var allowY = switch project.worldLayout {
 				case Free: true;
+				case WorldGrid: true;
 				case LinearHorizontal: false;
 				case LinearVertical: true;
 			}
@@ -251,6 +255,11 @@ class WorldTool extends dn.Process {
 						snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX+l.pxWid);
 					}
 
+				case WorldGrid:
+					var g = 256; // HACK customize that value
+					clickedLevel.worldX = Std.int( clickedLevel.worldX/g ) * g;
+					clickedLevel.worldY = Std.int( clickedLevel.worldY/g ) * g;
+
 				case LinearHorizontal:
 					var i = getInsertPoint(m);
 					if( i!=null ) {
@@ -281,7 +290,7 @@ class WorldTool extends dn.Process {
 		dh.remove( (i)->i.idx==curIdx+1 );
 
 		switch project.worldLayout {
-			case Free:
+			case Free, WorldGrid:
 				// N/A
 
 			case LinearHorizontal:
