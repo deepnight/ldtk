@@ -28,6 +28,8 @@ Value | Type | Description
 `jsonVersion` | String | File format version
 `levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | 
 `minifyJson` | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
+`worldGridHeight`<br/><sup>Only *'WorldGrid' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Int | Height of the world grid in pixels.
+`worldGridWidth`<br/><sup>Only *'WorldGrid' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Int | Width of the world grid in pixels.
 `worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Enum | An enum that describes how levels are organized in this project (ie. linearly, or freely in a 2D space)
 
 <a id="ldtk-LevelJson" name="ldtk-LevelJson"></a>
