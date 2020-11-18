@@ -157,9 +157,19 @@ class JsonTools {
 		return v==true;
 	}
 
-	public static function readArray<T>(arr:Dynamic) : Array<T> {
+	public static function readArray<T>(arr:Dynamic, ?expectedSize:Int, ?defaultIfMissing:Array<T>) : Array<T> {
+		if( arr==null && defaultIfMissing!=null )
+			return defaultIfMissing.copy();
+
+
 		switch Type.typeof(arr) {
 			case TClass(Array):
+				if( expectedSize!=null && expectedSize!=arr.length )
+					if( defaultIfMissing==null )
+						throw "Array size is incorrect";
+					else
+						return defaultIfMissing;
+					
 			case _: throw "Not an array ("+Type.typeof(arr)+")";
 		}
 		return arr;

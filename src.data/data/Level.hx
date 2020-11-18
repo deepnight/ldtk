@@ -16,11 +16,11 @@ class Level {
 
 
 	@:allow(data.Project)
-	private function new(project:Project, uid:Int) {
+	private function new(project:Project, wid:Int, hei:Int, uid:Int) {
 		this.uid = uid;
 		worldX = worldY = 0;
-		pxWid = Project.DEFAULT_LEVEL_WIDTH;
-		pxHei = Project.DEFAULT_LEVEL_HEIGHT;
+		pxWid = wid;
+		pxHei = hei;
 		this._project = project;
 		this.identifier = "Level"+uid;
 		this.bgColor = null;
@@ -52,11 +52,11 @@ class Level {
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {
-		var l = new Level( p, JsonTools.readInt(json.uid) );
+		var wid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_SIZE*p.defaultGridSize );
+		var hei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_SIZE*p.defaultGridSize );
+		var l = new Level( p, wid, hei, JsonTools.readInt(json.uid) );
 		l.worldX = JsonTools.readInt( json.worldX, 0 );
 		l.worldY = JsonTools.readInt( json.worldY, 0 );
-		l.pxWid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_WIDTH );
-		l.pxHei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_HEIGHT );
 		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
 		l.bgColor = JsonTools.readColor(json.bgColor, true);
 

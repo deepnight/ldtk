@@ -124,8 +124,8 @@ class WorldTool extends dn.Process {
 		clickedLevel = null;
 	}
 
-	inline function getWorldGrid() return 16;
-	inline function getLevelSnapDist() return getWorldGrid() / ( editor.camera.adjustedZoom * 0.4 );
+	inline function getLevelGrid() return project.defaultGridSize;
+	inline function getLevelSnapDist() return getLevelGrid() / ( editor.camera.adjustedZoom * 0.4 );
 
 	inline function snapLevelX(cur:data.Level, offset:Int, at:Int) {
 		if( M.fabs(cur.worldX + offset - at) <= getLevelSnapDist() ) {
@@ -222,13 +222,12 @@ class WorldTool extends dn.Process {
 				case Free:
 					// Snap to grid
 					if( settings.grid ) {
-						var g = getWorldGrid();
+						var g = getLevelGrid();
 						clickedLevel.worldX = Std.int( clickedLevel.worldX/g ) * g;
 						clickedLevel.worldY = Std.int( clickedLevel.worldY/g ) * g;
 					}
 
 					// Snap to other levels
-					var snapDist = getWorldGrid();
 					for(l in project.levels) {
 						if( l==clickedLevel )
 							continue;
@@ -256,9 +255,8 @@ class WorldTool extends dn.Process {
 					}
 
 				case WorldGrid:
-					var g = 256; // HACK customize that value
-					clickedLevel.worldX = Std.int( clickedLevel.worldX/g ) * g;
-					clickedLevel.worldY = Std.int( clickedLevel.worldY/g ) * g;
+					clickedLevel.worldX = Std.int( clickedLevel.worldX/project.worldGridWidth ) * project.worldGridWidth;
+					clickedLevel.worldY = Std.int( clickedLevel.worldY/project.worldGridHeight ) * project.worldGridHeight;
 
 				case LinearHorizontal:
 					var i = getInsertPoint(m);

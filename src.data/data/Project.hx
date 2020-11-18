@@ -2,9 +2,8 @@ package data;
 
 class Project {
 	public static var DEFAULT_BG_COLOR = 0x7f8093;
-	public static var DEFAULT_LEVEL_WIDTH = 256; // px
-	public static var DEFAULT_LEVEL_HEIGHT = 256; // px
 	public static var DEFAULT_GRID_SIZE = 16; // px
+	public static var DEFAULT_LEVEL_SIZE = 16; // cells
 
 	var nextUid = 0;
 	public var defs : Definitions;
@@ -17,6 +16,8 @@ class Project {
 	public var bgColor : UInt;
 	public var defaultLevelbgColor : UInt;
 	public var worldLayout : data.DataTypes.WorldLayout;
+	public var worldGridWidth : Int;
+	public var worldGridHeight : Int;
 
 	public var minifyJson = false;
 	public var exportTiled = false;
@@ -28,6 +29,8 @@ class Project {
 		defaultLevelbgColor = DEFAULT_BG_COLOR;
 		defaultPivotX = defaultPivotY = 0;
 		worldLayout = Free;
+		worldGridWidth = defaultGridSize * DEFAULT_LEVEL_SIZE;
+		worldGridHeight = defaultGridSize * DEFAULT_LEVEL_SIZE;
 
 		defs = new Definitions(this);
 	}
@@ -65,7 +68,10 @@ class Project {
 
 		// World
 		var defLayout : data.DataTypes.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
+
 		p.worldLayout = JsonTools.readEnum( data.DataTypes.WorldLayout, json.worldLayout, false, defLayout );
+		p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, DEFAULT_LEVEL_SIZE*p.defaultGridSize );
+		p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, DEFAULT_LEVEL_SIZE*p.defaultGridSize );
 		if( dn.Version.lower(json.jsonVersion, "0.6") )
 			p.reorganizeWorld();
 
@@ -85,6 +91,8 @@ class Project {
 			minifyJson: minifyJson,
 			exportTiled: exportTiled,
 			worldLayout: JsonTools.writeEnum(worldLayout, false),
+			worldGridWidth: worldGridWidth,
+			worldGridHeight: worldGridHeight,
 
 			defs: defs.toJson(this),
 			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
@@ -133,7 +141,16 @@ class Project {
 	/**  LEVELS  *****************************************/
 
 	public function createLevel() {
-		var l = new Level(this, makeUniqId());
+		var wid = defaultGridSize * DEFAULT_LEVEL_SIZE;
+		var hei = wid;
+		switch worldLayout {
+			case Free, LinearHorizontal, LinearVertical:
+			case WorldGrid:
+				wid = worldGridWidth;
+				hei = worldGridHeight;
+		}
+
+		var l = new Level(this, wid, hei, makeUniqId());
 		levels.push(l);
 
 		var id = "Level";

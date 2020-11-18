@@ -43,6 +43,10 @@ class EditProject extends ui.modal.Panel {
 	function updateProjectForm() {
 		var jForm = jContent.find("ul.form:first");
 
+		for(k in data.DataTypes.WorldLayout.getConstructors())
+			jForm.removeClass("layout-"+k);
+		jForm.addClass("layout-"+project.worldLayout.getName());
+
 		var ext = dn.FilePath.extractExtension( editor.projectFilePath );
 		var usesAppDefault = ext==Const.FILE_EXTENSION;
 		var i = Input.linkToHtmlInput( usesAppDefault, jForm.find("[name=useAppExtension]") );
@@ -92,6 +96,12 @@ class EditProject extends ui.modal.Panel {
 		i.isColorCode = true;
 		i.linkEvent(ProjectSettingsChanged);
 
+		var i = Input.linkToHtmlInput( project.worldGridWidth, jForm.find("[name=worldGridWidth]"));
+		i.linkEvent(ProjectSettingsChanged);
+
+		var i = Input.linkToHtmlInput( project.worldGridHeight, jForm.find("[name=worldGridHeight]"));
+		i.linkEvent(ProjectSettingsChanged);
+
 		var e = new form.input.EnumSelect(
 			jForm.find("[name=worldLayout]"),
 			data.DataTypes.WorldLayout,
@@ -99,7 +109,7 @@ class EditProject extends ui.modal.Panel {
 			(l)->project.worldLayout = l,
 			(l)->switch l {
 				case Free: L.t._("FREE - freely positioned in space");
-				case WorldGrid: L.t._("WORLD GRID - freely positioned inside a large world-scale grid");
+				case WorldGrid: L.t._("CASTLEVANIESQUE - levels are positioned inside a large world-scale grid");
 				case LinearHorizontal: L.t._("LINEAR (horizontal) - one level after the other");
 				case LinearVertical: L.t._("LINEAR (vertical) - one level after the other");
 			}
