@@ -219,24 +219,19 @@ class WorldTool extends dn.Process {
 			if( boundsOverlaps( l, b.x, b.y, b.wid, b.hei ) ) {
 				// Source: https://stackoverflow.com/questions/1585525/how-to-find-the-intersection-point-between-a-line-and-a-rectangle
 				var slope = ( (b.y+b.hei*0.5)-l.worldCenterY )  /  ( (b.x+b.wid*0.5)-l.worldCenterX );
-				App.ME.debug("slope="+dn.M.pretty(slope));
 				if( slope*l.pxWid*0.5 >= -l.pxHei*0.5  &&  slope*l.pxWid*0.5 <= l.pxHei*0.5 )
 					if( b.x < l.worldCenterX ) {
 						b.x = l.worldX-b.wid;
-						App.ME.debug("LEFT",true);
 					}
 					else {
 						b.x = l.worldX+l.pxWid;
-						App.ME.debug("RIGHT",true);
 					}
 				else {
 					if( b.y < l.worldCenterY ) {
 						b.y = l.worldY-b.hei;
-						App.ME.debug("TOP",true);
 					}
 					else {
 						b.y = l.worldY+l.pxHei;
-						App.ME.debug("BOTTOM",true);
 					}
 				}
 			}
