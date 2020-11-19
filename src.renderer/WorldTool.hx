@@ -22,6 +22,7 @@ class WorldTool extends dn.Process {
 	var cursor : h2d.Graphics;
 	var insertCursor : h2d.Graphics;
 	var clickedSameLevel = false;
+	var addMode = false;
 
 	// var addBounds : { worldX:Int, worldY:Int, pxWid:Int, pxHei:Int } = null;
 
@@ -51,8 +52,18 @@ class WorldTool extends dn.Process {
 	}
 
 
+	public function startAddMode() {
+		addMode = true;
+	}
+
+	public function stopAddMode() {
+		addMode = false;
+		insertCursor.visible = false;
+	}
+
 	public function onWorldModeChange(active:Bool) {
 		insertCursor.visible = false;
+		stopAddMode();
 	}
 
 	public function onMouseDown(ev:hxd.Event, m:Coords) {
@@ -122,7 +133,6 @@ class WorldTool extends dn.Process {
 		else if( worldMode && clicked && !dragStarted ) {
 			var b = getLevelInsertBounds(m);
 			if( b!=null ) {
-				N.msg("New level created");
 				var l = switch project.worldLayout {
 					case Free, WorldGrid:
 						var l = project.createLevel();
@@ -142,9 +152,12 @@ class WorldTool extends dn.Process {
 							null;
 				}
 				if( l!=null ) {
+					N.msg("New level created");
+					stopAddMode();
 					project.reorganizeWorld();
 					editor.ge.emit( LevelAdded(l) );
 					editor.selectLevel(l);
+					editor.camera.scrollToLevel(l);
 				}
 			}
 		}
@@ -254,7 +267,7 @@ class WorldTool extends dn.Process {
 				var i = getLinearInsertPoint(m);
 				if( i!=null) {
 					b.x = i.pos-b.wid*0.5;
-					b.y = -b.hei*0.7;
+					b.y = -b.hei;
 				}
 				else
 					return null;
@@ -300,14 +313,21 @@ class WorldTool extends dn.Process {
 			cursor.clear();
 
 		// Preview "add level" location
-		if( !dragStarted && editor.worldMode ) {
+		if( addMode && !dragStarted && editor.worldMode ) {
 			var bounds = getLevelInsertBounds(m);
 			insertCursor.visible = bounds!=null;
 			if( bounds!=null ) {
+				var c = 0x8dcbfb;
 				insertCursor.clear();
-				insertCursor.lineStyle(2*editor.camera.pixelRatio, 0xffcc00, 0.5);
-				insertCursor.beginFill(0xffcc00, 0.2);
+				insertCursor.lineStyle(2*editor.camera.pixelRatio, c, 0.7);
+				insertCursor.beginFill(c, 0.3);
 				insertCursor.drawRect(bounds.x, bounds.y, bounds.wid, bounds.hei);
+
+				insertCursor.lineStyle(10*editor.camera.pixelRatio, c, 1);
+				insertCursor.moveTo(bounds.x+bounds.wid*0.5, bounds.y+bounds.hei*0.3);
+				insertCursor.lineTo(bounds.x+bounds.wid*0.5, bounds.y+bounds.hei*0.7);
+				insertCursor.moveTo(bounds.x+bounds.wid*0.3, bounds.y+bounds.hei*0.5);
+				insertCursor.lineTo(bounds.x+bounds.wid*0.7, bounds.y+bounds.hei*0.5);
 				editor.cursor.set(Add);
 				ev.cancel = true;
 			}

@@ -131,12 +131,24 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 			);
 		});
 
+		// Create button
+		jPanel.find("button.create").click( (_)->{
+			editor.worldTool.startAddMode();
+			N.msg(L.t._("Select a spot on the world map..."));
+		});
+
 		// Duplicate button
 		jPanel.find("button.duplicate").click( (_)->{
 			var copy = project.duplicateLevel(inst);
 			editor.selectLevel(copy);
-			copy.worldX += project.defaultGridSize*4;
-			copy.worldY += project.defaultGridSize*4;
+			switch project.worldLayout {
+				case Free, WorldGrid:
+					copy.worldX += project.defaultGridSize*4;
+					copy.worldY += project.defaultGridSize*4;
+
+				case LinearHorizontal:
+				case LinearVertical:
+			}
 			editor.ge.emit( LevelAdded(copy) );
 		});
 
