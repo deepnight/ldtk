@@ -79,6 +79,7 @@ class WorldRender extends dn.Process {
 				invalidateLevel(l);
 
 			case LevelSelected(l):
+				invalidateLevel(l);
 				updateLayout();
 
 			case LevelResized(l):
@@ -225,6 +226,7 @@ class WorldRender extends dn.Process {
 		if( levels.exists(l.uid) ) {
 			levels.get(l.uid).render.remove();
 			levels.get(l.uid).bounds.remove();
+			levels.get(l.uid).bg.remove();
 			levels.remove(l.uid);
 		}
 	}
