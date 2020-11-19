@@ -12,11 +12,11 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 		var jBar = editor.jMainPanel.find("#mainBar");
 		var margin = 4;
 
-		jPanel.css({
-			left: 0,
-			top: ( jBar.offset().top + jBar.outerHeight() + margin ) +"px",
-			height: ( js.Browser.window.innerHeight - ( jBar.offset().top+jBar.outerHeight() ) - margin )+"px",
-		});
+		// jPanel.css({
+		// 	left: 0,
+		// 	top: ( jBar.offset().top + jBar.outerHeight() + margin ) +"px",
+		// 	height: ( js.Browser.window.innerHeight - ( jBar.offset().top+jBar.outerHeight() ) - margin )+"px",
+		// });
 	}
 
 	override function onGlobalEvent(ge:GlobalEvent) {

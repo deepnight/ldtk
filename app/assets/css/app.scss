@@ -3223,13 +3223,16 @@ canvas#webgl {
 	}
 
 	&.level {
+		left: 32px;
+		width: calc( #{$mainPanelNormalWid} + 16px );
+		height: 100vh;
 		max-height: none;
-		left: 0;
-		width: $mainPanelNormalWid;
+		padding: 8px;
+
+		border-left: 2px solid $bgLighter;
+		border-right: 1px solid $bgLight;
 		background-color: $bgMed;
-		border-right: 1px solid black;
-		border-top: 1px solid black;
-		border-top-right-radius: 3px;
+		box-shadow: -8px 0px 0px rgba(0, 0, 0, 0.5), 2px 0px 0px rgba(0, 0, 0, 0.5);
 	}
 
 	&.picking {
