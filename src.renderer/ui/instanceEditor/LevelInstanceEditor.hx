@@ -94,6 +94,28 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 		if( inst.bgColor!=null )
 			i.jInput.siblings("span.usingDefault").hide();
 
+		jPanel.find("button.delete").click( (_)->{
+			if( project.levels.length<=1 ) {
+				N.error( L.t._("You can't remove last level.") );
+				return;
+			}
+
+			new ui.modal.dialog.Confirm(
+				Lang.t._("Are you sure you want to delete this level?"),
+				true,
+				()->{
+					var dh = new dn.DecisionHelper(project.levels);
+					dh.removeValue(inst);
+					dh.score( (l)->-inst.getBoundsDist(l) );
+
+					new LastChance('Level ${inst.identifier} removed', project);
+					project.removeLevel(inst);
+					editor.ge.emit( LevelRemoved(inst) );
+					editor.selectLevel( dh.getBest() );
+				}
+			);
+		});
+
 		// // Custom fields
 		// if( inst.def.fieldDefs.length==0 )
 		// 	jPanel.append('<div class="empty">This entity has no custom field.</div>');
