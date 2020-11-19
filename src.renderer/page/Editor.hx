@@ -371,10 +371,11 @@ class Editor extends Page {
 				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeLatest();
 				else if( selectionTool.any() ) {
-					ui.InstanceEditor.closeAny();
+					if( !worldMode )
+						ui.InstanceEditor.closeAny();
 					selectionTool.clear();
 				}
-				else if( ui.InstanceEditor.isOpen() )
+				else if( ui.InstanceEditor.isOpen() && !worldMode )
 					ui.InstanceEditor.closeAny();
 				else if( worldMode )
 					setWorldMode(false);

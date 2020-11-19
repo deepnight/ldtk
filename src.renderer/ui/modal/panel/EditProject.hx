@@ -92,7 +92,7 @@ class EditProject extends ui.modal.Panel {
 		i.isColorCode = true;
 		i.linkEvent(ProjectSettingsChanged);
 
-		var i = Input.linkToHtmlInput( project.defaultLevelbgColor, jForm.find("[name=defaultLevelbgColor]"));
+		var i = Input.linkToHtmlInput( project.defaultLevelBgColor, jForm.find("[name=defaultLevelbgColor]"));
 		i.isColorCode = true;
 		i.linkEvent(ProjectSettingsChanged);
 

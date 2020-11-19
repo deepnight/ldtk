@@ -14,7 +14,7 @@ class Project {
 	public var defaultPivotY : Float;
 	public var defaultGridSize : Int;
 	public var bgColor : UInt;
-	public var defaultLevelbgColor : UInt;
+	public var defaultLevelBgColor : UInt;
 	public var worldLayout : data.DataTypes.WorldLayout;
 	public var worldGridWidth : Int;
 	public var worldGridHeight : Int;
@@ -26,7 +26,7 @@ class Project {
 		jsonVersion = Const.getJsonVersion();
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
 		bgColor = DEFAULT_BG_COLOR;
-		defaultLevelbgColor = DEFAULT_BG_COLOR;
+		defaultLevelBgColor = DEFAULT_BG_COLOR;
 		defaultPivotX = defaultPivotY = 0;
 		worldLayout = Free;
 		worldGridWidth = defaultGridSize * DEFAULT_LEVEL_SIZE;
@@ -56,7 +56,7 @@ class Project {
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
 		p.bgColor = JsonTools.readColor( json.bgColor, DEFAULT_BG_COLOR );
-		p.defaultLevelbgColor = JsonTools.readColor( json.defaultLevelBgColor, p.bgColor );
+		p.defaultLevelBgColor = JsonTools.readColor( json.defaultLevelBgColor, p.bgColor );
 
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
@@ -86,7 +86,7 @@ class Project {
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
 			bgColor: JsonTools.writeColor(bgColor),
-			defaultLevelBgColor: JsonTools.writeColor(defaultLevelbgColor),
+			defaultLevelBgColor: JsonTools.writeColor(defaultLevelBgColor),
 			nextUid: nextUid,
 			minifyJson: minifyJson,
 			exportTiled: exportTiled,

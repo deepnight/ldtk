@@ -12,6 +12,7 @@ class Level {
 	public var pxHei : Int;
 	public var layerInstances : Array<data.inst.LayerInstance> = [];
 
+	@:allow(ui.instanceEditor.LevelInstanceEditor)
 	var bgColor : Null<UInt>;
 
 
@@ -70,7 +71,7 @@ class Level {
 	}
 
 	public inline function getBgColor() : UInt {
-		return bgColor!=null ? bgColor : _project.defaultLevelbgColor;
+		return bgColor!=null ? bgColor : _project.defaultLevelBgColor;
 	}
 
 	public inline function inBounds(x:Int, y:Int) {

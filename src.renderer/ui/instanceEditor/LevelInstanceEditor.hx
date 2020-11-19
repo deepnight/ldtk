@@ -25,6 +25,9 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 				if( l==this.inst )
 					close();
 
+			case WorldLevelMoved:
+				updateForm();
+
 			case ViewportChanged :
 				renderLink();
 
@@ -44,14 +47,11 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 			return new LevelInstanceEditor(l);
 	}
 
-	// override function onFieldChange(keepCurrentSpecialTool=false) {
-	// 	super.onFieldChange(keepCurrentSpecialTool);
+	override function onFieldChange(keepCurrentSpecialTool=false) {
+		super.onFieldChange(keepCurrentSpecialTool);
 
-	// 	var editor = Editor.ME;
-	// 	editor.curLevelHistory.saveLayerState( editor.curLayerInstance );
-	// 	editor.curLevelHistory.setLastStateBounds( inst.left, inst.top, inst.def.width, inst.def.height );
-	// 	editor.ge.emit( EntityInstanceFieldChanged(inst) );
-	// }
+		editor.ge.emit( LevelSettingsChanged(inst) );
+	}
 
 
 	// override function getInstanceCx():Int {
@@ -75,12 +75,36 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 			return;
 		}
 
-		// Form header
-		var jHeader = new J('<header/>');
-		jHeader.appendTo(jPanel);
-		jHeader.append('<div>${inst.identifier}</div>');
+		var html = JsTools.getHtmlTemplate("levelInstanceEditor", { identifier:inst.identifier });
+		jPanel.append(html);
 
-		// var i = Input
+		// Level name
+		var i = Input.linkToHtmlInput( inst.identifier, jPanel.find("#identifier"));
+		i.onChange = ()->onFieldChange();
+
+		// Coords
+		var i = Input.linkToHtmlInput( inst.worldX, jPanel.find("#worldX"));
+		i.onChange = ()->onFieldChange();
+		var i = Input.linkToHtmlInput( inst.worldY, jPanel.find("#worldY"));
+		i.onChange = ()->onFieldChange();
+
+		// Bg color
+		var c = inst.getBgColor();
+		var i = Input.linkToHtmlInput( c, jPanel.find("#bgColor"));
+		i.isColorCode = true;
+		i.onChange = ()->{
+			inst.bgColor = c==project.defaultLevelBgColor ? null : c;
+			onFieldChange();
+		}
+		var jDefault = i.jInput.siblings("a.reset");
+		if( inst.bgColor==null )
+			jDefault.hide();
+		jDefault.click( (_)->{
+			inst.bgColor = null;
+			onFieldChange();
+		});
+		if( inst.bgColor!=null )
+			i.jInput.siblings("span.usingDefault").hide();
 
 		// // Custom fields
 		// if( inst.def.fieldDefs.length==0 )

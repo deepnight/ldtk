@@ -1105,7 +1105,7 @@ ul.form {
 			width: 0px; // for flex min-width
 		}
 		>input[type=color] {
-			flex: 0.1 1 32px;
+			flex: 0.1 1 64px;
 		}
 
 		>input[type=checkbox] {
@@ -3228,11 +3228,13 @@ canvas#webgl {
 		width: 100%;
 		padding-bottom: 4px;
 		margin-bottom: 4px;
+		overflow: hidden;
 
 		font-weight: bold;
 		color: $orange;
 
 		border-bottom: 1px solid $bgLight;
+
 
 		a {
 			display: inline-block;
@@ -3275,18 +3277,31 @@ canvas#webgl {
 			span.value {
 				flex: 1 0 auto;
 			}
-			a.reset {
-				flex: 0 0 0px;
-				margin-left: 10px;
-				font-size: 0.75em;
-				text-decoration: underline;
-				color: $orange;
-				white-space: nowrap;
-			}
-			a.reset:hover {
+		}
+
+		a.reset {
+			flex: 0 0 0px;
+			align-self: center;
+			margin-left: 10px;
+			font-size: 0.75em;
+			text-decoration: underline;
+			color: $orange;
+			white-space: nowrap;
+			cursor: pointer;
+			&:hover {
 				color: white;
 			}
 		}
+
+		span.usingDefault {
+			flex: 0 0 0px;
+			align-self: center;
+			margin-left: 10px;
+			font-size: 0.75em;
+			color: $bgLighter;
+			opacity: 1;
+		}
+
 
 		button.removePoint {
 			flex: 0.2 1 0px;
