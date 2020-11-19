@@ -4,6 +4,7 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 
 	private function new(l:data.Level) {
 		super(l);
+		jPanel.addClass("level");
 	}
 
 	override function onGlobalEvent(ge:GlobalEvent) {
@@ -94,6 +95,7 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 		if( inst.bgColor!=null )
 			i.jInput.siblings("span.usingDefault").hide();
 
+		// Delete button
 		jPanel.find("button.delete").click( (_)->{
 			if( project.levels.length<=1 ) {
 				N.error( L.t._("You can't remove last level.") );
@@ -114,6 +116,13 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 					editor.selectLevel( dh.getBest() );
 				}
 			);
+		});
+
+		// Duplicate button
+		jPanel.find("button.duplicate").click( (_)->{
+			var copy = project.duplicateLevel(inst);
+			editor.selectLevel(copy);
+			editor.ge.emit( LevelAdded(copy) );
 		});
 
 		// // Custom fields

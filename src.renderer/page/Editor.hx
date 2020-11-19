@@ -30,7 +30,7 @@ class Editor extends Page {
 	var curLayerDefUid : Int;
 
 	// Tools
-	var worldTool : WorldTool;
+	public var worldTool : WorldTool;
 	var panTool : tool.PanView;
 	public var curTool(get,never) : tool.LayerTool<Dynamic>;
 	public var selectionTool: tool.SelectionTool;

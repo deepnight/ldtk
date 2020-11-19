@@ -178,7 +178,7 @@ class Project {
 
 		levels.insert( dn.Lib.getArrayIndex(l,levels)+1, copy );
 		tidy();
-		return l;
+		return copy;
 	}
 
 	public function isLevelIdentifierUnique(id:String) {

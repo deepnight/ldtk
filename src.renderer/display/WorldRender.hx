@@ -107,8 +107,8 @@ class WorldRender extends dn.Process {
 				invalidateLevel(l);
 				updateLayout();
 				renderWorldBounds();
-				if( editor.worldMode )
-					camera.scrollToLevel(l);
+				// if( editor.worldMode )
+				// 	camera.scrollToLevel(l);
 
 			case LevelRemoved(l):
 				removeLevel(l);

@@ -4,6 +4,7 @@ class EntityInstanceEditor extends ui.InstanceEditor<data.inst.EntityInstance> {
 
 	private function new(ei:data.inst.EntityInstance) {
 		super(ei);
+		jPanel.addClass("entity");
 	}
 
 	override function onGlobalEvent(ge:GlobalEvent) {

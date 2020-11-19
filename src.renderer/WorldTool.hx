@@ -58,7 +58,7 @@ class WorldTool extends dn.Process {
 	}
 
 	public function onMouseDown(ev:hxd.Event, m:Coords) {
-		if( ev.button!=0 || App.ME.hasAnyToggleKeyDown() )
+		if( ev.button!=0 || App.ME.isShiftDown() )
 			return;
 
 		editor.camera.cancelAllAutoMovements();
@@ -98,6 +98,8 @@ class WorldTool extends dn.Process {
 			clickedSameLevel = editor.curLevel==clickedLevel;
 			editor.selectLevel(clickedLevel);
 		}
+		else if( getLevelInsertBounds(m)!=null )
+			ev.cancel = true;
 	}
 
 	public function onMouseUp(m:Coords) {
@@ -264,6 +266,12 @@ class WorldTool extends dn.Process {
 		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=DRAG_THRESHOLD ) {
 			dragStarted = true;
 			ev.cancel = true;
+			if( clickedLevel!=null && ( App.ME.isAltDown() || App.ME.isCtrlDown() ) ) {
+				var copy = project.duplicateLevel(clickedLevel);
+				editor.ge.emit( LevelAdded(copy) );
+				editor.selectLevel(copy);
+				clickedLevel = copy;
+			}
 		}
 
 		// Rollover
@@ -421,9 +429,12 @@ class WorldTool extends dn.Process {
 		if( !allowSelf && editor.curLevel.isWorldOver(worldX,worldY) )
 			return null;
 
-		for(l in project.levels)
-			if( l.isWorldOver(worldX,worldY) )
-				return l;
+		var i = project.levels.length-1;
+		while( i>=0 )
+			if( project.levels[i].isWorldOver(worldX,worldY) )
+				return project.levels[i];
+			else
+				i--;
 
 		return null;
 	}
