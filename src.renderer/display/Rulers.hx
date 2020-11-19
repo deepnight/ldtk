@@ -174,7 +174,7 @@ class Rulers extends dn.Process {
 
 
 	inline function isOver(x:Int, y:Int, pos:RulerPos) {
-		return M.dist( x,y, getX(pos), getY(pos) ) <= HANDLE_SIZE*1.1;
+		return M.dist( x,y, getX(pos), getY(pos) ) <= HANDLE_SIZE*1.5;
 	}
 
 
