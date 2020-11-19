@@ -78,6 +78,7 @@ class WorldTool extends dn.Process {
 			levelOriginX = clickedLevel.worldX;
 			levelOriginY = clickedLevel.worldY;
 			ev.cancel = true;
+			editor.selectLevel(clickedLevel);
 		}
 	}
 

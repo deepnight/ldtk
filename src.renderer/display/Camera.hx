@@ -64,7 +64,6 @@ class Camera extends dn.Process {
 					fit();
 
 			case LevelSelected(level):
-				fit();
 
 			case ViewportChanged:
 
