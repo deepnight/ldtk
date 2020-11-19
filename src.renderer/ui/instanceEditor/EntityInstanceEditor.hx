@@ -1,4 +1,4 @@
-package ui;
+package ui.instanceEditor;
 
 class EntityInstanceEditor extends ui.InstanceEditor<data.inst.EntityInstance> {
 

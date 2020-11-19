@@ -775,6 +775,8 @@ class Editor extends Page {
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
 		ge.emit( ViewportChanged );
+		if( worldMode )
+			ui.instanceEditor.LevelInstanceEditor.openFor(l);
 	}
 
 	public function selectLayerInstance(li:data.inst.LayerInstance, notify=true) {
@@ -849,6 +851,8 @@ class Editor extends Page {
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
 		if( worldMode )
+			ui.instanceEditor.LevelInstanceEditor.openFor(curLevel);
+		else
 			ui.InstanceEditor.closeAny();
 	}
 

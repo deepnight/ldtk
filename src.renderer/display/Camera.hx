@@ -64,6 +64,8 @@ class Camera extends dn.Process {
 					fit();
 
 			case LevelSelected(level):
+				if( !editor.worldMode )
+					fit();
 
 			case ViewportChanged:
 

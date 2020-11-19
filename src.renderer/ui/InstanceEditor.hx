@@ -3,6 +3,9 @@ package ui;
 class InstanceEditor<T> extends dn.Process {
 	public static var CURRENT : Null<InstanceEditor<T>> = null;
 
+	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
+	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+
 	var jPanel : js.jquery.JQuery;
 	var inst : T;
 	var link : h2d.Graphics;
