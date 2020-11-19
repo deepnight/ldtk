@@ -141,7 +141,7 @@ class WorldTool extends dn.Process {
 					editor.setWorldMode(false);
 			}
 		}
-		else if( worldMode && clicked ) {
+		else if( worldMode && clicked && !dragStarted ) {
 			var b = getLevelInsertBounds(m);
 			if( b!=null ) {
 				N.msg("New level created");
@@ -157,6 +157,7 @@ class WorldTool extends dn.Process {
 
 		// Cleanup
 		clickedLevel = null;
+		dragStarted = false;
 		clicked = false;
 	}
 
@@ -259,6 +260,7 @@ class WorldTool extends dn.Process {
 
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
 		if( ev.cancel ) {
+			insertCursor.visible = false;
 			cursor.clear();
 			return;
 		}
@@ -274,10 +276,11 @@ class WorldTool extends dn.Process {
 		if( over!=null ) {
 			ev.cancel = true;
 			cursor.clear();
-			editor.cursor.set(Move);
+			editor.cursor.set(Pointer);
 			cursor.lineStyle(2*editor.camera.pixelRatio, 0xffffff);
 			cursor.beginFill(0xffcc00, 0.15);
 			cursor.drawRect(over.worldX, over.worldY, over.pxWid, over.pxHei);
+			ev.cancel = true;
 		}
 		else
 			cursor.clear();
@@ -291,6 +294,8 @@ class WorldTool extends dn.Process {
 				insertCursor.lineStyle(2*editor.camera.pixelRatio, 0xffcc00, 0.5);
 				insertCursor.beginFill(0xffcc00, 0.2);
 				insertCursor.drawRect(bounds.x, bounds.y, bounds.wid, bounds.hei);
+				editor.cursor.set(Add);
+				ev.cancel = true;
 			}
 		}
 		else

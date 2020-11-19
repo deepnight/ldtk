@@ -95,6 +95,8 @@ enum CursorType {
 	Tiles(li:data.inst.LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int, flips:Int);
 	Resize(p:RulerPos);
 	Link(fx:Float, fy:Float, tx:Float, ty:Float, color:UInt);
+	Pointer;
+	Add;
 }
 
 enum GenericLevelElement {
