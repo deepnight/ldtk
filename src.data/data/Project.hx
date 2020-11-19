@@ -140,7 +140,7 @@ class Project {
 
 	/**  LEVELS  *****************************************/
 
-	public function createLevel() {
+	public function createLevel(?insertIdx:Int) {
 		var wid = defaultGridSize * DEFAULT_LEVEL_SIZE;
 		var hei = wid;
 		switch worldLayout {
@@ -151,7 +151,10 @@ class Project {
 		}
 
 		var l = new Level(this, wid, hei, makeUniqId());
-		levels.push(l);
+		if( insertIdx==null )
+			levels.push(l);
+		else
+			levels.insert(insertIdx,l);
 
 		var id = "Level";
 		var idx = 2;

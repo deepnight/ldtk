@@ -1,7 +1,6 @@
-private typedef WorldInsertPoint = {
+private typedef LinearInsertPoint = {
 	var idx:Int;
-	var x:Int;
-	var y:Int;
+	var pos:Int;
 }
 
 class WorldTool extends dn.Process {
@@ -22,7 +21,6 @@ class WorldTool extends dn.Process {
 	var tmpRender : h2d.Graphics;
 	var cursor : h2d.Graphics;
 	var insertCursor : h2d.Graphics;
-	var insertPoints : Array<WorldInsertPoint> = [];
 	var clickedSameLevel = false;
 
 	// var addBounds : { worldX:Int, worldY:Int, pxWid:Int, pxHei:Int } = null;
@@ -63,28 +61,6 @@ class WorldTool extends dn.Process {
 
 		editor.camera.cancelAllAutoMovements();
 
-		// Init possible insert points in linear modes
-		switch project.worldLayout {
-			case Free:
-
-			case WorldGrid:
-
-			case LinearHorizontal:
-				var idx = 0;
-				insertPoints = project.levels.map( (l)->{ x:l.worldX, y:0, idx:idx++ } );
-
-				var last = project.levels[project.levels.length-1];
-				insertPoints.push({ x:last.worldX+last.pxWid, y:0, idx:idx });
-
-			case LinearVertical:
-				var idx = 0;
-				insertPoints = project.levels.map( (l)->{ x:0, y:l.worldY, idx:idx++ } );
-
-				var last = project.levels[project.levels.length-1];
-				insertPoints.push({ x:0, y:last.worldY+last.pxHei, idx:idx });
-		}
-
-
 		tmpRender.clear();
 		origin = m;
 		dragStarted = false;
@@ -114,7 +90,7 @@ class WorldTool extends dn.Process {
 				switch project.worldLayout {
 					case Free, WorldGrid:
 					case LinearHorizontal:
-						var i = getInsertPoint(m);
+						var i = getLinearInsertPoint(m);
 						if( i!=null ) {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
@@ -124,7 +100,7 @@ class WorldTool extends dn.Process {
 						}
 
 					case LinearVertical:
-						var i = getInsertPoint(m);
+						var i = getLinearInsertPoint(m);
 						if( i!=null ) {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
@@ -147,13 +123,29 @@ class WorldTool extends dn.Process {
 			var b = getLevelInsertBounds(m);
 			if( b!=null ) {
 				N.msg("New level created");
-				var l = project.createLevel();
-				l.worldX = M.round(b.x);
-				l.worldY = M.round(b.y);
-				l.pxWid = b.wid;
-				l.pxHei = b.hei;
-				editor.ge.emit( LevelAdded(l) );
-				editor.selectLevel(l);
+				var l = switch project.worldLayout {
+					case Free, WorldGrid:
+						var l = project.createLevel();
+						l.worldX = M.round(b.x);
+						l.worldY = M.round(b.y);
+						l.pxWid = b.wid;
+						l.pxHei = b.hei;
+						l;
+
+					case LinearHorizontal, LinearVertical:
+						var i = getLinearInsertPoint(m);
+						if( i!=null ) {
+							var l = project.createLevel(i.idx);
+							l;
+						}
+						else
+							null;
+				}
+				if( l!=null ) {
+					project.reorganizeWorld();
+					editor.ge.emit( LevelAdded(l) );
+					editor.selectLevel(l);
+				}
 			}
 		}
 
@@ -217,38 +209,57 @@ class WorldTool extends dn.Process {
 			wid: size,
 			hei: size,
 		}
-		for(l in project.levels)
-			if( boundsOverlaps( l, b.x, b.y, b.wid, b.hei ) ) {
-				// Source: https://stackoverflow.com/questions/1585525/how-to-find-the-intersection-point-between-a-line-and-a-rectangle
-				var slope = ( (b.y+b.hei*0.5)-l.worldCenterY )  /  ( (b.x+b.wid*0.5)-l.worldCenterX );
-				if( slope*l.pxWid*0.5 >= -l.pxHei*0.5  &&  slope*l.pxWid*0.5 <= l.pxHei*0.5 )
-					if( b.x < l.worldCenterX ) {
-						b.x = l.worldX-b.wid;
+
+		// Find a spot in world space
+		switch project.worldLayout {
+			case Free, WorldGrid:
+				// Deinterlace with existing levels
+				for(l in project.levels)
+					if( boundsOverlaps( l, b.x, b.y, b.wid, b.hei ) ) {
+						// Source: https://stackoverflow.com/questions/1585525/how-to-find-the-intersection-point-between-a-line-and-a-rectangle
+						var slope = ( (b.y+b.hei*0.5)-l.worldCenterY )  /  ( (b.x+b.wid*0.5)-l.worldCenterX );
+						if( slope*l.pxWid*0.5 >= -l.pxHei*0.5  &&  slope*l.pxWid*0.5 <= l.pxHei*0.5 )
+							if( b.x < l.worldCenterX ) {
+								b.x = l.worldX-b.wid;
+							}
+							else {
+								b.x = l.worldX+l.pxWid;
+							}
+						else {
+							if( b.y < l.worldCenterY ) {
+								b.y = l.worldY-b.hei;
+							}
+							else {
+								b.y = l.worldY+l.pxHei;
+							}
+						}
 					}
-					else {
-						b.x = l.worldX+l.pxWid;
-					}
-				else {
-					if( b.y < l.worldCenterY ) {
-						b.y = l.worldY-b.hei;
-					}
-					else {
-						b.y = l.worldY+l.pxHei;
-					}
+
+				// Cancel if deinterlace failed
+				for(l in project.levels)
+					if( boundsOverlaps(l, b.x, b.y, b.wid, b.hei) )
+						return null;
+
+				// Grid snapping
+				if( project.worldLayout==WorldGrid ) {
+					b.x = dn.M.round( b.x/project.worldGridWidth ) * project.worldGridWidth;
+					b.y = dn.M.round( b.y/project.worldGridHeight ) * project.worldGridHeight;
 				}
-			}
+				else if( settings.grid ) {
+					b.x = dn.M.round( b.x/project.defaultGridSize ) * project.defaultGridSize;
+					b.y = dn.M.round( b.y/project.defaultGridSize ) * project.defaultGridSize;
+				}
 
-		for(l in project.levels)
-			if( boundsOverlaps(l, b.x, b.y, b.wid, b.hei) )
-				return null;
+			case LinearHorizontal:
+				var i = getLinearInsertPoint(m);
+				if( i!=null) {
+					b.x = i.pos-b.wid*0.5;
+					b.y = -b.hei*0.7;
+				}
+				else
+					return null;
 
-		if( project.worldLayout==WorldGrid ) {
-			b.x = dn.M.round( b.x/project.worldGridWidth ) * project.worldGridWidth;
-			b.y = dn.M.round( b.y/project.worldGridHeight ) * project.worldGridHeight;
-		}
-		else if( settings.grid ) {
-			b.x = dn.M.round( b.x/project.defaultGridSize ) * project.defaultGridSize;
-			b.y = dn.M.round( b.y/project.defaultGridSize ) * project.defaultGridSize;
+			case LinearVertical:
 		}
 
 
@@ -384,17 +395,17 @@ class WorldTool extends dn.Process {
 					clickedLevel.worldY = M.floor( clickedLevel.worldY/project.worldGridHeight) * project.worldGridHeight;
 
 				case LinearHorizontal:
-					var i = getInsertPoint(m);
+					var i = getLinearInsertPoint(m);
 					if( i!=null ) {
-						tmpRender.moveTo(i.x, -100);
-						tmpRender.lineTo(i.x, project.getWorldHeight(clickedLevel)+100);
+						tmpRender.moveTo(i.pos, -100);
+						tmpRender.lineTo(i.pos, project.getWorldHeight(clickedLevel)+100);
 					}
 
 				case LinearVertical:
-					var i = getInsertPoint(m);
+					var i = getLinearInsertPoint(m);
 					if( i!=null ) {
-						tmpRender.moveTo(-100, i.y);
-						tmpRender.lineTo(project.getWorldWidth(clickedLevel)+100, i.y);
+						tmpRender.moveTo(-100, i.pos);
+						tmpRender.lineTo(project.getWorldWidth(clickedLevel)+100, i.pos);
 					}
 			}
 
@@ -404,12 +415,33 @@ class WorldTool extends dn.Process {
 		}
 	}
 
-	function getInsertPoint(m:Coords) : Null<WorldInsertPoint> {
+	function getLinearInsertPoint(m:Coords) : Null<LinearInsertPoint> {
 		if( project.levels.length<=1 )
 			return null;
 
+		// Init possible insert points in linear modes
+		var pts =
+			switch project.worldLayout {
+				case Free, WorldGrid: null;
+
+				case LinearHorizontal:
+					var idx = 0;
+					var all = project.levels.map( (l)->{ pos:l==clickedLevel ? levelOriginX : l.worldX, idx:idx++ } );
+					var last = project.levels[project.levels.length-1];
+					all.push({ pos:last.worldX+last.pxWid, idx:idx });
+					all;
+
+				case LinearVertical:
+					var idx = 0;
+					var all = project.levels.map( (l)->{ pos:l.worldY, idx:idx++ } );
+
+					var last = project.levels[project.levels.length-1];
+					all.push({ pos:last.worldY+last.pxHei, idx:idx });
+					all;
+			}
+
 		var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
-		var dh = new dn.DecisionHelper(insertPoints);
+		var dh = new dn.DecisionHelper(pts);
 		dh.remove( (i)->i.idx==curIdx+1 );
 
 		switch project.worldLayout {
@@ -417,10 +449,10 @@ class WorldTool extends dn.Process {
 				// N/A
 
 			case LinearHorizontal:
-				dh.score( (i)->return -M.fabs(m.worldX-i.x) );
+				dh.score( (i)->return -M.fabs(m.worldX-i.pos) );
 
 			case LinearVertical:
-				dh.score( (i)->return -M.fabs(m.worldY-i.y) );
+				dh.score( (i)->return -M.fabs(m.worldY-i.pos) );
 		}
 		return dh.getBest();
 	}
