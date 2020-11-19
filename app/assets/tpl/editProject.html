@@ -4,18 +4,7 @@
 </h2>
 
 <ul class="form projectForm">
-
-	<li>
-		<label for="color">World layout</label>
-		<select name="worldLayout"></select>
-		<div class="info">This setting will affect how all levels are be positioned in the "world".</div>
-	</li>
-
-	<li class="WorldGrid">
-		<label for="worldGridWidth">World grid</label>
-		<input type="text" id="worldGridWidth" name="worldGridWidth"/> <span>x</span>
-		<input type="text" id="worldGridHeight" name="worldGridHeight"/> <span>px</span>
-	</li>
+	<li><h3>Project file settings</h3></li>
 
 	<li>
 		<label for="useAppExtension">Use .::ext:: extension</label>
@@ -38,7 +27,23 @@
 	</li>
 
 	<li>
-		<label for="defaultGridSize">Default grid size</label>
+		<h3>World settings</h3>
+	</li>
+
+	<li>
+		<label for="color">World layout</label>
+		<select name="worldLayout"></select>
+		<div class="info">This setting will affect how all levels are be positioned in the "world".</div>
+	</li>
+
+	<li class="WorldGrid">
+		<label for="worldGridWidth">World grid</label>
+		<input type="text" id="worldGridWidth" name="worldGridWidth"/> <span>x</span>
+		<input type="text" id="worldGridHeight" name="worldGridHeight"/> <span>px</span>
+	</li>
+
+	<li>
+		<label for="defaultGridSize">Default layer grid</label>
 		<input type="text" name="defaultGridSize" id="defaultGridSize"/>
 		<span>px</span>
 	</li>
@@ -49,7 +54,7 @@
 	</li>
 
 	<li>
-		<label for="defaultLevelbgColor">Levels default background color</label>
+		<label for="defaultLevelbgColor">Default level bg color</label>
 		<input type="color" name="defaultLevelbgColor" id="defaultLevelbgColor"/>
 	</li>
 
