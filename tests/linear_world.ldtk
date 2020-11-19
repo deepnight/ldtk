@@ -1973,8 +1973,8 @@
 		{
 			"identifier": "C",
 			"uid": 41,
-			"worldX": 512,
-			"worldY": 512,
+			"worldX": -256,
+			"worldY": 256,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#37494E",
@@ -2344,7 +2344,7 @@
 		{
 			"identifier": "D",
 			"uid": 42,
-			"worldX": 768,
+			"worldX": 0,
 			"worldY": 256,
 			"pxWid": 256,
 			"pxHei": 512,
@@ -2995,8 +2995,8 @@
 		{
 			"identifier": "E",
 			"uid": 43,
-			"worldX": 256,
-			"worldY": -256,
+			"worldX": 0,
+			"worldY": 768,
 			"pxWid": 768,
 			"pxHei": 256,
 			"__bgColor": "#37494E",
