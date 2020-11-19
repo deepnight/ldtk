@@ -130,7 +130,7 @@ class WorldTool extends dn.Process {
 					editor.setWorldMode(false);
 			}
 		}
-		else if( worldMode && clicked && !dragStarted ) {
+		else if( worldMode && clicked && !dragStarted && addMode ) {
 			var b = getLevelInsertBounds(m);
 			if( b!=null ) {
 				var l = switch project.worldLayout {
@@ -273,6 +273,14 @@ class WorldTool extends dn.Process {
 					return null;
 
 			case LinearVertical:
+				var i = getLinearInsertPoint(m);
+				if( i!=null) {
+					b.x = -b.wid;
+					b.y = i.pos-b.hei*0.5;
+				}
+				else
+					return null;
+
 		}
 
 
@@ -453,7 +461,7 @@ class WorldTool extends dn.Process {
 
 				case LinearVertical:
 					var idx = 0;
-					var all = project.levels.map( (l)->{ pos:l.worldY, idx:idx++ } );
+					var all = project.levels.map( (l)->{ pos:l==clickedLevel ? levelOriginY : l.worldY, idx:idx++ } );
 
 					var last = project.levels[project.levels.length-1];
 					all.push({ pos:last.worldY+last.pxHei, idx:idx });
