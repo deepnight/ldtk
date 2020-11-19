@@ -853,6 +853,7 @@ class Editor extends Page {
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
 		if( worldMode ) {
+			N.quick(L.t._("World view"), new J('<span class="icon world"/>'));
 			ui.Modal.closeAll();
 			ui.instanceEditor.LevelInstanceEditor.openFor(curLevel);
 		}
