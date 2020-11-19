@@ -1,10 +1,22 @@
 package ui.instanceEditor;
 
 class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
-
 	private function new(l:data.Level) {
 		super(l);
 		jPanel.addClass("level");
+	}
+
+	override function onResize() {
+		super.onResize();
+
+		var jBar = editor.jMainPanel.find("#mainBar");
+		var margin = 4;
+
+		jPanel.css({
+			left: 0,
+			top: ( jBar.offset().top + jBar.outerHeight() + margin ) +"px",
+			height: ( js.Browser.window.innerHeight - ( jBar.offset().top+jBar.outerHeight() ) - margin )+"px",
+		});
 	}
 
 	override function onGlobalEvent(ge:GlobalEvent) {
@@ -64,10 +76,11 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 			return;
 		}
 
-		var html = JsTools.getHtmlTemplate("levelInstanceEditor", { identifier:inst.identifier });
+		var html = JsTools.getHtmlTemplate("levelInstanceEditor");
 		jPanel.append(html);
 
-		// Level name
+		// Level identifier
+		jPanel.find(".uid").text("#"+inst.uid);
 		var i = Input.linkToHtmlInput( inst.identifier, jPanel.find("#identifier"));
 		i.onChange = ()->onFieldChange();
 
@@ -122,6 +135,8 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 		jPanel.find("button.duplicate").click( (_)->{
 			var copy = project.duplicateLevel(inst);
 			editor.selectLevel(copy);
+			copy.worldX += project.defaultGridSize*4;
+			copy.worldY += project.defaultGridSize*4;
 			editor.ge.emit( LevelAdded(copy) );
 		});
 

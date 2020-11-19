@@ -38,7 +38,7 @@ class RulePerlinSettings extends ui.modal.Dialog {
 		i.setBounds(1, 4);
 		i.linkEvent( LayerRuleChanged(r) );
 
-		positionNear(target, true);
+		positionNear(target);
 		updatePreview();
 	}
 

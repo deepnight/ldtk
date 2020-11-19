@@ -7,6 +7,15 @@ class EntityInstanceEditor extends ui.InstanceEditor<data.inst.EntityInstance> {
 		jPanel.addClass("entity");
 	}
 
+	override function onResize() {
+		super.onResize();
+
+		jPanel.css({
+			left : js.Browser.window.innerWidth - jPanel.outerWidth(),
+			top : Std.int(js.Browser.window.innerHeight*0.5 - jPanel.outerHeight()*0.5)+"px",
+		});
+	}
+
 	override function onGlobalEvent(ge:GlobalEvent) {
 		super.onGlobalEvent(ge);
 		switch ge {

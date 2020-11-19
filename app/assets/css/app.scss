@@ -960,6 +960,7 @@ ul.log {
 .icon.gridOn	{ background-image: url("../icons/gridOn.svg"); }
 .icon.gridOff	{ background-image: url("../icons/gridOff.svg"); }
 .icon.stop		{ background-image: url("../icons/stop.svg"); }
+.icon.delete	{ background-image: url("../icons/delete.svg"); }
 .icon.discord	{ background-image: url("../icons/discord.svg"); }
 .icon.ghost		{ background-image: url("../icons/ghost.svg"); }
 .icon.love		{ background-image: url("../icons/love.svg"); }
@@ -3209,14 +3210,27 @@ canvas#webgl {
 	overflow: auto;
 	z-index: 10;
 
-	width: 200px;
 	max-height: 90vh;
+	width: 200px;
 	box-sizing: border-box;
 	padding: 10px;
-	border-left: 4px solid $orange;
-	box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.6);
 
-	background-color: $bgDark;
+
+	&.entity {
+		border-left: 4px solid $orange;
+		box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.6);
+		background-color: $bgDark;
+	}
+
+	&.level {
+		max-height: none;
+		left: 0;
+		width: $mainPanelNormalWid;
+		background-color: $bgMed;
+		border-right: 1px solid black;
+		border-top: 1px solid black;
+		border-top-right-radius: 3px;
+	}
 
 	&.picking {
 		opacity: 0.5;

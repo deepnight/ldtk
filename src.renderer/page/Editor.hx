@@ -117,10 +117,11 @@ class Editor extends Page {
 		});
 
 		jMainPanel.find("button.world").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.panel.WorldPanel) )
-				ui.Modal.closeAll();
-			else
-				new ui.modal.panel.WorldPanel();
+			setWorldMode(!worldMode);
+			// if( ui.Modal.isOpen(ui.modal.panel.WorldPanel) )
+			// 	ui.Modal.closeAll();
+			// else
+			// 	new ui.modal.panel.WorldPanel();
 		});
 
 		jMainPanel.find("button.editLayers").click( function(_) {
@@ -851,8 +852,10 @@ class Editor extends Page {
 		project.reorganizeWorld();
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
-		if( worldMode )
+		if( worldMode ) {
+			ui.Modal.closeAll();
 			ui.instanceEditor.LevelInstanceEditor.openFor(curLevel);
+		}
 		else
 			ui.InstanceEditor.closeAny();
 

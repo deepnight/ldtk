@@ -48,7 +48,7 @@ class Modal extends dn.Process {
 
 	function onClickMask() {}
 
-	public function positionNear(?target:js.jquery.JQuery, ?m:Coords, toLeft=false) {
+	public function positionNear(?target:js.jquery.JQuery, ?m:Coords) {
 		if( target==null && m==null )
 			jModalAndMask.addClass("centered");
 		else {
@@ -79,6 +79,7 @@ class Modal extends dn.Process {
 			else {
 				// Use DOM element
 				var targetOff = target.offset();
+				var toLeft = targetOff.left>=js.Browser.window.innerWidth*0.6;
 				var x = toLeft ? targetOff.left+target.outerWidth()-jContent.width() : targetOff.left;
 				if( targetOff.top>=hei*0.7 ) {
 					// Place above target
