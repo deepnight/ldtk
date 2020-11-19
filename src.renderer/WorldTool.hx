@@ -21,6 +21,7 @@ class WorldTool extends dn.Process {
 	var tmpRender : h2d.Graphics;
 	var cursor : h2d.Graphics;
 	var insertPoints : Array<WorldInsertPoint> = [];
+	var clickedSameLevel = false;
 
 	public function new() {
 		super(Editor.ME);
@@ -78,6 +79,7 @@ class WorldTool extends dn.Process {
 			levelOriginX = clickedLevel.worldX;
 			levelOriginY = clickedLevel.worldY;
 			ev.cancel = true;
+			clickedSameLevel = editor.curLevel==clickedLevel;
 			editor.selectLevel(clickedLevel);
 		}
 	}
@@ -117,8 +119,8 @@ class WorldTool extends dn.Process {
 			}
 			else if( origin.getPageDist(m)<=DRAG_THRESHOLD ) {
 				// Pick level
-				var old = editor.curLevel;
-				editor.setWorldMode(false);
+				if( clickedSameLevel )
+					editor.setWorldMode(false);
 				editor.selectLevel(clickedLevel);
 			}
 
