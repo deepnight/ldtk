@@ -105,6 +105,20 @@ class Coords {
 		return new Coords(pageX, pageY);
 	}
 
+	/** Create from Level coords **/
+	public static function fromWorldCoords(lx:Float, ly:Float) {
+		// TODO
+		var render = Editor.ME.levelRender;
+		var camera = Editor.ME.camera;
+
+		var canvasX = ( lx * camera.adjustedZoom + render.root.x ) * Const.SCALE;
+		var pageX = canvasX / pixelRatio + App.ME.jCanvas.offset().left;
+		var canvasY = ( ly * camera.adjustedZoom + render.root.y ) * Const.SCALE;
+		var pageY = canvasY / pixelRatio + App.ME.jCanvas.offset().top;
+
+		return new Coords(pageX, pageY);
+	}
+
 
 	inline function getRelativeLayerInst() {
 		return _relativeLayerInst==null ? Editor.ME.curLayerInstance : _relativeLayerInst;

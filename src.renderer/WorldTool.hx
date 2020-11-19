@@ -119,9 +119,9 @@ class WorldTool extends dn.Process {
 			}
 			else if( origin.getPageDist(m)<=DRAG_THRESHOLD ) {
 				// Pick level
+				editor.selectLevel(clickedLevel);
 				if( clickedSameLevel )
 					editor.setWorldMode(false);
-				editor.selectLevel(clickedLevel);
 			}
 
 		clickedLevel = null;

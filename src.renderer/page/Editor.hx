@@ -371,11 +371,11 @@ class Editor extends Page {
 				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeLatest();
 				else if( selectionTool.any() ) {
-					ui.EntityInstanceEditor.close();
+					ui.InstanceEditor.closeAny();
 					selectionTool.clear();
 				}
-				else if( ui.EntityInstanceEditor.isOpen() )
-					ui.EntityInstanceEditor.close();
+				else if( ui.InstanceEditor.isOpen() )
+					ui.InstanceEditor.closeAny();
 				else if( worldMode )
 					setWorldMode(false);
 
@@ -774,6 +774,7 @@ class Editor extends Page {
 
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
+		ge.emit( ViewportChanged );
 	}
 
 	public function selectLayerInstance(li:data.inst.LayerInstance, notify=true) {
@@ -848,7 +849,7 @@ class Editor extends Page {
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
 		if( worldMode )
-			ui.EntityInstanceEditor.close();
+			ui.InstanceEditor.closeAny();
 	}
 
 	public function setGrid(v:Bool, notify=true) {

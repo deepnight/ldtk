@@ -52,13 +52,16 @@ class Rulers extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
-			case ProjectSelected, LevelSelected(_), LayerInstanceSelected, ProjectSettingsChanged:
+			case ProjectSelected, LayerInstanceSelected, ProjectSettingsChanged:
 				invalidate();
 
 			case LayerDefChanged, LayerDefRemoved(_), LevelResized(_), LevelRestoredFromHistory(_):
 				invalidate();
 
 			case LevelSettingsChanged(_):
+				invalidate();
+
+			case LevelSelected(l):
 				invalidate();
 
 			case ViewportChanged, WorldLevelMoved:
