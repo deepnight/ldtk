@@ -15,6 +15,12 @@ class Level {
 	@:allow(ui.instanceEditor.LevelInstanceEditor)
 	var bgColor : Null<UInt>;
 
+	public var worldCenterX(get,never) : Int;
+		inline function get_worldCenterX() return dn.M.round( worldX + pxWid*0.5 );
+
+	public var worldCenterY(get,never) : Int;
+		inline function get_worldCenterY() return dn.M.round( worldY + pxHei*0.5 );
+
 
 	@:allow(data.Project)
 	private function new(project:Project, wid:Int, hei:Int, uid:Int) {

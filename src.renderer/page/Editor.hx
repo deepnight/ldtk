@@ -855,6 +855,8 @@ class Editor extends Page {
 			ui.instanceEditor.LevelInstanceEditor.openFor(curLevel);
 		else
 			ui.InstanceEditor.closeAny();
+
+		worldTool.onWorldModeChange(worldMode);
 	}
 
 	public function setGrid(v:Bool, notify=true) {

@@ -175,6 +175,16 @@ class Camera extends dn.Process {
 		targetZoom = null;
 	}
 
+	public inline function cancelAllAutoMovements() {
+		cancelAutoScrolling();
+		cancelAutoZoom();
+	}
+
+	public function scrollToLevel(l:data.Level) {
+		targetWorldX = l.worldCenterX;
+		targetWorldY = l.worldCenterY;
+	}
+
 	inline function getMinZoom() {
 		return editor.worldMode ? MIN_WORLD_ZOOM : MIN_LEVEL_ZOOM;
 	}

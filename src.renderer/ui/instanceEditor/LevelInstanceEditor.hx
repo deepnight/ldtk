@@ -8,6 +8,7 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 
 	override function onGlobalEvent(ge:GlobalEvent) {
 		super.onGlobalEvent(ge);
+
 		switch ge {
 			case ProjectSettingsChanged:
 				if( inst==null )
@@ -52,19 +53,6 @@ class LevelInstanceEditor extends ui.InstanceEditor<data.Level> {
 
 		editor.ge.emit( LevelSettingsChanged(inst) );
 	}
-
-
-	// override function getInstanceCx():Int {
-	// 	return inst.getCx( Editor.ME.curLayerDef );
-	// }
-
-	// override function getInstanceCy():Int {
-	// 	return inst.getCy( Editor.ME.curLayerDef );
-	// }
-
-	// override function getInstanceColor():UInt {
-	// 	return inst.def.color;
-	// }
 
 
 	override function renderForm() {

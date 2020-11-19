@@ -15,13 +15,17 @@ class WorldTool extends dn.Process {
 	var levelOriginX : Int;
 	var levelOriginY : Int;
 	var origin : Coords;
+	var clicked = false;
 	var dragStarted = false;
 	var worldMode(get,never) : Bool; inline function get_worldMode() return editor.worldMode;
 
 	var tmpRender : h2d.Graphics;
 	var cursor : h2d.Graphics;
+	var insertCursor : h2d.Graphics;
 	var insertPoints : Array<WorldInsertPoint> = [];
 	var clickedSameLevel = false;
+
+	// var addBounds : { worldX:Int, worldY:Int, pxWid:Int, pxHei:Int } = null;
 
 	public function new() {
 		super(Editor.ME);
@@ -31,12 +35,16 @@ class WorldTool extends dn.Process {
 
 		cursor = new h2d.Graphics();
 		editor.worldRender.root.add(cursor, Const.DP_UI);
+
+		insertCursor = new h2d.Graphics();
+		editor.worldRender.root.add(insertCursor, Const.DP_UI);
 	}
 
 	override function onDispose() {
 		super.onDispose();
 		tmpRender.remove();
 		cursor.remove();
+		insertCursor.remove();
 	}
 
 	override function toString() {
@@ -44,9 +52,16 @@ class WorldTool extends dn.Process {
 			+ ( dragStarted ? " (DRAGGING)" : "" );
 	}
 
+
+	public function onWorldModeChange(active:Bool) {
+		insertCursor.visible = false;
+	}
+
 	public function onMouseDown(ev:hxd.Event, m:Coords) {
 		if( ev.button!=0 || App.ME.hasAnyToggleKeyDown() )
 			return;
+
+		editor.camera.cancelAllAutoMovements();
 
 		// Init possible insert points in linear modes
 		switch project.worldLayout {
@@ -73,6 +88,7 @@ class WorldTool extends dn.Process {
 		tmpRender.clear();
 		origin = m;
 		dragStarted = false;
+		clicked = true;
 		clickedLevel = getLevelAt(m.worldX, m.worldY, worldMode);
 
 		if( clickedLevel!=null ) {
@@ -86,7 +102,8 @@ class WorldTool extends dn.Process {
 
 	public function onMouseUp(m:Coords) {
 		tmpRender.clear();
-		if( clickedLevel!=null )
+
+		if( clickedLevel!=null ) {
 			if( dragStarted ) {
 				// Drag complete
 				var initialX = clickedLevel.worldX;
@@ -123,8 +140,24 @@ class WorldTool extends dn.Process {
 				if( clickedSameLevel )
 					editor.setWorldMode(false);
 			}
+		}
+		else if( worldMode && clicked ) {
+			var b = getLevelInsertBounds(m);
+			if( b!=null ) {
+				N.msg("New level created");
+				var l = project.createLevel();
+				l.worldX = M.round(b.x);
+				l.worldY = M.round(b.y);
+				l.pxWid = b.wid;
+				l.pxHei = b.hei;
+				editor.ge.emit( LevelAdded(l) );
+				editor.selectLevel(l);
+			}
+		}
 
+		// Cleanup
 		clickedLevel = null;
+		clicked = false;
 	}
 
 	inline function getLevelGrid() return project.defaultGridSize;
@@ -165,6 +198,65 @@ class WorldTool extends dn.Process {
 		}
 	}
 
+	inline function boundsOverlaps(l:data.Level, x,y,w,h) {
+		return dn.Lib.rectangleOverlaps( x, y, w, h, l.worldX, l.worldY, l.pxWid, l.pxHei );
+	}
+
+	function getLevelInsertBounds(m:Coords) {
+		if( getLevelAt(m.worldX, m.worldY, true)!=null )
+			return null;
+
+		var size = project.defaultGridSize * data.Project.DEFAULT_LEVEL_SIZE;
+
+		var b = {
+			x : m.worldX-size*0.5,
+			y : m.worldY-size*0.5,
+			wid: size,
+			hei: size,
+		}
+		for(l in project.levels)
+			if( boundsOverlaps( l, b.x, b.y, b.wid, b.hei ) ) {
+				// Source: https://stackoverflow.com/questions/1585525/how-to-find-the-intersection-point-between-a-line-and-a-rectangle
+				var slope = ( (b.y+b.hei*0.5)-l.worldCenterY )  /  ( (b.x+b.wid*0.5)-l.worldCenterX );
+				App.ME.debug("slope="+dn.M.pretty(slope));
+				if( slope*l.pxWid*0.5 >= -l.pxHei*0.5  &&  slope*l.pxWid*0.5 <= l.pxHei*0.5 )
+					if( b.x < l.worldCenterX ) {
+						b.x = l.worldX-b.wid;
+						App.ME.debug("LEFT",true);
+					}
+					else {
+						b.x = l.worldX+l.pxWid;
+						App.ME.debug("RIGHT",true);
+					}
+				else {
+					if( b.y < l.worldCenterY ) {
+						b.y = l.worldY-b.hei;
+						App.ME.debug("TOP",true);
+					}
+					else {
+						b.y = l.worldY+l.pxHei;
+						App.ME.debug("BOTTOM",true);
+					}
+				}
+			}
+
+		for(l in project.levels)
+			if( boundsOverlaps(l, b.x, b.y, b.wid, b.hei) )
+				return null;
+
+		if( project.worldLayout==WorldGrid ) {
+			b.x = dn.M.round( b.x/project.worldGridWidth ) * project.worldGridWidth;
+			b.y = dn.M.round( b.y/project.worldGridHeight ) * project.worldGridHeight;
+		}
+		else if( settings.grid ) {
+			b.x = dn.M.round( b.x/project.defaultGridSize ) * project.defaultGridSize;
+			b.y = dn.M.round( b.y/project.defaultGridSize ) * project.defaultGridSize;
+		}
+
+
+		return b;
+	}
+
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
 		if( ev.cancel ) {
 			cursor.clear();
@@ -172,7 +264,7 @@ class WorldTool extends dn.Process {
 		}
 
 		// Start dragging
-		if( worldMode && !dragStarted && clickedLevel!=null && origin.getPageDist(m)>=DRAG_THRESHOLD ) {
+		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=DRAG_THRESHOLD ) {
 			dragStarted = true;
 			ev.cancel = true;
 		}
@@ -183,12 +275,26 @@ class WorldTool extends dn.Process {
 			ev.cancel = true;
 			cursor.clear();
 			editor.cursor.set(Move);
-			cursor.lineStyle(1*editor.camera.pixelRatio, 0xffffff);
+			cursor.lineStyle(2*editor.camera.pixelRatio, 0xffffff);
 			cursor.beginFill(0xffcc00, 0.15);
 			cursor.drawRect(over.worldX, over.worldY, over.pxWid, over.pxHei);
 		}
 		else
 			cursor.clear();
+
+		// Preview "add level" location
+		if( !dragStarted && editor.worldMode ) {
+			var bounds = getLevelInsertBounds(m);
+			insertCursor.visible = bounds!=null;
+			if( bounds!=null ) {
+				insertCursor.clear();
+				insertCursor.lineStyle(2*editor.camera.pixelRatio, 0xffcc00, 0.5);
+				insertCursor.beginFill(0xffcc00, 0.2);
+				insertCursor.drawRect(bounds.x, bounds.y, bounds.wid, bounds.hei);
+			}
+		}
+		else
+			insertCursor.visible = false;
 
 		// Drag
 		if( clickedLevel!=null && dragStarted ) {
@@ -258,8 +364,16 @@ class WorldTool extends dn.Process {
 					}
 
 				case WorldGrid:
-					clickedLevel.worldX = Std.int( clickedLevel.worldX/project.worldGridWidth ) * project.worldGridWidth;
-					clickedLevel.worldY = Std.int( clickedLevel.worldY/project.worldGridHeight ) * project.worldGridHeight;
+					var omx = M.floor( origin.worldX / project.worldGridWidth ) * project.worldGridWidth;
+					var mx = M.floor( m.worldX / project.worldGridWidth ) * project.worldGridWidth;
+					clickedLevel.worldX = levelOriginX + (mx-omx);
+
+					var omy = M.floor( origin.worldY / project.worldGridWidth ) * project.worldGridWidth;
+					var my = M.floor( m.worldY / project.worldGridWidth ) * project.worldGridWidth;
+					clickedLevel.worldY = levelOriginY + (my-omy);
+
+					clickedLevel.worldX = M.floor( clickedLevel.worldX/project.worldGridWidth ) * project.worldGridWidth;
+					clickedLevel.worldY = M.floor( clickedLevel.worldY/project.worldGridHeight) * project.worldGridHeight;
 
 				case LinearHorizontal:
 					var i = getInsertPoint(m);
