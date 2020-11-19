@@ -166,12 +166,17 @@ class WorldRender extends dn.Process {
 	}
 
 	function renderWorldBounds() {
-		var pad = 10;
+		var pad = editor.project.defaultGridSize*3;
 		var b = editor.project.getWorldBounds();
 		worldBounds.clear();
-		worldBounds.beginFill(0x0, 0.1);
-		worldBounds.lineStyle(1, 0xffffff, 0.4);
-		worldBounds.drawRect( b.left-pad, b.top-pad, b.right-b.left+1+pad*2, b.bottom-b.top+1+pad*2 );
+		worldBounds.beginFill(editor.project.bgColor, 0.8);
+		worldBounds.drawRoundedRect(
+			b.left-pad,
+			b.top-pad,
+			b.right-b.left+1+pad*2,
+			b.bottom-b.top+1+pad*2,
+			pad*0.5
+		);
 	}
 
 	public function updateLayout() {
