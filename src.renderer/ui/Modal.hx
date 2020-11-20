@@ -189,7 +189,6 @@ class Modal extends dn.Process {
 
 		// Validate current edits before closing
 		jContent.find(":focus").blur();
-		jContent.find("input[type=color]").change();
 
 		// Close
 		jModalAndMask.find("*").off();

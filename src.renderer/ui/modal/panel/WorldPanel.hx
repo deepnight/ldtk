@@ -1,12 +1,12 @@
 package ui.modal.panel;
 
 class WorldPanel extends ui.modal.Panel {
-	var level(get,never) : data.Level;
-		inline function get_level() return editor.curLevel;
+	var level: data.Level;
 
 	public function new() {
 		super();
 
+		level = editor.curLevel;
 		loadTemplate("worldPanel");
 
 		// Delete button
@@ -29,7 +29,7 @@ class WorldPanel extends ui.modal.Panel {
 					project.removeLevel(level);
 					editor.ge.emit( LevelRemoved(l) );
 					editor.selectLevel( dh.getBest() );
-					updateForm();
+					editor.camera.scrollToLevel(editor.curLevel);
 				}
 			);
 		});
@@ -59,6 +59,11 @@ class WorldPanel extends ui.modal.Panel {
 		updateForm();
 	}
 
+	function useLevel(l:data.Level) {
+		level = l;
+		updateForm();
+	}
+
 	override function onGlobalEvent(ge:GlobalEvent) {
 		super.onGlobalEvent(ge);
 
@@ -70,10 +75,9 @@ class WorldPanel extends ui.modal.Panel {
 					updateForm();
 
 			case LevelSelected(l):
-				updateForm();
+				useLevel(l);
 
 			case LevelRemoved(l):
-				updateForm();
 
 			case WorldLevelMoved:
 				updateForm();

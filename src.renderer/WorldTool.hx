@@ -198,8 +198,7 @@ class WorldTool extends dn.Process {
 	}
 
 
-	public function onKeyPress(keyCode:Int) {
-	}
+	public function onKeyPress(keyCode:Int) {}
 
 	inline function boundsOverlaps(l:data.Level, x,y,w,h) {
 		return dn.Lib.rectangleOverlaps( x, y, w, h, l.worldX, l.worldY, l.pxWid, l.pxHei );
