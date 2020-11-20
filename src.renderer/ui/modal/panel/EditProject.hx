@@ -96,32 +96,6 @@ class EditProject extends ui.modal.Panel {
 		i.isColorCode = true;
 		i.linkEvent(ProjectSettingsChanged);
 
-		var i = Input.linkToHtmlInput( project.worldGridWidth, jForm.find("[name=worldGridWidth]"));
-		i.linkEvent(ProjectSettingsChanged);
-
-		var i = Input.linkToHtmlInput( project.worldGridHeight, jForm.find("[name=worldGridHeight]"));
-		i.linkEvent(ProjectSettingsChanged);
-
-		var e = new form.input.EnumSelect(
-			jForm.find("[name=worldLayout]"),
-			data.DataTypes.WorldLayout,
-			()->project.worldLayout,
-			(l)->project.worldLayout = l,
-			(l)->switch l {
-				case Free: L.t._("FREE - freely positioned in space");
-				case WorldGrid: L.t._("CASTLEVANIESQUE - levels are positioned inside a large world-scale grid");
-				case LinearHorizontal: L.t._("LINEAR (horizontal) - one level after the other");
-				case LinearVertical: L.t._("LINEAR (vertical) - one level after the other");
-			}
-		);
-		if( project.levels.length>2 )
-			e.confirmMessage = L.t._("Changing this might affect ALL the levels layout, so please make sure you know what you're doing :)");
-		e.onValueChange = (l)->{
-			project.reorganizeWorld();
-		}
-		e.linkEvent( ProjectSettingsChanged );
-
-
 		var pivot = jForm.find(".pivot");
 		pivot.empty();
 		pivot.append( JsTools.createPivotEditor(

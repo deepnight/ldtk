@@ -3699,6 +3699,15 @@ body.sorting ul.collapsedSortTarget {
 		gap: 8px;
 		height: 100%;
 		width: calc( #{ $mainPanelNormalWid } + 32px );
+
+		ul.form>li>label {
+			flex: 0 0 100%;
+			padding: 0;
+			padding-top: 8px;
+			text-align: left;
+			font-size: 10pt;
+			text-transform: none;
+		}
 	}
 }
 
