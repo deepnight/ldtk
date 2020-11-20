@@ -25,9 +25,11 @@ class WorldPanel extends ui.modal.Panel {
 					dh.score( (l)->-level.getBoundsDist(l) );
 
 					new LastChance('Level ${level.identifier} removed', project);
+					var l = level;
 					project.removeLevel(level);
-					editor.ge.emit( LevelRemoved(level) );
+					editor.ge.emit( LevelRemoved(l) );
 					editor.selectLevel( dh.getBest() );
+					updateForm();
 				}
 			);
 		});
