@@ -23,22 +23,22 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - uses: nelonoel/branch-name@v1.0.1
-      - run: echo hello ${BRANCH_NAME}
-      - run: echo test ${GITHUB_REF#refs/heads/}
-      - uses: krdlab/setup-haxe@v1
-        with:
-          haxe-version: 4.1.4
-      - run: |
-          haxe -version
-          haxelib install castle
-          haxelib git heaps https://github.com/HeapsIO/heaps.git
-          haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
-          haxelib git electron https://github.com/tong/hxelectron.git
-      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${BRANCH_NAME}
-      - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '14'
-      - run: cd app && npm install
-      - run: cd app && npm run compile
+      - run: echo foo ${GITHUB_REF} bar
+      - run: echo foo ${GITHUB_REF#refs/heads/} bar
+      - run: echo foo ${GITHUB_REF##*/} bar
+      # - uses: krdlab/setup-haxe@v1
+      #   with:
+      #     haxe-version: 4.1.4
+      # - run: |
+      #     haxe -version
+      #     haxelib install castle
+      #     haxelib git heaps https://github.com/HeapsIO/heaps.git
+      #     haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
+      #     haxelib git electron https://github.com/tong/hxelectron.git
+      #     haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${BRANCH_NAME}
+      #     haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+      # - uses: actions/setup-node@v1
+      #   with:
+      #     node-version: '14'
+      # - run: cd app && npm install
+      # - run: cd app && npm run compile
