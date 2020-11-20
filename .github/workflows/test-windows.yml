@@ -24,6 +24,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - uses: nelonoel/branch-name@v1.0.1
+      - run: echo ${BRANCH_NAME}
       - uses: krdlab/setup-haxe@v1
         with:
           haxe-version: 4.1.4
