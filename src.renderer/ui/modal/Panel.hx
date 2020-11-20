@@ -10,7 +10,9 @@ class Panel extends ui.Modal {
 
 		super();
 
-		// editor.setWorldMode(false);
+		if( !Std.isOfType(this,ui.modal.panel.WorldPanel) )
+			editor.setWorldMode(false);
+
 		EntityInstanceEditor.closeExisting();
 		editor.selectionTool.clear();
 
@@ -23,8 +25,7 @@ class Panel extends ui.Modal {
 		jCloseButton = new J('<button class="close gray"> <div class="icon close"/> </button>');
 		jModalAndMask.append(jCloseButton);
 		jCloseButton.click( ev->if( !isClosing() ) close() );
-		updateCloseButton();
-		// jCloseButton.hide();
+		enableCloseButton();
 
 		jPanelMask = new J("<div/>");
 		jPanelMask.addClass("panelMask");
@@ -48,6 +49,10 @@ class Panel extends ui.Modal {
 			_lastWrapperWid = w;
 			jCloseButton.css({ left:(w-2)+"px" });
 		}
+	}
+
+	function hideCloseButton() {
+		jCloseButton.hide();
 	}
 
 	function enableCloseButton() {
