@@ -378,10 +378,8 @@ class Editor extends Page {
 						ui.InstanceEditor.closeAny();
 					selectionTool.clear();
 				}
-				else if( ui.InstanceEditor.isOpen() && !worldMode )
+				else if( ui.InstanceEditor.isOpen() && !worldMode ) // TODO instance cleanup
 					ui.InstanceEditor.closeAny();
-				else if( worldMode )
-					setWorldMode(false);
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() )
