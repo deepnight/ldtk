@@ -31,6 +31,7 @@ Just hit the `W` key to in world view, and start arranging your creations as you
 - Application samples will now display a warning if you try to save them (not recommended as they will be overwritten by future app updates).
 - Better Entity panel layout
 - Fixed a bug in Entity panel that went crazy when containing too many entities.
+- Sample maps are no longer added to "recent projects" list
 - Updated the Enum panel icon.
 - Better display of samples in recent files list on app Home.
 - Added a "Close" button to Project panel
