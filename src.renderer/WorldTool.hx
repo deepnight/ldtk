@@ -87,7 +87,7 @@ class WorldTool extends dn.Process {
 			clickedSameLevel = editor.curLevel==clickedLevel;
 			editor.selectLevel(clickedLevel);
 		}
-		else if( getLevelInsertBounds(m)!=null )
+		else if( addMode && getLevelInsertBounds(m)!=null )
 			ev.cancel = true;
 	}
 
