@@ -26,7 +26,7 @@ jobs:
       - uses: krdlab/setup-haxe@v1
         with:
           haxe-version: 4.1.4
-      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${GITHUB_REF#refs/heads/})
+      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${GITHUB_REF#refs/heads/}
       # - run: |
       #     haxe -version
       #     haxelib install castle
