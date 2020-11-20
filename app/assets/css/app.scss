@@ -1180,6 +1180,12 @@ ul.form {
 			font-size: 80%;
 		}
 
+		>label:not(:first-of-type) {
+			align-self: center;
+			text-align: right;
+			padding-left: 16px;
+		}
+
 		input[type=text]:not(:read-only):hover {
 			outline: 1px solid $orange;
 		}
@@ -4575,22 +4581,18 @@ $patternSize : 32px;
 		height: 100%;
 		justify-content: stretch;
 		gap: 16px;
-		grid-template-rows: min-content auto auto;
-		grid-template-columns: 200px 200px auto;
+		grid-template-rows: min-content auto;
+		grid-template-columns: 200px auto;
 
 		>.header {
-			grid-column: 1/4;
+			grid-column: 1/3;
 			h2 {
 				margin-bottom: 8px;
 			}
 		}
 
-		button {
-			white-space: nowrap;
-		}
-
 		>.entityList {
-			grid-row: 2/4;
+			grid-row: 2/3;
 			display: grid;
 			grid-template-rows: auto min-content;
 			overflow: hidden;
@@ -4604,43 +4606,56 @@ $patternSize : 32px;
 				content: "No entity";
 			}
 		}
-		>.entityForm {
-			grid-column: 2/4;
-			grid-row: 2/3;
-		}
 
-		>.fieldList {
+		>.rightColumn {
 			grid-column: 2/3;
-			grid-row: 3/4;
+			grid-row: 2/3;
 			display: grid;
-			grid-template-rows: auto min-content;
-			overflow: hidden;
-			ul {
-				overflow: auto;
-				li {
-					grid-template-columns: auto min-content min-content;
-					gap: 0px 2px;
-					.name {
-						width: 100%;
-						overflow: hidden;
+			gap: 16px;
+			grid-template-columns: 200px auto;
+			grid-template-rows: min-content auto;
+
+			>.entityForm {
+				grid-column: 1/3;
+			}
+
+			>.fieldList {
+				grid-column: 1/2;
+				display: grid;
+				grid-template-rows: auto min-content;
+				overflow: hidden;
+				ul {
+					overflow: auto;
+					li {
+						grid-template-columns: auto min-content min-content;
+						gap: 0px 2px;
+						.name {
+							width: 100%;
+							overflow: hidden;
+						}
 					}
 				}
+				ul:empty::before {
+					content: "No custom field";
+				}
 			}
-			ul:empty::before {
-				content: "No custom field";
+
+			>.fieldForm {
+				grid-column: 2/3;
+				overflow: auto;
+
+				button.convert {
+					padding: 4px;
+					flex: 0 1 0px;
+					align-self: stretch;
+				}
 			}
 		}
 
-		>.fieldForm {
-			grid-column: 3/4;
-			grid-row: 3/4;
-			overflow: auto;
 
-			button.convert {
-				padding: 4px;
-				flex: 0 1 0px;
-				align-self: stretch;
-			}
+
+		button {
+			white-space: nowrap;
 		}
 
 

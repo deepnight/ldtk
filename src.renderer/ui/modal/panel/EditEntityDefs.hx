@@ -384,6 +384,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput(curEntity.maxPerLevel, jEntityForm.find("input[name='maxPerLevel']") );
 		i.setBounds(0,1024);
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
+		if( curEntity.maxPerLevel==0 )
+			i.jInput.val("");
 
 		// Behavior when max is reached
 		var i = new form.input.EnumSelect(
@@ -394,13 +396,14 @@ class EditEntityDefs extends ui.modal.Panel {
 				curEntity.limitBehavior = v;
 			},
 			function(k) {
-				return Lang.untranslated("... ") + switch k {
+				return switch k {
 					case DiscardOldOnes: Lang.t._("discard older ones");
 					case PreventAdding: Lang.t._("prevent adding more");
 					case MoveLastOne: Lang.t._("move the last one instead of adding");
 				}
 			}
 		);
+		i.setEnabled( curEntity.maxPerLevel>0 );
 
 		// Show name
 		var i = Input.linkToHtmlInput(curEntity.showName, jEntityForm.find("#showIdentifier"));

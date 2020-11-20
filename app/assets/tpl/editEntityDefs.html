@@ -17,132 +17,130 @@
 	</div>
 </div>
 
-<div class="entityForm">
-	<div class="previewWrapper">
-		<div class="label"></div>
+
+<div class="rightColumn">
+
+	<div class="entityForm">
+		<div class="previewWrapper">
+			<div class="label"></div>
+		</div>
+
+		<ul class="form">
+			<li>
+				<label for="eName">Entity identifier</label>
+				<input type="text" name="name" id="eName"/>
+				<div class="info identifier"></div>
+			</li>
+
+			<li>
+				<label for="width">Width</label>
+				<input type="text" name="width" class="small" id="width"/>
+				<span>x</span>
+				<input type="text" name="height" class="small"/>
+				<span>px</span>
+			</li>
+
+			<li class="renderMode">
+				<label>Editor visual</label>
+
+				<input type="color" name="color" id="eColor"/>
+				<select class="renderMode"></select>
+				<div class="tilePicker"></div>
+				<select class="mode_Tile tileRenderMode"></select>
+
+				<label for="showIdentifier">Show identifier</label>
+				<input type="checkbox" name="showIdentifier" id="showIdentifier"/>
+			</li>
+
+			<li>
+				<label>Pivot point</label>
+				<div class="pivot"></div>
+			</li>
+
+			<li>
+				<label for="maxPerLevel">Max per level</label>
+				<input type="text" name="maxPerLevel" id="maxPerLevel" placeholder="none" class="small"/>
+				<span>, and </span>
+				<select name="limitBehavior"></select>
+				<span>when max is reached.</span>
+			</li>
+
+		</ul>
+
 	</div>
 
-	<ul class="form">
+
+	<div class="fieldList">
+		<ul class="niceList"></ul>
+		<div class="buttons">
+			<button type="button" class="createSingle" title="Add a single value field">+ field</button>
+			<button type="button" class="createArray" title="Add an 'array of values' field">+ array</button>
+			<button type="button" class="delete">🗑️</button>
+		</div>
+	</div>
+
+
+	<div class="fieldForm">
+		<ul class="form">
 		<li>
-			<label for="eName">Entity identifier</label>
-			<input type="text" name="name" id="eName"/>
+			<label>Type</label>
+			<input type="text" readonly="readonly" class="type"/>
+			<button class="convert">Convert</button>
+		</li>
+		<li>
+			<label for="fName">Field identifier</label>
+			<input type="text" name="name" id="fName"/>
 			<div class="info identifier"></div>
 		</li>
 
+		<li class="F_Int F_Float F_String F_Text">
+			<label for="fDef">Default value</label>
+			<input type="text" name="fDef" placeholder="" id="fDef"/>
+		</li>
+
+		<li class="F_Bool">
+			<label for="bDef">Default state</label>
+			<input type="checkbox" name="bDef" id="bDef"/>
+		</li>
+
+		<li class="F_Color">
+			<label for="cDef">Default color</label>
+			<input type="color" name="cDef" id="cDef"/>
+		</li>
+
+		<li class="F_Int F_Float">
+			<label for="min">Limits</label>
+			<input type="text" name="min" id="min" placeholder="Min"/>
+			<span>to</span>
+			<input type="text" name="max" id="max" placeholder="Max"/>
+		</li>
+
+
+		<li class="F_Int F_Float F_String F_Text F_Enum F_Point">
+			<label for="canBeNull">Can be null</label>
+			<input type="checkbox" name="canBeNull" id="canBeNull"/>
+		</li>
+
+		<li class="Array">
+			<label for="arrayMinLength">Array length</label>
+			<input type="text" name="arrayMinLength" id="arrayMinLength" placeholder="min length"/>
+			<span>to</span>
+			<input type="text" name="arrayMaxLength" id="arrayMaxLength" placeholder="max length"/>
+		</li>
+
 		<li>
-			<label for="width">Width</label>
-			<input type="text" name="width" class="small" id="width"/>
-			<span>x</span>
-			<input type="text" name="height" class="small"/>
-			<span>px</span>
-		</li>
-
-		<li class="renderMode">
-			<label>Editor visual</label>
-
-			<input type="color" name="color" id="eColor"/>
-			<select class="renderMode"></select>
-			<div class="tilePicker"></div>
-			<select class="mode_Tile tileRenderMode"></select>
+			<label for="editorDisplayMode">Display in editor</label>
+			<select name="editorDisplayMode" id="editorDisplayMode"></select>
+			<select name="editorDisplayPos" id="editorDisplayPos"></select>
+			<div class="help F_Enum">If this Enum has an ICON, it will be used for display in place of the name.</div>
 		</li>
 
 		<li>
-			<label>Pivot point</label>
-			<div class="pivot"></div>
+			<label for="editorAlwaysShow">Always show</label>
+			<input type="checkbox" name="editorAlwaysShow" id="editorAlwaysShow"/>
+			<div class="info" title="If not checked, the value will only be displayed if it is relevant (ie. different from its default value)."></div>
 		</li>
 
-		<li>
-			<label for="maxPerLevel">Max per level</label>
-			<input type="text" name="maxPerLevel" id="maxPerLevel" placeholder="0"/>
-			<span>(0 = unlimited)</span>
-		</li>
-		<li>
-			<label for="limitBehavior">When max is reached...</label>
-			<select name="limitBehavior"></select>
-		</li>
-
-
-		<li>
-			<label for="showIdentifier">Show identifier</label>
-			<input type="checkbox" name="showIdentifier" id="showIdentifier"/>
-		</li>
-
-	</ul>
-
-</div>
-
-<div class="fieldList">
-	<ul class="niceList"></ul>
-	<div class="buttons">
-		<button type="button" class="createSingle" title="Add a single value field">+ field</button>
-		<button type="button" class="createArray" title="Add an 'array of values' field">+ array</button>
-		<button type="button" class="delete">🗑️</button>
+		</ul>
 	</div>
-</div>
-
-
-
-
-<div class="fieldForm">
-	<ul class="form">
-	<li>
-		<label>Type</label>
-		<input type="text" readonly="readonly" class="type"/>
-		<button class="convert">Convert</button>
-	</li>
-	<li>
-		<label for="fName">Field identifier</label>
-		<input type="text" name="name" id="fName"/>
-		<div class="info identifier"></div>
-	</li>
-
-	<li class="F_Int F_Float F_String F_Text">
-		<label for="fDef">Default value</label>
-		<input type="text" name="fDef" placeholder="" id="fDef"/>
-	</li>
-
-	<li class="F_Bool">
-		<label for="bDef">Default state</label>
-		<input type="checkbox" name="bDef" id="bDef"/>
-	</li>
-
-	<li class="F_Color">
-		<label for="cDef">Default color</label>
-		<input type="color" name="cDef" id="cDef"/>
-	</li>
-
-	<li class="F_Int F_Float">
-		<label for="min">Limits</label>
-		<input type="text" name="min" id="min" placeholder="Min"/>
-		<span>to</span>
-		<input type="text" name="max" id="max" placeholder="Max"/>
-	</li>
-
-
-	<li class="F_Int F_Float F_String F_Text F_Enum F_Point">
-		<label for="canBeNull">Can be null</label>
-		<input type="checkbox" name="canBeNull" id="canBeNull"/>
-	</li>
-
-	<li class="Array">
-		<label for="arrayMinLength">Array length</label>
-		<input type="text" name="arrayMinLength" id="arrayMinLength" placeholder="min length"/>
-		<span>to</span>
-		<input type="text" name="arrayMaxLength" id="arrayMaxLength" placeholder="max length"/>
-	</li>
-
-	<li>
-		<label for="editorDisplayMode">Display in editor</label>
-		<select name="editorDisplayMode" id="editorDisplayMode"></select>
-		<select name="editorDisplayPos" id="editorDisplayPos"></select>
-		<div class="help F_Enum">If this Enum has an ICON, it will be used for display in place of the name.</div>
-	</li>
-
-	<li>
-		<label for="editorAlwaysShow">Always show</label>
-		<input type="checkbox" name="editorAlwaysShow" id="editorAlwaysShow"/>
-		<div class="info" title="If not checked, the value will only be displayed if it is relevant (ie. different from its default value)."></div>
-	</li>
-
-	</ul>
 </div>

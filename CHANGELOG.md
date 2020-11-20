@@ -18,6 +18,8 @@ We now have an official 💬 **[Discord](https://deepnight.net/go/ldtk-discord)*
 - Fixed loading of files with spaces in name, when using file association on Windows
 - Better "invalid value" error display in entity fields (previously, you only had `<error>`).
 - Application samples will now display a warning if you try to save them (not recommended as they will be overwritten by future app updates).
+- Better Entity panel layout
+- Fixed a bug in Entity panel that went crazy when containing too many entities.
 - Updated the Enum panel icon.
 - Better display of samples in recent files list on app Home.
 - Added a "Close" button to Project panel
