@@ -25,6 +25,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: nelonoel/branch-name@v1.0.1
       - run: echo hello ${BRANCH_NAME}
+      - run: echo test ${GITHUB_REF#refs/heads/}
       - uses: krdlab/setup-haxe@v1
         with:
           haxe-version: 4.1.4
