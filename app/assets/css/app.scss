@@ -2778,15 +2778,13 @@ canvas#webgl {
 					}
 
 					&:first-of-type {
-						// background-color: $bgLight;
 						&:hover {
 							outline-color: white;
 						}
 					}
-					&:not(:first-of-type) {
-						// background-color: $bgMed;
-						opacity: 0.65;
-					}
+					// &:not(:first-of-type) {
+					// 	opacity: 0.65;
+					// }
 
 					&.crash {
 						border: 1px solid $help;
