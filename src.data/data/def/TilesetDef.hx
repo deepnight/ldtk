@@ -511,12 +511,12 @@ class TilesetDef {
 	public inline function hasValidPixelData() {
 		return isAtlasLoaded()
 			&& opaqueTiles!=null && opaqueTiles.length==cWid*cHei
-			&& averageColorsCache!=null; 
+			&& averageColorsCache!=null;
 	}
 
-	public function buildPixelData(onComplete:Void->Void) {
+	public function buildPixelData(onComplete:Void->Void, sync=false) {
 		if( !isAtlasLoaded() )
-			return;
+			return false;
 
 		App.LOG.general("Init pixel data cache for "+relPath);
 		opaqueTiles = new haxe.ds.Vector( cWid*cHei );
@@ -531,8 +531,13 @@ class TilesetDef {
 				}
 			});
 
-		// new ui.modal.Progress('Initializing pixel data cache for "${getFileName(true)}"', 3, ops, onComplete);
-		new ui.modal.Progress('Initializing pixel data cache for "${getFileName(true)}"', 3, ops, onComplete);
+		if( !sync )
+			new ui.modal.Progress('Initializing pixel data cache for "${getFileName(true)}"', 3, ops, onComplete);
+		else
+			for(op in ops)
+				op.cb();
+
+		return true;
 	}
 
 

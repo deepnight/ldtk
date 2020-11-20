@@ -60,21 +60,35 @@ class Home extends Page {
 				var path = JsTools.getSamplesDir();
 				var files = js.node.Fs.readdirSync(path);
 				var log = new dn.Log();
+				log.printOnAdd = true;
+				var ops = [];
 				for(f in files) {
 					var fp = dn.FilePath.fromFile(path+"/"+f);
 					if( fp.extension!="ldtk" )
 						continue;
-					log.fileOp(fp.fileName+"...");
 
-					var raw = JsTools.readFileString(fp.full);
-					var json = haxe.Json.parse(raw);
-					var p = data.Project.fromJson(json);
-					log.fileOp(" -> Parsed.");
-					var data = JsTools.prepareProjectFile(p);
-					JsTools.writeFileString(fp.full, data.str);
-					log.fileOp(" -> Saved");
+					ops.push({
+						label: fp.fileName,
+						cb: ()->{
+							log.fileOp(fp.fileName+"...");
+							log.general(" -> Loading...");
+							var raw = JsTools.readFileString(fp.full);
+							log.general(" -> Parsing...");
+							var json = haxe.Json.parse(raw);
+							var p = data.Project.fromJson(json);
+							log.general(" -> Updating tileset data...");
+							for(td in p.defs.tilesets) {
+								td.reloadImage(fp.directory);
+								td.buildPixelData(()->{}, true);
+							}
+
+							log.general(" -> Saving "+fp.fileName+"...");
+							var data = JsTools.prepareProjectFile(p);
+							JsTools.writeFileString(fp.full, data.str);
+						}
+					});
 				}
-				new ui.modal.dialog.LogPrint(log);
+				new ui.modal.Progress("Updating samples", 1, ops);
 			});
 			m.jContent.append(jButton);
 		});
