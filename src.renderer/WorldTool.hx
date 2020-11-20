@@ -69,8 +69,34 @@ class WorldTool extends dn.Process {
 	}
 
 	public function onMouseDown(ev:hxd.Event, m:Coords) {
+		// Right click context menu
+		if( ev.button==1 && worldMode ) {
+			var ctx = new ui.modal.ContextMenu(m);
+			ctx.add("New level", ()->{
+				if( !createLevelAt(m) ) {
+					new ui.modal.dialog.Confirm(L.t._("No room for a level here! Do you want to pick another location?"), startAddMode);
+				}
+			});
+			var l = getLevelAt(m.worldX, m.worldY, true);
+			if( l!=null ) {
+				editor.selectLevel(l);
+				ctx.add("Delete this level", ()->{
+					var closest = project.getClosestLevelFrom(l);
+					new ui.LastChance('Level ${l.identifier} removed', project);
+					project.removeLevel(l);
+					editor.ge.emit( LevelRemoved(l) );
+					editor.selectLevel( closest );
+					editor.camera.scrollToLevel(closest);
+				});
+			}
+			ev.cancel = true;
+			return;
+		}
+
+
 		if( ev.button!=0 || App.ME.isShiftDown() )
 			return;
+
 
 		editor.camera.cancelAllAutoMovements();
 
@@ -132,42 +158,48 @@ class WorldTool extends dn.Process {
 					editor.setWorldMode(false);
 			}
 		}
-		else if( worldMode && clicked && !dragStarted && addMode ) {
-			var b = getLevelInsertBounds(m);
-			if( b!=null ) {
-				var l = switch project.worldLayout {
-					case Free, WorldGrid:
-						var l = project.createLevel();
-						l.worldX = M.round(b.x);
-						l.worldY = M.round(b.y);
-						l.pxWid = b.wid;
-						l.pxHei = b.hei;
-						l;
-
-					case LinearHorizontal, LinearVertical:
-						var i = getLinearInsertPoint(m);
-						if( i!=null ) {
-							var l = project.createLevel(i.idx);
-							l;
-						}
-						else
-							null;
-				}
-				if( l!=null ) {
-					N.msg("New level created");
-					stopAddMode();
-					project.reorganizeWorld();
-					editor.ge.emit( LevelAdded(l) );
-					editor.selectLevel(l);
-					editor.camera.scrollToLevel(l);
-				}
-			}
-		}
+		else if( worldMode && clicked && !dragStarted && addMode )
+			createLevelAt(m);
 
 		// Cleanup
 		clickedLevel = null;
 		dragStarted = false;
 		clicked = false;
+	}
+
+	function createLevelAt(m:Coords) {
+		var b = getLevelInsertBounds(m);
+		if( b!=null ) {
+			var l = switch project.worldLayout {
+				case Free, WorldGrid:
+					var l = project.createLevel();
+					l.worldX = M.round(b.x);
+					l.worldY = M.round(b.y);
+					l.pxWid = b.wid;
+					l.pxHei = b.hei;
+					l;
+
+				case LinearHorizontal, LinearVertical:
+					var i = getLinearInsertPoint(m);
+					if( i!=null ) {
+						var l = project.createLevel(i.idx);
+						l;
+					}
+					else
+						null;
+			}
+			if( l!=null ) {
+				N.msg("New level created");
+				stopAddMode();
+				project.reorganizeWorld();
+				editor.ge.emit( LevelAdded(l) );
+				editor.selectLevel(l);
+				editor.camera.scrollToLevel(l);
+			}
+			return true;
+		}
+		else
+			return false;
 	}
 
 	inline function getLevelGrid() return project.defaultGridSize;

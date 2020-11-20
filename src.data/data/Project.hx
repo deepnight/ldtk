@@ -206,6 +206,13 @@ class Project {
 		return null;
 	}
 
+	public function getClosestLevelFrom(level:data.Level) : Null<data.Level> {
+		var dh = new dn.DecisionHelper(levels);
+		dh.removeValue(level);
+		dh.score( (l)->-level.getBoundsDist(l) );
+		return dh.getBest();
+	}
+
 	public function sortLevel(from:Int, to:Int) : Null<data.Level> {
 		if( from<0 || from>=levels.length || from==to )
 			return null;

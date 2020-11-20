@@ -20,15 +20,12 @@ class WorldPanel extends ui.modal.Panel {
 				Lang.t._("Are you sure you want to delete this level?"),
 				true,
 				()->{
-					var dh = new dn.DecisionHelper(project.levels);
-					dh.removeValue(level);
-					dh.score( (l)->-level.getBoundsDist(l) );
-
+					var closest = project.getClosestLevelFrom(level);
 					new LastChance('Level ${level.identifier} removed', project);
 					var l = level;
 					project.removeLevel(level);
 					editor.ge.emit( LevelRemoved(l) );
-					editor.selectLevel( dh.getBest() );
+					editor.selectLevel( closest );
 					editor.camera.scrollToLevel(editor.curLevel);
 				}
 			);
