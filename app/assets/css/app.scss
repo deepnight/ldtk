@@ -4575,7 +4575,7 @@ $patternSize : 32px;
 		height: 100%;
 		justify-content: stretch;
 		gap: 16px;
-		grid-template-rows: min-content min-content auto;
+		grid-template-rows: min-content auto auto;
 		grid-template-columns: 200px 200px auto;
 
 		>.header {
@@ -4607,7 +4607,6 @@ $patternSize : 32px;
 		>.entityForm {
 			grid-column: 2/4;
 			grid-row: 2/3;
-			overflow: hidden;
 		}
 
 		>.fieldList {
