@@ -14,6 +14,7 @@ We now have an official 💬 **[Discord](https://deepnight.net/go/ldtk-discord)*
 - **End of beta**: LDtk is no longer considered *Beta* as it's now stable & mature enough to be used in production.
 - Many *under-the-hood* optimizations to support the new World map feature.
 - Removed the "double" *Fit* mode when pressing `F`. Now pressing this key just fits the whole level in the viewport.
+- Unified R & Shift-R shortcuts: just press R to toggle all auto-layers rendering.
 - Fixed loading of files with spaces in name, when using file association on Windows
 - Better "invalid value" error display in entity fields (previously, you only had `<error>`).
 - Application samples will now display a warning if you try to save them (not recommended as they will be overwritten by future app updates).
