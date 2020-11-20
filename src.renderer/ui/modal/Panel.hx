@@ -11,7 +11,7 @@ class Panel extends ui.Modal {
 		super();
 
 		// editor.setWorldMode(false);
-		InstanceEditor.closeAny();
+		EntityInstanceEditor.closeExisting();
 		editor.selectionTool.clear();
 
 		var mainPanel = new J("#mainPanel");

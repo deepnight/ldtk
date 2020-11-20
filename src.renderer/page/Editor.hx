@@ -375,11 +375,11 @@ class Editor extends Page {
 					ui.Modal.closeLatest();
 				else if( selectionTool.any() ) {
 					if( !worldMode )
-						ui.InstanceEditor.closeAny();
+						ui.EntityInstanceEditor.closeExisting();
 					selectionTool.clear();
 				}
-				else if( ui.InstanceEditor.isOpen() && !worldMode ) // TODO instance cleanup
-					ui.InstanceEditor.closeAny();
+				else if( ui.EntityInstanceEditor.isOpen() && !worldMode ) // TODO instance cleanup
+					ui.EntityInstanceEditor.closeExisting();
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() )
@@ -861,7 +861,7 @@ class Editor extends Page {
 			new WorldPanel();
 		}
 		else
-			ui.InstanceEditor.closeAny();
+			ui.EntityInstanceEditor.closeExisting();
 
 		worldTool.onWorldModeChange(worldMode);
 	}

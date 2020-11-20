@@ -634,7 +634,7 @@ class GenericLevelElementGroup {
 						var old = ei;
 						ei = li.duplicateEntityInstance(ei);
 						elements[i] = Entity(li,ei);
-						if( ui.InstanceEditor.existsFor(old) )
+						if( ui.EntityInstanceEditor.existsFor(old) )
 							ui.EntityInstanceEditor.openFor(ei);
 					}
 					ei.x += getDeltaX(origin, to);
