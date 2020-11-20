@@ -1,5 +1,4 @@
 # LDtk Json structure (version 0.6.0)
-Please refer to the [README.md](https://github.com/deepnight/ldtk/blob/master/README.md) for more informations.
    - [LDtk Json root](#ldtk-ProjectJson)
    - [Level](#ldtk-LevelJson)
      - [Layer instance](#ldtk-LayerInstanceJson)

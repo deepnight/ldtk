@@ -185,7 +185,7 @@ class XmlDocToMarkdown {
 		// Header
 		var headerMd = [
 			'# LDtk Json structure (version $appVersion)',
-			'Please refer to the [README.md](https://github.com/deepnight/ldtk/blob/master/README.md) for more informations.'
+			// 'Please refer to the [README.md](https://github.com/deepnight/ldtk/blob/master/README.md) for more informations.'
 		];
 
 		// Table of content
