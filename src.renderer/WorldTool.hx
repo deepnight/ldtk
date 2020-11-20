@@ -171,8 +171,6 @@ class WorldTool extends dn.Process {
 				editor.selectLevel(clickedLevel);
 				if( clickedSameLevel )
 					editor.setWorldMode(false);
-				else
-					editor.camera.scrollTo(m.worldX,m.worldY);
 			}
 		}
 		else if( worldMode && clicked && !dragStarted && addMode )
