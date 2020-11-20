@@ -1,9 +1,5 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI-test-windows
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches:
@@ -14,9 +10,7 @@ on:
       - master
       - dev-*
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
     strategy:
       matrix:
@@ -32,16 +26,16 @@ jobs:
       - uses: krdlab/setup-haxe@v1
         with:
           haxe-version: 4.1.4
-      - run: |
-          haxe -version
-          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${GITHUB_REF##*/}
-          haxelib install castle
-          haxelib git heaps https://github.com/HeapsIO/heaps.git
-          haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
-          haxelib git electron https://github.com/tong/hxelectron.git
-          haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '14'
-      - run: cd app && npm install
-      - run: cd app && npm run compile
+      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${GITHUB_REF#refs/heads/})
+      # - run: |
+      #     haxe -version
+      #     haxelib install castle
+      #     haxelib git heaps https://github.com/HeapsIO/heaps.git
+      #     haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
+      #     haxelib git electron https://github.com/tong/hxelectron.git
+      #     haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+      # - uses: actions/setup-node@v1
+      #   with:
+      #     node-version: '14'
+      # - run: cd app && npm install
+      # - run: cd app && npm run compile
