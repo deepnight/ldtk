@@ -133,7 +133,7 @@ class WorldPanel extends ui.modal.Panel {
 			}
 		);
 		if( project.levels.length>2 )
-			e.confirmMessage = L.t._("Changing this might affect ALL the levels layout, so please make sure you know what you're doing :)");
+			e.confirmMessage = L.t._("Changing this will change ALL the level positions! Please make sure you know what you're doing :)");
 		e.onBeforeSetter = ()->{
 			new LastChance(L.t._("World layout changed"), editor.project);
 		}
