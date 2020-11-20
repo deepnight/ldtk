@@ -64,8 +64,13 @@ class Camera extends dn.Process {
 					fit();
 
 			case LevelSelected(level):
-				if( !editor.worldMode )
-					fit();
+				// Move toward level if not over it
+				// if( !level.inBoundsWorld(worldX,worldY) ) {
+				// 	var ang = Math.atan2( level.worldCenterY-worldY, level.worldCenterX-worldX );
+				// 	var dist = 100; // TODO pick a better dist
+				// 	targetWorldX = worldX + Math.cos(ang)*dist;
+				// 	targetWorldY = worldY + Math.sin(ang)*dist;
+				// }
 
 			case ViewportChanged:
 
@@ -183,6 +188,11 @@ class Camera extends dn.Process {
 	public function scrollToLevel(l:data.Level) {
 		targetWorldX = l.worldCenterX;
 		targetWorldY = l.worldCenterY;
+	}
+
+	public function scrollTo(wx,wy) {
+		targetWorldX = wx;
+		targetWorldY = wy;
 	}
 
 	inline function getMinZoom() {

@@ -80,8 +80,15 @@ class Level {
 		return bgColor!=null ? bgColor : _project.defaultLevelBgColor;
 	}
 
-	public inline function inBounds(x:Int, y:Int) {
-		return x>=0 && x<pxWid && y>=0 && y<pxHei;
+	public inline function inBounds(levelX:Int, levelY:Int) {
+		return levelX>=0 && levelX<pxWid && levelY>=0 && levelY<pxHei;
+	}
+
+	public inline function inBoundsWorld(worldX:Float, worldY:Float) {
+		return worldX>=this.worldX
+			&& worldX<this.worldX+pxWid
+			&& worldY>=this.worldY
+			&& worldY<this.worldY+pxHei;
 	}
 
 	public function isWorldOver(wx:Int, wy:Int) {

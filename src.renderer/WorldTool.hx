@@ -127,7 +127,6 @@ class WorldTool extends dn.Process {
 			levelOriginY = clickedLevel.worldY;
 			ev.cancel = true;
 			clickedSameLevel = editor.curLevel==clickedLevel;
-			editor.selectLevel(clickedLevel);
 		}
 		else if( addMode && getLevelInsertBounds(m)!=null )
 			ev.cancel = true;
@@ -172,6 +171,8 @@ class WorldTool extends dn.Process {
 				editor.selectLevel(clickedLevel);
 				if( clickedSameLevel )
 					editor.setWorldMode(false);
+				else
+					editor.camera.scrollTo(m.worldX,m.worldY);
 			}
 		}
 		else if( worldMode && clicked && !dragStarted && addMode )
@@ -342,6 +343,9 @@ class WorldTool extends dn.Process {
 		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=DRAG_THRESHOLD ) {
 			dragStarted = true;
 			ev.cancel = true;
+			if( clickedLevel!=null )
+				editor.selectLevel(clickedLevel);
+
 			if( clickedLevel!=null && ( App.ME.isAltDown() || App.ME.isCtrlDown() ) ) {
 				var copy = project.duplicateLevel(clickedLevel);
 				editor.ge.emit( LevelAdded(copy) );
