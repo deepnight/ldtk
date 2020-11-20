@@ -22,7 +22,9 @@ enum GlobalEvent {
 	LevelResized(level:data.Level);
 	LevelRestoredFromHistory(level:data.Level);
 	LevelSorted; // TODO remove this event (duplicate of WorldLevelMoved)
+
 	WorldLevelMoved;
+	WorldSettingsChanged;
 
 	LayerDefAdded;
 	LayerDefRemoved(defUid:Int);

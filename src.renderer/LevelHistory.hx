@@ -66,7 +66,9 @@ class LevelHistory {
 			case LevelAdded(l):
 			case LevelRemoved(l):
 			case LevelSettingsChanged(l):
+
 			case WorldLevelMoved:
+			case WorldSettingsChanged:
 
 			case ProjectSettingsChanged:
 			case LayerDefChanged, EntityDefChanged:

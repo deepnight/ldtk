@@ -43,10 +43,7 @@ class EditProject extends ui.modal.Panel {
 	function updateProjectForm() {
 		var jForm = jContent.find("ul.form:first");
 
-		for(k in data.DataTypes.WorldLayout.getConstructors())
-			jForm.removeClass("layout-"+k);
-		jForm.addClass("layout-"+project.worldLayout.getName());
-
+		// File extension
 		var ext = dn.FilePath.extractExtension( editor.projectFilePath );
 		var usesAppDefault = ext==Const.FILE_EXTENSION;
 		var i = Input.linkToHtmlInput( usesAppDefault, jForm.find("[name=useAppExtension]") );
@@ -64,9 +61,11 @@ class EditProject extends ui.modal.Panel {
 			}
 		}
 
+		// Json minifiying
 		var i = Input.linkToHtmlInput( project.minifyJson, jForm.find("[name=minify]") );
 		i.linkEvent(ProjectSettingsChanged);
 
+		// Tiled export
 		var i = Input.linkToHtmlInput( project.exportTiled, jForm.find("[name=tiled]") );
 		i.linkEvent(ProjectSettingsChanged);
 		i.onValueChange = function(v) {
@@ -84,18 +83,22 @@ class EditProject extends ui.modal.Panel {
 		if( project.exportTiled )
 			jLocate.append( JsTools.makeExploreLink(fp.full, false) );
 
+		// Level grid size
 		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.linkEvent(ProjectSettingsChanged);
 
+		// Workspace bg
 		var i = Input.linkToHtmlInput( project.bgColor, jForm.find("[name=bgColor]"));
 		i.isColorCode = true;
 		i.linkEvent(ProjectSettingsChanged);
 
+		// Level bg
 		var i = Input.linkToHtmlInput( project.defaultLevelBgColor, jForm.find("[name=defaultLevelbgColor]"));
 		i.isColorCode = true;
 		i.linkEvent(ProjectSettingsChanged);
 
+		// Default entity pivot
 		var pivot = jForm.find(".pivot");
 		pivot.empty();
 		pivot.append( JsTools.createPivotEditor(

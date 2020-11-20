@@ -1062,6 +1062,7 @@ class Editor extends Page {
 				case LevelRestoredFromHistory(l):
 				case LevelSorted:
 				case WorldLevelMoved:
+				case WorldSettingsChanged:
 				case LayerDefAdded:
 				case LayerDefConverted:
 				case LayerDefRemoved(defUid):
@@ -1204,6 +1205,7 @@ class Editor extends Page {
 			case LevelResized(l):
 			case LevelSorted:
 			case WorldLevelMoved:
+			case WorldSettingsChanged:
 
 			case LevelSelected(l):
 				updateLayerList();

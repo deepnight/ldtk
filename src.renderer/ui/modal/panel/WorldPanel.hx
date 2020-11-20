@@ -68,7 +68,7 @@ class WorldPanel extends ui.modal.Panel {
 		super.onGlobalEvent(ge);
 
 		switch ge {
-			case ProjectSettingsChanged:
+			case WorldSettingsChanged:
 				if( level==null || project.getLevel(level.uid)==null )
 					destroy();
 				else {
@@ -109,6 +109,10 @@ class WorldPanel extends ui.modal.Panel {
 		var jForm = jContent.find("ul#worldForm");
 		jForm.find("*").off();
 
+		for(k in data.DataTypes.WorldLayout.getConstructors())
+			jForm.removeClass("layout-"+k);
+		jForm.addClass("layout-"+project.worldLayout.getName());
+
 		// World layout
 		var e = new form.input.EnumSelect(
 			jForm.find("[name=worldLayout]"),
@@ -124,17 +128,20 @@ class WorldPanel extends ui.modal.Panel {
 		);
 		if( project.levels.length>2 )
 			e.confirmMessage = L.t._("Changing this might affect ALL the levels layout, so please make sure you know what you're doing :)");
+		e.onBeforeSetter = ()->{
+			new LastChance(L.t._("World layout changed"), editor.project);
+		}
 		e.onValueChange = (l)->{
 			project.reorganizeWorld();
 		}
-		e.linkEvent( ProjectSettingsChanged ); // TODO use another event
+		e.linkEvent( WorldSettingsChanged );
 
 		// World grid
 		var i = Input.linkToHtmlInput( project.worldGridWidth, jForm.find("[name=worldGridWidth]"));
-		i.linkEvent(ProjectSettingsChanged);
+		i.linkEvent(WorldSettingsChanged);
 
 		var i = Input.linkToHtmlInput( project.worldGridHeight, jForm.find("[name=worldGridHeight]"));
-		i.linkEvent(ProjectSettingsChanged);
+		i.linkEvent(WorldSettingsChanged);
 
 		JsTools.parseComponents(jForm);
 	}

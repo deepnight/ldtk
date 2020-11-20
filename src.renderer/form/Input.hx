@@ -62,6 +62,7 @@ class Input<T> {
 			return;
 		}
 
+		onBeforeSetter();
 		setter( parseInputValue() );
 		writeValueToInput();
 		lastValidValue = getter();
@@ -75,6 +76,7 @@ class Input<T> {
 		linkedEvents.set(eid,true);
 	}
 
+	public dynamic function onBeforeSetter() {}
 	public dynamic function onChange() {}
 	public dynamic function onValueChange(v:T) {}
 

@@ -72,8 +72,9 @@ class WorldRender extends dn.Process {
 			case ProjectSelected:
 				renderAll();
 
-			case ProjectSettingsChanged:
+			case ProjectSettingsChanged, WorldSettingsChanged:
 				renderAll();
+				editor.camera.fit();
 
 			case LevelRestoredFromHistory(l):
 				invalidateLevel(l);
