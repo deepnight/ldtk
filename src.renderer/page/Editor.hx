@@ -1,5 +1,7 @@
 package page;
 
+import ui.modal.panel.WorldPanel;
+
 class Editor extends Page {
 	public static var ME : Editor;
 
@@ -418,6 +420,9 @@ class Editor extends Page {
 			case K.W if( App.ME.isCtrlDown() ):
 				onClose();
 
+			case K.W if( !App.ME.hasAnyToggleKeyDown() && !hasInputFocus() ):
+				setWorldMode( !worldMode );
+
 			case K.Q if( App.ME.isCtrlDown() ):
 				App.ME.exit();
 
@@ -777,8 +782,8 @@ class Editor extends Page {
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
 		ge.emit( ViewportChanged );
-		if( worldMode )
-			ui.instanceEditor.LevelInstanceEditor.openFor(l);
+		// if( worldMode )
+		// 	new ui.modal.panel.WorldPanel();
 	}
 
 	public function selectLayerInstance(li:data.inst.LayerInstance, notify=true) {
@@ -855,7 +860,7 @@ class Editor extends Page {
 		if( worldMode ) {
 			N.quick(L.t._("World view"), new J('<span class="icon world"/>'));
 			ui.Modal.closeAll();
-			ui.instanceEditor.LevelInstanceEditor.openFor(curLevel);
+			new WorldPanel();
 		}
 		else
 			ui.InstanceEditor.closeAny();

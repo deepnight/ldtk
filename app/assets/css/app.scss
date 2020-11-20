@@ -3205,7 +3205,7 @@ canvas#webgl {
 	}
 }
 
-.instanceEditor {
+.entityInstanceEditor {
 	position: absolute;
 	overflow: auto;
 	z-index: 10;
@@ -3216,24 +3216,24 @@ canvas#webgl {
 	padding: 10px;
 
 
-	&.entity {
-		border-left: 4px solid $orange;
-		box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.6);
-		background-color: $bgDark;
-	}
+	border-left: 4px solid $orange;
+	box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.6);
+	background-color: $bgDark;
+	// &.entity {
+	// }
 
-	&.level {
-		left: 32px;
-		width: calc( #{$mainPanelNormalWid} + 16px );
-		height: 100vh;
-		max-height: none;
-		padding: 8px;
+	// &.level {
+	// 	left: 32px;
+	// 	width: calc( #{$mainPanelNormalWid} + 16px );
+	// 	height: 100vh;
+	// 	max-height: none;
+	// 	padding: 8px;
 
-		border-left: 2px solid $bgLighter;
-		border-right: 1px solid $bgLight;
-		background-color: $bgMed;
-		box-shadow: -8px 0px 0px rgba(0, 0, 0, 0.5), 2px 0px 0px rgba(0, 0, 0, 0.5);
-	}
+	// 	border-left: 2px solid $bgLighter;
+	// 	border-right: 1px solid $bgLight;
+	// 	background-color: $bgMed;
+	// 	box-shadow: -8px 0px 0px rgba(0, 0, 0, 0.5), 2px 0px 0px rgba(0, 0, 0, 0.5);
+	// }
 
 	&.picking {
 		opacity: 0.5;
@@ -3450,7 +3450,6 @@ canvas#webgl {
 	}
 }
 
-.window.panel.worldPanel,
 .window.panel.layerDefs,
 .window.panel.tilesetDefs {
 	.content{
@@ -3480,20 +3479,6 @@ canvas#webgl {
 				padding: 2px 8px;
 				font-size: 8pt;
 			}
-		}
-	}
-}
-
-.window.panel.worldPanel {
-	.content {
-		grid-template-columns: auto;
-		width: 250px;
-		>.header {
-			grid-column: auto;
-		}
-		ul.form li label {
-			flex: 1 0 100%;
-			text-align: left;
 		}
 	}
 }
@@ -3711,12 +3696,35 @@ body.sorting ul.collapsedSortTarget {
 	display: block !important;
 }
 
+.window.panel.worldPanel {
+	left: 32px !important;
+	width: auto;
+
+	.mask {
+		display: none;
+	}
+
+	.wrapper {
+		padding: 8px;
+		border-left: 2px solid $bgLighter;
+		border-right: 1px solid $bgLight;
+		box-shadow: -8px 0px 0px rgba(0, 0, 0, 0.5), 2px 0px 0px rgba(0, 0, 0, 0.5);
+	}
+
+	.content {
+		display: grid;
+		grid-auto-rows: min-content;
+		gap: 8px;
+		height: 100%;
+		width: calc( #{ $mainPanelNormalWid } + 32px );
+	}
+}
+
 .window.panel.editAllAutoLayerRules {
 	left: 32px !important;
 	width: auto;
 
 	.mask {
-		// width: calc( 100vw - 32px) ;
 		display: none;
 	}
 

@@ -1,30 +1,40 @@
-<div class="header">
-	<h2>
-		<div class="icon level orange"></div>
-		World
-	</h2>
+<div class="buttons">
+	<button class="create">Add level</button>
+	<button class="duplicate gray small" title="**Duplicate level** Note: you can also just drag a level with CTRL+ALT to duplicate it.">
+		<span class="icon copy"></span>
+	</button>
+	<button class="delete dark small" title="Delete level">
+		<span class="icon delete"></span>
+	</button>
 </div>
 
-<div class="mainList">
-	<ul class="niceList levels"></ul>
-	<div class="buttons">
-		<button class="create">Create level</button>
-		<button class="delete">🗑️</button>
-	</div>
-</div>
-
+<h3>Level settings</h3>
 
 <ul class="form">
 	<li>
-		<label for="name">Level identifier</label>
-		<input type="text" name="name" id="name"/>
+		<label for="identifier">Level identifier</label>
+		<span class="uid">???</span>
+		<input type="text" id="identifier"/>
 		<div class="info identifier"></div>
 	</li>
+
 	<li>
 		<label for="name">World coords</label>
-		<input type="text" name="worldX" id="worldX"/>
+		<input type="text" id="worldX"/>
 		<span>,</span>
-		<input type="text" name="worldY" id="worldY"/>
+		<input type="text" id="worldY"/>
+		<span>px</span>
+	</li>
+
+	<li>
+		<label for="bgColor">Bg color</label>
+		<input type="color" id="bgColor"/>
+		<a class="reset">Use default</a>
+		<span class="usingDefault">(default)</a>
 	</li>
 </ul>
+
+<div class="customFields">
+	<em>Custom fields are not available yet :)</em>
+</div>
 

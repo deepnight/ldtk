@@ -1,130 +1,148 @@
 package ui.modal.panel;
 
 class WorldPanel extends ui.modal.Panel {
-	var jList(get,never) : js.jquery.JQuery; inline function get_jList() return jContent.find(".mainList ul");
-	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jContent.find("ul.form:first");
+	var level(get,never) : data.Level;
+		inline function get_level() return editor.curLevel;
 
 	public function new() {
 		super();
 
-		loadTemplate( "worldPanel" );
-		linkToButton("button.world");
+		loadTemplate("worldPanel");
 
-		jContent.find(".mainList button.create").click( function(ev) {
-			var l = project.createLevel();
-			editor.ge.emit( LevelAdded(l) );
-			select(l);
-		});
+		// Delete button
+		jContent.find("button.delete").click( (_)->{
+			if( project.levels.length<=1 ) {
+				N.error( L.t._("You can't remove last level.") );
+				return;
+			}
 
-		// Delete level
-		jContent.find(".mainList button.delete").click( function(ev) {
 			new ui.modal.dialog.Confirm(
-				ev.getThis(),
-				Lang.t._("Confirm this action?"),
-				()->deleteLevel(curLevel)
+				Lang.t._("Are you sure you want to delete this level?"),
+				true,
+				()->{
+					var dh = new dn.DecisionHelper(project.levels);
+					dh.removeValue(level);
+					dh.score( (l)->-level.getBoundsDist(l) );
+
+					new LastChance('Level ${level.identifier} removed', project);
+					project.removeLevel(level);
+					editor.ge.emit( LevelRemoved(level) );
+					editor.selectLevel( dh.getBest() );
+				}
 			);
 		});
 
-		updateList();
+		// Create button
+		jContent.find("button.create").click( (_)->{
+			editor.worldTool.startAddMode();
+			N.msg(L.t._("Select a spot on the world map..."));
+		});
+
+		// Duplicate button
+		jContent.find("button.duplicate").click( (_)->{
+			var copy = project.duplicateLevel(level);
+			editor.selectLevel(copy);
+			switch project.worldLayout {
+				case Free, WorldGrid:
+					copy.worldX += project.defaultGridSize*4;
+					copy.worldY += project.defaultGridSize*4;
+
+				case LinearHorizontal:
+				case LinearVertical:
+			}
+			editor.ge.emit( LevelAdded(copy) );
+		});
+
+
 		updateForm();
 	}
 
-	function deleteLevel(l:data.Level) {
-		if( project.levels.length==1 ) {
-			N.error(L.t._("Can't delete the last level."));
-			return false;
-		}
+	override function onGlobalEvent(ge:GlobalEvent) {
+		super.onGlobalEvent(ge);
 
-		new LastChance(Lang.t._("Level ::name:: deleted", { name:l.identifier }), project);
-		var idx = 0;
-		for( pl in project.levels)
-			if( pl==l )
-				break;
-			else
-				idx++;
-		project.removeLevel( l );
-		if( idx==0 )
-			editor.selectLevel( project.levels[0] );
-		else
-			editor.selectLevel( project.levels[idx-1] );
-		editor.ge.emit( LevelRemoved(l) );
-		return true;
-	}
+		switch ge {
+			case ProjectSettingsChanged:
+				if( level==null )
+					destroy();
+				else
+					updateForm();
 
-	override function onGlobalEvent(e:GlobalEvent) {
-		super.onGlobalEvent(e);
-
-		switch e {
-			case ProjectSettingsChanged, ProjectSelected, LayerInstanceRestoredFromHistory(_):
-				close();
-
-			case LayerInstanceSelected, LayerInstanceVisiblityChanged(_):
-
-			case LevelSelected(l), LevelSettingsChanged(l):
-				updateList();
+			case LevelSelected(l):
 				updateForm();
 
-			case LevelAdded(_), LevelSorted:
-				updateList();
+			case LevelRemoved(l):
+				updateForm();
+
+			case WorldLevelMoved:
+				updateForm();
+
+			case ViewportChanged :
 
 			case _:
 		}
 	}
 
-	function updateForm() {
-		var i = Input.linkToHtmlInput( curLevel.identifier, jForm.find("[name=name]") );
-		i.linkEvent( LevelSettingsChanged(curLevel) );
-		i.validityCheck = function(id) return data.Project.isValidIdentifier(id) && project.isLevelIdentifierUnique(id);
-		i.validityError = N.invalidIdentifier;
-
-		var i = Input.linkToHtmlInput( curLevel.worldX, jForm.find("[name=worldX]") );
-		i.linkEvent( LevelSettingsChanged(curLevel) );
-
-		var i = Input.linkToHtmlInput( curLevel.worldY, jForm.find("[name=worldY]") );
-		i.linkEvent( LevelSettingsChanged(curLevel) );
+	override function onClose() {
+		super.onClose();
+		editor.setWorldMode(false);
 	}
 
-	function updateList() {
-		var list = jContent.find("ul.levels");
-		list.empty();
+	function onFieldChange() {
+		editor.ge.emit( LevelSettingsChanged(level) );
+	}
 
-		for(l in project.levels) {
-			var e = new J("<li/>");
-			e.appendTo(list);
-			e.text( l.identifier );
-			if( curLevel==l )
-				e.addClass("active");
 
-			ContextMenu.addTo(e, [
-				{
-					label: L._Duplicate(),
-					cb:()->{
-						project.duplicateLevel(l);
-						editor.ge.emit( LevelAdded(l) );
-					}
-				},
-				{ label: L._Delete(), cb:deleteLevel.bind(l) },
-			]);
-
-			if( l.hasAnyError() )
-				e.append('<div class="error">Contains errors</div>');
-
-			e.click( function(_) {
-				select(l);
-			});
+	function updateForm() {
+		if( level==null ) {
+			close();
+			return;
 		}
 
-		// Make level list sortable
-		JsTools.makeSortable(jList, function(ev) {
-			var moved = project.sortLevel(ev.oldIndex, ev.newIndex);
-			select(moved);
-			editor.ge.emit(LevelSorted);
-		});
+		var jForm = jContent.find("ul.form");
+		jForm.find("*").off();
 
+		// Level identifier
+		jForm.find(".uid").text("#"+level.uid);
+		var i = Input.linkToHtmlInput( level.identifier, jForm.find("#identifier"));
+		i.onChange = ()->onFieldChange();
+
+		// Coords
+		var i = Input.linkToHtmlInput( level.worldX, jForm.find("#worldX"));
+		i.onChange = ()->onFieldChange();
+		var i = Input.linkToHtmlInput( level.worldY, jForm.find("#worldY"));
+		i.onChange = ()->onFieldChange();
+
+		// Bg color
+		var c = level.getBgColor();
+		var i = Input.linkToHtmlInput( c, jForm.find("#bgColor"));
+		i.isColorCode = true;
+		i.onChange = ()->{
+			level.bgColor = c==project.defaultLevelBgColor ? null : c;
+			onFieldChange();
+		}
+		var jDefault = i.jInput.siblings("a.reset");
+		if( level.bgColor==null )
+			jDefault.hide();
+		jDefault.click( (_)->{
+			level.bgColor = null;
+			onFieldChange();
+		});
+		if( level.bgColor!=null )
+			i.jInput.siblings("span.usingDefault").hide();
+
+		// Custom fields (not implemented yet)
+		// if( level.def.fieldDefs.length==0 )
+		// 	jForm.append('<div class="empty">This entity has no custom field.</div>');
+		// else {
+		// 	// Field defs form
+		// 	var jForm = renderFieldDefsForm(level.def.fieldDefs, (fd)->level.getFieldInstance(fd));
+		// 	jForm.appendTo(jForm);
+		// }
 	}
 
-	function select(l:data.Level) {
-		editor.selectLevel(l);
+	override function update() {
+		super.update();
+		if( !editor.worldMode )
+			close();
 	}
 }
-

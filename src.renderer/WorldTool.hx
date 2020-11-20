@@ -199,11 +199,6 @@ class WorldTool extends dn.Process {
 
 
 	public function onKeyPress(keyCode:Int) {
-		switch keyCode {
-			case K.W:
-				editor.setWorldMode( !worldMode );
-
-		}
 	}
 
 	inline function boundsOverlaps(l:data.Level, x,y,w,h) {

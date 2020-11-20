@@ -1,6 +1,6 @@
 package ui.instanceEditor;
 
-class EntityInstanceEditor extends ui.InstanceEditor<data.inst.EntityInstance> {
+class EntityInstanceEditorOld extends ui.InstanceEditor<data.inst.EntityInstance> {
 
 	private function new(ei:data.inst.EntityInstance) {
 		super(ei);
@@ -52,11 +52,11 @@ class EntityInstanceEditor extends ui.InstanceEditor<data.inst.EntityInstance> {
 		drawLink( inst.def.color, inst.x, inst.y );
 	}
 
-	public static function openFor(ei:data.inst.EntityInstance) : EntityInstanceEditor {
+	public static function openFor(ei:data.inst.EntityInstance) : EntityInstanceEditorOld {
 		if( InstanceEditor.existsFor(ei) )
 			return cast InstanceEditor.CURRENT;
 		else
-			return new EntityInstanceEditor(ei);
+			return new EntityInstanceEditorOld(ei);
 	}
 
 	override function onFieldChange(keepCurrentSpecialTool=false) {
@@ -69,17 +69,17 @@ class EntityInstanceEditor extends ui.InstanceEditor<data.inst.EntityInstance> {
 	}
 
 
-	override function getInstanceCx():Int {
-		return inst.getCx( Editor.ME.curLayerDef );
-	}
+	// override function getInstanceCx():Int {
+	// 	return inst.getCx( Editor.ME.curLayerDef );
+	// }
 
-	override function getInstanceCy():Int {
-		return inst.getCy( Editor.ME.curLayerDef );
-	}
+	// override function getInstanceCy():Int {
+	// 	return inst.getCy( Editor.ME.curLayerDef );
+	// }
 
-	override function getInstanceColor():UInt {
-		return inst.def.color;
-	}
+	// override function getInstanceColor():UInt {
+	// 	return inst.def.color;
+	// }
 
 
 	override function renderForm() {
@@ -102,12 +102,10 @@ class EntityInstanceEditor extends ui.InstanceEditor<data.inst.EntityInstance> {
 		jHeader.append(jEdit);
 
 		// Fields
-		if( inst.def.fieldDefs.length==0 )
-			jPanel.append('<div class="empty">This entity has no custom field.</div>');
-		else {
-			// Field defs form
-			var jForm = renderFieldDefsForm(inst.def.fieldDefs, (fd)->inst.getFieldInstance(fd));
-			jForm.appendTo(jPanel);
+		var form = new ui.FieldInstancesForm(Entity(inst), inst.def.fieldDefs, (fd)->inst.getFieldInstance(fd));
+		jPanel.append(form.jWrapper);
+		form.onChange = ()->{
+			editor.ge.emit( EntityInstanceFieldChanged(inst) );
 		}
 	}
 }

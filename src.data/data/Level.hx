@@ -12,7 +12,8 @@ class Level {
 	public var pxHei : Int;
 	public var layerInstances : Array<data.inst.LayerInstance> = [];
 
-	@:allow(ui.instanceEditor.LevelInstanceEditor)
+	@:allow(ui.modal.panel.WorldPanel)
+	@:allow(ui.instanceEditor.LevelInstanceEditor) // TODO deprecated
 	var bgColor : Null<UInt>;
 
 	public var worldCenterX(get,never) : Int;

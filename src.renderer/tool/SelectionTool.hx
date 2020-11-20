@@ -112,7 +112,7 @@ class SelectionTool extends Tool<Int> {
 					if( t!=null )
 						t.selectValue(ei.defUid);
 					editor.levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
-					ui.instanceEditor.EntityInstanceEditor.openFor(ei);
+					ui.EntityInstanceEditor.openFor(ei);
 
 				case PointField(li, ei, fi, arrayIdx):
 					var t = editor.curTool.as(tool.lt.EntityTool);
@@ -122,7 +122,7 @@ class SelectionTool extends Tool<Int> {
 					var pt = fi.getPointGrid(arrayIdx);
 					if( pt!=null)
 						editor.levelRender.bleepRectCase( pt.cx, pt.cy, 1, 1, ei.def.color );
-					ui.instanceEditor.EntityInstanceEditor.openFor(ei);
+					ui.EntityInstanceEditor.openFor(ei);
 			}
 
 			editor.curTool.onValuePicking();
