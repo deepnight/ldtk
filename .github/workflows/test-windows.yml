@@ -23,6 +23,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      - run: echo foo $GITHUB_REF bar
       - run: echo foo ${GITHUB_REF} bar
       - run: echo foo ${GITHUB_REF#refs/heads/} bar
       - run: echo foo ${GITHUB_REF##*/} bar
