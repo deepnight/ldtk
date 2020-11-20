@@ -29,7 +29,7 @@ Value | Type | Description
 `minifyJson` | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
 `worldGridHeight`<br/><sup>Only *'WorldGrid' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Int | Height of the world grid in pixels.
 `worldGridWidth`<br/><sup>Only *'WorldGrid' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Int | Width of the world grid in pixels.
-`worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values are: Free, WorldGrid, LinearHorizontal and LinearVertical;
+`worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values are: Free, WorldGrid, LinearHorizontal and LinearVertical;
 
 <a id="ldtk-LevelJson" name="ldtk-LevelJson"></a>
 ## 1. Level   
@@ -176,7 +176,6 @@ Sorry this type has no documentation yet.
 ## 2.3. Tileset definition   
 Value | Type | Description
 -- | -- | --
-`cachedPixelData`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | The following data is used internally for various optimizations. It's always synced with source image changes.<br/>This object contains the following fields:<br/><ul><li>**`averageColors`** **(String *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  : *Average color codes for each tileset tile (ARGB format)*</li><li>**`opaqueTiles`** **(String**)  ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-green.svg)  : *An array of 0/1 bytes, encoded in Base64, that tells if a specific TileID is fully opaque (1) or not (0)*</li></ul>
 `identifier` | String | Unique String identifier
 `padding` | Int | Distance in pixels from image borders
 `pxHei` | Int | Image width in pixels
