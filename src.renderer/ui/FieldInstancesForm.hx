@@ -311,8 +311,6 @@ class FieldInstancesForm {
 	}
 
 	function startPointsEditing(fi:data.inst.FieldInstance, editIdx:Int) {
-		jWrapper.addClass("picking");
-
 		var t = new tool.PickPoint();
 
 		t.pickOrigin = { cx:getInstanceCx(), cy:getInstanceCy(), color:getInstanceColor() }
@@ -344,7 +342,6 @@ class FieldInstancesForm {
 				fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
 			}
 			onFieldChange(true);
-			jWrapper.addClass("picking");
 		}
 
 		// Tool stopped
@@ -371,7 +368,6 @@ class FieldInstancesForm {
 
 	function renderForm() {
 		jWrapper.empty();
-		jWrapper.removeClass("picking");
 
 		if( fieldDefs.length==0 ) {
 			jWrapper.append('<div class="empty">This element has no custom field.</div>');

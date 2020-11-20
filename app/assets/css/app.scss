@@ -3219,25 +3219,7 @@ canvas#webgl {
 	border-left: 4px solid $orange;
 	box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.6);
 	background-color: $bgDark;
-	// &.entity {
-	// }
 
-	// &.level {
-	// 	left: 32px;
-	// 	width: calc( #{$mainPanelNormalWid} + 16px );
-	// 	height: 100vh;
-	// 	max-height: none;
-	// 	padding: 8px;
-
-	// 	border-left: 2px solid $bgLighter;
-	// 	border-right: 1px solid $bgLight;
-	// 	background-color: $bgMed;
-	// 	box-shadow: -8px 0px 0px rgba(0, 0, 0, 0.5), 2px 0px 0px rgba(0, 0, 0, 0.5);
-	// }
-
-	&.picking {
-		opacity: 0.5;
-	}
 
 	header {
 		display: grid;
