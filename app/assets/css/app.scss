@@ -3683,7 +3683,7 @@ body.sorting ul.collapsedSortTarget {
 		grid-auto-rows: min-content;
 		gap: 8px;
 		height: 100%;
-		width: calc( #{ $mainPanelNormalWid } + 32px );
+		width: $mainPanelNormalWid;
 
 		ul.form>li>label {
 			flex: 0 0 100%;

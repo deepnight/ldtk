@@ -131,8 +131,8 @@ class WorldPanel extends ui.modal.Panel {
 			(l)->switch l {
 				case Free: L.t._("FREE - freely positioned in space");
 				case WorldGrid: L.t._("CASTLEVANIESQUE - levels are positioned inside a large world-scale grid");
-				case LinearHorizontal: L.t._("LINEAR (horizontal) - one level after the other");
-				case LinearVertical: L.t._("LINEAR (vertical) - one level after the other");
+				case LinearHorizontal: L.t._("HORIZONTAL - one level after the other");
+				case LinearVertical: L.t._("VERTICAL - one level after the other");
 			}
 		);
 		if( project.levels.length>2 )
