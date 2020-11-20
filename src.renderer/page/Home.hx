@@ -49,6 +49,37 @@ class Home extends Page {
 			onNew();
 		});
 
+		// Debug menu
+		#if debug
+		jPage.find("button.settings").show().click( function(ev) {
+			var m = new ui.Modal();
+
+			// Update all sample files
+			var jButton = new J('<button>Update all samples</button>');
+			jButton.click((_)->{
+				var path = JsTools.getSamplesDir();
+				var files = js.node.Fs.readdirSync(path);
+				var log = new dn.Log();
+				for(f in files) {
+					var fp = dn.FilePath.fromFile(path+"/"+f);
+					if( fp.extension!="ldtk" )
+						continue;
+					log.fileOp(fp.fileName+"...");
+
+					var raw = JsTools.readFileString(fp.full);
+					var json = haxe.Json.parse(raw);
+					var p = data.Project.fromJson(json);
+					log.fileOp(" -> Parsed.");
+					var data = JsTools.prepareProjectFile(p);
+					JsTools.writeFileString(fp.full, data.str);
+					log.fileOp(" -> Saved");
+				}
+				new ui.modal.dialog.LogPrint(log);
+			});
+			m.jContent.append(jButton);
+		});
+		#end
+
 		jPage.find(".buy").click( (ev)->{
 			var w = new ui.Modal();
 			w.loadTemplate("buy", {

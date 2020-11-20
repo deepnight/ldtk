@@ -960,6 +960,7 @@ ul.log {
 .icon.gridOn	{ background-image: url("../icons/gridOn.svg"); }
 .icon.gridOff	{ background-image: url("../icons/gridOff.svg"); }
 .icon.stop		{ background-image: url("../icons/stop.svg"); }
+.icon.settings	{ background-image: url("../icons/settings.svg"); }
 .icon.delete	{ background-image: url("../icons/delete.svg"); }
 .icon.discord	{ background-image: url("../icons/discord.svg"); }
 .icon.ghost		{ background-image: url("../icons/ghost.svg"); }
@@ -2639,16 +2640,27 @@ canvas#webgl {
 		align-items: center;
 		justify-content: center;
 
-		.buttons button {
-			white-space: nowrap;
-			display: flex;
-			justify-content: center;
-			.icon {
-				margin-right: 4px;
-				opacity: 0.5;
-			}
-			&.buy {
-				text-transform: none;
+		.buttons {
+			button {
+				white-space: nowrap;
+				display: flex;
+				justify-content: center;
+				.icon {
+					margin-right: 4px;
+					opacity: 0.5;
+				}
+				&.buy {
+					text-transform: none;
+				}
+				&.settings {
+					display: none;
+					text-align: center;
+
+					.icon {
+						margin: 0;
+						font-size: 0.8em;
+					}
+				}
 			}
 		}
 
