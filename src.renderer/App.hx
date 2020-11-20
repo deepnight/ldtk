@@ -344,9 +344,11 @@ class App extends dn.Process {
 	}
 
 	public function registerRecentProject(path:String) {
+		#if !debug
 		if( isInAppDir(path,true) )
 			return false;
-		
+		#end
+
 		path = StringTools.replace(path, "\\", "/");
 		settings.recentProjects.remove(path);
 		settings.recentProjects.push(path);
