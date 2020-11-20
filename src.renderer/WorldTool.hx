@@ -56,6 +56,8 @@ class WorldTool extends dn.Process {
 		addMode = true;
 	}
 
+	public inline function isInAddMode() return addMode;
+
 	public function stopAddMode() {
 		addMode = false;
 		insertCursor.visible = false;
@@ -205,8 +207,8 @@ class WorldTool extends dn.Process {
 	}
 
 	function getLevelInsertBounds(m:Coords) {
-		if( getLevelAt(m.worldX, m.worldY, true)!=null )
-			return null;
+		// if( getLevelAt(m.worldX, m.worldY, true)!=null )
+		// 	return null;
 
 		var size = project.defaultGridSize * data.Project.DEFAULT_LEVEL_SIZE;
 
@@ -261,7 +263,7 @@ class WorldTool extends dn.Process {
 				var i = getLinearInsertPoint(m);
 				if( i!=null) {
 					b.x = i.pos-b.wid*0.5;
-					b.y = -b.hei;
+					b.y = 0;
 				}
 				else
 					return null;
@@ -269,7 +271,7 @@ class WorldTool extends dn.Process {
 			case LinearVertical:
 				var i = getLinearInsertPoint(m);
 				if( i!=null) {
-					b.x = -b.wid;
+					b.x = 0;
 					b.y = i.pos-b.hei*0.5;
 				}
 				else
@@ -480,6 +482,9 @@ class WorldTool extends dn.Process {
 	}
 
 	function getLevelAt(worldX:Int, worldY:Int, allowSelf:Bool) {
+		if( addMode )
+			return null;
+
 		if( !allowSelf && editor.curLevel.isWorldOver(worldX,worldY) )
 			return null;
 

@@ -371,6 +371,8 @@ class Editor extends Page {
 				}
 				else if( specialTool!=null )
 					clearSpecialTool();
+				else if( worldMode && worldTool.isInAddMode() )
+					worldTool.stopAddMode();
 				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeLatest();
 				else if( selectionTool.any() ) {

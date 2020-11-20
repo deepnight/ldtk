@@ -3694,6 +3694,17 @@ body.sorting ul.collapsedSortTarget {
 			text-transform: none;
 		}
 
+		button:not(.running) span.running {
+			display: none;
+		}
+		button.running {
+			outline: 1px solid $orange;
+			box-shadow: 0px 0px 16px $red;
+			opacity: 0.5;
+			span.ready {
+				display: none;
+			}
+		}
 
 		ul.form .WorldGrid,
 		ul.form .LinearHorizontal,

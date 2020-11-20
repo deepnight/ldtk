@@ -35,9 +35,16 @@ class WorldPanel extends ui.modal.Panel {
 		});
 
 		// Create button
-		jContent.find("button.create").click( (_)->{
-			editor.worldTool.startAddMode();
-			N.msg(L.t._("Select a spot on the world map..."));
+		jContent.find("button.create").click( (ev:js.jquery.Event)->{
+			if( editor.worldTool.isInAddMode() ) {
+				editor.worldTool.stopAddMode();
+				ev.getThis().removeClass("running");
+			}
+			else {
+				editor.worldTool.startAddMode();
+				ev.getThis().addClass("running");
+				N.msg(L.t._("Select a spot on the world map..."));
+			}
 		});
 
 		// Duplicate button
@@ -75,6 +82,8 @@ class WorldPanel extends ui.modal.Panel {
 					updateWorldForm();
 					updateLevelForm();
 				}
+
+			case LevelAdded(level):
 
 			case LevelSelected(l):
 				useLevel(l);
@@ -195,5 +204,8 @@ class WorldPanel extends ui.modal.Panel {
 		super.update();
 		if( !editor.worldMode )
 			close();
+
+		if( !editor.worldTool.isInAddMode() && jContent.find("button.create.running").length>0 )
+			jContent.find("button.create").removeClass("running");
 	}
 }
