@@ -23,10 +23,11 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      - uses: nelonoel/branch-name@v1.0.1
       - uses: krdlab/setup-haxe@v1
         with:
           haxe-version: 4.1.4
-      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${GITHUB_REF#refs/heads/}
+      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${BRANCH_NAME}
       # - run: |
       #     haxe -version
       #     haxelib install castle
