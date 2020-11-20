@@ -204,7 +204,7 @@ class Home extends Page {
 			li.appendTo(jRecentList);
 
 
-			if( !App.ME.isSample(p,true) ) {
+			if( !App.ME.isInAppDir(p,true) ) {
 				var col = C.toBlack( C.fromStringLight( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] ), 0.3 );
 				li.append( JsTools.makePath(trimmedPaths[i], col, true) );
 			}

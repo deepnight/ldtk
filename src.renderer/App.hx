@@ -333,17 +333,20 @@ class App extends dn.Process {
 		return false;
 	}
 
-	public inline function isSample(path:String, isFile:Bool) {
+	public inline function isInAppDir(path:String, isFile:Bool) {
 		if( path==null )
 			return false;
 		else {
 			var fp = isFile ? dn.FilePath.fromFile(path) : dn.FilePath.fromDir(path);
 			fp.useSlashes();
-			return fp.directory.indexOf( JsTools.getSamplesDir() )==0;
+			return fp.directory.indexOf( JsTools.getExeDir() )==0;
 		}
 	}
 
 	public function registerRecentProject(path:String) {
+		if( isInAppDir(path,true) )
+			return false;
+		
 		path = StringTools.replace(path, "\\", "/");
 		settings.recentProjects.remove(path);
 		settings.recentProjects.push(path);

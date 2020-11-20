@@ -948,7 +948,7 @@ class Editor extends Page {
 		}
 
 		// Check sample file
-		if( !bypasses.exists("sample") && App.ME.isSample(projectFilePath, true) ) {
+		if( !bypasses.exists("sample") && App.ME.isInAppDir(projectFilePath, true) ) {
 			bypasses.set("sample",true);
 			new ui.modal.dialog.Choice(
 				Lang.t._("The file you're trying to save is a ::app:: sample map.\nAny change to it will be lost during automatic updates, so it's NOT recommended to modify it.", { app:Const.APP_NAME }),
