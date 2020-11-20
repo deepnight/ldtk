@@ -21,13 +21,16 @@ jobs:
     runs-on: windows-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Get Branch
+        run: |
+          raw=$(git branch -r --contains ${{ github.ref }})
+          branch=${raw/origin\/}
+          echo ::set-env name=BRANCH::$branch
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - run: echo foo $GITHUB_REF bar
+      - run: echo foo ${{ env.BRANCH }} bar
       - run: echo foo ${{ github.ref }} bar
-      - run: echo foo ${GITHUB_REF} bar
-      - run: echo foo ${GITHUB_REF#refs/heads/} bar
-      - run: echo foo ${GITHUB_REF##*/} bar
       # - uses: krdlab/setup-haxe@v1
       #   with:
       #     haxe-version: 4.1.4
