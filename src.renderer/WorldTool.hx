@@ -72,6 +72,7 @@ class WorldTool extends dn.Process {
 		// Right click context menu
 		if( ev.button==1 && worldMode ) {
 			var ctx = new ui.modal.ContextMenu(m);
+			// Create
 			ctx.add("New level", ()->{
 				if( !createLevelAt(m) ) {
 					new ui.modal.dialog.Confirm(L.t._("No room for a level here! Do you want to pick another location?"), startAddMode);
@@ -80,7 +81,22 @@ class WorldTool extends dn.Process {
 			var l = getLevelAt(m.worldX, m.worldY, true);
 			if( l!=null ) {
 				editor.selectLevel(l);
-				ctx.add("Delete this level", ()->{
+				// Duplicate
+				ctx.add("Duplicate", ()->{
+					var copy = project.duplicateLevel(l);
+					editor.selectLevel(copy);
+					switch project.worldLayout {
+						case Free, WorldGrid:
+							copy.worldX += project.defaultGridSize*4;
+							copy.worldY += project.defaultGridSize*4;
+
+						case LinearHorizontal:
+						case LinearVertical:
+					}
+					editor.ge.emit( LevelAdded(copy) );
+				});
+				// Delete
+				ctx.add("Delete", ()->{
 					var closest = project.getClosestLevelFrom(l);
 					new ui.LastChance('Level ${l.identifier} removed', project);
 					project.removeLevel(l);
