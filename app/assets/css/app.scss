@@ -2508,7 +2508,9 @@ canvas#webgl {
 		}
 
 		.window.panel {
-			width: calc( 100vw - #{ $mainPanelCompactWid } );
+			&:not(.editAllAutoLayerRules):not(.worldPanel) {
+				width: calc( 100vw - #{ $mainPanelCompactWid } );
+			}
 		}
 	}
 }
