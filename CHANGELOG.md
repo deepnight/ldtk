@@ -1,12 +1,23 @@
-# 0.6.0 - World editor
+# 0.6.0 - Take over the world!
 
-## Discord
+## 💬 Discord
 
-We now have an official 💬 **[Discord](https://deepnight.net/go/ldtk-discord)**! Join us, with have cookies:
+We now have an official **Discord**! Come join us, we have cookies 🤗 Feel free to share the invite URL:
 
-## Release notes
+**https://deepnight.net/go/ldtk-discord**
 
-- **World map**: TODO
+## 🌍 World map
+
+Levels in your project can now be organized in various ways:
+- horizontally,
+- vertically,
+- in a large grid system (like a *Castlevania*™ game),
+- freely on a vast 2D map.
+
+Just hit the `W` key to in world view, and start arranging your creations as you wish!
+
+## 📑 Other changes
+
 - **New splash screen**: to reduce screen flickering and dirty window flashes on startup, a new splash screen was added, among other minor changes. The app window should now feel a little more "stable".
 - **Smooth zooming/panning**: TODO
 - **New rule editor window**: this UI component really needed some love, so it now features a more streamlined interface and a much better integrated help.
