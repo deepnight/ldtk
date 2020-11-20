@@ -36,6 +36,7 @@ jobs:
           haxelib git electron https://github.com/tong/hxelectron.git
       - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${BRANCH_NAME}
       - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+      - run: echo ${BRANCH_NAME}
       - uses: actions/setup-node@v1
         with:
           node-version: '14'
