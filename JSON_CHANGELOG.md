@@ -1,6 +1,7 @@
 # 0.6.0-beta
 
  - Added `worldLayout` to **Project root**
+ - Added `worldGridWidth`/`worldGridHeight` to **Project root**
  - Added `worldX/worldY` to **Level Instance**
  - Added `t` (tile ID) to **Tile Instance**
  - Added `averageColors` to **Tileset definition**

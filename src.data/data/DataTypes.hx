@@ -18,9 +18,9 @@ enum LayerType {
 
 enum WorldLayout {
 	Free;
+	WorldGrid;
 	LinearHorizontal;
 	LinearVertical;
-	WorldGrid;
 }
 
 
