@@ -34,8 +34,8 @@ jobs:
           haxelib git heaps https://github.com/HeapsIO/heaps.git
           haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
           haxelib git electron https://github.com/tong/hxelectron.git
-          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${BRANCH_NAME}
-          haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${BRANCH_NAME}
+      - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
       - uses: actions/setup-node@v1
         with:
           node-version: '14'
