@@ -329,7 +329,7 @@ class WorldRender extends dn.Process {
 
 		// Bounds
 		if( l==editor.curLevel )
-			wl.bounds.lineStyle(6*camera.pixelRatio, 0xffffff, 1);
+			wl.bounds.lineStyle(3*camera.pixelRatio, 0xffffff, 1);
 		else
 			wl.bounds.lineStyle(1*camera.pixelRatio, 0xffcc00, 1);
 		wl.bounds.drawRect(0, 0, l.pxWid, l.pxHei);
