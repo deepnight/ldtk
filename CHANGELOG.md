@@ -19,7 +19,7 @@ Just hit the `W` key to in world view, and start arranging your creations as you
 ## 📑 Other changes
 
 - **New splash screen**: to reduce screen flickering and dirty window flashes on startup, a new splash screen was added, among other minor changes. The app window should now feel a little more "stable".
-- **Smooth zooming/panning**: TODO
+- **Smooth zooming/panning**: automatic zooming and panning (eg. when pressing `F` key) are now animated and smoother.
 - **New rule editor window**: this UI component really needed some love, so it now features a more streamlined interface and a much better integrated help.
 - **User settings** are now stored in AppData OS folder to prevent from losing them on each future update. Unfortunately, this will only apply starting from this version, so settings will be reset one last time :) Sorry!
 - **End of beta**: LDtk is no longer considered *Beta* as it's now stable & mature enough to be used in production.
