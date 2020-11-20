@@ -403,11 +403,7 @@ class Editor extends Page {
 			case K.F if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				camera.fit();
 
-			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() && curLayerInstance.def.isAutoLayer() ):
-				levelRender.toggleAutoLayerRendering(curLayerInstance);
-				N.quick( "Auto-layer rendering: "+L.onOff( levelRender.autoLayerRenderingEnabled(curLayerInstance) ));
-
-			case K.R if( !hasInputFocus() && App.ME.isShiftDown() ):
+			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				var state : Null<Bool> = null;
 				for(li in curLevel.layerInstances)
 					if( li.def.isAutoLayer() ) {
@@ -415,7 +411,7 @@ class Editor extends Page {
 							state = !levelRender.autoLayerRenderingEnabled(li);
 						levelRender.setAutoLayerRendering(li, state);
 					}
-				N.quick( "All auto-layers rendering: "+L.onOff(state));
+				N.quick( "Auto-layers rendering: "+L.onOff(state));
 
 			case K.W if( App.ME.isCtrlDown() ):
 				onClose();
