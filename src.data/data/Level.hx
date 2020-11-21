@@ -55,6 +55,19 @@ class Level {
 			__bgColor: JsonTools.writeColor( getBgColor() ),
 			bgColor: JsonTools.writeColor(bgColor, true),
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),
+			__neighbours: {
+				var nears = _project.levels.filter( (ol)->ol!=this && getBoundsDist(ol)==0 );
+				nears.map( (l)->{
+					var dir = l.worldX>=worldX+pxWid ? "e"
+						: l.worldX+l.pxWid<=worldX ? "w"
+						: l.worldY+l.pxHei<=worldY ? "n"
+						: "s";
+					return {
+						levelUid: l.uid,
+						dir: dir,
+					}
+				});
+			}
 		}
 	}
 

@@ -36,6 +36,7 @@ Value | Type | Description
 Value | Type | Description
 -- | -- | --
 `__bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String<br/><small>*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Background color of the level (same as `bgColor`, except the default value is automatically used here if its value is `null`)
+`__neighbours`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Array&nbsp;of&nbsp;Object | An array listing all other levels touching this one on the world map. The `dir` is a single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast)<br/>This object contains the following fields:<br/><ul><li>**`dir`** **(String**)</li><li>**`levelUid`** **(Int**)</li></ul>
 `bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)*<br/><small>*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Background color of the level. If `null`, the project `defaultLevelBgColor` should be used.
 `identifier` | String | Unique String identifier
 `layerInstances` | Array&nbsp;of&nbsp;[Layer&nbsp;instance](#ldtk-LayerInstanceJson) | 
