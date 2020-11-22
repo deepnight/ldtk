@@ -4,6 +4,7 @@ import data.inst.EntityInstance;
 
 class EntityInstanceEditor extends dn.Process {
 	public static var CURRENT : Null<EntityInstanceEditor> = null;
+	public static var size : Float = 220;
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
@@ -32,6 +33,8 @@ class EntityInstanceEditor extends dn.Process {
 	override function onDispose() {
 		super.onDispose();
 
+		js.Browser.document.removeEventListener("mousemove", resizeDrag);
+		js.Browser.document.removeEventListener("mouseup", resizeDrag);
 		jWindow.remove();
 		jWindow = null;
 
@@ -48,9 +51,9 @@ class EntityInstanceEditor extends dn.Process {
 
 	override function onResize() {
 		super.onResize();
-
+		
 		jWindow.css({
-			left : js.Browser.window.innerWidth - jWindow.outerWidth(),
+			left : (js.Browser.window.innerWidth - Math.floor(size)) + "px",
 			top : Std.int(js.Browser.window.innerHeight*0.5 - jWindow.outerHeight()*0.5)+"px",
 		});
 	}
@@ -87,6 +90,20 @@ class EntityInstanceEditor extends dn.Process {
 		}
 	}
 
+	function resizeDrag( ev : js.html.MouseEvent ) {
+		if ( ev.type == "mouseup" ) {
+			js.Browser.document.removeEventListener("mousemove", resizeDrag);
+			js.Browser.document.removeEventListener("mouseup", resizeDrag);
+		}
+		size = dn.M.fclamp((js.Browser.window.innerWidth - ev.pageX), 220, 820);
+		js.Browser.window.requestAnimationFrame(updateResize);
+	}
+	
+	function updateResize( stamp : Float ) {
+		jWindow.css("width", Math.ceil(size) + "px");
+		renderLink();
+		onResize();
+	}
 
 	function renderLink() {
 		var c = ei.def.color;
@@ -131,15 +148,27 @@ class EntityInstanceEditor extends dn.Process {
 
 	final function updateForm() {
 		jWindow.empty();
+		jWindow.css("width", Math.ceil(size) + "px");
 
 		if( ei==null || ei.def==null ) {
 			destroy();
 			return;
 		}
+		
+		
+		var resizer = new J('<div class="resizeBar"></div>');
+		resizer.appendTo(jWindow);
+		resizer.mousedown(function( ev ) {
+			js.Browser.document.addEventListener("mousemove", resizeDrag);
+			js.Browser.document.addEventListener("mouseup", resizeDrag);
+		});
+		
+		var wrapper = new J('<div class="entityInstanceWrapper"></div>');
+		wrapper.appendTo(jWindow);
 
 		// Form header
 		var jHeader = new J('<header/>');
-		jHeader.appendTo(jWindow);
+		jHeader.appendTo(wrapper);
 		jHeader.append('<div>${ei.def.identifier}</div>');
 		var jEdit = new J('<a class="edit">Edit</a>');
 		jEdit.click( function(ev) {
@@ -150,7 +179,7 @@ class EntityInstanceEditor extends dn.Process {
 
 		// Custom fields
 		var form = new ui.FieldInstancesForm(Entity(ei), ei.def.fieldDefs, (fd)->ei.getFieldInstance(fd));
-		jWindow.append(form.jWrapper);
+		wrapper.append(form.jWrapper);
 		form.onChange = ()->{
 			editor.curLevelHistory.saveLayerState( editor.curLayerInstance );
 			editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );

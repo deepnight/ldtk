@@ -86,7 +86,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			// Type picker
 			var w = new ui.modal.Dialog(anchor,"fieldTypes");
 			var types : Array<data.DataTypes.FieldType> = [
-				F_Int, F_Float, F_Bool, F_String, F_Text, F_Enum(null), F_Color, F_Point
+				F_Int, F_Float, F_Bool, F_String, F_Text, F_Enum(null), F_Color, F_Point, F_File
 			];
 			for(type in types) {
 				var b = new J("<button/>");
@@ -558,7 +558,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Default value
 		switch curField.type {
-			case F_Int, F_Float, F_String, F_Text, F_Point:
+			case F_Int, F_Float, F_String, F_Text, F_Point, F_File:
 				var defInput = jFieldForm.find("input[name=fDef]");
 				if( curField.defaultOverride != null )
 					defInput.val( Std.string( curField.getUntypedDefault() ) );
@@ -573,7 +573,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					defInput.attr("placeholder", switch curField.type {
 						case F_Int: Std.string( curField.iClamp(0) );
 						case F_Float: Std.string( curField.fClamp(0) );
-						case F_String, F_Text: "";
+						case F_String, F_Text, F_File: "";
 						case F_Point: "0"+Const.POINT_SEPARATOR+"0";
 						case F_Bool, F_Color, F_Enum(_): "N/A";
 					});
@@ -701,6 +701,26 @@ class EditEntityDefs extends ui.modal.Panel {
 		input.change( function(ev) {
 			curField.setMax( input.val() );
 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
+		});
+		
+		// Accept file types
+		var input = jFieldForm.find("input[name=acceptTypes]");
+		input.val( curField.acceptFileTypes==null ? "" : curField.acceptFileTypes.join(";") );
+		input.change( function(ev) {
+			curField.setAcceptFileTypes( input.val() );
+			editor.ge.emit( EntityFieldDefChanged(curEntity) );
+		});
+		
+		// File select button
+		var input = jFieldForm.find("button[name=fDefFile]");
+		input.click( function(ev) {
+			dn.electron.Dialogs.open(curField.acceptFileTypes, Editor.ME.getProjectDir(), function( absPath ) {
+				var relPath = Editor.ME.makeRelativeFilePath(absPath);
+				var defInput = jFieldForm.find("input[name=fDef]");
+				defInput.val(relPath);
+				curField.setDefault(relPath);
+				editor.ge.emit( EntityFieldDefChanged(curEntity) );
+			});
 		});
 	}
 

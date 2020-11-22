@@ -93,9 +93,10 @@
 			<div class="info identifier"></div>
 		</li>
 
-		<li class="F_Int F_Float F_String F_Text">
+		<li class="F_Int F_Float F_String F_Text F_File">
 			<label for="fDef">Default value</label>
 			<input type="text" name="fDef" placeholder="" id="fDef"/>
+			<button class="F_File file-select" id="fDefFile" name="fDefFile">Select file</button>
 		</li>
 
 		<li class="F_Bool">
@@ -114,9 +115,15 @@
 			<span>to</span>
 			<input type="text" name="max" id="max" placeholder="Max"/>
 		</li>
+		
+		<li class="F_File">
+			<label for="acceptTypes">Accept types</label>
+			<input type="text" name="acceptTypes" id="acceptTypes" placeholder=".*"/>
+			<div class="info" title="Semicolon-separated extensions with dot. For example: .png;.jpg;.gif"></div>
+		</li>
 
 
-		<li class="F_Int F_Float F_String F_Text F_Enum F_Point">
+		<li class="F_Int F_Float F_String F_Text F_Enum F_Point F_File">
 			<label for="canBeNull">Can be null</label>
 			<input type="checkbox" name="canBeNull" id="canBeNull"/>
 		</li>

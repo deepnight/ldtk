@@ -289,6 +289,33 @@ class FieldInstancesForm {
 				});
 
 				hideInputIfDefault(arrayIdx, input, fi);
+			
+			case F_File:
+				var def = fi.def.getStringDefault();
+				var input = new J('<input class="fileInput" type="text"/>');
+				input.appendTo(jTarget);
+				input.attr("placeholder", def==null ? "(null)" : def=="" ? "(empty string)" : def);
+				if( !fi.isUsingDefault(arrayIdx) )
+					input.val( fi.getString(arrayIdx) );
+				// TODO: Proper icon
+				var fileSelect = new J('<button class="fileSelectButton">&#128269;</button>');
+				fileSelect.appendTo(jTarget);
+				
+				input.change( function(ev) {
+					fi.parseValue( arrayIdx, input.val() );
+					onFieldChange();
+				});
+				
+				fileSelect.click( function(ev) {
+					dn.electron.Dialogs.open(fi.def.acceptFileTypes, Editor.ME.getProjectDir(), function( absPath ) {
+						var relPath = Editor.ME.makeRelativeFilePath(absPath);
+						input.val(relPath);
+						fi.parseValue( arrayIdx, relPath );
+						onFieldChange();
+					});
+				});
+				
+				hideInputIfDefault(arrayIdx, input, fi);
 		}
 	}
 
@@ -460,7 +487,7 @@ class FieldInstancesForm {
 						}
 						var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
 						switch fi.def.type {
-							case F_Int, F_Float, F_String, F_Text: jArray.find("a.usingDefault:last").click();
+							case F_Int, F_Float, F_String, F_Text, F_File: jArray.find("a.usingDefault:last").click();
 							case F_Bool:
 							case F_Color:
 							case F_Enum(enumDefUid):
