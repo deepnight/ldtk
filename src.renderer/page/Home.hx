@@ -197,6 +197,7 @@ class Home extends Page {
 
 		// List files
 		var i = recents.length-1;
+		C.initUniqueColors();
 		while( i>=0 ) {
 			var p = recents[i];
 			var isCrashFile = p.indexOf( Const.CRASH_NAME_SUFFIX )>=0;
@@ -205,7 +206,8 @@ class Home extends Page {
 
 
 			if( !App.ME.isInAppDir(p,true) ) {
-				var col = C.fromStringLight( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] );
+				var bgCol = C.pickUniqueColorFor( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] );
+				var textCol = C.toWhite(bgCol, 0.3);
 				var jPath = new J('<div class="recentPath"/>');
 				jPath.appendTo(li);
 				var parts = trimmedPaths[i].split("/");
@@ -213,18 +215,18 @@ class Home extends Page {
 				for(d in parts) {
 					if( j>0 ) {
 						var jSlash = new J('<div class="slash">/</div>');
-						jSlash.css({ color: C.intToHex(col) });
+						jSlash.css({ color: C.intToHex(textCol) });
 						jSlash.appendTo(jPath);
 					}
 
 					var jPart = new J('<div>$d</div>');
 					jPart.appendTo(jPath);
-					jPart.css({ color: C.intToHex(col) });
+					jPart.css({ color: C.intToHex(textCol) });
 
 					if( j==0 ) {
 						jPart.addClass("label");
 						jPart.wrapInner('<span/>');
-						jPart.find("span").css({ backgroundColor: C.intToHex(col) });
+						jPart.find("span").css({ backgroundColor: C.intToHex(bgCol) });
 					}
 					else if( j<parts.length-1 ) {
 						jPart.addClass("dir");
