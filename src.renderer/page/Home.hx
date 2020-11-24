@@ -205,15 +205,43 @@ class Home extends Page {
 
 
 			if( !App.ME.isInAppDir(p,true) ) {
-				var col = C.toBlack( C.fromStringLight( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] ), 0.3 );
-				li.append( JsTools.makePath(trimmedPaths[i], col, true) );
+				var col = C.fromStringLight( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] );
+				var jPath = new J('<div class="recentPath"/>');
+				jPath.appendTo(li);
+				var parts = trimmedPaths[i].split("/");
+				var j = 0;
+				for(d in parts) {
+					if( j>0 ) {
+						var jSlash = new J('<div class="slash">/</div>');
+						jSlash.css({ color: C.intToHex(col) });
+						jSlash.appendTo(jPath);
+					}
+
+					var jPart = new J('<div>$d</div>');
+					jPart.appendTo(jPath);
+					jPart.css({ color: C.intToHex(col) });
+
+					if( j==0 ) {
+						jPart.addClass("label");
+						jPart.wrapInner('<span/>');
+						jPart.find("span").css({ backgroundColor: C.intToHex(col) });
+					}
+					else if( j<parts.length-1 ) {
+						jPart.addClass("dir");
+					}
+					else if( j==parts.length-1 ) {
+						jPart.addClass("file");
+						jPart.html( '<span class="name">' + d.split(".")[0] + '</span>' );
+					}
+
+					j++;
+				}
 			}
 			else {
 				// Sample file
-				li.addClass("sample");
-				var jPath = new J('<div class="path"/>');
-				jPath.append('<span class="highlight">${Const.APP_NAME} sample</span>');
-				jPath.append('<span>${dn.FilePath.extractFileWithExt(p)}</span>');
+				var jPath = new J('<div class="recentPath sample"/>');
+				jPath.append('<div class="label"><span>${Const.APP_NAME} sample</span></div>');
+				jPath.append('<div class="file"><span class="name">${dn.FilePath.extractFileName(p)}</span></div>');
 				jPath.appendTo(li);
 			}
 

@@ -2733,17 +2733,64 @@ canvas#webgl {
 					text-shadow: 0px 2px 8px $bgDark, 0px 2px 2px $bgDark;
 				}
 
-				.path {
-					padding-top: 4px;
-					padding-bottom: 4px;
-					white-space: nowrap;
-					overflow-x: hidden;
+				.recentPath {
+					display: flex;
+					// display: grid;
+					// grid-template-columns: min-content;
+					// grid-auto-flow: column;
+					// grid-auto-columns: min-content;
 					width: 100%;
+					align-items: center;
 
-					span:not(:last-of-type):not(.slash) {
-						font-size: 8pt;
+					.label span {
+						display: inline-block;
+						width: 100px;
+						padding: 3px 8px;
+						font-size: 9pt;
+						text-align: center;
+						font-weight: bold;
+						white-space: nowrap;
+						color: white;
+						text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3), 0px 0px 3px rgba(0, 0, 0, 0.3);
+						overflow-x: hidden;
+						border-radius: 3px;
+					}
+
+					&.sample {
+						flex: 0 1 0px;
+						color: $help;
+						.label span {
+							background-color: $helpMed;
+						}
+						.file .name {
+							color: $help;
+						}
+					}
+
+					.dir,
+					.slash {
+						flex: 0 1 0px;
+						font-size: 7.5pt;
+					}
+
+					.slash {
+						padding: 0px 3px;
+					}
+
+					.file {
+						flex: 1 0 auto;
+						padding-left: 8px;
+						.name {
+							font-weight: bold;
+							font-size: 10.5pt;
+							color: white;
+						}
+						.ext {
+							font-size: 8pt;
+						}
 					}
 				}
+
 
 				li {
 					overflow: hidden;
@@ -2759,21 +2806,7 @@ canvas#webgl {
 						padding: 4px 8px;
 					}
 
-					&.sample {
-						.path {
-							.highlight {
-								margin-right: 8px;
-								font-style: italic;
-								background-color: $helpDark;
-								color: $help;
-							}
-							span:last-of-type {
-								color: $help !important;
-							}
-						}
-					}
-
-					&.missing .path span {
+					&.missing .recentPath div {
 						text-decoration: line-through;
 						font-weight: normal;
 						color: $red !important;
