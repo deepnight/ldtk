@@ -25,7 +25,7 @@ class Modal extends dn.Process {
 
 		jModalAndMask = new J("xml#window").children().first().clone();
 		App.ME.jPage.append(jModalAndMask).addClass("hasModal");
-		jModalAndMask.on("mousemove", (ev)->ev.stopPropagation());
+		// jModalAndMask.on("mousemove", (ev)->ev.stopPropagation());
 
 		jWrapper = jModalAndMask.find(".wrapper");
 		jContent = jModalAndMask.find(".content");
