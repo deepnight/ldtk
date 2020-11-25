@@ -16,6 +16,8 @@
 	"minifyJson": false,
 	"exportTiled": false,
 	"worldLayout": "LinearHorizontal",
+	"worldGridWidth": 256,
+	"worldGridHeight": 256,
 	"defs": {
 		"layers": [
 			{
@@ -760,11 +762,11 @@
 			"identifier": "Rules_rollover",
 			"uid": 52,
 			"worldX": 0,
-			"worldY": 40,
+			"worldY": 0,
 			"pxWid": 256,
 			"pxHei": 256,
-			"__bgColor": "#262737",
-			"bgColor": null,
+			"__bgColor": "#4D529D",
+			"bgColor": "#4D529D",
 			"layerInstances": [
 				{
 					"__identifier": "Entities2",
@@ -1063,13 +1065,14 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": []
 		},
 		{
 			"identifier": "Rule_tile_groups",
 			"uid": 53,
 			"worldX": 288,
-			"worldY": 40,
+			"worldY": 0,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#262737",
@@ -1215,13 +1218,14 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": []
 		},
 		{
 			"identifier": "Flood_fill",
 			"uid": 51,
 			"worldX": 576,
-			"worldY": 24,
+			"worldY": 0,
 			"pxWid": 368,
 			"pxHei": 288,
 			"__bgColor": "#262737",
@@ -1581,13 +1585,14 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": []
 		},
 		{
 			"identifier": "Complex",
 			"uid": 22,
 			"worldX": 976,
-			"worldY": 4,
+			"worldY": 0,
 			"pxWid": 360,
 			"pxHei": 328,
 			"__bgColor": "#262737",
@@ -1998,13 +2003,14 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": []
 		},
 		{
 			"identifier": "Empty",
 			"uid": 49,
 			"worldX": 1368,
-			"worldY": 40,
+			"worldY": 0,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#262737",
@@ -2199,13 +2205,14 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": []
 		},
 		{
 			"identifier": "Field_conversions",
 			"uid": 41,
 			"worldX": 1656,
-			"worldY": 96,
+			"worldY": 0,
 			"pxWid": 224,
 			"pxHei": 144,
 			"__bgColor": "#262737",
@@ -2430,13 +2437,14 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": []
 		},
 		{
 			"identifier": "MultiLines",
 			"uid": 33,
 			"worldX": 1912,
-			"worldY": 128,
+			"worldY": 0,
 			"pxWid": 80,
 			"pxHei": 80,
 			"__bgColor": "#262737",
@@ -2478,12 +2486,12 @@
 						{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] },
 						{
 							"__identifier": "desc",
-							"__value": "some desc\\n...on multiple\\n...lines!",
+							"__value": "some desc\n...on multiple\n...lines!",
 							"__type": "String",
 							"defUid": 38,
 							"realEditorValues": [{
 								"id": "V_String",
-								"params": ["some desc\\n...on multiple\\n...lines!"]
+								"params": ["some desc\n...on multiple\n...lines!"]
 							}]
 						}
 					] }]
@@ -2572,13 +2580,14 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": []
 		},
 		{
 			"identifier": "Level2",
 			"uid": 40,
 			"worldX": 2024,
-			"worldY": 40,
+			"worldY": 0,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#262737",
@@ -2647,12 +2656,12 @@
 							{ "__identifier": "Enum", "__value": null, "__type": "LocalEnum.Test", "defUid": 31, "realEditorValues": [] },
 							{
 								"__identifier": "desc",
-								"__value": "line1\\\\nline2",
+								"__value": "line1\\\nline2",
 								"__type": "String",
 								"defUid": 38,
 								"realEditorValues": [{
 									"id": "V_String",
-									"params": ["line1\\\\nline2"]
+									"params": ["line1\\\nline2"]
 								}]
 							}
 						] }
@@ -2834,7 +2843,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": []
 		},
 		{
 			"identifier": "Another_complex",
@@ -3192,7 +3202,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": []
 		}
 	]
 }
