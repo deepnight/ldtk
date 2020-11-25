@@ -37,7 +37,7 @@ class FieldDef {
 		editorDisplayPos = Above;
 		editorAlwaysShow = false;
 		identifier = "NewField"+uid;
-		canBeNull = type==F_String || type==F_Text || type==F_File || type==F_Point && !isArray;
+		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point && !isArray;
 		arrayMinLength = arrayMaxLength = null;
 		min = max = null;
 		defaultOverride = null;
@@ -56,10 +56,12 @@ class FieldDef {
 			+ ( canBeNull ? 'Null<$type>' : '$type' )
 			+ ', default=${getDefault()})'
 			+ ( type==F_Int || type==F_Float ? '[$min-$max]' : "" )
-			+ ( type==F_File && acceptFileTypes != null ? '[${acceptFileTypes.join(";")}]' : "[.*]");
+			+ ( type==F_Path && acceptFileTypes != null ? '[${acceptFileTypes.join(";")}]' : "[.*]");
 	}
 
 	public static function fromJson(p:Project, json:Dynamic) {
+		if( json.type=="F_File" ) json.type = "F_Path"; // patch old type name
+
 		var type = JsonTools.readEnum(data.DataTypes.FieldType, json.type, false);
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), type, JsonTools.readBool(json.isArray, false) );
 		o.identifier = JsonTools.readString(json.identifier);
@@ -108,7 +110,7 @@ class FieldDef {
 			case F_Color: "Color";
 			case F_Point: "Point";
 			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
-			case F_File: "FilePath";
+			case F_Path: "Path";
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
@@ -125,7 +127,7 @@ class FieldDef {
 			case F_Enum(enumDefUid):
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
-			case F_File: "FilePath";
+			case F_Path: "Path";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}
@@ -134,12 +136,12 @@ class FieldDef {
 		var infinity = "∞";
 		return getShortDescription()
 			+ ( canBeNull ? " (nullable)" : "" )
-			+ ", default = " + ( ( type==F_String || type==F_Text || type==F_File ) && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
+			+ ", default = " + ( ( type==F_String || type==F_Text || type==F_Path ) && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
 			+ ( min==null && max==null ? "" :
 				( type==F_Int ? " ["+(min==null?"-"+infinity:""+dn.M.round(min))+";"+(max==null?"+"+infinity:""+dn.M.round(max))+"]" : "" )
 				+ ( type==F_Float ? " ["+(min==null?"-"+infinity:""+min)+";"+(max==null?infinity:""+max)+"]" : "" )
 			)
-			+ ( type==F_File && acceptFileTypes != null ? '[${acceptFileTypes.join(" ")}]' : "[.*]");
+			+ ( type==F_Path && acceptFileTypes != null ? '[${acceptFileTypes.join(" ")}]' : "[.*]");
 	}
 	#end
 
@@ -280,7 +282,7 @@ class FieldDef {
 				var def = Std.parseFloat(rawDef);
 				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Float( fClamp(def) );
 
-			case F_String, F_Text, F_File:
+			case F_String, F_Text, F_Path:
 				rawDef = StringTools.trim(rawDef);
 				defaultOverride = rawDef=="" ? null : V_String(rawDef);
 
@@ -313,7 +315,8 @@ class FieldDef {
 			case F_Int: getIntDefault();
 			case F_Color: getColorDefault();
 			case F_Float: getFloatDefault();
-			case F_String, F_Text, F_File: getStringDefault();
+			case F_String, F_Text: getStringDefault();
+			case F_Path: null;
 			case F_Bool: getBoolDefault();
 			case F_Point: getPointDefault();
 			case F_Enum(name): getEnumDefault();

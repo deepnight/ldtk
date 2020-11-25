@@ -152,7 +152,17 @@ class FieldInstance {
 					setInternal( arrayIdx, V_Float(v) );
 				}
 
-			case F_String, F_File:
+			case F_Path:
+				raw = StringTools.trim(raw);
+				if( raw.length==0 )
+					setInternal(arrayIdx, null);
+				else {
+					raw = StringTools.replace(raw, "\\r", " ");
+					raw = StringTools.replace(raw, "\\n", " ");
+					setInternal(arrayIdx, V_String(raw) );
+				}
+
+			case F_String:
 				raw = StringTools.trim(raw);
 				if( raw.length==0 )
 					setInternal(arrayIdx, null);
@@ -229,7 +239,7 @@ class FieldInstance {
 						if( getEnumValue(idx)==null )
 							return def.identifier+"?";
 
-			case F_File:
+			case F_Path:
 				for( idx in 0...getArrayLength() ) {
 					if( !def.canBeNull && valueIsNull(idx) )
 						return def.identifier+"?";
@@ -251,7 +261,7 @@ class FieldInstance {
 			case F_Color: getColorAsInt(arrayIdx);
 			case F_Float: getFloat(arrayIdx);
 			case F_String, F_Text: getString(arrayIdx);
-			case F_File: getFilePath(arrayIdx);
+			case F_Path: getFilePath(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
@@ -292,7 +302,7 @@ class FieldInstance {
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Float: getFloat(arrayIdx);
 			case F_String, F_Text: getString(arrayIdx);
-			case F_File: getFilePath(arrayIdx);
+			case F_Path: getFilePath(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
@@ -303,7 +313,7 @@ class FieldInstance {
 			case F_Int, F_Float, F_Bool, F_Color: return Std.string(v);
 			case F_Enum(name): return '$v';
 			case F_Point: return '$v';
-			case F_String, F_Text, F_File: return '"$v"';
+			case F_String, F_Text, F_Path: return '"$v"';
 		}
 	}
 
@@ -313,7 +323,7 @@ class FieldInstance {
 			case F_Float: JsonTools.writeFloat( getFloat(arrayIdx) );
 			case F_String: escapeStringForJson( getString(arrayIdx) );
 			case F_Text: escapeStringForJson( getString(arrayIdx) );
-			case F_File: escapeStringForJson( getFilePath(arrayIdx) );
+			case F_Path: escapeStringForJson( getFilePath(arrayIdx) );
 			case F_Bool: getBool(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Point: getPointGrid(arrayIdx);
@@ -373,7 +383,7 @@ class FieldInstance {
 	}
 
 	public function getFilePath(arrayIdx:Int) : String {
-		def.require(F_File);
+		def.require(F_Path);
 		var out = isUsingDefault(arrayIdx) ? null : switch internalValues[arrayIdx] {
 			case V_String(v): v;
 			case _: throw "unexpected";
@@ -426,7 +436,7 @@ class FieldInstance {
 			case F_Text:
 			case F_Bool:
 			case F_Color:
-			case F_File:
+			case F_Path:
 
 			case F_Point:
 				var i = 0;

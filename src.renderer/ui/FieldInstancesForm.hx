@@ -299,7 +299,7 @@ class FieldInstancesForm {
 
 				hideInputIfDefault(arrayIdx, input, fi);
 
-			case F_File:
+			case F_Path:
 				var isRequired = fi.valueIsNull(arrayIdx) && !fi.def.canBeNull;
 				var input = new J('<input class="fileInput" type="text"/>');
 				input.appendTo(jTarget);
@@ -503,7 +503,7 @@ class FieldInstancesForm {
 						}
 						var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
 						switch fi.def.type {
-							case F_Int, F_Float, F_String, F_Text, F_File: jArray.find("a.usingDefault:last").click();
+							case F_Int, F_Float, F_String, F_Text, F_Path: jArray.find("a.usingDefault:last").click();
 							case F_Bool:
 							case F_Color:
 							case F_Enum(enumDefUid):

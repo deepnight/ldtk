@@ -4744,7 +4744,7 @@ $patternSize : 32px;
 				grid-column: 2/3;
 				overflow: auto;
 
-				button.convert,.F_File.file-select {
+				button.convert, .F_Path.file-select {
 					padding: 4px;
 					flex: 0 1 0px;
 					align-self: stretch;
@@ -4834,11 +4834,11 @@ $patternSize : 32px;
 		ul.form.type-F_Point .F_Point,
 		ul.form.type-F_Text .F_Text,
 		ul.form.type-F_String .F_String,
-		ul.form.type-F_File .F_File {
+		ul.form.type-F_Path .F_Path {
 			display: flex;
 		}
 
-		ul.form.type-F_File .F_File.file-select {
+		ul.form.type-F_Path .F_Path.file-select {
 			display: initial;
 
 		}

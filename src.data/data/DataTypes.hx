@@ -38,7 +38,7 @@ enum FieldType {
 	F_Color;
 	F_Enum(enumDefUid:Int);
 	F_Point;
-	F_File;
+	F_Path;
 }
 
 enum ValueWrapper {

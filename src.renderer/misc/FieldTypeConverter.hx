@@ -37,11 +37,11 @@ class FieldTypeConverter {
 			}
 		},
 		{
-			from:F_File, to:F_String, lossless:true,
+			from:F_Path, to:F_String, lossless:true,
 			convertInst:(fi,i)->{},
 		},
 		{
-			from:F_String, to:F_File, lossless:true,
+			from:F_String, to:F_Path, lossless:true,
 			convertInst:(fi,i)->{},
 		},
 

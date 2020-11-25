@@ -313,13 +313,13 @@ class Tiled extends Exporter {
 								case F_Color: "color";
 								case F_Enum(enumDefUid): null;
 								case F_Point: null;
-								case F_File: "file";
+								case F_Path: "path";
 							}
 							// Value
 							var v : Dynamic = switch fi.def.type {
 								case F_Int: fi.getInt(i);
 								case F_Float: fi.getFloat(i);
-								case F_String, F_Text, F_File: fi.getString(i);
+								case F_String, F_Text, F_Path: fi.getString(i);
 								case F_Bool: fi.getBool(i);
 								case F_Color:
 									var c = fi.getColorAsHexStr(i);

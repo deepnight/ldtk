@@ -86,7 +86,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			// Type picker
 			var w = new ui.modal.Dialog(anchor,"fieldTypes");
 			var types : Array<data.DataTypes.FieldType> = [
-				F_Int, F_Float, F_Bool, F_String, F_Text, F_Enum(null), F_Color, F_Point, F_File
+				F_Int, F_Float, F_Bool, F_String, F_Text, F_Enum(null), F_Color, F_Point, F_Path
 			];
 			for(type in types) {
 				var b = new J("<button/>");
@@ -558,7 +558,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Default value
 		switch curField.type {
-			case F_File:
+			case F_Path:
 
 			case F_Int, F_Float, F_String, F_Text, F_Point:
 				var defInput = jFieldForm.find("input[name=fDef]");
@@ -575,7 +575,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					defInput.attr("placeholder", switch curField.type {
 						case F_Int: Std.string( curField.iClamp(0) );
 						case F_Float: Std.string( curField.fClamp(0) );
-						case F_String, F_Text, F_File: "";
+						case F_String, F_Text, F_Path: "";
 						case F_Point: "0"+Const.POINT_SEPARATOR+"0";
 						case F_Bool, F_Color, F_Enum(_): "N/A";
 					});
