@@ -214,12 +214,17 @@ class Camera extends dn.Process {
 	}
 
 	public function deltaZoomTo(zoomFocusX:Float, zoomFocusY:Float, delta:Float) {
-		var c = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
+		cancelAllAutoMovements();
+		var old = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
 
 		rawZoom += delta * rawZoom;
 		rawZoom = M.fclamp(rawZoom, getMinZoom(), MAX_ZOOM);
 
 		editor.ge.emit(ViewportChanged);
+
+		var c = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
+		worldX += c.levelX - old.levelX;
+		worldY += c.levelY - old.levelY;
 	}
 
 
