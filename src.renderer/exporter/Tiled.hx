@@ -37,7 +37,6 @@ class Tiled extends Exporter {
 
 		// Export each level to a separate TMX file
 		var i = 1;
-		var wx = 0;
 		for(l in p.levels) {
 			var bytes = exportLevel(l);
 
@@ -48,10 +47,9 @@ class Tiled extends Exporter {
 
 			world.maps.push({
 				fileName: fp.fileWithExt,
-				x:wx,
-				y:0,
+				x:l.worldX,
+				y:l.worldY,
 			});
-			wx += l.pxWid;
 			i++;
 		}
 
