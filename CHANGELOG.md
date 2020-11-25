@@ -23,6 +23,7 @@ Just hit the `W` key to in world view, and start arranging your creations as you
 - **New rule editor window**: this UI component really needed some love, so it now features a more streamlined interface and a much better integrated help.
 - **User settings** are now stored in AppData OS folder to prevent from losing them on each future update. Unfortunately, this will only apply starting from this version, so settings will be reset one last time :) Sorry!
 - **End of beta**: LDtk is no longer considered *Beta* as it's now stable & mature enough to be used in production.
+- **"File path" field**: this new field type allow you to refer to an external file directly from an Entity instance (many thanks to [Yanrishatum](https://github.com/Yanrishatum)!)
 - Many *under-the-hood* optimizations to support the new World map feature.
 - Removed the "double" *Fit* mode when pressing `F`. Now pressing this key just fits the whole level in the viewport.
 - Unified R & Shift-R shortcuts: just press R to toggle all auto-layers rendering.
