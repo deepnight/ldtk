@@ -376,13 +376,18 @@ class FieldDef {
 
 	public function setAcceptFileTypes(raw:Null<String>) {
 		var extReg = ~/\.?([a-z_\-.0-9]+)/gi;
+		var anyValidChar = ~/[a-z0-9]+/gi;
 		if( raw == null || !extReg.match(raw) )
 			acceptFileTypes = null;
 		else {
 			acceptFileTypes = [];
+			var duplicates = new Map();
 			while( extReg.match(raw) ) {
 				var ext = extReg.matched(1).toLowerCase();
-				acceptFileTypes.push("." + ext);
+				if( !duplicates.exists(ext) && ext.indexOf("..")<0 && anyValidChar.match(ext) ) {
+					duplicates.set(ext,true);
+					acceptFileTypes.push("." + ext);
+				}
 				raw = extReg.matchedRight();
 			}
 		}
