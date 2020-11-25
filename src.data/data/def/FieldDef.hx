@@ -22,6 +22,8 @@ class FieldDef {
 
 	public var min : Null<Float>;
 	public var max : Null<Float>;
+	
+	public var acceptFileTypes : Array<String>;
 
 	var _project : data.Project;
 
@@ -35,7 +37,7 @@ class FieldDef {
 		editorDisplayPos = Above;
 		editorAlwaysShow = false;
 		identifier = "NewField"+uid;
-		canBeNull = type==F_String || type==F_Text || type==F_Point && !isArray;
+		canBeNull = type==F_String || type==F_Text || type==F_File || type==F_Point && !isArray;
 		arrayMinLength = arrayMaxLength = null;
 		min = max = null;
 		defaultOverride = null;
@@ -53,7 +55,8 @@ class FieldDef {
 		return 'FieldDef.$identifier('
 			+ ( canBeNull ? 'Null<$type>' : '$type' )
 			+ ', default=${getDefault()})'
-			+ ( type==F_Int || type==F_Float ? '[$min-$max]' : "" );
+			+ ( type==F_Int || type==F_Float ? '[$min-$max]' : "" )
+			+ ( type==F_File && acceptFileTypes != null ? '[${acceptFileTypes.join(";")}]' : "[.*]");
 	}
 
 	public static function fromJson(p:Project, json:Dynamic) {
@@ -68,6 +71,7 @@ class FieldDef {
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);
+		o.acceptFileTypes = json.acceptFileTypes==null ? null : JsonTools.readArray(json.acceptFileTypes);
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
 		return o;
 	}
@@ -87,6 +91,7 @@ class FieldDef {
 			editorAlwaysShow: editorAlwaysShow,
 			min: min==null ? null : JsonTools.writeFloat(min),
 			max: max==null ? null : JsonTools.writeFloat(max),
+			acceptFileTypes: acceptFileTypes,
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
 		}
 	}
@@ -103,6 +108,7 @@ class FieldDef {
 			case F_Color: "Color";
 			case F_Point: "Point";
 			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
+			case F_File: "File";
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
@@ -119,6 +125,7 @@ class FieldDef {
 			case F_Enum(enumDefUid):
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
+			case F_File: "File";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}
@@ -127,11 +134,12 @@ class FieldDef {
 		var infinity = "∞";
 		return getShortDescription()
 			+ ( canBeNull ? " (nullable)" : "" )
-			+ ", default = " + ( ( type==F_String || type==F_Text ) && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
+			+ ", default = " + ( ( type==F_String || type==F_Text || type==F_File ) && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
 			+ ( min==null && max==null ? "" :
 				( type==F_Int ? " ["+(min==null?"-"+infinity:""+dn.M.round(min))+";"+(max==null?"+"+infinity:""+dn.M.round(max))+"]" : "" )
 				+ ( type==F_Float ? " ["+(min==null?"-"+infinity:""+min)+";"+(max==null?infinity:""+max)+"]" : "" )
-			);
+			)
+			+ ( type==F_File && acceptFileTypes != null ? '[${acceptFileTypes.join(";")}]' : "[.*]");
 	}
 	#end
 
@@ -226,7 +234,7 @@ class FieldDef {
 	}
 
 	public function getStringDefault() : Null<String> {
-		requireAny([ F_String, F_Text ]);
+		requireAny([ F_String, F_Text, F_File ]);
 		return switch defaultOverride {
 			case null: canBeNull ? null : "";
 			case V_String(v): v;
@@ -272,7 +280,7 @@ class FieldDef {
 				var def = Std.parseFloat(rawDef);
 				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Float( fClamp(def) );
 
-			case F_String, F_Text:
+			case F_String, F_Text, F_File:
 				rawDef = StringTools.trim(rawDef);
 				defaultOverride = rawDef=="" ? null : V_String(rawDef);
 
@@ -305,7 +313,7 @@ class FieldDef {
 			case F_Int: getIntDefault();
 			case F_Color: getColorDefault();
 			case F_Float: getFloatDefault();
-			case F_String, F_Text: getStringDefault();
+			case F_String, F_Text, F_File: getStringDefault();
 			case F_Bool: getBoolDefault();
 			case F_Point: getPointDefault();
 			case F_Enum(name): getEnumDefault();
@@ -361,6 +369,25 @@ class FieldDef {
 			}
 		}
 		checkMinMax();
+	}
+	
+	public function setAcceptFileTypes(raw:Null<String>) {
+		if( raw == null )
+			acceptFileTypes = null;
+		else {
+			var types = [];
+			for( ext in raw.split(";") ) {
+				ext = StringTools.trim(ext);
+				if ( ext != "" ) {
+					if ( ext.charCodeAt(0) != ".".code )
+						types.push("." + ext);
+					else
+						types.push(ext);
+				}
+			}
+			if ( types.length == 0 ) acceptFileTypes = null;
+			else acceptFileTypes = types;
+		}
 	}
 
 	function checkMinMax() {

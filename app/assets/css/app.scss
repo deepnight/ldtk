@@ -3254,19 +3254,30 @@ canvas#webgl {
 
 .entityInstanceEditor {
 	position: absolute;
-	overflow: auto;
 	z-index: 10;
 
-	max-height: 90vh;
 	width: 200px;
 	box-sizing: border-box;
-	padding: 10px;
 
-
-	border-left: 4px solid $orange;
 	box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.6);
 	background-color: $bgDark;
 
+	.entityInstanceWrapper {
+		overflow: auto;
+		max-height: 90vh;
+		padding: 10px;
+	}
+	
+	.resizeBar {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 4px;
+		height: 100%;
+		
+		background-color: $orange;
+		cursor: ew-resize;
+	}
 
 	header {
 		display: grid;
@@ -3356,6 +3367,11 @@ canvas#webgl {
 
 		button.removePoint {
 			flex: 0.2 1 0px;
+		}
+		
+		button.fileSelectButton {
+			flex: 0.2 1 0px;
+			padding: 8px 2px;
 		}
 
 		input[type=color] {
@@ -4707,7 +4723,7 @@ $patternSize : 32px;
 				grid-column: 2/3;
 				overflow: auto;
 
-				button.convert {
+				button.convert,.F_File.file-select {
 					padding: 4px;
 					flex: 0 1 0px;
 					align-self: stretch;
@@ -4796,8 +4812,14 @@ $patternSize : 32px;
 		ul.form.type-F_Enum .F_Enum,
 		ul.form.type-F_Point .F_Point,
 		ul.form.type-F_Text .F_Text,
-		ul.form.type-F_String .F_String {
+		ul.form.type-F_String .F_String,
+		ul.form.type-F_File .F_File {
 			display: flex;
+		}
+		
+		ul.form.type-F_File .F_File.file-select {
+			display: initial;
+			
 		}
 
 	}
