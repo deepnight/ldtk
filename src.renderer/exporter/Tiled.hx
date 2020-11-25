@@ -2,6 +2,8 @@ package exporter;
 
 import ldtk.Json;
 
+
+// TMX documentation: https://doc.mapeditor.org/en/stable/reference/tmx-map-format/
 class Tiled extends Exporter {
 	static var TILED_VERSION = "1.4.2";
 	static var MAP_VERSION = "1.4";
@@ -93,7 +95,7 @@ class Tiled extends Exporter {
 		map.set("tilewidth", ""+tiledGridSize);
 		map.set("tileheight", ""+tiledGridSize);
 		map.set("infinite", "0");
-		map.set("backgroundcolor", C.intToHex(p.bgColor));
+		map.set("backgroundcolor", C.intToHex(level.getBgColor()) );
 
 		/**
 			TILESETS
