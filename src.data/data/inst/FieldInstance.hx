@@ -236,7 +236,7 @@ class FieldInstance {
 
 					if( !valueIsNull(idx) ) {
 						// HACK not super clean to access Editor here
-						var absPath = page.Editor.ME.makeAbsoluteFilePath( getString(idx) );
+						var absPath = page.Editor.ME.makeAbsoluteFilePath( getFilePath(idx) );
 						if( !misc.JsTools.fileExists(absPath) )
 							return def.identifier;
 					}
@@ -251,7 +251,7 @@ class FieldInstance {
 			case F_Color: getColorAsInt(arrayIdx);
 			case F_Float: getFloat(arrayIdx);
 			case F_String, F_Text: getString(arrayIdx);
-			case F_File: getString(arrayIdx);
+			case F_File: getFilePath(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
@@ -292,7 +292,7 @@ class FieldInstance {
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Float: getFloat(arrayIdx);
 			case F_String, F_Text: getString(arrayIdx);
-			case F_File: getString(arrayIdx);
+			case F_File: getFilePath(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
@@ -313,7 +313,7 @@ class FieldInstance {
 			case F_Float: JsonTools.writeFloat( getFloat(arrayIdx) );
 			case F_String: escapeStringForJson( getString(arrayIdx) );
 			case F_Text: escapeStringForJson( getString(arrayIdx) );
-			case F_File: escapeStringForJson( getString(arrayIdx) );
+			case F_File: escapeStringForJson( getFilePath(arrayIdx) );
 			case F_Bool: getBool(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Point: getPointGrid(arrayIdx);
@@ -364,8 +364,17 @@ class FieldInstance {
 	}
 
 	public function getString(arrayIdx:Int) : String {
-		def.requireAny([ F_String, F_Text, F_File ]);
+		def.requireAny([ F_String, F_Text ]);
 		var out = isUsingDefault(arrayIdx) ? def.getStringDefault() : switch internalValues[arrayIdx] {
+			case V_String(v): v;
+			case _: throw "unexpected";
+		}
+		return out;
+	}
+
+	public function getFilePath(arrayIdx:Int) : String {
+		def.require(F_File);
+		var out = isUsingDefault(arrayIdx) ? null : switch internalValues[arrayIdx] {
 			case V_String(v): v;
 			case _: throw "unexpected";
 		}

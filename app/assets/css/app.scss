@@ -3394,6 +3394,20 @@ canvas#webgl {
 			background-color: $bgMed;
 			background-image: url("../img/stripes.png");
 
+			&.required {
+				border-color: $orange;
+				box-shadow: 0px 0px 4px $red, 0px 0px 8px $red inset;
+				background-color: $darkRed;
+				span.value {
+					text-shadow: none;
+					color: $orange !important;
+				}
+				span.label {
+					text-shadow: none;
+					color: $orange !important;
+				}
+			}
+
 			&.checkbox {
 				padding: 0;
 				padding-right: 8px;

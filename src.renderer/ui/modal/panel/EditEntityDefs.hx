@@ -558,7 +558,9 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Default value
 		switch curField.type {
-			case F_Int, F_Float, F_String, F_Text, F_Point, F_File:
+			case F_File:
+
+			case F_Int, F_Float, F_String, F_Text, F_Point:
 				var defInput = jFieldForm.find("input[name=fDef]");
 				if( curField.defaultOverride != null )
 					defInput.val( Std.string( curField.getUntypedDefault() ) );

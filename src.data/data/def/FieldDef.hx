@@ -234,7 +234,7 @@ class FieldDef {
 	}
 
 	public function getStringDefault() : Null<String> {
-		requireAny([ F_String, F_Text, F_File ]);
+		requireAny([ F_String, F_Text ]);
 		return switch defaultOverride {
 			case null: canBeNull ? null : "";
 			case V_String(v): v;

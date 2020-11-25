@@ -37,7 +37,7 @@ class FieldInstancesForm {
 	public inline function isDestroyed() return jWrapper==null || jWrapper.parents("body").length==0;
 
 
-	function hideInputIfDefault(arrayIdx:Int, input:js.jquery.JQuery, fi:data.inst.FieldInstance) {
+	function hideInputIfDefault(arrayIdx:Int, input:js.jquery.JQuery, fi:data.inst.FieldInstance, isRequired=false) {
 		input.off(".def").removeClass("usingDefault");
 
 		if( fi.isUsingDefault(arrayIdx) ) {
@@ -58,6 +58,7 @@ class FieldInstancesForm {
 			else if( !input.is("select") ) {
 				// General INPUT
 				var jRep = new J('<a class="usingDefault" href="#"/>');
+
 				if( input.is("[type=checkbox]") ) {
 					var chk = new J('<input type="checkbox"/>');
 					chk.prop("checked", fi.getBool(arrayIdx));
@@ -66,7 +67,12 @@ class FieldInstancesForm {
 				}
 				else
 					jRep.append('<span class="value">${fi.getForDisplay(arrayIdx)}</span>');
-				jRep.append('<span class="label">Default</span>');
+
+				if( isRequired )
+					jRep.append('<span class="label">Required!</span>');
+				else
+					jRep.append('<span class="label">Default</span>');
+
 				jRep.on("click.def", function(ev) {
 					ev.preventDefault();
 					jRep.remove();
@@ -79,9 +85,12 @@ class FieldInstancesForm {
 				jRep.insertBefore(input);
 				input.hide();
 
+				if( isRequired )
+					jRep.addClass("required");
+
 				input.on("blur.def", function(ev) {
 					jRep.remove();
-					hideInputIfDefault(arrayIdx, input,fi);
+					hideInputIfDefault(arrayIdx, input, fi, isRequired);
 				});
 			}
 			else if( input.is("select") && ( fi.getEnumValue(arrayIdx)!=null || fi.def.canBeNull ) ) {
@@ -91,7 +100,7 @@ class FieldInstancesForm {
 					input.removeClass("usingDefault");
 				});
 				input.on("blur.def", function(ev) {
-					hideInputIfDefault(arrayIdx, input,fi);
+					hideInputIfDefault(arrayIdx, input, fi, isRequired);
 				});
 			}
 		}
@@ -289,23 +298,27 @@ class FieldInstancesForm {
 				});
 
 				hideInputIfDefault(arrayIdx, input, fi);
-			
+
 			case F_File:
-				var def = fi.def.getStringDefault();
+				var isRequired = fi.valueIsNull(arrayIdx) && !fi.def.canBeNull;
 				var input = new J('<input class="fileInput" type="text"/>');
 				input.appendTo(jTarget);
-				input.attr("placeholder", def==null ? "(null)" : def=="" ? "(empty string)" : def);
+				input.attr("placeholder", "(null)");
+				if( isRequired )
+					input.addClass("required");
+
 				if( !fi.isUsingDefault(arrayIdx) )
-					input.val( fi.getString(arrayIdx) );
+					input.val( fi.getFilePath(arrayIdx) );
+
 				// TODO: Proper icon
 				var fileSelect = new J('<button class="fileSelectButton">&#128269;</button>');
 				fileSelect.appendTo(jTarget);
-				
+
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, input.val() );
 					onFieldChange();
 				});
-				
+
 				fileSelect.click( function(ev) {
 					dn.electron.Dialogs.open(fi.def.acceptFileTypes, Editor.ME.getProjectDir(), function( absPath ) {
 						var relPath = Editor.ME.makeRelativeFilePath(absPath);
@@ -314,8 +327,8 @@ class FieldInstancesForm {
 						onFieldChange();
 					});
 				});
-				
-				hideInputIfDefault(arrayIdx, input, fi);
+
+				hideInputIfDefault(arrayIdx, input, fi, isRequired);
 		}
 	}
 
