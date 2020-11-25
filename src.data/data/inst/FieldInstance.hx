@@ -228,12 +228,19 @@ class FieldInstance {
 					for( idx in 0...getArrayLength() )
 						if( getEnumValue(idx)==null )
 							return def.identifier;
-			
+
 			case F_File:
-				// TODO: Check file exists, path is localized.
-				// for( idx in 0...getArrayLength() )
-				// 	if( !def.canBeNull && !fileExists(idx) )
-				// 		return def.identifier;
+				for( idx in 0...getArrayLength() ) {
+					if( !def.canBeNull && valueIsNull(idx) )
+						return def.identifier;
+
+					if( !valueIsNull(idx) ) {
+						// HACK not super clean to access Editor here
+						var absPath = page.Editor.ME.makeAbsoluteFilePath( getString(idx) );
+						if( !misc.JsTools.fileExists(absPath) )
+							return def.identifier;
+					}
+				}
 		}
 		return null;
 	}
@@ -243,7 +250,8 @@ class FieldInstance {
 			case F_Int: getInt(arrayIdx);
 			case F_Color: getColorAsInt(arrayIdx);
 			case F_Float: getFloat(arrayIdx);
-			case F_String, F_Text, F_File: getString(arrayIdx);
+			case F_String, F_Text: getString(arrayIdx);
+			case F_File: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
@@ -283,7 +291,8 @@ class FieldInstance {
 			case F_Int: getInt(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Float: getFloat(arrayIdx);
-			case F_String, F_Text, F_File: getString(arrayIdx);
+			case F_String, F_Text: getString(arrayIdx);
+			case F_File: getString(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);

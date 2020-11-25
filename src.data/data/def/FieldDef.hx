@@ -108,7 +108,7 @@ class FieldDef {
 			case F_Color: "Color";
 			case F_Point: "Point";
 			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
-			case F_File: "File";
+			case F_File: "FilePath";
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
@@ -125,7 +125,7 @@ class FieldDef {
 			case F_Enum(enumDefUid):
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
-			case F_File: "File";
+			case F_File: "FilePath";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}
@@ -139,7 +139,7 @@ class FieldDef {
 				( type==F_Int ? " ["+(min==null?"-"+infinity:""+dn.M.round(min))+";"+(max==null?"+"+infinity:""+dn.M.round(max))+"]" : "" )
 				+ ( type==F_Float ? " ["+(min==null?"-"+infinity:""+min)+";"+(max==null?infinity:""+max)+"]" : "" )
 			)
-			+ ( type==F_File && acceptFileTypes != null ? '[${acceptFileTypes.join(";")}]' : "[.*]");
+			+ ( type==F_File && acceptFileTypes != null ? '[${acceptFileTypes.join(" ")}]' : "[.*]");
 	}
 	#end
 
