@@ -103,6 +103,41 @@ class Project {
 		return fromJson( toJson() );
 	}
 
+	public function onWorldLayoutChange(old:data.DataTypes.WorldLayout) {
+		// Convert layout
+		switch worldLayout {
+			case Free:
+
+			case WorldGrid:
+				switch old {
+					case Free:
+						for(l in levels) {
+							l.worldX = Std.int( l.worldX/worldGridWidth ) * worldGridWidth;
+							l.worldY = Std.int( l.worldY/worldGridHeight ) * worldGridHeight;
+						}
+
+					case WorldGrid:
+
+					case LinearHorizontal:
+						var pos = 0;
+						for(l in levels) {
+							l.worldX = pos*worldGridWidth;
+							pos+=dn.M.ceil( l.pxWid / worldGridWidth );
+						}
+
+					case LinearVertical:
+						var pos = 0;
+						for(l in levels) {
+							l.worldY = pos*worldGridHeight;
+							pos+=dn.M.ceil( l.pxHei / worldGridHeight );
+						}
+				}
+
+			case LinearHorizontal:
+			case LinearVertical:
+		}
+	}
+
 	public function onWorldGridChange(oldWid:Int, oldHei:Int) {
 		for( l in levels ) {
 			var wcx = Std.int(l.worldX/oldWid);

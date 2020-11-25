@@ -124,6 +124,7 @@ class WorldPanel extends ui.modal.Panel {
 		jForm.addClass("layout-"+project.worldLayout.getName());
 
 		// World layout
+		var old = project.worldLayout;
 		var e = new form.input.EnumSelect(
 			jForm.find("[name=worldLayout]"),
 			data.DataTypes.WorldLayout,
@@ -142,6 +143,7 @@ class WorldPanel extends ui.modal.Panel {
 			new LastChance(L.t._("World layout changed"), editor.project);
 		}
 		e.onValueChange = (l)->{
+			project.onWorldLayoutChange(old);
 			project.reorganizeWorld();
 		}
 		e.linkEvent( WorldSettingsChanged );
