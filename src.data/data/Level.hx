@@ -56,17 +56,35 @@ class Level {
 			bgColor: JsonTools.writeColor(bgColor, true),
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),
 			__neighbours: {
-				var nears = _project.levels.filter( (ol)->ol!=this && getBoundsDist(ol)==0 );
-				nears.map( (l)->{
-					var dir = l.worldX>=worldX+pxWid ? "e"
-						: l.worldX+l.pxWid<=worldX ? "w"
-						: l.worldY+l.pxHei<=worldY ? "n"
-						: "s";
-					return {
-						levelUid: l.uid,
-						dir: dir,
-					}
-				});
+				switch _project.worldLayout {
+					case Free, WorldGrid:
+						var nears = _project.levels.filter( (ol)->ol!=this && getBoundsDist(ol)==0 );
+						nears.map( (l)->{
+							var dir = l.worldX>=worldX+pxWid ? "e"
+								: l.worldX+l.pxWid<=worldX ? "w"
+								: l.worldY+l.pxHei<=worldY ? "n"
+								: "s";
+							return {
+								levelUid: l.uid,
+								dir: dir,
+							}
+						});
+
+					case LinearHorizontal, LinearVertical:
+						var idx = dn.Lib.getArrayIndex(this, _project.levels);
+						var nears = [];
+						if( idx<_project.levels.length-1 )
+							nears.push({
+								levelUid: _project.levels[idx+1].uid,
+								dir: _project.worldLayout==LinearHorizontal?"e":"s",
+							});
+						if( idx>0 )
+							nears.push({
+								levelUid: _project.levels[idx-1].uid,
+								dir: _project.worldLayout==LinearHorizontal?"w":"n",
+							});
+						nears;
+				}
 			}
 		}
 	}
