@@ -52,7 +52,7 @@ class Lang {
             case F_Bool: t._("Boolean");
             case F_Point: t._("Point");
             case F_Enum(name): name==null ? t._("Enum") : t._("Enum.::e::", { e:name });
-            case F_Path: t._("Path");
+            case F_Path: t._("File path");
         }
     }
 

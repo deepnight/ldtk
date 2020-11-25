@@ -313,7 +313,7 @@ class Tiled extends Exporter {
 								case F_Color: "color";
 								case F_Enum(enumDefUid): null;
 								case F_Point: null;
-								case F_Path: "path";
+								case F_Path: "file";
 							}
 							// Value
 							var v : Dynamic = switch fi.def.type {

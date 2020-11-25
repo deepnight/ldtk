@@ -110,7 +110,7 @@ class FieldDef {
 			case F_Color: "Color";
 			case F_Point: "Point";
 			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
-			case F_Path: "Path";
+			case F_Path: "File path";
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
@@ -127,7 +127,7 @@ class FieldDef {
 			case F_Enum(enumDefUid):
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
-			case F_Path: "Path";
+			case F_Path: "FilePath";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}

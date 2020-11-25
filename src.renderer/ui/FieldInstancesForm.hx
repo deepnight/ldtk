@@ -310,8 +310,16 @@ class FieldInstancesForm {
 				if( !fi.isUsingDefault(arrayIdx) )
 					input.val( fi.getFilePath(arrayIdx) );
 
-				// TODO: Proper icon
-				var fileSelect = new J('<button class="fileSelectButton">&#128269;</button>');
+				var jLocate = new J('<button class="locate gray"> <span class="icon locate"/> </button>');
+				jLocate.appendTo(jTarget);
+				jLocate.click( (_)->{
+					if( !fi.valueIsNull(arrayIdx) ) {
+						var p = editor.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
+						JsTools.exploreToFile(p, true);
+					}
+				});
+
+				var fileSelect = new J('<button class="fileSelectButton"> <span class="icon open"/> </button>');
 				fileSelect.appendTo(jTarget);
 
 				input.change( function(ev) {
