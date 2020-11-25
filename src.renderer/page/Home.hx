@@ -233,7 +233,7 @@ class Home extends Page {
 					}
 					else if( j==parts.length-1 ) {
 						jPart.addClass("file");
-						jPart.html( '<span class="name">' + d.split(".")[0] + '</span>' );
+						jPart.html( '<span class="name">' + dn.FilePath.extractFileName(p) + '</span>' );
 					}
 
 					j++;
