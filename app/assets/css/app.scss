@@ -3326,16 +3326,21 @@ canvas#webgl {
 		}
 
 		a.reset {
-			flex: 0 0 0px;
+			flex: 0 0 auto;
 			align-self: center;
 			margin-left: 10px;
 			font-size: 0.75em;
 			text-decoration: underline;
 			color: $orange;
 			white-space: nowrap;
+			padding: 2px 4px;
+			border-radius: 3px;
 			cursor: pointer;
+
 			&:hover {
-				color: white;
+				text-decoration: none;
+				color: black;
+				background-color: $orange;
 			}
 		}
 
@@ -3739,6 +3744,23 @@ body.sorting ul.collapsedSortTarget {
 			text-align: left;
 			font-size: 10pt;
 			text-transform: none;
+		}
+
+		a.reset {
+			flex: 0 0 auto;
+			align-self: center;
+			font-size: 9pt;
+			text-decoration: underline;
+			margin-left: 8px;
+			padding: 2px 4px;
+			border-radius: 3px;
+			cursor: pointer;
+
+			&:hover {
+				text-decoration: none;
+				color: black;
+				background-color: $orange;
+			}
 		}
 
 		button:not(.running) span.running {

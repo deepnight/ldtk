@@ -80,6 +80,10 @@ class WorldPanel extends ui.modal.Panel {
 					updateLevelForm();
 				}
 
+			case LevelSettingsChanged(l):
+				if( l==level )
+					updateLevelForm();
+
 			case LevelAdded(level):
 
 			case LevelSelected(l):
@@ -181,15 +185,20 @@ class WorldPanel extends ui.modal.Panel {
 			level.bgColor = c==project.defaultLevelBgColor ? null : c;
 			onFieldChange();
 		}
-		var jDefault = i.jInput.siblings("a.reset");
+		var jSetDefault = i.jInput.siblings("a.reset");
 		if( level.bgColor==null )
-			jDefault.hide();
-		jDefault.click( (_)->{
+			jSetDefault.hide();
+		else
+			jSetDefault.show();
+		jSetDefault.click( (_)->{
 			level.bgColor = null;
 			onFieldChange();
 		});
-		if( level.bgColor!=null )
-			i.jInput.siblings("span.usingDefault").hide();
+		var jIsDefault = i.jInput.siblings("span.usingDefault").hide();
+		if( level.bgColor==null )
+			jIsDefault.show();
+		else
+			jIsDefault.hide();
 
 		// Custom fields
 		// ... (not implemented yet)
