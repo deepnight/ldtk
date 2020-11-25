@@ -272,6 +272,20 @@ class Project {
 		return max-min;
 	}
 
+	public inline function getSmartLevelGridSize() {
+		if( defs.layers.length==0 )
+			return defaultGridSize;
+		else {
+			var g = Const.INFINITE;
+
+			for(ld in defs.layers)
+				if( ld.type!=Entities )
+					g = dn.M.imin(g, ld.gridSize);
+
+			return g==Const.INFINITE ? defaultGridSize : g;
+		}
+	}
+
 
 	/**  USED CHECKS  *****************************************/
 

@@ -219,8 +219,7 @@ class WorldTool extends dn.Process {
 			return false;
 	}
 
-	inline function getLevelGrid() return project.defaultGridSize;
-	inline function getLevelSnapDist() return getLevelGrid() / ( editor.camera.adjustedZoom * 0.4 );
+	inline function getLevelSnapDist() return project.getSmartLevelGridSize() / ( editor.camera.adjustedZoom * 0.4 );
 
 	inline function snapLevelX(cur:data.Level, offset:Int, at:Int) {
 		if( M.fabs(cur.worldX + offset - at) <= getLevelSnapDist() ) {
@@ -360,8 +359,9 @@ class WorldTool extends dn.Process {
 			ev.cancel = true;
 			cursor.clear();
 			editor.cursor.set(Pointer);
-			cursor.lineStyle(2*editor.camera.pixelRatio, 0xffffff);
+			cursor.lineStyle(2/editor.camera.adjustedZoom, 0xffffff);
 			cursor.beginFill(0xffcc00, 0.15);
+			// var p = project.getSmartLevelGridSize()*0.5;
 			cursor.drawRect(over.worldX, over.worldY, over.pxWid, over.pxHei);
 			ev.cancel = true;
 		}
@@ -426,7 +426,7 @@ class WorldTool extends dn.Process {
 				case Free:
 					// Snap to grid
 					if( settings.grid ) {
-						var g = getLevelGrid();
+						var g = project.getSmartLevelGridSize();
 						clickedLevel.worldX = Std.int( clickedLevel.worldX/g ) * g;
 						clickedLevel.worldY = Std.int( clickedLevel.worldY/g ) * g;
 					}
