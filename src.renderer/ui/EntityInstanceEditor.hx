@@ -51,7 +51,7 @@ class EntityInstanceEditor extends dn.Process {
 
 	override function onResize() {
 		super.onResize();
-		
+
 		jWindow.css({
 			left : (js.Browser.window.innerWidth - Math.floor(size)) + "px",
 			top : Std.int(js.Browser.window.innerHeight*0.5 - jWindow.outerHeight()*0.5)+"px",
@@ -98,7 +98,7 @@ class EntityInstanceEditor extends dn.Process {
 		size = dn.M.fclamp((js.Browser.window.innerWidth - ev.pageX), 220, 820);
 		js.Browser.window.requestAnimationFrame(updateResize);
 	}
-	
+
 	function updateResize( stamp : Float ) {
 		jWindow.css("width", Math.ceil(size) + "px");
 		renderLink();
@@ -146,6 +146,7 @@ class EntityInstanceEditor extends dn.Process {
 	}
 
 
+	var scrollMem : Float = 0;
 	final function updateForm() {
 		jWindow.empty();
 		jWindow.css("width", Math.ceil(size) + "px");
@@ -154,15 +155,15 @@ class EntityInstanceEditor extends dn.Process {
 			destroy();
 			return;
 		}
-		
-		
+
+
 		var resizer = new J('<div class="resizeBar"></div>');
 		resizer.appendTo(jWindow);
 		resizer.mousedown(function( ev ) {
 			js.Browser.document.addEventListener("mousemove", resizeDrag);
 			js.Browser.document.addEventListener("mouseup", resizeDrag);
 		});
-		
+
 		var wrapper = new J('<div class="entityInstanceWrapper"></div>');
 		wrapper.appendTo(jWindow);
 
@@ -185,6 +186,12 @@ class EntityInstanceEditor extends dn.Process {
 			editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
 			editor.ge.emit( EntityInstanceFieldChanged(ei) );
 			onResize();
+			wrapper.scrollTop( scrollMem );
+			N.debug(scrollMem);
+		}
+
+		form.onBeforeRender = ()->{
+			scrollMem = wrapper.scrollTop();
 		}
 
 		JsTools.parseComponents(jWindow);
@@ -192,5 +199,6 @@ class EntityInstanceEditor extends dn.Process {
 
 		// Re-position
 		onResize();
+		wrapper.scrollTop(scrollMem);
 	}
 }

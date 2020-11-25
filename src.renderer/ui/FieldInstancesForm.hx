@@ -412,10 +412,12 @@ class FieldInstancesForm {
 		if( !keepCurrentSpecialTool )
 			Editor.ME.clearSpecialTool();
 
+		onBeforeRender();
 		renderForm();
 		onChange();
 	}
 
+	public dynamic function onBeforeRender() {}
 	public dynamic function onChange() {}
 
 
@@ -487,7 +489,6 @@ class FieldInstancesForm {
 						jRemove.click( function(_) {
 							fi.removeArrayValue(idx);
 							onFieldChange();
-							renderForm();
 						});
 					}
 					if( sortable )
@@ -509,7 +510,6 @@ class FieldInstancesForm {
 						else {
 							fi.addArrayValue();
 							onFieldChange();
-							renderForm();
 						}
 						var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
 						switch fi.def.type {
