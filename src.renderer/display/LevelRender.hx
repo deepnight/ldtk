@@ -731,7 +731,7 @@ class LevelRender extends dn.Process {
 				if( err!=null ) {
 					var tf = new h2d.Text(font, above);
 					tf.textColor = 0xffcc00;
-					tf.text = '<$err?>';
+					tf.text = '<$err>';
 				}
 
 				// Skip hiddens

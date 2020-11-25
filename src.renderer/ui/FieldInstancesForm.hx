@@ -319,6 +319,9 @@ class FieldInstancesForm {
 					onFieldChange();
 				});
 
+				if( !fi.valueIsNull(arrayIdx) && !JsTools.fileExists( editor.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) ) )
+					input.addClass("fileNotFound");
+
 				fileSelect.click( function(ev) {
 					dn.electron.Dialogs.open(fi.def.acceptFileTypes, Editor.ME.getProjectDir(), function( absPath ) {
 						var relPath = Editor.ME.makeRelativeFilePath(absPath);

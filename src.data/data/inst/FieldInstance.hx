@@ -221,24 +221,24 @@ class FieldInstance {
 			case F_Point:
 				for( idx in 0...getArrayLength() )
 					if( !def.canBeNull && getPointStr(idx)==null )
-						return def.identifier;
+						return def.identifier+"?";
 
 			case F_Enum(enumDefUid):
 				if( !def.canBeNull )
 					for( idx in 0...getArrayLength() )
 						if( getEnumValue(idx)==null )
-							return def.identifier;
+							return def.identifier+"?";
 
 			case F_File:
 				for( idx in 0...getArrayLength() ) {
 					if( !def.canBeNull && valueIsNull(idx) )
-						return def.identifier;
+						return def.identifier+"?";
 
 					if( !valueIsNull(idx) ) {
 						// HACK not super clean to access Editor here
 						var absPath = page.Editor.ME.makeAbsoluteFilePath( getFilePath(idx) );
 						if( !misc.JsTools.fileExists(absPath) )
-							return def.identifier;
+							return "FileNotFound";
 					}
 				}
 		}

@@ -3378,6 +3378,13 @@ canvas#webgl {
 			width: 100%;
 		}
 
+		input.fileNotFound {
+			color: $orange;
+			border-color: $orange;
+			background-color: $darkRed;
+			box-shadow: 0px 0px 8px $red;
+		}
+
 		textarea {
 			height: auto;
 			overflow-x: auto;
