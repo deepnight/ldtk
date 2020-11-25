@@ -22,7 +22,7 @@ class FieldDef {
 
 	public var min : Null<Float>;
 	public var max : Null<Float>;
-	
+
 	public var acceptFileTypes : Array<String>;
 
 	var _project : data.Project;
@@ -370,23 +370,18 @@ class FieldDef {
 		}
 		checkMinMax();
 	}
-	
+
 	public function setAcceptFileTypes(raw:Null<String>) {
-		if( raw == null )
+		var extReg = ~/\.?([a-z_\-.0-9]+)/gi;
+		if( raw == null || !extReg.match(raw) )
 			acceptFileTypes = null;
 		else {
-			var types = [];
-			for( ext in raw.split(";") ) {
-				ext = StringTools.trim(ext);
-				if ( ext != "" ) {
-					if ( ext.charCodeAt(0) != ".".code )
-						types.push("." + ext);
-					else
-						types.push(ext);
-				}
+			acceptFileTypes = [];
+			while( extReg.match(raw) ) {
+				var ext = extReg.matched(1).toLowerCase();
+				acceptFileTypes.push("." + ext);
+				raw = extReg.matchedRight();
 			}
-			if ( types.length == 0 ) acceptFileTypes = null;
-			else acceptFileTypes = types;
 		}
 	}
 

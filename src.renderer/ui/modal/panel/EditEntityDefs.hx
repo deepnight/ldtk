@@ -702,15 +702,16 @@ class EditEntityDefs extends ui.modal.Panel {
 			curField.setMax( input.val() );
 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
 		});
-		
+
 		// Accept file types
 		var input = jFieldForm.find("input[name=acceptTypes]");
-		input.val( curField.acceptFileTypes==null ? "" : curField.acceptFileTypes.join(";") );
+		if( curField.acceptFileTypes!=null )
+			input.val( curField.acceptFileTypes.join("  ") );
 		input.change( function(ev) {
 			curField.setAcceptFileTypes( input.val() );
 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
 		});
-		
+
 		// File select button
 		var input = jFieldForm.find("button[name=fDefFile]");
 		input.click( function(ev) {
