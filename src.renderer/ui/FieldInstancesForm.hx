@@ -324,7 +324,9 @@ class FieldInstancesForm {
 
 				fileSelect.click( function(ev) {
 					dn.electron.Dialogs.open(fi.def.acceptFileTypes, Editor.ME.getProjectDir(), function( absPath ) {
-						var relPath = Editor.ME.makeRelativeFilePath(absPath);
+						var fp = dn.FilePath.fromFile(absPath);
+						fp.useSlashes();
+						var relPath = Editor.ME.makeRelativeFilePath(fp.full);
 						input.val(relPath);
 						fi.parseValue( arrayIdx, relPath );
 						onFieldChange();
