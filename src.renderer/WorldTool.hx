@@ -312,7 +312,7 @@ class WorldTool extends dn.Process {
 				var i = getLinearInsertPoint(m);
 				if( i!=null) {
 					b.x = i.pos-b.wid*0.5;
-					b.y = 0;
+					b.y = -32;
 				}
 				else
 					return null;
@@ -320,7 +320,7 @@ class WorldTool extends dn.Process {
 			case LinearVertical:
 				var i = getLinearInsertPoint(m);
 				if( i!=null) {
-					b.x = 0;
+					b.x = -32;
 					b.y = i.pos-b.hei*0.5;
 				}
 				else
@@ -516,9 +516,11 @@ class WorldTool extends dn.Process {
 					all;
 			}
 
-		var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
 		var dh = new dn.DecisionHelper(pts);
-		dh.remove( (i)->i.idx==curIdx+1 );
+		if( clickedLevel!=null ) {
+			var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
+			dh.remove( (i)->i.idx==curIdx+1 );
+		}
 
 		switch project.worldLayout {
 			case Free, WorldGrid:
