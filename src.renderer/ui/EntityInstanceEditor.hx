@@ -77,6 +77,10 @@ class EntityInstanceEditor extends dn.Process {
 				if( ei==this.ei )
 					updateForm();
 
+			case EntityInstanceFieldChanged(ei):
+				if( ei==this.ei )
+					updateForm();
+
 			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				closeExisting(); // TODO do softer refresh
 
@@ -146,6 +150,10 @@ class EntityInstanceEditor extends dn.Process {
 	}
 
 
+	inline function applyScrollMemory() {
+		jWindow.find(".entityInstanceWrapper").scrollTop( scrollMem );
+	}
+
 	var scrollMem : Float = 0;
 	final function updateForm() {
 		jWindow.empty();
@@ -185,20 +193,17 @@ class EntityInstanceEditor extends dn.Process {
 			editor.curLevelHistory.saveLayerState( editor.curLayerInstance );
 			editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
 			editor.ge.emit( EntityInstanceFieldChanged(ei) );
-			onResize();
-			wrapper.scrollTop( scrollMem );
-			N.debug(scrollMem);
 		}
 
-		form.onBeforeRender = ()->{
-			scrollMem = wrapper.scrollTop();
-		}
 
 		JsTools.parseComponents(jWindow);
 		renderLink();
 
 		// Re-position
 		onResize();
-		wrapper.scrollTop(scrollMem);
+		applyScrollMemory();
+		wrapper.scroll( (_)->{
+			scrollMem = wrapper.scrollTop();
+		});
 	}
 }
