@@ -387,7 +387,7 @@
 		{
 			"identifier": "Level2",
 			"uid": 119,
-			"worldX": -24,
+			"worldX": 0,
 			"worldY": 80,
 			"pxWid": 128,
 			"pxHei": 128,
@@ -489,13 +489,13 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 70, "dir": "n" }, { "levelUid": 120, "dir": "e" } ]
+			"__neighbours": [ { "levelUid": 70, "dir": "n" }, { "levelUid": 120, "dir": "n" } ]
 		},
 		{
 			"identifier": "Level3",
 			"uid": 120,
 			"worldX": 104,
-			"worldY": 0,
+			"worldY": -48,
 			"pxWid": 128,
 			"pxHei": 128,
 			"__bgColor": "#343F5E",
@@ -592,7 +592,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 70, "dir": "w" }, { "levelUid": 119, "dir": "w" } ]
+			"__neighbours": [ { "levelUid": 70, "dir": "w" }, { "levelUid": 119, "dir": "s" } ]
 		}
 	]
 }
