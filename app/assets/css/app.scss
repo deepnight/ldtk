@@ -3267,14 +3267,14 @@ canvas#webgl {
 		max-height: 90vh;
 		padding: 10px;
 	}
-	
+
 	.resizeBar {
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 4px;
 		height: 100%;
-		
+
 		background-color: $orange;
 		cursor: ew-resize;
 	}
@@ -3368,7 +3368,7 @@ canvas#webgl {
 		button.removePoint {
 			flex: 0.2 1 0px;
 		}
-		
+
 		button.fileSelectButton {
 			flex: 0.2 1 0px;
 			padding: 8px 2px;
@@ -4816,10 +4816,10 @@ $patternSize : 32px;
 		ul.form.type-F_File .F_File {
 			display: flex;
 		}
-		
+
 		ul.form.type-F_File .F_File.file-select {
 			display: initial;
-			
+
 		}
 
 	}
