@@ -767,8 +767,7 @@ class Editor extends Page {
 	function onMouseWheel(e:hxd.Event) {
 		var m = getMouse();
 		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta*0.1 );
-		camera.cancelAutoScrolling();
-		camera.cancelAutoZoom();
+		camera.cancelAllAutoMovements();
 	}
 
 	public function selectLevel(l:data.Level) {

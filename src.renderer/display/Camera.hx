@@ -214,7 +214,6 @@ class Camera extends dn.Process {
 	}
 
 	public function deltaZoomTo(zoomFocusX:Float, zoomFocusY:Float, delta:Float) {
-		cancelAllAutoMovements();
 		var old = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
 
 		rawZoom += delta * rawZoom;
