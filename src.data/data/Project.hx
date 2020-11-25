@@ -103,6 +103,16 @@ class Project {
 		return fromJson( toJson() );
 	}
 
+	public function onWorldGridChange(oldWid:Int, oldHei:Int) {
+		for( l in levels ) {
+			var wcx = Std.int(l.worldX/oldWid);
+			var wcy = Std.int(l.worldY/oldHei);
+			l.worldX = wcx * worldGridWidth;
+			l.worldY = wcy * worldGridHeight;
+		}
+
+	}
+
 	public function reorganizeWorld() {
 		var spacing = 32;
 		switch worldLayout {
