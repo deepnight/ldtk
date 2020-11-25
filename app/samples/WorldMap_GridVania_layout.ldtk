@@ -1381,6 +1381,13 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
+			],
+			"__neighbours": [
+				{ "levelUid": 4, "dir": "s" },
+				{ "levelUid": 66, "dir": "w" },
+				{ "levelUid": 54, "dir": "e" },
+				{ "levelUid": 41, "dir": "e" },
+				{ "levelUid": 51, "dir": "e" }
 			]
 		},
 		{
@@ -3430,6 +3437,13 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
+			],
+			"__neighbours": [
+				{ "levelUid": 0, "dir": "n" },
+				{ "levelUid": 66, "dir": "w" },
+				{ "levelUid": 41, "dir": "e" },
+				{ "levelUid": 42, "dir": "e" },
+				{ "levelUid": 51, "dir": "e" }
 			]
 		},
 		{
@@ -5328,7 +5342,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [{ "levelUid": 66, "dir": "e" }]
 		},
 		{
 			"identifier": "B52",
@@ -7351,7 +7366,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 0, "dir": "e" }, { "levelUid": 4, "dir": "e" }, { "levelUid": 65, "dir": "w" } ]
 		},
 		{
 			"identifier": "B3",
@@ -9441,7 +9457,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 61, "dir": "s" }, { "levelUid": 42, "dir": "n" }, { "levelUid": 43, "dir": "n" } ]
 		},
 		{
 			"identifier": "B322",
@@ -11298,7 +11315,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [{ "levelUid": 59, "dir": "n" }]
 		},
 		{
 			"identifier": "B2",
@@ -13123,7 +13141,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [{ "levelUid": 43, "dir": "w" }]
 		},
 		{
 			"identifier": "B222",
@@ -15055,7 +15074,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 0, "dir": "w" }, { "levelUid": 56, "dir": "e" }, { "levelUid": 51, "dir": "s" } ]
 		},
 		{
 			"identifier": "B22222",
@@ -16898,6 +16918,13 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
+			],
+			"__neighbours": [
+				{ "levelUid": 54, "dir": "w" },
+				{ "levelUid": 50, "dir": "w" },
+				{ "levelUid": 63, "dir": "e" },
+				{ "levelUid": 51, "dir": "w" },
+				{ "levelUid": 52, "dir": "s" }
 			]
 		},
 		{
@@ -17443,6 +17470,13 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
+			],
+			"__neighbours": [
+				{ "levelUid": 0, "dir": "w" },
+				{ "levelUid": 4, "dir": "w" },
+				{ "levelUid": 42, "dir": "s" },
+				{ "levelUid": 50, "dir": "e" },
+				{ "levelUid": 51, "dir": "n" }
 			]
 		},
 		{
@@ -18499,6 +18533,13 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
+			],
+			"__neighbours": [
+				{ "levelUid": 4, "dir": "w" },
+				{ "levelUid": 59, "dir": "s" },
+				{ "levelUid": 41, "dir": "n" },
+				{ "levelUid": 43, "dir": "e" },
+				{ "levelUid": 50, "dir": "e" }
 			]
 		},
 		{
@@ -19870,7 +19911,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 59, "dir": "s" }, { "levelUid": 47, "dir": "e" }, { "levelUid": 42, "dir": "w" }, { "levelUid": 50, "dir": "n" } ]
 		},
 		{
 			"identifier": "Level",
@@ -20851,6 +20893,14 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
+			],
+			"__neighbours": [
+				{ "levelUid": 56, "dir": "e" },
+				{ "levelUid": 41, "dir": "w" },
+				{ "levelUid": 42, "dir": "w" },
+				{ "levelUid": 43, "dir": "s" },
+				{ "levelUid": 51, "dir": "n" },
+				{ "levelUid": 52, "dir": "e" }
 			]
 		},
 		{
@@ -21864,7 +21914,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [{ "levelUid": 56, "dir": "w" }]
 		},
 		{
 			"identifier": "Level2",
@@ -22857,6 +22908,15 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
+			],
+			"__neighbours": [
+				{ "levelUid": 0, "dir": "w" },
+				{ "levelUid": 4, "dir": "w" },
+				{ "levelUid": 54, "dir": "n" },
+				{ "levelUid": 56, "dir": "e" },
+				{ "levelUid": 41, "dir": "s" },
+				{ "levelUid": 50, "dir": "s" },
+				{ "levelUid": 52, "dir": "e" }
 			]
 		},
 		{
@@ -23391,7 +23451,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 56, "dir": "n" }, { "levelUid": 50, "dir": "w" }, { "levelUid": 51, "dir": "w" } ]
 		}
 	]
 }

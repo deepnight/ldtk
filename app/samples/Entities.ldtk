@@ -1501,7 +1501,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": []
 		}
 	]
 }

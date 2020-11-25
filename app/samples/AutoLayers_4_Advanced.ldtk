@@ -2737,7 +2737,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": []
 		}
 	]
 }

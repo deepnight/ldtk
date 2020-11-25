@@ -1044,7 +1044,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 40, "dir": "n" }, { "levelUid": 0, "dir": "w" }, { "levelUid": 2, "dir": "e" } ]
 		},
 		{
 			"identifier": "Surface",
@@ -1949,7 +1950,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 3, "dir": "s" }, { "levelUid": 2, "dir": "s" } ]
 		},
 		{
 			"identifier": "Large_room",
@@ -2647,7 +2649,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 3, "dir": "e" }, { "levelUid": 30, "dir": "w" } ]
 		},
 		{
 			"identifier": "Secret_passage",
@@ -3238,7 +3241,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 3, "dir": "w" }, { "levelUid": 40, "dir": "n" }, { "levelUid": 4, "dir": "s" }, { "levelUid": 29, "dir": "e" } ]
 		},
 		{
 			"identifier": "Beneath",
@@ -4231,7 +4235,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 2, "dir": "n" }, { "levelUid": 29, "dir": "n" }, { "levelUid": 41, "dir": "s" }, { "levelUid": 42, "dir": "s" } ]
 		},
 		{
 			"identifier": "Dead_end_east",
@@ -5013,7 +5018,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 2, "dir": "w" }, { "levelUid": 4, "dir": "s" } ]
 		},
 		{
 			"identifier": "Dead_end_west",
@@ -5652,7 +5658,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [{ "levelUid": 0, "dir": "e" }]
 		},
 		{
 			"identifier": "Pit",
@@ -6390,7 +6397,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 4, "dir": "n" }, { "levelUid": 42, "dir": "w" } ]
 		},
 		{
 			"identifier": "Hidden_cave",
@@ -6824,7 +6832,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 4, "dir": "n" }, { "levelUid": 41, "dir": "e" } ]
 		}
 	]
 }

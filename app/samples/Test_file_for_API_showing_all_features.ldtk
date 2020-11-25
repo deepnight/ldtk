@@ -1234,7 +1234,8 @@
 					],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [{ "levelUid": 32, "dir": "s" }]
 		},
 		{
 			"identifier": "Level2",
@@ -1766,7 +1767,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 33, "dir": "s" }, { "levelUid": 0, "dir": "n" } ]
 		},
 		{
 			"identifier": "Level3",
@@ -2028,7 +2030,8 @@
 					],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [{ "levelUid": 32, "dir": "n" }]
 		}
 	]
 }

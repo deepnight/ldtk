@@ -3220,7 +3220,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [ { "levelUid": 89, "dir": "n" }, { "levelUid": 88, "dir": "s" } ]
 		},
 		{
 			"identifier": "Top",
@@ -4530,7 +4531,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [{ "levelUid": 0, "dir": "s" }]
 		},
 		{
 			"identifier": "Bottom",
@@ -5525,7 +5527,8 @@
 					"gridTiles": [],
 					"entityInstances": []
 				}
-			]
+			],
+			"__neighbours": [{ "levelUid": 0, "dir": "n" }]
 		}
 	]
 }
