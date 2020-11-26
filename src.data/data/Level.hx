@@ -58,7 +58,12 @@ class Level {
 			__neighbours: {
 				switch _project.worldLayout {
 					case Free, WorldGrid:
-						var nears = _project.levels.filter( (ol)->ol!=this && getBoundsDist(ol)==0 );
+						var nears = _project.levels.filter( (ol)->
+							ol!=this && getBoundsDist(ol)==0
+							&& !( ( ol.worldX>=worldX+pxWid || ol.worldX+ol.pxWid<=worldX )
+								&& ( ol.worldY>=worldY+pxHei || ol.worldY+ol.pxHei<=worldY )
+							)
+						);
 						nears.map( (l)->{
 							var dir = l.worldX>=worldX+pxWid ? "e"
 								: l.worldX+l.pxWid<=worldX ? "w"
