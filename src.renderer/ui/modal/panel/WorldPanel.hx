@@ -6,6 +6,7 @@ class WorldPanel extends ui.modal.Panel {
 	public function new() {
 		super();
 
+		jMask.hide();
 		level = editor.curLevel;
 		loadTemplate("worldPanel");
 

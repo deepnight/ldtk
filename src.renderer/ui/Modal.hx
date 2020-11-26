@@ -25,7 +25,6 @@ class Modal extends dn.Process {
 
 		jModalAndMask = new J("xml#window").children().first().clone();
 		App.ME.jPage.append(jModalAndMask).addClass("hasModal");
-		// jModalAndMask.on("mousemove", (ev)->ev.stopPropagation());
 
 		jWrapper = jModalAndMask.find(".wrapper");
 		jContent = jModalAndMask.find(".content");
@@ -138,6 +137,13 @@ class Modal extends dn.Process {
 	public static function hasAnyUnclosable() {
 		for(e in ALL)
 			if( !e.isClosing() && e.countAsModal() && !e.canBeClosedManually )
+				return true;
+		return false;
+	}
+
+	public static function hasAnyWithMask() {
+		for(e in ALL)
+			if( !e.isClosing() && e.countAsModal() && e.jMask.is(":visible") )
 				return true;
 		return false;
 	}
