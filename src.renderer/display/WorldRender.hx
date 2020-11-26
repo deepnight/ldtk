@@ -166,7 +166,8 @@ class WorldRender extends dn.Process {
 				continue;
 
 			var e = levels.get(l.uid);
-			e.label.setScale(2*camera.pixelRatio / camera.adjustedZoom);
+			var scale = camera.pixelRatio>1 ? ( 1.5 * camera.pixelRatio ) : 1;
+			e.label.setScale( scale / camera.adjustedZoom);
 			e.label.x = Std.int( l.worldX + l.pxWid*0.5 - e.label.width*e.label.scaleX*0.5 );
 			e.label.y = l.worldY + 8;
 		}
