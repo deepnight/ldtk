@@ -48,7 +48,6 @@ class RuleEditor extends ui.modal.Dialog {
 			else {
 				if( str.indexOf("\\n")>=0 )
 					str = "<p>" + str.split("\\n").join("</p><p>") + "</p>";
-				trace(str);
 				jExplain.html(str);
 			}
 		}

@@ -281,8 +281,6 @@ class App extends dn.Process {
 	}
 
 	public function loadSettings() {
-		trace(JsTools.getExeDir());
-		trace(JsTools.getAppResourceDir());
 		LOG.fileOp("Loading settings from "+JsTools.getSettingsDir()+"...");
 		if( js.Browser.window.localStorage.getItem("session")!=null ) {
 			// Migrate old sessionData

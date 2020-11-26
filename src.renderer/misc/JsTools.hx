@@ -557,7 +557,6 @@ class JsTools {
 		if( !fileExists(fp.full) )
 			fp.fileWithExt = null;
 
-		trace(fp.debug());
 		if( fp.fileWithExt==null )
 			electron.Shell.openPath(fp.full);
 		else
