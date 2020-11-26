@@ -290,6 +290,15 @@ class Tool<T> extends dn.Process {
 		palette.focusOnSelection();
 	}
 
+	public function palettePoppedOut() {
+		return palette!=null && palette.isPoppedOut && ui.modal.ToolPalettePopOut.ME!=null;
+	}
+
+	public function popInPalette() {
+		if( palettePoppedOut() )
+			ui.modal.ToolPalettePopOut.ME.close();
+	}
+
 	public function initPalette() {
 		palette = createToolPalette();
 		palette.render();

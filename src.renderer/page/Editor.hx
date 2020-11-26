@@ -369,6 +369,8 @@ class Editor extends Page {
 					try App.ME.jBody.find("input:focus, textarea:focus").blur()
 					catch(e:Dynamic) {}
 				}
+				else if( curTool!=null && curTool.palettePoppedOut() )
+					curTool.popInPalette();
 				else if( specialTool!=null )
 					clearSpecialTool();
 				else if( worldMode && worldTool.isInAddMode() )

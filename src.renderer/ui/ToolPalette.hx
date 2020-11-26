@@ -4,6 +4,7 @@ class ToolPalette {
 	public var jContent : js.jquery.JQuery;
 	var tool : Tool<Dynamic>;
 	var canPopOut = false;
+	@:allow(Tool)
 	var isPoppedOut = false;
 
 	// Optional scrollable list stuff
