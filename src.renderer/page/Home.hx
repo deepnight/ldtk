@@ -57,6 +57,7 @@ class Home extends Page {
 			// Update all sample files
 			var jButton = new J('<button>Update all samples</button>');
 			jButton.click((_)->{
+				m.close();
 				var path = JsTools.getSamplesDir();
 				var files = js.node.Fs.readdirSync(path);
 				var log = new dn.Log();
