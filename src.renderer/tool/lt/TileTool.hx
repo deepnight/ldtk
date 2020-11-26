@@ -335,7 +335,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		else
 			editor.cursor.set(None);
 
-		if( settings.tileStacking )
+		if( settings.tileStacking && curLevel.inBoundsWorld(m.worldX,m.worldY) )
 			editor.cursor.setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("cell") );
 	}
 
