@@ -9,12 +9,12 @@ We now have an official **Discord**! Come join us, we have cookies 🤗 Feel fre
 ## 🌍 World map
 
 Levels in your project can now be organized in various ways:
+- freely on a vast 2D map,
+- in a large grid system (aka "grid-vania"),
 - horizontally,
-- vertically,
-- in a large grid system (like a *Castlevania*™ game),
-- freely on a vast 2D map.
+- vertically.
 
-Just hit the `W` key to in world view, and start arranging your creations as you wish!
+Just hit the `W` or `F2` key to in world view, and start arranging your creations as you wish!
 
 ## 📑 Other changes
 
@@ -40,6 +40,7 @@ Just hit the `W` key to in world view, and start arranging your creations as you
 - Removed "Loaded" useless notification
 - Added a "locate project" button to Project panel
 - Fixed an infinite loop when resizing a level
+- Updated the LDtk website
 
 # 0.5.2-beta
 
