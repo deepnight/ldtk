@@ -66,8 +66,8 @@ Value | Type | Description
 `intGrid`<br/><sup>Only *IntGrid layers*</sup> | Array&nbsp;of&nbsp;Object | This object contains the following fields:<br/><ul><li>**`coordId`** **(Int**) : *Coordinate ID in the layer grid*</li><li>**`v`** **(Int**) : *IntGrid value*</li></ul>
 `layerDefUid` | Int | Reference the Layer definition UID
 `levelId` | Int | Reference to the UID of the level containing this layer instance
-`pxOffsetX`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Int | X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset)
-`pxOffsetY`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Int | Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset)
+`pxOffsetX`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Int | X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset, see `__pxTotalOffsetX`)
+`pxOffsetY`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Int | Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset, see `__pxTotalOffsetY`)
 `seed`<br/><sup>Only *Auto-layers*</sup> | Int | Random seed used for Auto-Layers rendering
 
 <a id="ldtk-Tile" name="ldtk-Tile"></a>
@@ -106,7 +106,7 @@ Value | Type | Description
 -- | -- | --
 `entities` | Array&nbsp;of&nbsp;[Entity&nbsp;definition](#ldtk-EntityDefJson) | 
 `enums` | Array&nbsp;of&nbsp;[Enum&nbsp;definition](#ldtk-EnumDefJson) | 
-`externalEnums` | Array&nbsp;of&nbsp;[Enum&nbsp;definition](#ldtk-EnumDefJson) | Note: external enums are exactly the same as `enums`, except they<br/>		have a `relPath` to point to an external source file.
+`externalEnums` | Array&nbsp;of&nbsp;[Enum&nbsp;definition](#ldtk-EnumDefJson) | Note: external enums are exactly the same as `enums`, except they have a `relPath` to point to an external source file.
 `layers` | Array&nbsp;of&nbsp;[Layer&nbsp;definition](#ldtk-LayerDefJson) | 
 `tilesets` | Array&nbsp;of&nbsp;[Tileset&nbsp;definition](#ldtk-TilesetDefJson) | 
 
@@ -146,7 +146,7 @@ Value | Type | Description
 `perlinSeed` | Float | 
 `pivotX`<br/><sup>Only *'Stamp' tile mode*</sup> | Float | X pivot of a tile stamp (0-1)
 `pivotY`<br/><sup>Only *'Stamp' tile mode*</sup> | Float | Y pivot of a tile stamp (0-1)
-`size` | Int | <![CDATA[Pattern width & height. Should only be 1,3,5 or 7.]]>
+`size` | Int | Pattern width & height. Should only be 1,3,5 or 7.
 `tileIds` | Array&nbsp;of&nbsp;Int | Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
 `tileMode` | Enum | Defines how tileIds array is used
 `uid` | Int | Unique Int identifier
@@ -170,8 +170,21 @@ Value | Type | Description
 `width` | Int | Pixel width
 
 <a id="ldtk-FieldDefJson" name="ldtk-FieldDefJson"></a>
-## 2.2.1. Field definition   
-Sorry this type has no documentation yet.
+## 2.2.1. Field definition  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg) 
+Value | Type | Description
+-- | -- | --
+`__type` | String | Human readable value type (eg. `Int`, `Float`, `Point`, etc.). If the field is an array, this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)
+`acceptFileTypes`<br/><sup>Only *FilePath*</sup> | Array&nbsp;of&nbsp;String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional list of accepted file extensions for FilePath value type. Includes the dot: `.ext`
+`arrayMaxLength`<br/><sup>Only *Array*</sup> | Int | Array max length
+`arrayMinLength`<br/><sup>Only *Array*</sup> | Int | Array min length
+`canBeNull` | Bool | TRUE if the value can be null. For arrays, TRUE means it can contain null values (exception: array of Points can't have null values).
+`defaultOverride` | Enum | Default value if selected value is null or invalid.
+`identifier` | String | Unique String identifier
+`isArray` | Bool | TRUE if the value is an array of multiple values
+`max`<br/><sup>Only *Int, Float*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Max limit for value, if applicable
+`min`<br/><sup>Only *Int, Float*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Min limit for value, if applicable
+`type` | String | Internal type enum
+`uid` | Int | Unique Intidentifier
 
 <a id="ldtk-TilesetDefJson" name="ldtk-TilesetDefJson"></a>
 ## 2.3. Tileset definition   
