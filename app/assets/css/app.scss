@@ -2049,6 +2049,7 @@ textarea {
 }
 
 .window.popOutPalette {
+	align-items: flex-start;
 	&>.wrapper {
 		overflow: hidden;
 		padding: 0;
