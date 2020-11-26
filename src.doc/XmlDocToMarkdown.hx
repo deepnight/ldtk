@@ -282,6 +282,8 @@ class XmlDocToMarkdown {
 			var descMd = [];
 			if( fieldXml.hasNode.haxe_doc ) {
 				var html = fieldXml.node.haxe_doc.innerHTML;
+				html = StringTools.replace(html, "<![CDATA[", "");
+				html = StringTools.replace(html, "]]>", "");
 				html = StringTools.replace(html, "\n", "<br/>");
 				descMd.push(html);
 			}
