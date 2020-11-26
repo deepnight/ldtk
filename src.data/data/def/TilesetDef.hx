@@ -484,9 +484,11 @@ class TilesetDef {
 			var r = 0.;
 			var g = 0.;
 			var b = 0.;
-			var pixel = 0x0;
-			var n = 0.;
 
+			var pixel = 0x0;
+			var nRGB = 0.;
+			var nA = 0.;
+			var curA = 0.;
 			for(py in ty...ty+tileGridSize)
 			for(px in tx...tx+tileGridSize) {
 				pixel = pixels.getPixel(px,py);
@@ -496,15 +498,17 @@ class TilesetDef {
 					opaqueTiles[tid] = false;
 
 				// Average color
-				a += dn.Color.getA(pixel);
-				r += dn.Color.getR(pixel) * dn.Color.getR(pixel);
-				g += dn.Color.getG(pixel) * dn.Color.getG(pixel);
-				b += dn.Color.getB(pixel) * dn.Color.getB(pixel);
-				n++;
+				curA = dn.Color.getA(pixel);
+				a += curA;
+				r += dn.Color.getR(pixel) * dn.Color.getR(pixel) * curA;
+				g += dn.Color.getG(pixel) * dn.Color.getG(pixel) * curA;
+				b += dn.Color.getB(pixel) * dn.Color.getB(pixel) * curA;
+				nRGB += curA;
+				nA++;
 			}
 
 			// WARNING: actual color precision will later be reduced upon saving to 4-chars "argb"" String
-			averageColorsCache.set(tid, dn.Color.makeColor( Math.sqrt(r/n), Math.sqrt(g/n), Math.sqrt(b/n), a/n ));
+			averageColorsCache.set(tid, dn.Color.makeColor( Math.sqrt(r/nRGB), Math.sqrt(g/nRGB), Math.sqrt(b/nRGB), a/nA ));
 		}
 	}
 
@@ -565,11 +569,26 @@ class TilesetDef {
 		ctx.imageSmoothingEnabled = false;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		var img = new js.html.Image(pixels.width, pixels.height);
-		img.src = 'data:image/png;base64,$base64';
-		img.onload = function() {
-			ctx.drawImage(img, 0, 0, pixels.width*scale, pixels.height*scale);
+		var clampedArray = new js.lib.Uint8ClampedArray( pixels.width * pixels.height * 4 );
+		var c = 0;
+		var idx = 0;
+		for(y in 0...pixels.height)
+		for(x in 0...pixels.width) {
+			c = pixels.getPixel(x,y);
+			idx = y*(pixels.width*4) + x*4;
+			clampedArray[idx] = dn.Color.getRi(c);
+			clampedArray[idx+1] = dn.Color.getGi(c);
+			clampedArray[idx+2] = dn.Color.getBi(c);
+			clampedArray[idx+3] = dn.Color.getAi(c);
 		}
+		var imgData = new js.html.ImageData(clampedArray, pixels.width);
+		ctx.putImageData(imgData,0,0);
+
+		// var img = new js.html.Image(pixels.width, pixels.height);
+		// img.src = 'data:image/png;base64,$base64';
+		// img.onload = function() {
+		// 	ctx.drawImage(img, 0, 0, pixels.width*scale, pixels.height*scale);
+		// }
 	}
 
 	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
