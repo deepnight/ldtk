@@ -77,7 +77,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 					case _:
 				}
-				var f = curEntity.createFieldDef(project, type, isArray);
+				var f = curEntity.createFieldDef(project, type, L.getFieldType(type), isArray);
 				editor.ge.emit( EntityFieldAdded(curEntity) );
 				selectField(f);
 				jFieldForm.find("input:not([readonly]):first").focus().select();

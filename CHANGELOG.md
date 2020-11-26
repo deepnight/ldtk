@@ -31,6 +31,7 @@ Just hit the `W` key to in world view, and start arranging your creations as you
 - Better "invalid value" error display in entity fields (previously, you only had `<error>`).
 - Application samples will now display a warning if you try to save them (not recommended as they will be overwritten by future app updates).
 - Better Entity panel layout
+- Better default entity Field naming when creating a new one
 - Fixed a bug in Entity panel that went crazy when containing too many entities.
 - Sample maps are no longer added to "recent projects" list
 - Updated the Enum panel icon.
