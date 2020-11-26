@@ -1,5 +1,10 @@
 package ui;
 
+private enum GridMode {
+	ShowOpaques;
+	ShowPixelData;
+}
+
 class TilesetPicker {
 	static var SCROLL_MEMORY : Map<String, { x:Float, y:Float, zoom:Float }> = new Map();
 
@@ -12,6 +17,10 @@ class TilesetPicker {
 	var jAtlas : js.jquery.JQuery;
 	var jCursor : js.jquery.JQuery;
 	var jSelection : js.jquery.JQuery;
+	var jCanvas : js.jquery.JQuery;
+
+	var canvas(get,never) : js.html.CanvasElement;
+		inline function get_canvas() return cast jCanvas.get(0);
 
 	var zoom(default,set) : Float;
 	var dragStart : Null<{ bt:Int, pageX:Float, pageY:Float }>;
@@ -23,6 +32,7 @@ class TilesetPicker {
 
 	var mode : TilePickerMode;
 	var _internalSelectedIds : Array<Int> = [];
+	var gridMode : GridMode = ShowOpaques;
 
 
 	public function new(target:js.jquery.JQuery, td:data.def.TilesetDef, mode:TilePickerMode, ?tool:tool.lt.TileTool) {
@@ -51,10 +61,10 @@ class TilesetPicker {
 		jSelection = new J('<div class="selectionsWrapper"/>');
 		jSelection.prependTo(jAtlas);
 
-		var jCanvas = new J('<canvas/>');
+		jCanvas = new J('<canvas/>');
 		jCanvas.attr("width",tilesetDef.pxWid+"px");
 		jCanvas.attr("height",tilesetDef.pxHei+"px");
-		tilesetDef.drawAtlasToCanvas(jCanvas);
+		renderAtlas();
 		jCanvas.appendTo(jAtlas);
 
 		// Init events
@@ -79,26 +89,50 @@ class TilesetPicker {
 		SCROLL_MEMORY = new Map();
 	}
 
-	public function renderPixelData() {
+	function renderAtlas() {
+		tilesetDef.drawAtlasToCanvas(jCanvas);
+	}
+
+	public function renderGrid() {
 		jPicker.remove(".grid");
 		var jGrid = new J('<div class="grid"/>');
 		jGrid.prependTo(jAtlas);
 
-		// var cnv =
+		var ctx = canvas.getContext2d();
+		ctx.lineWidth = 1;
 
 		for(cy in 0...tilesetDef.cHei)
 		for(cx in 0...tilesetDef.cWid) {
-			var jCell = new J('<div/>');
 			var tid = tilesetDef.getTileId(cx,cy);
-			if( tilesetDef.isTileOpaque(tid) )
-				jCell.addClass("opaque");
-			jCell.offset({
-				left: tilesetDef.getTileSourceX(tid),
-				top: tilesetDef.getTileSourceY(tid),
-			});
-			jCell.css("width", (tilesetDef.tileGridSize-1)+"px");
-			jCell.css("height", (tilesetDef.tileGridSize-1)+"px");
-			jGrid.append(jCell);
+			switch gridMode {
+				case ShowOpaques:
+
+				case ShowPixelData:
+					// Fill
+					ctx.beginPath();
+					ctx.rect(
+						cx*tilesetDef.tileGridSize,
+						cy*tilesetDef.tileGridSize,
+						tilesetDef.tileGridSize,
+						tilesetDef.tileGridSize
+					);
+					ctx.fillStyle = C.intToHexRGBA( tilesetDef.getAverageTileColor(tid) );
+					ctx.fill();
+			}
+
+			// Outline
+			ctx.beginPath();
+			ctx.rect(
+				cx*tilesetDef.tileGridSize+0.5, // draw in the middle of the pixel to avoid blur
+				cy*tilesetDef.tileGridSize+0.5,
+				tilesetDef.tileGridSize-1,
+				tilesetDef.tileGridSize-1
+			);
+			if( gridMode==ShowOpaques )
+				ctx.strokeStyle = C.intToHexRGBA( tilesetDef.getAverageTileColor(tid) );
+			else
+				ctx.strokeStyle = C.intToHexRGBA( C.replaceAlphaF(tilesetDef.getAverageTileColor(tid), 1) );
+			ctx.stroke();
 		}
 	}
 
@@ -341,6 +375,13 @@ class TilesetPicker {
 
 	function onDocMouseUp(ev:js.jquery.Event) {
 		jDoc.off(".pickerDragEvent");
+
+		if( mode==ViewOnly && dragStart.bt==2 )
+			if( M.dist(ev.pageX, ev.pageY, dragStart.pageX, dragStart.pageY) <= js.Browser.window.devicePixelRatio*5 ) {
+				gridMode = gridMode==ShowOpaques ? ShowPixelData : ShowOpaques;
+				renderAtlas();
+				renderGrid();
+			}
 
 		// Apply selection
 		if( dragStart!=null && !isScrolling() ) {
