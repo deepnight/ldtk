@@ -51,9 +51,11 @@ class TilesetPicker {
 		jSelection = new J('<div class="selectionsWrapper"/>');
 		jSelection.prependTo(jAtlas);
 
-		var jImg = new J( tilesetDef.createAtlasHtmlImage() );
-		jImg.appendTo(jAtlas);
-		jImg.addClass("atlas");
+		var jCanvas = new J('<canvas/>');
+		jCanvas.attr("width",tilesetDef.pxWid+"px");
+		jCanvas.attr("height",tilesetDef.pxHei+"px");
+		tilesetDef.drawAtlasToCanvas(jCanvas);
+		jCanvas.appendTo(jAtlas);
 
 		// Init events
 		jPicker.mousedown( function(ev) {
@@ -77,10 +79,12 @@ class TilesetPicker {
 		SCROLL_MEMORY = new Map();
 	}
 
-	public function renderGrid() {
+	public function renderPixelData() {
 		jPicker.remove(".grid");
 		var jGrid = new J('<div class="grid"/>');
 		jGrid.prependTo(jAtlas);
+
+		// var cnv =
 
 		for(cy in 0...tilesetDef.cHei)
 		for(cx in 0...tilesetDef.cWid) {
@@ -325,7 +329,7 @@ class TilesetPicker {
 	}
 
 	inline function isScrolling() {
-		return dragStart!=null && ( dragStart.bt==1 || App.ME.isKeyDown(K.SPACE) );
+		return dragStart!=null && ( mode==ViewOnly || dragStart.bt==1 || App.ME.isKeyDown(K.SPACE) );
 	}
 
 	function onDocMouseMove(ev:js.jquery.Event) {
