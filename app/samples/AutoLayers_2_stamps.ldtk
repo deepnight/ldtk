@@ -145,6 +145,7 @@
 						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
+						"acceptFileTypes": null,
 						"defaultOverride": null
 					},
 					{
@@ -161,6 +162,7 @@
 						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
+						"acceptFileTypes": null,
 						"defaultOverride": { "id": "V_Int", "params": [16777215] }
 					}
 				]
