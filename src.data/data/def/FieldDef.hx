@@ -59,7 +59,7 @@ class FieldDef {
 			+ ( type==F_Path && acceptFileTypes != null ? '[${acceptFileTypes.join(";")}]' : "[.*]");
 	}
 
-	public static function fromJson(p:Project, json:Dynamic) {
+	public static function fromJson(p:Project, json:ldtk.Json.FieldDefJson) {
 		if( json.type=="F_File" ) json.type = "F_Path"; // patch old type name
 
 		var type = JsonTools.readEnum(data.DataTypes.FieldType, json.type, false);
@@ -78,7 +78,7 @@ class FieldDef {
 		return o;
 	}
 
-	public function toJson() {
+	public function toJson() : ldtk.Json.FieldDefJson {
 		return {
 			identifier: identifier,
 			__type: getJsonTypeString(),
