@@ -77,7 +77,12 @@ class EditEntityDefs extends ui.modal.Panel {
 
 					case _:
 				}
-				var f = curEntity.createFieldDef(project, type, L.getFieldType(type), isArray);
+
+				var baseName = switch type {
+					case F_Enum(enumDefUid): project.defs.getEnumDef(enumDefUid).identifier;
+					case _: L.getFieldType(type);
+				}
+				var f = curEntity.createFieldDef(project, type, baseName, isArray);
 				editor.ge.emit( EntityFieldAdded(curEntity) );
 				selectField(f);
 				jFieldForm.find("input:not([readonly]):first").focus().select();
