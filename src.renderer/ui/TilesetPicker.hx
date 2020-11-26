@@ -376,13 +376,6 @@ class TilesetPicker {
 	function onDocMouseUp(ev:js.jquery.Event) {
 		jDoc.off(".pickerDragEvent");
 
-		if( mode==ViewOnly && dragStart.bt==2 )
-			if( M.dist(ev.pageX, ev.pageY, dragStart.pageX, dragStart.pageY) <= js.Browser.window.devicePixelRatio*5 ) {
-				gridMode = gridMode==ShowOpaques ? ShowPixelData : ShowOpaques;
-				renderAtlas();
-				renderGrid();
-			}
-
 		// Apply selection
 		if( dragStart!=null && !isScrolling() ) {
 			var r = getCursorRect(ev.pageX, ev.pageY);
@@ -519,6 +512,13 @@ class TilesetPicker {
 			bt: ev.button,
 			pageX: ev.pageX,
 			pageY: ev.pageY,
+		}
+
+		// Toggle grid render mode
+		if( mode==ViewOnly && ev.button==2 ) {
+			gridMode = gridMode==ShowOpaques ? ShowPixelData : ShowOpaques;
+			renderAtlas();
+			renderGrid();
 		}
 
 		tx = ty = null;

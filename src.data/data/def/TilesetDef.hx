@@ -153,15 +153,6 @@ class TilesetDef {
 			}
 		}
 
-
-		// if( json.opaqueTiles!=null ) {
-		// 	td.opaqueTilesCache = new Map();
-		// 	for(tid in json.opaqueTiles)
-		// 		td.opaqueTilesCache.set(tid, true);
-		// }
-		// else
-		// 	td.opaqueTilesCache = null;
-
 		var arr = JsonTools.readArray( json.savedSelections );
 		td.savedSelections = json.savedSelections==null ? [] : arr.map( function(jsonSel:Dynamic) {
 			return {
