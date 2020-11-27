@@ -1,50 +1,50 @@
 name: test-windows
 
 on:
-	push:
-		branches:
-			- master
-			- dev*
-	pull_request:
-		branches:
-			- master
-			- dev*
+  push:
+    branches:
+      - master
+      - dev*
+  pull_request:
+    branches:
+      - master
+      - dev*
 
 jobs:
-	build:
+  build:
 
-		strategy:
-			matrix:
-				os: [windows-latest]
-				haxe: [4.1.4]
-			fail-fast: true
-		runs-on: windows-latest
+    strategy:
+      matrix:
+        os: [windows-latest]
+        haxe: [4.1.4]
+      fail-fast: true
+    runs-on: windows-latest
 
-		steps:
-			# Get branch name
-			- name: getBranch
-				shell: bash
-				run: echo "::set-output name=v::${GITHUB_REF#refs/heads/}"
-				id: branch
+    steps:
+      # Get branch name
+      - name: getBranch
+        shell: bash
+        run: echo "::set-output name=v::${GITHUB_REF#refs/heads/}"
+        id: branch
 
-			# Checkout, install haxe and libs
-			- uses: actions/checkout@v2
-			- uses: krdlab/setup-haxe@v1
-				with:
-					haxe-version: 4.1.4
-			- run: haxe -version
-			- run: haxelib git castle https://github.com/ncannasse/castle
-			- run: haxelib git heaps https://github.com/HeapsIO/heaps.git
-			- run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
-			- run: haxelib git electron https://github.com/tong/hxelectron.git
-			- run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
-			- run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
-			- run: haxelib list
+      # Checkout, install haxe and libs
+      - uses: actions/checkout@v2
+      - uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: 4.1.4
+      - run: haxe -version
+      - run: haxelib git castle https://github.com/ncannasse/castle
+      - run: haxelib git heaps https://github.com/HeapsIO/heaps.git
+      - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
+      - run: haxelib git electron https://github.com/tong/hxelectron.git
+      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
+      - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+      - run: haxelib list
 
-			# Node/NPM commands
-			- uses: actions/setup-node@v1
-				with:
-					node-version: '14'
-			- run: cd app && npm install
-			- run: cd app && npm run compile
+      # Node/NPM commands
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - run: cd app && npm install
+      - run: cd app && npm run compile
 
