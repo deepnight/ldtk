@@ -37,9 +37,8 @@ jobs:
       - run: haxelib git heaps https://github.com/HeapsIO/heaps.git
       - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
       - run: haxelib git electron https://github.com/tong/hxelectron.git
-      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
+      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }}
       - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
-      # - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }}
       - run: haxelib list
 
       # Node/NPM commands
