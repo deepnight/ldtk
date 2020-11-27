@@ -513,12 +513,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					}
 					ev.preventDefault();
 					if( ev.button==2 ) {
+						// Pick vertical/horizontal checker
 						var m = new Dialog(jFlag);
 						for(k in [AutoLayerRuleCheckerMode.Horizontal, AutoLayerRuleCheckerMode.Vertical]) {
 							var name = k.getName();
 							var jRadio = new J('<input name="mode" type="radio" value="$name" id="$name"/>');
 							jRadio.change( function(ev:js.jquery.Event) {
 								r.checker = k;
+								invalidateRuleAndOnesBelow(r);
 								editor.ge.emit( LayerRuleChanged(r) );
 							});
 							m.jContent.append(jRadio);
@@ -530,7 +532,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						m.jContent.find("[name=mode][value="+r.checker.getName()+"]").click();
 					}
 					else {
+						// Just toggle it
 						r.checker = r.checker==None ? ( r.xModulo==1 ? Vertical : Horizontal ) : None;
+						invalidateRuleAndOnesBelow(r);
 						editor.ge.emit( LayerRuleChanged(r) );
 					}
 				});
