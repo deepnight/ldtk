@@ -13,6 +13,12 @@ class WorldRender extends dn.Process {
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
+	var worldBgColor(get,never) : UInt;
+		inline function get_worldBgColor() return C.interpolateInt(project.bgColor, 0x8187bd, 0.85);
+
+	var worldLineColor(get,never) : UInt;
+		inline function get_worldLineColor() return C.toWhite(worldBgColor, 0.0);
+
 	var levels : Map<Int,WorldLevelRender> = new Map();
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
 	var worldBounds : h2d.Graphics;
@@ -39,14 +45,14 @@ class WorldRender extends dn.Process {
 		editor.root.add(worldBg.wrapper, Const.DP_BG);
 		worldBg.wrapper.alpha = 0;
 
-		axes = new h2d.Graphics();
-		editor.root.add(axes, Const.DP_BG);
-
 		worldBounds = new h2d.Graphics();
 		// editor.root.add(worldBounds, Const.DP_BG);
 
 		grids = new h2d.Graphics();
 		editor.root.add(grids, Const.DP_BG);
+
+		axes = new h2d.Graphics();
+		editor.root.add(axes, Const.DP_BG);
 
 		levelsWrapper = new h2d.Layers();
 		root.add(levelsWrapper, Const.DP_MAIN);
@@ -169,7 +175,7 @@ class WorldRender extends dn.Process {
 
 	function renderBg() {
 		worldBg.tex.resize( camera.iWidth, camera.iHeight );
-		worldBg.col.tile = h2d.Tile.fromColor( C.interpolateInt(editor.project.bgColor, 0x8187bd, 0.85) );
+		worldBg.col.tile = h2d.Tile.fromColor(worldBgColor);
 		worldBg.col.scaleX = camera.width;
 		worldBg.col.scaleY = camera.height;
 	}
@@ -190,32 +196,47 @@ class WorldRender extends dn.Process {
 	function renderGrids() {
 		grids.clear();
 
+		if( !editor.worldMode )
+			return;
+
 		// Base level grid
-		if( editor.worldMode && camera.adjustedZoom>=1.5 && settings.grid ) {
-			grids.lineStyle(2*camera.pixelRatio, 0xffffff, 0.1 * M.fmin( (camera.adjustedZoom-1.5)/1, 1 ) );
-			var g = editor.project.getSmartLevelGridSize() * camera.adjustedZoom;
+		if( project.worldLayout==Free && camera.adjustedZoom>=1.5 && settings.grid ) {
+			grids.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-1.5)/0.6, 1 ) );
+			var g = project.getSmartLevelGridSize() * camera.adjustedZoom;
 			var off = root.x % g;
-			for(i in 0...Std.int(camera.width/g)) {
+			for(i in 0...M.ceil(camera.width/g)) {
 				grids.moveTo(i*g+off, 0);
 				grids.lineTo(i*g+off, camera.height);
 			}
 			var off = root.y % g;
-			for(i in 0...Std.int(camera.height/g)) {
+			for(i in 0...M.ceil(camera.height/g)) {
 				grids.moveTo(0, i*g+off);
 				grids.lineTo(camera.width, i*g+off);
 			}
 		}
 
 		// World grid
-		if( project.worldLayout==GridVania ) {
-			// TODO
+		if( project.worldLayout==GridVania && camera.adjustedZoom>=0.2 ) {
+			grids.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-0.2)/0.3, 1 ) );
+			var g = project.worldGridWidth * camera.adjustedZoom;
+			var off =  root.x % g;
+			for( i in 0...M.ceil(camera.width/g)+1 ) {
+				grids.moveTo(i*g+off, 0);
+				grids.lineTo(i*g+off, camera.height);
+			}
+			var g = project.worldGridHeight * camera.adjustedZoom;
+			var off =  root.y % g;
+			for( i in 0...M.ceil(camera.height/g)+1 ) {
+				grids.moveTo(0, i*g+off);
+				grids.lineTo(camera.width, i*g+off);
+			}
 		}
 	}
 
 
 	function renderAxes() {
 		axes.clear();
-		axes.lineStyle(2*camera.pixelRatio, 0x0, 0.15);
+		axes.lineStyle(3*camera.pixelRatio, worldLineColor, 1);
 
 		// Horizontal
 		axes.moveTo(0, root.y);
