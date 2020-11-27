@@ -181,15 +181,22 @@ class WorldRender extends dn.Process {
 	}
 
 	function updateLabels() {
+		var minZoom = 0.25;
 		for( l in editor.project.levels ) {
 			if( !levels.exists(l.uid) )
 				continue;
 
 			var e = levels.get(l.uid);
+			e.label.visible = camera.adjustedZoom>=minZoom;
+			if( !e.label.visible )
+				continue;
+
 			var scale = camera.pixelRatio>1 ? ( 1.5 * camera.pixelRatio ) : 1;
+			e.label.alpha = M.fmin( (camera.adjustedZoom-minZoom)/0.2, 1 );
 			e.label.setScale( scale / camera.adjustedZoom);
 			e.label.x = Std.int( l.worldX + l.pxWid*0.5 - e.label.width*e.label.scaleX*0.5 );
-			e.label.y = l.worldY + 8;
+			e.label.y = Std.int( l.worldY + l.pxHei*0.5 - e.label.height*e.label.scaleY*0.5 );
+			e.label.color.setColor( C.addAlphaF( C.toBlack( l.getBgColor(), 0.15 ) ) );
 		}
 	}
 
@@ -436,7 +443,7 @@ class WorldRender extends dn.Process {
 
 		var tf = new h2d.Text(Assets.fontPixel, wl.label);
 		tf.text = l.identifier;
-		tf.textColor = 0xffcc00;
+		tf.textColor = C.toWhite( l.getBgColor(), 0.8 );
 		tf.x = 4;
 
 		wl.label.width = tf.x*2 + tf.textWidth;
