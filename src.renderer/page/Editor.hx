@@ -1037,6 +1037,7 @@ class Editor extends Page {
 			case ViewportChanged: false;
 			case WorldLevelMoved: false;
 			case LayerInstanceChanged: false;
+			case WorldMode(_): false;
 			case GridChanged(_): false;
 			case _: true;
 		}
