@@ -433,7 +433,7 @@ class Editor extends Page {
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setSingleLayerMode( !settings.singleLayerMode );
 
-			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() && !App.ME.isShiftDown() ):
+			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() && !App.ME.isShiftDown() && !worldMode ):
 				if( settings.singleLayerMode )
 					selectionTool.selectAllInLayers(curLevel, [curLayerInstance]);
 				else
