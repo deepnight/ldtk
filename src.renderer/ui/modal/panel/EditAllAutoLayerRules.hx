@@ -211,6 +211,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jContent.find("button.seed").click( function(ev) {
 			li.seed = Std.random(9999999);
 			editor.ge.emit(LayerRuleSeedChanged);
+			ld.iterateActiveRulesInEvalOrder( r->{
+				if( r.chance<1 || r.hasPerlin() )
+					invalidateRule(r);
+			});
 		});
 
 		// Render
