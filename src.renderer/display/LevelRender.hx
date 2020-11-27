@@ -82,6 +82,9 @@ class LevelRender extends dn.Process {
 					resume();
 				}
 
+			case GridChanged(active):
+				applyGridVisibility();
+
 			case ViewportChanged, WorldLevelMoved, WorldSettingsChanged:
 				root.setScale( camera.adjustedZoom );
 				root.x = M.round( editor.camera.width*0.5 - camera.levelX * camera.adjustedZoom );
@@ -338,7 +341,7 @@ class LevelRender extends dn.Process {
 		boundsGlow.filter = shadow;
 	}
 
-	public inline function applyGridVisibility() {
+	inline function applyGridVisibility() {
 		grid.visible = settings.grid && !editor.worldMode;
 	}
 

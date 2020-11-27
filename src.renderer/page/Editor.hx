@@ -870,7 +870,7 @@ class Editor extends Page {
 		settings.grid = v;
 		App.ME.saveSettings();
 		selectionTool.clear();
-		levelRender.applyGridVisibility();
+		ge.emit( GridChanged(settings.grid) );
 		if( notify )
 			N.quick( "Grid: "+L.onOff( settings.grid ));
 	}
@@ -1037,6 +1037,7 @@ class Editor extends Page {
 			case ViewportChanged: false;
 			case WorldLevelMoved: false;
 			case LayerInstanceChanged: false;
+			case GridChanged(_): false;
 			case _: true;
 		}
 	}
@@ -1107,6 +1108,7 @@ class Editor extends Page {
 				case EnumDefSorted:
 				case EnumDefValueRemoved:
 				case ToolOptionChanged:
+				case GridChanged(active):
 			}
 			App.LOG.add( "event", e.getName() + (extra==null ? "" : " "+Std.string(extra)) );
 		}
@@ -1149,6 +1151,8 @@ class Editor extends Page {
 			case EntityInstanceChanged(ei):
 
 			case ToolOptionChanged:
+
+			case GridChanged(active):
 
 			case LayerInstanceSelected:
 				updateTool();

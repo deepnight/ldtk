@@ -92,6 +92,7 @@ class LevelHistory {
 			case LayerInstanceRestoredFromHistory(_):
 			case LevelRestoredFromHistory(l):
 			case ToolOptionChanged:
+			case GridChanged(active):
 		}
 	}
 

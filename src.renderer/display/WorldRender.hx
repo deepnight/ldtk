@@ -10,12 +10,14 @@ typedef WorldLevelRender = {
 class WorldRender extends dn.Process {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
+	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
 	var levels : Map<Int,WorldLevelRender> = new Map();
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
 	var worldBounds : h2d.Graphics;
 	var axes : h2d.Graphics;
+	var grids : h2d.Graphics;
 	public var levelsWrapper : h2d.Layers;
 
 	var levelInvalidations : Map<Int,Bool> = new Map();
@@ -41,7 +43,10 @@ class WorldRender extends dn.Process {
 		editor.root.add(axes, Const.DP_BG);
 
 		worldBounds = new h2d.Graphics();
-		root.add(worldBounds, Const.DP_BG);
+		// editor.root.add(worldBounds, Const.DP_BG);
+
+		grids = new h2d.Graphics();
+		editor.root.add(grids, Const.DP_BG);
 
 		levelsWrapper = new h2d.Layers();
 		root.add(levelsWrapper, Const.DP_MAIN);
@@ -51,12 +56,14 @@ class WorldRender extends dn.Process {
 		super.onDispose();
 		worldBg.wrapper.remove();
 		axes.remove();
+		grids.remove();
 		editor.ge.removeListener(onGlobalEvent);
 	}
 
 	override function onResize() {
 		super.onResize();
 		renderAxes();
+		renderGrids();
 		renderBg();
 	}
 
@@ -65,6 +72,8 @@ class WorldRender extends dn.Process {
 			case WorldMode(active):
 				if( active )
 					invalidateLevel(editor.curLevel);
+
+				renderGrids();
 				updateLayout();
 
 			case ViewportChanged:
@@ -72,7 +81,11 @@ class WorldRender extends dn.Process {
 				root.x = M.round( camera.width*0.5 - camera.worldX * camera.adjustedZoom );
 				root.y = M.round( camera.height*0.5 - camera.worldY * camera.adjustedZoom );
 				renderAxes();
+				renderGrids();
 				updateLabels();
+
+			case GridChanged(active):
+				renderGrids();
 
 			case WorldLevelMoved:
 				updateLayout();
@@ -149,6 +162,7 @@ class WorldRender extends dn.Process {
 
 		renderBg();
 		renderAxes();
+		renderGrids();
 		renderWorldBounds();
 		updateLayout();
 	}
@@ -173,9 +187,31 @@ class WorldRender extends dn.Process {
 		}
 	}
 
+	function renderGrids() {
+		grids.clear();
+
+		App.ME.debug(camera.adjustedZoom);
+		// Base level grid
+		if( editor.worldMode && camera.adjustedZoom>=1.5 && settings.grid ) {
+			grids.lineStyle(2*camera.pixelRatio, 0xffffff, 0.1 * M.fmin( (camera.adjustedZoom-1.5)/1, 1 ) );
+			var g = editor.project.getSmartLevelGridSize() * camera.adjustedZoom;
+			var off = root.x % g;
+			for(i in 0...Std.int(camera.width/g)) {
+				grids.moveTo(i*g+off, 0);
+				grids.lineTo(i*g+off, camera.height);
+			}
+			var off = root.y % g;
+			for(i in 0...Std.int(camera.height/g)) {
+				grids.moveTo(0, i*g+off);
+				grids.lineTo(camera.width, i*g+off);
+			}
+		}
+	}
+
+
 	function renderAxes() {
 		axes.clear();
-		axes.lineStyle(2*editor.camera.pixelRatio, 0x0, 0.15);
+		axes.lineStyle(2*camera.pixelRatio, 0x0, 0.15);
 
 		// Horizontal
 		axes.moveTo(0, root.y);

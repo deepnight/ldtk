@@ -81,6 +81,7 @@ enum GlobalEvent {
 	ToolOptionChanged;
 
 	WorldMode(active:Bool);
+	GridChanged(active:Bool);
 }
 
 enum CursorType {
