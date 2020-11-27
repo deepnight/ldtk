@@ -4487,6 +4487,7 @@ $patternSize : 32px;
 		padding: 4px;
 		width: min-content;
 		min-width: 300px;
+		position: relative;
 
 		&:not(.guided) {
 			.explain,
@@ -4514,8 +4515,8 @@ $patternSize : 32px;
 
 		.debugInfos {
 			position: absolute;
-			right: 3px;
-			bottom: 3px;
+			right: -5px;
+			bottom: -8px;
 			font-size: 8pt;
 			color: $bgLighter;
 		}
