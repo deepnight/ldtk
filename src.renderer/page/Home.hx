@@ -52,46 +52,7 @@ class Home extends Page {
 		// Debug menu
 		#if debug
 		jPage.find("button.settings").show().click( function(ev) {
-			var m = new ui.Modal();
-
-			// Update all sample files
-			var jButton = new J('<button>Update all samples</button>');
-			jButton.click((_)->{
-				m.close();
-				var path = JsTools.getSamplesDir();
-				var files = js.node.Fs.readdirSync(path);
-				var log = new dn.Log();
-				log.printOnAdd = true;
-				var ops = [];
-				for(f in files) {
-					var fp = dn.FilePath.fromFile(path+"/"+f);
-					if( fp.extension!="ldtk" )
-						continue;
-
-					ops.push({
-						label: fp.fileName,
-						cb: ()->{
-							log.fileOp(fp.fileName+"...");
-							log.general(" -> Loading...");
-							var raw = JsTools.readFileString(fp.full);
-							log.general(" -> Parsing...");
-							var json = haxe.Json.parse(raw);
-							var p = data.Project.fromJson(json);
-							log.general(" -> Updating tileset data...");
-							for(td in p.defs.tilesets) {
-								td.reloadImage(fp.directory);
-								td.buildPixelData(()->{}, true);
-							}
-
-							log.general(" -> Saving "+fp.fileName+"...");
-							var data = JsTools.prepareProjectFile(p);
-							JsTools.writeFileString(fp.full, data.str);
-						}
-					});
-				}
-				new ui.modal.Progress("Updating samples", 1, ops);
-			});
-			m.jContent.append(jButton);
+			openDebugMenu();
 		});
 		#end
 
@@ -128,6 +89,63 @@ class Home extends Page {
 
 		updateRecents();
 	}
+
+	#if debug
+	function openDebugMenu() {
+		var m = new ui.Modal();
+
+		// Update all sample files
+		var jButton = new J('<button>Update all samples</button>');
+		jButton.click((_)->{
+			m.close();
+			var path = JsTools.getSamplesDir();
+			var files = js.node.Fs.readdirSync(path);
+			var log = new dn.Log();
+			log.printOnAdd = true;
+			var ops = [];
+			for(f in files) {
+				var fp = dn.FilePath.fromFile(path+"/"+f);
+				if( fp.extension!="ldtk" )
+					continue;
+
+				ops.push({
+					label: fp.fileName,
+					cb: ()->{
+						// Loading
+						log.fileOp(fp.fileName+"...");
+						log.general(" -> Loading...");
+						var raw = JsTools.readFileString(fp.full);
+						log.general(" -> Parsing...");
+						var json = haxe.Json.parse(raw);
+						var p = data.Project.fromJson(json);
+
+						// Tilesets
+						log.general(" -> Updating tileset data...");
+						for(td in p.defs.tilesets) {
+							td.reloadImage(fp.directory);
+							td.buildPixelData(()->{}, true);
+						}
+
+						// Auto layer rules
+						log.general(" -> Updating auto-rules cache...");
+						for(l in p.levels)
+						for(li in l.layerInstances) {
+							if( !li.def.isAutoLayer() )
+								continue;
+							li.applyAllAutoLayerRules();
+						}
+
+						log.general(" -> Saving "+fp.fileName+"...");
+						var data = JsTools.prepareProjectFile(p);
+						JsTools.writeFileString(fp.full, data.str);
+					}
+				});
+			}
+			new ui.modal.Progress("Updating samples", 1, ops);
+		});
+		m.jContent.append(jButton);
+	}
+	#end
 
 	function updateRecents() {
 		ui.Tip.clear();
