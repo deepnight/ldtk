@@ -355,6 +355,8 @@ button {
 	flex-wrap: wrap;
 	margin-top: 2px;
 	margin-bottom: 2px;
+	border-radius: 6px;
+	overflow: hidden;
 	button {
 		flex: 1 1 0;
 	}
