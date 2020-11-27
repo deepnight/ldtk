@@ -2,9 +2,7 @@
 
 ## 💬 Discord
 
-We now have an official **Discord**! Come join us, we have cookies 🤗 Feel free to share the invite URL:
-
-**https://deepnight.net/go/ldtk-discord**
+We now have an official **Discord**! Come join us, we have cookies 🤗 Feel free to share the invite URL: **https://deepnight.net/go/ldtk-discord**
 
 ## 🌍 World map
 
@@ -14,7 +12,7 @@ Levels in your project can now be organized in various ways:
 - horizontally,
 - vertically.
 
-Just hit the `W` or `F2` key to in world view, and start arranging your creations as you wish!
+Just hit the `W` or `F2` key to switch to world view, and start re-arranging your creations as you wish! While in world mode, you can `right click` to reveal a context menu.
 
 ## 📑 Other changes
 
@@ -38,9 +36,13 @@ Just hit the `W` or `F2` key to in world view, and start arranging your creation
 - Better display of samples in recent files list on app Home.
 - Added a "Close" button to Project panel
 - Removed "Loaded" useless notification
+- You can now right-click external URL links in LDtk to copy them.
+- Fixed middle clicks on URL links.
 - Added a "locate project" button to Project panel
 - Fixed an infinite loop when resizing a level
+- Fixed a bug with files stored in a path containing some special characters (eg. ~ or %)
 - Updated the LDtk website
+- Updated all sample maps
 
 # 0.5.2-beta
 
