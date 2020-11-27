@@ -38,6 +38,7 @@ Just hit the `W` or `F2` key to switch to world view, and start re-arranging you
 - Removed "Loaded" useless notification
 - You can now right-click external URL links in LDtk to copy them.
 - Fixed middle clicks on URL links.
+- Fixed many many issues with rules that didn't update properly after some specific changes (eg. perlin, checker mode, modulos etc.)
 - Added a "locate project" button to Project panel
 - Fixed an infinite loop when resizing a level
 - Fixed a bug with files stored in a path containing some special characters (eg. ~ or %)
