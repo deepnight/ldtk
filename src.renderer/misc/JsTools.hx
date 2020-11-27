@@ -353,9 +353,25 @@ class JsTools {
 			if( displayUrl.length>cut )
 				displayUrl = displayUrl.substr(0,cut)+"...";
 			ui.Tip.attach(link, displayUrl, "link", true);
-			link.click( function(ev) {
+			link.click( function(ev:js.jquery.Event) {
 				ev.preventDefault();
 				electron.Shell.openExternal(url);
+			});
+			link.on("auxclick", (ev:js.jquery.Event)->{
+				switch ev.button {
+					case 1:
+						ev.preventDefault();
+						electron.Shell.openExternal(url);
+
+					case 2:
+						var m = new ui.modal.ContextMenu(ev);
+						m.add(L.t._("Copy URL"), ()->{
+							electron.Clipboard.write({ text:url });
+							N.msg("Copied.");
+						});
+
+					case _:
+				}
 			});
 		});
 

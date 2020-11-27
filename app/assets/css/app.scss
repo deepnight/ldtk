@@ -1684,7 +1684,6 @@ textarea {
 
 			button {
 				background-color: $bgDark;
-				border-bottom: 1px solid $bgMed;
 				margin: 0;
 				padding: 8px 20px;
 				font-size: 10pt;
@@ -1693,6 +1692,9 @@ textarea {
 					background-color: $orange;
 					color: black;
 				}
+			}
+			button+button {
+				border-top: 1px solid $bgMed;
 			}
 		}
 
