@@ -15,6 +15,7 @@ class ElectronMain {
 				fullscreenable: true,
 				show: false,
 				title: "LDtk",
+				icon: __dirname+"/appIcon.png",
 				backgroundColor: '#1e2229'
 			});
 
