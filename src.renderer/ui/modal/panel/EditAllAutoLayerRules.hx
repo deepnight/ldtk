@@ -422,7 +422,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 				// X modulo
 				var i = Input.linkToHtmlInput( r.xModulo, jRule.find("[name=xModulo]"));
-				i.onChange = function() r.tidy();
+				i.onValueChange = (v)->{
+					if( v>1 )
+						invalidateRuleAndOnesBelow(r);
+					r.tidy();
+				}
 				i.linkEvent( LayerRuleChanged(r) );
 				i.setBounds(1,10);
 				if( r.xModulo==1 )
@@ -430,7 +434,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 				// Y modulo
 				var i = Input.linkToHtmlInput( r.yModulo, jRule.find("[name=yModulo]"));
-				i.onChange = function() r.tidy();
+				i.onValueChange = (v)->{
+					if( v>1 )
+						invalidateRuleAndOnesBelow(r);
+					r.tidy();
+				}
 				i.linkEvent( LayerRuleChanged(r) );
 				i.setBounds(1,10);
 				if( r.yModulo==1 )
