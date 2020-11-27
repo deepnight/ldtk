@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI-macos
+name: package-ubuntu
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -16,11 +16,11 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [ubuntu-latest]
         haxe: [4.1.2]
       fail-fast: true
     # The type of runner that the job will run on
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -41,8 +41,8 @@ jobs:
           node-version: '14'
       - run: cd app && npm install
       - run: cd app && npm run compile
-      - run: cd app && npm run pack-mac
+      - run: cd app && npm run pack-linux
       - uses: actions/upload-artifact@v2
         with:
-          name: mac-distribution
-          path: app/redist/LDtk**installer.dmg
+          name: ubuntu-distribution
+          path: app/redist/LDtk**installer.AppImage

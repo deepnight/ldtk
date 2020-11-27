@@ -1,14 +1,14 @@
-name: CI-test-windows
+name: test-windows
 
 on:
   push:
     branches:
       - master
-      - dev-*
+      - dev*
   pull_request:
     branches:
       - master
-      - dev-*
+      - dev*
 
 jobs:
   build:
