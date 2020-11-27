@@ -12,10 +12,11 @@ class Home extends Page {
 		loadPageTemplate("home", {
 			app: Const.APP_NAME,
 			appVer: Const.getAppVersion(),
-			deepnightUrl: Const.DEEPNIGHT_URL,
+			deepnightUrl: Const.DEEPNIGHT_DOMAIN,
+			discordUrl: Const.DISCORD_URL,
 			jsonDocUrl: Const.JSON_DOC_URL,
 			docUrl: Const.DOCUMENTATION_URL,
-			websiteUrl : Const.WEBSITE_URL,
+			websiteUrl : Const.HOME_URL,
 			issueUrl : Const.ISSUES_URL,
 			appChangelog: StringTools.htmlEscape( Const.APP_CHANGELOG_MD),
 			jsonChangelog: StringTools.htmlEscape( Const.JSON_CHANGELOG_MD ),
@@ -47,6 +48,13 @@ class Home extends Page {
 		jPage.find(".new").click( function(ev) {
 			onNew();
 		});
+
+		// Debug menu
+		#if debug
+		jPage.find("button.settings").show().click( function(ev) {
+			openDebugMenu();
+		});
+		#end
 
 		jPage.find(".buy").click( (ev)->{
 			var w = new ui.Modal();
@@ -81,6 +89,63 @@ class Home extends Page {
 
 		updateRecents();
 	}
+
+	#if debug
+	function openDebugMenu() {
+		var m = new ui.Modal();
+
+		// Update all sample files
+		var jButton = new J('<button>Update all samples</button>');
+		jButton.click((_)->{
+			m.close();
+			var path = JsTools.getSamplesDir();
+			var files = js.node.Fs.readdirSync(path);
+			var log = new dn.Log();
+			log.printOnAdd = true;
+			var ops = [];
+			for(f in files) {
+				var fp = dn.FilePath.fromFile(path+"/"+f);
+				if( fp.extension!="ldtk" )
+					continue;
+
+				ops.push({
+					label: fp.fileName,
+					cb: ()->{
+						// Loading
+						log.fileOp(fp.fileName+"...");
+						log.general(" -> Loading...");
+						var raw = JsTools.readFileString(fp.full);
+						log.general(" -> Parsing...");
+						var json = haxe.Json.parse(raw);
+						var p = data.Project.fromJson(json);
+
+						// Tilesets
+						log.general(" -> Updating tileset data...");
+						for(td in p.defs.tilesets) {
+							td.reloadImage(fp.directory);
+							td.buildPixelData(()->{}, true);
+						}
+
+						// Auto layer rules
+						log.general(" -> Updating auto-rules cache...");
+						for(l in p.levels)
+						for(li in l.layerInstances) {
+							if( !li.def.isAutoLayer() )
+								continue;
+							li.applyAllAutoLayerRules();
+						}
+
+						log.general(" -> Saving "+fp.fileName+"...");
+						var data = JsTools.prepareProjectFile(p);
+						JsTools.writeFileString(fp.full, data.str);
+					}
+				});
+			}
+			new ui.modal.Progress("Updating samples", 1, ops);
+		});
+		m.jContent.append(jButton);
+	}
+	#end
 
 	function updateRecents() {
 		ui.Tip.clear();
@@ -151,14 +216,55 @@ class Home extends Page {
 
 		// List files
 		var i = recents.length-1;
+		C.initUniqueColors();
 		while( i>=0 ) {
 			var p = recents[i];
 			var isCrashFile = p.indexOf( Const.CRASH_NAME_SUFFIX )>=0;
 			var li = new J('<li/>');
 			li.appendTo(jRecentList);
 
-			var col = C.toBlack( C.fromStringLight( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] ), 0.3 );
-			li.append( JsTools.makePath(trimmedPaths[i], col, true) );
+
+			if( !App.ME.isInAppDir(p,true) ) {
+				var bgCol = C.pickUniqueColorFor( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] );
+				var textCol = C.toWhite(bgCol, 0.3);
+				var jPath = new J('<div class="recentPath"/>');
+				jPath.appendTo(li);
+				var parts = trimmedPaths[i].split("/");
+				var j = 0;
+				for(d in parts) {
+					if( j>0 ) {
+						var jSlash = new J('<div class="slash">/</div>');
+						jSlash.css({ color: C.intToHex(textCol) });
+						jSlash.appendTo(jPath);
+					}
+
+					var jPart = new J('<div>$d</div>');
+					jPart.appendTo(jPath);
+					jPart.css({ color: C.intToHex(textCol) });
+
+					if( j==0 ) {
+						jPart.addClass("label");
+						jPart.wrapInner('<span/>');
+						jPart.find("span").css({ backgroundColor: C.intToHex(bgCol) });
+					}
+					else if( j<parts.length-1 ) {
+						jPart.addClass("dir");
+					}
+					else if( j==parts.length-1 ) {
+						jPart.addClass("file");
+						jPart.html( '<span class="name">' + dn.FilePath.extractFileName(p) + '</span>' );
+					}
+
+					j++;
+				}
+			}
+			else {
+				// Sample file
+				var jPath = new J('<div class="recentPath sample"/>');
+				jPath.append('<div class="label"><span>${Const.APP_NAME} sample</span></div>');
+				jPath.append('<div class="file"><span class="name">${dn.FilePath.extractFileName(p)}</span></div>');
+				jPath.appendTo(li);
+			}
 
 			li.click( function(ev) {
 				if( !App.ME.loadProject(p) )
@@ -218,8 +324,7 @@ class Home extends Page {
 	}
 
 	public function onLoadSamples() {
-		var path = JsTools.getExeDir()+"/samples";
-		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION], path, function(filePath) {
+		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION], JsTools.getSamplesDir(), function(filePath) {
 			App.ME.loadProject(filePath);
 		});
 	}
@@ -231,7 +336,7 @@ class Home extends Page {
 
 			var p = data.Project.createEmpty();
 			var data = JsTools.prepareProjectFile(p);
-			JsTools.writeFileBytes(fp.full, data.bytes);
+			JsTools.writeFileString(fp.full, data.str);
 
 			N.msg("New project created: "+fp.full);
 			App.ME.loadPage( ()->new Editor(p, fp.full) );

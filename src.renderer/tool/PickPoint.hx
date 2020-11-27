@@ -7,8 +7,9 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 		super();
 	}
 
-	override function onMouseMove(m:MouseCoords) {
-		super.onMouseMove(m);
+	override function onMouseMove(ev:hxd.Event, m:Coords) {
+		super.onMouseMove(ev,m);
+		
 		if( pickOrigin!=null ) {
 			var grid = curLayerInstance.def.gridSize;
 			editor.cursor.set( Link(
@@ -23,16 +24,16 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 			editor.cursor.set( GridCell(curLayerInstance, m.cx, m.cy) );
 	}
 
-	override function startUsing(m:MouseCoords, buttonId:Int) {
-		super.startUsing(m, buttonId);
+	override function startUsing(ev:hxd.Event, m:Coords) {
+		super.startUsing(ev,m);
 
-		if( buttonId==1 )
+		if( ev.button==1 )
 			editor.clearSpecialTool();
-		else if( buttonId==0 )
+		else if( ev.button==0 )
 			curMode = Add;
 	}
 
-	override function stopUsing(m:MouseCoords) {
+	override function stopUsing(m:Coords) {
 		super.stopUsing(m);
 
 		var li = editor.curLayerInstance;
@@ -42,5 +43,5 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 		}
 	}
 
-	public dynamic function onPick(m:MouseCoords) {}
+	public dynamic function onPick(m:Coords) {}
 }

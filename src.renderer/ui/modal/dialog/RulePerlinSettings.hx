@@ -22,25 +22,32 @@ class RulePerlinSettings extends ui.modal.Dialog {
 		setTransparentMask();
 
 		var i = Input.linkToHtmlInput(r.perlinSeed, jContent.find("#perlinSeed"));
-		i.linkEvent( LayerRuleChanged(r) );
+		i.onChange = onChange.bind(r);
 		i.jInput.siblings("button").click( function(_) {
 			r.perlinSeed = Std.random(99999999);
 			i.jInput.val(r.perlinSeed);
-			editor.ge.emit( LayerRuleChanged(r) );
+			onChange(r);
 		});
 
 		var i = Input.linkToHtmlInput(r.perlinScale, jContent.find("#perlinScale"));
 		i.displayAsPct = true;
 		i.setBounds(0.01, 0.99);
-		i.linkEvent( LayerRuleChanged(r) );
+		i.onChange = onChange.bind(r);
 
 		var i = Input.linkToHtmlInput(r.perlinOctaves, jContent.find("#perlinOctaves"));
 		i.setBounds(1, 4);
-		i.linkEvent( LayerRuleChanged(r) );
+		i.onChange = onChange.bind(r);
 
-		positionNear(target, true);
+		positionNear(target);
 		updatePreview();
 	}
+
+	function onChange(r:data.def.AutoLayerRuleDef) {
+		editor.ge.emit( LayerRuleChanged(r) );
+		onSettingsChange(r);
+	}
+
+	public dynamic function onSettingsChange(r:data.def.AutoLayerRuleDef) {}
 
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);

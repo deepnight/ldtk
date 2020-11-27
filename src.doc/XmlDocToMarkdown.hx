@@ -158,6 +158,8 @@ class XmlDocToMarkdown {
 
 				// Type
 				var type = '${getTypeMd(f.type)}';
+				if( f.isColor )
+					type+="<br/>"+getColorInfosMd(f);
 				type = StringTools.replace(type," ","&nbsp;");
 				tableCols.push(type);
 
@@ -183,7 +185,7 @@ class XmlDocToMarkdown {
 		// Header
 		var headerMd = [
 			'# LDtk Json structure (version $appVersion)',
-			'Please refer to the [README.md](https://github.com/deepnight/ldtk/blob/master/README.md) for more informations.'
+			// 'Please refer to the [README.md](https://github.com/deepnight/ldtk/blob/master/README.md) for more informations.'
 		];
 
 		// Table of content
@@ -217,13 +219,17 @@ class XmlDocToMarkdown {
 	}
 
 
-	static function getColorInfosMd(f:FieldInfos) {
-		if( f.type.equals(Basic("String")) )
-			return '*Hex color "#rrggbb"*';
-		else if( f.type.equals(Basic("UInt")) )
-			return '*Hex color 0xrrggbb*';
-		else
-			return "???";
+	static function getColorInfosMd(f:FieldInfos) : String {
+		return '<small>*' + ( switch f.type {
+			case Nullable(Basic("String")), Basic("String"):
+				'Hex color "#rrggbb"';
+
+			case Nullable(Basic("UInt")), Basic("UInt"), Nullable(Basic("Int")), Basic("Int"):
+				'Hex color 0xrrggbb';
+
+			case _:
+				'???';
+		} ) + '*</small>';
 	}
 
 	static function getSubFieldsHtml(fields:Array<FieldInfos>) {
@@ -276,6 +282,8 @@ class XmlDocToMarkdown {
 			var descMd = [];
 			if( fieldXml.hasNode.haxe_doc ) {
 				var html = fieldXml.node.haxe_doc.innerHTML;
+				html = StringTools.replace(html, "<![CDATA[", "");
+				html = StringTools.replace(html, "]]>", "");
 				html = StringTools.replace(html, "\n", "<br/>");
 				descMd.push(html);
 			}

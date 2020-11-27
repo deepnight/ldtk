@@ -1,6 +1,6 @@
 {
 	"name": "ldtk",
-	"version": "0.5.2-beta",
+	"version": "0.6.0",
 	"main": "assets/main.js",
 	"productName": "LDtk",
 	"author": "Sebastien Benard",
@@ -9,7 +9,7 @@
 		"start": "electron .",
 		"compile": "cd ../  &&  haxe main.hxml  &&  haxe renderer.hxml",
 		"doc": "cd ../  &&  haxe doc.hxml",
-		"pack-prepare": "npm run compile  &&  npm run doc",
+		"pack-prepare": "npm run doc  &&  npm run compile",
 		"pack-test": "electron-builder build --dir --publish never",
 		"pack-win": "npm run pack-prepare  &&  electron-builder build --win --publish never",
 		"pack-win-interactive": "electron-builder build --win -c.nsis.oneClick=false -c.nsis.allowToChangeInstallationDirectory=true --publish never",

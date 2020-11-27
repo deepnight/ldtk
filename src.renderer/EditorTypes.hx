@@ -15,13 +15,16 @@ enum GlobalEvent {
 	BeforeProjectSaving;
 	ProjectSaved;
 
-	LevelSelected;
-	LevelSettingsChanged;
-	LevelAdded;
-	LevelRemoved;
-	LevelResized;
-	LevelRestoredFromHistory;
-	LevelSorted;
+	LevelSelected(level:data.Level);
+	LevelSettingsChanged(level:data.Level);
+	LevelAdded(level:data.Level);
+	LevelRemoved(level:data.Level);
+	LevelResized(level:data.Level);
+	LevelRestoredFromHistory(level:data.Level);
+	LevelSorted; // TODO remove this event (duplicate of WorldLevelMoved)
+
+	WorldLevelMoved;
+	WorldSettingsChanged;
 
 	LayerDefAdded;
 	LayerDefRemoved(defUid:Int);
@@ -52,7 +55,7 @@ enum GlobalEvent {
 	TilesetDefAdded(td:data.def.TilesetDef);
 	TilesetDefRemoved(td:data.def.TilesetDef);
 	TilesetSelectionSaved(td:data.def.TilesetDef);
-	TilesetDefOpaqueCacheRebuilt(td:data.def.TilesetDef);
+	TilesetDefPixelDataCacheRebuilt(td:data.def.TilesetDef);
 
 	EntityInstanceAdded(ei:data.inst.EntityInstance);
 	EntityInstanceRemoved(ei:data.inst.EntityInstance);
@@ -76,6 +79,9 @@ enum GlobalEvent {
 	EnumDefValueRemoved;
 
 	ToolOptionChanged;
+
+	WorldMode(active:Bool);
+	GridChanged(active:Bool);
 }
 
 enum CursorType {
@@ -92,6 +98,8 @@ enum CursorType {
 	Tiles(li:data.inst.LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int, flips:Int);
 	Resize(p:RulerPos);
 	Link(fx:Float, fy:Float, tx:Float, ty:Float, color:UInt);
+	Pointer;
+	Add;
 }
 
 enum GenericLevelElement {
@@ -101,7 +109,6 @@ enum GenericLevelElement {
 }
 
 enum ToolEditMode {
-	PanView;
 	Add;
 	Remove;
 }

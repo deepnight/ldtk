@@ -1,19 +1,11 @@
 package display;
 
 class LevelRender extends dn.Process {
-	static var MIN_ZOOM = 0.2;
-	static var MAX_ZOOM = 32;
-	static var MAX_FOCUS_PADDING = 200;
 	static var FIELD_TEXT_SCALE = 0.666;
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
+	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
 	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
-
-	public var focusLevelX(default,set) : Float;
-	public var focusLevelY(default,set) : Float;
-	public var adjustedZoom(get,set) : Float;
-	var rawZoom : Float;
-	var isFit = false;
 
 	/** <LayerDefUID, Bool> **/
 	var autoLayerRendering : Map<Int,Bool> = new Map();
@@ -22,19 +14,20 @@ class LevelRender extends dn.Process {
 	var layerVis : Map<Int,Bool> = new Map();
 
 	var layersWrapper : h2d.Layers;
+
 	/** <LayerDefUID, h2d.Object> **/
 	var layerRenders : Map<Int,h2d.Object> = new Map();
 
+	var bg : h2d.Bitmap;
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
 	var grid : h2d.Graphics;
 	var rectBleeps : Array<h2d.Object> = [];
-
 	public var temp : h2d.Graphics;
 
 	// Invalidation system (ie. render calls)
 	var allInvalidated = true;
-	var bgInvalidated = false;
+	var uiInvalidated = false;
 	var layerInvalidations : Map<Int, { left:Int, right:Int, top:Int, bottom:Int }> = new Map();
 
 
@@ -42,8 +35,10 @@ class LevelRender extends dn.Process {
 		super(editor);
 
 		editor.ge.addGlobalListener(onGlobalEvent);
-
 		createRootInLayers(editor.root, Const.DP_MAIN);
+
+		bg = new h2d.Bitmap();
+		root.add(bg, Const.DP_BG);
 
 		bounds = new h2d.Graphics();
 		root.add(bounds, Const.DP_UI);
@@ -59,85 +54,6 @@ class LevelRender extends dn.Process {
 
 		temp = new h2d.Graphics();
 		root.add(temp, Const.DP_TOP);
-
-		focusLevelX = 0;
-		focusLevelY = 0;
-		adjustedZoom = 3;
-	}
-
-	public function setFocus(x,y) {
-		focusLevelX = x;
-		focusLevelY = y;
-	}
-
-	public function fit() {
-		var wasFit = isFit;
-		focusLevelX = editor.curLevel.pxWid*0.5;
-		focusLevelY = editor.curLevel.pxHei*0.5;
-
-		var old = rawZoom;
-		var pad = 100 * js.Browser.window.devicePixelRatio;
-		adjustedZoom = M.fmin(
-			editor.canvasWid() / ( editor.curLevel.pxWid + pad ),
-			editor.canvasHei() / ( editor.curLevel.pxHei + pad )
-		);
-
-		// Fit closer if repeated
-		if( wasFit ) {
-			var pad = 8 * js.Browser.window.devicePixelRatio;
-			adjustedZoom = M.fmin(
-				editor.canvasWid() / ( editor.curLevel.pxWid + pad ),
-				editor.canvasHei() / ( editor.curLevel.pxHei + pad )
-			);
-		}
-
-		isFit = true;
-	}
-
-	inline function set_focusLevelX(v) {
-		isFit = false;
-		focusLevelX = editor.curLevelId==null
-			? v
-			: M.fclamp( v, -MAX_FOCUS_PADDING/adjustedZoom, editor.curLevel.pxWid+MAX_FOCUS_PADDING/adjustedZoom );
-		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
-		return focusLevelX;
-	}
-
-	inline function set_focusLevelY(v) {
-		isFit = false;
-		focusLevelY = editor.curLevelId==null
-			? v
-			: M.fclamp( v, -MAX_FOCUS_PADDING/adjustedZoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING/adjustedZoom );
-		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
-		return focusLevelY;
-	}
-
-	inline function set_adjustedZoom(v) {
-		isFit = false;
-		rawZoom = M.fclamp(v, MIN_ZOOM, MAX_ZOOM);
-		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
-		return rawZoom;
-	}
-
-	inline function get_adjustedZoom() {
-		if( rawZoom<=js.Browser.window.devicePixelRatio )
-			return rawZoom;
-		else
-			return M.round(rawZoom*2)/2; // reduces tile flickering (#71)
-	}
-
-	public function deltaZoom(delta:Float) {
-		isFit = false;
-		rawZoom += delta * rawZoom;
-		rawZoom = M.fclamp(rawZoom, MIN_ZOOM, MAX_ZOOM);
-	}
-
-	public inline function levelToUiX(x:Float) {
-		return M.round( x*adjustedZoom + root.x );
-	}
-
-	public inline function levelToUiY(y:Float) {
-		return M.round( y*adjustedZoom + root.y );
 	}
 
 	override function onDispose() {
@@ -147,31 +63,54 @@ class LevelRender extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
-			case ViewportChanged:
-				root.setScale(adjustedZoom);
-				root.x = M.round( editor.canvasWid()*0.5 - focusLevelX * adjustedZoom );
-				root.y = M.round( editor.canvasHei()*0.5 - focusLevelY * adjustedZoom );
+			case WorldMode(active):
+				if( active ) {
+					// Remove hidden render
+					for(l in layerRenders)
+						l.remove();
+					layerRenders = new Map();
+					grid.clear();
+
+					// Stop process
+					pause();
+					root.visible = false;
+				}
+				else {
+					// Resume
+					root.visible = true;
+					invalidateAll();
+					resume();
+				}
+
+			case GridChanged(active):
+				applyGridVisibility();
+
+			case ViewportChanged, WorldLevelMoved, WorldSettingsChanged:
+				root.setScale( camera.adjustedZoom );
+				root.x = M.round( editor.camera.width*0.5 - camera.levelX * camera.adjustedZoom );
+				root.y = M.round( editor.camera.height*0.5 - camera.levelY * camera.adjustedZoom );
 
 			case ProjectSaved, BeforeProjectSaving:
 
 			case ProjectSelected:
 				renderAll();
-				fit();
 
 			case ProjectSettingsChanged:
-				invalidateBg();
+				invalidateUi();
 
-			case LevelRestoredFromHistory:
+			case LevelRestoredFromHistory(l):
 				invalidateAll();
 
 			case LayerInstanceRestoredFromHistory(li):
 				invalidateLayer(li);
 
-			case LevelSelected:
-				renderAll();
-				fit();
+			case LevelSelected(l):
+				invalidateAll();
 
-			case LevelResized:
+			case LevelResized(l):
+				for(li in l.layerInstances)
+					if( li.def.isAutoLayer() )
+						li.applyAllAutoLayerRules();
 				invalidateAll();
 
 			case LayerInstanceVisiblityChanged(li):
@@ -182,10 +121,10 @@ class LevelRender extends dn.Process {
 
 			case LayerInstanceSelected:
 				applyAllLayersVisibility();
-				invalidateBg();
+				invalidateUi();
 
-			case LevelSettingsChanged:
-				invalidateBg();
+			case LevelSettingsChanged(l):
+				invalidateUi();
 
 			case LayerDefRemoved(uid):
 				if( layerRenders.exists(uid) ) {
@@ -208,7 +147,7 @@ class LevelRender extends dn.Process {
 
 			case LayerRuleChanged(r), LayerRuleAdded(r):
 				var li = editor.curLevel.getLayerInstanceFromRule(r);
-				li.applyAutoLayerRuleToAllLayer(r);
+				li.applyAutoLayerRuleToAllLayer(r, true);
 				invalidateLayer(li);
 
 			case LayerRuleSeedChanged:
@@ -241,7 +180,8 @@ class LevelRender extends dn.Process {
 			case LayerInstanceChanged:
 
 			case TilesetSelectionSaved(td):
-			case TilesetDefOpaqueCacheRebuilt(td):
+
+			case TilesetDefPixelDataCacheRebuilt(td):
 
 			case TilesetDefRemoved(td):
 				invalidateAll();
@@ -273,8 +213,10 @@ class LevelRender extends dn.Process {
 				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
 				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
-			case LevelAdded:
-			case LevelRemoved:
+			case LevelAdded(l):
+
+			case LevelRemoved(l):
+
 			case LevelSorted:
 			case LayerDefAdded:
 
@@ -377,9 +319,14 @@ class LevelRender extends dn.Process {
 	}
 
 
-	function renderBounds() {
-		bgInvalidated = false;
+	function renderBg() {
+		var c = editor.curLevel.getBgColor();
+		bg.tile = h2d.Tile.fromColor(c);
+		bg.scaleX = editor.curLevel.pxWid;
+		bg.scaleY = editor.curLevel.pxHei;
+	}
 
+	function renderBounds() {
 		// Bounds
 		bounds.clear();
 		bounds.lineStyle(1, 0xffffff, 0.7);
@@ -394,12 +341,11 @@ class LevelRender extends dn.Process {
 		boundsGlow.filter = shadow;
 	}
 
-	public inline function applyGridVisibility() {
-		grid.visible = settings.grid;
+	inline function applyGridVisibility() {
+		grid.visible = settings.grid && !editor.worldMode;
 	}
 
 	function renderGrid() {
-		bgInvalidated = false;
 		grid.clear();
 		applyGridVisibility();
 
@@ -441,13 +387,10 @@ class LevelRender extends dn.Process {
 		clearTemp();
 		renderBounds();
 		renderGrid();
+		renderBg();
 
-		for(ld in editor.project.defs.layers) {
-			var li = editor.curLevel.getLayerInstance(ld);
-			if( li.def.isAutoLayer() )
-				li.applyAllAutoLayerRules();
-			renderLayer(li);
-		}
+		for(ld in editor.project.defs.layers)
+			renderLayer( editor.curLevel.getLayerInstance(ld) );
 	}
 
 	public inline function clearTemp() {
@@ -474,19 +417,20 @@ class LevelRender extends dn.Process {
 		// Render
 		switch li.def.type {
 		case IntGrid, AutoLayer:
-			var g = new h2d.Graphics(wrapper);
-
-			var doneCoords = new Map();
+			// var doneCoords = new Map();
 
 			if( li.def.isAutoLayer() && li.def.autoTilesetDefUid!=null && autoLayerRenderingEnabled(li) ) {
 				// Auto-layer tiles
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper);
 
+				if( li.autoTilesCache==null )
+					li.applyAllAutoLayerRules();
+
 				li.def.iterateActiveRulesInDisplayOrder( (r)-> {
 					if( li.autoTilesCache.exists( r.uid ) ) {
 						for(coordId in li.autoTilesCache.get( r.uid ).keys()) {
-							doneCoords.set(coordId, true);
+							// doneCoords.set(coordId, true);
 							for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
 								tg.addTransform(
 									tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
@@ -513,14 +457,12 @@ class LevelRender extends dn.Process {
 			}
 			else if( li.def.type==IntGrid ) {
 				// Normal intGrid
-				for(cy in 0...li.cHei)
-				for(cx in 0...li.cWid) {
-					if( !li.hasIntGrid(cx,cy) )
-						continue;
+				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wrapper);
 
-					g.beginFill( li.getIntGridColorAt(cx,cy), 1 );
-					g.drawRect(cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize);
-				}
+				for(cy in 0...li.cHei)
+				for(cx in 0...li.cWid)
+					if( li.hasIntGrid(cx,cy) )
+						pixelGrid.setPixel( cx, cy, li.getIntGridColorAt(cx,cy) );
 			}
 
 		case Entities:
@@ -598,7 +540,7 @@ class LevelRender extends dn.Process {
 					var w = new h2d.Flow(valuesFlow);
 					var tile = fi.getIconForDisplay(idx);
 					var bmp = new h2d.Bitmap( tile, w );
-					var s = M.fmin( ei.def.width/ tile.width, ei.def.height/tile.height );
+					var s = M.fmin(1, M.fmin( ei.def.width/ tile.width, ei.def.height/tile.height ));
 					bmp.setScale(s);
 				}
 				else if( fi.def.type==F_Color ) {
@@ -750,7 +692,7 @@ class LevelRender extends dn.Process {
 
 
 		function _addBg(f:h2d.Flow, dark:Float) {
-			var bg = new h2d.ScaleGrid(hxd.Res.img.fieldBg.toTile(), 2,2);
+			var bg = new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2,2);
 			f.addChildAt(bg, 0);
 			f.getProperties(bg).isAbsolute = true;
 			bg.color.setColor( C.addAlphaF( C.toBlack( ei.getSmartColor(false), dark ) ) );
@@ -787,12 +729,12 @@ class LevelRender extends dn.Process {
 			for(fd in ei.def.fieldDefs) {
 				var fi = ei.getFieldInstance(fd);
 
-				// Null enum warning
-				if( fi.hasAnyErrorInValues() ) {
+				// Value error
+				var err = fi.getFirstErrorInValues();
+				if( err!=null ) {
 					var tf = new h2d.Text(font, above);
 					tf.textColor = 0xffcc00;
-					tf.text = "<ERROR>";
-					// continue;
+					tf.text = '<$err>';
 				}
 
 				// Skip hiddens
@@ -867,7 +809,7 @@ class LevelRender extends dn.Process {
 							case RadiusPx, RadiusGrid: false;
 							case _: true;
 						};
-					case F_String, F_Text, F_Bool: true;
+					case F_String, F_Text, F_Bool, F_Path: true;
 					case F_Color, F_Point: false;
 					case F_Enum(enumDefUid): fd.editorDisplayMode!=EntityTile;
 				}
@@ -927,7 +869,6 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-
 	public inline function invalidateLayer(?li:data.inst.LayerInstance, ?layerDefUid:Int) {
 		if( li==null )
 			li = editor.curLevel.getLayerInstance(layerDefUid);
@@ -955,13 +896,8 @@ class LevelRender extends dn.Process {
 					invalidateLayerArea(other, left, right, top, bottom);
 	}
 
-	// public inline function invalidateAllLayers() {
-	// 	for(li in editor.curLevel.layerInstances)
-	// 		invalidateLayer(li);
-	// }
-
-	public inline function invalidateBg() {
-		bgInvalidated = true;
+	public inline function invalidateUi() {
+		uiInvalidated = true;
 	}
 
 	public inline function invalidateAll() {
@@ -985,6 +921,7 @@ class LevelRender extends dn.Process {
 				i++;
 		}
 
+
 		// Render invalidation system
 		if( allInvalidated ) {
 			// Full
@@ -992,11 +929,13 @@ class LevelRender extends dn.Process {
 			App.LOG.warning("Full render requested");
 		}
 		else {
-			// Bg
-			if( bgInvalidated ) {
+			// UI & bg elements
+			if( uiInvalidated ) {
+				renderBg();
 				renderBounds();
 				renderGrid();
-				App.LOG.render("Rendered bg");
+				uiInvalidated = false;
+				App.LOG.render("Rendered level UI");
 			}
 
 			// Layers
@@ -1008,6 +947,8 @@ class LevelRender extends dn.Process {
 					renderLayer(li);
 				}
 		}
+
+		applyGridVisibility();
 	}
 
 }

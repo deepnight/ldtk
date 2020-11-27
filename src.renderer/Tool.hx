@@ -15,8 +15,8 @@ class Tool<T> extends dn.Process {
 
 	var clickingOutsideBounds = false;
 	var curMode : Null<ToolEditMode> = null;
-	var origin : MouseCoords;
-	var lastMouse : Null<MouseCoords>;
+	var origin : Coords;
+	var lastMouse : Null<Coords>;
 	var button = -1;
 	var rectangle = false;
 	var startTime = 0.;
@@ -32,7 +32,9 @@ class Tool<T> extends dn.Process {
 
 	override function toString():String {
 		return Type.getClassName(Type.getClass(this))
-			+ "[" + ( curMode==null ? "--" : curMode.getName() ) + "]";
+			+ "[" + ( curMode==null ? "--" : curMode.getName() ) + "]"
+			+ ( isRunning() ? " (RUNNING)" : "" );
+
 	}
 
 	function getSelectionMemoryKey() {
@@ -68,29 +70,20 @@ class Tool<T> extends dn.Process {
 	public function canEdit() return getSelectedValue()!=null && editor.isCurrentLayerVisible();
 	public function isRunning() return curMode!=null;
 
-	public function startUsing(m:MouseCoords, buttonId:Int) {
+	public function startUsing(ev:hxd.Event, m:Coords) {
 		curMode = null;
 		startTime = haxe.Timer.stamp();
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
 
 		// Start tool
-		button = buttonId;
+		button = ev.button;
 		switch button {
 			case 0:
-				if( App.ME.isKeyDown(K.SPACE) )
-					curMode = PanView;
-				else
-					curMode = Add;
+				curMode = Add;
 
 			case 1:
 				curMode = Remove;
-
-			case 2:
-				curMode = PanView;
 		}
-
-		if( curMode==PanView )
-			clickingOutsideBounds = false;
 
 		if( !canEdit() && ( curMode==Add || curMode==Remove ) ) {
 			curMode = null;
@@ -106,14 +99,14 @@ class Tool<T> extends dn.Process {
 	}
 
 
-	function updateCursor(m:MouseCoords) {}
+	function updateCursor(m:Coords) {}
 
-	function useFloodfillAt(m:MouseCoords) {
+	function useFloodfillAt(m:Coords) {
 		return false;
 	}
 
 	function _floodFillImpl(
-		m:MouseCoords,
+		m:Coords,
 		isBlocking:(cx:Int,cy:Int)->Bool,
 		setter:(cx:Int,cy:Int,v:T)->Void,
 		?onFill:(left:Int, right:Int, top:Int, bottom:Int, affectedPoints:Array<{ cx:Int, cy:Int }>)->Void
@@ -168,12 +161,7 @@ class Tool<T> extends dn.Process {
 		return true;
 	}
 
-	function useAt(m:MouseCoords, isOnStop:Bool) : Bool {
-		if( curMode==PanView ) {
-			editor.levelRender.focusLevelX -= m.levelX-lastMouse.levelX;
-			editor.levelRender.focusLevelY -= m.levelY-lastMouse.levelY;
-		}
-
+	function useAt(m:Coords, isOnStop:Bool) : Bool {
 		var anyChange = false;
 		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
 			anyChange = useAtInterpolatedGrid(cx,cy) || anyChange;
@@ -187,20 +175,20 @@ class Tool<T> extends dn.Process {
 		return false;
 	}
 
-	function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int) : Bool {
+	function useOnRectangle(m:Coords, left:Int, right:Int, top:Int, bottom:Int) : Bool {
 		return false;
 	}
 
 
-	public inline function getRunningRectCWid(m:MouseCoords) : Int {
-		return isRunning() && rectangle && curMode!=PanView ? M.iabs(m.cx-origin.cx)+1 : 0;
+	public inline function getRunningRectCWid(m:Coords) : Int {
+		return isRunning() && rectangle ? M.iabs(m.cx-origin.cx)+1 : 0;
 	}
 
-	public inline function getRunningRectCHei(m:MouseCoords) : Int {
-		return isRunning() && rectangle && curMode!=PanView ? M.iabs(m.cy-origin.cy)+1 : 0;
+	public inline function getRunningRectCHei(m:Coords) : Int {
+		return isRunning() && rectangle ? M.iabs(m.cy-origin.cy)+1 : 0;
 	}
 
-	public function stopUsing(m:MouseCoords) {
+	public function stopUsing(m:Coords) {
 		var clickTime = haxe.Timer.stamp() - startTime;
 
 		if( isRunning() && !clickingOutsideBounds ) {
@@ -254,8 +242,9 @@ class Tool<T> extends dn.Process {
 
 	public function onKeyPress(keyId:Int) {}
 
-	public function onMouseMove(m:MouseCoords) {
+	public function onMouseMove(ev:hxd.Event, m:Coords) {
 		editor.cursor.setLabel();
+
 		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )
 			clickingOutsideBounds = false;
 
@@ -266,12 +255,7 @@ class Tool<T> extends dn.Process {
 		// Render cursor
 		if( isRunning() && clickingOutsideBounds )
 			editor.cursor.set(None);
-		else if( App.ME.isKeyDown(K.SPACE) )
-			editor.cursor.set(Pan);
 		else switch curMode {
-			case PanView:
-				editor.cursor.set(Pan);
-
 			case null, Add, Remove:
 				if( editor.isCurrentLayerVisible() )
 					updateCursor(m);
@@ -282,7 +266,11 @@ class Tool<T> extends dn.Process {
 		lastMouse = m;
 	}
 
+	function onBeforeToolActivation() {}
+
 	public final function onToolActivation() {
+		onBeforeToolActivation();
+
 		resume();
 
 		if( palette!=null ) {
@@ -300,6 +288,15 @@ class Tool<T> extends dn.Process {
 	public function onValuePicking() {
 		palette.render();
 		palette.focusOnSelection();
+	}
+
+	public function palettePoppedOut() {
+		return palette!=null && palette.isPoppedOut && ui.modal.ToolPalettePopOut.ME!=null;
+	}
+
+	public function popInPalette() {
+		if( palettePoppedOut() )
+			ui.modal.ToolPalettePopOut.ME.close();
 	}
 
 	public function initPalette() {

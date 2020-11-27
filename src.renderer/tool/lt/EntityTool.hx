@@ -10,6 +10,13 @@ class EntityTool extends tool.LayerTool<Int> {
 			selectValue( project.defs.entities[0].uid );
 	}
 
+	override function onBeforeToolActivation() {
+		super.onBeforeToolActivation();
+
+		if( curEntityDef==null )
+			selectValue( getDefaultValue() );
+	}
+
 	inline function get_curEntityDef() return project.defs.getEntityDef( getSelectedValue() );
 
 	override function selectValue(v:Int) {
@@ -27,19 +34,19 @@ class EntityTool extends tool.LayerTool<Int> {
 			return -1;
 	}
 
-	function getPlacementX(m:MouseCoords) {
+	function getPlacementX(m:Coords) {
 		return snapToGrid()
 			? M.round( ( m.cx + curEntityDef.pivotX ) * curLayerInstance.def.gridSize )
 			: m.levelX;
 	}
 
-	function getPlacementY(m:MouseCoords) {
+	function getPlacementY(m:Coords) {
 		return snapToGrid()
 			? M.round( ( m.cy + curEntityDef.pivotY ) * curLayerInstance.def.gridSize )
 			: m.levelY;
 	}
 
-	override function updateCursor(m:MouseCoords) {
+	override function updateCursor(m:Coords) {
 		super.updateCursor(m);
 
 		if( curEntityDef==null )
@@ -53,29 +60,29 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function startUsing(m:MouseCoords, buttonId:Int) {
-		super.startUsing(m, buttonId);
+	override function startUsing(ev:hxd.Event, m:Coords) {
+		super.startUsing(ev,m);
 
 		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 		switch ge {
-			case Entity(_) if( buttonId==0 ):
-				editor.selectionTool.startUsing(m, buttonId);
+			case Entity(_) if( ev.button==0 ):
+				editor.selectionTool.startUsing(ev,m);
 				stopUsing(m);
 				return;
 
-			case PointField(_) if( buttonId==0 ):
-				editor.selectionTool.startUsing(m, buttonId);
+			case PointField(_) if( ev.button==0 ):
+				editor.selectionTool.startUsing(ev,m);
 				stopUsing(m);
 				return;
 
 			case _:
 		}
 
-		if( buttonId!=2 )
+		if( ev.button!=2 )
 			editor.selectionTool.clear();
 
 		switch curMode {
-			case null, PanView:
+			case null:
 			case Add:
 				if( curLevel.inBounds(m.levelX, m.levelY) ) {
 					var ei = curLayerInstance.createEntityInstance(curEntityDef);
@@ -87,7 +94,7 @@ class EntityTool extends tool.LayerTool<Int> {
 						editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);
 						onEditAnything();
 						stopUsing(m);
-						editor.selectionTool.startUsing(m, button);
+						editor.selectionTool.startUsing(ev, m);
 						editor.ge.emit( EntityInstanceAdded(ei) );
 					}
 				}
@@ -98,7 +105,7 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 
-	function removeAnyEntityOrPointAt(m:MouseCoords) {
+	function removeAnyEntityOrPointAt(m:Coords) {
 		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, true);
 		switch ge {
 			case Entity(curLayerInstance, instance):
@@ -133,22 +140,22 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function onMouseMove(m:MouseCoords) {
-		super.onMouseMove(m);
+	override function onMouseMove(ev:hxd.Event, m:Coords) {
+		super.onMouseMove(ev,m);
 
 		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 		switch ge {
-			case Entity(_): editor.selectionTool.onMouseMove(m);
-			case PointField(_): editor.selectionTool.onMouseMove(m);
+			case Entity(_): editor.selectionTool.onMouseMove(ev,m);
+			case PointField(_): editor.selectionTool.onMouseMove(ev,m);
 			case _:
 		}
 	}
 
-	override function useAt(m:MouseCoords, isOnStop) {
+	override function useAt(m:Coords, isOnStop) {
 		super.useAt(m,isOnStop);
 
 		switch curMode {
-			case null, PanView:
+			case null:
 			case Add:
 
 			case Remove:
@@ -159,7 +166,7 @@ class EntityTool extends tool.LayerTool<Int> {
 		return false;
 	}
 
-	override function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int) {
+	override function useOnRectangle(m:Coords, left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(m, left, right, top, bottom);
 		return false;
 	}

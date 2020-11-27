@@ -2,6 +2,8 @@ package exporter;
 
 import ldtk.Json;
 
+
+// TMX documentation: https://doc.mapeditor.org/en/stable/reference/tmx-map-format/
 class Tiled extends Exporter {
 	static var TILED_VERSION = "1.4.2";
 	static var MAP_VERSION = "1.4";
@@ -37,7 +39,6 @@ class Tiled extends Exporter {
 
 		// Export each level to a separate TMX file
 		var i = 1;
-		var wx = 0;
 		for(l in p.levels) {
 			var bytes = exportLevel(l);
 
@@ -48,10 +49,9 @@ class Tiled extends Exporter {
 
 			world.maps.push({
 				fileName: fp.fileWithExt,
-				x:wx,
-				y:0,
+				x:l.worldX,
+				y:l.worldY,
 			});
-			wx += l.pxWid;
 			i++;
 		}
 
@@ -95,7 +95,7 @@ class Tiled extends Exporter {
 		map.set("tilewidth", ""+tiledGridSize);
 		map.set("tileheight", ""+tiledGridSize);
 		map.set("infinite", "0");
-		map.set("backgroundcolor", C.intToHex(p.bgColor));
+		map.set("backgroundcolor", C.intToHex(level.getBgColor()) );
 
 		/**
 			TILESETS
@@ -313,12 +313,13 @@ class Tiled extends Exporter {
 								case F_Color: "color";
 								case F_Enum(enumDefUid): null;
 								case F_Point: null;
+								case F_Path: "file";
 							}
 							// Value
 							var v : Dynamic = switch fi.def.type {
 								case F_Int: fi.getInt(i);
 								case F_Float: fi.getFloat(i);
-								case F_String, F_Text: fi.getString(i);
+								case F_String, F_Text, F_Path: fi.getString(i);
 								case F_Bool: fi.getBool(i);
 								case F_Color:
 									var c = fi.getColorAsHexStr(i);

@@ -10,24 +10,32 @@ typedef ContextAction = {
 
 class ContextMenu extends ui.Modal {
 	public static var ME : ContextMenu;
-	var jAttachTarget : Null<js.jquery.JQuery>;
+	var jAttachTarget : js.jquery.JQuery; // could be empty
 
-	public function new(?openEvent:js.jquery.Event) {
+	public function new(?m:Coords, ?openEvent:js.jquery.Event) {
 		super();
 
 		ME = this;
 
-		var jEventTarget = new J(openEvent.currentTarget);
-		jAttachTarget = jEventTarget;
-		if( jAttachTarget.is("button.context") )
-			jAttachTarget = jAttachTarget.parent();
+		if( openEvent!=null ) {
+			var jEventTarget = new J(openEvent.currentTarget);
+			jAttachTarget = jEventTarget;
+			if( jAttachTarget.is("button.context") )
+				jAttachTarget = jAttachTarget.parent();
+			jAttachTarget.addClass("contextMenuOpen");
 
-		if( jEventTarget.is("button.context") )
-			positionNear(jEventTarget);
-		else if( openEvent!=null )
-			positionNear( new MouseCoords(openEvent.pageX, openEvent.pageY) );
+			if( jEventTarget.is("button.context") )
+				positionNear(jEventTarget);
+			else if( openEvent!=null )
+				positionNear( new Coords(openEvent.pageX, openEvent.pageY) );
 
-		jAttachTarget.addClass("contextMenuOpen");
+		}
+		else {
+			jAttachTarget = new J("");
+			if( m!=null )
+				positionNear(m);
+		}
+
 		setTransparentMask();
 		addClass("contextMenu");
 	}

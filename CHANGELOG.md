@@ -1,3 +1,50 @@
+# 0.6.0 - Take over the world!
+
+## 💬 Discord
+
+We now have an official **Discord**! Come join us, we have cookies 🤗 Feel free to share the invite URL: **https://deepnight.net/go/ldtk-discord**
+
+## 🌍 World map
+
+Levels in your project can now be organized in various ways:
+- freely on a vast 2D map,
+- in a large grid system (aka "grid-vania"),
+- horizontally,
+- vertically.
+
+Just hit the `W` or `F2` key to switch to world view, and start re-arranging your creations as you wish! While in world mode, you can `right click` to reveal a context menu.
+
+## 📑 Other changes
+
+- **New splash screen**: to reduce screen flickering and dirty window flashes on startup, a new splash screen was added, among other minor changes. The app window should now feel a little more "stable".
+- **Smooth zooming/panning**: automatic zooming and panning (eg. when pressing `F` key) are now animated and smoother.
+- **New rule editor window**: this UI component really needed some love, so it now features a more streamlined interface and a much better integrated help.
+- **User settings** are now stored in AppData OS folder to prevent from losing them on each future update. Unfortunately, this will only apply starting from this version, so settings will be reset one last time :) Sorry!
+- **End of beta**: LDtk is no longer considered *Beta* as it's now stable & mature enough to be used in production.
+- **"File path" field**: this new field type allow you to refer to an external file directly from an Entity instance (many thanks to [Yanrishatum](https://github.com/Yanrishatum)!)
+- Many *under-the-hood* optimizations to support the new World map feature.
+- Removed the "double" *Fit* mode when pressing `F`. Now pressing this key just fits the whole level in the viewport.
+- Unified R & Shift-R shortcuts: just press R to toggle all auto-layers rendering.
+- Fixed loading of files with spaces in name, when using file association on Windows
+- Better "invalid value" error display in entity fields (previously, you only had `<error>`).
+- Application samples will now display a warning if you try to save them (not recommended as they will be overwritten by future app updates).
+- Better Entity panel layout
+- Better default entity Field naming when creating a new one
+- Fixed a bug in Entity panel that went crazy when containing too many entities.
+- Sample maps are no longer added to "recent projects" list
+- Updated the Enum panel icon.
+- Better display of samples in recent files list on app Home.
+- Added a "Close" button to Project panel
+- Removed "Loaded" useless notification
+- You can now right-click external URL links in LDtk to copy them.
+- Fixed middle clicks on URL links.
+- Fixed many many issues with rules that didn't update properly after some specific changes (eg. perlin, checker mode, modulos etc.)
+- Added a "locate project" button to Project panel
+- Fixed an infinite loop when resizing a level
+- Fixed a bug with files stored in a path containing some special characters (eg. ~ or %)
+- Updated the LDtk website
+- Updated all sample maps
+
 # 0.5.2-beta
 
  - Fixed a crash when loading a project with a "lost" tileset image (ie. path not found).

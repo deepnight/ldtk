@@ -80,6 +80,12 @@ class Cursor extends dn.Process {
 				}) );
 				#end
 
+			case Pointer:
+				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("pointer") );
+
+			case Add:
+				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("cell") );
+
 			case PickNothing:
 				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("help") );
 
@@ -184,7 +190,7 @@ class Cursor extends dn.Process {
 		var changed = type==null || curLabel!=label || type.getIndex()!=t.getIndex();
 		if( !changed )
 			changed = switch t {
-				case None, Move, Moving, Pan, PickNothing, Forbidden: type!=t;
+				case None, Move, Moving, Pan, PickNothing, Forbidden, Pointer, Add: type!=t;
 				case Eraser(x, y): false;
 				case GridCell(li, cx, cy, col): !type.equals(t);
 				case GridRect(li, cx, cy, wid, hei, col): !type.equals(t);
@@ -205,7 +211,7 @@ class Cursor extends dn.Process {
 			return;
 
 		switch type {
-			case None, Move, Moving, Pan, Resize(_), PickNothing, Forbidden:
+			case None, Move, Moving, Pan, Resize(_), PickNothing, Forbidden, Pointer, Add:
 				var m = editor.getMouse();
 				labelWrapper.setPosition(m.levelX, m.levelY);
 
@@ -236,7 +242,7 @@ class Cursor extends dn.Process {
 
 		graphics.setPosition(wrapper.x, wrapper.y);
 
-		labelWrapper.setScale(1/editor.levelRender.adjustedZoom * js.Browser.window.devicePixelRatio*2);
+		labelWrapper.setScale(1/editor.camera.adjustedZoom * js.Browser.window.devicePixelRatio*2);
 	}
 
 	public function enablePermanentHighlights() {
@@ -251,9 +257,11 @@ class Cursor extends dn.Process {
 
 		root.x = editor.levelRender.root.x;
 		root.y = editor.levelRender.root.y;
-		root.setScale(editor.levelRender.adjustedZoom);
+		root.setScale(editor.camera.adjustedZoom);
+		root.visible = !editor.worldMode;
 
 		updatePosition();
+
 	}
 
 	override function update() {

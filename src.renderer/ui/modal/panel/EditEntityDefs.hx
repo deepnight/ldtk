@@ -77,7 +77,12 @@ class EditEntityDefs extends ui.modal.Panel {
 
 					case _:
 				}
-				var f = curEntity.createFieldDef(project, type, isArray);
+
+				var baseName = switch type {
+					case F_Enum(enumDefUid): project.defs.getEnumDef(enumDefUid).identifier;
+					case _: L.getFieldType(type);
+				}
+				var f = curEntity.createFieldDef(project, type, baseName, isArray);
 				editor.ge.emit( EntityFieldAdded(curEntity) );
 				selectField(f);
 				jFieldForm.find("input:not([readonly]):first").focus().select();
@@ -86,7 +91,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			// Type picker
 			var w = new ui.modal.Dialog(anchor,"fieldTypes");
 			var types : Array<data.DataTypes.FieldType> = [
-				F_Int, F_Float, F_Bool, F_String, F_Text, F_Enum(null), F_Color, F_Point
+				F_Int, F_Float, F_Bool, F_String, F_Text, F_Enum(null), F_Color, F_Point, F_Path
 			];
 			for(type in types) {
 				var b = new J("<button/>");
@@ -118,6 +123,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 			new ui.modal.dialog.Confirm(
 				ev.getThis(),
+				Lang.t._("Confirm this action?"),
 				true,
 				function() {
 					deleteFieldDef(curField);
@@ -173,7 +179,7 @@ class EditEntityDefs extends ui.modal.Panel {
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
-			case ProjectSettingsChanged, LevelSettingsChanged, LevelSelected:
+			case ProjectSettingsChanged, LevelSettingsChanged(_), LevelSelected(_):
 				close();
 
 			case ProjectSelected:
@@ -383,6 +389,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput(curEntity.maxPerLevel, jEntityForm.find("input[name='maxPerLevel']") );
 		i.setBounds(0,1024);
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
+		if( curEntity.maxPerLevel==0 )
+			i.jInput.val("");
 
 		// Behavior when max is reached
 		var i = new form.input.EnumSelect(
@@ -393,13 +401,14 @@ class EditEntityDefs extends ui.modal.Panel {
 				curEntity.limitBehavior = v;
 			},
 			function(k) {
-				return Lang.untranslated("... ") + switch k {
+				return switch k {
 					case DiscardOldOnes: Lang.t._("discard older ones");
 					case PreventAdding: Lang.t._("prevent adding more");
 					case MoveLastOne: Lang.t._("move the last one instead of adding");
 				}
 			}
 		);
+		i.setEnabled( curEntity.maxPerLevel>0 );
 
 		// Show name
 		var i = Input.linkToHtmlInput(curEntity.showName, jEntityForm.find("#showIdentifier"));
@@ -554,6 +563,8 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Default value
 		switch curField.type {
+			case F_Path:
+
 			case F_Int, F_Float, F_String, F_Text, F_Point:
 				var defInput = jFieldForm.find("input[name=fDef]");
 				if( curField.defaultOverride != null )
@@ -569,7 +580,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					defInput.attr("placeholder", switch curField.type {
 						case F_Int: Std.string( curField.iClamp(0) );
 						case F_Float: Std.string( curField.fClamp(0) );
-						case F_String, F_Text: "";
+						case F_String, F_Text, F_Path: "";
 						case F_Point: "0"+Const.POINT_SEPARATOR+"0";
 						case F_Bool, F_Color, F_Enum(_): "N/A";
 					});
@@ -697,6 +708,27 @@ class EditEntityDefs extends ui.modal.Panel {
 		input.change( function(ev) {
 			curField.setMax( input.val() );
 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
+		});
+
+		// Accept file types
+		var input = jFieldForm.find("input[name=acceptTypes]");
+		if( curField.acceptFileTypes!=null )
+			input.val( curField.acceptFileTypes.join("  ") );
+		input.change( function(ev) {
+			curField.setAcceptFileTypes( input.val() );
+			editor.ge.emit( EntityFieldDefChanged(curEntity) );
+		});
+
+		// File select button
+		var input = jFieldForm.find("button[name=fDefFile]");
+		input.click( function(ev) {
+			dn.electron.Dialogs.open(curField.acceptFileTypes, Editor.ME.getProjectDir(), function( absPath ) {
+				var relPath = Editor.ME.makeRelativeFilePath(absPath);
+				var defInput = jFieldForm.find("input[name=fDef]");
+				defInput.val(relPath);
+				curField.setDefault(relPath);
+				editor.ge.emit( EntityFieldDefChanged(curEntity) );
+			});
 		});
 	}
 

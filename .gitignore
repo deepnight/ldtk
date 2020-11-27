@@ -2,6 +2,7 @@ lastBuildVersion.txt
 json_doc.xml
 
 **/*.crash.json
+**/*.crash.ldtk
 
 dump/
 res/.tmp
@@ -9,7 +10,7 @@ res/.tmp
 
 app/*.log
 app/package-lock.json
-app/userSettings
+app/settings
 app/redist
 app/node_modules
 app/buildAssets/release-notes.md
@@ -18,3 +19,5 @@ app/assets/main.js.map
 app/assets/css/app.css
 app/assets/js/renderer.js
 app/assets/js/*.map
+
+art/export_appElements

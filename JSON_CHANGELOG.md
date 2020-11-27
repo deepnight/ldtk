@@ -1,3 +1,17 @@
+Please always refer to the [JSON_DOC.md](JSON_DOC.md) file for automatically updated Json format description (including version related changes).
+
+# 0.6.0-beta
+
+ - Added `worldLayout` to **Project root**
+ - Added `worldGridWidth`/`worldGridHeight` to **Project root**
+ - Added `worldX/worldY` to **Level Instance**
+ - Added `t` (tile ID) to **Tile Instance**
+ - Added `averageColors` to **Tileset definition**
+ - Added `__tilesetDefUid` and`__tilesetRelPath` to **Layer instance**
+ - Added `defaultLevelBgColor` to **Project root**
+ - Added optional `bgColor` to **Level instance** (if value is `null`, the project `defaultLevelBgColor` should be used instead).
+ - Added optional `__bgColor` to **Level instance** (same as `bgColor`, except the default project value is automatically used here if its value is `null`).
+
 # 0.5.0-beta
 
  - The pixel coordinates of AutoLayer tiles no longer include the layer `pxOffsetX/Y` values. They should be added manually on display.

@@ -4,6 +4,7 @@
 </h2>
 
 <ul class="form projectForm">
+	<li><h3>Project file settings</h3></li>
 
 	<li>
 		<label for="useAppExtension">Use .::ext:: extension</label>
@@ -26,14 +27,23 @@
 	</li>
 
 	<li>
-		<label for="defaultGridSize">Default grid size</label>
+		<h3>Workspace settings</h3>
+	</li>
+
+	<li>
+		<label for="defaultGridSize">Default layer grid</label>
 		<input type="text" name="defaultGridSize" id="defaultGridSize"/>
 		<span>px</span>
 	</li>
 
 	<li>
-		<label for="color">Background color</label>
-		<input type="color" name="color"/>
+		<label for="bgColor">Workspace background color</label>
+		<input type="color" name="bgColor" id="bgColor"/>
+	</li>
+
+	<li>
+		<label for="defaultLevelbgColor">Default level bg color</label>
+		<input type="color" name="defaultLevelbgColor" id="defaultLevelbgColor"/>
 	</li>
 
 	<li>
@@ -45,5 +55,7 @@
 <div class="buttons">
 	<button class="save" title="Save project" keys="CTRL+S">Save</button>
 	<button class="saveAs" title="Save project to a new file" keys="CTRL+SHIFT+S">Save as...</button>
+	<button class="close gray" title="Close project" keys="CTRL+W">Close</button>
+	<button class="locate dark small" title="Locate project file"><span class="icon locate"></span></button>
 </div>
 

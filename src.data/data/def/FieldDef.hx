@@ -23,6 +23,8 @@ class FieldDef {
 	public var min : Null<Float>;
 	public var max : Null<Float>;
 
+	public var acceptFileTypes : Array<String>;
+
 	var _project : data.Project;
 
 	@:allow(data.def.EntityDef)
@@ -35,7 +37,7 @@ class FieldDef {
 		editorDisplayPos = Above;
 		editorAlwaysShow = false;
 		identifier = "NewField"+uid;
-		canBeNull = type==F_String || type==F_Text || type==F_Point && !isArray;
+		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point && !isArray;
 		arrayMinLength = arrayMaxLength = null;
 		min = max = null;
 		defaultOverride = null;
@@ -53,10 +55,13 @@ class FieldDef {
 		return 'FieldDef.$identifier('
 			+ ( canBeNull ? 'Null<$type>' : '$type' )
 			+ ', default=${getDefault()})'
-			+ ( type==F_Int || type==F_Float ? '[$min-$max]' : "" );
+			+ ( type==F_Int || type==F_Float ? '[$min-$max]' : "" )
+			+ ( type==F_Path && acceptFileTypes != null ? '[${acceptFileTypes.join(";")}]' : "[.*]");
 	}
 
-	public static function fromJson(p:Project, json:Dynamic) {
+	public static function fromJson(p:Project, json:ldtk.Json.FieldDefJson) {
+		if( json.type=="F_File" ) json.type = "F_Path"; // patch old type name
+
 		var type = JsonTools.readEnum(data.DataTypes.FieldType, json.type, false);
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), type, JsonTools.readBool(json.isArray, false) );
 		o.identifier = JsonTools.readString(json.identifier);
@@ -68,11 +73,12 @@ class FieldDef {
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);
+		o.acceptFileTypes = json.acceptFileTypes==null ? null : JsonTools.readArray(json.acceptFileTypes);
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
 		return o;
 	}
 
-	public function toJson() {
+	public function toJson() : ldtk.Json.FieldDefJson {
 		return {
 			identifier: identifier,
 			__type: getJsonTypeString(),
@@ -87,6 +93,7 @@ class FieldDef {
 			editorAlwaysShow: editorAlwaysShow,
 			min: min==null ? null : JsonTools.writeFloat(min),
 			max: max==null ? null : JsonTools.writeFloat(max),
+			acceptFileTypes: acceptFileTypes,
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
 		}
 	}
@@ -103,6 +110,7 @@ class FieldDef {
 			case F_Color: "Color";
 			case F_Point: "Point";
 			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
+			case F_Path: "File path";
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
@@ -119,6 +127,7 @@ class FieldDef {
 			case F_Enum(enumDefUid):
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
+			case F_Path: "FilePath";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}
@@ -127,11 +136,12 @@ class FieldDef {
 		var infinity = "∞";
 		return getShortDescription()
 			+ ( canBeNull ? " (nullable)" : "" )
-			+ ", default = " + ( ( type==F_String || type==F_Text ) && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
+			+ ", default = " + ( ( type==F_String || type==F_Text || type==F_Path ) && getDefault()!=null ? '"${getDefault()}"' : getDefault() )
 			+ ( min==null && max==null ? "" :
 				( type==F_Int ? " ["+(min==null?"-"+infinity:""+dn.M.round(min))+";"+(max==null?"+"+infinity:""+dn.M.round(max))+"]" : "" )
 				+ ( type==F_Float ? " ["+(min==null?"-"+infinity:""+min)+";"+(max==null?infinity:""+max)+"]" : "" )
-			);
+			)
+			+ ( type==F_Path && acceptFileTypes != null ? '[${acceptFileTypes.join(" ")}]' : "[.*]");
 	}
 	#end
 
@@ -272,7 +282,7 @@ class FieldDef {
 				var def = Std.parseFloat(rawDef);
 				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Float( fClamp(def) );
 
-			case F_String, F_Text:
+			case F_String, F_Text, F_Path:
 				rawDef = StringTools.trim(rawDef);
 				defaultOverride = rawDef=="" ? null : V_String(rawDef);
 
@@ -306,6 +316,7 @@ class FieldDef {
 			case F_Color: getColorDefault();
 			case F_Float: getFloatDefault();
 			case F_String, F_Text: getStringDefault();
+			case F_Path: null;
 			case F_Bool: getBoolDefault();
 			case F_Point: getPointDefault();
 			case F_Enum(name): getEnumDefault();
@@ -361,6 +372,25 @@ class FieldDef {
 			}
 		}
 		checkMinMax();
+	}
+
+	public function setAcceptFileTypes(raw:Null<String>) {
+		var extReg = ~/\.?([a-z_\-.0-9]+)/gi;
+		var anyValidChar = ~/[a-z0-9]+/gi;
+		if( raw == null || !extReg.match(raw) )
+			acceptFileTypes = null;
+		else {
+			acceptFileTypes = [];
+			var duplicates = new Map();
+			while( extReg.match(raw) ) {
+				var ext = extReg.matched(1).toLowerCase();
+				if( !duplicates.exists(ext) && ext.indexOf("..")<0 && anyValidChar.match(ext) ) {
+					duplicates.set(ext,true);
+					acceptFileTypes.push("." + ext);
+				}
+				raw = extReg.matchedRight();
+			}
+		}
 	}
 
 	function checkMinMax() {

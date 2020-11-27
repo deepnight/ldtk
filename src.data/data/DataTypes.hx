@@ -16,6 +16,14 @@ enum LayerType {
 }
 
 
+enum WorldLayout {
+	Free;
+	GridVania;
+	LinearHorizontal;
+	LinearVertical;
+}
+
+
 typedef IntGridValueDef = {
 	var identifier : Null<String>;
 	var color : UInt;
@@ -30,6 +38,7 @@ enum FieldType {
 	F_Color;
 	F_Enum(enumDefUid:Int);
 	F_Point;
+	F_Path;
 }
 
 enum ValueWrapper {

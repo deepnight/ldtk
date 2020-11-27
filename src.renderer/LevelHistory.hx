@@ -30,6 +30,8 @@ class LevelHistory {
 		switch e {
 			case ProjectSaved, BeforeProjectSaving:
 
+			case WorldMode(active):
+
 			case ProjectSelected:
 				clearHistory();
 
@@ -58,12 +60,15 @@ class LevelHistory {
 			case EnumDefChanged:
 			case EnumDefSorted:
 
-			case LevelResized:
+			case LevelResized(l):
 			case LevelSorted:
-			case LevelSelected:
-			case LevelAdded:
-			case LevelRemoved:
-			case LevelSettingsChanged:
+			case LevelSelected(l):
+			case LevelAdded(l):
+			case LevelRemoved(l):
+			case LevelSettingsChanged(l):
+
+			case WorldLevelMoved:
+			case WorldSettingsChanged:
 
 			case ProjectSettingsChanged:
 			case LayerDefChanged, EntityDefChanged:
@@ -72,7 +77,7 @@ class LevelHistory {
 			case TilesetDefChanged(td):
 			case TilesetSelectionSaved(td):
 			case TilesetDefAdded(td):
-			case TilesetDefOpaqueCacheRebuilt(td):
+			case TilesetDefPixelDataCacheRebuilt(td):
 
 			case EntityDefSorted, EntityFieldSorted, EntityFieldDefChanged(_):
 			case EntityInstanceFieldChanged(ei):
@@ -85,8 +90,9 @@ class LevelHistory {
 			case LayerInstanceAutoRenderingChanged(_):
 
 			case LayerInstanceRestoredFromHistory(_):
-			case LevelRestoredFromHistory:
+			case LevelRestoredFromHistory(l):
 			case ToolOptionChanged:
+			case GridChanged(active):
 		}
 	}
 
@@ -260,7 +266,7 @@ class LevelHistory {
 					editor.project.levels[lidx] = data.Level.fromJson(editor.project, beforeJson);
 				else
 					editor.project.levels[lidx] = data.Level.fromJson(editor.project, afterJson);
-				editor.ge.emit(LevelRestoredFromHistory);
+				editor.ge.emit( LevelRestoredFromHistory(editor.project.levels[lidx]) );
 
 			case Layer(layerId, bounds, json):
 				var li = data.inst.LayerInstance.fromJson(editor.project, json);

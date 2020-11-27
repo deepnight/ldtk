@@ -292,13 +292,13 @@ class GenericLevelElementGroup {
 		return ghost;
 	}
 
-	function getDeltaX(origin:MouseCoords, now:MouseCoords) {
+	function getDeltaX(origin:Coords, now:Coords) {
 		return snapToGrid()
 			? ( now.cx - origin.cx ) * getSmartSnapGrid()
 			: now.levelX - origin.levelX;
 	}
 
-	function getDeltaY(origin:MouseCoords, now:MouseCoords) {
+	function getDeltaY(origin:Coords, now:Coords) {
 		return snapToGrid()
 			? ( now.cy - origin.cy ) * getSmartSnapGrid()
 			: now.levelY - origin.levelY;
@@ -385,7 +385,7 @@ class GenericLevelElementGroup {
 		arrow.visible = false;
 	}
 
-	public function showGhost(origin:MouseCoords, now:MouseCoords, isCopy:Bool) {
+	public function showGhost(origin:Coords, now:Coords, isCopy:Bool) {
 		var rel = getSmartRelativeLayerInstance();
 		origin = origin.cloneRelativeToLayer(rel);
 		now = now.cloneRelativeToLayer(rel);
@@ -547,7 +547,7 @@ class GenericLevelElementGroup {
 	}
 
 
-	public function isOveringSelection(m:MouseCoords) {
+	public function isOveringSelection(m:Coords) {
 		for(ge in elements) {
 			switch ge {
 				case GridCell(li, cx, cy):
@@ -578,7 +578,7 @@ class GenericLevelElementGroup {
 	}
 
 
-	public function moveSelecteds(origin:MouseCoords, to:MouseCoords, isCopy:Bool) : Array<data.inst.LayerInstance> {
+	public function moveSelecteds(origin:Coords, to:Coords, isCopy:Bool) : Array<data.inst.LayerInstance> {
 		if( elements.length==0 )
 			return [];
 
@@ -631,9 +631,10 @@ class GenericLevelElementGroup {
 				case Entity(li, ei):
 					var i = i;
 					if( isCopy ) {
+						var old = ei;
 						ei = li.duplicateEntityInstance(ei);
 						elements[i] = Entity(li,ei);
-						if( ui.EntityInstanceEditor.isOpen() )
+						if( ui.EntityInstanceEditor.existsFor(old) )
 							ui.EntityInstanceEditor.openFor(ei);
 					}
 					ei.x += getDeltaX(origin, to);

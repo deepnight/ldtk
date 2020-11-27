@@ -2,6 +2,7 @@ package display;
 
 class Rulers extends dn.Process {
 	static var PADDING = 20;
+	static var HANDLE_SIZE = 10;
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var levelRender(get,never) : LevelRender;
@@ -18,10 +19,13 @@ class Rulers extends dn.Process {
 	var g : h2d.Graphics;
 	var labels : h2d.Object;
 
+	var tip : h2d.Flow;
+	var tipTf : h2d.Text;
+
 	// Drag & drop
 	var draggables : Array<RulerPos>;
 	var draggedPos : Null<RulerPos>;
-	var dragOrigin : Null<MouseCoords>;
+	var dragOrigin : Null<Coords>;
 	var dragStarted = false;
 	var resizePreview : h2d.Graphics;
 
@@ -36,6 +40,29 @@ class Rulers extends dn.Process {
 		g = new h2d.Graphics(root);
 		labels = new h2d.Object(root);
 		resizePreview = new h2d.Graphics(root);
+
+		tip = new h2d.Flow(root);
+		tip.backgroundTile = Assets.elements.getTile("fieldBg");
+		tip.borderWidth = tip.borderHeight = 3;
+		tip.padding = 3;
+		tipTf = new h2d.Text(Assets.fontPixel, tip);
+		tipTf.textColor = 0x0;
+	}
+
+	override function toString():String {
+		return Type.getClassName(Type.getClass(this))
+			+ "[" + ( draggedPos==null ? "--" : draggedPos.getName() ) + "]"
+			+ ( dragStarted ? " (RESIZING)" : "" );
+	}
+
+	function setTip(?p:RulerPos, ?str:String) {
+		tip.visible = str!=null;
+		if( tipTf.text!=str )
+			tipTf.text = str;
+		if( tip.visible ) {
+			tip.x = Std.int( getX(p) - tip.outerWidth*tip.scaleX*0.5 );
+			tip.y = Std.int( getY(p) - tip.outerHeight*tip.scaleY*0.5 );
+		}
 	}
 
 	override function onDispose() {
@@ -45,19 +72,23 @@ class Rulers extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
-			case ProjectSelected, LevelSelected, LayerInstanceSelected, ProjectSettingsChanged:
+			case ProjectSelected, LayerInstanceSelected, ProjectSettingsChanged:
 				invalidate();
 
-			case LayerDefChanged, LayerDefRemoved(_), LevelResized, LevelRestoredFromHistory:
+			case LayerDefChanged, LayerDefRemoved(_), LevelResized(_), LevelRestoredFromHistory(_):
 				invalidate();
 
-			case LevelSettingsChanged:
+			case LevelSettingsChanged(_):
 				invalidate();
 
-			case ViewportChanged:
+			case LevelSelected(l):
+				invalidate();
+
+			case ViewportChanged, WorldLevelMoved:
 				root.x = levelRender.root.x;
 				root.y = levelRender.root.y;
 				root.setScale( levelRender.root.scaleX );
+				tip.setScale( editor.camera.pixelRatio*2 * 1/editor.camera.adjustedZoom );
 
 			case _:
 		}
@@ -73,23 +104,30 @@ class Rulers extends dn.Process {
 		labels.removeChildren();
 
 		var c = C.getPerceivedLuminosityInt(editor.project.bgColor)>=0.7 ? 0x0 : 0xffffff;
-		var a = 0.3;
-		g.lineStyle(2, c, a);
+		g.lineStyle(2, c);
 
 		// Top
 		g.moveTo(0, -PADDING);
+		g.lineTo(curLevel.pxWid*0.5-HANDLE_SIZE*1.5, -PADDING);
+		g.moveTo(curLevel.pxWid*0.5+HANDLE_SIZE*1.5, -PADDING);
 		g.lineTo(curLevel.pxWid, -PADDING);
 
 		// Bottom
 		g.moveTo(0, curLevel.pxHei+PADDING);
+		g.lineTo(curLevel.pxWid*0.5-HANDLE_SIZE*1.5, curLevel.pxHei+PADDING);
+		g.moveTo(curLevel.pxWid*0.5+HANDLE_SIZE*1.5, curLevel.pxHei+PADDING);
 		g.lineTo(curLevel.pxWid, curLevel.pxHei+PADDING);
 
 		// Left
 		g.moveTo(-PADDING, 0);
+		g.lineTo(-PADDING, curLevel.pxHei*0.5-HANDLE_SIZE*1.5);
+		g.moveTo(-PADDING, curLevel.pxHei*0.5+HANDLE_SIZE*1.5);
 		g.lineTo(-PADDING, curLevel.pxHei);
 
 		// Right
 		g.moveTo(curLevel.pxWid+PADDING, 0);
+		g.lineTo(curLevel.pxWid+PADDING, curLevel.pxHei*0.5-HANDLE_SIZE*1.5);
+		g.moveTo(curLevel.pxWid+PADDING, curLevel.pxHei*0.5+HANDLE_SIZE*1.5);
 		g.lineTo(curLevel.pxWid+PADDING, curLevel.pxHei);
 
 		// Horizontal labels
@@ -108,10 +146,9 @@ class Rulers extends dn.Process {
 		// Corners
 		if( curLayerInstance!=null ) {
 			g.lineStyle(0);
-			g.beginFill(c, a);
-			var size = 8;
+			g.beginFill(c);
 			for(p in draggables)
-				g.drawRect( getX(p)-size*0.5, getY(p)-size*0.5, size, size );
+				g.drawCircle( getX(p), getY(p), HANDLE_SIZE*0.5);
 		}
 	}
 
@@ -137,7 +174,7 @@ class Rulers extends dn.Process {
 
 
 	inline function isOver(x:Int, y:Int, pos:RulerPos) {
-		return M.dist( x,y, getX(pos), getY(pos) ) <= PADDING;
+		return M.dist( x,y, getX(pos), getY(pos) ) <= HANDLE_SIZE*1.5;
 	}
 
 
@@ -165,13 +202,13 @@ class Rulers extends dn.Process {
 
 	inline function isClicking() return dragOrigin!=null;
 
-	public function onMouseDown(m:MouseCoords, buttonId:Int) {
+	public function onMouseDown(ev:hxd.Event, m:Coords) {
 		resizePreview.clear();
 		dragOrigin = null;
 		dragStarted = false;
 		draggedPos = null;
 
-		if( buttonId!=0 || !canUseResizers() )
+		if( ev.button!=0 || !canUseResizers() )
 			return;
 
 		dragOrigin = m;
@@ -180,8 +217,10 @@ class Rulers extends dn.Process {
 			if( isOver(m.levelX, m.levelY, p) )
 				draggedPos = p;
 
-		if( draggedPos!=null )
-			editor.curTool.stopUsing(m);
+		if( draggedPos!=null ) {
+			ev.cancel = true;
+			// editor.curTool.stopUsing(m);
+		}
 	}
 
 	function canUseResizers() {
@@ -189,18 +228,23 @@ class Rulers extends dn.Process {
 			&& !App.ME.isKeyDown(K.SPACE) && !App.ME.hasAnyToggleKeyDown();
 	}
 
-	public function onMouseMove(m:MouseCoords) {
-		if( curLayerInstance==null)
+	public function onMouseMove(ev:hxd.Event, m:Coords) {
+		if( curLayerInstance==null || ev.cancel )
 			return;
 
 		// Cursor
 		if( canUseResizers() )
 			for( p in draggables )
-				if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p )
+				if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p ) {
+					ev.cancel = true;
 					editor.cursor.set( Resize(p) );
+					g.alpha = 1;
+				}
+		if( !ev.cancel )
+			g.alpha = 0.3;
 
 		// Drag only starts after a short threshold
-		if( isClicking() && draggedPos!=null && !dragStarted && M.dist(m.pageX, m.pageY, dragOrigin.pageX, dragOrigin.pageY)>=4 )
+		if( isClicking() && draggedPos!=null && !dragStarted && m.getPageDist(dragOrigin)>=4 )
 			dragStarted = true;
 
 		// Preview resizing
@@ -209,6 +253,7 @@ class Rulers extends dn.Process {
 			var b = getResizedBounds(m);
 			resizePreview.lineStyle(4, !resizeBoundsValid(b) ? 0xff0000 : 0xffcc00);
 			resizePreview.drawRect(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
+			setTip(draggedPos, (b.newRight-b.newLeft)+"x"+(b.newBottom-b.newTop)+"px");
 		}
 	}
 
@@ -217,12 +262,12 @@ class Rulers extends dn.Process {
 		return b.newRight>b.newLeft+min && b.newBottom>b.newTop+min;
 	}
 
-	function getResizedBounds(m:MouseCoords) {
+	function getResizedBounds(m:Coords) {
 		if( draggedPos==null )
 			return null;
 
 		var grid = curLayerInstance.def.gridSize;
-		return {
+		var b = {
 			newLeft :
 				switch draggedPos {
 					case Left, TopLeft, BottomLeft : M.floor( ( m.levelX - dragOrigin.levelX ) / grid ) * grid;
@@ -247,20 +292,32 @@ class Rulers extends dn.Process {
 				},
 
 		}
+
+		if( editor.project.worldLayout==GridVania) {
+			// Snap to world grid
+			var p = editor.project;
+			b.newLeft = dn.M.round( b.newLeft/p.worldGridWidth ) * p.worldGridWidth;
+			b.newRight = dn.M.round( b.newRight/p.worldGridWidth ) * p.worldGridWidth;
+			b.newTop = dn.M.round( b.newTop/p.worldGridHeight ) * p.worldGridHeight;
+			b.newBottom = dn.M.round( b.newBottom/p.worldGridHeight ) * p.worldGridHeight;
+		}
+		return b;
 	}
 
-	public function onMouseUp(m:MouseCoords) {
+	public function onMouseUp(m:Coords) {
+		setTip();
 		if( dragStarted ) {
 			var b = getResizedBounds(m);
 			if( b.newLeft!=0 || b.newTop!=0 || b.newRight!=curLevel.pxWid || b.newBottom!=curLevel.pxHei ) {
 				if( resizeBoundsValid(b) ) {
 					var before = curLevel.toJson();
-					editor.levelRender.focusLevelX -= b.newLeft;
-					editor.levelRender.focusLevelY -= b.newTop;
+					curLevel.worldX += b.newLeft;
+					curLevel.worldY += b.newTop;
 					curLevel.applyNewBounds(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
 					editor.selectionTool.clear();
-					editor.ge.emit(LevelResized);
+					editor.ge.emit( LevelResized(curLevel) );
 					editor.curLevelHistory.saveResizedState( before, curLevel.toJson() );
+					editor.ge.emit( WorldLevelMoved );
 				}
 			}
 		}
@@ -276,5 +333,7 @@ class Rulers extends dn.Process {
 
 		if( invalidated )
 			render();
+
+		labels.visible = !editor.worldMode;
 	}
 }

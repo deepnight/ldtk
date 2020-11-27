@@ -6,18 +6,31 @@ class Level {
 	@:allow(data.Project)
 	public var uid(default,null) : Int;
 	public var identifier(default,set): String;
+	public var worldX : Int;
+	public var worldY : Int;
 	public var pxWid : Int;
 	public var pxHei : Int;
 	public var layerInstances : Array<data.inst.LayerInstance> = [];
 
+	@:allow(ui.modal.panel.WorldPanel)
+	var bgColor : Null<UInt>;
+
+	public var worldCenterX(get,never) : Int;
+		inline function get_worldCenterX() return dn.M.round( worldX + pxWid*0.5 );
+
+	public var worldCenterY(get,never) : Int;
+		inline function get_worldCenterY() return dn.M.round( worldY + pxHei*0.5 );
+
 
 	@:allow(data.Project)
-	private function new(project:Project, uid:Int) {
+	private function new(project:Project, wid:Int, hei:Int, uid:Int) {
 		this.uid = uid;
-		pxWid = Project.DEFAULT_LEVEL_WIDTH;
-		pxHei = Project.DEFAULT_LEVEL_HEIGHT;
+		worldX = worldY = 0;
+		pxWid = wid;
+		pxHei = hei;
 		this._project = project;
 		this.identifier = "Level"+uid;
+		this.bgColor = null;
 
 		for(ld in _project.defs.layers)
 			layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
@@ -35,17 +48,60 @@ class Level {
 		return {
 			identifier: identifier,
 			uid: uid,
+			worldX: worldX,
+			worldY: worldY,
 			pxWid: pxWid,
 			pxHei: pxHei,
+			__bgColor: JsonTools.writeColor( getBgColor() ),
+			bgColor: JsonTools.writeColor(bgColor, true),
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),
+			__neighbours: {
+				switch _project.worldLayout {
+					case Free, GridVania:
+						var nears = _project.levels.filter( (ol)->
+							ol!=this && getBoundsDist(ol)==0
+							&& !( ( ol.worldX>=worldX+pxWid || ol.worldX+ol.pxWid<=worldX )
+								&& ( ol.worldY>=worldY+pxHei || ol.worldY+ol.pxHei<=worldY )
+							)
+						);
+						nears.map( (l)->{
+							var dir = l.worldX>=worldX+pxWid ? "e"
+								: l.worldX+l.pxWid<=worldX ? "w"
+								: l.worldY+l.pxHei<=worldY ? "n"
+								: "s";
+							return {
+								levelUid: l.uid,
+								dir: dir,
+							}
+						});
+
+					case LinearHorizontal, LinearVertical:
+						var idx = dn.Lib.getArrayIndex(this, _project.levels);
+						var nears = [];
+						if( idx<_project.levels.length-1 )
+							nears.push({
+								levelUid: _project.levels[idx+1].uid,
+								dir: _project.worldLayout==LinearHorizontal?"e":"s",
+							});
+						if( idx>0 )
+							nears.push({
+								levelUid: _project.levels[idx-1].uid,
+								dir: _project.worldLayout==LinearHorizontal?"w":"n",
+							});
+						nears;
+				}
+			}
 		}
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {
-		var l = new Level( p, JsonTools.readInt(json.uid) );
-		l.pxWid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_WIDTH );
-		l.pxHei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_HEIGHT );
+		var wid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_SIZE*p.defaultGridSize );
+		var hei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_SIZE*p.defaultGridSize );
+		var l = new Level( p, wid, hei, JsonTools.readInt(json.uid) );
+		l.worldX = JsonTools.readInt( json.worldX, 0 );
+		l.worldY = JsonTools.readInt( json.worldY, 0 );
 		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
+		l.bgColor = JsonTools.readColor(json.bgColor, true);
 
 		l.layerInstances = [];
 		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
@@ -56,8 +112,58 @@ class Level {
 		return l;
 	}
 
-	public inline function inBounds(x:Int, y:Int) {
-		return x>=0 && x<pxWid && y>=0 && y<pxHei;
+	public inline function getBgColor() : UInt {
+		return bgColor!=null ? bgColor : _project.defaultLevelBgColor;
+	}
+
+	public inline function inBounds(levelX:Int, levelY:Int) {
+		return levelX>=0 && levelX<pxWid && levelY>=0 && levelY<pxHei;
+	}
+
+	public inline function inBoundsWorld(worldX:Float, worldY:Float) {
+		return worldX>=this.worldX
+			&& worldX<this.worldX+pxWid
+			&& worldY>=this.worldY
+			&& worldY<this.worldY+pxHei;
+	}
+
+	public function isWorldOver(wx:Int, wy:Int) {
+		return wx>=worldX && wx<worldX+pxWid && wy>=worldY && wy<worldY+pxHei;
+	}
+
+	public function getBoundsDist(l:Level) : Int {
+		return dn.M.imax(
+			dn.M.imax(0, worldX - (l.worldX+l.pxWid)) + dn.M.imax( 0, l.worldX - (worldX+pxWid) ),
+			dn.M.imax(0, worldY - (l.worldY+l.pxHei)) + dn.M.imax( 0, l.worldY - (worldY+pxHei) )
+		);
+	}
+
+	public inline function touches(l:Level) {
+		return l!=null
+			&& l!=this
+			&& dn.Lib.rectangleTouches(worldX, worldY, pxWid, pxHei, l.worldX, l.worldY, l.pxWid, l.pxHei);
+	}
+
+	public inline function overlaps(l:Level) {
+		return l!=null
+			&& l!=this
+			&& dn.Lib.rectangleOverlaps(worldX, worldY, pxWid, pxHei, l.worldX, l.worldY, l.pxWid, l.pxHei);
+	}
+
+	public function overlapsAnyLevel() {
+		for(l in _project.levels)
+			if( overlaps(l) )
+				return true;
+
+		return false;
+	}
+
+	public function willOverlapAnyLevel(newWorldX:Int, newWorldY:Int) {
+		for(l in _project.levels)
+			if( l!=this && dn.Lib.rectangleOverlaps(newWorldX, newWorldY, pxWid, pxHei, l.worldX, l.worldY, l.pxWid, l.pxHei) )
+				return true;
+
+		return false;
 	}
 
 	public function getLayerInstance(?layerDefUid:Int, ?layerDef:data.def.LayerDef) : data.inst.LayerInstance {

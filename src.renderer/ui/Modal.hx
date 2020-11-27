@@ -41,13 +41,13 @@ class Modal extends dn.Process {
 
 		if( editor!=null )
 			editor.ge.addGlobalListener(onGlobalEvent);
-		
+
 		positionNear();
 	}
 
 	function onClickMask() {}
 
-	public function positionNear(?target:js.jquery.JQuery, ?m:MouseCoords, toLeft=false) {
+	public function positionNear(?target:js.jquery.JQuery, ?m:Coords) {
 		if( target==null && m==null )
 			jModalAndMask.addClass("centered");
 		else {
@@ -78,6 +78,7 @@ class Modal extends dn.Process {
 			else {
 				// Use DOM element
 				var targetOff = target.offset();
+				var toLeft = targetOff.left>=js.Browser.window.innerWidth*0.6;
 				var x = toLeft ? targetOff.left+target.outerWidth()-jContent.width() : targetOff.left;
 				if( targetOff.top>=hei*0.7 ) {
 					// Place above target
@@ -140,6 +141,13 @@ class Modal extends dn.Process {
 		return false;
 	}
 
+	public static function hasAnyWithMask() {
+		for(e in ALL)
+			if( !e.isClosing() && e.countAsModal() && e.jMask.is(":visible") )
+				return true;
+		return false;
+	}
+
 	public static function closeLatest() {
 		if( !hasAnyOpen() )
 			return false;
@@ -187,7 +195,6 @@ class Modal extends dn.Process {
 
 		// Validate current edits before closing
 		jContent.find(":focus").blur();
-		jContent.find("input[type=color]").change();
 
 		// Close
 		jModalAndMask.find("*").off();

@@ -5,6 +5,13 @@ class IntGridTool extends tool.LayerTool<Int> {
 		super();
 	}
 
+	override function onBeforeToolActivation() {
+		super.onBeforeToolActivation();
+
+		if( !editor.curLayerDef.hasIntGridValue(getSelectedValue()) )
+			selectValue(0);
+	}
+
 	override function selectValue(v:Int) {
 		v = M.iclamp(v, 0, curLayerInstance.def.countIntGridValues()-1);
 		super.selectValue(v);
@@ -18,17 +25,17 @@ class IntGridTool extends tool.LayerTool<Int> {
 		return curLayerInstance.def.getIntGridValueDef( getSelectedValue() ).color;
 	}
 
-	override function startUsing(m:MouseCoords, buttonId:Int) {
-		super.startUsing(m, buttonId);
+	override function startUsing(ev:hxd.Event, m:Coords) {
+		super.startUsing(ev,m);
 		editor.selectionTool.clear();
 	}
 
 
-	override function updateCursor(m:MouseCoords) {
+	override function updateCursor(m:Coords) {
 		super.updateCursor(m);
 
 		if( isRunning() && rectangle ) {
-			var r = Rect.fromMouseCoords(origin, m);
+			var r = Rect.fromCoords(origin, m);
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, getSelectedColor()) );
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) )
@@ -37,16 +44,12 @@ class IntGridTool extends tool.LayerTool<Int> {
 			editor.cursor.set(None);
 	}
 
-	override function onMouseMove(m:MouseCoords) {
-		super.onMouseMove(m);
-	}
-
 	override function useAtInterpolatedGrid(cx:Int, cy:Int):Bool {
 		super.useAtInterpolatedGrid(cx, cy);
 
 		var old = curLayerInstance.getIntGrid(cx,cy);
 		switch curMode {
-			case null, PanView:
+			case null:
 			case Add:
 				curLayerInstance.setIntGrid(cx, cy, getSelectedValue());
 
@@ -63,7 +66,7 @@ class IntGridTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function useOnRectangle(m:MouseCoords, left:Int, right:Int, top:Int, bottom:Int) {
+	override function useOnRectangle(m:Coords, left:Int, right:Int, top:Int, bottom:Int) {
 		super.useOnRectangle(m, left, right, top, bottom);
 
 		var anyChange = false;
@@ -71,7 +74,7 @@ class IntGridTool extends tool.LayerTool<Int> {
 		for(cy in top...bottom+1) {
 			var old = curLayerInstance.getIntGrid(cx,cy);
 			switch curMode {
-				case null, PanView:
+				case null:
 				case Add:
 					curLayerInstance.setIntGrid(cx,cy, getSelectedValue());
 
@@ -89,7 +92,7 @@ class IntGridTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function useFloodfillAt(m:MouseCoords):Bool {
+	override function useFloodfillAt(m:Coords):Bool {
 		var initial = curLayerInstance.getIntGrid(m.cx,m.cy);
 		if( initial==getSelectedValue() && curMode==Add )
 			return false;
@@ -100,7 +103,6 @@ class IntGridTool extends tool.LayerTool<Int> {
 			(cx,cy, v)->{
 				switch curMode {
 					case null:
-					case PanView:
 					case Add:
 						curLayerInstance.setIntGrid(cx,cy, v);
 

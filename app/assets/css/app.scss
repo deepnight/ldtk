@@ -35,7 +35,7 @@ $mainPanelCompactWid: 150px;
 body {
 	margin: 0;
 	padding: 0;
-	background: $bgMed;
+	background: $bgDark;
 	color: white;
 	font-family: "Arial";
 	font-size: 11pt;
@@ -206,6 +206,25 @@ button {
 		}
 	}
 
+	&.discord {
+		background-color: #7289DA;
+		&:hover {
+			background-color: #85A0FF;
+		}
+	}
+
+	&.guide {
+		padding: 8px;
+		font-size: 8.5pt;
+		text-transform: none;
+		background-color: $helpDark;
+		color: $help;
+		&:hover {
+			background-color: $helpMed;
+			color: white;
+		}
+	}
+
 	&.blue {
 		background-color: #2a73ab;
 		&:hover {
@@ -247,7 +266,7 @@ button {
 }
 
 
-.appLogo { // remember to update "Updating" page
+.appLogo {
 	min-width: 300px;
 	min-height: 100px;
 	background-image: url("../img/LDtk-simple.svg");
@@ -256,6 +275,9 @@ button {
 	background-position: center;
 	&.full {
 		background-image: url("../img/LDtk.svg");
+	}
+	&.shine {
+		background-image: url("../img/LDtk-shine-1024.png");
 	}
 }
 
@@ -333,12 +355,17 @@ button {
 	flex-wrap: wrap;
 	margin-top: 2px;
 	margin-bottom: 2px;
+	border-radius: 6px;
+	overflow: hidden;
 	button {
 		flex: 1 1 0;
 	}
 	button.debug {
 		flex: 0 0 0;
 		display: none;
+	}
+	button.small {
+		flex: 0.2 1 0;
 	}
 }
 
@@ -938,6 +965,9 @@ ul.log {
 .icon.gridOn	{ background-image: url("../icons/gridOn.svg"); }
 .icon.gridOff	{ background-image: url("../icons/gridOff.svg"); }
 .icon.stop		{ background-image: url("../icons/stop.svg"); }
+.icon.settings	{ background-image: url("../icons/settings.svg"); }
+.icon.delete	{ background-image: url("../icons/delete.svg"); }
+.icon.discord	{ background-image: url("../icons/discord.svg"); }
 .icon.ghost		{ background-image: url("../icons/ghost.svg"); }
 .icon.love		{ background-image: url("../icons/love.svg"); }
 .icon.folder	{ background-image: url("../icons/folder.svg"); }
@@ -1082,7 +1112,7 @@ ul.form {
 			width: 0px; // for flex min-width
 		}
 		>input[type=color] {
-			flex: 0.1 1 32px;
+			flex: 0.1 1 64px;
 		}
 
 		>input[type=checkbox] {
@@ -1154,6 +1184,12 @@ ul.form {
 			text-transform: uppercase;
 			text-align: right;
 			font-size: 80%;
+		}
+
+		>label:not(:first-of-type) {
+			align-self: center;
+			text-align: right;
+			padding-left: 16px;
 		}
 
 		input[type=text]:not(:read-only):hover {
@@ -1648,7 +1684,6 @@ textarea {
 
 			button {
 				background-color: $bgDark;
-				border-bottom: 1px solid $bgMed;
 				margin: 0;
 				padding: 8px 20px;
 				font-size: 10pt;
@@ -1657,6 +1692,9 @@ textarea {
 					background-color: $orange;
 					color: black;
 				}
+			}
+			button+button {
+				border-top: 1px solid $bgMed;
 			}
 		}
 
@@ -1678,6 +1716,13 @@ textarea {
 	&.warning .wrapper {
 		background-color: $darkRed;
 		border-color: $red;
+	}
+
+	&.choice .wrapper {
+		max-width: 500px;
+		button {
+			white-space: nowrap;
+		}
 	}
 
 	&.message .wrapper {
@@ -2011,6 +2056,7 @@ textarea {
 }
 
 .window.popOutPalette {
+	align-items: flex-start;
 	&>.wrapper {
 		overflow: hidden;
 		padding: 0;
@@ -2130,17 +2176,40 @@ div.sortHandle {
 	span.grid {
 		background-color: transparentize($color: #3fc3a5, $amount: 0.6);
 	}
-	span.pixels {
+	span.level {
 		background-color: transparentize($color: #257361, $amount: 0.6);
 	}
+	span.world {
+		background-color: transparentize($color: #233373, $amount: 0.6);
+	}
+}
+
+#appMask {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	width: 100vw;
+	height: 100vh;
+	background-color: $bgDark;
+	pointer-events: none;
 }
 
 canvas#webgl {
 	position: absolute;
 	top: 0;
 	left: 0;
-	height: 100vh !important;
 	z-index: 1;
+
+	&:not(.active) {
+		visibility: hidden;
+		width: 100px !important;
+		height: 100px !important;
+	}
+
+	&.active {
+		height: 100vh !important;
+	}
 }
 
 #page {
@@ -2447,7 +2516,9 @@ canvas#webgl {
 		}
 
 		.window.panel {
-			width: calc( 100vw - #{ $mainPanelCompactWid } );
+			&:not(.editAllAutoLayerRules):not(.worldPanel) {
+				width: calc( 100vw - #{ $mainPanelCompactWid } );
+			}
 		}
 	}
 }
@@ -2571,7 +2642,7 @@ canvas#webgl {
 
 	&>.wrapper {
 		display: grid;
-		grid-template-columns: 30% 40%;
+		grid-template-columns: 70%;
 		grid-template-rows: min-content 50vh min-content;
 		box-sizing: border-box;
 		width: 100%;
@@ -2579,22 +2650,13 @@ canvas#webgl {
 		align-items: center;
 		justify-content: center;
 
-		.buttons button {
-			white-space: nowrap;
-			display: flex;
-			justify-content: center;
-			.icon {
-				margin-right: 4px;
-				opacity: 0.5;
-			}
-			&.buy {
-				text-transform: none;
-			}
-		}
+		header {
+			padding-bottom: 30px;
 
-		.header {
-			grid-column: 1/3;
-			padding-bottom: 40px;
+			background-image: url("../img/homeBg_header.png");
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: bottom center;
 
 			.appLogo {
 				min-height: 160px;
@@ -2637,12 +2699,49 @@ canvas#webgl {
 
 		}
 
+		.main {
+			display: grid;
+			grid-template-columns: 40% 60%;
+			box-sizing: border-box;
+			padding-top: 30px;
+			height: 100%;
+
+			background-image: url("../img/homeBg_main.png");
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: top center;
+		}
+
+		.buttons {
+			button {
+				white-space: nowrap;
+				display: flex;
+				justify-content: center;
+				.icon {
+					margin-right: 4px;
+					opacity: 0.5;
+				}
+				&.buy {
+					text-transform: none;
+				}
+				&.settings {
+					display: none;
+					text-align: center;
+
+					.icon {
+						margin: 0;
+						font-size: 0.8em;
+					}
+				}
+			}
+		}
+
 		.files {
-			grid-column: 1/2;
 			display: grid;
 			grid-template-rows: min-content auto;
 			gap: 8px;
 			height: 100%;
+			overflow: hidden;
 
 			ul.recents {
 				overflow-y: auto;
@@ -2659,17 +2758,60 @@ canvas#webgl {
 					text-shadow: 0px 2px 8px $bgDark, 0px 2px 2px $bgDark;
 				}
 
-				.path {
-					padding-top: 4px;
-					padding-bottom: 4px;
-					white-space: nowrap;
-					overflow-x: hidden;
+				.recentPath {
+					display: flex;
 					width: 100%;
+					align-items: center;
 
-					span:not(:last-of-type):not(.slash) {
-						font-size: 8pt;
+					.label span {
+						display: inline-block;
+						width: 100px;
+						padding: 3px 8px;
+						font-size: 9pt;
+						text-align: center;
+						font-weight: bold;
+						white-space: nowrap;
+						color: white;
+						text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3), 0px 0px 3px rgba(0, 0, 0, 0.3);
+						overflow-x: hidden;
+						border-radius: 3px;
+					}
+
+					&.sample {
+						flex: 0 1 0px;
+						color: $help;
+						.label span {
+							background-color: $helpMed;
+						}
+						.file .name {
+							color: $help;
+						}
+					}
+
+					.dir,
+					.slash {
+						flex: 0 1 0px;
+						font-size: 7.5pt;
+					}
+
+					.slash {
+						padding: 0px 3px;
+					}
+
+					.file {
+						flex: 1 0 auto;
+						padding-left: 8px;
+						.name {
+							font-weight: bold;
+							font-size: 10.5pt;
+							color: white;
+						}
+						.ext {
+							font-size: 8pt;
+						}
 					}
 				}
+
 
 				li {
 					overflow: hidden;
@@ -2685,22 +2827,20 @@ canvas#webgl {
 						padding: 4px 8px;
 					}
 
-					&.missing .path span {
+					&.missing .recentPath div {
 						text-decoration: line-through;
 						font-weight: normal;
 						color: $red !important;
 					}
 
 					&:first-of-type {
-						// background-color: $bgLight;
 						&:hover {
 							outline-color: white;
 						}
 					}
-					&:not(:first-of-type) {
-						// background-color: $bgMed;
-						opacity: 0.65;
-					}
+					// &:not(:first-of-type) {
+					// 	opacity: 0.65;
+					// }
 
 					&.crash {
 						border: 1px solid $help;
@@ -2719,15 +2859,18 @@ canvas#webgl {
 		}
 
 		.about {
-			grid-column: 2/3;
 			display: grid;
 			grid-template-rows: min-content auto;
 			gap: 8px;
 			height: 100%;
+			overflow: hidden;
 			margin-left: 16px;
 
 			.buttons {
 				margin: 0;
+				button {
+					font-size: 9pt;
+				}
 			}
 
 			.changelogsWrapper {
@@ -2923,7 +3066,6 @@ canvas#webgl {
 
 		.footer {
 			display: grid;
-			grid-column: 1/3;
 			grid-template-columns: min-content auto;
 			margin-top: 16px;
 
@@ -3042,7 +3184,7 @@ canvas#webgl {
 	width: 100%;
 	height: 100%;
 
-	img.atlas {
+	canvas {
 		image-rendering: pixelated;
 		box-shadow: 0px 0px 32px black;
 		outline: 1px solid $bgLight;
@@ -3136,20 +3278,29 @@ canvas#webgl {
 
 .entityInstanceEditor {
 	position: absolute;
-	overflow: auto;
 	z-index: 10;
 
 	width: 200px;
-	max-height: 90vh;
 	box-sizing: border-box;
-	padding: 10px;
-	border-left: 4px solid $orange;
-	box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.6);
 
+	box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.6);
 	background-color: $bgDark;
 
-	&.picking {
-		opacity: 0.5;
+	.entityInstanceWrapper {
+		overflow: auto;
+		max-height: 90vh;
+		padding: 10px;
+	}
+
+	.resizeBar {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 4px;
+		height: 100%;
+
+		background-color: $orange;
+		cursor: ew-resize;
 	}
 
 	header {
@@ -3158,11 +3309,13 @@ canvas#webgl {
 		width: 100%;
 		padding-bottom: 4px;
 		margin-bottom: 4px;
+		overflow: hidden;
 
 		font-weight: bold;
 		color: $orange;
 
 		border-bottom: 1px solid $bgLight;
+
 
 		a {
 			display: inline-block;
@@ -3205,31 +3358,62 @@ canvas#webgl {
 			span.value {
 				flex: 1 0 auto;
 			}
-			a.reset {
-				flex: 0 0 0px;
-				margin-left: 10px;
-				font-size: 0.75em;
-				text-decoration: underline;
-				color: $orange;
-				white-space: nowrap;
-			}
-			a.reset:hover {
-				color: white;
+		}
+
+		a.reset {
+			flex: 0 0 auto;
+			align-self: center;
+			margin-left: 10px;
+			font-size: 0.75em;
+			text-decoration: underline;
+			color: $orange;
+			white-space: nowrap;
+			padding: 2px 4px;
+			border-radius: 3px;
+			cursor: pointer;
+
+			&:hover {
+				text-decoration: none;
+				color: black;
+				background-color: $orange;
 			}
 		}
 
+		span.usingDefault {
+			flex: 0 0 0px;
+			align-self: center;
+			margin-left: 10px;
+			font-size: 0.75em;
+			color: $bgLighter;
+			opacity: 1;
+		}
+
+
 		button.removePoint {
 			flex: 0.2 1 0px;
+		}
+
+		button.locate,
+		button.fileSelectButton {
+			flex: 0 1 0px;
 		}
 
 		input[type=color] {
 			width: 100%;
 		}
 
+		input.fileNotFound {
+			color: $orange;
+			border-color: $orange;
+			background-color: $darkRed;
+			box-shadow: 0px 0px 8px $red;
+		}
+
 		textarea {
 			height: auto;
 			overflow-x: auto;
 			overflow-y: hidden;
+			font-size: 8.5pt;
 		}
 
 		a.usingDefault {
@@ -3240,6 +3424,20 @@ canvas#webgl {
 			align-items: center;
 			background-color: $bgMed;
 			background-image: url("../img/stripes.png");
+
+			&.required {
+				border-color: $orange;
+				box-shadow: 0px 0px 4px $red, 0px 0px 8px $red inset;
+				background-color: $darkRed;
+				span.value {
+					text-shadow: none;
+					color: $orange !important;
+				}
+				span.label {
+					text-shadow: none;
+					color: $orange !important;
+				}
+			}
 
 			&.checkbox {
 				padding: 0;
@@ -3319,6 +3517,11 @@ canvas#webgl {
 						width: 100%;
 					}
 
+					&.compact {
+						color: $bgLighter;
+						font-size: 9pt;
+						padding-bottom: 4px;
+					}
 				}
 				&.sortable li {
 					grid-template-columns: min-content auto min-content;
@@ -3342,7 +3545,6 @@ canvas#webgl {
 	}
 }
 
-.window.panel.worldPanel,
 .window.panel.layerDefs,
 .window.panel.tilesetDefs {
 	.content{
@@ -3372,20 +3574,6 @@ canvas#webgl {
 				padding: 2px 8px;
 				font-size: 8pt;
 			}
-		}
-	}
-}
-
-.window.panel.worldPanel {
-	.content {
-		grid-template-columns: auto;
-		width: 250px;
-		>.header {
-			grid-column: auto;
-		}
-		ul.form li label {
-			flex: 1 0 100%;
-			text-align: left;
 		}
 	}
 }
@@ -3588,14 +3776,81 @@ body.sorting ul.collapsedSortTarget {
 	display: block !important;
 }
 
-.window.panel.editAllAutoLayerRules {
+.window.panel.worldPanel {
 	left: 32px !important;
 	width: auto;
 
-	.mask {
-		// width: calc( 100vw - 32px) ;
-		display: none;
+	.wrapper {
+		padding: 8px;
+		border-left: 2px solid $bgLighter;
+		border-right: 1px solid $bgLight;
+		box-shadow: -8px 0px 0px rgba(0, 0, 0, 0.5), 2px 0px 0px rgba(0, 0, 0, 0.5);
 	}
+
+	.content {
+		display: grid;
+		grid-auto-rows: min-content;
+		gap: 8px;
+		height: 100%;
+		width: $mainPanelNormalWid;
+
+		ul.form>li>label {
+			flex: 0 0 100%;
+			padding: 0;
+			padding-top: 8px;
+			text-align: left;
+			font-size: 10pt;
+			text-transform: none;
+		}
+
+		a.reset {
+			flex: 0 0 auto;
+			align-self: center;
+			font-size: 9pt;
+			text-decoration: underline;
+			margin-left: 8px;
+			padding: 2px 4px;
+			border-radius: 3px;
+			cursor: pointer;
+
+			&:hover {
+				text-decoration: none;
+				color: black;
+				background-color: $orange;
+			}
+		}
+
+		button:not(.running) span.running {
+			display: none;
+		}
+		button.running {
+			outline: 1px solid $orange;
+			box-shadow: 0px 0px 16px $red;
+			opacity: 0.5;
+			span.ready {
+				display: none;
+			}
+		}
+
+		ul.form .WorldGrid,
+		ul.form .LinearHorizontal,
+		ul.form .LinearVertical,
+		ul.form .Free {
+			display: none;
+		}
+
+		ul.form.layout-WorldGrid .WorldGrid,
+		ul.form.layout-LinearHorizontal .LinearHorizontal,
+		ul.form.layout-LinearVertical .LinearVertical,
+		ul.form.layout-Free .Free {
+			display: flex;
+		}
+	}
+}
+
+.window.panel.editAllAutoLayerRules {
+	left: 32px !important;
+	width: auto;
 
 	.wrapper {
 		padding: 8px;
@@ -4217,117 +4472,187 @@ $patternSize : 32px;
 
 
 .window.dialog.ruleEditor {
-	.content {
-		padding: 4px;
-		display: grid;
-		gap: 16px;
-		grid-template-columns: repeat(3, min-content);
-		align-items: center;
+	$gutter: 8px;
 
-		.infos {
+	>.wrapper {
+		padding: $gutter;
+		justify-self: left;
+		margin-left: 80px;
+	}
+
+	>.wrapper .content {
+		display: grid;
+		gap: $gutter;
+		grid-template-rows: repeat(3, min-content);
+		padding: 4px;
+		width: min-content;
+		min-width: 300px;
+		position: relative;
+
+		&:not(.guided) {
+			.explain,
+			.help {
+				display: none;
+			}
+		}
+		&.guided {
+			button.guide {
+				display: none;
+			}
+		}
+
+		.explain,
+		.tileSettings,
+		.pattern .editor,
+		.pattern .values {
+			width: 100%;
+			height: 100%;
+			padding: 16px;
+			box-sizing: border-box;
+			background-color: $bgDark;
+			border-radius: 3px;
+		}
+
+		.debugInfos {
 			position: absolute;
-			right: 3px;
-			bottom: 3px;
+			right: -5px;
+			bottom: -8px;
 			font-size: 8pt;
 			color: $bgLighter;
 		}
 
-		.explain, .help {
-			grid-column: 1/4;
-		}
 		.explain {
-			padding: 4px;
-			min-height: 1.2em;
-			color: $bgLighter;
+			display: grid;
+			align-items: center;
+			min-height: calc( 4em + 16px * 2 );
+			color: $help;
+			font-size: 8.5pt;
 			text-align: center;
+			transition: background-color 0.3s;
+
+			&:not(:empty) {
+				transition: background-color 0.1s;
+				background-color: $helpDark;
+			}
+
+			p {
+				margin: 0;
+				padding: 0;
+			}
 		}
 
-		>div>label {
-			display: block;
-			margin-bottom: 4px;
-			color: $bgLighter;
-			font-size: 9pt;
-		}
-
-		.tiles {
+		.tileSettings {
 			display: grid;
-			justify-items: center;
-			grid-template-rows: repeat(2,min-content) auto;
-			height: 100%;
+			justify-items: stretch;
+			grid-template-columns: auto min-content min-content;
 
-			select {
-				margin-bottom: 4px;
-			}
-			.wrapper {
-				display: grid;
-				justify-items: center;
-			}
-
-			canvas {
-				image-rendering: pixelated;
-				zoom: 2;
-				border: 1px solid $orange;
-				cursor: pointer;
-
-				&:hover {
-					border-color: white;
-				}
-			}
-		}
-
-		.grid {
-			display: grid;
-			min-width: 80px;
-			justify-items: center;
-
-			select {
-				width: 100%;
-				margin-top: 2px;
-			}
-		}
-
-
-		.values {
-			align-self: stretch;
-			display: grid;
-			min-height: 125px;
-			grid-template-rows: min-content auto;
-
-			ul {
-				display: grid;
-				grid-template-columns: repeat( 2, 100px );
-				gap: 2px;
-				padding: 4px;
-				border: 1px solid $bgLight;
-
-				li {
-					display: grid;
-					align-content: center;
-					justify-content: center;
-
-					text-shadow: 0px 2px 1px black, 0px 0px 4px black;
-
-					border: 1px solid $bgMed;
+			.picker {
+				margin-left: $gutter;
+				canvas {
+					image-rendering: pixelated;
+					zoom: 2;
+					border: 1px solid $orange;
 					cursor: pointer;
+					width: 24px !important;
+					height: 24px !important;
 
 					&:hover {
-						outline: 1px solid white;
-						outline-offset: -1px;
+						border-color: white;
 					}
-
-					&.active {
-						border-color: $orange;
-						outline: 1px solid black;
-						outline-offset: -2px;
-						box-shadow: 0px 0px 8px $red;
+					&.empty {
+						border-color: $red;
+						box-shadow: 0px 0px 32px $red;
 					}
-				}
-				li.any {
-					font-style: italic;
-					background-image: url("../img/any.png");
 				}
 			}
 
+			.options:not(:empty) {
+				margin-left: $gutter;
+			}
+		}
+
+		.pattern {
+			display: grid;
+			grid-template-columns: min-content auto;
+			gap: $gutter;
+
+			.editor{
+				display: grid;
+				grid-template-rows: min-content auto;
+				gap: 4px;
+
+				select {
+					width: 100%;
+					overflow: hidden;
+				}
+
+				.grid {
+					display: grid;
+					justify-items: center;
+					align-items: center;
+				}
+			}
+
+			.values {
+				ul {
+					display: grid;
+					height: 100%;
+					gap: 2px;
+
+					li {
+						display: grid;
+						align-content: center;
+						justify-content: center;
+						padding: 8px;
+
+						text-shadow: 0px 2px 1px black, 0px 0px 4px black;
+
+						border: 1px solid $bgMed;
+						cursor: pointer;
+
+						&:hover {
+							outline: 1px solid white;
+							outline-offset: -1px;
+						}
+
+						&.active {
+							border-color: $orange;
+							outline: 1px solid black;
+							outline-offset: -2px;
+							box-shadow: 0px 0px 8px $red;
+						}
+					}
+					li.any {
+						font-style: italic;
+						background-image: url("../img/any.png");
+					}
+				}
+
+			}
+		}
+
+		.help {
+			margin-top: 8px;
+			p {
+				margin: 0;
+				padding: 0;
+			}
+			ul {
+				display: grid;
+				gap: 2px;
+				width: 100%;
+				margin-top: 8px;
+
+				li {
+					font-size: 9pt;
+					padding: 6px;
+					border-radius: 3px;
+					background-color: $bgDark;
+				}
+				li+li {
+					margin-left: 4px;
+				}
+			}
 		}
 	}
 }
@@ -4373,22 +4698,18 @@ $patternSize : 32px;
 		height: 100%;
 		justify-content: stretch;
 		gap: 16px;
-		grid-template-rows: min-content min-content auto;
-		grid-template-columns: 200px 200px auto;
+		grid-template-rows: min-content auto;
+		grid-template-columns: 200px auto;
 
 		>.header {
-			grid-column: 1/4;
+			grid-column: 1/3;
 			h2 {
 				margin-bottom: 8px;
 			}
 		}
 
-		button {
-			white-space: nowrap;
-		}
-
 		>.entityList {
-			grid-row: 2/4;
+			grid-row: 2/3;
 			display: grid;
 			grid-template-rows: auto min-content;
 			overflow: hidden;
@@ -4402,44 +4723,56 @@ $patternSize : 32px;
 				content: "No entity";
 			}
 		}
-		>.entityForm {
-			grid-column: 2/4;
-			grid-row: 2/3;
-			overflow: hidden;
-		}
 
-		>.fieldList {
+		>.rightColumn {
 			grid-column: 2/3;
-			grid-row: 3/4;
+			grid-row: 2/3;
 			display: grid;
-			grid-template-rows: auto min-content;
-			overflow: hidden;
-			ul {
-				overflow: auto;
-				li {
-					grid-template-columns: auto min-content min-content;
-					gap: 0px 2px;
-					.name {
-						width: 100%;
-						overflow: hidden;
+			gap: 16px;
+			grid-template-columns: 200px auto;
+			grid-template-rows: min-content auto;
+
+			>.entityForm {
+				grid-column: 1/3;
+			}
+
+			>.fieldList {
+				grid-column: 1/2;
+				display: grid;
+				grid-template-rows: auto min-content;
+				overflow: hidden;
+				ul {
+					overflow: auto;
+					li {
+						grid-template-columns: auto min-content min-content;
+						gap: 0px 2px;
+						.name {
+							width: 100%;
+							overflow: hidden;
+						}
 					}
 				}
+				ul:empty::before {
+					content: "No custom field";
+				}
 			}
-			ul:empty::before {
-				content: "No custom field";
+
+			>.fieldForm {
+				grid-column: 2/3;
+				overflow: auto;
+
+				button.convert, .F_Path.file-select {
+					padding: 4px;
+					flex: 0 1 0px;
+					align-self: stretch;
+				}
 			}
 		}
 
-		>.fieldForm {
-			grid-column: 3/4;
-			grid-row: 3/4;
-			overflow: auto;
 
-			button.convert {
-				padding: 4px;
-				flex: 0 1 0px;
-				align-self: stretch;
-			}
+
+		button {
+			white-space: nowrap;
 		}
 
 
@@ -4517,8 +4850,14 @@ $patternSize : 32px;
 		ul.form.type-F_Enum .F_Enum,
 		ul.form.type-F_Point .F_Point,
 		ul.form.type-F_Text .F_Text,
-		ul.form.type-F_String .F_String {
+		ul.form.type-F_String .F_String,
+		ul.form.type-F_Path .F_Path {
 			display: flex;
+		}
+
+		ul.form.type-F_Path .F_Path.file-select {
+			display: initial;
+
 		}
 
 	}

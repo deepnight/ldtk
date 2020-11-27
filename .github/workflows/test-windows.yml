@@ -1,0 +1,46 @@
+name: CI-test-windows
+
+on:
+  push:
+    branches:
+      - master
+      - dev-*
+  pull_request:
+    branches:
+      - master
+      - dev-*
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest]
+        haxe: [4.1.4]
+      fail-fast: true
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Get the current branch name
+        shell: bash
+        run: echo "::set-output name=v::${GITHUB_REF#refs/heads/}"
+        id: branch
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: 4.1.4
+      - run: |
+          haxe -version
+          haxelib install castle
+          haxelib git heaps https://github.com/HeapsIO/heaps.git
+          haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
+          haxelib git electron https://github.com/tong/hxelectron.git
+          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }}
+          haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - run: cd app && npm install
+      - run: cd app && npm run compile

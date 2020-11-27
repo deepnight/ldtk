@@ -1,5 +1,7 @@
 package page;
 
+import ui.modal.panel.WorldPanel;
+
 class Editor extends Page {
 	public static var ME : Editor;
 
@@ -30,6 +32,8 @@ class Editor extends Page {
 	var curLayerDefUid : Int;
 
 	// Tools
+	public var worldTool : WorldTool;
+	var panTool : tool.PanView;
 	public var curTool(get,never) : tool.LayerTool<Dynamic>;
 	public var selectionTool: tool.SelectionTool;
 	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();
@@ -37,7 +41,10 @@ class Editor extends Page {
 	var doNothingTool : tool.lt.DoNothing;
 
 	public var needSaving = false;
+	public var worldMode(default,null) = false;
 
+	public var camera : display.Camera;
+	public var worldRender : display.WorldRender;
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
 	var bg : h2d.Bitmap;
@@ -65,6 +72,9 @@ class Editor extends Page {
 
 		Boot.ME.s2d.addEventListener( onHeapsEvent );
 
+		bg = new h2d.Bitmap();
+		root.add(bg, Const.DP_BG);
+
 		ge = new GlobalEventDispatcher();
 		ge.addGlobalListener( onGlobalEvent );
 
@@ -73,17 +83,23 @@ class Editor extends Page {
 		cursor = new ui.Cursor();
 		cursor.canChangeSystemCursors = true;
 
+		worldRender = new display.WorldRender();
 		levelRender = new display.LevelRender();
+		camera = new display.Camera();
 		rulers = new display.Rulers();
 
 		selectionTool = new tool.SelectionTool();
 		doNothingTool = new tool.lt.DoNothing();
+		worldTool = new WorldTool();
+		panTool = new tool.PanView();
 
+		showCanvas();
 		initUI();
 		updateCanvasSize();
 
 		selectProject(p);
 		setCompactMode( settings.compactMode, true );
+		dn.Process.resizeAll();
 	}
 
 	function saveLocked() {
@@ -103,10 +119,11 @@ class Editor extends Page {
 		});
 
 		jMainPanel.find("button.world").click( function(_) {
-			if( ui.Modal.isOpen(ui.modal.panel.WorldPanel) )
-				ui.Modal.closeAll();
-			else
-				new ui.modal.panel.WorldPanel();
+			setWorldMode(!worldMode);
+			// if( ui.Modal.isOpen(ui.modal.panel.WorldPanel) )
+			// 	ui.Modal.closeAll();
+			// else
+			// 	new ui.modal.panel.WorldPanel();
 		});
 
 		jMainPanel.find("button.editLayers").click( function(_) {
@@ -285,8 +302,8 @@ class Editor extends Page {
 		var oldRelPath = td.relPath;
 		App.LOG.fileOp("Reloading tileset: "+td.relPath);
 		var result = td.reloadImage( getProjectDir() );
-		App.LOG.fileOp(" -> "+result);
-		App.LOG.fileOp(" -> opaqueCache: "+(td.opaqueTilesCache==null ? "null" : "not null"));
+		App.LOG.fileOp(" -> Reload result: "+result);
+		App.LOG.fileOp(" -> pixelData: "+(td.hasValidPixelData() ? "Ok" : "need rebuild"));
 
 		var changed = false;
 		switch result {
@@ -295,7 +312,7 @@ class Editor extends Page {
 				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
 					var newRelPath = makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( getProjectDir(), newRelPath );
-					td.buildOpaqueTileCache( ge.emit.bind(TilesetDefOpaqueCacheRebuilt(td)) );
+					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 					ge.emit( TilesetDefChanged(td) );
 					levelRender.invalidateAll();
 				});
@@ -324,9 +341,9 @@ class Editor extends Page {
 		}
 
 		// Rebuild "opaque tiles" cache
-		if( td.opaqueTilesCache==null || !isInitialLoading || result!=Ok ) {
+		if( !td.hasValidPixelData() || !isInitialLoading || result!=Ok ) {
 			changed = true;
-			td.buildOpaqueTileCache( ge.emit.bind(TilesetDefOpaqueCacheRebuilt(td)) );
+			td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 		}
 
 		ge.emit( TilesetDefChanged(td) );
@@ -352,45 +369,43 @@ class Editor extends Page {
 					try App.ME.jBody.find("input:focus, textarea:focus").blur()
 					catch(e:Dynamic) {}
 				}
+				else if( curTool!=null && curTool.palettePoppedOut() )
+					curTool.popInPalette();
 				else if( specialTool!=null )
 					clearSpecialTool();
-				else if( ui.Modal.hasAnyOpen() ) {
+				else if( worldMode && worldTool.isInAddMode() )
+					worldTool.stopAddMode();
+				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeLatest();
-				}
 				else if( selectionTool.any() ) {
-					ui.EntityInstanceEditor.close();
+					if( !worldMode )
+						ui.EntityInstanceEditor.closeExisting();
 					selectionTool.clear();
 				}
-				else if( ui.EntityInstanceEditor.isOpen() )
-					ui.EntityInstanceEditor.close();
+				else if( ui.EntityInstanceEditor.isOpen() && !worldMode ) // TODO instance cleanup
+					ui.EntityInstanceEditor.closeExisting();
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() )
 					setCompactMode( !settings.compactMode );
 
-			case K.Z:
-				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() )
-					curLevelHistory.undo();
+			case K.Z if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
+				curLevelHistory.undo();
 
-			case K.Y:
-				if( !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() )
-					curLevelHistory.redo();
+			case K.Y if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
+				curLevelHistory.redo();
 
 			case K.S:
 				if( !hasInputFocus() && App.ME.isCtrlDown() )
 					if( App.ME.isShiftDown() )
-						onSaveAs();
+						onSave(true);
 					else
 						onSave();
 
 			case K.F if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				levelRender.fit();
+				camera.fit();
 
-			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() && curLayerInstance.def.isAutoLayer() ):
-				levelRender.toggleAutoLayerRendering(curLayerInstance);
-				N.quick( "Auto-layer rendering: "+L.onOff( levelRender.autoLayerRenderingEnabled(curLayerInstance) ));
-
-			case K.R if( !hasInputFocus() && App.ME.isShiftDown() ):
+			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				var state : Null<Bool> = null;
 				for(li in curLevel.layerInstances)
 					if( li.def.isAutoLayer() ) {
@@ -398,10 +413,13 @@ class Editor extends Page {
 							state = !levelRender.autoLayerRenderingEnabled(li);
 						levelRender.setAutoLayerRendering(li, state);
 					}
-				N.quick( "All auto-layers rendering: "+L.onOff(state));
+				N.quick( "Auto-layers rendering: "+L.onOff(state));
 
 			case K.W if( App.ME.isCtrlDown() ):
 				onClose();
+
+			case K.W if( !App.ME.hasAnyToggleKeyDown() && !hasInputFocus() ):
+				setWorldMode( !worldMode );
 
 			case K.Q if( App.ME.isCtrlDown() ):
 				App.ME.exit();
@@ -415,7 +433,7 @@ class Editor extends Page {
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setSingleLayerMode( !settings.singleLayerMode );
 
-			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() ):
+			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() && !App.ME.isShiftDown() && !worldMode ):
 				if( settings.singleLayerMode )
 					selectionTool.selectAllInLayers(curLevel, [curLayerInstance]);
 				else
@@ -446,21 +464,23 @@ class Editor extends Page {
 
 			#if debug
 
-			case K.T:
-				if( !hasInputFocus() ) {
-					// var t = haxe.Timer.stamp();
-					// var json = curLevel.toJson();
-					// App.ME.debug("level.toJson() => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
+			case K.T if( App.ME.isAltDown() && !hasInputFocus() ):
+				if( cd.has("debugTools") )
+					cd.unset("debugTools");
+				else
+					cd.setS("debugTools", Const.INFINITE);
 
-					// var t = haxe.Timer.stamp();
-					// for( li in curLevel.layerInstances )
-						// li.applyAllAutoLayerRules();
-					// App.ME.debug("all curLevel rules => "+dn.M.pretty(haxe.Timer.stamp()-t, 3)+"s");
-					// for(l in project.levels)
-					// for(li in l.layerInstances)
-					// 	li.autoTilesCache = null;
-					// N.debug("cleared caches");
-				}
+			case K.P if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
+				N.msg("Rebuilding pixel caches...");
+				for(td in project.defs.tilesets)
+					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
+
+			case K.A if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
+				N.msg("Rebuilding auto layers...");
+				for(l in project.levels)
+				for(li in l.layerInstances)
+					li.autoTilesCache = null;
+				checkAutoLayersCache( (_)->N.success("Done") );
 
 			case K.U if( !hasInputFocus() && App.ME.isShiftDown() && App.ME.isCtrlDown() ):
 				dn.electron.ElectronUpdater.emulate();
@@ -470,11 +490,16 @@ class Editor extends Page {
 
 		// Propagate to tools
 		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() ) {
-			if( isSpecialToolActive() )
-				specialTool.onKeyPress(keyCode);
-			else {
-				selectionTool.onKeyPress(keyCode);
-				curTool.onKeyPress(keyCode);
+			worldTool.onKeyPress(keyCode);
+			panTool.onKeyPress(keyCode);
+
+			if( !worldMode ) {
+				if( isSpecialToolActive() )
+					specialTool.onKeyPress(keyCode);
+				else {
+					selectionTool.onKeyPress(keyCode);
+					curTool.onKeyPress(keyCode);
+				}
 			}
 		}
 	}
@@ -619,20 +644,32 @@ class Editor extends Page {
 		}
 	}
 
-	function onMouseDown(e:hxd.Event) {
+	function onMouseDown(ev:hxd.Event) {
 		var m = getMouse();
-		if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && e.button==0 )
-			selectionTool.startUsing( m, e.button );
-		else if( isSpecialToolActive() )
-			specialTool.startUsing( m, e.button )
-		else
-			curTool.startUsing( m, e.button );
 
-		rulers.onMouseDown( m, e.button );
+		panTool.startUsing(ev,m);
+
+		if( !ev.cancel )
+			rulers.onMouseDown( ev, m );
+
+		if( !ev.cancel )
+			worldTool.onMouseDown(ev, m);
+
+		if( !ev.cancel && !worldMode ) {
+			if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && ev.button==0 )
+				selectionTool.startUsing( ev, m );
+			else if( isSpecialToolActive() )
+				specialTool.startUsing( ev, m )
+			else
+				curTool.startUsing( ev, m );
+		}
 	}
 
 	function onMouseUp() {
 		var m = getMouse();
+
+		panTool.stopUsing(m);
+		worldTool.onMouseUp(m);
 
 		// Tool updates
 		if( selectionTool.isRunning() )
@@ -645,17 +682,24 @@ class Editor extends Page {
 		rulers.onMouseUp( m );
 	}
 
-	function onMouseMove(e:hxd.Event) {
+	function onMouseMove(ev:hxd.Event) {
 		var m = getMouse();
 
-		// Tool updates
-		if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
-			selectionTool.onMouseMove(m);
-		else if( isSpecialToolActive() )
-			specialTool.onMouseMove(m);
-		else
-			curTool.onMouseMove(m);
-		rulers.onMouseMove(m);
+		if( !ui.Modal.hasAnyWithMask() ) {
+			// Propagate event to tools & UI components
+			panTool.onMouseMove(ev,m);
+			rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
+			worldTool.onMouseMove(ev,m);
+
+			if( !ev.cancel && !worldMode ) {
+				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
+					selectionTool.onMouseMove(ev,m);
+				else if( isSpecialToolActive() )
+					specialTool.onMouseMove(ev,m);
+				else
+					curTool.onMouseMove(ev,m);
+			}
+		}
 
 		// Mouse coords infos
 		if( ui.Modal.hasAnyOpen() )
@@ -664,11 +708,19 @@ class Editor extends Page {
 			jMouseCoords.show();
 
 			// Coordinates
-			if( curLayerInstance!=null )
-				jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
-			else
+			if( worldMode ) {
+				jMouseCoords.find(".world").text('World = ${m.worldX},${m.worldY}');
 				jMouseCoords.find(".grid").hide();
-			jMouseCoords.find(".pixels").text('Level = ${m.levelX},${m.levelY}');
+				jMouseCoords.find(".level").hide();
+			}
+			else {
+				if( curLayerInstance!=null )
+					jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
+				else
+					jMouseCoords.find(".grid").hide();
+				jMouseCoords.find(".level").text('Level = ${m.levelX},${m.levelY}');
+				jMouseCoords.find(".world").text('World = ${m.worldX},${m.worldY}');
+			}
 			if( curTool.getRunningRectCWid(m)>0 || selectionTool.getRunningRectCWid(m)>0 ) {
 				var wid = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCWid(m);
 				var hei = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCHei(m);
@@ -717,22 +769,19 @@ class Editor extends Page {
 
 	function onMouseWheel(e:hxd.Event) {
 		var m = getMouse();
-		var oldLevelX = m.levelX;
-		var oldLevelY = m.levelY;
-
-		levelRender.deltaZoom( -e.wheelDelta*0.1 );
-		ge.emit(ViewportChanged);
-
-		levelRender.focusLevelX += ( oldLevelX - m.levelX );
-		levelRender.focusLevelY += ( oldLevelY - m.levelY );
+		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta*0.1 );
+		camera.cancelAllAutoMovements();
 	}
 
 	public function selectLevel(l:data.Level) {
-		if( curLevelId==l.uid )
-			return;
+		if( curLevel!=null )
+			worldRender.invalidateLevel(curLevel);
 
 		curLevelId = l.uid;
-		ge.emit(LevelSelected);
+		ge.emit( LevelSelected(l) );
+		ge.emit( ViewportChanged );
+		// if( worldMode )
+		// 	new ui.modal.panel.WorldPanel();
 	}
 
 	public function selectLayerInstance(li:data.inst.LayerInstance, notify=true) {
@@ -799,12 +848,29 @@ class Editor extends Page {
 		});
 	}
 
+	public function setWorldMode(v:Bool) {
+		if( worldMode==v )
+			return;
+
+		project.reorganizeWorld();
+		worldMode = v;
+		ge.emit( WorldMode(worldMode) );
+		if( worldMode ) {
+			N.quick(L.t._("World view"), new J('<span class="icon world"/>'));
+			ui.Modal.closeAll();
+			new WorldPanel();
+		}
+		else
+			ui.EntityInstanceEditor.closeExisting();
+
+		worldTool.onWorldModeChange(worldMode);
+	}
 
 	public function setGrid(v:Bool, notify=true) {
 		settings.grid = v;
 		App.ME.saveSettings();
 		selectionTool.clear();
-		levelRender.applyGridVisibility();
+		ge.emit( GridChanged(settings.grid) );
 		if( notify )
 			N.quick( "Grid: "+L.onOff( settings.grid ));
 	}
@@ -853,7 +919,7 @@ class Editor extends Page {
 		new ui.modal.panel.Help();
 	}
 
-	function onClose(?bt:js.jquery.JQuery) {
+	public function onClose(?bt:js.jquery.JQuery) {
 		ui.Modal.closeAll();
 		if( needSaving )
 			new ui.modal.dialog.UnsavedChanges( bt, App.ME.loadPage.bind( ()->new Home() ) );
@@ -861,19 +927,55 @@ class Editor extends Page {
 			App.ME.loadPage( ()->new Home() );
 	}
 
-	public function onSave(?bypassMissing=false, ?onComplete:Void->Void) {
+	public function onSave(saveAs=false, ?bypasses:Map<String,Bool>, ?onComplete:Void->Void) {
 		if( saveLocked() )
 			return;
 
-		if( !bypassMissing && !JsTools.fileExists(projectFilePath) ) {
-			needSaving = true;
-			new ui.modal.dialog.Confirm(
-				Lang.t._("The project file is no longer in ::path::. Save to this path anyway?", { path:projectFilePath }),
-				onSave.bind(true, onComplete)
+		if( bypasses==null )
+			bypasses = new Map();
+
+		// Save as...
+		if( saveAs ) {
+			var oldDir = getProjectDir();
+
+			dn.electron.Dialogs.saveAs(["."+Const.FILE_EXTENSION, ".json"], getProjectDir(), function(filePath:String) {
+				this.projectFilePath = filePath;
+				var newDir = getProjectDir();
+				App.LOG.fileOp("Remap project paths: "+oldDir+" => "+newDir);
+				project.remapAllRelativePaths(oldDir, newDir);
+				bypasses.set("missing",true);
+				onSave(false, bypasses, onComplete);
+			});
+			return;
+		}
+
+		// Check sample file
+		if( !bypasses.exists("sample") && App.ME.isInAppDir(projectFilePath, true) ) {
+			bypasses.set("sample",true);
+			new ui.modal.dialog.Choice(
+				Lang.t._("The file you're trying to save is a ::app:: sample map.\nAny change to it will be lost during automatic updates, so it's NOT recommended to modify it.", { app:Const.APP_NAME }),
+				true,
+				[
+					{ label:"Save to another file", cb:onSave.bind(true, bypasses, onComplete) },
+					{ label:"Save anyway", className:"gray", cb:onSave.bind(false, bypasses, onComplete) },
+				]
 			);
 			return;
 		}
-		if( !bypassMissing && projectFilePath.indexOf(Const.CRASH_NAME_SUFFIX)>=0 ) {
+
+		// Check missing file
+		if( !bypasses.exists("missing") && !JsTools.fileExists(projectFilePath) ) {
+			needSaving = true;
+			new ui.modal.dialog.Confirm(
+				null,
+				Lang.t._("The project file is no longer in ::path::. Save to this path anyway?", { path:projectFilePath }),
+				onSave.bind(true, bypasses, onComplete)
+			);
+			return;
+		}
+
+		// Check crash backups
+		if( projectFilePath.indexOf(Const.CRASH_NAME_SUFFIX)>=0 ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
 				Lang.t._("This file seems to be a CRASH BACKUP. Do you want to save your changes to the original file instead?"),
@@ -884,21 +986,22 @@ class Editor extends Page {
 					// Save
 					projectFilePath = StringTools.replace(projectFilePath, Const.CRASH_NAME_SUFFIX, "");
 					updateTitle();
-					onSave(onComplete);
+					onSave(bypasses, onComplete);
 				}
 			);
 			return;
 		}
 
+		// Pre-save operations followed by actual saving
 		ge.emit(BeforeProjectSaving);
 		createChildProcess( (p)->{
 			if( !saveLocked() ) {
 				checkAutoLayersCache( (anyChange)->{
 					App.LOG.fileOp('Saving $projectFilePath...');
 					var data = JsTools.prepareProjectFile(project);
-					JsTools.writeFileBytes(projectFilePath, data.bytes);
+					JsTools.writeFileString(projectFilePath, data.str);
 
-					var size = dn.Lib.prettyBytesSize(data.bytes.length);
+					var size = dn.Lib.prettyBytesSize(data.str.length);
 					App.LOG.fileOp('Saved $size.');
 
 					var fileName = dn.FilePath.extractFileWithExt(projectFilePath);
@@ -929,37 +1032,39 @@ class Editor extends Page {
 		}, true);
 	}
 
-	public function onSaveAs() {
-		var oldDir = getProjectDir();
-
-		dn.electron.Dialogs.saveAs(["."+Const.FILE_EXTENSION, ".json"], getProjectDir(), function(filePath:String) {
-			this.projectFilePath = filePath;
-			var newDir = getProjectDir();
-			App.LOG.fileOp("Remap project paths: "+oldDir+" => "+newDir);
-			project.remapAllRelativePaths(oldDir, newDir);
-			onSave(true);
-		});
+	inline function shouldLogEvent(e:GlobalEvent) {
+		return switch(e) {
+			case ViewportChanged: false;
+			case WorldLevelMoved: false;
+			case LayerInstanceChanged: false;
+			case WorldMode(_): false;
+			case GridChanged(_): false;
+			case _: true;
+		}
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
 		// Logging
 		if( e==null )
 			App.LOG.error("Received null global event!");
-		else if( e!=ViewportChanged ) {
+		else if( shouldLogEvent(e) ) {
 			var extra : Dynamic = null;
 			switch e {
+				case WorldMode(active):
 				case ViewportChanged:
 				case ProjectSelected:
 				case ProjectSettingsChanged:
 				case BeforeProjectSaving:
 				case ProjectSaved:
-				case LevelSelected:
-				case LevelSettingsChanged:
-				case LevelAdded:
-				case LevelRemoved:
-				case LevelResized:
-				case LevelRestoredFromHistory:
+				case LevelSelected(l):
+				case LevelSettingsChanged(l):
+				case LevelAdded(l):
+				case LevelRemoved(l):
+				case LevelResized(l):
+				case LevelRestoredFromHistory(l):
 				case LevelSorted:
+				case WorldLevelMoved:
+				case WorldSettingsChanged:
 				case LayerDefAdded:
 				case LayerDefConverted:
 				case LayerDefRemoved(defUid):
@@ -985,7 +1090,7 @@ class Editor extends Page {
 				case TilesetDefAdded(td): extra = td.uid;
 				case TilesetDefRemoved(td): extra = td.uid;
 				case TilesetSelectionSaved(td): extra = td.uid;
-				case TilesetDefOpaqueCacheRebuilt(td): extra = td.uid;
+				case TilesetDefPixelDataCacheRebuilt(td): extra = td.uid;
 				case EntityInstanceAdded(ei): extra = ei.defUid;
 				case EntityInstanceRemoved(ei): extra = ei.defUid;
 				case EntityInstanceChanged(ei): extra = ei.defUid;
@@ -1004,6 +1109,7 @@ class Editor extends Page {
 				case EnumDefSorted:
 				case EnumDefValueRemoved:
 				case ToolOptionChanged:
+				case GridChanged(active):
 			}
 			App.LOG.add( "event", e.getName() + (extra==null ? "" : " "+Std.string(extra)) );
 		}
@@ -1011,9 +1117,10 @@ class Editor extends Page {
 
 		// Check if events changes the NeedSaving flag
 		switch e {
+			case WorldMode(_):
 			case ViewportChanged:
 			case LayerInstanceSelected:
-			case LevelSelected:
+			case LevelSelected(_):
 			case LayerInstanceVisiblityChanged(_):
 			case LayerInstanceAutoRenderingChanged(_):
 			case ToolOptionChanged:
@@ -1027,6 +1134,8 @@ class Editor extends Page {
 
 		// Use event
 		switch e {
+			case WorldMode(active):
+
 			case ViewportChanged:
 
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
@@ -1043,6 +1152,8 @@ class Editor extends Page {
 			case EntityInstanceChanged(ei):
 
 			case ToolOptionChanged:
+
+			case GridChanged(active):
 
 			case LayerInstanceSelected:
 				updateTool();
@@ -1091,24 +1202,26 @@ class Editor extends Page {
 				clearSpecialTool();
 				updateTool();
 
-			case LevelSettingsChanged:
+			case LevelSettingsChanged(l):
 				updateGuide();
 
-			case LevelAdded:
-			case LevelRemoved:
-			case LevelResized:
+			case LevelAdded(l):
+			case LevelRemoved(l):
+			case LevelResized(l):
 			case LevelSorted:
+			case WorldLevelMoved:
+			case WorldSettingsChanged:
 
-			case LevelSelected:
+			case LevelSelected(l):
 				updateLayerList();
 				updateGuide();
 				clearSpecialTool();
 				selectionTool.clear();
 				updateTool();
-				if( !levelHistory.exists(curLevelId) )
-					levelHistory.set(curLevelId, new LevelHistory(curLevelId) );
+				if( !levelHistory.exists(l.uid) )
+					levelHistory.set(l.uid, new LevelHistory(l.uid) );
 
-			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory:
+			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				selectionTool.clear();
 				clearSpecialTool();
 				updateAppBg();
@@ -1126,7 +1239,7 @@ class Editor extends Page {
 				updateGuide();
 
 			case TilesetSelectionSaved(td):
-			case TilesetDefOpaqueCacheRebuilt(td):
+			case TilesetDefPixelDataCacheRebuilt(td):
 
 			case TilesetDefAdded(td):
 
@@ -1163,11 +1276,7 @@ class Editor extends Page {
 	}
 
 	function updateAppBg() {
-		if( bg!=null )
-			bg.remove();
-
-		bg = new h2d.Bitmap( h2d.Tile.fromColor(project.bgColor) );
-		root.add(bg, Const.DP_BG);
+		bg.tile = h2d.Tile.fromColor(project.bgColor);
 		onAppResize();
 	}
 
@@ -1177,18 +1286,11 @@ class Editor extends Page {
 		updateCanvasSize();
 
 		if( bg!=null ) {
-			bg.scaleX = canvasWid();
-			bg.scaleY = canvasHei();
+			bg.scaleX = camera.width;
+			bg.scaleY = camera.height;
 		}
 		ge.emit(ViewportChanged);
-	}
-
-	public inline function canvasWid() {
-		return App.ME.jCanvas.outerWidth() * js.Browser.window.devicePixelRatio;
-	}
-
-	public inline function canvasHei() {
-		return App.ME.jCanvas.outerHeight() * js.Browser.window.devicePixelRatio;
+		dn.Process.resizeAll();
 	}
 
 	function updateTitle() {
@@ -1304,8 +1406,8 @@ class Editor extends Page {
 		return curLayerInstance!=null && levelRender.isLayerVisible(curLayerInstance);
 	}
 
-	public inline function getMouse() : MouseCoords {
-		return new MouseCoords();
+	public inline function getMouse() : Coords {
+		return new Coords();
 	}
 
 	override function onDispose() {
@@ -1337,5 +1439,17 @@ class Editor extends Page {
 
 	override function update() {
 		super.update();
+
+		#if debug
+		if( cd.has("debugTools") ) {
+			App.ME.debug("-- Tools & UI ----------------------------------------");
+			App.ME.debug("  "+worldTool, true);
+			App.ME.debug("  "+panTool, true);
+			App.ME.debug("  "+selectionTool, true);
+			for(t in allLayerTools)
+				App.ME.debug("  "+t, true);
+			App.ME.debug("  "+rulers, true);
+		}
+		#end
 	}
 }

@@ -14,6 +14,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	public function new(li:data.inst.LayerInstance) {
 		super();
 		this.li = li;
+		jMask.hide();
 
 		loadTemplate("editAllAutoLayerRules");
 		updatePanel();
@@ -29,14 +30,19 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 		switch e {
-			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
+			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged(_):
 				updatePanel();
 
+			case LevelSelected(l):
+				close();
+
 			case LayerInstanceRestoredFromHistory(li):
+				if( li.layerDefUid==this.li.layerDefUid )
+					this.li = li;
 				updatePanel();
 
 			case BeforeProjectSaving:
-				updateInvalidatedRulesInAllLevels();
+				applyInvalidatedRulesInAllLevels();
 
 			case LayerRuleChanged(r), LayerRuleRemoved(r), LayerRuleAdded(r):
 				invalidateRule(r);
@@ -76,7 +82,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 	override function onClose() {
 		super.onClose();
-		updateInvalidatedRulesInAllLevels();
+		applyInvalidatedRulesInAllLevels();
 		editor.levelRender.clearTemp();
 	}
 
@@ -84,9 +90,22 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		invalidatedRules.set(r.uid, r.uid);
 	}
 
+	function invalidateRuleAndOnesBelow(r:data.def.AutoLayerRuleDef) {
+		invalidateRule(r);
 
-	function updateInvalidatedRulesInAllLevels() {
+		var isAfter = false;
+		li.def.iterateActiveRulesInEvalOrder( (or)->{
+			if( or.uid==r.uid )
+				isAfter = true;
+			else if( isAfter )
+				invalidateRule(or);
+		} );
+	}
+
+
+	function applyInvalidatedRulesInAllLevels() {
 		var ops = [];
+		var affectedLayers : Map<data.inst.LayerInstance,data.Level> = new Map();
 
 		// Apply edited rules to all other levels
 		for(ruleUid in invalidatedRules)
@@ -96,31 +115,45 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				continue;
 
 			if( li.autoTilesCache==null ) {
+				// Run all rules
 				ops.push({
 					label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
 					cb: li.applyAllAutoLayerRules
 				});
+				affectedLayers.set(li,l);
 			}
 			else {
 				var r = li.def.getRule(ruleUid);
-				if( r!=null ) {
-					ops.push({
-						label: 'Updating rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
-						cb: li.applyAutoLayerRuleToAllLayer.bind(r),
-					});
-				}
-				else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
-					// WARNING: re-apply all rules here if breakOnMatch exists
-					ops.push({
-						label: 'Removing rule #$ruleUid from ${l.identifier}',
-						cb: li.autoTilesCache.remove.bind(ruleUid),
-					});
+				if( r!=null && !r.isEmpty() ) { // Could be null for garbaged empty rules
+					if( r!=null ) {
+						// Apply rule
+						ops.push({
+							label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
+							cb: li.applyAutoLayerRuleToAllLayer.bind(r, false),
+						});
+						affectedLayers.set(li,l);
+					}
+					else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
+						// Removed rule
+						ops.push({
+							label: 'Removing rule tiles #$ruleUid from ${l.identifier}',
+							cb: li.autoTilesCache.remove.bind(ruleUid),
+						});
+						affectedLayers.set(li,l);
+					}
 				}
 			}
 		}
 
+		// Apply "break on match" cascading effect in changed layers
+		for(li in affectedLayers.keys())
+			ops.push({
+				label: 'Applying break on matches on ${affectedLayers.get(li).identifier}.${li.def.identifier}',
+				cb: li.applyBreakOnMatches.bind(),
+			});
+
 		if( ops.length>0 )
-			new Progress(L.t._("Updating auto layers..."), ops);
+			new Progress(L.t._("Updating auto layers..."), 5, ops, editor.levelRender.renderAll);
 
 		invalidatedRules = new Map();
 	}
@@ -164,7 +197,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 			var jNewRule = jContent.find("[ruleUid="+r.uid+"]"); // BUG fix scrollbar position
-			new ui.modal.dialog.RuleEditor(jNewRule, ld, lastRule );
+			new ui.modal.dialog.RuleEditor(ld, lastRule );
 		}
 
 
@@ -189,6 +222,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jContent.find("button.seed").click( function(ev) {
 			li.seed = Std.random(9999999);
 			editor.ge.emit(LayerRuleSeedChanged);
+			ld.iterateActiveRulesInEvalOrder( r->{
+				if( r.chance<1 || r.hasPerlin() )
+					invalidateRule(r);
+			});
 		});
 
 		// Render
@@ -273,6 +310,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			// Enable/disable group
 			jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {
+				if( rg.rules.length>0 )
+					invalidateRuleAndOnesBelow( rg.rules[0] );
 				rg.active = !rg.active;
 				editor.ge.emit( LayerRuleGroupChangedActiveState(rg) );
 			});
@@ -361,14 +400,21 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				else
 					jPreview.append( JsTools.createAutoPatternGrid(r, sourceDef, ld, true) );
 				jPreview.click( function(ev) {
-					new ui.modal.dialog.RuleEditor(jPreview, ld, r);
+					new ui.modal.dialog.RuleEditor(ld, r);
 				});
 
-				// Random
+				// Random chance
+				var old = r.chance;
 				var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
 				i.linkEvent( LayerRuleChanged(r) );
 				i.displayAsPct = true;
 				i.setBounds(0,1);
+				i.onValueChange = (v)->{
+					if( v/100<old ) {
+						N.debug("below");
+						invalidateRuleAndOnesBelow(r);
+					}
+				}
 				if( r.chance>=1 )
 					i.jInput.addClass("max");
 				else if( r.chance<=0 )
@@ -376,7 +422,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 				// X modulo
 				var i = Input.linkToHtmlInput( r.xModulo, jRule.find("[name=xModulo]"));
-				i.onChange = function() r.tidy();
+				i.onValueChange = (v)->{
+					if( v>1 )
+						invalidateRuleAndOnesBelow(r);
+					r.tidy();
+				}
 				i.linkEvent( LayerRuleChanged(r) );
 				i.setBounds(1,10);
 				if( r.xModulo==1 )
@@ -384,7 +434,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 				// Y modulo
 				var i = Input.linkToHtmlInput( r.yModulo, jRule.find("[name=yModulo]"));
-				i.onChange = function() r.tidy();
+				i.onValueChange = (v)->{
+					if( v>1 )
+						invalidateRuleAndOnesBelow(r);
+					r.tidy();
+				}
 				i.linkEvent( LayerRuleChanged(r) );
 				i.setBounds(1,10);
 				if( r.yModulo==1 )
@@ -395,14 +449,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				jFlag.addClass( r.breakOnMatch ? "on" : "off" );
 				jFlag.click( function(ev:js.jquery.Event) {
 					ev.preventDefault();
+					invalidateRuleAndOnesBelow(r);
 					r.breakOnMatch = !r.breakOnMatch;
-					var isAfter = false;
-					li.def.iterateActiveRulesInEvalOrder( (or)->{
-						if( or.uid==r.uid )
-							isAfter = true;
-						else if( isAfter )
-							invalidateRule(or);
-					} );
 					editor.ge.emit( LayerRuleChanged(r) );
 				});
 
@@ -438,14 +486,19 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				jFlag.mousedown( function(ev:js.jquery.Event) {
 					ev.preventDefault();
 					if( ev.button==2 ) {
-						new ui.modal.dialog.RulePerlinSettings(jFlag, r);
+						// Open perlin settings
+						var w = new ui.modal.dialog.RulePerlinSettings(jFlag, r);
+						w.onSettingsChange = (r)->invalidateRuleAndOnesBelow(r);
 						if( !r.hasPerlin() ) {
 							r.setPerlin(true);
 							editor.ge.emit( LayerRuleChanged(r) );
 						}
 					}
 					else {
+						// Toggle it
 						r.setPerlin( !r.hasPerlin() );
+						if( r.hasPerlin() )
+							invalidateRuleAndOnesBelow(r);
 						editor.ge.emit( LayerRuleChanged(r) );
 					}
 				});
@@ -460,12 +513,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					}
 					ev.preventDefault();
 					if( ev.button==2 ) {
+						// Pick vertical/horizontal checker
 						var m = new Dialog(jFlag);
 						for(k in [AutoLayerRuleCheckerMode.Horizontal, AutoLayerRuleCheckerMode.Vertical]) {
 							var name = k.getName();
 							var jRadio = new J('<input name="mode" type="radio" value="$name" id="$name"/>');
 							jRadio.change( function(ev:js.jquery.Event) {
 								r.checker = k;
+								invalidateRuleAndOnesBelow(r);
 								editor.ge.emit( LayerRuleChanged(r) );
 							});
 							m.jContent.append(jRadio);
@@ -477,7 +532,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						m.jContent.find("[name=mode][value="+r.checker.getName()+"]").click();
 					}
 					else {
+						// Just toggle it
 						r.checker = r.checker==None ? ( r.xModulo==1 ? Vertical : Horizontal ) : None;
+						invalidateRuleAndOnesBelow(r);
 						editor.ge.emit( LayerRuleChanged(r) );
 					}
 				});
@@ -487,8 +544,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				jActive.find(".icon").addClass( r.active ? "active" : "inactive" );
 				jActive.click( function(ev:js.jquery.Event) {
 					ev.preventDefault();
+					invalidateRuleAndOnesBelow(r);
 					r.active = !r.active;
-					invalidateRule(r);
 					editor.ge.emit( LayerRuleChanged(r) );
 				});
 
@@ -527,7 +584,16 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				var fromGroupIdx = Std.parseInt( ev.from.getAttribute("groupIdx") );
 				var toGroupIdx = Std.parseInt( ev.to.getAttribute("groupIdx") );
 
+				var ruleUid = Std.parseInt( ev.item.getAttribute("ruleUid") );
+
+				if( ev.newIndex>ev.oldIndex || toGroupIdx>fromGroupIdx)
+					invalidateRuleAndOnesBelow( ld.getRule(ruleUid) );
+
 				project.defs.sortLayerAutoRules(ld, fromGroupIdx, toGroupIdx, ev.oldIndex, ev.newIndex);
+
+				if( ev.newIndex<ev.oldIndex || toGroupIdx<fromGroupIdx )
+					invalidateRuleAndOnesBelow( ld.getRule(ruleUid) );
+
 				editor.ge.emit(LayerRuleSorted);
 			});
 
@@ -547,7 +613,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 	function deleteRuleGroup(rg:AutoLayerRuleGroup) {
-		new ui.modal.dialog.Confirm(true, function() {
+		new ui.modal.dialog.Confirm(Lang.t._("Confirm this action?"), true, function() {
 			new LastChance(Lang.t._("Rule group removed"), project);
 			App.LOG.general("Deleted rule group "+rg.name);
 			ld.removeRuleGroup(rg);
@@ -563,4 +629,15 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 	}
 
+
+	#if debug
+	override function update() {
+		super.update();
+		var all = [];
+		for(ruid in invalidatedRules.keys())
+			all.push(ruid);
+		App.ME.debug( all.join(", "));
+	}
+	#end
 }
+

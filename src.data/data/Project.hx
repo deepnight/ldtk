@@ -1,9 +1,9 @@
 package data;
 
 class Project {
-	public static var DEFAULT_LEVEL_WIDTH = 256; // px
-	public static var DEFAULT_LEVEL_HEIGHT = 256; // px
+	public static var DEFAULT_BG_COLOR = 0x7f8093;
 	public static var DEFAULT_GRID_SIZE = 16; // px
+	public static var DEFAULT_LEVEL_SIZE = 16; // cells
 
 	var nextUid = 0;
 	public var defs : Definitions;
@@ -14,6 +14,10 @@ class Project {
 	public var defaultPivotY : Float;
 	public var defaultGridSize : Int;
 	public var bgColor : UInt;
+	public var defaultLevelBgColor : UInt;
+	public var worldLayout : data.DataTypes.WorldLayout;
+	public var worldGridWidth : Int;
+	public var worldGridHeight : Int;
 
 	public var minifyJson = false;
 	public var exportTiled = false;
@@ -21,8 +25,12 @@ class Project {
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
-		bgColor = 0x7f8093;
+		bgColor = DEFAULT_BG_COLOR;
+		defaultLevelBgColor = DEFAULT_BG_COLOR;
 		defaultPivotX = defaultPivotY = 0;
+		worldLayout = Free;
+		worldGridWidth = defaultGridSize * DEFAULT_LEVEL_SIZE;
+		worldGridHeight = defaultGridSize * DEFAULT_LEVEL_SIZE;
 
 		defs = new Definitions(this);
 	}
@@ -47,7 +55,9 @@ class Project {
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
-		p.bgColor = JsonTools.readColor( json.bgColor, 0xffffff );
+		p.bgColor = JsonTools.readColor( json.bgColor, DEFAULT_BG_COLOR );
+		p.defaultLevelBgColor = JsonTools.readColor( json.defaultLevelBgColor, p.bgColor );
+
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
 
@@ -55,6 +65,18 @@ class Project {
 
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( Level.fromJson(p, lvlJson) );
+
+		// World
+		var defLayout : data.DataTypes.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
+
+		#if debug
+		if( json.worldLayout=="WorldGrid" ) json.worldLayout = "GridVania"; // TODO remove that after 0.6 release
+		#end
+		p.worldLayout = JsonTools.readEnum( data.DataTypes.WorldLayout, json.worldLayout, false, defLayout );
+		p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, DEFAULT_LEVEL_SIZE*p.defaultGridSize );
+		p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, DEFAULT_LEVEL_SIZE*p.defaultGridSize );
+		if( dn.Version.lower(json.jsonVersion, "0.6") )
+			p.reorganizeWorld();
 
 		p.jsonVersion = Const.getJsonVersion(); // always uses latest version
 		return p;
@@ -67,9 +89,13 @@ class Project {
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
 			bgColor: JsonTools.writeColor(bgColor),
+			defaultLevelBgColor: JsonTools.writeColor(defaultLevelBgColor),
 			nextUid: nextUid,
 			minifyJson: minifyJson,
 			exportTiled: exportTiled,
+			worldLayout: JsonTools.writeEnum(worldLayout, false),
+			worldGridWidth: worldGridWidth,
+			worldGridHeight: worldGridHeight,
 
 			defs: defs.toJson(this),
 			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
@@ -80,9 +106,80 @@ class Project {
 		return fromJson( toJson() );
 	}
 
+	public function onWorldLayoutChange(old:data.DataTypes.WorldLayout) {
+		// Convert layout
+		switch worldLayout {
+			case Free:
+
+			case GridVania:
+				switch old {
+					case Free:
+						for(l in levels) {
+							l.worldX = Std.int( l.worldX/worldGridWidth ) * worldGridWidth;
+							l.worldY = Std.int( l.worldY/worldGridHeight ) * worldGridHeight;
+						}
+
+					case GridVania:
+
+					case LinearHorizontal:
+						var pos = 0;
+						for(l in levels) {
+							l.worldX = pos*worldGridWidth;
+							pos+=dn.M.ceil( l.pxWid / worldGridWidth );
+						}
+
+					case LinearVertical:
+						var pos = 0;
+						for(l in levels) {
+							l.worldY = pos*worldGridHeight;
+							pos+=dn.M.ceil( l.pxHei / worldGridHeight );
+						}
+				}
+
+			case LinearHorizontal:
+			case LinearVertical:
+		}
+	}
+
+	public function onWorldGridChange(oldWid:Int, oldHei:Int) {
+		for( l in levels ) {
+			var wcx = Std.int(l.worldX/oldWid);
+			var wcy = Std.int(l.worldY/oldHei);
+			l.worldX = wcx * worldGridWidth;
+			l.worldY = wcy * worldGridHeight;
+		}
+
+	}
+
+	public function reorganizeWorld() {
+		var spacing = 32;
+		switch worldLayout {
+			case Free:
+
+			case LinearHorizontal:
+				var wx = 0;
+				for(l in levels) {
+					l.worldX = wx;
+					l.worldY = 0;
+					wx += l.pxWid + spacing;
+				}
+
+			case LinearVertical:
+				var wy = 0;
+				for(l in levels) {
+					l.worldX = 0;
+					l.worldY = wy;
+					wy += l.pxHei + spacing;
+				}
+
+			case GridVania:
+		}
+	}
+
 	public function tidy() {
 		defs.tidy(this);
 
+		reorganizeWorld();
 		for(level in levels)
 			level.tidy(this);
 	}
@@ -90,9 +187,21 @@ class Project {
 
 	/**  LEVELS  *****************************************/
 
-	public function createLevel() {
-		var l = new Level(this, makeUniqId());
-		levels.push(l);
+	public function createLevel(?insertIdx:Int) {
+		var wid = defaultGridSize * DEFAULT_LEVEL_SIZE;
+		var hei = wid;
+		switch worldLayout {
+			case Free, LinearHorizontal, LinearVertical:
+			case GridVania:
+				wid = worldGridWidth;
+				hei = worldGridHeight;
+		}
+
+		var l = new Level(this, wid, hei, makeUniqId());
+		if( insertIdx==null )
+			levels.push(l);
+		else
+			levels.insert(insertIdx,l);
 
 		var id = "Level";
 		var idx = 2;
@@ -119,7 +228,7 @@ class Project {
 
 		levels.insert( dn.Lib.getArrayIndex(l,levels)+1, copy );
 		tidy();
-		return l;
+		return copy;
 	}
 
 	public function isLevelIdentifierUnique(id:String) {
@@ -144,6 +253,13 @@ class Project {
 		return null;
 	}
 
+	public function getClosestLevelFrom(level:data.Level) : Null<data.Level> {
+		var dh = new dn.DecisionHelper(levels);
+		dh.removeValue(level);
+		dh.score( (l)->-level.getBoundsDist(l) );
+		return dh.getBest();
+	}
+
 	public function sortLevel(from:Int, to:Int) : Null<data.Level> {
 		if( from<0 || from>=levels.length || from==to )
 			return null;
@@ -155,7 +271,66 @@ class Project {
 
 		var moved = levels.splice(from,1)[0];
 		levels.insert(to, moved);
+		reorganizeWorld();
 		return moved;
+	}
+
+	public function getWorldBounds() {
+		var left = Const.INFINITE;
+		var right = -Const.INFINITE;
+		var top = Const.INFINITE;
+		var bottom = -Const.INFINITE;
+
+		for(l in levels) {
+			left = dn.M.imin(left, l.worldX);
+			right = dn.M.imax(right, l.worldX+l.pxWid);
+			top = dn.M.imin(top, l.worldY);
+			bottom = dn.M.imax(bottom, l.worldY+l.pxHei);
+		}
+
+		return {
+			left: left,
+			right: right,
+			top: top,
+			bottom: bottom,
+		}
+	}
+
+	public inline function getWorldWidth(?ignoredLevel:data.Level) {
+		var min = Const.INFINITE;
+		var max = -Const.INFINITE;
+		for(l in levels)
+			if( l!=ignoredLevel ) {
+				min = dn.M.imin(min, l.worldX);
+				max = dn.M.imax(max, l.worldX+l.pxWid);
+			}
+		return max-min;
+	}
+
+
+	public inline function getWorldHeight(?ignoredLevel:data.Level) {
+		var min = Const.INFINITE;
+		var max = -Const.INFINITE;
+		for(l in levels)
+			if( l!=ignoredLevel ) {
+				min = dn.M.imin(min, l.worldY);
+				max = dn.M.imax(max, l.worldY+l.pxHei);
+			}
+		return max-min;
+	}
+
+	public inline function getSmartLevelGridSize() {
+		if( defs.layers.length==0 )
+			return defaultGridSize;
+		else {
+			var g = Const.INFINITE;
+
+			for(ld in defs.layers)
+				if( ld.type!=Entities )
+					g = dn.M.imin(g, ld.gridSize);
+
+			return g==Const.INFINITE ? defaultGridSize : g;
+		}
 	}
 
 

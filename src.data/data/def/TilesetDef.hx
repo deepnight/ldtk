@@ -13,8 +13,12 @@ class TilesetDef {
 	public var padding : Int = 0; // px dist to atlas borders
 	public var spacing : Int = 0; // px space between consecutive tiles
 	public var savedSelections : Array<TilesetSelection> = [];
-	@:allow(page.Editor)
-	var opaqueTilesCache : Null< Map<Int,Bool> >;
+
+	// @:allow(page.Editor)
+	// var opaqueTilesCache : Null< Map<Int,Bool> >;
+
+	var opaqueTiles : Null< haxe.ds.Vector<Bool> >;
+	var averageColorsCache : Null< Map<Int,Int> >; // ARGB Int
 
 	public var pxWid = 0;
 	public var pxHei = 0;
@@ -94,21 +98,27 @@ class TilesetDef {
 			tileGridSize: tileGridSize,
 			spacing: spacing,
 			padding: padding,
-			opaqueTiles: {
-				if( opaqueTilesCache==null )
-					null;
-				else {
-					var arr = [];
-					for(cy in 0...cHei)
-					for(cx in 0...cWid)
-						if( opaqueTilesCache.get( getTileId(cx,cy) )==true )
-							arr.push( getTileId(cx,cy) );
-					arr;
-				}
-			},
+
 			savedSelections: savedSelections.map( function(sel) {
 				return { ids:sel.ids, mode:JsonTools.writeEnum(sel.mode, false) }
 			}),
+
+			cachedPixelData: !hasValidPixelData() ? null : {
+				opaqueTiles: {
+					var buf = new StringBuf();
+					var zero = "0".charCodeAt(0);
+					for(v in opaqueTiles)
+						buf.addChar( v==true ? zero+1 : zero );
+					buf.toString();
+				},
+
+				averageColors: {
+					var buf = new StringBuf();
+					for(tid in 0...cWid*cHei)
+						buf.add( dn.Color.intToHex3_ARGB( averageColorsCache.get(tid) ) );
+					buf.toString();
+				},
+			},
 		}
 	}
 
@@ -123,13 +133,25 @@ class TilesetDef {
 		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
 
-		if( json.opaqueTiles!=null ) {
-			td.opaqueTilesCache = new Map();
-			for(tid in json.opaqueTiles)
-				td.opaqueTilesCache.set(tid, true);
+		if( json.cachedPixelData!=null ) {
+			var size = td.cWid*td.cHei;
+			var data = json.cachedPixelData;
+			if( data.opaqueTiles!=null && data.opaqueTiles.length==size && data.averageColors!=null && data.averageColors.length%4==0 ) {
+				td.opaqueTiles = new haxe.ds.Vector(size);
+				var one = "1".code;
+				for(i in 0...size)
+					td.opaqueTiles[i] = data.opaqueTiles.charCodeAt(i)==one;
+
+				td.averageColorsCache = new Map();
+				var pos = 0;
+				var tid = 0;
+				while( pos<data.averageColors.length ) {
+					td.averageColorsCache.set( tid, dn.Color.hex3ToInt_ARGB( data.averageColors.substr(pos,4) ) );
+					tid++;
+					pos+=4;
+				}
+			}
 		}
-		else
-			td.opaqueTilesCache = null;
 
 		var arr = JsonTools.readArray( json.savedSelections );
 		td.savedSelections = json.savedSelections==null ? [] : arr.map( function(jsonSel:Dynamic) {
@@ -281,7 +303,11 @@ class TilesetDef {
 			return getTileId(oldCx, oldCy);
 	}
 
-	public function getTileId(tcx,tcy) {
+	public inline function getAverageTileColor(tid:Int) {
+		return averageColorsCache!=null && averageColorsCache.exists(tid) ? averageColorsCache.get(tid) : 0x888888;
+	}
+
+	public inline function getTileId(tcx,tcy) {
 		return tcx + tcy * cWid;
 	}
 
@@ -432,44 +458,81 @@ class TilesetDef {
 
 
 	public inline function isTileOpaque(tid:Int) {
-		return opaqueTilesCache!=null ? opaqueTilesCache.get(tid)==true : false;
+		return opaqueTiles!=null ? opaqueTiles[tid]==true : false;
+		// return opaqueTilesCache!=null ? opaqueTilesCache.get(tid)==true : false;
 	}
 
 
-	function parseTileOpacity(tid:Int) {
-		opaqueTilesCache.set(tid, true);
+	function _parseTilePixels(tid:Int) {
+		opaqueTiles[tid] = true;
+		averageColorsCache.set(tid, 0x0);
 
 		var tx = getTileSourceX(tid);
 		var ty = getTileSourceY(tid);
 
 		if( tx+tileGridSize<=pxWid && ty+tileGridSize<=pxHei ) {
+			var a = 0.;
+			var r = 0.;
+			var g = 0.;
+			var b = 0.;
+
+			var pixel = 0x0;
+			var nRGB = 0.;
+			var nA = 0.;
+			var curA = 0.;
 			for(py in ty...ty+tileGridSize)
 			for(px in tx...tx+tileGridSize) {
-				if( dn.Color.getAlpha( pixels.getPixel(px,py) ) < 255 ) {
-					opaqueTilesCache.set(tid, false);
-					return;
-				}
+				pixel = pixels.getPixel(px,py);
+
+				// Detect opacity
+				if( opaqueTiles[tid]!=false && dn.Color.getA(pixel) < 1 )
+					opaqueTiles[tid] = false;
+
+				// Average color
+				curA = dn.Color.getA(pixel);
+				a += curA;
+				r += dn.Color.getR(pixel) * dn.Color.getR(pixel) * curA;
+				g += dn.Color.getG(pixel) * dn.Color.getG(pixel) * curA;
+				b += dn.Color.getB(pixel) * dn.Color.getB(pixel) * curA;
+				nRGB += curA;
+				nA++;
 			}
+
+			// WARNING: actual color precision will later be reduced upon saving to 4-chars "argb"" String
+			averageColorsCache.set(tid, dn.Color.makeColor( Math.sqrt(r/nRGB), Math.sqrt(g/nRGB), Math.sqrt(b/nRGB), a/nA ));
 		}
 	}
 
-	public function buildOpaqueTileCache(onComplete:Void->Void) {
-		if( !isAtlasLoaded() )
-			return;
+	public inline function hasValidPixelData() {
+		return isAtlasLoaded()
+			&& opaqueTiles!=null && opaqueTiles.length==cWid*cHei
+			&& averageColorsCache!=null;
+	}
 
-		App.LOG.general("Init opaque cache for "+relPath);
-		opaqueTilesCache = new Map();
+	public function buildPixelData(onComplete:Void->Void, sync=false) {
+		if( !isAtlasLoaded() )
+			return false;
+
+		App.LOG.general("Init pixel data cache for "+relPath);
+		opaqueTiles = new haxe.ds.Vector( cWid*cHei );
+		averageColorsCache = new Map();
 		var ops = [];
 		for(tcy in 0...cHei)
 			ops.push({
 				label: "Row "+tcy,
 				cb : ()->{
 					for(tcx in 0...cWid)
-						parseTileOpacity( getTileId(tcx,tcy) );
+						_parseTilePixels( getTileId(tcx,tcy) );
 				}
 			});
 
-		new ui.modal.Progress('Detecting opaque tiles in "${getFileName(true)}"', 10, ops, onComplete);
+		if( !sync )
+			new ui.modal.Progress('Initializing pixel data cache for "${getFileName(true)}"', 3, ops, onComplete);
+		else
+			for(op in ops)
+				op.cb();
+
+		return true;
 	}
 
 
@@ -497,11 +560,26 @@ class TilesetDef {
 		ctx.imageSmoothingEnabled = false;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		var img = new js.html.Image(pixels.width, pixels.height);
-		img.src = 'data:image/png;base64,$base64';
-		img.onload = function() {
-			ctx.drawImage(img, 0, 0, pixels.width*scale, pixels.height*scale);
+		var clampedArray = new js.lib.Uint8ClampedArray( pixels.width * pixels.height * 4 );
+		var c = 0;
+		var idx = 0;
+		for(y in 0...pixels.height)
+		for(x in 0...pixels.width) {
+			c = pixels.getPixel(x,y);
+			idx = y*(pixels.width*4) + x*4;
+			clampedArray[idx] = dn.Color.getRi(c);
+			clampedArray[idx+1] = dn.Color.getGi(c);
+			clampedArray[idx+2] = dn.Color.getBi(c);
+			clampedArray[idx+3] = dn.Color.getAi(c);
 		}
+		var imgData = new js.html.ImageData(clampedArray, pixels.width);
+		ctx.putImageData(imgData,0,0);
+
+		// var img = new js.html.Image(pixels.width, pixels.height);
+		// img.src = 'data:image/png;base64,$base64';
+		// img.onload = function() {
+		// 	ctx.drawImage(img, 0, 0, pixels.width*scale, pixels.height*scale);
+		// }
 	}
 
 	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {

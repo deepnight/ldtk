@@ -93,7 +93,7 @@ class FieldInstance {
 	}
 
 	public function removeArrayValue(idx:Int) {
-		if( def.isArray && idx>=0 && idx<getArrayLength() )
+		if( idx>=0 && idx<getArrayLength() )
 			internalValues.splice(idx,1);
 	}
 
@@ -152,6 +152,16 @@ class FieldInstance {
 					setInternal( arrayIdx, V_Float(v) );
 				}
 
+			case F_Path:
+				raw = StringTools.trim(raw);
+				if( raw.length==0 )
+					setInternal(arrayIdx, null);
+				else {
+					raw = StringTools.replace(raw, "\\r", " ");
+					raw = StringTools.replace(raw, "\\n", " ");
+					setInternal(arrayIdx, V_String(raw) );
+				}
+
 			case F_String:
 				raw = StringTools.trim(raw);
 				if( raw.length==0 )
@@ -200,12 +210,16 @@ class FieldInstance {
 		}
 	}
 
-	public function hasAnyErrorInValues() {
+	public inline function hasAnyErrorInValues() {
+		return getFirstErrorInValues()!=null;
+	}
+
+	public function getFirstErrorInValues() : Null<String> {
 		if( def.isArray && def.arrayMinLength!=null && getArrayLength()<def.arrayMinLength )
-			return true;
+			return "ArraySize";
 
 		if( def.isArray && def.arrayMaxLength!=null && getArrayLength()>def.arrayMaxLength )
-			return true;
+			return "ArraySize";
 
 		switch def.type {
 			case F_Int:
@@ -217,15 +231,28 @@ class FieldInstance {
 			case F_Point:
 				for( idx in 0...getArrayLength() )
 					if( !def.canBeNull && getPointStr(idx)==null )
-						return true;
+						return def.identifier+"?";
 
 			case F_Enum(enumDefUid):
 				if( !def.canBeNull )
 					for( idx in 0...getArrayLength() )
 						if( getEnumValue(idx)==null )
-							return true;
+							return def.identifier+"?";
+
+			case F_Path:
+				for( idx in 0...getArrayLength() ) {
+					if( !def.canBeNull && valueIsNull(idx) )
+						return def.identifier+"?";
+
+					if( !valueIsNull(idx) ) {
+						// HACK not super clean to access Editor here
+						var absPath = page.Editor.ME.makeAbsoluteFilePath( getFilePath(idx) );
+						if( !misc.JsTools.fileExists(absPath) )
+							return "FileNotFound";
+					}
+				}
 		}
-		return false;
+		return null;
 	}
 
 	public function valueIsNull(arrayIdx:Int) {
@@ -234,6 +261,7 @@ class FieldInstance {
 			case F_Color: getColorAsInt(arrayIdx);
 			case F_Float: getFloat(arrayIdx);
 			case F_String, F_Text: getString(arrayIdx);
+			case F_Path: getFilePath(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
@@ -274,6 +302,7 @@ class FieldInstance {
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Float: getFloat(arrayIdx);
 			case F_String, F_Text: getString(arrayIdx);
+			case F_Path: getFilePath(arrayIdx);
 			case F_Bool: getBool(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
@@ -284,7 +313,7 @@ class FieldInstance {
 			case F_Int, F_Float, F_Bool, F_Color: return Std.string(v);
 			case F_Enum(name): return '$v';
 			case F_Point: return '$v';
-			case F_String, F_Text: return '"$v"';
+			case F_String, F_Text, F_Path: return '"$v"';
 		}
 	}
 
@@ -294,6 +323,7 @@ class FieldInstance {
 			case F_Float: JsonTools.writeFloat( getFloat(arrayIdx) );
 			case F_String: escapeStringForJson( getString(arrayIdx) );
 			case F_Text: escapeStringForJson( getString(arrayIdx) );
+			case F_Path: escapeStringForJson( getFilePath(arrayIdx) );
 			case F_Bool: getBool(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Point: getPointGrid(arrayIdx);
@@ -352,11 +382,20 @@ class FieldInstance {
 		return out;
 	}
 
+	public function getFilePath(arrayIdx:Int) : String {
+		def.require(F_Path);
+		var out = isUsingDefault(arrayIdx) ? null : switch internalValues[arrayIdx] {
+			case V_String(v): v;
+			case _: throw "unexpected";
+		}
+		return out;
+	}
+
 	public static inline function escapeStringForJson(s:String) {
 		if( s==null )
 			return null;
-		s = StringTools.replace(s, "\n", "\\n");
 		s = StringTools.replace(s, "\\", "\\\\");
+		s = StringTools.replace(s, "\n", "\\n");
 		s = StringTools.replace(s, '"', '\\"');
 		s = StringTools.replace(s, "'", "\'");
 		return s;
@@ -397,13 +436,14 @@ class FieldInstance {
 			case F_Text:
 			case F_Bool:
 			case F_Color:
+			case F_Path:
 
 			case F_Point:
 				var i = 0;
 				while( i<getArrayLength() ) {
 					var pt = getPointGrid(i);
 					if( pt!=null && ( pt.cx<0 || pt.cx>=li.cWid || pt.cy<0 || pt.cy>=li.cHei ) ) {
-						App.LOG.add("tidy", 'Removed out-of-bounds point field $pt in $this');
+						App.LOG.add("tidy", 'Removed pt ${pt.cx},${pt.cy} in $this (out of bounds)');
 						removeArrayValue(i);
 					}
 					else

@@ -34,7 +34,7 @@ class App extends dn.Process {
 		// App arguments
 		var electronArgs : Array<String> = try electron.renderer.IpcRenderer.sendSync("getArgs") catch(_) [];
 		electronArgs.shift();
-		args = new dn.Args( electronArgs.join(" "), true );
+		args = new dn.Args( electronArgs.join(" ") );
 		LOG.add("BOOT", args.toString());
 
 		// Init
@@ -75,33 +75,9 @@ class App extends dn.Process {
 		APP_RESOURCE_DIR = fp.directoryWithSlash;
 
 		// Restore settings
-		LOG.fileOp("Loading settings...");
-		dn.LocalStorage.BASE_PATH = JsTools.getExeDir();
-		if( js.Browser.window.localStorage.getItem("session")!=null ) {
-			// Migrate old sessionData
-			LOG.fileOp("Migrating old session to settings files...");
-			var raw = js.Browser.window.localStorage.getItem("session");
-			var old : AppSettings =
-				try haxe.Unserializer.run(raw)
-				catch( err:Dynamic ) null;
-			if( old!=null )
-				try {
-					if( old.recentProjects!=null )
-						for(i in 0...old.recentProjects.length)
-							old.recentProjects[i] = StringTools.replace(old.recentProjects[i], "\\", "/");
-					dn.LocalStorage.writeObject("settings", true, old);
-				} catch(e) {}
-
-			js.Browser.window.localStorage.removeItem("session");
-		}
-		settings = dn.LocalStorage.readObject("settings", true, {
-			recentProjects: [],
-			compactMode: false,
-			grid: true,
-			singleLayerMode: false,
-			emptySpaceSelection: false,
-			tileStacking: false,
-		});
+		dn.LocalStorage.BASE_PATH = JsTools.getSettingsDir();
+		dn.LocalStorage.SUB_FOLDER_NAME = null;
+		loadSettings();
 		saveSettings();
 
 		// Auto updater
@@ -151,9 +127,11 @@ class App extends dn.Process {
 		dn.electron.ElectronUpdater.checkNow();
 
 		// Start
-		var path = getArgPath();
-		if( path==null || !loadProject(path) )
-			loadPage( ()->new page.Home() );
+		delayer.addS( ()->{
+			var path = getArgPath();
+			if( path==null || !loadProject(path) )
+				loadPage( ()->new page.Home() );
+		}, 0.2);
 
 		IpcRenderer.invoke("appReady");
 	}
@@ -162,13 +140,9 @@ class App extends dn.Process {
 		if( args.getLastSoloValue()==null )
 			return null;
 
-		for( v in args.getAllSoloValues() ) {
-			if( v.indexOf(".json")>=0 || v.indexOf("."+Const.FILE_EXTENSION)>=0 ) {
-				var fp = dn.FilePath.fromFile( args.getLastSoloValue() );
-				if( fp.fileWithExt!=null )
-					return fp.full;
-			}
-		}
+		var fp = dn.FilePath.fromFile( args.getAllSoloValues().join(" ") );
+		if( fp.fileWithExt!=null )
+			return fp.full;
 
 		return null;
 	}
@@ -250,6 +224,15 @@ class App extends dn.Process {
 	}
 
 
+	public function addMask() {
+		jBody.find("#appMask").remove();
+		jBody.append('<div id="appMask"/>');
+	}
+
+	public function fadeOutMask() {
+		jBody.find("#appMask").fadeOut(200);
+	}
+
 	public function miniNotif(html:String, fadeDelayS=0.5, persist=false) {
 		var e = jBody.find("#miniNotif");
 		delayer.cancelById("miniNotifFadeOut");
@@ -297,6 +280,35 @@ class App extends dn.Process {
 		saveSettings();
 	}
 
+	public function loadSettings() {
+		LOG.fileOp("Loading settings from "+JsTools.getSettingsDir()+"...");
+		if( js.Browser.window.localStorage.getItem("session")!=null ) {
+			// Migrate old sessionData
+			LOG.fileOp("Migrating old session to settings files...");
+			var raw = js.Browser.window.localStorage.getItem("session");
+			var old : AppSettings =
+				try haxe.Unserializer.run(raw)
+				catch( err:Dynamic ) null;
+			if( old!=null )
+				try {
+					if( old.recentProjects!=null )
+						for(i in 0...old.recentProjects.length)
+							old.recentProjects[i] = StringTools.replace(old.recentProjects[i], "\\", "/");
+					dn.LocalStorage.writeObject("settings", true, old);
+				} catch(e:Dynamic) {}
+
+			js.Browser.window.localStorage.removeItem("session");
+		}
+		settings = dn.LocalStorage.readObject("settings", true, {
+			recentProjects: [],
+			compactMode: false,
+			grid: true,
+			singleLayerMode: false,
+			emptySpaceSelection: false,
+			tileStacking: false,
+		});
+	}
+
 	public function saveSettings() {
 		dn.LocalStorage.writeObject("settings", true, settings);
 	}
@@ -319,7 +331,22 @@ class App extends dn.Process {
 		return false;
 	}
 
+	public inline function isInAppDir(path:String, isFile:Bool) {
+		if( path==null )
+			return false;
+		else {
+			var fp = isFile ? dn.FilePath.fromFile(path) : dn.FilePath.fromDir(path);
+			fp.useSlashes();
+			return fp.directory.indexOf( JsTools.getExeDir() )==0;
+		}
+	}
+
 	public function registerRecentProject(path:String) {
+		#if !debug
+		if( isInAppDir(path,true) )
+			return false;
+		#end
+
 		path = StringTools.replace(path, "\\", "/");
 		settings.recentProjects.remove(path);
 		settings.recentProjects.push(path);
@@ -380,23 +407,8 @@ class App extends dn.Process {
 
 		// Open it
 		loadPage( ()->new page.Editor(p, filePath) );
-		N.success("Loaded project: "+dn.FilePath.extractFileWithExt(filePath));
 		return true;
 	}
-
-	// public function openEditor(project:data.Project, path:String) {
-	// 	LOG.general("Opening Editor");
-	// 	clearCurPage();
-	// 	curPageProcess = new Editor(project, path);
-	// 	curPageProcess.onAppResize();
-	// }
-
-	// public function openHome() {
-	// 	LOG.general("Opening Home");
-	// 	clearCurPage();
-	// 	curPageProcess = new page.Home();
-	// 	curPageProcess.onAppResize();
-	// }
 
 	public function debug(msg:Dynamic, append=false) {
 		var wrapper = new J("#debug");

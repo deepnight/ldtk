@@ -6,7 +6,8 @@ import sortablejs.Sortable;
 class JsTools {
 	public static function makeSortable(jSortable:js.jquery.JQuery, ?jScrollRoot:js.jquery.JQuery, ?group:String, anim=true, onSort:(event:SortableDragEvent)->Void) {
 		if( jSortable.length!=1 )
-			N.error("Used sortable on a set of "+jSortable.length+" element(s)");
+			throw "Used sortable on a set of "+jSortable.length+" element(s)";
+
 		jSortable.addClass("sortable");
 
 		// Base settings
@@ -56,12 +57,12 @@ class JsTools {
 	}
 
 
-	public static function prepareProjectFile(p:data.Project) : { bytes:haxe.io.Bytes, json:ldtk.Json.ProjectJson } {
+	public static function prepareProjectFile(p:data.Project) : { str:String, json:ldtk.Json.ProjectJson } {
 		var json = p.toJson();
 		var jsonStr = dn.JsonPretty.stringify(p.minifyJson, json, Const.JSON_HEADER);
 
 		return {
-			bytes: haxe.io.Bytes.ofString( jsonStr ),
+			str: jsonStr,
 			json: json,
 		}
 	}
@@ -352,9 +353,25 @@ class JsTools {
 			if( displayUrl.length>cut )
 				displayUrl = displayUrl.substr(0,cut)+"...";
 			ui.Tip.attach(link, displayUrl, "link", true);
-			link.click( function(ev) {
+			link.click( function(ev:js.jquery.Event) {
 				ev.preventDefault();
 				electron.Shell.openExternal(url);
+			});
+			link.on("auxclick", (ev:js.jquery.Event)->{
+				switch ev.button {
+					case 1:
+						ev.preventDefault();
+						electron.Shell.openExternal(url);
+
+					case 2:
+						var m = new ui.modal.ContextMenu(ev);
+						m.add(L.t._("Copy URL"), ()->{
+							electron.Clipboard.write({ text:url });
+							N.msg("Copied.");
+						});
+
+					case _:
+				}
 			});
 		});
 
@@ -478,6 +495,11 @@ class JsTools {
 			return js.node.Fs.readFileSync(path).toString();
 	}
 
+	public static function writeFileString(path:String, str:String) {
+		js.node.Require.require("fs");
+		js.node.Fs.writeFileSync( path, str );
+	}
+
 	public static function readFileBytes(path:String) : Null<haxe.io.Bytes> {
 		if( !fileExists(path) )
 			return null;
@@ -511,11 +533,25 @@ class JsTools {
 	}
 
 	public static function getExeDir() {
+		#if !debug
 		var path = electron.renderer.IpcRenderer.sendSync("getExeDir");
-		#if debug
-		path = getAppResourceDir()+"/app";
+		#else
+		var path = getAppResourceDir()+"/foo.exe";
 		#end
 		return dn.FilePath.fromFile( path ).useSlashes().directory;
+	}
+
+	public static function getSettingsDir() {
+		#if !debug
+		var path = electron.renderer.IpcRenderer.sendSync("getUserDataDir") + "/settings";
+		#else
+		var path = getAppResourceDir()+"/settings";
+		#end
+		return dn.FilePath.fromDir( path ).useSlashes().directory;
+	}
+
+	public static function getSamplesDir() {
+		return dn.FilePath.fromDir( getExeDir()+"/samples" ).directory;
 	}
 
 	public static function getAppResourceDir() {
@@ -537,7 +573,6 @@ class JsTools {
 		if( !fileExists(fp.full) )
 			fp.fileWithExt = null;
 
-		trace(fp.debug());
 		if( fp.fileWithExt==null )
 			electron.Shell.openPath(fp.full);
 		else
@@ -620,6 +655,7 @@ class JsTools {
 						if( idx>=tileIds.length )
 							idx = 0;
 
+						clearCanvas(jTileCanvas);
 						td.drawTileToCanvas(jTileCanvas, tileIds[idx]);
 					});
 				}

@@ -13,6 +13,12 @@ class Tip extends dn.Process {
 			jTip.addClass(className);
 
 		var jContent = jTip.find(".content");
+
+		// Multilines
+		if( str.indexOf("\\n")>=0 )
+			str = "<p>" + str.split("\\n").join("</p><p>") + "</p>";
+
+		// Bold
 		var parts = str.split("**");
 		if( parts.length>1 && parts.length%2!=0 ) {
 			var jText = jContent.find(".text");
@@ -23,7 +29,7 @@ class Tip extends dn.Process {
 					jText.append( parts[i] );
 		}
 		else
-			jContent.find(".text").text(str);
+			jContent.find(".text").html(str);
 
 
 		if( keys!=null && keys.length>0 ) {
@@ -62,9 +68,8 @@ class Tip extends dn.Process {
 		target
 			.off(".tip")
 			.on( "mouseenter.tip", function(ev) {
-				if( cur!=null )
-					return;
-				cur = new Tip(target, str, keys, className, forceBelow);
+				if( cur==null && !target.hasClass("disableTip") )
+					cur = new Tip(target, str, keys, className, forceBelow);
 			})
 			.on( "mouseleave.tip", function(ev) {
 				if( cur!=null ) {

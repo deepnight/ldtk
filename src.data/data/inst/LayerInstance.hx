@@ -47,6 +47,10 @@ class LayerInstance {
 
 
 	public function toJson() : ldtk.Json.LayerInstanceJson {
+		var td : Null<data.def.TilesetDef> = def.tilesetDefUid!=null ? _project.defs.getTilesetDef(def.tilesetDefUid)
+			: def.autoTilesetDefUid!=null ? _project.defs.getTilesetDef(def.autoTilesetDefUid)
+			: null;
+
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
@@ -57,6 +61,8 @@ class LayerInstance {
 			__opacity: def.displayOpacity,
 			__pxTotalOffsetX: pxOffsetX + def.pxOffsetX,
 			__pxTotalOffsetY: pxOffsetY + def.pxOffsetY,
+			__tilesetDefUid: td!=null ? td.uid : null,
+			__tilesetRelPath: td!=null ? td.relPath : null,
 
 			levelId: levelId,
 			layerDefUid: layerDefUid,
@@ -86,7 +92,8 @@ class LayerInstance {
 									px: [ tileInfos.x, tileInfos.y ],
 									src: [ tileInfos.srcX, tileInfos.srcY ],
 									f: tileInfos.flips,
-									d: [r.uid,allTiles.key,tileInfos.tid],
+									t: tileInfos.tid,
+									d: [r.uid,allTiles.key],
 								});
 							}
 					});
@@ -111,7 +118,8 @@ class LayerInstance {
 								td==null ? -1 : td.getTileSourceY(tileInf.tileId),
 							],
 							f: tileInf.flips,
-							d: [ e.key, tileInf.tileId ],
+							t: tileInf.tileId,
+							d: [ e.key ],
 						});
 					}
 				arr;
@@ -181,15 +189,18 @@ class LayerInstance {
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );
 
 		for( gridTilesJson in json.gridTiles ) {
-			if( (cast gridTilesJson).coordId!=null ) // pre-0.4.0 format
+			if( dn.Version.lower(p.jsonVersion, "0.4") )
 				gridTilesJson.d = [ (cast gridTilesJson).coordId, (cast gridTilesJson).tileId ];
+
+			if( dn.Version.lower(p.jsonVersion, "0.6") )
+				gridTilesJson.t = gridTilesJson.d[1];
 
 			var coordId = gridTilesJson.d[0];
 			if( !li.gridTiles.exists(coordId) )
 				li.gridTiles.set(coordId, []);
 
 			li.gridTiles.get(coordId).push({
-				tileId: gridTilesJson.d[1],
+				tileId: gridTilesJson.t,
 				flips: gridTilesJson.f,
 			});
 		}
@@ -205,13 +216,17 @@ class LayerInstance {
 				for(at in jsonAutoLayerTiles) {
 					var ruleId = at.d[0];
 					var coordId = at.d[1];
+
+					if( dn.Version.lower(p.jsonVersion, "0.6") )
+						at.t = at.d[2];
+
 					if( !li.autoTilesCache.exists(ruleId) )
 						li.autoTilesCache.set(ruleId, new Map());
 
 					if( !li.autoTilesCache.get(ruleId).exists(coordId) )
 						li.autoTilesCache.get(ruleId).set(coordId, []);
 
-					if( dn.Version.lower(p.jsonVersion, "0.5.0") && ( li.pxOffsetX!=0 || li.pxOffsetY!=0 ) ) {
+					if( dn.Version.lower(p.jsonVersion, "0.5") && ( li.pxOffsetX!=0 || li.pxOffsetY!=0 ) ) {
 						// Fix old coords that included offsets
 						at.px[0]-=li.pxOffsetX;
 						at.px[1]-=li.pxOffsetY;
@@ -223,7 +238,7 @@ class LayerInstance {
 						srcX: at.src[0],
 						srcY: at.src[1],
 						flips: at.f,
-						tid: at.d[2],
+						tid: at.t,
 					});
 				}
 			}
@@ -622,7 +637,7 @@ class LayerInstance {
 	}
 
 
-	function applyBreakOnMatches() {
+	public function applyBreakOnMatches() {
 		var coordLocks = new Map();
 
 		var td = _project.defs.getTilesetDef( def.autoTilesetDefUid );
@@ -658,6 +673,11 @@ class LayerInstance {
 		if( !def.isAutoLayer() || !def.autoLayerRulesCanBeUsed() )
 			return;
 
+		if( autoTilesCache==null ) {
+			applyAllAutoLayerRules();
+			return;
+		}
+
 		// Adjust bounds to also redraw nearby cells
 		var left = dn.M.imax( 0, cx - Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
 		var top = dn.M.imax( 0, cy - Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
@@ -689,7 +709,7 @@ class LayerInstance {
 	}
 
 	/** Apply the rule to all layer cells **/
-	public function applyAutoLayerRuleToAllLayer(r:data.def.AutoLayerRuleDef) {
+	public function applyAutoLayerRuleToAllLayer(r:data.def.AutoLayerRuleDef, applyBreakOnMatch:Bool) {
 		if( !def.isAutoLayer() )
 			return;
 
@@ -707,7 +727,8 @@ class LayerInstance {
 		for(cy in 0...cHei)
 			runAutoLayerRuleAt(source, r, cx,cy);
 
-		applyBreakOnMatches();
+		if( applyBreakOnMatch )
+			applyBreakOnMatches();
 	}
 
 }

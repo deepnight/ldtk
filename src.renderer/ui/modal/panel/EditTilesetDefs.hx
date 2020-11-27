@@ -47,7 +47,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
-			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged, LevelSelected:
+			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged(_), LevelSelected(_):
 				close();
 
 			case LayerInstanceRestoredFromHistory(li):
@@ -60,9 +60,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 				updateForm();
 				updateTilesetPreview();
 				if( td==curTd )
-					rebuildOpaqueCache();
+					rebuildPixelData();
 
-			case TilesetDefOpaqueCacheRebuilt(td):
+			case TilesetDefPixelDataCacheRebuilt(td):
 				if( td==curTd )
 					updateTilesetPreview();
 
@@ -122,8 +122,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 	}
 
 
-	function rebuildOpaqueCache() {
-		curTd.buildOpaqueTileCache( Editor.ME.ge.emit.bind(TilesetDefOpaqueCacheRebuilt(curTd)) );
+	inline function rebuildPixelData() {
+		curTd.buildPixelData( Editor.ME.ge.emit.bind(TilesetDefPixelDataCacheRebuilt(curTd)) );
 	}
 
 
