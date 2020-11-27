@@ -1,48 +1,49 @@
-# This is a basic workflow to help you get started with Actions
-
 name: package-ubuntu
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+	push:
+		branches:
+			- master
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+	pull_request:
+		branches:
+			- master
+
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        haxe: [4.1.2]
-      fail-fast: true
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      - uses: krdlab/setup-haxe@v1
-        with:
-          haxe-version: 4.1.2
-      - run: |
-          haxe -version
-          haxelib install castle
-          haxelib git heaps https://github.com/HeapsIO/heaps.git
-          haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
-          haxelib git electron https://github.com/tong/hxelectron.git
-          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
-          haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '14'
-      - run: cd app && npm install
-      - run: cd app && npm run compile
-      - run: cd app && npm run pack-linux
-      - uses: actions/upload-artifact@v2
-        with:
-          name: ubuntu-distribution
-          path: app/redist/LDtk**installer.AppImage
+	build:
+
+		strategy:
+			matrix:
+				os: [ubuntu-latest]
+				haxe: [4.1.2]
+			fail-fast: true
+		runs-on: ubuntu-latest
+
+		steps:
+			# Checkout, install haxe and libs
+			- uses: actions/checkout@v2
+			- uses: krdlab/setup-haxe@v1
+				with:
+					haxe-version: 4.1.4
+			- run: haxe -version
+			- run: haxelib git castle https://github.com/ncannasse/castle
+			- run: haxelib git heaps https://github.com/HeapsIO/heaps.git
+			- run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
+			- run: haxelib git electron https://github.com/tong/hxelectron.git
+			- run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
+			- run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+			- run: haxelib list
+
+			# Node/NPM commands
+			- uses: actions/setup-node@v1
+				with:
+					node-version: '14'
+			- run: cd app && npm install
+			- run: cd app && npm run compile
+			- run: cd app && npm run pack-linux
+
+			# Upload
+			- uses: actions/upload-artifact@v2
+				with:
+					name: ubuntu-distribution
+					path: app/redist/LDtk**installer.AppImage
