@@ -50,7 +50,7 @@ class WorldPanel extends ui.modal.Panel {
 			var copy = project.duplicateLevel(level);
 			editor.selectLevel(copy);
 			switch project.worldLayout {
-				case Free, WorldGrid:
+				case Free, GridVania:
 					copy.worldX += project.defaultGridSize*4;
 					copy.worldY += project.defaultGridSize*4;
 
@@ -133,7 +133,7 @@ class WorldPanel extends ui.modal.Panel {
 			(l)->project.worldLayout = l,
 			(l)->switch l {
 				case Free: L.t._("2D free map - Freely positioned in space");
-				case WorldGrid: L.t._("GridVania - Levels are positioned inside a large world-scale grid");
+				case GridVania: L.t._("GridVania - Levels are positioned inside a large world-scale grid");
 				case LinearHorizontal: L.t._("Horizontal - One level after the other");
 				case LinearVertical: L.t._("Vertical - One level after the other");
 			}

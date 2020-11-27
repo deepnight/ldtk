@@ -86,7 +86,7 @@ class WorldTool extends dn.Process {
 					var copy = project.duplicateLevel(l);
 					editor.selectLevel(copy);
 					switch project.worldLayout {
-						case Free, WorldGrid:
+						case Free, GridVania:
 							copy.worldX += project.defaultGridSize*4;
 							copy.worldY += project.defaultGridSize*4;
 
@@ -142,7 +142,7 @@ class WorldTool extends dn.Process {
 				var initialY = clickedLevel.worldY;
 
 				switch project.worldLayout {
-					case Free, WorldGrid:
+					case Free, GridVania:
 					case LinearHorizontal:
 						var i = getLinearInsertPoint(m);
 						if( i!=null ) {
@@ -188,7 +188,7 @@ class WorldTool extends dn.Process {
 		var b = getLevelInsertBounds(m);
 		if( b!=null ) {
 			var l = switch project.worldLayout {
-				case Free, WorldGrid:
+				case Free, GridVania:
 					var l = project.createLevel();
 					l.worldX = M.round(b.x);
 					l.worldY = M.round(b.y);
@@ -269,7 +269,7 @@ class WorldTool extends dn.Process {
 
 		// Find a spot in world space
 		switch project.worldLayout {
-			case Free, WorldGrid:
+			case Free, GridVania:
 				// Deinterlace with existing levels
 				for(l in project.levels)
 					if( boundsOverlaps( l, b.x, b.y, b.wid, b.hei ) ) {
@@ -298,7 +298,7 @@ class WorldTool extends dn.Process {
 						return null;
 
 				// Grid snapping
-				if( project.worldLayout==WorldGrid ) {
+				if( project.worldLayout==GridVania ) {
 					b.x = dn.M.round( b.x/project.worldGridWidth ) * project.worldGridWidth;
 					b.y = dn.M.round( b.y/project.worldGridHeight ) * project.worldGridHeight;
 				}
@@ -400,13 +400,13 @@ class WorldTool extends dn.Process {
 			// Drag
 			var allowX = switch project.worldLayout {
 				case Free: true;
-				case WorldGrid: true;
+				case GridVania: true;
 				case LinearHorizontal: true;
 				case LinearVertical: false;
 			}
 			var allowY = switch project.worldLayout {
 				case Free: true;
-				case WorldGrid: true;
+				case GridVania: true;
 				case LinearHorizontal: false;
 				case LinearVertical: true;
 			}
@@ -458,7 +458,7 @@ class WorldTool extends dn.Process {
 						snapLevelX(clickedLevel, clickedLevel.pxWid, l.worldX+l.pxWid);
 					}
 
-				case WorldGrid:
+				case GridVania:
 					var omx = M.floor( origin.worldX / project.worldGridWidth ) * project.worldGridWidth;
 					var mx = M.floor( m.worldX / project.worldGridWidth ) * project.worldGridWidth;
 					clickedLevel.worldX = levelOriginX + (mx-omx);
@@ -498,7 +498,7 @@ class WorldTool extends dn.Process {
 		// Init possible insert points in linear modes
 		var pts =
 			switch project.worldLayout {
-				case Free, WorldGrid: null;
+				case Free, GridVania: null;
 
 				case LinearHorizontal:
 					var idx = 0;
@@ -523,7 +523,7 @@ class WorldTool extends dn.Process {
 		}
 
 		switch project.worldLayout {
-			case Free, WorldGrid:
+			case Free, GridVania:
 				// N/A
 
 			case LinearHorizontal:

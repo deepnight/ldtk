@@ -57,7 +57,7 @@ class Level {
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),
 			__neighbours: {
 				switch _project.worldLayout {
-					case Free, WorldGrid:
+					case Free, GridVania:
 						var nears = _project.levels.filter( (ol)->
 							ol!=this && getBoundsDist(ol)==0
 							&& !( ( ol.worldX>=worldX+pxWid || ol.worldX+ol.pxWid<=worldX )

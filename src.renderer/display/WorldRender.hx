@@ -205,6 +205,11 @@ class WorldRender extends dn.Process {
 				grids.lineTo(camera.width, i*g+off);
 			}
 		}
+
+		// World grid
+		if( project.worldLayout==GridVania ) {
+			// TODO
+		}
 	}
 
 
@@ -241,7 +246,7 @@ class WorldRender extends dn.Process {
 		// Axes visibility
 		axes.visible = editor.worldMode && switch editor.project.worldLayout {
 			case Free: true;
-			case WorldGrid: true;
+			case GridVania: true;
 			case LinearHorizontal: false;
 			case LinearVertical: false;
 		};
