@@ -20,16 +20,23 @@ class Const {
 	#if !macro
 	public static var APP_NAME = "LDtk";
 	public static var FILE_EXTENSION = "ldtk";
-	public static var DEEPNIGHT_URL = "https://deepnight.net";
-	public static var WEBSITE_URL = DEEPNIGHT_URL+"/tools/ldtk-2d-level-editor/";
-	public static var DOCUMENTATION_URL = DEEPNIGHT_URL+"/docs/ldtk/";
-	public static var DISCORD_URL = DEEPNIGHT_URL+"/go/ldtk-discord";
+	public static var POINT_SEPARATOR = ",";
+	public static var CRASH_NAME_SUFFIX = ".crash";
+
+	// URLs: Deepnight games
+	public static var DEEPNIGHT_DOMAIN = "https://deepnight.net";
+
+	// URLs: LDtk home
+	public static var LDTK_DOMAIN = DEEPNIGHT_DOMAIN;
+	public static var HOME_URL = DEEPNIGHT_DOMAIN+"/tools/ldtk-2d-level-editor/";
+	public static var DOCUMENTATION_URL = DEEPNIGHT_DOMAIN+"/docs/ldtk/";
+	public static var DISCORD_URL = DEEPNIGHT_DOMAIN+"/go/ldtk-discord";
+
+	// URLs: misc
 	public static var ITCH_IO_BUY_URL = "https://deepnight.itch.io/ldtk/purchase";
 	public static var ISSUES_URL = "https://github.com/deepnight/ldtk/issues";
 	public static var GITHUB_SPONSOR_URL = "https://github.com/sponsors/deepnight";
 	public static var JSON_DOC_URL = "https://github.com/deepnight/ldtk/blob/master/JSON_DOC.md";
-	public static var POINT_SEPARATOR = ",";
-	public static var CRASH_NAME_SUFFIX = ".crash";
 
 
 	public static var JSON_HEADER = {
@@ -37,7 +44,7 @@ class Const {
 		app: Const.APP_NAME,
 		appAuthor: "Sebastien Benard",
 		appVersion: getAppVersion(),
-		url: WEBSITE_URL,
+		url: HOME_URL,
 	}
 
 	public static var APP_CHANGELOG_MD = getAppChangelogMarkdown();

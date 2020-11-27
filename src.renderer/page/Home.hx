@@ -12,11 +12,11 @@ class Home extends Page {
 		loadPageTemplate("home", {
 			app: Const.APP_NAME,
 			appVer: Const.getAppVersion(),
-			deepnightUrl: Const.DEEPNIGHT_URL,
+			deepnightUrl: Const.DEEPNIGHT_DOMAIN,
 			discordUrl: Const.DISCORD_URL,
 			jsonDocUrl: Const.JSON_DOC_URL,
 			docUrl: Const.DOCUMENTATION_URL,
-			websiteUrl : Const.WEBSITE_URL,
+			websiteUrl : Const.HOME_URL,
 			issueUrl : Const.ISSUES_URL,
 			appChangelog: StringTools.htmlEscape( Const.APP_CHANGELOG_MD),
 			jsonChangelog: StringTools.htmlEscape( Const.JSON_CHANGELOG_MD ),
