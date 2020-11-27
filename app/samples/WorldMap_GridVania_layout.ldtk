@@ -11592,8 +11592,8 @@
 			"worldY": 512,
 			"pxWid": 512,
 			"pxHei": 768,
-			"__bgColor": "#37494E",
-			"bgColor": null,
+			"__bgColor": "#8D3349",
+			"bgColor": "#8D3349",
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -16174,8 +16174,8 @@
 			"worldY": 256,
 			"pxWid": 256,
 			"pxHei": 256,
-			"__bgColor": "#37494E",
-			"bgColor": null,
+			"__bgColor": "#2C2598",
+			"bgColor": "#2C2598",
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -23503,8 +23503,8 @@
 			"worldY": 256,
 			"pxWid": 256,
 			"pxHei": 256,
-			"__bgColor": "#37494E",
-			"bgColor": null,
+			"__bgColor": "#22806A",
+			"bgColor": "#22806A",
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
