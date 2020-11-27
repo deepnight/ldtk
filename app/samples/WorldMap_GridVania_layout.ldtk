@@ -15,7 +15,7 @@
 	"nextUid": 82,
 	"minifyJson": false,
 	"exportTiled": false,
-	"worldLayout": "WorldGrid",
+	"worldLayout": "GridVania",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
 	"defs": {
