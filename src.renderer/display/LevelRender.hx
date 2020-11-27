@@ -147,7 +147,7 @@ class LevelRender extends dn.Process {
 
 			case LayerRuleChanged(r), LayerRuleAdded(r):
 				var li = editor.curLevel.getLayerInstanceFromRule(r);
-				li.applyAutoLayerRuleToAllLayer(r);
+				li.applyAutoLayerRuleToAllLayer(r, true);
 				invalidateLayer(li);
 
 			case LayerRuleSeedChanged:

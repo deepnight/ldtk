@@ -637,7 +637,7 @@ class LayerInstance {
 	}
 
 
-	function applyBreakOnMatches() {
+	public function applyBreakOnMatches() {
 		var coordLocks = new Map();
 
 		var td = _project.defs.getTilesetDef( def.autoTilesetDefUid );
@@ -709,7 +709,7 @@ class LayerInstance {
 	}
 
 	/** Apply the rule to all layer cells **/
-	public function applyAutoLayerRuleToAllLayer(r:data.def.AutoLayerRuleDef) {
+	public function applyAutoLayerRuleToAllLayer(r:data.def.AutoLayerRuleDef, applyBreakOnMatch:Bool) {
 		if( !def.isAutoLayer() )
 			return;
 
@@ -727,7 +727,8 @@ class LayerInstance {
 		for(cy in 0...cHei)
 			runAutoLayerRuleAt(source, r, cx,cy);
 
-		applyBreakOnMatches();
+		if( applyBreakOnMatch )
+			applyBreakOnMatches();
 	}
 
 }

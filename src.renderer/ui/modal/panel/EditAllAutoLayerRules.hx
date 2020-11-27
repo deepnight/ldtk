@@ -42,7 +42,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				updatePanel();
 
 			case BeforeProjectSaving:
-				updateInvalidatedRulesInAllLevels();
+				applyInvalidatedRulesInAllLevels();
 
 			case LayerRuleChanged(r), LayerRuleRemoved(r), LayerRuleAdded(r):
 				invalidateRule(r);
@@ -82,7 +82,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 	override function onClose() {
 		super.onClose();
-		updateInvalidatedRulesInAllLevels();
+		applyInvalidatedRulesInAllLevels();
 		editor.levelRender.clearTemp();
 	}
 
@@ -103,8 +103,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function updateInvalidatedRulesInAllLevels() {
+	function applyInvalidatedRulesInAllLevels() {
 		var ops = [];
+		var affectedLayers : Map<data.inst.LayerInstance,data.Level> = new Map();
 
 		// Apply edited rules to all other levels
 		for(ruleUid in invalidatedRules)
@@ -119,27 +120,37 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
 					cb: li.applyAllAutoLayerRules
 				});
+				affectedLayers.set(li,l);
 			}
 			else {
 				var r = li.def.getRule(ruleUid);
 				if( r!=null && !r.isEmpty() ) { // Could be null for garbaged empty rules
-					// Run invalidated rules
 					if( r!=null ) {
+						// Apply rule
 						ops.push({
-							label: 'Updating rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
-							cb: li.applyAutoLayerRuleToAllLayer.bind(r),
+							label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
+							cb: li.applyAutoLayerRuleToAllLayer.bind(r, false),
 						});
+						affectedLayers.set(li,l);
 					}
 					else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
-						// WARNING: re-apply all rules here if breakOnMatch exists
+						// Removed rule
 						ops.push({
-							label: 'Removing rule #$ruleUid from ${l.identifier}',
+							label: 'Removing rule tiles #$ruleUid from ${l.identifier}',
 							cb: li.autoTilesCache.remove.bind(ruleUid),
 						});
+						affectedLayers.set(li,l);
 					}
 				}
 			}
 		}
+
+		// Apply "break on match" cascading effect in changed layers
+		for(li in affectedLayers.keys())
+			ops.push({
+				label: 'Applying break on matches on ${affectedLayers.get(li).identifier}.${li.def.identifier}',
+				cb: li.applyBreakOnMatches.bind(),
+			});
 
 		if( ops.length>0 )
 			new Progress(L.t._("Updating auto layers..."), 5, ops, editor.levelRender.renderAll);
@@ -392,11 +403,18 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					new ui.modal.dialog.RuleEditor(ld, r);
 				});
 
-				// Random
+				// Random chance
+				var old = r.chance;
 				var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
 				i.linkEvent( LayerRuleChanged(r) );
 				i.displayAsPct = true;
 				i.setBounds(0,1);
+				i.onValueChange = (v)->{
+					if( v/100<old ) {
+						N.debug("below");
+						invalidateRuleAndOnesBelow(r);
+					}
+				}
 				if( r.chance>=1 )
 					i.jInput.addClass("max");
 				else if( r.chance<=0 )
@@ -460,14 +478,19 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				jFlag.mousedown( function(ev:js.jquery.Event) {
 					ev.preventDefault();
 					if( ev.button==2 ) {
-						new ui.modal.dialog.RulePerlinSettings(jFlag, r);
+						// Open perlin settings
+						var w = new ui.modal.dialog.RulePerlinSettings(jFlag, r);
+						w.onSettingsChange = (r)->invalidateRuleAndOnesBelow(r);
 						if( !r.hasPerlin() ) {
 							r.setPerlin(true);
 							editor.ge.emit( LayerRuleChanged(r) );
 						}
 					}
 					else {
+						// Toggle it
 						r.setPerlin( !r.hasPerlin() );
+						if( r.hasPerlin() )
+							invalidateRuleAndOnesBelow(r);
 						editor.ge.emit( LayerRuleChanged(r) );
 					}
 				});
@@ -594,4 +617,15 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 	}
 
+
+	#if debug
+	override function update() {
+		super.update();
+		var all = [];
+		for(ruid in invalidatedRules.keys())
+			all.push(ruid);
+		App.ME.debug( all.join(", "));
+	}
+	#end
 }
+
