@@ -190,7 +190,6 @@ class WorldRender extends dn.Process {
 	function renderGrids() {
 		grids.clear();
 
-		App.ME.debug(camera.adjustedZoom);
 		// Base level grid
 		if( editor.worldMode && camera.adjustedZoom>=1.5 && settings.grid ) {
 			grids.lineStyle(2*camera.pixelRatio, 0xffffff, 0.1 * M.fmin( (camera.adjustedZoom-1.5)/1, 1 ) );
