@@ -41,7 +41,7 @@ jobs:
         id: ldtkHaxeApi
         run: |
           haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
-          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }}
+          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }} --always
         continue-on-error: true
       - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
       - run: haxelib list
