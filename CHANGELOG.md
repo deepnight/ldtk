@@ -1,3 +1,7 @@
+# 0.6.1
+
+- Fixed macOS version not loading
+
 # 0.6.0 - Take over the world!
 
 ## 💬 Discord
