@@ -46,7 +46,7 @@ jobs:
         continue-on-error: true
       - name: Check missing branch for LDtk API
         if: steps.ldtkHaxeApi.outcome == 'failure'
-        run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
+        run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
 
       - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
       - run: haxelib list
