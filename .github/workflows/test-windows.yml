@@ -27,22 +27,27 @@ jobs:
         run: echo "::set-output name=v::${GITHUB_REF#refs/heads/}"
         id: branch
 
-      # Checkout, install haxe and libs
+      # Checkout & install haxe
       - uses: actions/checkout@v2
       - uses: krdlab/setup-haxe@v1
         with:
           haxe-version: 4.1.4
       - run: haxe -version
+
+      # Install libs
       - run: haxelib git castle https://github.com/ncannasse/castle
       - run: haxelib git heaps https://github.com/HeapsIO/heaps.git
       - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
       - run: haxelib git electron https://github.com/tong/hxelectron.git
+
       - name: Install Haxe API
         id: ldtkHaxeApi
-        run: |
-          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
-          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }} --always
+        run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }} --always
         continue-on-error: true
+      - name: Check missing branch for LDtk API
+        if: ${{ failure() }}
+        run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
+
       - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
       - run: haxelib list
 
