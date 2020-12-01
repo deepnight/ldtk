@@ -1,4 +1,5 @@
 # LDtk Json structure (version 0.6.0)
+## Table of contents
    - [LDtk Json root](#ldtk-ProjectJson)
    - [Level](#ldtk-LevelJson)
      - [Layer instance](#ldtk-LayerInstanceJson)
