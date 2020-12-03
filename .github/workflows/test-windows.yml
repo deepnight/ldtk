@@ -40,20 +40,19 @@ jobs:
       - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
       - run: haxelib git electron https://github.com/tong/hxelectron.git
 
-      # Install haxe API from same branch (if it exists), or master otherwise
+      # Install haxe API from same branch (if it exists)...
       - name: Install Haxe API from same branch
         id: installApiBranch
-        run: |
-          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }} --always
-          echo ::set-output name=exitCode::$?
-
+        run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }} --always
+        continue-on-error: true
+      # ... or from master otherwise
       - name: Install Haxe API from master
-        if: steps.installApiBranch.outputs.exitCode != 0
+        if: job.steps.installApiBranch.outcome == "failure"
         run: |
           haxelib remove ldtk-haxe-api
-          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
+          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
 
-      - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+      - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
       - run: haxelib list
 
       # Node/NPM commands
