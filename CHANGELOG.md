@@ -5,7 +5,8 @@
 - Updated in-app URLs
 - Fixed a crash when editing Entity points and switching layer
 - Fixed a crash in Tiled TMX exporter caused by tilesets without image
-- Fixed macOS build (didn't start properly)
+- Fixed macOS build (didn't start properly).
+- Fixed long auto-update error message on Linux and macOS versions.
 - Minor update to app logo
 
 # 0.6.0 - Take over the world!
