@@ -42,7 +42,7 @@ jobs:
       - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
 
       # Install haxe API (use same branch as LDtk if it exists)
-      - name: Check Haxe API branch:
+      - name: Check Haxe API branch
         id: checkApiBranch
         run: |
           OUTPUT=$(git ls-remote --heads https://github.com/deepnight/ldtk-haxe-api.git | wc -l) && echo "::set-output name=result::$OUPUT"
