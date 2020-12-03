@@ -8,6 +8,7 @@
 - Fixed macOS build (didn't start properly).
 - Fixed long auto-update error message on Linux and macOS versions.
 - Fixed entities being destroyed when dragged near level limits
+- Fixed *samples* folder location on macOS
 - Minor update to app logo
 
 # 0.6.0 - Take over the world!
