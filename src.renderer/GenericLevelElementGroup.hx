@@ -642,8 +642,8 @@ class GenericLevelElementGroup {
 					changedLayers.set(li,li);
 
 					// Out of bounds
-					if( ei.x<li.pxTotalOffsetX || ei.x>=li.pxTotalOffsetX+li.cWid*li.def.gridSize
-					|| ei.y<li.pxTotalOffsetY || ei.y>=li.pxTotalOffsetY+li.cHei*li.def.gridSize ) {
+					if( ei.x<li.pxTotalOffsetX || ei.x>li.pxTotalOffsetX+li.cWid*li.def.gridSize
+					|| ei.y<li.pxTotalOffsetY || ei.y>li.pxTotalOffsetY+li.cHei*li.def.gridSize ) {
 						li.removeEntityInstance(ei);
 						elements[i] = null;
 

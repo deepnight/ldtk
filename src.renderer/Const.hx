@@ -12,9 +12,7 @@ class Const {
 	}
 
 	public static function getJsonVersion() {
-		var r = ~/([0-9\.]*)/gi;
-		r.match( getAppVersion() );
-		return r.matched(1);
+		return getAppVersion(true);
 	}
 
 	#if !macro
@@ -27,23 +25,24 @@ class Const {
 	public static var DEEPNIGHT_DOMAIN = "https://deepnight.net";
 
 	// URLs: LDtk home
-	public static var LDTK_DOMAIN = DEEPNIGHT_DOMAIN;
-	public static var HOME_URL = DEEPNIGHT_DOMAIN+"/tools/ldtk-2d-level-editor/";
-	public static var DOCUMENTATION_URL = DEEPNIGHT_DOMAIN+"/docs/ldtk/";
-	public static var DISCORD_URL = DEEPNIGHT_DOMAIN+"/go/ldtk-discord";
+	public static var LDTK_DOMAIN = "https://ldtk.io";
+	public static var HOME_URL = LDTK_DOMAIN;
+	public static var DOCUMENTATION_URL = LDTK_DOMAIN+"/docs/";
+	public static var DISCORD_URL = LDTK_DOMAIN+"/go/discord";
 
 	// URLs: misc
 	public static var ITCH_IO_BUY_URL = "https://deepnight.itch.io/ldtk/purchase";
 	public static var ISSUES_URL = "https://github.com/deepnight/ldtk/issues";
 	public static var GITHUB_SPONSOR_URL = "https://github.com/sponsors/deepnight";
-	public static var JSON_DOC_URL = "https://github.com/deepnight/ldtk/blob/master/JSON_DOC.md";
+	public static var JSON_SCHEMA_URL = LDTK_DOMAIN+"/json";
 
 
 	public static var JSON_HEADER = {
 		fileType: Const.APP_NAME+" Project JSON",
 		app: Const.APP_NAME,
-		appAuthor: "Sebastien Benard",
-		appVersion: getAppVersion(),
+		schema: JSON_SCHEMA_URL,
+		appAuthor: "Sebastien 'deepnight' Benard",
+		appVersion: getAppVersion(true),
 		url: HOME_URL,
 	}
 

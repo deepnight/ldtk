@@ -106,6 +106,11 @@ class Tiled extends Exporter {
 		**/
 		var tilesetGids = new Map();
 		for( td in p.defs.tilesets ) {
+			if( !td.hasAtlasPath() ) {
+				log.warning("Skipped undefined tileset: "+td.identifier);
+				continue;
+			}
+
 			log.add("tileset", 'Adding tileset ${td.identifier}...');
 			if( td.padding!=0 )
 				log.error('Tileset ${td.identifier} has padding, which isn\'t supported by Tiled.');

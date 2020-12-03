@@ -93,9 +93,11 @@ class App extends dn.Process {
 		}
 		dn.electron.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
 		dn.electron.ElectronUpdater.onError = function(err) {
-			LOG.error("Couldn't check for updates: "+err);
-			// miniNotif("Can't check for updates");
-			miniNotif(err, 2);
+			var errStr = err==null ? null : Std.string(err);
+			LOG.error("Couldn't check for updates: "+errStr);
+			if( errStr.length>40 )
+				errStr = errStr.substr(0,40) + "[...]";
+			miniNotif('Auto-updater failed: "$errStr"', 2);
 		}
 		dn.electron.ElectronUpdater.onUpdateDownloaded = function(info) {
 			LOG.network("Update ready: "+info.version);
@@ -186,7 +188,11 @@ class App extends dn.Process {
 		exit(false);
 	}
 
-	public static inline function isMac() return js.Browser.window.navigator.userAgent.indexOf('Mac') != -1;
+	// public static inline function isMac() return js.Browser.window.navigator.userAgent.indexOf('Mac') != -1;
+	public static inline function isLinux() return js.node.Os.platform()=="linux";
+	public static inline function isWindows() return js.node.Os.platform()=="win32";
+	public static inline function isMac() return js.node.Os.platform()=="darwin";
+
 	public inline function isKeyDown(keyId:Int) return keyDowns.get(keyId)==true;
 	public inline function isShiftDown() return keyDowns.get(K.SHIFT)==true;
 	public inline function isCtrlDown() return (App.isMac() ? keyDowns.get(K.LEFT_WINDOW_KEY) || keyDowns.get(K.RIGHT_WINDOW_KEY) : keyDowns.get(K.CTRL))==true;

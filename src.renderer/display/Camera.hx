@@ -206,11 +206,9 @@ class Camera extends dn.Process {
 	}
 
 	inline function get_adjustedZoom() {
-		// Reduces tile flickering (issue #71)
-		return
-			rawZoom; // TODO fix flickering again?
-			// ( rawZoom<=pixelRatio ? rawZoom : M.round(rawZoom*2)/2 )
-			// * ( 1 - worldZoom*0.5 ) ;
+		return rawZoom; // TODO fix flickering again? (see issue #71)
+
+		// return rawZoom<=pixelRatio ? rawZoom : M.round(rawZoom*2)/2;
 	}
 
 	public function deltaZoomTo(zoomFocusX:Float, zoomFocusY:Float, delta:Float) {
@@ -221,9 +219,9 @@ class Camera extends dn.Process {
 
 		editor.ge.emit(ViewportChanged);
 
-		var c = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
-		worldX += c.levelX - old.levelX;
-		worldY += c.levelY - old.levelY;
+		var newCoord = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
+		worldX += newCoord.worldXf - old.worldXf;
+		worldY += newCoord.worldYf - old.worldYf;
 	}
 
 

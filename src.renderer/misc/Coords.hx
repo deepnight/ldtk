@@ -15,22 +15,29 @@ class Coords {
 	public var canvasY(get,never) : Int;
 		inline function get_canvasY() return M.round( ( pageY - App.ME.jCanvas.offset().top ) * pixelRatio );
 
-	// World
-	public var worldX(get,never) : Int;
-	inline function get_worldX() {
+	// World (float)
+	public var worldXf(get,never) : Float;
+	inline function get_worldXf() {
 		if( Editor.ME==null || Editor.ME.destroyed )
-			return -1;
+			return -1.;
 		else
-			return M.round( ( canvasX/Const.SCALE - Editor.ME.worldRender.root.x ) / Editor.ME.camera.adjustedZoom );
+			return ( canvasX/Const.SCALE - Editor.ME.worldRender.root.x ) / Editor.ME.camera.adjustedZoom;
 	}
 
-	public var worldY(get,never) : Int;
-	inline function get_worldY() {
+	public var worldYf(get,never) : Float;
+	inline function get_worldYf() {
 		if( Editor.ME==null || Editor.ME.destroyed )
-			return -1;
+			return -1.;
 		else
-			return M.round( ( canvasY/Const.SCALE - Editor.ME.worldRender.root.y ) / Editor.ME.camera.adjustedZoom );
+			return ( canvasY/Const.SCALE - Editor.ME.worldRender.root.y ) / Editor.ME.camera.adjustedZoom;
 	}
+
+	// World
+	public var worldX(get,never) : Int;
+	inline function get_worldX() return M.round( worldXf );
+
+	public var worldY(get,never) : Int;
+	inline function get_worldY() return M.round(worldYf);
 
 	// Level
 	public var levelX(get,never) : Int;

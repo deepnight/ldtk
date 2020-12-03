@@ -1,8 +1,22 @@
+# 0.6.1
+
+- **New website URL: [LDtk.io](https://ldtk.io)**
+- New Json schema URL: [LDtk.io/json](https://ldtk.io/json)
+- Updated in-app URLs
+- Fixed a crash when editing Entity points and switching layer
+- Fixed a crash in Tiled TMX exporter caused by tilesets without image
+- Fixed macOS build (didn't start properly).
+- Fixed long auto-update error message on Linux and macOS versions.
+- Fixed entities being destroyed when dragged near level limits
+- Fixed *samples* folder location on macOS
+- Updated buttons on app home page
+- Minor update to app logo
+
 # 0.6.0 - Take over the world!
 
 ## 💬 Discord
 
-We now have an official **Discord**! Come join us, we have cookies 🤗 Feel free to share the invite URL: **https://deepnight.net/go/ldtk-discord**
+We now have an official **Discord**! Come join us, we have cookies 🤗 Feel free to share the invite URL: **https://ldtk.io/go/discord**
 
 ## 🌍 World map
 
@@ -147,7 +161,7 @@ You might also need to **manually uninstall any previous installation of LEd**.
 
  - **Tiled (TMX) export option**: from the project settings (`F1`), check the *Tiled export* option to save Tiled compatible files along with the LEd JSON.
 
-    **DISCLAIMER**: this export is limited because Tiled doesn't support some core features from LEd, like different grid sizes in the same level or Array of properties in Entities. This export is only meant as a short-term solution to quickly load LEd data in a framework only supporting TMX files. See [documentation](https://deepnight.net/docs/led/json/tiled/) for more informations.
+    **DISCLAIMER**: this export is limited because Tiled doesn't support some core features from LEd, like different grid sizes in the same level or Array of properties in Entities. This export is only meant as a short-term solution to quickly load LEd data in a framework only supporting TMX files. See [documentation](https://ldtk.io/docs/general/exporting-tiled-tmx/) for more informations.
 
  - Better active/inactive visual state for rules and groups of rules in auto-layers
  - Inactive rules are no longer exported in the JSON file

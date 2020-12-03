@@ -14,7 +14,6 @@ class Home extends Page {
 			appVer: Const.getAppVersion(),
 			deepnightUrl: Const.DEEPNIGHT_DOMAIN,
 			discordUrl: Const.DISCORD_URL,
-			jsonDocUrl: Const.JSON_DOC_URL,
 			docUrl: Const.DOCUMENTATION_URL,
 			websiteUrl : Const.HOME_URL,
 			issueUrl : Const.ISSUES_URL,

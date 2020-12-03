@@ -352,7 +352,10 @@ class JsTools {
 			var cut = 40;
 			if( displayUrl.length>cut )
 				displayUrl = displayUrl.substr(0,cut)+"...";
-			ui.Tip.attach(link, displayUrl, "link", true);
+
+			if( link.attr("title")==null )
+				ui.Tip.attach(link, displayUrl, "link", true);
+
 			link.click( function(ev:js.jquery.Event) {
 				ev.preventDefault();
 				electron.Shell.openExternal(url);
@@ -551,7 +554,8 @@ class JsTools {
 	}
 
 	public static function getSamplesDir() {
-		return dn.FilePath.fromDir( getExeDir()+"/samples" ).directory;
+		var raw = getExeDir() + ( App.isMac() ? "../samples" : "/samples" );
+		return dn.FilePath.fromDir( raw ).directory;
 	}
 
 	public static function getAppResourceDir() {

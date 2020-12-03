@@ -65,7 +65,7 @@ The JSON format was optimized to reduce its size (should be approximately 40-50%
    - Replaced `tileId` from `layerInstances.autoTiles` with an array called `tiles`.
    - Renamed `__tileX` and `__tileY` in these sections with hopefully clearer names `__srcX` and `__srcY`. These are still X/Y pixel coordinates of corresponding tiles in the tileset image.
    - Added `_x` and `_y` which are pre-computed pixel coordinates of tile on screen
-   - Please refer to updated doc for more infos: https://deepnight.net/docs/led/json/
+   - Please refer to updated doc for more infos: https://ldtk.io/json/
 
 Before, in layerInstances:
 ```json
