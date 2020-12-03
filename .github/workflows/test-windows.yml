@@ -39,13 +39,12 @@ jobs:
       - run: haxelib git heaps https://github.com/HeapsIO/heaps.git
       - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
       - run: haxelib git electron https://github.com/tong/hxelectron.git
-      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
 
       # Install haxe API from same branch (if it exists), or master otherwise
       - name: Install Haxe API from same branch
         id: installApiBranch
         run: |
-          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }}
+          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }} --always
           echo ::set-output name=exitCode::$?
 
       - name: Install Haxe API from master
