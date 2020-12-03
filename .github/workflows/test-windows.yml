@@ -47,7 +47,7 @@ jobs:
         continue-on-error: true
       # ... or from master otherwise
       - name: Install Haxe API from master
-        if: job.steps.installApiBranch.outcome == "failure"
+        if: steps.installApiBranch.outcome == 'failure'
         run: |
           haxelib remove ldtk-haxe-api
           haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
