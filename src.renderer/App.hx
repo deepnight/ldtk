@@ -188,7 +188,11 @@ class App extends dn.Process {
 		exit(false);
 	}
 
-	public static inline function isMac() return js.Browser.window.navigator.userAgent.indexOf('Mac') != -1;
+	// public static inline function isMac() return js.Browser.window.navigator.userAgent.indexOf('Mac') != -1;
+	public static inline function isLinux() return js.node.Os.platform()=="linux";
+	public static inline function isWindows() return js.node.Os.platform()=="win32";
+	public static inline function isMac() return js.node.Os.platform()=="darwin";
+
 	public inline function isKeyDown(keyId:Int) return keyDowns.get(keyId)==true;
 	public inline function isShiftDown() return keyDowns.get(K.SHIFT)==true;
 	public inline function isCtrlDown() return (App.isMac() ? keyDowns.get(K.LEFT_WINDOW_KEY) || keyDowns.get(K.RIGHT_WINDOW_KEY) : keyDowns.get(K.CTRL))==true;
