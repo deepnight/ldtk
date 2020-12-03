@@ -93,9 +93,11 @@ class App extends dn.Process {
 		}
 		dn.electron.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
 		dn.electron.ElectronUpdater.onError = function(err) {
-			LOG.error("Couldn't check for updates: "+err);
-			// miniNotif("Can't check for updates");
-			miniNotif(err, 2);
+			var errStr = err==null ? null : Std.string(err);
+			LOG.error("Couldn't check for updates: "+errStr);
+			if( errStr.length>40 )
+				errStr = errStr.substr(0,40) + "[...]";
+			miniNotif('Auto-updater failed: "$errStr"', 2);
 		}
 		dn.electron.ElectronUpdater.onUpdateDownloaded = function(info) {
 			LOG.network("Update ready: "+info.version);
