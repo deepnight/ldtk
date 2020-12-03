@@ -793,6 +793,7 @@ class Editor extends Page {
 
 		curLayerDefUid = li.def.uid;
 		ge.emit(LayerInstanceSelected);
+		clearSpecialTool();
 
 		setGrid(settings.grid, false); // update checkbox
 	}
