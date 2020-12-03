@@ -39,14 +39,21 @@ jobs:
       - run: haxelib git heaps https://github.com/HeapsIO/heaps.git
       - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
       - run: haxelib git electron https://github.com/tong/hxelectron.git
+      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
 
-      - name: Install Haxe API
-        id: ldtkHaxeApi
-        run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }} --always
-        continue-on-error: true
-      - name: Check missing branch for LDtk API
-        if: steps.ldtkHaxeApi.outcome == 'failure'
-        run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
+      # Install haxe API (use same branch as LDtk if it exists)
+      - name: Check Haxe API branch:
+        id: checkApiBranch
+        run: |
+          OUTPUT=$(git ls-remote --heads https://github.com/deepnight/ldtk-haxe-api.git | wc -l) && echo "::set-output name=result::$OUPUT"
+
+      - name: Install branch Haxe API
+        if: steps.checkApiBranch.outputs.result == 1
+        run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }}
+
+      - name: Install master Haxe API
+        if: steps.checkApiBranch.outputs.result == 0
+        run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
 
       - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
       - run: haxelib list
