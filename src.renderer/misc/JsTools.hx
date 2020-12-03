@@ -551,7 +551,8 @@ class JsTools {
 	}
 
 	public static function getSamplesDir() {
-		return dn.FilePath.fromDir( getExeDir()+"/samples" ).directory;
+		var raw = getExeDir() + ( App.isMac() ? "../samples" : "/samples" )
+		return dn.FilePath.fromDir( raw ).directory;
 	}
 
 	public static function getAppResourceDir() {
