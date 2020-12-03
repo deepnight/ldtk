@@ -7,6 +7,7 @@
 - Fixed a crash in Tiled TMX exporter caused by tilesets without image
 - Fixed macOS build (didn't start properly).
 - Fixed long auto-update error message on Linux and macOS versions.
+- Fixed entities being destroyed when dragged near level limits
 - Minor update to app logo
 
 # 0.6.0 - Take over the world!
