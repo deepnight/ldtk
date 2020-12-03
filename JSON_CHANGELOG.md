@@ -1,4 +1,4 @@
-Please always refer to the [JSON_DOC.md](JSON_DOC.md) file for automatically updated Json format description (including version related changes).
+Please always refer to the [JSON schema](https://ldtk.io/json) for automatically updated Json format description (including version related changes).
 
 # 0.6.0-beta
 
