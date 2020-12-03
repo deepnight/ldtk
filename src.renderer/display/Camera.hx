@@ -219,9 +219,9 @@ class Camera extends dn.Process {
 
 		editor.ge.emit(ViewportChanged);
 
-		var c = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
-		worldX += c.levelX - old.levelX;
-		worldY += c.levelY - old.levelY;
+		var newCoord = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
+		worldX += newCoord.worldXf - old.worldXf;
+		worldY += newCoord.worldYf - old.worldYf;
 	}
 
 
