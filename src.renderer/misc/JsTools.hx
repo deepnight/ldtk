@@ -352,7 +352,10 @@ class JsTools {
 			var cut = 40;
 			if( displayUrl.length>cut )
 				displayUrl = displayUrl.substr(0,cut)+"...";
-			ui.Tip.attach(link, displayUrl, "link", true);
+
+			if( link.attr("title")==null )
+				ui.Tip.attach(link, displayUrl, "link", true);
+
 			link.click( function(ev:js.jquery.Event) {
 				ev.preventDefault();
 				electron.Shell.openExternal(url);

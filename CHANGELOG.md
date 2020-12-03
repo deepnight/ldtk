@@ -9,6 +9,7 @@
 - Fixed long auto-update error message on Linux and macOS versions.
 - Fixed entities being destroyed when dragged near level limits
 - Fixed *samples* folder location on macOS
+- Updated buttons on app home page
 - Minor update to app logo
 
 # 0.6.0 - Take over the world!

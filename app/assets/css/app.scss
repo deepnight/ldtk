@@ -169,7 +169,7 @@ button {
 		border-color: #ffff00;
 	}
 
-	&[href] {
+	&[href]:not(.red) {
 		display: flex;
 		justify-content: center;
 
@@ -207,9 +207,9 @@ button {
 	}
 
 	&.discord {
-		background-color: #7289DA;
+		background-color: #7289DA !important;
 		&:hover {
-			background-color: #85A0FF;
+			background-color: #85A0FF !important;
 		}
 	}
 
@@ -957,10 +957,12 @@ ul.log {
 .icon.partial	{ background-image: url("../icons/partial.png"); }
 .icon.help		{ background-image: url("../icons/help.svg"); }
 .icon.manual	{ background-image: url("../icons/manual.svg"); }
+.icon.doc		{ background-image: url("../icons/doc.svg"); }
 .icon.new		{ background-image: url("../icons/new.svg"); }
 .icon.open		{ background-image: url("../icons/open.svg"); }
 .icon.web		{ background-image: url("../icons/web.svg"); }
 .icon.community	{ background-image: url("../icons/community.svg"); }
+.icon.bug		{ background-image: url("../icons/bug.svg"); }
 .icon.tutorial	{ background-image: url("../icons/tutorial.svg"); }
 .icon.gridOn	{ background-image: url("../icons/gridOn.svg"); }
 .icon.gridOff	{ background-image: url("../icons/gridOff.svg"); }
@@ -2717,9 +2719,20 @@ canvas#webgl {
 				white-space: nowrap;
 				display: flex;
 				justify-content: center;
-				.icon {
+				align-items: center;
+				height: 38px;
+				padding: 0px 8px;
+
+				&:not(.single) .icon {
 					margin-right: 4px;
 					opacity: 0.5;
+				}
+				&.single {
+					flex: 0 1 0px;
+					.icon {
+						margin: 0;
+						opacity: 1;
+					}
 				}
 				&.buy {
 					text-transform: none;
