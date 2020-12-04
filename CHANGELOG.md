@@ -1,3 +1,7 @@
+# 0.6.2
+
+- Added an optional **Regular Expression** that can be tested against a `String` field in an Entity. Any unmatched character in a string value will just be discarded. This allows the creation of custom field type (that needs to follow some specific pattern), while still having a safety net (the editor cleans up invalid parts).
+
 # 0.6.1
 
 - **New website URL: [LDtk.io](https://ldtk.io)**

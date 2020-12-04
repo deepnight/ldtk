@@ -1,4 +1,4 @@
-# LDtk Json structure (version 0.6.1)
+# LDtk Json structure (version 0.6.2)
 ## Table of contents
    - [LDtk Json root](#ldtk-ProjectJson)
    - [Level](#ldtk-LevelJson)
@@ -184,7 +184,7 @@ Value | Type | Description
 `isArray` | Bool | TRUE if the value is an array of multiple values
 `max`<br/><sup>Only *Int, Float*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Max limit for value, if applicable
 `min`<br/><sup>Only *Int, Float*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Min limit for value, if applicable
-`regex`<br/><sup>Only *String*</sup> | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional "i" flag.
+`regex`<br/><sup>Only *String*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.2-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional "i" flag.
 `type` | String | Internal type enum
 `uid` | Int | Unique Intidentifier
 
