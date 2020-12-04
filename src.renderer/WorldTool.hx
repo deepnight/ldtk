@@ -144,7 +144,7 @@ class WorldTool extends dn.Process {
 				switch project.worldLayout {
 					case Free, GridVania:
 					case LinearHorizontal:
-						var i = getLinearInsertPoint(m);
+						var i = getLinearInsertPoint(m,false);
 						if( i!=null ) {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
@@ -154,7 +154,7 @@ class WorldTool extends dn.Process {
 						}
 
 					case LinearVertical:
-						var i = getLinearInsertPoint(m);
+						var i = getLinearInsertPoint(m,false);
 						if( i!=null ) {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
@@ -197,7 +197,7 @@ class WorldTool extends dn.Process {
 					l;
 
 				case LinearHorizontal, LinearVertical:
-					var i = getLinearInsertPoint(m);
+					var i = getLinearInsertPoint(m, true);
 					if( i!=null ) {
 						var l = project.createLevel(i.idx);
 						l;
@@ -308,7 +308,7 @@ class WorldTool extends dn.Process {
 				}
 
 			case LinearHorizontal:
-				var i = getLinearInsertPoint(m);
+				var i = getLinearInsertPoint(m, true);
 				if( i!=null) {
 					b.x = i.pos-b.wid*0.5;
 					b.y = -32;
@@ -317,7 +317,7 @@ class WorldTool extends dn.Process {
 					return null;
 
 			case LinearVertical:
-				var i = getLinearInsertPoint(m);
+				var i = getLinearInsertPoint(m, true);
 				if( i!=null) {
 					b.x = -32;
 					b.y = i.pos-b.hei*0.5;
@@ -340,16 +340,23 @@ class WorldTool extends dn.Process {
 
 		// Start dragging
 		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=DRAG_THRESHOLD ) {
-			dragStarted = true;
-			ev.cancel = true;
-			if( clickedLevel!=null )
-				editor.selectLevel(clickedLevel);
+			var allow = switch project.worldLayout {
+				case Free: true;
+				case GridVania: true;
+				case LinearHorizontal, LinearVertical: project.levels.length>1;
+			}
+			if( allow ) {
+				dragStarted = true;
+				ev.cancel = true;
+				if( clickedLevel!=null )
+					editor.selectLevel(clickedLevel);
 
-			if( clickedLevel!=null && ( App.ME.isAltDown() || App.ME.isCtrlDown() ) ) {
-				var copy = project.duplicateLevel(clickedLevel);
-				editor.ge.emit( LevelAdded(copy) );
-				editor.selectLevel(copy);
-				clickedLevel = copy;
+				if( clickedLevel!=null && ( App.ME.isAltDown() || App.ME.isCtrlDown() ) ) {
+					var copy = project.duplicateLevel(clickedLevel);
+					editor.ge.emit( LevelAdded(copy) );
+					editor.selectLevel(copy);
+					clickedLevel = copy;
+				}
 			}
 		}
 
@@ -471,14 +478,14 @@ class WorldTool extends dn.Process {
 					clickedLevel.worldY = M.floor( clickedLevel.worldY/project.worldGridHeight) * project.worldGridHeight;
 
 				case LinearHorizontal:
-					var i = getLinearInsertPoint(m);
+					var i = getLinearInsertPoint(m,false);
 					if( i!=null ) {
 						tmpRender.moveTo(i.pos, -100);
 						tmpRender.lineTo(i.pos, project.getWorldHeight(clickedLevel)+100);
 					}
 
 				case LinearVertical:
-					var i = getLinearInsertPoint(m);
+					var i = getLinearInsertPoint(m,false);
 					if( i!=null ) {
 						tmpRender.moveTo(-100, i.pos);
 						tmpRender.lineTo(project.getWorldWidth(clickedLevel)+100, i.pos);
@@ -491,8 +498,8 @@ class WorldTool extends dn.Process {
 		}
 	}
 
-	function getLinearInsertPoint(m:Coords) : Null<LinearInsertPoint> {
-		if( project.levels.length<=1 )
+	function getLinearInsertPoint(m:Coords, forCreation:Bool) : Null<LinearInsertPoint> {
+		if( project.levels.length<=1 && !forCreation )
 			return null;
 
 		// Init possible insert points in linear modes
@@ -505,6 +512,7 @@ class WorldTool extends dn.Process {
 					var all = project.levels.map( (l)->{ pos:l==clickedLevel ? levelOriginX : l.worldX, idx:idx++ } );
 					var last = project.levels[project.levels.length-1];
 					all.push({ pos:last.worldX+last.pxWid, idx:idx });
+					trace(all);
 					all;
 
 				case LinearVertical:
