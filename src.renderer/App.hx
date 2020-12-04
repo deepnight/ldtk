@@ -30,6 +30,10 @@ class App extends dn.Process {
 		LOG.printOnAdd = true;
 		#end
 		LOG.add("BOOT","App started");
+		LOG.add("BOOT","ExePath: "+JsTools.getExeDir());
+		LOG.add("BOOT","Resources: "+JsTools.getAppResourceDir());
+		LOG.add("BOOT","SamplesPath: "+JsTools.getSamplesDir());
+		LOG.add("BOOT","Settings: "+JsTools.getSettingsDir());
 
 		// App arguments
 		var electronArgs : Array<String> = try electron.renderer.IpcRenderer.sendSync("getArgs") catch(_) [];
