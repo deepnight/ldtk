@@ -169,10 +169,33 @@ class JsonTools {
 						throw "Array size is incorrect";
 					else
 						return defaultIfMissing;
-					
+
 			case _: throw "Not an array ("+Type.typeof(arr)+")";
 		}
 		return arr;
+	}
+
+
+	public static inline function escapeString(s:String) {
+		if( s==null )
+			return null;
+
+		s = StringTools.replace(s, "\\", "\\\\");
+		s = StringTools.replace(s, "\n", "\\n");
+		s = StringTools.replace(s, '"', '\\"');
+		s = StringTools.replace(s, "'", "\'");
+		return s;
+	}
+
+	public static inline function unescapeString(s:String) {
+		if( s==null )
+			return null;
+
+		s = StringTools.replace(s, "\\\\", "\\");
+		s = StringTools.replace(s, "\\n", "\n");
+		s = StringTools.replace(s, '\\"', '"');
+		s = StringTools.replace(s, "\'", "'");
+		return s;
 	}
 
 }
