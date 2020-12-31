@@ -152,7 +152,7 @@ class XmlDocToMarkdown {
 				if( f.only!=null )
 					cell.push('<sup class="only">Only *${f.only}*</sup>');
 				if( f.isInternal )
-					cell.push('<sup class="internal">*Only for the editor*</sup>');
+					cell.push('<sup class="internal">*Internal editor data*</sup>');
 
 				if( f.hasVersion )
 					cell.push( versionBadge(f.xml) );

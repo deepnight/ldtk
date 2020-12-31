@@ -28,7 +28,7 @@ Value | Type | Description
 `jsonVersion` | String | File format version
 `levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
 `minifyJson` | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
-`nextUid`<br/><sup class="internal">*Only for the editor*</sup> | Int | 
+`nextUid`<br/><sup class="internal">*Internal editor data*</sup> | Int | 
 `worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Int | Height of the world grid in pixels.
 `worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Int | Width of the world grid in pixels.
 `worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values are: Free, GridVania, LinearHorizontal and LinearVertical;
@@ -76,7 +76,7 @@ Value | Type | Description
 ## 1.1.1. Tile instance  ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg) 
 Value | Type | Description
 -- | -- | --
-`d`<br/><sup class="internal">*Only for the editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-green.svg)  | Array&nbsp;of&nbsp;Int | Internal data used by the editor.<br/>		For auto-layer tiles: `[ruleId, coordId]`.<br/>		For tile-layer tiles: `[coordId]`.
+`d`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-green.svg)  | Array&nbsp;of&nbsp;Int | Internal data used by the editor.<br/>		For auto-layer tiles: `[ruleId, coordId]`.<br/>		For tile-layer tiles: `[coordId]`.
 `f` | Int | "Flip bits", a 2-bits integer to represent the mirror transformations of the tile.<br/>		 - Bit 0 = X flip<br/>		 - Bit 1 = Y flip<br/>		 Examples: f=0 (no flip), f=1 (X flip only), f=2 (Y flip only), f=3 (both flips)
 `px`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Array&nbsp;of&nbsp;Int | Pixel coordinates of the tile in the **layer** (`[x,y]` format). Don't forget optional layer offsets, if they exist!
 `src` | Array&nbsp;of&nbsp;Int | Pixel coordinates of the tile in the **tileset** (`[x,y]` format)
@@ -101,7 +101,7 @@ Value | Type | Description
 `__type` | String | Type of the field, such as Int, Float, Enum(enum_name), Bool, etc.
 `__value` | Dynamic&nbsp;(anything) | Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>		It can also be an `Array` of various types.
 `defUid` | Int | Reference of the **Field definition** UID
-`realEditorValues`<br/><sup class="internal">*Only for the editor*</sup> | Array&nbsp;of&nbsp;Dynamic&nbsp;(anything) | 
+`realEditorValues`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Dynamic&nbsp;(anything) | 
 
 <a id="ldtk-DefinitionsJson" name="ldtk-DefinitionsJson"></a>
 ## 2. Definitions   
@@ -130,7 +130,7 @@ Value | Type | Description
 `tilePivotX`<br/><sup class="only">Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilePivotY`<br/><sup class="only">Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilesetDefUid`<br/><sup class="only">Only *Tile layers*</sup> | Int | Reference to the Tileset UID being used by this tile layer
-`type`<br/><sup class="internal">*Only for the editor*</sup> | Enum | Type of the layer as Haxe Enum
+`type`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Type of the layer as Haxe Enum
 `uid` | Int | Unique Int identifier
 
 <a id="ldtk-AutoRuleDef" name="ldtk-AutoRuleDef"></a>
@@ -165,14 +165,14 @@ Value | Type | Description
 `fieldDefs` | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | Array of field definitions
 `height` | Int | Pixel height
 `identifier` | String | Unique String identifier
-`limitBehavior`<br/><sup class="internal">*Only for the editor*</sup> | Enum | 
+`limitBehavior`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
 `maxPerLevel` | Int | Max instances per level
 `pivotX` | Float | Pivot X coordinate (from 0 to 1.0)
 `pivotY` | Float | Pivot Y coordinate (from 0 to 1.0)
-`renderMode`<br/><sup class="internal">*Only for the editor*</sup> | Enum | 
-`showName`<br/><sup class="internal">*Only for the editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Bool | Display entity name in editor
+`renderMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
+`showName`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Bool | Display entity name in editor
 `tileId` | Int | Tile ID used for optional tile display
-`tileRenderMode`<br/><sup class="internal">*Only for the editor*</sup> | Enum | 
+`tileRenderMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
 `tilesetId` | Int | Tileset ID used for optional tile display
 `uid` | Int | Unique Int identifier
 `width` | Int | Pixel width
@@ -187,9 +187,9 @@ Value | Type | Description
 `arrayMinLength`<br/><sup class="only">Only *Array*</sup> | Int | Array min length
 `canBeNull` | Bool | TRUE if the value can be null. For arrays, TRUE means it can contain null values (exception: array of Points can't have null values).
 `defaultOverride` | Enum | Default value if selected value is null or invalid.
-`editorAlwaysShow`<br/><sup class="internal">*Only for the editor*</sup> | Bool | 
-`editorDisplayMode`<br/><sup class="internal">*Only for the editor*</sup> | Enum | 
-`editorDisplayPos`<br/><sup class="internal">*Only for the editor*</sup> | Enum | 
+`editorAlwaysShow`<br/><sup class="internal">*Internal editor data*</sup> | Bool | 
+`editorDisplayMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
+`editorDisplayPos`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
 `identifier` | String | Unique String identifier
 `isArray` | Bool | TRUE if the value is an array of multiple values
 `max`<br/><sup class="only">Only *Int, Float*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Max limit for value, if applicable
@@ -202,13 +202,13 @@ Value | Type | Description
 ## 2.3. Tileset definition   
 Value | Type | Description
 -- | -- | --
-`cachedPixelData`<br/><sup class="internal">*Only for the editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | The following data is used internally for various optimizations. It's always synced with source image changes.<br/>This object contains the following fields:<br/><ul><li>**`averageColors`** **(String *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  : *Average color codes for each tileset tile (ARGB format)*</li><li>**`opaqueTiles`** **(String**)  ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-green.svg)  : *An array of 0/1 bytes, encoded in Base64, that tells if a specific TileID is fully opaque (1) or not (0)*</li></ul>
+`cachedPixelData`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | The following data is used internally for various optimizations. It's always synced with source image changes.<br/>This object contains the following fields:<br/><ul><li>**`averageColors`** **(String *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  : *Average color codes for each tileset tile (ARGB format)*</li><li>**`opaqueTiles`** **(String**)  ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-green.svg)  : *An array of 0/1 bytes, encoded in Base64, that tells if a specific TileID is fully opaque (1) or not (0)*</li></ul>
 `identifier` | String | Unique String identifier
 `padding` | Int | Distance in pixels from image borders
 `pxHei` | Int | Image height in pixels
 `pxWid` | Int | Image width in pixels
 `relPath` | String | Path to the source file, relative to the current project JSON file
-`savedSelections`<br/><sup class="internal">*Only for the editor*</sup> | Array&nbsp;of&nbsp;Object | Array of group of tiles selections, only meant to be used in the editor<br/>This object contains the following fields:<br/><ul><li>**`ids`** **(Array of Int**)</li><li>**`mode`** **(Dynamic (anything)**)</li></ul>
+`savedSelections`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Object | Array of group of tiles selections, only meant to be used in the editor<br/>This object contains the following fields:<br/><ul><li>**`ids`** **(Array of Int**)</li><li>**`mode`** **(Dynamic (anything)**)</li></ul>
 `spacing` | Int | Space in pixels between all tiles
 `tileGridSize` | Int | 
 `uid` | Int | Unique Intidentifier
@@ -217,7 +217,7 @@ Value | Type | Description
 ## 2.4. Enum definition   
 Value | Type | Description
 -- | -- | --
-`externalFileChecksum`<br/><sup class="internal">*Only for the editor*</sup> | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
+`externalFileChecksum`<br/><sup class="internal">*Internal editor data*</sup> | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
 `externalRelPath` | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Relative path to the external file providing this Enum
 `iconTilesetUid` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset UID if provided
 `identifier` | String | Unique String identifier
