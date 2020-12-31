@@ -1000,9 +1000,9 @@ class Editor extends Page {
 				checkAutoLayersCache( (anyChange)->{
 					App.LOG.fileOp('Saving $projectFilePath...');
 					var data = JsTools.prepareProjectFile(project);
-					JsTools.writeFileString(projectFilePath, data.str);
+					JsTools.writeFileString(projectFilePath, data.jsonString);
 
-					var size = dn.Lib.prettyBytesSize(data.str.length);
+					var size = dn.Lib.prettyBytesSize(data.jsonString.length);
 					App.LOG.fileOp('Saved $size.');
 
 					var fileName = dn.FilePath.extractFileWithExt(projectFilePath);

@@ -136,7 +136,7 @@ class Home extends Page {
 
 						log.general(" -> Saving "+fp.fileName+"...");
 						var data = JsTools.prepareProjectFile(p);
-						JsTools.writeFileString(fp.full, data.str);
+						JsTools.writeFileString(fp.full, data.jsonString);
 					}
 				});
 			}
@@ -335,7 +335,7 @@ class Home extends Page {
 
 			var p = data.Project.createEmpty();
 			var data = JsTools.prepareProjectFile(p);
-			JsTools.writeFileString(fp.full, data.str);
+			JsTools.writeFileString(fp.full, data.jsonString);
 
 			N.msg("New project created: "+fp.full);
 			App.ME.loadPage( ()->new Editor(p, fp.full) );

@@ -169,3 +169,7 @@ enum TilePickerMode {
 	ViewOnly;
 	RectOnly;
 }
+
+typedef FileSavingData = {
+	var jsonString: String;
+}
