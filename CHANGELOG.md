@@ -1,6 +1,7 @@
 # 0.6.2
 
 - Added an optional **Regular Expression** that can be tested against a `String` field in an Entity. Any unmatched character in a string value will just be discarded. This allows the creation of custom field type (that needs to follow some specific pattern), while still having a safety net (the editor cleans up invalid parts).
+- Fixed missing "world grid size" inputs in Grid Vania layouts. They should now appear in the World panel.
 - Fixed level creation in "Linear" world layouts that only contain 1 level
 - Fixed loading of null multiline fields
 - Fixed a crash on layer removal
