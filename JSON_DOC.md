@@ -130,7 +130,7 @@ Value | Type | Description
 `tilePivotX`<br/><sup class="only">Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilePivotY`<br/><sup class="only">Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilesetDefUid`<br/><sup class="only">Only *Tile layers*</sup> | Int | Reference to the Tileset UID being used by this tile layer
-`type`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Type of the layer as Haxe Enum
+`type`<br/><sup class="internal">*Internal editor data*</sup> | String | Type of the layer as Haxe Enum
 `uid` | Int | Unique Int identifier
 
 <a id="ldtk-AutoRuleDef" name="ldtk-AutoRuleDef"></a>
