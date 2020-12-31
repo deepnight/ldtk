@@ -523,6 +523,16 @@ class Editor extends Page {
 		return allLayerTools.get( curLayerDef.uid );
 	}
 
+	function deleteLayerTool(layerUid:Int) {
+		if( allLayerTools.exists(layerUid) ) {
+			allLayerTools.get(layerUid).destroy();
+			allLayerTools.remove(layerUid);
+			return true;
+		}
+		else
+			return false;
+	}
+
 	public function resetTools() {
 		for(t in allLayerTools)
 			t.destroy();
@@ -1175,7 +1185,12 @@ class Editor extends Page {
 				resetTools();
 				updateTool();
 
-			case LayerDefAdded, LayerDefRemoved(_):
+			case LayerDefAdded:
+				updateLayerList();
+				updateTool();
+
+			case LayerDefRemoved(uid):
+				deleteLayerTool(uid);
 				updateLayerList();
 				updateTool();
 
