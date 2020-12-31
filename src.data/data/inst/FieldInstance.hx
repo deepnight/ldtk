@@ -38,6 +38,7 @@ class FieldInstance {
 
 				if( o.def.type==F_Text ) // Restore end-of-lines
 					switch val {
+						case null:
 						case V_String(v):
 							v = JsonTools.unescapeString(v);
 							val = V_String(v);
