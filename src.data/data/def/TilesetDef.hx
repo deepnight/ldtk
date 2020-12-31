@@ -499,7 +499,7 @@ class TilesetDef {
 			}
 
 			// WARNING: actual color precision will later be reduced upon saving to 4-chars "argb"" String
-			averageColorsCache.set(tid, dn.Color.makeColor( Math.sqrt(r/nRGB), Math.sqrt(g/nRGB), Math.sqrt(b/nRGB), a/nA ));
+			averageColorsCache.set(tid, dn.Color.makeColorRgba( Math.sqrt(r/nRGB), Math.sqrt(g/nRGB), Math.sqrt(b/nRGB), a/nA ));
 		}
 	}
 
