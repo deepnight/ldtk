@@ -710,6 +710,37 @@ class EditEntityDefs extends ui.modal.Panel {
 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
 		});
 
+		// String regex
+		trace("get: "+curField.regex);
+		var i = new form.input.StringInput(
+			jFieldForm.find("input#regex"),
+			()->return curField.getRegexContent(),
+			(s)-> {
+				curField.setRegexContent(s);
+				trace(s+" => "+curField.regex);
+			}
+		);
+
+		// Regex "i" flag
+		var i = new form.input.BoolInput(
+			jFieldForm.find("input#flag_i"),
+			()->curField.hasRegexFlag("i"),
+			(v)->{
+				curField.setRegexFlag("i",v);
+				trace("=> "+curField.regex);
+			}
+		);
+
+		// Test regex
+		if( curField.regex!=null ) {
+			jFieldForm.find(".testRegex").click( (_)->{
+				electron.Shell.openExternal( "https://regex101.com/"
+					+ "?regex="+curField.getRegexContent()
+					+ "&flags="+curField.getRegexFlagsStr()
+				);
+			});
+		}
+
 		// Accept file types
 		var input = jFieldForm.find("input[name=acceptTypes]");
 		if( curField.acceptFileTypes!=null )

@@ -3,6 +3,8 @@ package data.def;
 import data.DataTypes;
 
 class FieldDef {
+	static var REGEX_REG = ~/^\/(.*)\/([gi]*)$/gi; // regex that recognizes a basic regex string
+
 	@:allow(data.Definitions, data.def.EntityDef)
 	public var uid(default,null) : Int;
 
@@ -24,6 +26,7 @@ class FieldDef {
 	public var max : Null<Float>;
 
 	public var acceptFileTypes : Array<String>;
+	public var regex : Null<String>;
 
 	var _project : data.Project;
 
@@ -73,6 +76,7 @@ class FieldDef {
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);
+		o.regex = JsonTools.unescapeString( json.regex );
 		o.acceptFileTypes = json.acceptFileTypes==null ? null : JsonTools.readArray(json.acceptFileTypes);
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
 		return o;
@@ -93,6 +97,7 @@ class FieldDef {
 			editorAlwaysShow: editorAlwaysShow,
 			min: min==null ? null : JsonTools.writeFloat(min),
 			max: max==null ? null : JsonTools.writeFloat(max),
+			regex: JsonTools.escapeString(regex),
 			acceptFileTypes: acceptFileTypes,
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
 		}
@@ -391,6 +396,86 @@ class FieldDef {
 				raw = extReg.matchedRight();
 			}
 		}
+	}
+
+	public function getRegexContent() : Null<String> {
+		if( regex==null )
+			return null;
+		else if( REGEX_REG.match(regex) )
+			return REGEX_REG.matched(1);
+		else
+			return null;
+	}
+
+	public function setRegexContent(raw:String) {
+		if( raw==null )
+			regex = null;
+		else
+			regex = '/$raw/${getRegexFlagsStr()}';
+	}
+
+	public function setRegexFlag(flag:String, v:Bool) {
+		if( regex!=null ) {
+			var flags = getRegexFlags();
+			flags.set(flag.toLowerCase(), v);
+			var newFlags = "";
+			for( f in flags.keyValueIterator() )
+				if( f.value )
+					newFlags+=f.key;
+			regex = '/${getRegexContent()}/$newFlags';
+			return true;
+		}
+		else
+			return false;
+	}
+
+	public function getRegexFlags() : Map<String,Bool> {
+		var flags = new Map();
+		var flagsStr = getRegexFlagsStr();
+
+		if( flagsStr!=null ) {
+			for(i in 0...flagsStr.length)
+				flags.set( flagsStr.charAt(i).toLowerCase(), true );
+		}
+
+		return flags;
+	}
+
+	public inline function hasRegexFlag(f:String) {
+		return getRegexFlags().get( f.toLowerCase() ) == true;
+	}
+
+	public inline function getRegexFlagsStr() : String {
+		if( regex==null || !REGEX_REG.match(regex) )
+			return "g";
+		else
+			return REGEX_REG.matched(2);
+	}
+
+	public function applyRegex(value:Null<String>) {
+		if( value==null )
+			return null;
+
+		if( regex==null )
+			return value;
+
+		var r = new EReg( getRegexContent(), getRegexFlagsStr() );
+
+		// Discard all
+		if( !r.match(value) )
+			return "";
+
+		// Discard only unmatched parts
+		var keep = [];
+		var sub = value;
+		while( r.match(sub) ) {
+			var pos = r.matchedPos();
+			keep.push( r.matched(0) );
+			trace(keep);
+			sub = r.matchedRight();
+		}
+
+		return keep.join("");
 	}
 
 	function checkMinMax() {

@@ -57,13 +57,12 @@ class JsTools {
 	}
 
 
-	public static function prepareProjectFile(p:data.Project) : { str:String, json:ldtk.Json.ProjectJson } {
+	public static function prepareProjectFile(p:data.Project) : FileSavingData {
 		var json = p.toJson();
 		var jsonStr = dn.JsonPretty.stringify(p.minifyJson, json, Const.JSON_HEADER);
 
 		return {
-			str: jsonStr,
-			json: json,
+			jsonString: jsonStr,
 		}
 	}
 
@@ -554,7 +553,7 @@ class JsTools {
 	}
 
 	public static function getSamplesDir() {
-		var raw = getExeDir() + ( App.isMac() ? "../samples" : "/samples" );
+		var raw = getExeDir() + ( App.isMac() ? "/../samples" : "/samples" );
 		return dn.FilePath.fromDir( raw ).directory;
 	}
 

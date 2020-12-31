@@ -16,6 +16,7 @@ typedef FieldInfos = {
 	var only: Null<String>;
 	var hasVersion: Bool;
 	var isColor: Bool;
+	var isInternal: Bool;
 }
 
 typedef TypeInfos = {
@@ -149,7 +150,9 @@ class XmlDocToMarkdown {
 				// Name
 				var cell = [ '`${f.displayName}`' ];
 				if( f.only!=null )
-					cell.push('<sup>Only *${f.only}*</sup>');
+					cell.push('<sup class="only">Only *${f.only}*</sup>');
+				if( f.isInternal )
+					cell.push('<sup class="internal">*Internal editor data*</sup>');
 
 				if( f.hasVersion )
 					cell.push( versionBadge(f.xml) );
@@ -221,7 +224,7 @@ class XmlDocToMarkdown {
 
 
 	static function getColorInfosMd(f:FieldInfos) : String {
-		return '<small>*' + ( switch f.type {
+		return '<small class="color">*' + ( switch f.type {
 			case Nullable(Basic("String")), Basic("String"):
 				'Hex color "#rrggbb"';
 
@@ -308,6 +311,7 @@ class XmlDocToMarkdown {
 				hasVersion: hasMeta(fieldXml, "changed") || hasMeta(fieldXml, "added"),
 				descMd: descMd,
 				isColor: hasMeta(fieldXml, "color"),
+				isInternal: hasMeta(fieldXml, "internal"),
 			});
 		}
 		allFields.sort( (a,b)->Reflect.compare(a.displayName, b.displayName) );

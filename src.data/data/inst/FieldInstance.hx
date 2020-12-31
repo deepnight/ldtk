@@ -38,8 +38,9 @@ class FieldInstance {
 
 				if( o.def.type==F_Text ) // Restore end-of-lines
 					switch val {
+						case null:
 						case V_String(v):
-							v = StringTools.replace(v, "\\n", "\n");
+							v = JsonTools.unescapeString(v);
 							val = V_String(v);
 						case _:
 					}
@@ -69,7 +70,7 @@ class FieldInstance {
 						JsonTools.writeEnum(e,true);
 
 					case V_String(v):
-						JsonTools.writeEnum( V_String( escapeStringForJson(v) ), true);
+						JsonTools.writeEnum( V_String( JsonTools.escapeString(v) ), true);
 				}
 			}),
 
@@ -169,6 +170,8 @@ class FieldInstance {
 				else {
 					raw = StringTools.replace(raw, "\\r", " ");
 					raw = StringTools.replace(raw, "\\n", " ");
+					if( def.regex!=null )
+						raw = def.applyRegex(raw);
 					setInternal(arrayIdx, V_String(raw) );
 				}
 
@@ -177,7 +180,7 @@ class FieldInstance {
 				if( raw.length==0 )
 					setInternal(arrayIdx, null);
 				else {
-					raw = StringTools.replace(raw, "\\n", "\n");
+					raw = JsonTools.unescapeString(raw);
 					setInternal(arrayIdx, V_String(raw) );
 				}
 
@@ -321,9 +324,9 @@ class FieldInstance {
 		return switch def.type {
 			case F_Int: getInt(arrayIdx);
 			case F_Float: JsonTools.writeFloat( getFloat(arrayIdx) );
-			case F_String: escapeStringForJson( getString(arrayIdx) );
-			case F_Text: escapeStringForJson( getString(arrayIdx) );
-			case F_Path: escapeStringForJson( getFilePath(arrayIdx) );
+			case F_String: JsonTools.escapeString( getString(arrayIdx) );
+			case F_Text: JsonTools.escapeString( getString(arrayIdx) );
+			case F_Path: JsonTools.escapeString( getFilePath(arrayIdx) );
 			case F_Bool: getBool(arrayIdx);
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Point: getPointGrid(arrayIdx);
@@ -389,16 +392,6 @@ class FieldInstance {
 			case _: throw "unexpected";
 		}
 		return out;
-	}
-
-	public static inline function escapeStringForJson(s:String) {
-		if( s==null )
-			return null;
-		s = StringTools.replace(s, "\\", "\\\\");
-		s = StringTools.replace(s, "\n", "\\n");
-		s = StringTools.replace(s, '"', '\\"');
-		s = StringTools.replace(s, "'", "\'");
-		return s;
 	}
 
 	public function getEnumValue(arrayIdx:Int) : Null<String> {

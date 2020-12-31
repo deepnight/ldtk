@@ -273,9 +273,9 @@ class Tool<T> extends dn.Process {
 
 		resume();
 
+		jPalette.empty();
 		if( palette!=null ) {
 			// Show palette
-			jPalette.empty();
 			palette.jContent.appendTo( jPalette );
 			palette.render();
 		}
