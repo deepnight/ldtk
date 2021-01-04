@@ -1,3 +1,6 @@
+import haxe.Json;
+using StringTools;
+
 typedef ObjectField = {
 	var xml : haxe.xml.Access;
 	var name : String;
@@ -46,16 +49,8 @@ class XmlDocToMarkdown {
 	static var verbose = false;
 	static var appVersion = new dn.Version();
 
-	public static function run(className:String, xmlPath:String, ?mdPath:String, deleteXml=false) {
+	public static function run(className:String, xmlPath:String, ?mdPath:String, ?jsonPath:String, deleteXml=false) {
 		allTypes = [];
-
-		// Get app version from "package.json"
-		haxe.macro.Context.registerModuleDependency("XmlDocToMarkdown", "app/package.json");
-		var raw = sys.io.File.getContent("app/package.json");
-		var versionReg = ~/"version"[ \t]*:[ \t]*"(.*)"/gim;
-		versionReg.match(raw);
-		appVersion.set( versionReg.matched(1) );
-		Sys.println('App version is $appVersion...');
 
 		// Read XML file
 		Sys.println('Parsing $xmlPath...');
@@ -96,7 +91,29 @@ class XmlDocToMarkdown {
 				return Reflect.compare(a.section, b.section);
 		});
 
+		Sys.println("Generating Markdown");
+		genMarkdown(xml, className, xmlPath, mdPath, deleteXml);
 
+		Sys.println("-------------------");
+		Sys.println("Generating JSON");
+		genJson(xml, className, xmlPath, jsonPath, deleteXml);
+
+		// Cleanup
+		if( deleteXml ) {
+			Sys.println("Deleting XML file");
+			sys.FileSystem.deleteFile(xmlPath);
+		}
+	}
+
+	public static function genMarkdown(xml:haxe.xml.Access, className:String, xmlPath:String, ?mdPath:String, deleteXml=false) {
+
+		// Get app version from "package.json"
+		haxe.macro.Context.registerModuleDependency("XmlDocToMarkdown", "app/package.json");
+		var raw = sys.io.File.getContent("app/package.json");
+		var versionReg = ~/"version"[ \t]*:[ \t]*"(.*)"/gim;
+		versionReg.match(raw);
+		appVersion.set( versionReg.matched(1) );
+		Sys.println('App version is $appVersion...');
 
 		// Print types
 		var toc = [];
@@ -214,9 +231,86 @@ class XmlDocToMarkdown {
 		fo.writeString(md.join("\n"));
 		fo.close();
 
-		// Cleanup
-		if( deleteXml )
-			sys.FileSystem.deleteFile(xmlPath);
+		Sys.println('Done!');
+		Sys.println('');
+	}
+
+	public static function genJson(xml:haxe.xml.Access, className:String, xmlPath:String, ?jsonPath:String, deleteXml=false) {
+		var json: Dynamic = {
+			definitions: new Map<String,Dynamic>(),
+			"$ref": "#/definitions/Project"
+		};
+
+		// Get app version from "package.json"
+		haxe.macro.Context.registerModuleDependency("XmlDocToMarkdown", "app/package.json");
+		var raw = sys.io.File.getContent("app/package.json");
+		var versionReg = ~/"version"[ \t]*:[ \t]*"(.*)"/gim;
+		versionReg.match(raw);
+		appVersion.set( versionReg.matched(1) );
+		Sys.println('App version is $appVersion...');
+
+		// Print types
+		for(type in allTypes) {
+			var depth = 0;
+
+			var definition: Dynamic = {
+				properties: new Map<String,Dynamic>()
+			};
+			var definitionName = type.rawName.split(".")[1].replace("Json", "");
+
+			Sys.println('Found ${type.xml.name}: ${type.displayName} ${definitionName}');
+
+			// No field informations for this type
+			if( !type.xml.hasNode.a ) {
+				continue;
+			}
+
+			// List fields
+			var required = [];
+			for(f in getFieldsInfos(type.xml.node.a)) {
+				var typeInfo: Dynamic = getTypeJson(f.type);
+				if (typeInfo.required) {
+					required.push(f.displayName);
+				}
+				typeInfo.data.description = f.descMd.join('\n');
+				definition.properties.set(f.displayName, typeInfo.data);
+			}
+			definition.required = required;
+
+			json.definitions.set(definitionName, definition);
+		}
+
+
+
+
+		// Header
+		var headerMd = [
+			'# LDtk Json structure (version $appVersion)',
+			'## Table of contents',
+			// 'Please refer to the [README.md](https://github.com/deepnight/ldtk/blob/master/README.md) for more informations.'
+		];
+
+		// Table of content
+		// for(e in toc) {
+		// 	var indent = " -";
+		// 	for(i in 0...e.depth)
+		// 		indent = "  "+indent;
+		// 	headerMd.push('$indent [${e.name}](#${e.anchor})');
+		// }
+		// md = headerMd.concat(md);
+
+
+		// Write markdown file
+		if( jsonPath==null ) {
+			var fp = dn.FilePath.fromFile(xmlPath);
+			fp.extension = "md";
+			jsonPath = fp.full;
+		}
+
+		Sys.println('Writing JSON: ${jsonPath}...');
+		var fo = sys.io.File.write(jsonPath, false);
+		fo.writeString(Json.stringify(json));
+		fo.close();
 
 		Sys.println('Done!');
 		Sys.println('');
@@ -439,6 +533,56 @@ class XmlDocToMarkdown {
 			case Unknown: "???";
 		}
 		return str;
+	}
+
+	static function getTypeJson(t:FieldType): { required: Bool, data: Dynamic } {
+		var required = true;
+		var data = switch t {
+			case Nullable(f): {
+				required = false;
+				getTypeJson(f).data;
+			};
+			case Basic(name): switch name {
+				case "Bool": {
+					type: "boolean",
+				};
+				case "String": {
+					type: "string",
+				};
+				case "Int": {
+					type: "integer",
+				};
+				case "Float": {
+					type: "number",
+				};
+				case "Enum": {
+					type: "string",
+				};
+				case x: {
+					type: x
+				};
+			};
+			case Enu(name): {
+				"$ref": '#/definitions/${name.replace("ldtk.", "").replace("Json", "")}'
+			};
+			case Ref(display, name): {
+				"$ref": '#/definitions/${name.replace("ldtk.", "").replace("Json", "")}'
+			};
+			case Arr(t): {
+				type: "array",
+				items: getTypeJson(t).data
+			};
+			case Obj(fields): {
+				type: "object",
+			};
+			case Dyn: {};
+			case Unknown: null;
+		}
+
+		return {
+			required: required,
+			data: data,
+		};
 	}
 
 
