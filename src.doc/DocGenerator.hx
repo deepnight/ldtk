@@ -85,13 +85,14 @@ class DocGenerator {
 
 			if( type.name=="enum") {
 				// Enum
-				var vals = [];
-				for(n in type.elements) {
-					if( n.name=="meta" )
-						continue;
-					vals.push(n.name);
-				}
-				allEnums.set(type.att.path, vals);
+				var enumValues = [];
+				for(n in type.elements)
+					switch n.name {
+						case "meta", "haxe_doc":
+						case _: enumValues.push(n.name);
+					}
+
+				allEnums.set(type.att.path, enumValues);
 			}
 			else {
 				// Typedef
