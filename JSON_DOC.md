@@ -104,7 +104,7 @@ Value | Type | Description
 `__type` | String | Type of the field, such as Int, Float, Enum(enum_name), Bool, etc.
 `__value` | Dynamic&nbsp;(anything) | Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>		It can also be an `Array` of various types.
 `defUid` | Int | Reference of the **Field definition** UID
-`realEditorValues`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Dynamic&nbsp;(anything) | 
+`realEditorValues`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
 
 <a id="ldtk-DefinitionsJson" name="ldtk-DefinitionsJson"></a>
 ## 2. Definitions   
@@ -127,7 +127,7 @@ Value | Type | Description
 `displayOpacity` | Float | Opacity of the layer (0 to 1.0)
 `gridSize` | Int | Width and height of the grid in pixels
 `identifier` | String | Unique String identifier
-`intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup> | Array&nbsp;of&nbsp;Object | This object contains the following fields:<br/><ul><li>**`color`** **(String**) <small class="color">*Hex color "#rrggbb"*</small></li><li>**`identifier`** **(String**)</li></ul>
+`intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup> | Array&nbsp;of&nbsp;Object | This object contains the following fields:<br/><ul><li>**`color`** **(String**) <small class="color">*Hex color "#rrggbb"*</small></li><li>**`identifier`** **(String *(can be `null`)***)</li></ul>
 `pxOffsetX`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Int | X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
 `pxOffsetY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Int | Y offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
 `tilePivotX`<br/><sup class="only">Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
@@ -198,7 +198,7 @@ Value | Type | Description
 `max`<br/><sup class="only">Only *Int, Float*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Max limit for value, if applicable
 `min`<br/><sup class="only">Only *Int, Float*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Min limit for value, if applicable
 `regex`<br/><sup class="only">Only *String*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.2-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional "i" flag.
-`type` | Dynamic&nbsp;(anything) | Internal type enum
+`type` | Enum | Internal type enum
 `uid` | Int | Unique Intidentifier
 
 <a id="ldtk-TilesetDefJson" name="ldtk-TilesetDefJson"></a>
@@ -211,7 +211,7 @@ Value | Type | Description
 `pxHei` | Int | Image height in pixels
 `pxWid` | Int | Image width in pixels
 `relPath` | String | Path to the source file, relative to the current project JSON file
-`savedSelections`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Object | Array of group of tiles selections, only meant to be used in the editor<br/>This object contains the following fields:<br/><ul><li>**`ids`** **(Array of Int**)</li><li>**`mode`** **(Dynamic (anything)**)</li></ul>
+`savedSelections`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Object | Array of group of tiles selections, only meant to be used in the editor<br/>This object contains the following fields:<br/><ul><li>**`ids`** **(Array of Int**)</li><li>**`mode`** **(Enum**)</li></ul>
 `spacing` | Int | Space in pixels between all tiles
 `tileGridSize` | Int | 
 `uid` | Int | Unique Intidentifier

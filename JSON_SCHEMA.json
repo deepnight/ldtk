@@ -30,7 +30,13 @@
 				},
 				"realEditorValues": {
 					"description": "",
-					"items" : {},
+					"items": {
+						"type": [
+							"string",
+							"object",
+							"null"
+						]
+					},
 					"type": [
 						"array"
 					]
@@ -414,7 +420,11 @@
 					]
 				},
 				"type": {
-					"description": "Internal type enum"
+					"description": "Internal type enum",
+					"type": [
+						"string",
+						"object"
+					]
 				},
 				"identifier": {
 					"description": "Unique String identifier",
