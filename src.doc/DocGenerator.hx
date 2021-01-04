@@ -522,7 +522,7 @@ class DocGenerator {
 			case _: true;
 		}
 
-		var data = switch t {
+		var data : Dynamic = switch t {
 			case Nullable(f):
 				var d : { type:Array<String> } = getTypeJson(f).data;
 				d.type.push("null");
@@ -541,9 +541,14 @@ class DocGenerator {
 				case "Float": {
 					type: ["number"],
 				};
-				case "Enum": {
-					type: [ "string", "object" ],
-				};
+				case "Enum":
+					{
+						type: ["string","object"],
+						properties: {
+							id: { type:"string" },
+							params: { type: "array", items: { type:["string","integer","number","boolean"]} },
+						}
+					};
 				case x: {
 					type: [x]
 				};
@@ -571,7 +576,7 @@ class DocGenerator {
 				};
 
 			case Dyn: {
-				type: ["string","integer","number","object","array"]
+				type: ["string","integer","number","object","array","boolean","null"]
 			};
 			case Unknown: null;
 		}
