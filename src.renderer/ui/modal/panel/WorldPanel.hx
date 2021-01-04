@@ -120,7 +120,7 @@ class WorldPanel extends ui.modal.Panel {
 		var jForm = jContent.find("ul#worldForm");
 		jForm.find("*").off();
 
-		for(k in data.DataTypes.WorldLayout.getConstructors())
+		for(k in ldtk.Json.WorldLayout.getConstructors())
 			jForm.removeClass("layout-"+k);
 		jForm.addClass("layout-"+project.worldLayout.getName());
 
@@ -128,7 +128,7 @@ class WorldPanel extends ui.modal.Panel {
 		var old = project.worldLayout;
 		var e = new form.input.EnumSelect(
 			jForm.find("[name=worldLayout]"),
-			data.DataTypes.WorldLayout,
+			ldtk.Json.WorldLayout,
 			()->project.worldLayout,
 			(l)->project.worldLayout = l,
 			(l)->switch l {

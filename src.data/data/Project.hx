@@ -15,7 +15,7 @@ class Project {
 	public var defaultGridSize : Int;
 	public var bgColor : UInt;
 	public var defaultLevelBgColor : UInt;
-	public var worldLayout : data.DataTypes.WorldLayout;
+	public var worldLayout : ldtk.Json.WorldLayout;
 	public var worldGridWidth : Int;
 	public var worldGridHeight : Int;
 
@@ -67,12 +67,12 @@ class Project {
 			p.levels.push( Level.fromJson(p, lvlJson) );
 
 		// World
-		var defLayout : data.DataTypes.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
+		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
 
 		#if debug
-		if( json.worldLayout=="WorldGrid" ) json.worldLayout = "GridVania"; // TODO remove that after 0.6 release
+		if( (cast json.worldLayout)=="WorldGrid" ) json.worldLayout = cast "GridVania"; // TODO remove that after 0.6 release
 		#end
-		p.worldLayout = JsonTools.readEnum( data.DataTypes.WorldLayout, json.worldLayout, false, defLayout );
+		p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
 		p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, DEFAULT_LEVEL_SIZE*p.defaultGridSize );
 		p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, DEFAULT_LEVEL_SIZE*p.defaultGridSize );
 		if( dn.Version.lower(json.jsonVersion, "0.6") )
@@ -106,7 +106,7 @@ class Project {
 		return fromJson( toJson() );
 	}
 
-	public function onWorldLayoutChange(old:data.DataTypes.WorldLayout) {
+	public function onWorldLayoutChange(old:ldtk.Json.WorldLayout) {
 		// Convert layout
 		switch worldLayout {
 			case Free:

@@ -8,13 +8,6 @@ package data;
 		- do not rename Typedef fields or change their type
 */
 
-enum WorldLayout {
-	Free;
-	GridVania;
-	LinearHorizontal;
-	LinearVertical;
-}
-
 typedef IntGridValueDef = {
 	var identifier : Null<String>;
 	var color : UInt;
