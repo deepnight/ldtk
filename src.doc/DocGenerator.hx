@@ -44,6 +44,7 @@ enum FieldType {
 
 class DocGenerator {
 	#if macro
+	static var SCHEMA_URL = "https://ldtk.io/files/JSON_SCHEMA.json";
 
 	static var allTypes: Array<TypeInfos>;
 	static var verbose = false;
@@ -206,8 +207,10 @@ class DocGenerator {
 		// Header
 		var headerMd = [
 			'# LDtk Json structure (version $appVersion)',
+			'',
+			'Json schema: $SCHEMA_URL',
+			'',
 			'## Table of contents',
-			// 'Please refer to the [README.md](https://github.com/deepnight/ldtk/blob/master/README.md) for more informations.'
 		];
 
 		// Table of content
@@ -283,7 +286,7 @@ class DocGenerator {
 		// Header
 		var header = {};
 		Reflect.setField(header, "$schema", "https://json-schema.org/draft-07/schema#");
-		Reflect.setField(header, "$id", "https://ldtk.io/files/JSON_SCHEMA.json");
+		Reflect.setField(header, "$id", SCHEMA_URL);
 
 		// Write Json file
 		Sys.println('Writing JSON: ${jsonPath}...');

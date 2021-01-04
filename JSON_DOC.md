@@ -1,4 +1,7 @@
 # LDtk Json structure (version 0.6.2)
+
+Json schema: https://ldtk.io/files/JSON_SCHEMA.json
+
 ## Table of contents
    - [LDtk Json root](#ldtk-ProjectJson)
    - [Level](#ldtk-LevelJson)
