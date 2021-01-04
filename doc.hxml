@@ -9,4 +9,4 @@ ldtk/Json.hx
 --next
 -cp src.doc
 -lib deepnightLibs
---macro DocGenerator.run("ldtk/Json", "json_doc.xml", "JSON_DOC.md", "./schema.json")
+--macro DocGenerator.run("ldtk/Json", "json_doc.xml", "JSON_DOC.md", "JSON_SCHEMA.json")
