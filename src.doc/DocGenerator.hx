@@ -282,7 +282,8 @@ class DocGenerator {
 
 		// Header
 		var header = {};
-		Reflect.setField(header, "$schema", "http://json-schema.org/draft-07/schema#");
+		Reflect.setField(header, "$schema", "https://json-schema.org/draft-07/schema#");
+		Reflect.setField(header, "$id", "https://ldtk.io/files/JSON_SCHEMA.json");
 
 		// Write Json file
 		Sys.println('Writing JSON: ${jsonPath}...');
