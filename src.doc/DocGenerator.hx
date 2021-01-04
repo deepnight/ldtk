@@ -293,16 +293,17 @@ class DocGenerator {
 		// md = headerMd.concat(md);
 
 
-		// Write markdown file
+		// Default output file name
 		if( jsonPath==null ) {
 			var fp = dn.FilePath.fromFile(xmlPath);
 			fp.extension = "md";
 			jsonPath = fp.full;
 		}
 
+		// Write Json file
 		Sys.println('Writing JSON: ${jsonPath}...');
 		var fo = sys.io.File.write(jsonPath, false);
-		fo.writeString(Json.stringify(json));
+		fo.writeString( dn.JsonPretty.stringify(false, json) );
 		fo.close();
 
 		Sys.println('Done!');
