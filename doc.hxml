@@ -1,7 +1,7 @@
 # Build XML
 ldtk/Json.hx
 -lib ldtk-haxe-api
--dce full
+-dce std
 -D doc-gen
 -xml json_doc.xml
 

@@ -47,11 +47,13 @@ class DocGenerator {
 	static var SCHEMA_URL = "https://ldtk.io/files/JSON_SCHEMA.json";
 
 	static var allTypes: Array<TypeInfos>;
+	static var allEnums : Map<String, Array<String>>;
 	static var verbose = false;
 	static var appVersion = new dn.Version();
 
 	public static function run(className:String, xmlPath:String, ?mdPath:String, ?jsonPath:String, deleteXml=false) {
 		allTypes = [];
+		allEnums = [];
 
 		// Read XML file
 		Sys.println('Parsing $xmlPath...');
@@ -72,13 +74,29 @@ class DocGenerator {
 			if( hasMeta(type,"display") )
 				displayName = getMeta(type,"display");
 
-			allTypes.push({
-				xml: type,
-				rawName: type.att.path,
-				displayName: displayName,
-				section: hasMeta(type,"section") ? getMeta(type,"section") : "",
-			});
+			if( type.name=="enum") {
+				// Enum
+				var vals = [];
+				for(n in type.elements) {
+					if( n.name=="meta" )
+						continue;
+					vals.push(n.name);
+				}
+				allEnums.set(type.att.path, vals);
+			}
+			else {
+				// Typedef
+				allTypes.push({
+					xml: type,
+					rawName: type.att.path,
+					displayName: displayName,
+					section: hasMeta(type,"section") ? getMeta(type,"section") : "",
+				});
+			}
+
+			Sys.println('Found ${type.name}: $displayName');
 		}
+		Sys.println("-------------------");
 
 		// Sort types
 		allTypes.sort( (a,b)->{
@@ -105,7 +123,6 @@ class DocGenerator {
 		genMarkdownDoc(xml, className, xmlPath, mdPath);
 
 		// Json schema output
-		Sys.println("-------------------");
 		Sys.println("Generating JSON");
 		genJsonSchema(xml, className, xmlPath, jsonPath);
 
@@ -123,7 +140,6 @@ class DocGenerator {
 		for(type in allTypes) {
 			md.push("");
 			var depth = 0;
-			Sys.println('Found ${type.xml.name}: ${type.displayName}');
 
 			// Anchor
 			md.push( getAnchorHtml(type.xml.att.path) );
@@ -254,8 +270,6 @@ class DocGenerator {
 			};
 			var definitionName = type.rawName.split(".")[1].replace("Json", "");
 
-			Sys.println('Found ${type.xml.name}: ${type.displayName} ${definitionName}');
-
 			// No field informations for this type
 			if( !type.xml.hasNode.a ) {
 				continue;
@@ -374,6 +388,11 @@ class DocGenerator {
 				case Nullable( Obj(f) ): f;
 				case Nullable( Arr(Obj(f)) ): f;
 				case _: [];
+			}
+
+			switch type {
+				case Enu(name): descMd.push("Possible values: `"+allEnums.get(name).join("`, `")+"`");
+				case _:
 			}
 
 			allFields.push({
@@ -506,7 +525,7 @@ class DocGenerator {
 					case "UInt": "Unsigned integer";
 					case _: name;
 				}
-			case Enu(name): 'Haxe editor enum $name';
+			case Enu(name): 'Enum';
 			case Ref(display, name): '[$display](#${anchorId(name)})';
 			case Arr(t): 'Array of ${getTypeMd(t)}';
 			case Obj(fields): "Object";
