@@ -4,6 +4,7 @@ json_doc.xml
 *.crash.json
 *.crash.ldtk
 *.map
+*.zip
 
 dump/
 res/.tmp
