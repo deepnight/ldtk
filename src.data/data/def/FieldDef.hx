@@ -63,7 +63,7 @@ class FieldDef {
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.FieldDefJson) {
-		if( json.type=="F_File" ) json.type = "F_Path"; // patch old type name
+		if( (cast json.type)=="F_File" ) json.type = cast "F_Path"; // patch old type name
 
 		var type = JsonTools.readEnum(data.DataTypes.FieldType, json.type, false);
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), type, JsonTools.readBool(json.isArray, false) );
