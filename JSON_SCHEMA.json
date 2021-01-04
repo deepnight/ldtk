@@ -30,13 +30,26 @@
 				},
 				"realEditorValues": {
 					"description": "",
-					"items" : {},
+					"items": {
+						"type": [
+							"string",
+							"object",
+							"null"
+						]
+					},
 					"type": [
 						"array"
 					]
 				},
 				"__value": {
-					"description": "Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>  It can also be an `Array` of various types."
+					"description": "Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>  It can also be an `Array` of various types.",
+					"type": [
+						"string",
+						"integer",
+						"number",
+						"object",
+						"array"
+					]
 				}
 			}
 		},
@@ -63,6 +76,23 @@
 				},
 				"__tile": {
 					"description": "Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).",
+					"properties": {
+						"srcRect": {
+							"items": {
+								"type": [
+									"integer"
+								]
+							},
+							"type": [
+								"array"
+							]
+						},
+						"tilesetUid": {
+							"type": [
+								"integer"
+							]
+						}
+					},
 					"type": [
 						"object",
 						"null"
@@ -414,7 +444,11 @@
 					]
 				},
 				"type": {
-					"description": "Internal type enum"
+					"description": "Internal type enum",
+					"type": [
+						"string",
+						"object"
+					]
 				},
 				"identifier": {
 					"description": "Unique String identifier",
@@ -796,6 +830,18 @@
 				"intGrid": {
 					"description": "",
 					"items": {
+						"properties": {
+							"v": {
+								"type": [
+									"integer"
+								]
+							},
+							"coordId": {
+								"type": [
+									"integer"
+								]
+							}
+						},
 						"type": [
 							"object"
 						]
@@ -821,6 +867,19 @@
 			"properties": {
 				"cachedPixelData": {
 					"description": "The following data is used internally for various optimizations. It's always synced with source image changes.",
+					"properties": {
+						"opaqueTiles": {
+							"type": [
+								"string"
+							]
+						},
+						"averageColors": {
+							"type": [
+								"string",
+								"null"
+							]
+						}
+					},
 					"type": [
 						"object",
 						"null"
@@ -865,6 +924,24 @@
 				"savedSelections": {
 					"description": "Array of group of tiles selections, only meant to be used in the editor",
 					"items": {
+						"properties": {
+							"mode": {
+								"type": [
+									"string",
+									"object"
+								]
+							},
+							"ids": {
+								"items": {
+									"type": [
+										"integer"
+									]
+								},
+								"type": [
+									"array"
+								]
+							}
+						},
 						"type": [
 							"object"
 						]
@@ -1013,6 +1090,19 @@
 				"intGridValues": {
 					"description": "",
 					"items": {
+						"properties": {
+							"color": {
+								"type": [
+									"string"
+								]
+							},
+							"identifier": {
+								"type": [
+									"string",
+									"null"
+								]
+							}
+						},
 						"type": [
 							"object"
 						]
@@ -1024,6 +1114,36 @@
 				"autoRuleGroups": {
 					"description": "Contains all the auto-layer rule definitions.",
 					"items": {
+						"properties": {
+							"name": {
+								"type": [
+									"string"
+								]
+							},
+							"collapsed": {
+								"type": [
+									"boolean"
+								]
+							},
+							"uid": {
+								"type": [
+									"integer"
+								]
+							},
+							"active": {
+								"type": [
+									"boolean"
+								]
+							},
+							"rules": {
+								"items": {
+									"$ref": "#/definitions/AutoRuleDef"
+								},
+								"type": [
+									"array"
+								]
+							}
+						},
 						"type": [
 							"object"
 						]
@@ -1080,6 +1200,18 @@
 				"__neighbours": {
 					"description": "An array listing all other levels touching this one on the world map. The `dir` is a single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast). In \"linear\" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.",
 					"items": {
+						"properties": {
+							"levelUid": {
+								"type": [
+									"integer"
+								]
+							},
+							"dir": {
+								"type": [
+									"string"
+								]
+							}
+						},
 						"type": [
 							"object"
 						]
@@ -1178,6 +1310,29 @@
 				"values": {
 					"description": "All possible enum values, with their optional Tile infos.",
 					"items": {
+						"properties": {
+							"tileId": {
+								"type": [
+									"integer",
+									"null"
+								]
+							},
+							"id": {
+								"type": [
+									"string"
+								]
+							},
+							"__tileSrcRect": {
+								"items": {
+									"type": [
+										"integer"
+									]
+								},
+								"type": [
+									"array"
+								]
+							}
+						},
 						"type": [
 							"object"
 						]
