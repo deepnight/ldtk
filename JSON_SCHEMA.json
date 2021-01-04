@@ -646,10 +646,8 @@
 					]
 				},
 				"worldLayout": {
-					"description": "An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values are: Free, GridVania, LinearHorizontal and LinearVertical;",
-					"type": [
-						"string"
-					]
+					"description": "An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`",
+					"$ref": "#/definitions/WorldLayout"
 				},
 				"exportTiled": {
 					"description": "If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)",
@@ -1008,6 +1006,18 @@
 					]
 				}
 			}
+		},
+		"WorldLayout": {
+			"type": [
+				"string",
+				"object"
+			],
+			"enum": [
+				"Free",
+				"GridVania",
+				"LinearHorizontal",
+				"LinearVertical"
+			]
 		},
 		"Tile": {
 			"required": [
