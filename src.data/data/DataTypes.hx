@@ -105,12 +105,6 @@ enum EntityLimitBehavior {
 	MoveLastOne;
 }
 
-enum AutoLayerRuleCheckerMode {
-	None;
-	Horizontal;
-	Vertical;
-}
-
 typedef GridTileInfos = {
 	var tileId : Int;
 	var flips : Int;

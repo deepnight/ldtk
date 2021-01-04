@@ -515,7 +515,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					if( ev.button==2 ) {
 						// Pick vertical/horizontal checker
 						var m = new Dialog(jFlag);
-						for(k in [AutoLayerRuleCheckerMode.Horizontal, AutoLayerRuleCheckerMode.Vertical]) {
+						for(k in [ldtk.Json.AutoLayerRuleCheckerMode.Horizontal, ldtk.Json.AutoLayerRuleCheckerMode.Vertical]) {
 							var name = k.getName();
 							var jRadio = new J('<input name="mode" type="radio" value="$name" id="$name"/>');
 							jRadio.change( function(ev:js.jquery.Event) {

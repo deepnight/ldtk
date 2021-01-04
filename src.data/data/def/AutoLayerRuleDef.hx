@@ -19,7 +19,7 @@ class AutoLayerRuleDef {
 	public var pivotY = 0.;
 	public var xModulo = 1;
 	public var yModulo = 1;
-	public var checker : data.DataTypes.AutoLayerRuleCheckerMode = None;
+	public var checker : ldtk.Json.AutoLayerRuleCheckerMode = None;
 
 	var perlinActive = false;
 	public var perlinSeed : Int;
@@ -138,7 +138,7 @@ class AutoLayerRuleDef {
 		r.pattern = json.pattern;
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
-		r.checker = JsonTools.readEnum(data.DataTypes.AutoLayerRuleCheckerMode, json.checker, false, None);
+		r.checker = JsonTools.readEnum(ldtk.Json.AutoLayerRuleCheckerMode, json.checker, false, None);
 		r.tileMode = JsonTools.readEnum(ldtk.Json.AutoLayerRuleTileMode, json.tileMode, false, Single);
 		r.pivotX = JsonTools.readFloat(json.pivotX, 0);
 		r.pivotY = JsonTools.readFloat(json.pivotY, 0);
