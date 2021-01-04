@@ -273,26 +273,6 @@ class DocGenerator {
 			json.definitions.set(definitionName, definition);
 		}
 
-
-
-
-		// Header
-		var headerMd = [
-			'# LDtk Json structure (version $appVersion)',
-			'## Table of contents',
-			// 'Please refer to the [README.md](https://github.com/deepnight/ldtk/blob/master/README.md) for more informations.'
-		];
-
-		// Table of content
-		// for(e in toc) {
-		// 	var indent = " -";
-		// 	for(i in 0...e.depth)
-		// 		indent = "  "+indent;
-		// 	headerMd.push('$indent [${e.name}](#${e.anchor})');
-		// }
-		// md = headerMd.concat(md);
-
-
 		// Default output file name
 		if( jsonPath==null ) {
 			var fp = dn.FilePath.fromFile(xmlPath);
