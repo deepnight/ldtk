@@ -280,10 +280,14 @@ class DocGenerator {
 			jsonPath = fp.full;
 		}
 
+		// Header
+		var header = {};
+		Reflect.setField(header, "$schema", "http://json-schema.org/draft-07/schema#");
+
 		// Write Json file
 		Sys.println('Writing JSON: ${jsonPath}...');
 		var fo = sys.io.File.write(jsonPath, false);
-		fo.writeString( dn.JsonPretty.stringify(json, Full) );
+		fo.writeString( dn.JsonPretty.stringify(json, Full, header, true) );
 		fo.close();
 
 		Sys.println('Done!');
