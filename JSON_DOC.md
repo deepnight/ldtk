@@ -119,8 +119,8 @@ Value | Type | Description
 -- | -- | --
 `__type` | String | Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)
 `autoRuleGroups`<br/><sup class="only">Only *Auto-layers*</sup> | Array&nbsp;of&nbsp;Object | Contains all the auto-layer rule definitions.<br/>This object contains the following fields:<br/><ul><li>**`active`** **(Bool**)</li><li>**`collapsed`** **(Bool**)</li><li>**`name`** **(String**)</li><li>**`rules`** **(Array of [Auto-layer rule definition](#ldtk-AutoRuleDef)**)</li><li>**`uid`** **(Int**)</li></ul>
-`autoSourceLayerDefUid`<br/><sup class="only">Only *Auto-layers*</sup> | Int | 
-`autoTilesetDefUid`<br/><sup class="only">Only *Auto-layers*</sup> | Int | Reference to the Tileset UID being used by this auto-layer rules
+`autoSourceLayerDefUid`<br/><sup class="only">Only *Auto-layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
+`autoTilesetDefUid`<br/><sup class="only">Only *Auto-layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Reference to the Tileset UID being used by this auto-layer rules
 `displayOpacity` | Float | Opacity of the layer (0 to 1.0)
 `gridSize` | Int | Width and height of the grid in pixels
 `identifier` | String | Unique String identifier
@@ -129,7 +129,7 @@ Value | Type | Description
 `pxOffsetY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Int | Y offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
 `tilePivotX`<br/><sup class="only">Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilePivotY`<br/><sup class="only">Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
-`tilesetDefUid`<br/><sup class="only">Only *Tile layers*</sup> | Int | Reference to the Tileset UID being used by this tile layer
+`tilesetDefUid`<br/><sup class="only">Only *Tile layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Reference to the Tileset UID being used by this tile layer
 `type`<br/><sup class="internal">*Internal editor data*</sup> | String | Type of the layer as Haxe Enum
 `uid` | Int | Unique Int identifier
 
@@ -171,9 +171,9 @@ Value | Type | Description
 `pivotY` | Float | Pivot Y coordinate (from 0 to 1.0)
 `renderMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
 `showName`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Bool | Display entity name in editor
-`tileId` | Int | Tile ID used for optional tile display
+`tileId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tile ID used for optional tile display
 `tileRenderMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
-`tilesetId` | Int | Tileset ID used for optional tile display
+`tilesetId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset ID used for optional tile display
 `uid` | Int | Unique Int identifier
 `width` | Int | Pixel width
 
@@ -183,10 +183,10 @@ Value | Type | Description
 -- | -- | --
 `__type` | String | Human readable value type (eg. `Int`, `Float`, `Point`, etc.). If the field is an array, this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)
 `acceptFileTypes`<br/><sup class="only">Only *FilePath*</sup> | Array&nbsp;of&nbsp;String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional list of accepted file extensions for FilePath value type. Includes the dot: `.ext`
-`arrayMaxLength`<br/><sup class="only">Only *Array*</sup> | Int | Array max length
-`arrayMinLength`<br/><sup class="only">Only *Array*</sup> | Int | Array min length
+`arrayMaxLength`<br/><sup class="only">Only *Array*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Array max length
+`arrayMinLength`<br/><sup class="only">Only *Array*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Array min length
 `canBeNull` | Bool | TRUE if the value can be null. For arrays, TRUE means it can contain null values (exception: array of Points can't have null values).
-`defaultOverride` | Enum | Default value if selected value is null or invalid.
+`defaultOverride` | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Default value if selected value is null or invalid.
 `editorAlwaysShow`<br/><sup class="internal">*Internal editor data*</sup> | Bool | 
 `editorDisplayMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
 `editorDisplayPos`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
@@ -195,7 +195,7 @@ Value | Type | Description
 `max`<br/><sup class="only">Only *Int, Float*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Max limit for value, if applicable
 `min`<br/><sup class="only">Only *Int, Float*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Min limit for value, if applicable
 `regex`<br/><sup class="only">Only *String*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.2-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional "i" flag.
-`type` | String | Internal type enum
+`type` | Dynamic&nbsp;(anything) | Internal type enum
 `uid` | Int | Unique Intidentifier
 
 <a id="ldtk-TilesetDefJson" name="ldtk-TilesetDefJson"></a>
