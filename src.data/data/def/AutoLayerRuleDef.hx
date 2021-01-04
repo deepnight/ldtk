@@ -14,7 +14,7 @@ class AutoLayerRuleDef {
 	public var flipX = false;
 	public var flipY = false;
 	public var active = true;
-	public var tileMode : data.DataTypes.AutoLayerRuleTileMode = Single;
+	public var tileMode : ldtk.Json.AutoLayerRuleTileMode = Single;
 	public var pivotX = 0.;
 	public var pivotY = 0.;
 	public var xModulo = 1;
@@ -139,7 +139,7 @@ class AutoLayerRuleDef {
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
 		r.checker = JsonTools.readEnum(data.DataTypes.AutoLayerRuleCheckerMode, json.checker, false, None);
-		r.tileMode = JsonTools.readEnum(data.DataTypes.AutoLayerRuleTileMode, json.tileMode, false, Single);
+		r.tileMode = JsonTools.readEnum(ldtk.Json.AutoLayerRuleTileMode, json.tileMode, false, Single);
 		r.pivotX = JsonTools.readFloat(json.pivotX, 0);
 		r.pivotY = JsonTools.readFloat(json.pivotY, 0);
 		r.xModulo = JsonTools.readInt(json.xModulo, 1);

@@ -105,10 +105,6 @@ enum EntityLimitBehavior {
 	MoveLastOne;
 }
 
-enum AutoLayerRuleTileMode {
-	Single;
-	Stamp;
-}
 enum AutoLayerRuleCheckerMode {
 	None;
 	Horizontal;

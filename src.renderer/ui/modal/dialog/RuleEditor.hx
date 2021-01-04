@@ -62,7 +62,7 @@ class RuleEditor extends ui.modal.Dialog {
 		// Tile mode
 		var i = new form.input.EnumSelect(
 			jContent.find("select[name=tileMode]"),
-			AutoLayerRuleTileMode,
+			ldtk.Json.AutoLayerRuleTileMode,
 			()->rule.tileMode,
 			(v)->rule.tileMode = v,
 			(v)->switch v {
