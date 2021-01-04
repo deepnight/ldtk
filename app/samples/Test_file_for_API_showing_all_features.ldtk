@@ -2,12 +2,13 @@
 	"__header__": {
 		"fileType": "LDtk Project JSON",
 		"app": "LDtk",
-		"schema": "https://ldtk.io/json",
+		"doc": "https://ldtk.io/json",
+		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.1",
+		"appVersion": "0.6.2",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.6.1",
+	"jsonVersion": "0.6.2",
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 0.5,
 	"defaultGridSize": 16,
@@ -295,6 +296,7 @@
 						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
 					},
@@ -312,6 +314,7 @@
 						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
 					},
@@ -329,6 +332,7 @@
 						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
 					},
@@ -346,6 +350,7 @@
 						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
 					},
@@ -363,6 +368,7 @@
 						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
 					},
@@ -380,6 +386,7 @@
 						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
 					},
@@ -397,6 +404,7 @@
 						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": { "id": "V_Int", "params": [0] }
 					},
@@ -414,6 +422,7 @@
 						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
 					},
@@ -431,6 +440,7 @@
 						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
 					},
@@ -448,6 +458,7 @@
 						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
 					},
@@ -465,6 +476,7 @@
 						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
 					}
@@ -500,6 +512,7 @@
 						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
 					},
@@ -517,6 +530,7 @@
 						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": { "id": "V_Int", "params": [8361387] }
 					}

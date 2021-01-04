@@ -2,12 +2,13 @@
 	"__header__": {
 		"fileType": "LDtk Project JSON",
 		"app": "LDtk",
-		"schema": "https://ldtk.io/json",
+		"doc": "https://ldtk.io/json",
+		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.1",
+		"appVersion": "0.6.2",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.6.1",
+	"jsonVersion": "0.6.2",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
@@ -636,6 +637,7 @@
 						"editorAlwaysShow": true,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
 					},
@@ -653,6 +655,7 @@
 						"editorAlwaysShow": false,
 						"min": null,
 						"max": null,
+						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": { "id": "V_Int", "params": [16763904] }
 					}
@@ -722,13 +725,13 @@
 						{ "__identifier": "Text", "__grid": [12,1], "__tile": null, "defUid": 55, "px": [200,24], "fieldInstances": [
 							{
 								"__identifier": "text",
-								"__value": "Using combinations of \"Auto-Layers\" and classic \"Tile layers\", you can achieve great results quickly.",
+								"__value": "Using combinations of \\"Auto-Layers\\" and classic \\"Tile layers\\", you can achieve great results quickly.",
 								"__type": "String",
 								"defUid": 56,
 								"realEditorValues": [{
 									"id": "V_String",
 									"params": [
-										"Using combinations of \"Auto-Layers\" and classic \"Tile layers\", you can achieve great results quickly."
+										"Using combinations of \\"Auto-Layers\\" and classic \\"Tile layers\\", you can achieve great results quickly."
 									]
 								}]
 							},
