@@ -537,28 +537,28 @@ class DocGenerator {
 
 		var data = switch t {
 			case Nullable(f):
-				var d : Dynamic = getTypeJson(f).data;
-				d.type = [ "null", d.type ];
+				var d : { type:Array<String> } = getTypeJson(f).data;
+				d.type.push("null");
 				d;
 
 			case Basic(name): switch name {
 				case "Bool": {
-					type: "boolean",
+					type: ["boolean"],
 				};
 				case "String": {
-					type: "string",
+					type: ["string"],
 				};
 				case "Int": {
-					type: "integer",
+					type: ["integer"],
 				};
 				case "Float": {
-					type: "number",
+					type: ["number"],
 				};
 				case "Enum": {
-					type: "string",
+					type: [ "string", "object" ],
 				};
 				case x: {
-					type: x
+					type: [x]
 				};
 			};
 			case Enu(name): {
@@ -568,11 +568,11 @@ class DocGenerator {
 				"$ref": '#/definitions/${name.replace("ldtk.", "").replace("Json", "")}'
 			};
 			case Arr(t): {
-				type: "array",
+				type: ["array"],
 				items: getTypeJson(t).data
 			};
 			case Obj(fields): {
-				type: "object",
+				type: ["object"],
 			};
 			case Dyn: {};
 			case Unknown: null;
