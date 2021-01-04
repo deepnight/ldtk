@@ -303,7 +303,7 @@ class DocGenerator {
 		// Write Json file
 		Sys.println('Writing JSON: ${jsonPath}...');
 		var fo = sys.io.File.write(jsonPath, false);
-		fo.writeString( dn.JsonPretty.stringify(false, json) );
+		fo.writeString( dn.JsonPretty.stringify(json, Full) );
 		fo.close();
 
 		Sys.println('Done!');

@@ -59,7 +59,7 @@ class JsTools {
 
 	public static function prepareProjectFile(p:data.Project) : FileSavingData {
 		var json = p.toJson();
-		var jsonStr = dn.JsonPretty.stringify(p.minifyJson, json, Const.JSON_HEADER);
+		var jsonStr = dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
 
 		return {
 			jsonString: jsonStr,
