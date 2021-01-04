@@ -539,7 +539,6 @@ class DocGenerator {
 			case Nullable(f):
 				var d : Dynamic = getTypeJson(f).data;
 				d.type = [ "null", d.type ];
-				trace(d);
 				d;
 
 			case Basic(name): switch name {
