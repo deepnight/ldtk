@@ -290,6 +290,16 @@ class DocGenerator {
 			json.definitions.set(definitionName, definition);
 		}
 
+		// Print enums
+		for( e in allEnums.keyValueIterator() ) {
+			var name = e.key.replace("ldtk.","");
+			var def : Dynamic = {
+				type: "string",
+			}
+			Reflect.setField(def, "enum", e.value);
+			json.definitions.set(name, def);
+		}
+
 		// Default output file name
 		if( jsonPath==null ) {
 			var fp = dn.FilePath.fromFile(xmlPath);
