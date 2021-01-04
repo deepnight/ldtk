@@ -1,3 +1,7 @@
+# 0.6.3
+
+- Added a **Json schema** file directly generated from source code. It's available on [LDtk.io/json](https://ldtk.io/json) and contains a schema following Draft 7 standard from [Json-schema.org](https://json-schema.org/). This file describes all fields from LDtk json files (value types and descriptions).
+
 # 0.6.2
 
 - Added an optional **Regular Expression** that can be tested against a `String` field in an Entity. Any unmatched character in a string value will just be discarded. This allows the creation of custom field type (that needs to follow some specific pattern), while still having a safety net (the editor cleans up invalid parts).
