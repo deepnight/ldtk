@@ -262,9 +262,9 @@ class DocGenerator {
 			var required = [];
 			for(f in getFieldsInfos(type.xml.node.a)) {
 				var typeInfo: Dynamic = getTypeJson(f.type);
-				if (typeInfo.required) {
+				if (typeInfo.required)
 					required.push(f.displayName);
-				}
+
 				typeInfo.data.description = f.descMd.join('\n');
 				definition.properties.set(f.displayName, typeInfo.data);
 			}
@@ -530,12 +530,18 @@ class DocGenerator {
 	}
 
 	static function getTypeJson(t:FieldType): { required: Bool, data: Dynamic } {
-		var required = true;
+		var required = switch t {
+			case Nullable(f): false;
+			case _: true;
+		}
+
 		var data = switch t {
-			case Nullable(f): {
-				required = false;
-				getTypeJson(f).data;
-			};
+			case Nullable(f):
+				var d : Dynamic = getTypeJson(f).data;
+				d.type = [ "null", d.type ];
+				trace(d);
+				d;
+
 			case Basic(name): switch name {
 				case "Bool": {
 					type: "boolean",
