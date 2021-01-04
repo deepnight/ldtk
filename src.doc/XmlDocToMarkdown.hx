@@ -91,12 +91,22 @@ class XmlDocToMarkdown {
 				return Reflect.compare(a.section, b.section);
 		});
 
-		Sys.println("Generating Markdown");
-		genMarkdown(xml, className, xmlPath, mdPath, deleteXml);
+		// Read app version from "package.json"
+		haxe.macro.Context.registerModuleDependency("XmlDocToMarkdown", "app/package.json");
+		var raw = sys.io.File.getContent("app/package.json");
+		var versionReg = ~/"version"[ \t]*:[ \t]*"(.*)"/gim;
+		versionReg.match(raw);
+		appVersion.set( versionReg.matched(1) );
+		Sys.println('App version is $appVersion...');
 
+		// Markdown doc output
+		Sys.println("Generating Markdown");
+		genMarkdownDoc(xml, className, xmlPath, mdPath);
+
+		// Json schema output
 		Sys.println("-------------------");
 		Sys.println("Generating JSON");
-		genJson(xml, className, xmlPath, jsonPath, deleteXml);
+		genJsonSchema(xml, className, xmlPath, jsonPath);
 
 		// Cleanup
 		if( deleteXml ) {
@@ -105,16 +115,7 @@ class XmlDocToMarkdown {
 		}
 	}
 
-	public static function genMarkdown(xml:haxe.xml.Access, className:String, xmlPath:String, ?mdPath:String, deleteXml=false) {
-
-		// Get app version from "package.json"
-		haxe.macro.Context.registerModuleDependency("XmlDocToMarkdown", "app/package.json");
-		var raw = sys.io.File.getContent("app/package.json");
-		var versionReg = ~/"version"[ \t]*:[ \t]*"(.*)"/gim;
-		versionReg.match(raw);
-		appVersion.set( versionReg.matched(1) );
-		Sys.println('App version is $appVersion...');
-
+	public static function genMarkdownDoc(xml:haxe.xml.Access, className:String, xmlPath:String, ?mdPath:String) {
 		// Print types
 		var toc = [];
 		var md = [];
@@ -235,19 +236,11 @@ class XmlDocToMarkdown {
 		Sys.println('');
 	}
 
-	public static function genJson(xml:haxe.xml.Access, className:String, xmlPath:String, ?jsonPath:String, deleteXml=false) {
+	public static function genJsonSchema(xml:haxe.xml.Access, className:String, xmlPath:String, ?jsonPath:String) {
 		var json: Dynamic = {
 			definitions: new Map<String,Dynamic>(),
 			"$ref": "#/definitions/Project"
 		};
-
-		// Get app version from "package.json"
-		haxe.macro.Context.registerModuleDependency("XmlDocToMarkdown", "app/package.json");
-		var raw = sys.io.File.getContent("app/package.json");
-		var versionReg = ~/"version"[ \t]*:[ \t]*"(.*)"/gim;
-		versionReg.match(raw);
-		appVersion.set( versionReg.matched(1) );
-		Sys.println('App version is $appVersion...');
 
 		// Print types
 		for(type in allTypes) {
