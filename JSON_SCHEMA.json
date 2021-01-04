@@ -1,6 +1,18 @@
 {
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"definitions": {
+		"LayerType": {
+			"type": [
+				"string",
+				"object"
+			],
+			"enum": [
+				"IntGrid",
+				"Entities",
+				"Tiles",
+				"AutoLayer"
+			]
+		},
 		"FieldInstance": {
 			"required": [
 				"__identifier",
@@ -30,26 +42,13 @@
 				},
 				"realEditorValues": {
 					"description": "",
-					"items": {
-						"type": [
-							"string",
-							"object",
-							"null"
-						]
-					},
+					"items" : {},
 					"type": [
 						"array"
 					]
 				},
 				"__value": {
-					"description": "Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>  It can also be an `Array` of various types.",
-					"type": [
-						"string",
-						"integer",
-						"number",
-						"object",
-						"array"
-					]
+					"description": "Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>  It can also be an `Array` of various types."
 				}
 			}
 		},
@@ -130,6 +129,28 @@
 					]
 				}
 			}
+		},
+		"AutoLayerRuleCheckerMode": {
+			"type": [
+				"string",
+				"object"
+			],
+			"enum": [
+				"None",
+				"Horizontal",
+				"Vertical"
+			]
+		},
+		"FieldDisplayPosition": {
+			"type": [
+				"string",
+				"object"
+			],
+			"enum": [
+				"Above",
+				"Center",
+				"Beneath"
+			]
 		},
 		"Definitions": {
 			"required": [
@@ -246,11 +267,8 @@
 					]
 				},
 				"checker": {
-					"description": "Checker mode: None, Horizontal or Vertical.",
-					"type": [
-						"string",
-						"object"
-					]
+					"description": "Checker mode Possible values: `None`, `Horizontal`, `Vertical`",
+					"$ref": "#/definitions/AutoLayerRuleCheckerMode"
 				},
 				"perlinOctaves": {
 					"description": "",
@@ -306,11 +324,8 @@
 					]
 				},
 				"tileMode": {
-					"description": "Defines how tileIds array is used",
-					"type": [
-						"string",
-						"object"
-					]
+					"description": "Defines how tileIds array is used Possible values: `Single`, `Stamp`",
+					"$ref": "#/definitions/AutoLayerRuleTileMode"
 				},
 				"flipY": {
 					"description": "If TRUE, allow rule to be matched by flipping its pattern vertically",
@@ -390,11 +405,8 @@
 					]
 				},
 				"editorDisplayMode": {
-					"description": "",
-					"type": [
-						"string",
-						"object"
-					]
+					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`, `PointPath`, `RadiusPx`, `RadiusGrid`",
+					"$ref": "#/definitions/FieldDisplayMode"
 				},
 				"canBeNull": {
 					"description": "TRUE if the value can be null. For arrays, TRUE means it can contain null values (exception: array of Points can't have null values).",
@@ -415,11 +427,8 @@
 					]
 				},
 				"editorDisplayPos": {
-					"description": "",
-					"type": [
-						"string",
-						"object"
-					]
+					"description": "Possible values: `Above`, `Center`, `Beneath`",
+					"$ref": "#/definitions/FieldDisplayPosition"
 				},
 				"max": {
 					"description": "Max limit for value, if applicable",
@@ -429,12 +438,7 @@
 					]
 				},
 				"defaultOverride": {
-					"description": "Default value if selected value is null or invalid.",
-					"type": [
-						"string",
-						"object",
-						"null"
-					]
+					"description": "Default value if selected value is null or invalid."
 				},
 				"regex": {
 					"description": "Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional \"i\" flag.",
@@ -444,11 +448,7 @@
 					]
 				},
 				"type": {
-					"description": "Internal type enum",
-					"type": [
-						"string",
-						"object"
-					]
+					"description": "Internal type enum"
 				},
 				"identifier": {
 					"description": "Unique String identifier",
@@ -524,18 +524,12 @@
 					]
 				},
 				"tileRenderMode": {
-					"description": "",
-					"type": [
-						"string",
-						"object"
-					]
+					"description": "Possible values: `Stretch`, `Crop`",
+					"$ref": "#/definitions/EntityTileRenderMode"
 				},
 				"limitBehavior": {
-					"description": "",
-					"type": [
-						"string",
-						"object"
-					]
+					"description": "Possible values: `DiscardOldOnes`, `PreventAdding`, `MoveLastOne`",
+					"$ref": "#/definitions/EntityLimitBehavior"
 				},
 				"uid": {
 					"description": "Unique Int identifier",
@@ -562,11 +556,8 @@
 					]
 				},
 				"renderMode": {
-					"description": "",
-					"type": [
-						"string",
-						"object"
-					]
+					"description": "Possible values: `Rectangle`, `Ellipse`, `Tile`, `Cross`",
+					"$ref": "#/definitions/EntityRenderMode"
 				},
 				"maxPerLevel": {
 					"description": "Max instances per level",
@@ -581,6 +572,18 @@
 					]
 				}
 			}
+		},
+		"EntityRenderMode": {
+			"type": [
+				"string",
+				"object"
+			],
+			"enum": [
+				"Rectangle",
+				"Ellipse",
+				"Tile",
+				"Cross"
+			]
 		},
 		"Project": {
 			"required": [
@@ -686,6 +689,16 @@
 					]
 				}
 			}
+		},
+		"AutoLayerRuleTileMode": {
+			"type": [
+				"string",
+				"object"
+			],
+			"enum": [
+				"Single",
+				"Stamp"
+			]
 		},
 		"LayerInstance": {
 			"required": [
@@ -852,6 +865,43 @@
 				}
 			}
 		},
+		"FieldDisplayMode": {
+			"type": [
+				"string",
+				"object"
+			],
+			"enum": [
+				"Hidden",
+				"ValueOnly",
+				"NameAndValue",
+				"EntityTile",
+				"PointStar",
+				"PointPath",
+				"RadiusPx",
+				"RadiusGrid"
+			]
+		},
+		"EntityTileRenderMode": {
+			"type": [
+				"string",
+				"object"
+			],
+			"enum": [
+				"Stretch",
+				"Crop"
+			]
+		},
+		"EntityLimitBehavior": {
+			"type": [
+				"string",
+				"object"
+			],
+			"enum": [
+				"DiscardOldOnes",
+				"PreventAdding",
+				"MoveLastOne"
+			]
+		},
 		"TilesetDef": {
 			"required": [
 				"identifier",
@@ -925,12 +975,7 @@
 					"description": "Array of group of tiles selections, only meant to be used in the editor",
 					"items": {
 						"properties": {
-							"mode": {
-								"type": [
-									"string",
-									"object"
-								]
-							},
+							"mode" : {},
 							"ids": {
 								"items": {
 									"type": [
@@ -1153,10 +1198,8 @@
 					]
 				},
 				"type": {
-					"description": "Type of the layer as Haxe Enum",
-					"type": [
-						"string"
-					]
+					"description": "Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`, `AutoLayer`",
+					"$ref": "#/definitions/LayerType"
 				},
 				"identifier": {
 					"description": "Unique String identifier",
