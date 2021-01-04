@@ -8,6 +8,10 @@ Links: [Official website](https://ldtk.io/) | [Haxe API (on GitHub)](https://git
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/deepnight/ldtk/test-windows?label=LDtk%20build)
 [![Travis (.com)](https://img.shields.io/travis/com/deepnight/ldtk-haxe-api?label=Haxe%20API)](https://travis-ci.com/github/deepnight/ldtk-haxe-api)
 
+# Getting LDtk latest version
+
+Visit [LDtk.io](https://ldtk.io) to get latest version. 
+
 # Building from source
 
 ## Requirements
