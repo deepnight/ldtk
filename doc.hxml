@@ -5,8 +5,8 @@ ldtk/Json.hx
 -D doc-gen
 -xml json_doc.xml
 
-# Build MD
+# Build docs (markdown & Json schema)
 --next
 -cp src.doc
 -lib deepnightLibs
---macro XmlDocToMarkdown.run("ldtk/Json", "json_doc.xml", "JSON_DOC.md", "./schema.json")
+--macro DocGenerator.run("ldtk/Json", "json_doc.xml", "JSON_DOC.md", "./schema.json")

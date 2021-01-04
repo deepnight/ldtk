@@ -42,7 +42,7 @@ enum FieldType {
 
 
 
-class XmlDocToMarkdown {
+class DocGenerator {
 	#if macro
 
 	static var allTypes: Array<TypeInfos>;
@@ -54,7 +54,7 @@ class XmlDocToMarkdown {
 
 		// Read XML file
 		Sys.println('Parsing $xmlPath...');
-		haxe.macro.Context.registerModuleDependency("XmlDocToMarkdown", xmlPath);
+		haxe.macro.Context.registerModuleDependency("DocGenerator", xmlPath);
 		var raw = sys.io.File.getContent(xmlPath);
 		var xml = Xml.parse( raw );
 		var xml = new haxe.xml.Access(xml);
@@ -92,7 +92,7 @@ class XmlDocToMarkdown {
 		});
 
 		// Read app version from "package.json"
-		haxe.macro.Context.registerModuleDependency("XmlDocToMarkdown", "app/package.json");
+		haxe.macro.Context.registerModuleDependency("DocGenerator", "app/package.json");
 		var raw = sys.io.File.getContent("app/package.json");
 		var versionReg = ~/"version"[ \t]*:[ \t]*"(.*)"/gim;
 		versionReg.match(raw);
