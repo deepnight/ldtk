@@ -113,30 +113,35 @@ class Home extends Page {
 						// Loading
 						log.fileOp(fp.fileName+"...");
 						log.general(" -> Loading...");
-						var raw = JsTools.readFileString(fp.full);
-						log.general(" -> Parsing...");
-						var json = haxe.Json.parse(raw);
-						var p = data.Project.fromJson(json);
+						try {
+							var raw = JsTools.readFileString(fp.full);
+							log.general(" -> Parsing...");
+							var json = haxe.Json.parse(raw);
+							var p = data.Project.fromJson(json);
 
-						// Tilesets
-						log.general(" -> Updating tileset data...");
-						for(td in p.defs.tilesets) {
-							td.reloadImage(fp.directory);
-							td.buildPixelData(()->{}, true);
+							// Tilesets
+							log.general(" -> Updating tileset data...");
+							for(td in p.defs.tilesets) {
+								td.reloadImage(fp.directory);
+								td.buildPixelData(()->{}, true);
+							}
+
+							// Auto layer rules
+							log.general(" -> Updating auto-rules cache...");
+							for(l in p.levels)
+							for(li in l.layerInstances) {
+								if( !li.def.isAutoLayer() )
+									continue;
+								li.applyAllAutoLayerRules();
+							}
+
+							log.general(" -> Saving "+fp.fileName+"...");
+							var data = JsTools.prepareProjectFile(p);
+							JsTools.writeFileString(fp.full, data.jsonString);
 						}
-
-						// Auto layer rules
-						log.general(" -> Updating auto-rules cache...");
-						for(l in p.levels)
-						for(li in l.layerInstances) {
-							if( !li.def.isAutoLayer() )
-								continue;
-							li.applyAllAutoLayerRules();
+						catch(e:Dynamic) {
+							new ui.modal.dialog.Message("Failed on "+fp.fileName);
 						}
-
-						log.general(" -> Saving "+fp.fileName+"...");
-						var data = JsTools.prepareProjectFile(p);
-						JsTools.writeFileString(fp.full, data.jsonString);
 					}
 				});
 			}

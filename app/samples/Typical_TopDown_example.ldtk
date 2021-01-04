@@ -725,13 +725,13 @@
 						{ "__identifier": "Text", "__grid": [12,1], "__tile": null, "defUid": 55, "px": [200,24], "fieldInstances": [
 							{
 								"__identifier": "text",
-								"__value": "Using combinations of \\"Auto-Layers\\" and classic \\"Tile layers\\", you can achieve great results quickly.",
+								"__value": "Using combinations of \"Auto-Layers\" and classic \"Tile layers\", you can achieve great results quickly.",
 								"__type": "String",
 								"defUid": 56,
 								"realEditorValues": [{
 									"id": "V_String",
 									"params": [
-										"Using combinations of \\"Auto-Layers\\" and classic \\"Tile layers\\", you can achieve great results quickly."
+										"Using combinations of \"Auto-Layers\" and classic \"Tile layers\", you can achieve great results quickly."
 									]
 								}]
 							},

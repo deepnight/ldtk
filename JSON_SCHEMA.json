@@ -1,18 +1,6 @@
 {
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"definitions": {
-		"LayerType": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"IntGrid",
-				"Entities",
-				"Tiles",
-				"AutoLayer"
-			]
-		},
 		"FieldInstance": {
 			"required": [
 				"__identifier",
@@ -130,28 +118,6 @@
 				}
 			}
 		},
-		"AutoLayerRuleCheckerMode": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"None",
-				"Horizontal",
-				"Vertical"
-			]
-		},
-		"FieldDisplayPosition": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"Above",
-				"Center",
-				"Beneath"
-			]
-		},
 		"Definitions": {
 			"required": [
 				"entities",
@@ -267,8 +233,7 @@
 					]
 				},
 				"checker": {
-					"description": "Checker mode Possible values: `None`, `Horizontal`, `Vertical`",
-					"$ref": "#/definitions/AutoLayerRuleCheckerMode"
+					"description": "Checker mode: None, Horizontal or Vertical."
 				},
 				"perlinOctaves": {
 					"description": "",
@@ -324,8 +289,7 @@
 					]
 				},
 				"tileMode": {
-					"description": "Defines how tileIds array is used Possible values: `Single`, `Stamp`",
-					"$ref": "#/definitions/AutoLayerRuleTileMode"
+					"description": "Defines how tileIds array is used"
 				},
 				"flipY": {
 					"description": "If TRUE, allow rule to be matched by flipping its pattern vertically",
@@ -405,8 +369,7 @@
 					]
 				},
 				"editorDisplayMode": {
-					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`, `PointPath`, `RadiusPx`, `RadiusGrid`",
-					"$ref": "#/definitions/FieldDisplayMode"
+					"description": ""
 				},
 				"canBeNull": {
 					"description": "TRUE if the value can be null. For arrays, TRUE means it can contain null values (exception: array of Points can't have null values).",
@@ -427,8 +390,7 @@
 					]
 				},
 				"editorDisplayPos": {
-					"description": "Possible values: `Above`, `Center`, `Beneath`",
-					"$ref": "#/definitions/FieldDisplayPosition"
+					"description": ""
 				},
 				"max": {
 					"description": "Max limit for value, if applicable",
@@ -524,12 +486,10 @@
 					]
 				},
 				"tileRenderMode": {
-					"description": "Possible values: `Stretch`, `Crop`",
-					"$ref": "#/definitions/EntityTileRenderMode"
+					"description": ""
 				},
 				"limitBehavior": {
-					"description": "Possible values: `DiscardOldOnes`, `PreventAdding`, `MoveLastOne`",
-					"$ref": "#/definitions/EntityLimitBehavior"
+					"description": ""
 				},
 				"uid": {
 					"description": "Unique Int identifier",
@@ -556,8 +516,7 @@
 					]
 				},
 				"renderMode": {
-					"description": "Possible values: `Rectangle`, `Ellipse`, `Tile`, `Cross`",
-					"$ref": "#/definitions/EntityRenderMode"
+					"description": ""
 				},
 				"maxPerLevel": {
 					"description": "Max instances per level",
@@ -572,18 +531,6 @@
 					]
 				}
 			}
-		},
-		"EntityRenderMode": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"Rectangle",
-				"Ellipse",
-				"Tile",
-				"Cross"
-			]
 		},
 		"Project": {
 			"required": [
@@ -646,8 +593,10 @@
 					]
 				},
 				"worldLayout": {
-					"description": "An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`",
-					"$ref": "#/definitions/WorldLayout"
+					"description": "An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values are: Free, GridVania, LinearHorizontal and LinearVertical;",
+					"type": [
+						"string"
+					]
 				},
 				"exportTiled": {
 					"description": "If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)",
@@ -687,16 +636,6 @@
 					]
 				}
 			}
-		},
-		"AutoLayerRuleTileMode": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"Single",
-				"Stamp"
-			]
 		},
 		"LayerInstance": {
 			"required": [
@@ -863,43 +802,6 @@
 				}
 			}
 		},
-		"FieldDisplayMode": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"Hidden",
-				"ValueOnly",
-				"NameAndValue",
-				"EntityTile",
-				"PointStar",
-				"PointPath",
-				"RadiusPx",
-				"RadiusGrid"
-			]
-		},
-		"EntityTileRenderMode": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"Stretch",
-				"Crop"
-			]
-		},
-		"EntityLimitBehavior": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"DiscardOldOnes",
-				"PreventAdding",
-				"MoveLastOne"
-			]
-		},
 		"TilesetDef": {
 			"required": [
 				"identifier",
@@ -1006,18 +908,6 @@
 					]
 				}
 			}
-		},
-		"WorldLayout": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"Free",
-				"GridVania",
-				"LinearHorizontal",
-				"LinearVertical"
-			]
 		},
 		"Tile": {
 			"required": [
@@ -1208,8 +1098,10 @@
 					]
 				},
 				"type": {
-					"description": "Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`, `AutoLayer`",
-					"$ref": "#/definitions/LayerType"
+					"description": "Type of the layer as Haxe Enum",
+					"type": [
+						"string"
+					]
 				},
 				"identifier": {
 					"description": "Unique String identifier",

@@ -34,7 +34,7 @@ Value | Type | Description
 `nextUid`<br/><sup class="internal">*Internal editor data*</sup> | Int | 
 `worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Int | Height of the world grid in pixels.
 `worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Int | Width of the world grid in pixels.
-`worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+`worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values are: Free, GridVania, LinearHorizontal and LinearVertical;
 
 <a id="ldtk-LevelJson" name="ldtk-LevelJson"></a>
 ## 1. Level   
@@ -133,7 +133,7 @@ Value | Type | Description
 `tilePivotX`<br/><sup class="only">Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilePivotY`<br/><sup class="only">Only *Tile layers*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilesetDefUid`<br/><sup class="only">Only *Tile layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Reference to the Tileset UID being used by this tile layer
-`type`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Type of the layer as Haxe Enum<br/> Possible values: `IntGrid`, `Entities`, `Tiles`, `AutoLayer`
+`type`<br/><sup class="internal">*Internal editor data*</sup> | String | Type of the layer as Haxe Enum
 `uid` | Int | Unique Int identifier
 
 <a id="ldtk-AutoRuleDef" name="ldtk-AutoRuleDef"></a>
@@ -143,7 +143,7 @@ Value | Type | Description
 `active` | Bool | If FALSE, the rule effect isn't applied, and no tiles are generated.
 `breakOnMatch` | Bool | When TRUE, the rule will prevent other rules to be applied in the same cell if it matches (TRUE by default).
 `chance` | Float | Chances for this rule to be applied (0 to 1)
-`checker` | Enum | Checker mode<br/> Possible values: `None`, `Horizontal`, `Vertical`
+`checker` | Enum | Checker mode: None, Horizontal or Vertical.
 `flipX` | Bool | If TRUE, allow rule to be matched by flipping its pattern horizontally
 `flipY` | Bool | If TRUE, allow rule to be matched by flipping its pattern vertically
 `pattern` | Array&nbsp;of&nbsp;Int | Rule pattern (size x size)
@@ -155,7 +155,7 @@ Value | Type | Description
 `pivotY`<br/><sup class="only">Only *'Stamp' tile mode*</sup> | Float | Y pivot of a tile stamp (0-1)
 `size` | Int | Pattern width & height. Should only be 1,3,5 or 7.
 `tileIds` | Array&nbsp;of&nbsp;Int | Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
-`tileMode` | Enum | Defines how tileIds array is used<br/> Possible values: `Single`, `Stamp`
+`tileMode` | Enum | Defines how tileIds array is used
 `uid` | Int | Unique Int identifier
 `xModulo` | Int | X cell coord modulo
 `yModulo` | Int | Y cell coord modulo
@@ -168,14 +168,14 @@ Value | Type | Description
 `fieldDefs` | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | Array of field definitions
 `height` | Int | Pixel height
 `identifier` | String | Unique String identifier
-`limitBehavior`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `DiscardOldOnes`, `PreventAdding`, `MoveLastOne`
+`limitBehavior`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
 `maxPerLevel` | Int | Max instances per level
 `pivotX` | Float | Pivot X coordinate (from 0 to 1.0)
 `pivotY` | Float | Pivot Y coordinate (from 0 to 1.0)
-`renderMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Rectangle`, `Ellipse`, `Tile`, `Cross`
+`renderMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
 `showName`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Bool | Display entity name in editor
 `tileId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tile ID used for optional tile display
-`tileRenderMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Stretch`, `Crop`
+`tileRenderMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
 `tilesetId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset ID used for optional tile display
 `uid` | Int | Unique Int identifier
 `width` | Int | Pixel width
@@ -191,14 +191,14 @@ Value | Type | Description
 `canBeNull` | Bool | TRUE if the value can be null. For arrays, TRUE means it can contain null values (exception: array of Points can't have null values).
 `defaultOverride` | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Default value if selected value is null or invalid.
 `editorAlwaysShow`<br/><sup class="internal">*Internal editor data*</sup> | Bool | 
-`editorDisplayMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`, `PointPath`, `RadiusPx`, `RadiusGrid`
-`editorDisplayPos`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Above`, `Center`, `Beneath`
+`editorDisplayMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
+`editorDisplayPos`<br/><sup class="internal">*Internal editor data*</sup> | Enum | 
 `identifier` | String | Unique String identifier
 `isArray` | Bool | TRUE if the value is an array of multiple values
 `max`<br/><sup class="only">Only *Int, Float*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Max limit for value, if applicable
 `min`<br/><sup class="only">Only *Int, Float*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Min limit for value, if applicable
 `regex`<br/><sup class="only">Only *String*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.2-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional "i" flag.
-`type` | Dynamic&nbsp;(anything) | Internal type enum
+`type` | Enum | Internal type enum
 `uid` | Int | Unique Intidentifier
 
 <a id="ldtk-TilesetDefJson" name="ldtk-TilesetDefJson"></a>

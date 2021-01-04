@@ -182,8 +182,8 @@ class JsonTools {
 
 		s = StringTools.replace(s, "\\", "\\\\");
 		s = StringTools.replace(s, "\n", "\\n");
-		s = StringTools.replace(s, '"', '\\"');
-		s = StringTools.replace(s, "'", "\'");
+		// s = StringTools.replace(s, '"', '\\"');
+		// s = StringTools.replace(s, "'", "\'");
 		return s;
 	}
 
@@ -193,8 +193,8 @@ class JsonTools {
 
 		s = StringTools.replace(s, "\\\\", "\\");
 		s = StringTools.replace(s, "\\n", "\n");
-		s = StringTools.replace(s, '\\"', '"');
-		s = StringTools.replace(s, "\'", "'");
+		// s = StringTools.replace(s, '\\"', '"');
+		// s = StringTools.replace(s, "\'", "'");
 		return s;
 	}
 
