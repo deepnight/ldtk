@@ -1301,13 +1301,13 @@
 						{ "__identifier": "Tutorial", "__grid": [21,2], "__tile": null, "defUid": 66, "px": [344,40], "fieldInstances": [
 							{
 								"__identifier": "text",
-								"__value": "Press SHIFT+R to toggle auto-layers rendering.\n\nPress A to toggle \\"Single layer mode.\\"",
+								"__value": "Press SHIFT+R to toggle auto-layers rendering.\n\nPress A to toggle \"Single layer mode.\"",
 								"__type": "String",
 								"defUid": 67,
 								"realEditorValues": [{
 									"id": "V_String",
 									"params": [
-										"Press SHIFT+R to toggle auto-layers rendering.\n\nPress A to toggle \\"Single layer mode.\\""
+										"Press SHIFT+R to toggle auto-layers rendering.\n\nPress A to toggle \"Single layer mode.\""
 									]
 								}]
 							},
