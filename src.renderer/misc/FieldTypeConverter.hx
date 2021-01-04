@@ -3,8 +3,8 @@ package misc;
 import data.DataTypes;
 
 typedef Convertor = {
-	var from: FieldType;
-	var to: FieldType;
+	var from: data.DataTypes.FieldType;
+	var to: data.DataTypes.FieldType;
 	var ?displayName: String;
 	var ?mode: Null<String>;
 	var lossless : Bool;

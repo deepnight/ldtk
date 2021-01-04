@@ -66,7 +66,7 @@ class JsTools {
 		}
 	}
 
-	public static function createLayerTypeIcon2(type:data.DataTypes.LayerType) : js.jquery.JQuery {
+	public static function createLayerTypeIcon2(type:ldtk.Json.LayerType) : js.jquery.JQuery {
 		var icon = new J('<span class="icon"/>');
 		icon.addClass( switch type {
 			case IntGrid: "intGrid";
@@ -77,7 +77,7 @@ class JsTools {
 		return icon;
 	}
 
-	public static function createLayerTypeIconAndName(type:data.DataTypes.LayerType) : js.jquery.JQuery {
+	public static function createLayerTypeIconAndName(type:ldtk.Json.LayerType) : js.jquery.JQuery {
 		var wrapper = new J('<span class="layerType"/>');
 
 		wrapper.append( createLayerTypeIcon2(type) );

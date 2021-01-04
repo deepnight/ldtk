@@ -216,7 +216,7 @@ class DocGenerator {
 					cell.push( getSubFieldsHtml( f.subFields ) );
 				}
 
-				tableCols.push( cell.join("<br/>") );
+				tableCols.push( cell.join("<br/> ") );
 
 				md.push( tableCols.join(" | "));
 				for(row in subRows)
@@ -298,7 +298,7 @@ class DocGenerator {
 		for( e in allEnums.keyValueIterator() ) {
 			var name = e.key.replace("ldtk.","");
 			var def : Dynamic = {
-				type: "string",
+				type: ["string","object"],
 			}
 			Reflect.setField(def, "enum", e.value);
 			json.definitions.set(name, def);
@@ -555,7 +555,8 @@ class DocGenerator {
 		var data : Dynamic = switch t {
 			case Nullable(f):
 				var d : { type:Array<String> } = getTypeJson(f).data;
-				d.type.push("null");
+				if( d.type!=null )
+					d.type.push("null");
 				d;
 
 			case Basic(name): switch name {
@@ -572,13 +573,7 @@ class DocGenerator {
 					type: ["number"],
 				};
 				case "Enum":
-					{
-						type: ["string","object"],
-						properties: {
-							id: { type:"string" },
-							params: { type: "array", items: { type:["string","integer","number","boolean"]} },
-						}
-					};
+					{}
 				case x: {
 					type: [x]
 				};
@@ -606,7 +601,7 @@ class DocGenerator {
 				};
 
 			case Dyn: {
-				type: ["string","integer","number","object","array","boolean","null"]
+				// type: ["string","integer","number","object","array","boolean","null"]
 			};
 			case Unknown: null;
 		}

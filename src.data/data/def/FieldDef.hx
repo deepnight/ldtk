@@ -14,8 +14,8 @@ class FieldDef {
 	public var canBeNull : Bool;
 	public var arrayMinLength : Null<Int>;
 	public var arrayMaxLength : Null<Int>;
-	public var editorDisplayMode : data.DataTypes.FieldDisplayMode;
-	public var editorDisplayPos : data.DataTypes.FieldDisplayPosition;
+	public var editorDisplayMode : ldtk.Json.FieldDisplayMode;
+	public var editorDisplayPos : ldtk.Json.FieldDisplayPosition;
 	public var editorAlwaysShow: Bool;
 	public var isArray : Bool;
 
@@ -71,8 +71,8 @@ class FieldDef {
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.arrayMinLength = JsonTools.readNullableInt(json.arrayMinLength);
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
-		o.editorDisplayMode = JsonTools.readEnum(data.DataTypes.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
-		o.editorDisplayPos = JsonTools.readEnum(data.DataTypes.FieldDisplayPosition, json.editorDisplayPos, false, Above);
+		o.editorDisplayMode = JsonTools.readEnum(ldtk.Json.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
+		o.editorDisplayPos = JsonTools.readEnum(ldtk.Json.FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);

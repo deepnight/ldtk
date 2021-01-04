@@ -114,7 +114,7 @@ class FieldInstance {
 
 
 
-	inline function require(type:FieldType) {
+	inline function require(type:data.DataTypes.FieldType) {
 		if( def.type.getIndex()!=type.getIndex() )
 			throw "Only available on "+type+" fields";
 	}

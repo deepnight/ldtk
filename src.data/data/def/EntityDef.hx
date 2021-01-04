@@ -10,14 +10,14 @@ class EntityDef {
 	public var width : Int;
 	public var height : Int;
 	public var color : UInt;
-	public var renderMode : EntityRenderMode;
-	public var tileRenderMode : EntityTileRenderMode;
+	public var renderMode : ldtk.Json.EntityRenderMode;
+	public var tileRenderMode : ldtk.Json.EntityTileRenderMode;
 	public var showName : Bool;
 	public var tilesetId : Null<Int>;
 	public var tileId : Null<Int>;
 
 	public var maxPerLevel : Int;
-	public var limitBehavior : data.DataTypes.EntityLimitBehavior; // what to do when maxPerLevel is reached
+	public var limitBehavior : ldtk.Json.EntityLimitBehavior; // what to do when maxPerLevel is reached
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
 
@@ -71,17 +71,17 @@ class EntityDef {
 		o.height = JsonTools.readInt( json.height, 16 );
 
 		o.color = JsonTools.readColor( json.color, 0x0 );
-		o.renderMode = JsonTools.readEnum(EntityRenderMode, json.renderMode, false, Rectangle);
+		o.renderMode = JsonTools.readEnum(ldtk.Json.EntityRenderMode, json.renderMode, false, Rectangle);
 		o.showName = JsonTools.readBool(json.showName, true);
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
 		o.tileId = JsonTools.readNullableInt(json.tileId);
-		o.tileRenderMode = JsonTools.readEnum(EntityTileRenderMode, json.tileRenderMode, false, Stretch);
+		o.tileRenderMode = JsonTools.readEnum(ldtk.Json.EntityTileRenderMode, json.tileRenderMode, false, Stretch);
 
 		o.maxPerLevel = JsonTools.readInt( json.maxPerLevel, 0 );
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
 		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
 
-		o.limitBehavior = JsonTools.readEnum( EntityLimitBehavior, json.limitBehavior, true, DiscardOldOnes );
+		o.limitBehavior = JsonTools.readEnum( ldtk.Json.EntityLimitBehavior, json.limitBehavior, true, DiscardOldOnes );
 		if( JsonTools.readBool( (cast json).discardExcess, true)==false )
 			o.limitBehavior = PreventAdding;
 
@@ -127,7 +127,7 @@ class EntityDef {
 
 	/** FIELDS ****************************/
 
-	public function createFieldDef(project:Project, type:FieldType, baseName:String, isArray:Bool) : FieldDef {
+	public function createFieldDef(project:Project, type:data.DataTypes.FieldType, baseName:String, isArray:Bool) : FieldDef {
 		var f = new FieldDef(project, project.makeUniqId(), type, isArray);
 		f.identifier = baseName.toLowerCase() + (isArray?"_array":"");
 		var idx = 2;

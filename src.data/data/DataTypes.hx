@@ -8,14 +8,6 @@ package data;
 		- do not rename Typedef fields or change their type
 */
 
-enum LayerType {
-	IntGrid;
-	Entities;
-	Tiles;
-	AutoLayer;
-}
-
-
 enum WorldLayout {
 	Free;
 	GridVania;
@@ -23,22 +15,9 @@ enum WorldLayout {
 	LinearVertical;
 }
 
-
 typedef IntGridValueDef = {
 	var identifier : Null<String>;
 	var color : UInt;
-}
-
-enum FieldType {
-	F_Int;
-	F_Float;
-	F_String;
-	F_Text;
-	F_Bool;
-	F_Color;
-	F_Enum(enumDefUid:Int);
-	F_Point;
-	F_Path;
 }
 
 enum ValueWrapper {
@@ -46,34 +25,6 @@ enum ValueWrapper {
 	V_Float(v:Float);
 	V_Bool(v:Bool);
 	V_String(v:String);
-}
-
-enum FieldDisplayMode {
-	Hidden;
-	ValueOnly;
-	NameAndValue;
-	EntityTile;
-	PointStar;
-	PointPath;
-	RadiusPx;
-	RadiusGrid;
-}
-
-enum FieldDisplayPosition {
-	Above;
-	Center;
-	Beneath;
-}
-
-enum EntityRenderMode {
-	Rectangle;
-	Ellipse;
-	Tile;
-	Cross;
-}
-enum EntityTileRenderMode {
-	Stretch;
-	Crop;
 }
 
 typedef TilesetSelection = {
@@ -99,13 +50,19 @@ typedef AutoLayerRuleGroup = {
 	var rules : Array<data.def.AutoLayerRuleDef>;
 }
 
-enum EntityLimitBehavior {
-	DiscardOldOnes;
-	PreventAdding;
-	MoveLastOne;
-}
-
 typedef GridTileInfos = {
 	var tileId : Int;
 	var flips : Int;
+}
+
+enum FieldType {
+	F_Int;
+	F_Float;
+	F_String;
+	F_Text;
+	F_Bool;
+	F_Color;
+	F_Enum(enumDefUid:Int);
+	F_Point;
+	F_Path;
 }

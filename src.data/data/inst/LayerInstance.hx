@@ -250,7 +250,7 @@ class LayerInstance {
 		return li;
 	}
 
-	inline function requireType(t:LayerType) {
+	inline function requireType(t:ldtk.Json.LayerType) {
 		if( def.type!=t )
 			throw 'Only works on $t layer!';
 	}

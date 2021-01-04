@@ -68,7 +68,7 @@ class Definitions {
 
 	/**  LAYER DEFS  *****************************************/
 
-	public function hasLayerType(t:LayerType) {
+	public function hasLayerType(t:ldtk.Json.LayerType) {
 		for(ld in layers)
 			if( ld.type==t )
 				return true;
@@ -82,7 +82,7 @@ class Definitions {
 		return null;
 	}
 
-	public function createLayerDef(type:LayerType, ?id:String) : data.def.LayerDef {
+	public function createLayerDef(type:ldtk.Json.LayerType, ?id:String) : data.def.LayerDef {
 		var l = new data.def.LayerDef(_project.makeUniqId(), type);
 
 		id = Project.cleanupIdentifier(id, true);

@@ -33,7 +33,7 @@ class Lang {
         return t.untranslated(str);
     }
 
-    public static function getLayerType(type:data.DataTypes.LayerType) : LocaleString {
+    public static function getLayerType(type:ldtk.Json.LayerType) : LocaleString {
         return switch type {
             case IntGrid: Lang.t._("Integer grid");
             case AutoLayer: Lang.t._("Auto-layer");

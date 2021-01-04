@@ -15,7 +15,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		// Create layer
 		jModalAndMask.find(".mainList button.create").click( function(ev) {
-			function _create(type:data.DataTypes.LayerType) {
+			function _create(type:ldtk.Json.LayerType) {
 				var ld = project.defs.createLayerDef(type);
 				select(ld);
 				editor.ge.emit(LayerDefAdded);
@@ -24,8 +24,8 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			// Type picker
 			var w = new ui.modal.Dialog(ev.getThis(),"layerTypes");
-			for(k in data.DataTypes.LayerType.getConstructors()) {
-				var type = data.DataTypes.LayerType.createByName(k);
+			for(k in ldtk.Json.LayerType.getConstructors()) {
+				var type = ldtk.Json.LayerType.createByName(k);
 				var b = new J("<button/>");
 				b.appendTo( w.jContent );
 				b.append( JsTools.createLayerTypeIconAndName(type) );
@@ -176,7 +176,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		jForm.find("#gridSize").prop("readonly",false);
 
 		// Set form class
-		for(k in Type.getEnumConstructs(data.DataTypes.LayerType))
+		for(k in Type.getEnumConstructs(ldtk.Json.LayerType))
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+cur.type);
 		if( cur.type==IntGrid && cur.isAutoLayer() )

@@ -287,8 +287,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Entity render mode
 		var jSelect = jRenderModeBlock.find(".renderMode");
 		jSelect.empty();
-		for(k in data.DataTypes.EntityRenderMode.getConstructors()) {
-			var e = data.DataTypes.EntityRenderMode.createByName(k);
+		for(k in ldtk.Json.EntityRenderMode.getConstructors()) {
+			var e = ldtk.Json.EntityRenderMode.createByName(k);
 			if( e==Tile )
 				continue;
 
@@ -314,7 +314,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Pick render mode
 		jSelect.change( function(ev) {
 			var v : String = jSelect.val();
-			var mode = data.DataTypes.EntityRenderMode.createByName( v.indexOf(".")<0 ? v : v.substr(0,v.indexOf(".")) );
+			var mode = ldtk.Json.EntityRenderMode.createByName( v.indexOf(".")<0 ? v : v.substr(0,v.indexOf(".")) );
 			curEntity.renderMode = mode;
 			curEntity.tileId = null;
 			if( mode==Tile ) {
@@ -369,7 +369,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Tile render mode
 		var i = new form.input.EnumSelect(
 			jEntityForm.find("select.tileRenderMode"),
-			data.DataTypes.EntityTileRenderMode,
+			ldtk.Json.EntityTileRenderMode,
 			()->curEntity.tileRenderMode,
 			(v)->curEntity.tileRenderMode = v
 		);
@@ -395,7 +395,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Behavior when max is reached
 		var i = new form.input.EnumSelect(
 			jEntityForm.find("select[name=limitBehavior]"),
-			data.DataTypes.EntityLimitBehavior,
+			ldtk.Json.EntityLimitBehavior,
 			function() return curEntity.limitBehavior,
 			function(v) {
 				curEntity.limitBehavior = v;
@@ -499,7 +499,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		var i = new form.input.EnumSelect(
 			jFieldForm.find("select[name=editorDisplayMode]"),
-			data.DataTypes.FieldDisplayMode,
+			ldtk.Json.FieldDisplayMode,
 			function() return curField.editorDisplayMode,
 			function(v) return curField.editorDisplayMode = v,
 
@@ -536,7 +536,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		var i = new form.input.EnumSelect(
 			jFieldForm.find("select[name=editorDisplayPos]"),
-			data.DataTypes.FieldDisplayPosition,
+			ldtk.Json.FieldDisplayPosition,
 			function() return curField.editorDisplayPos,
 			function(v) return curField.editorDisplayPos = v
 		);

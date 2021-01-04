@@ -5,7 +5,7 @@ import data.DataTypes;
 class LayerDef {
 	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
-	public var type : LayerType;
+	public var type : ldtk.Json.LayerType;
 	public var identifier(default,set) : String;
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var displayOpacity : Float = 1.0;
@@ -25,7 +25,7 @@ class LayerDef {
 	public var tilePivotX(default,set) : Float = 0;
 	public var tilePivotY(default,set) : Float = 0;
 
-	public function new(uid:Int, t:LayerType) {
+	public function new(uid:Int, t:ldtk.Json.LayerType) {
 		this.uid = uid;
 		type = t;
 		#if editor
@@ -46,7 +46,7 @@ class LayerDef {
 	}
 
 	public static function fromJson(jsonVersion:String, json:ldtk.Json.LayerDefJson) {
-		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(LayerType, json.type, false));
+		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(ldtk.Json.LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
