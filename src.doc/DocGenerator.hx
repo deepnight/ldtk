@@ -558,10 +558,21 @@ class DocGenerator {
 				type: ["array"],
 				items: getTypeJson(t).data
 			};
-			case Obj(fields): {
-				type: ["object"],
+
+			case Obj(fields):
+				var props = {};
+				for(f in fields) {
+					var t = getTypeJson(f.type);
+					Reflect.setField(props, f.displayName, t.data);
+				}
+				{
+					type: ["object"],
+					properties: props,
+				};
+
+			case Dyn: {
+				type: ["string","integer","number","object","array"]
 			};
-			case Dyn: {};
 			case Unknown: null;
 		}
 
