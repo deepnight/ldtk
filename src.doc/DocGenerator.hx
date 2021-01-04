@@ -55,7 +55,16 @@ class DocGenerator {
 		allTypes = [];
 		allEnums = [];
 
+		// Read app version from "package.json"
+		haxe.macro.Context.registerModuleDependency("DocGenerator", "app/package.json");
+		var raw = sys.io.File.getContent("app/package.json");
+		var versionReg = ~/"version"[ \t]*:[ \t]*"(.*)"/gim;
+		versionReg.match(raw);
+		appVersion.set( versionReg.matched(1) );
+		Sys.println('App version is $appVersion...');
+
 		// Read XML file
+		Sys.println("");
 		Sys.println('Parsing $xmlPath...');
 		haxe.macro.Context.registerModuleDependency("DocGenerator", xmlPath);
 		var raw = sys.io.File.getContent(xmlPath);
@@ -96,7 +105,7 @@ class DocGenerator {
 
 			Sys.println('Found ${type.name}: $displayName');
 		}
-		Sys.println("-------------------");
+		Sys.println("");
 
 		// Sort types
 		allTypes.sort( (a,b)->{
@@ -110,20 +119,13 @@ class DocGenerator {
 				return Reflect.compare(a.section, b.section);
 		});
 
-		// Read app version from "package.json"
-		haxe.macro.Context.registerModuleDependency("DocGenerator", "app/package.json");
-		var raw = sys.io.File.getContent("app/package.json");
-		var versionReg = ~/"version"[ \t]*:[ \t]*"(.*)"/gim;
-		versionReg.match(raw);
-		appVersion.set( versionReg.matched(1) );
-		Sys.println('App version is $appVersion...');
-
 		// Markdown doc output
-		Sys.println("Generating Markdown");
+		Sys.println("Generating Markdown doc");
 		genMarkdownDoc(xml, className, xmlPath, mdPath);
+		Sys.println("");
 
 		// Json schema output
-		Sys.println("Generating JSON");
+		Sys.println("Generating JSON schema");
 		genJsonSchema(xml, className, xmlPath, jsonPath);
 
 		// Cleanup
@@ -131,6 +133,10 @@ class DocGenerator {
 			Sys.println("Deleting XML file");
 			sys.FileSystem.deleteFile(xmlPath);
 		}
+
+		Sys.println("");
+		Sys.println('Done!');
+		Sys.println('');
 	}
 
 	public static function genMarkdownDoc(xml:haxe.xml.Access, className:String, xmlPath:String, ?mdPath:String) {
@@ -246,13 +252,10 @@ class DocGenerator {
 			mdPath = fp.full;
 		}
 
-		Sys.println('Writing markdown: ${mdPath}...');
+		Sys.println(' > Writing: ${mdPath}...');
 		var fo = sys.io.File.write(mdPath, false);
 		fo.writeString(md.join("\n"));
 		fo.close();
-
-		Sys.println('Done!');
-		Sys.println('');
 	}
 
 	public static function genJsonSchema(xml:haxe.xml.Access, className:String, xmlPath:String, ?jsonPath:String) {
@@ -312,13 +315,10 @@ class DocGenerator {
 		Reflect.setField(header, "$schema", "https://json-schema.org/draft-07/schema#");
 
 		// Write Json file
-		Sys.println('Writing JSON: ${jsonPath}...');
+		Sys.println(' > Writing: ${jsonPath}...');
 		var fo = sys.io.File.write(jsonPath, false);
 		fo.writeString( dn.JsonPretty.stringify(json, Full, header, true) );
 		fo.close();
-
-		Sys.println('Done!');
-		Sys.println('');
 	}
 
 
