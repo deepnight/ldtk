@@ -18,11 +18,11 @@
 		"publish-github": "npm run pack-prepare  &&  electron-builder build --publish always",
 		"publish-itchio": "npm run pack-win  &&  butler push \"redist/LDtk %npm_package_version% installer.exe\" deepnight/ldtk:win64 --userversion-file ../lastBuildVersion.txt",
 		"quicktype": "npm i -g quicktype  &&  npm run qt-cs  &&  npm run qt-js  &&  npm run qt-py  &&  npm run qt-rs  &&  npm run qt-go",
-		"qt-cs": "quicktype -s schema ../JSON_SCHEMA.json -o ../quicktype/csharp/LdtkJson.cs --namespace ldtk --any-type dynamic",
-		"qt-js": "quicktype -s schema ../JSON_SCHEMA.json -o ../quicktype/javascript/LdtkJson.js",
-		"qt-py": "quicktype -s schema ../JSON_SCHEMA.json -o ../quicktype/python/LdtkJson.py",
-		"qt-rs": "quicktype -s schema ../JSON_SCHEMA.json -o ../quicktype/rust/LdtkJson.rs",
-		"qt-go": "quicktype -s schema ../JSON_SCHEMA.json -o ../quicktype/go/LdtkJson.go"
+		"qt-cs": "quicktype -s schema ../JSON_SCHEMA.json -o ../quicktype/LdtkJson.cs --namespace ldtk --any-type dynamic",
+		"qt-js": "quicktype -s schema ../JSON_SCHEMA.json -o ../quicktype/LdtkJson.js",
+		"qt-py": "quicktype -s schema ../JSON_SCHEMA.json -o ../quicktype/LdtkJson.py",
+		"qt-rs": "quicktype -s schema ../JSON_SCHEMA.json -o ../quicktype/LdtkJson.rs",
+		"qt-go": "quicktype -s schema ../JSON_SCHEMA.json -o ../quicktype/LdtkJson.go"
 	},
 	"repository": {
 		"type": "git",
