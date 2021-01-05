@@ -142,17 +142,13 @@
 				},
 				"realEditorValues": {
 					"description": "",
-					"items": {
-						"type": [
-							"null"
-						]
-					},
+					"items" : {},
 					"type": [
 						"array"
 					]
 				},
 				"__value": {
-					"description": "Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>  It can also be an `Array` of various types."
+					"description": "Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>  It can also be an `Array` of those same types."
 				}
 			},
 			"type": [
@@ -538,10 +534,7 @@
 					]
 				},
 				"defaultOverride": {
-					"description": "Default value if selected value is null or invalid.",
-					"type": [
-						"null"
-					]
+					"description": "Default value if selected value is null or invalid."
 				},
 				"regex": {
 					"description": "Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional \"i\" flag.",
