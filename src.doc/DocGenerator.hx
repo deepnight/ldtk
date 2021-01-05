@@ -589,16 +589,19 @@ class DocGenerator {
 		switch t {
 			case Nullable(f):
 				st = getSchemaType(f);
-				if( f!=Dyn )
-					st.type.push("null");
+				switch f { // ignore Dynamics
+					case Basic("Enum"):
+					case Dyn:
+					case _:
+						st.type.push("null");
+				}
 
 			case Basic(name):
-				st.type = [];
 				switch name {
-					case "String": st.type.push("string");
-					case "Int": st.type.push("integer");
-					case "Float": st.type.push("number");
-					case "Bool": st.type.push("boolean");
+					case "String": st.type = ["string"];
+					case "Int": st.type = ["integer"];
+					case "Float": st.type = ["number"];
+					case "Bool": st.type = ["boolean"];
 					case "Enum":
 				}
 
