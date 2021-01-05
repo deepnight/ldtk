@@ -1,11 +1,16 @@
 import haxe.Json;
 using StringTools;
 
-typedef ObjectField = {
-	var xml : haxe.xml.Access;
-	var name : String;
-	var type : FieldType;
-	var doc:Null<String>;
+
+enum FieldType {
+	Nullable(f:FieldType);
+	Basic(name:String);
+	Enu(name:String);
+	Arr(t:FieldType);
+	Obj(fields:Array<FieldInfos>);
+	Ref(display:String, typeName:String);
+	Dyn;
+	Unknown;
 }
 
 typedef FieldInfos = {
@@ -22,33 +27,22 @@ typedef FieldInfos = {
 	var isInternal: Bool;
 }
 
-typedef TypeInfos = {
+typedef GlobalType = {
 	var rawName : String;
 	var displayName : String;
 	var xml : haxe.xml.Access;
 	var section : String;
 }
 
-enum FieldType {
-	Nullable(f:FieldType);
-	Basic(name:String);
-	Enu(name:String);
-	Arr(t:FieldType);
-	Obj(fields:Array<FieldInfos>);
-	Ref(display:String, typeName:String);
-	Dyn;
-	Unknown;
-}
 
-
-typedef TypeJson = {
+typedef SchemaType = {
 	var ?title: String;
 	var ?type: Array<String>;
 	var ?description: String;
 	var ?required: Array<String>;
-	var ?properties: Map<String, TypeJson>;
+	var ?properties: Map<String, SchemaType>;
 	var ?additionalProperties: Bool;
-	var ?items: TypeJson;
+	var ?items: SchemaType;
 	var ?enum__: Array<String>;
 	var ?ref__: String;
 }
@@ -58,7 +52,7 @@ class DocGenerator {
 	#if macro
 	static var SCHEMA_URL = "https://ldtk.io/files/JSON_SCHEMA.json";
 
-	static var allTypes: Array<TypeInfos>;
+	static var allTypes: Array<GlobalType>;
 	static var allEnums : Map<String, Array<String>>;
 	static var verbose = false;
 	static var appVersion = new dn.Version();
@@ -155,6 +149,11 @@ class DocGenerator {
 		Sys.println('');
 	}
 
+
+
+	/**
+		Build doc
+	**/
 	static function genMarkdownDoc(xml:haxe.xml.Access, className:String, xmlPath:String, ?mdPath:String) {
 		// Print types
 		var toc = [];
@@ -276,6 +275,9 @@ class DocGenerator {
 
 
 
+	/**
+		Build Json schema
+	**/
 	static function genJsonSchema(xml:haxe.xml.Access, className:String, xmlPath:String, ?jsonPath:String) {
 		// Prepare Json structure
 		var json = {
@@ -285,14 +287,16 @@ class DocGenerator {
 			otherTypes: new Map<String,Dynamic>(),
 		};
 
+
 		for(type in allTypes) {
-			// No field informations for this type
+
+			// No field informations for this type?
 			if( !type.xml.hasNode.a )
 				continue;
 
 			// Init json type
 			var typeName = type.rawName.substr( type.rawName.lastIndexOf(".")+1 ).replace("Json","");
-			var typeJson : TypeJson = {}
+			var typeJson : SchemaType = {}
 			typeJson.type = ["object"];
 			typeJson.properties = [];
 			typeJson.required = [];
@@ -301,13 +305,13 @@ class DocGenerator {
 
 			// List fields
 			for(f in getFieldsInfos(type.xml.node.a)) {
-				var jt = getTypeJson(f.type);
-				jt.description = f.descMd.join('\n');
+				var st = getSchemaType(f.type);
+				st.description = f.descMd.join('\n');
 
 				// Detect required fields
-				if( jt.type!=null ) {
+				if( st.type!=null ) {
 					var req = true;
-					for( t in jt.type )
+					for( t in st.type )
 						if( t=="null" ) {
 							req = false;
 							break;
@@ -316,7 +320,7 @@ class DocGenerator {
 						typeJson.required.push(f.displayName);
 				}
 
-				typeJson.properties.set(f.displayName, jt);
+				typeJson.properties.set(f.displayName, st);
 			}
 
 			// Store type
@@ -359,6 +363,7 @@ class DocGenerator {
 		} ) + '*</small>';
 	}
 
+
 	static function getSubFieldsHtml(fields:Array<FieldInfos>) {
 		var list = [];
 		for(f in fields) {
@@ -393,6 +398,7 @@ class DocGenerator {
 
 		return "<ul><li>" + list.join("</li><li>") + "</li></ul>";
 	}
+
 
 
 	/**
@@ -569,42 +575,42 @@ class DocGenerator {
 		return str;
 	}
 
-	static function getTypeJson(t:FieldType): TypeJson {
-		var jt : TypeJson = {}
+	static function getSchemaType(t:FieldType): SchemaType {
+		var st : SchemaType = {}
 		switch t {
 			case Nullable(f):
-				jt = getTypeJson(f);
+				st = getSchemaType(f);
 				if( f!=Dyn )
-					jt.type.push("null");
+					st.type.push("null");
 
 			case Basic(name):
-				jt.type = [];
+				st.type = [];
 				switch name {
-					case "String": jt.type.push("string");
-					case "Int": jt.type.push("integer");
-					case "Float": jt.type.push("number");
-					case "Bool": jt.type.push("boolean");
+					case "String": st.type.push("string");
+					case "Int": st.type.push("integer");
+					case "Float": st.type.push("number");
+					case "Bool": st.type.push("boolean");
 					case "Enum":
 				}
 
 			case Enu(name):
-				jt.enum__ = allEnums.get(name);
+				st.enum__ = allEnums.get(name);
 
 			case Arr(t):
-				jt.type = ["array"];
-				jt.items = getTypeJson(t);
+				st.type = ["array"];
+				st.items = getSchemaType(t);
 
 			case Obj(fields):
-				jt.type = ["object"];
+				st.type = ["object"];
 
 			case Ref(display, typeName):
-				jt.ref__ = '#/otherTypes/${typeName.replace("ldtk.", "").replace("Json", "")}';
+				st.ref__ = '#/otherTypes/${typeName.replace("ldtk.", "").replace("Json", "")}';
 
 			case Dyn:
 			case Unknown:
 		}
 
-		return jt;
+		return st;
 	}
 
 
