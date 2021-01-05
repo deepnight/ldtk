@@ -55,6 +55,14 @@
 			"priority": -32
 		},
 		{
+			"text": "📖 QT",
+			"color": "#58ffb2",
+			"command": "cd app  &&  npm run quicktype  &&  echo Done.",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -33
+		},
+		{
 			"text": "🌐 pub-GitHub",
 			"color": "cyan",
 			"command": "cd app  &&  npm run publish-github  &&  echo Done.",
