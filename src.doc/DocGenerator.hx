@@ -63,6 +63,9 @@ class DocGenerator {
 	static var verbose = false;
 	static var appVersion = new dn.Version();
 
+	/**
+		Generate Markdown doc and Json schema
+	**/
 	public static function run(className:String, xmlPath:String, ?mdPath:String, ?jsonPath:String, deleteXml=false) {
 		allTypes = [];
 		allEnums = [];
@@ -152,7 +155,7 @@ class DocGenerator {
 		Sys.println('');
 	}
 
-	public static function genMarkdownDoc(xml:haxe.xml.Access, className:String, xmlPath:String, ?mdPath:String) {
+	static function genMarkdownDoc(xml:haxe.xml.Access, className:String, xmlPath:String, ?mdPath:String) {
 		// Print types
 		var toc = [];
 		var md = [];
@@ -273,7 +276,7 @@ class DocGenerator {
 
 
 
-	public static function genJsonSchema(xml:haxe.xml.Access, className:String, xmlPath:String, ?jsonPath:String) {
+	static function genJsonSchema(xml:haxe.xml.Access, className:String, xmlPath:String, ?jsonPath:String) {
 		// Prepare Json structure
 		var json = {
 			"$schema": "https://json-schema.org/draft-07/schema#",
