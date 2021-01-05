@@ -1,3 +1,12 @@
+/**
+	Json Documentation and Schema generator
+
+	Useful links:
+	- QuickType: https://app.quicktype.io/
+	- JsonSchema doc: https://json-schema.org/understanding-json-schema/index.html
+	- Test JsonSchema: https://www.jsonschemavalidator.net/
+**/
+
 import haxe.Json;
 using StringTools;
 
