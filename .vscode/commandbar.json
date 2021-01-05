@@ -13,15 +13,6 @@
 			"priority": -21
 		},
 		{
-			"text": "⚡ Rdr rls",
-			"color": "yellow",
-			"commandType":"palette",
-			"command": "workbench.action.tasks.runTask|Electron Renderer release",
-			"alignment": "right",
-			"skipTerminateQuickPick": false,
-			"priority": -22
-		},
-		{
 			"text": "⚡ Main dbg",
 			"color": "yellow",
 			"commandType":"palette",
@@ -47,7 +38,7 @@
 			"priority": -31
 		},
 		{
-			"text": "📖 Dox",
+			"text": "📘 Dox",
 			"color": "#8a96ff",
 			"command": "haxe doc.hxml",
 			"alignment": "right",
@@ -55,7 +46,7 @@
 			"priority": -32
 		},
 		{
-			"text": "📖 QT",
+			"text": "📗 QT",
 			"color": "#58ffb2",
 			"command": "cd app  &&  npm run quicktype  &&  echo Done.",
 			"alignment": "right",
@@ -63,7 +54,7 @@
 			"priority": -33
 		},
 		{
-			"text": "🌐 pub-GitHub",
+			"text": "➾ GitHub",
 			"color": "cyan",
 			"command": "cd app  &&  npm run publish-github  &&  echo Done.",
 			"alignment": "right",
@@ -71,7 +62,7 @@
 			"priority": -40
 		},
 		{
-			"text": "🌐 pub-ItchIo",
+			"text": "➾ ItchIo",
 			"color": "cyan",
 			"command": "cd app  &&  npm run publish-itchio  &&  echo Done.",
 			"alignment": "right",
