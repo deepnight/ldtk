@@ -41,6 +41,18 @@ enum FieldType {
 }
 
 
+typedef TypeJson = {
+	var ?title: String;
+	var ?type: Array<String>;
+	var ?description: String;
+	var ?required: Array<String>;
+	var ?properties: Map<String, TypeJson>;
+	var ?additionalProperties: Bool;
+	var ?items: TypeJson;
+	var ?enum__: Array<String>;
+	var ?ref__: String;
+}
+
 
 class DocGenerator {
 	#if macro
@@ -259,49 +271,58 @@ class DocGenerator {
 		fo.close();
 	}
 
+
+
 	public static function genJsonSchema(xml:haxe.xml.Access, className:String, xmlPath:String, ?jsonPath:String) {
-		var json: Dynamic = {
-			definitions: new Map<String,Dynamic>(),
-			"$ref": "#/definitions/Project"
+		// Prepare Json structure
+		var json = {
+			"$schema": "https://json-schema.org/draft-07/schema#",
+			"$ref" : "#/LdtkJsonRoot",
+			LdtkJsonRoot: null,
+			otherTypes: new Map<String,Dynamic>(),
 		};
 
-		// Print types
 		for(type in allTypes) {
-			var depth = 0;
-
-			var definition: Dynamic = {
-				properties: new Map<String,Dynamic>()
-			};
-			var definitionName = type.rawName.split(".")[1].replace("Json", "");
-
 			// No field informations for this type
-			if( !type.xml.hasNode.a ) {
+			if( !type.xml.hasNode.a )
 				continue;
-			}
+
+			// Init json type
+			var typeName = type.rawName.substr( type.rawName.lastIndexOf(".")+1 ).replace("Json","");
+			var typeJson : TypeJson = {}
+			typeJson.type = ["object"];
+			typeJson.properties = [];
+			typeJson.required = [];
+			typeJson.title = type.displayName;
+
 
 			// List fields
-			var required = [];
 			for(f in getFieldsInfos(type.xml.node.a)) {
-				var typeInfo: Dynamic = getTypeJson(f.type);
-				if (typeInfo.required)
-					required.push(f.displayName);
+				var jt = getTypeJson(f.type);
+				jt.description = f.descMd.join('\n');
 
-				typeInfo.data.description = f.descMd.join('\n');
-				definition.properties.set(f.displayName, typeInfo.data);
+				// Detect required fields
+				if( jt.type!=null ) {
+					var req = true;
+					for( t in jt.type )
+						if( t=="null" ) {
+							req = false;
+							break;
+						}
+					if( req )
+						typeJson.required.push(f.displayName);
+				}
+
+				typeJson.properties.set(f.displayName, jt);
 			}
-			definition.required = required;
 
-			json.definitions.set(definitionName, definition);
-		}
-
-		// Print enums
-		for( e in allEnums.keyValueIterator() ) {
-			var name = e.key.replace("ldtk.","");
-			var def : Dynamic = {
-				type: ["string","object"],
+			// Store type
+			if( typeName=="Project" )
+				json.LdtkJsonRoot = typeJson;
+			else {
+				typeJson.additionalProperties = false;
+				json.otherTypes.set(typeName, typeJson);
 			}
-			Reflect.setField(def, "enum", e.value);
-			json.definitions.set(name, def);
 		}
 
 		// Default output file name
@@ -311,14 +332,13 @@ class DocGenerator {
 			jsonPath = fp.full;
 		}
 
-		// Header
-		var header = {};
-		Reflect.setField(header, "$schema", "https://json-schema.org/draft-07/schema#");
-
 		// Write Json file
 		Sys.println(' > Writing: ${jsonPath}...');
 		var fo = sys.io.File.write(jsonPath, false);
-		fo.writeString( dn.JsonPretty.stringify(json, Full, header, true) );
+		var jsonStr = dn.JsonPretty.stringify(json, Full);
+		jsonStr = jsonStr.replace('"ref__"', "\"$ref\"");
+		jsonStr = jsonStr.replace('"enum__"', '"enum"');
+		fo.writeString(jsonStr);
 		fo.close();
 	}
 
@@ -546,70 +566,42 @@ class DocGenerator {
 		return str;
 	}
 
-	static function getTypeJson(t:FieldType): { required: Bool, data: Dynamic } {
-		var required = switch t {
-			case Nullable(f): false;
-			case _: true;
-		}
-
-		var data : Dynamic = switch t {
+	static function getTypeJson(t:FieldType): TypeJson {
+		var jt : TypeJson = {}
+		switch t {
 			case Nullable(f):
-				var d : { type:Array<String> } = getTypeJson(f).data;
-				if( d.type!=null )
-					d.type.push("null");
-				d;
+				jt = getTypeJson(f);
+				if( f!=Dyn )
+					jt.type.push("null");
 
-			case Basic(name): switch name {
-				case "Bool": {
-					type: ["boolean"],
-				};
-				case "String": {
-					type: ["string"],
-				};
-				case "Int": {
-					type: ["integer"],
-				};
-				case "Float": {
-					type: ["number"],
-				};
-				case "Enum":
-					{}
-				case x: {
-					type: [x]
-				};
-			};
-			case Enu(name): {
-				"$ref": '#/definitions/${name.replace("ldtk.", "").replace("Json", "")}'
-			};
-			case Ref(display, name): {
-				"$ref": '#/definitions/${name.replace("ldtk.", "").replace("Json", "")}'
-			};
-			case Arr(t): {
-				type: ["array"],
-				items: getTypeJson(t).data
-			};
+			case Basic(name):
+				jt.type = [];
+				switch name {
+					case "String": jt.type.push("string");
+					case "Int": jt.type.push("integer");
+					case "Float": jt.type.push("number");
+					case "Bool": jt.type.push("boolean");
+					case "Enum":
+				}
+
+			case Enu(name):
+				jt.enum__ = allEnums.get(name);
+
+			case Arr(t):
+				jt.type = ["array"];
+				jt.items = getTypeJson(t);
 
 			case Obj(fields):
-				var props = {};
-				for(f in fields) {
-					var t = getTypeJson(f.type);
-					Reflect.setField(props, f.displayName, t.data);
-				}
-				{
-					type: ["object"],
-					properties: props,
-				};
+				jt.type = ["object"];
 
-			case Dyn: {
-				// type: ["string","integer","number","object","array","boolean","null"]
-			};
-			case Unknown: null;
+			case Ref(display, typeName):
+				jt.ref__ = '#/otherTypes/${typeName.replace("ldtk.", "").replace("Json", "")}';
+
+			case Dyn:
+			case Unknown:
 		}
 
-		return {
-			required: required,
-			data: data,
-		};
+		return jt;
 	}
 
 
