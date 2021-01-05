@@ -1,26 +1,126 @@
 {
 	"$schema": "https://json-schema.org/draft-07/schema#",
-	"definitions": {
-		"LayerType": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"IntGrid",
-				"Entities",
-				"Tiles",
-				"AutoLayer"
-			]
+	"LdtkJsonRoot": {
+		"title": "LDtk Json root",
+		"required": [
+			"bgColor",
+			"defaultGridSize",
+			"defaultLevelBgColor",
+			"defaultPivotX",
+			"defaultPivotY",
+			"exportTiled",
+			"jsonVersion",
+			"levels",
+			"minifyJson",
+			"nextUid",
+			"worldGridHeight",
+			"worldGridWidth"
+		],
+		"properties": {
+			"worldGridWidth": {
+				"description": "Width of the world grid in pixels.",
+				"type": [
+					"integer"
+				]
+			},
+			"defaultLevelBgColor": {
+				"description": "Default background color of levels",
+				"type": [
+					"string"
+				]
+			},
+			"bgColor": {
+				"description": "Project background color",
+				"type": [
+					"string"
+				]
+			},
+			"nextUid": {
+				"description": "",
+				"type": [
+					"integer"
+				]
+			},
+			"defaultPivotY": {
+				"description": "Default Y pivot (0 to 1) for new entities",
+				"type": [
+					"number"
+				]
+			},
+			"worldGridHeight": {
+				"description": "Height of the world grid in pixels.",
+				"type": [
+					"integer"
+				]
+			},
+			"defaultGridSize": {
+				"description": "Default grid size for new layers",
+				"type": [
+					"integer"
+				]
+			},
+			"worldLayout": {
+				"description": "An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`",
+				"enum": [
+					"Free",
+					"GridVania",
+					"LinearHorizontal",
+					"LinearVertical"
+				]
+			},
+			"exportTiled": {
+				"description": "If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)",
+				"type": [
+					"boolean"
+				]
+			},
+			"defs": {
+				"description": "A structure containing all the definitions of this project",
+				"$ref": "#/otherTypes/Definitions"
+			},
+			"levels": {
+				"description": "All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.",
+				"items": {
+					"$ref": "#/otherTypes/Level"
+				},
+				"type": [
+					"array"
+				]
+			},
+			"jsonVersion": {
+				"description": "File format version",
+				"type": [
+					"string"
+				]
+			},
+			"defaultPivotX": {
+				"description": "Default X pivot (0 to 1) for new entities",
+				"type": [
+					"number"
+				]
+			},
+			"minifyJson": {
+				"description": "If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)",
+				"type": [
+					"boolean"
+				]
+			}
 		},
+		"type": [
+			"object"
+		]
+	},
+	"$ref": "#/LdtkJsonRoot",
+	"otherTypes": {
 		"FieldInstance": {
+			"title": "Field instance",
 			"required": [
 				"__identifier",
 				"__type",
-				"__value",
 				"defUid",
 				"realEditorValues"
 			],
+			"additionalProperties": false,
 			"properties": {
 				"__type": {
 					"description": "Type of the field, such as Int, Float, Enum(enum_name), Bool, etc.",
@@ -42,7 +142,11 @@
 				},
 				"realEditorValues": {
 					"description": "",
-					"items" : {},
+					"items": {
+						"type": [
+							"null"
+						]
+					},
 					"type": [
 						"array"
 					]
@@ -50,9 +154,13 @@
 				"__value": {
 					"description": "Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>  It can also be an `Array` of various types."
 				}
-			}
+			},
+			"type": [
+				"object"
+			]
 		},
 		"EntityInstance": {
+			"title": "Entity instance",
 			"required": [
 				"__grid",
 				"__identifier",
@@ -60,6 +168,7 @@
 				"fieldInstances",
 				"px"
 			],
+			"additionalProperties": false,
 			"properties": {
 				"defUid": {
 					"description": "Reference of the **Entity definition** UID",
@@ -75,23 +184,6 @@
 				},
 				"__tile": {
 					"description": "Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).",
-					"properties": {
-						"srcRect": {
-							"items": {
-								"type": [
-									"integer"
-								]
-							},
-							"type": [
-								"array"
-							]
-						},
-						"tilesetUid": {
-							"type": [
-								"integer"
-							]
-						}
-					},
 					"type": [
 						"object",
 						"null"
@@ -122,37 +214,19 @@
 				"fieldInstances": {
 					"description": "",
 					"items": {
-						"$ref": "#/definitions/FieldInstance"
+						"$ref": "#/otherTypes/FieldInstance"
 					},
 					"type": [
 						"array"
 					]
 				}
-			}
-		},
-		"AutoLayerRuleCheckerMode": {
+			},
 			"type": [
-				"string",
 				"object"
-			],
-			"enum": [
-				"None",
-				"Horizontal",
-				"Vertical"
-			]
-		},
-		"FieldDisplayPosition": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"Above",
-				"Center",
-				"Beneath"
 			]
 		},
 		"Definitions": {
+			"title": "Definitions",
 			"required": [
 				"entities",
 				"enums",
@@ -160,11 +234,12 @@
 				"layers",
 				"tilesets"
 			],
+			"additionalProperties": false,
 			"properties": {
 				"tilesets": {
 					"description": "",
 					"items": {
-						"$ref": "#/definitions/TilesetDef"
+						"$ref": "#/otherTypes/TilesetDef"
 					},
 					"type": [
 						"array"
@@ -173,7 +248,7 @@
 				"layers": {
 					"description": "",
 					"items": {
-						"$ref": "#/definitions/LayerDef"
+						"$ref": "#/otherTypes/LayerDef"
 					},
 					"type": [
 						"array"
@@ -182,7 +257,7 @@
 				"enums": {
 					"description": "",
 					"items": {
-						"$ref": "#/definitions/EnumDef"
+						"$ref": "#/otherTypes/EnumDef"
 					},
 					"type": [
 						"array"
@@ -191,7 +266,7 @@
 				"entities": {
 					"description": "",
 					"items": {
-						"$ref": "#/definitions/EntityDef"
+						"$ref": "#/otherTypes/EntityDef"
 					},
 					"type": [
 						"array"
@@ -200,20 +275,23 @@
 				"externalEnums": {
 					"description": "Note: external enums are exactly the same as `enums`, except they have a `relPath` to point to an external source file.",
 					"items": {
-						"$ref": "#/definitions/EnumDef"
+						"$ref": "#/otherTypes/EnumDef"
 					},
 					"type": [
 						"array"
 					]
 				}
-			}
+			},
+			"type": [
+				"object"
+			]
 		},
 		"AutoRuleDef": {
+			"title": "Auto-layer rule definition",
 			"required": [
 				"active",
 				"breakOnMatch",
 				"chance",
-				"checker",
 				"flipX",
 				"flipY",
 				"pattern",
@@ -225,11 +303,11 @@
 				"pivotY",
 				"size",
 				"tileIds",
-				"tileMode",
 				"uid",
 				"xModulo",
 				"yModulo"
 			],
+			"additionalProperties": false,
 			"properties": {
 				"flipX": {
 					"description": "If TRUE, allow rule to be matched by flipping its pattern horizontally",
@@ -268,7 +346,11 @@
 				},
 				"checker": {
 					"description": "Checker mode Possible values: `None`, `Horizontal`, `Vertical`",
-					"$ref": "#/definitions/AutoLayerRuleCheckerMode"
+					"enum": [
+						"None",
+						"Horizontal",
+						"Vertical"
+					]
 				},
 				"perlinOctaves": {
 					"description": "",
@@ -325,7 +407,10 @@
 				},
 				"tileMode": {
 					"description": "Defines how tileIds array is used Possible values: `Single`, `Stamp`",
-					"$ref": "#/definitions/AutoLayerRuleTileMode"
+					"enum": [
+						"Single",
+						"Stamp"
+					]
 				},
 				"flipY": {
 					"description": "If TRUE, allow rule to be matched by flipping its pattern vertically",
@@ -351,20 +436,22 @@
 						"boolean"
 					]
 				}
-			}
+			},
+			"type": [
+				"object"
+			]
 		},
 		"FieldDef": {
+			"title": "Field definition",
 			"required": [
 				"__type",
 				"canBeNull",
 				"editorAlwaysShow",
-				"editorDisplayMode",
-				"editorDisplayPos",
 				"identifier",
 				"isArray",
-				"type",
 				"uid"
 			],
+			"additionalProperties": false,
 			"properties": {
 				"acceptFileTypes": {
 					"description": "Optional list of accepted file extensions for FilePath value type. Includes the dot: `.ext`",
@@ -406,7 +493,16 @@
 				},
 				"editorDisplayMode": {
 					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`, `PointPath`, `RadiusPx`, `RadiusGrid`",
-					"$ref": "#/definitions/FieldDisplayMode"
+					"enum": [
+						"Hidden",
+						"ValueOnly",
+						"NameAndValue",
+						"EntityTile",
+						"PointStar",
+						"PointPath",
+						"RadiusPx",
+						"RadiusGrid"
+					]
 				},
 				"canBeNull": {
 					"description": "TRUE if the value can be null. For arrays, TRUE means it can contain null values (exception: array of Points can't have null values).",
@@ -428,7 +524,11 @@
 				},
 				"editorDisplayPos": {
 					"description": "Possible values: `Above`, `Center`, `Beneath`",
-					"$ref": "#/definitions/FieldDisplayPosition"
+					"enum": [
+						"Above",
+						"Center",
+						"Beneath"
+					]
 				},
 				"max": {
 					"description": "Max limit for value, if applicable",
@@ -438,7 +538,10 @@
 					]
 				},
 				"defaultOverride": {
-					"description": "Default value if selected value is null or invalid."
+					"description": "Default value if selected value is null or invalid.",
+					"type": [
+						"null"
+					]
 				},
 				"regex": {
 					"description": "Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional \"i\" flag.",
@@ -463,24 +566,26 @@
 						"null"
 					]
 				}
-			}
+			},
+			"type": [
+				"object"
+			]
 		},
 		"EntityDef": {
+			"title": "Entity definition",
 			"required": [
 				"color",
 				"fieldDefs",
 				"height",
 				"identifier",
-				"limitBehavior",
 				"maxPerLevel",
 				"pivotX",
 				"pivotY",
-				"renderMode",
 				"showName",
-				"tileRenderMode",
 				"uid",
 				"width"
 			],
+			"additionalProperties": false,
 			"properties": {
 				"tileId": {
 					"description": "Tile ID used for optional tile display",
@@ -517,7 +622,7 @@
 				"fieldDefs": {
 					"description": "Array of field definitions",
 					"items": {
-						"$ref": "#/definitions/FieldDef"
+						"$ref": "#/otherTypes/FieldDef"
 					},
 					"type": [
 						"array"
@@ -525,11 +630,18 @@
 				},
 				"tileRenderMode": {
 					"description": "Possible values: `Stretch`, `Crop`",
-					"$ref": "#/definitions/EntityTileRenderMode"
+					"enum": [
+						"Stretch",
+						"Crop"
+					]
 				},
 				"limitBehavior": {
 					"description": "Possible values: `DiscardOldOnes`, `PreventAdding`, `MoveLastOne`",
-					"$ref": "#/definitions/EntityLimitBehavior"
+					"enum": [
+						"DiscardOldOnes",
+						"PreventAdding",
+						"MoveLastOne"
+					]
 				},
 				"uid": {
 					"description": "Unique Int identifier",
@@ -557,7 +669,12 @@
 				},
 				"renderMode": {
 					"description": "Possible values: `Rectangle`, `Ellipse`, `Tile`, `Cross`",
-					"$ref": "#/definitions/EntityRenderMode"
+					"enum": [
+						"Rectangle",
+						"Ellipse",
+						"Tile",
+						"Cross"
+					]
 				},
 				"maxPerLevel": {
 					"description": "Max instances per level",
@@ -571,134 +688,13 @@
 						"integer"
 					]
 				}
-			}
-		},
-		"EntityRenderMode": {
+			},
 			"type": [
-				"string",
 				"object"
-			],
-			"enum": [
-				"Rectangle",
-				"Ellipse",
-				"Tile",
-				"Cross"
-			]
-		},
-		"Project": {
-			"required": [
-				"bgColor",
-				"defaultGridSize",
-				"defaultLevelBgColor",
-				"defaultPivotX",
-				"defaultPivotY",
-				"defs",
-				"exportTiled",
-				"jsonVersion",
-				"levels",
-				"minifyJson",
-				"nextUid",
-				"worldGridHeight",
-				"worldGridWidth",
-				"worldLayout"
-			],
-			"properties": {
-				"worldGridWidth": {
-					"description": "Width of the world grid in pixels.",
-					"type": [
-						"integer"
-					]
-				},
-				"defaultLevelBgColor": {
-					"description": "Default background color of levels",
-					"type": [
-						"string"
-					]
-				},
-				"bgColor": {
-					"description": "Project background color",
-					"type": [
-						"string"
-					]
-				},
-				"nextUid": {
-					"description": "",
-					"type": [
-						"integer"
-					]
-				},
-				"defaultPivotY": {
-					"description": "Default Y pivot (0 to 1) for new entities",
-					"type": [
-						"number"
-					]
-				},
-				"worldGridHeight": {
-					"description": "Height of the world grid in pixels.",
-					"type": [
-						"integer"
-					]
-				},
-				"defaultGridSize": {
-					"description": "Default grid size for new layers",
-					"type": [
-						"integer"
-					]
-				},
-				"worldLayout": {
-					"description": "An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`",
-					"$ref": "#/definitions/WorldLayout"
-				},
-				"exportTiled": {
-					"description": "If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)",
-					"type": [
-						"boolean"
-					]
-				},
-				"defs": {
-					"description": "A structure containing all the definitions of this project",
-					"$ref": "#/definitions/Definitions"
-				},
-				"levels": {
-					"description": "All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.",
-					"items": {
-						"$ref": "#/definitions/Level"
-					},
-					"type": [
-						"array"
-					]
-				},
-				"jsonVersion": {
-					"description": "File format version",
-					"type": [
-						"string"
-					]
-				},
-				"defaultPivotX": {
-					"description": "Default X pivot (0 to 1) for new entities",
-					"type": [
-						"number"
-					]
-				},
-				"minifyJson": {
-					"description": "If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)",
-					"type": [
-						"boolean"
-					]
-				}
-			}
-		},
-		"AutoLayerRuleTileMode": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"Single",
-				"Stamp"
 			]
 		},
 		"LayerInstance": {
+			"title": "Layer instance",
 			"required": [
 				"__cHei",
 				"__cWid",
@@ -718,6 +714,7 @@
 				"pxOffsetY",
 				"seed"
 			],
+			"additionalProperties": false,
 			"properties": {
 				"__cHei": {
 					"description": "Grid-based height",
@@ -753,7 +750,7 @@
 				"autoLayerTiles": {
 					"description": "An array containing all tiles generated by Auto-layer rules. The array is already sorted in display order (ie. 1st tile is beneath 2nd, which is beneath 3rd etc.).<br/><br/>  Note: if multiple tiles are stacked in the same cell as the result of different rules, all tiles behind opaque ones will be discarded.",
 					"items": {
-						"$ref": "#/definitions/Tile"
+						"$ref": "#/otherTypes/Tile"
 					},
 					"type": [
 						"array"
@@ -780,7 +777,7 @@
 				"entityInstances": {
 					"description": "",
 					"items": {
-						"$ref": "#/definitions/EntityInstance"
+						"$ref": "#/otherTypes/EntityInstance"
 					},
 					"type": [
 						"array"
@@ -832,7 +829,7 @@
 				"gridTiles": {
 					"description": "",
 					"items": {
-						"$ref": "#/definitions/Tile"
+						"$ref": "#/otherTypes/Tile"
 					},
 					"type": [
 						"array"
@@ -841,18 +838,6 @@
 				"intGrid": {
 					"description": "",
 					"items": {
-						"properties": {
-							"v": {
-								"type": [
-									"integer"
-								]
-							},
-							"coordId": {
-								"type": [
-									"integer"
-								]
-							}
-						},
 						"type": [
 							"object"
 						]
@@ -861,46 +846,13 @@
 						"array"
 					]
 				}
-			}
-		},
-		"FieldDisplayMode": {
+			},
 			"type": [
-				"string",
 				"object"
-			],
-			"enum": [
-				"Hidden",
-				"ValueOnly",
-				"NameAndValue",
-				"EntityTile",
-				"PointStar",
-				"PointPath",
-				"RadiusPx",
-				"RadiusGrid"
-			]
-		},
-		"EntityTileRenderMode": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"Stretch",
-				"Crop"
-			]
-		},
-		"EntityLimitBehavior": {
-			"type": [
-				"string",
-				"object"
-			],
-			"enum": [
-				"DiscardOldOnes",
-				"PreventAdding",
-				"MoveLastOne"
 			]
 		},
 		"TilesetDef": {
+			"title": "Tileset definition",
 			"required": [
 				"identifier",
 				"padding",
@@ -912,22 +864,10 @@
 				"tileGridSize",
 				"uid"
 			],
+			"additionalProperties": false,
 			"properties": {
 				"cachedPixelData": {
 					"description": "The following data is used internally for various optimizations. It's always synced with source image changes.",
-					"properties": {
-						"opaqueTiles": {
-							"type": [
-								"string"
-							]
-						},
-						"averageColors": {
-							"type": [
-								"string",
-								"null"
-							]
-						}
-					},
 					"type": [
 						"object",
 						"null"
@@ -972,19 +912,6 @@
 				"savedSelections": {
 					"description": "Array of group of tiles selections, only meant to be used in the editor",
 					"items": {
-						"properties": {
-							"mode" : {},
-							"ids": {
-								"items": {
-									"type": [
-										"integer"
-									]
-								},
-								"type": [
-									"array"
-								]
-							}
-						},
 						"type": [
 							"object"
 						]
@@ -1005,21 +932,13 @@
 						"integer"
 					]
 				}
-			}
-		},
-		"WorldLayout": {
+			},
 			"type": [
-				"string",
 				"object"
-			],
-			"enum": [
-				"Free",
-				"GridVania",
-				"LinearHorizontal",
-				"LinearVertical"
 			]
 		},
 		"Tile": {
+			"title": "Tile instance",
 			"required": [
 				"d",
 				"f",
@@ -1027,6 +946,7 @@
 				"src",
 				"t"
 			],
+			"additionalProperties": false,
 			"properties": {
 				"t": {
 					"description": "The *Tile ID* in the corresponding tileset.",
@@ -1073,9 +993,13 @@
 						"array"
 					]
 				}
-			}
+			},
+			"type": [
+				"object"
+			]
 		},
 		"LayerDef": {
+			"title": "Layer definition",
 			"required": [
 				"__type",
 				"autoRuleGroups",
@@ -1087,9 +1011,9 @@
 				"pxOffsetY",
 				"tilePivotX",
 				"tilePivotY",
-				"type",
 				"uid"
 			],
+			"additionalProperties": false,
 			"properties": {
 				"pxOffsetX": {
 					"description": "X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)",
@@ -1145,19 +1069,6 @@
 				"intGridValues": {
 					"description": "",
 					"items": {
-						"properties": {
-							"color": {
-								"type": [
-									"string"
-								]
-							},
-							"identifier": {
-								"type": [
-									"string",
-									"null"
-								]
-							}
-						},
 						"type": [
 							"object"
 						]
@@ -1169,36 +1080,6 @@
 				"autoRuleGroups": {
 					"description": "Contains all the auto-layer rule definitions.",
 					"items": {
-						"properties": {
-							"name": {
-								"type": [
-									"string"
-								]
-							},
-							"collapsed": {
-								"type": [
-									"boolean"
-								]
-							},
-							"uid": {
-								"type": [
-									"integer"
-								]
-							},
-							"active": {
-								"type": [
-									"boolean"
-								]
-							},
-							"rules": {
-								"items": {
-									"$ref": "#/definitions/AutoRuleDef"
-								},
-								"type": [
-									"array"
-								]
-							}
-						},
 						"type": [
 							"object"
 						]
@@ -1209,7 +1090,12 @@
 				},
 				"type": {
 					"description": "Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`, `AutoLayer`",
-					"$ref": "#/definitions/LayerType"
+					"enum": [
+						"IntGrid",
+						"Entities",
+						"Tiles",
+						"AutoLayer"
+					]
 				},
 				"identifier": {
 					"description": "Unique String identifier",
@@ -1235,9 +1121,13 @@
 						"integer"
 					]
 				}
-			}
+			},
+			"type": [
+				"object"
+			]
 		},
 		"Level": {
+			"title": "Level",
 			"required": [
 				"__bgColor",
 				"__neighbours",
@@ -1249,22 +1139,11 @@
 				"worldX",
 				"worldY"
 			],
+			"additionalProperties": false,
 			"properties": {
 				"__neighbours": {
 					"description": "An array listing all other levels touching this one on the world map. The `dir` is a single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast). In \"linear\" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.",
 					"items": {
-						"properties": {
-							"levelUid": {
-								"type": [
-									"integer"
-								]
-							},
-							"dir": {
-								"type": [
-									"string"
-								]
-							}
-						},
 						"type": [
 							"object"
 						]
@@ -1325,20 +1204,25 @@
 				"layerInstances": {
 					"description": "",
 					"items": {
-						"$ref": "#/definitions/LayerInstance"
+						"$ref": "#/otherTypes/LayerInstance"
 					},
 					"type": [
 						"array"
 					]
 				}
-			}
+			},
+			"type": [
+				"object"
+			]
 		},
 		"EnumDef": {
+			"title": "Enum definition",
 			"required": [
 				"identifier",
 				"uid",
 				"values"
 			],
+			"additionalProperties": false,
 			"properties": {
 				"externalFileChecksum": {
 					"description": "",
@@ -1363,29 +1247,6 @@
 				"values": {
 					"description": "All possible enum values, with their optional Tile infos.",
 					"items": {
-						"properties": {
-							"tileId": {
-								"type": [
-									"integer",
-									"null"
-								]
-							},
-							"id": {
-								"type": [
-									"string"
-								]
-							},
-							"__tileSrcRect": {
-								"items": {
-									"type": [
-										"integer"
-									]
-								},
-								"type": [
-									"array"
-								]
-							}
-						},
 						"type": [
 							"object"
 						]
@@ -1407,8 +1268,10 @@
 						"string"
 					]
 				}
-			}
+			},
+			"type": [
+				"object"
+			]
 		}
-	},
-	"$ref": "#/definitions/Project"
+	}
 }
