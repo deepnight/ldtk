@@ -9,6 +9,7 @@
 			"defaultPivotX",
 			"defaultPivotY",
 			"exportTiled",
+			"externalLevels",
 			"jsonVersion",
 			"levels",
 			"minifyJson",
@@ -97,6 +98,12 @@
 				"description": "Default X pivot (0 to 1) for new entities",
 				"type": [
 					"number"
+				]
+			},
+			"externalLevels": {
+				"description": "If TRUE, one file will be saved the project (incl. all its definitions) and one file per level in a sub-folder.",
+				"type": [
+					"boolean"
 				]
 			},
 			"minifyJson": {
@@ -1123,9 +1130,7 @@
 			"title": "Level",
 			"required": [
 				"__bgColor",
-				"__neighbours",
 				"identifier",
-				"layerInstances",
 				"pxHei",
 				"pxWid",
 				"uid",
@@ -1135,14 +1140,15 @@
 			"additionalProperties": false,
 			"properties": {
 				"__neighbours": {
-					"description": "An array listing all other levels touching this one on the world map. The `dir` is a single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast). In \"linear\" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.",
+					"description": "An array listing all other levels touching this one on the world map. The `dir` is a single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast). In \"linear\" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout. **Note**: if the project option \"Save levels separately\" is enabled, this field will be `null`.",
 					"items": {
 						"type": [
 							"object"
 						]
 					},
 					"type": [
-						"array"
+						"array",
+						"null"
 					]
 				},
 				"__bgColor": {
@@ -1155,6 +1161,13 @@
 					"description": "World X coordinate in pixels",
 					"type": [
 						"integer"
+					]
+				},
+				"externalRelPath": {
+					"description": "",
+					"type": [
+						"string",
+						"null"
 					]
 				},
 				"bgColor": {
@@ -1195,12 +1208,13 @@
 					]
 				},
 				"layerInstances": {
-					"description": "",
+					"description": "TODO specify array order<br/>  An array containing all Layer instances. **Note**: if the project option \"Save levels separately\" is enabled, this field will be `null`.",
 					"items": {
 						"$ref": "#/otherTypes/LayerInstance"
 					},
 					"type": [
-						"array"
+						"array",
+						"null"
 					]
 				}
 			},

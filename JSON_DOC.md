@@ -28,6 +28,7 @@ Value | Type | Description
 `defaultPivotY` | Float | Default Y pivot (0 to 1) for new entities
 `defs` | [Definitions](#ldtk-DefinitionsJson) | A structure containing all the definitions of this project
 `exportTiled` | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)
+`externalLevels` | Bool | If TRUE, one file will be saved the project (incl. all its definitions) and one file per level in a sub-folder.
 `jsonVersion` | String | File format version
 `levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
 `minifyJson` | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
@@ -41,10 +42,11 @@ Value | Type | Description
 Value | Type | Description
 -- | -- | --
 `__bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String<br/><small&nbsp;class="color">*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Background color of the level (same as `bgColor`, except the default value is automatically used here if its value is `null`)
-`__neighbours`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Array&nbsp;of&nbsp;Object | An array listing all other levels touching this one on the world map. The `dir` is a single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast). In "linear" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.<br/> This object contains the following fields:<br/> <ul><li>**`dir`** **(String**)</li><li>**`levelUid`** **(Int**)</li></ul>
+`__neighbours`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg) ![Generic badge](https://img.shields.io/badge/Changed_0.6.3-green.svg)  | Array&nbsp;of&nbsp;Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array listing all other levels touching this one on the world map. The `dir` is a single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast). In "linear" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout. **Note**: if the project option "Save levels separately" is enabled, this field will be `null`.<br/> This object contains the following fields:<br/> <ul><li>**`dir`** **(String**)</li><li>**`levelUid`** **(Int**)</li></ul>
 `bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)*<br/><small&nbsp;class="color">*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Background color of the level. If `null`, the project `defaultLevelBgColor` should be used.
+`externalRelPath`<br/><sup class="only">Only *Separate level files*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
 `identifier` | String | Unique String identifier
-`layerInstances` | Array&nbsp;of&nbsp;[Layer&nbsp;instance](#ldtk-LayerInstanceJson) | 
+`layerInstances`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.6.3-green.svg)  | Array&nbsp;of&nbsp;[Layer&nbsp;instance](#ldtk-LayerInstanceJson)&nbsp;*(can&nbsp;be&nbsp;`null`)* | TODO specify array order<br/>		An array containing all Layer instances. **Note**: if the project option "Save levels separately" is enabled, this field will be `null`.
 `pxHei` | Int | Height of the level in pixels
 `pxWid` | Int | Width of the level in pixels
 `uid` | Int | Unique Int identifier
