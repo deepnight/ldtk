@@ -65,6 +65,10 @@ class EditProject extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( project.minifyJson, jForm.find("[name=minify]") );
 		i.linkEvent(ProjectSettingsChanged);
 
+		// External level files
+		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("[name=externalLevels]") );
+		i.linkEvent(ProjectSettingsChanged);
+
 		// Tiled export
 		var i = Input.linkToHtmlInput( project.exportTiled, jForm.find("[name=tiled]") );
 		i.linkEvent(ProjectSettingsChanged);

@@ -17,6 +17,7 @@ class Const {
 
 	public static var APP_NAME = "LDtk";
 	public static var FILE_EXTENSION = "ldtk";
+	public static var LEVEL_EXTENSION = "ldtkl";
 	public static var POINT_SEPARATOR = ",";
 	public static var CRASH_NAME_SUFFIX = ".crash";
 

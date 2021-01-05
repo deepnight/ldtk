@@ -57,12 +57,30 @@ class JsTools {
 	}
 
 
+	static inline function jsonStringify(p:data.Project, json:Dynamic) {
+		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
+	}
+
 	public static function prepareProjectFile(p:data.Project) : FileSavingData {
-		var json = p.toJson();
-		var jsonStr = dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
+		var levels = [];
+
+		if( p.externalLevels ) {
+			// Create levels JSON separately
+			var idx = 0;
+			for(l in p.levels) {
+				var json = l.toJson(true);
+				trace(l.identifier);
+				levels.push({
+					json: jsonStringify(p, json),
+					relPath: l.makeExternalRelPath(Editor.ME.projectFilePath),
+					id: l.identifier,
+				});
+			}
+		}
 
 		return {
-			jsonString: jsonStr,
+			projectJson: jsonStringify(p, p.toJson()),
+			levelsJson: levels,
 		}
 	}
 

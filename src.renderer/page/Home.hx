@@ -137,7 +137,7 @@ class Home extends Page {
 
 							log.general(" -> Saving "+fp.fileName+"...");
 							var data = JsTools.prepareProjectFile(p);
-							JsTools.writeFileString(fp.full, data.jsonString);
+							JsTools.writeFileString(fp.full, data.projectJson);
 						}
 						catch(e:Dynamic) {
 							new ui.modal.dialog.Message("Failed on "+fp.fileName);
@@ -340,7 +340,7 @@ class Home extends Page {
 
 			var p = data.Project.createEmpty();
 			var data = JsTools.prepareProjectFile(p);
-			JsTools.writeFileString(fp.full, data.jsonString);
+			JsTools.writeFileString(fp.full, data.projectJson);
 
 			N.msg("New project created: "+fp.full);
 			App.ME.loadPage( ()->new Editor(p, fp.full) );

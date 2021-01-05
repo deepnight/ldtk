@@ -20,6 +20,7 @@ class Project {
 	public var worldGridHeight : Int;
 
 	public var minifyJson = false;
+	public var externalLevels = false;
 	public var exportTiled = false;
 
 	private function new() {
@@ -57,6 +58,7 @@ class Project {
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
 		p.bgColor = JsonTools.readColor( json.bgColor, DEFAULT_BG_COLOR );
 		p.defaultLevelBgColor = JsonTools.readColor( json.defaultLevelBgColor, p.bgColor );
+		p.externalLevels = JsonTools.readBool(json.externalLevels, false);
 
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
@@ -82,7 +84,7 @@ class Project {
 		return p;
 	}
 
-	public function toJson(excludeLevels=false) : ldtk.Json.ProjectJson {
+	public function toJson() : ldtk.Json.ProjectJson {
 		return {
 			jsonVersion: jsonVersion,
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
@@ -92,13 +94,14 @@ class Project {
 			defaultLevelBgColor: JsonTools.writeColor(defaultLevelBgColor),
 			nextUid: nextUid,
 			minifyJson: minifyJson,
+			externalLevels: externalLevels,
 			exportTiled: exportTiled,
 			worldLayout: JsonTools.writeEnum(worldLayout, false),
 			worldGridWidth: worldGridWidth,
 			worldGridHeight: worldGridHeight,
 
 			defs: defs.toJson(this),
-			levels: excludeLevels ? [] : levels.map( function(l) return l.toJson() ),
+			levels: levels.map( function(l) return l.toJson(!externalLevels) ),
 		}
 	}
 

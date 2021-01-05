@@ -44,7 +44,44 @@ class Level {
 		return Type.getClassName( Type.getClass(this) ) + '.$identifier(#$uid)';
 	}
 
-	public function toJson() : ldtk.Json.LevelJson {
+	public function toJson(includeData=true) : ldtk.Json.LevelJson {
+		// List nearby levels
+		var neighbours = !includeData ? null : switch _project.worldLayout {
+			case Free, GridVania:
+				var nears = _project.levels.filter( (ol)->
+					ol!=this && getBoundsDist(ol)==0
+					&& !( ( ol.worldX>=worldX+pxWid || ol.worldX+ol.pxWid<=worldX )
+						&& ( ol.worldY>=worldY+pxHei || ol.worldY+ol.pxHei<=worldY )
+					)
+				);
+				nears.map( (l)->{
+					var dir = l.worldX>=worldX+pxWid ? "e"
+						: l.worldX+l.pxWid<=worldX ? "w"
+						: l.worldY+l.pxHei<=worldY ? "n"
+						: "s";
+					return {
+						levelUid: l.uid,
+						dir: dir,
+					}
+				});
+
+			case LinearHorizontal, LinearVertical:
+				var idx = dn.Lib.getArrayIndex(this, _project.levels);
+				var nears = [];
+				if( idx<_project.levels.length-1 )
+					nears.push({
+						levelUid: _project.levels[idx+1].uid,
+						dir: _project.worldLayout==LinearHorizontal?"e":"s",
+					});
+				if( idx>0 )
+					nears.push({
+						levelUid: _project.levels[idx-1].uid,
+						dir: _project.worldLayout==LinearHorizontal?"w":"n",
+					});
+				nears;
+		}
+
+		// Json
 		return {
 			identifier: identifier,
 			uid: uid,
@@ -54,44 +91,16 @@ class Level {
 			pxHei: pxHei,
 			__bgColor: JsonTools.writeColor( getBgColor() ),
 			bgColor: JsonTools.writeColor(bgColor, true),
-			layerInstances: layerInstances.map( function(li) return li.toJson() ),
-			__neighbours: {
-				switch _project.worldLayout {
-					case Free, GridVania:
-						var nears = _project.levels.filter( (ol)->
-							ol!=this && getBoundsDist(ol)==0
-							&& !( ( ol.worldX>=worldX+pxWid || ol.worldX+ol.pxWid<=worldX )
-								&& ( ol.worldY>=worldY+pxHei || ol.worldY+ol.pxHei<=worldY )
-							)
-						);
-						nears.map( (l)->{
-							var dir = l.worldX>=worldX+pxWid ? "e"
-								: l.worldX+l.pxWid<=worldX ? "w"
-								: l.worldY+l.pxHei<=worldY ? "n"
-								: "s";
-							return {
-								levelUid: l.uid,
-								dir: dir,
-							}
-						});
 
-					case LinearHorizontal, LinearVertical:
-						var idx = dn.Lib.getArrayIndex(this, _project.levels);
-						var nears = [];
-						if( idx<_project.levels.length-1 )
-							nears.push({
-								levelUid: _project.levels[idx+1].uid,
-								dir: _project.worldLayout==LinearHorizontal?"e":"s",
-							});
-						if( idx>0 )
-							nears.push({
-								levelUid: _project.levels[idx-1].uid,
-								dir: _project.worldLayout==LinearHorizontal?"w":"n",
-							});
-						nears;
-				}
-			}
+			externalRelPath: includeData ? null : makeExternalRelPath(page.Editor.ME.projectFilePath),
+			layerInstances: includeData ? layerInstances.map( function(li) return li.toJson() ) : null,
+			__neighbours: neighbours,
 		}
+	}
+
+	public function makeExternalRelPath(projectFilePath:String) {
+		var fp = dn.FilePath.fromFile(projectFilePath);
+		return fp.fileName+"/"+identifier+"."+Const.LEVEL_EXTENSION;
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {

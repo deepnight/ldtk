@@ -1009,10 +1009,20 @@ class Editor extends Page {
 			if( !saveLocked() ) {
 				checkAutoLayersCache( (anyChange)->{
 					App.LOG.fileOp('Saving $projectFilePath...');
-					var data = JsTools.prepareProjectFile(project);
-					JsTools.writeFileString(projectFilePath, data.jsonString);
+					var savingData = JsTools.prepareProjectFile(project);
 
-					var size = dn.Lib.prettyBytesSize(data.jsonString.length);
+					// Save main project file
+					JsTools.writeFileString(projectFilePath, savingData.projectJson);
+
+					// Optional: save level files
+					for(l in savingData.levelsJson) {
+						var fp = dn.FilePath.fromFile( makeAbsoluteFilePath(l.relPath) );
+						if( !JsTools.fileExists(fp.directory) )
+							JsTools.createDir(fp.directory);
+						JsTools.writeFileString(fp.full, l.json);
+					}
+
+					var size = dn.Lib.prettyBytesSize(savingData.projectJson.length);
 					App.LOG.fileOp('Saved $size.');
 
 					var fileName = dn.FilePath.extractFileWithExt(projectFilePath);
