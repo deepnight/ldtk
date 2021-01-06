@@ -539,15 +539,16 @@ class JsTools {
 		js.node.Fs.mkdirSync(path);
 	}
 
-	public static function emptyDir(path:String) {
+	public static function emptyDir(path:String, ?onlyExt:String) {
 		js.node.Require.require("fs");
+
 		if( !fileExists(path) )
 			return;
 
 		for(f in js.node.Fs.readdirSync(path)) {
 			var fp = dn.FilePath.fromDir(path);
 			fp.fileWithExt = f;
-			if( js.node.Fs.lstatSync(fp.full).isFile() )
+			if( js.node.Fs.lstatSync(fp.full).isFile() && ( onlyExt==null || fp.extension==onlyExt ) )
 				js.node.Fs.unlinkSync(fp.full);
 		}
 	}

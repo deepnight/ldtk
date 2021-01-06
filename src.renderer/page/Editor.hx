@@ -1015,11 +1015,20 @@ class Editor extends Page {
 					JsTools.writeFileString(projectFilePath, savingData.projectJson);
 
 					// Optional: save level files
-					for(l in savingData.levelsJson) {
-						var fp = dn.FilePath.fromFile( makeAbsoluteFilePath(l.relPath) );
+					if( savingData.levelsJson.length>0 ) {
+						var fp = dn.FilePath.fromFile( makeAbsoluteFilePath(savingData.levelsJson[0].relPath) );
+
+						// Init dir
 						if( !JsTools.fileExists(fp.directory) )
 							JsTools.createDir(fp.directory);
-						JsTools.writeFileString(fp.full, l.json);
+						else
+							JsTools.emptyDir(fp.directory, fp.extension);
+
+						// Save levels
+						for(l in savingData.levelsJson) {
+							var fp = dn.FilePath.fromFile( makeAbsoluteFilePath(l.relPath) );
+							JsTools.writeFileString(fp.full, l.json);
+						}
 					}
 
 					var size = dn.Lib.prettyBytesSize(savingData.projectJson.length);
