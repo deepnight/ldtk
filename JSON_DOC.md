@@ -28,7 +28,7 @@ Value | Type | Description
 `defaultPivotY` | Float | Default Y pivot (0 to 1) for new entities
 `defs` | [Definitions](#ldtk-DefinitionsJson) | A structure containing all the definitions of this project
 `exportTiled` | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)
-`externalLevels` | Bool | If TRUE, one file will be saved the project (incl. all its definitions) and one file per level in a sub-folder.
+`externalLevels` | Bool | If TRUE, one file will be saved the project (incl. all its definitions) and one file per-level in a sub-folder.
 `jsonVersion` | String | File format version
 `levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
 `minifyJson` | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
