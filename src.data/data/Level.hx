@@ -92,15 +92,14 @@ class Level {
 			__bgColor: JsonTools.writeColor( getBgColor() ),
 			bgColor: JsonTools.writeColor(bgColor, true),
 
-			externalRelPath: includeData ? null : makeExternalRelPath(_project.filePath.full),
+			externalRelPath: includeData ? null : makeExternalRelPath(),
 			layerInstances: includeData ? layerInstances.map( function(li) return li.toJson() ) : null,
 			__neighbours: neighbours,
 		}
 	}
 
-	public function makeExternalRelPath(projectFilePath:String) {
-		var fp = dn.FilePath.fromFile(projectFilePath);
-		return fp.fileName+"/"+identifier+"."+Const.LEVEL_EXTENSION;
+	public function makeExternalRelPath() {
+		return _project.getRelExternalFilesDir() + "/" + identifier+"." + Const.LEVEL_EXTENSION;
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {

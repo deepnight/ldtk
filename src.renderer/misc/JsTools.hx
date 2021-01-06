@@ -69,10 +69,9 @@ class JsTools {
 			var idx = 0;
 			for(l in p.levels) {
 				var json = l.toJson(true);
-				trace(l.identifier);
 				levels.push({
 					json: jsonStringify(p, json),
-					relPath: l.makeExternalRelPath(p.filePath.full),
+					relPath: l.makeExternalRelPath(),
 					id: l.identifier,
 				});
 			}
@@ -491,6 +490,7 @@ class JsTools {
 			return false;
 		else {
 			js.node.Require.require("fs");
+			App.LOG.fileOp('Renaming $oldPath -> $newPath...');
 			return
 				try { js.node.Fs.renameSync(oldPath,newPath); true; }
 				catch(e:Dynamic) false;
@@ -502,6 +502,7 @@ class JsTools {
 			return false;
 		else {
 			js.node.Require.require("fs");
+			App.LOG.fileOp('Deleting file $path...');
 			return
 				try { js.node.Fs.unlinkSync(path); true; }
 				catch(e:Dynamic) false;
@@ -535,18 +536,31 @@ class JsTools {
 	public static function createDir(path:String) {
 		if( fileExists(path) )
 			return;
+
+		App.LOG.fileOp("Creating dir "+path+"...");
 		js.node.Require.require("fs");
 		js.node.Fs.mkdirSync(path);
 	}
 
-	public static function emptyDir(path:String, ?onlyExt:String) {
-		js.node.Require.require("fs");
-
+	public static function removeDir(path:String) {
 		if( !fileExists(path) )
 			return;
 
+		App.LOG.fileOp("Removing dir "+path+"...");
+		js.node.Require.require("fs");
+		js.node.Fs.rmdirSync(path, {
+			recursive: true, retryDelay: 10000, maxRetries: 3 // WARNING: requires NodeJS 12+
+		});
+	}
+
+	public static function emptyDir(path:String, ?onlyExt:String) {
+		if( !fileExists(path) )
+			return;
+
+		App.LOG.fileOp("Emptying dir "+path+" (onlyExt="+onlyExt+")...");
+		js.node.Require.require("fs");
+		var fp = dn.FilePath.fromDir(path);
 		for(f in js.node.Fs.readdirSync(path)) {
-			var fp = dn.FilePath.fromDir(path);
 			fp.fileWithExt = f;
 			if( js.node.Fs.lstatSync(fp.full).isFile() && ( onlyExt==null || fp.extension==onlyExt ) )
 				js.node.Fs.unlinkSync(fp.full);

@@ -43,6 +43,14 @@ class Project {
 		return filePath.directory;
 	}
 
+	public function getAbsExternalFilesDir() {
+		return filePath.directoryWithSlash + filePath.fileName;
+	}
+
+	public function getRelExternalFilesDir() {
+		return filePath.fileName;
+	}
+
 	public function makeRelativeFilePath(absPath:String) {
 		var fp = dn.FilePath.fromFile( absPath );
 		fp.makeRelativeTo( filePath.directory );

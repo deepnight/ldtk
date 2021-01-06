@@ -994,21 +994,25 @@ class Editor extends Page {
 					// Save main project file
 					JsTools.writeFileString(project.filePath.full, savingData.projectJson);
 
-					// Optional: save level files
-					if( savingData.levelsJson.length>0 ) {
-						var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(savingData.levelsJson[0].relPath) );
+					// Optional: save external files
+					var externDir = project.getAbsExternalFilesDir();
+					if( project.externalLevels ) {
 
 						// Init dir
-						if( !JsTools.fileExists(fp.directory) )
-							JsTools.createDir(fp.directory);
+						if( !JsTools.fileExists(externDir) )
+							JsTools.createDir(externDir);
 						else
-							JsTools.emptyDir(fp.directory, fp.extension);
+							JsTools.emptyDir(externDir, Const.LEVEL_EXTENSION);
 
 						// Save levels
 						for(l in savingData.levelsJson) {
 							var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(l.relPath) );
 							JsTools.writeFileString(fp.full, l.json);
 						}
+					}
+					else if( JsTools.fileExists(externDir) ) {
+						// Delete external folder if it exists
+						JsTools.removeDir(externDir);
 					}
 
 					var size = dn.Lib.prettyBytesSize(savingData.projectJson.length);
