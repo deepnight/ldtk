@@ -248,8 +248,7 @@ class FieldInstance {
 						return def.identifier+"?";
 
 					if( !valueIsNull(idx) ) {
-						// HACK not super clean to access Editor here
-						var absPath = page.Editor.ME.makeAbsoluteFilePath( getFilePath(idx) );
+						var absPath = _project.makeAbsoluteFilePath( getFilePath(idx) );
 						if( !misc.JsTools.fileExists(absPath) )
 							return "FileNotFound";
 					}

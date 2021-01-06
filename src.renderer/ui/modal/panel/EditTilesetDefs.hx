@@ -150,7 +150,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var jLocate = jForm.find(".locate");
 		if( curTd.relPath!=null ) {
 			jPath.empty().show().append( JsTools.makePath(curTd.relPath) );
-			jLocate.empty().show().append( JsTools.makeExploreLink( Editor.ME.makeAbsoluteFilePath(curTd.relPath), true ) );
+			jLocate.empty().show().append( JsTools.makeExploreLink( project.makeAbsoluteFilePath(curTd.relPath), true ) );
 		}
 		else {
 			jLocate.hide();
@@ -175,7 +175,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		b.click( function(ev) {
 			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], project.getProjectDir(), function(absPath) {
 				var oldRelPath = curTd.relPath;
-				var relPath = Editor.ME.makeRelativeFilePath( absPath );
+				var relPath = project.makeRelativeFilePath( absPath );
 				App.LOG.fileOp("Loading atlas: "+absPath);
 
 				if( !curTd.importAtlasImage(project.getProjectDir(), relPath) ) {
@@ -193,7 +193,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				}
 
 				if( oldRelPath!=null )
-					editor.watcher.stopWatching( editor.makeAbsoluteFilePath(oldRelPath) );
+					editor.watcher.stopWatching( project.makeAbsoluteFilePath(oldRelPath) );
 				editor.watcher.watchTileset(curTd);
 
 				project.defs.autoRenameTilesetIdentifier(oldRelPath, curTd);

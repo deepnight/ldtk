@@ -33,7 +33,7 @@ class EditEnums extends ui.modal.Panel {
 				if( dn.FilePath.extractExtension(absPath)!="hx" )
 					N.error("The file must have the HX extension.");
 				else
-					importer.HxEnum.load( editor.makeRelativeFilePath(absPath), false );
+					importer.HxEnum.load( project.makeRelativeFilePath(absPath), false );
 			});
 		});
 
@@ -64,7 +64,7 @@ class EditEnums extends ui.modal.Panel {
 				function() {
 					var name = dn.FilePath.fromFile(ed.externalRelPath).fileWithExt;
 					new ui.LastChance( L.t._("::file:: enums deleted", { file:name }), project );
-					editor.watcher.stopWatching( editor.makeAbsoluteFilePath(ed.externalRelPath) );
+					editor.watcher.stopWatching( project.makeAbsoluteFilePath(ed.externalRelPath) );
 					project.defs.removeExternalEnumSource(ed.externalRelPath);
 					editor.ge.emit(EnumDefRemoved);
 					selectEnum( project.defs.enums[0] );
@@ -152,7 +152,7 @@ class EditEnums extends ui.modal.Panel {
 
 		var grouped = project.defs.getGroupedExternalEnums();
 		for( group in grouped.keyValueIterator() ) {
-			var fullPath = editor.makeAbsoluteFilePath(group.key);
+			var fullPath = project.makeAbsoluteFilePath(group.key);
 
 			// Source name
 			var e = new J("<li/>");
@@ -254,7 +254,7 @@ class EditEnums extends ui.modal.Panel {
 			jForm.find(".source")
 				.show()
 				.append( JsTools.makePath(curEnum.externalRelPath) )
-				.append( JsTools.makeExploreLink( editor.makeAbsoluteFilePath(curEnum.externalRelPath), true ) );
+				.append( JsTools.makeExploreLink( project.makeAbsoluteFilePath(curEnum.externalRelPath), true ) );
 		}
 		else
 			jForm.find(".source").hide();

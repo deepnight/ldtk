@@ -754,7 +754,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		var input = jFieldForm.find("button[name=fDefFile]");
 		input.click( function(ev) {
 			dn.electron.Dialogs.open(curField.acceptFileTypes, project.getProjectDir(), function( absPath ) {
-				var relPath = Editor.ME.makeRelativeFilePath(absPath);
+				var relPath = project.makeRelativeFilePath(absPath);
 				var defInput = jFieldForm.find("input[name=fDef]");
 				defInput.val(relPath);
 				curField.setDefault(relPath);

@@ -183,20 +183,6 @@ class Editor extends Page {
 		});
 	}
 
-
-	public function makeRelativeFilePath(filePath:String) {
-		var relativePath = dn.FilePath.fromFile( filePath );
-		relativePath.makeRelativeTo( project.getProjectDir() );
-		return relativePath.full;
-	}
-
-	public function makeAbsoluteFilePath(relPath:String) {
-		var fp = dn.FilePath.fromFile(relPath);
-		return fp.hasDriveLetter()
-			? fp.full
-			: dn.FilePath.fromFile( project.getProjectDir() +"/"+ relPath ).full;
-	}
-
 	public function selectProject(p:data.Project) {
 		watcher.clearAllWatches();
 		ui.modal.Dialog.closeAll();
@@ -206,16 +192,16 @@ class Editor extends Page {
 
 		// Check external enums
 		for( relPath in project.defs.getExternalEnumPaths() ) {
-			if( !JsTools.fileExists( makeAbsoluteFilePath(relPath) ) ) {
+			if( !JsTools.fileExists( project.makeAbsoluteFilePath(relPath) ) ) {
 				// File not found
 				new ui.modal.dialog.LostFile(relPath, function(newAbsPath) {
-					var newRel = makeRelativeFilePath(newAbsPath);
+					var newRel = project.makeRelativeFilePath(newAbsPath);
 					importer.HxEnum.load(newRel, true);
 				});
 			}
 			else {
 				// Verify checksum
-				var f = JsTools.readFileString( makeAbsoluteFilePath(relPath) );
+				var f = JsTools.readFileString( project.makeAbsoluteFilePath(relPath) );
 				var checksum = haxe.crypto.Md5.encode(f);
 				for(ed in project.defs.getAllExternalEnumsFrom(relPath) )
 					if( ed.externalFileChecksum!=checksum ) {
@@ -304,7 +290,7 @@ class Editor extends Page {
 			case FileNotFound:
 				changed = true;
 				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
-					var newRelPath = makeRelativeFilePath(newAbsPath);
+					var newRelPath = project.makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( project.getProjectDir(), newRelPath );
 					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 					ge.emit( TilesetDefChanged(td) );
@@ -1010,7 +996,7 @@ class Editor extends Page {
 
 					// Optional: save level files
 					if( savingData.levelsJson.length>0 ) {
-						var fp = dn.FilePath.fromFile( makeAbsoluteFilePath(savingData.levelsJson[0].relPath) );
+						var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(savingData.levelsJson[0].relPath) );
 
 						// Init dir
 						if( !JsTools.fileExists(fp.directory) )
@@ -1020,7 +1006,7 @@ class Editor extends Page {
 
 						// Save levels
 						for(l in savingData.levelsJson) {
-							var fp = dn.FilePath.fromFile( makeAbsoluteFilePath(l.relPath) );
+							var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(l.relPath) );
 							JsTools.writeFileString(fp.full, l.json);
 						}
 					}

@@ -20,7 +20,7 @@ class LostFile extends ui.modal.Dialog {
 
 		addParagraph(Lang.t._("What do you want to do?") );
 		addButton(Lang.t._("Locate the file"), "confirm", function() {
-			var lostFullPath = editor.makeAbsoluteFilePath( fp.full );
+			var lostFullPath = project.makeAbsoluteFilePath( fp.full );
 			var lostDir = dn.FilePath.extractDirectoryWithoutSlash(lostFullPath, true);
 			var baseDir = JsTools.fileExists(lostDir) ? lostDir : project.getProjectDir();
 

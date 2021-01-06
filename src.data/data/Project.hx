@@ -43,6 +43,19 @@ class Project {
 		return filePath.directory;
 	}
 
+	public function makeRelativeFilePath(absPath:String) {
+		var fp = dn.FilePath.fromFile( absPath );
+		fp.makeRelativeTo( filePath.directory );
+		return fp.full;
+	}
+
+	public function makeAbsoluteFilePath(relPath:String) {
+		var fp = dn.FilePath.fromFile(relPath);
+		return fp.hasDriveLetter()
+			? fp.full
+			: dn.FilePath.fromFile( filePath.directory +"/"+ relPath ).full;
+	}
+
 	public static function createEmpty(path:String) {
 		var p = new Project();
 		p.filePath.parseFilePath(path);

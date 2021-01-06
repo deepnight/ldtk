@@ -314,8 +314,8 @@ class FieldInstancesForm {
 				jLocate.appendTo(jTarget);
 				jLocate.click( (_)->{
 					if( !fi.valueIsNull(arrayIdx) ) {
-						var p = editor.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
-						JsTools.exploreToFile(p, true);
+						var path = project.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
+						JsTools.exploreToFile(path, true);
 					}
 				});
 
@@ -327,14 +327,14 @@ class FieldInstancesForm {
 					onFieldChange();
 				});
 
-				if( !fi.valueIsNull(arrayIdx) && !JsTools.fileExists( editor.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) ) )
+				if( !fi.valueIsNull(arrayIdx) && !JsTools.fileExists( project.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) ) )
 					input.addClass("fileNotFound");
 
 				fileSelect.click( function(ev) {
 					dn.electron.Dialogs.open(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
 						var fp = dn.FilePath.fromFile(absPath);
 						fp.useSlashes();
-						var relPath = Editor.ME.makeRelativeFilePath(fp.full);
+						var relPath = project.makeRelativeFilePath(fp.full);
 						input.val(relPath);
 						fi.parseValue( arrayIdx, relPath );
 						onFieldChange();

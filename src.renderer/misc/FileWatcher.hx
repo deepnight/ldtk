@@ -52,7 +52,7 @@ class FileWatcher extends dn.Process {
 	public function watchEnum(ed:data.def.EnumDef) {
 		if( ed.externalRelPath!=null )
 			watch(
-				Editor.ME.makeAbsoluteFilePath(ed.externalRelPath),
+				Editor.ME.project.makeAbsoluteFilePath(ed.externalRelPath),
 				Editor.ME.reloadEnum.bind(ed)
 			);
 	}
@@ -60,7 +60,7 @@ class FileWatcher extends dn.Process {
 	public function watchTileset(td:data.def.TilesetDef) {
 		if( td.relPath!=null )
 			watch(
-				Editor.ME.makeAbsoluteFilePath(td.relPath),
+				Editor.ME.project.makeAbsoluteFilePath(td.relPath),
 				Editor.ME.reloadTileset.bind(td)
 			);
 	}

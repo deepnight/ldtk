@@ -4,14 +4,14 @@ class HxEnum {
 
 	public static function load(relPath:String, isSync:Bool) {
 		var curProject = Editor.ME.project;
-		var absPath = Editor.ME.makeAbsoluteFilePath(relPath);
+		var absPath = curProject.makeAbsoluteFilePath(relPath);
 		var fileContent = JsTools.readFileString(absPath);
 
 		// File not found
 		if( fileContent==null ) {
 			if( isSync )
 				new ui.modal.dialog.LostFile(relPath, function(newAbs) {
-					var newRel = Editor.ME.makeRelativeFilePath(newAbs);
+					var newRel = curProject.makeRelativeFilePath(newAbs);
 					for(ed in curProject.defs.externalEnums)
 						if( ed.externalRelPath==relPath )
 							ed.externalRelPath = newRel;
