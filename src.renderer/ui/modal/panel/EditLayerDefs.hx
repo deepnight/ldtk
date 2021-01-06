@@ -79,7 +79,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				return;
 			}
 		// Backup project
-		var oldProject = data.Project.fromJson( project.toJson() );
+		var oldProject = project.clone();
 
 		// Update layer instances
 		var ops : Array<ui.modal.Progress.ProgressOp> = [];

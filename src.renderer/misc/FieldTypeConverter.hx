@@ -111,7 +111,7 @@ class FieldTypeConverter {
 		if( c==null )
 			throw "Unsupported conversion";
 
-		var oldProject = data.Project.fromJson( p.toJson() );
+		var oldProject = p.clone();
 		var ops = [];
 
 		var toType = c.to!=null ? c.to : fd.type;
