@@ -1,6 +1,6 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk JSON schema",
+	"title": "LDtk JSON schema v0.6.3",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
 	"LdtkJsonRoot": {
@@ -1166,7 +1166,7 @@
 					]
 				},
 				"externalRelPath": {
-					"description": "",
+					"description": "This value is not null if the project option \"*Save levels separately*\" is enabled. In this case, this **relative** path points to the level Json file.",
 					"type": [
 						"string",
 						"null"
@@ -1210,7 +1210,7 @@
 					]
 				},
 				"layerInstances": {
-					"description": "TODO specify array order<br/>  An array containing all Layer instances. **Note**: if the project option \"Save levels separately\" is enabled, this field will be `null`.",
+					"description": "An array containing all Layer instances. **IMPORTANT**: if the project option \"*Save levels separately*\" is enabled, this field will be `null`.<br/>  TODO specify array order",
 					"items": {
 						"$ref": "#/otherTypes/LayerInstance"
 					},
