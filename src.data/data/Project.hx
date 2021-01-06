@@ -39,6 +39,10 @@ class Project {
 		defs = new Definitions(this);
 	}
 
+	public inline function getProjectDir() {
+		return filePath.directory;
+	}
+
 	public static function createEmpty(path:String) {
 		var p = new Project();
 		p.filePath.parseFilePath(path);

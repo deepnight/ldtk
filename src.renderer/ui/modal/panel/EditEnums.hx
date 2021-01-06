@@ -28,7 +28,7 @@ class EditEnums extends ui.modal.Panel {
 
 		// Import HX
 		jContent.find("button.importHx").click( function(_) {
-			dn.electron.Dialogs.open([".hx"], editor.getProjectDir(), function(absPath:String) {
+			dn.electron.Dialogs.open([".hx"], project.getProjectDir(), function(absPath:String) {
 				absPath = StringTools.replace(absPath,"\\","/");
 				if( dn.FilePath.extractExtension(absPath)!="hx" )
 					N.error("The file must have the HX extension.");

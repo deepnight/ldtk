@@ -72,7 +72,7 @@ class JsTools {
 				trace(l.identifier);
 				levels.push({
 					json: jsonStringify(p, json),
-					relPath: l.makeExternalRelPath(Editor.ME.projectFilePath),
+					relPath: l.makeExternalRelPath(p.filePath.full),
 					id: l.identifier,
 				});
 			}

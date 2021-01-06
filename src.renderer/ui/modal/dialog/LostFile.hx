@@ -22,7 +22,7 @@ class LostFile extends ui.modal.Dialog {
 		addButton(Lang.t._("Locate the file"), "confirm", function() {
 			var lostFullPath = editor.makeAbsoluteFilePath( fp.full );
 			var lostDir = dn.FilePath.extractDirectoryWithoutSlash(lostFullPath, true);
-			var baseDir = JsTools.fileExists(lostDir) ? lostDir : editor.getProjectDir();
+			var baseDir = JsTools.fileExists(lostDir) ? lostDir : project.getProjectDir();
 
 			dn.electron.Dialogs.open(lostExt==null ? null : ["."+lostExt], baseDir, function(newPath:String) {
 				newPath = StringTools.replace(newPath, "\\", "/");

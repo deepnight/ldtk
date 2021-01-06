@@ -92,7 +92,7 @@ class Level {
 			__bgColor: JsonTools.writeColor( getBgColor() ),
 			bgColor: JsonTools.writeColor(bgColor, true),
 
-			externalRelPath: includeData ? null : makeExternalRelPath(page.Editor.ME.projectFilePath),
+			externalRelPath: includeData ? null : makeExternalRelPath(_project.filePath.full),
 			layerInstances: includeData ? layerInstances.map( function(li) return li.toJson() ) : null,
 			__neighbours: neighbours,
 		}

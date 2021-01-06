@@ -62,7 +62,7 @@ class App extends dn.Process {
 			for(e in ui.Modal.ALL)
 				e.destroy();
 			var project : data.Project = Editor.ME!=null && Editor.ME.needSaving ? Editor.ME.project : null;
-			var path : String = Editor.ME!=null && Editor.ME.needSaving ? Editor.ME.projectFilePath : null;
+			var path : String = Editor.ME!=null && Editor.ME.needSaving ? project.filePath.full : null;
 			loadPage( ()->new page.CrashReport(error, processes, project, path) );
 			return false;
 		}

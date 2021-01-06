@@ -27,7 +27,6 @@ class Editor extends Page {
 	public var ge : GlobalEventDispatcher;
 	public var watcher : misc.FileWatcher;
 	public var project : data.Project;
-	public var projectFilePath : String;
 	public var curLevelId : Int;
 	var curLayerDefUid : Int;
 
@@ -185,13 +184,9 @@ class Editor extends Page {
 	}
 
 
-	public function getProjectDir() {
-		return dn.FilePath.fromFile( projectFilePath ).directory;
-	}
-
 	public function makeRelativeFilePath(filePath:String) {
 		var relativePath = dn.FilePath.fromFile( filePath );
-		relativePath.makeRelativeTo( getProjectDir() );
+		relativePath.makeRelativeTo( project.getProjectDir() );
 		return relativePath.full;
 	}
 
@@ -199,7 +194,7 @@ class Editor extends Page {
 		var fp = dn.FilePath.fromFile(relPath);
 		return fp.hasDriveLetter()
 			? fp.full
-			: dn.FilePath.fromFile( getProjectDir() +"/"+ relPath ).full;
+			: dn.FilePath.fromFile( project.getProjectDir() +"/"+ relPath ).full;
 	}
 
 	public function selectProject(p:data.Project) {
@@ -300,7 +295,7 @@ class Editor extends Page {
 
 		var oldRelPath = td.relPath;
 		App.LOG.fileOp("Reloading tileset: "+td.relPath);
-		var result = td.reloadImage( getProjectDir() );
+		var result = td.reloadImage( project.getProjectDir() );
 		App.LOG.fileOp(" -> Reload result: "+result);
 		App.LOG.fileOp(" -> pixelData: "+(td.hasValidPixelData() ? "Ok" : "need rebuild"));
 
@@ -310,7 +305,7 @@ class Editor extends Page {
 				changed = true;
 				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
 					var newRelPath = makeRelativeFilePath(newAbsPath);
-					td.importAtlasImage( getProjectDir(), newRelPath );
+					td.importAtlasImage( project.getProjectDir(), newRelPath );
 					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 					ge.emit( TilesetDefChanged(td) );
 					levelRender.invalidateAll();
@@ -946,11 +941,11 @@ class Editor extends Page {
 
 		// Save as...
 		if( saveAs ) {
-			var oldDir = getProjectDir();
+			var oldDir = project.getProjectDir();
 
-			dn.electron.Dialogs.saveAs(["."+Const.FILE_EXTENSION, ".json"], getProjectDir(), function(filePath:String) {
-				this.projectFilePath = filePath;
-				var newDir = getProjectDir();
+			dn.electron.Dialogs.saveAs(["."+Const.FILE_EXTENSION, ".json"], project.getProjectDir(), function(filePath:String) {
+				project.filePath.parseFilePath( filePath );
+				var newDir = project.getProjectDir();
 				App.LOG.fileOp("Remap project paths: "+oldDir+" => "+newDir);
 				project.remapAllRelativePaths(oldDir, newDir);
 				bypasses.set("missing",true);
@@ -960,7 +955,7 @@ class Editor extends Page {
 		}
 
 		// Check sample file
-		if( !bypasses.exists("sample") && App.ME.isInAppDir(projectFilePath, true) ) {
+		if( !bypasses.exists("sample") && App.ME.isInAppDir(project.filePath.full, true) ) {
 			bypasses.set("sample",true);
 			new ui.modal.dialog.Choice(
 				Lang.t._("The file you're trying to save is a ::app:: sample map.\nAny change to it will be lost during automatic updates, so it's NOT recommended to modify it.", { app:Const.APP_NAME }),
@@ -974,27 +969,27 @@ class Editor extends Page {
 		}
 
 		// Check missing file
-		if( !bypasses.exists("missing") && !JsTools.fileExists(projectFilePath) ) {
+		if( !bypasses.exists("missing") && !JsTools.fileExists(project.filePath.full) ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
 				null,
-				Lang.t._("The project file is no longer in ::path::. Save to this path anyway?", { path:projectFilePath }),
+				Lang.t._("The project file is no longer in ::path::. Save to this path anyway?", { path:project.filePath.full }),
 				onSave.bind(true, bypasses, onComplete)
 			);
 			return;
 		}
 
 		// Check crash backups
-		if( projectFilePath.indexOf(Const.CRASH_NAME_SUFFIX)>=0 ) {
+		if( project.filePath.full.indexOf(Const.CRASH_NAME_SUFFIX)>=0 ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
 				Lang.t._("This file seems to be a CRASH BACKUP. Do you want to save your changes to the original file instead?"),
 				()->{
 					// Remove backup
-					JsTools.removeFile(projectFilePath);
-					App.ME.unregisterRecentProject(projectFilePath);
+					JsTools.removeFile(project.filePath.full);
+					App.ME.unregisterRecentProject(project.filePath.full);
 					// Save
-					projectFilePath = StringTools.replace(projectFilePath, Const.CRASH_NAME_SUFFIX, "");
+					project.filePath.parseFilePath( StringTools.replace(project.filePath.full, Const.CRASH_NAME_SUFFIX, "") );
 					updateTitle();
 					onSave(bypasses, onComplete);
 				}
@@ -1007,11 +1002,11 @@ class Editor extends Page {
 		createChildProcess( (p)->{
 			if( !saveLocked() ) {
 				checkAutoLayersCache( (anyChange)->{
-					App.LOG.fileOp('Saving $projectFilePath...');
+					App.LOG.fileOp('Saving ${project.filePath.full}...');
 					var savingData = JsTools.prepareProjectFile(project);
 
 					// Save main project file
-					JsTools.writeFileString(projectFilePath, savingData.projectJson);
+					JsTools.writeFileString(project.filePath.full, savingData.projectJson);
 
 					// Optional: save level files
 					if( savingData.levelsJson.length>0 ) {
@@ -1033,11 +1028,11 @@ class Editor extends Page {
 					var size = dn.Lib.prettyBytesSize(savingData.projectJson.length);
 					App.LOG.fileOp('Saved $size.');
 
-					var fileName = dn.FilePath.extractFileWithExt(projectFilePath);
+					var fileName = project.filePath.fileWithExt;
 					if( project.exportTiled ) {
 						var e = new exporter.Tiled();
 						e.addExtraLogger( App.LOG, "TiledExport" );
-						e.run( project, projectFilePath );
+						e.run( project, project.filePath.full );
 						if( e.hasErrors() )
 							N.error('Saved $fileName ($size) but Tiled export has errors.');
 						else
@@ -1046,7 +1041,7 @@ class Editor extends Page {
 					else
 						N.success('Saved $fileName ($size)');
 
-					App.ME.registerRecentProject(projectFilePath);
+					App.ME.registerRecentProject(project.filePath.full);
 
 					updateTitle();
 
@@ -1329,7 +1324,7 @@ class Editor extends Page {
 
 	function updateTitle() {
 		App.ME.setWindowTitle(
-			dn.FilePath.extractFileName(projectFilePath)
+			project.filePath.fileName
 			+ ( needSaving ? " [UNSAVED]" : "" )
 			+ ( curLevel!=null ? "  @ "+curLevel.identifier : "" )
 		);

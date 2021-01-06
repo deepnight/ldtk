@@ -331,7 +331,7 @@ class FieldInstancesForm {
 					input.addClass("fileNotFound");
 
 				fileSelect.click( function(ev) {
-					dn.electron.Dialogs.open(fi.def.acceptFileTypes, Editor.ME.getProjectDir(), function( absPath ) {
+					dn.electron.Dialogs.open(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
 						var fp = dn.FilePath.fromFile(absPath);
 						fp.useSlashes();
 						var relPath = Editor.ME.makeRelativeFilePath(fp.full);

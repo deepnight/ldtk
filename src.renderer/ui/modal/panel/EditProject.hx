@@ -20,7 +20,7 @@ class EditProject extends ui.modal.Panel {
 		});
 
 		jContent.find("button.locate").click( function(ev) {
-			JsTools.exploreToFile(editor.projectFilePath, true);
+			JsTools.exploreToFile(project.filePath.full, true);
 		});
 
 		jContent.find("button.close").click( function(ev) {
@@ -44,16 +44,16 @@ class EditProject extends ui.modal.Panel {
 		var jForm = jContent.find("ul.form:first");
 
 		// File extension
-		var ext = dn.FilePath.extractExtension( editor.projectFilePath );
+		var ext = project.filePath.extension;
 		var usesAppDefault = ext==Const.FILE_EXTENSION;
 		var i = Input.linkToHtmlInput( usesAppDefault, jForm.find("[name=useAppExtension]") );
 		i.onValueChange = (v)->{
-			var old = editor.projectFilePath;
-			var fp = dn.FilePath.fromFile( editor.projectFilePath );
+			var old = project.filePath.full;
+			var fp = project.filePath.clone();
 			fp.extension = v ? Const.FILE_EXTENSION : "json";
 			if( JsTools.fileExists(old) && JsTools.renameFile(old, fp.full) ) {
 				App.ME.renameRecentProject(old, fp.full);
-				editor.projectFilePath = fp.full;
+				project.filePath.parseFilePath(fp.full);
 				N.success(L.t._("Changed file extension to ::ext::", { ext:fp.extWithDot }));
 			}
 			else {
@@ -76,11 +76,11 @@ class EditProject extends ui.modal.Panel {
 			if( v )
 				new ui.modal.dialog.Message(Lang.t._("Disclaimer: Tiled export is only meant to load your LDtk project in a game framework that only supports Tiled files. It is recommended to write your own LDtk JSON parser, as some LDtk features may not be supported.\nIt's not so complicated, I promise :)"), "project");
 		}
-		var fp = dn.FilePath.fromFile( editor.projectFilePath );
+		var fp = project.filePath.clone();
 		fp.appendDirectory(fp.fileName+"_tiled");
 		fp.fileWithExt = null;
 		if( !JsTools.fileExists(fp.full) ) {
-			fp.parseFilePath( editor.projectFilePath );
+			fp = project.filePath.clone();
 			fp.fileWithExt = null;
 		}
 		var jLocate = jForm.find("[name=tiled]").siblings(".locate").empty();

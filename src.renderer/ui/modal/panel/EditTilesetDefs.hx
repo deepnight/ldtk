@@ -173,12 +173,12 @@ class EditTilesetDefs extends ui.modal.Panel {
 			b.text("Replace image");
 
 		b.click( function(ev) {
-			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], Editor.ME.getProjectDir(), function(absPath) {
+			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], project.getProjectDir(), function(absPath) {
 				var oldRelPath = curTd.relPath;
 				var relPath = Editor.ME.makeRelativeFilePath( absPath );
 				App.LOG.fileOp("Loading atlas: "+absPath);
 
-				if( !curTd.importAtlasImage(editor.getProjectDir(), relPath) ) {
+				if( !curTd.importAtlasImage(project.getProjectDir(), relPath) ) {
 					switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) {
 						case Unknown:
 							N.error("ERROR: I don't think this is an actual image");
