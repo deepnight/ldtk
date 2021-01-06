@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.2",
+		"appVersion": "0.6.3",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.6.2",
+	"jsonVersion": "0.6.3",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
@@ -16,6 +16,7 @@
 	"defaultLevelBgColor": "#37494E",
 	"nextUid": 82,
 	"minifyJson": false,
+	"externalLevels": false,
 	"exportTiled": false,
 	"worldLayout": "GridVania",
 	"worldGridWidth": 256,
@@ -515,6 +516,7 @@
 			"pxHei": 256,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -1565,6 +1567,7 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -3636,6 +3639,7 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -5574,6 +5578,7 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -7670,6 +7675,7 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -9793,6 +9799,7 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -11693,6 +11700,7 @@
 			"pxHei": 768,
 			"__bgColor": "#8D3349",
 			"bgColor": "#8D3349",
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -14427,6 +14435,7 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -16327,6 +16336,7 @@
 			"pxHei": 256,
 			"__bgColor": "#2C2598",
 			"bgColor": "#2C2598",
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -16894,6 +16904,7 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -17978,6 +17989,7 @@
 			"pxHei": 256,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -19377,6 +19389,7 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -20383,6 +20396,7 @@
 			"pxHei": 768,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -21924,6 +21938,7 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -23707,6 +23722,7 @@
 			"pxHei": 256,
 			"__bgColor": "#22806A",
 			"bgColor": "#22806A",
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -24263,6 +24279,7 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",

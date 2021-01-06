@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.2",
+		"appVersion": "0.6.3",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.6.2",
+	"jsonVersion": "0.6.3",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
@@ -16,6 +16,7 @@
 	"defaultLevelBgColor": "#37494E",
 	"nextUid": 46,
 	"minifyJson": false,
+	"externalLevels": false,
 	"exportTiled": false,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -468,6 +469,7 @@
 			"pxHei": 256,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -1060,6 +1062,7 @@
 			"pxHei": 256,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -1966,6 +1969,7 @@
 			"pxHei": 256,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -2665,6 +2669,7 @@
 			"pxHei": 256,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -3257,6 +3262,7 @@
 			"pxHei": 256,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -4251,6 +4257,7 @@
 			"pxHei": 288,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -5034,6 +5041,7 @@
 			"pxHei": 288,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -5674,6 +5682,7 @@
 			"pxHei": 224,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -6413,6 +6422,7 @@
 			"pxHei": 176,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",

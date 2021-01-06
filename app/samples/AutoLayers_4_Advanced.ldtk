@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.2",
+		"appVersion": "0.6.3",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.6.2",
+	"jsonVersion": "0.6.3",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
@@ -16,6 +16,7 @@
 	"defaultLevelBgColor": "#1B2037",
 	"nextUid": 96,
 	"minifyJson": false,
+	"externalLevels": false,
 	"exportTiled": false,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -1086,6 +1087,7 @@
 			"pxHei": 320,
 			"__bgColor": "#1B2037",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid_layer",
