@@ -458,7 +458,6 @@ class App extends dn.Process {
 
 		// Display errors
 		if( loadingLog.containsAnyCriticalEntry() ) {
-			trace("log display");
 			new ui.modal.dialog.LogPrint(loadingLog, L.t._("Error while loading project"));
 			Editor.ME.needSaving = true;
 		}
