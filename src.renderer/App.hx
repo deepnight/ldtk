@@ -397,6 +397,7 @@ class App extends dn.Process {
 		}
 
 		// Parse
+		App.LOG.fileOp('Loading project $filePath...');
 		var json = null;
 		var p = #if !debug try #end {
 			var raw = JsTools.readFileString(filePath);
@@ -409,6 +410,37 @@ class App extends dn.Process {
 			null;
 		}
 		#end
+
+		// Load separate files
+		if( p.externalLevels ) {
+			var idx = 0;
+			for(l in p.levels) {
+				var path = p.makeAbsoluteFilePath(l.externalRelPath);
+				if( !JsTools.fileExists(path) ) {
+					// TODO better lost level management
+					N.error("Missing level file: "+l.externalRelPath);
+					p.levels.splice(idx,1);
+					idx--;
+				}
+				else {
+					// Parse level
+					try {
+						App.LOG.fileOp("Loading external level "+l.externalRelPath+"...");
+						var raw = JsTools.readFileString(path);
+						var lJson = haxe.Json.parse(raw);
+						var l = data.Level.fromJson(p, lJson);
+						p.levels[idx] = l;
+					}
+					catch(e:Dynamic) {
+						// TODO better lost level management
+						N.error("Error loading level "+l.externalRelPath);
+						p.levels.splice(idx,1);
+						idx--;
+					}
+				}
+				idx++;
+			}
+		}
 
 		if( p==null ) {
 			N.error("Couldn't read project file!");

@@ -12,6 +12,8 @@ class Level {
 	public var pxHei : Int;
 	public var layerInstances : Array<data.inst.LayerInstance> = [];
 
+	public var externalRelPath: Null<String>;
+
 	@:allow(ui.modal.panel.WorldPanel)
 	var bgColor : Null<UInt>;
 
@@ -110,12 +112,14 @@ class Level {
 		l.worldY = JsonTools.readInt( json.worldY, 0 );
 		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
 		l.bgColor = JsonTools.readColor(json.bgColor, true);
+		l.externalRelPath = json.externalRelPath;
 
 		l.layerInstances = [];
-		for( layerJson in JsonTools.readArray(json.layerInstances) ) {
-			var li = data.inst.LayerInstance.fromJson(p, layerJson);
-			l.layerInstances.push(li);
-		}
+		if( json.layerInstances!=null ) // external levels
+			for( layerJson in JsonTools.readArray(json.layerInstances) ) {
+				var li = data.inst.LayerInstance.fromJson(p, layerJson);
+				l.layerInstances.push(li);
+			}
 
 		return l;
 	}
