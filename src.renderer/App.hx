@@ -18,6 +18,8 @@ class App extends dn.Process {
 	var keyDowns : Map<Int,Bool> = new Map();
 	public var args: dn.Args;
 
+	public var loadingLog : dn.Log;
+
 	public function new() {
 		super();
 
@@ -34,6 +36,9 @@ class App extends dn.Process {
 		LOG.add("BOOT","Resources: "+JsTools.getAppResourceDir());
 		LOG.add("BOOT","SamplesPath: "+JsTools.getSamplesDir());
 		LOG.add("BOOT","Settings: "+JsTools.getSettingsDir());
+
+		loadingLog = new dn.Log();
+		loadingLog.onAdd = (l)->LOG.addLogEntry(l);
 
 		// App arguments
 		var electronArgs : Array<String> = try electron.renderer.IpcRenderer.sendSync("getArgs") catch(_) [];
@@ -389,15 +394,15 @@ class App extends dn.Process {
 	}
 
 	public function loadProject(filePath:String) {
+		loadingLog.clear();
 		if( !JsTools.fileExists(filePath) ) {
-			N.error("File not found: "+filePath);
+			loadingLog.error("File not found: "+filePath);
 			unregisterRecentProject(filePath);
-			// updateRecents();
 			return false;
 		}
 
 		// Parse
-		App.LOG.fileOp('Loading project $filePath...');
+		loadingLog.fileOp('Loading project $filePath...');
 		var json = null;
 		var p = #if !debug try #end {
 			var raw = JsTools.readFileString(filePath);
@@ -406,7 +411,7 @@ class App extends dn.Process {
 		}
 		#if !debug
 		catch(e:Dynamic) {
-			N.error( Std.string(e) );
+			loadingLog.error( Std.string(e) );
 			null;
 		}
 		#end
@@ -418,14 +423,14 @@ class App extends dn.Process {
 				var path = p.makeAbsoluteFilePath(l.externalRelPath);
 				if( !JsTools.fileExists(path) ) {
 					// TODO better lost level management
-					N.error("Missing level file: "+l.externalRelPath);
+					loadingLog.error("Level file not found "+l.externalRelPath);
 					p.levels.splice(idx,1);
 					idx--;
 				}
 				else {
 					// Parse level
 					try {
-						App.LOG.fileOp("Loading external level "+l.externalRelPath+"...");
+						loadingLog.fileOp("Loading external level "+l.externalRelPath+"...");
 						var raw = JsTools.readFileString(path);
 						var lJson = haxe.Json.parse(raw);
 						var l = data.Level.fromJson(p, lJson);
@@ -433,7 +438,7 @@ class App extends dn.Process {
 					}
 					catch(e:Dynamic) {
 						// TODO better lost level management
-						N.error("Error loading level "+l.externalRelPath);
+						loadingLog.error("Error while parsing level file "+l.externalRelPath);
 						p.levels.splice(idx,1);
 						idx--;
 					}
@@ -443,12 +448,20 @@ class App extends dn.Process {
 		}
 
 		if( p==null ) {
-			N.error("Couldn't read project file!");
+			loadingLog.error("Couldn't read project file!");
 			return false;
 		}
 
 		// Open it
+		loadingLog.fileOp("Done.");
 		loadPage( ()->new page.Editor(p) );
+
+		// Display errors
+		if( loadingLog.containsAnyCriticalEntry() ) {
+			trace("log display");
+			new ui.modal.dialog.LogPrint(loadingLog, L.t._("Error while loading project"));
+			Editor.ME.needSaving = true;
+		}
 		return true;
 	}
 
