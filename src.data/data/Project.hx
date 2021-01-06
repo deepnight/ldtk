@@ -79,10 +79,6 @@ class Project {
 
 		// World
 		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
-
-		#if debug
-		if( (cast json.worldLayout)=="WorldGrid" ) json.worldLayout = cast "GridVania"; // TODO remove that after 0.6 release
-		#end
 		p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
 		p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, DEFAULT_LEVEL_SIZE*p.defaultGridSize );
 		p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, DEFAULT_LEVEL_SIZE*p.defaultGridSize );
