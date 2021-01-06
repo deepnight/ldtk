@@ -55,15 +55,14 @@ class Editor extends Page {
 		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
 
-	public function new(p:data.Project, path:String) {
+	public function new(p:data.Project) {
 		super();
 
 		loadPageTemplate("editor");
 
 		ME = this;
 		createRoot(parent.root);
-		projectFilePath = path;
-		App.ME.registerRecentProject(path);
+		App.ME.registerRecentProject(p.filePath.full);
 
 		// Events
 		App.ME.jBody

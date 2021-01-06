@@ -338,12 +338,12 @@ class Home extends Page {
 			var fp = dn.FilePath.fromFile(filePath);
 			fp.extension = "ldtk";
 
-			var p = data.Project.createEmpty();
+			var p = data.Project.createEmpty(fp.full);
 			var data = JsTools.prepareProjectFile(p);
-			JsTools.writeFileString(fp.full, data.projectJson);
+			JsTools.writeFileString(p.filePath.full, data.projectJson);
 
-			N.msg("New project created: "+fp.full);
-			App.ME.loadPage( ()->new Editor(p, fp.full) );
+			N.msg("New project created: "+p.filePath.full);
+			App.ME.loadPage( ()->new Editor(p) );
 		});
 	}
 

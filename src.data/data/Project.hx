@@ -39,8 +39,9 @@ class Project {
 		defs = new Definitions(this);
 	}
 
-	public static function createEmpty() {
+	public static function createEmpty(path:String) {
 		var p = new Project();
+		p.filePath.parseFilePath(path);
 		p.createLevel();
 
 		return p;

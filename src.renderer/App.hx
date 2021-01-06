@@ -416,7 +416,7 @@ class App extends dn.Process {
 		}
 
 		// Open it
-		loadPage( ()->new page.Editor(p, filePath) );
+		loadPage( ()->new page.Editor(p) );
 		return true;
 	}
 
