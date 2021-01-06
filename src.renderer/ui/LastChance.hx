@@ -9,7 +9,8 @@ class LastChance extends dn.Process {
 
 		LastChance.end();
 		CUR = this;
-		var json = project.toJson();
+		var backup = project.toJson();
+		var backupPath = project.filePath.full;
 
 		elem = new J("xml#lastChance").clone().children().first();
 		elem.appendTo(App.ME.jBody);
@@ -18,7 +19,7 @@ class LastChance extends dn.Process {
 		elem.find("button").click( function(ev) {
 			if( !isActive() )
 				return;
-			Editor.ME.selectProject( data.Project.fromJson(json) );
+			Editor.ME.selectProject( data.Project.fromJson(backupPath, backup) );
 			Editor.ME.resetTools();
 			ui.modal.Dialog.closeAll();
 			N.msg( L.t._("Canceled action: \"::act::\"", {act:str}) );

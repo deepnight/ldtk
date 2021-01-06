@@ -5,6 +5,8 @@ class Project {
 	public static var DEFAULT_GRID_SIZE = 16; // px
 	public static var DEFAULT_LEVEL_SIZE = 16; // cells
 
+	public var filePath : dn.FilePath; // not stored in JSON
+
 	var nextUid = 0;
 	public var defs : Definitions;
 	public var levels : Array<Level> = [];
@@ -32,6 +34,7 @@ class Project {
 		worldLayout = Free;
 		worldGridWidth = defaultGridSize * DEFAULT_LEVEL_SIZE;
 		worldGridHeight = defaultGridSize * DEFAULT_LEVEL_SIZE;
+		filePath = new dn.FilePath();
 
 		defs = new Definitions(this);
 	}
@@ -49,8 +52,9 @@ class Project {
 		return 'Project(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
 	}
 
-	public static function fromJson(json:ldtk.Json.ProjectJson) {
+	public static function fromJson(filePath:String, json:ldtk.Json.ProjectJson) {
 		var p = new Project();
+		p.filePath.parseFilePath(filePath);
 		p.jsonVersion = JsonTools.readString(json.jsonVersion, Const.getJsonVersion());
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
@@ -106,7 +110,7 @@ class Project {
 	}
 
 	public function clone() : data.Project {
-		return fromJson( toJson() );
+		return fromJson( filePath.full, toJson() );
 	}
 
 	public function onWorldLayoutChange(old:ldtk.Json.WorldLayout) {

@@ -401,7 +401,7 @@ class App extends dn.Process {
 		var p = #if !debug try #end {
 			var raw = JsTools.readFileString(filePath);
 			json = haxe.Json.parse(raw);
-			data.Project.fromJson(json);
+			data.Project.fromJson(filePath, json);
 		}
 		#if !debug
 		catch(e:Dynamic) {

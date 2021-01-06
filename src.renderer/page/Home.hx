@@ -117,7 +117,7 @@ class Home extends Page {
 							var raw = JsTools.readFileString(fp.full);
 							log.general(" -> Parsing...");
 							var json = haxe.Json.parse(raw);
-							var p = data.Project.fromJson(json);
+							var p = data.Project.fromJson(fp.full, json);
 
 							// Tilesets
 							log.general(" -> Updating tileset data...");
