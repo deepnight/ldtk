@@ -471,7 +471,6 @@ class FieldDef {
 		while( r.match(sub) ) {
 			var pos = r.matchedPos();
 			keep.push( r.matched(0) );
-			trace(keep);
 			sub = r.matchedRight();
 		}
 

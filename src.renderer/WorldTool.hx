@@ -512,7 +512,6 @@ class WorldTool extends dn.Process {
 					var all = project.levels.map( (l)->{ pos:l==clickedLevel ? levelOriginX : l.worldX, idx:idx++ } );
 					var last = project.levels[project.levels.length-1];
 					all.push({ pos:last.worldX+last.pxWid, idx:idx });
-					trace(all);
 					all;
 
 				case LinearVertical:

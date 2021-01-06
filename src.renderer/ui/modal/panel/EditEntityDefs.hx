@@ -711,13 +711,11 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// String regex
-		trace("get: "+curField.regex);
 		var i = new form.input.StringInput(
 			jFieldForm.find("input#regex"),
 			()->return curField.getRegexContent(),
 			(s)-> {
 				curField.setRegexContent(s);
-				trace(s+" => "+curField.regex);
 			}
 		);
 
@@ -727,7 +725,6 @@ class EditEntityDefs extends ui.modal.Panel {
 			()->curField.hasRegexFlag("i"),
 			(v)->{
 				curField.setRegexFlag("i",v);
-				trace("=> "+curField.regex);
 			}
 		);
 
