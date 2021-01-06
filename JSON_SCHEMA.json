@@ -193,7 +193,7 @@
 					]
 				},
 				"px": {
-					"description": "Pixel coordinates (`[x,y]` format). Don't forget optional layer offsets, if they exist!",
+					"description": "Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget optional layer offsets, if they exist!",
 					"items": {
 						"type": [
 							"integer"
