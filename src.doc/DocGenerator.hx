@@ -290,8 +290,6 @@ class DocGenerator {
 	static function genJsonSchema(xml:haxe.xml.Access, className:String, xmlPath:String, ?jsonPath:String) {
 		// Prepare Json structure
 		var json = {
-			"$schema": "https://json-schema.org/draft-07/schema#",
-			"$ref" : "#/LdtkJsonRoot",
 			LdtkJsonRoot: null,
 			otherTypes: new Map<String,Dynamic>(),
 		};
@@ -349,9 +347,15 @@ class DocGenerator {
 		}
 
 		// Write Json file
+		var header = {
+			"$schema": "https://json-schema.org/draft-07/schema#",
+			title: "LDtk JSON schema",
+			description: "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
+			"$ref" : "#/LdtkJsonRoot",
+		}
 		Sys.println(' > Writing: ${jsonPath}...');
 		var fo = sys.io.File.write(jsonPath, false);
-		var jsonStr = dn.JsonPretty.stringify(json, Full);
+		var jsonStr = dn.JsonPretty.stringify(json, Full, header, true);
 		jsonStr = jsonStr.replace('"ref__"', "\"$ref\"");
 		jsonStr = jsonStr.replace('"enum__"', '"enum"');
 		fo.writeString(jsonStr);

@@ -1,5 +1,8 @@
 {
+	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
+	"title": "LDtk JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
+	"$ref": "#/LdtkJsonRoot",
 	"LdtkJsonRoot": {
 		"title": "LDtk Json root",
 		"required": [
@@ -117,7 +120,6 @@
 			"object"
 		]
 	},
-	"$ref": "#/LdtkJsonRoot",
 	"otherTypes": {
 		"FieldInstance": {
 			"title": "Field instance",
