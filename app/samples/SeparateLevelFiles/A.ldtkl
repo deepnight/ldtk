@@ -1,0 +1,104 @@
+{
+	"__header__": {
+		"fileType": "LDtk Project JSON",
+		"app": "LDtk",
+		"doc": "https://ldtk.io/json",
+		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
+		"appAuthor": "Sebastien 'deepnight' Benard",
+		"appVersion": "0.6.3-preview",
+		"url": "https://ldtk.io"
+	},
+	"identifier": "A",
+	"uid": 0,
+	"worldX": 0,
+	"worldY": 0,
+	"pxWid": 240,
+	"pxHei": 240,
+	"__bgColor": "#7F8093",
+	"bgColor": null,
+	"externalRelPath": null,
+	"layerInstances": [
+		{
+			"__identifier": "IntGrid",
+			"__type": "IntGrid",
+			"__cWid": 15,
+			"__cHei": 15,
+			"__gridSize": 16,
+			"__opacity": 1,
+			"__pxTotalOffsetX": 0,
+			"__pxTotalOffsetY": 0,
+			"__tilesetDefUid": null,
+			"__tilesetRelPath": null,
+			"levelId": 0,
+			"layerDefUid": 1,
+			"pxOffsetX": 0,
+			"pxOffsetY": 0,
+			"intGrid": [
+				{ "coordId": 66, "v": 0 },
+				{ "coordId": 67, "v": 0 },
+				{ "coordId": 68, "v": 0 },
+				{ "coordId": 80, "v": 0 },
+				{ "coordId": 84, "v": 0 },
+				{ "coordId": 95, "v": 0 },
+				{ "coordId": 99, "v": 0 },
+				{ "coordId": 110, "v": 0 },
+				{ "coordId": 111, "v": 0 },
+				{ "coordId": 112, "v": 0 },
+				{ "coordId": 113, "v": 0 },
+				{ "coordId": 114, "v": 0 },
+				{ "coordId": 125, "v": 0 },
+				{ "coordId": 129, "v": 0 },
+				{ "coordId": 140, "v": 0 },
+				{ "coordId": 144, "v": 0 },
+				{ "coordId": 155, "v": 0 },
+				{ "coordId": 159, "v": 0 }
+			],
+			"autoLayerTiles": [],
+			"seed": 5411700,
+			"gridTiles": [],
+			"entityInstances": []
+		},
+		{
+			"__identifier": "Entities",
+			"__type": "Entities",
+			"__cWid": 15,
+			"__cHei": 15,
+			"__gridSize": 16,
+			"__opacity": 1,
+			"__pxTotalOffsetX": 0,
+			"__pxTotalOffsetY": 0,
+			"__tilesetDefUid": null,
+			"__tilesetRelPath": null,
+			"levelId": 0,
+			"layerDefUid": 4,
+			"pxOffsetX": 0,
+			"pxOffsetY": 0,
+			"intGrid": [],
+			"autoLayerTiles": [],
+			"seed": 5582680,
+			"gridTiles": [],
+			"entityInstances": [
+				{ "__identifier": "Text", "__grid": [7,1], "__tile": null, "defUid": 5, "px": [120,24], "fieldInstances": [
+					{
+						"__identifier": "text",
+						"__value": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
+						"__type": "String",
+						"defUid": 6,
+						"realEditorValues": [{
+							"id": "V_String",
+							"params": [
+								"In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective."
+							]
+						}]
+					},
+					{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 7, "realEditorValues": [] }
+				] },
+				{ "__identifier": "Text", "__grid": [7,1], "__tile": null, "defUid": 5, "px": [120,24], "fieldInstances": [
+					{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 6, "realEditorValues": [] },
+					{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 7, "realEditorValues": [] }
+				] }
+			]
+		}
+	],
+	"__neighbours": [{ "levelUid": 2, "dir": "e" }]
+}
