@@ -19,6 +19,12 @@ Json schema: https://ldtk.io/files/JSON_SCHEMA.json
 
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
 ## LDtk Json root   
+This is the root of any Project JSON file. It contains:
+
+- the project settings,
+- an array of levels
+- and a definition object (that can probably be safely ignored for most users).
+
 Value | Type | Description
 -- | -- | --
 `bgColor` | String<br/><small&nbsp;class="color">*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Project background color
@@ -39,14 +45,21 @@ Value | Type | Description
 
 <a id="ldtk-LevelJson" name="ldtk-LevelJson"></a>
 ## 1. Level   
+This section contains all the level data. It can be found in 2 distinct forms, depending on Project current settings:
+
+- If "*Separate level files*" is **disabled** (default): full level data is *embedded* inside the main Project JSON file,
+- If "*Separate level files*" is **enabled**: level data is stored in *separate* standalone `.ldtkl` files (one per level). In this case, the main Project JSON file will still contain most level data, except heavy sections, like the `layerInstances` array (which will be null). The `externalRelPath` string points to the `ldtkl` file.
+
+A `ldtkl` file is just a JSON file containing exactly what is described below.
+
 Value | Type | Description
 -- | -- | --
 `__bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String<br/><small&nbsp;class="color">*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Background color of the level (same as `bgColor`, except the default value is automatically used here if its value is `null`)
-`__neighbours`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg) ![Generic badge](https://img.shields.io/badge/Changed_0.6.3-green.svg)  | Array&nbsp;of&nbsp;Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array listing all other levels touching this one on the world map. The `dir` is a single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast). In "linear" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout. **Note**: if the project option "Save levels separately" is enabled, this field will be `null`.<br/> This object contains the following fields:<br/> <ul><li>**`dir`** **(String**)</li><li>**`levelUid`** **(Int**)</li></ul>
+`__neighbours`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Array&nbsp;of&nbsp;Object | An array listing all other levels touching this one on the world map. The `dir` is a single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast). In "linear" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.<br/> This object contains the following fields:<br/> <ul><li>**`dir`** **(String**)</li><li>**`levelUid`** **(Int**)</li></ul>
 `bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)*<br/><small&nbsp;class="color">*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Background color of the level. If `null`, the project `defaultLevelBgColor` should be used.
-`externalRelPath`<br/><sup class="only">Only *Separate level files*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | This value is not null if the project option "*Save levels separately*" is enabled. In this case, this **relative** path points to the level Json file.
+`externalRelPath`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | This value is not null if the project option "*Save levels separately*" is enabled. In this case, this **relative** path points to the level Json file.
 `identifier` | String | Unique String identifier
-`layerInstances`<br/><sup class="only">Only *Embedded level data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.6.3-green.svg)  | Array&nbsp;of&nbsp;[Layer&nbsp;instance](#ldtk-LayerInstanceJson)&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array containing all Layer instances. **IMPORTANT**: if the project option "*Save levels separately*" is enabled, this field will be `null`.<br/>		TODO specify array order
+`layerInstances`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.6.3-green.svg)  | Array&nbsp;of&nbsp;[Layer&nbsp;instance](#ldtk-LayerInstanceJson)&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array containing all Layer instances. **IMPORTANT**: if the project option "*Save levels separately*" is enabled, this field will be `null`.<br/>		TODO specify array order
 `pxHei` | Int | Height of the level in pixels
 `pxWid` | Int | Width of the level in pixels
 `uid` | Int | Unique Int identifier
@@ -110,6 +123,10 @@ Value | Type | Description
 
 <a id="ldtk-DefinitionsJson" name="ldtk-DefinitionsJson"></a>
 ## 2. Definitions   
+If you're writing your own LDtk importer, you should probably ignore MOST stuff in the `defs` section, as it contains data that are specifically useful to the editor. Data that is useful to game devs is duplicated in fields prefixed with a double underscore (eg. `__identifier` or `__type`).
+
+	The 2 only definition types you might need here are **Tilesets** and **Enums**.
+
 Value | Type | Description
 -- | -- | --
 `entities` | Array&nbsp;of&nbsp;[Entity&nbsp;definition](#ldtk-EntityDefJson) | 
@@ -140,6 +157,8 @@ Value | Type | Description
 
 <a id="ldtk-AutoRuleDef" name="ldtk-AutoRuleDef"></a>
 ## 2.1.1. Auto-layer rule definition   
+This complex section isn't meant to be used by game devs at all, as these rules are completely resolved internally by the editor before any saving. You should just ignore this part.
+
 Value | Type | Description
 -- | -- | --
 `active` | Bool | If FALSE, the rule effect isn't applied, and no tiles are generated.
@@ -184,6 +203,8 @@ Value | Type | Description
 
 <a id="ldtk-FieldDefJson" name="ldtk-FieldDefJson"></a>
 ## 2.2.1. Field definition  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg) 
+This section is mostly only intended for the LDtk editor app itself. You can safely ignore it.
+
 Value | Type | Description
 -- | -- | --
 `__type` | String | Human readable value type (eg. `Int`, `Float`, `Point`, etc.). If the field is an array, this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)
@@ -205,6 +226,8 @@ Value | Type | Description
 
 <a id="ldtk-TilesetDefJson" name="ldtk-TilesetDefJson"></a>
 ## 2.3. Tileset definition   
+The `Tileset` definition is the most useful part among project definitions. It contains some extra informations about each integrated tileset. If you only had to parse one definition section, that would be the one.
+
 Value | Type | Description
 -- | -- | --
 `cachedPixelData`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | The following data is used internally for various optimizations. It's always synced with source image changes.<br/> This object contains the following fields:<br/> <ul><li>**`averageColors`** **(String *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  : *Average color codes for each tileset tile (ARGB format)*</li><li>**`opaqueTiles`** **(String**)  ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-green.svg)  : *An array of 0/1 bytes, encoded in Base64, that tells if a specific TileID is fully opaque (1) or not (0)*</li></ul>
