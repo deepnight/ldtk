@@ -41,6 +41,7 @@ typedef GlobalType = {
 	var displayName : String;
 	var xml : haxe.xml.Access;
 	var section : String;
+	var description : Null<String>;
 }
 
 
@@ -116,6 +117,7 @@ class DocGenerator {
 				// Typedef
 				allTypes.push({
 					xml: type,
+					description: type.hasNode.haxe_doc ? type.node.haxe_doc.innerHTML : null,
 					rawName: type.att.path,
 					displayName: displayName,
 					section: hasMeta(type,"section") ? getMeta(type,"section") : "",
@@ -186,6 +188,12 @@ class DocGenerator {
 				anchor: anchorId(type.xml.att.path),
 				depth: type.section.split(".").length,
 			});
+
+			// Optional description
+			if( type.description!=null ) {
+				md.push(type.description);
+				md.push("");
+			}
 
 			// No field informations for this type
 			if( !type.xml.hasNode.a ) {
