@@ -297,8 +297,9 @@ class App extends dn.Process {
 
 	public function loadSettings() {
 		LOG.fileOp("Loading settings from "+JsTools.getSettingsDir()+"...");
+
+		// Migrate old JS sessionData
 		if( js.Browser.window.localStorage.getItem("session")!=null ) {
-			// Migrate old sessionData
 			LOG.fileOp("Migrating old session to settings files...");
 			var raw = js.Browser.window.localStorage.getItem("session");
 			var old : AppSettings =
@@ -314,14 +315,32 @@ class App extends dn.Process {
 
 			js.Browser.window.localStorage.removeItem("session");
 		}
+
 		settings = dn.LocalStorage.readObject("settings", true, {
 			recentProjects: [],
+			recentDirs: null,
 			compactMode: false,
 			grid: true,
 			singleLayerMode: false,
 			emptySpaceSelection: false,
 			tileStacking: false,
 		});
+
+		// Import recent projects to dirs
+		if( settings.recentDirs==null ) {
+			settings.recentDirs = [];
+			var dones = new Map();
+			var i = settings.recentProjects.length-1;
+			while( i>=0 ) {
+				var fp = dn.FilePath.fromFile( settings.recentProjects[i] );
+				if( !dones.exists(fp.directory) ) {
+					dones.set(fp.directory, true);
+					settings.recentDirs.insert(0, fp.directory);
+				}
+				i--;
+			}
+			trace(settings.recentDirs);
+		}
 	}
 
 	public function saveSettings() {
@@ -337,6 +356,39 @@ class App extends dn.Process {
 			curPageProcess = null;
 		}
 	}
+
+	public function recentDirsContains(dir:String) {
+		if( dir==null )
+			return false;
+		dir = StringTools.replace(dir, "\\", "/");
+		for(p in settings.recentDirs)
+			if( p==dir )
+				return true;
+		return false;
+	}
+
+	public function registerRecentDir(dir:String) {
+		if( dir==null )
+			return;
+		dir = StringTools.replace(dir, "\\", "/");
+		settings.recentDirs.remove(dir);
+		settings.recentDirs.push(dir);
+		saveSettings();
+	}
+
+	public function unregisterRecentDir(dir:String) {
+		if( dir==null )
+			return;
+		dir = StringTools.replace(dir, "\\", "/");
+		settings.recentDirs.remove(dir);
+		saveSettings();
+	}
+
+	public function clearRecentDirs() {
+		settings.recentDirs = [];
+		saveSettings();
+	}
+
 
 	public function recentProjectsContains(path:String) {
 		path = StringTools.replace(path, "\\", "/");
@@ -357,15 +409,19 @@ class App extends dn.Process {
 	}
 
 	public function registerRecentProject(path:String) {
-		#if !debug
-		if( isInAppDir(path,true) )
-			return false;
-		#end
+		// #if !debug
+		// if( isInAppDir(path,true) )
+		// 	return false;
+		// #end
 
 		path = StringTools.replace(path, "\\", "/");
 		settings.recentProjects.remove(path);
 		settings.recentProjects.push(path);
 		saveSettings();
+
+		var fp = dn.FilePath.fromFile(path);
+		registerRecentDir(fp.directory);
+
 		return true;
 	}
 

@@ -2800,7 +2800,7 @@ canvas#webgl {
 
 			ul.recentFiles {
 				&:empty::before {
-					content: "No recent project, maybe you should check SAMPLES first?";
+					content: "No recent project file";
 				}
 				.recentPath {
 					display: flex;
@@ -2899,6 +2899,12 @@ canvas#webgl {
 			ul.recentDirs {
 				&:empty::before {
 					content: "No recent folder";
+				}
+				.path {
+					>span:not(:last-of-type) {
+						color: white !important;
+						opacity: 0.7;
+					}
 				}
 			}
 

@@ -93,6 +93,10 @@ class Home extends Page {
 	function openDebugMenu() {
 		var m = new ui.Modal();
 
+		var jButton = new J('<button>Settings dir</button>');
+		jButton.appendTo(m.jContent);
+		jButton.click( (_)->JsTools.exploreToFile(JsTools.getSettingsDir(), false) );
+
 		// Update all sample files
 		var jButton = new J('<button>Update all samples</button>');
 		jButton.click((_)->{
@@ -317,18 +321,9 @@ class Home extends Page {
 		}
 
 
-		// List recent dirs
-		var dirs = [];
-		var dones = new Map();
-		for(path in recents) {
-			var fp = dn.FilePath.fromFile(path);
-			if( !dones.exists(fp.directory) ) {
-				dones.set(fp.directory,true);
-				dirs.insert( 0, fp );
-			}
-		}
-
 		// Trim common parts
+		var dirs = App.ME.settings.recentDirs.map( dir->dn.FilePath.fromDir(dir) );
+		dirs.reverse();
 		var trim = 0;
 		var same = true;
 		while( same && dirs.length>1 ) {
@@ -354,6 +349,25 @@ class Home extends Page {
 			li.click( (_)->{
 				onLoad(fp.directory);
 			});
+
+			ui.modal.ContextMenu.addTo(li, [
+				{
+					label: L.t._("Remove from history"),
+					cond: null,
+					cb: ()->{
+						App.ME.unregisterRecentDir(fp.directory);
+						updateRecents();
+					}
+				},
+				{
+					label: L.t._("Clear all folder history"),
+					cond: null,
+					cb: ()->{
+						App.ME.clearRecentDirs();
+						updateRecents();
+					}
+				},
+			]);
 		}
 
 		JsTools.parseComponents(jRecentFiles);
