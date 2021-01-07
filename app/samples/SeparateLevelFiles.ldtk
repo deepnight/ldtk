@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.3-preview",
+		"appVersion": "0.6.3",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.6.3-preview",
+	"jsonVersion": "0.6.3",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
@@ -130,7 +130,7 @@
 			"bgColor": null,
 			"externalRelPath": "SeparateLevelFiles/A.ldtkl",
 			"layerInstances": null,
-			"__neighbours": null
+			"__neighbours": [{ "levelUid": 2, "dir": "e" }]
 		},
 		{
 			"identifier": "B",
@@ -143,7 +143,7 @@
 			"bgColor": null,
 			"externalRelPath": "SeparateLevelFiles/B.ldtkl",
 			"layerInstances": null,
-			"__neighbours": null
+			"__neighbours": [ { "levelUid": 3, "dir": "e" }, { "levelUid": 0, "dir": "w" } ]
 		},
 		{
 			"identifier": "C",
@@ -156,7 +156,7 @@
 			"bgColor": null,
 			"externalRelPath": "SeparateLevelFiles/C.ldtkl",
 			"layerInstances": null,
-			"__neighbours": null
+			"__neighbours": [{ "levelUid": 2, "dir": "w" }]
 		}
 	]
 }
