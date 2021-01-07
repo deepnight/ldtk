@@ -146,7 +146,7 @@
 					]
 				},
 				"__identifier": {
-					"description": "Unique String identifier",
+					"description": "Field definition identifier",
 					"type": [
 						"string"
 					]
@@ -184,7 +184,7 @@
 					]
 				},
 				"__identifier": {
-					"description": "Unique String identifier",
+					"description": "Entity definition identifier",
 					"type": [
 						"string"
 					]
@@ -233,7 +233,7 @@
 			]
 		},
 		"Definitions": {
-			"description": "If you're writing your own LDtk importer, you should probably ignore MOST stuff in the `defs` section, as it contains data that are specifically useful to the editor. Data that is useful to game devs is duplicated in fields prefixed with a double underscore (eg. `__identifier` or `__type`).  The 2 only definition types you might need here are **Tilesets** and **Enums**.",
+			"description": "If you're writing your own LDtk importer, you should probably just ignore *most* stuff in the `defs` section, as it contains data that are mostly useful to the editor. To keep you away from the `defs` section and avoid some unnecessary JSON parsing, important data from definitions is often duplicated in fields prefixed with a double underscore (eg. `__identifier` or `__type`).  The 2 only definition types you might need here are **Tilesets** and **Enums**.",
 			"title": "Definitions",
 			"required": [
 				"entities",
@@ -764,7 +764,7 @@
 					]
 				},
 				"__identifier": {
-					"description": "Unique String identifier",
+					"description": "Layer definition identifier",
 					"type": [
 						"string"
 					]
