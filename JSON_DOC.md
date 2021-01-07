@@ -59,7 +59,7 @@ Value | Type | Description
 `bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)*<br/><small&nbsp;class="color">*Hex&nbsp;color&nbsp;"#rrggbb"*</small> | Background color of the level. If `null`, the project `defaultLevelBgColor` should be used.
 `externalRelPath`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | This value is not null if the project option "*Save levels separately*" is enabled. In this case, this **relative** path points to the level Json file.
 `identifier` | String | Unique String identifier
-`layerInstances`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.6.3-green.svg)  | Array&nbsp;of&nbsp;[Layer&nbsp;instance](#ldtk-LayerInstanceJson)&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array containing all Layer instances. **IMPORTANT**: if the project option "*Save levels separately*" is enabled, this field will be `null`.<br/>		TODO specify array order
+`layerInstances`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.6.3-green.svg)  | Array&nbsp;of&nbsp;[Layer&nbsp;instance](#ldtk-LayerInstanceJson)&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array containing all Layer instances. **IMPORTANT**: if the project option "*Save levels separately*" is enabled, this field will be `null`.<br/>		This array is **sorted in display order**: the 1st layer is the top-most and the last is behind.
 `pxHei` | Int | Height of the level in pixels
 `pxWid` | Int | Width of the level in pixels
 `uid` | Int | Unique Int identifier
