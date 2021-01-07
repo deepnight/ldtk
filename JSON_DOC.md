@@ -125,7 +125,7 @@ Value | Type | Description
 ## 2. Definitions   
 If you're writing your own LDtk importer, you should probably ignore MOST stuff in the `defs` section, as it contains data that are specifically useful to the editor. Data that is useful to game devs is duplicated in fields prefixed with a double underscore (eg. `__identifier` or `__type`).
 
-	The 2 only definition types you might need here are **Tilesets** and **Enums**.
+The 2 only definition types you might need here are **Tilesets** and **Enums**.
 
 Value | Type | Description
 -- | -- | --
