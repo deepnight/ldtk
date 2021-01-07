@@ -154,9 +154,6 @@ class Home extends Page {
 	function updateRecents() {
 		ui.Tip.clear();
 
-		var jRecentList = jPage.find("ul.recents");
-		jRecentList.empty();
-
 		var recents = App.ME.settings.recentProjects.copy();
 
 		// Automatically detects crash backups
@@ -219,16 +216,19 @@ class Home extends Page {
 
 
 		// List files
+		var jRecentFiles = jPage.find("ul.recentFiles");
+		jRecentFiles.empty();
+
 		var i = recents.length-1;
 		C.initUniqueColors();
 		while( i>=0 ) {
-			var p = recents[i];
-			var isCrashFile = p.indexOf( Const.CRASH_NAME_SUFFIX )>=0;
+			var filePath = recents[i];
+			var isCrashFile = filePath.indexOf( Const.CRASH_NAME_SUFFIX )>=0;
 			var li = new J('<li/>');
-			li.appendTo(jRecentList);
+			li.appendTo(jRecentFiles);
 
 
-			if( !App.ME.isInAppDir(p,true) ) {
+			if( !App.ME.isInAppDir(filePath,true) ) {
 				var bgCol = C.pickUniqueColorFor( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] );
 				var textCol = C.toWhite(bgCol, 0.3);
 				var jPath = new J('<div class="recentPath"/>');
@@ -256,7 +256,7 @@ class Home extends Page {
 					}
 					else if( j==parts.length-1 ) {
 						jPart.addClass("file");
-						jPart.html( '<span class="name">' + dn.FilePath.extractFileName(p) + '</span>' );
+						jPart.html( '<span class="name">' + dn.FilePath.extractFileName(filePath) + '</span>' );
 					}
 
 					j++;
@@ -266,16 +266,16 @@ class Home extends Page {
 				// Sample file
 				var jPath = new J('<div class="recentPath sample"/>');
 				jPath.append('<div class="label"><span>${Const.APP_NAME} sample</span></div>');
-				jPath.append('<div class="file"><span class="name">${dn.FilePath.extractFileName(p)}</span></div>');
+				jPath.append('<div class="file"><span class="name">${dn.FilePath.extractFileName(filePath)}</span></div>');
 				jPath.appendTo(li);
 			}
 
 			li.click( function(ev) {
-				if( !App.ME.loadProject(p) )
+				if( !App.ME.loadProject(filePath) )
 					updateRecents();
 			});
 
-			if( !JsTools.fileExists(p) )
+			if( !JsTools.fileExists(filePath) )
 				li.addClass("missing");
 
 			if( isCrashFile )
@@ -285,13 +285,13 @@ class Home extends Page {
 				{
 					label: L.t._("Locate file"),
 					cond: null,
-					cb: JsTools.exploreToFile.bind(p, true),
+					cb: JsTools.exploreToFile.bind(filePath, true),
 				},
 				{
 					label: L.t._("Remove from history"),
 					cond: ()->!isCrashFile,
 					cb: ()->{
-						App.ME.unregisterRecentProject(p);
+						App.ME.unregisterRecentProject(filePath);
 						updateRecents();
 					}
 				},
@@ -299,8 +299,8 @@ class Home extends Page {
 					label: L.t._("Delete this crash backup file"),
 					cond: ()->isCrashFile,
 					cb: ()->{
-						JsTools.removeFile(p);
-						App.ME.unregisterRecentProject(p);
+						JsTools.removeFile(filePath);
+						App.ME.unregisterRecentProject(filePath);
 						updateRecents();
 					}
 				},
@@ -316,12 +316,54 @@ class Home extends Page {
 			i--;
 		}
 
-		JsTools.parseComponents(jRecentList);
+
+		// List recent dirs
+		var dirs = [];
+		var dones = new Map();
+		for(path in recents) {
+			var fp = dn.FilePath.fromFile(path);
+			if( !dones.exists(fp.directory) ) {
+				dones.set(fp.directory,true);
+				dirs.insert( 0, fp );
+			}
+		}
+
+		// Trim common parts
+		var trim = 0;
+		var same = true;
+		while( same && dirs.length>1 ) {
+			for(i in 1...dirs.length) {
+				if( dirs[0].directory.charAt(trim) != dirs[i].directory.charAt(trim) ) {
+					same = false;
+					break;
+				}
+			}
+			if( same )
+				trim++;
+		}
+
+		// List dirs
+		var jRecentDirs = jPage.find("ul.recentDirs");
+		jRecentDirs.empty();
+		C.initUniqueColors();
+		for(fp in dirs) {
+			var li = new J('<li/>');
+			li.appendTo(jRecentDirs);
+
+			li.append( JsTools.makePath( fp.directory.substr(trim) ) );
+			li.click( (_)->{
+				onLoad(fp.directory);
+			});
+		}
+
+		JsTools.parseComponents(jRecentFiles);
 	}
 
 
-	public function onLoad() {
-		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION,".json"], App.ME.getDefaultDialogDir(), function(filePath) {
+	public function onLoad(?openPath:String) {
+		if( openPath==null )
+			openPath = App.ME.getDefaultDialogDir();
+		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION,".json"], openPath, function(filePath) {
 			if( !App.ME.loadProject(filePath) )
 				updateRecents();
 		});
@@ -357,7 +399,7 @@ class Home extends Page {
 					App.ME.exit();
 
 			case K.ENTER:
-				jPage.find("ul.recents li:first").click();
+				jPage.find("ul.recentFiles li:first").click();
 
 			case K.ESCAPE:
 				if( jPage.find(".changelogsWrapper").hasClass("fullscreen") )
