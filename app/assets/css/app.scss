@@ -2796,85 +2796,63 @@ canvas#webgl {
 					color: $bgLighter;
 					text-shadow: 0px 2px 8px $bgDark, 0px 2px 2px $bgDark;
 				}
+
+				li .path {
+					width: 100%;
+					overflow: hidden;
+					white-space: nowrap;
+					text-align: left;
+				}
 			}
 
 			ul.recentFiles {
 				&:empty::before {
 					content: "No recent project file";
 				}
-				.recentPath {
-					display: flex;
-					width: 100%;
-					align-items: center;
 
-					.label span {
-						display: inline-block;
-						width: 100px;
-						padding: 3px 8px;
-						font-size: 9pt;
-						text-align: center;
+				li {
+					display: grid;
+					overflow: hidden;
+					grid-template-columns: auto min-content;
+					grid-template-rows: auto auto;
+
+					&.missing .fileName {
+						text-decoration: line-through;
+						font-weight: normal;
+						color: $lightRed !important;
+					}
+
+					.fileName {
+						grid-column: 1/2;
 						font-weight: bold;
-						white-space: nowrap;
-						color: white;
-						text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3), 0px 0px 3px rgba(0, 0, 0, 0.3);
-						overflow-x: hidden;
-						border-radius: 3px;
+						overflow: hidden;
+						width: 100%;
+					}
+					.path {
+						grid-column: 1/2;
+						grid-row: 2/3;
+
+						font-size: 9pt;
+						color: $bgLighter;
+
+						>span:last-of-type {
+							display: none;
+						}
 					}
 
 					&.sample {
-						flex: 0 1 0px;
-						color: $help;
-						.label span {
-							background-color: $helpMed;
+						.fileName {
+							color: $help !important;
+							grid-row: 1/3;
 						}
-						.file .name {
-							color: $help;
-						}
-					}
-
-					.dir,
-					.slash {
-						flex: 0 1 0px;
-						font-size: 7.5pt;
-					}
-
-					.slash {
-						padding: 0px 3px;
-					}
-
-					.file {
-						flex: 1 0 auto;
-						padding-left: 8px;
-						.name {
-							font-weight: bold;
-							font-size: 10.5pt;
-							color: white;
-						}
-						.ext {
-							font-size: 8pt;
+						.path {
+							display: none;
 						}
 					}
-				}
 
-
-				li {
-					overflow: hidden;
-					grid-template-columns: auto min-content;
-					justify-items: right;
-
-					button.remove {
-						padding: 5px;
-						border-radius: 3px;
-					}
-
-					.exploreTo {
-						padding: 4px 8px;
-					}
-
-					&.missing .recentPath div {
-						text-decoration: line-through;
-						font-weight: normal;
-						color: $red !important;
+					button.context {
+						grid-column: 2/3;
+						grid-row: 1/3;
 					}
 
 					&:first-of-type {
@@ -2900,11 +2878,17 @@ canvas#webgl {
 				&:empty::before {
 					content: "No recent folder";
 				}
+
 				.path {
 					>span:not(:last-of-type) {
 						color: white !important;
 						opacity: 0.7;
 					}
+				}
+
+				li.missing .path >span {
+					color: $lightRed !important;
+					text-decoration: line-through;
 				}
 			}
 

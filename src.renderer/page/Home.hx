@@ -232,47 +232,19 @@ class Home extends Page {
 			li.appendTo(jRecentFiles);
 
 
-			if( !App.ME.isInAppDir(filePath,true) ) {
-				var bgCol = C.pickUniqueColorFor( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] );
-				var textCol = C.toWhite(bgCol, 0.3);
-				var jPath = new J('<div class="recentPath"/>');
-				jPath.appendTo(li);
-				var parts = trimmedPaths[i].split("/");
-				var j = 0;
-				for(d in parts) {
-					if( j>0 ) {
-						var jSlash = new J('<div class="slash">/</div>');
-						jSlash.css({ color: C.intToHex(textCol) });
-						jSlash.appendTo(jPath);
-					}
+			var fp = dn.FilePath.fromFile(filePath);
+			var col = C.pickUniqueColorFor( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] );
+			if( App.ME.isInAppDir(filePath,true) )
+				li.addClass("sample");
 
-					var jPart = new J('<div>$d</div>');
-					jPart.appendTo(jPath);
-					jPart.css({ color: C.intToHex(textCol) });
+			var jName = new J('<span class="fileName">${fp.fileName}</span>');
+			jName.appendTo(li);
+			jName.css("color", C.intToHex( C.toWhite(col, 0.7) ));
 
-					if( j==0 ) {
-						jPart.addClass("label");
-						jPart.wrapInner('<span/>');
-						jPart.find("span").css({ backgroundColor: C.intToHex(bgCol) });
-					}
-					else if( j<parts.length-1 ) {
-						jPart.addClass("dir");
-					}
-					else if( j==parts.length-1 ) {
-						jPart.addClass("file");
-						jPart.html( '<span class="name">' + dn.FilePath.extractFileName(filePath) + '</span>' );
-					}
-
-					j++;
-				}
-			}
-			else {
-				// Sample file
-				var jPath = new J('<div class="recentPath sample"/>');
-				jPath.append('<div class="label"><span>${Const.APP_NAME} sample</span></div>');
-				jPath.append('<div class="file"><span class="name">${dn.FilePath.extractFileName(filePath)}</span></div>');
-				jPath.appendTo(li);
-			}
+			var jDir = JsTools.makePath(trimmedPaths[i], C.toWhite(col, 0.3));
+			// var jDir = new J('<span class="dir">${trimmedPaths[i]}</span>');
+			jDir.appendTo(li);
+			// jDir.css("color", C.intToHex( C.toWhite(col, 0.3) ));
 
 			li.click( function(ev) {
 				if( !App.ME.loadProject(filePath) )
@@ -286,6 +258,11 @@ class Home extends Page {
 				li.addClass("crash");
 
 			ui.modal.ContextMenu.addTo(li, [
+				{
+					label: L.t._("Load from this folder"),
+					cond: null,
+					cb: onLoad.bind( dn.FilePath.fromFile(filePath).directory ),
+				},
 				{
 					label: L.t._("Locate file"),
 					cond: null,
@@ -345,9 +322,25 @@ class Home extends Page {
 			var li = new J('<li/>');
 			li.appendTo(jRecentDirs);
 
+			if( !JsTools.fileExists(fp.directory) )
+				li.addClass("missing");
+
 			li.append( JsTools.makePath( fp.directory.substr(trim) ) );
 			li.click( (_)->{
-				onLoad(fp.directory);
+				if( JsTools.fileExists(fp.directory) )
+					onLoad(fp.directory);
+				else {
+					App.ME.unregisterRecentDir(fp.directory);
+
+					// Try to open parent
+					fp.removeLastDirectory();
+					if( JsTools.fileExists(fp.directory) )
+						onLoad(fp.directory);
+					else
+						N.error("Removed lost folder from history");
+
+					updateRecents();
+				}
 			});
 
 			ui.modal.ContextMenu.addTo(li, [

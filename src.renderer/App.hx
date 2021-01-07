@@ -452,6 +452,7 @@ class App extends dn.Process {
 	public function loadProject(filePath:String) {
 		loadingLog.clear();
 		if( !JsTools.fileExists(filePath) ) {
+			N.error("File not found: "+filePath);
 			loadingLog.error("File not found: "+filePath);
 			unregisterRecentProject(filePath);
 			return false;
