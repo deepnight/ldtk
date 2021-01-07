@@ -349,7 +349,8 @@ class DocGenerator {
 		// Write Json file
 		var header = {
 			"$schema": "https://json-schema.org/draft-07/schema#",
-			title: "LDtk JSON schema v"+appVersion.numbers,
+			title: "LDtk "+appVersion.numbers+" JSON schema",
+			version: appVersion.numbers,
 			description: "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
 			"$ref" : "#/LdtkJsonRoot",
 		}

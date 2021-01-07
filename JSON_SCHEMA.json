@@ -1,8 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk JSON schema v0.6.3",
+	"title": "LDtk 0.6.3 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
+	"version": "0.6.3",
 	"LdtkJsonRoot": {
 		"title": "LDtk Json root",
 		"required": [
