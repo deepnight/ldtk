@@ -1,5 +1,6 @@
 # 0.6.3
 
+- The app home now shows a **list of recently opened folders** along with recently opened project files.
 - Added a **Json schema** file directly generated from source code. It's available on [LDtk.io/json](https://ldtk.io/json) and contains a schema following Draft 7 standard from [Json-schema.org](https://json-schema.org/). This file describes all fields from LDtk json files (value types and descriptions).
 
 # 0.6.2
