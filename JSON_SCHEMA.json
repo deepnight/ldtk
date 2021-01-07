@@ -5,6 +5,7 @@
 	"$ref": "#/LdtkJsonRoot",
 	"version": "0.6.3",
 	"LdtkJsonRoot": {
+		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels - and a definition object (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
 		"required": [
 			"bgColor",
@@ -232,6 +233,7 @@
 			]
 		},
 		"Definitions": {
+			"description": "If you're writing your own LDtk importer, you should probably ignore MOST stuff in the `defs` section, as it contains data that are specifically useful to the editor. Data that is useful to game devs is duplicated in fields prefixed with a double underscore (eg. `__identifier` or `__type`).   The 2 only definition types you might need here are **Tilesets** and **Enums**.",
 			"title": "Definitions",
 			"required": [
 				"entities",
@@ -293,6 +295,7 @@
 			]
 		},
 		"AutoRuleDef": {
+			"description": "This complex section isn't meant to be used by game devs at all, as these rules are completely resolved internally by the editor before any saving. You should just ignore this part.",
 			"title": "Auto-layer rule definition",
 			"required": [
 				"active",
@@ -448,6 +451,7 @@
 			]
 		},
 		"FieldDef": {
+			"description": "This section is mostly only intended for the LDtk editor app itself. You can safely ignore it.",
 			"title": "Field definition",
 			"required": [
 				"__type",
@@ -855,6 +859,7 @@
 			]
 		},
 		"TilesetDef": {
+			"description": "The `Tileset` definition is the most useful part among project definitions. It contains some extra informations about each integrated tileset. If you only had to parse one definition section, that would be the one.",
 			"title": "Tileset definition",
 			"required": [
 				"identifier",
@@ -1130,9 +1135,11 @@
 			]
 		},
 		"Level": {
+			"description": "This section contains all the level data. It can be found in 2 distinct forms, depending on Project current settings:  - If \"*Separate level files*\" is **disabled** (default): full level data is *embedded* inside the main Project JSON file, - If \"*Separate level files*\" is **enabled**: level data is stored in *separate* standalone `.ldtkl` files (one per level). In this case, the main Project JSON file will still contain most level data, except heavy sections, like the `layerInstances` array (which will be null). The `externalRelPath` string points to the `ldtkl` file.  A `ldtkl` file is just a JSON file containing exactly what is described below.",
 			"title": "Level",
 			"required": [
 				"__bgColor",
+				"__neighbours",
 				"identifier",
 				"pxHei",
 				"pxWid",
@@ -1143,15 +1150,14 @@
 			"additionalProperties": false,
 			"properties": {
 				"__neighbours": {
-					"description": "An array listing all other levels touching this one on the world map. The `dir` is a single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast). In \"linear\" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout. **Note**: if the project option \"Save levels separately\" is enabled, this field will be `null`.",
+					"description": "An array listing all other levels touching this one on the world map. The `dir` is a single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast). In \"linear\" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.",
 					"items": {
 						"type": [
 							"object"
 						]
 					},
 					"type": [
-						"array",
-						"null"
+						"array"
 					]
 				},
 				"__bgColor": {
