@@ -313,6 +313,8 @@ class DocGenerator {
 			var typeName = type.rawName.substr( type.rawName.lastIndexOf(".")+1 ).replace("Json","");
 			var typeJson : SchemaType = {}
 			typeJson.type = ["object"];
+			if( type.description!=null )
+				typeJson.description = type.description.replace("\n"," ");
 			typeJson.properties = [];
 			typeJson.required = [];
 			typeJson.title = type.displayName;
