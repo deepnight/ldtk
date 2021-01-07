@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.3",
+		"appVersion": "0.6.3-preview",
 		"url": "https://ldtk.io"
 	},
-	"identifier": "Start",
+	"identifier": "A",
 	"uid": 0,
 	"worldX": 0,
 	"worldY": 0,

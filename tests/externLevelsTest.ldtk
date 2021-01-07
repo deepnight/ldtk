@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.3",
+		"appVersion": "0.6.3-preview",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.6.3",
+	"jsonVersion": "0.6.3-preview",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
@@ -18,7 +18,7 @@
 	"minifyJson": false,
 	"externalLevels": true,
 	"exportTiled": false,
-	"worldLayout": "GridVania",
+	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 128,
 	"worldGridHeight": 128,
 	"defs": {
@@ -197,7 +197,7 @@
 	},
 	"levels": [
 		{
-			"identifier": "Start",
+			"identifier": "A",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 0,
@@ -205,33 +205,33 @@
 			"pxHei": 128,
 			"__bgColor": "#7F8093",
 			"bgColor": null,
-			"externalRelPath": "externLevelsTest/Start.ldtkl",
+			"externalRelPath": "externLevelsTest/A.ldtkl",
 			"layerInstances": null,
 			"__neighbours": null
 		},
 		{
-			"identifier": "Vertical",
+			"identifier": "B",
 			"uid": 10,
-			"worldX": 128,
+			"worldX": 160,
 			"worldY": 0,
 			"pxWid": 128,
 			"pxHei": 256,
 			"__bgColor": "#7F8093",
 			"bgColor": null,
-			"externalRelPath": "externLevelsTest/Vertical.ldtkl",
+			"externalRelPath": "externLevelsTest/B.ldtkl",
 			"layerInstances": null,
 			"__neighbours": null
 		},
 		{
-			"identifier": "Large",
+			"identifier": "C",
 			"uid": 11,
-			"worldX": 256,
+			"worldX": 320,
 			"worldY": 0,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#7F8093",
 			"bgColor": null,
-			"externalRelPath": "externLevelsTest/Large.ldtkl",
+			"externalRelPath": "externLevelsTest/C.ldtkl",
 			"layerInstances": null,
 			"__neighbours": null
 		}
