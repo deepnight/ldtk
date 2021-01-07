@@ -48,7 +48,7 @@ class Level {
 
 	public function toJson(includeData=true) : ldtk.Json.LevelJson {
 		// List nearby levels
-		var neighbours = !includeData ? null : switch _project.worldLayout {
+		var neighbours = switch _project.worldLayout {
 			case Free, GridVania:
 				var nears = _project.levels.filter( (ol)->
 					ol!=this && getBoundsDist(ol)==0
