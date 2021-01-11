@@ -23,7 +23,7 @@ For all other changes, please refer to the [JSON schema](https://ldtk.io/json). 
 
 # 0.4.0-beta
 
-The JSON format was optimized to reduce its size (should be approximately 40-50% smaller). See changes below, or check the [JSON_DOC.md](JSON_DOC.md).
+The JSON format was optimized to reduce its size (should be approximately 40-50% smaller). See changes below, or check the [JSON doc](https://ldtk.io/json).
 
 ## Auto-layer tiles
 
