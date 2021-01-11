@@ -1,4 +1,8 @@
-Please always refer to the [JSON schema](https://ldtk.io/json) for automatically updated Json format description (including version related changes).
+# Important
+
+This file ONLY presents **major** changes to the JSON format.
+
+For all other changes, please refer to the [JSON schema](https://ldtk.io/json). It's automatically updated, and *always* up-to-date.
 
 # 0.6.0-beta
 
