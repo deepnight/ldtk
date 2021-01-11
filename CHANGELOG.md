@@ -5,6 +5,7 @@
   When enabled, all the project **settings** and **definitions** will still be stored in the `*.ldtk` file, and all level data will now be saved to separate files (one per level) in a sub-folder, in `*.ldtkl` files (notice the extra `l` letter at the end of the extension).
 
   **Important note:** This feature might not be supported in all current existing APIs and loaders.
+- **HaxeFlixel**: the HaxeFlixel game framework has been added to the official [LDtk Haxe API](https://github.com/deepnight/ldtk-haxe-api). You can now easily load and display a LDtk project in your game.
 - The app home now shows a **list of recently opened folders** along with recently opened project files.
 - Added a **Json schema** file directly generated from source code. It's available on [LDtk.io/json](https://ldtk.io/json) and contains a schema following Draft 7 standard from [Json-schema.org](https://json-schema.org/). This file describes all fields from LDtk json files (value types and descriptions).
 - Minor UI tweaks
