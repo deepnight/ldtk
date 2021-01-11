@@ -3876,10 +3876,27 @@ body.sorting ul.collapsedSortTarget {
 		#worldForm {
 			display: none;
 			margin-top: -10px;
+			margin-bottom: 16px;
 			padding: 12px;
+			padding-bottom: 32px;
+
 			border: none;
+			border-bottom: 1px solid $bgLight;
+			border-bottom-left-radius: 3px;
+			border-bottom-right-radius: 3px;
+
 			background-color: $bgDark;
 			box-shadow: 0px 4px 16px black inset;
+
+			h3 {
+				color: $bgLighter;
+				border-color: $bgLighter;
+			}
+
+			>ul {
+				border: 0;
+				padding: 0;
+			}
 		}
 
 		ul.form>li>label {

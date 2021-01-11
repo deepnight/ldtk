@@ -121,7 +121,7 @@ class WorldPanel extends ui.modal.Panel {
 			return;
 		}
 
-		var jForm = jContent.find("ul#worldForm");
+		var jForm = jContent.find("#worldForm ul");
 		jForm.find("*").off();
 
 		for(k in ldtk.Json.WorldLayout.getConstructors())

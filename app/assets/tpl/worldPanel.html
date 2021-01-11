@@ -9,20 +9,32 @@
 	</button>
 </div>
 
-<ul class="form" id="worldForm">
-	<li>
-		<label for="color">World layout</label>
-		<select name="worldLayout"></select>
-		<div class="info">This setting will affect how all levels are be positioned in the "world".</div>
-	</li>
 
-	<li class="GridVania">
-		<label for="worldGridWidth">World grid</label>
-		<input type="text" id="worldGridWidth" name="worldGridWidth"/> <span>x</span>
-		<input type="text" id="worldGridHeight" name="worldGridHeight"/> <span>px</span>
-	</li>
-</ul>
+<!-- World settings -->
 
+<div id="worldForm">
+
+	<h3>World settings</h3>
+
+	<ul class="form">
+		<li>
+			<label for="color">World layout</label>
+			<select name="worldLayout"></select>
+			<div class="info">This setting will affect how all levels are be positioned in the "world".</div>
+		</li>
+
+		<li class="GridVania">
+			<label for="worldGridWidth">World grid</label>
+			<input type="text" id="worldGridWidth" name="worldGridWidth"/> <span>x</span>
+			<input type="text" id="worldGridHeight" name="worldGridHeight"/> <span>px</span>
+		</li>
+	</ul>
+
+</div>
+
+
+
+<!-- Current level -->
 
 <h3>Level <span class="levelIdentifier">???</span></h3>
 
@@ -59,6 +71,8 @@
 	</button>
 </div>
 
+
+<!-- Custom level fields -->
 
 <div class="customFields">
 	<em>Custom fields are not available yet :)</em>
