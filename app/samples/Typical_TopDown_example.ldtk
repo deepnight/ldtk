@@ -724,7 +724,7 @@
 					"seed": 5347079,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Text", "__grid": [12,1], "__tile": null, "defUid": 55, "px": [200,24], "fieldInstances": [
+						{ "__identifier": "Text", "__grid": [12,1], "__pivot": [0.5,0.5], "__tile": null, "defUid": 55, "px": [200,24], "fieldInstances": [
 							{
 								"__identifier": "text",
 								"__value": "Using combinations of \"Auto-Layers\" and classic \"Tile layers\", you can achieve great results quickly.",
@@ -745,7 +745,7 @@
 								"realEditorValues": [null]
 							}
 						] },
-						{ "__identifier": "Text", "__grid": [12,3], "__tile": null, "defUid": 55, "px": [200,56], "fieldInstances": [
+						{ "__identifier": "Text", "__grid": [12,3], "__pivot": [0.5,0.5], "__tile": null, "defUid": 55, "px": [200,56], "fieldInstances": [
 							{
 								"__identifier": "text",
 								"__value": "Press A to toggle [Single Layer Mode] and see what each layer contains.",

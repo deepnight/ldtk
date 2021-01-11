@@ -1079,7 +1079,7 @@
 					"autoLayerTiles": [],
 					"seed": 3895192,
 					"gridTiles": [],
-					"entityInstances": [{ "__identifier": "Label", "__grid": [18,3], "__tile": null, "defUid": 100, "px": [148,28], "fieldInstances": [
+					"entityInstances": [{ "__identifier": "Label", "__grid": [18,3], "__pivot": [0.5,0.5], "__tile": null, "defUid": 100, "px": [148,28], "fieldInstances": [
 						{
 							"__identifier": "Label",
 							"__value": "IntGrid layers can paint tiles automatically using simple RULE SETS.\nPress SHIFT+R to toggle auto-layer rendering\n\nClick on the RULES button on the left to see/edit rules.",

@@ -2666,7 +2666,7 @@
 					"autoLayerTiles": [],
 					"seed": 6291330,
 					"gridTiles": [],
-					"entityInstances": [{ "__identifier": "Tutorial", "__grid": [19,4], "__tile": null, "defUid": 87, "px": [152,32], "fieldInstances": [
+					"entityInstances": [{ "__identifier": "Tutorial", "__grid": [19,4], "__pivot": [0.5,0.5], "__tile": null, "defUid": 87, "px": [152,32], "fieldInstances": [
 						{
 							"__identifier": "text",
 							"__value": "Rules can be used to render various biome elements, such as Dirt, Water or Lava.\n\nPress SHIFT+R to toggle auto-layers rendering",

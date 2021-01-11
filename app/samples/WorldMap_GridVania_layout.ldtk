@@ -623,7 +623,7 @@
 					"seed": 8696599,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Item", "__grid": [27,8], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [440,144], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [27,8], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [440,144], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Gold",
 							"__type": "LocalEnum.ItemType",
@@ -633,7 +633,7 @@
 								"params": ["Gold"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [3,6], "__tile": { "tilesetUid": 73, "srcRect": [64,656,16,16] }, "defUid": 72, "px": [56,112], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [3,6], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [64,656,16,16] }, "defUid": 72, "px": [56,112], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Healing_potion",
 							"__type": "LocalEnum.ItemType",
@@ -3759,7 +3759,7 @@
 					"seed": 6779321,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Item", "__grid": [21,25], "__tile": { "tilesetUid": 73, "srcRect": [144,64,16,16] }, "defUid": 72, "px": [344,416], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [21,25], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [144,64,16,16] }, "defUid": 72, "px": [344,416], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Armor",
 							"__type": "LocalEnum.ItemType",
@@ -3769,7 +3769,7 @@
 								"params": ["Armor"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [19,25], "__tile": { "tilesetUid": 73, "srcRect": [32,1712,16,16] }, "defUid": 72, "px": [312,416], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [19,25], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [32,1712,16,16] }, "defUid": 72, "px": [312,416], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Fire_blade",
 							"__type": "LocalEnum.ItemType",
@@ -5751,7 +5751,7 @@
 					"seed": 1452875,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Item", "__grid": [17,25], "__tile": { "tilesetUid": 73, "srcRect": [160,432,16,16] }, "defUid": 72, "px": [280,416], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [17,25], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [160,432,16,16] }, "defUid": 72, "px": [280,416], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Green_gem",
 							"__type": "LocalEnum.ItemType",
@@ -5761,7 +5761,7 @@
 								"params": ["Green_gem"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [24,25], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [392,416], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [24,25], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [392,416], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Gold",
 							"__type": "LocalEnum.ItemType",
@@ -5771,7 +5771,7 @@
 								"params": ["Gold"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [21,25], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [344,416], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [21,25], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [344,416], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Gold",
 							"__type": "LocalEnum.ItemType",
@@ -5781,7 +5781,7 @@
 								"params": ["Gold"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [5,10], "__tile": { "tilesetUid": 73, "srcRect": [128,288,16,16] }, "defUid": 72, "px": [88,176], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [5,10], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [128,288,16,16] }, "defUid": 72, "px": [88,176], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Meat",
 							"__type": "LocalEnum.ItemType",
@@ -5791,7 +5791,7 @@
 								"params": ["Meat"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [14,10], "__tile": { "tilesetUid": 73, "srcRect": [224,976,16,16] }, "defUid": 72, "px": [232,176], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [14,10], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [224,976,16,16] }, "defUid": 72, "px": [232,176], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Spell",
 							"__type": "LocalEnum.ItemType",
@@ -7825,7 +7825,7 @@
 					"autoLayerTiles": [],
 					"seed": 1070610,
 					"gridTiles": [],
-					"entityInstances": [{ "__identifier": "Item", "__grid": [17,15], "__tile": { "tilesetUid": 73, "srcRect": [48,1456,16,16] }, "defUid": 72, "px": [280,256], "fieldInstances": [{
+					"entityInstances": [{ "__identifier": "Item", "__grid": [17,15], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [48,1456,16,16] }, "defUid": 72, "px": [280,256], "fieldInstances": [{
 						"__identifier": "type",
 						"__value": "Ammo",
 						"__type": "LocalEnum.ItemType",
@@ -9921,7 +9921,7 @@
 					"seed": 5961450,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Item", "__grid": [7,27], "__tile": { "tilesetUid": 73, "srcRect": [16,1584,16,16] }, "defUid": 72, "px": [120,448], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [7,27], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [16,1584,16,16] }, "defUid": 72, "px": [120,448], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Vorpal_blade",
 							"__type": "LocalEnum.ItemType",
@@ -9931,7 +9931,7 @@
 								"params": ["Vorpal_blade"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [10,27], "__tile": { "tilesetUid": 73, "srcRect": [144,64,16,16] }, "defUid": 72, "px": [168,448], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [10,27], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [144,64,16,16] }, "defUid": 72, "px": [168,448], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Armor",
 							"__type": "LocalEnum.ItemType",
@@ -14553,7 +14553,7 @@
 					"autoLayerTiles": [],
 					"seed": 9474576,
 					"gridTiles": [],
-					"entityInstances": [{ "__identifier": "Item", "__grid": [9,7], "__tile": { "tilesetUid": 73, "srcRect": [64,656,16,16] }, "defUid": 72, "px": [152,128], "fieldInstances": [{
+					"entityInstances": [{ "__identifier": "Item", "__grid": [9,7], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [64,656,16,16] }, "defUid": 72, "px": [152,128], "fieldInstances": [{
 						"__identifier": "type",
 						"__value": "Healing_potion",
 						"__type": "LocalEnum.ItemType",
@@ -20567,7 +20567,7 @@
 					"seed": 5459671,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Item", "__grid": [6,44], "__tile": { "tilesetUid": 73, "srcRect": [32,1712,16,16] }, "defUid": 72, "px": [104,720], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [6,44], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [32,1712,16,16] }, "defUid": 72, "px": [104,720], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Fire_blade",
 							"__type": "LocalEnum.ItemType",
@@ -20577,7 +20577,7 @@
 								"params": ["Fire_blade"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [9,44], "__tile": { "tilesetUid": 73, "srcRect": [16,1584,16,16] }, "defUid": 72, "px": [152,720], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [9,44], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [16,1584,16,16] }, "defUid": 72, "px": [152,720], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Vorpal_blade",
 							"__type": "LocalEnum.ItemType",
@@ -20587,7 +20587,7 @@
 								"params": ["Vorpal_blade"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [12,44], "__tile": { "tilesetUid": 73, "srcRect": [224,976,16,16] }, "defUid": 72, "px": [200,720], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [12,44], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [224,976,16,16] }, "defUid": 72, "px": [200,720], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Spell",
 							"__type": "LocalEnum.ItemType",
@@ -22106,7 +22106,7 @@
 					"seed": 3097303,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Item", "__grid": [16,15], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [264,256], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [16,15], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [264,256], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Gold",
 							"__type": "LocalEnum.ItemType",
@@ -22116,7 +22116,7 @@
 								"params": ["Gold"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [23,28], "__tile": { "tilesetUid": 73, "srcRect": [192,432,16,16] }, "defUid": 72, "px": [376,464], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [23,28], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [192,432,16,16] }, "defUid": 72, "px": [376,464], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Gem",
 							"__type": "LocalEnum.ItemType",
@@ -22126,7 +22126,7 @@
 								"params": ["Gem"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [3,15], "__tile": { "tilesetUid": 73, "srcRect": [64,656,16,16] }, "defUid": 72, "px": [56,256], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [3,15], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [64,656,16,16] }, "defUid": 72, "px": [56,256], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Healing_potion",
 							"__type": "LocalEnum.ItemType",
@@ -24348,7 +24348,7 @@
 					"seed": 8145397,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Item", "__grid": [14,27], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [232,448], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [14,27], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [232,448], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Gold",
 							"__type": "LocalEnum.ItemType",
@@ -24358,7 +24358,7 @@
 								"params": ["Gold"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [25,27], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [408,448], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [25,27], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [408,448], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Gold",
 							"__type": "LocalEnum.ItemType",
@@ -24368,7 +24368,7 @@
 								"params": ["Gold"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [19,27], "__tile": { "tilesetUid": 73, "srcRect": [160,432,16,16] }, "defUid": 72, "px": [312,448], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [19,27], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [160,432,16,16] }, "defUid": 72, "px": [312,448], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Green_gem",
 							"__type": "LocalEnum.ItemType",
@@ -24378,7 +24378,7 @@
 								"params": ["Green_gem"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [7,25], "__tile": { "tilesetUid": 73, "srcRect": [192,432,16,16] }, "defUid": 72, "px": [120,416], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [7,25], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [192,432,16,16] }, "defUid": 72, "px": [120,416], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Gem",
 							"__type": "LocalEnum.ItemType",
@@ -24388,7 +24388,7 @@
 								"params": ["Gem"]
 							}]
 						}] },
-						{ "__identifier": "Item", "__grid": [23,27], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [376,448], "fieldInstances": [{
+						{ "__identifier": "Item", "__grid": [23,27], "__pivot": [0.5,1], "__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] }, "defUid": 72, "px": [376,448], "fieldInstances": [{
 							"__identifier": "type",
 							"__value": "Gold",
 							"__type": "LocalEnum.ItemType",

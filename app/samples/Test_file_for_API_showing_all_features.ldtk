@@ -712,7 +712,7 @@
 					"seed": 7679736,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Labels", "__grid": [5,5], "__tile": null, "defUid": 10, "px": [88,88], "fieldInstances": [
+						{ "__identifier": "Labels", "__grid": [5,5], "__pivot": [0.5,0.5], "__tile": null, "defUid": 10, "px": [88,88], "fieldInstances": [
 							{
 								"__identifier": "text",
 								"__value": "IntGrid (classic)",
@@ -725,7 +725,7 @@
 							},
 							{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Labels", "__grid": [14,5], "__tile": null, "defUid": 10, "px": [232,88], "fieldInstances": [
+						{ "__identifier": "Labels", "__grid": [14,5], "__pivot": [0.5,0.5], "__tile": null, "defUid": 10, "px": [232,88], "fieldInstances": [
 							{
 								"__identifier": "text",
 								"__value": "IntGrid (with rules)",
@@ -738,7 +738,7 @@
 							},
 							{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Labels", "__grid": [29,5], "__tile": null, "defUid": 10, "px": [472,88], "fieldInstances": [
+						{ "__identifier": "Labels", "__grid": [29,5], "__pivot": [0.5,0.5], "__tile": null, "defUid": 10, "px": [472,88], "fieldInstances": [
 							{
 								"__identifier": "text",
 								"__value": "Tiles",
@@ -751,7 +751,7 @@
 							},
 							{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Test", "__grid": [6,21], "__tile": null, "defUid": 15, "px": [104,344], "fieldInstances": [
+						{ "__identifier": "Test", "__grid": [6,21], "__pivot": [0.5,0.5], "__tile": null, "defUid": 15, "px": [104,344], "fieldInstances": [
 							{
 								"__identifier": "Integer",
 								"__value": 1,
@@ -866,7 +866,7 @@
 								} ]
 							}
 						] },
-						{ "__identifier": "Labels", "__grid": [6,16], "__tile": null, "defUid": 10, "px": [104,264], "fieldInstances": [
+						{ "__identifier": "Labels", "__grid": [6,16], "__pivot": [0.5,0.5], "__tile": null, "defUid": 10, "px": [104,264], "fieldInstances": [
 							{
 								"__identifier": "text",
 								"__value": "Entity fields",
@@ -879,7 +879,7 @@
 							},
 							{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Labels", "__grid": [21,5], "__tile": null, "defUid": 10, "px": [344,88], "fieldInstances": [
+						{ "__identifier": "Labels", "__grid": [21,5], "__pivot": [0.5,0.5], "__tile": null, "defUid": 10, "px": [344,88], "fieldInstances": [
 							{
 								"__identifier": "text",
 								"__value": "PureAutoLayers",
@@ -892,7 +892,7 @@
 							},
 							{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Labels", "__grid": [21,6], "__tile": null, "defUid": 10, "px": [344,104], "fieldInstances": [
+						{ "__identifier": "Labels", "__grid": [21,6], "__pivot": [0.5,0.5], "__tile": null, "defUid": 10, "px": [344,104], "fieldInstances": [
 							{
 								"__identifier": "text",
 								"__value": "(based on IntGrid_classic)",
@@ -911,7 +911,7 @@
 								"realEditorValues": [{ "id": "V_Int", "params": [7439025] }]
 							}
 						] },
-						{ "__identifier": "Labels", "__grid": [20,2], "__tile": null, "defUid": 10, "px": [328,40], "fieldInstances": [
+						{ "__identifier": "Labels", "__grid": [20,2], "__pivot": [0.5,0.5], "__tile": null, "defUid": 10, "px": [328,40], "fieldInstances": [
 							{
 								"__identifier": "text",
 								"__value": "This file can be used to check if an API supports LDtk file format properly. \n\nIt takes advantage of all important LDtk features.",
@@ -932,7 +932,7 @@
 								"realEditorValues": [{ "id": "V_Int", "params": [16763904] }]
 							}
 						] },
-						{ "__identifier": "Labels", "__grid": [37,5], "__tile": null, "defUid": 10, "px": [600,88], "fieldInstances": [
+						{ "__identifier": "Labels", "__grid": [37,5], "__pivot": [0.5,0.5], "__tile": null, "defUid": 10, "px": [600,88], "fieldInstances": [
 							{
 								"__identifier": "text",
 								"__value": "IntGrid with a 8px grid size",
@@ -1318,7 +1318,7 @@
 					"autoLayerTiles": [],
 					"seed": 8894473,
 					"gridTiles": [],
-					"entityInstances": [{ "__identifier": "Test", "__grid": [7,7], "__tile": null, "defUid": 15, "px": [120,120], "fieldInstances": [
+					"entityInstances": [{ "__identifier": "Test", "__grid": [7,7], "__pivot": [0.5,0.5], "__tile": null, "defUid": 15, "px": [120,120], "fieldInstances": [
 						{
 							"__identifier": "Integer",
 							"__value": 2,

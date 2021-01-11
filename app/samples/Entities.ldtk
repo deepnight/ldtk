@@ -581,7 +581,7 @@
 					"seed": 3776513,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Chest", "__grid": [31,19], "__tile": { "tilesetUid": 20, "srcRect": [16,80,16,16] }, "defUid": 8, "px": [504,320], "fieldInstances": [
+						{ "__identifier": "Chest", "__grid": [31,19], "__pivot": [0.5,1], "__tile": { "tilesetUid": 20, "srcRect": [16,80,16,16] }, "defUid": 8, "px": [504,320], "fieldInstances": [
 							{
 								"__identifier": "loot",
 								"__value": [ "Sword", "Heavy sword", "Bow" ],
@@ -609,7 +609,7 @@
 								}]
 							}
 						] },
-						{ "__identifier": "LightEmitter", "__grid": [11,7], "__tile": { "tilesetUid": 20, "srcRect": [112,64,16,16] }, "defUid": 10, "px": [184,112], "fieldInstances": [
+						{ "__identifier": "LightEmitter", "__grid": [11,7], "__pivot": [0.5,0], "__tile": { "tilesetUid": 20, "srcRect": [112,64,16,16] }, "defUid": 10, "px": [184,112], "fieldInstances": [
 							{
 								"__identifier": "flickering",
 								"__value": false,
@@ -632,7 +632,7 @@
 								"realEditorValues": [{ "id": "V_Float", "params": [4] }]
 							}
 						] },
-						{ "__identifier": "LightEmitter", "__grid": [6,7], "__tile": { "tilesetUid": 20, "srcRect": [112,64,16,16] }, "defUid": 10, "px": [104,112], "fieldInstances": [
+						{ "__identifier": "LightEmitter", "__grid": [6,7], "__pivot": [0.5,0], "__tile": { "tilesetUid": 20, "srcRect": [112,64,16,16] }, "defUid": 10, "px": [104,112], "fieldInstances": [
 							{
 								"__identifier": "flickering",
 								"__value": false,
@@ -655,7 +655,7 @@
 								"realEditorValues": [null]
 							}
 						] },
-						{ "__identifier": "LightEmitter", "__grid": [21,7], "__tile": { "tilesetUid": 20, "srcRect": [112,64,16,16] }, "defUid": 10, "px": [344,112], "fieldInstances": [
+						{ "__identifier": "LightEmitter", "__grid": [21,7], "__pivot": [0.5,0], "__tile": { "tilesetUid": 20, "srcRect": [112,64,16,16] }, "defUid": 10, "px": [344,112], "fieldInstances": [
 							{
 								"__identifier": "flickering",
 								"__value": true,
@@ -681,7 +681,7 @@
 								"realEditorValues": [{ "id": "V_Float", "params": [2.5] }]
 							}
 						] },
-						{ "__identifier": "Player", "__grid": [3,17], "__tile": { "tilesetUid": 47, "srcRect": [192,480,32,32] }, "defUid": 1, "px": [56,288], "fieldInstances": [
+						{ "__identifier": "Player", "__grid": [3,17], "__pivot": [0.5,1], "__tile": { "tilesetUid": 47, "srcRect": [192,480,32,32] }, "defUid": 1, "px": [56,288], "fieldInstances": [
 							{
 								"__identifier": "life",
 								"__value": 3,
@@ -720,7 +720,7 @@
 								}]
 							}
 						] },
-						{ "__identifier": "Chest", "__grid": [27,9], "__tile": { "tilesetUid": 20, "srcRect": [16,80,16,16] }, "defUid": 8, "px": [440,160], "fieldInstances": [
+						{ "__identifier": "Chest", "__grid": [27,9], "__pivot": [0.5,1], "__tile": { "tilesetUid": 20, "srcRect": [16,80,16,16] }, "defUid": 8, "px": [440,160], "fieldInstances": [
 							{
 								"__identifier": "loot",
 								"__value": [ "Bow", "Arrow" ],
@@ -742,7 +742,7 @@
 								"realEditorValues": [null]
 							}
 						] },
-						{ "__identifier": "Enemy", "__grid": [3,11], "__tile": { "tilesetUid": 47, "srcRect": [128,320,32,32] }, "defUid": 37, "px": [56,192], "fieldInstances": [
+						{ "__identifier": "Enemy", "__grid": [3,11], "__pivot": [0.5,1], "__tile": { "tilesetUid": 47, "srcRect": [128,320,32,32] }, "defUid": 37, "px": [56,192], "fieldInstances": [
 							{
 								"__identifier": "patrol",
 								"__value": [
@@ -808,7 +808,7 @@
 								}]
 							}
 						] },
-						{ "__identifier": "Door", "__grid": [22,17], "__tile": null, "defUid": 43, "px": [360,288], "fieldInstances": [{
+						{ "__identifier": "Door", "__grid": [22,17], "__pivot": [0.5,1], "__tile": null, "defUid": 43, "px": [360,288], "fieldInstances": [{
 							"__identifier": "locked",
 							"__value": true,
 							"__type": "Bool",
@@ -818,7 +818,7 @@
 								"params": [ true ]
 							}]
 						}] },
-						{ "__identifier": "Door", "__grid": [16,11], "__tile": null, "defUid": 43, "px": [264,192], "fieldInstances": [{
+						{ "__identifier": "Door", "__grid": [16,11], "__pivot": [0.5,1], "__tile": null, "defUid": 43, "px": [264,192], "fieldInstances": [{
 							"__identifier": "locked",
 							"__value": true,
 							"__type": "Bool",
@@ -828,7 +828,7 @@
 								"params": [ true ]
 							}]
 						}] },
-						{ "__identifier": "Button", "__grid": [30,12], "__tile": null, "defUid": 41, "px": [488,200], "fieldInstances": [{
+						{ "__identifier": "Button", "__grid": [30,12], "__pivot": [0.5,0.5], "__tile": null, "defUid": 41, "px": [488,200], "fieldInstances": [{
 							"__identifier": "activationTargets",
 							"__value": [ { "cx": 16, "cy": 11 }, { "cx": 22, "cy": 17 } ],
 							"__type": "Array<Point>",
@@ -841,7 +841,7 @@
 								"params": ["22,17"]
 							} ]
 						}] },
-						{ "__identifier": "Enemy", "__grid": [20,17], "__tile": { "tilesetUid": 47, "srcRect": [192,64,32,32] }, "defUid": 37, "px": [328,288], "fieldInstances": [
+						{ "__identifier": "Enemy", "__grid": [20,17], "__pivot": [0.5,1], "__tile": { "tilesetUid": 47, "srcRect": [192,64,32,32] }, "defUid": 37, "px": [328,288], "fieldInstances": [
 							{
 								"__identifier": "patrol",
 								"__value": [{ "cx": 9, "cy": 17 }],
@@ -871,7 +871,7 @@
 								}]
 							}
 						] },
-						{ "__identifier": "Enemy", "__grid": [27,19], "__tile": { "tilesetUid": 47, "srcRect": [192,224,32,32] }, "defUid": 37, "px": [440,320], "fieldInstances": [
+						{ "__identifier": "Enemy", "__grid": [27,19], "__pivot": [0.5,1], "__tile": { "tilesetUid": 47, "srcRect": [192,224,32,32] }, "defUid": 37, "px": [440,320], "fieldInstances": [
 							{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "defUid": 38, "realEditorValues": [] },
 							{
 								"__identifier": "loots",
@@ -895,8 +895,8 @@
 								}]
 							}
 						] },
-						{ "__identifier": "Door", "__grid": [7,17], "__tile": null, "defUid": 43, "px": [120,288], "fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 50, "realEditorValues": [] }] },
-						{ "__identifier": "Tutorial", "__grid": [17,2], "__tile": null, "defUid": 56, "px": [280,40], "fieldInstances": [
+						{ "__identifier": "Door", "__grid": [7,17], "__pivot": [0.5,1], "__tile": null, "defUid": 43, "px": [120,288], "fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 50, "realEditorValues": [] }] },
+						{ "__identifier": "Tutorial", "__grid": [17,2], "__pivot": [0.5,0.5], "__tile": null, "defUid": 56, "px": [280,40], "fieldInstances": [
 							{
 								"__identifier": "desc",
 								"__value": "Entities can be used to represent any gameplay element, such as player, enemies, items etc.\n\nThey can have many kind of customizable properties, including arrays, enums or coordinates.",

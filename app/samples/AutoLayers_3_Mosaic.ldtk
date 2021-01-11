@@ -515,7 +515,7 @@
 					"autoLayerTiles": [],
 					"seed": 8053731,
 					"gridTiles": [],
-					"entityInstances": [{ "__identifier": "Tutorial", "__grid": [9,2], "__tile": null, "defUid": 46, "px": [152,40], "fieldInstances": [
+					"entityInstances": [{ "__identifier": "Tutorial", "__grid": [9,2], "__pivot": [0.5,0.5], "__tile": null, "defUid": 46, "px": [152,40], "fieldInstances": [
 						{
 							"__identifier": "desc",
 							"__value": "This example demonstrates the use of rules to create complex but dynamic mosaics.",
