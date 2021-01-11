@@ -143,13 +143,11 @@ class Rulers extends dn.Process {
 		addLabel(editor.curLevel.identifier, Top, 2, PADDING, 0xffcc00);
 
 
-		// Corners
-		if( curLayerInstance!=null ) {
-			g.lineStyle(0);
-			g.beginFill(c);
-			for(p in draggables)
-				g.drawCircle( getX(p), getY(p), HANDLE_SIZE*0.5);
-		}
+		// Resizing drags
+		g.lineStyle(0);
+		g.beginFill(c);
+		for(p in draggables)
+			g.drawCircle( getX(p), getY(p), HANDLE_SIZE*0.5);
 	}
 
 	function addLabel(str:String, pos:RulerPos, scale=1.0, extraPadding=0, ?color:UInt) {
@@ -224,12 +222,11 @@ class Rulers extends dn.Process {
 	}
 
 	function canUseResizers() {
-		return curLayerInstance!=null
-			&& !App.ME.isKeyDown(K.SPACE) && !App.ME.hasAnyToggleKeyDown();
+		return !App.ME.isKeyDown(K.SPACE) && !App.ME.hasAnyToggleKeyDown();
 	}
 
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
-		if( curLayerInstance==null || ev.cancel )
+		if( ev.cancel )
 			return;
 
 		// Cursor
@@ -257,8 +254,12 @@ class Rulers extends dn.Process {
 		}
 	}
 
+	inline function getResizeGrid() {
+		return curLayerInstance==null ? Editor.ME.project.defaultGridSize : curLayerInstance.def.gridSize;
+	}
+
 	function resizeBoundsValid(b) {
-		var min = curLayerInstance.def.gridSize * 2;
+		var min = getResizeGrid() * 2;
 		return b.newRight>b.newLeft+min && b.newBottom>b.newTop+min;
 	}
 
@@ -266,7 +267,7 @@ class Rulers extends dn.Process {
 		if( draggedPos==null )
 			return null;
 
-		var grid = curLayerInstance.def.gridSize;
+		var grid = getResizeGrid();
 		var b = {
 			newLeft :
 				switch draggedPos {
