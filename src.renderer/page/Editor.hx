@@ -331,6 +331,10 @@ class Editor extends Page {
 					levelRender.invalidateAll();
 				});
 
+			case LoadingFailed(err):
+				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
+				new ui.modal.dialog.Warning( Lang.t._("Couldn't read the file ::name:: (error: ::err::)!", { name:name, err:err } ) );
+
 			case RemapLoss:
 				changed = true;
 				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;

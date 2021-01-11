@@ -170,9 +170,16 @@ class TilesetDef {
 			return false;
 		}
 
+		// Optional previous image infos
+		var oldRelPath = relPath;
+		var oldWid = pxWid;
+		var oldHei = pxHei;
+
+		// Init
 		var newPath = dn.FilePath.fromFile( relFilePath ).useSlashes();
 		relPath = newPath.full;
 
+		// Load image
 		try {
 			var fullFp = newPath.hasDriveLetter() ? newPath : dn.FilePath.fromFile( projectDir +"/"+ relFilePath );
 			var fullPath = fullFp.full;
@@ -196,6 +203,7 @@ class TilesetDef {
 			return false;
 		}
 
+		// Init using image infos
 		pxWid = pixels.width;
 		pxHei = pixels.height;
 		tileGridSize = dn.M.imin( tileGridSize, getMaxTileGridSize() );
@@ -205,7 +213,8 @@ class TilesetDef {
 		return true;
 	}
 
-	public inline function reloadImage(projectDir:String) : EditorTypes.ImageSyncResult {
+
+	public inline function reloadImage(projectDir:String) : EditorTypes.AtlasLoadingResult {
 		var oldWid = pxWid;
 		var oldHei = pxHei;
 		App.LOG.fileOp("Reloading tileset image "+relPath);
@@ -241,16 +250,9 @@ class TilesetDef {
 					i++;
 				}
 			}
-			// for( tileInf in li.gridTiles.get(coordId) ) {
-			// 	var remap = remapTileId( oldCwid, tileInf.tileId );
-			// 	if( remap==null )
-			// 		li.gridTiles.remove(coordId);
-			// 	else
-			// 		tileInf.tileId = remap;
-			// }
 		}
 
-		// Save selections remapping
+		// Saved selections remapping
 		for(sel in savedSelections) {
 			var i = 0;
 			while( i<sel.ids.length ) {
@@ -290,6 +292,8 @@ class TilesetDef {
 		else
 			return RemapSuccessful;
 	}
+
+
 
 	inline function remapTileId(oldCwid:Int, oldTileCoordId:Null<Int>) : Null<Int> {
 		if( oldTileCoordId==null )

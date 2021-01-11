@@ -155,9 +155,10 @@ enum SyncOp {
 	DateUpdated;
 }
 
-enum ImageSyncResult {
+enum AtlasLoadingResult {
 	Ok;
 	FileNotFound;
+	LoadingFailed(err:String);
 	TrimmedPadding;
 	RemapLoss;
 	RemapSuccessful;
