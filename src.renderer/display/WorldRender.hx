@@ -181,7 +181,7 @@ class WorldRender extends dn.Process {
 	}
 
 	function updateLabels() {
-		var minZoom = 0.25;
+		var minZoom = 0.1;
 		for( l in editor.project.levels ) {
 			if( !levels.exists(l.uid) )
 				continue;
@@ -192,10 +192,22 @@ class WorldRender extends dn.Process {
 				continue;
 
 			var scale = camera.pixelRatio>1 ? ( 1.5 * camera.pixelRatio ) : 1;
-			e.label.alpha = M.fmin( (camera.adjustedZoom-minZoom)/0.2, 1 );
+			e.label.alpha = M.fmin( (camera.adjustedZoom-minZoom)/minZoom, 1 );
 			e.label.setScale( scale / camera.adjustedZoom);
-			e.label.x = Std.int( l.worldX + l.pxWid*0.5 - e.label.width*e.label.scaleX*0.5 );
-			e.label.y = Std.int( l.worldY + l.pxHei*0.5 - e.label.height*e.label.scaleY*0.5 );
+			switch project.worldLayout {
+				case Free, GridVania:
+					e.label.x = Std.int( l.worldX + l.pxWid*0.5 - e.label.width*e.label.scaleX*0.5 );
+					e.label.y = Std.int( l.worldY + l.pxHei*0.5 - e.label.height*e.label.scaleY*0.5 );
+
+				case LinearHorizontal:
+					e.label.x = Std.int( l.worldX + l.pxWid*0.5 - e.label.width*e.label.scaleX*0.5 );
+					e.label.y = Std.int( l.worldY - e.label.height*e.label.scaleY );
+
+				case LinearVertical:
+					e.label.scale(1.5);
+					e.label.x = Std.int( l.worldX - e.label.width*e.label.scaleX - 30 );
+					e.label.y = Std.int( l.worldY + l.pxHei*0.5 - e.label.height*e.label.scaleY*0.5 );
+			}
 			e.label.color.setColor( C.addAlphaF( C.toBlack( l.getBgColor(), 0.15 ) ) );
 		}
 	}
