@@ -97,23 +97,23 @@ class Const {
 	}
 
 	static macro function getAppChangelogMarkdown() {
-		haxe.macro.Context.registerModuleDependency("Const","CHANGELOG.md");
-		return macro $v{ sys.io.File.getContent("CHANGELOG.md") };
+		haxe.macro.Context.registerModuleDependency("Const","docs/CHANGELOG.md");
+		return macro $v{ sys.io.File.getContent("docs/CHANGELOG.md") };
 	}
 
 	static macro function getJsonChangelogMarkdown() {
-		haxe.macro.Context.registerModuleDependency("Const","JSON_CHANGELOG.md");
-		return macro $v{ sys.io.File.getContent("JSON_CHANGELOG.md") };
+		haxe.macro.Context.registerModuleDependency("Const","docs/JSON_CHANGELOG.md");
+		return macro $v{ sys.io.File.getContent("docs/JSON_CHANGELOG.md") };
 	}
 
 	static macro function getJsonFormatMarkdown() {
-		haxe.macro.Context.registerModuleDependency("Const","JSON_DOC.md");
-		return macro $v{ sys.io.File.getContent("JSON_DOC.md") };
+		haxe.macro.Context.registerModuleDependency("Const","docs/JSON_DOC.md");
+		return macro $v{ sys.io.File.getContent("docs/JSON_DOC.md") };
 	}
 
 	static macro function buildLatestReleaseNotes() {
 		// App latest changelog
-		var raw = sys.io.File.getContent("CHANGELOG.md");
+		var raw = sys.io.File.getContent("docs/CHANGELOG.md");
 		var appCL = new dn.Changelog(raw);
 		var relNotes = [
 			"# " + appCL.latest.version.full + ( appCL.latest.title!=null ? " -- *"+appCL.latest.title+"*" : "" ),
@@ -122,7 +122,7 @@ class Const {
 		].concat( appCL.latest.allNoteLines );
 
 		// Json corresponding changelog
-		var raw = sys.io.File.getContent("JSON_CHANGELOG.md");
+		var raw = sys.io.File.getContent("docs/JSON_CHANGELOG.md");
 		var jsonCL = new dn.Changelog(raw);
 		if( jsonCL.latest.version.isEqual(appCL.latest.version) ) {
 			relNotes.push('## Json format changes');

@@ -1,5 +1,5 @@
--cp src.main
--cp src.externs
+-cp src/electron.main
+-cp src/externs
 
 -lib deepnightLibs
 -lib electron
