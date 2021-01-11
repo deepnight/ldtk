@@ -155,8 +155,11 @@ class Home extends Page {
 	}
 	#end
 
+
+
 	function updateRecents() {
 		ui.Tip.clear();
+		var uniqueColorMix = 0x6066d3;
 
 		var recents = App.ME.settings.recentProjects.copy();
 
@@ -222,9 +225,11 @@ class Home extends Page {
 		// List files
 		var jRecentFiles = jPage.find("ul.recentFiles");
 		jRecentFiles.empty();
+		if( recents.length>0 )
+			jRecentFiles.append('<li class="title">Recent projects</li>');
 
 		var i = recents.length-1;
-		C.initUniqueColors();
+		C.initUniqueColors(12, uniqueColorMix);
 		while( i>=0 ) {
 			var filePath = recents[i];
 			var isCrashFile = filePath.indexOf( Const.CRASH_NAME_SUFFIX )>=0;
@@ -298,14 +303,14 @@ class Home extends Page {
 		}
 
 
-		// Trim common parts
+		// Trim common parts in dirs
 		var dirs = App.ME.settings.recentDirs.map( dir->dn.FilePath.fromDir(dir) );
 		dirs.reverse();
 		var trim = 0;
 		var same = true;
 		while( same && dirs.length>1 ) {
 			for(i in 1...dirs.length) {
-				if( dirs[0].directory.charAt(trim) != dirs[i].directory.charAt(trim) ) {
+				if( dirs[0].full.charAt(trim) != dirs[i].full.charAt(trim) ) {
 					same = false;
 					break;
 				}
@@ -313,11 +318,16 @@ class Home extends Page {
 			if( same )
 				trim++;
 		}
+		if( dirs.length==1 && dirs[0].directory!=null )
+			trim = dirs[0].full.lastIndexOf( dirs[0].slash() )+1;
+
 
 		// List dirs
 		var jRecentDirs = jPage.find("ul.recentDirs");
 		jRecentDirs.empty();
-		C.initUniqueColors();
+		if( dirs.length>0 )
+			jRecentDirs.append('<li class="title">Recent folders</li>');
+		C.initUniqueColors(12, uniqueColorMix);
 		for(fp in dirs) {
 			var li = new J('<li/>');
 			li.appendTo(jRecentDirs);
@@ -325,7 +335,12 @@ class Home extends Page {
 			if( !JsTools.fileExists(fp.directory) )
 				li.addClass("missing");
 
-			li.append( JsTools.makePath( fp.directory.substr(trim) ) );
+			if( App.ME.isInAppDir(fp.full,true) )
+				li.addClass("sample");
+
+			var shortFp = dn.FilePath.fromDir( fp.directory.substr(trim) );
+			var col = C.toWhite( C.pickUniqueColorFor( shortFp.getDirectoryArray()[0] ), 0.3 );
+			li.append( JsTools.makePath( shortFp.full, col ) );
 			li.click( (_)->{
 				if( JsTools.fileExists(fp.directory) )
 					onLoad(fp.directory);

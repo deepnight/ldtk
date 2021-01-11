@@ -333,7 +333,7 @@ class App extends dn.Process {
 			var i = settings.recentProjects.length-1;
 			while( i>=0 ) {
 				var fp = dn.FilePath.fromFile( settings.recentProjects[i] );
-				if( !dones.exists(fp.directory) ) {
+				if( !isInAppDir(fp.full,true) && !dones.exists(fp.directory) ) {
 					dones.set(fp.directory, true);
 					settings.recentDirs.insert(0, fp.directory);
 				}
@@ -368,7 +368,7 @@ class App extends dn.Process {
 	}
 
 	public function registerRecentDir(dir:String) {
-		if( dir==null )
+		if( dir==null || isInAppDir(dir,false) )
 			return;
 		dir = StringTools.replace(dir, "\\", "/");
 		settings.recentDirs.remove(dir);
@@ -448,6 +448,7 @@ class App extends dn.Process {
 		curPageProcess = create();
 		curPageProcess.onAppResize();
 	}
+
 
 	public function loadProject(filePath:String) {
 		loadingLog.clear();
