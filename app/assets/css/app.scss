@@ -3873,6 +3873,15 @@ body.sorting ul.collapsedSortTarget {
 		height: 100%;
 		width: $mainPanelNormalWid;
 
+		#worldForm {
+			display: none;
+			margin-top: -10px;
+			padding: 12px;
+			border: none;
+			background-color: $bgDark;
+			box-shadow: 0px 4px 16px black inset;
+		}
+
 		ul.form>li>label {
 			flex: 0 0 100%;
 			padding: 0;
@@ -3897,6 +3906,10 @@ body.sorting ul.collapsedSortTarget {
 				color: black;
 				background-color: $orange;
 			}
+		}
+
+		button {
+			white-space: nowrap;
 		}
 
 		button:not(.running) span.running {

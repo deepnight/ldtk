@@ -60,6 +60,10 @@ class WorldPanel extends ui.modal.Panel {
 			editor.ge.emit( LevelAdded(copy) );
 		});
 
+		jContent.find("button.worldSettings").click( (_)->{
+			jContent.find("#worldForm").slideToggle(100);
+		});
+
 		updateWorldForm();
 		updateLevelForm();
 	}
