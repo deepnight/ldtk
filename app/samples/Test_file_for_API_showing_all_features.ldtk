@@ -14,7 +14,7 @@
 	"defaultGridSize": 16,
 	"bgColor": "#373852",
 	"defaultLevelBgColor": "#373852",
-	"nextUid": 35,
+	"nextUid": 36,
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
@@ -480,6 +480,24 @@
 						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null
+					},
+					{
+						"identifier": "FilePath",
+						"__type": "FilePath",
+						"uid": 35,
+						"type": "F_Path",
+						"isArray": false,
+						"canBeNull": false,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "NameAndValue",
+						"editorDisplayPos": "Center",
+						"editorAlwaysShow": true,
+						"min": null,
+						"max": null,
+						"regex": null,
+						"acceptFileTypes": null,
+						"defaultOverride": null
 					}
 				]
 			},
@@ -864,6 +882,16 @@
 									"id": "V_String",
 									"params": ["13,25"]
 								} ]
+							},
+							{
+								"__identifier": "FilePath",
+								"__value": "README.md",
+								"__type": "FilePath",
+								"defUid": 35,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["README.md"]
+								}]
 							}
 						] },
 						{ "__identifier": "Labels", "__grid": [6,16], "__pivot": [0.5,0.5], "__tile": null, "defUid": 10, "px": [104,264], "fieldInstances": [
@@ -914,13 +942,13 @@
 						{ "__identifier": "Labels", "__grid": [20,2], "__pivot": [0.5,0.5], "__tile": null, "defUid": 10, "px": [328,40], "fieldInstances": [
 							{
 								"__identifier": "text",
-								"__value": "This file can be used to check if an API supports LDtk file format properly. \n\nIt takes advantage of all important LDtk features.",
+								"__value": "This file can be used to check if an API supports LDtk file format properly. \n\nIt uses all important LDtk features.",
 								"__type": "String",
 								"defUid": 11,
 								"realEditorValues": [{
 									"id": "V_String",
 									"params": [
-										"This file can be used to check if an API supports LDtk file format properly. \n\nIt takes advantage of all important LDtk features."
+										"This file can be used to check if an API supports LDtk file format properly. \n\nIt uses all important LDtk features."
 									]
 								}]
 							},
@@ -1389,7 +1417,17 @@
 							"realEditorValues": [ { "id": "V_Int", "params": [10] }, null, { "id": "V_Int", "params": [20] } ]
 						},
 						{ "__identifier": "Array_Enum", "__value": [], "__type": "Array<LocalEnum.SomeEnum>", "defUid": 29, "realEditorValues": [] },
-						{ "__identifier": "Array_points", "__value": [], "__type": "Array<Point>", "defUid": 30, "realEditorValues": [] }
+						{ "__identifier": "Array_points", "__value": [], "__type": "Array<Point>", "defUid": 30, "realEditorValues": [] },
+						{
+							"__identifier": "FilePath",
+							"__value": "README.md",
+							"__type": "FilePath",
+							"defUid": 35,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": ["README.md"]
+							}]
+						}
 					] }]
 				},
 				{
