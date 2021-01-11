@@ -14,8 +14,8 @@
 	"worldY": 0,
 	"pxWid": 240,
 	"pxHei": 240,
-	"__bgColor": "#7F8093",
-	"bgColor": null,
+	"__bgColor": "#398666",
+	"bgColor": "#398666",
 	"externalRelPath": null,
 	"layerInstances": [
 		{
