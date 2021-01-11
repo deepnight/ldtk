@@ -33,6 +33,7 @@ class EntityInstance {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
 			__grid: [ getCx(li.def), getCy(li.def) ],
+			__pivot: [ JsonTools.writeFloat(def.pivotX), JsonTools.writeFloat(def.pivotY) ],
 			__tile: {
 				var t = getSmartTile();
 				if( t!=null ) {

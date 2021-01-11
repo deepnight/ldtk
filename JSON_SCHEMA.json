@@ -171,6 +171,7 @@
 			"required": [
 				"__grid",
 				"__identifier",
+				"__pivot",
 				"defUid",
 				"fieldInstances",
 				"px"
@@ -212,6 +213,17 @@
 					"items": {
 						"type": [
 							"integer"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"__pivot": {
+					"description": "Pivot coordinates  (`[x,y]` format) of the Entity (Float values from 0 to 1)",
+					"items": {
+						"type": [
+							"number"
 						]
 					},
 					"type": [
