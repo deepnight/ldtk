@@ -12,10 +12,8 @@ class HxEnum {
 			if( isSync )
 				new ui.modal.dialog.LostFile(relPath, function(newAbs) {
 					var newRel = curProject.makeRelativeFilePath(newAbs);
-					for(ed in curProject.defs.externalEnums)
-						if( ed.externalRelPath==relPath )
-							ed.externalRelPath = newRel;
-					Editor.ME.ge.emit( EnumDefChanged );
+					if( curProject.remapExternEnums(relPath, newRel) )
+						Editor.ME.ge.emit( EnumDefChanged );
 					load(newRel, true);
 				});
 			else

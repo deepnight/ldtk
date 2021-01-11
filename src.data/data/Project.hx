@@ -472,6 +472,16 @@ class Project {
 	}
 
 
+	public function remapExternEnums(oldHxRelPath:String, newHxRelPath:String) {
+		var any = false;
+		for(ed in defs.externalEnums)
+			if( ed.externalRelPath==oldHxRelPath ) {
+				ed.externalRelPath = newHxRelPath;
+				any = true;
+			}
+		return any;
+	}
+
 	public function remapAllRelativePaths(oldProjectDir:String, newProjectDir:String) {
 		function _remapRelativePath(relPath:Null<String>) {
 			if( relPath==null )

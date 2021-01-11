@@ -196,7 +196,10 @@ class Editor extends Page {
 				// File not found
 				new ui.modal.dialog.LostFile(relPath, function(newAbsPath) {
 					var newRel = project.makeRelativeFilePath(newAbsPath);
+					if( project.remapExternEnums(relPath, newRel) )
+						Editor.ME.ge.emit( EnumDefChanged );
 					importer.HxEnum.load(newRel, true);
+					needSaving = true;
 				});
 			}
 			else {
