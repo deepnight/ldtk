@@ -69,4 +69,28 @@ class Lang {
             case F_Path: t._("*.*");
         }
     }
+
+
+    public static function atlasLoadingMessage(filePath:String, result:AtlasLoadingResult) : LocaleString {
+        var name = dn.FilePath.fromFile(filePath).fileWithExt;
+        return switch result {
+            case Ok:
+                Lang.t._("Tileset image ::name:: updated.", { name:name } );
+
+            case FileNotFound:
+                Lang.t._("File not found: ::name::", { name:name } );
+
+            case LoadingFailed(err):
+                Lang.t._("Couldn't read file: ::name::", { name:name } );
+
+            case TrimmedPadding:
+                Lang.t._("\"::name::\" image was modified but it was SMALLER than the old version.\nLuckily, the tileset had some PADDING, so I was able to use it to compensate the difference.\nSo everything is ok, have a nice day ♥️", { name:name } );
+
+            case RemapLoss:
+                Lang.t._("\"::name::\" image was updated, but the new version is smaller than the previous one.\nSome tiles might have been lost in the process. It is recommended to check this carefully before saving this project!", { name:name } );
+
+            case RemapSuccessful:
+                Lang.t._("Tileset image \"::name::\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { name:name } );
+        }
+    }
 }

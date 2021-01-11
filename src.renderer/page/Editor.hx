@@ -320,6 +320,8 @@ class Editor extends Page {
 		App.LOG.fileOp(" -> pixelData: "+(td.hasValidPixelData() ? "Ok" : "need rebuild"));
 
 		var changed = false;
+		var msg = Lang.atlasLoadingMessage(td.relPath, result);
+
 		switch result {
 			case FileNotFound:
 				changed = true;
@@ -332,30 +334,25 @@ class Editor extends Page {
 				});
 
 			case LoadingFailed(err):
-				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
-				new ui.modal.dialog.Warning( Lang.t._("Couldn't read the file ::name:: (error: ::err::)!", { name:name, err:err } ) );
+				new ui.modal.dialog.Warning(msg);
 
 			case RemapLoss:
 				changed = true;
-				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
-				new ui.modal.dialog.Warning( Lang.t._("The image ::file:: was updated, but the new version is smaller than the previous one.\nSome tiles might have been lost in the process. It is recommended to check this carefully before saving this project!", { file:name } ) );
+				new ui.modal.dialog.Warning(msg);
 
 			case TrimmedPadding:
 				changed = true;
-				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
-				new ui.modal.dialog.Message( Lang.t._("\"::file::\" image was modified but it was SMALLER than the old version.\nLuckily, the tileset had some PADDING, so I was able to use it to compensate the difference.\nSo everything is ok, have a nice day ♥️", { file:name } ), "tile" );
+				new ui.modal.dialog.Message(msg, "tile");
 
 			case Ok:
 				if( !isInitialLoading ) {
 					changed = true;
-					var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
-					N.success(Lang.t._("Tileset image ::file:: updated.", { file:name } ) );
+					N.success(msg);
 				}
 
 			case RemapSuccessful:
 				changed = true;
-				var name = dn.FilePath.fromFile(td.relPath).fileWithExt;
-				new ui.modal.dialog.Message( Lang.t._("Tileset image \"::file::\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { file:name } ), "tile" );
+				new ui.modal.dialog.Message(msg, "tile");
 		}
 
 		// Rebuild "opaque tiles" cache

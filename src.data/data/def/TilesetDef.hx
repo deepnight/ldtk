@@ -164,16 +164,16 @@ class TilesetDef {
 	}
 
 
-	public function importAtlasImage(projectDir:String, relFilePath:String) : Bool {
+	public function importAtlasImage(projectDir:String, relFilePath:String) : EditorTypes.AtlasLoadingResult {
 		if( relFilePath==null ) {
 			removeAtlasImage();
-			return false;
+			return LoadingFailed("Missing path");
 		}
 
 		// Optional previous image infos
 		var oldRelPath = relPath;
-		var oldWid = pxWid;
-		var oldHei = pxHei;
+		var oldPxWid = pxWid;
+		var oldPxHei = pxHei;
 
 		// Init
 		var newPath = dn.FilePath.fromFile( relFilePath ).useSlashes();
@@ -188,7 +188,7 @@ class TilesetDef {
 
 			if( bytes==null ) {
 				App.LOG.error("No bytes");
-				return false;
+				return LoadingFailed("Empty file");
 			}
 
 			App.LOG.fileOp(' -> Loaded ${bytes.length} bytes.');
@@ -200,37 +200,43 @@ class TilesetDef {
 		catch(err:Dynamic) {
 			App.LOG.error(err);
 			removeAtlasImage();
-			return false;
+			return LoadingFailed( Std.string(err) );
 		}
 
-		// Init using image infos
+		// Update dimensions
 		pxWid = pixels.width;
 		pxHei = pixels.height;
 		tileGridSize = dn.M.imin( tileGridSize, getMaxTileGridSize() );
 		spacing = dn.M.imin( spacing, getMaxTileGridSize() );
 		padding = dn.M.imin( padding, getMaxTileGridSize() );
 
-		return true;
+		if( oldRelPath!=null ) {
+			// Try to update previous image
+			return remapAllTileIds(oldPxWid, oldPxHei);
+		}
+		else
+			return Ok;
 	}
 
 
 	public inline function reloadImage(projectDir:String) : EditorTypes.AtlasLoadingResult {
-		var oldWid = pxWid;
-		var oldHei = pxHei;
-		App.LOG.fileOp("Reloading tileset image "+relPath);
+		return importAtlasImage(projectDir, relPath);
+	}
 
-		if( !importAtlasImage(projectDir, relPath) )
-			return FileNotFound;
 
-		if( oldWid==pxWid && oldHei==pxHei )
+	function remapAllTileIds(oldPxWid:Int, oldPxHei:Int) : EditorTypes.AtlasLoadingResult {
+		App.LOG.general('Tileset remapping...');
+
+		if( oldPxWid==pxWid && oldPxHei==pxHei )
 			return Ok;
 
-		if( padding>0 && oldWid>pxWid && oldHei>pxHei && dn.M.iabs(oldWid-pxWid)<=padding*2 && dn.M.iabs(oldHei-pxHei)<=padding*2 && pxWid%2==0 && pxHei%2==0 ) {
-			padding -= Std.int( dn.M.imin( oldWid-pxWid, oldHei-pxHei ) / 2 );
+		if( padding>0 && oldPxWid>pxWid && oldPxHei>pxHei && dn.M.iabs(oldPxWid-pxWid)<=padding*2 && dn.M.iabs(oldPxHei-pxHei)<=padding*2 && pxWid%2==0 && pxHei%2==0 ) {
+			App.LOG.general(' > padding trim');
+			padding -= Std.int( dn.M.imin( oldPxWid-pxWid, oldPxHei-pxHei ) / 2 );
 			return TrimmedPadding;
 		}
 
-		var oldCwid = dn.M.ceil( oldWid / tileGridSize );
+		var oldCwid = dn.M.ceil( oldPxWid / tileGridSize );
 
 		// Layers remapping
 		for(l in _project.levels)
@@ -287,10 +293,14 @@ class TilesetDef {
 			}
 
 
-		if( pxWid<oldWid || pxHei<oldHei )
+		if( pxWid<oldPxWid || pxHei<oldPxHei ) {
+			App.LOG.general(' > loss');
 			return RemapLoss;
-		else
+		}
+		else {
+			App.LOG.general(' > success');
 			return RemapSuccessful;
+		}
 	}
 
 

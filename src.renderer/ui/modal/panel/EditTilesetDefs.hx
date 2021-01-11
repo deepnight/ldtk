@@ -178,19 +178,30 @@ class EditTilesetDefs extends ui.modal.Panel {
 				var relPath = project.makeRelativeFilePath( absPath );
 				App.LOG.fileOp("Loading atlas: "+absPath);
 
-				if( !curTd.importAtlasImage(project.getProjectDir(), relPath) ) {
-					switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) {
-						case Unknown:
-							N.error("ERROR: I don't think this is an actual image");
+				var result = curTd.importAtlasImage(project.getProjectDir(), relPath);
+				switch result {
+					case Ok:
 
-						case Png, Jpeg, Gif:
-							N.error("ERROR: couldn't read this image file");
+					case FileNotFound, LoadingFailed(_):
+						new ui.modal.dialog.Warning( Lang.atlasLoadingMessage(relPath, result) );
+						return;
 
-						case Bmp:
-							N.error("ERROR: unsupported image format");
-					}
-					return;
+					case TrimmedPadding, RemapLoss, RemapSuccessful:
+						new ui.modal.dialog.Message( Lang.atlasLoadingMessage(relPath, result), "tile" );
 				}
+				// if( curTd.importAtlasImage(project.getProjectDir(), relPath)!=Ok ) {
+				// 	switch dn.Identify.getType( JsTools.readFileBytes(absPath) ) { // TODO move these results to enum
+				// 		case Unknown:
+				// 			N.error("ERROR: I don't think this is an actual image");
+
+				// 		case Png, Jpeg, Gif:
+				// 			N.error("ERROR: couldn't read this image file");
+
+				// 		case Bmp:
+				// 			N.error("ERROR: unsupported image format");
+				// 	}
+				// 	return;
+				// }
 
 				if( oldRelPath!=null )
 					editor.watcher.stopWatching( project.makeAbsoluteFilePath(oldRelPath) );
