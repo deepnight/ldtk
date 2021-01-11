@@ -163,8 +163,10 @@ class EditEnums extends ui.modal.Panel {
 
 			// Check file
 			var fileExists = JsTools.fileExists(fullPath);
-			if( !fileExists )
+			if( !fileExists ) {
+				e.addClass("missing");
 				e.append('<div class="error">File not found!</div>');
+			}
 			else {
 				var checksum = haxe.crypto.Md5.encode( JsTools.readFileString(fullPath) );
 				for( ed in group.value )
@@ -196,6 +198,8 @@ class EditEnums extends ui.modal.Panel {
 			for(ed in group.value) {
 				var e = new J("<li/>");
 				e.addClass("fixed");
+				if( !fileExists )
+					e.addClass("missing");
 				e.appendTo(jList);
 				if( ed==curEnum )
 					e.addClass("active");

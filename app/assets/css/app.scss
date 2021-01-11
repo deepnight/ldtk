@@ -795,8 +795,8 @@ ul.niceList {
 		text-transform: uppercase;
 
 		border-radius: 4px;
-		background-color: $darkRed;
-		border: 1px solid $red;
+		background-color: $red;
+		border: 1px solid $lightRed;
 		outline: none;
 		box-shadow: 0px 0px 16px $red;
 	}
@@ -3692,6 +3692,9 @@ canvas#webgl {
 			overflow: hidden;
 			ul {
 				overflow: auto;
+				li.missing {
+					background-color: $darkRed;
+				}
 			}
 
 			button[class^="import"]{
