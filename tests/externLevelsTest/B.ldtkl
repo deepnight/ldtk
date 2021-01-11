@@ -5,13 +5,13 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.3-preview",
+		"appVersion": "0.6.3",
 		"url": "https://ldtk.io"
 	},
 	"identifier": "B",
 	"uid": 10,
-	"worldX": 160,
-	"worldY": 0,
+	"worldX": 0,
+	"worldY": 160,
 	"pxWid": 128,
 	"pxHei": 256,
 	"__bgColor": "#7F8093",
@@ -405,5 +405,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [ { "levelUid": 11, "dir": "e" }, { "levelUid": 0, "dir": "w" } ]
+	"__neighbours": [ { "levelUid": 11, "dir": "s" }, { "levelUid": 0, "dir": "n" } ]
 }
