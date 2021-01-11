@@ -474,37 +474,6 @@ class App extends dn.Process {
 		}
 		#end
 
-		// Load separate files
-		if( p.externalLevels ) {
-			var idx = 0;
-			for(l in p.levels) {
-				var path = p.makeAbsoluteFilePath(l.externalRelPath);
-				if( !JsTools.fileExists(path) ) {
-					// TODO better lost level management
-					loadingLog.error("Level file not found "+l.externalRelPath);
-					p.levels.splice(idx,1);
-					idx--;
-				}
-				else {
-					// Parse level
-					try {
-						loadingLog.fileOp("Loading external level "+l.externalRelPath+"...");
-						var raw = JsTools.readFileString(path);
-						var lJson = haxe.Json.parse(raw);
-						var l = data.Level.fromJson(p, lJson);
-						p.levels[idx] = l;
-					}
-					catch(e:Dynamic) {
-						// TODO better lost level management
-						loadingLog.error("Error while parsing level file "+l.externalRelPath);
-						p.levels.splice(idx,1);
-						idx--;
-					}
-				}
-				idx++;
-			}
-		}
-
 		if( p==null ) {
 			loadingLog.error("Couldn't read project file!");
 			return false;

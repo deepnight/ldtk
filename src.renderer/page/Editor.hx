@@ -213,6 +213,37 @@ class Editor extends Page {
 			}
 		}
 
+		// Load separate level files
+		if( project.externalLevels ) {
+			var idx = 0;
+			for(l in project.levels) {
+				var path = project.makeAbsoluteFilePath(l.externalRelPath);
+				if( !JsTools.fileExists(path) ) {
+					// TODO better lost level management
+					// loadingLog.error("Level file not found "+l.externalRelPath);
+					project.levels.splice(idx,1);
+					idx--;
+				}
+				else {
+					// Parse level
+					try {
+						// loadingLog.fileOp("Loading external level "+l.externalRelPath+"...");
+						var raw = JsTools.readFileString(path);
+						var lJson = haxe.Json.parse(raw);
+						var l = data.Level.fromJson(p, lJson);
+						project.levels[idx] = l;
+					}
+					catch(e:Dynamic) {
+						// TODO better lost level management
+						// loadingLog.error("Error while parsing level file "+l.externalRelPath);
+						project.levels.splice(idx,1);
+						idx--;
+					}
+				}
+				idx++;
+			}
+		}
+
 
 		curLevelId = project.levels[0].uid;
 		curLayerDefUid = -1;
