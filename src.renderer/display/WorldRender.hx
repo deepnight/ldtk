@@ -181,7 +181,11 @@ class WorldRender extends dn.Process {
 	}
 
 	function updateLabels() {
-		var minZoom = 0.1;
+		var minZoom = switch project.worldLayout {
+			case Free, GridVania: 0.25;
+			case LinearHorizontal, LinearVertical: 0.1;
+		}
+
 		for( l in editor.project.levels ) {
 			if( !levels.exists(l.uid) )
 				continue;
