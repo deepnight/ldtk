@@ -421,7 +421,7 @@ class Home extends Page {
 					App.ME.exit();
 
 			case K.ENTER:
-				jPage.find("ul.recentFiles li:first").click();
+				jPage.find("ul.recentFiles li:not(.title):first").click();
 
 			case K.ESCAPE:
 				if( jPage.find(".changelogsWrapper").hasClass("fullscreen") )
