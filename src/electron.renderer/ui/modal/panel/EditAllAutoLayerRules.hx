@@ -410,10 +410,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				i.displayAsPct = true;
 				i.setBounds(0,1);
 				i.onValueChange = (v)->{
-					if( v/100<old ) {
-						N.debug("below");
+					if( v/100<old )
 						invalidateRuleAndOnesBelow(r);
-					}
 				}
 				if( r.chance>=1 )
 					i.jInput.addClass("max");
