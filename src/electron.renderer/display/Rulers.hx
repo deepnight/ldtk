@@ -47,6 +47,7 @@ class Rulers extends dn.Process {
 		tip.padding = 3;
 		tipTf = new h2d.Text(Assets.fontPixel, tip);
 		tipTf.textColor = 0x0;
+		tip.visible = false;
 	}
 
 	override function toString():String {
