@@ -114,6 +114,13 @@ class WorldPanel extends ui.modal.Panel {
 		editor.ge.emit( LevelSettingsChanged(level) );
 	}
 
+	function onLevelResized(pxWid:Int,pxHei:Int) {
+		new LastChance( Lang.t._("Level resized"), project );
+		curLevel.applyNewBounds(0, 0, pxWid, pxHei);
+		onFieldChange();
+		new J("ul#levelForm *:focus").blur();
+	}
+
 
 	function updateWorldForm() {
 		if( level==null ) {
@@ -187,6 +194,17 @@ class WorldPanel extends ui.modal.Panel {
 		i.onChange = ()->onFieldChange();
 		var i = Input.linkToHtmlInput( level.worldY, jForm.find("#worldY"));
 		i.onChange = ()->onFieldChange();
+
+		// Size
+		var tmpWid = level.pxWid;
+		var tmpHei = level.pxHei;
+		var e = jForm.find("#width"); e.replaceWith( e.clone() ); // block undo/redo
+		var i = Input.linkToHtmlInput( tmpWid, jForm.find("#width") );
+		i.onChange = ()->onLevelResized(tmpWid, tmpHei);
+
+		var e = jForm.find("#height"); e.replaceWith( e.clone() ); // block undo/redo
+		var i = Input.linkToHtmlInput( tmpHei, jForm.find("#height"));
+		i.onChange = ()->onLevelResized(tmpWid, tmpHei);
 
 		// Bg color
 		var c = level.getBgColor();
