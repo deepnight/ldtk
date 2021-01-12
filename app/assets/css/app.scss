@@ -6,6 +6,7 @@ $bgLighter: #737f9d;
 $lightRed: #ffa386;
 $red: #e34d00;
 $darkRed: #791105;
+$softRed: #59374b;
 $orange: #ffcc00;
 $darkOrange: #d56932;
 $green: #cfdd40;
@@ -3035,6 +3036,18 @@ canvas#webgl {
 							border-bottom: 1px solid $orange;
 						}
 
+						span.important {
+							color: $help;
+						}
+
+						span.internal {
+							font-weight: bold;
+							color: $lightRed !important;
+							background-color: $softRed;
+							padding: 2px 4px;
+							border-radius: 3px;
+						}
+
 						h2 {
 							border: none;
 							margin-top: 32px;
@@ -3107,10 +3120,11 @@ canvas#webgl {
 									color: $lightRed;
 									font-size: 90%;
 									background-image: url("../img/stripesLight.png");
+									background-color: $softRed;
 									opacity: 0.7;
 								}
 
-								&.useful td {
+								&.important td {
 									color: $help;
 									background-color: $helpDark;
 								}

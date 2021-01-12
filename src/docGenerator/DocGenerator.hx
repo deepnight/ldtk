@@ -34,7 +34,6 @@ typedef FieldInfos = {
 	var hasVersion: Bool;
 	var isColor: Bool;
 	var isInternal: Bool;
-	var isUseful: Bool;
 }
 
 typedef GlobalType = {
@@ -43,6 +42,7 @@ typedef GlobalType = {
 	var xml : haxe.xml.Access;
 	var section : String;
 	var description : Null<String>;
+	var onlyInternalFields : Bool;
 }
 
 
@@ -122,6 +122,7 @@ class DocGenerator {
 					rawName: type.att.path,
 					displayName: displayName,
 					section: hasMeta(type,"section") ? getMeta(type,"section") : "",
+					onlyInternalFields: hasMeta(type,"internal"),
 				});
 			}
 
@@ -225,10 +226,8 @@ class DocGenerator {
 				var cell = [ '`${f.displayName}`' ];
 				if( f.only!=null )
 					cell.push('<sup class="only">Only *${f.only}*</sup>');
-				if( f.isInternal )
+				if( f.isInternal || type.onlyInternalFields )
 					cell.push('<sup class="internal">*Internal editor data*</sup>');
-				if( f.isUseful )
-					cell.push('<sup class="useful">*Useful for game devs*</sup>');
 
 				if( f.hasVersion )
 					cell.push( versionBadge(f.xml) );
@@ -267,7 +266,7 @@ class DocGenerator {
 			'',
 			'Json schema: $SCHEMA_URL',
 			'',
-			'Note: lines marked as <span class="critical">red</span> are only used by the LDtk editor and **can be safely ignored when writing a custom importer**. Lines marked as <span class="useful">green</span> are important values that will definitely be useful when writing an importer.',
+			'Note: lines marked as <span class="internal">red</span> are only used by the LDtk editor and **can be safely ignored when writing a custom importer**.',
 			'',
 			'## Table of contents',
 		];
@@ -475,7 +474,6 @@ class DocGenerator {
 				descMd: descMd,
 				isColor: hasMeta(fieldXml, "color"),
 				isInternal: hasMeta(fieldXml, "internal"),
-				isUseful: hasMeta(fieldXml, "useful"),
 			});
 		}
 		allFields.sort( (a,b)->Reflect.compare(a.displayName, b.displayName) );
