@@ -191,7 +191,7 @@ class WorldRender extends dn.Process {
 				continue;
 
 			var e = levels.get(l.uid);
-			e.label.visible = camera.adjustedZoom>=minZoom;
+			e.label.visible = camera.adjustedZoom>=minZoom && ( l!=editor.curLevel || editor.worldMode );
 			if( !e.label.visible )
 				continue;
 
@@ -204,7 +204,7 @@ class WorldRender extends dn.Process {
 					e.label.y = Std.int( l.worldY + l.pxHei*0.5 - e.label.height*e.label.scaleY*0.5 );
 
 				case LinearHorizontal:
-					e.label.x = Std.int( l.worldX + l.pxWid*0.5 - e.label.width*e.label.scaleX*0.5 );
+					e.label.x = Std.int( l.worldX + l.pxWid*0.3 );
 					e.label.y = Std.int( l.worldY - e.label.height*e.label.scaleY );
 					e.label.rotation = -0.3;
 
