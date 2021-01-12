@@ -3103,6 +3103,18 @@ canvas#webgl {
 									}
 								}
 
+								&.internal td {
+									color: $lightRed;
+									font-size: 90%;
+									background-image: url("../img/stripesLight.png");
+									opacity: 0.7;
+								}
+
+								&.useful td {
+									color: $help;
+									background-color: $helpDark;
+								}
+
 								code {
 									background-color: black;
 									padding: 2px 3px;

@@ -74,4 +74,7 @@
 
 	document.getElementById("jsonFormatHtml").innerHTML =
 		marked( document.getElementById("jsonFormatMd").textContent );
+
+	$("#jsonFormatHtml .internal").closest("tr").addClass("internal");
+	$("#jsonFormatHtml .useful").closest("tr").addClass("useful");
 </script>

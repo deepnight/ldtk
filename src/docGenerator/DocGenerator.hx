@@ -34,6 +34,7 @@ typedef FieldInfos = {
 	var hasVersion: Bool;
 	var isColor: Bool;
 	var isInternal: Bool;
+	var isUseful: Bool;
 }
 
 typedef GlobalType = {
@@ -226,6 +227,8 @@ class DocGenerator {
 					cell.push('<sup class="only">Only *${f.only}*</sup>');
 				if( f.isInternal )
 					cell.push('<sup class="internal">*Internal editor data*</sup>');
+				if( f.isUseful )
+					cell.push('<sup class="useful">*Useful for game devs*</sup>');
 
 				if( f.hasVersion )
 					cell.push( versionBadge(f.xml) );
@@ -234,9 +237,9 @@ class DocGenerator {
 
 				// Type
 				var type = '${getTypeMd(f.type)}';
+				type = StringTools.replace(type," ","&nbsp;");
 				if( f.isColor )
 					type+="<br/>"+getColorInfosMd(f);
-				type = StringTools.replace(type," ","&nbsp;");
 				tableCols.push(type);
 
 				// Desc
@@ -263,6 +266,8 @@ class DocGenerator {
 			'# LDtk Json structure (version $appVersion)',
 			'',
 			'Json schema: $SCHEMA_URL',
+			'',
+			'Note: lines marked as <span class="critical">red</span> are only used by the LDtk editor and **can be safely ignored when writing a custom importer**. Lines marked as <span class="useful">green</span> are important values that will definitely be useful when writing an importer.',
 			'',
 			'## Table of contents',
 		];
@@ -375,7 +380,7 @@ class DocGenerator {
 
 
 	static function getColorInfosMd(f:FieldInfos) : String {
-		return '<small class="color">*' + ( switch f.type {
+		return '<small class="color"> *' + ( switch f.type {
 			case Nullable(Basic("String")), Basic("String"):
 				'Hex color "#rrggbb"';
 
@@ -384,7 +389,7 @@ class DocGenerator {
 
 			case _:
 				'???';
-		} ) + '*</small>';
+		} ) + '* </small>';
 	}
 
 
@@ -470,6 +475,7 @@ class DocGenerator {
 				descMd: descMd,
 				isColor: hasMeta(fieldXml, "color"),
 				isInternal: hasMeta(fieldXml, "internal"),
+				isUseful: hasMeta(fieldXml, "useful"),
 			});
 		}
 		allFields.sort( (a,b)->Reflect.compare(a.displayName, b.displayName) );
