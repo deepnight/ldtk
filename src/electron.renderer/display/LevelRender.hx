@@ -1,7 +1,7 @@
 package display;
 
 class LevelRender extends dn.Process {
-	static var FIELD_TEXT_SCALE = 0.666;
+	static var FIELD_TEXT_SCALE : Float = 1.0;
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
@@ -517,17 +517,19 @@ class LevelRender extends dn.Process {
 	}
 
 
+	static inline function getDefaultEntityFont() {
+		return Assets.fontLight_small;
+	}
+
 
 	static function createFieldValuesRender(ei:data.inst.EntityInstance, fi:data.inst.FieldInstance) {
-		var font = Assets.fontPixel;
-
 		var valuesFlow = new h2d.Flow();
 		valuesFlow.layout = Horizontal;
 		valuesFlow.verticalAlign = Middle;
 
 		// Array opening
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = new h2d.Text(font, valuesFlow);
+			var tf = new h2d.Text(getDefaultEntityFont(), valuesFlow);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = "[";
 			tf.scale(FIELD_TEXT_SCALE);
@@ -553,9 +555,9 @@ class LevelRender extends dn.Process {
 				}
 				else {
 					// Text render
-					var tf = new h2d.Text(font, valuesFlow);
+					var tf = new h2d.Text(getDefaultEntityFont(), valuesFlow);
 					tf.textColor = ei.getSmartColor(true);
-					tf.filter = new dn.heaps.filter.PixelOutline();
+					// tf.filter = new dn.heaps.filter.PixelOutline();
 					tf.maxWidth = 300;
 					tf.scale(FIELD_TEXT_SCALE);
 					var v = fi.getForDisplay(idx);
@@ -568,7 +570,7 @@ class LevelRender extends dn.Process {
 
 			// Array separator
 			if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
-				var tf = new h2d.Text(font, valuesFlow);
+				var tf = new h2d.Text(getDefaultEntityFont(), valuesFlow);
 				tf.textColor = ei.getSmartColor(true);
 				tf.text = ",";
 				tf.scale(FIELD_TEXT_SCALE);
@@ -577,7 +579,7 @@ class LevelRender extends dn.Process {
 
 		// Array closing
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = new h2d.Text(font, valuesFlow);
+			var tf = new h2d.Text(getDefaultEntityFont(), valuesFlow);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = "]";
 			tf.scale(FIELD_TEXT_SCALE);
@@ -599,6 +601,8 @@ class LevelRender extends dn.Process {
 			cur+=dashLen*2;
 		}
 	}
+
+
 
 	public static function createEntityRender(?ei:data.inst.EntityInstance, ?def:data.def.EntityDef, ?li:data.inst.LayerInstance, ?parent:h2d.Object) {
 		if( def==null && ei==null )
@@ -706,8 +710,6 @@ class LevelRender extends dn.Process {
 		// Display fields not marked as "Hidden"
 		if( ei!=null && li!=null ) {
 			// Init field wrappers
-			var font = Assets.fontPixel;
-
 			var custom = new h2d.Graphics(wrapper);
 
 			var above = new h2d.Flow(wrapper);
@@ -732,7 +734,7 @@ class LevelRender extends dn.Process {
 				// Value error
 				var err = fi.getFirstErrorInValues();
 				if( err!=null ) {
-					var tf = new h2d.Text(font, above);
+					var tf = new h2d.Text(getDefaultEntityFont(), above);
 					tf.textColor = 0xffcc00;
 					tf.text = '<$err>';
 				}
@@ -759,11 +761,11 @@ class LevelRender extends dn.Process {
 						var f = new h2d.Flow(fieldWrapper);
 						f.verticalAlign = Middle;
 
-						var tf = new h2d.Text(font, f);
+						var tf = new h2d.Text(getDefaultEntityFont(), f);
 						tf.textColor = ei.getSmartColor(true);
 						tf.text = fd.identifier+" = ";
 						tf.scale(FIELD_TEXT_SCALE);
-						tf.filter = new dn.heaps.filter.PixelOutline();
+						// tf.filter = new dn.heaps.filter.PixelOutline();
 
 						f.addChild( createFieldValuesRender(ei,fi) );
 
@@ -824,13 +826,13 @@ class LevelRender extends dn.Process {
 			// Identifier label
 			if( ei.def.showName ) {
 				var f = new h2d.Flow(above);
-				var tf = new h2d.Text(Assets.fontPixel, f);
+				var tf = new h2d.Text(getDefaultEntityFont(), f);
 				tf.textColor = ei.getSmartColor(true);
 				tf.text = def.identifier.substr(0,16);
 				tf.scale(0.5);
 				tf.x = Std.int( def.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
 				tf.y = 0;
-				tf.filter = new dn.heaps.filter.PixelOutline();
+				// tf.filter = new dn.heaps.filter.PixelOutline();
 				_addBg(f, 0.5);
 			}
 
