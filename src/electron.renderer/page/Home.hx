@@ -140,7 +140,8 @@ class Home extends Page {
 							}
 
 							log.general(" -> Saving "+fp.fileName+"...");
-							var data = JsTools.prepareProjectFile(p);
+							var data = JsTools.prepareProjectSavingData(p);
+							// BUG support multi files!
 							JsTools.writeFileString(fp.full, data.projectJson);
 						}
 						catch(e:Dynamic) {
@@ -403,7 +404,8 @@ class Home extends Page {
 			fp.extension = "ldtk";
 
 			var p = data.Project.createEmpty(fp.full);
-			var data = JsTools.prepareProjectFile(p);
+			var data = JsTools.prepareProjectSavingData(p);
+			// BUG will not work if multifiles goes default!
 			JsTools.writeFileString(p.filePath.full, data.projectJson);
 
 			N.msg("New project created: "+p.filePath.full);

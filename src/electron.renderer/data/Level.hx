@@ -46,7 +46,7 @@ class Level {
 		return Type.getClassName( Type.getClass(this) ) + '.$identifier(#$uid)';
 	}
 
-	public function toJson(includeData=true) : ldtk.Json.LevelJson {
+	public function toJson() : ldtk.Json.LevelJson {
 		// List nearby levels
 		var neighbours = switch _project.worldLayout {
 			case Free, GridVania:
@@ -94,8 +94,8 @@ class Level {
 			__bgColor: JsonTools.writeColor( getBgColor() ),
 			bgColor: JsonTools.writeColor(bgColor, true),
 
-			externalRelPath: includeData ? null : makeExternalRelPath(),
-			layerInstances: includeData ? layerInstances.map( function(li) return li.toJson() ) : null,
+			externalRelPath: null, // is only set upon actual saving, if project uses externalLevels option
+			layerInstances: layerInstances.map( function(li) return li.toJson() ),
 			__neighbours: neighbours,
 		}
 	}

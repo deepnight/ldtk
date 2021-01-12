@@ -61,25 +61,33 @@ class JsTools {
 		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
 	}
 
-	public static function prepareProjectFile(p:data.Project) : FileSavingData {
-		var levels = [];
-
-		if( p.externalLevels ) {
-			// Create levels JSON separately
-			var idx = 0;
-			for(l in p.levels) {
-				var json = l.toJson(true);
-				levels.push({
-					json: jsonStringify(p, json),
-					relPath: l.makeExternalRelPath(),
-					id: l.identifier,
-				});
+	public static function prepareProjectSavingData(project:data.Project) : FileSavingData {
+		if( !project.externalLevels ) {
+			// Full single JSON
+			return {
+				projectJson: jsonStringify( project, project.toJson() ),
+				externLevelsJson: [],
 			}
 		}
+		else {
+			// Separate level JSONs
+			var externLevels = project.levels.map( (l)->{
+				json: jsonStringify( project, l.toJson() ),
+				relPath: l.makeExternalRelPath(),
+				id: l.identifier,
+			});
 
-		return {
-			projectJson: jsonStringify(p, p.toJson()),
-			levelsJson: levels,
+			// Build project JSON without level data
+			var trimmedProjectJson = project.toJson();
+			for(l in trimmedProjectJson.levels) {
+				l.layerInstances = null;
+				l.externalRelPath = project.getLevel(l.uid).makeExternalRelPath();
+			}
+
+			return {
+				projectJson: jsonStringify( project, trimmedProjectJson ),
+				externLevelsJson: externLevels,
+			}
 		}
 	}
 

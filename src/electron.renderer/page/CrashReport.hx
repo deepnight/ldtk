@@ -82,7 +82,8 @@ class CrashReport extends Page {
 			if( unsavedProject!=null ) {
 				var fp = dn.FilePath.fromFile(projectFilePath);
 				fp.fileName += Const.CRASH_NAME_SUFFIX;
-				var data = JsTools.prepareProjectFile(unsavedProject);
+				var data = JsTools.prepareProjectSavingData(unsavedProject);
+				// BUG support multifiles!
 				JsTools.writeFileString(fp.full, data.projectJson);
 				jBackup.html('I saved your current work in <a>${fp.fileWithExt}</a>.');
 				jBackup.find("a").click( (ev)->{

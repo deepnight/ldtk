@@ -19,7 +19,10 @@ class LastChance extends dn.Process {
 		elem.find("button").click( function(ev) {
 			if( !isActive() )
 				return;
-			Editor.ME.selectProject( data.Project.fromJson(backupPath, backup) );
+			App.LOG.general('Restored project using LastChance ("$str")');
+			var restored : data.Project = data.Project.fromJson(backupPath, backup);
+			Editor.ME.selectProject(restored);
+			App.LOG.general('Restore complete.');
 			Editor.ME.resetTools();
 			ui.modal.Dialog.closeAll();
 			N.msg( L.t._("Canceled action: \"::act::\"", {act:str}) );

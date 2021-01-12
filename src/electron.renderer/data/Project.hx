@@ -127,7 +127,7 @@ class Project {
 			worldGridHeight: worldGridHeight,
 
 			defs: defs.toJson(this),
-			levels: levels.map( function(l) return l.toJson(!externalLevels) ),
+			levels: levels.map( (l)->l.toJson() ),
 		}
 	}
 
