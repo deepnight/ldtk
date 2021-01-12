@@ -142,7 +142,8 @@ class Cursor extends dn.Process {
 					def.height + pad*2
 				);
 
-				var o = display.LevelRender.createEntityRender(ei, def, wrapper);
+				var o = display.EntityRender.renderCore(def);
+				wrapper.addChild(o);
 
 			case Tiles(li, tileIds, cx, cy, flips):
 				var td = project.defs.getTilesetDef( li.def.tilesetDefUid );

@@ -18,6 +18,9 @@ class LevelRender extends dn.Process {
 	/** <LayerDefUID, h2d.Object> **/
 	var layerRenders : Map<Int,h2d.Object> = new Map();
 
+	/** <LayerDefUID, EntityRender> **/
+	var entityRenders : Map<Int, Array<EntityRender> > = new Map();
+
 	var bg : h2d.Bitmap;
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
@@ -69,6 +72,8 @@ class LevelRender extends dn.Process {
 					for(l in layerRenders)
 						l.remove();
 					layerRenders = new Map();
+					for(layerDefUid in entityRenders.keys())
+						clearLayerEntities(layerDefUid);
 					grid.clear();
 
 					// Stop process
@@ -134,6 +139,7 @@ class LevelRender extends dn.Process {
 						if( !li.def.autoLayerRulesCanBeUsed() )
 							invalidateLayer(li);
 				}
+				clearLayerEntities(uid);
 
 			case LayerDefSorted:
 				for( li in editor.curLevel.layerInstances ) {
@@ -466,10 +472,10 @@ class LevelRender extends dn.Process {
 			}
 
 		case Entities:
+			clearLayerEntities(li.layerDefUid);
 			for(ei in li.entityInstances) {
-				var e = createEntityRender(ei, li);
-				e.setPosition(ei.x, ei.y);
-				wrapper.addChild(e);
+				var er = new EntityRender(ei, li.def, wrapper);
+				entityRenders.get(li.layerDefUid).push( er );
 			}
 
 		case Tiles:
@@ -603,6 +609,14 @@ class LevelRender extends dn.Process {
 	}
 
 
+	function clearLayerEntities(layerDefUid:Int) {
+		if( entityRenders.exists(layerDefUid) )
+			for( er in entityRenders.get(layerDefUid) )
+				er.destroy();
+			
+		entityRenders.set(layerDefUid, []);
+	}
+
 
 	public static function createEntityRender(?ei:data.inst.EntityInstance, ?def:data.def.EntityDef, ?li:data.inst.LayerInstance, ?parent:h2d.Object) {
 		if( def==null && ei==null )
@@ -613,6 +627,8 @@ class LevelRender extends dn.Process {
 
 		// Init
 		var wrapper = new h2d.Object(parent);
+		new display.EntityRender(ei, li.def, wrapper);
+		/*
 
 		var g = new h2d.Graphics(wrapper);
 		g.x = Std.int( -def.width*def.pivotX );
@@ -847,6 +863,7 @@ class LevelRender extends dn.Process {
 			beneath.y = Std.int( def.height*(1-def.pivotY) + 1 );
 		}
 
+		*/
 		return wrapper;
 	}
 

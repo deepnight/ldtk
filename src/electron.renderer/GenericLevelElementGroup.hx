@@ -261,11 +261,11 @@ class GenericLevelElementGroup {
 						}
 
 				case Entity(li, ei):
-					var e = display.LevelRender.createEntityRender(ei);
-					ghost.addChild(e);
-					e.alpha = 0.5;
-					e.x = li.pxTotalOffsetX + ei.x - bounds.left;
-					e.y = li.pxTotalOffsetY + ei.y - bounds.top;
+					var o = display.EntityRender.renderCore(ei);
+					ghost.addChild(o);
+					o.alpha = 0.5;
+					o.x = li.pxTotalOffsetX + ei.x - bounds.left;
+					o.y = li.pxTotalOffsetY + ei.y - bounds.top;
 
 				case PointField(li, ei, fi, arrayIdx):
 					var pt = fi.getPointGrid(arrayIdx);
