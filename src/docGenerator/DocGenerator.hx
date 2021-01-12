@@ -264,9 +264,9 @@ class DocGenerator {
 		var headerMd = [
 			'# LDtk Json structure (version $appVersion)',
 			'',
-			'Json schema: $SCHEMA_URL',
+			'**Note:** lines marked as <span class="internal">red</span> are only used by the LDtk editor and **can be safely ignored when writing a custom importer**.',
 			'',
-			'Note: lines marked as <span class="internal">red</span> are only used by the LDtk editor and **can be safely ignored when writing a custom importer**.',
+			'Json schema: $SCHEMA_URL',
 			'',
 			'## Table of contents',
 		];

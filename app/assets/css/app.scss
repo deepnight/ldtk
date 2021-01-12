@@ -3141,6 +3141,10 @@ canvas#webgl {
 							color: white;
 						}
 
+						.only {
+							color: $bgLighter;
+						}
+
 						a.discreet {
 							// text-decoration: none;
 							color: inherit;
