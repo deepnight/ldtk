@@ -361,6 +361,11 @@ class Home extends Page {
 
 			ui.modal.ContextMenu.addTo(li, [
 				{
+					label: L.t._("Locate folder"),
+					cond: null,
+					cb: JsTools.exploreToFile.bind(fp.directory, false),
+				},
+				{
 					label: L.t._("Remove from history"),
 					cond: null,
 					cb: ()->{
