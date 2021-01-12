@@ -85,6 +85,14 @@ class WorldPanel extends ui.modal.Panel {
 					updateLevelForm();
 				}
 
+			case ProjectSelected:
+				updateWorldForm();
+				useLevel(editor.curLevel);
+
+			case LevelRestoredFromHistory(l):
+				if( l.uid==level.uid )
+					useLevel(l);
+
 			case LevelSettingsChanged(l):
 				if( l==level )
 					updateLevelForm();
