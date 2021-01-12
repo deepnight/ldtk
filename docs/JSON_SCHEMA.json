@@ -5,7 +5,7 @@
 	"$ref": "#/LdtkJsonRoot",
 	"version": "0.6.3",
 	"LdtkJsonRoot": {
-		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels - and a definition object (that can probably be safely ignored for most users).",
+		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - and a definition object (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
 		"required": [
 			"bgColor",
@@ -134,7 +134,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"__type": {
-					"description": "Type of the field, such as Int, Float, Enum(enum_name), Bool, etc.",
+					"description": "Type of the field, such as `Int`, `Float`, `Enum(my_enum_name)`, `Bool`, etc.",
 					"type": [
 						"string"
 					]
@@ -245,7 +245,7 @@
 			]
 		},
 		"Definitions": {
-			"description": "If you're writing your own LDtk importer, you should probably just ignore *most* stuff in the `defs` section, as it contains data that are mostly useful to the editor. To keep you away from the `defs` section and avoid some unnecessary JSON parsing, important data from definitions is often duplicated in fields prefixed with a double underscore (eg. `__identifier` or `__type`).  The 2 only definition types you might need here are **Tilesets** and **Enums**.",
+			"description": "If you're writing your own LDtk importer, you should probably just ignore *most* stuff in the `defs` section, as it contains data that are mostly important to the editor. To keep you away from the `defs` section and avoid some unnecessary JSON parsing, important data from definitions is often duplicated in fields prefixed with a double underscore (eg. `__identifier` or `__type`).  The 2 only definition types you might need here are **Tilesets** and **Enums**.",
 			"title": "Definitions",
 			"required": [
 				"entities",
@@ -871,7 +871,7 @@
 			]
 		},
 		"TilesetDef": {
-			"description": "The `Tileset` definition is the most useful part among project definitions. It contains some extra informations about each integrated tileset. If you only had to parse one definition section, that would be the one.",
+			"description": "The `Tileset` definition is the most important part among project definitions. It contains some extra informations about each integrated tileset. If you only had to parse one definition section, that would be the one.",
 			"title": "Tileset definition",
 			"required": [
 				"identifier",
@@ -958,6 +958,7 @@
 			]
 		},
 		"Tile": {
+			"description": "This structure represents a single tile from a given Tileset.",
 			"title": "Tile instance",
 			"required": [
 				"d",
@@ -1060,7 +1061,7 @@
 					]
 				},
 				"tilesetDefUid": {
-					"description": "Reference to the Tileset UID being used by this tile layer",
+					"description": "Reference to the Tileset UID being used by this Tile layer",
 					"type": [
 						"integer",
 						"null"
@@ -1087,7 +1088,7 @@
 					]
 				},
 				"intGridValues": {
-					"description": "",
+					"description": "An array (using IntGrid value as array index, starting from 0) that defines extra optional info for each IntGrid value.",
 					"items": {
 						"type": [
 							"object"
