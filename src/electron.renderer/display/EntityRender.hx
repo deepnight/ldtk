@@ -24,6 +24,10 @@ class EntityRender extends dn.Process {
 		ei = inst;
 		ld = layerDef;
 
+		core = new h2d.Object(root);
+
+		fieldGraphics = new h2d.Graphics(root);
+
 		above = new h2d.Flow(root);
 		above.layout = Vertical;
 		above.horizontalAlign = Middle;
@@ -39,8 +43,6 @@ class EntityRender extends dn.Process {
 		beneath.horizontalAlign = Middle;
 		beneath.verticalSpacing = 1;
 
-		fieldGraphics = new h2d.Graphics(root);
-
 		renderAll();
 	}
 
@@ -48,6 +50,10 @@ class EntityRender extends dn.Process {
 		super.onDispose();
 		ei = null;
 		ld = null;
+		above = null;
+		beneath = null;
+		center = null;
+		fieldGraphics = null;
 		core = null;
 	}
 
@@ -146,10 +152,8 @@ class EntityRender extends dn.Process {
 
 
 	public function renderAll() {
-		if( core!=null )
-			core.remove();
-		core = renderCore(ei,ed);
-		root.addChild(core);
+		core.removeChildren();
+		core.addChild( renderCore(ei,ed) );
 
 		renderFields();
 	}
@@ -223,7 +227,7 @@ class EntityRender extends dn.Process {
 					// Text render
 					var tf = new h2d.Text(getDefaultFont(), valuesFlow);
 					tf.textColor = ei.getSmartColor(true);
-					tf.maxWidth = 300;
+					tf.maxWidth = 400;
 					var v = fi.getForDisplay(idx);
 					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
 						tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';
@@ -367,7 +371,6 @@ class EntityRender extends dn.Process {
 
 	public inline function updatePos() {
 		var cam = Editor.ME.camera;
-		var scale = 2 / cam.adjustedZoom;
 		var scale = M.fmin(0.5, 2/cam.adjustedZoom);
 
 		root.x = ei.x;
