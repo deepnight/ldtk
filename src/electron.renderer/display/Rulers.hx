@@ -154,8 +154,8 @@ class Rulers extends dn.Process {
 
 	function addLabel(str:String, pos:RulerPos, smallFont=true, extraPadding=0, ?color:UInt) {
 		var scale : Float = switch pos {
-			case Top, Bottom: editor.curLevel.pxWid<=256 ? 0.5 : 1;
-			case Left, Right: editor.curLevel.pxHei<=256 ? 0.5 : 1;
+			case Top, Bottom: editor.curLevel.pxWid<=512 ? 0.5 : 1;
+			case Left, Right: editor.curLevel.pxHei<=512 ? 0.5 : 1;
 			case _: 1;
 		}
 
