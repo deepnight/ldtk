@@ -140,7 +140,7 @@ class Rulers extends dn.Process {
 		addLabel(yLabel, Left);
 		addLabel(yLabel, Right);
 
-		addLabel(editor.curLevel.identifier, Top, 2, PADDING, 0xffcc00);
+		addLabel(editor.curLevel.identifier, Top, false, PADDING+8, 0xffcc00);
 
 
 		// Resizing drags
@@ -150,10 +150,17 @@ class Rulers extends dn.Process {
 			g.drawCircle( getX(p), getY(p), HANDLE_SIZE*0.5);
 	}
 
-	function addLabel(str:String, pos:RulerPos, scale=1.0, extraPadding=0, ?color:UInt) {
+
+	function addLabel(str:String, pos:RulerPos, smallFont=true, extraPadding=0, ?color:UInt) {
+		var scale : Float = switch pos {
+			case Top, Bottom: editor.curLevel.pxWid<=256 ? 0.5 : 1;
+			case Left, Right: editor.curLevel.pxHei<=256 ? 0.5 : 1;
+			case _: 1;
+		}
+
 		var wrapper = new h2d.Object(labels);
-		wrapper.x = getX(pos, PADDING*2 + extraPadding);
-		wrapper.y = getY(pos, PADDING*2 + extraPadding);
+		wrapper.x = getX(pos, PADDING*2 + extraPadding*scale);
+		wrapper.y = getY(pos, PADDING*2 + extraPadding*scale);
 		switch pos {
 			case Left, Right: wrapper.rotate(-M.PIHALF);
 			case _:
@@ -162,7 +169,7 @@ class Rulers extends dn.Process {
 		if( color==null )
 			color = C.toWhite(editor.project.bgColor,0.5);
 
-		var tf = new h2d.Text(Assets.fontPixel, wrapper);
+		var tf = new h2d.Text(smallFont ? Assets.fontLight_small : Assets.fontLight_medium, wrapper);
 		tf.text = str;
 		tf.textColor = color;
 		tf.scale(scale);

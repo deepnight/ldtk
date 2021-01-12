@@ -182,7 +182,7 @@ class WorldRender extends dn.Process {
 
 	function updateLabels() {
 		var minZoom = switch project.worldLayout {
-			case Free, GridVania: 0.25;
+			case Free, GridVania: 0.1;
 			case LinearHorizontal, LinearVertical: 0.1;
 		}
 
@@ -195,7 +195,7 @@ class WorldRender extends dn.Process {
 			if( !e.label.visible )
 				continue;
 
-			var scale = camera.pixelRatio>1 ? ( 1.5 * camera.pixelRatio ) : 1;
+			var scale = 1;
 			e.label.alpha = M.fmin( (camera.adjustedZoom-minZoom)/minZoom, 1 );
 			e.label.setScale( scale / camera.adjustedZoom);
 			switch project.worldLayout {
@@ -206,9 +206,9 @@ class WorldRender extends dn.Process {
 				case LinearHorizontal:
 					e.label.x = Std.int( l.worldX + l.pxWid*0.5 - e.label.width*e.label.scaleX*0.5 );
 					e.label.y = Std.int( l.worldY - e.label.height*e.label.scaleY );
+					e.label.rotation = -0.3;
 
 				case LinearVertical:
-					e.label.scale(1.5);
 					e.label.x = Std.int( l.worldX - e.label.width*e.label.scaleX - 30 );
 					e.label.y = Std.int( l.worldY + l.pxHei*0.5 - e.label.height*e.label.scaleY*0.5 );
 			}
@@ -457,7 +457,7 @@ class WorldRender extends dn.Process {
 		wl.label.color.setColor( C.addAlphaF(0x464e79) );
 		wl.label.alpha = 0.8;
 
-		var tf = new h2d.Text(Assets.fontPixel, wl.label);
+		var tf = new h2d.Text(Assets.fontLight_medium, wl.label);
 		tf.text = l.identifier;
 		tf.textColor = C.toWhite( l.getBgColor(), 0.8 );
 		tf.x = 4;
