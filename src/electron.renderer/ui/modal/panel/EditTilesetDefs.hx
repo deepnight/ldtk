@@ -5,6 +5,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 	var jForm : js.jquery.JQuery;
 	public var curTd : Null<data.def.TilesetDef>;
 
+
 	public function new(?selectedDef:data.def.TilesetDef) {
 		super();
 

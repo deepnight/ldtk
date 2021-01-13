@@ -16,6 +16,7 @@ class EditEntityDefs extends ui.modal.Panel {
 	var curEntity : Null<data.def.EntityDef>;
 	var curField : Null<data.def.FieldDef>;
 
+
 	public function new(?editDef:data.def.EntityDef) {
 		super();
 
