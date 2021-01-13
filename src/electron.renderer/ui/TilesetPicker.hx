@@ -127,8 +127,13 @@ class TilesetPicker {
 				tilesetDef.tileGridSize - strokeOffset*2,
 				tilesetDef.tileGridSize - strokeOffset*2
 			);
+
+			// Outline color
+			var c = tilesetDef.getAverageTileColor(tid);
+			var a = C.getA(c)>0 ? 1 : 0;
 			ctx.strokeStyle =
-				C.intToHexRGBA( C.toWhite( C.replaceAlphaF(tilesetDef.getAverageTileColor(tid), 0.9 ), 0.2 ) );
+				C.intToHexRGBA( C.toWhite( C.replaceAlphaF( tilesetDef.getAverageTileColor(tid), a ), 0.23 ) );
+
 			ctx.stroke();
 		}
 	}
