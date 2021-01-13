@@ -20,6 +20,7 @@ class Const {
 	public static var LEVEL_EXTENSION = "ldtkl";
 	public static var POINT_SEPARATOR = ",";
 	public static var CRASH_NAME_SUFFIX = ".crash";
+	public static var LEVEL_FILE_LEADER_ZEROS = 4;
 
 	// URLs: Deepnight games
 	public static var DEEPNIGHT_DOMAIN = "https://deepnight.net";

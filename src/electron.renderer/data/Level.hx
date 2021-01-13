@@ -101,7 +101,11 @@ class Level {
 	}
 
 	public function makeExternalRelPath(idx:Int) {
-		return _project.getRelExternalFilesDir() + "/" + (dn.Lib.leadingZeros(idx,4)+"-") + identifier+"." + Const.LEVEL_EXTENSION;
+		return
+			_project.getRelExternalFilesDir() + "/"
+			+ (dn.Lib.leadingZeros(idx,Const.LEVEL_FILE_LEADER_ZEROS)+"-")
+			+ identifier
+			+ "." + Const.LEVEL_EXTENSION;
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {

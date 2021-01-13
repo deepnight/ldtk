@@ -43,7 +43,7 @@ class Tiled extends Exporter {
 			var bytes = exportLevel(l);
 
 			var fp = outputPath.clone();
-			fp.fileName = ( p.levels.length>1 ? '${i}_' : '' ) + l.identifier;
+			fp.fileName = ( p.levels.length>1 ? '${dn.Lib.leadingZeros(i,Const.LEVEL_FILE_LEADER_ZEROS)}_' : '' ) + l.identifier;
 			fp.extension = "tmx";
 			addOuputFile(fp.full, bytes);
 
