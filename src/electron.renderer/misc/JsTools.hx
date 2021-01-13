@@ -543,13 +543,19 @@ class JsTools {
 		js.node.Fs.writeFileSync( path, js.node.Buffer.hxFromBytes(bytes) );
 	}
 
-	public static function createDir(path:String) {
+	public static function createDirs(path:String) {
 		if( fileExists(path) )
 			return;
 
-		App.LOG.fileOp("Creating dir "+path+"...");
+
+		// Split sub dirs
 		js.node.Require.require("fs");
-		js.node.Fs.mkdirSync(path);
+		var subDirs = dn.FilePath.fromDir(path).getSubDirectories(true);
+		for(subPath in subDirs)
+			if( !fileExists(subPath) ) {
+				App.LOG.fileOp("Creating dir "+subPath+"...");
+				js.node.Fs.mkdirSync(subPath);
+			}
 	}
 
 	public static function removeDir(path:String) {

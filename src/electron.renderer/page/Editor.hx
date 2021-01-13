@@ -1004,7 +1004,7 @@ class Editor extends Page {
 
 						// Init dir
 						if( !JsTools.fileExists(externDir) )
-							JsTools.createDir(externDir);
+							JsTools.createDirs(externDir);
 						else
 							JsTools.emptyDir(externDir, Const.LEVEL_EXTENSION);
 

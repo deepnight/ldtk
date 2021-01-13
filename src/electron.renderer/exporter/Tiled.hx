@@ -17,7 +17,7 @@ class Tiled extends Exporter {
 	override function convert() {
 		super.convert();
 
-		setOutputPath( projectPath.directory + "/" + projectPath.fileName+"_tiled", true );
+		setOutputPath( projectPath.directory + "/" + p.getRelExternalFilesDir() + "/tiled", true );
 
 		// Prepare world object
 		var world = {

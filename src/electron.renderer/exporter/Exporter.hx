@@ -77,7 +77,7 @@ class Exporter {
 
 
 		log.fileOp("  Initializing dir...");
-		JsTools.createDir(outputPath.full);
+		JsTools.createDirs(outputPath.full);
 		if( removeAllFilesInDir )
 			JsTools.emptyDir(outputPath.full);
 	}
