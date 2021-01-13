@@ -95,11 +95,10 @@ class TilesetPicker {
 
 	public function renderGrid() {
 		jPicker.remove(".grid");
-		var jGrid = new J('<div class="grid"/>');
-		jGrid.prependTo(jAtlas);
 
 		var ctx = canvas.getContext2d();
-		ctx.lineWidth = 1;
+		ctx.lineWidth = M.fmax( 1, Std.int( tilesetDef.tileGridSize / 16 ) );
+		var strokeOffset = ctx.lineWidth*0.5;
 
 		for(cy in 0...tilesetDef.cHei)
 		for(cx in 0...tilesetDef.cWid) {
@@ -123,15 +122,13 @@ class TilesetPicker {
 			// Outline
 			ctx.beginPath();
 			ctx.rect(
-				cx*tilesetDef.tileGridSize+0.5, // draw in the middle of the pixel to avoid blur
-				cy*tilesetDef.tileGridSize+0.5,
-				tilesetDef.tileGridSize-1,
-				tilesetDef.tileGridSize-1
+				cx*tilesetDef.tileGridSize + strokeOffset, // draw in the middle of the pixel to avoid blur
+				cy*tilesetDef.tileGridSize + strokeOffset,
+				tilesetDef.tileGridSize - strokeOffset*2,
+				tilesetDef.tileGridSize - strokeOffset*2
 			);
-			if( gridMode==ShowOpaques )
-				ctx.strokeStyle = C.intToHexRGBA( tilesetDef.getAverageTileColor(tid) );
-			else
-				ctx.strokeStyle = C.intToHexRGBA( C.replaceAlphaF(tilesetDef.getAverageTileColor(tid), 1) );
+			ctx.strokeStyle =
+				C.intToHexRGBA( C.toWhite( C.replaceAlphaF(tilesetDef.getAverageTileColor(tid), 0.9 ), 0.2 ) );
 			ctx.stroke();
 		}
 	}
