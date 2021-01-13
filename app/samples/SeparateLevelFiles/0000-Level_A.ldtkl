@@ -8,41 +8,32 @@
 		"appVersion": "0.6.3",
 		"url": "https://ldtk.io"
 	},
-	"identifier": "Level_B",
-	"uid": 2,
+	"identifier": "Level_A",
+	"uid": 0,
 	"worldX": 0,
-	"worldY": 272,
+	"worldY": 0,
 	"pxWid": 240,
-	"pxHei": 240,
-	"__bgColor": "#4A4C7F",
-	"bgColor": "#4A4C7F",
+	"pxHei": 288,
+	"__bgColor": "#398666",
+	"bgColor": "#398666",
 	"externalRelPath": null,
 	"layerInstances": [
 		{
 			"__identifier": "IntGrid",
 			"__type": "IntGrid",
 			"__cWid": 15,
-			"__cHei": 15,
+			"__cHei": 18,
 			"__gridSize": 16,
 			"__opacity": 1,
 			"__pxTotalOffsetX": 0,
 			"__pxTotalOffsetY": 0,
 			"__tilesetDefUid": null,
 			"__tilesetRelPath": null,
-			"levelId": 2,
+			"levelId": 0,
 			"layerDefUid": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"intGrid": [
-				{ "coordId": 65, "v": 0 },
-				{ "coordId": 66, "v": 0 },
-				{ "coordId": 67, "v": 0 },
-				{ "coordId": 68, "v": 0 },
-				{ "coordId": 80, "v": 0 },
-				{ "coordId": 84, "v": 0 },
-				{ "coordId": 95, "v": 0 },
-				{ "coordId": 99, "v": 0 },
-				{ "coordId": 110, "v": 0 },
 				{ "coordId": 111, "v": 0 },
 				{ "coordId": 112, "v": 0 },
 				{ "coordId": 113, "v": 0 },
@@ -53,10 +44,17 @@
 				{ "coordId": 155, "v": 0 },
 				{ "coordId": 156, "v": 0 },
 				{ "coordId": 157, "v": 0 },
-				{ "coordId": 158, "v": 0 }
+				{ "coordId": 158, "v": 0 },
+				{ "coordId": 159, "v": 0 },
+				{ "coordId": 170, "v": 0 },
+				{ "coordId": 174, "v": 0 },
+				{ "coordId": 185, "v": 0 },
+				{ "coordId": 189, "v": 0 },
+				{ "coordId": 200, "v": 0 },
+				{ "coordId": 204, "v": 0 }
 			],
 			"autoLayerTiles": [],
-			"seed": 8634741,
+			"seed": 5411700,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -64,23 +62,37 @@
 			"__identifier": "Entities",
 			"__type": "Entities",
 			"__cWid": 15,
-			"__cHei": 15,
+			"__cHei": 18,
 			"__gridSize": 16,
 			"__opacity": 1,
 			"__pxTotalOffsetX": 0,
 			"__pxTotalOffsetY": 0,
 			"__tilesetDefUid": null,
 			"__tilesetRelPath": null,
-			"levelId": 2,
+			"levelId": 0,
 			"layerDefUid": 4,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"intGrid": [],
 			"autoLayerTiles": [],
-			"seed": 7028425,
+			"seed": 5582680,
 			"gridTiles": [],
-			"entityInstances": []
+			"entityInstances": [{ "__identifier": "Text", "__grid": [7,3], "__pivot": [0.5,0.5], "__tile": null, "defUid": 5, "px": [120,56], "fieldInstances": [
+				{
+					"__identifier": "text",
+					"__value": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
+					"__type": "String",
+					"defUid": 6,
+					"realEditorValues": [{
+						"id": "V_String",
+						"params": [
+							"In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective."
+						]
+					}]
+				},
+				{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 7, "realEditorValues": [] }
+			] }]
 		}
 	],
-	"__neighbours": [ { "levelUid": 3, "dir": "s" }, { "levelUid": 0, "dir": "n" } ]
+	"__neighbours": [{ "levelUid": 2, "dir": "s" }]
 }

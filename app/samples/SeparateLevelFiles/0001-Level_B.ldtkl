@@ -8,14 +8,14 @@
 		"appVersion": "0.6.3",
 		"url": "https://ldtk.io"
 	},
-	"identifier": "Level_A",
-	"uid": 0,
+	"identifier": "Level_B",
+	"uid": 2,
 	"worldX": 0,
-	"worldY": 0,
+	"worldY": 320,
 	"pxWid": 240,
 	"pxHei": 240,
-	"__bgColor": "#398666",
-	"bgColor": "#398666",
+	"__bgColor": "#4A4C7F",
+	"bgColor": "#4A4C7F",
 	"externalRelPath": null,
 	"layerInstances": [
 		{
@@ -29,11 +29,12 @@
 			"__pxTotalOffsetY": 0,
 			"__tilesetDefUid": null,
 			"__tilesetRelPath": null,
-			"levelId": 0,
+			"levelId": 2,
 			"layerDefUid": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"intGrid": [
+				{ "coordId": 65, "v": 0 },
 				{ "coordId": 66, "v": 0 },
 				{ "coordId": 67, "v": 0 },
 				{ "coordId": 68, "v": 0 },
@@ -45,16 +46,17 @@
 				{ "coordId": 111, "v": 0 },
 				{ "coordId": 112, "v": 0 },
 				{ "coordId": 113, "v": 0 },
-				{ "coordId": 114, "v": 0 },
 				{ "coordId": 125, "v": 0 },
 				{ "coordId": 129, "v": 0 },
 				{ "coordId": 140, "v": 0 },
 				{ "coordId": 144, "v": 0 },
 				{ "coordId": 155, "v": 0 },
-				{ "coordId": 159, "v": 0 }
+				{ "coordId": 156, "v": 0 },
+				{ "coordId": 157, "v": 0 },
+				{ "coordId": 158, "v": 0 }
 			],
 			"autoLayerTiles": [],
-			"seed": 5411700,
+			"seed": 8634741,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -69,36 +71,16 @@
 			"__pxTotalOffsetY": 0,
 			"__tilesetDefUid": null,
 			"__tilesetRelPath": null,
-			"levelId": 0,
+			"levelId": 2,
 			"layerDefUid": 4,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"intGrid": [],
 			"autoLayerTiles": [],
-			"seed": 5582680,
+			"seed": 7028425,
 			"gridTiles": [],
-			"entityInstances": [
-				{ "__identifier": "Text", "__grid": [7,1], "__pivot": [0.5,0.5], "__tile": null, "defUid": 5, "px": [120,24], "fieldInstances": [
-					{
-						"__identifier": "text",
-						"__value": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
-						"__type": "String",
-						"defUid": 6,
-						"realEditorValues": [{
-							"id": "V_String",
-							"params": [
-								"In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective."
-							]
-						}]
-					},
-					{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 7, "realEditorValues": [] }
-				] },
-				{ "__identifier": "Text", "__grid": [7,1], "__pivot": [0.5,0.5], "__tile": null, "defUid": 5, "px": [120,24], "fieldInstances": [
-					{ "__identifier": "text", "__value": "", "__type": "String", "defUid": 6, "realEditorValues": [] },
-					{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 7, "realEditorValues": [] }
-				] }
-			]
+			"entityInstances": []
 		}
 	],
-	"__neighbours": [{ "levelUid": 2, "dir": "s" }]
+	"__neighbours": [ { "levelUid": 3, "dir": "s" }, { "levelUid": 0, "dir": "n" } ]
 }
