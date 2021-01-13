@@ -4,7 +4,7 @@ import data.inst.EntityInstance;
 
 class EntityInstanceEditor extends dn.Process {
 	public static var CURRENT : Null<EntityInstanceEditor> = null;
-	public static var size : Float = 220;
+	static var PANEL_WIDTH : Float = -1;
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
@@ -12,6 +12,8 @@ class EntityInstanceEditor extends dn.Process {
 	var jWindow : js.jquery.JQuery;
 	var ei : EntityInstance;
 	var link : h2d.Graphics;
+	var minPanelWidth : Int;
+
 
 	private function new(inst:data.inst.EntityInstance) {
 		super(Editor.ME);
@@ -26,6 +28,9 @@ class EntityInstanceEditor extends dn.Process {
 
 		jWindow = new J('<div class="entityInstanceEditor"/>');
 		App.ME.jPage.append(jWindow);
+		minPanelWidth = Std.int( jWindow.innerWidth() );
+		if( PANEL_WIDTH<=0 )
+			PANEL_WIDTH = minPanelWidth;
 
 		updateForm();
 	}
@@ -53,7 +58,7 @@ class EntityInstanceEditor extends dn.Process {
 		super.onResize();
 
 		jWindow.css({
-			left : (js.Browser.window.innerWidth - Math.floor(size)) + "px",
+			left : (js.Browser.window.innerWidth - Math.floor(PANEL_WIDTH)) + "px",
 			top : Std.int(js.Browser.window.innerHeight*0.5 - jWindow.outerHeight()*0.5)+"px",
 		});
 	}
@@ -99,12 +104,12 @@ class EntityInstanceEditor extends dn.Process {
 			js.Browser.document.removeEventListener("mousemove", resizeDrag);
 			js.Browser.document.removeEventListener("mouseup", resizeDrag);
 		}
-		size = dn.M.fclamp((js.Browser.window.innerWidth - ev.pageX), 220, 820);
+		PANEL_WIDTH = dn.M.fclamp((js.Browser.window.innerWidth - ev.pageX), minPanelWidth, 820);
 		js.Browser.window.requestAnimationFrame(updateResize);
 	}
 
 	function updateResize( stamp : Float ) {
-		jWindow.css("width", Math.ceil(size) + "px");
+		jWindow.css("width", Math.ceil(PANEL_WIDTH) + "px");
 		renderLink();
 		onResize();
 	}
@@ -157,7 +162,7 @@ class EntityInstanceEditor extends dn.Process {
 	var scrollMem : Float = 0;
 	final function updateForm() {
 		jWindow.empty();
-		jWindow.css("width", Math.ceil(size) + "px");
+		jWindow.css("width", Math.ceil(PANEL_WIDTH) + "px");
 
 		if( ei==null || ei.def==null ) {
 			destroy();
