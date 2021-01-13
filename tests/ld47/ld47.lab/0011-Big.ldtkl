@@ -10,8 +10,8 @@
 	},
 	"identifier": "Big",
 	"uid": 139,
-	"worldX": 8752,
-	"worldY": 0,
+	"worldX": 0,
+	"worldY": 5728,
 	"pxWid": 736,
 	"pxHei": 528,
 	"__bgColor": "#1C1520",
@@ -5514,5 +5514,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [ { "levelUid": 194, "dir": "e" }, { "levelUid": 155, "dir": "w" } ]
+	"__neighbours": [ { "levelUid": 194, "dir": "s" }, { "levelUid": 155, "dir": "n" } ]
 }

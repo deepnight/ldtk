@@ -10,8 +10,8 @@
 	},
 	"identifier": "Double_key",
 	"uid": 149,
-	"worldX": 3184,
-	"worldY": 0,
+	"worldX": 0,
+	"worldY": 2080,
 	"pxWid": 784,
 	"pxHei": 432,
 	"__bgColor": "#1C1520",
@@ -3993,5 +3993,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [ { "levelUid": 156, "dir": "e" }, { "levelUid": 166, "dir": "w" } ]
+	"__neighbours": [ { "levelUid": 156, "dir": "s" }, { "levelUid": 166, "dir": "n" } ]
 }

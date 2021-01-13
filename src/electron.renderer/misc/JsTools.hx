@@ -71,17 +71,19 @@ class JsTools {
 		}
 		else {
 			// Separate level JSONs
+			var idx = 0;
 			var externLevels = project.levels.map( (l)->{
 				json: jsonStringify( project, l.toJson() ),
-				relPath: l.makeExternalRelPath(),
+				relPath: l.makeExternalRelPath(idx++),
 				id: l.identifier,
 			});
 
-			// Build project JSON without level data
+			// Build project JSON without level datav
+			var idx = 0;
 			var trimmedProjectJson = project.toJson();
 			for(l in trimmedProjectJson.levels) {
 				l.layerInstances = null;
-				l.externalRelPath = project.getLevel(l.uid).makeExternalRelPath();
+				l.externalRelPath = project.getLevel(l.uid).makeExternalRelPath(idx++);
 			}
 
 			return {

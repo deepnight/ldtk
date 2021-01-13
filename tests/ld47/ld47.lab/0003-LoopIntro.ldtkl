@@ -10,8 +10,8 @@
 	},
 	"identifier": "LoopIntro",
 	"uid": 166,
-	"worldX": 2272,
-	"worldY": 0,
+	"worldX": 0,
+	"worldY": 1424,
 	"pxWid": 880,
 	"pxHei": 624,
 	"__bgColor": "#1C1520",
@@ -6694,5 +6694,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [ { "levelUid": 149, "dir": "e" }, { "levelUid": 148, "dir": "w" } ]
+	"__neighbours": [ { "levelUid": 149, "dir": "s" }, { "levelUid": 148, "dir": "n" } ]
 }

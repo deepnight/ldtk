@@ -10,8 +10,8 @@
 	},
 	"identifier": "Diamond2",
 	"uid": 148,
-	"worldX": 1696,
-	"worldY": 0,
+	"worldX": 0,
+	"worldY": 928,
 	"pxWid": 544,
 	"pxHei": 464,
 	"__bgColor": "#1C1520",
@@ -3024,5 +3024,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [ { "levelUid": 166, "dir": "e" }, { "levelUid": 147, "dir": "w" } ]
+	"__neighbours": [ { "levelUid": 166, "dir": "s" }, { "levelUid": 147, "dir": "n" } ]
 }

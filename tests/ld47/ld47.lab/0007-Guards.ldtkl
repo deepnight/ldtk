@@ -10,8 +10,8 @@
 	},
 	"identifier": "Guards",
 	"uid": 150,
-	"worldX": 5648,
-	"worldY": 0,
+	"worldX": 0,
+	"worldY": 3600,
 	"pxWid": 800,
 	"pxHei": 480,
 	"__bgColor": "#1C1520",
@@ -4532,5 +4532,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [ { "levelUid": 193, "dir": "e" }, { "levelUid": 172, "dir": "w" } ]
+	"__neighbours": [ { "levelUid": 193, "dir": "s" }, { "levelUid": 172, "dir": "n" } ]
 }

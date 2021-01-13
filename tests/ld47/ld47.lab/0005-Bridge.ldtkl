@@ -10,8 +10,8 @@
 	},
 	"identifier": "Bridge",
 	"uid": 156,
-	"worldX": 4000,
-	"worldY": 0,
+	"worldX": 0,
+	"worldY": 2544,
 	"pxWid": 1008,
 	"pxHei": 512,
 	"__bgColor": "#1C1520",
@@ -7291,5 +7291,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [ { "levelUid": 172, "dir": "e" }, { "levelUid": 149, "dir": "w" } ]
+	"__neighbours": [ { "levelUid": 172, "dir": "s" }, { "levelUid": 149, "dir": "n" } ]
 }

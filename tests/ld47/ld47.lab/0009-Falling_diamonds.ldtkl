@@ -10,8 +10,8 @@
 	},
 	"identifier": "Falling_diamonds",
 	"uid": 191,
-	"worldX": 7296,
-	"worldY": 0,
+	"worldX": 0,
+	"worldY": 4704,
 	"pxWid": 656,
 	"pxHei": 560,
 	"__bgColor": "#1C1520",
@@ -4556,5 +4556,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [ { "levelUid": 155, "dir": "e" }, { "levelUid": 193, "dir": "w" } ]
+	"__neighbours": [ { "levelUid": 155, "dir": "s" }, { "levelUid": 193, "dir": "n" } ]
 }

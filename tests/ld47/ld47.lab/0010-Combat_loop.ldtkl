@@ -10,8 +10,8 @@
 	},
 	"identifier": "Combat_loop",
 	"uid": 155,
-	"worldX": 7984,
-	"worldY": 0,
+	"worldX": 0,
+	"worldY": 5296,
 	"pxWid": 736,
 	"pxHei": 400,
 	"__bgColor": "#1C1520",
@@ -3712,5 +3712,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [ { "levelUid": 139, "dir": "e" }, { "levelUid": 191, "dir": "w" } ]
+	"__neighbours": [ { "levelUid": 139, "dir": "s" }, { "levelUid": 191, "dir": "n" } ]
 }

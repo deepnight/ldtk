@@ -10,8 +10,8 @@
 	},
 	"identifier": "Vortex_keys",
 	"uid": 194,
-	"worldX": 9520,
-	"worldY": 0,
+	"worldX": 0,
+	"worldY": 6288,
 	"pxWid": 1216,
 	"pxHei": 768,
 	"__bgColor": "#1C1520",
@@ -11391,5 +11391,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [{ "levelUid": 139, "dir": "w" }]
+	"__neighbours": [{ "levelUid": 139, "dir": "n" }]
 }
