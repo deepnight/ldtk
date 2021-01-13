@@ -457,7 +457,7 @@ class WorldRender extends dn.Process {
 		wl.label.color.setColor( C.addAlphaF(0x464e79) );
 		wl.label.alpha = 0.8;
 
-		var tf = new h2d.Text(Assets.fontLight_medium, wl.label);
+		var tf = new h2d.Text(Assets.fontLight_large, wl.label);
 		tf.text = l.identifier;
 		tf.textColor = C.toWhite( l.getBgColor(), 0.8 );
 		tf.x = 4;

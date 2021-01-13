@@ -4,6 +4,7 @@ class Assets {
 	public static var fontLight_small : h2d.Font;
 	public static var fontLight_medium : h2d.Font;
 	public static var fontLight_large : h2d.Font;
+	public static var fontLight_xlarge : h2d.Font;
 	public static var fontPixel : h2d.Font;
 	public static var fontPixelOutline : h2d.Font;
 
@@ -13,8 +14,9 @@ class Assets {
 		fontPixelOutline = hxd.Res.fonts.minecraftiaOutline.toFont();
 		fontPixel = hxd.Res.fonts.pixel_berry_xml.toFont();
 		fontLight_small = hxd.Res.fonts.robotoLight24.toFont();
-		fontLight_medium = hxd.Res.fonts.robotoLight48.toFont();
-		fontLight_large = hxd.Res.fonts.robotoLight72.toFont();
+		fontLight_medium = hxd.Res.fonts.robotoLight36.toFont();
+		fontLight_large = hxd.Res.fonts.robotoLight48.toFont();
+		fontLight_xlarge = hxd.Res.fonts.robotoLight72.toFont();
 
 		elements = dn.heaps.assets.Atlas.load("appElements.atlas");
 	}

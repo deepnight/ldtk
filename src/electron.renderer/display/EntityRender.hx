@@ -175,7 +175,7 @@ class EntityRender extends dn.Process {
 
 
 	inline function getDefaultFont() {
-		return Assets.fontLight_small;
+		return Assets.fontLight_medium;
 	}
 
 
@@ -184,8 +184,8 @@ class EntityRender extends dn.Process {
 		f.addChildAt(bg, 0);
 		f.getProperties(bg).isAbsolute = true;
 		bg.color.setColor( C.addAlphaF( C.toBlack( ei.getSmartColor(false), dark ) ) );
-		bg.alpha = 0.8;
-		bg.x = -4;
+		bg.alpha = 0.9;
+		bg.x = -8;
 		bg.y = 1;
 		bg.width = f.outerWidth + M.fabs(bg.x)*2;
 		bg.height = f.outerHeight+3;
@@ -349,7 +349,7 @@ class EntityRender extends dn.Process {
 			}
 
 			if( needBg )
-				addFieldBg(fieldWrapper, 0.15);
+				addFieldBg(fieldWrapper, 0.25);
 
 			fieldWrapper.visible = fieldWrapper.numChildren>0;
 
@@ -371,7 +371,7 @@ class EntityRender extends dn.Process {
 
 	public inline function updatePos() {
 		var cam = Editor.ME.camera;
-		var scale = M.fmin(0.5, 2/cam.adjustedZoom);
+		var scale = M.fmin(0.5, 1/cam.adjustedZoom);
 
 		root.x = ei.x;
 		root.y = ei.y;
