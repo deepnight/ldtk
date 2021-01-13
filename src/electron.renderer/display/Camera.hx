@@ -59,7 +59,7 @@ class Camera extends dn.Process {
 		switch e {
 			case WorldMode(active):
 				if( active )
-					targetZoom = M.fmax(0.3, getFitZoom()*0.8);
+					targetZoom = snapZoomValue( M.fmax(0.3, getFitZoom()*0.8) );
 				else
 					fit();
 
@@ -125,7 +125,7 @@ class Camera extends dn.Process {
 			targetWorldY = editor.curLevel.worldY + editor.curLevel.pxHei*0.5;
 		}
 
-		targetZoom = getFitZoom();
+		targetZoom = snapZoomValue( getFitZoom() );
 
 		if( immediate ) {
 			worldX = targetWorldX;
@@ -205,10 +205,12 @@ class Camera extends dn.Process {
 		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
 	}
 
-	inline function get_adjustedZoom() {
-		return rawZoom; // TODO fix flickering again? (see issue #71)
+	inline function snapZoomValue(v:Float) {
+		return v<=pixelRatio ? v : M.round(v*2)/2;
+	}
 
-		// return rawZoom<=pixelRatio ? rawZoom : M.round(rawZoom*2)/2;
+	inline function get_adjustedZoom() {
+		return targetZoom==null ? snapZoomValue(rawZoom) : rawZoom;
 	}
 
 	public function deltaZoomTo(zoomFocusX:Float, zoomFocusY:Float, delta:Float) {
