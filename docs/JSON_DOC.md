@@ -35,6 +35,7 @@ Value | Type | Description
 `defaultPivotX`<br/><sup class="internal">*Internal editor data*</sup> | Float | Default X pivot (0 to 1) for new entities
 `defaultPivotY`<br/><sup class="internal">*Internal editor data*</sup> | Float | Default Y pivot (0 to 1) for new entities
 `defs` | [Definitions](#ldtk-DefinitionsJson) | A structure containing all the definitions of this project
+`exportPng`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, all layers in all levels will also be exported as PNG along with the project file (default is FALSE)
 `exportTiled`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)
 `externalLevels` | Bool | If TRUE, one file will be saved the project (incl. all its definitions) and one file per-level in a sub-folder.
 `jsonVersion` | String | File format version

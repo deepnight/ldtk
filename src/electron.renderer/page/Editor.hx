@@ -1022,25 +1022,29 @@ class Editor extends Page {
 					var size = dn.Lib.prettyBytesSize(savingData.projectJson.length);
 					App.LOG.fileOp('Saved $size.');
 
-					var fileName = project.filePath.fileWithExt;
+					// Tiled export
 					if( project.exportTiled ) {
 						var e = new exporter.Tiled();
 						e.addExtraLogger( App.LOG, "TiledExport" );
 						e.run( project, project.filePath.full );
 						if( e.hasErrors() )
-							N.error('Saved $fileName ($size) but Tiled export has errors.');
+							N.error('Tiled export has errors.');
 						else
-							N.success('Saved $fileName ($size) and Tiled files.');
+							N.success('Saved Tiled files.');
 					}
-					else
-						N.success('Saved $fileName ($size)');
 
+					// Png export
+					if( project.exportPng ) {
+						N.notImplemented();
+					}
+
+					var fileName = project.filePath.fileWithExt;
+					N.success('Saved $fileName ($size)');
 					App.ME.registerRecentProject(project.filePath.full);
-
-					updateTitle();
-
 					this.needSaving = false;
 					ge.emit(ProjectSaved);
+
+					updateTitle();
 
 					if( onComplete!=null )
 						onComplete();

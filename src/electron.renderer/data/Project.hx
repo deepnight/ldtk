@@ -24,6 +24,7 @@ class Project {
 	public var minifyJson = false;
 	public var externalLevels = false;
 	public var exportTiled = false;
+	public var exportPng = false;
 
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
@@ -92,6 +93,7 @@ class Project {
 
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
+		p.exportPng = JsonTools.readBool( json.exportPng, false );
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
@@ -122,6 +124,7 @@ class Project {
 			minifyJson: minifyJson,
 			externalLevels: externalLevels,
 			exportTiled: exportTiled,
+			exportPng: exportPng,
 			worldLayout: JsonTools.writeEnum(worldLayout, false),
 			worldGridWidth: worldGridWidth,
 			worldGridHeight: worldGridHeight,

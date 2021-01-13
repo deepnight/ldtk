@@ -13,6 +13,7 @@
 			"defaultLevelBgColor",
 			"defaultPivotX",
 			"defaultPivotY",
+			"exportPng",
 			"exportTiled",
 			"externalLevels",
 			"jsonVersion",
@@ -72,6 +73,12 @@
 					"GridVania",
 					"LinearHorizontal",
 					"LinearVertical"
+				]
+			},
+			"exportPng": {
+				"description": "If TRUE, all layers in all levels will also be exported as PNG along with the project file (default is FALSE)",
+				"type": [
+					"boolean"
 				]
 			},
 			"exportTiled": {
