@@ -71,12 +71,14 @@
 				{ "__identifier": "Trigger", "__grid": [13,21], "__pivot": [0.5,1], "__tile": null, "defUid": 145, "px": [216,352], "fieldInstances": [
 					{ "__identifier": "hidden", "__value": false, "__type": "Bool", "defUid": 161, "realEditorValues": [] },
 					{ "__identifier": "radius", "__value": 0, "__type": "Int", "defUid": 162, "realEditorValues": [] },
-					{ "__identifier": "target", "__value": null, "__type": "Point", "defUid": 165, "realEditorValues": [] }
+					{ "__identifier": "target", "__value": null, "__type": "Point", "defUid": 165, "realEditorValues": [] },
+					{ "__identifier": "exitLevel", "__value": false, "__type": "Bool", "defUid": 196, "realEditorValues": [] }
 				] },
 				{ "__identifier": "Trigger", "__grid": [31,21], "__pivot": [0.5,1], "__tile": null, "defUid": 145, "px": [504,352], "fieldInstances": [
 					{ "__identifier": "hidden", "__value": false, "__type": "Bool", "defUid": 161, "realEditorValues": [] },
 					{ "__identifier": "radius", "__value": 0, "__type": "Int", "defUid": 162, "realEditorValues": [] },
-					{ "__identifier": "target", "__value": null, "__type": "Point", "defUid": 165, "realEditorValues": [] }
+					{ "__identifier": "target", "__value": null, "__type": "Point", "defUid": 165, "realEditorValues": [] },
+					{ "__identifier": "exitLevel", "__value": false, "__type": "Bool", "defUid": 196, "realEditorValues": [] }
 				] },
 				{ "__identifier": "Vault", "__grid": [37,20], "__pivot": [0.5,0.5], "__tile": null, "defUid": 136, "px": [600,328], "fieldInstances": [] },
 				{ "__identifier": "Item", "__grid": [23,6], "__pivot": [0.5,1], "__tile": { "tilesetUid": 200, "srcRect": [192,432,16,16] }, "defUid": 64, "px": [376,112], "fieldInstances": [{
@@ -120,7 +122,8 @@
 							"id": "V_String",
 							"params": ["23,8"]
 						}]
-					}
+					},
+					{ "__identifier": "exitLevel", "__value": false, "__type": "Bool", "defUid": 196, "realEditorValues": [] }
 				] },
 				{ "__identifier": "Text", "__grid": [42,23], "__pivot": [0.5,0.5], "__tile": null, "defUid": 152, "px": [680,376], "fieldInstances": [
 					{
@@ -144,7 +147,8 @@
 							"id": "V_Bool",
 							"params": [ true ]
 						}]
-					}
+					},
+					{ "__identifier": "tutorial", "__value": false, "__type": "Bool", "defUid": 197, "realEditorValues": [] }
 				] },
 				{ "__identifier": "Vault", "__grid": [43,20], "__pivot": [0.5,0.5], "__tile": null, "defUid": 136, "px": [696,328], "fieldInstances": [] },
 				{ "__identifier": "Vault", "__grid": [40,20], "__pivot": [0.5,0.5], "__tile": null, "defUid": 136, "px": [648,328], "fieldInstances": [] },
@@ -189,7 +193,8 @@
 							"id": "V_String",
 							"params": ["26,5"]
 						}]
-					}
+					},
+					{ "__identifier": "exitLevel", "__value": false, "__type": "Bool", "defUid": 196, "realEditorValues": [] }
 				] },
 				{ "__identifier": "Trigger", "__grid": [39,20], "__pivot": [0.5,1], "__tile": null, "defUid": 145, "px": [632,336], "fieldInstances": [
 					{
@@ -218,7 +223,8 @@
 							"id": "V_String",
 							"params": ["42,22"]
 						}]
-					}
+					},
+					{ "__identifier": "exitLevel", "__value": false, "__type": "Bool", "defUid": 196, "realEditorValues": [] }
 				] },
 				{ "__identifier": "Item", "__grid": [45,21], "__pivot": [0.5,1], "__tile": { "tilesetUid": 200, "srcRect": [192,432,16,16] }, "defUid": 64, "px": [728,352], "fieldInstances": [{
 					"__identifier": "type",
@@ -258,7 +264,8 @@
 							"id": "V_Bool",
 							"params": [ true ]
 						}]
-					}
+					},
+					{ "__identifier": "tutorial", "__value": false, "__type": "Bool", "defUid": 197, "realEditorValues": [] }
 				] },
 				{ "__identifier": "Trigger", "__grid": [23,21], "__pivot": [0.5,1], "__tile": null, "defUid": 145, "px": [376,352], "fieldInstances": [
 					{
@@ -287,7 +294,8 @@
 							"id": "V_String",
 							"params": ["22,18"]
 						}]
-					}
+					},
+					{ "__identifier": "exitLevel", "__value": false, "__type": "Bool", "defUid": 196, "realEditorValues": [] }
 				] }
 			]
 		},
