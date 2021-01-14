@@ -50,7 +50,7 @@ enum GlobalEvent {
 	LayerInstanceChanged;
 	LayerInstanceVisiblityChanged(li:data.inst.LayerInstance);
 	LayerInstanceRestoredFromHistory(li:data.inst.LayerInstance);
-	LayerInstanceAutoRenderingChanged(li:data.inst.LayerInstance);
+	AutoLayerRenderingChanged;
 
 	TilesetDefChanged(td:data.def.TilesetDef);
 	TilesetDefAdded(td:data.def.TilesetDef);

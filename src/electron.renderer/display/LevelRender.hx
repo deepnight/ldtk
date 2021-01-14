@@ -7,8 +7,7 @@ class LevelRender extends dn.Process {
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
 	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
 
-	/** <LayerDefUID, Bool> **/
-	var autoLayerRendering : Map<Int,Bool> = new Map();
+	var autoLayerRendering = true;
 
 	/** <LayerDefUID, Bool> **/
 	var layerVis : Map<Int,Bool> = new Map();
@@ -121,8 +120,10 @@ class LevelRender extends dn.Process {
 			case LayerInstanceVisiblityChanged(li):
 				applyLayerVisibility(li);
 
-			case LayerInstanceAutoRenderingChanged(li):
-				invalidateLayer(li);
+			case AutoLayerRenderingChanged:
+				for(li in editor.curLevel.layerInstances)
+					if( li.def.isAutoLayer() )
+						invalidateLayer(li);
 
 			case LayerInstanceSelected:
 				applyAllLayersVisibility();
@@ -236,24 +237,18 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	public inline function autoLayerRenderingEnabled(li:data.inst.LayerInstance) {
-		if( li==null || !li.def.isAutoLayer() )
-			return false;
-
-		return ( !autoLayerRendering.exists(li.layerDefUid) || autoLayerRendering.get(li.layerDefUid)==true );
+	public inline function isAutoLayerRenderingEnabled() {
+		return autoLayerRendering;
 	}
 
-	public function setAutoLayerRendering(li:data.inst.LayerInstance, v:Bool) {
-		if( li==null || !li.def.isAutoLayer() )
-			return;
-
-		autoLayerRendering.set(li.layerDefUid, v);
-		editor.ge.emit( LayerInstanceAutoRenderingChanged(li) );
+	public function setAutoLayerRendering(v:Bool) {
+		autoLayerRendering = v;
+		editor.ge.emit( AutoLayerRenderingChanged );
 	}
 
-	public function toggleAutoLayerRendering(li:data.inst.LayerInstance) {
-		if( li!=null && li.def.isAutoLayer() )
-			setAutoLayerRendering( li, !autoLayerRenderingEnabled(li) );
+	public inline function toggleAutoLayerRendering() {
+		setAutoLayerRendering( !autoLayerRendering );
+		return autoLayerRendering;
 	}
 
 	public inline function isLayerVisible(l:data.inst.LayerInstance) {
@@ -425,7 +420,7 @@ class LevelRender extends dn.Process {
 		case IntGrid, AutoLayer:
 			// var doneCoords = new Map();
 
-			if( li.def.isAutoLayer() && li.def.autoTilesetDefUid!=null && autoLayerRenderingEnabled(li) ) {
+			if( li.def.isAutoLayer() && li.def.autoTilesetDefUid!=null && autoLayerRendering ) {
 				// Auto-layer tiles
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper);

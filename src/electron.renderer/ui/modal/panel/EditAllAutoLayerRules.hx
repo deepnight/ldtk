@@ -233,9 +233,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		// Render
 		var chk = jContent.find("[name=renderRules]");
-		chk.prop("checked", editor.levelRender.autoLayerRenderingEnabled(li) );
+		chk.prop("checked", editor.levelRender.isAutoLayerRenderingEnabled() );
 		chk.change( function(ev) {
-			editor.levelRender.setAutoLayerRendering( li, chk.prop("checked") );
+			editor.levelRender.setAutoLayerRendering( chk.prop("checked") );
 		});
 
 

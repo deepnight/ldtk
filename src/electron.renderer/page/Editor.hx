@@ -390,13 +390,7 @@ class Editor extends Page {
 				camera.fit();
 
 			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				var state : Null<Bool> = null;
-				for(li in curLevel.layerInstances)
-					if( li.def.isAutoLayer() ) {
-						if( state==null )
-							state = !levelRender.autoLayerRenderingEnabled(li);
-						levelRender.setAutoLayerRendering(li, state);
-					}
+				var state = levelRender.toggleAutoLayerRendering();
 				N.quick( "Auto-layers rendering: "+L.onOff(state));
 
 			case K.W if( App.ME.isCtrlDown() ):
@@ -1107,7 +1101,7 @@ class Editor extends Page {
 				case LayerInstanceChanged:
 				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
 				case LayerInstanceRestoredFromHistory(li): extra = li.layerDefUid;
-				case LayerInstanceAutoRenderingChanged(li): extra = li.layerDefUid;
+				case AutoLayerRenderingChanged:
 				case TilesetDefChanged(td): extra = td.uid;
 				case TilesetDefAdded(td): extra = td.uid;
 				case TilesetDefRemoved(td): extra = td.uid;
@@ -1144,7 +1138,7 @@ class Editor extends Page {
 			case LayerInstanceSelected:
 			case LevelSelected(_):
 			case LayerInstanceVisiblityChanged(_):
-			case LayerInstanceAutoRenderingChanged(_):
+			case AutoLayerRenderingChanged:
 			case ToolOptionChanged:
 			case BeforeProjectSaving:
 			case ProjectSaved:
@@ -1182,7 +1176,7 @@ class Editor extends Page {
 				updateLayerList();
 				updateGuide();
 
-			case LayerInstanceAutoRenderingChanged(li):
+			case AutoLayerRenderingChanged:
 
 			case LayerInstanceVisiblityChanged(li):
 				selectionTool.clear();
