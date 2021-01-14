@@ -17,6 +17,8 @@ class Camera extends dn.Process {
 	public var levelY(get,set) : Float;
 
 	public var adjustedZoom(get,never) : Float;
+
+	@:allow(display.EntityRender)
 	var rawZoom : Float;
 
 	public var pixelRatio(get,never) : Float;
