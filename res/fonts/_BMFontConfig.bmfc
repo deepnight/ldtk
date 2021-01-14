@@ -2,7 +2,7 @@
 fileVersion=1
 
 # font settings
-fontName=Roboto Light
+fontName=Roboto Condensed
 fontFile=
 charSet=0
 fontSize=24
@@ -35,7 +35,7 @@ widthPaddingFactor=0.00
 
 # output file
 outWidth=512
-outHeight=1024
+outHeight=512
 outBitDepth=32
 fontDescFormat=1
 fourChnlPacked=0
