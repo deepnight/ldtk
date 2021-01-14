@@ -1469,7 +1469,8 @@ class Editor extends Page {
 
 		#if debug
 		if( cd.has("debugTools") ) {
-			App.ME.debug("-- Tools & UI ----------------------------------------");
+			App.ME.debug("zoom="+M.pretty(camera.adjustedZoom,1));
+			App.ME.debug("-- Tools & UI ----------------------------------------",true);
 			App.ME.debug("  "+worldTool, true);
 			App.ME.debug("  "+panTool, true);
 			App.ME.debug("  "+selectionTool, true);
