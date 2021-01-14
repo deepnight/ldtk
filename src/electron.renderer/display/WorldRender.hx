@@ -195,9 +195,8 @@ class WorldRender extends dn.Process {
 			if( !e.label.visible )
 				continue;
 
-			var scale = 1;
 			e.label.alpha = M.fmin( (camera.adjustedZoom-minZoom)/minZoom, 1 );
-			e.label.setScale( scale / camera.adjustedZoom);
+			e.label.setScale( M.fmin( 0.8*l.pxWid / e.label.width, 1/camera.adjustedZoom ) );
 			switch project.worldLayout {
 				case Free, GridVania:
 					e.label.x = Std.int( l.worldX + l.pxWid*0.5 - e.label.width*e.label.scaleX*0.5 );
