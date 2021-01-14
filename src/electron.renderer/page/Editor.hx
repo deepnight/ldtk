@@ -992,31 +992,37 @@ class Editor extends Page {
 					// Save main project file
 					JsTools.writeFileString(project.filePath.full, savingData.projectJson);
 
-					// Optional: save external files
+					// Project dir (optional)
 					var externDir = project.getAbsExternalFilesDir();
-					if( project.externalLevels ) {
-
-						// Init dir
+					if( project.externalLevels || project.exportPng ) {
+						// Init project dir
 						if( !JsTools.fileExists(externDir) )
 							JsTools.createDirs(externDir);
 						else
-							JsTools.emptyDir(externDir, Const.LEVEL_EXTENSION);
-
-						// Save external levels
-						for(l in savingData.externLevelsJson) {
-							var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(l.relPath) );
-							JsTools.writeFileString(fp.full, l.json);
-						}
+							JsTools.emptyDir(externDir, [Const.LEVEL_EXTENSION,"png"]);
 					}
 					else if( JsTools.fileExists(externDir) ) {
 						// Delete external folder if it exists
 						JsTools.removeDir(externDir);
 					}
 
-					var size = dn.Lib.prettyBytesSize(savingData.projectJson.length);
-					App.LOG.fileOp('Saved $size.');
 
-					// Tiled export
+					// Optional: save external files
+					if( project.externalLevels ) {
+						var ops = [];
+						for(l in savingData.externLevelsJson) {
+							var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(l.relPath) );
+							ops.push({
+								label: "Level "+l.id,
+								cb: ()->{
+									JsTools.writeFileString(fp.full, l.json);
+								}
+							});
+						}
+						new ui.modal.Progress(Lang.t._("Saving levels"), 2, ops);
+					}
+
+					// Optional: Tiled export
 					if( project.exportTiled ) {
 						var e = new exporter.Tiled();
 						e.addExtraLogger( App.LOG, "TiledExport" );
@@ -1027,17 +1033,63 @@ class Editor extends Page {
 							N.success('Saved Tiled files.');
 					}
 
-					// Png export
+					// Optional: PNGs export
 					if( project.exportPng ) {
-						N.notImplemented();
+						var ops = [];
+
+						// Init PNG dir
+						var pngDir = externDir+"/png";
+						if( !JsTools.fileExists(pngDir) )
+							JsTools.createDirs(pngDir);
+						else
+							JsTools.emptyDir(pngDir);
+
+						// Export level layers
+						var lr = new display.LayerRender();
+						var levelIdx = 0;
+						for( level in project.levels ) {
+							var layerIdx = 0;
+							for( li in level.layerInstances ) {
+								var level = level;
+								var li = li;
+								var levelIdx = levelIdx;
+								var layerIdx = layerIdx;
+								ops.push({
+									label: "Level "+level.identifier+": "+li.def.identifier,
+									cb: ()->{
+										// Draw
+										var bytes = lr.createPng(project, level, li);
+										if( bytes==null )
+											return;
+
+										// Save PNG
+										var fp = dn.FilePath.fromDir(pngDir);
+										fp.fileName =
+											dn.Lib.leadingZeros(levelIdx, Const.LEVEL_FILE_LEADER_ZEROS) + "-"
+											+ dn.Lib.leadingZeros(layerIdx++, 2) + "-"
+											+ li.def.identifier;
+										fp.extension = "png";
+										App.LOG.fileOp('Saving ${fp.fileWithExt} (${bytes.length} bytes)...');
+										JsTools.writeFileBytes(fp.full, bytes);
+									}
+								});
+							}
+							levelIdx++;
+						}
+
+						new ui.modal.Progress(Lang.t._("PNG export"), 2, ops);
 					}
 
+
+					// Notify
+					var size = dn.Lib.prettyBytesSize(savingData.projectJson.length);
+					App.LOG.fileOp('Saved $size.');
 					var fileName = project.filePath.fileWithExt;
 					N.success('Saved $fileName ($size)');
+
 					App.ME.registerRecentProject(project.filePath.full);
 					this.needSaving = false;
 					ge.emit(ProjectSaved);
-
 					updateTitle();
 
 					if( onComplete!=null )
