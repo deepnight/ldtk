@@ -175,7 +175,7 @@ class EntityRender extends dn.Process {
 
 
 	inline function getDefaultFont() {
-		return Assets.fontLight_medium;
+		return Assets.fontLight_small;
 	}
 
 
@@ -371,7 +371,9 @@ class EntityRender extends dn.Process {
 
 	public inline function updatePos() {
 		var cam = Editor.ME.camera;
-		var scale = M.fmin(0.5, 1/cam.adjustedZoom);
+		// var scale = M.fmin(0.5, 1/cam.adjustedZoom);
+		var scale = 1 / @:privateAccess cam.rawZoom;
+		var alpha = M.fclamp( (cam.adjustedZoom-1) / 1, 0, 1 );
 
 		root.x = ei.x;
 		root.y = ei.y;
@@ -380,14 +382,17 @@ class EntityRender extends dn.Process {
 		above.setScale(scale);
 		above.x = Std.int( -ed.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ed.width*0.5 );
 		above.y = Std.int( -above.outerHeight*above.scaleY - ed.height*ed.pivotY - 1 );
+		above.alpha = alpha;
 
 		center.setScale(scale);
 		center.x = Std.int( -ed.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ed.width*0.5 );
 		center.y = Std.int( -ed.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ed.height*0.5);
+		center.alpha = alpha;
 
 		beneath.setScale(scale);
 		beneath.x = Std.int( -ed.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ed.width*0.5 );
 		beneath.y = Std.int( ed.height*(1-ed.pivotY) + 1 );
+		beneath.alpha = alpha;
 	}
 
 	override function update() {
