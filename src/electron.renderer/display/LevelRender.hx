@@ -452,7 +452,7 @@ class LevelRender extends dn.Process {
 				});
 
 				// Default render when no rule match here
-				// if( li.def.type==IntGrid )
+				// if( li.def.type==IntGrid && !li.def.hasAnyActiveRule() ) {
 				// 	for(cy in 0...li.cHei)
 				// 	for(cx in 0...li.cWid) {
 				// 		if( doneCoords.exists(li.coordId(cx,cy)) || li.getIntGrid(cx,cy)<0 )
@@ -460,6 +460,7 @@ class LevelRender extends dn.Process {
 				// 		g.lineStyle(1, li.getIntGridColorAt(cx,cy), 0.6 );
 				// 		g.drawRect(cx*li.def.gridSize+2, cy*li.def.gridSize+2, li.def.gridSize-4, li.def.gridSize-4);
 				// 	}
+				// }
 			}
 			else if( li.def.type==IntGrid ) {
 				// Normal intGrid
@@ -523,349 +524,14 @@ class LevelRender extends dn.Process {
 	}
 
 
-	static inline function getDefaultEntityFont() {
-		return Assets.fontLight_small;
-	}
-
-
-	static function createFieldValuesRender(ei:data.inst.EntityInstance, fi:data.inst.FieldInstance) {
-		var valuesFlow = new h2d.Flow();
-		valuesFlow.layout = Horizontal;
-		valuesFlow.verticalAlign = Middle;
-
-		// Array opening
-		if( fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = new h2d.Text(getDefaultEntityFont(), valuesFlow);
-			tf.textColor = ei.getSmartColor(true);
-			tf.text = "[";
-			tf.scale(FIELD_TEXT_SCALE);
-		}
-
-		for( idx in 0...fi.getArrayLength() ) {
-			if( !fi.valueIsNull(idx) && !( !fi.def.editorAlwaysShow && fi.def.type==F_Bool && fi.isUsingDefault(idx) ) ) {
-				if( fi.hasIconForDisplay(idx) ) {
-					// Icon
-					var w = new h2d.Flow(valuesFlow);
-					var tile = fi.getIconForDisplay(idx);
-					var bmp = new h2d.Bitmap( tile, w );
-					var s = M.fmin(1, M.fmin( ei.def.width/ tile.width, ei.def.height/tile.height ));
-					bmp.setScale(s);
-				}
-				else if( fi.def.type==F_Color ) {
-					// Color disc
-					var g = new h2d.Graphics(valuesFlow);
-					var r = 6;
-					g.beginFill( fi.getColorAsInt(idx) );
-					g.lineStyle(1, 0x0, 0.8);
-					g.drawCircle(r,r,r, 16);
-				}
-				else {
-					// Text render
-					var tf = new h2d.Text(getDefaultEntityFont(), valuesFlow);
-					tf.textColor = ei.getSmartColor(true);
-					// tf.filter = new dn.heaps.filter.PixelOutline();
-					tf.maxWidth = 300;
-					tf.scale(FIELD_TEXT_SCALE);
-					var v = fi.getForDisplay(idx);
-					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
-						tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';
-					else
-						tf.text = v;
-				}
-			}
-
-			// Array separator
-			if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
-				var tf = new h2d.Text(getDefaultEntityFont(), valuesFlow);
-				tf.textColor = ei.getSmartColor(true);
-				tf.text = ",";
-				tf.scale(FIELD_TEXT_SCALE);
-			}
-		}
-
-		// Array closing
-		if( fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = new h2d.Text(getDefaultEntityFont(), valuesFlow);
-			tf.textColor = ei.getSmartColor(true);
-			tf.text = "]";
-			tf.scale(FIELD_TEXT_SCALE);
-		}
-
-		return valuesFlow;
-	}
-
-	static inline function dashedLine(g:h2d.Graphics, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=4.) {
-		var a = Math.atan2(ty-fy, tx-fx);
-		var len = M.dist(fx,fy, tx,ty);
-		var cur = 0.;
-		var count = M.ceil( len/(dashLen*2) );
-		var dashLen = len / ( count%2==0 ? count+1 : count );
-
-		while( cur<len ) {
-			g.moveTo( fx+Math.cos(a)*cur, fy+Math.sin(a)*cur );
-			g.lineTo( fx+Math.cos(a)*(cur+dashLen), fy+Math.sin(a)*(cur+dashLen) );
-			cur+=dashLen*2;
-		}
-	}
-
-
 	function clearLayerEntities(layerDefUid:Int) {
 		if( entityRenders.exists(layerDefUid) )
 			for( er in entityRenders.get(layerDefUid) )
 				er.destroy();
-			
+
 		entityRenders.set(layerDefUid, []);
 	}
 
-
-	public static function createEntityRender(?ei:data.inst.EntityInstance, ?def:data.def.EntityDef, ?li:data.inst.LayerInstance, ?parent:h2d.Object) {
-		if( def==null && ei==null )
-			throw "Need at least 1 parameter";
-
-		if( def==null )
-			def = ei.def;
-
-		// Init
-		var wrapper = new h2d.Object(parent);
-		new display.EntityRender(ei, li.def, wrapper);
-		/*
-
-		var g = new h2d.Graphics(wrapper);
-		g.x = Std.int( -def.width*def.pivotX );
-		g.y = Std.int( -def.height*def.pivotY );
-
-		// Render a tile
-		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:ldtk.Json.EntityTileRenderMode) {
-			if( tileId==null || tilesetId==null ) {
-				// Missing tile
-				var p = 2;
-				g.lineStyle(3, 0xff0000);
-				g.moveTo(p,p);
-				g.lineTo(def.width-p, def.height-p);
-				g.moveTo(def.width-p, p);
-				g.lineTo(p, def.height-p);
-			}
-			else {
-				g.beginFill(def.color, 0.2);
-				g.drawRect(0, 0, def.width, def.height);
-
-				var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
-				var t = td.getTile(tileId);
-				var bmp = new h2d.Bitmap(t, wrapper);
-				switch mode {
-					case Stretch:
-						bmp.scaleX = def.width / bmp.tile.width;
-						bmp.scaleY = def.height / bmp.tile.height;
-
-					case Crop:
-						if( bmp.tile.width>def.width || bmp.tile.height>def.height )
-							bmp.tile = bmp.tile.sub(
-								0, 0,
-								M.fmin( bmp.tile.width, def.width ),
-								M.fmin( bmp.tile.height, def.height )
-							);
-				}
-				bmp.tile.setCenterRatio(def.pivotX, def.pivotY);
-			}
-		}
-
-		// Base render
-		var custTile = ei==null ? null : ei.getSmartTile();
-		if( custTile!=null )
-			renderTile(custTile.tilesetUid, custTile.tileId, Stretch);
-		else
-			switch def.renderMode {
-			case Rectangle, Ellipse:
-				g.beginFill(def.color);
-				g.lineStyle(1, 0x0, 0.4);
-				switch def.renderMode {
-					case Rectangle:
-						g.drawRect(0, 0, def.width, def.height);
-
-					case Ellipse:
-						g.drawEllipse(def.width*0.5, def.height*0.5, def.width*0.5, def.height*0.5, 0, def.width<=16 || def.height<=16 ? 16 : 0);
-
-					case _:
-				}
-				g.endFill();
-
-			case Cross:
-				g.lineStyle(5, def.color, 1);
-				g.moveTo(0,0);
-				g.lineTo(def.width, def.height);
-				g.moveTo(0,def.height);
-				g.lineTo(def.width, 0);
-
-			case Tile:
-				renderTile(def.tilesetId, def.tileId, def.tileRenderMode);
-			}
-
-		// Pivot
-		g.beginFill(def.color);
-		g.lineStyle(1, 0x0, 0.5);
-		var pivotSize = 3;
-		g.drawRect(
-			Std.int((def.width-pivotSize)*def.pivotX),
-			Std.int((def.height-pivotSize)*def.pivotY),
-			pivotSize, pivotSize
-		);
-
-
-		function _addBg(f:h2d.Flow, dark:Float) {
-			var bg = new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2,2);
-			f.addChildAt(bg, 0);
-			f.getProperties(bg).isAbsolute = true;
-			bg.color.setColor( C.addAlphaF( C.toBlack( ei.getSmartColor(false), dark ) ) );
-			bg.alpha = 0.8;
-			bg.x = -2;
-			bg.y = 1;
-			bg.width = f.outerWidth + M.fabs(bg.x)*2;
-			bg.height = f.outerHeight;
-		}
-
-		// Display fields not marked as "Hidden"
-		if( ei!=null && li!=null ) {
-			// Init field wrappers
-			var custom = new h2d.Graphics(wrapper);
-
-			var above = new h2d.Flow(wrapper);
-			above.layout = Vertical;
-			above.horizontalAlign = Middle;
-			above.verticalSpacing = 1;
-
-			var center = new h2d.Flow(wrapper);
-			center.layout = Vertical;
-			center.horizontalAlign = Middle;
-			center.verticalSpacing = 1;
-
-			var beneath = new h2d.Flow(wrapper);
-			beneath.layout = Vertical;
-			beneath.horizontalAlign = Middle;
-			beneath.verticalSpacing = 1;
-
-			// Attach fields
-			for(fd in ei.def.fieldDefs) {
-				var fi = ei.getFieldInstance(fd);
-
-				// Value error
-				var err = fi.getFirstErrorInValues();
-				if( err!=null ) {
-					var tf = new h2d.Text(getDefaultEntityFont(), above);
-					tf.textColor = 0xffcc00;
-					tf.text = '<$err>';
-				}
-
-				// Skip hiddens
-				if( fd.editorDisplayMode==Hidden )
-					continue;
-
-				if( !fi.def.editorAlwaysShow && ( fi.def.isArray && fi.getArrayLength()==0 || !fi.def.isArray && fi.isUsingDefault(0) ) )
-					continue;
-
-				// Position
-				var fieldWrapper = new h2d.Flow();
-				switch fd.editorDisplayPos {
-					case Above: above.addChild(fieldWrapper);
-					case Center: center.addChild(fieldWrapper);
-					case Beneath: beneath.addChild(fieldWrapper);
-				}
-
-				switch fd.editorDisplayMode {
-					case Hidden: // N/A
-
-					case NameAndValue:
-						var f = new h2d.Flow(fieldWrapper);
-						f.verticalAlign = Middle;
-
-						var tf = new h2d.Text(getDefaultEntityFont(), f);
-						tf.textColor = ei.getSmartColor(true);
-						tf.text = fd.identifier+" = ";
-						tf.scale(FIELD_TEXT_SCALE);
-						// tf.filter = new dn.heaps.filter.PixelOutline();
-
-						f.addChild( createFieldValuesRender(ei,fi) );
-
-					case ValueOnly:
-						fieldWrapper.addChild( createFieldValuesRender(ei,fi) );
-
-					case RadiusPx:
-						custom.lineStyle(1, ei.getSmartColor(false), 0.33);
-						custom.drawCircle(0,0, fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0));
-
-					case RadiusGrid:
-						custom.lineStyle(1, ei.getSmartColor(false), 0.33);
-						custom.drawCircle(0,0, ( fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0) ) * li.def.gridSize);
-
-					case EntityTile:
-
-					case PointStar, PointPath:
-						var fx = ei.getCellCenterX(li.def);
-						var fy = ei.getCellCenterY(li.def);
-						custom.lineStyle(1, ei.getSmartColor(false), 0.66);
-
-						for(i in 0...fi.getArrayLength()) {
-							var pt = fi.getPointGrid(i);
-							if( pt==null )
-								continue;
-
-							var tx = M.round( (pt.cx+0.5)*li.def.gridSize-ei.x );
-							var ty = M.round( (pt.cy+0.5)*li.def.gridSize-ei.y );
-							dashedLine(custom, fx,fy, tx,ty, 3);
-							custom.drawRect( tx-2, ty-2, 4, 4 );
-
-							if( fd.editorDisplayMode==PointPath ) {
-								fx = tx;
-								fy = ty;
-							}
-						}
-				}
-
-				// Field bg
-				var needBg = switch fd.type {
-					case F_Int, F_Float:
-						switch fd.editorDisplayMode {
-							case RadiusPx, RadiusGrid: false;
-							case _: true;
-						};
-					case F_String, F_Text, F_Bool, F_Path: true;
-					case F_Color, F_Point: false;
-					case F_Enum(enumDefUid): fd.editorDisplayMode!=EntityTile;
-				}
-
-				if( needBg )
-					_addBg(fieldWrapper, 0.15);
-
-				fieldWrapper.visible = fieldWrapper.numChildren>0;
-
-			}
-
-			// Identifier label
-			if( ei.def.showName ) {
-				var f = new h2d.Flow(above);
-				var tf = new h2d.Text(getDefaultEntityFont(), f);
-				tf.textColor = ei.getSmartColor(true);
-				tf.text = def.identifier.substr(0,16);
-				tf.scale(0.5);
-				tf.x = Std.int( def.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
-				tf.y = 0;
-				// tf.filter = new dn.heaps.filter.PixelOutline();
-				_addBg(f, 0.5);
-			}
-
-			// Update wrappers pos
-			above.x = Std.int( -def.width*def.pivotX - above.outerWidth*0.5 + def.width*0.5 );
-			above.y = Std.int( -above.outerHeight - def.height*def.pivotY - 1 );
-
-			center.x = Std.int( -def.width*def.pivotX - center.outerWidth*0.5 + def.width*0.5 );
-			center.y = Std.int( -def.height*def.pivotY - center.outerHeight*0.5 + def.height*0.5);
-
-			beneath.x = Std.int( -def.width*def.pivotX - beneath.outerWidth*0.5 + def.width*0.5 );
-			beneath.y = Std.int( def.height*(1-def.pivotY) + 1 );
-		}
-
-		*/
-		return wrapper;
-	}
 
 	function applyLayerVisibility(li:data.inst.LayerInstance) {
 		var wrapper = layerRenders.get(li.layerDefUid);
@@ -879,6 +545,7 @@ class LevelRender extends dn.Process {
 			new h2d.filter.Blur(2),
 		]);
 	}
+
 
 	@:allow(page.Editor)
 	function applyAllLayersVisibility() {

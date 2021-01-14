@@ -205,6 +205,16 @@ class LayerDef {
 		return false;
 	}
 
+	public function hasAnyActiveRule() : Bool {
+		for(rg in autoRuleGroups) {
+			if( rg.active )
+				for(r in rg.rules)
+					if( r.active )
+						return true;
+		}
+		return false;
+	}
+
 	public function hasRule(ruleUid:Int) : Bool {
 		for(rg in autoRuleGroups)
 		for(r in rg.rules)
