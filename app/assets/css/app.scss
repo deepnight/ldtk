@@ -3677,6 +3677,10 @@ canvas#webgl {
 		gap: 16px;
 		height: 100%;
 
+		ul.form>li>label:first-of-type {
+			flex: 0 0 250px;
+		}
+
 		h2 {
 			margin-bottom: 0;
 		}
