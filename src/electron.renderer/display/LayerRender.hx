@@ -39,9 +39,10 @@ class LayerRender {
 		// Render
 		switch li.def.type {
 		case IntGrid, AutoLayer:
-			if( li.def.isAutoLayer() && li.def.autoTilesetDefUid!=null && renderAutoLayers ) {
+			var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
+
+			if( li.def.isAutoLayer() && renderAutoLayers && td!=null && td.isAtlasLoaded() ) {
 				// Auto-layer tiles
-				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				var tg = new h2d.TileGroup( td.getAtlasTile(), root);
 
 				if( li.autoTilesCache==null )
@@ -49,18 +50,16 @@ class LayerRender {
 
 				li.def.iterateActiveRulesInDisplayOrder( (r)-> {
 					if( li.autoTilesCache.exists( r.uid ) ) {
-						for(coordId in li.autoTilesCache.get( r.uid ).keys()) {
-							// doneCoords.set(coordId, true);
-							for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
-								tg.addTransform(
-									tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-									tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
-									dn.M.hasBit(tileInfos.flips,0)?-1:1,
-									dn.M.hasBit(tileInfos.flips,1)?-1:1,
-									0,
-									td.extractTile(tileInfos.srcX, tileInfos.srcY)
-								);
-							}
+						for(coordId in li.autoTilesCache.get( r.uid ).keys())
+						for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
+							tg.addTransform(
+								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
+								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
+								dn.M.hasBit(tileInfos.flips,0)?-1:1,
+								dn.M.hasBit(tileInfos.flips,1)?-1:1,
+								0,
+								td.extractTile(tileInfos.srcX, tileInfos.srcY)
+							);
 						}
 					}
 				});
@@ -75,10 +74,11 @@ class LayerRender {
 						pixelGrid.setPixel( cx, cy, li.getIntGridColorAt(cx,cy) );
 			}
 
+
 		case Entities:
-			clear();
 			for(ei in li.entityInstances)
 				entityRenders.push( new EntityRender(ei, li.def, root) );
+
 
 		case Tiles:
 			var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
