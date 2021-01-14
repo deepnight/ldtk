@@ -396,15 +396,16 @@ class LevelRender extends dn.Process {
 	function renderLayer(li:data.inst.LayerInstance) {
 		layerInvalidations.remove(li.layerDefUid);
 
-		// Create LayerRender
-		if( layerRenders.exists(li.layerDefUid) )
-			layerRenders.get(li.layerDefUid).dispose();
-		var lr = new LayerRender(li, autoLayerRendering);
+		if( !layerRenders.exists(li.layerDefUid) ) {
+			// Create new render
+			var lr = new LayerRender();
+			layerRenders.set(li.layerDefUid, lr);
+			layersWrapper.add( lr.root, editor.project.defs.getLayerDepth(li.def) );
+		}
 
-		// Register it
-		layerRenders.set(li.layerDefUid, lr);
-		var depth = editor.project.defs.getLayerDepth(li.def);
-		layersWrapper.add( lr.root, depth );
+		// Render
+		var lr = layerRenders.get(li.layerDefUid);
+		lr.render(li, autoLayerRendering);
 
 		applyLayerVisibility(li);
 	}

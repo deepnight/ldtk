@@ -4,18 +4,10 @@ class LayerRender {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 
 	public var root : h2d.Object;
-	var li : data.inst.LayerInstance;
 	var entityRenders : Array<EntityRender> = [];
 
-	/** Need to call render() again after setting this **/
-	public var renderAutoLayers : Bool;
-
-
-	public function new(li:data.inst.LayerInstance, ?renderAutoLayers=true, ?target:h2d.Object) {
+	public function new(?target:h2d.Object) {
 		root = new h2d.Object(target);
-		this.renderAutoLayers = renderAutoLayers;
-		this.li = li;
-		render();
 	}
 
 	public function dispose() {
@@ -24,19 +16,13 @@ class LayerRender {
 		root.remove();
 		root = null;
 
-		li = null;
 		entityRenders = null;
 	}
 
 
-	public function render() {
+	public function render(li:data.inst.LayerInstance, renderAutoLayers=true) {
 		clear();
 
-		// Apply offsets
-		root.x = li.pxTotalOffsetX; // TODO apply to layer objects instead
-		root.y = li.pxTotalOffsetY;
-
-		// Render
 		switch li.def.type {
 		case IntGrid, AutoLayer:
 			var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
@@ -53,8 +39,8 @@ class LayerRender {
 						for(coordId in li.autoTilesCache.get( r.uid ).keys())
 						for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
 							tg.addTransform(
-								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
+								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + li.pxTotalOffsetX,
+								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize + li.pxTotalOffsetY,
 								dn.M.hasBit(tileInfos.flips,0)?-1:1,
 								dn.M.hasBit(tileInfos.flips,1)?-1:1,
 								0,
@@ -67,6 +53,8 @@ class LayerRender {
 			else if( li.def.type==IntGrid ) {
 				// Normal intGrid
 				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
+				pixelGrid.x = li.pxTotalOffsetX;
+				pixelGrid.y = li.pxTotalOffsetY;
 
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid)
@@ -76,11 +64,13 @@ class LayerRender {
 
 
 		case Entities:
+			// Entity layer
 			for(ei in li.entityInstances)
 				entityRenders.push( new EntityRender(ei, li.def, root) );
 
 
 		case Tiles:
+			// Classic tiles layer
 			var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
 			if( td!=null && td.isAtlasLoaded() ) {
 				var tg = new h2d.TileGroup( td.getAtlasTile(), root );
@@ -96,8 +86,8 @@ class LayerRender {
 						var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
 						var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;
 						tg.addTransform(
-							(cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize,
-							(cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize,
+							(cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize + li.pxTotalOffsetX,
+							(cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize + li.pxTotalOffsetY,
 							sx,
 							sy,
 							0,
