@@ -359,7 +359,7 @@ class WorldRender extends dn.Process {
 			bg : new h2d.Bitmap(),
 			render : new h2d.Object(),
 			bounds : new h2d.Graphics(),
-			label : new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2),
+			label : new h2d.ScaleGrid(Assets.elements.getTile("fieldBgOutline"), 5, 5),
 		}
 		var _depth = 0;
 		levelsWrapper.add(wl.bg, _depth++);
@@ -456,7 +456,7 @@ class WorldRender extends dn.Process {
 		var tf = new h2d.Text(Assets.fontLight_large, wl.label);
 		tf.text = l.identifier;
 		tf.textColor = C.toWhite( l.getBgColor(), 0.8 );
-		tf.x = 4;
+		tf.x = 8;
 
 		wl.label.width = tf.x*2 + tf.textWidth;
 		wl.label.height = tf.textHeight;
