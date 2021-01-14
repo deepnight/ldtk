@@ -399,13 +399,15 @@ class LevelRender extends dn.Process {
 		if( !layerRenders.exists(li.layerDefUid) ) {
 			// Create new render
 			var lr = new LayerRender();
+			lr.render(li, autoLayerRendering);
 			layerRenders.set(li.layerDefUid, lr);
 			layersWrapper.add( lr.root, editor.project.defs.getLayerDepth(li.def) );
 		}
-
-		// Render
-		var lr = layerRenders.get(li.layerDefUid);
-		lr.render(li, autoLayerRendering);
+		else {
+			// Refresh render
+			var lr = layerRenders.get(li.layerDefUid);
+			lr.render(li, autoLayerRendering);
+		}
 
 		applyLayerVisibility(li);
 	}
