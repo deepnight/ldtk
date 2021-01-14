@@ -1471,6 +1471,10 @@ class Editor extends Page {
 			for(t in allLayerTools)
 				App.ME.debug("  "+t, true);
 			App.ME.debug("  "+rulers, true);
+
+			App.ME.debug("-- Processes ----------------------------------------",true);
+			for( line in dn.Process.rprintAll().split('\n') )
+				App.ME.debug('<pre>$line</pre>', true);
 		}
 		#end
 	}

@@ -2155,16 +2155,15 @@ div.sortHandle {
 
 	p {
 		@include resetMargin();
-		opacity: 0.5;
-	}
-	p:nth-of-type(1) {
-		opacity: 1;
-	}
-	p:nth-of-type(2) {
-		opacity: 0.7;
+		margin: 0;
 	}
 	p+p {
-		margin-top: 8px;
+		margin-top: 3px;
+		pre {
+			margin: 0;
+			padding: 0;
+			font-family: Roboto;
+		}
 	}
 }
 
