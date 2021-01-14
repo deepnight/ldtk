@@ -243,6 +243,7 @@ class LayerInstance {
 				}
 			}
 			catch(e:Dynamic) {
+				App.LOG.error('Failed to parse autoTilesCache in $li (err=$e)');
 				li.autoTilesCache = null;
 			}
 		}
