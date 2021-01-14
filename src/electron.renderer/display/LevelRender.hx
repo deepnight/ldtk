@@ -14,8 +14,8 @@ class LevelRender extends dn.Process {
 
 	var layersWrapper : h2d.Layers;
 
-	/** <LayerDefUID, h2d.Object> **/
-	var layerRenders : Map<Int,h2d.Object> = new Map();
+	/** <LayerDefUID, LayerRender> **/
+	var layerRenders : Map<Int, LayerRender> = new Map();
 
 	/** <LayerDefUID, EntityRender> **/
 	var entityRenders : Map<Int, Array<EntityRender> > = new Map();
@@ -69,7 +69,7 @@ class LevelRender extends dn.Process {
 				if( active ) {
 					// Remove hidden render
 					for(l in layerRenders)
-						l.remove();
+						l.dispose();
 					layerRenders = new Map();
 					for(layerDefUid in entityRenders.keys())
 						clearLayerEntities(layerDefUid);
@@ -134,7 +134,7 @@ class LevelRender extends dn.Process {
 
 			case LayerDefRemoved(uid):
 				if( layerRenders.exists(uid) ) {
-					layerRenders.get(uid).remove();
+					layerRenders.get(uid).dispose();
 					layerRenders.remove(uid);
 					for(li in editor.curLevel.layerInstances)
 						if( !li.def.autoLayerRulesCanBeUsed() )
@@ -146,7 +146,7 @@ class LevelRender extends dn.Process {
 				for( li in editor.curLevel.layerInstances ) {
 					var depth = editor.project.defs.getLayerDepth(li.def);
 					if( layerRenders.exists(li.layerDefUid) )
-						layersWrapper.add( layerRenders.get(li.layerDefUid), depth );
+						layersWrapper.add( layerRenders.get(li.layerDefUid).root, depth );
 				}
 
 			case LayerDefChanged, LayerDefConverted:
@@ -404,17 +404,20 @@ class LevelRender extends dn.Process {
 
 		// Create wrapper
 		if( layerRenders.exists(li.layerDefUid) )
-			layerRenders.get(li.layerDefUid).remove();
+			layerRenders.get(li.layerDefUid).dispose();
 
-		var wrapper = new h2d.Object();
-		wrapper.x = li.pxTotalOffsetX;
-		wrapper.y = li.pxTotalOffsetY;
+		var lr = new LayerRender(li, autoLayerRendering);
+
+		// var wrapper = new h2d.Object();
+		// wrapper.x = li.pxTotalOffsetX;
+		// wrapper.y = li.pxTotalOffsetY;
 
 		// Register it
-		layerRenders.set(li.layerDefUid, wrapper);
+		layerRenders.set(li.layerDefUid, lr);
 		var depth = editor.project.defs.getLayerDepth(li.def);
-		layersWrapper.add( wrapper, depth );
+		layersWrapper.add( lr.root, depth );
 
+		/*
 		// Render
 		switch li.def.type {
 		case IntGrid, AutoLayer:
@@ -514,6 +517,7 @@ class LevelRender extends dn.Process {
 						);
 			}
 		}
+		*/
 
 		applyLayerVisibility(li);
 	}
@@ -529,13 +533,13 @@ class LevelRender extends dn.Process {
 
 
 	function applyLayerVisibility(li:data.inst.LayerInstance) {
-		var wrapper = layerRenders.get(li.layerDefUid);
-		if( wrapper==null )
+		var lr = layerRenders.get(li.layerDefUid);
+		if( lr==null )
 			return;
 
-		wrapper.visible = isLayerVisible(li);
-		wrapper.alpha = li.def.displayOpacity * ( !settings.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
-		wrapper.filter = !settings.singleLayerMode || li==editor.curLayerInstance ? null : new h2d.filter.Group([
+		lr.root.visible = isLayerVisible(li);
+		lr.root.alpha = li.def.displayOpacity * ( !settings.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
+		lr.root.filter = !settings.singleLayerMode || li==editor.curLayerInstance ? null : new h2d.filter.Group([
 			C.getColorizeFilterH2d(0x8c99c1, 0.9),
 			new h2d.filter.Blur(2),
 		]);
