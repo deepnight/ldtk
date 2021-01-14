@@ -3,12 +3,12 @@ package display;
 class LayerRender {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 
-	public var root : h2d.Object;
+	public var root(default,null) : Null<h2d.Object>;
 	var entityRenders : Array<EntityRender> = [];
 
-	public function new(?target:h2d.Object) {
-		root = new h2d.Object(target);
-	}
+
+	public function new() {}
+
 
 	public function dispose() {
 		clear();
@@ -20,8 +20,16 @@ class LayerRender {
 	}
 
 
-	public function render(li:data.inst.LayerInstance, renderAutoLayers=true) {
-		clear();
+	public function render(li:data.inst.LayerInstance, renderAutoLayers=true, ?target:h2d.Object) {
+		// Cleanup
+		if( root!=null )
+			clear();
+
+		// Init root
+		if( root==null )
+			root = new h2d.Object(target);
+		else if( target!=null && root.parent!=target )
+			target.addChild(root);
 
 		switch li.def.type {
 		case IntGrid, AutoLayer:
