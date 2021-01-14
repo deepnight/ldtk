@@ -569,16 +569,22 @@ class JsTools {
 		});
 	}
 
-	public static function emptyDir(path:String, ?onlyExt:String) {
+	public static function emptyDir(path:String, ?onlyExts:Array<String>) {
 		if( !fileExists(path) )
 			return;
 
-		App.LOG.fileOp("Emptying dir "+path+" (onlyExt="+onlyExt+")...");
+		var extMap = new Map();
+		if( onlyExts!=null )
+			for(e in onlyExts)
+				extMap.set(e, true);
+
+
+		App.LOG.fileOp("Emptying dir "+path+" (onlyExts="+onlyExts+")...");
 		js.node.Require.require("fs");
 		var fp = dn.FilePath.fromDir(path);
 		for(f in js.node.Fs.readdirSync(path)) {
 			fp.fileWithExt = f;
-			if( js.node.Fs.lstatSync(fp.full).isFile() && ( onlyExt==null || fp.extension==onlyExt ) )
+			if( js.node.Fs.lstatSync(fp.full).isFile() && ( onlyExts==null || extMap.exists(fp.extension) ) )
 				js.node.Fs.unlinkSync(fp.full);
 		}
 	}
