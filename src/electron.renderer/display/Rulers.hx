@@ -154,8 +154,8 @@ class Rulers extends dn.Process {
 
 	function addLabel(str:String, pos:RulerPos, smallFont=true, extraPadding=0, ?color:UInt) {
 		var scale : Float = switch pos {
-			case Top, Bottom: editor.curLevel.pxWid<=512 ? 0.5 : 1;
-			case Left, Right: editor.curLevel.pxHei<=512 ? 0.5 : 1;
+			case Top, Bottom: editor.curLevel.pxWid<400 ? 0.5 : 1;
+			case Left, Right: editor.curLevel.pxHei<300 ? 0.5 : 1;
 			case _: 1;
 		}
 
@@ -170,7 +170,7 @@ class Rulers extends dn.Process {
 		if( color==null )
 			color = C.toWhite(editor.project.bgColor,0.5);
 
-		var tf = new h2d.Text(smallFont ? Assets.fontLight_small : Assets.fontLight_medium, wrapper);
+		var tf = new h2d.Text(smallFont ? Assets.fontLight_tiny : Assets.fontLight_small, wrapper);
 		tf.text = str;
 		tf.textColor = color;
 		tf.scale(scale);
