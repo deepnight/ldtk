@@ -17,9 +17,6 @@ class LevelRender extends dn.Process {
 	/** <LayerDefUID, LayerRender> **/
 	var layerRenders : Map<Int, LayerRender> = new Map();
 
-	/** <LayerDefUID, EntityRender> **/
-	var entityRenders : Map<Int, Array<EntityRender> > = new Map();
-
 	var bg : h2d.Bitmap;
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
@@ -71,8 +68,6 @@ class LevelRender extends dn.Process {
 					for(l in layerRenders)
 						l.dispose();
 					layerRenders = new Map();
-					for(layerDefUid in entityRenders.keys())
-						clearLayerEntities(layerDefUid);
 					grid.clear();
 
 					// Stop process
@@ -140,7 +135,6 @@ class LevelRender extends dn.Process {
 						if( !li.def.autoLayerRulesCanBeUsed() )
 							invalidateLayer(li);
 				}
-				clearLayerEntities(uid);
 
 			case LayerDefSorted:
 				for( li in editor.curLevel.layerInstances ) {
@@ -402,133 +396,17 @@ class LevelRender extends dn.Process {
 	function renderLayer(li:data.inst.LayerInstance) {
 		layerInvalidations.remove(li.layerDefUid);
 
-		// Create wrapper
+		// Create LayerRender
 		if( layerRenders.exists(li.layerDefUid) )
 			layerRenders.get(li.layerDefUid).dispose();
-
 		var lr = new LayerRender(li, autoLayerRendering);
-
-		// var wrapper = new h2d.Object();
-		// wrapper.x = li.pxTotalOffsetX;
-		// wrapper.y = li.pxTotalOffsetY;
 
 		// Register it
 		layerRenders.set(li.layerDefUid, lr);
 		var depth = editor.project.defs.getLayerDepth(li.def);
 		layersWrapper.add( lr.root, depth );
 
-		/*
-		// Render
-		switch li.def.type {
-		case IntGrid, AutoLayer:
-			// var doneCoords = new Map();
-
-			if( li.def.isAutoLayer() && li.def.autoTilesetDefUid!=null && autoLayerRendering ) {
-				// Auto-layer tiles
-				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
-				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper);
-
-				if( li.autoTilesCache==null )
-					li.applyAllAutoLayerRules();
-
-				li.def.iterateActiveRulesInDisplayOrder( (r)-> {
-					if( li.autoTilesCache.exists( r.uid ) ) {
-						for(coordId in li.autoTilesCache.get( r.uid ).keys()) {
-							// doneCoords.set(coordId, true);
-							for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
-								tg.addTransform(
-									tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize,
-									tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize,
-									dn.M.hasBit(tileInfos.flips,0)?-1:1,
-									dn.M.hasBit(tileInfos.flips,1)?-1:1,
-									0,
-									td.extractTile(tileInfos.srcX, tileInfos.srcY)
-								);
-							}
-						}
-					}
-				});
-
-				// Default render when no rule match here
-				// if( li.def.type==IntGrid && !li.def.hasAnyActiveRule() ) {
-				// 	for(cy in 0...li.cHei)
-				// 	for(cx in 0...li.cWid) {
-				// 		if( doneCoords.exists(li.coordId(cx,cy)) || li.getIntGrid(cx,cy)<0 )
-				// 			continue;
-				// 		g.lineStyle(1, li.getIntGridColorAt(cx,cy), 0.6 );
-				// 		g.drawRect(cx*li.def.gridSize+2, cy*li.def.gridSize+2, li.def.gridSize-4, li.def.gridSize-4);
-				// 	}
-				// }
-			}
-			else if( li.def.type==IntGrid ) {
-				// Normal intGrid
-				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wrapper);
-
-				for(cy in 0...li.cHei)
-				for(cx in 0...li.cWid)
-					if( li.hasIntGrid(cx,cy) )
-						pixelGrid.setPixel( cx, cy, li.getIntGridColorAt(cx,cy) );
-			}
-
-		case Entities:
-			clearLayerEntities(li.layerDefUid);
-			for(ei in li.entityInstances) {
-				var er = new EntityRender(ei, li.def, wrapper);
-				entityRenders.get(li.layerDefUid).push( er );
-			}
-
-		case Tiles:
-			var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
-			if( td!=null && td.isAtlasLoaded() ) {
-				var tg = new h2d.TileGroup( td.getAtlasTile(), wrapper );
-
-				for(cy in 0...li.cHei)
-				for(cx in 0...li.cWid) {
-					if( !li.hasAnyGridTile(cx,cy) )
-						continue;
-
-					for( tileInf in li.getGridTileStack(cx,cy) ) {
-						var t = td.getTile(tileInf.tileId);
-						t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
-						var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
-						var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;
-						tg.addTransform(
-							(cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize,
-							(cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize,
-							sx,
-							sy,
-							0,
-							t
-						);
-					}
-				}
-			}
-			else {
-				// Missing tileset
-				var tileError = data.def.TilesetDef.makeErrorTile(li.def.gridSize);
-				var tg = new h2d.TileGroup( tileError, wrapper );
-				for(cy in 0...li.cHei)
-				for(cx in 0...li.cWid)
-					if( li.hasAnyGridTile(cx,cy) )
-						tg.add(
-							(cx + li.def.tilePivotX) * li.def.gridSize,
-							(cy + li.def.tilePivotX) * li.def.gridSize,
-							tileError
-						);
-			}
-		}
-		*/
-
 		applyLayerVisibility(li);
-	}
-
-
-	function clearLayerEntities(layerDefUid:Int) {
-		if( entityRenders.exists(layerDefUid) )
-			for( er in entityRenders.get(layerDefUid) )
-				er.destroy();
-
-		entityRenders.set(layerDefUid, []);
 	}
 
 
