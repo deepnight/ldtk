@@ -299,6 +299,8 @@ class WorldRender extends dn.Process {
 			if( levels.exists(l.uid) ) {
 				var e = levels.get(l.uid);
 
+				e.bg.alpha = editor.worldMode ? 1 : 0.5;
+
 				if( l.uid==editor.curLevelId && !editor.worldMode ) {
 					// Hide current level in editor mode
 					e.bounds.visible = false;
