@@ -121,6 +121,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					cb: li.applyAllAutoLayerRules
 				});
 				affectedLayers.set(li,l);
+				editor.worldRender.invalidateLevel(l);
 			}
 			else {
 				var r = li.def.getRule(ruleUid);
@@ -132,6 +133,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 							cb: li.applyAutoLayerRuleToAllLayer.bind(r, false),
 						});
 						affectedLayers.set(li,l);
+						editor.worldRender.invalidateLevel(l);
 					}
 					else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
 						// Removed rule
@@ -140,6 +142,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 							cb: li.autoTilesCache.remove.bind(ruleUid),
 						});
 						affectedLayers.set(li,l);
+						editor.worldRender.invalidateLevel(l);
 					}
 				}
 			}

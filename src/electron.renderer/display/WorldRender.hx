@@ -385,36 +385,33 @@ class WorldRender extends dn.Process {
 			return doneCoords.exists(li.def.gridSize) && doneCoords.get(li.def.gridSize).exists( li.coordId(cx,cy) );
 		}
 
-		// Render world level
-		for(li in l.layerInstances) {
+		// Render layers
+		l.iterateLayerInstancesInRenderOrder( (li)->{
 			if( li.def.type==Entities )
-				continue;
+				return;
 
-			// if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
-			// 	// Auto layer
-			// 	var source = li.def.type==IntGrid ? li : l.getLayerInstance(li.def.autoSourceLayerDefUid);
-			// 	var td = editor.project.defs.getTilesetDef(li.def.autoTilesetDefUid);
-			// 	var doneCoords = new Map();
-			// 	li.def.iterateActiveRulesInDisplayOrder( (r)->{
-			// 		if( li.autoTilesCache.exists( r.uid ) ) {
-			// 			for( coordId in li.autoTilesCache.get( r.uid ).keys() ) {
-			// 				if( doneCoords.exists(coordId) )
-			// 					continue;
+			if( li.def.isAutoLayer() && li.autoTilesCache==null )
+				App.LOG.error("missing autoTilesCache in "+li);
 
-			// 				for( t in li.autoTilesCache.get( r.uid ).get(coordId) ) {
-			// 					if( td.isTileOpaque(t.tid) ) {
-			// 						var c = td.getAverageTileColor(t.tid);
-			// 						render.beginFill( C.removeAlpha(c), 1 );
-			// 						render.drawRect(t.x*scale, t.y*scale, td.tileGridSize*scale, td.tileGridSize*scale);
-			// 						doneCoords.set(coordId,true);
-			// 						break;
-			// 					}
-			// 				}
-			// 			}
-			// 		}
-			// 	});
-			// }
-			if( li.def.type==IntGrid ) {
+			if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
+				// Auto layer
+				var td = editor.project.defs.getTilesetDef(li.def.autoTilesetDefUid);
+				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
+				li.def.iterateActiveRulesInDisplayOrder( (r)->{
+					if( li.autoTilesCache.exists( r.uid ) ) {
+						for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
+						for( tileInfos in allTiles.value ) {
+							pixelGrid.setPixel(
+								Std.int( tileInfos.x / li.def.gridSize ),
+								Std.int( tileInfos.y / li.def.gridSize ),
+								td.getAverageTileColor(tileInfos.tid),
+								0.3
+							);
+						}
+					}
+				});
+			}
+			else if( li.def.type==IntGrid ) {
 				// Pure intGrid
 				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 				for(cy in 0...li.cHei)
@@ -436,7 +433,7 @@ class WorldRender extends dn.Process {
 						pixelGrid.setPixel(cx,cy, td.getAverageTileColor( li.getTopMostGridTile(cx,cy).tileId ) );
 					}
 			}
-		}
+		});
 
 		// Bounds
 		var thick = 1*camera.pixelRatio;
@@ -474,12 +471,20 @@ class WorldRender extends dn.Process {
 		worldBg.wrapper.visible = worldBg.wrapper.alpha>=0.02;
 		worldBounds.visible = editor.worldMode && editor.project.levels.length>1;
 
-		// World levels invalidation (max one per frame)
-		for( uid in levelInvalidations.keys() ) {
-			renderLevel( editor.project.getLevel(uid) );
-			updateLayout();
-			break;
-		}
+		var waitTileset = false;
+		for(td in project.defs.tilesets)
+			if( td.hasAtlasPath() && !td.hasValidPixelData() ) {
+				waitTileset = true;
+				break;
+			}
+
+		// World levels rendering (max one per frame)
+		if( !waitTileset )
+			for( uid in levelInvalidations.keys() ) {
+				renderLevel( editor.project.getLevel(uid) );
+				updateLayout();
+				break;
+			}
 	}
 
 }
