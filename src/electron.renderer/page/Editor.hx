@@ -985,14 +985,20 @@ class Editor extends Page {
 			return;
 		}
 
+		// Save project
 		new ui.ProjectSaving(this, project, (success)->{
-			App.LOG.fileOp('Saved ${project.filePath.fileWithExt}.');
-			N.success('Saved ${project.filePath.fileWithExt}.');
+			if( !success ) {
+				N.error("Saving failed!");
+			}
+			else {
+				App.LOG.fileOp('Saved ${project.filePath.fileWithExt}.');
+				N.success('Saved ${project.filePath.fileWithExt}.');
 
-			App.ME.registerRecentProject(project.filePath.full);
-			this.needSaving = false;
-			ge.emit(ProjectSaved);
-			updateTitle();
+				App.ME.registerRecentProject(project.filePath.full);
+				this.needSaving = false;
+				ge.emit(ProjectSaved);
+				updateTitle();
+			}
 
 			if( onComplete!=null )
 				onComplete();
