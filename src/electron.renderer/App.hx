@@ -146,7 +146,6 @@ class App extends dn.Process {
 		// Start
 		delayer.addS( ()->{
 			var path = getArgPath();
-			N.debug(path);
 			if( path!=null && path.extension==Const.LEVEL_EXTENSION ) {
 				var dir = path.getLastDirectory();
 				path.removeLastDirectory();

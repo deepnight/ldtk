@@ -35,7 +35,6 @@ class RulePatternEditor {
 		jRoot = new J('<div/>');
 
 		render();
-		N.debug("pattern editor "+rule.uid);
 	}
 
 
