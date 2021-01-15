@@ -27,11 +27,8 @@ class ProjectSaving extends dn.Process {
 
 		log("Preparing project saving...");
 		savingData = JsTools.prepareProjectSavingData(project);
-
-		if( QUEUE.length>1 )
-			beginState(InQueue);
-		else
-			beginState(BeforeSavingActions);
+		beginState(InQueue);
+		updateState();
 
 		/**
 			Steps:
@@ -175,11 +172,11 @@ class ProjectSaving extends dn.Process {
 			case Done:
 				logState();
 				log('Saving complete (${project.filePath.fileWithExt})');
-				end(true);
+				complete(true);
 		}
 	}
 
-	function end(success:Bool) {
+	function complete(success:Bool) {
 		destroy();
 		onComplete(success);
 	}
@@ -188,7 +185,7 @@ class ProjectSaving extends dn.Process {
 	function updateState() {
 		switch state {
 			case InQueue:
-				if( QUEUE[0]==this )
+				if( QUEUE[0]==this && !ui.modal.Progress.hasAny() )
 					beginState(BeforeSavingActions);
 
 			case BeforeSavingActions:
