@@ -146,20 +146,26 @@ class App extends dn.Process {
 		// Start
 		delayer.addS( ()->{
 			var path = getArgPath();
-			if( path==null || !loadProject(path) )
+			N.debug(path);
+			if( path!=null && path.extension==Const.LEVEL_EXTENSION ) {
+				var dir = path.getLastDirectory();
+				path.removeLastDirectory();
+				path.fileWithExt = dir+"."+Const.FILE_EXTENSION;
+			}
+			if( path==null || !loadProject(path.full) )
 				loadPage( ()->new page.Home() );
 		}, 0.2);
 
 		IpcRenderer.invoke("appReady");
 	}
 
-	function getArgPath() : Null<String> {
+	function getArgPath() : Null<dn.FilePath> {
 		if( args.getLastSoloValue()==null )
 			return null;
 
 		var fp = dn.FilePath.fromFile( args.getAllSoloValues().join(" ") );
 		if( fp.fileWithExt!=null )
-			return fp.full;
+			return fp;
 
 		return null;
 	}

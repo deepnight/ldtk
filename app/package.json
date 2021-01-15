@@ -60,6 +60,13 @@
 				"mimeType": "application/json",
 				"icon": "project.ico",
 				"role": "Editor"
+			},
+			{
+				"ext": "ldtkl",
+				"name": "LDTK Level File",
+				"mimeType": "application/json",
+				"icon": "level.ico",
+				"role": "Editor"
 			}
 		],
 		"nsis": {
