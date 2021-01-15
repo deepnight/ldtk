@@ -31,7 +31,7 @@ class ProjectLoader {
 		}
 
 		// Load separate level files
-		if( p.externalLevels && p.levels[0].layerInstances==null ) { // in backup files, levels are actually embedded
+		if( p.externalLevels && p.levels[0].layerInstances.length==0 ) { // in backup files, levels are actually embedded
 			var idx = 0;
 			for(l in p.levels) {
 				var path = p.makeAbsoluteFilePath(l.externalRelPath);
