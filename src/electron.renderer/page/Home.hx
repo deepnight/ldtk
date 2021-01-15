@@ -140,9 +140,7 @@ class Home extends Page {
 							}
 
 							log.general(" -> Saving "+fp.fileName+"...");
-							var data = JsTools.prepareProjectSavingData(p);
-							// BUG support multi files!
-							JsTools.writeFileString(fp.full, data.projectJson);
+							var s = new ui.ProjectSaving(this, p);
 						}
 						catch(e:Dynamic) {
 							new ui.modal.dialog.Message("Failed on "+fp.fileName);
