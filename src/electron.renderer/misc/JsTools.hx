@@ -61,8 +61,8 @@ class JsTools {
 		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
 	}
 
-	public static function prepareProjectSavingData(project:data.Project) : FileSavingData {
-		if( !project.externalLevels ) {
+	public static function prepareProjectSavingData(project:data.Project, isBackup=false) : FileSavingData {
+		if( !project.externalLevels || isBackup ) {
 			// Full single JSON
 			return {
 				projectJson: jsonStringify( project, project.toJson() ),
