@@ -277,11 +277,15 @@ class App extends dn.Process {
 	}
 
 	function onAppMouseUp(e:js.jquery.Event) {
-		mouseButtonDowns.set(e.button,false);
+		mouseButtonDowns.remove(e.button);
 	}
 
 	public inline function isMouseButtonDown(btId:Int) {
-		return mouseButtonDowns.exists(btId) && mouseButtonDowns.get(btId)==true;
+		return mouseButtonDowns.exists(btId);
+	}
+
+	public inline function anyMouseButtonDown() {
+		return Lambda.count(mouseButtonDowns)==0;
 	}
 
 	function onAppMouseMove(e:js.html.MouseEvent) {
