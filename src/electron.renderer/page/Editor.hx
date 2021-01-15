@@ -100,10 +100,6 @@ class Editor extends Page {
 		dn.Process.resizeAll();
 	}
 
-	function saveLocked() {
-		return ui.modal.Progress.hasAny();
-	}
-
 	function initUI() {
 		jMouseCoords = App.ME.jBody.find("xml.mouseCoords").clone().children().first();
 		App.ME.jBody.append(jMouseCoords);
@@ -921,7 +917,7 @@ class Editor extends Page {
 	}
 
 	public function onSave(saveAs=false, ?bypasses:Map<String,Bool>, ?onComplete:Void->Void) {
-		if( saveLocked() )
+		if( ui.ProjectSaving.hasAny() )
 			return;
 
 		if( bypasses==null )
@@ -1003,127 +999,6 @@ class Editor extends Page {
 			if( onComplete!=null )
 				onComplete();
 		});
-
-/*
-
-		// Pre-save operations followed by actual saving
-		ge.emit(BeforeProjectSaving);
-		createChildProcess( (p)->{
-			if( !saveLocked() ) {
-				checkAutoLayersCache( (anyChange)->{
-					App.LOG.fileOp('Saving ${project.filePath.full}...');
-					var savingData = JsTools.prepareProjectSavingData(project);
-
-					// Save main project file
-					JsTools.writeFileString(project.filePath.full, savingData.projectJson);
-
-					// Project dir (optional)
-					var externDir = project.getAbsExternalFilesDir();
-					if( project.externalLevels || project.exportPng ) {
-						// Init project dir
-						if( !JsTools.fileExists(externDir) )
-							JsTools.createDirs(externDir);
-						else
-							JsTools.emptyDir(externDir, [Const.LEVEL_EXTENSION,"png"]);
-					}
-					else if( JsTools.fileExists(externDir) ) {
-						// Delete external folder if it exists
-						JsTools.removeDir(externDir);
-					}
-
-
-					// Optional: save external files
-					if( project.externalLevels ) {
-						var ops = [];
-						for(l in savingData.externLevelsJson) {
-							var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(l.relPath) );
-							ops.push({
-								label: "Level "+l.id,
-								cb: ()->{
-									JsTools.writeFileString(fp.full, l.json);
-								}
-							});
-						}
-						new ui.modal.Progress(Lang.t._("Saving levels"), 2, ops);
-					}
-
-					// Optional: Tiled export
-					if( project.exportTiled ) {
-						var e = new exporter.Tiled();
-						e.addExtraLogger( App.LOG, "TiledExport" );
-						e.run( project, project.filePath.full );
-						if( e.hasErrors() )
-							N.error('Tiled export has errors.');
-						else
-							N.success('Saved Tiled files.');
-					}
-
-					// Optional: PNGs export
-					if( project.exportPng ) {
-						var ops = [];
-
-						// Init PNG dir
-						var pngDir = externDir+"/png";
-						if( !JsTools.fileExists(pngDir) )
-							JsTools.createDirs(pngDir);
-						else
-							JsTools.emptyDir(pngDir);
-
-						// Export level layers
-						var lr = new display.LayerRender();
-						var levelIdx = 0;
-						for( level in project.levels ) {
-							var layerIdx = 0;
-							for( li in level.layerInstances ) {
-								var level = level;
-								var li = li;
-								var levelIdx = levelIdx;
-								var layerIdx = layerIdx;
-								ops.push({
-									label: "Level "+level.identifier+": "+li.def.identifier,
-									cb: ()->{
-										// Draw
-										var bytes = lr.createPng(project, level, li);
-										if( bytes==null )
-											return;
-
-										// Save PNG
-										var fp = dn.FilePath.fromDir(pngDir);
-										fp.fileName =
-											dn.Lib.leadingZeros(levelIdx, Const.LEVEL_FILE_LEADER_ZEROS) + "-"
-											+ dn.Lib.leadingZeros(layerIdx++, 2) + "-"
-											+ li.def.identifier;
-										fp.extension = "png";
-										App.LOG.fileOp('Saving ${fp.fileWithExt} (${bytes.length} bytes)...');
-										JsTools.writeFileBytes(fp.full, bytes);
-									}
-								});
-							}
-							levelIdx++;
-						}
-
-						new ui.modal.Progress(Lang.t._("PNG export"), 2, ops);
-					}
-
-
-					// Notify
-					var size = dn.Lib.prettyBytesSize(savingData.projectJson.length);
-					App.LOG.fileOp('Saved $size.');
-					var fileName = project.filePath.fileWithExt;
-					N.success('Saved $fileName ($size)');
-
-					App.ME.registerRecentProject(project.filePath.full);
-					this.needSaving = false;
-					ge.emit(ProjectSaved);
-					updateTitle();
-
-					if( onComplete!=null )
-						onComplete();
-				});
-				p.destroy();
-			}
-		}, true);
-		*/
 	}
 
 	inline function shouldLogEvent(e:GlobalEvent) {
