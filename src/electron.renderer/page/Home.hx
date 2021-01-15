@@ -118,29 +118,30 @@ class Home extends Page {
 						log.fileOp(fp.fileName+"...");
 						log.general(" -> Loading...");
 						try {
-							var raw = JsTools.readFileString(fp.full);
-							log.general(" -> Parsing...");
-							var json = haxe.Json.parse(raw);
-							var p = data.Project.fromJson(fp.full, json);
+							ui.ProjectLoader.load(fp.full, (?p,?err)->{
+								if( p==null )
+									throw "Failed on "+fp.full;
+								// Tilesets
+								log.general(" -> Updating tileset data...");
+								for(td in p.defs.tilesets) {
+									td.reloadImage(fp.directory);
+									td.buildPixelData(()->{}, true);
+								}
 
-							// Tilesets
-							log.general(" -> Updating tileset data...");
-							for(td in p.defs.tilesets) {
-								td.reloadImage(fp.directory);
-								td.buildPixelData(()->{}, true);
-							}
+								// Auto layer rules
+								log.general(" -> Updating auto-rules cache...");
+								for(l in p.levels)
+								for(li in l.layerInstances) {
+									if( !li.def.isAutoLayer() )
+										continue;
+									li.applyAllAutoLayerRules();
+								}
 
-							// Auto layer rules
-							log.general(" -> Updating auto-rules cache...");
-							for(l in p.levels)
-							for(li in l.layerInstances) {
-								if( !li.def.isAutoLayer() )
-									continue;
-								li.applyAllAutoLayerRules();
-							}
+								// Write sample map
+								log.general(" -> Saving "+fp.fileName+"...");
+								var s = new ui.ProjectSaving(this, p);
+							});
 
-							log.general(" -> Saving "+fp.fileName+"...");
-							var s = new ui.ProjectSaving(this, p);
 						}
 						catch(e:Dynamic) {
 							new ui.modal.dialog.Message("Failed on "+fp.fileName);
