@@ -637,7 +637,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var all = [];
 		for(ruid in invalidatedRules.keys())
 			all.push(ruid);
-		App.ME.debug( all.join(", "));
+		App.ME.debug( "invalidatedRules="+all, true);
 	}
 	#end
 }

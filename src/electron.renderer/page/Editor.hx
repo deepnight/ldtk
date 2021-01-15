@@ -443,8 +443,10 @@ class Editor extends Page {
 			#if debug
 
 			case K.T if( App.ME.isAltDown() && !hasInputFocus() ):
-				if( cd.has("debugTools") )
+				if( cd.has("debugTools") ) {
+					App.ME.clearDebug();
 					cd.unset("debugTools");
+				}
 				else
 					cd.setS("debugTools", Const.INFINITE);
 
@@ -1515,18 +1517,24 @@ class Editor extends Page {
 
 		#if debug
 		if( cd.has("debugTools") ) {
+			App.ME.clearDebug();
+			App.ME.debug("appButtons="
+				+ ( App.ME.isMouseButtonDown(0) ? "[left] " : "" )
+				+ ( App.ME.isMouseButtonDown(2) ? "[right] " : "" )
+				+ ( App.ME.isMouseButtonDown(1) ? "[middle] " : "" )
+			);
 			App.ME.debug("zoom="+M.pretty(camera.adjustedZoom,1));
-			App.ME.debug("-- Tools & UI ----------------------------------------",true);
-			App.ME.debug("  "+worldTool, true);
-			App.ME.debug("  "+panTool, true);
-			App.ME.debug("  "+selectionTool, true);
+			App.ME.debug("-- Tools & UI ----------------------------------------");
+			App.ME.debug("  "+worldTool);
+			App.ME.debug("  "+panTool);
+			App.ME.debug("  "+selectionTool);
 			for(t in allLayerTools)
-				App.ME.debug("  "+t, true);
-			App.ME.debug("  "+rulers, true);
+				App.ME.debug("  "+t);
+			App.ME.debug("  "+rulers);
 
-			App.ME.debug("-- Processes ----------------------------------------",true);
+			App.ME.debug("-- Processes ----------------------------------------");
 			for( line in dn.Process.rprintAll().split('\n') )
-				App.ME.debug('<pre>$line</pre>', true);
+				App.ME.debug('<pre>$line</pre>');
 		}
 		#end
 	}
