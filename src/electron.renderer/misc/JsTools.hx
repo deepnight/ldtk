@@ -565,7 +565,7 @@ class JsTools {
 		App.LOG.fileOp("Removing dir "+path+"...");
 		js.node.Require.require("fs");
 		js.node.Fs.rmdirSync(path, {
-			recursive: true, retryDelay: 10000, maxRetries: 3 // WARNING: requires NodeJS 12+
+			recursive: true, retryDelay: 1000, maxRetries: 3 // WARNING: requires NodeJS 12+
 		});
 	}
 
