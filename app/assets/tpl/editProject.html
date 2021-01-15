@@ -21,18 +21,21 @@
 
 	<li>
 		<label for="externalLevels">Save levels to separate files</label>
-		<input type="checkbox" name="externalLevels" id="externalLevels"/>
+		<input type="checkbox" id="externalLevels"/>
+		<div class="locate"></div>
 		<div class="info" title='If checked, one file will be saved for the project itself (ie. settings, definitions etc.) and one file per-level will be created in a sub-folder.'></div>
 	</li>
 
 	<li>
 		<label for="png">Export layers as PNG</label>
 		<input type="checkbox" id="png"/>
+		<div class="locate"></div>
+		<div class="info" title='If checked, each layer in each level will be exported as an individual PNG image. Warning, this will increase saving time on large projects.'></div>
 	</li>
 
 	<li>
 		<label for="tiled">Export Tiled TMX</label>
-		<input type="checkbox" name="tiled" id="tiled"/>
+		<input type="checkbox" id="tiled"/>
 		<div class="locate"></div>
 		<div class="info" title='Every time you save, Tiled TMX files (one per level) will also be created in the same folder as the ::app:: JSON, for easier integration with existing frameworks.'></div>
 	</li>

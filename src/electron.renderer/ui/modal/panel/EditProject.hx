@@ -66,30 +66,29 @@ class EditProject extends ui.modal.Panel {
 		i.linkEvent(ProjectSettingsChanged);
 
 		// External level files
-		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("[name=externalLevels]") );
+		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
 		i.linkEvent(ProjectSettingsChanged);
+		var jLocate = jForm.find("#externalLevels").siblings(".locate").empty();
+		if( project.externalLevels )
+			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir(), false) );
 
 		// Png export
 		var i = Input.linkToHtmlInput( project.exportPng, jForm.find("#png") );
 		i.linkEvent(ProjectSettingsChanged);
+		var jLocate = jForm.find("#png").siblings(".locate").empty();
+		if( project.exportPng )
+			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/png", false) );
 
 		// Tiled export
-		var i = Input.linkToHtmlInput( project.exportTiled, jForm.find("[name=tiled]") );
+		var i = Input.linkToHtmlInput( project.exportTiled, jForm.find("#tiled") );
 		i.linkEvent(ProjectSettingsChanged);
 		i.onValueChange = function(v) {
 			if( v )
 				new ui.modal.dialog.Message(Lang.t._("Disclaimer: Tiled export is only meant to load your LDtk project in a game framework that only supports Tiled files. It is recommended to write your own LDtk JSON parser, as some LDtk features may not be supported.\nIt's not so complicated, I promise :)"), "project");
 		}
-		var fp = project.filePath.clone();
-		fp.appendDirectory(fp.fileName+"_tiled");
-		fp.fileWithExt = null;
-		if( !JsTools.fileExists(fp.full) ) {
-			fp = project.filePath.clone();
-			fp.fileWithExt = null;
-		}
-		var jLocate = jForm.find("[name=tiled]").siblings(".locate").empty();
+		var jLocate = jForm.find("#tiled").siblings(".locate").empty();
 		if( project.exportTiled )
-			jLocate.append( JsTools.makeExploreLink(fp.full, false) );
+			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/tiled", false) );
 
 		// Level grid size
 		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
