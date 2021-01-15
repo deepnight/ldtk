@@ -5,6 +5,7 @@ import data.DataTypes;
 class RuleEditor extends ui.modal.Dialog {
 	var curValIdx = 0;
 	var layerDef : data.def.LayerDef;
+	var sourceDef : data.def.LayerDef;
 	var rule : data.def.AutoLayerRuleDef;
 	var guidedMode = false;
 
@@ -13,15 +14,15 @@ class RuleEditor extends ui.modal.Dialog {
 
 		this.layerDef = layerDef;
 		this.rule = rule;
+		sourceDef = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef( layerDef.autoSourceLayerDefUid );
 
-		render();
+		renderAll();
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch(e) {
 			case LayerRuleChanged(rule):
-				render();
 
 			case _:
 		}
@@ -34,34 +35,29 @@ class RuleEditor extends ui.modal.Dialog {
 		jContent.find(".explain").show();
 	}
 
-	function render() {
-		var sourceDef = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef(layerDef.autoSourceLayerDefUid);
 
-		loadTemplate("ruleEditor");
-		jContent.find("[data-title],[title]").addClass("disableTip"); // removed on guided mode
+	override function close() {
+		super.close();
 
-		// Mini explanation tip
-		var jExplain = jContent.find(".explain").hide();
-		function _setExplain(?str:String) {
-			if( str==null )
-				jExplain.empty();
-			else {
-				if( str.indexOf("\\n")>=0 )
-					str = "<p>" + str.split("\\n").join("</p><p>") + "</p>";
-				jExplain.html(str);
-			}
+		if( rule.isEmpty() ) {
+			for(rg in layerDef.autoRuleGroups)
+				rg.rules.remove(rule);
+			editor.ge.emit( LayerRuleRemoved(rule) );
 		}
+		else if( rule.tidy() )
+			editor.ge.emit( LayerRuleChanged(rule) );
+	}
 
-		// Guided mode button
-		jContent.find("button.guide").click( (_)->{
-			enableGuidedMode();
-		} );
 
-		jContent.find(".debugInfos").text('#${rule.uid}');
+	function updateTileSettings() {
+		var jTilesSettings = jContent.find(".tileSettings");
+		jTilesSettings.off();
 
 		// Tile mode
+		var jModeSelect = jContent.find("select[name=tileMode]");
+		jModeSelect.empty();
 		var i = new form.input.EnumSelect(
-			jContent.find("select[name=tileMode]"),
+			jModeSelect,
 			ldtk.Json.AutoLayerRuleTileMode,
 			()->rule.tileMode,
 			(v)->rule.tileMode = v,
@@ -73,9 +69,8 @@ class RuleEditor extends ui.modal.Dialog {
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.onChange = function() {
 			rule.tileIds = [];
+			updateTileSettings();
 		}
-
-		var jTilesSettings = jContent.find(".tileSettings");
 
 		// Tile(s)
 		var jTilePicker = JsTools.createTilePicker(
@@ -85,6 +80,7 @@ class RuleEditor extends ui.modal.Dialog {
 			function(tids) {
 				rule.tileIds = tids.copy();
 				editor.ge.emit( LayerRuleChanged(rule) );
+				updateTileSettings();
 			}
 		);
 		jTilesSettings.find(">.picker").empty().append( jTilePicker );
@@ -98,28 +94,85 @@ class RuleEditor extends ui.modal.Dialog {
 					rule.pivotX = xr;
 					rule.pivotY = yr;
 					editor.ge.emit( LayerRuleChanged(rule) );
+					updateTileSettings();
 				});
 				jTileOptions.append(jPivot);
 		}
+	}
+
+
+
+	function updateValuePicker() {
+		var jValues = jContent.find(">.pattern .values ul").empty();
+
+		// Values picker
+		var idx = 0;
+		for(v in sourceDef.getAllIntGridValues()) {
+			var jVal = new J('<li/>');
+			jVal.appendTo(jValues);
+
+			jVal.css("background-color", C.intToHex(v.color));
+			jVal.text( v.identifier!=null ? v.identifier : '#$idx' );
+
+			if( idx==curValIdx )
+				jVal.addClass("active");
+
+			var i = idx;
+			jVal.click( function(ev) {
+				curValIdx = i;
+				editor.ge.emit( LayerRuleChanged(rule) );
+				updateValuePicker();
+			});
+			idx++;
+		}
+
+		// "Anything" value
+		var jVal = new J('<li/>');
+		jVal.appendTo(jValues);
+		jVal.addClass("any");
+		jVal.text("Anything");
+		if( curValIdx==Const.AUTO_LAYER_ANYTHING )
+			jVal.addClass("active");
+		jVal.click( function(ev) {
+			curValIdx = Const.AUTO_LAYER_ANYTHING;
+			editor.ge.emit( LayerRuleChanged(rule) );
+			updateValuePicker();
+		});
+
+	}
+
+	function renderAll() {
+
+		loadTemplate("ruleEditor");
+		jContent.find("[data-title],[title]").addClass("disableTip"); // removed on guided mode
+
+		// Mini explanation tip
+		var jExplain = jContent.find(".explain").hide();
+
+		// Guided mode button
+		jContent.find("button.guide").click( (_)->{
+			enableGuidedMode();
+		} );
+		jContent.find(".debugInfos").text('#${rule.uid}');
+
+		updateTileSettings();
 
 		// Pattern grid editor
-		var jGrid = JsTools.createAutoPatternGrid(rule, sourceDef, layerDef, _setExplain, (cx,cy,button)->{
-			var v = rule.get(cx,cy);
-			if( button==0 ) {
-				if( v==0 || v>0 )
-					rule.set(cx,cy, curValIdx+1); // avoid zero value
-				else if( v<0 )
-					rule.set(cx,cy, 0);
-			}
-			else {
-				if( v==0 )
-					rule.set(cx,cy, -curValIdx-1);
-				else
-					rule.set(cx,cy, 0);
-			}
-			editor.ge.emit( LayerRuleChanged(rule) );
-		});
-		jContent.find(">.pattern .editor .grid").empty().append(jGrid);
+		var patternEditor = new RulePatternEditor(
+			rule, sourceDef, layerDef,
+			(str:String)->{
+				if( str==null )
+					jExplain.empty();
+				else {
+					if( str.indexOf("\\n")>=0 )
+						str = "<p>" + str.split("\\n").join("</p><p>") + "</p>";
+					jExplain.html(str);
+				}
+			},
+			()->curValIdx,
+			()->editor.ge.emit( LayerRuleChanged(rule) )
+		);
+		jContent.find(">.pattern .editor .grid").empty().append( patternEditor.jRoot );
 
 
 		// Grid size selection
@@ -136,57 +189,14 @@ class RuleEditor extends ui.modal.Dialog {
 			var size = Std.parseInt( jSizes.val() );
 			rule.resize(size);
 			editor.ge.emit( LayerRuleChanged(rule) );
+			renderAll();
 		});
 		jSizes.val(rule.size);
 
-
-		// Value picker
-		var jValues = jContent.find(">.pattern .values ul").empty();
-
-		var idx = 0;
-		for(v in sourceDef.getAllIntGridValues()) {
-			var jVal = new J('<li/>');
-			jVal.appendTo(jValues);
-
-			jVal.css("background-color", C.intToHex(v.color));
-			jVal.text( v.identifier!=null ? v.identifier : '#$idx' );
-
-			if( idx==curValIdx )
-				jVal.addClass("active");
-
-			var i = idx;
-			jVal.click( function(ev) {
-				curValIdx = i;
-				editor.ge.emit( LayerRuleChanged(rule) );
-			});
-			idx++;
-		}
-
-		// "Anything" value
-		var jVal = new J('<li/>');
-		jVal.appendTo(jValues);
-		jVal.addClass("any");
-		jVal.text("Anything");
-		if( curValIdx==Const.AUTO_LAYER_ANYTHING )
-			jVal.addClass("active");
-		jVal.click( function(ev) {
-			curValIdx = Const.AUTO_LAYER_ANYTHING;
-			editor.ge.emit( LayerRuleChanged(rule) );
-		});
-
+		// Finalize
+		updateValuePicker();
 		if( guidedMode )
 			enableGuidedMode();
 	}
 
-	override function close() {
-		super.close();
-
-		if( rule.isEmpty() ) {
-			for(rg in layerDef.autoRuleGroups)
-				rg.rules.remove(rule);
-			editor.ge.emit( LayerRuleRemoved(rule) );
-		}
-		else if( rule.tidy() )
-			editor.ge.emit( LayerRuleChanged(rule) );
-	}
 }

@@ -89,7 +89,7 @@ class AutoLayerRuleDef {
 
 	public inline function set(cx,cy,v) {
 		// clearOptim();
-		return pattern[ coordId(cx,cy) ] = v;
+		return isValid(cx,cy) ? pattern[ coordId(cx,cy) ] = v : 0;
 	}
 
 	function initPattern() {
@@ -180,6 +180,9 @@ class AutoLayerRuleDef {
 	}
 
 	inline function coordId(cx,cy) return cx+cy*size;
+	inline function isValid(cx,cy) {
+		return cx>=0 && cx<size && cy>=0 && cy<size;
+	}
 
 	public function trim() {
 		while( size>1 ) {
