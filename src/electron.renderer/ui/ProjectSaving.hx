@@ -89,6 +89,10 @@ class ProjectSaving extends dn.Process {
 				beginState(SavingExternLevels);
 
 			case SavingExternLevels:
+				// Remove previous level files
+				if( JsTools.fileExists( project.getAbsExternalFilesDir() ) )
+					JsTools.emptyDir(project.getAbsExternalFilesDir(), [Const.LEVEL_EXTENSION]);
+
 				if( project.externalLevels ) {
 					logState();
 					var ops = [];
@@ -159,6 +163,7 @@ class ProjectSaving extends dn.Process {
 					beginState(ExportingTiled);
 				}
 
+
 			case ExportingTiled:
 				if( project.exportTiled ) {
 					logState();
@@ -169,6 +174,12 @@ class ProjectSaving extends dn.Process {
 						N.error('Tiled export has errors.');
 					else
 						N.success('Saved Tiled files.');
+				}
+				else {
+					// Remove previous tiled dir
+					var dir = project.getAbsExternalFilesDir() + "/tiled";
+					if( JsTools.fileExists(dir) )
+						JsTools.removeDir(dir);
 				}
 
 				beginState(Done);
