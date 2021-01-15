@@ -107,12 +107,12 @@ class ProjectSaving extends dn.Process {
 					beginState(SavingLayerImages);
 
 			case SavingLayerImages:
+				var pngDir = project.getAbsExternalFilesDir()+"/png";
 				if( project.exportPng ) {
 					logState();
 					var ops = [];
 
 					// Init PNG dir
-					var pngDir = project.getAbsExternalFilesDir()+"/png";
 					if( !JsTools.fileExists(pngDir) )
 						JsTools.createDirs(pngDir);
 					else
@@ -152,8 +152,12 @@ class ProjectSaving extends dn.Process {
 					}
 					new ui.modal.Progress(Lang.t._("PNG export"), 2, ops);
 				}
-				else
+				else {
+					// Delete previous PNG dir
+					if( JsTools.fileExists(pngDir) )
+						JsTools.removeDir(pngDir);
 					beginState(ExportingTiled);
+				}
 
 			case ExportingTiled:
 				if( project.exportTiled ) {
