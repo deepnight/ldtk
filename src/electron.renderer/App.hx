@@ -29,6 +29,7 @@ class App extends dn.Process {
 		LOG.trimFileLines();
 		LOG.emptyEntry();
 		LOG.tagColors.set("tidy", "#8ed1ac");
+		LOG.tagColors.set("save", "#ff6f14");
 		#if debug
 		LOG.printOnAdd = true;
 		#end
@@ -588,8 +589,8 @@ class App extends dn.Process {
 		return Editor.ME!=null && !Editor.ME.destroyed && Editor.ME.needSaving;
 	}
 
-	public function exit(force=false) {
-		if( !force && editorNeedSaving() ) {
+	public function exit(ignoreUnsaved=false) {
+		if( !ignoreUnsaved && editorNeedSaving() ) {
 			ui.Modal.closeAll();
 			new ui.modal.dialog.UnsavedChanges( exit.bind(true) );
 		}

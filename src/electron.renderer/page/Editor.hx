@@ -380,7 +380,9 @@ class Editor extends Page {
 				curLevelHistory.redo();
 
 			case K.S:
-				if( !hasInputFocus() && App.ME.isCtrlDown() )
+				if( !hasInputFocus() && App.ME.isAltDown() ) // HACK
+					new ui.ProjectSaving(this, project, (_)->{});
+				else if( !hasInputFocus() && App.ME.isCtrlDown() )
 					if( App.ME.isShiftDown() )
 						onSave(true);
 					else
@@ -983,6 +985,21 @@ class Editor extends Page {
 			return;
 		}
 
+		new ui.ProjectSaving(this, project, (success)->{
+			App.LOG.fileOp('Saved ${project.filePath.fileWithExt}.');
+			N.success('Saved ${project.filePath.fileWithExt}.');
+
+			App.ME.registerRecentProject(project.filePath.full);
+			this.needSaving = false;
+			ge.emit(ProjectSaved);
+			updateTitle();
+
+			if( onComplete!=null )
+				onComplete();
+		});
+
+/*
+
 		// Pre-save operations followed by actual saving
 		ge.emit(BeforeProjectSaving);
 		createChildProcess( (p)->{
@@ -1100,6 +1117,7 @@ class Editor extends Page {
 				p.destroy();
 			}
 		}, true);
+		*/
 	}
 
 	inline function shouldLogEvent(e:GlobalEvent) {
