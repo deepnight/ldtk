@@ -17,6 +17,7 @@ class App extends dn.Process {
 	public var settings : AppSettings;
 	var keyDowns : Map<Int,Bool> = new Map();
 	public var args: dn.Args;
+	var mouseButtonDowns : Map<Int,Bool> = new Map();
 
 	public var loadingLog : dn.Log;
 
@@ -71,6 +72,10 @@ class App extends dn.Process {
 			loadPage( ()->new page.CrashReport(error, processes, project, path) );
 			return false;
 		}
+
+		// Track mouse buttons
+		jDoc.mousedown( onAppMouseDown );
+		jDoc.mouseup( onAppMouseUp );
 
 		// Keyboard events
 		jBody
@@ -265,6 +270,18 @@ class App extends dn.Process {
 		jBody.find("#miniNotif")
 			.stop(false,true)
 			.fadeOut(1500);
+	}
+
+	function onAppMouseDown(e:js.jquery.Event) {
+		mouseButtonDowns.set(e.button,true);
+	}
+
+	function onAppMouseUp(e:js.jquery.Event) {
+		mouseButtonDowns.set(e.button,false);
+	}
+
+	public inline function isMouseButtonDown(btId:Int) {
+		return mouseButtonDowns.exists(btId) && mouseButtonDowns.get(btId)==true;
 	}
 
 	function onAppMouseMove(e:js.html.MouseEvent) {
@@ -521,14 +538,17 @@ class App extends dn.Process {
 		return true;
 	}
 
-	public function debug(msg:Dynamic, append=false) {
+	public inline function clearDebug() {
+		jBody.find("#debug").empty().hide();
+	}
+
+	public inline function debug(msg:Dynamic, clear=false) {
 		var wrapper = new J("#debug");
-		if( !append )
+		if( clear )
 			wrapper.empty();
 		wrapper.show();
 
-		var line = new J("<p/>");
-		line.append( Std.string(msg) );
+		var line = new J('<p>${Std.string(msg)}</p>');
 		line.appendTo(wrapper);
 	}
 
