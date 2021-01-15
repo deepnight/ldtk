@@ -596,7 +596,9 @@ class App extends dn.Process {
 		}
 		else {
 			if( editorNeedSaving() )
-				LOG.fileOp("Exit without saving");
+				LOG.general("Exiting without saving.");
+			else
+				LOG.general("Exiting.");
 			LOG.trimFileLines();
 			LOG.flushToFile();
 			IpcRenderer.invoke("exitApp");
