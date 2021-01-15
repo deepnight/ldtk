@@ -18,6 +18,7 @@
 	"minifyJson": false,
 	"externalLevels": true,
 	"exportTiled": false,
+	"exportPng": false,
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 240,
 	"worldGridHeight": 240,

@@ -18,6 +18,7 @@
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
+	"exportPng": false,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
