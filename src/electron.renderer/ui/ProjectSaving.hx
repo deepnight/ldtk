@@ -16,9 +16,9 @@ class ProjectSaving extends dn.Process {
 	var project : data.Project;
 	var state : SavingState;
 	var savingData : FileSavingData;
-	var onComplete : Bool->Void;
+	var onComplete : Null< Bool->Void >;
 
-	public function new(p:dn.Process, project:data.Project, onComplete:(success:Bool)->Void) {
+	public function new(p:dn.Process, project:data.Project, ?onComplete:(success:Bool)->Void) {
 		super(p);
 
 		this.onComplete = onComplete;
@@ -57,7 +57,7 @@ class ProjectSaving extends dn.Process {
 
 	inline function hasEditor() return Editor.ME!=null && !Editor.ME.destroyed;
 
-	inline function log(str:String) App.LOG.add("save", str);
+	inline function log(str:String) App.LOG.add("save", '[${project.filePath.fileName}] $str');
 	inline function logState() log('=> $state...');
 
 	function beginState(s:SavingState) {
@@ -178,7 +178,8 @@ class ProjectSaving extends dn.Process {
 
 	function complete(success:Bool) {
 		destroy();
-		onComplete(success);
+		if( onComplete!=null )
+			onComplete(success);
 	}
 
 
