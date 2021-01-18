@@ -151,7 +151,9 @@ class App extends dn.Process {
 				path.removeLastDirectory();
 				path.fileWithExt = dir+"."+Const.FILE_EXTENSION;
 			}
-			if( path==null || !loadProject(path.full) )
+			if( path!=null )
+				loadProject(path.full);
+			else
 				loadPage( ()->new page.Home() );
 		}, 0.2);
 
@@ -476,76 +478,26 @@ class App extends dn.Process {
 	}
 
 
-	public function loadProject(filePath:String) {
-		loadingLog.clear();
-		if( !JsTools.fileExists(filePath) ) {
-			N.error("File not found: "+filePath);
-			loadingLog.error("File not found: "+filePath);
-			unregisterRecentProject(filePath);
-			return false;
-		}
+	public function loadProject(filePath:String) : Void {
+		ui.ProjectLoader.load(filePath, (?p,?err)->{
+			if( p!=null )
+				loadPage( ()->new page.Editor(p) );
+			else {
+				// Failed
+				N.error(switch err {
+					case null:
+						L.t._("Unknown error");
 
-		// Parse
-		loadingLog.fileOp('Loading project $filePath...');
-		var json = null;
-		var p = #if !debug try #end {
-			var raw = JsTools.readFileString(filePath);
-			json = haxe.Json.parse(raw);
-			data.Project.fromJson(filePath, json);
-		}
-		#if !debug
-		catch(e:Dynamic) {
-			loadingLog.error( Std.string(e) );
-			null;
-		}
-		#end
+					case FileNotFound:
+						unregisterRecentProject(filePath);
+						L.t._("File not found");
 
-		if( p==null ) {
-			loadingLog.error("Couldn't read project file!");
-			return false;
-		}
-
-		// Load separate level files
-		if( p.externalLevels ) {
-			var idx = 0;
-			for(l in p.levels) {
-				var path = p.makeAbsoluteFilePath(l.externalRelPath);
-				if( !JsTools.fileExists(path) ) {
-					// TODO better lost level management
-					loadingLog.error("Level file not found "+l.externalRelPath);
-					p.levels.splice(idx,1);
-					idx--;
-				}
-				else {
-					// Parse level
-					try {
-						loadingLog.fileOp("Loading external level "+l.externalRelPath+"...");
-						var raw = JsTools.readFileString(path);
-						var lJson = haxe.Json.parse(raw);
-						var l = data.Level.fromJson(p, lJson);
-						p.levels[idx] = l;
-					}
-					catch(e:Dynamic) {
-						// TODO better lost level management
-						loadingLog.error("Error while parsing level file "+l.externalRelPath);
-						p.levels.splice(idx,1);
-						idx--;
-					}
-				}
-				idx++;
+					case ParsingFailed(err):
+						L.t._("Couldn't parse project JSON file!");
+				});
+				loadPage( ()->new page.Home() );
 			}
-		}
-
-		// Open it
-		loadingLog.fileOp("Done.");
-		loadPage( ()->new page.Editor(p) );
-
-		// Display errors
-		if( loadingLog.containsAnyCriticalEntry() ) {
-			new ui.modal.dialog.LogPrint(loadingLog, L.t._("Error while loading project"));
-			Editor.ME.needSaving = true;
-		}
-		return true;
+		});
 	}
 
 	public inline function clearDebug() {
