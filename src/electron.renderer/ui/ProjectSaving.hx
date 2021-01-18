@@ -88,6 +88,7 @@ class ProjectSaving extends dn.Process {
 				JsTools.writeFileString(project.filePath.full, savingData.projectJson);
 				beginState(SavingExternLevels);
 
+
 			case SavingExternLevels:
 				// Init level dir
 				var levelDir = project.getAbsExternalFilesDir();
@@ -96,16 +97,18 @@ class ProjectSaving extends dn.Process {
 				else
 					JsTools.createDirs(levelDir);
 
-
 				if( project.externalLevels ) {
 					logState();
 					var ops = [];
 					for(l in savingData.externLevelsJson) {
 						var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(l.relPath) );
+						trace(fp);
 						ops.push({
 							label: "Level "+l.id,
 							cb: ()->{
+								trace(fp.full);
 								JsTools.writeFileString(fp.full, l.json);
+								trace("OK");
 							}
 						});
 					}
@@ -114,11 +117,13 @@ class ProjectSaving extends dn.Process {
 				else
 					beginState(SavingLayerImages);
 
+
 			case SavingLayerImages:
 				var pngDir = project.getAbsExternalFilesDir()+"/png";
 				if( project.exportPng ) {
 					logState();
 					var ops = [];
+					var count = 0;
 
 					// Init PNG dir
 					if( !JsTools.fileExists(pngDir) )
@@ -151,14 +156,16 @@ class ProjectSaving extends dn.Process {
 										+ dn.Lib.leadingZeros(layerIdx++, 2) + "-"
 										+ li.def.identifier;
 									fp.extension = "png";
-									log('  Saving ${fp.fileWithExt} (${bytes.length} bytes)...');
 									JsTools.writeFileBytes(fp.full, bytes);
+									count++;
 								}
 							});
 						}
 						levelIdx++;
 					}
-					new ui.modal.Progress(Lang.t._("PNG export"), 2, ops);
+					new ui.modal.Progress(Lang.t._("PNG export"), 2, ops, ()->{
+						log('  Saved $count PNG(s)...');
+					});
 				}
 				else {
 					// Delete previous PNG dir
@@ -192,8 +199,10 @@ class ProjectSaving extends dn.Process {
 			case Done:
 				// Delete empty project dir
 				var dir = project.getAbsExternalFilesDir();
-				if( JsTools.fileExists(dir) && JsTools.isDirEmpty(dir) )
+				if( JsTools.fileExists(dir) && JsTools.isDirEmpty(dir) ) {
+					log('Removing useless dir: $dir');
 					JsTools.removeDir(dir);
+				}
 
 				// Finalize
 				logState();
