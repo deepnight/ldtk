@@ -252,8 +252,7 @@ class Home extends Page {
 			// jDir.css("color", C.intToHex( C.toWhite(col, 0.3) ));
 
 			li.click( function(ev) {
-				if( !App.ME.loadProject(filePath) )
-					updateRecents();
+				App.ME.loadProject(filePath);
 			});
 
 			if( !JsTools.fileExists(filePath) )
@@ -391,8 +390,7 @@ class Home extends Page {
 		if( openPath==null )
 			openPath = App.ME.getDefaultDialogDir();
 		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION,".json"], openPath, function(filePath) {
-			if( !App.ME.loadProject(filePath) )
-				updateRecents();
+			App.ME.loadProject(filePath);
 		});
 	}
 
@@ -409,11 +407,15 @@ class Home extends Page {
 
 			var p = data.Project.createEmpty(fp.full);
 			var data = JsTools.prepareProjectSavingData(p);
-			// BUG will not work if multifiles goes default!
-			JsTools.writeFileString(p.filePath.full, data.projectJson);
-
-			N.msg("New project created: "+p.filePath.full);
-			App.ME.loadPage( ()->new Editor(p) );
+			new ui.ProjectSaving(this, p, (success)->{
+				if( success ) {
+					N.msg("New project created: "+p.filePath.full);
+					App.ME.loadPage( ()->new Editor(p) );
+				}
+				else {
+					N.error("Couldn't create this project file!");
+				}
+			});
 		});
 	}
 
