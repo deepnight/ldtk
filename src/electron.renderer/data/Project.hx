@@ -226,7 +226,7 @@ class Project {
 	/** CACHED IMAGES ************************************/
 
 	public inline function isImageLoaded(relPath:String) {
-		return imageCache.exists(relPath);
+		return relPath!=null && imageCache.exists(relPath);
 	}
 
 	public function loadImage(relPath:String) : Null<data.DataTypes.CachedImage> {
