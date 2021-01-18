@@ -305,6 +305,14 @@ class WorldPanel extends ui.modal.Panel {
 		else
 			jSelect.prop("disabled",true);
 
+		// Locate bg image
+		var jLocate = jForm.find(".bg .locate");
+		jLocate.empty();
+		if( level.bgRelPath!=null ) {
+			var e = JsTools.makeExploreLink( project.makeAbsoluteFilePath(level.bgRelPath), true );
+			jLocate.append(e);
+		}
+
 		// Custom fields
 		// ... (not implemented yet)
 
