@@ -250,10 +250,16 @@ class WorldPanel extends ui.modal.Panel {
 			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], path, function(absPath) {
 				var relPath = project.makeRelativeFilePath(absPath);
 				if( relPath!=null ) {
-					level.bgRelPath = relPath;
-					if( level.bgPos==null )
-						level.bgPos = Cover;
-					onFieldChange();
+					var img = project.getImage(relPath);
+					if( img!=null ) {
+						level.bgRelPath = relPath;
+						if( level.bgPos==null )
+							level.bgPos = Cover;
+						onFieldChange();
+					}
+					else {
+						N.error('Couldn\'t read image file: $relPath');
+					}
 				}
 			});
 		});
