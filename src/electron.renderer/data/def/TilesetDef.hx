@@ -14,9 +14,6 @@ class TilesetDef {
 	public var spacing : Int = 0; // px space between consecutive tiles
 	public var savedSelections : Array<TilesetSelection> = [];
 
-	// @:allow(page.Editor)
-	// var opaqueTilesCache : Null< Map<Int,Bool> >;
-
 	var opaqueTiles : Null< haxe.ds.Vector<Bool> >;
 	var averageColorsCache : Null< Map<Int,Int> >; // ARGB Int
 
@@ -445,7 +442,6 @@ class TilesetDef {
 
 	public inline function isTileOpaque(tid:Int) {
 		return opaqueTiles!=null ? opaqueTiles[tid]==true : false;
-		// return opaqueTilesCache!=null ? opaqueTilesCache.get(tid)==true : false;
 	}
 
 
@@ -565,12 +561,6 @@ class TilesetDef {
 		}
 		var imgData = new js.html.ImageData(clampedArray, imgData.pixels.width);
 		ctx.putImageData(imgData,0,0);
-
-		// var img = new js.html.Image(pixels.width, pixels.height);
-		// img.src = 'data:image/png;base64,$base64';
-		// img.onload = function() {
-		// 	ctx.drawImage(img, 0, 0, pixels.width*scale, pixels.height*scale);
-		// }
 	}
 
 	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
