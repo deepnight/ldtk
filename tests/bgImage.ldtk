@@ -14,7 +14,7 @@
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
 	"defaultLevelBgColor": "#7F8093",
-	"nextUid": 1,
+	"nextUid": 2,
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
@@ -22,7 +22,31 @@
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
-	"defs": { "layers": [], "entities": [], "tilesets": [], "enums": [], "externalEnums": [] },
+	"defs": {
+		"layers": [
+			{
+				"__type": "IntGrid",
+				"identifier": "IntGrid",
+				"type": "IntGrid",
+				"uid": 1,
+				"gridSize": 16,
+				"displayOpacity": 1,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGridValues": [{ "identifier": null, "color": "#000000" }],
+				"autoTilesetDefUid": null,
+				"autoRuleGroups": [],
+				"autoSourceLayerDefUid": null,
+				"tilesetDefUid": null,
+				"tilePivotX": 0,
+				"tilePivotY": 0
+			}
+		],
+		"entities": [],
+		"tilesets": [],
+		"enums": [],
+		"externalEnums": []
+	},
 	"levels": [
 		{
 			"identifier": "Level",
@@ -35,8 +59,31 @@
 			"bgColor": null,
 			"bgRelPath": "texturePacker.png",
 			"bgPos": "Cover",
+			"__bgPos": null,
 			"externalRelPath": null,
-			"layerInstances": [],
+			"layerInstances": [
+				{
+					"__identifier": "IntGrid",
+					"__type": "IntGrid",
+					"__cWid": 16,
+					"__cHei": 16,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"levelId": 0,
+					"layerDefUid": 1,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 9150878,
+					"gridTiles": [],
+					"entityInstances": []
+				}
+			],
 			"__neighbours": []
 		}
 	]
