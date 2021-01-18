@@ -22,11 +22,6 @@ class TilesetDef {
 
 	public var pxWid = 0;
 	public var pxHei = 0;
-	var bytes : Null<haxe.io.Bytes>;
-	var texture : Null<h3d.mat.Texture>;
-	var pixels : Null<hxd.Pixels>;
-	var base64 : Null<String>;
-
 
 	public var cWid(get,never) : Int;
 	inline function get_cWid() return !hasAtlasPath() ? 0 : dn.M.ceil( (pxWid-padding*2) / (tileGridSize+spacing) );
@@ -46,7 +41,7 @@ class TilesetDef {
 	}
 
 	public inline function hasAtlasPath() return relPath!=null;
-	public inline function isAtlasLoaded() return relPath!=null && bytes!=null;
+	public inline function isAtlasLoaded() return _project.isImageLoaded(relPath);
 
 	@:allow(data.Project)
 	function unsafeRelPathChange(newRelPath:String) { // should ONLY be used in specific circonstances
@@ -72,19 +67,6 @@ class TilesetDef {
 		relPath = null;
 		pxWid = pxHei = 0;
 		savedSelections = [];
-
-		#if heaps
-		if( texture!=null )
-			texture.dispose();
-		texture = null;
-
-		if( pixels!=null )
-			pixels.dispose();
-		pixels = null;
-
-		bytes = null;
-		base64 = null;
-		#end
 	}
 
 
@@ -180,42 +162,32 @@ class TilesetDef {
 		relPath = newPath.full;
 
 		// Load image
-		try {
-			var fullFp = newPath.hasDriveLetter() ? newPath : dn.FilePath.fromFile( projectDir +"/"+ relFilePath );
-			var fullPath = fullFp.full;
-			App.LOG.fileOp("Loading atlas image: "+fullPath);
-			bytes = misc.JsTools.readFileBytes(fullPath);
-
-			if( bytes==null ) {
-				App.LOG.error("No bytes");
-				return LoadingFailed("Empty file");
-			}
-
-			App.LOG.fileOp(' -> Loaded ${bytes.length} bytes.');
-			base64 = haxe.crypto.Base64.encode(bytes);
-			pixels = dn.ImageDecoder.decodePixels(bytes);
-			App.LOG.fileOp(' -> Decoded ${pixels.width}x${pixels.height} pixels.');
-			texture = h3d.mat.Texture.fromPixels(pixels);
-		}
-		catch(err:Dynamic) {
-			App.LOG.error(err);
+		App.LOG.fileOp('Loading atlas image: $relFilePath...');
+		_project.disposeImage(relFilePath);
+		var img = _project.getImage(relFilePath);
+		if( img==null ) {
+			App.LOG.error("Image loading failed");
 			removeAtlasImage();
-			return LoadingFailed( Std.string(err) );
+			return LoadingFailed("Unknown error");
 		}
+		else {
+			App.LOG.fileOp(' -> Loaded ${img.bytes.length} bytes.');
+			App.LOG.fileOp(' -> Decoded ${img.pixels.width}x${img.pixels.height} pixels.');
 
-		// Update dimensions
-		pxWid = pixels.width;
-		pxHei = pixels.height;
-		tileGridSize = dn.M.imin( tileGridSize, getMaxTileGridSize() );
-		spacing = dn.M.imin( spacing, getMaxTileGridSize() );
-		padding = dn.M.imin( padding, getMaxTileGridSize() );
+			// Update dimensions
+			pxWid = img.pixels.width;
+			pxHei = img.pixels.height;
+			tileGridSize = dn.M.imin( tileGridSize, getMaxTileGridSize() );
+			spacing = dn.M.imin( spacing, getMaxTileGridSize() );
+			padding = dn.M.imin( padding, getMaxTileGridSize() );
 
-		if( oldRelPath!=null ) {
-			// Try to update previous image
-			return remapAllTileIds(oldPxWid, oldPxHei);
+			if( oldRelPath!=null ) {
+				// Try to update previous image
+				return remapAllTileIds(oldPxWid, oldPxHei);
+			}
+			else
+				return Ok;
 		}
-		else
-			return Ok;
 	}
 
 
@@ -453,7 +425,7 @@ class TilesetDef {
 	}
 
 	public inline function getAtlasTile() : Null<h2d.Tile> {
-		return isAtlasLoaded() ? h2d.Tile.fromTexture(texture) : null;
+		return isAtlasLoaded() ? h2d.Tile.fromTexture( _project.getImage(relPath).tex ) : null;
 	}
 
 	public inline function getTile(tileId:Int) : h2d.Tile {
@@ -477,7 +449,7 @@ class TilesetDef {
 	}
 
 
-	function _parseTilePixels(tid:Int) {
+	function _parseTilePixels(img:CachedImage, tid:Int) {
 		opaqueTiles[tid] = true;
 		averageColorsCache.set(tid, 0x0);
 
@@ -496,7 +468,7 @@ class TilesetDef {
 			var curA = 0.;
 			for(py in ty...ty+tileGridSize)
 			for(px in tx...tx+tileGridSize) {
-				pixel = pixels.getPixel(px,py);
+				pixel = img.pixels.getPixel(px,py);
 
 				// Detect opacity
 				if( opaqueTiles[tid]!=false && dn.Color.getA(pixel) < 1 )
@@ -530,13 +502,14 @@ class TilesetDef {
 		App.LOG.general("Init pixel data cache for "+relPath);
 		opaqueTiles = new haxe.ds.Vector( cWid*cHei );
 		averageColorsCache = new Map();
+		var img = _project.getImage(relPath);
 		var ops = [];
 		for(tcy in 0...cHei)
 			ops.push({
 				label: "Row "+tcy,
 				cb : ()->{
 					for(tcx in 0...cWid)
-						_parseTilePixels( getTileId(tcx,tcy) );
+						_parseTilePixels( img, getTileId(tcx,tcy) );
 				}
 			});
 
@@ -556,8 +529,10 @@ class TilesetDef {
 
 	public function createAtlasHtmlImage() : js.html.Image {
 		var img = new js.html.Image();
-		if( isAtlasLoaded() )
-			img.src = 'data:image/png;base64,$base64';
+		if( isAtlasLoaded() ) {
+			var imgData = _project.getImage(relPath);
+			img.src = 'data:image/png;base64,${imgData.base64}';
+		}
 		return img;
 	}
 
@@ -574,19 +549,21 @@ class TilesetDef {
 		ctx.imageSmoothingEnabled = false;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		var clampedArray = new js.lib.Uint8ClampedArray( pixels.width * pixels.height * 4 );
+		var imgData = _project.getImage(relPath);
+
+		var clampedArray = new js.lib.Uint8ClampedArray( imgData.pixels.width * imgData.pixels.height * 4 );
 		var c = 0;
 		var idx = 0;
-		for(y in 0...pixels.height)
-		for(x in 0...pixels.width) {
-			c = pixels.getPixel(x,y);
-			idx = y*(pixels.width*4) + x*4;
+		for(y in 0...imgData.pixels.height)
+		for(x in 0...imgData.pixels.width) {
+			c = imgData.pixels.getPixel(x,y);
+			idx = y*(imgData.pixels.width*4) + x*4;
 			clampedArray[idx] = dn.Color.getRi(c);
 			clampedArray[idx+1] = dn.Color.getGi(c);
 			clampedArray[idx+2] = dn.Color.getBi(c);
 			clampedArray[idx+3] = dn.Color.getAi(c);
 		}
-		var imgData = new js.html.ImageData(clampedArray, pixels.width);
+		var imgData = new js.html.ImageData(clampedArray, imgData.pixels.width);
 		ctx.putImageData(imgData,0,0);
 
 		// var img = new js.html.Image(pixels.width, pixels.height);
@@ -597,7 +574,7 @@ class TilesetDef {
 	}
 
 	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
-		if( pixels==null )
+		if( !isAtlasLoaded() )
 			return;
 
 		if( !jCanvas.is("canvas") )
@@ -606,7 +583,8 @@ class TilesetDef {
 		if( getTileSourceX(tileId)+tileGridSize>pxWid || getTileSourceY(tileId)+tileGridSize>pxHei )
 			return; // out of bounds
 
-		var subPixels = pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
+		var imgData = _project.getImage(relPath);
+		var subPixels = imgData.pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
 		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
 		var ctx = canvas.getContext2d();
 		ctx.imageSmoothingEnabled = false;

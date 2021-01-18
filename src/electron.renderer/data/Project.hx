@@ -229,11 +229,22 @@ class Project {
 		return relPath!=null && imageCache.exists(relPath);
 	}
 
-	public function loadImage(relPath:String) : Null<data.DataTypes.CachedImage> {
-		var absPath = makeAbsoluteFilePath(relPath);
+	public function disposeImage(relPath:String) {
+		if( isImageLoaded(relPath) ) {
+			var img = imageCache.get(relPath);
+			img.base64 = null;
+			img.bytes = null;
+			img.pixels.dispose();
+			img.tex.dispose();
+			imageCache.remove(relPath);
+		}
+	}
 
+	public function getImage(relPath:String) : Null<data.DataTypes.CachedImage> {
 		try {
 			if( !imageCache.exists(relPath) ) {
+				// Load it from the disk
+				var absPath = makeAbsoluteFilePath(relPath);
 				var bytes = misc.JsTools.readFileBytes(absPath);
 				var base64 = haxe.crypto.Base64.encode(bytes);
 				var pixels = dn.ImageDecoder.decodePixels(bytes);
