@@ -53,12 +53,16 @@ class Project {
 	}
 
 	public function makeRelativeFilePath(absPath:String) {
+		if( absPath==null )
+			return null;
 		var fp = dn.FilePath.fromFile( absPath );
 		fp.makeRelativeTo( filePath.directory );
 		return fp.full;
 	}
 
 	public function makeAbsoluteFilePath(relPath:String) {
+		if( relPath==null )
+			return null;
 		var fp = dn.FilePath.fromFile(relPath);
 		return fp.hasDriveLetter()
 			? fp.full
