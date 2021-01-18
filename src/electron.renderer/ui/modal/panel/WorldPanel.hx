@@ -278,8 +278,8 @@ class WorldPanel extends ui.modal.Panel {
 		var jSelect = jForm.find("#bgPos");
 		jSelect.empty();
 		if( level.bgPos!=null ) {
-			for(k in data.DataTypes.BgImagePos.getConstructors()) {
-				var e = data.DataTypes.BgImagePos.createByName(k);
+			for(k in ldtk.Json.BgImagePos.getConstructors()) {
+				var e = ldtk.Json.BgImagePos.createByName(k);
 				var jOpt = new J('<option value="$k"/>');
 				jSelect.append(jOpt);
 				jOpt.text( switch e {

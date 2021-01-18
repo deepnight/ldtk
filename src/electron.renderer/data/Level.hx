@@ -15,7 +15,7 @@ class Level {
 	public var externalRelPath: Null<String>;
 
 	public var bgRelPath: Null<String>;
-	public var bgPos: Null<data.DataTypes.BgImagePos>;
+	public var bgPos: Null<ldtk.Json.BgImagePos>;
 
 	@:allow(ui.modal.panel.WorldPanel)
 	var bgColor : Null<UInt>;
@@ -99,6 +99,7 @@ class Level {
 
 			bgRelPath: bgRelPath,
 			bgPos: JsonTools.writeEnum(bgPos, true),
+			__bgPos: null, // JSON export bgPos helper
 
 			externalRelPath: null, // is only set upon actual saving, if project uses externalLevels option
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),
@@ -125,7 +126,7 @@ class Level {
 		l.externalRelPath = json.externalRelPath;
 
 		l.bgRelPath = json.bgRelPath;
-		l.bgPos = JsonTools.readEnum(data.DataTypes.BgImagePos, json.bgPos, true);
+		l.bgPos = JsonTools.readEnum(ldtk.Json.BgImagePos, json.bgPos, true);
 
 		l.layerInstances = [];
 		if( json.layerInstances!=null ) // external levels
