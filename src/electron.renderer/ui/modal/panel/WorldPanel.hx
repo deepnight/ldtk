@@ -297,6 +297,10 @@ class WorldPanel extends ui.modal.Panel {
 			}
 			jSelect.val( level.bgPos.getName() );
 			jSelect.prop("disabled",false);
+			jSelect.change( (_)->{
+				level.bgPos = ldtk.Json.BgImagePos.createByName( jSelect.val() );
+				onFieldChange();
+			});
 		}
 		else
 			jSelect.prop("disabled",true);
