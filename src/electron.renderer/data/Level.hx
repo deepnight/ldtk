@@ -138,6 +138,19 @@ class Level {
 		return l;
 	}
 
+	public inline function hasBgImage() {
+		return bgRelPath!=null;
+	}
+
+	public inline function getBgImageData() : Null<data.DataTypes.CachedImage> {
+		return hasBgImage() ? _project.getImage(bgRelPath) : null;
+	}
+
+	public inline function getBgTile() : Null<h2d.Tile> {
+		var data = getBgImageData();
+		return data==null ? null : h2d.Tile.fromTexture( data.tex );
+	}
+
 	public inline function getBgColor() : UInt {
 		return bgColor!=null ? bgColor : _project.defaultLevelBgColor;
 	}

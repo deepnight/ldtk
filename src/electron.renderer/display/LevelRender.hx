@@ -17,7 +17,8 @@ class LevelRender extends dn.Process {
 	/** <LayerDefUID, LayerRender> **/
 	var layerRenders : Map<Int, LayerRender> = new Map();
 
-	var bg : h2d.Bitmap;
+	var bgColor : h2d.Bitmap;
+	var bgImage : h2d.Bitmap;
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
 	var grid : h2d.Graphics;
@@ -36,8 +37,11 @@ class LevelRender extends dn.Process {
 		editor.ge.addGlobalListener(onGlobalEvent);
 		createRootInLayers(editor.root, Const.DP_MAIN);
 
-		bg = new h2d.Bitmap();
-		root.add(bg, Const.DP_BG);
+		bgColor = new h2d.Bitmap();
+		root.add(bgColor, Const.DP_BG);
+
+		bgImage = new h2d.Bitmap();
+		root.add(bgImage, Const.DP_BG);
 
 		bounds = new h2d.Graphics();
 		root.add(bounds, Const.DP_UI);
@@ -315,10 +319,34 @@ class LevelRender extends dn.Process {
 
 
 	function renderBg() {
-		var c = editor.curLevel.getBgColor();
-		bg.tile = h2d.Tile.fromColor(c);
-		bg.scaleX = editor.curLevel.pxWid;
-		bg.scaleY = editor.curLevel.pxHei;
+		var level = editor.curLevel;
+
+		var c = level.getBgColor();
+		bgColor.tile = h2d.Tile.fromColor(c);
+		bgColor.scaleX = editor.curLevel.pxWid;
+		bgColor.scaleY = editor.curLevel.pxHei;
+
+		if( level.hasBgImage() ) {
+			var t = level.getBgTile();
+			bgImage.visible = true;
+			bgImage.tile = t;
+			switch level.bgPos {
+				case null:
+				case Unscaled:
+					bgImage.scaleX = bgImage.scaleY = 1;
+
+				case Contain:
+				case Cover:
+
+				case CoverDirty:
+					bgImage.scaleX = level.pxWid / t.width;
+					bgImage.scaleY = level.pxHei/ t.height;
+			}
+		}
+		else {
+			bgImage.tile = null;
+			bgImage.visible = false;
+		}
 	}
 
 	function renderBounds() {
