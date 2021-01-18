@@ -89,9 +89,13 @@ class ProjectSaving extends dn.Process {
 				beginState(SavingExternLevels);
 
 			case SavingExternLevels:
-				// Remove previous level files
-				if( JsTools.fileExists( project.getAbsExternalFilesDir() ) )
-					JsTools.emptyDir(project.getAbsExternalFilesDir(), [Const.LEVEL_EXTENSION]);
+				// Init level dir
+				var levelDir = project.getAbsExternalFilesDir();
+				if( JsTools.fileExists(levelDir) )
+					JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
+				else
+					JsTools.createDirs(levelDir);
+
 
 				if( project.externalLevels ) {
 					logState();
@@ -105,7 +109,7 @@ class ProjectSaving extends dn.Process {
 							}
 						});
 					}
-					new ui.modal.Progress(Lang.t._("Saving levels"), 2, ops);
+					new ui.modal.Progress(Lang.t._("Saving levels"), 3, ops);
 				}
 				else
 					beginState(SavingLayerImages);
@@ -184,7 +188,14 @@ class ProjectSaving extends dn.Process {
 
 				beginState(Done);
 
+
 			case Done:
+				// Delete empty project dir
+				var dir = project.getAbsExternalFilesDir();
+				if( JsTools.fileExists(dir) && JsTools.isDirEmpty(dir) )
+					JsTools.removeDir(dir);
+
+				// Finalize
 				logState();
 				log('Saving complete (${project.filePath.fileWithExt})');
 				complete(true);

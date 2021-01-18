@@ -569,6 +569,16 @@ class JsTools {
 		});
 	}
 
+	public static function isDirEmpty(path:String) {
+		if( !fileExists(path) )
+			return true;
+
+		for( f in js.node.Fs.readdirSync(path) )
+			return false;
+
+		return true;
+	}
+
 	public static function emptyDir(path:String, ?onlyExts:Array<String>) {
 		if( !fileExists(path) )
 			return;
