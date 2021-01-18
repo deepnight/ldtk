@@ -1270,6 +1270,12 @@ select {
 		overflow: hidden;
 	}
 
+	&:empty {
+		background-color: transparent;
+		border-color: $bgLight;
+		opacity: 0.7;
+	}
+
 	&.noValue:not(:focus) {
 		background-color: $bgLight;
 		background-image: url("../img/stripes.png");
@@ -3914,6 +3920,24 @@ body.sorting ul.collapsedSortTarget {
 			>ul {
 				border: 0;
 				padding: 0;
+			}
+		}
+
+		#levelForm {
+			.bg {
+				align-items: stretch;
+				button#bgPath {
+					text-transform: none;
+					font-size: 90%;
+				}
+				button#removeBg {
+					flex: 0 1 0px;
+					padding-top: 0;
+					padding-bottom: 0;
+				}
+				select {
+					font-size: 9pt;
+				}
 			}
 		}
 

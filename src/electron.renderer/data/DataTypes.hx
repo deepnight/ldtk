@@ -64,5 +64,5 @@ enum BgImagePos {
 	Unscaled;
 	Contain;
 	Cover;
-	DirtyScale;
+	CoverDirty;
 }

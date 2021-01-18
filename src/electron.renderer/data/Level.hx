@@ -97,6 +97,9 @@ class Level {
 			__bgColor: JsonTools.writeColor( getBgColor() ),
 			bgColor: JsonTools.writeColor(bgColor, true),
 
+			bgRelPath: bgRelPath,
+			bgPos: JsonTools.writeEnum(bgPos, true),
+
 			externalRelPath: null, // is only set upon actual saving, if project uses externalLevels option
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),
 			__neighbours: neighbours,
@@ -120,6 +123,9 @@ class Level {
 		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
 		l.bgColor = JsonTools.readColor(json.bgColor, true);
 		l.externalRelPath = json.externalRelPath;
+
+		l.bgRelPath = json.bgRelPath;
+		l.bgPos = JsonTools.readEnum(data.DataTypes.BgImagePos, json.bgPos, true);
 
 		l.layerInstances = [];
 		if( json.layerInstances!=null ) // external levels
