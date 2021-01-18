@@ -14,7 +14,7 @@
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
 	"defaultLevelBgColor": "#7F8093",
-	"nextUid": 2,
+	"nextUid": 3,
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
@@ -51,14 +51,14 @@
 		{
 			"identifier": "Level",
 			"uid": 0,
-			"worldX": -80,
+			"worldX": 0,
 			"worldY": 0,
 			"pxWid": 464,
 			"pxHei": 256,
 			"__bgColor": "#3D406E",
 			"bgColor": "#3D406E",
-			"bgRelPath": "atlas/foodIcons_by_Henry_Software.png",
-			"bgPos": "CoverDirty",
+			"bgRelPath": "atlas/7Soul's RPG Graphics - Icons.png",
+			"bgPos": "Cover",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
@@ -84,7 +84,45 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": []
+			"__neighbours": [{ "levelUid": 2, "dir": "s" }]
+		},
+		{
+			"identifier": "Level3",
+			"uid": 2,
+			"worldX": 288,
+			"worldY": 256,
+			"pxWid": 256,
+			"pxHei": 256,
+			"__bgColor": "#7F8093",
+			"bgColor": null,
+			"bgRelPath": "texturePacker.png",
+			"bgPos": "Contain",
+			"__bgPos": null,
+			"externalRelPath": null,
+			"layerInstances": [
+				{
+					"__identifier": "IntGrid",
+					"__type": "IntGrid",
+					"__cWid": 16,
+					"__cHei": 16,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"levelId": 2,
+					"layerDefUid": 1,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 630003,
+					"gridTiles": [],
+					"entityInstances": []
+				}
+			],
+			"__neighbours": [{ "levelUid": 0, "dir": "n" }]
 		}
 	]
 }
