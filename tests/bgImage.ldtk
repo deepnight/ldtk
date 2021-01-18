@@ -33,6 +33,8 @@
 			"pxHei": 256,
 			"__bgColor": "#7F8093",
 			"bgColor": null,
+			"bgRelPath": "texturePacker.png",
+			"bgPos": "Cover",
 			"externalRelPath": null,
 			"layerInstances": [],
 			"__neighbours": []
