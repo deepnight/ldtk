@@ -26,6 +26,8 @@ class Project {
 	public var exportTiled = false;
 	public var exportPng = false;
 
+	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
+
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
@@ -218,6 +220,37 @@ class Project {
 		reorganizeWorld();
 		for(level in levels)
 			level.tidy(this);
+	}
+
+
+	/** CACHED IMAGES ************************************/
+
+	public inline function isImageLoaded(relPath:String) {
+		return imageCache.exists(relPath);
+	}
+
+	public function loadImage(relPath:String) : Null<data.DataTypes.CachedImage> {
+		var absPath = makeAbsoluteFilePath(relPath);
+
+		try {
+			if( !imageCache.exists(relPath) ) {
+				var bytes = misc.JsTools.readFileBytes(absPath);
+				var base64 = haxe.crypto.Base64.encode(bytes);
+				var pixels = dn.ImageDecoder.decodePixels(bytes);
+				var texture = h3d.mat.Texture.fromPixels(pixels);
+				imageCache.set( relPath, {
+					relPath: relPath,
+					bytes: bytes,
+					base64: base64,
+					pixels: pixels,
+					tex: texture,
+				});
+			}
+			return imageCache.get(relPath);
+		}
+		catch( e:Dynamic ) {
+			return null;
+		}
 	}
 
 
