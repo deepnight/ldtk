@@ -58,6 +58,7 @@ class Project {
 		if( absPath==null )
 			return null;
 		var fp = dn.FilePath.fromFile( absPath );
+		fp.useSlashes();
 		fp.makeRelativeTo( filePath.directory );
 		return fp.full;
 	}
@@ -66,6 +67,7 @@ class Project {
 		if( relPath==null )
 			return null;
 		var fp = dn.FilePath.fromFile(relPath);
+		fp.useSlashes();
 		return fp.hasDriveLetter()
 			? fp.full
 			: dn.FilePath.fromFile( filePath.directory +"/"+ relPath ).full;
