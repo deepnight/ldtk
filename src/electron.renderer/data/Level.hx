@@ -142,13 +142,43 @@ class Level {
 		return bgRelPath!=null;
 	}
 
-	public inline function getBgImageData() : Null<data.DataTypes.CachedImage> {
-		return hasBgImage() ? _project.getImage(bgRelPath) : null;
-	}
+	public function getBgImage() : Null<{ t:h2d.Tile, sx:Float, sy:Float }> {
+		if( !hasBgImage() )
+			return null;
 
-	public inline function getBgTile() : Null<h2d.Tile> {
-		var data = getBgImageData();
-		return data==null ? null : h2d.Tile.fromTexture( data.tex );
+		var data = _project.getImage(bgRelPath);
+		if( data==null )
+			return null;
+
+		var t = h2d.Tile.fromTexture( data.tex );
+		var sx = 1.0;
+		var sy = 1.0;
+		switch bgPos {
+			case null:
+
+			case Unscaled:
+
+			case Contain:
+				sx = sy = M.fmin( pxWid/t.width, pxHei/t.height );
+
+			case Cover:
+				sx = sy = M.fmax( pxWid/t.width, pxHei/t.height );
+
+			case CoverDirty:
+				sx = pxWid / t.width;
+				sy = pxHei/ t.height;
+		}
+		// Crop
+		t = t.sub(
+			0, 0,
+			M.fmin(t.width, pxWid/sx),
+			M.fmin(t.height, pxHei/sy)
+		);
+		return {
+			t: t,
+			sx: sx,
+			sy: sy,
+		}
 	}
 
 	public inline function getBgColor() : UInt {

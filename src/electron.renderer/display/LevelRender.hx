@@ -326,22 +326,12 @@ class LevelRender extends dn.Process {
 		bgColor.scaleX = editor.curLevel.pxWid;
 		bgColor.scaleY = editor.curLevel.pxHei;
 
-		if( level.hasBgImage() ) {
-			var t = level.getBgTile();
+		var bgInfos = level.getBgImage();
+		if( bgInfos!=null ) {
 			bgImage.visible = true;
-			bgImage.tile = t;
-			switch level.bgPos {
-				case null:
-				case Unscaled:
-					bgImage.scaleX = bgImage.scaleY = 1;
-
-				case Contain:
-				case Cover:
-
-				case CoverDirty:
-					bgImage.scaleX = level.pxWid / t.width;
-					bgImage.scaleY = level.pxHei/ t.height;
-			}
+			bgImage.tile = bgInfos.t;
+			bgImage.scaleX = bgInfos.sx;
+			bgImage.scaleY = bgInfos.sy;
 		}
 		else {
 			bgImage.tile = null;
