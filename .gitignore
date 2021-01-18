@@ -24,3 +24,5 @@ app/assets/js/renderer.js
 app/assets/js/*.map
 
 art/export_appElements
+
+tests/_doNotShare
