@@ -10,34 +10,34 @@
 		<label for="useAppExtension">Use .::ext:: extension</label>
 		<input type="checkbox" name="useAppExtension" id="useAppExtension"/>
 		<span>(recommended)</span>
-		<div class="info" title='If checked, the project JSON file will use the app extension ".::ext::" instead of ".json" '></div>
+		<div class="info" title='The project JSON file will use the app extension ".::ext::" instead of ".json" '></div>
 	</li>
 
 	<li>
 		<label for="minify">Minify JSON</label>
 		<input type="checkbox" name="minify" id="minify"/>
-		<div class="info" title='If checked, the project JSON file will be saved without any "pretty" formatting (ie. spaces and indentation), making it more compact.'></div>
+		<div class="info" title='Project JSON file will be saved without any "pretty" formatting (ie. spaces and indentation), making it smaller.'></div>
 	</li>
 
 	<li>
 		<label for="externalLevels">Save levels to separate files</label>
 		<input type="checkbox" id="externalLevels"/>
 		<div class="locate"></div>
-		<div class="info" title='If checked, one file will be saved for the project itself (ie. settings, definitions etc.) and one file per-level will be created in a sub-folder.'></div>
+		<div class="info" title='Separate project data in multiple files: one for the project itself (ie. settings, definitions etc.) and one per-level in a sub-folder.'></div>
 	</li>
 
 	<li>
 		<label for="png">Export layers as PNG</label>
 		<input type="checkbox" id="png"/>
 		<div class="locate"></div>
-		<div class="info" title='If checked, each layer in each level will be exported as an individual PNG image. Warning, this will increase saving time on large projects.'></div>
+		<div class="info" title='Each layer in each level will be exported as an individual PNG image. WARNING: this will increase saving time on large projects.'></div>
 	</li>
 
 	<li>
 		<label for="tiled">Export Tiled TMX</label>
 		<input type="checkbox" id="tiled"/>
 		<div class="locate"></div>
-		<div class="info" title='Every time you save, Tiled TMX files (one per level) will also be created in the same folder as the ::app:: JSON, for easier integration with existing frameworks.'></div>
+		<div class="info" title='Every time you save, Tiled TMX files (one per level) will also be created in a sub folder, for easier integration with existing frameworks.'></div>
 	</li>
 
 	<li>
