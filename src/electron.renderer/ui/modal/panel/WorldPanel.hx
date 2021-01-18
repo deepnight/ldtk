@@ -239,6 +239,14 @@ class WorldPanel extends ui.modal.Panel {
 		else
 			jIsDefault.hide();
 
+		// Bg color
+		var c = level.getBgColor();
+		var i = Input.linkToHtmlInput( c, jForm.find("#bgColor"));
+		i.isColorCode = true;
+		i.onChange = ()->{
+			level.bgColor = c==project.defaultLevelBgColor ? null : c;
+			onFieldChange();
+		}
 		// Custom fields
 		// ... (not implemented yet)
 

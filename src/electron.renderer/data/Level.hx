@@ -14,6 +14,9 @@ class Level {
 
 	public var externalRelPath: Null<String>;
 
+	public var bgRelPath: Null<String>;
+	public var bgPos: Null<data.DataTypes.BgImagePos>;
+
 	@:allow(ui.modal.panel.WorldPanel)
 	var bgColor : Null<UInt>;
 

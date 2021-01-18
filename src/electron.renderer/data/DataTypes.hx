@@ -59,3 +59,10 @@ enum FieldType {
 	F_Point;
 	F_Path;
 }
+
+enum BgImagePos {
+	Unscaled;
+	Contain;
+	Cover;
+	DirtyScale;
+}
