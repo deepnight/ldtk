@@ -27,7 +27,7 @@ class Progress extends ui.Modal {
 		var total = ops.length;
 		var time = haxe.Timer.stamp();
 		createChildProcess( (p)->{
-			if( ops.length==0 ) {
+			if( ops.length==0 && !delayer.hasAny() ) {
 				// All done!
 				canBeClosedManually = true;
 				App.LOG.general('Done "$title" (${M.pretty(haxe.Timer.stamp()-time)}s)');
