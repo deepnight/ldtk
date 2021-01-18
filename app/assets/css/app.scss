@@ -3929,11 +3929,19 @@ body.sorting ul.collapsedSortTarget {
 				button#bgPath {
 					text-transform: none;
 					font-size: 90%;
+					overflow: hidden;
+					text-overflow: ellipsis;
 				}
 				button#removeBg {
 					flex: 0 1 0px;
 					padding-top: 0;
 					padding-bottom: 0;
+				}
+				.locate {
+					display: flex;
+					.exploreTo {
+						background: transparent;
+					}
 				}
 				select {
 					font-size: 9pt;
