@@ -813,6 +813,7 @@ class JsTools {
 		// Button label
 		if( curRelPath!=null ) {
 			var abs = Editor.ME.project.makeAbsoluteFilePath(curRelPath);
+			ui.Tip.attach(jPick, abs);
 			if( !JsTools.fileExists(abs) ) {
 				jWrapper.addClass("error");
 				jPick.text(L.t._("File not found!"));
