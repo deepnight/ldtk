@@ -220,7 +220,7 @@
 			"bgPos": "Cover",
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__bgPos": { "topLeftPx": [0,0], "scale": [0.9666666666666667,0.9666666666666667], "subRect": [0,2.586,480,264.828] },
+			"__bgPos": { "topLeftPx": [0,0], "scale": [0.9666666666666667,0.9666666666666667], "subRect": [0,2.5862068965517153,480,264.82758620689657] },
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -478,7 +478,7 @@
 			"bgPos": "Cover",
 			"bgPivotX": 0.5,
 			"bgPivotY": 1,
-			"__bgPos": { "topLeftPx": [0,0], "scale": [1.15,1.15], "subRect": [0,17.391,320,222.609] },
+			"__bgPos": { "topLeftPx": [0,0], "scale": [1.15,1.15], "subRect": [0,17.391304347826065,320,222.60869565217394] },
 			"externalRelPath": null,
 			"layerInstances": [
 				{
