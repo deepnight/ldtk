@@ -57,6 +57,7 @@ class Project {
 	public function makeRelativeFilePath(absPath:String) {
 		if( absPath==null )
 			return null;
+
 		var fp = dn.FilePath.fromFile( absPath );
 		fp.useSlashes();
 		fp.makeRelativeTo( filePath.directory );
@@ -66,6 +67,7 @@ class Project {
 	public function makeAbsoluteFilePath(relPath:String) {
 		if( relPath==null )
 			return null;
+
 		var fp = dn.FilePath.fromFile(relPath);
 		fp.useSlashes();
 		return fp.hasDriveLetter()
@@ -229,6 +231,16 @@ class Project {
 
 	public inline function isImageLoaded(relPath:String) {
 		return relPath!=null && imageCache.exists(relPath);
+	}
+
+	public function reloadImage(relPath:String) {
+		if( isImageLoaded(relPath) ) {
+			disposeImage(relPath);
+			getImage(relPath);
+			return true;
+		}
+		else
+			return false;
 	}
 
 	public function disposeImage(relPath:String) {

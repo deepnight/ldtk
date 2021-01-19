@@ -64,7 +64,7 @@ class EditEnums extends ui.modal.Panel {
 				function() {
 					var name = dn.FilePath.fromFile(ed.externalRelPath).fileWithExt;
 					new ui.LastChance( L.t._("::file:: enums deleted", { file:name }), project );
-					editor.watcher.stopWatching( project.makeAbsoluteFilePath(ed.externalRelPath) );
+					editor.watcher.stopWatchingRel(ed.externalRelPath);
 					project.defs.removeExternalEnumSource(ed.externalRelPath);
 					editor.ge.emit(EnumDefRemoved);
 					selectEnum( project.defs.enums[0] );

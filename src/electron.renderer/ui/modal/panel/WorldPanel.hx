@@ -244,11 +244,22 @@ class WorldPanel extends ui.modal.Panel {
 		// Create bg image picker
 		jForm.find(".bg .imagePicker").remove();
 		var jImg = JsTools.createImagePicker(level.bgRelPath, (?relPath)->{
-			if( level.bgRelPath==null && relPath!=null )
-				level.bgPos = Cover;
-			level.bgRelPath = relPath;
-			if( level.bgRelPath==null )
+			var old = level.bgRelPath;
+			if( relPath==null && old!=null ) {
+				// Remove
+				level.bgRelPath = null;
 				level.bgPos = null;
+				editor.watcher.stopWatchingRel( old );
+			}
+			else if( relPath!=null ) {
+				// Add or update
+				level.bgRelPath = relPath;
+				if( old!=null )
+					editor.watcher.stopWatchingRel( old );
+				editor.watcher.watchImage(relPath);
+				if( old==null )
+					level.bgPos = Cover;
+			}
 			onFieldChange();
 		});
 		jImg.insertAfter( jForm.find(".bg>label:first-of-type") );

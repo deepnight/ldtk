@@ -153,7 +153,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			if( relPath==null ) {
 				// Remove image
 				if( oldRelPath!=null )
-					editor.watcher.stopWatching( project.makeAbsoluteFilePath(oldRelPath) );
+					editor.watcher.stopWatchingRel(oldRelPath);
 				curTd.removeAtlasImage();
 			}
 			else {
@@ -173,8 +173,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 				}
 
 				if( oldRelPath!=null )
-					editor.watcher.stopWatching( project.makeAbsoluteFilePath(oldRelPath) );
-				editor.watcher.watchTileset(curTd);
+					editor.watcher.stopWatchingRel(oldRelPath);
+				editor.watcher.watchImage(curTd.relPath);
 				project.defs.autoRenameTilesetIdentifier(oldRelPath, curTd);
 			}
 

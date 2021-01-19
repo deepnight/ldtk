@@ -12,7 +12,7 @@ class FileWatcher extends dn.Process {
 		if( !JsTools.fileExists(absFilePath) )
 			return;
 
-		stopWatching(absFilePath);
+		stopWatchingAbs(absFilePath);
 
 		try {
 			App.LOG.fileOp("Watching file: "+absFilePath);
@@ -57,11 +57,11 @@ class FileWatcher extends dn.Process {
 			);
 	}
 
-	public function watchTileset(td:data.def.TilesetDef) {
-		if( td.relPath!=null )
+	public function watchImage(relPath:String) {
+		if( relPath!=null )
 			watch(
-				Editor.ME.project.makeAbsoluteFilePath(td.relPath),
-				Editor.ME.reloadTileset.bind(td)
+				Editor.ME.project.makeAbsoluteFilePath(relPath),
+				Editor.ME.onProjectImageChanged.bind(relPath)
 			);
 	}
 
@@ -77,7 +77,14 @@ class FileWatcher extends dn.Process {
 		all = [];
 	}
 
-	public function stopWatching(absFilePath:String) {
+	public function stopWatchingRel(relFilePath:String) {
+		stopWatchingAbs( Editor.ME.project.makeAbsoluteFilePath(relFilePath) );
+	}
+
+	public function stopWatchingAbs(absFilePath:String) {
+		if( absFilePath==null )
+			return;
+
 		var i = 0;
 		while( i<all.length )
 			if( all[i].path==absFilePath ) {

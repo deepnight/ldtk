@@ -27,7 +27,7 @@ class LevelRender extends dn.Process {
 
 	// Invalidation system (ie. render calls)
 	var allInvalidated = true;
-	var uiInvalidated = false;
+	var uiAndBgInvalidated = false;
 	var layerInvalidations : Map<Int, { left:Int, right:Int, top:Int, bottom:Int }> = new Map();
 
 
@@ -481,7 +481,11 @@ class LevelRender extends dn.Process {
 	}
 
 	public inline function invalidateUi() {
-		uiInvalidated = true;
+		uiAndBgInvalidated = true;
+	}
+
+	public inline function invalidateBg() {
+		uiAndBgInvalidated = true;
 	}
 
 	public inline function invalidateAll() {
@@ -514,11 +518,11 @@ class LevelRender extends dn.Process {
 		}
 		else {
 			// UI & bg elements
-			if( uiInvalidated ) {
+			if( uiAndBgInvalidated ) {
 				renderBg();
 				renderBounds();
 				renderGrid();
-				uiInvalidated = false;
+				uiAndBgInvalidated = false;
 				App.LOG.render("Rendered level UI");
 			}
 

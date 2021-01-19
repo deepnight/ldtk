@@ -237,7 +237,12 @@ class Editor extends Page {
 
 		// Tileset image hot-reloading
 		for( td in project.defs.tilesets )
-			watcher.watchTileset(td);
+			watcher.watchImage(td.relPath);
+
+		// Level bg image hot-reloading
+		for( l in project.levels )
+			if( l.bgRelPath!=null )
+			watcher.watchImage(l.bgRelPath);
 
 		for( ed in project.defs.externalEnums )
 			watcher.watchEnum(ed);
@@ -272,6 +277,28 @@ class Editor extends Page {
 
 	public function reloadEnum(ed:data.def.EnumDef) {
 		importer.HxEnum.load(ed.externalRelPath, true);
+	}
+
+
+	public function onProjectImageChanged(relPath:String) {
+		if( project.reloadImage(relPath) ) {
+			N.success("Image updated: "+dn.FilePath.extractFileWithExt(relPath));
+
+			// Update tilesets
+			for(td in project.defs.tilesets)
+				if( td.relPath==relPath )
+					reloadTileset(td);
+
+			// Update level bgs
+			for(l in project.levels)
+				if( l.bgRelPath==relPath ) {
+					worldRender.invalidateLevel(l);
+					if( curLevel==l )
+						levelRender.invalidateBg();
+				}
+		}
+		else
+			N.error("Unknown watched image changed: "+relPath);
 	}
 
 	public function reloadTileset(td:data.def.TilesetDef, isInitialLoading=false) {
@@ -310,10 +337,8 @@ class Editor extends Page {
 				new ui.modal.dialog.Message(msg, "tile");
 
 			case Ok:
-				if( !isInitialLoading ) {
+				if( !isInitialLoading )
 					changed = true;
-					N.success(msg);
-				}
 
 			case RemapSuccessful:
 				changed = true;
