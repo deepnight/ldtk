@@ -1244,12 +1244,62 @@
 				"object"
 			]
 		},
+		"LevelBgPosInfos": {
+			"description": "A small object describing the level background image position, based on level settings.",
+			"title": "Level background position",
+			"required": [
+				"scale",
+				"subRect",
+				"topLeftPx"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"scale": {
+					"description": "An array containing the `[scaleX,scaleY]` values of the background image, depending on `bgPos` option.",
+					"items": {
+						"type": [
+							"number"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"topLeftPx": {
+					"description": "An array containing the `[x,y]` pixel coordinates of the top-left corner of the background image, depending on `bgPos` option.",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"subRect": {
+					"description": "An array of 4 float values describing the sub-rectangle of the displayed background image. This is useful when the initial image was cropped, because it was larger than the level bounds. Array format: `[ subX, subY, subWidth, subHeight ]`",
+					"items": {
+						"type": [
+							"number"
+						]
+					},
+					"type": [
+						"array"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"Level": {
 			"description": "This section contains all the level data. It can be found in 2 distinct forms, depending on Project current settings:  - If \"*Separate level files*\" is **disabled** (default): full level data is *embedded* inside the main Project JSON file, - If \"*Separate level files*\" is **enabled**: level data is stored in *separate* standalone `.ldtkl` files (one per level). In this case, the main Project JSON file will still contain most level data, except heavy sections, like the `layerInstances` array (which will be null). The `externalRelPath` string points to the `ldtkl` file.  A `ldtkl` file is just a JSON file containing exactly what is described below.",
 			"title": "Level",
 			"required": [
 				"__bgColor",
 				"__neighbours",
+				"bgPivotX",
+				"bgPivotY",
 				"identifier",
 				"pxHei",
 				"pxWid",
@@ -1317,7 +1367,7 @@
 				},
 				"__bgPos": {
 					"description": "Position informations of the background image, if there is one.",
-					"$ref": "#/otherTypes/LevelBgPos"
+					"$ref": "#/otherTypes/LevelBgPosInfos"
 				},
 				"uid": {
 					"description": "Unique Int identifier",
@@ -1335,6 +1385,18 @@
 					"description": "Unique String identifier",
 					"type": [
 						"string"
+					]
+				},
+				"bgPivotY": {
+					"description": "",
+					"type": [
+						"number"
+					]
+				},
+				"bgPivotX": {
+					"description": "",
+					"type": [
+						"number"
 					]
 				},
 				"layerInstances": {
@@ -1408,41 +1470,6 @@
 					"description": "Unique String identifier",
 					"type": [
 						"string"
-					]
-				}
-			},
-			"type": [
-				"object"
-			]
-		},
-		"LevelBgPos": {
-			"title": "Level background position",
-			"required": [
-				"px",
-				"scale"
-			],
-			"additionalProperties": false,
-			"properties": {
-				"scale": {
-					"description": "An array containing the [scaleX,scaleY] values of the background image, depending on `bgPos` option.",
-					"items": {
-						"type": [
-							"number"
-						]
-					},
-					"type": [
-						"array"
-					]
-				},
-				"px": {
-					"description": "An array containing the [x,y] pixel coordinates of the top-left corner of the background image, depending on `bgPos` option.",
-					"items": {
-						"type": [
-							"integer"
-						]
-					},
-					"type": [
-						"array"
 					]
 				}
 			},

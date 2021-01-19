@@ -13,7 +13,7 @@ Json schema: https://ldtk.io/files/JSON_SCHEMA.json
        - [Entity instance tile](#ldtk-EntityInstanceTile)
        - [Field instance](#ldtk-FieldInstanceJson)
      - [NeighbourLevel](#ldtk-NeighbourLevel)
-     - [Level background position](#ldtk-LevelBgPos)
+     - [Level background position](#ldtk-LevelBgPosInfos)
    - [Definitions](#ldtk-DefinitionsJson)
      - [Layer definition](#ldtk-LayerDefJson)
        - [Auto-layer rule definition](#ldtk-AutoRuleDef)
@@ -62,10 +62,12 @@ A `ldtkl` file is just a JSON file containing exactly what is described below.
 Value | Type | Description
 -- | -- | --
 `__bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Background color of the level (same as `bgColor`, except the default value is automatically used here if its value is `null`)
-`__bgPos`<br/><sup class="only">Only *If background image exists*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | [Level&nbsp;background&nbsp;position](#ldtk-LevelBgPos)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Position informations of the background image, if there is one.
+`__bgPos`<br/><sup class="only">Only *If background image exists*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | [Level&nbsp;background&nbsp;position](#ldtk-LevelBgPosInfos)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Position informations of the background image, if there is one.
 `__neighbours`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Array&nbsp;of&nbsp;[NeighbourLevel](#ldtk-NeighbourLevel) | An array listing all other levels touching this one on the world map. In "linear" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.
 `bgColor`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)*<br/><small class="color"> *Hex color "#rrggbb"* </small> | Background color of the level. If `null`, the project `defaultLevelBgColor` should be used.
-`bgPos`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | Enum | An enum defining the way the background image (if any) is positioned on the level. See `__bgPos` for resulting position info.<br/> Possible values: `Unscaled`, `Contain`, `Cover`, `CoverDirty`
+`bgPivotX`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | Float | 
+`bgPivotY`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | Float | 
+`bgPos`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | Enum | An enum defining the way the background image (if any) is positioned on the level. See `__bgPos` for resulting position info.<br/> Possible values: `Unscaled`, `Contain`, `Cover`, `CoverDirty`
 `bgRelPath`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | The *optional* relative path to the level background image.
 `externalRelPath`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | This value is not null if the project option "*Save levels separately*" is enabled. In this case, this **relative** path points to the level Json file.
 `identifier` | String | Unique String identifier
@@ -150,12 +152,15 @@ Value | Type | Description
 `dir` | String | A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast).
 `levelUid` | Int | 
 
-<a id="ldtk-LevelBgPos" name="ldtk-LevelBgPos"></a>
+<a id="ldtk-LevelBgPosInfos" name="ldtk-LevelBgPosInfos"></a>
 ## 1.3. Level background position   
+A small object describing the level background image position, based on level settings.
+
 Value | Type | Description
 -- | -- | --
-`px` | Array&nbsp;of&nbsp;Int | An array containing the [x,y] pixel coordinates of the top-left corner of the background image, depending on `bgPos` option.
-`scale` | Array&nbsp;of&nbsp;Float | An array containing the [scaleX,scaleY] values of the background image, depending on `bgPos` option.
+`scale` | Array&nbsp;of&nbsp;Float | An array containing the `[scaleX,scaleY]` values of the background image, depending on `bgPos` option.
+`subRect` | Array&nbsp;of&nbsp;Float | An array of 4 float values describing the sub-rectangle of the displayed background image. This is useful when the initial image was cropped, because it was larger than the level bounds. Array format: `[ subX, subY, subWidth, subHeight ]`
+`topLeftPx` | Array&nbsp;of&nbsp;Int | An array containing the `[x,y]` pixel coordinates of the top-left corner of the background image, depending on `bgPos` option.
 
 <a id="ldtk-DefinitionsJson" name="ldtk-DefinitionsJson"></a>
 ## 2. Definitions   
