@@ -199,8 +199,8 @@
 				},
 				"__tile": {
 					"description": "Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).",
+					"$ref": "#/otherTypes/EntityInstanceTile",
 					"type": [
-						"object",
 						"null"
 					]
 				},
@@ -719,6 +719,62 @@
 				"object"
 			]
 		},
+		"EntityInstanceTile": {
+			"description": "Description of a tile used by an EntityInstance",
+			"title": "Entity instance tile",
+			"required": [
+				"srcRect",
+				"tilesetUid"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"srcRect": {
+					"description": "An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"tilesetUid": {
+					"description": "Tileset ID",
+					"type": [
+						"integer"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"NeighbourLevel": {
+			"title": "NeighbourLevel",
+			"required": [
+				"dir",
+				"levelUid"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"levelUid": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"dir": {
+					"description": "A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast).",
+					"type": [
+						"string"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"LayerInstance": {
 			"title": "Layer instance",
 			"required": [
@@ -964,6 +1020,43 @@
 				"object"
 			]
 		},
+		"EnumDefValues": {
+			"title": "Enum value informations",
+			"required": [
+				"__tileSrcRect",
+				"id"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"tileId": {
+					"description": "The optional ID of the tile",
+					"type": [
+						"integer",
+						"null"
+					]
+				},
+				"id": {
+					"description": "Enum value",
+					"type": [
+						"string"
+					]
+				},
+				"__tileSrcRect": {
+					"description": "An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"Tile": {
 			"description": "This structure represents a single tile from a given Tileset.",
 			"title": "Tile instance",
@@ -1170,11 +1263,9 @@
 			"additionalProperties": false,
 			"properties": {
 				"__neighbours": {
-					"description": "An array listing all other levels touching this one on the world map. The `dir` is a single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast). In \"linear\" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.",
+					"description": "An array listing all other levels touching this one on the world map. In \"linear\" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.",
 					"items": {
-						"type": [
-							"object"
-						]
+						"$ref": "#/otherTypes/NeighbourLevel"
 					},
 					"type": [
 						"array"
@@ -1229,8 +1320,8 @@
 				},
 				"__bgPos": {
 					"description": "Position informations of the background image, if there is one.",
+					"$ref": "#/otherTypes/LevelBgPos",
 					"type": [
-						"object",
 						"null"
 					]
 				},
@@ -1306,9 +1397,7 @@
 				"values": {
 					"description": "All possible enum values, with their optional Tile infos.",
 					"items": {
-						"type": [
-							"object"
-						]
+						"$ref": "#/otherTypes/EnumDefValues"
 					},
 					"type": [
 						"array"
@@ -1325,6 +1414,41 @@
 					"description": "Unique String identifier",
 					"type": [
 						"string"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"LevelBgPos": {
+			"title": "Level background position",
+			"required": [
+				"px",
+				"scale"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"scale": {
+					"description": "An array containing the [scaleX,scaleY] values of the background image, depending on `bgPos` option.",
+					"items": {
+						"type": [
+							"number"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"px": {
+					"description": "An array containing the [x,y] pixel coordinates of the top-left corner of the background image, depending on `bgPos` option.",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
 					]
 				}
 			},
