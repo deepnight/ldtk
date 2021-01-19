@@ -14,7 +14,7 @@
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
 	"defaultLevelBgColor": "#7F8093",
-	"nextUid": 14,
+	"nextUid": 15,
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
@@ -208,7 +208,7 @@
 	},
 	"levels": [
 		{
-			"identifier": "Daweed_bg",
+			"identifier": "N2D",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 0,
@@ -450,7 +450,7 @@
 			"__neighbours": [{ "levelUid": 2, "dir": "s" }]
 		},
 		{
-			"identifier": "N2D_bg",
+			"identifier": "Daweed",
 			"uid": 2,
 			"worldX": 288,
 			"worldY": 256,
@@ -458,7 +458,7 @@
 			"pxHei": 256,
 			"__bgColor": "#7F8093",
 			"bgColor": null,
-			"bgRelPath": "bg/Daweed.png",
+			"bgRelPath": "bg/_Daweed.png",
 			"bgPos": "Cover",
 			"__bgPos": null,
 			"externalRelPath": null,
