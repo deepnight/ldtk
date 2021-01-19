@@ -160,17 +160,38 @@ class LayerRender {
 	// 	return flippedTileCache.get(tid).get(flipBits);
 	// }
 
-	public function createPng(p:data.Project, l:data.Level, li:data.inst.LayerInstance) : Null<haxe.io.Bytes> {
+	public function createPngs(p:data.Project, l:data.Level, li:data.inst.LayerInstance) : Array<{ suffix:Null<String>, bytes:haxe.io.Bytes }> {
+		var out = [];
 		switch li.def.type {
 			case IntGrid, Tiles, AutoLayer:
-				render(li);
-				var tex = new h3d.mat.Texture(l.pxWid, l.pxHei, [Target]);
-				root.drawTo(tex);
-				return tex.capturePixels().toPNG();
+				// Tiles
+				if( li.def.isAutoLayer() || li.def.type==Tiles ) {
+					render(li);
+					var tex = new h3d.mat.Texture(l.pxWid, l.pxHei, [Target]);
+					root.drawTo(tex);
+					out.push({
+						suffix: null,
+						bytes: tex.capturePixels().toPNG(),
+					});
+				}
+
+				// Export IntGrid as pixel tiny image
+				if( li.def.type==IntGrid ) {
+					var pixels = hxd.Pixels.alloc(li.cWid, li.cHei, RGBA);
+					for(cx in 0...li.cWid)
+					for(cy in 0...li.cWid) {
+						if( li.hasIntGrid(cx,cy) )
+							pixels.setPixel( cx, cy, C.addAlphaF(li.getIntGridColorAt(cx,cy)) );
+					}
+					out.push({
+						suffix: "int",
+						bytes: pixels.toPNG(),
+					});
+				}
 
 			case Entities:
-				return null;
 		}
+		return out;
 	}
 
 	public function clear() {

@@ -145,19 +145,22 @@ class ProjectSaving extends dn.Process {
 								label: "Level "+level.identifier+": "+li.def.identifier,
 								cb: ()->{
 									// Draw
-									var bytes = lr.createPng(project, level, li);
-									if( bytes==null )
+									var allImages = lr.createPngs(project, level, li);
+									if( allImages.length==0 )
 										return;
 
-									// Save PNG
-									var fp = dn.FilePath.fromDir(pngDir);
-									fp.fileName =
-										dn.Lib.leadingZeros(levelIdx, Const.LEVEL_FILE_LEADER_ZEROS) + "-"
-										+ dn.Lib.leadingZeros(layerIdx++, 2) + "-"
-										+ li.def.identifier;
-									fp.extension = "png";
-									JsTools.writeFileBytes(fp.full, bytes);
-									count++;
+									// Save PNGs
+									for(i in allImages) {
+										var fp = dn.FilePath.fromDir(pngDir);
+										fp.fileName =
+											dn.Lib.leadingZeros(levelIdx, Const.LEVEL_FILE_LEADER_ZEROS) + "-"
+											+ dn.Lib.leadingZeros(layerIdx++, 2) + "-"
+											+ li.def.identifier
+											+ ( i.suffix==null ? "" : "-"+i.suffix );
+										fp.extension = "png";
+										JsTools.writeFileBytes(fp.full, i.bytes);
+										count++;
+									}
 								}
 							});
 						}
