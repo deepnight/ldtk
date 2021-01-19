@@ -1206,6 +1206,15 @@
 						"null"
 					]
 				},
+				"bgPos": {
+					"description": "An enum defining the way the background image (if any) is positioned on the level. See `__bgPos` for resulting position info. Possible values: `Unscaled`, `Contain`, `Cover`, `CoverDirty`",
+					"enum": [
+						"Unscaled",
+						"Contain",
+						"Cover",
+						"CoverDirty"
+					]
+				},
 				"pxHei": {
 					"description": "Height of the level in pixels",
 					"type": [
@@ -1216,6 +1225,13 @@
 					"description": "World Y coordinate in pixels",
 					"type": [
 						"integer"
+					]
+				},
+				"__bgPos": {
+					"description": "Position informations of the background image, if there is one.",
+					"type": [
+						"object",
+						"null"
 					]
 				},
 				"uid": {
@@ -1243,6 +1259,13 @@
 					},
 					"type": [
 						"array",
+						"null"
+					]
+				},
+				"bgRelPath": {
+					"description": "The *optional* relative path to the level background image.",
+					"type": [
+						"string",
 						"null"
 					]
 				}

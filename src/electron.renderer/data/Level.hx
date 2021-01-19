@@ -14,6 +14,9 @@ class Level {
 
 	public var externalRelPath: Null<String>;
 
+	public var bgRelPath: Null<String>;
+	public var bgPos: Null<ldtk.Json.BgImagePos>;
+
 	@:allow(ui.modal.panel.WorldPanel)
 	var bgColor : Null<UInt>;
 
@@ -94,6 +97,10 @@ class Level {
 			__bgColor: JsonTools.writeColor( getBgColor() ),
 			bgColor: JsonTools.writeColor(bgColor, true),
 
+			bgRelPath: bgRelPath,
+			bgPos: JsonTools.writeEnum(bgPos, true),
+			__bgPos: null, // JSON export bgPos helper
+
 			externalRelPath: null, // is only set upon actual saving, if project uses externalLevels option
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),
 			__neighbours: neighbours,
@@ -118,6 +125,9 @@ class Level {
 		l.bgColor = JsonTools.readColor(json.bgColor, true);
 		l.externalRelPath = json.externalRelPath;
 
+		l.bgRelPath = json.bgRelPath;
+		l.bgPos = JsonTools.readEnum(ldtk.Json.BgImagePos, json.bgPos, true);
+
 		l.layerInstances = [];
 		if( json.layerInstances!=null ) // external levels
 			for( layerJson in JsonTools.readArray(json.layerInstances) ) {
@@ -126,6 +136,49 @@ class Level {
 			}
 
 		return l;
+	}
+
+	public inline function hasBgImage() {
+		return bgRelPath!=null;
+	}
+
+	public function getBgImage() : Null<{ t:h2d.Tile, sx:Float, sy:Float }> {
+		if( !hasBgImage() )
+			return null;
+
+		var data = _project.getImage(bgRelPath);
+		if( data==null )
+			return null;
+
+		var t = h2d.Tile.fromTexture( data.tex );
+		var sx = 1.0;
+		var sy = 1.0;
+		switch bgPos {
+			case null:
+
+			case Unscaled:
+
+			case Contain:
+				sx = sy = M.fmin( pxWid/t.width, pxHei/t.height );
+
+			case Cover:
+				sx = sy = M.fmax( pxWid/t.width, pxHei/t.height );
+
+			case CoverDirty:
+				sx = pxWid / t.width;
+				sy = pxHei/ t.height;
+		}
+		// Crop
+		t = t.sub(
+			0, 0,
+			M.fmin(t.width, pxWid/sx),
+			M.fmin(t.height, pxHei/sy)
+		);
+		return {
+			t: t,
+			sx: sx,
+			sy: sy,
+		}
 	}
 
 	public inline function getBgColor() : UInt {

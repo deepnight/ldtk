@@ -59,3 +59,11 @@ enum FieldType {
 	F_Point;
 	F_Path;
 }
+
+typedef CachedImage = {
+	var relPath: String;
+	var base64: String;
+	var bytes: haxe.io.Bytes;
+	var pixels: hxd.Pixels;
+	var tex: h3d.mat.Texture;
+}

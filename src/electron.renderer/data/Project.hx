@@ -26,6 +26,8 @@ class Project {
 	public var exportTiled = false;
 	public var exportPng = false;
 
+	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
+
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
@@ -53,13 +55,19 @@ class Project {
 	}
 
 	public function makeRelativeFilePath(absPath:String) {
+		if( absPath==null )
+			return null;
 		var fp = dn.FilePath.fromFile( absPath );
+		fp.useSlashes();
 		fp.makeRelativeTo( filePath.directory );
 		return fp.full;
 	}
 
 	public function makeAbsoluteFilePath(relPath:String) {
+		if( relPath==null )
+			return null;
 		var fp = dn.FilePath.fromFile(relPath);
+		fp.useSlashes();
 		return fp.hasDriveLetter()
 			? fp.full
 			: dn.FilePath.fromFile( filePath.directory +"/"+ relPath ).full;
@@ -214,6 +222,48 @@ class Project {
 		reorganizeWorld();
 		for(level in levels)
 			level.tidy(this);
+	}
+
+
+	/** CACHED IMAGES ************************************/
+
+	public inline function isImageLoaded(relPath:String) {
+		return relPath!=null && imageCache.exists(relPath);
+	}
+
+	public function disposeImage(relPath:String) {
+		if( isImageLoaded(relPath) ) {
+			var img = imageCache.get(relPath);
+			img.base64 = null;
+			img.bytes = null;
+			img.pixels.dispose();
+			img.tex.dispose();
+			imageCache.remove(relPath);
+		}
+	}
+
+	public function getImage(relPath:String) : Null<data.DataTypes.CachedImage> {
+		try {
+			if( !imageCache.exists(relPath) ) {
+				// Load it from the disk
+				var absPath = makeAbsoluteFilePath(relPath);
+				var bytes = misc.JsTools.readFileBytes(absPath);
+				var base64 = haxe.crypto.Base64.encode(bytes);
+				var pixels = dn.ImageDecoder.decodePixels(bytes);
+				var texture = h3d.mat.Texture.fromPixels(pixels);
+				imageCache.set( relPath, {
+					relPath: relPath,
+					bytes: bytes,
+					base64: base64,
+					pixels: pixels,
+					tex: texture,
+				});
+			}
+			return imageCache.get(relPath);
+		}
+		catch( e:Dynamic ) {
+			return null;
+		}
 	}
 
 

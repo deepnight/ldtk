@@ -182,6 +182,8 @@ class WorldPanel extends ui.modal.Panel {
 		JsTools.parseComponents(jForm);
 	}
 
+
+
 	function updateLevelForm() {
 		if( level==null ) {
 			close();
@@ -238,6 +240,78 @@ class WorldPanel extends ui.modal.Panel {
 			jIsDefault.show();
 		else
 			jIsDefault.hide();
+
+		// Bg path
+		var bt = jForm.find("#bgPath");
+		bt.click( (_)->{
+			var path = project.makeAbsoluteFilePath( dn.FilePath.extractDirectoryWithoutSlash(level.bgRelPath, true) );
+			if( path==null )
+				path = project.getProjectDir();
+			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], path, function(absPath) {
+				var relPath = project.makeRelativeFilePath(absPath);
+				if( relPath!=null ) {
+					var img = project.getImage(relPath);
+					if( img!=null ) {
+						level.bgRelPath = relPath;
+						if( level.bgPos==null )
+							level.bgPos = Cover;
+						onFieldChange();
+					}
+					else {
+						N.error('Couldn\'t read image file: $relPath');
+					}
+				}
+			});
+		});
+		if( level.bgRelPath!=null ) {
+			var abs = project.makeAbsoluteFilePath(level.bgRelPath);
+			if( !JsTools.fileExists(abs) )
+				bt.text(L.t._("File not found!"));
+			else
+				bt.text(dn.FilePath.extractFileWithExt(level.bgRelPath));
+		}
+		else
+			bt.text("[ No image ]");
+
+		// Remove bg
+		jForm.find("#removeBg").click( (_)->{
+			level.bgRelPath = null;
+			level.bgPos = null;
+			onFieldChange();
+		});
+
+		// Bg position
+		var jSelect = jForm.find("#bgPos");
+		jSelect.empty();
+		if( level.bgPos!=null ) {
+			for(k in ldtk.Json.BgImagePos.getConstructors()) {
+				var e = ldtk.Json.BgImagePos.createByName(k);
+				var jOpt = new J('<option value="$k"/>');
+				jSelect.append(jOpt);
+				jOpt.text( switch e {
+					case Unscaled: Lang.t._("Not scaled");
+					case Contain: Lang.t._("Fit inside (keep aspect ratio)");
+					case Cover: Lang.t._("Cover level (keep aspect ratio)");
+					case CoverDirty: Lang.t._("Cover (dirty scaling)");
+				});
+			}
+			jSelect.val( level.bgPos.getName() );
+			jSelect.prop("disabled",false);
+			jSelect.change( (_)->{
+				level.bgPos = ldtk.Json.BgImagePos.createByName( jSelect.val() );
+				onFieldChange();
+			});
+		}
+		else
+			jSelect.prop("disabled",true);
+
+		// Locate bg image
+		var jLocate = jForm.find(".bg .locate");
+		jLocate.empty();
+		if( level.bgRelPath!=null ) {
+			var e = JsTools.makeExploreLink( project.makeAbsoluteFilePath(level.bgRelPath), true );
+			jLocate.append(e);
+		}
 
 		// Custom fields
 		// ... (not implemented yet)

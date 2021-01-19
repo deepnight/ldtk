@@ -1,7 +1,8 @@
 package display;
 
 typedef WorldLevelRender = {
-	var bg: h2d.Bitmap;
+	var bgColor: h2d.Bitmap;
+	var bgImage: h2d.Bitmap;
 	var bounds: h2d.Graphics;
 	var render: h2d.Object;
 	var label: h2d.ScaleGrid;
@@ -299,7 +300,8 @@ class WorldRender extends dn.Process {
 			if( levels.exists(l.uid) ) {
 				var e = levels.get(l.uid);
 
-				e.bg.alpha = editor.worldMode ? 1 : 0.5;
+				e.bgColor.alpha = editor.worldMode ? 1 : 0.5;
+				e.bgImage.alpha = editor.worldMode ? 1 : 0.5;
 
 				if( l.uid==editor.curLevelId && !editor.worldMode ) {
 					// Hide current level in editor mode
@@ -323,7 +325,8 @@ class WorldRender extends dn.Process {
 				// Position
 				e.render.setPosition( l.worldX, l.worldY );
 				e.bounds.setPosition( l.worldX, l.worldY );
-				e.bg.setPosition( l.worldX, l.worldY );
+				e.bgColor.setPosition( l.worldX, l.worldY );
+				e.bgImage.setPosition( l.worldX, l.worldY );
 			}
 
 		updateLabels();
@@ -340,7 +343,8 @@ class WorldRender extends dn.Process {
 			var lr = levels.get(uid);
 			lr.render.remove();
 			lr.bounds.remove();
-			lr.bg.remove();
+			lr.bgColor.remove();
+			lr.bgImage.remove();
 			lr.label.remove();
 			levels.remove(uid);
 		}
@@ -357,23 +361,33 @@ class WorldRender extends dn.Process {
 		removeLevel(l);
 
 		// Init
-		var wl = {
-			bg : new h2d.Bitmap(),
+		var wl : WorldLevelRender = {
+			bgColor : new h2d.Bitmap(),
+			bgImage : new h2d.Bitmap(),
 			render : new h2d.Object(),
 			bounds : new h2d.Graphics(),
 			label : new h2d.ScaleGrid(Assets.elements.getTile("fieldBgOutline"), 5, 5),
 		}
 		var _depth = 0;
-		levelsWrapper.add(wl.bg, _depth++);
+		levelsWrapper.add(wl.bgColor, _depth++);
+		levelsWrapper.add(wl.bgImage, _depth++);
 		levelsWrapper.add(wl.render, _depth++);
 		levelsWrapper.add(wl.bounds, _depth++);
 		levelsWrapper.add(wl.label, _depth++);
 		levels.set(l.uid, wl);
 
-		// Bg
-		wl.bg.tile = h2d.Tile.fromColor(l.getBgColor());
-		wl.bg.scaleX = l.pxWid;
-		wl.bg.scaleY = l.pxHei;
+		// Bg color
+		wl.bgColor.tile = h2d.Tile.fromColor(l.getBgColor());
+		wl.bgColor.scaleX = l.pxWid;
+		wl.bgColor.scaleY = l.pxHei;
+
+		// Bg image
+		var bgInfos = l.getBgImage();
+		if( bgInfos!=null ) {
+			wl.bgImage.tile = bgInfos.t;
+			wl.bgImage.scaleX = bgInfos.sx;
+			wl.bgImage.scaleY = bgInfos.sy;
+		}
 
 		// Per-coord limit
 		var doneCoords = new Map();
