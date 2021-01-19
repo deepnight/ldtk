@@ -16,6 +16,8 @@ class Level {
 
 	public var bgRelPath: Null<String>;
 	public var bgPos: Null<ldtk.Json.BgImagePos>;
+	public var bgPivotX: Float;
+	public var bgPivotY: Float;
 
 	@:allow(ui.modal.panel.WorldPanel)
 	var bgColor : Null<UInt>;
@@ -33,6 +35,8 @@ class Level {
 		worldX = worldY = 0;
 		pxWid = wid;
 		pxHei = hei;
+		bgPivotX = 0.5;
+		bgPivotY = 0.5;
 		this._project = project;
 		this.identifier = "Level"+uid;
 		this.bgColor = null;
@@ -99,6 +103,8 @@ class Level {
 
 			bgRelPath: bgRelPath,
 			bgPos: JsonTools.writeEnum(bgPos, true),
+			bgPivotX: JsonTools.writeFloat(bgPivotX),
+			bgPivotY: JsonTools.writeFloat(bgPivotY),
 			__bgPos: null, // JSON export bgPos helper
 
 			externalRelPath: null, // is only set upon actual saving, if project uses externalLevels option
@@ -127,6 +133,8 @@ class Level {
 
 		l.bgRelPath = json.bgRelPath;
 		l.bgPos = JsonTools.readEnum(ldtk.Json.BgImagePos, json.bgPos, true);
+		l.bgPivotX = JsonTools.readFloat(json.bgPivotX, 0.5);
+		l.bgPivotY = JsonTools.readFloat(json.bgPivotY, 0.5);
 
 		l.layerInstances = [];
 		if( json.layerInstances!=null ) // external levels
@@ -142,7 +150,7 @@ class Level {
 		return bgRelPath!=null;
 	}
 
-	public function getBgImage() : Null<{ t:h2d.Tile, sx:Float, sy:Float }> {
+	public function getBgImage() : Null<{ t:h2d.Tile, x:Float, y:Float, sx:Float, sy:Float }> {
 		if( !hasBgImage() )
 			return null;
 
@@ -155,6 +163,7 @@ class Level {
 		var sy = 1.0;
 		switch bgPos {
 			case null:
+				throw "Unexpected null here";
 
 			case Unscaled:
 
@@ -168,13 +177,19 @@ class Level {
 				sx = pxWid / t.width;
 				sy = pxHei/ t.height;
 		}
-		// Crop
+
+		// Crop tile
+		var tw = M.fmin(t.width, pxWid/sx);
+		var th = M.fmin(t.height, pxHei/sy);
 		t = t.sub(
-			0, 0,
-			M.fmin(t.width, pxWid/sx),
-			M.fmin(t.height, pxHei/sy)
+			bgPivotX * (t.width-tw),
+			bgPivotY * (t.height-th),
+			tw,
+			th
 		);
 		return {
+			x: bgPivotX * (pxWid-tw*sx),
+			y: bgPivotY * (pxHei-th*sy),
 			t: t,
 			sx: sx,
 			sy: sy,

@@ -264,6 +264,12 @@ class WorldPanel extends ui.modal.Panel {
 		});
 		jImg.insertAfter( jForm.find(".bg>label:first-of-type") );
 
+		if( level.bgRelPath!=null )
+			jForm.find(".bg .pos").show();
+		else
+			jForm.find(".bg .pos").hide();
+
+
 		// Bg position
 		var jSelect = jForm.find("#bgPos");
 		jSelect.empty();
@@ -280,15 +286,21 @@ class WorldPanel extends ui.modal.Panel {
 				});
 			}
 			jSelect.val( level.bgPos.getName() );
-			jSelect.prop("disabled",false);
 			jSelect.change( (_)->{
 				level.bgPos = ldtk.Json.BgImagePos.createByName( jSelect.val() );
 				onFieldChange();
 			});
 		}
-		else
-			jSelect.prop("disabled",true);
 
+		// Bg pivot
+		var jPivot = jForm.find(".pos>.pivot");
+		jPivot.empty();
+		if( level.bgRelPath!=null )
+			jPivot.append( JsTools.createPivotEditor(level.bgPivotX, level.bgPivotY, (x,y)->{
+				level.bgPivotX = x;
+				level.bgPivotY = y;
+				onFieldChange();
+			}) );
 
 		// Custom fields
 		// ... (not implemented yet)
