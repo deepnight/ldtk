@@ -26,7 +26,7 @@ class ProjectSaving extends dn.Process {
 		QUEUE.push(this);
 
 		log("Preparing project saving...");
-		savingData = JsTools.prepareProjectSavingData(project);
+		savingData = ui.ProjectSaving.prepareProjectSavingData(project);
 		beginState(InQueue);
 		updateState();
 
@@ -248,6 +248,45 @@ class ProjectSaving extends dn.Process {
 			case Done:
 		}
 	}
+
+
+
+	static inline function jsonStringify(p:data.Project, json:Dynamic) {
+		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
+	}
+
+	public static function prepareProjectSavingData(project:data.Project, isBackup=false) : FileSavingData {
+		if( !project.externalLevels || isBackup ) {
+			// Full single JSON
+			return {
+				projectJson: jsonStringify( project, project.toJson() ),
+				externLevelsJson: [],
+			}
+		}
+		else {
+			// Separate level JSONs
+			var idx = 0;
+			var externLevels = project.levels.map( (l)->{
+				json: jsonStringify( project, l.toJson() ),
+				relPath: l.makeExternalRelPath(idx++),
+				id: l.identifier,
+			});
+
+			// Build project JSON without level datav
+			var idx = 0;
+			var trimmedProjectJson = project.toJson();
+			for(l in trimmedProjectJson.levels) {
+				l.layerInstances = null;
+				l.externalRelPath = project.getLevel(l.uid).makeExternalRelPath(idx++);
+			}
+
+			return {
+				projectJson: jsonStringify( project, trimmedProjectJson ),
+				externLevelsJson: externLevels,
+			}
+		}
+	}
+
 
 	override function update() {
 		super.update();

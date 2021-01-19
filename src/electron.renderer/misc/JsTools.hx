@@ -57,42 +57,6 @@ class JsTools {
 	}
 
 
-	static inline function jsonStringify(p:data.Project, json:Dynamic) {
-		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
-	}
-
-	public static function prepareProjectSavingData(project:data.Project, isBackup=false) : FileSavingData {
-		if( !project.externalLevels || isBackup ) {
-			// Full single JSON
-			return {
-				projectJson: jsonStringify( project, project.toJson() ),
-				externLevelsJson: [],
-			}
-		}
-		else {
-			// Separate level JSONs
-			var idx = 0;
-			var externLevels = project.levels.map( (l)->{
-				json: jsonStringify( project, l.toJson() ),
-				relPath: l.makeExternalRelPath(idx++),
-				id: l.identifier,
-			});
-
-			// Build project JSON without level datav
-			var idx = 0;
-			var trimmedProjectJson = project.toJson();
-			for(l in trimmedProjectJson.levels) {
-				l.layerInstances = null;
-				l.externalRelPath = project.getLevel(l.uid).makeExternalRelPath(idx++);
-			}
-
-			return {
-				projectJson: jsonStringify( project, trimmedProjectJson ),
-				externLevelsJson: externLevels,
-			}
-		}
-	}
-
 	public static function createLayerTypeIcon2(type:ldtk.Json.LayerType) : js.jquery.JQuery {
 		var icon = new J('<span class="icon"/>');
 		icon.addClass( switch type {
@@ -796,6 +760,8 @@ class JsTools {
 			var path = project.makeAbsoluteFilePath( dn.FilePath.extractDirectoryWithoutSlash(curRelPath, true) );
 			if( path==null )
 				path = project.getProjectDir();
+
+			ui.Tip.clear();
 
 			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], path, function(absPath) {
 				var relPath = project.makeRelativeFilePath(absPath);

@@ -406,7 +406,7 @@ class Home extends Page {
 			fp.extension = "ldtk";
 
 			var p = data.Project.createEmpty(fp.full);
-			var data = JsTools.prepareProjectSavingData(p);
+			var data = ui.ProjectSaving.prepareProjectSavingData(p);
 			new ui.ProjectSaving(this, p, (success)->{
 				if( success ) {
 					N.msg("New project created: "+p.filePath.full);

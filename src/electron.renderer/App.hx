@@ -376,7 +376,11 @@ class App extends dn.Process {
 	}
 
 	function clearCurPage() {
-		jPage.empty();
+		jPage
+			.empty()
+			.off()
+			.removeClass("locked");
+			
 		ui.Tip.clear();
 
 		if( curPageProcess!=null ) {

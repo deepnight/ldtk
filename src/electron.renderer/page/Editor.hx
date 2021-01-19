@@ -363,8 +363,15 @@ class Editor extends Page {
 	override function onKeyPress(keyCode:Int) {
 		super.onKeyPress(keyCode);
 
-		if( ui.Modal.hasAnyUnclosable() )
+		if( isLocked() ) {
+			#if debug
+			if( keyCode==K.L && App.ME.isCtrlDown() && App.ME.isShiftDown() ) {
+				cd.unset("debugLock");
+				N.msg("Unlocked", 0x77ff00);
+			}
+			#end
 			return;
+		}
 
 		switch keyCode {
 			case K.ESCAPE:
@@ -400,10 +407,14 @@ class Editor extends Page {
 			case K.Y if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
 				curLevelHistory.redo();
 
+			#if debug
+			case K.L if( !worldMode && !hasInputFocus() && App.ME.isCtrlDown() && App.ME.isShiftDown() ):
+				cd.setS("debugLock",Const.INFINITE);
+				N.msg("Locked.", 0xff7700);
+			#end
+
 			case K.S:
-				if( !hasInputFocus() && App.ME.isAltDown() ) // HACK
-					new ui.ProjectSaving(this, project, (_)->{});
-				else if( !hasInputFocus() && App.ME.isCtrlDown() )
+				if( !hasInputFocus() && App.ME.isCtrlDown() )
 					if( App.ME.isShiftDown() )
 						onSave(true);
 					else
@@ -658,6 +669,9 @@ class Editor extends Page {
 	}
 
 	function onMouseDown(ev:hxd.Event) {
+		if( isLocked() )
+			return;
+
 		var m = getMouse();
 
 		panTool.startUsing(ev,m);
@@ -698,7 +712,7 @@ class Editor extends Page {
 	function onMouseMove(ev:hxd.Event) {
 		var m = getMouse();
 
-		if( !ui.Modal.hasAnyWithMask() ) {
+		if( !isLocked() ) {
 			// Propagate event to tools & UI components
 			panTool.onMouseMove(ev,m);
 			rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
@@ -715,7 +729,7 @@ class Editor extends Page {
 		}
 
 		// Mouse coords infos
-		if( ui.Modal.hasAnyOpen() )
+		if( ui.Modal.hasAnyOpen() || isLocked() )
 			jMouseCoords.hide();
 		else {
 			jMouseCoords.show();
@@ -933,6 +947,11 @@ class Editor extends Page {
 		new ui.modal.panel.Help();
 	}
 
+	public function isLocked() {
+		return ui.ProjectSaving.hasAny() || ui.Modal.hasAnyUnclosable()
+			#if debug || cd.has("debugLock") #end;
+	}
+
 	public function onClose(?bt:js.jquery.JQuery) {
 		ui.Modal.closeAll();
 		if( needSaving )
@@ -942,7 +961,7 @@ class Editor extends Page {
 	}
 
 	public function onSave(saveAs=false, ?bypasses:Map<String,Bool>, ?onComplete:Void->Void) {
-		if( ui.ProjectSaving.hasAny() )
+		if( isLocked() )
 			return;
 
 		if( bypasses==null )
@@ -968,7 +987,6 @@ class Editor extends Page {
 			bypasses.set("sample",true);
 			new ui.modal.dialog.Choice(
 				Lang.t._("The file you're trying to save is a ::app:: sample map.\nAny change to it will be lost during automatic updates, so it's NOT recommended to modify it.", { app:Const.APP_NAME }),
-				true,
 				[
 					{ label:"Save to another file", cb:onSave.bind(true, bypasses, onComplete) },
 					{ label:"Save anyway", className:"gray", cb:onSave.bind(false, bypasses, onComplete) },
@@ -1438,6 +1456,14 @@ class Editor extends Page {
 
 	override function update() {
 		super.update();
+
+		// DOM locking
+		if( isLocked() && !App.ME.jPage.hasClass("locked") && !ui.Modal.hasAnyUnclosable() )
+			App.ME.jPage.addClass("locked");
+
+		if( !isLocked() && App.ME.jPage.hasClass("locked") )
+			App.ME.jPage.removeClass("locked");
+
 
 		#if debug
 		if( cd.has("debugTools") ) {
