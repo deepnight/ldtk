@@ -1728,6 +1728,9 @@ textarea {
 			.sub {
 				font-size: 14pt;
 				color: $darkOrange;
+				&:empty {
+					display: none;
+				}
 			}
 		}
 

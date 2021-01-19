@@ -84,6 +84,7 @@ class Home extends Page {
 
 		// Notify app update
 		if( App.ME.settings.lastKnownVersion!=Const.getAppVersion() ) {
+			var prev = App.ME.settings.lastKnownVersion;
 			// App.ME.settings.lastKnownVersion = Const.getAppVersion();
 			App.ME.saveSettings();
 
@@ -95,6 +96,7 @@ class Home extends Page {
 				app: Const.APP_NAME,
 				title: latest.title,
 				md: latest.allNoteLines.join("\n"),
+				sub: prev!=null ? L.t._("::app:: has been updated, enjoy!", { app:Const.APP_NAME }) : "",
 			});
 
 			w.jContent.find(".changelog").click( (_)->N.notImplemented() );
