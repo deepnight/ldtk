@@ -1,4 +1,4 @@
-# 0.7.0
+# 0.7.0 - Some title TODO
 
 - **Separate level files**: a much needed feature to reduce JSON size and optimize parsing times! There is now an option in Project panel (press `F1`) to enable "Separate level files".
 
@@ -6,11 +6,11 @@
 
   **Important note:** This feature might not be supported in all current existing APIs and loaders.
 - **Save layers as PNG**: if you *really* don't want to bother with the LDtk JSON, you can check this new option in your project settings to export all your layers as PNG images (note: only supported layers will be exported, that is those with tiles).
-- Replaced the often hard-to-read pixel font with a sleeker "Roboto" font (this change affects entity fields and floating level informations).
+- **New font**: replaced the often hard-to-read pixel font with a sleeker "Roboto" font (this change affects entity fields and floating level informations).
+- **For game devs**: a **Json schema** file is now directly generated from source code. It's available on [LDtk.io/json](https://ldtk.io/json) and contains a schema following Draft 7 standard from [Json-schema.org](https://json-schema.org/). This file describes all fields from LDtk json files (value types and descriptions). The great thing about JSON schema is that it allows **JSON "parser" generation** using *QuickType*. That's right: you can now generate Rust, C#, JS or Python parsers easily, right from the file format.
 - **HaxeFlixel**: the HaxeFlixel game framework has been added to the official [LDtk Haxe API](https://github.com/deepnight/ldtk-haxe-api). You can now easily load and display a LDtk project in your game.
 - The [JSON documentation](https://ldtk.io/json) now shows clearly what parts are useful for game devs and what parts aren't (trying to make your dev life even easier!).
 - The app home now shows a **list of recently opened folders** along with recently opened project files.
-- Added a **Json schema** file directly generated from source code. It's available on [LDtk.io/json](https://ldtk.io/json) and contains a schema following Draft 7 standard from [Json-schema.org](https://json-schema.org/). This file describes all fields from LDtk json files (value types and descriptions).
 - Optimized the rule pattern editor to update less UI stuff when being edited.
 - Tiled TMX files are now exported in a sub folder (along with other optional external files, like levels or layer PNGs)
 - Better organized world panel (shortcut `W`)
