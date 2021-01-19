@@ -450,9 +450,15 @@ class WorldRender extends dn.Process {
 			}
 		});
 
+		var error = l.getFirstError();
+
 		// Bounds
 		var thick = 1*camera.pixelRatio;
 		var c = l==editor.curLevel ? 0xffffff :  C.toWhite(l.getBgColor(),0.4);
+		if( error!=null ) {
+			thick*=3;
+			c = 0xff0000;
+		}
 		wl.bounds.beginFill(c);
 		wl.bounds.drawRect(0, 0, l.pxWid, thick); // top
 
@@ -473,6 +479,15 @@ class WorldRender extends dn.Process {
 		tf.text = l.identifier;
 		tf.textColor = C.toWhite( l.getBgColor(), 0.8 );
 		tf.x = 8;
+		if( error!=null ) {
+			tf.textColor = 0xff0000;
+			tf.text +=
+				" <ERR: " + ( switch error {
+					case null: '???';
+					case InvalidEntityField(ei): '${ei.def.identifier}';
+					case InvalidBgImage: 'bg image';
+				}) + ">";
+		}
 
 		wl.label.width = tf.x*2 + tf.textWidth;
 		wl.label.height = tf.textHeight;

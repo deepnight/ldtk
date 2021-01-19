@@ -176,3 +176,8 @@ typedef FileSavingData = {
 	var projectJson: String;
 	var externLevelsJson: Array<{ json:String, relPath:String, id:String }>;
 }
+
+enum LevelError {
+	InvalidEntityField(ei:data.inst.EntityInstance);
+	InvalidBgImage;
+}

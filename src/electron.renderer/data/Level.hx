@@ -311,20 +311,27 @@ class Level {
 	}
 
 
-	public function hasAnyError() {
+	public inline function hasAnyError() {
+		return getFirstError()==null;
+	}
+
+	public function getFirstError() : Null<LevelError> {
 		for(li in layerInstances)
 			switch li.def.type {
 				case IntGrid:
 				case Entities:
 					for(ei in li.entityInstances)
 						if( ei.hasAnyFieldError() )
-							return true;
+							return InvalidEntityField(ei);
 
 				case Tiles:
 				case AutoLayer:
 			}
 
-		return false;
+		if( bgRelPath!=null && !_project.isImageLoaded(bgRelPath) )
+			return InvalidBgImage;
+
+		return null;
 	}
 
 
