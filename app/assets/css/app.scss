@@ -1178,6 +1178,10 @@ ul.form {
 			align-items: stretch;
 			button.pick {
 				flex: 1 1 auto;
+				text-transform: none;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
 			}
 			button.remove {
 				flex: 0 1 0px;
