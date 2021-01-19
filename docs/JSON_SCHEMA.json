@@ -199,10 +199,7 @@
 				},
 				"__tile": {
 					"description": "Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).",
-					"$ref": "#/otherTypes/EntityInstanceTile",
-					"type": [
-						"null"
-					]
+					"$ref": "#/otherTypes/EntityInstanceTile"
 				},
 				"px": {
 					"description": "Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget optional layer offsets, if they exist!",
@@ -1320,10 +1317,7 @@
 				},
 				"__bgPos": {
 					"description": "Position informations of the background image, if there is one.",
-					"$ref": "#/otherTypes/LevelBgPos",
-					"type": [
-						"null"
-					]
+					"$ref": "#/otherTypes/LevelBgPos"
 				},
 				"uid": {
 					"description": "Unique Int identifier",
