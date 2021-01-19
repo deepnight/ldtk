@@ -85,7 +85,7 @@ class Home extends Page {
 		// Notify app update
 		if( App.ME.settings.lastKnownVersion!=Const.getAppVersion() ) {
 			var prev = App.ME.settings.lastKnownVersion;
-			// App.ME.settings.lastKnownVersion = Const.getAppVersion();
+			App.ME.settings.lastKnownVersion = Const.getAppVersion();
 			App.ME.saveSettings();
 
 			var w = new ui.Modal();
