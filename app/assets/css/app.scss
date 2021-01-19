@@ -1200,6 +1200,15 @@ ul.form {
 					display: none;
 				}
 			}
+			&.error {
+				margin-top: 4px;
+				margin-bottom: 4px;
+				padding: 3px;
+				border: 1px solid $orange;
+				border-radius: 3px;
+				background-color: $darkRed;
+				box-shadow: 0px 0px 4px $red inset, 0px 0px 8px $orange, 0px 0px 16px $red;
+			}
 	}
 
 		.locate {
