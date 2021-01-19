@@ -1173,6 +1173,31 @@ ul.form {
 			}
 		}
 
+		.imagePicker {
+			display: flex;
+			align-items: stretch;
+			button.pick {
+				flex: 1 1 auto;
+			}
+			button.remove {
+				flex: 0 1 0px;
+				padding-top: 0;
+				padding-bottom: 0;
+			}
+			.exploreTo {
+				margin-bottom: 2px; // compensate nearby buttons bottom border
+			}
+
+			&.empty {
+				button.pick {
+					background-color: $bgLight;
+				}
+				button.remove {
+					display: none;
+				}
+			}
+	}
+
 		.locate {
 			flex: 0 0 auto;
 		}
@@ -3926,25 +3951,13 @@ body.sorting ul.collapsedSortTarget {
 		#levelForm {
 			.bg {
 				align-items: stretch;
-				button#bgPath {
-					text-transform: none;
-					font-size: 90%;
-					overflow: hidden;
-					text-overflow: ellipsis;
-				}
-				button#removeBg {
-					flex: 0 1 0px;
-					padding-top: 0;
-					padding-bottom: 0;
-				}
-				.locate {
+				.pos {
 					display: flex;
-					.exploreTo {
-						background: transparent;
+					justify-content: stretch;
+					select {
+						flex: 1 1 auto;
+						font-size: 9pt;
 					}
-				}
-				select {
-					font-size: 9pt;
 				}
 			}
 		}

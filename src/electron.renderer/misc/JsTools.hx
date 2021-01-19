@@ -647,18 +647,28 @@ class JsTools {
 			electron.Shell.showItemInFolder(fp.full);
 	}
 
-	public static function makeExploreLink(filePath:String, isFile:Bool) {
+	public static function makeExploreLink(filePath:Null<String>, isFile:Bool) {
 		var a = new J('<a class="exploreTo"/>');
 		a.append('<span class="icon"/>');
 		a.find(".icon").addClass( isFile ? "locate" : "folder" );
 		a.click( function(ev) {
-			ev.preventDefault();
-			ev.stopPropagation();
-			exploreToFile(filePath, isFile);
+			if( filePath==null )
+				N.error("No file");
+			else {
+				ev.preventDefault();
+				ev.stopPropagation();
+				exploreToFile(filePath, isFile);
+			}
 		});
+
+		if( filePath==null )
+			a.hide();
+
 		ui.Tip.attach( a, isFile ? L.t._("Locate file") : L.t._("Locate folder") );
+
 		return a;
 	}
+
 
 	public static function isWindows() {
 		return js.Node.process.platform.toLowerCase().indexOf("win")==0;
@@ -771,5 +781,61 @@ class JsTools {
 		}
 
 		return jTileCanvas;
+	}
+
+
+
+	public static function createImagePicker( curRelPath:Null<String>, onChange : (?relPath:String)->Void ) : js.jquery.JQuery {
+		var jWrapper = new J('<div class="imagePicker"/>');
+
+		// Pick image button
+		var jPick = new J('<button class="pick"/>');
+		jPick.appendTo(jWrapper);
+		jPick.click( (_)->{
+			var project = Editor.ME.project;
+			var path = project.makeAbsoluteFilePath( dn.FilePath.extractDirectoryWithoutSlash(curRelPath, true) );
+			if( path==null )
+				path = project.getProjectDir();
+
+			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], path, function(absPath) {
+				var relPath = project.makeRelativeFilePath(absPath);
+				if( relPath!=null ) {
+					var img = project.getImage(relPath);
+					if( img!=null )
+						onChange(relPath);
+					else {
+						N.error('Couldn\'t read image file: $relPath');
+					}
+				}
+			});
+		});
+
+		// Button label
+		if( curRelPath!=null ) {
+			var abs = Editor.ME.project.makeAbsoluteFilePath(curRelPath);
+			if( !JsTools.fileExists(abs) ) {
+				jWrapper.addClass("error");
+				jPick.text(L.t._("File not found!"));
+			}
+			else
+				jPick.text(dn.FilePath.extractFileWithExt(curRelPath));
+		}
+		else {
+			jWrapper.addClass("empty");
+			jPick.text("[ No image ]");
+		}
+
+		// Remove bg
+		var jRemove = new J('<button class="remove gray"> <span class="icon delete"/> </button>');
+		jRemove.appendTo(jWrapper);
+		jRemove.click( (_)->{
+			onChange(null);
+		});
+
+		// Locate bg image
+		var jLocate = makeExploreLink(Editor.ME.project.makeAbsoluteFilePath(curRelPath), true);
+		jLocate.appendTo(jWrapper);
+
+		return jWrapper;
 	}
 }

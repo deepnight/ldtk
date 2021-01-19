@@ -241,44 +241,17 @@ class WorldPanel extends ui.modal.Panel {
 		else
 			jIsDefault.hide();
 
-		// Bg path
-		var bt = jForm.find("#bgPath");
-		bt.click( (_)->{
-			var path = project.makeAbsoluteFilePath( dn.FilePath.extractDirectoryWithoutSlash(level.bgRelPath, true) );
-			if( path==null )
-				path = project.getProjectDir();
-			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], path, function(absPath) {
-				var relPath = project.makeRelativeFilePath(absPath);
-				if( relPath!=null ) {
-					var img = project.getImage(relPath);
-					if( img!=null ) {
-						level.bgRelPath = relPath;
-						if( level.bgPos==null )
-							level.bgPos = Cover;
-						onFieldChange();
-					}
-					else {
-						N.error('Couldn\'t read image file: $relPath');
-					}
-				}
-			});
-		});
-		if( level.bgRelPath!=null ) {
-			var abs = project.makeAbsoluteFilePath(level.bgRelPath);
-			if( !JsTools.fileExists(abs) )
-				bt.text(L.t._("File not found!"));
-			else
-				bt.text(dn.FilePath.extractFileWithExt(level.bgRelPath));
-		}
-		else
-			bt.text("[ No image ]");
-
-		// Remove bg
-		jForm.find("#removeBg").click( (_)->{
-			level.bgRelPath = null;
-			level.bgPos = null;
+		// Create bg image picker
+		jForm.find(".bg .imagePicker").remove();
+		var jImg = JsTools.createImagePicker(level.bgRelPath, (?relPath)->{
+			if( level.bgRelPath==null && relPath!=null )
+				level.bgPos = Cover;
+			level.bgRelPath = relPath;
+			if( level.bgRelPath==null )
+				level.bgPos = null;
 			onFieldChange();
 		});
+		jImg.insertAfter( jForm.find(".bg>label:first-of-type") );
 
 		// Bg position
 		var jSelect = jForm.find("#bgPos");
@@ -305,13 +278,6 @@ class WorldPanel extends ui.modal.Panel {
 		else
 			jSelect.prop("disabled",true);
 
-		// Locate bg image
-		var jLocate = jForm.find(".bg .locate");
-		jLocate.empty();
-		if( level.bgRelPath!=null ) {
-			var e = JsTools.makeExploreLink( project.makeAbsoluteFilePath(level.bgRelPath), true );
-			jLocate.append(e);
-		}
 
 		// Custom fields
 		// ... (not implemented yet)
