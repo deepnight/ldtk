@@ -376,15 +376,7 @@ class WorldRender extends dn.Process {
 		col.scaleY = l.pxHei;
 
 		// Bg image
-		var bgInfos = l.getBgImage();
-		if( bgInfos!=null ) {
-			trace(bgInfos);
-			var img = new h2d.Bitmap(bgInfos.t, wl.bgWrapper);
-			img.x = bgInfos.x;
-			img.y = bgInfos.y;
-			img.scaleX = bgInfos.sx;
-			img.scaleY = bgInfos.sy;
-		}
+		l.createBgBitmap(wl.bgWrapper);
 
 		// Per-coord limit
 		var doneCoords = new Map();

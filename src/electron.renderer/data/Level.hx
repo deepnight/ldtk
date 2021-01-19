@@ -105,7 +105,20 @@ class Level {
 			bgPos: JsonTools.writeEnum(bgPos, true),
 			bgPivotX: JsonTools.writeFloat(bgPivotX),
 			bgPivotY: JsonTools.writeFloat(bgPivotY),
-			__bgPos: null, // JSON export bgPos helper
+
+			__bgPos: {
+				var bg = getBgTileInfos();
+				if( bg==null )
+					null;
+				else {
+					topLeftPx: [ bg.dispX, bg.dispY ],
+					scale: [ bg.sx, bg.sy ],
+					subRect: [
+						bg.tx, bg.ty,
+						bg.tw, bg.th,
+					],
+				}
+			},
 
 			externalRelPath: null, // is only set upon actual saving, if project uses externalLevels option
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),
@@ -150,7 +163,7 @@ class Level {
 		return bgRelPath!=null;
 	}
 
-	public function getBgImage() : Null<{ t:h2d.Tile, x:Float, y:Float, sx:Float, sy:Float }> {
+	public function getBgTileInfos() : Null<{ imgData:data.DataTypes.CachedImage, tx:Float, ty:Float, tw:Float, th:Float, dispX:Int, dispY:Int, sx:Float, sy:Float }> {
 		if( !hasBgImage() )
 			return null;
 
@@ -158,7 +171,8 @@ class Level {
 		if( data==null )
 			return null;
 
-		var t = h2d.Tile.fromTexture( data.tex );
+		var baseTileWid = data.pixels.width;
+		var baseTileHei = data.pixels.height;
 		var sx = 1.0;
 		var sy = 1.0;
 		switch bgPos {
@@ -168,33 +182,51 @@ class Level {
 			case Unscaled:
 
 			case Contain:
-				sx = sy = M.fmin( pxWid/t.width, pxHei/t.height );
+				sx = sy = M.fmin( pxWid/baseTileWid, pxHei/baseTileHei );
 
 			case Cover:
-				sx = sy = M.fmax( pxWid/t.width, pxHei/t.height );
+				sx = sy = M.fmax( pxWid/baseTileWid, pxHei/baseTileHei );
 
 			case CoverDirty:
-				sx = pxWid / t.width;
-				sy = pxHei/ t.height;
+				sx = pxWid / baseTileWid;
+				sy = pxHei/ baseTileHei;
 		}
 
 		// Crop tile
-		var tw = M.fmin(t.width, pxWid/sx);
-		var th = M.fmin(t.height, pxHei/sy);
-		t = t.sub(
-			bgPivotX * (t.width-tw),
-			bgPivotY * (t.height-th),
-			tw,
-			th
-		);
+		var subTileWid = M.fmin(baseTileWid, pxWid/sx);
+		var subTileHei = M.fmin(baseTileHei, pxHei/sy);
+
 		return {
-			x: bgPivotX * (pxWid-tw*sx),
-			y: bgPivotY * (pxHei-th*sy),
-			t: t,
+			imgData: data,
+			tx: bgPivotX * (baseTileWid-subTileWid),
+			ty: bgPivotY * (baseTileHei-subTileHei),
+			tw: subTileWid,
+			th: subTileHei,
+			dispX: Std.int( bgPivotX * (pxWid - subTileWid*sx) ),
+			dispY: Std.int( bgPivotY * (pxHei - subTileHei*sy) ),
 			sx: sx,
 			sy: sy,
 		}
 	}
+
+
+	public function createBgBitmap(?p:h2d.Object) : Null<h2d.Bitmap> {
+		var bgInf = getBgTileInfos();
+		if( bgInf==null )
+			return null;
+
+		var t = h2d.Tile.fromTexture( bgInf.imgData.tex );
+		t = t.sub(bgInf.tx, bgInf.ty, bgInf.tw, bgInf.th);
+
+		var bmp = new h2d.Bitmap(t,p);
+		bmp.x = bgInf.dispX;
+		bmp.y = bgInf.dispY;
+		bmp.scaleX = bgInf.sx;
+		bmp.scaleY = bgInf.sy;
+
+		return bmp;
+	}
+
 
 	public inline function getBgColor() : UInt {
 		return bgColor!=null ? bgColor : _project.defaultLevelBgColor;
