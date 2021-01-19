@@ -830,7 +830,7 @@ class JsTools {
 		var jRemove = new J('<button class="remove gray"> <span class="icon delete"/> </button>');
 		jRemove.appendTo(jWrapper);
 		jRemove.click( (_)->{
-			onChange(null);
+			new ui.modal.dialog.Confirm(jRemove, L.t._("Remove this image?"), true, onChange.bind(null));
 		});
 
 		// Locate bg image
