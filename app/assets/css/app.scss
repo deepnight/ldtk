@@ -1704,6 +1704,62 @@ textarea {
 	}
 }
 
+.window.appUpdated {
+	.wrapper .content {
+		max-width: 600px;
+
+		header {
+			margin-bottom: 16px;
+			font-family: Roboto;
+			text-align: center;
+			color: $orange;
+			.version {
+				font-weight: bold;
+				font-size: 90pt;
+				line-height: 95pt;
+				text-shadow: 0px 0px 32px $darkOrange
+			}
+
+			.title {
+				font-size: 18pt;
+				font-style: italic;
+				margin-bottom: 8px;
+			}
+			.sub {
+				font-size: 14pt;
+				color: $darkOrange;
+			}
+		}
+
+		.changelog {
+			margin-left: -20px;
+			margin-right: -20px;
+			margin-bottom: 16px;
+			padding: 20px;
+			max-height: 45vh;
+
+			overflow-y: auto;
+			background-color: $bgDark;
+
+			color: $bgLighter;
+
+			strong {
+				color: white;
+			}
+
+			&>ul>li {
+				border-bottom: 1px dashed $bgMed;
+				padding-bottom: 8px;
+				margin-bottom: 8px;
+			}
+		}
+
+		#updateChangelogMd {
+			display: none;
+		}
+	}
+}
+
 .window.progress {
 	display: grid;
 	align-items: flex-start;

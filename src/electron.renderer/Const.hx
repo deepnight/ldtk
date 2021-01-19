@@ -51,7 +51,7 @@ class Const {
 	}
 
 	public static var APP_CHANGELOG_MD = getAppChangelogMarkdown();
-	public static var APP_CHANGELOG = new dn.Changelog(APP_CHANGELOG_MD);
+	public static function getChangeLog() return new dn.Changelog(APP_CHANGELOG_MD);
 
 	public static var JSON_CHANGELOG_MD = getJsonChangelogMarkdown();
 	public static var JSON_FORMAT_MD = getJsonFormatMarkdown();

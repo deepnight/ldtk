@@ -6,6 +6,7 @@ typedef AppSettings = {
 	var singleLayerMode : Bool;
 	var emptySpaceSelection : Bool;
 	var tileStacking : Bool;
+	var lastKnownVersion: Null<String>;
 }
 
 enum GlobalEvent {

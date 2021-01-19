@@ -82,6 +82,25 @@ class Home extends Page {
 				btIcon.addClass("icon fullscreen");
 		});
 
+		// Notify app update
+		if( App.ME.settings.lastKnownVersion!=Const.getAppVersion() ) {
+			// App.ME.settings.lastKnownVersion = Const.getAppVersion();
+			App.ME.saveSettings();
+
+			var w = new ui.Modal();
+			w.canBeClosedManually = false;
+			var latest = Const.getChangeLog().latest;
+			w.loadTemplate("appUpdated", {
+				ver: Const.getAppVersion(true),
+				app: Const.APP_NAME,
+				title: latest.title,
+				md: latest.allNoteLines.join("\n"),
+			});
+
+			w.jContent.find(".changelog").click( (_)->N.notImplemented() );
+			w.jContent.find(".close").click( (_)->w.close() );
+		}
+
 		// jPage.find(".exit").click( function(ev) {
 		// 	App.ME.exit(true);
 		// });

@@ -353,6 +353,7 @@ class App extends dn.Process {
 			singleLayerMode: false,
 			emptySpaceSelection: false,
 			tileStacking: false,
+			lastKnownVersion: null,
 		});
 
 		// Import recent projects to dirs
@@ -380,7 +381,7 @@ class App extends dn.Process {
 			.empty()
 			.off()
 			.removeClass("locked");
-			
+
 		ui.Tip.clear();
 
 		if( curPageProcess!=null ) {

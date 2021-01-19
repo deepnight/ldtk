@@ -1,0 +1,17 @@
+<header>
+	<div class="version">::ver::</div>
+	<div class="title">&laquo; ::title:: &raquo;</div>
+	<div class="sub">::app:: has been updated, enjoy!</div>
+</header>
+
+<div class="changelog" id="updateChangelogHtml"></div>
+<div id="updateChangelogMd">::md::</div>
+
+<button class="close">Continue</button>
+
+<!-- Parse markdowns -->
+<script type="text/javascript" src="js/marked.min.js"></script>
+<script type="text/javascript">
+	document.getElementById("updateChangelogHtml").innerHTML =
+		marked( document.getElementById("updateChangelogMd").textContent );
+</script>
