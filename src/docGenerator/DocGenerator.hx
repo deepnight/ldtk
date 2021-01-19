@@ -611,6 +611,7 @@ class DocGenerator {
 				switch f { // ignore Dynamics
 					case Basic("Enum"):
 					case Dyn:
+					case Ref(_):
 					case _:
 						st.type.push("null");
 				}
