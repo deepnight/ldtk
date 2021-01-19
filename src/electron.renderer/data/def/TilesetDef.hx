@@ -161,7 +161,7 @@ class TilesetDef {
 		// Load image
 		App.LOG.fileOp('Loading atlas image: $relFilePath...');
 		_project.disposeImage(relFilePath);
-		var img = _project.getImage(relFilePath);
+		var img = _project.getOrLoadImage(relFilePath);
 		if( img==null ) {
 			App.LOG.error("Image loading failed");
 			removeAtlasImage();
@@ -185,11 +185,6 @@ class TilesetDef {
 			else
 				return Ok;
 		}
-	}
-
-
-	public inline function reloadImage(projectDir:String) : EditorTypes.AtlasLoadingResult {
-		return importAtlasImage(projectDir, relPath);
 	}
 
 
@@ -422,7 +417,7 @@ class TilesetDef {
 	}
 
 	public inline function getAtlasTile() : Null<h2d.Tile> {
-		return isAtlasLoaded() ? h2d.Tile.fromTexture( _project.getImage(relPath).tex ) : null;
+		return isAtlasLoaded() ? h2d.Tile.fromTexture( _project.getOrLoadImage(relPath).tex ) : null;
 	}
 
 	public inline function getTile(tileId:Int) : h2d.Tile {
@@ -498,7 +493,7 @@ class TilesetDef {
 		App.LOG.general("Init pixel data cache for "+relPath);
 		opaqueTiles = new haxe.ds.Vector( cWid*cHei );
 		averageColorsCache = new Map();
-		var img = _project.getImage(relPath);
+		var img = _project.getOrLoadImage(relPath);
 		var ops = [];
 		for(tcy in 0...cHei)
 			ops.push({
@@ -526,7 +521,7 @@ class TilesetDef {
 	public function createAtlasHtmlImage() : js.html.Image {
 		var img = new js.html.Image();
 		if( isAtlasLoaded() ) {
-			var imgData = _project.getImage(relPath);
+			var imgData = _project.getOrLoadImage(relPath);
 			img.src = 'data:image/png;base64,${imgData.base64}';
 		}
 		return img;
@@ -545,7 +540,7 @@ class TilesetDef {
 		ctx.imageSmoothingEnabled = false;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		var imgData = _project.getImage(relPath);
+		var imgData = _project.getOrLoadImage(relPath);
 
 		var clampedArray = new js.lib.Uint8ClampedArray( imgData.pixels.width * imgData.pixels.height * 4 );
 		var c = 0;
@@ -573,7 +568,7 @@ class TilesetDef {
 		if( getTileSourceX(tileId)+tileGridSize>pxWid || getTileSourceY(tileId)+tileGridSize>pxHei )
 			return; // out of bounds
 
-		var imgData = _project.getImage(relPath);
+		var imgData = _project.getOrLoadImage(relPath);
 		var subPixels = imgData.pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
 		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
 		var ctx = canvas.getContext2d();

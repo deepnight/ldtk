@@ -236,7 +236,7 @@ class Project {
 	public function reloadImage(relPath:String) {
 		if( isImageLoaded(relPath) ) {
 			disposeImage(relPath);
-			getImage(relPath);
+			getOrLoadImage(relPath);
 			return true;
 		}
 		else
@@ -254,7 +254,7 @@ class Project {
 		}
 	}
 
-	public function getImage(relPath:String) : Null<data.DataTypes.CachedImage> {
+	public function getOrLoadImage(relPath:String) : Null<data.DataTypes.CachedImage> {
 		try {
 			if( !imageCache.exists(relPath) ) {
 				// Load it from the disk

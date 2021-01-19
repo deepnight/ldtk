@@ -301,13 +301,13 @@ class Editor extends Page {
 			N.error("Unknown watched image changed: "+relPath);
 	}
 
-	public function reloadTileset(td:data.def.TilesetDef, isInitialLoading=false) {
+	function reloadTileset(td:data.def.TilesetDef, isInitialLoading=false) {
 		if( !td.hasAtlasPath() )
 			return false;
 
 		var oldRelPath = td.relPath;
 		App.LOG.fileOp("Reloading tileset: "+td.relPath);
-		var result = td.reloadImage( project.getProjectDir() );
+		var result = td.importAtlasImage( project.getProjectDir(), td.relPath );
 		App.LOG.fileOp(" -> Reload result: "+result);
 		App.LOG.fileOp(" -> pixelData: "+(td.hasValidPixelData() ? "Ok" : "need rebuild"));
 

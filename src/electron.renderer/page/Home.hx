@@ -124,7 +124,7 @@ class Home extends Page {
 								// Tilesets
 								log.general(" -> Updating tileset data...");
 								for(td in p.defs.tilesets) {
-									td.reloadImage(fp.directory);
+									td.importAtlasImage(fp.directory, td.relPath);
 									td.buildPixelData(()->{}, true);
 								}
 

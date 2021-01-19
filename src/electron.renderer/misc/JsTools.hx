@@ -800,7 +800,7 @@ class JsTools {
 			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], path, function(absPath) {
 				var relPath = project.makeRelativeFilePath(absPath);
 				if( relPath!=null ) {
-					var img = project.getImage(relPath);
+					var img = project.getOrLoadImage(relPath);
 					if( img!=null )
 						onChange(relPath);
 					else {

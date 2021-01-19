@@ -146,7 +146,7 @@ class Level {
 		if( !hasBgImage() )
 			return null;
 
-		var data = _project.getImage(bgRelPath);
+		var data = _project.getOrLoadImage(bgRelPath);
 		if( data==null )
 			return null;
 
