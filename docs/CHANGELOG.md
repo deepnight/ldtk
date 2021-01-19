@@ -1,4 +1,4 @@
-# 0.6.3
+# 0.7.0
 
 - **Separate level files**: a much needed feature to reduce JSON size and optimize parsing times! There is now an option in Project panel (press `F1`) to enable "Separate level files".
 
@@ -6,7 +6,7 @@
 
   **Important note:** This feature might not be supported in all current existing APIs and loaders.
 - **Save layers as PNG**: if you *really* don't want to bother with the LDtk JSON, you can check this new option in your project settings to export all your layers as PNG images (note: only supported layers will be exported, that is those with tiles).
-- Replaced the often hard-to-read pixel font with a sleeker "Roboto" font (affects entity fields and level info).
+- Replaced the often hard-to-read pixel font with a sleeker "Roboto" font (this change affects entity fields and floating level informations).
 - **HaxeFlixel**: the HaxeFlixel game framework has been added to the official [LDtk Haxe API](https://github.com/deepnight/ldtk-haxe-api). You can now easily load and display a LDtk project in your game.
 - The [JSON documentation](https://ldtk.io/json) now shows clearly what parts are useful for game devs and what parts aren't (trying to make your dev life even easier!).
 - The app home now shows a **list of recently opened folders** along with recently opened project files.
