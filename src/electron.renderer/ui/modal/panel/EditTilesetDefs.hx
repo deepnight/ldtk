@@ -146,38 +146,19 @@ class EditTilesetDefs extends ui.modal.Panel {
 		else
 			jContent.find(".noTileLayer").hide();
 
-		// Image path
-		var jPath = jForm.find(".path");
-		var jLocate = jForm.find(".locate");
-		if( curTd.relPath!=null ) {
-			jPath.empty().show().append( JsTools.makePath(curTd.relPath) );
-			jLocate.empty().show().append( JsTools.makeExploreLink( project.makeAbsoluteFilePath(curTd.relPath), true ) );
-		}
-		else {
-			jLocate.hide();
-			jPath.hide();
-		}
-
-		// Fields
-		var i = Input.linkToHtmlInput(curTd.identifier, jForm.find("input[name='name']") );
-		i.validityCheck = function(id) return data.Project.isValidIdentifier(id) && project.defs.isTilesetIdentifierUnique(id);
-		i.validityError = N.invalidIdentifier;
-		i.onChange = editor.ge.emit.bind( TilesetDefChanged(curTd) );
-
-		// "Import image" button
-		var b = jForm.find("#tilesetFile");
-		if( !curTd.hasAtlasPath() )
-			b.text( Lang.t._("Select an image file") );
-		else if( !curTd.isAtlasLoaded() )
-			b.text("ERROR: Couldn't read image data");
-		else
-			b.text("Replace image");
-
-		b.click( function(ev) {
-			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], project.getProjectDir(), function(absPath) {
-				var oldRelPath = curTd.relPath;
-				var relPath = project.makeRelativeFilePath( absPath );
-				App.LOG.fileOp("Loading atlas: "+absPath);
+		// Image file picker
+		jForm.find(".imagePicker").remove();
+		var jImg = JsTools.createImagePicker(curTd.relPath, (?relPath)->{
+			var oldRelPath = curTd.relPath;
+			if( relPath==null ) {
+				// Remove image
+				if( oldRelPath!=null )
+					editor.watcher.stopWatching( project.makeAbsoluteFilePath(oldRelPath) );
+				curTd.removeAtlasImage();
+			}
+			else {
+				// Load image
+				App.LOG.fileOp("Loading atlas: "+project.makeAbsoluteFilePath(relPath));
 
 				var result = curTd.importAtlasImage(project.getProjectDir(), relPath);
 				switch result {
@@ -194,12 +175,57 @@ class EditTilesetDefs extends ui.modal.Panel {
 				if( oldRelPath!=null )
 					editor.watcher.stopWatching( project.makeAbsoluteFilePath(oldRelPath) );
 				editor.watcher.watchTileset(curTd);
-
 				project.defs.autoRenameTilesetIdentifier(oldRelPath, curTd);
-				updateTilesetPreview();
-				editor.ge.emit( TilesetDefChanged(curTd) );
-			});
+			}
+
+			updateTilesetPreview();
+			editor.ge.emit( TilesetDefChanged(curTd) );
 		});
+		jImg.insertAfter( jForm.find("li.img>label:first") );
+
+
+		// Fields
+		var i = Input.linkToHtmlInput(curTd.identifier, jForm.find("input[name='name']") );
+		i.validityCheck = function(id) return data.Project.isValidIdentifier(id) && project.defs.isTilesetIdentifierUnique(id);
+		i.validityError = N.invalidIdentifier;
+		i.onChange = editor.ge.emit.bind( TilesetDefChanged(curTd) );
+
+		// "Import image" button
+		// var b = jForm.find("#tilesetFile");
+		// if( !curTd.hasAtlasPath() )
+		// 	b.text( Lang.t._("Select an image file") );
+		// else if( !curTd.isAtlasLoaded() )
+		// 	b.text("ERROR: Couldn't read image data");
+		// else
+		// 	b.text("Replace image");
+
+		// b.click( function(ev) {
+		// 	dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], project.getProjectDir(), function(absPath) {
+		// 		var oldRelPath = curTd.relPath;
+		// 		var relPath = project.makeRelativeFilePath( absPath );
+		// 		App.LOG.fileOp("Loading atlas: "+absPath);
+
+		// 		var result = curTd.importAtlasImage(project.getProjectDir(), relPath);
+		// 		switch result {
+		// 			case Ok:
+
+		// 			case FileNotFound, LoadingFailed(_):
+		// 				new ui.modal.dialog.Warning( Lang.atlasLoadingMessage(relPath, result) );
+		// 				return;
+
+		// 			case TrimmedPadding, RemapLoss, RemapSuccessful:
+		// 				new ui.modal.dialog.Message( Lang.atlasLoadingMessage(relPath, result), "tile" );
+		// 		}
+
+		// 		if( oldRelPath!=null )
+		// 			editor.watcher.stopWatching( project.makeAbsoluteFilePath(oldRelPath) );
+		// 		editor.watcher.watchTileset(curTd);
+
+		// 		project.defs.autoRenameTilesetIdentifier(oldRelPath, curTd);
+		// 		updateTilesetPreview();
+		// 		editor.ge.emit( TilesetDefChanged(curTd) );
+		// 	});
+		// });
 
 		var i = Input.linkToHtmlInput( curTd.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
 		i.linkEvent( TilesetDefChanged(curTd) );
