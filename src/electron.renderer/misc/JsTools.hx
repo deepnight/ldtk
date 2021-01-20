@@ -785,7 +785,7 @@ class JsTools {
 		});
 
 		// Existing image assets
-		var jRecall = new J('<button class="recall"> <span class="icon history"/> </button>');
+		var jRecall = new J('<button class="recall"> <span class="icon expand"/> </button>');
 		jRecall.appendTo(jWrapper);
 		jRecall.click( (ev:js.jquery.Event)->{
 			var ctx = new ui.modal.ContextMenu();
