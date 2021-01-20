@@ -14,7 +14,7 @@
 	"defaultGridSize": 16,
 	"bgColor": "#7F8093",
 	"defaultLevelBgColor": "#7F8093",
-	"nextUid": 16,
+	"nextUid": 19,
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
@@ -33,7 +33,7 @@
 				"displayOpacity": 1,
 				"pxOffsetX": 0,
 				"pxOffsetY": 0,
-				"intGridValues": [{ "identifier": null, "color": "#FFFFFF" }],
+				"intGridValues": [{ "identifier": "walls", "color": "#FFFFFF" }],
 				"autoTilesetDefUid": 3,
 				"autoRuleGroups": [
 					{
@@ -220,7 +220,7 @@
 			"bgPos": "Cover",
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__bgPos": { "topLeftPx": [0,0], "scale": [0.9666666666666667,0.9666666666666667], "subRect": [0,2.5862068965517153,480,264.82758620689657] },
+			"__bgPos": { "topLeftPx": [0,0], "scale": [0.9666666666666667,0.9666666666666667], "cropRect": [0,2.5862068965517153,480,264.82758620689657] },
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -478,7 +478,7 @@
 			"bgPos": "Cover",
 			"bgPivotX": 0.5,
 			"bgPivotY": 1,
-			"__bgPos": { "topLeftPx": [0,0], "scale": [1.15,1.15], "subRect": [0,17.391304347826065,320,222.60869565217394] },
+			"__bgPos": { "topLeftPx": [0,0], "scale": [1.15,1.15], "cropRect": [0,17.391304347826065,320,222.60869565217394] },
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -681,7 +681,7 @@
 			"bgPos": "Cover",
 			"bgPivotX": 0,
 			"bgPivotY": 1,
-			"__bgPos": { "topLeftPx": [0,0], "scale": [0.31527093596059114,0.31527093596059114], "subRect": [0,0,812,812] },
+			"__bgPos": { "topLeftPx": [0,0], "scale": [0.31527093596059114,0.31527093596059114], "cropRect": [0,0,812,812] },
 			"externalRelPath": null,
 			"layerInstances": [
 				{
