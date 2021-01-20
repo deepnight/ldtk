@@ -43,6 +43,7 @@ typedef GlobalType = {
 	var section : String;
 	var description : Null<String>;
 	var onlyInternalFields : Bool;
+	var inlined: Bool;
 }
 
 
@@ -63,7 +64,7 @@ class DocGenerator {
 	#if macro
 	static var SCHEMA_URL = "https://ldtk.io/files/JSON_SCHEMA.json";
 
-	static var allTypes: Array<GlobalType>;
+	static var allGlobalTypes: Array<GlobalType>;
 	static var allEnums : Map<String, Array<String>>;
 	static var verbose = false;
 	static var appVersion = new dn.Version();
@@ -72,7 +73,7 @@ class DocGenerator {
 		Generate Markdown doc and Json schema
 	**/
 	public static function run(className:String, xmlPath:String, ?mdPath:String, ?jsonPath:String, deleteXml=false) {
-		allTypes = [];
+		allGlobalTypes = [];
 		allEnums = [];
 
 		// Read app version from "package.json"
@@ -116,13 +117,14 @@ class DocGenerator {
 			}
 			else {
 				// Typedef
-				allTypes.push({
+				allGlobalTypes.push({
 					xml: type,
 					description: type.hasNode.haxe_doc ? type.node.haxe_doc.innerHTML : null,
 					rawName: type.att.path,
 					displayName: displayName,
 					section: hasMeta(type,"section") ? getMeta(type,"section") : "",
 					onlyInternalFields: hasMeta(type,"internal"),
+					inlined: hasMeta(type,"inline"),
 				});
 			}
 
@@ -131,9 +133,7 @@ class DocGenerator {
 		Sys.println("");
 
 		// Sort types
-		allTypes.sort( (a,b)->{
-			// var a = displayNames.get(a.att.path);
-			// var b = displayNames.get(b.att.path);
+		allGlobalTypes.sort( (a,b)->{
 			if( a.section!=null && b.section==null ) return 1;
 			if( a.section==null && b.section!=null ) return -1;
 			if( a.section==null && b.section==null )
@@ -163,6 +163,15 @@ class DocGenerator {
 	}
 
 
+	static function getGlobalType(typePath:String) : GlobalType {
+		for( t in allGlobalTypes )
+			if( t.rawName==typePath )
+				return t;
+
+		throw 'Unknown global type $typePath';
+		return null;
+	}
+
 
 	/**
 		Build doc
@@ -171,7 +180,10 @@ class DocGenerator {
 		// Print types
 		var toc = [];
 		var md = [];
-		for(type in allTypes) {
+		for(type in allGlobalTypes) {
+			if( type.inlined )
+				continue;
+
 			md.push("");
 			var depth = 0;
 
@@ -307,7 +319,7 @@ class DocGenerator {
 		};
 
 
-		for(type in allTypes) {
+		for(type in allGlobalTypes) {
 
 			// No field informations for this type?
 			if( !type.xml.hasNode.a )
@@ -451,10 +463,17 @@ class DocGenerator {
 
 			var type = getFieldType(fieldXml);
 			var subFields = switch type {
-				case Obj(f): f;
-				case Arr(Obj(f)): f;
-				case Nullable( Obj(f) ): f;
-				case Nullable( Arr(Obj(f)) ): f;
+				case Obj(f), Nullable( Obj(f) ): f;
+				case Arr(Obj(f)), Nullable( Arr(Obj(f)) ): f;
+				case Ref(_,t), Nullable( Ref(_,t) ),
+					Arr(Ref(_,t)), Nullable( Arr(Ref(_,t)) ):
+					var gt = getGlobalType(t);
+					trace(t);
+					if( gt.inlined )
+						getFieldsInfos(gt.xml.node.a);
+					else
+						[];
+
 				case _: [];
 			}
 
@@ -561,7 +580,7 @@ class DocGenerator {
 				Dyn;
 			else if( fieldXml.hasNode.t ) {
 				var name = fieldXml.node.t.att.path;
-				var typeInfos = allTypes.filter( (t)->t.rawName==name )[0];
+				var typeInfos = allGlobalTypes.filter( (t)->t.rawName==name )[0];
 				var dispName = typeInfos==null ? name : typeInfos.displayName;
 				Ref( dispName, name );
 			}
@@ -594,7 +613,13 @@ class DocGenerator {
 					case _: name;
 				}
 			case Enu(name): 'Enum';
-			case Ref(display, name): '[$display](#${anchorId(name)})';
+			case Ref(display, name):
+				var gt = getGlobalType(name);
+				if( gt.inlined )
+					'Object';
+				else
+					'[$display](#${anchorId(name)})';
+
 			case Arr(t): 'Array of ${getTypeMd(t)}';
 			case Obj(fields): "Object";
 			case Dyn: "Dynamic (anything)";
