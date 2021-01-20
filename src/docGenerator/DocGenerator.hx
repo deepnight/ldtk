@@ -468,7 +468,6 @@ class DocGenerator {
 				case Ref(_,t), Nullable( Ref(_,t) ),
 					Arr(Ref(_,t)), Nullable( Arr(Ref(_,t)) ):
 					var gt = getGlobalType(t);
-					trace(t);
 					if( gt.inlined )
 						getFieldsInfos(gt.xml.node.a);
 					else
