@@ -329,6 +329,7 @@ class LevelRender extends dn.Process {
 		var bmp = level.createBgBitmap();
 		if( bmp!=null ) {
 			bgImage.tile = bmp.tile;
+			bgImage.setPosition( bmp.x, bmp.y );
 			bgImage.scaleX = bmp.scaleX;
 			bgImage.scaleY = bmp.scaleY;
 			bgImage.visible = true;
