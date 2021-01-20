@@ -4026,6 +4026,9 @@ body.sorting ul.collapsedSortTarget {
 		#levelForm {
 			.bg {
 				align-items: stretch;
+				button.pick {
+					width: 0;
+				}
 				.pos {
 					display: flex;
 					justify-content: stretch;
