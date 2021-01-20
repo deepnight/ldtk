@@ -717,7 +717,7 @@
 			]
 		},
 		"EntityInstanceTile": {
-			"description": "Description of a tile used by an EntityInstance",
+			"description": "Tile data in an Entity instance",
 			"title": "ldtk.EntityInstanceTile",
 			"required": [
 				"srcRect",
@@ -748,6 +748,7 @@
 			]
 		},
 		"IntGridValueInstance": {
+			"description": "IntGrid value instance",
 			"title": "ldtk.IntGridValueInstance",
 			"required": [
 				"coordId",
@@ -773,6 +774,7 @@
 			]
 		},
 		"NeighbourLevel": {
+			"description": "Nearby level info",
 			"title": "ldtk.NeighbourLevel",
 			"required": [
 				"dir",
@@ -1266,7 +1268,7 @@
 			]
 		},
 		"LevelBgPosInfos": {
-			"description": "A small object describing the level background image position, based on level settings.",
+			"description": "Level background image position info",
 			"title": "ldtk.LevelBgPosInfos",
 			"required": [
 				"scale",
@@ -1499,6 +1501,7 @@
 			]
 		},
 		"IntGridValueDef": {
+			"description": "IntGrid value definition",
 			"title": "ldtk.IntGridValueDef",
 			"required": [
 				"color"
