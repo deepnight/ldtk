@@ -16,11 +16,11 @@
 	"pxHei": 168,
 	"__bgColor": "#7F8093",
 	"bgColor": null,
-	"bgRelPath": null,
-	"bgPos": null,
+	"bgRelPath": "bg/DaWeeD.png",
+	"bgPos": "Cover",
 	"bgPivotX": 0.5,
 	"bgPivotY": 0.5,
-	"__bgPos": null,
+	"__bgPos": { "topLeftPx": [0,0], "scale": [0.6222222222222222,0.6222222222222222], "cropRect": [92.14285714285714,0,295.7142857142857,270] },
 	"externalRelPath": null,
 	"layerInstances": [
 		{
