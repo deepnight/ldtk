@@ -54,7 +54,7 @@ class Editor extends Page {
 		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
 
-	public function new(p:data.Project) {
+	public function new(p:data.Project, ?loadLevelIndex:Int) {
 		super();
 
 		loadPageTemplate("editor");
@@ -96,6 +96,16 @@ class Editor extends Page {
 		updateCanvasSize();
 
 		selectProject(p);
+
+		// Auto-load provided level index
+		if( loadLevelIndex!=null )
+			if( loadLevelIndex>=0 && loadLevelIndex<project.levels.length ) {
+				selectLevel( project.levels[loadLevelIndex] );
+				camera.fit(true);
+			}
+			else
+				N.error('Invalid level index $loadLevelIndex');
+
 		setCompactMode( settings.compactMode, true );
 		dn.Process.resizeAll();
 	}
@@ -808,8 +818,6 @@ class Editor extends Page {
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
 		ge.emit( ViewportChanged );
-		// if( worldMode )
-		// 	new ui.modal.panel.WorldPanel();
 	}
 
 	public function selectLayerInstance(li:data.inst.LayerInstance, notify=true) {
@@ -1069,11 +1077,11 @@ class Editor extends Page {
 				case ProjectSettingsChanged:
 				case BeforeProjectSaving:
 				case ProjectSaved:
-				case LevelSelected(l):
-				case LevelSettingsChanged(l):
-				case LevelAdded(l):
-				case LevelRemoved(l):
-				case LevelResized(l):
+				case LevelSelected(l): extra = l.uid;
+				case LevelSettingsChanged(l): extra = l.uid;
+				case LevelAdded(l): extra = l.uid;
+				case LevelRemoved(l): extra = l.uid;
+				case LevelResized(l): extra = l.uid;
 				case LevelRestoredFromHistory(l):
 				case LevelSorted:
 				case WorldLevelMoved:

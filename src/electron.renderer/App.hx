@@ -146,13 +146,20 @@ class App extends dn.Process {
 		// Start
 		delayer.addS( ()->{
 			var path = getArgPath();
+			var levelIndex : Null<Int> = null;
 			if( path!=null && path.extension==Const.LEVEL_EXTENSION ) {
+				var indexReg = ~/0*([0-9]+)-.*/gi;
+				if( !indexReg.match(path.fileName) )
+					LOG.error("Couldn't parse level UID in arg: "+path.full);
+				else
+					levelIndex = Std.parseInt( indexReg.matched(1) );
 				var dir = path.getLastDirectory();
 				path.removeLastDirectory();
 				path.fileWithExt = dir+"."+Const.FILE_EXTENSION;
 			}
+			LOG.add("BOOT", 'Start args: path=$path levelIndex=$levelIndex');
 			if( path!=null )
-				loadProject(path.full);
+				loadProject(path.full, levelIndex);
 			else
 				loadPage( ()->new page.Home() );
 		}, 0.2);
@@ -483,10 +490,11 @@ class App extends dn.Process {
 	}
 
 
-	public function loadProject(filePath:String) : Void {
+	public function loadProject(filePath:String, ?levelIndex:Int) : Void {
 		ui.ProjectLoader.load(filePath, (?p,?err)->{
-			if( p!=null )
-				loadPage( ()->new page.Editor(p) );
+			if( p!=null ) {
+				loadPage( ()->new page.Editor(p, levelIndex) );
+			}
 			else {
 				// Failed
 				N.error(switch err {
