@@ -89,7 +89,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 								// Write sample map
 								log.general(" -> Saving "+fp.fileName+"...");
-								var s = new ui.ProjectSaving(this, p);
+								var s = new ui.ProjectSaving(App.ME, p);
 							});
 
 						}
