@@ -1271,14 +1271,25 @@
 			"description": "Level background image position info",
 			"title": "ldtk.LevelBgPosInfos",
 			"required": [
+				"cropRect",
 				"scale",
-				"subRect",
 				"topLeftPx"
 			],
 			"additionalProperties": false,
 			"properties": {
+				"cropRect": {
+					"description": "An array of 4 float values describing the cropped sub-rectangle of the displayed background image. This cropping happens when original is larger than the level bounds. Array format: `[ cropX, cropY, cropWidth, cropHeight ]`",
+					"items": {
+						"type": [
+							"number"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
 				"scale": {
-					"description": "An array containing the `[scaleX,scaleY]` values of the background image, depending on `bgPos` option.",
+					"description": "An array containing the `[scaleX,scaleY]` values of the **cropped** background image, depending on `bgPos` option.",
 					"items": {
 						"type": [
 							"number"
@@ -1289,21 +1300,10 @@
 					]
 				},
 				"topLeftPx": {
-					"description": "An array containing the `[x,y]` pixel coordinates of the top-left corner of the background image, depending on `bgPos` option.",
+					"description": "An array containing the `[x,y]` pixel coordinates of the top-left corner of the **cropped** background image, depending on `bgPos` option.",
 					"items": {
 						"type": [
 							"integer"
-						]
-					},
-					"type": [
-						"array"
-					]
-				},
-				"subRect": {
-					"description": "An array of 4 float values describing the sub-rectangle of the displayed background image. This is useful when the initial image was cropped, because it was larger than the level bounds. Array format: `[ subX, subY, subWidth, subHeight ]`",
-					"items": {
-						"type": [
-							"number"
 						]
 					},
 					"type": [
