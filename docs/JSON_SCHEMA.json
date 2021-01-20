@@ -159,7 +159,7 @@
 					]
 				},
 				"realEditorValues": {
-					"description": "",
+					"description": "Editor internal raw values",
 					"items" : {},
 					"type": [
 						"array"
@@ -718,7 +718,7 @@
 		},
 		"EntityInstanceTile": {
 			"description": "Description of a tile used by an EntityInstance",
-			"title": "Entity instance tile",
+			"title": "ldtk.EntityInstanceTile",
 			"required": [
 				"srcRect",
 				"tilesetUid"
@@ -747,8 +747,33 @@
 				"object"
 			]
 		},
+		"IntGridValueInstance": {
+			"title": "ldtk.IntGridValueInstance",
+			"required": [
+				"coordId",
+				"v"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"v": {
+					"description": "IntGrid value",
+					"type": [
+						"integer"
+					]
+				},
+				"coordId": {
+					"description": "Coordinate ID in the layer grid",
+					"type": [
+						"integer"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"NeighbourLevel": {
-			"title": "NeighbourLevel",
+			"title": "ldtk.NeighbourLevel",
 			"required": [
 				"dir",
 				"levelUid"
@@ -917,9 +942,7 @@
 				"intGrid": {
 					"description": "",
 					"items": {
-						"type": [
-							"object"
-						]
+						"$ref": "#/otherTypes/IntGridValueInstance"
 					},
 					"type": [
 						"array"
@@ -1018,7 +1041,7 @@
 			]
 		},
 		"EnumDefValues": {
-			"title": "Enum value informations",
+			"title": "Enum value definition",
 			"required": [
 				"__tileSrcRect",
 				"id"
@@ -1187,9 +1210,7 @@
 				"intGridValues": {
 					"description": "An array (using IntGrid value as array index, starting from 0) that defines extra optional info for each IntGrid value.",
 					"items": {
-						"type": [
-							"object"
-						]
+						"$ref": "#/otherTypes/IntGridValueDef"
 					},
 					"type": [
 						"array"
@@ -1246,7 +1267,7 @@
 		},
 		"LevelBgPosInfos": {
 			"description": "A small object describing the level background image position, based on level settings.",
-			"title": "Level background position",
+			"title": "ldtk.LevelBgPosInfos",
 			"required": [
 				"scale",
 				"subRect",
@@ -1470,6 +1491,31 @@
 					"description": "Unique String identifier",
 					"type": [
 						"string"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"IntGridValueDef": {
+			"title": "ldtk.IntGridValueDef",
+			"required": [
+				"color"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"color": {
+					"description": "",
+					"type": [
+						"string"
+					]
+				},
+				"identifier": {
+					"description": "Unique String identifier",
+					"type": [
+						"string",
+						"null"
 					]
 				}
 			},

@@ -10,10 +10,7 @@ Json schema: https://ldtk.io/files/JSON_SCHEMA.json
      - [Layer instance](#ldtk-LayerInstanceJson)
        - [Tile instance](#ldtk-Tile)
        - [Entity instance](#ldtk-EntityInstanceJson)
-       - [Entity instance tile](#ldtk-EntityInstanceTile)
        - [Field instance](#ldtk-FieldInstanceJson)
-     - [NeighbourLevel](#ldtk-NeighbourLevel)
-     - [Level background position](#ldtk-LevelBgPosInfos)
    - [Definitions](#ldtk-DefinitionsJson)
      - [Layer definition](#ldtk-LayerDefJson)
        - [Auto-layer rule definition](#ldtk-AutoRuleDef)
@@ -21,7 +18,7 @@ Json schema: https://ldtk.io/files/JSON_SCHEMA.json
        - [Field definition](#ldtk-FieldDefJson)
      - [Tileset definition](#ldtk-TilesetDefJson)
      - [Enum definition](#ldtk-EnumDefJson)
-       - [Enum value informations](#ldtk-EnumDefValues)
+       - [Enum value definition](#ldtk-EnumDefValues)
 
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
 ## LDtk Json root   
@@ -62,8 +59,8 @@ A `ldtkl` file is just a JSON file containing exactly what is described below.
 Value | Type | Description
 -- | -- | --
 `__bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Background color of the level (same as `bgColor`, except the default value is automatically used here if its value is `null`)
-`__bgPos`<br/><sup class="only">Only *If background image exists*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | [Level&nbsp;background&nbsp;position](#ldtk-LevelBgPosInfos)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Position informations of the background image, if there is one.
-`__neighbours`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Array&nbsp;of&nbsp;[NeighbourLevel](#ldtk-NeighbourLevel) | An array listing all other levels touching this one on the world map. In "linear" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.
+`__bgPos`<br/><sup class="only">Only *If background image exists*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | Position informations of the background image, if there is one.<br/> This object contains the following fields:<br/> <ul><li>**`scale`** **(Array of Float**) : *An array containing the `[scaleX,scaleY]` values of the background image, depending on `bgPos` option.*</li><li>**`subRect`** **(Array of Float**) : *An array of 4 float values describing the sub-rectangle of the displayed background image. This is useful when the initial image was cropped, because it was larger than the level bounds. Array format: `[ subX, subY, subWidth, subHeight ]`*</li><li>**`topLeftPx`** **(Array of Int**) : *An array containing the `[x,y]` pixel coordinates of the top-left corner of the background image, depending on `bgPos` option.*</li></ul>
+`__neighbours`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array listing all other levels touching this one on the world map. In "linear" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.<br/> This object contains the following fields:<br/> <ul><li>**`dir`** **(String**) : *A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast).*</li><li>**`levelUid`** **(Int**)</li></ul>
 `bgColor`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)*<br/><small class="color"> *Hex color "#rrggbb"* </small> | Background color of the level. If `null`, the project `defaultLevelBgColor` should be used.
 `bgPivotX`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | Float | 
 `bgPivotY`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | Float | 
@@ -121,19 +118,10 @@ Value | Type | Description
 `__grid`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.4.0-gray.svg)  | Array&nbsp;of&nbsp;Int | Grid-based coordinates (`[x,y]` format)
 `__identifier` | String | Entity definition identifier
 `__pivot`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.3-gray.svg)  | Array&nbsp;of&nbsp;Float | Pivot coordinates  (`[x,y]` format, values are from 0 to 1) of the Entity
-`__tile`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | [Entity&nbsp;instance&nbsp;tile](#ldtk-EntityInstanceTile)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).
+`__tile`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).<br/> This object contains the following fields:<br/> <ul><li>**`srcRect`** **(Array of Int**) : *An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`*</li><li>**`tilesetUid`** **(Int**) : *Tileset ID*</li></ul>
 `defUid` | Int | Reference of the **Entity definition** UID
 `fieldInstances` | Array&nbsp;of&nbsp;[Field&nbsp;instance](#ldtk-FieldInstanceJson) | 
 `px`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.4.0-gray.svg)  | Array&nbsp;of&nbsp;Int | Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget optional layer offsets, if they exist!
-
-<a id="ldtk-EntityInstanceTile" name="ldtk-EntityInstanceTile"></a>
-## 1.1.3. Entity instance tile   
-Description of a tile used by an EntityInstance
-
-Value | Type | Description
--- | -- | --
-`srcRect` | Array&nbsp;of&nbsp;Int | An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`
-`tilesetUid` | Int | Tileset ID
 
 <a id="ldtk-FieldInstanceJson" name="ldtk-FieldInstanceJson"></a>
 ## 1.1.4. Field instance   
@@ -143,24 +131,7 @@ Value | Type | Description
 `__type` | String | Type of the field, such as `Int`, `Float`, `Enum(my_enum_name)`, `Bool`, etc.
 `__value` | Dynamic&nbsp;(anything) | Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>		It can also be an `Array` of those same types.
 `defUid` | Int | Reference of the **Field definition** UID
-`realEditorValues`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
-
-<a id="ldtk-NeighbourLevel" name="ldtk-NeighbourLevel"></a>
-## 1.2. NeighbourLevel   
-Value | Type | Description
--- | -- | --
-`dir` | String | A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast).
-`levelUid` | Int | 
-
-<a id="ldtk-LevelBgPosInfos" name="ldtk-LevelBgPosInfos"></a>
-## 1.3. Level background position   
-A small object describing the level background image position, based on level settings.
-
-Value | Type | Description
--- | -- | --
-`scale` | Array&nbsp;of&nbsp;Float | An array containing the `[scaleX,scaleY]` values of the background image, depending on `bgPos` option.
-`subRect` | Array&nbsp;of&nbsp;Float | An array of 4 float values describing the sub-rectangle of the displayed background image. This is useful when the initial image was cropped, because it was larger than the level bounds. Array format: `[ subX, subY, subWidth, subHeight ]`
-`topLeftPx` | Array&nbsp;of&nbsp;Int | An array containing the `[x,y]` pixel coordinates of the top-left corner of the background image, depending on `bgPos` option.
+`realEditorValues`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Editor internal raw values
 
 <a id="ldtk-DefinitionsJson" name="ldtk-DefinitionsJson"></a>
 ## 2. Definitions   
@@ -187,7 +158,7 @@ Value | Type | Description
 `displayOpacity` | Float | Opacity of the layer (0 to 1.0)
 `gridSize` | Int | Width and height of the grid in pixels
 `identifier` | String | Unique String identifier
-`intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup> | Array&nbsp;of&nbsp;Object | An array (using IntGrid value as array index, starting from 0) that defines extra optional info for each IntGrid value.<br/> This object contains the following fields:<br/> <ul><li>**`color`** **(String**) <small class="color"> *Hex color "#rrggbb"* </small></li><li>**`identifier`** **(String *(can be `null`)***)</li></ul>
+`intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup> | Array&nbsp;of&nbsp;Object | An array (using IntGrid value as array index, starting from 0) that defines extra optional info for each IntGrid value.<br/> This object contains the following fields:<br/> <ul><li>**`color`** **(String**) <small class="color"> *Hex color "#rrggbb"* </small></li><li>**`identifier`** **(String *(can be `null`)***) : *Unique String identifier*</li></ul>
 `pxOffsetX`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Int | X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
 `pxOffsetY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Int | Y offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
 `tilePivotX`<br/><sup class="only">Only *Tile layers*</sup><br/><sup class="internal">*Internal editor data*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
@@ -291,10 +262,10 @@ Value | Type | Description
 `iconTilesetUid` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset UID if provided
 `identifier` | String | Unique String identifier
 `uid` | Int | Unique Int identifier
-`values` | Array&nbsp;of&nbsp;[Enum&nbsp;value&nbsp;informations](#ldtk-EnumDefValues) | All possible enum values, with their optional Tile infos.
+`values` | Array&nbsp;of&nbsp;[Enum&nbsp;value&nbsp;definition](#ldtk-EnumDefValues) | All possible enum values, with their optional Tile infos.
 
 <a id="ldtk-EnumDefValues" name="ldtk-EnumDefValues"></a>
-## 2.4.1. Enum value informations   
+## 2.4.1. Enum value definition   
 Value | Type | Description
 -- | -- | --
 `__tileSrcRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Array&nbsp;of&nbsp;Int | An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`
