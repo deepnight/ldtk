@@ -228,6 +228,10 @@ class App extends dn.Process {
 	public inline function isAltDown() return keyDowns.get(K.ALT)==true;
 	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlDown() || isAltDown();
 
+	public inline function hasInputFocus() {
+		return jBody.find("input:focus, textarea:focus").length>0;
+	}
+
 	function onKeyPress(keyCode:Int) {
 		if( hasPage() )
 			curPageProcess.onKeyPress(keyCode);
@@ -237,22 +241,12 @@ class App extends dn.Process {
 				m.onKeyPress(keyCode);
 
 		switch keyCode {
-			case K.L if( isCtrlDown() && isShiftDown() ):
-				LOG.printAll();
-
-			// Emulate a crash
+			// Open debug menu
 			#if debug
-			case K.T if( isCtrlDown() && isShiftDown() ):
-				LOG.warning("Emulating crash...");
-				var a : Dynamic = null;
-				a.crash = 5;
+			case K.D if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
+				new ui.modal.DebugMenu();
 			#end
 
-			#if debug
-			case K.P if( isCtrlDown() && isShiftDown() ):
-				App.LOG.general( "\n"+dn.Process.rprintAll() );
-				App.LOG.flushToFile();
-			#end
 
 			case _:
 		}

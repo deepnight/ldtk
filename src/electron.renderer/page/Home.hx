@@ -114,10 +114,6 @@ class Home extends Page {
 	function openDebugMenu() {
 		var m = new ui.Modal();
 
-		var jButton = new J('<button>Settings dir</button>');
-		jButton.appendTo(m.jContent);
-		jButton.click( (_)->JsTools.exploreToFile(JsTools.getSettingsDir(), false) );
-
 		// Update all sample files
 		var jButton = new J('<button>Update all samples</button>');
 		jButton.click((_)->{

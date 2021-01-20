@@ -368,7 +368,7 @@ class Editor extends Page {
 
 
 	public inline function hasInputFocus() {
-		return App.ME.jBody.find("input:focus, textarea:focus").length>0;
+		return App.ME.hasInputFocus();
 	}
 
 	override function onKeyPress(keyCode:Int) {
@@ -484,33 +484,6 @@ class Editor extends Page {
 
 			case k if( k>=K.F1 && k<=K.F6 && !hasInputFocus() ):
 				jMainPanel.find("#mainBar .buttons button:nth-of-type("+(k-K.F1+1)+")").click();
-
-			#if debug
-
-			case K.T if( App.ME.isAltDown() && !hasInputFocus() ):
-				if( cd.has("debugTools") ) {
-					App.ME.clearDebug();
-					cd.unset("debugTools");
-				}
-				else
-					cd.setS("debugTools", Const.INFINITE);
-
-			case K.P if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
-				N.msg("Rebuilding pixel caches...");
-				for(td in project.defs.tilesets)
-					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
-
-			case K.A if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
-				N.msg("Rebuilding auto layers...");
-				for(l in project.levels)
-				for(li in l.layerInstances)
-					li.autoTilesCache = null;
-				checkAutoLayersCache( (_)->N.success("Done") );
-
-			case K.U if( !hasInputFocus() && App.ME.isShiftDown() && App.ME.isCtrlDown() ):
-				dn.electron.ElectronUpdater.emulate();
-
-			#end
 		}
 
 		// Propagate to tools
@@ -1475,7 +1448,7 @@ class Editor extends Page {
 
 
 		#if debug
-		if( cd.has("debugTools") ) {
+		if( App.ME.cd.has("debugTools") ) {
 			App.ME.clearDebug();
 			App.ME.debug("appButtons="
 				+ ( App.ME.isMouseButtonDown(0) ? "[left] " : "" )
