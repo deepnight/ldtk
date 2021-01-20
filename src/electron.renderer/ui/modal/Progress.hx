@@ -8,6 +8,8 @@ typedef ProgressOp = {
 class Progress extends ui.Modal {
 	static var ALL: Array<Progress> = [];
 
+	public var done(default,null) = false;
+
 	public function new(title:String, opsPerCycle=1, ops:Array<ProgressOp>, ?onComplete:Void->Void) {
 		super();
 
@@ -31,6 +33,7 @@ class Progress extends ui.Modal {
 				// All done!
 				canBeClosedManually = true;
 				App.LOG.general('Done "$title" (${M.pretty(haxe.Timer.stamp()-time)}s)');
+				done = true;
 
 				if( !App.ME.isCtrlDown() || !App.ME.isShiftDown() )
 					close();
@@ -70,7 +73,7 @@ class Progress extends ui.Modal {
 
 	public static function hasAny() {
 		for(e in ALL)
-			if( !e.destroyed )
+			if( !e.destroyed && !e.done )
 				return true;
 		return false;
 	}
