@@ -33,7 +33,7 @@ class Cursor extends dn.Process {
 	public function setLabel(?str:String) {
 		labelWrapper.removeChildren();
 		if( str!=null ) {
-			var tf = new h2d.Text(Assets.fontPixelOutline, labelWrapper);
+			var tf = new h2d.Text(Assets.fontLight_small, labelWrapper);
 			tf.text = str;
 		}
 		curLabel = str;
@@ -243,7 +243,7 @@ class Cursor extends dn.Process {
 
 		graphics.setPosition(wrapper.x, wrapper.y);
 
-		labelWrapper.setScale(1/editor.camera.adjustedZoom * js.Browser.window.devicePixelRatio*2);
+		labelWrapper.setScale( js.Browser.window.devicePixelRatio / editor.camera.adjustedZoom );
 	}
 
 	public function enablePermanentHighlights() {

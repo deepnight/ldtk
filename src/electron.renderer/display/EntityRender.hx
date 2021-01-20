@@ -175,7 +175,7 @@ class EntityRender extends dn.Process {
 
 
 	inline function getDefaultFont() {
-		return Assets.fontLight_small;
+		return Editor.ME.camera.pixelRatio<=1 ? Assets.fontLight_tiny : Assets.fontLight_small;
 	}
 
 
@@ -371,8 +371,8 @@ class EntityRender extends dn.Process {
 
 	public inline function updatePos() {
 		var cam = Editor.ME.camera;
-		var scale = 1 / cam.rawZoom;
-		var alpha = M.fclamp( (cam.adjustedZoom-1) / 1, 0, 1 );
+		var scale = 1 / cam.adjustedZoom;
+		var alpha = M.fclamp( (cam.adjustedZoom-0.33*cam.pixelRatio) / 2, 0, 1 );
 
 		root.x = ei.x;
 		root.y = ei.y;
