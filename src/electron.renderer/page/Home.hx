@@ -91,12 +91,12 @@ class Home extends Page {
 			var w = new ui.Modal();
 			w.canBeClosedManually = false;
 			var latest = Const.getChangeLog().latest;
+			var ver = new Version( Const.getAppVersion() );
 			w.loadTemplate("appUpdated", {
-				ver: Const.getAppVersion(true),
+				ver: ver.getTrimmedNumbers(true),
 				app: Const.APP_NAME,
 				title: latest.title,
 				md: latest.allNoteLines.join("\n"),
-				sub: prev!=null ? L.t._("::app:: has been updated, enjoy!", { app:Const.APP_NAME }) : "",
 			});
 
 			w.jContent.find(".changelog").click( (_)->N.notImplemented() );
