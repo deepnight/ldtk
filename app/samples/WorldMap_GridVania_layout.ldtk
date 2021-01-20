@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.3",
+		"appVersion": "0.7.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.6.3",
+	"jsonVersion": "0.7.0",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
@@ -559,6 +559,11 @@
 			"pxHei": 256,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -1620,6 +1625,11 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -3706,6 +3716,11 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -5671,6 +5686,11 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -7782,6 +7802,11 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -9914,6 +9939,11 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -11839,6 +11869,11 @@
 			"pxHei": 768,
 			"__bgColor": "#8D3349",
 			"bgColor": "#8D3349",
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -14610,6 +14645,11 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -16535,6 +16575,11 @@
 			"pxHei": 256,
 			"__bgColor": "#2C2598",
 			"bgColor": "#2C2598",
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -17105,6 +17150,11 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -18194,6 +18244,11 @@
 			"pxHei": 256,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -19612,6 +19667,11 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -20635,6 +20695,11 @@
 			"pxHei": 768,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -22193,6 +22258,11 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -24013,6 +24083,11 @@
 			"pxHei": 256,
 			"__bgColor": "#22806A",
 			"bgColor": "#22806A",
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -24572,6 +24647,11 @@
 			"pxHei": 512,
 			"__bgColor": "#37494E",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{

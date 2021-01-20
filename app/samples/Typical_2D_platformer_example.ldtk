@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.3",
+		"appVersion": "0.7.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.6.3",
+	"jsonVersion": "0.7.0",
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1,
 	"defaultGridSize": 16,
@@ -1215,6 +1215,11 @@
 			"pxHei": 336,
 			"__bgColor": "#50506A",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -3251,6 +3256,11 @@
 			"pxHei": 256,
 			"__bgColor": "#50506A",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
@@ -4563,6 +4573,11 @@
 			"pxHei": 256,
 			"__bgColor": "#50506A",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": null,
 			"layerInstances": [
 				{
