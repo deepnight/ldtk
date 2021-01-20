@@ -984,6 +984,7 @@ ul.log {
 .icon.stop		{ background-image: url("../icons/stop.svg"); }
 .icon.settings	{ background-image: url("../icons/settings.svg"); }
 .icon.delete	{ background-image: url("../icons/delete.svg"); }
+.icon.history	{ background-image: url("../icons/history.svg"); }
 .icon.discord	{ background-image: url("../icons/discord.svg"); }
 .icon.ghost		{ background-image: url("../icons/ghost.svg"); }
 .icon.love		{ background-image: url("../icons/love.svg"); }
@@ -1183,10 +1184,13 @@ ul.form {
 				overflow: hidden;
 				text-overflow: ellipsis;
 			}
+			button.recall {
+				flex: 0 1 0px;
+				padding: 3px;
+			}
 			button.remove {
 				flex: 0 1 0px;
-				padding-top: 0;
-				padding-bottom: 0;
+				padding: 3px;
 			}
 			.exploreTo {
 				margin-bottom: 2px; // compensate nearby buttons bottom border
@@ -1810,6 +1814,7 @@ textarea {
 				padding: 8px 20px;
 				font-size: 10pt;
 				color: $orange;
+				text-align: left;
 				&:hover {
 					background-color: $orange;
 					color: black;

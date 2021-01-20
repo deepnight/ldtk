@@ -226,6 +226,26 @@ class Project {
 			level.tidy(this);
 	}
 
+	public function getAllExternalImages() : Array<String> {
+		var dones = new Map();
+		var all = [];
+
+		inline function _add(relPath) {
+			if( relPath!=null && !dones.exists(relPath) ) {
+				all.push(relPath);
+				dones.set(relPath,true);
+			}
+		}
+
+		for(l in levels)
+			_add(l.bgRelPath);
+
+		for(td in defs.tilesets)
+			_add(td.relPath);
+
+		return all;
+	}
+
 
 	/** CACHED IMAGES ************************************/
 

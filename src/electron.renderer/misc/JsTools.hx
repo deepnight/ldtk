@@ -752,6 +752,21 @@ class JsTools {
 	public static function createImagePicker( curRelPath:Null<String>, onChange : (?relPath:String)->Void ) : js.jquery.JQuery {
 		var jWrapper = new J('<div class="imagePicker"/>');
 
+		function _pickImage(relPath:String) {
+			if( relPath==null )
+				return false;
+
+			var img = Editor.ME.project.getOrLoadImage(relPath);
+			if( img!=null ) {
+				onChange(relPath);
+				return true;
+			}
+			else {
+				N.error('Couldn\'t read image file: $relPath');
+				return false;
+			}
+		}
+
 		// Pick image button
 		var jPick = new J('<button class="pick"/>');
 		jPick.appendTo(jWrapper);
@@ -765,15 +780,20 @@ class JsTools {
 
 			dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], path, function(absPath) {
 				var relPath = project.makeRelativeFilePath(absPath);
-				if( relPath!=null ) {
-					var img = project.getOrLoadImage(relPath);
-					if( img!=null )
-						onChange(relPath);
-					else {
-						N.error('Couldn\'t read image file: $relPath');
-					}
-				}
+				_pickImage(relPath);
 			});
+		});
+
+		// Existing image assets
+		var jRecall = new J('<button class="recall"> <span class="icon history"/> </button>');
+		jRecall.appendTo(jWrapper);
+		jRecall.click( (ev:js.jquery.Event)->{
+			var ctx = new ui.modal.ContextMenu();
+			ctx.positionNear(jRecall);
+			for( relPath in Editor.ME.project.getAllExternalImages() )
+				ctx.add(L.untranslated(dn.FilePath.extractFileWithExt(relPath)), ()->{
+					_pickImage(relPath);
+				});
 		});
 
 		// Button label
