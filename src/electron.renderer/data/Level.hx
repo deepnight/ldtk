@@ -113,7 +113,7 @@ class Level {
 				else {
 					topLeftPx: [ bg.dispX, bg.dispY ],
 					scale: [ bg.sx, bg.sy ],
-					subRect: [
+					cropRect: [
 						bg.tx, bg.ty,
 						bg.tw, bg.th,
 					],
