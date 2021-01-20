@@ -207,8 +207,8 @@ class Camera extends dn.Process {
 		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
 	}
 
-	inline function snapZoomValue(v:Float) {
-		return v<=pixelRatio ? v : M.round(v*2)/2;
+	inline function snapZoomValue(z:Float) {
+		return z<=pixelRatio ? z : M.round(z*2)/2;
 	}
 
 	inline function get_adjustedZoom() {
