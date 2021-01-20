@@ -307,7 +307,7 @@ class Editor extends Page {
 
 		var oldRelPath = td.relPath;
 		App.LOG.fileOp("Reloading tileset: "+td.relPath);
-		var result = td.importAtlasImage( project.getProjectDir(), td.relPath );
+		var result = td.importAtlasImage( td.relPath );
 		App.LOG.fileOp(" -> Reload result: "+result);
 		App.LOG.fileOp(" -> pixelData: "+(td.hasValidPixelData() ? "Ok" : "need rebuild"));
 
@@ -319,13 +319,14 @@ class Editor extends Page {
 				changed = true;
 				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
 					var newRelPath = project.makeRelativeFilePath(newAbsPath);
-					td.importAtlasImage( project.getProjectDir(), newRelPath );
+					td.importAtlasImage( newRelPath );
 					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 					ge.emit( TilesetDefChanged(td) );
 					levelRender.invalidateAll();
 				});
 
 			case LoadingFailed(err):
+				throw "check";
 				new ui.modal.dialog.Warning(msg);
 
 			case RemapLoss:

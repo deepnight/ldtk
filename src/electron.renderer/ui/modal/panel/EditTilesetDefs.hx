@@ -160,7 +160,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				// Load image
 				App.LOG.fileOp("Loading atlas: "+project.makeAbsoluteFilePath(relPath));
 
-				var result = curTd.importAtlasImage(project.getProjectDir(), relPath);
+				var result = curTd.importAtlasImage(relPath);
 				switch result {
 					case Ok:
 

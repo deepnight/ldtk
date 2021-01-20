@@ -143,11 +143,14 @@ class TilesetDef {
 	}
 
 
-	public function importAtlasImage(projectDir:String, relFilePath:String) : EditorTypes.AtlasLoadingResult {
+	public function importAtlasImage(relFilePath:String) : EditorTypes.AtlasLoadingResult {
 		if( relFilePath==null ) {
 			removeAtlasImage();
-			return LoadingFailed("Missing path");
+			return LoadingFailed("No file path");
 		}
+
+		if( !JsTools.fileExists(_project.makeAbsoluteFilePath(relFilePath)) )
+			return FileNotFound;
 
 		// Optional previous image infos
 		var oldRelPath = relPath;
