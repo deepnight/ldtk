@@ -299,7 +299,7 @@ class WorldRender extends dn.Process {
 			if( levels.exists(l.uid) ) {
 				var e = levels.get(l.uid);
 
-				e.bgWrapper.alpha = editor.worldMode ? 1 : 0.5;
+				e.bgWrapper.alpha = editor.worldMode ? 1 : 0.2;
 
 				if( l.uid==editor.curLevelId && !editor.worldMode ) {
 					// Hide current level in editor mode
@@ -315,8 +315,8 @@ class WorldRender extends dn.Process {
 				else {
 					// Fade other levels in editor mode
 					var dist = cur.getBoundsDist(l);
-					e.bounds.alpha = 0.33;
-					e.render.alpha = 0.33;
+					e.bounds.alpha = 0.3;
+					e.render.alpha = 0.7;
 					e.render.visible = dist<=300;
 				}
 
