@@ -48,13 +48,6 @@ class Home extends Page {
 			onNew();
 		});
 
-		// Debug menu
-		#if debug
-		jPage.find("button.settings").show().click( function(ev) {
-			openDebugMenu();
-		});
-		#end
-
 		jPage.find(".buy").click( (ev)->{
 			var w = new ui.Modal();
 			w.loadTemplate("buy", {
@@ -109,69 +102,6 @@ class Home extends Page {
 
 		updateRecents();
 	}
-
-	#if debug
-	function openDebugMenu() {
-		var m = new ui.Modal();
-
-		// Update all sample files
-		var jButton = new J('<button>Update all samples</button>');
-		jButton.click((_)->{
-			m.close();
-			var path = JsTools.getSamplesDir();
-			var files = js.node.Fs.readdirSync(path);
-			var log = new dn.Log();
-			log.printOnAdd = true;
-			var ops = [];
-			for(f in files) {
-				var fp = dn.FilePath.fromFile(path+"/"+f);
-				if( fp.extension!="ldtk" )
-					continue;
-
-				ops.push({
-					label: fp.fileName,
-					cb: ()->{
-						// Loading
-						log.fileOp(fp.fileName+"...");
-						log.general(" -> Loading...");
-						try {
-							ui.ProjectLoader.load(fp.full, (?p,?err)->{
-								if( p==null )
-									throw "Failed on "+fp.full;
-								// Tilesets
-								log.general(" -> Updating tileset data...");
-								for(td in p.defs.tilesets) {
-									td.importAtlasImage(td.relPath);
-									td.buildPixelData(()->{}, true);
-								}
-
-								// Auto layer rules
-								log.general(" -> Updating auto-rules cache...");
-								for(l in p.levels)
-								for(li in l.layerInstances) {
-									if( !li.def.isAutoLayer() )
-										continue;
-									li.applyAllAutoLayerRules();
-								}
-
-								// Write sample map
-								log.general(" -> Saving "+fp.fileName+"...");
-								var s = new ui.ProjectSaving(this, p);
-							});
-
-						}
-						catch(e:Dynamic) {
-							new ui.modal.dialog.Message("Failed on "+fp.fileName);
-						}
-					}
-				});
-			}
-			new ui.modal.Progress("Updating samples", 1, ops);
-		});
-		m.jContent.append(jButton);
-	}
-	#end
-
 
 
 	function updateRecents() {

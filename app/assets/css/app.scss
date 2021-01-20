@@ -2870,27 +2870,14 @@ canvas#webgl {
 				.icon {
 					opacity: 0.5;
 				}
-				// &:not(.small) .icon {
-					// opacity: 0.5;
-				// }
 				&.small {
 					flex: 0.5 1 0px;
 					.icon {
 						margin: 0;
-						// opacity: 1;
 					}
 				}
 				&.buy {
 					text-transform: none;
-				}
-				&.settings {
-					display: none;
-					text-align: center;
-
-					.icon {
-						margin: 0;
-						font-size: 0.8em;
-					}
 				}
 			}
 		}
