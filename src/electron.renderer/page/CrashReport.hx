@@ -94,11 +94,7 @@ class CrashReport extends Page {
 					// Save
 					var data = ui.ProjectSaving.prepareProjectSavingData(unsavedProject, true);
 					JsTools.writeFileString(fp.full, data.projectJson);
-					jBackup.html('I saved your current work in <a>${fp.fileWithExt}</a>.');
-					jBackup.find("a").click( (ev)->{
-						ev.preventDefault();
-						JsTools.exploreToFile(fp.full, true);
-					});
+					jBackup.html("But don't worry, your work was saved in a backup file! ");
 
 					// Register in recents
 					App.ME.registerRecentProject(fp.full);

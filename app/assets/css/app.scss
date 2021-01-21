@@ -2764,6 +2764,14 @@ canvas#webgl {
 					border-right: 16px solid $bgLight;
 					border-bottom: 16px solid transparent;
 				}
+
+				.backup {
+					color: $help;
+					font-weight: bold;
+					&:empty {
+						display: none;
+					}
+				}
 			}
 		}
 
