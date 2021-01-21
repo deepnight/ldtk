@@ -81,7 +81,7 @@ class CrashReport extends Page {
 			var jBackup = jContent.find(".backup");
 			if( unsavedProject!=null ) {
 				var fp = dn.FilePath.fromFile(projectFilePath);
-				fp.fileName += Const.CRASH_NAME_SUFFIX;
+				fp.fileName += Const.BACKUP_NAME_SUFFIX;
 				var data = ui.ProjectSaving.prepareProjectSavingData(unsavedProject, true);
 				JsTools.writeFileString(fp.full, data.projectJson);
 				jBackup.html('I saved your current work in <a>${fp.fileWithExt}</a>.');

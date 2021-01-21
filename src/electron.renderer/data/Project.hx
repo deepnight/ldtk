@@ -55,6 +55,10 @@ class Project {
 		return filePath.fileName;
 	}
 
+	public inline function isBackup() {
+		return filePath.fileWithExt.indexOf( Const.BACKUP_NAME_SUFFIX ) >= 0;
+	}
+
 	public function makeRelativeFilePath(absPath:String) {
 		if( absPath==null )
 			return null;

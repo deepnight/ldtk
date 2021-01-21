@@ -992,16 +992,16 @@ class Editor extends Page {
 		}
 
 		// Check crash backups
-		if( project.filePath.full.indexOf(Const.CRASH_NAME_SUFFIX)>=0 ) {
+		if( project.isBackup() ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
-				Lang.t._("This file seems to be a CRASH BACKUP. Do you want to save your changes to the original file instead?"),
+				Lang.t._("This file seems to be a BACKUP. Do you want to save your changes to the original file instead?"),
 				()->{
 					// Remove backup
 					JsTools.removeFile(project.filePath.full);
 					App.ME.unregisterRecentProject(project.filePath.full);
 					// Save
-					project.filePath.parseFilePath( StringTools.replace(project.filePath.full, Const.CRASH_NAME_SUFFIX, "") );
+					project.filePath.parseFilePath( StringTools.replace(project.filePath.full, Const.BACKUP_NAME_SUFFIX, "") );
 					updateTitle();
 					onSave(bypasses, onComplete);
 				}

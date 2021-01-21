@@ -79,7 +79,7 @@ class ProjectSaving extends dn.Process {
 					// Save a duplicate in backups folder
 					var fp = dn.FilePath.fromDir(backupDir);
 					fp.fileName = project.filePath.fileName+"-"+DateTools.format(Date.now(), "%Y-%m-%d--%H:%M:%S");
-					fp.extension = Const.FILE_EXTENSION;
+					fp.extension = Const.BACKUP_NAME_SUFFIX+"."+Const.FILE_EXTENSION;
 					var savingData = prepareProjectSavingData(project, true);
 					JsTools.writeFileString(fp.full, savingData.projectJson);
 				}

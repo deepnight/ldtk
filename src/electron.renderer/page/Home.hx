@@ -115,7 +115,7 @@ class Home extends Page {
 		while( i<recents.length ) {
 			var fp = dn.FilePath.fromFile(recents[i]);
 			var crash = fp.clone();
-			crash.fileName+=Const.CRASH_NAME_SUFFIX;
+			crash.fileName+=Const.BACKUP_NAME_SUFFIX;
 			if( !App.ME.recentProjectsContains(crash.full) && JsTools.fileExists(crash.full) ) {
 				recents.insert(i+1, crash.full);
 				// i++;
@@ -179,7 +179,7 @@ class Home extends Page {
 		C.initUniqueColors(12, uniqueColorMix);
 		while( i>=0 ) {
 			var filePath = recents[i];
-			var isCrashFile = filePath.indexOf( Const.CRASH_NAME_SUFFIX )>=0;
+			var isCrashFile = filePath.indexOf( Const.BACKUP_NAME_SUFFIX )>=0;
 			var li = new J('<li/>');
 			li.appendTo(jRecentFiles);
 
