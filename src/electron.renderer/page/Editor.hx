@@ -710,6 +710,9 @@ class Editor extends Page {
 				else
 					curTool.onMouseMove(ev,m);
 			}
+
+			if( ui.Modal.isOpen( ui.modal.panel.EditAllAutoLayerRules ) )
+				ui.Modal.getFirst( ui.modal.panel.EditAllAutoLayerRules ).onEditorMouseMove(m);
 		}
 
 		// Mouse coords infos

@@ -4191,6 +4191,11 @@ body.sorting ul.collapsedSortTarget {
 				box-shadow: 0px 2px 4px black;
 				background-color: $bgMed;
 
+				&.highlight header {
+					outline: 1px solid #ff00ff;
+					background-color: #770077;
+				}
+
 				&.inactive {
 					background-image: url("../img/stripes.png");
 					background-color: $darkRed;
@@ -4312,7 +4317,7 @@ body.sorting ul.collapsedSortTarget {
 						}
 					}
 
-					li {
+					li { // Rule
 						position: relative;
 						display: grid;
 						box-sizing: border-box;
@@ -4324,6 +4329,11 @@ body.sorting ul.collapsedSortTarget {
 						background-color: $bgDark;
 						border-radius: 3px;
 						border: 1px dashed transparent;
+
+						&.highlight {
+							outline: 1px solid #ff00ff;
+							background-color: #770077;
+						}
 
 						&.inactive {
 							background-image: url("../img/stripes.png");

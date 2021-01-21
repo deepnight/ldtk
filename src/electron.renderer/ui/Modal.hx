@@ -173,11 +173,15 @@ class Modal extends dn.Process {
 		return false;
 	}
 
-	public static function isOpen<T:Modal>(c:Class<T>) {
+	public static inline function isOpen<T:Modal>(c:Class<T>) {
+		return getFirst(c)!=null;
+	}
+
+	public static function getFirst<T:Modal>(c:Class<T>) : Null<T> {
 		for(w in ALL)
 			if( !w.isClosing() && #if( haxe_ver >= 4.1 ) Std.isOfType(w,c) #else Std.is(w,c) #end )
-				return true;
-		return false;
+				return (cast w:T);
+		return null;
 	}
 
 	function countAsModal() return true;

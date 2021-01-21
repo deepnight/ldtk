@@ -661,6 +661,26 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
+	public function onEditorMouseMove(m:Coords) {
+		if( m.cx<0 || m.cx>=li.cWid || m.cy<0 || m.cy>=li.cHei )
+			return;
+
+
+		// List corresponding rules when overing a layer cell
+		var coordId = li.coordId(m.cx, m.cy);
+		var activeRules = new Map();
+		li.def.iterateActiveRulesInEvalOrder((r)->{
+			if( li.autoTilesCache.exists(r.uid) && li.autoTilesCache.get(r.uid).exists(coordId) )
+				activeRules.set(r.uid, true);
+		});
+
+		// Highlight rules in panel
+		jContent.find("li.highlight").removeClass("highlight");
+		var jRules = jContent.find(".ruleGroup>li");
+		for( uid in activeRules.keys() )
+			jRules.filter('li[ruleuid=$uid]').addClass("highlight").parent().closest("li").addClass("highlight");
+	}
+
 	#if debug
 	override function update() {
 		super.update();
