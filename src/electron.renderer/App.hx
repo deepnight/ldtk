@@ -570,6 +570,12 @@ class App extends dn.Process {
 		}
 	}
 
+	#if debug
+	public function reload() {
+		IpcRenderer.invoke("reload");
+	}
+	#end
+
 	override function update() {
 		super.update();
 

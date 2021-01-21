@@ -8,5 +8,9 @@ class Updating extends Page {
 
 		loadPageTemplate("updating");
 		App.ME.setWindowTitle();
+
+		#if debug
+		delayer.addS(App.ME.reload, 0.6);
+		#end
 	}
 }

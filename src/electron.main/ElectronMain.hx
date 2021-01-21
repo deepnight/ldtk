@@ -40,6 +40,10 @@ class ElectronMain {
 			App.exit();
 		});
 
+		IpcMain.handle("reload", function(event) {
+			mainWindow.reload();
+		});
+
 		IpcMain.handle("setFullScreen", function(event,args) {
 			mainWindow.setFullScreen(args);
 		});
