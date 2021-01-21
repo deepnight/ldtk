@@ -177,6 +177,24 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		invalidatedRules = new Map();
 	}
 
+
+	function showAffectedCells(r:data.def.AutoLayerRuleDef) {
+		if( li.autoTilesCache!=null && li.autoTilesCache.exists(r.uid) ) {
+			editor.levelRender.temp.lineStyle(1, 0xff00ff, 1);
+			editor.levelRender.temp.beginFill(0x5a36a7, 0.6);
+			for( coordId in li.autoTilesCache.get(r.uid).keys() ) {
+				var cx = ( coordId % li.cWid );
+				var cy = Std.int( coordId / li.cWid );
+				editor.levelRender.temp.drawRect(
+					cx*li.def.gridSize,
+					cy*li.def.gridSize,
+					li.def.gridSize,
+					li.def.gridSize
+				);
+			}
+		}
+	}
+
 	function updatePanel() {
 		jContent.find("*").off();
 		ui.Tip.clear();
@@ -286,10 +304,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				jGroup.append(jDropTarget);
 			}
 
-			// Delete group
-			// jGroupHeader.find(".delete").click( function(ev:js.jquery.Event) {
-			// 	deleteRuleGroup(rg);
-			// });
+			// Show cells affected by this whole group
+			jGroupHeader.mouseenter( (ev)->{
+				editor.levelRender.clearTemp();
+				for(r in rg.rules)
+					showAffectedCells(r);
+			});
+			jGroupHeader.mouseleave( (_)->editor.levelRender.clearTemp() );
+
 
 			// Edit group
 			jGroupHeader.find(".edit").click( function(ev:js.jquery.Event) {
@@ -374,21 +396,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 				// Show affect level cells
 				jRule.mouseenter( (ev)->{
-					if( li.autoTilesCache!=null && li.autoTilesCache.exists(r.uid) ) {
-						editor.levelRender.clearTemp();
-						editor.levelRender.temp.lineStyle(1, 0xff00ff, 1);
-						editor.levelRender.temp.beginFill(0x5a36a7, 0.6);
-						for( coordId in li.autoTilesCache.get(r.uid).keys() ) {
-							var cx = ( coordId % li.cWid );
-							var cy = Std.int( coordId / li.cWid );
-							editor.levelRender.temp.drawRect(
-								cx*li.def.gridSize,
-								cy*li.def.gridSize,
-								li.def.gridSize,
-								li.def.gridSize
-							);
-						}
-					}
+					editor.levelRender.clearTemp();
+					showAffectedCells(r);
 				} );
 				jRule.mouseleave( (ev)->editor.levelRender.clearTemp() );
 
