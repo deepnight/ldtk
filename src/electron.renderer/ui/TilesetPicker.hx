@@ -98,7 +98,7 @@ class TilesetPicker {
 
 		var ctx = canvas.getContext2d();
 		ctx.lineWidth = M.fmax( 1, Std.int( tilesetDef.tileGridSize / 16 ) );
-		var strokeOffset = ctx.lineWidth*0.5;
+		var strokeOffset = ctx.lineWidth*0.5; // draw in the middle of the pixel to avoid blur
 
 		for(cy in 0...tilesetDef.cHei)
 		for(cx in 0...tilesetDef.cWid) {
@@ -115,6 +115,8 @@ class TilesetPicker {
 						tilesetDef.tileGridSize,
 						tilesetDef.tileGridSize
 					);
+					ctx.fillStyle = "black";
+					ctx.fill();
 					ctx.fillStyle = C.intToHexRGBA( tilesetDef.getAverageTileColor(tid) );
 					ctx.fill();
 			}
@@ -122,7 +124,7 @@ class TilesetPicker {
 			// Outline
 			ctx.beginPath();
 			ctx.rect(
-				cx*tilesetDef.tileGridSize + strokeOffset, // draw in the middle of the pixel to avoid blur
+				cx*tilesetDef.tileGridSize + strokeOffset,
 				cy*tilesetDef.tileGridSize + strokeOffset,
 				tilesetDef.tileGridSize - strokeOffset*2,
 				tilesetDef.tileGridSize - strokeOffset*2
@@ -132,7 +134,7 @@ class TilesetPicker {
 			var c = tilesetDef.getAverageTileColor(tid);
 			var a = C.getA(c)>0 ? 1 : 0;
 			ctx.strokeStyle =
-				C.intToHexRGBA( C.toWhite( C.replaceAlphaF( tilesetDef.getAverageTileColor(tid), a ), 0.23 ) );
+				C.intToHexRGBA( C.toWhite( C.replaceAlphaF( tilesetDef.getAverageTileColor(tid), a ), 0.2 ) );
 
 			ctx.stroke();
 		}
