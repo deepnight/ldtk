@@ -102,13 +102,10 @@ class ProjectSaving extends dn.Process {
 					var ops = [];
 					for(l in savingData.externLevelsJson) {
 						var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(l.relPath) );
-						trace(fp);
 						ops.push({
 							label: "Level "+l.id,
 							cb: ()->{
-								trace(fp.full);
 								JsTools.writeFileString(fp.full, l.json);
-								trace("OK");
 							}
 						});
 					}
