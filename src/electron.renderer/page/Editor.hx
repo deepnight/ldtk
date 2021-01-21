@@ -189,12 +189,32 @@ class Editor extends Page {
 		});
 	}
 
+	public function setPermanentNotification(id:String, ?msg:dn.data.GetText.LocaleString, ?onClick:Void->Void) {
+		jPage.find('#permanentNotifications #$id').remove();
+		if( msg!=null ) {
+			var jLi = new J('<li id="$id">$msg</li>');
+			jPage.find("#permanentNotifications").append(jLi);
+			if( onClick!=null )
+				jLi.click( (_)->onClick() );
+			else
+				jLi.addClass("noClick");
+		}
+	}
+
 	public function selectProject(p:data.Project) {
 		watcher.clearAllWatches();
 		ui.modal.Dialog.closeAll();
 
 		project = p;
 		project.tidy();
+
+		if( project.isBackup() ) {
+			setPermanentNotification("backup", L.t._("This file is a BACKUP file: external files such as images and tilesets might be unavailable, as the backup isn't stored in the same location as the original file. Click on this message to locate the backup file."), ()->{
+				JsTools.exploreToFile(project.filePath.full, true);
+			});
+		}
+		else
+			setPermanentNotification("backup");
 
 		// Check external enums
 		for( relPath in project.defs.getExternalEnumPaths() ) {

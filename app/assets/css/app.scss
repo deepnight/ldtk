@@ -2351,6 +2351,33 @@ canvas#webgl {
 }
 
 #page.editor {
+	#permanentNotifications {
+		position: absolute;
+		top: 0;
+		left: $mainPanelNormalWid;
+		width: calc( 100vw - #{ $mainPanelNormalWid } );
+		z-index: 9999;
+		li {
+			padding: 8px;
+			font-size: 9pt;
+			color: white;
+			font-weight: bold;
+			text-align: center;
+			background-color: $red;
+			&.noClick {
+				pointer-events: none;
+			}
+			&:not(.noClick):hover {
+				outline: 1px solid white;
+				outline-offset: -1px;
+				cursor: pointer;
+			}
+		}
+		li#backup {
+			background-color: $helpMed;
+			// color: black;
+		}
+	}
 	#mainPanel {
 		position: absolute;
 		top: 0;
