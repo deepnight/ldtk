@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.3",
+		"appVersion": "0.7.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.6.3",
+	"jsonVersion": "0.7.0",
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1,
 	"defaultGridSize": 16,
@@ -39,7 +39,7 @@
 					"uid": 183,
 					"name": "Narrow spaces",
 					"active": true,
-					"collapsed": false,
+					"collapsed": true,
 					"rules": [
 						{
 							"uid": 190,
@@ -638,7 +638,7 @@
 						"uid": 80,
 						"name": "Ceil props",
 						"active": true,
-						"collapsed": false,
+						"collapsed": true,
 						"rules": [
 							{
 								"uid": 81,
@@ -734,7 +734,7 @@
 					"uid": 110,
 					"name": "Wall plants",
 					"active": true,
-					"collapsed": false,
+					"collapsed": true,
 					"rules": [
 						{
 							"uid": 112,
@@ -780,7 +780,7 @@
 						"uid": 101,
 						"name": "Ground props",
 						"active": true,
-						"collapsed": false,
+						"collapsed": true,
 						"rules": [
 							{
 								"uid": 173,
@@ -872,7 +872,7 @@
 						"uid": 157,
 						"name": "Sky",
 						"active": true,
-						"collapsed": false,
+						"collapsed": true,
 						"rules": [
 							{
 								"uid": 164,
@@ -1124,7 +1124,7 @@
 						"uid": 176,
 						"name": "sky",
 						"active": true,
-						"collapsed": false,
+						"collapsed": true,
 						"rules": [
 							{
 								"uid": 179,
@@ -1965,6 +1965,11 @@
 			"pxHei": 384,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0000-Controls.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [{ "levelUid": 147, "dir": "s" }]
@@ -1978,6 +1983,11 @@
 			"pxHei": 480,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0001-Diamond1.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 148, "dir": "s" }, { "levelUid": 195, "dir": "n" } ]
@@ -1991,6 +2001,11 @@
 			"pxHei": 464,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0002-Diamond2.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 166, "dir": "s" }, { "levelUid": 147, "dir": "n" } ]
@@ -2004,6 +2019,11 @@
 			"pxHei": 624,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0003-LoopIntro.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 149, "dir": "s" }, { "levelUid": 148, "dir": "n" } ]
@@ -2017,6 +2037,11 @@
 			"pxHei": 432,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0004-Double_key.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 156, "dir": "s" }, { "levelUid": 166, "dir": "n" } ]
@@ -2030,6 +2055,11 @@
 			"pxHei": 512,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0005-Bridge.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 172, "dir": "s" }, { "levelUid": 149, "dir": "n" } ]
@@ -2043,6 +2073,11 @@
 			"pxHei": 480,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0006-Loot_loop.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 150, "dir": "s" }, { "levelUid": 156, "dir": "n" } ]
@@ -2056,6 +2091,11 @@
 			"pxHei": 480,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0007-Guards.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 193, "dir": "s" }, { "levelUid": 172, "dir": "n" } ]
@@ -2069,6 +2109,11 @@
 			"pxHei": 560,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0008-Vortex_intro.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 191, "dir": "s" }, { "levelUid": 150, "dir": "n" } ]
@@ -2082,6 +2127,11 @@
 			"pxHei": 560,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0009-Falling_diamonds.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 155, "dir": "s" }, { "levelUid": 193, "dir": "n" } ]
@@ -2095,6 +2145,11 @@
 			"pxHei": 400,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0010-Combat_loop.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 139, "dir": "s" }, { "levelUid": 191, "dir": "n" } ]
@@ -2108,6 +2163,11 @@
 			"pxHei": 528,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0011-Big.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 194, "dir": "s" }, { "levelUid": 155, "dir": "n" } ]
@@ -2121,6 +2181,11 @@
 			"pxHei": 768,
 			"__bgColor": "#1C1520",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
 			"externalRelPath": "ld47.lab/0012-Vortex_keys.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [{ "levelUid": 139, "dir": "n" }]
