@@ -11,8 +11,8 @@ This update features many important changes to make LDtk **production ready** an
 
   **Important notes**: this new feature might not be supported in all current existing APIs and loaders. Also, this option isn't enabled by default, but this might change on 1.0.
 - **Save layers as PNG**: if you *really* don't want to bother with the LDtk JSON, you can check this new option in your project settings to export all your layers as PNG images (note: only supported layers will be exported, that is those with tiles).
-- **Backups**: enable this in your project settings to automatically save extra copies of your project in a sub-folder.
-- **Crash backups**: if, for some reasons, LDtk crashes, it will backup your unsaved work automatically. Obviously, this works even if the backup setting isn't enabled.
+- **Backups**: automatically keep extra copies of your project in a sub-folder every time you save (enable backups in your project settings). **Important**: LDtk will *not* delete any of your old backups automatically. It's up to you to manage your backup files.
+- **Crash backups**: if, for some reasons, LDtk crashes, it will try to backup your unsaved work automatically. Obviously, this works even if the backup setting isn't enabled.
 - **Level background image**: each level can now have a custom background image (PNG, GIF or JPEG) that can be resized and aligned in various ways.
 - **New font**: replaced the often hard-to-read pixel font with a sleeker "Roboto" font (this change affects entity fields and floating level informations).
 - **For game devs**: a **Json schema** file is now directly generated from source code. It's available on [LDtk.io/json](https://ldtk.io/json) and contains a schema following Draft 7 standard from [Json-schema.org](https://json-schema.org/). This file describes all fields from LDtk json files (value types and descriptions). The great thing about JSON schema is that it allows **JSON "parser" generation** using *QuickType*. That's right: you can now generate Rust, C#, JS or Python parsers easily, right from the file format.
