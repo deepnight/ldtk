@@ -4,6 +4,7 @@ private enum SavingState {
 	InQueue;
 	BeforeSavingActions;
 	AutoLayers;
+	Backup;
 	SavingMainFile;
 	SavingExternLevels;
 	SavingLayerImages;
@@ -29,20 +30,6 @@ class ProjectSaving extends dn.Process {
 		project.garbageCollectUnusedImages();
 		beginState(InQueue);
 		updateState();
-
-		/**
-			Steps:
-			- call BeforeSaving event
-			- wait for other operations if any
-			- check autolayer cache anomalies
-			- save main project json
-			- init project dir if needed
-			- save level jsons
-			- save layer PNGs
-			- export Tiled
-			- clean up dirs
-			- notify
-		**/
 	}
 
 	override function onDispose() {
@@ -77,10 +64,27 @@ class ProjectSaving extends dn.Process {
 			case AutoLayers:
 				if( hasEditor() ) { // TODO support this without an Editor?
 					logState();
-					Editor.ME.checkAutoLayersCache( (anyChange)->beginState(SavingMainFile) );
+					Editor.ME.checkAutoLayersCache( (anyChange)->beginState(Backup) );
 				}
 				else
-					beginState(SavingMainFile);
+					beginState(Backup);
+
+			case Backup:
+				var backupDir = project.getAbsExternalFilesDir() + "/backups";
+				if( project.backupOnSave ) {
+					logState();
+					if( !JsTools.fileExists(backupDir) )
+						JsTools.createDirs(backupDir);
+
+					// Save a duplicate in backups folder
+					var fp = dn.FilePath.fromDir(backupDir);
+					fp.fileName = project.filePath.fileName+"-"+DateTools.format(Date.now(), "%Y-%m-%d--%H:%M:%S");
+					fp.extension = Const.FILE_EXTENSION;
+					var savingData = prepareProjectSavingData(project, true);
+					JsTools.writeFileString(fp.full, savingData.projectJson);
+				}
+
+				beginState(SavingMainFile);
 
 			case SavingMainFile:
 				logState();
@@ -99,8 +103,6 @@ class ProjectSaving extends dn.Process {
 				var levelDir = project.getAbsExternalFilesDir();
 				if( JsTools.fileExists(levelDir) )
 					JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
-				else
-					JsTools.createDirs(levelDir);
 
 				if( project.externalLevels ) {
 					logState();
@@ -234,6 +236,8 @@ class ProjectSaving extends dn.Process {
 					beginState(AutoLayers);
 
 			case AutoLayers:
+
+			case Backup:
 
 			case SavingMainFile:
 

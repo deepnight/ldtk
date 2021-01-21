@@ -522,6 +522,14 @@ class JsTools {
 			}
 	}
 
+	public static function copyFile(from:String, to:String) {
+		if( !fileExists(from) )
+			return;
+		App.LOG.fileOp('Copying $from -> $to...');
+		js.node.Require.require("fs");
+		(cast js.node.Fs).copyFileSync(from, to);
+	}
+
 	public static function removeDir(path:String) {
 		if( !fileExists(path) )
 			return;
@@ -561,6 +569,14 @@ class JsTools {
 			if( js.node.Fs.lstatSync(fp.full).isFile() && ( onlyExts==null || extMap.exists(fp.extension) ) )
 				js.node.Fs.unlinkSync(fp.full);
 		}
+	}
+
+	public static function readDir(path:String) : Array<String> {
+		if( !fileExists(path) )
+			return [];
+
+		js.node.Require.require("fs");
+		return js.node.Fs.readdirSync(path);
 	}
 
 	public static function getExeDir() {

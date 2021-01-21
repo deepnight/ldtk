@@ -25,6 +25,7 @@ class Project {
 	public var externalLevels = false;
 	public var exportTiled = false;
 	public var exportPng = false;
+	public var backupOnSave = false;
 
 	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
 
@@ -104,6 +105,7 @@ class Project {
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
 		p.exportPng = JsonTools.readBool( json.exportPng, false );
+		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
@@ -135,6 +137,7 @@ class Project {
 			externalLevels: externalLevels,
 			exportTiled: exportTiled,
 			exportPng: exportPng,
+			backupOnSave: backupOnSave,
 			worldLayout: JsonTools.writeEnum(worldLayout, false),
 			worldGridWidth: worldGridWidth,
 			worldGridHeight: worldGridHeight,

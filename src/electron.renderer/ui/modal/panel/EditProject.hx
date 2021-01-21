@@ -41,6 +41,7 @@ class EditProject extends ui.modal.Panel {
 	}
 
 	function updateProjectForm() {
+		ui.Tip.clear();
 		var jForm = jContent.find("ul.form:first");
 
 		// File extension
@@ -60,6 +61,13 @@ class EditProject extends ui.modal.Panel {
 				N.error(L.t._("Couldn't rename project file!"));
 			}
 		}
+
+		// Backups
+		var i = Input.linkToHtmlInput( project.backupOnSave, jForm.find("#backup") );
+		i.linkEvent(ProjectSettingsChanged);
+		var jLocate = i.jInput.siblings(".locate").empty();
+		if( project.backupOnSave )
+			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/backups", false) );
 
 		// Json minifiying
 		var i = Input.linkToHtmlInput( project.minifyJson, jForm.find("[name=minify]") );

@@ -30,6 +30,7 @@ This is the root of any Project JSON file. It contains:
 
 Value | Type | Description
 -- | -- | --
+`backupOnSave`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, an extra copy of the project will be created in a sub folder, when saving.
 `bgColor` | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Project background color
 `defaultGridSize`<br/><sup class="internal">*Internal editor data*</sup> | Int | Default grid size for new layers
 `defaultLevelBgColor`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Default background color of levels

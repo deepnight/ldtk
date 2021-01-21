@@ -8,6 +8,7 @@
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - and a definition object (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
 		"required": [
+			"backupOnSave",
 			"bgColor",
 			"defaultGridSize",
 			"defaultLevelBgColor",
@@ -24,6 +25,12 @@
 			"worldGridWidth"
 		],
 		"properties": {
+			"backupOnSave": {
+				"description": "If TRUE, an extra copy of the project will be created in a sub folder, when saving.",
+				"type": [
+					"boolean"
+				]
+			},
 			"worldGridWidth": {
 				"description": "Width of the world grid in pixels.",
 				"type": [
