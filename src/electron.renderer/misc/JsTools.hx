@@ -785,16 +785,19 @@ class JsTools {
 		});
 
 		// Existing image assets
-		var jRecall = new J('<button class="recall"> <span class="icon expand"/> </button>');
-		jRecall.appendTo(jWrapper);
-		jRecall.click( (ev:js.jquery.Event)->{
-			var ctx = new ui.modal.ContextMenu();
-			ctx.positionNear(jRecall);
-			for( relPath in Editor.ME.project.getAllExternalImages() )
-				ctx.add(L.untranslated(dn.FilePath.extractFileWithExt(relPath)), ()->{
-					_pickImage(relPath);
-				});
-		});
+		var allImages = Editor.ME.project.getAllExternalImages();
+		if( allImages.length>0 ) {
+			var jRecall = new J('<button class="recall"> <span class="icon expand"/> </button>');
+			jRecall.appendTo(jWrapper);
+			jRecall.click( (ev:js.jquery.Event)->{
+				var ctx = new ui.modal.ContextMenu();
+				ctx.positionNear(jRecall);
+				for( relPath in allImages )
+					ctx.add(L.untranslated(dn.FilePath.extractFileWithExt(relPath)), ()->{
+						_pickImage(relPath);
+					});
+			});
+		}
 
 		// Button label
 		if( curRelPath!=null ) {
