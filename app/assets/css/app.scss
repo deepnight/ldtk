@@ -3038,9 +3038,9 @@ canvas#webgl {
 
 			.buttons {
 				margin: 0;
-				// button {
-				// 	font-size: 9pt;
-				// }
+				.small {
+					flex: 0 1 0px;
+				}
 			}
 
 			.changelogsWrapper {
