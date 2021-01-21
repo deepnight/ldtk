@@ -6,6 +6,7 @@ json_doc.xml
 *.map
 *.zip
 
+backups/
 quicktype/
 dump/
 res/.tmp
