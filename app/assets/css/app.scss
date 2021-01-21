@@ -1753,6 +1753,7 @@ textarea {
 
 			color: #acb8d1;
 
+
 			strong {
 				color: white;
 			}
@@ -2945,6 +2946,7 @@ canvas#webgl {
 						font-weight: bold;
 						overflow: hidden;
 						width: 100%;
+						white-space: nowrap;
 						text-overflow: ellipsis;
 					}
 					.path {
