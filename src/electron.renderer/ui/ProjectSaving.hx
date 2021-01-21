@@ -222,7 +222,20 @@ class ProjectSaving extends dn.Process {
 			+ "__" + DateTools.format(Date.now(), "%Y-%m-%d__%H-%M-%S")
 			+ ( extraSuffix==null ? "" : "__" + extraSuffix )
 			+ Const.BACKUP_NAME_SUFFIX+"."+Const.FILE_EXTENSION;
+	}
 
+	public static function makeOriginalPathFromBackup(backupAbsPath:String) : Null<dn.FilePath> {
+		var fp = dn.FilePath.fromFile(backupAbsPath);
+		var reg = ~/^(.*?)__[0-9\-]+__[0-9\-]+/gi;
+		if( !reg.match(fp.fileName) )
+			return null;
+		else {
+			var out = fp.clone();
+			out.removeLastDirectory();
+			out.removeLastDirectory();
+			out.fileName = reg.matched(1);
+			return out;
+		}
 	}
 
 	function complete(success:Bool) {

@@ -209,38 +209,39 @@ class Editor extends Page {
 		project.tidy();
 
 		if( project.isBackup() ) {
-			setPermanentNotification("backup", L.t._("This file is a BACKUP file: external files such as images and tilesets might be unavailable, as the backup isn't stored in the same location as the original file. Click on this message to locate the backup file."), ()->{
-				JsTools.exploreToFile(project.filePath.full, true);
+			setPermanentNotification("backup", L.t._("This file is a BACKUP: some external files such as images and tilesets are temporarily unavailable, but that's normal. The backup project file isn't stored in the same location as the original file. Click on this message to RESTORE this backup."), ()->{
+				onBackupRestore();
 			});
 		}
 		else
 			setPermanentNotification("backup");
 
 		// Check external enums
-		for( relPath in project.defs.getExternalEnumPaths() ) {
-			if( !JsTools.fileExists( project.makeAbsoluteFilePath(relPath) ) ) {
-				// File not found
-				new ui.modal.dialog.LostFile(relPath, function(newAbsPath) {
-					var newRel = project.makeRelativeFilePath(newAbsPath);
-					if( project.remapExternEnums(relPath, newRel) )
-						Editor.ME.ge.emit( EnumDefChanged );
-					importer.HxEnum.load(newRel, true);
-					needSaving = true;
-				});
+		if( !project.isBackup() )
+			for( relPath in project.defs.getExternalEnumPaths() ) {
+				if( !JsTools.fileExists( project.makeAbsoluteFilePath(relPath) ) ) {
+					// File not found
+					new ui.modal.dialog.LostFile(relPath, function(newAbsPath) {
+						var newRel = project.makeRelativeFilePath(newAbsPath);
+						if( project.remapExternEnums(relPath, newRel) )
+							Editor.ME.ge.emit( EnumDefChanged );
+						importer.HxEnum.load(newRel, true);
+						needSaving = true;
+					});
+				}
+				else {
+					// Verify checksum
+					var f = JsTools.readFileString( project.makeAbsoluteFilePath(relPath) );
+					var checksum = haxe.crypto.Md5.encode(f);
+					for(ed in project.defs.getAllExternalEnumsFrom(relPath) )
+						if( ed.externalFileChecksum!=checksum ) {
+							new ui.modal.dialog.ExternalFileChanged(relPath, function() {
+								importer.HxEnum.load(relPath, true);
+							});
+							break;
+						}
+				}
 			}
-			else {
-				// Verify checksum
-				var f = JsTools.readFileString( project.makeAbsoluteFilePath(relPath) );
-				var checksum = haxe.crypto.Md5.encode(f);
-				for(ed in project.defs.getAllExternalEnumsFrom(relPath) )
-					if( ed.externalFileChecksum!=checksum ) {
-						new ui.modal.dialog.ExternalFileChanged(relPath, function() {
-							importer.HxEnum.load(relPath, true);
-						});
-						break;
-					}
-			}
-		}
 
 
 		curLevelId = project.levels[0].uid;
@@ -259,9 +260,10 @@ class Editor extends Page {
 
 		// Load tilesets
 		var tilesetChanged = false;
-		for(td in project.defs.tilesets)
-			if( reloadTileset(td, true) )
-				tilesetChanged = true;
+		if( !project.isBackup() )
+			for(td in project.defs.tilesets)
+				if( reloadTileset(td, true) )
+					tilesetChanged = true;
 
 		ge.emit(ProjectSelected);
 
@@ -1014,18 +1016,7 @@ class Editor extends Page {
 		// Check crash backups
 		if( project.isBackup() ) {
 			needSaving = true;
-			new ui.modal.dialog.Confirm(
-				Lang.t._("This file seems to be a BACKUP. Do you want to save your changes to the original file instead?"),
-				()->{
-					// Remove backup
-					JsTools.removeFile(project.filePath.full);
-					App.ME.unregisterRecentProject(project.filePath.full);
-					// Save
-					project.filePath.parseFilePath( StringTools.replace(project.filePath.full, Const.BACKUP_NAME_SUFFIX, "") );
-					updateTitle();
-					onSave(bypasses, onComplete);
-				}
-			);
+			onBackupRestore();
 			return;
 		}
 
@@ -1047,6 +1038,39 @@ class Editor extends Page {
 			if( onComplete!=null )
 				onComplete();
 		});
+	}
+
+	function onBackupRestore() {
+		new ui.modal.dialog.Confirm(
+			Lang.t._("Do you want to want to RESTORE this backup?"),
+			()->{
+				var original = ui.ProjectSaving.makeOriginalPathFromBackup(project.filePath.full);
+				if( !JsTools.fileExists(original.full) ) {
+					// Project not found
+					new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the corresponding project file."));
+				}
+				else {
+					new ui.modal.dialog.Confirm( // extra confirmation
+						Lang.t._("WARNING: I will REPLACE the original project file with this backup. Are you sure?"),
+						true,
+						()->{
+							App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
+							var original = ui.ProjectSaving.makeOriginalPathFromBackup(project.filePath.full);
+							// Remove backup
+							JsTools.removeFile(project.filePath.full);
+							App.ME.unregisterRecentProject(project.filePath.full);
+
+							// Save upon original
+							App.LOG.fileOp('Backup original: ${original.full}...');
+							project.filePath = original.clone();
+							setPermanentNotification("backup");
+							onSave();
+							selectProject(project);
+						}
+					);
+				}
+			}
+		);
 	}
 
 	inline function shouldLogEvent(e:GlobalEvent) {
