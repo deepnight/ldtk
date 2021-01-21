@@ -37,6 +37,8 @@ class DebugMenu extends ui.modal.ContextMenu {
 		});
 
 		add(L.untranslated("Emulate new update"), ()->{
+			App.ME.settings.lastKnownVersion = null;
+			App.ME.saveSettings();
 			dn.electron.ElectronUpdater.emulate();
 		});
 
