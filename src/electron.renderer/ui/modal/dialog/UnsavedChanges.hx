@@ -1,7 +1,7 @@
 package ui.modal.dialog;
 
 class UnsavedChanges extends ui.modal.Dialog {
-	public function new(?target:js.jquery.JQuery, after:Void->Void) {
+	public function new(?target:js.jquery.JQuery, after:Void->Void, ?onCancel:Void->Void) {
 		super(target, "unsavedChanges");
 
 		jContent.text( L.t._("Do you want to save before leaving?") );
@@ -11,6 +11,6 @@ class UnsavedChanges extends ui.modal.Dialog {
 			Editor.ME.onSave(after);
 		});
 		addButton(L.t._("No"), after);
-		addCancel();
+		addCancel( onCancel );
 	}
 }

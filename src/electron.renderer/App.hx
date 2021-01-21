@@ -125,9 +125,9 @@ class App extends dn.Process {
 			bt.append('<strong>Install update</strong>');
 			bt.append('<em>Version ${info.version}</em>');
 			bt.click(function(_) {
+				bt.hide();
 				function applyUpdate() {
 					LOG.general("Installing update");
-					bt.remove();
 
 					loadPage( ()->new page.Updating() );
 					delayer.addS(function() {
@@ -136,7 +136,7 @@ class App extends dn.Process {
 				}
 
 				if( Editor.ME!=null && Editor.ME.needSaving )
-					new ui.modal.dialog.UnsavedChanges(applyUpdate);
+					new ui.modal.dialog.UnsavedChanges(applyUpdate, ()->bt.show());
 				else
 					applyUpdate();
 			});
