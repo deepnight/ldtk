@@ -1,4 +1,8 @@
-# 0.7.0 - Last one before 1.0!
+# 0.7.0 - Getting serious
+
+This update features many important changes to make LDtk **production ready** and **future proof**. These changes will allow better support for large projects, better API creation and maintenance, and smoother user adoption.
+
+**We are getting really close to 1.0!**
 
 - **New APIs**: LDtk JSON files can now be easily parsed in many languages, including **C#**, **Python**, **Rust**, **C++**, **Javascript**, using QuickType.io generator. These parsers are based on latest JSON schema file (see below) and are super easy to keep updated. You can check [existing APIs on the LDtk website](https://ldtk.io/api/).
 - **Separate level files**: a much needed feature to reduce JSON size and optimize parsing times! There is now an option in Project panel (press `F1`) to enable "Separate level files".
