@@ -196,7 +196,14 @@ class WorldRender extends dn.Process {
 				continue;
 
 			e.label.alpha = M.fmin( (camera.adjustedZoom-minZoom)/minZoom, 1 );
-			e.label.setScale( M.fmin( 0.8*l.pxWid / e.label.width, 1/camera.adjustedZoom ) );
+			switch project.worldLayout {
+				case Free, GridVania:
+					e.label.setScale( M.fmin( 0.8*l.pxWid / e.label.width, 1/camera.adjustedZoom ) );
+
+				case LinearHorizontal, LinearVertical:
+					e.label.setScale( 1/camera.adjustedZoom );
+			}
+
 			switch project.worldLayout {
 				case Free, GridVania:
 					e.label.x = Std.int( l.worldX + l.pxWid*0.5 - e.label.width*e.label.scaleX*0.5 );
@@ -463,6 +470,7 @@ class WorldRender extends dn.Process {
 		// Identifier
 		wl.label.color.setColor( C.addAlphaF(0x464e79) );
 		wl.label.alpha = 0.8;
+
 
 		var tf = new h2d.Text(Assets.fontLight_large, wl.label);
 		tf.text = l.identifier;
