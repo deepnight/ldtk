@@ -110,16 +110,14 @@ class Home extends Page {
 
 		var recents = App.ME.settings.recentProjects.copy();
 
-		// Automatically detects crash backups
+		// Automatically detects backups
 		var i = 0;
 		while( i<recents.length ) {
 			var fp = dn.FilePath.fromFile(recents[i]);
-			var crash = fp.clone();
-			crash.fileName+=Const.BACKUP_NAME_SUFFIX;
-			if( !App.ME.recentProjectsContains(crash.full) && JsTools.fileExists(crash.full) ) {
-				recents.insert(i+1, crash.full);
-				// i++;
-			}
+			var backup = fp.clone();
+			backup.fileName+=Const.BACKUP_NAME_SUFFIX;
+			if( !App.ME.recentProjectsContains(backup.full) && JsTools.fileExists(backup.full) )
+				recents.insert(i+1, backup.full);
 			i++;
 		}
 
@@ -179,7 +177,7 @@ class Home extends Page {
 		C.initUniqueColors(12, uniqueColorMix);
 		while( i>=0 ) {
 			var filePath = recents[i];
-			var isCrashFile = filePath.indexOf( Const.BACKUP_NAME_SUFFIX )>=0;
+			var isBackupFile = filePath.indexOf( Const.BACKUP_NAME_SUFFIX )>=0;
 			var li = new J('<li/>');
 			li.appendTo(jRecentFiles);
 
@@ -205,7 +203,7 @@ class Home extends Page {
 			if( !JsTools.fileExists(filePath) )
 				li.addClass("missing");
 
-			if( isCrashFile )
+			if( isBackupFile )
 				li.addClass("crash");
 
 			ui.modal.ContextMenu.addTo(li, [
@@ -221,15 +219,15 @@ class Home extends Page {
 				},
 				{
 					label: L.t._("Remove from history"),
-					cond: ()->!isCrashFile,
+					cond: ()->!isBackupFile,
 					cb: ()->{
 						App.ME.unregisterRecentProject(filePath);
 						updateRecents();
 					}
 				},
 				{
-					label: L.t._("Delete this crash backup file"),
-					cond: ()->isCrashFile,
+					label: L.t._("Delete this BACKUP file"),
+					cond: ()->isBackupFile,
 					cb: ()->{
 						JsTools.removeFile(filePath);
 						App.ME.unregisterRecentProject(filePath);
