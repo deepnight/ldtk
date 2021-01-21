@@ -82,10 +82,7 @@ class CrashReport extends Page {
 			if( unsavedProject!=null ) {
 				try {
 					// Build file name & path
-					var fp = dn.FilePath.fromFile(projectFilePath);
-					fp.appendDirectory(fp.fileName);
-					fp.appendDirectory("backups");
-					fp.fileWithExt = ui.ProjectSaving.makeBackupFileName(fp.fileName, "crash");
+					var fp = ui.ProjectSaving.makeBackupFilePath(unsavedProject, "crash");
 
 					// Init dirs
 					if( !JsTools.fileExists(fp.directory) )

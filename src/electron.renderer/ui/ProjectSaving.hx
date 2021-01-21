@@ -73,12 +73,12 @@ class ProjectSaving extends dn.Process {
 				var backupDir = project.getAbsExternalFilesDir() + "/backups";
 				if( project.backupOnSave ) {
 					logState();
-					if( !JsTools.fileExists(backupDir) )
-						JsTools.createDirs(backupDir);
+					var fp = ProjectSaving.makeBackupFilePath(project);
+
+					if( !JsTools.fileExists(fp.directory) )
+						JsTools.createDirs(fp.directory);
 
 					// Save a duplicate in backups folder
-					var fp = dn.FilePath.fromDir(backupDir);
-					fp.fileWithExt = makeBackupFileName(project.filePath.fileName);
 					var savingData = prepareProjectSavingData(project, true);
 					JsTools.writeFileString(fp.full, savingData.projectJson);
 				}
@@ -217,24 +217,40 @@ class ProjectSaving extends dn.Process {
 		}
 	}
 
-	public static function makeBackupFileName(baseFileName:String, ?extraSuffix:String) {
-		return baseFileName
-			+ "__" + DateTools.format(Date.now(), "%Y-%m-%d__%H-%M-%S")
+	public static function makeBackupFilePath(project:data.Project, ?extraSuffix:String) {
+		var fp = project.filePath.clone();
+		if( project.isBackup() ) {
+			// Start from original project file
+			fp = makeOriginalPathFromBackup(fp.full);
+			if( fp==null )
+				return null;
+		}
+		fp.appendDirectory(fp.fileName);
+		fp.appendDirectory("backups");
+		fp.fileName +=
+			"___" + DateTools.format(Date.now(), "%Y-%m-%d__%H-%M-%S")
 			+ ( extraSuffix==null ? "" : "__" + extraSuffix )
-			+ Const.BACKUP_NAME_SUFFIX+"."+Const.FILE_EXTENSION;
+			+ Const.BACKUP_NAME_SUFFIX;
+		trace("backup = "+fp);
+
+		return fp;
+		// return baseFileName
+		// 	+ "___" + DateTools.format(Date.now(), "%Y-%m-%d__%H-%M-%S")
+		// 	+ ( extraSuffix==null ? "" : "__" + extraSuffix )
+			// + Const.BACKUP_NAME_SUFFIX+"."+Const.FILE_EXTENSION;
 	}
 
 	public static function makeOriginalPathFromBackup(backupAbsPath:String) : Null<dn.FilePath> {
 		var fp = dn.FilePath.fromFile(backupAbsPath);
-		var reg = ~/^(.*?)__[0-9\-]+__[0-9\-]+/gi;
+		var reg = ~/^(.*?)___[0-9\-]+__[0-9\-]+/gi;
 		if( !reg.match(fp.fileName) )
 			return null;
 		else {
-			var out = fp.clone();
-			out.removeLastDirectory();
-			out.removeLastDirectory();
-			out.fileName = reg.matched(1);
-			return out;
+			fp.removeLastDirectory();
+			fp.removeLastDirectory();
+			fp.fileName = reg.matched(1);
+			trace("original = "+fp);
+			return fp;
 		}
 	}
 
