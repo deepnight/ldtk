@@ -12,6 +12,7 @@
 - **For game devs**: a **Json schema** file is now directly generated from source code. It's available on [LDtk.io/json](https://ldtk.io/json) and contains a schema following Draft 7 standard from [Json-schema.org](https://json-schema.org/). This file describes all fields from LDtk json files (value types and descriptions). The great thing about JSON schema is that it allows **JSON "parser" generation** using *QuickType*. That's right: you can now generate Rust, C#, JS or Python parsers easily, right from the file format.
 - **HaxeFlixel support**: the HaxeFlixel game framework has been added to the official [LDtk Haxe API](https://github.com/deepnight/ldtk-haxe-api). You can now easily load and display a LDtk project in your game.
 - Moving your mouse cursor over a **Rule group** in an auto-layer will now reveal all layer cells affected by the rules in this group.
+- If the auto-layer rule panel is open, moving your mouse over the level will now also highlight rules affecting the current coordinate.
 - The [JSON documentation](https://ldtk.io/json) now shows clearly what parts are useful for game devs and what parts aren't (trying to make your dev life even easier!).
 - The app home now shows a **list of recently opened folders** along with recently opened project files.
 - Optimized the rule pattern editor to update less UI stuff when being edited.
