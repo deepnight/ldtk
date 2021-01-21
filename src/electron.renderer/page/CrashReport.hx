@@ -80,24 +80,32 @@ class CrashReport extends Page {
 			// Try to save
 			var jBackup = jContent.find(".backup");
 			if( unsavedProject!=null ) {
-				// Build file name & path
-				var fp = dn.FilePath.fromFile(projectFilePath);
-				fp.appendDirectory(fp.fileName);
-				fp.appendDirectory("backups");
-				fp.fileWithExt = ui.ProjectSaving.makeBackupFileName(fp.fileName, "crash");
+				try {
+					// Build file name & path
+					var fp = dn.FilePath.fromFile(projectFilePath);
+					fp.appendDirectory(fp.fileName);
+					fp.appendDirectory("backups");
+					fp.fileWithExt = ui.ProjectSaving.makeBackupFileName(fp.fileName, "crash");
 
-				// Init dirs
-				if( !JsTools.fileExists(fp.directory) )
-					JsTools.createDirs(fp.directory);
+					// Init dirs
+					if( !JsTools.fileExists(fp.directory) )
+						JsTools.createDirs(fp.directory);
 
-				// Save
-				var data = ui.ProjectSaving.prepareProjectSavingData(unsavedProject, true);
-				JsTools.writeFileString(fp.full, data.projectJson);
-				jBackup.html('I saved your current work in <a>${fp.fileWithExt}</a>.');
-				jBackup.find("a").click( (ev)->{
-					ev.preventDefault();
-					JsTools.exploreToFile(fp.full, true);
-				});
+					// Save
+					var data = ui.ProjectSaving.prepareProjectSavingData(unsavedProject, true);
+					JsTools.writeFileString(fp.full, data.projectJson);
+					jBackup.html('I saved your current work in <a>${fp.fileWithExt}</a>.');
+					jBackup.find("a").click( (ev)->{
+						ev.preventDefault();
+						JsTools.exploreToFile(fp.full, true);
+					});
+
+					// Register in recents
+					App.ME.registerRecentProject(fp.full);
+				}
+				catch(err:Dynamic) {
+					jBackup.html("I tried to save your current work in a backup file, but it failed (ERR: "+err+")");
+				}
 			}
 			else
 				jBackup.hide();
