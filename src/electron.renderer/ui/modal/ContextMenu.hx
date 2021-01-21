@@ -15,6 +15,8 @@ class ContextMenu extends ui.Modal {
 	public function new(?m:Coords, ?openEvent:js.jquery.Event) {
 		super();
 
+		if( ME!=null && !ME.destroyed )
+			ME.destroy();
 		ME = this;
 
 		if( openEvent!=null ) {
