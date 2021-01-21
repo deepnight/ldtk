@@ -1055,7 +1055,7 @@ class Editor extends Page {
 						true,
 						()->{
 							App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
-							var original = ui.ProjectSaving.makeOriginalPathFromBackup(project.filePath.full);
+
 							// Remove backup
 							JsTools.removeFile(project.filePath.full);
 							App.ME.unregisterRecentProject(project.filePath.full);
