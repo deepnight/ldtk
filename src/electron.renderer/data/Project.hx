@@ -226,25 +226,6 @@ class Project {
 			level.tidy(this);
 	}
 
-	public function getAllExternalImages() : Array<String> {
-		var dones = new Map();
-		var all = [];
-
-		inline function _add(relPath) {
-			if( relPath!=null && !dones.exists(relPath) ) {
-				all.push(relPath);
-				dones.set(relPath,true);
-			}
-		}
-
-		for(l in levels)
-			_add(l.bgRelPath);
-
-		for(td in defs.tilesets)
-			_add(td.relPath);
-
-		return all;
-	}
 
 
 	/** CACHED IMAGES ************************************/
@@ -255,6 +236,7 @@ class Project {
 
 	public function reloadImage(relPath:String) {
 		if( isImageLoaded(relPath) ) {
+			App.LOG.add("cache", 'Reloading cached image $relPath...');
 			disposeImage(relPath);
 			getOrLoadImage(relPath);
 			return true;
@@ -263,8 +245,9 @@ class Project {
 			return false;
 	}
 
-	public function disposeImage(relPath:String) {
+	function disposeImage(relPath:String) {
 		if( isImageLoaded(relPath) ) {
+			App.LOG.add("cache", 'Disposing cached image $relPath...');
 			var img = imageCache.get(relPath);
 			img.base64 = null;
 			img.bytes = null;
@@ -278,12 +261,14 @@ class Project {
 		try {
 			if( !imageCache.exists(relPath) ) {
 				// Load it from the disk
+				App.LOG.add("cache", 'Caching image $relPath...');
 				var absPath = makeAbsoluteFilePath(relPath);
 				var bytes = misc.JsTools.readFileBytes(absPath);
 				var base64 = haxe.crypto.Base64.encode(bytes);
 				var pixels = dn.ImageDecoder.decodePixels(bytes);
 				var texture = h3d.mat.Texture.fromPixels(pixels);
 				imageCache.set( relPath, {
+					fileName: dn.FilePath.extractFileWithExt(relPath),
 					relPath: relPath,
 					bytes: bytes,
 					base64: base64,
@@ -296,6 +281,33 @@ class Project {
 		catch( e:Dynamic ) {
 			return null;
 		}
+	}
+
+
+	public function getAllCachedImages() {
+		var arr = Lambda.array(imageCache);
+		arr.sort( (a,b)->Reflect.compare( a.fileName.toLowerCase(), b.fileName.toLowerCase() ) );
+		return arr;
+	}
+
+	function isCachedImageUsed(img:data.DataTypes.CachedImage) {
+		for(l in levels)
+			if( l.bgRelPath==img.relPath )
+				return true;
+
+		for(td in defs.tilesets)
+			if( td.relPath==img.relPath )
+				return true;
+
+		return false;
+	}
+
+	public function garbageCollectUnusedImages() {
+		for( k in imageCache.keys() )
+			if( !isCachedImageUsed(imageCache.get(k)) ) {
+				App.LOG.add("cache", 'Garbaging unused image $k...');
+				disposeImage(k);
+			}
 	}
 
 

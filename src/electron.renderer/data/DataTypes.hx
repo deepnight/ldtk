@@ -62,6 +62,7 @@ enum FieldType {
 
 typedef CachedImage = {
 	var relPath: String;
+	var fileName: String;
 	var base64: String;
 	var bytes: haxe.io.Bytes;
 	var pixels: hxd.Pixels;

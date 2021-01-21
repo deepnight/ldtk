@@ -163,7 +163,6 @@ class TilesetDef {
 
 		// Load image
 		App.LOG.fileOp('Loading atlas image: $relFilePath...');
-		_project.disposeImage(relFilePath);
 		var img = _project.getOrLoadImage(relFilePath);
 		if( img==null ) {
 			App.LOG.error("Image loading failed");

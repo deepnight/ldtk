@@ -26,6 +26,7 @@ class ProjectSaving extends dn.Process {
 		QUEUE.push(this);
 
 		log("Preparing project saving...");
+		project.garbageCollectUnusedImages();
 		beginState(InQueue);
 		updateState();
 

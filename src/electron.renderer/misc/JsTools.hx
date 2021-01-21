@@ -785,16 +785,16 @@ class JsTools {
 		});
 
 		// Existing image assets
-		var allImages = Editor.ME.project.getAllExternalImages();
+		var allImages = Editor.ME.project.getAllCachedImages();
 		if( allImages.length>0 ) {
 			var jRecall = new J('<button class="recall"> <span class="icon expand"/> </button>');
 			jRecall.appendTo(jWrapper);
 			jRecall.click( (ev:js.jquery.Event)->{
 				var ctx = new ui.modal.ContextMenu();
 				ctx.positionNear(jRecall);
-				for( relPath in allImages )
-					ctx.add(L.untranslated(dn.FilePath.extractFileWithExt(relPath)), ()->{
-						_pickImage(relPath);
+				for( img in allImages )
+					ctx.add(L.untranslated(img.fileName), ()->{
+						_pickImage(img.relPath);
 					});
 			});
 		}
