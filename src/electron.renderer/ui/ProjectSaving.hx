@@ -78,8 +78,7 @@ class ProjectSaving extends dn.Process {
 
 					// Save a duplicate in backups folder
 					var fp = dn.FilePath.fromDir(backupDir);
-					fp.fileName = project.filePath.fileName+"__"+DateTools.format(Date.now(), "%Y-%m-%d__%H-%M-%S");
-					fp.extension = Const.BACKUP_NAME_SUFFIX+"."+Const.FILE_EXTENSION;
+					fp.fileWithExt = makeBackupFileName(project.filePath.fileName);
 					var savingData = prepareProjectSavingData(project, true);
 					JsTools.writeFileString(fp.full, savingData.projectJson);
 				}
@@ -216,6 +215,14 @@ class ProjectSaving extends dn.Process {
 				log('Saving complete (${project.filePath.fileWithExt})');
 				complete(true);
 		}
+	}
+
+	public static function makeBackupFileName(baseFileName:String, ?extraSuffix:String) {
+		return baseFileName
+			+ "__" + DateTools.format(Date.now(), "%Y-%m-%d__%H-%M-%S")
+			+ ( extraSuffix==null ? "" : "__" + extraSuffix )
+			+ Const.BACKUP_NAME_SUFFIX+"."+Const.FILE_EXTENSION;
+
 	}
 
 	function complete(success:Bool) {
