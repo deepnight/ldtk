@@ -15,7 +15,7 @@ class ProjectSaving extends dn.Process {
 	static var QUEUE : Array<ProjectSaving> = [];
 	var project : data.Project;
 	var state : SavingState;
-	var savingData : FileSavingData;
+	var savingData : Null<FileSavingData>;
 	var onComplete : Null< Bool->Void >;
 
 	public function new(p:dn.Process, project:data.Project, ?onComplete:(success:Bool)->Void) {
@@ -26,7 +26,6 @@ class ProjectSaving extends dn.Process {
 		QUEUE.push(this);
 
 		log("Preparing project saving...");
-		savingData = ui.ProjectSaving.prepareProjectSavingData(project);
 		beginState(InQueue);
 		updateState();
 
@@ -84,8 +83,13 @@ class ProjectSaving extends dn.Process {
 
 			case SavingMainFile:
 				logState();
+
+				log('  Preparing SavingData...');
+				savingData = ui.ProjectSaving.prepareProjectSavingData(project);
+
 				log('  Writing ${project.filePath.full}...');
 				JsTools.writeFileString(project.filePath.full, savingData.projectJson);
+
 				beginState(SavingExternLevels);
 
 

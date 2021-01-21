@@ -44,21 +44,22 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			case BeforeProjectSaving:
 				applyInvalidatedRulesInAllLevels();
 
-			case LayerRuleChanged(r), LayerRuleRemoved(r), LayerRuleAdded(r):
-				invalidateRule(r);
+			case LayerRuleChanged(r), LayerRuleAdded(r):
+				invalidateRuleAndOnesBelow(r);
 				updatePanel();
 
-			case LayerRuleGroupRemoved(rg):
-				for(r in rg.rules)
-					invalidateRule(r);
+			case LayerRuleRemoved(r): // invalidation is done before removal
+				updatePanel();
+
+			case LayerRuleGroupRemoved(rg): // invalidation is done before removal
 				updatePanel();
 
 			case LayerRuleGroupSorted:
 				// WARNING: enable invalidation if breakOnMatch finally exists
 
-				// for(rg in ld.autoRuleGroups)
-				// for(r in rg.rules)
-				// 	invalidateRule(r);
+				for(rg in ld.autoRuleGroups)
+				for(r in rg.rules)
+					invalidateRule(r);
 
 				updatePanel();
 
@@ -67,7 +68,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			case LayerRuleGroupChangedActiveState(rg):
 				for(r in rg.rules)
-					invalidateRule(r);
+					invalidateRuleAndOnesBelow(r);
 				updatePanel();
 
 			case LayerRuleGroupAdded, LayerRuleGroupChanged(_):
@@ -118,10 +119,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				// Run all rules
 				ops.push({
 					label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
-					cb: li.applyAllAutoLayerRules
+					cb: ()->{
+						li.applyAllAutoLayerRules();
+					}
 				});
 				affectedLayers.set(li,l);
-				editor.worldRender.invalidateLevel(l);
 			}
 			else {
 				var r = li.def.getRule(ruleUid);
@@ -130,33 +132,47 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						// Apply rule
 						ops.push({
 							label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
-							cb: li.applyAutoLayerRuleToAllLayer.bind(r, false),
+							cb: ()->{
+								li.applyAutoLayerRuleToAllLayer(r, false);
+							},
 						});
 						affectedLayers.set(li,l);
-						editor.worldRender.invalidateLevel(l);
 					}
 					else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
 						// Removed rule
 						ops.push({
 							label: 'Removing rule tiles #$ruleUid from ${l.identifier}',
-							cb: li.autoTilesCache.remove.bind(ruleUid),
+							cb: ()->{
+								li.autoTilesCache.remove(ruleUid);
+							}
 						});
 						affectedLayers.set(li,l);
-						editor.worldRender.invalidateLevel(l);
 					}
 				}
 			}
 		}
 
 		// Apply "break on match" cascading effect in changed layers
-		for(li in affectedLayers.keys())
+		var affectedLevels : Map<data.Level, Bool> = new Map();
+		for(li in affectedLayers.keys()) {
+			affectedLevels.set( affectedLayers.get(li), true );
 			ops.push({
 				label: 'Applying break on matches on ${affectedLayers.get(li).identifier}.${li.def.identifier}',
 				cb: li.applyBreakOnMatches.bind(),
 			});
+		}
 
-		if( ops.length>0 )
+		// Refresh world renders
+		for(l in affectedLevels.keys())
+			ops.push({
+				label: 'Refreshing world render for ${l.identifier}...',
+				cb: ()->editor.worldRender.invalidateLevel(l),
+			});
+
+		if( ops.length>0 ) {
+			App.LOG.general("Applying invalidated rules...");
 			new Progress(L.t._("Updating auto layers..."), 5, ops, editor.levelRender.renderAll);
+		}
 
 		invalidatedRules = new Map();
 	}
@@ -227,7 +243,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			editor.ge.emit(LayerRuleSeedChanged);
 			ld.iterateActiveRulesInEvalOrder( r->{
 				if( r.chance<1 || r.hasPerlin() )
-					invalidateRule(r);
+					invalidateRuleAndOnesBelow(r);
 			});
 		});
 
@@ -333,7 +349,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
 						editor.ge.emit( LayerRuleGroupAdded );
 						for(r in copy.rules)
-							invalidateRule(r);
+							invalidateRuleAndOnesBelow(r);
 					},
 				},
 				{
@@ -565,7 +581,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 							var copy = ld.duplicateRule(project, rg, r);
 							lastRule = copy;
 							editor.ge.emit( LayerRuleAdded(copy) );
-							invalidateRule(copy);
+							invalidateRuleAndOnesBelow(copy);
 						},
 					},
 					{
@@ -619,6 +635,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		new ui.modal.dialog.Confirm(Lang.t._("Confirm this action?"), true, function() {
 			new LastChance(Lang.t._("Rule group removed"), project);
 			App.LOG.general("Deleted rule group "+rg.name);
+			for(r in rg.rules)
+				invalidateRuleAndOnesBelow(r);
 			ld.removeRuleGroup(rg);
 			editor.ge.emit( LayerRuleGroupRemoved(rg) );
 		});
@@ -627,6 +645,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	function deleteRule(rg:AutoLayerRuleGroup, r:data.def.AutoLayerRuleDef) {
 		new ui.modal.dialog.Confirm( Lang.t._("Warning, this cannot be undone!"), true, function() {
 			App.LOG.general("Deleted rule "+r);
+			invalidateRuleAndOnesBelow(r);
 			rg.rules.remove(r);
 			editor.ge.emit( LayerRuleRemoved(r) );
 		});
