@@ -103,6 +103,8 @@ class TilesetDef {
 
 
 	public static function fromJson(p:Project, json:ldtk.Json.TilesetDefJson) {
+		if( (cast json).path!=null ) json.relPath = (cast json).path;
+
 		var td = new TilesetDef( p, JsonTools.readInt(json.uid) );
 		td.tileGridSize = JsonTools.readInt(json.tileGridSize, Project.DEFAULT_GRID_SIZE);
 		td.spacing = JsonTools.readInt(json.spacing, 0);

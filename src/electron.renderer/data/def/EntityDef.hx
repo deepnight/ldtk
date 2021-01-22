@@ -65,6 +65,8 @@ class EntityDef {
 	// }
 
 	public static function fromJson(p:Project, json:ldtk.Json.EntityDefJson) {
+		if( (cast json).name!=null ) json.identifier = (cast json).name;
+
 		var o = new EntityDef( JsonTools.readInt(json.uid) );
 		o.identifier = JsonTools.readString( json.identifier );
 		o.width = JsonTools.readInt( json.width, 16 );

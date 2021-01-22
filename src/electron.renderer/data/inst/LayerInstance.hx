@@ -180,6 +180,8 @@ class LayerInstance {
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.LayerInstanceJson) {
+		if( (cast json).layerDefId!=null ) json.layerDefUid = (cast json).layerDefId;
+
 		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
 		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
@@ -189,7 +191,7 @@ class LayerInstance {
 			li.intGrid.set( intGridJson.coordId, intGridJson.v );
 
 		for( gridTilesJson in json.gridTiles ) {
-			if( dn.Version.lower(p.jsonVersion, "0.4") )
+			if( dn.Version.lower(p.jsonVersion, "0.4") || gridTilesJson.d==null )
 				gridTilesJson.d = [ (cast gridTilesJson).coordId, (cast gridTilesJson).tileId ];
 
 			if( dn.Version.lower(p.jsonVersion, "0.6") )

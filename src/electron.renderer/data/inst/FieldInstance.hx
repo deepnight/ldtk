@@ -30,6 +30,8 @@ class FieldInstance {
 	}
 
 	public static function fromJson(project:Project, json:ldtk.Json.FieldInstanceJson) {
+		if( (cast json).defId!=null ) json.defUid = (cast json).defId;
+
 		var o = new FieldInstance( project, JsonTools.readInt(json.defUid) );
 		o.internalValues = [];
 		if( json.realEditorValues!=null ) {

@@ -54,9 +54,11 @@ class EntityInstance {
 	}
 
 	public static function fromJson(project:Project, json:ldtk.Json.EntityInstanceJson) {
-		// Convert old coordinates
-		if( (cast json).x!=null )
+		if( (cast json).x!=null ) // Convert old coordinates
 			json.px = [ JsonTools.readInt( (cast json).x, 0 ), JsonTools.readInt((cast json).y,0) ];
+
+		if( (cast json).defId!=null ) json.defUid = (cast json).defId;
+
 
 		var ei = new EntityInstance(project, JsonTools.readInt(json.defUid));
 		ei.x = JsonTools.readInt( json.px[0], 0 );

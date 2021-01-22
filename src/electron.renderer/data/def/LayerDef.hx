@@ -46,6 +46,8 @@ class LayerDef {
 	}
 
 	public static function fromJson(jsonVersion:String, json:ldtk.Json.LayerDefJson) {
+		if( (cast json).tilesetDefId!=null ) json.tilesetDefUid = (cast json).tilesetDefId;
+
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(ldtk.Json.LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);

@@ -64,6 +64,7 @@ class FieldDef {
 
 	public static function fromJson(p:Project, json:ldtk.Json.FieldDefJson) {
 		if( (cast json.type)=="F_File" ) json.type = cast "F_Path"; // patch old type name
+		if( (cast json).name!=null ) json.identifier = (cast json).name;
 
 		var type = JsonTools.readEnum(data.DataTypes.FieldType, json.type, false);
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), type, JsonTools.readBool(json.isArray, false) );
@@ -79,6 +80,7 @@ class FieldDef {
 		o.regex = JsonTools.unescapeString( json.regex );
 		o.acceptFileTypes = json.acceptFileTypes==null ? null : JsonTools.readArray(json.acceptFileTypes);
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
+
 		return o;
 	}
 
