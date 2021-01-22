@@ -20,6 +20,7 @@
 	"exportTiled": false,
 	"exportPng": false,
 	"backupOnSave": false,
+	"backupLimit": 10,
 	"worldLayout": "GridVania",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,

@@ -20,6 +20,7 @@
 	"exportTiled": false,
 	"exportPng": false,
 	"backupOnSave": false,
+	"backupLimit": 10,
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 240,
 	"worldGridHeight": 240,
