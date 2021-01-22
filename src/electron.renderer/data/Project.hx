@@ -56,7 +56,7 @@ class Project {
 	}
 
 	public inline function isBackup() {
-		return filePath.fileWithExt.indexOf( Const.BACKUP_NAME_SUFFIX ) >= 0;
+		return ui.ProjectSaving.isBackupFile(filePath.full);
 	}
 
 	public function makeRelativeFilePath(absPath:String) {

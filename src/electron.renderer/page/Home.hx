@@ -206,6 +206,28 @@ class Home extends Page {
 			if( isBackupFile )
 				li.addClass("crash");
 
+			// Backups button
+			if( ui.ProjectSaving.hasBackupFiles(filePath) ) {
+				N.debug(filePath);
+				var all = ui.ProjectSaving.listBackupFiles(filePath);
+				if( all.length>0 ) {
+					var jBackups = new J('<button class="backups gray"/>');
+					jBackups.appendTo(li);
+					jBackups.append('<span class="icon history"/>');
+					jBackups.click( (ev:js.jquery.Event)->{
+						ev.stopPropagation();
+						// List all backup files
+						var ctx = new ui.modal.ContextMenu(ev);
+						for( b in all )
+							ctx.add(
+								Lang.relativeDate(b.date),
+								Lang.date(b.date),
+								()->App.ME.loadProject(b.backup.full)
+							);
+					});
+				}
+			}
+
 			ui.modal.ContextMenu.addTo(li, [
 				{
 					label: L.t._("Load from this folder"),

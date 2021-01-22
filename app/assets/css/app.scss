@@ -1811,15 +1811,23 @@ textarea {
 			grid-auto-rows: auto;
 
 			button {
-				background-color: $bgDark;
+				display: block;
 				margin: 0;
 				padding: 8px 20px;
 				font-size: 10pt;
 				color: $orange;
 				text-align: left;
+				background-color: $bgDark;
 				&:hover {
 					background-color: $orange;
 					color: black;
+				}
+				.sub {
+					display: block;
+					margin-top: 2px;
+					text-transform: none;
+					color: $bgLighter;
+					font-size: 9pt;
 				}
 			}
 			button+button {
@@ -2921,7 +2929,7 @@ canvas#webgl {
 		.files {
 			display: grid;
 			grid-template-rows: min-content auto;
-			grid-template-columns: 0.45fr 0.55fr;
+			grid-template-columns: 0.5fr 0.5fr;
 			gap: 8px;
 			height: 100%;
 			overflow: hidden;
@@ -2967,7 +2975,7 @@ canvas#webgl {
 				li {
 					display: grid;
 					overflow: hidden;
-					grid-template-columns: auto min-content;
+					grid-template-columns: auto min-content min-content;
 					grid-template-rows: auto auto;
 
 					&.missing .fileName {
@@ -3008,9 +3016,17 @@ canvas#webgl {
 						}
 					}
 
-					button.context {
+					button.backups {
 						grid-column: 2/3;
 						grid-row: 1/3;
+						padding: 0 2px;
+						align-self: stretch;
+					}
+
+					button.context {
+						grid-column: 3/4;
+						grid-row: 1/3;
+						align-self: stretch;
 					}
 
 					&:first-of-type {

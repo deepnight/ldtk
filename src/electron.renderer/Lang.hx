@@ -93,4 +93,36 @@ class Lang {
                 Lang.t._("Tileset image \"::name::\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { name:name } );
         }
     }
+
+
+    static var MONTHS = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+    public static function date(date:Date) : LocaleString {
+        var day = date.getDate();
+        return untranslated(
+            MONTHS[ date.getMonth()+1 ]
+            +" " + day + ( day==1?"st" : day==2?"nd" : day==3?"rd" : "th" )
+            +" " + date.getFullYear()
+            +" "+t._("at")
+            +' ${dn.Lib.leadingZeros(date.getHours())}:${dn.Lib.leadingZeros(date.getMinutes())}'
+        );
+    }
+
+    public static function relativeDate(d:Date) : LocaleString {
+        var deltaS = Std.int( ( Date.now().getTime() - d.getTime() ) / 1000 );
+        if( deltaS<0 )
+            return date(d);
+
+        if( deltaS<60 )
+            return '$deltaS seconds ago';
+        else if( deltaS<60*60 ) {
+            var m = Std.int( deltaS/60 );
+            return m<=1 ? '1 minute ago' : '$m minutes ago';
+        }
+        else if( deltaS<60*60*24 ) {
+            var h = Std.int( deltaS / (60*60) );
+            return h<=1 ? '1 hour ago' : '$h hours ago';
+        }
+        else
+            return date(d);
+    }
 }

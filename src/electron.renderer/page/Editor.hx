@@ -208,6 +208,8 @@ class Editor extends Page {
 		project = p;
 		project.tidy();
 
+		var all = ui.ProjectSaving.listBackupFiles(project.filePath.full);
+
 		if( project.isBackup() ) {
 			setPermanentNotification("backup", L.t._("This file is a BACKUP: some external files such as images and tilesets are temporarily unavailable, but that's normal. The backup project file isn't stored in the same location as the original file. Click on this message to RESTORE this backup."), ()->{
 				onBackupRestore();
@@ -1055,10 +1057,6 @@ class Editor extends Page {
 						true,
 						()->{
 							App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
-
-							// Remove backup
-							JsTools.removeFile(project.filePath.full);
-							App.ME.unregisterRecentProject(project.filePath.full);
 
 							// Save upon original
 							App.LOG.fileOp('Backup original: ${original.full}...');

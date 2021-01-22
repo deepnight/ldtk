@@ -91,10 +91,13 @@ class ContextMenu extends ui.Modal {
 	}
 
 
-	public function add(label:dn.data.GetText.LocaleString, cb:Void->Void) {
+	public function add(label:LocaleString, ?sub:LocaleString, cb:Void->Void) {
 		var jButton = new J('<button class="transparent"/>');
 		jButton.appendTo(jContent);
 		jButton.text(label);
+		if( sub!=null && sub!=label )
+			jButton.append('<span class="sub">$sub</span>');
+
 		jButton.click( (_)->{
 			close();
 			cb();

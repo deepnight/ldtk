@@ -219,12 +219,15 @@ class ProjectSaving extends dn.Process {
 
 	public static function makeBackupFilePath(project:data.Project, ?extraSuffix:String) {
 		var fp = project.filePath.clone();
+
+		// Start from original project file to avoid "backups of backups" issue
 		if( project.isBackup() ) {
-			// Start from original project file
 			fp = makeOriginalPathFromBackup(fp.full);
 			if( fp==null )
 				return null;
 		}
+
+		// Create backup file path
 		fp.appendDirectory(fp.fileName);
 		fp.appendDirectory("backups");
 		fp.fileName +=
@@ -234,25 +237,64 @@ class ProjectSaving extends dn.Process {
 		trace("backup = "+fp);
 
 		return fp;
-		// return baseFileName
-		// 	+ "___" + DateTools.format(Date.now(), "%Y-%m-%d__%H-%M-%S")
-		// 	+ ( extraSuffix==null ? "" : "__" + extraSuffix )
-			// + Const.BACKUP_NAME_SUFFIX+"."+Const.FILE_EXTENSION;
 	}
 
-	public static function makeOriginalPathFromBackup(backupAbsPath:String) : Null<dn.FilePath> {
+	public static function extractBackupInfosFromFileName(backupAbsPath:String) : Null<{ backup:dn.FilePath, project:dn.FilePath, date:Date }> {
 		var fp = dn.FilePath.fromFile(backupAbsPath);
-		var reg = ~/^(.*?)___[0-9\-]+__[0-9\-]+/gi;
+		var reg = ~/^(.*?)___([0-9\-]+)__([0-9\-]+)/gi;
 		if( !reg.match(fp.fileName) )
 			return null;
 		else {
-			fp.removeLastDirectory();
-			fp.removeLastDirectory();
-			fp.fileName = reg.matched(1);
-			trace("original = "+fp);
-			return fp;
+			var date = Date.fromString( reg.matched(2)+" "+StringTools.replace(reg.matched(3),"-",":") );
+			var original = fp.clone();
+			original.fileName = reg.matched(1);
+			original.removeLastDirectory();
+			original.removeLastDirectory();
+			return {
+				project: original,
+				backup: fp,
+				date: date,
+			}
 		}
 	}
+
+	public static inline function isBackupFile(filePath:String) {
+		return filePath.indexOf( Const.BACKUP_NAME_SUFFIX )>0;
+	}
+
+	public static function makeOriginalPathFromBackup(backupAbsPath:String) : Null<dn.FilePath> {
+		var infos = extractBackupInfosFromFileName(backupAbsPath);
+		return infos==null ? null : infos.project;
+	}
+
+	public static function hasBackupFiles(projectFilePath:String) {
+		var fp = dn.FilePath.fromFile(projectFilePath);
+		fp.appendDirectory(fp.fileName);
+		fp.appendDirectory("backups");
+		fp.fileName = null;
+		fp.extension = null;
+		return JsTools.fileExists(fp.full) && !JsTools.isDirEmpty(fp.full);
+	}
+
+	public static function listBackupFiles(projectFilePath:String) {
+		var fp = dn.FilePath.fromFile(projectFilePath);
+		var dir = dn.FilePath.fromDir( fp.directory+"/"+fp.fileName+"/backups" );
+		if( !JsTools.fileExists(dir.full) )
+			return [];
+
+		var all = [];
+		for( f in JsTools.readDir(dir.full) ) {
+			if( dn.FilePath.extractExtension(f) != Const.FILE_EXTENSION )
+				continue;
+
+			var infos = ui.ProjectSaving.extractBackupInfosFromFileName(dir.full+"/"+f);
+			all.push(infos);
+		}
+
+		all.sort( (a,b)->-Reflect.compare( a.date.getTime(), b.date.getTime() ) );
+		return all;
+	}
+
 
 	function complete(success:Bool) {
 		destroy();

@@ -449,6 +449,10 @@ class App extends dn.Process {
 		// 	return false;
 		// #end
 
+		// No backup files
+		if( ui.ProjectSaving.extractBackupInfosFromFileName(path) != null )
+			return false;
+
 		path = StringTools.replace(path, "\\", "/");
 		settings.recentProjects.remove(path);
 		settings.recentProjects.push(path);
@@ -492,6 +496,7 @@ class App extends dn.Process {
 			}
 			else {
 				// Failed
+				LOG.error("Failed to load project: "+filePath+" levelIdx="+levelIndex);
 				N.error(switch err {
 					case null:
 						L.t._("Unknown error");

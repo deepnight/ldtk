@@ -6,12 +6,14 @@ class CrashReport extends Page {
 	public function new(error:js.lib.Error, activeProcesses:String, ?unsavedProject:data.Project, ?projectFilePath:String) {
 		super();
 
+		if( Editor.ME!=null )
+			Editor.ME.destroy();
+
 		// Init
 		loadPageTemplate("crashReport", {
 			app: Const.APP_NAME,
 		});
 		App.ME.setWindowTitle();
-
 
 		var jContent = jPage.find(".wrapper");
 		var jError = jContent.find(".error");
