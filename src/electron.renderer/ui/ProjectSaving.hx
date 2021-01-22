@@ -324,7 +324,6 @@ class ProjectSaving extends dn.Process {
 			"___" + DateTools.format(Date.now(), "%Y-%m-%d__%H-%M-%S")
 			+ ( extraSuffix==null ? "" : "__" + extraSuffix )
 			+ Const.BACKUP_NAME_SUFFIX;
-		trace("backup = "+fp);
 
 		return fp;
 	}

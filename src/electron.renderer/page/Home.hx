@@ -208,7 +208,6 @@ class Home extends Page {
 
 			// Backups button
 			if( ui.ProjectSaving.hasBackupFiles(filePath) ) {
-				N.debug(filePath);
 				var all = ui.ProjectSaving.listBackupFiles(filePath);
 				if( all.length>0 ) {
 					var jBackups = new J('<button class="backups gray"/>');
