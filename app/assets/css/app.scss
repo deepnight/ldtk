@@ -1758,6 +1758,10 @@ textarea {
 				color: white;
 			}
 
+			&>p+ul {
+				border-top: 1px solid $bgLight;
+				margin-top: 32px;
+			}
 			&>ul>li {
 				border-bottom: 1px dashed $bgMed;
 				padding-bottom: 8px;
