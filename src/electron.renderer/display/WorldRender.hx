@@ -407,20 +407,22 @@ class WorldRender extends dn.Process {
 			if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
 				// Auto layer
 				var td = editor.project.defs.getTilesetDef(li.def.autoTilesetDefUid);
-				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
-				li.def.iterateActiveRulesInDisplayOrder( (r)->{
-					if( li.autoTilesCache.exists( r.uid ) ) {
-						for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
-						for( tileInfos in allTiles.value ) {
-							pixelGrid.setPixel(
-								Std.int( tileInfos.x / li.def.gridSize ),
-								Std.int( tileInfos.y / li.def.gridSize ),
-								td.getAverageTileColor(tileInfos.tid),
-								0.3
-							);
+				if( td.isAtlasLoaded() ) {
+					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
+					li.def.iterateActiveRulesInDisplayOrder( (r)->{
+						if( li.autoTilesCache.exists( r.uid ) ) {
+							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
+							for( tileInfos in allTiles.value ) {
+								pixelGrid.setPixel(
+									Std.int( tileInfos.x / li.def.gridSize ),
+									Std.int( tileInfos.y / li.def.gridSize ),
+									td.getAverageTileColor(tileInfos.tid),
+									0.3
+								);
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 			else if( li.def.type==IntGrid ) {
 				// Pure intGrid
@@ -437,12 +439,14 @@ class WorldRender extends dn.Process {
 				// Classic tiles
 				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 				var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
-				for(cy in 0...li.cHei)
-				for(cx in 0...li.cWid)
-					if( !isCoordDone(li,cx,cy) && li.hasAnyGridTile(cx,cy) ) {
-						markCoordAsDone(li, cx,cy);
-						pixelGrid.setPixel(cx,cy, td.getAverageTileColor( li.getTopMostGridTile(cx,cy).tileId ) );
-					}
+				if( td.isAtlasLoaded() ) {
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid)
+						if( !isCoordDone(li,cx,cy) && li.hasAnyGridTile(cx,cy) ) {
+							markCoordAsDone(li, cx,cy);
+							pixelGrid.setPixel(cx,cy, td.getAverageTileColor( li.getTopMostGridTile(cx,cy).tileId ) );
+						}
+				}
 			}
 		});
 
