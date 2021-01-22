@@ -1425,13 +1425,13 @@
 					]
 				},
 				"bgPivotY": {
-					"description": "",
+					"description": "Background image Y pivot (0-1)",
 					"type": [
 						"number"
 					]
 				},
 				"bgPivotX": {
-					"description": "",
+					"description": "Background image X pivot (0-1)",
 					"type": [
 						"number"
 					]
