@@ -343,7 +343,7 @@ class JsTools {
 			if( displayUrl.length>cut )
 				displayUrl = displayUrl.substr(0,cut)+"...";
 
-			if( link.attr("title")==null )
+			if( link.attr("title")==null && link.attr("noTitle")==null )
 				ui.Tip.attach(link, displayUrl, "link", true);
 
 			link.click( function(ev:js.jquery.Event) {
