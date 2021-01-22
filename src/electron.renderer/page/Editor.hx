@@ -1024,9 +1024,8 @@ class Editor extends Page {
 
 		// Save project
 		new ui.ProjectSaving(this, project, (success)->{
-			if( !success ) {
+			if( !success )
 				N.error("Saving failed!");
-			}
 			else {
 				App.LOG.fileOp('Saved ${project.filePath.fileWithExt}.');
 				N.success('Saved ${project.filePath.fileWithExt}.');

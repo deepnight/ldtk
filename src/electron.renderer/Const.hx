@@ -15,12 +15,13 @@ class Const {
 		return getAppVersion(true);
 	}
 
-	public static var APP_NAME = "LDtk";
-	public static var FILE_EXTENSION = "ldtk";
-	public static var LEVEL_EXTENSION = "ldtkl";
-	public static var POINT_SEPARATOR = ",";
-	public static var BACKUP_NAME_SUFFIX = ".backup"; 
-	public static var LEVEL_FILE_LEADER_ZEROS = 4;
+	public static final APP_NAME = "LDtk";
+	public static final FILE_EXTENSION = "ldtk";
+	public static final LEVEL_EXTENSION = "ldtkl";
+	public static final POINT_SEPARATOR = ",";
+	public static final BACKUP_NAME_SUFFIX = ".backup";
+	public static final LEVEL_FILE_LEADER_ZEROS = 4;
+	public static final DEFAULT_BACKUP_LIMIT = 10;
 
 	// URLs: Deepnight games
 	public static var DEEPNIGHT_DOMAIN = "https://deepnight.net";

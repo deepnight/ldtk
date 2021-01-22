@@ -68,6 +68,19 @@ class EditProject extends ui.modal.Panel {
 		var jLocate = i.jInput.siblings(".locate").empty();
 		if( project.backupOnSave )
 			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/backups", false) );
+		var jCount = jForm.find("#backupCount");
+		jCount.val( Std.string(Const.DEFAULT_BACKUP_LIMIT) );
+		if( project.backupOnSave ) {
+			jCount.show();
+			jCount.siblings("span").show();
+			var i = Input.linkToHtmlInput( project.backupLimit, jCount );
+			i.setBounds(3, 50);
+		}
+		else {
+			jCount.hide();
+			jCount.siblings("span").hide();
+		}
+
 
 		// Json minifiying
 		var i = Input.linkToHtmlInput( project.minifyJson, jForm.find("[name=minify]") );

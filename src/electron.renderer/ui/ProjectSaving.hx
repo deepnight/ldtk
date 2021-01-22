@@ -81,6 +81,15 @@ class ProjectSaving extends dn.Process {
 					// Save a duplicate in backups folder
 					var savingData = prepareProjectSavingData(project, true);
 					JsTools.writeFileString(fp.full, savingData.projectJson);
+
+					// Delete extra backup files
+					var all = listBackupFiles(project.filePath.full);
+					if( all.length>project.backupLimit ) {
+						for(i in project.backupLimit...all.length ) {
+							log("Discarded backup: "+all[i].backup.full);
+							JsTools.removeFile( all[i].backup.full );
+						}
+					}
 				}
 
 				beginState(SavingMainFile);
@@ -217,6 +226,87 @@ class ProjectSaving extends dn.Process {
 		}
 	}
 
+
+
+	function complete(success:Bool) {
+		destroy();
+		if( onComplete!=null )
+			onComplete(success);
+	}
+
+
+	function updateState() {
+		switch state {
+			case InQueue:
+				if( QUEUE[0]==this && !ui.modal.Progress.hasAny() )
+					beginState(BeforeSavingActions);
+
+			case BeforeSavingActions:
+				if( !ui.modal.Progress.hasAny() )
+					beginState(AutoLayers);
+
+			case AutoLayers:
+
+			case Backup:
+
+			case SavingMainFile:
+
+			case SavingExternLevels:
+				if( !ui.modal.Progress.hasAny() )
+					beginState(SavingLayerImages);
+
+			case SavingLayerImages:
+				if( !ui.modal.Progress.hasAny() )
+					beginState(ExportingTiled);
+
+			case ExportingTiled:
+
+			case Done:
+		}
+	}
+
+
+
+	static inline function jsonStringify(p:data.Project, json:Dynamic) {
+		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
+	}
+
+	public static function prepareProjectSavingData(project:data.Project, isBackup=false) : FileSavingData {
+		if( !project.externalLevels || isBackup ) {
+			// Full single JSON
+			return {
+				projectJson: jsonStringify( project, project.toJson() ),
+				externLevelsJson: [],
+			}
+		}
+		else {
+			// Separate level JSONs
+			var idx = 0;
+			var externLevels = project.levels.map( (l)->{
+				json: jsonStringify( project, l.toJson() ),
+				relPath: l.makeExternalRelPath(idx++),
+				id: l.identifier,
+			});
+
+			// Build project JSON without level datav
+			var idx = 0;
+			var trimmedProjectJson = project.toJson();
+			for(l in trimmedProjectJson.levels) {
+				l.layerInstances = null;
+				l.externalRelPath = project.getLevel(l.uid).makeExternalRelPath(idx++);
+			}
+
+			return {
+				projectJson: jsonStringify( project, trimmedProjectJson ),
+				externLevelsJson: externLevels,
+			}
+		}
+	}
+
+
+
+	/* BACKUP FILE MANAGEMENT *****************************************************/
+
 	public static function makeBackupFilePath(project:data.Project, ?extraSuffix:String) {
 		var fp = project.filePath.clone();
 
@@ -296,80 +386,6 @@ class ProjectSaving extends dn.Process {
 	}
 
 
-	function complete(success:Bool) {
-		destroy();
-		if( onComplete!=null )
-			onComplete(success);
-	}
-
-
-	function updateState() {
-		switch state {
-			case InQueue:
-				if( QUEUE[0]==this && !ui.modal.Progress.hasAny() )
-					beginState(BeforeSavingActions);
-
-			case BeforeSavingActions:
-				if( !ui.modal.Progress.hasAny() )
-					beginState(AutoLayers);
-
-			case AutoLayers:
-
-			case Backup:
-
-			case SavingMainFile:
-
-			case SavingExternLevels:
-				if( !ui.modal.Progress.hasAny() )
-					beginState(SavingLayerImages);
-
-			case SavingLayerImages:
-				if( !ui.modal.Progress.hasAny() )
-					beginState(ExportingTiled);
-
-			case ExportingTiled:
-
-			case Done:
-		}
-	}
-
-
-
-	static inline function jsonStringify(p:data.Project, json:Dynamic) {
-		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
-	}
-
-	public static function prepareProjectSavingData(project:data.Project, isBackup=false) : FileSavingData {
-		if( !project.externalLevels || isBackup ) {
-			// Full single JSON
-			return {
-				projectJson: jsonStringify( project, project.toJson() ),
-				externLevelsJson: [],
-			}
-		}
-		else {
-			// Separate level JSONs
-			var idx = 0;
-			var externLevels = project.levels.map( (l)->{
-				json: jsonStringify( project, l.toJson() ),
-				relPath: l.makeExternalRelPath(idx++),
-				id: l.identifier,
-			});
-
-			// Build project JSON without level datav
-			var idx = 0;
-			var trimmedProjectJson = project.toJson();
-			for(l in trimmedProjectJson.levels) {
-				l.layerInstances = null;
-				l.externalRelPath = project.getLevel(l.uid).makeExternalRelPath(idx++);
-			}
-
-			return {
-				projectJson: jsonStringify( project, trimmedProjectJson ),
-				externLevelsJson: externLevels,
-			}
-		}
-	}
 
 
 	override function update() {
