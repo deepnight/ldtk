@@ -1,8 +1,10 @@
 package ui;
 
 enum LoadingError {
-	FileNotFound;
-	ParsingFailed(err:String);
+	NotFound;
+	FileRead(err:String);
+	JsonParse(err:String);
+	ProjectInit(err:String);
 }
 
 class ProjectLoader {
@@ -12,23 +14,37 @@ class ProjectLoader {
 		log.clear();
 
 		if( !JsTools.fileExists(filePath) ) {
-			onComplete(FileNotFound);
+			onComplete(NotFound);
 			return;
 		}
 
 		// Parse main JSON
 		log.fileOp('Loading project $filePath...');
 		var json = null;
-		var p = try {
-			var raw = JsTools.readFileString(filePath);
-			json = haxe.Json.parse(raw);
-			data.Project.fromJson(filePath, json);
-		}
-		catch(e:Dynamic) {
-			log.error( Std.string(e) );
-			onComplete( ParsingFailed(Std.string(e)) );
-			return;
-		}
+		var raw = try JsTools.readFileString(filePath)
+			catch(err:Dynamic) {
+				log.error( Std.string(err) );
+				onComplete( FileRead( Std.string(err) ) );
+				return;
+			}
+
+		var json = try haxe.Json.parse(raw)
+			catch(err:Dynamic) {
+				log.error( Std.string(err) );
+				onComplete( JsonParse( Std.string(err) ) );
+				return;
+			}
+
+
+		var p = try data.Project.fromJson(filePath, json)
+			#if debug ;
+			#else
+			catch(err:Dynamic) {
+				log.error( Std.string(err) );
+				onComplete( ProjectInit( Std.string(err) ) );
+				return;
+			}
+			#end
 
 		// Load separate level files
 		if( p.externalLevels && p.levels[0].layerInstances.length==0 ) { // in backup files, levels are actually embedded

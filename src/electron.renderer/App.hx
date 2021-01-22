@@ -501,12 +501,18 @@ class App extends dn.Process {
 					case null:
 						L.t._("Unknown error");
 
-					case FileNotFound:
+					case NotFound:
 						unregisterRecentProject(filePath);
 						L.t._("File not found");
 
-					case ParsingFailed(err):
-						L.t._("Couldn't parse project JSON file!");
+					case JsonParse(err):
+						L.t._("Failed to parse project JSON file!");
+
+					case FileRead(err):
+						L.t._("Failed to read file on disk!");
+
+					case ProjectInit(err):
+						L.t._("Failed to create Project instance!");
 				});
 				loadPage( ()->new page.Home() );
 			}
