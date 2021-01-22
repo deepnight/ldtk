@@ -988,6 +988,7 @@ ul.log {
 .icon.history	{ background-image: url("../icons/history.svg"); }
 .icon.expand	{ background-image: url("../icons/expand.svg"); }
 .icon.discord	{ background-image: url("../icons/discord.svg"); }
+.icon.json		{ background-image: url("../icons/json.svg"); }
 .icon.ghost		{ background-image: url("../icons/ghost.svg"); }
 .icon.love		{ background-image: url("../icons/love.svg"); }
 .icon.folder	{ background-image: url("../icons/folder.svg"); }
@@ -2920,9 +2921,6 @@ canvas#webgl {
 				white-space: nowrap;
 				text-transform: none;
 
-				.icon {
-					opacity: 0.5;
-				}
 				&.small {
 					flex: 0.5 1 0px;
 					.icon {
@@ -3043,9 +3041,6 @@ canvas#webgl {
 							outline-color: white;
 						}
 					}
-					// &:not(:first-of-type) {
-					// 	opacity: 0.65;
-					// }
 
 					&.crash {
 						border: 1px solid $help;
@@ -3067,10 +3062,6 @@ canvas#webgl {
 				}
 				.path {
 					text-overflow: ellipsis;
-					// >span:not(:last-of-type) {
-						// opacity: 0.7;
-					// }
-
 				}
 				li.sample .path >span {
 					color: $help !important;
@@ -3097,6 +3088,7 @@ canvas#webgl {
 			height: 100%;
 			overflow: hidden;
 			margin-left: 16px;
+			background-color: $bgMed;
 
 			.buttons {
 				$btSize: 40px;
@@ -3108,16 +3100,16 @@ canvas#webgl {
 				button {
 					height: auto;
 				}
-				button[href],
-				button.buy {
+				button {
 					justify-content: flex-start;
 				}
-				button[href]:not(.help) {
+				button[href] {
 					box-shadow: none;
 					background-color: $bgMed;
 					&:hover {
 						background-color: $bgLight;
 					}
+					border-bottom: 1px solid $bgDark;
 				}
 
 				button.update {
