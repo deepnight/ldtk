@@ -62,8 +62,6 @@ typedef SchemaType = {
 
 class DocGenerator {
 	#if macro
-	static var SCHEMA_URL = "https://ldtk.io/files/JSON_SCHEMA.json";
-
 	static var allGlobalTypes: Array<GlobalType>;
 	static var allEnums : Map<String, Array<String>>;
 	static var verbose = false;
@@ -276,10 +274,6 @@ class DocGenerator {
 		var headerMd = [
 			'# LDtk Json structure (version $appVersion)',
 			'',
-			'**Note:** lines marked as <span class="internal">red</span> are only used by the LDtk editor and **can be safely ignored when writing a custom importer**.',
-			'',
-			'Json schema: $SCHEMA_URL',
-			'',
 			'## Table of contents',
 		];
 
@@ -290,6 +284,7 @@ class DocGenerator {
 				indent = "  "+indent;
 			headerMd.push('$indent [${e.name}](#${e.anchor})');
 		}
+
 		md = headerMd.concat(md);
 
 

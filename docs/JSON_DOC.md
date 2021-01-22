@@ -1,9 +1,5 @@
 # LDtk Json structure (version 0.7.0)
 
-**Note:** lines marked as <span class="internal">red</span> are only used by the LDtk editor and **can be safely ignored when writing a custom importer**.
-
-Json schema: https://ldtk.io/files/JSON_SCHEMA.json
-
 ## Table of contents
    - [LDtk Json root](#ldtk-ProjectJson)
    - [Level](#ldtk-LevelJson)
