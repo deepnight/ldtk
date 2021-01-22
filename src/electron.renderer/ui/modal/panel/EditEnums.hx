@@ -33,7 +33,18 @@ class EditEnums extends ui.modal.Panel {
 				if( dn.FilePath.extractExtension(absPath)!="hx" )
 					N.error("The file must have the HX extension.");
 				else
-					importer.HxEnum.load( project.makeRelativeFilePath(absPath), false );
+					importer.EnumImporter.load( project.makeRelativeFilePath(absPath), false );
+			});
+		});
+
+		// Import Csv Files
+		jContent.find("button.importCsv").click( function(_) {
+			dn.electron.Dialogs.open([".csv"], project.getProjectDir(), function(absPath:String) {
+				absPath = StringTools.replace(absPath,"\\","/");
+				if( dn.FilePath.extractExtension(absPath)!="csv" )
+					N.error("The file must have the CSV extension.");
+				else
+					importer.EnumImporter.load( project.makeRelativeFilePath(absPath), false );
 			});
 		});
 
@@ -190,7 +201,7 @@ class EditEnums extends ui.modal.Panel {
 			sync.appendTo(links);
 			sync.text("⟳");
 			sync.click( function(ev) {
-				importer.HxEnum.load(group.key, true);
+				importer.EnumImporter.load(group.key, true);
 			});
 			Tip.attach(sync, Lang.t._("Reload and synchronize Enums"));
 
