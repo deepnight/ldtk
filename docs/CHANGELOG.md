@@ -4,7 +4,6 @@ This update features many important changes to make LDtk **production ready** an
 
 **We are getting really close to 1.0!**
 
-- **New APIs**: LDtk JSON files can now be easily parsed in many languages, including **C#**, **Python**, **Rust**, **C++**, **Javascript**, using QuickType.io generator. These parsers are based on latest JSON schema file (see below) and are super easy to keep updated. You can check [existing APIs on the LDtk website](https://ldtk.io/api/).
 - **Separate level files**: a much needed feature to reduce JSON size and optimize parsing times! There is now an option in Project panel (press `F1`) to enable "Separate level files".
 
   When enabled, all the project **settings** and **definitions** will still be stored in the `*.ldtk` file, and all level data will now be saved to separate files (one per level) in a sub-folder, in `*.ldtkl` files (notice the extra `l` letter at the end of the extension).
@@ -15,7 +14,8 @@ This update features many important changes to make LDtk **production ready** an
 - **Crash backups**: if, for some reasons, LDtk crashes, it will try to backup your unsaved work automatically. Obviously, this works even if the backup setting isn't enabled.
 - **Level background image**: each level can now have a custom background image (PNG, GIF or JPEG) that can be resized and aligned in various ways.
 - **New font**: replaced the often hard-to-read pixel font with a sleeker "Roboto" font (this change affects entity fields and floating level informations).
-- **For game devs**: a **Json schema** file is now directly generated from source code. It's available on [LDtk.io/json](https://ldtk.io/json) and contains a schema following Draft 7 standard from [Json-schema.org](https://json-schema.org/). This file describes all fields from LDtk json files (value types and descriptions). The great thing about JSON schema is that it allows **JSON "parser" generation** using *QuickType*. That's right: you can now generate Rust, C#, JS or Python parsers easily, right from the file format.
+- **New APIs**: LDtk JSON files can now be easily parsed in many languages, including **C#**, **Python**, **Rust**, **C++**, **Javascript**, using QuickType.io generator. These parsers are based on latest JSON schema file (see below) and are super easy to keep updated. You can check [existing APIs on the LDtk website](https://ldtk.io/api/).
+- **JSON Schema**: a schema file is now directly generated from source code (ie. a JSON that describes the LDtk project file format). It's available on [LDtk.io/json](https://ldtk.io/json) and contains a schema following Draft 7 standard from [Json-schema.org](https://json-schema.org/). This file describes all fields from LDtk json files (value types and descriptions). The great thing about JSON schema is that it allows **JSON "parser" generation** using *QuickType*. That's right: you can now generate Rust, C#, JS or Python parsers easily, right from the file format.
 - **HaxeFlixel support**: the HaxeFlixel game framework has been added to the official [LDtk Haxe API](https://github.com/deepnight/ldtk-haxe-api). You can now easily load and display a LDtk project in your game.
 - Moving your mouse cursor over a **Rule group** in an auto-layer will now reveal all layer cells affected by the rules in this group.
 - If the auto-layer rule panel is open, moving your mouse over the level will now also highlight rules affecting the current coordinate.
