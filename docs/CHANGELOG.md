@@ -4,6 +4,8 @@ This update features many important changes to make LDtk **production ready** an
 
 **We are getting really close to 1.0!**
 
+## Changes
+
 - **Separate level files**: a much needed feature to reduce JSON size and optimize parsing times! There is now an option in Project panel (press `F1`) to enable "Separate level files".
 
   When enabled, all the project **settings** and **definitions** will still be stored in the `*.ldtk` file, and all level data will now be saved to separate files (one per level) in a sub-folder, in `*.ldtkl` files (notice the extra `l` letter at the end of the extension).
