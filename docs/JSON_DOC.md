@@ -30,6 +30,7 @@ This is the root of any Project JSON file. It contains:
 
 Value | Type | Description
 -- | -- | --
+`backupLimit`<br/><sup class="internal">*Internal editor data*</sup> | Int | Number of backup files to keep, if the `backupOnSave` is TRUE
 `backupOnSave`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, an extra copy of the project will be created in a sub folder, when saving.
 `bgColor` | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Project background color
 `defaultGridSize`<br/><sup class="internal">*Internal editor data*</sup> | Int | Default grid size for new layers
