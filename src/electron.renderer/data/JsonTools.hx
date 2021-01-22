@@ -26,7 +26,10 @@ class JsonTools {
 		try {
 			switch Type.typeof(o) {
 			case TObject:
-				return e.createByName(o.id, o.params);
+				if( Type.typeof(o.id)==TInt )
+					return e.createByIndex(o.id, o.p);
+				else
+					return e.createByName(o.id, o.params);
 
 			case TClass(String):
 				return e.createByName(o);
@@ -64,6 +67,9 @@ class JsonTools {
 				}
 				else
 					return c;
+
+			case TInt:
+				return v;
 
 			case _:
 				throw "Invalid color format: "+v;
