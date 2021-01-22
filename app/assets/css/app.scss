@@ -984,6 +984,7 @@ ul.log {
 .icon.stop		{ background-image: url("../icons/stop.svg"); }
 .icon.settings	{ background-image: url("../icons/settings.svg"); }
 .icon.delete	{ background-image: url("../icons/delete.svg"); }
+.icon.update	{ background-image: url("../icons/update.svg"); }
 .icon.history	{ background-image: url("../icons/history.svg"); }
 .icon.expand	{ background-image: url("../icons/expand.svg"); }
 .icon.discord	{ background-image: url("../icons/discord.svg"); }
@@ -2893,7 +2894,7 @@ canvas#webgl {
 		.main {
 			display: grid;
 			width: 70vw;
-			grid-template-columns: auto 200px;
+			grid-template-columns: auto 250px;
 			box-sizing: border-box;
 			padding-top: 30px;
 			height: 100%;
@@ -3103,6 +3104,7 @@ canvas#webgl {
 				grid-template-rows: $btSize 100px;
 				grid-auto-rows: $btSize;
 				margin: 0;
+
 				button {
 					height: auto;
 				}
@@ -3120,18 +3122,21 @@ canvas#webgl {
 
 				button.update {
 					display: grid;
+					grid-template-columns: min-content auto;
 					grid-template-rows: min-content auto;
-					justify-items: flex-start;
+					justify-content: flex-start;
 					align-content: center;
 					text-align: left;
 					white-space: initial;
 					overflow: hidden;
 					font-family: Roboto;
 					em {
+						grid-column: 2/3;
 						font-style: normal;
 						opacity: 0.8;
 					}
 					strong {
+						grid-column: 2/3;
 						font-size: 14pt;
 						font-weight: normal;
 					}
