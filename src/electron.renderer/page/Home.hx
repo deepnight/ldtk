@@ -220,7 +220,7 @@ class Home extends Page {
 						var ctx = new ui.modal.ContextMenu(ev);
 						for( b in all )
 							ctx.add(
-								Lang.relativeDate(b.date),
+								ui.ProjectSaving.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
 								Lang.date(b.date),
 								()->App.ME.loadProject(b.backup.full)
 							);

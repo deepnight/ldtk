@@ -1056,6 +1056,7 @@ class Editor extends Page {
 						true,
 						()->{
 							App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
+							var crashFile = ui.ProjectSaving.isCrashFile(project.filePath.full) ? project.filePath.full : null;
 
 							// Save upon original
 							App.LOG.fileOp('Backup original: ${original.full}...');
@@ -1063,6 +1064,10 @@ class Editor extends Page {
 							setPermanentNotification("backup");
 							onSave();
 							selectProject(project);
+
+							// Delete crash backup
+							if( crashFile!=null )
+								JsTools.removeFile(crashFile);
 						}
 					);
 				}

@@ -352,6 +352,10 @@ class ProjectSaving extends dn.Process {
 		return filePath.indexOf( Const.BACKUP_NAME_SUFFIX )>0;
 	}
 
+	public static inline function isCrashFile(filePath:String) {
+		return isBackupFile(filePath) && filePath.indexOf("_crash")>0;
+	}
+
 	public static function makeOriginalPathFromBackup(backupAbsPath:String) : Null<dn.FilePath> {
 		var infos = extractBackupInfosFromFileName(backupAbsPath);
 		return infos==null ? null : infos.project;
