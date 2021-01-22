@@ -102,9 +102,9 @@ class Home extends Page {
 		var latest = Const.getChangeLog().latest;
 		var ver = new Version( Const.getAppVersion() );
 		w.loadTemplate("appUpdated", {
-			ver: latest.version.getTrimmedNumbers(true),
+			ver: latest.version.numbers,
 			app: Const.APP_NAME,
-			title: latest.title==null ? "" : latest.title,
+			title: latest.title==null ? "" : '&ldquo;&nbsp;'+latest.title+'&nbsp;&rdquo;',
 			md: latest.allNoteLines.join("\n"),
 		});
 
