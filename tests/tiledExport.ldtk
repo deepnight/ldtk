@@ -2,11 +2,13 @@
 	"__header__": {
 		"fileType": "LDtk Project JSON",
 		"app": "LDtk",
-		"appAuthor": "Sebastien Benard",
-		"appVersion": "0.6.0-debug",
-		"url": "https://deepnight.net/tools/ldtk-2d-level-editor/"
+		"doc": "https://ldtk.io/json",
+		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
+		"appAuthor": "Sebastien 'deepnight' Benard",
+		"appVersion": "0.6.3",
+		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.6.0",
+	"jsonVersion": "0.6.3",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 8,
@@ -14,6 +16,7 @@
 	"defaultLevelBgColor": "#343F5E",
 	"nextUid": 121,
 	"minifyJson": false,
+	"externalLevels": false,
 	"exportTiled": true,
 	"worldLayout": "Free",
 	"worldGridWidth": 128,
@@ -281,6 +284,7 @@
 			"pxHei": 80,
 			"__bgColor": "#343F5E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "PureIntGrid",
@@ -397,6 +401,7 @@
 			"pxHei": 128,
 			"__bgColor": "#343F5E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "PureIntGrid",
@@ -510,6 +515,7 @@
 			"pxHei": 128,
 			"__bgColor": "#343F5E",
 			"bgColor": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "PureIntGrid",

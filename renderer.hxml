@@ -1,6 +1,5 @@
--cp src.data
--cp src.externs
--cp src.renderer
+-cp src/externs
+-cp src/electron.renderer
 
 -lib heaps
 -lib castle

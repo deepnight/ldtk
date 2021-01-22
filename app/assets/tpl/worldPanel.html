@@ -1,34 +1,42 @@
-<h3>World settings</h3>
-
-<ul class="form" id="worldForm">
-	<li>
-		<label for="color">World layout</label>
-		<select name="worldLayout"></select>
-		<div class="info">This setting will affect how all levels are be positioned in the "world".</div>
-	</li>
-
-	<li class="GridVania">
-		<label for="worldGridWidth">World grid</label>
-		<input type="text" id="worldGridWidth" name="worldGridWidth"/> <span>x</span>
-		<input type="text" id="worldGridHeight" name="worldGridHeight"/> <span>px</span>
-	</li>
-</ul>
-
-
-<h3>Level <span class="levelIdentifier">???</span></h3>
-
 <div class="buttons">
 	<button class="create">
-		<span class="ready">Add level</span>
+		<span class="ready">+ level</span>
 		<span class="running">Select location -&gt;</span>
 	</button>
-	<button class="duplicate gray small" title="**Duplicate level** Note: you can also just drag a level with CTRL+ALT to duplicate it.">
-		<span class="icon copy"></span>
-	</button>
-	<button class="delete dark small" title="Delete level">
-		<span class="icon delete"></span>
+
+	<button class="worldSettings gray">
+		<span class="icon settings"></span> World settings
 	</button>
 </div>
+
+
+<!-- World settings -->
+
+<div id="worldForm">
+
+	<h3>World settings</h3>
+
+	<ul class="form">
+		<li>
+			<label for="color">World layout</label>
+			<select name="worldLayout"></select>
+			<div class="info">This setting will affect how all levels are be positioned in the "world".</div>
+		</li>
+
+		<li class="GridVania">
+			<label for="worldGridWidth">World grid</label>
+			<input type="text" id="worldGridWidth" name="worldGridWidth"/> <span>x</span>
+			<input type="text" id="worldGridHeight" name="worldGridHeight"/> <span>px</span>
+		</li>
+	</ul>
+
+</div>
+
+
+
+<!-- Current level -->
+
+<h3>Level <span class="levelIdentifier">???</span></h3>
 
 <ul class="form" id="levelForm">
 	<li>
@@ -46,13 +54,41 @@
 	</li>
 
 	<li>
+		<label for="name">Size</label>
+		<input type="text" id="width"/>
+		<span>x</span>
+		<input type="text" id="height"/>
+		<span>px</span>
+	</li>
+
+	<li>
 		<label for="bgColor">Bg color</label>
 		<input type="color" id="bgColor"/>
 		<a class="reset">Use default</a>
 		<span class="usingDefault">(default)</a>
 	</li>
+
+	<li class="bg">
+		<label>Bg image</label>
+		<div class="pos">
+			<select id="bgPos"></select>
+			<span class="pivot"></span>
+		</div>
+	</li>
 </ul>
 
+<div class="buttons">
+	<button class="duplicate gray" title="**Duplicate level** Note: you can also just drag a level with CTRL+ALT to duplicate it.">
+		Duplicate level
+	</button>
+
+	<button class="delete dark" title="Delete level">
+		<span class="icon delete"></span>
+	</button>
+</div>
+
+
+<!-- Custom level fields -->
 
 <div class="customFields">
 	<em>Custom fields are not available yet :)</em>

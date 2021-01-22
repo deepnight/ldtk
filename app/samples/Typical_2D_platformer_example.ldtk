@@ -5,18 +5,22 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.6.2",
+		"appVersion": "0.7.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.6.2",
+	"jsonVersion": "0.7.0",
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1,
 	"defaultGridSize": 16,
-	"bgColor": "#0C0C13",
-	"defaultLevelBgColor": "#0C0C13",
+	"bgColor": "#806262",
+	"defaultLevelBgColor": "#50506A",
 	"nextUid": 91,
 	"minifyJson": false,
+	"externalLevels": false,
 	"exportTiled": false,
+	"exportPng": false,
+	"backupOnSave": false,
+	"backupLimit": 10,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -1211,8 +1215,14 @@
 			"worldY": 0,
 			"pxWid": 848,
 			"pxHei": 336,
-			"__bgColor": "#0C0C13",
+			"__bgColor": "#50506A",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -1234,7 +1244,7 @@
 					"seed": 9220595,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Player", "__grid": [11,12], "__tile": null, "defUid": 46, "px": [184,208], "fieldInstances": [{
+						{ "__identifier": "Player", "__grid": [11,12], "__pivot": [0.5,1], "__tile": null, "defUid": 46, "px": [184,208], "fieldInstances": [{
 							"__identifier": "items",
 							"__value": [ "PickAxe", "Bedroll" ],
 							"__type": "Array<LocalEnum.Item>",
@@ -1247,7 +1257,7 @@
 								"params": ["Bedroll"]
 							} ]
 						}] },
-						{ "__identifier": "Chest", "__grid": [31,17], "__tile": null, "defUid": 52, "px": [504,288], "fieldInstances": [{
+						{ "__identifier": "Chest", "__grid": [31,17], "__pivot": [0.5,1], "__tile": null, "defUid": 52, "px": [504,288], "fieldInstances": [{
 							"__identifier": "content",
 							"__value": [ "Healing_Plant", "Water", "Meat" ],
 							"__type": "Array<LocalEnum.Item>",
@@ -1263,7 +1273,7 @@
 								"params": ["Meat"]
 							} ]
 						}] },
-						{ "__identifier": "Mob", "__grid": [23,9], "__tile": null, "defUid": 54, "px": [376,160], "fieldInstances": [
+						{ "__identifier": "Mob", "__grid": [23,9], "__pivot": [0.5,1], "__tile": null, "defUid": 54, "px": [376,160], "fieldInstances": [
 							{
 								"__identifier": "patrol",
 								"__value": [{ "cx": 32, "cy": 9 }],
@@ -1285,7 +1295,7 @@
 								}]
 							}
 						] },
-						{ "__identifier": "Mob", "__grid": [17,17], "__tile": null, "defUid": 54, "px": [280,288], "fieldInstances": [
+						{ "__identifier": "Mob", "__grid": [17,17], "__pivot": [0.5,1], "__tile": null, "defUid": 54, "px": [280,288], "fieldInstances": [
 							{
 								"__identifier": "patrol",
 								"__value": [{ "cx": 26, "cy": 17 }],
@@ -1298,7 +1308,7 @@
 							},
 							{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Tutorial", "__grid": [21,2], "__tile": null, "defUid": 66, "px": [344,40], "fieldInstances": [
+						{ "__identifier": "Tutorial", "__grid": [21,2], "__pivot": [0.5,0.5], "__tile": null, "defUid": 66, "px": [344,40], "fieldInstances": [
 							{
 								"__identifier": "text",
 								"__value": "Press SHIFT+R to toggle auto-layers rendering.\n\nPress A to toggle \"Single layer mode.\"",
@@ -1319,14 +1329,14 @@
 								"realEditorValues": [null]
 							}
 						] },
-						{ "__identifier": "Door", "__grid": [27,17], "__tile": null, "defUid": 86, "px": [440,288], "fieldInstances": [{
+						{ "__identifier": "Door", "__grid": [27,17], "__pivot": [0.5,1], "__tile": null, "defUid": 86, "px": [440,288], "fieldInstances": [{
 							"__identifier": "locked",
 							"__value": false,
 							"__type": "Bool",
 							"defUid": 87,
 							"realEditorValues": [null]
 						}] },
-						{ "__identifier": "Door", "__grid": [34,7], "__tile": null, "defUid": 86, "px": [552,128], "fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 87, "realEditorValues": [] }] }
+						{ "__identifier": "Door", "__grid": [34,7], "__pivot": [0.5,1], "__tile": null, "defUid": 86, "px": [552,128], "fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 87, "realEditorValues": [] }] }
 					]
 				},
 				{
@@ -3246,8 +3256,14 @@
 			"worldY": -256,
 			"pxWid": 624,
 			"pxHei": 256,
-			"__bgColor": "#0C0C13",
+			"__bgColor": "#50506A",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -3269,7 +3285,7 @@
 					"seed": 5505402,
 					"gridTiles": [],
 					"entityInstances": [
-						{ "__identifier": "Mob", "__grid": [25,8], "__tile": null, "defUid": 54, "px": [408,144], "fieldInstances": [
+						{ "__identifier": "Mob", "__grid": [25,8], "__pivot": [0.5,1], "__tile": null, "defUid": 54, "px": [408,144], "fieldInstances": [
 							{
 								"__identifier": "patrol",
 								"__value": [{ "cx": 19, "cy": 8 }],
@@ -3282,7 +3298,7 @@
 							},
 							{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Chest", "__grid": [14,7], "__tile": null, "defUid": 52, "px": [232,128], "fieldInstances": [{
+						{ "__identifier": "Chest", "__grid": [14,7], "__pivot": [0.5,1], "__tile": null, "defUid": 52, "px": [232,128], "fieldInstances": [{
 							"__identifier": "content",
 							"__value": [ "Gold", "Gold" ],
 							"__type": "Array<LocalEnum.Item>",
@@ -3295,7 +3311,7 @@
 								"params": ["Gold"]
 							} ]
 						}] },
-						{ "__identifier": "Mob", "__grid": [23,14], "__tile": null, "defUid": 54, "px": [376,240], "fieldInstances": [
+						{ "__identifier": "Mob", "__grid": [23,14], "__pivot": [0.5,1], "__tile": null, "defUid": 54, "px": [376,240], "fieldInstances": [
 							{
 								"__identifier": "patrol",
 								"__value": [{ "cx": 20, "cy": 14 }],
@@ -3308,7 +3324,7 @@
 							},
 							{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] }
 						] },
-						{ "__identifier": "Mob", "__grid": [16,7], "__tile": null, "defUid": 54, "px": [264,128], "fieldInstances": [
+						{ "__identifier": "Mob", "__grid": [16,7], "__pivot": [0.5,1], "__tile": null, "defUid": 54, "px": [264,128], "fieldInstances": [
 							{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "defUid": 55, "realEditorValues": [] },
 							{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] }
 						] }
@@ -4557,8 +4573,14 @@
 			"worldY": 336,
 			"pxWid": 464,
 			"pxHei": 256,
-			"__bgColor": "#0C0C13",
+			"__bgColor": "#50506A",
 			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
+			"externalRelPath": null,
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -4579,7 +4601,7 @@
 					"autoLayerTiles": [],
 					"seed": 5505402,
 					"gridTiles": [],
-					"entityInstances": [{ "__identifier": "Mob", "__grid": [19,10], "__tile": null, "defUid": 54, "px": [312,176], "fieldInstances": [
+					"entityInstances": [{ "__identifier": "Mob", "__grid": [19,10], "__pivot": [0.5,1], "__tile": null, "defUid": 54, "px": [312,176], "fieldInstances": [
 						{
 							"__identifier": "patrol",
 							"__value": [{ "cx": 11, "cy": 10 }],

@@ -1,0 +1,16 @@
+package page;
+
+import hxd.Key;
+
+class Updating extends Page {
+	public function new() {
+		super();
+
+		loadPageTemplate("updating");
+		App.ME.setWindowTitle();
+
+		#if debug
+		delayer.addS(App.ME.reload, 0.6);
+		#end
+	}
+}

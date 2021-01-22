@@ -1,6 +1,6 @@
 {
 	"name": "ldtk",
-	"version": "0.6.2",
+	"version": "0.7.0",
 	"main": "assets/main.js",
 	"productName": "LDtk",
 	"author": "Sebastien Benard",
@@ -16,7 +16,14 @@
 		"pack-mac": "npm run pack-prepare  &&  electron-builder build --mac --publish never",
 		"pack-linux": "npm run pack-prepare  &&  electron-builder build --linux --publish never",
 		"publish-github": "npm run pack-prepare  &&  electron-builder build --publish always",
-		"publish-itchio": "npm run pack-win  &&  butler push \"redist/LDtk %npm_package_version% installer.exe\" deepnight/ldtk:win64 --userversion-file ../lastBuildVersion.txt"
+		"publish-itchio": "npm run pack-win  &&  butler push \"redist/LDtk %npm_package_version% installer.exe\" deepnight/ldtk:win64 --userversion-file ../lastBuildVersion.txt",
+		"quicktype": "npm i -g quicktype  &&  npm run qt-cs  &&  npm run qt-js  &&  npm run qt-py  &&  npm run qt-rs  &&  npm run qt-go  &&  npm run qt-cpp",
+		"qt-cs": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.cs --namespace ldtk --any-type dynamic",
+		"qt-js": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.js",
+		"qt-py": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.py",
+		"qt-rs": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.rs",
+		"qt-go": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.go",
+		"qt-cpp": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.cpp"
 	},
 	"repository": {
 		"type": "git",
@@ -52,6 +59,13 @@
 				"name": "LDTK Project File",
 				"mimeType": "application/json",
 				"icon": "project.ico",
+				"role": "Editor"
+			},
+			{
+				"ext": "ldtkl",
+				"name": "LDTK Level File",
+				"mimeType": "application/json",
+				"icon": "level.ico",
 				"role": "Editor"
 			}
 		],

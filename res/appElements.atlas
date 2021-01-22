@@ -1,14 +1,21 @@
 
 appElements.png
-size: 236,252
+size: 236,256
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 fieldBg
   rotate: false
-  xy: 1, 237
+  xy: 24, 237
   size: 19, 14
   orig: 19, 14
+  offset: 0, 0
+  index: -1
+fieldBgOutline
+  rotate: false
+  xy: 1, 237
+  size: 21, 18
+  orig: 21, 18
   offset: 0, 0
   index: -1
 largeStripes

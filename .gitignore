@@ -4,7 +4,10 @@ json_doc.xml
 *.crash.json
 *.crash.ldtk
 *.map
+*.zip
 
+backups/
+quicktype/
 dump/
 res/.tmp
 .vscode/settings.json
@@ -22,3 +25,5 @@ app/assets/js/renderer.js
 app/assets/js/*.map
 
 art/export_appElements
+
+tests/_doNotShare
