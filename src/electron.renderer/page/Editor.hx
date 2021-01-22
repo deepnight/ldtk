@@ -336,11 +336,12 @@ class Editor extends Page {
 	}
 
 	function reloadTileset(td:data.def.TilesetDef, isInitialLoading=false) {
+		App.LOG.fileOp("Reloading tileset: "+td.identifier+" path="+td.relPath);
+
 		if( !td.hasAtlasPath() )
 			return false;
 
 		var oldRelPath = td.relPath;
-		App.LOG.fileOp("Reloading tileset: "+td.relPath);
 		var result = td.importAtlasImage( td.relPath );
 		App.LOG.fileOp(" -> Reload result: "+result);
 		App.LOG.fileOp(" -> pixelData: "+(td.hasValidPixelData() ? "Ok" : "need rebuild"));
