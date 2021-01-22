@@ -11,7 +11,7 @@ This update features many important changes to make LDtk **production ready** an
 
   **Important notes**: this new feature might not be supported in all current existing APIs and loaders. Also, this option isn't enabled by default, but this might change on 1.0.
 - **Save layers as PNG**: if you *really* don't want to bother with the LDtk JSON, you can check this new option in your project settings to export all your layers as PNG images (note: only supported layers will be exported, that is those with tiles).
-- **Backups**: automatically keep extra copies of your project in a sub-folder every time you save (enable backups in your project settings). **Important**: LDtk will *not* delete any of your old backups automatically. It's up to you to manage your backup files.
+- **Backups**: automatically keep extra copies of your project in a sub-folder every time you save (enable backups in your project settings). **Important**: LDtk only keeps up to 10 backup files per project.
 - **Crash backups**: if, for some reasons, LDtk crashes, it will try to backup your unsaved work automatically. Obviously, this works even if the backup setting isn't enabled.
 - **Level background image**: each level can now have a custom background image (PNG, GIF or JPEG) that can be resized and aligned in various ways.
 - **New font**: replaced the often hard-to-read pixel font with a sleeker "Roboto" font (this change affects entity fields and floating level informations).
