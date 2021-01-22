@@ -1711,7 +1711,7 @@ textarea {
 
 .window.appUpdated {
 	.wrapper .content {
-		max-width: 600px;
+		width: 600px;
 
 		header {
 			margin-bottom: 16px;
@@ -1738,6 +1738,9 @@ textarea {
 				font-size: 20pt;
 				font-style: italic;
 				margin-bottom: 8px;
+				&:empty {
+					display: none;
+				}
 			}
 		}
 
@@ -2889,7 +2892,8 @@ canvas#webgl {
 
 		.main {
 			display: grid;
-			grid-template-columns: 60% 40%;
+			width: 70vw;
+			grid-template-columns: auto 200px;
 			box-sizing: border-box;
 			padding-top: 30px;
 			height: 100%;
@@ -3087,16 +3091,50 @@ canvas#webgl {
 
 		.about {
 			display: grid;
-			grid-template-rows: min-content auto;
+			grid-template-rows: auto;
 			gap: 8px;
 			height: 100%;
 			overflow: hidden;
 			margin-left: 16px;
 
 			.buttons {
+				$btSize: 40px;
+				display: grid;
+				grid-template-rows: $btSize 100px;
+				grid-auto-rows: $btSize;
 				margin: 0;
-				.small {
-					flex: 0 1 0px;
+				button {
+					height: auto;
+				}
+				button[href],
+				button.buy {
+					justify-content: flex-start;
+				}
+				button[href]:not(.help) {
+					box-shadow: none;
+					background-color: $bgMed;
+					&:hover {
+						background-color: $bgLight;
+					}
+				}
+
+				button.update {
+					display: grid;
+					grid-template-rows: min-content auto;
+					justify-items: flex-start;
+					align-content: center;
+					text-align: left;
+					white-space: initial;
+					overflow: hidden;
+					font-family: Roboto;
+					em {
+						font-style: normal;
+						opacity: 0.8;
+					}
+					strong {
+						font-size: 14pt;
+						font-weight: normal;
+					}
 				}
 			}
 
@@ -3128,7 +3166,6 @@ canvas#webgl {
 					background-position: center 15px;
 					background-size: 200px;
 					padding-top: 120px;
-					// background-size: ;
 
 					.changelogs {
 						padding: 32px;

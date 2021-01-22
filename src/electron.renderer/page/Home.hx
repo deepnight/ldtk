@@ -9,17 +9,18 @@ class Home extends Page {
 		super();
 
 		ME = this;
+		var changeLog = Const.getChangeLog();
 		loadPageTemplate("home", {
 			app: Const.APP_NAME,
 			appVer: Const.getAppVersion(),
+			latestVer: changeLog.latest.version,
+			latestDesc: changeLog.latest.title==null ? L.t._("Read latest changes") : '"'+changeLog.latest.title+'"',
 			deepnightUrl: Const.DEEPNIGHT_DOMAIN,
 			discordUrl: Const.DISCORD_URL,
 			docUrl: Const.DOCUMENTATION_URL,
 			websiteUrl : Const.HOME_URL,
 			issueUrl : Const.ISSUES_URL,
-			appChangelog: StringTools.htmlEscape( Const.APP_CHANGELOG_MD),
-			jsonChangelog: StringTools.htmlEscape( Const.JSON_CHANGELOG_MD ),
-			jsonFormat: StringTools.htmlEscape( Const.JSON_FORMAT_MD ),
+			jsonUrl: Const.JSON_DOC_URL,
 		});
 		App.ME.setWindowTitle();
 
@@ -62,18 +63,22 @@ class Home extends Page {
 			});
 		});
 
-		var jFullscreenBt = jPage.find("button.fullscreen");
-		var jChangelogs = jPage.find(".changelogsWrapper");
-
-		jFullscreenBt.click( function(ev) {
-			jChangelogs.toggleClass("fullscreen");
-			var btIcon = jFullscreenBt.find(".icon");
-			btIcon.removeClass();
-			if( jChangelogs.hasClass("fullscreen") )
-				btIcon.addClass("icon fullscreen_exit");
-			else
-				btIcon.addClass("icon fullscreen");
+		jPage.find("button.update").click((_)->{
+			showLatestUpdate();
 		});
+
+		// var jFullscreenBt = jPage.find("button.fullscreen");
+		// var jChangelogs = jPage.find(".changelogsWrapper");
+
+		// jFullscreenBt.click( function(ev) {
+		// 	jChangelogs.toggleClass("fullscreen");
+		// 	var btIcon = jFullscreenBt.find(".icon");
+		// 	btIcon.removeClass();
+		// 	if( jChangelogs.hasClass("fullscreen") )
+		// 		btIcon.addClass("icon fullscreen_exit");
+		// 	else
+		// 		btIcon.addClass("icon fullscreen");
+		// });
 
 		// Notify app update
 		if( App.ME.settings.lastKnownVersion!=Const.getAppVersion() ) {
@@ -81,19 +86,7 @@ class Home extends Page {
 			App.ME.settings.lastKnownVersion = Const.getAppVersion();
 			App.ME.saveSettings();
 
-			var w = new ui.Modal();
-			w.canBeClosedManually = false;
-			var latest = Const.getChangeLog().latest;
-			var ver = new Version( Const.getAppVersion() );
-			w.loadTemplate("appUpdated", {
-				ver: ver.getTrimmedNumbers(true),
-				app: Const.APP_NAME,
-				title: latest.title,
-				md: latest.allNoteLines.join("\n"),
-			});
-
-			w.jContent.find(".changelog").click( (_)->N.notImplemented() );
-			w.jContent.find(".close").click( (_)->w.close() );
+			showLatestUpdate(true);
 		}
 
 		// jPage.find(".exit").click( function(ev) {
@@ -101,6 +94,22 @@ class Home extends Page {
 		// });
 
 		updateRecents();
+	}
+
+	function showLatestUpdate(isNewUpdate=false) {
+		var w = new ui.Modal();
+		w.canBeClosedManually = !isNewUpdate;
+		var latest = Const.getChangeLog().latest;
+		var ver = new Version( Const.getAppVersion() );
+		w.loadTemplate("appUpdated", {
+			ver: latest.version.getTrimmedNumbers(true),
+			app: Const.APP_NAME,
+			title: latest.title==null ? "" : latest.title,
+			md: latest.allNoteLines.join("\n"),
+		});
+
+		w.jContent.find(".changelog").click( (_)->N.notImplemented() );
+		w.jContent.find(".close").click( (_)->w.close() );
 	}
 
 
