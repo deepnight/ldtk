@@ -17,6 +17,7 @@ This document is for my personal use only, so I don't forget anything ;)
 - Copy *Releases notes* to GitHub
 - Build macOS and Linux distribs
 - Attach them to GitHub Release
+- Build QuickType files
 
 ## Publish
 - Upload HaxeLib
@@ -24,6 +25,7 @@ This document is for my personal use only, so I don't forget anything ;)
 - Upload macOS and Linux builds to Itch.io
 - Upload Changelog to FTP
 - Upload JSON Schema to FTP
+- Upload QuickType parsers
 - Publish GitHub release
 
 ## Finalize
