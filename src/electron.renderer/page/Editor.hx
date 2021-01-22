@@ -684,13 +684,13 @@ class Editor extends Page {
 
 		panTool.startUsing(ev,m);
 
-		if( !ev.cancel )
+		if( !ev.cancel && !project.isBackup() )
 			rulers.onMouseDown( ev, m );
 
 		if( !ev.cancel )
 			worldTool.onMouseDown(ev, m);
 
-		if( !ev.cancel && !worldMode ) {
+		if( !ev.cancel && !worldMode && !project.isBackup() ) {
 			if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && ev.button==0 )
 				selectionTool.startUsing( ev, m );
 			else if( isSpecialToolActive() )
@@ -698,6 +698,9 @@ class Editor extends Page {
 			else
 				curTool.startUsing( ev, m );
 		}
+
+		if( !ev.cancel && project.isBackup() )
+			N.error("Backup files should not be edited directly");
 	}
 
 	function onMouseUp() {

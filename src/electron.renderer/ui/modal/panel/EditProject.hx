@@ -11,20 +11,20 @@ class EditProject extends ui.modal.Panel {
 		});
 		linkToButton("button.editProject");
 
-		jContent.find("button.save").click( function(ev) {
+		var jSave = jContent.find("button.save").click( function(ev) {
 			editor.onSave();
 		});
+		if( project.isBackup() )
+			jSave.text(L.t._("Restore this backup"));
 
-		jContent.find("button.saveAs").click( function(ev) {
+		var jSaveAs = jContent.find("button.saveAs").click( function(ev) {
 			editor.onSave(true);
 		});
+		if( project.isBackup() )
+			jSaveAs.hide();
 
 		jContent.find("button.locate").click( function(ev) {
 			JsTools.exploreToFile(project.filePath.full, true);
-		});
-
-		jContent.find("button.close").click( function(ev) {
-			editor.onClose();
 		});
 
 		updateProjectForm();
