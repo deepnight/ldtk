@@ -83,9 +83,9 @@ class Project {
 			: dn.FilePath.fromFile( filePath.directory +"/"+ relPath ).full;
 	}
 
-	public static function createEmpty(path:String) {
+	public static function createEmpty(filePath:String) {
 		var p = new Project();
-		p.filePath.parseFilePath(path);
+		p.filePath.parseFilePath(filePath);
 		p.createLevel();
 
 		return p;
