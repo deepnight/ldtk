@@ -229,7 +229,7 @@ class EntityRender extends dn.Process {
 					var tf = new h2d.Text(getDefaultFont(), valuesFlow);
 					tf.scale(settings.v.editorUiScale);
 					tf.textColor = ei.getSmartColor(true);
-					tf.maxWidth = 400;
+					tf.maxWidth = 400 * ( 0.5 + 0.5*settings.v.editorUiScale );
 					var v = fi.getForDisplay(idx);
 					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
 						tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';

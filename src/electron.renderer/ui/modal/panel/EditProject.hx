@@ -31,6 +31,7 @@ class EditProject extends ui.modal.Panel {
 
 		if( !project.isBackup() )
 			jContent.find("button.settings").click( function(ev) {
+				close();
 				new ui.modal.dialog.EditAppSettings();
 			});
 

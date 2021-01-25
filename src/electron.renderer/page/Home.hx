@@ -393,6 +393,10 @@ class Home extends Page {
 			case K.ENTER:
 				jPage.find("ul.recentFiles li:not(.title):first").click();
 
+			// Open settings
+			case K.F12 if( !App.ME.hasAnyToggleKeyDown() ):
+				new ui.modal.dialog.EditAppSettings();
+
 			case K.ESCAPE:
 				if( jPage.find(".changelogsWrapper").hasClass("fullscreen") )
 					jPage.find("button.fullscreen").click();
