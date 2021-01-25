@@ -1,0 +1,48 @@
+{
+	"__header__": {
+		"fileType": "LDtk Project JSON",
+		"app": "LDtk",
+		"doc": "https://ldtk.io/json",
+		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
+		"appAuthor": "Sebastien 'deepnight' Benard",
+		"appVersion": "0.7.2",
+		"url": "https://ldtk.io"
+	},
+	"jsonVersion": "0.7.2",
+	"defaultPivotX": 0,
+	"defaultPivotY": 0,
+	"defaultGridSize": 16,
+	"bgColor": "#7F8093",
+	"defaultLevelBgColor": "#7F8093",
+	"nextUid": 1,
+	"minifyJson": false,
+	"externalLevels": false,
+	"exportTiled": false,
+	"exportPng": false,
+	"backupOnSave": false,
+	"backupLimit": 10,
+	"worldLayout": "Free",
+	"worldGridWidth": 256,
+	"worldGridHeight": 256,
+	"defs": { "layers": [], "entities": [], "tilesets": [], "enums": [], "externalEnums": [] },
+	"levels": [
+		{
+			"identifier": "Level",
+			"uid": 0,
+			"worldX": 0,
+			"worldY": 0,
+			"pxWid": 256,
+			"pxHei": 256,
+			"__bgColor": "#7F8093",
+			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
+			"externalRelPath": null,
+			"layerInstances": [],
+			"__neighbours": []
+		}
+	]
+}
