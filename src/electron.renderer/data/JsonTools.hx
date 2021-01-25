@@ -96,6 +96,12 @@ class JsonTools {
 		if( v==null && defaultIfMissing!=null )
 			return defaultIfMissing;
 
+		if( Type.typeof(v)==TFloat )
+			if( v>=M.T_INT16_MAX )
+				return defaultIfMissing;
+			else
+				return Std.int(v);
+
 		if( v==null || Type.typeof(v)!=TInt )
 			throw "Couldn't read Int "+v;
 
@@ -105,6 +111,12 @@ class JsonTools {
 	public static function readNullableInt(v:Dynamic) : Null<Int> {
 		if( v==null )
 			return null;
+
+		if( Type.typeof(v)==TFloat )
+			if( v>=M.T_INT16_MAX )
+				return null;
+			else
+				return Std.int(v);
 
 		if( Type.typeof(v)!=TInt )
 			throw "Couldn't read Nullable Int "+v;
