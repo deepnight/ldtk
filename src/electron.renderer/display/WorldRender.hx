@@ -77,7 +77,7 @@ class WorldRender extends dn.Process {
 		switch e {
 			case AppSettingsChanged:
 				renderAll();
-				
+
 			case WorldMode(active):
 				if( active )
 					invalidateLevel(editor.curLevel);
@@ -410,7 +410,7 @@ class WorldRender extends dn.Process {
 			if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
 				// Auto layer
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
-				if( td.isAtlasLoaded() ) {
+				if( td!=null && td.isAtlasLoaded() ) {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 					li.def.iterateActiveRulesInDisplayOrder( (r)->{
 						if( li.autoTilesCache.exists( r.uid ) ) {
@@ -440,9 +440,9 @@ class WorldRender extends dn.Process {
 			}
 			else if( li.def.type==Tiles ) {
 				// Classic tiles
-				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 				var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
-				if( td.isAtlasLoaded() ) {
+				if( td!=null && td.isAtlasLoaded() ) {
+					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 					for(cy in 0...li.cHei)
 					for(cx in 0...li.cWid)
 						if( !isCoordDone(li,cx,cy) && li.hasAnyGridTile(cx,cy) ) {
