@@ -2,6 +2,7 @@
 
 - Added a setting to change font size in Editor UI.
 - You can now press `F12` to open app settings from almost anywhere.
+- Added a button to delete crash recovery files on Home screen
 - More robust JSON parsing with invalid integer numbers
 - Fixed a crash with empty tilesets
 
