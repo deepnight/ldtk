@@ -107,13 +107,17 @@ class ProjectSaving extends dn.Process {
 
 
 			case SavingExternLevels:
-				// Init level dir
 				var levelDir = project.getAbsExternalFilesDir();
-				if( JsTools.fileExists(levelDir) )
-					JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
 
 				if( project.externalLevels ) {
 					logState();
+
+					// Init level dir
+					if( JsTools.fileExists(levelDir) )
+						JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
+					else
+						JsTools.createDirs(levelDir);
+
 					var ops = [];
 					for(l in savingData.externLevelsJson) {
 						var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(l.relPath) );
@@ -126,8 +130,11 @@ class ProjectSaving extends dn.Process {
 					}
 					new ui.modal.Progress(Lang.t._("Saving levels"), 3, ops);
 				}
-				else
+				else {
 					beginState(SavingLayerImages);
+					if( JsTools.fileExists(levelDir) )
+						JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
+				}
 
 
 			case SavingLayerImages:
