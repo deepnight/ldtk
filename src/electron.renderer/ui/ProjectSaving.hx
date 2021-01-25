@@ -75,8 +75,7 @@ class ProjectSaving extends dn.Process {
 					logState();
 					var fp = ProjectSaving.makeBackupFilePath(project);
 
-					if( !JsTools.fileExists(fp.directory) )
-						JsTools.createDirs(fp.directory);
+					initDir(fp.directory);
 
 					// Save a duplicate in backups folder
 					var savingData = prepareProjectSavingData(project, true);
@@ -111,12 +110,7 @@ class ProjectSaving extends dn.Process {
 
 				if( project.externalLevels ) {
 					logState();
-
-					// Init level dir
-					if( JsTools.fileExists(levelDir) )
-						JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
-					else
-						JsTools.createDirs(levelDir);
+					initDir(levelDir, Const.LEVEL_EXTENSION);
 
 					var ops = [];
 					for(l in savingData.externLevelsJson) {
@@ -131,9 +125,11 @@ class ProjectSaving extends dn.Process {
 					new ui.modal.Progress(Lang.t._("Saving levels"), 3, ops);
 				}
 				else {
-					beginState(SavingLayerImages);
+					// Remove previous external lmevels
 					if( JsTools.fileExists(levelDir) )
 						JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
+
+					beginState(SavingLayerImages);
 				}
 
 
@@ -143,12 +139,7 @@ class ProjectSaving extends dn.Process {
 					logState();
 					var ops = [];
 					var count = 0;
-
-					// Init PNG dir
-					if( !JsTools.fileExists(pngDir) )
-						JsTools.createDirs(pngDir);
-					else
-						JsTools.emptyDir(pngDir);
+					initDir(pngDir);
 
 					// Export level layers
 					var lr = new display.LayerRender();
@@ -221,8 +212,8 @@ class ProjectSaving extends dn.Process {
 			case Done:
 				// Delete empty project dir
 				var dir = project.getAbsExternalFilesDir();
-				if( JsTools.fileExists(dir) && JsTools.isDirEmpty(dir) ) {
-					log('Removing useless dir: $dir');
+				if( JsTools.fileExists(dir) && JsTools.isDirEmptyRec(dir) ) {
+					log('Removing empty dir: $dir');
 					JsTools.removeDir(dir);
 				}
 
@@ -233,6 +224,14 @@ class ProjectSaving extends dn.Process {
 		}
 	}
 
+
+
+	function initDir(dirPath:String, ?removeFileExt:String) {
+		if( !JsTools.fileExists(dirPath) )
+			JsTools.createDirs(dirPath);
+		else if( removeFileExt!=null )
+			JsTools.emptyDir(dirPath, [removeFileExt]);
+	}
 
 
 	function complete(success:Bool) {

@@ -2,6 +2,7 @@ package misc;
 
 import sortablejs.*;
 import sortablejs.Sortable;
+import js.node.Fs;
 
 class JsTools {
 	public static function makeSortable(jSortable:js.jquery.JQuery, ?jScrollRoot:js.jquery.JQuery, ?group:String, anim=true, onSort:(event:SortableDragEvent)->Void) {
@@ -541,12 +542,33 @@ class JsTools {
 		});
 	}
 
+	/** Check if dir is empty. Return FALSE even if it only contains empty sub dirs. **/
 	public static function isDirEmpty(path:String) {
 		if( !fileExists(path) )
 			return true;
 
 		for( f in js.node.Fs.readdirSync(path) )
 			return false;
+
+		return true;
+	}
+
+	/** Check if dir is empty, or if it only contains empty dirs **/
+	public static function isDirEmptyRec(path:String) {
+		if( !fileExists(path) )
+			return true;
+
+		var pendings = [ path ];
+		while( pendings.length>0 ) {
+			var fp = dn.FilePath.fromDir( pendings.shift() );
+			for( f in Fs.readdirSync(fp.full) ) {
+				var inf = Fs.lstatSync(fp.full+"/"+f);
+				if( !inf.isDirectory() )
+					return false;
+				else if( !inf.isSymbolicLink() ) {}
+					pendings.push( fp.full+"/"+f );
+			}
+		}
 
 		return true;
 	}
