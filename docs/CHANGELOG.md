@@ -1,3 +1,7 @@
+# 0.7.2
+
+- More robust JSON parsing with invalid integer numbers
+
 # 0.7.1
 
 - Fixed a crash when saving separate level files.
