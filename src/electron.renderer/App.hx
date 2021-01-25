@@ -329,7 +329,6 @@ class App extends dn.Process {
 
 		// Load
 		settings = new Settings();
-		trace(settings);
 
 		// Import recent projects to dirs
 		if( settings.v.recentDirs==null ) {
