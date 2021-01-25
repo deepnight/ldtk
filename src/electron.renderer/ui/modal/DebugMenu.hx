@@ -46,6 +46,11 @@ class DebugMenu extends ui.modal.ContextMenu {
 			App.LOG.printAll();
 		});
 
+		add(L.untranslated("Use best GPU: "+settings.v.useBestGPU), ()->{
+			settings.v.useBestGPU = !settings.v.useBestGPU;
+			settings.save();
+		});
+
 		add(L.untranslated("Flush log to disk"), ()->{
 			App.LOG.general( "\n"+dn.Process.rprintAll() );
 			App.LOG.flushToFile();

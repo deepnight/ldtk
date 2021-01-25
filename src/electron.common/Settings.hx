@@ -7,6 +7,7 @@ typedef AppSettings = {
 	var emptySpaceSelection : Bool;
 	var tileStacking : Bool;
 	var lastKnownVersion: Null<String>;
+	var useBestGPU : Bool;
 }
 
 
@@ -29,6 +30,7 @@ class Settings {
 			emptySpaceSelection: false,
 			tileStacking: false,
 			lastKnownVersion: null,
+			useBestGPU: true,
 		}
 
 		// Load
