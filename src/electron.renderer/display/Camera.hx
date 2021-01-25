@@ -8,7 +8,7 @@ class Camera extends dn.Process {
 	static var MAX_FOCUS_PADDING_Y = 400;
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
-	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
+	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	public var worldX(default,set) : Float;
 	public var worldY(default,set) : Float;

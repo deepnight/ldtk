@@ -81,10 +81,10 @@ class Home extends Page {
 		// });
 
 		// Notify app update
-		if( App.ME.settings.lastKnownVersion!=Const.getAppVersion() ) {
-			var prev = App.ME.settings.lastKnownVersion;
-			App.ME.settings.lastKnownVersion = Const.getAppVersion();
-			App.ME.saveSettings();
+		if( settings.v.lastKnownVersion!=Const.getAppVersion() ) {
+			var prev = settings.v.lastKnownVersion;
+			settings.v.lastKnownVersion = Const.getAppVersion();
+			App.ME.settings.save();
 
 			showLatestUpdate(true);
 		}
@@ -117,7 +117,7 @@ class Home extends Page {
 		ui.Tip.clear();
 		var uniqueColorMix = 0x6066d3;
 
-		var recents = App.ME.settings.recentProjects.copy();
+		var recents = settings.v.recentProjects.copy();
 
 		// Automatically detects backups
 		var i = 0;
@@ -278,7 +278,7 @@ class Home extends Page {
 
 
 		// Trim common parts in dirs
-		var dirs = App.ME.settings.recentDirs.map( dir->dn.FilePath.fromDir(dir) );
+		var dirs = settings.v.recentDirs.map( dir->dn.FilePath.fromDir(dir) );
 		dirs.reverse();
 		var trim = 0;
 		var same = true;

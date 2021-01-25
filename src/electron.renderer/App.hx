@@ -14,7 +14,7 @@ class App extends dn.Process {
 
 	public var lastKnownMouse : { pageX:Int, pageY:Int };
 	var curPageProcess : Null<Page>;
-	public var settings : AppSettings;
+	public var settings : Settings;
 	var keyDowns : Map<Int,Bool> = new Map();
 	public var args: dn.Args;
 	var mouseButtonDowns : Map<Int,Bool> = new Map();
@@ -94,7 +94,7 @@ class App extends dn.Process {
 		dn.LocalStorage.BASE_PATH = JsTools.getSettingsDir();
 		dn.LocalStorage.SUB_FOLDER_NAME = null;
 		loadSettings();
-		saveSettings();
+		settings.save();
 
 		// Auto updater
 		miniNotif("Checking for update...", true);
@@ -323,60 +323,33 @@ class App extends dn.Process {
 
 	public inline function changeSettings(doChange:Void->Void) {
 		doChange();
-		saveSettings();
+		settings.save();
 	}
 
-	public function loadSettings() {
+
+	function loadSettings() {
 		LOG.fileOp("Loading settings from "+JsTools.getSettingsDir()+"...");
 
-		// Migrate old JS sessionData
-		if( js.Browser.window.localStorage.getItem("session")!=null ) {
-			LOG.fileOp("Migrating old session to settings files...");
-			var raw = js.Browser.window.localStorage.getItem("session");
-			var old : AppSettings =
-				try haxe.Unserializer.run(raw)
-				catch( err:Dynamic ) null;
-			if( old!=null )
-				try {
-					if( old.recentProjects!=null )
-						for(i in 0...old.recentProjects.length)
-							old.recentProjects[i] = StringTools.replace(old.recentProjects[i], "\\", "/");
-					dn.LocalStorage.writeObject("settings", true, old);
-				} catch(e:Dynamic) {}
-
-			js.Browser.window.localStorage.removeItem("session");
-		}
-
-		settings = dn.LocalStorage.readObject("settings", true, {
-			recentProjects: [],
-			recentDirs: null,
-			compactMode: false,
-			grid: true,
-			singleLayerMode: false,
-			emptySpaceSelection: false,
-			tileStacking: false,
-			lastKnownVersion: null,
-		});
+		// Load
+		settings = new Settings();
+		trace(settings);
 
 		// Import recent projects to dirs
-		if( settings.recentDirs==null ) {
-			settings.recentDirs = [];
+		if( settings.v.recentDirs==null ) {
+			settings.v.recentDirs = [];
 			var dones = new Map();
-			var i = settings.recentProjects.length-1;
+			var i = settings.v.recentProjects.length-1;
 			while( i>=0 ) {
-				var fp = dn.FilePath.fromFile( settings.recentProjects[i] );
+				var fp = dn.FilePath.fromFile( settings.v.recentProjects[i] );
 				if( !isInAppDir(fp.full,true) && !dones.exists(fp.directory) ) {
 					dones.set(fp.directory, true);
-					settings.recentDirs.insert(0, fp.directory);
+					settings.v.recentDirs.insert(0, fp.directory);
 				}
 				i--;
 			}
 		}
 	}
 
-	public function saveSettings() {
-		dn.LocalStorage.writeObject("settings", true, settings);
-	}
 
 	function clearCurPage() {
 		jPage
@@ -396,7 +369,7 @@ class App extends dn.Process {
 		if( dir==null )
 			return false;
 		dir = StringTools.replace(dir, "\\", "/");
-		for(p in settings.recentDirs)
+		for(p in settings.v.recentDirs)
 			if( p==dir )
 				return true;
 		return false;
@@ -406,28 +379,28 @@ class App extends dn.Process {
 		if( dir==null || isInAppDir(dir,false) )
 			return;
 		dir = StringTools.replace(dir, "\\", "/");
-		settings.recentDirs.remove(dir);
-		settings.recentDirs.push(dir);
-		saveSettings();
+		settings.v.recentDirs.remove(dir);
+		settings.v.recentDirs.push(dir);
+		settings.save();
 	}
 
 	public function unregisterRecentDir(dir:String) {
 		if( dir==null )
 			return;
 		dir = StringTools.replace(dir, "\\", "/");
-		settings.recentDirs.remove(dir);
-		saveSettings();
+		settings.v.recentDirs.remove(dir);
+		settings.save();
 	}
 
 	public function clearRecentDirs() {
-		settings.recentDirs = [];
-		saveSettings();
+		settings.v.recentDirs = [];
+		settings.save();
 	}
 
 
 	public function recentProjectsContains(path:String) {
 		path = StringTools.replace(path, "\\", "/");
-		for(p in settings.recentProjects)
+		for(p in settings.v.recentProjects)
 			if( p==path )
 				return true;
 		return false;
@@ -454,9 +427,9 @@ class App extends dn.Process {
 			return false;
 
 		path = StringTools.replace(path, "\\", "/");
-		settings.recentProjects.remove(path);
-		settings.recentProjects.push(path);
-		saveSettings();
+		settings.v.recentProjects.remove(path);
+		settings.v.recentProjects.push(path);
+		settings.save();
 
 		var fp = dn.FilePath.fromFile(path);
 		registerRecentDir(fp.directory);
@@ -466,20 +439,20 @@ class App extends dn.Process {
 
 	public function unregisterRecentProject(path:String) {
 		path = StringTools.replace(path, "\\", "/");
-		settings.recentProjects.remove(path);
-		saveSettings();
+		settings.v.recentProjects.remove(path);
+		settings.save();
 	}
 
 	public function renameRecentProject(oldPath:String, newPath:String) {
-		for(i in 0...settings.recentProjects.length)
-			if( settings.recentProjects[i]==oldPath )
-				settings.recentProjects[i] = newPath;
-		saveSettings();
+		for(i in 0...settings.v.recentProjects.length)
+			if( settings.v.recentProjects[i]==oldPath )
+				settings.v.recentProjects[i] = newPath;
+		settings.save();
 	}
 
 	public function clearRecentProjects() {
-		settings.recentProjects = [];
-		saveSettings();
+		settings.v.recentProjects = [];
+		settings.save();
 	}
 
 	public function loadPage( create:()->Page ) {
@@ -540,10 +513,10 @@ class App extends dn.Process {
 	}
 
 	public function getDefaultDialogDir() {
-		if( settings.recentProjects.length==0 )
+		if( settings.v.recentProjects.length==0 )
 			return #if debug JsTools.getAppResourceDir() #else JsTools.getExeDir() #end;
 
-		var last = settings.recentProjects[settings.recentProjects.length-1];
+		var last = settings.v.recentProjects[settings.v.recentProjects.length-1];
 		return dn.FilePath.fromFile(last).directory;
 	}
 

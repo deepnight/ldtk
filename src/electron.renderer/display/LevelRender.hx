@@ -5,7 +5,7 @@ class LevelRender extends dn.Process {
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
-	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
+	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	var autoLayerRendering = true;
 
@@ -356,7 +356,7 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function applyGridVisibility() {
-		grid.visible = settings.grid && !editor.worldMode;
+		grid.visible = settings.v.grid && !editor.worldMode;
 	}
 
 	function renderGrid() {
@@ -438,8 +438,8 @@ class LevelRender extends dn.Process {
 			return;
 
 		lr.root.visible = isLayerVisible(li);
-		lr.root.alpha = li.def.displayOpacity * ( !settings.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
-		lr.root.filter = !settings.singleLayerMode || li==editor.curLayerInstance ? null : new h2d.filter.Group([
+		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
+		lr.root.filter = !settings.v.singleLayerMode || li==editor.curLayerInstance ? null : new h2d.filter.Group([
 			C.getColorizeFilterH2d(0x8c99c1, 0.9),
 			new h2d.filter.Blur(2),
 		]);

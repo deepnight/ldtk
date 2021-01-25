@@ -1,3 +1,4 @@
+-cp src/electron.common
 -cp src/electron.main
 -cp src/externs
 

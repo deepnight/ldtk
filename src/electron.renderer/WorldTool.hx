@@ -8,7 +8,7 @@ class WorldTool extends dn.Process {
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
-	var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
+	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	var clickedLevel : Null<data.Level>;
 	var levelOriginX : Int;
@@ -302,7 +302,7 @@ class WorldTool extends dn.Process {
 					b.x = dn.M.round( b.x/project.worldGridWidth ) * project.worldGridWidth;
 					b.y = dn.M.round( b.y/project.worldGridHeight ) * project.worldGridHeight;
 				}
-				else if( settings.grid ) {
+				else if( settings.v.grid ) {
 					b.x = dn.M.round( b.x/project.defaultGridSize ) * project.defaultGridSize;
 					b.y = dn.M.round( b.y/project.defaultGridSize ) * project.defaultGridSize;
 				}
@@ -432,7 +432,7 @@ class WorldTool extends dn.Process {
 			switch project.worldLayout {
 				case Free:
 					// Snap to grid
-					if( settings.grid ) {
+					if( settings.v.grid ) {
 						var g = project.getSmartLevelGridSize();
 						clickedLevel.worldX = Std.int( clickedLevel.worldX/g ) * g;
 						clickedLevel.worldY = Std.int( clickedLevel.worldY/g ) * g;
