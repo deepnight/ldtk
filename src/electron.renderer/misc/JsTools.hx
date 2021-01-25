@@ -635,9 +635,13 @@ class JsTools {
 			if( filePath==null )
 				N.error("No file");
 			else {
-				ev.preventDefault();
-				ev.stopPropagation();
-				exploreToFile(filePath, isFile);
+				if( !JsTools.fileExists(filePath) )
+					N.error("Sorry, but this file couldn't be found.");
+				else {
+					ev.preventDefault();
+					ev.stopPropagation();
+					exploreToFile(filePath, isFile);
+				}
 			}
 		});
 
