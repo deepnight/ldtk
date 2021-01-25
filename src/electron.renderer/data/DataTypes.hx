@@ -3,8 +3,7 @@ package data;
 /*
 	WARNING: all the follow types are serialized when saving a Project:
 		- do not remove Enum values,
-		- always add new Enum values at the end of the Enum,
-		- Enum values can be renamed (they are stored as enum indexes)
+		- Enum values CANNOT be renamed (they are stored as strings)
 		- do not rename Typedef fields or change their type
 */
 
