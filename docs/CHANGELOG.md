@@ -1,3 +1,9 @@
+# 0.7.1
+
+- Fixed a crash when saving separate level files
+- Fixed a crash with FilePath fields in Tiled export
+- Fixed removal of empty dirs when saving a project
+
 # 0.7.0 - Getting serious
 
 This update features many important changes to make LDtk **production ready** and **future proof**. These changes will allow better support for large projects, better API creation and maintenance, and smoother user adoption.

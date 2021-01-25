@@ -1,4 +1,4 @@
-# LDtk Json structure (version 0.7.0)
+# LDtk Json structure (version 0.7.1)
 
 ## Table of contents
    - [LDtk Json root](#ldtk-ProjectJson)
