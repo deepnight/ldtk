@@ -121,45 +121,6 @@ class LayerRender {
 	}
 
 
-	// var flippedTileCache : Map< Int, Map<Int,hxd.BitmapData> >;
-
-	// function getFlippedPixels(td:data.def.TilesetDef, tid:Int, flipBits:Int) : hxd.BitmapData {
-	// 	if( flippedTileCache==null )
-	// 		flippedTileCache = new Map();
-
-	// 	if( !flippedTileCache.exists(tid) )
-	// 		flippedTileCache.set(tid, new Map());
-
-	// 	if( !flippedTileCache.get(tid).exists(flipBits) ) {
-	// 		// Init cache
-	// 		var size = td.tileGridSize;
-	// 		var p = hxd.Pixels.alloc(size, size, td.pixels.format);
-	// 		var srcX = td.getTileSourceX(tid);
-	// 		var srcY = td.getTileSourceY(tid);
-	// 		switch flipBits {
-	// 			case 1:
-	// 				for( x in 0...size )
-	// 					p.blit(
-	// 						size-1-x, 0,
-	// 						td.pixels,
-	// 						srcX+x, srcY,
-	// 						1, size
-	// 					);
-
-	// 			case 2: throw "not done yet"; // TODO
-	// 			case 3: throw "not done yet"; // TODO
-
-	// 			case _: throw "unexpected flipbits value";
-	// 		}
-	// 		var bd = new hxd.BitmapData(p.width, p.height);
-	// 		bd.setPixels(p);
-	// 		flippedTileCache.get(tid).set(flipBits, bd);
-	// 		trace("init for #"+tid+" flips="+flipBits);
-	// 	}
-
-	// 	return flippedTileCache.get(tid).get(flipBits);
-	// }
-
 	public function createPngs(p:data.Project, l:data.Level, li:data.inst.LayerInstance) : Array<{ suffix:Null<String>, bytes:haxe.io.Bytes }> {
 		var out = [];
 		switch li.def.type {

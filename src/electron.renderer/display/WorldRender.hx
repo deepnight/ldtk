@@ -11,7 +11,7 @@ class WorldRender extends dn.Process {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
-	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
+	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	var worldBgColor(get,never) : UInt;
 		inline function get_worldBgColor() return C.interpolateInt(project.bgColor, 0x8187bd, 0.85);
@@ -229,7 +229,7 @@ class WorldRender extends dn.Process {
 			return;
 
 		// Base level grid
-		if( project.worldLayout==Free && camera.adjustedZoom>=1.5 && settings.grid ) {
+		if( project.worldLayout==Free && camera.adjustedZoom>=1.5 && settings.v.grid ) {
 			grids.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-1.5)/0.6, 1 ) );
 			var g = project.getSmartLevelGridSize() * camera.adjustedZoom;
 			var off = root.x % g;
@@ -406,7 +406,7 @@ class WorldRender extends dn.Process {
 
 			if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
 				// Auto layer
-				var td = editor.project.defs.getTilesetDef(li.def.autoTilesetDefUid);
+				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				if( td.isAtlasLoaded() ) {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 					li.def.iterateActiveRulesInDisplayOrder( (r)->{

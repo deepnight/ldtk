@@ -1,4 +1,5 @@
 -cp src/externs
+-cp src/electron.common
 -cp src/electron.renderer
 
 -lib heaps

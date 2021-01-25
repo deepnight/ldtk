@@ -67,31 +67,18 @@ class Home extends Page {
 			showLatestUpdate();
 		});
 
-		// var jFullscreenBt = jPage.find("button.fullscreen");
-		// var jChangelogs = jPage.find(".changelogsWrapper");
-
-		// jFullscreenBt.click( function(ev) {
-		// 	jChangelogs.toggleClass("fullscreen");
-		// 	var btIcon = jFullscreenBt.find(".icon");
-		// 	btIcon.removeClass();
-		// 	if( jChangelogs.hasClass("fullscreen") )
-		// 		btIcon.addClass("icon fullscreen_exit");
-		// 	else
-		// 		btIcon.addClass("icon fullscreen");
-		// });
-
 		// Notify app update
-		if( App.ME.settings.lastKnownVersion!=Const.getAppVersion() ) {
-			var prev = App.ME.settings.lastKnownVersion;
-			App.ME.settings.lastKnownVersion = Const.getAppVersion();
-			App.ME.saveSettings();
+		if( settings.v.lastKnownVersion!=Const.getAppVersion() ) {
+			var prev = settings.v.lastKnownVersion;
+			settings.v.lastKnownVersion = Const.getAppVersion();
+			App.ME.settings.save();
 
 			showLatestUpdate(true);
 		}
 
-		// jPage.find(".exit").click( function(ev) {
-		// 	App.ME.exit(true);
-		// });
+		jPage.find("button.settings").click( function(ev) {
+			new ui.modal.dialog.SettingsWindow();
+		});
 
 		updateRecents();
 	}
@@ -117,7 +104,7 @@ class Home extends Page {
 		ui.Tip.clear();
 		var uniqueColorMix = 0x6066d3;
 
-		var recents = App.ME.settings.recentProjects.copy();
+		var recents = settings.v.recentProjects.copy();
 
 		// Automatically detects backups
 		var i = 0;
@@ -278,7 +265,7 @@ class Home extends Page {
 
 
 		// Trim common parts in dirs
-		var dirs = App.ME.settings.recentDirs.map( dir->dn.FilePath.fromDir(dir) );
+		var dirs = settings.v.recentDirs.map( dir->dn.FilePath.fromDir(dir) );
 		dirs.reverse();
 		var trim = 0;
 		var same = true;

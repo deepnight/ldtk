@@ -602,7 +602,7 @@ class GenericLevelElementGroup {
 				r.bottomPx += getDeltaY(origin,to);
 			}
 
-			var layers = App.ME.settings.singleLayerMode
+			var layers = App.ME.settings.v.singleLayerMode
 				? [ editor.curLayerInstance ]
 				: editor.curLevel.layerInstances;
 			for(li in layers)
@@ -698,7 +698,7 @@ class GenericLevelElementGroup {
 								if( !isCopy && li.hasAnyGridTile(cx,cy) )
 									postRemovals.push( ()-> li.removeAllGridTiles(cx,cy) );
 
-								var stacking = li.getGridTileStack(cx,cy).length>1 || App.ME.settings.tileStacking;
+								var stacking = li.getGridTileStack(cx,cy).length>1 || App.ME.settings.v.tileStacking;
 								for( t in li.getGridTileStack(cx,cy) )
 									postInserts.push( ()-> li.addGridTile(tcx, tcy, t.tileId, t.flips, stacking) );
 

@@ -119,7 +119,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 
 							case Random:
 								var id = v.ids[ Std.random(v.ids.length) ];
-								curLayerInstance.addGridTile( cx,cy, id, settings.tileStacking && !curTilesetDef.isTileOpaque(id) );
+								curLayerInstance.addGridTile( cx,cy, id, settings.v.tileStacking && !curTilesetDef.isTileOpaque(id) );
 						}
 
 					case Remove:
@@ -158,7 +158,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 					// Erase rectangle
 					if( editor.curLayerInstance.hasAnyGridTile(cx,cy) ) {
 						editor.curLevelHistory.markChange(cx,cy);
-						if( settings.tileStacking )
+						if( settings.v.tileStacking )
 							editor.curLayerInstance.removeTopMostGridTile(cx,cy);
 						else
 							editor.curLayerInstance.removeAllGridTiles(cx,cy);
@@ -209,7 +209,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 
 			if( onlyCoordsMask==null || onlyCoordsMask.exists(curLayerInstance.coordId(x,y)) )
 			if( curLayerInstance.isValid(x,y) && selMap.exists(tid) ) {
-				curLayerInstance.addGridTile(x,y, tid, settings.tileStacking && !curTilesetDef.isTileOpaque(tid));
+				curLayerInstance.addGridTile(x,y, tid, settings.v.tileStacking && !curTilesetDef.isTileOpaque(tid));
 				editor.curLevelHistory.markChange(x,y);
 				anyChange = true;
 			}
@@ -229,8 +229,8 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 			var tid = sel.ids[Std.random(sel.ids.length)];
 			// if( li.isValid(cx,cy) && ( li.getGridTileId(cx,cy)!=tid || li.getGridTileFlips(cx,cy)!=flips ) ) {
 			if( li.isValid(cx,cy) && !hasAlreadyPaintedAt(cx,cy) ) {
-				li.addGridTile(cx,cy, tid, flips, settings.tileStacking && !curTilesetDef.isTileOpaque(tid));
-				if( settings.tileStacking )
+				li.addGridTile(cx,cy, tid, flips, settings.v.tileStacking && !curTilesetDef.isTileOpaque(tid));
+				if( settings.v.tileStacking )
 					markAsPainted(cx,cy);
 				anyChange = true;
 			}
@@ -256,8 +256,8 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				var tcx = cx + ( flipX ? right-tdCx : tdCx-left ) * gridDiffScale;
 				var tcy = cy + ( flipY ? bottom-tdCy : tdCy-top ) * gridDiffScale;
 				if( li.isValid(tcx,tcy) && !hasAlreadyPaintedAt(tcx,tcy	) ) {
-					li.addGridTile(tcx,tcy,tid, flips, settings.tileStacking && !curTilesetDef.isTileOpaque(tid));
-					if( settings.tileStacking )
+					li.addGridTile(tcx,tcy,tid, flips, settings.v.tileStacking && !curTilesetDef.isTileOpaque(tid));
+					if( settings.v.tileStacking )
 						markAsPainted(tcx,tcy);
 					editor.curLevelHistory.markChange(tcx,tcy);
 					anyChange = true;
@@ -275,7 +275,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		if( isRandomMode() || isPaintingSingleTile() ) {
 			// Remove tiles one-by-one
 			if( editor.curLayerInstance.hasAnyGridTile(cx,cy) && !hasAlreadyPaintedAt(cx,cy) ) {
-				if( settings.tileStacking ) {
+				if( settings.v.tileStacking ) {
 					markAsPainted(cx,cy);
 					editor.curLayerInstance.removeTopMostGridTile(cx,cy);
 				}
@@ -335,7 +335,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		else
 			editor.cursor.set(None);
 
-		if( settings.tileStacking && curLevel.inBoundsWorld(m.worldX,m.worldY) )
+		if( settings.v.tileStacking && curLevel.inBoundsWorld(m.worldX,m.worldY) )
 			editor.cursor.setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("cell") );
 	}
 

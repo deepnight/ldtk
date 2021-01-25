@@ -49,7 +49,7 @@ class SelectionTool extends Tool<Int> {
 				case AutoLayer:
 			}
 
-		if( settings.emptySpaceSelection && !group.isEmpty() )
+		if( settings.v.emptySpaceSelection && !group.isEmpty() )
 			group.addSelectionRect(0, level.pxWid, 0, level.pxHei);
 	}
 
@@ -143,7 +143,7 @@ class SelectionTool extends Tool<Int> {
 			editor.cursor.set(Move);
 		else if( !isRunning() ) {
 			// Preview picking
-			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.singleLayerMode);
+			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.v.singleLayerMode);
 			switch ge {
 			case null:
 				editor.cursor.set(PickNothing);
@@ -210,7 +210,7 @@ class SelectionTool extends Tool<Int> {
 			else {
 				// Start a new selection
 				if( !rectangle ) {
-					var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.singleLayerMode);
+					var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.v.singleLayerMode);
 					if( ge!=null )
 						select([ ge ]);
 					else
@@ -359,7 +359,7 @@ class SelectionTool extends Tool<Int> {
 				}
 			}
 
-			if( settings.singleLayerMode )
+			if( settings.v.singleLayerMode )
 				_addRectFromLayer( editor.curLayerInstance );
 			else {
 				for(li in editor.curLevel.layerInstances)
@@ -367,7 +367,7 @@ class SelectionTool extends Tool<Int> {
 			}
 			select(all, true);
 
-			if( settings.emptySpaceSelection && !group.isEmpty() )
+			if( settings.v.emptySpaceSelection && !group.isEmpty() )
 				group.addSelectionRect(leftPx, rightPx, topPx, bottomPx);
 		}
 
