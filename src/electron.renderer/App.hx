@@ -38,7 +38,6 @@ class App extends dn.Process {
 		LOG.add("BOOT","ExePath: "+JsTools.getExeDir());
 		LOG.add("BOOT","Resources: "+JsTools.getAppResourceDir());
 		LOG.add("BOOT","SamplesPath: "+JsTools.getSamplesDir());
-		LOG.add("BOOT","Settings: "+JsTools.getSettingsDir());
 
 		loadingLog = new dn.Log();
 		loadingLog.onAdd = (l)->LOG.addLogEntry(l);
@@ -91,8 +90,6 @@ class App extends dn.Process {
 		APP_RESOURCE_DIR = fp.directoryWithSlash;
 
 		// Restore settings
-		dn.LocalStorage.BASE_PATH = JsTools.getSettingsDir();
-		dn.LocalStorage.SUB_FOLDER_NAME = null;
 		loadSettings();
 		settings.save();
 
@@ -328,7 +325,7 @@ class App extends dn.Process {
 
 
 	function loadSettings() {
-		LOG.fileOp("Loading settings from "+JsTools.getSettingsDir()+"...");
+		LOG.fileOp("Loading settings from "+Settings.getDir()+"...");
 
 		// Load
 		settings = new Settings();

@@ -33,7 +33,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 		}
 
 		add(L.untranslated("Open settings dir"), ()->{
-			JsTools.exploreToFile(JsTools.getSettingsDir(), false);
+			JsTools.exploreToFile(Settings.getDir(), false);
 		});
 
 		add(L.untranslated("Emulate new update"), ()->{

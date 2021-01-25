@@ -15,6 +15,10 @@ class Settings {
 	public var v : AppSettings;
 
 	public function new() {
+		// Init storage
+		dn.LocalStorage.BASE_PATH = getDir();
+		dn.LocalStorage.SUB_FOLDER_NAME = null;
+
 		// Init defaults
 		defaults = {
 			recentProjects: [],
@@ -29,6 +33,15 @@ class Settings {
 
 		// Load
 		v = dn.LocalStorage.readObject("settings", true, defaults);
+	}
+
+	public static function getDir() {
+		var path = electron.main.App!=null
+			?	#if debug	electron.main.App.getAppPath()
+				#else		electron.main.App.getPath("userData") #end
+			:	#if debug	Std.string( electron.renderer.IpcRenderer.sendSync("getAppResourceDir") );
+				#else		Std.string( electron.renderer.IpcRenderer.sendSync("getUserDataDir") ); #end
+		return dn.FilePath.fromDir( path+"/settings" ).useSlashes().directory;
 	}
 
 	public function toString() {
