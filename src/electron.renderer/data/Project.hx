@@ -1,7 +1,8 @@
 package data;
 
 class Project {
-	public static var DEFAULT_BG_COLOR = 0x7f8093;
+	public static var DEFAULT_WORKSPACE_BG = 0x676877;
+	public static var DEFAULT_LEVEL_BG = 0x7f8093;
 	public static var DEFAULT_GRID_SIZE = 16; // px
 	public static var DEFAULT_LEVEL_SIZE = 16; // cells
 
@@ -34,8 +35,8 @@ class Project {
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
-		bgColor = DEFAULT_BG_COLOR;
-		defaultLevelBgColor = DEFAULT_BG_COLOR;
+		bgColor = DEFAULT_WORKSPACE_BG;
+		defaultLevelBgColor = DEFAULT_LEVEL_BG;
 		defaultPivotX = defaultPivotY = 0;
 		worldLayout = Free;
 		worldGridWidth = defaultGridSize * DEFAULT_LEVEL_SIZE;
@@ -104,7 +105,7 @@ class Project {
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
-		p.bgColor = JsonTools.readColor( json.bgColor, DEFAULT_BG_COLOR );
+		p.bgColor = JsonTools.readColor( json.bgColor, DEFAULT_WORKSPACE_BG );
 		p.defaultLevelBgColor = JsonTools.readColor( json.defaultLevelBgColor, p.bgColor );
 		p.externalLevels = JsonTools.readBool(json.externalLevels, false);
 
