@@ -213,11 +213,26 @@ class Home extends Page {
 						ev.stopPropagation();
 						// List all backup files
 						var ctx = new ui.modal.ContextMenu(ev);
-						for( b in all )
+						var crashBackups = [];
+						for( b in all ) {
+							if( b.crash )
+								crashBackups.push(b.backup);
+
 							ctx.add(
 								ui.ProjectSaving.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
 								Lang.date(b.date),
 								()->App.ME.loadProject(b.backup.full)
+							);
+						}
+
+						if( crashBackups.length>0 )
+							ctx.add(
+								L.t._("Delete all crash recovery files"),
+								()->{
+									for(fp in crashBackups)
+										JsTools.removeFile(fp.full);
+									updateRecents();
+								}
 							);
 					});
 				}

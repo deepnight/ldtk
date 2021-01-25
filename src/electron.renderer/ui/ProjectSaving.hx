@@ -334,7 +334,7 @@ class ProjectSaving extends dn.Process {
 		return fp;
 	}
 
-	public static function extractBackupInfosFromFileName(backupAbsPath:String) : Null<{ backup:dn.FilePath, project:dn.FilePath, date:Date }> {
+	public static function extractBackupInfosFromFileName(backupAbsPath:String) : Null<{ backup:dn.FilePath, project:dn.FilePath, date:Date, crash:Bool }> {
 		var fp = dn.FilePath.fromFile(backupAbsPath);
 		var reg = ~/^(.*?)___([0-9\-]+)__([0-9\-]+)/gi;
 		if( !reg.match(fp.fileName) )
@@ -348,6 +348,7 @@ class ProjectSaving extends dn.Process {
 			return {
 				project: original,
 				backup: fp,
+				crash: isCrashFile(backupAbsPath),
 				date: date,
 			}
 		}
