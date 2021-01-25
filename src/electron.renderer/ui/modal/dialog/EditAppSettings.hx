@@ -59,6 +59,7 @@ class EditAppSettings extends ui.modal.Dialog {
 
 	function onSettingChanged() {
 		settings.save();
+		anyChange = true;
 		if( hasEditor() )
 			Editor.ME.ge.emit( AppSettingsChanged );
 		updateForm();
