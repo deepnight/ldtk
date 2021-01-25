@@ -67,19 +67,6 @@ class Home extends Page {
 			showLatestUpdate();
 		});
 
-		// var jFullscreenBt = jPage.find("button.fullscreen");
-		// var jChangelogs = jPage.find(".changelogsWrapper");
-
-		// jFullscreenBt.click( function(ev) {
-		// 	jChangelogs.toggleClass("fullscreen");
-		// 	var btIcon = jFullscreenBt.find(".icon");
-		// 	btIcon.removeClass();
-		// 	if( jChangelogs.hasClass("fullscreen") )
-		// 		btIcon.addClass("icon fullscreen_exit");
-		// 	else
-		// 		btIcon.addClass("icon fullscreen");
-		// });
-
 		// Notify app update
 		if( settings.v.lastKnownVersion!=Const.getAppVersion() ) {
 			var prev = settings.v.lastKnownVersion;
@@ -89,9 +76,9 @@ class Home extends Page {
 			showLatestUpdate(true);
 		}
 
-		// jPage.find(".exit").click( function(ev) {
-		// 	App.ME.exit(true);
-		// });
+		jPage.find("button.settings").click( function(ev) {
+			new ui.modal.dialog.SettingsWindow();
+		});
 
 		updateRecents();
 	}
