@@ -1033,8 +1033,8 @@ class Editor extends Page {
 			if( !success )
 				N.error("Saving failed!");
 			else {
-				App.LOG.fileOp('Saved ${project.filePath.fileWithExt}.');
-				N.success('Saved ${project.filePath.fileWithExt}.');
+				App.LOG.fileOp('Saved "${project.filePath.fileWithExt}".');
+				N.success('Saved "${project.filePath.fileName}".');
 
 				App.ME.registerRecentProject(project.filePath.full);
 				this.needSaving = false;
