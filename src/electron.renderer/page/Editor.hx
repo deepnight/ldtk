@@ -1095,6 +1095,7 @@ class Editor extends Page {
 		else if( shouldLogEvent(e) ) {
 			var extra : Dynamic = null;
 			switch e {
+				case AppSettingsChanged:
 				case WorldMode(active):
 				case ViewportChanged:
 				case ProjectSelected:
@@ -1179,6 +1180,7 @@ class Editor extends Page {
 
 		// Use event
 		switch e {
+			case AppSettingsChanged:
 			case WorldMode(active):
 
 			case ViewportChanged:

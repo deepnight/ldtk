@@ -75,6 +75,9 @@ class WorldRender extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
+			case AppSettingsChanged:
+				renderAll();
+				
 			case WorldMode(active):
 				if( active )
 					invalidateLevel(editor.curLevel);

@@ -77,7 +77,7 @@ class Home extends Page {
 		}
 
 		jPage.find("button.settings").click( function(ev) {
-			new ui.modal.dialog.SettingsWindow();
+			new ui.modal.dialog.EditAppSettings();
 		});
 
 		updateRecents();

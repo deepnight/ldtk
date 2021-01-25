@@ -13,6 +13,8 @@ class EditProject extends ui.modal.Panel {
 
 		var jSave = jContent.find("button.save").click( function(ev) {
 			editor.onSave();
+			if( project.isBackup() )
+				close();
 		});
 		if( project.isBackup() )
 			jSave.text(L.t._("Restore this backup"));
@@ -26,6 +28,11 @@ class EditProject extends ui.modal.Panel {
 		jContent.find("button.locate").click( function(ev) {
 			JsTools.exploreToFile(project.filePath.full, true);
 		});
+
+		if( !project.isBackup() )
+			jContent.find("button.settings").click( function(ev) {
+				new ui.modal.dialog.EditAppSettings();
+			});
 
 		updateProjectForm();
 	}
