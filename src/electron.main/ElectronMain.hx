@@ -7,6 +7,8 @@ class ElectronMain {
 	static var mainWindow : electron.main.BrowserWindow;
 
 	static function main() {
+		App.commandLine.appendSwitch("force_high_performance_gpu");
+
 		App.whenReady().then( (_)->createAppWindow() );
 
 		// Mac
