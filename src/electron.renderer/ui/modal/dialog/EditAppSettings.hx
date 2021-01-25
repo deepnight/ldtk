@@ -1,6 +1,9 @@
 package ui.modal.dialog;
 
 class EditAppSettings extends ui.modal.Dialog {
+	var anyChange = false;
+	var needRestart = false;
+
 	public function new() {
 		super();
 
@@ -18,16 +21,18 @@ class EditAppSettings extends ui.modal.Dialog {
 		var i = Input.linkToHtmlInput(settings.v.useBestGPU, jForm.find("#gpu"));
 		i.onChange = ()->{
 			onSettingChanged();
-			N.warning(L.t._("You need to RESTART the app to apply your changes."));
+			needRestart = true;
 		}
 
 		// Font scaling
 		var jScale = jForm.find("#fontScale");
 		jScale.empty();
-		for(s in [0.5, 0.75, 1, 1.5, 2, 3, 4]) {
+		for(s in [0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4]) {
 			var jOpt = new J('<option value="$s"/>');
 			jScale.append(jOpt);
 			jOpt.text('${Std.int(s*100)}%');
+			if( s==1 )
+				jOpt.append(" "+L.t._("(default)"));
 			if( s==settings.v.editorUiScale)
 				jOpt.prop("selected",true);
 		}
@@ -37,6 +42,15 @@ class EditAppSettings extends ui.modal.Dialog {
 		});
 
 		JsTools.parseComponents(jForm);
+	}
+
+	override function onClose() {
+		super.onClose();
+
+		if( needRestart )
+			N.warning( L.t._("Saved. You need to RESTART the app to apply your changes.") );
+		else if( anyChange )
+			N.success( L.t._("Settings saved.") );
 	}
 
 	function hasEditor() {
