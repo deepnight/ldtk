@@ -1684,6 +1684,12 @@ textarea {
 	}
 }
 
+.window.settings {
+	.wrapper .content {
+		width: 400px;
+	}
+}
+
 .window.buy {
 	.wrapper .content {
 		max-width: 380px;
@@ -2929,6 +2935,9 @@ canvas#webgl {
 				}
 				&.buy {
 					text-transform: none;
+				}
+				&.settings {
+					flex: 0 1 0px;
 				}
 			}
 		}

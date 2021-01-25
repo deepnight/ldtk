@@ -93,7 +93,7 @@ class LayerDef {
 			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
 
 			autoTilesetDefUid: autoTilesetDefUid,
-			autoRuleGroups: autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)),
+			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
 			autoSourceLayerDefUid: autoSourceLayerDefUid,
 
 			tilesetDefUid: tilesetDefUid,
@@ -183,7 +183,7 @@ class LayerDef {
 
 
 	public inline function isAutoLayer() {
-		return type==IntGrid && autoTilesetDefUid!=null || type==AutoLayer || autoRuleGroups.length>0;
+		return type==IntGrid && autoTilesetDefUid!=null || type==AutoLayer;
 	}
 
 	public function autoLayerRulesCanBeUsed() {

@@ -1,5 +1,6 @@
 class Page extends dn.Process {
 	var jPage(get,never) : js.jquery.JQuery; inline function get_jPage() return App.ME.jPage;
+	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	public function new() {
 		super(App.ME);

@@ -12,8 +12,6 @@ class Editor extends Page {
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 	var jMouseCoords : js.jquery.JQuery;
 
-	public var settings(get,never) : AppSettings; inline function get_settings() return App.ME.settings;
-
 	public var curLevel(get,never) : data.Level;
 		inline function get_curLevel() return project.getLevel(curLevelId);
 
@@ -106,7 +104,7 @@ class Editor extends Page {
 			else
 				N.error('Invalid level index $loadLevelIndex');
 
-		setCompactMode( settings.compactMode, true );
+		setCompactMode( settings.v.compactMode, true );
 		dn.Process.resizeAll();
 	}
 
@@ -171,12 +169,12 @@ class Editor extends Page {
 
 
 		// Option checkboxes
-		linkOption( jEditOptions.find("li.singleLayerMode"), ()->settings.singleLayerMode, (v)->setSingleLayerMode(v) );
-		linkOption( jEditOptions.find("li.grid"), ()->settings.grid, (v)->setGrid(v) );
-		linkOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
+		linkOption( jEditOptions.find("li.singleLayerMode"), ()->settings.v.singleLayerMode, (v)->setSingleLayerMode(v) );
+		linkOption( jEditOptions.find("li.grid"), ()->settings.v.grid, (v)->setGrid(v) );
+		linkOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.v.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
 		linkOption(
 			jEditOptions.find("li.tileStacking"),
-			()->settings.tileStacking,
+			()->settings.v.tileStacking,
 			(v)->setTileStacking(v),
 			()->curLayerDef!=null && curLayerDef.type==Tiles
 		);
@@ -435,7 +433,7 @@ class Editor extends Page {
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() )
-					setCompactMode( !settings.compactMode );
+					setCompactMode( !settings.v.compactMode );
 
 			case K.Z if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
 				curLevelHistory.undo();
@@ -473,22 +471,22 @@ class Editor extends Page {
 				App.ME.exit();
 
 			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setEmptySpaceSelection( !settings.emptySpaceSelection );
+				setEmptySpaceSelection( !settings.v.emptySpaceSelection );
 
 			case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setTileStacking( !settings.tileStacking );
+				setTileStacking( !settings.v.tileStacking );
 
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setSingleLayerMode( !settings.singleLayerMode );
+				setSingleLayerMode( !settings.v.singleLayerMode );
 
 			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() && !App.ME.isShiftDown() && !worldMode ):
-				if( settings.singleLayerMode )
+				if( settings.v.singleLayerMode )
 					selectionTool.selectAllInLayers(curLevel, [curLayerInstance]);
 				else
 					selectionTool.selectAllInLayers(curLevel, curLevel.layerInstances);
 
 				if( !selectionTool.isEmpty() ) {
-					if( settings.singleLayerMode )
+					if( settings.v.singleLayerMode )
 						N.quick( L.t._("Selected all in layer") );
 					else
 						N.quick( L.t._("Selected all") );
@@ -497,7 +495,7 @@ class Editor extends Page {
 					N.error("Nothing to select");
 
 			case K.G if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setGrid( !settings.grid );
+				setGrid( !settings.v.grid );
 
 			case K.H if( !hasInputFocus() ):
 				onHelp();
@@ -648,7 +646,7 @@ class Editor extends Page {
 			var best = null;
 			for(ld in all) {
 				var ge = getElement( curLevel.getLayerInstance(ld) );
-				if( ld==curLayerDef && ge!=null && settings.singleLayerMode ) // prioritize active layer
+				if( ld==curLayerDef && ge!=null && settings.v.singleLayerMode ) // prioritize active layer
 					return ge;
 
 				if( ge!=null )
@@ -776,7 +774,7 @@ class Editor extends Page {
 				jElement.css("color", C.intToHex( C.toWhite( c, 0.66 ) ));
 				jElement.css("background-color", C.intToHex( C.toBlack( c, 0.5 ) ));
 			}
-			var overed = getGenericLevelElementAt(m.levelX, m.levelY, settings.singleLayerMode);
+			var overed = getGenericLevelElementAt(m.levelX, m.levelY, settings.v.singleLayerMode);
 			switch overed {
 				case null:
 				case GridCell(li, cx, cy):
@@ -835,7 +833,7 @@ class Editor extends Page {
 		ge.emit(LayerInstanceSelected);
 		clearSpecialTool();
 
-		setGrid(settings.grid, false); // update checkbox
+		setGrid(settings.v.grid, false); // update checkbox
 	}
 
 	function layerSupportsFreeMode() {
@@ -849,7 +847,7 @@ class Editor extends Page {
 
 
 	public function isSnappingToGrid() {
-		return settings.grid || !layerSupportsFreeMode();
+		return settings.v.grid || !layerSupportsFreeMode();
 	}
 
 
@@ -908,42 +906,42 @@ class Editor extends Page {
 	}
 
 	public function setGrid(v:Bool, notify=true) {
-		settings.grid = v;
-		App.ME.saveSettings();
+		settings.v.grid = v;
+		App.ME.settings.save();
 		selectionTool.clear();
-		ge.emit( GridChanged(settings.grid) );
+		ge.emit( GridChanged(settings.v.grid) );
 		if( notify )
-			N.quick( "Grid: "+L.onOff( settings.grid ));
+			N.quick( "Grid: "+L.onOff( settings.v.grid ));
 	}
 
 	public function setSingleLayerMode(v:Bool) {
-		settings.singleLayerMode = v;
-		App.ME.saveSettings();
+		settings.v.singleLayerMode = v;
+		App.ME.settings.save();
 		levelRender.applyAllLayersVisibility();
 		selectionTool.clear();
-		N.quick( "Single layer mode: "+L.onOff( settings.singleLayerMode ));
+		N.quick( "Single layer mode: "+L.onOff( settings.v.singleLayerMode ));
 	}
 
 	public function setEmptySpaceSelection(v:Bool) {
-		settings.emptySpaceSelection = v;
-		App.ME.saveSettings();
+		settings.v.emptySpaceSelection = v;
+		App.ME.settings.save();
 		selectionTool.clear();
-		N.quick( "Select empty spaces: "+L.onOff( settings.emptySpaceSelection ));
+		N.quick( "Select empty spaces: "+L.onOff( settings.v.emptySpaceSelection ));
 	}
 
 	public function setTileStacking(v:Bool) {
-		settings.tileStacking = v;
-		App.ME.saveSettings();
+		settings.v.tileStacking = v;
+		App.ME.settings.save();
 		selectionTool.clear();
-		N.quick( "Tile stacking: "+L.onOff( settings.tileStacking ));
+		N.quick( "Tile stacking: "+L.onOff( settings.v.tileStacking ));
 	}
 
 	public function setCompactMode(v:Bool, init=false) {
-		settings.compactMode = v;
+		settings.v.compactMode = v;
 		if( !init )
-			App.ME.saveSettings();
+			App.ME.settings.save();
 
-		if( settings.compactMode )
+		if( settings.v.compactMode )
 			App.ME.jPage.addClass("compactPanel");
 		else
 			App.ME.jPage.removeClass("compactPanel");
@@ -951,7 +949,7 @@ class Editor extends Page {
 		updateCanvasSize();
 		updateAppBg();
 		if( !init )
-			N.quick("Compact UI: "+L.onOff(settings.compactMode));
+			N.quick("Compact UI: "+L.onOff(settings.v.compactMode));
 	}
 
 
