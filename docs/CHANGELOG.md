@@ -4,6 +4,7 @@
 - Fixed a crash with FilePath fields in Tiled export.
 - Fixed removal of empty dirs when saving a project.
 - Added a new "settings" button to LDtk home screen.
+- Fixed useless autoRuleGroups array in JSON
 - Added an option to force the app to always use the best GPU.
 
 # 0.7.0 - Getting serious
