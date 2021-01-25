@@ -1,0 +1,94 @@
+{
+	"__header__": {
+		"fileType": "LDtk Project JSON",
+		"app": "LDtk",
+		"doc": "https://ldtk.io/json",
+		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
+		"appAuthor": "Sebastien 'deepnight' Benard",
+		"appVersion": "0.7.2",
+		"url": "https://ldtk.io"
+	},
+	"jsonVersion": "0.7.2",
+	"defaultPivotX": 0,
+	"defaultPivotY": 0,
+	"defaultGridSize": 16,
+	"bgColor": "#112233",
+	"defaultLevelBgColor": "#112233",
+	"nextUid": 2,
+	"minifyJson": false,
+	"externalLevels": false,
+	"exportTiled": false,
+	"exportPng": false,
+	"backupOnSave": false,
+	"backupLimit": 10,
+	"worldLayout": "Free",
+	"worldGridWidth": 256,
+	"worldGridHeight": 256,
+	"defs": {
+		"layers": [
+			{
+				"__type": "IntGrid",
+				"identifier": "Grid_layer",
+				"type": "IntGrid",
+				"uid": 1,
+				"gridSize": 16,
+				"displayOpacity": 1,
+				"pxOffsetX": 0,
+				"pxOffsetY": 0,
+				"intGridValues": [{ "identifier": null, "color": "#000000" }],
+				"autoTilesetDefUid": null,
+				"autoRuleGroups": [],
+				"autoSourceLayerDefUid": null,
+				"tilesetDefUid": null,
+				"tilePivotX": 0,
+				"tilePivotY": 0
+			}
+		],
+		"entities": [],
+		"tilesets": [],
+		"enums": [],
+		"externalEnums": []
+	},
+	"levels": [
+		{
+			"identifier": "Level",
+			"uid": 0,
+			"worldX": 0,
+			"worldY": 0,
+			"pxWid": 256,
+			"pxHei": 256,
+			"__bgColor": "#112233",
+			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
+			"externalRelPath": null,
+			"layerInstances": [
+				{
+					"__identifier": "Grid_layer",
+					"__type": "IntGrid",
+					"__cWid": 16,
+					"__cHei": 16,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"levelId": 0,
+					"layerDefUid": 1,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"autoLayerTiles": [],
+					"seed": 9323657,
+					"gridTiles": [],
+					"entityInstances": []
+				}
+			],
+			"__neighbours": []
+		}
+	]
+}

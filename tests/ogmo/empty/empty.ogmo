@@ -1,0 +1,31 @@
+{
+  "name": "Empty project",
+  "ogmoVersion": "3.4.0",
+  "levelPaths": ["."],
+  "backgroundColor": "#112233ff",
+  "gridColor": "#ffffffcc",
+  "anglesRadians": true,
+  "directoryDepth": 2,
+  "layerGridDefaultSize": {"x": 16, "y": 16},
+  "levelDefaultSize": {"x": 320, "y": 240},
+  "levelMinSize": {"x": 128, "y": 128},
+  "levelMaxSize": {"x": 4096, "y": 4096},
+  "levelValues": [],
+  "defaultExportMode": ".json",
+  "compactExport": false,
+  "externalScript": "",
+  "playCommand": "",
+  "entityTags": [],
+  "layers": [
+    {
+      "definition": "grid",
+      "name": "grid layer",
+      "gridSize": {"x": 16, "y": 16},
+      "exportID": "58730307",
+      "arrayMode": 0,
+      "legend": {"0": "#00000000", "1": "#000000ff"}
+    }
+  ],
+  "entities": [],
+  "tilesets": []
+}
