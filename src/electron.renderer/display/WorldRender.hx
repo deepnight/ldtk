@@ -406,7 +406,7 @@ class WorldRender extends dn.Process {
 
 			if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
 				// Auto layer
-				var td = editor.project.defs.getTilesetDef(li.def.autoTilesetDefUid);
+				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				if( td.isAtlasLoaded() ) {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 					li.def.iterateActiveRulesInDisplayOrder( (r)->{
