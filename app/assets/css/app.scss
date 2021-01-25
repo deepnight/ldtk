@@ -1847,6 +1847,18 @@ textarea {
 					color: $bgLighter;
 					font-size: 9pt;
 				}
+
+				&.crash:not(:hover) {
+					background-color: $helpDark;
+				}
+
+				&.warning {
+					background-color: $darkRed;
+					&:hover {
+						color: white;
+						background-color: $red;
+					}
+				}
 			}
 			button+button {
 				border-top: 1px solid $bgMed;

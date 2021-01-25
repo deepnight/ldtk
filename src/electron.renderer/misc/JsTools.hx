@@ -358,10 +358,13 @@ class JsTools {
 						electron.Shell.openExternal(url);
 
 					case 2:
-						var m = new ui.modal.ContextMenu(ev);
-						m.add(L.t._("Copy URL"), ()->{
-							electron.Clipboard.write({ text:url });
-							N.msg("Copied.");
+						var ctx = new ui.modal.ContextMenu(ev);
+						ctx.add({
+							label: L.t._("Copy URL"),
+							cb: ()->{
+								electron.Clipboard.write({ text:url });
+								N.msg("Copied.");
+							}
 						});
 
 					case _:
@@ -826,8 +829,9 @@ class JsTools {
 				var ctx = new ui.modal.ContextMenu();
 				ctx.positionNear(jRecall);
 				for( img in allImages )
-					ctx.add(L.untranslated(img.fileName), ()->{
-						_pickImage(img.relPath);
+					ctx.add({
+						label: L.untranslated(img.fileName),
+						cb: ()->_pickImage(img.relPath)
 					});
 			});
 		}

@@ -218,22 +218,30 @@ class Home extends Page {
 							if( b.crash )
 								crashBackups.push(b.backup);
 
-							ctx.add(
-								ui.ProjectSaving.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
-								Lang.date(b.date),
-								()->App.ME.loadProject(b.backup.full)
-							);
+							ctx.add({
+								label: ui.ProjectSaving.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
+								className: b.crash ? "crash" : null,
+								sub: Lang.date(b.date),
+								cb: ()->App.ME.loadProject(b.backup.full)
+							});
 						}
 
 						if( crashBackups.length>0 )
-							ctx.add(
-								L.t._("Delete all crash recovery files"),
-								()->{
-									for(fp in crashBackups)
-										JsTools.removeFile(fp.full);
-									updateRecents();
+							ctx.add({
+								label: L.t._("Delete all crash recovery files"),
+								className: "warning",
+								cb: ()->{
+									new ui.modal.dialog.Confirm(
+										L.t._("Delete all crash recovery files project ::name::?", { name: fp.fileName}),
+										true,
+										()->{
+											for(fp in crashBackups)
+												JsTools.removeFile(fp.full);
+											updateRecents();
+										}
+									);
 								}
-							);
+							});
 					});
 				}
 			}
