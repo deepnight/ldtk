@@ -10,7 +10,7 @@ class ElectronMain {
 		var settings = new Settings();
 
 		// Force best available GPU usage
-		if( settings.v.useBestGPU )
+		if( settings.v.useBestGPU && !App.commandLine.hasSwitch("force_low_power_gpu") )
 			App.commandLine.appendSwitch("force_high_performance_gpu");
 
 		App.whenReady().then( (_)->createAppWindow() );
