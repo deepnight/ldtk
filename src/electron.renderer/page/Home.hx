@@ -37,17 +37,10 @@ class Home extends Page {
 		});
 
 		// Buttons
-		jPage.find(".load").click( function(ev) {
-			onLoad();
-		});
-
-		jPage.find(".samples").click( function(ev) {
-			onLoadSamples();
-		});
-
-		jPage.find(".new").click( function(ev) {
-			onNew();
-		});
+		jPage.find(".load").click( (_)->onLoad() );
+		jPage.find(".samples").click( (_)->onLoadSamples() );
+		jPage.find(".loadOgmo").click( (ev)->onLoadOgmo() );
+		jPage.find(".new").click( (_)->onNew() );
 
 		jPage.find(".buy").click( (ev)->{
 			var w = new ui.Modal();
@@ -376,6 +369,29 @@ class Home extends Page {
 			openPath = App.ME.getDefaultDialogDir();
 		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION,".json"], openPath, function(filePath) {
 			App.ME.loadProject(filePath);
+		});
+	}
+
+
+	public function onLoadOgmo() {
+		#if !debug
+		N.notImplemented(); // HACK remove this if Ogmo is stable
+		return;
+		#end
+
+		var dir = App.ME.getDefaultDialogDir();
+		dir = "C:/projects/LDtk/tests/ogmo/empty"; // HACK
+		dn.electron.Dialogs.open([".ogmo"], dir, function(filePath) {
+			var i = new importer.OgmoProject(filePath);
+			var p = i.load();
+			new ui.modal.dialog.LogPrint(i.log);
+			if( p!=null ) {
+				new ui.ProjectSaving(this, p, (ok)->{
+					N.success("Success!");
+					App.ME.loadProject(p.filePath.full);
+				});
+
+			}
 		});
 	}
 
