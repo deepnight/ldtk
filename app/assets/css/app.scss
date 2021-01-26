@@ -1687,8 +1687,12 @@ textarea {
 .window.editAppSettings {
 	.wrapper .content {
 		width: 400px;
-		label {
-			flex: 0 0 45%;
+
+		ul.form li {
+			label {
+				align-self: center;
+				flex: 0 0 45%;
+			}
 		}
 	}
 }

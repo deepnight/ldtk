@@ -12,10 +12,13 @@ class EditAppSettings extends ui.modal.Dialog {
 	}
 
 	function updateForm() {
+		// Init
 		loadTemplate("editAppSettings", { app: Const.APP_NAME });
-
 		var jForm = jContent.find(".form");
 		jForm.off().find("*").off();
+
+		// Log button
+		jContent.find( "button.log").click( (_)->JsTools.exploreToFile( JsTools.getLogPath(), true ) );
 
 		// GPU
 		var i = Input.linkToHtmlInput(settings.v.useBestGPU, jForm.find("#gpu"));

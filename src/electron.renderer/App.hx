@@ -25,7 +25,7 @@ class App extends dn.Process {
 		super();
 
 		// Init logging
-		LOG.logFilePath = JsTools.getExeDir()+"/LDtk.log";
+		LOG.logFilePath = JsTools.getLogPath();
 		LOG.trimFileLines();
 		LOG.emptyEntry();
 		LOG.tagColors.set("cache", "#edda6f");
