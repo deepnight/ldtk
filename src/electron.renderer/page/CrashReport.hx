@@ -6,6 +6,9 @@ class CrashReport extends Page {
 	public function new(error:js.lib.Error, activeProcesses:String, ?unsavedProject:data.Project, ?projectFilePath:String) {
 		super();
 
+		dn.Process.destroyAllExcept([this, App.ME]);
+		App.ME.delayer.cancelEverything();
+
 		if( Editor.ME!=null )
 			Editor.ME.destroy();
 
