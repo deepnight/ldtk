@@ -21,7 +21,7 @@
 	"exportPng": false,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"worldLayout": "Free",
+	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
 	"defs": {
@@ -35,7 +35,7 @@
 				"displayOpacity": 1,
 				"pxOffsetX": 0,
 				"pxOffsetY": 0,
-				"intGridValues": [ { "identifier": null, "color": "#000000" }, { "identifier": null, "color": "#000000" }, { "identifier": null, "color": "#000000" } ],
+				"intGridValues": [ { "identifier": "MyGrid_1", "color": "#FF0000" }, { "identifier": "MyGrid_2", "color": "#0BFF00" }, { "identifier": "MyGrid_3", "color": "#0002FF" } ],
 				"autoTilesetDefUid": null,
 				"autoRuleGroups": [],
 				"autoSourceLayerDefUid": null,
@@ -83,7 +83,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoLayerTiles": [],
-					"seed": 703363,
+					"seed": 7274145,
 					"gridTiles": [],
 					"entityInstances": []
 				}

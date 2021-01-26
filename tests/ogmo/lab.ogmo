@@ -22,8 +22,8 @@
       "name": "myGrid",
       "gridSize": {"x": 16, "y": 16},
       "exportID": "65320514",
-      "arrayMode": 0,
-      "legend": {"0": "#00000000", "1": "#000000ff"}
+      "arrayMode": 1,
+      "legend": {"0": "#d04c4c00", "1": "#ff0000ff", "2": "#0bff00ff", "3": "#0002ffff"}
     }
   ],
   "entities": [],
