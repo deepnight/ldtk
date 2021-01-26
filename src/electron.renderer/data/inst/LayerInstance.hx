@@ -24,6 +24,7 @@ class LayerInstance {
 	var intGrid : Map<Int,Int> = new Map(); // <coordId, value>
 	public var entityInstances : Array<EntityInstance> = [];
 	public var gridTiles : Map<Int, Array<GridTileInfos>> = []; // <coordId, tileinfos>
+	var overrideTilesetUid : Null<Int>;
 
 	/** < RuleUid, < coordId, { tiles } > > **/
 	public var autoTilesCache :
@@ -52,7 +53,9 @@ class LayerInstance {
 
 
 	public function getTilesetUid() : Null<Int> {
-		return def.tilesetDefUid!=null ? def.tilesetDefUid
+		return
+			overrideTilesetUid!=null ? overrideTilesetUid
+			: def.tilesetDefUid!=null ? def.tilesetDefUid
 			: def.autoTilesetDefUid!=null ? def.autoTilesetDefUid
 			: null;
 	}
@@ -117,6 +120,7 @@ class LayerInstance {
 
 			seed: seed,
 
+			overrideTilesetUid: overrideTilesetUid,
 			gridTiles: {
 				var arr : Array<ldtk.Json.Tile> = [];
 				for( e in gridTiles.keyValueIterator() )
@@ -219,6 +223,7 @@ class LayerInstance {
 				flips: gridTilesJson.f,
 			});
 		}
+		li.overrideTilesetUid = JsonTools.readNullableInt(json.overrideTilesetUid);
 
 		for( entityJson in json.entityInstances )
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );

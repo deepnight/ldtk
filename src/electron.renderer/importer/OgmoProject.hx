@@ -31,7 +31,8 @@ class OgmoProject {
 
 		// Init ogmo data cache
 		var ogmoLayerJsons : Map<Int, OgmoLayerDef> = new Map();
-		var realLayerDefs : Map<Int, data.def.LayerDef> = new Map();
+		var ldtkLayerDefs : Map<Int, data.def.LayerDef> = new Map(); // ogmo "exportID" as index
+		var ldtkTilesets : Map<String, data.def.TilesetDef> = new Map(); // ogmo "label" as index
 
 		// Prepare base project
 		log.general('Preparing project...');
@@ -56,6 +57,7 @@ class OgmoProject {
 				log.general("Found tileset "+tilesetJson.label+" ("+tilesetJson.path+")");
 				log.indentMore();
 				var td = p.defs.createTilesetDef();
+				ldtkTilesets.set(tilesetJson.label, td);
 				td.identifier = data.Project.cleanupIdentifier(tilesetJson.label,true);
 				td.tileGridSize = readGrid({ x:tilesetJson.tileWidth, y:tilesetJson.tileHeight });
 				td.spacing = tilesetJson.tileSeparationX;
@@ -91,7 +93,7 @@ class OgmoProject {
 					// IntGrid layer def
 					case "grid":
 						var layer = p.defs.createLayerDef(IntGrid, data.Project.cleanupIdentifier(layerJson.name, true));
-						realLayerDefs.set(layerJson.exportID, layer);
+						ldtkLayerDefs.set(layerJson.exportID, layer);
 						layer.gridSize = readGrid(layerJson.gridSize);
 						layer.intGridValues = [];
 						var ignoreFirst = true;
@@ -109,13 +111,13 @@ class OgmoProject {
 					// Entity layer def
 					case "entity":
 						var layer = p.defs.createLayerDef(Entities, data.Project.cleanupIdentifier(layerJson.name, true));
-						realLayerDefs.set(layerJson.exportID, layer);
+						ldtkLayerDefs.set(layerJson.exportID, layer);
 						layer.gridSize = readGrid(layerJson.gridSize);
 
 					// Tile layer def
 					case "tile":
 						var layer = p.defs.createLayerDef(Tiles, data.Project.cleanupIdentifier(layerJson.name, true));
-						realLayerDefs.set(layerJson.exportID, layer);
+						ldtkLayerDefs.set(layerJson.exportID, layer);
 						layer.gridSize = readGrid(layerJson.gridSize);
 						if( layerJson.defaultTileset!=null ) {
 							var td = p.defs.getTilesetDef( data.Project.cleanupIdentifier(layerJson.defaultTileset, true) );
@@ -168,7 +170,7 @@ class OgmoProject {
 				for(layer in levelJson.layers) {
 					log.indentMore();
 					log.debug(layer.name);
-					var ld = realLayerDefs.get(layer._eid);
+					var ld = ldtkLayerDefs.get(layer._eid);
 					if( ld==null ) {
 						log.error("ExportID in layer "+layer.name+" from level "+fp.full+" doesn't match any layer definition");
 						continue;
@@ -203,6 +205,13 @@ class OgmoProject {
 
 
 						case Tiles:
+							var defaultTdUid = ld.tilesetDefUid;
+							var td = ldtkTilesets.get(layer.tileset);
+							log.debug("uses tileset: "+td.identifier);
+							if( td.uid!=ld.tilesetDefUid ) {
+								log.debug("not default!");
+								@:privateAccess li.overrideTilesetUid = td.uid;
+							}
 							// Transform flags
 							var rotations = 0;
 							var flipBits = new Map();
