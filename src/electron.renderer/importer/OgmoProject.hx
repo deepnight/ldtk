@@ -27,11 +27,15 @@ class OgmoProject {
 
 		log.general("Successfully parsed project: "+json.name);
 
-		// Prepare empty project
+		// Init ogmo data cache
+		var ogmoLayers : Map<Int, OgmoLayerDef> = new Map();
+
+		// Prepare base project
 		log.general('Preparing project...');
 		var out = fp.clone();
 		out.extension = Const.FILE_EXTENSION;
 		var p = data.Project.createEmpty(out.full);
+		p.worldLayout = LinearHorizontal;
 
 		try {
 			// Project settings
@@ -44,11 +48,23 @@ class OgmoProject {
 			log.general('Reading layer defs...');
 			for(layerJson in json.layers) {
 				log.general(' - Found layer ${layerJson.name} (${layerJson.definition})');
+				ogmoLayers.set(layerJson.exportID, layerJson);
+
 				switch layerJson.definition {
 					case "grid":
 						var layer = p.defs.createLayerDef(IntGrid, data.Project.cleanupIdentifier(layerJson.name, true));
-						for(k in Reflect.fields(layerJson.legend))
-							layer.addIntGridValue( convertColor( Reflect.field(layerJson.legend,k) ) );
+						layer.gridSize = readGrid(layerJson.gridSize);
+						layer.intGridValues = [];
+						for(k in Reflect.fields(layerJson.legend)) {
+							var idx = Std.parseInt(k)-1;
+							if( idx<0 )
+								continue;
+
+							layer.intGridValues[idx] = {
+								identifier: layer.identifier+"_"+k,
+								color: convertColor( Reflect.field(layerJson.legend,k) ),
+							}
+						}
 
 					case _: log.error('Unsupported layer type ${layerJson.definition}');
 				}
@@ -84,16 +100,21 @@ typedef XY = {
 	var y : Int;
 }
 
+
 typedef OgmoJson = {
 	var name: String;
 	var levelPaths: Array<String>;
 	var backgroundColor: String;
 	var layerGridDefaultSize : XY;
 
-	var layers: Array<{
-		var definition: String;
-		var name: String;
-		var gridSize: XY;
-		var legend: Map<Int,String>;
-	}>;
+	var layers: Array<OgmoLayerDef>;
+}
+
+typedef OgmoLayerDef = {
+	var exportID: Int;
+	var definition: String;
+	var name: String;
+	var gridSize: XY;
+	var arrayMode: Int;
+	var legend: Map<Int,String>;
 }

@@ -13,6 +13,7 @@ class LayerDef {
 	public var pxOffsetY : Int = 0;
 
 	// IntGrid
+	@:allow(importer)
 	var intGridValues : Array<IntGridValueDef> = [];
 
 	// IntGrid/AutoLayers
