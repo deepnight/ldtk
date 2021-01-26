@@ -107,6 +107,13 @@ class EditProject extends ui.modal.Panel {
 		var jLocate = jForm.find("#png").siblings(".locate").empty();
 		if( project.exportPng )
 			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/png", false) );
+		var jFilePattern = jForm.find("#png").siblings(".pattern").hide();
+		if( project.exportPng ) {
+			jFilePattern.show();
+			var i = new form.input.StringInput(jFilePattern, ()->"", (v)->{});
+			i.setPlaceholder("%level-%layer-%name");
+		}
+
 
 		// Tiled export
 		var i = Input.linkToHtmlInput( project.exportTiled, jForm.find("#tiled") );
