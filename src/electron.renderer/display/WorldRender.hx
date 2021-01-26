@@ -440,7 +440,7 @@ class WorldRender extends dn.Process {
 			}
 			else if( li.def.type==Tiles ) {
 				// Classic tiles
-				var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
+				var td = li.getTiledsetDef();
 				if( td!=null && td.isAtlasLoaded() ) {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 					for(cy in 0...li.cHei)

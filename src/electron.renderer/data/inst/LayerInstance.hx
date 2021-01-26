@@ -118,7 +118,6 @@ class LayerInstance {
 			seed: seed,
 
 			gridTiles: {
-				var td = _project.defs.getTilesetDef(def.tilesetDefUid);
 				var arr : Array<ldtk.Json.Tile> = [];
 				for( e in gridTiles.keyValueIterator() )
 					for( tileInf in e.value ) {

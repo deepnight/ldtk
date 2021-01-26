@@ -2,7 +2,7 @@ package tool.lt;
 
 class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 	public var curTilesetDef(get,never) : Null<data.def.TilesetDef>;
-	inline function get_curTilesetDef() return editor.project.defs.getTilesetDef( editor.curLayerInstance.def.tilesetDefUid );
+	inline function get_curTilesetDef() return editor.curLayerInstance.getTiledsetDef();
 
 	public var flipX = false;
 	public var flipY = false;
