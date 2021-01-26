@@ -51,13 +51,19 @@ class LayerInstance {
 	}
 
 
+	public function getTilesetUid() : Null<Int> {
+		return def.tilesetDefUid!=null ? def.tilesetDefUid
+			: def.autoTilesetDefUid!=null ? def.autoTilesetDefUid
+			: null;
+	}
+
+	public function getTiledsetDef() : Null<data.def.TilesetDef> {
+		var tdUid = getTilesetUid();
+		return tdUid==null ? null : _project.defs.getTilesetDef(tdUid);
+	}
+
 	public function toJson() : ldtk.Json.LayerInstanceJson {
-		var td : Null<data.def.TilesetDef> =
-			def.tilesetDefUid!=null
-				? _project.defs.getTilesetDef(def.tilesetDefUid)
-				: def.autoTilesetDefUid!=null
-					? _project.defs.getTilesetDef(def.autoTilesetDefUid)
-					: null;
+		var td = getTiledsetDef();
 
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
