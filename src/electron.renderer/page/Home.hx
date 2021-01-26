@@ -104,9 +104,29 @@ class Home extends Page {
 		ui.Tip.clear();
 		var uniqueColorMix = 0x6066d3;
 
+		// Clean up invalid paths
+		settings.v.recentProjects = settings.v.recentProjects.filter( (p)->{
+			if( p==null || p.length==0 )
+				return false;
+
+			var fp = dn.FilePath.fromFile(p);
+			return fp!=null && fp.directory!=null && fp.fileWithExt!=null;
+		});
+		settings.v.recentDirs = settings.v.recentDirs.filter( (p)->{
+			if( p==null || p.length==0 )
+				return false;
+
+			var fp = dn.FilePath.fromDir(p);
+			return fp!=null && fp.directory!=null;
+		});
+		settings.save();
+
+
+
 		var recents = settings.v.recentProjects.copy();
 
-		// Automatically detects backups
+
+		// Automatically detect backups
 		var i = 0;
 		while( i<recents.length ) {
 			var fp = dn.FilePath.fromFile(recents[i]);
