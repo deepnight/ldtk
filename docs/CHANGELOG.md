@@ -5,6 +5,7 @@
 - Added a button to delete crash recovery files on Home screen
 - More robust JSON parsing with invalid integer numbers
 - Fixed a crash with empty tilesets
+- Fixed a crash loop on Home screen
 
 # 0.7.1
 
