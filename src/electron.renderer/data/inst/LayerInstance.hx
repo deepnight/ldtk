@@ -9,8 +9,13 @@ class LayerInstance {
 
 	public var levelId : Int;
 	public var layerDefUid : Int;
+
+	@:allow(importer)
 	var pxOffsetX : Int = 0;
+
+	@:allow(importer)
 	var pxOffsetY : Int = 0;
+	
 	public var pxTotalOffsetX(get,never) : Int; inline function get_pxTotalOffsetX() return pxOffsetX + def.pxOffsetX;
 	public var pxTotalOffsetY(get,never) : Int; inline function get_pxTotalOffsetY() return pxOffsetY + def.pxOffsetY;
 	public var seed : Int;

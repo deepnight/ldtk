@@ -604,6 +604,27 @@ class JsTools {
 		return js.node.Fs.readdirSync(path);
 	}
 
+	public static function findFilesRec(dirPath:String, ?ext:String) : Array<dn.FilePath> {
+		if( !fileExists(dirPath) )
+			return [];
+
+		var all = [];
+		var pendings = [dirPath];
+		while( pendings.length>0 ) {
+			var dir = pendings.shift();
+			for(f in readDir(dir)) {
+				var fp = dn.FilePath.fromFile(dir+"/"+f);
+				if( js.node.Fs.lstatSync(fp.full).isFile() ) {
+					if( ext==null || fp.extension==ext )
+						all.push(fp);
+				}
+				else if( !js.node.Fs.lstatSync(fp.full).isSymbolicLink() )
+					pendings.push(fp.full);
+			}
+		}
+		return all;
+	}
+
 	public static function getLogPath() {
 		return getExeDir()+"/LDtk.log";
 	}
