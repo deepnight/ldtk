@@ -350,7 +350,9 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 			return;
 
 		var curTd = curLayerInstance.getTiledsetDef();
+		var layerIsEmpty = curLayerInstance.isEmpty();
 
+		// List tilesets
 		var jTilesets = new J('<select/>');
 		jTilesets.appendTo(jOptions);
 		for(td in project.defs.tilesets) {
@@ -358,15 +360,31 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 			jOpt.appendTo(jTilesets);
 			jOpt.attr("value", td.uid);
 			jOpt.text(td.identifier);
+
 			if( td.uid==curLayerInstance.getDefaultTilesetUid() )
 				jOpt.append(" (default)");
-			if( td.pxWid!=curTd.pxWid )
-				jOpt.append('(INCOMPATIBLE SIZE!)');
+
+			// Mark as incompatible
+			if( td.pxWid!=curTd.pxWid && !layerIsEmpty ) {
+				jOpt.addClass("bad");
+				jOpt.append(' (INCOMPATIBLE SIZE!)');
+			}
 		}
 		jTilesets.val( curLayerInstance.getTilesetUid() );
+
+		// Pick tileset
 		jTilesets.change( (_)->{
-			curLayerInstance.setOverrideTileset( Std.parseInt( jTilesets.val() ) );
-			editor.ge.emit( LayerDefChanged );
+			function _apply(canUndo:Bool) {
+				if( canUndo )
+					new ui.LastChance(L.t._("Changed layer tileset"), project);
+				curLayerInstance.setOverrideTileset( Std.parseInt( jTilesets.val() ) );
+				editor.ge.emit( LayerDefChanged );
+			}
+			var isBad = jTilesets.find(":selected").hasClass("bad");
+			if( isBad )
+				new ui.modal.dialog.Confirm(jTilesets, L.t._("Warning: using this tileset in this layer will mess any existing tiles here."), true, _apply.bind(true), initOptionForm);
+			else
+				_apply(false);
 		});
 	}
 

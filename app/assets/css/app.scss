@@ -1302,6 +1302,17 @@ select {
 	display: block;
 	padding: 8px;
 	max-width: 100%;
+	color: white;
+	border: 1px solid $bgLighter;
+	background-color: $bgLight;
+	&:not(.gray) {
+		box-shadow: 0px 2px 0px transparentize($color: black, $amount: 0.3);
+	}
+
+	&:hover {
+		border-color: white;
+		cursor: pointer;
+	}
 
 	&.gray {
 		border: 1px dashed $bgLight;
@@ -1313,6 +1324,8 @@ select {
 
 	option {
 		overflow: hidden;
+		background-color: $bgMed;
+		color: $orange;
 	}
 
 	&:empty {
@@ -2561,6 +2574,9 @@ canvas#webgl {
 		#toolOptions {
 			select {
 				width: 100%;
+				option.bad {
+					color: $bgLight;
+				}
 			}
 		}
 
@@ -2570,7 +2586,7 @@ canvas#webgl {
 			outline: 1px solid white;
 
 			&:empty {
-				outline-color: $bgLight
+				outline-color: $bgLight;
 			}
 
 			&:empty,
