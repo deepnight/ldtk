@@ -40,7 +40,9 @@ class OgmoProject {
 		var p = data.Project.createEmpty(out.full);
 		p.worldLayout = LinearHorizontal;
 
+		#if !debug
 		try {
+		#end
 			// Project settings
 			log.general('Reading project settings...');
 			p.bgColor = convertColor(json.backgroundColor);
@@ -167,6 +169,10 @@ class OgmoProject {
 					log.indentMore();
 					log.debug(layer.name);
 					var ld = realLayerDefs.get(layer._eid);
+					if( ld==null ) {
+						log.error("ExportID in layer "+layer.name+" from level "+fp.full+" doesn't match any layer definition");
+						continue;
+					}
 					var li = level.getLayerInstance(ld);
 					li.pxOffsetX = levelJson.offsetX + layer.offsetX;
 					li.pxOffsetY = levelJson.offsetY + layer.offsetY;
@@ -245,11 +251,13 @@ class OgmoProject {
 
 			log.general("Done.");
 			return p;
+		#if !debug
 		}
 		catch(e:Dynamic) {
 			log.error("Exception: "+e);
 			return null;
 		}
+		#end
 	}
 
 	function iterateArray1D<T>(arr:Array<T>, lineWid:Int, cb:(cx:Int, cy:Int, v:T)->Void)  {
