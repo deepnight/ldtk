@@ -15,7 +15,7 @@ class LayerInstance {
 
 	@:allow(importer)
 	var pxOffsetY : Int = 0;
-	
+
 	public var pxTotalOffsetX(get,never) : Int; inline function get_pxTotalOffsetX() return pxOffsetX + def.pxOffsetX;
 	public var pxTotalOffsetY(get,never) : Int; inline function get_pxTotalOffsetY() return pxOffsetY + def.pxOffsetY;
 	public var seed : Int;
@@ -52,9 +52,12 @@ class LayerInstance {
 
 
 	public function toJson() : ldtk.Json.LayerInstanceJson {
-		var td : Null<data.def.TilesetDef> = def.tilesetDefUid!=null ? _project.defs.getTilesetDef(def.tilesetDefUid)
-			: def.autoTilesetDefUid!=null ? _project.defs.getTilesetDef(def.autoTilesetDefUid)
-			: null;
+		var td : Null<data.def.TilesetDef> =
+			def.tilesetDefUid!=null
+				? _project.defs.getTilesetDef(def.tilesetDefUid)
+				: def.autoTilesetDefUid!=null
+					? _project.defs.getTilesetDef(def.autoTilesetDefUid)
+					: null;
 
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
