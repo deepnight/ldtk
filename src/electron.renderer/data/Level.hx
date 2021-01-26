@@ -177,7 +177,7 @@ class Level {
 		var sy = 1.0;
 		switch bgPos {
 			case null:
-				throw "Unexpected null here";
+				throw "bgPos should not be null";
 
 			case Unscaled:
 
