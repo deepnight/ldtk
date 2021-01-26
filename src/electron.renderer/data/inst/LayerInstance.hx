@@ -52,6 +52,17 @@ class LayerInstance {
 	}
 
 
+	public function setOverrideTileset(?tilesetUid:Int) {
+		overrideTilesetUid = tilesetUid==null ? null : tilesetUid;
+	}
+
+	public function getDefaultTilesetUid() : Null<Int> {
+		return
+			def.tilesetDefUid!=null ? def.tilesetDefUid
+			: def.autoTilesetDefUid!=null ? def.autoTilesetDefUid
+			: null;
+	}
+
 	public function getTilesetUid() : Null<Int> {
 		return
 			overrideTilesetUid!=null ? overrideTilesetUid

@@ -343,6 +343,33 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		return new ui.palette.TilePalette(this);
 	}
 
+	override function initOptionForm() {
+		super.initOptionForm();
+
+		if( project.defs.tilesets.length==0 )
+			return;
+
+		var curTd = curLayerInstance.getTiledsetDef();
+
+		var jTilesets = new J('<select/>');
+		jTilesets.appendTo(jOptions);
+		for(td in project.defs.tilesets) {
+			var jOpt = new J('<option/>');
+			jOpt.appendTo(jTilesets);
+			jOpt.attr("value", td.uid);
+			jOpt.text(td.identifier);
+			if( td.uid==curLayerInstance.getDefaultTilesetUid() )
+				jOpt.append(" (default)");
+			if( td.pxWid!=curTd.pxWid )
+				jOpt.append('(INCOMPATIBLE SIZE!)');
+		}
+		jTilesets.val( curLayerInstance.getTilesetUid() );
+		jTilesets.change( (_)->{
+			curLayerInstance.setOverrideTileset( Std.parseInt( jTilesets.val() ) );
+			editor.ge.emit( LayerDefChanged );
+		});
+	}
+
 	public function saveSelection() {
 		curTilesetDef.saveSelection( getSelectedValue() );
 		editor.ge.emit( TilesetSelectionSaved(curTilesetDef) );
