@@ -1,9 +1,9 @@
 {
-  "name": "Empty project",
+  "name": "Ogmo lab project",
   "ogmoVersion": "3.4.0",
   "levelPaths": ["."],
-  "backgroundColor": "#112233ff",
-  "gridColor": "#ffffffcc",
+  "backgroundColor": "#282c34ff",
+  "gridColor": "#3c4049cc",
   "anglesRadians": true,
   "directoryDepth": 2,
   "layerGridDefaultSize": {"x": 16, "y": 16},
@@ -19,9 +19,9 @@
   "layers": [
     {
       "definition": "grid",
-      "name": "grid layer",
+      "name": "myGrid",
       "gridSize": {"x": 16, "y": 16},
-      "exportID": "58730307",
+      "exportID": "65320514",
       "arrayMode": 0,
       "legend": {"0": "#00000000", "1": "#000000ff"}
     }

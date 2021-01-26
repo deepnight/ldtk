@@ -5,15 +5,15 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.2",
+		"appVersion": "0.8.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.7.2",
+	"jsonVersion": "0.8.0",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
-	"bgColor": "#112233",
-	"defaultLevelBgColor": "#112233",
+	"bgColor": "#282C34",
+	"defaultLevelBgColor": "#282C34",
 	"nextUid": 2,
 	"minifyJson": false,
 	"externalLevels": false,
@@ -28,14 +28,14 @@
 		"layers": [
 			{
 				"__type": "IntGrid",
-				"identifier": "Grid_layer",
+				"identifier": "MyGrid",
 				"type": "IntGrid",
 				"uid": 1,
 				"gridSize": 16,
 				"displayOpacity": 1,
 				"pxOffsetX": 0,
 				"pxOffsetY": 0,
-				"intGridValues": [{ "identifier": null, "color": "#000000" }],
+				"intGridValues": [ { "identifier": null, "color": "#000000" }, { "identifier": null, "color": "#000000" }, { "identifier": null, "color": "#000000" } ],
 				"autoTilesetDefUid": null,
 				"autoRuleGroups": [],
 				"autoSourceLayerDefUid": null,
@@ -57,7 +57,7 @@
 			"worldY": 0,
 			"pxWid": 256,
 			"pxHei": 256,
-			"__bgColor": "#112233",
+			"__bgColor": "#282C34",
 			"bgColor": null,
 			"bgRelPath": null,
 			"bgPos": null,
@@ -67,7 +67,7 @@
 			"externalRelPath": null,
 			"layerInstances": [
 				{
-					"__identifier": "Grid_layer",
+					"__identifier": "MyGrid",
 					"__type": "IntGrid",
 					"__cWid": 16,
 					"__cHei": 16,
@@ -83,7 +83,7 @@
 					"pxOffsetY": 0,
 					"intGrid": [],
 					"autoLayerTiles": [],
-					"seed": 9323657,
+					"seed": 703363,
 					"gridTiles": [],
 					"entityInstances": []
 				}
