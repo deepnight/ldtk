@@ -31,7 +31,7 @@
       "gridSize": {"x": 16, "y": 16},
       "exportID": "65320514",
       "arrayMode": 1,
-      "legend": {"0": "#d04c4c00", "1": "#ff0000ff", "2": "#0bff00ff", "3": "#0002ffff"}
+      "legend": {"0": "#d04c4c00", "r": "#ff0000ff", "g": "#00ffc1ff", "b": "#0098ffff"}
     },
     {
       "definition": "tile",
@@ -39,8 +39,8 @@
       "gridSize": {"x": 16, "y": 16},
       "exportID": "65582237",
       "exportMode": 0,
-      "arrayMode": 0,
-      "defaultTileset": "myTileset"
+      "arrayMode": 1,
+      "defaultTileset": "myIncaFront"
     }
   ],
   "entities": [],
