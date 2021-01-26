@@ -6,6 +6,7 @@
 - More robust JSON parsing with invalid integer numbers
 - Fixed a crash with empty tilesets
 - Fixed a crash loop on Home screen
+- Minor visual fix on splash screen
 
 # 0.7.1
 
