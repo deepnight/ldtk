@@ -107,7 +107,7 @@ class App extends dn.Process {
 		dn.electron.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
 		dn.electron.ElectronUpdater.onError = function(err) {
 			var errStr = err==null ? null : Std.string(err);
-			LOG.error("Couldn't check for updates: "+errStr);
+			LOG.warning("Couldn't check for updates: "+errStr);
 			if( errStr.length>40 )
 				errStr = errStr.substr(0,40) + "[...]";
 			miniNotif('Auto-updater failed: "$errStr"', 2);
@@ -143,19 +143,20 @@ class App extends dn.Process {
 
 		// Start
 		delayer.addS( ()->{
+			// Look for path and level index in args
 			var path = getArgPath();
 			var levelIndex : Null<Int> = null;
 			if( path!=null && path.extension==Const.LEVEL_EXTENSION ) {
 				var indexReg = ~/0*([0-9]+)-.*/gi;
-				if( !indexReg.match(path.fileName) )
-					LOG.error("Couldn't parse level UID in arg: "+path.full);
-				else
+				if( indexReg.match(path.fileName) )
 					levelIndex = Std.parseInt( indexReg.matched(1) );
 				var dir = path.getLastDirectory();
 				path.removeLastDirectory();
 				path.fileWithExt = dir+"."+Const.FILE_EXTENSION;
 			}
 			LOG.add("BOOT", 'Start args: path=$path levelIndex=$levelIndex');
+
+			// Load page
 			if( path!=null )
 				loadProject(path.full, levelIndex);
 			else
@@ -372,7 +373,7 @@ class App extends dn.Process {
 	}
 
 	public function registerRecentDir(dir:String) {
-		if( dir==null || isInAppDir(dir,false) )
+		if( dir==null || dir.length==0 || isInAppDir(dir,false) )
 			return;
 		dir = StringTools.replace(dir, "\\", "/");
 		settings.v.recentDirs.remove(dir);
@@ -408,7 +409,7 @@ class App extends dn.Process {
 		else {
 			var fp = isFile ? dn.FilePath.fromFile(path) : dn.FilePath.fromDir(path);
 			fp.useSlashes();
-			return fp.directory.indexOf( JsTools.getExeDir() )==0;
+			return fp.directory!=null && fp.directory.indexOf( JsTools.getExeDir() )==0;
 		}
 	}
 
