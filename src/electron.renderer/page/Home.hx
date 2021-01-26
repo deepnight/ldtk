@@ -39,7 +39,7 @@ class Home extends Page {
 		// Buttons
 		jPage.find(".load").click( (_)->onLoad() );
 		jPage.find(".samples").click( (_)->onLoadSamples() );
-		jPage.find(".loadOgmo").click( (ev)->onLoadOgmo() );
+		jPage.find(".loadOgmo").click( (ev)->onImportOgmo() );
 		jPage.find(".new").click( (_)->onNew() );
 
 		jPage.find(".buy").click( (ev)->{
@@ -411,25 +411,26 @@ class Home extends Page {
 	}
 
 
-	public function onLoadOgmo() {
+	public function onImportOgmo() {
 		#if !debug
 		N.notImplemented(); // HACK remove this if Ogmo is stable
 		return;
 		#end
 
 		var dir = App.ME.getDefaultDialogDir();
-		dir = "C:/projects/LDtk/tests/ogmo/empty"; // HACK
+		dir = "C:/projects/LDtk/tests/ogmo"; // HACK
 		dn.electron.Dialogs.open([".ogmo"], dir, function(filePath) {
 			var i = new importer.OgmoProject(filePath);
 			var p = i.load();
-			new ui.modal.dialog.LogPrint(i.log);
+			i.log.printAllToLog(App.LOG);
 			if( p!=null ) {
 				new ui.ProjectSaving(this, p, (ok)->{
 					N.success("Success!");
 					App.ME.loadProject(p.filePath.full);
 				});
-
 			}
+
+			new ui.modal.dialog.LogPrint(i.log);
 		});
 	}
 

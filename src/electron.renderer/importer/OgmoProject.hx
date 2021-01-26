@@ -41,16 +41,14 @@ class OgmoProject {
 			p.defaultGridSize = readGrid(json.layerGridDefaultSize);
 
 			// Layers
-			log.general('Reading layers...');
+			log.general('Reading layer defs...');
 			for(layerJson in json.layers) {
-				log.general('Found layer ${layerJson.name} (${layerJson.definition})');
+				log.general(' - Found layer ${layerJson.name} (${layerJson.definition})');
 				switch layerJson.definition {
 					case "grid":
 						var layer = p.defs.createLayerDef(IntGrid, data.Project.cleanupIdentifier(layerJson.name, true));
-						for(k in Reflect.fields(layerJson.legend)) {
-							trace(k);
-							trace(Reflect.field(layerJson.legend,k));
-						}
+						for(k in Reflect.fields(layerJson.legend))
+							layer.addIntGridValue( convertColor( Reflect.field(layerJson.legend,k) ) );
 
 					case _: log.error('Unsupported layer type ${layerJson.definition}');
 				}
