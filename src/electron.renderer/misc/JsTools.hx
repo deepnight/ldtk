@@ -604,6 +604,10 @@ class JsTools {
 		return js.node.Fs.readdirSync(path);
 	}
 
+	public static function getLogPath() {
+		return getExeDir()+"/LDtk.log";
+	}
+
 	public static function getExeDir() {
 		#if !debug
 		var path = electron.renderer.IpcRenderer.sendSync("getExeDir");
