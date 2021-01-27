@@ -1712,6 +1712,25 @@ textarea {
 	}
 }
 
+.window.lockMessage {
+	.wrapper .content {
+		.task {
+			font-family: Roboto;
+			font-size: 18pt;
+			color: $orange;
+			p {
+				margin-top: 0.5em;
+				margin-bottom: 0.5em;
+			}
+		}
+		.sub {
+			color: $bgLighter;
+			text-align: center;
+		}
+	}
+}
+
+
 .window.buy {
 	.wrapper .content {
 		max-width: 380px;
