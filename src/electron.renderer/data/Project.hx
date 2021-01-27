@@ -26,6 +26,7 @@ class Project {
 	public var externalLevels = false;
 	public var exportTiled = false;
 	public var exportPng = false;
+	public var pngFilePattern : Null<String>;
 
 	public var backupOnSave = false;
 	public var backupLimit = 10;
@@ -56,6 +57,45 @@ class Project {
 
 	public function getRelExternalFilesDir() {
 		return filePath.fileName;
+	}
+
+	public function getDefaultPngFilePattern() {
+		return "%level_idx-%level_name--%layer_idx-%layer_name";
+	}
+
+	public function getPngFilePattern() {
+		return pngFilePattern!=null
+			? pngFilePattern
+			: getDefaultPngFilePattern();
+	}
+
+	public function getPngFileName(?pattern:String, level:data.Level, ld:data.def.LayerDef, ?extraSuffix:String) {
+		if( ld==null )
+			return "--ERROR: no layer--";
+
+		var p = pattern!=null ? pattern : getPngFilePattern();
+
+		var vars = [
+			"%level_name"=>()->level.identifier,
+			"%level_idx"=>()->dn.Lib.leadingZeros( getLevelIndex(level), 4),
+			"%layer_name"=>()->ld.identifier,
+			"%layer_idx"=>()->{
+				var i = 0;
+				for(l in defs.layers)
+					if( l==ld )
+						break;
+					else switch l.type {
+						case IntGrid, Tiles, AutoLayer: i++;
+						case Entities: // TODO increment PNG layer index if entities are rendered
+					}
+				dn.Lib.leadingZeros(i,2);
+			}
+		];
+		for(v in vars.keyValueIterator())
+			if( p.indexOf(v.key)>=0 )
+				p = StringTools.replace(p, v.key, v.value());
+
+		return p + (extraSuffix==null ? "" : "-"+extraSuffix);
 	}
 
 	public inline function isBackup() {
@@ -111,9 +151,11 @@ class Project {
 
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
-		p.exportPng = JsonTools.readBool( json.exportPng, false );
 		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
+
+		p.exportPng = JsonTools.readBool( json.exportPng, false );
+		p.pngFilePattern = json.pngFilePattern;
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
@@ -145,6 +187,7 @@ class Project {
 			externalLevels: externalLevels,
 			exportTiled: exportTiled,
 			exportPng: exportPng,
+			pngFilePattern: pngFilePattern,
 			backupOnSave: backupOnSave,
 			backupLimit: backupLimit,
 			worldLayout: JsonTools.writeEnum(worldLayout, false),
@@ -389,6 +432,17 @@ class Project {
 			if( l.uid==uid || l.identifier==id )
 				return l;
 		return null;
+	}
+
+
+	public function getLevelIndex(l:Level) : Int {
+		var i = 0;
+		for(ol in levels)
+			if( ol==l )
+				return i;
+			else
+				i++;
+		return -1;
 	}
 
 	public function getClosestLevelFrom(level:data.Level) : Null<data.Level> {

@@ -3927,6 +3927,37 @@ canvas#webgl {
 			flex: 0 0 250px;
 		}
 
+		li.pngPattern {
+			position: relative;
+			dl.guide {
+				position: absolute;
+				z-index: 2;
+
+				display: grid;
+				grid-template-columns: min-content auto;
+				top: 48px;
+				right: 0;
+				padding: 16px;
+				border-radius: 3px;
+				background-color: $helpDark;
+
+				dt {
+					font-family: monospace;
+					color: $orange;
+				}
+				dd {
+					padding-left: 8px;
+					padding-bottom: 8px;
+				}
+			}
+			.example {
+				flex: 1 0 100%;
+				text-align: right;
+				color: $help;
+				font-family: monospace;
+			}
+		}
+
 		h2 {
 			margin-bottom: 0;
 		}

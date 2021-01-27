@@ -115,6 +115,35 @@ class EditProject extends ui.modal.Panel {
 		}
 
 
+		var jFilePattern : js.jquery.JQuery = jForm.find("#png").siblings(".pattern").hide();
+		var jGuide : js.jquery.JQuery = jForm.find("#png").siblings(".guide").hide();
+		var jExample : js.jquery.JQuery = jForm.find("#png").siblings(".example").hide();
+		var jReset : js.jquery.JQuery = jForm.find("#png").siblings(".reset").hide();
+		if( project.exportPng ) {
+			jFilePattern.show();
+			jExample.show();
+			jReset.show();
+			jReset.click( (_)->{
+				project.pngFilePattern = null;
+				editor.ge.emit(ProjectSettingsChanged);
+			});
+			var i = new form.input.StringInput(
+				jFilePattern,
+				()->project.getPngFilePattern(),
+				(v)->{
+					project.pngFilePattern = v==project.getDefaultPngFilePattern() ? null : v;
+					editor.ge.emit(ProjectSettingsChanged);
+				}
+			);
+			jFilePattern.focus( (_)->jGuide.show() );
+			jFilePattern.blur( (_)->jGuide.hide() );
+			jFilePattern.keyup( (_)->{
+				var pattern = jFilePattern.val()==null ? project.getDefaultPngFilePattern() : jFilePattern.val();
+				jExample.text( '"'+project.getPngFileName(pattern, editor.curLevel, editor.curLayerDef)+'.png"' );
+			} ).keyup();
+		}
+
+
 		// Tiled export
 		var i = Input.linkToHtmlInput( project.exportTiled, jForm.find("#tiled") );
 		i.linkEvent(ProjectSettingsChanged);

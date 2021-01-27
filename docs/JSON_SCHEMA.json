@@ -95,6 +95,13 @@
 					"boolean"
 				]
 			},
+			"pngFilePattern": {
+				"description": "File naming pattern for exported PNGs",
+				"type": [
+					"string",
+					"null"
+				]
+			},
 			"exportTiled": {
 				"description": "If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)",
 				"type": [
@@ -127,7 +134,7 @@
 				]
 			},
 			"externalLevels": {
-				"description": "If TRUE, one file will be saved the project (incl. all its definitions) and one file per-level in a sub-folder.",
+				"description": "If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.",
 				"type": [
 					"boolean"
 				]
@@ -892,13 +899,6 @@
 					"description": "Total layer Y pixel offset, including both instance and definition offsets.",
 					"type": [
 						"integer"
-					]
-				},
-				"overrideTilesetUid": {
-					"description": "This layer can use another tileset by overriding the tileset UID here.",
-					"type": [
-						"integer",
-						"null"
 					]
 				},
 				"entityInstances": {
