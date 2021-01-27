@@ -33,6 +33,7 @@ class OgmoProject {
 		var ogmoLayerJsons : Map<Int, OgmoLayerDef> = new Map();
 		var ldtkLayerDefs : Map<String, data.def.LayerDef> = new Map(); // ogmo "name" as index
 		var ldtkTilesets : Map<String, data.def.TilesetDef> = new Map(); // ogmo "label" as index
+		var ldtkEntities : Map<String, data.def.EntityDef> = new Map(); // ogmo "name" as index
 
 		// Prepare base project
 		log.general('Preparing project...');
@@ -93,12 +94,14 @@ class OgmoProject {
 
 				// Create base entity
 				var ed = p.defs.createEntityDef();
+				ldtkEntities.set(entityJson.name, ed);
 				ed.identifier = data.Project.cleanupIdentifier(entityJson.name, true);
 				ed.color = convertColor(entityJson.color);
 				ed.width = entityJson.size.x;
 				ed.height = entityJson.size.y;
 				ed.pivotX = M.round( (entityJson.origin.x / entityJson.size.x) / 0.5 ) * 0.5;
 				ed.pivotY = M.round( (entityJson.origin.y / entityJson.size.y) / 0.5 ) * 0.5;
+				ed.maxPerLevel = entityJson.limit<=0 ? 0 : entityJson.limit;
 
 				// Entity fields
 				for(valJson in entityJson.values) {
@@ -266,19 +269,22 @@ class OgmoProject {
 				// TODO add level offset to layers
 				p.tidy();
 
-				// Layer instances
+
+
+				// Layer instances **************************************************************
+
 				log.general("Filling layers...");
-				for(layer in levelJson.layers) {
+				for(layerJson in levelJson.layers) {
 					log.indentMore();
-					log.debug(layer.name);
-					var ld = ldtkLayerDefs.get(layer.name);
+					log.debug(layerJson.name);
+					var ld = ldtkLayerDefs.get(layerJson.name);
 					if( ld==null ) {
-						log.error('Layer "${layer.name}" from level ${fp.full} does not match any layer definition');
+						log.error('Layer "${layerJson.name}" from level ${fp.full} does not match any layer definition');
 						continue;
 					}
 					var li = level.getLayerInstance(ld);
-					li.pxOffsetX = levelJson.offsetX + layer.offsetX;
-					li.pxOffsetY = levelJson.offsetY + layer.offsetY;
+					li.pxOffsetX = levelJson.offsetX + layerJson.offsetX;
+					li.pxOffsetY = levelJson.offsetY + layerJson.offsetY;
 					switch ld.type {
 
 						// IntGrid instance
@@ -288,14 +294,14 @@ class OgmoProject {
 							for(v in ld.getAllIntGridValues())
 								valueMap.set(v.identifier, idx++);
 
-							if( layer.grid!=null ) {
-								iterateArray1D( layer.grid, li.cWid, (cx,cy,v)->{
+							if( layerJson.grid!=null ) {
+								iterateArray1D( layerJson.grid, li.cWid, (cx,cy,v)->{
 									if( valueMap.exists(v) )
 										li.setIntGrid( cx, cy, valueMap.get(v) );
 								});
 							}
-							else if( layer.grid2D!=null ) {
-								iterateArray2D(layer.grid2D, (cx,cy,v)->{
+							else if( layerJson.grid2D!=null ) {
+								iterateArray2D(layerJson.grid2D, (cx,cy,v)->{
 									if( valueMap.exists(v) )
 										li.setIntGrid( cx, cy, valueMap.get(v) );
 								});
@@ -303,12 +309,49 @@ class OgmoProject {
 
 
 						case Entities:
+							for(entJson in layerJson.entities) {
+								var ed = ldtkEntities.get(entJson.name);
+								if( ed==null ) {
+									log.error('Unknown entity ${entJson.name} in level ${fp.fileWithExt}');
+									continue;
+								}
 
+								// Base entity instance
+								var ei = li.createEntityInstance(ed);
+								ei.x = entJson.x;
+								ei.y = entJson.y;
+
+								// Fields values
+								if( entJson.values!=null )
+									for(k in Reflect.fields(entJson.values)) {
+										var fd = ed.getFieldDef( data.Project.cleanupIdentifier(k, false) );
+										if( fd==null ) {
+											log.error('Unknown value $k in entity ${entJson.name} in level ${fp.fileWithExt}');
+											continue;
+										}
+										var fi = ei.getFieldInstance(fd);
+										var rawValue = Std.string( Reflect.field(entJson.values, k) );
+										switch fd.type {
+											case F_Int, F_Float, F_String, F_Text, F_Bool:
+												fi.parseValue(0, rawValue);
+
+											case F_Color:
+												fi.parseValue(0, C.intToHex(convertColor(rawValue)) );
+
+											case F_Enum(enumDefUid):
+												fi.parseValue(0, rawValue);
+
+											case F_Point:
+											case F_Path:
+										}
+
+									}
+							}
 
 
 						case Tiles:
 							var defaultTdUid = ld.tilesetDefUid;
-							var td = ldtkTilesets.get(layer.tileset);
+							var td = ldtkTilesets.get(layerJson.tileset);
 							log.debug("uses tileset: "+td.identifier);
 							if( td.uid!=ld.tilesetDefUid ) {
 								log.debug("not default!");
@@ -320,28 +363,28 @@ class OgmoProject {
 							inline function _getFlipBit(cx,cy) {
 								return flipBits.exists( li.coordId(cx,cy) ) ? flipBits.get( li.coordId(cx,cy) ) : 0;
 							}
-							if( layer.tileFlags!=null )
-								iterateArray1D(layer.tileFlags, li.cWid, (cx,cy,v)->{
+							if( layerJson.tileFlags!=null )
+								iterateArray1D(layerJson.tileFlags, li.cWid, (cx,cy,v)->{
 									if( M.hasBit(v,0) )
 										rotations++;
 									flipBits.set( li.coordId(cx,cy), convertTransformFlagToFlipBits(v) );
 								});
-							else if( layer.tileFlags2D!=null )
-								iterateArray2D(layer.tileFlags2D, (cx,cy,v)->{
+							else if( layerJson.tileFlags2D!=null )
+								iterateArray2D(layerJson.tileFlags2D, (cx,cy,v)->{
 									if( M.hasBit(v,0) )
 										rotations++;
 									flipBits.set( li.coordId(cx,cy), convertTransformFlagToFlipBits(v) );
 								});
 
 							// Tiles
-							if( layer.data!=null ) {
-								iterateArray1D( layer.data, li.cWid, (cx,cy,v)->{
+							if( layerJson.data!=null ) {
+								iterateArray1D( layerJson.data, li.cWid, (cx,cy,v)->{
 									if( v>=0 )
 										li.addGridTile(cx,cy, v, _getFlipBit(cx,cy));
 								});
 							}
-							else if( layer.data2D!=null ) {
-								iterateArray2D( layer.data2D, (cx,cy,v)->{
+							else if( layerJson.data2D!=null ) {
+								iterateArray2D( layerJson.data2D, (cx,cy,v)->{
 									if( v>=0 )
 										li.addGridTile(cx,cy, v, _getFlipBit(cx,cy));
 								});
@@ -507,7 +550,7 @@ typedef OgmoLayerInst = {
 	var arrayMode: Int;
 	var exportMode: Int;
 
-	var entities: Array<Dynamic>;
+	var entities: Array<OgmoEntityInst>;
 
 	var grid: Array<String>;
 	var grid2D: Array<Array<String>>;
@@ -517,4 +560,11 @@ typedef OgmoLayerInst = {
 	var data2D: Array<Array<Int>>;
 	var tileFlags: Array<Int>;
 	var tileFlags2D: Array<Array<Int>>;
+}
+
+typedef OgmoEntityInst = {
+	var name: String;
+	var x: Int;
+	var y: Int;
+	var values: Dynamic;
 }
