@@ -50,7 +50,9 @@ class OgmoProject {
 			p.defaultLevelBgColor = p.bgColor;
 			p.defaultGridSize = readGrid(json.layerGridDefaultSize);
 
-			// Tilesets
+
+
+			// Tilesets **************************************************************
 			log.general("Reading tileset defs...");
 			log.indentMore();
 			for(tilesetJson in json.tilesets) {
@@ -80,7 +82,105 @@ class OgmoProject {
 			}
 			log.clearIndent();
 
-			// Layers
+
+
+			// Entity defs **************************************************************
+			log.general("Reading entity defs...");
+			log.indentMore();
+			for(entityJson in json.entities) {
+				log.general("Found entity "+entityJson.name);
+				log.indentMore();
+
+				// Create base entity
+				var ed = p.defs.createEntityDef();
+				ed.identifier = data.Project.cleanupIdentifier(entityJson.name, true);
+				ed.color = convertColor(entityJson.color);
+				ed.width = entityJson.size.x;
+				ed.height = entityJson.size.y;
+				ed.pivotX = M.round( (entityJson.origin.x / entityJson.size.x) / 0.5 ) * 0.5;
+				ed.pivotY = M.round( (entityJson.origin.y / entityJson.size.y) / 0.5 ) * 0.5;
+
+				// Entity fields
+				for(valJson in entityJson.values) {
+					log.general("Found value "+valJson.name+" ("+valJson.definition+")");
+					log.indentMore();
+
+					// Convert type
+					var type : data.DataTypes.FieldType = switch valJson.definition {
+						case "Integer": F_Int;
+						case "Float": F_Float;
+						case "Boolean": F_Bool;
+						case "Color": F_Color;
+						case "String": F_String;
+						case "Text": F_Text;
+						case "Filepath": F_Path;
+
+						case "Enum":
+							// Create enum def
+							var enumDef = p.defs.createEnumDef();
+							enumDef.identifier = data.Project.cleanupIdentifier(entityJson.name+"_"+valJson.name, true);
+							for(ev in valJson.choices)
+								enumDef.addValue(ev);
+							F_Enum(enumDef.uid);
+
+						case _:
+							log.error('Unsupported entity value type ${valJson.definition} in ${entityJson.name}');
+							null;
+					}
+
+					// Create field def
+					if( type!=null ) {
+						var fd = ed.createFieldDef(p, type, valJson.name, false);
+
+						fd.editorDisplayMode = switch valJson.display {
+							case 0 : Hidden;
+							case 1 : ValueOnly;
+							case _ : NameAndValue;
+						}
+
+						switch type {
+							case F_Int, F_Float:
+								fd.setDefault( Std.string(valJson.defaults) );
+								if( valJson.bounded ) {
+									fd.min = valJson.min;
+									fd.max = valJson.max;
+								}
+
+							case F_String, F_Text:
+								fd.setDefault( Std.string(valJson.defaults) );
+
+							case F_Bool:
+								fd.setDefault( Std.string(valJson.defaults) );
+
+							case F_Color:
+								fd.setDefault( C.intToHex(convertColor(valJson.defaults)) );
+
+							case F_Enum(enumDefUid):
+								fd.canBeNull = true;
+
+							case F_Point:
+
+							case F_Path:
+								fd.setAcceptFileTypes( valJson.extensions.join(" ") );
+						}
+
+					}
+
+					log.indentLess();
+				}
+
+				// Entity nodes
+				if( entityJson.hasNodes ) {
+					var fd = ed.createFieldDef(p, F_Point, "ogmoNodes", true);
+				}
+
+				log.indentLess();
+			}
+			log.clearIndent();
+
+
+
+			// Layers **************************************************************
 			log.general('Reading layer defs...');
 			json.layers.reverse();
 			log.indentMore();
@@ -135,7 +235,8 @@ class OgmoProject {
 			log.clearIndent();
 
 
-			// Levels
+
+			// Levels **************************************************************
 			log.general('Reading levels...');
 			var allFiles = JsTools.findFilesRec(fp.directory, "json");
 			log.indentMore();
@@ -204,6 +305,7 @@ class OgmoProject {
 						case Entities:
 
 
+
 						case Tiles:
 							var defaultTdUid = ld.tilesetDefUid;
 							var td = ldtkTilesets.get(layer.tileset);
@@ -256,10 +358,11 @@ class OgmoProject {
 				log.indentLess();
 			}
 			log.clearIndent();
-			p.removeLevel( p.levels[0] );
+			p.removeLevel( p.levels[0] ); // remove default 1st level
 
 			log.general("Done.");
 			return p;
+
 		#if !debug
 		}
 		catch(e:Dynamic) {
@@ -268,6 +371,8 @@ class OgmoProject {
 		}
 		#end
 	}
+
+
 
 	function iterateArray1D<T>(arr:Array<T>, lineWid:Int, cb:(cx:Int, cy:Int, v:T)->Void)  {
 		var cx = 0;
@@ -318,7 +423,8 @@ class OgmoProject {
 }
 
 
-/** OGMO JSON ***********************************************************/
+
+// OGMO JSON **************************************************************
 
 typedef XY = {
 	var x : Int;
@@ -359,8 +465,31 @@ typedef OgmoTilesetDef = {
 	var tileMarginY: Int;
 }
 
-typedef OgmoEntityDef = {}
+typedef OgmoEntityDef = {
+	var name: String;
+	var limit: Int;
+	var size: XY;
+	var origin: XY;
+	var originAnchored: Bool;
+	var color: String;
+	var hasNodes: Bool;
+	var values: Array<OgmoEntityValueDef>;
+}
 
+typedef OgmoEntityValueDef = {
+	var name: String;
+	var definition: String;
+	var display: Int;
+	var defaults: Dynamic;
+
+	var bounded: Bool;
+	var min: Float;
+	var max: Float;
+
+	var choices: Array<String>;
+
+	var extensions: Array<String>;
+}
 
 typedef OgmoLevelJson = {
 	var width: Int;
