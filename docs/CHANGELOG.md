@@ -3,6 +3,7 @@
 - **Ogmo 3 import**: TODO
 - Customizable source tileset per-layer instance: TODO
 - Disabled "New level" context menu when holding `Shift` or `Alt`
+- Fixed layer order for "simplified" level render in World view
 
 # 0.7.2
 

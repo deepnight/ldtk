@@ -400,7 +400,7 @@ class WorldRender extends dn.Process {
 		}
 
 		// Render layers
-		l.iterateLayerInstancesInRenderOrder( (li)->{
+		for( li in l.layerInstances ) {
 			if( li.def.type==Entities )
 				return;
 
@@ -451,7 +451,7 @@ class WorldRender extends dn.Process {
 						}
 				}
 			}
-		});
+		}
 
 		var error = l.getFirstError();
 
