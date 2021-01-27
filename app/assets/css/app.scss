@@ -1322,9 +1322,16 @@ select {
 	color: white;
 	border: 1px solid $bgLighter;
 	background-color: $bgLight;
+
 	&:not(.gray) {
 		border-radius: 3px;
 		box-shadow: 0px 2px 0px transparentize($color: black, $amount: 0.7);
+	}
+
+	&:disabled {
+		color: $bgMed;
+		border-color: $bgMed;
+		background-color: $bgDark;
 	}
 
 	&:hover {
