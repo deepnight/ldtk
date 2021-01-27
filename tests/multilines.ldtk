@@ -52,7 +52,7 @@
 				"width": 48,
 				"height": 48,
 				"color": "#94D9B3",
-				"renderMode": "Rectangle",
+				"renderMode": "Ellipse",
 				"showName": true,
 				"tilesetId": null,
 				"tileId": null,
@@ -78,7 +78,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": "Lua"
 					}
 				]
 			}
@@ -126,13 +127,13 @@
 					"gridTiles": [],
 					"entityInstances": [{ "__identifier": "Dummy", "__grid": [7,8], "__pivot": [0.5,0.5], "__tile": null, "defUid": 1, "px": [120,128], "fieldInstances": [{
 						"__identifier": "script",
-						"__value": "package ui.modal.dialog;\n\nclass TextEditor extends ui.modal.Dialog {\n public function new(str:String, onChange:String->Void) {\n  super(\"textEditor\");\n\n  var jTextArea = new J('<textarea/>');\n  jTextArea.appendTo(jContent);\n  jTextArea.val(str);\n  jTextArea.change( _->{\n   onChange( jTextArea.val() );\n  });\n\n  addClose();\n }\n}",
+						"__value": "package form.input;\n\nclass EnumSelect<T:EnumValue> extends form.Input<T> {\n var enumRef : Enum<T>;\n var allowNull : Bool;\n\n public function new(j:js.jquery.JQuery, e:Enum<T>, allowNull=false, getter:Void->T, setter:T->Void, ?nameLocalizer:T->dn.data.GetText.LocaleString, ?filter:T->Bool) {\n  this.allowNull = allowNull;\n\n  super(j, getter, setter);\n\n  enumRef = e;\n\n  jInput.empty();\n  for(k in Type.getEnumConstructs(enumRef)) {\n   var t = enumRef.createByName(k);\n\n   if( filter!=null && !filter(t) )\n    continue;\n\n   var opt = new J(\"<option/>\");\n   jInput.append(opt);\n   opt.attr(\"value\",k);\n   opt.text( nameLocalizer==null ? k : nameLocalizer(t) );\n   if( t==getter() )\n    opt.attr(\"selected\",\"selected\");\n  }\n\n  // \"None\" option\n  if( allowNull ) {\n   var opt = new J(\"<option/>\");\n   jInput.prepend(opt);\n   opt.text( nameLocalizer==null ? Lang.t._(\"(none)\") : nameLocalizer(null) );\n   opt.attr(\"value\", \"\");\n   if( getter()==null )\n    opt.attr(\"selected\",\"selected\");\n  }\n }\n\n override function parseInputValue() : T {\n  if( allowNull && jInput.val()==\"\" )\n   return null;\n  else\n   return enumRef.createByName( jInput.val() );\n }\n}",
 						"__type": "String",
 						"defUid": 2,
 						"realEditorValues": [{
 							"id": "V_String",
 							"params": [
-								"package ui.modal.dialog;\n\nclass TextEditor extends ui.modal.Dialog {\n public function new(str:String, onChange:String->Void) {\n  super(\"textEditor\");\n\n  var jTextArea = new J('<textarea/>');\n  jTextArea.appendTo(jContent);\n  jTextArea.val(str);\n  jTextArea.change( _->{\n   onChange( jTextArea.val() );\n  });\n\n  addClose();\n }\n}"
+								"package form.input;\n\nclass EnumSelect<T:EnumValue> extends form.Input<T> {\n var enumRef : Enum<T>;\n var allowNull : Bool;\n\n public function new(j:js.jquery.JQuery, e:Enum<T>, allowNull=false, getter:Void->T, setter:T->Void, ?nameLocalizer:T->dn.data.GetText.LocaleString, ?filter:T->Bool) {\n  this.allowNull = allowNull;\n\n  super(j, getter, setter);\n\n  enumRef = e;\n\n  jInput.empty();\n  for(k in Type.getEnumConstructs(enumRef)) {\n   var t = enumRef.createByName(k);\n\n   if( filter!=null && !filter(t) )\n    continue;\n\n   var opt = new J(\"<option/>\");\n   jInput.append(opt);\n   opt.attr(\"value\",k);\n   opt.text( nameLocalizer==null ? k : nameLocalizer(t) );\n   if( t==getter() )\n    opt.attr(\"selected\",\"selected\");\n  }\n\n  // \"None\" option\n  if( allowNull ) {\n   var opt = new J(\"<option/>\");\n   jInput.prepend(opt);\n   opt.text( nameLocalizer==null ? Lang.t._(\"(none)\") : nameLocalizer(null) );\n   opt.attr(\"value\", \"\");\n   if( getter()==null )\n    opt.attr(\"selected\",\"selected\");\n  }\n }\n\n override function parseInputValue() : T {\n  if( allowNull && jInput.val()==\"\" )\n   return null;\n  else\n   return enumRef.createByName( jInput.val() );\n }\n}"
 							]
 						}]
 					}] }]
