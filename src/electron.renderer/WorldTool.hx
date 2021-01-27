@@ -70,7 +70,7 @@ class WorldTool extends dn.Process {
 
 	public function onMouseDown(ev:hxd.Event, m:Coords) {
 		// Right click context menu
-		if( ev.button==1 && ( worldMode || getLevelAt(m.worldX,m.worldY,true)==null ) ) {
+		if( ev.button==1 && ( worldMode || getLevelAt(m.worldX,m.worldY,true)==null ) && !App.ME.hasAnyToggleKeyDown() ) {
 			var ctx = new ui.modal.ContextMenu(m);
 			// Create
 			ctx.add({

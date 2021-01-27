@@ -2,6 +2,7 @@
 
 - **Ogmo 3 import**: TODO
 - Customizable source tileset per-layer instance: TODO
+- Disabled "New level" context menu when holding `Shift` or `Alt`
 
 # 0.7.2
 
