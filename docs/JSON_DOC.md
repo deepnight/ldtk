@@ -233,7 +233,7 @@ Value | Type | Description
 `max`<br/><sup class="only">Only *Int, Float*</sup><br/><sup class="internal">*Internal editor data*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Max limit for value, if applicable
 `min`<br/><sup class="only">Only *Int, Float*</sup><br/><sup class="internal">*Internal editor data*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Min limit for value, if applicable
 `regex`<br/><sup class="only">Only *String*</sup><br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.2-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional "i" flag.
-`textLangageMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Possible values: &lt;`null`&gt;, `JsonDoc`, `Javascript`, `Lua`
+`textLangageMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Possible values: &lt;`null`&gt;, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangJson`, `LangXml`
 `type`<br/><sup class="internal">*Internal editor data*</sup> | Dynamic&nbsp;(anything) | Internal type enum
 `uid`<br/><sup class="internal">*Internal editor data*</sup> | Int | Unique Intidentifier
 

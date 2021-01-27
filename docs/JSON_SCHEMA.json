@@ -588,11 +588,14 @@
 					"description": "Default value if selected value is null or invalid."
 				},
 				"textLangageMode": {
-					"description": "Possible values: &lt;`null`&gt;, `JsonDoc`, `Javascript`, `Lua`",
+					"description": "Possible values: &lt;`null`&gt;, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangJson`, `LangXml`",
 					"enum": [
-						"JsonDoc",
-						"Javascript",
-						"Lua",
+						"LangJS",
+						"LangLua",
+						"LangC",
+						"LangHaxe",
+						"LangJson",
+						"LangXml",
 						null
 					]
 				},
