@@ -310,17 +310,19 @@ class FieldInstancesForm {
 				if( !fi.isUsingDefault(arrayIdx) )
 					input.val( fi.getFilePath(arrayIdx) );
 
-				var jLocate = new J('<button class="locate gray"> <span class="icon locate"/> </button>');
-				jLocate.appendTo(jTarget);
-				jLocate.click( (_)->{
-					if( !fi.valueIsNull(arrayIdx) ) {
-						var path = project.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
-						JsTools.exploreToFile(path, true);
-					}
-				});
-
 				var fileSelect = new J('<button class="fileSelectButton"> <span class="icon open"/> </button>');
 				fileSelect.appendTo(jTarget);
+
+				if( !fi.isUsingDefault(arrayIdx) ) {
+					var jLocate = new J('<button class="locate gray"> <span class="icon locate"/> </button>');
+					jLocate.appendTo(jTarget);
+					jLocate.click( (_)->{
+						if( !fi.valueIsNull(arrayIdx) ) {
+							var path = project.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
+							JsTools.exploreToFile(path, true);
+						}
+					});
+				}
 
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, input.val() );
