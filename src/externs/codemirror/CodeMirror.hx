@@ -8,11 +8,12 @@ extern class CodeMirror {
 
 	public function getValue(?lineSeparator:String) : String;
 	public function setValue(v:String) : Void;
+	public function setOption(name:String, val:Dynamic) : Void;
 }
 
 
 typedef CodeMirrorConfig = {
-	var ?mode: String;
+	var ?mode: haxe.extern.EitherType<String,{}>; // string or object
 	var ?theme: String;
 
 	var ?lineWrapping: Bool;
