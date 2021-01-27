@@ -31,7 +31,7 @@ class OgmoProject {
 
 		// Init ogmo data cache
 		var ogmoLayerJsons : Map<Int, OgmoLayerDef> = new Map();
-		var ldtkLayerDefs : Map<Int, data.def.LayerDef> = new Map(); // ogmo "exportID" as index
+		var ldtkLayerDefs : Map<String, data.def.LayerDef> = new Map(); // ogmo "name" as index
 		var ldtkTilesets : Map<String, data.def.TilesetDef> = new Map(); // ogmo "label" as index
 
 		// Prepare base project
@@ -93,7 +93,7 @@ class OgmoProject {
 					// IntGrid layer def
 					case "grid":
 						var layer = p.defs.createLayerDef(IntGrid, data.Project.cleanupIdentifier(layerJson.name, true));
-						ldtkLayerDefs.set(layerJson.exportID, layer);
+						ldtkLayerDefs.set(layerJson.name, layer);
 						layer.gridSize = readGrid(layerJson.gridSize);
 						layer.intGridValues = [];
 						var ignoreFirst = true;
@@ -111,13 +111,13 @@ class OgmoProject {
 					// Entity layer def
 					case "entity":
 						var layer = p.defs.createLayerDef(Entities, data.Project.cleanupIdentifier(layerJson.name, true));
-						ldtkLayerDefs.set(layerJson.exportID, layer);
+						ldtkLayerDefs.set(layerJson.name, layer);
 						layer.gridSize = readGrid(layerJson.gridSize);
 
 					// Tile layer def
 					case "tile":
 						var layer = p.defs.createLayerDef(Tiles, data.Project.cleanupIdentifier(layerJson.name, true));
-						ldtkLayerDefs.set(layerJson.exportID, layer);
+						ldtkLayerDefs.set(layerJson.name, layer);
 						layer.gridSize = readGrid(layerJson.gridSize);
 						if( layerJson.defaultTileset!=null ) {
 							var td = p.defs.getTilesetDef( data.Project.cleanupIdentifier(layerJson.defaultTileset, true) );
@@ -170,9 +170,9 @@ class OgmoProject {
 				for(layer in levelJson.layers) {
 					log.indentMore();
 					log.debug(layer.name);
-					var ld = ldtkLayerDefs.get(layer._eid);
+					var ld = ldtkLayerDefs.get(layer.name);
 					if( ld==null ) {
-						log.error("ExportID in layer "+layer.name+" from level "+fp.full+" doesn't match any layer definition");
+						log.error('Layer "${layer.name}" from level ${fp.full} does not match any layer definition');
 						continue;
 					}
 					var li = level.getLayerInstance(ld);
