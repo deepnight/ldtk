@@ -4,6 +4,8 @@ import dn.data.GetText.LocaleString;
 
 typedef ContextAction = {
 	var label : LocaleString;
+	var ?sub : Null<LocaleString>;
+	var ?className : String;
 	var cb : Void->Void;
 	var ?cond : Void->Bool;
 }
@@ -73,7 +75,7 @@ class ContextMenu extends ui.Modal {
 			var ctx = new ContextMenu(event);
 			for(a in actions)
 				if( a.cond==null || a.cond() )
-					ctx.add( a.label, a.cb );
+					ctx.add(a);
 		}
 
 		// Arrow button
@@ -91,16 +93,19 @@ class ContextMenu extends ui.Modal {
 	}
 
 
-	public function add(label:LocaleString, ?sub:LocaleString, cb:Void->Void) {
+	public function add(a:ContextAction) {
 		var jButton = new J('<button class="transparent"/>');
 		jButton.appendTo(jContent);
-		jButton.text(label);
-		if( sub!=null && sub!=label )
-			jButton.append('<span class="sub">$sub</span>');
+		jButton.text(a.label);
+		if( a.sub!=null && a.sub!=a.label )
+			jButton.append('<span class="sub">${a.sub}</span>');
+
+		if( a.className!=null )
+			jButton.addClass(a.className);
 
 		jButton.click( (_)->{
 			close();
-			cb();
+			a.cb();
 		 });
 		 return jButton;
 	}

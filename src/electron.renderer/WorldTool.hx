@@ -73,36 +73,47 @@ class WorldTool extends dn.Process {
 		if( ev.button==1 && ( worldMode || getLevelAt(m.worldX,m.worldY,true)==null ) ) {
 			var ctx = new ui.modal.ContextMenu(m);
 			// Create
-			ctx.add("New level", ()->{
-				if( !createLevelAt(m) ) {
-					new ui.modal.dialog.Confirm(L.t._("No room for a level here! Do you want to pick another location?"), startAddMode);
-				}
+			ctx.add({
+				label: L.t._("New level"),
+				cb: ()->{
+					if( !createLevelAt(m) ) {
+						new ui.modal.dialog.Confirm(L.t._("No room for a level here! Do you want to pick another location?"), startAddMode);
+					}
+				},
 			});
+
 			var l = getLevelAt(m.worldX, m.worldY, true);
 			if( l!=null ) {
 				editor.selectLevel(l);
 				// Duplicate
-				ctx.add("Duplicate", ()->{
-					var copy = project.duplicateLevel(l);
-					editor.selectLevel(copy);
-					switch project.worldLayout {
-						case Free, GridVania:
-							copy.worldX += project.defaultGridSize*4;
-							copy.worldY += project.defaultGridSize*4;
+				ctx.add({
+					label: L.t._("Duplicate"),
+					cb: ()->{
+						var copy = project.duplicateLevel(l);
+						editor.selectLevel(copy);
+						switch project.worldLayout {
+							case Free, GridVania:
+								copy.worldX += project.defaultGridSize*4;
+								copy.worldY += project.defaultGridSize*4;
 
-						case LinearHorizontal:
-						case LinearVertical:
+							case LinearHorizontal:
+							case LinearVertical:
+						}
+						editor.ge.emit( LevelAdded(copy) );
 					}
-					editor.ge.emit( LevelAdded(copy) );
 				});
+
 				// Delete
-				ctx.add("Delete", ()->{
-					var closest = project.getClosestLevelFrom(l);
-					new ui.LastChance('Level ${l.identifier} removed', project);
-					project.removeLevel(l);
-					editor.ge.emit( LevelRemoved(l) );
-					editor.selectLevel( closest );
-					editor.camera.scrollToLevel(closest);
+				ctx.add({
+					label: L.t._("Delete"),
+					cb: ()->{
+						var closest = project.getClosestLevelFrom(l);
+						new ui.LastChance('Level ${l.identifier} removed', project);
+						project.removeLevel(l);
+						editor.ge.emit( LevelRemoved(l) );
+						editor.selectLevel( closest );
+						editor.camera.scrollToLevel(closest);
+					}
 				});
 			}
 			ev.cancel = true;

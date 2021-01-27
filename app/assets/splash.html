@@ -13,13 +13,14 @@
 
 		.splash {
 			position: absolute;
-			box-sizing: border-box;
-			width: 80%;
-			height: 80%;
-			margin: 10%;
-			padding: 32px;
 			display: grid;
 			grid-template-rows: auto min-content;
+			gap: 16px;
+			box-sizing: border-box;
+			width: 90%;
+			height: 90%;
+			margin: 5%;
+			padding: 32px;
 
 			border-radius: 8px;
 			background-color: #1e2229;
@@ -29,6 +30,12 @@
 		.splash img {
 			width: 100%;
 		}
+
+		.splash .sub {
+			font-size: 14pt;
+			font-family: Roboto, Arial;
+			text-align: center;
+		}
 	</style>
 </head>
 
@@ -36,7 +43,7 @@
 <body>
 	<div class="splash">
 		<img src="img/LDtk.svg"/>
-		<p>Loading...</p>
+		<div class="sub">Loading...</div>
 	</div>
 </body>
 </html>

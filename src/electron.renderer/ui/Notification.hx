@@ -47,6 +47,11 @@ class Notification extends dn.Process {
 			new Notification(str, 0x42b771);
 	}
 
+	public static function warning(str:String) {
+		if( !sameAsLast(str) )
+			new Notification(str, 0xcb8d13);
+	}
+
 	public static function appUpdate(str:String) {
 		if( !sameAsLast(str) )
 			new Notification(str, 0xdbab13);

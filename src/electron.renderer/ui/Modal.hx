@@ -228,5 +228,6 @@ class Modal extends dn.Process {
 		var html = JsTools.getHtmlTemplate(tplName, vars);
 		jContent.empty().off().append( html );
 		JsTools.parseComponents(jContent);
+		ui.Tip.clear();
 	}
 }

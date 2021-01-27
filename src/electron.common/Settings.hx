@@ -8,6 +8,7 @@ typedef AppSettings = {
 	var tileStacking : Bool;
 	var lastKnownVersion: Null<String>;
 	var useBestGPU : Bool;
+	var editorUiScale : Float;
 }
 
 
@@ -31,6 +32,7 @@ class Settings {
 			tileStacking: false,
 			lastKnownVersion: null,
 			useBestGPU: true,
+			editorUiScale: 1.0,
 		}
 
 		// Load

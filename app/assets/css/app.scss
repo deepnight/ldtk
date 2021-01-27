@@ -1647,7 +1647,7 @@ textarea {
 		background: $bgMed;
 		border: 1px solid $bgLight;
 
-		box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
+		box-shadow: 0px 0px 32px black, 0px 8px 32px rgba(0, 0, 0, 0.3);
 	}
 }
 
@@ -1684,9 +1684,16 @@ textarea {
 	}
 }
 
-.window.settings {
+.window.editAppSettings {
 	.wrapper .content {
 		width: 400px;
+
+		ul.form li {
+			label {
+				align-self: center;
+				flex: 0 0 45%;
+			}
+		}
 	}
 }
 
@@ -1843,6 +1850,18 @@ textarea {
 					text-transform: none;
 					color: $bgLighter;
 					font-size: 9pt;
+				}
+
+				&.crash:not(:hover) {
+					background-color: $helpDark;
+				}
+
+				&.warning {
+					background-color: $darkRed;
+					&:hover {
+						color: white;
+						background-color: $red;
+					}
 				}
 			}
 			button+button {
@@ -3882,6 +3901,37 @@ canvas#webgl {
 
 		ul.form>li>label:first-of-type {
 			flex: 0 0 250px;
+		}
+
+		li.pngPattern {
+			position: relative;
+			dl.guide {
+				position: absolute;
+				z-index: 2;
+
+				display: grid;
+				grid-template-columns: min-content auto;
+				top: 48px;
+				right: 0;
+				padding: 16px;
+				border-radius: 3px;
+				background-color: $helpDark;
+
+				dt {
+					font-family: monospace;
+					color: $orange;
+				}
+				dd {
+					padding-left: 8px;
+					padding-bottom: 8px;
+				}
+			}
+			.example {
+				flex: 1 0 100%;
+				text-align: right;
+				color: $help;
+				font-family: monospace;
+			}
 		}
 
 		h2 {

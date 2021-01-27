@@ -3,8 +3,8 @@ package display;
 
 class EntityRender extends dn.Process {
 	var ei : data.inst.EntityInstance;
-	var ed(get,never) : data.def.EntityDef;
-		inline function get_ed() return ei.def;
+	var ed(get,never) : data.def.EntityDef; inline function get_ed() return ei.def;
+	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	var ld : data.def.LayerDef;
 
@@ -201,6 +201,7 @@ class EntityRender extends dn.Process {
 		// Array opening
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = new h2d.Text(getDefaultFont(), valuesFlow);
+			tf.scale(settings.v.editorUiScale);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = "[";
 		}
@@ -213,7 +214,7 @@ class EntityRender extends dn.Process {
 					var tile = fi.getIconForDisplay(idx);
 					var bmp = new h2d.Bitmap( tile, w );
 					var s = M.fmin( 32/tile.width, 32/tile.height );
-					bmp.setScale(s);
+					bmp.setScale(s * settings.v.editorUiScale);
 				}
 				else if( fi.def.type==F_Color ) {
 					// Color disc
@@ -226,8 +227,9 @@ class EntityRender extends dn.Process {
 				else {
 					// Text render
 					var tf = new h2d.Text(getDefaultFont(), valuesFlow);
+					tf.scale(settings.v.editorUiScale);
 					tf.textColor = ei.getSmartColor(true);
-					tf.maxWidth = 400;
+					tf.maxWidth = 400 * ( 0.5 + 0.5*settings.v.editorUiScale );
 					var v = fi.getForDisplay(idx);
 					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
 						tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';
@@ -239,6 +241,7 @@ class EntityRender extends dn.Process {
 			// Array separator
 			if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
 				var tf = new h2d.Text(getDefaultFont(), valuesFlow);
+				tf.scale(settings.v.editorUiScale);
 				tf.textColor = ei.getSmartColor(true);
 				tf.text = ",";
 			}
@@ -247,6 +250,7 @@ class EntityRender extends dn.Process {
 		// Array closing
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = new h2d.Text(getDefaultFont(), valuesFlow);
+			tf.scale(settings.v.editorUiScale);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = "]";
 		}
@@ -269,7 +273,8 @@ class EntityRender extends dn.Process {
 			var err = fi.getFirstErrorInValues();
 			if( err!=null ) {
 				var tf = new h2d.Text(getDefaultFont(), above);
-				tf.textColor = 0xffcc00;
+				tf.scale(settings.v.editorUiScale);
+				tf.textColor = 0xff8800;
 				tf.text = '<$err>';
 			}
 
@@ -296,6 +301,7 @@ class EntityRender extends dn.Process {
 					f.verticalAlign = Middle;
 
 					var tf = new h2d.Text(getDefaultFont(), f);
+					tf.scale(settings.v.editorUiScale);
 					tf.textColor = ei.getSmartColor(true);
 					tf.text = fd.identifier+" = ";
 
@@ -359,6 +365,7 @@ class EntityRender extends dn.Process {
 		if( ei.def.showName ) {
 			var f = new h2d.Flow(above);
 			var tf = new h2d.Text(getDefaultFont(), f);
+			tf.scale(settings.v.editorUiScale);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = ed.identifier.substr(0,16);
 			tf.x = Std.int( ed.width*0.5 - tf.textWidth*tf.scaleX*0.5 );

@@ -457,6 +457,10 @@ class Editor extends Page {
 			case K.F if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				camera.fit();
 
+			case K.F12 if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				ui.Modal.closeAll();
+				new ui.modal.dialog.EditAppSettings();
+
 			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				var state = levelRender.toggleAutoLayerRendering();
 				N.quick( "Auto-layers rendering: "+L.onOff(state));
@@ -1029,8 +1033,8 @@ class Editor extends Page {
 			if( !success )
 				N.error("Saving failed!");
 			else {
-				App.LOG.fileOp('Saved ${project.filePath.fileWithExt}.');
-				N.success('Saved ${project.filePath.fileWithExt}.');
+				App.LOG.fileOp('Saved "${project.filePath.fileWithExt}".');
+				N.success('Saved "${project.filePath.fileName}".');
 
 				App.ME.registerRecentProject(project.filePath.full);
 				this.needSaving = false;
@@ -1095,6 +1099,7 @@ class Editor extends Page {
 		else if( shouldLogEvent(e) ) {
 			var extra : Dynamic = null;
 			switch e {
+				case AppSettingsChanged:
 				case WorldMode(active):
 				case ViewportChanged:
 				case ProjectSelected:
@@ -1163,6 +1168,7 @@ class Editor extends Page {
 		// Check if events changes the NeedSaving flag
 		switch e {
 			case WorldMode(_):
+			case AppSettingsChanged:
 			case ViewportChanged:
 			case LayerInstanceSelected:
 			case LevelSelected(_):
@@ -1179,6 +1185,7 @@ class Editor extends Page {
 
 		// Use event
 		switch e {
+			case AppSettingsChanged:
 			case WorldMode(active):
 
 			case ViewportChanged:

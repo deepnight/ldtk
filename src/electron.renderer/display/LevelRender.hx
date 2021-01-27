@@ -66,6 +66,9 @@ class LevelRender extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
+			case AppSettingsChanged:
+				invalidateAll();
+
 			case WorldMode(active):
 				if( active ) {
 					// Remove hidden render

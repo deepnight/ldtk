@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.1",
+		"appVersion": "0.7.2",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.7.1",
+	"jsonVersion": "0.7.2",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
@@ -19,6 +19,7 @@
 	"externalLevels": true,
 	"exportTiled": false,
 	"exportPng": true,
+	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"worldLayout": "LinearHorizontal",
@@ -1082,7 +1083,7 @@
 	},
 	"levels": [
 		{
-			"identifier": "AutoLayers_advanced_demo",
+			"identifier": "A",
 			"uid": 70,
 			"worldX": 0,
 			"worldY": 0,
@@ -1095,12 +1096,12 @@
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
 			"__bgPos": null,
-			"externalRelPath": "pngLayers/0000-AutoLayers_advanced_demo.ldtkl",
+			"externalRelPath": "pngLayers/0000-A.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [{ "levelUid": 96, "dir": "e" }]
 		},
 		{
-			"identifier": "Level",
+			"identifier": "B",
 			"uid": 96,
 			"worldX": 328,
 			"worldY": 0,
@@ -1113,12 +1114,12 @@
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
 			"__bgPos": null,
-			"externalRelPath": "pngLayers/0001-Level.ldtkl",
+			"externalRelPath": "pngLayers/0001-B.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 97, "dir": "e" }, { "levelUid": 70, "dir": "w" } ]
 		},
 		{
-			"identifier": "Level2",
+			"identifier": "C",
 			"uid": 97,
 			"worldX": 616,
 			"worldY": 0,
@@ -1131,7 +1132,7 @@
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
 			"__bgPos": null,
-			"externalRelPath": "pngLayers/0002-Level2.ldtkl",
+			"externalRelPath": "pngLayers/0002-C.ldtkl",
 			"layerInstances": null,
 			"__neighbours": [{ "levelUid": 96, "dir": "w" }]
 		}

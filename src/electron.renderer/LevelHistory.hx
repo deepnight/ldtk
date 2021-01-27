@@ -28,6 +28,7 @@ class LevelHistory {
 
 	public function manualOnGlobalEvent(e:GlobalEvent) {
 		switch e {
+			case AppSettingsChanged:
 			case ProjectSaved, BeforeProjectSaving:
 
 			case WorldMode(active):

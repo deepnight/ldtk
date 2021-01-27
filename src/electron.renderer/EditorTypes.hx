@@ -1,6 +1,7 @@
 
 enum GlobalEvent {
 	ViewportChanged;
+	AppSettingsChanged;
 
 	ProjectSelected;
 	ProjectSettingsChanged;
