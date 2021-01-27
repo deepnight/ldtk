@@ -14,7 +14,18 @@
       "gridCellHeight": 16,
       "gridCellsX": 20,
       "gridCellsY": 15,
-      "entities": []
+      "entities": [
+        {
+          "name": "foo",
+          "id": 11,
+          "_eid": "74377636",
+          "x": 16,
+          "y": 16,
+          "originX": 0,
+          "originY": 0,
+          "values": {"myBool": true, "myColor": "#aedb4aff", "myEnum": "C", "myFloat": 0.5, "myFilePath": "proj:", "myInt": 5, "myString": "pouet", "myText": "hey \nhello\npouet"}
+        }
+      ]
     },
     {
       "name": "myGrid",
