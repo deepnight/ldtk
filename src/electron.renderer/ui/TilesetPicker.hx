@@ -100,9 +100,9 @@ class TilesetPicker {
 		ctx.lineWidth = M.fmax( 1, Std.int( tilesetDef.tileGridSize / 16 ) );
 		var strokeOffset = ctx.lineWidth*0.5; // draw in the middle of the pixel to avoid blur
 
-		for(cy in 0...tilesetDef.cHei)
-		for(cx in 0...tilesetDef.cWid) {
-			var tid = tilesetDef.getTileId(cx,cy);
+		for(tileId in 0...tilesetDef.cWid*tilesetDef.cHei) {
+			var x = tilesetDef.getTileSourceX(tileId);
+			var y = tilesetDef.getTileSourceY(tileId);
 			switch gridMode {
 				case ShowOpaques:
 
@@ -110,31 +110,29 @@ class TilesetPicker {
 					// Fill
 					ctx.beginPath();
 					ctx.rect(
-						cx*tilesetDef.tileGridSize,
-						cy*tilesetDef.tileGridSize,
-						tilesetDef.tileGridSize,
-						tilesetDef.tileGridSize
+						x, y,
+						tilesetDef.tileGridSize, tilesetDef.tileGridSize
 					);
 					ctx.fillStyle = "black";
 					ctx.fill();
-					ctx.fillStyle = C.intToHexRGBA( tilesetDef.getAverageTileColor(tid) );
+					ctx.fillStyle = C.intToHexRGBA( tilesetDef.getAverageTileColor(tileId) );
 					ctx.fill();
 			}
 
 			// Outline
 			ctx.beginPath();
 			ctx.rect(
-				cx*tilesetDef.tileGridSize + strokeOffset,
-				cy*tilesetDef.tileGridSize + strokeOffset,
+				x + strokeOffset,
+				y + strokeOffset,
 				tilesetDef.tileGridSize - strokeOffset*2,
 				tilesetDef.tileGridSize - strokeOffset*2
 			);
 
 			// Outline color
-			var c = tilesetDef.getAverageTileColor(tid);
+			var c = tilesetDef.getAverageTileColor(tileId);
 			var a = C.getA(c)>0 ? 1 : 0;
 			ctx.strokeStyle =
-				C.intToHexRGBA( C.toWhite( C.replaceAlphaF( tilesetDef.getAverageTileColor(tid), a ), 0.2 ) );
+				C.intToHexRGBA( C.toWhite( C.replaceAlphaF( tilesetDef.getAverageTileColor(tileId), a ), 0.2 ) );
 
 			ctx.stroke();
 		}
