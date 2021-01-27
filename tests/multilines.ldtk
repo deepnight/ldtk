@@ -14,7 +14,7 @@
 	"defaultGridSize": 16,
 	"bgColor": "#676877",
 	"defaultLevelBgColor": "#7F8093",
-	"nextUid": 4,
+	"nextUid": 5,
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
@@ -63,7 +63,7 @@
 				"pivotY": 0.5,
 				"fieldDefs": [
 					{
-						"identifier": "script",
+						"identifier": "json",
 						"__type": "String",
 						"uid": 2,
 						"type": "F_Text",
@@ -79,7 +79,26 @@
 						"regex": null,
 						"acceptFileTypes": null,
 						"defaultOverride": null,
-						"textLangageMode": "LangHaxe"
+						"textLangageMode": "LangJson"
+					},
+					{
+						"identifier": "xml",
+						"__type": "String",
+						"uid": 4,
+						"type": "F_Text",
+						"isArray": false,
+						"canBeNull": true,
+						"arrayMinLength": null,
+						"arrayMaxLength": null,
+						"editorDisplayMode": "Hidden",
+						"editorDisplayPos": "Above",
+						"editorAlwaysShow": false,
+						"min": null,
+						"max": null,
+						"regex": null,
+						"acceptFileTypes": null,
+						"defaultOverride": null,
+						"textLangageMode": "LangXml"
 					}
 				]
 			}
@@ -125,18 +144,30 @@
 					"seed": 2887611,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": [{ "__identifier": "Dummy", "__grid": [7,8], "__pivot": [0.5,0.5], "__tile": null, "defUid": 1, "px": [120,128], "fieldInstances": [{
-						"__identifier": "script",
-						"__value": "import dn.data.GetText;\n\nclass Lang {\n // Text constants\n public static var _Duplicate = ()->t._(\"Duplicate\");\n public static var _Delete = ()->t._(\"Delete\");\n\n\n // Misc\n static var _initDone = false;\n static var DEFAULT = \"en\";\n public static var CUR = \"??\";\n public static var t : GetText;\n\n\n public static function init(?lid:String) {\n  if( _initDone )\n   return;\n\n  _initDone = true;\n  CUR = lid==null ? DEFAULT : lid;\n\n  t = new GetText();\n  t.readMo( hxd.Res.load(\"lang/\"+CUR+\".mo\").entry.getBytes() );\n }\n\n public static inline function onOff(v:Null<Bool>) {\n  return v==true ? t._(\"ON\") : t._(\"off\");\n }\n\n public static function untranslated(str:Dynamic) : LocaleString {\n  init();\n  return t.untranslated(str);\n }\n\n public static function getLayerType(type:ldtk.Json.LayerType) : LocaleString {\n  return switch type {\n   case IntGrid: Lang.t._(\"Integer grid\");\n   case AutoLayer: Lang.t._(\"Auto-layer\");\n   case Entities: Lang.t._(\"Entities\");\n   case Tiles: Lang.t._(\"Tiles\");\n  }\n }\n\n public static function getFieldType(type:data.DataTypes.FieldType) : LocaleString {\n  return switch type {\n   case F_Int: t._(\"Integer\");\n   case F_Color: t._(\"Color\");\n   case F_Float: t._(\"Float\");\n   case F_String: t._(\"String\");\n   case F_Text: t._(\"Multilines\");\n   case F_Bool: t._(\"Boolean\");\n   case F_Point: t._(\"Point\");\n   case F_Enum(name): name==null ? t._(\"Enum\") : t._(\"Enum.::e::\", { e:name });\n   case F_Path: t._(\"File path\");\n  }\n }\n\n public static function getFieldTypeShortName(type:data.DataTypes.FieldType) : LocaleString {\n  return switch type {\n   case F_Int: t._(\"123\");\n   case F_Color: t._(\"Red\");\n   case F_Float: t._(\"1.0\");\n   case F_String: t._(\"\\\"Ab\\\"\");\n   case F_Text: t._(\"\\\"\n\n\\\"\");\n   case F_Bool: t._(\"✔\");\n   case F_Point: t._(\"X::sep::Y\", { sep:Const.POINT_SEPARATOR });\n   case F_Enum(name): t._(\"Enu\");\n   case F_Path: t._(\"*.*\");\n  }\n }\n\n\n public static function getTextLanguageMode(m:Null<ldtk.Json.TextLanguageMode>) : LocaleString {\n  return switch m {\n   case null: t._(\"Plain text\");\n   case LangJson: t._(\"JSON\");\n   case LangXml: t._(\"XML\");\n   case LangC: t._(\"C/C++/C#\");\n   case LangHaxe: t._(\"Haxe\");\n   case LangJS: t._(\"Javascript\");\n   case LangLua: t._(\"LUA\");\n  }\n }\n\n\n public static function atlasLoadingMessage(filePath:String, result:AtlasLoadingResult) : LocaleString {\n  var name = dn.FilePath.fromFile(filePath).fileWithExt;\n  return switch result {\n   case Ok:\n    Lang.t._(\"Tileset image ::name:: updated.\", { name:name } );\n\n   case FileNotFound:\n    Lang.t._(\"File not found: ::name::\", { name:name } );\n\n   case LoadingFailed(err):\n    Lang.t._(\"Couldn't read file: ::name::\", { name:name } );\n\n   case TrimmedPadding:\n    Lang.t._(\"\\\"::name::\\\" image was modified but it was SMALLER than the old version.\nLuckily, the tileset had some PADDING, so I was able to use it to compensate the difference.\nSo everything is ok, have a nice day ♥️\", { name:name } );\n\n   case RemapLoss:\n    Lang.t._(\"\\\"::name::\\\" image was updated, but the new version is smaller than the previous one.\nSome tiles might have been lost in the process. It is recommended to check this carefully before saving this project!\", { name:name } );\n\n   case RemapSuccessful:\n    Lang.t._(\"Tileset image \\\"::name::\\\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)\", { name:name } );\n  }\n }\n\n\n static var MONTHS = [ \"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\" ];\n public static function date(date:Date) : LocaleString {\n  var day = date.getDate();\n  return untranslated(\n   MONTHS[ date.getMonth()+1 ]\n   +\" \" + day + ( day==1?\"st\" : day==2?\"nd\" : day==3?\"rd\" : \"th\" )\n   +\" \" + date.getFullYear()\n   +\" \"+t._(\"at\")\n   +' ${dn.Lib.leadingZeros(date.getHours())}:${dn.Lib.leadingZeros(date.getMinutes())}'\n  );\n }\n\n public static function relativeDate(d:Date) : LocaleString {\n  var deltaS = Std.int( ( Date.now().getTime() - d.getTime() ) / 1000 );\n  if( deltaS<0 )\n   return date(d);\n\n  if( deltaS<60 )\n   return '$deltaS seconds ago';\n  else if( deltaS<60*60 ) {\n   var m = Std.int( deltaS/60 );\n   return m<=1 ? '1 minute ago' : '$m minutes ago';\n  }\n  else if( deltaS<60*60*24 ) {\n   var h = Std.int( deltaS / (60*60) );\n   return h<=1 ? '1 hour ago' : '$h hours ago';\n  }\n  else\n   return date(d);\n }\n}",
-						"__type": "String",
-						"defUid": 2,
-						"realEditorValues": [{
-							"id": "V_String",
-							"params": [
-								"import dn.data.GetText;\n\nclass Lang {\n // Text constants\n public static var _Duplicate = ()->t._(\"Duplicate\");\n public static var _Delete = ()->t._(\"Delete\");\n\n\n // Misc\n static var _initDone = false;\n static var DEFAULT = \"en\";\n public static var CUR = \"??\";\n public static var t : GetText;\n\n\n public static function init(?lid:String) {\n  if( _initDone )\n   return;\n\n  _initDone = true;\n  CUR = lid==null ? DEFAULT : lid;\n\n  t = new GetText();\n  t.readMo( hxd.Res.load(\"lang/\"+CUR+\".mo\").entry.getBytes() );\n }\n\n public static inline function onOff(v:Null<Bool>) {\n  return v==true ? t._(\"ON\") : t._(\"off\");\n }\n\n public static function untranslated(str:Dynamic) : LocaleString {\n  init();\n  return t.untranslated(str);\n }\n\n public static function getLayerType(type:ldtk.Json.LayerType) : LocaleString {\n  return switch type {\n   case IntGrid: Lang.t._(\"Integer grid\");\n   case AutoLayer: Lang.t._(\"Auto-layer\");\n   case Entities: Lang.t._(\"Entities\");\n   case Tiles: Lang.t._(\"Tiles\");\n  }\n }\n\n public static function getFieldType(type:data.DataTypes.FieldType) : LocaleString {\n  return switch type {\n   case F_Int: t._(\"Integer\");\n   case F_Color: t._(\"Color\");\n   case F_Float: t._(\"Float\");\n   case F_String: t._(\"String\");\n   case F_Text: t._(\"Multilines\");\n   case F_Bool: t._(\"Boolean\");\n   case F_Point: t._(\"Point\");\n   case F_Enum(name): name==null ? t._(\"Enum\") : t._(\"Enum.::e::\", { e:name });\n   case F_Path: t._(\"File path\");\n  }\n }\n\n public static function getFieldTypeShortName(type:data.DataTypes.FieldType) : LocaleString {\n  return switch type {\n   case F_Int: t._(\"123\");\n   case F_Color: t._(\"Red\");\n   case F_Float: t._(\"1.0\");\n   case F_String: t._(\"\\\"Ab\\\"\");\n   case F_Text: t._(\"\\\"\n\n\\\"\");\n   case F_Bool: t._(\"✔\");\n   case F_Point: t._(\"X::sep::Y\", { sep:Const.POINT_SEPARATOR });\n   case F_Enum(name): t._(\"Enu\");\n   case F_Path: t._(\"*.*\");\n  }\n }\n\n\n public static function getTextLanguageMode(m:Null<ldtk.Json.TextLanguageMode>) : LocaleString {\n  return switch m {\n   case null: t._(\"Plain text\");\n   case LangJson: t._(\"JSON\");\n   case LangXml: t._(\"XML\");\n   case LangC: t._(\"C/C++/C#\");\n   case LangHaxe: t._(\"Haxe\");\n   case LangJS: t._(\"Javascript\");\n   case LangLua: t._(\"LUA\");\n  }\n }\n\n\n public static function atlasLoadingMessage(filePath:String, result:AtlasLoadingResult) : LocaleString {\n  var name = dn.FilePath.fromFile(filePath).fileWithExt;\n  return switch result {\n   case Ok:\n    Lang.t._(\"Tileset image ::name:: updated.\", { name:name } );\n\n   case FileNotFound:\n    Lang.t._(\"File not found: ::name::\", { name:name } );\n\n   case LoadingFailed(err):\n    Lang.t._(\"Couldn't read file: ::name::\", { name:name } );\n\n   case TrimmedPadding:\n    Lang.t._(\"\\\"::name::\\\" image was modified but it was SMALLER than the old version.\nLuckily, the tileset had some PADDING, so I was able to use it to compensate the difference.\nSo everything is ok, have a nice day ♥️\", { name:name } );\n\n   case RemapLoss:\n    Lang.t._(\"\\\"::name::\\\" image was updated, but the new version is smaller than the previous one.\nSome tiles might have been lost in the process. It is recommended to check this carefully before saving this project!\", { name:name } );\n\n   case RemapSuccessful:\n    Lang.t._(\"Tileset image \\\"::name::\\\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)\", { name:name } );\n  }\n }\n\n\n static var MONTHS = [ \"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\" ];\n public static function date(date:Date) : LocaleString {\n  var day = date.getDate();\n  return untranslated(\n   MONTHS[ date.getMonth()+1 ]\n   +\" \" + day + ( day==1?\"st\" : day==2?\"nd\" : day==3?\"rd\" : \"th\" )\n   +\" \" + date.getFullYear()\n   +\" \"+t._(\"at\")\n   +' ${dn.Lib.leadingZeros(date.getHours())}:${dn.Lib.leadingZeros(date.getMinutes())}'\n  );\n }\n\n public static function relativeDate(d:Date) : LocaleString {\n  var deltaS = Std.int( ( Date.now().getTime() - d.getTime() ) / 1000 );\n  if( deltaS<0 )\n   return date(d);\n\n  if( deltaS<60 )\n   return '$deltaS seconds ago';\n  else if( deltaS<60*60 ) {\n   var m = Std.int( deltaS/60 );\n   return m<=1 ? '1 minute ago' : '$m minutes ago';\n  }\n  else if( deltaS<60*60*24 ) {\n   var h = Std.int( deltaS / (60*60) );\n   return h<=1 ? '1 hour ago' : '$h hours ago';\n  }\n  else\n   return date(d);\n }\n}"
-							]
-						}]
-					}] }]
+					"entityInstances": [{ "__identifier": "Dummy", "__grid": [7,8], "__pivot": [0.5,0.5], "__tile": null, "defUid": 1, "px": [120,128], "fieldInstances": [
+						{
+							"__identifier": "json",
+							"__value": "{\n  \"test\":0,\n  \"hello\": 5,\n  \"test\": {\n    \n  }\n}",
+							"__type": "String",
+							"defUid": 2,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": ["{\n  \"test\":0,\n  \"hello\": 5,\n  \"test\": {\n    \n  }\n}"]
+							}]
+						},
+						{
+							"__identifier": "xml",
+							"__value": "<movePlayerHere/>\n<say>hello world</say>\n<drop item=\"Food\"/>\n<say>Noice!</say>\n<emote id=\"thumbUp\"/>\n<run dir=\"east\"/>\n<say>\n  \n</say>",
+							"__type": "String",
+							"defUid": 4,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": [
+									"<movePlayerHere/>\n<say>hello world</say>\n<drop item=\"Food\"/>\n<say>Noice!</say>\n<emote id=\"thumbUp\"/>\n<run dir=\"east\"/>\n<say>\n  \n</say>"
+								]
+							}]
+						}
+					] }]
 				}
 			],
 			"__neighbours": []
