@@ -1,6 +1,7 @@
 typedef SelectionBounds = { top:Int, left:Int, right:Int, bottom:Int }
 
 class GenericLevelElementGroup {
+	static var SELECTION_COLOR = 0xffcc00;
 	var editor(get,never): Editor; inline function get_editor() return Editor.ME;
 
 	var renderWrapper : h2d.Object;
@@ -28,9 +29,10 @@ class GenericLevelElementGroup {
 		arrow = new h2d.Graphics(renderWrapper);
 		pointLinks = new h2d.Graphics(renderWrapper);
 		selectRender = new h2d.Graphics(renderWrapper);
+		var f = new dn.heaps.filter.PixelOutline(SELECTION_COLOR);
+		f.setPartialKnockout(0.66);
 		selectRender.filter = new h2d.filter.Group([
-			new dn.heaps.filter.PixelOutline(0xffcc00),
-			new dn.heaps.filter.PixelOutline(0x0),
+			f, new dn.heaps.filter.PixelOutline(0x0),
 		]);
 		invalidateBounds();
 	}
@@ -180,8 +182,8 @@ class GenericLevelElementGroup {
 	function renderSelection() {
 		selectRender.clear();
 		selectRender.visible = true;
-		var c = 0xffcc00;
-		var a = 0.3;
+		var c = SELECTION_COLOR;
+		var a = 1;
 
 		for(r in originalRects) {
 			selectRender.beginFill(0x8ab7ff, a);
@@ -285,7 +287,7 @@ class GenericLevelElementGroup {
 
 		ghost.endFill();
 		for(r in originalRects) {
-			ghost.lineStyle(1,0xffcc00,0.5);
+			ghost.lineStyle(1,SELECTION_COLOR,0.5);
 			ghost.drawRect(r.leftPx-bounds.left, r.topPx-bounds.top, r.rightPx-r.leftPx, r.bottomPx-r.topPx);
 		}
 
@@ -420,7 +422,7 @@ class GenericLevelElementGroup {
 			var size = 6;
 
 			// Main line
-			var c = isCopy ? 0xffcc00 : 0xffffff;
+			var c = isCopy ? SELECTION_COLOR : 0xffffff;
 			arrow.clear();
 			arrow.visible = true;
 			arrow.lineStyle(1, c);
