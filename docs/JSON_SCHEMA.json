@@ -134,7 +134,7 @@
 				]
 			},
 			"externalLevels": {
-				"description": "If TRUE, one file will be saved the project (incl. all its definitions) and one file per-level in a sub-folder.",
+				"description": "If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.",
 				"type": [
 					"boolean"
 				]
