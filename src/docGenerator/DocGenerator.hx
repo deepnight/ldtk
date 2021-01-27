@@ -632,7 +632,10 @@ class DocGenerator {
 					case Dyn:
 					case Ref(_):
 					case _:
-						st.type.push("null");
+						if( st.enum__!=null )
+							st.enum__.push(null);
+						else
+							st.type.push("null");
 				}
 
 			case Basic(name):
