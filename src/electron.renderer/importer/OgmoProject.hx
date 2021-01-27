@@ -136,7 +136,7 @@ class OgmoProject {
 						var fd = ed.createFieldDef(p, type, valJson.name, false);
 
 						fd.editorDisplayMode = switch valJson.display {
-							case 0 : Hidden;
+							case 0 : NameAndValue; // fix buggy displayMode
 							case 1 : ValueOnly;
 							case _ : NameAndValue;
 						}
