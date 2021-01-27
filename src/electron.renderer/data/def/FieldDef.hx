@@ -28,6 +28,8 @@ class FieldDef {
 	public var acceptFileTypes : Array<String>;
 	public var regex : Null<String>;
 
+	public var textLangageMode: Null<ldtk.Json.TextLanguageMode>;
+
 	var _project : data.Project;
 
 	@:allow(data.def.EntityDef)
@@ -42,6 +44,7 @@ class FieldDef {
 		identifier = "NewField"+uid;
 		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point && !isArray;
 		arrayMinLength = arrayMaxLength = null;
+		textLangageMode = null;
 		min = max = null;
 		defaultOverride = null;
 	}
@@ -80,6 +83,7 @@ class FieldDef {
 		o.regex = JsonTools.unescapeString( json.regex );
 		o.acceptFileTypes = json.acceptFileTypes==null ? null : JsonTools.readArray(json.acceptFileTypes);
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
+		o.textLangageMode = JsonTools.readEnum(ldtk.Json.TextLanguageMode, json.textLangageMode, true);
 
 		return o;
 	}
@@ -100,8 +104,9 @@ class FieldDef {
 			min: min==null ? null : JsonTools.writeFloat(min),
 			max: max==null ? null : JsonTools.writeFloat(max),
 			regex: JsonTools.escapeString(regex),
-			acceptFileTypes: acceptFileTypes,
+			acceptFileTypes: type!=F_Path ? null : acceptFileTypes,
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
+			textLangageMode: type!=F_Text ? null : JsonTools.writeEnum(textLangageMode, true),
 		}
 	}
 
