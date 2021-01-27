@@ -587,6 +587,15 @@
 				"defaultOverride": {
 					"description": "Default value if selected value is null or invalid."
 				},
+				"textLangageMode": {
+					"description": "Possible values: &lt;`null`&gt;, `JsonDoc`, `Javascript`, `Lua`",
+					"enum": [
+						"JsonDoc",
+						"Javascript",
+						"Lua",
+						null
+					]
+				},
 				"regex": {
 					"description": "Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional \"i\" flag.",
 					"type": [
