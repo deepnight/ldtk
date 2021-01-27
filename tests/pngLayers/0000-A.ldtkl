@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.1",
+		"appVersion": "0.7.2",
 		"url": "https://ldtk.io"
 	},
-	"identifier": "AutoLayers_advanced_demo",
+	"identifier": "A",
 	"uid": 70,
 	"worldX": 0,
 	"worldY": 0,
