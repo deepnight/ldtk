@@ -95,6 +95,13 @@
 					"boolean"
 				]
 			},
+			"pngFilePattern": {
+				"description": "File naming pattern for exported PNGs",
+				"type": [
+					"string",
+					"null"
+				]
+			},
 			"exportTiled": {
 				"description": "If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)",
 				"type": [

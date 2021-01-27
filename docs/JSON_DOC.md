@@ -41,6 +41,7 @@ Value | Type | Description
 `levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
 `minifyJson` | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
 `nextUid`<br/><sup class="internal">*Internal editor data*</sup> | Int | 
+`pngFilePattern`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.2-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | File naming pattern for exported PNGs
 `worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | Height of the world grid in pixels.
 `worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | Width of the world grid in pixels.
 `worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
