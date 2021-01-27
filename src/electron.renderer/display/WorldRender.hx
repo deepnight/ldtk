@@ -402,7 +402,7 @@ class WorldRender extends dn.Process {
 		// Render layers
 		for( li in l.layerInstances ) {
 			if( li.def.type==Entities )
-				return;
+				continue;
 
 			if( li.def.isAutoLayer() && li.autoTilesCache==null )
 				App.LOG.error("missing autoTilesCache in "+li);
