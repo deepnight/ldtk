@@ -74,8 +74,10 @@ class Lang {
 	public static function getTextLanguageMode(m:Null<ldtk.Json.TextLanguageMode>) : LocaleString {
 		return switch m {
 			case null: t._("Plain text");
+
 			case LangJson: t._("JSON");
-			case LangXml: t._("XML");
+			case LangXml: t._("XML/HTML");
+
 			case LangC: t._("C/C++/C#");
 			case LangHaxe: t._("Haxe");
 			case LangJS: t._("Javascript");
