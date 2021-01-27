@@ -963,7 +963,7 @@ class Editor extends Page {
 	}
 
 	public function isLocked() {
-		return ui.ProjectSaving.hasAny() || ui.Modal.hasAnyUnclosable()
+		return App.ME.isLocked()
 			#if debug || cd.has("debugLock") #end;
 	}
 

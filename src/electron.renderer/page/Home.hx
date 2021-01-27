@@ -421,16 +421,18 @@ class Home extends Page {
 		dir = "C:/projects/LDtk/tests/ogmo"; // HACK
 		dn.electron.Dialogs.open([".ogmo"], dir, function(filePath) {
 			var i = new importer.OgmoProject(filePath);
-			var p = i.load();
-			i.log.printAllToLog(App.LOG);
-			if( p!=null ) {
-				new ui.ProjectSaving(this, p, (ok)->{
-					N.success("Success!");
-					App.ME.loadProject(p.filePath.full);
-				});
-			}
+			new ui.modal.dialog.LockMessage(L.t._("Importing OGMO 3 project..."), ()->{
+				var p = i.load();
+				i.log.printAllToLog(App.LOG);
+				if( p!=null ) {
+					new ui.ProjectSaving(this, p, (ok)->{
+						N.success("Success!");
+						App.ME.loadProject(p.filePath.full);
+					});
+				}
 
-			new ui.modal.dialog.LogPrint(i.log);
+				new ui.modal.dialog.LogPrint(i.log);
+			});
 		});
 	}
 
@@ -462,6 +464,9 @@ class Home extends Page {
 
 	override function onKeyPress(keyCode:Int) {
 		super.onKeyPress(keyCode);
+
+		if( App.ME.isLocked() )
+			return;
 
 		switch keyCode {
 			case K.W, K.Q:
