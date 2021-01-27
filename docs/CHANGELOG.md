@@ -1,7 +1,8 @@
 # 0.8.0
 
-- **Ogmo 3 import**: TODO
-- Customizable source tileset per-layer instance: TODO
+- TODO **Ogmo 3 import**
+- TODO multi lines pop up text editor
+- TODO Customizable source tileset per-layer instance
 - Disabled "New level" context menu when holding `Shift` or `Alt`
 - Fixed layer order for "simplified" level render in World view
 
