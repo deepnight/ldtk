@@ -15,6 +15,7 @@ typedef CodeMirrorConfig = {
 	var ?mode: String;
 	var ?theme: String;
 
+	var ?lineWrapping: Bool;
 	var ?lineNumbers: Bool;
 	var ?indentUnit: Int;
 	var ?indentWithTabs: Bool;

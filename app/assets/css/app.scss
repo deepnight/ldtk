@@ -1757,8 +1757,9 @@ textarea {
 .window.textEditor {
 	.wrapper .content {
 		.CodeMirror {
-			width: 600px;
-			height: 450px;
+			width: 80vw;
+			min-height: 500px;
+			max-height: 50vh;
 		}
 	}
 }

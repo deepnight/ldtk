@@ -212,7 +212,7 @@ class FieldInstancesForm {
 				else
 					jText.text( fi.getString(arrayIdx) );
 				jText.click( _->{
-					new ui.modal.dialog.TextEditor( fi.getString(arrayIdx), v->{
+					new ui.modal.dialog.TextEditor( fi.getString(arrayIdx), fi.def.textLangageMode, v->{
 						fi.parseValue(arrayIdx, v);
 						onFieldChange();
 					});

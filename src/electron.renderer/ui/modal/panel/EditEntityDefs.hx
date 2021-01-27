@@ -748,8 +748,8 @@ class EditEntityDefs extends ui.modal.Panel {
 				()->curField.textLangageMode,
 				(e)->{
 					curField.textLangageMode = e;
-				}
-				// (e)->{}
+				},
+				(e)->Lang.getTextLanguageMode(e)
 			);
 		}
 
