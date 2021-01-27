@@ -171,7 +171,7 @@ class FieldInstancesForm {
 				});
 				hideInputIfDefault(arrayIdx, input, fi);
 
-			case F_String, F_Text:
+			case F_String:
 				var input = if( fi.def.type==F_Text ) {
 					var input = new J("<textarea/>");
 					input.appendTo(jTarget);
@@ -201,6 +201,22 @@ class FieldInstancesForm {
 				if( fi.def.type==F_Text )
 					input.keyup();
 				hideInputIfDefault(arrayIdx, input, fi);
+
+			case F_Text:
+				var jText = new J('<div class="multiLines"/>');
+				jText.appendTo(jTarget);
+				if( fi.isUsingDefault(arrayIdx) ) {
+					var def = fi.def.getStringDefault();
+					jText.text(def==null ? "(null)" : def=="" ? "(empty string)" : def);
+				}
+				else
+					jText.text( fi.getString(arrayIdx) );
+				jText.click( _->{
+					new ui.modal.dialog.TextEditor( fi.getString(arrayIdx), v->{
+						fi.parseValue(arrayIdx, v);
+						onFieldChange();
+					});
+				});
 
 			case F_Point:
 				if( fi.valueIsNull(arrayIdx) && !fi.def.canBeNull || !fi.def.isArray ) {

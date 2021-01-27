@@ -1144,6 +1144,23 @@ ul.form {
 			flex: 1 1 0;
 		}
 
+		div.multiLines {
+			max-height: 85px;
+			overflow: hidden;
+			padding: 8px;
+
+			font-style: italic;
+			text-overflow: ellipsis;
+			white-space: pre;
+
+			border: 1px dashed $bgLight;
+			cursor: pointer;
+
+			&:hover {
+				border-color: white;
+			}
+		}
+
 		.colorWrapper {
 			display: grid;
 			justify-items: center;
@@ -1726,6 +1743,15 @@ textarea {
 		.sub {
 			color: $bgLighter;
 			text-align: center;
+		}
+	}
+}
+
+.window.textEditor {
+	.wrapper .content {
+		.CodeMirror {
+			width: 600px;
+			height: 450px;
 		}
 	}
 }
