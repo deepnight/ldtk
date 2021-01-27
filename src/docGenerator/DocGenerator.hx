@@ -472,7 +472,12 @@ class DocGenerator {
 			}
 
 			switch type {
-				case Enu(name): descMd.push("Possible values: `"+allEnums.get(name).join("`, `")+"`");
+				case Enu(name):
+					descMd.push("Possible values: `"+allEnums.get(name).join("`, `")+"`");
+
+				case Nullable(Enu(name)):
+					descMd.push("Possible values: &lt;`null`&gt;, `"+allEnums.get(name).join("`, `")+"`");
+
 				case _:
 			}
 
