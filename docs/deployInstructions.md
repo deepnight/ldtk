@@ -3,6 +3,8 @@
 This document is for my personal use only, so I don't forget anything ;)
 
 ## Preparation & checks
+- [ ] Fill changelog
+- [ ] Update JSON changelog if necessary
 - [ ] Run Haxe API tests
 - [ ] Build Haxe API samples
 - [ ] Check JSON doc
