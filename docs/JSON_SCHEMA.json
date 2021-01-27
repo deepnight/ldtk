@@ -901,6 +901,13 @@
 						"integer"
 					]
 				},
+				"overrideTilesetUid": {
+					"description": "This layer can use another tileset by overriding the tileset UID here.",
+					"type": [
+						"integer",
+						"null"
+					]
+				},
 				"entityInstances": {
 					"description": "",
 					"items": {
