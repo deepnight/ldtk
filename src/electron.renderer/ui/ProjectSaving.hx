@@ -139,7 +139,7 @@ class ProjectSaving extends dn.Process {
 					logState();
 					var ops = [];
 					var count = 0;
-					initDir(pngDir);
+					initDir(pngDir, "png");
 
 					// Export level layers
 					var lr = new display.LayerRender();
@@ -162,11 +162,7 @@ class ProjectSaving extends dn.Process {
 									// Save PNGs
 									for(i in allImages) {
 										var fp = dn.FilePath.fromDir(pngDir);
-										fp.fileName =
-											dn.Lib.leadingZeros(levelIdx, Const.LEVEL_FILE_LEADER_ZEROS) + "-"
-											+ dn.Lib.leadingZeros(layerIdx++, 2) + "-"
-											+ li.def.identifier
-											+ ( i.suffix==null ? "" : "-"+i.suffix );
+										fp.fileName = project.getPngFileName(level, li.def, i.suffix);
 										fp.extension = "png";
 										JsTools.writeFileBytes(fp.full, i.bytes);
 										count++;

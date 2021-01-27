@@ -31,14 +31,18 @@
 		<div class="locate"></div>
 	</li>
 
-	<li>
+	<li class="pngPattern">
 		<label for="png">Export layers as PNG</label>
 		<input type="checkbox" id="png" title='Each layer in each level will be exported as an individual PNG image. Note that IntGrid layer values will be exported as tiny images where 1px = 1 layer grid cell. WARNING: this will increase saving time on large projects.'/>
 		<div class="locate"></div>
 		<input type="text" class="pattern"/>
+		<button class="reset dark small">Reset</button>
+		<div class="example"></div>
 		<dl class="guide">
-			<dt>%n</dt> <dd>Level index in array, starting at 0</dd>
-			<dt>%n</dt> <dd>Level index in array, starting at 0</dd>
+			<dt>%level_name</dt> <dd>Level text identifier</dd>
+			<dt>%level_idx</dt> <dd>Level index in array, starting at 0</dd>
+			<dt>%layer_name</dt> <dd>Layer text identifier</dd>
+			<dt>%layer_idx</dt> <dd>Layer index in render order</dd>
 		</dl>
 	</li>
 
