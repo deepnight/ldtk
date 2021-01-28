@@ -5,10 +5,13 @@ import codemirror.CodeMirror;
 
 class TextEditor extends ui.modal.Dialog {
 
-	public function new(str:String, ?mode:ldtk.Json.TextLanguageMode, onChange:(str:String)->Void) {
+	public function new(str:String, ?title:String, ?mode:ldtk.Json.TextLanguageMode, onChange:(str:String)->Void) {
 		super("textEditor");
 
 		var anyChange = false;
+
+		if( title!=null )
+			new J('<h2>$title</h2>').appendTo(jContent);
 
 		var jTextArea = new J('<textarea/>');
 		jTextArea.appendTo(jContent);
@@ -112,6 +115,7 @@ class TextEditor extends ui.modal.Dialog {
 				case "txt", "cfg": null;
 				case "xml", "html", "xhtml", "jhtml", "tpl", "rss", "svg": LangXml;
 				case "js": LangJS;
+				case "hx", "hscript": LangHaxe;
 				case "py": LangPython;
 				case "rb","rhtml": LangRuby;
 				case "lua": LangLua;
