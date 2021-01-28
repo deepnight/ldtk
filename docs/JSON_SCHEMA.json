@@ -849,6 +849,7 @@
 				"entityInstances",
 				"gridTiles",
 				"intGrid",
+				"intGridCsv",
 				"layerDefUid",
 				"levelId",
 				"pxOffsetX",
@@ -913,6 +914,17 @@
 					"description": "Total layer Y pixel offset, including both instance and definition offsets.",
 					"type": [
 						"integer"
+					]
+				},
+				"intGridCsv": {
+					"description": "A list of all values in the IntGrid layer, stored from left to right, and top to bottom: `-1` means \"empty cell\" and IntGrid values start at 0. This array size is `__cWid` x `__cHei` cells.",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"overrideTilesetUid": {
@@ -984,7 +996,7 @@
 					]
 				},
 				"intGrid": {
-					"description": "",
+					"description": "WARNING: this old value was marked as DEPRECATED. It is no longer exported by LDtk since version 0.1.0. The list of IntGrid values, stored using coordinate ID system (refer to online documentation for more info about \"Coordinate IDs\")",
 					"items": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
 					},
