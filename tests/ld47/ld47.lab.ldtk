@@ -25,6 +25,7 @@
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
+	"advancedExportFlags": ["discardIntGrid"],
 	"defs": {
 		"layers": [
 			{
