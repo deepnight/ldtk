@@ -101,7 +101,7 @@
 						"textLangageMode": "LangXml"
 					},
 					{
-						"identifier": "File_path",
+						"identifier": "MyScript",
 						"__type": "FilePath",
 						"uid": 5,
 						"type": "F_Path",
@@ -115,7 +115,7 @@
 						"min": null,
 						"max": null,
 						"regex": null,
-						"acceptFileTypes": null,
+						"acceptFileTypes": [ ".lua", ".hx" ],
 						"defaultOverride": null,
 						"textLangageMode": null
 					}
@@ -187,13 +187,13 @@
 							}]
 						},
 						{
-							"__identifier": "File_path",
-							"__value": "../.travis.yml",
+							"__identifier": "MyScript",
+							"__value": "scripts/someScript.lua",
 							"__type": "FilePath",
 							"defUid": 5,
 							"realEditorValues": [{
 								"id": "V_String",
-								"params": ["../.travis.yml"]
+								"params": ["scripts/someScript.lua"]
 							}]
 						}
 					] }]
