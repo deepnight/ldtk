@@ -1759,8 +1759,7 @@ textarea {
 	.wrapper .content {
 		.CodeMirror {
 			width: 80vw;
-			min-height: 500px;
-			max-height: 50vh;
+			height: 70vh;
 		}
 	}
 }
@@ -2725,7 +2724,7 @@ canvas#webgl {
 	&.compactPanel {
 		#mainPanel {
 			width: $mainPanelCompactWid;
-			grid-template-rows: min-content 200px auto;
+			grid-template-rows: min-content 200px min-content auto;
 
 			#mainBar {
 				.buttons {
