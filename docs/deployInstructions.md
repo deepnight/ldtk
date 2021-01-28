@@ -3,6 +3,7 @@
 This document is for my personal use only, so I don't forget anything ;)
 
 ## Preparation & checks
+- [ ] Verify planned deprecations
 - [ ] Fill changelog
 - [ ] Update JSON changelog if necessary
 - [ ] Run API tests
