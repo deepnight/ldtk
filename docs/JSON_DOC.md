@@ -26,6 +26,7 @@ This is the root of any Project JSON file. It contains:
 
 Value | Type | Description
 -- | -- | --
+`advancedExportFlags`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Array&nbsp;of&nbsp;String | An array containing various advanced export options, mostly for advanced users to deal with JSON format changes.
 `backupLimit`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Int | Number of backup files to keep, if the `backupOnSave` is TRUE
 `backupOnSave`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, an extra copy of the project will be created in a sub folder, when saving.
 `bgColor` | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Project background color

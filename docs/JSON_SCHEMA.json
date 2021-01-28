@@ -8,6 +8,7 @@
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - and a definition object (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
 		"required": [
+			"advancedExportFlags",
 			"backupLimit",
 			"backupOnSave",
 			"bgColor",
@@ -30,6 +31,17 @@
 				"description": "Number of backup files to keep, if the `backupOnSave` is TRUE",
 				"type": [
 					"integer"
+				]
+			},
+			"advancedExportFlags": {
+				"description": "An array containing various advanced export options, mostly for advanced users to deal with JSON format changes.",
+				"items": {
+					"type": [
+						"string"
+					]
+				},
+				"type": [
+					"array"
 				]
 			},
 			"backupOnSave": {
