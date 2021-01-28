@@ -107,6 +107,15 @@ class LayerInstance {
 				arr;
 			},
 
+			intGridCsv: {
+				var csv : Array<Int> = [];
+				if( def.type==IntGrid )
+					for(cy in 0...cWid)
+					for(cx in 0...cWid)
+						csv.push( getIntGrid(cx,cy) );
+				csv;
+			},
+
 			autoLayerTiles: {
 				var arr = [];
 
@@ -215,8 +224,17 @@ class LayerInstance {
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
-		for( intGridJson in json.intGrid )
-			li.intGrid.set( intGridJson.coordId, intGridJson.v );
+		if( json.intGridCsv==null ) {
+			// Read old pre-CSV format
+			for( intGridJson in json.intGrid )
+				li.intGrid.set( intGridJson.coordId, intGridJson.v );
+		}
+		else {
+			// Read CSV format
+			for(i in 0...json.intGridCsv.length)
+				if( json.intGridCsv[i]>=0 )
+					li.intGrid.set(i, json.intGridCsv[i]);
+		}
 
 		for( gridTilesJson in json.gridTiles ) {
 			if( dn.Version.lower(p.jsonVersion, "0.4") || gridTilesJson.d==null )
