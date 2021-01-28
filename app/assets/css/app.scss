@@ -984,6 +984,7 @@ ul.log {
 .icon.stop		{ background-image: url("../icons/stop.svg"); }
 .icon.settings	{ background-image: url("../icons/settings.svg"); }
 .icon.delete	{ background-image: url("../icons/delete.svg"); }
+.icon.edit		{ background-image: url("../icons/edit.svg"); }
 .icon.update	{ background-image: url("../icons/update.svg"); }
 .icon.history	{ background-image: url("../icons/history.svg"); }
 .icon.expand	{ background-image: url("../icons/expand.svg"); }
@@ -3874,6 +3875,14 @@ canvas#webgl {
 			font-style: italic;
 			border-radius: 6px;
 			background-color: $bgMed;
+		}
+
+		li.F_Path {
+			button {
+				flex: 0 1 0px;
+				padding: 0 4px;
+				align-self: stretch;
+			}
 		}
 
 		div.array {

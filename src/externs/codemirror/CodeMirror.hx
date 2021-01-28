@@ -9,6 +9,7 @@ extern class CodeMirror {
 	public function getValue(?lineSeparator:String) : String;
 	public function setValue(v:String) : Void;
 	public function setOption(name:String, val:Dynamic) : Void;
+	public function on(eventName:String, cb:(args:Dynamic)->Void) : Void;
 }
 
 
