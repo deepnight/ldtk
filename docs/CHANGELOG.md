@@ -1,6 +1,8 @@
 # 0.8.0
 
 - TODO **Ogmo 3 import**
+- TODO codemirror
+- TODO sidebar design
 - TODO multi lines pop up text editor
 - TODO Customizable source tileset per-layer instance
 - Disabled "New level" context menu when holding `Shift` or `Alt`
