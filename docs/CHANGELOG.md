@@ -2,6 +2,7 @@
 
 - TODO **Ogmo 3 import**
 - TODO codemirror
+- TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
 - TODO sidebar design
 - TODO multi lines pop up text editor
 - TODO Customizable source tileset per-layer instance
