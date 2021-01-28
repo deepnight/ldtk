@@ -588,8 +588,10 @@
 					"description": "Default value if selected value is null or invalid."
 				},
 				"textLangageMode": {
-					"description": "Possible values: &lt;`null`&gt;, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangJson`, `LangXml`",
+					"description": "Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangJson`, `LangXml`",
 					"enum": [
+						"LangPython",
+						"LangRuby",
 						"LangJS",
 						"LangLua",
 						"LangC",
