@@ -114,6 +114,7 @@ class TextEditor extends ui.modal.Dialog {
 				case "js": LangJS;
 				case "py": LangPython;
 				case "rb","rhtml": LangRuby;
+				case "lua": LangLua;
 				case "json", Const.FILE_EXTENSION, Const.LEVEL_EXTENSION: LangJson;
 				case "cs", "csx", "c", "cpp", "c++", "cp", "cc", "h": LangC;
 				case _: LangJS;
