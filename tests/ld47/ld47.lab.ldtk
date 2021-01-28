@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.0",
+		"appVersion": "0.8.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.7.0",
+	"jsonVersion": "0.8.0",
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1,
 	"defaultGridSize": 16,
@@ -19,7 +19,9 @@
 	"externalLevels": true,
 	"exportTiled": false,
 	"exportPng": false,
+	"pngFilePattern": null,
 	"backupOnSave": false,
+	"backupLimit": 10,
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -1496,7 +1498,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					},
 					{
 						"identifier": "initialDir",
@@ -1514,7 +1517,8 @@
 						"max": 1,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": { "id": "V_Int", "params": [1] }
+						"defaultOverride": { "id": "V_Int", "params": [1] },
+						"textLangageMode": null
 					},
 					{
 						"identifier": "loot",
@@ -1532,7 +1536,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					}
 				]
 			},
@@ -1568,7 +1573,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					}
 				]
 			},
@@ -1607,7 +1613,8 @@
 						"defaultOverride": {
 							"id": "V_Bool",
 							"params": [ true ]
-						}
+						},
+						"textLangageMode": null
 					},
 					{
 						"identifier": "showLock",
@@ -1628,7 +1635,8 @@
 						"defaultOverride": {
 							"id": "V_Bool",
 							"params": [ true ]
-						}
+						},
+						"textLangageMode": null
 					}
 				]
 			},
@@ -1698,7 +1706,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					},
 					{
 						"identifier": "hidden",
@@ -1716,7 +1725,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					},
 					{
 						"identifier": "radius",
@@ -1734,7 +1744,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": { "id": "V_Int", "params": [0] }
+						"defaultOverride": { "id": "V_Int", "params": [0] },
+						"textLangageMode": null
 					},
 					{
 						"identifier": "exitLevel",
@@ -1752,7 +1763,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					}
 				]
 			},
@@ -1788,7 +1800,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					}
 				]
 			},
@@ -1824,7 +1837,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					},
 					{
 						"identifier": "color",
@@ -1842,7 +1856,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": { "id": "V_Int", "params": [16762880] }
+						"defaultOverride": { "id": "V_Int", "params": [16762880] },
+						"textLangageMode": null
 					},
 					{
 						"identifier": "showAfterDark",
@@ -1860,7 +1875,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					},
 					{
 						"identifier": "startHidden",
@@ -1878,7 +1894,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					},
 					{
 						"identifier": "tutorial",
@@ -1896,7 +1913,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					}
 				]
 			}

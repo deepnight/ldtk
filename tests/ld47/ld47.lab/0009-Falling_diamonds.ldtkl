@@ -5,7 +5,7 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.0",
+		"appVersion": "0.8.0",
 		"url": "https://ldtk.io"
 	},
 	"identifier": "Falling_diamonds",
@@ -66,6 +66,7 @@
 				{ "px": [368,464], "src": [96,96], "f": 3, "t": 198, "d": [190,1212] }
 			],
 			"seed": 9864974,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -87,6 +88,7 @@
 			"intGrid": [],
 			"autoLayerTiles": [],
 			"seed": 6056044,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": [
 				{ "__identifier": "Mob", "__grid": [10,22], "__pivot": [0.5,1], "__tile": null, "defUid": 40, "px": [168,368], "fieldInstances": [
@@ -2627,6 +2629,7 @@
 				{ "px": [256,352], "src": [16,64], "f": 0, "t": 129, "d": [115,918] }
 			],
 			"seed": 9359825,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -2660,6 +2663,7 @@
 				{ "px": [336,336], "src": [192,48], "f": 0, "t": 108, "d": [112,882] }
 			],
 			"seed": 3970634,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -3063,6 +3067,7 @@
 				{ "px": [416,464], "src": [160,16], "f": 0, "t": 42, "d": [102,1215] }
 			],
 			"seed": 68612,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -4551,6 +4556,7 @@
 				{ "px": [256,352], "src": [16,144], "f": 0, "t": 289, "d": [123,918] }
 			],
 			"seed": 2090706,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		}

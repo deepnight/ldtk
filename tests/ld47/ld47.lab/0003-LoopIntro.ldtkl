@@ -5,7 +5,7 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.0",
+		"appVersion": "0.8.0",
 		"url": "https://ldtk.io"
 	},
 	"identifier": "LoopIntro",
@@ -41,6 +41,7 @@
 			"intGrid": [],
 			"autoLayerTiles": [],
 			"seed": 3342246,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -62,6 +63,7 @@
 			"intGrid": [],
 			"autoLayerTiles": [],
 			"seed": 2035341,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": [
 				{ "__identifier": "Hero", "__grid": [18,10], "__pivot": [0.5,1], "__tile": null, "defUid": 20, "px": [296,176], "fieldInstances": [] },
@@ -4213,6 +4215,7 @@
 				{ "px": [480,368], "src": [16,64], "f": 0, "t": 129, "d": [115,1295] }
 			],
 			"seed": 711517,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -4251,6 +4254,7 @@
 				{ "px": [464,480], "src": [192,64], "f": 0, "t": 140, "d": [112,1679] }
 			],
 			"seed": 8637625,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -4528,6 +4532,7 @@
 				{ "px": [464,496], "src": [176,16], "f": 0, "t": 43, "d": [102,1734] }
 			],
 			"seed": 5840887,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -6713,6 +6718,7 @@
 				{ "px": [480,368], "src": [16,144], "f": 0, "t": 289, "d": [123,1295] }
 			],
 			"seed": 6240021,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		}
