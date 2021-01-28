@@ -34,6 +34,7 @@ typedef FieldInfos = {
 	var hasVersion: Bool;
 	var isColor: Bool;
 	var isInternal: Bool;
+	var deprecation: Null<dn.Version>;
 }
 
 typedef GlobalType = {
@@ -236,8 +237,12 @@ class DocGenerator {
 				var cell = [ '`${f.displayName}`' ];
 				if( f.only!=null )
 					cell.push('<sup class="only">Only *${f.only}*</sup>');
+
 				if( f.isInternal || type.onlyInternalFields )
 					cell.push('<sup class="internal">*Internal editor data*</sup>');
+
+				if( f.deprecation!=null )
+					cell.push('<sup class="deprecated">*DEPRECATED!*</sup>');
 
 				if( f.hasVersion )
 					cell.push( versionBadge(f.xml) );
@@ -447,7 +452,14 @@ class DocGenerator {
 
 			var displayName = hasMeta(fieldXml, "display") ? getMeta(fieldXml, "display") : fieldXml.name;
 
+			var deprecationVersion = hasMeta(fieldXml,"deprecation") ? getMetaVersion(fieldXml, "deprecation") : null;
+
 			var descMd = [];
+			if( deprecationVersion!=null )
+				if( appVersion.compare(deprecationVersion)<0 )
+					descMd.push('WARNING: this value is marked as DEPRECATED. It will be no longer be exported by LDtk in version $deprecationVersion and later.');
+				else
+					descMd.push('WARNING: this old value was marked as DEPRECATED. It is no longer exported by LDtk since version $deprecationVersion.');
 			if( fieldXml.hasNode.haxe_doc ) {
 				var html = fieldXml.node.haxe_doc.innerHTML;
 				html = StringTools.replace(html, "<![CDATA[", "");
@@ -492,6 +504,7 @@ class DocGenerator {
 				descMd: descMd,
 				isColor: hasMeta(fieldXml, "color"),
 				isInternal: hasMeta(fieldXml, "internal"),
+				deprecation: deprecationVersion,
 			});
 		}
 		allFields.sort( (a,b)->Reflect.compare(a.displayName, b.displayName) );
@@ -545,9 +558,9 @@ class DocGenerator {
 
 
 	/**
-		Get meta data of a field
+		Get meta data of a field as String
 	**/
-	static function getMeta(xml:haxe.xml.Access, name:String) {
+	static function getMeta(xml:haxe.xml.Access, name:String) : Null<String> {
 		if( !hasMeta(xml,name) )
 			return null;
 
@@ -561,6 +574,14 @@ class DocGenerator {
 			}
 
 		throw "Malformed meta?";
+	}
+
+
+	/**
+		Get meta data of a field as dn.Version
+	**/
+	static function getMetaVersion(xml:haxe.xml.Access, name:String) : Null<dn.Version> {
+		return new dn.Version( getMeta(xml, name) );
 	}
 
 
