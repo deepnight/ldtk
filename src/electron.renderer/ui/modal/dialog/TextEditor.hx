@@ -125,10 +125,15 @@ class TextEditor extends ui.modal.Dialog {
 			}
 
 		// Open editor
-		var editor = new TextEditor(raw, mode, (str)->{
-			JsTools.writeFileString(fp.full, str);
-			N.success( L.t._('File "::name::" saved.', { name:fp.fileWithExt }) );
-		});
+		var editor = new TextEditor(
+			raw,
+			fp.fileWithExt,
+			mode,
+			(str)->{
+				JsTools.writeFileString(fp.full, str);
+				N.success( L.t._('File "::name::" saved.', { name:fp.fileWithExt }) );
+			}
+		);
 		return true;
 	}
 }

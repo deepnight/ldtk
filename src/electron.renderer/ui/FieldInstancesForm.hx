@@ -213,10 +213,15 @@ class FieldInstancesForm {
 				else
 					jText.text( fi.getString(arrayIdx) );
 				jText.click( _->{
-					new ui.modal.dialog.TextEditor( fi.getString(arrayIdx), fi.def.textLangageMode, (v)->{
-						fi.parseValue(arrayIdx, v);
-						onFieldChange();
-					});
+					new ui.modal.dialog.TextEditor(
+						fi.getString(arrayIdx),
+						getInstanceName()+"."+fi.def.identifier,
+						fi.def.textLangageMode,
+						(v)->{
+							fi.parseValue(arrayIdx, v);
+							onFieldChange();
+						}
+					);
 				});
 
 			case F_Point:
@@ -378,6 +383,12 @@ class FieldInstancesForm {
 					input.addClass("fileNotFound");
 
 				hideInputIfDefault(arrayIdx, input, fi, isRequired);
+		}
+	}
+
+	function getInstanceName() {
+		return switch relatedInstance {
+			case Entity(ei): return ei.def.identifier;
 		}
 	}
 
