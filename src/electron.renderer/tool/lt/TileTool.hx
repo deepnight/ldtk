@@ -365,7 +365,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				jOpt.append(" (default)");
 
 			// Mark as incompatible
-			if( td.pxWid!=curTd.pxWid && !layerIsEmpty ) {
+			if( curTd!=null && td.pxWid!=curTd.pxWid && !layerIsEmpty ) {
 				jOpt.addClass("bad");
 				jOpt.append(' (INCOMPATIBLE SIZE!)');
 			}

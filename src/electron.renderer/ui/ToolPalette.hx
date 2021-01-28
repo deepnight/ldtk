@@ -46,6 +46,19 @@ class ToolPalette {
 		}
 	}
 
+	function makeBgActiveColor(c:Int) : String {
+		return C.intToHex( C.toWhite(c, 0.66) );
+	}
+
+	function makeBgInactiveColor(c:Int) : String {
+		return C.intToHex( C.interpolateInt( c, 0x313843, 0.92 ) );
+	}
+
+	function makeTextInactiveColor(c:Int) : String {
+		return C.intToHex( C.toWhite(c, 0.3) );
+	}
+
+
 	function doRender() {}
 
 	function popOut() {
