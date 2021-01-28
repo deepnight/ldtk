@@ -99,11 +99,12 @@ class LayerInstance {
 
 			intGrid: {
 				var arr = [];
-				for(e in intGrid.keyValueIterator())
-					arr.push({
-						coordId: e.key,
-						v: e.value,
-					});
+				if( !_project.hasAdvancedExportFlag("discardIntGrid") )
+					for(e in intGrid.keyValueIterator())
+						arr.push({
+							coordId: e.key,
+							v: e.value,
+						});
 				arr;
 			},
 

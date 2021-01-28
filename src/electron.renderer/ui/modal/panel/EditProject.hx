@@ -51,6 +51,23 @@ class EditProject extends ui.modal.Panel {
 	function updateProjectForm() {
 		ui.Tip.clear();
 		var jForm = jContent.find("ul.form:first");
+		jForm.off().find("*").off();
+
+		// Advanced options
+		var jAdvanceds = jForm.find(".advanced");
+		if( project.hasAnyAdvancedExportFlag() || cd.has("showAdvanced") ) {
+			jForm.find(".advancedWarning a").hide();
+			jAdvanceds.show();
+			cd.setS("showAdvanced",Const.INFINITE);
+		}
+		else {
+			jForm.find(".advancedWarning a").show().click(ev->{
+				jAdvanceds.show();
+				cd.setS("showAdvanced",Const.INFINITE);
+				ev.getThis().hide();
+			});
+			jAdvanceds.hide();
+		}
 
 		// File extension
 		var ext = project.filePath.extension;
@@ -182,6 +199,17 @@ class EditProject extends ui.modal.Panel {
 				editor.ge.emit(ProjectSettingsChanged);
 			}
 		));
+
+
+		// Advanced flags
+		new form.input.BoolInput(
+			jForm.find("#intGridCsv"),
+			()->project.hasAdvancedExportFlag("discardIntGrid"),
+			(v)->{
+				project.setAdvancedExportFlag("discardIntGrid", v);
+				editor.ge.emit(ProjectSettingsChanged);
+			}
+		);
 
 		JsTools.parseComponents(jForm);
 	}

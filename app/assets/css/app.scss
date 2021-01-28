@@ -4016,6 +4016,24 @@ canvas#webgl {
 			flex: 0 0 250px;
 		}
 
+		li.advanced {
+			label {
+				flex: 0 0 auto !important;
+				white-space: nowrap;
+			}
+		}
+
+		li.advancedWarning {
+			display: block;
+			color: $lightRed;
+			a {
+				cursor: pointer;
+				&:hover {
+					color: white;
+				}
+			}
+		}
+
 		li.pngPattern {
 			position: relative;
 			dl.guide {
