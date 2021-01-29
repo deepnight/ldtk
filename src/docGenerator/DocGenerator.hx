@@ -507,7 +507,15 @@ class DocGenerator {
 				deprecation: deprecationVersion,
 			});
 		}
-		allFields.sort( (a,b)->Reflect.compare(a.displayName, b.displayName) );
+		allFields.sort( (a,b)->{
+			if( a.isInternal!=b.isInternal )
+				if( a.isInternal )
+					return 1;
+				else
+					return -1;
+			else
+				return Reflect.compare(a.displayName, b.displayName);
+		});
 
 		return allFields;
 	}
