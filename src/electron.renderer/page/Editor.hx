@@ -818,7 +818,7 @@ class Editor extends Page {
 		camera.cancelAllAutoMovements();
 
 		// Auto world mode on zoom out
-		if( !worldMode && e.wheelDelta>0 ) {
+		if( settings.v.autoWorldModeSwitch!=Never && !worldMode && e.wheelDelta>0 ) {
 			var wr = camera.getLevelWidthRatio(curLevel);
 			var hr = camera.getLevelHeightRatio(curLevel);
 			// App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
@@ -827,16 +827,18 @@ class Editor extends Page {
 		}
 
 		// Auto level mode on zoom in
-		if( worldMode && e.wheelDelta<0 ) {
+		if( settings.v.autoWorldModeSwitch==ZoomInAndOut && worldMode && e.wheelDelta<0 ) {
+			// Find closest level to cursor
 			var dh = new dn.DecisionHelper(project.levels);
+			dh.keepOnly( l->l.isWorldOver(m.worldX, m.worldY, 500) );
 			dh.score( l->l.isWorldOver(m.worldX, m.worldY) ? 100 : 0 );
 			dh.score( l->-l.getDist(m.worldX,m.worldY) );
 			var l = dh.getBest();
+
 			var wr = camera.getLevelWidthRatio(l);
 			var hr = camera.getLevelHeightRatio(l);
 			// App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
-
-			if( wr>0.4 || hr>0.4 ) {
+			if( wr>=0.4 && hr>=0.4 || wr>=0.6 || hr>=0.6 ) {
 				selectLevel(l);
 				setWorldMode(false, true);
 			}

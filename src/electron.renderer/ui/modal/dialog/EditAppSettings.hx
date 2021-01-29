@@ -20,6 +20,23 @@ class EditAppSettings extends ui.modal.Dialog {
 		// Log button
 		jContent.find( "button.log").click( (_)->JsTools.exploreToFile( JsTools.getLogPath(), true ) );
 
+		// World mode using mousewheel
+		var i = new form.input.EnumSelect(
+			jForm.find("#autoSwitchOnZoom"),
+			Settings.AutoWorldModeSwitch,
+			false,
+			()->settings.v.autoWorldModeSwitch,
+			(v)->{
+				settings.v.autoWorldModeSwitch = v;
+				onSettingChanged();
+			},
+			(v)->return switch v {
+				case Never: L.t._("Never");
+				case ZoomOutOnly: L.t._("Switch when zooming out");
+				case ZoomInAndOut: L.t._("Switch when zooming in or out (default)");
+			}
+		);
+
 		// GPU
 		var i = Input.linkToHtmlInput(settings.v.useBestGPU, jForm.find("#gpu"));
 		i.onChange = ()->{

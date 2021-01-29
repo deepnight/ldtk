@@ -243,8 +243,10 @@ class Level {
 			&& worldY<this.worldY+pxHei;
 	}
 
-	public function isWorldOver(wx:Int, wy:Int) {
-		return wx>=worldX && wx<worldX+pxWid && wy>=worldY && wy<worldY+pxHei;
+	public function isWorldOver(wx:Int, wy:Int, padding=0) {
+		return
+			wx>=worldX-padding && wx<worldX+pxWid+padding
+			&& wy>=worldY-padding && wy<worldY+pxHei+padding;
 	}
 
 	public function getDist(wx:Int, wy:Int) : Float {
