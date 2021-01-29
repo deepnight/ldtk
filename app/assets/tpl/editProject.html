@@ -52,9 +52,9 @@
 		<div class="locate"></div>
 	</li>
 
-	<li>
-		<h3>Workspace settings</h3>
-	</li>
+
+
+	<li> <h3>Workspace settings</h3> </li>
 
 	<li>
 		<label for="defaultGridSize">Default layer grid</label>
@@ -76,6 +76,21 @@
 		<label>Default pivot point for new entities</label>
 		<div class="pivot"></div>
 	</li>
+
+
+
+	<li> <h3>Advanced export settings</h3> </li>
+
+	<li class="advancedWarning">
+		Advanced options are not recommended for most users as they might break compatibility with older game APIs. Please make sure you know what you're doing before using any of them!
+		<a>[ Show advanced settings ]</a>
+	</li>
+
+	<li class="advanced">
+		<label for="intGridCsv">Discard pre-CSV IntGrid layer data in level data</label>
+		<input type="checkbox" id="intGridCsv" title='If checked, the exported JSON will not contain the deprecated array "intGrid", making the file smaller. Do not enable this if the game API you are using is made for LDtk older than version 0.8.0.'/>
+	</li>
+
 </ul>
 
 <div class="buttons">

@@ -18,13 +18,19 @@ class EntityPalette extends ui.ToolPalette {
 			jList.append(e);
 			e.attr("data-defUid", ed.uid);
 			e.addClass("entity");
+			e.css( "border-color", C.intToHex(ed.color) );
+
+			// State
 			if( ed==tool.curEntityDef ) {
 				e.addClass("active");
-				e.css( "background-color", C.intToHex( C.toWhite(ed.color, 0.7) ) );
+				e.css( "background-color", makeBgActiveColor(ed.color) );
 			}
-			else
-				e.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
+			else {
+				e.css( "background-color", makeBgInactiveColor(ed.color) );
+				e.css( "color", makeTextInactiveColor(ed.color) );
+			}
 
+			// Preview and label
 			e.append( JsTools.createEntityPreview(Editor.ME.project, ed) );
 			e.append(ed.identifier);
 

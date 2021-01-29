@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 0.7.2 JSON schema",
+	"title": "LDtk 0.8.0 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "0.7.2",
+	"version": "0.8.0",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - and a definition object (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -15,6 +15,7 @@
 			"minifyJson",
 			"worldGridHeight",
 			"worldGridWidth",
+			"advancedExportFlags",
 			"backupLimit",
 			"backupOnSave",
 			"defaultGridSize",
@@ -30,6 +31,17 @@
 				"description": "Number of backup files to keep, if the `backupOnSave` is TRUE",
 				"type": [
 					"integer"
+				]
+			},
+			"advancedExportFlags": {
+				"description": "An array containing various advanced export options, mostly for advanced users to deal with JSON format changes.",
+				"items": {
+					"type": [
+						"string"
+					]
+				},
+				"type": [
+					"array"
 				]
 			},
 			"backupOnSave": {
@@ -202,7 +214,9 @@
 				"__pivot",
 				"defUid",
 				"fieldInstances",
-				"px"
+				"height",
+				"px",
+				"width"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -262,6 +276,18 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"height": {
+					"description": "Entity height in pixels. For non-resizable entities, it will be the same as Entity definition.",
+					"type": [
+						"integer"
+					]
+				},
+				"width": {
+					"description": "Entity width in pixels. For non-resizable entities, it will be the same as Entity definition.",
+					"type": [
+						"integer"
 					]
 				}
 			},
@@ -594,6 +620,20 @@
 				"defaultOverride": {
 					"description": "Default value if selected value is null or invalid."
 				},
+				"textLangageMode": {
+					"description": "Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangJson`, `LangXml`",
+					"enum": [
+						"LangPython",
+						"LangRuby",
+						"LangJS",
+						"LangLua",
+						"LangC",
+						"LangHaxe",
+						"LangJson",
+						"LangXml",
+						null
+					]
+				},
 				"regex": {
 					"description": "Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional \"i\" flag.",
 					"type": [
@@ -842,6 +882,7 @@
 				"entityInstances",
 				"gridTiles",
 				"intGrid",
+				"intGridCsv",
 				"layerDefUid",
 				"levelId",
 				"pxOffsetX",
@@ -908,6 +949,24 @@
 						"integer"
 					]
 				},
+				"intGridCsv": {
+					"description": "A list of all values in the IntGrid layer, stored from left to right, and top to bottom: `-1` means \"empty cell\" and IntGrid values start at 0. This array size is `__cWid` x `__cHei` cells.",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"overrideTilesetUid": {
+					"description": "This layer can use another tileset by overriding the tileset UID here.",
+					"type": [
+						"integer",
+						"null"
+					]
+				},
 				"entityInstances": {
 					"description": "",
 					"items": {
@@ -970,7 +1029,7 @@
 					]
 				},
 				"intGrid": {
-					"description": "",
+					"description": "WARNING: this old value was marked as DEPRECATED. It is no longer exported by LDtk since version 0.1.0. The list of IntGrid values, stored using coordinate ID system (refer to online documentation for more info about \"Coordinate IDs\")",
 					"items": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
 					},

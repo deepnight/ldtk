@@ -9,6 +9,14 @@ typedef AppSettings = {
 	var lastKnownVersion: Null<String>;
 	var useBestGPU : Bool;
 	var editorUiScale : Float;
+	var autoWorldModeSwitch : AutoWorldModeSwitch;
+}
+
+
+enum AutoWorldModeSwitch {
+	Never;
+	ZoomOutOnly;
+	ZoomInAndOut;
 }
 
 
@@ -32,12 +40,15 @@ class Settings {
 			tileStacking: false,
 			lastKnownVersion: null,
 			useBestGPU: true,
+			autoWorldModeSwitch: ZoomInAndOut,
 			editorUiScale: 1.0,
 		}
 
 		// Load
 		v = dn.LocalStorage.readObject("settings", true, defaults);
 	}
+
+
 
 	public static function getDir() {
 		var path = electron.main.App!=null

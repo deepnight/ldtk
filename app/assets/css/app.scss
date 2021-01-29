@@ -13,6 +13,7 @@ $green: #cfdd40;
 $help: #79dd8a;
 $helpMed: #5eab6b;
 $helpDark: #3c6148;
+$helpDarker: #273f2f;
 $mainPanelNormalWid: 300px;
 $mainPanelCompactWid: 150px;
 
@@ -450,38 +451,6 @@ a.exploreTo {
 		color: white;
 		font-size: 9pt;
 		color: $bgLighter;
-	}
-}
-
-#guide {
-	display: flex;
-	padding: 2px;
-	min-height: 1.3em;
-	flex-wrap: wrap;
-
-	vertical-align: middle;
-	font-family: Roboto;
-	color: $help;
-	font-style: italic;
-	font-size: 0.9em;
-
-	border: 1px dotted $bgMed;
-
-	>span {
-		padding: 2px;
-		padding-left: 1px;
-		padding-right: 8px;
-		white-space: nowrap;
-		flex: 0 1 auto;
-		margin-right: 2px;
-		margin-bottom: 1px;
-		background-color: $bgMed;
-		border-radius: 3px;
-		border-left: 1px solid $bgLight;
-	}
-
-	.key {
-		color: white;
 	}
 }
 
@@ -984,6 +953,7 @@ ul.log {
 .icon.stop		{ background-image: url("../icons/stop.svg"); }
 .icon.settings	{ background-image: url("../icons/settings.svg"); }
 .icon.delete	{ background-image: url("../icons/delete.svg"); }
+.icon.edit		{ background-image: url("../icons/edit.svg"); }
 .icon.update	{ background-image: url("../icons/update.svg"); }
 .icon.history	{ background-image: url("../icons/history.svg"); }
 .icon.expand	{ background-image: url("../icons/expand.svg"); }
@@ -1144,6 +1114,23 @@ ul.form {
 			flex: 1 1 0;
 		}
 
+		div.multiLines {
+			max-height: 85px;
+			overflow: hidden;
+			padding: 8px;
+
+			font-style: italic;
+			text-overflow: ellipsis;
+			white-space: pre;
+
+			border: 1px dashed $bgLight;
+			cursor: pointer;
+
+			&:hover {
+				border-color: white;
+			}
+		}
+
 		.colorWrapper {
 			display: grid;
 			justify-items: center;
@@ -1302,6 +1289,25 @@ select {
 	display: block;
 	padding: 8px;
 	max-width: 100%;
+	color: white;
+	border: 1px solid $bgLighter;
+	background-color: $bgLight;
+
+	&:not(.gray) {
+		border-radius: 3px;
+		box-shadow: 0px 2px 0px transparentize($color: black, $amount: 0.7);
+	}
+
+	&:disabled {
+		color: $bgMed;
+		border-color: $bgMed;
+		background-color: $bgDark;
+	}
+
+	&:hover {
+		border-color: white;
+		cursor: pointer;
+	}
 
 	&.gray {
 		border: 1px dashed $bgLight;
@@ -1313,6 +1319,9 @@ select {
 
 	option {
 		overflow: hidden;
+		color: $orange;
+		background-color: $bgMed;
+		cursor: pointer;
 	}
 
 	&:empty {
@@ -1686,7 +1695,7 @@ textarea {
 
 .window.editAppSettings {
 	.wrapper .content {
-		width: 400px;
+		width: 600px;
 
 		ul.form li {
 			label {
@@ -1696,6 +1705,37 @@ textarea {
 		}
 	}
 }
+
+.window.lockMessage {
+	.wrapper .content {
+		.task {
+			font-family: Roboto;
+			font-size: 18pt;
+			color: $orange;
+			p {
+				margin-top: 0.5em;
+				margin-bottom: 0.5em;
+			}
+		}
+		.sub {
+			color: $bgLighter;
+			text-align: center;
+		}
+	}
+}
+
+.window.textEditor {
+	.wrapper .content {
+		h2 {
+			margin-bottom: 8px;
+		}
+		.CodeMirror {
+			width: 80vw;
+			height: 70vh;
+		}
+	}
+}
+
 
 .window.buy {
 	.wrapper .content {
@@ -2429,44 +2469,33 @@ canvas#webgl {
 
 		display: grid;
 		overflow: hidden;
-		grid-template-rows: min-content 250px min-content auto;
-		padding: 5px;
-		gap: 5px;
+		grid-template-rows: repeat(4, min-content) auto;
+		// grid-template-rows: min-content 250px min-content min-content auto;
 		background: $bgDark;
 		box-sizing: border-box;
-		border-right: 1px solid black;
+		border-right: 2px solid black;
 
 		#mainbar {
 			overflow: hidden; // for title
 
-			.icon {
-				margin: -4px;
-				width: 1.5em;
-				height: 1.5em;
-			}
-
 			.buttons {
 				margin: 0;
-			}
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+				border-bottom-left-radius: 0;
+				margin-bottom: 4px;
 
-			button.showHelp {
-				flex: 0 1 0;
-			}
+				button {
+					margin: 0;
+					padding: 0;
+					padding-top: 8px;
+					padding-bottom: 8px;
 
-			button.close {
-				flex: 0 1 16px;
-			}
-
-			h2#levelName {
-				margin: 0;
-				padding: 0;
-				margin-top: 8px;
-				white-space: nowrap;
-				border: none;
-				cursor: pointer;
-			}
-			h2#levelName:hover {
-				color: white;
+					.icon {
+						width: 1.7em;
+						height: 1.7em;
+					}
+				}
 			}
 		}
 
@@ -2479,6 +2508,16 @@ canvas#webgl {
 			overflow-x: hidden;
 			overflow-y: auto;
 			margin: 0;
+			border: 0;
+			padding: 0;
+			min-height: 100px;
+			max-height: 250px;
+			margin-bottom: 4px;
+
+			&:empty {
+				padding: 32px;
+				border: 1px solid $bgMed;
+			}
 
 			li {
 				grid-template-columns: min-content min-content auto min-content;
@@ -2558,19 +2597,75 @@ canvas#webgl {
 			}
 		}
 
+		#guide {
+			display: flex;
+			min-height: 1.3em;
+			flex-wrap: wrap;
+			margin-bottom: 4px;
+			padding: 4px;
+
+			vertical-align: middle;
+			font-family: Roboto;
+			color: $help;
+			font-size: 0.9em;
+			align-items: stretch;
+			background-color: $helpDarker;
+
+			&:empty {
+				margin: 0;
+				padding: 0;
+				min-height: 0;
+				background-color: transparent;
+			}
+
+			>span {
+				// padding: 2px;
+				padding-left: 1px;
+				padding-right: 8px;
+				color: $help;
+				font-style: italic;
+				white-space: nowrap;
+				flex: 0 1 auto;
+				margin-right: 3px;
+				margin-bottom: 1px;
+				background-color: $helpDark;
+				border-radius: 3px;
+			}
+
+			.key {
+				color: white;
+				margin: 0;
+				margin-right: 1px;
+				box-shadow: none;
+				&:last-of-type {
+					margin-right: 4px;
+				}
+			}
+		}
+
+		#toolOptions {
+			select {
+				width: 100%;
+				option.bad {
+					color: $bgLight;
+				}
+			}
+		}
+
 		#mainPaletteWrapper {
 			overflow: auto;
 			position: relative;
-			outline: 1px solid white;
 
 			&:empty {
-				outline-color: $bgLight
+				outline-color: $bgLight;
 			}
 
 			&:empty,
 			.palette:empty {
-				background-image: url("../img/stripes.png");
+				box-sizing: border-box;
 				box-shadow: 0px 0px 8px $bgDark inset;
+				border-top: 1px solid $bgMed;
+				background-image: url("../img/stripes.png");
 			}
 
 			ul.niceList {
@@ -2647,7 +2742,7 @@ canvas#webgl {
 	&.compactPanel {
 		#mainPanel {
 			width: $mainPanelCompactWid;
-			grid-template-rows: min-content 200px auto;
+			grid-template-rows: min-content 200px min-content auto;
 
 			#mainBar {
 				.buttons {
@@ -2671,8 +2766,8 @@ canvas#webgl {
 						margin: 0px;
 					}
 					.icon {
-						width: 1.1em;
-						height: 1.1em;
+						width: 1.3em;
+						height: 1.3em;
 					}
 				}
 			}
@@ -3470,15 +3565,22 @@ canvas#webgl {
 		padding: 4px;
 		width: 100%;
 		height: 100%;
+		border: 0px;
 
 		>li {
 			display: flex;
+			// margin-bottom: 1px;
 			min-height: 16px;
 			cursor: pointer;
-		}
-		>li:hover {
-			outline: 1px solid white;
-			outline-offset: -1px;
+			box-shadow: none;
+			border: 0;
+			border-left: 6px solid white; // color set in code
+
+
+			&:not(.active):hover {
+				outline: 1px solid white !important;
+				outline-offset: -1px;
+			}
 		}
 
 		li.entity {
@@ -3492,11 +3594,14 @@ canvas#webgl {
 			padding-left: 10px;
 			overflow: hidden;
 			line-height: 32px;
-			box-shadow: -2px 0px 0px rgba(0, 0, 0, 0.3) inset;
 		}
 
-		li.color.active {
-			outline: 2px solid white !important;
+		li.active {
+			outline: 1px solid white !important;
+			outline-offset: -1px;
+			// box-shadow:
+			// 	0px 0px 2px black inset,
+			// 	0px 0px 2px black inset;
 		}
 	}
 }
@@ -3513,8 +3618,8 @@ canvas#webgl {
 
 	canvas {
 		image-rendering: pixelated;
-		box-shadow: 0px 0px 32px black;
-		outline: 1px solid $bgLight;
+		// box-shadow: 0px 0px 32px black;
+		// outline: 1px solid $bgLight;
 	}
 
 	&.singleTileMode .selectionsWrapper .tileCursor.selection {
@@ -3799,6 +3904,14 @@ canvas#webgl {
 			background-color: $bgMed;
 		}
 
+		li.F_Path {
+			button {
+				flex: 0 1 0px;
+				padding: 0 4px;
+				align-self: stretch;
+			}
+		}
+
 		div.array {
 			display: grid;
 			grid-template-columns: auto;
@@ -3901,6 +4014,24 @@ canvas#webgl {
 
 		ul.form>li>label:first-of-type {
 			flex: 0 0 250px;
+		}
+
+		li.advanced {
+			label {
+				flex: 0 0 auto !important;
+				white-space: nowrap;
+			}
+		}
+
+		li.advancedWarning {
+			display: block;
+			color: $lightRed;
+			a {
+				cursor: pointer;
+				&:hover {
+					color: white;
+				}
+			}
 		}
 
 		li.pngPattern {

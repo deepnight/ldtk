@@ -1,3 +1,15 @@
+# 0.8.0
+
+- TODO **Ogmo 3 import**
+- TODO codemirror
+- TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
+- TODO sidebar design
+- TODO multi lines pop up text editor
+- TODO Customizable source tileset per-layer instance
+- **Mouse wheel** can now be used to switch to world mode (and vice versa) automatically
+- Disabled "New level" context menu when holding `Shift` or `Alt`
+- Fixed layer order for "simplified" level render in World view
+
 # 0.7.2
 
 - Added a setting to change font size in Editor UI.

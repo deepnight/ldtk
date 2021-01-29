@@ -17,21 +17,31 @@ class IntGridPalette extends ui.ToolPalette {
 			e.attr("data-id", idx);
 			e.appendTo(jList);
 			e.addClass("color");
-			if( idx==tool.getSelectedValue() )
+
+			e.css( "border-color", C.intToHex(intGridVal.color) );
+
+			// State
+			if( idx==tool.getSelectedValue() ) {
 				e.addClass("active");
+				e.css( "background-color", makeBgActiveColor(intGridVal.color) );
+			}
+			else {
+				e.css( "background-color", makeBgInactiveColor(intGridVal.color) );
+				e.css( "color", makeTextInactiveColor(intGridVal.color) );
+			}
 
+			// Label
 			if( intGridVal.identifier==null )
-				e.text("#"+idx);
+				e.text(idx);
 			else
-				e.text("#"+idx+" - "+intGridVal.identifier);
+				e.text(idx+" - "+intGridVal.identifier);
 
-			e.css("color", C.intToHex( C.autoContrast(C.toBlack(intGridVal.color,0.3)) ));
-			e.css("background-color", C.intToHex(intGridVal.color));
+			// e.css("color", C.intToHex( C.autoContrast(C.toBlack(intGridVal.color,0.3)) ));
+			// e.css("background-color", C.intToHex(intGridVal.color));
 			var curIdx = idx;
 			e.click( function(_) {
 				tool.selectValue(curIdx);
-				jList.find(".active").removeClass("active");
-				e.addClass("active");
+				render();
 			});
 			idx++;
 		}

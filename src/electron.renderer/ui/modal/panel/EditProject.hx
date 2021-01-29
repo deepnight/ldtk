@@ -51,6 +51,23 @@ class EditProject extends ui.modal.Panel {
 	function updateProjectForm() {
 		ui.Tip.clear();
 		var jForm = jContent.find("ul.form:first");
+		jForm.off().find("*").off();
+
+		// Advanced options
+		var jAdvanceds = jForm.find(".advanced");
+		if( project.hasAnyAdvancedExportFlag() || cd.has("showAdvanced") ) {
+			jForm.find(".advancedWarning a").hide();
+			jAdvanceds.show();
+			cd.setS("showAdvanced",Const.INFINITE);
+		}
+		else {
+			jForm.find(".advancedWarning a").show().click(ev->{
+				jAdvanceds.show();
+				cd.setS("showAdvanced",Const.INFINITE);
+				ev.getThis().hide();
+			});
+			jAdvanceds.hide();
+		}
 
 		// File extension
 		var ext = project.filePath.extension;
@@ -107,6 +124,13 @@ class EditProject extends ui.modal.Panel {
 		var jLocate = jForm.find("#png").siblings(".locate").empty();
 		if( project.exportPng )
 			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/png", false) );
+		var jFilePattern = jForm.find("#png").siblings(".pattern").hide();
+		if( project.exportPng ) {
+			jFilePattern.show();
+			var i = new form.input.StringInput(jFilePattern, ()->"", (v)->{});
+			i.setPlaceholder("%level-%layer-%name");
+		}
+
 
 		var jFilePattern : js.jquery.JQuery = jForm.find("#png").siblings(".pattern").hide();
 		var jGuide : js.jquery.JQuery = jForm.find("#png").siblings(".guide").hide();
@@ -175,6 +199,17 @@ class EditProject extends ui.modal.Panel {
 				editor.ge.emit(ProjectSettingsChanged);
 			}
 		));
+
+
+		// Advanced flags
+		new form.input.BoolInput(
+			jForm.find("#intGridCsv"),
+			()->project.hasAdvancedExportFlag("discardIntGrid"),
+			(v)->{
+				project.setAdvancedExportFlag("discardIntGrid", v);
+				editor.ge.emit(ProjectSettingsChanged);
+			}
+		);
 
 		JsTools.parseComponents(jForm);
 	}

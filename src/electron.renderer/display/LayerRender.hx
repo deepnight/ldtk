@@ -94,7 +94,7 @@ class LayerRender {
 
 		case Tiles:
 			// Classic tiles layer
-			var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
+			var td = li.getTiledsetDef();
 			if( td!=null && td.isAtlasLoaded() ) {
 				var tg = new h2d.TileGroup( td.getAtlasTile(), root );
 

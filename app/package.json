@@ -1,6 +1,6 @@
 {
 	"name": "ldtk",
-	"version": "0.7.2",
+	"version": "0.8.0",
 	"main": "assets/main.js",
 	"productName": "LDtk",
 	"author": "Sebastien Benard",
@@ -30,6 +30,7 @@
 		"url": "https://github.com/deepnight/ldtk.git"
 	},
 	"dependencies": {
+		"codemirror": "^5.59.2",
 		"electron-updater": "^4.3.5",
 		"simple-color-picker": "^1.0.4",
 		"sortablejs": "^1.10.2"

@@ -146,7 +146,7 @@ class Cursor extends dn.Process {
 				wrapper.addChild(o);
 
 			case Tiles(li, tileIds, cx, cy, flips):
-				var td = project.defs.getTilesetDef( li.def.tilesetDefUid );
+				var td = li.getTiledsetDef();
 				if( td!=null ) {
 					var left = Const.INFINITE;
 					var right = 0;

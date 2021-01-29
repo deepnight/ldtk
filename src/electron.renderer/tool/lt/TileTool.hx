@@ -2,7 +2,7 @@ package tool.lt;
 
 class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 	public var curTilesetDef(get,never) : Null<data.def.TilesetDef>;
-	inline function get_curTilesetDef() return editor.project.defs.getTilesetDef( editor.curLayerInstance.def.tilesetDefUid );
+	inline function get_curTilesetDef() return editor.curLayerInstance.getTiledsetDef();
 
 	public var flipX = false;
 	public var flipY = false;
@@ -341,6 +341,51 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 
 	override function createToolPalette():ui.ToolPalette {
 		return new ui.palette.TilePalette(this);
+	}
+
+	override function initOptionForm() {
+		super.initOptionForm();
+
+		if( project.defs.tilesets.length==0 )
+			return;
+
+		var curTd = curLayerInstance.getTiledsetDef();
+		var layerIsEmpty = curLayerInstance.isEmpty();
+
+		// List tilesets
+		var jTilesets = new J('<select/>');
+		jTilesets.appendTo(jOptions);
+		for(td in project.defs.tilesets) {
+			var jOpt = new J('<option/>');
+			jOpt.appendTo(jTilesets);
+			jOpt.attr("value", td.uid);
+			jOpt.text(td.identifier);
+
+			if( td.uid==curLayerInstance.getDefaultTilesetUid() )
+				jOpt.append(" (default)");
+
+			// Mark as incompatible
+			if( curTd!=null && td.pxWid!=curTd.pxWid && !layerIsEmpty ) {
+				jOpt.addClass("bad");
+				jOpt.append(' (INCOMPATIBLE SIZE!)');
+			}
+		}
+		jTilesets.val( curLayerInstance.getTilesetUid() );
+
+		// Pick tileset
+		jTilesets.change( (_)->{
+			function _apply(canUndo:Bool) {
+				if( canUndo )
+					new ui.LastChance(L.t._("Changed layer tileset"), project);
+				curLayerInstance.setOverrideTileset( Std.parseInt( jTilesets.val() ) );
+				editor.ge.emit( LayerDefChanged );
+			}
+			var isBad = jTilesets.find(":selected").hasClass("bad");
+			if( isBad )
+				new ui.modal.dialog.Confirm(jTilesets, L.t._("Warning: using this tileset in this layer will mess any existing tiles here."), true, _apply.bind(true), initOptionForm);
+			else
+				_apply(false);
+		});
 	}
 
 	public function saveSelection() {
