@@ -47,6 +47,8 @@ class EntityInstance {
 					null;
 			},
 
+			width: def.width,
+			height: def.height,
 			defUid: defUid,
 			px: [x,y],
 			fieldInstances: fieldsJson,
