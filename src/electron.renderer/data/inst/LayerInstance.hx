@@ -111,7 +111,7 @@ class LayerInstance {
 			intGridCsv: {
 				var csv : Array<Int> = [];
 				if( def.type==IntGrid )
-					for(cy in 0...cWid)
+					for(cy in 0...cHei)
 					for(cx in 0...cWid)
 						csv.push( getIntGrid(cx,cy) );
 				csv;
