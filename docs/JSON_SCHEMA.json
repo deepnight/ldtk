@@ -214,7 +214,9 @@
 				"__pivot",
 				"defUid",
 				"fieldInstances",
-				"px"
+				"height",
+				"px",
+				"width"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -274,6 +276,18 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"height": {
+					"description": "Entity height in pixels. For non-resizable entities, it will be the same as Entity definition.",
+					"type": [
+						"integer"
+					]
+				},
+				"width": {
+					"description": "Entity width in pixels. For non-resizable entities, it will be the same as Entity definition.",
+					"type": [
+						"integer"
 					]
 				}
 			},
