@@ -507,6 +507,17 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						editor.ge.emit( LayerRuleChanged(r) );
 					}
 				});
+				
+				// Rotate
+				var jFlag = jRule.find("a.rotate");
+				jFlag.addClass( r.rotate ? "on" : "off" );
+				jFlag.click( function(ev:js.jquery.Event) {
+					ev.preventDefault();
+
+					r.rotate=!r.rotate;
+
+					editor.ge.emit( LayerRuleChanged(r) );					
+				});
 
 				// Perlin
 				var jFlag = jRule.find("a.perlin");

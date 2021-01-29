@@ -46,12 +46,27 @@ class LayerRender {
 					if( li.autoTilesCache.exists( r.uid ) ) {
 						for(coordId in li.autoTilesCache.get( r.uid ).keys())
 						for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
+							var rotationXOffset=0;
+							var rotationYOffset=0;
+							switch (tileInfos.rotations)
+							{
+								case 1:
+								rotationXOffset=1;
+
+								case 2:
+								rotationXOffset=1;
+								rotationYOffset=1;
+
+								case 3:
+								rotationYOffset=1;
+							}
+
 							tg.addTransform(
-								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + li.pxTotalOffsetX,
-								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize + li.pxTotalOffsetY,
+								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + rotationXOffset+ li.def.tilePivotX ) * li.def.gridSize + li.pxTotalOffsetX,
+								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + rotationYOffset+ li.def.tilePivotY ) * li.def.gridSize + li.pxTotalOffsetY,
 								dn.M.hasBit(tileInfos.flips,0)?-1:1,
 								dn.M.hasBit(tileInfos.flips,1)?-1:1,
-								0,
+								tileInfos.rotations*Math.PI/2,
 								td.extractTile(tileInfos.srcX, tileInfos.srcY)
 							);
 						}

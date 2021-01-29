@@ -45,6 +45,7 @@ typedef AutoLayerRuleGroup = {
 typedef GridTileInfos = {
 	var tileId : Int;
 	var flips : Int;
+	var rotations : Int;
 }
 
 enum FieldType {

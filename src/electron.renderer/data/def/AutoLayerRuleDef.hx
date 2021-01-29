@@ -13,6 +13,7 @@ class AutoLayerRuleDef {
 	var pattern : Array<Int> = [];
 	public var flipX = false;
 	public var flipY = false;
+	public var rotate = false;
 	public var active = true;
 	public var tileMode : ldtk.Json.AutoLayerRuleTileMode = Single;
 	public var pivotX = 0.;
@@ -115,6 +116,7 @@ class AutoLayerRuleDef {
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
 			flipX: flipX,
 			flipY: flipY,
+			rotate: rotate,
 			xModulo: xModulo,
 			yModulo: yModulo,
 			checker: JsonTools.writeEnum(checker, false),
@@ -138,6 +140,7 @@ class AutoLayerRuleDef {
 		r.pattern = json.pattern;
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
+		r.rotate = JsonTools.readBool(json.rotate, false);
 		r.checker = JsonTools.readEnum(ldtk.Json.AutoLayerRuleCheckerMode, json.checker, false, None);
 		r.tileMode = JsonTools.readEnum(ldtk.Json.AutoLayerRuleTileMode, json.tileMode, false, Single);
 		r.pivotX = JsonTools.readFloat(json.pivotX, 0);
@@ -230,7 +233,7 @@ class AutoLayerRuleDef {
 		return false;
 	}
 
-	public function matches(li:data.inst.LayerInstance, source:data.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
+	public function matches(li:data.inst.LayerInstance, source:data.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1, rotations=0) {
 		if( tileIds.length==0 )
 			return false;
 
@@ -253,19 +256,50 @@ class AutoLayerRuleDef {
 
 			if( dn.M.iabs( pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
 				// "Anything" checks
-				if( pattern[coordId]>0 && !source.hasIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+				var x = (px-radius);
+				var y = (py-radius);				
+				
+				if(rotations!=0)
+				{
+					for(i in 0...rotations)
+					{
+						x=x*-1;
+						var temp=x;
+						x=y;
+						y=temp;
+					}
+				}
+
+				if( pattern[coordId]>0 && !source.hasIntGrid(cx+dirX*x,cy+dirY*y) )
 					return false;
 
-				if( pattern[coordId]<0 && source.hasIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+				if( pattern[coordId]<0 && source.hasIntGrid(cx+dirX*x,cy+dirY*y) )
 					return false;
+				
 			}
 			else {
 				// Specific value checks
-				if( pattern[coordId]>0 && source.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius))!=pattern[coordId]-1 )
-					return false;
 
-				if( pattern[coordId]<0 && source.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius))==-pattern[coordId]-1 )
+				var x = (px-radius);
+				var y = (py-radius);
+
+				if(rotations!=0)
+				{
+					for(i in 0...rotations)
+					{
+						x=x*-1;
+						var temp=x;
+						x=y;
+						y=temp;
+					}
+				}
+
+				if( pattern[coordId]>0 && source.getIntGrid(cx+dirX*x,cy+dirY*y)!=pattern[coordId]-1 )
 					return false;
+				
+				if( pattern[coordId]<0 && source.getIntGrid(cx+dirX*x,cy+dirY*y)==-pattern[coordId]-1 )
+					return false;
+				
 			}
 		}
 		return true;

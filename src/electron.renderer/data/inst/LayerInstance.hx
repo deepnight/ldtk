@@ -25,7 +25,7 @@ class LayerInstance {
 		Null< Map<Int, // RuleUID
 			Map<Int, // CoordID
 				// WARNING: x/y don't contain layerDef.pxOffsetX/Y (to avoid the need of a global update when changing these values). They are added in the JSON though.
-				Array<{ x:Int, y:Int, flips:Int, srcX:Int, srcY:Int, tid:Int }>
+				Array<{ x:Int, y:Int, flips:Int, srcX:Int, srcY:Int, tid:Int, rotations:Int }>
 			>
 		> > = null;
 
@@ -94,6 +94,7 @@ class LayerInstance {
 									f: tileInfos.flips,
 									t: tileInfos.tid,
 									d: [r.uid,allTiles.key],
+									r: tileInfos.rotations
 								});
 							}
 					});
@@ -120,6 +121,7 @@ class LayerInstance {
 							f: tileInf.flips,
 							t: tileInf.tileId,
 							d: [ e.key ],
+							r:tileInf.rotations,
 						});
 					}
 				arr;
@@ -204,6 +206,7 @@ class LayerInstance {
 			li.gridTiles.get(coordId).push({
 				tileId: gridTilesJson.t,
 				flips: gridTilesJson.f,
+				rotations: gridTilesJson.r,
 			});
 		}
 
@@ -241,6 +244,7 @@ class LayerInstance {
 						srcY: at.src[1],
 						flips: at.f,
 						tid: at.t,
+						rotations: at.r
 					});
 				}
 			}
@@ -498,7 +502,7 @@ class LayerInstance {
 
 	/** TILES *******************/
 
-	public function addGridTile(cx:Int, cy:Int, tileId:Null<Int>, flips=0, stack=false) {
+	public function addGridTile(cx:Int, cy:Int, tileId:Null<Int>, flips=0, rotations=0, stack=false) {
 		if( !isValid(cx,cy) )
 			return;
 
@@ -508,10 +512,10 @@ class LayerInstance {
 		}
 
 		if( !gridTiles.exists(coordId(cx,cy)) || !stack )
-			gridTiles.set( coordId(cx,cy), [{ tileId:tileId, flips:flips }]);
+			gridTiles.set( coordId(cx,cy), [{ tileId:tileId, flips:flips,rotations: rotations }]);
 		else {
 			removeSpecificGridTile(cx, cy, tileId, flips);
-			gridTiles.get( coordId(cx,cy) ).push({ tileId:tileId, flips:flips });
+			gridTiles.get( coordId(cx,cy) ).push({ tileId:tileId, flips:flips,rotations: rotations });
 		}
 	}
 
@@ -578,7 +582,7 @@ class LayerInstance {
 		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) && gridTiles.get(coordId(cx,cy)).length>0;
 	}
 
-	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
+	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int, rotations:Int=0) {
 		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds;
 		var td = _project.defs.getTilesetDef( def.autoTilesetDefUid );
 		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
@@ -590,6 +594,7 @@ class LayerInstance {
 				srcY: td.getTileSourceY(tid),
 				tid: tid,
 				flips: flips,
+				rotations: rotations,
 			}
 		} ) );
 	}
@@ -632,6 +637,18 @@ class LayerInstance {
 			}
 			else if( r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
 				addRuleTilesAt(r, cx,cy, 3);
+				return true;
+			}
+			else if( r.rotate && r.matches(this, source, cx,cy, 1, 1,1) ) {
+				addRuleTilesAt(r, cx,cy, 0,3);
+				return true;
+			}
+			else if( r.rotate && r.matches(this, source, cx,cy, 1, 1,2) ) {
+				addRuleTilesAt(r, cx,cy, 0,2);
+				return true;
+			}
+			else if( r.rotate && r.matches(this, source, cx,cy, 1, 1,3) ) {
+				addRuleTilesAt(r, cx,cy, 0,1);
 				return true;
 			}
 			else

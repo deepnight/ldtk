@@ -107,6 +107,7 @@ Value | Type | Description
 `d`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-gray.svg)  | Array&nbsp;of&nbsp;Int | Internal data used by the editor.<br/>		For auto-layer tiles: `[ruleId, coordId]`.<br/>		For tile-layer tiles: `[coordId]`.
 `f` | Int | "Flip bits", a 2-bits integer to represent the mirror transformations of the tile.<br/>		 - Bit 0 = X flip<br/>		 - Bit 1 = Y flip<br/>		 Examples: f=0 (no flip), f=1 (X flip only), f=2 (Y flip only), f=3 (both flips)
 `px`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Array&nbsp;of&nbsp;Int | Pixel coordinates of the tile in the **layer** (`[x,y]` format). Don't forget optional layer offsets, if they exist!
+`r` | Int | "Rotation"<br/>		Examples: r=0 (no degrees), r=1 (90 degrees), r=2 (180 degrees), r=3 (270 degrees)
 `src` | Array&nbsp;of&nbsp;Int | Pixel coordinates of the tile in the **tileset** (`[x,y]` format)
 `t`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | The *Tile ID* in the corresponding tileset.
 
@@ -185,6 +186,7 @@ Value | Type | Description
 `perlinSeed`<br/><sup class="internal">*Internal editor data*</sup> | Float | 
 `pivotX`<br/><sup class="only">Only *'Stamp' tile mode*</sup><br/><sup class="internal">*Internal editor data*</sup> | Float | X pivot of a tile stamp (0-1)
 `pivotY`<br/><sup class="only">Only *'Stamp' tile mode*</sup><br/><sup class="internal">*Internal editor data*</sup> | Float | Y pivot of a tile stamp (0-1)
+`rotate`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, allow rule to be matched by rotating its pattern around clockwise
 `size`<br/><sup class="internal">*Internal editor data*</sup> | Int | Pattern width & height. Should only be 1,3,5 or 7.
 `tileIds`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Int | Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
 `tileMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Defines how tileIds array is used<br/> Possible values: `Single`, `Stamp`
