@@ -516,7 +516,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 					r.rotate=!r.rotate;
 
-					editor.ge.emit( LayerRuleChanged(r) );					
+					editor.ge.emit( LayerRuleChanged(r) );
 				});
 
 				// Perlin

@@ -8,22 +8,22 @@
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - and a definition object (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
 		"required": [
+			"bgColor",
+			"externalLevels",
+			"jsonVersion",
+			"levels",
+			"minifyJson",
+			"worldGridHeight",
+			"worldGridWidth",
 			"backupLimit",
 			"backupOnSave",
-			"bgColor",
 			"defaultGridSize",
 			"defaultLevelBgColor",
 			"defaultPivotX",
 			"defaultPivotY",
 			"exportPng",
 			"exportTiled",
-			"externalLevels",
-			"jsonVersion",
-			"levels",
-			"minifyJson",
-			"nextUid",
-			"worldGridHeight",
-			"worldGridWidth"
+			"nextUid"
 		],
 		"properties": {
 			"backupLimit": {
@@ -453,7 +453,7 @@
 					]
 				},
 				"rotate": {
-					"description": "If TRUE, allow rule to be matched by rotating its pattern around clockwise",
+					"description": "If TRUE, allow rule to be matched by rotating its pattern by 90 degree increments",
 					"type": [
 						"boolean"
 					]
@@ -500,10 +500,10 @@
 			"required": [
 				"__type",
 				"canBeNull",
-				"editorAlwaysShow",
 				"identifier",
 				"isArray",
-				"uid"
+				"uid",
+				"editorAlwaysShow"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -626,15 +626,15 @@
 			"title": "Entity definition",
 			"required": [
 				"color",
-				"fieldDefs",
 				"height",
 				"identifier",
 				"maxPerLevel",
 				"pivotX",
 				"pivotY",
-				"showName",
 				"uid",
-				"width"
+				"width",
+				"fieldDefs",
+				"showName"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -992,10 +992,10 @@
 				"pxHei",
 				"pxWid",
 				"relPath",
-				"savedSelections",
 				"spacing",
 				"tileGridSize",
-				"uid"
+				"uid",
+				"savedSelections"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1111,12 +1111,12 @@
 			"description": "This structure represents a single tile from a given Tileset.",
 			"title": "Tile instance",
 			"required": [
-				"d",
 				"f",
 				"px",
 				"r",
 				"src",
-				"t"
+				"t",
+				"d"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1180,16 +1180,16 @@
 			"title": "Layer definition",
 			"required": [
 				"__type",
-				"autoRuleGroups",
 				"displayOpacity",
 				"gridSize",
 				"identifier",
 				"intGridValues",
 				"pxOffsetX",
 				"pxOffsetY",
+				"uid",
+				"autoRuleGroups",
 				"tilePivotX",
-				"tilePivotY",
-				"uid"
+				"tilePivotY"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1356,14 +1356,14 @@
 			"required": [
 				"__bgColor",
 				"__neighbours",
-				"bgPivotX",
-				"bgPivotY",
 				"identifier",
 				"pxHei",
 				"pxWid",
 				"uid",
 				"worldX",
-				"worldY"
+				"worldY",
+				"bgPivotX",
+				"bgPivotY"
 			],
 			"additionalProperties": false,
 			"properties": {

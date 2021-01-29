@@ -251,8 +251,11 @@ class AutoLayerRuleDef {
 			if( pattern[coordId]==0 )
 				continue;
 
-			if( !source.isValid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
-				return false;
+			if(rotations==0)
+			{
+				if( !source.isValid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+					return false;
+			}
 
 			if( dn.M.iabs( pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
 				// "Anything" checks
@@ -279,7 +282,6 @@ class AutoLayerRuleDef {
 			}
 			else {
 				// Specific value checks
-
 				var x = (px-radius);
 				var y = (py-radius);
 
