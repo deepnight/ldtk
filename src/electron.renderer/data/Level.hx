@@ -247,6 +247,22 @@ class Level {
 		return wx>=worldX && wx<worldX+pxWid && wy>=worldY && wy<worldY+pxHei;
 	}
 
+	public function getDist(wx:Int, wy:Int) : Float {
+		if( isWorldOver(wx,wy) )
+			return 0;
+		else {
+			if( wy>=worldY && wy<worldY+pxHei ) // Distance to left or right sides
+				return M.imin( M.iabs(worldX-wx), M.iabs(wx-(worldX+pxWid)) );
+			else if( wx>=worldX && wx<worldX+pxWid ) // Distance to top or bottom sides
+				return M.imin( M.iabs(worldY-wy), M.iabs(wy-(worldY+pxHei)) );
+			else // Distances to corners
+				return M.fmin(
+					M.fmin( M.dist(wx,wy,worldX,worldY), M.dist(wx,wy,worldX+pxWid-1,worldY) ),
+					M.fmin( M.dist(wx,wy,worldX,worldY+pxHei-1), M.dist(wx,wy,worldX+pxWid-1,worldY+pxHei-1) )
+				);
+		}
+	}
+
 	public function getBoundsDist(l:Level) : Int {
 		return dn.M.imax(
 			dn.M.imax(0, worldX - (l.worldX+l.pxWid)) + dn.M.imax( 0, l.worldX - (worldX+pxWid) ),

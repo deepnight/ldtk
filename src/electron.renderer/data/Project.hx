@@ -466,6 +466,13 @@ class Project {
 		return null;
 	}
 
+	public function getLevelAt(worldX:Int, worldY:Int) : Null<Level> {
+		for(l in levels)
+			if( l.isWorldOver(worldX, worldY) )
+				return l;
+		return null;
+	}
+
 
 	public function getLevelIndex(l:Level) : Int {
 		var i = 0;

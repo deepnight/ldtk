@@ -57,13 +57,17 @@ class Camera extends dn.Process {
 	}
 
 
+	public function onWorldModeChange(worldMode:Bool, usedMouseWheel:Bool) {
+		if( !usedMouseWheel )
+			if( worldMode )
+				targetZoom = snapZoomValue( M.fmax(0.3, getFitZoom()*0.8) );
+			else
+				fit();
+	}
+
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case WorldMode(active):
-				if( active )
-					targetZoom = snapZoomValue( M.fmax(0.3, getFitZoom()*0.8) );
-				else
-					fit();
 
 			case LevelSelected(level):
 				// Move toward level if not over it
@@ -182,6 +186,8 @@ class Camera extends dn.Process {
 		targetZoom = null;
 	}
 
+	inline function isAutoZooming() return targetZoom!=null;
+
 	public inline function cancelAllAutoMovements() {
 		cancelAutoScrolling();
 		cancelAutoZoom();
@@ -248,4 +254,11 @@ class Camera extends dn.Process {
 		}
 	}
 
+	public inline function getLevelWidthRatio(l:data.Level) {
+		return ( l.pxWid * adjustedZoom ) / width;
+	}
+
+	public inline function getLevelHeightRatio(l:data.Level) {
+		return ( l.pxHei * adjustedZoom ) / height;
+	}
 }

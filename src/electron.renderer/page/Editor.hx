@@ -811,11 +811,38 @@ class Editor extends Page {
 		}
 	}
 
+
 	function onMouseWheel(e:hxd.Event) {
 		var m = getMouse();
 		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta*0.1 );
 		camera.cancelAllAutoMovements();
+
+		// Auto world mode on zoom out
+		if( !worldMode && e.wheelDelta>0 ) {
+			var wr = camera.getLevelWidthRatio(curLevel);
+			var hr = camera.getLevelHeightRatio(curLevel);
+			App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
+			if( wr<=0.4 && hr<=0.4 || wr<=0.25 || hr<=0.25 )
+				setWorldMode(true, true);
+		}
+
+		// Auto level mode on zoom in
+		if( worldMode && e.wheelDelta<0 ) {
+			var dh = new dn.DecisionHelper(project.levels);
+			dh.score( l->l.isWorldOver(m.worldX, m.worldY) ? 100 : 0 );
+			dh.score( l->-l.getDist(m.worldX,m.worldY) );
+			var l = dh.getBest();
+			var wr = camera.getLevelWidthRatio(l);
+			var hr = camera.getLevelHeightRatio(l);
+			App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
+
+			if( wr>0.4 || hr>0.4 ) {
+				selectLevel(l);
+				setWorldMode(false, true);
+			}
+		}
 	}
+
 
 	public function selectLevel(l:data.Level) {
 		if( curLevel!=null )
@@ -891,7 +918,7 @@ class Editor extends Page {
 		});
 	}
 
-	public function setWorldMode(v:Bool) {
+	public function setWorldMode(v:Bool, usedMouseWheel=false) {
 		if( worldMode==v )
 			return;
 
@@ -906,6 +933,7 @@ class Editor extends Page {
 		else
 			ui.EntityInstanceEditor.closeExisting();
 
+		camera.onWorldModeChange(worldMode, usedMouseWheel);
 		worldTool.onWorldModeChange(worldMode);
 	}
 
