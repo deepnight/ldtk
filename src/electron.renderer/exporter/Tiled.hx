@@ -352,7 +352,7 @@ class Tiled extends Exporter {
 						for( coordId in li.gridTiles.keys() ) {
 							var stack = li.gridTiles.get(coordId);
 							if( layerIdx < stack.length ) {
-								csv.setCoordId( coordId, _makeTiledTileId(ld.tilesetDefUid, stack[layerIdx].tileId, stack[layerIdx].flips) );
+								csv.setCoordId( coordId, _makeTiledTileId(li.getTilesetUid(), stack[layerIdx].tileId, stack[layerIdx].flips) );
 							}
 						}
 

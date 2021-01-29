@@ -739,6 +739,20 @@ class EditEntityDefs extends ui.modal.Panel {
 			});
 		}
 
+		// Text language mode
+		if( curField.type==F_Text ) {
+			var i = new form.input.EnumSelect(
+				jFieldForm.find("#textLanguage"),
+				ldtk.Json.TextLanguageMode,
+				true,
+				()->curField.textLangageMode,
+				(e)->{
+					curField.textLangageMode = e;
+				},
+				(e)->Lang.getTextLanguageMode(e)
+			);
+		}
+
 		// Accept file types
 		var input = jFieldForm.find("input[name=acceptTypes]");
 		if( curField.acceptFileTypes!=null )

@@ -3,11 +3,13 @@
 This document is for my personal use only, so I don't forget anything ;)
 
 ## Preparation & checks
+- [ ] Verify planned deprecations
 - [ ] Fill changelog
 - [ ] Update JSON changelog if necessary
-- [ ] Run Haxe API tests
-- [ ] Build Haxe API samples
+- [ ] Run API tests
+- [ ] Build API samples
 - [ ] Check JSON doc
+- [ ] Rebuild LDtk demo maps
 
 ## Git
 - [ ] Merge LDtk repo to `master`

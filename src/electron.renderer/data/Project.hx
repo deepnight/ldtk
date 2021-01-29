@@ -27,6 +27,7 @@ class Project {
 	public var exportTiled = false;
 	public var exportPng = false;
 	public var pngFilePattern : Null<String>;
+	var advancedExportFlags: Map<String,Bool>;
 
 	public var backupOnSave = false;
 	public var backupLimit = 10;
@@ -43,6 +44,7 @@ class Project {
 		worldGridWidth = defaultGridSize * DEFAULT_LEVEL_SIZE;
 		worldGridHeight = defaultGridSize * DEFAULT_LEVEL_SIZE;
 		filePath = new dn.FilePath();
+		advancedExportFlags = new Map();
 
 		defs = new Definitions(this);
 	}
@@ -162,6 +164,10 @@ class Project {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( Level.fromJson(p, lvlJson) );
 
+		if( json.advancedExportFlags!=null )
+			for(f in json.advancedExportFlags )
+				p.advancedExportFlags.set(f, true);
+
 		// World
 		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
 		p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
@@ -172,6 +178,24 @@ class Project {
 
 		p.jsonVersion = Const.getJsonVersion(); // always uses latest version
 		return p;
+	}
+
+	public function hasAnyAdvancedExportFlag() {
+		for(v in advancedExportFlags)
+			return true;
+		return false;
+	}
+
+	public inline function hasAdvancedExportFlag(k:String) {
+		return k!=null && advancedExportFlags.exists(k);
+	}
+
+	public inline function setAdvancedExportFlag(k:String, v:Bool) {
+		if( k!=null )
+			if( v )
+				advancedExportFlags.set(k,true);
+			else
+				advancedExportFlags.remove(k);
 	}
 
 	public function toJson() : ldtk.Json.ProjectJson {
@@ -193,6 +217,14 @@ class Project {
 			worldLayout: JsonTools.writeEnum(worldLayout, false),
 			worldGridWidth: worldGridWidth,
 			worldGridHeight: worldGridHeight,
+
+			advancedExportFlags: {
+				var all = [];
+				for( f in advancedExportFlags.keyValueIterator() )
+					if( f.value==true )
+						all.push(f.key);
+				all;
+			},
 
 			defs: defs.toJson(this),
 			levels: levels.map( (l)->l.toJson() ),
@@ -430,6 +462,13 @@ class Project {
 	public function getLevel(?id:String, ?uid:Int) : Null<Level> {
 		for(l in levels)
 			if( l.uid==uid || l.identifier==id )
+				return l;
+		return null;
+	}
+
+	public function getLevelAt(worldX:Int, worldY:Int) : Null<Level> {
+		for(l in levels)
+			if( l.isWorldOver(worldX, worldY) )
 				return l;
 		return null;
 	}

@@ -120,6 +120,7 @@ class FieldInstancesForm {
 
 
 	function createFieldInput(fi:data.inst.FieldInstance, arrayIdx:Int, jTarget:js.jquery.JQuery) {
+		jTarget.addClass( fi.def.type.getName() );
 		switch fi.def.type {
 			case F_Int:
 				var input = new J("<input/>");
@@ -171,7 +172,7 @@ class FieldInstancesForm {
 				});
 				hideInputIfDefault(arrayIdx, input, fi);
 
-			case F_String, F_Text:
+			case F_String:
 				var input = if( fi.def.type==F_Text ) {
 					var input = new J("<textarea/>");
 					input.appendTo(jTarget);
@@ -201,6 +202,27 @@ class FieldInstancesForm {
 				if( fi.def.type==F_Text )
 					input.keyup();
 				hideInputIfDefault(arrayIdx, input, fi);
+
+			case F_Text:
+				var jText = new J('<div class="multiLines"/>');
+				jText.appendTo(jTarget);
+				if( fi.isUsingDefault(arrayIdx) ) {
+					var def = fi.def.getStringDefault();
+					jText.text(def==null ? "(null)" : def=="" ? "(empty string)" : def);
+				}
+				else
+					jText.text( fi.getString(arrayIdx) );
+				jText.click( _->{
+					new ui.modal.dialog.TextEditor(
+						fi.getString(arrayIdx),
+						getInstanceName()+"."+fi.def.identifier,
+						fi.def.textLangageMode,
+						(v)->{
+							fi.parseValue(arrayIdx, v);
+							onFieldChange();
+						}
+					);
+				});
 
 			case F_Point:
 				if( fi.valueIsNull(arrayIdx) && !fi.def.canBeNull || !fi.def.isArray ) {
@@ -301,6 +323,8 @@ class FieldInstancesForm {
 
 			case F_Path:
 				var isRequired = fi.valueIsNull(arrayIdx) && !fi.def.canBeNull;
+
+				// Text input
 				var input = new J('<input class="fileInput" type="text"/>');
 				input.appendTo(jTarget);
 				input.attr("placeholder", "(null)");
@@ -310,26 +334,39 @@ class FieldInstancesForm {
 				if( !fi.isUsingDefault(arrayIdx) )
 					input.val( fi.getFilePath(arrayIdx) );
 
-				var jLocate = new J('<button class="locate gray"> <span class="icon locate"/> </button>');
-				jLocate.appendTo(jTarget);
-				jLocate.click( (_)->{
-					if( !fi.valueIsNull(arrayIdx) ) {
-						var path = project.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
-						JsTools.exploreToFile(path, true);
-					}
-				});
-
-				var fileSelect = new J('<button class="fileSelectButton"> <span class="icon open"/> </button>');
-				fileSelect.appendTo(jTarget);
-
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, input.val() );
 					onFieldChange();
 				});
 
-				if( !fi.valueIsNull(arrayIdx) && !JsTools.fileExists( project.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) ) )
-					input.addClass("fileNotFound");
+				// Edit
+				if( !fi.isUsingDefault(arrayIdx) ) {
+					var jEdit = new J('<button class="edit gray" title="Edit file content"> <span class="icon edit"></span> </button>');
+					jEdit.appendTo(jTarget);
+					jEdit.click( (_)->{
+						if( !fi.valueIsNull(arrayIdx) ) {
+							ui.modal.dialog.TextEditor.editExternalFile( project.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) );
+						// 	var path = project.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
+						// 	JsTools.exploreToFile(path, true);
+						}
+					});
+				}
 
+				// Locate
+				if( !fi.isUsingDefault(arrayIdx) ) {
+					var jLocate = new J('<button class="locate gray" title="Locate this file"> <span class="icon locate"/> </button>');
+					jLocate.appendTo(jTarget);
+					jLocate.click( (_)->{
+						if( !fi.valueIsNull(arrayIdx) ) {
+							var path = project.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
+							JsTools.exploreToFile(path, true);
+						}
+					});
+				}
+
+				// Pick
+				var fileSelect = new J('<button class="fileSelectButton" title="Pick a file"> <span class="icon open"/>  </button>');
+				fileSelect.appendTo(jTarget);
 				fileSelect.click( function(ev) {
 					dn.electron.Dialogs.open(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
 						var fp = dn.FilePath.fromFile(absPath);
@@ -341,7 +378,17 @@ class FieldInstancesForm {
 					});
 				});
 
+				// Error
+				if( !fi.valueIsNull(arrayIdx) && !JsTools.fileExists( project.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) ) )
+					input.addClass("fileNotFound");
+
 				hideInputIfDefault(arrayIdx, input, fi, isRequired);
+		}
+	}
+
+	function getInstanceName() {
+		return switch relatedInstance {
+			case Entity(ei): return ei.def.identifier;
 		}
 	}
 
@@ -422,6 +469,7 @@ class FieldInstancesForm {
 
 
 	function renderForm() {
+		ui.Tip.clear();
 		jWrapper.empty();
 
 		if( fieldDefs.length==0 ) {
