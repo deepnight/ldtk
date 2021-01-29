@@ -326,7 +326,7 @@ class WorldRender extends dn.Process {
 					// Fade other levels in editor mode
 					var dist = cur.getBoundsDist(l);
 					e.bounds.alpha = 0.3;
-					e.render.alpha = 0.7;
+					e.render.alpha = 0.5;
 					e.render.visible = dist<=300;
 				}
 
