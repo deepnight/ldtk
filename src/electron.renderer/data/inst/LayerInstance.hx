@@ -687,6 +687,7 @@ class LayerInstance {
 				addRuleTilesAt(r, cx,cy, 3);
 				return true;
 			}
+			// Rotation rules
 			else if( r.rotate && r.matches(this, source, cx,cy, 1, 1,1) ) {
 				addRuleTilesAt(r, cx,cy, 0,3);
 				return true;
