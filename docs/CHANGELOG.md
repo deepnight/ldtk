@@ -6,7 +6,7 @@
 - TODO sidebar design
 - TODO multi lines pop up text editor
 - TODO Customizable source tileset per-layer instance
-- **Mouse wheel** can now be used to switch to world mode (and vice versa) automatically
+- **Mouse wheel** can now be used to switch to world mode (and vice versa) automatically. A new related option has been to app settings (`F12`).
 - Disabled "New level" context menu when holding `Shift` or `Alt`
 - Fixed layer order for "simplified" level render in World view
 
