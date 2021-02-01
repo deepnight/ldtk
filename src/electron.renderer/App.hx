@@ -460,6 +460,7 @@ class App extends dn.Process {
 
 	public function loadPage( create:()->Page ) {
 		clearCurPage();
+		LOG.flushToFile();
 		curPageProcess = create();
 		curPageProcess.onAppResize();
 	}
@@ -567,10 +568,6 @@ class App extends dn.Process {
 
 	override function update() {
 		super.update();
-
-		// Auto flush log every X seconds
-		if( !cd.hasSetS("logFlush",30) )
-			LOG.flushToFile();
 
 		// Process profiling
 		if( dn.Process.PROFILING && !cd.hasSetS("profiler",2) ) {
