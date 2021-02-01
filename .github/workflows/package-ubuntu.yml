@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: '14'
       - run: cd app && npm install
-      - run: cd app && npm run compile
+      - run: cd app && npm run pack-prepare
       - run: cd app && npm run pack-linux
 
       # Upload

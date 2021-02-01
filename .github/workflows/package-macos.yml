@@ -39,8 +39,8 @@ jobs:
         with:
           node-version: '14'
       - run: cd app && npm install
-      - run: cd app && npm run compile
-      - run: cd app && npm run pack-mac
+      - run: cd app && npm run pack-prepare
+      - run: cd app && npm run pack-macos
 
       # Upload
       - uses: actions/upload-artifact@v2
