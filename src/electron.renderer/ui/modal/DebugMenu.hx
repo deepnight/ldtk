@@ -127,6 +127,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 		add({
 			label: L.untranslated("Process profiling"),
 			cb: ()->{
+				dn.Process.clearProfilingTimes();
 				dn.Process.PROFILING = !dn.Process.PROFILING;
 				App.ME.clearDebug();
 			}
