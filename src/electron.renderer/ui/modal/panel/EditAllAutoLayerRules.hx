@@ -15,6 +15,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		super();
 		this.li = li;
 		jMask.hide();
+		overlapMainPanel();
 
 		loadTemplate("editAllAutoLayerRules");
 		updatePanel();

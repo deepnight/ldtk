@@ -9,6 +9,7 @@ class WorldPanel extends ui.modal.Panel {
 		jMask.hide();
 		level = editor.curLevel;
 		loadTemplate("worldPanel");
+		overlapMainPanel();
 
 		// Delete button
 		jContent.find("button.delete").click( (_)->{

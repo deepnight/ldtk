@@ -1663,6 +1663,7 @@ textarea {
 .window.panel {
 	left: 0px; // set on opening
 	width: calc( 100vw - #{ $mainPanelNormalWid } );
+	height: 100vh;
 
 	>button.close {
 		position: absolute;
@@ -1674,11 +1675,17 @@ textarea {
 		border: 0px;
 		border-top-right-radius: 3px;
 		border-bottom-right-radius: 3px;
+		border-top: 1px solid $bgLight;
+		border-right: 1px solid $bgLight;
+		border-bottom: 1px solid $bgLight;
 		box-shadow: 0px 5px 0px rgba(0,0,0,0.2);
 
 		&:hover {
 			background-color: $orange;
 		}
+	}
+	&.overlap>button.close {
+		top: 50px;
 	}
 
 	&>.wrapper {
@@ -4257,8 +4264,12 @@ body.sorting ul.collapsedSortTarget {
 	display: block !important;
 }
 
-.window.panel.worldPanel {
+.window.panel.overlap {
 	left: 32px !important;
+	// Y pos and height are set in code
+}
+
+.window.panel.worldPanel {
 	width: auto;
 
 	.wrapper {
@@ -4377,7 +4388,6 @@ body.sorting ul.collapsedSortTarget {
 }
 
 .window.panel.editAllAutoLayerRules {
-	left: 32px !important;
 	width: auto;
 
 	.wrapper {
