@@ -8,7 +8,21 @@ class Const {
 			return [
 				APP_VERSION,
 				#if debug "debug", #end
+				getArch(),
 			].join("-");
+	}
+
+	public static function getArch() {
+		#if macro
+		return "";
+		#else
+		return switch js.Node.process.arch {
+			case "x64": "64bits";
+			case "x32": "32bits";
+			case "ia32": "32bits";
+			case _: "";
+		}
+		#end
 	}
 
 	public static function getJsonVersion() {
