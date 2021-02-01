@@ -4,6 +4,7 @@ class Panel extends ui.Modal {
 	var jPanelMask: js.jquery.JQuery; // mask over main panel
 	var jLinkedButton : Null<js.jquery.JQuery>;
 	var jCloseButton : js.jquery.JQuery;
+	var closeBtInvalidated = true;
 
 	public function new() {
 		ui.Modal.closeAll(this);
@@ -45,10 +46,13 @@ class Panel extends ui.Modal {
 			top: y+"px",
 			height: 'calc( 100vh - ${y}px )',
 		});
+
+		closeBtInvalidated = true;
 	}
 
 	var _lastWrapperWid : Float = 0;
 	function updateCloseButton() {
+		closeBtInvalidated = false;
 		if( isClosing() ) {
 			if( jCloseButton.is(":visible") )
 				jCloseButton.hide();
@@ -68,7 +72,7 @@ class Panel extends ui.Modal {
 
 	function enableCloseButton() {
 		jCloseButton.show();
-		updateCloseButton();
+		closeBtInvalidated = true;
 	}
 
 	function linkToButton(selector:String) {
@@ -106,6 +110,7 @@ class Panel extends ui.Modal {
 
 	override function postUpdate() {
 		super.postUpdate();
-		updateCloseButton();
+		if( closeBtInvalidated )
+			updateCloseButton();
 	}
 }
