@@ -1620,8 +1620,8 @@ textarea {
 		z-index: 1;
 		top: 0px;
 		left: 0px;
-		width: 100%;
-		height: 100%;
+		width: 100vw;
+		height: 100vh;
 		background-color: rgba(0,0,0,0.35);
 
 		&.transparent {
@@ -1661,13 +1661,22 @@ textarea {
 }
 
 .window.panel {
-	left: 0px; // set on opening
-	width: calc( 100vw - #{ $mainPanelNormalWid } );
-	height: 100vh;
+	// NOTE: wrapper dimensions and position are all set in code
+	width: auto;
+	height: auto;
+
+	.mask {
+		width: calc( 100vw - #{ $mainPanelNormalWid } );
+		left: $mainPanelNormalWid;
+	}
+	@at-root .compactPanel .window.panel .mask {
+		width: calc( 100vw - #{ $mainPanelCompactWid } );
+		left: $mainPanelCompactWid;
+	}
 
 	>button.close {
 		position: absolute;
-		top: 10px;
+		top: 50px;
 		width: auto;
 		height: 45px;
 		z-index: 2;
@@ -1684,8 +1693,8 @@ textarea {
 			background-color: $orange;
 		}
 	}
-	&.overlap>button.close {
-		top: 50px;
+	@at-root .compactPanel .window.panel>button.close {
+		top: 80px;
 	}
 
 	&>.wrapper {
@@ -1693,6 +1702,8 @@ textarea {
 		left: 0px;
 		height: 100vh;
 		border-left: none;
+		border-bottom: none;
+		box-shadow: 0px 16px 32px black, 0px 16px 32px rgba(0, 0, 0, 0.3);
 
 		.content {
 			width: 700px;
@@ -4264,19 +4275,11 @@ body.sorting ul.collapsedSortTarget {
 	display: block !important;
 }
 
-.window.panel.overlap {
-	left: 32px !important;
-	// Y pos and height are set in code
-}
-
 .window.panel.worldPanel {
 	width: auto;
 
 	.wrapper {
 		padding: 8px;
-		border-left: 2px solid $bgLighter;
-		border-right: 1px solid $bgLight;
-		box-shadow: -8px 0px 0px rgba(0, 0, 0, 0.5), 2px 0px 0px rgba(0, 0, 0, 0.5);
 	}
 
 	.content {
@@ -4392,9 +4395,9 @@ body.sorting ul.collapsedSortTarget {
 
 	.wrapper {
 		padding: 8px;
-		border-left: 2px solid $bgLighter;
-		border-right: 1px solid $bgLight;
-		box-shadow: -8px 0px 0px rgba(0, 0, 0, 0.5), 2px 0px 0px rgba(0, 0, 0, 0.5);
+		// border-left: 2px solid $bgLighter;
+		// border-right: 1px solid $bgLight;
+		// box-shadow: -8px 0px 0px rgba(0, 0, 0, 0.5), 2px 0px 0px rgba(0, 0, 0, 0.5);
 	}
 
 	.content {

@@ -19,7 +19,6 @@ class Panel extends ui.Modal {
 		var mainPanel = new J("#mainPanel");
 
 		jModalAndMask.addClass("panel");
-		jModalAndMask.css({ left:mainPanel.outerWidth()+"px" });
 		jModalAndMask.removeClass("centered");
 
 		jCloseButton = new J('<button class="close gray"> <div class="icon close"/> </button>');
@@ -34,23 +33,18 @@ class Panel extends ui.Modal {
 		jPanelMask.width(mainPanel.outerWidth());
 		jPanelMask.height( mainPanel.outerHeight() - jPanelMask.offset().top );
 		jPanelMask.click( function(_) close() );
+
+		dn.Process.resizeAll();
 	}
 
 	override function onResize() {
 		super.onResize();
-		if( jModalAndMask.hasClass("overlap") ) {
-			var jBar = editor.jMainPanel.find("#mainBar");
-			var y = jBar.offset().top + jBar.outerHeight();
-			jWrapper.css({
-				top: y+"px",
-				height: 'calc( 100vh - ${y}px )',
-			});
-		}
-	}
-
-	function overlapMainPanel() {
-		jModalAndMask.addClass("overlap");
-		onResize();
+		var jBar = editor.jMainPanel.find("#mainBar");
+		var y = jBar.offset().top + jBar.outerHeight();
+		jWrapper.css({
+			top: y+"px",
+			height: 'calc( 100vh - ${y}px )',
+		});
 	}
 
 	var _lastWrapperWid : Float = 0;
