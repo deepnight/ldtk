@@ -16,7 +16,7 @@ class Editor extends Page {
 		inline function get_curLevel() return project.getLevel(curLevelId);
 
 	public var curLayerDef(get,never) : Null<data.def.LayerDef>;
-		inline function get_curLayerDef() return project.defs.getLayerDef(curLayerDefUid);
+		inline function get_curLayerDef() return project!=null ? project.defs.getLayerDef(curLayerDefUid) : null;
 
 	public var curLayerInstance(get,never) : Null<data.inst.LayerInstance>;
 		function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
@@ -170,15 +170,7 @@ class Editor extends Page {
 
 
 		// Option checkboxes
-		linkOption( jEditOptions.find("li.singleLayerMode"), ()->settings.v.singleLayerMode, (v)->setSingleLayerMode(v) );
-		linkOption( jEditOptions.find("li.grid"), ()->settings.v.grid, (v)->setGrid(v) );
-		linkOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.v.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
-		linkOption(
-			jEditOptions.find("li.tileStacking"),
-			()->settings.v.tileStacking,
-			(v)->setTileStacking(v),
-			()->curLayerDef!=null && curLayerDef.type==Tiles
-		);
+		updateEditOptions();
 
 		// Space bar blocking
 		new J(js.Browser.window).off().keydown( function(ev) {
@@ -869,7 +861,7 @@ class Editor extends Page {
 		ge.emit(LayerInstanceSelected);
 		clearSpecialTool();
 
-		setGrid(settings.v.grid, false); // update checkbox
+		updateEditOptions();
 	}
 
 	function layerSupportsFreeMode() {
@@ -886,37 +878,39 @@ class Editor extends Page {
 		return settings.v.grid || !layerSupportsFreeMode();
 	}
 
-
-	function linkOption( jOpt:js.jquery.JQuery, getter:()->Bool, setter:Bool->Void, ?isSupported:Void->Bool ) {
-		var p = createChildProcess( (p)->{
-			// Loop
-			if( jOpt.parents("body").length==0 ) {
-				p.destroy();
-				return;
-			}
-
-			if( jOpt.hasClass("active") && !getter() )
-				jOpt.removeClass("active");
-
-			if( !jOpt.hasClass("active") && getter() )
-				jOpt.addClass("active");
-
-			if( isSupported!=null ) {
-				if( jOpt.hasClass("unsupported") && isSupported() )
-					jOpt.removeClass("unsupported");
-
-				if( !jOpt.hasClass("unsupported") && !isSupported() )
-					jOpt.addClass("unsupported");
-			}
-		});
-
-		p.name = "Option watcher ("+jOpt.attr("class")+")";
-
+	function updateEditOptions() {
 		// Init
-		if( getter() )
-			jOpt.addClass("active");
-		else
+		jEditOptions
+			.off()
+			.find("*")
+				.removeClass("active unsupported")
+				.off();
+
+		// Update all
+		applyEditOption( jEditOptions.find("li.singleLayerMode"), ()->settings.v.singleLayerMode, (v)->setSingleLayerMode(v) );
+		applyEditOption( jEditOptions.find("li.grid"), ()->settings.v.grid, (v)->setGrid(v) );
+		applyEditOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.v.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
+		applyEditOption(
+			jEditOptions.find("li.tileStacking"),
+			()->settings.v.tileStacking,
+			(v)->setTileStacking(v),
+			()->curLayerDef!=null && curLayerDef.type==Tiles
+		);
+	}
+
+	inline function applyEditOption( jOpt:js.jquery.JQuery, getter:()->Bool, setter:Bool->Void, ?isSupported:Void->Bool ) {
+		if( jOpt.hasClass("active") && !getter() )
 			jOpt.removeClass("active");
+		else if( !jOpt.hasClass("active") && getter() )
+			jOpt.addClass("active");
+
+		if( isSupported!=null ) {
+			if( jOpt.hasClass("unsupported") && isSupported() )
+				jOpt.removeClass("unsupported");
+
+			if( !jOpt.hasClass("unsupported") && !isSupported() )
+				jOpt.addClass("unsupported");
+		}
 
 		jOpt.off(".option").on("click.option", (ev)->{
 			setter( !getter() );
@@ -949,6 +943,7 @@ class Editor extends Page {
 		ge.emit( GridChanged(settings.v.grid) );
 		if( notify )
 			N.quick( "Grid: "+L.onOff( settings.v.grid ));
+		updateEditOptions();
 	}
 
 	public function setSingleLayerMode(v:Bool) {
@@ -957,6 +952,7 @@ class Editor extends Page {
 		levelRender.applyAllLayersVisibility();
 		selectionTool.clear();
 		N.quick( "Single layer mode: "+L.onOff( settings.v.singleLayerMode ));
+		updateEditOptions();
 	}
 
 	public function setEmptySpaceSelection(v:Bool) {
@@ -964,6 +960,7 @@ class Editor extends Page {
 		App.ME.settings.save();
 		selectionTool.clear();
 		N.quick( "Select empty spaces: "+L.onOff( settings.v.emptySpaceSelection ));
+		updateEditOptions();
 	}
 
 	public function setTileStacking(v:Bool) {
@@ -971,6 +968,7 @@ class Editor extends Page {
 		App.ME.settings.save();
 		selectionTool.clear();
 		N.quick( "Tile stacking: "+L.onOff( settings.v.tileStacking ));
+		updateEditOptions();
 	}
 
 	public function setCompactMode(v:Bool, init=false) {
@@ -1527,15 +1525,18 @@ class Editor extends Page {
 		ge.onEndOfFrame();
 	}
 
+	var wasLocked : Bool = null;
 	override function update() {
 		super.update();
 
 		// DOM locking
-		if( isLocked() && !App.ME.jPage.hasClass("locked") && !ui.Modal.hasAnyUnclosable() )
-			App.ME.jPage.addClass("locked");
-
-		if( !isLocked() && App.ME.jPage.hasClass("locked") )
-			App.ME.jPage.removeClass("locked");
+		if( isLocked()!=wasLocked ) {
+			wasLocked = isLocked();
+			if( isLocked() && !ui.Modal.hasAnyUnclosable() )
+				App.ME.jPage.addClass("locked");
+			else if( !isLocked() )
+				App.ME.jPage.removeClass("locked");
+		}
 
 
 		#if debug
