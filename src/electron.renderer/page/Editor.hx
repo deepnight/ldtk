@@ -822,7 +822,7 @@ class Editor extends Page {
 			var wr = camera.getLevelWidthRatio(curLevel);
 			var hr = camera.getLevelHeightRatio(curLevel);
 			// App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
-			if( wr<=0.4 && hr<=0.4 || wr<=0.33 || hr<=0.33 )
+			if( wr<=0.3 && hr<=0.3 || wr<=0.22 || hr<=0.22 )
 				setWorldMode(true, true);
 		}
 
@@ -838,7 +838,7 @@ class Editor extends Page {
 			var wr = camera.getLevelWidthRatio(l);
 			var hr = camera.getLevelHeightRatio(l);
 			// App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
-			if( wr>=0.4 && hr>=0.4 || wr>=0.6 || hr>=0.6 ) {
+			if( wr>0.3 && hr>0.3 || wr>0.78 || hr>0.78 ) {
 				selectLevel(l);
 				setWorldMode(false, true);
 			}
