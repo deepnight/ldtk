@@ -495,7 +495,9 @@ class App extends dn.Process {
 	}
 
 	public inline function clearDebug() {
-		jBody.find("#debug").empty().hide();
+		var e = jBody.find("#debug");
+		if( !e.is(":empty") || e.is(":visible") )
+			e.empty().hide();
 	}
 
 	public inline function debug(msg:Dynamic, clear=false) {

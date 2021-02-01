@@ -56,6 +56,7 @@ class Editor extends Page {
 		super();
 
 		loadPageTemplate("editor");
+		Profiler.init();
 
 		ME = this;
 		createRoot(parent.root);
