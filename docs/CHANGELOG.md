@@ -4,9 +4,11 @@
 - TODO codemirror
 - TODO 32bits support, file size increase
 - TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
-- TODO sidebar design
+- TODO sidebar design (less gutters & lines)
+- TODO all panels now cover main sidebar
 - TODO multi lines pop up text editor
 - TODO Customizable source tileset per-layer instance
+- The default size of a new level can now be customized from the World settings (press `W`, then open settings).
 - **Mouse wheel** can now be used to switch to world mode (and vice versa) automatically. A new related option has been to app settings (`F12`).
 - Disabled "New level" context menu when holding `Shift` or `Alt`
 - Fixed layer order for "simplified" level render in World view
