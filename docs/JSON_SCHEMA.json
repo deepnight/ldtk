@@ -20,6 +20,8 @@
 			"backupOnSave",
 			"defaultGridSize",
 			"defaultLevelBgColor",
+			"defaultLevelHeight",
+			"defaultLevelWidth",
 			"defaultPivotX",
 			"defaultPivotY",
 			"exportPng",
@@ -107,6 +109,12 @@
 					"boolean"
 				]
 			},
+			"defaultLevelWidth": {
+				"description": "Default new level width",
+				"type": [
+					"integer"
+				]
+			},
 			"pngFilePattern": {
 				"description": "File naming pattern for exported PNGs",
 				"type": [
@@ -143,6 +151,12 @@
 				"description": "Default X pivot (0 to 1) for new entities",
 				"type": [
 					"number"
+				]
+			},
+			"defaultLevelHeight": {
+				"description": "Default new level height",
+				"type": [
+					"integer"
 				]
 			},
 			"externalLevels": {
