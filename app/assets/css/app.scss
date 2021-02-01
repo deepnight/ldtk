@@ -2512,7 +2512,6 @@ canvas#webgl {
 			padding: 0;
 			min-height: 100px;
 			max-height: 250px;
-			margin-bottom: 4px;
 
 			&:empty {
 				padding: 32px;
@@ -2601,7 +2600,6 @@ canvas#webgl {
 			display: flex;
 			min-height: 1.3em;
 			flex-wrap: wrap;
-			margin-bottom: 4px;
 			padding: 4px;
 
 			vertical-align: middle;
@@ -2610,12 +2608,15 @@ canvas#webgl {
 			font-size: 0.9em;
 			align-items: stretch;
 			background-color: $helpDarker;
+			border-top: 1px solid $helpMed;
+			border-bottom: 1px solid $helpMed;
 
 			&:empty {
 				margin: 0;
 				padding: 0;
 				min-height: 0;
 				background-color: transparent;
+				border: none;
 			}
 
 			>span {
@@ -2655,15 +2656,14 @@ canvas#webgl {
 		#mainPaletteWrapper {
 			overflow: auto;
 			position: relative;
+			margin-top: 16px;
 
 			&:empty {
-				outline-color: $bgLight;
-			}
-
-			&:empty,
-			.palette:empty {
+				margin-top: 1px;
 				box-sizing: border-box;
+
 				box-shadow: 0px 0px 8px $bgDark inset;
+				outline-color: $bgLight;
 				border-top: 1px solid $bgMed;
 				background-image: url("../img/stripes.png");
 			}

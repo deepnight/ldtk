@@ -21,7 +21,7 @@ class Tool<T> extends dn.Process {
 	var button = -1;
 	var rectangle = false;
 	var startTime = 0.;
-	var palette : ui.ToolPalette;
+	var palette : Null<ui.ToolPalette>;
 
 	private function new() {
 		super(Editor.ME);
@@ -283,13 +283,15 @@ class Tool<T> extends dn.Process {
 		initOptionForm();
 	}
 
-	function createToolPalette() {
-		return new ui.ToolPalette(this); // <-- should be overridden in extended classes
+	function createToolPalette() : Null<ui.ToolPalette> {
+		return null; // <-- should be overridden in extended classes
 	}
 
 	public function onValuePicking() {
-		palette.render();
-		palette.focusOnSelection();
+		if( palette!=null ) {
+			palette.render();
+			palette.focusOnSelection();
+		}
 	}
 
 	public function palettePoppedOut() {
@@ -303,7 +305,8 @@ class Tool<T> extends dn.Process {
 
 	public function initPalette() {
 		palette = createToolPalette();
-		palette.render();
+		if( palette!=null )
+			palette.render();
 		initOptionForm();
 	}
 
