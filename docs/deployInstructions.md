@@ -26,6 +26,7 @@ This document is for my personal use only, so I don't forget anything ;)
 ## Publish
 - [ ] Upload HaxeLib
 - [ ] Run `npm run publish-itchio`
+- [ ] **WARNING** 0.8 specificity: cleanup old 64bits version
 - [ ] Upload macOS and Linux builds to Itch.io
 - [ ] Upload Changelog to FTP
 - [ ] Upload JSON Schema to FTP
