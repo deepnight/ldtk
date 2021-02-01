@@ -125,6 +125,24 @@ class DebugMenu extends ui.modal.ContextMenu {
 		});
 
 		add({
+			label: L.untranslated("Process profiling"),
+			cb: ()->{
+				dn.Process.PROFILING = !dn.Process.PROFILING;
+				App.ME.clearDebug();
+			}
+		});
+
+		// Pauses
+		if( editor!=null ) {
+			function _addPauseToggler(p:dn.Process) {
+				add({ label: L.untranslated(p.toString()+" ("+p.paused+")"), cb: ()->p.togglePause() });
+			}
+			_addPauseToggler(editor);
+			_addPauseToggler(editor.levelRender);
+			_addPauseToggler(editor.worldRender);
+		}
+
+		add({
 			label: L.untranslated("Crash"),
 			className: "warning",
 			cb: ()->{
