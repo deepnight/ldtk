@@ -127,7 +127,8 @@ class DocGenerator {
 				});
 			}
 
-			Sys.println('Found ${type.name}: $displayName');
+			if( verbose )
+				Sys.println('Found ${type.name}: $displayName');
 		}
 		Sys.println("");
 
