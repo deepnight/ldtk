@@ -195,7 +195,7 @@ class WorldPanel extends ui.modal.Panel {
 
 
 		// Level identifier
-		jContent.find(".levelIdentifier").text('"${level.identifier}" (#${level.uid})');
+		jContent.find(".levelIdentifier").text('"${level.identifier}"');
 		var i = Input.linkToHtmlInput( level.identifier, jForm.find("#identifier"));
 		i.onChange = ()->onFieldChange();
 

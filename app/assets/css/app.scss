@@ -1707,6 +1707,12 @@ textarea {
 
 		.content {
 			width: 700px;
+
+			h2, h3, h4 {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
 		}
 	}
 }
@@ -4304,7 +4310,7 @@ body.sorting ul.collapsedSortTarget {
 			background-color: $bgDark;
 			box-shadow: 0px 4px 16px black inset;
 
-			h3 {
+			h2 {
 				color: $bgLighter;
 				border-color: $bgLighter;
 			}
@@ -4339,6 +4345,10 @@ body.sorting ul.collapsedSortTarget {
 			text-align: left;
 			font-size: 10pt;
 			text-transform: none;
+		}
+
+		h2 {
+			margin-bottom: 8px;
 		}
 
 		a.reset {
