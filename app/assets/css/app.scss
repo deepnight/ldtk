@@ -4296,8 +4296,8 @@ body.sorting ul.collapsedSortTarget {
 		display: grid;
 		grid-auto-rows: min-content;
 		gap: 8px;
+		width: 320px;
 		height: 100%;
-		width: $mainPanelNormalWid;
 
 		#worldForm {
 			display: none;
