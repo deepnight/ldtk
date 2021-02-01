@@ -96,6 +96,9 @@ class LevelRender extends dn.Process {
 				root.x = M.round( editor.camera.width*0.5 - camera.levelX * camera.adjustedZoom );
 				root.y = M.round( editor.camera.height*0.5 - camera.levelY * camera.adjustedZoom );
 
+				for(l in layerRenders)
+					l.onViewportChange();
+
 			case ProjectSaved, BeforeProjectSaving:
 
 			case ProjectSelected:

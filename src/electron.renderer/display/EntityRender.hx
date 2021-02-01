@@ -16,6 +16,8 @@ class EntityRender extends dn.Process {
 	var beneath: h2d.Flow;
 	var fieldGraphics : h2d.Graphics;
 
+	public var posInvalidated = true;
+
 
 	public function new(inst:data.inst.EntityInstance, layerDef:data.def.LayerDef, p:h2d.Object) {
 		super(Editor.ME);
@@ -55,6 +57,11 @@ class EntityRender extends dn.Process {
 		center = null;
 		fieldGraphics = null;
 		core = null;
+	}
+
+
+	public function onViewportChange() {
+		posInvalidated = true;
 	}
 
 
@@ -377,6 +384,7 @@ class EntityRender extends dn.Process {
 	}
 
 	public inline function updatePos() {
+		posInvalidated = false;
 		var cam = Editor.ME.camera;
 		var scale = 1 / cam.adjustedZoom;
 		var alpha = M.fclamp( (cam.adjustedZoom-0.33*cam.pixelRatio) / 2, 0, 1 );
@@ -403,6 +411,7 @@ class EntityRender extends dn.Process {
 
 	override function update() {
 		super.update();
-		updatePos(); // HACK
+		if( posInvalidated )
+			updatePos();
 	}
 }

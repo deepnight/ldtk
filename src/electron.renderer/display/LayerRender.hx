@@ -20,6 +20,12 @@ class LayerRender {
 	}
 
 
+	public function onViewportChange() {
+		for(e in entityRenders)
+			e.onViewportChange();
+	}
+
+
 	public function render(li:data.inst.LayerInstance, renderAutoLayers=true, ?target:h2d.Object) {
 		// Cleanup
 		if( root!=null )
