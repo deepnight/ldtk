@@ -2,6 +2,7 @@
 
 - TODO **Ogmo 3 import**
 - TODO codemirror
+- TODO 32bits support, file size increase
 - TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
 - TODO sidebar design
 - TODO multi lines pop up text editor
