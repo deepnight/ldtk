@@ -39,6 +39,7 @@ class App extends dn.Process {
 		LOG.add("BOOT","ExePath: "+JsTools.getExeDir());
 		LOG.add("BOOT","Resources: "+JsTools.getAppResourceDir());
 		LOG.add("BOOT","SamplesPath: "+JsTools.getSamplesDir());
+		cd.setS("logFlush",30);
 
 		loadingLog = new dn.Log();
 		loadingLog.onAdd = (l)->LOG.addLogEntry(l);
@@ -568,7 +569,7 @@ class App extends dn.Process {
 		super.update();
 
 		// Auto flush log every X seconds
-		if( !cd.hasSetS("logFlush",10) )
+		if( !cd.hasSetS("logFlush",30) )
 			LOG.flushToFile();
 	}
 }
