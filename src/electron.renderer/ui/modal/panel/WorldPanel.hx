@@ -168,6 +168,22 @@ class WorldPanel extends ui.modal.Panel {
 		}
 		e.linkEvent( WorldSettingsChanged );
 
+		// Default new level size
+		var i = Input.linkToHtmlInput( project.defaultLevelWidth, jForm.find("#defaultLevelWidth"));
+		i.linkEvent(WorldSettingsChanged);
+		i.setBounds(32, 9999);
+		i.fixValue = v->{
+			return project.worldLayout!=GridVania ? v
+				: M.imax( M.round(v/project.worldGridWidth), 1 ) * project.worldGridWidth;
+		}
+		var i = Input.linkToHtmlInput( project.defaultLevelHeight, jForm.find("#defaultLevelHeight"));
+		i.linkEvent(WorldSettingsChanged);
+		i.setBounds(32, 9999);
+		i.fixValue = v->{
+			return project.worldLayout!=GridVania ? v
+				: M.imax( M.round(v/project.worldGridHeight), 1 ) * project.worldGridHeight;
+		}
+
 		// World grid
 		var old = project.worldGridWidth;
 		var i = Input.linkToHtmlInput( project.worldGridWidth, jForm.find("[name=worldGridWidth]"));

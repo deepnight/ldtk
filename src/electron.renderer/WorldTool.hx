@@ -266,16 +266,14 @@ class WorldTool extends dn.Process {
 	}
 
 	function getLevelInsertBounds(m:Coords) {
-		// if( getLevelAt(m.worldX, m.worldY, true)!=null )
-		// 	return null;
-
-		var size = project.defaultGridSize * data.Project.DEFAULT_LEVEL_SIZE;
+		var wid = project.defaultLevelWidth;
+		var hei = project.defaultLevelHeight;
 
 		var b = {
-			x : m.worldX-size*0.5,
-			y : m.worldY-size*0.5,
-			wid: size,
-			hei: size,
+			x : m.worldX-wid*0.5,
+			y : m.worldY-hei*0.5,
+			wid: wid,
+			hei: hei,
 		}
 
 		// Find a spot in world space

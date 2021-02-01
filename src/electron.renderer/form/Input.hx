@@ -63,7 +63,9 @@ class Input<T> {
 		}
 
 		onBeforeSetter();
-		setter( parseInputValue() );
+		var v = parseInputValue();
+		v = fixValue(v);
+		setter(v);
 		writeValueToInput();
 		lastValidValue = getter();
 		onChange();
@@ -77,6 +79,7 @@ class Input<T> {
 	}
 
 	public dynamic function onBeforeSetter() {}
+	public dynamic function fixValue(v:T) : T { return v; }
 	public dynamic function onChange() {}
 	public dynamic function onValueChange(v:T) {}
 

@@ -4,7 +4,6 @@ class Project {
 	public static var DEFAULT_WORKSPACE_BG = 0x676877;
 	public static var DEFAULT_LEVEL_BG = 0x7f8093;
 	public static var DEFAULT_GRID_SIZE = 16; // px
-	public static var DEFAULT_LEVEL_SIZE = 16; // cells
 
 	public var filePath : dn.FilePath; // not stored in JSON
 
@@ -16,6 +15,8 @@ class Project {
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
 	public var defaultGridSize : Int;
+	public var defaultLevelWidth : Int;
+	public var defaultLevelHeight : Int;
 	public var bgColor : UInt;
 	public var defaultLevelBgColor : UInt;
 	public var worldLayout : ldtk.Json.WorldLayout;
@@ -37,12 +38,14 @@ class Project {
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
+		defaultLevelWidth = Project.DEFAULT_GRID_SIZE * 16;
+		defaultLevelHeight = Project.DEFAULT_GRID_SIZE * 16;
 		bgColor = DEFAULT_WORKSPACE_BG;
 		defaultLevelBgColor = DEFAULT_LEVEL_BG;
 		defaultPivotX = defaultPivotY = 0;
 		worldLayout = Free;
-		worldGridWidth = defaultGridSize * DEFAULT_LEVEL_SIZE;
-		worldGridHeight = defaultGridSize * DEFAULT_LEVEL_SIZE;
+		worldGridWidth = defaultLevelWidth;
+		worldGridHeight = defaultLevelHeight;
 		filePath = new dn.FilePath();
 		advancedExportFlags = new Map();
 
@@ -147,6 +150,8 @@ class Project {
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
+		p.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_GRID_SIZE*16 );
+		p.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, Project.DEFAULT_GRID_SIZE*16 );
 		p.bgColor = JsonTools.readColor( json.bgColor, DEFAULT_WORKSPACE_BG );
 		p.defaultLevelBgColor = JsonTools.readColor( json.defaultLevelBgColor, p.bgColor );
 		p.externalLevels = JsonTools.readBool(json.externalLevels, false);
@@ -171,8 +176,8 @@ class Project {
 		// World
 		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
 		p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
-		p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, DEFAULT_LEVEL_SIZE*p.defaultGridSize );
-		p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, DEFAULT_LEVEL_SIZE*p.defaultGridSize );
+		p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, p.defaultLevelWidth );
+		p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
 		if( dn.Version.lower(json.jsonVersion, "0.6") )
 			p.reorganizeWorld();
 
@@ -204,6 +209,8 @@ class Project {
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
+			defaultLevelWidth: defaultLevelWidth,
+			defaultLevelHeight: defaultLevelHeight,
 			bgColor: JsonTools.writeColor(bgColor),
 			defaultLevelBgColor: JsonTools.writeColor(defaultLevelBgColor),
 			nextUid: nextUid,
@@ -268,6 +275,8 @@ class Project {
 			case LinearHorizontal:
 			case LinearVertical:
 		}
+
+		tidy();
 	}
 
 	public function onWorldGridChange(oldWid:Int, oldHei:Int) {
@@ -306,8 +315,12 @@ class Project {
 	}
 
 	public function tidy() {
-		defs.tidy(this);
+		if( worldLayout==GridVania ) {
+			defaultLevelWidth = M.imax( M.round(defaultLevelWidth/worldGridWidth), 1 ) * worldGridWidth;
+			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/worldGridHeight), 1 ) * worldGridHeight;
+		}
 
+		defs.tidy(this);
 		reorganizeWorld();
 		for(level in levels)
 			level.tidy(this);
@@ -401,16 +414,7 @@ class Project {
 	/**  LEVELS  *****************************************/
 
 	public function createLevel(?insertIdx:Int) {
-		var wid = defaultGridSize * DEFAULT_LEVEL_SIZE;
-		var hei = wid;
-		switch worldLayout {
-			case Free, LinearHorizontal, LinearVertical:
-			case GridVania:
-				wid = worldGridWidth;
-				hei = worldGridHeight;
-		}
-
-		var l = new Level(this, wid, hei, makeUniqId());
+		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, makeUniqId());
 		if( insertIdx==null )
 			levels.push(l);
 		else

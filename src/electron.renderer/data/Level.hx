@@ -135,8 +135,8 @@ class Level {
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {
-		var wid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_SIZE*p.defaultGridSize );
-		var hei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_SIZE*p.defaultGridSize );
+		var wid = JsonTools.readInt( json.pxWid, p.defaultLevelWidth );
+		var hei = JsonTools.readInt( json.pxHei, p.defaultLevelHeight );
 		var l = new Level( p, wid, hei, JsonTools.readInt(json.uid) );
 		l.worldX = JsonTools.readInt( json.worldX, 0 );
 		l.worldY = JsonTools.readInt( json.worldY, 0 );
