@@ -1,5 +1,7 @@
 package misc;
 
+// TODO not used anymore
+
 class Profiler {
 	static var timers : Map<String,Float> = new Map();
 	static var averages : Map<String,Float> = new Map();
