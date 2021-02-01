@@ -11,7 +11,6 @@ import dn.data.GetText;
 // Misc
 import page.Editor;
 import misc.*;
-import misc.Profiler;
 import EditorTypes;
 import ui.Notification as N;
 import form.Input;
