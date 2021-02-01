@@ -833,14 +833,16 @@ class Editor extends Page {
 			dh.keepOnly( l->l.isWorldOver(m.worldX, m.worldY, 500) );
 			dh.score( l->l.isWorldOver(m.worldX, m.worldY) ? 100 : 0 );
 			dh.score( l->-l.getDist(m.worldX,m.worldY) );
-			var l = dh.getBest();
 
-			var wr = camera.getLevelWidthRatio(l);
-			var hr = camera.getLevelHeightRatio(l);
-			// App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
-			if( wr>0.3 && hr>0.3 || wr>0.78 || hr>0.78 ) {
-				selectLevel(l);
-				setWorldMode(false, true);
+			var l = dh.getBest();
+			if( l!=null ) {
+				var wr = camera.getLevelWidthRatio(l);
+				var hr = camera.getLevelHeightRatio(l);
+				// App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
+				if( wr>0.3 && hr>0.3 || wr>0.78 || hr>0.78 ) {
+					selectLevel(l);
+					setWorldMode(false, true);
+				}
 			}
 		}
 	}
