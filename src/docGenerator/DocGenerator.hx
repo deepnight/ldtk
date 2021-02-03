@@ -483,15 +483,15 @@ class DocGenerator {
 			var descMd = [];
 			if( deprecation!=null ) {
 				if( appVersion.compare(deprecation.removal)<0 ) {
-					descMd.push('**WARNING**: this value is marked as DEPRECATED since ${deprecation.start}. It will be no longer be exported by LDtk, **starting from version ${deprecation.removal}.**');
+					descMd.push('**WARNING**: this deprecated value will be *removed* completely on version ${deprecation.removal}+');
 
 				}
 				else
-					descMd.push('**WARNING**: this old value was marked as DEPRECATED. It is no longer exported by LDtk since version ${deprecation.removal}.');
+					descMd.push('**WARNING**: this deprecated value is no longer exported since version ${deprecation.removal}');
 
 				descMd.push('');
 				if( deprecation.replacement!=null )
-					descMd.push('Use **`${deprecation.replacement}`** instead.');
+					descMd.push('Replaced by: `${deprecation.replacement}`');
 			}
 
 			var type = getFieldType(fieldXml);

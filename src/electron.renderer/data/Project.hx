@@ -143,10 +143,35 @@ class Project {
 	}
 
 	public static function fromJson(filePath:String, json:ldtk.Json.ProjectJson) {
+		// Move old settings previously stored in root
+		if( json.settings==null ) {
+			var v : ldtk.Json.ProjectSettings = {
+				defaultPivotX: json.defaultPivotX,
+				defaultPivotY: json.defaultPivotY,
+				defaultGridSize: json.defaultGridSize,
+				defaultLevelWidth: json.defaultLevelWidth,
+				defaultLevelHeight: json.defaultLevelHeight,
+				bgColor: json.bgColor,
+				defaultLevelBgColor: json.defaultLevelBgColor,
+				externalLevels: json.externalLevels,
+
+				minifyJson: json.minifyJson,
+				exportTiled: json.exportTiled,
+				backupOnSave: json.backupOnSave,
+				backupLimit: json.backupLimit,
+				exportPng: json.exportPng,
+				pngFilePattern: json.pngFilePattern,
+
+				advancedExportFlags: [],
+			}
+			json.settings = v;
+		}
+
 		var p = new Project();
 		p.filePath.parseFilePath(filePath);
 		p.jsonVersion = JsonTools.readString(json.jsonVersion, Const.getJsonVersion());
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
+
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
@@ -160,7 +185,6 @@ class Project {
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
 		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
-
 		p.exportPng = JsonTools.readBool( json.exportPng, false );
 		p.pngFilePattern = json.pngFilePattern;
 
@@ -169,8 +193,8 @@ class Project {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( Level.fromJson(p, lvlJson) );
 
-		if( json.advancedExportFlags!=null )
-			for(f in json.advancedExportFlags )
+		if( json.settings.advancedExportFlags!=null )
+			for(f in json.settings.advancedExportFlags )
 				p.advancedExportFlags.set(f, true);
 
 		// World
@@ -204,8 +228,7 @@ class Project {
 	}
 
 	public function toJson() : ldtk.Json.ProjectJson {
-		return {
-			jsonVersion: jsonVersion,
+		var settings : ldtk.Json.ProjectSettings = {
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
@@ -213,7 +236,6 @@ class Project {
 			defaultLevelHeight: defaultLevelHeight,
 			bgColor: JsonTools.writeColor(bgColor),
 			defaultLevelBgColor: JsonTools.writeColor(defaultLevelBgColor),
-			nextUid: nextUid,
 			minifyJson: minifyJson,
 			externalLevels: externalLevels,
 			exportTiled: exportTiled,
@@ -221,9 +243,6 @@ class Project {
 			pngFilePattern: pngFilePattern,
 			backupOnSave: backupOnSave,
 			backupLimit: backupLimit,
-			worldLayout: JsonTools.writeEnum(worldLayout, false),
-			worldGridWidth: worldGridWidth,
-			worldGridHeight: worldGridHeight,
 
 			advancedExportFlags: {
 				var all = [];
@@ -232,10 +251,47 @@ class Project {
 						all.push(f.key);
 				all;
 			},
+		}
+
+		var json : ldtk.Json.ProjectJson = {
+			jsonVersion: jsonVersion,
+			nextUid: nextUid,
+
+			worldLayout: JsonTools.writeEnum(worldLayout, false),
+			worldGridWidth: worldGridWidth,
+			worldGridHeight: worldGridHeight,
+
+			settings: settings,
+
+			// Legacy setting values
+			defaultPivotX: settings.defaultPivotX,
+			defaultPivotY: settings.defaultPivotY,
+			defaultGridSize: settings.defaultGridSize,
+			defaultLevelWidth: settings.defaultLevelWidth,
+			defaultLevelHeight: settings.defaultLevelHeight,
+			bgColor: settings.bgColor,
+			defaultLevelBgColor: settings.defaultLevelBgColor,
+			minifyJson: settings.minifyJson,
+			externalLevels: settings.externalLevels,
+			exportTiled: settings.exportTiled,
+			exportPng: settings.exportPng,
+			pngFilePattern: settings.pngFilePattern,
+			backupOnSave: settings.backupOnSave,
+			backupLimit: settings.backupLimit,
 
 			defs: defs.toJson(this),
 			levels: levels.map( (l)->l.toJson() ),
 		}
+
+		if( hasAdvancedExportFlag("discardRootSettings") ) {
+			for( k in Reflect.fields(settings) )
+				if( Reflect.hasField(json,k) ) {
+					trace(k);
+					Reflect.deleteField(json, k);
+				}
+		}
+
+		return json;
 	}
 
 	public function clone() : data.Project {
