@@ -494,6 +494,8 @@ class DocGenerator {
 			}
 
 			var type = getFieldType(fieldXml);
+			if( displayName=="advancedOptionFlags" )
+				trace(type);
 			var subFields = [];
 			if( deprecation==null ) {
 				if( fieldXml.hasNode.haxe_doc ) {
@@ -519,7 +521,7 @@ class DocGenerator {
 				}
 
 				switch type {
-					case Enu(name):
+					case Enu(name), Arr(Enu(name)):
 						descMd.push("Possible values: `"+allEnums.get(name).join("`, `")+"`");
 
 					case Nullable(Enu(name)):
