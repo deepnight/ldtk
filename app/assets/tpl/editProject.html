@@ -3,6 +3,13 @@
 	Project settings
 </h2>
 
+<div class="buttons">
+	<button class="save" title="Save project" keys="CTRL+S">Save project</button>
+	<button class="saveAs" title="Save project to a different file" keys="CTRL+SHIFT+S">Save as...</button>
+	<button class="locate gray small" title="Locate project file"><span class="icon locate"></span> </button>
+	<button class="settings gray" title="Application settings" keys="F12"><span class="icon settings"></span> ::app:: settings</button>
+</div>
+
 <ul class="form projectForm">
 	<li><h3>Project file settings</h3></li>
 
@@ -87,16 +94,8 @@
 	</li>
 
 	<li class="advanced">
-		<label for="intGridCsv">Discard pre-CSV IntGrid layer data in level data</label>
-		<input type="checkbox" id="intGridCsv" title='If checked, the exported JSON will not contain the deprecated array "intGrid", making the file smaller. Do not enable this if the game API you are using is made for LDtk older than version 0.8.0.'/>
+		<label for="DiscardPreCsvIntGrid">Discard pre-CSV IntGrid layer data in level data</label>
+		<input type="checkbox" id="DiscardPreCsvIntGrid" title='If checked, the exported JSON will not contain the deprecated array "intGrid", making the file smaller. Do not enable this if the game API you are using is made for LDtk older than version 0.8.0.'/>
 	</li>
 
 </ul>
-
-<div class="buttons">
-	<button class="save" title="Save project" keys="CTRL+S">Save</button>
-	<button class="saveAs" title="Save project to a new file" keys="CTRL+SHIFT+S">Save as...</button>
-	<button class="locate gray small" title="Locate project file"><span class="icon locate"></span> </button>
-	<button class="settings gray" title="Application settings" keys="F12"><span class="icon settings"></span> ::app:: settings</button>
-</div>
-

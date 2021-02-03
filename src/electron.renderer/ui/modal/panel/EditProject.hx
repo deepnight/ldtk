@@ -203,10 +203,10 @@ class EditProject extends ui.modal.Panel {
 
 		// Advanced flags
 		new form.input.BoolInput(
-			jForm.find("#intGridCsv"),
-			()->project.hasAdvancedExportFlag("discardIntGrid"),
+			jForm.find("#DiscardPreCsvIntGrid"),
+			()->project.hasAdvancedExportFlag(DiscardPreCsvIntGrid),
 			(v)->{
-				project.setAdvancedExportFlag("discardIntGrid", v);
+				project.setAdvancedExportFlag(DiscardPreCsvIntGrid, v);
 				editor.ge.emit(ProjectSettingsChanged);
 			}
 		);

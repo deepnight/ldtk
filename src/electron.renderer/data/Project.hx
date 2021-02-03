@@ -28,7 +28,7 @@ class Project {
 	public var exportTiled = false;
 	public var exportPng = false;
 	public var pngFilePattern : Null<String>;
-	var advancedExportFlags: Map<String,Bool>;
+	var advancedOptionFlags: Map<ldtk.Json.AdvancedOptionFlag, Bool>;
 
 	public var backupOnSave = false;
 	public var backupLimit = 10;
@@ -47,7 +47,7 @@ class Project {
 		worldGridWidth = defaultLevelWidth;
 		worldGridHeight = defaultLevelHeight;
 		filePath = new dn.FilePath();
-		advancedExportFlags = new Map();
+		advancedOptionFlags = new Map();
 
 		defs = new Definitions(this);
 	}
@@ -162,7 +162,7 @@ class Project {
 				exportPng: json.exportPng,
 				pngFilePattern: json.pngFilePattern,
 
-				advancedExportFlags: [],
+				advancedOptionFlags: [],
 			}
 			json.settings = v;
 		}
@@ -193,9 +193,14 @@ class Project {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( Level.fromJson(p, lvlJson) );
 
-		if( json.settings.advancedExportFlags!=null )
-			for(f in json.settings.advancedExportFlags )
-				p.advancedExportFlags.set(f, true);
+		if( json.settings.advancedOptionFlags!=null )
+			for(f in json.settings.advancedOptionFlags ) {
+				var ev =
+					try JsonTools.readEnum(ldtk.Json.AdvancedOptionFlag, f, true)
+					catch(e:Dynamic) null;
+				if( ev!=null )
+					p.advancedOptionFlags.set(ev, true);
+			}
 
 		// World
 		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
@@ -210,21 +215,21 @@ class Project {
 	}
 
 	public function hasAnyAdvancedExportFlag() {
-		for(v in advancedExportFlags)
+		for(v in advancedOptionFlags)
 			return true;
 		return false;
 	}
 
-	public inline function hasAdvancedExportFlag(k:String) {
-		return k!=null && advancedExportFlags.exists(k);
+	public inline function hasAdvancedExportFlag(f:ldtk.Json.AdvancedOptionFlag) {
+		return f!=null && advancedOptionFlags.exists(f);
 	}
 
-	public inline function setAdvancedExportFlag(k:String, v:Bool) {
-		if( k!=null )
+	public inline function setAdvancedExportFlag(f:ldtk.Json.AdvancedOptionFlag, v:Bool) {
+		if( f!=null )
 			if( v )
-				advancedExportFlags.set(k,true);
+				advancedOptionFlags.set(f,true);
 			else
-				advancedExportFlags.remove(k);
+				advancedOptionFlags.remove(f);
 	}
 
 	public function toJson() : ldtk.Json.ProjectJson {
@@ -244,11 +249,11 @@ class Project {
 			backupOnSave: backupOnSave,
 			backupLimit: backupLimit,
 
-			advancedExportFlags: {
+			advancedOptionFlags: {
 				var all = [];
-				for( f in advancedExportFlags.keyValueIterator() )
+				for( f in advancedOptionFlags.keyValueIterator() )
 					if( f.value==true )
-						all.push(f.key);
+						all.push( JsonTools.writeEnum(f.key, false) );
 				all;
 			},
 		}
@@ -283,12 +288,10 @@ class Project {
 			levels: levels.map( (l)->l.toJson() ),
 		}
 
-		if( hasAdvancedExportFlag("discardRootSettings") ) {
+		if( hasAdvancedExportFlag(DiscardPreCsvIntGrid) ) {
 			for( k in Reflect.fields(settings) )
-				if( Reflect.hasField(json,k) ) {
-					trace(k);
+				if( Reflect.hasField(json,k) )
 					Reflect.deleteField(json, k);
-				}
 		}
 
 		return json;

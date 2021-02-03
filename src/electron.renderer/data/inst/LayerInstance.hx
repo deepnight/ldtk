@@ -99,7 +99,7 @@ class LayerInstance {
 
 			intGrid: {
 				var arr = [];
-				if( !_project.hasAdvancedExportFlag("discardIntGrid") )
+				if( !_project.hasAdvancedExportFlag(DiscardPreCsvIntGrid) )
 					for(e in intGrid.keyValueIterator())
 						arr.push({
 							coordId: e.key,
