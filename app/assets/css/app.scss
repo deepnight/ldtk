@@ -4139,9 +4139,13 @@ canvas#webgl {
 		}
 
 		li.advanced {
+			flex-wrap: nowrap;
 			label {
-				flex: 0 0 auto !important;
-				white-space: nowrap;
+				flex: 1 0 auto !important;
+				margin: 0;
+				margin-left: 8px;
+				text-transform: none;
+				// white-space: nowrap;
 			}
 		}
 
