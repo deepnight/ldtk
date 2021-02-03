@@ -25,10 +25,6 @@ class EntityInstance {
 	}
 
 	public function toJson(li:data.inst.LayerInstance) : ldtk.Json.EntityInstanceJson {
-		var fieldsJson = [];
-		for(fi in fieldInstances)
-			fieldsJson.push( fi.toJson() );
-
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
@@ -51,7 +47,12 @@ class EntityInstance {
 			height: def.height,
 			defUid: defUid,
 			px: [x,y],
-			fieldInstances: fieldsJson,
+			fieldInstances: {
+				var all = [];
+				for(fi in fieldInstances)
+					all.push( fi.toJson() );
+				all;
+			}
 		}
 	}
 
@@ -143,15 +144,15 @@ class EntityInstance {
 	}
 
 
+
+	// ** FIELDS **********************************
+
 	public function hasAnyFieldError() {
 		for(fi in fieldInstances)
 			if( fi.hasAnyErrorInValues() )
 				return true;
 		return false;
 	}
-
-
-	// ** FIELDS **********************************
 
 	public function getFieldInstance(fieldDef:data.def.FieldDef) {
 		if( !fieldInstances.exists(fieldDef.uid) )
