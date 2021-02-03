@@ -132,7 +132,8 @@ class OgmoProject {
 							var enumDef = p.defs.createEnumDef();
 							enumDef.identifier = data.Project.cleanupIdentifier(entityJson.name+"_"+valJson.name, true);
 							for(ev in valJson.choices)
-								enumDef.addValue(ev);
+								if( !enumDef.addValue(ev) )
+									log.error("Enum value is invalid or already used in entity "+entityJson.name+"."+valJson.name);
 							F_Enum(enumDef.uid);
 
 						case _:
@@ -364,7 +365,8 @@ class OgmoProject {
 												fi.parseValue(0, C.intToHex(convertColor(rawValue)) );
 
 											case F_Enum(enumDefUid):
-												fi.parseValue(0, rawValue);
+												var ev = data.Project.cleanupIdentifier(rawValue,true);
+												fi.parseValue(0, ev);
 
 											case F_Point:
 											case F_Path:
