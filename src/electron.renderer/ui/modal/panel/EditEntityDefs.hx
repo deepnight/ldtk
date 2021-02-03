@@ -111,28 +111,28 @@ class EditEntityDefs extends ui.modal.Panel {
 			case ProjectSelected:
 				updatePreview();
 				updateEntityForm();
-				updateFieldForm();
-				updateLists();
+				updateFieldsForm();
+				updateEntityList();
 				selectEntity(project.defs.entities[0]);
 
 			case LayerInstanceRestoredFromHistory(li):
 				updatePreview();
 				updateEntityForm();
-				updateFieldForm();
-				updateLists();
+				updateFieldsForm();
+				updateEntityList();
 
 			case EntityDefChanged, EntityDefAdded, EntityDefRemoved:
 				updatePreview();
 				updateEntityForm();
-				updateFieldForm();
-				updateLists();
+				updateFieldsForm();
+				updateEntityList();
 
 			case EntityDefSorted, EntityFieldSorted:
-				updateLists();
+				updateEntityList();
 
 			case EntityFieldAdded(ed), EntityFieldRemoved(ed), EntityFieldDefChanged(ed):
-				updateLists();
-				updateFieldForm();
+				updateEntityList();
+				updateFieldsForm();
 
 			case _:
 		}
@@ -148,15 +148,15 @@ class EditEntityDefs extends ui.modal.Panel {
 		LAST_FIELD_ID = curField==null ? -1 : curField.uid;
 		updatePreview();
 		updateEntityForm();
-		updateFieldForm();
-		updateLists();
+		updateFieldsForm();
+		updateEntityList();
 	}
 
 	function selectField(fd:data.def.FieldDef) {
 		curField = fd;
 		LAST_FIELD_ID = curField==null ? -1 : curField.uid;
-		updateFieldForm();
-		updateLists();
+		updateFieldsForm();
+		updateEntityList();
 	}
 
 
@@ -352,363 +352,12 @@ class EditEntityDefs extends ui.modal.Panel {
 	}
 
 
-	function updateFieldForm() {
+	function updateFieldsForm() {
 		fieldsForm.setFields(curEntity.fieldDefs);
-
-		// jFieldForm.find("*").off(); // cleanup events
-
-		// if( curField==null ) {
-		// 	jFieldForm.css("visibility","hidden");
-		// 	return;
-		// }
-		// else
-		// 	jFieldForm.css("visibility","visible");
-
-		// JsTools.parseComponents(jFieldForm);
-
-		// // Set form classes
-		// for(k in Type.getEnumConstructs(data.DataTypes.FieldType))
-		// 	jFieldForm.removeClass("type-"+k);
-		// jFieldForm.addClass("type-"+curField.type.getName());
-
-		// if( curField.isArray )
-		// 	jFieldForm.addClass("type-Array");
-		// else
-		// 	jFieldForm.removeClass("type-Array");
-
-		// // Type desc
-		// jFieldForm.find(".type").val( curField.getShortDescription() );
-
-		// // Type conversion
-		// jFieldForm.find("button.convert").click( (ev)->{
-		// 	var convertors = FieldTypeConverter.getAllConvertors(curField);
-		// 	if( convertors.length==0 ) {
-		// 		// No convertor
-		// 		new ui.modal.dialog.Message(
-		// 			L.t._('Sorry, there\'s no conversion option available for the type "::name::".', { name:L.getFieldType(curField.type) })
-		// 		);
-		// 	}
-		// 	else {
-		// 		// Field convertor picker
-		// 		var w = new Dialog(ev.getThis(), "convertFieldType");
-		// 		for(c in convertors) {
-		// 			var toName = Lang.getFieldType(c.to!=null ? c.to : curField.type);
-		// 			var jButton = new J('<button class="dark"/>');
-		// 			if( c.displayName!=null )
-		// 				jButton.text(c.displayName);
-		// 			else if( c.to!=null )
-		// 				jButton.text('To '+L.getFieldType(c.to));
-		// 			else
-		// 				jButton.text('???');
-
-		// 			if( c.mode!=null )
-		// 				jButton.append(' (${c.mode})');
-
-		// 			jButton.appendTo(w.jContent);
-		// 			jButton.click( (_)->{
-		// 				function _convert() {
-		// 					w.close();
-		// 					misc.FieldTypeConverter.convert(
-		// 						project,
-		// 						curField,
-		// 						c,
-		// 						()->Editor.ME.ge.emit( EntityFieldDefChanged(curEntity) )
-		// 					);
-		// 				}
-
-		// 				if( c.lossless )
-		// 					_convert();
-		// 				else
-		// 					new ui.modal.dialog.Confirm(
-		// 						L.t._("This conversion will TRANSFORM EXISTING VALUES because the target type isn't fully compatible with the previous one!\nSome data might be lost in the process because of this conversion.\nPlease make sure that you known what you're doing here."),
-		// 						true,
-		// 						_convert
-		// 					);
-		// 			});
-		// 		}
-		// 	}
-		// } );
-
-
-		// var i = new form.input.EnumSelect(
-		// 	jFieldForm.find("select[name=editorDisplayMode]"),
-		// 	ldtk.Json.FieldDisplayMode,
-		// 	function() return curField.editorDisplayMode,
-		// 	function(v) return curField.editorDisplayMode = v,
-
-		// 	function(k) {
-		// 		return switch k {
-		// 			case Hidden: L.t._("Do not show");
-		// 			case ValueOnly: curField.isArray ? L.t._("Show values only") : L.t._("Show value only");
-		// 			case NameAndValue:
-		// 				curField.isArray
-		// 				? L.t._('Show "::name::=[...values...]"', { name:curField.identifier })
-		// 				: L.t._('Show "::name::=..."', { name:curField.identifier });
-		// 			case PointStar: curField.isArray ? L.t._("Show star of points") : L.t._("Show point");
-		// 			case PointPath: L.t._("Show path of points");
-		// 			case RadiusPx: L.t._("As a radius (pixels)");
-		// 			case RadiusGrid: L.t._("As a radius (grid-based)");
-		// 			case EntityTile: L.t._("Replace entity tile");
-		// 		}
-		// 	},
-
-		// 	function(k) {
-		// 		return switch k {
-		// 			case Hidden: true;
-		// 			case ValueOnly: curField.type!=F_Point;
-		// 			case NameAndValue: true;
-		// 			case EntityTile: curField.isEnum();
-		// 			case PointStar: curField.type==F_Point;
-		// 			case PointPath: curField.type==F_Point && curField.isArray;
-		// 			case RadiusPx, RadiusGrid: !curField.isArray && ( curField.type==F_Int || curField.type==F_Float );
-		// 		}
-		// 	}
-		// );
-		// i.linkEvent( EntityFieldDefChanged(curEntity) );
-
-
-		// var i = new form.input.EnumSelect(
-		// 	jFieldForm.find("select[name=editorDisplayPos]"),
-		// 	ldtk.Json.FieldDisplayPosition,
-		// 	function() return curField.editorDisplayPos,
-		// 	function(v) return curField.editorDisplayPos = v
-		// );
-		// switch curField.editorDisplayMode {
-		// 	case ValueOnly, NameAndValue:
-		// 		i.setEnabled(true);
-
-		// 	case Hidden, PointStar, PointPath, RadiusPx, RadiusGrid, EntityTile:
-		// 		i.setEnabled(false);
-		// }
-		// i.linkEvent( EntityFieldDefChanged(curEntity) );
-
-		// var i = Input.linkToHtmlInput( curField.editorAlwaysShow, jFieldForm.find("input[name=editorAlwaysShow]") );
-		// i.linkEvent( EntityFieldDefChanged(curEntity) );
-		// i.setEnabled( curField.editorDisplayMode!=Hidden );
-
-
-		// var i = Input.linkToHtmlInput( curField.identifier, jFieldForm.find("input[name=name]") );
-		// i.linkEvent( EntityFieldDefChanged(curEntity) );
-		// i.validityCheck = function(id) {
-		// 	return data.Project.isValidIdentifier(id) && curEntity.isFieldIdentifierUnique(id);
-		// }
-		// i.validityError = N.invalidIdentifier;
-
-		// // Default value
-		// switch curField.type {
-		// 	case F_Path:
-
-		// 	case F_Int, F_Float, F_String, F_Text, F_Point:
-		// 		var defInput = jFieldForm.find("input[name=fDef]");
-		// 		if( curField.defaultOverride != null )
-		// 			defInput.val( Std.string( curField.getUntypedDefault() ) );
-		// 		else
-		// 			defInput.val("");
-
-		// 		if( ( curField.type==F_String || curField.type==F_Text ) && !curField.canBeNull )
-		// 			defInput.attr("placeholder", "(empty string)");
-		// 		else if( curField.canBeNull )
-		// 			defInput.attr("placeholder", "(null)");
-		// 		else
-		// 			defInput.attr("placeholder", switch curField.type {
-		// 				case F_Int: Std.string( curField.iClamp(0) );
-		// 				case F_Float: Std.string( curField.fClamp(0) );
-		// 				case F_String, F_Text, F_Path: "";
-		// 				case F_Point: "0"+Const.POINT_SEPARATOR+"0";
-		// 				case F_Bool, F_Color, F_Enum(_): "N/A";
-		// 			});
-
-		// 		defInput.change( function(ev) {
-		// 			curField.setDefault( defInput.val() );
-		// 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
-		// 			defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
-		// 		});
-
-		// 	case F_Enum(name):
-		// 		var ed = project.defs.getEnumDef(name);
-		// 		var enumDef = jFieldForm.find("[name=enumDef]");
-		// 		enumDef.find("[value]").remove();
-		// 		if( curField.canBeNull ) {
-		// 			var opt = new J('<option/>');
-		// 			opt.appendTo(enumDef);
-		// 			opt.attr("value","");
-		// 			opt.text("-- null --");
-		// 			if( curField.getEnumDefault()==null )
-		// 				opt.attr("selected","selected");
-		// 		}
-		// 		for(v in ed.values) {
-		// 			var opt = new J('<option/>');
-		// 			opt.appendTo(enumDef);
-		// 			opt.attr("value",v.id);
-		// 			opt.text(v.id);
-		// 			if( curField.getEnumDefault()==v.id )
-		// 				opt.attr("selected","selected");
-		// 		}
-
-		// 		enumDef.change( function(ev) {
-		// 			var v = enumDef.val();
-		// 			if( v=="" && curField.canBeNull )
-		// 				curField.setDefault(null);
-		// 			else if( v!="" )
-		// 				curField.setDefault(v);
-		// 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
-		// 		});
-
-		// 	case F_Color:
-		// 		var defInput = jFieldForm.find("input[name=cDef]");
-		// 		defInput.val( C.intToHex(curField.getColorDefault()) );
-		// 		defInput.change( function(ev) {
-		// 			curField.setDefault( defInput.val() );
-		// 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
-		// 		});
-
-		// 	case F_Bool:
-		// 		var defInput = jFieldForm.find("input[name=bDef]");
-		// 		defInput.prop("checked", curField.getBoolDefault());
-		// 		defInput.change( function(ev) {
-		// 			var checked = defInput.prop("checked") == true;
-		// 			curField.setDefault( Std.string(checked) );
-		// 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
-		// 		});
-		// }
-
-		// // Nullable
-		// var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
-		// i.onChange = editor.ge.emit.bind( EntityFieldDefChanged(curEntity) );
-
-		// // Multi-lines
-		// // if( curField.isString() ) {
-		// // 	var i = new form.input.BoolInput(
-		// // 		jFieldForm.find("input[name=multiLines]"),
-		// // 		()->switch curField.type {
-		// // 			case F_String(multilines): multilines;
-		// // 			case _: false;
-		// // 		},
-		// // 		(v)->{
-		// // 			curField.convertType( F_String(v) );
-		// // 		}
-		// // 	);
-		// // 	i.linkEvent( EntityFieldDefChanged(curEntity) );
-		// // }
-
-		// // Array size constraints
-		// if( curField.isArray ) {
-		// 	// Min
-		// 	var i = new form.input.IntInput(
-		// 		jFieldForm.find("input[name=arrayMinLength]"),
-		// 		function() return curField.arrayMinLength,
-		// 		function(v) {
-		// 			curField.arrayMinLength = v<=0 ? null : v;
-		// 			if( curField.arrayMinLength!=null && curField.arrayMaxLength!=null )
-		// 				curField.arrayMaxLength = M.imax( curField.arrayMaxLength, curField.arrayMinLength );
-		// 		}
-		// 	);
-		// 	i.setBounds(0, 99999);
-		// 	i.linkEvent( EntityFieldDefChanged(curEntity) );
-		// 	// Max
-		// 	var i = new form.input.IntInput(
-		// 		jFieldForm.find("input[name=arrayMaxLength]"),
-		// 		function() return curField.arrayMaxLength,
-		// 		function(v) {
-		// 			curField.arrayMaxLength = v<=0 ? null : v;
-		// 			if( curField.arrayMinLength!=null && curField.arrayMaxLength!=null )
-		// 				curField.arrayMinLength = M.imin( curField.arrayMaxLength, curField.arrayMinLength );
-		// 		}
-		// 	);
-		// 	i.setBounds(0, 99999);
-		// 	i.linkEvent( EntityFieldDefChanged(curEntity) );
-		// 	// Max
-		// 	// var i = new form.input.IntInput(
-		// 	// 	jFieldForm.find("input[name=arrayMinLength]"),
-		// 	// 	function() return curField.arrayMinLength,
-		// 	// 	function(v) curField.arrayMinLength = v
-		// 	// );
-		// }
-		// // var i = Input.linkToHtmlInput( curField.arrayMinLength, jFieldForm.find("input[name=arrayMinLength]") );
-		// // i.onChange = editor.ge.emit.bind( EntityFieldDefChanged(curEntity) );
-
-		// // Min
-		// var input = jFieldForm.find("input[name=min]");
-		// input.val( curField.min==null ? "" : curField.min );
-		// input.change( function(ev) {
-		// 	curField.setMin( input.val() );
-		// 	editor.ge.emit( EntityFieldDefChanged(curEntity) );
-		// });
-
-		// // Max
-		// var input = jFieldForm.find("input[name=max]");
-		// input.val( curField.max==null ? "" : curField.max );
-		// input.change( function(ev) {
-		// 	curField.setMax( input.val() );
-		// 	editor.ge.emit( EntityFieldDefChanged(curEntity) );
-		// });
-
-		// // String regex
-		// var i = new form.input.StringInput(
-		// 	jFieldForm.find("input#regex"),
-		// 	()->return curField.getRegexContent(),
-		// 	(s)-> {
-		// 		curField.setRegexContent(s);
-		// 	}
-		// );
-
-		// // Regex "i" flag
-		// var i = new form.input.BoolInput(
-		// 	jFieldForm.find("input#flag_i"),
-		// 	()->curField.hasRegexFlag("i"),
-		// 	(v)->{
-		// 		curField.setRegexFlag("i",v);
-		// 	}
-		// );
-
-		// // Test regex
-		// if( curField.regex!=null ) {
-		// 	jFieldForm.find(".testRegex").click( (_)->{
-		// 		electron.Shell.openExternal( "https://regex101.com/"
-		// 			+ "?regex="+curField.getRegexContent()
-		// 			+ "&flags="+curField.getRegexFlagsStr()
-		// 		);
-		// 	});
-		// }
-
-		// // Text language mode
-		// if( curField.type==F_Text ) {
-		// 	var i = new form.input.EnumSelect(
-		// 		jFieldForm.find("#textLanguage"),
-		// 		ldtk.Json.TextLanguageMode,
-		// 		true,
-		// 		()->curField.textLangageMode,
-		// 		(e)->{
-		// 			curField.textLangageMode = e;
-		// 		},
-		// 		(e)->Lang.getTextLanguageMode(e)
-		// 	);
-		// }
-
-		// // Accept file types
-		// var input = jFieldForm.find("input[name=acceptTypes]");
-		// if( curField.acceptFileTypes!=null )
-		// 	input.val( curField.acceptFileTypes.join("  ") );
-		// input.change( function(ev) {
-		// 	curField.setAcceptFileTypes( input.val() );
-		// 	editor.ge.emit( EntityFieldDefChanged(curEntity) );
-		// });
-
-		// // File select button
-		// var input = jFieldForm.find("button[name=fDefFile]");
-		// input.click( function(ev) {
-		// 	dn.electron.Dialogs.open(curField.acceptFileTypes, project.getProjectDir(), function( absPath ) {
-		// 		var relPath = project.makeRelativeFilePath(absPath);
-		// 		var defInput = jFieldForm.find("input[name=fDef]");
-		// 		defInput.val(relPath);
-		// 		curField.setDefault(relPath);
-		// 		editor.ge.emit( EntityFieldDefChanged(curEntity) );
-		// 	});
-		// });
 	}
 
 
-	function updateLists() {
+	function updateEntityList() {
 		jEntityList.empty();
 		jFieldList.empty();
 
@@ -752,42 +401,6 @@ class EditEntityDefs extends ui.modal.Panel {
 			selectEntity(moved);
 			editor.ge.emit(EntityDefSorted);
 		});
-
-		// Fields
-		// if( curEntity!=null ) {
-		// 	for(fd in curEntity.fieldDefs) {
-		// 		var li = new J("<li/>");
-		// 		li.appendTo(jFieldList);
-		// 		li.append('<span class="name">'+fd.identifier+'</span>');
-		// 		if( curField==fd )
-		// 			li.addClass("active");
-
-		// 		var sub = new J('<span class="sub"></span>');
-		// 		sub.appendTo(li);
-		// 		sub.text( fd.getShortDescription() );
-
-		// 		ContextMenu.addTo(li, [
-		// 			{
-		// 				label: L._Duplicate(),
-		// 				cb:()->{
-		// 					var copy = curEntity.duplicateFieldDef(project, fd);
-		// 					editor.ge.emit( EntityFieldAdded(curEntity) );
-		// 					selectField(copy);
-		// 				}
-		// 			},
-		// 			{ label: L._Delete(), cb:deleteFieldDef.bind(fd) },
-		// 		]);
-
-		// 		li.click( function(_) selectField(fd) );
-		// 	}
-		// }
-
-		// // Make fields list sortable
-		// JsTools.makeSortable(jFieldList, function(ev) {
-		// 	var moved = curEntity.sortField(ev.oldIndex, ev.newIndex);
-		// 	selectField(moved);
-		// 	editor.ge.emit( EntityFieldSorted );
-		// });
 	}
 
 

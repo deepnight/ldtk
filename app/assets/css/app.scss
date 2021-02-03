@@ -5365,8 +5365,10 @@ $patternSize : 32px;
 		white-space: nowrap;
 	}
 
-	ul.niceList {
+	ul.fieldList {
 		overflow: auto;
+		margin: 0;
+
 		li {
 			grid-template-columns: auto min-content min-content;
 			gap: 0px 2px;
@@ -5380,6 +5382,7 @@ $patternSize : 32px;
 			content: "No custom field";
 		}
 	}
+
 	.buttons {
 		grid-column: 1/2;
 		grid-row: 2/3;

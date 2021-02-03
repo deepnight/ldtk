@@ -60,9 +60,19 @@ class FieldDefsForm {
 	}
 
 
-	public function setFields(f:Array<FieldDef>) {
-		fieldDefs = f;
-		selectField( fieldDefs[0] );
+	public function setFields(fields:Array<FieldDef>) {
+		fieldDefs = fields;
+
+		// Default field selection
+		var found = false;
+		if( curField!=null )
+			for(f in fieldDefs)
+				if( f.uid==curField.uid ) {
+					found = true;
+					break;
+				}
+		if( !found )
+			selectField( fieldDefs[0] );
 	}
 
 
