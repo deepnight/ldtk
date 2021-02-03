@@ -462,7 +462,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				);
 			}
 			else {
-				// Convertor picker
+				// Field convertor picker
 				var w = new Dialog(ev.getThis(), "convertFieldType");
 				for(c in convertors) {
 					var toName = Lang.getFieldType(c.to!=null ? c.to : curField.type);
@@ -481,7 +481,12 @@ class EditEntityDefs extends ui.modal.Panel {
 					jButton.click( (_)->{
 						function _convert() {
 							w.close();
-							misc.FieldTypeConverter.convert(project, curEntity, curField, c);
+							misc.FieldTypeConverter.convert(
+								project,
+								curField,
+								c,
+								()->Editor.ME.ge.emit( EntityFieldDefChanged(curEntity) )
+							);
 						}
 
 						if( c.lossless )
