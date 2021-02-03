@@ -9,6 +9,10 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
+	"nextUid": 37,
+	"worldLayout": "LinearVertical",
+	"worldGridWidth": 256,
+	"worldGridHeight": 256,
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 0.5,
 	"defaultGridSize": 16,
@@ -16,7 +20,6 @@
 	"defaultLevelHeight": 256,
 	"bgColor": "#373852",
 	"defaultLevelBgColor": "#373852",
-	"nextUid": 37,
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
@@ -24,10 +27,7 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"worldLayout": "LinearVertical",
-	"worldGridWidth": 256,
-	"worldGridHeight": 256,
-	"advancedExportFlags": ["discardIntGrid"],
+	"advancedOptionFlags": ["DiscardPreCsvIntGrid"],
 	"defs": {
 		"layers": [
 			{
@@ -657,7 +657,6 @@
 					"layerDefUid": 34,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
@@ -818,7 +817,6 @@
 					"layerDefUid": 13,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 7679736,
@@ -1175,7 +1173,6 @@
 					"layerDefUid": 26,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [304,112], "src": [0,144], "f": 0, "t": 180, "d": [28,320] },
@@ -1235,7 +1232,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
@@ -1294,7 +1290,6 @@
 					"layerDefUid": 3,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
@@ -1406,7 +1401,6 @@
 					"layerDefUid": 14,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 1504355,
@@ -1481,7 +1475,6 @@
 					"layerDefUid": 34,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
@@ -1535,7 +1528,6 @@
 					"layerDefUid": 13,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 8894473,
@@ -1652,7 +1644,6 @@
 					"layerDefUid": 26,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 106526,
@@ -1675,7 +1666,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
@@ -1707,7 +1697,6 @@
 					"layerDefUid": 3,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,0,0,0,-1,-1,
@@ -1928,7 +1917,6 @@
 					"layerDefUid": 14,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 5395320,
@@ -1970,7 +1958,6 @@
 					"layerDefUid": 34,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
@@ -2013,7 +2000,6 @@
 					"layerDefUid": 13,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 8894473,
@@ -2036,7 +2022,6 @@
 					"layerDefUid": 26,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 106526,
@@ -2059,7 +2044,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,1,-1,-1,-1,-1,
@@ -2088,7 +2072,6 @@
 					"layerDefUid": 3,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,0,0,
@@ -2170,7 +2153,6 @@
 					"layerDefUid": 14,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 5395320,
@@ -2229,7 +2211,6 @@
 					"layerDefUid": 34,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
@@ -2283,7 +2264,6 @@
 					"layerDefUid": 13,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 3655473,
@@ -2330,7 +2310,6 @@
 					"layerDefUid": 26,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 5193927,
@@ -2353,7 +2332,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
@@ -2385,7 +2363,6 @@
 					"layerDefUid": 3,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
@@ -2417,7 +2394,6 @@
 					"layerDefUid": 14,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 4655507,

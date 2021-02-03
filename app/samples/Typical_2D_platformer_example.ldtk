@@ -9,6 +9,10 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
+	"nextUid": 92,
+	"worldLayout": "Free",
+	"worldGridWidth": 256,
+	"worldGridHeight": 256,
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1,
 	"defaultGridSize": 16,
@@ -16,7 +20,6 @@
 	"defaultLevelHeight": 256,
 	"bgColor": "#806262",
 	"defaultLevelBgColor": "#50506A",
-	"nextUid": 92,
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
@@ -24,10 +27,7 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"worldLayout": "Free",
-	"worldGridWidth": 256,
-	"worldGridHeight": 256,
-	"advancedExportFlags": ["discardIntGrid"],
+	"advancedOptionFlags": ["DiscardPreCsvIntGrid"],
 	"defs": {
 		"layers": [
 			{
@@ -1250,7 +1250,6 @@
 					"layerDefUid": 48,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 9220595,
@@ -1437,7 +1436,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,2,2,2,2,2,2,2,2,1,2,2,2,2,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,0,
@@ -2211,7 +2209,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [0,0], "src": [320,272], "f": 0, "t": 411, "d": [26,0] },
@@ -2722,7 +2719,6 @@
 					"layerDefUid": 48,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 5505402,
@@ -2829,7 +2825,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,0,0,0,
@@ -3424,7 +3419,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [208,64], "src": [320,272], "f": 0, "t": 411, "d": [26,169] },
@@ -3565,7 +3559,6 @@
 					"layerDefUid": 48,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 5505402,
@@ -3621,7 +3614,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -4071,7 +4063,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [192,48], "src": [320,272], "f": 0, "t": 411, "d": [26,99] },

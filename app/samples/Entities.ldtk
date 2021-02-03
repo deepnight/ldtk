@@ -9,6 +9,10 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
+	"nextUid": 60,
+	"worldLayout": "Free",
+	"worldGridWidth": 256,
+	"worldGridHeight": 256,
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1,
 	"defaultGridSize": 16,
@@ -16,7 +20,6 @@
 	"defaultLevelHeight": 256,
 	"bgColor": "#79799A",
 	"defaultLevelBgColor": "#79799A",
-	"nextUid": 60,
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
@@ -24,10 +27,7 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"worldLayout": "Free",
-	"worldGridWidth": 256,
-	"worldGridHeight": 256,
-	"advancedExportFlags": ["discardIntGrid"],
+	"advancedOptionFlags": ["DiscardPreCsvIntGrid"],
 	"defs": {
 		"layers": [
 			{
@@ -605,7 +605,6 @@
 					"layerDefUid": 7,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 3776513,
@@ -1099,7 +1098,6 @@
 					"layerDefUid": 13,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

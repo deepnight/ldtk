@@ -9,6 +9,10 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
+	"nextUid": 84,
+	"worldLayout": "GridVania",
+	"worldGridWidth": 256,
+	"worldGridHeight": 256,
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
@@ -16,7 +20,6 @@
 	"defaultLevelHeight": 256,
 	"bgColor": "#132A3F",
 	"defaultLevelBgColor": "#37494E",
-	"nextUid": 84,
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
@@ -24,10 +27,7 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"worldLayout": "GridVania",
-	"worldGridWidth": 256,
-	"worldGridHeight": 256,
-	"advancedExportFlags": ["discardIntGrid"],
+	"advancedOptionFlags": ["DiscardPreCsvIntGrid"],
 	"defs": {
 		"layers": [
 			{
@@ -588,7 +588,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [32,32], "src": [320,128], "f": 0, "t": 204, "d": [26,66] },
@@ -675,7 +674,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 8696599,
@@ -739,7 +737,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,
@@ -1360,7 +1357,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [368,0], "src": [320,128], "f": 0, "t": 204, "d": [26,23] },
@@ -1462,7 +1458,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 447792,
@@ -1485,7 +1480,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -2660,7 +2654,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [320,48], "src": [320,128], "f": 0, "t": 204, "d": [26,116] },
@@ -2760,7 +2753,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 6779321,
@@ -2824,7 +2816,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -4003,7 +3994,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [64,96], "src": [320,128], "f": 0, "t": 204, "d": [26,196] },
@@ -4156,7 +4146,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 1452875,
@@ -4280,7 +4269,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -5488,7 +5476,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [160,0], "src": [320,128], "f": 0, "t": 204, "d": [26,10] },
@@ -5619,7 +5606,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 1070610,
@@ -5663,7 +5649,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -6850,7 +6835,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [368,0], "src": [320,128], "f": 0, "t": 204, "d": [26,23] },
@@ -6952,7 +6936,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 5961450,
@@ -7016,7 +6999,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -8212,7 +8194,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [48,176], "src": [320,128], "f": 0, "t": 204, "d": [26,355] },
@@ -8308,7 +8289,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 5091096,
@@ -8331,7 +8311,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -10051,7 +10030,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [128,48], "src": [320,128], "f": 0, "t": 204, "d": [26,104] },
@@ -10150,7 +10128,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 9474576,
@@ -10194,7 +10171,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -11357,7 +11333,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [48,80], "src": [320,128], "f": 0, "t": 204, "d": [26,83] },
@@ -11407,7 +11382,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 5488219,
@@ -11511,7 +11485,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -11843,7 +11816,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [128,48], "src": [320,128], "f": 0, "t": 204, "d": [26,56] },
@@ -11974,7 +11946,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 8773081,
@@ -11997,7 +11968,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,0,0,
@@ -12672,7 +12642,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [96,0], "src": [320,128], "f": 0, "t": 204, "d": [26,6] },
@@ -12768,7 +12737,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 3591331,
@@ -12791,7 +12759,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,-1,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -13687,7 +13654,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [64,64], "src": [320,128], "f": 0, "t": 204, "d": [26,68] },
@@ -13783,7 +13749,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 48713,
@@ -13806,7 +13771,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,
@@ -14452,7 +14416,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [208,48], "src": [320,128], "f": 1, "t": 204, "d": [26,61] },
@@ -14603,7 +14566,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 5459671,
@@ -14687,7 +14649,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,-1,-1,-1,-1,-1,-1,
@@ -15625,7 +15586,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [32,32], "src": [320,128], "f": 0, "t": 204, "d": [26,66] },
@@ -15773,7 +15733,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 3097303,
@@ -15857,7 +15816,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,
@@ -17076,7 +17034,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [48,32], "src": [320,128], "f": 0, "t": 204, "d": [26,35] },
@@ -17148,7 +17105,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 6568829,
@@ -17171,7 +17127,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						-1,-1,-1,-1,0,0,-1,-1,-1,-1,0,0,0,0,0,0,-1,-1,-1,-1,0,0,-1,-1,-1,-1,0,0,0,0,0,0,-1,-1,-1,
@@ -17518,7 +17473,6 @@
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [64,208], "src": [336,112], "f": 0, "t": 182, "d": [27,420] },
@@ -17567,7 +17521,6 @@
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 8145397,
@@ -17691,7 +17644,6 @@
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [],
 					"intGridCsv": [
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,
