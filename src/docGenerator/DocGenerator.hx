@@ -71,7 +71,7 @@ class DocGenerator {
 	#if macro
 	static var allGlobalTypes: Array<GlobalType>;
 	static var allEnums : Map<String, Array<String>>;
-	static var verbose = true;
+	static var verbose = false;
 	static var appVersion = new dn.Version();
 
 	/**
@@ -90,7 +90,8 @@ class DocGenerator {
 		Sys.println('App version is $appVersion...');
 
 		// Read XML file
-		Sys.println("");
+		if( verbose )
+			Sys.println("");
 		Sys.println('Parsing $xmlPath...');
 		haxe.macro.Context.registerModuleDependency("DocGenerator", xmlPath);
 		var raw = sys.io.File.getContent(xmlPath);
@@ -136,7 +137,8 @@ class DocGenerator {
 			if( verbose )
 				Sys.println('Found ${type.name}: $displayName');
 		}
-		Sys.println("");
+		if( verbose )
+			Sys.println("");
 
 		// Sort types
 		allGlobalTypes.sort( (a,b)->{
@@ -149,12 +151,13 @@ class DocGenerator {
 		});
 
 		// Markdown doc output
-		Sys.println("Generating Markdown doc");
+		Sys.println("Generating Markdown doc...");
 		genMarkdownDoc(xml, className, xmlPath, mdPath);
-		Sys.println("");
+		if( verbose )
+			Sys.println("");
 
 		// Json schema output
-		Sys.println("Generating JSON schema");
+		Sys.println("Generating JSON schema...");
 		genJsonSchema(xml, className, xmlPath, jsonPath);
 
 		// Cleanup
@@ -314,7 +317,8 @@ class DocGenerator {
 			mdPath = fp.full;
 		}
 
-		Sys.println(' > Writing: ${mdPath}...');
+		if( verbose )
+			Sys.println(' > Writing: ${mdPath}...');
 		var fo = sys.io.File.write(mdPath, false);
 		fo.writeString(md.join("\n"));
 		fo.close();
@@ -394,7 +398,8 @@ class DocGenerator {
 			description: "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
 			"$ref" : "#/LdtkJsonRoot",
 		}
-		Sys.println(' > Writing: ${jsonPath}...');
+		if( verbose )
+			Sys.println(' > Writing: ${jsonPath}...');
 		var fo = sys.io.File.write(jsonPath, false);
 		var jsonStr = dn.JsonPretty.stringify(json, Full, header, true);
 		jsonStr = jsonStr.replace('"ref__"', "\"$ref\"");
