@@ -64,6 +64,7 @@ typedef SchemaType = {
 	var ?items: SchemaType;
 	var ?enum__: Array<String>;
 	var ?ref__: String;
+	var ?oneOf: Array<SchemaType>;
 }
 
 
@@ -359,14 +360,12 @@ class DocGenerator {
 				var st = getSchemaType(f.type);
 				st.description = f.descMd.join('\n');
 
-				// Detect required fields
-				if( st.type!=null && f.deprecation==null ) {
-					var req = true;
-					for( t in st.type )
-						if( t=="null" ) {
-							req = false;
-							break;
-						}
+				// Detect non-nullable fields
+				if( f.deprecation==null ) {
+					var req = switch f.type {
+						case Nullable(_): false;
+						case _: true;
+					}
 					if( req )
 						typeJson.required.push(f.displayName);
 				}
@@ -719,6 +718,11 @@ class DocGenerator {
 					case Basic("Enum"):
 					case Dyn:
 					case Ref(_):
+						st.oneOf = [
+							{ type: ["null"] },
+							{ ref__: st.ref__ },
+						];
+						Reflect.deleteField(st, "ref__");
 					case _:
 						if( st.enum__!=null )
 							st.enum__.push(null);
