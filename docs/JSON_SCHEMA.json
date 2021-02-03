@@ -888,7 +888,6 @@
 				"autoLayerTiles",
 				"entityInstances",
 				"gridTiles",
-				"intGrid",
 				"intGridCsv",
 				"layerDefUid",
 				"levelId",
@@ -1036,7 +1035,7 @@
 					]
 				},
 				"intGrid": {
-					"description": "WARNING: this old value was marked as DEPRECATED. It is no longer exported by LDtk since version 0.1.0. The list of IntGrid values, stored using coordinate ID system (refer to online documentation for more info about \"Coordinate IDs\")",
+					"description": "**WARNING**: this value is marked as DEPRECATED since 0.8.0. It will be no longer be exported by LDtk, **starting from version 1.0.0.**  Use **`intGridCsv`** instead.",
 					"items": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
 					},
