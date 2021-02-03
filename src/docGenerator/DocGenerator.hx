@@ -45,6 +45,7 @@ typedef GlobalType = {
 	var description : Null<String>;
 	var onlyInternalFields : Bool;
 	var inlined: Bool;
+	var deprecation: Null<dn.Version>;
 }
 
 
@@ -65,7 +66,7 @@ class DocGenerator {
 	#if macro
 	static var allGlobalTypes: Array<GlobalType>;
 	static var allEnums : Map<String, Array<String>>;
-	static var verbose = false;
+	static var verbose = true;
 	static var appVersion = new dn.Version();
 
 	/**
@@ -124,6 +125,7 @@ class DocGenerator {
 					section: hasMeta(type,"section") ? getMeta(type,"section") : "",
 					onlyInternalFields: hasMeta(type,"internal"),
 					inlined: hasMeta(type,"inline"),
+					deprecation: hasMeta(type, "deprecation") ? new dn.Version(getMeta(type,"deprecation")) : null,
 				});
 			}
 
@@ -187,6 +189,10 @@ class DocGenerator {
 			md.push("");
 			var depth = 0;
 
+			if( verbose )
+				Sys.println('${type.displayName}:');
+
+
 			// Anchor
 			md.push( getAnchorHtml(type.xml.att.path) );
 
@@ -242,8 +248,11 @@ class DocGenerator {
 				if( f.isInternal || type.onlyInternalFields )
 					cell.push('<sup class="internal">*Internal editor data*</sup>');
 
-				if( f.deprecation!=null )
+				if( f.deprecation!=null ) {
+					cell[0] = "~~"+cell[0]+"~~";
 					cell.push('<sup class="deprecated">*DEPRECATED!*</sup>');
+
+				}
 
 				if( f.hasVersion )
 					cell.push( versionBadge(f.xml) );
@@ -456,42 +465,53 @@ class DocGenerator {
 			var deprecationVersion = hasMeta(fieldXml,"deprecation") ? getMetaVersion(fieldXml, "deprecation") : null;
 
 			var descMd = [];
-			if( deprecationVersion!=null )
-				if( appVersion.compare(deprecationVersion)<0 )
-					descMd.push('WARNING: this value is marked as DEPRECATED. It will be no longer be exported by LDtk in version $deprecationVersion and later.');
+			if( deprecationVersion!=null ) {
+				if( appVersion.compare(deprecationVersion)<0 ) {
+					descMd.push('**WARNING**: this value is marked as DEPRECATED. It will be no longer be exported by LDtk, **starting from version $deprecationVersion.**');
+
+				}
 				else
-					descMd.push('WARNING: this old value was marked as DEPRECATED. It is no longer exported by LDtk since version $deprecationVersion.');
-			if( fieldXml.hasNode.haxe_doc ) {
-				var html = fieldXml.node.haxe_doc.innerHTML;
-				html = StringTools.replace(html, "<![CDATA[", "");
-				html = StringTools.replace(html, "]]>", "");
-				html = StringTools.replace(html, "\n", "<br/>");
-				descMd.push(html);
+					descMd.push('**WARNING**: this old value was marked as DEPRECATED. It is no longer exported by LDtk since version $deprecationVersion.');
+
+				descMd.push('');
+				if( hasMeta(fieldXml,"deprecation",1) )
+					descMd.push('Use **`${getMeta(fieldXml,"deprecation",1)}`** instead.');
 			}
 
 			var type = getFieldType(fieldXml);
-			var subFields = switch type {
-				case Obj(f), Nullable( Obj(f) ): f;
-				case Arr(Obj(f)), Nullable( Arr(Obj(f)) ): f;
-				case Ref(_,t), Nullable( Ref(_,t) ),
-					Arr(Ref(_,t)), Nullable( Arr(Ref(_,t)) ):
-					var gt = getGlobalType(t);
-					if( gt.inlined )
-						getFieldsInfos(gt.xml.node.a);
-					else
-						[];
+			var subFields = [];
+			if( deprecationVersion==null ) {
+				if( fieldXml.hasNode.haxe_doc ) {
+					var html = fieldXml.node.haxe_doc.innerHTML;
+					html = StringTools.replace(html, "<![CDATA[", "");
+					html = StringTools.replace(html, "]]>", "");
+					html = StringTools.replace(html, "\n", "<br/>");
+					descMd.push(html);
+				}
 
-				case _: [];
-			}
+				subFields = switch type {
+					case Obj(f), Nullable( Obj(f) ): f;
+					case Arr(Obj(f)), Nullable( Arr(Obj(f)) ): f;
+					case Ref(_,t), Nullable( Ref(_,t) ),
+						Arr(Ref(_,t)), Nullable( Arr(Ref(_,t)) ):
+						var gt = getGlobalType(t);
+						if( gt.inlined )
+							getFieldsInfos(gt.xml.node.a);
+						else
+							[];
 
-			switch type {
-				case Enu(name):
-					descMd.push("Possible values: `"+allEnums.get(name).join("`, `")+"`");
+					case _: [];
+				}
 
-				case Nullable(Enu(name)):
-					descMd.push("Possible values: &lt;`null`&gt;, `"+allEnums.get(name).join("`, `")+"`");
+				switch type {
+					case Enu(name):
+						descMd.push("Possible values: `"+allEnums.get(name).join("`, `")+"`");
 
-				case _:
+					case Nullable(Enu(name)):
+						descMd.push("Possible values: &lt;`null`&gt;, `"+allEnums.get(name).join("`, `")+"`");
+
+					case _:
+				}
 			}
 
 			allFields.push({
@@ -509,6 +529,11 @@ class DocGenerator {
 			});
 		}
 		allFields.sort( (a,b)->{
+			if( a.deprecation!=b.deprecation )
+				if( a.deprecation!=null )
+					return 1;
+				else
+					return -1;
 			if( a.isInternal!=b.isInternal )
 				if( a.isInternal )
 					return 1;
@@ -554,13 +579,20 @@ class DocGenerator {
 	/**
 		Return TRUE if field has specified meta data
 	**/
-	static function hasMeta(xml:haxe.xml.Access, name:String) {
+	static function hasMeta(xml:haxe.xml.Access, name:String, metaIndex=0) {
 		if( !xml.hasNode.meta || !xml.node.meta.hasNode.m )
 			return false;
 
 		for(m in xml.node.meta.nodes.m )
-			if( m.att.n == name )
-				return true;
+			if( m.att.n==name ) {
+				if( metaIndex==0 && !m.hasNode.e )
+					return true;
+				var i = 0;
+				for(metaValue in m.nodes.e) {
+					if( i++>=metaIndex )
+						return true;
+				}
+			}
 
 		return false;
 	}
@@ -569,17 +601,22 @@ class DocGenerator {
 	/**
 		Get meta data of a field as String
 	**/
-	static function getMeta(xml:haxe.xml.Access, name:String) : Null<String> {
+	static function getMeta(xml:haxe.xml.Access, name:String, metaIndex=0) : Null<String> {
 		if( !hasMeta(xml,name) )
 			return null;
 
 		for(m in xml.node.meta.nodes.m )
 			if( m.att.n == name ) {
-				var v = m.node.e.innerHTML;
-				if( v.charAt(0)=="\"" )
-					return v.substring(1, v.length-1);
-				else
-					return v;
+				var i = 0;
+				for(metaValues in m.nodes.e) {
+					if( i++<metaIndex )
+						continue;
+					var v = metaValues.innerHTML;
+					if( v.charAt(0)=="\"" )
+						return v.substring(1, v.length-1);
+					else
+						return v;
+				}
 			}
 
 		throw "Malformed meta?";
