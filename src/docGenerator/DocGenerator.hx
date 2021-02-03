@@ -494,8 +494,6 @@ class DocGenerator {
 			}
 
 			var type = getFieldType(fieldXml);
-			if( displayName=="advancedOptionFlags" )
-				trace(type);
 			var subFields = [];
 			if( deprecation==null ) {
 				if( fieldXml.hasNode.haxe_doc ) {
