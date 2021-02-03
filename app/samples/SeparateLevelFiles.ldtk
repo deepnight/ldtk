@@ -5,13 +5,15 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.1",
+		"appVersion": "0.8.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.7.1",
+	"jsonVersion": "0.8.0",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
+	"defaultLevelWidth": 256,
+	"defaultLevelHeight": 256,
 	"bgColor": "#7F8093",
 	"defaultLevelBgColor": "#7F8093",
 	"nextUid": 8,
@@ -19,11 +21,13 @@
 	"externalLevels": true,
 	"exportTiled": false,
 	"exportPng": false,
+	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 240,
 	"worldGridHeight": 240,
+	"advancedExportFlags": ["discardIntGrid"],
 	"defs": {
 		"layers": [
 			{
@@ -94,7 +98,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					},
 					{
 						"identifier": "color",
@@ -112,7 +117,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": { "id": "V_Int", "params": [16777215] }
+						"defaultOverride": { "id": "V_Int", "params": [16777215] },
+						"textLangageMode": null
 					}
 				]
 			}

@@ -5,13 +5,15 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.1",
+		"appVersion": "0.8.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.7.1",
+	"jsonVersion": "0.8.0",
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
+	"defaultLevelWidth": 256,
+	"defaultLevelHeight": 256,
 	"bgColor": "#222225",
 	"defaultLevelBgColor": "#222225",
 	"nextUid": 37,
@@ -19,11 +21,13 @@
 	"externalLevels": false,
 	"exportTiled": false,
 	"exportPng": false,
+	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
+	"advancedExportFlags": ["discardIntGrid"],
 	"defs": {
 		"layers": [
 			{
@@ -153,7 +157,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": null
+						"defaultOverride": null,
+						"textLangageMode": null
 					},
 					{
 						"identifier": "Color",
@@ -171,7 +176,8 @@
 						"max": null,
 						"regex": null,
 						"acceptFileTypes": null,
-						"defaultOverride": { "id": "V_Int", "params": [16777215] }
+						"defaultOverride": { "id": "V_Int", "params": [16777215] },
+						"textLangageMode": null
 					}
 				]
 			}
@@ -228,84 +234,17 @@
 					"layerDefUid": 2,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"intGrid": [
-						{ "coordId": 76, "v": 0 },
-						{ "coordId": 77, "v": 0 },
-						{ "coordId": 78, "v": 0 },
-						{ "coordId": 79, "v": 0 },
-						{ "coordId": 80, "v": 0 },
-						{ "coordId": 81, "v": 0 },
-						{ "coordId": 93, "v": 0 },
-						{ "coordId": 94, "v": 0 },
-						{ "coordId": 95, "v": 0 },
-						{ "coordId": 96, "v": 0 },
-						{ "coordId": 97, "v": 0 },
-						{ "coordId": 98, "v": 0 },
-						{ "coordId": 142, "v": 0 },
-						{ "coordId": 143, "v": 0 },
-						{ "coordId": 145, "v": 0 },
-						{ "coordId": 146, "v": 0 },
-						{ "coordId": 147, "v": 0 },
-						{ "coordId": 148, "v": 0 },
-						{ "coordId": 157, "v": 0 },
-						{ "coordId": 158, "v": 0 },
-						{ "coordId": 159, "v": 0 },
-						{ "coordId": 160, "v": 0 },
-						{ "coordId": 162, "v": 0 },
-						{ "coordId": 163, "v": 0 },
-						{ "coordId": 164, "v": 0 },
-						{ "coordId": 165, "v": 0 },
-						{ "coordId": 172, "v": 0 },
-						{ "coordId": 173, "v": 0 },
-						{ "coordId": 174, "v": 0 },
-						{ "coordId": 175, "v": 0 },
-						{ "coordId": 176, "v": 0 },
-						{ "coordId": 177, "v": 0 },
-						{ "coordId": 179, "v": 0 },
-						{ "coordId": 180, "v": 0 },
-						{ "coordId": 181, "v": 0 },
-						{ "coordId": 182, "v": 0 },
-						{ "coordId": 189, "v": 0 },
-						{ "coordId": 190, "v": 0 },
-						{ "coordId": 191, "v": 0 },
-						{ "coordId": 192, "v": 0 },
-						{ "coordId": 193, "v": 0 },
-						{ "coordId": 194, "v": 0 },
-						{ "coordId": 196, "v": 0 },
-						{ "coordId": 197, "v": 0 },
-						{ "coordId": 198, "v": 0 },
-						{ "coordId": 199, "v": 0 },
-						{ "coordId": 206, "v": 0 },
-						{ "coordId": 207, "v": 0 },
-						{ "coordId": 208, "v": 0 },
-						{ "coordId": 209, "v": 0 },
-						{ "coordId": 210, "v": 0 },
-						{ "coordId": 211, "v": 0 },
-						{ "coordId": 225, "v": 0 },
-						{ "coordId": 226, "v": 0 },
-						{ "coordId": 227, "v": 0 },
-						{ "coordId": 228, "v": 0 },
-						{ "coordId": 231, "v": 0 },
-						{ "coordId": 232, "v": 0 },
-						{ "coordId": 233, "v": 0 },
-						{ "coordId": 234, "v": 0 },
-						{ "coordId": 235, "v": 0 },
-						{ "coordId": 242, "v": 0 },
-						{ "coordId": 243, "v": 0 },
-						{ "coordId": 244, "v": 0 },
-						{ "coordId": 245, "v": 0 },
-						{ "coordId": 249, "v": 0 },
-						{ "coordId": 250, "v": 0 },
-						{ "coordId": 251, "v": 0 },
-						{ "coordId": 252, "v": 0 },
-						{ "coordId": 266, "v": 0 },
-						{ "coordId": 267, "v": 0 },
-						{ "coordId": 268, "v": 0 },
-						{ "coordId": 269, "v": 0 },
-						{ "coordId": 283, "v": 0 },
-						{ "coordId": 284, "v": 0 },
-						{ "coordId": 285, "v": 0 },
-						{ "coordId": 286, "v": 0 }
+					"intGrid": [],
+					"intGridCsv": [
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,0,0,-1,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,-1,0,0,0,0,-1,-1,-1,-1,-1,-1,0,0,0,
+						0,0,0,-1,0,0,0,0,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,-1,0,0,0,0,-1,-1,-1,-1,-1,-1,0,0,0,0,
+						0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,-1,-1,0,0,0,0,0,-1,-1,-1,-1,-1,-1,0,0,0,
+						0,-1,-1,-1,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 					],
 					"autoLayerTiles": [
 						{ "px": [144,64], "src": [32,112], "f": 0, "t": 142, "d": [11,77] },
@@ -423,6 +362,7 @@
 						{ "px": [208,240], "src": [48,48], "f": 0, "t": 63, "d": [13,250] }
 					],
 					"seed": 256018,
+					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []
 				},
@@ -442,30 +382,44 @@
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
 					"intGrid": [],
+					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 4238306,
+					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": [{ "__identifier": "Label", "__grid": [8,1], "__pivot": [0.5,0.5], "__tile": null, "defUid": 33, "px": [136,24], "fieldInstances": [
+					"entityInstances": [
 						{
-							"__identifier": "Text",
-							"__value": "\"STAMPS\" are groups of multiple tiles that are generated by RULES.\n\nClick on the RULES button on the left to see them.",
-							"__type": "String",
-							"defUid": 34,
-							"realEditorValues": [{
-								"id": "V_String",
-								"params": [
-									"\"STAMPS\" are groups of multiple tiles that are generated by RULES.\n\nClick on the RULES button on the left to see them."
-								]
-							}]
-						},
-						{
-							"__identifier": "Color",
-							"__value": "#FFD500",
-							"__type": "Color",
-							"defUid": 36,
-							"realEditorValues": [{ "id": "V_Int", "params": [16766208] }]
+							"__identifier": "Label",
+							"__grid": [8,1],
+							"__pivot": [0.5,0.5],
+							"__tile": null,
+							"width": 16,
+							"height": 16,
+							"defUid": 33,
+							"px": [136,24],
+							"fieldInstances": [
+								{
+									"__identifier": "Text",
+									"__value": "\"STAMPS\" are groups of multiple tiles that are generated by RULES.\n\nClick on the RULES button on the left to see them.",
+									"__type": "String",
+									"defUid": 34,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": [
+											"\"STAMPS\" are groups of multiple tiles that are generated by RULES.\n\nClick on the RULES button on the left to see them."
+										]
+									}]
+								},
+								{
+									"__identifier": "Color",
+									"__value": "#FFD500",
+									"__type": "Color",
+									"defUid": 36,
+									"realEditorValues": [{ "id": "V_Int", "params": [16766208] }]
+								}
+							]
 						}
-					] }]
+					]
 				}
 			],
 			"__neighbours": []
