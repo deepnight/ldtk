@@ -1090,9 +1090,9 @@ ul.form {
 		align-items: flex-start;
 		border-radius: 3px;
 
-		&:hover {
-			background-color: transparentize($color: black, $amount: 0.8);
-		}
+		// &:hover {
+			// background-color: transparentize($color: black, $amount: 0.8);
+		// }
 
 		>* {
 			flex: 1 1 0px;
@@ -4138,14 +4138,18 @@ canvas#webgl {
 			flex: 0 0 250px;
 		}
 
-		li.advanced {
-			flex-wrap: nowrap;
-			label {
-				flex: 1 0 auto !important;
-				margin: 0;
-				margin-left: 8px;
-				text-transform: none;
-				// white-space: nowrap;
+		ul.advanced {
+			li {
+				display: flex;
+				flex-wrap: nowrap;
+				align-items: center;
+				label {
+					flex: 1 0 auto !important;
+					margin: 0;
+					margin-left: 8px;
+					text-transform: none;
+					cursor: pointer;
+				}
 			}
 		}
 

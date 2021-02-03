@@ -54,7 +54,7 @@ class EditProject extends ui.modal.Panel {
 		jForm.off().find("*").off();
 
 		// Advanced options
-		var jAdvanceds = jForm.find(".advanced");
+		var jAdvanceds = jForm.find("ul.advanced");
 		if( project.hasAnyAdvancedExportFlag() || cd.has("showAdvanced") ) {
 			jForm.find(".advancedWarning a").hide();
 			jAdvanceds.show();
