@@ -129,6 +129,25 @@ class FieldInstance {
 		return internalValues[arrayIdx]==null;
 	}
 
+	public function isEqualToDefault(arrayIdx:Int) {
+		if( isUsingDefault(arrayIdx) )
+			return true;
+		else {
+			var v = internalValues[arrayIdx];
+			switch def.type {
+				case F_Int: return getInt(arrayIdx)==def.getDefault();
+				case F_Float: return getFloat(arrayIdx)==def.getDefault();
+				case F_String: return getString(arrayIdx)==def.getDefault();
+				case F_Text: return getString(arrayIdx)==def.getDefault();
+				case F_Bool: return getBool(arrayIdx)==def.getDefault();
+				case F_Color: return getColorAsInt(arrayIdx)==def.getDefault();
+				case F_Enum(enumDefUid): return false; // TODO support default enum values
+				case F_Point: return false;
+				case F_Path: return getFilePath(arrayIdx)==def.getDefault();
+			}
+		}
+	}
+
 
 	public function parseValue(arrayIdx:Int, raw:Null<String>) {
 		if( raw==null )

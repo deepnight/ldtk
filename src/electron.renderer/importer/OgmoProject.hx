@@ -370,6 +370,8 @@ class OgmoProject {
 											case F_Path:
 										}
 
+										if( fi.isEqualToDefault(0) )
+											fi.parseValue(0, null);
 									}
 							}
 
