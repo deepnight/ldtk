@@ -144,28 +144,28 @@ class Project {
 
 	public static function fromJson(filePath:String, json:ldtk.Json.ProjectJson) {
 		// Move old settings previously stored in root
-		if( json.settings==null ) {
-			var v : ldtk.Json.ProjectSettings = {
-				defaultPivotX: json.defaultPivotX,
-				defaultPivotY: json.defaultPivotY,
-				defaultGridSize: json.defaultGridSize,
-				defaultLevelWidth: json.defaultLevelWidth,
-				defaultLevelHeight: json.defaultLevelHeight,
-				bgColor: json.bgColor,
-				defaultLevelBgColor: json.defaultLevelBgColor,
-				externalLevels: json.externalLevels,
+		// if( json.settings==null ) {
+		// 	var v : ldtk.Json.ProjectSettings = {
+		// 		defaultPivotX: json.defaultPivotX,
+		// 		defaultPivotY: json.defaultPivotY,
+		// 		defaultGridSize: json.defaultGridSize,
+		// 		defaultLevelWidth: json.defaultLevelWidth,
+		// 		defaultLevelHeight: json.defaultLevelHeight,
+		// 		bgColor: json.bgColor,
+		// 		defaultLevelBgColor: json.defaultLevelBgColor,
+		// 		externalLevels: json.externalLevels,
 
-				minifyJson: json.minifyJson,
-				exportTiled: json.exportTiled,
-				backupOnSave: json.backupOnSave,
-				backupLimit: json.backupLimit,
-				exportPng: json.exportPng,
-				pngFilePattern: json.pngFilePattern,
+		// 		minifyJson: json.minifyJson,
+		// 		exportTiled: json.exportTiled,
+		// 		backupOnSave: json.backupOnSave,
+		// 		backupLimit: json.backupLimit,
+		// 		exportPng: json.exportPng,
+		// 		pngFilePattern: json.pngFilePattern,
 
-				advancedOptionFlags: [],
-			}
-			json.settings = v;
-		}
+		// 		advancedOptionFlags: [],
+		// 	}
+		// 	json.settings = v;
+		// }
 
 		var p = new Project();
 		p.filePath.parseFilePath(filePath);
@@ -193,8 +193,8 @@ class Project {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( Level.fromJson(p, lvlJson) );
 
-		if( json.settings.advancedOptionFlags!=null )
-			for(f in json.settings.advancedOptionFlags ) {
+		if( json.advancedOptionFlags!=null )
+			for(f in json.advancedOptionFlags ) {
 				var ev =
 					try JsonTools.readEnum(ldtk.Json.AdvancedOptionFlag, f, true)
 					catch(e:Dynamic) null;
@@ -233,7 +233,14 @@ class Project {
 	}
 
 	public function toJson() : ldtk.Json.ProjectJson {
-		var settings : ldtk.Json.ProjectSettings = {
+		var json : ldtk.Json.ProjectJson = {
+			jsonVersion: jsonVersion,
+			nextUid: nextUid,
+
+			worldLayout: JsonTools.writeEnum(worldLayout, false),
+			worldGridWidth: worldGridWidth,
+			worldGridHeight: worldGridHeight,
+
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
@@ -241,6 +248,7 @@ class Project {
 			defaultLevelHeight: defaultLevelHeight,
 			bgColor: JsonTools.writeColor(bgColor),
 			defaultLevelBgColor: JsonTools.writeColor(defaultLevelBgColor),
+
 			minifyJson: minifyJson,
 			externalLevels: externalLevels,
 			exportTiled: exportTiled,
@@ -256,42 +264,9 @@ class Project {
 						all.push( JsonTools.writeEnum(f.key, false) );
 				all;
 			},
-		}
-
-		var json : ldtk.Json.ProjectJson = {
-			jsonVersion: jsonVersion,
-			nextUid: nextUid,
-
-			worldLayout: JsonTools.writeEnum(worldLayout, false),
-			worldGridWidth: worldGridWidth,
-			worldGridHeight: worldGridHeight,
-
-			settings: settings,
-
-			// Legacy setting values
-			defaultPivotX: settings.defaultPivotX,
-			defaultPivotY: settings.defaultPivotY,
-			defaultGridSize: settings.defaultGridSize,
-			defaultLevelWidth: settings.defaultLevelWidth,
-			defaultLevelHeight: settings.defaultLevelHeight,
-			bgColor: settings.bgColor,
-			defaultLevelBgColor: settings.defaultLevelBgColor,
-			minifyJson: settings.minifyJson,
-			externalLevels: settings.externalLevels,
-			exportTiled: settings.exportTiled,
-			exportPng: settings.exportPng,
-			pngFilePattern: settings.pngFilePattern,
-			backupOnSave: settings.backupOnSave,
-			backupLimit: settings.backupLimit,
 
 			defs: defs.toJson(this),
 			levels: levels.map( (l)->l.toJson() ),
-		}
-
-		if( hasAdvancedExportFlag(DiscardRootSettings) ) {
-			for( k in Reflect.fields(settings) )
-				if( Reflect.hasField(json,k) )
-					Reflect.deleteField(json, k);
 		}
 
 		return json;

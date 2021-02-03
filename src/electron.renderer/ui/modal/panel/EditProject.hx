@@ -217,10 +217,6 @@ class EditProject extends ui.modal.Panel {
 				case DiscardPreCsvIntGrid:
 					jLabel.text("Discard pre-CSV IntGrid layer data in level data");
 					jInput.attr("title", L.t._("If checked, the exported JSON will not contain the deprecated array \"intGrid\", making the file smaller. Only use this if your game API supports LDtk 0.8.x or more."));
-
-				case DiscardRootSettings:
-					jLabel.text("Discard setting values from JSON root");
-					jInput.attr("title", L.t._("If checked, all values that were moved to \"settings\" object will be removed from JSON root. Only use this if your game API supports LDtk 0.8.x or more."));
 			}
 
 			var i = new form.input.BoolInput(
