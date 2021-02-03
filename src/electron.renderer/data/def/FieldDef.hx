@@ -5,7 +5,7 @@ import data.DataTypes;
 class FieldDef {
 	static var REGEX_REG = ~/^\/(.*)\/([gi]*)$/gi; // regex that recognizes a basic regex string
 
-	@:allow(data.Definitions, data.def.EntityDef)
+	@:allow(data.Definitions, data.def.EntityDef, ui.FieldDefsForm)
 	public var uid(default,null) : Int;
 
 	@:allow(misc.FieldTypeConverter)
@@ -19,7 +19,7 @@ class FieldDef {
 	public var editorAlwaysShow: Bool;
 	public var isArray : Bool;
 
-	@:allow(ui.modal.panel.EditEntityDefs, misc.FieldTypeConverter)
+	@:allow(ui.modal.panel.EditEntityDefs, misc.FieldTypeConverter, ui.FieldDefsForm)
 	var defaultOverride : Null<data.DataTypes.ValueWrapper>;
 
 	public var min : Null<Float>;

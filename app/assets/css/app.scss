@@ -5264,8 +5264,9 @@ $patternSize : 32px;
 		height: 100%;
 		justify-content: stretch;
 		gap: 16px;
-		grid-template-rows: min-content auto;
 		grid-template-columns: 200px auto;
+		grid-template-rows: min-content min-content auto;
+		overflow: hidden;
 
 		>.header {
 			grid-column: 1/3;
@@ -5275,7 +5276,7 @@ $patternSize : 32px;
 		}
 
 		>.entityList {
-			grid-row: 2/3;
+			grid-row: 2/4;
 			display: grid;
 			grid-template-rows: auto min-content;
 			overflow: hidden;
@@ -5289,53 +5290,6 @@ $patternSize : 32px;
 				content: "No entity";
 			}
 		}
-
-		>.rightColumn {
-			grid-column: 2/3;
-			grid-row: 2/3;
-			display: grid;
-			gap: 16px;
-			grid-template-columns: 200px auto;
-			grid-template-rows: min-content auto;
-
-			>.entityForm {
-				grid-column: 1/3;
-			}
-
-			>.fieldList {
-				grid-column: 1/2;
-				display: grid;
-				grid-template-rows: auto min-content;
-				overflow: hidden;
-				ul {
-					overflow: auto;
-					li {
-						grid-template-columns: auto min-content min-content;
-						gap: 0px 2px;
-						.name {
-							width: 100%;
-							overflow: hidden;
-						}
-					}
-				}
-				ul:empty::before {
-					content: "No custom field";
-				}
-			}
-
-			>.fieldForm {
-				grid-column: 2/3;
-				overflow: auto;
-
-				button.convert, .F_Path.file-select {
-					padding: 4px;
-					flex: 0 1 0px;
-					align-self: stretch;
-				}
-			}
-		}
-
-
 
 		button {
 			white-space: nowrap;
@@ -5395,36 +5349,82 @@ $patternSize : 32px;
 		min-height: 32px;
 	}
 
-	.fieldForm {
-		ul.form li>label {
-			flex: 0 0 100px;
+}
+
+
+.fieldDefsEditor {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	display: grid;
+	gap: 8px;
+	grid-template-columns: 200px auto;
+	grid-template-rows: auto 40px;
+
+	button {
+		white-space: nowrap;
+	}
+
+	ul.niceList {
+		overflow: auto;
+		li {
+			grid-template-columns: auto min-content min-content;
+			gap: 0px 2px;
+			overflow: hidden;
+			.name {
+				width: 100%;
+				overflow: hidden;
+			}
 		}
+		&:empty::before {
+			content: "No custom field";
+		}
+	}
+	.buttons {
+		grid-column: 1/2;
+		grid-row: 2/3;
+	}
+
+	ul.form {
+		overflow: auto;
+		grid-column: 2/3;
+		grid-row: 1/3;
 
 		input.type {
 			font-family: 'Courier New', Courier, monospace;
 		}
+		li>label {
+			flex: 0 0 100px;
+		}
 
-		ul.form *[class*="F_"],
-		ul.form *[class="Array"] {
+		button.convert, .F_Path.file-select {
+			padding: 4px;
+			flex: 0 1 0px;
+			align-self: stretch;
+		}
+
+		*[class*="F_"],
+		*[class="Array"] {
 			display: none;
 		}
-		ul.form.type-Array .Array,
-		ul.form.type-F_Int .F_int,
-		ul.form.type-F_Float .F_Float,
-		ul.form.type-F_Bool .F_Bool,
-		ul.form.type-F_Color .F_Color,
-		ul.form.type-F_Enum .F_Enum,
-		ul.form.type-F_Point .F_Point,
-		ul.form.type-F_Text .F_Text,
-		ul.form.type-F_String .F_String,
-		ul.form.type-F_Path .F_Path {
+
+
+		&.type-Array .Array,
+		&.type-F_Int .F_int,
+		&.type-F_Float .F_Float,
+		&.type-F_Bool .F_Bool,
+		&.type-F_Color .F_Color,
+		&.type-F_Enum .F_Enum,
+		&.type-F_Point .F_Point,
+		&.type-F_Text .F_Text,
+		&.type-F_String .F_String,
+		&.type-F_Path .F_Path {
 			display: flex;
 		}
 
-		ul.form.type-F_Path .F_Path.file-select {
+		&.type-F_Path .F_Path.file-select {
 			display: initial;
 
 		}
-
 	}
 }

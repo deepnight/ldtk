@@ -16,6 +16,8 @@ class EditEntityDefs extends ui.modal.Panel {
 	var curEntity : Null<data.def.EntityDef>;
 	var curField : Null<data.def.FieldDef>;
 
+	var fieldsForm : FieldDefsForm;
+
 
 	public function new(?editDef:data.def.EntityDef) {
 		super();
@@ -40,97 +42,20 @@ class EditEntityDefs extends ui.modal.Panel {
 			deleteEntityDef(curEntity);
 		});
 
-		function createField(anchor:js.jquery.JQuery, isArray:Bool) {
-			function _create(type:data.DataTypes.FieldType) {
-				switch type {
-					case F_Enum(null):
-						// Enum picker
-						var w = new ui.modal.Dialog(anchor, "enums");
-						if( project.defs.enums.length==0 && project.defs.externalEnums.length==0 ) {
-							w.jContent.append('<div class="warning">This project has no Enum: add one from the Enum panel.</div>');
-						}
-
-						for(ed in project.defs.enums) {
-							var b = new J("<button/>");
-							b.appendTo(w.jContent);
-							b.text(ed.identifier);
-							b.click( function(_) {
-								_create(F_Enum(ed.uid));
-								w.close();
-							});
-						}
-
-						for(ed in project.defs.externalEnums) {
-							var b = new J("<button/>");
-							b.appendTo(w.jContent);
-							b.append('<span class="id">${ed.identifier}</span>');
-
-							var fileName = dn.FilePath.extractFileWithExt(ed.externalRelPath);
-							b.append('<span class="source">$fileName</span>');
-
-							b.click( function(_) {
-								_create(F_Enum(ed.uid));
-								w.close();
-							});
-						}
-						return;
-
-
-					case _:
-				}
-
-				var baseName = switch type {
-					case F_Enum(enumDefUid): project.defs.getEnumDef(enumDefUid).identifier;
-					case _: L.getFieldType(type);
-				}
-				var f = curEntity.createFieldDef(project, type, baseName, isArray);
-				editor.ge.emit( EntityFieldAdded(curEntity) );
-				selectField(f);
-				jFieldForm.find("input:not([readonly]):first").focus().select();
+		// Create fields editor
+		fieldsForm = new ui.FieldDefsForm(
+			(t,n,arr)->curEntity.createFieldDef(project, t, n, arr),
+			fd->editor.ge.emit( EntityFieldAdded(curEntity) ),
+			fd->editor.ge.emit( EntityFieldDefChanged(curEntity) ),
+			fd->editor.ge.emit( EntityFieldRemoved(curEntity) ),
+			(from,to)->{
+				var moved = curEntity.sortField(from, to);
+				selectField(moved);
+				editor.ge.emit( EntityFieldSorted );
 			}
+		);
+		jContent.find("#fields").replaceWith( fieldsForm.jWrapper );
 
-			// Type picker
-			var w = new ui.modal.Dialog(anchor,"fieldTypes");
-			var types : Array<data.DataTypes.FieldType> = [
-				F_Int, F_Float, F_Bool, F_String, F_Text, F_Enum(null), F_Color, F_Point, F_Path
-			];
-			for(type in types) {
-				var b = new J("<button/>");
-				w.jContent.append(b);
-				JsTools.createFieldTypeIcon(type, b);
-				b.click( function(ev) {
-					_create(type);
-					w.close();
-				});
-			}
-		}
-
-		// Create single field
-		jFieldList.parent().find("button.createSingle").click( function(ev) {
-			createField(ev.getThis(), false);
-		});
-
-		// Create single field
-		jFieldList.parent().find("button.createArray").click( function(ev) {
-			createField(ev.getThis(), true);
-		});
-
-		// Delete field
-		jFieldList.parent().find("button.delete").click( function(ev) {
-			if( curField==null ) {
-				N.error("No field selected.");
-				return;
-			}
-
-			new ui.modal.dialog.Confirm(
-				ev.getThis(),
-				Lang.t._("Confirm this action?"),
-				true,
-				function() {
-					deleteFieldDef(curField);
-				}
-			);
-		});
 
 		// Select same entity as current client selection
 		var lastFieldId = LAST_FIELD_ID; // because selectEntity changes it
@@ -428,356 +353,358 @@ class EditEntityDefs extends ui.modal.Panel {
 
 
 	function updateFieldForm() {
-		jFieldForm.find("*").off(); // cleanup events
+		fieldsForm.setFields(curEntity.fieldDefs);
 
-		if( curField==null ) {
-			jFieldForm.css("visibility","hidden");
-			return;
-		}
-		else
-			jFieldForm.css("visibility","visible");
+		// jFieldForm.find("*").off(); // cleanup events
 
-		JsTools.parseComponents(jFieldForm);
+		// if( curField==null ) {
+		// 	jFieldForm.css("visibility","hidden");
+		// 	return;
+		// }
+		// else
+		// 	jFieldForm.css("visibility","visible");
 
-		// Set form classes
-		for(k in Type.getEnumConstructs(data.DataTypes.FieldType))
-			jFieldForm.removeClass("type-"+k);
-		jFieldForm.addClass("type-"+curField.type.getName());
+		// JsTools.parseComponents(jFieldForm);
 
-		if( curField.isArray )
-			jFieldForm.addClass("type-Array");
-		else
-			jFieldForm.removeClass("type-Array");
+		// // Set form classes
+		// for(k in Type.getEnumConstructs(data.DataTypes.FieldType))
+		// 	jFieldForm.removeClass("type-"+k);
+		// jFieldForm.addClass("type-"+curField.type.getName());
 
-		// Type desc
-		jFieldForm.find(".type").val( curField.getShortDescription() );
+		// if( curField.isArray )
+		// 	jFieldForm.addClass("type-Array");
+		// else
+		// 	jFieldForm.removeClass("type-Array");
 
-		// Type conversion
-		jFieldForm.find("button.convert").click( (ev)->{
-			var convertors = FieldTypeConverter.getAllConvertors(curField);
-			if( convertors.length==0 ) {
-				// No convertor
-				new ui.modal.dialog.Message(
-					L.t._('Sorry, there\'s no conversion option available for the type "::name::".', { name:L.getFieldType(curField.type) })
-				);
-			}
-			else {
-				// Field convertor picker
-				var w = new Dialog(ev.getThis(), "convertFieldType");
-				for(c in convertors) {
-					var toName = Lang.getFieldType(c.to!=null ? c.to : curField.type);
-					var jButton = new J('<button class="dark"/>');
-					if( c.displayName!=null )
-						jButton.text(c.displayName);
-					else if( c.to!=null )
-						jButton.text('To '+L.getFieldType(c.to));
-					else
-						jButton.text('???');
+		// // Type desc
+		// jFieldForm.find(".type").val( curField.getShortDescription() );
 
-					if( c.mode!=null )
-						jButton.append(' (${c.mode})');
+		// // Type conversion
+		// jFieldForm.find("button.convert").click( (ev)->{
+		// 	var convertors = FieldTypeConverter.getAllConvertors(curField);
+		// 	if( convertors.length==0 ) {
+		// 		// No convertor
+		// 		new ui.modal.dialog.Message(
+		// 			L.t._('Sorry, there\'s no conversion option available for the type "::name::".', { name:L.getFieldType(curField.type) })
+		// 		);
+		// 	}
+		// 	else {
+		// 		// Field convertor picker
+		// 		var w = new Dialog(ev.getThis(), "convertFieldType");
+		// 		for(c in convertors) {
+		// 			var toName = Lang.getFieldType(c.to!=null ? c.to : curField.type);
+		// 			var jButton = new J('<button class="dark"/>');
+		// 			if( c.displayName!=null )
+		// 				jButton.text(c.displayName);
+		// 			else if( c.to!=null )
+		// 				jButton.text('To '+L.getFieldType(c.to));
+		// 			else
+		// 				jButton.text('???');
 
-					jButton.appendTo(w.jContent);
-					jButton.click( (_)->{
-						function _convert() {
-							w.close();
-							misc.FieldTypeConverter.convert(
-								project,
-								curField,
-								c,
-								()->Editor.ME.ge.emit( EntityFieldDefChanged(curEntity) )
-							);
-						}
+		// 			if( c.mode!=null )
+		// 				jButton.append(' (${c.mode})');
 
-						if( c.lossless )
-							_convert();
-						else
-							new ui.modal.dialog.Confirm(
-								L.t._("This conversion will TRANSFORM EXISTING VALUES because the target type isn't fully compatible with the previous one!\nSome data might be lost in the process because of this conversion.\nPlease make sure that you known what you're doing here."),
-								true,
-								_convert
-							);
-					});
-				}
-			}
-		} );
+		// 			jButton.appendTo(w.jContent);
+		// 			jButton.click( (_)->{
+		// 				function _convert() {
+		// 					w.close();
+		// 					misc.FieldTypeConverter.convert(
+		// 						project,
+		// 						curField,
+		// 						c,
+		// 						()->Editor.ME.ge.emit( EntityFieldDefChanged(curEntity) )
+		// 					);
+		// 				}
 
-
-		var i = new form.input.EnumSelect(
-			jFieldForm.find("select[name=editorDisplayMode]"),
-			ldtk.Json.FieldDisplayMode,
-			function() return curField.editorDisplayMode,
-			function(v) return curField.editorDisplayMode = v,
-
-			function(k) {
-				return switch k {
-					case Hidden: L.t._("Do not show");
-					case ValueOnly: curField.isArray ? L.t._("Show values only") : L.t._("Show value only");
-					case NameAndValue:
-						curField.isArray
-						? L.t._('Show "::name::=[...values...]"', { name:curField.identifier })
-						: L.t._('Show "::name::=..."', { name:curField.identifier });
-					case PointStar: curField.isArray ? L.t._("Show star of points") : L.t._("Show point");
-					case PointPath: L.t._("Show path of points");
-					case RadiusPx: L.t._("As a radius (pixels)");
-					case RadiusGrid: L.t._("As a radius (grid-based)");
-					case EntityTile: L.t._("Replace entity tile");
-				}
-			},
-
-			function(k) {
-				return switch k {
-					case Hidden: true;
-					case ValueOnly: curField.type!=F_Point;
-					case NameAndValue: true;
-					case EntityTile: curField.isEnum();
-					case PointStar: curField.type==F_Point;
-					case PointPath: curField.type==F_Point && curField.isArray;
-					case RadiusPx, RadiusGrid: !curField.isArray && ( curField.type==F_Int || curField.type==F_Float );
-				}
-			}
-		);
-		i.linkEvent( EntityFieldDefChanged(curEntity) );
-
-
-		var i = new form.input.EnumSelect(
-			jFieldForm.find("select[name=editorDisplayPos]"),
-			ldtk.Json.FieldDisplayPosition,
-			function() return curField.editorDisplayPos,
-			function(v) return curField.editorDisplayPos = v
-		);
-		switch curField.editorDisplayMode {
-			case ValueOnly, NameAndValue:
-				i.setEnabled(true);
-
-			case Hidden, PointStar, PointPath, RadiusPx, RadiusGrid, EntityTile:
-				i.setEnabled(false);
-		}
-		i.linkEvent( EntityFieldDefChanged(curEntity) );
-
-		var i = Input.linkToHtmlInput( curField.editorAlwaysShow, jFieldForm.find("input[name=editorAlwaysShow]") );
-		i.linkEvent( EntityFieldDefChanged(curEntity) );
-		i.setEnabled( curField.editorDisplayMode!=Hidden );
-
-
-		var i = Input.linkToHtmlInput( curField.identifier, jFieldForm.find("input[name=name]") );
-		i.linkEvent( EntityFieldDefChanged(curEntity) );
-		i.validityCheck = function(id) {
-			return data.Project.isValidIdentifier(id) && curEntity.isFieldIdentifierUnique(id);
-		}
-		i.validityError = N.invalidIdentifier;
-
-		// Default value
-		switch curField.type {
-			case F_Path:
-
-			case F_Int, F_Float, F_String, F_Text, F_Point:
-				var defInput = jFieldForm.find("input[name=fDef]");
-				if( curField.defaultOverride != null )
-					defInput.val( Std.string( curField.getUntypedDefault() ) );
-				else
-					defInput.val("");
-
-				if( ( curField.type==F_String || curField.type==F_Text ) && !curField.canBeNull )
-					defInput.attr("placeholder", "(empty string)");
-				else if( curField.canBeNull )
-					defInput.attr("placeholder", "(null)");
-				else
-					defInput.attr("placeholder", switch curField.type {
-						case F_Int: Std.string( curField.iClamp(0) );
-						case F_Float: Std.string( curField.fClamp(0) );
-						case F_String, F_Text, F_Path: "";
-						case F_Point: "0"+Const.POINT_SEPARATOR+"0";
-						case F_Bool, F_Color, F_Enum(_): "N/A";
-					});
-
-				defInput.change( function(ev) {
-					curField.setDefault( defInput.val() );
-					editor.ge.emit( EntityFieldDefChanged(curEntity) );
-					defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
-				});
-
-			case F_Enum(name):
-				var ed = project.defs.getEnumDef(name);
-				var enumDef = jFieldForm.find("[name=enumDef]");
-				enumDef.find("[value]").remove();
-				if( curField.canBeNull ) {
-					var opt = new J('<option/>');
-					opt.appendTo(enumDef);
-					opt.attr("value","");
-					opt.text("-- null --");
-					if( curField.getEnumDefault()==null )
-						opt.attr("selected","selected");
-				}
-				for(v in ed.values) {
-					var opt = new J('<option/>');
-					opt.appendTo(enumDef);
-					opt.attr("value",v.id);
-					opt.text(v.id);
-					if( curField.getEnumDefault()==v.id )
-						opt.attr("selected","selected");
-				}
-
-				enumDef.change( function(ev) {
-					var v = enumDef.val();
-					if( v=="" && curField.canBeNull )
-						curField.setDefault(null);
-					else if( v!="" )
-						curField.setDefault(v);
-					editor.ge.emit( EntityFieldDefChanged(curEntity) );
-				});
-
-			case F_Color:
-				var defInput = jFieldForm.find("input[name=cDef]");
-				defInput.val( C.intToHex(curField.getColorDefault()) );
-				defInput.change( function(ev) {
-					curField.setDefault( defInput.val() );
-					editor.ge.emit( EntityFieldDefChanged(curEntity) );
-				});
-
-			case F_Bool:
-				var defInput = jFieldForm.find("input[name=bDef]");
-				defInput.prop("checked", curField.getBoolDefault());
-				defInput.change( function(ev) {
-					var checked = defInput.prop("checked") == true;
-					curField.setDefault( Std.string(checked) );
-					editor.ge.emit( EntityFieldDefChanged(curEntity) );
-				});
-		}
-
-		// Nullable
-		var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
-		i.onChange = editor.ge.emit.bind( EntityFieldDefChanged(curEntity) );
-
-		// Multi-lines
-		// if( curField.isString() ) {
-		// 	var i = new form.input.BoolInput(
-		// 		jFieldForm.find("input[name=multiLines]"),
-		// 		()->switch curField.type {
-		// 			case F_String(multilines): multilines;
-		// 			case _: false;
-		// 		},
-		// 		(v)->{
-		// 			curField.convertType( F_String(v) );
+		// 				if( c.lossless )
+		// 					_convert();
+		// 				else
+		// 					new ui.modal.dialog.Confirm(
+		// 						L.t._("This conversion will TRANSFORM EXISTING VALUES because the target type isn't fully compatible with the previous one!\nSome data might be lost in the process because of this conversion.\nPlease make sure that you known what you're doing here."),
+		// 						true,
+		// 						_convert
+		// 					);
+		// 			});
 		// 		}
-		// 	);
-		// 	i.linkEvent( EntityFieldDefChanged(curEntity) );
+		// 	}
+		// } );
+
+
+		// var i = new form.input.EnumSelect(
+		// 	jFieldForm.find("select[name=editorDisplayMode]"),
+		// 	ldtk.Json.FieldDisplayMode,
+		// 	function() return curField.editorDisplayMode,
+		// 	function(v) return curField.editorDisplayMode = v,
+
+		// 	function(k) {
+		// 		return switch k {
+		// 			case Hidden: L.t._("Do not show");
+		// 			case ValueOnly: curField.isArray ? L.t._("Show values only") : L.t._("Show value only");
+		// 			case NameAndValue:
+		// 				curField.isArray
+		// 				? L.t._('Show "::name::=[...values...]"', { name:curField.identifier })
+		// 				: L.t._('Show "::name::=..."', { name:curField.identifier });
+		// 			case PointStar: curField.isArray ? L.t._("Show star of points") : L.t._("Show point");
+		// 			case PointPath: L.t._("Show path of points");
+		// 			case RadiusPx: L.t._("As a radius (pixels)");
+		// 			case RadiusGrid: L.t._("As a radius (grid-based)");
+		// 			case EntityTile: L.t._("Replace entity tile");
+		// 		}
+		// 	},
+
+		// 	function(k) {
+		// 		return switch k {
+		// 			case Hidden: true;
+		// 			case ValueOnly: curField.type!=F_Point;
+		// 			case NameAndValue: true;
+		// 			case EntityTile: curField.isEnum();
+		// 			case PointStar: curField.type==F_Point;
+		// 			case PointPath: curField.type==F_Point && curField.isArray;
+		// 			case RadiusPx, RadiusGrid: !curField.isArray && ( curField.type==F_Int || curField.type==F_Float );
+		// 		}
+		// 	}
+		// );
+		// i.linkEvent( EntityFieldDefChanged(curEntity) );
+
+
+		// var i = new form.input.EnumSelect(
+		// 	jFieldForm.find("select[name=editorDisplayPos]"),
+		// 	ldtk.Json.FieldDisplayPosition,
+		// 	function() return curField.editorDisplayPos,
+		// 	function(v) return curField.editorDisplayPos = v
+		// );
+		// switch curField.editorDisplayMode {
+		// 	case ValueOnly, NameAndValue:
+		// 		i.setEnabled(true);
+
+		// 	case Hidden, PointStar, PointPath, RadiusPx, RadiusGrid, EntityTile:
+		// 		i.setEnabled(false);
+		// }
+		// i.linkEvent( EntityFieldDefChanged(curEntity) );
+
+		// var i = Input.linkToHtmlInput( curField.editorAlwaysShow, jFieldForm.find("input[name=editorAlwaysShow]") );
+		// i.linkEvent( EntityFieldDefChanged(curEntity) );
+		// i.setEnabled( curField.editorDisplayMode!=Hidden );
+
+
+		// var i = Input.linkToHtmlInput( curField.identifier, jFieldForm.find("input[name=name]") );
+		// i.linkEvent( EntityFieldDefChanged(curEntity) );
+		// i.validityCheck = function(id) {
+		// 	return data.Project.isValidIdentifier(id) && curEntity.isFieldIdentifierUnique(id);
+		// }
+		// i.validityError = N.invalidIdentifier;
+
+		// // Default value
+		// switch curField.type {
+		// 	case F_Path:
+
+		// 	case F_Int, F_Float, F_String, F_Text, F_Point:
+		// 		var defInput = jFieldForm.find("input[name=fDef]");
+		// 		if( curField.defaultOverride != null )
+		// 			defInput.val( Std.string( curField.getUntypedDefault() ) );
+		// 		else
+		// 			defInput.val("");
+
+		// 		if( ( curField.type==F_String || curField.type==F_Text ) && !curField.canBeNull )
+		// 			defInput.attr("placeholder", "(empty string)");
+		// 		else if( curField.canBeNull )
+		// 			defInput.attr("placeholder", "(null)");
+		// 		else
+		// 			defInput.attr("placeholder", switch curField.type {
+		// 				case F_Int: Std.string( curField.iClamp(0) );
+		// 				case F_Float: Std.string( curField.fClamp(0) );
+		// 				case F_String, F_Text, F_Path: "";
+		// 				case F_Point: "0"+Const.POINT_SEPARATOR+"0";
+		// 				case F_Bool, F_Color, F_Enum(_): "N/A";
+		// 			});
+
+		// 		defInput.change( function(ev) {
+		// 			curField.setDefault( defInput.val() );
+		// 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
+		// 			defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
+		// 		});
+
+		// 	case F_Enum(name):
+		// 		var ed = project.defs.getEnumDef(name);
+		// 		var enumDef = jFieldForm.find("[name=enumDef]");
+		// 		enumDef.find("[value]").remove();
+		// 		if( curField.canBeNull ) {
+		// 			var opt = new J('<option/>');
+		// 			opt.appendTo(enumDef);
+		// 			opt.attr("value","");
+		// 			opt.text("-- null --");
+		// 			if( curField.getEnumDefault()==null )
+		// 				opt.attr("selected","selected");
+		// 		}
+		// 		for(v in ed.values) {
+		// 			var opt = new J('<option/>');
+		// 			opt.appendTo(enumDef);
+		// 			opt.attr("value",v.id);
+		// 			opt.text(v.id);
+		// 			if( curField.getEnumDefault()==v.id )
+		// 				opt.attr("selected","selected");
+		// 		}
+
+		// 		enumDef.change( function(ev) {
+		// 			var v = enumDef.val();
+		// 			if( v=="" && curField.canBeNull )
+		// 				curField.setDefault(null);
+		// 			else if( v!="" )
+		// 				curField.setDefault(v);
+		// 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
+		// 		});
+
+		// 	case F_Color:
+		// 		var defInput = jFieldForm.find("input[name=cDef]");
+		// 		defInput.val( C.intToHex(curField.getColorDefault()) );
+		// 		defInput.change( function(ev) {
+		// 			curField.setDefault( defInput.val() );
+		// 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
+		// 		});
+
+		// 	case F_Bool:
+		// 		var defInput = jFieldForm.find("input[name=bDef]");
+		// 		defInput.prop("checked", curField.getBoolDefault());
+		// 		defInput.change( function(ev) {
+		// 			var checked = defInput.prop("checked") == true;
+		// 			curField.setDefault( Std.string(checked) );
+		// 			editor.ge.emit( EntityFieldDefChanged(curEntity) );
+		// 		});
 		// }
 
-		// Array size constraints
-		if( curField.isArray ) {
-			// Min
-			var i = new form.input.IntInput(
-				jFieldForm.find("input[name=arrayMinLength]"),
-				function() return curField.arrayMinLength,
-				function(v) {
-					curField.arrayMinLength = v<=0 ? null : v;
-					if( curField.arrayMinLength!=null && curField.arrayMaxLength!=null )
-						curField.arrayMaxLength = M.imax( curField.arrayMaxLength, curField.arrayMinLength );
-				}
-			);
-			i.setBounds(0, 99999);
-			i.linkEvent( EntityFieldDefChanged(curEntity) );
-			// Max
-			var i = new form.input.IntInput(
-				jFieldForm.find("input[name=arrayMaxLength]"),
-				function() return curField.arrayMaxLength,
-				function(v) {
-					curField.arrayMaxLength = v<=0 ? null : v;
-					if( curField.arrayMinLength!=null && curField.arrayMaxLength!=null )
-						curField.arrayMinLength = M.imin( curField.arrayMaxLength, curField.arrayMinLength );
-				}
-			);
-			i.setBounds(0, 99999);
-			i.linkEvent( EntityFieldDefChanged(curEntity) );
-			// Max
-			// var i = new form.input.IntInput(
-			// 	jFieldForm.find("input[name=arrayMinLength]"),
-			// 	function() return curField.arrayMinLength,
-			// 	function(v) curField.arrayMinLength = v
-			// );
-		}
-		// var i = Input.linkToHtmlInput( curField.arrayMinLength, jFieldForm.find("input[name=arrayMinLength]") );
+		// // Nullable
+		// var i = Input.linkToHtmlInput( curField.canBeNull, jFieldForm.find("input[name=canBeNull]") );
 		// i.onChange = editor.ge.emit.bind( EntityFieldDefChanged(curEntity) );
 
-		// Min
-		var input = jFieldForm.find("input[name=min]");
-		input.val( curField.min==null ? "" : curField.min );
-		input.change( function(ev) {
-			curField.setMin( input.val() );
-			editor.ge.emit( EntityFieldDefChanged(curEntity) );
-		});
+		// // Multi-lines
+		// // if( curField.isString() ) {
+		// // 	var i = new form.input.BoolInput(
+		// // 		jFieldForm.find("input[name=multiLines]"),
+		// // 		()->switch curField.type {
+		// // 			case F_String(multilines): multilines;
+		// // 			case _: false;
+		// // 		},
+		// // 		(v)->{
+		// // 			curField.convertType( F_String(v) );
+		// // 		}
+		// // 	);
+		// // 	i.linkEvent( EntityFieldDefChanged(curEntity) );
+		// // }
 
-		// Max
-		var input = jFieldForm.find("input[name=max]");
-		input.val( curField.max==null ? "" : curField.max );
-		input.change( function(ev) {
-			curField.setMax( input.val() );
-			editor.ge.emit( EntityFieldDefChanged(curEntity) );
-		});
+		// // Array size constraints
+		// if( curField.isArray ) {
+		// 	// Min
+		// 	var i = new form.input.IntInput(
+		// 		jFieldForm.find("input[name=arrayMinLength]"),
+		// 		function() return curField.arrayMinLength,
+		// 		function(v) {
+		// 			curField.arrayMinLength = v<=0 ? null : v;
+		// 			if( curField.arrayMinLength!=null && curField.arrayMaxLength!=null )
+		// 				curField.arrayMaxLength = M.imax( curField.arrayMaxLength, curField.arrayMinLength );
+		// 		}
+		// 	);
+		// 	i.setBounds(0, 99999);
+		// 	i.linkEvent( EntityFieldDefChanged(curEntity) );
+		// 	// Max
+		// 	var i = new form.input.IntInput(
+		// 		jFieldForm.find("input[name=arrayMaxLength]"),
+		// 		function() return curField.arrayMaxLength,
+		// 		function(v) {
+		// 			curField.arrayMaxLength = v<=0 ? null : v;
+		// 			if( curField.arrayMinLength!=null && curField.arrayMaxLength!=null )
+		// 				curField.arrayMinLength = M.imin( curField.arrayMaxLength, curField.arrayMinLength );
+		// 		}
+		// 	);
+		// 	i.setBounds(0, 99999);
+		// 	i.linkEvent( EntityFieldDefChanged(curEntity) );
+		// 	// Max
+		// 	// var i = new form.input.IntInput(
+		// 	// 	jFieldForm.find("input[name=arrayMinLength]"),
+		// 	// 	function() return curField.arrayMinLength,
+		// 	// 	function(v) curField.arrayMinLength = v
+		// 	// );
+		// }
+		// // var i = Input.linkToHtmlInput( curField.arrayMinLength, jFieldForm.find("input[name=arrayMinLength]") );
+		// // i.onChange = editor.ge.emit.bind( EntityFieldDefChanged(curEntity) );
 
-		// String regex
-		var i = new form.input.StringInput(
-			jFieldForm.find("input#regex"),
-			()->return curField.getRegexContent(),
-			(s)-> {
-				curField.setRegexContent(s);
-			}
-		);
+		// // Min
+		// var input = jFieldForm.find("input[name=min]");
+		// input.val( curField.min==null ? "" : curField.min );
+		// input.change( function(ev) {
+		// 	curField.setMin( input.val() );
+		// 	editor.ge.emit( EntityFieldDefChanged(curEntity) );
+		// });
 
-		// Regex "i" flag
-		var i = new form.input.BoolInput(
-			jFieldForm.find("input#flag_i"),
-			()->curField.hasRegexFlag("i"),
-			(v)->{
-				curField.setRegexFlag("i",v);
-			}
-		);
+		// // Max
+		// var input = jFieldForm.find("input[name=max]");
+		// input.val( curField.max==null ? "" : curField.max );
+		// input.change( function(ev) {
+		// 	curField.setMax( input.val() );
+		// 	editor.ge.emit( EntityFieldDefChanged(curEntity) );
+		// });
 
-		// Test regex
-		if( curField.regex!=null ) {
-			jFieldForm.find(".testRegex").click( (_)->{
-				electron.Shell.openExternal( "https://regex101.com/"
-					+ "?regex="+curField.getRegexContent()
-					+ "&flags="+curField.getRegexFlagsStr()
-				);
-			});
-		}
+		// // String regex
+		// var i = new form.input.StringInput(
+		// 	jFieldForm.find("input#regex"),
+		// 	()->return curField.getRegexContent(),
+		// 	(s)-> {
+		// 		curField.setRegexContent(s);
+		// 	}
+		// );
 
-		// Text language mode
-		if( curField.type==F_Text ) {
-			var i = new form.input.EnumSelect(
-				jFieldForm.find("#textLanguage"),
-				ldtk.Json.TextLanguageMode,
-				true,
-				()->curField.textLangageMode,
-				(e)->{
-					curField.textLangageMode = e;
-				},
-				(e)->Lang.getTextLanguageMode(e)
-			);
-		}
+		// // Regex "i" flag
+		// var i = new form.input.BoolInput(
+		// 	jFieldForm.find("input#flag_i"),
+		// 	()->curField.hasRegexFlag("i"),
+		// 	(v)->{
+		// 		curField.setRegexFlag("i",v);
+		// 	}
+		// );
 
-		// Accept file types
-		var input = jFieldForm.find("input[name=acceptTypes]");
-		if( curField.acceptFileTypes!=null )
-			input.val( curField.acceptFileTypes.join("  ") );
-		input.change( function(ev) {
-			curField.setAcceptFileTypes( input.val() );
-			editor.ge.emit( EntityFieldDefChanged(curEntity) );
-		});
+		// // Test regex
+		// if( curField.regex!=null ) {
+		// 	jFieldForm.find(".testRegex").click( (_)->{
+		// 		electron.Shell.openExternal( "https://regex101.com/"
+		// 			+ "?regex="+curField.getRegexContent()
+		// 			+ "&flags="+curField.getRegexFlagsStr()
+		// 		);
+		// 	});
+		// }
 
-		// File select button
-		var input = jFieldForm.find("button[name=fDefFile]");
-		input.click( function(ev) {
-			dn.electron.Dialogs.open(curField.acceptFileTypes, project.getProjectDir(), function( absPath ) {
-				var relPath = project.makeRelativeFilePath(absPath);
-				var defInput = jFieldForm.find("input[name=fDef]");
-				defInput.val(relPath);
-				curField.setDefault(relPath);
-				editor.ge.emit( EntityFieldDefChanged(curEntity) );
-			});
-		});
+		// // Text language mode
+		// if( curField.type==F_Text ) {
+		// 	var i = new form.input.EnumSelect(
+		// 		jFieldForm.find("#textLanguage"),
+		// 		ldtk.Json.TextLanguageMode,
+		// 		true,
+		// 		()->curField.textLangageMode,
+		// 		(e)->{
+		// 			curField.textLangageMode = e;
+		// 		},
+		// 		(e)->Lang.getTextLanguageMode(e)
+		// 	);
+		// }
+
+		// // Accept file types
+		// var input = jFieldForm.find("input[name=acceptTypes]");
+		// if( curField.acceptFileTypes!=null )
+		// 	input.val( curField.acceptFileTypes.join("  ") );
+		// input.change( function(ev) {
+		// 	curField.setAcceptFileTypes( input.val() );
+		// 	editor.ge.emit( EntityFieldDefChanged(curEntity) );
+		// });
+
+		// // File select button
+		// var input = jFieldForm.find("button[name=fDefFile]");
+		// input.click( function(ev) {
+		// 	dn.electron.Dialogs.open(curField.acceptFileTypes, project.getProjectDir(), function( absPath ) {
+		// 		var relPath = project.makeRelativeFilePath(absPath);
+		// 		var defInput = jFieldForm.find("input[name=fDef]");
+		// 		defInput.val(relPath);
+		// 		curField.setDefault(relPath);
+		// 		editor.ge.emit( EntityFieldDefChanged(curEntity) );
+		// 	});
+		// });
 	}
 
 
@@ -827,40 +754,40 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Fields
-		if( curEntity!=null ) {
-			for(fd in curEntity.fieldDefs) {
-				var li = new J("<li/>");
-				li.appendTo(jFieldList);
-				li.append('<span class="name">'+fd.identifier+'</span>');
-				if( curField==fd )
-					li.addClass("active");
+		// if( curEntity!=null ) {
+		// 	for(fd in curEntity.fieldDefs) {
+		// 		var li = new J("<li/>");
+		// 		li.appendTo(jFieldList);
+		// 		li.append('<span class="name">'+fd.identifier+'</span>');
+		// 		if( curField==fd )
+		// 			li.addClass("active");
 
-				var sub = new J('<span class="sub"></span>');
-				sub.appendTo(li);
-				sub.text( fd.getShortDescription() );
+		// 		var sub = new J('<span class="sub"></span>');
+		// 		sub.appendTo(li);
+		// 		sub.text( fd.getShortDescription() );
 
-				ContextMenu.addTo(li, [
-					{
-						label: L._Duplicate(),
-						cb:()->{
-							var copy = curEntity.duplicateFieldDef(project, fd);
-							editor.ge.emit( EntityFieldAdded(curEntity) );
-							selectField(copy);
-						}
-					},
-					{ label: L._Delete(), cb:deleteFieldDef.bind(fd) },
-				]);
+		// 		ContextMenu.addTo(li, [
+		// 			{
+		// 				label: L._Duplicate(),
+		// 				cb:()->{
+		// 					var copy = curEntity.duplicateFieldDef(project, fd);
+		// 					editor.ge.emit( EntityFieldAdded(curEntity) );
+		// 					selectField(copy);
+		// 				}
+		// 			},
+		// 			{ label: L._Delete(), cb:deleteFieldDef.bind(fd) },
+		// 		]);
 
-				li.click( function(_) selectField(fd) );
-			}
-		}
+		// 		li.click( function(_) selectField(fd) );
+		// 	}
+		// }
 
-		// Make fields list sortable
-		JsTools.makeSortable(jFieldList, function(ev) {
-			var moved = curEntity.sortField(ev.oldIndex, ev.newIndex);
-			selectField(moved);
-			editor.ge.emit( EntityFieldSorted );
-		});
+		// // Make fields list sortable
+		// JsTools.makeSortable(jFieldList, function(ev) {
+		// 	var moved = curEntity.sortField(ev.oldIndex, ev.newIndex);
+		// 	selectField(moved);
+		// 	editor.ge.emit( EntityFieldSorted );
+		// });
 	}
 
 
