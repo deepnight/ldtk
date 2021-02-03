@@ -1083,13 +1083,16 @@ ul.log {
 
 
 ul.form {
-	padding: 8px;
-	border: 1px solid $bgLight;
-
+	padding-bottom: 16px;
 	>li {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: flex-start;
+		border-radius: 3px;
+
+		&:hover {
+			background-color: transparentize($color: black, $amount: 0.8);
+		}
 
 		>* {
 			flex: 1 1 0px;
@@ -1213,6 +1216,9 @@ ul.form {
 
 		.small {
 			flex: 0 1 60px;
+			&[placeholder] {
+				flex: 0 1 90px;
+			}
 		}
 
 		div.info {
@@ -1304,9 +1310,13 @@ select {
 		color: $bgMed;
 		border-color: $bgMed;
 		background-color: $bgDark;
+		cursor: not-allowed;
+		&:hover {
+			border-color: $bgLight;
+		}
 	}
 
-	&:hover {
+	&:not(:disabled):hover {
 		border-color: white;
 		cursor: pointer;
 	}
@@ -1729,7 +1739,7 @@ textarea {
 		ul.form li {
 			label {
 				align-self: center;
-				flex: 0 0 45%;
+				flex: 0 0 220px;
 			}
 		}
 	}
