@@ -8,46 +8,28 @@
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - and a definition object (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
 		"required": [
-			"bgColor",
-			"externalLevels",
+			"defs",
 			"jsonVersion",
 			"levels",
-			"minifyJson",
+			"settings",
 			"worldGridHeight",
 			"worldGridWidth",
-			"advancedExportFlags",
-			"backupLimit",
-			"backupOnSave",
-			"defaultGridSize",
-			"defaultLevelBgColor",
-			"defaultLevelHeight",
-			"defaultLevelWidth",
-			"defaultPivotX",
-			"defaultPivotY",
-			"exportPng",
-			"exportTiled",
+			"worldLayout",
 			"nextUid"
 		],
 		"properties": {
+			"settings": {
+				"description": "Various settings and data for this project",
+				"$ref": "#/otherTypes/ProjectSettings"
+			},
 			"backupLimit": {
-				"description": "Number of backup files to keep, if the `backupOnSave` is TRUE",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
 				"type": [
 					"integer"
 				]
 			},
-			"advancedExportFlags": {
-				"description": "An array containing various advanced export options, mostly for advanced users to deal with JSON format changes.",
-				"items": {
-					"type": [
-						"string"
-					]
-				},
-				"type": [
-					"array"
-				]
-			},
 			"backupOnSave": {
-				"description": "If TRUE, an extra copy of the project will be created in a sub folder, when saving.",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
 				"type": [
 					"boolean"
 				]
@@ -59,25 +41,25 @@
 				]
 			},
 			"defaultLevelBgColor": {
-				"description": "Default background color of levels",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
 				"type": [
 					"string"
 				]
 			},
 			"bgColor": {
-				"description": "Project background color",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
 				"type": [
 					"string"
 				]
 			},
 			"nextUid": {
-				"description": "",
+				"description": "Next Unique integer ID available",
 				"type": [
 					"integer"
 				]
 			},
 			"defaultPivotY": {
-				"description": "Default Y pivot (0 to 1) for new entities",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.defaultPivotY`",
 				"type": [
 					"number"
 				]
@@ -89,7 +71,7 @@
 				]
 			},
 			"defaultGridSize": {
-				"description": "Default grid size for new layers",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
 				"type": [
 					"integer"
 				]
@@ -104,26 +86,26 @@
 				]
 			},
 			"exportPng": {
-				"description": "If TRUE, all layers in all levels will also be exported as PNG along with the project file (default is FALSE)",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
 				"type": [
 					"boolean"
 				]
 			},
 			"defaultLevelWidth": {
-				"description": "Default new level width",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.defaultLevelWidth`",
 				"type": [
 					"integer"
 				]
 			},
 			"pngFilePattern": {
-				"description": "File naming pattern for exported PNGs",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
 				"type": [
 					"string",
 					"null"
 				]
 			},
 			"exportTiled": {
-				"description": "If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
 				"type": [
 					"boolean"
 				]
@@ -148,25 +130,25 @@
 				]
 			},
 			"defaultPivotX": {
-				"description": "Default X pivot (0 to 1) for new entities",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.defaultPivotX`",
 				"type": [
 					"number"
 				]
 			},
 			"defaultLevelHeight": {
-				"description": "Default new level height",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.defaultLevelWidth`",
 				"type": [
 					"integer"
 				]
 			},
 			"externalLevels": {
-				"description": "If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
 				"type": [
 					"boolean"
 				]
 			},
 			"minifyJson": {
-				"description": "If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
 				"type": [
 					"boolean"
 				]
@@ -182,6 +164,7 @@
 			"required": [
 				"__identifier",
 				"__type",
+				"__value",
 				"defUid",
 				"realEditorValues"
 			],
@@ -248,7 +231,16 @@
 				},
 				"__tile": {
 					"description": "Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).",
-					"$ref": "#/otherTypes/EntityInstanceTile"
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/EntityInstanceTile"
+						}
+					]
 				},
 				"px": {
 					"description": "Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget optional layer offsets, if they exist!",
@@ -378,6 +370,7 @@
 				"active",
 				"breakOnMatch",
 				"chance",
+				"checker",
 				"flipX",
 				"flipY",
 				"pattern",
@@ -389,6 +382,7 @@
 				"pivotY",
 				"size",
 				"tileIds",
+				"tileMode",
 				"uid",
 				"xModulo",
 				"yModulo"
@@ -527,6 +521,129 @@
 				"object"
 			]
 		},
+		"ProjectSettings": {
+			"description": "An object containing misc project settings and data.",
+			"title": "Project settings",
+			"required": [
+				"bgColor",
+				"externalLevels",
+				"advancedOptionFlags",
+				"backupLimit",
+				"backupOnSave",
+				"defaultGridSize",
+				"defaultLevelBgColor",
+				"defaultLevelHeight",
+				"defaultLevelWidth",
+				"defaultPivotX",
+				"defaultPivotY",
+				"exportPng",
+				"exportTiled",
+				"minifyJson"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"backupLimit": {
+					"description": "Number of backup files to keep, if the `backupOnSave` is TRUE",
+					"type": [
+						"integer"
+					]
+				},
+				"backupOnSave": {
+					"description": "If TRUE, an extra copy of the project will be created in a sub folder, when saving.",
+					"type": [
+						"boolean"
+					]
+				},
+				"defaultLevelBgColor": {
+					"description": "Default background color of levels",
+					"type": [
+						"string"
+					]
+				},
+				"bgColor": {
+					"description": "Project background color",
+					"type": [
+						"string"
+					]
+				},
+				"defaultPivotY": {
+					"description": "Default Y pivot (0 to 1) for new entities",
+					"type": [
+						"number"
+					]
+				},
+				"defaultGridSize": {
+					"description": "Default grid size for new layers",
+					"type": [
+						"integer"
+					]
+				},
+				"exportPng": {
+					"description": "If TRUE, all layers in all levels will also be exported as PNG along with the project file (default is FALSE)",
+					"type": [
+						"boolean"
+					]
+				},
+				"defaultLevelWidth": {
+					"description": "Default new level width",
+					"type": [
+						"integer"
+					]
+				},
+				"pngFilePattern": {
+					"description": "File naming pattern for exported PNGs",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				"advancedOptionFlags": {
+					"description": "An array containing various advanced export options (only for experienced users). Possible values: `DiscardPreCsvIntGrid`, `DiscardRootSettings`",
+					"items": {
+						"enum": [
+							"DiscardPreCsvIntGrid",
+							"DiscardRootSettings"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"exportTiled": {
+					"description": "If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)",
+					"type": [
+						"boolean"
+					]
+				},
+				"defaultPivotX": {
+					"description": "Default X pivot (0 to 1) for new entities",
+					"type": [
+						"number"
+					]
+				},
+				"defaultLevelHeight": {
+					"description": "Default new level height",
+					"type": [
+						"integer"
+					]
+				},
+				"externalLevels": {
+					"description": "If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.",
+					"type": [
+						"boolean"
+					]
+				},
+				"minifyJson": {
+					"description": "If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)",
+					"type": [
+						"boolean"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"FieldDef": {
 			"description": "This section is mostly only intended for the LDtk editor app itself. You can safely ignore it.",
 			"title": "Field definition",
@@ -535,8 +652,11 @@
 				"canBeNull",
 				"identifier",
 				"isArray",
+				"type",
 				"uid",
-				"editorAlwaysShow"
+				"editorAlwaysShow",
+				"editorDisplayMode",
+				"editorDisplayPos"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -681,7 +801,10 @@
 				"uid",
 				"width",
 				"fieldDefs",
-				"showName"
+				"limitBehavior",
+				"renderMode",
+				"showName",
+				"tileRenderMode"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1035,7 +1158,7 @@
 					]
 				},
 				"intGrid": {
-					"description": "**WARNING**: this value is marked as DEPRECATED since 0.8.0. It will be no longer be exported by LDtk, **starting from version 1.0.0.**  Use **`intGridCsv`** instead.",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `intGridCsv`",
 					"items": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
 					},
@@ -1247,7 +1370,8 @@
 				"uid",
 				"autoRuleGroups",
 				"tilePivotX",
-				"tilePivotY"
+				"tilePivotY",
+				"type"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1461,12 +1585,13 @@
 					]
 				},
 				"bgPos": {
-					"description": "An enum defining the way the background image (if any) is positioned on the level. See `__bgPos` for resulting position info. Possible values: `Unscaled`, `Contain`, `Cover`, `CoverDirty`",
+					"description": "An enum defining the way the background image (if any) is positioned on the level. See `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`, `Contain`, `Cover`, `CoverDirty`",
 					"enum": [
 						"Unscaled",
 						"Contain",
 						"Cover",
-						"CoverDirty"
+						"CoverDirty",
+						null
 					]
 				},
 				"pxHei": {
@@ -1483,7 +1608,16 @@
 				},
 				"__bgPos": {
 					"description": "Position informations of the background image, if there is one.",
-					"$ref": "#/otherTypes/LevelBgPosInfos"
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/LevelBgPosInfos"
+						}
+					]
 				},
 				"uid": {
 					"description": "Unique Int identifier",
