@@ -3,6 +3,8 @@ package importer;
 import dn.M;
 
 class OgmoProject {
+	static var MIN_VERSION = "3.3";
+
 	public var log : dn.Log;
 	var fp : dn.FilePath;
 
@@ -27,8 +29,9 @@ class OgmoProject {
 				return null;
 			}
 
-		if( json.ogmoVersion==null || Version.lower(json.ogmoVersion, "3.4") ) {
-			log.error("This Ogmo project should be first saved using Ogmo 3.4 or later. LDtk doesn't support older file versions.");
+		// Version check
+		if( json.ogmoVersion==null || Version.lower(json.ogmoVersion, MIN_VERSION) ) {
+			log.error("This Ogmo project should be first saved using Ogmo "+MIN_VERSION+" or later. LDtk doesn't support older file versions.");
 			return null;
 		}
 
