@@ -202,10 +202,29 @@ class EditProject extends ui.modal.Panel {
 
 
 		// Advanced flags
+		jAdvanceds.empty();
 		for( k in Type.getEnumConstructs(ldtk.Json.AdvancedOptionFlag) ) {
 			var e = ldtk.Json.AdvancedOptionFlag.createByName(k);
-			new form.input.BoolInput(
-				jForm.find("#"+k),
+			var jLi = new J('<li/>');
+			jLi.appendTo(jAdvanceds);
+
+			var jInput = new J('<input type="checkbox" id="$k"/>');
+			jInput.appendTo(jLi);
+
+			var jLabel = new J('<label for="$k"/>');
+			jLabel.appendTo(jLi);
+			switch e {
+				case DiscardPreCsvIntGrid:
+					jLabel.text("Discard pre-CSV IntGrid layer data in level data");
+					jInput.attr("title", L.t._("If checked, the exported JSON will not contain the deprecated array \"intGrid\", making the file smaller. Do not enable this if the game API you are using is not supporting LDtk 0.8.x"));
+
+				case DiscardRootSettings:
+					jLabel.text("Discard setting values from JSON root");
+					jInput.attr("title", L.t._("If checked, all values that were moved to \"settings\" object will be removed from JSON root. Do not use this if your game API is not supporting LDtk 0.8.x"));
+			}
+
+			var i = new form.input.BoolInput(
+				jInput,
 				()->project.hasAdvancedExportFlag(e),
 				(v)->{
 					project.setAdvancedExportFlag(e, v);
