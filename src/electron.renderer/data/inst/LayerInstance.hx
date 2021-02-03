@@ -79,7 +79,7 @@ class LayerInstance {
 	public function toJson() : ldtk.Json.LayerInstanceJson {
 		var td = getTiledsetDef();
 
-		return {
+		var json : ldtk.Json.LayerInstanceJson = {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
 			__type: Std.string(def.type),
@@ -165,6 +165,11 @@ class LayerInstance {
 
 			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
+
+		if( _project.hasAdvancedExportFlag(DiscardPreCsvIntGrid) )
+			Reflect.deleteField(json, "intGrid");
+
+		return json;
 	}
 
 	public inline function getRuleStampRenderInfos(rule:data.def.AutoLayerRuleDef, td:data.def.TilesetDef, tileIds:Array<Int>, flipBits:Int)
