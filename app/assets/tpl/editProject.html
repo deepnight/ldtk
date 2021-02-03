@@ -94,8 +94,13 @@
 	</li>
 
 	<li class="advanced">
+		<input type="checkbox" id="DiscardPreCsvIntGrid" title='If checked, the exported JSON will not contain the deprecated array "intGrid", making the file smaller. Do not enable this if the game API you are using is not supporting LDtk 0.8.x'/>
 		<label for="DiscardPreCsvIntGrid">Discard pre-CSV IntGrid layer data in level data</label>
-		<input type="checkbox" id="DiscardPreCsvIntGrid" title='If checked, the exported JSON will not contain the deprecated array "intGrid", making the file smaller. Do not enable this if the game API you are using is made for LDtk older than version 0.8.0.'/>
+	</li>
+
+	<li class="advanced">
+		<input type="checkbox" id="DiscardRootSettings" title='If checked, all values that were moved to "settings" object will be removed from JSON root. Do not use this if your game API is not supporting LDtk 0.8.x'/>
+		<label for="DiscardRootSettings">Discard setting values from JSON root</label>
 	</li>
 
 </ul>

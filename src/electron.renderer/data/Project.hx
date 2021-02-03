@@ -288,7 +288,7 @@ class Project {
 			levels: levels.map( (l)->l.toJson() ),
 		}
 
-		if( hasAdvancedExportFlag(DiscardPreCsvIntGrid) ) {
+		if( hasAdvancedExportFlag(DiscardRootSettings) ) {
 			for( k in Reflect.fields(settings) )
 				if( Reflect.hasField(json,k) )
 					Reflect.deleteField(json, k);

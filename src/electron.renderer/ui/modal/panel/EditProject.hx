@@ -202,14 +202,17 @@ class EditProject extends ui.modal.Panel {
 
 
 		// Advanced flags
-		new form.input.BoolInput(
-			jForm.find("#DiscardPreCsvIntGrid"),
-			()->project.hasAdvancedExportFlag(DiscardPreCsvIntGrid),
-			(v)->{
-				project.setAdvancedExportFlag(DiscardPreCsvIntGrid, v);
-				editor.ge.emit(ProjectSettingsChanged);
-			}
-		);
+		for( k in Type.getEnumConstructs(ldtk.Json.AdvancedOptionFlag) ) {
+			var e = ldtk.Json.AdvancedOptionFlag.createByName(k);
+			new form.input.BoolInput(
+				jForm.find("#"+k),
+				()->project.hasAdvancedExportFlag(e),
+				(v)->{
+					project.setAdvancedExportFlag(e, v);
+					editor.ge.emit(ProjectSettingsChanged);
+				}
+			);
+		}
 
 		JsTools.parseComponents(jForm);
 	}
