@@ -356,7 +356,7 @@ class DocGenerator {
 				st.description = f.descMd.join('\n');
 
 				// Detect required fields
-				if( st.type!=null ) {
+				if( st.type!=null && f.deprecation==null ) {
 					var req = true;
 					for( t in st.type )
 						if( t=="null" ) {
