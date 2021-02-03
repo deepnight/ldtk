@@ -92,6 +92,10 @@ class DebugMenu extends ui.modal.ContextMenu {
 								ui.ProjectLoader.load(fp.full, (?p,?err)->{
 									if( p==null )
 										throw "Failed on "+fp.full;
+
+									// IntGrid CSV change
+									p.setAdvancedExportFlag("discardIntGrid", true);
+
 									// Tilesets
 									log.general(" -> Updating tileset data...");
 									for(td in p.defs.tilesets) {
