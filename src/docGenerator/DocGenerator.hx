@@ -22,6 +22,12 @@ enum FieldType {
 	Unknown;
 }
 
+typedef DeprecationInfos = {
+	var start : dn.Version;
+	var removal : dn.Version;
+	var replacement : Null<String>;
+}
+
 typedef FieldInfos = {
 	var xml: haxe.xml.Access;
 	var subFields: Array<FieldInfos>;
@@ -34,7 +40,7 @@ typedef FieldInfos = {
 	var hasVersion: Bool;
 	var isColor: Bool;
 	var isInternal: Bool;
-	var deprecation: Null<dn.Version>;
+	var deprecation: Null<DeprecationInfos>;
 }
 
 typedef GlobalType = {
@@ -45,7 +51,6 @@ typedef GlobalType = {
 	var description : Null<String>;
 	var onlyInternalFields : Bool;
 	var inlined: Bool;
-	var deprecation: Null<dn.Version>;
 }
 
 
@@ -125,7 +130,6 @@ class DocGenerator {
 					section: hasMeta(type,"section") ? getMeta(type,"section") : "",
 					onlyInternalFields: hasMeta(type,"internal"),
 					inlined: hasMeta(type,"inline"),
-					deprecation: hasMeta(type, "deprecation") ? new dn.Version(getMeta(type,"deprecation")) : null,
 				});
 			}
 
@@ -462,25 +466,32 @@ class DocGenerator {
 
 			var displayName = hasMeta(fieldXml, "display") ? getMeta(fieldXml, "display") : fieldXml.name;
 
-			var deprecationVersion = hasMeta(fieldXml,"deprecation") ? getMetaVersion(fieldXml, "deprecation") : null;
+			var deprecation : Null<DeprecationInfos> =
+				!hasMeta(fieldXml,"deprecation")
+					? null
+					: {
+						start: new dn.Version( getMeta(fieldXml,"deprecation",0) ),
+						removal: new dn.Version( getMeta(fieldXml,"deprecation",1) ),
+						replacement: getMeta(fieldXml,"deprecation",2),
+					}
 
 			var descMd = [];
-			if( deprecationVersion!=null ) {
-				if( appVersion.compare(deprecationVersion)<0 ) {
-					descMd.push('**WARNING**: this value is marked as DEPRECATED. It will be no longer be exported by LDtk, **starting from version $deprecationVersion.**');
+			if( deprecation!=null ) {
+				if( appVersion.compare(deprecation.removal)<0 ) {
+					descMd.push('**WARNING**: this value is marked as DEPRECATED since ${deprecation.start}. It will be no longer be exported by LDtk, **starting from version ${deprecation.removal}.**');
 
 				}
 				else
-					descMd.push('**WARNING**: this old value was marked as DEPRECATED. It is no longer exported by LDtk since version $deprecationVersion.');
+					descMd.push('**WARNING**: this old value was marked as DEPRECATED. It is no longer exported by LDtk since version ${deprecation.removal}.');
 
 				descMd.push('');
-				if( hasMeta(fieldXml,"deprecation",1) )
-					descMd.push('Use **`${getMeta(fieldXml,"deprecation",1)}`** instead.');
+				if( deprecation.replacement!=null )
+					descMd.push('Use **`${deprecation.replacement}`** instead.');
 			}
 
 			var type = getFieldType(fieldXml);
 			var subFields = [];
-			if( deprecationVersion==null ) {
+			if( deprecation==null ) {
 				if( fieldXml.hasNode.haxe_doc ) {
 					var html = fieldXml.node.haxe_doc.innerHTML;
 					html = StringTools.replace(html, "<![CDATA[", "");
@@ -525,7 +536,7 @@ class DocGenerator {
 				descMd: descMd,
 				isColor: hasMeta(fieldXml, "color"),
 				isInternal: hasMeta(fieldXml, "internal"),
-				deprecation: deprecationVersion,
+				deprecation: deprecation,
 			});
 		}
 		allFields.sort( (a,b)->{
