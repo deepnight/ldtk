@@ -145,6 +145,16 @@ class LayerDef {
 		return intGridValues[idx];
 	}
 
+	public function getIntGridIndexFromIdentifier(id:String) : Int {
+		var idx = 0;
+		for( v in intGridValues )
+			if( v.identifier==id )
+				return idx;
+			else
+				idx++;
+		return -1;
+	}
+
 	public inline function getIntGridValueDisplayName(idx:Int) : Null<String> {
 		var vd = getIntGridValueDef(idx);
 		return vd==null ? null : vd.identifier==null ? '#$idx' : '${vd.identifier} #$idx';

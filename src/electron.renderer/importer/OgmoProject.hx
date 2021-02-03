@@ -27,6 +27,11 @@ class OgmoProject {
 				return null;
 			}
 
+		if( json.ogmoVersion==null || Version.lower(json.ogmoVersion, "3.4") ) {
+			log.error("This Ogmo project should be first saved using Ogmo 3.4 or later. LDtk doesn't support older file versions.");
+			return null;
+		}
+
 		log.general("Successfully parsed project: "+json.name);
 
 		// Init ogmo data cache
@@ -34,6 +39,7 @@ class OgmoProject {
 		var ldtkLayerDefs : Map<String, data.def.LayerDef> = new Map(); // ogmo "name" as index
 		var ldtkTilesets : Map<String, data.def.TilesetDef> = new Map(); // ogmo "label" as index
 		var ldtkEntities : Map<String, data.def.EntityDef> = new Map(); // ogmo "name" as index
+		var ldtkIntGridIds : Map<Int, Map<String,String>> = new Map(); // Map<LayerDefUid, Map<ogmoIntGridName>>
 
 		// Prepare base project
 		log.general('Preparing project...');
@@ -49,7 +55,7 @@ class OgmoProject {
 			log.general('Reading project settings...');
 			p.bgColor = convertColor(json.backgroundColor);
 			p.defaultLevelBgColor = p.bgColor;
-			p.defaultGridSize = readGrid(json.layerGridDefaultSize);
+			p.defaultGridSize = readGrid(json.layerGridDefaultSize, 16);
 
 
 
@@ -62,7 +68,7 @@ class OgmoProject {
 				var td = p.defs.createTilesetDef();
 				ldtkTilesets.set(tilesetJson.label, td);
 				td.identifier = data.Project.cleanupIdentifier(tilesetJson.label,true);
-				td.tileGridSize = readGrid({ x:tilesetJson.tileWidth, y:tilesetJson.tileHeight });
+				td.tileGridSize = readGrid({ x:tilesetJson.tileWidth, y:tilesetJson.tileHeight }, 16);
 				td.spacing = tilesetJson.tileSeparationX;
 				td.padding = tilesetJson.tileMarginX;
 				var path = fp.directory+"/"+tilesetJson.path;
@@ -197,31 +203,37 @@ class OgmoProject {
 					case "grid":
 						var layer = p.defs.createLayerDef(IntGrid, data.Project.cleanupIdentifier(layerJson.name, true));
 						ldtkLayerDefs.set(layerJson.name, layer);
-						layer.gridSize = readGrid(layerJson.gridSize);
+						layer.gridSize = readGrid(layerJson.gridSize, 16);
 						layer.intGridValues = [];
+						ldtkIntGridIds.set(layer.uid, new Map());
 						var ignoreFirst = true;
+						var numReg = ~/^[0-9]+$/gi;
 						for(k in Reflect.fields(layerJson.legend)) {
 							if( ignoreFirst ) {
+								ldtkIntGridIds.get(layer.uid).set(k, null);
 								ignoreFirst = false;
 								continue;
 							}
-							layer.addIntGridValue(
-								convertColor( Reflect.field(layerJson.legend,k) ),
-								data.Project.cleanupIdentifier(k,false)
-							);
+							var baseId = numReg.match(k) ? "v"+k : k;
+							var id = data.Project.cleanupIdentifier(baseId,false);
+							var inc = 2;
+							while( !layer.isIntGridValueIdentifierValid(id) )
+								id = data.Project.cleanupIdentifier(baseId+"_"+(inc++), false);
+							ldtkIntGridIds.get(layer.uid).set(k, id);
+							layer.addIntGridValue( convertColor( Reflect.field(layerJson.legend,k) ), id );
 						}
 
 					// Entity layer def
 					case "entity":
 						var layer = p.defs.createLayerDef(Entities, data.Project.cleanupIdentifier(layerJson.name, true));
 						ldtkLayerDefs.set(layerJson.name, layer);
-						layer.gridSize = readGrid(layerJson.gridSize);
+						layer.gridSize = readGrid(layerJson.gridSize, 16);
 
 					// Tile layer def
 					case "tile":
 						var layer = p.defs.createLayerDef(Tiles, data.Project.cleanupIdentifier(layerJson.name, true));
 						ldtkLayerDefs.set(layerJson.name, layer);
-						layer.gridSize = readGrid(layerJson.gridSize);
+						layer.gridSize = readGrid(layerJson.gridSize, 16);
 						if( layerJson.defaultTileset!=null ) {
 							var td = p.defs.getTilesetDef( data.Project.cleanupIdentifier(layerJson.defaultTileset, true) );
 							if( td!=null )
@@ -289,21 +301,31 @@ class OgmoProject {
 
 						// IntGrid instance
 						case IntGrid:
-							var valueMap = new Map();
-							var idx = 0;
-							for(v in ld.getAllIntGridValues())
-								valueMap.set(v.identifier, idx++);
+							// var valueMap = new Map();
+							// var idx = 0;
+							// for(v in ld.getAllIntGridValues())
+							// 	valueMap.set(v.identifier, idx++);
 
 							if( layerJson.grid!=null ) {
 								iterateArray1D( layerJson.grid, li.cWid, (cx,cy,v)->{
-									if( valueMap.exists(v) )
-										li.setIntGrid( cx, cy, valueMap.get(v) );
+									if( !ldtkIntGridIds.get(li.layerDefUid).exists(v) )
+										log.error("Unknown IntGrid value "+v+" in "+li.def.identifier);
+									li.setIntGrid(
+										cx,
+										cy,
+										li.def.getIntGridIndexFromIdentifier(ldtkIntGridIds.get(li.layerDefUid).get(v))
+									);
 								});
 							}
 							else if( layerJson.grid2D!=null ) {
 								iterateArray2D(layerJson.grid2D, (cx,cy,v)->{
-									if( valueMap.exists(v) )
-										li.setIntGrid( cx, cy, valueMap.get(v) );
+									if( !ldtkIntGridIds.get(li.layerDefUid).exists(v) )
+										log.error("Unknown IntGrid value "+v+" in "+li.def.identifier);
+									li.setIntGrid(
+										cx,
+										cy,
+										li.def.getIntGridIndexFromIdentifier(ldtkIntGridIds.get(li.layerDefUid).get(v))
+									);
 								});
 							}
 
@@ -436,8 +458,10 @@ class OgmoProject {
 			cb(cx,cy, arr[cy][cx]);
 	}
 
-	function readGrid(v:XY) : Int {
-		if( v.y!=v.x )
+	function readGrid(v:XY, defaultIfMissing:Int) : Int {
+		if( v==null || !Reflect.hasField(v,"x") )
+			return defaultIfMissing;
+		else if( v.y!=v.x )
 			throw "Unsupported different grid height value";
 		else
 			return v.x;
@@ -477,6 +501,7 @@ typedef XY = {
 
 typedef OgmoProjectJson = {
 	var name: String;
+	var ogmoVersion: String;
 	var levelPaths: Array<String>;
 	var backgroundColor: String;
 	var layerGridDefaultSize : XY;
