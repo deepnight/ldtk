@@ -53,6 +53,10 @@ class Const {
 	public static var JSON_DOC_URL = LDTK_DOMAIN+"/json";
 	public static var JSON_SCHEMA_URL = LDTK_DOMAIN+"/files/JSON_SCHEMA.json";
 
+	public static function getContactEmail() {
+		return "ldtk" + String.fromCharCode(64) + String.fromCharCode(100) + "epnigh" + "t." + "ne"+"t";
+	}
+
 
 	#if !macro
 	public static var JSON_HEADER = {

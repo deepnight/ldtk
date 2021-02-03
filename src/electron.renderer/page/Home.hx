@@ -21,6 +21,7 @@ class Home extends Page {
 			websiteUrl : Const.HOME_URL,
 			issueUrl : Const.ISSUES_URL,
 			jsonUrl: Const.JSON_DOC_URL,
+			email: Const.getContactEmail(),
 		});
 		App.ME.setWindowTitle();
 
@@ -430,8 +431,10 @@ class Home extends Page {
 						App.ME.loadProject(p.filePath.full);
 					});
 				}
-
-				new ui.modal.dialog.LogPrint(i.log);
+				else {
+					new ui.modal.dialog.LogPrint(i.log);
+					new ui.modal.dialog.Message(L.t._("Failed to import this Ogmo project. If you really need this, feel free to send me the Ogmo project file so I can check and fix the updater (see contact link)."));
+				}
 			});
 		});
 	}
