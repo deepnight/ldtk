@@ -8,28 +8,37 @@
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - and a definition object (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
 		"required": [
+			"bgColor",
 			"defs",
+			"externalLevels",
 			"jsonVersion",
 			"levels",
-			"settings",
 			"worldGridHeight",
 			"worldGridWidth",
 			"worldLayout",
+			"advancedOptionFlags",
+			"backupLimit",
+			"backupOnSave",
+			"defaultGridSize",
+			"defaultLevelBgColor",
+			"defaultLevelHeight",
+			"defaultLevelWidth",
+			"defaultPivotX",
+			"defaultPivotY",
+			"exportPng",
+			"exportTiled",
+			"minifyJson",
 			"nextUid"
 		],
 		"properties": {
-			"settings": {
-				"description": "Various settings and data for this project",
-				"$ref": "#/otherTypes/ProjectSettings"
-			},
 			"backupLimit": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
+				"description": "Number of backup files to keep, if the `backupOnSave` is TRUE",
 				"type": [
 					"integer"
 				]
 			},
 			"backupOnSave": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
+				"description": "If TRUE, an extra copy of the project will be created in a sub folder, when saving.",
 				"type": [
 					"boolean"
 				]
@@ -41,13 +50,13 @@
 				]
 			},
 			"defaultLevelBgColor": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
+				"description": "Default background color of levels",
 				"type": [
 					"string"
 				]
 			},
 			"bgColor": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
+				"description": "Project background color",
 				"type": [
 					"string"
 				]
@@ -59,7 +68,7 @@
 				]
 			},
 			"defaultPivotY": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.defaultPivotY`",
+				"description": "Default Y pivot (0 to 1) for new entities",
 				"type": [
 					"number"
 				]
@@ -71,7 +80,7 @@
 				]
 			},
 			"defaultGridSize": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
+				"description": "Default grid size for new layers",
 				"type": [
 					"integer"
 				]
@@ -86,26 +95,37 @@
 				]
 			},
 			"exportPng": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
+				"description": "If TRUE, all layers in all levels will also be exported as PNG along with the project file (default is FALSE)",
 				"type": [
 					"boolean"
 				]
 			},
 			"defaultLevelWidth": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.defaultLevelWidth`",
+				"description": "Default new level width",
 				"type": [
 					"integer"
 				]
 			},
 			"pngFilePattern": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
+				"description": "File naming pattern for exported PNGs",
 				"type": [
 					"string",
 					"null"
 				]
 			},
+			"advancedOptionFlags": {
+				"description": "An array containing various advanced export options (only for experienced users). Possible values: `DiscardPreCsvIntGrid`",
+				"items": {
+					"enum": [
+						"DiscardPreCsvIntGrid"
+					]
+				},
+				"type": [
+					"array"
+				]
+			},
 			"exportTiled": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
+				"description": "If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)",
 				"type": [
 					"boolean"
 				]
@@ -130,25 +150,25 @@
 				]
 			},
 			"defaultPivotX": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.defaultPivotX`",
+				"description": "Default X pivot (0 to 1) for new entities",
 				"type": [
 					"number"
 				]
 			},
 			"defaultLevelHeight": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.defaultLevelWidth`",
+				"description": "Default new level height",
 				"type": [
 					"integer"
 				]
 			},
 			"externalLevels": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
+				"description": "If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.",
 				"type": [
 					"boolean"
 				]
 			},
 			"minifyJson": {
-				"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `settings.TODO`",
+				"description": "If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)",
 				"type": [
 					"boolean"
 				]
@@ -512,129 +532,6 @@
 				},
 				"active": {
 					"description": "If FALSE, the rule effect isn't applied, and no tiles are generated.",
-					"type": [
-						"boolean"
-					]
-				}
-			},
-			"type": [
-				"object"
-			]
-		},
-		"ProjectSettings": {
-			"description": "An object containing misc project settings and data.",
-			"title": "Project settings",
-			"required": [
-				"bgColor",
-				"externalLevels",
-				"advancedOptionFlags",
-				"backupLimit",
-				"backupOnSave",
-				"defaultGridSize",
-				"defaultLevelBgColor",
-				"defaultLevelHeight",
-				"defaultLevelWidth",
-				"defaultPivotX",
-				"defaultPivotY",
-				"exportPng",
-				"exportTiled",
-				"minifyJson"
-			],
-			"additionalProperties": false,
-			"properties": {
-				"backupLimit": {
-					"description": "Number of backup files to keep, if the `backupOnSave` is TRUE",
-					"type": [
-						"integer"
-					]
-				},
-				"backupOnSave": {
-					"description": "If TRUE, an extra copy of the project will be created in a sub folder, when saving.",
-					"type": [
-						"boolean"
-					]
-				},
-				"defaultLevelBgColor": {
-					"description": "Default background color of levels",
-					"type": [
-						"string"
-					]
-				},
-				"bgColor": {
-					"description": "Project background color",
-					"type": [
-						"string"
-					]
-				},
-				"defaultPivotY": {
-					"description": "Default Y pivot (0 to 1) for new entities",
-					"type": [
-						"number"
-					]
-				},
-				"defaultGridSize": {
-					"description": "Default grid size for new layers",
-					"type": [
-						"integer"
-					]
-				},
-				"exportPng": {
-					"description": "If TRUE, all layers in all levels will also be exported as PNG along with the project file (default is FALSE)",
-					"type": [
-						"boolean"
-					]
-				},
-				"defaultLevelWidth": {
-					"description": "Default new level width",
-					"type": [
-						"integer"
-					]
-				},
-				"pngFilePattern": {
-					"description": "File naming pattern for exported PNGs",
-					"type": [
-						"string",
-						"null"
-					]
-				},
-				"advancedOptionFlags": {
-					"description": "An array containing various advanced export options (only for experienced users). Possible values: `DiscardPreCsvIntGrid`, `DiscardRootSettings`",
-					"items": {
-						"enum": [
-							"DiscardPreCsvIntGrid",
-							"DiscardRootSettings"
-						]
-					},
-					"type": [
-						"array"
-					]
-				},
-				"exportTiled": {
-					"description": "If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)",
-					"type": [
-						"boolean"
-					]
-				},
-				"defaultPivotX": {
-					"description": "Default X pivot (0 to 1) for new entities",
-					"type": [
-						"number"
-					]
-				},
-				"defaultLevelHeight": {
-					"description": "Default new level height",
-					"type": [
-						"integer"
-					]
-				},
-				"externalLevels": {
-					"description": "If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.",
-					"type": [
-						"boolean"
-					]
-				},
-				"minifyJson": {
-					"description": "If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)",
 					"type": [
 						"boolean"
 					]

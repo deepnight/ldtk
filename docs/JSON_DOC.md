@@ -2,7 +2,6 @@
 
 ## Table of contents
    - [LDtk Json root](#ldtk-ProjectJson)
-     - [Project settings](#ldtk-ProjectSettings)
    - [Level](#ldtk-LevelJson)
      - [Layer instance](#ldtk-LayerInstanceJson)
        - [Tile instance](#ldtk-Tile)
@@ -27,38 +26,15 @@ This is the root of any Project JSON file. It contains:
 
 Value | Type | Description
 -- | -- | --
+`bgColor` | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Project background color
 `defs` | [Definitions](#ldtk-DefinitionsJson) | A structure containing all the definitions of this project
+`externalLevels`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.
 `jsonVersion` | String | File format version
 `levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
-`settings`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | [Project&nbsp;settings](#ldtk-ProjectSettings) | Various settings and data for this project
 `worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | Height of the world grid in pixels.
 `worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | Width of the world grid in pixels.
 `worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
-`nextUid`<br/><sup class="internal">*Internal editor data*</sup> | Int | Next Unique integer ID available
-~~`exportTiled`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Bool | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.TODO`
-~~`exportPng`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Bool | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.TODO`
-~~`externalLevels`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Bool | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.TODO`
-~~`bgColor`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | String | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.TODO`
-~~`defaultLevelHeight`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Int | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.defaultLevelWidth`
-~~`defaultLevelBgColor`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | String | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.TODO`
-~~`defaultGridSize`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Int | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.TODO`
-~~`minifyJson`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Bool | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.TODO`
-~~`backupOnSave`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Bool | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.TODO`
-~~`backupLimit`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Int | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.TODO`
-~~`defaultLevelWidth`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Int | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.defaultLevelWidth`
-~~`defaultPivotX`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Float | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.defaultPivotX`
-~~`pngFilePattern`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.TODO`
-~~`defaultPivotY`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Float | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `settings.defaultPivotY`
-
-<a id="ldtk-ProjectSettings" name="ldtk-ProjectSettings"></a>
-## 1.1. Project settings   
-An object containing misc project settings and data.
-
-Value | Type | Description
--- | -- | --
-`bgColor` | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Project background color
-`externalLevels`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.
-`advancedOptionFlags`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Array&nbsp;of&nbsp;Enum | An array containing various advanced export options (only for experienced users).<br/> Possible values: `DiscardPreCsvIntGrid`, `DiscardRootSettings`
+`advancedOptionFlags`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Array&nbsp;of&nbsp;Enum | An array containing various advanced export options (only for experienced users).<br/> Possible values: `DiscardPreCsvIntGrid`
 `backupLimit`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Int | Number of backup files to keep, if the `backupOnSave` is TRUE
 `backupOnSave`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, an extra copy of the project will be created in a sub folder, when saving.
 `defaultGridSize`<br/><sup class="internal">*Internal editor data*</sup> | Int | Default grid size for new layers
@@ -70,6 +46,7 @@ Value | Type | Description
 `exportPng`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, all layers in all levels will also be exported as PNG along with the project file (default is FALSE)
 `exportTiled`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)
 `minifyJson`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
+`nextUid`<br/><sup class="internal">*Internal editor data*</sup> | Int | Next Unique integer ID available
 `pngFilePattern`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.2-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | File naming pattern for exported PNGs
 
 <a id="ldtk-LevelJson" name="ldtk-LevelJson"></a>
