@@ -3993,6 +3993,89 @@ canvas#webgl {
 }
 
 
+
+.fieldDefsEditor {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	display: grid;
+	gap: 8px;
+	grid-template-columns: 200px auto;
+	grid-template-rows: auto 40px;
+
+	button {
+		white-space: nowrap;
+	}
+
+	ul.fieldList {
+		overflow: auto;
+		margin: 0;
+
+		li {
+			grid-template-columns: auto min-content min-content;
+			gap: 0px 2px;
+			overflow: hidden;
+			.name {
+				width: 100%;
+				overflow: hidden;
+			}
+		}
+		&:empty::before {
+			content: "No custom field";
+		}
+	}
+
+	.buttons {
+		grid-column: 1/2;
+		grid-row: 2/3;
+	}
+
+	ul.form {
+		overflow: auto;
+		grid-column: 2/3;
+		grid-row: 1/3;
+
+		input.type {
+			font-family: 'Courier New', Courier, monospace;
+		}
+		li>label {
+			flex: 0 0 100px;
+		}
+
+		button.convert, .F_Path.file-select {
+			padding: 4px;
+			flex: 0 1 0px;
+			align-self: stretch;
+		}
+
+		*[class*="F_"],
+		*[class="Array"] {
+			display: none;
+		}
+
+
+		&.type-Array .Array,
+		&.type-F_Int .F_int,
+		&.type-F_Float .F_Float,
+		&.type-F_Bool .F_Bool,
+		&.type-F_Color .F_Color,
+		&.type-F_Enum .F_Enum,
+		&.type-F_Point .F_Point,
+		&.type-F_Text .F_Text,
+		&.type-F_String .F_String,
+		&.type-F_Path .F_Path {
+			display: flex;
+		}
+
+		&.type-F_Path .F_Path.file-select {
+			display: initial;
+
+		}
+	}
+}
+
+
+
 .window.panel {
 	button.delete {
 		flex: 0 0 32px;
@@ -5349,85 +5432,4 @@ $patternSize : 32px;
 		min-height: 32px;
 	}
 
-}
-
-
-.fieldDefsEditor {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	display: grid;
-	gap: 8px;
-	grid-template-columns: 200px auto;
-	grid-template-rows: auto 40px;
-
-	button {
-		white-space: nowrap;
-	}
-
-	ul.fieldList {
-		overflow: auto;
-		margin: 0;
-
-		li {
-			grid-template-columns: auto min-content min-content;
-			gap: 0px 2px;
-			overflow: hidden;
-			.name {
-				width: 100%;
-				overflow: hidden;
-			}
-		}
-		&:empty::before {
-			content: "No custom field";
-		}
-	}
-
-	.buttons {
-		grid-column: 1/2;
-		grid-row: 2/3;
-	}
-
-	ul.form {
-		overflow: auto;
-		grid-column: 2/3;
-		grid-row: 1/3;
-
-		input.type {
-			font-family: 'Courier New', Courier, monospace;
-		}
-		li>label {
-			flex: 0 0 100px;
-		}
-
-		button.convert, .F_Path.file-select {
-			padding: 4px;
-			flex: 0 1 0px;
-			align-self: stretch;
-		}
-
-		*[class*="F_"],
-		*[class="Array"] {
-			display: none;
-		}
-
-
-		&.type-Array .Array,
-		&.type-F_Int .F_int,
-		&.type-F_Float .F_Float,
-		&.type-F_Bool .F_Bool,
-		&.type-F_Color .F_Color,
-		&.type-F_Enum .F_Enum,
-		&.type-F_Point .F_Point,
-		&.type-F_Text .F_Text,
-		&.type-F_String .F_String,
-		&.type-F_Path .F_Path {
-			display: flex;
-		}
-
-		&.type-F_Path .F_Path.file-select {
-			display: initial;
-
-		}
-	}
 }

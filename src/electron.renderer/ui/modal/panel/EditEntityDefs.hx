@@ -4,18 +4,12 @@ import data.DataTypes;
 
 class EditEntityDefs extends ui.modal.Panel {
 	static var LAST_ENTITY_ID = -1;
-	static var LAST_FIELD_ID = -1;
 
 	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jContent.find(".entityList ul");
-	var jFieldList(get,never) : js.jquery.JQuery; inline function get_jFieldList() return jContent.find(".fieldList ul");
-
 	var jEntityForm(get,never) : js.jquery.JQuery; inline function get_jEntityForm() return jContent.find(".entityForm>ul.form");
-	var jFieldForm(get,never) : js.jquery.JQuery; inline function get_jFieldForm() return jContent.find(".fieldForm>ul.form");
 	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jContent.find(".previewWrapper");
 
 	var curEntity : Null<data.def.EntityDef>;
-	var curField : Null<data.def.FieldDef>;
-
 	var fieldsForm : FieldDefsForm;
 
 
@@ -50,15 +44,14 @@ class EditEntityDefs extends ui.modal.Panel {
 			fd->editor.ge.emit( EntityFieldRemoved(curEntity) ),
 			(from,to)->{
 				var moved = curEntity.sortField(from, to);
-				selectField(moved);
 				editor.ge.emit( EntityFieldSorted );
+				return moved;
 			}
 		);
 		jContent.find("#fields").replaceWith( fieldsForm.jWrapper );
 
 
 		// Select same entity as current client selection
-		var lastFieldId = LAST_FIELD_ID; // because selectEntity changes it
 		if( editDef!=null )
 			selectEntity( editDef );
 		else if( editor.curLayerDef!=null && editor.curLayerDef.type==Entities )
@@ -67,10 +60,6 @@ class EditEntityDefs extends ui.modal.Panel {
 			selectEntity( project.defs.getEntityDef(LAST_ENTITY_ID) );
 		else
 			selectEntity(project.defs.entities[0]);
-
-		// Re-select last field
-		if( lastFieldId>=0 && curEntity!=null && curEntity.getFieldDef(lastFieldId)!=null )
-			selectField( curEntity.getFieldDef(lastFieldId) );
 	}
 
 
@@ -93,13 +82,6 @@ class EditEntityDefs extends ui.modal.Panel {
 			selectEntity(project.defs.entities[0]);
 		else
 			selectEntity(null);
-	}
-
-	function deleteFieldDef(fd:data.def.FieldDef) {
-		new ui.LastChance( L.t._("Entity field ::name:: deleted", { name:fd.identifier }), project );
-		curEntity.removeField(project, fd);
-		editor.ge.emit( EntityFieldRemoved(curEntity) );
-		selectField( curEntity.fieldDefs[0] );
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -143,27 +125,17 @@ class EditEntityDefs extends ui.modal.Panel {
 			ed = editor.project.defs.entities[0];
 
 		curEntity = ed;
-		curField = ed==null ? null : ed.fieldDefs[0];
 		LAST_ENTITY_ID = curEntity==null ? -1 : curEntity.uid;
-		LAST_FIELD_ID = curField==null ? -1 : curField.uid;
 		updatePreview();
 		updateEntityForm();
 		updateFieldsForm();
 		updateEntityList();
 	}
 
-	function selectField(fd:data.def.FieldDef) {
-		curField = fd;
-		LAST_FIELD_ID = curField==null ? -1 : curField.uid;
-		updateFieldsForm();
-		updateEntityList();
-	}
-
-
 	function updateEntityForm() {
 		jEntityForm.find("*").off(); // cleanup event listeners
 
-		var jAll = jEntityForm.add( jFieldForm ).add( jFieldList.parent() ).add( jPreview );
+		var jAll = jEntityForm.add( jPreview );
 		if( curEntity==null ) {
 			jAll.css("visibility","hidden");
 			jContent.find(".none").show();
@@ -359,7 +331,6 @@ class EditEntityDefs extends ui.modal.Panel {
 
 	function updateEntityList() {
 		jEntityList.empty();
-		jFieldList.empty();
 
 		// Entities
 		for(ed in project.defs.entities) {

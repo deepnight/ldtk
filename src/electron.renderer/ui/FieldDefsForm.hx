@@ -17,7 +17,7 @@ class FieldDefsForm {
 	var onCreate : FieldDef->Void;
 	var onChange : FieldDef->Void;
 	var onRemove : FieldDef->Void;
-	var onSort : Int->Int->Void;
+	var onSort : Int->Int->FieldDef;
 
 
 	public function new(create, onCreate, onChange, onRemove, onSort) {
@@ -214,7 +214,8 @@ class FieldDefsForm {
 
 		// Make fields list sortable
 		JsTools.makeSortable(jList, function(ev) {
-			onSort(ev.oldIndex, ev.newIndex);
+			var moved = onSort(ev.oldIndex, ev.newIndex);
+			selectField(moved);
 		});
 	}
 
