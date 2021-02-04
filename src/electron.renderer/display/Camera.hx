@@ -59,8 +59,11 @@ class Camera extends dn.Process {
 
 	public function onWorldModeChange(worldMode:Bool, usedMouseWheel:Bool) {
 		if( !usedMouseWheel )
-			if( worldMode )
+			if( worldMode ) {
 				targetZoom = snapZoomValue( M.fmax(0.3, getFitZoom()*0.8) );
+				if( editor.project.levels.length<=1 )
+					targetZoom*=0.5;
+			}
 			else
 				fit();
 	}
