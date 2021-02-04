@@ -26,6 +26,12 @@ class LayerRender {
 	}
 
 
+	public function onLayerSelection() {
+		for(e in entityRenders)
+			e.onLayerSelection();
+	}
+
+
 	public function render(li:data.inst.LayerInstance, renderAutoLayers=true, ?target:h2d.Object) {
 		// Cleanup
 		if( root!=null )

@@ -133,6 +133,8 @@ class LevelRender extends dn.Process {
 			case LayerInstanceSelected:
 				applyAllLayersVisibility();
 				invalidateUi();
+				for(l in layerRenders)
+					l.onLayerSelection();
 
 			case LevelSettingsChanged(l):
 				invalidateUi();

@@ -64,6 +64,10 @@ class EntityRender extends dn.Process {
 		posInvalidated = true;
 	}
 
+	public function onLayerSelection() {
+		posInvalidated = true;
+	}
+
 
 	public static function renderCore(?ei:data.inst.EntityInstance, ?ed:data.def.EntityDef) : h2d.Object {
 		if( ei==null && ed==null )
@@ -391,6 +395,11 @@ class EntityRender extends dn.Process {
 
 		root.x = ei.x;
 		root.y = ei.y;
+
+		// Hide fields in other layers
+		if( Editor.ME.curLayerDef==null || Editor.ME.curLayerDef.type!=Entities )
+			alpha*=0.4;
+		// above.visible = center.visible = beneath.visible = Editor.ME.curLayerDef.type==Entities;
 
 		// Update field wrappers
 		above.setScale(scale);
