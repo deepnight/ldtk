@@ -16,7 +16,7 @@ class FieldDefsForm {
 	var onCreate : FieldDef->Void;
 	var onChange : FieldDef->Void;
 	var onRemove : FieldDef->Void;
-	var onSort : Int->Int->FieldDef;
+	var onSort : FieldDef->Void;
 
 
 	public function new(onCreate, onChange, onRemove, onSort) {
@@ -253,6 +253,7 @@ class FieldDefsForm {
 			fieldDefs.insert(to, moved);
 
 			selectField(moved);
+			onSort(moved);
 		});
 
 		JsTools.parseComponents(jList);

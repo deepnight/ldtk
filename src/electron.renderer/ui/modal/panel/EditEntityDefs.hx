@@ -41,11 +41,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			fd->editor.ge.emit( EntityFieldAdded(curEntity) ),
 			fd->editor.ge.emit( EntityFieldDefChanged(curEntity) ),
 			fd->editor.ge.emit( EntityFieldRemoved(curEntity) ),
-			(from,to)->{
-				var moved = curEntity.sortField(from, to);
-				editor.ge.emit( EntityFieldSorted );
-				return moved;
-			}
+			fd->editor.ge.emit( EntityFieldSorted )
 		);
 		jContent.find("#fields").replaceWith( fieldsForm.jWrapper );
 

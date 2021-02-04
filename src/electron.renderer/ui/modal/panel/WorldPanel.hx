@@ -13,9 +13,10 @@ class WorldPanel extends ui.modal.Panel {
 			(fd)->editor.ge.emit( WorldSettingsChanged ),
 			(fd)->editor.ge.emit( WorldSettingsChanged ),
 			(fd)->editor.ge.emit( WorldSettingsChanged ),
-			(from,to)->null
+			(fd)->editor.ge.emit( WorldSettingsChanged )
 		);
 		jContent.find("#levelFields").replaceWith(fieldForm.jWrapper);
+		fieldForm.setFields( project.defs.levelFields );
 		updateWorldForm();
 	}
 
@@ -28,6 +29,7 @@ class WorldPanel extends ui.modal.Panel {
 				updateWorldForm();
 
 			case ProjectSelected:
+				fieldForm.setFields( project.defs.levelFields );
 				updateWorldForm();
 
 			case _:
