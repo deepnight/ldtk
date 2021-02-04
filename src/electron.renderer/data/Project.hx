@@ -313,6 +313,20 @@ class Project {
 		tidy();
 	}
 
+	public function snapWorldGridX(v:Int, forceGreaterThanZero:Bool) {
+		return worldLayout!=GridVania ? v
+		: forceGreaterThanZero
+			? M.imax( M.round(v/worldGridWidth), 1 ) * worldGridWidth
+			: M.round(v/worldGridWidth) * worldGridWidth;
+	}
+
+	public function snapWorldGridY(v:Int, forceGreaterThanZero:Bool) {
+		return worldLayout!=GridVania ? v
+		: forceGreaterThanZero
+			? M.imax( M.round(v/worldGridHeight), 1 ) * worldGridHeight
+			: M.round(v/worldGridHeight) * worldGridHeight;
+	}
+
 	public function onWorldGridChange(oldWid:Int, oldHei:Int) {
 		for( l in levels ) {
 			var wcx = Std.int(l.worldX/oldWid);
