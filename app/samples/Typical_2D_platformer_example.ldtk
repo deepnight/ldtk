@@ -945,8 +945,8 @@
 				"tilesetId": null,
 				"tileId": null,
 				"tileRenderMode": "Stretch",
-				"maxPerLevel": 0,
-				"limitBehavior": "DiscardOldOnes",
+				"maxPerLevel": 1,
+				"limitBehavior": "PreventAdding",
 				"pivotX": 0.5,
 				"pivotY": 1,
 				"fieldDefs": [
@@ -1075,8 +1075,8 @@
 				"tilesetId": null,
 				"tileId": null,
 				"tileRenderMode": "Stretch",
-				"maxPerLevel": 0,
-				"limitBehavior": "DiscardOldOnes",
+				"maxPerLevel": 1,
+				"limitBehavior": "PreventAdding",
 				"pivotX": 0.5,
 				"pivotY": 0.5,
 				"fieldDefs": [
