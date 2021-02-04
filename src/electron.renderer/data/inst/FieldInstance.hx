@@ -4,7 +4,7 @@ import data.DataTypes;
 
 class FieldInstance {
 	public var _project : Project;
-	public var def(get,never) : data.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defUid);
+	public var def(get,never) : data.def.FieldDef; inline function get_def() return _project.defs.getEntityFieldDef(defUid);
 
 	public var defUid: Int;
 

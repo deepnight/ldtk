@@ -10,6 +10,7 @@ class Definitions {
 	public var tilesets: Array<data.def.TilesetDef> = [];
 	public var enums: Array<data.def.EnumDef> = [];
 	public var externalEnums: Array<data.def.EnumDef> = [];
+	public var levelFields: Array<data.def.FieldDef> = [];
 
 
 	public function new(project:Project) {
@@ -18,12 +19,12 @@ class Definitions {
 
 	public function toJson(p:Project) : ldtk.Json.DefinitionsJson {
 		return {
-			layers: layers.map( function(ld) return ld.toJson() ),
-			entities: entities.map( function(ed) return ed.toJson() ),
-			tilesets: tilesets.map( function(td) return td.toJson() ),
-			enums: enums.map( function(ed) return ed.toJson(p) ),
-			externalEnums: externalEnums.map( function(ed) return ed.toJson(p) ),
-			levelFields: [],
+			layers: layers.map( ld->ld.toJson() ),
+			entities: entities.map( ed->ed.toJson() ),
+			tilesets: tilesets.map( td->td.toJson() ),
+			enums: enums.map( ed->ed.toJson(p) ),
+			externalEnums: externalEnums.map( ed->ed.toJson(p) ),
+			levelFields: levelFields.map( fd->fd.toJson() ),
 		}
 	}
 
@@ -45,6 +46,10 @@ class Definitions {
 		if( json.externalEnums!=null )
 			for( enumJson in JsonTools.readArray(json.externalEnums) )
 				d.externalEnums.push( data.def.EnumDef.fromJson(p.jsonVersion, enumJson) );
+
+		if( json.levelFields!=null )
+			for(fieldJson in JsonTools.readArray(json.levelFields))
+				d.levelFields.push( data.def.FieldDef.fromJson(p, fieldJson) );
 
 		return d;
 	}
@@ -318,7 +323,7 @@ class Definitions {
 
 	/**  FIELD DEFS  *****************************************/
 
-	public function getFieldDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.FieldDef> {
+	public function getEntityFieldDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.FieldDef> {
 		for(ed in entities)
 		for(fd in ed.fieldDefs)
 			if( fd.uid==id || fd.identifier==id )
