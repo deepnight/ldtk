@@ -38,7 +38,6 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Create fields editor
 		fieldsForm = new ui.FieldDefsForm(
-			(t,n,arr)->curEntity.createFieldDef(project, t, n, arr),
 			fd->editor.ge.emit( EntityFieldAdded(curEntity) ),
 			fd->editor.ge.emit( EntityFieldDefChanged(curEntity) ),
 			fd->editor.ge.emit( EntityFieldRemoved(curEntity) ),

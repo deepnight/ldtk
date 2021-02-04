@@ -32,7 +32,7 @@ class FieldDef {
 
 	var _project : data.Project;
 
-	@:allow(data.def.EntityDef)
+	@:allow(data.def.EntityDef, ui.FieldDefsForm)
 	private function new(p:data.Project, uid:Int, t:data.DataTypes.FieldType, array:Bool) {
 		_project = p;
 		this.uid = uid;

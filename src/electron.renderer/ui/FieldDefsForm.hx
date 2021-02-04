@@ -13,16 +13,14 @@ class FieldDefsForm {
 	var fieldDefs : Array<FieldDef>;
 	var curField : Null<FieldDef>;
 
-	var create : (type:data.DataTypes.FieldType, baseName:String, isArray:Bool)->FieldDef;
 	var onCreate : FieldDef->Void;
 	var onChange : FieldDef->Void;
 	var onRemove : FieldDef->Void;
 	var onSort : Int->Int->FieldDef;
 
 
-	public function new(create, onCreate, onChange, onRemove, onSort) {
+	public function new(onCreate, onChange, onRemove, onSort) {
 		this.fieldDefs = [];
-		this.create = create;
 		this.onCreate = onCreate;
 		this.onChange = onChange;
 		this.onRemove = onRemove;
@@ -86,7 +84,6 @@ class FieldDefsForm {
 			selectField( fieldDefs[0] );
 	}
 
-
 	function onCreateField(anchor:js.jquery.JQuery, isArray:Bool) {
 		function _create(type:data.DataTypes.FieldType) {
 			switch type {
@@ -126,14 +123,21 @@ class FieldDefsForm {
 				case _:
 			}
 
+
+			// Create field def
+			var fd = new FieldDef(project, project.makeUniqId(), type, isArray);
 			var baseName = switch type {
 				case F_Enum(enumDefUid): project.defs.getEnumDef(enumDefUid).identifier;
 				case _: L.getFieldType(type);
 			}
-			var f = create(type, baseName, isArray);
-			// var f = curEntity.createFieldDef(project, type, baseName, isArray);
-			onCreate(f);
-			selectField(f);
+			fd.identifier = baseName + (isArray?"_array":"");
+			var idx = 2;
+			while( !isFieldIdentifierUnique(fd.identifier) )
+				fd.identifier = baseName+(idx++);
+			fieldDefs.push(fd);
+
+			onCreate(fd);
+			selectField(fd);
 			jForm.find("input:not([readonly]):first").focus().select();
 		}
 
@@ -236,7 +240,18 @@ class FieldDefsForm {
 
 		// Make fields list sortable
 		JsTools.makeSortable(jList, false, function(ev) {
-			var moved = onSort(ev.oldIndex, ev.newIndex);
+			var from = ev.oldIndex;
+			var to = ev.newIndex;
+
+			if( from<0 || from>=fieldDefs.length || from==to )
+				return;
+
+			if( to<0 || to>=fieldDefs.length )
+				return;
+
+			var moved = fieldDefs.splice(from,1)[0];
+			fieldDefs.insert(to, moved);
+
 			selectField(moved);
 		});
 
@@ -247,6 +262,7 @@ class FieldDefsForm {
 
 	function onFieldChange() {
 		onChange(curField);
+		updateList();
 		updateForm();
 	}
 

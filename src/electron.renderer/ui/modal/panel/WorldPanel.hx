@@ -10,7 +10,6 @@ class WorldPanel extends ui.modal.Panel {
 		loadTemplate("worldPanel");
 
 		fieldForm = new FieldDefsForm(
-			(t,n,arr)->null,
 			(fd)->editor.ge.emit( WorldSettingsChanged ),
 			(fd)->editor.ge.emit( WorldSettingsChanged ),
 			(fd)->editor.ge.emit( WorldSettingsChanged ),
