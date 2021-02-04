@@ -296,7 +296,7 @@
 					]
 				},
 				"fieldInstances": {
-					"description": "",
+					"description": "An array of all custom fields and their values.",
 					"items": {
 						"$ref": "#/otherTypes/FieldInstance"
 					},
@@ -329,6 +329,7 @@
 				"enums",
 				"externalEnums",
 				"layers",
+				"levelFields",
 				"tilesets"
 			],
 			"additionalProperties": false,
@@ -351,6 +352,15 @@
 						"array"
 					]
 				},
+				"levelFields": {
+					"description": "An array containing all custom fields available to all levels.",
+					"items": {
+						"$ref": "#/otherTypes/FieldDef"
+					},
+					"type": [
+						"array"
+					]
+				},
 				"enums": {
 					"description": "",
 					"items": {
@@ -361,7 +371,7 @@
 					]
 				},
 				"entities": {
-					"description": "",
+					"description": "All entities, including their custom fields",
 					"items": {
 						"$ref": "#/otherTypes/EntityDef"
 					},
@@ -1435,6 +1445,7 @@
 			"required": [
 				"__bgColor",
 				"__neighbours",
+				"fieldInstances",
 				"identifier",
 				"pxHei",
 				"pxWid",
@@ -1520,6 +1531,15 @@
 					"description": "Unique Int identifier",
 					"type": [
 						"integer"
+					]
+				},
+				"fieldInstances": {
+					"description": "An array containing this level custom field values.",
+					"items": {
+						"$ref": "#/otherTypes/FieldInstance"
+					},
+					"type": [
+						"array"
 					]
 				},
 				"pxWid": {
