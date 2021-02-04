@@ -7,7 +7,7 @@ class FieldDefsForm {
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 
 	public var jWrapper : js.jquery.JQuery;
-	var jList(get,never) : js.jquery.JQuery; inline function get_jList() return jWrapper.find("ul.fieldList ");
+	var jList(get,never) : js.jquery.JQuery; inline function get_jList() return jWrapper.find("ul.fieldList");
 	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jWrapper.find("ul.form");
 	var jButtons(get,never) : js.jquery.JQuery; inline function get_jButtons() return jList.siblings(".buttons");
 	var fieldDefs : Array<FieldDef>;
@@ -57,6 +57,8 @@ class FieldDefsForm {
 				}
 			);
 		});
+
+		JsTools.parseComponents( jButtons );
 	}
 
 
@@ -129,11 +131,14 @@ class FieldDefsForm {
 		// Type picker
 		var w = new ui.modal.Dialog(anchor,"fieldTypes");
 		var types : Array<data.DataTypes.FieldType> = [
-			F_Int, F_Float, F_Bool, F_String, F_Text, F_Enum(null), F_Color, F_Point, F_Path
+			F_Int, F_Float, F_Bool, F_String, F_Text, F_Path, F_Color, F_Enum(null), F_Point
 		];
 		for(type in types) {
 			var b = new J("<button/>");
 			w.jContent.append(b);
+			b.css({
+				backgroundColor: FieldDef.getTypeColorHex(type, 0.55),
+			});
 			JsTools.createFieldTypeIcon(type, b);
 			b.click( function(ev) {
 				_create(type);
@@ -193,10 +198,17 @@ class FieldDefsForm {
 			if( curField==fd )
 				li.addClass("active");
 
-			var sub = new J('<span class="type"></span>');
-			sub.appendTo(li);
-			sub.text( L.getFieldTypeShortName(fd.type) );
-			// sub.text( fd.getShortDescription() );
+			var fType = new J('<span class="type"></span>');
+			if( fd.isArray ) {
+				fType.css({ backgroundColor: FieldDef.getTypeColorHex(fd.type, 0.4) });
+				fType.addClass("array");
+			}
+			fType.appendTo(li);
+			fType.text( L.getFieldTypeShortName(fd.type) );
+			fType.css({
+				borderColor: FieldDef.getTypeColorHex(fd.type, fd.isArray ? 1 : 0.4),
+				color: FieldDef.getTypeColorHex(fd.type),
+			});
 
 			ui.modal.ContextMenu.addTo(li, [
 				{
@@ -214,10 +226,12 @@ class FieldDefsForm {
 		}
 
 		// Make fields list sortable
-		JsTools.makeSortable(jList, function(ev) {
+		JsTools.makeSortable(jList, false, function(ev) {
 			var moved = onSort(ev.oldIndex, ev.newIndex);
 			selectField(moved);
 		});
+
+		JsTools.parseComponents(jList);
 	}
 
 
@@ -237,8 +251,6 @@ class FieldDefsForm {
 		}
 		else
 			jForm.css("visibility","visible");
-
-		JsTools.parseComponents(jForm);
 
 		// Set form classes
 		for(k in Type.getEnumConstructs(data.DataTypes.FieldType))
@@ -572,7 +584,5 @@ class FieldDefsForm {
 				onFieldChange();
 			});
 		});
-
-		JsTools.parseComponents( jForm );
 	}
 }

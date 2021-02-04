@@ -85,6 +85,10 @@ class JsTools {
 		var icon = new J("<span/>");
 		icon.addClass("icon fieldType");
 		icon.addClass(type.getName());
+		// icon.css({
+			// backgroundColor: data.def.FieldDef.getTypeColorHex(type, 0.5),
+			// borderColor: data.def.FieldDef.getTypeColorHex(type),
+		// });
 		if( withName )
 			icon.append('<span class="typeName">'+L.getFieldType(type)+'</span>');
 		icon.append('<span class="typeIcon">'+L.getFieldTypeShortName(type)+'</span>');

@@ -112,6 +112,25 @@ class FieldDef {
 
 
 	#if editor
+
+	public static function getTypeColorHex(t:FieldType, luminosity=1.0) : String {
+		var c = switch t {
+			case F_Int: "#1ba7c9";
+			case F_Float: "#1ba7c9";
+			case F_String: "#ffa23c";
+			case F_Text: "#ffa23c";
+			case F_Path: "#ffa23c";
+			case F_Bool: "#3afdff";
+			case F_Color: "#ff6c48";
+			case F_Enum(enumDefUid): "#9bc95a";
+			case F_Point: "#9bc95a";
+		}
+		if( luminosity<1 )
+			return C.intToHex( C.setLuminosityInt( C.hexToInt(c), luminosity ) );
+		else
+			return c;
+	}
+
 	public function getShortDescription(includeArray=true) : String {
 		var desc = switch type {
 			case F_Int: "Int";

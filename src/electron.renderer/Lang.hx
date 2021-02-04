@@ -59,7 +59,7 @@ class Lang {
 	public static function getFieldTypeShortName(type:data.DataTypes.FieldType) : LocaleString {
 		return switch type {
 			case F_Int: t._("123");
-			case F_Color: t._("Red");
+			case F_Color: t._("Col");
 			case F_Float: t._("1.0");
 			case F_String: t._("\"Ab\"");
 			case F_Text: t._("\"\\n\\n\"");

@@ -2187,6 +2187,10 @@ textarea {
 
 			button {
 				margin: 0;
+				&:hover {
+					color: black;
+					background-color: $orange !important;
+				}
 			}
 		}
 	}
@@ -4032,8 +4036,9 @@ canvas#webgl {
 			}
 			.type {
 				display: block;
+				box-sizing: border-box;
 				flex: 0 1 0px;
-				width: 2em;
+				width: 3em;
 				padding: 4px;
 				overflow: hidden;
 
@@ -4041,12 +4046,19 @@ canvas#webgl {
 				font-size: 8pt;
 				text-align: center;
 
-				border: 1px solid $helpDark;
+				border: 1px solid white; // color in code
 				border-radius: 3px;
+
+				&.array {
+					border: 2px solid white; // color in code
+					border-top: none;
+					border-bottom: none;
+				}
 			}
 			&.active .type {
-				color: black;
-				border-color: black;
+				color: black !important;
+				border-color: black !important;
+				background: transparent !important;
 			}
 		}
 		&:empty::before {
