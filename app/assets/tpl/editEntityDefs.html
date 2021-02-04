@@ -15,55 +15,57 @@
 	</div>
 </div>
 
+<div class="rightColumn">
 
-<div class="entityForm">
-	<div class="previewWrapper">
-		<div class="label"></div>
+	<div class="entityForm">
+		<div class="previewWrapper">
+			<div class="label"></div>
+		</div>
+
+		<ul class="form">
+			<li>
+				<label for="eName">Entity identifier</label>
+				<input type="text" name="name" id="eName"/>
+				<div class="info identifier"></div>
+			</li>
+
+			<li>
+				<label for="width">Width</label>
+				<input type="text" name="width" class="small" id="width"/>
+				<span>x</span>
+				<input type="text" name="height" class="small"/>
+				<span>px</span>
+			</li>
+
+			<li class="renderMode">
+				<label>Editor visual</label>
+
+				<input type="color" name="color" id="eColor"/>
+				<select class="renderMode"></select>
+				<div class="tilePicker"></div>
+				<select class="mode_Tile tileRenderMode"></select>
+
+				<label for="showIdentifier">Show identifier</label>
+				<input type="checkbox" name="showIdentifier" id="showIdentifier"/>
+			</li>
+
+			<li>
+				<label>Pivot point</label>
+				<div class="pivot"></div>
+			</li>
+
+			<li>
+				<label for="maxPerLevel">Max per level</label>
+				<input type="text" name="maxPerLevel" id="maxPerLevel" placeholder="Unlimited" class="small"/>
+				<span>, and </span>
+				<select name="limitBehavior"></select>
+				<span>when max is reached.</span>
+			</li>
+
+		</ul>
+
 	</div>
 
-	<ul class="form">
-		<li>
-			<label for="eName">Entity identifier</label>
-			<input type="text" name="name" id="eName"/>
-			<div class="info identifier"></div>
-		</li>
-
-		<li>
-			<label for="width">Width</label>
-			<input type="text" name="width" class="small" id="width"/>
-			<span>x</span>
-			<input type="text" name="height" class="small"/>
-			<span>px</span>
-		</li>
-
-		<li class="renderMode">
-			<label>Editor visual</label>
-
-			<input type="color" name="color" id="eColor"/>
-			<select class="renderMode"></select>
-			<div class="tilePicker"></div>
-			<select class="mode_Tile tileRenderMode"></select>
-
-			<label for="showIdentifier">Show identifier</label>
-			<input type="checkbox" name="showIdentifier" id="showIdentifier"/>
-		</li>
-
-		<li>
-			<label>Pivot point</label>
-			<div class="pivot"></div>
-		</li>
-
-		<li>
-			<label for="maxPerLevel">Max per level</label>
-			<input type="text" name="maxPerLevel" id="maxPerLevel" placeholder="Unlimited" class="small"/>
-			<span>, and </span>
-			<select name="limitBehavior"></select>
-			<span>when max is reached.</span>
-		</li>
-
-	</ul>
+	<div id="fields"></div>
 
 </div>
-
-
-<div id="fields"></div>

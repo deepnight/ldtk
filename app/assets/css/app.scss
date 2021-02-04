@@ -5367,7 +5367,7 @@ $patternSize : 32px;
 		justify-content: stretch;
 		gap: 16px;
 		grid-template-columns: 200px auto;
-		grid-template-rows: min-content min-content auto;
+		grid-template-rows: min-content auto;
 		overflow: hidden;
 
 		>.header {
@@ -5378,7 +5378,6 @@ $patternSize : 32px;
 		}
 
 		>.entityList {
-			grid-row: 2/4;
 			display: grid;
 			grid-template-rows: auto min-content;
 			overflow: hidden;
@@ -5390,6 +5389,16 @@ $patternSize : 32px;
 			}
 			ul:empty::before {
 				content: "No entity";
+			}
+		}
+
+		.rightColumn {
+			overflow: hidden;
+			display: grid;
+			grid-template-rows: min-content auto;
+			.entityForm {
+				margin-bottom: 16px;
+				border-bottom: 1px solid $bgLight;
 			}
 		}
 
