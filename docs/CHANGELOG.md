@@ -1,9 +1,9 @@
 # 0.8.0
 
+- TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
 - TODO **Ogmo 3 import**
 - TODO codemirror
 - TODO 32bits support, file size increase
-- TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
 - TODO sidebar design (less gutters & lines)
 - TODO all panels now cover main sidebar
 - TODO multi lines pop up text editor
