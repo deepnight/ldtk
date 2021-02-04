@@ -2,6 +2,7 @@ package ui.modal.panel;
 
 class LevelPanel extends ui.modal.Panel {
 	var level: data.Level;
+	var link : h2d.Graphics;
 
 	public function new() {
 		super();
@@ -9,6 +10,9 @@ class LevelPanel extends ui.modal.Panel {
 		jMask.hide();
 		level = editor.curLevel;
 		loadTemplate("levelPanel");
+
+		link = new h2d.Graphics();
+		editor.root.add(link, Const.DP_UI);
 
 		// Delete button
 		jContent.find("button.delete").click( (_)->{
@@ -61,11 +65,47 @@ class LevelPanel extends ui.modal.Panel {
 		});
 
 		jContent.find("button.worldSettings").click( (_)->{
-			jContent.find("#worldForm").slideToggle(100);
+			new ui.modal.panel.WorldPanel();
+			// jContent.find("#worldForm").slideToggle(100);
 		});
 
 		updateWorldForm();
 		updateLevelForm();
+		renderLink();
+	}
+
+	function renderLink() {
+		if( project.worldLayout==LinearHorizontal )
+			return;
+
+		var c = 0xffcc00;
+		// jWindow.css("border-color", C.intToHex(c));
+		var cam = Editor.ME.camera;
+		var render = Editor.ME.levelRender;
+		link.clear();
+		link.lineStyle(2*cam.pixelRatio, c, 0.5);
+		var coords = Coords.fromWorldCoords(curLevel.worldX, curLevel.worldCenterY);
+		link.moveTo(coords.canvasX, coords.canvasY);
+		link.lineTo(0, cam.height*0.5);
+	}
+
+	override function onDispose() {
+		super.onDispose();
+		link.remove();
+		link = null;
+	}
+
+	override function onClose() {
+		super.onClose();
+		link.visible = false;
+		var anyWorldPanel = false;
+		for(m in Modal.ALL)
+			if( !m.destroyed && m!=this && Std.isOfType(m,WorldPanel) ) {
+				anyWorldPanel = true;
+				break;
+			}
+		if( !anyWorldPanel )
+			editor.setWorldMode(false);
 	}
 
 	function useLevel(l:data.Level) {
@@ -101,21 +141,19 @@ class LevelPanel extends ui.modal.Panel {
 
 			case LevelSelected(l):
 				useLevel(l);
+				renderLink();
 
 			case LevelRemoved(l):
 
 			case WorldLevelMoved:
 				updateLevelForm();
+				renderLink();
 
 			case ViewportChanged :
+				renderLink();
 
 			case _:
 		}
-	}
-
-	override function onClose() {
-		super.onClose();
-		editor.setWorldMode(false);
 	}
 
 	function onFieldChange() {
@@ -326,6 +364,7 @@ class LevelPanel extends ui.modal.Panel {
 
 	override function update() {
 		super.update();
+
 		if( !editor.worldMode )
 			close();
 

@@ -7,12 +7,8 @@ class Panel extends ui.Modal {
 	var closeBtInvalidated = true;
 
 	public function new() {
-		ui.Modal.closeAll(this);
-
 		super();
-
-		if( !Std.isOfType(this,ui.modal.panel.LevelPanel) )
-			editor.setWorldMode(false);
+		ui.Modal.closeAll(this);
 
 		EntityInstanceEditor.closeExisting();
 		editor.selectionTool.clear();
@@ -62,7 +58,7 @@ class Panel extends ui.Modal {
 		var w = jWrapper.outerWidth();
 		if( w!=_lastWrapperWid ) {
 			_lastWrapperWid = w;
-			jCloseButton.css({ left:(w-2)+"px" });
+			jCloseButton.css({ left:(w-3)+"px" });
 		}
 	}
 

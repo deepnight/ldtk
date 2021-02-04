@@ -4418,11 +4418,49 @@ body.sorting ul.collapsedSortTarget {
 	display: block !important;
 }
 
+.window.panel.worldPanel {
+	width: auto;
+
+	.wrapper {
+		padding: 8px;
+	}
+
+	.content {
+		display: grid;
+		grid-auto-rows: min-content auto;
+		gap: 8px;
+		width: 600px;
+		height: 100%;
+
+		.levelFields {
+			display: grid;
+			grid-template-rows: min-content auto;
+		}
+
+		ul.form .GridVania,
+		ul.form .LinearHorizontal,
+		ul.form .LinearVertical,
+		ul.form .Free {
+			display: none;
+		}
+
+		ul.form.layout-GridVania .GridVania,
+		ul.form.layout-LinearHorizontal .LinearHorizontal,
+		ul.form.layout-LinearVertical .LinearVertical,
+		ul.form.layout-Free .Free {
+			display: flex;
+		}
+	}
+}
+
+
 .window.panel.levelPanel {
 	width: auto;
 
 	.wrapper {
 		padding: 8px;
+		border-right: 2px solid $orange;
+		background-color: $bgDark;
 	}
 
 	.content {
@@ -4519,20 +4557,6 @@ body.sorting ul.collapsedSortTarget {
 			span.ready {
 				display: none;
 			}
-		}
-
-		ul.form .GridVania,
-		ul.form .LinearHorizontal,
-		ul.form .LinearVertical,
-		ul.form .Free {
-			display: none;
-		}
-
-		ul.form.layout-GridVania .GridVania,
-		ul.form.layout-LinearHorizontal .LinearHorizontal,
-		ul.form.layout-LinearVertical .LinearVertical,
-		ul.form.layout-Free .Free {
-			display: flex;
 		}
 	}
 }

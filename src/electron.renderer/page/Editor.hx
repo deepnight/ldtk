@@ -1536,6 +1536,8 @@ class Editor extends Page {
 		#if debug
 		if( App.ME.cd.has("debugTools") ) {
 			App.ME.clearDebug();
+			App.ME.debug("mouse="+getMouse());
+
 			App.ME.debug("appButtons="
 				+ ( App.ME.isMouseButtonDown(0) ? "[left] " : "" )
 				+ ( App.ME.isMouseButtonDown(2) ? "[right] " : "" )

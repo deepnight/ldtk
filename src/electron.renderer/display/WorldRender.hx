@@ -24,6 +24,7 @@ class WorldRender extends dn.Process {
 	var worldBounds : h2d.Graphics;
 	var axes : h2d.Graphics;
 	var grids : h2d.Graphics;
+	var currentHighlight : h2d.Graphics;
 	public var levelsWrapper : h2d.Layers;
 
 	var levelInvalidations : Map<Int,Bool> = new Map();
@@ -54,6 +55,9 @@ class WorldRender extends dn.Process {
 		axes = new h2d.Graphics();
 		editor.root.add(axes, Const.DP_BG);
 
+		currentHighlight = new h2d.Graphics();
+		root.add(currentHighlight, Const.DP_TOP);
+
 		levelsWrapper = new h2d.Layers();
 		root.add(levelsWrapper, Const.DP_MAIN);
 	}
@@ -63,6 +67,7 @@ class WorldRender extends dn.Process {
 		worldBg.wrapper.remove();
 		axes.remove();
 		grids.remove();
+		currentHighlight.remove();
 		editor.ge.removeListener(onGlobalEvent);
 	}
 
@@ -71,6 +76,7 @@ class WorldRender extends dn.Process {
 		renderAxes();
 		renderGrids();
 		renderBg();
+		updateCurrentHighlight();
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
@@ -84,6 +90,7 @@ class WorldRender extends dn.Process {
 
 				renderGrids();
 				updateLayout();
+				updateCurrentHighlight();
 
 			case ViewportChanged:
 				root.setScale( camera.adjustedZoom );
@@ -92,12 +99,14 @@ class WorldRender extends dn.Process {
 				renderAxes();
 				renderGrids();
 				updateLabels();
+				updateCurrentHighlight();
 
 			case GridChanged(active):
 				renderGrids();
 
 			case WorldLevelMoved:
 				updateLayout();
+				updateCurrentHighlight();
 
 			case ProjectSelected:
 				renderAll();
@@ -108,6 +117,7 @@ class WorldRender extends dn.Process {
 
 			case LevelRestoredFromHistory(l):
 				invalidateLevel(l);
+				updateCurrentHighlight();
 
 			case LevelSelected(l):
 				invalidateLevel(l);
@@ -117,10 +127,12 @@ class WorldRender extends dn.Process {
 				invalidateLevel(l);
 				updateLayout();
 				renderWorldBounds();
+				updateCurrentHighlight();
 
 			case LevelSettingsChanged(l):
 				invalidateLevel(l);
 				renderWorldBounds();
+				updateCurrentHighlight();
 
 			case LayerDefRemoved(uid):
 				renderAll();
@@ -291,6 +303,18 @@ class WorldRender extends dn.Process {
 			b.bottom-b.top+1+pad*2,
 			pad*0.5
 		);
+	}
+
+	function updateCurrentHighlight() {
+		currentHighlight.visible = editor.worldMode;
+		if( !currentHighlight.visible )
+			return;
+
+		currentHighlight.clear();
+		currentHighlight.lineStyle(7/camera.adjustedZoom, 0xffcc00);
+		var l = editor.curLevel;
+		var p = 2 / camera.adjustedZoom;
+		currentHighlight.drawRect(l.worldX-p, l.worldY-p, l.pxWid+p*2, l.pxHei+p*2);
 	}
 
 	public function updateLayout() {
