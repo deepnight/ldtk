@@ -77,6 +77,13 @@ class Definitions {
 		return false;
 	}
 
+	public function hasAutoLayer() {
+		for(ld in layers)
+			if( ld.isAutoLayer() )
+				return true;
+		return false;
+	}
+
 	public function getLayerDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.LayerDef> {
 		for(ld in layers)
 			if( ld.uid==id || ld.identifier==id )

@@ -141,7 +141,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		JsTools.parseComponents(jForm);
 		jForm.show();
 		jContent.find(".none").hide();
-		if( !project.defs.hasLayerType(Tiles) )
+		if( !project.defs.hasLayerType(Tiles) && !project.defs.hasAutoLayer() )
 			jContent.find(".noTileLayer").show();
 		else
 			jContent.find(".noTileLayer").hide();
