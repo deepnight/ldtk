@@ -66,11 +66,13 @@ class EntityTool extends tool.LayerTool<Int> {
 		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 		switch ge {
 			case Entity(_) if( ev.button==0 ):
+				editor.selectionTool.select([ge]);
 				editor.selectionTool.startUsing(ev,m);
 				stopUsing(m);
 				return;
 
 			case PointField(_) if( ev.button==0 ):
+				editor.selectionTool.select([ge]);
 				editor.selectionTool.startUsing(ev,m);
 				stopUsing(m);
 				return;

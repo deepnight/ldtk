@@ -200,7 +200,7 @@ class SelectionTool extends Tool<Int> {
 		super.startUsing(ev,m);
 
 		if( ev.button==0 ) {
-			if( group.isOveringSelection(m) ) {
+			if( !App.ME.isAltDown() || group.isOveringSelection(m) ) {
 				// Move existing selection
 				if( group.hasIncompatibleGridSizes() ) {
 					new ui.modal.dialog.Message(L.t._("This selection can't be moved around because it contains elements from using different grid sizes."));
