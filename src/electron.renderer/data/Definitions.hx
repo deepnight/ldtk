@@ -23,6 +23,7 @@ class Definitions {
 			tilesets: tilesets.map( function(td) return td.toJson() ),
 			enums: enums.map( function(ed) return ed.toJson(p) ),
 			externalEnums: externalEnums.map( function(ed) return ed.toJson(p) ),
+			levelFields: [],
 		}
 	}
 

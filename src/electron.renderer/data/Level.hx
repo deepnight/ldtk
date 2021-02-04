@@ -121,6 +121,7 @@ class Level {
 			},
 
 			externalRelPath: null, // is only set upon actual saving, if project uses externalLevels option
+			fieldInstances: [],
 			layerInstances: layerInstances.map( function(li) return li.toJson() ),
 			__neighbours: neighbours,
 		}
