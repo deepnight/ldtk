@@ -49,6 +49,7 @@ class TextEditor extends ui.modal.Dialog {
 			case null: null;
 			case LangJson: "javascript";
 			case LangXml: "xml";
+			case LangMarkdown: "markdown";
 
 			case LangRuby: "ruby";
 			case LangPython: "python";

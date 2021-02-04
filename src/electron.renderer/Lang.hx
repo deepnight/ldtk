@@ -77,6 +77,7 @@ class Lang {
 
 			case LangJson: t._("JSON");
 			case LangXml: t._("XML/HTML");
+			case LangMarkdown: t._("Markdown");
 
 			case LangPython: t._("Python");
 			case LangRuby: t._("Ruby");
