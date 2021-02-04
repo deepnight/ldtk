@@ -1195,6 +1195,11 @@ ul.form {
 			&.empty {
 				button.pick {
 					background-color: $bgLight;
+					opacity: 0.6;
+					&:hover {
+						background-color: $bgLighter;
+						opacity: 1;
+					}
 				}
 				button.remove {
 					display: none;
@@ -4460,6 +4465,7 @@ body.sorting ul.collapsedSortTarget {
 	.wrapper {
 		padding: 8px;
 		border-right: 2px solid $orange;
+		box-shadow: none;
 		background-color: $bgDark;
 	}
 
@@ -4470,33 +4476,10 @@ body.sorting ul.collapsedSortTarget {
 		width: 320px;
 		height: 100%;
 
-		#worldForm {
-			display: none;
-			margin-top: -10px;
-			margin-bottom: 16px;
-			padding: 12px;
-			padding-bottom: 32px;
-
-			border: none;
-			border-bottom: 1px solid $bgLight;
-			border-bottom-left-radius: 3px;
-			border-bottom-right-radius: 3px;
-
-			background-color: $bgDark;
-			box-shadow: 0px 4px 16px black inset;
-
-			h2 {
-				color: $bgLighter;
-				border-color: $bgLighter;
-			}
-
-			>ul {
-				border: 0;
-				padding: 0;
-			}
-		}
-
 		#levelForm {
+			input#identifier {
+				font-size: 14pt;
+			}
 			.bg {
 				align-items: stretch;
 				button.pick {
@@ -4540,6 +4523,16 @@ body.sorting ul.collapsedSortTarget {
 				text-decoration: none;
 				color: black;
 				background-color: $orange;
+			}
+		}
+
+		.buttons {
+			button.worldSettings {
+				flex: 1 0 100%;
+			}
+			button.dark {
+				flex: 0 0 32px;
+				background-color: $bgMed;
 			}
 		}
 

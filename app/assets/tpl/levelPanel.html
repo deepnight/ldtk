@@ -8,42 +8,14 @@
 		<span class="running">Select location -&gt;</span>
 	</button>
 
+	<button class="duplicate dark" title="**Duplicate level** Note: you can also just drag a level with CTRL+ALT to duplicate it.">
+		<span class="icon copy"></span>
+	</button>
+
+	<button class="delete dark" title="Delete level">
+		<span class="icon delete"></span>
+	</button>
 </div>
-
-
-<!-- World settings -->
-
-<div id="worldForm">
-
-	<h2>World settings</h2>
-
-	<ul class="form">
-		<li>
-			<label for="color">World layout</label>
-			<select name="worldLayout"></select>
-			<div class="info">This setting will affect how all levels are be positioned in the "world".</div>
-		</li>
-
-		<li class="GridVania">
-			<label for="worldGridWidth">World grid</label>
-			<input type="text" id="worldGridWidth" name="worldGridWidth"/> <span>x</span>
-			<input type="text" id="worldGridHeight" name="worldGridHeight"/> <span>px</span>
-		</li>
-
-		<li>
-			<label for="defaultLevelWidth">Default "new level" size</label>
-			<input type="text" id="defaultLevelWidth"/> <span>x</span>
-			<input type="text" id="defaultLevelHeight"/> <span>px</span>
-		</li>
-	</ul>
-
-</div>
-
-
-
-<!-- Current level -->
-
-<h2><span class="levelIdentifier">???</span></h2>
 
 <ul class="form" id="levelForm">
 	<li>
@@ -84,18 +56,13 @@
 	</li>
 </ul>
 
-<div class="buttons">
-	<button class="duplicate gray" title="**Duplicate level** Note: you can also just drag a level with CTRL+ALT to duplicate it.">
-		Duplicate level
-	</button>
-
-	<button class="delete dark" title="Delete level">
-		<span class="icon delete"></span>
-	</button>
-</div>
-
 
 <!-- Custom level fields -->
+
+<h2>
+	Custom fields
+	<a class="editFields">Edit</a>
+</h2>
 
 <div class="customFields">
 	<em>Custom fields are not available yet :)</em>
