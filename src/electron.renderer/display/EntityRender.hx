@@ -390,8 +390,9 @@ class EntityRender extends dn.Process {
 	public inline function updatePos() {
 		posInvalidated = false;
 		var cam = Editor.ME.camera;
-		var scale = 1 / cam.adjustedZoom;
-		var alpha = M.fclamp( (cam.adjustedZoom-0.33*cam.pixelRatio) / 2, 0, 1 );
+		var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
+		var scale = (1-downScale) / cam.adjustedZoom;
+		var alpha = M.fclamp( (cam.adjustedZoom-0.33*cam.pixelRatio) / 3, 0, 1 );
 
 		root.x = ei.x;
 		root.y = ei.y;
