@@ -3,6 +3,8 @@
 - TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
 - TODO **Ogmo 3 import**
 - TODO codemirror
+- TODO level custom fields
+- TODO world/level panel separation
 - TODO 32bits support, file size increase
 - TODO sidebar design (less gutters & lines)
 - TODO all panels now cover main sidebar
@@ -14,6 +16,7 @@
 - Disabled "New level" context menu when holding `Shift` or `Alt`
 - Fixed layer order for "simplified" level render in World view
 - Entity fields are now slightly faded out when not currently on an Entity layer
+- Fixed entity instance editor not closing when switching level
 - The default behaviour when limiting an entity count is now to "Move the last one" instead "Discard the oldest one".
 
 # 0.7.2
