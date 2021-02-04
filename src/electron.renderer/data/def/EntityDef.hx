@@ -31,7 +31,7 @@ class EntityDef {
 		width = height = 16;
 		maxPerLevel = 0;
 		showName = true;
-		limitBehavior = DiscardOldOnes;
+		limitBehavior = MoveLastOne;
 		tileRenderMode = Stretch;
 		identifier = "Entity"+uid;
 		setPivot(0.5,1);
@@ -83,7 +83,7 @@ class EntityDef {
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
 		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
 
-		o.limitBehavior = JsonTools.readEnum( ldtk.Json.EntityLimitBehavior, json.limitBehavior, true, DiscardOldOnes );
+		o.limitBehavior = JsonTools.readEnum( ldtk.Json.EntityLimitBehavior, json.limitBehavior, true, MoveLastOne );
 		if( JsonTools.readBool( (cast json).discardExcess, true)==false )
 			o.limitBehavior = PreventAdding;
 
