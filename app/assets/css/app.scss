@@ -4527,9 +4527,7 @@ body.sorting ul.collapsedSortTarget {
 		}
 
 		.buttons {
-			button.worldSettings {
-				flex: 1 0 100%;
-			}
+			flex-wrap: nowrap;
 			button.dark {
 				flex: 0 0 32px;
 				background-color: $bgMed;
