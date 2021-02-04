@@ -11,6 +11,7 @@ class Level {
 	public var pxWid : Int;
 	public var pxHei : Int;
 	public var layerInstances : Array<data.inst.LayerInstance> = [];
+	public var fieldInstances : Array<data.inst.FieldInstance> = [];
 
 	public var externalRelPath: Null<String>;
 
@@ -121,8 +122,8 @@ class Level {
 			},
 
 			externalRelPath: null, // is only set upon actual saving, if project uses externalLevels option
-			fieldInstances: [],
-			layerInstances: layerInstances.map( function(li) return li.toJson() ),
+			fieldInstances: fieldInstances.map( fi->fi.toJson() ),
+			layerInstances: layerInstances.map( li->li.toJson() ),
 			__neighbours: neighbours,
 		}
 	}
@@ -155,6 +156,12 @@ class Level {
 			for( layerJson in JsonTools.readArray(json.layerInstances) ) {
 				var li = data.inst.LayerInstance.fromJson(p, layerJson);
 				l.layerInstances.push(li);
+			}
+
+		if( json.fieldInstances!=null )
+			for( fieldJson in JsonTools.readArray(json.fieldInstances)) {
+				var fi = data.inst.FieldInstance.fromJson(p,fieldJson);
+				l.fieldInstances.push(fi);
 			}
 
 		return l;
