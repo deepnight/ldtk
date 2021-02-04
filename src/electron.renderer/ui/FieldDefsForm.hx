@@ -59,10 +59,19 @@ class FieldDefsForm {
 		});
 
 		JsTools.parseComponents( jButtons );
+
+		updateList();
+		updateForm();
+	}
+
+
+	public function hide() {
+		jWrapper.css({ visibility: "hidden" });
 	}
 
 
 	public function setFields(fields:Array<FieldDef>) {
+		jWrapper.css({ visibility: "show" });
 		fieldDefs = fields;
 
 		// Default field selection
