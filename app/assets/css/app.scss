@@ -2856,7 +2856,7 @@ canvas#webgl {
 		}
 
 		.window.panel {
-			&:not(.editAllAutoLayerRules):not(.worldPanel) {
+			&:not(.editAllAutoLayerRules):not(.levelPanel) {
 				width: calc( 100vw - #{ $mainPanelCompactWid } );
 			}
 		}
@@ -4418,7 +4418,7 @@ body.sorting ul.collapsedSortTarget {
 	display: block !important;
 }
 
-.window.panel.worldPanel {
+.window.panel.levelPanel {
 	width: auto;
 
 	.wrapper {

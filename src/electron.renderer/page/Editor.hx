@@ -1,7 +1,5 @@
 package page;
 
-import ui.modal.panel.WorldPanel;
-
 class Editor extends Page {
 	public static var ME : Editor;
 
@@ -122,10 +120,6 @@ class Editor extends Page {
 
 		jMainPanel.find("button.world").click( function(_) {
 			setWorldMode(!worldMode);
-			// if( ui.Modal.isOpen(ui.modal.panel.WorldPanel) )
-			// 	ui.Modal.closeAll();
-			// else
-			// 	new ui.modal.panel.WorldPanel();
 		});
 
 		jMainPanel.find("button.editLayers").click( function(_) {
@@ -927,7 +921,7 @@ class Editor extends Page {
 		if( worldMode ) {
 			N.quick(L.t._("World view"), new J('<span class="icon world"/>'));
 			ui.Modal.closeAll();
-			new WorldPanel();
+			new ui.modal.panel.LevelPanel();
 		}
 		else
 			ui.EntityInstanceEditor.closeExisting();

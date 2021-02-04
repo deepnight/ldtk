@@ -19,7 +19,7 @@ class Level {
 	public var bgPivotX: Float;
 	public var bgPivotY: Float;
 
-	@:allow(ui.modal.panel.WorldPanel)
+	@:allow(ui.modal.panel.LevelPanel)
 	var bgColor : Null<UInt>;
 
 	public var worldCenterX(get,never) : Int;

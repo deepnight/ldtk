@@ -1,6 +1,6 @@
 package ui.modal.panel;
 
-class WorldPanel extends ui.modal.Panel {
+class LevelPanel extends ui.modal.Panel {
 	var level: data.Level;
 
 	public function new() {
@@ -8,7 +8,7 @@ class WorldPanel extends ui.modal.Panel {
 
 		jMask.hide();
 		level = editor.curLevel;
-		loadTemplate("worldPanel");
+		loadTemplate("levelPanel");
 
 		// Delete button
 		jContent.find("button.delete").click( (_)->{

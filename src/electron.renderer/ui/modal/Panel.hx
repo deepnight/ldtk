@@ -11,7 +11,7 @@ class Panel extends ui.Modal {
 
 		super();
 
-		if( !Std.isOfType(this,ui.modal.panel.WorldPanel) )
+		if( !Std.isOfType(this,ui.modal.panel.LevelPanel) )
 			editor.setWorldMode(false);
 
 		EntityInstanceEditor.closeExisting();
