@@ -4011,7 +4011,7 @@ canvas#webgl {
 	overflow: hidden;
 	display: grid;
 	gap: 8px;
-	grid-template-columns: 200px auto;
+	grid-template-columns: 250px auto;
 	grid-template-rows: auto 40px;
 
 	button {
@@ -4029,6 +4029,24 @@ canvas#webgl {
 			.name {
 				width: 100%;
 				overflow: hidden;
+			}
+			.type {
+				display: block;
+				flex: 0 1 0px;
+				width: 2em;
+				padding: 4px;
+				overflow: hidden;
+
+				color: $help;
+				font-size: 8pt;
+				text-align: center;
+
+				border: 1px solid $helpDark;
+				border-radius: 3px;
+			}
+			&.active .type {
+				color: black;
+				border-color: black;
 			}
 		}
 		&:empty::before {

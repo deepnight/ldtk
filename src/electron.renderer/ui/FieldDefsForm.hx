@@ -193,9 +193,10 @@ class FieldDefsForm {
 			if( curField==fd )
 				li.addClass("active");
 
-			var sub = new J('<span class="sub"></span>');
+			var sub = new J('<span class="type"></span>');
 			sub.appendTo(li);
-			sub.text( fd.getShortDescription() );
+			sub.text( L.getFieldTypeShortName(fd.type) );
+			// sub.text( fd.getShortDescription() );
 
 			ui.modal.ContextMenu.addTo(li, [
 				{
@@ -218,6 +219,14 @@ class FieldDefsForm {
 			selectField(moved);
 		});
 	}
+
+
+
+	function onFieldChange() {
+		onChange(curField);
+		updateForm();
+	}
+
 
 	function updateForm() {
 		jForm.find("*").off(); // cleanup events
@@ -277,7 +286,7 @@ class FieldDefsForm {
 								project,
 								curField,
 								c,
-								()->onChange(curField)
+								onFieldChange
 							);
 						}
 
@@ -329,7 +338,7 @@ class FieldDefsForm {
 				}
 			}
 		);
-		i.onChange = ()->onChange(curField);
+		i.onChange = onFieldChange;
 
 
 		var i = new form.input.EnumSelect(
@@ -345,15 +354,15 @@ class FieldDefsForm {
 			case Hidden, PointStar, PointPath, RadiusPx, RadiusGrid, EntityTile:
 				i.setEnabled(false);
 		}
-		i.onChange = ()->onChange(curField);
+		i.onChange = onFieldChange;
 
 		var i = Input.linkToHtmlInput( curField.editorAlwaysShow, jForm.find("input[name=editorAlwaysShow]") );
-		i.onChange = ()->onChange(curField);
+		i.onChange = onFieldChange;
 		i.setEnabled( curField.editorDisplayMode!=Hidden );
 
 
 		var i = Input.linkToHtmlInput( curField.identifier, jForm.find("input[name=name]") );
-		i.onChange = ()->onChange(curField);
+		i.onChange = onFieldChange;
 		i.validityCheck = function(id) {
 			return true; // HACK
 			// return data.Project.isValidIdentifier(id) && curEntity.isFieldIdentifierUnique(id); // TODO
@@ -386,7 +395,7 @@ class FieldDefsForm {
 
 				defInput.change( function(ev) {
 					curField.setDefault( defInput.val() );
-					onChange(curField);
+					onFieldChange();
 					defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
 				});
 
@@ -417,7 +426,7 @@ class FieldDefsForm {
 						curField.setDefault(null);
 					else if( v!="" )
 						curField.setDefault(v);
-					onChange(curField);
+					onFieldChange();
 				});
 
 			case F_Color:
@@ -425,7 +434,7 @@ class FieldDefsForm {
 				defInput.val( C.intToHex(curField.getColorDefault()) );
 				defInput.change( function(ev) {
 					curField.setDefault( defInput.val() );
-					onChange(curField);
+					onFieldChange();
 				});
 
 			case F_Bool:
@@ -434,13 +443,13 @@ class FieldDefsForm {
 				defInput.change( function(ev) {
 					var checked = defInput.prop("checked") == true;
 					curField.setDefault( Std.string(checked) );
-					onChange(curField);
+					onFieldChange();
 				});
 		}
 
 		// Nullable
 		var i = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]") );
-		i.onChange = ()->onChange(curField);
+		i.onChange = onFieldChange;
 
 		// Multi-lines
 		// if( curField.isString() ) {
@@ -470,7 +479,7 @@ class FieldDefsForm {
 				}
 			);
 			i.setBounds(0, 99999);
-			i.onChange = ()->onChange(curField);
+			i.onChange = onFieldChange;
 			// Max
 			var i = new form.input.IntInput(
 				jForm.find("input[name=arrayMaxLength]"),
@@ -482,7 +491,7 @@ class FieldDefsForm {
 				}
 			);
 			i.setBounds(0, 99999);
-			i.onChange = ()->onChange(curField);
+			i.onChange = onFieldChange;
 		}
 
 		// Min
@@ -490,7 +499,7 @@ class FieldDefsForm {
 		input.val( curField.min==null ? "" : curField.min );
 		input.change( function(ev) {
 			curField.setMin( input.val() );
-			onChange(curField);
+			onFieldChange();
 		});
 
 		// Max
@@ -498,7 +507,7 @@ class FieldDefsForm {
 		input.val( curField.max==null ? "" : curField.max );
 		input.change( function(ev) {
 			curField.setMax( input.val() );
-			onChange(curField);
+			onFieldChange();
 		});
 
 		// String regex
@@ -549,7 +558,7 @@ class FieldDefsForm {
 			input.val( curField.acceptFileTypes.join("  ") );
 		input.change( function(ev) {
 			curField.setAcceptFileTypes( input.val() );
-			onChange(curField);
+			onFieldChange();
 		});
 
 		// File select button
@@ -560,7 +569,7 @@ class FieldDefsForm {
 				var defInput = jForm.find("input[name=fDef]");
 				defInput.val(relPath);
 				curField.setDefault(relPath);
-				onChange(curField);
+				onFieldChange();
 			});
 		});
 
