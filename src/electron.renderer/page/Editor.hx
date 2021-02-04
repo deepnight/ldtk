@@ -806,7 +806,7 @@ class Editor extends Page {
 
 	function onMouseWheel(e:hxd.Event) {
 		var m = getMouse();
-		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta*0.1 );
+		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta*0.05*camera.pixelRatio );
 		camera.cancelAllAutoMovements();
 
 		// Auto world mode on zoom out
@@ -1546,7 +1546,7 @@ class Editor extends Page {
 				+ ( App.ME.isMouseButtonDown(2) ? "[right] " : "" )
 				+ ( App.ME.isMouseButtonDown(1) ? "[middle] " : "" )
 			);
-			App.ME.debug("zoom="+M.pretty(camera.adjustedZoom,1));
+			App.ME.debug("zoom="+M.pretty(camera.adjustedZoom,1)+" pixelratio="+camera.pixelRatio);
 			App.ME.debug("-- Tools & UI ----------------------------------------");
 			App.ME.debug("  "+worldTool);
 			App.ME.debug("  "+panTool);
