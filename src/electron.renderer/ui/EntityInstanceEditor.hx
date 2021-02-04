@@ -95,6 +95,9 @@ class EntityInstanceEditor extends dn.Process {
 			case ViewportChanged :
 				renderLink();
 
+			case LevelSelected(level):
+				closeExisting();
+
 			case _:
 		}
 	}
@@ -121,7 +124,7 @@ class EntityInstanceEditor extends dn.Process {
 		var render = Editor.ME.levelRender;
 		link.clear();
 		link.lineStyle(4*cam.pixelRatio, c, 0.33);
-		var coords = Coords.fromWorldCoords(ei.x, ei.y);
+		var coords = Coords.fromLevelCoords(ei.x, ei.y);
 		link.moveTo(coords.canvasX, coords.canvasY);
 		link.lineTo(
 			cam.width - jWindow.outerWidth() * cam.pixelRatio,
