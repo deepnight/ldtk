@@ -3,6 +3,7 @@ package ui.modal.panel;
 class LevelPanel extends ui.modal.Panel {
 	var level: data.Level;
 	var link : h2d.Graphics;
+	var formFields : FieldInstancesForm;
 
 	public function new() {
 		super();
@@ -67,6 +68,12 @@ class LevelPanel extends ui.modal.Panel {
 		jContent.find("button.worldSettings").click( (_)->{
 			new ui.modal.panel.WorldPanel();
 		});
+
+		jContent.find("a.editFields").click( (_)->{
+			new ui.modal.panel.WorldPanel();
+		});
+
+		// formFields = new FieldInstancesForm() // TODO
 
 		updateLevelForm();
 		renderLink();

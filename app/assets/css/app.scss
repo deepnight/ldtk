@@ -4426,9 +4426,9 @@ body.sorting ul.collapsedSortTarget {
 .window.panel.worldPanel {
 	width: auto;
 
-	.wrapper {
-		padding: 8px;
-	}
+	// .wrapper {
+		// padding: 8px;
+	// }
 
 	.content {
 		display: grid;
@@ -4475,6 +4475,21 @@ body.sorting ul.collapsedSortTarget {
 		gap: 8px;
 		width: 320px;
 		height: 100%;
+
+		a.editFields {
+			display: inline-block;
+			margin-left: 8px;
+			padding: 2px 4px;
+			font-size: 9pt;
+			color: black;
+			background-color: $orange;
+			border-radius: 3px;
+			cursor: pointer;
+			vertical-align: middle;
+			&:hover {
+				background-color: white;
+			}
+		}
 
 		#levelForm {
 			input#identifier {
