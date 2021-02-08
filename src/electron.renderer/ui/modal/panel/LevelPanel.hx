@@ -252,7 +252,7 @@ class LevelPanel extends ui.modal.Panel {
 			jIsDefault.hide();
 
 		// Create bg image picker
-		jForm.find(".bg .imagePicker").remove();
+		jForm.find("dd.bg .imagePicker").remove();
 		var jImg = JsTools.createImagePicker(level.bgRelPath, (?relPath)->{
 			var old = level.bgRelPath;
 			if( relPath==null && old!=null ) {
@@ -272,12 +272,12 @@ class LevelPanel extends ui.modal.Panel {
 			}
 			onFieldChange();
 		});
-		jImg.prependTo( jForm.find(".bg") );
+		jImg.prependTo( jForm.find("dd.bg") );
 
 		if( level.bgRelPath!=null )
-			jForm.find(".bg .pos").show();
+			jForm.find("dd.bg .pos").show();
 		else
-			jForm.find(".bg .pos").hide();
+			jForm.find("dd.bg .pos").hide();
 
 
 		// Bg position
