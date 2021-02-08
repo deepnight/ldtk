@@ -1,8 +1,8 @@
 package data;
 
 class Project {
-	public static var DEFAULT_WORKSPACE_BG = 0x676877;
-	public static var DEFAULT_LEVEL_BG = 0x7f8093;
+	public static var DEFAULT_WORKSPACE_BG = dn.Color.hexToInt("#40465B");
+	public static var DEFAULT_LEVEL_BG = dn.Color.hexToInt("#696a79");
 	public static var DEFAULT_GRID_SIZE = 16; // px
 
 	public var filePath : dn.FilePath; // not stored in JSON
