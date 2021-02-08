@@ -211,7 +211,7 @@ class LevelRender extends dn.Process {
 					if( li.def.type==Entities )
 						invalidateLayer(li);
 
-			case EntityFieldAdded(ed), EntityFieldRemoved(ed), EntityFieldDefChanged(ed):
+			case EntityFieldDefAdded(ed), EntityFieldDefRemoved(ed), EntityFieldDefChanged(ed):
 				if( editor.curLayerInstance!=null ) {
 					var li = editor.curLevel.getLayerInstanceFromEntity(ed);
 					invalidateLayer( li==null ? editor.curLayerInstance : li );
@@ -222,7 +222,7 @@ class LevelRender extends dn.Process {
 					if( li.def.type==Entities )
 						invalidateLayer(li);
 
-			case EntityInstanceAdded(ei), EntityInstanceRemoved(ei), EntityInstanceChanged(ei), EntityInstanceFieldChanged(ei):
+			case EntityInstanceAdded(ei), EntityInstanceRemoved(ei), EntityInstanceChanged(ei), EntityFieldInstanceChanged(ei):
 				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
 				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
@@ -234,7 +234,7 @@ class LevelRender extends dn.Process {
 			case LayerDefAdded:
 
 			case EntityDefAdded:
-			case EntityFieldSorted:
+			case EntityFieldDefSorted:
 
 			case ToolOptionChanged:
 

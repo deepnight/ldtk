@@ -53,17 +53,17 @@ enum GlobalEvent {
 	EntityInstanceAdded(ei:data.inst.EntityInstance);
 	EntityInstanceRemoved(ei:data.inst.EntityInstance);
 	EntityInstanceChanged(ei:data.inst.EntityInstance);
-	EntityInstanceFieldChanged(ei:data.inst.EntityInstance);
 
 	EntityDefAdded;
 	EntityDefRemoved;
 	EntityDefChanged;
 	EntityDefSorted;
 
-	EntityFieldAdded(ed:data.def.EntityDef);
-	EntityFieldRemoved(ed:data.def.EntityDef);
+	EntityFieldDefAdded(ed:data.def.EntityDef);
+	EntityFieldDefRemoved(ed:data.def.EntityDef);
 	EntityFieldDefChanged(ed:data.def.EntityDef);
-	EntityFieldSorted;
+	EntityFieldDefSorted;
+	EntityFieldInstanceChanged(ei:data.inst.EntityInstance);
 
 	EnumDefAdded;
 	EnumDefRemoved;

@@ -36,10 +36,10 @@ class LevelHistory {
 			case ProjectSelected:
 				clearHistory();
 
-			case LayerDefAdded, EntityDefAdded, EntityFieldAdded(_):
+			case LayerDefAdded, EntityDefAdded, EntityFieldDefAdded(_):
 				initMostAncientLayerStates(false);
 
-			case LayerDefRemoved(_), EntityDefRemoved, EntityFieldRemoved(_), EnumDefRemoved, TilesetDefRemoved(_), EnumDefValueRemoved, LayerDefConverted:
+			case LayerDefRemoved(_), EntityDefRemoved, EntityFieldDefRemoved(_), EnumDefRemoved, TilesetDefRemoved(_), EnumDefValueRemoved, LayerDefConverted:
 				clearHistory();
 
 			case LayerRuleChanged(r):
@@ -80,8 +80,8 @@ class LevelHistory {
 			case TilesetDefAdded(td):
 			case TilesetDefPixelDataCacheRebuilt(td):
 
-			case EntityDefSorted, EntityFieldSorted, EntityFieldDefChanged(_):
-			case EntityInstanceFieldChanged(ei):
+			case EntityDefSorted, EntityFieldDefSorted, EntityFieldDefChanged(_):
+			case EntityFieldInstanceChanged(ei):
 			case EntityInstanceAdded(ei):
 			case EntityInstanceRemoved(ei):
 			case EntityInstanceChanged(ei):

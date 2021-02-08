@@ -123,7 +123,7 @@ class EntityTool extends tool.LayerTool<Int> {
 						fi.removeArrayValue(arrayIdx);
 					else
 						fi.parseValue(arrayIdx, null);
-					editor.ge.emit( EntityInstanceFieldChanged(ei) );
+					editor.ge.emit( EntityFieldInstanceChanged(ei) );
 					editor.selectionTool.select([ GenericLevelElement.Entity(li,ei) ]);
 					editor.levelRender.bleepPoint(
 						(pt.cx+0.5) * li.def.gridSize,

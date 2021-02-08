@@ -65,7 +65,7 @@ class EntityInstanceEditor extends dn.Process {
 
 	function onGlobalEvent(ge:GlobalEvent) {
 		switch ge {
-			case ProjectSettingsChanged, EntityDefChanged, EntityFieldDefChanged(_), EntityFieldSorted:
+			case ProjectSettingsChanged, EntityDefChanged, EntityFieldDefChanged(_), EntityFieldDefSorted:
 				if( ei==null || ei.def==null )
 					destroy();
 				else
@@ -82,7 +82,7 @@ class EntityInstanceEditor extends dn.Process {
 				if( ei==this.ei )
 					updateForm();
 
-			case EntityInstanceFieldChanged(ei):
+			case EntityFieldInstanceChanged(ei):
 				if( ei==this.ei )
 					updateForm();
 
@@ -200,7 +200,7 @@ class EntityInstanceEditor extends dn.Process {
 		form.onChange = ()->{
 			editor.curLevelHistory.saveLayerState( editor.curLayerInstance );
 			editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
-			editor.ge.emit( EntityInstanceFieldChanged(ei) );
+			editor.ge.emit( EntityFieldInstanceChanged(ei) );
 		}
 
 
