@@ -184,7 +184,7 @@ class FieldDefsForm {
 
 
 	function deleteField(fd:data.def.FieldDef) {
-		new ui.LastChance( L.t._("Entity field ::name:: deleted", { name:fd.identifier }), project );
+		new ui.LastChance( L.t._("Field ::name:: deleted", { name:fd.identifier }), project );
 		fieldDefs.remove(fd);
 		project.tidy();
 		editor.ge.emit( FieldDefRemoved(fd) );
