@@ -3729,6 +3729,7 @@ canvas#webgl {
 		overflow: auto;
 		max-height: 90vh;
 		padding: 10px;
+		box-sizing: border-box;
 	}
 
 	.resizeBar {
