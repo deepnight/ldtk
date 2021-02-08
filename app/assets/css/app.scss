@@ -1139,6 +1139,13 @@ ul.form {
 			flex: 1 1 0;
 		}
 
+		button {
+			margin-top: 0;
+			padding-top: 4px;
+			padding-bottom: 4px;
+			align-self: stretch;
+		}
+
 		div.multiLines {
 			width: 100%;
 			max-height: 85px;
@@ -1148,7 +1155,7 @@ ul.form {
 			font-style: italic;
 			font-size: 80%;
 			text-overflow: ellipsis;
-			white-space: pre;
+			white-space: pre-wrap;
 
 			border: 1px dashed $bgLight;
 			cursor: pointer;
@@ -3912,15 +3919,6 @@ dl.form.fieldInstanceEditor {
 	padding: 0;
 	border: none;
 
-	&>li>label {
-		flex: 0 0 100%;
-		padding: 0;
-		padding-top: 8px;
-		text-align: left;
-		font-size: 10pt;
-		text-transform: none;
-	}
-
 	span.inputWithDefaultOption {
 		display: flex;
 		align-items: center;
@@ -4095,11 +4093,12 @@ dl.form.fieldInstanceEditor {
 		background-color: $bgMed;
 	}
 
-	li.F_Path {
-		button {
-			flex: 0 1 0px;
-			padding: 0 4px;
-			align-self: stretch;
+	.F_Path button {
+		flex: 0 1 0px;
+		padding: 0 4px;
+		align-self: stretch;
+		.icon {
+			width: 1.3em;
 		}
 	}
 

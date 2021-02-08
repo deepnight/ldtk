@@ -214,8 +214,12 @@ class FieldInstancesForm {
 					jText.text(def==null ? "(null)" : def=="" ? "(empty string)" : def);
 					jText.addClass("usingDefault");
 				}
-				else
-					jText.text( fi.getString(arrayIdx) );
+				else {
+					var str = fi.getString(arrayIdx);
+					if( str.length>256 )
+						str = str.substr(0,256)+"[...]";
+					jText.text(str);
+				}
 				jText.click( _->{
 					new ui.modal.dialog.TextEditor(
 						fi.getString(arrayIdx),
