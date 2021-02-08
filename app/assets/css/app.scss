@@ -1085,7 +1085,7 @@ ul.log {
 
 dl.form {
 	display: grid;
-	grid-template-columns: 110px auto;
+	grid-template-columns: min-content auto;
 	width: 100%;
 }
 
@@ -1094,10 +1094,15 @@ ul.form {
 	padding-bottom: 16px;
 
 	>dt {
+		min-width: 70px;
+		max-width: 110px;
+		padding-top: 8px;
+
 		overflow-x: hidden;
 		text-overflow: ellipsis;
 		font-size: 9pt;
-		padding-top: 8px;
+		white-space: nowrap;
+
 		&.isDefault {
 			color: $bgLighter;
 			font-style: italic;
@@ -4126,6 +4131,7 @@ dl.form.fieldInstanceEditor {
 		overflow-x: hidden;
 		overflow-y: auto;
 		border-left: 1px solid white;
+		border-top-left-radius: 8px;
 		border-bottom-left-radius: 8px;
 
 		ul.values {
