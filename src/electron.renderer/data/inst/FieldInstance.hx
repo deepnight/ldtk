@@ -108,9 +108,8 @@ class FieldInstance {
 		if( from<0 || from>=getArrayLength() || to<0 || to>=getArrayLength() || from==to )
 			return false;
 
-		var tmp = internalValues[from];
-		internalValues[from] = internalValues[to];
-		internalValues[to] = tmp;
+		var moved = internalValues.splice(from,1)[0];
+		internalValues.insert(to, moved);
 		return true;
 	}
 
