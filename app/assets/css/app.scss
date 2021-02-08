@@ -257,7 +257,8 @@ button {
 	}
 
 	&.dark {
-		background-color: $bgDark;
+		background-color: scale-color($color: $bgDark, $lightness: 10%);
+		box-shadow: 0px 0px 2px $bgLight inset, 0px 0px 3px black, 0px 2px 2px black;
 		&:hover {
 			background-color: $bgLight;
 		}
@@ -923,6 +924,7 @@ ul.log {
 	background-repeat: no-repeat;
 	background-size: contain;
 }
+.icon.add		{ background-image: url("../icons/add.svg"); }
 .icon.email		{ background-image: url("../icons/email.svg"); }
 .icon.entity	{ background-image: url("../icons/entity.png"); }
 .icon.tile		{ background-image: url("../icons/tile.png"); }
@@ -4099,12 +4101,17 @@ dl.form.fieldInstanceEditor {
 		background-color: $bgMed;
 	}
 
-	.F_Path button {
-		flex: 0 1 0px;
-		padding: 0 4px;
-		align-self: stretch;
-		.icon {
-			width: 1.3em;
+	.F_Path {
+		input {
+			cursor: pointer;
+		}
+		button {
+			flex: 0 1 0px;
+			padding: 0 4px;
+			align-self: stretch;
+			.icon {
+				width: 1.3em;
+			}
 		}
 	}
 

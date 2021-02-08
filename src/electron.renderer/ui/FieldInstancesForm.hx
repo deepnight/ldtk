@@ -79,11 +79,14 @@ class FieldInstancesForm {
 				jRep.on("click.def", function(ev) {
 					ev.preventDefault();
 					jRep.remove();
-					input.show().focus();
 					if( input.is("[type=checkbox]") ) {
 						input.prop("checked", !fi.getBool(arrayIdx));
 						input.change();
 					}
+					if( input.is(":read-only") )
+						input.click();
+					else
+						input.show().focus();
 				});
 				jRep.insertBefore(input);
 				input.hide();
@@ -339,12 +342,26 @@ class FieldInstancesForm {
 				if( isRequired )
 					input.addClass("required");
 
-				if( !fi.isUsingDefault(arrayIdx) )
-					input.val( fi.getFilePath(arrayIdx) );
+				if( !fi.isUsingDefault(arrayIdx) ) {
+					var fp = dn.FilePath.fromFile( fi.getFilePath(arrayIdx) );
+					input.val( fp.fileWithExt );
+					input.attr("title", fp.full);
+				}
 
-				input.change( function(ev) {
-					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange(fi);
+				input.focus( ev->{
+					input.blur();
+				});
+				input.prop("readonly",true);
+				input.click( ev->{
+					dn.electron.Dialogs.open(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
+						var fp = dn.FilePath.fromFile(absPath);
+						fp.useSlashes();
+						var relPath = project.makeRelativeFilePath(fp.full);
+						input.val(relPath);
+						fi.parseValue( arrayIdx, relPath );
+						onFieldChange(fi);
+					});
+					input.blur();
 				});
 
 				// Edit
@@ -354,8 +371,6 @@ class FieldInstancesForm {
 					jEdit.click( (_)->{
 						if( !fi.valueIsNull(arrayIdx) ) {
 							ui.modal.dialog.TextEditor.editExternalFile( project.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) );
-						// 	var path = project.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
-						// 	JsTools.exploreToFile(path, true);
 						}
 					});
 				}
@@ -372,19 +387,26 @@ class FieldInstancesForm {
 					});
 				}
 
-				// Pick
-				var fileSelect = new J('<button class="fileSelectButton" title="Pick a file"> <span class="icon open"/>  </button>');
-				fileSelect.appendTo(jTarget);
-				fileSelect.click( function(ev) {
-					dn.electron.Dialogs.open(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
-						var fp = dn.FilePath.fromFile(absPath);
-						fp.useSlashes();
-						var relPath = project.makeRelativeFilePath(fp.full);
-						input.val(relPath);
-						fi.parseValue( arrayIdx, relPath );
+				// Clear
+				if( !fi.isUsingDefault(arrayIdx) ) {
+					var jClear = new J('<button class="red" title="Reset"> <span class="icon delete"/> </button>');
+					jClear.appendTo(jTarget);
+					jClear.click( ev->{
+						fi.parseValue(arrayIdx,null);
 						onFieldChange(fi);
 					});
-				});
+				}
+				// fileSelect.appendTo(jTarget);
+				// fileSelect.click( function(ev) {
+				// 	dn.electron.Dialogs.open(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
+				// 		var fp = dn.FilePath.fromFile(absPath);
+				// 		fp.useSlashes();
+				// 		var relPath = project.makeRelativeFilePath(fp.full);
+				// 		input.val(relPath);
+				// 		fi.parseValue( arrayIdx, relPath );
+				// 		onFieldChange(fi);
+				// 	});
+				// });
 
 				// Error
 				if( !fi.valueIsNull(arrayIdx) && !JsTools.fileExists( project.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) ) )
@@ -571,8 +593,8 @@ class FieldInstancesForm {
 
 				// "Add" button
 				if( fi.def.arrayMaxLength==null || fi.getArrayLength()<fi.def.arrayMaxLength ) {
-					var jAdd = new J('<button class="add"/>');
-					jAdd.text("Add "+fi.def.getShortDescription(false) );
+					var jAdd = new J('<button class="add dark"/>');
+					jAdd.append('<span class="icon add"/>');
 					jAdd.appendTo(jArray);
 					jAdd.click( function(_) {
 						if( fi.def.type==F_Point ) {
