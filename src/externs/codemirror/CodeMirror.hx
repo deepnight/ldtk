@@ -22,4 +22,5 @@ typedef CodeMirrorConfig = {
 	var ?indentUnit: Int;
 	var ?indentWithTabs: Bool;
 	var ?tabSize: Int;
+	var ?autofocus: Bool;
 }

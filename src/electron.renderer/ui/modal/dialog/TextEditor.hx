@@ -23,8 +23,10 @@ class TextEditor extends ui.modal.Dialog {
 			theme: "ayu-mirage",
 			lineNumbers: true,
 			lineWrapping: true,
+			autofocus: true,
 		});
 		cm.on("change", (ev)->anyChange=true );
+
 		// Load extra addons
 		if( mode==LangXml ) {
 			js.node.Require.require('codemirror/addon/edit/closetag.js');
