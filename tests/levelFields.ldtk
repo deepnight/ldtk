@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 18,
-	"worldLayout": "LinearHorizontal",
+	"nextUid": 23,
+	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
 	"defaultPivotX": 0,
@@ -18,7 +18,7 @@
 	"defaultGridSize": 16,
 	"defaultLevelWidth": 256,
 	"defaultLevelHeight": 256,
-	"bgColor": "#7F8093",
+	"bgColor": "#545461",
 	"defaultLevelBgColor": "#7F8093",
 	"minifyJson": false,
 	"externalLevels": false,
@@ -90,7 +90,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
-					"editorDisplayPos": "Center",
+					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"min": null,
 					"max": null,
@@ -109,13 +109,51 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
-					"editorDisplayPos": "Center",
+					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"min": 1,
 					"max": null,
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": { "id": "V_Int", "params": [1] },
+					"textLangageMode": null
+				},
+				{
+					"identifier": "radius",
+					"__type": "Int",
+					"uid": 21,
+					"type": "F_Int",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "RadiusGrid",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": true,
+					"min": 1,
+					"max": 10,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": { "id": "V_Int", "params": [1] },
+					"textLangageMode": null
+				},
+				{
+					"identifier": "path",
+					"__type": "Array<Point>",
+					"uid": 22,
+					"type": "F_Point",
+					"isArray": true,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "PointPath",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
 					"textLangageMode": null
 				}
 			]
@@ -127,7 +165,7 @@
 			"uid": 12,
 			"type": "F_Text",
 			"isArray": false,
-			"canBeNull": false,
+			"canBeNull": true,
 			"arrayMinLength": null,
 			"arrayMaxLength": null,
 			"editorDisplayMode": "ValueOnly",
@@ -160,28 +198,6 @@
 			"textLangageMode": null
 		},
 		{
-			"identifier": "test",
-			"__type": "Bool",
-			"uid": 14,
-			"type": "F_Bool",
-			"isArray": false,
-			"canBeNull": false,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "ValueOnly",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": {
-				"id": "V_Bool",
-				"params": [ true ]
-			},
-			"textLangageMode": null
-		},
-		{
 			"identifier": "File_path",
 			"__type": "FilePath",
 			"uid": 15,
@@ -196,45 +212,7 @@
 			"min": null,
 			"max": null,
 			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": null,
-			"textLangageMode": null
-		},
-		{
-			"identifier": "scripts",
-			"__type": "Array<FilePath>",
-			"uid": 16,
-			"type": "F_Path",
-			"isArray": true,
-			"canBeNull": true,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "NameAndValue",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": [".lua"],
-			"defaultOverride": null,
-			"textLangageMode": null
-		},
-		{
-			"identifier": "Color_array",
-			"__type": "Array<Color>",
-			"uid": 17,
-			"type": "F_Color",
-			"isArray": true,
-			"canBeNull": false,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "Hidden",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
+			"acceptFileTypes": [ ".lua", ".hx", ".md", ".xml", ".json" ],
 			"defaultOverride": null,
 			"textLangageMode": null
 		}
@@ -274,44 +252,14 @@
 					}]
 				},
 				{
-					"__identifier": "test",
-					"__value": false,
-					"__type": "Bool",
-					"defUid": 14,
-					"realEditorValues": [{
-						"id": "V_Bool",
-						"params": [ false ]
-					}]
-				},
-				{
 					"__identifier": "File_path",
-					"__value": "scripts/someScript.lua",
+					"__value": "enumFiles/TypesTest.hx",
 					"__type": "FilePath",
 					"defUid": 15,
 					"realEditorValues": [{
 						"id": "V_String",
-						"params": ["scripts/someScript.lua"]
+						"params": ["enumFiles/TypesTest.hx"]
 					}]
-				},
-				{
-					"__identifier": "scripts",
-					"__value": [ "scripts/someScript.lua", "scripts/someScript.lua" ],
-					"__type": "Array<FilePath>",
-					"defUid": 16,
-					"realEditorValues": [ {
-						"id": "V_String",
-						"params": ["scripts/someScript.lua"]
-					}, {
-						"id": "V_String",
-						"params": ["scripts/someScript.lua"]
-					} ]
-				},
-				{
-					"__identifier": "Color_array",
-					"__value": [ "#1C8EC1", "#5869B8", "#5F168E" ],
-					"__type": "Array<Color>",
-					"defUid": 17,
-					"realEditorValues": [ { "id": "V_Int", "params": [1871553] }, { "id": "V_Int", "params": [5794232] }, { "id": "V_Int", "params": [6231694] } ]
 				}
 			],
 			"layerInstances": [
@@ -339,15 +287,21 @@
 					"entityInstances": [
 						{
 							"__identifier": "Item",
-							"__grid": [5,4],
+							"__grid": [5,8],
 							"__pivot": [0.5,0.5],
 							"__tile": null,
 							"width": 16,
 							"height": 16,
 							"defUid": 4,
-							"px": [88,72],
+							"px": [88,136],
 							"fieldInstances": [
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "defUid": 5, "realEditorValues": [] },
+								{
+									"__identifier": "count",
+									"__value": 1,
+									"__type": "Int",
+									"defUid": 5,
+									"realEditorValues": [null]
+								},
 								{
 									"__identifier": "type",
 									"__value": "food",
@@ -357,7 +311,70 @@
 										"id": "V_String",
 										"params": ["food"]
 									}]
+								},
+								{
+									"__identifier": "radius",
+									"__value": 2,
+									"__type": "Int",
+									"defUid": 21,
+									"realEditorValues": [{ "id": "V_Int", "params": [2] }]
+								},
+								{
+									"__identifier": "path",
+									"__value": [ { "cx": 5, "cy": 11 }, { "cx": 2, "cy": 11 }, { "cx": 2, "cy": 5 }, { "cx": 6, "cy": 5 } ],
+									"__type": "Array<Point>",
+									"defUid": 22,
+									"realEditorValues": [ {
+										"id": "V_String",
+										"params": ["5,11"]
+									}, {
+										"id": "V_String",
+										"params": ["2,11"]
+									}, {
+										"id": "V_String",
+										"params": ["2,5"]
+									}, {
+										"id": "V_String",
+										"params": ["6,5"]
+									} ]
 								}
+							]
+						},
+						{
+							"__identifier": "Item",
+							"__grid": [11,4],
+							"__pivot": [0.5,0.5],
+							"__tile": null,
+							"width": 16,
+							"height": 16,
+							"defUid": 4,
+							"px": [184,72],
+							"fieldInstances": [
+								{
+									"__identifier": "count",
+									"__value": 1,
+									"__type": "Int",
+									"defUid": 5,
+									"realEditorValues": [null]
+								},
+								{
+									"__identifier": "type",
+									"__value": "water",
+									"__type": "String",
+									"defUid": 6,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["water"]
+									}]
+								},
+								{
+									"__identifier": "radius",
+									"__value": 5,
+									"__type": "Int",
+									"defUid": 21,
+									"realEditorValues": [{ "id": "V_Int", "params": [5] }]
+								},
+								{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 22, "realEditorValues": [] }
 							]
 						}
 					]
@@ -400,8 +417,8 @@
 		{
 			"identifier": "B",
 			"uid": 11,
-			"worldX": 288,
-			"worldY": 0,
+			"worldX": 256,
+			"worldY": 64,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#7F8093",
@@ -414,17 +431,23 @@
 			"externalRelPath": null,
 			"fieldInstances": [
 				{ "__identifier": "Color", "__value": "#FFD500", "__type": "Color", "defUid": 3, "realEditorValues": [] },
-				{ "__identifier": "tutorial", "__value": "", "__type": "String", "defUid": 12, "realEditorValues": [] },
 				{
-					"__identifier": "test",
-					"__value": true,
-					"__type": "Bool",
-					"defUid": 14,
+					"__identifier": "tutorial",
+					"__value": null,
+					"__type": "String",
+					"defUid": 12,
 					"realEditorValues": [null]
 				},
-				{ "__identifier": "File_path", "__value": null, "__type": "FilePath", "defUid": 15, "realEditorValues": [] },
-				{ "__identifier": "scripts", "__value": [], "__type": "Array<FilePath>", "defUid": 16, "realEditorValues": [] },
-				{ "__identifier": "Color_array", "__value": [], "__type": "Array<Color>", "defUid": 17, "realEditorValues": [] }
+				{
+					"__identifier": "File_path",
+					"__value": "gmtk.json",
+					"__type": "FilePath",
+					"defUid": 15,
+					"realEditorValues": [{
+						"id": "V_String",
+						"params": ["gmtk.json"]
+					}]
+				}
 			],
 			"layerInstances": [
 				{
@@ -475,7 +498,9 @@
 										"id": "V_String",
 										"params": ["something"]
 									}]
-								}
+								},
+								{ "__identifier": "radius", "__value": 1, "__type": "Int", "defUid": 21, "realEditorValues": [] },
+								{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 22, "realEditorValues": [] }
 							]
 						}
 					]
