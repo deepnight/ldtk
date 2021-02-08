@@ -37,7 +37,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Create fields editor
-		fieldsForm = new ui.FieldDefsForm();
+		fieldsForm = new ui.FieldDefsForm(FP_Entity);
 		jContent.find("#fields").replaceWith( fieldsForm.jWrapper );
 
 

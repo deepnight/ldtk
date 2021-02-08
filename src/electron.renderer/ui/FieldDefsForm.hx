@@ -2,10 +2,16 @@ package ui;
 
 import data.def.FieldDef;
 
+enum FieldParent {
+	FP_Entity;
+	FP_Level;
+}
+
 class FieldDefsForm {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 
+	var fieldParent : FieldParent;
 	public var jWrapper : js.jquery.JQuery;
 	var jList(get,never) : js.jquery.JQuery; inline function get_jList() return jWrapper.find("ul.fieldList");
 	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jWrapper.find("ul.form");
@@ -13,8 +19,8 @@ class FieldDefsForm {
 	var fieldDefs : Array<FieldDef>;
 	var curField : Null<FieldDef>;
 
-
-	public function new() {
+	public function new(fieldParent:FieldParent) {
+		this.fieldParent = fieldParent;
 		this.fieldDefs = [];
 
 		jWrapper = new J('<div class="fieldDefsEditor"/>');
@@ -360,10 +366,18 @@ class FieldDefsForm {
 					case Hidden: true;
 					case ValueOnly: curField.type!=F_Point;
 					case NameAndValue: true;
-					case EntityTile: curField.isEnum();
-					case PointStar: curField.type==F_Point;
-					case PointPath: curField.type==F_Point && curField.isArray;
-					case RadiusPx, RadiusGrid: !curField.isArray && ( curField.type==F_Int || curField.type==F_Float );
+
+					case EntityTile:
+						curField.isEnum() && fieldParent==FP_Entity;
+
+					case PointStar:
+						curField.type==F_Point && fieldParent==FP_Entity;
+
+					case PointPath:
+						curField.type==F_Point && curField.isArray && fieldParent==FP_Entity;
+
+					case RadiusPx, RadiusGrid:
+						!curField.isArray && ( curField.type==F_Int || curField.type==F_Float ) && fieldParent==FP_Entity;
 				}
 			}
 		);
