@@ -183,7 +183,7 @@ class LevelPanel extends ui.modal.Panel {
 		onFieldChange();
 		editor.ge.emit( LevelResized(level) );
 		editor.curLevelHistory.saveResizedState( before, level.toJson() );
-		new J("ul#levelForm *:focus").blur();
+		new J("dl#levelForm *:focus").blur();
 	}
 
 
@@ -193,7 +193,7 @@ class LevelPanel extends ui.modal.Panel {
 			return;
 		}
 
-		var jForm = jContent.find("ul#levelForm");
+		var jForm = jContent.find("dl#levelForm");
 		jForm.find("*").off();
 
 
@@ -270,7 +270,7 @@ class LevelPanel extends ui.modal.Panel {
 			}
 			onFieldChange();
 		});
-		jImg.insertAfter( jForm.find(".bg>label:first-of-type") );
+		jImg.prependTo( jForm.find(".bg") );
 
 		if( level.bgRelPath!=null )
 			jForm.find(".bg .pos").show();

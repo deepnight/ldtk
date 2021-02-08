@@ -17,40 +17,45 @@
 	</button>
 </div>
 
-<ul class="form" id="levelForm">
-	<li>
-		<label for="identifier">Level identifier</label>
+
+<dl class="form" id="levelForm">
+	<dt> <label for="identifier">Level identifier</label> </dt>
+	<dd>
 		<input type="text" id="identifier"/>
 		<div class="info identifier"></div>
-	</li>
+	</dd>
 
-	<li>
-		<label for="name">World coords</label>
+	<dt> <label for="name">World coords</label> </dt>
+	<dd>
 		<input type="text" id="worldX" class="small" title="Level X coordinate in pixels"/>
 		<span>,</span>
 		<input type="text" id="worldY" class="small" title="Level Y coordinate in pixels"/>
+		<span>px</span>
+	</dd>
 
-		<span>&nbsp; Size:</span>
+	<dt> <label for="name">Size</label> </dt>
+	<dd>
 		<input type="text" id="width" class="small" title="Level width in pixels"/>
 		<span>x</span>
 		<input type="text" id="height" class="small" title="Level height in pixels"/>
-	</li>
+		<span>px</span>
+	</dd>
 
-	<li>
-		<label for="bgColor">Bg color</label>
+	<dt> <label for="bgColor">Bg color</label> </dt>
+	<dd>
 		<input type="color" id="bgColor"/>
 		<a class="reset">Use default</a>
 		<span class="usingDefault">(default)</a>
-	</li>
+	</dd>
 
-	<li class="bg">
-		<label>Bg image</label>
+	<dt> <label>Bg image</label> </dt>
+	<dd class="bg">
 		<div class="pos">
 			<select id="bgPos"></select>
 			<span class="pivot"></span>
 		</div>
-	</li>
-</ul>
+	</dd>
+</dl>
 
 
 <!-- Custom level fields -->

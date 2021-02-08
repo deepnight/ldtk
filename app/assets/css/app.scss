@@ -1067,13 +1067,13 @@ ul.log {
 		cursor: pointer;
 	}
 	label:hover {
-		outline: 1px dashed $orange;
+		outline: 1px dotted $orange;
 		outline-offset: -1px;
 	}
 	label input[type=radio] {
-		width: 50%;
-		height: 50%;
-		opacity: 0.7;
+		width: 70%;
+		height: 70%;
+		opacity: 0.5;
 		cursor: pointer;
 	}
 	label input[type=radio]:checked {
@@ -1094,6 +1094,7 @@ ul.form {
 	padding-bottom: 16px;
 
 	>dt {
+		grid-column: 1/2;
 		min-width: 70px;
 		max-width: 110px;
 		padding-right: 8px;
@@ -1111,6 +1112,7 @@ ul.form {
 	}
 
 	>dd {
+		grid-column: 2/3;
 		margin: 0;
 		margin-bottom: 8px;
 	}
@@ -4557,15 +4559,22 @@ body.sorting ul.collapsedSortTarget {
 				font-size: 14pt;
 			}
 			.bg {
+				display: grid;
 				align-items: stretch;
+
 				button.pick {
 					width: 0;
 				}
+
 				.pos {
-					display: flex;
+					display: grid;
+					grid-template-columns: 160px min-content;
 					justify-content: stretch;
+					.pivotEditor {
+						grid-template-columns: repeat(3, 14px);
+						grid-template-rows: repeat(3, 14px);
+					}
 					select {
-						flex: 1 1 auto;
 						font-size: 9pt;
 					}
 				}
