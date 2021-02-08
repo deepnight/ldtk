@@ -204,70 +204,70 @@ class EntityRender extends dn.Process {
 
 
 
-	function renderFieldValue(fi:data.inst.FieldInstance) {
-		var valuesFlow = new h2d.Flow();
-		valuesFlow.layout = Horizontal;
-		valuesFlow.verticalAlign = Middle;
+	// function renderFieldValue(fi:data.inst.FieldInstance) {
+	// 	var valuesFlow = new h2d.Flow();
+	// 	valuesFlow.layout = Horizontal;
+	// 	valuesFlow.verticalAlign = Middle;
 
-		// Array opening
-		if( fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = new h2d.Text(getDefaultFont(), valuesFlow);
-			tf.scale(settings.v.editorUiScale);
-			tf.textColor = ei.getSmartColor(true);
-			tf.text = "[";
-		}
+	// 	// Array opening
+	// 	if( fi.def.isArray && fi.getArrayLength()>1 ) {
+	// 		var tf = new h2d.Text(getDefaultFont(), valuesFlow);
+	// 		tf.scale(settings.v.editorUiScale);
+	// 		tf.textColor = ei.getSmartColor(true);
+	// 		tf.text = "[";
+	// 	}
 
-		for( idx in 0...fi.getArrayLength() ) {
-			if( !fi.valueIsNull(idx) && !( !fi.def.editorAlwaysShow && fi.def.type==F_Bool && fi.isUsingDefault(idx) ) ) {
-				if( fi.hasIconForDisplay(idx) ) {
-					// Icon
-					var w = new h2d.Flow(valuesFlow);
-					var tile = fi.getIconForDisplay(idx);
-					var bmp = new h2d.Bitmap( tile, w );
-					var s = M.fmin( 32/tile.width, 32/tile.height );
-					bmp.setScale(s * settings.v.editorUiScale);
-				}
-				else if( fi.def.type==F_Color ) {
-					// Color disc
-					var g = new h2d.Graphics(valuesFlow);
-					var r = 6;
-					g.beginFill( fi.getColorAsInt(idx) );
-					g.lineStyle(1, 0x0, 0.8);
-					g.drawCircle(r,r,r, 16);
-				}
-				else {
-					// Text render
-					var tf = new h2d.Text(getDefaultFont(), valuesFlow);
-					tf.scale(settings.v.editorUiScale);
-					tf.textColor = ei.getSmartColor(true);
-					tf.maxWidth = 400 * ( 0.5 + 0.5*settings.v.editorUiScale );
-					var v = fi.getForDisplay(idx);
-					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
-						tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';
-					else
-						tf.text = v;
-				}
-			}
+	// 	for( idx in 0...fi.getArrayLength() ) {
+	// 		if( !fi.valueIsNull(idx) && !( !fi.def.editorAlwaysShow && fi.def.type==F_Bool && fi.isUsingDefault(idx) ) ) {
+	// 			if( fi.hasIconForDisplay(idx) ) {
+	// 				// Icon
+	// 				var w = new h2d.Flow(valuesFlow);
+	// 				var tile = fi.getIconForDisplay(idx);
+	// 				var bmp = new h2d.Bitmap( tile, w );
+	// 				var s = M.fmin( 32/tile.width, 32/tile.height );
+	// 				bmp.setScale(s * settings.v.editorUiScale);
+	// 			}
+	// 			else if( fi.def.type==F_Color ) {
+	// 				// Color disc
+	// 				var g = new h2d.Graphics(valuesFlow);
+	// 				var r = 6;
+	// 				g.beginFill( fi.getColorAsInt(idx) );
+	// 				g.lineStyle(1, 0x0, 0.8);
+	// 				g.drawCircle(r,r,r, 16);
+	// 			}
+	// 			else {
+	// 				// Text render
+	// 				var tf = new h2d.Text(getDefaultFont(), valuesFlow);
+	// 				tf.scale(settings.v.editorUiScale);
+	// 				tf.textColor = ei.getSmartColor(true);
+	// 				tf.maxWidth = 400 * ( 0.5 + 0.5*settings.v.editorUiScale );
+	// 				var v = fi.getForDisplay(idx);
+	// 				if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
+	// 					tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';
+	// 				else
+	// 					tf.text = v;
+	// 			}
+	// 		}
 
-			// Array separator
-			if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
-				var tf = new h2d.Text(getDefaultFont(), valuesFlow);
-				tf.scale(settings.v.editorUiScale);
-				tf.textColor = ei.getSmartColor(true);
-				tf.text = ",";
-			}
-		}
+	// 		// Array separator
+	// 		if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
+	// 			var tf = new h2d.Text(getDefaultFont(), valuesFlow);
+	// 			tf.scale(settings.v.editorUiScale);
+	// 			tf.textColor = ei.getSmartColor(true);
+	// 			tf.text = ",";
+	// 		}
+	// 	}
 
-		// Array closing
-		if( fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = new h2d.Text(getDefaultFont(), valuesFlow);
-			tf.scale(settings.v.editorUiScale);
-			tf.textColor = ei.getSmartColor(true);
-			tf.text = "]";
-		}
+	// 	// Array closing
+	// 	if( fi.def.isArray && fi.getArrayLength()>1 ) {
+	// 		var tf = new h2d.Text(getDefaultFont(), valuesFlow);
+	// 		tf.scale(settings.v.editorUiScale);
+	// 		tf.textColor = ei.getSmartColor(true);
+	// 		tf.text = "]";
+	// 	}
 
-		return valuesFlow;
-	}
+	// 	return valuesFlow;
+	// }
 
 
 	public function renderFields() {
@@ -279,96 +279,107 @@ class EntityRender extends dn.Process {
 		// Attach fields
 		for(fd in ei.def.fieldDefs) {
 			var fi = ei.getFieldInstance(fd);
+			var fr = FieldInstanceRender.renderField(fi, ei.getSmartColor(true), EntityCtx(fieldGraphics,ei,ld));
 
-			// Value error
-			var err = fi.getFirstErrorInValues();
-			if( err!=null ) {
-				var tf = new h2d.Text(getDefaultFont(), above);
-				tf.scale(settings.v.editorUiScale);
-				tf.textColor = 0xff8800;
-				tf.text = '<$err>';
-			}
-
-			// Skip hiddens
-			if( fd.editorDisplayMode==Hidden )
-				continue;
-
-			if( !fi.def.editorAlwaysShow && ( fi.def.isArray && fi.getArrayLength()==0 || !fi.def.isArray && fi.isUsingDefault(0) ) )
+			if( fr==null )
 				continue;
 
 			// Position
-			var fieldWrapper = new h2d.Flow();
 			switch fd.editorDisplayPos {
-				case Above: above.addChild(fieldWrapper);
-				case Center: center.addChild(fieldWrapper);
-				case Beneath: beneath.addChild(fieldWrapper);
+				case Above: above.addChild(fr);
+				case Center: center.addChild(fr);
+				case Beneath: beneath.addChild(fr);
 			}
 
-			switch fd.editorDisplayMode {
-				case Hidden: // N/A
+			// // Value error
+			// var err = fi.getFirstErrorInValues();
+			// if( err!=null ) {
+			// 	var tf = new h2d.Text(getDefaultFont(), above);
+			// 	tf.scale(settings.v.editorUiScale);
+			// 	tf.textColor = 0xff8800;
+			// 	tf.text = '<$err>';
+			// }
 
-				case NameAndValue:
-					var f = new h2d.Flow(fieldWrapper);
-					f.verticalAlign = Middle;
+			// // Skip hiddens
+			// if( fd.editorDisplayMode==Hidden )
+			// 	continue;
 
-					var tf = new h2d.Text(getDefaultFont(), f);
-					tf.scale(settings.v.editorUiScale);
-					tf.textColor = ei.getSmartColor(true);
-					tf.text = fd.identifier+" = ";
+			// if( !fi.def.editorAlwaysShow && ( fi.def.isArray && fi.getArrayLength()==0 || !fi.def.isArray && fi.isUsingDefault(0) ) )
+			// 	continue;
 
-					f.addChild( renderFieldValue(fi) );
+			// // Position
+			// var fieldWrapper = new h2d.Flow();
+			// switch fd.editorDisplayPos {
+			// 	case Above: above.addChild(fieldWrapper);
+			// 	case Center: center.addChild(fieldWrapper);
+			// 	case Beneath: beneath.addChild(fieldWrapper);
+			// }
 
-				case ValueOnly:
-					fieldWrapper.addChild( renderFieldValue(fi) );
+			// switch fd.editorDisplayMode {
+			// 	case Hidden: // N/A
 
-				case RadiusPx:
-					fieldGraphics.lineStyle(1, ei.getSmartColor(false), 0.33);
-					fieldGraphics.drawCircle(0,0, fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0));
+			// 	case NameAndValue:
+			// 		var f = new h2d.Flow(fieldWrapper);
+			// 		f.verticalAlign = Middle;
 
-				case RadiusGrid:
-					fieldGraphics.lineStyle(1, ei.getSmartColor(false), 0.33);
-					fieldGraphics.drawCircle(0,0, ( fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0) ) * ld.gridSize);
+			// 		var tf = new h2d.Text(getDefaultFont(), f);
+			// 		tf.scale(settings.v.editorUiScale);
+			// 		tf.textColor = ei.getSmartColor(true);
+			// 		tf.text = fd.identifier+" = ";
 
-				case EntityTile:
+			// 		f.addChild( FieldInstanceRender.renderValue(fi, ei.getSmartColor(true)) );
 
-				case PointStar, PointPath:
-					var fx = ei.getCellCenterX(ld);
-					var fy = ei.getCellCenterY(ld);
-					fieldGraphics.lineStyle(1, ei.getSmartColor(false), 0.66);
+			// 	case ValueOnly:
+			// 		fieldWrapper.addChild( FieldInstanceRender.renderValue(fi, ei.getSmartColor(true)) );
 
-					for(i in 0...fi.getArrayLength()) {
-						var pt = fi.getPointGrid(i);
-						if( pt==null )
-							continue;
+			// 	case RadiusPx:
+			// 		fieldGraphics.lineStyle(1, ei.getSmartColor(false), 0.33);
+			// 		fieldGraphics.drawCircle(0,0, fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0));
 
-						var tx = M.round( (pt.cx+0.5)*ld.gridSize-ei.x );
-						var ty = M.round( (pt.cy+0.5)*ld.gridSize-ei.y );
-						renderDashedLine(fieldGraphics, fx,fy, tx,ty, 3);
-						fieldGraphics.drawRect( tx-2, ty-2, 4, 4 );
+			// 	case RadiusGrid:
+			// 		fieldGraphics.lineStyle(1, ei.getSmartColor(false), 0.33);
+			// 		fieldGraphics.drawCircle(0,0, ( fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0) ) * ld.gridSize);
 
-						if( fd.editorDisplayMode==PointPath ) {
-							fx = tx;
-							fy = ty;
-						}
-					}
-			}
+			// 	case EntityTile:
 
-			// Field bg
-			var needBg = switch fd.type {
-				case F_Int, F_Float:
-					switch fd.editorDisplayMode {
-						case RadiusPx, RadiusGrid: false;
-						case _: true;
-					};
-				case F_String, F_Text, F_Bool, F_Path: true;
-				case F_Color, F_Point: false;
-				case F_Enum(enumDefUid): fd.editorDisplayMode!=EntityTile;
-			}
+			// 	case PointStar, PointPath:
+			// 		var fx = ei.getCellCenterX(ld);
+			// 		var fy = ei.getCellCenterY(ld);
+			// 		fieldGraphics.lineStyle(1, ei.getSmartColor(false), 0.66);
 
-			if( needBg )
-				addFieldBg(fieldWrapper, 0.25);
+			// 		for(i in 0...fi.getArrayLength()) {
+			// 			var pt = fi.getPointGrid(i);
+			// 			if( pt==null )
+			// 				continue;
 
-			fieldWrapper.visible = fieldWrapper.numChildren>0;
+			// 			var tx = M.round( (pt.cx+0.5)*ld.gridSize-ei.x );
+			// 			var ty = M.round( (pt.cy+0.5)*ld.gridSize-ei.y );
+			// 			renderDashedLine(fieldGraphics, fx,fy, tx,ty, 3);
+			// 			fieldGraphics.drawRect( tx-2, ty-2, 4, 4 );
+
+			// 			if( fd.editorDisplayMode==PointPath ) {
+			// 				fx = tx;
+			// 				fy = ty;
+			// 			}
+			// 		}
+			// }
+
+			// // Field bg
+			// var needBg = switch fd.type {
+			// 	case F_Int, F_Float:
+			// 		switch fd.editorDisplayMode {
+			// 			case RadiusPx, RadiusGrid: false;
+			// 			case _: true;
+			// 		};
+			// 	case F_String, F_Text, F_Bool, F_Path: true;
+			// 	case F_Color, F_Point: false;
+			// 	case F_Enum(enumDefUid): fd.editorDisplayMode!=EntityTile;
+			// }
+
+			// if( needBg )
+			// 	addFieldBg(fieldWrapper, 0.25);
+
+			// fieldWrapper.visible = fieldWrapper.numChildren>0;
 
 		}
 
