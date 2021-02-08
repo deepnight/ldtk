@@ -19,7 +19,7 @@ class FieldInstancesForm {
 
 
 	public function new() {
-		jWrapper = new J('<ul class="form fieldInstanceEditor"/>');
+		jWrapper = new J('<dl class="form fieldInstanceEditor"/>');
 	}
 
 	public function use(elementInstance: FormRelatedInstance, fieldDefs: Array<FieldDef>, fieldInstGetter: (fd:FieldDef)->FieldInstance ) {
@@ -489,15 +489,22 @@ class FieldInstancesForm {
 		// Fields
 		for(fd in fieldDefs) {
 			var fi = fieldInstGetter(fd);
-			var li = new J("<li/>");
+
+			var jDt = new J("<dt/>");
+			jDt.appendTo(jWrapper);
+
+			var jDd = new J("<dd/>");
+			var li = jDd;
+			// var li = new J("<li/>");
 			li.attr("defUid", fd.uid);
 			li.appendTo(jWrapper);
 
 			// Identifier
 			if( !fd.isArray )
-				li.append('<label>${fi.def.identifier}</label>');
+				jDt.append('${fi.def.identifier}');
 			else
-				li.append('<label>${fi.def.identifier} (${fi.getArrayLength()})</label>');
+				jDt.append('${fi.def.identifier} (${fi.getArrayLength()})');
+				// li.append('<label>${fi.def.identifier} (${fi.getArrayLength()})</label>');
 
 			if( !fd.isArray ) {
 				// Single value
