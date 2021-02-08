@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 23,
+	"nextUid": 26,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -215,6 +215,25 @@
 			"acceptFileTypes": [ ".lua", ".hx", ".md", ".xml", ".json" ],
 			"defaultOverride": null,
 			"textLangageMode": null
+		},
+		{
+			"identifier": "entrance",
+			"__type": "Point",
+			"uid": 25,
+			"type": "F_Point",
+			"isArray": false,
+			"canBeNull": false,
+			"arrayMinLength": null,
+			"arrayMaxLength": null,
+			"editorDisplayMode": "NameAndValue",
+			"editorDisplayPos": "Above",
+			"editorAlwaysShow": false,
+			"min": null,
+			"max": null,
+			"regex": null,
+			"acceptFileTypes": null,
+			"defaultOverride": null,
+			"textLangageMode": null
 		}
 	] },
 	"levels": [
@@ -260,7 +279,8 @@
 						"id": "V_String",
 						"params": ["enumFiles/TypesTest.hx"]
 					}]
-				}
+				},
+				{ "__identifier": "entrance", "__value": null, "__type": "Point", "defUid": 25, "realEditorValues": [] }
 			],
 			"layerInstances": [
 				{
@@ -447,7 +467,8 @@
 						"id": "V_String",
 						"params": ["gmtk.json"]
 					}]
-				}
+				},
+				{ "__identifier": "entrance", "__value": null, "__type": "Point", "defUid": 25, "realEditorValues": [] }
 			],
 			"layerInstances": [
 				{
