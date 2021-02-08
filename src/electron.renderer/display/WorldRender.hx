@@ -22,6 +22,7 @@ class WorldRender extends dn.Process {
 	var levels : Map<Int,WorldLevelRender> = new Map();
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
 	var worldBounds : h2d.Graphics;
+	var title : h2d.Text;
 	var axes : h2d.Graphics;
 	var grids : h2d.Graphics;
 	var currentHighlight : h2d.Graphics;
@@ -55,6 +56,10 @@ class WorldRender extends dn.Process {
 		axes = new h2d.Graphics();
 		editor.root.add(axes, Const.DP_BG);
 
+		title = new h2d.Text(Assets.fontLight_xlarge);
+		title.text = "hello world";
+		editor.root.add(title, Const.DP_TOP);
+
 		currentHighlight = new h2d.Graphics();
 		root.add(currentHighlight, Const.DP_TOP);
 
@@ -65,6 +70,7 @@ class WorldRender extends dn.Process {
 	override function onDispose() {
 		super.onDispose();
 		worldBg.wrapper.remove();
+		title.remove();
 		axes.remove();
 		grids.remove();
 		currentHighlight.remove();
@@ -73,6 +79,7 @@ class WorldRender extends dn.Process {
 
 	override function onResize() {
 		super.onResize();
+		updateTitle();
 		renderAxes();
 		renderGrids();
 		renderBg();
@@ -99,6 +106,7 @@ class WorldRender extends dn.Process {
 				renderAxes();
 				renderGrids();
 				updateLabels();
+				updateTitle();
 				updateCurrentHighlight();
 
 			case GridChanged(active):
@@ -125,6 +133,7 @@ class WorldRender extends dn.Process {
 
 			case LevelResized(l):
 				invalidateLevel(l);
+				updateTitle();
 				updateLayout();
 				renderWorldBounds();
 				updateCurrentHighlight();
@@ -132,6 +141,7 @@ class WorldRender extends dn.Process {
 			case LevelSettingsChanged(l):
 				invalidateLevel(l);
 				renderWorldBounds();
+				updateTitle();
 				updateCurrentHighlight();
 
 			case LayerDefRemoved(uid):
@@ -193,6 +203,23 @@ class WorldRender extends dn.Process {
 		worldBg.col.tile = h2d.Tile.fromColor(worldBgColor);
 		worldBg.col.scaleX = camera.width;
 		worldBg.col.scaleY = camera.height;
+	}
+
+	function updateTitle() {
+		title.visible = editor.worldMode;
+		if( title.visible ) {
+			var b = project.getWorldBounds();
+			var w = b.right-b.left;
+			var t = project.filePath.fileName;
+			title.textColor = C.toWhite(project.bgColor, 0.3);
+			title.text = t;
+			title.setScale( camera.adjustedZoom * (w/title.textWidth) * switch project.worldLayout {
+				case Free, GridVania, LinearVertical:  1.1;
+				case LinearHorizontal: 2;
+			} );
+			title.x = Std.int( (b.left + b.right)*0.5*camera.adjustedZoom + root.x - title.textWidth*0.5*title.scaleX );
+			title.y = Std.int( b.top*camera.adjustedZoom - 64 + root.y - title.textHeight*title.scaleY );
+		}
 	}
 
 	function updateLabels() {
