@@ -1257,6 +1257,7 @@ ul.form {
 
 		input[type=text]:not(:read-only):hover {
 			outline: 1px solid $orange;
+			outline-offset: -1px;
 		}
 
 		input[type=checkbox]+label {
@@ -3998,7 +3999,8 @@ dl.form.fieldInstanceEditor {
 		border-radius: 2px;
 
 		&:hover {
-			outline: 1px solid white;
+			outline: 1px solid $orange;
+			outline-offset: -1px;
 		}
 
 		&.usingDefault {
