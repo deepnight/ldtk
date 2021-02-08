@@ -77,7 +77,7 @@ class LevelPanel extends ui.modal.Panel {
 
 		// Field instance form
 		fieldsForm = new FieldInstancesForm();
-		jContent.append(fieldsForm.jWrapper);
+		jContent.find("#fieldInstances").replaceWith( fieldsForm.jWrapper );
 
 		updateLevelForm();
 		updateFieldsForm();

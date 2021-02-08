@@ -514,10 +514,8 @@ class FieldInstancesForm {
 		ui.Tip.clear();
 		jWrapper.empty();
 
-		if( fieldDefs.length==0 ) {
-			jWrapper.append('<div class="empty">This element has no custom field.</div>');
+		if( fieldDefs.length==0 )
 			return;
-		}
 
 		// Fields
 		for(fd in fieldDefs) {
