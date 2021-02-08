@@ -1244,6 +1244,7 @@ class Editor extends Page {
 				updateLayerList();
 
 			case FieldDefAdded(_), FieldDefRemoved(_):
+				project.tidy();
 				updateTool();
 
 			case LayerDefConverted:

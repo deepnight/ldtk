@@ -139,6 +139,10 @@ class EntityInstance {
 				fieldInstances.remove(e.key);
 			}
 
+		// Create missing field instances
+		for(fd in def.fieldDefs)
+			getFieldInstance(fd);
+
 		for(fi in fieldInstances)
 			fi.tidy(_project, li);
 	}

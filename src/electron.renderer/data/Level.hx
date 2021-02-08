@@ -377,6 +377,21 @@ class Level {
 		// Tidy layer instances
 		for(li in layerInstances)
 			li.tidy(_project);
+
+
+		// Remove field instances whose def was removed
+		for(e in fieldInstances.keyValueIterator())
+			if( e.value.def==null ) {
+				App.LOG.add("tidy", 'Removed lost fieldInstance in $this');
+				fieldInstances.remove(e.key);
+			}
+
+		// Create missing field instances
+		for(fd in p.defs.levelFields)
+			getFieldInstance(fd);
+
+		for(fi in fieldInstances)
+			fi.tidy(_project);
 	}
 
 
@@ -414,8 +429,9 @@ class Level {
 
 
 
-	/** CUSTOM FIELDS *******************/
+	/* CUSTOM FIELDS *******************/
 
+	/** Get (and automatically creates) a field instance **/
 	public function getFieldInstance(fd:data.def.FieldDef) : data.inst.FieldInstance{
 		if( !fieldInstances.exists(fd.uid) )
 			fieldInstances.set( fd.uid, new data.inst.FieldInstance(_project, fd.uid) );
@@ -423,7 +439,7 @@ class Level {
 	}
 
 
-	/** RENDERING *******************/
+	/* RENDERING *******************/
 
 	public function iterateLayerInstancesInRenderOrder( eachLayer:data.inst.LayerInstance->Void ) {
 		var i = _project.defs.layers.length-1;
