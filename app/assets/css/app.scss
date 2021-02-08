@@ -1081,9 +1081,29 @@ ul.log {
 	}
 }
 
+dl.form {
+	display: grid;
+	grid-template-columns: 110px auto;
+	width: 100%;
+}
 
+dl.form,
 ul.form {
 	padding-bottom: 16px;
+
+	>dt {
+		overflow-x: hidden;
+		text-overflow: ellipsis;
+		font-size: 9pt;
+		padding-top: 8px;
+	}
+
+	>dd {
+		margin: 0;
+		margin-bottom: 8px;
+	}
+
+	>dd,
 	>li {
 		display: flex;
 		flex-wrap: wrap;
@@ -3719,7 +3739,7 @@ canvas#webgl {
 	position: absolute;
 	z-index: 10;
 
-	width: 300px;
+	width: 350px;
 	box-sizing: border-box;
 
 	box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.6);
@@ -3888,6 +3908,7 @@ canvas#webgl {
 
 
 
+dl.form.fieldInstanceEditor,
 ul.form.fieldInstanceEditor {
 	padding: 0;
 	border: none;
