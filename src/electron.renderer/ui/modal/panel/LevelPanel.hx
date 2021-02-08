@@ -188,6 +188,8 @@ class LevelPanel extends ui.modal.Panel {
 
 
 	function updateLevelForm() {
+		ui.Tip.clear();
+
 		if( level==null ) {
 			close();
 			return;
