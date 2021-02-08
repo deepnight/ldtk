@@ -1120,6 +1120,7 @@ ul.form {
 		}
 
 		div.multiLines {
+			width: 100%;
 			max-height: 85px;
 			overflow: hidden;
 			padding: 8px;
@@ -1132,41 +1133,13 @@ ul.form {
 			border: 1px dashed $bgLight;
 			cursor: pointer;
 
-			&:hover {
-				border-color: white;
-			}
-		}
-
-		.colorWrapper {
-			display: grid;
-			justify-items: center;
-			align-items: center;
-			box-sizing: border-box;
-
-			min-width: 64px;
-			min-height: 32px;
-			padding: 4px;
-
-			color: white;
-			text-shadow: 0px 2px 2px black, 0px 0px 8px black;
-
-			border: 1px solid black;
-			box-shadow: 0px 0px 2px black inset;
-			cursor: pointer;
-			border-radius: 2px;
-
-			&:hover {
-				outline: 1px solid white;
-			}
-
 			&.usingDefault {
+				color: $bgLighter;
 				background-image: url("../img/stripes.png");
 			}
 
-			input {
-				visibility: hidden;
-				width: 32px !important;
-				position: absolute;
+			&:hover {
+				border-color: white;
 			}
 		}
 
@@ -1214,7 +1187,7 @@ ul.form {
 				background-color: $darkRed;
 				box-shadow: 0px 0px 4px $red inset, 0px 0px 8px $orange, 0px 0px 16px $red;
 			}
-	}
+		}
 
 		.locate {
 			flex: 0 0 auto;
@@ -3802,214 +3775,6 @@ canvas#webgl {
 		color: $bgLighter;
 		font-style: italic;
 	}
-
-	ul.form {
-		padding: 0;
-		border: none;
-		&>li>label {
-			flex: 0 0 100%;
-			padding: 0;
-			padding-top: 8px;
-			text-align: left;
-			font-size: 10pt;
-			text-transform: none;
-		}
-
-		span.inputWithDefaultOption {
-			display: flex;
-			align-items: center;
-			opacity: 1 !important;
-			padding: 0 !important;
-			flex: 1 0 auto !important;
-			span.value {
-				flex: 1 0 auto;
-			}
-		}
-
-		a.reset {
-			flex: 0 0 auto;
-			align-self: center;
-			margin-left: 10px;
-			font-size: 0.75em;
-			text-decoration: underline;
-			color: $orange;
-			white-space: nowrap;
-			padding: 2px 4px;
-			border-radius: 3px;
-			cursor: pointer;
-
-			&:hover {
-				text-decoration: none;
-				color: black;
-				background-color: $orange;
-			}
-		}
-
-		span.usingDefault {
-			flex: 0 0 0px;
-			align-self: center;
-			margin-left: 10px;
-			font-size: 0.75em;
-			color: $bgLighter;
-			opacity: 1;
-		}
-
-
-		button.removePoint {
-			flex: 0.2 1 0px;
-		}
-
-		button.locate,
-		button.fileSelectButton {
-			flex: 0 1 0px;
-		}
-
-		input[type=color] {
-			width: 100%;
-		}
-
-		input.fileNotFound {
-			color: $orange;
-			border-color: $orange;
-			background-color: $darkRed;
-			box-shadow: 0px 0px 8px $red;
-		}
-
-		textarea {
-			height: auto;
-			overflow-x: auto;
-			overflow-y: hidden;
-			font-size: 8.5pt;
-		}
-
-		a.usingDefault {
-			display: flex;
-			text-decoration: none;
-			border: 1px dashed $bgLight;
-			padding: 8px;
-			align-items: center;
-			background-color: $bgMed;
-			background-image: url("../img/stripes.png");
-
-			&.required {
-				border-color: $orange;
-				box-shadow: 0px 0px 4px $red, 0px 0px 8px $red inset;
-				background-color: $darkRed;
-				span.value {
-					text-shadow: none;
-					color: $orange !important;
-				}
-				span.label {
-					text-shadow: none;
-					color: $orange !important;
-				}
-			}
-
-			&.checkbox {
-				padding: 0;
-				padding-right: 8px;
-			}
-
-			span {
-				opacity: 1;
-				text-shadow: 2px 0px 4px $bgMed, 0px 2px 4px $bgMed, -2px 0px 4px $bgMed, 0px -2px 4px $bgMed;
-				&.value {
-					flex: 1 1 auto;
-					color: white;
-					font-style: italic;
-				}
-				&.label {
-					font-size: 0.75em;
-					font-style: italic;
-					color: $bgLighter;
-				}
-			}
-
-			&:hover {
-				border-color: $orange;
-			}
-		}
-		select.usingDefault {
-			border: 1px dashed $bgLight;
-			padding: 8px;
-			color: white;
-			background-color: $bgMed;
-			background-image: url("../img/stripes.png");
-		}
-
-		button.usingDefault:not(.required) {
-			background-image: url("../img/stripes.png");
-		}
-		button.required {
-			outline: 1px solid $orange;
-			box-shadow: 0px 0px 32px $red;
-		}
-
-		span.point {
-			color: $bgLighter;
-			padding: 4px;
-			font-style: italic;
-			border-radius: 6px;
-			background-color: $bgMed;
-		}
-
-		li.F_Path {
-			button {
-				flex: 0 1 0px;
-				padding: 0 4px;
-				align-self: stretch;
-			}
-		}
-
-		div.array {
-			display: grid;
-			grid-template-columns: auto;
-			gap: 2px;
-			box-sizing: border-box;
-			margin-left: 4px;
-			padding: 8px;
-			padding-right: 2px;
-			overflow-x: hidden;
-			overflow-y: auto;
-			border-left: 1px solid white;
-			border-bottom-left-radius: 8px;
-
-			ul.values {
-				li {
-					display: grid;
-					gap: 4px;
-					grid-template-columns: auto min-content;
-					overflow-x: hidden;
-
-					select {
-						width: 100%;
-						padding: 0;
-					}
-
-					.colorWrapper,
-					input[type=text] {
-						width: 100%;
-					}
-
-					&.compact {
-						color: $bgLighter;
-						font-size: 9pt;
-						padding-bottom: 4px;
-					}
-				}
-				&.sortable li {
-					grid-template-columns: min-content auto min-content;
-				}
-			}
-
-
-			button.remove {
-				padding: 0;
-				margin: 0;
-			}
-		}
-
-	}
 }
 
 
@@ -4118,6 +3883,262 @@ canvas#webgl {
 
 		}
 	}
+}
+
+
+
+ul.form.fieldInstanceEditor {
+	padding: 0;
+	border: none;
+
+	&>li>label {
+		flex: 0 0 100%;
+		padding: 0;
+		padding-top: 8px;
+		text-align: left;
+		font-size: 10pt;
+		text-transform: none;
+	}
+
+	span.inputWithDefaultOption {
+		display: flex;
+		align-items: center;
+		opacity: 1 !important;
+		padding: 0 !important;
+		flex: 1 0 auto !important;
+		span.value {
+			flex: 1 0 auto;
+		}
+	}
+
+	a.reset {
+		flex: 0 0 auto;
+		align-self: center;
+		margin-left: 10px;
+		font-size: 0.75em;
+		text-decoration: underline;
+		color: $orange;
+		white-space: nowrap;
+		padding: 2px 4px;
+		border-radius: 3px;
+		cursor: pointer;
+
+		&:hover {
+			text-decoration: none;
+			color: black;
+			background-color: $orange;
+		}
+	}
+
+	span.usingDefault {
+		flex: 0 0 0px;
+		align-self: center;
+		margin-left: 10px;
+		font-size: 0.75em;
+		color: $bgLighter;
+		opacity: 1;
+	}
+
+
+	button.removePoint {
+		flex: 0.2 1 0px;
+	}
+
+	button.locate,
+	button.fileSelectButton {
+		flex: 0 1 0px;
+	}
+
+	input[type=color] {
+		width: 100%;
+	}
+
+	input.fileNotFound {
+		color: $orange;
+		border-color: $orange;
+		background-color: $darkRed;
+		box-shadow: 0px 0px 8px $red;
+	}
+
+	.colorWrapper {
+		display: grid;
+		justify-items: center;
+		align-items: center;
+		box-sizing: border-box;
+
+		min-width: 64px;
+		min-height: 32px;
+		padding: 4px;
+
+		color: white;
+		text-shadow: 0px 2px 2px black, 0px 0px 8px black;
+
+		border: 1px solid black;
+		box-shadow: 0px 0px 2px black inset;
+		cursor: pointer;
+		border-radius: 2px;
+
+		&:hover {
+			outline: 1px solid white;
+		}
+
+		&.usingDefault {
+			background-image: url("../img/stripes.png");
+		}
+
+		input {
+			visibility: hidden;
+			width: 0px !important;
+			height: 0px !important;
+			// width: 32px !important;
+			// position: absolute;
+		}
+	}
+
+	textarea {
+		height: auto;
+		overflow-x: auto;
+		overflow-y: hidden;
+		font-size: 8.5pt;
+	}
+
+	a.usingDefault {
+		display: flex;
+		width: 100%;
+		text-decoration: none;
+		border: 1px dashed $bgLight;
+		padding: 8px;
+		align-items: center;
+		background-color: $bgMed;
+		background-image: url("../img/stripes.png");
+
+		&.required {
+			border-color: $orange;
+			box-shadow: 0px 0px 4px $red, 0px 0px 8px $red inset;
+			background-color: $darkRed;
+			span.value {
+				text-shadow: none;
+				color: $orange !important;
+			}
+			span.label {
+				text-shadow: none;
+				color: $orange !important;
+			}
+		}
+
+		&.checkbox {
+			padding: 0;
+			padding-right: 8px;
+		}
+
+		span {
+			opacity: 1;
+			text-shadow: 2px 0px 4px $bgMed, 0px 2px 4px $bgMed, -2px 0px 4px $bgMed, 0px -2px 4px $bgMed;
+			&.value {
+				flex: 1 1 auto;
+				color: white;
+				font-style: italic;
+			}
+			&.label {
+				font-size: 0.75em;
+				font-style: italic;
+				color: $bgLighter;
+			}
+		}
+
+		&:hover {
+			border-color: $orange;
+		}
+	}
+	select.usingDefault {
+		border: 1px dashed $bgLight;
+		padding: 8px;
+		color: white;
+		background-color: $bgMed;
+		background-image: url("../img/stripes.png");
+	}
+
+	button.usingDefault:not(.required) {
+		background-image: url("../img/stripes.png");
+	}
+	button.required {
+		outline: 1px solid $orange;
+		box-shadow: 0px 0px 32px $red;
+	}
+
+	span.point {
+		color: $bgLighter;
+		padding: 4px;
+		font-style: italic;
+		border-radius: 6px;
+		background-color: $bgMed;
+	}
+
+	li.F_Path {
+		button {
+			flex: 0 1 0px;
+			padding: 0 4px;
+			align-self: stretch;
+		}
+	}
+
+	div.array {
+		display: grid;
+		grid-template-columns: auto;
+		gap: 2px;
+		box-sizing: border-box;
+		margin-left: 4px;
+		padding: 8px;
+		padding-right: 2px;
+		overflow-x: hidden;
+		overflow-y: auto;
+		border-left: 1px solid white;
+		border-bottom-left-radius: 8px;
+
+		ul.values {
+			>li {
+				display: flex;
+				// display: grid;
+				// gap: 4px;
+				// grid-template-columns: auto min-content;
+				flex-wrap: nowrap;
+				overflow: hidden;
+
+				.sortHandle {
+					flex: 0 1 0px;
+				}
+				button.remove {
+					flex: 0 1 24px;
+				}
+
+				select {
+					width: 100%;
+					padding: 0;
+				}
+
+				.colorWrapper,
+				input[type=text] {
+					width: 100%;
+				}
+
+				&.compact {
+					color: $bgLighter;
+					font-size: 9pt;
+					padding-bottom: 4px;
+				}
+			}
+			// &.sortable li {
+				// grid-template-columns: min-content auto min-content;
+			// }
+		}
+
+
+		button.remove {
+			padding: 0;
+			margin: 0;
+		}
+	}
+
 }
 
 

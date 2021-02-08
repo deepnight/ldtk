@@ -19,7 +19,7 @@ class FieldInstancesForm {
 
 
 	public function new() {
-		jWrapper = new J('<ul class="form"/>');
+		jWrapper = new J('<ul class="form fieldInstanceEditor"/>');
 	}
 
 	public function use(elementInstance: FormRelatedInstance, fieldDefs: Array<FieldDef>, fieldInstGetter: (fd:FieldDef)->FieldInstance ) {
@@ -33,6 +33,8 @@ class FieldInstancesForm {
 	public function dispose() {
 		jWrapper.remove();
 		jWrapper = null;
+		fieldDefs = null;
+		fieldInstGetter = null;
 	}
 
 	public inline function isDestroyed() return jWrapper==null || jWrapper.parents("body").length==0;
@@ -210,6 +212,7 @@ class FieldInstancesForm {
 				if( fi.isUsingDefault(arrayIdx) ) {
 					var def = fi.def.getStringDefault();
 					jText.text(def==null ? "(null)" : def=="" ? "(empty string)" : def);
+					jText.addClass("usingDefault");
 				}
 				else
 					jText.text( fi.getString(arrayIdx) );
