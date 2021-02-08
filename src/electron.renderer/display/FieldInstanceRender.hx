@@ -143,7 +143,8 @@ class FieldInstanceRender {
 	}
 
 
-	public static function renderValue(fi:data.inst.FieldInstance, textColor:Int) {
+
+	static function renderValue(fi:data.inst.FieldInstance, textColor:Int) {
 		var valuesFlow = new h2d.Flow();
 		valuesFlow.layout = Horizontal;
 		valuesFlow.verticalAlign = Middle;
