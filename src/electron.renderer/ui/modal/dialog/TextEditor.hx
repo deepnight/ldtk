@@ -20,7 +20,7 @@ class TextEditor extends ui.modal.Dialog {
 		// Init Codemirror
 		var cm = CodeMirror.fromTextArea( cast jTextArea.get(0), {
 			mode: requireMode(mode),
-			theme: "ayu-mirage",
+			theme: "lucario",
 			lineNumbers: true,
 			lineWrapping: true,
 			autofocus: true,
@@ -114,7 +114,7 @@ class TextEditor extends ui.modal.Dialog {
 		// Guess display language
 		var mode : ldtk.Json.TextLanguageMode = null;
 		if( fp.extension!=null )
-			mode = switch fp.extension {
+			mode = switch fp.extension.toLowerCase() {
 				case "txt", "cfg": null;
 				case "xml", "html", "xhtml", "jhtml", "tpl", "rss", "svg": LangXml;
 				case "js": LangJS;
@@ -122,6 +122,7 @@ class TextEditor extends ui.modal.Dialog {
 				case "py": LangPython;
 				case "rb","rhtml": LangRuby;
 				case "lua": LangLua;
+				case "md": LangMarkdown;
 				case "json", Const.FILE_EXTENSION, Const.LEVEL_EXTENSION: LangJson;
 				case "cs", "csx", "c", "cpp", "c++", "cp", "cc", "h": LangC;
 				case _: LangJS;
