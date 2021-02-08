@@ -312,8 +312,6 @@ class LevelPanel extends ui.modal.Panel {
 				onFieldChange();
 			}) );
 
-		// Custom fields
-		// ... (not implemented yet)
 
 		JsTools.parseComponents(jForm);
 	}
