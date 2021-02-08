@@ -125,11 +125,12 @@ class FieldInstancesForm {
 	}
 
 
-	function createFieldInput(fi:data.inst.FieldInstance, arrayIdx:Int, jTarget:js.jquery.JQuery) {
+	function createFieldInput(domId:String, fi:data.inst.FieldInstance, arrayIdx:Int, jTarget:js.jquery.JQuery) {
 		jTarget.addClass( fi.def.type.getName() );
 		switch fi.def.type {
 			case F_Int:
 				var input = new J("<input/>");
+				input.attr("id",domId);
 				input.appendTo(jTarget);
 				input.attr("type","text");
 				input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
@@ -154,6 +155,7 @@ class FieldInstancesForm {
 					jWrapper.append("(default)");
 
 				var input = new J("<input/>");
+				input.attr("id",domId);
 				input.appendTo(jWrapper);
 				input.attr("type","color");
 				input.addClass("advanced");
@@ -167,6 +169,7 @@ class FieldInstancesForm {
 
 			case F_Float:
 				var input = new J("<input/>");
+				input.attr("id",domId);
 				input.appendTo(jTarget);
 				input.attr("type","text");
 				input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
@@ -198,6 +201,7 @@ class FieldInstancesForm {
 					input;
 				}
 				var def = fi.def.getStringDefault();
+				input.attr("id",domId);
 				input.attr("placeholder", def==null ? "(null)" : def=="" ? "(empty string)" : def);
 				if( !fi.isUsingDefault(arrayIdx) )
 					input.val( fi.getString(arrayIdx) );
@@ -239,6 +243,7 @@ class FieldInstancesForm {
 				if( fi.valueIsNull(arrayIdx) && !fi.def.canBeNull || !fi.def.isArray ) {
 					// Button mode
 					var jPick = new J('<button/>');
+					jPick.attr("id",domId);
 					if( !fi.valueIsNull(arrayIdx) )
 						jPick.addClass("gray");
 					jPick.appendTo(jTarget);
@@ -322,6 +327,7 @@ class FieldInstancesForm {
 
 			case F_Bool:
 				var input = new J("<input/>");
+				input.attr("id",domId);
 				input.appendTo(jTarget);
 				input.attr("type","checkbox");
 				input.prop("checked",fi.getBool(arrayIdx));
@@ -338,6 +344,7 @@ class FieldInstancesForm {
 				// Text input
 				var input = new J('<input class="fileInput" type="text"/>');
 				input.appendTo(jTarget);
+				input.attr("id",domId);
 				input.attr("placeholder", "(null)");
 				if( isRequired )
 					input.addClass("required");
@@ -515,6 +522,7 @@ class FieldInstancesForm {
 		// Fields
 		for(fd in fieldDefs) {
 			var fi = fieldInstGetter(fd);
+			var domId = "field_"+fd.identifier+"_"+fd.uid;
 
 			var jDt = new J("<dt/>");
 			jDt.appendTo(jWrapper);
@@ -527,9 +535,9 @@ class FieldInstancesForm {
 
 			// Identifier
 			if( !fd.isArray )
-				jDt.append('${fi.def.identifier}');
+				jDt.append('<label for="$domId">${fi.def.identifier}</label>');
 			else
-				jDt.append('${fi.def.identifier} (${fi.getArrayLength()})');
+				jDt.append('<label for="$domId">${fi.def.identifier} (${fi.getArrayLength()})</label>');
 
 			// Field is not manually defined
 			if( !fd.isArray && fi.isUsingDefault(0) || fd.isArray && fi.getArrayLength()==0 )
@@ -537,7 +545,7 @@ class FieldInstancesForm {
 
 			if( !fd.isArray ) {
 				// Single value
-				createFieldInput(fi, 0, li);
+				createFieldInput(domId, fi, 0, li);
 			}
 			else {
 				// Array
@@ -573,7 +581,7 @@ class FieldInstancesForm {
 						if( sortable )
 							li.append('<div class="sortHandle"/>');
 
-						createFieldInput(fi, i, li);
+						createFieldInput(domId, fi, i, li);
 
 						// "Remove" button
 						var jRemove = new J('<button class="remove dark">x</button>');
