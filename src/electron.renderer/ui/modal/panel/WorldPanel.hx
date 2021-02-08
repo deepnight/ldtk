@@ -97,13 +97,15 @@ class WorldPanel extends ui.modal.Panel {
 
 	override function onClose() {
 		super.onClose();
-		var anyWorldPanel = false;
+		var anyNonWorldPanel = false;
 		for(m in Modal.ALL)
-			if( !m.destroyed && m!=this && Std.isOfType(m,LevelPanel) ) {
-				anyWorldPanel = true;
+			if( !m.destroyed && m!=this && !Std.isOfType(m,LevelPanel) ) {
+				anyNonWorldPanel = true;
 				break;
 			}
-		if( !anyWorldPanel )
+		if( !anyNonWorldPanel )
+			new LevelPanel();
+		else if( editor.worldMode )
 			editor.setWorldMode(false);
 	}
 
