@@ -3,7 +3,7 @@ package ui.modal.panel;
 class LevelPanel extends ui.modal.Panel {
 	var level: data.Level;
 	var link : h2d.Graphics;
-	var formFields : FieldInstancesForm;
+	var fieldsForm : FieldInstancesForm;
 
 	public function new() {
 		super();
@@ -76,17 +76,11 @@ class LevelPanel extends ui.modal.Panel {
 		});
 
 		// Field instance form
-		formFields = new FieldInstancesForm(
-			Level(level),
-			project.defs.levelFields,
-			(fd)->level.getFieldInstance(fd)
-		);
-		jContent.append(formFields.jWrapper);
-		formFields.onChange = ()->{
-			N.notImplemented();
-		}
+		fieldsForm = new FieldInstancesForm();
+		jContent.append(fieldsForm.jWrapper);
 
 		updateLevelForm();
+		updateFieldsForm();
 		renderLink();
 	}
 
@@ -127,6 +121,7 @@ class LevelPanel extends ui.modal.Panel {
 	function useLevel(l:data.Level) {
 		level = l;
 		updateLevelForm();
+		updateFieldsForm();
 	}
 
 	override function onGlobalEvent(ge:GlobalEvent) {
@@ -160,7 +155,15 @@ class LevelPanel extends ui.modal.Panel {
 
 			case WorldLevelMoved:
 				updateLevelForm();
+				updateFieldsForm();
 				renderLink();
+
+			case FieldDefSorted, FieldDefRemoved(_), FieldDefChanged(_), FieldDefAdded(_):
+				updateFieldsForm();
+
+			case FieldInstanceChanged(fd):
+				updateFieldsForm();
+
 
 			case ViewportChanged :
 				renderLink();
@@ -312,6 +315,13 @@ class LevelPanel extends ui.modal.Panel {
 
 		JsTools.parseComponents(jForm);
 	}
+
+
+	function updateFieldsForm() {
+		fieldsForm.use( Level(level), project.defs.levelFields, (fd)->level.getFieldInstance(fd) );
+	}
+
+
 
 	override function update() {
 		super.update();

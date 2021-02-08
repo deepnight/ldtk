@@ -59,8 +59,8 @@ class FieldDefsForm {
 	}
 
 
-	public function setFields(fields:Array<FieldDef>) {
-		jWrapper.css({ visibility: "show" });
+	public function useFields(fields:Array<FieldDef>) {
+		jWrapper.css({ visibility: "visible" });
 		fieldDefs = fields;
 
 		// Default field selection

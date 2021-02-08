@@ -18,17 +18,17 @@ class FieldInstancesForm {
 	var fieldInstGetter : (fd:FieldDef)->FieldInstance;
 
 
-	public function new(
-		elementInstance: FormRelatedInstance,
-		fieldDefs: Array<FieldDef>,
-		fieldInstGetter: (fd:FieldDef)->FieldInstance
-	) {
-		this.relatedInstance = elementInstance;
+	public function new() {
 		jWrapper = new J('<ul class="form"/>');
-		this.fieldDefs = fieldDefs;
+	}
+
+	public function use(elementInstance: FormRelatedInstance, fieldDefs: Array<FieldDef>, fieldInstGetter: (fd:FieldDef)->FieldInstance ) {
+		this.relatedInstance = elementInstance;
 		this.fieldInstGetter = fieldInstGetter;
+		this.fieldDefs = fieldDefs;
 		renderForm();
 	}
+
 
 	public function dispose() {
 		jWrapper.remove();

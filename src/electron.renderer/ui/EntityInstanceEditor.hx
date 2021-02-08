@@ -194,8 +194,9 @@ class EntityInstanceEditor extends dn.Process {
 		jHeader.append(jEdit);
 
 		// Custom fields
-		var form = new ui.FieldInstancesForm(Entity(ei), ei.def.fieldDefs, (fd)->ei.getFieldInstance(fd));
+		var form = new ui.FieldInstancesForm();
 		wrapper.append(form.jWrapper);
+		form.use( Entity(ei), ei.def.fieldDefs, (fd)->ei.getFieldInstance(fd) );
 		form.onChange = ()->{
 			editor.curLevelHistory.saveLayerState( editor.curLayerInstance );
 			editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );

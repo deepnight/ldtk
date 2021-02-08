@@ -316,9 +316,9 @@ class EditEntityDefs extends ui.modal.Panel {
 
 	function updateFieldsForm() {
 		if( curEntity!=null )
-			fieldsForm.setFields(curEntity.fieldDefs);
+			fieldsForm.useFields(curEntity.fieldDefs);
 		else {
-			fieldsForm.setFields([]);
+			fieldsForm.useFields([]);
 			fieldsForm.hide();
 		}
 	}

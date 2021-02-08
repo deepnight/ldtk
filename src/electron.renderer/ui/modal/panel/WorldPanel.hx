@@ -11,7 +11,7 @@ class WorldPanel extends ui.modal.Panel {
 
 		fieldForm = new FieldDefsForm();
 		jContent.find("#levelFields").replaceWith(fieldForm.jWrapper);
-		fieldForm.setFields( project.defs.levelFields );
+		fieldForm.useFields( project.defs.levelFields );
 		updateWorldForm();
 	}
 
@@ -24,7 +24,7 @@ class WorldPanel extends ui.modal.Panel {
 				updateWorldForm();
 
 			case ProjectSelected:
-				fieldForm.setFields( project.defs.levelFields );
+				fieldForm.useFields( project.defs.levelFields );
 				updateWorldForm();
 
 			case _:
