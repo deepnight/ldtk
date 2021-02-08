@@ -508,7 +508,10 @@ class FieldInstancesForm {
 				jDt.append('${fi.def.identifier}');
 			else
 				jDt.append('${fi.def.identifier} (${fi.getArrayLength()})');
-				// li.append('<label>${fi.def.identifier} (${fi.getArrayLength()})</label>');
+
+			// Field is not manually defined
+			if( !fd.isArray && fi.isUsingDefault(0) || fd.isArray && fi.getArrayLength()==0 )
+				jDt.addClass("isDefault");
 
 			if( !fd.isArray ) {
 				// Single value

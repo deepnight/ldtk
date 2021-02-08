@@ -1096,6 +1096,10 @@ ul.form {
 		text-overflow: ellipsis;
 		font-size: 9pt;
 		padding-top: 8px;
+		&.isDefault {
+			color: $bgLighter;
+			font-style: italic;
+		}
 	}
 
 	>dd {
