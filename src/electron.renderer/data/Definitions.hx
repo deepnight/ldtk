@@ -323,15 +323,6 @@ class Definitions {
 
 	/**  FIELD DEFS  *****************************************/
 
-	public function getEntityFieldDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.FieldDef> {
-		for(ed in entities)
-		for(fd in ed.fieldDefs)
-			if( fd.uid==id || fd.identifier==id )
-				return fd;
-
-		return null;
-	}
-
 	public function getEntityDefUsingField(fd:data.def.FieldDef) : Null<data.def.EntityDef> {
 		for(ed in entities)
 		for(efd in ed.fieldDefs)
@@ -339,6 +330,20 @@ class Definitions {
 				return ed;
 		return null;
 	}
+
+	public function getFieldDef(uid:Int) : Null<data.def.FieldDef> {
+		for(fd in levelFields)
+			if( fd.uid==uid )
+				return fd;
+
+		for(ed in entities)
+		for(efd in ed.fieldDefs)
+			if( efd.uid==uid )
+				return efd;
+
+		return null;
+	}
+
 
 
 	/**  TILESET DEFS  *****************************************/

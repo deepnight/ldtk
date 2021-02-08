@@ -11,7 +11,7 @@ class Level {
 	public var pxWid : Int;
 	public var pxHei : Int;
 	public var layerInstances : Array<data.inst.LayerInstance> = [];
-	public var fieldInstances : Array<data.inst.FieldInstance> = [];
+	public var fieldInstances : Map<Int, data.inst.FieldInstance> = new Map();
 
 	public var externalRelPath: Null<String>;
 
@@ -122,7 +122,12 @@ class Level {
 			},
 
 			externalRelPath: null, // is only set upon actual saving, if project uses externalLevels option
-			fieldInstances: fieldInstances.map( fi->fi.toJson() ),
+			fieldInstances: {
+				var all = [];
+				for(fi in fieldInstances)
+					all.push( fi.toJson() );
+				all;
+			},
 			layerInstances: layerInstances.map( li->li.toJson() ),
 			__neighbours: neighbours,
 		}
@@ -161,7 +166,7 @@ class Level {
 		if( json.fieldInstances!=null )
 			for( fieldJson in JsonTools.readArray(json.fieldInstances)) {
 				var fi = data.inst.FieldInstance.fromJson(p,fieldJson);
-				l.fieldInstances.push(fi);
+				l.fieldInstances.set(fi.defUid, fi);
 			}
 
 		return l;
@@ -407,6 +412,15 @@ class Level {
 		return null;
 	}
 
+
+
+	/** CUSTOM FIELDS *******************/
+
+	public function getFieldInstance(fd:data.def.FieldDef) : data.inst.FieldInstance{
+		if( !fieldInstances.exists(fd.uid) )
+			fieldInstances.set( fd.uid, new data.inst.FieldInstance(_project, fd.uid) );
+		return fieldInstances.get(fd.uid);
+	}
 
 
 	/** RENDERING *******************/

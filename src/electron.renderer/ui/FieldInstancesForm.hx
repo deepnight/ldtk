@@ -5,6 +5,7 @@ import data.inst.FieldInstance;
 
 enum FormRelatedInstance {
 	Entity(ei:data.inst.EntityInstance);
+	Level(l:data.Level);
 }
 
 class FieldInstancesForm {
@@ -388,25 +389,29 @@ class FieldInstancesForm {
 
 	function getInstanceName() {
 		return switch relatedInstance {
-			case Entity(ei): return ei.def.identifier;
+			case Entity(ei): ei.def.identifier;
+			case Level(l): l.identifier;
 		}
 	}
 
 	function getInstanceCx() {
 		return switch relatedInstance {
-			case Entity(ei): return ei.getCx( editor.curLayerDef );
+			case Entity(ei): ei.getCx( editor.curLayerDef );
+			case Level(l): 0; // N/A
 		}
 	}
 
 	function getInstanceCy() {
 		return switch relatedInstance {
-			case Entity(ei): return ei.getCy( editor.curLayerDef );
+			case Entity(ei): ei.getCy( editor.curLayerDef );
+			case Level(l): 0; // N/A
 		}
 	}
 
 	function getInstanceColor() {
 		return switch relatedInstance {
-			case Entity(ei): return ei.getSmartColor(true);
+			case Entity(ei): ei.getSmartColor(true);
+			case Level(l): l.getBgColor();
 		}
 	}
 

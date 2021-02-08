@@ -65,15 +65,26 @@ class LevelPanel extends ui.modal.Panel {
 			editor.ge.emit( LevelAdded(copy) );
 		});
 
+		// World panel
 		jContent.find("button.worldSettings").click( (_)->{
 			new ui.modal.panel.WorldPanel();
 		});
 
+		// World panel "edit" shortcut
 		jContent.find("a.editFields").click( (_)->{
 			new ui.modal.panel.WorldPanel();
 		});
 
-		// formFields = new FieldInstancesForm() // TODO
+		// Field instance form
+		formFields = new FieldInstancesForm(
+			Level(level),
+			project.defs.levelFields,
+			(fd)->level.getFieldInstance(fd)
+		);
+		jContent.append(formFields.jWrapper);
+		formFields.onChange = ()->{
+			N.notImplemented();
+		}
 
 		updateLevelForm();
 		renderLink();

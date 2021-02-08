@@ -140,7 +140,7 @@ class EntityInstance {
 			}
 
 		for(fi in fieldInstances)
-			fi.tidy(_project, li, this);
+			fi.tidy(_project, li);
 	}
 
 

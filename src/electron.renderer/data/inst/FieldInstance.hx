@@ -4,14 +4,14 @@ import data.DataTypes;
 
 class FieldInstance {
 	public var _project : Project;
-	public var def(get,never) : data.def.FieldDef; inline function get_def() return _project.defs.getEntityFieldDef(defUid);
+	public var def(get,never) : data.def.FieldDef; inline function get_def() return _project.defs.getFieldDef(defUid);
 
 	public var defUid: Int;
 
 	@:allow(misc.FieldTypeConverter)
 	var internalValues : Array<ValueWrapper>;
 
-	@:allow(data.inst.EntityInstance)
+	@:allow(data.inst.EntityInstance, data.Level)
 	private function new(p:Project, fieldDefUid:Int) {
 		_project = p;
 		defUid = fieldDefUid;
@@ -439,7 +439,7 @@ class FieldInstance {
 		}
 	}
 
-	public function tidy(p:Project, li:LayerInstance, ei:EntityInstance) {
+	public function tidy(p:Project, ?li:LayerInstance) {
 		_project = p;
 
 		switch def.type {
@@ -452,15 +452,17 @@ class FieldInstance {
 			case F_Path:
 
 			case F_Point:
-				var i = 0;
-				while( i<getArrayLength() ) {
-					var pt = getPointGrid(i);
-					if( pt!=null && ( pt.cx<0 || pt.cx>=li.cWid || pt.cy<0 || pt.cy>=li.cHei ) ) {
-						App.LOG.add("tidy", 'Removed pt ${pt.cx},${pt.cy} in $this (out of bounds)');
-						removeArrayValue(i);
+				if( li!=null ) {
+					var i = 0;
+					while( i<getArrayLength() ) {
+						var pt = getPointGrid(i);
+						if( pt!=null && ( pt.cx<0 || pt.cx>=li.cWid || pt.cy<0 || pt.cy>=li.cHei ) ) {
+							App.LOG.add("tidy", 'Removed pt ${pt.cx},${pt.cy} in $this (out of bounds)');
+							removeArrayValue(i);
+						}
+						else
+							i++;
 					}
-					else
-						i++;
 				}
 
 			case F_Enum(enumDefUid):
