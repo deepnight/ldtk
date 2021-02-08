@@ -9,12 +9,7 @@ class WorldPanel extends ui.modal.Panel {
 		jMask.hide();
 		loadTemplate("worldPanel");
 
-		fieldForm = new FieldDefsForm(
-			(fd)->editor.ge.emit( WorldSettingsChanged ),
-			(fd)->editor.ge.emit( WorldSettingsChanged ),
-			(fd)->editor.ge.emit( WorldSettingsChanged ),
-			(fd)->editor.ge.emit( WorldSettingsChanged )
-		);
+		fieldForm = new FieldDefsForm();
 		jContent.find("#levelFields").replaceWith(fieldForm.jWrapper);
 		fieldForm.setFields( project.defs.levelFields );
 		updateWorldForm();

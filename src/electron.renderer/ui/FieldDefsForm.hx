@@ -13,18 +13,9 @@ class FieldDefsForm {
 	var fieldDefs : Array<FieldDef>;
 	var curField : Null<FieldDef>;
 
-	var onCreate : FieldDef->Void;
-	var onChange : FieldDef->Void;
-	var onRemove : FieldDef->Void;
-	var onSort : FieldDef->Void;
 
-
-	public function new(onCreate, onChange, onRemove, onSort) {
+	public function new() {
 		this.fieldDefs = [];
-		this.onCreate = onCreate;
-		this.onChange = onChange;
-		this.onRemove = onRemove;
-		this.onSort = onSort;
 
 		jWrapper = new J('<div class="fieldDefsEditor"/>');
 		jWrapper.html( JsTools.getHtmlTemplate("fieldDefsEditor") );
@@ -136,7 +127,7 @@ class FieldDefsForm {
 				fd.identifier = baseName+(idx++);
 			fieldDefs.push(fd);
 
-			onCreate(fd);
+			editor.ge.emit( FieldDefAdded(fd) );
 			selectField(fd);
 			jForm.find("input:not([readonly]):first").focus().select();
 		}
@@ -196,7 +187,7 @@ class FieldDefsForm {
 		new ui.LastChance( L.t._("Entity field ::name:: deleted", { name:fd.identifier }), project );
 		fieldDefs.remove(fd);
 		project.tidy();
-		onRemove(fd);
+		editor.ge.emit( FieldDefRemoved(fd) );
 		selectField( fieldDefs[0] );
 	}
 
@@ -228,7 +219,7 @@ class FieldDefsForm {
 					label: L._Duplicate(),
 					cb:()->{
 						var copy = duplicateField(fd);
-						onCreate(copy);
+						editor.ge.emit( FieldDefAdded(fd) );
 						selectField(copy);
 					}
 				},
@@ -253,7 +244,7 @@ class FieldDefsForm {
 			fieldDefs.insert(to, moved);
 
 			selectField(moved);
-			onSort(moved);
+			editor.ge.emit( FieldDefSorted );
 		});
 
 		JsTools.parseComponents(jList);
@@ -262,7 +253,7 @@ class FieldDefsForm {
 
 
 	function onFieldChange() {
-		onChange(curField);
+		editor.ge.emit( FieldDefChanged(curField) );
 		updateList();
 		updateForm();
 	}

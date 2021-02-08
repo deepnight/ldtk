@@ -65,7 +65,7 @@ class EntityInstanceEditor extends dn.Process {
 
 	function onGlobalEvent(ge:GlobalEvent) {
 		switch ge {
-			case ProjectSettingsChanged, EntityDefChanged, EntityFieldDefChanged(_), EntityFieldDefSorted:
+			case ProjectSettingsChanged, EntityDefChanged, FieldDefChanged(_), FieldDefSorted:
 				if( ei==null || ei.def==null )
 					destroy();
 				else
@@ -82,9 +82,8 @@ class EntityInstanceEditor extends dn.Process {
 				if( ei==this.ei )
 					updateForm();
 
-			case EntityFieldInstanceChanged(ei):
-				if( ei==this.ei )
-					updateForm();
+			case FieldInstanceChanged(fi):
+				updateForm();
 
 			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				closeExisting(); // TODO do softer refresh
@@ -200,7 +199,6 @@ class EntityInstanceEditor extends dn.Process {
 		form.onChange = ()->{
 			editor.curLevelHistory.saveLayerState( editor.curLayerInstance );
 			editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
-			editor.ge.emit( EntityFieldInstanceChanged(ei) );
 		}
 
 

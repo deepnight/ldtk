@@ -37,12 +37,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Create fields editor
-		fieldsForm = new ui.FieldDefsForm(
-			fd->editor.ge.emit( EntityFieldDefAdded(curEntity) ),
-			fd->editor.ge.emit( EntityFieldDefChanged(curEntity) ),
-			fd->editor.ge.emit( EntityFieldDefRemoved(curEntity) ),
-			fd->editor.ge.emit( EntityFieldDefSorted )
-		);
+		fieldsForm = new ui.FieldDefsForm();
 		jContent.find("#fields").replaceWith( fieldsForm.jWrapper );
 
 
@@ -104,10 +99,10 @@ class EditEntityDefs extends ui.modal.Panel {
 				updateFieldsForm();
 				updateEntityList();
 
-			case EntityDefSorted, EntityFieldDefSorted:
+			case EntityDefSorted, FieldDefSorted:
 				updateEntityList();
 
-			case EntityFieldDefAdded(ed), EntityFieldDefRemoved(ed), EntityFieldDefChanged(ed):
+			case FieldDefAdded(_), FieldDefRemoved(_), FieldDefChanged(_):
 				updateEntityList();
 				updateFieldsForm();
 

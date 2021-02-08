@@ -211,8 +211,9 @@ class LevelRender extends dn.Process {
 					if( li.def.type==Entities )
 						invalidateLayer(li);
 
-			case EntityFieldDefAdded(ed), EntityFieldDefRemoved(ed), EntityFieldDefChanged(ed):
-				if( editor.curLayerInstance!=null ) {
+			case FieldDefAdded(fd), FieldDefRemoved(fd), FieldDefChanged(fd):
+				var ed = editor.project.defs.getEntityDefUsingField(fd);
+				if( editor.curLayerInstance!=null && ed!=null ) {
 					var li = editor.curLevel.getLayerInstanceFromEntity(ed);
 					invalidateLayer( li==null ? editor.curLayerInstance : li );
 				}
@@ -222,7 +223,14 @@ class LevelRender extends dn.Process {
 					if( li.def.type==Entities )
 						invalidateLayer(li);
 
-			case EntityInstanceAdded(ei), EntityInstanceRemoved(ei), EntityInstanceChanged(ei), EntityFieldInstanceChanged(ei):
+			case FieldInstanceChanged(fi):
+				var ed = editor.project.defs.getEntityDefUsingField(fi.def);
+				if( ed!=null ) {
+					var li = editor.curLevel.getLayerInstanceFromEntity(ed);
+					invalidateLayer( li==null ? editor.curLayerInstance : li );
+				}
+
+			case EntityInstanceAdded(ei), EntityInstanceRemoved(ei), EntityInstanceChanged(ei):
 				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
 				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
@@ -234,7 +242,7 @@ class LevelRender extends dn.Process {
 			case LayerDefAdded:
 
 			case EntityDefAdded:
-			case EntityFieldDefSorted:
+			case FieldDefSorted:
 
 			case ToolOptionChanged:
 

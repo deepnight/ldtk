@@ -1169,15 +1169,15 @@ class Editor extends Page {
 				case EntityInstanceAdded(ei): extra = ei.defUid;
 				case EntityInstanceRemoved(ei): extra = ei.defUid;
 				case EntityInstanceChanged(ei): extra = ei.defUid;
-				case EntityFieldInstanceChanged(ei): extra = ei.defUid;
+				case FieldInstanceChanged(fi): extra = fi.defUid;
 				case EntityDefAdded:
 				case EntityDefRemoved:
 				case EntityDefChanged:
 				case EntityDefSorted:
-				case EntityFieldDefAdded(ed): extra = ed.uid;
-				case EntityFieldDefRemoved(ed): extra = ed.uid;
-				case EntityFieldDefChanged(ed): extra = ed.uid;
-				case EntityFieldDefSorted:
+				case FieldDefAdded(fd): extra = fd.identifier;
+				case FieldDefRemoved(fd): extra = fd.identifier;
+				case FieldDefChanged(fd): extra = fd.identifier;
+				case FieldDefSorted:
 				case EnumDefAdded:
 				case EnumDefRemoved:
 				case EnumDefChanged:
@@ -1219,10 +1219,10 @@ class Editor extends Page {
 
 			case LayerInstanceChanged:
 
-			case EntityFieldDefChanged(ed):
-			case EntityFieldDefSorted:
+			case FieldDefChanged(fd):
+			case FieldDefSorted:
 			case EntityDefSorted:
-			case EntityFieldInstanceChanged(ei):
+			case FieldInstanceChanged(fi):
 
 			case EntityInstanceAdded(ei):
 			case EntityInstanceRemoved(ei):
@@ -1243,7 +1243,7 @@ class Editor extends Page {
 				selectionTool.clear();
 				updateLayerList();
 
-			case EntityFieldDefAdded(ed), EntityFieldDefRemoved(ed):
+			case FieldDefAdded(_), FieldDefRemoved(_):
 				updateTool();
 
 			case LayerDefConverted:

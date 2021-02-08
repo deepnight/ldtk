@@ -143,7 +143,6 @@ class FieldTypeConverter {
 
 		new ui.modal.Progress("Type conversion", ops, ()->{
 			N.success("Type changed to "+toType);
-			// Editor.ME.ge.emit( EntityFieldDefChanged(ed) );
 			new ui.LastChance(L.t._("Type conversion"), oldProject);
 			onSuccess();
 		});

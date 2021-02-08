@@ -113,7 +113,7 @@ class FieldInstancesForm {
 			defLink.appendTo(span);
 			defLink.on("click.def", function(ev) {
 				fi.parseValue(arrayIdx, null);
-				onFieldChange();
+				onFieldChange(fi);
 				ev.preventDefault();
 			});
 		}
@@ -132,7 +132,7 @@ class FieldInstancesForm {
 					input.val( Std.string(fi.getInt(arrayIdx)) );
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange();
+					onFieldChange(fi);
 				});
 				hideInputIfDefault(arrayIdx, input, fi);
 
@@ -155,7 +155,7 @@ class FieldInstancesForm {
 				input.val(cHex);
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange();
+					onFieldChange(fi);
 				});
 
 				hideInputIfDefault(arrayIdx, jWrapper, fi);
@@ -169,7 +169,7 @@ class FieldInstancesForm {
 					input.val( Std.string(fi.getFloat(arrayIdx)) );
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange();
+					onFieldChange(fi);
 				});
 				hideInputIfDefault(arrayIdx, input, fi);
 
@@ -198,7 +198,7 @@ class FieldInstancesForm {
 					input.val( fi.getString(arrayIdx) );
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange();
+					onFieldChange(fi);
 				});
 				if( fi.def.type==F_Text )
 					input.keyup();
@@ -220,7 +220,7 @@ class FieldInstancesForm {
 						fi.def.textLangageMode,
 						(v)->{
 							fi.parseValue(arrayIdx, v);
-							onFieldChange();
+							onFieldChange(fi);
 						}
 					);
 				});
@@ -257,7 +257,7 @@ class FieldInstancesForm {
 						jRem.appendTo(jTarget);
 						jRem.click( (_)->{
 							fi.parseValue(arrayIdx,null);
-							onFieldChange();
+							onFieldChange(fi);
 						});
 					}
 				}
@@ -306,7 +306,7 @@ class FieldInstancesForm {
 				select.change( function(ev) {
 					var v = select.val()=="" ? null : select.val();
 					fi.parseValue(arrayIdx, v);
-					onFieldChange();
+					onFieldChange(fi);
 				});
 				hideInputIfDefault(arrayIdx, select, fi);
 
@@ -317,7 +317,7 @@ class FieldInstancesForm {
 				input.prop("checked",fi.getBool(arrayIdx));
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, Std.string( input.prop("checked") ) );
-					onFieldChange();
+					onFieldChange(fi);
 				});
 
 				hideInputIfDefault(arrayIdx, input, fi);
@@ -337,7 +337,7 @@ class FieldInstancesForm {
 
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange();
+					onFieldChange(fi);
 				});
 
 				// Edit
@@ -375,7 +375,7 @@ class FieldInstancesForm {
 						var relPath = project.makeRelativeFilePath(fp.full);
 						input.val(relPath);
 						fi.parseValue( arrayIdx, relPath );
-						onFieldChange();
+						onFieldChange(fi);
 					});
 				});
 
@@ -446,7 +446,7 @@ class FieldInstancesForm {
 				Editor.ME.clearSpecialTool();
 				fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
 			}
-			onFieldChange(true);
+			onFieldChange(fi, true);
 		}
 
 		// Tool stopped
@@ -460,12 +460,13 @@ class FieldInstancesForm {
 
 
 
-	function onFieldChange(keepCurrentSpecialTool=false) {
+	function onFieldChange(fi:FieldInstance, keepCurrentSpecialTool=false) {
 		if( !keepCurrentSpecialTool )
 			Editor.ME.clearSpecialTool();
 
 		onBeforeRender();
 		renderForm();
+		editor.ge.emit( FieldInstanceChanged(fi) );
 		onChange();
 	}
 
@@ -541,13 +542,13 @@ class FieldInstancesForm {
 						var idx = i;
 						jRemove.click( function(_) {
 							fi.removeArrayValue(idx);
-							onFieldChange();
+							onFieldChange(fi);
 						});
 					}
 					if( sortable )
 						JsTools.makeSortable(jArrayInputs, function(ev:sortablejs.Sortable.SortableDragEvent) {
 							fi.sortArrayValues(ev.oldIndex, ev.newIndex);
-							onFieldChange();
+							onFieldChange(fi);
 						});
 				}
 
@@ -562,7 +563,7 @@ class FieldInstancesForm {
 						}
 						else {
 							fi.addArrayValue();
-							onFieldChange();
+							onFieldChange(fi);
 						}
 						var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
 						switch fi.def.type {
