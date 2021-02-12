@@ -10,6 +10,7 @@
 - TODO all panels now cover main sidebar
 - TODO multi lines pop up text editor
 - TODO Customizable source tileset per-layer instance
+- TODO better field display by aligning labels and values
 - Each Entity field type now has an associated color, making field list easier to read.
 - The default size of a new level can now be customized from the World settings (press `W`, then open settings).
 - **Mouse wheel** can now be used to switch to world mode (and vice versa) automatically. A new related option has been to app settings (`F12`).
