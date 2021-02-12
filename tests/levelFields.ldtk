@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 26,
+	"nextUid": 30,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -89,7 +89,7 @@
 					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "ValueOnly",
+					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"min": null,
@@ -108,7 +108,7 @@
 					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "ValueOnly",
+					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"min": 1,
@@ -155,6 +155,25 @@
 					"acceptFileTypes": null,
 					"defaultOverride": null,
 					"textLangageMode": null
+				},
+				{
+					"identifier": "Multilines",
+					"__type": "String",
+					"uid": 29,
+					"type": "F_Text",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLangageMode": null
 				}
 			]
 		}
@@ -168,7 +187,7 @@
 			"canBeNull": true,
 			"arrayMinLength": null,
 			"arrayMaxLength": null,
-			"editorDisplayMode": "ValueOnly",
+			"editorDisplayMode": "NameAndValue",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
 			"min": null,
@@ -187,7 +206,7 @@
 			"canBeNull": false,
 			"arrayMinLength": null,
 			"arrayMaxLength": null,
-			"editorDisplayMode": "Hidden",
+			"editorDisplayMode": "NameAndValue",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
 			"min": null,
@@ -206,32 +225,13 @@
 			"canBeNull": true,
 			"arrayMinLength": null,
 			"arrayMaxLength": null,
-			"editorDisplayMode": "Hidden",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": [ ".lua", ".hx", ".md", ".xml", ".json" ],
-			"defaultOverride": null,
-			"textLangageMode": null
-		},
-		{
-			"identifier": "entrance",
-			"__type": "Point",
-			"uid": 25,
-			"type": "F_Point",
-			"isArray": false,
-			"canBeNull": false,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
 			"editorDisplayMode": "NameAndValue",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
 			"min": null,
 			"max": null,
 			"regex": null,
-			"acceptFileTypes": null,
+			"acceptFileTypes": [ ".lua", ".hx", ".md", ".xml", ".json" ],
 			"defaultOverride": null,
 			"textLangageMode": null
 		}
@@ -262,12 +262,14 @@
 				},
 				{
 					"__identifier": "tutorial",
-					"__value": "Hello world!",
+					"__value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget nunc scelerisque viverra mauris. Pharetra massa massa ultricies mi quis hendrerit dolor magna eget. Consequat nisl vel pretium lectus quam id leo. Sagittis eu volutpat odio facilisis mauris sit amet massa vitae. Fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Sed pulvinar proin gravida hendrerit lectus a. Scelerisque purus semper eget duis at tellus at. Ut diam quam nulla porttitor. Elementum integer enim neque volutpat ac tincidunt. Pulvinar etiam non quam lacus suspendisse faucibus interdum posuere lorem. Leo urna molestie at elementum eu facilisis sed odio morbi. Tempor commodo ullamcorper a lacus vestibulum sed arcu. In dictum non consectetur a erat nam. Enim nulla aliquet porttitor lacus luctus accumsan tortor.\n\nVolutpat odio facilisis mauris sit amet massa vitae. Tincidunt id aliquet risus feugiat in ante metus dictum at. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Pretium nibh ipsum consequat nisl vel pretium lectus quam. Varius quam quisque id diam vel quam elementum. In fermentum et sollicitudin ac orci phasellus egestas. Ornare lectus sit amet est placerat in egestas erat imperdiet. Quam id leo in vitae turpis massa sed elementum. Consectetur libero id faucibus nisl tincidunt eget nullam non. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. At imperdiet dui accumsan sit amet nulla facilisi morbi. Consequat ac felis donec et odio pellentesque diam. Vitae semper quis lectus nulla at. Nunc sed id semper risus in. Sed ullamcorper morbi tincidunt ornare massa. Sed enim ut sem viverra aliquet. Convallis tellus id interdum velit laoreet id donec ultrices. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor.",
 					"__type": "String",
 					"defUid": 12,
 					"realEditorValues": [{
 						"id": "V_String",
-						"params": ["Hello world!"]
+						"params": [
+							"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget nunc scelerisque viverra mauris. Pharetra massa massa ultricies mi quis hendrerit dolor magna eget. Consequat nisl vel pretium lectus quam id leo. Sagittis eu volutpat odio facilisis mauris sit amet massa vitae. Fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Sed pulvinar proin gravida hendrerit lectus a. Scelerisque purus semper eget duis at tellus at. Ut diam quam nulla porttitor. Elementum integer enim neque volutpat ac tincidunt. Pulvinar etiam non quam lacus suspendisse faucibus interdum posuere lorem. Leo urna molestie at elementum eu facilisis sed odio morbi. Tempor commodo ullamcorper a lacus vestibulum sed arcu. In dictum non consectetur a erat nam. Enim nulla aliquet porttitor lacus luctus accumsan tortor.\n\nVolutpat odio facilisis mauris sit amet massa vitae. Tincidunt id aliquet risus feugiat in ante metus dictum at. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Pretium nibh ipsum consequat nisl vel pretium lectus quam. Varius quam quisque id diam vel quam elementum. In fermentum et sollicitudin ac orci phasellus egestas. Ornare lectus sit amet est placerat in egestas erat imperdiet. Quam id leo in vitae turpis massa sed elementum. Consectetur libero id faucibus nisl tincidunt eget nullam non. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. At imperdiet dui accumsan sit amet nulla facilisi morbi. Consequat ac felis donec et odio pellentesque diam. Vitae semper quis lectus nulla at. Nunc sed id semper risus in. Sed ullamcorper morbi tincidunt ornare massa. Sed enim ut sem viverra aliquet. Convallis tellus id interdum velit laoreet id donec ultrices. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor."
+						]
 					}]
 				},
 				{
@@ -279,8 +281,7 @@
 						"id": "V_String",
 						"params": ["enumFiles/TypesTest.hx"]
 					}]
-				},
-				{ "__identifier": "entrance", "__value": null, "__type": "Point", "defUid": 25, "realEditorValues": [] }
+				}
 			],
 			"layerInstances": [
 				{
@@ -357,6 +358,18 @@
 										"id": "V_String",
 										"params": ["6,5"]
 									} ]
+								},
+								{
+									"__identifier": "Multilines",
+									"__value": "function updateTitle() {\n  title.visible = editor.worldMode;\n  if( title.visible ) {\n   var b = project.getWorldBounds();\n   var w = b.right-b.left;\n   var t = project.filePath.fileName;\n   title.textColor = C.toWhite(project.bgColor, 0.3);\n   title.text = t;\n   title.setScale( camera.adjustedZoom * (w/title.textWidth) * switch project.worldLayout {\n    case Free, GridVania, LinearVertical:  1.1;\n    case LinearHorizontal: 2;\n   } );\n   title.x = Std.int( (b.left + b.right)*0.5*camera.adjustedZoom + root.x - title.textWidth*0.5*title.scaleX );\n   title.y = Std.int( b.top*camera.adjustedZoom - 64 + root.y - title.textHeight*title.scaleY );\n  }\n }",
+									"__type": "String",
+									"defUid": 29,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": [
+											"function updateTitle() {\n  title.visible = editor.worldMode;\n  if( title.visible ) {\n   var b = project.getWorldBounds();\n   var w = b.right-b.left;\n   var t = project.filePath.fileName;\n   title.textColor = C.toWhite(project.bgColor, 0.3);\n   title.text = t;\n   title.setScale( camera.adjustedZoom * (w/title.textWidth) * switch project.worldLayout {\n    case Free, GridVania, LinearVertical:  1.1;\n    case LinearHorizontal: 2;\n   } );\n   title.x = Std.int( (b.left + b.right)*0.5*camera.adjustedZoom + root.x - title.textWidth*0.5*title.scaleX );\n   title.y = Std.int( b.top*camera.adjustedZoom - 64 + root.y - title.textHeight*title.scaleY );\n  }\n }"
+										]
+									}]
 								}
 							]
 						},
@@ -372,10 +385,10 @@
 							"fieldInstances": [
 								{
 									"__identifier": "count",
-									"__value": 1,
+									"__value": 10,
 									"__type": "Int",
 									"defUid": 5,
-									"realEditorValues": [null]
+									"realEditorValues": [{ "id": "V_Int", "params": [10] }]
 								},
 								{
 									"__identifier": "type",
@@ -394,7 +407,14 @@
 									"defUid": 21,
 									"realEditorValues": [{ "id": "V_Int", "params": [5] }]
 								},
-								{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 22, "realEditorValues": [] }
+								{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 22, "realEditorValues": [] },
+								{
+									"__identifier": "Multilines",
+									"__value": null,
+									"__type": "String",
+									"defUid": 29,
+									"realEditorValues": [null]
+								}
 							]
 						}
 					]
@@ -432,13 +452,13 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelUid": 11, "dir": "e" }]
+			"__neighbours": [ { "levelUid": 11, "dir": "e" }, { "levelUid": 26, "dir": "e" } ]
 		},
 		{
 			"identifier": "B",
 			"uid": 11,
 			"worldX": 256,
-			"worldY": 64,
+			"worldY": 124,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#7F8093",
@@ -453,10 +473,13 @@
 				{ "__identifier": "Color", "__value": "#FFD500", "__type": "Color", "defUid": 3, "realEditorValues": [] },
 				{
 					"__identifier": "tutorial",
-					"__value": null,
+					"__value": "pouet pouet",
 					"__type": "String",
 					"defUid": 12,
-					"realEditorValues": [null]
+					"realEditorValues": [{
+						"id": "V_String",
+						"params": ["pouet pouet"]
+					}]
 				},
 				{
 					"__identifier": "File_path",
@@ -467,8 +490,7 @@
 						"id": "V_String",
 						"params": ["gmtk.json"]
 					}]
-				},
-				{ "__identifier": "entrance", "__value": null, "__type": "Point", "defUid": 25, "realEditorValues": [] }
+				}
 			],
 			"layerInstances": [
 				{
@@ -521,7 +543,8 @@
 									}]
 								},
 								{ "__identifier": "radius", "__value": 1, "__type": "Int", "defUid": 21, "realEditorValues": [] },
-								{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 22, "realEditorValues": [] }
+								{ "__identifier": "path", "__value": [], "__type": "Array<Point>", "defUid": 22, "realEditorValues": [] },
+								{ "__identifier": "Multilines", "__value": null, "__type": "String", "defUid": 29, "realEditorValues": [] }
 							]
 						}
 					]
@@ -559,7 +582,92 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelUid": 0, "dir": "w" }]
+			"__neighbours": [ { "levelUid": 0, "dir": "w" }, { "levelUid": 26, "dir": "n" } ]
+		},
+		{
+			"identifier": "C",
+			"uid": 26,
+			"worldX": 256,
+			"worldY": -132,
+			"pxWid": 256,
+			"pxHei": 256,
+			"__bgColor": "#7F8093",
+			"bgColor": null,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__bgPos": null,
+			"externalRelPath": null,
+			"fieldInstances": [
+				{
+					"__identifier": "Color",
+					"__value": "#A08811",
+					"__type": "Color",
+					"defUid": 3,
+					"realEditorValues": [{ "id": "V_Int", "params": [10520593] }]
+				},
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 12, "realEditorValues": [] },
+				{ "__identifier": "File_path", "__value": null, "__type": "FilePath", "defUid": 15, "realEditorValues": [] }
+			],
+			"layerInstances": [
+				{
+					"__identifier": "Entities",
+					"__type": "Entities",
+					"__cWid": 16,
+					"__cHei": 16,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"levelId": 26,
+					"layerDefUid": 7,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 1052347,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
+					"__identifier": "IntGrid",
+					"__type": "IntGrid",
+					"__cWid": 16,
+					"__cHei": 16,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"levelId": 26,
+					"layerDefUid": 1,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"intGrid": [],
+					"intGridCsv": [
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+					],
+					"autoLayerTiles": [],
+					"seed": 316808,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": []
+				}
+			],
+			"__neighbours": [ { "levelUid": 0, "dir": "w" }, { "levelUid": 11, "dir": "s" } ]
 		}
 	]
 }
