@@ -1241,7 +1241,7 @@ class Editor extends Page {
 
 			case LayerInstanceVisiblityChanged(li):
 				selectionTool.clear();
-				updateLayerList();
+				updateLayerVisibilities();
 
 			case FieldDefAdded(_), FieldDefRemoved(_):
 				project.tidy();
@@ -1428,6 +1428,18 @@ class Editor extends Page {
 		}
 	}
 
+	override function onAppBlur() {
+		super.onAppBlur();
+		heldVisibilitySet = null;
+	}
+
+	override function onAppMouseUp() {
+		super.onAppMouseUp();
+		heldVisibilitySet = null;
+	}
+
+
+	var heldVisibilitySet = null;
 	public function updateLayerList() {
 		jLayerList.empty();
 
@@ -1436,12 +1448,10 @@ class Editor extends Page {
 			var li = curLevel.getLayerInstance(ld);
 			var e = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			jLayerList.append(e);
+			e.attr("uid",ld.uid);
 
 			if( li==curLayerInstance )
 				e.addClass("active");
-
-			if( !levelRender.isLayerVisible(li) )
-				e.addClass("hidden");
 
 			e.find(".index").text( Std.string(idx++) );
 
@@ -1473,15 +1483,36 @@ class Editor extends Page {
 
 			// Visibility button
 			var vis = e.find(".vis");
-			vis.find(".icon").addClass( levelRender.isLayerVisible(li) ? "visible" : "hidden" );
-			vis.click( function(ev) {
-				if( ui.Modal.closeAll() )
-					return;
-				ev.stopPropagation();
-				levelRender.toggleLayer(li);
+			vis.mouseover( (_)->{
+				if( App.ME.isMouseButtonDown(0) && heldVisibilitySet!=null )
+					levelRender.setLayerVisibility(li, heldVisibilitySet);
 			});
-
+			vis.mousedown( (ev:js.jquery.Event)->{
+				heldVisibilitySet = !levelRender.isLayerVisible(li);
+				levelRender.setLayerVisibility(li, heldVisibilitySet);
+			});
 		}
+
+		updateLayerVisibilities();
+	}
+
+	function updateLayerVisibilities() {
+		jLayerList.children().each( (idx,e)->{
+			var jLayer = new J(e);
+			var li = curLevel.getLayerInstance( Std.parseInt(jLayer.attr("uid")) );
+			if( li==null )
+				return;
+
+			var jIcon = jLayer.find(".vis .icon").removeClass("visible hidden");
+			if( levelRender.isLayerVisible(li) ) {
+				jLayer.removeClass("hidden");
+				jIcon.addClass("visible");
+			}
+			else {
+				jLayer.addClass("hidden");
+				jIcon.addClass("hidden");
+			}
+		});
 	}
 
 
