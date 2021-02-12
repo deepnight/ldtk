@@ -78,7 +78,7 @@ class FieldInstanceRender {
 		}
 	}
 
-	public static function renderField(fi:data.inst.FieldInstance, baseColor:Int, ctx:FieldRenderContext) : Null<{ label:h2d.Flow, value:h2d.Flow }> {
+	static function renderField(fi:data.inst.FieldInstance, baseColor:Int, ctx:FieldRenderContext) : Null<{ label:h2d.Flow, value:h2d.Flow }> {
 		var fd = fi.def;
 
 		var labelFlow = new h2d.Flow();
