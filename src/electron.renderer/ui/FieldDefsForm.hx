@@ -387,8 +387,17 @@ class FieldDefsForm {
 		var i = new form.input.EnumSelect(
 			jForm.find("select[name=editorDisplayPos]"),
 			ldtk.Json.FieldDisplayPosition,
-			function() return curField.editorDisplayPos,
-			function(v) return curField.editorDisplayPos = v
+			()->curField.editorDisplayPos,
+			(v)->curField.editorDisplayPos = v,
+			(pos)->switch fieldParent {
+				case FP_Entity: true;
+				case FP_Level:
+					switch pos {
+						case Above: true;
+						case Center: false;
+						case Beneath: true;
+					}
+			}
 		);
 		switch curField.editorDisplayMode {
 			case ValueOnly, NameAndValue:
