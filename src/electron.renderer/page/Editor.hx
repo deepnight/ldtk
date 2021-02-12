@@ -1488,8 +1488,27 @@ class Editor extends Page {
 					levelRender.setLayerVisibility(li, heldVisibilitySet);
 			});
 			vis.mousedown( (ev:js.jquery.Event)->{
-				heldVisibilitySet = !levelRender.isLayerVisible(li);
-				levelRender.setLayerVisibility(li, heldVisibilitySet);
+				if( App.ME.isShiftDown() ) {
+					// Keep only this one
+					var anyChange = !levelRender.isLayerVisible(li);
+					for(oli in curLevel.layerInstances)
+						if( oli!=li && levelRender.isLayerVisible(oli) ) {
+							anyChange = true;
+							levelRender.setLayerVisibility(oli, false);
+						}
+					if( anyChange )
+						levelRender.setLayerVisibility(li, true);
+					else {
+						// Re-enable all if it's already the case
+						for(oli in curLevel.layerInstances)
+							levelRender.setLayerVisibility(oli, true);
+					}
+				}
+				else {
+					// Toggle this one
+					heldVisibilitySet = !levelRender.isLayerVisible(li);
+					levelRender.setLayerVisibility(li, heldVisibilitySet);
+				}
 			});
 		}
 
@@ -1503,15 +1522,10 @@ class Editor extends Page {
 			if( li==null )
 				return;
 
-			var jIcon = jLayer.find(".vis .icon").removeClass("visible hidden");
-			if( levelRender.isLayerVisible(li) ) {
+			if( levelRender.isLayerVisible(li) )
 				jLayer.removeClass("hidden");
-				jIcon.addClass("visible");
-			}
-			else {
+			else
 				jLayer.addClass("hidden");
-				jIcon.addClass("hidden");
-			}
 		});
 	}
 

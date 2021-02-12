@@ -794,14 +794,6 @@ ul.niceList {
 		color: black;
 		box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
 	}
-
-	li.hidden {
-		opacity: 0.4;
-		.vis {
-			background: transparent;
-			cursor: zoom-in;
-		}
-	}
 }
 
 ul.tabs {
@@ -2590,6 +2582,16 @@ canvas#webgl {
 				padding-left: 8px;
 				align-items: stretch;
 
+				&.hidden {
+					opacity: 0.4;
+					.actions .vis {
+						cursor: zoom-in;
+						.icon {
+							background-image: url("../icons/hidden.png");
+						}
+					}
+				}
+
 				.index {
 					display: flex;
 					align-items: center;
@@ -2630,6 +2632,10 @@ canvas#webgl {
 						order: 2;
 						border-radius: 3px;
 						cursor: zoom-out;
+
+						.icon {
+							background-image: url("../icons/visible.png");
+						}
 
 						&:hover {
 							background-color: white;
