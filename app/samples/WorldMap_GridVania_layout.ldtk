@@ -498,6 +498,7 @@
 					"editorDisplayMode": "EntityTile",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -562,6 +563,7 @@
 			"editorDisplayMode": "ValueOnly",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
+			"editorCutLongValues": true,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -581,6 +583,7 @@
 			"editorDisplayMode": "Hidden",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
+			"editorCutLongValues": true,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -8245,7 +8248,13 @@
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
-				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{
+					"__identifier": "tutorial",
+					"__value": null,
+					"__type": "String",
+					"defUid": 88,
+					"realEditorValues": [null]
+				},
 				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
 			],
 			"layerInstances": [

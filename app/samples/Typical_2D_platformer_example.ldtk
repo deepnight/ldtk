@@ -960,6 +960,7 @@
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -997,6 +998,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -1034,6 +1036,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -1053,6 +1056,7 @@
 					"editorDisplayMode": "PointPath",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -1090,6 +1094,7 @@
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -1168,6 +1173,7 @@
 			"editorDisplayMode": "ValueOnly",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
+			"editorCutLongValues": false,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -1187,6 +1193,7 @@
 			"editorDisplayMode": "Hidden",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
+			"editorCutLongValues": true,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -1214,13 +1221,13 @@
 			"fieldInstances": [
 				{
 					"__identifier": "tutorial",
-					"__value": "Press \"R\" to toggle auto-layers rendering.\n\nPress \"A\" to toggle \"Single layer mode.\"",
+					"__value": "Press <R> to toggle auto-layers rendering.\n\nPress <A> to toggle \"Single layer mode.\"",
 					"__type": "String",
 					"defUid": 92,
 					"realEditorValues": [{
 						"id": "V_String",
 						"params": [
-							"Press \"R\" to toggle auto-layers rendering.\n\nPress \"A\" to toggle \"Single layer mode.\""
+							"Press <R> to toggle auto-layers rendering.\n\nPress <A> to toggle \"Single layer mode.\""
 						]
 					}]
 				},

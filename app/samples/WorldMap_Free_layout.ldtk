@@ -435,6 +435,7 @@
 					"editorDisplayMode": "PointStar",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -473,6 +474,7 @@
 			"editorDisplayMode": "ValueOnly",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
+			"editorCutLongValues": true,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -492,6 +494,7 @@
 			"editorDisplayMode": "Hidden",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
+			"editorCutLongValues": true,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -519,12 +522,12 @@
 			"fieldInstances": [
 				{
 					"__identifier": "tutorial",
-					"__value": "Press \"W\" to switch to World mode.",
+					"__value": "Press <W> to switch to World mode.",
 					"__type": "String",
 					"defUid": 46,
 					"realEditorValues": [{
 						"id": "V_String",
-						"params": ["Press \"W\" to switch to World mode."]
+						"params": ["Press <W> to switch to World mode."]
 					}]
 				},
 				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 47, "realEditorValues": [] }

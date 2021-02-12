@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 76,
+	"nextUid": 78,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -641,6 +641,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": 1,
 					"max": 100,
 					"regex": null,
@@ -660,6 +661,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": 0,
 					"max": 50,
 					"regex": null,
@@ -697,6 +699,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -734,6 +737,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -756,6 +760,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -775,6 +780,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -844,6 +850,7 @@
 			"editorDisplayMode": "ValueOnly",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
+			"editorCutLongValues": false,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -863,6 +870,7 @@
 			"editorDisplayMode": "Hidden",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
+			"editorCutLongValues": true,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -890,13 +898,13 @@
 			"fieldInstances": [
 				{
 					"__identifier": "tutorial",
-					"__value": "Using combinations of \"Auto-Layers\" and classic \"Tile layers\", you can achieve great results quickly.\n\nPress A to toggle [Single Layer Mode] and see what each layer contains.",
+					"__value": "Using combinations of \"Auto-Layers\" and classic \"Tile layers\", you can achieve great results quickly.\n\nPress <A> to toggle [Single Layer Mode] and see what each layer contains.",
 					"__type": "String",
 					"defUid": 74,
 					"realEditorValues": [{
 						"id": "V_String",
 						"params": [
-							"Using combinations of \"Auto-Layers\" and classic \"Tile layers\", you can achieve great results quickly.\n\nPress A to toggle [Single Layer Mode] and see what each layer contains."
+							"Using combinations of \"Auto-Layers\" and classic \"Tile layers\", you can achieve great results quickly.\n\nPress <A> to toggle [Single Layer Mode] and see what each layer contains."
 						]
 					}]
 				},

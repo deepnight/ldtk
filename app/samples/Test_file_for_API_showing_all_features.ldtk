@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 38,
+	"nextUid": 39,
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -300,6 +300,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -319,6 +320,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -338,6 +340,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -357,6 +360,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -376,6 +380,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -395,6 +400,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -414,6 +420,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -433,6 +440,7 @@
 					"editorDisplayMode": "PointStar",
 					"editorDisplayPos": "Center",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -452,6 +460,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -471,6 +480,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -490,6 +500,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -509,6 +520,7 @@
 					"editorDisplayMode": "PointPath",
 					"editorDisplayPos": "Center",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -528,6 +540,7 @@
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -565,6 +578,7 @@
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Center",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -584,6 +598,7 @@
 					"editorDisplayMode": "Hidden",
 					"editorDisplayPos": "Beneath",
 					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -637,7 +652,28 @@
 		{ "id": "B", "tileId": 1145, "__tileSrcRect": [144,1136,16,16] },
 		{ "id": "C", "tileId": 678, "__tileSrcRect": [96,672,16,16] },
 		{ "id": "D", "tileId": 1723, "__tileSrcRect": [176,1712,16,16] }
-	], "iconTilesetUid": 31, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [] },
+	], "iconTilesetUid": 31, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [
+		{
+			"identifier": "desc",
+			"__type": "String",
+			"uid": 38,
+			"type": "F_Text",
+			"isArray": false,
+			"canBeNull": true,
+			"arrayMinLength": null,
+			"arrayMaxLength": null,
+			"editorDisplayMode": "ValueOnly",
+			"editorDisplayPos": "Above",
+			"editorAlwaysShow": false,
+			"editorCutLongValues": false,
+			"min": null,
+			"max": null,
+			"regex": null,
+			"acceptFileTypes": null,
+			"defaultOverride": null,
+			"textLangageMode": null
+		}
+	] },
 	"levels": [
 		{
 			"identifier": "Level1",
@@ -645,7 +681,7 @@
 			"worldX": 0,
 			"worldY": 0,
 			"pxWid": 680,
-			"pxHei": 528,
+			"pxHei": 568,
 			"__bgColor": "#6E6F8B",
 			"bgColor": null,
 			"bgRelPath": null,
@@ -654,13 +690,24 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [{
+				"__identifier": "desc",
+				"__value": "This file can be used to check if an API supports LDtk file format properly. \n\nIt uses all important LDtk features.",
+				"__type": "String",
+				"defUid": 38,
+				"realEditorValues": [{
+					"id": "V_String",
+					"params": [
+						"This file can be used to check if an API supports LDtk file format properly. \n\nIt uses all important LDtk features."
+					]
+				}]
+			}],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid_8px_grid",
 					"__type": "IntGrid",
 					"__cWid": 85,
-					"__cHei": 66,
+					"__cHei": 71,
 					"__gridSize": 8,
 					"__opacity": 1,
 					"__pxTotalOffsetX": 0,
@@ -832,7 +879,19 @@
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 					],
 					"autoLayerTiles": [],
 					"seed": 7676281,
@@ -844,7 +903,7 @@
 					"__identifier": "Entities",
 					"__type": "Entities",
 					"__cWid": 43,
-					"__cHei": 33,
+					"__cHei": 36,
 					"__gridSize": 16,
 					"__opacity": 1,
 					"__pxTotalOffsetX": 0,
@@ -1152,37 +1211,6 @@
 						},
 						{
 							"__identifier": "Labels",
-							"__grid": [20,2],
-							"__pivot": [0.5,0.5],
-							"__tile": null,
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [328,40],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "This file can be used to check if an API supports LDtk file format properly. \n\nIt uses all important LDtk features.",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": [
-											"This file can be used to check if an API supports LDtk file format properly. \n\nIt uses all important LDtk features."
-										]
-									}]
-								},
-								{
-									"__identifier": "color",
-									"__value": "#FFCC00",
-									"__type": "Color",
-									"defUid": 12,
-									"realEditorValues": [{ "id": "V_Int", "params": [16763904] }]
-								}
-							]
-						},
-						{
-							"__identifier": "Labels",
 							"__grid": [37,5],
 							"__pivot": [0.5,0.5],
 							"__tile": null,
@@ -1210,7 +1238,7 @@
 					"__identifier": "PureAutoLayer",
 					"__type": "AutoLayer",
 					"__cWid": 43,
-					"__cHei": 33,
+					"__cHei": 36,
 					"__gridSize": 16,
 					"__opacity": 1,
 					"__pxTotalOffsetX": 0,
@@ -1269,7 +1297,7 @@
 					"__identifier": "IntGrid_classic",
 					"__type": "IntGrid",
 					"__cWid": 43,
-					"__cHei": 33,
+					"__cHei": 36,
 					"__gridSize": 16,
 					"__opacity": 1,
 					"__pxTotalOffsetX": 0,
@@ -1321,7 +1349,11 @@
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1
 					],
 					"autoLayerTiles": [],
 					"seed": 2892918,
@@ -1333,7 +1365,7 @@
 					"__identifier": "IntGrid_with_rules",
 					"__type": "IntGrid",
 					"__cWid": 43,
-					"__cHei": 33,
+					"__cHei": 36,
 					"__gridSize": 16,
 					"__opacity": 1,
 					"__pxTotalOffsetX": 0,
@@ -1385,7 +1417,11 @@
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1
 					],
 					"autoLayerTiles": [
 						{ "px": [208,112], "src": [0,112], "f": 0, "t": 140, "d": [5,314] },
@@ -1450,7 +1486,7 @@
 					"__identifier": "Tiles",
 					"__type": "Tiles",
 					"__cWid": 43,
-					"__cHei": 33,
+					"__cHei": 36,
 					"__gridSize": 16,
 					"__opacity": 1,
 					"__pxTotalOffsetX": 0,
@@ -1508,7 +1544,7 @@
 			"identifier": "Level2",
 			"uid": 32,
 			"worldX": 0,
-			"worldY": 560,
+			"worldY": 600,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#6E6F8B",
@@ -1519,7 +1555,7 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [{ "__identifier": "desc", "__value": null, "__type": "String", "defUid": 38, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid_8px_grid",
@@ -1993,7 +2029,7 @@
 			"identifier": "Level3",
 			"uid": 33,
 			"worldX": 0,
-			"worldY": 848,
+			"worldY": 888,
 			"pxWid": 256,
 			"pxHei": 160,
 			"__bgColor": "#6E6F8B",
@@ -2004,7 +2040,7 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [{ "__identifier": "desc", "__value": null, "__type": "String", "defUid": 38, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid_8px_grid",
@@ -2247,7 +2283,7 @@
 			"identifier": "Level4",
 			"uid": 36,
 			"worldX": 0,
-			"worldY": 1040,
+			"worldY": 1080,
 			"pxWid": 272,
 			"pxHei": 192,
 			"__bgColor": "#6E6F8B",
@@ -2258,7 +2294,16 @@
 			"bgPivotY": 0.5,
 			"__bgPos": { "topLeftPx": [0,0], "scale": [0.85,0.85], "cropRect": [0,7.058823529411768,320,225.88235294117646] },
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [{
+				"__identifier": "desc",
+				"__value": "Level background image",
+				"__type": "String",
+				"defUid": 38,
+				"realEditorValues": [{
+					"id": "V_String",
+					"params": ["Level background image"]
+				}]
+			}],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid_8px_grid",
@@ -2327,31 +2372,7 @@
 					"seed": 3655473,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "Labels",
-							"__grid": [8,1],
-							"__pivot": [0.5,0.5],
-							"__tile": null,
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [129,24],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "Level background image",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Level background image"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
-							]
-						}
-					]
+					"entityInstances": []
 				},
 				{
 					"__identifier": "PureAutoLayer",
@@ -2422,12 +2443,43 @@
 					"intGridCsv": [
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,-1,-1,-1,-1,-1,-1,-1,
+						-1,-1,-1,-1,-1,-1,-1,-1,0,0,-1,-1,-1,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,0,0,0,0,0,-1,-1,-1,-1,-1,
+						0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 					],
-					"autoLayerTiles": [],
+					"autoLayerTiles": [
+						{ "px": [208,96], "src": [0,112], "f": 0, "t": 140, "d": [5,115] },
+						{ "px": [192,112], "src": [0,112], "f": 0, "t": 140, "d": [5,131] },
+						{ "px": [208,112], "src": [0,112], "f": 0, "t": 140, "d": [5,132] },
+						{ "px": [192,128], "src": [0,112], "f": 0, "t": 140, "d": [5,148] },
+						{ "px": [208,128], "src": [0,112], "f": 0, "t": 140, "d": [5,149] },
+						{ "px": [16,144], "src": [0,112], "f": 0, "t": 140, "d": [5,154] },
+						{ "px": [48,144], "src": [0,112], "f": 0, "t": 140, "d": [5,156] },
+						{ "px": [208,144], "src": [0,112], "f": 0, "t": 140, "d": [5,166] },
+						{ "px": [240,144], "src": [0,112], "f": 0, "t": 140, "d": [5,168] },
+						{ "px": [256,144], "src": [0,112], "f": 0, "t": 140, "d": [5,169] },
+						{ "px": [80,160], "src": [0,112], "f": 0, "t": 140, "d": [5,175] },
+						{ "px": [80,176], "src": [0,112], "f": 0, "t": 140, "d": [5,192] },
+						{ "px": [208,80], "src": [64,128], "f": 1, "t": 164, "d": [7,98] },
+						{ "px": [80,144], "src": [64,128], "f": 1, "t": 164, "d": [7,158] },
+						{ "px": [192,96], "src": [128,0], "f": 0, "t": 8, "d": [6,114] },
+						{ "px": [192,112], "src": [128,16], "f": 0, "t": 28, "d": [6,114] },
+						{ "px": [208,96], "src": [144,0], "f": 0, "t": 9, "d": [6,114] },
+						{ "px": [208,112], "src": [144,16], "f": 0, "t": 29, "d": [6,114] },
+						{ "px": [192,80], "src": [64,80], "f": 0, "t": 104, "d": [9,97] },
+						{ "px": [208,80], "src": [80,80], "f": 0, "t": 105, "d": [9,97] },
+						{ "px": [64,144], "src": [64,80], "f": 0, "t": 104, "d": [9,157] },
+						{ "px": [80,144], "src": [80,80], "f": 0, "t": 105, "d": [9,157] },
+						{ "px": [0,144], "src": [64,80], "f": 0, "t": 104, "d": [8,153] },
+						{ "px": [16,144], "src": [80,80], "f": 0, "t": 105, "d": [8,153] },
+						{ "px": [32,144], "src": [64,80], "f": 0, "t": 104, "d": [8,155] },
+						{ "px": [48,144], "src": [80,80], "f": 0, "t": 105, "d": [8,155] },
+						{ "px": [192,144], "src": [64,80], "f": 0, "t": 104, "d": [8,165] },
+						{ "px": [208,144], "src": [80,80], "f": 0, "t": 105, "d": [8,165] },
+						{ "px": [224,144], "src": [64,80], "f": 0, "t": 104, "d": [8,167] },
+						{ "px": [240,144], "src": [80,80], "f": 0, "t": 105, "d": [8,167] }
+					],
 					"seed": 7313278,
 					"overrideTilesetUid": null,
 					"gridTiles": [],

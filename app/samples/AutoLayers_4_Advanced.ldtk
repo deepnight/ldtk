@@ -1018,6 +1018,7 @@
 			"editorDisplayMode": "ValueOnly",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
+			"editorCutLongValues": false,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -1037,6 +1038,7 @@
 			"editorDisplayMode": "Hidden",
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
+			"editorCutLongValues": true,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -1064,13 +1066,13 @@
 			"fieldInstances": [
 				{
 					"__identifier": "tutorial",
-					"__value": "Rules can be used to render various biome elements, such as Dirt, Water or Lava.\n\nPress SHIFT+R to toggle auto-layers rendering",
+					"__value": "Rules can be used to render various biome elements, such as Dirt, Water or Lava.\n\nPress <R> to toggle auto-layers rendering",
 					"__type": "String",
 					"defUid": 96,
 					"realEditorValues": [{
 						"id": "V_String",
 						"params": [
-							"Rules can be used to render various biome elements, such as Dirt, Water or Lava.\n\nPress SHIFT+R to toggle auto-layers rendering"
+							"Rules can be used to render various biome elements, such as Dirt, Water or Lava.\n\nPress <R> to toggle auto-layers rendering"
 						]
 					}]
 				},
