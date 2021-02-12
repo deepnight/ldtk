@@ -536,6 +536,15 @@ class Project {
 		return -1;
 	}
 
+	public function getLevelUsingFieldInst(fi:data.inst.FieldInstance) : Null<data.Level> {
+		for(l in levels)
+		for(lfi in l.fieldInstances)
+			if( lfi==fi )
+				return l;
+
+		return null;
+	}
+
 	public function getClosestLevelFrom(level:data.Level) : Null<data.Level> {
 		var dh = new dn.DecisionHelper(levels);
 		dh.removeValue(level);

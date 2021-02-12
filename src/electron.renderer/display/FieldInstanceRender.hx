@@ -2,6 +2,7 @@ package display;
 
 enum FieldRenderContext {
 	EntityCtx(g:h2d.Graphics, ei:data.inst.EntityInstance, ld:data.def.LayerDef);
+	LevelCtx(l:data.Level);
 }
 
 class FieldInstanceRender {
@@ -48,6 +49,7 @@ class FieldInstanceRender {
 
 			allRenders.push(fr);
 			var line = new h2d.Flow(parent);
+			line.setScale( settings.v.editorUiScale );
 			if( fr.label.numChildren>0 )
 				line.addChild(fr.label);
 			line.addChild(fr.value);
@@ -91,7 +93,7 @@ class FieldInstanceRender {
 		var err = fi.getFirstErrorInValues();
 		if( err!=null ) {
 			var tf = new h2d.Text(getDefaultFont(), valueFlow);
-			tf.scale(settings.v.editorUiScale*2);
+			tf.scale(2);
 			tf.textColor = 0xff8800;
 			tf.text = '<$err>';
 			return { label:labelFlow, value:valueFlow };
@@ -110,7 +112,6 @@ class FieldInstanceRender {
 			case NameAndValue:
 				// Label
 				var tf = new h2d.Text(getDefaultFont(), labelFlow);
-				tf.scale(settings.v.editorUiScale);
 				tf.textColor = baseColor;
 				tf.text = fd.identifier;
 
@@ -125,6 +126,8 @@ class FieldInstanceRender {
 					case EntityCtx(g,_):
 						g.lineStyle(1, baseColor, 0.33);
 						g.drawCircle(0,0, fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0));
+
+					case LevelCtx(_):
 				}
 
 			case RadiusGrid:
@@ -132,6 +135,8 @@ class FieldInstanceRender {
 					case EntityCtx(g, ei, ld):
 						g.lineStyle(1, baseColor, 0.33);
 						g.drawCircle(0,0, ( fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0) ) * ld.gridSize);
+
+					case LevelCtx(_):
 				}
 
 			case EntityTile:
@@ -158,6 +163,9 @@ class FieldInstanceRender {
 								fy = ty;
 							}
 						}
+
+					case LevelCtx(_):
+						// TODO support points in level fields?
 				}
 		}
 
@@ -173,26 +181,32 @@ class FieldInstanceRender {
 
 		// Array opening
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = new h2d.Text(getDefaultFont(), valuesFlow);
-			tf.scale(settings.v.editorUiScale);
+			var tf = new h2d.Text( getDefaultFont(), valuesFlow );
 			tf.textColor = textColor;
 			tf.text = "[";
 		}
 
+		// Empty array with "always" display
+		if( fi.def.isArray && fi.getArrayLength()==0 && fi.def.editorAlwaysShow ) {
+			var tf = new h2d.Text( getDefaultFont(), valuesFlow );
+			tf.textColor = textColor;
+			tf.text = "--empty--";
+		}
+
 		for( idx in 0...fi.getArrayLength() ) {
-			if( !fi.valueIsNull(idx) && !( !fi.def.editorAlwaysShow && fi.def.type==F_Bool && fi.isUsingDefault(idx) ) ) {
+			if( fi.def.editorAlwaysShow || !fi.valueIsNull(idx) ) {
 				if( fi.hasIconForDisplay(idx) ) {
 					// Icon
 					var w = new h2d.Flow(valuesFlow);
 					var tile = fi.getIconForDisplay(idx);
 					var bmp = new h2d.Bitmap( tile, w );
 					var s = M.fmin( 32/tile.width, 32/tile.height );
-					bmp.setScale(s * settings.v.editorUiScale);
+					bmp.setScale(s);
 				}
 				else if( fi.def.type==F_Color ) {
 					// Color disc
 					var g = new h2d.Graphics(valuesFlow);
-					var r = 12 * settings.v.editorUiScale;
+					var r = 12;
 					g.beginFill( fi.getColorAsInt(idx) );
 					g.lineStyle(1, 0x0, 0.8);
 					g.drawCircle(r,r,r, 16);
@@ -200,21 +214,27 @@ class FieldInstanceRender {
 				else {
 					// Text render
 					var tf = new h2d.Text(getDefaultFont(), valuesFlow);
-					tf.scale(settings.v.editorUiScale);
 					tf.textColor = textColor;
 					tf.maxWidth = 400 * ( 0.5 + 0.5*settings.v.editorUiScale );
 					var v = fi.getForDisplay(idx);
 					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
 						tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';
-					else
-						tf.text = v;
+					else {
+						if( v==null )
+							tf.text = "--null--";
+						else {
+							var lines = v.substr(0,200).split("\n");
+							var n = M.imin(4, lines.length);
+							for(i in 0...n)
+								tf.text+=lines[i] + (i<n-1 ? "\n" : "");
+						}
+					}
 				}
 			}
 
 			// Array separator
 			if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
 				var tf = new h2d.Text(getDefaultFont(), valuesFlow);
-				tf.scale(settings.v.editorUiScale);
 				tf.textColor = textColor;
 				tf.text = ",";
 			}
@@ -223,7 +243,6 @@ class FieldInstanceRender {
 		// Array closing
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = new h2d.Text(getDefaultFont(), valuesFlow);
-			tf.scale(settings.v.editorUiScale);
 			tf.textColor = textColor;
 			tf.text = "]";
 		}

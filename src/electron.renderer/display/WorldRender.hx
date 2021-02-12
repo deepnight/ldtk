@@ -27,8 +27,11 @@ class WorldRender extends dn.Process {
 	var grids : h2d.Graphics;
 	var currentHighlight : h2d.Graphics;
 	public var levelsWrapper : h2d.Layers;
+	var fieldsWrapper : h2d.Object;
+	var fieldRenders : Map<Int, { above:h2d.Flow, below:h2d.Flow }> = new Map();
 
 	var levelInvalidations : Map<Int,Bool> = new Map();
+	var levelFieldsInvalidation : Map<Int,Bool> = new Map();
 
 
 	public function new() {
@@ -65,6 +68,9 @@ class WorldRender extends dn.Process {
 
 		levelsWrapper = new h2d.Layers();
 		root.add(levelsWrapper, Const.DP_MAIN);
+
+		fieldsWrapper = new h2d.Object();
+		root.add(fieldsWrapper, Const.DP_MAIN);
 	}
 
 	override function onDispose() {
@@ -97,6 +103,7 @@ class WorldRender extends dn.Process {
 
 				renderGrids();
 				updateLayout();
+				updateFieldsPos();
 				updateCurrentHighlight();
 
 			case ViewportChanged:
@@ -107,6 +114,7 @@ class WorldRender extends dn.Process {
 				renderGrids();
 				updateLabels();
 				updateTitle();
+				updateFieldsPos();
 				updateCurrentHighlight();
 
 			case GridChanged(active):
@@ -119,20 +127,37 @@ class WorldRender extends dn.Process {
 			case ProjectSelected:
 				renderAll();
 
+			case FieldInstanceChanged(fi):
+				var l = project.getLevelUsingFieldInst(fi);
+				if( l!=null )
+					invalidateLevelFields(l);
+
+			case FieldDefRemoved(fd):
+				invalidateAllLevelFields();
+
+			case FieldDefChanged(fd):
+				invalidateAllLevelFields();
+
+			case FieldDefSorted:
+				invalidateAllLevelFields();
+
 			case ProjectSettingsChanged, WorldSettingsChanged:
 				renderAll();
 				editor.camera.fit();
 
 			case LevelRestoredFromHistory(l):
 				invalidateLevel(l);
+				invalidateLevelFields(l);
 				updateCurrentHighlight();
 
 			case LevelSelected(l):
 				invalidateLevel(l);
+				invalidateLevelFields(l);
 				updateLayout();
 
 			case LevelResized(l):
 				invalidateLevel(l);
+				invalidateLevelFields(l);
 				updateTitle();
 				updateLayout();
 				renderWorldBounds();
@@ -140,6 +165,7 @@ class WorldRender extends dn.Process {
 
 			case LevelSettingsChanged(l):
 				invalidateLevel(l);
+				invalidateLevelFields(l);
 				renderWorldBounds();
 				updateTitle();
 				updateCurrentHighlight();
@@ -158,13 +184,15 @@ class WorldRender extends dn.Process {
 
 			case LevelAdded(l):
 				invalidateLevel(l);
+				invalidateLevelFields(l);
 				updateLayout();
 				renderWorldBounds();
 				// if( editor.worldMode )
 				// 	camera.scrollToLevel(l);
 
 			case LevelRemoved(l):
-				removeLevel(l);
+				removeLevel(l.uid);
+				removeLevelFields(l.uid);
 				updateLayout();
 				renderWorldBounds();
 
@@ -180,16 +208,30 @@ class WorldRender extends dn.Process {
 		levelInvalidations.set(l.uid, true);
 	}
 
+	public inline function invalidateLevelFields(l:data.Level) {
+		levelFieldsInvalidation.set(l.uid, true);
+		N.debug("invalidate "+l.identifier);
+	}
+
+	public inline function invalidateAllLevelFields() {
+		for(l in project.levels)
+			invalidateLevelFields(l);
+	}
+
 	public function renderAll() {
 		App.LOG.render("Reset world render");
 
-		for(l in levels.keys())
-			removeLevel(l);
+		for(uid in levels.keys()) {
+			removeLevel(uid);
+			removeLevelFields(uid);
+		}
 		levels = new Map();
 		levelsWrapper.removeChildren();
 
-		for(l in editor.project.levels)
+		for(l in editor.project.levels) {
+			invalidateLevelFields(l);
 			invalidateLevel(l);
+		}
 
 		renderBg();
 		renderAxes();
@@ -219,6 +261,19 @@ class WorldRender extends dn.Process {
 			} );
 			title.x = Std.int( (b.left + b.right)*0.5*camera.adjustedZoom + root.x - title.textWidth*0.5*title.scaleX );
 			title.y = Std.int( b.top*camera.adjustedZoom - 64 + root.y - title.textHeight*title.scaleY );
+		}
+	}
+
+	function updateFieldsPos() {
+		for(f in fieldRenders.keyValueIterator()) {
+			var l = project.getLevel(f.key);
+			// Above
+			f.value.above.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/f.value.above.outerWidth) );
+			f.value.above.x = Std.int( l.worldCenterX - f.value.above.outerWidth*0.5*f.value.above.scaleX );
+			if( editor.worldMode )
+				f.value.above.y = l.worldY;
+			else
+				f.value.above.y = Std.int( l.worldY - f.value.above.outerHeight*f.value.above.scaleY );
 		}
 	}
 
@@ -390,13 +445,7 @@ class WorldRender extends dn.Process {
 		updateLabels();
 	}
 
-	function removeLevel(?l:data.Level, ?uid:Int) {
-		if( l==null && uid==null )
-			throw "Need 1 parameter";
-
-		if( l!=null )
-			uid = l.uid;
-
+	function removeLevel(uid:Int) {
 		if( levels.exists(uid) ) {
 			var lr = levels.get(uid);
 			lr.render.remove();
@@ -407,6 +456,49 @@ class WorldRender extends dn.Process {
 		}
 	}
 
+	function removeLevelFields(uid:Int) {
+		if( fieldRenders.exists(uid) ) {
+			N.error("level removed "+uid);
+			fieldRenders.get(uid).above.remove();
+			fieldRenders.get(uid).below.remove();
+			fieldRenders.remove(uid);
+		}
+	}
+
+	function renderFields(l:data.Level) {
+		N.debug("render: "+l.identifier);
+		levelFieldsInvalidation.remove(l.uid);
+
+		// Init wrapper
+		if( !fieldRenders.exists(l.uid) ) {
+			fieldRenders.set(l.uid, {
+				above: {
+					var f = new h2d.Flow(fieldsWrapper);
+					f.layout = Vertical;
+					f;
+				},
+				below: {
+					var f = new h2d.Flow(fieldsWrapper);
+					f.layout = Vertical;
+					f;
+				}
+			});
+		}
+		var fWrapper = fieldRenders.get(l.uid);
+		fWrapper.above.removeChildren();
+		fWrapper.below.removeChildren();
+
+		// Attach fields
+		FieldInstanceRender.renderFields(
+			project.defs.levelFields.filter( fd->fd.editorDisplayPos==Above ).map( fd->l.getFieldInstance(fd) ),
+			l.getBgColor(),
+			LevelCtx(l),
+			fWrapper.above
+		);
+
+		updateFieldsPos();
+	}
+
 	function renderLevel(l:data.Level) {
 		if( l==null )
 			throw "Unknown level";
@@ -415,7 +507,7 @@ class WorldRender extends dn.Process {
 
 		// Cleanup
 		levelInvalidations.remove(l.uid);
-		removeLevel(l);
+		removeLevel(l.uid);
 
 		// Init
 		var wl : WorldLevelRender = {
@@ -578,6 +670,15 @@ class WorldRender extends dn.Process {
 				updateLayout();
 				break;
 			}
+
+		// Fields
+		// var limit = 2;
+		for( uid in levelFieldsInvalidation.keys() ) {
+			renderFields( editor.project.getLevel(uid) );
+			break;
+			// if( limit--<=0 )
+			// 	break;
+		}
 	}
 
 }
