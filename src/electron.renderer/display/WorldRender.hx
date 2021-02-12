@@ -491,7 +491,7 @@ class WorldRender extends dn.Process {
 		// Attach fields
 		FieldInstanceRender.renderFields(
 			project.defs.levelFields.filter( fd->fd.editorDisplayPos==Above ).map( fd->l.getFieldInstance(fd) ),
-			l.getBgColor(),
+			l.getSmartColor(true),
 			LevelCtx(l),
 			fWrapper.above
 		);
