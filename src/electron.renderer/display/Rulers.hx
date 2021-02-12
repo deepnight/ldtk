@@ -1,7 +1,7 @@
 package display;
 
 class Rulers extends dn.Process {
-	static var PADDING = 20;
+	public static var PADDING = 4;
 	static var HANDLE_SIZE = 10;
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
@@ -32,7 +32,7 @@ class Rulers extends dn.Process {
 	public function new() {
 		super(editor);
 
-		createRootInLayers(editor.root, Const.DP_UI);
+		createRootInLayers(editor.root, Const.DP_MAIN);
 		editor.ge.addGlobalListener(onGlobalEvent);
 
 		draggables = RulerPos.createAll();
@@ -76,6 +76,9 @@ class Rulers extends dn.Process {
 			case ProjectSelected, LayerInstanceSelected, ProjectSettingsChanged:
 				invalidate();
 
+			case FieldDefChanged(_), FieldDefRemoved(_):
+				invalidate();
+
 			case LayerDefChanged, LayerDefRemoved(_), LevelResized(_), LevelRestoredFromHistory(_):
 				invalidate();
 
@@ -108,51 +111,54 @@ class Rulers extends dn.Process {
 		g.lineStyle(2, c);
 
 		// Top
-		g.moveTo(0, -PADDING);
-		g.lineTo(curLevel.pxWid*0.5-HANDLE_SIZE*1.5, -PADDING);
-		g.moveTo(curLevel.pxWid*0.5+HANDLE_SIZE*1.5, -PADDING);
-		g.lineTo(curLevel.pxWid, -PADDING);
+		// g.moveTo(0, -PADDING);
+		// g.lineTo(curLevel.pxWid*0.5-HANDLE_SIZE*1.5, -PADDING);
+		// g.moveTo(curLevel.pxWid*0.5+HANDLE_SIZE*1.5, -PADDING);
+		// g.lineTo(curLevel.pxWid, -PADDING);
 
 		// Bottom
-		g.moveTo(0, curLevel.pxHei+PADDING);
-		g.lineTo(curLevel.pxWid*0.5-HANDLE_SIZE*1.5, curLevel.pxHei+PADDING);
-		g.moveTo(curLevel.pxWid*0.5+HANDLE_SIZE*1.5, curLevel.pxHei+PADDING);
-		g.lineTo(curLevel.pxWid, curLevel.pxHei+PADDING);
+		// g.moveTo(0, curLevel.pxHei+PADDING);
+		// g.lineTo(curLevel.pxWid*0.5-HANDLE_SIZE*1.5, curLevel.pxHei+PADDING);
+		// g.moveTo(curLevel.pxWid*0.5+HANDLE_SIZE*1.5, curLevel.pxHei+PADDING);
+		// g.lineTo(curLevel.pxWid, curLevel.pxHei+PADDING);
 
 		// Left
-		g.moveTo(-PADDING, 0);
-		g.lineTo(-PADDING, curLevel.pxHei*0.5-HANDLE_SIZE*1.5);
-		g.moveTo(-PADDING, curLevel.pxHei*0.5+HANDLE_SIZE*1.5);
-		g.lineTo(-PADDING, curLevel.pxHei);
+		// g.moveTo(-PADDING, 0);
+		// g.lineTo(-PADDING, curLevel.pxHei*0.5-HANDLE_SIZE*1.5);
+		// g.moveTo(-PADDING, curLevel.pxHei*0.5+HANDLE_SIZE*1.5);
+		// g.lineTo(-PADDING, curLevel.pxHei);
 
 		// Right
-		g.moveTo(curLevel.pxWid+PADDING, 0);
-		g.lineTo(curLevel.pxWid+PADDING, curLevel.pxHei*0.5-HANDLE_SIZE*1.5);
-		g.moveTo(curLevel.pxWid+PADDING, curLevel.pxHei*0.5+HANDLE_SIZE*1.5);
-		g.lineTo(curLevel.pxWid+PADDING, curLevel.pxHei);
+		// g.moveTo(curLevel.pxWid+PADDING, 0);
+		// g.lineTo(curLevel.pxWid+PADDING, curLevel.pxHei*0.5-HANDLE_SIZE*1.5);
+		// g.moveTo(curLevel.pxWid+PADDING, curLevel.pxHei*0.5+HANDLE_SIZE*1.5);
+		// g.lineTo(curLevel.pxWid+PADDING, curLevel.pxHei);
 
 		// Horizontal labels
 		var xLabel = curLayerInstance==null ? curLevel.pxWid+"px" : curLayerInstance.cWid+" cells / "+curLevel.pxWid+"px";
-		addLabel(xLabel, Top);
-		addLabel(xLabel, Bottom);
+		if( !editor.curLevel.hasAnyFieldDisplayedAt(Above) )
+			addLabel(xLabel, Top, 16);
+		if( !editor.curLevel.hasAnyFieldDisplayedAt(Beneath) )
+			addLabel(xLabel, Bottom, 16);
 
 		// Vertical labels
 		var yLabel = curLayerInstance==null ? curLevel.pxHei+"px" : curLayerInstance.cHei+" cells / "+curLevel.pxHei+"px";
-		addLabel(yLabel, Left);
-		addLabel(yLabel, Right);
+		addLabel(yLabel, Left, 16);
+		addLabel(yLabel, Right, 16);
 
-		addLabel(editor.curLevel.identifier, Top, false, PADDING+8, 0xffcc00);
+		if( !editor.curLevel.hasAnyFieldDisplayedAt(Above) )
+			addLabel(editor.curLevel.identifier, Top, false, 32, 0xffcc00);
 
 
 		// Resizing drags
 		g.lineStyle(0);
 		g.beginFill(c);
 		for(p in draggables)
-			g.drawCircle( getX(p), getY(p), HANDLE_SIZE*0.5);
+			g.drawCircle( getX(p), getY(p), HANDLE_SIZE*0.5, 24);
 	}
 
 
-	function addLabel(str:String, pos:RulerPos, smallFont=true, extraPadding=0, ?color:UInt) {
+	function addLabel(str:String, pos:RulerPos, smallFont=true, distancePx=0, ?color:UInt) {
 		var scale : Float = switch pos {
 			case Top, Bottom: editor.curLevel.pxWid<400 ? 0.5 : 1;
 			case Left, Right: editor.curLevel.pxHei<300 ? 0.5 : 1;
@@ -160,8 +166,8 @@ class Rulers extends dn.Process {
 		}
 
 		var wrapper = new h2d.Object(labels);
-		wrapper.x = getX(pos, PADDING*2 + extraPadding*scale);
-		wrapper.y = getY(pos, PADDING*2 + extraPadding*scale);
+		wrapper.x = getX(pos, distancePx);
+		wrapper.y = getY(pos, distancePx);
 		switch pos {
 			case Left, Right: wrapper.rotate(-M.PIHALF);
 			case _:
@@ -179,29 +185,28 @@ class Rulers extends dn.Process {
 	}
 
 
-	inline function isOver(x:Int, y:Int, pos:RulerPos) {
-		return M.dist( x,y, getX(pos), getY(pos) ) <= HANDLE_SIZE*1.5;
+	inline function isOver(levelX:Int, levelY:Int, pos:RulerPos) {
+		if( !editor.worldMode && editor.curLevel.inBounds(levelX,levelY) )
+			return false;
+		else
+			return M.dist( levelX, levelY, getX(pos), getY(pos) ) <= HANDLE_SIZE*4 / editor.camera.adjustedZoom;
 	}
 
 
-	function getX(pos:RulerPos, ?padding:Float) : Int {
-		if( padding==null )
-			padding = PADDING;
-
+	function getX(pos:RulerPos, extraDistancePx=0) : Int {
+		extraDistancePx += PADDING;
 		return Std.int( switch pos {
 			case Top, Bottom : curLevel.pxWid*0.5;
-			case Left, TopLeft, BottomLeft : -padding;
-			case Right, TopRight, BottomRight : curLevel.pxWid + padding;
+			case Left, TopLeft, BottomLeft : -extraDistancePx;
+			case Right, TopRight, BottomRight : curLevel.pxWid + extraDistancePx;
 		} );
 	}
 
-	function getY(pos:RulerPos, ?padding:Float) : Int {
-		if( padding==null )
-			padding = PADDING;
-
+	function getY(pos:RulerPos, extraDistancePx=0) : Int {
+		extraDistancePx += PADDING;
 		return Std.int( switch pos {
-			case Top, TopLeft, TopRight : -padding;
-			case Bottom, BottomLeft, BottomRight : curLevel.pxHei + padding;
+			case Top, TopLeft, TopRight : -extraDistancePx;
+			case Bottom, BottomLeft, BottomRight : curLevel.pxHei + extraDistancePx;
 			case Left, Right : curLevel.pxHei*0.5;
 		} );
 	}

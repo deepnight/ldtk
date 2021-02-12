@@ -449,6 +449,25 @@ class Level {
 		return bright ? dn.Color.toWhite(getBgColor(), 0.5) : getBgColor();
 	}
 
+	public function hasAnyFieldDisplayedAt(pos:ldtk.Json.FieldDisplayPosition) {
+		for(fi in fieldInstances)
+			if( fi.def.editorAlwaysShow || !fi.isUsingDefault(0) ) {
+				switch fi.def.editorDisplayMode {
+					case ValueOnly, NameAndValue:
+						if( fi.def.editorDisplayPos==pos )
+							return true;
+
+					case Hidden:
+					case EntityTile:
+					case PointStar:
+					case PointPath:
+					case RadiusPx:
+					case RadiusGrid:
+				}
+			}
+		return false;
+	}
+
 
 	/* RENDERING *******************/
 
