@@ -15,6 +15,8 @@ class Page extends dn.Process {
 	}
 
 	public function onAppBlur() {}
+	public function onAppMouseDown() {}
+	public function onAppMouseUp() {}
 	public function onAppFocus() {}
 	public function onAppResize() {}
 	public function onKeyPress(keyCode:Int) {}

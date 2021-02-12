@@ -221,7 +221,6 @@ class App extends dn.Process {
 		return ui.ProjectSaving.hasAny() || ui.Modal.hasAnyUnclosable();
 	}
 
-	// public static inline function isMac() return js.Browser.window.navigator.userAgent.indexOf('Mac') != -1;
 	public static inline function isLinux() return js.node.Os.platform()=="linux";
 	public static inline function isWindows() return js.node.Os.platform()=="win32";
 	public static inline function isMac() return js.node.Os.platform()=="darwin";
@@ -287,10 +286,14 @@ class App extends dn.Process {
 
 	function onAppMouseDown(e:js.jquery.Event) {
 		mouseButtonDowns.set(e.button,true);
+		if( hasPage() )
+			curPageProcess.onAppMouseDown();
 	}
 
 	function onAppMouseUp(e:js.jquery.Event) {
 		mouseButtonDowns.remove(e.button);
+		if( hasPage() )
+			curPageProcess.onAppMouseUp();
 	}
 
 	public inline function isMouseButtonDown(btId:Int) {
