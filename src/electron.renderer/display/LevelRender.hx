@@ -211,12 +211,10 @@ class LevelRender extends dn.Process {
 					if( li.def.type==Entities )
 						invalidateLayer(li);
 
-			case FieldDefAdded(fd), FieldDefRemoved(fd), FieldDefChanged(fd):
-				var ed = editor.project.defs.getEntityDefUsingField(fd);
-				if( editor.curLayerInstance!=null && ed!=null ) {
-					var li = editor.curLevel.getLayerInstanceFromEntity(ed);
-					invalidateLayer( li==null ? editor.curLayerInstance : li );
-				}
+			case FieldDefAdded(_), FieldDefRemoved(_), FieldDefChanged(_), FieldDefSorted:
+				for(li in editor.curLevel.layerInstances)
+					if( li.def.type==Entities )
+						invalidateLayer(li);
 
 			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved:
 				for(li in editor.curLevel.layerInstances)
@@ -242,7 +240,6 @@ class LevelRender extends dn.Process {
 			case LayerDefAdded:
 
 			case EntityDefAdded:
-			case FieldDefSorted:
 
 			case ToolOptionChanged:
 
