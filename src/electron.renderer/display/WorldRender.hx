@@ -267,22 +267,27 @@ class WorldRender extends dn.Process {
 		var padding = Std.int( Rulers.PADDING*1.5 );
 		for(f in fieldRenders.keyValueIterator()) {
 			var l = project.getLevel(f.key);
+			var fr = f.value;
+			fr.above.visible = fr.beneath.visible = editor.worldMode || editor.curLevel==l;
+
+			if( !fr.above.visible )
+				continue;
 
 			// Above
-			f.value.above.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/f.value.above.outerWidth) );
-			f.value.above.x = Std.int( l.worldCenterX - f.value.above.outerWidth*0.5*f.value.above.scaleX );
+			fr.above.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.above.outerWidth) );
+			fr.above.x = Std.int( l.worldCenterX - fr.above.outerWidth*0.5*fr.above.scaleX );
 			if( editor.worldMode )
-				f.value.above.y = l.worldY - padding;
+				fr.above.y = l.worldY - padding;
 			else
-				f.value.above.y = Std.int( l.worldY - padding - f.value.above.outerHeight*f.value.above.scaleY );
+				fr.above.y = Std.int( l.worldY - padding - fr.above.outerHeight*fr.above.scaleY );
 
 			// Beneath
-			f.value.beneath.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/f.value.beneath.outerWidth) );
-			f.value.beneath.x = Std.int( l.worldCenterX - f.value.beneath.outerWidth*0.5*f.value.beneath.scaleX );
+			fr.beneath.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.beneath.outerWidth) );
+			fr.beneath.x = Std.int( l.worldCenterX - fr.beneath.outerWidth*0.5*fr.beneath.scaleX );
 			if( editor.worldMode )
-				f.value.beneath.y = Std.int( l.worldY + l.pxHei + padding - f.value.beneath.outerHeight*f.value.beneath.scaleY );
+				fr.beneath.y = Std.int( l.worldY + l.pxHei + padding - fr.beneath.outerHeight*fr.beneath.scaleY );
 			else
-				f.value.beneath.y = l.worldY + l.pxHei + padding;
+				fr.beneath.y = l.worldY + l.pxHei + padding;
 		}
 	}
 
