@@ -116,10 +116,10 @@ class FieldInstanceRender {
 				tf.text = fd.identifier;
 
 				// Value
-				valueFlow.addChild( FieldInstanceRender.renderValue(fi, 0xffffff) );
+				valueFlow.addChild( FieldInstanceRender.renderValue(fi, C.toWhite(baseColor, 0.8)) );
 
 			case ValueOnly:
-				valueFlow.addChild( FieldInstanceRender.renderValue(fi, baseColor) );
+				valueFlow.addChild( FieldInstanceRender.renderValue(fi, C.toWhite(baseColor, 0.8)) );
 
 			case RadiusPx:
 				switch ctx {
