@@ -70,7 +70,7 @@ class WorldRender extends dn.Process {
 		root.add(levelsWrapper, Const.DP_MAIN);
 
 		fieldsWrapper = new h2d.Object();
-		root.add(fieldsWrapper, Const.DP_MAIN);
+		root.add(fieldsWrapper, Const.DP_TOP);
 	}
 
 	override function onDispose() {
@@ -210,7 +210,6 @@ class WorldRender extends dn.Process {
 
 	public inline function invalidateLevelFields(l:data.Level) {
 		levelFieldsInvalidation.set(l.uid, true);
-		N.debug("invalidate "+l.identifier);
 	}
 
 	public inline function invalidateAllLevelFields() {
@@ -458,7 +457,6 @@ class WorldRender extends dn.Process {
 
 	function removeLevelFields(uid:Int) {
 		if( fieldRenders.exists(uid) ) {
-			N.error("level removed "+uid);
 			fieldRenders.get(uid).above.remove();
 			fieldRenders.get(uid).below.remove();
 			fieldRenders.remove(uid);
@@ -466,7 +464,6 @@ class WorldRender extends dn.Process {
 	}
 
 	function renderFields(l:data.Level) {
-		N.debug("render: "+l.identifier);
 		levelFieldsInvalidation.remove(l.uid);
 
 		// Init wrapper
