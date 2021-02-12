@@ -28,7 +28,7 @@ class WorldRender extends dn.Process {
 	var currentHighlight : h2d.Graphics;
 	public var levelsWrapper : h2d.Layers;
 	var fieldsWrapper : h2d.Object;
-	var fieldRenders : Map<Int, { above:h2d.Flow, below:h2d.Flow }> = new Map();
+	var fieldRenders : Map<Int, { above:h2d.Flow, beneath:h2d.Flow }> = new Map();
 
 	var levelInvalidations : Map<Int,Bool> = new Map();
 	var levelFieldsInvalidation : Map<Int,Bool> = new Map();
@@ -264,15 +264,25 @@ class WorldRender extends dn.Process {
 	}
 
 	function updateFieldsPos() {
+		var padding = Std.int( Rulers.PADDING*1.5 );
 		for(f in fieldRenders.keyValueIterator()) {
 			var l = project.getLevel(f.key);
+
 			// Above
 			f.value.above.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/f.value.above.outerWidth) );
 			f.value.above.x = Std.int( l.worldCenterX - f.value.above.outerWidth*0.5*f.value.above.scaleX );
 			if( editor.worldMode )
-				f.value.above.y = l.worldY;
+				f.value.above.y = l.worldY - padding;
 			else
-				f.value.above.y = Std.int( l.worldY - f.value.above.outerHeight*f.value.above.scaleY );
+				f.value.above.y = Std.int( l.worldY - padding - f.value.above.outerHeight*f.value.above.scaleY );
+
+			// Beneath
+			f.value.beneath.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/f.value.beneath.outerWidth) );
+			f.value.beneath.x = Std.int( l.worldCenterX - f.value.beneath.outerWidth*0.5*f.value.beneath.scaleX );
+			if( editor.worldMode )
+				f.value.beneath.y = Std.int( l.worldY + l.pxHei + padding - f.value.beneath.outerHeight*f.value.beneath.scaleY );
+			else
+				f.value.beneath.y = l.worldY + l.pxHei + padding;
 		}
 	}
 
@@ -458,7 +468,7 @@ class WorldRender extends dn.Process {
 	function removeLevelFields(uid:Int) {
 		if( fieldRenders.exists(uid) ) {
 			fieldRenders.get(uid).above.remove();
-			fieldRenders.get(uid).below.remove();
+			fieldRenders.get(uid).beneath.remove();
 			fieldRenders.remove(uid);
 		}
 	}
@@ -474,7 +484,7 @@ class WorldRender extends dn.Process {
 					f.layout = Vertical;
 					f;
 				},
-				below: {
+				beneath: {
 					var f = new h2d.Flow(fieldsWrapper);
 					f.layout = Vertical;
 					f;
@@ -483,7 +493,7 @@ class WorldRender extends dn.Process {
 		}
 		var fWrapper = fieldRenders.get(l.uid);
 		fWrapper.above.removeChildren();
-		fWrapper.below.removeChildren();
+		fWrapper.beneath.removeChildren();
 
 		// Attach fields
 		FieldInstanceRender.renderFields(
@@ -491,6 +501,12 @@ class WorldRender extends dn.Process {
 			l.getSmartColor(true),
 			LevelCtx(l),
 			fWrapper.above
+		);
+		FieldInstanceRender.renderFields(
+			project.defs.levelFields.filter( fd->fd.editorDisplayPos==Beneath ).map( fd->l.getFieldInstance(fd) ),
+			l.getSmartColor(true),
+			LevelCtx(l),
+			fWrapper.beneath
 		);
 
 		updateFieldsPos();
