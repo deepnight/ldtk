@@ -887,65 +887,7 @@
 		{ "id": "Health", "tileId": 542, "__tileSrcRect": [224,528,16,16] },
 		{ "id": "PowerOrb", "tileId": 1365, "__tileSrcRect": [80,1360,16,16] },
 		{ "id": "Key", "tileId": 510, "__tileSrcRect": [224,496,16,16] }
-	], "iconTilesetUid": 67, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [
-		{
-			"identifier": "music",
-			"__type": "FilePath",
-			"uid": 70,
-			"type": "F_Path",
-			"isArray": false,
-			"canBeNull": true,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "NameAndValue",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": [ ".mp3", ".wav", ".ogg" ],
-			"defaultOverride": null,
-			"textLangageMode": null
-		},
-		{
-			"identifier": "script",
-			"__type": "FilePath",
-			"uid": 71,
-			"type": "F_Path",
-			"isArray": false,
-			"canBeNull": true,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "NameAndValue",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": [".lua"],
-			"defaultOverride": null,
-			"textLangageMode": null
-		},
-		{
-			"identifier": "isDark",
-			"__type": "Bool",
-			"uid": 72,
-			"type": "F_Bool",
-			"isArray": false,
-			"canBeNull": false,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "NameAndValue",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": null,
-			"textLangageMode": null
-		}
-	] },
+	], "iconTilesetUid": 67, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Entrance",
@@ -962,29 +904,7 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{
-					"__identifier": "music",
-					"__value": "../../../ld34-fullMetalDemocracy/music/ld34.wav",
-					"__type": "FilePath",
-					"defUid": 70,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["../../../ld34-fullMetalDemocracy/music/ld34.wav"]
-					}]
-				},
-				{ "__identifier": "script", "__value": null, "__type": "FilePath", "defUid": 71, "realEditorValues": [] },
-				{
-					"__identifier": "isDark",
-					"__value": true,
-					"__type": "Bool",
-					"defUid": 72,
-					"realEditorValues": [{
-						"id": "V_Bool",
-						"params": [ true ]
-					}]
-				}
-			],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -2259,20 +2179,7 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{
-					"__identifier": "music",
-					"__value": "../../../ld41-nightclubShowdown/music/music2.wav",
-					"__type": "FilePath",
-					"defUid": 70,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["../../../ld41-nightclubShowdown/music/music2.wav"]
-					}]
-				},
-				{ "__identifier": "script", "__value": null, "__type": "FilePath", "defUid": 71, "realEditorValues": [] },
-				{ "__identifier": "isDark", "__value": false, "__type": "Bool", "defUid": 72, "realEditorValues": [] }
-			],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
