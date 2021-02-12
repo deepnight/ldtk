@@ -18,7 +18,7 @@
 	"defaultGridSize": 8,
 	"defaultLevelWidth": 256,
 	"defaultLevelHeight": 256,
-	"bgColor": "#1D2135",
+	"bgColor": "#1E2027",
 	"defaultLevelBgColor": "#1D2135",
 	"minifyJson": false,
 	"externalLevels": false,
