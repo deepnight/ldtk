@@ -218,13 +218,14 @@ class EntityRender extends dn.Process {
 			var f = new h2d.Flow(above);
 			f.minWidth = above.innerWidth;
 			f.horizontalAlign = Middle;
+			f.padding = 2;
 			var tf = new h2d.Text(getDefaultFont(), f);
 			tf.scale(settings.v.editorUiScale);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = ed.identifier.substr(0,16);
 			tf.x = Std.int( ed.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
 			tf.y = 0;
-			FieldInstanceRender.addBg(f, ei.getSmartColor(true), 0.9);
+			FieldInstanceRender.addBg(f, ei.getSmartColor(true), 0.7);
 		}
 
 		updatePos();

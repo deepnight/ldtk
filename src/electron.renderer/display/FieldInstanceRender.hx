@@ -222,14 +222,14 @@ class FieldInstanceRender {
 					else {
 						if( v==null )
 							tf.text = "--null--";
-						else if( !fi.def.editorCutLongValues )
-							tf.text = v;
-						else {
-							var lines = v.substr(0,140).split("\n");
+						else if( fi.def.editorCutLongValues ) {
+							var lines = v.substr(0,70).split("\n");
 							var n = M.imin(2, lines.length);
 							for(i in 0...n)
 								tf.text+=lines[i] + (i<n-1 ? "\n" : "");
 						}
+						else
+							tf.text = v;
 					}
 				}
 			}
