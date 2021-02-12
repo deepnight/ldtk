@@ -28,7 +28,7 @@ class WorldRender extends dn.Process {
 	var currentHighlight : h2d.Graphics;
 	public var levelsWrapper : h2d.Layers;
 	var fieldsWrapper : h2d.Object;
-	var fieldRenders : Map<Int, { above:h2d.Flow, beneath:h2d.Flow }> = new Map();
+	var fieldRenders : Map<Int, { above:h2d.Flow, beneath:h2d.Flow, identifier:h2d.Flow }> = new Map();
 
 	var levelInvalidations : Map<Int,Bool> = new Map();
 	var levelFieldsInvalidation : Map<Int,Bool> = new Map();
@@ -264,11 +264,12 @@ class WorldRender extends dn.Process {
 	}
 
 	function updateFieldsPos() {
-		var padding = Std.int( Rulers.PADDING*1.5 );
+		var padding = Std.int( Rulers.PADDING*3 );
 		for(f in fieldRenders.keyValueIterator()) {
 			var l = project.getLevel(f.key);
 			var fr = f.value;
 			fr.above.visible = fr.beneath.visible = editor.worldMode || editor.curLevel==l;
+			fr.identifier.visible = !editor.worldMode;
 
 			if( !fr.above.visible )
 				continue;
@@ -277,7 +278,7 @@ class WorldRender extends dn.Process {
 			fr.above.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.above.outerWidth) );
 			fr.above.x = Std.int( l.worldCenterX - fr.above.outerWidth*0.5*fr.above.scaleX );
 			if( editor.worldMode )
-				fr.above.y = l.worldY - padding;
+				fr.above.y = l.worldY;
 			else
 				fr.above.y = Std.int( l.worldY - padding - fr.above.outerHeight*fr.above.scaleY );
 
@@ -285,7 +286,7 @@ class WorldRender extends dn.Process {
 			fr.beneath.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.beneath.outerWidth) );
 			fr.beneath.x = Std.int( l.worldCenterX - fr.beneath.outerWidth*0.5*fr.beneath.scaleX );
 			if( editor.worldMode )
-				fr.beneath.y = Std.int( l.worldY + l.pxHei + padding - fr.beneath.outerHeight*fr.beneath.scaleY );
+				fr.beneath.y = Std.int( l.worldY + l.pxHei - fr.beneath.outerHeight*fr.beneath.scaleY );
 			else
 				fr.beneath.y = l.worldY + l.pxHei + padding;
 		}
@@ -493,7 +494,8 @@ class WorldRender extends dn.Process {
 					var f = new h2d.Flow(fieldsWrapper);
 					f.layout = Vertical;
 					f;
-				}
+				},
+				identifier: null,
 			});
 		}
 		var fWrapper = fieldRenders.get(l.uid);
@@ -513,6 +515,19 @@ class WorldRender extends dn.Process {
 			LevelCtx(l),
 			fWrapper.beneath
 		);
+
+		// Level identifier
+		var f = new h2d.Flow(fWrapper.above);
+		f.minWidth = f.maxWidth = fWrapper.above.outerWidth;
+		f.horizontalAlign = Middle;
+		f.padding = 6;
+		var tf = new h2d.Text(Assets.fontLight_large, f);
+		tf.text = '"${l.identifier}"';
+		tf.textColor = l.getSmartColor(true);
+		FieldInstanceRender.addBg(f, l.getSmartColor(true), 0.6);
+		if( fWrapper.identifier!=null )
+			fWrapper.identifier.remove();
+		fWrapper.identifier = f;
 
 		updateFieldsPos();
 	}

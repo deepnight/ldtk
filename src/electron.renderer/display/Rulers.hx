@@ -110,34 +110,8 @@ class Rulers extends dn.Process {
 		var c = C.getPerceivedLuminosityInt(editor.project.bgColor)>=0.7 ? 0x0 : 0xffffff;
 		g.lineStyle(2, c);
 
-		// Top
-		// g.moveTo(0, -PADDING);
-		// g.lineTo(curLevel.pxWid*0.5-HANDLE_SIZE*1.5, -PADDING);
-		// g.moveTo(curLevel.pxWid*0.5+HANDLE_SIZE*1.5, -PADDING);
-		// g.lineTo(curLevel.pxWid, -PADDING);
-
-		// Bottom
-		// g.moveTo(0, curLevel.pxHei+PADDING);
-		// g.lineTo(curLevel.pxWid*0.5-HANDLE_SIZE*1.5, curLevel.pxHei+PADDING);
-		// g.moveTo(curLevel.pxWid*0.5+HANDLE_SIZE*1.5, curLevel.pxHei+PADDING);
-		// g.lineTo(curLevel.pxWid, curLevel.pxHei+PADDING);
-
-		// Left
-		// g.moveTo(-PADDING, 0);
-		// g.lineTo(-PADDING, curLevel.pxHei*0.5-HANDLE_SIZE*1.5);
-		// g.moveTo(-PADDING, curLevel.pxHei*0.5+HANDLE_SIZE*1.5);
-		// g.lineTo(-PADDING, curLevel.pxHei);
-
-		// Right
-		// g.moveTo(curLevel.pxWid+PADDING, 0);
-		// g.lineTo(curLevel.pxWid+PADDING, curLevel.pxHei*0.5-HANDLE_SIZE*1.5);
-		// g.moveTo(curLevel.pxWid+PADDING, curLevel.pxHei*0.5+HANDLE_SIZE*1.5);
-		// g.lineTo(curLevel.pxWid+PADDING, curLevel.pxHei);
-
 		// Horizontal labels
 		var xLabel = curLayerInstance==null ? curLevel.pxWid+"px" : curLayerInstance.cWid+" cells / "+curLevel.pxWid+"px";
-		if( !editor.curLevel.hasAnyFieldDisplayedAt(Above) )
-			addLabel(xLabel, Top, 16);
 		if( !editor.curLevel.hasAnyFieldDisplayedAt(Beneath) )
 			addLabel(xLabel, Bottom, 16);
 
@@ -145,10 +119,6 @@ class Rulers extends dn.Process {
 		var yLabel = curLayerInstance==null ? curLevel.pxHei+"px" : curLayerInstance.cHei+" cells / "+curLevel.pxHei+"px";
 		addLabel(yLabel, Left, 16);
 		addLabel(yLabel, Right, 16);
-
-		if( !editor.curLevel.hasAnyFieldDisplayedAt(Above) )
-			addLabel(editor.curLevel.identifier, Top, false, 32, 0xffcc00);
-
 
 		// Resizing drags
 		g.lineStyle(0);
