@@ -42,7 +42,7 @@ class EntityRender extends dn.Process {
 
 		beneath = new h2d.Flow(root);
 		beneath.layout = Vertical;
-		beneath.horizontalAlign = Middle;
+		beneath.horizontalAlign = Left;
 		beneath.verticalSpacing = 1;
 
 		renderAll();
@@ -190,86 +190,6 @@ class EntityRender extends dn.Process {
 	}
 
 
-	inline function addFieldBg(f:h2d.Flow, dark:Float) {
-		var bg = new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2,2);
-		f.addChildAt(bg, 0);
-		f.getProperties(bg).isAbsolute = true;
-		bg.color.setColor( C.addAlphaF( C.toBlack( ei.getSmartColor(false), dark ) ) );
-		bg.alpha = 0.9;
-		bg.x = -8;
-		bg.y = 1;
-		bg.width = f.outerWidth + M.fabs(bg.x)*2;
-		bg.height = f.outerHeight+3;
-	}
-
-
-
-	// function renderFieldValue(fi:data.inst.FieldInstance) {
-	// 	var valuesFlow = new h2d.Flow();
-	// 	valuesFlow.layout = Horizontal;
-	// 	valuesFlow.verticalAlign = Middle;
-
-	// 	// Array opening
-	// 	if( fi.def.isArray && fi.getArrayLength()>1 ) {
-	// 		var tf = new h2d.Text(getDefaultFont(), valuesFlow);
-	// 		tf.scale(settings.v.editorUiScale);
-	// 		tf.textColor = ei.getSmartColor(true);
-	// 		tf.text = "[";
-	// 	}
-
-	// 	for( idx in 0...fi.getArrayLength() ) {
-	// 		if( !fi.valueIsNull(idx) && !( !fi.def.editorAlwaysShow && fi.def.type==F_Bool && fi.isUsingDefault(idx) ) ) {
-	// 			if( fi.hasIconForDisplay(idx) ) {
-	// 				// Icon
-	// 				var w = new h2d.Flow(valuesFlow);
-	// 				var tile = fi.getIconForDisplay(idx);
-	// 				var bmp = new h2d.Bitmap( tile, w );
-	// 				var s = M.fmin( 32/tile.width, 32/tile.height );
-	// 				bmp.setScale(s * settings.v.editorUiScale);
-	// 			}
-	// 			else if( fi.def.type==F_Color ) {
-	// 				// Color disc
-	// 				var g = new h2d.Graphics(valuesFlow);
-	// 				var r = 6;
-	// 				g.beginFill( fi.getColorAsInt(idx) );
-	// 				g.lineStyle(1, 0x0, 0.8);
-	// 				g.drawCircle(r,r,r, 16);
-	// 			}
-	// 			else {
-	// 				// Text render
-	// 				var tf = new h2d.Text(getDefaultFont(), valuesFlow);
-	// 				tf.scale(settings.v.editorUiScale);
-	// 				tf.textColor = ei.getSmartColor(true);
-	// 				tf.maxWidth = 400 * ( 0.5 + 0.5*settings.v.editorUiScale );
-	// 				var v = fi.getForDisplay(idx);
-	// 				if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
-	// 					tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';
-	// 				else
-	// 					tf.text = v;
-	// 			}
-	// 		}
-
-	// 		// Array separator
-	// 		if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
-	// 			var tf = new h2d.Text(getDefaultFont(), valuesFlow);
-	// 			tf.scale(settings.v.editorUiScale);
-	// 			tf.textColor = ei.getSmartColor(true);
-	// 			tf.text = ",";
-	// 		}
-	// 	}
-
-	// 	// Array closing
-	// 	if( fi.def.isArray && fi.getArrayLength()>1 ) {
-	// 		var tf = new h2d.Text(getDefaultFont(), valuesFlow);
-	// 		tf.scale(settings.v.editorUiScale);
-	// 		tf.textColor = ei.getSmartColor(true);
-	// 		tf.text = "]";
-	// 	}
-
-	// 	return valuesFlow;
-	// }
-
-
 	public function renderFields() {
 		above.removeChildren();
 		center.removeChildren();
@@ -277,31 +197,34 @@ class EntityRender extends dn.Process {
 		fieldGraphics.clear();
 
 		// Attach fields
-		for(fd in ei.def.fieldDefs) {
-			var fi = ei.getFieldInstance(fd);
-			var fr = FieldInstanceRender.renderField(fi, ei.getSmartColor(true), EntityCtx(fieldGraphics,ei,ld));
+		var color = ei.getSmartColor(true);
+		var ctx : display.FieldInstanceRender.FieldRenderContext = EntityCtx(fieldGraphics, ei, ld);
+		FieldInstanceRender.renderFields(
+			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Beneath ).map( fd->ei.getFieldInstance(fd) ),
+			color, ctx, beneath
+		);
+		FieldInstanceRender.renderFields(
+			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Center ).map( fd->ei.getFieldInstance(fd) ),
+			color, ctx, center
+		);
 
-			if( fr==null )
-				continue;
-
-			// Position
-			switch fd.editorDisplayPos {
-				case Above: above.addChild(fr);
-				case Center: center.addChild(fr);
-				case Beneath: beneath.addChild(fr);
-			}
-		}
+		FieldInstanceRender.renderFields(
+			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Above ).map( fd->ei.getFieldInstance(fd) ),
+			color, ctx, above
+		);
 
 		// Identifier label
 		if( ei.def.showName ) {
 			var f = new h2d.Flow(above);
+			f.minWidth = above.innerWidth;
+			f.horizontalAlign = Middle;
 			var tf = new h2d.Text(getDefaultFont(), f);
 			tf.scale(settings.v.editorUiScale);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = ed.identifier.substr(0,16);
 			tf.x = Std.int( ed.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
 			tf.y = 0;
-			addFieldBg(f, 0.5);
+			FieldInstanceRender.addBg(f, ei.getSmartColor(true), 0.9);
 		}
 
 		updatePos();
@@ -312,15 +235,11 @@ class EntityRender extends dn.Process {
 		var cam = Editor.ME.camera;
 		var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
 		var scale = (1-downScale) / cam.adjustedZoom;
-		var alpha = M.fclamp( (cam.adjustedZoom-0.33*cam.pixelRatio) / 3, 0, 1 );
+		// var alpha = M.fclamp( (cam.adjustedZoom-0.33*cam.pixelRatio) / 3, 0, 1 );
+		var alpha = 1.0;
 
 		root.x = ei.x;
 		root.y = ei.y;
-
-		// Hide fields in other layers
-		if( Editor.ME.curLayerDef==null || Editor.ME.curLayerDef.type!=Entities )
-			alpha*=0.4;
-		// above.visible = center.visible = beneath.visible = Editor.ME.curLayerDef.type==Entities;
 
 		// Update field wrappers
 		above.setScale(scale);

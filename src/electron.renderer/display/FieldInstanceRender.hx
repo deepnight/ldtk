@@ -11,16 +11,14 @@ class FieldInstanceRender {
 
 
 
-	static inline function addBg(f:h2d.Flow, textColor:Int) {
+	public static function addBg(f:h2d.Flow, baseColor:Int, darken=0.5) {
 		var bg = new h2d.ScaleGrid( Assets.elements.getTile("fieldBg"), 2, 2 );
 		f.addChildAt(bg, 0);
 		f.getProperties(bg).isAbsolute = true;
-		bg.color.setColor( C.addAlphaF( C.toBlack( textColor, 0.5 ) ) );
-		bg.alpha = 0.9;
-		bg.x = -8;
-		bg.y = 1;
-		bg.width = f.outerWidth + M.fabs(bg.x)*2;
-		bg.height = f.outerHeight+3;
+		bg.color.setColor( C.addAlphaF( C.toBlack( baseColor, darken ) ) );
+		bg.setPosition(0,0);
+		bg.width = f.outerWidth;
+		bg.height = f.outerHeight;
 	}
 
 
@@ -39,18 +37,64 @@ class FieldInstanceRender {
 	}
 
 
-	public static function renderField(fi:data.inst.FieldInstance, textColor:Int, ?ctx:FieldRenderContext) : Null<h2d.Flow> {
+	public static function renderFields(fieldInstances:Array<data.inst.FieldInstance>, baseColor:Int, ctx:FieldRenderContext, parent:h2d.Flow) {
+		var allRenders = [];
+
+		// Create individual field renders
+		for(fi in fieldInstances) {
+			var fr = renderField(fi, baseColor, ctx);
+			if( fr==null || fr.value.numChildren==0 )
+				continue;
+
+			allRenders.push(fr);
+			var line = new h2d.Flow(parent);
+			if( fr.label.numChildren>0 )
+				line.addChild(fr.label);
+			line.addChild(fr.value);
+		}
+
+		// Align everything and add BGs
+		var maxLabelWidth = 0.;
+		var maxValueWidth = 0.;
+		for(fr in allRenders) {
+			maxLabelWidth = M.fmax(maxLabelWidth, fr.label.outerWidth);
+			maxValueWidth = M.fmax(maxValueWidth, fr.value.outerWidth);
+		}
+		for(fr in allRenders) {
+			if( fr.label.numChildren>0 ) {
+				fr.label.minWidth = Std.int( maxLabelWidth );
+			}
+
+			fr.value.minWidth = Std.int( maxValueWidth );
+			if( fr.label.numChildren==0 )
+				fr.value.minWidth += Std.int( maxLabelWidth);
+			addBg(fr.value, baseColor, 0.5);
+
+			if( fr.label.numChildren>0 )
+				fr.label.minHeight = fr.value.outerHeight;
+			addBg(fr.label, baseColor, 0.7);
+		}
+	}
+
+	public static function renderField(fi:data.inst.FieldInstance, baseColor:Int, ctx:FieldRenderContext) : Null<{ label:h2d.Flow, value:h2d.Flow }> {
 		var fd = fi.def;
-		var fieldWrapper = new h2d.Flow();
+
+		var labelFlow = new h2d.Flow();
+		labelFlow.verticalAlign = Middle;
+		labelFlow.horizontalAlign = Right;
+		labelFlow.padding = 6;
+
+		var valueFlow = new h2d.Flow();
+		valueFlow.padding = 6;
 
 		// Value error
 		var err = fi.getFirstErrorInValues();
 		if( err!=null ) {
-			var tf = new h2d.Text(getDefaultFont(), fieldWrapper);
-			tf.scale(settings.v.editorUiScale);
+			var tf = new h2d.Text(getDefaultFont(), valueFlow);
+			tf.scale(settings.v.editorUiScale*2);
 			tf.textColor = 0xff8800;
 			tf.text = '<$err>';
-			return fieldWrapper;
+			return { label:labelFlow, value:valueFlow };
 		}
 
 		// Skip hiddens
@@ -64,32 +108,29 @@ class FieldInstanceRender {
 			case Hidden: // N/A
 
 			case NameAndValue:
-				var f = new h2d.Flow(fieldWrapper);
-				f.verticalAlign = Middle;
-
-				var tf = new h2d.Text(getDefaultFont(), f);
+				// Label
+				var tf = new h2d.Text(getDefaultFont(), labelFlow);
 				tf.scale(settings.v.editorUiScale);
-				tf.textColor = textColor;
-				tf.text = fd.identifier+" = ";
+				tf.textColor = baseColor;
+				tf.text = fd.identifier;
 
-				f.addChild( FieldInstanceRender.renderValue(fi, textColor) );
+				// Value
+				valueFlow.addChild( FieldInstanceRender.renderValue(fi, 0xffffff) );
 
 			case ValueOnly:
-				fieldWrapper.addChild( FieldInstanceRender.renderValue(fi, textColor) );
+				valueFlow.addChild( FieldInstanceRender.renderValue(fi, baseColor) );
 
 			case RadiusPx:
 				switch ctx {
-					case null:
 					case EntityCtx(g,_):
-						g.lineStyle(1, textColor, 0.33);
+						g.lineStyle(1, baseColor, 0.33);
 						g.drawCircle(0,0, fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0));
 				}
 
 			case RadiusGrid:
 				switch ctx {
-					case null:
 					case EntityCtx(g, ei, ld):
-						g.lineStyle(1, textColor, 0.33);
+						g.lineStyle(1, baseColor, 0.33);
 						g.drawCircle(0,0, ( fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0) ) * ld.gridSize);
 				}
 
@@ -97,11 +138,10 @@ class FieldInstanceRender {
 
 			case PointStar, PointPath:
 				switch ctx {
-					case null:
 					case EntityCtx(g, ei, ld):
 						var fx = ei.getCellCenterX(ld);
 						var fy = ei.getCellCenterY(ld);
-						g.lineStyle(1, textColor, 0.66);
+						g.lineStyle(1, baseColor, 0.66);
 
 						for(i in 0...fi.getArrayLength()) {
 							var pt = fi.getPointGrid(i);
@@ -121,30 +161,12 @@ class FieldInstanceRender {
 				}
 		}
 
-		// Field bg
-		var needBg = switch fd.type {
-			case F_Int, F_Float:
-				switch fd.editorDisplayMode {
-					case RadiusPx, RadiusGrid: false;
-					case _: true;
-				};
-			case F_String, F_Text, F_Bool, F_Path: true;
-			case F_Color: fd.editorDisplayMode==NameAndValue;
-			case F_Point: false;
-			case F_Enum(enumDefUid): fd.editorDisplayMode!=EntityTile;
-		}
-
-		if( needBg )
-			addBg(fieldWrapper, textColor);
-
-		fieldWrapper.visible = fieldWrapper.numChildren>0;
-
-		return fieldWrapper;
+		return { label:labelFlow, value:valueFlow };
 	}
 
 
 
-	static function renderValue(fi:data.inst.FieldInstance, textColor:Int) {
+	static function renderValue(fi:data.inst.FieldInstance, textColor:Int) : h2d.Flow {
 		var valuesFlow = new h2d.Flow();
 		valuesFlow.layout = Horizontal;
 		valuesFlow.verticalAlign = Middle;
