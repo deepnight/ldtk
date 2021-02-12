@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 88,
+	"nextUid": 90,
 	"worldLayout": "GridVania",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -549,7 +549,46 @@
 		{ "id": "Ammo", "tileId": 1459, "__tileSrcRect": [48,1456,16,16] },
 		{ "id": "Fire_blade", "tileId": 1714, "__tileSrcRect": [32,1712,16,16] },
 		{ "id": "Vorpal_blade", "tileId": 1585, "__tileSrcRect": [16,1584,16,16] }
-	], "iconTilesetUid": 73, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [] },
+	], "iconTilesetUid": 73, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [
+		{
+			"identifier": "tutorial",
+			"__type": "String",
+			"uid": 88,
+			"type": "F_Text",
+			"isArray": false,
+			"canBeNull": true,
+			"arrayMinLength": null,
+			"arrayMaxLength": null,
+			"editorDisplayMode": "ValueOnly",
+			"editorDisplayPos": "Above",
+			"editorAlwaysShow": false,
+			"min": null,
+			"max": null,
+			"regex": null,
+			"acceptFileTypes": null,
+			"defaultOverride": null,
+			"textLangageMode": null
+		},
+		{
+			"identifier": "textColor",
+			"__type": "Color",
+			"uid": 89,
+			"type": "F_Color",
+			"isArray": false,
+			"canBeNull": false,
+			"arrayMinLength": null,
+			"arrayMaxLength": null,
+			"editorDisplayMode": "Hidden",
+			"editorDisplayPos": "Above",
+			"editorAlwaysShow": false,
+			"min": null,
+			"max": null,
+			"regex": null,
+			"acceptFileTypes": null,
+			"defaultOverride": { "id": "V_Int", "params": [16768000] },
+			"textLangageMode": null
+		}
+	] },
 	"levels": [
 		{
 			"identifier": "Entrance",
@@ -566,7 +605,19 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{
+					"__identifier": "tutorial",
+					"__value": "Press \"W\" to switch to World mode.",
+					"__type": "String",
+					"defUid": 88,
+					"realEditorValues": [{
+						"id": "V_String",
+						"params": ["Press \"W\" to switch to World mode."]
+					}]
+				},
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -1336,7 +1387,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -2634,7 +2688,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -3975,7 +4032,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -5458,7 +5518,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -6818,7 +6881,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -8178,7 +8244,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -10026,7 +10095,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -11330,7 +11402,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -11814,7 +11889,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -12641,7 +12719,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -13656,7 +13737,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -14419,7 +14503,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -15588,7 +15675,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -17037,7 +17127,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -17745,7 +17838,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -19014,7 +19110,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -20934,7 +21033,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",
@@ -21649,7 +21751,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 89, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Shadows",

@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 92,
+	"nextUid": 94,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -1063,62 +1063,6 @@
 			]
 		},
 		{
-			"identifier": "Tutorial",
-			"uid": 66,
-			"width": 8,
-			"height": 8,
-			"color": "#000000",
-			"renderMode": "Ellipse",
-			"showName": false,
-			"tilesetId": null,
-			"tileId": null,
-			"tileRenderMode": "Stretch",
-			"maxPerLevel": 1,
-			"limitBehavior": "PreventAdding",
-			"pivotX": 0.5,
-			"pivotY": 0.5,
-			"fieldDefs": [
-				{
-					"identifier": "text",
-					"__type": "String",
-					"uid": 67,
-					"type": "F_Text",
-					"isArray": false,
-					"canBeNull": false,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "ValueOnly",
-					"editorDisplayPos": "Center",
-					"editorAlwaysShow": false,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": null,
-					"textLangageMode": null
-				},
-				{
-					"identifier": "color",
-					"__type": "Color",
-					"uid": 68,
-					"type": "F_Color",
-					"isArray": false,
-					"canBeNull": false,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "Hidden",
-					"editorDisplayPos": "Above",
-					"editorAlwaysShow": false,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": { "id": "V_Int", "params": [16768256] },
-					"textLangageMode": null
-				}
-			]
-		},
-		{
 			"identifier": "Door",
 			"uid": 86,
 			"width": 8,
@@ -1211,7 +1155,46 @@
 		{ "id": "Boots", "tileId": 167, "__tileSrcRect": [112,160,16,16] },
 		{ "id": "Water", "tileId": 288, "__tileSrcRect": [0,288,16,16] },
 		{ "id": "Gem", "tileId": 478, "__tileSrcRect": [224,464,16,16] }
-	], "iconTilesetUid": 91, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [] },
+	], "iconTilesetUid": 91, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [
+		{
+			"identifier": "tutorial",
+			"__type": "String",
+			"uid": 92,
+			"type": "F_Text",
+			"isArray": false,
+			"canBeNull": true,
+			"arrayMinLength": null,
+			"arrayMaxLength": null,
+			"editorDisplayMode": "ValueOnly",
+			"editorDisplayPos": "Above",
+			"editorAlwaysShow": false,
+			"min": null,
+			"max": null,
+			"regex": null,
+			"acceptFileTypes": null,
+			"defaultOverride": null,
+			"textLangageMode": null
+		},
+		{
+			"identifier": "textColor",
+			"__type": "Color",
+			"uid": 93,
+			"type": "F_Color",
+			"isArray": false,
+			"canBeNull": false,
+			"arrayMinLength": null,
+			"arrayMaxLength": null,
+			"editorDisplayMode": "Hidden",
+			"editorDisplayPos": "Above",
+			"editorAlwaysShow": false,
+			"min": null,
+			"max": null,
+			"regex": null,
+			"acceptFileTypes": null,
+			"defaultOverride": { "id": "V_Int", "params": [16768000] },
+			"textLangageMode": null
+		}
+	] },
 	"levels": [
 		{
 			"identifier": "Your_typical_2D_platformer",
@@ -1228,7 +1211,21 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{
+					"__identifier": "tutorial",
+					"__value": "Press \"R\" to toggle auto-layers rendering.\n\nPress \"A\" to toggle \"Single layer mode.\"",
+					"__type": "String",
+					"defUid": 92,
+					"realEditorValues": [{
+						"id": "V_String",
+						"params": [
+							"Press \"R\" to toggle auto-layers rendering.\n\nPress \"A\" to toggle \"Single layer mode.\""
+						]
+					}]
+				},
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 93, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -1353,37 +1350,6 @@
 									}]
 								},
 								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Tutorial",
-							"__grid": [21,2],
-							"__pivot": [0.5,0.5],
-							"__tile": null,
-							"width": 8,
-							"height": 8,
-							"defUid": 66,
-							"px": [344,40],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "Press SHIFT+R to toggle auto-layers rendering.\n\nPress A to toggle \"Single layer mode.\"",
-									"__type": "String",
-									"defUid": 67,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": [
-											"Press SHIFT+R to toggle auto-layers rendering.\n\nPress A to toggle \"Single layer mode.\""
-										]
-									}]
-								},
-								{
-									"__identifier": "color",
-									"__value": "#FFDD00",
-									"__type": "Color",
-									"defUid": 68,
-									"realEditorValues": [null]
-								}
 							]
 						},
 						{
@@ -2698,7 +2664,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 92, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 93, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -3539,7 +3508,10 @@
 			"bgPivotY": 0.5,
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [],
+			"fieldInstances": [
+				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 92, "realEditorValues": [] },
+				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 93, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",

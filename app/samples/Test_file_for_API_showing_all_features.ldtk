@@ -446,7 +446,7 @@
 					"uid": 35,
 					"type": "F_Path",
 					"isArray": false,
-					"canBeNull": false,
+					"canBeNull": true,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "NameAndValue",
@@ -525,9 +525,9 @@
 					"canBeNull": true,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "Hidden",
+					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Beneath",
-					"editorAlwaysShow": false,
+					"editorAlwaysShow": true,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -932,13 +932,13 @@
 						},
 						{
 							"__identifier": "Test",
-							"__grid": [6,19],
+							"__grid": [9,19],
 							"__pivot": [0.5,0.5],
 							"__tile": null,
 							"width": 32,
 							"height": 32,
 							"defUid": 15,
-							"px": [104,312],
+							"px": [152,312],
 							"fieldInstances": [
 								{
 									"__identifier": "Integer",
@@ -1000,12 +1000,12 @@
 								},
 								{
 									"__identifier": "Point",
-									"__value": { "cx": 2, "cy": 17 },
+									"__value": { "cx": 4, "cy": 17 },
 									"__type": "Point",
 									"defUid": 24,
 									"realEditorValues": [{
 										"id": "V_String",
-										"params": ["2,17"]
+										"params": ["4,17"]
 									}]
 								},
 								{
@@ -1033,21 +1033,21 @@
 								},
 								{
 									"__identifier": "Array_points",
-									"__value": [ { "cx": 11, "cy": 19 }, { "cx": 11, "cy": 21 }, { "cx": 15, "cy": 21 }, { "cx": 15, "cy": 23 } ],
+									"__value": [ { "cx": 14, "cy": 19 }, { "cx": 14, "cy": 17 }, { "cx": 18, "cy": 17 }, { "cx": 18, "cy": 19 } ],
 									"__type": "Array<Point>",
 									"defUid": 30,
 									"realEditorValues": [ {
 										"id": "V_String",
-										"params": ["11,19"]
+										"params": ["14,19"]
 									}, {
 										"id": "V_String",
-										"params": ["11,21"]
+										"params": ["14,17"]
 									}, {
 										"id": "V_String",
-										"params": ["15,21"]
+										"params": ["18,17"]
 									}, {
 										"id": "V_String",
-										"params": ["15,23"]
+										"params": ["18,19"]
 									} ]
 								},
 								{
@@ -1077,13 +1077,13 @@
 						},
 						{
 							"__identifier": "Labels",
-							"__grid": [6,16],
+							"__grid": [9,16],
 							"__pivot": [0.5,0.5],
 							"__tile": null,
 							"width": 8,
 							"height": 8,
 							"defUid": 10,
-							"px": [104,264],
+							"px": [152,264],
 							"fieldInstances": [
 								{
 									"__identifier": "text",

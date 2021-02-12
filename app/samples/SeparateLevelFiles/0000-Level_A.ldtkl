@@ -13,7 +13,7 @@
 	"worldX": 0,
 	"worldY": 0,
 	"pxWid": 240,
-	"pxHei": 288,
+	"pxHei": 224,
 	"__bgColor": "#398666",
 	"bgColor": "#398666",
 	"bgRelPath": null,
@@ -22,12 +22,27 @@
 	"bgPivotY": 0.5,
 	"__bgPos": null,
 	"externalRelPath": null,
+	"fieldInstances": [
+		{
+			"__identifier": "tutorial",
+			"__value": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
+			"__type": "String",
+			"defUid": 8,
+			"realEditorValues": [{
+				"id": "V_String",
+				"params": [
+					"In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective."
+				]
+			}]
+		},
+		{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 9, "realEditorValues": [] }
+	],
 	"layerInstances": [
 		{
 			"__identifier": "IntGrid",
 			"__type": "IntGrid",
 			"__cWid": 15,
-			"__cHei": 18,
+			"__cHei": 14,
 			"__gridSize": 16,
 			"__opacity": 1,
 			"__pxTotalOffsetX": 0,
@@ -40,67 +55,18 @@
 			"pxOffsetY": 0,
 			"intGridCsv": [
 				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-				-1,-1,-1,-1,-1,-1,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-				0,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,0,
-				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,0,-1,-1,-1,-1,-1,
-				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
-				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,0,
+				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,-1,-1,-1,-1,-1,
+				-1,-1,-1,-1,-1,0,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+				0,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+				-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+				
 			],
 			"autoLayerTiles": [],
 			"seed": 5411700,
 			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
-		},
-		{
-			"__identifier": "Entities",
-			"__type": "Entities",
-			"__cWid": 15,
-			"__cHei": 18,
-			"__gridSize": 16,
-			"__opacity": 1,
-			"__pxTotalOffsetX": 0,
-			"__pxTotalOffsetY": 0,
-			"__tilesetDefUid": null,
-			"__tilesetRelPath": null,
-			"levelId": 0,
-			"layerDefUid": 4,
-			"pxOffsetX": 0,
-			"pxOffsetY": 0,
-			"intGridCsv": [],
-			"autoLayerTiles": [],
-			"seed": 5582680,
-			"overrideTilesetUid": null,
-			"gridTiles": [],
-			"entityInstances": [
-				{
-					"__identifier": "Text",
-					"__grid": [7,3],
-					"__pivot": [0.5,0.5],
-					"__tile": null,
-					"width": 8,
-					"height": 8,
-					"defUid": 5,
-					"px": [120,56],
-					"fieldInstances": [
-						{
-							"__identifier": "text",
-							"__value": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
-							"__type": "String",
-							"defUid": 6,
-							"realEditorValues": [{
-								"id": "V_String",
-								"params": [
-									"In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective."
-								]
-							}]
-						},
-						{ "__identifier": "color", "__value": "#FFFFFF", "__type": "Color", "defUid": 7, "realEditorValues": [] }
-					]
-				}
-			]
 		}
 	],
 	"__neighbours": [{ "levelUid": 2, "dir": "s" }]
