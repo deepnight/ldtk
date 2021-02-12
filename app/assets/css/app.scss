@@ -2667,6 +2667,7 @@ canvas#webgl {
 			min-height: 1.3em;
 			flex-wrap: wrap;
 			padding: 4px;
+			margin-bottom: 16px;
 
 			vertical-align: middle;
 			font-family: Roboto;
@@ -2722,7 +2723,6 @@ canvas#webgl {
 		#mainPaletteWrapper {
 			overflow: auto;
 			position: relative;
-			margin-top: 16px;
 
 			&:empty {
 				margin-top: 1px;
