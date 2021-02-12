@@ -241,6 +241,7 @@ Value | Type | Description
 `type`<br/><sup class="internal">*Internal editor data*</sup> | Dynamic&nbsp;(anything) | Internal type enum
 `uid`<br/><sup class="internal">*Internal editor data*</sup> | Int | Unique Intidentifier
 `editorAlwaysShow`<br/><sup class="internal">*Internal editor data*</sup> | Bool | 
+`editorCutLongValues`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | 
 `editorDisplayMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`, `PointPath`, `RadiusPx`, `RadiusGrid`
 `editorDisplayPos`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Above`, `Center`, `Beneath`
 `textLangageMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`

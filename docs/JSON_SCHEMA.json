@@ -562,6 +562,7 @@
 				"type",
 				"uid",
 				"editorAlwaysShow",
+				"editorCutLongValues",
 				"editorDisplayMode",
 				"editorDisplayPos"
 			],
@@ -649,6 +650,12 @@
 					"type": [
 						"number",
 						"null"
+					]
+				},
+				"editorCutLongValues": {
+					"description": "",
+					"type": [
+						"boolean"
 					]
 				},
 				"defaultOverride": {
