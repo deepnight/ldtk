@@ -274,9 +274,17 @@ class LevelRender extends dn.Process {
 			invalidateLayer(li);
 	}
 
+	public function setLayerVisibility(li:data.inst.LayerInstance, v:Bool) {
+		layerVis.set(li.layerDefUid, v);
+		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
+		if( isLayerVisible(li) )
+			invalidateLayer(li);
+	}
+
 	public function showLayer(li:data.inst.LayerInstance) {
 		layerVis.set(li.layerDefUid, true);
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
+		invalidateLayer(li);
 	}
 
 	public function hideLayer(li:data.inst.LayerInstance) {
