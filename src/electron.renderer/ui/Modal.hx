@@ -179,7 +179,7 @@ class Modal extends dn.Process {
 
 	public static function getFirst<T:Modal>(c:Class<T>) : Null<T> {
 		for(w in ALL)
-			if( !w.isClosing() && #if( haxe_ver >= 4.1 ) Std.isOfType(w,c) #else Std.is(w,c) #end )
+			if( !w.isClosing() && #if( haxe_ver >= 4.1 ) Std.isOfType(w,c) #else Std.isOfType(w,c) #end )
 				return (cast w:T);
 		return null;
 	}

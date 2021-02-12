@@ -573,7 +573,7 @@ class Editor extends Page {
 
 	public inline function isSpecialToolActive(?tClass:Class<Tool<Dynamic>>) {
 		return specialTool!=null && !specialTool.destroyed
-			&& ( tClass==null || Std.is(specialTool, tClass) );
+			&& ( tClass==null || Std.isOfType(specialTool, tClass) );
 	}
 
 	public function setSpecialTool(t:Tool<Dynamic>) {

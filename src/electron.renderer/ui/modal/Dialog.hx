@@ -25,7 +25,7 @@ class Dialog extends ui.Modal {
 
 	public static function closeAll() {
 		for(m in Modal.ALL)
-			if( !m.isClosing() && Std.is(m, Dialog) )
+			if( !m.isClosing() && Std.isOfType(m, Dialog) )
 				m.close();
 	}
 
