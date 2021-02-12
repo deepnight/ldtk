@@ -17,6 +17,7 @@ class FieldDef {
 	public var editorDisplayMode : ldtk.Json.FieldDisplayMode;
 	public var editorDisplayPos : ldtk.Json.FieldDisplayPosition;
 	public var editorAlwaysShow: Bool;
+	public var editorCutLongValues : Bool;
 	public var isArray : Bool;
 
 	@:allow(ui.modal.panel.EditEntityDefs, misc.FieldTypeConverter, ui.FieldDefsForm)
@@ -41,6 +42,7 @@ class FieldDef {
 		editorDisplayMode = Hidden;
 		editorDisplayPos = Above;
 		editorAlwaysShow = false;
+		editorCutLongValues = true;
 		identifier = "NewField"+uid;
 		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point && !isArray;
 		arrayMinLength = arrayMaxLength = null;
@@ -78,6 +80,7 @@ class FieldDef {
 		o.editorDisplayMode = JsonTools.readEnum(ldtk.Json.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
 		o.editorDisplayPos = JsonTools.readEnum(ldtk.Json.FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
+		o.editorCutLongValues = JsonTools.readBool(json.editorCutLongValues, true);
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);
 		o.regex = JsonTools.unescapeString( json.regex );
@@ -101,6 +104,7 @@ class FieldDef {
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
 			editorAlwaysShow: editorAlwaysShow,
+			editorCutLongValues: editorCutLongValues,
 			min: min==null ? null : JsonTools.writeFloat(min),
 			max: max==null ? null : JsonTools.writeFloat(max),
 			regex: JsonTools.escapeString(regex),

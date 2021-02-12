@@ -503,6 +503,10 @@ class FieldDefsForm {
 		var i = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]") );
 		i.onChange = onFieldChange;
 
+		// Cut long values
+		var i = Input.linkToHtmlInput( curField.editorCutLongValues, jForm.find("input#editorCutLongValues") );
+		i.onChange = onFieldChange;
+
 		// Multi-lines
 		// if( curField.isString() ) {
 		// 	var i = new form.input.BoolInput(
@@ -624,5 +628,8 @@ class FieldDefsForm {
 				onFieldChange();
 			});
 		});
+
+		// Finalize
+		JsTools.parseComponents(jForm);
 	}
 }
