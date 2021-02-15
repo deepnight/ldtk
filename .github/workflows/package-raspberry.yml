@@ -45,5 +45,5 @@ jobs:
       # Upload
       - uses: actions/upload-artifact@v2
         with:
-          name: ubuntu-distribution
+          name: raspberry-distribution
           path: app/redist/LDtk**installer.AppImage
