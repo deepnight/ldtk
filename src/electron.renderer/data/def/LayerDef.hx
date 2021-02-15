@@ -278,7 +278,7 @@ class LayerDef {
 
 	public function duplicateRule(p:data.Project, rg:AutoLayerRuleGroup, r:AutoLayerRuleDef) {
 		var copy = AutoLayerRuleDef.fromJson( p.jsonVersion, r.toJson() );
-		copy.uid = p.makeUniqId();
+		copy.uid = p.makeUniqueIdInt();
 		rg.rules.insert( dn.Lib.getArrayIndex(r, rg.rules)+1, copy );
 
 		p.tidy();
@@ -288,9 +288,9 @@ class LayerDef {
 	public function duplicateRuleGroup(p:data.Project, rg:AutoLayerRuleGroup) {
 		var copy = parseJsonRuleGroup( p.jsonVersion, toJsonRuleGroup(rg) );
 
-		copy.uid = p.makeUniqId();
+		copy.uid = p.makeUniqueIdInt();
 		for(r in copy.rules)
-			r.uid = p.makeUniqId();
+			r.uid = p.makeUniqueIdInt();
 
 		p.tidy();
 		return copy;

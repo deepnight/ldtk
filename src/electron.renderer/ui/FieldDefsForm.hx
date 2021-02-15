@@ -122,7 +122,7 @@ class FieldDefsForm {
 
 
 			// Create field def
-			var fd = new FieldDef(project, project.makeUniqId(), type, isArray);
+			var fd = new FieldDef(project, project.makeUniqueIdInt(), type, isArray);
 			var baseName = switch type {
 				case F_Enum(enumDefUid): project.defs.getEnumDef(enumDefUid).identifier;
 				case _: L.getFieldType(type);
@@ -175,7 +175,7 @@ class FieldDefsForm {
 
 	function duplicateField(fd:FieldDef) : FieldDef {
 		var copy = FieldDef.fromJson( project, fd.toJson() );
-		copy.uid = project.makeUniqId();
+		copy.uid = project.makeUniqueIdInt();
 		copy.identifier = project.makeUniqueIdString(fd.identifier, false, (id)->isFieldIdentifierUnique(id));
 		fieldDefs.insert( dn.Lib.getArrayIndex(fd,fieldDefs)+1, copy );
 

@@ -130,7 +130,7 @@ class EntityDef {
 	/** FIELDS ****************************/
 
 	public function createFieldDef(project:Project, type:data.DataTypes.FieldType, baseName:String, isArray:Bool) : FieldDef {
-		var f = new FieldDef(project, project.makeUniqId(), type, isArray);
+		var f = new FieldDef(project, project.makeUniqueIdInt(), type, isArray);
 		f.identifier = baseName + (isArray?"_array":"");
 		var idx = 2;
 		while( !isFieldIdentifierUnique(f.identifier) )

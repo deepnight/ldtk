@@ -223,7 +223,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		// Create new rule
 		function createRule(rg:data.DataTypes.AutoLayerRuleGroup, insertIdx:Int) {
 			App.LOG.general("Added rule");
-			var r = new data.def.AutoLayerRuleDef( project.makeUniqId() );
+			var r = new data.def.AutoLayerRuleDef( project.makeUniqueIdInt() );
 			rg.rules.insert(insertIdx, r);
 
 			if( rg.collapsed )
@@ -247,7 +247,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			App.LOG.general("Added rule group");
 
 			var insertIdx = 0;
-			var rg = ld.createRuleGroup(project.makeUniqId(), "New group", insertIdx);
+			var rg = ld.createRuleGroup(project.makeUniqueIdInt(), "New group", insertIdx);
 			editor.ge.emit(LayerRuleGroupAdded);
 
 			var jNewGroup = jContent.find("[groupUid="+rg.uid+"]");

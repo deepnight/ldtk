@@ -97,7 +97,7 @@ class Definitions {
 	}
 
 	public function createLayerDef(type:ldtk.Json.LayerType, ?id:String) : data.def.LayerDef {
-		var l = new data.def.LayerDef(_project.makeUniqId(), type);
+		var l = new data.def.LayerDef(_project.makeUniqueIdInt(), type);
 
 		id = Project.cleanupIdentifier(id, true);
 		if( id==null ) {
@@ -124,12 +124,12 @@ class Definitions {
 
 	public function duplicateLayerDef(ld:data.def.LayerDef, ?baseName:String) : data.def.LayerDef {
 		var copy = data.def.LayerDef.fromJson( _project.jsonVersion, ld.toJson() );
-		copy.uid = _project.makeUniqId();
+		copy.uid = _project.makeUniqueIdInt();
 
 		for(rg in copy.autoRuleGroups) {
-			rg.uid = _project.makeUniqId();
+			rg.uid = _project.makeUniqueIdInt();
 			for(r in rg.rules)
-				r.uid = _project.makeUniqId();
+				r.uid = _project.makeUniqueIdInt();
 		}
 
 		// Name
@@ -264,7 +264,7 @@ class Definitions {
 	}
 
 	public function createEntityDef() : data.def.EntityDef {
-		var ed = new data.def.EntityDef(_project.makeUniqId());
+		var ed = new data.def.EntityDef(_project.makeUniqueIdInt());
 		entities.push(ed);
 
 		ed.setPivot( _project.defaultPivotX, _project.defaultPivotY );
@@ -280,10 +280,10 @@ class Definitions {
 
 	public function duplicateEntityDef(ed:data.def.EntityDef) {
 		var copy = data.def.EntityDef.fromJson( _project, ed.toJson() );
-		copy.uid = _project.makeUniqId();
+		copy.uid = _project.makeUniqueIdInt();
 
 		for(fd in copy.fieldDefs)
-			fd.uid = _project.makeUniqId();
+			fd.uid = _project.makeUniqueIdInt();
 
 		var idx = 2;
 		while( !isEntityIdentifierUnique(copy.identifier) )
@@ -355,7 +355,7 @@ class Definitions {
 	/**  TILESET DEFS  *****************************************/
 
 	public function createTilesetDef() : data.def.TilesetDef {
-		var td = new data.def.TilesetDef( _project, _project.makeUniqId() );
+		var td = new data.def.TilesetDef( _project, _project.makeUniqueIdInt() );
 		tilesets.push(td);
 
 		var id = "Tileset";
@@ -370,7 +370,7 @@ class Definitions {
 
 	public function duplicateTilesetDef(td:data.def.TilesetDef) {
 		var copy = data.def.TilesetDef.fromJson( _project, td.toJson() );
-		copy.uid = _project.makeUniqId();
+		copy.uid = _project.makeUniqueIdInt();
 
 		var idx = 2;
 		while( !isTilesetIdentifierUnique(copy.identifier) )
@@ -421,7 +421,7 @@ class Definitions {
 	/**  ENUM DEFS  *****************************************/
 
 	public function createEnumDef(?externalRelPath:String) : data.def.EnumDef {
-		var ed = new data.def.EnumDef(_project.makeUniqId(), "Enum");
+		var ed = new data.def.EnumDef(_project.makeUniqueIdInt(), "Enum");
 
 		var idx = 2;
 		while( !isEnumIdentifierUnique(ed.identifier) )
@@ -453,7 +453,7 @@ class Definitions {
 
 	public function duplicateEnumDef(ed:data.def.EnumDef) {
 		var copy = data.def.EnumDef.fromJson( _project.jsonVersion, ed.toJson(_project) );
-		copy.uid = _project.makeUniqId();
+		copy.uid = _project.makeUniqueIdInt();
 
 		var idx = 2;
 		while( !isEnumIdentifierUnique(copy.identifier) )

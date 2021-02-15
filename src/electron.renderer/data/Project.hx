@@ -136,7 +136,26 @@ class Project {
 		return p;
 	}
 
-	public function makeUniqId() return nextUid++;
+	public function makeUniqueIdInt() return nextUid++;
+
+	public function makeUniqueIdString(baseId:String, firstCharCap=true, isUnique:String->Bool) : String {
+		baseId = cleanupIdentifier(baseId,firstCharCap);
+		if( baseId=="_" )
+			baseId = "Unnamed";
+
+		if( isUnique(baseId) )
+			return baseId;
+
+		var leadIdxReg = ~/(.*?)([0-9]+)$/gi;
+		var idx = !leadIdxReg.match(baseId) ? 2 : {
+			baseId = leadIdxReg.matched(1);
+			Std.parseInt( leadIdxReg.matched(2) )+1;
+		}
+		var id = baseId;
+		while( !isUnique(id) )
+			id = baseId + (idx++);
+		return id;
+	}
 
 	@:keep public function toString() {
 		return 'Project(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
@@ -462,7 +481,7 @@ class Project {
 	/**  LEVELS  *****************************************/
 
 	public function createLevel(?insertIdx:Int) {
-		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, makeUniqId());
+		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, makeUniqueIdInt());
 		if( insertIdx==null )
 			levels.push(l);
 		else
@@ -482,7 +501,7 @@ class Project {
 		var copy : data.Level = Level.fromJson( this, l.toJson() );
 
 		// Remap IDs
-		copy.uid = makeUniqId();
+		copy.uid = makeUniqueIdInt();
 		for(li in copy.layerInstances)
 			li.levelId = copy.uid;
 
@@ -697,22 +716,6 @@ class Project {
 
 	public static inline function isValidIdentifier(id:String) {
 		return cleanupIdentifier(id,false) != null;
-	}
-
-	public function makeUniqueIdString(baseId:String, firstCharCap=true, isUnique:String->Bool) : String {
-		baseId = cleanupIdentifier(baseId,firstCharCap);
-		if( baseId=="_" )
-			baseId = "Unnamed";
-
-		var leadIdxReg = ~/(.*?)([0-9]+)$/gi;
-		var idx = !leadIdxReg.match(baseId) ? 2 : {
-			baseId = leadIdxReg.matched(1);
-			Std.parseInt( leadIdxReg.matched(2) )+1;
-		}
-		var id = baseId;
-		while( !isUnique(id) )
-			id = baseId + (idx++);
-		return id;
 	}
 
 
