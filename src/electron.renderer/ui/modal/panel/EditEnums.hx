@@ -319,7 +319,7 @@ class EditEnums extends ui.modal.Panel {
 				function() return eValue.id,
 				function(newV) {
 					var oldV = eValue.id;
-					if( curEnum.renameValue(oldV, newV) ) {
+					if( curEnum.renameValue(project, oldV, newV) ) {
 						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
 							for(i in 0...fi.getArrayLength())
 								if( fi.getEnumValue(i)==oldV )
