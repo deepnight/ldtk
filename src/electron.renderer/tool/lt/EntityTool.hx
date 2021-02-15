@@ -87,10 +87,61 @@ class EntityTool extends tool.LayerTool<Int> {
 			case null:
 			case Add:
 				if( curLevel.inBounds(m.levelX, m.levelY) ) {
-					var ei = curLayerInstance.createEntityInstance(curEntityDef);
-					if( ei==null )
-						N.error("Max per level reached!");
+					// Create entity
+					var ei : data.inst.EntityInstance = null; // will stay null if some limit prevents adding more
+					if( curEntityDef.maxCount<=0 )
+						ei = curLayerInstance.createEntityInstance(curEntityDef);
 					else {
+						// Apply count limit
+						var all = [];
+						switch curEntityDef.limitScope {
+							case PerLayer:
+								for(ei in curLayerInstance.entityInstances)
+									if( ei.defUid==curEntityDef.uid )
+										all.push({ ei:ei, li:curLayerInstance });
+
+							case PerLevel:
+								for(li in curLevel.layerInstances)
+								for(ei in li.entityInstances)
+									if( ei.defUid==curEntityDef.uid )
+										all.push({ ei:ei, li:li });
+
+							case PerWorld:
+								for(l in project.levels)
+								for(li in l.layerInstances)
+								for(ei in li.entityInstances)
+									if( ei.defUid==curEntityDef.uid )
+										all.push({ ei:ei, li:li });
+						}
+						switch curEntityDef.limitBehavior {
+							case DiscardOldOnes:
+								while( all.length>=curEntityDef.maxCount ) {
+									var e = all.shift();
+									e.li.removeEntityInstance( e.ei );
+								}
+								ei = curLayerInstance.createEntityInstance(curEntityDef);
+
+							case PreventAdding:
+								if( all.length<curEntityDef.maxCount )
+									ei = curLayerInstance.createEntityInstance(curEntityDef);
+								else
+									N.error(curEntityDef.identifier+" max count reached!");
+
+							case MoveLastOne:
+								if( all.length>=curEntityDef.maxCount && all.length>0 ) {
+									var e = all.shift();
+									e.li.removeEntityInstance(e.ei);
+									curLayerInstance.entityInstances.push(e.ei);
+									editor.levelRender.invalidateLayer(curLayerInstance);
+									ei = e.ei;
+								}
+								else
+									ei = curLayerInstance.createEntityInstance(curEntityDef);
+						}
+					}
+
+					// Done
+					if( ei!=null ) {
 						ei.x = getPlacementX(m);
 						ei.y = getPlacementY(m);
 						editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);
