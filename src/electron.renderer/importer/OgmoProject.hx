@@ -110,7 +110,7 @@ class OgmoProject {
 				ed.height = entityJson.size.y;
 				ed.pivotX = M.round( (entityJson.origin.x / entityJson.size.x) / 0.5 ) * 0.5;
 				ed.pivotY = M.round( (entityJson.origin.y / entityJson.size.y) / 0.5 ) * 0.5;
-				ed.maxPerLevel = entityJson.limit<=0 ? 0 : entityJson.limit;
+				ed.maxCount = entityJson.limit<=0 ? 0 : entityJson.limit;
 
 				// Entity fields
 				for(valJson in entityJson.values) {

@@ -16,8 +16,8 @@ class EntityDef {
 	public var tilesetId : Null<Int>;
 	public var tileId : Null<Int>;
 
-	public var maxPerLevel : Int;
-	public var limitBehavior : ldtk.Json.EntityLimitBehavior; // what to do when maxPerLevel is reached
+	public var maxCount : Int;
+	public var limitBehavior : ldtk.Json.EntityLimitBehavior; // what to do when maxCount is reached
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
 
@@ -29,7 +29,7 @@ class EntityDef {
 		color = 0x94d9b3;
 		renderMode = Rectangle;
 		width = height = 16;
-		maxPerLevel = 0;
+		maxCount = 0;
 		showName = true;
 		limitBehavior = MoveLastOne;
 		tileRenderMode = Stretch;
@@ -66,6 +66,7 @@ class EntityDef {
 
 	public static function fromJson(p:Project, json:ldtk.Json.EntityDefJson) {
 		if( (cast json).name!=null ) json.identifier = (cast json).name;
+		if( (cast json).maxPerLevel!=null ) json.maxCount = (cast json).maxPerLevel;
 
 		var o = new EntityDef( JsonTools.readInt(json.uid) );
 		o.identifier = JsonTools.readString( json.identifier );
@@ -79,7 +80,7 @@ class EntityDef {
 		o.tileId = JsonTools.readNullableInt(json.tileId);
 		o.tileRenderMode = JsonTools.readEnum(ldtk.Json.EntityTileRenderMode, json.tileRenderMode, false, Stretch);
 
-		o.maxPerLevel = JsonTools.readInt( json.maxPerLevel, 0 );
+		o.maxCount = JsonTools.readInt( json.maxCount, 0 );
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
 		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
 
@@ -107,7 +108,7 @@ class EntityDef {
 			tileId: tileId,
 			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),
 
-			maxPerLevel: maxPerLevel,
+			maxCount: maxCount,
 			limitBehavior: JsonTools.writeEnum(limitBehavior, false),
 			pivotX: JsonTools.writeFloat( pivotX ),
 			pivotY: JsonTools.writeFloat( pivotY ),

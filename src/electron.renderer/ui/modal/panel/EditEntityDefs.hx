@@ -273,10 +273,10 @@ class EditEntityDefs extends ui.modal.Panel {
 
 
 		// Max per level
-		var i = Input.linkToHtmlInput(curEntity.maxPerLevel, jEntityForm.find("input[name='maxPerLevel']") );
+		var i = Input.linkToHtmlInput(curEntity.maxCount, jEntityForm.find("input#maxCount") );
 		i.setBounds(0,1024);
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
-		if( curEntity.maxPerLevel==0 )
+		if( curEntity.maxCount==0 )
 			i.jInput.val("");
 
 		// Behavior when max is reached
@@ -295,7 +295,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				}
 			}
 		);
-		i.setEnabled( curEntity.maxPerLevel>0 );
+		i.setEnabled( curEntity.maxCount>0 );
 
 		// Show name
 		var i = Input.linkToHtmlInput(curEntity.showName, jEntityForm.find("#showIdentifier"));
