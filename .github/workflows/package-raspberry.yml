@@ -1,4 +1,4 @@
-name: package-ubuntu
+name: package-raspberry
 
 on:
   push:
@@ -40,7 +40,7 @@ jobs:
           node-version: '14'
       - run: cd app && npm install
       - run: cd app && npm run pack-prepare
-      - run: cd app && npm run pack-linux-x86
+      - run: cd app && npm run pack-linux-arm64
 
       # Upload
       - uses: actions/upload-artifact@v2
