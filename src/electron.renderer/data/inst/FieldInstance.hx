@@ -260,7 +260,7 @@ class FieldInstance {
 				if( !def.canBeNull )
 					for( idx in 0...getArrayLength() )
 						if( getEnumValue(idx)==null )
-							return def.identifier+"?";
+							return _project.defs.getEnumDef(enumDefUid).identifier+"?";
 
 			case F_Path:
 				for( idx in 0...getArrayLength() ) {
