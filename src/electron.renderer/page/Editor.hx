@@ -944,6 +944,7 @@ class Editor extends Page {
 		settings.v.singleLayerMode = v;
 		App.ME.settings.save();
 		levelRender.applyAllLayersVisibility();
+		levelRender.invalidateBg();
 		selectionTool.clear();
 		N.quick( "Single layer mode: "+L.onOff( settings.v.singleLayerMode ));
 		updateEditOptions();

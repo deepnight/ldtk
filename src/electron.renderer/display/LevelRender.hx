@@ -356,6 +356,8 @@ class LevelRender extends dn.Process {
 			bgImage.scaleX = bmp.scaleX;
 			bgImage.scaleY = bmp.scaleY;
 			bgImage.visible = true;
+			bgImage.alpha = settings.v.singleLayerMode ? 0.2 : 1;
+			bgImage.filter = settings.v.singleLayerMode ? getSingleLayerModeFilter() : null;
 		}
 		else {
 			bgImage.tile = null;
@@ -462,7 +464,11 @@ class LevelRender extends dn.Process {
 
 		lr.root.visible = isLayerVisible(li);
 		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
-		lr.root.filter = !settings.v.singleLayerMode || li==editor.curLayerInstance ? null : new h2d.filter.Group([
+		lr.root.filter = !settings.v.singleLayerMode || li==editor.curLayerInstance ? null : getSingleLayerModeFilter();
+	}
+
+	function getSingleLayerModeFilter() : h2d.filter.Filter {
+		return new h2d.filter.Group([
 			C.getColorizeFilterH2d(0x8c99c1, 0.9),
 			new h2d.filter.Blur(2),
 		]);

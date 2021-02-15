@@ -1,49 +1,50 @@
 # 0.8.0
 
-- TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
-- TODO **Ogmo 3 import**
-- TODO codemirror
-- TODO level custom fields
-- TODO world/level panel separation
-- TODO 32bits support, file size increase
-- TODO sidebar design (less gutters & lines)
-- TODO all panels now cover main sidebar
-- TODO multi lines pop up text editor
-- TODO Customizable source tileset per-layer instance
-- TODO better field display by aligning labels and values
-- TODO Added photoshop style "visibility" held movement in layer list (held button & shift click)
-- When baking an Auto-layer (ie. flattening it), you are now given choices on what to do with the original baked auto-layer (delete, empty or keep).
-- Each Entity field type now has an associated color, making field list easier to read.
-- The default size of a new level can now be customized from the World settings (press `W`, then open settings).
-- **Mouse wheel** can now be used to switch to world mode (and vice versa) automatically. A new related option has been to app settings (`F12`).
-- Disabled "New level" context menu when holding `Shift` or `Alt`
-- Fixed layer order for "simplified" level render in World view
-- Entity fields are now slightly faded out when not currently on an Entity layer
-- Fixed entity instance editor not closing when switching level
-- Fixed a bug when adding *new Entity fields*, where some existing entity *instances* were not properly updated in the JSON file.
-- Fixed sorting of arrays in entity fields
-- The default behaviour when limiting an entity count is now to "Move the last one" instead "Discard the oldest one".
+  - TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
+  - TODO **Ogmo 3 import**
+  - TODO codemirror
+  - TODO level custom fields
+  - TODO world/level panel separation
+  - TODO 32bits support, file size increase
+  - TODO sidebar design (less gutters & lines)
+  - TODO all panels now cover main sidebar
+  - TODO multi lines pop up text editor
+  - TODO Customizable source tileset per-layer instance
+  - TODO better field display by aligning labels and values
+  - TODO Added photoshop style "visibility" held movement in layer list (held button & shift click)
+  - When baking an Auto-layer (ie. flattening it), you are now given choices on what to do with the original baked auto-layer (delete, empty or keep).
+  - Level background is now faded away in "Single layer mode".
+  - Each Entity field type now has an associated color, making field list easier to read.
+  - The default size of a new level can now be customized from the World settings (press `W`, then open settings).
+  - **Mouse wheel** can now be used to switch to world mode (and vice versa) automatically. A new related option has been to app settings (`F12`).
+  - Disabled "New level" context menu when holding `Shift` or `Alt`
+  - Fixed layer order for "simplified" level render in World view
+  - Entity fields are now slightly faded out when not currently on an Entity layer
+  - Fixed entity instance editor not closing when switching level
+  - Fixed a bug when adding *new Entity fields*, where some existing entity *instances* were not properly updated in the JSON file.
+  - Fixed sorting of arrays in entity fields
+  - The default behaviour when limiting an entity count is now to "Move the last one" instead "Discard the oldest one".
 
 # 0.7.2
 
-- Added a setting to change font size in Editor UI.
-- You can now press `F12` to open app settings from almost anywhere.
-- Added a button to delete crash recovery files on Home screen
-- Added file naming customization for layers exported as PNG
-- Fixed selection color (when using `ALT+SHIFT`)
-- More robust JSON parsing with invalid integer numbers
-- Fixed a crash with empty tilesets
-- Fixed a crash loop on Home screen
-- Minor visual fix on splash screen
+  - Added a setting to change font size in Editor UI.
+  - You can now press `F12` to open app settings from almost anywhere.
+  - Added a button to delete crash recovery files on Home screen
+  - Added file naming customization for layers exported as PNG
+  - Fixed selection color (when using `ALT+SHIFT`)
+  - More robust JSON parsing with invalid integer numbers
+  - Fixed a crash with empty tilesets
+  - Fixed a crash loop on Home screen
+  - Minor visual fix on splash screen
 
 # 0.7.1
 
-- Fixed a crash when saving separate level files.
-- Fixed a crash with FilePath fields in Tiled export.
-- Fixed removal of empty dirs when saving a project.
-- Added a new "settings" button to LDtk home screen.
-- Fixed useless autoRuleGroups array in JSON
-- Added an option to force the app to always use the best GPU.
+  - Fixed a crash when saving separate level files.
+  - Fixed a crash with FilePath fields in Tiled export.
+  - Fixed removal of empty dirs when saving a project.
+  - Added a new "settings" button to LDtk home screen.
+  - Fixed useless autoRuleGroups array in JSON
+  - Added an option to force the app to always use the best GPU.
 
 # 0.7.0 - Getting serious
 
@@ -53,60 +54,60 @@ This update features many important changes to make LDtk **production ready** an
 
 ## Changes
 
-- **New home layout**: the app home screen has been re-organized to focus on what's really important.
-- **Separate level files**: when enabled, LDtk will save separately the project JSON and one file per level. A much needed feature to reduce JSON size and optimize parsing times! The option is in Project settings (press `F1`): "Separate level files".
+  - **New home layout**: the app home screen has been re-organized to focus on what's really important.
+  - **Separate level files**: when enabled, LDtk will save separately the project JSON and one file per level. A much needed feature to reduce JSON size and optimize parsing times! The option is in Project settings (press `F1`): "Separate level files".
 
-  When enabled, all the project **settings** and **definitions** will still be stored in the `*.ldtk` file, and all level data will now be saved to separate files (one per level) in a sub-folder, in `*.ldtkl` files (notice the extra `l` letter at the end of the extension).
+    When enabled, all the project **settings** and **definitions** will still be stored in the `*.ldtk` file, and all level data will now be saved to separate files (one per level) in a sub-folder, in `*.ldtkl` files (notice the extra `l` letter at the end of the extension).
 
-  **Important notes**: this new feature might not be supported in all current existing APIs and loaders. Also, this option isn't enabled by default, but this might change on 1.0.
-- **Save layers as PNG**: if you *really* don't want to bother with the LDtk JSON, you can check this new option in your project settings to export all your layers as PNG images (note: only supported layers will be exported, that is those with tiles).
-- **Backups**: automatically keep extra copies of your project in a sub-folder every time you save (enable backups in your project settings). **Important**: LDtk only keeps up to 10 backup files per project.
-- **Crash backups**: if, for some reasons, LDtk crashes, it will try to backup your unsaved work automatically. Obviously, this works even if the backup setting isn't enabled.
-- **Level background image**: each level can now have a custom background image (PNG, GIF or JPEG) that can be resized and aligned in various ways.
-- **New font**: replaced the often hard-to-read pixel font with a sleeker "Roboto" font (this change affects entity fields and floating level informations).
-- **New APIs**: LDtk JSON files can now be easily parsed in many languages, including **C#**, **Python**, **Rust**, **C++**, **Javascript**, using QuickType.io generator. These parsers are based on latest JSON schema file (see below) and are super easy to keep updated. You can check [existing APIs on the LDtk website](https://ldtk.io/api/).
-- **JSON Schema**: a schema file is now directly generated from source code (ie. a JSON that describes the LDtk project file format). It's available on [LDtk.io/json](https://ldtk.io/json) and contains a schema following Draft 7 standard from [Json-schema.org](https://json-schema.org/). This file describes all fields from LDtk json files (value types and descriptions). The great thing about JSON schema is that it allows **JSON "parser" generation** using *QuickType*. That's right: you can now generate Rust, C#, JS or Python parsers easily, right from the file format.
-- **HaxeFlixel support**: the HaxeFlixel game framework has been added to the official [LDtk Haxe API](https://github.com/deepnight/ldtk-haxe-api). You can now easily load and display a LDtk project in your game.
-- Moving your mouse cursor over a **Rule group** in an auto-layer will now reveal all layer cells affected by the rules in this group.
-- If the auto-layer rule panel is open, moving your mouse over the level will now also highlight rules affecting the current coordinate.
-- The [JSON documentation](https://ldtk.io/json) now shows clearly what parts are useful for game devs and what parts aren't (trying to make your dev life even easier!).
-- The app home now shows a **list of recently opened folders** along with recently opened project files.
-- Optimized the rule pattern editor to update less UI stuff when being edited.
-- Tiled TMX files are now exported in a sub folder (along with other optional external files, like levels or layer PNGs)
-- Better organized world panel (shortcut `W`)
-- Better level name display in Linear world layouts.
-- Fixed reloading of tileset images.
-- Fixed Electron related security policy.
-- Fixed "Lost external enum file" dialog when loading a project.
-- Many UI tweaks
-- Bug fixes
+    **Important notes**: this new feature might not be supported in all current existing APIs and loaders. Also, this option isn't enabled by default, but this might change on 1.0.
+  - **Save layers as PNG**: if you *really* don't want to bother with the LDtk JSON, you can check this new option in your project settings to export all your layers as PNG images (note: only supported layers will be exported, that is those with tiles).
+  - **Backups**: automatically keep extra copies of your project in a sub-folder every time you save (enable backups in your project settings). **Important**: LDtk only keeps up to 10 backup files per project.
+  - **Crash backups**: if, for some reasons, LDtk crashes, it will try to backup your unsaved work automatically. Obviously, this works even if the backup setting isn't enabled.
+  - **Level background image**: each level can now have a custom background image (PNG, GIF or JPEG) that can be resized and aligned in various ways.
+  - **New font**: replaced the often hard-to-read pixel font with a sleeker "Roboto" font (this change affects entity fields and floating level informations).
+  - **New APIs**: LDtk JSON files can now be easily parsed in many languages, including **C#**, **Python**, **Rust**, **C++**, **Javascript**, using QuickType.io generator. These parsers are based on latest JSON schema file (see below) and are super easy to keep updated. You can check [existing APIs on the LDtk website](https://ldtk.io/api/).
+  - **JSON Schema**: a schema file is now directly generated from source code (ie. a JSON that describes the LDtk project file format). It's available on [LDtk.io/json](https://ldtk.io/json) and contains a schema following Draft 7 standard from [Json-schema.org](https://json-schema.org/). This file describes all fields from LDtk json files (value types and descriptions). The great thing about JSON schema is that it allows **JSON "parser" generation** using *QuickType*. That's right: you can now generate Rust, C#, JS or Python parsers easily, right from the file format.
+  - **HaxeFlixel support**: the HaxeFlixel game framework has been added to the official [LDtk Haxe API](https://github.com/deepnight/ldtk-haxe-api). You can now easily load and display a LDtk project in your game.
+  - Moving your mouse cursor over a **Rule group** in an auto-layer will now reveal all layer cells affected by the rules in this group.
+  - If the auto-layer rule panel is open, moving your mouse over the level will now also highlight rules affecting the current coordinate.
+  - The [JSON documentation](https://ldtk.io/json) now shows clearly what parts are useful for game devs and what parts aren't (trying to make your dev life even easier!).
+  - The app home now shows a **list of recently opened folders** along with recently opened project files.
+  - Optimized the rule pattern editor to update less UI stuff when being edited.
+  - Tiled TMX files are now exported in a sub folder (along with other optional external files, like levels or layer PNGs)
+  - Better organized world panel (shortcut `W`)
+  - Better level name display in Linear world layouts.
+  - Fixed reloading of tileset images.
+  - Fixed Electron related security policy.
+  - Fixed "Lost external enum file" dialog when loading a project.
+  - Many UI tweaks
+  - Bug fixes
 
 # 0.6.2
 
-- Added an optional **Regular Expression** that can be tested against a `String` field in an Entity. Any unmatched character in a string value will just be discarded. This allows the creation of custom field type (that needs to follow some specific pattern), while still having a safety net (the editor cleans up invalid parts).
-- Fixed missing "world grid size" inputs in Grid Vania layouts. They should now appear in the World panel.
-- Fixed level creation in "Linear" world layouts that only contain 1 level
-- Fixed loading of null multiline fields
-- Fixed a crash on layer removal
-- Added "internal" (ie. "only for editor use") indicator for undocumented fields in Json
-- Fixed Json doc typo
-- Fixed Travis unit tests
-- Fixed new level creation in "Linear" layouts that only contained 1 level
-- Minor changes & fixes on Home and Support pages
+  - Added an optional **Regular Expression** that can be tested against a `String` field in an Entity. Any unmatched character in a string value will just be discarded. This allows the creation of custom field type (that needs to follow some specific pattern), while still having a safety net (the editor cleans up invalid parts).
+  - Fixed missing "world grid size" inputs in Grid Vania layouts. They should now appear in the World panel.
+  - Fixed level creation in "Linear" world layouts that only contain 1 level
+  - Fixed loading of null multiline fields
+  - Fixed a crash on layer removal
+  - Added "internal" (ie. "only for editor use") indicator for undocumented fields in Json
+  - Fixed Json doc typo
+  - Fixed Travis unit tests
+  - Fixed new level creation in "Linear" layouts that only contained 1 level
+  - Minor changes & fixes on Home and Support pages
 
 # 0.6.1
 
-- **New website URL: [LDtk.io](https://ldtk.io)**
-- New Json schema URL: [LDtk.io/json](https://ldtk.io/json)
-- Updated in-app URLs
-- Fixed a crash when editing Entity points and switching layer
-- Fixed a crash in Tiled TMX exporter caused by tilesets without image
-- Fixed macOS build (didn't start properly).
-- Fixed long auto-update error message on Linux and macOS versions.
-- Fixed entities being destroyed when dragged near level limits
-- Fixed *samples* folder location on macOS
-- Updated buttons on app home page
-- Minor update to app logo
+  - **New website URL: [LDtk.io](https://ldtk.io)**
+  - New Json schema URL: [LDtk.io/json](https://ldtk.io/json)
+  - Updated in-app URLs
+  - Fixed a crash when editing Entity points and switching layer
+  - Fixed a crash in Tiled TMX exporter caused by tilesets without image
+  - Fixed macOS build (didn't start properly).
+  - Fixed long auto-update error message on Linux and macOS versions.
+  - Fixed entities being destroyed when dragged near level limits
+  - Fixed *samples* folder location on macOS
+  - Updated buttons on app home page
+  - Minor update to app logo
 
 # 0.6.0 - Take over the world!
 
@@ -117,43 +118,43 @@ We now have an official **Discord**! Come join us, we have cookies 🤗 Feel fre
 ## 🌍 World map
 
 Levels in your project can now be organized in various ways:
-- freely on a vast 2D map,
-- in a large grid system (aka "grid-vania"),
-- horizontally,
-- vertically.
+  - freely on a vast 2D map,
+  - in a large grid system (aka "grid-vania"),
+  - horizontally,
+  - vertically.
 
 Just hit the `W` or `F2` key to switch to world view, and start re-arranging your creations as you wish! While in world mode, you can `right click` to reveal a context menu.
 
 ## 📑 Other changes
 
-- **New splash screen**: to reduce screen flickering and dirty window flashes on startup, a new splash screen was added, among other minor changes. The app window should now feel a little more "stable".
-- **Smooth zooming/panning**: automatic zooming and panning (eg. when pressing `F` key) are now animated and smoother.
-- **New rule editor window**: this UI component really needed some love, so it now features a more streamlined interface and a much better integrated help.
-- **User settings** are now stored in AppData OS folder to prevent from losing them on each future update. Unfortunately, this will only apply starting from this version, so settings will be reset one last time :) Sorry!
-- **End of beta**: LDtk is no longer considered *Beta* as it's now stable & mature enough to be used in production.
-- **"File path" field**: this new field type allow you to refer to an external file directly from an Entity instance (many thanks to [Yanrishatum](https://github.com/Yanrishatum)!)
-- Many *under-the-hood* optimizations to support the new World map feature.
-- Removed the "double" *Fit* mode when pressing `F`. Now pressing this key just fits the whole level in the viewport.
-- Unified R & Shift-R shortcuts: just press R to toggle all auto-layers rendering.
-- Fixed loading of files with spaces in name, when using file association on Windows
-- Better "invalid value" error display in entity fields (previously, you only had `<error>`).
-- Application samples will now display a warning if you try to save them (not recommended as they will be overwritten by future app updates).
-- Better Entity panel layout
-- Better default entity Field naming when creating a new one
-- Fixed a bug in Entity panel that went crazy when containing too many entities.
-- Sample maps are no longer added to "recent projects" list
-- Updated the Enum panel icon.
-- Better display of samples in recent files list on app Home.
-- Added a "Close" button to Project panel
-- Removed "Loaded" useless notification
-- You can now right-click external URL links in LDtk to copy them.
-- Fixed middle clicks on URL links.
-- Fixed many many issues with rules that didn't update properly after some specific changes (eg. perlin, checker mode, modulos etc.)
-- Added a "locate project" button to Project panel
-- Fixed an infinite loop when resizing a level
-- Fixed a bug with files stored in a path containing some special characters (eg. ~ or %)
-- Updated the LDtk website
-- Updated all sample maps
+  - **New splash screen**: to reduce screen flickering and dirty window flashes on startup, a new splash screen was added, among other minor changes. The app window should now feel a little more "stable".
+  - **Smooth zooming/panning**: automatic zooming and panning (eg. when pressing `F` key) are now animated and smoother.
+  - **New rule editor window**: this UI component really needed some love, so it now features a more streamlined interface and a much better integrated help.
+  - **User settings** are now stored in AppData OS folder to prevent from losing them on each future update. Unfortunately, this will only apply starting from this version, so settings will be reset one last time :) Sorry!
+  - **End of beta**: LDtk is no longer considered *Beta* as it's now stable & mature enough to be used in production.
+  - **"File path" field**: this new field type allow you to refer to an external file directly from an Entity instance (many thanks to [Yanrishatum](https://github.com/Yanrishatum)!)
+  - Many *under-the-hood* optimizations to support the new World map feature.
+  - Removed the "double" *Fit* mode when pressing `F`. Now pressing this key just fits the whole level in the viewport.
+  - Unified R & Shift-R shortcuts: just press R to toggle all auto-layers rendering.
+  - Fixed loading of files with spaces in name, when using file association on Windows
+  - Better "invalid value" error display in entity fields (previously, you only had `<error>`).
+  - Application samples will now display a warning if you try to save them (not recommended as they will be overwritten by future app updates).
+  - Better Entity panel layout
+  - Better default entity Field naming when creating a new one
+  - Fixed a bug in Entity panel that went crazy when containing too many entities.
+  - Sample maps are no longer added to "recent projects" list
+  - Updated the Enum panel icon.
+  - Better display of samples in recent files list on app Home.
+  - Added a "Close" button to Project panel
+  - Removed "Loaded" useless notification
+  - You can now right-click external URL links in LDtk to copy them.
+  - Fixed middle clicks on URL links.
+  - Fixed many many issues with rules that didn't update properly after some specific changes (eg. perlin, checker mode, modulos etc.)
+  - Added a "locate project" button to Project panel
+  - Fixed an infinite loop when resizing a level
+  - Fixed a bug with files stored in a path containing some special characters (eg. ~ or %)
+  - Updated the LDtk website
+  - Updated all sample maps
 
 # 0.5.2-beta
 
