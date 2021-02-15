@@ -209,17 +209,17 @@ class EditLayerDefs extends ui.modal.Panel {
 	}
 
 	function updateForm() {
-		// Lost layer
-		if( project.defs.getLayerDef(cur.uid)==null ) {
-			select( project.defs.layers[0] );
-			return;
-		}
-
 		jForm.find("*").off(); // cleanup event listeners
 		jForm.find(".tmp").remove();
 
 		if( cur==null ) {
 			jForm.hide();
+			return;
+		}
+
+		// Lost layer
+		if( project.defs.getLayerDef(cur.uid)==null ) {
+			select( project.defs.layers[0] );
 			return;
 		}
 
