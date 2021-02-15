@@ -699,7 +699,7 @@ class Project {
 		return cleanupIdentifier(id,false) != null;
 	}
 
-	public function makeValidAndUniqueIdentifier(baseId:String, firstCharCap:Bool, isUnique:String->Bool) : String {
+	public function makeUniqueIdString(baseId:String, firstCharCap=true, isUnique:String->Bool) : String {
 		baseId = cleanupIdentifier(baseId,firstCharCap);
 		if( baseId=="_" )
 			baseId = "Unnamed";
