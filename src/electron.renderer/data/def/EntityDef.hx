@@ -17,6 +17,7 @@ class EntityDef {
 	public var tileId : Null<Int>;
 
 	public var maxCount : Int;
+	public var limitScope : ldtk.Json.EntityLimitScope;
 	public var limitBehavior : ldtk.Json.EntityLimitBehavior; // what to do when maxCount is reached
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
@@ -32,6 +33,7 @@ class EntityDef {
 		maxCount = 0;
 		showName = true;
 		limitBehavior = MoveLastOne;
+		limitScope = PerLevel;
 		tileRenderMode = Stretch;
 		identifier = "Entity"+uid;
 		setPivot(0.5,1);
@@ -84,6 +86,7 @@ class EntityDef {
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
 		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
 
+		o.limitScope = JsonTools.readEnum(ldtk.Json.EntityLimitScope, json.limitScope, false, PerLevel);
 		o.limitBehavior = JsonTools.readEnum( ldtk.Json.EntityLimitBehavior, json.limitBehavior, true, MoveLastOne );
 		if( JsonTools.readBool( (cast json).discardExcess, true)==false )
 			o.limitBehavior = PreventAdding;
@@ -109,6 +112,7 @@ class EntityDef {
 			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),
 
 			maxCount: maxCount,
+			limitScope: JsonTools.writeEnum(limitScope, false),
 			limitBehavior: JsonTools.writeEnum(limitBehavior, false),
 			pivotX: JsonTools.writeFloat( pivotX ),
 			pivotY: JsonTools.writeFloat( pivotY ),

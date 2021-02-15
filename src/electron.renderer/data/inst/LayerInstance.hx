@@ -513,6 +513,17 @@ class LayerInstance {
 	public function createEntityInstance(ed:data.def.EntityDef) : Null<EntityInstance> {
 		requireType(Entities);
 		if( ed.maxCount>0 ) {
+			// var all = ed.worldLimit
+			// 	? {
+			// 		var all = [];
+			// 		for(l in _project.levels)
+			// 		for(li in l.layerInstances)
+			// 		for(ei in li.entityInstances)
+			// 			if( ei.defUid==ed.uid )
+			// 				all.push(ei);
+			// 		all;
+			// 	}
+			// 	: entityInstances.filter( function(ei) return ei.defUid==ed.uid );
 			var all = entityInstances.filter( function(ei) return ei.defUid==ed.uid );
 			switch ed.limitBehavior {
 				case DiscardOldOnes:

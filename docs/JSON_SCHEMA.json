@@ -716,6 +716,7 @@
 				"width",
 				"fieldDefs",
 				"limitBehavior",
+				"limitScope",
 				"maxCount",
 				"renderMode",
 				"showName",
@@ -741,6 +742,14 @@
 					"type": [
 						"integer",
 						"null"
+					]
+				},
+				"limitScope": {
+					"description": "If TRUE, the maxCount is a \"per world\" limit, if FALSE, it's a \"per level\". Possible values: `PerLayer`, `PerLevel`, `PerWorld`",
+					"enum": [
+						"PerLayer",
+						"PerLevel",
+						"PerWorld"
 					]
 				},
 				"pivotX": {

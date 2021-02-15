@@ -272,12 +272,25 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 
 
-		// Max per level
+		// Max count
 		var i = Input.linkToHtmlInput(curEntity.maxCount, jEntityForm.find("input#maxCount") );
 		i.setBounds(0,1024);
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 		if( curEntity.maxCount==0 )
 			i.jInput.val("");
+
+		var i = new form.input.EnumSelect(
+			i.jInput.siblings("[name=scope]"),
+			ldtk.Json.EntityLimitScope,
+			()->curEntity.limitScope,
+			(e)->curEntity.limitScope = e,
+			(e)->switch e {
+				case PerLayer: L.t._("per layer");
+				case PerLevel: L.t._("per level");
+				case PerWorld: L.t._("in the world");
+			}
+		);
+		i.setEnabled(curEntity.maxCount>0);
 
 		// Behavior when max is reached
 		var i = new form.input.EnumSelect(
