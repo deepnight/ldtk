@@ -129,7 +129,7 @@ class FieldDefsForm {
 			}
 			if( isArray )
 				baseName+"_array";
-			fd.identifier = project.makeUniqueIdString(baseName, false, id->isFieldIdentifierUnique(id) );
+			fd.identifier = project.makeUniqueIdStr(baseName, false, id->isFieldIdentifierUnique(id) );
 			fieldDefs.push(fd);
 
 			editor.ge.emit( FieldDefAdded(fd) );
@@ -176,7 +176,7 @@ class FieldDefsForm {
 	function duplicateField(fd:FieldDef) : FieldDef {
 		var copy = FieldDef.fromJson( project, fd.toJson() );
 		copy.uid = project.makeUniqueIdInt();
-		copy.identifier = project.makeUniqueIdString(fd.identifier, false, (id)->isFieldIdentifierUnique(id));
+		copy.identifier = project.makeUniqueIdStr(fd.identifier, false, (id)->isFieldIdentifierUnique(id));
 		fieldDefs.insert( dn.Lib.getArrayIndex(fd,fieldDefs)+1, copy );
 
 		project.tidy();
@@ -410,7 +410,7 @@ class FieldDefsForm {
 
 		var i = Input.linkToHtmlInput( curField.identifier, jForm.find("input[name=name]") );
 		i.onChange = onFieldChange;
-		i.fixValue = (v)->project.makeUniqueIdString(v, false, (id)->isFieldIdentifierUnique(id,curField));
+		i.fixValue = (v)->project.makeUniqueIdStr(v, false, (id)->isFieldIdentifierUnique(id,curField));
 
 		// Default value
 		switch curField.type {

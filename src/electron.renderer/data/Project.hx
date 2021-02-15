@@ -138,7 +138,7 @@ class Project {
 
 	public function makeUniqueIdInt() return nextUid++;
 
-	public function makeUniqueIdString(baseId:String, firstCharCap=true, isUnique:String->Bool) : String {
+	public function makeUniqueIdStr(baseId:String, firstCharCap=true, isUnique:String->Bool) : String {
 		baseId = cleanupIdentifier(baseId,firstCharCap);
 		if( baseId=="_" )
 			baseId = "Unnamed";
