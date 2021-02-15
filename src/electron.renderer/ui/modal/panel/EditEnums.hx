@@ -247,9 +247,7 @@ class EditEnums extends ui.modal.Panel {
 
 		// Enum ID
 		var i = Input.linkToHtmlInput( curEnum.identifier, jForm.find("[name=id]") );
-		i.validityCheck = function(v) {
-			return project.defs.isEnumIdentifierUnique(v);
-		}
+		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isEnumIdentifierUnique(id, curEnum));
 		i.linkEvent(EnumDefChanged);
 
 		// Source path

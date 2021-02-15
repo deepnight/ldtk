@@ -405,9 +405,7 @@ class Definitions {
 	public function createEnumDef(?externalRelPath:String) : data.def.EnumDef {
 		var ed = new data.def.EnumDef(_project.makeUniqueIdInt(), "Enum");
 
-		var idx = 2;
-		while( !isEnumIdentifierUnique(ed.identifier) )
-			ed.identifier = "Enum"+(idx++);
+		ed.identifier = _project.makeUniqueIdStr(ed.identifier, (id)->isEnumIdentifierUnique(id));
 
 		if( externalRelPath!=null ) {
 			ed.externalRelPath = externalRelPath;
@@ -437,10 +435,7 @@ class Definitions {
 		var copy = data.def.EnumDef.fromJson( _project.jsonVersion, ed.toJson(_project) );
 		copy.uid = _project.makeUniqueIdInt();
 
-		var idx = 2;
-		while( !isEnumIdentifierUnique(copy.identifier) )
-			copy.identifier = ed.identifier+(idx++);
-
+		copy.identifier = _project.makeUniqueIdStr(ed.identifier, (id)->isEnumIdentifierUnique(id));
 		enums.insert( dn.Lib.getArrayIndex(ed, enums)+1, copy );
 		_project.tidy();
 		return copy;
@@ -463,13 +458,13 @@ class Definitions {
 		throw "EnumDef value not found";
 	}
 
-	public function isEnumIdentifierUnique(id:String) {
+	public function isEnumIdentifierUnique(id:String, ?exclude:data.def.EnumDef) {
 		id = Project.cleanupIdentifier(id, true);
 		if( id==null )
 			return false;
 
 		for(ed in enums)
-			if( ed.identifier==id )
+			if( ed.identifier==id && ed!=exclude )
 				return false;
 
 		for(ed in externalEnums)
