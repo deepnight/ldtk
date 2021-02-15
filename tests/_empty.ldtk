@@ -31,7 +31,7 @@
 	"defs": { "layers": [], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
-			"identifier": "Level",
+			"identifier": "Level1",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 0,
