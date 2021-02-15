@@ -41,7 +41,7 @@ class Home extends Page {
 		jPage.find(".load").click( (_)->onLoad() );
 		jPage.find(".samples").click( (_)->onLoadSamples() );
 		jPage.find(".loadOgmo").click( (ev)->onImportOgmo() );
-		jPage.find(".new").click( (_)->onNew() );
+		jPage.find(".new").click( (_)->if( !cd.hasSetS("newLock",0.2) ) onNew() );
 
 		jPage.find(".buy").click( (ev)->{
 			var w = new ui.Modal();
