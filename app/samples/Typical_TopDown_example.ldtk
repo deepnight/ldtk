@@ -617,17 +617,18 @@
 			"identifier": "Player",
 			"uid": 59,
 			"width": 16,
-			"height": 24,
+			"height": 16,
 			"color": "#03CB7C",
 			"renderMode": "Ellipse",
 			"showName": true,
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
-			"maxPerLevel": 0,
+			"maxCount": 1,
+			"limitScope": "PerWorld",
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0.5,
-			"pivotY": 1,
+			"pivotY": 0.5,
 			"fieldDefs": [
 				{
 					"identifier": "life",
@@ -682,7 +683,8 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
-			"maxPerLevel": 0,
+			"maxCount": 0,
+			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0.5,
 			"pivotY": 1,
@@ -720,7 +722,8 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
-			"maxPerLevel": 0,
+			"maxCount": 0,
+			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0.5,
 			"pivotY": 0.5,
@@ -939,20 +942,6 @@
 					"gridTiles": [],
 					"entityInstances": [
 						{
-							"__identifier": "Player",
-							"__grid": [1,7],
-							"__pivot": [0.5,1],
-							"__tile": null,
-							"width": 16,
-							"height": 24,
-							"defUid": 59,
-							"px": [24,128],
-							"fieldInstances": [
-								{ "__identifier": "ammo", "__value": 10, "__type": "Int", "defUid": 60, "realEditorValues": [] },
-								{ "__identifier": "life", "__value": 100, "__type": "Int", "defUid": 61, "realEditorValues": [] }
-							]
-						},
-						{
 							"__identifier": "Door",
 							"__grid": [10,9],
 							"__pivot": [0.5,1],
@@ -1009,6 +998,20 @@
 										"params": ["Scraps"]
 									}]
 								}
+							]
+						},
+						{
+							"__identifier": "Player",
+							"__grid": [1,7],
+							"__pivot": [0.5,0.5],
+							"__tile": null,
+							"width": 16,
+							"height": 16,
+							"defUid": 59,
+							"px": [24,120],
+							"fieldInstances": [
+								{ "__identifier": "ammo", "__value": 10, "__type": "Int", "defUid": 60, "realEditorValues": [] },
+								{ "__identifier": "life", "__value": 100, "__type": "Int", "defUid": 61, "realEditorValues": [] }
 							]
 						}
 					]
