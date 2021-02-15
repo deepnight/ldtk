@@ -337,10 +337,15 @@ class EditEnums extends ui.modal.Panel {
 
 			// Tile preview
 			if( !curEnum.isExternal() ) {
-				var jPicker = JsTools.createTilePicker(curEnum.iconTilesetUid, SingleTile, [eValue.tileId], function(tileIds) {
-					eValue.tileId = tileIds[0];
-					editor.ge.emit(EnumDefChanged);
-				});
+				var jPicker = JsTools.createTilePicker(
+					curEnum.iconTilesetUid,
+					SingleTile,
+					eValue.tileId==null ? [] : [eValue.tileId],
+					(tileIds)->{
+						eValue.tileId = tileIds[0];
+						editor.ge.emit(EnumDefChanged);
+					}
+				);
 				jPicker.insertAfter( li.find(".sortHandle") );
 			}
 
