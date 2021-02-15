@@ -127,10 +127,9 @@ class FieldDefsForm {
 				case F_Enum(enumDefUid): project.defs.getEnumDef(enumDefUid).identifier;
 				case _: L.getFieldType(type);
 			}
-			fd.identifier = baseName + (isArray?"_array":"");
-			var idx = 2;
-			while( !isFieldIdentifierUnique(fd.identifier) )
-				fd.identifier = baseName+(idx++);
+			if( isArray )
+				baseName+"_array";
+			fd.identifier = project.makeUniqueIdString(baseName, false, id->isFieldIdentifierUnique(id) );
 			fieldDefs.push(fd);
 
 			editor.ge.emit( FieldDefAdded(fd) );
@@ -165,10 +164,10 @@ class FieldDefsForm {
 	}
 
 
-	function isFieldIdentifierUnique(id:String) {
+	function isFieldIdentifierUnique(id:String, ?except:FieldDef) {
 		id = data.Project.cleanupIdentifier(id,false);
 		for(fd in fieldDefs)
-			if( fd.identifier==id )
+			if( ( except==null || fd!=except ) && fd.identifier==id )
 				return false;
 		return true;
 	}
@@ -177,11 +176,7 @@ class FieldDefsForm {
 	function duplicateField(fd:FieldDef) : FieldDef {
 		var copy = FieldDef.fromJson( project, fd.toJson() );
 		copy.uid = project.makeUniqId();
-
-		var idx = 2;
-		while( !isFieldIdentifierUnique(copy.identifier) )
-			copy.identifier = fd.identifier+(idx++);
-
+		copy.identifier = project.makeUniqueIdString(fd.identifier, false, (id)->isFieldIdentifierUnique(id));
 		fieldDefs.insert( dn.Lib.getArrayIndex(fd,fieldDefs)+1, copy );
 
 		project.tidy();
@@ -415,11 +410,7 @@ class FieldDefsForm {
 
 		var i = Input.linkToHtmlInput( curField.identifier, jForm.find("input[name=name]") );
 		i.onChange = onFieldChange;
-		i.validityCheck = function(id) {
-			return true; // HACK
-			// return data.Project.isValidIdentifier(id) && curEntity.isFieldIdentifierUnique(id); // TODO
-		}
-		i.validityError = N.invalidIdentifier;
+		i.fixValue = (v)->project.makeUniqueIdString(v, false, (id)->isFieldIdentifierUnique(id,curField));
 
 		// Default value
 		switch curField.type {
