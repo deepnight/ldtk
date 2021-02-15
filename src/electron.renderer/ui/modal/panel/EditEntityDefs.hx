@@ -144,8 +144,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Name
 		var i = Input.linkToHtmlInput(curEntity.identifier, jEntityForm.find("input[name='name']") );
-		i.validityCheck = function(id) return data.Project.isValidIdentifier(id) && project.defs.isEntityIdentifierUnique(id);
-		i.validityError = N.invalidIdentifier;
+		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isEntityIdentifierUnique(id, curEntity));
 		i.linkEvent(EntityDefChanged);
 
 		// Dimensions

@@ -284,10 +284,7 @@ class Definitions {
 
 		for(fd in copy.fieldDefs)
 			fd.uid = _project.makeUniqueIdInt();
-
-		var idx = 2;
-		while( !isEntityIdentifierUnique(copy.identifier) )
-			copy.identifier = ed.identifier+(idx++);
+		copy.identifier = _project.makeUniqueIdStr(ed.identifier, (id)->isEntityIdentifierUnique(id));
 
 		entities.insert( dn.Lib.getArrayIndex(ed, entities)+1, copy );
 		_project.tidy();
@@ -300,11 +297,11 @@ class Definitions {
 		_project.tidy();
 	}
 
-	public function isEntityIdentifierUnique(id:String) {
+	public function isEntityIdentifierUnique(id:String, ?exclude:data.def.EntityDef) {
 		id = Project.cleanupIdentifier(id, true);
 
 		for(ed in entities)
-			if( ed.identifier==id )
+			if( ed.identifier==id && ed!=exclude )
 				return false;
 
 		return true;
