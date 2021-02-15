@@ -496,11 +496,7 @@ class Project {
 		else
 			levels.insert(insertIdx,l);
 
-		var id = "Level";
-		var idx = 2;
-		while( !isLevelIdentifierUnique(id) )
-			id = "Level"+(idx++);
-		l.identifier = id;
+		l.identifier = makeUniqueIdStr("Level1", (id)->isLevelIdentifierUnique(id));
 
 		tidy(); // this will create layer instances
 		return l;
@@ -515,19 +511,17 @@ class Project {
 			li.levelId = copy.uid;
 
 		// Pick unique identifier
-		var idx = 2;
-		while( !isLevelIdentifierUnique(copy.identifier) )
-			copy.identifier = l.identifier+(idx++);
+		copy.identifier = makeUniqueIdStr(l.identifier, (id)->isLevelIdentifierUnique(id));
 
 		levels.insert( dn.Lib.getArrayIndex(l,levels)+1, copy );
 		tidy();
 		return copy;
 	}
 
-	public function isLevelIdentifierUnique(id:String) {
+	public function isLevelIdentifierUnique(id:String, ?exclude:Level) {
 		id = cleanupIdentifier(id,true);
 		for(l in levels)
-			if( l.identifier==id )
+			if( l.identifier==id && l!=exclude )
 				return false;
 		return true;
 	}

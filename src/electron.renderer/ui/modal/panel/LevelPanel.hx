@@ -202,6 +202,7 @@ class LevelPanel extends ui.modal.Panel {
 		// Level identifier
 		jContent.find(".levelIdentifier").text('"${level.identifier}"');
 		var i = Input.linkToHtmlInput( level.identifier, jForm.find("#identifier"));
+		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.isLevelIdentifierUnique(id, level));
 		i.onChange = ()->onFieldChange();
 
 		// Coords
