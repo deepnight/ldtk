@@ -122,7 +122,7 @@ class Definitions {
 		return l;
 	}
 
-	public function duplicateLayerDef(ld:data.def.LayerDef) {
+	public function duplicateLayerDef(ld:data.def.LayerDef, ?baseName:String) : data.def.LayerDef {
 		var copy = data.def.LayerDef.fromJson( _project.jsonVersion, ld.toJson() );
 		copy.uid = _project.makeUniqId();
 
@@ -132,12 +132,18 @@ class Definitions {
 				r.uid = _project.makeUniqId();
 		}
 
+		// Name
+		if( baseName!=null )
+			copy.identifier = baseName;
+		else
+			baseName = copy.identifier;
 		var idx = 2;
 		while( !isLayerNameUnique(copy.identifier) )
-			copy.identifier = ld.identifier+(idx++);
+			copy.identifier = baseName+(idx++);
 
-		layers.insert( dn.Lib.getArrayIndex(ld, layers)+1, copy );
+		layers.insert( dn.Lib.getArrayIndex(ld, layers), copy );
 		_project.tidy();
+		return copy;
 	}
 
 	public function isLayerNameUnique(id:String) {

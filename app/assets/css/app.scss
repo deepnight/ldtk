@@ -1984,9 +1984,13 @@ textarea {
 	}
 
 	&.choice .wrapper {
-		max-width: 500px;
-		button {
-			white-space: nowrap;
+		max-width: 400px;
+		.buttons {
+			button {
+				flex: 1 0 100%;
+				white-space: nowrap;
+				text-transform: none;
+			}
 		}
 	}
 

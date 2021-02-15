@@ -1,7 +1,7 @@
 package ui.modal.dialog;
 
 class Choice extends ui.modal.Dialog {
-	public function new(str:LocaleString, choices:Array<{ label:String, cb:Void->Void, ?className:String }>) {
+	public function new(str:LocaleString, choices:Array<{ label:String, cb:Void->Void, ?cond:Void->Bool, ?className:String }>) {
 		super();
 
 		jModalAndMask.addClass("choice");
@@ -10,10 +10,11 @@ class Choice extends ui.modal.Dialog {
 		jContent.html(str);
 
 		for(c in choices)
-			addButton(c.label, c.className, ()->{
-				close();
-				c.cb();
-			});
+			if( c.cond==null || c.cond() )
+				addButton(c.label, c.className, ()->{
+					close();
+					c.cb();
+				});
 
 		addCancel();
 	}
