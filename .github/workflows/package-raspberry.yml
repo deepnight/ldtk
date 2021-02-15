@@ -46,7 +46,7 @@ jobs:
           node-version: '14'
       - run: cd app && npm install
       - run: cd app && npm run compile
-      - run: cd app && npm run pack-linux-arm64
+      - run: cd app && npm run pack-linux-rasp
 
       # Upload
       - uses: actions/upload-artifact@v2
