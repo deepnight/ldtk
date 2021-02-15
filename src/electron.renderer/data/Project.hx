@@ -147,14 +147,23 @@ class Project {
 			return baseId;
 
 		var leadIdxReg = ~/(.*?)([0-9]+)$/gi;
-		var idx = !leadIdxReg.match(baseId) ? 2 : {
+		if( leadIdxReg.match(baseId) ) {
+			// Base name is terminated by a number
 			baseId = leadIdxReg.matched(1);
-			Std.parseInt( leadIdxReg.matched(2) )+1;
+			var idx = Std.parseInt( leadIdxReg.matched(2) );
+			var id = baseId + (idx++);
+			while( !isUnique(id) )
+				id = baseId + (idx++);
+			return id;
 		}
-		var id = baseId;
-		while( !isUnique(id) )
-			id = baseId + (idx++);
-		return id;
+		else {
+			// Plain string
+			var idx = 2;
+			var id = baseId;
+			while( !isUnique(id) )
+				id = baseId + (idx++);
+			return id;
+		}
 	}
 
 	@:keep public function toString() {
