@@ -699,6 +699,22 @@ class Project {
 		return cleanupIdentifier(id,false) != null;
 	}
 
+	public function makeValidAndUniqueIdentifier(baseId:String, firstCharCap:Bool, isUnique:String->Bool) : String {
+		baseId = cleanupIdentifier(baseId,firstCharCap);
+		if( baseId=="_" )
+			baseId = "Unnamed";
+
+		var leadIdxReg = ~/(.*?)([0-9]+)$/gi;
+		var idx = !leadIdxReg.match(baseId) ? 2 : {
+			baseId = leadIdxReg.matched(1);
+			Std.parseInt( leadIdxReg.matched(2) )+1;
+		}
+		var id = baseId;
+		while( !isUnique(id) )
+			id = baseId + (idx++);
+		return id;
+	}
+
 
 	public static function cleanupIdentifier(id:String, capitalizeFirstLetter:Bool) : Null<String> {
 		if( id==null )
