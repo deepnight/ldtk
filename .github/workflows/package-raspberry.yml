@@ -22,9 +22,15 @@ jobs:
     steps:
       # Checkout, install haxe and libs
       - uses: actions/checkout@v2
+
       - uses: krdlab/setup-haxe@v1
         with:
           haxe-version: 4.1.4
+
+        # Snapcraft required for ARM build
+      - name: Install Snapcraft
+        uses: samuelmeuli/action-snapcraft@v1
+
       - run: haxe -version
       - run: haxelib git castle https://github.com/ncannasse/castle
       - run: haxelib git heaps https://github.com/HeapsIO/heaps.git
