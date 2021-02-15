@@ -99,14 +99,7 @@ class Definitions {
 	public function createLayerDef(type:ldtk.Json.LayerType, ?id:String) : data.def.LayerDef {
 		var l = new data.def.LayerDef(_project.makeUniqueIdInt(), type);
 
-		id = Project.cleanupIdentifier(id, true);
-		if( id==null ) {
-			id = Std.string(type);
-			var idx = 2;
-			while( !isLayerNameUnique(id) )
-				id = Std.string(type) + (idx++);
-		}
-		l.identifier = id;
+		l.identifier = _project.makeUniqueIdStr(id==null ? type.getName() : id, (id)->isLayerNameUnique(id));
 
 		l.gridSize = _project.defaultGridSize;
 
@@ -132,24 +125,16 @@ class Definitions {
 				r.uid = _project.makeUniqueIdInt();
 		}
 
-		// Name
-		if( baseName!=null )
-			copy.identifier = baseName;
-		else
-			baseName = copy.identifier;
-		var idx = 2;
-		while( !isLayerNameUnique(copy.identifier) )
-			copy.identifier = baseName+(idx++);
-
+		copy.identifier = _project.makeUniqueIdStr(baseName==null ? ld.identifier : baseName, (id)->isLayerNameUnique(id));
 		layers.insert( dn.Lib.getArrayIndex(ld, layers), copy );
 		_project.tidy();
 		return copy;
 	}
 
-	public function isLayerNameUnique(id:String) {
+	public function isLayerNameUnique(id:String, ?exclude:data.def.LayerDef) {
 		var id = Project.cleanupIdentifier(id, true);
 		for(ld in layers)
-			if( ld.identifier==id )
+			if( ld.identifier==id && ld!=exclude )
 				return false;
 		return true;
 	}
