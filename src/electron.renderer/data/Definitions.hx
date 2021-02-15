@@ -340,12 +340,7 @@ class Definitions {
 		var td = new data.def.TilesetDef( _project, _project.makeUniqueIdInt() );
 		tilesets.push(td);
 
-		var id = "Tileset";
-		var idx = 2;
-		while( !isTilesetIdentifierUnique(id) )
-			id = "Tileset"+(idx++);
-		td.identifier = id;
-
+		td.identifier = _project.makeUniqueIdStr("Tileset", id->isTilesetIdentifierUnique(id));
 		_project.tidy();
 		return td;
 	}
@@ -353,11 +348,7 @@ class Definitions {
 	public function duplicateTilesetDef(td:data.def.TilesetDef) {
 		var copy = data.def.TilesetDef.fromJson( _project, td.toJson() );
 		copy.uid = _project.makeUniqueIdInt();
-
-		var idx = 2;
-		while( !isTilesetIdentifierUnique(copy.identifier) )
-			copy.identifier = td.identifier+(idx++);
-
+		copy.identifier = _project.makeUniqueIdStr(td.identifier, id->isTilesetIdentifierUnique(id));
 		tilesets.insert( dn.Lib.getArrayIndex(td, tilesets)+1, copy );
 
 		_project.tidy();
@@ -378,10 +369,10 @@ class Definitions {
 		return null;
 	}
 
-	public function isTilesetIdentifierUnique(id:String) {
+	public function isTilesetIdentifierUnique(id:String, ?exclude:data.def.TilesetDef) {
 		id = Project.cleanupIdentifier(id, true);
 		for(td in tilesets)
-			if( td.identifier==id )
+			if( td.identifier==id && td!=exclude)
 				return false;
 		return true;
 	}
