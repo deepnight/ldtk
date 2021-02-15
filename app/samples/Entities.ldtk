@@ -365,7 +365,8 @@
 			"tilesetId": 59,
 			"tileId": 1010,
 			"tileRenderMode": "Stretch",
-			"maxPerLevel": 0,
+			"maxCount": 0,
+			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
 			"pivotX": 0.5,
 			"pivotY": 1,
@@ -423,7 +424,8 @@
 			"tilesetId": 47,
 			"tileId": 306,
 			"tileRenderMode": "Stretch",
-			"maxPerLevel": 1,
+			"maxCount": 1,
+			"limitScope": "PerWorld",
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0.5,
 			"pivotY": 1,
@@ -524,7 +526,8 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
-			"maxPerLevel": 6,
+			"maxCount": 4,
+			"limitScope": "PerLevel",
 			"limitBehavior": "PreventAdding",
 			"pivotX": 0.5,
 			"pivotY": 0,
@@ -602,7 +605,8 @@
 			"tilesetId": 59,
 			"tileId": 1339,
 			"tileRenderMode": "Stretch",
-			"maxPerLevel": 0,
+			"maxCount": 0,
+			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
 			"pivotX": 0.5,
 			"pivotY": 1,
@@ -700,7 +704,8 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
-			"maxPerLevel": 0,
+			"maxCount": 0,
+			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
 			"pivotX": 0.5,
 			"pivotY": 0.5,
@@ -738,7 +743,8 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
-			"maxPerLevel": 0,
+			"maxCount": 0,
+			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
 			"pivotX": 0.5,
 			"pivotY": 1,
@@ -1066,55 +1072,6 @@
 							]
 						},
 						{
-							"__identifier": "Player",
-							"__grid": [3,13],
-							"__pivot": [0.5,1],
-							"__tile": { "tilesetUid": 47, "srcRect": [192,480,32,32] },
-							"width": 20,
-							"height": 20,
-							"defUid": 1,
-							"px": [56,224],
-							"fieldInstances": [
-								{
-									"__identifier": "life",
-									"__value": 3,
-									"__type": "Int",
-									"defUid": 2,
-									"realEditorValues": [null]
-								},
-								{
-									"__identifier": "isAwaken",
-									"__value": true,
-									"__type": "Bool",
-									"defUid": 3,
-									"realEditorValues": [null]
-								},
-								{
-									"__identifier": "bag",
-									"__value": [ "Healing_potion", "Mana_potion" ],
-									"__type": "Array<LocalEnum.ItemType>",
-									"defUid": 19,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["Healing_potion"]
-									}, {
-										"id": "V_String",
-										"params": ["Mana_potion"]
-									} ]
-								},
-								{
-									"__identifier": "weapon",
-									"__value": "Trout",
-									"__type": "LocalEnum.ItemType",
-									"defUid": 29,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Trout"]
-									}]
-								}
-							]
-						},
-						{
 							"__identifier": "Chest",
 							"__grid": [27,5],
 							"__pivot": [0.5,1],
@@ -1375,6 +1332,43 @@
 								"defUid": 50,
 								"realEditorValues": [null]
 							}]
+						},
+						{
+							"__identifier": "Player",
+							"__grid": [3,13],
+							"__pivot": [0.5,1],
+							"__tile": { "tilesetUid": 47, "srcRect": [192,480,32,32] },
+							"width": 20,
+							"height": 20,
+							"defUid": 1,
+							"px": [56,224],
+							"fieldInstances": [
+								{ "__identifier": "life", "__value": 3, "__type": "Int", "defUid": 2, "realEditorValues": [] },
+								{ "__identifier": "isAwaken", "__value": true, "__type": "Bool", "defUid": 3, "realEditorValues": [] },
+								{
+									"__identifier": "bag",
+									"__value": [ "Magic_ring", "Healing_potion" ],
+									"__type": "Array<LocalEnum.ItemType>",
+									"defUid": 19,
+									"realEditorValues": [ {
+										"id": "V_String",
+										"params": ["Magic_ring"]
+									}, {
+										"id": "V_String",
+										"params": ["Healing_potion"]
+									} ]
+								},
+								{
+									"__identifier": "weapon",
+									"__value": "Trout",
+									"__type": "LocalEnum.ItemType",
+									"defUid": 29,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Trout"]
+									}]
+								}
+							]
 						}
 					]
 				},
