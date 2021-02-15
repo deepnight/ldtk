@@ -23,8 +23,8 @@ class FieldDefsForm {
 		this.fieldParent = fieldParent;
 		this.fieldDefs = [];
 
-		jWrapper = new J('<div class="fieldDefsEditor"/>');
-		jWrapper.html( JsTools.getHtmlTemplate("fieldDefsEditor") );
+		jWrapper = new J('<div class="fieldDefsForm"/>');
+		jWrapper.html( JsTools.getHtmlTemplate("fieldDefsForm") );
 
 		// Create single field
 		jButtons.find("button.createSingle").click( function(ev) {
