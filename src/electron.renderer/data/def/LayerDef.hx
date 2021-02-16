@@ -57,11 +57,16 @@ class LayerDef {
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
 		o.intGridValues = [];
-		for( v in JsonTools.readArray(json.intGridValues) )
+		var idx = 0;
+		for( v in JsonTools.readArray(json.intGridValues) ) {
+			if( idx++==0 )
+				continue;
+
 			o.intGridValues.push({
 				identifier: v.identifier,
 				color: JsonTools.readColor(v.color),
 			});
+		}
 
 		o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
 		o.autoSourceLayerDefUid = JsonTools.readNullableInt(json.autoSourceLayerDefUid);
@@ -80,6 +85,7 @@ class LayerDef {
 	}
 
 	public function toJson() : ldtk.Json.LayerDefJson {
+		var valueIdx = 1;
 		return {
 			__type: Std.string(type),
 
@@ -91,7 +97,11 @@ class LayerDef {
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
 
-			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
+			intGridValues: [{ value:0, identifier:"-empty-", color: "#000000" }].concat( intGridValues.map( function(iv) return {
+				value: valueIdx++,
+				identifier: iv.identifier,
+				color: JsonTools.writeColor(iv.color),
+			}) ),
 
 			autoTilesetDefUid: autoTilesetDefUid,
 			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
@@ -138,21 +148,21 @@ class LayerDef {
 	}
 
 	public inline function hasIntGridValue(v:Int) {
-		return v>=0 && v<intGridValues.length;
+		return v>0 && v<=intGridValues.length;
 	}
 
-	public inline function getIntGridValueDef(idx:Int) : Null<IntGridValueDef> {
-		return intGridValues[idx];
+	public inline function getIntGridValueDef(v:Int) : Null<IntGridValueDef> {
+		return intGridValues[v-1];
 	}
 
 	public function getIntGridIndexFromIdentifier(id:String) : Int {
-		var idx = 0;
+		var idx = 1;
 		for( v in intGridValues )
 			if( v.identifier==id )
 				return idx;
 			else
 				idx++;
-		return -1;
+		return 0;
 	}
 
 	public inline function getIntGridValueDisplayName(idx:Int) : Null<String> {
@@ -163,6 +173,15 @@ class LayerDef {
 	public inline function getIntGridValueColor(idx:Int) : Null<UInt> {
 		var vd = getIntGridValueDef(idx);
 		return vd==null ? null : vd.color;
+	}
+
+	public function removeIntGridValue(v:Int) : Bool {
+		if( hasIntGridValue(v) ) {
+			intGridValues.splice(v-1, 1);
+			return true;
+		}
+		else
+			return false;
 	}
 
 	public inline function getAllIntGridValues() return intGridValues;

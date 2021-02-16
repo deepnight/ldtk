@@ -240,6 +240,7 @@ class LayerInstance {
 			for(i in 0...json.intGridCsv.length)
 				if( json.intGridCsv[i]>=0 )
 					li.intGrid.set(i, json.intGridCsv[i]);
+					// li.intGrid.set(i, json.intGridCsv[i]+1); // HACK loading old zero-based csv
 		}
 
 		for( gridTilesJson in json.gridTiles ) {
@@ -344,7 +345,7 @@ class LayerInstance {
 				if( def.type==IntGrid )
 					for(cy in 0...cHei)
 					for(cx in 0...cWid)
-						if( getIntGrid(cx,cy) >= def.countIntGridValues() )
+						if( !def.hasIntGridValue( getIntGrid(cx,cy) ) )
 							removeIntGrid(cx,cy);
 
 				if( def.isAutoLayer() && autoTilesCache!=null ) {
@@ -359,11 +360,6 @@ class LayerInstance {
 						App.LOG.add("tidy", 'Removed all autoTilesCache in $this (rules can no longer be applied)');
 						autoTilesCache = new Map();
 					}
-					// Fix missing autoTiles
-					// for(rg in def.autoRuleGroups)
-					// for(r in rg.rules)
-					// 	if( !autoTilesNewCache.exists(r.uid) )
-					// 		applyAutoLayerRule(r);
 				}
 
 			case Entities:
@@ -474,7 +470,7 @@ class LayerInstance {
 
 	public inline function getIntGrid(cx:Int, cy:Int) : Int {
 		requireType(IntGrid);
-		return !isValid(cx,cy) || !intGrid.exists( coordId(cx,cy) ) ? -1 : intGrid.get( coordId(cx,cy) );
+		return !isValid(cx,cy) || !intGrid.exists( coordId(cx,cy) ) ? 0 : intGrid.get( coordId(cx,cy) );
 	}
 
 	public inline function getIntGridColorAt(cx:Int, cy:Int) : Null<UInt> {
@@ -498,7 +494,7 @@ class LayerInstance {
 
 	public inline function hasIntGrid(cx:Int, cy:Int) {
 		requireType(IntGrid);
-		return getIntGrid(cx,cy)!=-1;
+		return getIntGrid(cx,cy)!=0;
 	}
 
 	public function removeIntGrid(cx:Int, cy:Int) {

@@ -9,16 +9,16 @@ class IntGridTool extends tool.LayerTool<Int> {
 		super.onBeforeToolActivation();
 
 		if( !editor.curLayerDef.hasIntGridValue(getSelectedValue()) )
-			selectValue(0);
+			selectValue(1);
 	}
 
 	override function selectValue(v:Int) {
-		v = M.iclamp(v, 0, curLayerInstance.def.countIntGridValues()-1);
+		v = M.iclamp(v, 1, curLayerInstance.def.countIntGridValues());
 		super.selectValue(v);
 	}
 
 	override function getDefaultValue():Int {
-		return 0;
+		return 1;
 	}
 
 	inline function getSelectedColor() {
