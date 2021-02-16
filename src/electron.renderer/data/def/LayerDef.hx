@@ -59,9 +59,6 @@ class LayerDef {
 		o.intGridValues = [];
 		var idx = 0;
 		for( v in JsonTools.readArray(json.intGridValues) ) {
-			// if( idx++==0 ) // HACK pre zero based intGrid
-			// 	continue;
-
 			o.intGridValues.push({
 				identifier: v.identifier,
 				color: JsonTools.readColor(v.color),
@@ -97,11 +94,11 @@ class LayerDef {
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
 
-			intGridValues: [{ value:0, identifier:"-empty-", color: "#000000" }].concat( intGridValues.map( function(iv) return {
+			intGridValues: intGridValues.map( function(iv) return {
 				value: valueIdx++,
 				identifier: iv.identifier,
 				color: JsonTools.writeColor(iv.color),
-			}) ),
+			}),
 
 			autoTilesetDefUid: autoTilesetDefUid,
 			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
