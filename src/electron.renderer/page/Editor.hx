@@ -596,7 +596,7 @@ class Editor extends Page {
 
 			switch li.def.type {
 				case IntGrid:
-					if( li.getIntGrid(cx,cy)>=0 )
+					if( li.getIntGrid(cx,cy)>0 )
 						ge = GenericLevelElement.GridCell( li, cx, cy );
 
 				case AutoLayer:
