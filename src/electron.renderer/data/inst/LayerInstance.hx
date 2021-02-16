@@ -233,14 +233,14 @@ class LayerInstance {
 		if( json.intGridCsv==null ) {
 			// Read old pre-CSV format
 			for( intGridJson in json.intGrid )
-				li.intGrid.set( intGridJson.coordId, intGridJson.v );
+				li.intGrid.set( intGridJson.coordId, intGridJson.v+1 );
 		}
 		else {
 			// Read CSV format
 			for(i in 0...json.intGridCsv.length)
 				if( json.intGridCsv[i]>=0 )
 					// li.intGrid.set(i, json.intGridCsv[i]);
-					li.intGrid.set(i, json.intGridCsv[i]+1); // HACK loading old zero-based csv
+					li.intGrid.set(i, json.intGridCsv[i]+1); // HACK convert pre zero based intGrid
 		}
 
 		for( gridTilesJson in json.gridTiles ) {

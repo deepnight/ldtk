@@ -59,8 +59,8 @@ class LayerDef {
 		o.intGridValues = [];
 		var idx = 0;
 		for( v in JsonTools.readArray(json.intGridValues) ) {
-			// if( idx++==0 ) // HACK disabled for old format support
-				// continue;
+			// if( idx++==0 ) // HACK pre zero based intGrid
+			// 	continue;
 
 			o.intGridValues.push({
 				identifier: v.identifier,
