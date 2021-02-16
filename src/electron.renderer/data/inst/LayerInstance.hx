@@ -239,8 +239,8 @@ class LayerInstance {
 			// Read CSV format
 			for(i in 0...json.intGridCsv.length)
 				if( json.intGridCsv[i]>=0 )
-					li.intGrid.set(i, json.intGridCsv[i]);
-					// li.intGrid.set(i, json.intGridCsv[i]+1); // HACK loading old zero-based csv
+					// li.intGrid.set(i, json.intGridCsv[i]);
+					li.intGrid.set(i, json.intGridCsv[i]+1); // HACK loading old zero-based csv
 		}
 
 		for( gridTilesJson in json.gridTiles ) {
