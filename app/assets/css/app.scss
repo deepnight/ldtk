@@ -4446,8 +4446,12 @@ dl.form.fieldInstanceEditor {
 			}
 
 			span.id {
+				width: 1.5em;
 				text-align: center;
 				font-weight: bold;
+				font-size: 1.2em;
+				border: 1px solid white;
+				border-radius: 3px;
 			}
 
 			a.remove {

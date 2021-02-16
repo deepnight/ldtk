@@ -324,13 +324,19 @@ class EditLayerDefs extends ui.modal.Panel {
 				});
 
 				// Existing values
-				var idx = 0;
+				var idx = 1;
 				for( intGridVal in cur.getAllIntGridValues() ) {
-					var curIdx = idx;
+					var intValue = idx++;
 					var e = jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
 					e.addClass("value");
 					e.insertBefore(addButton);
-					e.find(".id").html("#"+idx);
+					e.find(".id")
+						.html( Std.string(intValue) )
+						.css({
+							color: C.intToHex( C.toWhite(intGridVal.color,0.3) ),
+							borderColor: C.intToHex( C.toWhite(intGridVal.color,0.2) ),
+							backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.5) ),
+						});
 
 					// Edit value identifier
 					var i = new form.input.StringInput(
@@ -346,14 +352,14 @@ class EditLayerDefs extends ui.modal.Panel {
 					i.validityError = N.invalidIdentifier;
 					i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
-					if( cur.countIntGridValues()>1 && idx==cur.countIntGridValues()-1 )
+					if( cur.countIntGridValues()>1 && intValue==cur.countIntGridValues() )
 						e.addClass("removable");
 
 					// Edit color
 					var col = e.find("input[type=color]");
 					col.val( C.intToHex(intGridVal.color) );
 					col.change( function(ev) {
-						cur.getIntGridValueDef(curIdx).color = C.hexToInt( col.val() );
+						cur.getIntGridValueDef(intValue).color = C.hexToInt( col.val() );
 						editor.ge.emit(LayerDefChanged);
 						updateForm();
 					});
@@ -361,12 +367,12 @@ class EditLayerDefs extends ui.modal.Panel {
 					// Remove
 					e.find("a.remove").click( function(ev) {
 						function run() {
-							cur.getAllIntGridValues().splice(curIdx,1);
+							cur.removeIntGridValue(intValue);
 							project.tidy();
 							editor.ge.emit(LayerDefChanged);
 							updateForm();
 						}
-						if( project.isIntGridValueUsed(cur, curIdx) ) {
+						if( project.isIntGridValueUsed(cur, intValue) ) {
 							new ui.modal.dialog.Confirm(
 								e.find("a.remove"),
 								L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"),
@@ -378,7 +384,6 @@ class EditLayerDefs extends ui.modal.Panel {
 						else
 							run();
 					});
-					idx++;
 				}
 
 				initAutoTilesetSelect();
