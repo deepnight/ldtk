@@ -97,13 +97,13 @@ class LayerInstance {
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
 
-			intGrid: {
+			intGrid: { // old IntGrid format
 				var arr = [];
 				if( !_project.hasAdvancedExportFlag(DiscardPreCsvIntGrid) )
 					for(e in intGrid.keyValueIterator())
 						arr.push({
 							coordId: e.key,
-							v: e.value,
+							v: e.value-1,
 						});
 				arr;
 			},
