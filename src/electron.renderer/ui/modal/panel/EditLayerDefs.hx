@@ -330,7 +330,13 @@ class EditLayerDefs extends ui.modal.Panel {
 					var e = jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
 					e.addClass("value");
 					e.insertBefore(addButton);
-					e.find(".id").html( Std.string(intValue) );
+					e.find(".id")
+						.html( Std.string(intValue) )
+						.css({
+							color: C.intToHex( C.toWhite(intGridVal.color,0.3) ),
+							borderColor: C.intToHex( C.toWhite(intGridVal.color,0.2) ),
+							backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.5) ),
+						});
 
 					// Edit value identifier
 					var i = new form.input.StringInput(
