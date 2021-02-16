@@ -333,7 +333,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					e.find(".id")
 						.html( Std.string(intValue) )
 						.css({
-							color: C.intToHex( C.toWhite(intGridVal.color,0.3) ),
+							color: C.intToHex( C.toWhite(intGridVal.color,0.5) ),
 							borderColor: C.intToHex( C.toWhite(intGridVal.color,0.2) ),
 							backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.5) ),
 						});
@@ -351,6 +351,9 @@ class EditLayerDefs extends ui.modal.Panel {
 					i.validityCheck = cur.isIntGridValueIdentifierValid;
 					i.validityError = N.invalidIdentifier;
 					i.onChange = editor.ge.emit.bind(LayerDefChanged);
+					i.jInput.css({
+						backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.7) ),
+					});
 
 					if( cur.countIntGridValues()>1 && intValue==cur.countIntGridValues() )
 						e.addClass("removable");

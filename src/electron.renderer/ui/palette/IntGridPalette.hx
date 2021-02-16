@@ -8,7 +8,7 @@ class IntGridPalette extends ui.ToolPalette {
 	override function doRender() {
 		super.doRender();
 
-		jList = new J('<ul class="niceList"/>');
+		jList = new J('<ul class="intGridValues niceList"/>');
 		jList.appendTo(jContent);
 
 		var valueIdx = 1;
@@ -30,11 +30,18 @@ class IntGridPalette extends ui.ToolPalette {
 				e.css( "color", makeTextInactiveColor(intGridVal.color) );
 			}
 
+			// Value
+			var jVal = new J('<div class="intGridValue">$valueIdx</div>');
+			e.append(jVal);
+			jVal.css({
+				color: C.intToHex( C.toWhite(intGridVal.color,0.5) ),
+				borderColor: C.intToHex( C.toWhite(intGridVal.color,0.2) ),
+				backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.5) ),
+			});
+
 			// Label
-			if( intGridVal.identifier==null )
-				e.text(valueIdx);
-			else
-				e.text(valueIdx+" - "+intGridVal.identifier);
+			if( intGridVal.identifier!=null )
+				e.append(intGridVal.identifier);
 
 			var curIdx = valueIdx;
 			e.click( function(_) {

@@ -3679,6 +3679,15 @@ canvas#webgl {
 			// 	0px 0px 2px black inset,
 			// 	0px 0px 2px black inset;
 		}
+
+		&.intGridValues {
+			.intGridValue {
+				min-width: 1.5em;
+				text-align: center;
+				border: 1px solid white;
+				border-radius: 3px;
+			}
+		}
 	}
 }
 
@@ -4446,10 +4455,13 @@ dl.form.fieldInstanceEditor {
 			}
 
 			span.id {
-				width: 1.5em;
+				display: grid;
+				min-width: 1.5em;
+				min-height: 1.5em;
+				align-content: center;
 				text-align: center;
 				font-weight: bold;
-				font-size: 1.2em;
+				font-size: 1.3em;
 				border: 1px solid white;
 				border-radius: 3px;
 			}
