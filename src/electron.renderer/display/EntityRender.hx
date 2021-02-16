@@ -225,7 +225,7 @@ class EntityRender extends dn.Process {
 			tf.text = ed.identifier.substr(0,16);
 			tf.x = Std.int( ed.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
 			tf.y = 0;
-			FieldInstanceRender.addBg(f, ei.getSmartColor(true), 0.7);
+			FieldInstanceRender.addBg(f, ei.getSmartColor(true), 0.82);
 		}
 
 		updatePos();
