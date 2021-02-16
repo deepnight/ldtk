@@ -39,7 +39,7 @@
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"intGridValues": [
-				{ "value": 1, "identifier": "walls", "color": "#FFFFFF" },
+				{ "value": 1, "identifier": "walls", "color": "#6C8F1D" },
 				{ "value": 2, "identifier": "water", "color": "#33ADCC" },
 				{ "value": 3, "identifier": "ladder", "color": "#CF805E" },
 				{ "value": 4, "identifier": "lava", "color": "#FF0000" }
