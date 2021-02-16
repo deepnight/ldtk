@@ -38,7 +38,7 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
-			"intGridValues": [{ "identifier": "walls", "color": "#000000" }],
+			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#000000" }],
 			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
