@@ -23,8 +23,8 @@ class Rulers extends dn.Process {
 	var tipTf : h2d.Text;
 
 	// Drag & drop
-	var draggables : Array<RulerPos>;
-	var draggedPos : Null<RulerPos>;
+	var draggables : Array<RectHandlePos>;
+	var draggedPos : Null<RectHandlePos>;
 	var dragOrigin : Null<Coords>;
 	var dragStarted = false;
 	var resizePreview : h2d.Graphics;
@@ -35,7 +35,7 @@ class Rulers extends dn.Process {
 		createRootInLayers(editor.root, Const.DP_MAIN);
 		editor.ge.addGlobalListener(onGlobalEvent);
 
-		draggables = RulerPos.createAll();
+		draggables = RectHandlePos.createAll();
 
 		g = new h2d.Graphics(root);
 		labels = new h2d.Object(root);
@@ -56,7 +56,7 @@ class Rulers extends dn.Process {
 			+ ( dragStarted ? " (RESIZING)" : "" );
 	}
 
-	function setTip(?p:RulerPos, ?str:String) {
+	function setTip(?p:RectHandlePos, ?str:String) {
 		tip.visible = str!=null;
 		if( tipTf.text!=str )
 			tipTf.text = str;
@@ -128,7 +128,7 @@ class Rulers extends dn.Process {
 	}
 
 
-	function addLabel(str:String, pos:RulerPos, smallFont=true, distancePx=0, ?color:UInt) {
+	function addLabel(str:String, pos:RectHandlePos, smallFont=true, distancePx=0, ?color:UInt) {
 		var scale : Float = switch pos {
 			case Top, Bottom: editor.curLevel.pxWid<400 ? 0.5 : 1;
 			case Left, Right: editor.curLevel.pxHei<300 ? 0.5 : 1;
@@ -155,7 +155,7 @@ class Rulers extends dn.Process {
 	}
 
 
-	inline function isOver(levelX:Int, levelY:Int, pos:RulerPos) {
+	inline function isOver(levelX:Int, levelY:Int, pos:RectHandlePos) {
 		if( !editor.worldMode && editor.curLevel.inBounds(levelX,levelY) )
 			return false;
 		else
@@ -163,7 +163,7 @@ class Rulers extends dn.Process {
 	}
 
 
-	function getX(pos:RulerPos, extraDistancePx=0) : Int {
+	function getX(pos:RectHandlePos, extraDistancePx=0) : Int {
 		extraDistancePx += PADDING;
 		return Std.int( switch pos {
 			case Top, Bottom : curLevel.pxWid*0.5;
@@ -172,7 +172,7 @@ class Rulers extends dn.Process {
 		} );
 	}
 
-	function getY(pos:RulerPos, extraDistancePx=0) : Int {
+	function getY(pos:RectHandlePos, extraDistancePx=0) : Int {
 		extraDistancePx += PADDING;
 		return Std.int( switch pos {
 			case Top, TopLeft, TopRight : -extraDistancePx;
