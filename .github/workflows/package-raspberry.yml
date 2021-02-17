@@ -33,7 +33,8 @@ jobs:
         uses: samuelmeuli/action-snapcraft@v1
 
       # Install Multipass
-      - run: sudo snap install multipass
+      - name: Install Multipass
+        run: sudo snap install multipass
 
       - run: haxe -version
       - run: haxelib git castle https://github.com/ncannasse/castle
