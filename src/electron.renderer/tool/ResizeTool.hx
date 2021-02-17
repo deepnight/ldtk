@@ -183,13 +183,13 @@ class ResizeTool extends Tool<Int> {
 				case Left, Right: rect.h;
 
 				case Top, TopLeft, TopRight:
-					var h = (rect.y+rect.h) - HANDLE_RADIUS - m.levelY;
-					h = M.round(h/snap) * snap;
+					(rect.y+rect.h) - HANDLE_RADIUS - m.levelY;
 
 				case Bottom, BottomLeft, BottomRight:
-					var h = m.levelY - rect.y - HANDLE_RADIUS;
-					h = M.round(h/snap) * snap;
+					m.levelY - rect.y - HANDLE_RADIUS;
 			}
+			if( newHei!=rect.h )
+				newHei = M.round(newHei/snap) * snap;
 
 			// Apply new bounds
 			switch ge {
