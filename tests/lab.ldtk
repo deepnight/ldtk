@@ -206,8 +206,23 @@
 							"defUid": 1,
 							"px": [176,48],
 							"fieldInstances": [
-								{ "__identifier": "label", "__value": null, "__type": "String", "defUid": 5, "realEditorValues": [] },
-								{ "__identifier": "color", "__value": "#902020", "__type": "Color", "defUid": 6, "realEditorValues": [] }
+								{
+									"__identifier": "label",
+									"__value": "top",
+									"__type": "String",
+									"defUid": 5,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["top"]
+									}]
+								},
+								{
+									"__identifier": "color",
+									"__value": "#4E26D9",
+									"__type": "Color",
+									"defUid": 6,
+									"realEditorValues": [{ "id": "V_Int", "params": [5121753] }]
+								}
 							]
 						}
 					]
