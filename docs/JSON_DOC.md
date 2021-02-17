@@ -211,17 +211,18 @@ Value | Type | Description
 `identifier` | String | Unique String identifier
 `pivotX` | Float | Pivot X coordinate (from 0 to 1.0)
 `pivotY` | Float | Pivot Y coordinate (from 0 to 1.0)
-`resizableX`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | If TRUE, the entity instances will be resizable horizontally
-`resizableY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | If TRUE, the entity instances will be resizable vertically
 `tileId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tile ID used for optional tile display
 `tilesetId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset ID used for optional tile display
 `uid` | Int | Unique Int identifier
 `width` | Int | Pixel width
 `fieldDefs`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | Array of field definitions
+`keepAspectRatio`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | Only applies to entities resizable on both X/Y. If TRUE, the entity instance width/height will keep the same aspect ratio as the definition.
 `limitBehavior`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `DiscardOldOnes`, `PreventAdding`, `MoveLastOne`
 `limitScope`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Enum | If TRUE, the maxCount is a "per world" limit, if FALSE, it's a "per level".<br/> Possible values: `PerLayer`, `PerLevel`, `PerWorld`
 `maxCount`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.0-green.svg)  | Int | Max instances count
 `renderMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Rectangle`, `Ellipse`, `Tile`, `Cross`
+`resizableX`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | If TRUE, the entity instances will be resizable horizontally
+`resizableY`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | If TRUE, the entity instances will be resizable vertically
 `showName`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Bool | Display entity name in editor
 `tileRenderMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Stretch`, `Crop`
 

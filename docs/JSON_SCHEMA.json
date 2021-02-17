@@ -712,15 +712,16 @@
 				"identifier",
 				"pivotX",
 				"pivotY",
-				"resizableX",
-				"resizableY",
 				"uid",
 				"width",
 				"fieldDefs",
+				"keepAspectRatio",
 				"limitBehavior",
 				"limitScope",
 				"maxCount",
 				"renderMode",
+				"resizableX",
+				"resizableY",
 				"showName",
 				"tileRenderMode"
 			],
@@ -764,6 +765,12 @@
 					"description": "Max instances count",
 					"type": [
 						"integer"
+					]
+				},
+				"keepAspectRatio": {
+					"description": "Only applies to entities resizable on both X/Y. If TRUE, the entity instance width/height will keep the same aspect ratio as the definition.",
+					"type": [
+						"boolean"
 					]
 				},
 				"color": {
