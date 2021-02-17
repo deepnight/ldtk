@@ -34,7 +34,7 @@ jobs:
       #       use_lxd: true
 
       - name: Install Snapcraft
-        run: sudo snap install snapcraft
+        run: sudo snap install snapcraft --classic
 
       - name: Run Snapcraft in destructive mode
         run: snapcraft --destructive-mode
