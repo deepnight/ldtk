@@ -82,6 +82,7 @@ class EntityRender extends dn.Process {
 
 		var w = ei!=null ? ei.width : ed.width;
 		var h = ei!=null ? ei.height : ed.height;
+		var color = ei!=null ? ei.getSmartColor(false) : ed.color;
 
 		var wrapper = new h2d.Object();
 
@@ -101,7 +102,7 @@ class EntityRender extends dn.Process {
 				g.lineTo(p, h-p);
 			}
 			else {
-				g.beginFill(ed.color, 0.2);
+				g.beginFill(color, 0.2);
 				g.drawRect(0, 0, w, h);
 
 				var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
@@ -131,7 +132,7 @@ class EntityRender extends dn.Process {
 		else
 			switch ed.renderMode {
 			case Rectangle, Ellipse:
-				g.beginFill(ed.color);
+				g.beginFill(color);
 				g.lineStyle(1, 0x0, 0.4);
 				switch ed.renderMode {
 					case Rectangle:
@@ -145,7 +146,7 @@ class EntityRender extends dn.Process {
 				g.endFill();
 
 			case Cross:
-				g.lineStyle(5, ed.color, 1);
+				g.lineStyle(5, color, 1);
 				g.moveTo(0,0);
 				g.lineTo(w, h);
 				g.moveTo(0,h);
@@ -156,7 +157,7 @@ class EntityRender extends dn.Process {
 			}
 
 		// Pivot
-		g.beginFill(ed.color);
+		g.beginFill(color);
 		g.lineStyle(1, 0x0, 0.5);
 		var pivotSize = 3;
 		g.drawRect(
