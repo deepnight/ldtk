@@ -2,6 +2,7 @@
 
   - TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
   - TODO **Ogmo 3 import**
+  - TODO **Resizable entities**
   - TODO codemirror
   - TODO level custom fields
   - TODO world/level panel separation
