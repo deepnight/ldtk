@@ -31,6 +31,9 @@ jobs:
       - name: Install Snapcraft
         uses: samuelmeuli/action-snapcraft@v1
 
+      # Install Multipass
+      - run: sudo snap install multipass
+
       - run: haxe -version
       - run: haxelib git castle https://github.com/ncannasse/castle
       - run: haxelib git heaps https://github.com/HeapsIO/heaps.git
