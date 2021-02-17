@@ -499,6 +499,7 @@
 					"layerDefUid": 2,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
+					"visible": true,
 					"intGridCsv": [
 						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,
@@ -833,6 +834,7 @@
 					"layerDefUid": 37,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
+					"visible": true,
 					"intGridCsv": [],
 					"autoLayerTiles": [
 						{ "px": [64,64], "src": [0,112], "f": 0, "t": 70, "d": [40,76] },
