@@ -326,10 +326,16 @@ class SelectionTool extends Tool<Int> {
 				return false;
 			}
 		}
-		// else if( isOnStop ) {
-		// 	// Single quick pick
-		// 	select();
-		// }
+		else if( isOnStop ) {
+			// Single quick pick
+			if( any() )
+				switch group.getElement(0) {
+					case GridCell(li, cx, cy): clear(); // selection doesn't persist for single grid cell selection
+					case Entity(li, ei):
+					case PointField(li, ei, fi, arrayIdx):
+				}
+
+		}
 
 		return super.useAt(m,isOnStop);
 	}
