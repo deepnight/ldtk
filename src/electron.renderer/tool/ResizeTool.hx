@@ -41,7 +41,7 @@ class ResizeTool extends Tool<Int> {
 		g.beginFill(c,1);
 		for(p in _handlePosIterator) {
 			if( isHandleActive(p) )
-				g.drawCircle(getHandleX(p), getHandleY(p), HANDLE_RADIUS*0.8, 16);
+				g.drawCircle(getHandleX(p), getHandleY(p), HANDLE_RADIUS*0.6, 16);
 		}
 	}
 
@@ -101,7 +101,7 @@ class ResizeTool extends Tool<Int> {
 		curMode = null;
 
 		draggedHandle = getOveredHandle(m);
-		dragOrigin = m.clone();
+		dragOrigin = m;
 
 		ev.cancel = true;
 	}
@@ -139,12 +139,34 @@ class ResizeTool extends Tool<Int> {
 				case Bottom:
 				case Left:
 				case Right:
+					applyResize( m.levelX-dragOrigin.levelX, 0 );
+
 				case TopLeft:
 				case TopRight:
 				case BottomLeft:
 				case BottomRight:
 			}
+			dragOrigin = m;
 		}
+	}
+
+	function applyResize(deltaX:Int, deltaY:Int) {
+		switch ge {
+			case GridCell(li, cx, cy):
+
+			case Entity(li, ei):
+				if( deltaX!=0 ) {
+					ei.customWidth = ei.width + deltaX;
+					if( ei.customWidth<=ei.def.width )
+						ei.customWidth = null;
+				}
+				editor.ge.emit( EntityInstanceChanged(ei) );
+				editor.selectionTool.invalidateRender();
+
+			case PointField(li, ei, fi, arrayIdx):
+		}
+
+		invalidate();
 	}
 
 	public inline function invalidate() {

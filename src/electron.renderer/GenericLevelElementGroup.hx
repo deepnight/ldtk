@@ -118,8 +118,8 @@ class GenericLevelElementGroup {
 		return lis;
 	}
 
-	inline function invalidateSelectRender()  invalidatedSelectRender = true;
-	inline function invalidateBounds()  _cachedBounds = null;
+	public inline function invalidateSelectRender()  invalidatedSelectRender = true;
+	public inline function invalidateBounds()  _cachedBounds = null;
 
 	function get_bounds() {
 		if( _cachedBounds==null ) {

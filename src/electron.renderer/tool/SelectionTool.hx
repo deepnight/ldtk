@@ -239,6 +239,10 @@ class SelectionTool extends Tool<Int> {
 	public inline function isOveringSelection(m) return group.isOveringSelection(m);
 	public inline function debugContent() return group.toString();
 
+	public inline function invalidateRender() {
+		group.invalidateBounds();
+		group.invalidateSelectRender();
+	}
 
 	override function onMouseMove(ev:hxd.Event, m:Coords) {
 		super.onMouseMove(ev,m);
