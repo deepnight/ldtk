@@ -213,4 +213,12 @@ class EntityInstanceEditor extends dn.Process {
 			scrollMem = wrapper.scrollTop();
 		});
 	}
+
+	override function update() {
+		super.update();
+		if( editor.resizeTool!=null && editor.resizeTool.isRunning() && !jWindow.hasClass("faded") )
+			jWindow.addClass("faded");
+		if( ( editor.resizeTool==null || !editor.resizeTool.isRunning() ) && jWindow.hasClass("faded") )
+			jWindow.removeClass("faded");
+	}
 }

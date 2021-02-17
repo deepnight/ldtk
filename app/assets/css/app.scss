@@ -3788,6 +3788,12 @@ canvas#webgl {
 	box-shadow: -4px 0px 16px rgba(0, 0, 0, 0.6);
 	background-color: $bgDark;
 
+	transition: opacity 0.3s;
+
+	&.faded {
+		opacity: 0.3;
+	}
+
 	.entityInstanceWrapper {
 		overflow: auto;
 		max-height: 90vh;
