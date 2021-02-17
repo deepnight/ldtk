@@ -28,10 +28,14 @@ jobs:
         with:
           haxe-version: 4.1.4
 
-      - name: Install Snapcraft from store
-        uses: samuelmeuli/action-snapcraft@v1
-        with:
-            use_lxd: true
+      # - name: Install Snapcraft from store
+      #   uses: samuelmeuli/action-snapcraft@v1
+      #   with:
+      #       use_lxd: true
+
+      - name: Install Snapcraft in destructive mode
+        run: sudo snap install snapcraft
+        run: snapcraft --destructive-mode
 
       # - name: Install Snapcraft classic
       #   run: sudo snap install snapcraft --classic
