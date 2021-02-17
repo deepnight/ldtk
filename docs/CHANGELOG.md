@@ -11,8 +11,10 @@
   - TODO multi lines pop up text editor
   - TODO Customizable source tileset per-layer instance
   - TODO better field display by aligning labels and values
-  - TODO Added photoshop style "visibility" held movement in layer list (held button & shift click)
+  - You can now show/hide multiple layers at once by holding left mouse button over visibility icons (Photoshop style).
+  - Use `Shift` + left click on a visibility icon to Show or hide all other layers except the current one.
   - An Entity count can now limited per world or per layer. This is especially useful for elements like Player start position, which should be unique in the world.
+  - The visibility status of a layer is now saved with the project.
   - When baking an Auto-layer (ie. flattening it), you are now given choices on what to do with the original baked auto-layer (delete, empty or keep).
   - Level background is now faded away in "Single layer mode".
   - Smarter auto-naming when duplicating something (ie. a copy of an Entity named "foo50" will now be "foo51", "foo52" etc.)
