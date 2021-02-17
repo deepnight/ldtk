@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - master
+      - raspberry
 
   pull_request:
     branches:
       - master
-      - raspberry
 
 jobs:
   build:
