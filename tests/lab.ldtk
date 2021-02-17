@@ -55,7 +55,7 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
-			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
+			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#000000" }],
 			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
@@ -67,10 +67,11 @@
 		{
 			"identifier": "Area",
 			"uid": 1,
-			"width": 16,
+			"width": 32,
 			"height": 16,
 			"resizableX": true,
 			"resizableY": true,
+			"keepAspectRatio": true,
 			"color": "#94D9B3",
 			"renderMode": "Rectangle",
 			"showName": false,
@@ -166,66 +167,7 @@
 					"seed": 8574905,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "Area",
-							"__grid": [4,14],
-							"__pivot": [0,0],
-							"__tile": null,
-							"width": 224,
-							"height": 80,
-							"defUid": 1,
-							"px": [64,224],
-							"fieldInstances": [
-								{
-									"__identifier": "label",
-									"__value": "bottom",
-									"__type": "String",
-									"defUid": 5,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["bottom"]
-									}]
-								},
-								{
-									"__identifier": "color",
-									"__value": "#902020",
-									"__type": "Color",
-									"defUid": 6,
-									"realEditorValues": [null]
-								}
-							]
-						},
-						{
-							"__identifier": "Area",
-							"__grid": [11,3],
-							"__pivot": [0,0],
-							"__tile": null,
-							"width": 112,
-							"height": 112,
-							"defUid": 1,
-							"px": [176,48],
-							"fieldInstances": [
-								{
-									"__identifier": "label",
-									"__value": "top",
-									"__type": "String",
-									"defUid": 5,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["top"]
-									}]
-								},
-								{
-									"__identifier": "color",
-									"__value": "#4E26D9",
-									"__type": "Color",
-									"defUid": 6,
-									"realEditorValues": [{ "id": "V_Int", "params": [5121753] }]
-								}
-							]
-						}
-					]
+					"entityInstances": []
 				},
 				{
 					"__identifier": "IntGrid",
@@ -439,7 +381,6 @@
 						{ "coordId": 332, "v": 0 },
 						{ "coordId": 333, "v": 0 },
 						{ "coordId": 334, "v": 0 },
-						{ "coordId": 347, "v": 0 },
 						{ "coordId": 348, "v": 0 },
 						{ "coordId": 349, "v": 0 },
 						{ "coordId": 350, "v": 0 },
@@ -449,7 +390,6 @@
 						{ "coordId": 354, "v": 0 },
 						{ "coordId": 355, "v": 0 },
 						{ "coordId": 356, "v": 0 },
-						{ "coordId": 369, "v": 0 },
 						{ "coordId": 370, "v": 0 },
 						{ "coordId": 371, "v": 0 },
 						{ "coordId": 372, "v": 0 },
@@ -459,7 +399,6 @@
 						{ "coordId": 376, "v": 0 },
 						{ "coordId": 377, "v": 0 },
 						{ "coordId": 378, "v": 0 },
-						{ "coordId": 391, "v": 0 },
 						{ "coordId": 392, "v": 0 },
 						{ "coordId": 393, "v": 0 },
 						{ "coordId": 394, "v": 0 },
@@ -541,9 +480,9 @@
 						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
-						1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,
-						0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+						1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 						1,1,1,1,1,1,1
 					],
