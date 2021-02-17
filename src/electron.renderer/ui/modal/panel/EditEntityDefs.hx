@@ -158,6 +158,9 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 		var i = Input.linkToHtmlInput( curEntity.resizableY, jEntityForm.find("input#resizableY") );
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
+		var i = Input.linkToHtmlInput( curEntity.keepAspectRatio, jEntityForm.find("input#keepAspectRatio") );
+		i.onChange = editor.ge.emit.bind(EntityDefChanged);
+		i.setEnabled( curEntity.resizableX && curEntity.resizableY );
 
 		var i = Input.linkToHtmlInput( curEntity.height, jEntityForm.find("input[name='height']") );
 		i.setBounds(1,256);

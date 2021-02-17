@@ -199,6 +199,23 @@ class ResizeTool extends Tool<Int> {
 					var oldW = ei.width;
 					var oldH = ei.height;
 
+					// Aspect ratio
+					if( ei.def.resizableX && ei.def.resizableY && ei.def.keepAspectRatio ) {
+						var ar = ei.def.height/ei.def.width;
+						switch draggedHandle {
+							case null:
+							case Top, Bottom:
+								newWid = M.round( newHei*1/ar );
+
+							case Left, Right:
+								newHei = M.round( newWid*ar );
+
+							case TopLeft, TopRight, BottomLeft, BottomRight:
+								newHei = M.round( newWid*ar );
+						}
+					}
+
+
 					ei.customWidth = newWid;
 					if( ei.customWidth<=ei.def.width ) ei.customWidth = null;
 
