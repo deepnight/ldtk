@@ -36,8 +36,8 @@ jobs:
       - name: Install Snapcraft
         run: sudo snap install snapcraft --classic
 
-      - name: Run Snapcraft in destructive mode
-        run: snapcraft --destructive-mode
+      - run: snapcraft init
+      - run: snapcraft --destructive-mode
 
       # - name: Install Snapcraft classic
       #   run: sudo snap install snapcraft --classic
