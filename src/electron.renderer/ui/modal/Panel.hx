@@ -10,7 +10,6 @@ class Panel extends ui.Modal {
 		super();
 		ui.Modal.closeAll(this);
 
-		EntityInstanceEditor.closeExisting();
 		editor.selectionTool.clear();
 
 		var mainPanel = new J("#mainPanel");

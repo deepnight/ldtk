@@ -37,6 +37,11 @@ class GenericLevelElementGroup {
 		invalidateBounds();
 	}
 
+	@:keep
+	public function toString() {
+		return elements.length==0 ? "empty" : elements.map( e->e.getName() ).slice(0,10).join(",");
+	}
+
 	public function clear() {
 		elements = [];
 		originalRects = [];
@@ -767,6 +772,7 @@ class GenericLevelElementGroup {
 	}
 
 
+	@:allow(tool.SelectionTool)
 	function decrementAllFieldArrayIdxAbove(f:data.inst.FieldInstance, above:Int) {
 		for(i in 0...elements.length)
 			switch elements[i] {
@@ -776,31 +782,6 @@ class GenericLevelElementGroup {
 
 				case _:
 			}
-	}
-
-	public function deleteSelecteds() {
-		for(ge in elements)
-			switch ge {
-				case null:
-
-				case GridCell(li, cx, cy):
-					if( li.hasAnyGridValue(cx,cy) )
-						switch li.def.type {
-							case IntGrid: li.removeIntGrid(cx,cy);
-							case Tiles: li.removeAllGridTiles(cx,cy);
-							case Entities:
-							case AutoLayer:
-						}
-
-				case Entity(li, ei):
-					li.removeEntityInstance(ei);
-
-				case PointField(li, ei, fi, arrayIdx):
-					fi.removeArrayValue(arrayIdx);
-					decrementAllFieldArrayIdxAbove(fi, arrayIdx);
-			}
-
-		clear();
 	}
 
 	public function onPostUpdate() {

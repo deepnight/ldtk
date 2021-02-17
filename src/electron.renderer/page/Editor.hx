@@ -29,6 +29,7 @@ class Editor extends Page {
 	// Tools
 	public var worldTool : WorldTool;
 	var panTool : tool.PanView;
+	var resizeTool : Null<tool.ResizeTool>;
 	public var curTool(get,never) : tool.LayerTool<Dynamic>;
 	public var selectionTool: tool.SelectionTool;
 	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();
@@ -409,13 +410,8 @@ class Editor extends Page {
 					worldTool.stopAddMode();
 				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeLatest();
-				else if( selectionTool.any() ) {
-					if( !worldMode )
-						ui.EntityInstanceEditor.closeExisting();
+				else if( selectionTool.any() )
 					selectionTool.clear();
-				}
-				else if( ui.EntityInstanceEditor.isOpen() && !worldMode ) // TODO instance cleanup
-					ui.EntityInstanceEditor.closeExisting();
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() )
@@ -503,6 +499,8 @@ class Editor extends Page {
 		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() ) {
 			worldTool.onKeyPress(keyCode);
 			panTool.onKeyPress(keyCode);
+			if( resizeTool!=null )
+				resizeTool.onKeyPress(keyCode);
 
 			if( !worldMode ) {
 				if( isSpecialToolActive() )
@@ -665,6 +663,20 @@ class Editor extends Page {
 		}
 	}
 
+	public function clearResizeTool() {
+		if( resizeTool!=null ) {
+			if( resizeTool.isRunning() )
+				resizeTool.stopUsing( getMouse() );
+			resizeTool.destroy();
+		}
+		resizeTool = null;
+	}
+
+	public function createResizeToolFor(ge:GenericLevelElement) {
+		clearResizeTool();
+		resizeTool = new tool.ResizeTool(ge);
+	}
+
 	function onMouseDown(ev:hxd.Event) {
 		if( isLocked() )
 			return;
@@ -672,6 +684,9 @@ class Editor extends Page {
 		var m = getMouse();
 
 		panTool.startUsing(ev,m);
+
+		if( !ev.cancel && resizeTool!=null )
+			resizeTool.onMouseMove( ev, m );
 
 		if( !ev.cancel && !project.isBackup() )
 			rulers.onMouseDown( ev, m );
@@ -697,6 +712,8 @@ class Editor extends Page {
 
 		panTool.stopUsing(m);
 		worldTool.onMouseUp(m);
+		if( resizeTool!=null && resizeTool.isRunning() )
+			resizeTool.stopUsing(m);
 
 		// Tool updates
 		if( selectionTool.isRunning() )
@@ -717,6 +734,9 @@ class Editor extends Page {
 			panTool.onMouseMove(ev,m);
 			rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
 			worldTool.onMouseMove(ev,m);
+
+			if( !ev.cancel && resizeTool!=null )
+				resizeTool.onMouseMove(ev,m);
 
 			if( !ev.cancel && !worldMode ) {
 				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
@@ -915,6 +935,7 @@ class Editor extends Page {
 		if( worldMode==v )
 			return;
 
+		selectionTool.clear();
 		project.reorganizeWorld();
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
@@ -923,8 +944,6 @@ class Editor extends Page {
 			ui.Modal.closeAll();
 			new ui.modal.panel.LevelPanel();
 		}
-		else
-			ui.EntityInstanceEditor.closeExisting();
 
 		camera.onWorldModeChange(worldMode, usedMouseWheel);
 		worldTool.onWorldModeChange(worldMode);
@@ -1593,7 +1612,9 @@ class Editor extends Page {
 			App.ME.debug("-- Tools & UI ----------------------------------------");
 			App.ME.debug("  "+worldTool);
 			App.ME.debug("  "+panTool);
+			App.ME.debug("  "+resizeTool);
 			App.ME.debug("  "+selectionTool);
+			App.ME.debug("  selection="+selectionTool.debugContent());
 			for(t in allLayerTools)
 				App.ME.debug("  "+t);
 			App.ME.debug("  "+rulers);

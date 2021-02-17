@@ -56,6 +56,8 @@ class EntityDef {
 			+ "]";
 	}
 
+	public inline function isResizable() return resizableX || resizableY;
+
 	// public function getShortIdentifier(maxlen=8) {
 	// 	if( identifier.length<=maxlen )
 	// 		return identifier;
