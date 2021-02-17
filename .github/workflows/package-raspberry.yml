@@ -28,15 +28,16 @@ jobs:
         with:
           haxe-version: 4.1.4
 
-        # Snapcraft required for ARM build
-      # - name: Install Snapcraft
-        # uses: samuelmeuli/action-snapcraft@v1
+      - name: Install Snapcraft from store
+        uses: samuelmeuli/action-snapcraft@v1
+        with:
+            use_lxd: true
 
-      - name: Install Snapcraft classic
-        run: sudo snap install snapcraft --classic
+      # - name: Install Snapcraft classic
+      #   run: sudo snap install snapcraft --classic
 
-      - name: Install Multipass beta
-        run: sudo snap install multipass --beta --classic
+      # - name: Install Multipass beta
+      #   run: sudo snap install multipass --beta --classic
 
       - run: haxe -version
       - run: haxelib git castle https://github.com/ncannasse/castle
