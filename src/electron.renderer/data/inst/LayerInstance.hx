@@ -9,6 +9,7 @@ class LayerInstance {
 
 	public var levelId : Int;
 	public var layerDefUid : Int;
+	public var visible = true;
 
 	@:allow(importer)
 	var pxOffsetX : Int = 0;
@@ -96,6 +97,7 @@ class LayerInstance {
 			layerDefUid: layerDefUid,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
+			visible: visible,
 
 			intGrid: { // old IntGrid format
 				var arr = [];
@@ -229,6 +231,7 @@ class LayerInstance {
 		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
+		li.visible = JsonTools.readBool(json.visible, true);
 
 		if( json.intGridCsv==null ) {
 			// Read old pre-CSV format

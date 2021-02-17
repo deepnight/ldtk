@@ -1198,7 +1198,6 @@ class Editor extends Page {
 			case ViewportChanged:
 			case LayerInstanceSelected:
 			case LevelSelected(_):
-			case LayerInstanceVisiblityChanged(_):
 			case AutoLayerRenderingChanged:
 			case ToolOptionChanged:
 			case BeforeProjectSaving:

@@ -9,9 +9,6 @@ class LevelRender extends dn.Process {
 
 	var autoLayerRendering = true;
 
-	/** <LayerDefUID, Bool> **/
-	var layerVis : Map<Int,Bool> = new Map();
-
 	var layersWrapper : h2d.Layers;
 
 	/** <LayerDefUID, LayerRender> **/
@@ -264,12 +261,12 @@ class LevelRender extends dn.Process {
 		return autoLayerRendering;
 	}
 
-	public inline function isLayerVisible(l:data.inst.LayerInstance) {
-		return l!=null && ( !layerVis.exists(l.layerDefUid) || layerVis.get(l.layerDefUid)==true );
+	public inline function isLayerVisible(li:data.inst.LayerInstance) {
+		return li!=null && li.visible;
 	}
 
 	public function toggleLayer(li:data.inst.LayerInstance) {
-		layerVis.set(li.layerDefUid, !isLayerVisible(li));
+		li.visible = !li.visible;
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 
 		if( isLayerVisible(li) )
@@ -277,21 +274,18 @@ class LevelRender extends dn.Process {
 	}
 
 	public function setLayerVisibility(li:data.inst.LayerInstance, v:Bool) {
-		layerVis.set(li.layerDefUid, v);
+		li.visible = v;
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 		if( isLayerVisible(li) )
 			invalidateLayer(li);
 	}
 
-	public function showLayer(li:data.inst.LayerInstance) {
-		layerVis.set(li.layerDefUid, true);
-		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
-		invalidateLayer(li);
+	public inline function showLayer(li:data.inst.LayerInstance) {
+		setLayerVisibility(li, true);
 	}
 
-	public function hideLayer(li:data.inst.LayerInstance) {
-		layerVis.set(li.layerDefUid, false);
-		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
+	public inline function hideLayer(li:data.inst.LayerInstance) {
+		setLayerVisibility(li, false);
 	}
 
 	public function bleepRectPx(x:Int, y:Int, w:Int, h:Int, col:UInt, thickness=1) {
