@@ -198,8 +198,7 @@ class EntityTool extends tool.LayerTool<Int> {
 
 		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 		switch ge {
-			case Entity(_): editor.selectionTool.onMouseMove(ev,m);
-			case PointField(_): editor.selectionTool.onMouseMove(ev,m);
+			case Entity(_), PointField(_): editor.selectionTool.onMouseMove(ev,m);
 			case _:
 		}
 	}

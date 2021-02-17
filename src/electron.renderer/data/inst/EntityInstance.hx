@@ -76,6 +76,14 @@ class EntityInstance {
 		ei.x = JsonTools.readInt( json.px[0], 0 );
 		ei.y = JsonTools.readInt( json.px[1], 0 );
 
+		ei.customWidth = JsonTools.readNullableInt( json.width );
+		if( ei.customWidth==ei.def.width )
+			ei.customWidth = null;
+
+		ei.customHeight = JsonTools.readNullableInt( json.height );
+		if( ei.customHeight==ei.def.height )
+			ei.customHeight = null;
+
 		for( fieldJson in JsonTools.readArray(json.fieldInstances) ) {
 			var fi = FieldInstance.fromJson(project, fieldJson);
 			ei.fieldInstances.set(fi.defUid, fi);

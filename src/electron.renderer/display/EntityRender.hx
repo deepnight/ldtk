@@ -73,14 +73,21 @@ class EntityRender extends dn.Process {
 		if( ei==null && ed==null )
 			throw "Need at least 1 parameter";
 
+		if( ei!=null && ed!=null )
+			ed = null;
+
 		if( ed==null )
 			ed = ei.def;
+
+
+		var w = ei!=null ? ei.width : ed.width;
+		var h = ei!=null ? ei.height : ed.height;
 
 		var wrapper = new h2d.Object();
 
 		var g = new h2d.Graphics(wrapper);
-		g.x = Std.int( -ed.width*ed.pivotX );
-		g.y = Std.int( -ed.height*ed.pivotY );
+		g.x = Std.int( -w*ed.pivotX );
+		g.y = Std.int( -h*ed.pivotY );
 
 		// Render a tile
 		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:ldtk.Json.EntityTileRenderMode) {
@@ -89,28 +96,28 @@ class EntityRender extends dn.Process {
 				var p = 2;
 				g.lineStyle(3, 0xff0000);
 				g.moveTo(p,p);
-				g.lineTo(ed.width-p, ed.height-p);
-				g.moveTo(ed.width-p, p);
-				g.lineTo(p, ed.height-p);
+				g.lineTo(w-p, h-p);
+				g.moveTo(w-p, p);
+				g.lineTo(p, h-p);
 			}
 			else {
 				g.beginFill(ed.color, 0.2);
-				g.drawRect(0, 0, ed.width, ed.height);
+				g.drawRect(0, 0, w, h);
 
 				var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
 				var t = td.getTile(tileId);
 				var bmp = new h2d.Bitmap(t, wrapper);
 				switch mode {
 					case Stretch:
-						bmp.scaleX = ed.width / bmp.tile.width;
-						bmp.scaleY = ed.height / bmp.tile.height;
+						bmp.scaleX = w / bmp.tile.width;
+						bmp.scaleY = h / bmp.tile.height;
 
 					case Crop:
-						if( bmp.tile.width>ed.width || bmp.tile.height>ed.height )
+						if( bmp.tile.width>w || bmp.tile.height>h )
 							bmp.tile = bmp.tile.sub(
 								0, 0,
-								M.fmin( bmp.tile.width, ed.width ),
-								M.fmin( bmp.tile.height, ed.height )
+								M.fmin( bmp.tile.width, w ),
+								M.fmin( bmp.tile.height, h )
 							);
 				}
 				bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
@@ -128,10 +135,10 @@ class EntityRender extends dn.Process {
 				g.lineStyle(1, 0x0, 0.4);
 				switch ed.renderMode {
 					case Rectangle:
-						g.drawRect(0, 0, ed.width, ed.height);
+						g.drawRect(0, 0, w, h);
 
 					case Ellipse:
-						g.drawEllipse(ed.width*0.5, ed.height*0.5, ed.width*0.5, ed.height*0.5, 0, ed.width<=16 || ed.height<=16 ? 16 : 0);
+						g.drawEllipse(w*0.5, h*0.5, w*0.5, h*0.5, 0, w<=16 || h<=16 ? 16 : 0);
 
 					case _:
 				}
@@ -140,9 +147,9 @@ class EntityRender extends dn.Process {
 			case Cross:
 				g.lineStyle(5, ed.color, 1);
 				g.moveTo(0,0);
-				g.lineTo(ed.width, ed.height);
-				g.moveTo(0,ed.height);
-				g.lineTo(ed.width, 0);
+				g.lineTo(w, h);
+				g.moveTo(0,h);
+				g.lineTo(w, 0);
 
 			case Tile:
 				renderTile(ed.tilesetId, ed.tileId, ed.tileRenderMode);
@@ -153,8 +160,8 @@ class EntityRender extends dn.Process {
 		g.lineStyle(1, 0x0, 0.5);
 		var pivotSize = 3;
 		g.drawRect(
-			Std.int((ed.width-pivotSize)*ed.pivotX),
-			Std.int((ed.height-pivotSize)*ed.pivotY),
+			Std.int((w-pivotSize)*ed.pivotX),
+			Std.int((h-pivotSize)*ed.pivotY),
 			pivotSize, pivotSize
 		);
 
@@ -223,7 +230,7 @@ class EntityRender extends dn.Process {
 			tf.scale(settings.v.editorUiScale);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = ed.identifier.substr(0,16);
-			tf.x = Std.int( ed.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
+			tf.x = Std.int( ei.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
 			tf.y = 0;
 			FieldInstanceRender.addBg(f, ei.getSmartColor(true), 0.82);
 		}
@@ -244,18 +251,18 @@ class EntityRender extends dn.Process {
 
 		// Update field wrappers
 		above.setScale(scale);
-		above.x = Std.int( -ed.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ed.width*0.5 );
-		above.y = Std.int( -above.outerHeight*above.scaleY - ed.height*ed.pivotY - 1 );
+		above.x = Std.int( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
+		above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY - 1 );
 		above.alpha = alpha;
 
 		center.setScale(scale);
-		center.x = Std.int( -ed.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ed.width*0.5 );
-		center.y = Std.int( -ed.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ed.height*0.5);
+		center.x = Std.int( -ei.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
+		center.y = Std.int( -ei.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
 		center.alpha = alpha;
 
 		beneath.setScale(scale);
-		beneath.x = Std.int( -ed.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ed.width*0.5 );
-		beneath.y = Std.int( ed.height*(1-ed.pivotY) + 1 );
+		beneath.x = Std.int( -ei.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
+		beneath.y = Std.int( ei.height*(1-ed.pivotY) + 1 );
 		beneath.alpha = alpha;
 	}
 

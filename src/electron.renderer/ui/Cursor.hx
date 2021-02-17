@@ -135,14 +135,16 @@ class Cursor extends dn.Process {
 					graphics.lineStyle(2, 0xffffff, 1);
 				else
 					graphics.lineStyle(1, getOpposite(def.color), 0.8);
+				var w = ei!=null ? ei.width : def.width;
+				var h = ei!=null ? ei.height : def.height;
 				graphics.drawRect(
-					-pad -def.width*def.pivotX,
-					-pad -def.height*def.pivotY,
-					def.width + pad*2,
-					def.height + pad*2
+					-pad -w*def.pivotX,
+					-pad -h*def.pivotY,
+					w + pad*2,
+					h + pad*2
 				);
 
-				var o = display.EntityRender.renderCore(def);
+				var o = display.EntityRender.renderCore(ei,def);
 				wrapper.addChild(o);
 
 			case Tiles(li, tileIds, cx, cy, flips):

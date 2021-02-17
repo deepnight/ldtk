@@ -52,7 +52,7 @@ class ResizeTool extends Tool<Int> {
 					{ x:cx*li.def.gridSize, y:cy*li.def.gridSize, w:li.def.gridSize, h:li.def.gridSize }
 
 				case Entity(li, ei):
-					{ x:ei.left, y:ei.top, w:ei.def.width, h:ei.def.height }
+					{ x:ei.left, y:ei.top, w:ei.width, h:ei.height }
 
 				case PointField(li, ei, fi, arrayIdx):
 					var pt = fi.getPointGrid(arrayIdx);

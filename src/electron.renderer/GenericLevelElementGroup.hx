@@ -213,10 +213,10 @@ class GenericLevelElementGroup {
 				case Entity(li, ei):
 					selectRender.beginFill(c, a);
 					selectRender.drawRect(
-						li.pxTotalOffsetX + ei.x - ei.def.width * ei.def.pivotX,
-						li.pxTotalOffsetY + ei.y - ei.def.height * ei.def.pivotY,
-						ei.def.width,
-						ei.def.height
+						li.pxTotalOffsetX + ei.x - ei.width * ei.def.pivotX,
+						li.pxTotalOffsetY + ei.y - ei.height * ei.def.pivotY,
+						ei.width,
+						ei.height
 					);
 
 				case PointField(li, ei, fi, arrayIdx):
