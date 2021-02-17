@@ -940,6 +940,7 @@
 				"levelId",
 				"pxOffsetX",
 				"pxOffsetY",
+				"visible",
 				"seed"
 			],
 			"additionalProperties": false,
@@ -1018,6 +1019,12 @@
 					"type": [
 						"integer",
 						"null"
+					]
+				},
+				"visible": {
+					"description": "Layer instance visibility",
+					"type": [
+						"boolean"
 					]
 				},
 				"entityInstances": {
