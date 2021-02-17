@@ -317,10 +317,10 @@ class LevelRender extends dn.Process {
 	}
 	public inline function bleepEntity(ei:data.inst.EntityInstance) {
 		bleepRectPx(
-			Std.int( ei.x-ei.def.width*ei.def.pivotX ),
-			Std.int( ei.y-ei.def.height*ei.def.pivotY ),
-			ei.def.width,
-			ei.def.height,
+			Std.int( ei.x-ei.width*ei.def.pivotX ),
+			Std.int( ei.y-ei.height*ei.def.pivotY ),
+			ei.width,
+			ei.height,
 			ei.getSmartColor(true), 2
 		);
 	}
