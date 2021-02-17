@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 3,
+	"nextUid": 4,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -65,7 +65,28 @@
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0,
 			"pivotY": 0,
-			"fieldDefs": []
+			"fieldDefs": [
+				{
+					"identifier": "Point",
+					"__type": "Array<Point>",
+					"uid": 3,
+					"type": "F_Point",
+					"isArray": true,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "PointStar",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLangageMode": null
+				}
+			]
 		}
 	], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
@@ -111,14 +132,29 @@
 					"entityInstances": [
 						{
 							"__identifier": "Area",
-							"__grid": [6,5],
+							"__grid": [7,6],
 							"__pivot": [0,0],
 							"__tile": null,
 							"width": 16,
 							"height": 16,
 							"defUid": 1,
-							"px": [96,80],
-							"fieldInstances": []
+							"px": [112,96],
+							"fieldInstances": [{
+								"__identifier": "Point",
+								"__value": [ { "cx": 10, "cy": 4 }, { "cx": 2, "cy": 9 }, { "cx": 10, "cy": 8 } ],
+								"__type": "Array<Point>",
+								"defUid": 3,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": ["10,4"]
+								}, {
+									"id": "V_String",
+									"params": ["2,9"]
+								}, {
+									"id": "V_String",
+									"params": ["10,8"]
+								} ]
+							}]
 						}
 					]
 				}
