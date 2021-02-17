@@ -7,12 +7,21 @@ class EntityInstance {
 	public var defUid(default,null) : Int;
 	public var x : Int;
 	public var y : Int;
+	public var customWidth : Null<Int>;
+	public var customHeight: Null<Int>;
+
+	public var width(get,never) : Int;
+		inline function get_width() return customWidth!=null ? customWidth : def.width;
+
+	public var height(get,never) : Int;
+		inline function get_height() return customHeight!=null ? customHeight : def.height;
+
 	public var fieldInstances : Map<Int, data.inst.FieldInstance> = new Map();
 
-	public var left(get,never) : Int; inline function get_left() return Std.int( x - def.width*def.pivotX );
-	public var right(get,never) : Int; inline function get_right() return left + def.width-1;
-	public var top(get,never) : Int; inline function get_top() return Std.int( y - def.height*def.pivotY );
-	public var bottom(get,never) : Int; inline function get_bottom() return top + def.height-1;
+	public var left(get,never) : Int; inline function get_left() return Std.int( x - width*def.pivotX );
+	public var right(get,never) : Int; inline function get_right() return left + width-1;
+	public var top(get,never) : Int; inline function get_top() return Std.int( y - height*def.pivotY );
+	public var bottom(get,never) : Int; inline function get_bottom() return top + height-1;
 
 
 	public function new(p:Project, entityDefUid:Int) {
@@ -43,8 +52,8 @@ class EntityInstance {
 					null;
 			},
 
-			width: def.width,
-			height: def.height,
+			width: width,
+			height: height,
 			defUid: defUid,
 			px: [x,y],
 			fieldInstances: {
