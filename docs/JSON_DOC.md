@@ -211,6 +211,8 @@ Value | Type | Description
 `identifier` | String | Unique String identifier
 `pivotX` | Float | Pivot X coordinate (from 0 to 1.0)
 `pivotY` | Float | Pivot Y coordinate (from 0 to 1.0)
+`resizableX`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | If TRUE, the entity instances will be resizable horizontally
+`resizableY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | If TRUE, the entity instances will be resizable vertically
 `tileId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tile ID used for optional tile display
 `tilesetId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset ID used for optional tile display
 `uid` | Int | Unique Int identifier

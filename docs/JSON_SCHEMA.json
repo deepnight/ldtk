@@ -712,6 +712,8 @@
 				"identifier",
 				"pivotX",
 				"pivotY",
+				"resizableX",
+				"resizableY",
 				"uid",
 				"width",
 				"fieldDefs",
@@ -794,10 +796,22 @@
 						"MoveLastOne"
 					]
 				},
+				"resizableX": {
+					"description": "If TRUE, the entity instances will be resizable horizontally",
+					"type": [
+						"boolean"
+					]
+				},
 				"uid": {
 					"description": "Unique Int identifier",
 					"type": [
 						"integer"
+					]
+				},
+				"resizableY": {
+					"description": "If TRUE, the entity instances will be resizable vertically",
+					"type": [
+						"boolean"
 					]
 				},
 				"height": {
