@@ -123,6 +123,7 @@ class EditEntityDefs extends ui.modal.Panel {
 	}
 
 	function updateEntityForm() {
+		ui.Tip.clear();
 		jEntityForm.find("*").off(); // cleanup event listeners
 
 		var jAll = jEntityForm.add( jPreview );
@@ -150,6 +151,12 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Dimensions
 		var i = Input.linkToHtmlInput( curEntity.width, jEntityForm.find("input[name='width']") );
 		i.setBounds(1,256);
+		i.onChange = editor.ge.emit.bind(EntityDefChanged);
+
+		// Resizable
+		var i = Input.linkToHtmlInput( curEntity.resizableX, jEntityForm.find("input#resizableX") );
+		i.onChange = editor.ge.emit.bind(EntityDefChanged);
+		var i = Input.linkToHtmlInput( curEntity.resizableY, jEntityForm.find("input#resizableY") );
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 
 		var i = Input.linkToHtmlInput( curEntity.height, jEntityForm.find("input[name='height']") );

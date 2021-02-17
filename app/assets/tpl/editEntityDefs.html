@@ -30,11 +30,19 @@
 			</li>
 
 			<li>
-				<label for="width">Width</label>
+				<label for="width">Size</label>
 				<input type="text" name="width" class="small" id="width"/>
 				<span>x</span>
 				<input type="text" name="height" class="small"/>
 				<span>px</span>
+			</li>
+
+			<li>
+				<label>Resizable</label>
+				<input type="checkbox" id="resizableX" title="If checked, the entity instances will be horizontally resizable. In this case, the width above will define the a minimum size."/>
+				<span>ResizableX, </span>
+				<input type="checkbox" id="resizableY" title="If checked, the entity instances will be vertically resizable. In this case, the height above will define the a minimum size."/>
+				<span>ResizableY</span>
 			</li>
 
 			<li class="renderMode">

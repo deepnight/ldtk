@@ -15,6 +15,8 @@ class EntityDef {
 	public var showName : Bool;
 	public var tilesetId : Null<Int>;
 	public var tileId : Null<Int>;
+	public var resizableX : Bool;
+	public var resizableY : Bool;
 
 	public var maxCount : Int;
 	public var limitScope : ldtk.Json.EntityLimitScope;
@@ -37,6 +39,7 @@ class EntityDef {
 		tileRenderMode = Stretch;
 		identifier = "Entity"+uid;
 		setPivot(0.5,1);
+		resizableX = resizableY = false;
 	}
 
 	public function isTileDefined() {
@@ -74,6 +77,8 @@ class EntityDef {
 		o.identifier = JsonTools.readString( json.identifier );
 		o.width = JsonTools.readInt( json.width, 16 );
 		o.height = JsonTools.readInt( json.height, 16 );
+		o.resizableX = JsonTools.readBool( json.resizableX, false );
+		o.resizableY = JsonTools.readBool( json.resizableY, false );
 
 		o.color = JsonTools.readColor( json.color, 0x0 );
 		o.renderMode = JsonTools.readEnum(ldtk.Json.EntityRenderMode, json.renderMode, false, Rectangle);
@@ -103,6 +108,8 @@ class EntityDef {
 			uid: uid,
 			width: width,
 			height: height,
+			resizableX: resizableX,
+			resizableY: resizableY,
 
 			color: JsonTools.writeColor(color),
 			renderMode: JsonTools.writeEnum(renderMode, false),
