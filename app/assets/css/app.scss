@@ -1409,6 +1409,9 @@ input[type=checkbox] {
 	&:hover {
 		outline: 1px solid $orange;
 	}
+	&:disabled {
+		opacity: 0.3;
+	}
 }
 
 input[type="file"] {
