@@ -134,18 +134,19 @@ class ResizeTool extends Tool<Int> {
 		else {
 			// Actual resizing
 			ev.cancel = true;
-			switch draggedHandle { // TODO
-				case Top:
-				case Bottom:
-				case Left:
-				case Right:
-					applyResize( m.levelX-dragOrigin.levelX, 0 );
+			var deltaX = switch draggedHandle { // Width
+				case Top, Bottom: 0;
+				case Left, TopLeft, BottomLeft: dragOrigin.levelX - m.levelX;
+				case Right, TopRight, BottomRight: m.levelX - dragOrigin.levelX;
 
-				case TopLeft:
-				case TopRight:
-				case BottomLeft:
-				case BottomRight:
 			}
+			var deltaY = switch draggedHandle { // Height
+				case Left, Right: 0;
+				case Top, TopLeft, TopRight: dragOrigin.levelY - m.levelY;
+				case Bottom, BottomLeft, BottomRight: m.levelY - dragOrigin.levelY;
+
+			}
+			applyResize(deltaX, deltaY);
 			dragOrigin = m;
 		}
 	}
@@ -156,9 +157,28 @@ class ResizeTool extends Tool<Int> {
 
 			case Entity(li, ei):
 				if( deltaX!=0 ) {
+					// Width
+					var old = ei.width;
 					ei.customWidth = ei.width + deltaX;
 					if( ei.customWidth<=ei.def.width )
 						ei.customWidth = null;
+
+					switch draggedHandle {
+						case Left, TopLeft, BottomLeft: ei.x -= ei.width-old;
+						case _:
+					}
+				}
+				if( deltaY!=0 ) {
+					// Height
+					var old = ei.height;
+					ei.customHeight= ei.height + deltaY;
+					if( ei.customHeight<=ei.def.height )
+						ei.customHeight = null;
+
+					switch draggedHandle {
+						case Top, TopLeft, TopRight: ei.y -= ei.height-old;
+						case _:
+					}
 				}
 				editor.ge.emit( EntityInstanceChanged(ei) );
 				editor.selectionTool.invalidateRender();
