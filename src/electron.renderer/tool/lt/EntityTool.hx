@@ -147,7 +147,10 @@ class EntityTool extends tool.LayerTool<Int> {
 						editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);
 						onEditAnything();
 						stopUsing(m);
-						editor.selectionTool.startUsing(ev, m);
+						if( editor.resizeTool!=null )
+							editor.resizeTool.startUsing(ev, m);
+						else
+							editor.selectionTool.startUsing(ev, m);
 						editor.ge.emit( EntityInstanceAdded(ei) );
 					}
 				}

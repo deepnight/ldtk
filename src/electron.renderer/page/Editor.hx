@@ -29,7 +29,7 @@ class Editor extends Page {
 	// Tools
 	public var worldTool : WorldTool;
 	var panTool : tool.PanView;
-	var resizeTool : Null<tool.ResizeTool>;
+	public var resizeTool : Null<tool.ResizeTool>;
 	public var curTool(get,never) : tool.LayerTool<Dynamic>;
 	public var selectionTool: tool.SelectionTool;
 	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();

@@ -62,6 +62,23 @@ class ResizeTool extends Tool<Int> {
 	}
 
 	function isHandleActive(p:RectHandlePos) {
+		switch ge {
+			case GridCell(li, cx, cy):
+			case Entity(li, ei):
+				if( !ei.def.resizableX )
+					switch p {
+						case Left,Right,TopLeft,TopRight,BottomLeft,BottomRight: return false;
+						case _:
+					}
+				if( !ei.def.resizableY )
+					switch p {
+						case Top,Bottom,TopLeft,TopRight,BottomLeft,BottomRight: return false;
+						case _:
+					}
+
+			case PointField(li, ei, fi, arrayIdx):
+		}
+
 		return switch p {
 			case Top, Bottom: rect.w > HANDLE_RADIUS*2;
 			case Left, Right: rect.h > HANDLE_RADIUS*2;
@@ -100,10 +117,22 @@ class ResizeTool extends Tool<Int> {
 		super.startUsing(ev,m);
 		curMode = null;
 
-		draggedHandle = getOveredHandle(m);
-		dragOrigin = m;
-
 		ev.cancel = true;
+		draggedHandle = getOveredHandle(m);
+		if( draggedHandle==null ) {
+			// Can happen if startUsing() is manually called (like while creating an Entity)
+			switch ge {
+				case GridCell(li, cx, cy):
+				case Entity(li, ei):
+					draggedHandle = ei.def.resizableX && ei.def.resizableY ? BottomRight
+						: ei.def.resizableX ? Right
+						: Bottom;
+
+				case PointField(li, ei, fi, arrayIdx):
+			}
+		}
+
+		dragOrigin = m;
 	}
 
 	override function stopUsing(m:Coords) {
