@@ -134,59 +134,67 @@ class ResizeTool extends Tool<Int> {
 		else {
 			// Actual resizing
 			ev.cancel = true;
-			var deltaX = switch draggedHandle { // Width
-				case Top, Bottom: 0;
-				case Left, TopLeft, BottomLeft: dragOrigin.levelX - m.levelX;
-				case Right, TopRight, BottomRight: m.levelX - dragOrigin.levelX;
+			var snap = settings.v.grid ? editor.curLayerDef.gridSize : 1;
 
-			}
-			var deltaY = switch draggedHandle { // Height
-				case Left, Right: 0;
-				case Top, TopLeft, TopRight: dragOrigin.levelY - m.levelY;
-				case Bottom, BottomLeft, BottomRight: m.levelY - dragOrigin.levelY;
+			// Width
+			var newWid = switch draggedHandle {
+				case Top, Bottom: rect.w;
 
+				case Left, TopLeft, BottomLeft:
+					var w = (rect.x+rect.w) - HANDLE_RADIUS - m.levelX;
+					w = M.round(w/snap) * snap;
+					w;
+
+				case Right, TopRight, BottomRight:
+					var w = m.levelX - rect.x - HANDLE_RADIUS;
+					w = M.round(w/snap) * snap;
 			}
-			applyResize(deltaX, deltaY);
+
+			// Height
+			var newHei = switch draggedHandle {
+				case Left, Right: rect.h;
+
+				case Top, TopLeft, TopRight:
+					var h = (rect.y+rect.h) - HANDLE_RADIUS - m.levelY;
+					h = M.round(h/snap) * snap;
+
+				case Bottom, BottomLeft, BottomRight:
+					var h = m.levelY - rect.y - HANDLE_RADIUS;
+					h = M.round(h/snap) * snap;
+			}
+
+			// Apply new bounds
+			switch ge {
+				case GridCell(li, cx, cy):
+
+				case Entity(li, ei):
+					var oldW = ei.width;
+					var oldH = ei.height;
+
+					ei.customWidth = newWid;
+					if( ei.customWidth<=ei.def.width ) ei.customWidth = null;
+
+					ei.customHeight = newHei;
+					if( ei.customHeight<=ei.def.height ) ei.customHeight = null;
+
+					switch draggedHandle {
+						case Left, TopLeft, BottomLeft: ei.x -= ei.width - oldW;
+						case _:
+					}
+
+					switch draggedHandle {
+						case Top, TopLeft, TopRight: ei.y -= ei.height - oldH;
+						case _:
+					}
+
+					editor.ge.emit( EntityInstanceChanged(ei) );
+					editor.selectionTool.invalidateRender();
+					invalidate();
+
+				case PointField(li, ei, fi, arrayIdx):
+			}
 			dragOrigin = m;
 		}
-	}
-
-	function applyResize(deltaX:Int, deltaY:Int) {
-		switch ge {
-			case GridCell(li, cx, cy):
-
-			case Entity(li, ei):
-				if( deltaX!=0 ) {
-					// Width
-					var old = ei.width;
-					ei.customWidth = ei.width + deltaX;
-					if( ei.customWidth<=ei.def.width )
-						ei.customWidth = null;
-
-					switch draggedHandle {
-						case Left, TopLeft, BottomLeft: ei.x -= ei.width-old;
-						case _:
-					}
-				}
-				if( deltaY!=0 ) {
-					// Height
-					var old = ei.height;
-					ei.customHeight= ei.height + deltaY;
-					if( ei.customHeight<=ei.def.height )
-						ei.customHeight = null;
-
-					switch draggedHandle {
-						case Top, TopLeft, TopRight: ei.y -= ei.height-old;
-						case _:
-					}
-				}
-				editor.ge.emit( EntityInstanceChanged(ei) );
-				editor.selectionTool.invalidateRender();
-
-			case PointField(li, ei, fi, arrayIdx):
-		}
-
-		invalidate();
 	}
 
 	public inline function invalidate() {
