@@ -9,13 +9,15 @@ typedef ResizeRect = {
 
 class ResizeTool extends Tool<Int> {
 	static var DEFAULT_ALPHA = 0.75;
+	static var HANDLE_RADIUS = 5;
 
-	var handleDist = 4;
 	var draggedHandle: Null<RectHandlePos>;
+	var dragOrigin : Coords;
 	var g : h2d.Graphics;
 	var ge: GenericLevelElement;
 	var _handlePosIterator : Array<RectHandlePos>;
 
+	var invalidated = true;
 	var _rect : Null<ResizeRect>;
 	var rect(get,never) : ResizeRect;
 
@@ -35,11 +37,12 @@ class ResizeTool extends Tool<Int> {
 		g.clear();
 
 		// Draw handles
-		var c = 0xff00ff;
+		var c = 0xffcc00;
 		g.beginFill(c,1);
-		for(e in _handlePosIterator)
-			g.drawCircle(getHandleX(e), getHandleY(e), handleDist);
-
+		for(p in _handlePosIterator) {
+			if( isHandleActive(p) )
+				g.drawCircle(getHandleX(p), getHandleY(p), HANDLE_RADIUS*0.8, 16);
+		}
 	}
 
 	inline function get_rect() {
@@ -58,9 +61,17 @@ class ResizeTool extends Tool<Int> {
 		return _rect;
 	}
 
+	function isHandleActive(p:RectHandlePos) {
+		return switch p {
+			case Top, Bottom: rect.w > HANDLE_RADIUS*2;
+			case Left, Right: rect.h > HANDLE_RADIUS*2;
+			case TopLeft, TopRight, BottomLeft, BottomRight: true;
+		}
+	}
+
 	function getOveredHandle(m:Coords) : Null<RectHandlePos> {
 		for(p in _handlePosIterator)
-			if( M.dist(m.levelX, m.levelY, getHandleX(p), getHandleY(p) )<=5 )
+			if( isHandleActive(p) && M.dist(m.levelX, m.levelY, getHandleX(p), getHandleY(p) ) <= HANDLE_RADIUS )
 				return p;
 		return null;
 	}
@@ -68,47 +79,84 @@ class ResizeTool extends Tool<Int> {
 	function getHandleX(pos:RectHandlePos) : Float {
 		return switch pos {
 			case Top, Bottom: rect.x + rect.w*0.5;
-			case Left, TopLeft, BottomLeft: rect.x - handleDist;
-			case Right, TopRight, BottomRight: rect.x + rect.w-1 + handleDist;
+			case Left, TopLeft, BottomLeft: rect.x - HANDLE_RADIUS;
+			case Right, TopRight, BottomRight: rect.x + rect.w-1 + HANDLE_RADIUS;
 		}
 	}
 
 	function getHandleY(pos:RectHandlePos) : Float {
 		return switch pos {
 			case Left,Right: rect.y + rect.h*0.5;
-			case Top, TopLeft, TopRight: rect.y - handleDist;
-			case Bottom, BottomLeft, BottomRight: rect.y + rect.h + handleDist;
+			case Top, TopLeft, TopRight: rect.y - HANDLE_RADIUS;
+			case Bottom, BottomLeft, BottomRight: rect.y + rect.h + HANDLE_RADIUS;
 		}
 	}
 
 	override function isRunning():Bool {
-		return false;
+		return draggedHandle!=null;
 	}
 
 	override function startUsing(ev:hxd.Event, m:Coords) {
 		super.startUsing(ev,m);
 		curMode = null;
+
+		draggedHandle = getOveredHandle(m);
+		dragOrigin = m.clone();
+
+		ev.cancel = true;
+	}
+
+	override function stopUsing(m:Coords) {
+		super.stopUsing(m);
+		draggedHandle = null;
+	}
+
+	public function onMouseDown(ev:hxd.Event, m:Coords) {
+		var p = getOveredHandle(m);
+		if( p!=null )
+			startUsing(ev, m);
 	}
 
 	override function onMouseMove(ev:hxd.Event, m:Coords) {
 		super.onMouseMove(ev, m);
 
-		var p = getOveredHandle(m);
-		if( p!=null ) {
-			g.alpha = 1;
-			ev.cancel = true;
-			editor.cursor.set( Resize(p) );
+		if( !isRunning() ) {
+			// Overing
+			var p = getOveredHandle(m);
+			if( p!=null ) {
+				g.alpha = 1;
+				ev.cancel = true;
+				editor.cursor.set( Resize(p) );
+			}
+			else
+				g.alpha = DEFAULT_ALPHA;
 		}
-		else
-			g.alpha = DEFAULT_ALPHA;
+		else {
+			// Actual resizing
+			ev.cancel = true;
+			switch draggedHandle { // TODO
+				case Top:
+				case Bottom:
+				case Left:
+				case Right:
+				case TopLeft:
+				case TopRight:
+				case BottomLeft:
+				case BottomRight:
+			}
+		}
+	}
+
+	public inline function invalidate() {
+		invalidated = true;
 	}
 
 	override function postUpdate() {
 		super.postUpdate();
-		render();
-		// root.x = editor.levelRender.root.x;
-		// root.y = editor.levelRender.root.y;
-		// root.setScale( editor.levelRender.root.scaleX );
+		if( invalidated ) {
+			_rect = null;
+			render();
+			invalidated = false;
+		}
 	}
-
 }

@@ -672,6 +672,11 @@ class Editor extends Page {
 		resizeTool = null;
 	}
 
+	public function invalidateResizeTool() {
+		if( resizeTool!=null )
+			resizeTool.invalidate();
+	}
+
 	public function createResizeToolFor(ge:GenericLevelElement) {
 		clearResizeTool();
 		resizeTool = new tool.ResizeTool(ge);
@@ -686,7 +691,7 @@ class Editor extends Page {
 		panTool.startUsing(ev,m);
 
 		if( !ev.cancel && resizeTool!=null )
-			resizeTool.onMouseMove( ev, m );
+			resizeTool.onMouseDown( ev, m );
 
 		if( !ev.cancel && !project.isBackup() )
 			rulers.onMouseDown( ev, m );

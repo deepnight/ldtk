@@ -317,6 +317,7 @@ class SelectionTool extends Tool<Int> {
 					if( li!=curLayerInstance )
 						editor.levelRender.invalidateLayer(li); // cur is invalidated by Tool
 				}
+				editor.invalidateResizeTool();
 
 				return changedLayers.length>0;
 			}
