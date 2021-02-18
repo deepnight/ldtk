@@ -18,6 +18,7 @@ class Tags {
 			n++;
 		return n;
 	}
+	public inline function isEmpty() return count()==0;
 
 	inline function cleanUpTag(k:String) : Null<String> {
 		k = Project.cleanupIdentifier(k,false);
@@ -48,6 +49,13 @@ class Tags {
 	public inline function has(k) {
 		k = cleanUpTag(k);
 		return k!=null && map.exists(k);
+	}
+
+	public function hasTagFoundIn(others:Tags) {
+		for( k in map.keys() )
+			if( others.has(k) )
+				return true;
+		return false;
 	}
 
 	public inline function clear() {
@@ -135,6 +143,7 @@ class Tags {
 		jDelete.click( _->{
 			unset(k);
 			jTag.remove();
+			onChange();
 		});
 	}
 

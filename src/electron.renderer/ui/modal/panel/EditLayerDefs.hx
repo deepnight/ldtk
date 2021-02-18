@@ -230,6 +230,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		// Set form class
 		for(k in Type.getEnumConstructs(ldtk.Json.LayerType))
 			jForm.removeClass("type-"+k);
+		jForm.removeClass("type-IntGridAutoLayer");
 		jForm.addClass("type-"+cur.type);
 		if( cur.type==IntGrid && cur.isAutoLayer() )
 			jForm.addClass("type-IntGridAutoLayer");
@@ -445,6 +446,13 @@ class EditLayerDefs extends ui.modal.Panel {
 
 
 			case Entities:
+				// Tags
+				jForm.find("#requiredTags")
+					.empty()
+					.append( cur.requiredTags.createEditor( ()->editor.ge.emit(LayerDefChanged) ) );
+				jForm.find("#excludedTags")
+					.empty()
+					.append( cur.excludedTags.createEditor( ()->editor.ge.emit(LayerDefChanged) ) );
 
 			case Tiles:
 				var select = jForm.find("select[name=tilesets]");

@@ -13,7 +13,15 @@ class EntityPalette extends ui.ToolPalette {
 		jList = new J('<ul class="niceList"/>');
 		jList.appendTo(jContent);
 
+		var ld = Editor.ME.curLayerDef;
+
 		for(ed in Editor.ME.project.defs.entities) {
+			if( ed.tags.hasTagFoundIn(ld.excludedTags) )
+				continue;
+
+			if( !ld.requiredTags.isEmpty() && !ed.tags.hasTagFoundIn(ld.requiredTags) )
+				continue;
+
 			var e = new J("<li/>");
 			jList.append(e);
 			e.attr("data-defUid", ed.uid);

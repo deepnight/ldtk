@@ -13,8 +13,8 @@ class LayerDef {
 	public var pxOffsetY : Int = 0;
 
 	// Entities
-	var requiredTags : Tags;
-	var excludedTags : Tags;
+	public var requiredTags : Tags;
+	public var excludedTags : Tags;
 
 	// IntGrid
 	@:allow(importer)
