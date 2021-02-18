@@ -149,7 +149,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.linkEvent(EntityDefChanged);
 
 		// Tags editor
-		jEntityForm.find("#tags").empty().append( curEntity.tags.createEditor() );
+		jEntityForm.find("#tags").empty().append( curEntity.tags.createEditor( ()->editor.ge.emit(EntityDefChanged) ) );
 
 		// Dimensions
 		var i = Input.linkToHtmlInput( curEntity.width, jEntityForm.find("input[name='width']") );

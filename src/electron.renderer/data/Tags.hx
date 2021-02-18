@@ -83,13 +83,13 @@ class Tags {
 	JQuery editor
 	********************************************************/
 
-	public function createEditor() : js.jquery.JQuery {
+	public function createEditor(onChange:Void->Void) : js.jquery.JQuery {
 		var jEditor = new J('<div class="tagEditor"/>');
-		renderEditor(jEditor);
+		renderEditor(jEditor, onChange);
 		return jEditor;
 	}
 
-	function createInput(jEditor:js.jquery.JQuery, ?jTarget:js.jquery.JQuery, k="") {
+	function createInput(jEditor:js.jquery.JQuery, ?jTarget:js.jquery.JQuery, k="", onChange:Void->Void) {
 		var jInput = new J('<input type="text"/>');
 		if( jTarget!=null ) {
 			jInput.css({ width:jTarget.outerWidth()+"px" });
@@ -101,24 +101,25 @@ class Tags {
 		var i = new form.input.StringInput(jInput, ()->k, v->{
 			v = cleanUpTag(v);
 			if( v==k )
-				createTag(jEditor, jInput, v); // no change
+				createTag(jEditor, jInput, v, onChange); // no change
 			else if( v!=null ) {
 				unset(k);
 				if( has(v) )
 					jInput.remove(); // duplicate
 				else {
 					set(v);
-					createTag(jEditor, jInput, v); // changed
+					createTag(jEditor, jInput, v, onChange); // changed
 				}
+				onChange();
 			}
 			else
 				jInput.remove(); // invalid tag
 		});
-		jInput.blur( _->renderEditor(jEditor) );
+		jInput.blur( _->renderEditor(jEditor, onChange) );
 		jInput.focus();
 	}
 
-	function createTag(jEditor:js.jquery.JQuery, ?jTarget:js.jquery.JQuery, k:String) {
+	function createTag(jEditor:js.jquery.JQuery, ?jTarget:js.jquery.JQuery, k:String, onChange:Void->Void) {
 		var jTag = new J('<div class="tag"> <div class="label">$k</div> </div>');
 		if( jTarget!=null )
 			jTarget.replaceWith(jTag);
@@ -126,7 +127,7 @@ class Tags {
 			jEditor.append(jTag);
 
 		jTag.find(".label").click( _->{
-			createInput(jEditor, jTag, k);
+			createInput(jEditor, jTag, k, onChange);
 		});
 
 		var jDelete = new J('<button class="delete transparent"> <span class="icon delete"/> </button>');
@@ -137,16 +138,16 @@ class Tags {
 		});
 	}
 
-	function renderEditor(jEditor:js.jquery.JQuery) {
+	function renderEditor(jEditor:js.jquery.JQuery, onChange:Void->Void) {
 		jEditor.empty();
 
 		for( k in map.keys() )
-			createTag(jEditor, k);
+			createTag(jEditor, k, onChange);
 
 		var jAdd = new J('<button class="add transparent"> <span class="icon add"/> </button>');
 		jAdd.appendTo(jEditor);
 		jAdd.click( _->{
-			createInput(jEditor);
+			createInput(jEditor, onChange);
 			jEditor.append(jAdd);
 		});
 	}
