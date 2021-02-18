@@ -712,7 +712,6 @@
 				"identifier",
 				"pivotX",
 				"pivotY",
-				"tags",
 				"uid",
 				"width",
 				"fieldDefs",
@@ -724,6 +723,7 @@
 				"resizableX",
 				"resizableY",
 				"showName",
+				"tags",
 				"tileRenderMode"
 			],
 			"additionalProperties": false,
@@ -1326,15 +1326,15 @@
 			"required": [
 				"__type",
 				"displayOpacity",
-				"excludedTags",
 				"gridSize",
 				"identifier",
 				"intGridValues",
 				"pxOffsetX",
 				"pxOffsetY",
-				"requiredTags",
 				"uid",
 				"autoRuleGroups",
+				"excludedTags",
+				"requiredTags",
 				"tilePivotX",
 				"tilePivotY",
 				"type"
