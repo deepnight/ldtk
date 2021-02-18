@@ -1326,12 +1326,13 @@
 			"required": [
 				"__type",
 				"displayOpacity",
+				"excludedTags",
 				"gridSize",
 				"identifier",
 				"intGridValues",
 				"pxOffsetX",
 				"pxOffsetY",
-				"tags",
+				"requiredTags",
 				"uid",
 				"autoRuleGroups",
 				"tilePivotX",
@@ -1391,6 +1392,17 @@
 						"integer"
 					]
 				},
+				"excludedTags": {
+					"description": "An array of tags to forbid some Entities in this layer",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
 				"intGridValues": {
 					"description": "An array that defines extra optional info for each IntGrid value. The array is sorted using value (ascending).",
 					"items": {
@@ -1426,6 +1438,17 @@
 						"string"
 					]
 				},
+				"requiredTags": {
+					"description": "An array of tags to filter Entities that can be added to this layer",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
 				"pxOffsetY": {
 					"description": "Y offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)",
 					"type": [
@@ -1436,17 +1459,6 @@
 					"description": "If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.",
 					"type": [
 						"number"
-					]
-				},
-				"tags": {
-					"description": "An array of tags to filter Entities that can be added to this layer",
-					"items": {
-						"type": [
-							"string"
-						]
-					},
-					"type": [
-						"array"
 					]
 				},
 				"gridSize": {
