@@ -219,6 +219,7 @@ Value | Type | Description
 `width` | Int | Pixel width
 `fieldDefs`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | Array of field definitions
 `fillOpacity`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Float | 
+`hollow`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | 
 `keepAspectRatio`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | Only applies to entities resizable on both X/Y. If TRUE, the entity instance width/height will keep the same aspect ratio as the definition.
 `limitBehavior`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `DiscardOldOnes`, `PreventAdding`, `MoveLastOne`
 `limitScope`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Enum | If TRUE, the maxCount is a "per world" limit, if FALSE, it's a "per level".<br/> Possible values: `PerLayer`, `PerLevel`, `PerWorld`

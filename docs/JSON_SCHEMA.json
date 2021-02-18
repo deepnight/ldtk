@@ -716,6 +716,7 @@
 				"width",
 				"fieldDefs",
 				"fillOpacity",
+				"hollow",
 				"keepAspectRatio",
 				"limitBehavior",
 				"limitScope",
@@ -768,6 +769,12 @@
 					"description": "Max instances count",
 					"type": [
 						"integer"
+					]
+				},
+				"hollow": {
+					"description": "",
+					"type": [
+						"boolean"
 					]
 				},
 				"keepAspectRatio": {
