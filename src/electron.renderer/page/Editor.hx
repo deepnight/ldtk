@@ -957,7 +957,6 @@ class Editor extends Page {
 	public function setGrid(v:Bool, notify=true) {
 		settings.v.grid = v;
 		App.ME.settings.save();
-		selectionTool.clear();
 		ge.emit( GridChanged(settings.v.grid) );
 		if( notify )
 			N.quick( "Grid: "+L.onOff( settings.v.grid ));
