@@ -601,7 +601,7 @@ class Editor extends Page {
 
 				case Entities:
 					for(ei in li.entityInstances) {
-						if( ei.isOver(layerX, layerY, 0) )
+						if( ei.isOver(layerX, layerY) )
 							ge = GenericLevelElement.Entity(li, ei);
 						else {
 							// Points
