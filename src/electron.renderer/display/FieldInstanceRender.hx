@@ -152,8 +152,8 @@ class FieldInstanceRender {
 			case PointStar, PointPath:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
-						var fx = ei.getCellCenterX(ld);
-						var fy = ei.getCellCenterY(ld);
+						var fx = ei.getPointOriginX(ld) - ei.x;
+						var fy = ei.getPointOriginY(ld) - ei.y;
 						g.lineStyle(1, baseColor, 0.66);
 
 						for(i in 0...fi.getArrayLength()) {

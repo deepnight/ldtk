@@ -477,7 +477,10 @@ class GenericLevelElementGroup {
 								continue;
 
 							pointLinks.lineStyle(1,ei.getSmartColor(true));
-							pointLinks.moveTo( levelToGhostX(ei.x), levelToGhostY(ei.y) );
+							pointLinks.moveTo(
+								levelToGhostX(ei.getPointOriginX(li.def)),
+								levelToGhostY(ei.getPointOriginY(li.def))
+							);
 							var pt = fi.getPointGrid(i);
 							if( pt!=null )
 								if( isFieldValueSelected(fi,i) ) {
@@ -505,9 +508,12 @@ class GenericLevelElementGroup {
 						if( fi.def.editorDisplayMode==PointStar || arrayIdx==0 ) {
 							pointLinks.moveTo(x,y);
 							if( !isEntitySelected(ei) )
-								pointLinks.lineTo(ei.x, ei.y);
+								pointLinks.lineTo(ei.getPointOriginX(li.def), ei.getPointOriginY(li.def));
 							else
-								pointLinks.lineTo( levelToGhostX(ei.x), levelToGhostY(ei.y) );
+								pointLinks.lineTo(
+									levelToGhostX(ei.getPointOriginX(li.def)),
+									levelToGhostY(ei.getPointOriginY(li.def))
+								);
 						}
 
 						if( fi.def.editorDisplayMode==PointPath ) {

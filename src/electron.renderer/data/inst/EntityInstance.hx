@@ -105,12 +105,12 @@ class EntityInstance {
 		return Std.int( ( y + (def.pivotY==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
-	public function getCellCenterX(ld:data.def.LayerDef) {
-		return ( getCx(ld)+0.5 ) * ld.gridSize - x;
+	public function getPointOriginX(ld:data.def.LayerDef) {
+		return def.resizableX ? centerX : ( getCx(ld)+0.5 ) * ld.gridSize;
 	}
 
-	public function getCellCenterY(ld:data.def.LayerDef) {
-		return ( getCy(ld)+0.5 ) * ld.gridSize - y;
+	public function getPointOriginY(ld:data.def.LayerDef) {
+		return def.resizableY ? centerY : ( getCy(ld)+0.5 ) * ld.gridSize;
 	}
 
 	final overPad = 4;
