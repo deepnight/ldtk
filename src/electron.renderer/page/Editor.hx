@@ -1244,7 +1244,6 @@ class Editor extends Page {
 
 			case FieldDefChanged(fd):
 			case FieldDefSorted:
-			case EntityDefSorted:
 			case FieldInstanceChanged(fi):
 
 			case EntityInstanceAdded(ei):
@@ -1340,7 +1339,7 @@ class Editor extends Page {
 				updateTool();
 				updateGuide();
 
-			case TilesetDefChanged(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved:
+			case TilesetDefChanged(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved, EntityDefSorted:
 				updateTool();
 				updateGuide();
 
