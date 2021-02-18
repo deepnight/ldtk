@@ -79,11 +79,12 @@ class ResizeTool extends Tool<Int> {
 			case PointField(li, ei, fi, arrayIdx):
 		}
 
-		return switch p {
-			case Top, Bottom: rect.w > HANDLE_RADIUS*2;
-			case Left, Right: rect.h > HANDLE_RADIUS*2;
-			case TopLeft, TopRight, BottomLeft, BottomRight: true;
-		}
+		return true;
+		// return switch p {
+		// 	case Top, Bottom: rect.w > HANDLE_RADIUS*2;
+		// 	case Left, Right: rect.h > HANDLE_RADIUS*2;
+		// 	case TopLeft, TopRight, BottomLeft, BottomRight: true;
+		// }
 	}
 
 	function getOveredHandle(m:Coords) : Null<RectHandlePos> {
