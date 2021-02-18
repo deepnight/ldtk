@@ -1434,6 +1434,65 @@ textarea {
 	}
 }
 
+.tagEditor {
+	display: flex;
+	flex-wrap: wrap;
+
+	input[type=text] {
+		width: 5em;
+	}
+
+	button.add {
+		flex: 0 0 32px;
+		padding: 0;
+	}
+
+	.tag,
+	input[type=text] {
+		padding: 4px;
+		padding-right: 8px;
+		border-radius: 2px;
+		border-top-right-radius: 8px;
+		border-bottom-right-radius: 8px;
+	}
+
+	.tag {
+		display: grid;
+		grid-template-columns: auto min-content;
+		min-width: 5em;
+
+		margin-right: 2px;
+		margin-bottom: 2px;
+		box-sizing: border-box;
+		flex: 0 0 auto;
+
+		white-space: nowrap;
+
+		border: 1px solid $bgLighter;
+		background-color: $bgLight;
+
+		&:hover {
+			color: $orange;
+			border-color: $orange;
+		}
+
+		.label {
+			color: white;
+			font-style: italic;
+			cursor: text;
+		}
+
+		button.delete {
+			margin-left: 8px;
+			padding: 0;
+			.icon {
+				width: 1.2em;
+				height: 1.2em;
+			}
+		}
+	}
+}
+
 .tip {
 	position: absolute;
 	z-index: 99;

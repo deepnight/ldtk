@@ -12,6 +12,9 @@ class LayerDef {
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
 
+	// Entities
+	var tags : Tags;
+
 	// IntGrid
 	@:allow(importer)
 	var intGridValues : Array<IntGridValueDef> = [];
@@ -35,6 +38,7 @@ class LayerDef {
 		identifier = type+uid;
 		#end
 		addIntGridValue(0x0);
+		tags = new Tags();
 	}
 
 	function set_identifier(id:String) {
@@ -46,7 +50,7 @@ class LayerDef {
 		return 'LayerDef.$identifier($type,${gridSize}px)';
 	}
 
-	public static function fromJson(jsonVersion:String, json:ldtk.Json.LayerDefJson) {
+	public static function fromJson(p:Project, jsonVersion:String, json:ldtk.Json.LayerDefJson) {
 		if( (cast json).tilesetDefId!=null ) json.tilesetDefUid = (cast json).tilesetDefId;
 
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(ldtk.Json.LayerType, json.type, false));
@@ -55,6 +59,8 @@ class LayerDef {
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
+
+		o.tags = Tags.fromJson(json.tags);
 
 		o.intGridValues = [];
 		var idx = 0;
@@ -93,6 +99,7 @@ class LayerDef {
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
+			tags: tags.toJson(),
 
 			intGridValues: intGridValues.map( function(iv) return {
 				value: valueIdx++,

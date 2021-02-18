@@ -6,7 +6,7 @@ class EditEntityDefs extends ui.modal.Panel {
 	static var LAST_ENTITY_ID = -1;
 
 	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jContent.find(".entityList ul");
-	var jEntityForm(get,never) : js.jquery.JQuery; inline function get_jEntityForm() return jContent.find(".entityForm>ul.form");
+	var jEntityForm(get,never) : js.jquery.JQuery; inline function get_jEntityForm() return jContent.find(".entityForm>dl.form");
 	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jContent.find(".previewWrapper");
 
 	var curEntity : Null<data.def.EntityDef>;
@@ -147,6 +147,9 @@ class EditEntityDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput(curEntity.identifier, jEntityForm.find("input[name='name']") );
 		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isEntityIdentifierUnique(id, curEntity));
 		i.linkEvent(EntityDefChanged);
+
+		// Tags editor
+		jEntityForm.find("#tags").empty().append( curEntity.tags.createEditor() );
 
 		// Dimensions
 		var i = Input.linkToHtmlInput( curEntity.width, jEntityForm.find("input[name='width']") );

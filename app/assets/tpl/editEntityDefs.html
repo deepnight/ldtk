@@ -22,23 +22,37 @@
 			<div class="label"></div>
 		</div>
 
-		<ul class="form">
-			<li>
+		<dl class="form">
+			<dt>
 				<label for="eName">Entity identifier</label>
+			</dt>
+			<dd>
 				<input type="text" name="name" id="eName"/>
 				<div class="info identifier"></div>
-			</li>
+			</dd>
 
-			<li>
+			<dt>
+				<label>Tags</label>
+			</dt>
+			<dd>
+				<div id="tags"></div>
+				<div class="info" title="Tags can be used to filter Entities allowed in Entity layers."></div>
+			</dd>
+
+			<dt>
 				<label for="width">Size</label>
+			</dt>
+			<dd>
 				<input type="text" name="width" class="small" id="width"/>
 				<span>x</span>
 				<input type="text" name="height" class="small"/>
 				<span>px</span>
-			</li>
+			</dd>
 
-			<li>
+			<dt>
 				<label>Resizable</label>
+			</dt>
+			<dd>
 				<input type="checkbox" id="resizableX" title="If checked, the entity instances will be horizontally resizable. In this case, the width above will define the a minimum size."/>
 				<span>Width</span>
 
@@ -47,10 +61,12 @@
 
 				<input type="checkbox" id="keepAspectRatio" title="If checked, the entity instance size will use the same aspect ratio as the size above."/>
 				<span>Keep aspect ratio</span>
-			</li>
+			</dd>
 
-			<li class="renderMode">
+			<dt>
 				<label>Editor visual</label>
+			</dt>
+			<dd class="renderMode">
 
 				<input type="color" name="color" id="eColor"/>
 				<select class="renderMode"></select>
@@ -59,23 +75,27 @@
 
 				<label for="showIdentifier">Show identifier</label>
 				<input type="checkbox" name="showIdentifier" id="showIdentifier"/>
-			</li>
+			</dd>
 
-			<li>
+			<dt>
 				<label>Pivot point</label>
+			</dt>
+			<dd>
 				<div class="pivot"></div>
-			</li>
+			</dd>
 
-			<li>
+			<dt>
 				<label for="maxCount">Max count</label>
+			</dt>
+			<dd>
 				<input type="text" id="maxCount" placeholder="Unlimited" class="small"/>
 				<select name="scope"></select>
 				<span>, and </span>
 				<select name="limitBehavior"></select>
 				<span>when max is reached.</span>
-			</li>
+			</dd>
 
-		</ul>
+		</dl>
 
 	</div>
 

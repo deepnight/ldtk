@@ -32,7 +32,7 @@ class Definitions {
 		var d = new Definitions(p);
 
 		for( layerJson in JsonTools.readArray(json.layers) )
-			d.layers.push( data.def.LayerDef.fromJson(p.jsonVersion, layerJson) );
+			d.layers.push( data.def.LayerDef.fromJson(p, p.jsonVersion, layerJson) );
 
 		for( entityJson in JsonTools.readArray(json.entities) )
 			d.entities.push( data.def.EntityDef.fromJson(p, entityJson) );
@@ -116,7 +116,7 @@ class Definitions {
 	}
 
 	public function duplicateLayerDef(ld:data.def.LayerDef, ?baseName:String) : data.def.LayerDef {
-		var copy = data.def.LayerDef.fromJson( _project.jsonVersion, ld.toJson() );
+		var copy = data.def.LayerDef.fromJson( _project, _project.jsonVersion, ld.toJson() );
 		copy.uid = _project.makeUniqueIdInt();
 
 		for(rg in copy.autoRuleGroups) {

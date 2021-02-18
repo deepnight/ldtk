@@ -7,23 +7,26 @@ class EntityDef {
 	public var uid(default,null) : Int;
 
 	public var identifier(default,set) : String;
+	public var tags : Tags;
+
 	public var width : Int;
 	public var height : Int;
 	public var color : UInt;
+	public var showName : Bool;
 	public var renderMode : ldtk.Json.EntityRenderMode;
 	public var tileRenderMode : ldtk.Json.EntityTileRenderMode;
-	public var showName : Bool;
 	public var tilesetId : Null<Int>;
 	public var tileId : Null<Int>;
+
 	public var resizableX : Bool;
 	public var resizableY : Bool;
 	public var keepAspectRatio : Bool;
+	public var pivotX(default,set) : Float;
+	public var pivotY(default,set) : Float;
 
 	public var maxCount : Int;
 	public var limitScope : ldtk.Json.EntityLimitScope;
 	public var limitBehavior : ldtk.Json.EntityLimitBehavior; // what to do when maxCount is reached
-	public var pivotX(default,set) : Float;
-	public var pivotY(default,set) : Float;
 
 	public var fieldDefs : Array<data.def.FieldDef> = [];
 
@@ -42,6 +45,7 @@ class EntityDef {
 		setPivot(0.5,1);
 		resizableX = resizableY = false;
 		keepAspectRatio = false;
+		tags = new Tags();
 	}
 
 	public function isTileDefined() {
@@ -77,13 +81,15 @@ class EntityDef {
 		if( (cast json).name!=null ) json.identifier = (cast json).name;
 		if( (cast json).maxPerLevel!=null ) json.maxCount = (cast json).maxPerLevel;
 
-		var o = new EntityDef( JsonTools.readInt(json.uid) );
+		var o = new EntityDef(JsonTools.readInt(json.uid) );
 		o.identifier = JsonTools.readString( json.identifier );
 		o.width = JsonTools.readInt( json.width, 16 );
 		o.height = JsonTools.readInt( json.height, 16 );
 		o.resizableX = JsonTools.readBool( json.resizableX, false );
 		o.resizableY = JsonTools.readBool( json.resizableY, false );
 		o.keepAspectRatio = JsonTools.readBool( json.keepAspectRatio, false );
+
+		o.tags = Tags.fromJson(json.tags);
 
 		o.color = JsonTools.readColor( json.color, 0x0 );
 		o.renderMode = JsonTools.readEnum(ldtk.Json.EntityRenderMode, json.renderMode, false, Rectangle);
@@ -111,6 +117,7 @@ class EntityDef {
 		return {
 			identifier: identifier,
 			uid: uid,
+			tags: tags.toJson(),
 			width: width,
 			height: height,
 			resizableX: resizableX,
@@ -185,6 +192,9 @@ class EntityDef {
 
 
 	public function tidy(p:data.Project) {
+		// Tags
+		tags.tidy();
+
 		// Lost tileset
 		if( tilesetId!=null && p.defs.getTilesetDef(tilesetId)==null ) {
 			App.LOG.add("tidy", 'Removed lost tileset of $this');
