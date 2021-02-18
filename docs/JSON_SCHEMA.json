@@ -715,9 +715,11 @@
 				"uid",
 				"width",
 				"fieldDefs",
+				"fillOpacity",
 				"keepAspectRatio",
 				"limitBehavior",
 				"limitScope",
+				"lineOpacity",
 				"maxCount",
 				"renderMode",
 				"resizableX",
@@ -816,10 +818,22 @@
 						"integer"
 					]
 				},
+				"lineOpacity": {
+					"description": "",
+					"type": [
+						"number"
+					]
+				},
 				"resizableY": {
 					"description": "If TRUE, the entity instances will be resizable vertically",
 					"type": [
 						"boolean"
+					]
+				},
+				"fillOpacity": {
+					"description": "",
+					"type": [
+						"number"
 					]
 				},
 				"height": {
