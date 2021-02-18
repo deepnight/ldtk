@@ -7,6 +7,8 @@ class EntityInstance {
 	public var defUid(default,null) : Int;
 	public var x : Int;
 	public var y : Int;
+	public var centerX(get,never) : Int;
+	public var centerY(get,never) : Int;
 	public var customWidth : Null<Int>;
 	public var customHeight: Null<Int>;
 
@@ -32,6 +34,9 @@ class EntityInstance {
 	@:keep public function toString() {
 		return 'Instance<${def.identifier}>@$x,$y';
 	}
+
+	inline function get_centerX() return Std.int( x + (0.5-def.pivotX)*width );
+	inline function get_centerY() return Std.int( y + (0.5-def.pivotY)*height );
 
 	public function toJson(li:data.inst.LayerInstance) : ldtk.Json.EntityInstanceJson {
 		return {
@@ -111,8 +116,6 @@ class EntityInstance {
 	final overPad = 4;
 	public inline function isOver(layerX:Int, layerY:Int) {
 		if( def.renderMode==Ellipse ) {
-			final centerX = x + (0.5-def.pivotX)*width;
-			final centerY = y + (0.5-def.pivotY)*height;
 			if( def.hollow ) {
 				final rxIn2 = M.pow(width*0.5-overPad, 2);
 				final rxOut2 = M.pow(width*0.5+overPad, 2);
