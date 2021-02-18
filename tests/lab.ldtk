@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 7,
+	"nextUid": 8,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -38,6 +38,7 @@
 			"displayOpacity": 0.83,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"tags": [],
 			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
 			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
@@ -55,6 +56,7 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"tags": [],
 			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#000000" }],
 			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
@@ -67,11 +69,12 @@
 		{
 			"identifier": "Area",
 			"uid": 1,
-			"width": 32,
+			"tags": ["area"],
+			"width": 16,
 			"height": 16,
 			"resizableX": true,
 			"resizableY": true,
-			"keepAspectRatio": true,
+			"keepAspectRatio": false,
 			"color": "#94D9B3",
 			"renderMode": "Rectangle",
 			"showName": false,
@@ -125,6 +128,28 @@
 					"textLangageMode": null
 				}
 			]
+		},
+		{
+			"identifier": "Door",
+			"uid": 7,
+			"tags": [],
+			"width": 8,
+			"height": 32,
+			"resizableX": false,
+			"resizableY": true,
+			"keepAspectRatio": false,
+			"color": "#764A16",
+			"renderMode": "Rectangle",
+			"showName": true,
+			"tilesetId": null,
+			"tileId": null,
+			"tileRenderMode": "Stretch",
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0.5,
+			"pivotY": 1,
+			"fieldDefs": []
 		}
 	], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
@@ -167,7 +192,58 @@
 					"seed": 8574905,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": []
+					"entityInstances": [
+						{
+							"__identifier": "Area",
+							"__grid": [5,15],
+							"__pivot": [0,0],
+							"__tile": null,
+							"width": 208,
+							"height": 48,
+							"defUid": 1,
+							"px": [80,240],
+							"fieldInstances": [
+								{ "__identifier": "label", "__value": null, "__type": "String", "defUid": 5, "realEditorValues": [] },
+								{ "__identifier": "color", "__value": "#902020", "__type": "Color", "defUid": 6, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Area",
+							"__grid": [11,12],
+							"__pivot": [0,0],
+							"__tile": null,
+							"width": 64,
+							"height": 16,
+							"defUid": 1,
+							"px": [176,192],
+							"fieldInstances": [
+								{ "__identifier": "label", "__value": null, "__type": "String", "defUid": 5, "realEditorValues": [] },
+								{ "__identifier": "color", "__value": "#902020", "__type": "Color", "defUid": 6, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Door",
+							"__grid": [3,14],
+							"__pivot": [0.5,1],
+							"__tile": null,
+							"width": 8,
+							"height": 64,
+							"defUid": 7,
+							"px": [56,240],
+							"fieldInstances": []
+						},
+						{
+							"__identifier": "Door",
+							"__grid": [11,7],
+							"__pivot": [0.5,1],
+							"__tile": null,
+							"width": 8,
+							"height": 32,
+							"defUid": 7,
+							"px": [184,128],
+							"fieldInstances": []
+						}
+					]
 				},
 				{
 					"__identifier": "IntGrid",
