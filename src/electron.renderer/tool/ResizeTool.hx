@@ -163,7 +163,7 @@ class ResizeTool extends Tool<Int> {
 		else {
 			// Actual resizing
 			ev.cancel = true;
-			var snap = settings.v.grid ? editor.curLayerDef.gridSize : 1;
+			var snapSize = settings.v.grid ? editor.curLayerDef.gridSize : 1;
 
 			// Width
 			var newWid = switch draggedHandle {
@@ -176,7 +176,7 @@ class ResizeTool extends Tool<Int> {
 					m.levelX - rect.x - HANDLE_RADIUS;
 				}
 			if( newWid!=rect.w )
-				newWid = M.round(newWid/snap) * snap;
+				newWid = M.round(newWid/snapSize) * snapSize;
 
 			// Height
 			var newHei = switch draggedHandle {
@@ -189,7 +189,7 @@ class ResizeTool extends Tool<Int> {
 					m.levelY - rect.y - HANDLE_RADIUS;
 			}
 			if( newHei!=rect.h )
-				newHei = M.round(newHei/snap) * snap;
+				newHei = M.round(newHei/snapSize) * snapSize;
 
 			// Apply new bounds
 			switch ge {
