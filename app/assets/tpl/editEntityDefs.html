@@ -67,20 +67,23 @@
 				<label>Editor visual</label>
 			</dt>
 			<dd class="renderMode">
-
 				<input type="color" name="color" id="eColor"/>
 				<select class="renderMode"></select>
 
 				<span>Fill=</span>
 				<input type="text" id="fillOpacity"/>
+
 				<span>Line=</span>
 				<input type="text" id="lineOpacity"/>
+
+				<input type="checkbox" id="hollow" title="Clicks will pass through 'hollow' entities, except on edges. They don't have any fill color (only an outline and/or a tile)."/>
+				<label for="hollow">Hollow</label>
 
 				<div class="tilePicker"></div>
 				<select class="mode_Tile tileRenderMode"></select>
 
-				<label for="showIdentifier">Show identifier</label>
 				<input type="checkbox" name="showIdentifier" id="showIdentifier"/>
+				<label for="showIdentifier">Show identifier</label>
 			</dd>
 
 			<dt>

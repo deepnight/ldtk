@@ -133,7 +133,8 @@ class EntityRender extends dn.Process {
 		else
 			switch ed.renderMode {
 			case Rectangle, Ellipse:
-				g.beginFill(color, ed.fillOpacity);
+				if( !ed.hollow )
+					g.beginFill(color, ed.fillOpacity);
 				g.lineStyle(1, C.toWhite(color, 0.3), ed.lineOpacity);
 				switch ed.renderMode {
 					case Rectangle:
@@ -245,27 +246,30 @@ class EntityRender extends dn.Process {
 		var cam = Editor.ME.camera;
 		var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
 		var scale = (1-downScale) / cam.adjustedZoom;
-		// var alpha = M.fclamp( (cam.adjustedZoom-0.33*cam.pixelRatio) / 3, 0, 1 );
 		var alpha = 1.0;
 
 		root.x = ei.x;
 		root.y = ei.y;
 
+
 		// Update field wrappers
-		above.setScale(scale);
-		above.x = Std.int( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
-		above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY - 1 );
-		above.alpha = alpha;
+		above.visible = center.visible = beneath.visible = Editor.ME.curLayerInstance.containsEntity(ei);
+		if( above.visible ) {
+			above.setScale(scale);
+			above.x = Std.int( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
+			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY - 1 );
+			above.alpha = alpha;
 
-		center.setScale(scale);
-		center.x = Std.int( -ei.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
-		center.y = Std.int( -ei.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
-		center.alpha = alpha;
+			center.setScale(scale);
+			center.x = Std.int( -ei.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
+			center.y = Std.int( -ei.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
+			center.alpha = alpha;
 
-		beneath.setScale(scale);
-		beneath.x = Std.int( -ei.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
-		beneath.y = Std.int( ei.height*(1-ed.pivotY) + 1 );
-		beneath.alpha = alpha;
+			beneath.setScale(scale);
+			beneath.x = Std.int( -ei.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
+			beneath.y = Std.int( ei.height*(1-ed.pivotY) + 1 );
+			beneath.alpha = alpha;
+		}
 	}
 
 	override function update() {

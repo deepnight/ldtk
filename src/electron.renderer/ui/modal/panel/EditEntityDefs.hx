@@ -148,6 +148,10 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isEntityIdentifierUnique(id, curEntity));
 		i.linkEvent(EntityDefChanged);
 
+		// Pick through
+		var i = Input.linkToHtmlInput(curEntity.hollow, jEntityForm.find("input#hollow") );
+		i.linkEvent(EntityDefChanged);
+
 		// Tags editor
 		jEntityForm.find("#tags").empty().append( curEntity.tags.createEditor( ()->editor.ge.emit(EntityDefChanged) ) );
 
@@ -186,11 +190,12 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Fill opacity
 		var i = Input.linkToHtmlInput(curEntity.fillOpacity, jEntityForm.find("#fillOpacity"));
-		i.setBounds(0,1);
+		i.setBounds(0.1, 1);
 		i.displayAsPct = true;
 		i.linkEvent( EntityDefChanged );
+		i.setEnabled(!curEntity.hollow);
 		var i = Input.linkToHtmlInput(curEntity.lineOpacity, jEntityForm.find("#lineOpacity"));
-		i.setBounds(0,1);
+		i.setBounds(0, 1);
 		i.displayAsPct = true;
 		i.linkEvent( EntityDefChanged );
 

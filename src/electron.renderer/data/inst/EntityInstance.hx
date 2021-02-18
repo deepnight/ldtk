@@ -108,8 +108,32 @@ class EntityInstance {
 		return ( getCy(ld)+0.5 ) * ld.gridSize - y;
 	}
 
+	final overPad = 4;
 	public inline function isOver(layerX:Int, layerY:Int) {
-		return layerX >= left && layerX <= right && layerY>=top && layerY<=bottom;
+		if( def.renderMode==Ellipse ) {
+			final centerX = x + (0.5-def.pivotX)*width;
+			final centerY = y + (0.5-def.pivotY)*height;
+			if( def.hollow ) {
+				final rxIn2 = M.pow(width*0.5-overPad, 2);
+				final rxOut2 = M.pow(width*0.5+overPad, 2);
+				final ryIn2 = M.pow(height*0.5-overPad, 2);
+				final ryOut2 = M.pow(height*0.5+overPad, 2);
+				return
+					M.pow(layerX-centerX, 2) * ryIn2 + M.pow(layerY-centerY, 2) * rxIn2 > rxIn2*ryIn2
+					&& M.pow(layerX-centerX, 2) * ryOut2 + M.pow(layerY-centerY, 2) * rxOut2 <= rxOut2*ryOut2;
+			}
+			else {
+				final rx2 = M.pow(width*0.5, 2);
+				final ry2 = M.pow(height*0.5, 2);
+				return M.pow(layerX-centerX, 2) * ry2 + M.pow(layerY-centerY, 2) * rx2 <= rx2*ry2;
+			}
+		}
+		else if( def.hollow ) {
+			return layerX >= left-overPad && layerX<=right+overPad && layerY>=top-overPad && layerY<=bottom+overPad
+				&& !( layerX >= left+overPad && layerX<=right-overPad && layerY>=top+overPad && layerY<=bottom-overPad );
+		}
+		else
+			return layerX >= left && layerX <= right && layerY>=top && layerY<=bottom;
 	}
 
 	public function getSmartColor(bright:Bool) {

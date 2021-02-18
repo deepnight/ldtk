@@ -20,6 +20,8 @@ class EntityDef {
 	public var tilesetId : Null<Int>;
 	public var tileId : Null<Int>;
 
+	public var hollow : Bool;
+
 	public var resizableX : Bool;
 	public var resizableY : Bool;
 	public var keepAspectRatio : Bool;
@@ -49,6 +51,7 @@ class EntityDef {
 		setPivot(0.5,1);
 		resizableX = resizableY = false;
 		keepAspectRatio = false;
+		hollow = false;
 		tags = new Tags();
 	}
 
@@ -93,6 +96,8 @@ class EntityDef {
 		o.resizableY = JsonTools.readBool( json.resizableY, false );
 		o.keepAspectRatio = JsonTools.readBool( json.keepAspectRatio, false );
 
+		o.hollow = JsonTools.readBool( json.hollow, false );
+
 		o.tags = Tags.fromJson(json.tags);
 
 		o.color = JsonTools.readColor( json.color, 0x0 );
@@ -131,6 +136,8 @@ class EntityDef {
 			keepAspectRatio: keepAspectRatio,
 			fillOpacity: JsonTools.writeFloat(fillOpacity),
 			lineOpacity: JsonTools.writeFloat(lineOpacity),
+
+			hollow: hollow,
 
 			color: JsonTools.writeColor(color),
 			renderMode: JsonTools.writeEnum(renderMode, false),

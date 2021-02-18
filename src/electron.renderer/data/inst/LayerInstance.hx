@@ -517,6 +517,13 @@ class LayerInstance {
 		return ei;
 	}
 
+	public function containsEntity(ei:EntityInstance) {
+		for(e in entityInstances)
+			if( e==ei )
+				return true;
+		return false;
+	}
+
 	public function duplicateEntityInstance(ei:EntityInstance) : EntityInstance {
 		var copy = EntityInstance.fromJson( _project, ei.toJson(this) );
 		entityInstances.push(copy);

@@ -1246,7 +1246,7 @@ ul.form {
 			box-sizing: border-box;
 		}
 
-		>label:first-of-type {
+		>label:first-child {
 			flex: 0 0 150px;
 			align-self: stretch;
 			padding-top: 8px;
@@ -1257,20 +1257,18 @@ ul.form {
 			font-size: 80%;
 		}
 
-		>label:not(:first-of-type) {
-			align-self: center;
-			text-align: right;
-			padding-left: 16px;
-		}
-
 		input[type=text]:not(:read-only):hover {
 			outline: 1px solid $orange;
 			outline-offset: -1px;
 		}
 
+		*+input[type=checkbox] {
+			margin-left: 16px;
+		}
 		input[type=checkbox]+label {
-			flex: 1 1 auto;
-			padding-right: 20px;
+			flex: 0 1 auto;
+			align-self: center;
+			padding-left: 4px;
 			white-space: nowrap;
 			text-align: left;
 		}
@@ -1377,6 +1375,11 @@ input[type=number] {
 	color: white;
 	background-color: $bgDark;
 	border: 1px solid $bgLight;
+	&:disabled {
+		color: $bgLight;
+		background-color: $bgMed;
+		cursor: not-allowed;
+	}
 	&:read-only {
 		background-color: transparent;
 	}
@@ -1387,7 +1390,7 @@ input[type=number] {
 	}
 }
 
-input.quickEdit {
+input.quickEdit:not(:disabled) {
 	cursor: ew-resize;
 
 	&:hover {
