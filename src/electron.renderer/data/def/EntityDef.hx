@@ -12,6 +12,8 @@ class EntityDef {
 	public var width : Int;
 	public var height : Int;
 	public var color : UInt;
+	public var fillOpacity : Float;
+	public var lineOpacity : Float;
 	public var showName : Bool;
 	public var renderMode : ldtk.Json.EntityRenderMode;
 	public var tileRenderMode : ldtk.Json.EntityTileRenderMode;
@@ -34,6 +36,8 @@ class EntityDef {
 	public function new(uid:Int) {
 		this.uid = uid;
 		color = 0x94d9b3;
+		fillOpacity = 1;
+		lineOpacity = 1;
 		renderMode = Rectangle;
 		width = height = 16;
 		maxCount = 0;
@@ -92,6 +96,8 @@ class EntityDef {
 		o.tags = Tags.fromJson(json.tags);
 
 		o.color = JsonTools.readColor( json.color, 0x0 );
+		o.fillOpacity = JsonTools.readFloat( json.fillOpacity, 1 );
+		o.lineOpacity = JsonTools.readFloat( json.lineOpacity, 1 );
 		o.renderMode = JsonTools.readEnum(ldtk.Json.EntityRenderMode, json.renderMode, false, Rectangle);
 		o.showName = JsonTools.readBool(json.showName, true);
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
@@ -123,6 +129,8 @@ class EntityDef {
 			resizableX: resizableX,
 			resizableY: resizableY,
 			keepAspectRatio: keepAspectRatio,
+			fillOpacity: JsonTools.writeFloat(fillOpacity),
+			lineOpacity: JsonTools.writeFloat(lineOpacity),
 
 			color: JsonTools.writeColor(color),
 			renderMode: JsonTools.writeEnum(renderMode, false),

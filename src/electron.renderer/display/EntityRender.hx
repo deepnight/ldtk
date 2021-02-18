@@ -102,7 +102,7 @@ class EntityRender extends dn.Process {
 				g.lineTo(p, h-p);
 			}
 			else {
-				g.beginFill(color, 0.2);
+				g.beginFill(color, 0.2*ed.fillOpacity);
 				g.drawRect(0, 0, w, h);
 
 				var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
@@ -122,6 +122,7 @@ class EntityRender extends dn.Process {
 							);
 				}
 				bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+				bmp.alpha = ed.fillOpacity;
 			}
 		}
 
@@ -132,8 +133,8 @@ class EntityRender extends dn.Process {
 		else
 			switch ed.renderMode {
 			case Rectangle, Ellipse:
-				g.beginFill(color);
-				g.lineStyle(1, 0x0, 0.4);
+				g.beginFill(color, ed.fillOpacity);
+				g.lineStyle(1, C.toWhite(color, 0.3), ed.lineOpacity);
 				switch ed.renderMode {
 					case Rectangle:
 						g.drawRect(0, 0, w, h);
@@ -146,7 +147,7 @@ class EntityRender extends dn.Process {
 				g.endFill();
 
 			case Cross:
-				g.lineStyle(5, color, 1);
+				g.lineStyle(5, color, ed.lineOpacity);
 				g.moveTo(0,0);
 				g.lineTo(w, h);
 				g.moveTo(0,h);

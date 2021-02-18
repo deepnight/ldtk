@@ -184,6 +184,16 @@ class EditEntityDefs extends ui.modal.Panel {
 			updateEntityForm();
 		});
 
+		// Fill opacity
+		var i = Input.linkToHtmlInput(curEntity.fillOpacity, jEntityForm.find("#fillOpacity"));
+		i.setBounds(0,1);
+		i.displayAsPct = true;
+		i.linkEvent( EntityDefChanged );
+		var i = Input.linkToHtmlInput(curEntity.lineOpacity, jEntityForm.find("#lineOpacity"));
+		i.setBounds(0,1);
+		i.displayAsPct = true;
+		i.linkEvent( EntityDefChanged );
+
 		// Entity render mode
 		var jSelect = jRenderModeBlock.find(".renderMode");
 		jSelect.empty();
