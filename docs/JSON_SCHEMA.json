@@ -712,6 +712,7 @@
 				"identifier",
 				"pivotX",
 				"pivotY",
+				"tags",
 				"uid",
 				"width",
 				"fieldDefs",
@@ -846,6 +847,17 @@
 						"Ellipse",
 						"Tile",
 						"Cross"
+					]
+				},
+				"tags": {
+					"description": "An array of strings that classifies this entity",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"width": {
@@ -1319,6 +1331,7 @@
 				"intGridValues",
 				"pxOffsetX",
 				"pxOffsetY",
+				"tags",
 				"uid",
 				"autoRuleGroups",
 				"tilePivotX",
@@ -1423,6 +1436,17 @@
 					"description": "If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.",
 					"type": [
 						"number"
+					]
+				},
+				"tags": {
+					"description": "An array of tags to filter Entities that can be added to this layer",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"gridSize": {
