@@ -38,6 +38,8 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
 			"intGridValues": [
 				{ "value": 1, "identifier": "walls", "color": "#6C8F1D" },
 				{ "value": 2, "identifier": "water", "color": "#33ADCC" },
@@ -936,6 +938,8 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
 			"autoTilesetDefUid": 9,
 			"autoRuleGroups": [{

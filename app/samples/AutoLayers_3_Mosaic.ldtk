@@ -38,6 +38,8 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#E0C59E" }],
 			"autoTilesetDefUid": 1,
 			"autoRuleGroups": [
@@ -261,6 +263,8 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
 			"autoTilesetDefUid": 38,
 			"autoRuleGroups": [{

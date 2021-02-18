@@ -38,6 +38,8 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#FFFFFF" }],
 			"autoTilesetDefUid": 1,
 			"autoRuleGroups": [

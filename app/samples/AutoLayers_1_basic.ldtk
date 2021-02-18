@@ -38,6 +38,8 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#FFFFFF" }],
 			"autoTilesetDefUid": 9,
 			"autoRuleGroups": [
@@ -251,85 +253,8 @@
 			"tilesetDefUid": null,
 			"tilePivotX": 0,
 			"tilePivotY": 0
-		},
-		{
-			"__type": "Entities",
-			"identifier": "Entities",
-			"type": "Entities",
-			"uid": 103,
-			"gridSize": 8,
-			"displayOpacity": 1,
-			"pxOffsetX": 0,
-			"pxOffsetY": 0,
-			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
-			"autoTilesetDefUid": null,
-			"autoRuleGroups": [],
-			"autoSourceLayerDefUid": null,
-			"tilesetDefUid": null,
-			"tilePivotX": 0,
-			"tilePivotY": 0
 		}
-	], "entities": [
-		{
-			"identifier": "Label",
-			"uid": 100,
-			"width": 16,
-			"height": 8,
-			"color": "#000000",
-			"renderMode": "Rectangle",
-			"showName": false,
-			"tilesetId": null,
-			"tileId": null,
-			"tileRenderMode": "Stretch",
-			"maxCount": 0,
-			"limitScope": "PerLevel",
-			"limitBehavior": "DiscardOldOnes",
-			"pivotX": 0.5,
-			"pivotY": 0.5,
-			"fieldDefs": [
-				{
-					"identifier": "Label",
-					"__type": "String",
-					"uid": 101,
-					"type": "F_Text",
-					"isArray": false,
-					"canBeNull": false,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "ValueOnly",
-					"editorDisplayPos": "Center",
-					"editorAlwaysShow": false,
-					"editorCutLongValues": true,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": null,
-					"textLangageMode": null
-				},
-				{
-					"identifier": "Color",
-					"__type": "Color",
-					"uid": 102,
-					"type": "F_Color",
-					"isArray": false,
-					"canBeNull": false,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "Hidden",
-					"editorDisplayPos": "Above",
-					"editorAlwaysShow": false,
-					"editorCutLongValues": true,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": { "id": "V_Int", "params": [16777215] },
-					"textLangageMode": null
-				}
-			]
-		}
-	], "tilesets": [
+	], "entities": [], "tilesets": [
 		{
 			"identifier": "Cavernas_by_Adam_Saltsman",
 			"uid": 9,
@@ -902,29 +827,6 @@
 						{ "px": [56,152], "src": [24,96], "f": 0, "t": 147, "d": [99,710] }
 					],
 					"seed": 6134941,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": []
-				},
-				{
-					"__identifier": "Entities",
-					"__type": "Entities",
-					"__cWid": 37,
-					"__cHei": 22,
-					"__gridSize": 8,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"levelId": 70,
-					"layerDefUid": 103,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 3895192,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []
