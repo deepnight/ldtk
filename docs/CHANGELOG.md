@@ -1,6 +1,7 @@
 # 0.8.0
 
   - TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
+  - TODO **Region layers**
   - TODO **Ogmo 3 import**
   - TODO **Resizable entities**
   - TODO codemirror
@@ -12,6 +13,7 @@
   - TODO multi lines pop up text editor
   - TODO Customizable source tileset per-layer instance
   - TODO better field display by aligning labels and values
+  - Entities can now be marked as "Hollow", which will allow editor mouse clicks to pass through, except on edges.
   - You can now show/hide multiple layers at once by holding left mouse button over visibility icons (Photoshop style).
   - Use `Shift` + left click on a visibility icon to Show or hide all other layers except the current one.
   - An Entity count can now limited per world or per layer. This is especially useful for elements like Player start position, which should be unique in the world.
