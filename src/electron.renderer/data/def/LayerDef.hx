@@ -13,7 +13,8 @@ class LayerDef {
 	public var pxOffsetY : Int = 0;
 
 	// Entities
-	var tags : Tags;
+	var requiredTags : Tags;
+	var excludedTags : Tags;
 
 	// IntGrid
 	@:allow(importer)
@@ -38,7 +39,8 @@ class LayerDef {
 		identifier = type+uid;
 		#end
 		addIntGridValue(0x0);
-		tags = new Tags();
+		requiredTags = new Tags();
+		excludedTags = new Tags();
 	}
 
 	function set_identifier(id:String) {
@@ -60,7 +62,8 @@ class LayerDef {
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
-		o.tags = Tags.fromJson(json.tags);
+		o.requiredTags = Tags.fromJson(json.requiredTags);
+		o.excludedTags = Tags.fromJson(json.excludedTags);
 
 		o.intGridValues = [];
 		var idx = 0;
@@ -99,7 +102,8 @@ class LayerDef {
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
-			tags: tags.toJson(),
+			requiredTags: requiredTags.toJson(),
+			excludedTags: excludedTags.toJson(),
 
 			intGridValues: intGridValues.map( function(iv) return {
 				value: valueIdx++,
