@@ -4560,19 +4560,19 @@ dl.form.fieldInstanceEditor {
 		}
 	}
 
-	ul.form .IntGrid,
-	ul.form .IntGridAutoLayer,
-	ul.form .AutoLayer,
-	ul.form .Tiles,
-	ul.form .Entities {
+	dl.form .IntGrid,
+	dl.form .IntGridAutoLayer,
+	dl.form .AutoLayer,
+	dl.form .Tiles,
+	dl.form .Entities {
 		display: none;
 	}
 
-	ul.form.type-IntGrid .IntGrid,
-	ul.form.type-IntGridAutoLayer .IntGridAutoLayer,
-	ul.form.type-AutoLayer .AutoLayer,
-	ul.form.type-Entities .Entities,
-	ul.form.type-Tiles .Tiles {
+	dl.form.type-IntGrid .IntGrid,
+	dl.form.type-IntGridAutoLayer .IntGridAutoLayer,
+	dl.form.type-AutoLayer .AutoLayer,
+	dl.form.type-Entities .Entities,
+	dl.form.type-Tiles .Tiles {
 		display: flex;
 	}
 }

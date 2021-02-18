@@ -17,49 +17,63 @@
 </div>
 
 
-<ul class="form">
-	<li>
+<dl class="form">
+	<dt>
 		<label for="type">Type</label>
+	</dt>
+	<dd>
 		<span class="typeIcon"></span>
 		<span class="type"></span>
-	</li>
+	</dd>
 
-	<li>
+	<dt>
 		<label for="lName">Layer identifier</label>
+	</dt>
+	<dd>
 		<input type="text" name="name" id="lName"/>
 		<div class="info identifier"></div>
-	</li>
+	</dd>
 
-	<li class="Tiles">
+	<dt class="Tiles">
 		<label>Default tileset</label>
+	</dt>
+	<dd class="Tiles">
 		<select name="tilesets"></select>
 		<span class="infos"></span>
 		<button class="create">Create new tileset</button>
-	</li>
+	</dd>
 
-	<li>
+	<dt>
 		<label for="gridSize">Grid size</label>
+	</dt>
+	<dd>
 		<input type="text" name="gridSize" class="small" id="gridSize"/>
 		<span>px</span>
-	</li>
+	</dd>
 
-	<li>
+	<dt>
 		<label for="offsetX">Offsets</label>
+	</dt>
+	<dd>
 		<span>X=</span>
 		<input type="text" name="offsetX" class="small" id="offsetX"/>
 		<span>px, Y=</span>
 		<input type="text" name="offsetY" class="small" id="offsetY"/>
 		<span>px</span>
-	</li>
+	</dd>
 
-	<li>
+	<dt>
 		<label for="opacity">Display opacity</label>
+	</dt>
+	<dd>
 		<input type="text" name="displayOpacity" class="small" id="opacity"/>
 		<span>%</span>
-	</li>
+	</dd>
 
-	<li class="IntGrid">
+	<dt class="IntGrid">
 		<label>Grid values</label>
+	</dt>
+	<dd class="IntGrid">
 		<ul class="intGridValues">
 			<li class="add">
 				<button type="button" class="gray">+</button>
@@ -72,32 +86,40 @@
 			<input type="color" value="#ffffff"/>
 			<a href="#" class="remove">X</a>
 		</xml>
-	</li>
+	</dd>
 
-	<li class="Tiles">
+	<dt class="Tiles">
 		<label>Tile pivot point</label>
+	</dt>
+	<dd class="Tiles">
 		<div class="pivot"></div>
 		<span class="long">This is only useful if the Tileset grid size is different from the layer grid size.</span>
-	</li>
+	</dd>
 
-	<li class="AutoLayer">
+	<dt class="AutoLayer">
 		<label>Auto-Layer source</label>
+	</dt>
+	<dd class="AutoLayer">
 		<select name="autoLayerSources"></select>
 		<div class="help">This auto-layer will use the INTGRID layer above to apply its rules.</div>
-	</li>
+	</dd>
 
-	<li class="IntGrid AutoLayer">
+	<dt class="IntGrid AutoLayer">
 		<label>Auto-layer tileset</label>
+	</dt>
+	<dd class="IntGrid AutoLayer">
 		<select name="autoTileset"></select>
 		<div class="help IntGrid">
 			Selecting a Tileset above will enable Auto-Layer capabilities on this layer. This allows to render automatically tiles based on the IntGrid values (eg. adding "grass" tiles above cells with "walls" value).
 		</div>
-	</li>
+	</dd>
 
-	<li class="IntGridAutoLayer AutoLayer">
+	<dt class="IntGridAutoLayer AutoLayer">
 		<label>Bake</label>
+	</dt>
+	<dd class="IntGridAutoLayer AutoLayer">
 		<button class="bake">
 			Bake auto-layer
 		</button>
-	</li>
-</ul>
+	</dd>
+</dl>

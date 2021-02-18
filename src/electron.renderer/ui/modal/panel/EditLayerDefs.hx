@@ -16,7 +16,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		loadTemplate( "editLayerDefs", "defEditor layerDefs" );
 		jList = jModalAndMask.find(".mainList ul");
-		jForm = jModalAndMask.find("ul.form");
+		jForm = jModalAndMask.find("dl.form");
 		linkToButton("button.editLayers");
 
 		// Create layer
