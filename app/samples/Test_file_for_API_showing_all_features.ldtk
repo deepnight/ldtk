@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 39,
+	"nextUid": 42,
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -30,23 +30,6 @@
 	"advancedOptionFlags": ["DiscardPreCsvIntGrid"],
 	"defs": { "layers": [
 		{
-			"__type": "IntGrid",
-			"identifier": "IntGrid_8px_grid",
-			"type": "IntGrid",
-			"uid": 34,
-			"gridSize": 8,
-			"displayOpacity": 1,
-			"pxOffsetX": 0,
-			"pxOffsetY": 0,
-			"intGridValues": [{ "value": 1, "identifier": null, "color": "#00FF7A" }],
-			"autoTilesetDefUid": null,
-			"autoRuleGroups": [],
-			"autoSourceLayerDefUid": null,
-			"tilesetDefUid": null,
-			"tilePivotX": 0,
-			"tilePivotY": 0
-		},
-		{
 			"__type": "Entities",
 			"identifier": "Entities",
 			"type": "Entities",
@@ -55,7 +38,28 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
+			"autoTilesetDefUid": null,
+			"autoRuleGroups": [],
+			"autoSourceLayerDefUid": null,
+			"tilesetDefUid": null,
+			"tilePivotX": 0,
+			"tilePivotY": 0
+		},
+		{
+			"__type": "IntGrid",
+			"identifier": "IntGrid_8px_grid",
+			"type": "IntGrid",
+			"uid": 34,
+			"gridSize": 8,
+			"displayOpacity": 1,
+			"pxOffsetX": 0,
+			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
+			"intGridValues": [{ "value": 1, "identifier": null, "color": "#00FF7A" }],
 			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
@@ -72,6 +76,8 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
 			"autoTilesetDefUid": 2,
 			"autoRuleGroups": [{
@@ -117,6 +123,8 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
 			"intGridValues": [
 				{ "value": 1, "identifier": "first", "color": "#000000" },
 				{ "value": 2, "identifier": "second", "color": "#00B0FF" },
@@ -138,6 +146,8 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#D19E4D" }],
 			"autoTilesetDefUid": 2,
 			"autoRuleGroups": [{
@@ -267,6 +277,8 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
 			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
@@ -277,10 +289,17 @@
 		}
 	], "entities": [
 		{
-			"identifier": "Test",
+			"identifier": "EntityFieldsTest",
 			"uid": 15,
+			"tags": [],
 			"width": 32,
 			"height": 32,
+			"resizableX": false,
+			"resizableY": false,
+			"keepAspectRatio": false,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
 			"color": "#00A5FF",
 			"renderMode": "Ellipse",
 			"showName": true,
@@ -558,8 +577,15 @@
 		{
 			"identifier": "Labels",
 			"uid": 10,
+			"tags": [],
 			"width": 8,
 			"height": 8,
+			"resizableX": false,
+			"resizableY": false,
+			"keepAspectRatio": false,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
 			"color": "#000000",
 			"renderMode": "Cross",
 			"showName": false,
@@ -610,6 +636,72 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": { "id": "V_Int", "params": [8361387] },
+					"textLangageMode": null
+				}
+			]
+		},
+		{
+			"identifier": "Region",
+			"uid": 39,
+			"tags": [],
+			"width": 16,
+			"height": 16,
+			"resizableX": true,
+			"resizableY": true,
+			"keepAspectRatio": false,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": true,
+			"color": "#94D9B3",
+			"renderMode": "Rectangle",
+			"showName": true,
+			"tilesetId": null,
+			"tileId": null,
+			"tileRenderMode": "Stretch",
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": [
+				{
+					"identifier": "SomeEnum",
+					"__type": "LocalEnum.SomeEnum",
+					"uid": 40,
+					"type": { "id": "F_Enum", "params": [21] },
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Center",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLangageMode": null
+				},
+				{
+					"identifier": "Integer",
+					"__type": "Int",
+					"uid": 41,
+					"type": "F_Int",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Center",
+					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
 					"textLangageMode": null
 				}
 			]
@@ -709,6 +801,348 @@
 				}]
 			}],
 			"layerInstances": [
+				{
+					"__identifier": "Entities",
+					"__type": "Entities",
+					"__cWid": 43,
+					"__cHei": 36,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"levelId": 0,
+					"layerDefUid": 13,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 7679736,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "Labels",
+							"__grid": [5,5],
+							"__pivot": [0.5,0.5],
+							"__tile": null,
+							"width": 8,
+							"height": 8,
+							"defUid": 10,
+							"px": [88,88],
+							"fieldInstances": [
+								{
+									"__identifier": "text",
+									"__value": "IntGrid (classic)",
+									"__type": "String",
+									"defUid": 11,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["IntGrid (classic)"]
+									}]
+								},
+								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Labels",
+							"__grid": [14,5],
+							"__pivot": [0.5,0.5],
+							"__tile": null,
+							"width": 8,
+							"height": 8,
+							"defUid": 10,
+							"px": [232,88],
+							"fieldInstances": [
+								{
+									"__identifier": "text",
+									"__value": "IntGrid (with rules)",
+									"__type": "String",
+									"defUid": 11,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["IntGrid (with rules)"]
+									}]
+								},
+								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Labels",
+							"__grid": [29,5],
+							"__pivot": [0.5,0.5],
+							"__tile": null,
+							"width": 8,
+							"height": 8,
+							"defUid": 10,
+							"px": [472,88],
+							"fieldInstances": [
+								{
+									"__identifier": "text",
+									"__value": "Tiles",
+									"__type": "String",
+									"defUid": 11,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Tiles"]
+									}]
+								},
+								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "EntityFieldsTest",
+							"__grid": [9,19],
+							"__pivot": [0.5,0.5],
+							"__tile": null,
+							"width": 32,
+							"height": 32,
+							"defUid": 15,
+							"px": [152,312],
+							"fieldInstances": [
+								{
+									"__identifier": "Integer",
+									"__value": 1,
+									"__type": "Int",
+									"defUid": 16,
+									"realEditorValues": [{ "id": "V_Int", "params": [1] }]
+								},
+								{
+									"__identifier": "Float",
+									"__value": 1.5,
+									"__type": "Float",
+									"defUid": 17,
+									"realEditorValues": [{ "id": "V_Float", "params": [1.5] }]
+								},
+								{
+									"__identifier": "Boolean",
+									"__value": false,
+									"__type": "Bool",
+									"defUid": 18,
+									"realEditorValues": [null]
+								},
+								{
+									"__identifier": "String_singleLine",
+									"__value": "foo",
+									"__type": "String",
+									"defUid": 19,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["foo"]
+									}]
+								},
+								{
+									"__identifier": "String_multiLines",
+									"__value": "foo\nbar",
+									"__type": "String",
+									"defUid": 20,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["foo\nbar"]
+									}]
+								},
+								{
+									"__identifier": "Enum",
+									"__value": "A",
+									"__type": "LocalEnum.SomeEnum",
+									"defUid": 22,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["A"]
+									}]
+								},
+								{
+									"__identifier": "Color",
+									"__value": "#D181E8",
+									"__type": "Color",
+									"defUid": 23,
+									"realEditorValues": [{ "id": "V_Int", "params": [13730280] }]
+								},
+								{
+									"__identifier": "Point",
+									"__value": { "cx": 4, "cy": 17 },
+									"__type": "Point",
+									"defUid": 24,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["4,17"]
+									}]
+								},
+								{
+									"__identifier": "Array_Integer",
+									"__value": [1,2,3],
+									"__type": "Array<Int>",
+									"defUid": 25,
+									"realEditorValues": [ { "id": "V_Int", "params": [1] }, { "id": "V_Int", "params": [2] }, { "id": "V_Int", "params": [3] } ]
+								},
+								{
+									"__identifier": "Array_Enum",
+									"__value": [ "A", "B", "C" ],
+									"__type": "Array<LocalEnum.SomeEnum>",
+									"defUid": 29,
+									"realEditorValues": [ {
+										"id": "V_String",
+										"params": ["A"]
+									}, {
+										"id": "V_String",
+										"params": ["B"]
+									}, {
+										"id": "V_String",
+										"params": ["C"]
+									} ]
+								},
+								{
+									"__identifier": "Array_points",
+									"__value": [ { "cx": 14, "cy": 19 }, { "cx": 14, "cy": 17 }, { "cx": 18, "cy": 17 }, { "cx": 18, "cy": 19 } ],
+									"__type": "Array<Point>",
+									"defUid": 30,
+									"realEditorValues": [ {
+										"id": "V_String",
+										"params": ["14,19"]
+									}, {
+										"id": "V_String",
+										"params": ["14,17"]
+									}, {
+										"id": "V_String",
+										"params": ["18,17"]
+									}, {
+										"id": "V_String",
+										"params": ["18,19"]
+									} ]
+								},
+								{
+									"__identifier": "FilePath",
+									"__value": "README.md",
+									"__type": "FilePath",
+									"defUid": 35,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["README.md"]
+									}]
+								},
+								{
+									"__identifier": "Array_multilines",
+									"__value": [ "<foo/>\n<bar>5</bar>", "<hello>world</hello>" ],
+									"__type": "Array<String>",
+									"defUid": 37,
+									"realEditorValues": [ {
+										"id": "V_String",
+										"params": ["<foo/>\n<bar>5</bar>"]
+									}, {
+										"id": "V_String",
+										"params": ["<hello>world</hello>"]
+									} ]
+								}
+							]
+						},
+						{
+							"__identifier": "Labels",
+							"__grid": [21,5],
+							"__pivot": [0.5,0.5],
+							"__tile": null,
+							"width": 8,
+							"height": 8,
+							"defUid": 10,
+							"px": [344,88],
+							"fieldInstances": [
+								{
+									"__identifier": "text",
+									"__value": "PureAutoLayers",
+									"__type": "String",
+									"defUid": 11,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["PureAutoLayers"]
+									}]
+								},
+								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Labels",
+							"__grid": [21,6],
+							"__pivot": [0.5,0.5],
+							"__tile": null,
+							"width": 8,
+							"height": 8,
+							"defUid": 10,
+							"px": [344,104],
+							"fieldInstances": [
+								{
+									"__identifier": "text",
+									"__value": "(based on IntGrid_classic)",
+									"__type": "String",
+									"defUid": 11,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["(based on IntGrid_classic)"]
+									}]
+								},
+								{
+									"__identifier": "color",
+									"__value": "#7182B1",
+									"__type": "Color",
+									"defUid": 12,
+									"realEditorValues": [{ "id": "V_Int", "params": [7439025] }]
+								}
+							]
+						},
+						{
+							"__identifier": "Labels",
+							"__grid": [37,5],
+							"__pivot": [0.5,0.5],
+							"__tile": null,
+							"width": 8,
+							"height": 8,
+							"defUid": 10,
+							"px": [600,88],
+							"fieldInstances": [
+								{
+									"__identifier": "text",
+									"__value": "IntGrid with a 8px grid size",
+									"__type": "String",
+									"defUid": 11,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["IntGrid with a 8px grid size"]
+									}]
+								},
+								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Region",
+							"__grid": [24,24],
+							"__pivot": [0,0],
+							"__tile": null,
+							"width": 128,
+							"height": 80,
+							"defUid": 39,
+							"px": [384,384],
+							"fieldInstances": [
+								{
+									"__identifier": "SomeEnum",
+									"__value": "A",
+									"__type": "LocalEnum.SomeEnum",
+									"defUid": 40,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["A"]
+									}]
+								},
+								{
+									"__identifier": "Integer",
+									"__value": 1,
+									"__type": "Int",
+									"defUid": 41,
+									"realEditorValues": [{ "id": "V_Int", "params": [1] }]
+								}
+							]
+						}
+					]
+				},
 				{
 					"__identifier": "IntGrid_8px_grid",
 					"__type": "IntGrid",
@@ -905,342 +1339,6 @@
 					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []
-				},
-				{
-					"__identifier": "Entities",
-					"__type": "Entities",
-					"__cWid": 43,
-					"__cHei": 36,
-					"__gridSize": 16,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"levelId": 0,
-					"layerDefUid": 13,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 7679736,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "Labels",
-							"__grid": [5,5],
-							"__pivot": [0.5,0.5],
-							"__tile": null,
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [88,88],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "IntGrid (classic)",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["IntGrid (classic)"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Labels",
-							"__grid": [14,5],
-							"__pivot": [0.5,0.5],
-							"__tile": null,
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [232,88],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "IntGrid (with rules)",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["IntGrid (with rules)"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Labels",
-							"__grid": [29,5],
-							"__pivot": [0.5,0.5],
-							"__tile": null,
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [472,88],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "Tiles",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Tiles"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Test",
-							"__grid": [9,19],
-							"__pivot": [0.5,0.5],
-							"__tile": null,
-							"width": 32,
-							"height": 32,
-							"defUid": 15,
-							"px": [152,312],
-							"fieldInstances": [
-								{
-									"__identifier": "Integer",
-									"__value": 1,
-									"__type": "Int",
-									"defUid": 16,
-									"realEditorValues": [{ "id": "V_Int", "params": [1] }]
-								},
-								{
-									"__identifier": "Float",
-									"__value": 1.5,
-									"__type": "Float",
-									"defUid": 17,
-									"realEditorValues": [{ "id": "V_Float", "params": [1.5] }]
-								},
-								{
-									"__identifier": "Boolean",
-									"__value": false,
-									"__type": "Bool",
-									"defUid": 18,
-									"realEditorValues": [null]
-								},
-								{
-									"__identifier": "String_singleLine",
-									"__value": "foo",
-									"__type": "String",
-									"defUid": 19,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["foo"]
-									}]
-								},
-								{
-									"__identifier": "String_multiLines",
-									"__value": "foo\nbar",
-									"__type": "String",
-									"defUid": 20,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["foo\nbar"]
-									}]
-								},
-								{
-									"__identifier": "Enum",
-									"__value": "A",
-									"__type": "LocalEnum.SomeEnum",
-									"defUid": 22,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["A"]
-									}]
-								},
-								{
-									"__identifier": "Color",
-									"__value": "#D181E8",
-									"__type": "Color",
-									"defUid": 23,
-									"realEditorValues": [{ "id": "V_Int", "params": [13730280] }]
-								},
-								{
-									"__identifier": "Point",
-									"__value": { "cx": 4, "cy": 17 },
-									"__type": "Point",
-									"defUid": 24,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["4,17"]
-									}]
-								},
-								{
-									"__identifier": "Array_Integer",
-									"__value": [1,2,3],
-									"__type": "Array<Int>",
-									"defUid": 25,
-									"realEditorValues": [ { "id": "V_Int", "params": [1] }, { "id": "V_Int", "params": [2] }, { "id": "V_Int", "params": [3] } ]
-								},
-								{
-									"__identifier": "Array_Enum",
-									"__value": [ "A", "B", "C" ],
-									"__type": "Array<LocalEnum.SomeEnum>",
-									"defUid": 29,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["A"]
-									}, {
-										"id": "V_String",
-										"params": ["B"]
-									}, {
-										"id": "V_String",
-										"params": ["C"]
-									} ]
-								},
-								{
-									"__identifier": "Array_points",
-									"__value": [ { "cx": 14, "cy": 19 }, { "cx": 14, "cy": 17 }, { "cx": 18, "cy": 17 }, { "cx": 18, "cy": 19 } ],
-									"__type": "Array<Point>",
-									"defUid": 30,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["14,19"]
-									}, {
-										"id": "V_String",
-										"params": ["14,17"]
-									}, {
-										"id": "V_String",
-										"params": ["18,17"]
-									}, {
-										"id": "V_String",
-										"params": ["18,19"]
-									} ]
-								},
-								{
-									"__identifier": "FilePath",
-									"__value": "README.md",
-									"__type": "FilePath",
-									"defUid": 35,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["README.md"]
-									}]
-								},
-								{
-									"__identifier": "Array_multilines",
-									"__value": [ "<foo/>\n<bar>5</bar>", "<hello>world</hello>" ],
-									"__type": "Array<String>",
-									"defUid": 37,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["<foo/>\n<bar>5</bar>"]
-									}, {
-										"id": "V_String",
-										"params": ["<hello>world</hello>"]
-									} ]
-								}
-							]
-						},
-						{
-							"__identifier": "Labels",
-							"__grid": [9,16],
-							"__pivot": [0.5,0.5],
-							"__tile": null,
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [152,264],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "Entity fields",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Entity fields"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Labels",
-							"__grid": [21,5],
-							"__pivot": [0.5,0.5],
-							"__tile": null,
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [344,88],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "PureAutoLayers",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["PureAutoLayers"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Labels",
-							"__grid": [21,6],
-							"__pivot": [0.5,0.5],
-							"__tile": null,
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [344,104],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "(based on IntGrid_classic)",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["(based on IntGrid_classic)"]
-									}]
-								},
-								{
-									"__identifier": "color",
-									"__value": "#7182B1",
-									"__type": "Color",
-									"defUid": 12,
-									"realEditorValues": [{ "id": "V_Int", "params": [7439025] }]
-								}
-							]
-						},
-						{
-							"__identifier": "Labels",
-							"__grid": [37,5],
-							"__pivot": [0.5,0.5],
-							"__tile": null,
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [600,88],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "IntGrid with a 8px grid size",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["IntGrid with a 8px grid size"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
-							]
-						}
-					]
 				},
 				{
 					"__identifier": "PureAutoLayer",
@@ -1570,60 +1668,6 @@
 			"fieldInstances": [{ "__identifier": "desc", "__value": null, "__type": "String", "defUid": 38, "realEditorValues": [] }],
 			"layerInstances": [
 				{
-					"__identifier": "IntGrid_8px_grid",
-					"__type": "IntGrid",
-					"__cWid": 32,
-					"__cHei": 32,
-					"__gridSize": 8,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"levelId": 32,
-					"layerDefUid": 34,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"intGridCsv": [
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0
-					],
-					"autoLayerTiles": [],
-					"seed": 2324562,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": []
-				},
-				{
 					"__identifier": "Entities",
 					"__type": "Entities",
 					"__cWid": 16,
@@ -1646,7 +1690,7 @@
 					"gridTiles": [],
 					"entityInstances": [
 						{
-							"__identifier": "Test",
+							"__identifier": "EntityFieldsTest",
 							"__grid": [7,5],
 							"__pivot": [0.5,0.5],
 							"__tile": null,
@@ -1740,6 +1784,60 @@
 							]
 						}
 					]
+				},
+				{
+					"__identifier": "IntGrid_8px_grid",
+					"__type": "IntGrid",
+					"__cWid": 32,
+					"__cHei": 32,
+					"__gridSize": 8,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"levelId": 32,
+					"layerDefUid": 34,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"intGridCsv": [
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0
+					],
+					"autoLayerTiles": [],
+					"seed": 2324562,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": []
 				},
 				{
 					"__identifier": "PureAutoLayer",
@@ -2061,6 +2159,29 @@
 			"fieldInstances": [{ "__identifier": "desc", "__value": null, "__type": "String", "defUid": 38, "realEditorValues": [] }],
 			"layerInstances": [
 				{
+					"__identifier": "Entities",
+					"__type": "Entities",
+					"__cWid": 16,
+					"__cHei": 10,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"levelId": 33,
+					"layerDefUid": 13,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 8894473,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
 					"__identifier": "IntGrid_8px_grid",
 					"__type": "IntGrid",
 					"__cWid": 32,
@@ -2099,29 +2220,6 @@
 					],
 					"autoLayerTiles": [],
 					"seed": 9843615,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": []
-				},
-				{
-					"__identifier": "Entities",
-					"__type": "Entities",
-					"__cWid": 16,
-					"__cHei": 10,
-					"__gridSize": 16,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"levelId": 33,
-					"layerDefUid": 13,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 8894473,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []
@@ -2330,6 +2428,29 @@
 			}],
 			"layerInstances": [
 				{
+					"__identifier": "Entities",
+					"__type": "Entities",
+					"__cWid": 17,
+					"__cHei": 12,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"levelId": 36,
+					"layerDefUid": 13,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 3655473,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": []
+				},
+				{
 					"__identifier": "IntGrid_8px_grid",
 					"__type": "IntGrid",
 					"__cWid": 34,
@@ -2373,29 +2494,6 @@
 					],
 					"autoLayerTiles": [],
 					"seed": 3866698,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": []
-				},
-				{
-					"__identifier": "Entities",
-					"__type": "Entities",
-					"__cWid": 17,
-					"__cHei": 12,
-					"__gridSize": 16,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"levelId": 36,
-					"layerDefUid": 13,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 3655473,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []
