@@ -245,42 +245,6 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 		jSelect.val( curEntity.renderMode.getName() + ( curEntity.renderMode==Tile ? "."+curEntity.tilesetId : "" ) );
 
-		// Render mode
-		// var i = new form.input.EnumSelect(
-		// 	jEntityForm.find("select.renderMode"),
-		// 	data.DataTypes.EntityRenderMode,
-		// 	function() return curEntity.renderMode,
-		// 	function(v) {
-		// 		curEntity.tileId = null;
-		// 		curEntity.tilesetId = null;
-		// 		curEntity.renderMode = v;
-		// 	}
-		// );
-		// i.linkEvent(EntityDefChanged);
-
-		// // Tileset pick
-		// var jTilesets = jEntityForm.find("select.tilesets");
-		// jTilesets.find("option:not(:first)").remove();
-		// if( curEntity.renderMode==Tile ) {
-		// 	for( td in project.defs.tilesets ) {
-		// 		var opt = new J('<option/>');
-		// 		opt.appendTo(jTilesets);
-		// 		opt.attr("value",td.uid);
-		// 		opt.text( td.identifier );
-		// 		if( td.uid==curEntity.tilesetId )
-		// 			opt.attr("selected","selected");
-		// 	}
-		// 	jTilesets.change( function(_) {
-		// 		var id = Std.parseInt( jTilesets.val() );
-		// 		curEntity.tileId = null;
-		// 		if( !M.isValidNumber(id) || id<0 )
-		// 			curEntity.tilesetId = null;
-		// 		else
-		// 			curEntity.tilesetId = id;
-		// 		editor.ge.emit(EntityDefChanged);
-		// 	});
-		// }
-
 		// Tile render mode
 		var i = new form.input.EnumSelect(
 			jEntityForm.find("select.tileRenderMode"),
@@ -292,10 +256,15 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Tile pick
 		if( curEntity.renderMode==Tile ) {
-			var jPicker = JsTools.createTilePicker(curEntity.tilesetId, SingleTile, [curEntity.tileId], function(tileIds) {
-				curEntity.tileId = tileIds[0];
-				editor.ge.emit(EntityDefChanged);
-			});
+			var jPicker = JsTools.createTilePicker(
+				curEntity.tilesetId,
+				SingleTile,
+				curEntity.tileId==null ? [] : [curEntity.tileId],
+				(tileIds)->{
+					curEntity.tileId = tileIds[0];
+					editor.ge.emit(EntityDefChanged);
+				}
+			);
 			jPicker.appendTo( jRenderModeBlock.find(".tilePicker") );
 		}
 
