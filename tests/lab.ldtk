@@ -1075,13 +1075,13 @@
 						},
 						{
 							"__identifier": "RegionRect",
-							"__grid": [8,7],
+							"__grid": [0,9],
 							"__pivot": [0,0],
 							"__tile": null,
-							"width": 32,
+							"width": 72,
 							"height": 56,
 							"defUid": 1,
-							"px": [64,56],
+							"px": [0,72],
 							"fieldInstances": [
 								{
 									"__identifier": "type",
