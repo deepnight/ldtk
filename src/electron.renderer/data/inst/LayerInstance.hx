@@ -366,11 +366,19 @@ class LayerInstance {
 				}
 
 			case Entities:
-				// Remove lost entities (def removed)
 				var i = 0;
+				var ei = null;
+				var level = this.level;
 				while( i<entityInstances.length ) {
-					if( entityInstances[i].def==null ) {
+					ei = entityInstances[i];
+					if( ei.def==null ) {
+						// Remove lost entities (def removed)
 						App.LOG.add("tidy", 'Removed lost entity in $this');
+						entityInstances.splice(i,1);
+					}
+					else if( !level.inBounds(ei.x, ei.y) ) {
+						// Remove entities out of bounds
+						App.LOG.add("tidy", 'Removed out-of-bounds entity $ei in $this');
 						entityInstances.splice(i,1);
 					}
 					else
