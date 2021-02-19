@@ -4,10 +4,12 @@ class TagEditor {
 	public var jEditor : js.jquery.JQuery;
 	var onChange : Void->Void;
 	var tags : data.Tags;
+	var allValuesGetter : Void->Array<String>;
 
-	public function new(tags:data.Tags, onChange) {
+	public function new(tags:data.Tags, onChange, allValuesGetter:Void->Array<String>) {
 		this.tags = tags;
 		this.onChange = onChange;
+		this.allValuesGetter = allValuesGetter;
 
 		jEditor = new J('<div class="tagEditor"/>');
 		renderAll();
@@ -16,14 +18,32 @@ class TagEditor {
 	function renderAll() {
 		jEditor.empty();
 
-		for( k in tags.map.keys() )
+		for( k in tags.iterator() )
 			createTag(k);
 
-		var jAdd = new J('<button class="add transparent"> <span class="icon add"/> </button>');
-		jAdd.appendTo(jEditor);
+		var jButtons = new J('<div class="actions"/>');
+
+		jButtons.appendTo(jEditor);
+		var jAdd = new J('<button class="add dark"> <span class="icon add"/> </button>');
+		jAdd.appendTo(jButtons);
 		jAdd.click( _->{
 			createInput();
-			jEditor.append(jAdd);
+			jEditor.append(jButtons);
+		});
+
+		var jRecall = new J('<button class="recall dark"> <span class="icon expand"/> </button>');
+		jRecall.appendTo(jButtons);
+		jRecall.click( ev->{
+			var ctx = new ui.modal.ContextMenu(ev);
+			for(v in allValuesGetter())
+				ctx.add({
+					label: v,
+					cb: ()->{
+						tags.set(v);
+						onChange();
+					}
+				});
+			jEditor.append(jButtons);
 		});
 	}
 
@@ -59,21 +79,19 @@ class TagEditor {
 
 		var i = new form.input.StringInput(jInput, ()->k, v->{
 			v = tags.cleanUpTag(v);
-			if( v==k )
-				createTag(jInput, v); // no change
-			else if( v!=null ) {
+			if( v!=null && v!=k ) {
 				tags.unset(k);
-				if( tags.has(v) )
-					jInput.remove(); // duplicate
-				else {
+				if( !tags.has(v) )
 					tags.set(v);
-					createTag(jInput, v); // changed
-				}
+				jInput.blur();
 				onChange();
 			}
 			else
-				jInput.remove(); // invalid tag
+				jInput.blur();
 		});
+		// jInput.focus( _->{
+		// 	new ui.TypeSuggestion(jInput, allValuesGetter());
+		// });
 		jInput.blur( _->renderAll() );
 		jInput.focus();
 	}

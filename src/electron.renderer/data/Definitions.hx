@@ -307,6 +307,21 @@ class Definitions {
 		return moved;
 	}
 
+	public function getAllEntityTags(?excludes:Array<Tags>) : Array<String> {
+		var all = new Map();
+		for(ed in entities)
+		for(t in ed.tags.iterator())
+			all.set(t,t);
+
+		if( excludes!=null ) {
+			for( tags in excludes )
+				for( t in tags.iterator() )
+					all.remove(t);
+		}
+
+		return Lambda.array(all);
+	}
+
 
 
 	/**  FIELD DEFS  *****************************************/

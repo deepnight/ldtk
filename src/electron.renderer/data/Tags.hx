@@ -1,7 +1,6 @@
 package data;
 
 class Tags {
-	@:allow(ui.TagEditor)
 	var map : Map<String,Bool>;
 
 	public function new() {
@@ -36,6 +35,8 @@ class Tags {
 				map.remove(k);
 		return k;
 	}
+
+	public inline function iterator() return map.keys();
 
 	public inline function unset(k:String) : String {
 		return set(k,false);

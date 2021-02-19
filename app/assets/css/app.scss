@@ -1440,14 +1440,20 @@ textarea {
 .tagEditor {
 	display: flex;
 	flex-wrap: wrap;
+	justify-items: stretch;
 
 	input[type=text] {
 		width: 5em;
 	}
 
-	button.add {
-		flex: 0 0 32px;
-		padding: 0;
+	.actions {
+		display: grid;
+		grid-auto-columns: 32px;
+		grid-auto-flow: column;
+		button {
+			height: 100%;
+			padding: 0;
+		}
 	}
 
 	.tag,
@@ -1698,6 +1704,41 @@ textarea {
 		}
 	}
 }
+
+
+
+.typeSuggestion {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 98;
+	background: $bgDark;
+	// padding: 8px;
+
+	li {
+		padding: 4px;
+		&.out {
+			display: none;
+		}
+		&.focus {
+			background-color: $orange;
+			color: black;
+			strong {
+				color: black;
+			}
+		}
+		&:hover {
+			outline: 1px dotted $orange;
+			cursor: pointer;
+			// outline-offset: -1px;
+		}
+		strong {
+			color: $orange;
+			font-weight: normal;
+		}
+	}
+}
+
 
 .window {
 	position: absolute;

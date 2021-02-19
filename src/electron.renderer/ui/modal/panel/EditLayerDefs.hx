@@ -447,10 +447,18 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			case Entities:
 				// Tags
-				var ted = new ui.TagEditor( cur.requiredTags, ()->editor.ge.emit(LayerDefChanged) );
+				var ted = new ui.TagEditor(
+					cur.requiredTags,
+					()->editor.ge.emit(LayerDefChanged),
+					()->project.defs.getAllEntityTags([cur.requiredTags, cur.excludedTags])
+				);
 				jForm.find("#requiredTags").empty().append( ted.jEditor );
 
-				var ted = new ui.TagEditor( cur.excludedTags, ()->editor.ge.emit(LayerDefChanged) );
+				var ted = new ui.TagEditor(
+					cur.excludedTags,
+					()->editor.ge.emit(LayerDefChanged),
+					()->project.defs.getAllEntityTags([cur.requiredTags, cur.excludedTags])
+				);
 				jForm.find("#excludedTags").empty().append( ted.jEditor );
 
 			case Tiles:
