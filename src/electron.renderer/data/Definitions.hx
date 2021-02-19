@@ -309,9 +309,19 @@ class Definitions {
 
 	public function getAllEntityTags(?excludes:Array<Tags>) : Array<String> {
 		var all = new Map();
+
+		// From entities
 		for(ed in entities)
 		for(t in ed.tags.iterator())
 			all.set(t,t);
+
+		// From layers
+		for(ld in layers) {
+			for(t in ld.requiredTags.iterator())
+				all.set(t,t);
+			for(t in ld.excludedTags.iterator())
+				all.set(t,t);
+		}
 
 		if( excludes!=null ) {
 			for( tags in excludes )
