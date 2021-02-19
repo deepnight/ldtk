@@ -14,6 +14,7 @@
   - TODO Customizable source tileset per-layer instance
   - TODO better field display by aligning labels and values
   - The **application scaling** has been fixed for 4K and 8K displays. You can now adjust the general application scale factor from the app settings (press `F12`).
+  - It's now possible to associate icons with external enum values from a Haxe HX file.
   - Entities can now be marked as "Hollow", which will allow editor mouse clicks to pass through, except on edges.
   - You can now show/hide multiple layers at once by holding left mouse button over visibility icons (Photoshop style).
   - Use `Shift` + left click on a visibility icon to Show or hide all other layers except the current one.

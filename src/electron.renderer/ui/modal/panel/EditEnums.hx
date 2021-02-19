@@ -263,7 +263,7 @@ class EditEnums extends ui.modal.Panel {
 
 		// Tilesets
 		var jSelect = jForm.find("select#icons");
-		if( !curEnum.isExternal() ) {
+		// if( !curEnum.isExternal() ) {
 			jSelect.show();
 			jSelect.empty();
 			if( curEnum.iconTilesetUid==null )
@@ -302,7 +302,7 @@ class EditEnums extends ui.modal.Panel {
 				curEnum.clearAllTileIds();
 				editor.ge.emit(EnumDefChanged);
 			});
-		}
+		// }
 
 
 		// Values
@@ -336,7 +336,7 @@ class EditEnums extends ui.modal.Panel {
 				li.find(".sortHandle").hide();
 
 			// Tile preview
-			if( !curEnum.isExternal() ) {
+			// if( !curEnum.isExternal() ) {
 				var jPicker = JsTools.createTilePicker(
 					curEnum.iconTilesetUid,
 					SingleTile,
@@ -347,7 +347,7 @@ class EditEnums extends ui.modal.Panel {
 					}
 				);
 				jPicker.insertAfter( li.find(".sortHandle") );
-			}
+			// }
 
 			// Remove value button
 			if( !curEnum.isExternal() ) {
