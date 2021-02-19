@@ -159,7 +159,7 @@ class Rulers extends dn.Process {
 		if( !editor.worldMode && editor.curLevel.inBounds(levelX,levelY) )
 			return false;
 		else
-			return M.dist( levelX, levelY, getX(pos), getY(pos) ) <= HANDLE_SIZE*4 / editor.camera.adjustedZoom;
+			return M.dist( levelX, levelY, getX(pos), getY(pos) ) <= HANDLE_SIZE*1.5;
 	}
 
 
@@ -209,8 +209,10 @@ class Rulers extends dn.Process {
 	}
 
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
-		if( ev.cancel )
+		if( ev.cancel ) {
+			g.alpha = 0.3;
 			return;
+		}
 
 		// Cursor
 		if( canUseResizers() )
