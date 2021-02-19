@@ -254,10 +254,7 @@ class WorldRender extends dn.Process {
 			var t = project.filePath.fileName;
 			title.textColor = C.toWhite(project.bgColor, 0.3);
 			title.text = t;
-			title.setScale( camera.adjustedZoom * (w/title.textWidth) * switch project.worldLayout {
-				case Free, GridVania, LinearVertical:  1.1;
-				case LinearHorizontal: 2;
-			} );
+			title.setScale( camera.adjustedZoom * M.fmin(8, (w/title.textWidth) * 2) );
 			title.x = Std.int( (b.left + b.right)*0.5*camera.adjustedZoom + root.x - title.textWidth*0.5*title.scaleX );
 			title.y = Std.int( b.top*camera.adjustedZoom - 64 + root.y - title.textHeight*title.scaleY );
 		}
