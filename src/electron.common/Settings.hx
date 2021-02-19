@@ -8,6 +8,7 @@ typedef AppSettings = {
 	var tileStacking : Bool;
 	var lastKnownVersion: Null<String>;
 	var useBestGPU : Bool;
+	var appUiScale : Float;
 	var editorUiScale : Float;
 	var autoWorldModeSwitch : AutoWorldModeSwitch;
 }
@@ -41,6 +42,7 @@ class Settings {
 			lastKnownVersion: null,
 			useBestGPU: true,
 			autoWorldModeSwitch: ZoomInAndOut,
+			appUiScale: 1.0,
 			editorUiScale: 1.0,
 		}
 
@@ -48,6 +50,11 @@ class Settings {
 		v = dn.LocalStorage.readObject("settings", true, defaults);
 	}
 
+
+	public function getAppZoomFactor() : Float {
+		var disp = electron.main.Screen.getPrimaryDisplay();
+		return v.appUiScale * dn.M.fmax(0, dn.M.fmin( disp.size.width/1350, disp.size.height/950 ) );
+	}
 
 
 	public static function getDir() {

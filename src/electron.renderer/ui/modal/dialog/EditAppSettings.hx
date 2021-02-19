@@ -44,6 +44,24 @@ class EditAppSettings extends ui.modal.Dialog {
 			needRestart = true;
 		}
 
+		// App scaling
+		var jScale = jForm.find("#appScale");
+		jScale.empty();
+		for(s in [0.5, 0.75, 1, 1.25, 1.5]) {
+			var jOpt = new J('<option value="$s"/>');
+			jScale.append(jOpt);
+			jOpt.text('${Std.int(s*100)}%');
+			if( s==1 )
+				jOpt.append(" "+L.t._("(default)"));
+			if( s==settings.v.appUiScale)
+				jOpt.prop("selected",true);
+		}
+		jScale.change( (_)->{
+			settings.v.appUiScale = Std.parseFloat( jScale.val() );
+			onSettingChanged();
+			electron.renderer.WebFrame.setZoomFactor(settings.v.appUiScale);
+		});
+
 		// Font scaling
 		var jScale = jForm.find("#fontScale");
 		jScale.empty();

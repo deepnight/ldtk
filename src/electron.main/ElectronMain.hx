@@ -6,8 +6,10 @@ import js.Node.process;
 class ElectronMain {
 	static var mainWindow : electron.main.BrowserWindow;
 
+	static var settings : Settings;
+
 	static function main() {
-		var settings = new Settings();
+		settings = new Settings();
 
 		// Force best available GPU usage
 		if( settings.v.useBestGPU && !App.commandLine.hasSwitch("force_low_power_gpu") )
@@ -113,6 +115,10 @@ class ElectronMain {
 			title: "LDtk",
 			icon: __dirname+"/appIcon.png",
 			backgroundColor: '#1e2229'
+		});
+		mainWindow.once("ready-to-show", ev->{
+			var disp = electron.main.Screen.getPrimaryDisplay();
+			mainWindow.webContents.zoomFactor = settings.getAppZoomFactor();
 		});
 
 		// Window menu
