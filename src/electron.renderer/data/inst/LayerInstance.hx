@@ -376,11 +376,6 @@ class LayerInstance {
 						App.LOG.add("tidy", 'Removed lost entity in $this');
 						entityInstances.splice(i,1);
 					}
-					else if( !level.inBounds(ei.x, ei.y) ) {
-						// Remove entities out of bounds
-						App.LOG.add("tidy", 'Removed out-of-bounds entity $ei in $this');
-						entityInstances.splice(i,1);
-					}
 					else
 						i++;
 				}
@@ -441,10 +436,7 @@ class LayerInstance {
 								fi.parseValue( i, pt.cx + Const.POINT_SEPARATOR + pt.cy );
 							}
 
-					if( ei.x<0 || ei.y<0 )
-						entityInstances.splice(i,1);
-					else
-						i++;
+					i++;
 				}
 
 			case Tiles:

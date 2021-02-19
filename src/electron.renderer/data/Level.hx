@@ -400,6 +400,26 @@ class Level {
 			li.applyNewBounds(newPxLeft, newPxTop, newPxWid, newPxHei);
 		pxWid = newPxWid;
 		pxHei = newPxHei;
+
+		// Remove entities out of bounds
+		var n = 0;
+		for(li in layerInstances) {
+			var i = 0;
+			var ei = null;
+			while( i<li.entityInstances.length ) {
+				ei = li.entityInstances[i];
+				if( !inBounds(ei.x, ei.y) ) {
+					App.LOG.general('Removed out-of-bounds entity ${ei.def.identifier} in $li');
+					li.entityInstances.splice(i,1);
+					n++;
+				}
+				else
+					i++;
+			}
+		}
+		if( n>0 )
+			N.warning( L.t._("::n:: entity(ies) deleted during resizing!", { n:n }) );
+
 		_project.tidy();
 	}
 
