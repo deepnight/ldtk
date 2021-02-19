@@ -413,13 +413,12 @@ class Home extends Page {
 
 
 	public function onImportOgmo() {
-		#if !debug
-		N.notImplemented(); // HACK remove this if Ogmo is stable
-		return;
+		var dir = App.ME.getDefaultDialogDir();
+
+		#if debug
+		dir = "C:/projects/LDtk/tests/ogmo"; // HACK remove this hard-coded path
 		#end
 
-		var dir = App.ME.getDefaultDialogDir();
-		dir = "C:/projects/LDtk/tests/ogmo"; // HACK
 		dn.electron.Dialogs.open([".ogmo"], dir, function(filePath) {
 			var i = new importer.OgmoProject(filePath);
 			new ui.modal.dialog.LockMessage(L.t._("Importing OGMO 3 project..."), ()->{
