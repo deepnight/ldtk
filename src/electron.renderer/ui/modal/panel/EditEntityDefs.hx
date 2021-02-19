@@ -19,12 +19,33 @@ class EditEntityDefs extends ui.modal.Panel {
 		loadTemplate( "editEntityDefs", "defEditor entityDefs" );
 		linkToButton("button.editEntities");
 
-		// Create entity
-		jEntityList.parent().find("button.create").click( function(_) {
+		function _createEntity() {
 			var ed = project.defs.createEntityDef();
 			selectEntity(ed);
 			editor.ge.emit(EntityDefAdded);
 			jEntityForm.find("input").first().focus().select();
+			return ed;
+		}
+
+		// Create entity
+		jEntityList.parent().find("button.create").click( _->_createEntity() );
+
+		// Presets
+		jEntityList.parent().find("button.presets").click( (ev)->{
+			var ctx = new ContextMenu(ev);
+			ctx.add({
+				label: L.t._("Region"),
+				cb: ()->{
+					var ed = _createEntity();
+					ed.identifier = project.makeUniqueIdStr("Region", true, (s)->project.defs.isEntityIdentifierUnique(s));
+					ed.hollow = true;
+					ed.resizableX = true;
+					ed.resizableY = true;
+					ed.pivotX = ed.pivotY = 0;
+					ed.tags.set("region");
+					selectEntity(ed);
+				}
+			});
 		});
 
 		// Delete entity
