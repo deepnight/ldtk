@@ -481,7 +481,6 @@ class OgmoProject {
 				f = M.setBit(f, 1);
 			if( M.hasBit(v,2) ) // X
 				f = M.setBit(f, 0);
-			trace(v+"=>"+f);
 			return f;
 		}
 		else
