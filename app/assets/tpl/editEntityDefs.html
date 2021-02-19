@@ -46,21 +46,16 @@
 				<input type="text" name="width" class="small" id="width"/>
 				<span>x</span>
 				<input type="text" name="height" class="small"/>
-				<span>px</span>
-			</dd>
 
-			<dt>
-				<label>Resizable</label>
-			</dt>
-			<dd>
+				<span>Resizable:</span>
 				<input type="checkbox" id="resizableX" title="If checked, the entity instances will be horizontally resizable. In this case, the width above will define the a minimum size."/>
-				<span>Width</span>
+				<label for="resizableX">Width</label>
 
 				<input type="checkbox" id="resizableY" title="If checked, the entity instances will be vertically resizable. In this case, the height above will define the a minimum size."/>
-				<span>Height</span>
+				<label for="resizableY">Height</label>
 
 				<input type="checkbox" id="keepAspectRatio" title="If checked, the entity instance size will use the same aspect ratio as the size above."/>
-				<span>Keep aspect ratio</span>
+				<label for="keepAspectRatio">Keep aspect ratio</label>
 			</dd>
 
 			<dt>
@@ -70,17 +65,19 @@
 				<input type="color" name="color" id="eColor"/>
 				<select class="renderMode"></select>
 
-				<span>Fill=</span>
-				<input type="text" id="fillOpacity"/>
-
-				<span>Line=</span>
-				<input type="text" id="lineOpacity"/>
-
-				<input type="checkbox" id="hollow" title="Clicks will pass through 'hollow' entities, except on edges. They don't have any fill color (only an outline and/or a tile)."/>
-				<label for="hollow">Hollow</label>
-
 				<div class="tilePicker"></div>
 				<select class="mode_Tile tileRenderMode"></select>
+
+				<span>Fill=</span>
+				<input type="text" id="fillOpacity" class="small"/>
+
+				<span>Line=</span>
+				<input type="text" id="lineOpacity" class="small"/>
+			</dd>
+
+			<dd>
+				<input type="checkbox" id="hollow" title="Clicks will pass through 'hollow' entities, except on edges. They don't have any fill color (only an outline and/or a tile)."/>
+				<label for="hollow">Hollow</label>
 
 				<input type="checkbox" name="showIdentifier" id="showIdentifier"/>
 				<label for="showIdentifier">Show identifier</label>

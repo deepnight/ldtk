@@ -193,7 +193,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			updateEntityForm();
 		});
 
-		// Fill opacity
+		// Fill/line opacities
 		var i = Input.linkToHtmlInput(curEntity.fillOpacity, jEntityForm.find("#fillOpacity"));
 		i.setBounds(0.1, 1);
 		i.displayAsPct = true;
@@ -203,6 +203,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.setBounds(0, 1);
 		i.displayAsPct = true;
 		i.linkEvent( EntityDefChanged );
+		i.setEnabled(curEntity.renderMode!=Tile);
 
 		// Entity render mode
 		var jSelect = jRenderModeBlock.find(".renderMode");
