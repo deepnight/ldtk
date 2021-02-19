@@ -47,7 +47,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		// App scaling
 		var jScale = jForm.find("#appScale");
 		jScale.empty();
-		for(s in [0.5, 0.75, 1, 1.25, 1.5]) {
+		for(s in [0.7, 0.8, 0.9, 1, 1.1, 1.2]) {
 			var jOpt = new J('<option value="$s"/>');
 			jScale.append(jOpt);
 			jOpt.text('${Std.int(s*100)}%');

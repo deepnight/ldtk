@@ -53,7 +53,7 @@ class Settings {
 
 	public function getAppZoomFactor() : Float {
 		var disp = electron.main.Screen.getPrimaryDisplay();
-		return v.appUiScale * dn.M.fmax(0, dn.M.fmin( disp.size.width/1350, disp.size.height/950 ) );
+		return v.appUiScale * dn.M.fmax(0, dn.M.fmin( disp.size.width/1350, disp.size.height/1024 ) );
 	}
 
 
