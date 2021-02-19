@@ -252,6 +252,9 @@ class SelectionTool extends Tool<Int> {
 			group.onMoveStart();
 			moveStarted = true;
 		}
+
+		if( isRunning() )
+			ev.cancel = true;
 	}
 
 

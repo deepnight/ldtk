@@ -741,10 +741,6 @@ class Editor extends Page {
 			if( !ev.cancel && resizeTool!=null )
 				resizeTool.onMouseMove(ev,m);
 
-			rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
-			worldTool.onMouseMove(ev,m);
-
-
 			if( !ev.cancel && !worldMode ) {
 				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
 					selectionTool.onMouseMove(ev,m);
@@ -753,6 +749,9 @@ class Editor extends Page {
 				else
 					curTool.onMouseMove(ev,m);
 			}
+
+			rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
+			worldTool.onMouseMove(ev,m); // Note: event cancelation is checked inside
 
 			if( ui.Modal.isOpen( ui.modal.panel.EditAllAutoLayerRules ) )
 				ui.Modal.getFirst( ui.modal.panel.EditAllAutoLayerRules ).onEditorMouseMove(m);

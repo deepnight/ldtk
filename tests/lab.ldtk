@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 68,
+	"nextUid": 69,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -1171,17 +1171,6 @@
 									"params": ["Necklace"]
 								}]
 							}]
-						},
-						{
-							"__identifier": "Player",
-							"__grid": [4,12],
-							"__pivot": [0.5,1],
-							"__tile": null,
-							"width": 12,
-							"height": 16,
-							"defUid": 40,
-							"px": [36,104],
-							"fieldInstances": []
 						},
 						{
 							"__identifier": "Door",
