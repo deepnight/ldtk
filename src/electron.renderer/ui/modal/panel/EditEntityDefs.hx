@@ -174,7 +174,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 
 		// Display renderMode form fields based on current mode
-		var jRenderModeBlock = jEntityForm.find("li.renderMode");
+		var jRenderModeBlock = jEntityForm.find("dd.renderMode");
 		JsTools.removeClassReg(jRenderModeBlock, ~/mode_\S+/g);
 		jRenderModeBlock.addClass("mode_"+curEntity.renderMode);
 		jRenderModeBlock.find(".tilePicker").empty();
