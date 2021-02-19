@@ -662,6 +662,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 	public function onEditorMouseMove(m:Coords) {
+		jContent.find("li.highlight").removeClass("highlight");
+
 		if( m.cx<0 || m.cx>=li.cWid || m.cy<0 || m.cy>=li.cHei )
 			return;
 
@@ -675,7 +677,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 
 		// Highlight rules in panel
-		jContent.find("li.highlight").removeClass("highlight");
 		var jRules = jContent.find(".ruleGroup>li");
 		for( uid in activeRules.keys() )
 			jRules.filter('li[ruleuid=$uid]').addClass("highlight").parent().closest("li").addClass("highlight");
