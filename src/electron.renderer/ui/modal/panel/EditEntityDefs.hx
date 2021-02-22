@@ -447,7 +447,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				var toIdx = ev.newIndex>ev.oldIndex
 					? jItem.prev().length==0 ? 0 : project.defs.getEntityIndex( Std.parseInt( jItem.prev().attr("uid") ) )
 					: jItem.next().length==0 ? project.defs.entities.length-1 : project.defs.getEntityIndex( Std.parseInt( jItem.next().attr("uid") ) );
-				var moved = project.defs.sortEntityDefIndex(fromIdx, toIdx);
+				var moved = project.defs.sortEntityDef(fromIdx, toIdx);
 				selectEntity(moved);
 				editor.ge.emit(EntityDefSorted);
 			});

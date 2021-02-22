@@ -302,7 +302,7 @@ class Definitions {
 		return idx>=entities.length ? -1 : idx;
 	}
 
-	public function sortEntityDefIndex(from:Int, to:Int) : Null<data.def.EntityDef> {
+	public function sortEntityDef(from:Int, to:Int) : Null<data.def.EntityDef> {
 		if( from<0 || from>=entities.length || from==to )
 			return null;
 
