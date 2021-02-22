@@ -31,20 +31,23 @@ class TagEditor {
 			jEditor.append(jButtons);
 		});
 
-		var jRecall = new J('<button class="recall dark"> <span class="icon expand"/> </button>');
-		jRecall.appendTo(jButtons);
-		jRecall.click( ev->{
-			var ctx = new ui.modal.ContextMenu(ev);
-			for(v in allValuesGetter())
-				ctx.add({
-					label: v,
-					cb: ()->{
-						tags.set(v);
-						onChange();
-					}
-				});
-			jEditor.append(jButtons);
-		});
+		// Recall button
+		if( allValuesGetter().length>0 ) {
+			var jRecall = new J('<button class="recall dark"> <span class="icon expand"/> </button>');
+			jRecall.appendTo(jButtons);
+			jRecall.click( ev->{
+				var ctx = new ui.modal.ContextMenu(ev);
+				for(v in allValuesGetter())
+					ctx.add({
+						label: v,
+						cb: ()->{
+							tags.set(v);
+							onChange();
+						}
+					});
+				jEditor.append(jButtons);
+			});
+		}
 	}
 
 	function createTag(?jTarget:js.jquery.JQuery, k:String) {
