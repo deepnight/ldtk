@@ -4464,6 +4464,9 @@ dl.form.fieldInstanceEditor {
 
 		.header {
 			grid-column: 1/3;
+			h2 {
+				margin-bottom: 8px;
+			}
 		}
 		.enumList {
 			grid-column: 1/2;
