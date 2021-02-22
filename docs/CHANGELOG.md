@@ -1,10 +1,10 @@
 # 0.8.0
 
+  - **Resizable entities**: Entities can now be marked as resizable horizontally and/or vertically. This new feature opens the possibility of creating "Region" entities (ie. a custom rectangle or ellipses), with fully customizable properties.
+  - **Entity tags**: tags are labels that can be freely added to any Entity definition. They can be used to group entities in the editor (ie. actors, regions, interactives etc.) and to filter allowed entities per layers (eg. a "*Region*" layer that can only contain "*region*" tagged entities).
+  - **Ogmo 3 import**: you can now import Ogmo 3 projects to LDtk. Most features are supported, but feel free to drop a message on GitHub issues if you have any specific needs :)
+  - **CodeMirror**: edition of "multi-lines" fields in entities is now done using *CodeMirror* library, enabling syntax highlighting, basic completion and various quality of life features. Supported types include XML, JSON, Markdown, LUA, JS, C# etc. Feel free to ask for more languages on GitHub issues.
   - TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
-  - TODO **Region layers**
-  - TODO **Ogmo 3 import**
-  - TODO **Resizable entities**
-  - TODO codemirror
   - TODO level custom fields
   - TODO world/level panel separation
   - TODO 32bits support, file size increase
@@ -13,6 +13,7 @@
   - TODO multi lines pop up text editor
   - TODO Customizable source tileset per-layer instance
   - TODO better field display by aligning labels and values
+
   - The **application scaling** has been fixed for 4K and 8K displays. You can now adjust the general application scale factor from the app settings (press `F12`).
   - Moved buttons to the top of project Panels.
   - Removed all "Delete" buttons in project panels
