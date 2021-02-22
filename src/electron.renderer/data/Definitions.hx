@@ -317,7 +317,7 @@ class Definitions {
 		return moved;
 	}
 
-	public function getAllEntityTags(?excludes:Array<Tags>) : Array<String> {
+	public function getRecallEntityTags(?excludes:Array<Tags>) : Array<String> {
 		var all = new Map();
 
 		// From entities
