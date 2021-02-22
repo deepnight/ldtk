@@ -19,11 +19,35 @@
           "name": "foo",
           "id": 11,
           "_eid": "74377636",
-          "x": 16,
-          "y": 16,
+          "x": 48,
+          "y": 112,
           "originX": 0,
           "originY": 0,
           "values": {"myBool": true, "myColor": "#aedb4aff", "myEnum": "C", "myFloat": 0.5, "myFilePath": "proj:", "myInt": 5, "myString": "pouet", "myText": "hey \nhello\npouet"}
+        },
+        {
+          "name": "resizable",
+          "id": 14,
+          "_eid": "98126340",
+          "x": 224,
+          "y": 80,
+          "width": 80,
+          "height": 48,
+          "originX": 0,
+          "originY": 0,
+          "values": {"someString": "hello"}
+        },
+        {
+          "name": "resizable",
+          "id": 15,
+          "_eid": "98126340",
+          "x": 272,
+          "y": 144,
+          "width": 16,
+          "height": 16,
+          "originX": 0,
+          "originY": 0,
+          "values": {"someString": "world"}
         }
       ]
     },

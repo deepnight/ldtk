@@ -74,8 +74,9 @@ class Tags {
 
 	public function fromArray(arr:Array<String>) {
 		map = new Map();
-		for( k in arr )
-			set(k,true);
+		if( arr!=null )
+			for( k in arr )
+				set(k,true);
 	}
 
 	public function toJson() : Array<String> {

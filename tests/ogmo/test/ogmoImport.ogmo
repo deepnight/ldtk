@@ -15,15 +15,15 @@
   "compactExport": false,
   "externalScript": "",
   "playCommand": "",
-  "entityTags": [],
+  "entityTags": ["base", "region"],
   "layers": [
     {
       "definition": "entity",
       "name": "myEntity",
       "gridSize": {"x": 16, "y": 16},
       "exportID": "65565525",
-      "requiredTags": [],
-      "excludedTags": []
+      "requiredTags": ["base"],
+      "excludedTags": ["nope"]
     },
     {
       "definition": "grid",
@@ -44,6 +44,44 @@
     }
   ],
   "entities": [
+    {
+      "exportID": "98126340",
+      "name": "resizable",
+      "limit": -1,
+      "size": {"x": 16, "y": 16},
+      "origin": {"x": 0, "y": 0},
+      "originAnchored": true,
+      "shape": {
+        "label": "Rectangle",
+        "points": [
+          {"x": -1, "y": -1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": 1}
+        ]
+      },
+      "color": "#c41db9ff",
+      "tileX": false,
+      "tileY": false,
+      "tileSize": {"x": 16, "y": 16},
+      "resizeableX": true,
+      "resizeableY": true,
+      "rotatable": false,
+      "rotationDegrees": 360,
+      "canFlipX": false,
+      "canFlipY": false,
+      "canSetColor": false,
+      "hasNodes": false,
+      "nodeLimit": 0,
+      "nodeDisplay": 0,
+      "nodeGhost": true,
+      "tags": ["region"],
+      "values": [
+        {"name": "someString", "definition": "String", "display": 0, "defaults": "", "maxLength": 0, "trimWhitespace": true}
+      ]
+    },
     {
       "exportID": "74377636",
       "name": "foo",
@@ -77,7 +115,7 @@
       "nodeLimit": 0,
       "nodeDisplay": 0,
       "nodeGhost": true,
-      "tags": [],
+      "tags": ["base"],
       "values": [
         {"name": "myBool", "definition": "Boolean", "display": 2, "defaults": false},
         {"name": "myColor", "definition": "Color", "display": 1, "defaults": "#000000ff", "includeAlpha": false},

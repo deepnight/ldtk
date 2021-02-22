@@ -111,6 +111,9 @@ class OgmoProject {
 				ed.pivotX = M.round( (entityJson.origin.x / entityJson.size.x) / 0.5 ) * 0.5;
 				ed.pivotY = M.round( (entityJson.origin.y / entityJson.size.y) / 0.5 ) * 0.5;
 				ed.maxCount = entityJson.limit<=0 ? 0 : entityJson.limit;
+				ed.resizableX = entityJson.resizeableX;
+				ed.resizableY = entityJson.resizeableY;
+				ed.tags.fromArray( entityJson.tags );
 
 				// Entity fields
 				for(valJson in entityJson.values) {
@@ -232,6 +235,8 @@ class OgmoProject {
 						var layer = p.defs.createLayerDef(Entities, data.Project.cleanupIdentifier(layerJson.name, true));
 						ldtkLayerDefs.set(layerJson.name, layer);
 						layer.gridSize = readGrid(layerJson.gridSize, 16);
+						layer.requiredTags.fromArray( layerJson.requiredTags );
+						layer.excludedTags.fromArray( layerJson.excludedTags );
 
 					// Tile layer def
 					case "tile":
@@ -346,6 +351,8 @@ class OgmoProject {
 								var ei = li.createEntityInstance(ed);
 								ei.x = entJson.x;
 								ei.y = entJson.y;
+								ei.customWidth = ed.resizableX && entJson.width!=null && entJson.width!=ed.width ? entJson.width : null;
+								ei.customHeight = ed.resizableY && entJson.height!=null && entJson.height!=ed.height ? entJson.height: null;
 
 								// Fields values
 								if( entJson.values!=null )
@@ -525,6 +532,8 @@ typedef OgmoLayerDef = {
 	var arrayMode: Int;
 	var legend: Map<Int,String>;
 	var defaultTileset: Null<String>;
+	var requiredTags: Array<String>;
+	var excludedTags: Array<String>;
 }
 
 typedef OgmoTilesetDef = {
@@ -548,6 +557,9 @@ typedef OgmoEntityDef = {
 	var color: String;
 	var hasNodes: Bool;
 	var values: Array<OgmoEntityValueDef>;
+	var resizeableX: Bool;
+	var resizeableY: Bool;
+	var tags: Array<String>;
 }
 
 typedef OgmoEntityValueDef = {
@@ -598,4 +610,6 @@ typedef OgmoEntityInst = {
 	var x: Int;
 	var y: Int;
 	var values: Dynamic;
+	var ?width: Int;
+	var ?height: Int;
 }
