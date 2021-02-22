@@ -317,6 +317,31 @@ class Definitions {
 		return moved;
 	}
 
+	public function getEntityTagCategories() : Array< Null<String> > {
+		// List all unique tags
+		var tagMap = new Map();
+		var anyUntagged = false;
+		var anyTagged = false;
+		for(ed in entities) {
+			if( ed.tags.isEmpty() )
+				anyUntagged = true;
+			else
+				anyTagged = true;
+			for(t in ed.tags.iterator())
+				tagMap.set(t,t);
+		}
+
+		// Build array & sort it
+		var allTags = [];
+		for(t in tagMap)
+			allTags.push(t);
+		allTags.sort( (a,b)->Reflect.compare( a.toLowerCase(), b.toLowerCase() ) );
+		if( anyUntagged )
+			allTags.insert(0, null); // untagged category
+
+		return allTags;
+	}
+
 	public function getRecallEntityTags(?excludes:Array<Tags>) : Array<String> {
 		var all = new Map();
 

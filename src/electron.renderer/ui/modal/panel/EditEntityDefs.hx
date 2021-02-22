@@ -371,28 +371,11 @@ class EditEntityDefs extends ui.modal.Panel {
 	function updateEntityList() {
 		jEntityList.empty();
 
-		// List all existing tags
-		var tagMap = new Map();
-		var anyUntagged = false;
-		var anyTagged = false;
-		for(ed in project.defs.entities) {
-			if( ed.tags.isEmpty() )
-				anyUntagged = true;
-			else
-				anyTagged = true;
-			for(t in ed.tags.iterator())
-				tagMap.set(t,t);
-		}
-		var allTags = [];
-		for(t in tagMap)
-			allTags.push(t);
-		allTags.sort( (a,b)->Reflect.compare(a,b) );
-		if( anyUntagged )
-			allTags.insert(0, null); // untagged category
+		var allTags = project.defs.getEntityTagCategories();
 
 		// Tags
 		for(t in allTags) {
-			if( anyTagged ) {
+			if( allTags.length>1 ) {
 				var jSep = new J('<li class="title fixed"/>');
 				jSep.text( t==null ? L.t._("Untagged") : t );
 				jSep.appendTo(jEntityList);

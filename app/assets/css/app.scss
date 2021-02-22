@@ -3761,9 +3761,8 @@ canvas#webgl {
 		height: 100%;
 		border: 0px;
 
-		>li {
+		li:not(.title):not(.subList) {
 			display: flex;
-			// margin-bottom: 1px;
 			min-height: 16px;
 			cursor: pointer;
 			box-shadow: none;
@@ -3774,6 +3773,12 @@ canvas#webgl {
 			&:not(.active):hover {
 				outline: 1px solid white !important;
 				outline-offset: -1px;
+			}
+		}
+
+		li.subList {
+			padding: 0;
+			ul {
 			}
 		}
 
