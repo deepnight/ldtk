@@ -151,8 +151,8 @@ class LayerRender {
 				// Export IntGrid as pixel tiny image
 				if( li.def.type==IntGrid ) {
 					var pixels = hxd.Pixels.alloc(li.cWid, li.cHei, RGBA);
-					for(cx in 0...li.cWid)
-					for(cy in 0...li.cWid) {
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid) {
 						if( li.hasIntGrid(cx,cy) )
 							pixels.setPixel( cx, cy, C.addAlphaF(li.getIntGridColorAt(cx,cy)) );
 					}
