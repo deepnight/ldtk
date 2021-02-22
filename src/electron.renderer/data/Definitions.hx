@@ -292,7 +292,17 @@ class Definitions {
 		return true;
 	}
 
-	public function sortEntityDef(from:Int, to:Int) : Null<data.def.EntityDef> {
+	public function getEntityIndex(uid:Int) {
+		var idx = 0;
+		for(ed in entities)
+			if( ed.uid==uid )
+				break;
+			else
+				idx++;
+		return idx>=entities.length ? -1 : idx;
+	}
+
+	public function sortEntityDefIndex(from:Int, to:Int) : Null<data.def.EntityDef> {
 		if( from<0 || from>=entities.length || from==to )
 			return null;
 

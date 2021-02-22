@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 69,
+	"nextUid": 76,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -595,31 +595,6 @@
 		}
 	], "entities": [
 		{
-			"identifier": "Player",
-			"uid": 40,
-			"tags": ["actor"],
-			"width": 12,
-			"height": 16,
-			"resizableX": false,
-			"resizableY": false,
-			"keepAspectRatio": false,
-			"fillOpacity": 1,
-			"lineOpacity": 1,
-			"hollow": false,
-			"color": "#DCFA51",
-			"renderMode": "Ellipse",
-			"showName": true,
-			"tilesetId": null,
-			"tileId": null,
-			"tileRenderMode": "Stretch",
-			"maxCount": 1,
-			"limitScope": "PerWorld",
-			"limitBehavior": "MoveLastOne",
-			"pivotX": 0.5,
-			"pivotY": 1,
-			"fieldDefs": []
-		},
-		{
 			"identifier": "Item",
 			"uid": 29,
 			"tags": ["interactive"],
@@ -712,6 +687,56 @@
 			]
 		},
 		{
+			"identifier": "Player",
+			"uid": 40,
+			"tags": ["actor"],
+			"width": 12,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"keepAspectRatio": false,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#DCFA51",
+			"renderMode": "Ellipse",
+			"showName": true,
+			"tilesetId": null,
+			"tileId": null,
+			"tileRenderMode": "Stretch",
+			"maxCount": 1,
+			"limitScope": "PerWorld",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0.5,
+			"pivotY": 1,
+			"fieldDefs": []
+		},
+		{
+			"identifier": "Mob",
+			"uid": 71,
+			"tags": ["actor"],
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"keepAspectRatio": false,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#FF0000",
+			"renderMode": "Ellipse",
+			"showName": true,
+			"tilesetId": null,
+			"tileId": null,
+			"tileRenderMode": "Stretch",
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0.5,
+			"pivotY": 1,
+			"fieldDefs": []
+		},
+		{
 			"identifier": "MovingPlatform",
 			"uid": 57,
 			"tags": ["interactive"],
@@ -798,7 +823,7 @@
 			]
 		},
 		{
-			"identifier": "RegionRect",
+			"identifier": "Rect",
 			"uid": 1,
 			"tags": ["region"],
 			"width": 8,
@@ -907,7 +932,7 @@
 			]
 		},
 		{
-			"identifier": "RegionCircle",
+			"identifier": "Circle",
 			"uid": 47,
 			"tags": ["region"],
 			"width": 16,
@@ -1043,7 +1068,7 @@
 					"gridTiles": [],
 					"entityInstances": [
 						{
-							"__identifier": "RegionRect",
+							"__identifier": "Rect",
 							"__grid": [17,4],
 							"__pivot": [0,0],
 							"__tile": null,
@@ -1074,7 +1099,7 @@
 							]
 						},
 						{
-							"__identifier": "RegionRect",
+							"__identifier": "Rect",
 							"__grid": [0,9],
 							"__pivot": [0,0],
 							"__tile": null,
@@ -1108,7 +1133,7 @@
 							]
 						},
 						{
-							"__identifier": "RegionCircle",
+							"__identifier": "Circle",
 							"__grid": [27,9],
 							"__pivot": [0.5,0.5],
 							"__tile": null,
@@ -3693,7 +3718,7 @@
 					"gridTiles": [],
 					"entityInstances": [
 						{
-							"__identifier": "RegionRect",
+							"__identifier": "Rect",
 							"__grid": [7,3],
 							"__pivot": [0,0],
 							"__tile": null,
@@ -3733,7 +3758,7 @@
 							]
 						},
 						{
-							"__identifier": "RegionRect",
+							"__identifier": "Rect",
 							"__grid": [26,5],
 							"__pivot": [0,0],
 							"__tile": null,
@@ -7663,7 +7688,7 @@
 					"gridTiles": [],
 					"entityInstances": [
 						{
-							"__identifier": "RegionRect",
+							"__identifier": "Rect",
 							"__grid": [28,5],
 							"__pivot": [0,0],
 							"__tile": null,
@@ -7688,7 +7713,7 @@
 							]
 						},
 						{
-							"__identifier": "RegionRect",
+							"__identifier": "Rect",
 							"__grid": [17,17],
 							"__pivot": [0,0],
 							"__tile": null,
@@ -10341,7 +10366,19 @@
 					"seed": 2849335,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": []
+					"entityInstances": [
+						{
+							"__identifier": "Player",
+							"__grid": [2,14],
+							"__pivot": [0.5,1],
+							"__tile": null,
+							"width": 12,
+							"height": 16,
+							"defUid": 40,
+							"px": [20,120],
+							"fieldInstances": []
+						}
+					]
 				},
 				{
 					"__identifier": "Entities",

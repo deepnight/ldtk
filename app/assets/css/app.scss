@@ -696,12 +696,24 @@ ul.niceList {
 		background-color: $bgMed;
 		cursor: pointer;
 
-		.sub {
-			display: block;
-			width: 100%;
-			text-align: right;
-			font-size: 0.7em;
-			opacity: 0.5;
+		// .sub {
+		// 	display: block;
+		// 	width: 100%;
+		// 	text-align: right;
+		// 	font-size: 0.7em;
+		// 	opacity: 0.5;
+		// }
+
+		&.subList {
+			display: grid;
+			grid-template-columns: auto;
+			ul {
+				width: 100%;
+				overflow: hidden;
+				>li {
+					overflow: hidden;
+				}
+			}
 		}
 
 		&:not(.active):hover {
@@ -5676,10 +5688,13 @@ $patternSize : 32px;
 			display: grid;
 			grid-template-rows: auto min-content;
 			overflow: hidden;
-			ul {
+			>ul {
 				overflow: auto;
-				li {
+				li:not(.subList) {
 					grid-template-columns: min-content auto min-content;
+					.name {
+						overflow: hidden;
+					}
 				}
 			}
 			ul:empty::before {

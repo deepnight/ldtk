@@ -5,7 +5,7 @@ import data.DataTypes;
 class EditEntityDefs extends ui.modal.Panel {
 	static var LAST_ENTITY_ID = -1;
 
-	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jContent.find(".entityList ul");
+	var jEntityList(get,never) : js.jquery.JQuery; inline function get_jEntityList() return jContent.find(".entityList>ul");
 	var jEntityForm(get,never) : js.jquery.JQuery; inline function get_jEntityForm() return jContent.find(".entityForm>dl.form");
 	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jContent.find(".previewWrapper");
 
@@ -363,46 +363,83 @@ class EditEntityDefs extends ui.modal.Panel {
 	function updateEntityList() {
 		jEntityList.empty();
 
-		// Entities
+		// List all existing tags
+		var tagMap = new Map();
+		var anyUntagged = false;
 		for(ed in project.defs.entities) {
-			var elem = new J("<li/>");
-			jEntityList.append(elem);
-			elem.addClass("iconLeft");
-
-			var preview = JsTools.createEntityPreview(editor.project, ed);
-			preview.appendTo(elem);
-
-			elem.append('<span class="name">'+ed.identifier+'</span>');
-			if( curEntity==ed ) {
-				elem.addClass("active");
-				elem.css( "background-color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
-			}
-			else
-				elem.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
-
-
-			ContextMenu.addTo(elem, [
-				{
-					label: L._Duplicate(),
-					cb:()->{
-						var copy = project.defs.duplicateEntityDef(ed);
-						editor.ge.emit(EntityDefAdded);
-						selectEntity(copy);
-					}
-				},
-				{ label: L._Delete(), cb:deleteEntityDef.bind(ed) },
-			]);
-
-
-			elem.click( function(_) selectEntity(ed) );
+			if( ed.tags.isEmpty() )
+				anyUntagged = true;
+			for(t in ed.tags.iterator())
+				tagMap.set(t,t);
 		}
+		var allTags = [];
+		for(t in tagMap)
+			allTags.push(t);
+		allTags.sort( (a,b)->Reflect.compare(a,b) );
+		if( anyUntagged )
+			allTags.insert(0, null); // untagged category
 
-		// Make list sortable
-		JsTools.makeSortable(jEntityList, function(ev) {
-			var moved = project.defs.sortEntityDef(ev.oldIndex, ev.newIndex);
-			selectEntity(moved);
-			editor.ge.emit(EntityDefSorted);
-		});
+		// Tags
+		for(t in allTags) {
+			trace(t);
+			var jSep = new J('<li class="title fixed"/>');
+			jSep.text( t==null ? L.t._("Untagged") : t );
+			jSep.appendTo(jEntityList);
+
+			var jLi = new J('<li class="subList"/>');
+			jLi.appendTo(jEntityList);
+			var jSubList = new J('<ul/>');
+			jSubList.appendTo(jLi);
+
+			// Entities per tag
+			for(ed in project.defs.entities) {
+				if( t==null && !ed.tags.isEmpty() || t!=null && !ed.tags.has(t) )
+					continue;
+
+				var jEnt = new J('<li class="iconLeft"/>');
+				jEnt.appendTo(jSubList);
+				jEnt.attr("uid", ed.uid);
+
+				var preview = JsTools.createEntityPreview(editor.project, ed);
+				preview.appendTo(jEnt);
+
+				jEnt.append('<span class="name">${ed.identifier}</span>');
+				if( curEntity==ed ) {
+					jEnt.addClass("active");
+					jEnt.css( "background-color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
+				}
+				else
+					jEnt.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
+
+
+				ContextMenu.addTo(jEnt, [
+					{
+						label: L._Duplicate(),
+						cb:()->{
+							var copy = project.defs.duplicateEntityDef(ed);
+							editor.ge.emit(EntityDefAdded);
+							selectEntity(copy);
+						}
+					},
+					{ label: L._Delete(), cb:deleteEntityDef.bind(ed) },
+				]);
+
+
+				jEnt.click( function(_) selectEntity(ed) );
+			}
+
+			// Make sub list sortable
+			JsTools.makeSortable(jSubList, function(ev:sortablejs.Sortable.SortableDragEvent) {
+				var jItem = new J(ev.item);
+				var fromIdx = project.defs.getEntityIndex( Std.parseInt( jItem.attr("uid") ) );
+				var toIdx = ev.newIndex>ev.oldIndex
+					? jItem.prev().length==0 ? 0 : project.defs.getEntityIndex( Std.parseInt( jItem.prev().attr("uid") ) )
+					: jItem.next().length==0 ? project.defs.entities.length-1 : project.defs.getEntityIndex( Std.parseInt( jItem.next().attr("uid") ) );
+				var moved = project.defs.sortEntityDefIndex(fromIdx, toIdx);
+				selectEntity(moved);
+				editor.ge.emit(EntityDefSorted);
+			});
+		}
 	}
 
 
