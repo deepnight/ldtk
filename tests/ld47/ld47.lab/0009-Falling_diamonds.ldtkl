@@ -39,6 +39,7 @@
 			"layerDefUid": 182,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
 			"intGridCsv": [],
 			"autoLayerTiles": [
@@ -87,6 +88,7 @@
 			"layerDefUid": 21,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
 			"intGridCsv": [],
 			"autoLayerTiles": [],
@@ -372,6 +374,7 @@
 			"layerDefUid": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [
 				{ "coordId": 0, "v": 0 },
 				{ "coordId": 1, "v": 0 },
@@ -2835,6 +2838,7 @@
 			"layerDefUid": 109,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
 			"intGridCsv": [],
 			"autoLayerTiles": [
@@ -2870,6 +2874,7 @@
 			"layerDefUid": 25,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
 			"intGridCsv": [],
 			"autoLayerTiles": [
@@ -3275,6 +3280,7 @@
 			"layerDefUid": 23,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
 			"intGridCsv": [],
 			"autoLayerTiles": [
