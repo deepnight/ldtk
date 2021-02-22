@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 42,
+	"nextUid": 45,
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -641,9 +641,9 @@
 			]
 		},
 		{
-			"identifier": "Region",
+			"identifier": "RectRegion",
 			"uid": 39,
-			"tags": [],
+			"tags": ["region"],
 			"width": 16,
 			"height": 16,
 			"resizableX": true,
@@ -652,7 +652,7 @@
 			"fillOpacity": 1,
 			"lineOpacity": 1,
 			"hollow": true,
-			"color": "#94D9B3",
+			"color": "#A094D9",
 			"renderMode": "Rectangle",
 			"showName": true,
 			"tilesetId": null,
@@ -674,7 +674,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "NameAndValue",
-					"editorDisplayPos": "Center",
+					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"min": null,
@@ -694,8 +694,74 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "NameAndValue",
-					"editorDisplayPos": "Center",
+					"editorDisplayPos": "Above",
 					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLangageMode": null
+				}
+			]
+		},
+		{
+			"identifier": "CircleRegion",
+			"uid": 42,
+			"tags": ["region"],
+			"width": 16,
+			"height": 16,
+			"resizableX": true,
+			"resizableY": true,
+			"keepAspectRatio": true,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": true,
+			"color": "#95D994",
+			"renderMode": "Ellipse",
+			"showName": true,
+			"tilesetId": null,
+			"tileId": null,
+			"tileRenderMode": "Stretch",
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0.5,
+			"pivotY": 0.5,
+			"fieldDefs": [
+				{
+					"identifier": "SomeEnum",
+					"__type": "LocalEnum.SomeEnum",
+					"uid": 43,
+					"type": { "id": "F_Enum", "params": [21] },
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLangageMode": null
+				},
+				{
+					"identifier": "text",
+					"__type": "String",
+					"uid": 44,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"min": null,
 					"max": null,
@@ -1113,14 +1179,14 @@
 							]
 						},
 						{
-							"__identifier": "Region",
-							"__grid": [24,24],
+							"__identifier": "RectRegion",
+							"__grid": [23,19],
 							"__pivot": [0,0],
 							"__tile": null,
 							"width": 128,
 							"height": 80,
 							"defUid": 39,
-							"px": [384,384],
+							"px": [368,304],
 							"fieldInstances": [
 								{
 									"__identifier": "SomeEnum",
@@ -1138,6 +1204,38 @@
 									"__type": "Int",
 									"defUid": 41,
 									"realEditorValues": [{ "id": "V_Int", "params": [1] }]
+								}
+							]
+						},
+						{
+							"__identifier": "CircleRegion",
+							"__grid": [36,27],
+							"__pivot": [0.5,0.5],
+							"__tile": null,
+							"width": 112,
+							"height": 112,
+							"defUid": 42,
+							"px": [584,440],
+							"fieldInstances": [
+								{
+									"__identifier": "SomeEnum",
+									"__value": "B",
+									"__type": "LocalEnum.SomeEnum",
+									"defUid": 43,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["B"]
+									}]
+								},
+								{
+									"__identifier": "text",
+									"__value": "hello",
+									"__type": "String",
+									"defUid": 44,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["hello"]
+									}]
 								}
 							]
 						}
