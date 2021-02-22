@@ -102,7 +102,7 @@
 		{
 			"identifier": "C",
 			"uid": 3,
-			"tags": [],
+			"tags": ["group"],
 			"width": 16,
 			"height": 16,
 			"resizableX": false,
@@ -152,7 +152,7 @@
 		{
 			"identifier": "E",
 			"uid": 5,
-			"tags": [],
+			"tags": ["group"],
 			"width": 16,
 			"height": 16,
 			"resizableX": false,
