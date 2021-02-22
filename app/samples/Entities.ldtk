@@ -491,7 +491,7 @@
 		{
 			"identifier": "LightEmitter",
 			"uid": 10,
-			"tags": [],
+			"tags": ["interactive"],
 			"width": 16,
 			"height": 8,
 			"resizableX": false,
@@ -839,7 +839,7 @@
 			]
 		},
 		{
-			"identifier": "TriggerRegion",
+			"identifier": "Trigger",
 			"uid": 82,
 			"tags": ["region"],
 			"width": 16,
@@ -1530,7 +1530,7 @@
 							]
 						},
 						{
-							"__identifier": "TriggerRegion",
+							"__identifier": "Trigger",
 							"__grid": [10,13],
 							"__pivot": [0,0],
 							"__tile": null,
@@ -1572,7 +1572,7 @@
 							]
 						},
 						{
-							"__identifier": "TriggerRegion",
+							"__identifier": "Trigger",
 							"__grid": [34,2],
 							"__pivot": [0,0],
 							"__tile": null,
