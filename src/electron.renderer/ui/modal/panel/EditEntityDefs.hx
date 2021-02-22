@@ -366,9 +366,12 @@ class EditEntityDefs extends ui.modal.Panel {
 		// List all existing tags
 		var tagMap = new Map();
 		var anyUntagged = false;
+		var anyTagged = false;
 		for(ed in project.defs.entities) {
 			if( ed.tags.isEmpty() )
 				anyUntagged = true;
+			else
+				anyTagged = true;
 			for(t in ed.tags.iterator())
 				tagMap.set(t,t);
 		}
@@ -381,10 +384,11 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Tags
 		for(t in allTags) {
-			trace(t);
-			var jSep = new J('<li class="title fixed"/>');
-			jSep.text( t==null ? L.t._("Untagged") : t );
-			jSep.appendTo(jEntityList);
+			if( anyTagged ) {
+				var jSep = new J('<li class="title fixed"/>');
+				jSep.text( t==null ? L.t._("Untagged") : t );
+				jSep.appendTo(jEntityList);
+			}
 
 			var jLi = new J('<li class="subList"/>');
 			jLi.appendTo(jEntityList);
