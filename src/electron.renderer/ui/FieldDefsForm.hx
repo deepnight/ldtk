@@ -36,23 +36,6 @@ class FieldDefsForm {
 			onCreateField(ev.getThis(), true);
 		});
 
-		// Delete field
-		jButtons.find("button.delete").click( function(ev) {
-			if( curField==null ) {
-				N.error("No field selected.");
-				return;
-			}
-
-			new ui.modal.dialog.Confirm(
-				ev.getThis(),
-				Lang.t._("Confirm this action?"),
-				true,
-				function() {
-					deleteField(curField);
-				}
-			);
-		});
-
 		JsTools.parseComponents( jButtons );
 
 		updateList();
