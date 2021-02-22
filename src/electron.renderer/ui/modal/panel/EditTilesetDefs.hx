@@ -22,18 +22,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 			jForm.find("input").first().focus().select();
 		});
 
-		// Delete tileset
-		jModalAndMask.find(".mainList button.delete").click( function(ev) {
-			if( curTd==null ) {
-				N.error("No tileset selected.");
-				return;
-			}
-			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this tileset, it will be deleted in all levels and corresponding layers as well. Are you sure?", function() {
-				deleteTilesetDef(curTd);
-			});
-		});
-
-
 		selectTileset(selectedDef!=null ? selectedDef : project.defs.tilesets[0]);
 	}
 
@@ -133,7 +121,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		if( curTd==null ) {
 			jForm.hide();
-			jContent.find(".noTileLayer").hide();
+			// jContent.find(".noTileLayer").hide();
 			jContent.find(".none").show();
 			return;
 		}
@@ -141,10 +129,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 		JsTools.parseComponents(jForm);
 		jForm.show();
 		jContent.find(".none").hide();
-		if( !project.defs.hasLayerType(Tiles) && !project.defs.hasAutoLayer() )
-			jContent.find(".noTileLayer").show();
-		else
-			jContent.find(".noTileLayer").hide();
+		// if( !project.defs.hasLayerType(Tiles) && !project.defs.hasAutoLayer() )
+		// 	jContent.find(".noTileLayer").show();
+		// else
+		// 	jContent.find(".noTileLayer").hide();
 
 		// Image file picker
 		jForm.find(".imagePicker").remove();

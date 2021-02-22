@@ -34,27 +34,35 @@ class EditEntityDefs extends ui.modal.Panel {
 		jEntityList.parent().find("button.presets").click( (ev)->{
 			var ctx = new ContextMenu(ev);
 			ctx.add({
-				label: L.t._("Region"),
+				label: L.t._("Rectangle region"),
 				cb: ()->{
 					var ed = _createEntity();
-					ed.identifier = project.makeUniqueIdStr("Region", true, (s)->project.defs.isEntityIdentifierUnique(s));
+					ed.identifier = project.makeUniqueIdStr("RectRegion", true, (s)->project.defs.isEntityIdentifierUnique(s));
 					ed.hollow = true;
 					ed.resizableX = true;
 					ed.resizableY = true;
 					ed.pivotX = ed.pivotY = 0;
 					ed.tags.set("region");
 					selectEntity(ed);
+					editor.ge.emit( EntityDefChanged );
 				}
 			});
-		});
-
-		// Delete entity
-		jEntityList.parent().find("button.delete").click( function(ev) {
-			if( curEntity==null ) {
-				N.error("No entity selected.");
-				return;
-			}
-			deleteEntityDef(curEntity);
+			ctx.add({
+				label: L.t._("Circle region"),
+				cb: ()->{
+					var ed = _createEntity();
+					ed.identifier = project.makeUniqueIdStr("CircleRegion", true, (s)->project.defs.isEntityIdentifierUnique(s));
+					ed.renderMode = Ellipse;
+					ed.hollow = true;
+					ed.resizableX = true;
+					ed.resizableY = true;
+					ed.keepAspectRatio = true;
+					ed.pivotX = ed.pivotY = 0.5;
+					ed.tags.set("region");
+					selectEntity(ed);
+					editor.ge.emit( EntityDefChanged );
+				}
+			});
 		});
 
 		// Create fields editor
@@ -151,17 +159,17 @@ class EditEntityDefs extends ui.modal.Panel {
 		if( curEntity==null ) {
 			jAll.css("visibility","hidden");
 			jContent.find(".none").show();
-			jContent.find(".noEntLayer").hide();
+			// jContent.find(".noEntLayer").hide();
 			return;
 		}
 
 		JsTools.parseComponents(jEntityForm);
 		jAll.css("visibility","visible");
 		jContent.find(".none").hide();
-		if( !project.defs.hasLayerType(Entities) )
-			jContent.find(".noEntLayer").show();
-		else
-			jContent.find(".noEntLayer").hide();
+		// if( !project.defs.hasLayerType(Entities) )
+		// 	jContent.find(".noEntLayer").show();
+		// else
+		// 	jContent.find(".noEntLayer").hide();
 
 
 		// Name

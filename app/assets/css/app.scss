@@ -3974,7 +3974,7 @@ canvas#webgl {
 	display: grid;
 	gap: 8px;
 	grid-template-columns: 250px auto;
-	grid-template-rows: auto 40px;
+	grid-template-rows: 40px auto;
 
 	button {
 		white-space: nowrap;
@@ -3983,6 +3983,7 @@ canvas#webgl {
 	ul.fieldList {
 		overflow: auto;
 		margin: 0;
+		grid-row: 2/3;
 
 		li {
 			grid-template-columns: auto min-content min-content;
@@ -4026,7 +4027,7 @@ canvas#webgl {
 
 	.buttons {
 		grid-column: 1/2;
-		grid-row: 2/3;
+		grid-row: 1/2;
 	}
 
 	ul.form {
@@ -4360,7 +4361,7 @@ dl.form.fieldInstanceEditor {
 
 		>.mainList {
 			display: grid;
-			grid-template-rows: auto min-content;
+			grid-template-rows: min-content auto;
 			.error {
 				padding: 2px 8px;
 				font-size: 8pt;
@@ -4464,17 +4465,13 @@ dl.form.fieldInstanceEditor {
 		.enumList {
 			grid-column: 1/2;
 			display: grid;
-			grid-template-rows: auto min-content;
+			grid-template-rows: min-content auto;
 			overflow: hidden;
 			ul {
 				overflow: auto;
 				li.missing {
 					background-color: $darkRed;
 				}
-			}
-
-			button[class^="import"]{
-				flex: 1 0 100%;
 			}
 		}
 		ul.enumForm {
@@ -5686,7 +5683,7 @@ $patternSize : 32px;
 
 		>.entityList {
 			display: grid;
-			grid-template-rows: auto min-content;
+			grid-template-rows: min-content auto;
 			overflow: hidden;
 			>ul {
 				overflow: auto;

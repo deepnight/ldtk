@@ -17,34 +17,29 @@ class EditEnums extends ui.modal.Panel {
 			jContent.find("ul.enumForm input:first").focus();
 		});
 
-		// Delete enum
-		jContent.find("button.deleteEnum").click( function(ev) {
-			if( curEnum==null ) {
-				N.error(L.t._("No enum selected."));
-				return;
-			}
-			deleteEnumDef(curEnum,false);
-		});
-
-		// Import HX
-		jContent.find("button.importHx").click( function(_) {
-			dn.electron.Dialogs.open([".hx"], project.getProjectDir(), function(absPath:String) {
-				absPath = StringTools.replace(absPath,"\\","/");
-				if( dn.FilePath.extractExtension(absPath)!="hx" )
-					N.error("The file must have the HX extension.");
-				else
-					importer.HxEnum.load( project.makeRelativeFilePath(absPath), false );
+		// Import
+		jContent.find("button.import").click( ev->{
+			var ctx = new ContextMenu(ev);
+			ctx.add({
+				label:L.t._("Haxe source code"),
+				cb: ()->{
+					dn.electron.Dialogs.open([".hx"], project.getProjectDir(), function(absPath:String) {
+						absPath = StringTools.replace(absPath,"\\","/");
+						if( dn.FilePath.extractExtension(absPath)!="hx" )
+							N.error("The file must have the HX extension.");
+						else
+							importer.HxEnum.load( project.makeRelativeFilePath(absPath), false );
+					});
+				}
 			});
-		});
-
-		// Import CastleDB
-		jContent.find("button.importCdb").click( function(_) {
-			N.notImplemented();
-		});
-
-		// Import ExpDB
-		jContent.find("button.importEdb").click( function(_) {
-			N.notImplemented();
+			ctx.add({
+				label:L.t._("CastleDB"),
+				cb: ()->N.notImplemented()
+			});
+			ctx.add({
+				label:L.t._("JSON"),
+				cb: ()->N.notImplemented()
+			});
 		});
 
 		// Default enum selection
