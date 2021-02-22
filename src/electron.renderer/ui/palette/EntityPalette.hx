@@ -62,7 +62,7 @@ class EntityPalette extends ui.ToolPalette {
 			}
 
 			// Empty tag
-			if( count==0 )
+			if( count==0 || allTags.length==1 )
 				jTag.hide();
 		}
 
