@@ -1,20 +1,19 @@
 # 0.8.0
 
+**Note for developers:** *IntGrid layers* JSON format changed in this update. For now, retro-compatibility is maintained with old importers, but this will be dropped after update 0.9.0, breaking outdated importers. Please read all the details here: https://github.com/deepnight/ldtk/issues/358
+
+  - TODO world/level panel separation
+
+  - **UI rework**: many interface elements were reworked and cleaned up (less lines, less gutters). This includes panels, main side-bar, custom fields editor, world view, etc. I hope you'll enjoy the result :)
+  - **Level custom fields**: just like Entities, you can now add custom properties to your levels and edit values per-level. For example, add some FilePath field, name it "music", filter allowed files with "mp3 ogg" and you get a custom music picker in each of your levels.
+  - **Custom fields** have been visually re-organized to be easier to read in-editor. Labels and background are now aligned, and various minor display bugs were fixed.
   - **Resizable entities**: Entities can now be marked as resizable horizontally and/or vertically. This new feature opens the possibility of creating "Region" entities (ie. a custom rectangle or ellipses), with fully customizable properties.
   - **Entity tags**: tags are labels that can be freely added to any Entity definition. They can be used to group entities in the editor (ie. actors, regions, interactives etc.) and to filter allowed entities per layers (eg. a "*Region*" layer that can only contain "*region*" tagged entities).
   - **Ogmo 3 import**: you can now import Ogmo 3 projects to LDtk. Most features are supported, but feel free to drop a message on GitHub issues if you have any specific needs :)
-  - **CodeMirror**: edition of "multi-lines" fields in entities is now done using *CodeMirror* library, enabling syntax highlighting, basic completion and various quality of life features. Supported types include XML, JSON, Markdown, LUA, JS, C# etc. Feel free to ask for more languages on GitHub issues.
-  - TODO new intGrid CSV export (https://github.com/deepnight/ldtk/issues/358)
-  - TODO level custom fields
-  - TODO world/level panel separation
-  - TODO 32bits support, file size increase
-  - TODO sidebar design (less gutters & lines)
-  - TODO all panels now cover main sidebar
-  - TODO multi lines pop up text editor
-  - TODO Customizable source tileset per-layer instance
-  - TODO better field display by aligning labels and values
-
-  - The **application scaling** has been fixed for 4K and 8K displays. You can now adjust the general application scale factor from the app settings (press `F12`).
+  - The **UI scaling** has been fixed for 4K and 8K displays. You can now adjust the general application scale factor from the app settings (press `F12`).
+  - **CodeMirror**: editing of "multi-lines" fields in entities (and levels) is now done using an almost fullscreen text editor based on *CodeMirror* library. This allows syntax highlighting, basic completion and various quality of life features. Supported types include XML, JSON, Markdown, LUA, JS, C# etc. Feel free to ask for more languages on GitHub issues.
+  - Tileset can now be changed on-the-fly in each Tile layer.
+  - The Windows **setup file** is now twice bigger. Yeah, I know this isn't an actual feature, nor a great change. *But* this opens support for both 32 and 64bits environments. Please note that the *installed* version size hasn't increased, only the *Setup* executable.
   - Moved buttons to the top of project Panels.
   - Removed all "Delete" buttons in project panels
   - It's now possible to associate icons with external enum values from a Haxe HX file.
