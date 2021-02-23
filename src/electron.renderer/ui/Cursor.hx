@@ -99,7 +99,7 @@ class Cursor {
 		}
 
 		if( needRender ) {
-			N.debug("[!] render needed: old="+type+" new="+c);
+			// N.debug("[!] render needed: old="+type+" new="+c);
 			invalidateRender();
 		}
 		type = c;
@@ -286,9 +286,6 @@ class Cursor {
 					root.y += fy*cam.adjustedZoom;
 
 			}
-			// root.x += m.levelX*cam.adjustedZoom;
-			// root.y += m.levelY*cam.adjustedZoom;
-			App.ME.debug("moved "+m,true);
 		}
 	}
 
