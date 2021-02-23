@@ -9,10 +9,10 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 
 	override function onMouseMove(ev:hxd.Event, m:Coords) {
 		super.onMouseMove(ev,m);
-		
+
 		if( pickOrigin!=null ) {
 			var grid = curLayerInstance.def.gridSize;
-			editor.cursor.set( Link(
+			editor.cursor2.set( Link(
 				curLayerInstance.pxTotalOffsetX + (pickOrigin.cx+0.5)*grid,
 				curLayerInstance.pxTotalOffsetY + (pickOrigin.cy+0.5)*grid,
 				curLayerInstance.pxTotalOffsetX + (m.cx+0.5)*grid,
@@ -21,7 +21,9 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 			));
 		}
 		else
-			editor.cursor.set( GridCell(curLayerInstance, m.cx, m.cy) );
+			editor.cursor2.set( GridCell(curLayerInstance, m.cx, m.cy) );
+
+		ev.cancel = true;
 	}
 
 	override function startUsing(ev:hxd.Event, m:Coords) {

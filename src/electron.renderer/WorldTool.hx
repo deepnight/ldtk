@@ -374,7 +374,7 @@ class WorldTool extends dn.Process {
 		if( over!=null ) {
 			ev.cancel = true;
 			cursor.clear();
-			editor.cursor.set(Pointer);
+			editor.cursor2.set(Pointer);
 			cursor.lineStyle(2/editor.camera.adjustedZoom, 0xffffff);
 			cursor.beginFill(0xffcc00, 0.15);
 			// var p = project.getSmartLevelGridSize()*0.5;
@@ -400,7 +400,7 @@ class WorldTool extends dn.Process {
 				insertCursor.lineTo(bounds.x+bounds.wid*0.5, bounds.y+bounds.hei*0.7);
 				insertCursor.moveTo(bounds.x+bounds.wid*0.3, bounds.y+bounds.hei*0.5);
 				insertCursor.lineTo(bounds.x+bounds.wid*0.7, bounds.y+bounds.hei*0.5);
-				editor.cursor.set(Add);
+				editor.cursor2.set(Add);
 				ev.cancel = true;
 			}
 		}

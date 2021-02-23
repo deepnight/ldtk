@@ -100,7 +100,7 @@ class Tool<T> extends dn.Process {
 	}
 
 
-	function updateCursor(m:Coords) {}
+	function updateCursor(ev:hxd.Event, m:Coords) {}
 
 	function useFloodfillAt(m:Coords) {
 		return false;
@@ -244,8 +244,6 @@ class Tool<T> extends dn.Process {
 	public function onKeyPress(keyId:Int) {}
 
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
-		editor.cursor.setLabel();
-
 		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )
 			clickingOutsideBounds = false;
 
@@ -255,13 +253,15 @@ class Tool<T> extends dn.Process {
 
 		// Render cursor
 		if( isRunning() && clickingOutsideBounds )
-			editor.cursor.set(None);
+			editor.cursor2.set(None);
 		else switch curMode {
 			case null, Add, Remove:
 				if( editor.isCurrentLayerVisible() )
-					updateCursor(m);
-				else
-					editor.cursor.set(Forbidden);
+					updateCursor(ev,m);
+				else if( editor.curLevel.inBounds(m.levelX,m.levelY) ) {
+					ev.cancel = true;
+					editor.cursor2.set(Forbidden);
+				}
 		}
 
 		lastMouse = m;

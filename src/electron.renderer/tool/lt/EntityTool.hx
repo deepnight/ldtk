@@ -46,17 +46,17 @@ class EntityTool extends tool.LayerTool<Int> {
 			: m.levelY;
 	}
 
-	override function updateCursor(m:Coords) {
-		super.updateCursor(m);
+	override function updateCursor(ev:hxd.Event, m:Coords) {
+		super.updateCursor(ev,m);
 
 		if( curEntityDef==null )
-			editor.cursor.set(None);
+			editor.cursor2.set(None);
 		else if( isRunning() && curMode==Remove )
-			editor.cursor.set( Eraser(m.levelX,m.levelY) );
-		else if( curLevel.inBounds(m.levelX, m.levelY) )
-			editor.cursor.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m)) );
-		else
-			editor.cursor.set(None);
+			editor.cursor2.set( Eraser(m.levelX,m.levelY) );
+		else if( curLevel.inBounds(m.levelX, m.levelY) ) {
+			editor.cursor2.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m)) );
+			ev.cancel = true;
+		}
 	}
 
 
@@ -147,7 +147,7 @@ class EntityTool extends tool.LayerTool<Int> {
 						editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);
 						onEditAnything();
 						stopUsing(m);
-						if( editor.resizeTool!=null )
+						if( ei.def.isResizable() && editor.resizeTool!=null )
 							editor.resizeTool.startUsing(ev, m);
 						else
 							editor.selectionTool.startUsing(ev, m);
@@ -199,10 +199,12 @@ class EntityTool extends tool.LayerTool<Int> {
 	override function onMouseMove(ev:hxd.Event, m:Coords) {
 		super.onMouseMove(ev,m);
 
-		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
-		switch ge {
-			case Entity(_), PointField(_): editor.selectionTool.onMouseMove(ev,m);
-			case _:
+		if( !ev.cancel ) {
+			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
+			switch ge {
+				case Entity(_), PointField(_): editor.selectionTool.onMouseMove(ev,m);
+				case _:
+			}
 		}
 	}
 

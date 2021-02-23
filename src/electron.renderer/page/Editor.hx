@@ -44,7 +44,7 @@ class Editor extends Page {
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
 	var bg : h2d.Bitmap;
-	public var cursor : ui.Cursor;
+	public var cursor2 : ui.Cursor2;
 
 	var levelHistory : Map<Int,LevelHistory> = new Map();
 	public var curLevelHistory(get,never) : LevelHistory;
@@ -75,9 +75,6 @@ class Editor extends Page {
 
 		watcher = new misc.FileWatcher();
 
-		cursor = new ui.Cursor();
-		cursor.canChangeSystemCursors = true;
-
 		worldRender = new display.WorldRender();
 		levelRender = new display.LevelRender();
 		camera = new display.Camera();
@@ -87,6 +84,9 @@ class Editor extends Page {
 		doNothingTool = new tool.lt.DoNothing();
 		worldTool = new WorldTool();
 		panTool = new tool.PanView();
+
+		cursor2 = new ui.Cursor2();
+		root.add(cursor2.root, Const.DP_UI);
 
 		showCanvas();
 		initUI();
@@ -557,7 +557,7 @@ class Editor extends Page {
 		if( ui.modal.ToolPalettePopOut.isOpen() )
 			ui.modal.ToolPalettePopOut.ME.close();
 
-		cursor.set(None);
+		cursor2.set(None);
 		curTool.onToolActivation();
 	}
 
@@ -755,6 +755,11 @@ class Editor extends Page {
 
 			if( ui.Modal.isOpen( ui.modal.panel.EditAllAutoLayerRules ) )
 				ui.Modal.getFirst( ui.modal.panel.EditAllAutoLayerRules ).onEditorMouseMove(m);
+
+			if( !ev.cancel )
+				cursor2.set(None);
+			cursor2.onMouseMove(m);
+
 		}
 
 		// Mouse coords infos
@@ -1564,10 +1569,9 @@ class Editor extends Page {
 	override function onDispose() {
 		super.onDispose();
 
-		if( ME==this )
-			ME = null;
-
 		watcher = null;
+
+		cursor2.dispose();
 
 		ge.dispose();
 		ge = null;
@@ -1580,12 +1584,16 @@ class Editor extends Page {
 		ui.TilesetPicker.clearScrollMemory();
 
 		App.ME.jBody.off(".client");
+
+		if( ME==this )
+			ME = null;
 	}
 
 
 	override function postUpdate() {
 		super.postUpdate();
 		ge.onEndOfFrame();
+		cursor2.update();
 	}
 
 	var wasLocked : Bool = null;

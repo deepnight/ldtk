@@ -219,7 +219,7 @@ class Rulers extends dn.Process {
 			for( p in draggables )
 				if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p ) {
 					ev.cancel = true;
-					editor.cursor.set( Resize(p) );
+					editor.cursor2.set( Resize(p) );
 					g.alpha = 1;
 				}
 		if( !ev.cancel )

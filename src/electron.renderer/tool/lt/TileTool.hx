@@ -309,34 +309,32 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		return anyChange;
 	}
 
-	override function updateCursor(m:Coords) {
-		super.updateCursor(m);
+	override function updateCursor(ev:hxd.Event, m:Coords) {
+		super.updateCursor(ev,m);
 
 		if( curTilesetDef==null || !curTilesetDef.isAtlasLoaded() ) {
-			editor.cursor.set(None);
+			editor.cursor2.set(None);
 			return;
 		}
 
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromCoords(origin, m);
-			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei) );
+			editor.cursor2.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei) );
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
 			var sel = getSelectedValue();
 			var flips = M.makeBitsFromBools(flipX, flipY);
 			if( isRandomMode() )
-				editor.cursor.set(
+				editor.cursor2.set(
 					Tiles(curLayerInstance, [ sel.ids[Std.random(sel.ids.length)] ], m.cx, m.cy, flips)
 					// sel.ids.length>1 ? "R" : null
 				);
 			else
-				editor.cursor.set( Tiles(curLayerInstance, sel.ids, m.cx, m.cy, flips) );
-		}
-		else
-			editor.cursor.set(None);
+				editor.cursor2.set( Tiles(curLayerInstance, sel.ids, m.cx, m.cy, flips) );
 
-		if( settings.v.tileStacking && curLevel.inBoundsWorld(m.worldX,m.worldY) )
-			editor.cursor.setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("cell") );
+			if( ev!=null ) // happens when cursor is manually updated on X/Y flips
+				ev.cancel = true;
+		}
 	}
 
 	override function createToolPalette():ui.ToolPalette {
@@ -422,12 +420,12 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				case K.X:
 					flipX = !flipX;
 					N.quick("X-flip: "+L.onOff(flipX));
-					updateCursor(lastMouse);
+					updateCursor(null,lastMouse);
 
 				case K.Y, K.Z:
 					flipY = !flipY;
 					N.quick("Y-flip: "+L.onOff(flipY));
-					updateCursor(lastMouse);
+					updateCursor(null,lastMouse);
 			}
 	}
 }

@@ -7,6 +7,10 @@ class DoNothing extends tool.LayerTool<Int> {
 
 	override function onMouseMove(ev:hxd.Event, m:Coords) {
 		super.onMouseMove(ev,m);
-		editor.cursor.set(Forbidden);
+
+		if( editor.curLevel.inBounds(m.levelX, m.levelY) ) {
+			editor.cursor2.set(Forbidden);
+			ev.cancel = true;
+		}
 	}
 }
