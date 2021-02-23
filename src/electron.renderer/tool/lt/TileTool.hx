@@ -313,24 +313,24 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		super.updateCursor(ev,m);
 
 		if( curTilesetDef==null || !curTilesetDef.isAtlasLoaded() ) {
-			editor.cursor2.set(None);
+			editor.cursor.set(None);
 			return;
 		}
 
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromCoords(origin, m);
-			editor.cursor2.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei) );
+			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei) );
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
 			var sel = getSelectedValue();
 			var flips = M.makeBitsFromBools(flipX, flipY);
 			if( isRandomMode() )
-				editor.cursor2.set(
+				editor.cursor.set(
 					Tiles(curLayerInstance, [ sel.ids[Std.random(sel.ids.length)] ], m.cx, m.cy, flips)
 					// sel.ids.length>1 ? "R" : null
 				);
 			else
-				editor.cursor2.set( Tiles(curLayerInstance, sel.ids, m.cx, m.cy, flips) );
+				editor.cursor.set( Tiles(curLayerInstance, sel.ids, m.cx, m.cy, flips) );
 
 			if( ev!=null ) // happens when cursor is manually updated on X/Y flips
 				ev.cancel = true;

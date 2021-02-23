@@ -465,7 +465,7 @@ class FieldInstancesForm {
 
 		// Picking of a point
 		t.onPick = function(m) {
-			editor.cursor2.set(None);
+			editor.cursor.set(None);
 
 			if( fi.def.isArray && editIdx>=fi.getArrayLength()-1 ) {
 				// Append points in an array

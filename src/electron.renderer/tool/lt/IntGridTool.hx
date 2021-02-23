@@ -36,14 +36,14 @@ class IntGridTool extends tool.LayerTool<Int> {
 
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromCoords(origin, m);
-			editor.cursor2.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, getSelectedColor()) );
+			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, getSelectedColor()) );
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
-			editor.cursor2.set( GridCell(curLayerInstance, m.cx, m.cy, getSelectedColor()) );
+			editor.cursor.set( GridCell(curLayerInstance, m.cx, m.cy, getSelectedColor()) );
 			ev.cancel = true;
 		}
 		// else
-		// 	editor.cursor2.set(None);
+		// 	editor.cursor.set(None);
 	}
 
 	override function useAtInterpolatedGrid(cx:Int, cy:Int):Bool {

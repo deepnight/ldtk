@@ -9,7 +9,7 @@ class DoNothing extends tool.LayerTool<Int> {
 		super.onMouseMove(ev,m);
 
 		if( editor.curLevel.inBounds(m.levelX, m.levelY) ) {
-			editor.cursor2.set(Forbidden);
+			editor.cursor.set(Forbidden);
 			ev.cancel = true;
 		}
 	}

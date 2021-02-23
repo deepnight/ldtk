@@ -253,14 +253,14 @@ class Tool<T> extends dn.Process {
 
 		// Render cursor
 		if( isRunning() && clickingOutsideBounds )
-			editor.cursor2.set(None);
+			editor.cursor.set(None);
 		else switch curMode {
 			case null, Add, Remove:
 				if( editor.isCurrentLayerVisible() )
 					updateCursor(ev,m);
 				else if( editor.curLevel.inBounds(m.levelX,m.levelY) ) {
 					ev.cancel = true;
-					editor.cursor2.set(Forbidden);
+					editor.cursor.set(Forbidden);
 				}
 		}
 

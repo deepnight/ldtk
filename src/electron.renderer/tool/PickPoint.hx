@@ -12,7 +12,7 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 
 		if( pickOrigin!=null ) {
 			var grid = curLayerInstance.def.gridSize;
-			editor.cursor2.set( Link(
+			editor.cursor.set( Link(
 				curLayerInstance.pxTotalOffsetX + (pickOrigin.cx+0.5)*grid,
 				curLayerInstance.pxTotalOffsetY + (pickOrigin.cy+0.5)*grid,
 				curLayerInstance.pxTotalOffsetX + (m.cx+0.5)*grid,
@@ -21,7 +21,7 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 			));
 		}
 		else
-			editor.cursor2.set( GridCell(curLayerInstance, m.cx, m.cy) );
+			editor.cursor.set( GridCell(curLayerInstance, m.cx, m.cy) );
 
 		ev.cancel = true;
 	}

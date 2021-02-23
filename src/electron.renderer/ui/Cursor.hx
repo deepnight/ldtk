@@ -1,6 +1,6 @@
 package ui;
 
-class Cursor2 {
+class Cursor {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	var curLevel(get,never) : data.Level; inline function get_curLevel() return Editor.ME.curLevel;

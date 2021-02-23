@@ -140,13 +140,13 @@ class SelectionTool extends Tool<Int> {
 		// Default cursor
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromCoords(origin, m);
-			editor.cursor2.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, 0xffffff) );
+			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, 0xffffff) );
 		}
 		else if( isRunning() )
-			editor.cursor2.set(Moving);
+			editor.cursor.set(Moving);
 		else if( group.isOveringSelection(m) ) {
 			ev.cancel = true;
-			editor.cursor2.set(Move);
+			editor.cursor.set(Move);
 		}
 		else if( !isRunning() ) {
 			// Preview picking
@@ -155,14 +155,14 @@ class SelectionTool extends Tool<Int> {
 
 			switch ge {
 			case null:
-				editor.cursor2.set(PickNothing);
+				editor.cursor.set(PickNothing);
 
 			case GridCell(li, cx, cy):
 				if( li.hasAnyGridValue(cx,cy) )
 					switch li.def.type {
 						case IntGrid:
 							var id = li.getIntGridIdentifierAt(cx,cy);
-							editor.cursor2.set(
+							editor.cursor.set(
 								GridCell( li, cx, cy, li.getIntGridColorAt(cx,cy) ),
 								id==null ? "#"+li.getIntGrid(cx,cy) : id
 							);
@@ -170,7 +170,7 @@ class SelectionTool extends Tool<Int> {
 						case Tiles:
 							var stack = li.getGridTileStack(cx,cy);
 							var topTile = stack[stack.length-1];
-							editor.cursor2.set(
+							editor.cursor.set(
 								Tiles(li, [topTile.tileId], cx, cy, topTile.flips),
 								stack.length==1
 									? "Tile "+stack[0].tileId
@@ -183,16 +183,16 @@ class SelectionTool extends Tool<Int> {
 
 
 			case Entity(li, ei):
-				editor.cursor2.set( Entity(li, ei.def, ei, ei.x, ei.y), ei.def.identifier );
+				editor.cursor.set( Entity(li, ei.def, ei, ei.x, ei.y), ei.def.identifier );
 
 			case PointField(li, ei, fi, arrayIdx):
 				var pt = fi.getPointGrid(arrayIdx);
 				if( pt!=null )
-					editor.cursor2.set( GridCell(li, pt.cx, pt.cy, ei.getSmartColor(false)) );
+					editor.cursor.set( GridCell(li, pt.cx, pt.cy, ei.getSmartColor(false)) );
 			}
 
 			if( ge!=null )
-				editor.cursor2.overrideNativeCursor("grab");
+				editor.cursor.overrideNativeCursor("grab");
 		}
 	}
 

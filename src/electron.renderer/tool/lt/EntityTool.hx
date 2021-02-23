@@ -50,11 +50,11 @@ class EntityTool extends tool.LayerTool<Int> {
 		super.updateCursor(ev,m);
 
 		if( curEntityDef==null )
-			editor.cursor2.set(None);
+			editor.cursor.set(None);
 		else if( isRunning() && curMode==Remove )
-			editor.cursor2.set( Eraser(m.levelX,m.levelY) );
+			editor.cursor.set( Eraser(m.levelX,m.levelY) );
 		else if( curLevel.inBounds(m.levelX, m.levelY) ) {
-			editor.cursor2.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m)) );
+			editor.cursor.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m)) );
 			ev.cancel = true;
 		}
 	}

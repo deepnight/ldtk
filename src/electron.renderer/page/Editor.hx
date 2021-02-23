@@ -44,7 +44,7 @@ class Editor extends Page {
 	public var levelRender : display.LevelRender;
 	public var rulers : display.Rulers;
 	var bg : h2d.Bitmap;
-	public var cursor2 : ui.Cursor2;
+	public var cursor : ui.Cursor;
 
 	var levelHistory : Map<Int,LevelHistory> = new Map();
 	public var curLevelHistory(get,never) : LevelHistory;
@@ -85,8 +85,8 @@ class Editor extends Page {
 		worldTool = new WorldTool();
 		panTool = new tool.PanView();
 
-		cursor2 = new ui.Cursor2();
-		root.add(cursor2.root, Const.DP_UI);
+		cursor = new ui.Cursor();
+		root.add(cursor.root, Const.DP_UI);
 
 		showCanvas();
 		initUI();
@@ -557,7 +557,7 @@ class Editor extends Page {
 		if( ui.modal.ToolPalettePopOut.isOpen() )
 			ui.modal.ToolPalettePopOut.ME.close();
 
-		cursor2.set(None);
+		cursor.set(None);
 		curTool.onToolActivation();
 	}
 
@@ -757,8 +757,8 @@ class Editor extends Page {
 				ui.Modal.getFirst( ui.modal.panel.EditAllAutoLayerRules ).onEditorMouseMove(m);
 
 			if( !ev.cancel )
-				cursor2.set(None);
-			cursor2.onMouseMove(m);
+				cursor.set(None);
+			cursor.onMouseMove(m);
 
 		}
 
@@ -1571,7 +1571,7 @@ class Editor extends Page {
 
 		watcher = null;
 
-		cursor2.dispose();
+		cursor.dispose();
 
 		ge.dispose();
 		ge = null;
@@ -1593,7 +1593,7 @@ class Editor extends Page {
 	override function postUpdate() {
 		super.postUpdate();
 		ge.onEndOfFrame();
-		cursor2.update();
+		cursor.update();
 	}
 
 	var wasLocked : Bool = null;

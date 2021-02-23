@@ -156,7 +156,7 @@ class ResizeTool extends Tool<Int> {
 			if( p!=null ) {
 				g.alpha = 1;
 				ev.cancel = true;
-				editor.cursor2.set( Resize(p) );
+				editor.cursor.set( Resize(p) );
 			}
 			else
 				g.alpha = DEFAULT_ALPHA;
