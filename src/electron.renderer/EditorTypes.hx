@@ -14,7 +14,6 @@ enum GlobalEvent {
 	LevelRemoved(level:data.Level);
 	LevelResized(level:data.Level);
 	LevelRestoredFromHistory(level:data.Level);
-	LevelSorted; // TODO remove this event (duplicate of WorldLevelMoved)
 
 	WorldLevelMoved;
 	WorldSettingsChanged;

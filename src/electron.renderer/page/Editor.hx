@@ -1232,7 +1232,6 @@ class Editor extends Page {
 				case LevelRemoved(l): extra = l.uid;
 				case LevelResized(l): extra = l.uid;
 				case LevelRestoredFromHistory(l):
-				case LevelSorted:
 				case WorldLevelMoved:
 				case WorldSettingsChanged:
 				case LayerDefAdded:
@@ -1384,7 +1383,6 @@ class Editor extends Page {
 			case LevelAdded(l):
 			case LevelRemoved(l):
 			case LevelResized(l):
-			case LevelSorted:
 			case WorldLevelMoved:
 			case WorldSettingsChanged:
 

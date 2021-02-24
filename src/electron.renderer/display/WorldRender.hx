@@ -196,10 +196,6 @@ class WorldRender extends dn.Process {
 				updateLayout();
 				renderWorldBounds();
 
-			case LevelSorted:
-				updateLayout();
-				renderWorldBounds();
-
 			case _:
 		}
 	}
