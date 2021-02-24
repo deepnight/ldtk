@@ -23,6 +23,7 @@
   - You can now show/hide multiple layers at once by holding left mouse button over visibility icons (Photoshop style).
   - Use `Shift` + left click on a visibility icon to Show or hide all other layers except the current one.
   - An Entity count can now limited per world or per layer. This is especially useful for elements like Player start position, which should be unique in the world.
+  - A suggestion to enable Backups will now appear when opening a large project file.
   - The visibility status of a layer is now saved with the project.
   - When baking an Auto-layer (ie. flattening it), you are now given choices on what to do with the original baked auto-layer (delete, empty or keep).
   - Level background is now faded away in "Single layer mode".
