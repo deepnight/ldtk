@@ -18,6 +18,7 @@ class App extends dn.Process {
 	var keyDowns : Map<Int,Bool> = new Map();
 	public var args: dn.Args;
 	var mouseButtonDowns : Map<Int,Bool> = new Map();
+	public var focused(default,null) = true;
 
 	public var loadingLog : dn.Log;
 
@@ -310,6 +311,7 @@ class App extends dn.Process {
 	}
 
 	function onAppFocus(ev:js.html.Event) {
+		focused = true;
 		keyDowns = new Map();
 		if( hasPage() )
 			curPageProcess.onAppFocus();
@@ -317,6 +319,7 @@ class App extends dn.Process {
 	}
 
 	function onAppBlur(ev:js.html.Event) {
+		focused = false;
 		keyDowns = new Map();
 		if( hasPage() )
 			curPageProcess.onAppBlur();
@@ -363,6 +366,8 @@ class App extends dn.Process {
 			.empty()
 			.off()
 			.removeClass("locked");
+
+		hxd.System.fpsLimit = -1;
 
 		ui.Tip.clear();
 
@@ -590,6 +595,7 @@ class App extends dn.Process {
 			clearDebug();
 			debug("-- Misc ----------------------------------------");
 			if( Editor.ME!=null ) {
+				debugPre('FPS limit=${hxd.System.fpsLimit<=0 ? "none":Std.string(hxd.System.fpsLimit)}');
 				debugPre("mouse="+Editor.ME.getMouse());
 				var cam = Editor.ME.camera;
 				debugPre("zoom="+M.pretty(cam.adjustedZoom,1)+" cam="+cam.width+"x"+cam.height+" pixelratio="+cam.pixelRatio);
