@@ -27,7 +27,7 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"advancedOptionFlags": ["DiscardPreCsvIntGrid"],
+	"flags": ["DiscardPreCsvIntGrid"],
 	"defs": { "layers": [
 		{
 			"__type": "AutoLayer",
