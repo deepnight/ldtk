@@ -581,6 +581,8 @@ class WorldRender extends dn.Process {
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				if( td!=null && td.isAtlasLoaded() ) {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
+					pixelGrid.x = li.pxTotalOffsetX;
+					pixelGrid.y = li.pxTotalOffsetY;
 					var c = 0x0;
 					var cx = 0;
 					var cy = 0;
@@ -604,6 +606,8 @@ class WorldRender extends dn.Process {
 			else if( li.def.type==IntGrid ) {
 				// Pure intGrid
 				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
+				pixelGrid.x = li.pxTotalOffsetX;
+				pixelGrid.y = li.pxTotalOffsetY;
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
 					if( !isCoordDone(li,cx,cy) && li.hasAnyGridValue(cx,cy) ) {
@@ -617,6 +621,8 @@ class WorldRender extends dn.Process {
 				var td = li.getTiledsetDef();
 				if( td!=null && td.isAtlasLoaded() ) {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
+					pixelGrid.x = li.pxTotalOffsetX;
+					pixelGrid.y = li.pxTotalOffsetY;
 					var c = 0x0;
 					for(cy in 0...li.cHei)
 					for(cx in 0...li.cWid)
