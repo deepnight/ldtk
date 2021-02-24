@@ -68,11 +68,18 @@ class FieldDefsForm {
 		function _create(type:data.DataTypes.FieldType) {
 			switch type {
 				case F_Enum(null):
+					if( project.defs.enums.length==0 && project.defs.externalEnums.length==0 ) {
+						new ui.modal.dialog.Choice(
+							L.t._("This project contains no Enum yet. You first need to create one from the Enum panel."),
+							[
+								{ label:L.t._("Open enum panel"), cb:()->new ui.modal.panel.EditEnums() }
+							]
+						);
+						return;
+					}
+
 					// Enum picker
 					var w = new ui.modal.Dialog(anchor, "enums");
-					if( project.defs.enums.length==0 && project.defs.externalEnums.length==0 ) {
-						w.jContent.append('<div class="warning">This project has no Enum: add one from the Enum panel.</div>');
-					}
 
 					for(ed in project.defs.enums) {
 						var b = new J("<button/>");
@@ -123,8 +130,11 @@ class FieldDefsForm {
 		// Type picker
 		var w = new ui.modal.Dialog(anchor,"fieldTypes");
 		var types : Array<data.DataTypes.FieldType> = [
-			F_Int, F_Float, F_Bool, F_String, F_Text, F_Path, F_Color, F_Enum(null), F_Point
+			F_Int, F_Float, F_Bool, F_String, F_Text, F_Path, F_Color, F_Enum(null)
 		];
+		if( fieldParent==FP_Entity )
+			types.push(F_Point);
+
 		for(type in types) {
 			var b = new J("<button/>");
 			w.jContent.append(b);
