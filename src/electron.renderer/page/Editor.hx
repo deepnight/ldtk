@@ -447,8 +447,10 @@ class Editor extends Page {
 				camera.fit();
 
 			case K.F12 if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				ui.Modal.closeAll();
-				new ui.modal.dialog.EditAppSettings();
+				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
+					ui.Modal.closeAll();
+					new ui.modal.dialog.EditAppSettings();
+				}
 
 			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				var state = levelRender.toggleAutoLayerRendering();

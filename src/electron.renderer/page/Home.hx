@@ -480,7 +480,8 @@ class Home extends Page {
 
 			// Open settings
 			case K.F12 if( !App.ME.hasAnyToggleKeyDown() ):
-				new ui.modal.dialog.EditAppSettings();
+				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) )
+					new ui.modal.dialog.EditAppSettings();
 
 			case K.ESCAPE:
 				if( jPage.find(".changelogsWrapper").hasClass("fullscreen") )

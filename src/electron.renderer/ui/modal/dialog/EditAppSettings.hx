@@ -48,6 +48,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		// CPU throttling
 		var i = Input.linkToHtmlInput(settings.v.smartCpuThrottling, jForm.find("#smartCpuThrottling"));
 		i.onChange = ()->{
+			hxd.System.fpsLimit = -1;
 			onSettingChanged();
 		}
 
