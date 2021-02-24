@@ -313,12 +313,14 @@ class App extends dn.Process {
 		keyDowns = new Map();
 		if( hasPage() )
 			curPageProcess.onAppFocus();
+		hxd.System.fpsLimit = -1;
 	}
 
 	function onAppBlur(ev:js.html.Event) {
 		keyDowns = new Map();
 		if( hasPage() )
 			curPageProcess.onAppBlur();
+		hxd.System.fpsLimit = 4;
 	}
 
 	function onAppResize(ev:js.html.Event) {
