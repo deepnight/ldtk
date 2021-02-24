@@ -482,8 +482,8 @@ class WorldTool extends dn.Process {
 					var mx = M.floor( m.worldX / project.worldGridWidth ) * project.worldGridWidth;
 					clickedLevel.worldX = levelOriginX + (mx-omx);
 
-					var omy = M.floor( origin.worldY / project.worldGridWidth ) * project.worldGridWidth;
-					var my = M.floor( m.worldY / project.worldGridWidth ) * project.worldGridWidth;
+					var omy = M.floor( origin.worldY / project.worldGridHeight ) * project.worldGridHeight;
+					var my = M.floor( m.worldY / project.worldGridHeight ) * project.worldGridHeight;
 					clickedLevel.worldY = levelOriginY + (my-omy);
 
 					clickedLevel.worldX = M.floor( clickedLevel.worldX/project.worldGridWidth ) * project.worldGridWidth;
