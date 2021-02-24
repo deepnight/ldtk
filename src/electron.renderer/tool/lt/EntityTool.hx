@@ -49,14 +49,30 @@ class EntityTool extends tool.LayerTool<Int> {
 	override function customCursor(ev:hxd.Event, m:Coords) {
 		super.customCursor(ev,m);
 
-		if( curEntityDef==null )
-			editor.cursor.set(None);
+		if( curEntityDef==null ) {
+			editor.cursor.set(Forbidden);
+			ev.cancel = true;
+		}
 		else if( isRunning() && curMode==Remove ) {
 			editor.cursor.set( Eraser(m.levelX,m.levelY) );
 			ev.cancel = true;
 		}
 		else if( curLevel.inBounds(m.levelX, m.levelY) ) {
-			editor.cursor.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m)) );
+			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, true);
+			switch ge {
+				case Entity(li, ei):
+					editor.cursor.set( Entity(curLayerInstance, ei.def, ei, ei.x, ei.y) );
+					editor.cursor.overrideNativeCursor("grab");
+
+				case PointField(li, ei, fi, arrayIdx):
+					editor.cursor.set(Move);
+					// var pt = fi.getPointGrid(arrayIdx);
+					// editor.cursor.set( GridCell(curLayerInstance, pt.cx, pt.cy, ei.getSmartColor(false)) );
+					// editor.cursor.overrideNativeCursor("grab");
+
+				case _:
+					editor.cursor.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m)) );
+			}
 			ev.cancel = true;
 		}
 	}
