@@ -53,22 +53,6 @@ class EditProject extends ui.modal.Panel {
 		var jForm = jContent.find("ul.form:first");
 		jForm.off().find("*").off();
 
-		// Advanced options
-		var jAdvanceds = jForm.find("ul.advanced");
-		if( project.hasAnyAdvancedExportFlag() || cd.has("showAdvanced") ) {
-			jForm.find(".advancedWarning a").hide();
-			jAdvanceds.show();
-			cd.setS("showAdvanced",Const.INFINITE);
-		}
-		else {
-			jForm.find(".advancedWarning a").show().click(ev->{
-				jAdvanceds.show();
-				cd.setS("showAdvanced",Const.INFINITE);
-				ev.getThis().hide();
-			});
-			jAdvanceds.hide();
-		}
-
 		// File extension
 		var ext = project.filePath.extension;
 		var usesAppDefault = ext==Const.FILE_EXTENSION;
@@ -201,10 +185,27 @@ class EditProject extends ui.modal.Panel {
 		));
 
 
-		// Advanced flags
+		// Advanced options
+		var options = [
+			ldtk.Json.ProjectFlag.DiscardPreCsvIntGrid,
+		];
+		var jAdvanceds = jForm.find("ul.advanced");
+		if( project.hasAnyFlag(options) || cd.has("showAdvanced") ) {
+			jForm.find(".advancedWarning a").hide();
+			jAdvanceds.show();
+			cd.setS("showAdvanced",Const.INFINITE);
+		}
+		else {
+			jForm.find(".advancedWarning a").show().click(ev->{
+				jAdvanceds.show();
+				cd.setS("showAdvanced",Const.INFINITE);
+				ev.getThis().hide();
+			});
+			jAdvanceds.hide();
+		}
 		jAdvanceds.empty();
-		for( k in Type.getEnumConstructs(ldtk.Json.AdvancedOptionFlag) ) {
-			var e = ldtk.Json.AdvancedOptionFlag.createByName(k);
+		for( k in Type.getEnumConstructs(ldtk.Json.ProjectFlag) ) {
+			var e = ldtk.Json.ProjectFlag.createByName(k);
 			var jLi = new J('<li/>');
 			jLi.appendTo(jAdvanceds);
 
@@ -221,9 +222,9 @@ class EditProject extends ui.modal.Panel {
 
 			var i = new form.input.BoolInput(
 				jInput,
-				()->project.hasAdvancedExportFlag(e),
+				()->project.hasFlag(e),
 				(v)->{
-					project.setAdvancedExportFlag(e, v);
+					project.setFlag(e, v);
 					editor.ge.emit(ProjectSettingsChanged);
 				}
 			);

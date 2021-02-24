@@ -28,7 +28,7 @@ class Project {
 	public var exportTiled = false;
 	public var exportPng = false;
 	public var pngFilePattern : Null<String>;
-	var advancedOptionFlags: Map<ldtk.Json.AdvancedOptionFlag, Bool>;
+	var flags: Map<ldtk.Json.ProjectFlag, Bool>;
 
 	public var backupOnSave = false;
 	public var backupLimit = 10;
@@ -47,7 +47,7 @@ class Project {
 		worldGridWidth = defaultLevelWidth;
 		worldGridHeight = defaultLevelHeight;
 		filePath = new dn.FilePath();
-		advancedOptionFlags = new Map();
+		flags = new Map();
 
 		defs = new Definitions(this);
 	}
@@ -221,13 +221,15 @@ class Project {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( Level.fromJson(p, lvlJson) );
 
-		if( json.advancedOptionFlags!=null )
-			for(f in json.advancedOptionFlags ) {
-				var ev =
-					try JsonTools.readEnum(ldtk.Json.AdvancedOptionFlag, f, true)
+		if( (cast json).advancedOptionFlags!=null )
+			json.flags = (cast json).advancedOptionFlags;
+		if( json.flags!=null )
+			for(f in json.flags ) {
+				var ev = try JsonTools.readEnum(ldtk.Json.ProjectFlag, f, true)
 					catch(e:Dynamic) null;
+
 				if( ev!=null )
-					p.advancedOptionFlags.set(ev, true);
+					p.flags.set(ev, true);
 			}
 
 		// World
@@ -242,22 +244,23 @@ class Project {
 		return p;
 	}
 
-	public function hasAnyAdvancedExportFlag() {
-		for(v in advancedOptionFlags)
-			return true;
+	public function hasAnyFlag(among:Array<ldtk.Json.ProjectFlag>) {
+		for(f in among)
+			if( hasFlag(f) )
+				return true;
 		return false;
 	}
 
-	public inline function hasAdvancedExportFlag(f:ldtk.Json.AdvancedOptionFlag) {
-		return f!=null && advancedOptionFlags.exists(f);
+	public inline function hasFlag(f:ldtk.Json.ProjectFlag) {
+		return f!=null && flags.exists(f);
 	}
 
-	public inline function setAdvancedExportFlag(f:ldtk.Json.AdvancedOptionFlag, v:Bool) {
+	public inline function setFlag(f:ldtk.Json.ProjectFlag, v:Bool) {
 		if( f!=null )
 			if( v )
-				advancedOptionFlags.set(f,true);
+				flags.set(f,true);
 			else
-				advancedOptionFlags.remove(f);
+				flags.remove(f);
 	}
 
 	public function toJson() : ldtk.Json.ProjectJson {
@@ -285,9 +288,9 @@ class Project {
 			backupOnSave: backupOnSave,
 			backupLimit: backupLimit,
 
-			advancedOptionFlags: {
+			flags: {
 				var all = [];
-				for( f in advancedOptionFlags.keyValueIterator() )
+				for( f in flags.keyValueIterator() )
 					if( f.value==true )
 						all.push( JsonTools.writeEnum(f.key, false) );
 				all;

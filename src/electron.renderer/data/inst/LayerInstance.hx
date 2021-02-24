@@ -101,7 +101,7 @@ class LayerInstance {
 
 			intGrid: { // old IntGrid format
 				var arr = [];
-				if( !_project.hasAdvancedExportFlag(DiscardPreCsvIntGrid) )
+				if( !_project.hasFlag(DiscardPreCsvIntGrid) )
 					for(e in intGrid.keyValueIterator())
 						arr.push({
 							coordId: e.key,
@@ -168,7 +168,7 @@ class LayerInstance {
 			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
 
-		if( _project.hasAdvancedExportFlag(DiscardPreCsvIntGrid) )
+		if( _project.hasFlag(DiscardPreCsvIntGrid) )
 			Reflect.deleteField(json, "intGrid");
 
 		return json;
