@@ -9,6 +9,10 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 
 	override function onMouseMove(ev:hxd.Event, m:Coords) {
 		super.onMouseMove(ev,m);
+	}
+
+	override function customCursor(ev:hxd.Event, m:Coords) {
+		super.customCursor(ev, m);
 
 		if( pickOrigin!=null ) {
 			var grid = curLayerInstance.def.gridSize;
@@ -39,11 +43,14 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 		super.stopUsing(m);
 
 		var li = editor.curLayerInstance;
-		if( button==0 && m.cx>=0 && m.cx<li.cWid && m.cy>=0 && m.cy<li.cHei ) {
+		if( button==0 && m.cx>=0 && m.cx<li.cWid && m.cy>=0 && m.cy<li.cHei && canPick(m) ) {
 			editor.levelRender.bleepRectCase(m.cx,m.cy, 1,1, 0xffcc00);
 			onPick(m);
 		}
 	}
 
+	public dynamic function canPick(m:Coords) {
+		return true;
+	}
 	public dynamic function onPick(m:Coords) {}
 }

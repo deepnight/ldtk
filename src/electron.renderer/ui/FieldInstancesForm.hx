@@ -455,6 +455,12 @@ class FieldInstancesForm {
 		var t = new tool.PickPoint();
 
 		t.pickOrigin = { cx:getInstanceCx(), cy:getInstanceCy(), color:getInstanceColor() }
+		t.canPick = (m:Coords)->{
+			for(i in 0...fi.getArrayLength())
+				if( fi.getPointGrid(i).cx==m.cx && fi.getPointGrid(i).cy==m.cy )
+					return false;
+			return true;
+		}
 
 		// Connect to last of path
 		if( fi.def.isArray && fi.def.editorDisplayMode==PointPath ) {
