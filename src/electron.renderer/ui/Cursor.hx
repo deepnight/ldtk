@@ -258,6 +258,8 @@ class Cursor {
 
 			switch type {
 				case None,Forbidden,Pan,Move,Moving,PickNothing,Pointer,Add,Resize(_):
+					root.x += m.levelX*cam.adjustedZoom;
+					root.y += m.levelY*cam.adjustedZoom - 16;
 					centerLabelAbove(0,0);
 
 				case Eraser(x, y):

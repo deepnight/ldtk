@@ -19,9 +19,6 @@ class Rulers extends dn.Process {
 	var g : h2d.Graphics;
 	var labels : h2d.Object;
 
-	var tip : h2d.Flow;
-	var tipTf : h2d.Text;
-
 	// Drag & drop
 	var draggables : Array<RectHandlePos>;
 	var draggedPos : Null<RectHandlePos>;
@@ -40,30 +37,13 @@ class Rulers extends dn.Process {
 		g = new h2d.Graphics(root);
 		labels = new h2d.Object(root);
 		resizePreview = new h2d.Graphics(root);
-
-		tip = new h2d.Flow(root);
-		tip.backgroundTile = Assets.elements.getTile("fieldBg");
-		tip.borderWidth = tip.borderHeight = 3;
-		tip.padding = 3;
-		tipTf = new h2d.Text(Assets.fontPixel, tip);
-		tipTf.textColor = 0x0;
-		tip.visible = false;
 	}
 
+	@:keep
 	override function toString():String {
-		return Type.getClassName(Type.getClass(this))
+		return super.toString()
 			+ "[" + ( draggedPos==null ? "--" : draggedPos.getName() ) + "]"
 			+ ( dragStarted ? " (RESIZING)" : "" );
-	}
-
-	function setTip(?p:RectHandlePos, ?str:String) {
-		tip.visible = str!=null;
-		if( tipTf.text!=str )
-			tipTf.text = str;
-		if( tip.visible ) {
-			tip.x = Std.int( getX(p) - tip.outerWidth*tip.scaleX*0.5 );
-			tip.y = Std.int( getY(p) - tip.outerHeight*tip.scaleY*0.5 );
-		}
 	}
 
 	override function onDispose() {
@@ -92,7 +72,6 @@ class Rulers extends dn.Process {
 				root.x = levelRender.root.x;
 				root.y = levelRender.root.y;
 				root.setScale( levelRender.root.scaleX );
-				tip.setScale( editor.camera.pixelRatio*2 * 1/editor.camera.adjustedZoom );
 
 			case _:
 		}
@@ -219,7 +198,8 @@ class Rulers extends dn.Process {
 			for( p in draggables )
 				if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p ) {
 					ev.cancel = true;
-					editor.cursor.set( Resize(p) );
+					if( !dragStarted )
+						editor.cursor.set( Resize(p), L.t._("Resize level") );
 					g.alpha = 1;
 				}
 		if( !ev.cancel )
@@ -235,7 +215,7 @@ class Rulers extends dn.Process {
 			var b = getResizedBounds(m);
 			resizePreview.lineStyle(4, !resizeBoundsValid(b) ? 0xff0000 : 0xffcc00);
 			resizePreview.drawRect(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
-			setTip(draggedPos, (b.newRight-b.newLeft)+"x"+(b.newBottom-b.newTop)+"px");
+			editor.cursor.set( Moving, (b.newRight-b.newLeft)+"x"+(b.newBottom-b.newTop)+"px" );
 		}
 	}
 
@@ -291,7 +271,6 @@ class Rulers extends dn.Process {
 	}
 
 	public function onMouseUp(m:Coords) {
-		setTip();
 		if( dragStarted ) {
 			var b = getResizedBounds(m);
 			if( b.newLeft!=0 || b.newTop!=0 || b.newRight!=curLevel.pxWid || b.newBottom!=curLevel.pxHei ) {
