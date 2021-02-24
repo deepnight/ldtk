@@ -65,10 +65,13 @@ class FieldDefsForm {
 	}
 
 	function onCreateField(anchor:js.jquery.JQuery, isArray:Bool) {
-		function _create(type:data.DataTypes.FieldType) {
+		var w = new ui.modal.Dialog(anchor,"fieldTypes");
+
+		function _create(ev:js.jquery.Event, type:data.DataTypes.FieldType) {
 			switch type {
 				case F_Enum(null):
 					if( project.defs.enums.length==0 && project.defs.externalEnums.length==0 ) {
+						w.close();
 						new ui.modal.dialog.Choice(
 							L.t._("This project contains no Enum yet. You first need to create one from the Enum panel."),
 							[
@@ -79,37 +82,28 @@ class FieldDefsForm {
 					}
 
 					// Enum picker
-					var w = new ui.modal.Dialog(anchor, "enums");
-
+					var ctx = new ui.modal.ContextMenu(ev);
+					ctx.addTitle(L.t._("Pick an existing enum"));
 					for(ed in project.defs.enums) {
-						var b = new J("<button/>");
-						b.appendTo(w.jContent);
-						b.text(ed.identifier);
-						b.click( function(_) {
-							_create(F_Enum(ed.uid));
-							w.close();
+						ctx.add({
+							label: ed.identifier,
+							cb: ()->_create(ev, F_Enum(ed.uid)),
 						});
 					}
 
-					for(ed in project.defs.externalEnums) {
-						var b = new J("<button/>");
-						b.appendTo(w.jContent);
-						b.append('<span class="id">${ed.identifier}</span>');
-
-						var fileName = dn.FilePath.extractFileWithExt(ed.externalRelPath);
-						b.append('<span class="source">$fileName</span>');
-
-						b.click( function(_) {
-							_create(F_Enum(ed.uid));
-							w.close();
-						});
+					for(ext in project.defs.getGroupedExternalEnums().keyValueIterator()) {
+						ctx.addTitle( dn.FilePath.fromFile(ext.key).fileWithExt );
+						for(ed in ext.value)
+							ctx.add({
+								label: ed.identifier,
+								cb: ()->_create(ev, F_Enum(ed.uid)),
+							});
 					}
 					return;
 
 
 				case _:
 			}
-
 
 			// Create field def
 			var fd = new FieldDef(project, project.makeUniqueIdInt(), type, isArray);
@@ -122,13 +116,13 @@ class FieldDefsForm {
 			fd.identifier = project.makeUniqueIdStr(baseName, false, id->isFieldIdentifierUnique(id) );
 			fieldDefs.push(fd);
 
+			w.close();
 			editor.ge.emit( FieldDefAdded(fd) );
 			selectField(fd);
 			jForm.find("input:not([readonly]):first").focus().select();
 		}
 
 		// Type picker
-		var w = new ui.modal.Dialog(anchor,"fieldTypes");
 		var types : Array<data.DataTypes.FieldType> = [
 			F_Int, F_Float, F_Bool, F_String, F_Text, F_Path, F_Color, F_Enum(null)
 		];
@@ -143,8 +137,7 @@ class FieldDefsForm {
 			});
 			JsTools.createFieldTypeIcon(type, b);
 			b.click( function(ev) {
-				_create(type);
-				w.close();
+				_create(ev,type);
 			});
 		}
 	}

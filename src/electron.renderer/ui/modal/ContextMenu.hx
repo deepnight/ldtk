@@ -93,6 +93,11 @@ class ContextMenu extends ui.Modal {
 	}
 
 
+	public function addTitle(str:LocaleString) {
+		var jTitle = new J('<div class="title">$str</div>');
+		jTitle.appendTo(jContent);
+	}
+
 	public function add(a:ContextAction) {
 		var jButton = new J('<button class="transparent"/>');
 		jButton.appendTo(jContent);

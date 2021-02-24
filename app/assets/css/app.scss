@@ -2057,6 +2057,12 @@ textarea {
 		.content {
 			display: grid;
 			grid-auto-rows: auto;
+			.title {
+				padding: 8px 20px;
+				color: white;
+				font-weight: bold;
+				background-color: $bgMed;
+			}
 
 			button {
 				display: block;
