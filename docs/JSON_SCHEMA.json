@@ -95,10 +95,11 @@
 				]
 			},
 			"flags": {
-				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `DiscardPreCsvIntGrid`",
+				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `DiscardPreCsvIntGrid`, `IgnoreBackupSuggest`",
 				"items": {
 					"enum": [
-						"DiscardPreCsvIntGrid"
+						"DiscardPreCsvIntGrid",
+						"IgnoreBackupSuggest"
 					]
 				},
 				"type": [
