@@ -94,6 +94,31 @@ class Editor extends Page {
 
 		selectProject(p);
 
+		// Suggest backups
+		if( !project.isBackup() && !App.ME.isInAppDir(project.filePath.full,true) && project.levels.length>=1 && !project.backupOnSave && !project.hasFlag(IgnoreBackupSuggest) ) {
+			var w = new ui.modal.dialog.Choice(
+				L.t._("As your project is growing bigger, it is recommended to enable Backups, to secure your work a little bit more."),
+				[
+					{
+						label:L.t._("Enable backups when saving"),
+						cb: ()->{
+							project.backupOnSave = true;
+							ge.emit(ProjectSettingsChanged);
+						}
+					},
+					{
+						label:L.t._("No, I'm fine."),
+						className: "gray",
+						cb: ()->{
+							project.setFlag(IgnoreBackupSuggest, true);
+							ge.emit(ProjectSettingsChanged);
+						},
+					}
+				],
+				false
+			);
+		}
+
 		// Auto-load provided level index
 		if( loadLevelIndex!=null )
 			if( loadLevelIndex>=0 && loadLevelIndex<project.levels.length ) {
