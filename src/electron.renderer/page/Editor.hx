@@ -1649,7 +1649,7 @@ class Editor extends Page {
 				if( fpsRequests.get(k)<=0 )
 					fpsRequests.remove(k);
 			}
-			hxd.System.fpsLimit = maxCap==0 ? -1 : M.ceil(30+30*maxCap);
+			hxd.System.fpsLimit = maxCap>=1 ? -1 : M.ceil(30+30*maxCap);
 		}
 
 		// DOM locking
