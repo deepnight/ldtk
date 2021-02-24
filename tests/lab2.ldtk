@@ -27,7 +27,7 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"advancedOptionFlags": [],
+	"flags": [],
 	"defs": { "layers": [
 		{
 			"__type": "IntGrid",
@@ -120,7 +120,7 @@
 					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "PointPath",
+					"editorDisplayMode": "PointStar",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
@@ -269,14 +269,29 @@
 					"entityInstances": [
 						{
 							"__identifier": "Entity",
-							"__grid": [7,11],
+							"__grid": [6,11],
 							"__pivot": [0,0],
 							"__tile": null,
 							"width": 16,
 							"height": 16,
 							"defUid": 17,
-							"px": [112,176],
-							"fieldInstances": [{ "__identifier": "Point", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] }]
+							"px": [96,176],
+							"fieldInstances": [{
+								"__identifier": "Point",
+								"__value": [ { "cx": 11, "cy": 14 }, { "cx": 4, "cy": 14 }, { "cx": 1, "cy": 12 } ],
+								"__type": "Array<Point>",
+								"defUid": 20,
+								"realEditorValues": [ {
+									"id": "V_String",
+									"params": ["11,14"]
+								}, {
+									"id": "V_String",
+									"params": ["4,14"]
+								}, {
+									"id": "V_String",
+									"params": ["1,12"]
+								} ]
+							}]
 						}
 					]
 				}
