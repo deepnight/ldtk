@@ -309,17 +309,19 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		return anyChange;
 	}
 
-	override function updateCursor(ev:hxd.Event, m:Coords) {
-		super.updateCursor(ev,m);
+	override function customCursor(ev:hxd.Event, m:Coords) {
+		super.customCursor(ev,m);
 
 		if( curTilesetDef==null || !curTilesetDef.isAtlasLoaded() ) {
-			editor.cursor.set(None);
+			editor.cursor.set(Forbidden);
+			ev.cancel = true;
 			return;
 		}
 
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromCoords(origin, m);
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei) );
+			ev.cancel = true;
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
 			var sel = getSelectedValue();
@@ -332,8 +334,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 			else
 				editor.cursor.set( Tiles(curLayerInstance, sel.ids, m.cx, m.cy, flips) );
 
-			if( ev!=null ) // happens when cursor is manually updated on X/Y flips
-				ev.cancel = true;
+			ev.cancel = true;
 		}
 	}
 
@@ -420,12 +421,12 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				case K.X:
 					flipX = !flipX;
 					N.quick("X-flip: "+L.onOff(flipX));
-					updateCursor(null,lastMouse);
+					customCursor(new hxd.Event(EMove), lastMouse);
 
 				case K.Y, K.Z:
 					flipY = !flipY;
 					N.quick("Y-flip: "+L.onOff(flipY));
-					updateCursor(null,lastMouse);
+					customCursor(new hxd.Event(EMove), lastMouse);
 			}
 	}
 }

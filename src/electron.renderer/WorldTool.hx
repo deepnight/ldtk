@@ -341,33 +341,11 @@ class WorldTool extends dn.Process {
 		return b;
 	}
 
-	public function onMouseMove(ev:hxd.Event, m:Coords) {
+	public function onMouseMoveCursor(ev:hxd.Event, m:Coords) {
 		if( ev.cancel ) {
 			insertCursor.visible = false;
 			cursor.clear();
 			return;
-		}
-
-		// Start dragging
-		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=DRAG_THRESHOLD ) {
-			var allow = switch project.worldLayout {
-				case Free: true;
-				case GridVania: true;
-				case LinearHorizontal, LinearVertical: project.levels.length>1;
-			}
-			if( allow ) {
-				dragStarted = true;
-				ev.cancel = true;
-				if( clickedLevel!=null )
-					editor.selectLevel(clickedLevel);
-
-				if( clickedLevel!=null && ( App.ME.isAltDown() || App.ME.isCtrlDown() ) ) {
-					var copy = project.duplicateLevel(clickedLevel);
-					editor.ge.emit( LevelAdded(copy) );
-					editor.selectLevel(copy);
-					clickedLevel = copy;
-				}
-			}
 		}
 
 		// Rollover
@@ -407,6 +385,30 @@ class WorldTool extends dn.Process {
 		}
 		else
 			insertCursor.visible = false;
+	}
+
+	public function onMouseMove(ev:hxd.Event, m:Coords) {
+		// Start dragging
+		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=DRAG_THRESHOLD ) {
+			var allow = switch project.worldLayout {
+				case Free: true;
+				case GridVania: true;
+				case LinearHorizontal, LinearVertical: project.levels.length>1;
+			}
+			if( allow ) {
+				dragStarted = true;
+				ev.cancel = true;
+				if( clickedLevel!=null )
+					editor.selectLevel(clickedLevel);
+
+				if( clickedLevel!=null && ( App.ME.isAltDown() || App.ME.isCtrlDown() ) ) {
+					var copy = project.duplicateLevel(clickedLevel);
+					editor.ge.emit( LevelAdded(copy) );
+					editor.selectLevel(copy);
+					clickedLevel = copy;
+				}
+			}
+		}
 
 		// Drag
 		if( clickedLevel!=null && dragStarted ) {

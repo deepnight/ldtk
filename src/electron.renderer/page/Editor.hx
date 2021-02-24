@@ -735,31 +735,47 @@ class Editor extends Page {
 		var m = getMouse();
 
 		if( !isLocked() ) {
+			// Create a separate cancelable event for cursor update
+			var cursorEvent = new hxd.Event(EMove);
+
 			// Propagate event to tools & UI components
 			panTool.onMouseMove(ev,m);
+			panTool.onMouseMoveCursor(cursorEvent,m);
 
-			if( !ev.cancel && resizeTool!=null )
+			if( !ev.cancel && resizeTool!=null ) {
 				resizeTool.onMouseMove(ev,m);
+				resizeTool.onMouseMoveCursor(cursorEvent,m);
+			}
 
 			if( !ev.cancel && !worldMode ) {
-				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
+				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() ) {
 					selectionTool.onMouseMove(ev,m);
-				else if( isSpecialToolActive() )
+					selectionTool.onMouseMoveCursor(cursorEvent,m);
+				}
+				else if( isSpecialToolActive() ) {
 					specialTool.onMouseMove(ev,m);
-				else
+					specialTool.onMouseMoveCursor(cursorEvent,m);
+				}
+				else {
 					curTool.onMouseMove(ev,m);
+					curTool.onMouseMoveCursor(cursorEvent,m);
+				}
 			}
 
 			rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
+			rulers.onMouseMoveCursor(cursorEvent,m);
+
 			worldTool.onMouseMove(ev,m); // Note: event cancelation is checked inside
+			worldTool.onMouseMoveCursor(cursorEvent,m);
 
 			if( ui.Modal.isOpen( ui.modal.panel.EditAllAutoLayerRules ) )
 				ui.Modal.getFirst( ui.modal.panel.EditAllAutoLayerRules ).onEditorMouseMove(m);
 
-			if( !ev.cancel )
+			// Default cursor
+			if( !cursorEvent.cancel )
 				cursor.set(None);
-			cursor.onMouseMove(m);
 
+			cursor.onMouseMove(m);
 		}
 
 		// Mouse coords infos

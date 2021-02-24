@@ -42,7 +42,7 @@ class Cursor {
 	public inline function set(c:CursorType, ?labelStr:String) {
 		// Check if actual re-render is needed
 		var needRender : Bool = switch c {
-			case None,Forbidden,Pan,Move,Moving,PickNothing,Pointer,Add: c!=type;
+			case None,Forbidden,Pan,Panning,Move,Moving,PickNothing,Pointer,Add: c!=type;
 			case Resize(p):
 				switch type {
 					case Resize(p2): p!=p2;
@@ -146,6 +146,7 @@ class Cursor {
 			case None: hideRender(); setSystemCursor();
 			case Forbidden: hideRender(); setNativeCursor("not-allowed");
 			case Pan: hideRender(); setNativeCursor("all-scroll");
+			case Panning: hideRender(); setNativeCursor("grabbing");
 			case Move: hideRender(); setNativeCursor("grab");
 			case Moving: hideRender(); setNativeCursor("grabbing");
 			case PickNothing: hideRender(); setNativeCursor("help");
@@ -257,7 +258,7 @@ class Cursor {
 			root.y = M.round( cam.height*0.5 - cam.levelY * cam.adjustedZoom );
 
 			switch type {
-				case None,Forbidden,Pan,Move,Moving,PickNothing,Pointer,Add,Resize(_):
+				case None,Forbidden,Pan,Panning,Move,Moving,PickNothing,Pointer,Add,Resize(_):
 					root.x += m.levelX*cam.adjustedZoom;
 					root.y += m.levelY*cam.adjustedZoom - 16;
 					centerLabelAbove(0,0);

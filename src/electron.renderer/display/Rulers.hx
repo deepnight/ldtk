@@ -187,13 +187,13 @@ class Rulers extends dn.Process {
 		return !App.ME.isKeyDown(K.SPACE) && !App.ME.hasAnyToggleKeyDown();
 	}
 
-	public function onMouseMove(ev:hxd.Event, m:Coords) {
+	public function onMouseMoveCursor(ev:hxd.Event, m:Coords) {
 		if( ev.cancel ) {
 			g.alpha = 0.3;
 			return;
 		}
 
-		// Cursor
+		// Handles cursors
 		if( canUseResizers() )
 			for( p in draggables )
 				if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p ) {
@@ -202,8 +202,15 @@ class Rulers extends dn.Process {
 						editor.cursor.set( Resize(p), L.t._("Resize level") );
 					g.alpha = 1;
 				}
+
+		// No handle is overed
 		if( !ev.cancel )
 			g.alpha = 0.3;
+	}
+
+	public function onMouseMove(ev:hxd.Event, m:Coords) {
+		if( ev.cancel )
+			return;
 
 		// Drag only starts after a short threshold
 		if( isClicking() && draggedPos!=null && !dragStarted && m.getPageDist(dragOrigin)>=4 )

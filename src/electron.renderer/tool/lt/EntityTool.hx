@@ -46,13 +46,15 @@ class EntityTool extends tool.LayerTool<Int> {
 			: m.levelY;
 	}
 
-	override function updateCursor(ev:hxd.Event, m:Coords) {
-		super.updateCursor(ev,m);
+	override function customCursor(ev:hxd.Event, m:Coords) {
+		super.customCursor(ev,m);
 
 		if( curEntityDef==null )
 			editor.cursor.set(None);
-		else if( isRunning() && curMode==Remove )
+		else if( isRunning() && curMode==Remove ) {
 			editor.cursor.set( Eraser(m.levelX,m.levelY) );
+			ev.cancel = true;
+		}
 		else if( curLevel.inBounds(m.levelX, m.levelY) ) {
 			editor.cursor.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m)) );
 			ev.cancel = true;

@@ -31,19 +31,18 @@ class IntGridTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function updateCursor(ev:hxd.Event, m:Coords) {
-		super.updateCursor(ev,m);
+	override function customCursor(ev:hxd.Event, m:Coords) {
+		super.customCursor(ev,m);
 
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromCoords(origin, m);
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, getSelectedColor()) );
+			ev.cancel = true;
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
 			editor.cursor.set( GridCell(curLayerInstance, m.cx, m.cy, getSelectedColor()) );
 			ev.cancel = true;
 		}
-		// else
-		// 	editor.cursor.set(None);
 	}
 
 	override function useAtInterpolatedGrid(cx:Int, cy:Int):Bool {

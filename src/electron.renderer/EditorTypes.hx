@@ -81,6 +81,7 @@ enum CursorType {
 	None;
 	Forbidden;
 	Pan;
+	Panning;
 	Move;
 	Moving;
 	PickNothing;

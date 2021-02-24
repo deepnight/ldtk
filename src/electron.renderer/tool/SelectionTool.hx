@@ -134,19 +134,22 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
-	override function updateCursor(ev:hxd.Event, m:Coords) {
-		super.updateCursor(ev,m);
+	override function customCursor(ev:hxd.Event, m:Coords) {
+		super.customCursor(ev,m);
 
 		// Default cursor
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromCoords(origin, m);
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, 0xffffff) );
-		}
-		else if( isRunning() )
-			editor.cursor.set(Moving);
-		else if( group.isOveringSelection(m) ) {
 			ev.cancel = true;
+		}
+		else if( isRunning() ) {
+			editor.cursor.set(Moving);
+			ev.cancel = true;
+		}
+		else if( group.isOveringSelection(m) ) {
 			editor.cursor.set(Move);
+			ev.cancel = true;
 		}
 		else if( !isRunning() ) {
 			// Preview picking
