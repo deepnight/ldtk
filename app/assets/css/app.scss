@@ -1115,6 +1115,11 @@ ul.form {
 			color: $bgLighter;
 			font-style: italic;
 		}
+
+		&.full {
+			max-width: none;
+			grid-column: 1/3;
+		}
 	}
 
 	>dd {
@@ -1869,10 +1874,19 @@ textarea {
 	.wrapper .content {
 		width: 600px;
 
-		ul.form li {
-			label {
-				align-self: center;
-				flex: 0 0 220px;
+		dl.form {
+			// grid-template-columns: 220px auto;
+			dt {
+				max-width: none;
+			}
+
+			.logPath {
+				flex: 1 0 300px;
+				padding: 4px;
+				text-align: left;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				border: 1px solid $bgLight;
 			}
 		}
 	}

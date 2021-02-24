@@ -19,6 +19,7 @@ class EditAppSettings extends ui.modal.Dialog {
 
 		// Log button
 		jContent.find( "button.log").click( (_)->JsTools.exploreToFile( JsTools.getLogPath(), true ) );
+		jContent.find(".logPath").text( JsTools.getLogPath() );
 
 		// World mode using mousewheel
 		var i = new form.input.EnumSelect(
@@ -42,6 +43,12 @@ class EditAppSettings extends ui.modal.Dialog {
 		i.onChange = ()->{
 			onSettingChanged();
 			needRestart = true;
+		}
+
+		// CPU throttling
+		var i = Input.linkToHtmlInput(settings.v.smartCpuThrottling, jForm.find("#smartCpuThrottling"));
+		i.onChange = ()->{
+			onSettingChanged();
 		}
 
 		// App scaling
