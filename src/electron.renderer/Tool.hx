@@ -31,10 +31,11 @@ class Tool<T> extends dn.Process {
 		super.onDispose();
 	}
 
+	@:keep
 	override function toString():String {
-		return Type.getClassName(Type.getClass(this))
+		return super.toString()
 			+ "[" + ( curMode==null ? "--" : curMode.getName() ) + "]"
-			+ ( isRunning() ? " (RUNNING)" : "" );
+			+ ( isRunning() ? " [RUNNING]" : "" );
 
 	}
 

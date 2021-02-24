@@ -514,6 +514,10 @@ class App extends dn.Process {
 		line.appendTo(wrapper);
 	}
 
+	public inline function debugPre(msg:Dynamic, clear=false) {
+		debug('<pre>$msg</pre>', clear);
+	}
+
 	override function onDispose() {
 		super.onDispose();
 		if( ME==this )

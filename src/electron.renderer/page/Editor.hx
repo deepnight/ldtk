@@ -1613,27 +1613,24 @@ class Editor extends Page {
 		#if debug
 		if( App.ME.cd.has("debugTools") ) {
 			App.ME.clearDebug();
-			App.ME.debug("mouse="+getMouse());
+			App.ME.debug("-- Misc ----------------------------------------");
+			App.ME.debugPre("mouse="+getMouse());
 
-			App.ME.debug("appButtons="
+			App.ME.debugPre("appButtons="
 				+ ( App.ME.isMouseButtonDown(0) ? "[left] " : "" )
 				+ ( App.ME.isMouseButtonDown(2) ? "[right] " : "" )
 				+ ( App.ME.isMouseButtonDown(1) ? "[middle] " : "" )
+				+ " toggles="
+				+ ( App.ME.isCtrlDown() ? "[ctrl] " : "" )
+				+ ( App.ME.isShiftDown() ? "[shift] " : "" )
+				+ ( App.ME.isAltDown() ? "[alt] " : "" )
 			);
-			App.ME.debug("zoom="+M.pretty(camera.adjustedZoom,1)+" cam="+camera.width+"x"+camera.height+" pixelratio="+camera.pixelRatio);
-			App.ME.debug("-- Tools & UI ----------------------------------------");
-			App.ME.debug("  "+worldTool);
-			App.ME.debug("  "+panTool);
-			App.ME.debug("  "+resizeTool);
-			App.ME.debug("  "+selectionTool);
-			App.ME.debug("  selection="+selectionTool.debugContent());
-			for(t in allLayerTools)
-				App.ME.debug("  "+t);
-			App.ME.debug("  "+rulers);
+			App.ME.debugPre("zoom="+M.pretty(camera.adjustedZoom,1)+" cam="+camera.width+"x"+camera.height+" pixelratio="+camera.pixelRatio);
+			App.ME.debugPre("  Selection="+selectionTool.debugContent());
 
 			App.ME.debug("-- Processes ----------------------------------------");
 			for( line in dn.Process.rprintAll().split('\n') )
-				App.ME.debug('<pre>$line</pre>');
+				App.ME.debugPre(line);
 		}
 		#end
 	}

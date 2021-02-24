@@ -46,8 +46,9 @@ class WorldTool extends dn.Process {
 		insertCursor.remove();
 	}
 
+	@:keep
 	override function toString() {
-		return Type.getClassName( Type.getClass(this) )
+		return super.toString()
 			+ ( dragStarted ? " (DRAGGING)" : "" );
 	}
 
