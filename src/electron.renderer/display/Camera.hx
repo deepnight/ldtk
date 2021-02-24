@@ -243,6 +243,7 @@ class Camera extends dn.Process {
 
 		// Animated zoom
 		if( targetZoom!=null ) {
+			editor.requestFps();
 			deltaZoomTo( levelX, levelY, ( targetZoom - rawZoom ) * M.fmin(1, 0.08*tmod/rawZoom) );
 			if( M.fabs(targetZoom-rawZoom) <= 0.01*rawZoom )
 				cancelAutoZoom();
@@ -250,6 +251,7 @@ class Camera extends dn.Process {
 
 		// Animated scrolling
 		if( targetWorldX!=null ) {
+			editor.requestFps();
 			worldX += ( targetWorldX - worldX ) * M.fmin(1, 0.1*tmod);
 			worldY += ( targetWorldY - worldY ) * M.fmin(1, 0.1*tmod);
 			if( M.dist(targetWorldX, targetWorldY, worldX, worldY)<=4 )

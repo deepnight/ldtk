@@ -223,6 +223,7 @@ class Rulers extends dn.Process {
 			resizePreview.lineStyle(4, !resizeBoundsValid(b) ? 0xff0000 : 0xffcc00);
 			resizePreview.drawRect(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
 			editor.cursor.set( Moving, (b.newRight-b.newLeft)+"x"+(b.newBottom-b.newTop)+"px" );
+			editor.requestFps();
 		}
 	}
 

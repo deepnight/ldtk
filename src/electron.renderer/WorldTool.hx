@@ -506,6 +506,7 @@ class WorldTool extends dn.Process {
 
 			// Refresh render
 			editor.ge.emit( WorldLevelMoved );
+			editor.requestFps();
 			ev.cancel = true;
 		}
 	}

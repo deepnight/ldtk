@@ -741,6 +741,11 @@ class Editor extends Page {
 		rulers.onMouseUp( m );
 	}
 
+	var fpsRequests : Map<Int, Float> = new Map();
+	public inline function requestFps(ratio=1.0) {
+		fpsRequests.set(M.iclamp(Std.int(ratio*100), 10, 100), 2);
+	}
+
 	function onMouseMove(ev:hxd.Event) {
 		var m = getMouse();
 
@@ -786,6 +791,9 @@ class Editor extends Page {
 				cursor.set(None);
 
 			cursor.onMouseMove(m);
+
+			if( curLevel.inBounds(m.levelX, m.levelY) )
+				requestFps(0.5);
 		}
 
 		// Mouse coords infos
@@ -1629,6 +1637,18 @@ class Editor extends Page {
 	var wasLocked : Bool = null;
 	override function update() {
 		super.update();
+
+		// Smart FPS limiting
+		if( App.ME.focused ) {
+			var maxCap = 0.;
+			for(k in fpsRequests.keys()) {
+				maxCap = M.fmax(k/100,maxCap);
+				fpsRequests.set(k, fpsRequests.get(k)-tmod/Const.FPS);
+				if( fpsRequests.get(k)<=0 )
+					fpsRequests.remove(k);
+			}
+			hxd.System.fpsLimit = maxCap==0 ? -1 : M.ceil(30+30*maxCap);
+		}
 
 		// DOM locking
 		if( isLocked()!=wasLocked ) {
