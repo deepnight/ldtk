@@ -16,7 +16,6 @@
 			"worldGridHeight",
 			"worldGridWidth",
 			"worldLayout",
-			"advancedOptionFlags",
 			"backupLimit",
 			"backupOnSave",
 			"defaultGridSize",
@@ -27,6 +26,7 @@
 			"defaultPivotY",
 			"exportPng",
 			"exportTiled",
+			"flags",
 			"minifyJson",
 			"nextUid"
 		],
@@ -94,6 +94,17 @@
 					"LinearVertical"
 				]
 			},
+			"flags": {
+				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `DiscardPreCsvIntGrid`",
+				"items": {
+					"enum": [
+						"DiscardPreCsvIntGrid"
+					]
+				},
+				"type": [
+					"array"
+				]
+			},
 			"exportPng": {
 				"description": "If TRUE, all layers in all levels will also be exported as PNG along with the project file (default is FALSE)",
 				"type": [
@@ -111,17 +122,6 @@
 				"type": [
 					"string",
 					"null"
-				]
-			},
-			"advancedOptionFlags": {
-				"description": "An array containing various advanced export options (only for experienced users). Possible values: `DiscardPreCsvIntGrid`",
-				"items": {
-					"enum": [
-						"DiscardPreCsvIntGrid"
-					]
-				},
-				"type": [
-					"array"
 				]
 			},
 			"exportTiled": {
