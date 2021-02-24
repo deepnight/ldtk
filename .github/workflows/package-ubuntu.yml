@@ -27,7 +27,7 @@ jobs:
           haxe-version: 4.1.4
       - run: haxe -version
       - run: haxelib git castle https://github.com/ncannasse/castle
-      - run: haxelib git heaps https://github.com/HeapsIO/heaps.git
+      - run: haxelib git heaps https://github.com/deepnight/heaps.git
       - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
       - run: haxelib git electron https://github.com/tong/hxelectron.git
       - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
