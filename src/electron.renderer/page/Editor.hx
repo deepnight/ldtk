@@ -113,6 +113,7 @@ class Editor extends Page {
 
 		// Edit buttons
 		jMainPanel.find("button.editProject").click( function(_) {
+			if( paused ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.EditProject) )
 				ui.Modal.closeAll();
 			else
@@ -120,10 +121,12 @@ class Editor extends Page {
 		});
 
 		jMainPanel.find("button.world").click( function(_) {
+			if( paused ) return;
 			setWorldMode(!worldMode);
 		});
 
 		jMainPanel.find("button.editLayers").click( function(_) {
+			if( paused ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.EditLayerDefs) )
 				ui.Modal.closeAll();
 			else
@@ -131,6 +134,7 @@ class Editor extends Page {
 		});
 
 		jMainPanel.find("button.editEntities").click( function(_) {
+			if( paused ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.EditEntityDefs) )
 				ui.Modal.closeAll();
 			else
@@ -138,6 +142,7 @@ class Editor extends Page {
 		});
 
 		jMainPanel.find("button.editTilesets").click( function(_) {
+			if( paused ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.EditTilesetDefs) )
 				ui.Modal.closeAll();
 			else
@@ -145,6 +150,7 @@ class Editor extends Page {
 		});
 
 		jMainPanel.find("button.editEnums").click( function(_) {
+			if( paused ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.EditEnums) )
 				ui.Modal.closeAll();
 			else
@@ -156,6 +162,7 @@ class Editor extends Page {
 
 
 		jMainPanel.find("button.showHelp").click( function(_) {
+			if( paused ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.Help) )
 				ui.Modal.closeAll();
 			else
@@ -646,6 +653,9 @@ class Editor extends Page {
 	}
 
 	function onHeapsEvent(e:hxd.Event) {
+		if( paused )
+			return;
+
 		switch e.kind {
 			case EPush: onMouseDown(e);
 			case ERelease: onMouseUp();
@@ -954,6 +964,8 @@ class Editor extends Page {
 		}
 
 		jOpt.off(".option").on("click.option", (ev)->{
+			if( paused )
+				return;
 			setter( !getter() );
 		});
 	}
@@ -1039,6 +1051,8 @@ class Editor extends Page {
 	}
 
 	public function onClose(?bt:js.jquery.JQuery) {
+		if( paused )
+			return;
 		ui.Modal.closeAll();
 		if( needSaving )
 			new ui.modal.dialog.UnsavedChanges( bt, App.ME.loadPage.bind( ()->new Home() ) );

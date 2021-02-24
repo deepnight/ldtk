@@ -236,11 +236,11 @@ class App extends dn.Process {
 	}
 
 	function onKeyPress(keyCode:Int) {
-		if( hasPage() )
+		if( hasPage() && !curPageProcess.paused )
 			curPageProcess.onKeyPress(keyCode);
 
 		for(m in ui.Modal.ALL)
-			if( !m.destroyed )
+			if( !m.destroyed && !m.paused )
 				m.onKeyPress(keyCode);
 
 		switch keyCode {
@@ -286,13 +286,13 @@ class App extends dn.Process {
 
 	function onAppMouseDown(e:js.jquery.Event) {
 		mouseButtonDowns.set(e.button,true);
-		if( hasPage() )
+		if( hasPage() && !curPageProcess.paused )
 			curPageProcess.onAppMouseDown();
 	}
 
 	function onAppMouseUp(e:js.jquery.Event) {
 		mouseButtonDowns.remove(e.button);
-		if( hasPage() )
+		if( hasPage() && !curPageProcess.paused )
 			curPageProcess.onAppMouseUp();
 	}
 
