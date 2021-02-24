@@ -73,13 +73,6 @@ class Camera extends dn.Process {
 			case WorldMode(active):
 
 			case LevelSelected(level):
-				// Move toward level if not over it
-				// if( !level.inBoundsWorld(worldX,worldY) ) {
-				// 	var ang = Math.atan2( level.worldCenterY-worldY, level.worldCenterX-worldX );
-				// 	var dist = 100; // TODO pick a better dist
-				// 	targetWorldX = worldX + Math.cos(ang)*dist;
-				// 	targetWorldY = worldY + Math.sin(ang)*dist;
-				// }
 
 			case ViewportChanged:
 

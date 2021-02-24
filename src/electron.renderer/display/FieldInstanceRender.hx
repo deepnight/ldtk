@@ -173,7 +173,6 @@ class FieldInstanceRender {
 						}
 
 					case LevelCtx(_):
-						// TODO support points in level fields?
 				}
 		}
 
