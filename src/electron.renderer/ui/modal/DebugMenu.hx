@@ -138,11 +138,11 @@ class DebugMenu extends ui.modal.ContextMenu {
 		});
 
 		// Pauses
+		function _addPauseToggler(p:dn.Process) {
+			add({ label: L.untranslated(p.toString()+" ("+p.isPaused()+")"), cb: ()->p.togglePause() });
+		}
+		_addPauseToggler(@:privateAccess App.ME.curPageProcess);
 		if( editor!=null ) {
-			function _addPauseToggler(p:dn.Process) {
-				add({ label: L.untranslated(p.toString()+" ("+p.isPaused()+")"), cb: ()->p.togglePause() });
-			}
-			_addPauseToggler(editor);
 			_addPauseToggler(editor.levelRender);
 			_addPauseToggler(editor.worldRender);
 		}
