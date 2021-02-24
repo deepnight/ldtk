@@ -91,7 +91,7 @@ class Project {
 						break;
 					else switch l.type {
 						case IntGrid, Tiles, AutoLayer: i++;
-						case Entities: // TODO increment PNG layer index if entities are rendered
+						case Entities: // remember to increment PNG layer index too, if entities are rendered one day
 					}
 				dn.Lib.leadingZeros(i,2);
 			}
