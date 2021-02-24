@@ -246,7 +246,7 @@ class App extends dn.Process {
 		switch keyCode {
 			// Open debug menu
 			#if debug
-			case K.D if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
+			case K.D if( isCtrlDown() && isShiftDown() && !hasInputFocus() ):
 				new ui.modal.DebugMenu();
 			#end
 
@@ -581,5 +581,33 @@ class App extends dn.Process {
 			for(i in dn.Process.getSortedProfilerTimes())
 				debug(i.key+" => "+M.pretty(i.value,2)+"s");
 		}
+
+		// Debug print
+		#if debug
+		if( cd.has("debugTools") ) {
+			clearDebug();
+			debug("-- Misc ----------------------------------------");
+			if( Editor.ME!=null ) {
+				debugPre("mouse="+Editor.ME.getMouse());
+				var cam = Editor.ME.camera;
+				debugPre("zoom="+M.pretty(cam.adjustedZoom,1)+" cam="+cam.width+"x"+cam.height+" pixelratio="+cam.pixelRatio);
+				debugPre("  Selection="+Editor.ME.selectionTool.debugContent());
+			}
+
+			debugPre("appButtons="
+				+ ( isMouseButtonDown(0) ? "[left] " : "" )
+				+ ( isMouseButtonDown(2) ? "[right] " : "" )
+				+ ( isMouseButtonDown(1) ? "[middle] " : "" )
+				+ " toggles="
+				+ ( isCtrlDown() ? "[ctrl] " : "" )
+				+ ( isShiftDown() ? "[shift] " : "" )
+				+ ( isAltDown() ? "[alt] " : "" )
+			);
+
+			debug("-- Processes ----------------------------------------");
+			for( line in dn.Process.rprintAll().split('\n') )
+				debugPre(line);
+		}
+		#end
 	}
 }

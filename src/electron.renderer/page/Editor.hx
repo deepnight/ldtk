@@ -1638,30 +1638,5 @@ class Editor extends Page {
 			else if( !isLocked() )
 				App.ME.jPage.removeClass("locked");
 		}
-
-
-		#if debug
-		if( App.ME.cd.has("debugTools") ) {
-			App.ME.clearDebug();
-			App.ME.debug("-- Misc ----------------------------------------");
-			App.ME.debugPre("mouse="+getMouse());
-
-			App.ME.debugPre("appButtons="
-				+ ( App.ME.isMouseButtonDown(0) ? "[left] " : "" )
-				+ ( App.ME.isMouseButtonDown(2) ? "[right] " : "" )
-				+ ( App.ME.isMouseButtonDown(1) ? "[middle] " : "" )
-				+ " toggles="
-				+ ( App.ME.isCtrlDown() ? "[ctrl] " : "" )
-				+ ( App.ME.isShiftDown() ? "[shift] " : "" )
-				+ ( App.ME.isAltDown() ? "[alt] " : "" )
-			);
-			App.ME.debugPre("zoom="+M.pretty(camera.adjustedZoom,1)+" cam="+camera.width+"x"+camera.height+" pixelratio="+camera.pixelRatio);
-			App.ME.debugPre("  Selection="+selectionTool.debugContent());
-
-			App.ME.debug("-- Processes ----------------------------------------");
-			for( line in dn.Process.rprintAll().split('\n') )
-				App.ME.debugPre(line);
-		}
-		#end
 	}
 }
