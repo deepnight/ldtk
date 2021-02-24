@@ -4946,13 +4946,13 @@
 						},
 						{
 							"__identifier": "Item",
-							"__grid": [5,10],
+							"__grid": [7,19],
 							"__pivot": [0.5,1],
 							"__tile": { "tilesetUid": 73, "srcRect": [128,288,16,16] },
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
-							"px": [88,176],
+							"px": [120,320],
 							"fieldInstances": [
 								{
 									"__identifier": "type",
@@ -4971,7 +4971,7 @@
 							"__identifier": "Item",
 							"__grid": [14,10],
 							"__pivot": [0.5,1],
-							"__tile": { "tilesetUid": 73, "srcRect": [224,976,16,16] },
+							"__tile": { "tilesetUid": 73, "srcRect": [144,64,16,16] },
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -4979,12 +4979,12 @@
 							"fieldInstances": [
 								{
 									"__identifier": "type",
-									"__value": "Spell",
+									"__value": "Armor",
 									"__type": "LocalEnum.ItemType",
 									"defUid": 76,
 									"realEditorValues": [{
 										"id": "V_String",
-										"params": ["Spell"]
+										"params": ["Armor"]
 									}]
 								},
 								{ "__identifier": "price", "__value": 0, "__type": "Int", "defUid": 93, "realEditorValues": [] }
