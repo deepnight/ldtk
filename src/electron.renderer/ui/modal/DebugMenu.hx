@@ -140,7 +140,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 		// Pauses
 		if( editor!=null ) {
 			function _addPauseToggler(p:dn.Process) {
-				add({ label: L.untranslated(p.toString()+" ("+p.paused+")"), cb: ()->p.togglePause() });
+				add({ label: L.untranslated(p.toString()+" ("+p.isPaused()+")"), cb: ()->p.togglePause() });
 			}
 			_addPauseToggler(editor);
 			_addPauseToggler(editor.levelRender);

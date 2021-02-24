@@ -45,7 +45,7 @@ class IntGridPalette extends ui.ToolPalette {
 
 			var curIdx = valueIdx;
 			e.click( function(_) {
-				if( Editor.ME.paused ) return;
+				if( Editor.ME.isPaused() ) return;
 				tool.selectValue(curIdx);
 				render();
 			});
