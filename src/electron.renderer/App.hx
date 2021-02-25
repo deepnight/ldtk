@@ -125,92 +125,102 @@ class App extends dn.Process {
 
 
 	function initAutoUpdater() {
+		// Init
 		dn.electron.ElectronUpdater.initRenderer();
+		dn.electron.ElectronUpdater.onUpdateCheckStart = function() {
+			miniNotif("Looking for update...");
+			LOG.network("Looking for update");
+		}
+		dn.electron.ElectronUpdater.onUpdateFound = function(info) {
+			LOG.network("Found update: "+info.version+" ("+info.releaseDate+")");
+			miniNotif('Downloading ${info.version}...', true);
+		}
+		dn.electron.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
+		dn.electron.ElectronUpdater.onError = function(err) {
+			var errStr = err==null ? null : Std.string(err);
+			LOG.warning("Couldn't check for updates: "+errStr);
+			if( errStr.length>40 )
+				errStr = errStr.substr(0,40) + "[...]";
+			checkManualUpdate();
+		}
+		dn.electron.ElectronUpdater.onUpdateDownloaded = function(info) {
+			LOG.network("Update ready: "+info.version);
+			miniNotif('Update ${info.version} ready!');
 
+			var e = jBody.find("#updateInstall");
+			e.show();
+			var bt = e.find("button");
+			bt.off().empty();
+			bt.append('<strong>Install update</strong>');
+			bt.append('<em>Version ${info.version}</em>');
+			bt.click(function(_) {
+				bt.hide();
+				function applyUpdate() {
+					LOG.general("Installing update");
+
+					loadPage( ()->new page.Updating() );
+					delayer.addS(function() {
+						IpcRenderer.invoke("installUpdate");
+					}, 1);
+				}
+
+				if( Editor.ME!=null && Editor.ME.needSaving )
+					new ui.modal.dialog.UnsavedChanges(applyUpdate, ()->bt.show());
+				else
+					applyUpdate();
+			});
+		}
+
+		// Check now
 		if( App.isWindows() ) {
-			// Init
-			dn.electron.ElectronUpdater.onUpdateCheckStart = function() {
-				miniNotif("Looking for update...");
-				LOG.network("Looking for update");
-			}
-			dn.electron.ElectronUpdater.onUpdateFound = function(info) {
-				LOG.network("Found update: "+info.version+" ("+info.releaseDate+")");
-				miniNotif('Downloading ${info.version}...', true);
-			}
-			dn.electron.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
-			dn.electron.ElectronUpdater.onError = function(err) {
-				var errStr = err==null ? null : Std.string(err);
-				LOG.warning("Couldn't check for updates: "+errStr);
-				if( errStr.length>40 )
-					errStr = errStr.substr(0,40) + "[...]";
-				miniNotif('Auto-updater failed: "$errStr"', 2);
-			}
-			dn.electron.ElectronUpdater.onUpdateDownloaded = function(info) {
-				LOG.network("Update ready: "+info.version);
-				miniNotif('Update ${info.version} ready!');
-
-				var e = jBody.find("#updateInstall");
-				e.show();
-				var bt = e.find("button");
-				bt.off().empty();
-				bt.append('<strong>Install update</strong>');
-				bt.append('<em>Version ${info.version}</em>');
-				bt.click(function(_) {
-					bt.hide();
-					function applyUpdate() {
-						LOG.general("Installing update");
-
-						loadPage( ()->new page.Updating() );
-						delayer.addS(function() {
-							IpcRenderer.invoke("installUpdate");
-						}, 1);
-					}
-
-					if( Editor.ME!=null && Editor.ME.needSaving )
-						new ui.modal.dialog.UnsavedChanges(applyUpdate, ()->bt.show());
-					else
-						applyUpdate();
-				});
-			}
-
-			// Start
+			// Windows
 			miniNotif("Checking for update...", true);
 			dn.electron.ElectronUpdater.checkNow();
 		}
 		else {
 			// Mac & Linux
-			miniNotif("Checking for update...", true);
-			dn.electron.ElectronUpdater.fetchLatestGitHubReleaseVersion("deepnight","ldtk", (latest)->{
-				if( latest==null )
-					miniNotif("Couldn't retrieve latest version number from GitHub!", false);
-				else if( Version.greater(latest.full, Const.getAppVersion(true), true) ) {
-					LOG.network("Update available: "+latest);
-					N.success("Update "+latest.full+" is available!");
-
-					var e = jBody.find("#updateInstall");
-					e.show();
-					var bt = e.find("button");
-					bt.off().empty();
-					bt.append('<strong>Download update</strong>');
-					bt.append('<em>Version ${latest.full}</em>');
-					bt.click(function(_) {
-						bt.hide();
-						function _download() {
-							electron.Shell.openExternal(Const.DOWNLOAD_URL);
-							clearCurPage();
-							delayer.addS( exit.bind(), 0.5 );
-						}
-
-						if( Editor.ME!=null && Editor.ME.needSaving )
-							new ui.modal.dialog.UnsavedChanges(_download, ()->bt.show());
-						else
-							_download();
-					});
-				}
-				else
-					miniNotif('App is up-to-date.');
-			});
+			checkManualUpdate();
 		}
+	}
+
+	function checkManualUpdate() {
+		miniNotif("Checking for update (GitHub)...", true);
+		LOG.network("Fetching latest version from GitHub...");
+		dn.electron.ElectronUpdater.fetchLatestGitHubReleaseVersion("deepnight","ldtk", (latest)->{
+			if( latest!=null )
+				LOG.network("Found "+latest.full);
+
+			if( latest==null ) {
+				LOG.error("Failed to fetch latest version from GitHub");
+				miniNotif("Couldn't retrieve latest version number from GitHub!", false);
+			}
+			else if( Version.greater(latest.full, Const.getAppVersion(true), true) ) {
+				LOG.network("Update available: "+latest);
+				N.success("Update "+latest.full+" is available!");
+
+				var e = jBody.find("#updateInstall");
+				e.show();
+				var bt = e.find("button");
+				bt.off().empty();
+				bt.append('<strong>Download update</strong>');
+				bt.append('<em>Version ${latest.full}</em>');
+				bt.click(function(_) {
+					bt.hide();
+					function _download() {
+						electron.Shell.openExternal(Const.DOWNLOAD_URL);
+						clearCurPage();
+						delayer.addS( exit.bind(), 0.5 );
+					}
+
+					if( Editor.ME!=null && Editor.ME.needSaving )
+						new ui.modal.dialog.UnsavedChanges(_download, ()->bt.show());
+					else
+						_download();
+				});
+			}
+			else
+				miniNotif('App is up-to-date.');
+		});
 	}
 
 	function getArgPath() : Null<dn.FilePath> {
