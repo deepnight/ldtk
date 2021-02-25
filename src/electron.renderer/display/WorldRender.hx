@@ -698,6 +698,10 @@ class WorldRender extends dn.Process {
 		// World levels rendering (max one per frame)
 		if( !waitTileset )
 			for( uid in levelInvalidations.keys() ) {
+				if( editor.project.getLevel(uid)==null ) {
+					levelInvalidations.remove(uid);
+					continue;
+				}
 				renderLevel( editor.project.getLevel(uid) );
 				updateLayout();
 				break;

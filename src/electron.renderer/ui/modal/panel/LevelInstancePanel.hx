@@ -24,11 +24,12 @@ class LevelInstancePanel extends ui.modal.Panel {
 				()->{
 					var closest = project.getClosestLevelFrom(level);
 					new LastChance('Level ${level.identifier} removed', project);
-					var l = level;
-					project.removeLevel(level);
-					editor.ge.emit( LevelRemoved(l) );
+					var deleted = level;
+					close();
 					editor.selectLevel( closest );
-					editor.camera.scrollToLevel(editor.curLevel);
+					project.removeLevel(deleted);
+					editor.ge.emit( LevelRemoved(deleted) );
+					editor.setWorldMode(true);
 				}
 			);
 		});
@@ -109,9 +110,12 @@ class LevelInstancePanel extends ui.modal.Panel {
 			case LevelAdded(level):
 
 			case LevelSelected(l):
-				useLevel(l);
+				if( l!=level )
+					close();
 
 			case LevelRemoved(l):
+				if( l==level )
+					close();
 
 			case WorldLevelMoved:
 				updateLevelForm();
