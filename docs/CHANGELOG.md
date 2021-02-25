@@ -167,6 +167,7 @@ Just hit the `W` or `F2` key to switch to world view, and start re-arranging you
   - Added a "Close" button to Project panel
   - Removed "Loaded" useless notification
   - You can now right-click external URL links in LDtk to copy them.
+  - Fixed "new level" spot suggestion in Free and Gridvania worlds.
   - Fixed middle clicks on URL links.
   - Fixed many many issues with rules that didn't update properly after some specific changes (eg. perlin, checker mode, modulos etc.)
   - Added a "locate project" button to Project panel
