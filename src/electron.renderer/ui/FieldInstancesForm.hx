@@ -346,6 +346,8 @@ class FieldInstancesForm {
 				input.appendTo(jTarget);
 				input.attr("id",domId);
 				input.attr("placeholder", "(null)");
+				input.prop("readonly",true);
+
 				if( isRequired )
 					input.addClass("required");
 
@@ -358,7 +360,6 @@ class FieldInstancesForm {
 				input.focus( ev->{
 					input.blur();
 				});
-				input.prop("readonly",true);
 				input.click( ev->{
 					dn.electron.Dialogs.open(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
 						var fp = dn.FilePath.fromFile(absPath);
@@ -403,17 +404,6 @@ class FieldInstancesForm {
 						onFieldChange(fi);
 					});
 				}
-				// fileSelect.appendTo(jTarget);
-				// fileSelect.click( function(ev) {
-				// 	dn.electron.Dialogs.open(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
-				// 		var fp = dn.FilePath.fromFile(absPath);
-				// 		fp.useSlashes();
-				// 		var relPath = project.makeRelativeFilePath(fp.full);
-				// 		input.val(relPath);
-				// 		fi.parseValue( arrayIdx, relPath );
-				// 		onFieldChange(fi);
-				// 	});
-				// });
 
 				// Error
 				if( !fi.valueIsNull(arrayIdx) && !JsTools.fileExists( project.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) ) )

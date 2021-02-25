@@ -594,18 +594,6 @@ class FieldDefsForm {
 			onFieldChange();
 		});
 
-		// File select button
-		var input = jForm.find("button[name=fDefFile]");
-		input.click( function(ev) {
-			dn.electron.Dialogs.open(curField.acceptFileTypes, project.getProjectDir(), function( absPath ) {
-				var relPath = project.makeRelativeFilePath(absPath);
-				var defInput = jForm.find("input[name=fDef]");
-				defInput.val(relPath);
-				curField.setDefault(relPath);
-				onFieldChange();
-			});
-		});
-
 		// Finalize
 		JsTools.parseComponents(jForm);
 	}
