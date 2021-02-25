@@ -13,6 +13,7 @@
   - **Ogmo 3 import**: you can now import Ogmo 3 projects to LDtk. Most features are supported, but feel free to drop a message on GitHub issues if you have any specific needs :)
   - The **UI scaling** has been fixed for 4K and 8K displays. You can now adjust the general application scale factor from the app settings (press `F12`).
   - **CodeMirror**: editing of "multi-lines" fields in entities (and levels) is now done using an almost fullscreen text editor based on *CodeMirror* library. This allows syntax highlighting, basic completion and various quality of life features. Supported types include XML, JSON, Markdown, LUA, JS, C# etc. Feel free to ask for more languages on GitHub issues.
+  - **Debug menu**: you can now open a debug menu by pressing `Ctrl+Shift+D`. It will contain some commands that could be useful if you encountered some specific bug types. Commands inside this debug menu are *harmless*, so you can use them *without any risk* (unless some in-app message says the opposite).
   - Tileset can now be changed on-the-fly in each Tile layer.
   - The Windows **setup file** is now twice bigger. Yeah, I know this isn't an actual feature, nor a great change. *But* this opens support for both 32 and 64bits environments. Please note that the *installed* version size hasn't increased, only the *Setup* executable.
   - Moved buttons to the top of project Panels.
@@ -170,6 +171,7 @@ Just hit the `W` or `F2` key to switch to world view, and start re-arranging you
   - Fixed many many issues with rules that didn't update properly after some specific changes (eg. perlin, checker mode, modulos etc.)
   - Added a "locate project" button to Project panel
   - Fixed an infinite loop when resizing a level
+  - Fixed corrupted auto-layers when resizing a level using the width/height form fields.
   - Fixed a bug with files stored in a path containing some special characters (eg. ~ or %)
   - Updated the LDtk website
   - Updated all sample maps
