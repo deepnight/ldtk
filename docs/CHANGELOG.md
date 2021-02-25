@@ -4,7 +4,7 @@
 
   - TODO world/level panel separation
 
-  - **UI rework**: many interface elements were reworked and cleaned up (less lines, less gutters). This includes panels, main side-bar, custom fields editor, world view, etc. I hope you'll enjoy the result :)
+  - **UI rework**: many interface elements were reworked and cleaned up (less lines, less gutters). This includes panels, main side-bar, custom fields editor, etc. Also, the world panel is now separated from the "current level" panel, so it's no longer mandatory to go to "world view" to edit your active level settings. I hope you'll enjoy the changes :)
   - **Level custom fields**: just like Entities, you can now add custom properties to your levels and edit values per-level. For example, add some FilePath field, name it "music", filter allowed files with "mp3 ogg" and you get a custom music picker in each of your levels.
   - **Custom fields** have been visually re-organized to be easier to read in-editor. Labels and background are now aligned, and various minor display bugs were fixed.
   - **Resizable entities**: Entities can now be marked as resizable horizontally and/or vertically. This new feature opens the possibility of creating "Region" entities (ie. a custom rectangle or ellipses), with fully customizable properties.
