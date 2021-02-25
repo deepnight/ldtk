@@ -58,7 +58,7 @@ class Home extends Page {
 		});
 
 		jPage.find("button.update").click((_)->{
-			showLatestUpdate();
+			showUpdate();
 		});
 
 		// Notify app update
@@ -67,7 +67,7 @@ class Home extends Page {
 			settings.v.lastKnownVersion = Const.getAppVersion();
 			App.ME.settings.save();
 
-			showLatestUpdate(true);
+			showUpdate(true);
 		}
 
 		jPage.find("button.settings").click( function(ev) {
@@ -77,20 +77,47 @@ class Home extends Page {
 		updateRecents();
 	}
 
-	function showLatestUpdate(isNewUpdate=false) {
+	function showUpdate(?version:dn.Version, isNewUpdate=false) {
 		var w = new ui.Modal();
 		w.canBeClosedManually = !isNewUpdate;
-		var latest = Const.getChangeLog().latest;
-		var ver = new Version( Const.getAppVersion() );
-		w.loadTemplate("appUpdated", {
-			ver: latest.version.numbers,
-			app: Const.APP_NAME,
-			title: latest.title==null ? "" : '&ldquo;&nbsp;'+latest.title+'&nbsp;&rdquo;',
-			md: latest.allNoteLines.join("\n"),
-		});
 
-		w.jContent.find(".changelog").click( (_)->N.notImplemented() );
-		w.jContent.find(".close").click( (_)->w.close() );
+		var changeLog = Const.getChangeLog().latest;
+
+		// Pick specific version
+		if( version!=null ) {
+			for( c in Const.getChangeLog().entries )
+				if( c.version.isEqual(version,true) ) {
+					changeLog = c;
+					break;
+				}
+		}
+
+		w.loadTemplate("changeLog", {
+			ver: changeLog.version.numbers,
+			app: Const.APP_NAME,
+			title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
+			md: changeLog.allNoteLines.join("\n"),
+		}, false);
+		if( isNewUpdate )
+			w.addClass("newUpdate");
+
+		w.jContent.find(".close")
+			.text(isNewUpdate ? L.t._("Continue") : L.t._("Close"))
+			.click( (_)->w.close() );
+
+		w.jContent.find(".others").click( ev->{
+			var ctx = new ui.modal.ContextMenu(ev);
+				for( c in Const.getChangeLog().entries )
+				ctx.add({
+					label: c.version.numbers + ( c.title!=null ? " - "+c.title : "" ),
+					cb: ()->{
+						w.close();
+						showUpdate(c.version);
+					}
+				});
+		} );
+		if( isNewUpdate )
+			w.jContent.find(".others").hide();
 	}
 
 
@@ -478,14 +505,16 @@ class Home extends Page {
 			case K.ENTER:
 				jPage.find("ul.recentFiles li:not(.title):first").click();
 
+			case K.ESCAPE:
+				if( ui.Modal.hasAnyOpen() )
+					ui.Modal.closeLatest();
+				else if( jPage.find(".changelogsWrapper").hasClass("fullscreen") )
+					jPage.find("button.fullscreen").click();
+
 			// Open settings
 			case K.F12 if( !App.ME.hasAnyToggleKeyDown() ):
 				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) )
 					new ui.modal.dialog.EditAppSettings();
-
-			case K.ESCAPE:
-				if( jPage.find(".changelogsWrapper").hasClass("fullscreen") )
-					jPage.find("button.fullscreen").click();
 		}
 	}
 

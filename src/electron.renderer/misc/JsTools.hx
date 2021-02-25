@@ -212,12 +212,17 @@ class JsTools {
 
 
 	static var _fileCache : Map<String,String> = new Map();
-	public static function clearFileCache() {
-		_fileCache = new Map();
+	public static function clearFileCache(?name:String) {
+		if( name==null )
+			_fileCache = new Map();
+		else if( _fileCache.exists(name) )
+			_fileCache.remove(name);
 	}
 
-	public static function getHtmlTemplate(name:String, ?vars:Dynamic) : Null<String> {
-		if( !_fileCache.exists(name) ) {
+	public static function getHtmlTemplate(name:String, ?vars:Dynamic, useCache=true) : Null<String> {
+		if( !useCache || !_fileCache.exists(name) ) {
+			if( _fileCache.exists(name) )
+				_fileCache.remove(name);
 			App.LOG.fileOp("Loading HTML template "+name);
 			var path = dn.FilePath.fromFile(App.APP_ASSETS_DIR + "tpl/" + name);
 			path.extension = "html";

@@ -201,7 +201,9 @@ class Modal extends dn.Process {
 		jContent.find(":focus").blur();
 
 		// Close
-		jModalAndMask.find("*").off();
+		jModalAndMask.find("*")
+			.off()
+			.filter("[id]").removeAttr("id"); // clear IDs to avoid issues when re-opening same window
 		Tip.clear();
 		onClose();
 		doCloseAnimation();
@@ -220,12 +222,12 @@ class Modal extends dn.Process {
 	@:allow(App)
 	function onKeyPress(keyCode:Int) {}
 
-	public function loadTemplate(tplName:String, ?className:String, ?vars:Dynamic) {
+	public function loadTemplate(tplName:String, ?className:String, ?vars:Dynamic, useCache=true) {
 		if( className==null )
 			className = tplName;
 
 		jModalAndMask.addClass(className);
-		var html = JsTools.getHtmlTemplate(tplName, vars);
+		var html = JsTools.getHtmlTemplate(tplName, vars, useCache);
 		jContent.empty().off().append( html );
 		JsTools.parseComponents(jContent);
 		ui.Tip.clear();
