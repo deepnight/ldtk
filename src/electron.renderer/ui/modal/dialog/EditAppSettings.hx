@@ -52,6 +52,16 @@ class EditAppSettings extends ui.modal.Dialog {
 			onSettingChanged();
 		}
 
+		// Mouse wheel speed
+		var i = Input.linkToHtmlInput(settings.v.mouseWheelSpeed, jForm.find("#mouseWheelSpeed"));
+		i.setBounds(0.25, 3);
+		i.setValueStep(0.25);
+		i.enableSlider();
+		i.enablePercentageMode();
+		i.onChange = ()->{
+			onSettingChanged();
+		}
+
 		// App scaling
 		var jScale = jForm.find("#appScale");
 		jScale.empty();

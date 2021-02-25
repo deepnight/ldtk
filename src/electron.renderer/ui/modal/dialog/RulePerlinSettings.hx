@@ -30,7 +30,7 @@ class RulePerlinSettings extends ui.modal.Dialog {
 		});
 
 		var i = Input.linkToHtmlInput(r.perlinScale, jContent.find("#perlinScale"));
-		i.displayAsPct = true;
+		i.enablePercentageMode();
 		i.setBounds(0.01, 0.99);
 		i.onChange = onChange.bind(r);
 

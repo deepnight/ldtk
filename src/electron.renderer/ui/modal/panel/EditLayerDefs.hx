@@ -237,7 +237,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( cur.displayOpacity, jForm.find("input[name='displayOpacity']") );
-		i.displayAsPct = true;
+		i.enablePercentageMode();
 		i.setBounds(0.1, 1);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 

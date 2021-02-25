@@ -437,7 +437,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				var old = r.chance;
 				var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
 				i.linkEvent( LayerRuleChanged(r) );
-				i.displayAsPct = true;
+				i.enablePercentageMode();
 				i.setBounds(0,1);
 				i.onValueChange = (v)->{
 					if( v/100<old )
