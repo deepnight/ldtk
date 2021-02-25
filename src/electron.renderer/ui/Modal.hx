@@ -52,20 +52,20 @@ class Modal extends dn.Process {
 			jModalAndMask.addClass("centered");
 		else {
 			jModalAndMask.removeClass("centered");
-			var hei = App.ME.jDoc.innerHeight();
+			var docHei = App.ME.jDoc.innerHeight();
 
 			if( m!=null ) {
 				// Use mouse coords
 				var x = m.pageX;
 				var y = m.pageY;
-				if( y>=hei*0.7 ) {
+				if( y>=docHei*0.7 ) {
 					// Above coords
 					jWrapper.offset({
 						left: x,
 						top: 0,
 					});
 					jWrapper.css("top", "auto");
-					jWrapper.css("bottom", (hei-y+10)+"px");
+					jWrapper.css("bottom", (docHei-y+10)+"px");
 				}
 				else {
 					// Beneath
@@ -80,14 +80,14 @@ class Modal extends dn.Process {
 				var targetOff = target.offset();
 				var toLeft = targetOff.left>=js.Browser.window.innerWidth*0.6;
 				var x = toLeft ? targetOff.left+target.outerWidth()-jContent.width() : targetOff.left;
-				if( targetOff.top>=hei*0.7 ) {
+				if( targetOff.top>=docHei*0.7 ) {
 					// Place above target
 					jWrapper.offset({
 						left: x,
 						top: 0,
 					});
 					jWrapper.css("top", "auto");
-					jWrapper.css("bottom", (hei-targetOff.top)+"px");
+					jWrapper.css("bottom", (docHei-targetOff.top)+"px");
 				}
 				else {
 					// Place beneath target
