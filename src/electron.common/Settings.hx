@@ -12,6 +12,7 @@ typedef AppSettings = {
 	var editorUiScale : Float;
 	var autoWorldModeSwitch : AutoWorldModeSwitch;
 	var smartCpuThrottling : Bool;
+	var mouseWheelSpeed : Float;
 }
 
 
@@ -46,6 +47,7 @@ class Settings {
 			appUiScale: 1.0,
 			editorUiScale: 1.0,
 			smartCpuThrottling: true,
+			mouseWheelSpeed: 1.0,
 		}
 
 		// Load
