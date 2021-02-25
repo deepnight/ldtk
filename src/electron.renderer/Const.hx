@@ -47,6 +47,7 @@ class Const {
 	public static var DISCORD_URL = LDTK_DOMAIN+"/go/discord";
 
 	// URLs: misc
+	public static var DOWNLOAD_URL = HOME_URL;
 	public static var ITCH_IO_BUY_URL = "https://deepnight.itch.io/ldtk/purchase";
 	public static var ISSUES_URL = "https://github.com/deepnight/ldtk/issues";
 	public static var GITHUB_SPONSOR_URL = "https://github.com/sponsors/deepnight";
