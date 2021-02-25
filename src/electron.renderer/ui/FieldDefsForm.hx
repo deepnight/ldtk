@@ -402,14 +402,31 @@ class FieldDefsForm {
 		switch curField.type {
 			case F_Path:
 
-			case F_Int, F_Float, F_String, F_Text, F_Point:
+			case F_Text:
+				var defInput = jForm.find("textarea#fDefMultiLines");
+				if( curField.defaultOverride != null )
+					defInput.val( Std.string( curField.getUntypedDefault() ) );
+				else
+					defInput.val("");
+
+				defInput.attr("placeholder", curField.canBeNull ? "(null)" : "(empty string)");
+
+				defInput.change( function(ev) {
+					curField.setDefault( defInput.val() );
+					N.debug( defInput.val() );
+					onFieldChange();
+					defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
+				});
+
+
+			case F_Int, F_Float, F_String, F_Point:
 				var defInput = jForm.find("input[name=fDef]");
 				if( curField.defaultOverride != null )
 					defInput.val( Std.string( curField.getUntypedDefault() ) );
 				else
 					defInput.val("");
 
-				if( ( curField.type==F_String || curField.type==F_Text ) && !curField.canBeNull )
+				if( curField.type==F_String && !curField.canBeNull )
 					defInput.attr("placeholder", "(empty string)");
 				else if( curField.canBeNull )
 					defInput.attr("placeholder", "(null)");
