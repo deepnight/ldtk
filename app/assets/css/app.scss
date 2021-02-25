@@ -1892,9 +1892,9 @@ textarea {
 		width: 600px;
 
 		dl.form {
-			// grid-template-columns: 220px auto;
 			dt {
 				max-width: none;
+				white-space: nowrap;
 			}
 
 			.logPath {
