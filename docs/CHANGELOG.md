@@ -1,4 +1,4 @@
-# 0.8.0
+# 0.8.0 - Level custom fields, resizable entities and more!
 
 **Note for developers:** *IntGrid layers* JSON format changed in this update. For now, retro-compatibility is maintained with old importers, but this will be dropped after update 0.9.0, breaking outdated importers. Please read all the details here: https://github.com/deepnight/ldtk/issues/358
 
@@ -276,7 +276,7 @@ You might also need to **manually uninstall any previous installation of LEd**.
  - Fixed a crash when resizing level with an Entity having a null Point value
  - Added button icons in Help window
 
-# 0.3.1-beta
+# 0.3.1-beta - Tiled import
 
  - **Tiled (TMX) export option**: from the project settings (`F1`), check the *Tiled export* option to save Tiled compatible files along with the LEd JSON.
 
@@ -314,7 +314,7 @@ You might also need to **manually uninstall any previous installation of LEd**.
  - Added a JSON changelog file for devs working on importers
  - Add JSON changelog to app start page
 
-# 0.2.0-beta
+# 0.2.0-beta - Beta version
 
  - **Beta version!**: LEd is now stable enough to be used in production and retro-compatibility will be guaranteed from now on.
  - **Radius**: Integer and Float entity fields can now be displayed as a radius around the entity (eg. a "lightRadius" Float value can now be displayed accordingly right in the editor display). See `Samples` for some examples.
@@ -364,7 +364,7 @@ You might also need to **manually uninstall any previous installation of LEd**.
  - Fixed bugs
  - Added some internal app logging for debugging purpose (no sensitive data, don't worry)
 
-# 0.1.5-alpha
+# 0.1.5-alpha - Auto layers
 
  - **Auto-layers**: IntGrid layers can now render themselves automatically by drawing tiles based on their content. You can create "patterns of IntGrid values" (called **Rules**) to decide when a specific tile, or group of random tiles, should appear. It can for example be used to:
    - add random grass or rocks on top of platforms,
@@ -422,7 +422,7 @@ You might also need to **manually uninstall any previous installation of LEd**.
  - Bug fixes
  - Dev scripts cleanup
 
-# 0.0.1-alpha
+# 0.0.1-alpha - First public alpha
 
  - **Alpha release**: this version is only for early testing & feedback purpose.
  - **Auto updater**: Added support for built-in Electron auto-updater
