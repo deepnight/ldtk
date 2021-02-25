@@ -892,6 +892,8 @@ class Editor extends Page {
 
 	function onMouseWheel(e:hxd.Event) {
 		var m = getMouse();
+		requestFps(0.5);
+
 		var speed = camera.pixelRatio * 2100 / camera.width;
 		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta * 0.06 * speed );
 		camera.cancelAllAutoMovements();
