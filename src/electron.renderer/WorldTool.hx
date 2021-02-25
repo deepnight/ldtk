@@ -370,11 +370,13 @@ class WorldTool extends dn.Process {
 				insertCursor.beginFill(c, 0.3);
 				insertCursor.drawRect(bounds.x, bounds.y, bounds.wid, bounds.hei);
 
+				var radius = M.fmin(bounds.wid,bounds.hei) * 0.2;
 				insertCursor.lineStyle(10*editor.camera.pixelRatio, c, 1);
-				insertCursor.moveTo(bounds.x+bounds.wid*0.5, bounds.y+bounds.hei*0.3);
-				insertCursor.lineTo(bounds.x+bounds.wid*0.5, bounds.y+bounds.hei*0.7);
-				insertCursor.moveTo(bounds.x+bounds.wid*0.3, bounds.y+bounds.hei*0.5);
-				insertCursor.lineTo(bounds.x+bounds.wid*0.7, bounds.y+bounds.hei*0.5);
+				insertCursor.moveTo(bounds.x+bounds.wid*0.5, bounds.y+bounds.hei*0.5-radius); // vertical
+				insertCursor.lineTo(bounds.x+bounds.wid*0.5, bounds.y+bounds.hei*0.5+radius);
+
+				insertCursor.moveTo(bounds.x+bounds.wid*0.5-radius, bounds.y+bounds.hei*0.5); // horizontal
+				insertCursor.lineTo(bounds.x+bounds.wid*0.5+radius, bounds.y+bounds.hei*0.5);
 				editor.cursor.set(Add);
 				ev.cancel = true;
 			}
