@@ -4852,9 +4852,9 @@ body.sorting ul.collapsedSortTarget {
 
 		.buttons {
 			flex-wrap: nowrap;
-			// button.delete {
-			// 	flex: 1 1 auto;
-			// }
+			button.delete {
+				flex: 1 1 auto;
+			}
 		}
 
 		button {
