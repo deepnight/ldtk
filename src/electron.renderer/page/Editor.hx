@@ -900,10 +900,11 @@ class Editor extends Page {
 
 	function onMouseWheel(e:hxd.Event) {
 		var m = getMouse();
-		requestFps(0.5);
+		requestFps(0.85);
 
-		var speed = camera.pixelRatio * 2100 / camera.width;
-		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta * 0.06 * speed );
+		// var speed = camera.pixelRatio * 2100 / camera.width;
+		var speed = App.ME.getElectronZoomFactor();
+		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta * 0.13 * speed );
 		camera.cancelAllAutoMovements();
 
 		// Auto world mode on zoom out
