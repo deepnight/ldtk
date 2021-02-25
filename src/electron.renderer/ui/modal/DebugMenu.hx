@@ -4,8 +4,11 @@ class DebugMenu extends ui.modal.ContextMenu {
 	public function new() {
 		super();
 
+		addTitle(L.t._("Debug menu"));
+
 		if( editor!=null ) {
 
+			#if debug
 			add({
 				label: L.untranslated("Toggle debug print"),
 				cb: ()->{
@@ -17,6 +20,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 						App.ME.cd.setS("debugTools", Const.INFINITE);
 				}
 			});
+			#end
 
 			add({
 				label: L.untranslated("Rebuild tilesets pixel cache"),
@@ -27,7 +31,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 			});
 
 			add({
-				label: L.untranslated("Rebuild auto-layers"),
+				label: L.untranslated("Rebuild all auto-layers"),
 				cb: ()->{
 					for(l in project.levels)
 					for(li in l.layerInstances)
@@ -46,6 +50,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 			cb: ()->JsTools.exploreToFile(Settings.getDir(), false)
 		});
 
+		#if debug
 		add({
 			label: L.untranslated("Emulate new update"),
 			cb: ()->{
@@ -156,5 +161,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 				a.crash = 5;
 			}
 		});
+		#end // End of "if debug"
 	}
 }

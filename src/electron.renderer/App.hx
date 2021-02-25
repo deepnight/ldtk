@@ -246,11 +246,8 @@ class App extends dn.Process {
 
 		switch keyCode {
 			// Open debug menu
-			#if debug
 			case K.D if( isCtrlDown() && isShiftDown() && !hasInputFocus() ):
 				new ui.modal.DebugMenu();
-			#end
-
 
 			case _:
 		}
