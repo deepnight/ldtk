@@ -33,6 +33,7 @@
   - Each Entity field type now has an associated color, making field list easier to read.
   - The default size of a new level can now be customized from the World settings (press `W`, then open settings).
   - **Mouse wheel** can now be used to switch to world mode (and vice versa) automatically. A new related option has been to app settings (`F12`).
+  - Fixed zoom speed using mouse wheel.
   - Fixed Point fields in entities where clicking the same coordinate twice added multiple identical points.
   - Fixed Rule "pink" preview being stuck when moving mouse over a level
   - Fixed incorrect default tile when creating a new Enum value.
