@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 21,
+	"nextUid": 24,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -111,6 +111,52 @@
 			"pivotX": 0,
 			"pivotY": 0,
 			"fieldDefs": [
+				{
+					"identifier": "Multilines",
+					"__type": "String",
+					"uid": 21,
+					"type": "F_Text",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": {
+						"id": "V_String",
+						"params": ["pouet"]
+					},
+					"textLangageMode": null
+				},
+				{
+					"identifier": "File_path",
+					"__type": "FilePath",
+					"uid": 23,
+					"type": "F_Path",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": {
+						"id": "V_String",
+						"params": ["ld47/tileset.png"]
+					},
+					"textLangageMode": null
+				},
 				{
 					"identifier": "Point",
 					"__type": "Array<Point>",
@@ -276,22 +322,26 @@
 							"height": 16,
 							"defUid": 17,
 							"px": [96,176],
-							"fieldInstances": [{
-								"__identifier": "Point",
-								"__value": [ { "cx": 11, "cy": 14 }, { "cx": 4, "cy": 14 }, { "cx": 1, "cy": 12 } ],
-								"__type": "Array<Point>",
-								"defUid": 20,
-								"realEditorValues": [ {
-									"id": "V_String",
-									"params": ["11,14"]
-								}, {
-									"id": "V_String",
-									"params": ["4,14"]
-								}, {
-									"id": "V_String",
-									"params": ["1,12"]
-								} ]
-							}]
+							"fieldInstances": [
+								{
+									"__identifier": "Point",
+									"__value": [ { "cx": 11, "cy": 14 }, { "cx": 4, "cy": 14 }, { "cx": 1, "cy": 12 } ],
+									"__type": "Array<Point>",
+									"defUid": 20,
+									"realEditorValues": [ {
+										"id": "V_String",
+										"params": ["11,14"]
+									}, {
+										"id": "V_String",
+										"params": ["4,14"]
+									}, {
+										"id": "V_String",
+										"params": ["1,12"]
+									} ]
+								},
+								{ "__identifier": "Multilines", "__value": "pouet", "__type": "String", "defUid": 21, "realEditorValues": [] },
+								{ "__identifier": "File_path", "__value": null, "__type": "FilePath", "defUid": 23, "realEditorValues": [] }
+							]
 						}
 					]
 				}
