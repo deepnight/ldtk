@@ -403,20 +403,33 @@ class FieldDefsForm {
 			case F_Path:
 
 			case F_Text:
-				var defInput = jForm.find("textarea#fDefMultiLines");
-				if( curField.defaultOverride != null )
-					defInput.val( Std.string( curField.getUntypedDefault() ) );
+				var defInput = jForm.find("div#fDefMultiLines");
+				if( curField.defaultOverride != null ) {
+					var str = curField.getStringDefault();
+					if( str.length>256 )
+						str = str.substr(0,256)+"[...]";
+					defInput.text( str );
+				}
 				else
-					defInput.val("");
+					defInput.text( curField.canBeNull ? "(null)" : "(empty string)" );
 
-				defInput.attr("placeholder", curField.canBeNull ? "(null)" : "(empty string)");
-
-				defInput.change( function(ev) {
-					curField.setDefault( defInput.val() );
-					N.debug( defInput.val() );
-					onFieldChange();
-					defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
+				defInput.click( ev->{
+					new ui.modal.dialog.TextEditor(
+						curField.getStringDefault(),
+						curField.identifier,
+						curField.textLangageMode,
+						(v)->{
+							curField.setDefault(v);
+							onFieldChange();
+						}
+					);
 				});
+				// defInput.change( function(ev) {
+				// 	curField.setDefault( defInput.val() );
+				// 	N.debug( defInput.val() );
+				// 	onFieldChange();
+				// 	defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
+				// });
 
 
 			case F_Int, F_Float, F_String, F_Point:
