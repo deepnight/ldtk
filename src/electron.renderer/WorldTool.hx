@@ -270,6 +270,9 @@ class WorldTool extends dn.Process {
 		var wid = project.defaultLevelWidth;
 		var hei = project.defaultLevelHeight;
 
+		if( project.getLevelAt(m.worldX, m.worldY)!=null )
+			return null;
+
 		var b = {
 			x : m.worldX-wid*0.5,
 			y : m.worldY-hei*0.5,
@@ -378,8 +381,10 @@ class WorldTool extends dn.Process {
 				insertCursor.moveTo(bounds.x+bounds.wid*0.5-radius, bounds.y+bounds.hei*0.5); // horizontal
 				insertCursor.lineTo(bounds.x+bounds.wid*0.5+radius, bounds.y+bounds.hei*0.5);
 				editor.cursor.set(Add);
-				ev.cancel = true;
 			}
+			else
+				editor.cursor.set(Forbidden);
+			ev.cancel = true;
 		}
 		else
 			insertCursor.visible = false;
