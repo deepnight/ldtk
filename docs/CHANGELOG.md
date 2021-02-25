@@ -23,6 +23,7 @@
   - Entities can now be marked as "Hollow", which will allow editor mouse clicks to pass through, except on edges.
   - You can now show/hide multiple layers at once by holding left mouse button over visibility icons (Photoshop style).
   - Use `Shift` + left click on a visibility icon to Show or hide all other layers except the current one.
+  - Added a button to access previous changelogs in "Update" window, on Home screen.
   - An Entity count can now limited per world or per layer. This is especially useful for elements like Player start position, which should be unique in the world.
   - A suggestion to enable Backups will now appear when opening a large project file.
   - The visibility status of a layer is now saved with the project.
