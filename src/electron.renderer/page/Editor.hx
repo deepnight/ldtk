@@ -150,6 +150,14 @@ class Editor extends Page {
 			setWorldMode(!worldMode);
 		});
 
+		jMainPanel.find("button.editLevelInstance").click( function(_) {
+			if( isPaused() ) return;
+			if( ui.Modal.isOpen(ui.modal.panel.LevelInstancePanel) )
+				ui.Modal.closeAll();
+			else
+				new ui.modal.panel.LevelInstancePanel();
+		});
+
 		jMainPanel.find("button.editLayers").click( function(_) {
 			if( isPaused() ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.EditLayerDefs) )
@@ -1018,7 +1026,7 @@ class Editor extends Page {
 		if( worldMode ) {
 			N.quick(L.t._("World view"), new J('<span class="icon world"/>'));
 			ui.Modal.closeAll();
-			new ui.modal.panel.LevelPanel();
+			new ui.modal.panel.WorldPanel();
 		}
 
 		camera.onWorldModeChange(worldMode, usedMouseWheel);

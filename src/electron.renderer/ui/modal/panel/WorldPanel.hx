@@ -1,17 +1,12 @@
 package ui.modal.panel;
 
 class WorldPanel extends ui.modal.Panel {
-	var fieldForm : FieldDefsForm;
-
 	public function new() {
 		super();
 
+		linkToButton("button.world");
 		jMask.hide();
 		loadTemplate("worldPanel");
-
-		fieldForm = new FieldDefsForm(FP_Level);
-		jContent.find("#levelFields").replaceWith(fieldForm.jWrapper);
-		fieldForm.useFields( project.defs.levelFields );
 		updateWorldForm();
 	}
 
@@ -24,7 +19,6 @@ class WorldPanel extends ui.modal.Panel {
 				updateWorldForm();
 
 			case ProjectSelected:
-				fieldForm.useFields( project.defs.levelFields );
 				updateWorldForm();
 
 			case _:
@@ -33,7 +27,7 @@ class WorldPanel extends ui.modal.Panel {
 
 
 	function updateWorldForm() {
-		var jForm = jContent.find(".worldSettings ul.form");
+		var jForm = jContent.find(".worldSettings dl.form");
 		jForm.find("*").off();
 
 		for(k in ldtk.Json.WorldLayout.getConstructors())
@@ -92,16 +86,7 @@ class WorldPanel extends ui.modal.Panel {
 
 	override function onClose() {
 		super.onClose();
-		var anyNonWorldPanel = false;
-		for(m in Modal.ALL)
-			if( !m.destroyed && m!=this && !Std.isOfType(m,LevelPanel) ) {
-				anyNonWorldPanel = true;
-				break;
-			}
-		if( !anyNonWorldPanel )
-			new LevelPanel();
-		else if( editor.worldMode )
-			editor.setWorldMode(false);
+		editor.setWorldMode(false);
 	}
 
 	override function update() {

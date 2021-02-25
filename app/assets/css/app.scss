@@ -167,8 +167,11 @@ button {
 	}
 
 	&.active {
-		background-color: $orange;
-		border-color: #ffff00;
+		background-color: $orange !important;
+		border-color: #ffff00 !important;
+		outline: 1px solid #ff8;
+		outline-offset: -1px;
+		box-shadow: none;
 	}
 
 	&[href] {
@@ -206,6 +209,13 @@ button {
 		background-color: #2a73ab;
 		&:hover {
 			background-color: #348fd5;
+		}
+	}
+
+	&.purple {
+		background-color: #9976f1;
+		&:hover {
+			background-color: #b19aff;
 		}
 	}
 
@@ -935,7 +945,7 @@ ul.log {
 .icon.layer		{ background-image: url("../icons/layer.png"); }
 .icon.intGrid	{ background-image: url("../icons/intGrid.png"); }
 .icon.autoLayer	{ background-image: url("../icons/autoLayer.png") }
-.icon.level		{ background-image: url("../icons/level.png"); }
+.icon.level		{ background-image: url("../icons/level.svg"); }
 .icon.project	{ background-image: url("../icons/projectSettings.png"); }
 .icon.enum		{ background-image: url("../icons/enum.png"); }
 .icon.close		{ background-image: url("../icons/close.png"); }
@@ -1101,15 +1111,15 @@ ul.form {
 
 	>dt {
 		grid-column: 1/2;
-		min-width: 70px;
+		min-width: 90px;
 		max-width: 110px;
 		padding-right: 8px;
 		padding-top: 8px;
 
 		overflow-x: hidden;
 		text-overflow: ellipsis;
-		font-size: 9pt;
-		white-space: nowrap;
+		font-size: 10pt;
+		// white-space: nowrap;
 
 		&.isDefault {
 			color: $bgLighter;
@@ -2692,8 +2702,8 @@ canvas#webgl {
 					padding-bottom: 8px;
 
 					.icon {
-						width: 1.7em;
-						height: 1.7em;
+						width: 1.5em;
+						height: 1.5em;
 					}
 				}
 			}
@@ -2965,8 +2975,12 @@ canvas#webgl {
 					grid-template-rows: repeat(2, 32px);
 					button {
 						z-index: 1; // fix box-shadow depth
+						margin: 0px;
 					}
 					button.showHelp {
+						display: none;
+					}
+					button.world {
 						grid-row: 1/2;
 						grid-column: 3/4;
 						z-index: 0;
@@ -2975,9 +2989,6 @@ canvas#webgl {
 						grid-row: 1/2;
 						grid-column: 4/5;
 						z-index: 0;
-					}
-					button {
-						margin: 0px;
 					}
 					.icon {
 						width: 1.3em;
@@ -4667,15 +4678,18 @@ body.sorting ul.collapsedSortTarget {
 .window.panel.worldPanel {
 	width: auto;
 
-	// .wrapper {
-		// padding: 8px;
-	// }
+	.wrapper {
+		padding: 8px;
+		padding-bottom: 0;
+		box-shadow: none;
+		background-color: $bgDark;
+	}
 
 	.content {
 		display: grid;
 		grid-auto-rows: min-content auto;
 		gap: 8px;
-		width: 600px;
+		width: 330px;
 		height: 100%;
 
 		.levelFields {
@@ -4700,22 +4714,31 @@ body.sorting ul.collapsedSortTarget {
 }
 
 
-.window.panel.levelPanel {
+.window.panel.editLevelFieldDefs {
 	width: auto;
-
-	.wrapper {
-		padding: 8px;
-		padding-bottom: 0;
-		border-right: 2px solid $orange;
-		box-shadow: none;
-		background-color: $bgDark;
-	}
 
 	.content {
 		display: grid;
-		grid-template-rows: repeat(3,min-content) auto;
+		grid-template-rows: min-content auto;
 		gap: 8px;
-		width: 320px;
+		width: 750px;
+		height: 100%;
+
+		h2 {
+			margin-bottom: 8px;
+		}
+	}
+}
+
+
+.window.panel.levelInstancePanel {
+	width: auto;
+
+	.content {
+		display: grid;
+		grid-template-rows: repeat(4,min-content) auto;
+		gap: 8px;
+		width: 400px;
 		height: 100%;
 
 		a.editFields {
@@ -4813,10 +4836,9 @@ body.sorting ul.collapsedSortTarget {
 
 		.buttons {
 			flex-wrap: nowrap;
-			button.dark {
-				flex: 0 0 32px;
-				background-color: $bgMed;
-			}
+			// button.delete {
+			// 	flex: 1 1 auto;
+			// }
 		}
 
 		button {

@@ -101,6 +101,7 @@ class Panel extends ui.Modal {
 			jLinkedButton.removeClass("active");
 
 		jPanelMask.remove();
+		updateCloseButton();
 	}
 
 	override function postUpdate() {
