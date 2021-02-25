@@ -127,7 +127,7 @@ class App extends dn.Process {
 	function initAutoUpdater() {
 		dn.electron.ElectronUpdater.initRenderer();
 
-		if( false && App.isWindows() ) { // HACK
+		if( App.isWindows() ) {
 			// Init
 			dn.electron.ElectronUpdater.onUpdateCheckStart = function() {
 				miniNotif("Looking for update...");
@@ -197,7 +197,8 @@ class App extends dn.Process {
 						bt.hide();
 						function _download() {
 							electron.Shell.openExternal(Const.DOWNLOAD_URL);
-							exit();
+							clearCurPage();
+							delayer.addS( exit.bind(), 0.5 );
 						}
 
 						if( Editor.ME!=null && Editor.ME.needSaving )
