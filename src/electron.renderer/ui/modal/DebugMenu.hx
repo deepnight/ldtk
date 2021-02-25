@@ -6,21 +6,21 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 		addTitle(L.t._("Debug menu"));
 
-		if( editor!=null ) {
-
-			#if debug
-			add({
-				label: L.untranslated("Toggle debug print"),
-				cb: ()->{
-					if( App.ME.cd.has("debugTools") ) {
-						App.ME.clearDebug();
-						App.ME.cd.unset("debugTools");
-					}
-					else
-						App.ME.cd.setS("debugTools", Const.INFINITE);
+		#if debug
+		add({
+			label: L.untranslated("Toggle debug print"),
+			cb: ()->{
+				if( App.ME.cd.has("debugTools") ) {
+					App.ME.clearDebug();
+					App.ME.cd.unset("debugTools");
 				}
-			});
-			#end
+				else
+					App.ME.cd.setS("debugTools", Const.INFINITE);
+			}
+		});
+		#end
+
+		if( editor!=null ) {
 
 			add({
 				label: L.untranslated("Rebuild tilesets pixel cache"),

@@ -650,12 +650,12 @@ class App extends dn.Process {
 		if( cd.has("debugTools") ) {
 			clearDebug();
 			debug("-- Misc ----------------------------------------");
+			debugPre('FPS limit=${hxd.System.fpsLimit<=0 ? "none":Std.string(hxd.System.fpsLimit)}');
+			debugPre("electronZoom="+M.pretty(getElectronZoomFactor(),2));
 			if( Editor.ME!=null ) {
-				debugPre('FPS limit=${hxd.System.fpsLimit<=0 ? "none":Std.string(hxd.System.fpsLimit)}');
-				debugPre("electronZoom="+getElectronZoomFactor());
 				debugPre("mouse="+Editor.ME.getMouse());
 				var cam = Editor.ME.camera;
-				debugPre("zoom="+M.pretty(cam.adjustedZoom,1)+" cam="+cam.width+"x"+cam.height+" pixelratio="+cam.pixelRatio);
+				debugPre("zoom="+M.pretty(cam.adjustedZoom,1)+" cam="+M.round(cam.width)+"x"+M.round(cam.height)+" pixelratio="+cam.pixelRatio);
 				debugPre("  Selection="+Editor.ME.selectionTool.debugContent());
 			}
 
