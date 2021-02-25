@@ -2275,9 +2275,18 @@ textarea {
 .window.panel.helpPanel {
 	.wrapper {
 		.content {
-			width: 500px;
-			.appLogo {
-				margin-bottom: 16px;
+			width: 900px;
+			display: grid;
+			grid-template-rows: min-content auto;
+			grid-template-columns: 50% 50%;
+			gap: 16px;
+
+			.buttons {
+				grid-column: 1/3;
+			}
+
+			h3 {
+				margin-top: 0;
 			}
 		}
 	}
@@ -2315,15 +2324,15 @@ textarea {
 
 		&.major {
 			dt {
-				padding: 8px;
+				padding: 4px;
 				background-color: $bgDark;
 				border-radius: 4px;
 			}
 			dd {
-				padding: 8px;
+				padding: 4px;
 				background-color: $bgLight;
 				border-radius: 4px;
-				font-size: 1.5em;
+				font-size: 12pt;
 			}
 		}
 		&.minor {
