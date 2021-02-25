@@ -210,12 +210,6 @@ class LayerDef {
 	}
 
 
-
-	public function isUsingTileset(td:TilesetDef) {
-		return tilesetDefUid==td.uid || autoTilesetDefUid==td.uid;
-	}
-
-
 	inline function set_tilePivotX(v) return tilePivotX = dn.M.fclamp(v, 0, 1);
 	inline function set_tilePivotY(v) return tilePivotY = dn.M.fclamp(v, 0, 1);
 

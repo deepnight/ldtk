@@ -173,6 +173,18 @@ class EntityInstance {
 			return null;
 	}
 
+
+	public function isUsingTileset(td:data.def.TilesetDef) {
+		if( def.tilesetId==td.uid )
+			return true;
+
+		// TODO check future tile fields
+
+		return false;
+	}
+
+
+
 	public function tidy(p:data.Project, li:LayerInstance) {
 		_project = p;
 

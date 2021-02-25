@@ -72,6 +72,20 @@ class LayerInstance {
 			: null;
 	}
 
+
+	public function isUsingTileset(td:data.def.TilesetDef) {
+		if( getTilesetUid()==td.uid )
+			return true;
+
+		if( def.type==Entities )
+			for( li in entityInstances )
+				if( li.isUsingTileset(td) )
+					return true;
+
+		return false;
+	}
+
+
 	public function getTiledsetDef() : Null<data.def.TilesetDef> {
 		var tdUid = getTilesetUid();
 		return tdUid==null ? null : _project.defs.getTilesetDef(tdUid);
@@ -430,6 +444,7 @@ class LayerInstance {
 								var pt = fi.getPointGrid(i);
 								if( pt==null )
 									continue;
+
 								pt.cx+=cDeltaX;
 								pt.cy+=cDeltaY;
 								fi.parseValue( i, pt.cx + Const.POINT_SEPARATOR + pt.cy );
