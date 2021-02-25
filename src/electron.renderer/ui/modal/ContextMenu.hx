@@ -93,9 +93,22 @@ class ContextMenu extends ui.Modal {
 	}
 
 
+	function checkPosition() {
+		var pad = 16;
+		var docHei = App.ME.jDoc.innerHeight();
+
+		if( jWrapper.offset().top < pad )
+			jWrapper.css("top", pad+"px");
+
+		if( jWrapper.offset().top + jWrapper.outerHeight() >= docHei-pad )
+			jWrapper.css("bottom", pad+"px");
+	}
+
+
 	public function addTitle(str:LocaleString) {
 		var jTitle = new J('<div class="title">$str</div>');
 		jTitle.appendTo(jContent);
+		checkPosition();
 	}
 
 	public function add(a:ContextAction) {
@@ -112,6 +125,8 @@ class ContextMenu extends ui.Modal {
 			close();
 			a.cb();
 		 });
+
+		 checkPosition();
 		 return jButton;
 	}
 }
