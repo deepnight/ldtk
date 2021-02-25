@@ -502,7 +502,7 @@ class Home extends Page {
 				if( App.ME.isCtrlDown() )
 					App.ME.exit();
 
-			case K.ENTER:
+			case K.ENTER if( !ui.Modal.hasAnyOpen() ):
 				jPage.find("ul.recentFiles li:not(.title):first").click();
 
 			case K.ESCAPE:
