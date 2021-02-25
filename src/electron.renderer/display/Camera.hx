@@ -210,7 +210,8 @@ class Camera extends dn.Process {
 	}
 
 	inline function snapZoomValue(z:Float) {
-		return z<=pixelRatio ? z : M.round(z*2)/2;
+		return z;
+		// return z<=pixelRatio ? z : M.round(z*2)/2;
 	}
 
 	inline function get_adjustedZoom() {
