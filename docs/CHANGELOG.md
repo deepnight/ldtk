@@ -40,6 +40,7 @@
   - Disabled "New level" context menu when holding `Shift` or `Alt`
   - Fixed layer order for "simplified" level render in World view
   - Entity fields are now slightly faded out when not currently on an Entity layer
+  - Fixed a "pink square" on Entities when reloading a texture modified outside of LDtk
   - Fixed entity instance editor not closing when switching level
   - Fixed a bug when adding *new Entity fields*, where some existing entity *instances* were not properly updated in the JSON file.
   - Fixed sorting of arrays in entity fields
