@@ -270,41 +270,47 @@ class WorldTool extends dn.Process {
 		var wid = project.defaultLevelWidth;
 		var hei = project.defaultLevelHeight;
 
-		if( project.getLevelAt(m.worldX, m.worldY)!=null )
-			return null;
-
 		var b = {
 			x : m.worldX-wid*0.5,
 			y : m.worldY-hei*0.5,
 			wid: wid,
 			hei: hei,
+			overlaps: false,
 		}
 
 		// Find a spot in world space
 		switch project.worldLayout {
 			case Free, GridVania:
-				// Deinterlace with existing levels
-				for(l in project.levels)
-					if( boundsOverlaps( l, b.x, b.y, b.wid, b.hei ) ) {
-						// Source: https://stackoverflow.com/questions/1585525/how-to-find-the-intersection-point-between-a-line-and-a-rectangle
-						var slope = ( (b.y+b.hei*0.5)-l.worldCenterY )  /  ( (b.x+b.wid*0.5)-l.worldCenterX );
-						if( slope*l.pxWid*0.5 >= -l.pxHei*0.5  &&  slope*l.pxWid*0.5 <= l.pxHei*0.5 )
-							if( b.x < l.worldCenterX )
-								b.x = l.worldX-b.wid;
-							else
-								b.x = l.worldX+l.pxWid;
-						else {
-							if( b.y < l.worldCenterY )
-								b.y = l.worldY-b.hei;
-							else
-								b.y = l.worldY+l.pxHei;
-						}
-					}
 
-				// Cancel if deinterlace failed
-				for(l in project.levels)
-					if( boundsOverlaps(l, b.x, b.y, b.wid, b.hei) )
-						return null;
+				if( project.getLevelAt(m.worldX, m.worldY)!=null )
+					b.overlaps = true;
+				else {
+					// Deinterlace with existing levels
+					for(l in project.levels)
+						if( boundsOverlaps( l, b.x, b.y, b.wid, b.hei ) ) {
+							// Source: https://stackoverflow.com/questions/1585525/how-to-find-the-intersection-point-between-a-line-and-a-rectangle
+							var slope = ( (b.y+b.hei*0.5)-l.worldCenterY )  /  ( (b.x+b.wid*0.5)-l.worldCenterX );
+							if( slope*l.pxWid*0.5 >= -l.pxHei*0.5  &&  slope*l.pxWid*0.5 <= l.pxHei*0.5 )
+								if( b.x < l.worldCenterX )
+									b.x = l.worldX-b.wid;
+								else
+									b.x = l.worldX+l.pxWid;
+							else {
+								if( b.y < l.worldCenterY )
+									b.y = l.worldY-b.hei;
+								else
+									b.y = l.worldY+l.pxHei;
+							}
+						}
+
+					// Deinterlace failed
+					for(l in project.levels)
+						if( boundsOverlaps(l, b.x, b.y, b.wid, b.hei) ) {
+							b.overlaps = true;
+							break;
+						}
+				}
+
 
 				// Grid snapping
 				if( project.worldLayout==GridVania ) {
@@ -367,7 +373,7 @@ class WorldTool extends dn.Process {
 			var bounds = getLevelInsertBounds(m);
 			insertCursor.visible = bounds!=null;
 			if( bounds!=null ) {
-				var c = 0x8dcbfb;
+				var c = bounds.overlaps ? 0xff4400 : 0x8dcbfb;
 				insertCursor.clear();
 				insertCursor.lineStyle(2*editor.camera.pixelRatio, c, 0.7);
 				insertCursor.beginFill(c, 0.3);
