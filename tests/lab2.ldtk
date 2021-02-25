@@ -130,9 +130,9 @@
 					"acceptFileTypes": null,
 					"defaultOverride": {
 						"id": "V_String",
-						"params": ["pouet"]
+						"params": ["<script>hello world</script>"]
 					},
-					"textLangageMode": null
+					"textLangageMode": "LangXml"
 				},
 				{
 					"identifier": "File_path",
@@ -339,7 +339,13 @@
 										"params": ["1,12"]
 									} ]
 								},
-								{ "__identifier": "Multilines", "__value": "pouet", "__type": "String", "defUid": 21, "realEditorValues": [] },
+								{
+									"__identifier": "Multilines",
+									"__value": "<script>hello world</script>",
+									"__type": "String",
+									"defUid": 21,
+									"realEditorValues": [null]
+								},
 								{ "__identifier": "File_path", "__value": null, "__type": "FilePath", "defUid": 23, "realEditorValues": [] }
 							]
 						}
