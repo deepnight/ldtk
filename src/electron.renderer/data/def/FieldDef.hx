@@ -317,7 +317,10 @@ class FieldDef {
 				var def = Std.parseFloat(rawDef);
 				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Float( fClamp(def) );
 
-			case F_String, F_Text, F_Path:
+			case F_Text:
+				defaultOverride = rawDef=="" ? null : V_String(rawDef);
+
+			case F_String, F_Path:
 				rawDef = StringTools.trim(rawDef);
 				defaultOverride = rawDef=="" ? null : V_String(rawDef);
 

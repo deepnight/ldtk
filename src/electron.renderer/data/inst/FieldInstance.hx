@@ -196,7 +196,6 @@ class FieldInstance {
 				}
 
 			case F_Text:
-				raw = StringTools.trim(raw);
 				if( raw.length==0 )
 					setInternal(arrayIdx, null);
 				else {
