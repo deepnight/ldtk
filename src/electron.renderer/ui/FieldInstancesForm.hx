@@ -133,13 +133,25 @@ class FieldInstancesForm {
 				input.attr("id",domId);
 				input.appendTo(jTarget);
 				input.attr("type","text");
-				input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
-				if( !fi.isUsingDefault(arrayIdx) )
-					input.val( Std.string(fi.getInt(arrayIdx)) );
-				input.change( function(ev) {
-					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange(fi);
-				});
+				var i = new form.input.IntInput(
+					input,
+					()->fi.isUsingDefault(arrayIdx) ? null : fi.getInt(arrayIdx),
+					(v)->{
+						fi.parseValue(arrayIdx, Std.string(v));
+						onFieldChange(fi);
+					}
+				);
+				i.allowNull = true;
+				i.setBounds(fi.def.min, fi.def.max);
+				i.enableSlider();
+				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
+				// input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
+				// if( !fi.isUsingDefault(arrayIdx) )
+				// 	input.val( Std.string(fi.getInt(arrayIdx)) );
+				// input.change( function(ev) {
+				// 	fi.parseValue( arrayIdx, input.val() );
+				// 	onFieldChange(fi);
+				// });
 				hideInputIfDefault(arrayIdx, input, fi);
 
 			case F_Color:
