@@ -144,7 +144,30 @@ class FieldInstancesForm {
 				);
 				i.allowNull = true;
 				i.setBounds(fi.def.min, fi.def.max);
-				i.enableSlider();
+				var speed = fi.def.min!=null && fi.def.max!=null ? (fi.def.max-fi.def.min) / 50 : 2;
+				i.enableSlider(speed);
+				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
+
+				hideInputIfDefault(arrayIdx, jInput, fi);
+
+			case F_Float:
+				var jInput = new J("<input/>");
+				jInput.attr("id",domId);
+				jInput.appendTo(jTarget);
+				jInput.attr("type","text");
+
+				var i = new form.input.FloatInput(
+					jInput,
+					()->fi.isUsingDefault(arrayIdx) ? null : fi.getFloat(arrayIdx),
+					(v)->{
+						fi.parseValue(arrayIdx, Std.string(v));
+						onFieldChange(fi);
+					}
+				);
+				i.allowNull = true;
+				i.setBounds(fi.def.min, fi.def.max);
+				var speed = fi.def.min!=null && fi.def.max!=null ? (fi.def.max-fi.def.min) / 3 : 2;
+				i.enableSlider(speed);
 				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
 
 				hideInputIfDefault(arrayIdx, jInput, fi);
@@ -173,27 +196,6 @@ class FieldInstancesForm {
 				});
 
 				hideInputIfDefault(arrayIdx, jWrapper, fi);
-
-			case F_Float:
-				var jInput = new J("<input/>");
-				jInput.attr("id",domId);
-				jInput.appendTo(jTarget);
-				jInput.attr("type","text");
-
-				var i = new form.input.FloatInput(
-					jInput,
-					()->fi.isUsingDefault(arrayIdx) ? null : fi.getFloat(arrayIdx),
-					(v)->{
-						fi.parseValue(arrayIdx, Std.string(v));
-						onFieldChange(fi);
-					}
-				);
-				i.allowNull = true;
-				i.setBounds(fi.def.min, fi.def.max);
-				i.enableSlider();
-				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
-
-				hideInputIfDefault(arrayIdx, jInput, fi);
 
 			case F_String:
 				var input = if( fi.def.type==F_Text ) {
