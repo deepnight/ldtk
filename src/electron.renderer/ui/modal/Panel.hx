@@ -36,7 +36,7 @@ class Panel extends ui.Modal {
 	override function onResize() {
 		super.onResize();
 		var jBar = editor.jMainPanel.find("#mainBar");
-		var y = jBar.offset().top + jBar.outerHeight();
+		var y = jBar.offset().top + jBar.outerHeight() - 6;
 		jWrapper.css({
 			top: y+"px",
 			height: 'calc( 100vh - ${y}px )',
@@ -57,7 +57,7 @@ class Panel extends ui.Modal {
 		var w = jWrapper.outerWidth();
 		if( w!=_lastWrapperWid ) {
 			_lastWrapperWid = w;
-			jCloseButton.css({ left:(w-3)+"px" });
+			jCloseButton.css({ left:(w-jCloseButton.outerWidth()-8)+"px" });
 		}
 	}
 
@@ -73,14 +73,18 @@ class Panel extends ui.Modal {
 	function linkToButton(selector:String) {
 		jLinkedButton = new J(selector);
 		jLinkedButton.addClass("active");
+		jLinkedButton.closest(".buttons").addClass("faded");
 		return jLinkedButton.length>0;
 	}
 
 	override function onDispose() {
 		super.onDispose();
 
-		if( jLinkedButton!=null )
+		if( jLinkedButton!=null ) {
+			if( !ui.Modal.isOpen(Panel) )
+				jLinkedButton.closest(".buttons").removeClass("faded");
 			jLinkedButton.removeClass("active");
+		}
 		jLinkedButton = null;
 
 		jPanelMask.remove();

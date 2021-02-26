@@ -7,6 +7,7 @@ $lightRed: #ffa386;
 $red: #e34d00;
 $darkRed: #791105;
 $softRed: #59374b;
+$orangeLight: #ffff44;
 $orange: #ffcc00;
 $darkOrange: #d56932;
 $green: #cfdd40;
@@ -167,11 +168,14 @@ button {
 	}
 
 	&.active {
-		background-color: $orange !important;
-		border-color: #ffff00 !important;
+		background-color: white !important;
+		border-color: white !important;
 		outline: 1px solid #ff8;
 		outline-offset: -1px;
 		box-shadow: none;
+		.icon {
+			filter: brightness(0);
+		}
 	}
 
 	&[href] {
@@ -1671,7 +1675,7 @@ textarea {
 
 	.wrapper {
 		display: flex;
-		margin-left: 35px;
+		margin-left: 110px;
 		margin-top: 15px;
 		padding: 4px 16px;
 		align-items: center;
@@ -1832,6 +1836,27 @@ textarea {
 		border: 1px solid $bgLight;
 
 		box-shadow: 0px 0px 32px black, 0px 8px 32px rgba(0, 0, 0, 0.3);
+
+
+		h2:first-of-type {
+			display: flex;
+			align-items: center;
+			margin: -20px;
+			margin-bottom: 16px;
+			padding: 6px 20px;
+
+			color: white;
+			font-size: 15pt;
+
+			border: 0;
+			background-color: $bgLight;
+			border-top: 1px solid $bgLighter;
+
+			.icon {
+				// filter: brightness(0);
+				margin-right: 12px;
+			}
+		}
 	}
 }
 
@@ -1851,25 +1876,28 @@ textarea {
 
 	>button.close {
 		position: absolute;
-		top: 50px;
+		top: 37px;
 		width: auto;
 		height: 45px;
 		z-index: 2;
-		background-color: $bgMed;
-		border: 0px;
-		border-top-right-radius: 3px;
-		border-bottom-right-radius: 3px;
-		border-top: 1px solid $bgLight;
-		border-right: 1px solid $bgLight;
-		border-bottom: 1px solid $bgLight;
-		box-shadow: 0px 5px 0px rgba(0,0,0,0.2);
+		border-radius: 3px;
+		border: 1px solid $bgMed;
+		background-color: transparent;
+		box-shadow: 0px 1px 0px transparentize($color: black, $amount: 0.8);
+		&:hover {
+			border-color: white;
+			.icon {
+				filter: brightness(0);
+			}
+		}
+
 
 		&:hover {
-			background-color: $orange;
+			background-color: white;
 		}
 	}
 	@at-root .compactPanel .window.panel>button.close {
-		top: 80px;
+		top: 65px;
 	}
 
 	&>.wrapper {
@@ -1878,7 +1906,8 @@ textarea {
 		height: 100vh;
 		border-left: none;
 		border-bottom: none;
-		box-shadow: 0px 16px 32px black, 0px 16px 32px rgba(0, 0, 0, 0.3);
+		border-top: none;
+		box-shadow: 8px 0px 0px transparentize($color: black, $amount: 0.5); //, 16px 4px 16px black, ;
 
 		.content {
 			width: 700px;
@@ -2189,7 +2218,7 @@ textarea {
 	}
 
 	&>.wrapper {
-		padding: 16px;
+		padding: 20px;
 		box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.6);
 
 		.buttons {
@@ -2296,6 +2325,9 @@ textarea {
 			grid-template-columns: 50% 50%;
 			gap: 16px;
 
+			h2:first-of-type {
+				grid-column: 1/3;
+			}
 			.buttons {
 				grid-column: 1/3;
 			}
@@ -2729,6 +2761,10 @@ canvas#webgl {
 						width: 1.5em;
 						height: 1.5em;
 					}
+				}
+
+				&.faded button:not(.active) {
+					opacity: 0.66;
 				}
 			}
 		}
@@ -4444,9 +4480,6 @@ dl.form.fieldInstanceEditor {
 
 		> .header {
 			grid-column: 1/3;
-			h2 {
-				margin-bottom: 8px;
-			}
 		}
 
 		>.mainList {
@@ -4551,9 +4584,6 @@ dl.form.fieldInstanceEditor {
 
 		.header {
 			grid-column: 1/3;
-			h2 {
-				margin-bottom: 8px;
-			}
 		}
 		.enumList {
 			grid-column: 1/2;
@@ -4735,7 +4765,6 @@ body.sorting ul.collapsedSortTarget {
 	width: auto;
 
 	.wrapper {
-		padding: 8px;
 		padding-bottom: 0;
 		box-shadow: none;
 		background-color: $bgDark;
@@ -5776,13 +5805,10 @@ $patternSize : 32px;
 		gap: 16px;
 		grid-template-columns: 200px auto;
 		grid-template-rows: min-content auto;
-		overflow: hidden;
+		// overflow: hidden;
 
 		>.header {
 			grid-column: 1/3;
-			h2 {
-				margin-bottom: 8px;
-			}
 		}
 
 		>.entityList {
