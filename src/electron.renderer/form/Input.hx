@@ -43,6 +43,50 @@ class Input<T> {
 		return rawSetter(v);
 	}
 
+	function getSlideDisplayValue(v:Float) : String {
+		return null;
+	}
+
+	public function enableSlider(speed=1.0) {
+		if( getSlideDisplayValue(0)==null )
+			throw "Slider is not supported for this Input type";
+
+		jInput.addClass("slider");
+		var startX = -1.;
+		var threshold = 3;
+
+		jInput
+			.off(".slider")
+			.on("mousedown.slider", function(ev:js.jquery.Event) {
+				startX = ev.pageX;
+				ev.preventDefault();
+
+				var startVal : Float = cast getter();
+				App.ME.jDoc
+					.off(".slider")
+					.on("mousemove.slider", function(ev) {
+						var delta = startX<0 ? 0 : ev.pageX-startX;
+						if( M.fabs(delta)>=threshold ) {
+							var v = getSlideDisplayValue( startVal + delta*0.008*speed );
+							jInput.val( v );
+							jInput.val( Std.string( parseInputValue() ) ); // Force clamping
+							jInput.addClass("editing");
+						}
+					})
+					.on("mouseup.slider", function(ev) {
+						App.ME.jDoc.off(".slider");
+						jInput.removeClass("editing");
+
+						var delta = startX<0 ? 0 : ev.pageX-startX;
+						if( M.fabs(delta)<=threshold )
+							jInput.focus().select();
+						else
+							onInputChange();
+					});
+			});
+	}
+
+
 	function onInputChange(bypassConfirm=false) {
 		if( !bypassConfirm && confirmMessage!=null ) {
 			new ui.modal.dialog.Confirm(

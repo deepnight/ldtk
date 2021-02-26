@@ -15,6 +15,14 @@ class IntInput extends form.Input<Int> {
 		return isColorCode;
 	}
 
+	override function getSlideDisplayValue(v:Float):String {
+		return Std.string(v);
+	}
+
+	override public function enableSlider(speed:Float = 1.0) {
+		super.enableSlider(speed*8);
+	}
+
 	public function setBounds(min,max) {
 		this.min = min;
 		this.max = max;
