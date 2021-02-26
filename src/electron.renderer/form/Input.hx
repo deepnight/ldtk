@@ -159,7 +159,7 @@ class Input<T> {
 		jInput.prop("disabled",true);
 	}
 
-	public function setPlaceholder(v:T) {
+	public function setPlaceholder(v:Dynamic) {
 		if( !jInput.is("[type=text]") )
 			throw "Not compatible with this input type";
 		jInput.attr("placeholder", Std.string(v));
