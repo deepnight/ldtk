@@ -146,6 +146,7 @@ class FieldInstancesForm {
 				i.setBounds(fi.def.min, fi.def.max);
 				i.enableSlider();
 				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
+
 				hideInputIfDefault(arrayIdx, jInput, fi);
 
 			case F_Color:
@@ -174,18 +175,25 @@ class FieldInstancesForm {
 				hideInputIfDefault(arrayIdx, jWrapper, fi);
 
 			case F_Float:
-				var input = new J("<input/>");
-				input.attr("id",domId);
-				input.appendTo(jTarget);
-				input.attr("type","text");
-				input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
-				if( !fi.isUsingDefault(arrayIdx) )
-					input.val( Std.string(fi.getFloat(arrayIdx)) );
-				input.change( function(ev) {
-					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange(fi);
-				});
-				hideInputIfDefault(arrayIdx, input, fi);
+				var jInput = new J("<input/>");
+				jInput.attr("id",domId);
+				jInput.appendTo(jTarget);
+				jInput.attr("type","text");
+
+				var i = new form.input.FloatInput(
+					jInput,
+					()->fi.isUsingDefault(arrayIdx) ? null : fi.getFloat(arrayIdx),
+					(v)->{
+						fi.parseValue(arrayIdx, Std.string(v));
+						onFieldChange(fi);
+					}
+				);
+				i.allowNull = true;
+				i.setBounds(fi.def.min, fi.def.max);
+				i.enableSlider();
+				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
+
+				hideInputIfDefault(arrayIdx, jInput, fi);
 
 			case F_String:
 				var input = if( fi.def.type==F_Text ) {

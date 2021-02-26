@@ -5,6 +5,7 @@ class FloatInput extends form.Input<Float> {
 	var max : Float = M.T_INT16_MAX;
 	var displayAsPct : Bool;
 	var valueStep = -1.;
+	public var allowNull = false;
 
 	public function new(j:js.jquery.JQuery, rawGetter:Void->Float, rawSetter:Float->Void) {
 		super(j, rawGetter, rawSetter);
@@ -62,8 +63,12 @@ class FloatInput extends form.Input<Float> {
 			enableSlider( displayAsPct ? 100 : 1 );
 	}
 
+	static var zerosReg = ~/([\-0-9]+\.[0-9]*?)0{3,}/g;
 	override function getSlideDisplayValue(v:Float):String {
-		return Std.string( applyStep(v) );
+		var str = Std.string( M.round( applyStep(v)/0.05 )*0.05 );
+		if( zerosReg.match(str) )
+			str = zerosReg.matched(1);
+		return str;
 	}
 
 	function applyStep(v:Float) {
@@ -76,19 +81,28 @@ class FloatInput extends form.Input<Float> {
 	}
 
 	override function getter():Float {
-		return applyStep( rawGetter() * ( displayAsPct ? 100 : 1 ) );
+		if( rawGetter()==null )
+			return null;
+		else
+			return applyStep( rawGetter() * ( displayAsPct ? 100 : 1 ) );
 	}
 
 	override function setter(v:Float) {
-		rawSetter( applyStep(v) / ( displayAsPct ? 100 : 1) );
+		if( allowNull && v==null )
+			rawSetter(null);
+		else
+			rawSetter( applyStep(v) / ( displayAsPct ? 100 : 1) );
 	}
 
-	public function setBounds(min:Float, max:Float) {
-		this.min = min;
-		this.max = max;
+	public function setBounds(min:Null<Float>, max:Null<Float>) {
+		this.min = min==null ? M.T_INT16_MIN : min;
+		this.max = max==null ? M.T_INT16_MAX : max;
 	}
 
 	override function parseInputValue() : Float {
+		if( allowNull && StringTools.trim( jInput.val() ).length==0 )
+			return null;
+
 		var v = Std.parseFloat( jInput.val() );
 		if( Math.isNaN(v) || !Math.isFinite(v) || v==null )
 			v = 0;
