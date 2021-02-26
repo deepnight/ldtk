@@ -54,6 +54,8 @@ class Progress extends ui.Modal {
 			}
 			else {
 				// Execute "opsPerCycle" operation(s)
+				if( editor!=null )
+					editor.requestFps();
 				var i = 0;
 				while( i++<opsPerCycle && ops.length>0 ) {
 					var op = ops.shift();

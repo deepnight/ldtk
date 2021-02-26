@@ -222,8 +222,8 @@ class AutoLayerRuleDef {
 		var v = 0;
 		for(px in 0...size)
 		for(py in 0...size) {
-			v = dn.M.iabs( pattern[px+py*size] ) - 1;
-			if( v>=0 && v!=Const.AUTO_LAYER_ANYTHING && !ld.hasIntGridValue(v) )
+			v = dn.M.iabs( pattern[px+py*size] );
+			if( v!=0 && v!=Const.AUTO_LAYER_ANYTHING+1 && !ld.hasIntGridValue(v) )
 				return true;
 		}
 
@@ -261,10 +261,10 @@ class AutoLayerRuleDef {
 			}
 			else {
 				// Specific value checks
-				if( pattern[coordId]>0 && source.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius))!=pattern[coordId]-1 )
+				if( pattern[coordId]>0 && source.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) != pattern[coordId] )
 					return false;
 
-				if( pattern[coordId]<0 && source.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius))==-pattern[coordId]-1 )
+				if( pattern[coordId]<0 && source.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) == -pattern[coordId] )
 					return false;
 			}
 		}

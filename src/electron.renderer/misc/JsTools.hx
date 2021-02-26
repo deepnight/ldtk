@@ -85,6 +85,10 @@ class JsTools {
 		var icon = new J("<span/>");
 		icon.addClass("icon fieldType");
 		icon.addClass(type.getName());
+		// icon.css({
+			// backgroundColor: data.def.FieldDef.getTypeColorHex(type, 0.5),
+			// borderColor: data.def.FieldDef.getTypeColorHex(type),
+		// });
 		if( withName )
 			icon.append('<span class="typeName">'+L.getFieldType(type)+'</span>');
 		icon.append('<span class="typeIcon">'+L.getFieldTypeShortName(type)+'</span>');
@@ -208,12 +212,17 @@ class JsTools {
 
 
 	static var _fileCache : Map<String,String> = new Map();
-	public static function clearFileCache() {
-		_fileCache = new Map();
+	public static function clearFileCache(?name:String) {
+		if( name==null )
+			_fileCache = new Map();
+		else if( _fileCache.exists(name) )
+			_fileCache.remove(name);
 	}
 
-	public static function getHtmlTemplate(name:String, ?vars:Dynamic) : Null<String> {
-		if( !_fileCache.exists(name) ) {
+	public static function getHtmlTemplate(name:String, ?vars:Dynamic, useCache=true) : Null<String> {
+		if( !useCache || !_fileCache.exists(name) ) {
+			if( _fileCache.exists(name) )
+				_fileCache.remove(name);
 			App.LOG.fileOp("Loading HTML template "+name);
 			var path = dn.FilePath.fromFile(App.APP_ASSETS_DIR + "tpl/" + name);
 			path.extension = "html";
@@ -602,6 +611,27 @@ class JsTools {
 
 		js.node.Require.require("fs");
 		return js.node.Fs.readdirSync(path);
+	}
+
+	public static function findFilesRec(dirPath:String, ?ext:String) : Array<dn.FilePath> {
+		if( !fileExists(dirPath) )
+			return [];
+
+		var all = [];
+		var pendings = [dirPath];
+		while( pendings.length>0 ) {
+			var dir = pendings.shift();
+			for(f in readDir(dir)) {
+				var fp = dn.FilePath.fromFile(dir+"/"+f);
+				if( js.node.Fs.lstatSync(fp.full).isFile() ) {
+					if( ext==null || fp.extension==ext )
+						all.push(fp);
+				}
+				else if( !js.node.Fs.lstatSync(fp.full).isSymbolicLink() )
+					pendings.push(fp.full);
+			}
+		}
+		return all;
 	}
 
 	public static function getLogPath() {

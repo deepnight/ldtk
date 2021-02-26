@@ -12,6 +12,7 @@ class Tool<T> extends dn.Process {
 	var curLayerInstance(get,never) : data.inst.LayerInstance; inline function get_curLayerInstance() return Editor.ME.curLayerInstance;
 
 	var jPalette(get,never) : J; inline function get_jPalette() return editor.jPalette;
+	var jOptions(get,never) : J; inline function get_jOptions() return editor.jMainPanel.find("#toolOptions");
 
 	var clickingOutsideBounds = false;
 	var curMode : Null<ToolEditMode> = null;
@@ -20,7 +21,7 @@ class Tool<T> extends dn.Process {
 	var button = -1;
 	var rectangle = false;
 	var startTime = 0.;
-	var palette : ui.ToolPalette;
+	var palette : Null<ui.ToolPalette>;
 
 	private function new() {
 		super(Editor.ME);
@@ -30,10 +31,11 @@ class Tool<T> extends dn.Process {
 		super.onDispose();
 	}
 
+	@:keep
 	override function toString():String {
-		return Type.getClassName(Type.getClass(this))
+		return super.toString()
 			+ "[" + ( curMode==null ? "--" : curMode.getName() ) + "]"
-			+ ( isRunning() ? " (RUNNING)" : "" );
+			+ ( isRunning() ? " [RUNNING]" : "" );
 
 	}
 
@@ -71,6 +73,7 @@ class Tool<T> extends dn.Process {
 	public function isRunning() return curMode!=null;
 
 	public function startUsing(ev:hxd.Event, m:Coords) {
+		editor.requestFps();
 		curMode = null;
 		startTime = haxe.Timer.stamp();
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
@@ -99,7 +102,7 @@ class Tool<T> extends dn.Process {
 	}
 
 
-	function updateCursor(m:Coords) {}
+	function customCursor(ev:hxd.Event, m:Coords) {}
 
 	function useFloodfillAt(m:Coords) {
 		return false;
@@ -168,6 +171,7 @@ class Tool<T> extends dn.Process {
 			if( anyChange )
 				editor.levelRender.invalidateLayerArea(curLayerInstance, cx,cx, cy,cy);
 		});
+		editor.requestFps();
 		return anyChange;
 	}
 
@@ -243,8 +247,6 @@ class Tool<T> extends dn.Process {
 	public function onKeyPress(keyId:Int) {}
 
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
-		editor.cursor.setLabel();
-
 		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )
 			clickingOutsideBounds = false;
 
@@ -252,18 +254,24 @@ class Tool<T> extends dn.Process {
 		if( !clickingOutsideBounds && isRunning() && !rectangle && useAt(m, false) )
 			onEditAnything();
 
-		// Render cursor
+		lastMouse = m;
+	}
+
+	public function onMouseMoveCursor(ev:hxd.Event, m:Coords) {
+		if( ev.cancel )
+			return;
+
 		if( isRunning() && clickingOutsideBounds )
 			editor.cursor.set(None);
 		else switch curMode {
 			case null, Add, Remove:
 				if( editor.isCurrentLayerVisible() )
-					updateCursor(m);
-				else
+					customCursor(ev,m);
+				else if( editor.curLevel.inBounds(m.levelX,m.levelY) ) {
+					ev.cancel = true;
 					editor.cursor.set(Forbidden);
+				}
 		}
-
-		lastMouse = m;
 	}
 
 	function onBeforeToolActivation() {}
@@ -279,15 +287,18 @@ class Tool<T> extends dn.Process {
 			palette.jContent.appendTo( jPalette );
 			palette.render();
 		}
+		initOptionForm();
 	}
 
-	function createToolPalette() {
-		return new ui.ToolPalette(this); // <-- should be overridden in extended classes
+	function createToolPalette() : Null<ui.ToolPalette> {
+		return null; // <-- should be overridden in extended classes
 	}
 
 	public function onValuePicking() {
-		palette.render();
-		palette.focusOnSelection();
+		if( palette!=null ) {
+			palette.render();
+			palette.focusOnSelection();
+		}
 	}
 
 	public function palettePoppedOut() {
@@ -301,7 +312,13 @@ class Tool<T> extends dn.Process {
 
 	public function initPalette() {
 		palette = createToolPalette();
-		palette.render();
+		if( palette!=null )
+			palette.render();
+		initOptionForm();
+	}
+
+	function initOptionForm() {
+		jOptions.empty();
 	}
 
 

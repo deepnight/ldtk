@@ -1,18 +1,62 @@
 <h2>::app:: settings</h2>
 
-<ul class="form">
-	<li>
-		<label for="fontScale">Font size in editor view</label>
-		<select id="fontScale"></select>
-	</li>
+<dl class="form">
+	<dt>
+		<label for="appScale">General UI scale</label>
+	</dt>
+	<dd>
+		<select id="appScale" title="This setting will affect the whole app UI scale."></select>
+	</dd>
 
-	<li>
+	<dt>
+		<label for="fontScale">Font size in levels</label>
+	</dt>
+	<dd>
+		<select id="fontScale" title="This setting will affect the scale of texts and icons in the editor view (ie. for Entities and Custom Fields, mostly)"></select>
+	</dd>
+
+	<dt>
+		<label for="mouseWheelSpeed">Mouse wheel speed</label>
+	</dt>
+	<dd>
+		<input type="text" id="mouseWheelSpeed"/>
+		<span>%</span>
+		<div class="info" title="This will affect the zoom speed when using mouse wheel."></div>
+	</dd>
+
+	<dt>
+		<label for="autoSwitchOnZoom">World view with mouse wheel</label>
+	</dt>
+	<dd>
+		<select id="autoSwitchOnZoom"></select>
+		<div class="info" title="This option allow to quickly switch between WORLD view and LEVEL view by using mouse wheel."></div>
+	</dd>
+
+	<dt class="full">
+		<h2>Advanced options</h2>
+	</dt>
+
+	<dt>
 		<label for="gpu">Try to use best GPU</label>
-		<input type="checkbox" id="gpu" title="[RECOMMENDED] When enabled, ::app:: will always try to use the best GPU available on your system, resulting in better performances. This might use extra battery life." />
-	</li>
+	</dt>
+	<dd>
+		<input type="checkbox" id="gpu" title="When enabled, ::app:: will always try to use the best GPU available on your system, resulting in better performances. This might use extra battery life." />
+		<span>(Recommended)</span>
+	</dd>
 
-	<li>
+	<dt>
+		<label for="smartCpuThrottling">Smart CPU throttling</label>
+	</dt>
+	<dd>
+		<input type="checkbox" id="smartCpuThrottling" title="When enabled, ::app:: will limit CPU usage when idling or not doing something too demanding. This might make the app very slightly less responsive, but that shouldn't be too noticeable. This option also helps reducing laptop battery drain. Disable to allow full CPU all the time." />
+		<span>(Recommended)</span>
+	</dd>
+
+	<dt>
 		<label>App log file</label>
-		<button class="log gray" title="The LOG file is useful when reporting issues with the app. You can attach it to an e-mail or when you create an issue on GitHub site."> <span class="icon locate"></span> Locate</button>
-	</li>
-</ul>
+	</dt>
+	<dd>
+		<span class="logPath"></span>
+		<button class="log gray" title="The LOG file is useful when reporting issues with the app. You can attach it to an e-mail or when you create an issue on GitHub site."> <span class="icon locate"></span></button>
+	</dd>
+</dl>

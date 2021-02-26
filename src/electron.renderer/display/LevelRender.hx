@@ -9,9 +9,6 @@ class LevelRender extends dn.Process {
 
 	var autoLayerRendering = true;
 
-	/** <LayerDefUID, Bool> **/
-	var layerVis : Map<Int,Bool> = new Map();
-
 	var layersWrapper : h2d.Layers;
 
 	/** <LayerDefUID, LayerRender> **/
@@ -96,6 +93,9 @@ class LevelRender extends dn.Process {
 				root.x = M.round( editor.camera.width*0.5 - camera.levelX * camera.adjustedZoom );
 				root.y = M.round( editor.camera.height*0.5 - camera.levelY * camera.adjustedZoom );
 
+				for(l in layerRenders)
+					l.onViewportChange();
+
 			case ProjectSaved, BeforeProjectSaving:
 
 			case ProjectSelected:
@@ -130,6 +130,8 @@ class LevelRender extends dn.Process {
 			case LayerInstanceSelected:
 				applyAllLayersVisibility();
 				invalidateUi();
+				for(l in layerRenders)
+					l.onLayerSelection();
 
 			case LevelSettingsChanged(l):
 				invalidateUi();
@@ -196,7 +198,7 @@ class LevelRender extends dn.Process {
 
 			case TilesetDefChanged(td):
 				for(li in editor.curLevel.layerInstances)
-					if( li.def.isUsingTileset(td) )
+					if( li.isUsingTileset(td) )
 						invalidateLayer(li);
 
 			case TilesetDefAdded(td):
@@ -206,18 +208,24 @@ class LevelRender extends dn.Process {
 					if( li.def.type==Entities )
 						invalidateLayer(li);
 
-			case EntityFieldAdded(ed), EntityFieldRemoved(ed), EntityFieldDefChanged(ed):
-				if( editor.curLayerInstance!=null ) {
-					var li = editor.curLevel.getLayerInstanceFromEntity(ed);
-					invalidateLayer( li==null ? editor.curLayerInstance : li );
-				}
+			case FieldDefAdded(_), FieldDefRemoved(_), FieldDefChanged(_), FieldDefSorted:
+				for(li in editor.curLevel.layerInstances)
+					if( li.def.type==Entities )
+						invalidateLayer(li);
 
 			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved:
 				for(li in editor.curLevel.layerInstances)
 					if( li.def.type==Entities )
 						invalidateLayer(li);
 
-			case EntityInstanceAdded(ei), EntityInstanceRemoved(ei), EntityInstanceChanged(ei), EntityInstanceFieldChanged(ei):
+			case FieldInstanceChanged(fi):
+				var ed = editor.project.defs.getEntityDefUsingField(fi.def);
+				if( ed!=null ) {
+					var li = editor.curLevel.getLayerInstanceFromEntity(ed);
+					invalidateLayer( li==null ? editor.curLayerInstance : li );
+				}
+
+			case EntityInstanceAdded(ei), EntityInstanceRemoved(ei), EntityInstanceChanged(ei):
 				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
 				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
@@ -225,11 +233,10 @@ class LevelRender extends dn.Process {
 
 			case LevelRemoved(l):
 
-			case LevelSorted:
 			case LayerDefAdded:
+				invalidateAll();
 
 			case EntityDefAdded:
-			case EntityFieldSorted:
 
 			case ToolOptionChanged:
 
@@ -252,26 +259,31 @@ class LevelRender extends dn.Process {
 		return autoLayerRendering;
 	}
 
-	public inline function isLayerVisible(l:data.inst.LayerInstance) {
-		return l!=null && ( !layerVis.exists(l.layerDefUid) || layerVis.get(l.layerDefUid)==true );
+	public inline function isLayerVisible(li:data.inst.LayerInstance) {
+		return li!=null && li.visible;
 	}
 
 	public function toggleLayer(li:data.inst.LayerInstance) {
-		layerVis.set(li.layerDefUid, !isLayerVisible(li));
+		li.visible = !li.visible;
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
 
 		if( isLayerVisible(li) )
 			invalidateLayer(li);
 	}
 
-	public function showLayer(li:data.inst.LayerInstance) {
-		layerVis.set(li.layerDefUid, true);
+	public function setLayerVisibility(li:data.inst.LayerInstance, v:Bool) {
+		li.visible = v;
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
+		if( isLayerVisible(li) )
+			invalidateLayer(li);
 	}
 
-	public function hideLayer(li:data.inst.LayerInstance) {
-		layerVis.set(li.layerDefUid, false);
-		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
+	public inline function showLayer(li:data.inst.LayerInstance) {
+		setLayerVisibility(li, true);
+	}
+
+	public inline function hideLayer(li:data.inst.LayerInstance) {
+		setLayerVisibility(li, false);
 	}
 
 	public function bleepRectPx(x:Int, y:Int, w:Int, h:Int, col:UInt, thickness=1) {
@@ -303,10 +315,10 @@ class LevelRender extends dn.Process {
 	}
 	public inline function bleepEntity(ei:data.inst.EntityInstance) {
 		bleepRectPx(
-			Std.int( ei.x-ei.def.width*ei.def.pivotX ),
-			Std.int( ei.y-ei.def.height*ei.def.pivotY ),
-			ei.def.width,
-			ei.def.height,
+			Std.int( ei.x-ei.width*ei.def.pivotX ),
+			Std.int( ei.y-ei.height*ei.def.pivotY ),
+			ei.width,
+			ei.height,
 			ei.getSmartColor(true), 2
 		);
 	}
@@ -336,6 +348,8 @@ class LevelRender extends dn.Process {
 			bgImage.scaleX = bmp.scaleX;
 			bgImage.scaleY = bmp.scaleY;
 			bgImage.visible = true;
+			bgImage.alpha = settings.v.singleLayerMode ? 0.2 : 1;
+			bgImage.filter = settings.v.singleLayerMode ? getSingleLayerModeFilter() : null;
 		}
 		else {
 			bgImage.tile = null;
@@ -442,7 +456,11 @@ class LevelRender extends dn.Process {
 
 		lr.root.visible = isLayerVisible(li);
 		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
-		lr.root.filter = !settings.v.singleLayerMode || li==editor.curLayerInstance ? null : new h2d.filter.Group([
+		lr.root.filter = !settings.v.singleLayerMode || li==editor.curLayerInstance ? null : getSingleLayerModeFilter();
+	}
+
+	function getSingleLayerModeFilter() : h2d.filter.Filter {
+		return new h2d.filter.Group([
 			C.getColorizeFilterH2d(0x8c99c1, 0.9),
 			new h2d.filter.Blur(2),
 		]);

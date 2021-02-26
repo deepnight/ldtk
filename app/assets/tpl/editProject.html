@@ -3,6 +3,13 @@
 	Project settings
 </h2>
 
+<div class="buttons">
+	<button class="save" title="Save project" keys="CTRL+S">Save project</button>
+	<button class="saveAs" title="Save project to a different file" keys="CTRL+SHIFT+S">Save as...</button>
+	<button class="locate gray small" title="Locate project file"><span class="icon locate"></span> </button>
+	<button class="settings gray" title="Application settings" keys="F12"><span class="icon settings"></span> ::app:: settings</button>
+</div>
+
 <ul class="form projectForm">
 	<li><h3>Project file settings</h3></li>
 
@@ -52,9 +59,9 @@
 		<div class="locate"></div>
 	</li>
 
-	<li>
-		<h3>Workspace settings</h3>
-	</li>
+
+
+	<li> <h3>Workspace settings</h3> </li>
 
 	<li>
 		<label for="defaultGridSize">Default layer grid</label>
@@ -76,12 +83,19 @@
 		<label>Default pivot point for new entities</label>
 		<div class="pivot"></div>
 	</li>
+
+
+
+	<li> <h3>Advanced export settings</h3> </li>
+
+	<li class="advancedWarning">
+		Advanced options are not recommended for most users as they might break compatibility with older game APIs. Please make sure you know what you're doing before using any of them!
+		<a>[ Show advanced settings ]</a>
+	</li>
+
+	<li>
+		<ul class="advanced"></ul>
+	</li>
+
+
 </ul>
-
-<div class="buttons">
-	<button class="save" title="Save project" keys="CTRL+S">Save</button>
-	<button class="saveAs" title="Save project to a new file" keys="CTRL+SHIFT+S">Save as...</button>
-	<button class="locate gray small" title="Locate project file"><span class="icon locate"></span> </button>
-	<button class="settings gray" title="Application settings" keys="F12"><span class="icon settings"></span> ::app:: settings</button>
-</div>
-

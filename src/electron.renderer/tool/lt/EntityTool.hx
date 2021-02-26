@@ -46,17 +46,35 @@ class EntityTool extends tool.LayerTool<Int> {
 			: m.levelY;
 	}
 
-	override function updateCursor(m:Coords) {
-		super.updateCursor(m);
+	override function customCursor(ev:hxd.Event, m:Coords) {
+		super.customCursor(ev,m);
 
-		if( curEntityDef==null )
-			editor.cursor.set(None);
-		else if( isRunning() && curMode==Remove )
+		if( curEntityDef==null ) {
+			editor.cursor.set(Forbidden);
+			ev.cancel = true;
+		}
+		else if( isRunning() && curMode==Remove ) {
 			editor.cursor.set( Eraser(m.levelX,m.levelY) );
-		else if( curLevel.inBounds(m.levelX, m.levelY) )
-			editor.cursor.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m)) );
-		else
-			editor.cursor.set(None);
+			ev.cancel = true;
+		}
+		else if( curLevel.inBounds(m.levelX, m.levelY) ) {
+			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, true);
+			switch ge {
+				case Entity(li, ei):
+					editor.cursor.set( Entity(curLayerInstance, ei.def, ei, ei.x, ei.y) );
+					editor.cursor.overrideNativeCursor("grab");
+
+				case PointField(li, ei, fi, arrayIdx):
+					editor.cursor.set(Move);
+					// var pt = fi.getPointGrid(arrayIdx);
+					// editor.cursor.set( GridCell(curLayerInstance, pt.cx, pt.cy, ei.getSmartColor(false)) );
+					// editor.cursor.overrideNativeCursor("grab");
+
+				case _:
+					editor.cursor.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m)) );
+			}
+			ev.cancel = true;
+		}
 	}
 
 
@@ -66,11 +84,13 @@ class EntityTool extends tool.LayerTool<Int> {
 		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
 		switch ge {
 			case Entity(_) if( ev.button==0 ):
+				editor.selectionTool.select([ge]);
 				editor.selectionTool.startUsing(ev,m);
 				stopUsing(m);
 				return;
 
 			case PointField(_) if( ev.button==0 ):
+				editor.selectionTool.select([ge]);
 				editor.selectionTool.startUsing(ev,m);
 				stopUsing(m);
 				return;
@@ -85,16 +105,70 @@ class EntityTool extends tool.LayerTool<Int> {
 			case null:
 			case Add:
 				if( curLevel.inBounds(m.levelX, m.levelY) ) {
-					var ei = curLayerInstance.createEntityInstance(curEntityDef);
-					if( ei==null )
-						N.error("Max per level reached!");
+					// Create entity
+					var ei : data.inst.EntityInstance = null; // will stay null if some limit prevents adding more
+					if( curEntityDef.maxCount<=0 )
+						ei = curLayerInstance.createEntityInstance(curEntityDef);
 					else {
+						// Apply count limit
+						var all = [];
+						switch curEntityDef.limitScope {
+							case PerLayer:
+								for(ei in curLayerInstance.entityInstances)
+									if( ei.defUid==curEntityDef.uid )
+										all.push({ ei:ei, li:curLayerInstance });
+
+							case PerLevel:
+								for(li in curLevel.layerInstances)
+								for(ei in li.entityInstances)
+									if( ei.defUid==curEntityDef.uid )
+										all.push({ ei:ei, li:li });
+
+							case PerWorld:
+								for(l in project.levels)
+								for(li in l.layerInstances)
+								for(ei in li.entityInstances)
+									if( ei.defUid==curEntityDef.uid )
+										all.push({ ei:ei, li:li });
+						}
+						switch curEntityDef.limitBehavior {
+							case DiscardOldOnes:
+								while( all.length>=curEntityDef.maxCount ) {
+									var e = all.shift();
+									e.li.removeEntityInstance( e.ei );
+								}
+								ei = curLayerInstance.createEntityInstance(curEntityDef);
+
+							case PreventAdding:
+								if( all.length<curEntityDef.maxCount )
+									ei = curLayerInstance.createEntityInstance(curEntityDef);
+								else
+									N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:curEntityDef.maxCount, name:curEntityDef.identifier }));
+
+							case MoveLastOne:
+								if( all.length>=curEntityDef.maxCount && all.length>0 ) {
+									var e = all.shift();
+									e.li.removeEntityInstance(e.ei);
+									curLayerInstance.entityInstances.push(e.ei);
+									editor.levelRender.invalidateLayer(curLayerInstance);
+									ei = e.ei;
+								}
+								else
+									ei = curLayerInstance.createEntityInstance(curEntityDef);
+						}
+					}
+
+					// Done
+					if( ei!=null ) {
 						ei.x = getPlacementX(m);
 						ei.y = getPlacementY(m);
 						editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);
 						onEditAnything();
 						stopUsing(m);
-						editor.selectionTool.startUsing(ev, m);
+						if( ei.def.isResizable() && editor.resizeTool!=null )
+							editor.resizeTool.startUsing(ev, m);
+						else
+							editor.selectionTool.startUsing(ev, m);
 						editor.ge.emit( EntityInstanceAdded(ei) );
 					}
 				}
@@ -121,7 +195,7 @@ class EntityTool extends tool.LayerTool<Int> {
 						fi.removeArrayValue(arrayIdx);
 					else
 						fi.parseValue(arrayIdx, null);
-					editor.ge.emit( EntityInstanceFieldChanged(ei) );
+					editor.ge.emit( FieldInstanceChanged(fi) );
 					editor.selectionTool.select([ GenericLevelElement.Entity(li,ei) ]);
 					editor.levelRender.bleepPoint(
 						(pt.cx+0.5) * li.def.gridSize,
@@ -143,11 +217,12 @@ class EntityTool extends tool.LayerTool<Int> {
 	override function onMouseMove(ev:hxd.Event, m:Coords) {
 		super.onMouseMove(ev,m);
 
-		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
-		switch ge {
-			case Entity(_): editor.selectionTool.onMouseMove(ev,m);
-			case PointField(_): editor.selectionTool.onMouseMove(ev,m);
-			case _:
+		if( !ev.cancel ) {
+			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
+			switch ge {
+				case Entity(_), PointField(_): editor.selectionTool.onMouseMove(ev,m);
+				case _:
+			}
 		}
 	}
 

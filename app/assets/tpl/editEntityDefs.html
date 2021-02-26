@@ -1,22 +1,20 @@
 <div class="header">
-	<h2>
-		<div class="icon entity orange"></div>
-		Project entities
-	</h2>
+	<h2> <div class="icon entity orange"></div> Project entities </h2>
 	<div class="help">
 		ENTITIES are generic data that can be placed in your levels, such as the Player start position or Items to pick up. Each entity can have various custom editable properties as defined below.
 	</div>
-	<div class="warning noEntLayer">You need to create at least one ENTITY LAYER in order to insert entities in your levels.</div>
+	<!-- <div class="warning noEntLayer">You need to create at least one ENTITY LAYER in order to insert entities in your levels.</div> -->
 </div>
+
 
 <div class="entityList">
-	<ul class="niceList"></ul>
 	<div class="buttons">
-		<button class="create">Create entity</button>
-		<button class="delete">🗑️</button>
+		<button class="create"> <span class="icon add"></span> </button>
+		<button class="presets small" title="Create an entity using a preset.">Presets</button>
+		<!-- <button class="delete">🗑️</button> -->
 	</div>
+	<ul class="niceList"></ul>
 </div>
-
 
 <div class="rightColumn">
 
@@ -25,137 +23,89 @@
 			<div class="label"></div>
 		</div>
 
-		<ul class="form">
-			<li>
+		<dl class="form">
+			<dt>
 				<label for="eName">Entity identifier</label>
+			</dt>
+			<dd>
 				<input type="text" name="name" id="eName"/>
 				<div class="info identifier"></div>
-			</li>
+			</dd>
 
-			<li>
-				<label for="width">Width</label>
+			<dt>
+				<label>Tags</label>
+			</dt>
+			<dd>
+				<div id="tags"></div>
+				<div class="info" title="Tags can be used to filter Entities allowed in Entity layers."></div>
+			</dd>
+
+			<dt>
+				<label for="width">Size</label>
+			</dt>
+			<dd>
 				<input type="text" name="width" class="small" id="width"/>
 				<span>x</span>
 				<input type="text" name="height" class="small"/>
-				<span>px</span>
-			</li>
 
-			<li class="renderMode">
+				<span>Resizable:</span>
+				<input type="checkbox" id="resizableX" title="If checked, the entity instances will be horizontally resizable. In this case, the width above will define the a minimum size."/>
+				<label for="resizableX">Width</label>
+
+				<input type="checkbox" id="resizableY" title="If checked, the entity instances will be vertically resizable. In this case, the height above will define the a minimum size."/>
+				<label for="resizableY">Height</label>
+
+				<input type="checkbox" id="keepAspectRatio" title="If checked, the entity instance size will use the same aspect ratio as the size above."/>
+				<label for="keepAspectRatio">Keep aspect ratio</label>
+			</dd>
+
+			<dt>
 				<label>Editor visual</label>
-
+			</dt>
+			<dd class="renderMode">
 				<input type="color" name="color" id="eColor"/>
 				<select class="renderMode"></select>
+
 				<div class="tilePicker"></div>
 				<select class="mode_Tile tileRenderMode"></select>
 
-				<label for="showIdentifier">Show identifier</label>
+				<span>Fill=</span>
+				<input type="text" id="fillOpacity" class="small"/>
+
+				<span>Line=</span>
+				<input type="text" id="lineOpacity" class="small"/>
+			</dd>
+
+			<dd>
+				<input type="checkbox" id="hollow" title="Clicks will pass through 'hollow' entities, except on edges. They don't have any fill color (only an outline and/or a tile)."/>
+				<label for="hollow">Hollow</label>
+
 				<input type="checkbox" name="showIdentifier" id="showIdentifier"/>
-			</li>
+				<label for="showIdentifier">Show identifier</label>
+			</dd>
 
-			<li>
+			<dt>
 				<label>Pivot point</label>
+			</dt>
+			<dd>
 				<div class="pivot"></div>
-			</li>
+			</dd>
 
-			<li>
-				<label for="maxPerLevel">Max per level</label>
-				<input type="text" name="maxPerLevel" id="maxPerLevel" placeholder="none" class="small"/>
+			<dt>
+				<label for="maxCount">Max count</label>
+			</dt>
+			<dd>
+				<input type="text" id="maxCount" placeholder="Unlimited" class="small"/>
+				<select name="scope"></select>
 				<span>, and </span>
 				<select name="limitBehavior"></select>
 				<span>when max is reached.</span>
-			</li>
+			</dd>
 
-		</ul>
+		</dl>
 
 	</div>
 
+	<div id="fields"></div>
 
-	<div class="fieldList">
-		<ul class="niceList"></ul>
-		<div class="buttons">
-			<button type="button" class="createSingle" title="Add a single value field">+ field</button>
-			<button type="button" class="createArray" title="Add an 'array of values' field">+ array</button>
-			<button type="button" class="delete">🗑️</button>
-		</div>
-	</div>
-
-
-	<div class="fieldForm">
-		<ul class="form">
-		<li>
-			<label>Type</label>
-			<input type="text" readonly="readonly" class="type"/>
-			<button class="convert">Convert</button>
-		</li>
-		<li>
-			<label for="fName">Field identifier</label>
-			<input type="text" name="name" id="fName"/>
-			<div class="info identifier"></div>
-		</li>
-
-		<li class="F_Int F_Float F_String F_Text">
-			<label for="fDef">Default value</label>
-			<input type="text" name="fDef" placeholder="" id="fDef"/>
-			<button class="F_Path file-select" id="fDefFile" name="fDefFile">Select file</button>
-		</li>
-
-		<li class="F_Bool">
-			<label for="bDef">Default state</label>
-			<input type="checkbox" name="bDef" id="bDef"/>
-		</li>
-
-		<li class="F_Color">
-			<label for="cDef">Default color</label>
-			<input type="color" name="cDef" id="cDef"/>
-		</li>
-
-		<li class="F_Int F_Float">
-			<label for="min">Limits</label>
-			<input type="text" name="min" id="min" placeholder="Min"/>
-			<span>to</span>
-			<input type="text" name="max" id="max" placeholder="Max"/>
-		</li>
-
-		<li class="F_Path">
-			<label for="acceptTypes">Accept types</label>
-			<input type="text" name="acceptTypes" id="acceptTypes" placeholder="Any file"/>
-			<div class="info" title='Space separated extensions. For example: "txt dat png jpg gif"'></div>
-		</li>
-
-		<li class="F_String">
-			<label for="regex">Regex check</label>
-			<input type="text" id="regex" placeholder="(none)"/>
-			<input type="checkbox" id="flag_i" title='Check to enable "i" flag (case insensitive)'/> <span>i</span>
-			<button class="testRegex small gray" title="Open external website to test your regex">Test</button>
-			<div class="info" title="Values will be tested against this regex and any character that doesn't match will be discarded (WARNING: existing values in your levels will NOT be affected by a change here)""></div>
-		</li>
-
-
-		<li class="F_Int F_Float F_String F_Text F_Enum F_Point F_Path">
-			<label for="canBeNull">Can be null</label>
-			<input type="checkbox" name="canBeNull" id="canBeNull"/>
-		</li>
-
-		<li class="Array">
-			<label for="arrayMinLength">Array length</label>
-			<input type="text" name="arrayMinLength" id="arrayMinLength" placeholder="min length"/>
-			<span>to</span>
-			<input type="text" name="arrayMaxLength" id="arrayMaxLength" placeholder="max length"/>
-		</li>
-
-		<li>
-			<label for="editorDisplayMode">Display in editor</label>
-			<select name="editorDisplayMode" id="editorDisplayMode"></select>
-			<select name="editorDisplayPos" id="editorDisplayPos"></select>
-			<div class="help F_Enum">If this Enum has an ICON, it will be used for display in place of the name.</div>
-		</li>
-
-		<li>
-			<label for="editorAlwaysShow">Always show</label>
-			<input type="checkbox" name="editorAlwaysShow" id="editorAlwaysShow"/>
-			<div class="info" title="If not checked, the value will only be displayed if it is relevant (ie. different from its default value)."></div>
-		</li>
-
-		</ul>
-	</div>
 </div>

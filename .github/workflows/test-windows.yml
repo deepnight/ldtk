@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest]
-        haxe: [4.1.4]
+        haxe: [4.2.0]
       fail-fast: true
     runs-on: windows-latest
 
@@ -36,7 +36,7 @@ jobs:
 
       # Install libs
       - run: haxelib git castle https://github.com/ncannasse/castle
-      - run: haxelib git heaps https://github.com/HeapsIO/heaps.git
+      - run: haxelib git heaps https://github.com/deepnight/heaps.git
       - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
       - run: haxelib git electron https://github.com/tong/hxelectron.git
 

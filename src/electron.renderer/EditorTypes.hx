@@ -14,7 +14,6 @@ enum GlobalEvent {
 	LevelRemoved(level:data.Level);
 	LevelResized(level:data.Level);
 	LevelRestoredFromHistory(level:data.Level);
-	LevelSorted; // TODO remove this event (duplicate of WorldLevelMoved)
 
 	WorldLevelMoved;
 	WorldSettingsChanged;
@@ -53,17 +52,17 @@ enum GlobalEvent {
 	EntityInstanceAdded(ei:data.inst.EntityInstance);
 	EntityInstanceRemoved(ei:data.inst.EntityInstance);
 	EntityInstanceChanged(ei:data.inst.EntityInstance);
-	EntityInstanceFieldChanged(ei:data.inst.EntityInstance);
 
 	EntityDefAdded;
 	EntityDefRemoved;
 	EntityDefChanged;
 	EntityDefSorted;
 
-	EntityFieldAdded(ed:data.def.EntityDef);
-	EntityFieldRemoved(ed:data.def.EntityDef);
-	EntityFieldDefChanged(ed:data.def.EntityDef);
-	EntityFieldSorted;
+	FieldDefAdded(fd:data.def.FieldDef);
+	FieldDefRemoved(fd:data.def.FieldDef);
+	FieldDefChanged(fd:data.def.FieldDef);
+	FieldDefSorted;
+	FieldInstanceChanged(fi:data.inst.FieldInstance);
 
 	EnumDefAdded;
 	EnumDefRemoved;
@@ -81,18 +80,20 @@ enum CursorType {
 	None;
 	Forbidden;
 	Pan;
+	Panning;
 	Move;
 	Moving;
 	PickNothing;
+	Pointer;
+	Add;
+	Resize(p:RectHandlePos);
+
 	Eraser(x:Int,y:Int);
 	GridCell(li:data.inst.LayerInstance, cx:Int, cy:Int, ?col:UInt);
 	GridRect(li:data.inst.LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
 	Entity(li:data.inst.LayerInstance, def:data.def.EntityDef, ?ei:data.inst.EntityInstance, x:Int, y:Int);
 	Tiles(li:data.inst.LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int, flips:Int);
-	Resize(p:RulerPos);
 	Link(fx:Float, fy:Float, tx:Float, ty:Float, color:UInt);
-	Pointer;
-	Add;
 }
 
 enum GenericLevelElement {
@@ -118,7 +119,7 @@ typedef HistoryStateBounds = {
 	var hei : Int;
 }
 
-enum RulerPos {
+enum RectHandlePos {
 	Top;
 	Bottom;
 	Left;

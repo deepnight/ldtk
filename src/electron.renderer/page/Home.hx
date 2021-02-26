@@ -21,6 +21,7 @@ class Home extends Page {
 			websiteUrl : Const.HOME_URL,
 			issueUrl : Const.ISSUES_URL,
 			jsonUrl: Const.JSON_DOC_URL,
+			email: Const.getContactEmail(),
 		});
 		App.ME.setWindowTitle();
 
@@ -37,17 +38,10 @@ class Home extends Page {
 		});
 
 		// Buttons
-		jPage.find(".load").click( function(ev) {
-			onLoad();
-		});
-
-		jPage.find(".samples").click( function(ev) {
-			onLoadSamples();
-		});
-
-		jPage.find(".new").click( function(ev) {
-			onNew();
-		});
+		jPage.find(".load").click( (_)->onLoad() );
+		jPage.find(".samples").click( (_)->onLoadSamples() );
+		jPage.find(".loadOgmo").click( (ev)->onImportOgmo() );
+		jPage.find(".new").click( (_)->if( !cd.hasSetS("newLock",0.2) ) onNew() );
 
 		jPage.find(".buy").click( (ev)->{
 			var w = new ui.Modal();
@@ -64,7 +58,7 @@ class Home extends Page {
 		});
 
 		jPage.find("button.update").click((_)->{
-			showLatestUpdate();
+			showUpdate();
 		});
 
 		// Notify app update
@@ -73,7 +67,7 @@ class Home extends Page {
 			settings.v.lastKnownVersion = Const.getAppVersion();
 			App.ME.settings.save();
 
-			showLatestUpdate(true);
+			showUpdate(true);
 		}
 
 		jPage.find("button.settings").click( function(ev) {
@@ -83,20 +77,47 @@ class Home extends Page {
 		updateRecents();
 	}
 
-	function showLatestUpdate(isNewUpdate=false) {
+	function showUpdate(?version:dn.Version, isNewUpdate=false) {
 		var w = new ui.Modal();
 		w.canBeClosedManually = !isNewUpdate;
-		var latest = Const.getChangeLog().latest;
-		var ver = new Version( Const.getAppVersion() );
-		w.loadTemplate("appUpdated", {
-			ver: latest.version.numbers,
-			app: Const.APP_NAME,
-			title: latest.title==null ? "" : '&ldquo;&nbsp;'+latest.title+'&nbsp;&rdquo;',
-			md: latest.allNoteLines.join("\n"),
-		});
 
-		w.jContent.find(".changelog").click( (_)->N.notImplemented() );
-		w.jContent.find(".close").click( (_)->w.close() );
+		var changeLog = Const.getChangeLog().latest;
+
+		// Pick specific version
+		if( version!=null ) {
+			for( c in Const.getChangeLog().entries )
+				if( c.version.isEqual(version,true) ) {
+					changeLog = c;
+					break;
+				}
+		}
+
+		w.loadTemplate("changeLog", {
+			ver: changeLog.version.numbers,
+			app: Const.APP_NAME,
+			title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
+			md: changeLog.allNoteLines.join("\n"),
+		}, false);
+		if( isNewUpdate )
+			w.addClass("newUpdate");
+
+		w.jContent.find(".close")
+			.text(isNewUpdate ? L.t._("Continue") : L.t._("Close"))
+			.click( (_)->w.close() );
+
+		w.jContent.find(".others").click( ev->{
+			var ctx = new ui.modal.ContextMenu(ev);
+				for( c in Const.getChangeLog().entries )
+				ctx.add({
+					label: c.version.numbers + ( c.title!=null ? " - "+c.title : "" ),
+					cb: ()->{
+						w.close();
+						showUpdate(c.version);
+					}
+				});
+		} );
+		if( isNewUpdate )
+			w.jContent.find(".others").hide();
 	}
 
 
@@ -417,6 +438,33 @@ class Home extends Page {
 		});
 	}
 
+
+	public function onImportOgmo() {
+		var dir = App.ME.getDefaultDialogDir();
+
+		#if debug
+		dir = "C:/projects/LDtk/tests/ogmo"; // HACK remove this hard-coded path
+		#end
+
+		dn.electron.Dialogs.open([".ogmo"], dir, function(filePath) {
+			var i = new importer.OgmoProject(filePath);
+			new ui.modal.dialog.LockMessage(L.t._("Importing OGMO 3 project..."), ()->{
+				var p = i.load();
+				i.log.printAllToLog(App.LOG);
+				if( p!=null ) {
+					new ui.ProjectSaving(this, p, (ok)->{
+						N.success("Success!");
+						App.ME.loadProject(p.filePath.full);
+					});
+				}
+				else {
+					new ui.modal.dialog.LogPrint(i.log);
+					new ui.modal.dialog.Message(L.t._("Failed to import this Ogmo project. If you really need this, feel free to send me the Ogmo project file so I can check and fix the updater (see contact link)."));
+				}
+			});
+		});
+	}
+
 	public function onLoadSamples() {
 		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION], JsTools.getSamplesDir(), function(filePath) {
 			App.ME.loadProject(filePath);
@@ -446,21 +494,27 @@ class Home extends Page {
 	override function onKeyPress(keyCode:Int) {
 		super.onKeyPress(keyCode);
 
+		if( App.ME.isLocked() )
+			return;
+
 		switch keyCode {
 			case K.W, K.Q:
 				if( App.ME.isCtrlDown() )
 					App.ME.exit();
 
-			case K.ENTER:
+			case K.ENTER if( !ui.Modal.hasAnyOpen() ):
 				jPage.find("ul.recentFiles li:not(.title):first").click();
+
+			case K.ESCAPE:
+				if( ui.Modal.hasAnyOpen() )
+					ui.Modal.closeLatest();
+				else if( jPage.find(".changelogsWrapper").hasClass("fullscreen") )
+					jPage.find("button.fullscreen").click();
 
 			// Open settings
 			case K.F12 if( !App.ME.hasAnyToggleKeyDown() ):
-				new ui.modal.dialog.EditAppSettings();
-
-			case K.ESCAPE:
-				if( jPage.find(".changelogsWrapper").hasClass("fullscreen") )
-					jPage.find("button.fullscreen").click();
+				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) )
+					new ui.modal.dialog.EditAppSettings();
 		}
 	}
 

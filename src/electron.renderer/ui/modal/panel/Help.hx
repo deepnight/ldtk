@@ -4,6 +4,8 @@ class Help extends ui.modal.Panel {
 	public function new() {
 		super();
 
+		linkToButton("button.showHelp");
+
 		loadTemplate( "help", "helpPanel", {
 			appUrl: Const.HOME_URL,
 			discordUrl: Const.DISCORD_URL,

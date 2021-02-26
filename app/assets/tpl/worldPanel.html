@@ -1,96 +1,32 @@
-<div class="buttons">
-	<button class="create">
-		<span class="ready">+ level</span>
-		<span class="running">Select location -&gt;</span>
-	</button>
+<div class="worldSettings">
+	<h2>
+		<span class="icon orange world"></span>
+		World settings
+	</h2>
 
-	<button class="worldSettings gray">
-		<span class="icon settings"></span> World settings
-	</button>
-</div>
-
-
-<!-- World settings -->
-
-<div id="worldForm">
-
-	<h3>World settings</h3>
-
-	<ul class="form">
-		<li>
+	<dl class="form">
+		<dt>
 			<label for="color">World layout</label>
+		</dt>
+		<dd>
 			<select name="worldLayout"></select>
 			<div class="info">This setting will affect how all levels are be positioned in the "world".</div>
-		</li>
+		</dd>
 
-		<li class="GridVania">
+		<dt>
 			<label for="worldGridWidth">World grid</label>
-			<input type="text" id="worldGridWidth" name="worldGridWidth"/> <span>x</span>
-			<input type="text" id="worldGridHeight" name="worldGridHeight"/> <span>px</span>
-		</li>
-	</ul>
+		</dt>
+		<dd class="GridVania">
+			<input type="text" id="worldGridWidth" name="worldGridWidth" class="small"/> <span>x</span>
+			<input type="text" id="worldGridHeight" name="worldGridHeight" class="small"/> <span>px</span>
+		</dd>
 
+		<dt>
+			<label for="defaultLevelWidth">Default "new level" size</label>
+		</dt>
+		<dd>
+			<input type="text" id="defaultLevelWidth" class="small"/> <span>x</span>
+			<input type="text" id="defaultLevelHeight" class="small"/> <span>px</span>
+		</dd>
+	</dl>
 </div>
-
-
-
-<!-- Current level -->
-
-<h3>Level <span class="levelIdentifier">???</span></h3>
-
-<ul class="form" id="levelForm">
-	<li>
-		<label for="identifier">Level identifier</label>
-		<input type="text" id="identifier"/>
-		<div class="info identifier"></div>
-	</li>
-
-	<li>
-		<label for="name">World coords</label>
-		<input type="text" id="worldX"/>
-		<span>,</span>
-		<input type="text" id="worldY"/>
-		<span>px</span>
-	</li>
-
-	<li>
-		<label for="name">Size</label>
-		<input type="text" id="width"/>
-		<span>x</span>
-		<input type="text" id="height"/>
-		<span>px</span>
-	</li>
-
-	<li>
-		<label for="bgColor">Bg color</label>
-		<input type="color" id="bgColor"/>
-		<a class="reset">Use default</a>
-		<span class="usingDefault">(default)</a>
-	</li>
-
-	<li class="bg">
-		<label>Bg image</label>
-		<div class="pos">
-			<select id="bgPos"></select>
-			<span class="pivot"></span>
-		</div>
-	</li>
-</ul>
-
-<div class="buttons">
-	<button class="duplicate gray" title="**Duplicate level** Note: you can also just drag a level with CTRL+ALT to duplicate it.">
-		Duplicate level
-	</button>
-
-	<button class="delete dark" title="Delete level">
-		<span class="icon delete"></span>
-	</button>
-</div>
-
-
-<!-- Custom level fields -->
-
-<div class="customFields">
-	<em>Custom fields are not available yet :)</em>
-</div>
-

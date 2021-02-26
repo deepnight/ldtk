@@ -57,22 +57,22 @@ class Camera extends dn.Process {
 	}
 
 
+	public function onWorldModeChange(worldMode:Bool, usedMouseWheel:Bool) {
+		if( !usedMouseWheel )
+			if( worldMode ) {
+				targetZoom = snapZoomValue( M.fmax(0.3, getFitZoom()*0.8) );
+				if( editor.project.levels.length<=1 )
+					targetZoom*=0.5;
+			}
+			else
+				fit();
+	}
+
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case WorldMode(active):
-				if( active )
-					targetZoom = snapZoomValue( M.fmax(0.3, getFitZoom()*0.8) );
-				else
-					fit();
 
 			case LevelSelected(level):
-				// Move toward level if not over it
-				// if( !level.inBoundsWorld(worldX,worldY) ) {
-				// 	var ang = Math.atan2( level.worldCenterY-worldY, level.worldCenterX-worldX );
-				// 	var dist = 100; // TODO pick a better dist
-				// 	targetWorldX = worldX + Math.cos(ang)*dist;
-				// 	targetWorldY = worldY + Math.sin(ang)*dist;
-				// }
 
 			case ViewportChanged:
 
@@ -182,6 +182,8 @@ class Camera extends dn.Process {
 		targetZoom = null;
 	}
 
+	inline function isAutoZooming() return targetZoom!=null;
+
 	public inline function cancelAllAutoMovements() {
 		cancelAutoScrolling();
 		cancelAutoZoom();
@@ -208,7 +210,8 @@ class Camera extends dn.Process {
 	}
 
 	inline function snapZoomValue(z:Float) {
-		return z<=pixelRatio ? z : M.round(z*2)/2;
+		return z;
+		// return z<=pixelRatio ? z : M.round(z*2)/2;
 	}
 
 	inline function get_adjustedZoom() {
@@ -234,18 +237,27 @@ class Camera extends dn.Process {
 
 		// Animated zoom
 		if( targetZoom!=null ) {
-			deltaZoomTo( levelX, levelY, ( targetZoom - rawZoom ) * M.fmin(1, 0.10 * tmod / rawZoom) );
+			editor.requestFps();
+			deltaZoomTo( levelX, levelY, ( targetZoom - rawZoom ) * M.fmin(1, 0.08*tmod/rawZoom) );
 			if( M.fabs(targetZoom-rawZoom) <= 0.01*rawZoom )
 				cancelAutoZoom();
 		}
 
 		// Animated scrolling
 		if( targetWorldX!=null ) {
-			worldX += ( targetWorldX - worldX ) * M.fmin(1, 0.21*tmod);
-			worldY += ( targetWorldY - worldY ) * M.fmin(1, 0.21*tmod);
+			editor.requestFps();
+			worldX += ( targetWorldX - worldX ) * M.fmin(1, 0.1*tmod);
+			worldY += ( targetWorldY - worldY ) * M.fmin(1, 0.1*tmod);
 			if( M.dist(targetWorldX, targetWorldY, worldX, worldY)<=4 )
 				cancelAutoScrolling();
 		}
 	}
 
+	public inline function getLevelWidthRatio(l:data.Level) {
+		return ( l.pxWid * adjustedZoom ) / width;
+	}
+
+	public inline function getLevelHeightRatio(l:data.Level) {
+		return ( l.pxHei * adjustedZoom ) / height;
+	}
 }

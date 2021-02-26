@@ -107,7 +107,7 @@ class FieldTypeConverter {
 		return all;
 	}
 
-	public static function convert(p:data.Project, ed:data.def.EntityDef, fd:data.def.FieldDef, c:Convertor) {
+	public static function convert(p:data.Project, fd:data.def.FieldDef, c:Convertor, onSuccess:Void->Void) {
 		if( c==null )
 			throw "Unsupported conversion";
 
@@ -143,8 +143,8 @@ class FieldTypeConverter {
 
 		new ui.modal.Progress("Type conversion", ops, ()->{
 			N.success("Type changed to "+toType);
-			Editor.ME.ge.emit( EntityFieldDefChanged(ed) );
 			new ui.LastChance(L.t._("Type conversion"), oldProject);
+			onSuccess();
 		});
 	}
 }

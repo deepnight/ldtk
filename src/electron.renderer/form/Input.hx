@@ -8,8 +8,8 @@ import haxe.macro.Context;
 class Input<T> {
 	#if !macro
 	public var jInput : js.jquery.JQuery;
-	var getter : Void->T;
-	var setter : T->Void;
+	var rawGetter : Void->T;
+	var rawSetter : T->Void;
 
 	var lastValidValue : T;
 	public var validityCheck : Null<T->Bool>;
@@ -17,12 +17,12 @@ class Input<T> {
 	var linkedEvents : Map<GlobalEvent,Bool> = new Map();
 	public var confirmMessage: Null<LocaleString>;
 
-	private function new(jElement:js.jquery.JQuery, getter, setter) {
+	private function new(jElement:js.jquery.JQuery, rawGetter:Void->T, rawSetter:T->Void) {
 		if( jElement.length==0 )
 			throw "Empty jQuery object";
 
-		this.getter = getter;
-		this.setter = setter;
+		this.rawGetter = rawGetter;
+		this.rawSetter = rawSetter;
 		jInput = jElement;
 		jInput.off(".input");
 		writeValueToInput();
@@ -35,6 +35,57 @@ class Input<T> {
 			onInputChange();
 		});
 	}
+
+	function getter() {
+		return rawGetter();
+	}
+	function setter(v:T) {
+		return rawSetter(v);
+	}
+
+	function getSlideDisplayValue(v:Float) : String {
+		return null;
+	}
+
+	public function enableSlider(speed=1.0) {
+		if( getSlideDisplayValue(0)==null )
+			throw "Slider is not supported for this Input type";
+
+		jInput.addClass("slider");
+		var startX = -1.;
+		var threshold = 3;
+
+		jInput
+			.off(".slider")
+			.on("mousedown.slider", function(ev:js.jquery.Event) {
+				startX = ev.pageX;
+				ev.preventDefault();
+
+				var startVal : Float = cast getter();
+				App.ME.jDoc
+					.off(".slider")
+					.on("mousemove.slider", function(ev) {
+						var delta = startX<0 ? 0 : ev.pageX-startX;
+						if( M.fabs(delta)>=threshold ) {
+							var v = getSlideDisplayValue( startVal + delta*0.008*speed );
+							jInput.val( v );
+							jInput.val( Std.string( parseInputValue() ) ); // Force clamping
+							jInput.addClass("editing");
+						}
+					})
+					.on("mouseup.slider", function(ev) {
+						App.ME.jDoc.off(".slider");
+						jInput.removeClass("editing");
+
+						var delta = startX<0 ? 0 : ev.pageX-startX;
+						if( M.fabs(delta)<=threshold )
+							jInput.focus().select();
+						else
+							onInputChange();
+					});
+			});
+	}
+
 
 	function onInputChange(bypassConfirm=false) {
 		if( !bypassConfirm && confirmMessage!=null ) {
@@ -63,7 +114,9 @@ class Input<T> {
 		}
 
 		onBeforeSetter();
-		setter( parseInputValue() );
+		var v = parseInputValue();
+		v = fixValue(v);
+		setter(v);
 		writeValueToInput();
 		lastValidValue = getter();
 		onChange();
@@ -77,6 +130,7 @@ class Input<T> {
 	}
 
 	public dynamic function onBeforeSetter() {}
+	public dynamic function fixValue(v:T) : T { return v; }
 	public dynamic function onChange() {}
 	public dynamic function onValueChange(v:T) {}
 
@@ -105,7 +159,7 @@ class Input<T> {
 		jInput.prop("disabled",true);
 	}
 
-	public function setPlaceholder(v:T) {
+	public function setPlaceholder(v:Dynamic) {
 		if( !jInput.is("[type=text]") )
 			throw "Not compatible with this input type";
 		jInput.attr("placeholder", Std.string(v));

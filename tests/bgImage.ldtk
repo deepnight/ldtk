@@ -5,245 +5,243 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.1",
+		"appVersion": "0.8.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.7.1",
+	"jsonVersion": "0.8.0",
+	"nextUid": 23,
+	"worldLayout": "Free",
+	"worldGridWidth": 256,
+	"worldGridHeight": 256,
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
+	"defaultLevelWidth": 256,
+	"defaultLevelHeight": 256,
 	"bgColor": "#7F8093",
 	"defaultLevelBgColor": "#7F8093",
-	"nextUid": 23,
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
 	"exportPng": false,
+	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"worldLayout": "Free",
-	"worldGridWidth": 256,
-	"worldGridHeight": 256,
-	"defs": {
-		"layers": [
-			{
-				"__type": "IntGrid",
-				"identifier": "IntGrid",
-				"type": "IntGrid",
-				"uid": 1,
-				"gridSize": 16,
-				"displayOpacity": 1,
-				"pxOffsetX": 0,
-				"pxOffsetY": 0,
-				"intGridValues": [{ "identifier": "walls", "color": "#FFFFFF" }],
-				"autoTilesetDefUid": 3,
-				"autoRuleGroups": [
-					{
-						"uid": 4,
-						"name": "walls",
-						"active": true,
-						"collapsed": false,
-						"rules": [
-							{
-								"uid": 21,
-								"active": true,
-								"size": 3,
-								"tileIds": [8,28,9,29],
-								"chance": 0.92,
-								"breakOnMatch": true,
-								"pattern": [0,0,0,0,1,1,0,1,1],
-								"flipX": false,
-								"flipY": false,
-								"xModulo": 2,
-								"yModulo": 2,
-								"checker": "Horizontal",
-								"tileMode": "Stamp",
-								"pivotX": 0,
-								"pivotY": 0,
-								"perlinActive": true,
-								"perlinSeed": 1420868,
-								"perlinScale": 0.43,
-								"perlinOctaves": 2
-							},
-							{
-								"uid": 7,
-								"active": true,
-								"size": 3,
-								"tileIds": [187],
-								"chance": 1,
-								"breakOnMatch": true,
-								"pattern": [0,-1,0,-1,1,0,0,0,0],
-								"flipX": true,
-								"flipY": false,
-								"xModulo": 1,
-								"yModulo": 1,
-								"checker": "None",
-								"tileMode": "Single",
-								"pivotX": 0,
-								"pivotY": 0,
-								"perlinActive": false,
-								"perlinSeed": 2194757,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							},
-							{
-								"uid": 8,
-								"active": true,
-								"size": 3,
-								"tileIds": [141],
-								"chance": 1,
-								"breakOnMatch": true,
-								"pattern": [0,-1,0,0,1,0,0,0,0],
-								"flipX": false,
-								"flipY": false,
-								"xModulo": 2,
-								"yModulo": 1,
-								"checker": "None",
-								"tileMode": "Single",
-								"pivotX": 0,
-								"pivotY": 0,
-								"perlinActive": false,
-								"perlinSeed": 3177314,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							},
-							{
-								"uid": 6,
-								"active": true,
-								"size": 3,
-								"tileIds": [80,81],
-								"chance": 1,
-								"breakOnMatch": true,
-								"pattern": [0,1,1,0,1,1,0,0,0],
-								"flipX": false,
-								"flipY": false,
-								"xModulo": 2,
-								"yModulo": 1,
-								"checker": "Horizontal",
-								"tileMode": "Stamp",
-								"pivotX": 0,
-								"pivotY": 0,
-								"perlinActive": false,
-								"perlinSeed": 5102025,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							},
-							{
-								"uid": 5,
-								"active": true,
-								"size": 1,
-								"tileIds": [140],
-								"chance": 1,
-								"breakOnMatch": true,
-								"pattern": [1],
-								"flipX": false,
-								"flipY": false,
-								"xModulo": 1,
-								"yModulo": 1,
-								"checker": "None",
-								"tileMode": "Single",
-								"pivotX": 0,
-								"pivotY": 0,
-								"perlinActive": false,
-								"perlinSeed": 4584727,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							}
-						]
-					},
-					{
-						"uid": 10,
-						"name": "shadows",
-						"active": true,
-						"collapsed": false,
-						"rules": [
-							{
-								"uid": 12,
-								"active": true,
-								"size": 3,
-								"tileIds": [90],
-								"chance": 1,
-								"breakOnMatch": false,
-								"pattern": [0,1,0,0,-1,0,0,0,0],
-								"flipX": false,
-								"flipY": false,
-								"xModulo": 1,
-								"yModulo": 1,
-								"checker": "None",
-								"tileMode": "Single",
-								"pivotX": 0,
-								"pivotY": 0,
-								"perlinActive": false,
-								"perlinSeed": 4549261,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							},
-							{
-								"uid": 11,
-								"active": true,
-								"size": 3,
-								"tileIds": [91],
-								"chance": 1,
-								"breakOnMatch": true,
-								"pattern": [1,0,0,1,-1,0,0,0,0],
-								"flipX": false,
-								"flipY": false,
-								"xModulo": 1,
-								"yModulo": 1,
-								"checker": "None",
-								"tileMode": "Single",
-								"pivotX": 0,
-								"pivotY": 0,
-								"perlinActive": false,
-								"perlinSeed": 1038948,
-								"perlinScale": 0.2,
-								"perlinOctaves": 2
-							}
-						]
-					}
-				],
-				"autoSourceLayerDefUid": null,
-				"tilesetDefUid": null,
-				"tilePivotX": 0,
-				"tilePivotY": 0
-			}
-		],
-		"entities": [],
-		"tilesets": [
-			{
-				"identifier": "Inca_front_by_Kronbits_extended",
-				"uid": 3,
-				"relPath": "../app/samples/atlas/Inca_front_by_Kronbits-extended.png",
-				"pxWid": 320,
-				"pxHei": 224,
-				"tileGridSize": 16,
-				"spacing": 0,
-				"padding": 0,
-				"savedSelections": [],
-				"cachedPixelData": {
-					"opaqueTiles": "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
-					"averageColors": "f965f964fa65f965f854f854fa65f964fa64f964fa64fa64fa64f964f088f088f088f088f088f088f854f854f854f854f954f854f854f844f954f854f954fa64fa64f954f088f088f088f088f088f088f965f964f965f964f965f954f965f954fa65f965fa54fa64fa64f954f088f088f088f088f088f088f744f744f854f844f854f854f634f533f644f633f954f954f954f854f088f088f088f088f088f088f954f954f964f854f964f954f964f854f964f85430001000f088f088f088f088f088f088f088f088f854f754f964f964f954f854f954f854f854f854f088f088f088f088f088f088f088f088f088f088f855f854f965f964f965f964f965f964f965f964f088f088f088f088f088f088f088f088f088f088f854f854f744f854f954f954f854f965f964f954f088f088f088f088f088f088f088f088f088f088f854f854f854f854f954f964f954f965f854f954f088f088f088f088f088f088f088f088f088f088f854f854f964f855f854f854f954f854f854f964f088f088f088f088f088f088f088f088f088f088f965f854f744f854f643f088f088f088f088f088f088f088f088f088f088f088f088f088f088f088f854f643f643f754f754f088f088f088f088f088f088f088f088f088f088f088f088f088f088f088fa65f965f954f744f566f088f088f088f088f088f088f088f088f088f088f088f088f088f088f088f965f965f954f744f088f088f088f088f088f088f088f088f088f088f088f088f088f088f088f088"
+	"advancedOptionFlags": [],
+	"defs": { "layers": [
+		{
+			"__type": "IntGrid",
+			"identifier": "IntGrid",
+			"type": "IntGrid",
+			"uid": 1,
+			"gridSize": 16,
+			"displayOpacity": 1,
+			"pxOffsetX": 0,
+			"pxOffsetY": 0,
+			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#FFFFFF" }],
+			"autoTilesetDefUid": 3,
+			"autoRuleGroups": [
+				{
+					"uid": 4,
+					"name": "walls",
+					"active": true,
+					"collapsed": false,
+					"rules": [
+						{
+							"uid": 21,
+							"active": true,
+							"size": 3,
+							"tileIds": [8,28,9,29],
+							"chance": 0.92,
+							"breakOnMatch": true,
+							"pattern": [0,0,0,0,1,1,0,1,1],
+							"flipX": false,
+							"flipY": false,
+							"xModulo": 2,
+							"yModulo": 2,
+							"checker": "Horizontal",
+							"tileMode": "Stamp",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": true,
+							"perlinSeed": 1420868,
+							"perlinScale": 0.43,
+							"perlinOctaves": 2
+						},
+						{
+							"uid": 7,
+							"active": true,
+							"size": 3,
+							"tileIds": [187],
+							"chance": 1,
+							"breakOnMatch": true,
+							"pattern": [0,-1,0,-1,1,0,0,0,0],
+							"flipX": true,
+							"flipY": false,
+							"xModulo": 1,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 2194757,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						},
+						{
+							"uid": 8,
+							"active": true,
+							"size": 3,
+							"tileIds": [141],
+							"chance": 1,
+							"breakOnMatch": true,
+							"pattern": [0,-1,0,0,1,0,0,0,0],
+							"flipX": false,
+							"flipY": false,
+							"xModulo": 2,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 3177314,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						},
+						{
+							"uid": 6,
+							"active": true,
+							"size": 3,
+							"tileIds": [80,81],
+							"chance": 1,
+							"breakOnMatch": true,
+							"pattern": [0,1,1,0,1,1,0,0,0],
+							"flipX": false,
+							"flipY": false,
+							"xModulo": 2,
+							"yModulo": 1,
+							"checker": "Horizontal",
+							"tileMode": "Stamp",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 5102025,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						},
+						{
+							"uid": 5,
+							"active": true,
+							"size": 1,
+							"tileIds": [140],
+							"chance": 1,
+							"breakOnMatch": true,
+							"pattern": [1],
+							"flipX": false,
+							"flipY": false,
+							"xModulo": 1,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 4584727,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						}
+					]
+				},
+				{
+					"uid": 10,
+					"name": "shadows",
+					"active": true,
+					"collapsed": false,
+					"rules": [
+						{
+							"uid": 12,
+							"active": true,
+							"size": 3,
+							"tileIds": [90],
+							"chance": 1,
+							"breakOnMatch": false,
+							"pattern": [0,1,0,0,-1,0,0,0,0],
+							"flipX": false,
+							"flipY": false,
+							"xModulo": 1,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 4549261,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						},
+						{
+							"uid": 11,
+							"active": true,
+							"size": 3,
+							"tileIds": [91],
+							"chance": 1,
+							"breakOnMatch": true,
+							"pattern": [1,0,0,1,-1,0,0,0,0],
+							"flipX": false,
+							"flipY": false,
+							"xModulo": 1,
+							"yModulo": 1,
+							"checker": "None",
+							"tileMode": "Single",
+							"pivotX": 0,
+							"pivotY": 0,
+							"perlinActive": false,
+							"perlinSeed": 1038948,
+							"perlinScale": 0.2,
+							"perlinOctaves": 2
+						}
+					]
 				}
-			},
-			{
-				"identifier": "DaWeeD",
-				"uid": 22,
-				"relPath": "bg/DaWeeD.png",
-				"pxWid": 480,
-				"pxHei": 270,
-				"tileGridSize": 16,
-				"spacing": 0,
-				"padding": 0,
-				"savedSelections": [],
-				"cachedPixelData": {
-					"opaqueTiles": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
-					"averageColors": "fa44fb44f635f635f635fa65f635f855fd85f955f525f525f525f525f635f525f635f944fb44fb44fc54fb44fb54fa34fd85fd85fd74fc63fc63fc54fb44fc43f635f635f525f735f635fc75fa65f525f635f525f525f525f525f525f635f525f735f934fb44fd64fe84fb43fc64fe74fe95fe84fe63fd63fb44fa44f934fc64fb65f635f735fc64f955f635f525f525f525f525f525f635f525f635fa44fa44fb54fd84fd64fd85fe85fe95fe84fe74fe63fd64fb44fb44fb44fb54fd74f955f635fa54f735f735f635f635f525f525f635f735f525f635fc53fb43fc64fd64fc43fd74fe95fc75fd63fe84fe95fd95fa44fb43fb54fa44f934fb44f944f735f945f525f525f525f525f745f855f745f635f835fc53fb44fb54fd74fe95fe85fe84fc64fa44fe95fe95fd85fb44fc53fa44fb44fa44fb44fa44f735f934f835f735f735f835fa55f835f635f934fa34fa44fb64fc64fe95fe95fe95fe73fc53f934fb54fe63fb44fa44f934fa34fa34fa44fa44fa34fa34f944fc64f635f525f525f635f525f835fc54fa44fb44fc74fb54fc54fb54fd85fc54fb44fa44f735fc63fa44f834f835fa44f934f934f934fa34f934fa44fc53f955f635f525f525f735f944fc53fb44fc54fc64fc53fd53fb44f945fa44f635f835f835f735f735f735f934fa44f934f735fa44fa54fc64fb44fb43fd85fb65f745f635fa44fc53fc43fb54fe95fe84fd63fd63fb44f934f635f635f525f525f635f525f635f934fb44f735f934fa34fc64fa44fb44fd53fb54fa54f845f635fa34fa44fb44fd74fe84fe74fd63fd64fa44fa44f635f944f525f944f835f525f525f834fb44f735fa34fa44fb64fb44fc53fc53fb54fa44f945f835fb44fa44fb43fd84fe95fd63fa44f944f934f635f635fb44f834fb44f934f635f635fa34fa34f735fa44fb44fc54fc53fc53fc53fd64fc54fa54fa44fc43fc53fd74fd84fc64fa44f934f735f735f635f635f944f934f735f834f535f835fa44fa44fb44fb44f945f944f845fc53fe63fe63fd63fc54fd63fd63fd63fd63fd53fd53fd53fc53fc43fb44f934f835f735f635f735f635f535fa44fc43fc53f944f835f835f945f735fa44f945fe63fe63fd63fc54fb54fc64fd63fd53fd53fd53fc53fb43fb43fb44fa34fa34f934fa44f735f735f735f934fa34f835f735f735f835f525f944f845fd63fd63fe63fe63fd63fc53fc53fb54fb54fb54fc54fc54fb44fc43fc53fc43fb43fa44f934f934f835f934f934f635f635f735f735f635f635f635fb44fc53fb54fc53fc54fb44f944fa44fc53fa44f834f934f934fa54fc54fc54fb44fa44fa44fa44000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-				}
+			],
+			"autoSourceLayerDefUid": null,
+			"tilesetDefUid": null,
+			"tilePivotX": 0,
+			"tilePivotY": 0
+		}
+	], "entities": [], "tilesets": [
+		{
+			"identifier": "Inca_front_by_Kronbits_extended",
+			"uid": 3,
+			"relPath": "../app/samples/atlas/Inca_front_by_Kronbits-extended.png",
+			"pxWid": 320,
+			"pxHei": 224,
+			"tileGridSize": 16,
+			"spacing": 0,
+			"padding": 0,
+			"savedSelections": [],
+			"cachedPixelData": {
+				"opaqueTiles": "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+				"averageColors": "f965f964fa65f965f854f854fa65f964fa64f964fa64fa64fa64f964f088f088f088f088f088f088f854f854f854f854f954f854f854f844f954f854f954fa64fa64f954f088f088f088f088f088f088f965f964f965f964f965f954f965f954fa65f965fa54fa64fa64f954f088f088f088f088f088f088f744f744f854f844f854f854f634f533f644f633f954f954f954f854f088f088f088f088f088f088f954f954f964f854f964f954f964f854f964f85430001000f088f088f088f088f088f088f088f088f854f754f964f964f954f854f954f854f854f854f088f088f088f088f088f088f088f088f088f088f855f854f965f964f965f964f965f964f965f964f088f088f088f088f088f088f088f088f088f088f854f854f744f854f954f954f854f965f964f954f088f088f088f088f088f088f088f088f088f088f854f854f854f854f954f964f954f965f854f954f088f088f088f088f088f088f088f088f088f088f854f854f964f855f854f854f954f854f854f964f088f088f088f088f088f088f088f088f088f088f965f854f744f854f643f088f088f088f088f088f088f088f088f088f088f088f088f088f088f088f854f643f643f754f754f088f088f088f088f088f088f088f088f088f088f088f088f088f088f088fa65f965f954f744f566f088f088f088f088f088f088f088f088f088f088f088f088f088f088f088f965f965f954f744f088f088f088f088f088f088f088f088f088f088f088f088f088f088f088f088"
 			}
-		],
-		"enums": [],
-		"externalEnums": []
-	},
+		},
+		{
+			"identifier": "DaWeeD",
+			"uid": 22,
+			"relPath": "bg/DaWeeD.png",
+			"pxWid": 480,
+			"pxHei": 270,
+			"tileGridSize": 16,
+			"spacing": 0,
+			"padding": 0,
+			"savedSelections": [],
+			"cachedPixelData": {
+				"opaqueTiles": "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+				"averageColors": "fa44fb44f635f635f635fa65f635f855fd85f955f525f525f525f525f635f525f635f944fb44fb44fc54fb44fb54fa34fd85fd85fd74fc63fc63fc54fb44fc43f635f635f525f735f635fc75fa65f525f635f525f525f525f525f525f635f525f735f934fb44fd64fe84fb43fc64fe74fe95fe84fe63fd63fb44fa44f934fc64fb65f635f735fc64f955f635f525f525f525f525f525f635f525f635fa44fa44fb54fd84fd64fd85fe85fe95fe84fe74fe63fd64fb44fb44fb44fb54fd74f955f635fa54f735f735f635f635f525f525f635f735f525f635fc53fb43fc64fd64fc43fd74fe95fc75fd63fe84fe95fd95fa44fb43fb54fa44f934fb44f944f735f945f525f525f525f525f745f855f745f635f835fc53fb44fb54fd74fe95fe85fe84fc64fa44fe95fe95fd85fb44fc53fa44fb44fa44fb44fa44f735f934f835f735f735f835fa55f835f635f934fa34fa44fb64fc64fe95fe95fe95fe73fc53f934fb54fe63fb44fa44f934fa34fa34fa44fa44fa34fa34f944fc64f635f525f525f635f525f835fc54fa44fb44fc74fb54fc54fb54fd85fc54fb44fa44f735fc63fa44f834f835fa44f934f934f934fa34f934fa44fc53f955f635f525f525f735f944fc53fb44fc54fc64fc53fd53fb44f945fa44f635f835f835f735f735f735f934fa44f934f735fa44fa54fc64fb44fb43fd85fb65f745f635fa44fc53fc43fb54fe95fe84fd63fd63fb44f934f635f635f525f525f635f525f635f934fb44f735f934fa34fc64fa44fb44fd53fb54fa54f845f635fa34fa44fb44fd74fe84fe74fd63fd64fa44fa44f635f944f525f944f835f525f525f834fb44f735fa34fa44fb64fb44fc53fc53fb54fa44f945f835fb44fa44fb43fd84fe95fd63fa44f944f934f635f635fb44f834fb44f934f635f635fa34fa34f735fa44fb44fc54fc53fc53fc53fd64fc54fa54fa44fc43fc53fd74fd84fc64fa44f934f735f735f635f635f944f934f735f834f535f835fa44fa44fb44fb44f945f944f845fc53fe63fe63fd63fc54fd63fd63fd63fd63fd53fd53fd53fc53fc43fb44f934f835f735f635f735f635f535fa44fc43fc53f944f835f835f945f735fa44f945fe63fe63fd63fc54fb54fc64fd63fd53fd53fd53fc53fb43fb43fb44fa34fa34f934fa44f735f735f735f934fa34f835f735f735f835f525f944f845fd63fd63fe63fe63fd63fc53fc53fb54fb54fb54fc54fc54fb44fc43fc53fc43fb43fa44f934f934f835f934f934f635f635f735f735f635f635f635fb44fc53fb54fc53fc54fb44f944fa44fc53fa44f834f934f934fa54fc54fc54fb44fa44fa44fa44000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+			}
+		}
+	], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "N2D",
@@ -260,6 +258,7 @@
 			"bgPivotY": 0.5,
 			"__bgPos": { "topLeftPx": [0,0], "scale": [0.9666666666666667,0.9666666666666667], "cropRect": [0,2.5862068965517153,480,264.82758620689657] },
 			"externalRelPath": null,
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid",
@@ -376,6 +375,22 @@
 						{ "coordId": 435, "v": 0 },
 						{ "coordId": 462, "v": 0 },
 						{ "coordId": 463, "v": 0 }
+					],
+					"intGridCsv": [
+						1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,1,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						1,1,1,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+						1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,
+						0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,1,1,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,1,1
 					],
 					"autoLayerTiles": [
 						{ "px": [48,16], "src": [176,64], "f": 0, "t": 91, "d": [11,32] },
@@ -548,6 +563,7 @@
 						{ "px": [448,112], "src": [144,16], "f": 0, "t": 29, "d": [21,201] }
 					],
 					"seed": 9150878,
+					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []
 				}
@@ -569,6 +585,7 @@
 			"bgPivotY": 1,
 			"__bgPos": { "topLeftPx": [0,0], "scale": [2.05,2.05], "cropRect": [0,115.12195121951218,320,124.87804878048782] },
 			"externalRelPath": null,
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid",
@@ -701,6 +718,27 @@
 						{ "coordId": 653, "v": 0 },
 						{ "coordId": 654, "v": 0 },
 						{ "coordId": 655, "v": 0 }
+					],
+					"intGridCsv": [
+						1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,
+						1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						1,1,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,
+						1,0,1,1,1,1,1,1,0,0,0,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+						1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1
 					],
 					"autoLayerTiles": [
 						{ "px": [16,16], "src": [176,64], "f": 0, "t": 91, "d": [11,42] },
@@ -915,6 +953,7 @@
 						{ "px": [640,240], "src": [144,16], "f": 0, "t": 29, "d": [21,613] }
 					],
 					"seed": 630003,
+					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []
 				}
@@ -936,6 +975,7 @@
 			"bgPivotY": 1,
 			"__bgPos": { "topLeftPx": [0,0], "scale": [0.31527093596059114,0.31527093596059114], "cropRect": [0,0,812,812] },
 			"externalRelPath": null,
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid",
@@ -1076,6 +1116,16 @@
 						{ "coordId": 253, "v": 0 },
 						{ "coordId": 254, "v": 0 },
 						{ "coordId": 255, "v": 0 }
+					],
+					"intGridCsv": [
+						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+						0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,
+						0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,
+						0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,
+						0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,
+						1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,
+						0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,
+						0,1,1,1,1,1,1,1,1,1,1
 					],
 					"autoLayerTiles": [
 						{ "px": [32,32], "src": [176,64], "f": 0, "t": 91, "d": [11,34] },
@@ -1299,6 +1349,7 @@
 						{ "px": [224,240], "src": [144,16], "f": 0, "t": 29, "d": [21,237] }
 					],
 					"seed": 9956391,
+					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []
 				}
@@ -1320,6 +1371,7 @@
 			"bgPivotY": 0.5,
 			"__bgPos": { "topLeftPx": [0,0], "scale": [1.0666666666666667,1.0666666666666667], "cropRect": [2.5,0,315,240] },
 			"externalRelPath": null,
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid",
@@ -1446,6 +1498,18 @@
 						{ "coordId": 316, "v": 0 },
 						{ "coordId": 317, "v": 0 },
 						{ "coordId": 335, "v": 0 }
+					],
+					"intGridCsv": [
+						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+						1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+						0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,
+						1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,
+						0,0,1,0,0,0,0,0,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,
+						1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,
+						0,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,1,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+						1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 					],
 					"autoLayerTiles": [
 						{ "px": [256,96], "src": [176,64], "f": 0, "t": 91, "d": [11,142] },
@@ -1642,6 +1706,7 @@
 						{ "px": [16,208], "src": [144,16], "f": 0, "t": 29, "d": [21,252] }
 					],
 					"seed": 1718184,
+					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []
 				}
@@ -1663,6 +1728,7 @@
 			"bgPivotY": 0.5,
 			"__bgPos": { "topLeftPx": [0,0], "scale": [0.31527093596059114,0.31527093596059114], "cropRect": [486,0,812,812] },
 			"externalRelPath": null,
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid",
@@ -1821,6 +1887,16 @@
 						{ "coordId": 253, "v": 0 },
 						{ "coordId": 254, "v": 0 },
 						{ "coordId": 255, "v": 0 }
+					],
+					"intGridCsv": [
+						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,
+						1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+						1,1,1,1,1,1,1,1,1,1,1
 					],
 					"autoLayerTiles": [
 						{ "px": [48,32], "src": [176,64], "f": 0, "t": 91, "d": [11,35] },
@@ -2072,6 +2148,7 @@
 						{ "px": [192,240], "src": [144,16], "f": 0, "t": 29, "d": [21,235] }
 					],
 					"seed": 2353722,
+					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []
 				}

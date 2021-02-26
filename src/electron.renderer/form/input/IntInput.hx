@@ -4,6 +4,7 @@ class IntInput extends form.Input<Int> {
 	var min : Int = M.T_INT16_MIN;
 	var max : Int = M.T_INT16_MAX;
 	public var isColorCode(default,set) = false;
+	public var allowNull = false;
 
 	public function new(j:js.jquery.JQuery, getter:Void->Int, setter:Int->Void) {
 		super(j, getter, setter);
@@ -15,9 +16,17 @@ class IntInput extends form.Input<Int> {
 		return isColorCode;
 	}
 
-	public function setBounds(min,max) {
-		this.min = min;
-		this.max = max;
+	override function getSlideDisplayValue(v:Float):String {
+		return Std.string(v);
+	}
+
+	override public function enableSlider(speed:Float = 1.0) {
+		super.enableSlider(speed*11);
+	}
+
+	public function setBounds(min:Null<Float>, max:Null<Float>) {
+		this.min = min==null ? M.T_INT16_MIN : Std.int(min);
+		this.max = max==null ? M.T_INT16_MAX : Std.int(max);
 	}
 
 	override function writeValueToInput() {
@@ -28,6 +37,9 @@ class IntInput extends form.Input<Int> {
 	}
 
 	override function parseInputValue() : Int {
+		if( allowNull && StringTools.trim( jInput.val() ).length==0 )
+			return null;
+
 		if( isColorCode ) {
 			var v = C.hexToInt( jInput.val() );
 			return v;

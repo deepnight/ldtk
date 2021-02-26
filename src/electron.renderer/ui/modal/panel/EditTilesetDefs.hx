@@ -22,18 +22,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 			jForm.find("input").first().focus().select();
 		});
 
-		// Delete tileset
-		jModalAndMask.find(".mainList button.delete").click( function(ev) {
-			if( curTd==null ) {
-				N.error("No tileset selected.");
-				return;
-			}
-			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this tileset, it will be deleted in all levels and corresponding layers as well. Are you sure?", function() {
-				deleteTilesetDef(curTd);
-			});
-		});
-
-
 		selectTileset(selectedDef!=null ? selectedDef : project.defs.tilesets[0]);
 	}
 
@@ -133,7 +121,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		if( curTd==null ) {
 			jForm.hide();
-			jContent.find(".noTileLayer").hide();
+			// jContent.find(".noTileLayer").hide();
 			jContent.find(".none").show();
 			return;
 		}
@@ -141,10 +129,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 		JsTools.parseComponents(jForm);
 		jForm.show();
 		jContent.find(".none").hide();
-		if( !project.defs.hasLayerType(Tiles) )
-			jContent.find(".noTileLayer").show();
-		else
-			jContent.find(".noTileLayer").hide();
+		// if( !project.defs.hasLayerType(Tiles) && !project.defs.hasAutoLayer() )
+		// 	jContent.find(".noTileLayer").show();
+		// else
+		// 	jContent.find(".noTileLayer").hide();
 
 		// Image file picker
 		jForm.find(".imagePicker").remove();
@@ -186,46 +174,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Fields
 		var i = Input.linkToHtmlInput(curTd.identifier, jForm.find("input[name='name']") );
-		i.validityCheck = function(id) return data.Project.isValidIdentifier(id) && project.defs.isTilesetIdentifierUnique(id);
-		i.validityError = N.invalidIdentifier;
+		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isTilesetIdentifierUnique(id,curTd));
 		i.onChange = editor.ge.emit.bind( TilesetDefChanged(curTd) );
-
-		// "Import image" button
-		// var b = jForm.find("#tilesetFile");
-		// if( !curTd.hasAtlasPath() )
-		// 	b.text( Lang.t._("Select an image file") );
-		// else if( !curTd.isAtlasLoaded() )
-		// 	b.text("ERROR: Couldn't read image data");
-		// else
-		// 	b.text("Replace image");
-
-		// b.click( function(ev) {
-		// 	dn.electron.Dialogs.open([".png", ".gif", ".jpg", ".jpeg"], project.getProjectDir(), function(absPath) {
-		// 		var oldRelPath = curTd.relPath;
-		// 		var relPath = project.makeRelativeFilePath( absPath );
-		// 		App.LOG.fileOp("Loading atlas: "+absPath);
-
-		// 		var result = curTd.importAtlasImage(project.getProjectDir(), relPath);
-		// 		switch result {
-		// 			case Ok:
-
-		// 			case FileNotFound, LoadingFailed(_):
-		// 				new ui.modal.dialog.Warning( Lang.atlasLoadingMessage(relPath, result) );
-		// 				return;
-
-		// 			case TrimmedPadding, RemapLoss, RemapSuccessful:
-		// 				new ui.modal.dialog.Message( Lang.atlasLoadingMessage(relPath, result), "tile" );
-		// 		}
-
-		// 		if( oldRelPath!=null )
-		// 			editor.watcher.stopWatching( project.makeAbsoluteFilePath(oldRelPath) );
-		// 		editor.watcher.watchTileset(curTd);
-
-		// 		project.defs.autoRenameTilesetIdentifier(oldRelPath, curTd);
-		// 		updateTilesetPreview();
-		// 		editor.ge.emit( TilesetDefChanged(curTd) );
-		// 	});
-		// });
 
 		var i = Input.linkToHtmlInput( curTd.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
 		i.linkEvent( TilesetDefChanged(curTd) );

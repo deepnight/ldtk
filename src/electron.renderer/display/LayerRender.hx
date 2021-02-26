@@ -20,6 +20,18 @@ class LayerRender {
 	}
 
 
+	public function onViewportChange() {
+		for(e in entityRenders)
+			e.onViewportChange();
+	}
+
+
+	public function onLayerSelection() {
+		for(e in entityRenders)
+			e.onLayerSelection();
+	}
+
+
 	public function render(li:data.inst.LayerInstance, renderAutoLayers=true, ?target:h2d.Object) {
 		// Cleanup
 		if( root!=null )
@@ -79,7 +91,7 @@ class LayerRender {
 
 		case Tiles:
 			// Classic tiles layer
-			var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
+			var td = li.getTiledsetDef();
 			if( td!=null && td.isAtlasLoaded() ) {
 				var tg = new h2d.TileGroup( td.getAtlasTile(), root );
 
@@ -139,8 +151,8 @@ class LayerRender {
 				// Export IntGrid as pixel tiny image
 				if( li.def.type==IntGrid ) {
 					var pixels = hxd.Pixels.alloc(li.cWid, li.cHei, RGBA);
-					for(cx in 0...li.cWid)
-					for(cy in 0...li.cWid) {
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid) {
 						if( li.hasIntGrid(cx,cy) )
 							pixels.setPixel( cx, cy, C.addAlphaF(li.getIntGridColorAt(cx,cy)) );
 					}

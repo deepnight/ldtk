@@ -5,7 +5,7 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.0",
+		"appVersion": "0.8.0",
 		"url": "https://ldtk.io"
 	},
 	"identifier": "Vortex_intro",
@@ -22,6 +22,7 @@
 	"bgPivotY": 0.5,
 	"__bgPos": null,
 	"externalRelPath": null,
+	"fieldInstances": [],
 	"layerInstances": [
 		{
 			"__identifier": "Front_elements",
@@ -38,7 +39,9 @@
 			"layerDefUid": 182,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [384,256], "src": [32,96], "f": 0, "t": 194, "d": [185,808] },
 				{ "px": [464,256], "src": [32,96], "f": 0, "t": 194, "d": [185,813] },
@@ -60,6 +63,7 @@
 				{ "px": [384,272], "src": [96,96], "f": 2, "t": 198, "d": [190,857] }
 			],
 			"seed": 2448921,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -78,49 +82,192 @@
 			"layerDefUid": 21,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [],
 			"seed": 3672826,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": [
-				{ "__identifier": "Hero", "__grid": [20,20], "__pivot": [0.5,1], "__tile": null, "defUid": 20, "px": [328,336], "fieldInstances": [] },
-				{ "__identifier": "Vault", "__grid": [34,19], "__pivot": [0.5,0.5], "__tile": null, "defUid": 136, "px": [552,312], "fieldInstances": [] },
-				{ "__identifier": "Vortex", "__grid": [22,14], "__pivot": [0.5,0.5], "__tile": null, "defUid": 192, "px": [360,232], "fieldInstances": [] },
-				{ "__identifier": "Door", "__grid": [25,20], "__pivot": [0.5,1], "__tile": null, "defUid": 127, "px": [408,336], "fieldInstances": [
-					{ "__identifier": "needKey", "__value": true, "__type": "Bool", "defUid": 143, "realEditorValues": [] },
-					{ "__identifier": "showLock", "__value": true, "__type": "Bool", "defUid": 167, "realEditorValues": [] }
-				] },
-				{ "__identifier": "Door", "__grid": [30,20], "__pivot": [0.5,1], "__tile": null, "defUid": 127, "px": [488,336], "fieldInstances": [
-					{ "__identifier": "needKey", "__value": true, "__type": "Bool", "defUid": 143, "realEditorValues": [] },
-					{ "__identifier": "showLock", "__value": true, "__type": "Bool", "defUid": 167, "realEditorValues": [] }
-				] },
-				{ "__identifier": "Torch", "__grid": [23,18], "__pivot": [0.5,1], "__tile": null, "defUid": 151, "px": [376,304], "fieldInstances": [] },
-				{ "__identifier": "Torch", "__grid": [21,18], "__pivot": [0.5,1], "__tile": null, "defUid": 151, "px": [344,304], "fieldInstances": [] },
-				{ "__identifier": "Torch", "__grid": [33,18], "__pivot": [0.5,1], "__tile": null, "defUid": 151, "px": [536,304], "fieldInstances": [] },
-				{ "__identifier": "Torch", "__grid": [35,18], "__pivot": [0.5,1], "__tile": null, "defUid": 151, "px": [568,304], "fieldInstances": [] },
-				{ "__identifier": "Item", "__grid": [15,14], "__pivot": [0.5,1], "__tile": { "tilesetUid": 200, "srcRect": [160,480,16,16] }, "defUid": 64, "px": [248,240], "fieldInstances": [{
-					"__identifier": "type",
-					"__value": "DoorKey",
-					"__type": "LocalEnum.ItemType",
-					"defUid": 125,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["DoorKey"]
+				{
+					"__identifier": "Hero",
+					"__grid": [20,20],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 10,
+					"height": 20,
+					"defUid": 20,
+					"px": [328,336],
+					"fieldInstances": []
+				},
+				{
+					"__identifier": "Vault",
+					"__grid": [34,19],
+					"__pivot": [0.5,0.5],
+					"__tile": null,
+					"width": 11,
+					"height": 11,
+					"defUid": 136,
+					"px": [552,312],
+					"fieldInstances": []
+				},
+				{
+					"__identifier": "Vortex",
+					"__grid": [22,14],
+					"__pivot": [0.5,0.5],
+					"__tile": null,
+					"width": 16,
+					"height": 16,
+					"defUid": 192,
+					"px": [360,232],
+					"fieldInstances": []
+				},
+				{
+					"__identifier": "Door",
+					"__grid": [25,20],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 8,
+					"height": 32,
+					"defUid": 127,
+					"px": [408,336],
+					"fieldInstances": [
+						{ "__identifier": "needKey", "__value": true, "__type": "Bool", "defUid": 143, "realEditorValues": [] },
+						{ "__identifier": "showLock", "__value": true, "__type": "Bool", "defUid": 167, "realEditorValues": [] }
+					]
+				},
+				{
+					"__identifier": "Door",
+					"__grid": [30,20],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 8,
+					"height": 32,
+					"defUid": 127,
+					"px": [488,336],
+					"fieldInstances": [
+						{ "__identifier": "needKey", "__value": true, "__type": "Bool", "defUid": 143, "realEditorValues": [] },
+						{ "__identifier": "showLock", "__value": true, "__type": "Bool", "defUid": 167, "realEditorValues": [] }
+					]
+				},
+				{
+					"__identifier": "Torch",
+					"__grid": [23,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 4,
+					"height": 8,
+					"defUid": 151,
+					"px": [376,304],
+					"fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }]
+				},
+				{
+					"__identifier": "Torch",
+					"__grid": [21,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 4,
+					"height": 8,
+					"defUid": 151,
+					"px": [344,304],
+					"fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }]
+				},
+				{
+					"__identifier": "Torch",
+					"__grid": [33,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 4,
+					"height": 8,
+					"defUid": 151,
+					"px": [536,304],
+					"fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }]
+				},
+				{
+					"__identifier": "Torch",
+					"__grid": [35,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 4,
+					"height": 8,
+					"defUid": 151,
+					"px": [568,304],
+					"fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }]
+				},
+				{
+					"__identifier": "Item",
+					"__grid": [15,14],
+					"__pivot": [0.5,1],
+					"__tile": { "tilesetUid": 200, "srcRect": [160,480,16,16] },
+					"width": 16,
+					"height": 16,
+					"defUid": 64,
+					"px": [248,240],
+					"fieldInstances": [{
+						"__identifier": "type",
+						"__value": "DoorKey",
+						"__type": "LocalEnum.ItemType",
+						"defUid": 125,
+						"realEditorValues": [{
+							"id": "V_String",
+							"params": ["DoorKey"]
+						}]
 					}]
-				}] },
-				{ "__identifier": "Item", "__grid": [28,20], "__pivot": [0.5,1], "__tile": { "tilesetUid": 200, "srcRect": [192,432,16,16] }, "defUid": 64, "px": [456,336], "fieldInstances": [{
-					"__identifier": "type",
-					"__value": "Diamond",
-					"__type": "LocalEnum.ItemType",
-					"defUid": 125,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["Diamond"]
+				},
+				{
+					"__identifier": "Item",
+					"__grid": [28,20],
+					"__pivot": [0.5,1],
+					"__tile": { "tilesetUid": 200, "srcRect": [192,432,16,16] },
+					"width": 16,
+					"height": 16,
+					"defUid": 64,
+					"px": [456,336],
+					"fieldInstances": [{
+						"__identifier": "type",
+						"__value": "Diamond",
+						"__type": "LocalEnum.ItemType",
+						"defUid": 125,
+						"realEditorValues": [{
+							"id": "V_String",
+							"params": ["Diamond"]
+						}]
 					}]
-				}] },
-				{ "__identifier": "Torch", "__grid": [19,18], "__pivot": [0.5,1], "__tile": null, "defUid": 151, "px": [312,304], "fieldInstances": [] },
-				{ "__identifier": "Torch", "__grid": [17,18], "__pivot": [0.5,1], "__tile": null, "defUid": 151, "px": [280,304], "fieldInstances": [] },
-				{ "__identifier": "Torch", "__grid": [13,12], "__pivot": [0.5,1], "__tile": null, "defUid": 151, "px": [216,208], "fieldInstances": [] }
+				},
+				{
+					"__identifier": "Torch",
+					"__grid": [19,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 4,
+					"height": 8,
+					"defUid": 151,
+					"px": [312,304],
+					"fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }]
+				},
+				{
+					"__identifier": "Torch",
+					"__grid": [17,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 4,
+					"height": 8,
+					"defUid": 151,
+					"px": [280,304],
+					"fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }]
+				},
+				{
+					"__identifier": "Torch",
+					"__grid": [13,12],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 4,
+					"height": 8,
+					"defUid": 151,
+					"px": [216,208],
+					"fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }]
+				}
 			]
 		},
 		{
@@ -138,6 +285,7 @@
 			"layerDefUid": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [
 				{ "coordId": 0, "v": 0 },
 				{ "coordId": 1, "v": 0 },
@@ -1750,6 +1898,58 @@
 				{ "coordId": 1713, "v": 0 },
 				{ "coordId": 1714, "v": 0 }
 			],
+			"intGridCsv": [
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,3,3,3,3,3,3,3,
+				3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,0,0,0,3,3,3,3,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,3,3,3,3,3,3,3,3,3,3,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,
+				3,3,3,3,3,3,3,3,3,3,1,1,1,1,1,1,1,3,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,1,1,3,3,3,1,1,3,3,3,3,
+				3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,0,0,0,0,0,
+				0,0,0,0,0,3,3,3,0,0,3,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,2,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,0,0,0,0,0,0,0,0,1,1,0,2,
+				0,0,1,2,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,2,0,0,0,
+				0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+				
+			],
 			"autoLayerTiles": [
 				{ "px": [176,176], "src": [48,16], "f": 0, "t": 35, "d": [77,550] },
 				{ "px": [192,176], "src": [64,16], "f": 0, "t": 36, "d": [77,550] },
@@ -3137,6 +3337,7 @@
 				{ "px": [496,256], "src": [16,64], "f": 0, "t": 129, "d": [115,815] }
 			],
 			"seed": 5359290,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -3155,7 +3356,9 @@
 			"layerDefUid": 109,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [240,256], "src": [208,64], "f": 0, "t": 141, "d": [112,799] },
 				{ "px": [448,288], "src": [192,48], "f": 0, "t": 108, "d": [112,910] },
@@ -3165,6 +3368,7 @@
 				{ "px": [480,304], "src": [208,64], "f": 0, "t": 141, "d": [112,961] }
 			],
 			"seed": 1798696,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -3183,7 +3387,9 @@
 			"layerDefUid": 25,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [208,176], "src": [112,0], "f": 0, "t": 7, "d": [87,552] },
 				{ "px": [176,192], "src": [112,0], "f": 0, "t": 7, "d": [87,599] },
@@ -3467,6 +3673,7 @@
 				{ "px": [496,256], "src": [160,80], "f": 0, "t": 170, "d": [173,815] }
 			],
 			"seed": 4218366,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -3485,7 +3692,9 @@
 			"layerDefUid": 23,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [0,0], "src": [16,128], "f": 0, "t": 257, "d": [32,0] },
 				{ "px": [16,0], "src": [16,128], "f": 0, "t": 257, "d": [32,1] },
@@ -5286,6 +5495,7 @@
 				{ "px": [592,256], "src": [176,96], "f": 0, "t": 203, "d": [179,821] }
 			],
 			"seed": 5004694,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		}

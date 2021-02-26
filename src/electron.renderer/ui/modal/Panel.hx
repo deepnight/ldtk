@@ -4,22 +4,17 @@ class Panel extends ui.Modal {
 	var jPanelMask: js.jquery.JQuery; // mask over main panel
 	var jLinkedButton : Null<js.jquery.JQuery>;
 	var jCloseButton : js.jquery.JQuery;
+	var closeBtInvalidated = true;
 
 	public function new() {
+		super();
 		ui.Modal.closeAll(this);
 
-		super();
-
-		if( !Std.isOfType(this,ui.modal.panel.WorldPanel) )
-			editor.setWorldMode(false);
-
-		EntityInstanceEditor.closeExisting();
 		editor.selectionTool.clear();
 
 		var mainPanel = new J("#mainPanel");
 
 		jModalAndMask.addClass("panel");
-		jModalAndMask.offset({ top:0, left:mainPanel.outerWidth() });
 		jModalAndMask.removeClass("centered");
 
 		jCloseButton = new J('<button class="close gray"> <div class="icon close"/> </button>');
@@ -34,10 +29,25 @@ class Panel extends ui.Modal {
 		jPanelMask.width(mainPanel.outerWidth());
 		jPanelMask.height( mainPanel.outerHeight() - jPanelMask.offset().top );
 		jPanelMask.click( function(_) close() );
+
+		dn.Process.resizeAll();
+	}
+
+	override function onResize() {
+		super.onResize();
+		var jBar = editor.jMainPanel.find("#mainBar");
+		var y = jBar.offset().top + jBar.outerHeight();
+		jWrapper.css({
+			top: y+"px",
+			height: 'calc( 100vh - ${y}px )',
+		});
+
+		closeBtInvalidated = true;
 	}
 
 	var _lastWrapperWid : Float = 0;
 	function updateCloseButton() {
+		closeBtInvalidated = false;
 		if( isClosing() ) {
 			if( jCloseButton.is(":visible") )
 				jCloseButton.hide();
@@ -47,7 +57,7 @@ class Panel extends ui.Modal {
 		var w = jWrapper.outerWidth();
 		if( w!=_lastWrapperWid ) {
 			_lastWrapperWid = w;
-			jCloseButton.css({ left:(w-2)+"px" });
+			jCloseButton.css({ left:(w-3)+"px" });
 		}
 	}
 
@@ -57,7 +67,7 @@ class Panel extends ui.Modal {
 
 	function enableCloseButton() {
 		jCloseButton.show();
-		updateCloseButton();
+		closeBtInvalidated = true;
 	}
 
 	function linkToButton(selector:String) {
@@ -91,10 +101,12 @@ class Panel extends ui.Modal {
 			jLinkedButton.removeClass("active");
 
 		jPanelMask.remove();
+		updateCloseButton();
 	}
 
 	override function postUpdate() {
 		super.postUpdate();
-		updateCloseButton();
+		if( closeBtInvalidated )
+			updateCloseButton();
 	}
 }

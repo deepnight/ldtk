@@ -51,6 +51,7 @@ class EditProject extends ui.modal.Panel {
 	function updateProjectForm() {
 		ui.Tip.clear();
 		var jForm = jContent.find("ul.form:first");
+		jForm.off().find("*").off();
 
 		// File extension
 		var ext = project.filePath.extension;
@@ -107,6 +108,13 @@ class EditProject extends ui.modal.Panel {
 		var jLocate = jForm.find("#png").siblings(".locate").empty();
 		if( project.exportPng )
 			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/png", false) );
+		var jFilePattern = jForm.find("#png").siblings(".pattern").hide();
+		if( project.exportPng ) {
+			jFilePattern.show();
+			var i = new form.input.StringInput(jFilePattern, ()->"", (v)->{});
+			i.setPlaceholder("%level-%layer-%name");
+		}
+
 
 		var jFilePattern : js.jquery.JQuery = jForm.find("#png").siblings(".pattern").hide();
 		var jGuide : js.jquery.JQuery = jForm.find("#png").siblings(".guide").hide();
@@ -175,6 +183,53 @@ class EditProject extends ui.modal.Panel {
 				editor.ge.emit(ProjectSettingsChanged);
 			}
 		));
+
+
+		// Advanced options
+		var options = [
+			ldtk.Json.ProjectFlag.DiscardPreCsvIntGrid,
+		];
+		var jAdvanceds = jForm.find("ul.advanced");
+		if( project.hasAnyFlag(options) || cd.has("showAdvanced") ) {
+			jForm.find(".advancedWarning a").hide();
+			jAdvanceds.show();
+			cd.setS("showAdvanced",Const.INFINITE);
+		}
+		else {
+			jForm.find(".advancedWarning a").show().click(ev->{
+				jAdvanceds.show();
+				cd.setS("showAdvanced",Const.INFINITE);
+				ev.getThis().hide();
+			});
+			jAdvanceds.hide();
+		}
+		jAdvanceds.empty();
+		for( k in Type.getEnumConstructs(ldtk.Json.ProjectFlag) ) {
+			var e = ldtk.Json.ProjectFlag.createByName(k);
+			var jLi = new J('<li/>');
+			jLi.appendTo(jAdvanceds);
+
+			var jInput = new J('<input type="checkbox" id="$k"/>');
+			jInput.appendTo(jLi);
+
+			var jLabel = new J('<label for="$k"/>');
+			jLabel.appendTo(jLi);
+			switch e {
+				case DiscardPreCsvIntGrid:
+					jLabel.text("Discard pre-CSV IntGrid layer data in level data");
+					jInput.attr("title", L.t._("If checked, the exported JSON will not contain the deprecated array \"intGrid\", making the file smaller. Only use this if your game API supports LDtk 0.8.x or more."));
+				case _:
+			}
+
+			var i = new form.input.BoolInput(
+				jInput,
+				()->project.hasFlag(e),
+				(v)->{
+					project.setFlag(e, v);
+					editor.ge.emit(ProjectSettingsChanged);
+				}
+			);
+		}
 
 		JsTools.parseComponents(jForm);
 	}

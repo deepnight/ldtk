@@ -9,8 +9,14 @@ class LayerInstance {
 
 	public var levelId : Int;
 	public var layerDefUid : Int;
+	public var visible = true;
+
+	@:allow(importer)
 	var pxOffsetX : Int = 0;
+
+	@:allow(importer)
 	var pxOffsetY : Int = 0;
+
 	public var pxTotalOffsetX(get,never) : Int; inline function get_pxTotalOffsetX() return pxOffsetX + def.pxOffsetX;
 	public var pxTotalOffsetY(get,never) : Int; inline function get_pxTotalOffsetY() return pxOffsetY + def.pxOffsetY;
 	public var seed : Int;
@@ -19,6 +25,7 @@ class LayerInstance {
 	var intGrid : Map<Int,Int> = new Map(); // <coordId, value>
 	public var entityInstances : Array<EntityInstance> = [];
 	public var gridTiles : Map<Int, Array<GridTileInfos>> = []; // <coordId, tileinfos>
+	var overrideTilesetUid : Null<Int>;
 
 	/** < RuleUid, < coordId, { tiles } > > **/
 	public var autoTilesCache :
@@ -46,12 +53,48 @@ class LayerInstance {
 	}
 
 
-	public function toJson() : ldtk.Json.LayerInstanceJson {
-		var td : Null<data.def.TilesetDef> = def.tilesetDefUid!=null ? _project.defs.getTilesetDef(def.tilesetDefUid)
-			: def.autoTilesetDefUid!=null ? _project.defs.getTilesetDef(def.autoTilesetDefUid)
-			: null;
+	public function setOverrideTileset(?tilesetUid:Int) {
+		overrideTilesetUid = tilesetUid==null ? null : tilesetUid;
+	}
 
-		return {
+	public function getDefaultTilesetUid() : Null<Int> {
+		return
+			def.tilesetDefUid!=null ? def.tilesetDefUid
+			: def.autoTilesetDefUid!=null ? def.autoTilesetDefUid
+			: null;
+	}
+
+	public function getTilesetUid() : Null<Int> {
+		return
+			overrideTilesetUid!=null ? overrideTilesetUid
+			: def.tilesetDefUid!=null ? def.tilesetDefUid
+			: def.autoTilesetDefUid!=null ? def.autoTilesetDefUid
+			: null;
+	}
+
+
+	public function isUsingTileset(td:data.def.TilesetDef) {
+		if( getTilesetUid()==td.uid )
+			return true;
+
+		if( def.type==Entities )
+			for( li in entityInstances )
+				if( li.isUsingTileset(td) )
+					return true;
+
+		return false;
+	}
+
+
+	public function getTiledsetDef() : Null<data.def.TilesetDef> {
+		var tdUid = getTilesetUid();
+		return tdUid==null ? null : _project.defs.getTilesetDef(tdUid);
+	}
+
+	public function toJson() : ldtk.Json.LayerInstanceJson {
+		var td = getTiledsetDef();
+
+		var json : ldtk.Json.LayerInstanceJson = {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
 			__type: Std.string(def.type),
@@ -68,15 +111,26 @@ class LayerInstance {
 			layerDefUid: layerDefUid,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
+			visible: visible,
 
-			intGrid: {
+			intGrid: { // old IntGrid format
 				var arr = [];
-				for(e in intGrid.keyValueIterator())
-					arr.push({
-						coordId: e.key,
-						v: e.value,
-					});
+				if( !_project.hasFlag(DiscardPreCsvIntGrid) )
+					for(e in intGrid.keyValueIterator())
+						arr.push({
+							coordId: e.key,
+							v: e.value-1,
+						});
 				arr;
+			},
+
+			intGridCsv: {
+				var csv : Array<Int> = [];
+				if( def.type==IntGrid )
+					for(cy in 0...cHei)
+					for(cx in 0...cWid)
+						csv.push( getIntGrid(cx,cy) );
+				csv;
 			},
 
 			autoLayerTiles: {
@@ -103,8 +157,8 @@ class LayerInstance {
 
 			seed: seed,
 
+			overrideTilesetUid: overrideTilesetUid,
 			gridTiles: {
-				var td = _project.defs.getTilesetDef(def.tilesetDefUid);
 				var arr : Array<ldtk.Json.Tile> = [];
 				for( e in gridTiles.keyValueIterator() )
 					for( tileInf in e.value ) {
@@ -127,6 +181,11 @@ class LayerInstance {
 
 			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
+
+		if( _project.hasFlag(DiscardPreCsvIntGrid) )
+			Reflect.deleteField(json, "intGrid");
+
+		return json;
 	}
 
 	public inline function getRuleStampRenderInfos(rule:data.def.AutoLayerRuleDef, td:data.def.TilesetDef, tileIds:Array<Int>, flipBits:Int)
@@ -186,9 +245,19 @@ class LayerInstance {
 		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
+		li.visible = JsonTools.readBool(json.visible, true);
 
-		for( intGridJson in json.intGrid )
-			li.intGrid.set( intGridJson.coordId, intGridJson.v );
+		if( json.intGridCsv==null ) {
+			// Read old pre-CSV format
+			for( intGridJson in json.intGrid )
+				li.intGrid.set( intGridJson.coordId, intGridJson.v+1 );
+		}
+		else {
+			// Read CSV format
+			for(i in 0...json.intGridCsv.length)
+				if( json.intGridCsv[i]>=0 )
+					li.intGrid.set(i, json.intGridCsv[i]);
+		}
 
 		for( gridTilesJson in json.gridTiles ) {
 			if( dn.Version.lower(p.jsonVersion, "0.4") || gridTilesJson.d==null )
@@ -206,6 +275,7 @@ class LayerInstance {
 				flips: gridTilesJson.f,
 			});
 		}
+		li.overrideTilesetUid = JsonTools.readNullableInt(json.overrideTilesetUid);
 
 		for( entityJson in json.entityInstances )
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
@@ -291,7 +361,7 @@ class LayerInstance {
 				if( def.type==IntGrid )
 					for(cy in 0...cHei)
 					for(cx in 0...cWid)
-						if( getIntGrid(cx,cy) >= def.countIntGridValues() )
+						if( !def.hasIntGridValue( getIntGrid(cx,cy) ) )
 							removeIntGrid(cx,cy);
 
 				if( def.isAutoLayer() && autoTilesCache!=null ) {
@@ -306,18 +376,16 @@ class LayerInstance {
 						App.LOG.add("tidy", 'Removed all autoTilesCache in $this (rules can no longer be applied)');
 						autoTilesCache = new Map();
 					}
-					// Fix missing autoTiles
-					// for(rg in def.autoRuleGroups)
-					// for(r in rg.rules)
-					// 	if( !autoTilesNewCache.exists(r.uid) )
-					// 		applyAutoLayerRule(r);
 				}
 
 			case Entities:
-				// Remove lost entities (def removed)
 				var i = 0;
+				var ei = null;
+				var level = this.level;
 				while( i<entityInstances.length ) {
-					if( entityInstances[i].def==null ) {
+					ei = entityInstances[i];
+					if( ei.def==null ) {
+						// Remove lost entities (def removed)
 						App.LOG.add("tidy", 'Removed lost entity in $this');
 						entityInstances.splice(i,1);
 					}
@@ -376,15 +444,13 @@ class LayerInstance {
 								var pt = fi.getPointGrid(i);
 								if( pt==null )
 									continue;
+
 								pt.cx+=cDeltaX;
 								pt.cy+=cDeltaY;
 								fi.parseValue( i, pt.cx + Const.POINT_SEPARATOR + pt.cy );
 							}
 
-					if( ei.x<0 || ei.y<0 )
-						entityInstances.splice(i,1);
-					else
-						i++;
+					i++;
 				}
 
 			case Tiles:
@@ -421,7 +487,7 @@ class LayerInstance {
 
 	public inline function getIntGrid(cx:Int, cy:Int) : Int {
 		requireType(IntGrid);
-		return !isValid(cx,cy) || !intGrid.exists( coordId(cx,cy) ) ? -1 : intGrid.get( coordId(cx,cy) );
+		return !isValid(cx,cy) || !intGrid.exists( coordId(cx,cy) ) ? 0 : intGrid.get( coordId(cx,cy) );
 	}
 
 	public inline function getIntGridColorAt(cx:Int, cy:Int) : Null<UInt> {
@@ -445,7 +511,7 @@ class LayerInstance {
 
 	public inline function hasIntGrid(cx:Int, cy:Int) {
 		requireType(IntGrid);
-		return getIntGrid(cx,cy)!=-1;
+		return getIntGrid(cx,cy)!=0;
 	}
 
 	public function removeIntGrid(cx:Int, cy:Int) {
@@ -459,26 +525,17 @@ class LayerInstance {
 
 	public function createEntityInstance(ed:data.def.EntityDef) : Null<EntityInstance> {
 		requireType(Entities);
-		if( ed.maxPerLevel>0 ) {
-			var all = entityInstances.filter( function(ei) return ei.defUid==ed.uid );
-			switch ed.limitBehavior {
-				case DiscardOldOnes:
-					while( all.length>=ed.maxPerLevel )
-						removeEntityInstance( all.shift() );
-
-				case PreventAdding:
-					if( all.length>=ed.maxPerLevel )
-						return null;
-
-				case MoveLastOne:
-					if( all.length>=ed.maxPerLevel && all.length>0 )
-						return all[ all.length-1 ];
-			}
-		}
 
 		var ei = new EntityInstance(_project, ed.uid);
 		entityInstances.push(ei);
 		return ei;
+	}
+
+	public function containsEntity(ei:EntityInstance) {
+		for(e in entityInstances)
+			if( e==ei )
+				return true;
+		return false;
 	}
 
 	public function duplicateEntityInstance(ei:EntityInstance) : EntityInstance {

@@ -18,6 +18,7 @@ class App extends dn.Process {
 	var keyDowns : Map<Int,Bool> = new Map();
 	public var args: dn.Args;
 	var mouseButtonDowns : Map<Int,Bool> = new Map();
+	public var focused(default,null) = true;
 
 	public var loadingLog : dn.Log;
 
@@ -95,7 +96,36 @@ class App extends dn.Process {
 		settings.save();
 
 		// Auto updater
-		miniNotif("Checking for update...", true);
+		initAutoUpdater();
+
+		// Start
+		delayer.addS( ()->{
+			// Look for path and level index in args
+			var path = getArgPath();
+			var levelIndex : Null<Int> = null;
+			if( path!=null && path.extension==Const.LEVEL_EXTENSION ) {
+				var indexReg = ~/0*([0-9]+)-.*/gi;
+				if( indexReg.match(path.fileName) )
+					levelIndex = Std.parseInt( indexReg.matched(1) );
+				var dir = path.getLastDirectory();
+				path.removeLastDirectory();
+				path.fileWithExt = dir+"."+Const.FILE_EXTENSION;
+			}
+			LOG.add("BOOT", 'Start args: path=$path levelIndex=$levelIndex');
+
+			// Load page
+			if( path!=null )
+				loadProject(path.full, levelIndex);
+			else
+				loadPage( ()->new page.Home() );
+		}, 0.2);
+
+		IpcRenderer.invoke("appReady");
+	}
+
+
+	function initAutoUpdater() {
+		// Init
 		dn.electron.ElectronUpdater.initRenderer();
 		dn.electron.ElectronUpdater.onUpdateCheckStart = function() {
 			miniNotif("Looking for update...");
@@ -111,7 +141,7 @@ class App extends dn.Process {
 			LOG.warning("Couldn't check for updates: "+errStr);
 			if( errStr.length>40 )
 				errStr = errStr.substr(0,40) + "[...]";
-			miniNotif('Auto-updater failed: "$errStr"', 2);
+			checkManualUpdate();
 		}
 		dn.electron.ElectronUpdater.onUpdateDownloaded = function(info) {
 			LOG.network("Update ready: "+info.version);
@@ -140,31 +170,57 @@ class App extends dn.Process {
 					applyUpdate();
 			});
 		}
-		dn.electron.ElectronUpdater.checkNow();
 
-		// Start
-		delayer.addS( ()->{
-			// Look for path and level index in args
-			var path = getArgPath();
-			var levelIndex : Null<Int> = null;
-			if( path!=null && path.extension==Const.LEVEL_EXTENSION ) {
-				var indexReg = ~/0*([0-9]+)-.*/gi;
-				if( indexReg.match(path.fileName) )
-					levelIndex = Std.parseInt( indexReg.matched(1) );
-				var dir = path.getLastDirectory();
-				path.removeLastDirectory();
-				path.fileWithExt = dir+"."+Const.FILE_EXTENSION;
+		// Check now
+		if( App.isWindows() ) {
+			// Windows
+			miniNotif("Checking for update...", true);
+			dn.electron.ElectronUpdater.checkNow();
+		}
+		else {
+			// Mac & Linux
+			checkManualUpdate();
+		}
+	}
+
+	function checkManualUpdate() {
+		miniNotif("Checking for update (GitHub)...", true);
+		LOG.network("Fetching latest version from GitHub...");
+		dn.electron.ElectronUpdater.fetchLatestGitHubReleaseVersion("deepnight","ldtk", (latest)->{
+			if( latest!=null )
+				LOG.network("Found "+latest.full);
+
+			if( latest==null ) {
+				LOG.error("Failed to fetch latest version from GitHub");
+				miniNotif("Couldn't retrieve latest version number from GitHub!", false);
 			}
-			LOG.add("BOOT", 'Start args: path=$path levelIndex=$levelIndex');
+			else if( Version.greater(latest.full, Const.getAppVersion(true), true) ) {
+				LOG.network("Update available: "+latest);
+				N.success("Update "+latest.full+" is available!");
 
-			// Load page
-			if( path!=null )
-				loadProject(path.full, levelIndex);
+				var e = jBody.find("#updateInstall");
+				e.show();
+				var bt = e.find("button");
+				bt.off().empty();
+				bt.append('<strong>Download update</strong>');
+				bt.append('<em>Version ${latest.full}</em>');
+				bt.click(function(_) {
+					bt.hide();
+					function _download() {
+						electron.Shell.openExternal(Const.DOWNLOAD_URL);
+						clearCurPage();
+						delayer.addS( exit.bind(), 0.5 );
+					}
+
+					if( Editor.ME!=null && Editor.ME.needSaving )
+						new ui.modal.dialog.UnsavedChanges(_download, ()->bt.show());
+					else
+						_download();
+				});
+			}
 			else
-				loadPage( ()->new page.Home() );
-		}, 0.2);
-
-		IpcRenderer.invoke("appReady");
+				miniNotif('App is up-to-date.');
+		});
 	}
 
 	function getArgPath() : Null<dn.FilePath> {
@@ -217,7 +273,10 @@ class App extends dn.Process {
 		exit(false);
 	}
 
-	// public static inline function isMac() return js.Browser.window.navigator.userAgent.indexOf('Mac') != -1;
+	public function isLocked() {
+		return ui.ProjectSaving.hasAny() || ui.Modal.hasAnyUnclosable();
+	}
+
 	public static inline function isLinux() return js.node.Os.platform()=="linux";
 	public static inline function isWindows() return js.node.Os.platform()=="win32";
 	public static inline function isMac() return js.node.Os.platform()=="darwin";
@@ -233,20 +292,17 @@ class App extends dn.Process {
 	}
 
 	function onKeyPress(keyCode:Int) {
-		if( hasPage() )
+		if( hasPage() && !curPageProcess.isPaused() )
 			curPageProcess.onKeyPress(keyCode);
 
 		for(m in ui.Modal.ALL)
-			if( !m.destroyed )
+			if( !m.destroyed && !m.isPaused() )
 				m.onKeyPress(keyCode);
 
 		switch keyCode {
 			// Open debug menu
-			#if debug
-			case K.D if( App.ME.isCtrlDown() && App.ME.isShiftDown() && !hasInputFocus() ):
+			case K.D if( isCtrlDown() && isShiftDown() && !hasInputFocus() ):
 				new ui.modal.DebugMenu();
-			#end
-
 
 			case _:
 		}
@@ -283,10 +339,14 @@ class App extends dn.Process {
 
 	function onAppMouseDown(e:js.jquery.Event) {
 		mouseButtonDowns.set(e.button,true);
+		if( hasPage() && !curPageProcess.isPaused() )
+			curPageProcess.onAppMouseDown();
 	}
 
 	function onAppMouseUp(e:js.jquery.Event) {
 		mouseButtonDowns.remove(e.button);
+		if( hasPage() && !curPageProcess.isPaused() )
+			curPageProcess.onAppMouseUp();
 	}
 
 	public inline function isMouseButtonDown(btId:Int) {
@@ -303,15 +363,19 @@ class App extends dn.Process {
 	}
 
 	function onAppFocus(ev:js.html.Event) {
+		focused = true;
 		keyDowns = new Map();
 		if( hasPage() )
 			curPageProcess.onAppFocus();
+		hxd.System.fpsLimit = -1;
 	}
 
 	function onAppBlur(ev:js.html.Event) {
+		focused = false;
 		keyDowns = new Map();
 		if( hasPage() )
 			curPageProcess.onAppBlur();
+		hxd.System.fpsLimit = 4;
 	}
 
 	function onAppResize(ev:js.html.Event) {
@@ -354,6 +418,8 @@ class App extends dn.Process {
 			.empty()
 			.off()
 			.removeClass("locked");
+
+		hxd.System.fpsLimit = -1;
 
 		ui.Tip.clear();
 
@@ -455,6 +521,7 @@ class App extends dn.Process {
 
 	public function loadPage( create:()->Page ) {
 		clearCurPage();
+		LOG.flushToFile();
 		curPageProcess = create();
 		curPageProcess.onAppResize();
 	}
@@ -491,7 +558,9 @@ class App extends dn.Process {
 	}
 
 	public inline function clearDebug() {
-		jBody.find("#debug").empty().hide();
+		var e = jBody.find("#debug");
+		if( !e.is(":empty") || e.is(":visible") )
+			e.empty().hide();
 	}
 
 	public inline function debug(msg:Dynamic, clear=false) {
@@ -502,6 +571,10 @@ class App extends dn.Process {
 
 		var line = new J('<p>${Std.string(msg)}</p>');
 		line.appendTo(wrapper);
+	}
+
+	public inline function debugPre(msg:Dynamic, clear=false) {
+		debug('<pre>$msg</pre>', clear);
 	}
 
 	override function onDispose() {
@@ -552,6 +625,10 @@ class App extends dn.Process {
 		}
 	}
 
+	public inline function getElectronZoomFactor() {
+		return electron.renderer.WebFrame.getZoomFactor();
+	}
+
 	#if debug
 	public function reload() {
 		IpcRenderer.invoke("reload");
@@ -561,8 +638,41 @@ class App extends dn.Process {
 	override function update() {
 		super.update();
 
-		// Auto flush log every X seconds
-		if( !cd.hasSetS("logFlush",10) )
-			LOG.flushToFile();
+		// Process profiling
+		if( dn.Process.PROFILING && !cd.hasSetS("profiler",2) ) {
+			clearDebug();
+			for(i in dn.Process.getSortedProfilerTimes())
+				debug(i.key+" => "+M.pretty(i.value,2)+"s");
+		}
+
+		// Debug print
+		#if debug
+		if( cd.has("debugTools") ) {
+			clearDebug();
+			debug("-- Misc ----------------------------------------");
+			debugPre('FPS limit=${hxd.System.fpsLimit<=0 ? "none":Std.string(hxd.System.fpsLimit)}');
+			debugPre("electronZoom="+M.pretty(getElectronZoomFactor(),2));
+			if( Editor.ME!=null ) {
+				debugPre("mouse="+Editor.ME.getMouse());
+				var cam = Editor.ME.camera;
+				debugPre("zoom="+M.pretty(cam.adjustedZoom,1)+" cam="+M.round(cam.width)+"x"+M.round(cam.height)+" pixelratio="+cam.pixelRatio);
+				debugPre("  Selection="+Editor.ME.selectionTool.debugContent());
+			}
+
+			debugPre("appButtons="
+				+ ( isMouseButtonDown(0) ? "[left] " : "" )
+				+ ( isMouseButtonDown(2) ? "[right] " : "" )
+				+ ( isMouseButtonDown(1) ? "[middle] " : "" )
+				+ " toggles="
+				+ ( isCtrlDown() ? "[ctrl] " : "" )
+				+ ( isShiftDown() ? "[shift] " : "" )
+				+ ( isAltDown() ? "[alt] " : "" )
+			);
+
+			debug("-- Processes ----------------------------------------");
+			for( line in dn.Process.rprintAll().split('\n') )
+				debugPre(line);
+		}
+		#end
 	}
 }

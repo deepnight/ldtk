@@ -1,7 +1,7 @@
 package display;
 
 class Rulers extends dn.Process {
-	static var PADDING = 20;
+	public static var PADDING = 4;
 	static var HANDLE_SIZE = 10;
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
@@ -19,12 +19,9 @@ class Rulers extends dn.Process {
 	var g : h2d.Graphics;
 	var labels : h2d.Object;
 
-	var tip : h2d.Flow;
-	var tipTf : h2d.Text;
-
 	// Drag & drop
-	var draggables : Array<RulerPos>;
-	var draggedPos : Null<RulerPos>;
+	var draggables : Array<RectHandlePos>;
+	var draggedPos : Null<RectHandlePos>;
 	var dragOrigin : Null<Coords>;
 	var dragStarted = false;
 	var resizePreview : h2d.Graphics;
@@ -32,38 +29,21 @@ class Rulers extends dn.Process {
 	public function new() {
 		super(editor);
 
-		createRootInLayers(editor.root, Const.DP_UI);
+		createRootInLayers(editor.root, Const.DP_MAIN);
 		editor.ge.addGlobalListener(onGlobalEvent);
 
-		draggables = RulerPos.createAll();
+		draggables = RectHandlePos.createAll();
 
 		g = new h2d.Graphics(root);
 		labels = new h2d.Object(root);
 		resizePreview = new h2d.Graphics(root);
-
-		tip = new h2d.Flow(root);
-		tip.backgroundTile = Assets.elements.getTile("fieldBg");
-		tip.borderWidth = tip.borderHeight = 3;
-		tip.padding = 3;
-		tipTf = new h2d.Text(Assets.fontPixel, tip);
-		tipTf.textColor = 0x0;
-		tip.visible = false;
 	}
 
+	@:keep
 	override function toString():String {
-		return Type.getClassName(Type.getClass(this))
+		return super.toString()
 			+ "[" + ( draggedPos==null ? "--" : draggedPos.getName() ) + "]"
 			+ ( dragStarted ? " (RESIZING)" : "" );
-	}
-
-	function setTip(?p:RulerPos, ?str:String) {
-		tip.visible = str!=null;
-		if( tipTf.text!=str )
-			tipTf.text = str;
-		if( tip.visible ) {
-			tip.x = Std.int( getX(p) - tip.outerWidth*tip.scaleX*0.5 );
-			tip.y = Std.int( getY(p) - tip.outerHeight*tip.scaleY*0.5 );
-		}
 	}
 
 	override function onDispose() {
@@ -74,6 +54,9 @@ class Rulers extends dn.Process {
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case ProjectSelected, LayerInstanceSelected, ProjectSettingsChanged:
+				invalidate();
+
+			case FieldDefChanged(_), FieldDefRemoved(_):
 				invalidate();
 
 			case LayerDefChanged, LayerDefRemoved(_), LevelResized(_), LevelRestoredFromHistory(_):
@@ -89,7 +72,6 @@ class Rulers extends dn.Process {
 				root.x = levelRender.root.x;
 				root.y = levelRender.root.y;
 				root.setScale( levelRender.root.scaleX );
-				tip.setScale( editor.camera.pixelRatio*2 * 1/editor.camera.adjustedZoom );
 
 			case _:
 		}
@@ -107,52 +89,25 @@ class Rulers extends dn.Process {
 		var c = C.getPerceivedLuminosityInt(editor.project.bgColor)>=0.7 ? 0x0 : 0xffffff;
 		g.lineStyle(2, c);
 
-		// Top
-		g.moveTo(0, -PADDING);
-		g.lineTo(curLevel.pxWid*0.5-HANDLE_SIZE*1.5, -PADDING);
-		g.moveTo(curLevel.pxWid*0.5+HANDLE_SIZE*1.5, -PADDING);
-		g.lineTo(curLevel.pxWid, -PADDING);
-
-		// Bottom
-		g.moveTo(0, curLevel.pxHei+PADDING);
-		g.lineTo(curLevel.pxWid*0.5-HANDLE_SIZE*1.5, curLevel.pxHei+PADDING);
-		g.moveTo(curLevel.pxWid*0.5+HANDLE_SIZE*1.5, curLevel.pxHei+PADDING);
-		g.lineTo(curLevel.pxWid, curLevel.pxHei+PADDING);
-
-		// Left
-		g.moveTo(-PADDING, 0);
-		g.lineTo(-PADDING, curLevel.pxHei*0.5-HANDLE_SIZE*1.5);
-		g.moveTo(-PADDING, curLevel.pxHei*0.5+HANDLE_SIZE*1.5);
-		g.lineTo(-PADDING, curLevel.pxHei);
-
-		// Right
-		g.moveTo(curLevel.pxWid+PADDING, 0);
-		g.lineTo(curLevel.pxWid+PADDING, curLevel.pxHei*0.5-HANDLE_SIZE*1.5);
-		g.moveTo(curLevel.pxWid+PADDING, curLevel.pxHei*0.5+HANDLE_SIZE*1.5);
-		g.lineTo(curLevel.pxWid+PADDING, curLevel.pxHei);
-
 		// Horizontal labels
 		var xLabel = curLayerInstance==null ? curLevel.pxWid+"px" : curLayerInstance.cWid+" cells / "+curLevel.pxWid+"px";
-		addLabel(xLabel, Top);
-		addLabel(xLabel, Bottom);
+		if( !editor.curLevel.hasAnyFieldDisplayedAt(Beneath) )
+			addLabel(xLabel, Bottom, 16);
 
 		// Vertical labels
 		var yLabel = curLayerInstance==null ? curLevel.pxHei+"px" : curLayerInstance.cHei+" cells / "+curLevel.pxHei+"px";
-		addLabel(yLabel, Left);
-		addLabel(yLabel, Right);
-
-		addLabel(editor.curLevel.identifier, Top, false, PADDING+8, 0xffcc00);
-
+		addLabel(yLabel, Left, 16);
+		addLabel(yLabel, Right, 16);
 
 		// Resizing drags
 		g.lineStyle(0);
 		g.beginFill(c);
 		for(p in draggables)
-			g.drawCircle( getX(p), getY(p), HANDLE_SIZE*0.5);
+			g.drawCircle( getX(p), getY(p), HANDLE_SIZE*0.5, 24);
 	}
 
 
-	function addLabel(str:String, pos:RulerPos, smallFont=true, extraPadding=0, ?color:UInt) {
+	function addLabel(str:String, pos:RectHandlePos, smallFont=true, distancePx=0, ?color:UInt) {
 		var scale : Float = switch pos {
 			case Top, Bottom: editor.curLevel.pxWid<400 ? 0.5 : 1;
 			case Left, Right: editor.curLevel.pxHei<300 ? 0.5 : 1;
@@ -160,8 +115,8 @@ class Rulers extends dn.Process {
 		}
 
 		var wrapper = new h2d.Object(labels);
-		wrapper.x = getX(pos, PADDING*2 + extraPadding*scale);
-		wrapper.y = getY(pos, PADDING*2 + extraPadding*scale);
+		wrapper.x = getX(pos, distancePx);
+		wrapper.y = getY(pos, distancePx);
 		switch pos {
 			case Left, Right: wrapper.rotate(-M.PIHALF);
 			case _:
@@ -179,29 +134,28 @@ class Rulers extends dn.Process {
 	}
 
 
-	inline function isOver(x:Int, y:Int, pos:RulerPos) {
-		return M.dist( x,y, getX(pos), getY(pos) ) <= HANDLE_SIZE*1.5;
+	inline function isOver(levelX:Int, levelY:Int, pos:RectHandlePos) {
+		if( !editor.worldMode && editor.curLevel.inBounds(levelX,levelY) )
+			return false;
+		else
+			return M.dist( levelX, levelY, getX(pos), getY(pos) ) <= HANDLE_SIZE*1.5;
 	}
 
 
-	function getX(pos:RulerPos, ?padding:Float) : Int {
-		if( padding==null )
-			padding = PADDING;
-
+	function getX(pos:RectHandlePos, extraDistancePx=0) : Int {
+		extraDistancePx += PADDING;
 		return Std.int( switch pos {
 			case Top, Bottom : curLevel.pxWid*0.5;
-			case Left, TopLeft, BottomLeft : -padding;
-			case Right, TopRight, BottomRight : curLevel.pxWid + padding;
+			case Left, TopLeft, BottomLeft : -extraDistancePx;
+			case Right, TopRight, BottomRight : curLevel.pxWid + extraDistancePx;
 		} );
 	}
 
-	function getY(pos:RulerPos, ?padding:Float) : Int {
-		if( padding==null )
-			padding = PADDING;
-
+	function getY(pos:RectHandlePos, extraDistancePx=0) : Int {
+		extraDistancePx += PADDING;
 		return Std.int( switch pos {
-			case Top, TopLeft, TopRight : -padding;
-			case Bottom, BottomLeft, BottomRight : curLevel.pxHei + padding;
+			case Top, TopLeft, TopRight : -extraDistancePx;
+			case Bottom, BottomLeft, BottomRight : curLevel.pxHei + extraDistancePx;
 			case Left, Right : curLevel.pxHei*0.5;
 		} );
 	}
@@ -233,20 +187,30 @@ class Rulers extends dn.Process {
 		return !App.ME.isKeyDown(K.SPACE) && !App.ME.hasAnyToggleKeyDown();
 	}
 
-	public function onMouseMove(ev:hxd.Event, m:Coords) {
-		if( ev.cancel )
+	public function onMouseMoveCursor(ev:hxd.Event, m:Coords) {
+		if( ev.cancel ) {
+			g.alpha = 0.3;
 			return;
+		}
 
-		// Cursor
+		// Handles cursors
 		if( canUseResizers() )
 			for( p in draggables )
 				if( !isClicking() && isOver(m.levelX, m.levelY, p) || draggedPos==p ) {
 					ev.cancel = true;
-					editor.cursor.set( Resize(p) );
+					if( !dragStarted )
+						editor.cursor.set( Resize(p), L.t._("Resize level") );
 					g.alpha = 1;
 				}
+
+		// No handle is overed
 		if( !ev.cancel )
 			g.alpha = 0.3;
+	}
+
+	public function onMouseMove(ev:hxd.Event, m:Coords) {
+		if( ev.cancel )
+			return;
 
 		// Drag only starts after a short threshold
 		if( isClicking() && draggedPos!=null && !dragStarted && m.getPageDist(dragOrigin)>=4 )
@@ -258,7 +222,9 @@ class Rulers extends dn.Process {
 			var b = getResizedBounds(m);
 			resizePreview.lineStyle(4, !resizeBoundsValid(b) ? 0xff0000 : 0xffcc00);
 			resizePreview.drawRect(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
-			setTip(draggedPos, (b.newRight-b.newLeft)+"x"+(b.newBottom-b.newTop)+"px");
+			editor.cursor.set( Moving, (b.newRight-b.newLeft)+"x"+(b.newBottom-b.newTop)+"px" );
+			editor.requestFps();
+			ev.cancel = true;
 		}
 	}
 
@@ -314,7 +280,6 @@ class Rulers extends dn.Process {
 	}
 
 	public function onMouseUp(m:Coords) {
-		setTip();
 		if( dragStarted ) {
 			var b = getResizedBounds(m);
 			if( b.newLeft!=0 || b.newTop!=0 || b.newRight!=curLevel.pxWid || b.newBottom!=curLevel.pxHei ) {

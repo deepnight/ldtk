@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        haxe: [4.1.4]
+        haxe: [4.2.0]
       fail-fast: true
     runs-on: ubuntu-latest
 
@@ -33,7 +33,7 @@ jobs:
 
       - run: haxe -version
       - run: haxelib git castle https://github.com/ncannasse/castle
-      - run: haxelib git heaps https://github.com/HeapsIO/heaps.git
+      - run: haxelib git heaps https://github.com/deepnight/heaps.git
       - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
       - run: haxelib git electron https://github.com/tong/hxelectron.git
       - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
@@ -45,8 +45,8 @@ jobs:
         with:
           node-version: '14'
       - run: cd app && npm install
-      - run: cd app && npm run compile
-      - run: cd app && npm run pack-linux-rasp
+      - run: cd app && npm run pack-prepare
+      - run: cd app && npm run pack-linux-arm64
 
       # Upload
       - uses: actions/upload-artifact@v2

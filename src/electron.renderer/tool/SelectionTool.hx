@@ -24,7 +24,7 @@ class SelectionTool extends Tool<Int> {
 	override function getDefaultValue() return -1; // Not actually used
 
 	public function selectAllInLayers(level:data.Level, lis:Array<data.inst.LayerInstance>) {
-		group.clear();
+		clear();
 
 		for(li in lis)
 			switch li.def.type {
@@ -55,13 +55,17 @@ class SelectionTool extends Tool<Int> {
 
 	public function select(?elems:Array<GenericLevelElement>, append=false) {
 		if( !append )
-			group.clear();
+			clear();
 
 		if( elems!=null )
 			for(ge in elems)
 				group.add(ge);
 
-		if( group.selectedElementsCount()==1 ) {
+		if( group.selectedElementsCount()>1 ) {
+			editor.clearResizeTool();
+			ui.EntityInstanceEditor.closeExisting();
+		}
+		else if( group.selectedElementsCount()==1 ) {
 			var ge = group.getElement(0);
 			var li = group.getSmartRelativeLayerInstance();
 
@@ -111,8 +115,9 @@ class SelectionTool extends Tool<Int> {
 					var t = editor.curTool.as(tool.lt.EntityTool);
 					if( t!=null )
 						t.selectValue(ei.defUid);
-					editor.levelRender.bleepRectPx( ei.left, ei.top, ei.def.width, ei.def.height, ei.def.color );
+					editor.levelRender.bleepRectPx( ei.left, ei.top, ei.width, ei.height, ei.def.color );
 					ui.EntityInstanceEditor.openFor(ei);
+					editor.createResizeToolFor(ge);
 
 				case PointField(li, ei, fi, arrayIdx):
 					var t = editor.curTool.as(tool.lt.EntityTool);
@@ -129,21 +134,28 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
-	override function updateCursor(m:Coords) {
-		super.updateCursor(m);
+	override function customCursor(ev:hxd.Event, m:Coords) {
+		super.customCursor(ev,m);
 
 		// Default cursor
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromCoords(origin, m);
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, 0xffffff) );
+			ev.cancel = true;
 		}
-		else if( isRunning() )
+		else if( isRunning() ) {
 			editor.cursor.set(Moving);
-		else if( group.isOveringSelection(m) )
+			ev.cancel = true;
+		}
+		else if( group.isOveringSelection(m) ) {
 			editor.cursor.set(Move);
+			ev.cancel = true;
+		}
 		else if( !isRunning() ) {
 			// Preview picking
 			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.v.singleLayerMode);
+			ev.cancel = true;
+
 			switch ge {
 			case null:
 				editor.cursor.set(PickNothing);
@@ -174,11 +186,7 @@ class SelectionTool extends Tool<Int> {
 
 
 			case Entity(li, ei):
-				editor.cursor.set(
-					Entity(li, ei.def, ei, ei.x, ei.y),
-					ei.def.identifier,
-					true
-				);
+				editor.cursor.set( Entity(li, ei.def, ei, ei.x, ei.y), ei.def.identifier );
 
 			case PointField(li, ei, fi, arrayIdx):
 				var pt = fi.getPointGrid(arrayIdx);
@@ -187,7 +195,7 @@ class SelectionTool extends Tool<Int> {
 			}
 
 			if( ge!=null )
-				editor.cursor.setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("grab") );
+				editor.cursor.overrideNativeCursor("grab");
 		}
 	}
 
@@ -200,7 +208,7 @@ class SelectionTool extends Tool<Int> {
 		super.startUsing(ev,m);
 
 		if( ev.button==0 ) {
-			if( group.isOveringSelection(m) ) {
+			if( !App.ME.isAltDown() || group.isOveringSelection(m) ) {
 				// Move existing selection
 				if( group.hasIncompatibleGridSizes() ) {
 					new ui.modal.dialog.Message(L.t._("This selection can't be moved around because it contains elements from using different grid sizes."));
@@ -220,20 +228,24 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
-	// override function stopUsing(m:Coords) {
-	// 	super.stopUsing(m);
-	// }
-
 	public inline function get() return getSelectedValue();
 	public function clear() {
-		if( !isEmpty() )
-			select();
+		if( !isEmpty() ) {
+			group.clear();
+			ui.EntityInstanceEditor.closeExisting();
+			editor.clearResizeTool();
+		}
 	}
 	public inline function any() return !group.isEmpty();
 	public inline function isEmpty() return group.isEmpty();
 	public inline function isSingle() return group.selectedElementsCount()==1;
 	public inline function isOveringSelection(m) return group.isOveringSelection(m);
+	public inline function debugContent() return group.toString();
 
+	public inline function invalidateRender() {
+		group.invalidateBounds();
+		group.invalidateSelectRender();
+	}
 
 	override function onMouseMove(ev:hxd.Event, m:Coords) {
 		super.onMouseMove(ev,m);
@@ -243,6 +255,9 @@ class SelectionTool extends Tool<Int> {
 			group.onMoveStart();
 			moveStarted = true;
 		}
+
+		if( isRunning() )
+			ev.cancel = true;
 	}
 
 
@@ -258,7 +273,7 @@ class SelectionTool extends Tool<Int> {
 		switch keyId {
 			case K.DELETE:
 				var layerInsts = group.getSelectedLayerInstances();
-				group.deleteSelecteds();
+				deleteSelecteds();
 				for(li in layerInsts) {
 					editor.curLevelHistory.saveLayerState(li);
 					editor.levelRender.invalidateLayer(li);
@@ -266,6 +281,30 @@ class SelectionTool extends Tool<Int> {
 				editor.ge.emit(LayerInstanceChanged);
 				select();
 		}
+	}
+
+	function deleteSelecteds() {
+		for(ge in group.allElements())
+			switch ge {
+				case null:
+
+				case GridCell(li, cx, cy):
+					if( li.hasAnyGridValue(cx,cy) )
+						switch li.def.type {
+							case IntGrid: li.removeIntGrid(cx,cy);
+							case Tiles: li.removeAllGridTiles(cx,cy);
+							case Entities:
+							case AutoLayer:
+						}
+
+				case Entity(li, ei):
+					li.removeEntityInstance(ei);
+
+				case PointField(li, ei, fi, arrayIdx):
+					fi.removeArrayValue(arrayIdx);
+					group.decrementAllFieldArrayIdxAbove(fi, arrayIdx);
+			}
+		clear();
 	}
 
 	override function stopUsing(m:Coords) {
@@ -288,6 +327,7 @@ class SelectionTool extends Tool<Int> {
 					if( li!=curLayerInstance )
 						editor.levelRender.invalidateLayer(li); // cur is invalidated by Tool
 				}
+				editor.invalidateResizeTool();
 
 				return changedLayers.length>0;
 			}
@@ -299,7 +339,13 @@ class SelectionTool extends Tool<Int> {
 		}
 		else if( isOnStop ) {
 			// Single quick pick
-			select();
+			if( any() )
+				switch group.getElement(0) {
+					case GridCell(li, cx, cy): clear(); // selection doesn't persist for single grid cell selection
+					case Entity(li, ei):
+					case PointField(li, ei, fi, arrayIdx):
+				}
+
 		}
 
 		return super.useAt(m,isOnStop);

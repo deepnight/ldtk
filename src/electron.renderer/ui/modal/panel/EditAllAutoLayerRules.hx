@@ -223,7 +223,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		// Create new rule
 		function createRule(rg:data.DataTypes.AutoLayerRuleGroup, insertIdx:Int) {
 			App.LOG.general("Added rule");
-			var r = new data.def.AutoLayerRuleDef( project.makeUniqId() );
+			var r = new data.def.AutoLayerRuleDef( project.makeUniqueIdInt() );
 			rg.rules.insert(insertIdx, r);
 
 			if( rg.collapsed )
@@ -247,7 +247,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			App.LOG.general("Added rule group");
 
 			var insertIdx = 0;
-			var rg = ld.createRuleGroup(project.makeUniqId(), "New group", insertIdx);
+			var rg = ld.createRuleGroup(project.makeUniqueIdInt(), "New group", insertIdx);
 			editor.ge.emit(LayerRuleGroupAdded);
 
 			var jNewGroup = jContent.find("[groupUid="+rg.uid+"]");
@@ -437,7 +437,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				var old = r.chance;
 				var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
 				i.linkEvent( LayerRuleChanged(r) );
-				i.displayAsPct = true;
+				i.enablePercentageMode();
 				i.setBounds(0,1);
 				i.onValueChange = (v)->{
 					if( v/100<old )
@@ -662,6 +662,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 	public function onEditorMouseMove(m:Coords) {
+		jContent.find("li.highlight").removeClass("highlight");
+
 		if( m.cx<0 || m.cx>=li.cWid || m.cy<0 || m.cy>=li.cHei )
 			return;
 
@@ -675,7 +677,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 
 		// Highlight rules in panel
-		jContent.find("li.highlight").removeClass("highlight");
 		var jRules = jContent.find(".ruleGroup>li");
 		for( uid in activeRules.keys() )
 			jRules.filter('li[ruleuid=$uid]').addClass("highlight").parent().closest("li").addClass("highlight");

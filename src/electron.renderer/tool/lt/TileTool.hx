@@ -2,7 +2,7 @@ package tool.lt;
 
 class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 	public var curTilesetDef(get,never) : Null<data.def.TilesetDef>;
-	inline function get_curTilesetDef() return editor.project.defs.getTilesetDef( editor.curLayerInstance.def.tilesetDefUid );
+	inline function get_curTilesetDef() return editor.curLayerInstance.getTiledsetDef();
 
 	public var flipX = false;
 	public var flipY = false;
@@ -309,17 +309,19 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		return anyChange;
 	}
 
-	override function updateCursor(m:Coords) {
-		super.updateCursor(m);
+	override function customCursor(ev:hxd.Event, m:Coords) {
+		super.customCursor(ev,m);
 
 		if( curTilesetDef==null || !curTilesetDef.isAtlasLoaded() ) {
-			editor.cursor.set(None);
+			editor.cursor.set(Forbidden);
+			ev.cancel = true;
 			return;
 		}
 
 		if( isRunning() && rectangle ) {
 			var r = Rect.fromCoords(origin, m);
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei) );
+			ev.cancel = true;
 		}
 		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
 			var sel = getSelectedValue();
@@ -331,16 +333,58 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				);
 			else
 				editor.cursor.set( Tiles(curLayerInstance, sel.ids, m.cx, m.cy, flips) );
-		}
-		else
-			editor.cursor.set(None);
 
-		if( settings.v.tileStacking && curLevel.inBoundsWorld(m.worldX,m.worldY) )
-			editor.cursor.setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("cell") );
+			ev.cancel = true;
+		}
 	}
 
 	override function createToolPalette():ui.ToolPalette {
 		return new ui.palette.TilePalette(this);
+	}
+
+	override function initOptionForm() {
+		super.initOptionForm();
+
+		if( project.defs.tilesets.length==0 )
+			return;
+
+		var curTd = curLayerInstance.getTiledsetDef();
+		var layerIsEmpty = curLayerInstance.isEmpty();
+
+		// List tilesets
+		var jTilesets = new J('<select/>');
+		jTilesets.appendTo(jOptions);
+		for(td in project.defs.tilesets) {
+			var jOpt = new J('<option/>');
+			jOpt.appendTo(jTilesets);
+			jOpt.attr("value", td.uid);
+			jOpt.text(td.identifier);
+
+			if( td.uid==curLayerInstance.getDefaultTilesetUid() )
+				jOpt.append(" (default)");
+
+			// Mark as incompatible
+			if( curTd!=null && td.pxWid!=curTd.pxWid && !layerIsEmpty ) {
+				jOpt.addClass("bad");
+				jOpt.append(' (INCOMPATIBLE SIZE!)');
+			}
+		}
+		jTilesets.val( curLayerInstance.getTilesetUid() );
+
+		// Pick tileset
+		jTilesets.change( (_)->{
+			function _apply(canUndo:Bool) {
+				if( canUndo )
+					new ui.LastChance(L.t._("Changed layer tileset"), project);
+				curLayerInstance.setOverrideTileset( Std.parseInt( jTilesets.val() ) );
+				editor.ge.emit( LayerDefChanged );
+			}
+			var isBad = jTilesets.find(":selected").hasClass("bad");
+			if( isBad )
+				new ui.modal.dialog.Confirm(jTilesets, L.t._("Warning: using this tileset in this layer will mess any existing tiles here."), true, _apply.bind(true), initOptionForm);
+			else
+				_apply(false);
+		});
 	}
 
 	public function saveSelection() {
@@ -377,12 +421,12 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				case K.X:
 					flipX = !flipX;
 					N.quick("X-flip: "+L.onOff(flipX));
-					updateCursor(lastMouse);
+					customCursor(new hxd.Event(EMove), lastMouse);
 
 				case K.Y, K.Z:
 					flipY = !flipY;
 					N.quick("Y-flip: "+L.onOff(flipY));
-					updateCursor(lastMouse);
+					customCursor(new hxd.Event(EMove), lastMouse);
 			}
 	}
 }

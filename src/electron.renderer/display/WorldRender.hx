@@ -22,11 +22,16 @@ class WorldRender extends dn.Process {
 	var levels : Map<Int,WorldLevelRender> = new Map();
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
 	var worldBounds : h2d.Graphics;
+	var title : h2d.Text;
 	var axes : h2d.Graphics;
 	var grids : h2d.Graphics;
+	var currentHighlight : h2d.Graphics;
 	public var levelsWrapper : h2d.Layers;
+	var fieldsWrapper : h2d.Object;
+	var fieldRenders : Map<Int, { above:h2d.Flow, beneath:h2d.Flow, identifier:h2d.Flow }> = new Map();
 
 	var levelInvalidations : Map<Int,Bool> = new Map();
+	var levelFieldsInvalidation : Map<Int,Bool> = new Map();
 
 
 	public function new() {
@@ -54,23 +59,37 @@ class WorldRender extends dn.Process {
 		axes = new h2d.Graphics();
 		editor.root.add(axes, Const.DP_BG);
 
+		title = new h2d.Text(Assets.fontLight_xlarge);
+		title.text = "hello world";
+		editor.root.add(title, Const.DP_TOP);
+
+		currentHighlight = new h2d.Graphics();
+		root.add(currentHighlight, Const.DP_TOP);
+
 		levelsWrapper = new h2d.Layers();
 		root.add(levelsWrapper, Const.DP_MAIN);
+
+		fieldsWrapper = new h2d.Object();
+		root.add(fieldsWrapper, Const.DP_TOP);
 	}
 
 	override function onDispose() {
 		super.onDispose();
 		worldBg.wrapper.remove();
+		title.remove();
 		axes.remove();
 		grids.remove();
+		currentHighlight.remove();
 		editor.ge.removeListener(onGlobalEvent);
 	}
 
 	override function onResize() {
 		super.onResize();
+		updateTitle();
 		renderAxes();
 		renderGrids();
 		renderBg();
+		updateCurrentHighlight();
 	}
 
 	function onGlobalEvent(e:GlobalEvent) {
@@ -84,6 +103,8 @@ class WorldRender extends dn.Process {
 
 				renderGrids();
 				updateLayout();
+				updateFieldsPos();
+				updateCurrentHighlight();
 
 			case ViewportChanged:
 				root.setScale( camera.adjustedZoom );
@@ -92,15 +113,33 @@ class WorldRender extends dn.Process {
 				renderAxes();
 				renderGrids();
 				updateLabels();
+				updateTitle();
+				updateFieldsPos();
+				updateCurrentHighlight();
 
 			case GridChanged(active):
 				renderGrids();
 
 			case WorldLevelMoved:
 				updateLayout();
+				updateCurrentHighlight();
 
 			case ProjectSelected:
 				renderAll();
+
+			case FieldInstanceChanged(fi):
+				var l = project.getLevelUsingFieldInst(fi);
+				if( l!=null )
+					invalidateLevelFields(l);
+
+			case FieldDefRemoved(fd):
+				invalidateAllLevelFields();
+
+			case FieldDefChanged(fd):
+				invalidateAllLevelFields();
+
+			case FieldDefSorted:
+				invalidateAllLevelFields();
 
 			case ProjectSettingsChanged, WorldSettingsChanged:
 				renderAll();
@@ -108,19 +147,28 @@ class WorldRender extends dn.Process {
 
 			case LevelRestoredFromHistory(l):
 				invalidateLevel(l);
+				invalidateLevelFields(l);
+				updateCurrentHighlight();
 
 			case LevelSelected(l):
 				invalidateLevel(l);
+				invalidateLevelFields(l);
 				updateLayout();
 
 			case LevelResized(l):
 				invalidateLevel(l);
+				invalidateLevelFields(l);
+				updateTitle();
 				updateLayout();
 				renderWorldBounds();
+				updateCurrentHighlight();
 
 			case LevelSettingsChanged(l):
 				invalidateLevel(l);
+				invalidateLevelFields(l);
 				renderWorldBounds();
+				updateTitle();
+				updateCurrentHighlight();
 
 			case LayerDefRemoved(uid):
 				renderAll();
@@ -136,17 +184,15 @@ class WorldRender extends dn.Process {
 
 			case LevelAdded(l):
 				invalidateLevel(l);
+				invalidateLevelFields(l);
 				updateLayout();
 				renderWorldBounds();
 				// if( editor.worldMode )
 				// 	camera.scrollToLevel(l);
 
 			case LevelRemoved(l):
-				removeLevel(l);
-				updateLayout();
-				renderWorldBounds();
-
-			case LevelSorted:
+				removeLevel(l.uid);
+				removeLevelFields(l.uid);
 				updateLayout();
 				renderWorldBounds();
 
@@ -158,16 +204,29 @@ class WorldRender extends dn.Process {
 		levelInvalidations.set(l.uid, true);
 	}
 
+	public inline function invalidateLevelFields(l:data.Level) {
+		levelFieldsInvalidation.set(l.uid, true);
+	}
+
+	public inline function invalidateAllLevelFields() {
+		for(l in project.levels)
+			invalidateLevelFields(l);
+	}
+
 	public function renderAll() {
 		App.LOG.render("Reset world render");
 
-		for(l in levels.keys())
-			removeLevel(l);
+		for(uid in levels.keys()) {
+			removeLevel(uid);
+			removeLevelFields(uid);
+		}
 		levels = new Map();
 		levelsWrapper.removeChildren();
 
-		for(l in editor.project.levels)
+		for(l in editor.project.levels) {
+			invalidateLevelFields(l);
 			invalidateLevel(l);
+		}
 
 		renderBg();
 		renderAxes();
@@ -181,6 +240,49 @@ class WorldRender extends dn.Process {
 		worldBg.col.tile = h2d.Tile.fromColor(worldBgColor);
 		worldBg.col.scaleX = camera.width;
 		worldBg.col.scaleY = camera.height;
+	}
+
+	function updateTitle() {
+		title.visible = editor.worldMode;
+		if( title.visible ) {
+			var b = project.getWorldBounds();
+			var w = b.right-b.left;
+			var t = project.filePath.fileName;
+			title.textColor = C.toWhite(project.bgColor, 0.3);
+			title.text = t;
+			title.setScale( camera.adjustedZoom * M.fmin(8, (w/title.textWidth) * 2) );
+			title.x = Std.int( (b.left + b.right)*0.5*camera.adjustedZoom + root.x - title.textWidth*0.5*title.scaleX );
+			title.y = Std.int( b.top*camera.adjustedZoom - 64 + root.y - title.textHeight*title.scaleY );
+		}
+	}
+
+	function updateFieldsPos() {
+		var padding = Std.int( Rulers.PADDING*3 );
+		for(f in fieldRenders.keyValueIterator()) {
+			var l = project.getLevel(f.key);
+			var fr = f.value;
+			fr.above.visible = fr.beneath.visible = editor.worldMode || editor.curLevel==l;
+			fr.identifier.visible = !editor.worldMode;
+
+			if( !fr.above.visible )
+				continue;
+
+			// Above
+			fr.above.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.above.outerWidth) );
+			fr.above.x = Std.int( l.worldCenterX - fr.above.outerWidth*0.5*fr.above.scaleX );
+			if( editor.worldMode )
+				fr.above.y = l.worldY;
+			else
+				fr.above.y = Std.int( l.worldY - padding - fr.above.outerHeight*fr.above.scaleY );
+
+			// Beneath
+			fr.beneath.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.beneath.outerWidth) );
+			fr.beneath.x = Std.int( l.worldCenterX - fr.beneath.outerWidth*0.5*fr.beneath.scaleX );
+			if( editor.worldMode )
+				fr.beneath.y = Std.int( l.worldY + l.pxHei - fr.beneath.outerHeight*fr.beneath.scaleY );
+			else
+				fr.beneath.y = l.worldY + l.pxHei + padding;
+		}
 	}
 
 	function updateLabels() {
@@ -293,6 +395,18 @@ class WorldRender extends dn.Process {
 		);
 	}
 
+	function updateCurrentHighlight() {
+		currentHighlight.visible = editor.worldMode;
+		if( !currentHighlight.visible )
+			return;
+
+		currentHighlight.clear();
+		currentHighlight.lineStyle(7/camera.adjustedZoom, 0xffcc00);
+		var l = editor.curLevel;
+		var p = 2 / camera.adjustedZoom;
+		currentHighlight.drawRect(l.worldX-p, l.worldY-p, l.pxWid+p*2, l.pxHei+p*2);
+	}
+
 	public function updateLayout() {
 		var cur = editor.curLevel;
 
@@ -326,7 +440,7 @@ class WorldRender extends dn.Process {
 					// Fade other levels in editor mode
 					var dist = cur.getBoundsDist(l);
 					e.bounds.alpha = 0.3;
-					e.render.alpha = 0.7;
+					e.render.alpha = 0.5;
 					e.render.visible = dist<=300;
 				}
 
@@ -339,13 +453,7 @@ class WorldRender extends dn.Process {
 		updateLabels();
 	}
 
-	function removeLevel(?l:data.Level, ?uid:Int) {
-		if( l==null && uid==null )
-			throw "Need 1 parameter";
-
-		if( l!=null )
-			uid = l.uid;
-
+	function removeLevel(uid:Int) {
 		if( levels.exists(uid) ) {
 			var lr = levels.get(uid);
 			lr.render.remove();
@@ -356,6 +464,67 @@ class WorldRender extends dn.Process {
 		}
 	}
 
+	function removeLevelFields(uid:Int) {
+		if( fieldRenders.exists(uid) ) {
+			fieldRenders.get(uid).above.remove();
+			fieldRenders.get(uid).beneath.remove();
+			fieldRenders.remove(uid);
+		}
+	}
+
+	function renderFields(l:data.Level) {
+		levelFieldsInvalidation.remove(l.uid);
+
+		// Init wrapper
+		if( !fieldRenders.exists(l.uid) ) {
+			fieldRenders.set(l.uid, {
+				above: {
+					var f = new h2d.Flow(fieldsWrapper);
+					f.layout = Vertical;
+					f;
+				},
+				beneath: {
+					var f = new h2d.Flow(fieldsWrapper);
+					f.layout = Vertical;
+					f;
+				},
+				identifier: null,
+			});
+		}
+		var fWrapper = fieldRenders.get(l.uid);
+		fWrapper.above.removeChildren();
+		fWrapper.beneath.removeChildren();
+
+		// Attach fields
+		FieldInstanceRender.renderFields(
+			project.defs.levelFields.filter( fd->fd.editorDisplayPos==Above ).map( fd->l.getFieldInstance(fd) ),
+			l.getSmartColor(true),
+			LevelCtx(l),
+			fWrapper.above
+		);
+		FieldInstanceRender.renderFields(
+			project.defs.levelFields.filter( fd->fd.editorDisplayPos==Beneath ).map( fd->l.getFieldInstance(fd) ),
+			l.getSmartColor(true),
+			LevelCtx(l),
+			fWrapper.beneath
+		);
+
+		// Level identifier
+		var f = new h2d.Flow(fWrapper.above);
+		f.minWidth = f.maxWidth = fWrapper.above.outerWidth;
+		f.horizontalAlign = Middle;
+		f.padding = 6;
+		var tf = new h2d.Text(Assets.fontLight_large, f);
+		tf.text = '"${l.identifier}"';
+		tf.textColor = l.getSmartColor(true);
+		FieldInstanceRender.addBg(f, l.getSmartColor(true), 0.6);
+		if( fWrapper.identifier!=null )
+			fWrapper.identifier.remove();
+		fWrapper.identifier = f;
+
+		updateFieldsPos();
+	}
+
 	function renderLevel(l:data.Level) {
 		if( l==null )
 			throw "Unknown level";
@@ -364,7 +533,7 @@ class WorldRender extends dn.Process {
 
 		// Cleanup
 		levelInvalidations.remove(l.uid);
-		removeLevel(l);
+		removeLevel(l.uid);
 
 		// Init
 		var wl : WorldLevelRender = {
@@ -400,9 +569,9 @@ class WorldRender extends dn.Process {
 		}
 
 		// Render layers
-		l.iterateLayerInstancesInRenderOrder( (li)->{
+		for( li in l.layerInstances ) {
 			if( li.def.type==Entities )
-				return;
+				continue;
 
 			if( li.def.isAutoLayer() && li.autoTilesCache==null )
 				App.LOG.error("missing autoTilesCache in "+li);
@@ -412,16 +581,23 @@ class WorldRender extends dn.Process {
 				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 				if( td!=null && td.isAtlasLoaded() ) {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
+					pixelGrid.x = li.pxTotalOffsetX;
+					pixelGrid.y = li.pxTotalOffsetY;
+					var c = 0x0;
+					var cx = 0;
+					var cy = 0;
 					li.def.iterateActiveRulesInDisplayOrder( (r)->{
 						if( li.autoTilesCache.exists( r.uid ) ) {
 							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value ) {
-								pixelGrid.setPixel(
-									Std.int( tileInfos.x / li.def.gridSize ),
-									Std.int( tileInfos.y / li.def.gridSize ),
-									td.getAverageTileColor(tileInfos.tid),
-									0.3
-								);
+								cx = Std.int( tileInfos.x / li.def.gridSize );
+								cy = Std.int( tileInfos.y / li.def.gridSize );
+								if( !isCoordDone(li,cx,cy) ) {
+									c = td.getAverageTileColor(tileInfos.tid);
+									// if( C.getA(c)>=1 )
+										markCoordAsDone(li,cx,cy);
+									pixelGrid.setPixel24(cx,cy, c);
+								}
 							}
 						}
 					});
@@ -430,6 +606,8 @@ class WorldRender extends dn.Process {
 			else if( li.def.type==IntGrid ) {
 				// Pure intGrid
 				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
+				pixelGrid.x = li.pxTotalOffsetX;
+				pixelGrid.y = li.pxTotalOffsetY;
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
 					if( !isCoordDone(li,cx,cy) && li.hasAnyGridValue(cx,cy) ) {
@@ -440,18 +618,23 @@ class WorldRender extends dn.Process {
 			}
 			else if( li.def.type==Tiles ) {
 				// Classic tiles
-				var td = editor.project.defs.getTilesetDef(li.def.tilesetDefUid);
+				var td = li.getTiledsetDef();
 				if( td!=null && td.isAtlasLoaded() ) {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
+					pixelGrid.x = li.pxTotalOffsetX;
+					pixelGrid.y = li.pxTotalOffsetY;
+					var c = 0x0;
 					for(cy in 0...li.cHei)
 					for(cx in 0...li.cWid)
 						if( !isCoordDone(li,cx,cy) && li.hasAnyGridTile(cx,cy) ) {
-							markCoordAsDone(li, cx,cy);
-							pixelGrid.setPixel(cx,cy, td.getAverageTileColor( li.getTopMostGridTile(cx,cy).tileId ) );
+							c = td.getAverageTileColor( li.getTopMostGridTile(cx,cy).tileId );
+							if( C.getA(c)>=1 )
+								markCoordAsDone(li, cx,cy);
+							pixelGrid.setPixel24(cx,cy, c);
 						}
 				}
 			}
-		});
+		}
 
 		var error = l.getFirstError();
 
@@ -515,10 +698,23 @@ class WorldRender extends dn.Process {
 		// World levels rendering (max one per frame)
 		if( !waitTileset )
 			for( uid in levelInvalidations.keys() ) {
+				if( editor.project.getLevel(uid)==null ) {
+					levelInvalidations.remove(uid);
+					continue;
+				}
 				renderLevel( editor.project.getLevel(uid) );
 				updateLayout();
 				break;
 			}
+
+		// Fields
+		// var limit = 2;
+		for( uid in levelFieldsInvalidation.keys() ) {
+			renderFields( editor.project.getLevel(uid) );
+			break;
+			// if( limit--<=0 )
+			// 	break;
+		}
 	}
 
 }

@@ -258,7 +258,7 @@ class Tiled extends Exporter {
 					for(cy in 0...li.cHei)
 					for(cx in 0...li.cWid)
 						if( li.hasIntGrid(cx,cy) )
-							csv.set( cx, cy, _makeTiledTileId(li.def.uid, li.getIntGrid(cx,cy), 0) );
+							csv.set( cx, cy, _makeTiledTileId(li.def.uid, li.getIntGrid(cx,cy)-1, 0) );
 
 					// Build layer XML
 					log.add("layer", "  Exporting IntGrid values...");
@@ -352,7 +352,7 @@ class Tiled extends Exporter {
 						for( coordId in li.gridTiles.keys() ) {
 							var stack = li.gridTiles.get(coordId);
 							if( layerIdx < stack.length ) {
-								csv.setCoordId( coordId, _makeTiledTileId(ld.tilesetDefUid, stack[layerIdx].tileId, stack[layerIdx].flips) );
+								csv.setCoordId( coordId, _makeTiledTileId(li.getTilesetUid(), stack[layerIdx].tileId, stack[layerIdx].flips) );
 							}
 						}
 

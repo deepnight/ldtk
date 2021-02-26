@@ -4,19 +4,23 @@ class DebugMenu extends ui.modal.ContextMenu {
 	public function new() {
 		super();
 
-		if( editor!=null ) {
+		addTitle(L.t._("Debug menu"));
 
-			add({
-				label: L.untranslated("Toggle debug print"),
-				cb: ()->{
-					if( App.ME.cd.has("debugTools") ) {
-						App.ME.clearDebug();
-						App.ME.cd.unset("debugTools");
-					}
-					else
-						App.ME.cd.setS("debugTools", Const.INFINITE);
+		#if debug
+		add({
+			label: L.untranslated("Toggle debug print"),
+			cb: ()->{
+				if( App.ME.cd.has("debugTools") ) {
+					App.ME.clearDebug();
+					App.ME.cd.unset("debugTools");
 				}
-			});
+				else
+					App.ME.cd.setS("debugTools", Const.INFINITE);
+			}
+		});
+		#end
+
+		if( editor!=null ) {
 
 			add({
 				label: L.untranslated("Rebuild tilesets pixel cache"),
@@ -27,7 +31,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 			});
 
 			add({
-				label: L.untranslated("Rebuild auto-layers"),
+				label: L.untranslated("Rebuild all auto-layers"),
 				cb: ()->{
 					for(l in project.levels)
 					for(li in l.layerInstances)
@@ -45,7 +49,12 @@ class DebugMenu extends ui.modal.ContextMenu {
 			label: L.untranslated("Open settings dir"),
 			cb: ()->JsTools.exploreToFile(Settings.getDir(), false)
 		});
+		add({
+			label: L.untranslated("Locate log file"),
+			cb: ()->JsTools.exploreToFile(JsTools.getLogPath(), true)
+		});
 
+		#if debug
 		add({
 			label: L.untranslated("Emulate new update"),
 			cb: ()->{
@@ -92,6 +101,10 @@ class DebugMenu extends ui.modal.ContextMenu {
 								ui.ProjectLoader.load(fp.full, (?p,?err)->{
 									if( p==null )
 										throw "Failed on "+fp.full;
+
+									// IntGrid CSV change
+									p.setFlag(DiscardPreCsvIntGrid, true);
+
 									// Tilesets
 									log.general(" -> Updating tileset data...");
 									for(td in p.defs.tilesets) {
@@ -125,6 +138,25 @@ class DebugMenu extends ui.modal.ContextMenu {
 		});
 
 		add({
+			label: L.untranslated("Process profiling"),
+			cb: ()->{
+				dn.Process.clearProfilingTimes();
+				dn.Process.PROFILING = !dn.Process.PROFILING;
+				App.ME.clearDebug();
+			}
+		});
+
+		// Pauses
+		function _addPauseToggler(p:dn.Process) {
+			add({ label: L.untranslated(p.toString()+" ("+p.isPaused()+")"), cb: ()->p.togglePause() });
+		}
+		_addPauseToggler(@:privateAccess App.ME.curPageProcess);
+		if( editor!=null ) {
+			_addPauseToggler(editor.levelRender);
+			_addPauseToggler(editor.worldRender);
+		}
+
+		add({
 			label: L.untranslated("Crash"),
 			className: "warning",
 			cb: ()->{
@@ -133,5 +165,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 				a.crash = 5;
 			}
 		});
+		#end // End of "if debug"
 	}
 }

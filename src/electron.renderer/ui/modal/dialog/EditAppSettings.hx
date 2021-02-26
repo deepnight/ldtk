@@ -19,6 +19,24 @@ class EditAppSettings extends ui.modal.Dialog {
 
 		// Log button
 		jContent.find( "button.log").click( (_)->JsTools.exploreToFile( JsTools.getLogPath(), true ) );
+		jContent.find(".logPath").text( JsTools.getLogPath() );
+
+		// World mode using mousewheel
+		var i = new form.input.EnumSelect(
+			jForm.find("#autoSwitchOnZoom"),
+			Settings.AutoWorldModeSwitch,
+			false,
+			()->settings.v.autoWorldModeSwitch,
+			(v)->{
+				settings.v.autoWorldModeSwitch = v;
+				onSettingChanged();
+			},
+			(v)->return switch v {
+				case Never: L.t._("Never");
+				case ZoomOutOnly: L.t._("Switch when zooming out");
+				case ZoomInAndOut: L.t._("Switch when zooming in or out (default)");
+			}
+		);
 
 		// GPU
 		var i = Input.linkToHtmlInput(settings.v.useBestGPU, jForm.find("#gpu"));
@@ -26,6 +44,41 @@ class EditAppSettings extends ui.modal.Dialog {
 			onSettingChanged();
 			needRestart = true;
 		}
+
+		// CPU throttling
+		var i = Input.linkToHtmlInput(settings.v.smartCpuThrottling, jForm.find("#smartCpuThrottling"));
+		i.onChange = ()->{
+			hxd.System.fpsLimit = -1;
+			onSettingChanged();
+		}
+
+		// Mouse wheel speed
+		var i = Input.linkToHtmlInput(settings.v.mouseWheelSpeed, jForm.find("#mouseWheelSpeed"));
+		i.setBounds(0.25, 3);
+		i.setValueStep(0.25);
+		i.enableSlider();
+		i.enablePercentageMode();
+		i.onChange = ()->{
+			onSettingChanged();
+		}
+
+		// App scaling
+		var jScale = jForm.find("#appScale");
+		jScale.empty();
+		for(s in [0.7, 0.8, 0.9, 1, 1.1, 1.2]) {
+			var jOpt = new J('<option value="$s"/>');
+			jScale.append(jOpt);
+			jOpt.text('${Std.int(s*100)}%');
+			if( s==1 )
+				jOpt.append(" "+L.t._("(default)"));
+			if( s==settings.v.appUiScale)
+				jOpt.prop("selected",true);
+		}
+		jScale.change( (_)->{
+			settings.v.appUiScale = Std.parseFloat( jScale.val() );
+			onSettingChanged();
+			electron.renderer.WebFrame.setZoomFactor( settings.getAppZoomFactor() );
+		});
 
 		// Font scaling
 		var jScale = jForm.find("#fontScale");

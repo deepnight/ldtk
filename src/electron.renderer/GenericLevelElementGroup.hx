@@ -37,6 +37,11 @@ class GenericLevelElementGroup {
 		invalidateBounds();
 	}
 
+	@:keep
+	public function toString() {
+		return elements.length==0 ? "empty" : elements.map( e->e.getName() ).slice(0,10).join(",");
+	}
+
 	public function clear() {
 		elements = [];
 		originalRects = [];
@@ -113,8 +118,8 @@ class GenericLevelElementGroup {
 		return lis;
 	}
 
-	inline function invalidateSelectRender()  invalidatedSelectRender = true;
-	inline function invalidateBounds()  _cachedBounds = null;
+	public inline function invalidateSelectRender()  invalidatedSelectRender = true;
+	public inline function invalidateBounds()  _cachedBounds = null;
 
 	function get_bounds() {
 		if( _cachedBounds==null ) {
@@ -208,10 +213,10 @@ class GenericLevelElementGroup {
 				case Entity(li, ei):
 					selectRender.beginFill(c, a);
 					selectRender.drawRect(
-						li.pxTotalOffsetX + ei.x - ei.def.width * ei.def.pivotX,
-						li.pxTotalOffsetY + ei.y - ei.def.height * ei.def.pivotY,
-						ei.def.width,
-						ei.def.height
+						li.pxTotalOffsetX + ei.x - ei.width * ei.def.pivotX,
+						li.pxTotalOffsetY + ei.y - ei.height * ei.def.pivotY,
+						ei.width,
+						ei.height
 					);
 
 				case PointField(li, ei, fi, arrayIdx):
@@ -249,7 +254,7 @@ class GenericLevelElementGroup {
 								ghost.endFill();
 
 							case Tiles:
-								var td = editor.project.defs.getTilesetDef( li.def.tilesetDefUid );
+								var td = li.getTiledsetDef();
 								for( t in li.getGridTileStack(cx,cy) ) {
 									var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
 									bmp.x = li.pxTotalOffsetX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.gridSize - bounds.left;
@@ -472,7 +477,10 @@ class GenericLevelElementGroup {
 								continue;
 
 							pointLinks.lineStyle(1,ei.getSmartColor(true));
-							pointLinks.moveTo( levelToGhostX(ei.x), levelToGhostY(ei.y) );
+							pointLinks.moveTo(
+								levelToGhostX(ei.getPointOriginX(li.def)),
+								levelToGhostY(ei.getPointOriginY(li.def))
+							);
 							var pt = fi.getPointGrid(i);
 							if( pt!=null )
 								if( isFieldValueSelected(fi,i) ) {
@@ -500,9 +508,12 @@ class GenericLevelElementGroup {
 						if( fi.def.editorDisplayMode==PointStar || arrayIdx==0 ) {
 							pointLinks.moveTo(x,y);
 							if( !isEntitySelected(ei) )
-								pointLinks.lineTo(ei.x, ei.y);
+								pointLinks.lineTo(ei.getPointOriginX(li.def), ei.getPointOriginY(li.def));
 							else
-								pointLinks.lineTo( levelToGhostX(ei.x), levelToGhostY(ei.y) );
+								pointLinks.lineTo(
+									levelToGhostX(ei.getPointOriginX(li.def)),
+									levelToGhostY(ei.getPointOriginY(li.def))
+								);
 						}
 
 						if( fi.def.editorDisplayMode==PointPath ) {
@@ -767,6 +778,7 @@ class GenericLevelElementGroup {
 	}
 
 
+	@:allow(tool.SelectionTool)
 	function decrementAllFieldArrayIdxAbove(f:data.inst.FieldInstance, above:Int) {
 		for(i in 0...elements.length)
 			switch elements[i] {
@@ -776,31 +788,6 @@ class GenericLevelElementGroup {
 
 				case _:
 			}
-	}
-
-	public function deleteSelecteds() {
-		for(ge in elements)
-			switch ge {
-				case null:
-
-				case GridCell(li, cx, cy):
-					if( li.hasAnyGridValue(cx,cy) )
-						switch li.def.type {
-							case IntGrid: li.removeIntGrid(cx,cy);
-							case Tiles: li.removeAllGridTiles(cx,cy);
-							case Entities:
-							case AutoLayer:
-						}
-
-				case Entity(li, ei):
-					li.removeEntityInstance(ei);
-
-				case PointField(li, ei, fi, arrayIdx):
-					fi.removeArrayValue(arrayIdx);
-					decrementAllFieldArrayIdxAbove(fi, arrayIdx);
-			}
-
-		clear();
 	}
 
 	public function onPostUpdate() {

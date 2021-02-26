@@ -1,29 +1,34 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 0.7.2 JSON schema",
+	"title": "LDtk 0.8.0 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "0.7.2",
+	"version": "0.8.0",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - and a definition object (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
 		"required": [
+			"bgColor",
+			"defs",
+			"externalLevels",
+			"jsonVersion",
+			"levels",
+			"worldGridHeight",
+			"worldGridWidth",
+			"worldLayout",
 			"backupLimit",
 			"backupOnSave",
-			"bgColor",
 			"defaultGridSize",
 			"defaultLevelBgColor",
+			"defaultLevelHeight",
+			"defaultLevelWidth",
 			"defaultPivotX",
 			"defaultPivotY",
 			"exportPng",
 			"exportTiled",
-			"externalLevels",
-			"jsonVersion",
-			"levels",
+			"flags",
 			"minifyJson",
-			"nextUid",
-			"worldGridHeight",
-			"worldGridWidth"
+			"nextUid"
 		],
 		"properties": {
 			"backupLimit": {
@@ -57,7 +62,7 @@
 				]
 			},
 			"nextUid": {
-				"description": "",
+				"description": "Next Unique integer ID available",
 				"type": [
 					"integer"
 				]
@@ -89,10 +94,28 @@
 					"LinearVertical"
 				]
 			},
+			"flags": {
+				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `DiscardPreCsvIntGrid`, `IgnoreBackupSuggest`",
+				"items": {
+					"enum": [
+						"DiscardPreCsvIntGrid",
+						"IgnoreBackupSuggest"
+					]
+				},
+				"type": [
+					"array"
+				]
+			},
 			"exportPng": {
 				"description": "If TRUE, all layers in all levels will also be exported as PNG along with the project file (default is FALSE)",
 				"type": [
 					"boolean"
+				]
+			},
+			"defaultLevelWidth": {
+				"description": "Default new level width",
+				"type": [
+					"integer"
 				]
 			},
 			"pngFilePattern": {
@@ -133,6 +156,12 @@
 					"number"
 				]
 			},
+			"defaultLevelHeight": {
+				"description": "Default new level height",
+				"type": [
+					"integer"
+				]
+			},
 			"externalLevels": {
 				"description": "If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.",
 				"type": [
@@ -156,6 +185,7 @@
 			"required": [
 				"__identifier",
 				"__type",
+				"__value",
 				"defUid",
 				"realEditorValues"
 			],
@@ -202,7 +232,9 @@
 				"__pivot",
 				"defUid",
 				"fieldInstances",
-				"px"
+				"height",
+				"px",
+				"width"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -220,7 +252,16 @@
 				},
 				"__tile": {
 					"description": "Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).",
-					"$ref": "#/otherTypes/EntityInstanceTile"
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/EntityInstanceTile"
+						}
+					]
 				},
 				"px": {
 					"description": "Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget optional layer offsets, if they exist!",
@@ -256,12 +297,24 @@
 					]
 				},
 				"fieldInstances": {
-					"description": "",
+					"description": "An array of all custom fields and their values.",
 					"items": {
 						"$ref": "#/otherTypes/FieldInstance"
 					},
 					"type": [
 						"array"
+					]
+				},
+				"height": {
+					"description": "Entity height in pixels. For non-resizable entities, it will be the same as Entity definition.",
+					"type": [
+						"integer"
+					]
+				},
+				"width": {
+					"description": "Entity width in pixels. For non-resizable entities, it will be the same as Entity definition.",
+					"type": [
+						"integer"
 					]
 				}
 			},
@@ -277,6 +330,7 @@
 				"enums",
 				"externalEnums",
 				"layers",
+				"levelFields",
 				"tilesets"
 			],
 			"additionalProperties": false,
@@ -299,6 +353,15 @@
 						"array"
 					]
 				},
+				"levelFields": {
+					"description": "An array containing all custom fields available to all levels.",
+					"items": {
+						"$ref": "#/otherTypes/FieldDef"
+					},
+					"type": [
+						"array"
+					]
+				},
 				"enums": {
 					"description": "",
 					"items": {
@@ -309,7 +372,7 @@
 					]
 				},
 				"entities": {
-					"description": "",
+					"description": "All entities, including their custom fields",
 					"items": {
 						"$ref": "#/otherTypes/EntityDef"
 					},
@@ -338,6 +401,7 @@
 				"active",
 				"breakOnMatch",
 				"chance",
+				"checker",
 				"flipX",
 				"flipY",
 				"pattern",
@@ -349,6 +413,7 @@
 				"pivotY",
 				"size",
 				"tileIds",
+				"tileMode",
 				"uid",
 				"xModulo",
 				"yModulo"
@@ -493,10 +558,14 @@
 			"required": [
 				"__type",
 				"canBeNull",
-				"editorAlwaysShow",
 				"identifier",
 				"isArray",
-				"uid"
+				"type",
+				"uid",
+				"editorAlwaysShow",
+				"editorCutLongValues",
+				"editorDisplayMode",
+				"editorDisplayPos"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -584,8 +653,29 @@
 						"null"
 					]
 				},
+				"editorCutLongValues": {
+					"description": "",
+					"type": [
+						"boolean"
+					]
+				},
 				"defaultOverride": {
 					"description": "Default value if selected value is null or invalid."
+				},
+				"textLangageMode": {
+					"description": "Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`",
+					"enum": [
+						"LangPython",
+						"LangRuby",
+						"LangJS",
+						"LangLua",
+						"LangC",
+						"LangHaxe",
+						"LangMarkdown",
+						"LangJson",
+						"LangXml",
+						null
+					]
 				},
 				"regex": {
 					"description": "Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional \"i\" flag.",
@@ -619,15 +709,26 @@
 			"title": "Entity definition",
 			"required": [
 				"color",
-				"fieldDefs",
 				"height",
 				"identifier",
-				"maxPerLevel",
 				"pivotX",
 				"pivotY",
-				"showName",
 				"uid",
-				"width"
+				"width",
+				"fieldDefs",
+				"fillOpacity",
+				"hollow",
+				"keepAspectRatio",
+				"limitBehavior",
+				"limitScope",
+				"lineOpacity",
+				"maxCount",
+				"renderMode",
+				"resizableX",
+				"resizableY",
+				"showName",
+				"tags",
+				"tileRenderMode"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -651,10 +752,36 @@
 						"null"
 					]
 				},
+				"limitScope": {
+					"description": "If TRUE, the maxCount is a \"per world\" limit, if FALSE, it's a \"per level\". Possible values: `PerLayer`, `PerLevel`, `PerWorld`",
+					"enum": [
+						"PerLayer",
+						"PerLevel",
+						"PerWorld"
+					]
+				},
 				"pivotX": {
 					"description": "Pivot X coordinate (from 0 to 1.0)",
 					"type": [
 						"number"
+					]
+				},
+				"maxCount": {
+					"description": "Max instances count",
+					"type": [
+						"integer"
+					]
+				},
+				"hollow": {
+					"description": "",
+					"type": [
+						"boolean"
+					]
+				},
+				"keepAspectRatio": {
+					"description": "Only applies to entities resizable on both X/Y. If TRUE, the entity instance width/height will keep the same aspect ratio as the definition.",
+					"type": [
+						"boolean"
 					]
 				},
 				"color": {
@@ -687,10 +814,34 @@
 						"MoveLastOne"
 					]
 				},
+				"resizableX": {
+					"description": "If TRUE, the entity instances will be resizable horizontally",
+					"type": [
+						"boolean"
+					]
+				},
 				"uid": {
 					"description": "Unique Int identifier",
 					"type": [
 						"integer"
+					]
+				},
+				"lineOpacity": {
+					"description": "",
+					"type": [
+						"number"
+					]
+				},
+				"resizableY": {
+					"description": "If TRUE, the entity instances will be resizable vertically",
+					"type": [
+						"boolean"
+					]
+				},
+				"fillOpacity": {
+					"description": "",
+					"type": [
+						"number"
 					]
 				},
 				"height": {
@@ -720,10 +871,15 @@
 						"Cross"
 					]
 				},
-				"maxPerLevel": {
-					"description": "Max instances per level",
+				"tags": {
+					"description": "An array of strings that classifies this entity",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
 					"type": [
-						"integer"
+						"array"
 					]
 				},
 				"width": {
@@ -834,11 +990,12 @@
 				"autoLayerTiles",
 				"entityInstances",
 				"gridTiles",
-				"intGrid",
+				"intGridCsv",
 				"layerDefUid",
 				"levelId",
 				"pxOffsetX",
 				"pxOffsetY",
+				"visible",
 				"seed"
 			],
 			"additionalProperties": false,
@@ -899,6 +1056,30 @@
 					"description": "Total layer Y pixel offset, including both instance and definition offsets.",
 					"type": [
 						"integer"
+					]
+				},
+				"intGridCsv": {
+					"description": "A list of all values in the IntGrid layer, stored from left to right, and top to bottom (ie. first row from left to right, followed by second row, etc). `0` means \"empty cell\" and IntGrid values start at 1. This array size is `__cWid` x `__cHei` cells.",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"overrideTilesetUid": {
+					"description": "This layer can use another tileset by overriding the tileset UID here.",
+					"type": [
+						"integer",
+						"null"
+					]
+				},
+				"visible": {
+					"description": "Layer instance visibility",
+					"type": [
+						"boolean"
 					]
 				},
 				"entityInstances": {
@@ -963,7 +1144,7 @@
 					]
 				},
 				"intGrid": {
-					"description": "",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.0+  Replaced by: `intGridCsv`",
 					"items": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
 					},
@@ -985,10 +1166,10 @@
 				"pxHei",
 				"pxWid",
 				"relPath",
-				"savedSelections",
 				"spacing",
 				"tileGridSize",
-				"uid"
+				"uid",
+				"savedSelections"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1104,11 +1285,11 @@
 			"description": "This structure represents a single tile from a given Tileset.",
 			"title": "Tile instance",
 			"required": [
-				"d",
 				"f",
 				"px",
 				"src",
-				"t"
+				"t",
+				"d"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1166,16 +1347,19 @@
 			"title": "Layer definition",
 			"required": [
 				"__type",
-				"autoRuleGroups",
 				"displayOpacity",
 				"gridSize",
 				"identifier",
 				"intGridValues",
 				"pxOffsetX",
 				"pxOffsetY",
+				"uid",
+				"autoRuleGroups",
+				"excludedTags",
+				"requiredTags",
 				"tilePivotX",
 				"tilePivotY",
-				"uid"
+				"type"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1230,8 +1414,19 @@
 						"integer"
 					]
 				},
+				"excludedTags": {
+					"description": "An array of tags to forbid some Entities in this layer",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
 				"intGridValues": {
-					"description": "An array (using IntGrid value as array index, starting from 0) that defines extra optional info for each IntGrid value.",
+					"description": "An array that defines extra optional info for each IntGrid value. The array is sorted using value (ascending).",
 					"items": {
 						"$ref": "#/otherTypes/IntGridValueDef"
 					},
@@ -1263,6 +1458,17 @@
 					"description": "Unique String identifier",
 					"type": [
 						"string"
+					]
+				},
+				"requiredTags": {
+					"description": "An array of tags to filter Entities that can be added to this layer",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"pxOffsetY": {
@@ -1342,14 +1548,15 @@
 			"required": [
 				"__bgColor",
 				"__neighbours",
-				"bgPivotX",
-				"bgPivotY",
+				"fieldInstances",
 				"identifier",
 				"pxHei",
 				"pxWid",
 				"uid",
 				"worldX",
-				"worldY"
+				"worldY",
+				"bgPivotX",
+				"bgPivotY"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1389,12 +1596,13 @@
 					]
 				},
 				"bgPos": {
-					"description": "An enum defining the way the background image (if any) is positioned on the level. See `__bgPos` for resulting position info. Possible values: `Unscaled`, `Contain`, `Cover`, `CoverDirty`",
+					"description": "An enum defining the way the background image (if any) is positioned on the level. See `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`, `Contain`, `Cover`, `CoverDirty`",
 					"enum": [
 						"Unscaled",
 						"Contain",
 						"Cover",
-						"CoverDirty"
+						"CoverDirty",
+						null
 					]
 				},
 				"pxHei": {
@@ -1411,12 +1619,30 @@
 				},
 				"__bgPos": {
 					"description": "Position informations of the background image, if there is one.",
-					"$ref": "#/otherTypes/LevelBgPosInfos"
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/LevelBgPosInfos"
+						}
+					]
 				},
 				"uid": {
 					"description": "Unique Int identifier",
 					"type": [
 						"integer"
+					]
+				},
+				"fieldInstances": {
+					"description": "An array containing this level custom field values.",
+					"items": {
+						"$ref": "#/otherTypes/FieldInstance"
+					},
+					"type": [
+						"array"
 					]
 				},
 				"pxWid": {
@@ -1525,7 +1751,8 @@
 			"description": "IntGrid value definition",
 			"title": "IntGrid value definition",
 			"required": [
-				"color"
+				"color",
+				"value"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1540,6 +1767,12 @@
 					"type": [
 						"string",
 						"null"
+					]
+				},
+				"value": {
+					"description": "The IntGrid value itself",
+					"type": [
+						"integer"
 					]
 				}
 			},

@@ -11,6 +11,7 @@ class Level {
 	public var pxWid : Int;
 	public var pxHei : Int;
 	public var layerInstances : Array<data.inst.LayerInstance> = [];
+	public var fieldInstances : Map<Int, data.inst.FieldInstance> = new Map();
 
 	public var externalRelPath: Null<String>;
 
@@ -19,7 +20,7 @@ class Level {
 	public var bgPivotX: Float;
 	public var bgPivotY: Float;
 
-	@:allow(ui.modal.panel.WorldPanel)
+	@:allow(ui.modal.panel.LevelInstancePanel)
 	var bgColor : Null<UInt>;
 
 	public var worldCenterX(get,never) : Int;
@@ -121,7 +122,13 @@ class Level {
 			},
 
 			externalRelPath: null, // is only set upon actual saving, if project uses externalLevels option
-			layerInstances: layerInstances.map( function(li) return li.toJson() ),
+			fieldInstances: {
+				var all = [];
+				for(fi in fieldInstances)
+					all.push( fi.toJson() );
+				all;
+			},
+			layerInstances: layerInstances.map( li->li.toJson() ),
 			__neighbours: neighbours,
 		}
 	}
@@ -135,8 +142,8 @@ class Level {
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {
-		var wid = JsonTools.readInt( json.pxWid, Project.DEFAULT_LEVEL_SIZE*p.defaultGridSize );
-		var hei = JsonTools.readInt( json.pxHei, Project.DEFAULT_LEVEL_SIZE*p.defaultGridSize );
+		var wid = JsonTools.readInt( json.pxWid, p.defaultLevelWidth );
+		var hei = JsonTools.readInt( json.pxHei, p.defaultLevelHeight );
 		var l = new Level( p, wid, hei, JsonTools.readInt(json.uid) );
 		l.worldX = JsonTools.readInt( json.worldX, 0 );
 		l.worldY = JsonTools.readInt( json.worldY, 0 );
@@ -154,6 +161,12 @@ class Level {
 			for( layerJson in JsonTools.readArray(json.layerInstances) ) {
 				var li = data.inst.LayerInstance.fromJson(p, layerJson);
 				l.layerInstances.push(li);
+			}
+
+		if( json.fieldInstances!=null )
+			for( fieldJson in JsonTools.readArray(json.fieldInstances)) {
+				var fi = data.inst.FieldInstance.fromJson(p,fieldJson);
+				l.fieldInstances.set(fi.defUid, fi);
 			}
 
 		return l;
@@ -243,8 +256,26 @@ class Level {
 			&& worldY<this.worldY+pxHei;
 	}
 
-	public function isWorldOver(wx:Int, wy:Int) {
-		return wx>=worldX && wx<worldX+pxWid && wy>=worldY && wy<worldY+pxHei;
+	public function isWorldOver(wx:Int, wy:Int, padding=0) {
+		return
+			wx>=worldX-padding && wx<worldX+pxWid+padding
+			&& wy>=worldY-padding && wy<worldY+pxHei+padding;
+	}
+
+	public function getDist(wx:Int, wy:Int) : Float {
+		if( isWorldOver(wx,wy) )
+			return 0;
+		else {
+			if( wy>=worldY && wy<worldY+pxHei ) // Distance to left or right sides
+				return M.imin( M.iabs(worldX-wx), M.iabs(wx-(worldX+pxWid)) );
+			else if( wx>=worldX && wx<worldX+pxWid ) // Distance to top or bottom sides
+				return M.imin( M.iabs(worldY-wy), M.iabs(wy-(worldY+pxHei)) );
+			else // Distances to corners
+				return M.fmin(
+					M.fmin( M.dist(wx,wy,worldX,worldY), M.dist(wx,wy,worldX+pxWid-1,worldY) ),
+					M.fmin( M.dist(wx,wy,worldX,worldY+pxHei-1), M.dist(wx,wy,worldX+pxWid-1,worldY+pxHei-1) )
+				);
+		}
 	}
 
 	public function getBoundsDist(l:Level) : Int {
@@ -346,6 +377,21 @@ class Level {
 		// Tidy layer instances
 		for(li in layerInstances)
 			li.tidy(_project);
+
+
+		// Remove field instances whose def was removed
+		for(e in fieldInstances.keyValueIterator())
+			if( e.value.def==null ) {
+				App.LOG.add("tidy", 'Removed lost fieldInstance in $this');
+				fieldInstances.remove(e.key);
+			}
+
+		// Create missing field instances
+		for(fd in p.defs.levelFields)
+			getFieldInstance(fd);
+
+		for(fi in fieldInstances)
+			fi.tidy(_project);
 	}
 
 
@@ -354,6 +400,26 @@ class Level {
 			li.applyNewBounds(newPxLeft, newPxTop, newPxWid, newPxHei);
 		pxWid = newPxWid;
 		pxHei = newPxHei;
+
+		// Remove entities out of bounds
+		var n = 0;
+		for(li in layerInstances) {
+			var i = 0;
+			var ei = null;
+			while( i<li.entityInstances.length ) {
+				ei = li.entityInstances[i];
+				if( !inBounds(ei.x, ei.y) ) {
+					App.LOG.general('Removed out-of-bounds entity ${ei.def.identifier} in $li');
+					li.entityInstances.splice(i,1);
+					n++;
+				}
+				else
+					i++;
+			}
+		}
+		if( n>0 )
+			N.warning( L.t._("::n:: entity(ies) deleted during resizing!", { n:n }) );
+
 		_project.tidy();
 	}
 
@@ -383,7 +449,47 @@ class Level {
 
 
 
-	/** RENDERING *******************/
+	/* CUSTOM FIELDS *******************/
+
+	/** Get (and automatically creates) a field instance **/
+	public function getFieldInstance(fd:data.def.FieldDef) : data.inst.FieldInstance{
+		if( !fieldInstances.exists(fd.uid) )
+			fieldInstances.set( fd.uid, new data.inst.FieldInstance(_project, fd.uid) );
+		return fieldInstances.get(fd.uid);
+	}
+
+
+	public function getSmartColor(bright:Bool) {
+		for(fi in fieldInstances) {
+			if( fi.def.type==F_Color )
+				for(i in 0...fi.getArrayLength())
+					if( !fi.valueIsNull(i) )
+						return bright ? dn.Color.toWhite(fi.getColorAsInt(i), 0.5) : fi.getColorAsInt(i);
+		}
+		return bright ? dn.Color.toWhite(getBgColor(), 0.5) : getBgColor();
+	}
+
+	public function hasAnyFieldDisplayedAt(pos:ldtk.Json.FieldDisplayPosition) {
+		for(fi in fieldInstances)
+			if( fi.def.editorAlwaysShow || !fi.isUsingDefault(0) ) {
+				switch fi.def.editorDisplayMode {
+					case ValueOnly, NameAndValue:
+						if( fi.def.editorDisplayPos==pos )
+							return true;
+
+					case Hidden:
+					case EntityTile:
+					case PointStar:
+					case PointPath:
+					case RadiusPx:
+					case RadiusGrid:
+				}
+			}
+		return false;
+	}
+
+
+	/* RENDERING *******************/
 
 	public function iterateLayerInstancesInRenderOrder( eachLayer:data.inst.LayerInstance->Void ) {
 		var i = _project.defs.layers.length-1;

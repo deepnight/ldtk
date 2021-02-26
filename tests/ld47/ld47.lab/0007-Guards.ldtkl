@@ -5,7 +5,7 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.0",
+		"appVersion": "0.8.0",
 		"url": "https://ldtk.io"
 	},
 	"identifier": "Guards",
@@ -22,6 +22,7 @@
 	"bgPivotY": 0.5,
 	"__bgPos": null,
 	"externalRelPath": null,
+	"fieldInstances": [],
 	"layerInstances": [
 		{
 			"__identifier": "Front_elements",
@@ -38,9 +39,12 @@
 			"layerDefUid": 182,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [],
 			"seed": 5640404,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -59,159 +63,312 @@
 			"layerDefUid": 21,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [],
 			"seed": 6521607,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": [
-				{ "__identifier": "Hero", "__grid": [19,18], "__pivot": [0.5,1], "__tile": null, "defUid": 20, "px": [312,304], "fieldInstances": [] },
-				{ "__identifier": "Door", "__grid": [22,18], "__pivot": [0.5,1], "__tile": null, "defUid": 127, "px": [360,304], "fieldInstances": [
-					{
-						"__identifier": "needKey",
-						"__value": true,
-						"__type": "Bool",
-						"defUid": 143,
+				{
+					"__identifier": "Hero",
+					"__grid": [19,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 10,
+					"height": 20,
+					"defUid": 20,
+					"px": [312,304],
+					"fieldInstances": []
+				},
+				{
+					"__identifier": "Door",
+					"__grid": [22,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 8,
+					"height": 32,
+					"defUid": 127,
+					"px": [360,304],
+					"fieldInstances": [
+						{
+							"__identifier": "needKey",
+							"__value": true,
+							"__type": "Bool",
+							"defUid": 143,
+							"realEditorValues": [{
+								"id": "V_Bool",
+								"params": [ true ]
+							}]
+						},
+						{ "__identifier": "showLock", "__value": true, "__type": "Bool", "defUid": 167, "realEditorValues": [] }
+					]
+				},
+				{
+					"__identifier": "Mob",
+					"__grid": [11,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 16,
+					"height": 16,
+					"defUid": 40,
+					"px": [184,304],
+					"fieldInstances": [
+						{ "__identifier": "patrol", "__value": null, "__type": "Point", "defUid": 43, "realEditorValues": [] },
+						{ "__identifier": "initialDir", "__value": 1, "__type": "Int", "defUid": 46, "realEditorValues": [] },
+						{
+							"__identifier": "loot",
+							"__value": null,
+							"__type": "LocalEnum.ItemType",
+							"defUid": 142,
+							"realEditorValues": [null]
+						}
+					]
+				},
+				{
+					"__identifier": "Mob",
+					"__grid": [15,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 16,
+					"height": 16,
+					"defUid": 40,
+					"px": [248,304],
+					"fieldInstances": [
+						{ "__identifier": "patrol", "__value": null, "__type": "Point", "defUid": 43, "realEditorValues": [] },
+						{ "__identifier": "initialDir", "__value": 1, "__type": "Int", "defUid": 46, "realEditorValues": [] },
+						{
+							"__identifier": "loot",
+							"__value": null,
+							"__type": "LocalEnum.ItemType",
+							"defUid": 142,
+							"realEditorValues": [null]
+						}
+					]
+				},
+				{
+					"__identifier": "Mob",
+					"__grid": [9,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 16,
+					"height": 16,
+					"defUid": 40,
+					"px": [152,304],
+					"fieldInstances": [
+						{ "__identifier": "patrol", "__value": null, "__type": "Point", "defUid": 43, "realEditorValues": [] },
+						{ "__identifier": "initialDir", "__value": 1, "__type": "Int", "defUid": 46, "realEditorValues": [] },
+						{
+							"__identifier": "loot",
+							"__value": null,
+							"__type": "LocalEnum.ItemType",
+							"defUid": 142,
+							"realEditorValues": [null]
+						}
+					]
+				},
+				{
+					"__identifier": "Vault",
+					"__grid": [28,17],
+					"__pivot": [0.5,0.5],
+					"__tile": null,
+					"width": 11,
+					"height": 11,
+					"defUid": 136,
+					"px": [456,280],
+					"fieldInstances": []
+				},
+				{
+					"__identifier": "Item",
+					"__grid": [25,18],
+					"__pivot": [0.5,1],
+					"__tile": { "tilesetUid": 200, "srcRect": [192,432,16,16] },
+					"width": 16,
+					"height": 16,
+					"defUid": 64,
+					"px": [408,304],
+					"fieldInstances": [{
+						"__identifier": "type",
+						"__value": "Diamond",
+						"__type": "LocalEnum.ItemType",
+						"defUid": 125,
 						"realEditorValues": [{
-							"id": "V_Bool",
-							"params": [ true ]
+							"id": "V_String",
+							"params": ["Diamond"]
 						}]
-					},
-					{ "__identifier": "showLock", "__value": true, "__type": "Bool", "defUid": 167, "realEditorValues": [] }
-				] },
-				{ "__identifier": "Mob", "__grid": [11,18], "__pivot": [0.5,1], "__tile": null, "defUid": 40, "px": [184,304], "fieldInstances": [
-					{ "__identifier": "patrol", "__value": null, "__type": "Point", "defUid": 43, "realEditorValues": [] },
-					{ "__identifier": "initialDir", "__value": 1, "__type": "Int", "defUid": 46, "realEditorValues": [] },
-					{
-						"__identifier": "loot",
-						"__value": null,
-						"__type": "LocalEnum.ItemType",
-						"defUid": 142,
-						"realEditorValues": [null]
-					}
-				] },
-				{ "__identifier": "Mob", "__grid": [15,18], "__pivot": [0.5,1], "__tile": null, "defUid": 40, "px": [248,304], "fieldInstances": [
-					{ "__identifier": "patrol", "__value": null, "__type": "Point", "defUid": 43, "realEditorValues": [] },
-					{ "__identifier": "initialDir", "__value": 1, "__type": "Int", "defUid": 46, "realEditorValues": [] },
-					{
-						"__identifier": "loot",
-						"__value": null,
-						"__type": "LocalEnum.ItemType",
-						"defUid": 142,
-						"realEditorValues": [null]
-					}
-				] },
-				{ "__identifier": "Mob", "__grid": [9,18], "__pivot": [0.5,1], "__tile": null, "defUid": 40, "px": [152,304], "fieldInstances": [
-					{ "__identifier": "patrol", "__value": null, "__type": "Point", "defUid": 43, "realEditorValues": [] },
-					{ "__identifier": "initialDir", "__value": 1, "__type": "Int", "defUid": 46, "realEditorValues": [] },
-					{
-						"__identifier": "loot",
-						"__value": null,
-						"__type": "LocalEnum.ItemType",
-						"defUid": 142,
-						"realEditorValues": [null]
-					}
-				] },
-				{ "__identifier": "Vault", "__grid": [28,17], "__pivot": [0.5,0.5], "__tile": null, "defUid": 136, "px": [456,280], "fieldInstances": [] },
-				{ "__identifier": "Item", "__grid": [25,18], "__pivot": [0.5,1], "__tile": { "tilesetUid": 200, "srcRect": [192,432,16,16] }, "defUid": 64, "px": [408,304], "fieldInstances": [{
-					"__identifier": "type",
-					"__value": "Diamond",
-					"__type": "LocalEnum.ItemType",
-					"defUid": 125,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["Diamond"]
 					}]
-				}] },
-				{ "__identifier": "Text", "__grid": [17,14], "__pivot": [0.5,0.5], "__tile": null, "defUid": 152, "px": [280,232], "fieldInstances": [
-					{
-						"__identifier": "text",
-						"__value": "GUARDS!",
-						"__type": "String",
-						"defUid": 153,
-						"realEditorValues": [{
-							"id": "V_String",
-							"params": ["GUARDS!"]
-						}]
-					},
-					{
-						"__identifier": "color",
-						"__value": "#FF0000",
-						"__type": "Color",
-						"defUid": 154,
-						"realEditorValues": [{ "id": "V_Int", "params": [16711680] }]
-					},
-					{ "__identifier": "showAfterDark", "__value": 0, "__type": "Int", "defUid": 168, "realEditorValues": [] },
-					{
-						"__identifier": "startHidden",
-						"__value": true,
-						"__type": "Bool",
-						"defUid": 169,
-						"realEditorValues": [{
-							"id": "V_Bool",
-							"params": [ true ]
-						}]
-					},
-					{ "__identifier": "tutorial", "__value": false, "__type": "Bool", "defUid": 197, "realEditorValues": [] }
-				] },
-				{ "__identifier": "Mob", "__grid": [12,18], "__pivot": [0.5,1], "__tile": null, "defUid": 40, "px": [200,304], "fieldInstances": [
-					{ "__identifier": "patrol", "__value": null, "__type": "Point", "defUid": 43, "realEditorValues": [] },
-					{ "__identifier": "initialDir", "__value": 1, "__type": "Int", "defUid": 46, "realEditorValues": [] },
-					{
-						"__identifier": "loot",
-						"__value": "DoorKey",
-						"__type": "LocalEnum.ItemType",
-						"defUid": 142,
-						"realEditorValues": [{
-							"id": "V_String",
-							"params": ["DoorKey"]
-						}]
-					}
-				] },
-				{ "__identifier": "Mob", "__grid": [14,18], "__pivot": [0.5,1], "__tile": null, "defUid": 40, "px": [232,304], "fieldInstances": [
-					{ "__identifier": "patrol", "__value": null, "__type": "Point", "defUid": 43, "realEditorValues": [] },
-					{ "__identifier": "initialDir", "__value": 1, "__type": "Int", "defUid": 46, "realEditorValues": [] },
-					{
-						"__identifier": "loot",
-						"__value": null,
-						"__type": "LocalEnum.ItemType",
-						"defUid": 142,
-						"realEditorValues": [null]
-					}
-				] },
-				{ "__identifier": "Torch", "__grid": [25,16], "__pivot": [0.5,1], "__tile": null, "defUid": 151, "px": [408,272], "fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }] },
-				{ "__identifier": "Torch", "__grid": [27,16], "__pivot": [0.5,1], "__tile": null, "defUid": 151, "px": [440,272], "fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }] },
-				{ "__identifier": "Torch", "__grid": [11,17], "__pivot": [0.5,1], "__tile": null, "defUid": 151, "px": [184,288], "fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }] },
-				{ "__identifier": "Torch", "__grid": [16,17], "__pivot": [0.5,1], "__tile": null, "defUid": 151, "px": [264,288], "fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }] },
-				{ "__identifier": "Trigger", "__grid": [17,18], "__pivot": [0.5,1], "__tile": null, "defUid": 145, "px": [280,304], "fieldInstances": [
-					{
-						"__identifier": "hidden",
-						"__value": true,
-						"__type": "Bool",
-						"defUid": 161,
-						"realEditorValues": [{
-							"id": "V_Bool",
-							"params": [ true ]
-						}]
-					},
-					{
-						"__identifier": "radius",
-						"__value": 3,
-						"__type": "Int",
-						"defUid": 162,
-						"realEditorValues": [{ "id": "V_Int", "params": [3] }]
-					},
-					{
-						"__identifier": "target",
-						"__value": { "cx": 17, "cy": 15 },
-						"__type": "Point",
-						"defUid": 165,
-						"realEditorValues": [{
-							"id": "V_String",
-							"params": ["17,15"]
-						}]
-					},
-					{ "__identifier": "exitLevel", "__value": false, "__type": "Bool", "defUid": 196, "realEditorValues": [] }
-				] }
+				},
+				{
+					"__identifier": "Text",
+					"__grid": [17,14],
+					"__pivot": [0.5,0.5],
+					"__tile": null,
+					"width": 32,
+					"height": 16,
+					"defUid": 152,
+					"px": [280,232],
+					"fieldInstances": [
+						{
+							"__identifier": "text",
+							"__value": "GUARDS!",
+							"__type": "String",
+							"defUid": 153,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": ["GUARDS!"]
+							}]
+						},
+						{
+							"__identifier": "color",
+							"__value": "#FF0000",
+							"__type": "Color",
+							"defUid": 154,
+							"realEditorValues": [{ "id": "V_Int", "params": [16711680] }]
+						},
+						{ "__identifier": "showAfterDark", "__value": 0, "__type": "Int", "defUid": 168, "realEditorValues": [] },
+						{
+							"__identifier": "startHidden",
+							"__value": true,
+							"__type": "Bool",
+							"defUid": 169,
+							"realEditorValues": [{
+								"id": "V_Bool",
+								"params": [ true ]
+							}]
+						},
+						{ "__identifier": "tutorial", "__value": false, "__type": "Bool", "defUid": 197, "realEditorValues": [] }
+					]
+				},
+				{
+					"__identifier": "Mob",
+					"__grid": [12,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 16,
+					"height": 16,
+					"defUid": 40,
+					"px": [200,304],
+					"fieldInstances": [
+						{ "__identifier": "patrol", "__value": null, "__type": "Point", "defUid": 43, "realEditorValues": [] },
+						{ "__identifier": "initialDir", "__value": 1, "__type": "Int", "defUid": 46, "realEditorValues": [] },
+						{
+							"__identifier": "loot",
+							"__value": "DoorKey",
+							"__type": "LocalEnum.ItemType",
+							"defUid": 142,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": ["DoorKey"]
+							}]
+						}
+					]
+				},
+				{
+					"__identifier": "Mob",
+					"__grid": [14,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 16,
+					"height": 16,
+					"defUid": 40,
+					"px": [232,304],
+					"fieldInstances": [
+						{ "__identifier": "patrol", "__value": null, "__type": "Point", "defUid": 43, "realEditorValues": [] },
+						{ "__identifier": "initialDir", "__value": 1, "__type": "Int", "defUid": 46, "realEditorValues": [] },
+						{
+							"__identifier": "loot",
+							"__value": null,
+							"__type": "LocalEnum.ItemType",
+							"defUid": 142,
+							"realEditorValues": [null]
+						}
+					]
+				},
+				{
+					"__identifier": "Torch",
+					"__grid": [25,16],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 4,
+					"height": 8,
+					"defUid": 151,
+					"px": [408,272],
+					"fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }]
+				},
+				{
+					"__identifier": "Torch",
+					"__grid": [27,16],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 4,
+					"height": 8,
+					"defUid": 151,
+					"px": [440,272],
+					"fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }]
+				},
+				{
+					"__identifier": "Torch",
+					"__grid": [11,17],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 4,
+					"height": 8,
+					"defUid": 151,
+					"px": [184,288],
+					"fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }]
+				},
+				{
+					"__identifier": "Torch",
+					"__grid": [16,17],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 4,
+					"height": 8,
+					"defUid": 151,
+					"px": [264,288],
+					"fieldInstances": [{ "__identifier": "fake", "__value": false, "__type": "Bool", "defUid": 199, "realEditorValues": [] }]
+				},
+				{
+					"__identifier": "Trigger",
+					"__grid": [17,18],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 16,
+					"height": 6,
+					"defUid": 145,
+					"px": [280,304],
+					"fieldInstances": [
+						{
+							"__identifier": "hidden",
+							"__value": true,
+							"__type": "Bool",
+							"defUid": 161,
+							"realEditorValues": [{
+								"id": "V_Bool",
+								"params": [ true ]
+							}]
+						},
+						{
+							"__identifier": "radius",
+							"__value": 3,
+							"__type": "Int",
+							"defUid": 162,
+							"realEditorValues": [{ "id": "V_Int", "params": [3] }]
+						},
+						{
+							"__identifier": "target",
+							"__value": { "cx": 17, "cy": 15 },
+							"__type": "Point",
+							"defUid": 165,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": ["17,15"]
+							}]
+						},
+						{ "__identifier": "exitLevel", "__value": false, "__type": "Bool", "defUid": 196, "realEditorValues": [] }
+					]
+				}
 			]
 		},
 		{
@@ -229,6 +386,7 @@
 			"layerDefUid": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [
 				{ "coordId": 0, "v": 0 },
 				{ "coordId": 1, "v": 0 },
@@ -1653,6 +1811,51 @@
 				{ "coordId": 1498, "v": 0 },
 				{ "coordId": 1499, "v": 0 }
 			],
+			"intGridCsv": [
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+			],
 			"autoLayerTiles": [
 				{ "px": [368,224], "src": [48,16], "f": 0, "t": 35, "d": [77,723] },
 				{ "px": [384,224], "src": [64,16], "f": 0, "t": 36, "d": [77,723] },
@@ -2841,6 +3044,7 @@
 				{ "px": [464,320], "src": [96,16], "f": 2, "t": 38, "d": [97,1029] }
 			],
 			"seed": 1013386,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -2859,7 +3063,9 @@
 			"layerDefUid": 109,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [144,256], "src": [192,48], "f": 0, "t": 108, "d": [112,809] },
 				{ "px": [160,256], "src": [192,64], "f": 0, "t": 140, "d": [112,810] },
@@ -2871,6 +3077,7 @@
 				{ "px": [128,272], "src": [208,64], "f": 0, "t": 141, "d": [112,858] }
 			],
 			"seed": 9068718,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -2889,7 +3096,9 @@
 			"layerDefUid": 25,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [368,224], "src": [112,0], "f": 0, "t": 7, "d": [87,723] },
 				{ "px": [384,224], "src": [112,0], "f": 0, "t": 7, "d": [87,724] },
@@ -3014,6 +3223,7 @@
 				{ "px": [464,288], "src": [144,16], "f": 0, "t": 41, "d": [102,929] }
 			],
 			"seed": 9753234,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -3032,7 +3242,9 @@
 			"layerDefUid": 23,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [0,0], "src": [16,128], "f": 0, "t": 257, "d": [32,0] },
 				{ "px": [16,0], "src": [16,128], "f": 0, "t": 257, "d": [32,1] },
@@ -4537,6 +4749,7 @@
 				{ "px": [448,256], "src": [32,128], "f": 0, "t": 258, "d": [121,828] }
 			],
 			"seed": 1567939,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		}

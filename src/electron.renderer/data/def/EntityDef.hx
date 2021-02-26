@@ -7,19 +7,30 @@ class EntityDef {
 	public var uid(default,null) : Int;
 
 	public var identifier(default,set) : String;
+	public var tags : Tags;
+
 	public var width : Int;
 	public var height : Int;
 	public var color : UInt;
+	public var fillOpacity : Float;
+	public var lineOpacity : Float;
+	public var showName : Bool;
 	public var renderMode : ldtk.Json.EntityRenderMode;
 	public var tileRenderMode : ldtk.Json.EntityTileRenderMode;
-	public var showName : Bool;
 	public var tilesetId : Null<Int>;
 	public var tileId : Null<Int>;
 
-	public var maxPerLevel : Int;
-	public var limitBehavior : ldtk.Json.EntityLimitBehavior; // what to do when maxPerLevel is reached
+	public var hollow : Bool;
+
+	public var resizableX : Bool;
+	public var resizableY : Bool;
+	public var keepAspectRatio : Bool;
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
+
+	public var maxCount : Int;
+	public var limitScope : ldtk.Json.EntityLimitScope;
+	public var limitBehavior : ldtk.Json.EntityLimitBehavior; // what to do when maxCount is reached
 
 	public var fieldDefs : Array<data.def.FieldDef> = [];
 
@@ -27,14 +38,21 @@ class EntityDef {
 	public function new(uid:Int) {
 		this.uid = uid;
 		color = 0x94d9b3;
+		fillOpacity = 1;
+		lineOpacity = 1;
 		renderMode = Rectangle;
 		width = height = 16;
-		maxPerLevel = 0;
+		maxCount = 0;
 		showName = true;
-		limitBehavior = DiscardOldOnes;
+		limitBehavior = MoveLastOne;
+		limitScope = PerLevel;
 		tileRenderMode = Stretch;
 		identifier = "Entity"+uid;
 		setPivot(0.5,1);
+		resizableX = resizableY = false;
+		keepAspectRatio = false;
+		hollow = false;
+		tags = new Tags();
 	}
 
 	public function isTileDefined() {
@@ -51,6 +69,8 @@ class EntityDef {
 			+ "]";
 	}
 
+	public inline function isResizable() return resizableX || resizableY;
+
 	// public function getShortIdentifier(maxlen=8) {
 	// 	if( identifier.length<=maxlen )
 	// 		return identifier;
@@ -66,24 +86,35 @@ class EntityDef {
 
 	public static function fromJson(p:Project, json:ldtk.Json.EntityDefJson) {
 		if( (cast json).name!=null ) json.identifier = (cast json).name;
+		if( (cast json).maxPerLevel!=null ) json.maxCount = (cast json).maxPerLevel;
 
-		var o = new EntityDef( JsonTools.readInt(json.uid) );
+		var o = new EntityDef(JsonTools.readInt(json.uid) );
 		o.identifier = JsonTools.readString( json.identifier );
 		o.width = JsonTools.readInt( json.width, 16 );
 		o.height = JsonTools.readInt( json.height, 16 );
+		o.resizableX = JsonTools.readBool( json.resizableX, false );
+		o.resizableY = JsonTools.readBool( json.resizableY, false );
+		o.keepAspectRatio = JsonTools.readBool( json.keepAspectRatio, false );
+
+		o.hollow = JsonTools.readBool( json.hollow, false );
+
+		o.tags = Tags.fromJson(json.tags);
 
 		o.color = JsonTools.readColor( json.color, 0x0 );
+		o.fillOpacity = JsonTools.readFloat( json.fillOpacity, 1 );
+		o.lineOpacity = JsonTools.readFloat( json.lineOpacity, 1 );
 		o.renderMode = JsonTools.readEnum(ldtk.Json.EntityRenderMode, json.renderMode, false, Rectangle);
 		o.showName = JsonTools.readBool(json.showName, true);
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
 		o.tileId = JsonTools.readNullableInt(json.tileId);
 		o.tileRenderMode = JsonTools.readEnum(ldtk.Json.EntityTileRenderMode, json.tileRenderMode, false, Stretch);
 
-		o.maxPerLevel = JsonTools.readInt( json.maxPerLevel, 0 );
+		o.maxCount = JsonTools.readInt( json.maxCount, 0 );
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
 		o.pivotY = JsonTools.readFloat( json.pivotY, 0 );
 
-		o.limitBehavior = JsonTools.readEnum( ldtk.Json.EntityLimitBehavior, json.limitBehavior, true, DiscardOldOnes );
+		o.limitScope = JsonTools.readEnum(ldtk.Json.EntityLimitScope, json.limitScope, false, PerLevel);
+		o.limitBehavior = JsonTools.readEnum( ldtk.Json.EntityLimitBehavior, json.limitBehavior, true, MoveLastOne );
 		if( JsonTools.readBool( (cast json).discardExcess, true)==false )
 			o.limitBehavior = PreventAdding;
 
@@ -97,8 +128,16 @@ class EntityDef {
 		return {
 			identifier: identifier,
 			uid: uid,
+			tags: tags.toJson(),
 			width: width,
 			height: height,
+			resizableX: resizableX,
+			resizableY: resizableY,
+			keepAspectRatio: keepAspectRatio,
+			fillOpacity: JsonTools.writeFloat(fillOpacity),
+			lineOpacity: JsonTools.writeFloat(lineOpacity),
+
+			hollow: hollow,
 
 			color: JsonTools.writeColor(color),
 			renderMode: JsonTools.writeEnum(renderMode, false),
@@ -107,7 +146,8 @@ class EntityDef {
 			tileId: tileId,
 			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),
 
-			maxPerLevel: maxPerLevel,
+			maxCount: maxCount,
+			limitScope: JsonTools.writeEnum(limitScope, false),
 			limitBehavior: JsonTools.writeEnum(limitBehavior, false),
 			pivotX: JsonTools.writeFloat( pivotX ),
 			pivotY: JsonTools.writeFloat( pivotY ),
@@ -130,34 +170,10 @@ class EntityDef {
 	/** FIELDS ****************************/
 
 	public function createFieldDef(project:Project, type:data.DataTypes.FieldType, baseName:String, isArray:Bool) : FieldDef {
-		var f = new FieldDef(project, project.makeUniqId(), type, isArray);
-		f.identifier = baseName.toLowerCase() + (isArray?"_array":"");
-		var idx = 2;
-		while( !isFieldIdentifierUnique(f.identifier) )
-			f.identifier = baseName+(idx++);
+		var f = new FieldDef(project, project.makeUniqueIdInt(), type, isArray);
+		f.identifier = project.makeUniqueIdStr( baseName + (isArray?"_array":""), false, (id)->isFieldIdentifierUnique(id) );
 		fieldDefs.push(f);
 		return f;
-	}
-
-	public function duplicateFieldDef(p:Project, fd:FieldDef) {
-		var copy = FieldDef.fromJson( p, fd.toJson() );
-		copy.uid = p.makeUniqId();
-
-		var idx = 2;
-		while( !isFieldIdentifierUnique(copy.identifier) )
-			copy.identifier = fd.identifier+(idx++);
-
-		fieldDefs.insert( dn.Lib.getArrayIndex(fd,fieldDefs)+1, copy );
-
-		p.tidy();
-		return copy;
-	}
-
-	public function removeField(project:Project, fd:FieldDef) {
-		if( !fieldDefs.remove(fd) )
-			throw "Unknown fieldDef";
-
-		project.tidy();
 	}
 
 	public function sortField(from:Int, to:Int) : Null<FieldDef> {
@@ -191,6 +207,9 @@ class EntityDef {
 
 
 	public function tidy(p:data.Project) {
+		// Tags
+		tags.tidy();
+
 		// Lost tileset
 		if( tilesetId!=null && p.defs.getTilesetDef(tilesetId)==null ) {
 			App.LOG.add("tidy", 'Removed lost tileset of $this');

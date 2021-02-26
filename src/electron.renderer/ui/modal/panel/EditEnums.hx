@@ -17,34 +17,29 @@ class EditEnums extends ui.modal.Panel {
 			jContent.find("ul.enumForm input:first").focus();
 		});
 
-		// Delete enum
-		jContent.find("button.deleteEnum").click( function(ev) {
-			if( curEnum==null ) {
-				N.error(L.t._("No enum selected."));
-				return;
-			}
-			deleteEnumDef(curEnum,false);
-		});
-
-		// Import HX
-		jContent.find("button.importHx").click( function(_) {
-			dn.electron.Dialogs.open([".hx"], project.getProjectDir(), function(absPath:String) {
-				absPath = StringTools.replace(absPath,"\\","/");
-				if( dn.FilePath.extractExtension(absPath)!="hx" )
-					N.error("The file must have the HX extension.");
-				else
-					importer.HxEnum.load( project.makeRelativeFilePath(absPath), false );
+		// Import
+		jContent.find("button.import").click( ev->{
+			var ctx = new ContextMenu(ev);
+			ctx.add({
+				label:L.t._("Haxe source code"),
+				cb: ()->{
+					dn.electron.Dialogs.open([".hx"], project.getProjectDir(), function(absPath:String) {
+						absPath = StringTools.replace(absPath,"\\","/");
+						if( dn.FilePath.extractExtension(absPath)!="hx" )
+							N.error("The file must have the HX extension.");
+						else
+							importer.HxEnum.load( project.makeRelativeFilePath(absPath), false );
+					});
+				}
 			});
-		});
-
-		// Import CastleDB
-		jContent.find("button.importCdb").click( function(_) {
-			N.notImplemented();
-		});
-
-		// Import ExpDB
-		jContent.find("button.importEdb").click( function(_) {
-			N.notImplemented();
+			ctx.add({
+				label:L.t._("CastleDB"),
+				cb: ()->N.notImplemented()
+			});
+			ctx.add({
+				label:L.t._("JSON"),
+				cb: ()->N.notImplemented()
+			});
 		});
 
 		// Default enum selection
@@ -247,9 +242,7 @@ class EditEnums extends ui.modal.Panel {
 
 		// Enum ID
 		var i = Input.linkToHtmlInput( curEnum.identifier, jForm.find("[name=id]") );
-		i.validityCheck = function(v) {
-			return project.defs.isEnumIdentifierUnique(v);
-		}
+		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isEnumIdentifierUnique(id, curEnum));
 		i.linkEvent(EnumDefChanged);
 
 		// Source path
@@ -265,7 +258,7 @@ class EditEnums extends ui.modal.Panel {
 
 		// Tilesets
 		var jSelect = jForm.find("select#icons");
-		if( !curEnum.isExternal() ) {
+		// if( !curEnum.isExternal() ) {
 			jSelect.show();
 			jSelect.empty();
 			if( curEnum.iconTilesetUid==null )
@@ -304,7 +297,7 @@ class EditEnums extends ui.modal.Panel {
 				curEnum.clearAllTileIds();
 				editor.ge.emit(EnumDefChanged);
 			});
-		}
+		// }
 
 
 		// Values
@@ -321,7 +314,7 @@ class EditEnums extends ui.modal.Panel {
 				function() return eValue.id,
 				function(newV) {
 					var oldV = eValue.id;
-					if( curEnum.renameValue(oldV, newV) ) {
+					if( curEnum.renameValue(project, oldV, newV) ) {
 						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
 							for(i in 0...fi.getArrayLength())
 								if( fi.getEnumValue(i)==oldV )
@@ -338,13 +331,18 @@ class EditEnums extends ui.modal.Panel {
 				li.find(".sortHandle").hide();
 
 			// Tile preview
-			if( !curEnum.isExternal() ) {
-				var jPicker = JsTools.createTilePicker(curEnum.iconTilesetUid, SingleTile, [eValue.tileId], function(tileIds) {
-					eValue.tileId = tileIds[0];
-					editor.ge.emit(EnumDefChanged);
-				});
+			// if( !curEnum.isExternal() ) {
+				var jPicker = JsTools.createTilePicker(
+					curEnum.iconTilesetUid,
+					SingleTile,
+					eValue.tileId==null ? [] : [eValue.tileId],
+					(tileIds)->{
+						eValue.tileId = tileIds[0];
+						editor.ge.emit(EnumDefChanged);
+					}
+				);
 				jPicker.insertAfter( li.find(".sortHandle") );
-			}
+			// }
 
 			// Remove value button
 			if( !curEnum.isExternal() ) {

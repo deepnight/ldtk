@@ -65,7 +65,7 @@ class EntityInstanceEditor extends dn.Process {
 
 	function onGlobalEvent(ge:GlobalEvent) {
 		switch ge {
-			case ProjectSettingsChanged, EntityDefChanged, EntityFieldDefChanged(_), EntityFieldSorted:
+			case ProjectSettingsChanged, EntityDefChanged, FieldDefChanged(_), FieldDefSorted:
 				if( ei==null || ei.def==null )
 					destroy();
 				else
@@ -82,9 +82,8 @@ class EntityInstanceEditor extends dn.Process {
 				if( ei==this.ei )
 					updateForm();
 
-			case EntityInstanceFieldChanged(ei):
-				if( ei==this.ei )
-					updateForm();
+			case FieldInstanceChanged(fi):
+				updateForm();
 
 			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				closeExisting(); // TODO do softer refresh
@@ -94,6 +93,9 @@ class EntityInstanceEditor extends dn.Process {
 
 			case ViewportChanged :
 				renderLink();
+
+			case LevelSelected(level):
+				closeExisting();
 
 			case _:
 		}
@@ -121,7 +123,7 @@ class EntityInstanceEditor extends dn.Process {
 		var render = Editor.ME.levelRender;
 		link.clear();
 		link.lineStyle(4*cam.pixelRatio, c, 0.33);
-		var coords = Coords.fromWorldCoords(ei.x, ei.y);
+		var coords = Coords.fromLevelCoords(ei.centerX, ei.centerY);
 		link.moveTo(coords.canvasX, coords.canvasY);
 		link.lineTo(
 			cam.width - jWindow.outerWidth() * cam.pixelRatio,
@@ -191,13 +193,23 @@ class EntityInstanceEditor extends dn.Process {
 		});
 		jHeader.append(jEdit);
 
+		// Extra bits of info
+		var jExtraInfos = new J('<dl class="form extraInfos"/>');
+		jExtraInfos.appendTo(wrapper);
+
+		// Entity size
+		if( ei.def.isResizable() ) {
+			jExtraInfos.append('<dt>Size</dt>');
+			jExtraInfos.append('<dd>${ei.width} x ${ei.height}</dd>');
+		}
+
 		// Custom fields
-		var form = new ui.FieldInstancesForm(Entity(ei), ei.def.fieldDefs, (fd)->ei.getFieldInstance(fd));
+		var form = new ui.FieldInstancesForm();
 		wrapper.append(form.jWrapper);
+		form.use( Entity(ei), ei.def.fieldDefs, (fd)->ei.getFieldInstance(fd) );
 		form.onChange = ()->{
 			editor.curLevelHistory.saveLayerState( editor.curLayerInstance );
 			editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
-			editor.ge.emit( EntityInstanceFieldChanged(ei) );
 		}
 
 
@@ -210,5 +222,15 @@ class EntityInstanceEditor extends dn.Process {
 		wrapper.scroll( (_)->{
 			scrollMem = wrapper.scrollTop();
 		});
+	}
+
+	override function update() {
+		super.update();
+
+		var isOccupied = editor.resizeTool!=null && editor.resizeTool.isRunning() || editor.selectionTool.isRunning();
+		if( isOccupied && !jWindow.hasClass("faded") )
+			jWindow.addClass("faded");
+		if( !isOccupied && jWindow.hasClass("faded") )
+			jWindow.removeClass("faded");
 	}
 }

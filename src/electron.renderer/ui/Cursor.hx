@@ -1,152 +1,192 @@
 package ui;
 
-class Cursor extends dn.Process {
+class Cursor {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	var curLevel(get,never) : data.Level; inline function get_curLevel() return Editor.ME.curLevel;
+	var cam(get,never) : display.Camera; inline function get_cam() return Editor.ME.camera;
+	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
-	var type : CursorType = null;
-
+	var type : CursorType = None;
+	public var root : h2d.Object;
+	var g : h2d.Graphics;
 	var wrapper : h2d.Object;
-	var graphics : h2d.Graphics;
+	var invalidatedRender = true;
 
-	var labelWrapper : h2d.Flow;
-	var curLabel : Null<String>;
-	public var canChangeSystemCursors = false;
-	var permanentHighlight = false;
+	var label : { f:h2d.Flow, tf:h2d.Text };
 
 	public function new() {
-		super(Editor.ME);
-		createRootInLayers(Editor.ME.root, Const.DP_UI);
-
-		graphics = new h2d.Graphics(root);
+		root = new h2d.Object();
 
 		wrapper = new h2d.Object(root);
-		wrapper.alpha = 0.4;
+		g = new h2d.Graphics(root);
 
-		labelWrapper = new h2d.Flow(root);
-		labelWrapper.backgroundTile = h2d.Tile.fromColor(0x0, 1,1, 0.7);
-		labelWrapper.paddingHorizontal = 4;
-		labelWrapper.paddingVertical = 2;
+		// Init label
+		var f = new h2d.Flow(root);
+		f.paddingHorizontal = 3;
+		f.paddingVertical = 1;
+		var tf = new h2d.Text(Assets.fontLight_small, f);
+		label = { f:f, tf:tf }
+
+		editor.ge.addSpecificListener(ViewportChanged, onViewportChange);
+		onViewportChange();
 	}
 
-	public function setLabel(?str:String) {
-		labelWrapper.removeChildren();
-		if( str!=null ) {
-			var tf = new h2d.Text(Assets.fontLight_small, labelWrapper);
-			tf.text = str;
-		}
-		curLabel = str;
+	public function dispose() {
+		root.remove();
+		type = null;
+		editor.ge.removeListener(onViewportChange);
 	}
 
-	public function setSystemCursor(c:hxd.Cursor) {
-		if( canChangeSystemCursors )
-			hxd.System.setCursor(c);
-	}
+	/** Set current cursor **/
+	public inline function set(c:CursorType, ?labelStr:String) {
+		// Check if actual re-render is needed
+		var needRender : Bool = switch c {
+			case None,Forbidden,Pan,Panning,Move,Moving,PickNothing,Pointer,Add: c!=type;
+			case Resize(p):
+				switch type {
+					case Resize(p2): p!=p2;
+					case _: true;
+				}
 
-	function render(softHighlight:Bool) {
-		if( permanentHighlight )
-			softHighlight = true;
-
-		wrapper.removeChildren();
-		wrapper.filter = null;
-		graphics.clear();
-		graphics.lineStyle(0);
-		graphics.endFill();
-
-		wrapper.visible = type!=None && editor.isCurrentLayerVisible();
-		// wrapper.visible = type!=None && !Modal.hasAnyOpen() && editor.isCurrentLayerVisible();
-		graphics.visible = wrapper.visible;
-		labelWrapper.visible = curLabel!=null;
-
-		setSystemCursor(Default);
-
-		var pad = 2;
-
-		switch type {
-			case None:
-
-			case Resize(pos):
-				#if js
-				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor(switch pos {
-					case Top: "n-resize";
-					case Bottom: "s-resize";
-					case Left: "w-resize";
-					case Right: "e-resize";
-					case TopLeft: "nw-resize";
-					case TopRight: "ne-resize";
-					case BottomLeft: "sw-resize";
-					case BottomRight: "se-resize";
-				}) );
-				#end
-
-			case Pointer:
-				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("pointer") );
-
-			case Add:
-				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("cell") );
-
-			case PickNothing:
-				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("help") );
-
-			case Forbidden:
-				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("not-allowed") );
-
-			case Pan:
-				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("all-scroll") );
-
-			case Move:
-				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("grab") );
-
-			case Moving:
-				setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor("grabbing") );
-
-			case Eraser(x, y):
-				graphics.lineStyle(1, 0xff0000, 1);
-				graphics.drawCircle(0,0, 6);
-				graphics.lineStyle(1, 0x880000, 1);
-				graphics.drawCircle(0,0, 8);
-
-			case Link(fx, fy, tx, ty, c):
-				graphics.lineStyle(1, c);
-				graphics.moveTo(0,0);
-				graphics.lineTo(tx-fx, ty-fy);
+			case Eraser(x,y):
+				switch type {
+					case Eraser(_): false;
+					case _: true;
+				}
 
 			case GridCell(li, cx, cy, col):
-				if( col==null )
-					col = 0xffcc00;
-				graphics.lineStyle(1, softHighlight ? 0xffffff : getOpposite(col), 0.8);
-				graphics.drawRect(-pad, -pad, li.def.gridSize+pad*2, li.def.gridSize+pad*2);
+				switch type {
+					case GridCell(li2, cx2, cy2, col2): li2!=li || col2!=col;
+					case _: true;
+				}
 
-				graphics.lineStyle(1, col);
-				graphics.drawRect(0, 0, li.def.gridSize, li.def.gridSize);
 
 			case GridRect(li, cx, cy, wid, hei, col):
-				if( col==null )
-					col = 0xffcc00;
-				graphics.lineStyle(1, softHighlight ? 0xffffff : getOpposite(col), 0.8);
-				graphics.drawRect(-2, -2, li.def.gridSize*wid+4, li.def.gridSize*hei+4);
-
-				graphics.lineStyle(1, col);
-				graphics.drawRect(0, 0, li.def.gridSize*wid, li.def.gridSize*hei);
+				switch type {
+					case GridRect(li2, cx2, cy2, wid2, hei2, col2): li2!=li || wid2!=wid || hei2!=hei || col2!=col;
+					case _: true;
+				}
 
 			case Entity(li, def, ei, x, y):
-				if( softHighlight )
-					graphics.lineStyle(2, 0xffffff, 1);
-				else
-					graphics.lineStyle(1, getOpposite(def.color), 0.8);
-				graphics.drawRect(
-					-pad -def.width*def.pivotX,
-					-pad -def.height*def.pivotY,
-					def.width + pad*2,
-					def.height + pad*2
-				);
-
-				var o = display.EntityRender.renderCore(def);
-				wrapper.addChild(o);
+				switch type {
+					case Entity(li2, def2, ei2, _): li2!=li || def.uid!=def2.uid || ei2!=ei;
+					case _: true;
+				}
 
 			case Tiles(li, tileIds, cx, cy, flips):
-				var td = project.defs.getTilesetDef( li.def.tilesetDefUid );
+				switch type {
+					case Tiles(li2, tileIds2, cx2, cy2, flips2):
+						if( tileIds.length!=tileIds2.length || li!=li2 || flips!=flips2 )
+							true;
+						else {
+							var same = true;
+							for(i in 0...tileIds.length)
+								if( tileIds[i]!=tileIds2[i] ) {
+									same = false;
+									break;
+								}
+							!same;
+						}
+					case _: true;
+				}
+
+			case Link(fx, fy, tx, ty, color):
+				switch type {
+					case Link(fx2,fy2, tx2,ty2, color2): tx!=tx2 || ty!=ty2 || color!=color2;
+					case _: true;
+				}
+		}
+
+		if( needRender ) {
+			// N.debug("[!] render needed: old="+type+" new="+c);
+			invalidateRender();
+		}
+		type = c;
+
+
+		if( labelStr!=null && labelStr!=label.tf.text ) {
+			// Render label
+			label.f.visible = true;
+			label.f.setPosition(0,0);
+			label.tf.text = labelStr;
+			var c = switch type {
+				case Eraser(x, y): 0xff0000;
+				case GridCell(li, cx, cy, col): col;
+				case GridRect(li, cx, cy, wid, hei, col): col;
+				case Entity(li, def, ei, x, y): ei==null ? def.color : ei.getSmartColor(false);
+				case Tiles(li, tileIds, cx, cy, flips): 0xffffff;
+				case Link(fx, fy, tx, ty, color): color;
+				case _: 0xffcc00;
+			};
+			label.f.backgroundTile = h2d.Tile.fromColor( C.toBlack(c, 0.5) );
+			label.tf.textColor = C.toWhite(c, 0.5);
+		}
+
+		if( labelStr==null && hasLabel() ) {
+			// Hide label
+			label.f.visible = false;
+			label.tf.text = "";
+		}
+	}
+
+	inline function hasLabel() return label.f.visible;
+
+	inline function centerLabelAbove(x:Float, y:Float) {
+		if( hasLabel() ) {
+			label.f.x = Std.int( x - label.f.outerWidth*0.5*label.f.scaleX );
+			label.f.y = Std.int( y - label.f.outerHeight*label.f.scaleY );
+		}
+	}
+
+
+	/** Render current cursor **/
+	function render() {
+		switch type {
+			case None: hideRender(); setSystemCursor();
+			case Forbidden: hideRender(); setNativeCursor("not-allowed");
+			case Pan: hideRender(); setNativeCursor("all-scroll");
+			case Panning: hideRender(); setNativeCursor("grabbing");
+			case Move: hideRender(); setNativeCursor("grab");
+			case Moving: hideRender(); setNativeCursor("grabbing");
+			case PickNothing: hideRender(); setNativeCursor("help");
+			case Pointer: hideRender(); setSystemCursor(hxd.Cursor.Button);
+			case Add: hideRender(); setNativeCursor("cell");
+			case Resize(p): hideRender(); setResizeCursor(p);
+
+			case Eraser(x, y):
+				initRender();
+
+			case GridCell(li, cx, cy, col):
+				initRender();
+
+				final p = 2;
+				g.lineStyle(2, 0x0);
+				g.drawRect(p,p, li.def.gridSize-p*2, li.def.gridSize-p*2);
+
+				g.lineStyle(2, col);
+				g.drawRect(0,0, li.def.gridSize, li.def.gridSize);
+
+			case GridRect(li, cx, cy, wid, hei, col):
+				initRender();
+
+				final p = 2;
+				g.lineStyle(2, 0x0);
+				g.drawRect(p,p, li.def.gridSize*wid-p*2, li.def.gridSize*hei-p*2);
+
+				g.lineStyle(2, col);
+				g.beginFill(col,0.35);
+				g.drawRect(0,0, li.def.gridSize*wid, li.def.gridSize*hei);
+
+			case Entity(li, def, ei, x, y):
+				initRender();
+				var o = display.EntityRender.renderCore(ei,def);
+				wrapper.addChild(o);
+				o.alpha = 0.33;
+
+			case Tiles(li, tileIds, cx, cy, flips):
+				initRender();
+				var td = li.getTiledsetDef();
 				if( td!=null ) {
 					var left = Const.INFINITE;
 					var right = 0;
@@ -172,100 +212,117 @@ class Cursor extends dn.Process {
 						bmp.scaleX = flipX ? -1 : 1;
 						bmp.scaleY = flipY ? -1 : 1;
 					}
-					wrapper.filter = new h2d.filter.Glow(0xffffff, 1, 2);
 				}
+
+			case Link(fx, fy, tx, ty, color):
+				initRender();
+
+				g.lineStyle(1, color);
+				g.moveTo(0,0);
+				g.lineTo(tx-fx, ty-fy);
+
 		}
 
-		graphics.endFill();
-		customRender();
-		updatePosition();
+		g.endFill();
 	}
 
-	public dynamic function customRender() {}
 
-	function getOpposite(c:UInt) { // black or white
-		return C.interpolateInt(c, C.getPerceivedLuminosityInt(c)>=0.7 ? 0x0 : 0xffffff, 0.5);
+	inline function hideRender() {
+		g.visible = wrapper.visible = false;
 	}
 
-	public function set(t:CursorType, ?label:String, softHighlight=false) {
-		var changed = type==null || curLabel!=label || type.getIndex()!=t.getIndex();
-		if( !changed )
-			changed = switch t {
-				case None, Move, Moving, Pan, PickNothing, Forbidden, Pointer, Add: type!=t;
-				case Eraser(x, y): false;
-				case GridCell(li, cx, cy, col): !type.equals(t);
-				case GridRect(li, cx, cy, wid, hei, col): !type.equals(t);
-				case Entity(li, def, ei, x, y): !type.equals(t);
-				case Tiles(li, tileIds, cx, cy, flips): !type.equals(t);
-				case Resize(p): !type.equals(t);
-				case Link(fx, fy, tx, ty, c): !type.equals(t);
+	inline function initRender() {
+		setSystemCursor();
+		g.clear();
+		g.visible = true;
+		wrapper.removeChildren();
+		wrapper.visible = true;
+	}
+
+
+
+	/** Request a render **/
+	public inline function invalidateRender() invalidatedRender = true;
+
+
+	/** Viewport changed **/
+	function onViewportChange() {
+		root.setScale( cam.adjustedZoom );
+		label.f.setScale( 1/cam.adjustedZoom * settings.v.editorUiScale );
+	}
+
+	/** Mouse moved **/
+	public inline function onMouseMove(m:Coords) {
+		if( type!=None ) {
+			root.x = M.round( cam.width*0.5 - cam.levelX * cam.adjustedZoom );
+			root.y = M.round( cam.height*0.5 - cam.levelY * cam.adjustedZoom );
+
+			switch type {
+				case None,Forbidden,Pan,Panning,Move,Moving,PickNothing,Pointer,Add,Resize(_):
+					root.x += m.levelX*cam.adjustedZoom;
+					root.y += m.levelY*cam.adjustedZoom - 16;
+					centerLabelAbove(0,0);
+
+				case Eraser(x, y):
+					root.x += x*cam.adjustedZoom;
+					root.y += y*cam.adjustedZoom;
+
+				case GridCell(li, cx, cy, _), GridRect(li, cx, cy, _):
+					root.x += ( li.pxTotalOffsetX + cx*li.def.gridSize ) * cam.adjustedZoom;
+					root.y += ( li.pxTotalOffsetY + cy*li.def.gridSize ) * cam.adjustedZoom;
+					centerLabelAbove(li.def.gridSize*0.5, 0);
+
+				case Entity(li, def, ei, x, y):
+					root.x += x*cam.adjustedZoom;
+					root.y += y*cam.adjustedZoom;
+					var w = ei==null ? def.width : ei.width;
+					var h = ei==null ? def.height : ei.height;
+					centerLabelAbove( ( 0.5-def.pivotX )*w, (0-def.pivotY)*h );
+
+				case Tiles(li, tileIds, cx, cy, flips):
+					root.x += ( li.pxTotalOffsetX + cx*li.def.gridSize ) * cam.adjustedZoom;
+					root.y += ( li.pxTotalOffsetY + cy*li.def.gridSize ) * cam.adjustedZoom;
+					centerLabelAbove(li.def.gridSize*0.5, 0);
+
+				case Link(fx, fy, tx, ty, color):
+					root.x += fx*cam.adjustedZoom;
+					root.y += fy*cam.adjustedZoom;
+
 			}
-
-		type = t;
-		setLabel(label);
-		if( changed )
-			render(softHighlight);
-	}
-
-	public function updatePosition() {
-		if( type==None )
-			return;
-
-		switch type {
-			case None, Move, Moving, Pan, Resize(_), PickNothing, Forbidden, Pointer, Add:
-				var m = editor.getMouse();
-				labelWrapper.setPosition(m.levelX, m.levelY);
-
-			case Eraser(x, y):
-				wrapper.setPosition(x,y);
-
-			case Link(fx, fy, tx, ty, c):
-				wrapper.setPosition(fx,fy);
-
-			case GridCell(li, cx, cy), GridRect(li, cx,cy, _):
-				wrapper.setPosition( cx*li.def.gridSize + li.pxTotalOffsetX, cy*li.def.gridSize + li.pxTotalOffsetY );
-				labelWrapper.setPosition(wrapper.x + li.def.gridSize, wrapper.y);
-
-			case Entity(li, def, ei, x,y):
-				wrapper.setPosition( x+li.pxTotalOffsetX, y+li.pxTotalOffsetY );
-				labelWrapper.setPosition(
-					( Std.int(x/li.def.gridSize) + 1 ) * li.def.gridSize,
-					Std.int(y/li.def.gridSize) * li.def.gridSize
-				);
-
-			case Tiles(li, tileIds, cx, cy, flips):
-				wrapper.setPosition(
-					(cx+li.def.tilePivotX)*li.def.gridSize + li.pxTotalOffsetX,
-					(cy+li.def.tilePivotY)*li.def.gridSize + li.pxTotalOffsetY
-				);
-				labelWrapper.setPosition( (cx+1)*li.def.gridSize + li.pxTotalOffsetX, cy*li.def.gridSize + li.pxTotalOffsetY );
 		}
-
-		graphics.setPosition(wrapper.x, wrapper.y);
-
-		labelWrapper.setScale( js.Browser.window.devicePixelRatio / editor.camera.adjustedZoom );
 	}
 
-	public function enablePermanentHighlights() {
-		permanentHighlight = true;
-		root.filter = new h2d.filter.Group([
-			new h2d.filter.Glow(0xffcc00,1, 16, 1.4, 2, true),
-		]);
+
+	inline function setSystemCursor( c:hxd.Cursor = Default ) {
+		hxd.System.setCursor(c);
 	}
 
-	override function postUpdate() {
-		super.postUpdate();
 
-		root.x = editor.levelRender.root.x;
-		root.y = editor.levelRender.root.y;
-		root.setScale(editor.camera.adjustedZoom);
-		root.visible = !editor.worldMode;
-
-		updatePosition();
-
+	inline function setNativeCursor(id:String) {
+		setSystemCursor( hxd.Cursor.CustomCursor.getNativeCursor(id) );
 	}
 
-	override function update() {
-		super.update();
+	public inline function overrideNativeCursor(id:String) {
+		setNativeCursor(id);
+	}
+
+	inline function setResizeCursor(p:RectHandlePos) {
+		setNativeCursor(switch p {
+			case Top: "n-resize";
+			case Bottom: "s-resize";
+			case Left: "w-resize";
+			case Right: "e-resize";
+			case TopLeft: "nw-resize";
+			case TopRight: "ne-resize";
+			case BottomLeft: "sw-resize";
+			case BottomRight: "se-resize";
+		});
+	}
+
+	public inline function update() {
+		if( invalidatedRender ) {
+			invalidatedRender = false;
+			render();
+		}
 	}
 }

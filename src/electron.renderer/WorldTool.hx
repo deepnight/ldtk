@@ -46,8 +46,9 @@ class WorldTool extends dn.Process {
 		insertCursor.remove();
 	}
 
+	@:keep
 	override function toString() {
-		return Type.getClassName( Type.getClass(this) )
+		return super.toString()
 			+ ( dragStarted ? " (DRAGGING)" : "" );
 	}
 
@@ -70,7 +71,7 @@ class WorldTool extends dn.Process {
 
 	public function onMouseDown(ev:hxd.Event, m:Coords) {
 		// Right click context menu
-		if( ev.button==1 && ( worldMode || getLevelAt(m.worldX,m.worldY,true)==null ) ) {
+		if( ev.button==1 && ( worldMode || getLevelAt(m.worldX,m.worldY,true)==null ) && !App.ME.hasAnyToggleKeyDown() ) {
 			var ctx = new ui.modal.ContextMenu(m);
 			// Create
 			ctx.add({
@@ -266,47 +267,50 @@ class WorldTool extends dn.Process {
 	}
 
 	function getLevelInsertBounds(m:Coords) {
-		// if( getLevelAt(m.worldX, m.worldY, true)!=null )
-		// 	return null;
-
-		var size = project.defaultGridSize * data.Project.DEFAULT_LEVEL_SIZE;
+		var wid = project.defaultLevelWidth;
+		var hei = project.defaultLevelHeight;
 
 		var b = {
-			x : m.worldX-size*0.5,
-			y : m.worldY-size*0.5,
-			wid: size,
-			hei: size,
+			x : m.worldX-wid*0.5,
+			y : m.worldY-hei*0.5,
+			wid: wid,
+			hei: hei,
+			overlaps: false,
 		}
 
 		// Find a spot in world space
 		switch project.worldLayout {
 			case Free, GridVania:
-				// Deinterlace with existing levels
-				for(l in project.levels)
-					if( boundsOverlaps( l, b.x, b.y, b.wid, b.hei ) ) {
-						// Source: https://stackoverflow.com/questions/1585525/how-to-find-the-intersection-point-between-a-line-and-a-rectangle
-						var slope = ( (b.y+b.hei*0.5)-l.worldCenterY )  /  ( (b.x+b.wid*0.5)-l.worldCenterX );
-						if( slope*l.pxWid*0.5 >= -l.pxHei*0.5  &&  slope*l.pxWid*0.5 <= l.pxHei*0.5 )
-							if( b.x < l.worldCenterX ) {
-								b.x = l.worldX-b.wid;
-							}
+
+				if( project.getLevelAt(m.worldX, m.worldY)!=null )
+					b.overlaps = true;
+				else {
+					// Deinterlace with existing levels
+					for(l in project.levels)
+						if( boundsOverlaps( l, b.x, b.y, b.wid, b.hei ) ) {
+							// Source: https://stackoverflow.com/questions/1585525/how-to-find-the-intersection-point-between-a-line-and-a-rectangle
+							var slope = ( (b.y+b.hei*0.5)-l.worldCenterY )  /  ( (b.x+b.wid*0.5)-l.worldCenterX );
+							if( slope*l.pxWid*0.5 >= -l.pxHei*0.5  &&  slope*l.pxWid*0.5 <= l.pxHei*0.5 )
+								if( b.x < l.worldCenterX )
+									b.x = l.worldX-b.wid;
+								else
+									b.x = l.worldX+l.pxWid;
 							else {
-								b.x = l.worldX+l.pxWid;
-							}
-						else {
-							if( b.y < l.worldCenterY ) {
-								b.y = l.worldY-b.hei;
-							}
-							else {
-								b.y = l.worldY+l.pxHei;
+								if( b.y < l.worldCenterY )
+									b.y = l.worldY-b.hei;
+								else
+									b.y = l.worldY+l.pxHei;
 							}
 						}
-					}
 
-				// Cancel if deinterlace failed
-				for(l in project.levels)
-					if( boundsOverlaps(l, b.x, b.y, b.wid, b.hei) )
-						return null;
+					// Deinterlace failed
+					for(l in project.levels)
+						if( boundsOverlaps(l, b.x, b.y, b.wid, b.hei) ) {
+							b.overlaps = true;
+							break;
+						}
+				}
+
 
 				// Grid snapping
 				if( project.worldLayout==GridVania ) {
@@ -342,33 +346,11 @@ class WorldTool extends dn.Process {
 		return b;
 	}
 
-	public function onMouseMove(ev:hxd.Event, m:Coords) {
+	public function onMouseMoveCursor(ev:hxd.Event, m:Coords) {
 		if( ev.cancel ) {
 			insertCursor.visible = false;
 			cursor.clear();
 			return;
-		}
-
-		// Start dragging
-		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=DRAG_THRESHOLD ) {
-			var allow = switch project.worldLayout {
-				case Free: true;
-				case GridVania: true;
-				case LinearHorizontal, LinearVertical: project.levels.length>1;
-			}
-			if( allow ) {
-				dragStarted = true;
-				ev.cancel = true;
-				if( clickedLevel!=null )
-					editor.selectLevel(clickedLevel);
-
-				if( clickedLevel!=null && ( App.ME.isAltDown() || App.ME.isCtrlDown() ) ) {
-					var copy = project.duplicateLevel(clickedLevel);
-					editor.ge.emit( LevelAdded(copy) );
-					editor.selectLevel(copy);
-					clickedLevel = copy;
-				}
-			}
 		}
 
 		// Rollover
@@ -391,23 +373,51 @@ class WorldTool extends dn.Process {
 			var bounds = getLevelInsertBounds(m);
 			insertCursor.visible = bounds!=null;
 			if( bounds!=null ) {
-				var c = 0x8dcbfb;
+				var c = bounds.overlaps ? 0xff4400 : 0x8dcbfb;
 				insertCursor.clear();
 				insertCursor.lineStyle(2*editor.camera.pixelRatio, c, 0.7);
 				insertCursor.beginFill(c, 0.3);
 				insertCursor.drawRect(bounds.x, bounds.y, bounds.wid, bounds.hei);
 
+				var radius = M.fmin(bounds.wid,bounds.hei) * 0.2;
 				insertCursor.lineStyle(10*editor.camera.pixelRatio, c, 1);
-				insertCursor.moveTo(bounds.x+bounds.wid*0.5, bounds.y+bounds.hei*0.3);
-				insertCursor.lineTo(bounds.x+bounds.wid*0.5, bounds.y+bounds.hei*0.7);
-				insertCursor.moveTo(bounds.x+bounds.wid*0.3, bounds.y+bounds.hei*0.5);
-				insertCursor.lineTo(bounds.x+bounds.wid*0.7, bounds.y+bounds.hei*0.5);
+				insertCursor.moveTo(bounds.x+bounds.wid*0.5, bounds.y+bounds.hei*0.5-radius); // vertical
+				insertCursor.lineTo(bounds.x+bounds.wid*0.5, bounds.y+bounds.hei*0.5+radius);
+
+				insertCursor.moveTo(bounds.x+bounds.wid*0.5-radius, bounds.y+bounds.hei*0.5); // horizontal
+				insertCursor.lineTo(bounds.x+bounds.wid*0.5+radius, bounds.y+bounds.hei*0.5);
 				editor.cursor.set(Add);
-				ev.cancel = true;
 			}
+			else
+				editor.cursor.set(Forbidden);
+			ev.cancel = true;
 		}
 		else
 			insertCursor.visible = false;
+	}
+
+	public function onMouseMove(ev:hxd.Event, m:Coords) {
+		// Start dragging
+		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=DRAG_THRESHOLD ) {
+			var allow = switch project.worldLayout {
+				case Free: true;
+				case GridVania: true;
+				case LinearHorizontal, LinearVertical: project.levels.length>1;
+			}
+			if( allow ) {
+				dragStarted = true;
+				ev.cancel = true;
+				if( clickedLevel!=null )
+					editor.selectLevel(clickedLevel);
+
+				if( clickedLevel!=null && ( App.ME.isAltDown() || App.ME.isCtrlDown() ) ) {
+					var copy = project.duplicateLevel(clickedLevel);
+					editor.ge.emit( LevelAdded(copy) );
+					editor.selectLevel(copy);
+					clickedLevel = copy;
+				}
+			}
+		}
 
 		// Drag
 		if( clickedLevel!=null && dragStarted ) {
@@ -481,8 +491,8 @@ class WorldTool extends dn.Process {
 					var mx = M.floor( m.worldX / project.worldGridWidth ) * project.worldGridWidth;
 					clickedLevel.worldX = levelOriginX + (mx-omx);
 
-					var omy = M.floor( origin.worldY / project.worldGridWidth ) * project.worldGridWidth;
-					var my = M.floor( m.worldY / project.worldGridWidth ) * project.worldGridWidth;
+					var omy = M.floor( origin.worldY / project.worldGridHeight ) * project.worldGridHeight;
+					var my = M.floor( m.worldY / project.worldGridHeight ) * project.worldGridHeight;
 					clickedLevel.worldY = levelOriginY + (my-omy);
 
 					clickedLevel.worldX = M.floor( clickedLevel.worldX/project.worldGridWidth ) * project.worldGridWidth;
@@ -505,6 +515,7 @@ class WorldTool extends dn.Process {
 
 			// Refresh render
 			editor.ge.emit( WorldLevelMoved );
+			editor.requestFps();
 			ev.cancel = true;
 		}
 	}

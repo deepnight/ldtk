@@ -83,8 +83,8 @@ class EnumDef {
 		return null;
 	}
 
-	public inline function isValueIdentifierValidAndUnique(v:String) {
-		return Project.isValidIdentifier(v) && !hasValue(v);
+	public function isValueIdentifierValidAndUnique(v:String, ?exclude:String) {
+		return Project.isValidIdentifier(v) && !hasValue(v) || exclude!=null && v==exclude;
 	}
 
 	public function addValue(v:String) {
@@ -111,11 +111,8 @@ class EnumDef {
 			ev.tileId = null;
 	}
 
-	public function renameValue(from:String, to:String) {
-		to = Project.cleanupIdentifier(to,true);
-		if( to==null || !isValueIdentifierValidAndUnique(to) )
-			return false;
-
+	public function renameValue(project:Project, from:String, to:String) {
+		to = project.makeUniqueIdStr(to, id->isValueIdentifierValidAndUnique(id,from));
 		for(i in 0...values.length)
 			if( values[i].id==from ) {
 				values[i].id = to;

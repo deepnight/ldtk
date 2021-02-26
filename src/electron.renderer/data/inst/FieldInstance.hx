@@ -11,7 +11,7 @@ class FieldInstance {
 	@:allow(misc.FieldTypeConverter)
 	var internalValues : Array<ValueWrapper>;
 
-	@:allow(data.inst.EntityInstance)
+	@:allow(data.inst.EntityInstance, data.Level)
 	private function new(p:Project, fieldDefUid:Int) {
 		_project = p;
 		defUid = fieldDefUid;
@@ -108,9 +108,8 @@ class FieldInstance {
 		if( from<0 || from>=getArrayLength() || to<0 || to>=getArrayLength() || from==to )
 			return false;
 
-		var tmp = internalValues[from];
-		internalValues[from] = internalValues[to];
-		internalValues[to] = tmp;
+		var moved = internalValues.splice(from,1)[0];
+		internalValues.insert(to, moved);
 		return true;
 	}
 
@@ -127,6 +126,25 @@ class FieldInstance {
 
 	public function isUsingDefault(arrayIdx:Int) {
 		return internalValues[arrayIdx]==null;
+	}
+
+	public function isEqualToDefault(arrayIdx:Int) {
+		if( isUsingDefault(arrayIdx) )
+			return true;
+		else {
+			var v = internalValues[arrayIdx];
+			switch def.type {
+				case F_Int: return getInt(arrayIdx)==def.getDefault();
+				case F_Float: return getFloat(arrayIdx)==def.getDefault();
+				case F_String: return getString(arrayIdx)==def.getDefault();
+				case F_Text: return getString(arrayIdx)==def.getDefault();
+				case F_Bool: return getBool(arrayIdx)==def.getDefault();
+				case F_Color: return getColorAsInt(arrayIdx)==def.getDefault();
+				case F_Enum(enumDefUid): return false; // TODO support default enum values
+				case F_Point: return false;
+				case F_Path: return getFilePath(arrayIdx)==def.getDefault();
+			}
+		}
 	}
 
 
@@ -178,7 +196,6 @@ class FieldInstance {
 				}
 
 			case F_Text:
-				raw = StringTools.trim(raw);
 				if( raw.length==0 )
 					setInternal(arrayIdx, null);
 				else {
@@ -242,7 +259,7 @@ class FieldInstance {
 				if( !def.canBeNull )
 					for( idx in 0...getArrayLength() )
 						if( getEnumValue(idx)==null )
-							return def.identifier+"?";
+							return _project.defs.getEnumDef(enumDefUid).identifier+"?";
 
 			case F_Path:
 				for( idx in 0...getArrayLength() ) {
@@ -420,7 +437,7 @@ class FieldInstance {
 		}
 	}
 
-	public function tidy(p:Project, li:LayerInstance, ei:EntityInstance) {
+	public function tidy(p:Project, ?li:LayerInstance) {
 		_project = p;
 
 		switch def.type {
@@ -433,15 +450,17 @@ class FieldInstance {
 			case F_Path:
 
 			case F_Point:
-				var i = 0;
-				while( i<getArrayLength() ) {
-					var pt = getPointGrid(i);
-					if( pt!=null && ( pt.cx<0 || pt.cx>=li.cWid || pt.cy<0 || pt.cy>=li.cHei ) ) {
-						App.LOG.add("tidy", 'Removed pt ${pt.cx},${pt.cy} in $this (out of bounds)');
-						removeArrayValue(i);
+				if( li!=null ) {
+					var i = 0;
+					while( i<getArrayLength() ) {
+						var pt = getPointGrid(i);
+						if( pt!=null && ( pt.cx<0 || pt.cx>=li.cWid || pt.cy<0 || pt.cy>=li.cHei ) ) {
+							App.LOG.add("tidy", 'Removed pt ${pt.cx},${pt.cy} in $this (out of bounds)');
+							removeArrayValue(i);
+						}
+						else
+							i++;
 					}
-					else
-						i++;
 				}
 
 			case F_Enum(enumDefUid):

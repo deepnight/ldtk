@@ -5,7 +5,7 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.0",
+		"appVersion": "0.8.0",
 		"url": "https://ldtk.io"
 	},
 	"identifier": "Diamond2",
@@ -22,6 +22,7 @@
 	"bgPivotY": 0.5,
 	"__bgPos": null,
 	"externalRelPath": null,
+	"fieldInstances": [],
 	"layerInstances": [
 		{
 			"__identifier": "Front_elements",
@@ -38,9 +39,12 @@
 			"layerDefUid": 182,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [],
 			"seed": 2001057,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -59,95 +63,168 @@
 			"layerDefUid": 21,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [],
 			"seed": 7039029,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": [
-				{ "__identifier": "Item", "__grid": [15,9], "__pivot": [0.5,1], "__tile": { "tilesetUid": 200, "srcRect": [192,432,16,16] }, "defUid": 64, "px": [248,160], "fieldInstances": [{
-					"__identifier": "type",
-					"__value": "Diamond",
-					"__type": "LocalEnum.ItemType",
-					"defUid": 125,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["Diamond"]
-					}]
-				}] },
-				{ "__identifier": "Item", "__grid": [19,9], "__pivot": [0.5,1], "__tile": { "tilesetUid": 200, "srcRect": [192,432,16,16] }, "defUid": 64, "px": [312,160], "fieldInstances": [{
-					"__identifier": "type",
-					"__value": "Diamond",
-					"__type": "LocalEnum.ItemType",
-					"defUid": 125,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["Diamond"]
-					}]
-				}] },
-				{ "__identifier": "Vault", "__grid": [12,13], "__pivot": [0.5,0.5], "__tile": null, "defUid": 136, "px": [200,216], "fieldInstances": [] },
-				{ "__identifier": "Vault", "__grid": [21,13], "__pivot": [0.5,0.5], "__tile": null, "defUid": 136, "px": [344,216], "fieldInstances": [] },
-				{ "__identifier": "Hero", "__grid": [15,14], "__pivot": [0.5,1], "__tile": null, "defUid": 20, "px": [248,240], "fieldInstances": [] },
-				{ "__identifier": "Text", "__grid": [15,5], "__pivot": [0.5,0.5], "__tile": null, "defUid": 152, "px": [248,88], "fieldInstances": [
-					{
-						"__identifier": "text",
-						"__value": "I thought you would be taller.",
-						"__type": "String",
-						"defUid": 153,
+				{
+					"__identifier": "Item",
+					"__grid": [15,9],
+					"__pivot": [0.5,1],
+					"__tile": { "tilesetUid": 200, "srcRect": [192,432,16,16] },
+					"width": 16,
+					"height": 16,
+					"defUid": 64,
+					"px": [248,160],
+					"fieldInstances": [{
+						"__identifier": "type",
+						"__value": "Diamond",
+						"__type": "LocalEnum.ItemType",
+						"defUid": 125,
 						"realEditorValues": [{
 							"id": "V_String",
-							"params": ["I thought you would be taller."]
+							"params": ["Diamond"]
 						}]
-					},
-					{
-						"__identifier": "color",
-						"__value": "#FF6600",
-						"__type": "Color",
-						"defUid": 154,
-						"realEditorValues": [{ "id": "V_Int", "params": [16737792] }]
-					},
-					{ "__identifier": "showAfterDark", "__value": 0, "__type": "Int", "defUid": 168, "realEditorValues": [] },
-					{
-						"__identifier": "startHidden",
-						"__value": true,
-						"__type": "Bool",
-						"defUid": 169,
-						"realEditorValues": [{
-							"id": "V_Bool",
-							"params": [ true ]
-						}]
-					},
-					{ "__identifier": "tutorial", "__value": false, "__type": "Bool", "defUid": 197, "realEditorValues": [] }
-				] },
-				{ "__identifier": "Trigger", "__grid": [17,8], "__pivot": [0.5,1], "__tile": null, "defUid": 145, "px": [280,144], "fieldInstances": [
-					{
-						"__identifier": "hidden",
-						"__value": true,
-						"__type": "Bool",
-						"defUid": 161,
-						"realEditorValues": [{
-							"id": "V_Bool",
-							"params": [ true ]
-						}]
-					},
-					{
-						"__identifier": "radius",
-						"__value": 2,
-						"__type": "Int",
-						"defUid": 162,
-						"realEditorValues": [{ "id": "V_Int", "params": [2] }]
-					},
-					{
-						"__identifier": "target",
-						"__value": { "cx": 15, "cy": 6 },
-						"__type": "Point",
-						"defUid": 165,
+					}]
+				},
+				{
+					"__identifier": "Item",
+					"__grid": [19,9],
+					"__pivot": [0.5,1],
+					"__tile": { "tilesetUid": 200, "srcRect": [192,432,16,16] },
+					"width": 16,
+					"height": 16,
+					"defUid": 64,
+					"px": [312,160],
+					"fieldInstances": [{
+						"__identifier": "type",
+						"__value": "Diamond",
+						"__type": "LocalEnum.ItemType",
+						"defUid": 125,
 						"realEditorValues": [{
 							"id": "V_String",
-							"params": ["15,6"]
+							"params": ["Diamond"]
 						}]
-					},
-					{ "__identifier": "exitLevel", "__value": false, "__type": "Bool", "defUid": 196, "realEditorValues": [] }
-				] }
+					}]
+				},
+				{
+					"__identifier": "Vault",
+					"__grid": [12,13],
+					"__pivot": [0.5,0.5],
+					"__tile": null,
+					"width": 11,
+					"height": 11,
+					"defUid": 136,
+					"px": [200,216],
+					"fieldInstances": []
+				},
+				{
+					"__identifier": "Vault",
+					"__grid": [21,13],
+					"__pivot": [0.5,0.5],
+					"__tile": null,
+					"width": 11,
+					"height": 11,
+					"defUid": 136,
+					"px": [344,216],
+					"fieldInstances": []
+				},
+				{
+					"__identifier": "Hero",
+					"__grid": [15,14],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 10,
+					"height": 20,
+					"defUid": 20,
+					"px": [248,240],
+					"fieldInstances": []
+				},
+				{
+					"__identifier": "Text",
+					"__grid": [15,5],
+					"__pivot": [0.5,0.5],
+					"__tile": null,
+					"width": 32,
+					"height": 16,
+					"defUid": 152,
+					"px": [248,88],
+					"fieldInstances": [
+						{
+							"__identifier": "text",
+							"__value": "I thought you would be taller.",
+							"__type": "String",
+							"defUid": 153,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": ["I thought you would be taller."]
+							}]
+						},
+						{
+							"__identifier": "color",
+							"__value": "#FF6600",
+							"__type": "Color",
+							"defUid": 154,
+							"realEditorValues": [{ "id": "V_Int", "params": [16737792] }]
+						},
+						{ "__identifier": "showAfterDark", "__value": 0, "__type": "Int", "defUid": 168, "realEditorValues": [] },
+						{
+							"__identifier": "startHidden",
+							"__value": true,
+							"__type": "Bool",
+							"defUid": 169,
+							"realEditorValues": [{
+								"id": "V_Bool",
+								"params": [ true ]
+							}]
+						},
+						{ "__identifier": "tutorial", "__value": false, "__type": "Bool", "defUid": 197, "realEditorValues": [] }
+					]
+				},
+				{
+					"__identifier": "Trigger",
+					"__grid": [17,8],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 16,
+					"height": 6,
+					"defUid": 145,
+					"px": [280,144],
+					"fieldInstances": [
+						{
+							"__identifier": "hidden",
+							"__value": true,
+							"__type": "Bool",
+							"defUid": 161,
+							"realEditorValues": [{
+								"id": "V_Bool",
+								"params": [ true ]
+							}]
+						},
+						{
+							"__identifier": "radius",
+							"__value": 2,
+							"__type": "Int",
+							"defUid": 162,
+							"realEditorValues": [{ "id": "V_Int", "params": [2] }]
+						},
+						{
+							"__identifier": "target",
+							"__value": { "cx": 15, "cy": 6 },
+							"__type": "Point",
+							"defUid": 165,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": ["15,6"]
+							}]
+						},
+						{ "__identifier": "exitLevel", "__value": false, "__type": "Bool", "defUid": 196, "realEditorValues": [] }
+					]
+				}
 			]
 		},
 		{
@@ -165,6 +242,7 @@
 			"layerDefUid": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [
 				{ "coordId": 0, "v": 0 },
 				{ "coordId": 1, "v": 0 },
@@ -1088,6 +1166,37 @@
 				{ "coordId": 984, "v": 0 },
 				{ "coordId": 985, "v": 0 }
 			],
+			"intGridCsv": [
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				0,0,0,0,0,0,2,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+				0,0,0,0,0,2,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
+				0,0,0,0,2,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,
+				0,0,0,2,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1
+			],
 			"autoLayerTiles": [
 				{ "px": [176,176], "src": [48,16], "f": 0, "t": 35, "d": [77,385] },
 				{ "px": [192,176], "src": [64,16], "f": 0, "t": 36, "d": [77,385] },
@@ -1853,6 +1962,7 @@
 				{ "px": [272,144], "src": [16,64], "f": 0, "t": 129, "d": [115,323] }
 			],
 			"seed": 2790408,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -1871,7 +1981,9 @@
 			"layerDefUid": 109,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [240,112], "src": [192,48], "f": 0, "t": 108, "d": [112,253] },
 				{ "px": [256,176], "src": [208,64], "f": 0, "t": 141, "d": [112,390] },
@@ -1881,6 +1993,7 @@
 				{ "px": [352,176], "src": [192,48], "f": 0, "t": 108, "d": [112,396] }
 			],
 			"seed": 1190577,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -1899,7 +2012,9 @@
 			"layerDefUid": 25,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [224,112], "src": [112,0], "f": 0, "t": 7, "d": [87,252] },
 				{ "px": [256,112], "src": [112,0], "f": 0, "t": 7, "d": [87,254] },
@@ -2004,6 +2119,7 @@
 				{ "px": [352,224], "src": [176,16], "f": 0, "t": 43, "d": [102,498] }
 			],
 			"seed": 294427,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -2022,7 +2138,9 @@
 			"layerDefUid": 23,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [0,0], "src": [16,128], "f": 0, "t": 257, "d": [32,0] },
 				{ "px": [16,0], "src": [16,128], "f": 0, "t": 257, "d": [32,1] },
@@ -3018,6 +3136,7 @@
 				{ "px": [272,144], "src": [16,144], "f": 0, "t": 289, "d": [123,323] }
 			],
 			"seed": 9596921,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		}

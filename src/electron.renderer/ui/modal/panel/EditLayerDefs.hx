@@ -1,5 +1,11 @@
 package ui.modal.panel;
 
+enum BakeMethod {
+	DeleteBakedLayer;
+	EmptyBakedLayer;
+	KeepBakedLayer;
+}
+
 class EditLayerDefs extends ui.modal.Panel {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
@@ -10,7 +16,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		loadTemplate( "editLayerDefs", "defEditor layerDefs" );
 		jList = jModalAndMask.find(".mainList ul");
-		jForm = jModalAndMask.find("ul.form");
+		jForm = jModalAndMask.find("dl.form");
 		linkToButton("button.editLayers");
 
 		// Create layer
@@ -37,17 +43,6 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		});
 
-		// Delete layer
-		jModalAndMask.find(".mainList button.delete").click( function(ev) {
-			if( cur==null ) {
-				N.error("No layer selected.");
-				return;
-			}
-			new ui.modal.dialog.Confirm(ev.getThis(), "If you delete this layer, it will be deleted in all levels as well. Are you sure?", function() {
-				deleteLayer(cur);
-			});
-		});
-
 		select(editor.curLayerDef);
 	}
 
@@ -72,27 +67,49 @@ class EditLayerDefs extends ui.modal.Panel {
 
 
 
-	function bakeLayer(ld:data.def.LayerDef) {
+	function bakeLayer(ld:data.def.LayerDef, ?method:BakeMethod) {
 		for(other in project.defs.layers)
 			if( other.autoSourceLayerDefUid==ld.uid ) {
-				new ui.modal.dialog.Message(L.t._("This layer cannot be baked, as other auto-layers rely on this one as source for their data."));
+				new ui.modal.dialog.Message(L.t._("This layer cannot be baked, as at least one other auto-layer rely on it as 'source' for its data."));
 				return;
 			}
+
+		if( method==null ) {
+			new ui.modal.dialog.Choice(
+				L.t._("'Baking' an auto-layer will flatten it to create a new regular 'Tiles layer'. The copy will contain all the tiles generated from the auto-layer rules.\nWhat would you like to do with the original layer after baking it?"),
+				[
+					{ label:L.t._("Bake, then delete original layer"), cb:bakeLayer.bind(ld,DeleteBakedLayer) },
+					{ label:L.t._("Bake, then empty original layer"), cb:bakeLayer.bind(ld,EmptyBakedLayer), cond:()->ld.type!=AutoLayer },
+					{ label:L.t._("Keep both baked result and original"), cb:bakeLayer.bind(ld,KeepBakedLayer) },
+				]
+			);
+			return;
+		}
+
 		// Backup project
 		var oldProject = project.clone();
+
+		// Create new baked layer
+		var newLd = project.defs.duplicateLayerDef(ld, ld.identifier+"_baked");
+		newLd.type = Tiles;
+		newLd.autoRuleGroups = [];
+		newLd.autoTilesetDefUid = null;
+		newLd.autoSourceLayerDefUid = null;
+		newLd.tilesetDefUid = ld.autoTilesetDefUid;
 
 		// Update layer instances
 		var ops : Array<ui.modal.Progress.ProgressOp> = [];
 		for(l in project.levels) {
-			var li = l.getLayerInstance(ld);
+			var sourceLi = l.getLayerInstance(ld);
+			var newLi = l.getLayerInstance(newLd);
 			ops.push({
 				label: l.identifier,
 				cb: ()->{
 					ld.iterateActiveRulesInDisplayOrder( (r)->{
-						if( li.autoTilesCache.exists( r.uid ) ) {
-							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
+						if( sourceLi.autoTilesCache.exists( r.uid ) ) {
+							for( allTiles in sourceLi.autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value ) {
-								li.addGridTile(
+								newLi.addGridTile(
 									Std.int(tileInfos.x/ld.gridSize),
 									Std.int(tileInfos.y/ld.gridSize),
 									tileInfos.tid,
@@ -101,7 +118,14 @@ class EditLayerDefs extends ui.modal.Panel {
 							}
 						}
 					});
-					li.autoTilesCache = null;
+					switch method {
+						case null:
+						case DeleteBakedLayer:
+						case EmptyBakedLayer:
+							@:privateAccess sourceLi.intGrid = new Map();
+							sourceLi.autoTilesCache = null;
+						case KeepBakedLayer:
+					}
 				}
 			});
 		}
@@ -111,16 +135,27 @@ class EditLayerDefs extends ui.modal.Panel {
 			L.t._("Baking layer instances"),
 			ops,
 			()->{
-				// Done, update layer def
-				ld.type = Tiles;
-				ld.tilesetDefUid = ld.autoTilesetDefUid;
-				ld.autoRuleGroups = [];
-				ld.autoSourceLayerDefUid = null;
-				ld.autoTilesetDefUid = null;
+				select(newLd);
 
-				select(ld);
+				// Done, update layer def
+				switch method {
+					case null:
+					case DeleteBakedLayer:
+						project.defs.removeLayerDef(ld);
+						editor.ge.emit( LayerDefRemoved(ld.uid) );
+
+					case EmptyBakedLayer:
+					case KeepBakedLayer:
+				}
+				// ld.type = Tiles;
+				// ld.tilesetDefUid = ld.autoTilesetDefUid;
+				// ld.autoRuleGroups = [];
+				// ld.autoSourceLayerDefUid = null;
+				// ld.autoTilesetDefUid = null;
+
 				editor.ge.emit( LayerInstanceChanged );
-				editor.ge.emit( LayerDefConverted );
+				editor.ge.emit( LayerDefAdded );
+				// editor.ge.emit( LayerDefConverted );
 				new LastChance( L.t._("Baked layer ::name::", {name:ld.identifier}), oldProject );
 			}
 		);
@@ -171,6 +206,12 @@ class EditLayerDefs extends ui.modal.Panel {
 			return;
 		}
 
+		// Lost layer
+		if( project.defs.getLayerDef(cur.uid)==null ) {
+			select( project.defs.layers[0] );
+			return;
+		}
+
 		editor.selectLayerInstance( editor.curLevel.getLayerInstance(cur) );
 		jForm.show();
 		jForm.find("#gridSize").prop("readonly",false);
@@ -178,6 +219,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		// Set form class
 		for(k in Type.getEnumConstructs(ldtk.Json.LayerType))
 			jForm.removeClass("type-"+k);
+		jForm.removeClass("type-IntGridAutoLayer");
 		jForm.addClass("type-"+cur.type);
 		if( cur.type==IntGrid && cur.isAutoLayer() )
 			jForm.addClass("type-IntGridAutoLayer");
@@ -187,8 +229,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		// Fields
 		var i = Input.linkToHtmlInput( cur.identifier, jForm.find("input[name='name']") );
-		i.validityCheck = function(id) return data.Project.isValidIdentifier(id) && project.defs.isLayerNameUnique(id);
-		i.validityError = N.invalidIdentifier;
+		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isLayerNameUnique(id,cur));
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( cur.gridSize, jForm.find("input[name='gridSize']") );
@@ -196,7 +237,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( cur.displayOpacity, jForm.find("input[name='displayOpacity']") );
-		i.displayAsPct = true;
+		i.enablePercentageMode();
 		i.setBounds(0.1, 1);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
@@ -214,12 +255,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				if( !cur.autoLayerRulesCanBeUsed() )
 					new ui.modal.dialog.Message(L.t._("Errors in current layer settings prevent rules to be applied. It can't be baked now."));
 				else
-					new ui.modal.dialog.Confirm(
-						jButton,
-						L.t._("Transform this layer into a traditional Tile layer?"),
-						true,
-						()->bakeLayer(cur)
-					);
+					bakeLayer(cur);
 			});
 		}
 
@@ -278,13 +314,19 @@ class EditLayerDefs extends ui.modal.Panel {
 				});
 
 				// Existing values
-				var idx = 0;
+				var idx = 1;
 				for( intGridVal in cur.getAllIntGridValues() ) {
-					var curIdx = idx;
+					var intValue = idx++;
 					var e = jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
 					e.addClass("value");
 					e.insertBefore(addButton);
-					e.find(".id").html("#"+idx);
+					e.find(".id")
+						.html( Std.string(intValue) )
+						.css({
+							color: C.intToHex( C.toWhite(intGridVal.color,0.5) ),
+							borderColor: C.intToHex( C.toWhite(intGridVal.color,0.2) ),
+							backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.5) ),
+						});
 
 					// Edit value identifier
 					var i = new form.input.StringInput(
@@ -299,15 +341,18 @@ class EditLayerDefs extends ui.modal.Panel {
 					i.validityCheck = cur.isIntGridValueIdentifierValid;
 					i.validityError = N.invalidIdentifier;
 					i.onChange = editor.ge.emit.bind(LayerDefChanged);
+					i.jInput.css({
+						backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.7) ),
+					});
 
-					if( cur.countIntGridValues()>1 && idx==cur.countIntGridValues()-1 )
+					if( cur.countIntGridValues()>1 && intValue==cur.countIntGridValues() )
 						e.addClass("removable");
 
 					// Edit color
 					var col = e.find("input[type=color]");
 					col.val( C.intToHex(intGridVal.color) );
 					col.change( function(ev) {
-						cur.getIntGridValueDef(curIdx).color = C.hexToInt( col.val() );
+						cur.getIntGridValueDef(intValue).color = C.hexToInt( col.val() );
 						editor.ge.emit(LayerDefChanged);
 						updateForm();
 					});
@@ -315,12 +360,12 @@ class EditLayerDefs extends ui.modal.Panel {
 					// Remove
 					e.find("a.remove").click( function(ev) {
 						function run() {
-							cur.getAllIntGridValues().splice(curIdx,1);
+							cur.removeIntGridValue(intValue);
 							project.tidy();
 							editor.ge.emit(LayerDefChanged);
 							updateForm();
 						}
-						if( project.isIntGridValueUsed(cur, curIdx) ) {
+						if( project.isIntGridValueUsed(cur, intValue) ) {
 							new ui.modal.dialog.Confirm(
 								e.find("a.remove"),
 								L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"),
@@ -332,7 +377,6 @@ class EditLayerDefs extends ui.modal.Panel {
 						else
 							run();
 					});
-					idx++;
 				}
 
 				initAutoTilesetSelect();
@@ -391,6 +435,20 @@ class EditLayerDefs extends ui.modal.Panel {
 
 
 			case Entities:
+				// Tags
+				var ted = new ui.TagEditor(
+					cur.requiredTags,
+					()->editor.ge.emit(LayerDefChanged),
+					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags])
+				);
+				jForm.find("#requiredTags").empty().append( ted.jEditor );
+
+				var ted = new ui.TagEditor(
+					cur.excludedTags,
+					()->editor.ge.emit(LayerDefChanged),
+					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags])
+				);
+				jForm.find("#excludedTags").empty().append( ted.jEditor );
 
 			case Tiles:
 				var select = jForm.find("select[name=tilesets]");

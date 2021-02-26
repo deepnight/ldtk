@@ -1,4 +1,4 @@
-<div class="appLogo full"></div>
+<!-- <div class="appLogo full"></div> -->
 
 <div class="buttons">
 	<button href="::discordUrl::" class="discord"><span class="icon discord"></span> Discord</button>
@@ -6,118 +6,124 @@
 	<button href="::appUrl::"><span class="icon web"></span> Website</button>
 </div>
 
+<div class="column">
+	<h3>Editing commands</h3>
+	<dl class="major">
+		<dt> mouseleft </dt>
+		<dd>Draw</dd>
 
-<h3>Editing commands</h3>
-<dl class="major">
-	<dt> mouseleft </dt>
-	<dd>Draw</dd>
+		<dt> mouseright </dt>
+		<dd>Erase</dd>
 
-	<dt> mouseright </dt>
-	<dd>Erase</dd>
+		<dt> alt + mouseleft </dt>
+		<dd>Select a single element</dd>
 
-	<dt> alt + mouseleft </dt>
-	<dd>Select a single element</dd>
+		<dt> alt shift + mouseleft </dt>
+		<dd>Select all elements in a rectangle area</dd>
 
-	<dt> alt shift + mouseleft </dt>
-	<dd>Select all elements in a rectangle area</dd>
+		<dt> ctrl alt + mouseleft </dt>
+		<dd>Duplicate all selected elements</dd>
 
-	<dt> ctrl alt + mouseleft </dt>
-	<dd>Duplicate all selected elements</dd>
+		<dt> space + mouseleft </dt>
+		<dd>Move the current level view</dd>
 
-	<dt> space + mouseleft </dt>
-	<dd>Move the current level view</dd>
+		<dt> mouseWheel </dt>
+		<dd>Zoom</dd>
 
-	<dt> mouseWheel </dt>
-	<dd>Zoom</dd>
+		<dt> shift + mouseleft (held) </dt>
+		<dd>Draw a rectangle.</dd>
 
-	<dt> shift + mouseleft (held) </dt>
-	<dd>Draw a rectangle.</dd>
+		<dt> shift + mouseleft (single click) </dt>
+		<dd>Flood-fill the current area with the selected value.</dd>
+	</dl>
 
-	<dt> shift + mouseleft (single click) </dt>
-	<dd>Flood-fill the current area with the selected value.</dd>
-</dl>
-
-
-<h3>General shortcuts</h3>
-<dl class="minor">
-	<dt> mouseright </dt>
-	<dd>Open context menu (works on World map, and or all elements with 3 vertical dots)</dd>
-
-	<dt> TAB </dt>
-	<dd>Toggle compact mode</dd>
-
-	<dt> H </dt>
-	<dd>Show this help</dd>
-
-	<dt> F1 to F6 </dt>
-	<dd>Open editor panels</dd>
-
-	<dt> F12 </dt>
-	<dd>Open app settings</dd>
-
-	<dt> W or F2 </dt>
-	<dd>Open world view</dd>
-
-	<dt> 1 to 9 </dt>
-	<dd>Select layers</dd>
-
-	<dt> ctrl S </dt>
-	<dd>Save project</dd>
-
-	<dt> ctrl shift S </dt>
-	<dd>Save project as...</dd>
-
-	<dt> ctrl W </dt>
-	<dd>Close project</dd>
-
-	<dt> ctrl Q </dt>
-	<dd>Quit ::app::</dd>
-
-	<dt> ESCAPE </dt>
-	<dd>Clear selection, close panel, etc.</dd>
-
-	<dt> G </dt>
-	<dd>Show/hide the grid</dd>
-
-	<dt> L </dt>
-	<dd>Toggle grid-locking (only works with some layer types)</dd>
-
-	<dt> A </dt>
-	<dd>Toggle "single layer" mode</dd>
-
-	<dt> ctrl A </dt>
-	<dd>Select all</dd>
-
-	<dt> DELETE </dt>
-	<dd>Delete selected elements</dd>
-
-	<dt> F </dt>
-	<dd>Fit current level or world in screen</dd>
-</dl>
+	<h3>Auto-layers</h3>
+	<dl class="minor">
+		<dt> R </dt>
+		<dd>Toggle auto-layers rendering</dd>
+	</dl>
 
 
-<h3>Auto-layers</h3>
-<dl class="minor">
-	<dt> R </dt>
-	<dd>Toggle auto-layers rendering</dd>
-</dl>
+	<h3>Tile layers</h3>
+	<dl class="minor">
+		<dt> S </dt>
+		<dd>Save current tile selection.</dd>
+
+		<dt> L </dt>
+		<dd>Reload a saved tile selection from currently selected tile.</dd>
+
+		<dt> R </dt>
+		<dd>Toggle randomization of current tile selection.</dd>
+
+		<dt> X </dt>
+		<dd>X-mirror current tile(s)</dd>
+
+		<dt> Y or Z </dt>
+		<dd>Y-mirror current tile(s)</dd>
+	</dl>
 
 
-<h3>Tile layers</h3>
-<dl class="minor">
-	<dt> S </dt>
-	<dd>Save current tile selection.</dd>
+</div>
 
-	<dt> L </dt>
-	<dd>Reload a saved tile selection from currently selected tile.</dd>
 
-	<dt> R </dt>
-	<dd>Toggle randomization of current tile selection.</dd>
+<div class="column">
+	<h3>General shortcuts</h3>
+	<dl class="minor">
+		<dt> mouseright </dt>
+		<dd>Open context menu (works on World map, and or all elements with 3 vertical dots)</dd>
 
-	<dt> X </dt>
-	<dd>X-mirror current tile(s)</dd>
+		<dt> TAB </dt>
+		<dd>Toggle compact mode</dd>
 
-	<dt> Y or Z </dt>
-	<dd>Y-mirror current tile(s)</dd>
-</dl>
+		<dt> H </dt>
+		<dd>Show this help</dd>
+
+		<dt> F1 to F6 </dt>
+		<dd>Open editor panels</dd>
+
+		<dt> F12 </dt>
+		<dd>Open app settings</dd>
+
+		<dt> W or F2 </dt>
+		<dd>Open world view</dd>
+
+		<dt> 1 to 9 </dt>
+		<dd>Select layers</dd>
+
+		<dt> ctrl S </dt>
+		<dd>Save project</dd>
+
+		<dt> ctrl shift S </dt>
+		<dd>Save project as...</dd>
+
+		<dt> ctrl W </dt>
+		<dd>Close project</dd>
+
+		<dt> ctrl Q </dt>
+		<dd>Quit ::app::</dd>
+
+		<dt> ESCAPE </dt>
+		<dd>Clear selection, close panel, etc.</dd>
+
+		<dt> G </dt>
+		<dd>Show/hide the grid</dd>
+
+		<dt> L </dt>
+		<dd>Toggle grid-locking (only works with some layer types)</dd>
+
+		<dt> A </dt>
+		<dd>Toggle "single layer" mode</dd>
+
+		<dt> ctrl A </dt>
+		<dd>Select all</dd>
+
+		<dt> DELETE </dt>
+		<dd>Delete selected elements</dd>
+
+		<dt> F </dt>
+		<dd>Fit current level or world in screen</dd>
+	</dl>
+</div>
+
+
 

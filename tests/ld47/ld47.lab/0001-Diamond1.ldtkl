@@ -5,7 +5,7 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.7.0",
+		"appVersion": "0.8.0",
 		"url": "https://ldtk.io"
 	},
 	"identifier": "Diamond1",
@@ -22,6 +22,7 @@
 	"bgPivotY": 0.5,
 	"__bgPos": null,
 	"externalRelPath": null,
+	"fieldInstances": [],
 	"layerInstances": [
 		{
 			"__identifier": "Front_elements",
@@ -38,9 +39,12 @@
 			"layerDefUid": 182,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [],
 			"seed": 8727538,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -59,115 +63,178 @@
 			"layerDefUid": 21,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [],
 			"seed": 7930141,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": [
-				{ "__identifier": "Hero", "__grid": [14,16], "__pivot": [0.5,1], "__tile": null, "defUid": 20, "px": [232,272], "fieldInstances": [] },
-				{ "__identifier": "Vault", "__grid": [30,15], "__pivot": [0.5,0.5], "__tile": null, "defUid": 136, "px": [488,248], "fieldInstances": [] },
-				{ "__identifier": "Item", "__grid": [17,16], "__pivot": [0.5,1], "__tile": { "tilesetUid": 200, "srcRect": [192,432,16,16] }, "defUid": 64, "px": [280,272], "fieldInstances": [{
-					"__identifier": "type",
-					"__value": "Diamond",
-					"__type": "LocalEnum.ItemType",
-					"defUid": 125,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["Diamond"]
+				{
+					"__identifier": "Hero",
+					"__grid": [14,16],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 10,
+					"height": 20,
+					"defUid": 20,
+					"px": [232,272],
+					"fieldInstances": []
+				},
+				{
+					"__identifier": "Vault",
+					"__grid": [30,15],
+					"__pivot": [0.5,0.5],
+					"__tile": null,
+					"width": 11,
+					"height": 11,
+					"defUid": 136,
+					"px": [488,248],
+					"fieldInstances": []
+				},
+				{
+					"__identifier": "Item",
+					"__grid": [17,16],
+					"__pivot": [0.5,1],
+					"__tile": { "tilesetUid": 200, "srcRect": [192,432,16,16] },
+					"width": 16,
+					"height": 16,
+					"defUid": 64,
+					"px": [280,272],
+					"fieldInstances": [{
+						"__identifier": "type",
+						"__value": "Diamond",
+						"__type": "LocalEnum.ItemType",
+						"defUid": 125,
+						"realEditorValues": [{
+							"id": "V_String",
+							"params": ["Diamond"]
+						}]
 					}]
-				}] },
-				{ "__identifier": "Text", "__grid": [25,23], "__pivot": [0.5,0.5], "__tile": null, "defUid": 152, "px": [408,376], "fieldInstances": [
-					{
-						"__identifier": "text",
-						"__value": "So. You're the Thief, right?",
-						"__type": "String",
-						"defUid": 153,
-						"realEditorValues": [{
-							"id": "V_String",
-							"params": ["So. You're the Thief, right?"]
-						}]
-					},
-					{ "__identifier": "color", "__value": "#FFC800", "__type": "Color", "defUid": 154, "realEditorValues": [] },
-					{ "__identifier": "showAfterDark", "__value": 0, "__type": "Int", "defUid": 168, "realEditorValues": [] },
-					{
-						"__identifier": "startHidden",
-						"__value": true,
-						"__type": "Bool",
-						"defUid": 169,
-						"realEditorValues": [{
-							"id": "V_Bool",
-							"params": [ true ]
-						}]
-					},
-					{ "__identifier": "tutorial", "__value": false, "__type": "Bool", "defUid": 197, "realEditorValues": [] }
-				] },
-				{ "__identifier": "Trigger", "__grid": [18,19], "__pivot": [0.5,1], "__tile": null, "defUid": 145, "px": [296,320], "fieldInstances": [
-					{
-						"__identifier": "hidden",
-						"__value": true,
-						"__type": "Bool",
-						"defUid": 161,
-						"realEditorValues": [{
-							"id": "V_Bool",
-							"params": [ true ]
-						}]
-					},
-					{
-						"__identifier": "radius",
-						"__value": 2,
-						"__type": "Int",
-						"defUid": 162,
-						"realEditorValues": [{ "id": "V_Int", "params": [2] }]
-					},
-					{
-						"__identifier": "target",
-						"__value": { "cx": 25, "cy": 22 },
-						"__type": "Point",
-						"defUid": 165,
-						"realEditorValues": [{
-							"id": "V_String",
-							"params": ["25,22"]
-						}]
-					},
-					{ "__identifier": "exitLevel", "__value": false, "__type": "Bool", "defUid": 196, "realEditorValues": [] }
-				] },
-				{ "__identifier": "Text", "__grid": [32,11], "__pivot": [0.5,0.5], "__tile": null, "defUid": 152, "px": [520,184], "fieldInstances": [
-					{
-						"__identifier": "text",
-						"__value": "Press SPACE or Pad-X to throw an item",
-						"__type": "String",
-						"defUid": 153,
-						"realEditorValues": [{
-							"id": "V_String",
-							"params": ["Press SPACE or Pad-X to throw an item"]
-						}]
-					},
-					{
-						"__identifier": "color",
-						"__value": "#FFC800",
-						"__type": "Color",
-						"defUid": 154,
-						"realEditorValues": [null]
-					},
-					{ "__identifier": "showAfterDark", "__value": 0, "__type": "Int", "defUid": 168, "realEditorValues": [] },
-					{
-						"__identifier": "startHidden",
-						"__value": false,
-						"__type": "Bool",
-						"defUid": 169,
-						"realEditorValues": [null]
-					},
-					{
-						"__identifier": "tutorial",
-						"__value": true,
-						"__type": "Bool",
-						"defUid": 197,
-						"realEditorValues": [{
-							"id": "V_Bool",
-							"params": [ true ]
-						}]
-					}
-				] }
+				},
+				{
+					"__identifier": "Text",
+					"__grid": [25,23],
+					"__pivot": [0.5,0.5],
+					"__tile": null,
+					"width": 32,
+					"height": 16,
+					"defUid": 152,
+					"px": [408,376],
+					"fieldInstances": [
+						{
+							"__identifier": "text",
+							"__value": "So. You're the Thief, right?",
+							"__type": "String",
+							"defUid": 153,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": ["So. You're the Thief, right?"]
+							}]
+						},
+						{ "__identifier": "color", "__value": "#FFC800", "__type": "Color", "defUid": 154, "realEditorValues": [] },
+						{ "__identifier": "showAfterDark", "__value": 0, "__type": "Int", "defUid": 168, "realEditorValues": [] },
+						{
+							"__identifier": "startHidden",
+							"__value": true,
+							"__type": "Bool",
+							"defUid": 169,
+							"realEditorValues": [{
+								"id": "V_Bool",
+								"params": [ true ]
+							}]
+						},
+						{ "__identifier": "tutorial", "__value": false, "__type": "Bool", "defUid": 197, "realEditorValues": [] }
+					]
+				},
+				{
+					"__identifier": "Trigger",
+					"__grid": [18,19],
+					"__pivot": [0.5,1],
+					"__tile": null,
+					"width": 16,
+					"height": 6,
+					"defUid": 145,
+					"px": [296,320],
+					"fieldInstances": [
+						{
+							"__identifier": "hidden",
+							"__value": true,
+							"__type": "Bool",
+							"defUid": 161,
+							"realEditorValues": [{
+								"id": "V_Bool",
+								"params": [ true ]
+							}]
+						},
+						{
+							"__identifier": "radius",
+							"__value": 2,
+							"__type": "Int",
+							"defUid": 162,
+							"realEditorValues": [{ "id": "V_Int", "params": [2] }]
+						},
+						{
+							"__identifier": "target",
+							"__value": { "cx": 25, "cy": 22 },
+							"__type": "Point",
+							"defUid": 165,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": ["25,22"]
+							}]
+						},
+						{ "__identifier": "exitLevel", "__value": false, "__type": "Bool", "defUid": 196, "realEditorValues": [] }
+					]
+				},
+				{
+					"__identifier": "Text",
+					"__grid": [32,11],
+					"__pivot": [0.5,0.5],
+					"__tile": null,
+					"width": 32,
+					"height": 16,
+					"defUid": 152,
+					"px": [520,184],
+					"fieldInstances": [
+						{
+							"__identifier": "text",
+							"__value": "Press SPACE or Pad-X to throw an item",
+							"__type": "String",
+							"defUid": 153,
+							"realEditorValues": [{
+								"id": "V_String",
+								"params": ["Press SPACE or Pad-X to throw an item"]
+							}]
+						},
+						{
+							"__identifier": "color",
+							"__value": "#FFC800",
+							"__type": "Color",
+							"defUid": 154,
+							"realEditorValues": [null]
+						},
+						{ "__identifier": "showAfterDark", "__value": 0, "__type": "Int", "defUid": 168, "realEditorValues": [] },
+						{
+							"__identifier": "startHidden",
+							"__value": false,
+							"__type": "Bool",
+							"defUid": 169,
+							"realEditorValues": [null]
+						},
+						{
+							"__identifier": "tutorial",
+							"__value": true,
+							"__type": "Bool",
+							"defUid": 197,
+							"realEditorValues": [{
+								"id": "V_Bool",
+								"params": [ true ]
+							}]
+						}
+					]
+				}
 			]
 		},
 		{
@@ -185,6 +252,7 @@
 			"layerDefUid": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [
 				{ "coordId": 0, "v": 0 },
 				{ "coordId": 1, "v": 0 },
@@ -1347,6 +1415,45 @@
 				{ "coordId": 1258, "v": 0 },
 				{ "coordId": 1259, "v": 0 }
 			],
+			"intGridCsv": [
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,
+				0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+				0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,
+				0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,2,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,0,0,0,0,0,0,2,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,0,0,0,0,0,0,0,2,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+				
+			],
 			"autoLayerTiles": [
 				{ "px": [224,176], "src": [48,16], "f": 0, "t": 35, "d": [77,476] },
 				{ "px": [240,176], "src": [64,16], "f": 0, "t": 36, "d": [77,476] },
@@ -2357,6 +2464,7 @@
 				{ "px": [432,256], "src": [16,64], "f": 0, "t": 129, "d": [115,699] }
 			],
 			"seed": 3276453,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -2375,7 +2483,9 @@
 			"layerDefUid": 109,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [224,176], "src": [208,64], "f": 0, "t": 141, "d": [112,476] },
 				{ "px": [240,176], "src": [208,64], "f": 0, "t": 141, "d": [112,477] },
@@ -2392,6 +2502,7 @@
 				{ "px": [336,320], "src": [208,64], "f": 0, "t": 141, "d": [112,861] }
 			],
 			"seed": 41467,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -2410,7 +2521,9 @@
 			"layerDefUid": 25,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [224,176], "src": [112,0], "f": 0, "t": 7, "d": [87,476] },
 				{ "px": [304,176], "src": [112,0], "f": 0, "t": 7, "d": [87,481] },
@@ -2579,6 +2692,7 @@
 				{ "px": [416,336], "src": [160,16], "f": 0, "t": 42, "d": [102,908] }
 			],
 			"seed": 4052941,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		},
@@ -2597,7 +2711,9 @@
 			"layerDefUid": 23,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"visible": true,
 			"intGrid": [],
+			"intGridCsv": [],
 			"autoLayerTiles": [
 				{ "px": [0,0], "src": [16,128], "f": 0, "t": 257, "d": [32,0] },
 				{ "px": [16,0], "src": [16,128], "f": 0, "t": 257, "d": [32,1] },
@@ -3876,6 +3992,7 @@
 				{ "px": [432,256], "src": [16,144], "f": 0, "t": 289, "d": [123,699] }
 			],
 			"seed": 4742095,
+			"overrideTilesetUid": null,
 			"gridTiles": [],
 			"entityInstances": []
 		}

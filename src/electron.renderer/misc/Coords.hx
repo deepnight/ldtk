@@ -106,21 +106,22 @@ class Coords {
 
 		var canvasX = ( lx * camera.adjustedZoom + render.root.x ) * Const.SCALE;
 		var pageX = canvasX / pixelRatio + App.ME.jCanvas.offset().left;
+
 		var canvasY = ( ly * camera.adjustedZoom + render.root.y ) * Const.SCALE;
 		var pageY = canvasY / pixelRatio + App.ME.jCanvas.offset().top;
 
 		return new Coords(pageX, pageY);
 	}
 
-	/** Create from Level coords **/
-	public static function fromWorldCoords(lx:Float, ly:Float) {
-		// TODO
+	/** Create from World coords **/
+	public static function fromWorldCoords(wx:Float, wy:Float) {
 		var render = Editor.ME.levelRender;
 		var camera = Editor.ME.camera;
 
-		var canvasX = ( lx * camera.adjustedZoom + render.root.x ) * Const.SCALE;
+		var canvasX = ( (wx-Editor.ME.curLevel.worldX)*camera.adjustedZoom + render.root.x ) * Const.SCALE;
 		var pageX = canvasX / pixelRatio + App.ME.jCanvas.offset().left;
-		var canvasY = ( ly * camera.adjustedZoom + render.root.y ) * Const.SCALE;
+
+		var canvasY = ( (wy-Editor.ME.curLevel.worldY)*camera.adjustedZoom + render.root.y ) * Const.SCALE;
 		var pageY = canvasY / pixelRatio + App.ME.jCanvas.offset().top;
 
 		return new Coords(pageX, pageY);
@@ -143,7 +144,7 @@ class Coords {
 
 
 	@:keep public function toString() {
-		return 'Coords: Page=$pageX,$pageY, Canvas=$canvasX,$canvasY, Level=$levelX,$levelY, Scale=${Const.SCALE}';
+		return 'Coords: Page=$pageX,$pageY, Canvas=$canvasX,$canvasY, World=$worldX,$worldY, Level=$levelX,$levelY, Scale=${Const.SCALE}';
 	}
 
 	public inline function makeRect(to:Coords) : Rect {

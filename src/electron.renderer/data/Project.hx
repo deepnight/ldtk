@@ -1,10 +1,9 @@
 package data;
 
 class Project {
-	public static var DEFAULT_WORKSPACE_BG = 0x676877;
-	public static var DEFAULT_LEVEL_BG = 0x7f8093;
+	public static var DEFAULT_WORKSPACE_BG = dn.Color.hexToInt("#40465B");
+	public static var DEFAULT_LEVEL_BG = dn.Color.hexToInt("#696a79");
 	public static var DEFAULT_GRID_SIZE = 16; // px
-	public static var DEFAULT_LEVEL_SIZE = 16; // cells
 
 	public var filePath : dn.FilePath; // not stored in JSON
 
@@ -16,6 +15,8 @@ class Project {
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
 	public var defaultGridSize : Int;
+	public var defaultLevelWidth : Int;
+	public var defaultLevelHeight : Int;
 	public var bgColor : UInt;
 	public var defaultLevelBgColor : UInt;
 	public var worldLayout : ldtk.Json.WorldLayout;
@@ -27,6 +28,7 @@ class Project {
 	public var exportTiled = false;
 	public var exportPng = false;
 	public var pngFilePattern : Null<String>;
+	var flags: Map<ldtk.Json.ProjectFlag, Bool>;
 
 	public var backupOnSave = false;
 	public var backupLimit = 10;
@@ -36,13 +38,16 @@ class Project {
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
+		defaultLevelWidth = Project.DEFAULT_GRID_SIZE * 16;
+		defaultLevelHeight = Project.DEFAULT_GRID_SIZE * 16;
 		bgColor = DEFAULT_WORKSPACE_BG;
 		defaultLevelBgColor = DEFAULT_LEVEL_BG;
 		defaultPivotX = defaultPivotY = 0;
 		worldLayout = Free;
-		worldGridWidth = defaultGridSize * DEFAULT_LEVEL_SIZE;
-		worldGridHeight = defaultGridSize * DEFAULT_LEVEL_SIZE;
+		worldGridWidth = defaultLevelWidth;
+		worldGridHeight = defaultLevelHeight;
 		filePath = new dn.FilePath();
+		flags = new Map();
 
 		defs = new Definitions(this);
 	}
@@ -86,7 +91,7 @@ class Project {
 						break;
 					else switch l.type {
 						case IntGrid, Tiles, AutoLayer: i++;
-						case Entities: // TODO increment PNG layer index if entities are rendered
+						case Entities: // remember to increment PNG layer index too, if entities are rendered one day
 					}
 				dn.Lib.leadingZeros(i,2);
 			}
@@ -131,20 +136,75 @@ class Project {
 		return p;
 	}
 
-	public function makeUniqId() return nextUid++;
+	public function makeUniqueIdInt() return nextUid++;
+
+	public function makeUniqueIdStr(baseId:String, firstCharCap=true, isUnique:String->Bool) : String {
+		baseId = cleanupIdentifier(baseId,firstCharCap);
+		if( baseId=="_" )
+			baseId = "Unnamed";
+
+		if( isUnique(baseId) )
+			return baseId;
+
+		var leadIdxReg = ~/(.*?)([0-9]+)$/gi;
+		if( leadIdxReg.match(baseId) ) {
+			// Base name is terminated by a number
+			baseId = leadIdxReg.matched(1);
+			var idx = Std.parseInt( leadIdxReg.matched(2) );
+			var id = baseId + (idx++);
+			while( !isUnique(id) )
+				id = baseId + (idx++);
+			return id;
+		}
+		else {
+			// Plain string
+			var idx = 2;
+			var id = baseId;
+			while( !isUnique(id) )
+				id = baseId + (idx++);
+			return id;
+		}
+	}
 
 	@:keep public function toString() {
 		return 'Project(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
 	}
 
 	public static function fromJson(filePath:String, json:ldtk.Json.ProjectJson) {
+		// Move old settings previously stored in root
+		// if( json.settings==null ) {
+		// 	var v : ldtk.Json.ProjectSettings = {
+		// 		defaultPivotX: json.defaultPivotX,
+		// 		defaultPivotY: json.defaultPivotY,
+		// 		defaultGridSize: json.defaultGridSize,
+		// 		defaultLevelWidth: json.defaultLevelWidth,
+		// 		defaultLevelHeight: json.defaultLevelHeight,
+		// 		bgColor: json.bgColor,
+		// 		defaultLevelBgColor: json.defaultLevelBgColor,
+		// 		externalLevels: json.externalLevels,
+
+		// 		minifyJson: json.minifyJson,
+		// 		exportTiled: json.exportTiled,
+		// 		backupOnSave: json.backupOnSave,
+		// 		backupLimit: json.backupLimit,
+		// 		exportPng: json.exportPng,
+		// 		pngFilePattern: json.pngFilePattern,
+
+		// 		advancedOptionFlags: [],
+		// 	}
+		// 	json.settings = v;
+		// }
+
 		var p = new Project();
 		p.filePath.parseFilePath(filePath);
 		p.jsonVersion = JsonTools.readString(json.jsonVersion, Const.getJsonVersion());
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
+
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
+		p.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_GRID_SIZE*16 );
+		p.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, Project.DEFAULT_GRID_SIZE*16 );
 		p.bgColor = JsonTools.readColor( json.bgColor, DEFAULT_WORKSPACE_BG );
 		p.defaultLevelBgColor = JsonTools.readColor( json.defaultLevelBgColor, p.bgColor );
 		p.externalLevels = JsonTools.readBool(json.externalLevels, false);
@@ -153,7 +213,6 @@ class Project {
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
 		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
-
 		p.exportPng = JsonTools.readBool( json.exportPng, false );
 		p.pngFilePattern = json.pngFilePattern;
 
@@ -162,11 +221,22 @@ class Project {
 		for( lvlJson in JsonTools.readArray(json.levels) )
 			p.levels.push( Level.fromJson(p, lvlJson) );
 
+		if( (cast json).advancedOptionFlags!=null )
+			json.flags = (cast json).advancedOptionFlags;
+		if( json.flags!=null )
+			for(f in json.flags ) {
+				var ev = try JsonTools.readEnum(ldtk.Json.ProjectFlag, f, true)
+					catch(e:Dynamic) null;
+
+				if( ev!=null )
+					p.flags.set(ev, true);
+			}
+
 		// World
 		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
 		p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
-		p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, DEFAULT_LEVEL_SIZE*p.defaultGridSize );
-		p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, DEFAULT_LEVEL_SIZE*p.defaultGridSize );
+		p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, p.defaultLevelWidth );
+		p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
 		if( dn.Version.lower(json.jsonVersion, "0.6") )
 			p.reorganizeWorld();
 
@@ -174,15 +244,42 @@ class Project {
 		return p;
 	}
 
+	public function hasAnyFlag(among:Array<ldtk.Json.ProjectFlag>) {
+		for(f in among)
+			if( hasFlag(f) )
+				return true;
+		return false;
+	}
+
+	public inline function hasFlag(f:ldtk.Json.ProjectFlag) {
+		return f!=null && flags.exists(f);
+	}
+
+	public inline function setFlag(f:ldtk.Json.ProjectFlag, v:Bool) {
+		if( f!=null )
+			if( v )
+				flags.set(f,true);
+			else
+				flags.remove(f);
+	}
+
 	public function toJson() : ldtk.Json.ProjectJson {
-		return {
+		var json : ldtk.Json.ProjectJson = {
 			jsonVersion: jsonVersion,
+			nextUid: nextUid,
+
+			worldLayout: JsonTools.writeEnum(worldLayout, false),
+			worldGridWidth: worldGridWidth,
+			worldGridHeight: worldGridHeight,
+
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
+			defaultLevelWidth: defaultLevelWidth,
+			defaultLevelHeight: defaultLevelHeight,
 			bgColor: JsonTools.writeColor(bgColor),
 			defaultLevelBgColor: JsonTools.writeColor(defaultLevelBgColor),
-			nextUid: nextUid,
+
 			minifyJson: minifyJson,
 			externalLevels: externalLevels,
 			exportTiled: exportTiled,
@@ -190,13 +287,20 @@ class Project {
 			pngFilePattern: pngFilePattern,
 			backupOnSave: backupOnSave,
 			backupLimit: backupLimit,
-			worldLayout: JsonTools.writeEnum(worldLayout, false),
-			worldGridWidth: worldGridWidth,
-			worldGridHeight: worldGridHeight,
+
+			flags: {
+				var all = [];
+				for( f in flags.keyValueIterator() )
+					if( f.value==true )
+						all.push( JsonTools.writeEnum(f.key, false) );
+				all;
+			},
 
 			defs: defs.toJson(this),
 			levels: levels.map( (l)->l.toJson() ),
 		}
+
+		return json;
 	}
 
 	public function clone() : data.Project {
@@ -236,6 +340,22 @@ class Project {
 			case LinearHorizontal:
 			case LinearVertical:
 		}
+
+		tidy();
+	}
+
+	public function snapWorldGridX(v:Int, forceGreaterThanZero:Bool) {
+		return worldLayout!=GridVania ? v
+		: forceGreaterThanZero
+			? M.imax( M.round(v/worldGridWidth), 1 ) * worldGridWidth
+			: M.round(v/worldGridWidth) * worldGridWidth;
+	}
+
+	public function snapWorldGridY(v:Int, forceGreaterThanZero:Bool) {
+		return worldLayout!=GridVania ? v
+		: forceGreaterThanZero
+			? M.imax( M.round(v/worldGridHeight), 1 ) * worldGridHeight
+			: M.round(v/worldGridHeight) * worldGridHeight;
 	}
 
 	public function onWorldGridChange(oldWid:Int, oldHei:Int) {
@@ -274,8 +394,12 @@ class Project {
 	}
 
 	public function tidy() {
-		defs.tidy(this);
+		if( worldLayout==GridVania ) {
+			defaultLevelWidth = M.imax( M.round(defaultLevelWidth/worldGridWidth), 1 ) * worldGridWidth;
+			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/worldGridHeight), 1 ) * worldGridHeight;
+		}
 
+		defs.tidy(this);
 		reorganizeWorld();
 		for(level in levels)
 			level.tidy(this);
@@ -369,26 +493,13 @@ class Project {
 	/**  LEVELS  *****************************************/
 
 	public function createLevel(?insertIdx:Int) {
-		var wid = defaultGridSize * DEFAULT_LEVEL_SIZE;
-		var hei = wid;
-		switch worldLayout {
-			case Free, LinearHorizontal, LinearVertical:
-			case GridVania:
-				wid = worldGridWidth;
-				hei = worldGridHeight;
-		}
-
-		var l = new Level(this, wid, hei, makeUniqId());
+		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, makeUniqueIdInt());
 		if( insertIdx==null )
 			levels.push(l);
 		else
 			levels.insert(insertIdx,l);
 
-		var id = "Level";
-		var idx = 2;
-		while( !isLevelIdentifierUnique(id) )
-			id = "Level"+(idx++);
-		l.identifier = id;
+		l.identifier = makeUniqueIdStr("Level1", (id)->isLevelIdentifierUnique(id));
 
 		tidy(); // this will create layer instances
 		return l;
@@ -398,24 +509,22 @@ class Project {
 		var copy : data.Level = Level.fromJson( this, l.toJson() );
 
 		// Remap IDs
-		copy.uid = makeUniqId();
+		copy.uid = makeUniqueIdInt();
 		for(li in copy.layerInstances)
 			li.levelId = copy.uid;
 
 		// Pick unique identifier
-		var idx = 2;
-		while( !isLevelIdentifierUnique(copy.identifier) )
-			copy.identifier = l.identifier+(idx++);
+		copy.identifier = makeUniqueIdStr(l.identifier, (id)->isLevelIdentifierUnique(id));
 
 		levels.insert( dn.Lib.getArrayIndex(l,levels)+1, copy );
 		tidy();
 		return copy;
 	}
 
-	public function isLevelIdentifierUnique(id:String) {
+	public function isLevelIdentifierUnique(id:String, ?exclude:Level) {
 		id = cleanupIdentifier(id,true);
 		for(l in levels)
-			if( l.identifier==id )
+			if( l.identifier==id && l!=exclude )
 				return false;
 		return true;
 	}
@@ -434,6 +543,13 @@ class Project {
 		return null;
 	}
 
+	public function getLevelAt(worldX:Int, worldY:Int) : Null<Level> {
+		for(l in levels)
+			if( l.isWorldOver(worldX, worldY) )
+				return l;
+		return null;
+	}
+
 
 	public function getLevelIndex(l:Level) : Int {
 		var i = 0;
@@ -443,6 +559,15 @@ class Project {
 			else
 				i++;
 		return -1;
+	}
+
+	public function getLevelUsingFieldInst(fi:data.inst.FieldInstance) : Null<data.Level> {
+		for(l in levels)
+		for(lfi in l.fieldInstances)
+			if( lfi==fi )
+				return l;
+
+		return null;
 	}
 
 	public function getClosestLevelFrom(level:data.Level) : Null<data.Level> {

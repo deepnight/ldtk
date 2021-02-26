@@ -70,7 +70,6 @@ class RulePatternEditor {
 
 		var buttonDown = -1;
 
-		var idx = 0;
 		for(cy in 0...rule.size)
 		for(cx in 0...rule.size) {
 			var coordId = cx+cy*rule.size;
@@ -82,7 +81,7 @@ class RulePatternEditor {
 			if( isEditable() )
 				jCell.addClass("editable");
 
-			// Center
+			// Center guide
 			if( isCenter ) {
 				switch rule.tileMode {
 					case Single:
@@ -124,12 +123,12 @@ class RulePatternEditor {
 
 			// Cell color
 			if( !isCenter || !previewMode ) {
-				var v = rule.get(cx,cy);
-				if( v!=0 ) {
-					var intGridVal = M.iabs(v)-1;
-					if( v>0 ) {
+				var ruleValue = rule.get(cx,cy);
+				if( ruleValue!=0 ) {
+					var intGridVal = M.iabs(ruleValue);
+					if( ruleValue>0 ) {
 						// Required value
-						if( intGridVal == Const.AUTO_LAYER_ANYTHING ) {
+						if( intGridVal == Const.AUTO_LAYER_ANYTHING+1 ) {
 							jCell.addClass("anything");
 							addExplain(jCell, 'This cell should contain any IntGrid value to match.');
 						}
@@ -216,8 +215,6 @@ class RulePatternEditor {
 						draw();
 				});
 			}
-
-			idx++;
 		}
 
 		return jRoot;

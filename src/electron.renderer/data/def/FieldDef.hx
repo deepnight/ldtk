@@ -5,7 +5,7 @@ import data.DataTypes;
 class FieldDef {
 	static var REGEX_REG = ~/^\/(.*)\/([gi]*)$/gi; // regex that recognizes a basic regex string
 
-	@:allow(data.Definitions, data.def.EntityDef)
+	@:allow(data.Definitions, data.def.EntityDef, ui.FieldDefsForm)
 	public var uid(default,null) : Int;
 
 	@:allow(misc.FieldTypeConverter)
@@ -17,9 +17,10 @@ class FieldDef {
 	public var editorDisplayMode : ldtk.Json.FieldDisplayMode;
 	public var editorDisplayPos : ldtk.Json.FieldDisplayPosition;
 	public var editorAlwaysShow: Bool;
+	public var editorCutLongValues : Bool;
 	public var isArray : Bool;
 
-	@:allow(ui.modal.panel.EditEntityDefs, misc.FieldTypeConverter)
+	@:allow(ui.modal.panel.EditEntityDefs, misc.FieldTypeConverter, ui.FieldDefsForm)
 	var defaultOverride : Null<data.DataTypes.ValueWrapper>;
 
 	public var min : Null<Float>;
@@ -28,9 +29,11 @@ class FieldDef {
 	public var acceptFileTypes : Array<String>;
 	public var regex : Null<String>;
 
+	public var textLangageMode: Null<ldtk.Json.TextLanguageMode>;
+
 	var _project : data.Project;
 
-	@:allow(data.def.EntityDef)
+	@:allow(data.def.EntityDef, ui.FieldDefsForm)
 	private function new(p:data.Project, uid:Int, t:data.DataTypes.FieldType, array:Bool) {
 		_project = p;
 		this.uid = uid;
@@ -39,9 +42,11 @@ class FieldDef {
 		editorDisplayMode = Hidden;
 		editorDisplayPos = Above;
 		editorAlwaysShow = false;
+		editorCutLongValues = true;
 		identifier = "NewField"+uid;
 		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point && !isArray;
 		arrayMinLength = arrayMaxLength = null;
+		textLangageMode = null;
 		min = max = null;
 		defaultOverride = null;
 	}
@@ -75,11 +80,13 @@ class FieldDef {
 		o.editorDisplayMode = JsonTools.readEnum(ldtk.Json.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
 		o.editorDisplayPos = JsonTools.readEnum(ldtk.Json.FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
+		o.editorCutLongValues = JsonTools.readBool(json.editorCutLongValues, true);
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);
 		o.regex = JsonTools.unescapeString( json.regex );
 		o.acceptFileTypes = json.acceptFileTypes==null ? null : JsonTools.readArray(json.acceptFileTypes);
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
+		o.textLangageMode = JsonTools.readEnum(ldtk.Json.TextLanguageMode, json.textLangageMode, true);
 
 		return o;
 	}
@@ -97,16 +104,37 @@ class FieldDef {
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
 			editorAlwaysShow: editorAlwaysShow,
+			editorCutLongValues: editorCutLongValues,
 			min: min==null ? null : JsonTools.writeFloat(min),
 			max: max==null ? null : JsonTools.writeFloat(max),
 			regex: JsonTools.escapeString(regex),
-			acceptFileTypes: acceptFileTypes,
+			acceptFileTypes: type!=F_Path ? null : acceptFileTypes,
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
+			textLangageMode: type!=F_Text ? null : JsonTools.writeEnum(textLangageMode, true),
 		}
 	}
 
 
 	#if editor
+
+	public static function getTypeColorHex(t:FieldType, luminosity=1.0) : String {
+		var c = switch t {
+			case F_Int: "#1ba7c9";
+			case F_Float: "#1ba7c9";
+			case F_String: "#ffa23c";
+			case F_Text: "#ffa23c";
+			case F_Path: "#ffa23c";
+			case F_Bool: "#3afdff";
+			case F_Color: "#ff6c48";
+			case F_Enum(enumDefUid): "#9bc95a";
+			case F_Point: "#9bc95a";
+		}
+		if( luminosity<1 )
+			return C.intToHex( C.setLuminosityInt( C.hexToInt(c), luminosity ) );
+		else
+			return c;
+	}
+
 	public function getShortDescription(includeArray=true) : String {
 		var desc = switch type {
 			case F_Int: "Int";
@@ -289,7 +317,10 @@ class FieldDef {
 				var def = Std.parseFloat(rawDef);
 				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Float( fClamp(def) );
 
-			case F_String, F_Text, F_Path:
+			case F_Text:
+				defaultOverride = rawDef=="" ? null : V_String(rawDef);
+
+			case F_String, F_Path:
 				rawDef = StringTools.trim(rawDef);
 				defaultOverride = rawDef=="" ? null : V_String(rawDef);
 

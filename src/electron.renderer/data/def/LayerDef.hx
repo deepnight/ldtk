@@ -12,7 +12,12 @@ class LayerDef {
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
 
+	// Entities
+	public var requiredTags : Tags;
+	public var excludedTags : Tags;
+
 	// IntGrid
+	@:allow(importer)
 	var intGridValues : Array<IntGridValueDef> = [];
 
 	// IntGrid/AutoLayers
@@ -34,6 +39,8 @@ class LayerDef {
 		identifier = type+uid;
 		#end
 		addIntGridValue(0x0);
+		requiredTags = new Tags();
+		excludedTags = new Tags();
 	}
 
 	function set_identifier(id:String) {
@@ -45,7 +52,7 @@ class LayerDef {
 		return 'LayerDef.$identifier($type,${gridSize}px)';
 	}
 
-	public static function fromJson(jsonVersion:String, json:ldtk.Json.LayerDefJson) {
+	public static function fromJson(p:Project, jsonVersion:String, json:ldtk.Json.LayerDefJson) {
 		if( (cast json).tilesetDefId!=null ) json.tilesetDefUid = (cast json).tilesetDefId;
 
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(ldtk.Json.LayerType, json.type, false));
@@ -55,12 +62,17 @@ class LayerDef {
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
+		o.requiredTags = Tags.fromJson(json.requiredTags);
+		o.excludedTags = Tags.fromJson(json.excludedTags);
+
 		o.intGridValues = [];
-		for( v in JsonTools.readArray(json.intGridValues) )
+		var idx = 0;
+		for( v in JsonTools.readArray(json.intGridValues) ) {
 			o.intGridValues.push({
 				identifier: v.identifier,
 				color: JsonTools.readColor(v.color),
 			});
+		}
 
 		o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
 		o.autoSourceLayerDefUid = JsonTools.readNullableInt(json.autoSourceLayerDefUid);
@@ -79,6 +91,7 @@ class LayerDef {
 	}
 
 	public function toJson() : ldtk.Json.LayerDefJson {
+		var valueIdx = 1;
 		return {
 			__type: Std.string(type),
 
@@ -89,8 +102,14 @@ class LayerDef {
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
+			requiredTags: requiredTags.toJson(),
+			excludedTags: excludedTags.toJson(),
 
-			intGridValues: intGridValues.map( function(iv) return { identifier:iv.identifier, color:JsonTools.writeColor(iv.color) }),
+			intGridValues: intGridValues.map( function(iv) return {
+				value: valueIdx++,
+				identifier: iv.identifier,
+				color: JsonTools.writeColor(iv.color),
+			}),
 
 			autoTilesetDefUid: autoTilesetDefUid,
 			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
@@ -137,11 +156,21 @@ class LayerDef {
 	}
 
 	public inline function hasIntGridValue(v:Int) {
-		return v>=0 && v<intGridValues.length;
+		return v>0 && v<=intGridValues.length;
 	}
 
-	public inline function getIntGridValueDef(idx:Int) : Null<IntGridValueDef> {
-		return intGridValues[idx];
+	public inline function getIntGridValueDef(v:Int) : Null<IntGridValueDef> {
+		return intGridValues[v-1];
+	}
+
+	public function getIntGridIndexFromIdentifier(id:String) : Int {
+		var idx = 1;
+		for( v in intGridValues )
+			if( v.identifier==id )
+				return idx;
+			else
+				idx++;
+		return 0;
 	}
 
 	public inline function getIntGridValueDisplayName(idx:Int) : Null<String> {
@@ -152,6 +181,15 @@ class LayerDef {
 	public inline function getIntGridValueColor(idx:Int) : Null<UInt> {
 		var vd = getIntGridValueDef(idx);
 		return vd==null ? null : vd.color;
+	}
+
+	public function removeIntGridValue(v:Int) : Bool {
+		if( hasIntGridValue(v) ) {
+			intGridValues.splice(v-1, 1);
+			return true;
+		}
+		else
+			return false;
 	}
 
 	public inline function getAllIntGridValues() return intGridValues;
@@ -169,12 +207,6 @@ class LayerDef {
 				return false;
 
 		return true;
-	}
-
-
-
-	public function isUsingTileset(td:TilesetDef) {
-		return tilesetDefUid==td.uid || autoTilesetDefUid==td.uid;
 	}
 
 
@@ -267,7 +299,7 @@ class LayerDef {
 
 	public function duplicateRule(p:data.Project, rg:AutoLayerRuleGroup, r:AutoLayerRuleDef) {
 		var copy = AutoLayerRuleDef.fromJson( p.jsonVersion, r.toJson() );
-		copy.uid = p.makeUniqId();
+		copy.uid = p.makeUniqueIdInt();
 		rg.rules.insert( dn.Lib.getArrayIndex(r, rg.rules)+1, copy );
 
 		p.tidy();
@@ -277,9 +309,9 @@ class LayerDef {
 	public function duplicateRuleGroup(p:data.Project, rg:AutoLayerRuleGroup) {
 		var copy = parseJsonRuleGroup( p.jsonVersion, toJsonRuleGroup(rg) );
 
-		copy.uid = p.makeUniqId();
+		copy.uid = p.makeUniqueIdInt();
 		for(r in copy.rules)
-			r.uid = p.makeUniqId();
+			r.uid = p.makeUniqueIdInt();
 
 		p.tidy();
 		return copy;

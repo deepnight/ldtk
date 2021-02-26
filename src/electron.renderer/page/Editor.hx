@@ -1,7 +1,5 @@
 package page;
 
-import ui.modal.panel.WorldPanel;
-
 class Editor extends Page {
 	public static var ME : Editor;
 
@@ -16,7 +14,7 @@ class Editor extends Page {
 		inline function get_curLevel() return project.getLevel(curLevelId);
 
 	public var curLayerDef(get,never) : Null<data.def.LayerDef>;
-		inline function get_curLayerDef() return project.defs.getLayerDef(curLayerDefUid);
+		inline function get_curLayerDef() return project!=null ? project.defs.getLayerDef(curLayerDefUid) : null;
 
 	public var curLayerInstance(get,never) : Null<data.inst.LayerInstance>;
 		function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
@@ -31,6 +29,7 @@ class Editor extends Page {
 	// Tools
 	public var worldTool : WorldTool;
 	var panTool : tool.PanView;
+	public var resizeTool : Null<tool.ResizeTool>;
 	public var curTool(get,never) : tool.LayerTool<Dynamic>;
 	public var selectionTool: tool.SelectionTool;
 	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();
@@ -76,9 +75,6 @@ class Editor extends Page {
 
 		watcher = new misc.FileWatcher();
 
-		cursor = new ui.Cursor();
-		cursor.canChangeSystemCursors = true;
-
 		worldRender = new display.WorldRender();
 		levelRender = new display.LevelRender();
 		camera = new display.Camera();
@@ -89,11 +85,39 @@ class Editor extends Page {
 		worldTool = new WorldTool();
 		panTool = new tool.PanView();
 
+		cursor = new ui.Cursor();
+		root.add(cursor.root, Const.DP_UI);
+
 		showCanvas();
 		initUI();
 		updateCanvasSize();
 
 		selectProject(p);
+
+		// Suggest backups
+		if( !project.isBackup() && !App.ME.isInAppDir(project.filePath.full,true) && project.levels.length>=10 && !project.backupOnSave && !project.hasFlag(IgnoreBackupSuggest) ) {
+			var w = new ui.modal.dialog.Choice(
+				L.t._("As your project is growing bigger, it is recommended to enable Backups, to secure your work a little bit more."),
+				[
+					{
+						label:L.t._("Enable backups when saving"),
+						cb: ()->{
+							project.backupOnSave = true;
+							ge.emit(ProjectSettingsChanged);
+						}
+					},
+					{
+						label:L.t._("No, I'm fine."),
+						className: "gray",
+						cb: ()->{
+							project.setFlag(IgnoreBackupSuggest, true);
+							ge.emit(ProjectSettingsChanged);
+						},
+					}
+				],
+				false
+			);
+		}
 
 		// Auto-load provided level index
 		if( loadLevelIndex!=null )
@@ -114,6 +138,7 @@ class Editor extends Page {
 
 		// Edit buttons
 		jMainPanel.find("button.editProject").click( function(_) {
+			if( isPaused() ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.EditProject) )
 				ui.Modal.closeAll();
 			else
@@ -121,14 +146,20 @@ class Editor extends Page {
 		});
 
 		jMainPanel.find("button.world").click( function(_) {
+			if( isPaused() ) return;
 			setWorldMode(!worldMode);
-			// if( ui.Modal.isOpen(ui.modal.panel.WorldPanel) )
-			// 	ui.Modal.closeAll();
-			// else
-			// 	new ui.modal.panel.WorldPanel();
+		});
+
+		jMainPanel.find("button.editLevelInstance").click( function(_) {
+			if( isPaused() ) return;
+			if( ui.Modal.isOpen(ui.modal.panel.LevelInstancePanel) )
+				ui.Modal.closeAll();
+			else
+				new ui.modal.panel.LevelInstancePanel();
 		});
 
 		jMainPanel.find("button.editLayers").click( function(_) {
+			if( isPaused() ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.EditLayerDefs) )
 				ui.Modal.closeAll();
 			else
@@ -136,6 +167,7 @@ class Editor extends Page {
 		});
 
 		jMainPanel.find("button.editEntities").click( function(_) {
+			if( isPaused() ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.EditEntityDefs) )
 				ui.Modal.closeAll();
 			else
@@ -143,6 +175,7 @@ class Editor extends Page {
 		});
 
 		jMainPanel.find("button.editTilesets").click( function(_) {
+			if( isPaused() ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.EditTilesetDefs) )
 				ui.Modal.closeAll();
 			else
@@ -150,6 +183,7 @@ class Editor extends Page {
 		});
 
 		jMainPanel.find("button.editEnums").click( function(_) {
+			if( isPaused() ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.EditEnums) )
 				ui.Modal.closeAll();
 			else
@@ -161,6 +195,7 @@ class Editor extends Page {
 
 
 		jMainPanel.find("button.showHelp").click( function(_) {
+			if( isPaused() ) return;
 			if( ui.Modal.isOpen(ui.modal.panel.Help) )
 				ui.Modal.closeAll();
 			else
@@ -169,15 +204,7 @@ class Editor extends Page {
 
 
 		// Option checkboxes
-		linkOption( jEditOptions.find("li.singleLayerMode"), ()->settings.v.singleLayerMode, (v)->setSingleLayerMode(v) );
-		linkOption( jEditOptions.find("li.grid"), ()->settings.v.grid, (v)->setGrid(v) );
-		linkOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.v.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
-		linkOption(
-			jEditOptions.find("li.tileStacking"),
-			()->settings.v.tileStacking,
-			(v)->setTileStacking(v),
-			()->curLayerDef!=null && curLayerDef.type==Tiles
-		);
+		updateEditOptions();
 
 		// Space bar blocking
 		new J(js.Browser.window).off().keydown( function(ev) {
@@ -410,7 +437,7 @@ class Editor extends Page {
 		switch keyCode {
 			case K.ESCAPE:
 				if( hasInputFocus() ) {
-					// BUG jquery crashes on blur if element is removed in  the process
+					// BUG jquery crashes on "Blur" if element is removed in the process
 					// see: https://github.com/jquery/jquery/issues/4417
 					try App.ME.jBody.find("input:focus, textarea:focus").blur()
 					catch(e:Dynamic) {}
@@ -423,13 +450,8 @@ class Editor extends Page {
 					worldTool.stopAddMode();
 				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeLatest();
-				else if( selectionTool.any() ) {
-					if( !worldMode )
-						ui.EntityInstanceEditor.closeExisting();
+				else if( selectionTool.any() )
 					selectionTool.clear();
-				}
-				else if( ui.EntityInstanceEditor.isOpen() && !worldMode ) // TODO instance cleanup
-					ui.EntityInstanceEditor.closeExisting();
 
 			case K.TAB:
 				if( !ui.Modal.hasAnyOpen() )
@@ -458,8 +480,10 @@ class Editor extends Page {
 				camera.fit();
 
 			case K.F12 if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				ui.Modal.closeAll();
-				new ui.modal.dialog.EditAppSettings();
+				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
+					ui.Modal.closeAll();
+					new ui.modal.dialog.EditAppSettings();
+				}
 
 			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				var state = levelRender.toggleAutoLayerRendering();
@@ -510,13 +534,15 @@ class Editor extends Page {
 					selectLayerInstance( curLevel.layerInstances[idx] );
 
 			case k if( k>=K.F1 && k<=K.F6 && !hasInputFocus() ):
-				jMainPanel.find("#mainBar .buttons button:nth-of-type("+(k-K.F1+1)+")").click();
+				jMainPanel.find("#mainBar .buttons button:nth-of-type("+(k-K.F1+2)+")").click();
 		}
 
 		// Propagate to tools
 		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() ) {
 			worldTool.onKeyPress(keyCode);
 			panTool.onKeyPress(keyCode);
+			if( resizeTool!=null )
+				resizeTool.onKeyPress(keyCode);
 
 			if( !worldMode ) {
 				if( isSpecialToolActive() )
@@ -587,7 +613,7 @@ class Editor extends Page {
 
 	public inline function isSpecialToolActive(?tClass:Class<Tool<Dynamic>>) {
 		return specialTool!=null && !specialTool.destroyed
-			&& ( tClass==null || Std.is(specialTool, tClass) );
+			&& ( tClass==null || Std.isOfType(specialTool, tClass) );
 	}
 
 	public function setSpecialTool(t:Tool<Dynamic>) {
@@ -610,14 +636,14 @@ class Editor extends Page {
 
 			switch li.def.type {
 				case IntGrid:
-					if( li.getIntGrid(cx,cy)>=0 )
+					if( li.getIntGrid(cx,cy)>0 )
 						ge = GenericLevelElement.GridCell( li, cx, cy );
 
 				case AutoLayer:
 
 				case Entities:
 					for(ei in li.entityInstances) {
-						if( ei.isOver(layerX, layerY, 0) )
+						if( ei.isOver(layerX, layerY) )
 							ge = GenericLevelElement.Entity(li, ei);
 						else {
 							// Points
@@ -662,6 +688,9 @@ class Editor extends Page {
 	}
 
 	function onHeapsEvent(e:hxd.Event) {
+		if( isPaused() )
+			return;
+
 		switch e.kind {
 			case EPush: onMouseDown(e);
 			case ERelease: onMouseUp();
@@ -679,6 +708,25 @@ class Editor extends Page {
 		}
 	}
 
+	public function clearResizeTool() {
+		if( resizeTool!=null ) {
+			if( resizeTool.isRunning() )
+				resizeTool.stopUsing( getMouse() );
+			resizeTool.destroy();
+		}
+		resizeTool = null;
+	}
+
+	public function invalidateResizeTool() {
+		if( resizeTool!=null )
+			resizeTool.invalidate();
+	}
+
+	public function createResizeToolFor(ge:GenericLevelElement) {
+		clearResizeTool();
+		resizeTool = new tool.ResizeTool(ge);
+	}
+
 	function onMouseDown(ev:hxd.Event) {
 		if( isLocked() )
 			return;
@@ -686,6 +734,9 @@ class Editor extends Page {
 		var m = getMouse();
 
 		panTool.startUsing(ev,m);
+
+		if( !ev.cancel && resizeTool!=null )
+			resizeTool.onMouseDown( ev, m );
 
 		if( !ev.cancel && !project.isBackup() )
 			rulers.onMouseDown( ev, m );
@@ -711,6 +762,8 @@ class Editor extends Page {
 
 		panTool.stopUsing(m);
 		worldTool.onMouseUp(m);
+		if( resizeTool!=null && resizeTool.isRunning() )
+			resizeTool.stopUsing(m);
 
 		// Tool updates
 		if( selectionTool.isRunning() )
@@ -723,26 +776,59 @@ class Editor extends Page {
 		rulers.onMouseUp( m );
 	}
 
+	var fpsRequests : Map<Int, Float> = new Map();
+	public inline function requestFps(ratio=1.0) {
+		fpsRequests.set(M.iclamp(Std.int(ratio*100), 10, 100), 2);
+	}
+
 	function onMouseMove(ev:hxd.Event) {
 		var m = getMouse();
 
 		if( !isLocked() ) {
+			// Create a separate cancelable event for cursor update
+			var cursorEvent = new hxd.Event(EMove);
+
 			// Propagate event to tools & UI components
 			panTool.onMouseMove(ev,m);
-			rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
-			worldTool.onMouseMove(ev,m);
+			panTool.onMouseMoveCursor(cursorEvent,m);
+
+			if( !ev.cancel && resizeTool!=null ) {
+				resizeTool.onMouseMove(ev,m);
+				resizeTool.onMouseMoveCursor(cursorEvent,m);
+			}
 
 			if( !ev.cancel && !worldMode ) {
-				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() )
+				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() ) {
 					selectionTool.onMouseMove(ev,m);
-				else if( isSpecialToolActive() )
+					selectionTool.onMouseMoveCursor(cursorEvent,m);
+				}
+				else if( isSpecialToolActive() ) {
 					specialTool.onMouseMove(ev,m);
-				else
+					specialTool.onMouseMoveCursor(cursorEvent,m);
+				}
+				else {
 					curTool.onMouseMove(ev,m);
+					curTool.onMouseMoveCursor(cursorEvent,m);
+				}
 			}
+
+			rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
+			rulers.onMouseMoveCursor(cursorEvent,m);
+
+			worldTool.onMouseMove(ev,m); // Note: event cancelation is checked inside
+			worldTool.onMouseMoveCursor(cursorEvent,m);
 
 			if( ui.Modal.isOpen( ui.modal.panel.EditAllAutoLayerRules ) )
 				ui.Modal.getFirst( ui.modal.panel.EditAllAutoLayerRules ).onEditorMouseMove(m);
+
+			// Default cursor
+			if( !cursorEvent.cancel )
+				cursor.set(None);
+
+			cursor.onMouseMove(m);
+
+			if( curLevel.inBounds(m.levelX, m.levelY) )
+				requestFps(0.5);
 		}
 
 		// Mouse coords infos
@@ -811,11 +897,45 @@ class Editor extends Page {
 		}
 	}
 
+
 	function onMouseWheel(e:hxd.Event) {
 		var m = getMouse();
-		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta*0.1 );
+		requestFps(0.85);
+
+		var speed = App.ME.getElectronZoomFactor() * settings.v.mouseWheelSpeed;
+		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta * 0.13 * speed );
 		camera.cancelAllAutoMovements();
+
+		// Auto world mode on zoom out
+		if( settings.v.autoWorldModeSwitch!=Never && !worldMode && e.wheelDelta>0 ) {
+			var wr = camera.getLevelWidthRatio(curLevel);
+			var hr = camera.getLevelHeightRatio(curLevel);
+			// App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
+			if( wr<=0.3 && hr<=0.3 || wr<=0.22 || hr<=0.22 )
+				setWorldMode(true, true);
+		}
+
+		// Auto level mode on zoom in
+		if( settings.v.autoWorldModeSwitch==ZoomInAndOut && worldMode && e.wheelDelta<0 ) {
+			// Find closest level to cursor
+			var dh = new dn.DecisionHelper(project.levels);
+			dh.keepOnly( l->l.isWorldOver(m.worldX, m.worldY, 500) );
+			dh.score( l->l.isWorldOver(m.worldX, m.worldY) ? 100 : 0 );
+			dh.score( l->-l.getDist(m.worldX,m.worldY) );
+
+			var l = dh.getBest();
+			if( l!=null ) {
+				var wr = camera.getLevelWidthRatio(l);
+				var hr = camera.getLevelHeightRatio(l);
+				// App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
+				if( wr>0.3 && hr>0.3 || wr>0.78 || hr>0.78 ) {
+					selectLevel(l);
+					setWorldMode(false, true);
+				}
+			}
+		}
 	}
+
 
 	public function selectLevel(l:data.Level) {
 		if( curLevel!=null )
@@ -837,7 +957,7 @@ class Editor extends Page {
 		ge.emit(LayerInstanceSelected);
 		clearSpecialTool();
 
-		setGrid(settings.v.grid, false); // update checkbox
+		updateEditOptions();
 	}
 
 	function layerSupportsFreeMode() {
@@ -854,76 +974,82 @@ class Editor extends Page {
 		return settings.v.grid || !layerSupportsFreeMode();
 	}
 
-
-	function linkOption( jOpt:js.jquery.JQuery, getter:()->Bool, setter:Bool->Void, ?isSupported:Void->Bool ) {
-		var p = createChildProcess( (p)->{
-			// Loop
-			if( jOpt.parents("body").length==0 ) {
-				p.destroy();
-				return;
-			}
-
-			if( jOpt.hasClass("active") && !getter() )
-				jOpt.removeClass("active");
-
-			if( !jOpt.hasClass("active") && getter() )
-				jOpt.addClass("active");
-
-			if( isSupported!=null ) {
-				if( jOpt.hasClass("unsupported") && isSupported() )
-					jOpt.removeClass("unsupported");
-
-				if( !jOpt.hasClass("unsupported") && !isSupported() )
-					jOpt.addClass("unsupported");
-			}
-		});
-
-		p.name = "Option watcher ("+jOpt.attr("class")+")";
-
+	function updateEditOptions() {
 		// Init
-		if( getter() )
-			jOpt.addClass("active");
-		else
+		jEditOptions
+			.off()
+			.find("*")
+				.removeClass("active unsupported")
+				.off();
+
+		// Update all
+		applyEditOption( jEditOptions.find("li.singleLayerMode"), ()->settings.v.singleLayerMode, (v)->setSingleLayerMode(v) );
+		applyEditOption( jEditOptions.find("li.grid"), ()->settings.v.grid, (v)->setGrid(v) );
+		applyEditOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.v.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
+		applyEditOption(
+			jEditOptions.find("li.tileStacking"),
+			()->settings.v.tileStacking,
+			(v)->setTileStacking(v),
+			()->curLayerDef!=null && curLayerDef.type==Tiles
+		);
+	}
+
+	inline function applyEditOption( jOpt:js.jquery.JQuery, getter:()->Bool, setter:Bool->Void, ?isSupported:Void->Bool ) {
+		if( jOpt.hasClass("active") && !getter() )
 			jOpt.removeClass("active");
+		else if( !jOpt.hasClass("active") && getter() )
+			jOpt.addClass("active");
+
+		if( isSupported!=null ) {
+			if( jOpt.hasClass("unsupported") && isSupported() )
+				jOpt.removeClass("unsupported");
+
+			if( !jOpt.hasClass("unsupported") && !isSupported() )
+				jOpt.addClass("unsupported");
+		}
 
 		jOpt.off(".option").on("click.option", (ev)->{
+			if( isPaused() )
+				return;
 			setter( !getter() );
 		});
 	}
 
-	public function setWorldMode(v:Bool) {
+	public function setWorldMode(v:Bool, usedMouseWheel=false) {
 		if( worldMode==v )
 			return;
 
+		selectionTool.clear();
 		project.reorganizeWorld();
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
 		if( worldMode ) {
 			N.quick(L.t._("World view"), new J('<span class="icon world"/>'));
 			ui.Modal.closeAll();
-			new WorldPanel();
+			new ui.modal.panel.WorldPanel();
 		}
-		else
-			ui.EntityInstanceEditor.closeExisting();
 
+		camera.onWorldModeChange(worldMode, usedMouseWheel);
 		worldTool.onWorldModeChange(worldMode);
 	}
 
 	public function setGrid(v:Bool, notify=true) {
 		settings.v.grid = v;
 		App.ME.settings.save();
-		selectionTool.clear();
 		ge.emit( GridChanged(settings.v.grid) );
 		if( notify )
 			N.quick( "Grid: "+L.onOff( settings.v.grid ));
+		updateEditOptions();
 	}
 
 	public function setSingleLayerMode(v:Bool) {
 		settings.v.singleLayerMode = v;
 		App.ME.settings.save();
 		levelRender.applyAllLayersVisibility();
+		levelRender.invalidateBg();
 		selectionTool.clear();
 		N.quick( "Single layer mode: "+L.onOff( settings.v.singleLayerMode ));
+		updateEditOptions();
 	}
 
 	public function setEmptySpaceSelection(v:Bool) {
@@ -931,6 +1057,7 @@ class Editor extends Page {
 		App.ME.settings.save();
 		selectionTool.clear();
 		N.quick( "Select empty spaces: "+L.onOff( settings.v.emptySpaceSelection ));
+		updateEditOptions();
 	}
 
 	public function setTileStacking(v:Bool) {
@@ -938,6 +1065,7 @@ class Editor extends Page {
 		App.ME.settings.save();
 		selectionTool.clear();
 		N.quick( "Tile stacking: "+L.onOff( settings.v.tileStacking ));
+		updateEditOptions();
 	}
 
 	public function setCompactMode(v:Bool, init=false) {
@@ -963,11 +1091,13 @@ class Editor extends Page {
 	}
 
 	public function isLocked() {
-		return ui.ProjectSaving.hasAny() || ui.Modal.hasAnyUnclosable()
+		return App.ME.isLocked()
 			#if debug || cd.has("debugLock") #end;
 	}
 
 	public function onClose(?bt:js.jquery.JQuery) {
+		if( isPaused() )
+			return;
 		ui.Modal.closeAll();
 		if( needSaving )
 			new ui.modal.dialog.UnsavedChanges( bt, App.ME.loadPage.bind( ()->new Home() ) );
@@ -1112,7 +1242,6 @@ class Editor extends Page {
 				case LevelRemoved(l): extra = l.uid;
 				case LevelResized(l): extra = l.uid;
 				case LevelRestoredFromHistory(l):
-				case LevelSorted:
 				case WorldLevelMoved:
 				case WorldSettingsChanged:
 				case LayerDefAdded:
@@ -1144,15 +1273,15 @@ class Editor extends Page {
 				case EntityInstanceAdded(ei): extra = ei.defUid;
 				case EntityInstanceRemoved(ei): extra = ei.defUid;
 				case EntityInstanceChanged(ei): extra = ei.defUid;
-				case EntityInstanceFieldChanged(ei): extra = ei.defUid;
+				case FieldInstanceChanged(fi): extra = fi.defUid;
 				case EntityDefAdded:
 				case EntityDefRemoved:
 				case EntityDefChanged:
 				case EntityDefSorted:
-				case EntityFieldAdded(ed): extra = ed.uid;
-				case EntityFieldRemoved(ed): extra = ed.uid;
-				case EntityFieldDefChanged(ed): extra = ed.uid;
-				case EntityFieldSorted:
+				case FieldDefAdded(fd): extra = fd.identifier;
+				case FieldDefRemoved(fd): extra = fd.identifier;
+				case FieldDefChanged(fd): extra = fd.identifier;
+				case FieldDefSorted:
 				case EnumDefAdded:
 				case EnumDefRemoved:
 				case EnumDefChanged:
@@ -1172,7 +1301,6 @@ class Editor extends Page {
 			case ViewportChanged:
 			case LayerInstanceSelected:
 			case LevelSelected(_):
-			case LayerInstanceVisiblityChanged(_):
 			case AutoLayerRenderingChanged:
 			case ToolOptionChanged:
 			case BeforeProjectSaving:
@@ -1194,10 +1322,9 @@ class Editor extends Page {
 
 			case LayerInstanceChanged:
 
-			case EntityFieldDefChanged(ed):
-			case EntityFieldSorted:
-			case EntityDefSorted:
-			case EntityInstanceFieldChanged(ei):
+			case FieldDefChanged(fd):
+			case FieldDefSorted:
+			case FieldInstanceChanged(fi):
 
 			case EntityInstanceAdded(ei):
 			case EntityInstanceRemoved(ei):
@@ -1216,9 +1343,10 @@ class Editor extends Page {
 
 			case LayerInstanceVisiblityChanged(li):
 				selectionTool.clear();
-				updateLayerList();
+				updateLayerVisibilities();
 
-			case EntityFieldAdded(ed), EntityFieldRemoved(ed):
+			case FieldDefAdded(_), FieldDefRemoved(_):
+				project.tidy();
 				updateTool();
 
 			case LayerDefConverted:
@@ -1265,7 +1393,6 @@ class Editor extends Page {
 			case LevelAdded(l):
 			case LevelRemoved(l):
 			case LevelResized(l):
-			case LevelSorted:
 			case WorldLevelMoved:
 			case WorldSettingsChanged:
 
@@ -1291,7 +1418,7 @@ class Editor extends Page {
 				updateTool();
 				updateGuide();
 
-			case TilesetDefChanged(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved:
+			case TilesetDefChanged(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved, EntityDefSorted:
 				updateTool();
 				updateGuide();
 
@@ -1402,6 +1529,18 @@ class Editor extends Page {
 		}
 	}
 
+	override function onAppBlur() {
+		super.onAppBlur();
+		heldVisibilitySet = null;
+	}
+
+	override function onAppMouseUp() {
+		super.onAppMouseUp();
+		heldVisibilitySet = null;
+	}
+
+
+	var heldVisibilitySet = null;
 	public function updateLayerList() {
 		jLayerList.empty();
 
@@ -1410,12 +1549,10 @@ class Editor extends Page {
 			var li = curLevel.getLayerInstance(ld);
 			var e = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			jLayerList.append(e);
+			e.attr("uid",ld.uid);
 
 			if( li==curLayerInstance )
 				e.addClass("active");
-
-			if( !levelRender.isLayerVisible(li) )
-				e.addClass("hidden");
 
 			e.find(".index").text( Std.string(idx++) );
 
@@ -1447,15 +1584,50 @@ class Editor extends Page {
 
 			// Visibility button
 			var vis = e.find(".vis");
-			vis.find(".icon").addClass( levelRender.isLayerVisible(li) ? "visible" : "hidden" );
-			vis.click( function(ev) {
-				if( ui.Modal.closeAll() )
-					return;
-				ev.stopPropagation();
-				levelRender.toggleLayer(li);
+			vis.mouseover( (_)->{
+				if( App.ME.isMouseButtonDown(0) && heldVisibilitySet!=null )
+					levelRender.setLayerVisibility(li, heldVisibilitySet);
 			});
-
+			vis.mousedown( (ev:js.jquery.Event)->{
+				if( App.ME.isShiftDown() ) {
+					// Keep only this one
+					var anyChange = !levelRender.isLayerVisible(li);
+					for(oli in curLevel.layerInstances)
+						if( oli!=li && levelRender.isLayerVisible(oli) ) {
+							anyChange = true;
+							levelRender.setLayerVisibility(oli, false);
+						}
+					if( anyChange )
+						levelRender.setLayerVisibility(li, true);
+					else {
+						// Re-enable all if it's already the case
+						for(oli in curLevel.layerInstances)
+							levelRender.setLayerVisibility(oli, true);
+					}
+				}
+				else {
+					// Toggle this one
+					heldVisibilitySet = !levelRender.isLayerVisible(li);
+					levelRender.setLayerVisibility(li, heldVisibilitySet);
+				}
+			});
 		}
+
+		updateLayerVisibilities();
+	}
+
+	function updateLayerVisibilities() {
+		jLayerList.children().each( (idx,e)->{
+			var jLayer = new J(e);
+			var li = curLevel.getLayerInstance( Std.parseInt(jLayer.attr("uid")) );
+			if( li==null )
+				return;
+
+			if( levelRender.isLayerVisible(li) )
+				jLayer.removeClass("hidden");
+			else
+				jLayer.addClass("hidden");
+		});
 	}
 
 
@@ -1470,10 +1642,9 @@ class Editor extends Page {
 	override function onDispose() {
 		super.onDispose();
 
-		if( ME==this )
-			ME = null;
-
 		watcher = null;
+
+		cursor.dispose();
 
 		ge.dispose();
 		ge = null;
@@ -1486,46 +1657,41 @@ class Editor extends Page {
 		ui.TilesetPicker.clearScrollMemory();
 
 		App.ME.jBody.off(".client");
+
+		if( ME==this )
+			ME = null;
 	}
 
 
 	override function postUpdate() {
 		super.postUpdate();
 		ge.onEndOfFrame();
+		cursor.update();
 	}
 
+	var wasLocked : Bool = null;
 	override function update() {
 		super.update();
 
-		// DOM locking
-		if( isLocked() && !App.ME.jPage.hasClass("locked") && !ui.Modal.hasAnyUnclosable() )
-			App.ME.jPage.addClass("locked");
-
-		if( !isLocked() && App.ME.jPage.hasClass("locked") )
-			App.ME.jPage.removeClass("locked");
-
-
-		#if debug
-		if( App.ME.cd.has("debugTools") ) {
-			App.ME.clearDebug();
-			App.ME.debug("appButtons="
-				+ ( App.ME.isMouseButtonDown(0) ? "[left] " : "" )
-				+ ( App.ME.isMouseButtonDown(2) ? "[right] " : "" )
-				+ ( App.ME.isMouseButtonDown(1) ? "[middle] " : "" )
-			);
-			App.ME.debug("zoom="+M.pretty(camera.adjustedZoom,1));
-			App.ME.debug("-- Tools & UI ----------------------------------------");
-			App.ME.debug("  "+worldTool);
-			App.ME.debug("  "+panTool);
-			App.ME.debug("  "+selectionTool);
-			for(t in allLayerTools)
-				App.ME.debug("  "+t);
-			App.ME.debug("  "+rulers);
-
-			App.ME.debug("-- Processes ----------------------------------------");
-			for( line in dn.Process.rprintAll().split('\n') )
-				App.ME.debug('<pre>$line</pre>');
+		// Smart FPS limiting
+		if( App.ME.focused && settings.v.smartCpuThrottling ) {
+			var maxCap = 0.;
+			for(k in fpsRequests.keys()) {
+				maxCap = M.fmax(k/100,maxCap);
+				fpsRequests.set(k, fpsRequests.get(k)-tmod/Const.FPS);
+				if( fpsRequests.get(k)<=0 )
+					fpsRequests.remove(k);
+			}
+			hxd.System.fpsLimit = maxCap>=1 ? -1 : M.ceil(30+30*maxCap);
 		}
-		#end
+
+		// DOM locking
+		if( isLocked()!=wasLocked ) {
+			wasLocked = isLocked();
+			if( isLocked() && !ui.Modal.hasAnyUnclosable() )
+				App.ME.jPage.addClass("locked");
+			else if( !isLocked() )
+				App.ME.jPage.removeClass("locked");
+		}
 	}
 }

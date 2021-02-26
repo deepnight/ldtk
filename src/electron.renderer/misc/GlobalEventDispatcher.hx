@@ -34,7 +34,7 @@ class GlobalEventDispatcher {
 			ev(e);
 
 		for(l in specificListeners)
-			if( l.e==e )
+			if( l.e.getIndex()==e.getIndex() )
 				l.cb();
 	}
 

@@ -25,11 +25,6 @@ class PanView extends Tool<Int> {
 
 	override function onMouseMove(ev:hxd.Event, m:Coords) {
 		super.onMouseMove(ev, m);
-
-		if( App.ME.isKeyDown(K.SPACE) || panning )  {
-			editor.cursor.set(Pan);
-			ev.cancel = true;
-		}
 	}
 
 	override function stopUsing(m:Coords) {
@@ -49,9 +44,16 @@ class PanView extends Tool<Int> {
 		return false;
 	}
 
-	override function updateCursor(m:Coords) {
-		super.updateCursor(m);
-		if( isRunning() )
+	override function customCursor(ev:hxd.Event, m:Coords) {
+		super.customCursor(ev,m);
+
+		if( isRunning() ) {
+			editor.cursor.set(Panning);
+			ev.cancel = true;
+		}
+		else if( App.ME.isKeyDown(K.SPACE) ) {
 			editor.cursor.set(Pan);
+			ev.cancel = true;
+		}
 	}
 }

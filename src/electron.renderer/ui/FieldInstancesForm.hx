@@ -5,6 +5,7 @@ import data.inst.FieldInstance;
 
 enum FormRelatedInstance {
 	Entity(ei:data.inst.EntityInstance);
+	Level(l:data.Level);
 }
 
 class FieldInstancesForm {
@@ -17,21 +18,23 @@ class FieldInstancesForm {
 	var fieldInstGetter : (fd:FieldDef)->FieldInstance;
 
 
-	public function new(
-		elementInstance: FormRelatedInstance,
-		fieldDefs: Array<FieldDef>,
-		fieldInstGetter: (fd:FieldDef)->FieldInstance
-	) {
+	public function new() {
+		jWrapper = new J('<dl class="form fieldInstanceEditor"/>');
+	}
+
+	public function use(elementInstance: FormRelatedInstance, fieldDefs: Array<FieldDef>, fieldInstGetter: (fd:FieldDef)->FieldInstance ) {
 		this.relatedInstance = elementInstance;
-		jWrapper = new J('<ul class="form"/>');
-		this.fieldDefs = fieldDefs;
 		this.fieldInstGetter = fieldInstGetter;
+		this.fieldDefs = fieldDefs;
 		renderForm();
 	}
+
 
 	public function dispose() {
 		jWrapper.remove();
 		jWrapper = null;
+		fieldDefs = null;
+		fieldInstGetter = null;
 	}
 
 	public inline function isDestroyed() return jWrapper==null || jWrapper.parents("body").length==0;
@@ -76,11 +79,14 @@ class FieldInstancesForm {
 				jRep.on("click.def", function(ev) {
 					ev.preventDefault();
 					jRep.remove();
-					input.show().focus();
 					if( input.is("[type=checkbox]") ) {
 						input.prop("checked", !fi.getBool(arrayIdx));
 						input.change();
 					}
+					if( input.is(":read-only") )
+						input.click();
+					else
+						input.show().focus();
 				});
 				jRep.insertBefore(input);
 				input.hide();
@@ -112,27 +118,59 @@ class FieldInstancesForm {
 			defLink.appendTo(span);
 			defLink.on("click.def", function(ev) {
 				fi.parseValue(arrayIdx, null);
-				onFieldChange();
+				onFieldChange(fi);
 				ev.preventDefault();
 			});
 		}
 	}
 
 
-	function createFieldInput(fi:data.inst.FieldInstance, arrayIdx:Int, jTarget:js.jquery.JQuery) {
+	function createFieldInput(domId:String, fi:data.inst.FieldInstance, arrayIdx:Int, jTarget:js.jquery.JQuery) {
+		jTarget.addClass( fi.def.type.getName() );
 		switch fi.def.type {
 			case F_Int:
-				var input = new J("<input/>");
-				input.appendTo(jTarget);
-				input.attr("type","text");
-				input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
-				if( !fi.isUsingDefault(arrayIdx) )
-					input.val( Std.string(fi.getInt(arrayIdx)) );
-				input.change( function(ev) {
-					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange();
-				});
-				hideInputIfDefault(arrayIdx, input, fi);
+				var jInput = new J("<input/>");
+				jInput.attr("id",domId);
+				jInput.appendTo(jTarget);
+				jInput.attr("type","text");
+
+				var i = new form.input.IntInput(
+					jInput,
+					()->fi.isUsingDefault(arrayIdx) ? null : fi.getInt(arrayIdx),
+					(v)->{
+						fi.parseValue(arrayIdx, Std.string(v));
+						onFieldChange(fi);
+					}
+				);
+				i.allowNull = true;
+				i.setBounds(fi.def.min, fi.def.max);
+				var speed = fi.def.min!=null && fi.def.max!=null ? (fi.def.max-fi.def.min) / 50 : 2;
+				i.enableSlider(speed);
+				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
+
+				hideInputIfDefault(arrayIdx, jInput, fi);
+
+			case F_Float:
+				var jInput = new J("<input/>");
+				jInput.attr("id",domId);
+				jInput.appendTo(jTarget);
+				jInput.attr("type","text");
+
+				var i = new form.input.FloatInput(
+					jInput,
+					()->fi.isUsingDefault(arrayIdx) ? null : fi.getFloat(arrayIdx),
+					(v)->{
+						fi.parseValue(arrayIdx, Std.string(v));
+						onFieldChange(fi);
+					}
+				);
+				i.allowNull = true;
+				i.setBounds(fi.def.min, fi.def.max);
+				var speed = fi.def.min!=null && fi.def.max!=null ? (fi.def.max-fi.def.min) / 3 : 2;
+				i.enableSlider(speed);
+				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
+
+				hideInputIfDefault(arrayIdx, jInput, fi);
 
 			case F_Color:
 				var cHex = fi.getColorAsHexStr(arrayIdx);
@@ -147,31 +185,19 @@ class FieldInstancesForm {
 					jWrapper.append("(default)");
 
 				var input = new J("<input/>");
+				input.attr("id",domId);
 				input.appendTo(jWrapper);
 				input.attr("type","color");
 				input.addClass("advanced");
 				input.val(cHex);
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange();
+					onFieldChange(fi);
 				});
 
 				hideInputIfDefault(arrayIdx, jWrapper, fi);
 
-			case F_Float:
-				var input = new J("<input/>");
-				input.appendTo(jTarget);
-				input.attr("type","text");
-				input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
-				if( !fi.isUsingDefault(arrayIdx) )
-					input.val( Std.string(fi.getFloat(arrayIdx)) );
-				input.change( function(ev) {
-					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange();
-				});
-				hideInputIfDefault(arrayIdx, input, fi);
-
-			case F_String, F_Text:
+			case F_String:
 				var input = if( fi.def.type==F_Text ) {
 					var input = new J("<textarea/>");
 					input.appendTo(jTarget);
@@ -191,21 +217,49 @@ class FieldInstancesForm {
 					input;
 				}
 				var def = fi.def.getStringDefault();
+				input.attr("id",domId);
 				input.attr("placeholder", def==null ? "(null)" : def=="" ? "(empty string)" : def);
 				if( !fi.isUsingDefault(arrayIdx) )
 					input.val( fi.getString(arrayIdx) );
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange();
+					onFieldChange(fi);
 				});
 				if( fi.def.type==F_Text )
 					input.keyup();
 				hideInputIfDefault(arrayIdx, input, fi);
 
+			case F_Text:
+				var jText = new J('<div class="multiLines"/>');
+				jText.appendTo(jTarget);
+				if( fi.isUsingDefault(arrayIdx) ) {
+					var def = fi.def.getStringDefault();
+					jText.text(def==null ? "(null)" : def=="" ? "(empty string)" : def);
+					jText.addClass("usingDefault");
+				}
+				else {
+					var str = fi.getString(arrayIdx);
+					if( str.length>256 )
+						str = str.substr(0,256)+"[...]";
+					jText.text(str);
+				}
+				jText.click( _->{
+					new ui.modal.dialog.TextEditor(
+						fi.getString(arrayIdx),
+						getInstanceName()+"."+fi.def.identifier,
+						fi.def.textLangageMode,
+						(v)->{
+							fi.parseValue(arrayIdx, v);
+							onFieldChange(fi);
+						}
+					);
+				});
+
 			case F_Point:
 				if( fi.valueIsNull(arrayIdx) && !fi.def.canBeNull || !fi.def.isArray ) {
 					// Button mode
 					var jPick = new J('<button/>');
+					jPick.attr("id",domId);
 					if( !fi.valueIsNull(arrayIdx) )
 						jPick.addClass("gray");
 					jPick.appendTo(jTarget);
@@ -234,7 +288,7 @@ class FieldInstancesForm {
 						jRem.appendTo(jTarget);
 						jRem.click( (_)->{
 							fi.parseValue(arrayIdx,null);
-							onFieldChange();
+							onFieldChange(fi);
 						});
 					}
 				}
@@ -283,83 +337,123 @@ class FieldInstancesForm {
 				select.change( function(ev) {
 					var v = select.val()=="" ? null : select.val();
 					fi.parseValue(arrayIdx, v);
-					onFieldChange();
+					onFieldChange(fi);
 				});
 				hideInputIfDefault(arrayIdx, select, fi);
 
 			case F_Bool:
 				var input = new J("<input/>");
+				input.attr("id",domId);
 				input.appendTo(jTarget);
 				input.attr("type","checkbox");
 				input.prop("checked",fi.getBool(arrayIdx));
 				input.change( function(ev) {
 					fi.parseValue( arrayIdx, Std.string( input.prop("checked") ) );
-					onFieldChange();
+					onFieldChange(fi);
 				});
 
 				hideInputIfDefault(arrayIdx, input, fi);
 
 			case F_Path:
 				var isRequired = fi.valueIsNull(arrayIdx) && !fi.def.canBeNull;
+
+				// Text input
 				var input = new J('<input class="fileInput" type="text"/>');
 				input.appendTo(jTarget);
+				input.attr("id",domId);
 				input.attr("placeholder", "(null)");
+				input.prop("readonly",true);
+
 				if( isRequired )
 					input.addClass("required");
 
-				if( !fi.isUsingDefault(arrayIdx) )
-					input.val( fi.getFilePath(arrayIdx) );
+				if( !fi.isUsingDefault(arrayIdx) ) {
+					var fp = dn.FilePath.fromFile( fi.getFilePath(arrayIdx) );
+					input.val( fp.fileWithExt );
+					input.attr("title", fp.full);
+				}
 
-				var jLocate = new J('<button class="locate gray"> <span class="icon locate"/> </button>');
-				jLocate.appendTo(jTarget);
-				jLocate.click( (_)->{
-					if( !fi.valueIsNull(arrayIdx) ) {
-						var path = project.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
-						JsTools.exploreToFile(path, true);
-					}
+				input.focus( ev->{
+					input.blur();
 				});
-
-				var fileSelect = new J('<button class="fileSelectButton"> <span class="icon open"/> </button>');
-				fileSelect.appendTo(jTarget);
-
-				input.change( function(ev) {
-					fi.parseValue( arrayIdx, input.val() );
-					onFieldChange();
-				});
-
-				if( !fi.valueIsNull(arrayIdx) && !JsTools.fileExists( project.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) ) )
-					input.addClass("fileNotFound");
-
-				fileSelect.click( function(ev) {
+				input.click( ev->{
 					dn.electron.Dialogs.open(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
 						var fp = dn.FilePath.fromFile(absPath);
 						fp.useSlashes();
 						var relPath = project.makeRelativeFilePath(fp.full);
 						input.val(relPath);
 						fi.parseValue( arrayIdx, relPath );
-						onFieldChange();
+						onFieldChange(fi);
 					});
+					input.blur();
 				});
+
+				// Edit
+				if( !fi.isUsingDefault(arrayIdx) ) {
+					var jEdit = new J('<button class="edit gray" title="Edit file content"> <span class="icon edit"></span> </button>');
+					jEdit.appendTo(jTarget);
+					jEdit.click( (_)->{
+						if( !fi.valueIsNull(arrayIdx) ) {
+							ui.modal.dialog.TextEditor.editExternalFile( project.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) );
+						}
+					});
+				}
+
+				// Locate
+				if( !fi.isUsingDefault(arrayIdx) ) {
+					var jLocate = new J('<button class="locate gray" title="Locate this file"> <span class="icon locate"/> </button>');
+					jLocate.appendTo(jTarget);
+					jLocate.click( (_)->{
+						if( !fi.valueIsNull(arrayIdx) ) {
+							var path = project.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
+							JsTools.exploreToFile(path, true);
+						}
+					});
+				}
+
+				// Clear
+				if( !fi.isUsingDefault(arrayIdx) ) {
+					var jClear = new J('<button class="red" title="Reset"> <span class="icon delete"/> </button>');
+					jClear.appendTo(jTarget);
+					jClear.click( ev->{
+						fi.parseValue(arrayIdx,null);
+						onFieldChange(fi);
+					});
+				}
+
+				// Error
+				if( !fi.valueIsNull(arrayIdx) && !JsTools.fileExists( project.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) ) )
+					input.addClass("fileNotFound");
 
 				hideInputIfDefault(arrayIdx, input, fi, isRequired);
 		}
 	}
 
+	function getInstanceName() {
+		return switch relatedInstance {
+			case Entity(ei): ei.def.identifier;
+			case Level(l): l.identifier;
+		}
+	}
+
 	function getInstanceCx() {
 		return switch relatedInstance {
-			case Entity(ei): return ei.getCx( editor.curLayerDef );
+			case Entity(ei): ei.getCx( editor.curLayerDef );
+			case Level(l): 0; // N/A
 		}
 	}
 
 	function getInstanceCy() {
 		return switch relatedInstance {
-			case Entity(ei): return ei.getCy( editor.curLayerDef );
+			case Entity(ei): ei.getCy( editor.curLayerDef );
+			case Level(l): 0; // N/A
 		}
 	}
 
 	function getInstanceColor() {
 		return switch relatedInstance {
-			case Entity(ei): return ei.getSmartColor(true);
+			case Entity(ei): ei.getSmartColor(true);
+			case Level(l): l.getBgColor();
 		}
 	}
 
@@ -367,6 +461,12 @@ class FieldInstancesForm {
 		var t = new tool.PickPoint();
 
 		t.pickOrigin = { cx:getInstanceCx(), cy:getInstanceCy(), color:getInstanceColor() }
+		t.canPick = (m:Coords)->{
+			for(i in 0...fi.getArrayLength())
+				if( fi.getPointGrid(i).cx==m.cx && fi.getPointGrid(i).cy==m.cy )
+					return false;
+			return true;
+		}
 
 		// Connect to last of path
 		if( fi.def.isArray && fi.def.editorDisplayMode==PointPath ) {
@@ -377,6 +477,8 @@ class FieldInstancesForm {
 
 		// Picking of a point
 		t.onPick = function(m) {
+			editor.cursor.set(None);
+
 			if( fi.def.isArray && editIdx>=fi.getArrayLength()-1 ) {
 				// Append points in an array
 				fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
@@ -394,7 +496,7 @@ class FieldInstancesForm {
 				Editor.ME.clearSpecialTool();
 				fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
 			}
-			onFieldChange(true);
+			onFieldChange(fi, true);
 		}
 
 		// Tool stopped
@@ -408,12 +510,13 @@ class FieldInstancesForm {
 
 
 
-	function onFieldChange(keepCurrentSpecialTool=false) {
+	function onFieldChange(fi:FieldInstance, keepCurrentSpecialTool=false) {
 		if( !keepCurrentSpecialTool )
 			Editor.ME.clearSpecialTool();
 
 		onBeforeRender();
 		renderForm();
+		editor.ge.emit( FieldInstanceChanged(fi) );
 		onChange();
 	}
 
@@ -422,29 +525,39 @@ class FieldInstancesForm {
 
 
 	function renderForm() {
+		ui.Tip.clear();
 		jWrapper.empty();
 
-		if( fieldDefs.length==0 ) {
-			jWrapper.append('<div class="empty">This element has no custom field.</div>');
+		if( fieldDefs.length==0 )
 			return;
-		}
 
 		// Fields
 		for(fd in fieldDefs) {
 			var fi = fieldInstGetter(fd);
-			var li = new J("<li/>");
+			var domId = "field_"+fd.identifier+"_"+fd.uid;
+
+			var jDt = new J("<dt/>");
+			jDt.appendTo(jWrapper);
+
+			var jDd = new J("<dd/>");
+			var li = jDd;
+			// var li = new J("<li/>");
 			li.attr("defUid", fd.uid);
 			li.appendTo(jWrapper);
 
 			// Identifier
 			if( !fd.isArray )
-				li.append('<label>${fi.def.identifier}</label>');
+				jDt.append('<label for="$domId">${fi.def.identifier}</label>');
 			else
-				li.append('<label>${fi.def.identifier} (${fi.getArrayLength()})</label>');
+				jDt.append('<label for="$domId">${fi.def.identifier} (${fi.getArrayLength()})</label>');
+
+			// Field is not manually defined
+			if( !fd.isArray && fi.isUsingDefault(0) || fd.isArray && fi.getArrayLength()==0 )
+				jDt.addClass("isDefault");
 
 			if( !fd.isArray ) {
 				// Single value
-				createFieldInput(fi, 0, li);
+				createFieldInput(domId, fi, 0, li);
 			}
 			else {
 				// Array
@@ -480,7 +593,7 @@ class FieldInstancesForm {
 						if( sortable )
 							li.append('<div class="sortHandle"/>');
 
-						createFieldInput(fi, i, li);
+						createFieldInput(domId, fi, i, li);
 
 						// "Remove" button
 						var jRemove = new J('<button class="remove dark">x</button>');
@@ -488,20 +601,20 @@ class FieldInstancesForm {
 						var idx = i;
 						jRemove.click( function(_) {
 							fi.removeArrayValue(idx);
-							onFieldChange();
+							onFieldChange(fi);
 						});
 					}
 					if( sortable )
 						JsTools.makeSortable(jArrayInputs, function(ev:sortablejs.Sortable.SortableDragEvent) {
 							fi.sortArrayValues(ev.oldIndex, ev.newIndex);
-							onFieldChange();
+							onFieldChange(fi);
 						});
 				}
 
 				// "Add" button
 				if( fi.def.arrayMaxLength==null || fi.getArrayLength()<fi.def.arrayMaxLength ) {
-					var jAdd = new J('<button class="add"/>');
-					jAdd.text("Add "+fi.def.getShortDescription(false) );
+					var jAdd = new J('<button class="add dark"/>');
+					jAdd.append('<span class="icon add"/>');
 					jAdd.appendTo(jArray);
 					jAdd.click( function(_) {
 						if( fi.def.type==F_Point ) {
@@ -509,7 +622,7 @@ class FieldInstancesForm {
 						}
 						else {
 							fi.addArrayValue();
-							onFieldChange();
+							onFieldChange(fi);
 						}
 						var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
 						switch fi.def.type {

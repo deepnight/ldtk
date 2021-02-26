@@ -7,12 +7,23 @@ class EntityInstance {
 	public var defUid(default,null) : Int;
 	public var x : Int;
 	public var y : Int;
+	public var centerX(get,never) : Int;
+	public var centerY(get,never) : Int;
+	public var customWidth : Null<Int>;
+	public var customHeight: Null<Int>;
+
+	public var width(get,never) : Int;
+		inline function get_width() return customWidth!=null ? customWidth : def.width;
+
+	public var height(get,never) : Int;
+		inline function get_height() return customHeight!=null ? customHeight : def.height;
+
 	public var fieldInstances : Map<Int, data.inst.FieldInstance> = new Map();
 
-	public var left(get,never) : Int; inline function get_left() return Std.int( x - def.width*def.pivotX );
-	public var right(get,never) : Int; inline function get_right() return left + def.width-1;
-	public var top(get,never) : Int; inline function get_top() return Std.int( y - def.height*def.pivotY );
-	public var bottom(get,never) : Int; inline function get_bottom() return top + def.height-1;
+	public var left(get,never) : Int; inline function get_left() return Std.int( x - width*def.pivotX );
+	public var right(get,never) : Int; inline function get_right() return left + width-1;
+	public var top(get,never) : Int; inline function get_top() return Std.int( y - height*def.pivotY );
+	public var bottom(get,never) : Int; inline function get_bottom() return top + height-1;
 
 
 	public function new(p:Project, entityDefUid:Int) {
@@ -24,11 +35,10 @@ class EntityInstance {
 		return 'Instance<${def.identifier}>@$x,$y';
 	}
 
-	public function toJson(li:data.inst.LayerInstance) : ldtk.Json.EntityInstanceJson {
-		var fieldsJson = [];
-		for(fi in fieldInstances)
-			fieldsJson.push( fi.toJson() );
+	inline function get_centerX() return Std.int( x + (0.5-def.pivotX)*width );
+	inline function get_centerY() return Std.int( y + (0.5-def.pivotY)*height );
 
+	public function toJson(li:data.inst.LayerInstance) : ldtk.Json.EntityInstanceJson {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
@@ -47,9 +57,16 @@ class EntityInstance {
 					null;
 			},
 
+			width: width,
+			height: height,
 			defUid: defUid,
 			px: [x,y],
-			fieldInstances: fieldsJson,
+			fieldInstances: {
+				var all = [];
+				for(fi in fieldInstances)
+					all.push( fi.toJson() );
+				all;
+			}
 		}
 	}
 
@@ -63,6 +80,14 @@ class EntityInstance {
 		var ei = new EntityInstance(project, JsonTools.readInt(json.defUid));
 		ei.x = JsonTools.readInt( json.px[0], 0 );
 		ei.y = JsonTools.readInt( json.px[1], 0 );
+
+		ei.customWidth = JsonTools.readNullableInt( json.width );
+		if( ei.customWidth==ei.def.width )
+			ei.customWidth = null;
+
+		ei.customHeight = JsonTools.readNullableInt( json.height );
+		if( ei.customHeight==ei.def.height )
+			ei.customHeight = null;
 
 		for( fieldJson in JsonTools.readArray(json.fieldInstances) ) {
 			var fi = FieldInstance.fromJson(project, fieldJson);
@@ -80,16 +105,38 @@ class EntityInstance {
 		return Std.int( ( y + (def.pivotY==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
-	public function getCellCenterX(ld:data.def.LayerDef) {
-		return ( getCx(ld)+0.5 ) * ld.gridSize - x;
+	public function getPointOriginX(ld:data.def.LayerDef) {
+		return def.resizableX ? centerX : ( getCx(ld)+0.5 ) * ld.gridSize;
 	}
 
-	public function getCellCenterY(ld:data.def.LayerDef) {
-		return ( getCy(ld)+0.5 ) * ld.gridSize - y;
+	public function getPointOriginY(ld:data.def.LayerDef) {
+		return def.resizableY ? centerY : ( getCy(ld)+0.5 ) * ld.gridSize;
 	}
 
-	public function isOver(layerX:Int, layerY:Int, pad=0) {
-		return layerX >= left-pad && layerX <= right+pad && layerY >= top-pad && layerY <= bottom+pad;
+	final overPad = 4;
+	public inline function isOver(layerX:Int, layerY:Int) {
+		if( def.renderMode==Ellipse ) {
+			if( def.hollow ) {
+				final rxIn2 = M.pow(width*0.5-overPad, 2);
+				final rxOut2 = M.pow(width*0.5+overPad, 2);
+				final ryIn2 = M.pow(height*0.5-overPad, 2);
+				final ryOut2 = M.pow(height*0.5+overPad, 2);
+				return
+					M.pow(layerX-centerX, 2) * ryIn2 + M.pow(layerY-centerY, 2) * rxIn2 > rxIn2*ryIn2
+					&& M.pow(layerX-centerX, 2) * ryOut2 + M.pow(layerY-centerY, 2) * rxOut2 <= rxOut2*ryOut2;
+			}
+			else {
+				final rx2 = M.pow(width*0.5, 2);
+				final ry2 = M.pow(height*0.5, 2);
+				return M.pow(layerX-centerX, 2) * ry2 + M.pow(layerY-centerY, 2) * rx2 <= rx2*ry2;
+			}
+		}
+		else if( def.hollow ) {
+			return layerX >= left-overPad && layerX<=right+overPad && layerY>=top-overPad && layerY<=bottom+overPad
+				&& !( layerX >= left+overPad && layerX<=right-overPad && layerY>=top+overPad && layerY<=bottom-overPad );
+		}
+		else
+			return layerX >= left && layerX <= right && layerY>=top && layerY<=bottom;
 	}
 
 	public function getSmartColor(bright:Bool) {
@@ -126,6 +173,18 @@ class EntityInstance {
 			return null;
 	}
 
+
+	public function isUsingTileset(td:data.def.TilesetDef) {
+		if( def.tilesetId==td.uid )
+			return true;
+
+		// TODO check future tile fields
+
+		return false;
+	}
+
+
+
 	public function tidy(p:data.Project, li:LayerInstance) {
 		_project = p;
 
@@ -136,10 +195,17 @@ class EntityInstance {
 				fieldInstances.remove(e.key);
 			}
 
+		// Create missing field instances
+		for(fd in def.fieldDefs)
+			getFieldInstance(fd);
+
 		for(fi in fieldInstances)
-			fi.tidy(_project, li, this);
+			fi.tidy(_project, li);
 	}
 
+
+
+	// ** FIELDS **********************************
 
 	public function hasAnyFieldError() {
 		for(fi in fieldInstances)
@@ -147,9 +213,6 @@ class EntityInstance {
 				return true;
 		return false;
 	}
-
-
-	// ** FIELDS **********************************
 
 	public function getFieldInstance(fieldDef:data.def.FieldDef) {
 		if( !fieldInstances.exists(fieldDef.uid) )
