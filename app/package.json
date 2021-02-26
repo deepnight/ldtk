@@ -11,7 +11,7 @@
 		"doc":				"cd ..  &&  haxe doc.hxml",
 		"pack-prepare":		"npm run doc  &&  npm run compile",
 		"pack-test":		"npm run pack-prepare  &&  electron-builder build --win --dir --publish never",
-		"pack-win":			"npm run pack-prepare  &&  electron-builder build --win --x64 --ia32 --publish never",
+		"pack-win":			"npm run pack-prepare  &&  electron-builder build --win --x64 --ia32",
 		"pack-macos":		"npm run pack-prepare  &&  electron-builder build --mac --publish never",
 		"pack-linux-x86":	"npm run pack-prepare  &&  electron-builder build --linux --publish never",
 		"pack-linux-arm64":	"npm run pack-prepare  &&  electron-builder build --linux --arm64 --publish never",
