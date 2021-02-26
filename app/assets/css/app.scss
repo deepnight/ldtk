@@ -3466,7 +3466,7 @@ canvas#webgl {
 			.buttons {
 				$btSize: 40px;
 				display: grid;
-				grid-template-rows: $btSize 100px;
+				grid-template-rows: $btSize min-content;
 				grid-auto-rows: $btSize;
 				margin: 0;
 
@@ -3491,12 +3491,24 @@ canvas#webgl {
 					grid-template-rows: min-content auto;
 					justify-content: flex-start;
 					align-content: center;
+					overflow: hidden;
+					padding-top: 16px;
+					padding-bottom: 16px;
+
 					text-align: left;
 					white-space: initial;
-					overflow: hidden;
 					font-family: Roboto;
+
+					.icon {
+						grid-row: 2/3;
+						align-self: flex-start;
+						width: 2.2em;
+						height: 2.2em;
+						filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);
+					}
+
 					em {
-						grid-column: 2/3;
+						grid-column: 1/3;
 						font-style: normal;
 						opacity: 0.8;
 					}
@@ -3504,6 +3516,7 @@ canvas#webgl {
 						grid-column: 2/3;
 						font-size: 14pt;
 						font-weight: normal;
+						color: $orange;
 					}
 				}
 			}
