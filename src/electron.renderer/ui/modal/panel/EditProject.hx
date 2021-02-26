@@ -204,15 +204,14 @@ class EditProject extends ui.modal.Panel {
 			jAdvanceds.hide();
 		}
 		jAdvanceds.empty();
-		for( k in Type.getEnumConstructs(ldtk.Json.ProjectFlag) ) {
-			var e = ldtk.Json.ProjectFlag.createByName(k);
+		for( e in options ) {
 			var jLi = new J('<li/>');
 			jLi.appendTo(jAdvanceds);
 
-			var jInput = new J('<input type="checkbox" id="$k"/>');
+			var jInput = new J('<input type="checkbox" id="$e"/>');
 			jInput.appendTo(jLi);
 
-			var jLabel = new J('<label for="$k"/>');
+			var jLabel = new J('<label for="$e"/>');
 			jLabel.appendTo(jLi);
 			switch e {
 				case DiscardPreCsvIntGrid:
