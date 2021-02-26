@@ -945,62 +945,63 @@ ul.log {
 	background-repeat: no-repeat;
 	background-size: contain;
 }
-.icon.add		{ background-image: url("../icons/add.svg"); }
-.icon.email		{ background-image: url("../icons/email.svg"); }
-.icon.entity	{ background-image: url("../icons/entity.png"); }
-.icon.tile		{ background-image: url("../icons/tile.png"); }
-.icon.layer		{ background-image: url("../icons/layer.png"); }
-.icon.intGrid	{ background-image: url("../icons/intGrid.png"); }
-.icon.autoLayer	{ background-image: url("../icons/autoLayer.png") }
-.icon.level		{ background-image: url("../icons/level.svg"); }
-.icon.project	{ background-image: url("../icons/projectSettings.png"); }
-.icon.enum		{ background-image: url("../icons/enum.png"); }
-.icon.close		{ background-image: url("../icons/close.png"); }
-.icon.copy		{ background-image: url("../icons/copy.svg"); }
-.icon.paste		{ background-image: url("../icons/paste.svg"); }
-.icon.exit		{ background-image: url("../icons/exit.svg"); }
-.icon.visible	{ background-image: url("../icons/visible.png"); }
-.icon.hidden	{ background-image: url("../icons/hidden.png"); }
-.icon.active	{ background-image: url("../icons/active.png"); }
-.icon.inactive	{ background-image: url("../icons/inactive.png"); }
-.icon.partial	{ background-image: url("../icons/partial.png"); }
-.icon.help		{ background-image: url("../icons/help.svg"); }
-.icon.manual	{ background-image: url("../icons/manual.svg"); }
-.icon.doc		{ background-image: url("../icons/doc.svg"); }
-.icon.new		{ background-image: url("../icons/new.svg"); }
-.icon.open		{ background-image: url("../icons/open.svg"); }
-.icon.web		{ background-image: url("../icons/web.svg"); }
-.icon.community	{ background-image: url("../icons/community.svg"); }
-.icon.bug		{ background-image: url("../icons/bug.svg"); }
-.icon.tutorial	{ background-image: url("../icons/tutorial.svg"); }
-.icon.gridOn	{ background-image: url("../icons/gridOn.svg"); }
-.icon.gridOff	{ background-image: url("../icons/gridOff.svg"); }
-.icon.stop		{ background-image: url("../icons/stop.svg"); }
-.icon.settings	{ background-image: url("../icons/settings.svg"); }
-.icon.delete	{ background-image: url("../icons/delete.svg"); }
-.icon.edit		{ background-image: url("../icons/edit.svg"); }
-.icon.update	{ background-image: url("../icons/update.svg"); }
-.icon.history	{ background-image: url("../icons/history.svg"); }
-.icon.expand	{ background-image: url("../icons/expand.svg"); }
-.icon.discord	{ background-image: url("../icons/discord.svg"); }
-.icon.json		{ background-image: url("../icons/json.svg"); }
-.icon.ghost		{ background-image: url("../icons/ghost.svg"); }
-.icon.love		{ background-image: url("../icons/love.svg"); }
-.icon.folder	{ background-image: url("../icons/folder.svg"); }
-.icon.locate	{ background-image: url("../icons/locate.svg"); }
-.icon.world		{ background-image: url("../icons/world.svg"); }
-.icon.checker	{ background-image: url("../icons/checker.svg"); }
-.icon.singleLayer		{ background-image: url("../icons/singleLayer.svg"); }
-.icon.emptySpaceOn		{ background-image: url("../icons/emptySpaceOn.png"); }
-.icon.emptySpaceOff		{ background-image: url("../icons/emptySpaceOff.png"); }
+.icon.active			{ background-image: url("../icons/active.png"); }
+.icon.add				{ background-image: url("../icons/add.svg"); }
+.icon.autoLayer			{ background-image: url("../icons/autoLayer.png") }
+.icon.bug				{ background-image: url("../icons/bug.svg"); }
+.icon.checker			{ background-image: url("../icons/checker.svg"); }
+.icon.close				{ background-image: url("../icons/close.png"); }
+.icon.community			{ background-image: url("../icons/community.svg"); }
 .icon.contextMenu		{ background-image: url("../icons/contextMenu.svg"); }
 .icon.contextMenuOpen	{ background-image: url("../icons/contextMenuOpen.svg"); }
+.icon.copy				{ background-image: url("../icons/copy.svg"); }
+.icon.delete			{ background-image: url("../icons/delete.svg"); }
+.icon.discord			{ background-image: url("../icons/discord.svg"); }
+.icon.doc				{ background-image: url("../icons/doc.svg"); }
+.icon.edit				{ background-image: url("../icons/edit.svg"); }
+.icon.email				{ background-image: url("../icons/email.svg"); }
+.icon.emptySpaceOff		{ background-image: url("../icons/emptySpaceOff.png"); }
+.icon.emptySpaceOn		{ background-image: url("../icons/emptySpaceOn.png"); }
+.icon.entity			{ background-image: url("../icons/entity.png"); }
+.icon.enum				{ background-image: url("../icons/enum.png"); }
+.icon.exit				{ background-image: url("../icons/exit.svg"); }
+.icon.expand			{ background-image: url("../icons/expand.svg"); }
+.icon.folder			{ background-image: url("../icons/folder.svg"); }
 .icon.fullscreen		{ background-image: url("../icons/fullscreen.svg"); }
 .icon.fullscreen_exit	{ background-image: url("../icons/fullscreen_exit.svg"); }
+.icon.ghost				{ background-image: url("../icons/ghost.svg"); }
+.icon.gridOff			{ background-image: url("../icons/gridOff.svg"); }
+.icon.gridOn			{ background-image: url("../icons/gridOn.svg"); }
+.icon.help				{ background-image: url("../icons/help.svg"); }
+.icon.hidden			{ background-image: url("../icons/hidden.png"); }
+.icon.history			{ background-image: url("../icons/history.svg"); }
+.icon.inactive			{ background-image: url("../icons/inactive.png"); }
+.icon.intGrid			{ background-image: url("../icons/intGrid.png"); }
+.icon.json				{ background-image: url("../icons/json.svg"); }
+.icon.layer				{ background-image: url("../icons/layer.png"); }
+.icon.level				{ background-image: url("../icons/level.svg"); }
+.icon.locate			{ background-image: url("../icons/locate.svg"); }
+.icon.love				{ background-image: url("../icons/love.svg"); }
+.icon.manual			{ background-image: url("../icons/manual.svg"); }
+.icon.new				{ background-image: url("../icons/new.svg"); }
+.icon.open				{ background-image: url("../icons/open.svg"); }
+.icon.partial			{ background-image: url("../icons/partial.png"); }
+.icon.paste				{ background-image: url("../icons/paste.svg"); }
+.icon.project			{ background-image: url("../icons/projectSettings.png"); }
+.icon.settings			{ background-image: url("../icons/settings.svg"); }
+.icon.singleLayer		{ background-image: url("../icons/singleLayer.svg"); }
+.icon.slide				{ background-image: url("../icons/delete.svg"); }
+.icon.stop				{ background-image: url("../icons/stop.svg"); }
+.icon.tile				{ background-image: url("../icons/tile.png"); }
+.icon.tutorial			{ background-image: url("../icons/tutorial.svg"); }
+.icon.update			{ background-image: url("../icons/update.svg"); }
+.icon.visible			{ background-image: url("../icons/visible.png"); }
+.icon.web				{ background-image: url("../icons/web.svg"); }
+.icon.world				{ background-image: url("../icons/world.svg"); }
 
-.icon.mouseLeft		{ background-image: url("../icons/mouseLeft.png"); image-rendering: pixelated; }
-.icon.mouseRight	{ background-image: url("../icons/mouseRight.png"); image-rendering: pixelated; }
-.icon.mouseWheel	{ background-image: url("../icons/mouseWheel.png"); image-rendering: pixelated; }
+.icon.mouseLeft			{ background-image: url("../icons/mouseLeft.png"); image-rendering: pixelated; }
+.icon.mouseRight		{ background-image: url("../icons/mouseRight.png"); image-rendering: pixelated; }
+.icon.mouseWheel		{ background-image: url("../icons/mouseWheel.png"); image-rendering: pixelated; }
 
 .black		{ filter: brightness(0);}
 .orange		{ filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10); }
@@ -1424,8 +1425,15 @@ input[type=number] {
 	}
 }
 
-input.quickEdit:not(:disabled) {
+input.slider:not(:disabled) {
 	cursor: ew-resize;
+	flex: 0 0 48px;
+	box-sizing: content-box;
+	padding-right: 20px;
+
+	background-image: url("../icons/slide.svg");
+	background-repeat: no-repeat;
+	background-position: right 4px center;
 
 	&:hover {
 		outline: 1px solid $orange;

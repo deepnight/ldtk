@@ -17,20 +17,20 @@ class FloatInput extends form.Input<Float> {
 	}
 
 	public function enableSlider() {
-		jInput.addClass("quickEdit");
+		jInput.addClass("slider");
 		var startX = -1.;
 		var threshold = 3;
 
 		jInput
-			.off(".quickEdit")
-			.on("mousedown.quickEdit", function(ev:js.jquery.Event) {
+			.off(".slider")
+			.on("mousedown.slider", function(ev:js.jquery.Event) {
 				startX = ev.pageX;
 				ev.preventDefault();
 
 				var startVal = getter();
 				App.ME.jDoc
-					.off(".quickEdit")
-					.on("mousemove.quickEdit", function(ev) {
+					.off(".slider")
+					.on("mousemove.slider", function(ev) {
 						var delta = startX<0 ? 0 : ev.pageX-startX;
 						if( M.fabs(delta)>=threshold ) {
 							var v = displayAsPct
@@ -41,8 +41,8 @@ class FloatInput extends form.Input<Float> {
 							jInput.addClass("editing");
 						}
 					})
-					.on("mouseup.quickEdit", function(ev) {
-						App.ME.jDoc.off(".quickEdit");
+					.on("mouseup.slider", function(ev) {
+						App.ME.jDoc.off(".slider");
 						jInput.removeClass("editing");
 
 						var delta = startX<0 ? 0 : ev.pageX-startX;
