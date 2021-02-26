@@ -17,44 +17,6 @@ class FloatInput extends form.Input<Float> {
 		writeValueToInput();
 	}
 
-	// public function enableSlider() {
-	// 	jInput.addClass("slider");
-	// 	var startX = -1.;
-	// 	var threshold = 3;
-
-	// 	jInput
-	// 		.off(".slider")
-	// 		.on("mousedown.slider", function(ev:js.jquery.Event) {
-	// 			startX = ev.pageX;
-	// 			ev.preventDefault();
-
-	// 			var startVal = getter();
-	// 			App.ME.jDoc
-	// 				.off(".slider")
-	// 				.on("mousemove.slider", function(ev) {
-	// 					var delta = startX<0 ? 0 : ev.pageX-startX;
-	// 					if( M.fabs(delta)>=threshold ) {
-	// 						var v = displayAsPct
-	// 							? M.round( startVal + delta*0.8 )
-	// 							: startVal + delta*0.008;
-	// 						jInput.val( applyStep(v) );
-	// 						jInput.val( parseInputValue() ); // Force clamping
-	// 						jInput.addClass("editing");
-	// 					}
-	// 				})
-	// 				.on("mouseup.slider", function(ev) {
-	// 					App.ME.jDoc.off(".slider");
-	// 					jInput.removeClass("editing");
-
-	// 					var delta = startX<0 ? 0 : ev.pageX-startX;
-	// 					if( M.fabs(delta)<=threshold )
-	// 						jInput.focus().select();
-	// 					else
-	// 						onInputChange();
-	// 				});
-	// 		});
-	// }
-
 
 	public function enablePercentageMode(slider=true) {
 		displayAsPct = true;

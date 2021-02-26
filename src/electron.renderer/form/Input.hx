@@ -21,7 +21,7 @@ class Input<T> {
 		if( jElement.length==0 )
 			throw "Empty jQuery object";
 
-		this.rawGetter= rawGetter;
+		this.rawGetter = rawGetter;
 		this.rawSetter = rawSetter;
 		jInput = jElement;
 		jInput.off(".input");
