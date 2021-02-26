@@ -129,12 +129,13 @@ class FieldInstancesForm {
 		jTarget.addClass( fi.def.type.getName() );
 		switch fi.def.type {
 			case F_Int:
-				var input = new J("<input/>");
-				input.attr("id",domId);
-				input.appendTo(jTarget);
-				input.attr("type","text");
+				var jInput = new J("<input/>");
+				jInput.attr("id",domId);
+				jInput.appendTo(jTarget);
+				jInput.attr("type","text");
+
 				var i = new form.input.IntInput(
-					input,
+					jInput,
 					()->fi.isUsingDefault(arrayIdx) ? null : fi.getInt(arrayIdx),
 					(v)->{
 						fi.parseValue(arrayIdx, Std.string(v));
@@ -145,14 +146,7 @@ class FieldInstancesForm {
 				i.setBounds(fi.def.min, fi.def.max);
 				i.enableSlider();
 				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
-				// input.attr("placeholder", fi.def.getDefault()==null ? "(null)" : fi.def.getDefault());
-				// if( !fi.isUsingDefault(arrayIdx) )
-				// 	input.val( Std.string(fi.getInt(arrayIdx)) );
-				// input.change( function(ev) {
-				// 	fi.parseValue( arrayIdx, input.val() );
-				// 	onFieldChange(fi);
-				// });
-				hideInputIfDefault(arrayIdx, input, fi);
+				hideInputIfDefault(arrayIdx, jInput, fi);
 
 			case F_Color:
 				var cHex = fi.getColorAsHexStr(arrayIdx);
