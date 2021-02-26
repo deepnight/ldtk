@@ -193,6 +193,16 @@ class EntityInstanceEditor extends dn.Process {
 		});
 		jHeader.append(jEdit);
 
+		// Extra bits of info
+		var jExtraInfos = new J('<dl class="form extraInfos"/>');
+		jExtraInfos.appendTo(wrapper);
+
+		// Entity size
+		if( ei.def.isResizable() ) {
+			jExtraInfos.append('<dt>Size</dt>');
+			jExtraInfos.append('<dd>${ei.width} x ${ei.height}</dd>');
+		}
+
 		// Custom fields
 		var form = new ui.FieldInstancesForm();
 		wrapper.append(form.jWrapper);

@@ -4034,6 +4034,25 @@ canvas#webgl {
 		color: $bgLighter;
 		font-style: italic;
 	}
+
+	dl.extraInfos {
+		margin-bottom: 16px;
+		padding-top: 8px;
+		padding-bottom: 0;
+		border-bottom: 1px dashed $bgLight;
+
+		&:empty {
+			display: none;
+		}
+
+		dt {
+			padding-top: 0;
+		}
+
+		dd {
+			color: $bgLighter;
+		}
+	}
 }
 
 
