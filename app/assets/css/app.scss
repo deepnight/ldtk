@@ -168,14 +168,14 @@ button {
 	}
 
 	&.active {
-		background-color: white !important;
-		border-color: white !important;
-		outline: 1px solid #ff8;
-		outline-offset: -1px;
+		background-color: $bgLight !important;
+		border-color: $bgLight !important;
+		outline: 1px solid $bgLighter;
+		outline-offset: -2px;
 		box-shadow: none;
-		.icon {
-			filter: brightness(0);
-		}
+		// .icon {
+			// filter: brightness(0);
+		// }
 	}
 
 	&[href] {
@@ -2764,7 +2764,8 @@ canvas#webgl {
 				}
 
 				&.faded button:not(.active) {
-					opacity: 0.66;
+					opacity: 0.5;
+					box-shadow: 0px -6px 0px transparentize($color: black, $amount: 0.6) inset;
 				}
 			}
 		}
