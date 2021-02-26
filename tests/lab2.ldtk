@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.8.0",
-	"nextUid": 32,
+	"nextUid": 35,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -29,6 +29,25 @@
 	"backupLimit": 10,
 	"flags": [],
 	"defs": { "layers": [
+		{
+			"__type": "Entities",
+			"identifier": "Entities",
+			"type": "Entities",
+			"uid": 16,
+			"gridSize": 16,
+			"displayOpacity": 1,
+			"pxOffsetX": 0,
+			"pxOffsetY": 0,
+			"requiredTags": [],
+			"excludedTags": [],
+			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
+			"autoTilesetDefUid": null,
+			"autoRuleGroups": [],
+			"autoSourceLayerDefUid": null,
+			"tilesetDefUid": null,
+			"tilePivotX": 0,
+			"tilePivotY": 0
+		},
 		{
 			"__type": "IntGrid",
 			"identifier": "IntGrid",
@@ -199,25 +218,6 @@
 			"tilesetDefUid": 18,
 			"tilePivotX": 0,
 			"tilePivotY": 0
-		},
-		{
-			"__type": "Entities",
-			"identifier": "Entities",
-			"type": "Entities",
-			"uid": 16,
-			"gridSize": 16,
-			"displayOpacity": 1,
-			"pxOffsetX": 0,
-			"pxOffsetY": 0,
-			"requiredTags": [],
-			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
-			"autoTilesetDefUid": null,
-			"autoRuleGroups": [],
-			"autoSourceLayerDefUid": null,
-			"tilesetDefUid": null,
-			"tilePivotX": 0,
-			"tilePivotY": 0
 		}
 	], "entities": [
 		{
@@ -241,9 +241,69 @@
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
-			"pivotX": 0,
-			"pivotY": 0,
+			"pivotX": 0.5,
+			"pivotY": 0.5,
 			"fieldDefs": [
+				{
+					"identifier": "startGold",
+					"__type": "Int",
+					"uid": 34,
+					"type": "F_Int",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"min": 0,
+					"max": 100,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLangageMode": null
+				},
+				{
+					"identifier": "int",
+					"__type": "Int",
+					"uid": 32,
+					"type": "F_Int",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
+					"min": -10,
+					"max": 10,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": { "id": "V_Int", "params": [0] },
+					"textLangageMode": null
+				},
+				{
+					"identifier": "float",
+					"__type": "Float",
+					"uid": 33,
+					"type": "F_Float",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
+					"min": 0.1,
+					"max": 1,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": { "id": "V_Float", "params": [1] },
+					"textLangageMode": null
+				},
 				{
 					"identifier": "Multilines",
 					"__type": "String",
@@ -357,6 +417,79 @@
 			"externalRelPath": null,
 			"fieldInstances": [],
 			"layerInstances": [
+				{
+					"__identifier": "Entities",
+					"__type": "Entities",
+					"__cWid": 16,
+					"__cHei": 16,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"levelId": 0,
+					"layerDefUid": 16,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"intGrid": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 205437,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "Entity",
+							"__grid": [3,11],
+							"__pivot": [0.5,0.5],
+							"__tile": { "tilesetUid": 18, "srcRect": [40,24,8,8] },
+							"width": 16,
+							"height": 16,
+							"defUid": 17,
+							"px": [56,184],
+							"fieldInstances": [
+								{ "__identifier": "Point", "__value": [], "__type": "Array<Point>", "defUid": 20, "realEditorValues": [] },
+								{
+									"__identifier": "Multilines",
+									"__value": "<script>hello world</script>",
+									"__type": "String",
+									"defUid": 21,
+									"realEditorValues": [null]
+								},
+								{
+									"__identifier": "File_path",
+									"__value": null,
+									"__type": "FilePath",
+									"defUid": 23,
+									"realEditorValues": [null]
+								},
+								{
+									"__identifier": "int",
+									"__value": 0,
+									"__type": "Int",
+									"defUid": 32,
+									"realEditorValues": [null]
+								},
+								{
+									"__identifier": "float",
+									"__value": 1,
+									"__type": "Float",
+									"defUid": 33,
+									"realEditorValues": [null]
+								},
+								{
+									"__identifier": "startGold",
+									"__value": 0,
+									"__type": "Int",
+									"defUid": 34,
+									"realEditorValues": [{ "id": "V_Int", "params": [0] }]
+								}
+							]
+						}
+					]
+				},
 				{
 					"__identifier": "IntGrid",
 					"__type": "IntGrid",
@@ -543,67 +676,6 @@
 					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []
-				},
-				{
-					"__identifier": "Entities",
-					"__type": "Entities",
-					"__cWid": 16,
-					"__cHei": 16,
-					"__gridSize": 16,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"levelId": 0,
-					"layerDefUid": 16,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"intGrid": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 205437,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "Entity",
-							"__grid": [6,11],
-							"__pivot": [0,0],
-							"__tile": { "tilesetUid": 18, "srcRect": [40,24,8,8] },
-							"width": 16,
-							"height": 16,
-							"defUid": 17,
-							"px": [96,176],
-							"fieldInstances": [
-								{
-									"__identifier": "Point",
-									"__value": [ { "cx": 11, "cy": 14 }, { "cx": 4, "cy": 14 }, { "cx": 1, "cy": 12 } ],
-									"__type": "Array<Point>",
-									"defUid": 20,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["11,14"]
-									}, {
-										"id": "V_String",
-										"params": ["4,14"]
-									}, {
-										"id": "V_String",
-										"params": ["1,12"]
-									} ]
-								},
-								{
-									"__identifier": "Multilines",
-									"__value": "<script>hello world</script>",
-									"__type": "String",
-									"defUid": 21,
-									"realEditorValues": [null]
-								},
-								{ "__identifier": "File_path", "__value": null, "__type": "FilePath", "defUid": 23, "realEditorValues": [] }
-							]
-						}
-					]
 				}
 			],
 			"__neighbours": [{ "levelUid": 31, "dir": "n" }]
@@ -625,6 +697,30 @@
 			"externalRelPath": null,
 			"fieldInstances": [],
 			"layerInstances": [
+				{
+					"__identifier": "Entities",
+					"__type": "Entities",
+					"__cWid": 16,
+					"__cHei": 9,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": -8,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"levelId": 31,
+					"layerDefUid": 16,
+					"pxOffsetX": 0,
+					"pxOffsetY": -8,
+					"visible": true,
+					"intGrid": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 4963697,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": []
+				},
 				{
 					"__identifier": "IntGrid",
 					"__type": "IntGrid",
@@ -866,30 +962,6 @@
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 4591937,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": []
-				},
-				{
-					"__identifier": "Entities",
-					"__type": "Entities",
-					"__cWid": 16,
-					"__cHei": 9,
-					"__gridSize": 16,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": -8,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"levelId": 31,
-					"layerDefUid": 16,
-					"pxOffsetX": 0,
-					"pxOffsetY": -8,
-					"visible": true,
-					"intGrid": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 4963697,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []

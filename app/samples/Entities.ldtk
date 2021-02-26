@@ -1154,10 +1154,10 @@
 								},
 								{
 									"__identifier": "radius",
-									"__value": 4,
+									"__value": 4.75,
 									"__type": "Float",
 									"defUid": 45,
-									"realEditorValues": [{ "id": "V_Float", "params": [4] }]
+									"realEditorValues": [{ "id": "V_Float", "params": [4.75] }]
 								}
 							]
 						},
