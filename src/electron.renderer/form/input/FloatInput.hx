@@ -27,10 +27,14 @@ class FloatInput extends form.Input<Float> {
 
 	static var zerosReg = ~/([\-0-9]+\.[0-9]*?)0{3,}/g;
 	override function getSlideDisplayValue(v:Float):String {
-		var str = Std.string( M.round( applyStep(v)/0.05 )*0.05 );
-		if( zerosReg.match(str) )
-			str = zerosReg.matched(1);
-		return str;
+		if( displayAsPct )
+			return Std.string( M.round(v) );
+		else {
+			var str = Std.string( M.round( applyStep(v)/0.05 )*0.05 );
+			if( zerosReg.match(str) )
+				str = zerosReg.matched(1);
+			return str;
+		}
 	}
 
 	function applyStep(v:Float) {
