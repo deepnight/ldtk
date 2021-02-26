@@ -6,8 +6,8 @@ class FloatInput extends form.Input<Float> {
 	var displayAsPct : Bool;
 	var valueStep = -1.;
 
-	public function new(j:js.jquery.JQuery, getter:Void->Float, setter:Float->Void) {
-		super(j, floatGetter.bind(getter), floatSetter.bind(setter));
+	public function new(j:js.jquery.JQuery, rawGetter:Void->Float, rawSetter:Float->Void) {
+		super(j, rawGetter, rawSetter);
 		displayAsPct = false;
 	}
 
@@ -70,12 +70,12 @@ class FloatInput extends form.Input<Float> {
 		}
 	}
 
-	function floatGetter(def:Void->Float) : Float {
-		return applyStep( def() * ( displayAsPct ? 100 : 1 ) );
+	override function getter():Float {
+		return applyStep( rawGetter() * ( displayAsPct ? 100 : 1 ) );
 	}
 
-	function floatSetter(def:Float->Void, v:Float) {
-		def( applyStep(v) / ( displayAsPct ? 100 : 1) );
+	override function setter(v:Float) {
+		rawSetter( applyStep(v) / ( displayAsPct ? 100 : 1) );
 	}
 
 	public function setBounds(min:Float, max:Float) {

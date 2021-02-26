@@ -8,8 +8,8 @@ import haxe.macro.Context;
 class Input<T> {
 	#if !macro
 	public var jInput : js.jquery.JQuery;
-	var getter : Void->T;
-	var setter : T->Void;
+	var rawGetter : Void->T;
+	var rawSetter : T->Void;
 
 	var lastValidValue : T;
 	public var validityCheck : Null<T->Bool>;
@@ -17,12 +17,12 @@ class Input<T> {
 	var linkedEvents : Map<GlobalEvent,Bool> = new Map();
 	public var confirmMessage: Null<LocaleString>;
 
-	private function new(jElement:js.jquery.JQuery, getter, setter) {
+	private function new(jElement:js.jquery.JQuery, rawGetter:Void->T, rawSetter:T->Void) {
 		if( jElement.length==0 )
 			throw "Empty jQuery object";
 
-		this.getter = getter;
-		this.setter = setter;
+		this.rawGetter= rawGetter;
+		this.rawSetter = rawSetter;
 		jInput = jElement;
 		jInput.off(".input");
 		writeValueToInput();
@@ -34,6 +34,13 @@ class Input<T> {
 		jInput.on("change.input", function(_) {
 			onInputChange();
 		});
+	}
+
+	function getter() {
+		return rawGetter();
+	}
+	function setter(v:T) {
+		return rawSetter(v);
 	}
 
 	function onInputChange(bypassConfirm=false) {
