@@ -1,3 +1,5 @@
+import electron.renderer.IpcRenderer;
+
 typedef AppSettings = {
 	var recentProjects : Array<String>;
 	var recentDirs : Array<String>;
@@ -54,19 +56,29 @@ class Settings {
 		v = dn.LocalStorage.readObject("settings", true, defaults);
 	}
 
+	static inline function isRenderer() {
+		return electron.main.App==null;
+	}
 
 	public function getAppZoomFactor() : Float {
-		var disp = electron.main.Screen.getPrimaryDisplay();
-		return v.appUiScale * dn.M.fmax(0, dn.M.fmin( disp.size.width/1350, disp.size.height/1024 ) );
+		var w : Float = isRenderer()
+			? IpcRenderer.sendSync("getScreenWidth")
+			: electron.main.Screen.getPrimaryDisplay().size.width;
+
+		var h : Float = isRenderer()
+			? IpcRenderer.sendSync("getScreenHeight")
+			: electron.main.Screen.getPrimaryDisplay().size.height;
+
+		return v.appUiScale * dn.M.fmax(0, dn.M.fmin( w/1350, h/1024 ) );
 	}
 
 
 	public static function getDir() {
-		var path = electron.main.App!=null
-			?	#if debug	electron.main.App.getAppPath()
-				#else		electron.main.App.getPath("userData") #end
-			:	#if debug	Std.string( electron.renderer.IpcRenderer.sendSync("getAppResourceDir") );
-				#else		Std.string( electron.renderer.IpcRenderer.sendSync("getUserDataDir") ); #end
+		var path = isRenderer()
+			?	#if debug	Std.string( IpcRenderer.sendSync("getAppResourceDir") )
+				#else		Std.string( IpcRenderer.sendSync("getUserDataDir") ) #end
+			:	#if debug	electron.main.App.getAppPath();
+				#else		electron.main.App.getPath("userData"); #end
 		return dn.FilePath.fromDir( path+"/settings" ).useSlashes().directory;
 	}
 

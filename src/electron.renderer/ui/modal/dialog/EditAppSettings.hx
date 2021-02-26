@@ -77,7 +77,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		jScale.change( (_)->{
 			settings.v.appUiScale = Std.parseFloat( jScale.val() );
 			onSettingChanged();
-			electron.renderer.WebFrame.setZoomFactor(settings.v.appUiScale);
+			electron.renderer.WebFrame.setZoomFactor( settings.getAppZoomFactor() );
 		});
 
 		// Font scaling

@@ -63,6 +63,14 @@ class ElectronMain {
 
 		// *** sendSync/on *****************************************************
 
+		IpcMain.on("getScreenWidth", function(event) {
+			event.returnValue = electron.main.Screen.getPrimaryDisplay().size.width;
+		});
+
+		IpcMain.on("getScreenHeight", function(event) {
+			event.returnValue = electron.main.Screen.getPrimaryDisplay().size.height;
+		});
+
 		IpcMain.on("getCwd", function(event) {
 			event.returnValue = process.cwd();
 		});
@@ -118,7 +126,7 @@ class ElectronMain {
 		});
 		mainWindow.once("ready-to-show", ev->{
 			var disp = electron.main.Screen.getPrimaryDisplay();
-			mainWindow.webContents.zoomFactor = settings.getAppZoomFactor();
+			mainWindow.webContents.setZoomFactor( settings.getAppZoomFactor() );
 		});
 
 		// Window menu
