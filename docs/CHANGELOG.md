@@ -1,3 +1,14 @@
+# 0.8.1
+
+  - **Fullscreen mode**: just press `F11` to toggle this mode.
+  - **New entity tile display modes**: entity tile can now be displayed in more ways: **Repeat** (ie. repeat tile to cover entity bounds), **Cover** (ie. covers the full entity bounds), **Fit Inside** (stretched to fit inside entity bounds).
+  - Removed deprecated "Crop" from Entity tile render modes
+  - Added an option in LDtk settings to start the app in fullscreen mode
+  - Fixed cursor position while zooming
+  - Fixed "close" button in Rules panel
+  - Fixed scrollbar in Help panel
+  - Updated README
+
 # 0.8.0 - Level custom fields, resizable entities and more!
 
 **Note for developers:** *IntGrid layers* JSON format changed in this update. For now, retro-compatibility is maintained with old importers, but this will be dropped after update 0.9.0, breaking outdated importers. Please read all the details here: https://github.com/deepnight/ldtk/issues/358

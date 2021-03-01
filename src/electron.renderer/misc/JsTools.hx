@@ -166,10 +166,20 @@ class JsTools {
 							scaleX = scale * ed.width / td.tileGridSize;
 							scaleY = scale * ed.height / td.tileGridSize;
 
-						case Crop:
-							scaleX = scaleY = scale;
-							x = Std.int(ed.width*ed.pivotX*scale - td.tileGridSize*ed.pivotX*scale);
-							y = Std.int(ed.height*ed.pivotY*scale - td.tileGridSize*ed.pivotY*scale);
+						case FitInside:
+							var s = M.fmin(scale * ed.width / td.tileGridSize, scale * ed.height / td.tileGridSize);
+							scaleX = s;
+							scaleY = s;
+
+						case Cover, Repeat:
+							var s = M.fmin(scale * ed.width / td.tileGridSize, scale * ed.height / td.tileGridSize);
+							scaleX = s;
+							scaleY = s;
+
+						// case Crop:
+						// 	scaleX = scaleY = scale;
+						// 	x = Std.int(ed.width*ed.pivotX*scale - td.tileGridSize*ed.pivotX*scale);
+						// 	y = Std.int(ed.height*ed.pivotY*scale - td.tileGridSize*ed.pivotY*scale);
 					}
 					td.drawTileToCanvas( jCanvas, ed.tileId, x, y, scaleX, scaleY );
 				}
@@ -293,6 +303,7 @@ class JsTools {
 
 	public static function parseKeys(rawKeys:String) : Array<js.jquery.JQuery> {
 		var jKeys = [];
+		var funcKeyReg = ~/^f[0-9]{1,2}$/gi;
 
 		for(k in rawKeys.split(" ")) {
 			if( k==null || k.length==0 )
@@ -314,6 +325,8 @@ class JsTools {
 					switch k.toLowerCase() {
 						case "shift", "alt" : jKey.addClass( k.toLowerCase() );
 						case "ctrl" : jKey.addClass( App.isMac() ? 'meta' : k.toLowerCase() );
+						case "delete", "escape": jKey.addClass("special");
+						case _ if(funcKeyReg.match(k)): jKey.addClass("special");
 						case _:
 					}
 					jKey;

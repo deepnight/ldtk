@@ -1,4 +1,4 @@
-# LDtk Json structure (version 0.8.0)
+# LDtk Json structure (version 0.8.1)
 
 ## Table of contents
    - [LDtk Json root](#ldtk-ProjectJson)
@@ -230,7 +230,7 @@ Value | Type | Description
 `resizableY`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | If TRUE, the entity instances will be resizable vertically
 `showName`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Bool | Display entity name in editor
 `tags`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Array&nbsp;of&nbsp;String | An array of strings that classifies this entity
-`tileRenderMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Stretch`, `Crop`
+`tileRenderMode`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.1-green.svg)  | Enum | Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`
 
 <a id="ldtk-FieldDefJson" name="ldtk-FieldDefJson"></a>
 ## 3.2.1. Field definition  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg) 

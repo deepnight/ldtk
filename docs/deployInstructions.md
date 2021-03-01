@@ -6,10 +6,11 @@ This document is for my personal use only, so I don't forget anything ;)
 - [ ] Verify planned deprecations
 - [ ] Fill changelog
 - [ ] Update JSON changelog if necessary
-- [ ] Run API tests
-- [ ] Build API samples
-- [ ] Check JSON doc
-- [ ] Rebuild LDtk demo maps
+- [ ] Rebuild all LDtk sample maps
+- [ ] Update Haxe API sample maps
+- [ ] Check JSON doc (changed/added flags etc.)
+- [ ] Run Haxe API tests
+- [ ] Build Haxe API samples
 
 ## Git
 - [ ] Merge LDtk repo to `master`

@@ -46,7 +46,7 @@ class EntityDef {
 		showName = true;
 		limitBehavior = MoveLastOne;
 		limitScope = PerLevel;
-		tileRenderMode = Stretch;
+		tileRenderMode = FitInside;
 		identifier = "Entity"+uid;
 		setPivot(0.5,1);
 		resizableX = resizableY = false;
@@ -107,7 +107,9 @@ class EntityDef {
 		o.showName = JsonTools.readBool(json.showName, true);
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
 		o.tileId = JsonTools.readNullableInt(json.tileId);
-		o.tileRenderMode = JsonTools.readEnum(ldtk.Json.EntityTileRenderMode, json.tileRenderMode, false, Stretch);
+
+		if( (cast json.tileRenderMode)=="Crop" ) json.tileRenderMode = cast "Stretch";
+		o.tileRenderMode = JsonTools.readEnum(ldtk.Json.EntityTileRenderMode, json.tileRenderMode, false, FitInside);
 
 		o.maxCount = JsonTools.readInt( json.maxCount, 0 );
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );

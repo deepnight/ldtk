@@ -107,29 +107,50 @@ class EntityRender extends dn.Process {
 
 				var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
 				var t = td.getTile(tileId);
-				var bmp = new h2d.Bitmap(t, wrapper);
+				var alpha = ed.fillOpacity * (ed.hollow ? 0.15 : 1);
 				switch mode {
 					case Stretch:
+						var bmp = new h2d.Bitmap(t, wrapper);
+						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.alpha = alpha;
+
 						bmp.scaleX = w / bmp.tile.width;
 						bmp.scaleY = h / bmp.tile.height;
 
-					case Crop:
-						if( bmp.tile.width>w || bmp.tile.height>h )
-							bmp.tile = bmp.tile.sub(
-								0, 0,
-								M.fmin( bmp.tile.width, w ),
-								M.fmin( bmp.tile.height, h )
-							);
+					case FitInside:
+						var bmp = new h2d.Bitmap(t, wrapper);
+						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.alpha = alpha;
+
+						var s = M.fmin(w / bmp.tile.width, h / bmp.tile.height);
+						bmp.setScale(s);
+
+					case Repeat:
+						var tt = new dn.heaps.TiledTexture(t, w,h, wrapper);
+						tt.alpha = alpha;
+						tt.x = -w*ed.pivotX;
+						tt.y = -h*ed.pivotY;
+
+					case Cover:
+						var bmp = new h2d.Bitmap(t, wrapper);
+						bmp.alpha = alpha;
+
+						var s = M.fmax(w / bmp.tile.width, h / bmp.tile.height);
+						bmp.setScale(s);
+						bmp.tile = bmp.tile.sub(
+							0, 0,
+							M.fmin( bmp.tile.width*s, w ) / s,
+							M.fmin( bmp.tile.height*s, h ) / s
+						);
+						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 				}
-				bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
-				bmp.alpha = ed.fillOpacity;
 			}
 		}
 
 		// Base render
 		var custTile = ei==null ? null : ei.getSmartTile();
 		if( custTile!=null )
-			renderTile(custTile.tilesetUid, custTile.tileId, Stretch);
+			renderTile(custTile.tilesetUid, custTile.tileId, ed.tileRenderMode);
 		else
 			switch ed.renderMode {
 			case Rectangle, Ellipse:

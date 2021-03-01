@@ -4,7 +4,6 @@ class Panel extends ui.Modal {
 	var jPanelMask: js.jquery.JQuery; // mask over main panel
 	var jLinkedButton : Null<js.jquery.JQuery>;
 	var jCloseButton : js.jquery.JQuery;
-	var closeBtInvalidated = true;
 
 	public function new() {
 		super();
@@ -18,9 +17,7 @@ class Panel extends ui.Modal {
 		jModalAndMask.removeClass("centered");
 
 		jCloseButton = new J('<button class="close gray"> <div class="icon close"/> </button>');
-		jModalAndMask.append(jCloseButton);
 		jCloseButton.click( ev->if( !isClosing() ) close() );
-		enableCloseButton();
 
 		jPanelMask = new J("<div/>");
 		jPanelMask.addClass("panelMask");
@@ -33,6 +30,11 @@ class Panel extends ui.Modal {
 		dn.Process.resizeAll();
 	}
 
+	override function loadTemplate(tplName:String, ?className:String, ?vars:Dynamic, useCache = true) {
+		super.loadTemplate(tplName, className, vars, useCache);
+		insertCloseButton();
+	}
+
 	override function onResize() {
 		super.onResize();
 		var jBar = editor.jMainPanel.find("#mainBar");
@@ -41,33 +43,11 @@ class Panel extends ui.Modal {
 			top: y+"px",
 			height: 'calc( 100vh - ${y}px )',
 		});
-
-		closeBtInvalidated = true;
 	}
 
-	var _lastWrapperWid : Float = 0;
-	function updateCloseButton() {
-		closeBtInvalidated = false;
-		if( isClosing() ) {
-			if( jCloseButton.is(":visible") )
-				jCloseButton.hide();
-			return;
-		}
-
-		var w = jWrapper.outerWidth();
-		if( w!=_lastWrapperWid ) {
-			_lastWrapperWid = w;
-			jCloseButton.css({ left:(w-jCloseButton.outerWidth()-8)+"px" });
-		}
-	}
-
-	function hideCloseButton() {
-		jCloseButton.hide();
-	}
-
-	function enableCloseButton() {
-		jCloseButton.show();
-		closeBtInvalidated = true;
+	function insertCloseButton() {
+		var jTitle = jModalAndMask.find("h2").first();
+		jCloseButton.show().appendTo(jTitle);
 	}
 
 	function linkToButton(selector:String) {
@@ -104,13 +84,13 @@ class Panel extends ui.Modal {
 		if( jLinkedButton!=null )
 			jLinkedButton.removeClass("active");
 
+		if( jCloseButton.is(":visible") )
+			jCloseButton.hide();
+
 		jPanelMask.remove();
-		updateCloseButton();
 	}
 
 	override function postUpdate() {
 		super.postUpdate();
-		if( closeBtInvalidated )
-			updateCloseButton();
 	}
 }
