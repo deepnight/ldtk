@@ -1,7 +1,9 @@
 # 0.8.1
 
+  - **Fullscreen mode**: just press `F11`
   - Entity tile can now be displayed in more ways: **Repeat** (ie. repeat tile to cover entity bounds), **Cover** (ie. covers the full entity bounds), **Fit Inside** (stretched to fit inside entity bounds).
   - Removed deprecated "Crop" from Entity tile render modes
+  - Added an option in LDtk settings to start the app in fullscreen mode
   - Fixed cursor position while zooming
   - Fixed "close" button in Rules panel
   - Updated README
