@@ -18,7 +18,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		loadTemplate("editAllAutoLayerRules");
 		updatePanel();
-		enableCloseButton();
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -196,7 +195,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 	function updatePanel() {
-		jContent.find("*").off();
+		jContent.find("header, ul.ruleGroups").off();
 		ui.Tip.clear();
 		editor.levelRender.clearTemp();
 
