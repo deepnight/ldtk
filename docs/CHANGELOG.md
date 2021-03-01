@@ -1,6 +1,8 @@
 # 0.8.1
 
-- Updated README
+  - Fixed cursor position while zooming
+  - Fixed "close" button in Rules panel
+  - Updated README
 
 # 0.8.0 - Level custom fields, resizable entities and more!
 
