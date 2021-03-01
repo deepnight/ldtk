@@ -1,5 +1,7 @@
 # 0.8.1
 
+  - Entity tile can now be displayed in more ways: **Repeat** (ie. repeat tile to cover entity bounds), **Cover** (ie. covers the full entity bounds), **Fit Inside** (stretched to fit inside entity bounds).
+  - Removed deprecated "Crop" from Entity tile render modes
   - Fixed cursor position while zooming
   - Fixed "close" button in Rules panel
   - Updated README
