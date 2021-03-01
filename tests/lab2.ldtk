@@ -5,11 +5,11 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.8.0",
+		"appVersion": "0.8.1",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.8.0",
-	"nextUid": 35,
+	"jsonVersion": "0.8.1",
+	"nextUid": 37,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -371,6 +371,56 @@
 					"textLangageMode": null
 				}
 			]
+		},
+		{
+			"identifier": "RectRegion",
+			"uid": 35,
+			"tags": ["region"],
+			"width": 16,
+			"height": 16,
+			"resizableX": true,
+			"resizableY": true,
+			"keepAspectRatio": false,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#94D9B3",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 18,
+			"tileId": 25,
+			"tileRenderMode": "Cover",
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": []
+		},
+		{
+			"identifier": "Ladder",
+			"uid": 36,
+			"tags": [],
+			"width": 8,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": true,
+			"keepAspectRatio": false,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#9B7723",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 18,
+			"tileId": 156,
+			"tileRenderMode": "Crop",
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0.5,
+			"pivotY": 1,
+			"fieldDefs": []
 		}
 	], "tilesets": [
 		{
@@ -487,6 +537,28 @@
 									"realEditorValues": [{ "id": "V_Int", "params": [0] }]
 								}
 							]
+						},
+						{
+							"__identifier": "RectRegion",
+							"__grid": [7,9],
+							"__pivot": [0,0],
+							"__tile": { "tilesetUid": 18, "srcRect": [0,8,8,8] },
+							"width": 96,
+							"height": 48,
+							"defUid": 35,
+							"px": [112,144],
+							"fieldInstances": []
+						},
+						{
+							"__identifier": "Ladder",
+							"__grid": [2,7],
+							"__pivot": [0.5,1],
+							"__tile": { "tilesetUid": 18, "srcRect": [48,48,8,8] },
+							"width": 8,
+							"height": 96,
+							"defUid": 36,
+							"px": [40,128],
+							"fieldInstances": []
 						}
 					]
 				},
