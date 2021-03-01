@@ -16,6 +16,7 @@ This document is for my personal use only, so I don't forget anything ;)
 - [ ] Merge LDtk repo to `master`
 - [ ] Merge LDtk Haxe API repo to `master`
 - [ ] Update `Haxelib.json`
+- [ ] Add "x.x.x-rcX" tag to Haxe API repo
 
 ## Deploy
 - [ ] Run `npm run publish-github`
