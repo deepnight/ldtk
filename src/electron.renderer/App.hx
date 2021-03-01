@@ -121,7 +121,7 @@ class App extends dn.Process {
 		}, 0.2);
 
 		if( settings.v.startFullScreen )
-			IpcRenderer.invoke("setFullScreen",true);
+			setFullScreen(true);
 
 		IpcRenderer.invoke("appReady");
 	}
@@ -312,12 +312,15 @@ class App extends dn.Process {
 				var isFullScreen: Bool = IpcRenderer.sendSync("isFullScreen")==true;
 				if( !isFullScreen )
 					N.success("Press F11 to leave fullscreen");
-				IpcRenderer.invoke("setFullScreen", !isFullScreen);
+				setFullScreen(!isFullScreen);
 
 			case _:
 		}
 	}
 
+	public inline function setFullScreen(v:Bool) {
+		IpcRenderer.invoke("setFullScreen", v);
+	}
 
 	public function addMask() {
 		jBody.find("#appMask").remove();

@@ -52,10 +52,10 @@ class EditAppSettings extends ui.modal.Dialog {
 			onSettingChanged();
 		}
 
-		// CPU throttling
+		// Fullscreen
 		var i = Input.linkToHtmlInput(settings.v.startFullScreen, jForm.find("#startFullScreen"));
-		i.onChange = ()->{
-			// hxd.System.fpsLimit = -1;
+		i.onValueChange = (v)->{
+			App.ME.setFullScreen(v);
 			onSettingChanged();
 		}
 
