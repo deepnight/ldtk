@@ -182,7 +182,7 @@ class Camera extends dn.Process {
 		targetZoom = null;
 	}
 
-	inline function isAutoZooming() return targetZoom!=null;
+	public inline function isAnimated() return targetWorldX!=null || targetZoom!=null;
 
 	public inline function cancelAllAutoMovements() {
 		cancelAutoScrolling();

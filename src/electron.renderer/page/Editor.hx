@@ -906,6 +906,8 @@ class Editor extends Page {
 		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta * 0.13 * speed );
 		camera.cancelAllAutoMovements();
 
+		cursor.onMouseMove( getMouse() );
+
 		// Auto world mode on zoom out
 		if( settings.v.autoWorldModeSwitch!=Never && !worldMode && e.wheelDelta>0 ) {
 			var wr = camera.getLevelWidthRatio(curLevel);
@@ -1024,6 +1026,7 @@ class Editor extends Page {
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
 		if( worldMode ) {
+			cursor.set(None);
 			N.quick(L.t._("World view"), new J('<span class="icon world"/>'));
 			ui.Modal.closeAll();
 			new ui.modal.panel.WorldPanel();
@@ -1672,6 +1675,9 @@ class Editor extends Page {
 	var wasLocked : Bool = null;
 	override function update() {
 		super.update();
+
+		if( camera.isAnimated() )
+			cursor.onMouseMove( getMouse() );
 
 		// Smart FPS limiting
 		if( App.ME.focused && settings.v.smartCpuThrottling ) {
