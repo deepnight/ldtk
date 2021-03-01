@@ -303,6 +303,7 @@ class JsTools {
 
 	public static function parseKeys(rawKeys:String) : Array<js.jquery.JQuery> {
 		var jKeys = [];
+		var funcKeyReg = ~/^f[0-9]{1,2}$/gi;
 
 		for(k in rawKeys.split(" ")) {
 			if( k==null || k.length==0 )
@@ -324,6 +325,8 @@ class JsTools {
 					switch k.toLowerCase() {
 						case "shift", "alt" : jKey.addClass( k.toLowerCase() );
 						case "ctrl" : jKey.addClass( App.isMac() ? 'meta' : k.toLowerCase() );
+						case "delete", "escape": jKey.addClass("special");
+						case _ if(funcKeyReg.match(k)): jKey.addClass("special");
 						case _:
 					}
 					jKey;

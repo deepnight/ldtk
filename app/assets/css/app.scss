@@ -567,6 +567,12 @@ div.key {
 		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
 		border-bottom-color: transparentize( darken( $keyColor, $darken ), $opacity );
 	}
+	&.special {
+		$keyColor : #B577FD;
+		background-color: transparentize( $keyColor, $opacity );
+		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
+		border-bottom-color: transparentize( darken( $keyColor, $darken ), $opacity );
+	}
 	&.meta {
 		color: transparent;
 		background-image: url("../icons/meta.png");
@@ -2328,10 +2334,10 @@ textarea {
 .window.panel.helpPanel {
 	.wrapper {
 		.content {
-			width: 900px;
+			width: auto;
 			display: grid;
 			grid-template-rows: min-content auto;
-			grid-template-columns: 50% 50%;
+			grid-template-columns: 420px 420px;
 			gap: 16px;
 
 			h2:first-of-type {
