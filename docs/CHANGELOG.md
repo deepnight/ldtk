@@ -1,3 +1,7 @@
+# 0.8.1
+
+- Updated README
+
 # 0.8.0 - Level custom fields, resizable entities and more!
 
 **Note for developers:** *IntGrid layers* JSON format changed in this update. For now, retro-compatibility is maintained with old importers, but this will be dropped after update 0.9.0, breaking outdated importers. Please read all the details here: https://github.com/deepnight/ldtk/issues/358
