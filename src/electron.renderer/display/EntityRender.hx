@@ -133,7 +133,6 @@ class EntityRender extends dn.Process {
 
 					case Cover:
 						var bmp = new h2d.Bitmap(t, wrapper);
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.alpha = alpha;
 
 						var s = M.fmax(w / bmp.tile.width, h / bmp.tile.height);
@@ -143,6 +142,7 @@ class EntityRender extends dn.Process {
 							M.fmin( bmp.tile.width*s, w ) / s,
 							M.fmin( bmp.tile.height*s, h ) / s
 						);
+						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 				}
 			}
 		}
