@@ -10,7 +10,7 @@ Links: [Official website](https://ldtk.io/) | [Haxe API (on GitHub)](https://git
 
 # Getting LDtk latest version
 
-Visit [LDtk.io](https://ldtk.io) to get latest version. 
+Visit [LDtk.io](https://ldtk.io) to get latest version.
 
 # Building from source
 
@@ -23,7 +23,7 @@ Visit [LDtk.io](https://ldtk.io) to get latest version.
 
 Install required haxe libs:
 ```
-haxelib git heaps https://github.com/HeapsIO/heaps.git
+haxelib git heaps https://github.com/deepnight/heaps.git
 
 haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
 
@@ -63,7 +63,7 @@ This should create `app/assets/js/renderer.js`.
 
 ## Compiling another branch
 
-If you want to try a future version of LDtk, you can checkout branches named `dev-x.y.z` where x.y.z is version number. 
+If you want to try a future version of LDtk, you can checkout branches named `dev-x.y.z` where x.y.z is version number.
 
 **IMPORTANT**:
  - these *dev* branches might be unstables, or even broken. Therefore, it's not recommended to use, unless you plan to add or fix something on LDtk.
