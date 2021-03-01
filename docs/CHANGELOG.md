@@ -6,6 +6,7 @@
   - Added an option in LDtk settings to start the app in fullscreen mode
   - Fixed cursor position while zooming
   - Fixed "close" button in Rules panel
+  - Fixed scrollbar in Help panel
   - Updated README
 
 # 0.8.0 - Level custom fields, resizable entities and more!
