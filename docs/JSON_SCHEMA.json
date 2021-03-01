@@ -800,10 +800,12 @@
 					]
 				},
 				"tileRenderMode": {
-					"description": "Possible values: `Stretch`, `Crop`",
+					"description": "Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`",
 					"enum": [
-						"Stretch",
-						"Crop"
+						"Cover",
+						"FitInside",
+						"Repeat",
+						"Stretch"
 					]
 				},
 				"limitBehavior": {
