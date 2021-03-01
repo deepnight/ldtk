@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.8.0",
+		"appVersion": "0.8.1",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.8.0",
+	"jsonVersion": "0.8.1",
 	"nextUid": 45,
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 256,
