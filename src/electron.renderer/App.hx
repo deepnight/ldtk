@@ -120,6 +120,9 @@ class App extends dn.Process {
 				loadPage( ()->new page.Home() );
 		}, 0.2);
 
+		if( settings.v.startFullScreen )
+			IpcRenderer.invoke("setFullScreen",true);
+
 		IpcRenderer.invoke("appReady");
 	}
 
@@ -303,6 +306,13 @@ class App extends dn.Process {
 			// Open debug menu
 			case K.D if( isCtrlDown() && isShiftDown() && !hasInputFocus() ):
 				new ui.modal.DebugMenu();
+
+			// Fullscreen
+			case K.F11 if( !hasAnyToggleKeyDown() && !hasInputFocus() ):
+				var isFullScreen: Bool = IpcRenderer.sendSync("isFullScreen")==true;
+				if( !isFullScreen )
+					N.success("Press F11 to leave fullscreen");
+				IpcRenderer.invoke("setFullScreen", !isFullScreen);
 
 			case _:
 		}

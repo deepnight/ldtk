@@ -52,8 +52,8 @@ class ElectronMain {
 			mainWindow.reload();
 		});
 
-		IpcMain.handle("setFullScreen", function(event,args) {
-			mainWindow.setFullScreen(args);
+		IpcMain.handle("setFullScreen", function(event,flag) {
+			mainWindow.setFullScreen(flag);
 		});
 
 		IpcMain.handle("setWinTitle", function(event,args) {
@@ -89,6 +89,9 @@ class ElectronMain {
 
 		IpcMain.on("getUserDataDir", function(event) {
 			event.returnValue = App.getPath("userData");
+		});
+		IpcMain.on("isFullScreen", function(event) {
+			event.returnValue = mainWindow.isFullScreen();
 		});
 	}
 

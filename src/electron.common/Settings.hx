@@ -1,20 +1,24 @@
 import electron.renderer.IpcRenderer;
 
 typedef AppSettings = {
-	var recentProjects : Array<String>;
-	var recentDirs : Array<String>;
+	var lastKnownVersion: Null<String>;
+
 	var compactMode : Bool;
 	var grid : Bool;
 	var singleLayerMode : Bool;
 	var emptySpaceSelection : Bool;
 	var tileStacking : Bool;
-	var lastKnownVersion: Null<String>;
 	var useBestGPU : Bool;
+	var startFullScreen: Bool;
+	var smartCpuThrottling : Bool;
+
 	var appUiScale : Float;
 	var editorUiScale : Float;
-	var autoWorldModeSwitch : AutoWorldModeSwitch;
-	var smartCpuThrottling : Bool;
 	var mouseWheelSpeed : Float;
+	var autoWorldModeSwitch : AutoWorldModeSwitch;
+
+	var recentProjects : Array<String>;
+	var recentDirs : Array<String>;
 }
 
 
@@ -50,6 +54,7 @@ class Settings {
 			editorUiScale: 1.0,
 			smartCpuThrottling: true,
 			mouseWheelSpeed: 1.0,
+			startFullScreen: false,
 		}
 
 		// Load

@@ -52,6 +52,13 @@ class EditAppSettings extends ui.modal.Dialog {
 			onSettingChanged();
 		}
 
+		// CPU throttling
+		var i = Input.linkToHtmlInput(settings.v.startFullScreen, jForm.find("#startFullScreen"));
+		i.onChange = ()->{
+			// hxd.System.fpsLimit = -1;
+			onSettingChanged();
+		}
+
 		// Mouse wheel speed
 		var i = Input.linkToHtmlInput(settings.v.mouseWheelSpeed, jForm.find("#mouseWheelSpeed"));
 		i.setBounds(0.25, 3);
