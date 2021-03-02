@@ -336,6 +336,7 @@ class FieldDefsForm {
 						: L.t._('Show "::name::=..."', { name:curField.identifier });
 					case PointStar: curField.isArray ? L.t._("Show star of points") : L.t._("Show point");
 					case PointPath: L.t._("Show path of points");
+					case PointPathLoop: L.t._("Show path of points (looping)");
 					case RadiusPx: L.t._("As a radius (pixels)");
 					case RadiusGrid: L.t._("As a radius (grid-based)");
 					case EntityTile: L.t._("Replace entity tile");
@@ -354,7 +355,7 @@ class FieldDefsForm {
 					case PointStar:
 						curField.type==F_Point && fieldParent==FP_Entity;
 
-					case PointPath:
+					case PointPath, PointPathLoop:
 						curField.type==F_Point && curField.isArray && fieldParent==FP_Entity;
 
 					case RadiusPx, RadiusGrid:
@@ -384,7 +385,7 @@ class FieldDefsForm {
 			case ValueOnly, NameAndValue:
 				i.setEnabled(true);
 
-			case Hidden, PointStar, PointPath, RadiusPx, RadiusGrid, EntityTile:
+			case Hidden, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile:
 				i.setEnabled(false);
 		}
 		i.onChange = onFieldChange;

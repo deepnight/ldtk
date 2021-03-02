@@ -149,11 +149,13 @@ class FieldInstanceRender {
 
 			case EntityTile:
 
-			case PointStar, PointPath:
+			case PointStar, PointPath, PointPathLoop:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
 						var fx = ei.getPointOriginX(ld) - ei.x;
 						var fy = ei.getPointOriginY(ld) - ei.y;
+						var startX = fx;
+						var startY = fy;
 						g.lineStyle(1, baseColor, 0.66);
 
 						for(i in 0...fi.getArrayLength()) {
@@ -166,11 +168,15 @@ class FieldInstanceRender {
 							renderDashedLine(g, fx,fy, tx,ty, 3);
 							g.drawRect( tx-2, ty-2, 4, 4 );
 
-							if( fd.editorDisplayMode==PointPath ) {
+							if( fd.editorDisplayMode==PointPath || fd.editorDisplayMode==PointPathLoop ) {
 								fx = tx;
 								fy = ty;
 							}
 						}
+
+						// Loop
+						if( fd.editorDisplayMode==PointPathLoop && fi.getArrayLength()>1 )
+							renderDashedLine(g, fx,fy, startX, startY, 3);
 
 					case LevelCtx(_):
 				}

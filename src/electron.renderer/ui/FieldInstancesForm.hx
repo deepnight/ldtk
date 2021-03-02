@@ -469,7 +469,7 @@ class FieldInstancesForm {
 		}
 
 		// Connect to last of path
-		if( fi.def.isArray && fi.def.editorDisplayMode==PointPath ) {
+		if( fi.def.isArray && ( fi.def.editorDisplayMode==PointPath || fi.def.editorDisplayMode==PointPathLoop ) ) {
 			var pt = fi.getPointGrid( editIdx-1 );
 			if( pt!=null )
 				t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:getInstanceColor() }
@@ -485,7 +485,7 @@ class FieldInstancesForm {
 				editIdx = fi.getArrayLength(); // continue after
 
 				// Connect to path previous
-				if( fi.def.editorDisplayMode==PointPath ) {
+				if( fi.def.editorDisplayMode==PointPath || fi.def.editorDisplayMode==PointPathLoop ) {
 					var pt = fi.getPointGrid( editIdx-1 );
 					if( pt!=null )
 						t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:getInstanceColor() }
