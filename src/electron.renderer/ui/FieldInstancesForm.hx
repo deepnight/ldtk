@@ -462,6 +462,8 @@ class FieldInstancesForm {
 
 		t.pickOrigin = { cx:getInstanceCx(), cy:getInstanceCy(), color:getInstanceColor() }
 		t.canPick = (m:Coords)->{
+			if( !fi.def.isArray )
+				return true;
 			for(i in 0...fi.getArrayLength())
 				if( fi.getPointGrid(i).cx==m.cx && fi.getPointGrid(i).cy==m.cy )
 					return false;
