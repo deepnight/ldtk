@@ -1,6 +1,6 @@
 {
 	"name": "ldtk",
-	"version": "0.8.1",
+	"version": "0.8.2",
 	"main": "assets/main.js",
 	"productName": "LDtk",
 	"author": "Sebastien Benard",
