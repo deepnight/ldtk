@@ -49,6 +49,10 @@ class LayerRender {
 
 			if( li.def.isAutoLayer() && renderAutoLayers && td!=null && td.isAtlasLoaded() ) {
 				// Auto-layer tiles
+				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
+				pixelGrid.x = li.pxTotalOffsetX;
+				pixelGrid.y = li.pxTotalOffsetY;
+
 				var tg = new h2d.TileGroup( td.getAtlasTile(), root);
 
 				if( li.autoTilesCache==null )
@@ -56,8 +60,17 @@ class LayerRender {
 
 				li.def.iterateActiveRulesInDisplayOrder( (r)-> {
 					if( li.autoTilesCache.exists( r.uid ) ) {
+						var grid = li.def.gridSize;
 						for(coordId in li.autoTilesCache.get( r.uid ).keys())
 						for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
+							// Paint a full pixel behind to avoid flickering revealing background
+							if( td.isTileOpaque(tileInfos.tid) && tileInfos.x%grid==0 && tileInfos.y%grid==0 )
+								pixelGrid.setPixel(
+									Std.int(tileInfos.x/grid),
+									Std.int(tileInfos.y/grid),
+									td.getAverageTileColor(tileInfos.tid)
+								);
+							// Tile
 							tg.addTransform(
 								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + li.pxTotalOffsetX,
 								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize + li.pxTotalOffsetY,
@@ -93,6 +106,10 @@ class LayerRender {
 			// Classic tiles layer
 			var td = li.getTiledsetDef();
 			if( td!=null && td.isAtlasLoaded() ) {
+				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
+				pixelGrid.x = li.pxTotalOffsetX;
+				pixelGrid.y = li.pxTotalOffsetY;
+
 				var tg = new h2d.TileGroup( td.getAtlasTile(), root );
 
 				for(cy in 0...li.cHei)
@@ -101,6 +118,11 @@ class LayerRender {
 						continue;
 
 					for( tileInf in li.getGridTileStack(cx,cy) ) {
+						// Paint a full pixel behind to avoid flickering revealing background
+						if( td.isTileOpaque(tileInf.tileId) )
+							pixelGrid.setPixel( cx,cy, td.getAverageTileColor(tileInf.tileId) );
+
+						// Tile
 						var t = td.getTile(tileInf.tileId);
 						t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
 						var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
