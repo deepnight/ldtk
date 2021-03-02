@@ -195,7 +195,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 	function updatePanel() {
-		jContent.find("header, ul.ruleGroups").off();
+		jContent.find("header *, ul.ruleGroups *").off();
 		ui.Tip.clear();
 		editor.levelRender.clearTemp();
 
