@@ -1,6 +1,6 @@
 # 0.8.2
 
- - Reduced tile flickering while zooming in/out
+ - Reduced tile flickering while zooming in/out (this reduction can be disabled from the app settings)
 
 # 0.8.1
 
