@@ -1,5 +1,6 @@
 # 0.8.2
 
+ - Array of Points in Entities can now be displayed as "**looping paths**".
  - Reduced tile flickering while zooming in/out (this reduction can be disabled from the app settings)
 
 # 0.8.1
