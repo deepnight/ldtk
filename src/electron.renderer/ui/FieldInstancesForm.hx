@@ -577,7 +577,7 @@ class FieldInstancesForm {
 				var jArrayInputs = new J('<ul class="values"/>');
 				jArrayInputs.appendTo(jArray);
 
-				if( fi.def.type==F_Point && ( fi.def.editorDisplayMode==PointPath || fi.def.editorDisplayMode==PointStar ) ) {
+				if( fi.def.type==F_Point && ( fi.def.editorDisplayMode==Points || fi.def.editorDisplayMode==PointPath || fi.def.editorDisplayMode==PointStar ) ) {
 					// No points listing if displayed as path
 					var jLi = new J('<li class="compact"/>');
 					var vals = [];
