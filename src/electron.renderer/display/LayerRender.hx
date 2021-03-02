@@ -43,15 +43,19 @@ class LayerRender {
 		else if( target!=null && root.parent!=target )
 			target.addChild(root);
 
+		var fixFlickering = App.ME.settings.v.fixTileFlickering;
+
 		switch li.def.type {
 		case IntGrid, AutoLayer:
 			var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
 
 			if( li.def.isAutoLayer() && renderAutoLayers && td!=null && td.isAtlasLoaded() ) {
 				// Auto-layer tiles
-				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
-				pixelGrid.x = li.pxTotalOffsetX;
-				pixelGrid.y = li.pxTotalOffsetY;
+				var pixelGrid = !fixFlickering ? null : new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
+				if( fixFlickering ) {
+					pixelGrid.x = li.pxTotalOffsetX;
+					pixelGrid.y = li.pxTotalOffsetY;
+				}
 
 				var tg = new h2d.TileGroup( td.getAtlasTile(), root);
 
@@ -64,7 +68,7 @@ class LayerRender {
 						for(coordId in li.autoTilesCache.get( r.uid ).keys())
 						for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
 							// Paint a full pixel behind to avoid flickering revealing background
-							if( td.isTileOpaque(tileInfos.tid) && tileInfos.x%grid==0 && tileInfos.y%grid==0 )
+							if( fixFlickering && td.isTileOpaque(tileInfos.tid) && tileInfos.x%grid==0 && tileInfos.y%grid==0 )
 								pixelGrid.setPixel(
 									Std.int(tileInfos.x/grid),
 									Std.int(tileInfos.y/grid),
@@ -106,9 +110,11 @@ class LayerRender {
 			// Classic tiles layer
 			var td = li.getTiledsetDef();
 			if( td!=null && td.isAtlasLoaded() ) {
-				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
-				pixelGrid.x = li.pxTotalOffsetX;
-				pixelGrid.y = li.pxTotalOffsetY;
+				var pixelGrid = !fixFlickering ? null : new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
+				if( fixFlickering ) {
+					pixelGrid.x = li.pxTotalOffsetX;
+					pixelGrid.y = li.pxTotalOffsetY;
+				}
 
 				var tg = new h2d.TileGroup( td.getAtlasTile(), root );
 
@@ -119,7 +125,7 @@ class LayerRender {
 
 					for( tileInf in li.getGridTileStack(cx,cy) ) {
 						// Paint a full pixel behind to avoid flickering revealing background
-						if( td.isTileOpaque(tileInf.tileId) )
+						if( fixFlickering && td.isTileOpaque(tileInf.tileId) )
 							pixelGrid.setPixel( cx,cy, td.getAverageTileColor(tileInf.tileId) );
 
 						// Tile

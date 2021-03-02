@@ -11,6 +11,7 @@ typedef AppSettings = {
 	var useBestGPU : Bool;
 	var startFullScreen: Bool;
 	var smartCpuThrottling : Bool;
+	var fixTileFlickering : Bool;
 
 	var appUiScale : Float;
 	var editorUiScale : Float;
@@ -40,21 +41,24 @@ class Settings {
 
 		// Init defaults
 		defaults = {
+			lastKnownVersion: null,
 			recentProjects: [],
 			recentDirs: null,
+
 			compactMode: false,
 			grid: true,
 			singleLayerMode: false,
 			emptySpaceSelection: false,
 			tileStacking: false,
-			lastKnownVersion: null,
 			useBestGPU: true,
+			smartCpuThrottling: true,
+			startFullScreen: false,
+			fixTileFlickering: true,
+			
 			autoWorldModeSwitch: ZoomInAndOut,
 			appUiScale: 1.0,
 			editorUiScale: 1.0,
-			smartCpuThrottling: true,
 			mouseWheelSpeed: 1.0,
-			startFullScreen: false,
 		}
 
 		// Load

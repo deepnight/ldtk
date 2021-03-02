@@ -132,6 +132,10 @@ class Editor extends Page {
 		dn.Process.resizeAll();
 	}
 
+	public static inline function exists() {
+		return ME!=null && !ME.destroyed;
+	}
+
 	function initUI() {
 		jMouseCoords = App.ME.jBody.find("xml.mouseCoords").clone().children().first();
 		App.ME.jBody.append(jMouseCoords);
