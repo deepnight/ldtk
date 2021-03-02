@@ -1,3 +1,7 @@
+# 0.8.2
+
+ - Reduced tile flickering while zooming in/out
+
 # 0.8.1
 
   - **Fullscreen mode**: just press `F11` to toggle this mode.
