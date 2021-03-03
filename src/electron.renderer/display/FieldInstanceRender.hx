@@ -165,18 +165,22 @@ class FieldInstanceRender {
 
 							var tx = M.round( (pt.cx+0.5)*ld.gridSize - ei.x );
 							var ty = M.round( (pt.cy+0.5)*ld.gridSize - ei.y );
-							if( fd.editorDisplayMode!=Points ) {
+							if( fd.editorDisplayMode!=Points )
 								renderDashedLine(g, fx,fy, tx,ty, 3);
-							}
+
 							g.drawRect( tx-2, ty-2, 4, 4 );
 
-							if( fd.editorDisplayMode==PointPath || fd.editorDisplayMode==PointPathLoop ) {
-								fx = tx;
-								fy = ty;
+							switch fd.editorDisplayMode {
+								case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid:
+								case Points, PointStar:
+								case PointPath, PointPathLoop:
+									// Next point connects to this one
+									fx = tx;
+									fy = ty;
 							}
 						}
 
-						// Loop
+						// Loop to Entity
 						if( fd.editorDisplayMode==PointPathLoop && fi.getArrayLength()>1 )
 							renderDashedLine(g, fx,fy, startX, startY, 3);
 

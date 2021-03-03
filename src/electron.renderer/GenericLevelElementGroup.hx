@@ -468,8 +468,11 @@ class GenericLevelElementGroup {
 			switch ge {
 				case Entity(li,ei):
 					for(fi in ei.getFieldInstancesOfType(F_Point)) {
-						if( fi.def.editorDisplayMode!=PointPath && fi.def.editorDisplayMode!=PointStar )
-							continue;
+						switch fi.def.editorDisplayMode {
+							case PointStar, PointPath, PointPathLoop:
+							case Points: continue;
+							case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid: continue;
+						}
 
 						// Links to Entity own field points
 						for( i in 0...fi.getArrayLength() ) {

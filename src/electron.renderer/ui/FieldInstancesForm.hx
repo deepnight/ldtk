@@ -470,12 +470,16 @@ class FieldInstancesForm {
 			return true;
 		}
 
-		// Connect to last of path
-		if( fi.def.isArray && ( fi.def.editorDisplayMode==PointPath || fi.def.editorDisplayMode==PointPathLoop ) ) {
-			var pt = fi.getPointGrid( editIdx-1 );
-			if( pt!=null )
-				t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:getInstanceColor() }
-		}
+		// Connect to last point of existing path
+		if( fi.def.isArray )
+			switch fi.def.editorDisplayMode {
+				case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid:
+				case Points, PointStar:
+				case PointPath, PointPathLoop:
+					var pt = fi.getPointGrid( editIdx-1 );
+					if( pt!=null )
+						t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:getInstanceColor() }
+			}
 
 		// Picking of a point
 		t.onPick = function(m) {
@@ -486,11 +490,14 @@ class FieldInstancesForm {
 				fi.parseValue(editIdx, m.cx+Const.POINT_SEPARATOR+m.cy);
 				editIdx = fi.getArrayLength(); // continue after
 
-				// Connect to path previous
-				if( fi.def.editorDisplayMode==PointPath || fi.def.editorDisplayMode==PointPathLoop ) {
-					var pt = fi.getPointGrid( editIdx-1 );
-					if( pt!=null )
-						t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:getInstanceColor() }
+				// Connect to previous point in path mode
+				switch fi.def.editorDisplayMode {
+					case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid:
+					case Points, PointStar:
+					case PointPath, PointPathLoop:
+						var pt = fi.getPointGrid( editIdx-1 );
+						if( pt!=null )
+							t.pickOrigin = { cx:pt.cx, cy:pt.cy, color:getInstanceColor() }
 				}
 			}
 			else {

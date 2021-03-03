@@ -334,7 +334,7 @@ class FieldDefsForm {
 						curField.isArray
 						? L.t._('Show "::name::=[...values...]"', { name:curField.identifier })
 						: L.t._('Show "::name::=..."', { name:curField.identifier });
-					case Points: curField.isArray ? L.t._("Show points") : L.t._("Show point");
+					case Points: curField.isArray ? L.t._("Show isolated points") : L.t._("Show isolated point");
 					case PointStar: curField.isArray ? L.t._("Show star of points") : L.t._("Show point");
 					case PointPath: L.t._("Show path of points");
 					case PointPathLoop: L.t._("Show path of points (looping)");
