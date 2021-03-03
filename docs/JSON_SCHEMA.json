@@ -1168,7 +1168,7 @@
 				"__cHei",
 				"__cWid",
 				"identifier",
-				"metaDataCsv",
+				"metaDataEnumValues",
 				"padding",
 				"pxHei",
 				"pxWid",
@@ -1193,21 +1193,21 @@
 						"integer"
 					]
 				},
-				"metaDataCsv": {
-					"description": "Tileset meta as CSV, stored from left to right, and top to bottom (ie. first row from left to right, followed by second row, etc). `0` means \"empty cell\" and values start at 1. This array size is `__cWid` x `__cHei` cells.",
-					"items": {
-						"type": [
-							"integer"
-						]
-					},
-					"type": [
-						"array"
-					]
-				},
 				"pxHei": {
 					"description": "Image height in pixels",
 					"type": [
 						"integer"
+					]
+				},
+				"metaDataEnumValues": {
+					"description": "Tileset Enum meta-data. The array contains 1 element per Enum value, with a list of all Tile IDs that have the enum value applied to.",
+					"items": {
+						"type": [
+							"object"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"uid": {
