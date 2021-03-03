@@ -67,6 +67,9 @@ class TilesetDef {
 		savedSelections = [];
 	}
 
+	public function getMetaDataEnumDef() : Null<EnumDef> {
+		return metaDataEnumUid==null ? null : _project.defs.getEnumDef(metaDataEnumUid);
+	}
 
 	public function toJson() : ldtk.Json.TilesetDefJson {
 		return {

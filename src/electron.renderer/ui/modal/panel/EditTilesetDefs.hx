@@ -5,6 +5,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 	var jForm : js.jquery.JQuery;
 	public var curTd : Null<data.def.TilesetDef>;
 
+	var curEnumValue : Null<data.DataTypes.EnumDefValue>;
+
 
 	public function new(?selectedDef:data.def.TilesetDef) {
 		super();
@@ -61,6 +63,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 	function selectTileset(td:data.def.TilesetDef) {
 		curTd = td;
+		curEnumValue = null;
 		updateList();
 		updateForm();
 		updateTilesetPreview();
@@ -80,11 +83,41 @@ class EditTilesetDefs extends ui.modal.Panel {
 		jContent.find(".tilesDemo").show();
 
 		// Main tileset view
-		jPickerWrapper.show().empty();
+		jPickerWrapper.show();
+		var jPicker = jPickerWrapper.find(".picker");
+		jPicker.empty();
 		if( curTd.isAtlasLoaded() ) {
-			var picker = new TilesetPicker(jPickerWrapper, curTd, ViewOnly);
+			var picker = new TilesetPicker(jPicker, curTd, ViewOnly);
 			picker.renderGrid();
 			picker.resetScroll();
+		}
+
+		// Enum values
+		var jValues = jPickerWrapper.find(".values");
+		jValues.empty();
+		var ed = curTd.getMetaDataEnumDef();
+		if( ed==null )
+			jValues.hide();
+		else {
+			jValues.show();
+
+			function _selectEnumValue(?ev:data.DataTypes.EnumDefValue) {
+				curEnumValue = ev;
+				jValues.find(".active").removeClass("active");
+				jValues.find('[value=${ev==null?null:ev.id}]').addClass("active");
+			}
+
+			var jVal = new J('<li value="null">--None--</li>');
+			jVal.appendTo(jValues);
+			jVal.click( ev->_selectEnumValue(null) );
+
+			for(ev in ed.values) {
+				var jVal = new J('<li value="${ev.id}">${ev.id}</li>');
+				jVal.appendTo(jValues);
+				jVal.click( _->_selectEnumValue(ev) );
+			}
+			jValues.find('[value=${curEnumValue==null ? null : curEnumValue.id}]').addClass("active");
+
 		}
 
 		// Demo tiles
