@@ -4479,7 +4479,7 @@ dl.form.fieldInstanceEditor {
 	}
 }
 
-.window.panel.layerDefs,
+.window.panel.editLayerDefs,
 .window.panel.editTilesetDefs {
 	.content{
 		display: grid;
@@ -4677,7 +4677,7 @@ dl.form.fieldInstanceEditor {
 }
 
 
-.window.panel.layerDefs {
+.window.panel.editLayerDefs {
 	.mainList {
 		grid-row: 2/4;
 		ul li {
