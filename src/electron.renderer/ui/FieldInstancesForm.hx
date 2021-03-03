@@ -302,23 +302,23 @@ class FieldInstancesForm {
 
 			case F_Enum(name):
 				var ed = Editor.ME.project.defs.getEnumDef(name);
-				var select = new J("<select/>");
-				select.appendTo(jTarget);
+				var jSelect = new J("<select/>");
+				jSelect.appendTo(jTarget);
 
 				// Null value
 				if( fi.def.canBeNull || fi.getEnumValue(arrayIdx)==null ) {
 					var opt = new J('<option/>');
-					opt.appendTo(select);
+					opt.appendTo(jSelect);
 					opt.attr("value","");
 					if( fi.def.canBeNull )
 						opt.text("-- null --");
 					else {
 						// SELECT shouldn't be null
-						select.addClass("required");
+						jSelect.addClass("required");
 						opt.text("[ Value required ]");
-						select.click( function(ev) {
-							select.removeClass("required");
-							select.blur( function(ev) renderForm() );
+						jSelect.click( function(ev) {
+							jSelect.removeClass("required");
+							jSelect.blur( function(ev) renderForm() );
 						});
 					}
 					if( fi.getEnumValue(arrayIdx)==null )
@@ -326,20 +326,29 @@ class FieldInstancesForm {
 				}
 
 				for(v in ed.values) {
-					var opt = new J('<option/>');
-					opt.appendTo(select);
-					opt.attr("value",v.id);
-					opt.text(v.id);
-					if( fi.getEnumValue(arrayIdx)==v.id && !fi.isUsingDefault(arrayIdx) )
-						opt.attr("selected","selected");
+					var jOpt = new J('<option/>');
+					jOpt.appendTo(jSelect);
+					jOpt.attr("value",v.id);
+					jOpt.text(v.id);
+					jOpt.css({
+						color: C.intToHex( C.toWhite(v.color,0.7) ),
+						backgroundColor: C.intToHex( C.toBlack(v.color,0.5) ),
+					});
+					if( fi.getEnumValue(arrayIdx)==v.id && !fi.isUsingDefault(arrayIdx) ) {
+						jSelect.css({
+							color: C.intToHex( C.toWhite(v.color,0.7) ),
+							backgroundColor: C.intToHex( C.toBlack(v.color,0.5) ),
+						});
+						jOpt.attr("selected","selected");
+					}
 				}
 
-				select.change( function(ev) {
-					var v = select.val()=="" ? null : select.val();
+				jSelect.change( function(ev) {
+					var v = jSelect.val()=="" ? null : jSelect.val();
 					fi.parseValue(arrayIdx, v);
 					onFieldChange(fi);
 				});
-				hideInputIfDefault(arrayIdx, select, fi);
+				hideInputIfDefault(arrayIdx, jSelect, fi);
 
 			case F_Bool:
 				var input = new J("<input/>");
