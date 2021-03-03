@@ -165,6 +165,11 @@ enum TilePickerMode {
 	RectOnly;
 }
 
+enum TilePickerDisplayMode {
+	ShowOpaques;
+	ShowPixelData;
+}
+
 typedef FileSavingData = {
 	var projectJson: String;
 	var externLevelsJson: Array<{ json:String, relPath:String, id:String }>;

@@ -1,10 +1,5 @@
 package ui;
 
-private enum GridMode {
-	ShowOpaques;
-	ShowPixelData;
-}
-
 class TilesetPicker {
 	static var SCROLL_MEMORY : Map<String, { x:Float, y:Float, zoom:Float }> = new Map();
 
@@ -32,7 +27,7 @@ class TilesetPicker {
 
 	var mode : TilePickerMode;
 	var _internalSelectedIds : Array<Int> = [];
-	var gridMode : GridMode = ShowOpaques;
+	var displayMode : TilePickerDisplayMode = ShowOpaques;
 
 
 	public function new(target:js.jquery.JQuery, td:data.def.TilesetDef, mode:TilePickerMode, ?tool:tool.lt.TileTool) {
@@ -103,7 +98,7 @@ class TilesetPicker {
 		for(tileId in 0...tilesetDef.cWid*tilesetDef.cHei) {
 			var x = tilesetDef.getTileSourceX(tileId);
 			var y = tilesetDef.getTileSourceY(tileId);
-			switch gridMode {
+			switch displayMode {
 				case ShowOpaques:
 
 				case ShowPixelData:
@@ -518,7 +513,7 @@ class TilesetPicker {
 
 		// Toggle grid render mode
 		if( mode==ViewOnly && ev.button==2 ) {
-			gridMode = gridMode==ShowOpaques ? ShowPixelData : ShowOpaques;
+			displayMode = displayMode==ShowOpaques ? ShowPixelData : ShowOpaques;
 			renderAtlas();
 			renderGrid();
 		}
