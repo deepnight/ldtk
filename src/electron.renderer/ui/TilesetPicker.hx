@@ -327,7 +327,7 @@ class TilesetPicker {
 
 		switch mode {
 			case PaintId(valueGetter, _):
-				if( valueGetter()==null && ( dragStart==null || dragStart.bt==0 ) ) {
+				if( valueGetter()==null ) {
 					jCursor.hide();
 					return;
 				}
@@ -496,8 +496,9 @@ class TilesetPicker {
 				Editor.ME.ge.emit(ToolOptionChanged);
 
 			case PaintId( valueGetter, paint ):
-				for(tid in selIds)
-					paint(tid, valueGetter(), add);
+				if( valueGetter()!=null )
+					for(tid in selIds)
+						paint(tid, valueGetter(), add);
 
 			case ViewOnly:
 		}
