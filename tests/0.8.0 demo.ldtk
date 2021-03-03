@@ -1358,7 +1358,7 @@
 	] },
 	"levels": [
 		{
-			"identifier": "Unnamed_room",
+			"identifier": "Boss_room",
 			"uid": 94,
 			"worldX": 0,
 			"worldY": 0,
@@ -1374,10 +1374,13 @@
 			"externalRelPath": null,
 			"fieldInstances": [{
 				"__identifier": "room_music",
-				"__value": null,
+				"__value": "Oppressive_ambiant",
 				"__type": "LocalEnum.Music",
 				"defUid": 98,
-				"realEditorValues": [null]
+				"realEditorValues": [{
+					"id": "V_String",
+					"params": ["Oppressive_ambiant"]
+				}]
 			}],
 			"layerInstances": [
 				{
