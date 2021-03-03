@@ -1165,7 +1165,10 @@
 			"description": "The `Tileset` definition is the most important part among project definitions. It contains some extra informations about each integrated tileset. If you only had to parse one definition section, that would be the one.",
 			"title": "Tileset definition",
 			"required": [
+				"__cHei",
+				"__cWid",
 				"identifier",
+				"metaDataCsv",
 				"padding",
 				"pxHei",
 				"pxWid",
@@ -1182,6 +1185,23 @@
 					"type": [
 						"object",
 						"null"
+					]
+				},
+				"__cHei": {
+					"description": "Grid-based height",
+					"type": [
+						"integer"
+					]
+				},
+				"metaDataCsv": {
+					"description": "Tileset meta as CSV, stored from left to right, and top to bottom (ie. first row from left to right, followed by second row, etc). `0` means \"empty cell\" and values start at 1. This array size is `__cWid` x `__cHei` cells.",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"pxHei": {
@@ -1204,6 +1224,12 @@
 				},
 				"pxWid": {
 					"description": "Image width in pixels",
+					"type": [
+						"integer"
+					]
+				},
+				"__cWid": {
+					"description": "Grid-based width",
 					"type": [
 						"integer"
 					]

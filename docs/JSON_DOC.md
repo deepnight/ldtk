@@ -263,7 +263,10 @@ The `Tileset` definition is the most important part among project definitions. I
 
 Value | Type | Description
 -- | -- | --
+`__cHei`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Int | Grid-based height
+`__cWid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Int | Grid-based width
 `identifier` | String | Unique String identifier
+`metaDataCsv`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Array&nbsp;of&nbsp;Int | Tileset meta as CSV, stored from left to right, and top to bottom (ie. first row from left to right, followed by second row, etc). `0` means "empty cell" and values start at 1. This array size is `__cWid` x `__cHei` cells.
 `metaDataEnumUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Enum definition UID used for this tileset meta-data
 `padding` | Int | Distance in pixels from image borders
 `pxHei` | Int | Image height in pixels
