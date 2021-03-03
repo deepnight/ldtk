@@ -112,26 +112,35 @@ class EditTilesetDefs extends ui.modal.Panel {
 				var thick = M.fmax( 2, 1+Std.int( curTd.tileGridSize / 16 ) );
 				picker.customTileRender = (ctx,x,y,tid)->{
 					n = 0;
+					var iconTd = ed.iconTilesetUid==null ? null : project.defs.getTilesetDef(ed.iconTilesetUid);
 					for(ev in ed.values)
 						if( curTd.hasMetaDataEnumAt(ev.id, tid) && ( curEnumValue==null || curEnumValue==ev ) ) {
-							ctx.beginPath();
-							ctx.rect(
-								x+thick*0.5 - n*2,
-								y+thick*0.5 - n*4,
-								curTd.tileGridSize-thick,
-								curTd.tileGridSize-thick
-							);
-							// Fill
-							ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(ev.color, 0) );
-							ctx.fill();
-							// Black outline
-							ctx.strokeStyle = C.intToHex( 0x0 );
-							ctx.lineWidth = thick+2;
-							ctx.stroke();
-							// Outline
-							ctx.strokeStyle = C.intToHex( ev.color );
-							ctx.lineWidth = thick;
-							ctx.stroke();
+							if( ev.tileId!=null && iconTd!=null ) {
+								// Tile
+								iconTd.drawTileTo2dContext(ctx, ev.tileId, x-n*2, y-n*4);
+							}
+							else {
+								// Color
+								ctx.beginPath();
+								ctx.rect(
+									x+thick*0.5 - n*2,
+									y+thick*0.5 - n*4,
+									curTd.tileGridSize-thick,
+									curTd.tileGridSize-thick
+								);
+								// Fill
+								ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(ev.color, 0) );
+								ctx.fill();
+								// Black outline
+								ctx.strokeStyle = C.intToHex( 0x0 );
+								ctx.lineWidth = thick+2;
+								ctx.stroke();
+								// Outline
+								ctx.strokeStyle = C.intToHex( ev.color );
+								ctx.lineWidth = thick;
+								ctx.stroke();
+							}
+
 							n++;
 						}
 

@@ -631,20 +631,25 @@ class TilesetDef {
 		ctx.putImageData(imgData,0,0);
 	}
 
-	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
-		if( !isAtlasLoaded() )
-			return;
 
+	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
 		if( !jCanvas.is("canvas") )
 			throw "Not a canvas";
+
+		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
+		drawTileTo2dContext( canvas.getContext2d(), tileId, toX, toY, scaleX, scaleY );
+	}
+
+
+	public function drawTileTo2dContext(ctx:js.html.CanvasRenderingContext2D, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
+		if( !isAtlasLoaded() )
+			return;
 
 		if( getTileSourceX(tileId)+tileGridSize>pxWid || getTileSourceY(tileId)+tileGridSize>pxHei )
 			return; // out of bounds
 
 		var imgData = _project.getOrLoadImage(relPath);
 		var subPixels = imgData.pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
-		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
-		var ctx = canvas.getContext2d();
 		ctx.imageSmoothingEnabled = false;
 		var img = new js.html.Image(subPixels.width, subPixels.height);
 		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
