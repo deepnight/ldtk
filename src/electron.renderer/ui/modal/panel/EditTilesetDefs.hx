@@ -105,28 +105,43 @@ class EditTilesetDefs extends ui.modal.Panel {
 				)
 			);
 
+			// Meta-data render
 			if( curTd.metaDataEnumUid!=null ) {
 				var n = 0;
 				var ed = curTd.getMetaDataEnumDef();
-				var thick = M.fmax( 1, Std.int( curTd.tileGridSize / 16 ) );
+				var thick = M.fmax( 2, 1+Std.int( curTd.tileGridSize / 16 ) );
 				picker.customTileRender = (ctx,x,y,tid)->{
 					n = 0;
 					for(ev in ed.values)
-						if( curTd.hasMetaDataEnumAt(ev.id, tid) ) {
+						if( curTd.hasMetaDataEnumAt(ev.id, tid) && ( curEnumValue==null || curEnumValue==ev ) ) {
 							ctx.beginPath();
 							ctx.rect(
-								x+thick*0.5 + n*2,
+								x+thick*0.5 - n*2,
 								y+thick*0.5 - n*4,
 								curTd.tileGridSize-thick,
 								curTd.tileGridSize-thick
 							);
-							ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(ev.color, 0.5) );
+							// Fill
+							ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(ev.color, 0) );
+							ctx.fill();
+							// Black outline
+							ctx.strokeStyle = C.intToHex( 0x0 );
+							ctx.lineWidth = thick+2;
+							ctx.stroke();
+							// Outline
 							ctx.strokeStyle = C.intToHex( ev.color );
 							ctx.lineWidth = thick;
-							ctx.fill();
 							ctx.stroke();
 							n++;
 						}
+
+					if( n==0 && curEnumValue!=null ) {
+						// No meta
+						ctx.beginPath();
+						ctx.rect(x, y, curTd.tileGridSize, curTd.tileGridSize );
+						ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(0x0, 0.5) );
+						ctx.fill();
+					}
 					return true;
 				}
 			}
@@ -146,6 +161,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				curEnumValue = ev;
 				jValues.find(".active").removeClass("active");
 				jValues.find('[value=${ev==null?null:ev.id}]').addClass("active");
+				updateTilesetPreview();
 			}
 
 			var jVal = new J('<li value="null" class="none">--None--</li>');
