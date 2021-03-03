@@ -193,6 +193,8 @@ class LevelRender extends dn.Process {
 
 			case TilesetDefPixelDataCacheRebuilt(td):
 
+			case TilesetMetaDataChanged(td):
+
 			case TilesetDefRemoved(td):
 				invalidateAll();
 

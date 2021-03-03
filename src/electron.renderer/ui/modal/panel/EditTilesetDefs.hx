@@ -53,6 +53,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 				if( td==curTd )
 					rebuildPixelData();
 
+			case TilesetMetaDataChanged(td):
+				updateTilesetPreview();
+
 			case TilesetDefPixelDataCacheRebuilt(td):
 				if( td==curTd )
 					updateTilesetPreview();
@@ -97,9 +100,36 @@ class EditTilesetDefs extends ui.modal.Panel {
 							curTd.setMetaDataInt(tid, valueId, active);
 						else if( !active )
 							curTd.removeAllMetaDataAt(tid);
+						editor.ge.emitAtTheEndOfFrame( TilesetMetaDataChanged(curTd) );
 					}
 				)
 			);
+
+			if( curTd.metaDataEnumUid!=null ) {
+				var n = 0;
+				var ed = curTd.getMetaDataEnumDef();
+				var thick = M.fmax( 1, Std.int( curTd.tileGridSize / 16 ) );
+				picker.customTileRender = (ctx,x,y,tid)->{
+					n = 0;
+					for(ev in ed.values)
+						if( curTd.hasMetaDataEnumAt(ev.id, tid) ) {
+							ctx.beginPath();
+							ctx.rect(
+								x+thick*0.5 + n*2,
+								y+thick*0.5 - n*4,
+								curTd.tileGridSize-thick,
+								curTd.tileGridSize-thick
+							);
+							ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(ev.color, 0.5) );
+							ctx.strokeStyle = C.intToHex( ev.color );
+							ctx.lineWidth = thick;
+							ctx.fill();
+							ctx.stroke();
+							n++;
+						}
+					return true;
+				}
+			}
 			picker.renderGrid();
 		}
 

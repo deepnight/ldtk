@@ -89,6 +89,10 @@ class TilesetPicker {
 		tilesetDef.drawAtlasToCanvas(jCanvas);
 	}
 
+	public dynamic function customTileRender(ctx:js.html.CanvasRenderingContext2D, x:Int, y:Int, tileId:Int) {
+		return false;
+	}
+
 	public function renderGrid() {
 		jPicker.remove(".grid");
 
@@ -99,38 +103,40 @@ class TilesetPicker {
 		for(tileId in 0...tilesetDef.cWid*tilesetDef.cHei) {
 			var x = tilesetDef.getTileSourceX(tileId);
 			var y = tilesetDef.getTileSourceY(tileId);
-			switch displayMode {
-				case ShowOpaques:
+			if( !customTileRender(ctx, x,y, tileId) ) {
+				switch displayMode {
+					case ShowOpaques:
 
-				case ShowPixelData:
-					// Fill
-					ctx.beginPath();
-					ctx.rect(
-						x, y,
-						tilesetDef.tileGridSize, tilesetDef.tileGridSize
-					);
-					ctx.fillStyle = "black";
-					ctx.fill();
-					ctx.fillStyle = C.intToHexRGBA( tilesetDef.getAverageTileColor(tileId) );
-					ctx.fill();
+					case ShowPixelData:
+						// Fill
+						ctx.beginPath();
+						ctx.rect(
+							x, y,
+							tilesetDef.tileGridSize, tilesetDef.tileGridSize
+						);
+						ctx.fillStyle = "black";
+						ctx.fill();
+						ctx.fillStyle = C.intToHexRGBA( tilesetDef.getAverageTileColor(tileId) );
+						ctx.fill();
+				}
+
+				// Outline
+				ctx.beginPath();
+				ctx.rect(
+					x + strokeOffset,
+					y + strokeOffset,
+					tilesetDef.tileGridSize - strokeOffset*2,
+					tilesetDef.tileGridSize - strokeOffset*2
+				);
+
+				// Outline color
+				var c = tilesetDef.getAverageTileColor(tileId);
+				var a = C.getA(c)>0 ? 1 : 0;
+				ctx.strokeStyle =
+					C.intToHexRGBA( C.toWhite( C.replaceAlphaF( tilesetDef.getAverageTileColor(tileId), a ), 0.2 ) );
+
+				ctx.stroke();
 			}
-
-			// Outline
-			ctx.beginPath();
-			ctx.rect(
-				x + strokeOffset,
-				y + strokeOffset,
-				tilesetDef.tileGridSize - strokeOffset*2,
-				tilesetDef.tileGridSize - strokeOffset*2
-			);
-
-			// Outline color
-			var c = tilesetDef.getAverageTileColor(tileId);
-			var a = C.getA(c)>0 ? 1 : 0;
-			ctx.strokeStyle =
-				C.intToHexRGBA( C.toWhite( C.replaceAlphaF( tilesetDef.getAverageTileColor(tileId), a ), 0.2 ) );
-
-			ctx.stroke();
 		}
 	}
 
