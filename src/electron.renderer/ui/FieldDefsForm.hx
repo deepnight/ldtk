@@ -426,12 +426,6 @@ class FieldDefsForm {
 						}
 					);
 				});
-				// defInput.change( function(ev) {
-				// 	curField.setDefault( defInput.val() );
-				// 	N.debug( defInput.val() );
-				// 	onFieldChange();
-				// 	defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
-				// });
 
 
 			case F_Int, F_Float, F_String, F_Point:
