@@ -188,10 +188,10 @@ class Editor extends Page {
 
 		jMainPanel.find("button.editEnums").click( function(_) {
 			if( isPaused() ) return;
-			if( ui.Modal.isOpen(ui.modal.panel.EditEnums) )
+			if( ui.Modal.isOpen(ui.modal.panel.EditEnumDefs) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.panel.EditEnums();
+				new ui.modal.panel.EditEnumDefs();
 		});
 
 

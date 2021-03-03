@@ -75,7 +75,7 @@ class FieldDefsForm {
 						new ui.modal.dialog.Choice(
 							L.t._("This project contains no Enum yet. You first need to create one from the Enum panel."),
 							[
-								{ label:L.t._("Open enum panel"), cb:()->new ui.modal.panel.EditEnums() }
+								{ label:L.t._("Open enum panel"), cb:()->new ui.modal.panel.EditEnumDefs() }
 							]
 						);
 						return;

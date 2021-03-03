@@ -1,12 +1,12 @@
 package ui.modal.panel;
 
-class EditEnums extends ui.modal.Panel {
+class EditEnumDefs extends ui.modal.Panel {
 	var curEnum : Null<data.def.EnumDef>;
 
 	public function new() {
 		super();
 
-		loadTemplate( "editEnums", "editEnums" );
+		loadTemplate("editEnumDefs");
 		linkToButton("button.editEnums");
 
 		// Add enum
