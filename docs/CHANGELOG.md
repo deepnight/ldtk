@@ -4,6 +4,7 @@
   - Reduced tile flickering while zooming in/out (this reduction can be disabled from the app settings)
   - Fixed "Create group" button in Auto-layer Rules panel
   - Fixed a crash when adding a single entity point
+  - Fixed Enum value renaming in Level fields
 
 # 0.8.1
 
