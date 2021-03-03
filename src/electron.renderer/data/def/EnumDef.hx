@@ -125,6 +125,9 @@ class EnumDef {
 	}
 
 	public function renameValue(project:Project, from:String, to:String) {
+		if( to=="" || to==null )
+			return false;
+
 		to = project.makeUniqueIdStr(to, id->isValueIdentifierValidAndUnique(id,from));
 
 		for(i in 0...values.length)
@@ -139,6 +142,13 @@ class EnumDef {
 							fi.parseValue(i, to);
 						}
 				});
+
+				// Fix tileset meta-data
+				for(td in project.defs.tilesets)
+					if( td.metaDataEnumUid==uid && td.metaDataEnumValues.exists(from) ) {
+						td.metaDataEnumValues.set(to, td.metaDataEnumValues.get(from));
+						td.metaDataEnumValues.remove(from);
+					}
 
 				return true;
 			}
