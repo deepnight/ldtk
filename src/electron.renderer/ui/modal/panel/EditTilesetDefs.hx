@@ -173,7 +173,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				updateTilesetPreview();
 			}
 
-			var jVal = new J('<li value="null" class="none">--None--</li>');
+			var jVal = new J('<li value="null" class="none">-- Show all --</li>');
 			jVal.appendTo(jValues);
 			jVal.click( ev->_selectEnumValue(null) );
 
