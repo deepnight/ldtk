@@ -264,6 +264,7 @@ The `Tileset` definition is the most important part among project definitions. I
 Value | Type | Description
 -- | -- | --
 `identifier` | String | Unique String identifier
+`metaDataEnumUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Enum definition UID used for this tileset meta-data
 `padding` | Int | Distance in pixels from image borders
 `pxHei` | Int | Image height in pixels
 `pxWid` | Int | Image width in pixels

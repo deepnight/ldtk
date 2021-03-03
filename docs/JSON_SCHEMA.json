@@ -1231,6 +1231,13 @@
 						"array"
 					]
 				},
+				"metaDataEnumUid": {
+					"description": "Optional Enum definition UID used for this tileset meta-data",
+					"type": [
+						"integer",
+						"null"
+					]
+				},
 				"relPath": {
 					"description": "Path to the source file, relative to the current project JSON file",
 					"type": [
