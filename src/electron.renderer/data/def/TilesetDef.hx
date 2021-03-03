@@ -13,6 +13,7 @@ class TilesetDef {
 	public var padding : Int = 0; // px dist to atlas borders
 	public var spacing : Int = 0; // px space between consecutive tiles
 	public var savedSelections : Array<TilesetSelection> = [];
+	public var metaDataEnumUid : Null<Int>;
 
 	var opaqueTiles : Null< haxe.ds.Vector<Bool> >;
 	var averageColorsCache : Null< Map<Int,Int> >; // ARGB Int
@@ -77,6 +78,7 @@ class TilesetDef {
 			tileGridSize: tileGridSize,
 			spacing: spacing,
 			padding: padding,
+			metaDataEnumUid: metaDataEnumUid,
 
 			savedSelections: savedSelections.map( function(sel) {
 				return { ids:sel.ids, mode:JsonTools.writeEnum(sel.mode, false) }
@@ -113,6 +115,7 @@ class TilesetDef {
 		td.pxHei = JsonTools.readInt( json.pxHei );
 		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
+		td.metaDataEnumUid = JsonTools.readNullableInt(json.metaDataEnumUid);
 
 		if( json.cachedPixelData!=null ) {
 			var size = td.cWid*td.cHei;

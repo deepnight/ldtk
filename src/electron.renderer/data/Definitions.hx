@@ -582,6 +582,12 @@ class Definitions {
 		return externalEnums.filter( function(ed) return ed.externalRelPath==relPath );
 	}
 
+	public function getAllEnumsSorted() : Array<data.def.EnumDef> {
+		var all = enums.concat(externalEnums);
+		all.sort( (a,b)->Reflect.compare(a.identifier.toLowerCase(), b.identifier.toLowerCase()) );
+		return all;
+	}
+
 
 	public function removeExternalEnumSource(relPath:String) {
 		var i = 0;

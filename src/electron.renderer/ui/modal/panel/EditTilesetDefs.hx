@@ -188,6 +188,25 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( curTd.padding, jForm.find("input[name=padding]") );
 		i.linkEvent( TilesetDefChanged(curTd) );
 		i.setBounds(0, curTd.getMaxTileGridSize());
+
+		// Metadata Enum selector
+		var jSelect = jForm.find("#metaDataEnumUid");
+		jSelect.empty();
+		var jOpt = new J('<option value="">-- None --</option>');
+		jOpt.appendTo(jSelect);
+		for( ed in project.defs.getAllEnumsSorted() ) {
+			var jOpt = new J('<option value="${ed.uid}">${ed.identifier}</option>');
+			jOpt.appendTo(jSelect);
+		}
+		jSelect.change( ev->{
+			var uid = Std.parseInt( jSelect.val() );
+			if( !M.isValidNumber(uid) )
+				uid = null;
+			curTd.metaDataEnumUid = uid;
+			editor.ge.emit( TilesetDefChanged(curTd) );
+		});
+		if( curTd.metaDataEnumUid!=null )
+			jSelect.val(curTd.metaDataEnumUid);
 	}
 
 
