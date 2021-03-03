@@ -11,7 +11,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 	public function new(?selectedDef:data.def.TilesetDef) {
 		super();
 
-		loadTemplate( "editTilesetDefs", "defEditor tilesetDefs" );
+		loadTemplate( "editTilesetDefs", "defEditor editTilesetDefs" );
 		jList = jModalAndMask.find(".mainList ul");
 		jForm = jModalAndMask.find("dl.form");
 		linkToButton("button.editTilesets");
@@ -118,7 +118,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				jValues.find('[value=${ev==null?null:ev.id}]').addClass("active");
 			}
 
-			var jVal = new J('<li value="null">--None--</li>');
+			var jVal = new J('<li value="null" class="none">--None--</li>');
 			jVal.appendTo(jValues);
 			jVal.click( ev->_selectEnumValue(null) );
 
@@ -127,6 +127,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 				if( ev.tileId!=null )
 					jVal.prepend( JsTools.createTile(curTd, ev.tileId, 16) );
 				jVal.appendTo(jValues);
+				jVal.css({
+					borderColor: C.intToHex(ev.color),
+					backgroundColor: C.intToHex( C.toBlack(ev.color,0.4) ),
+				});
 				jVal.click( _->_selectEnumValue(ev) );
 			}
 			jValues.find('[value=${curEnumValue==null ? null : curEnumValue.id}]').addClass("active");

@@ -4480,7 +4480,7 @@ dl.form.fieldInstanceEditor {
 }
 
 .window.panel.layerDefs,
-.window.panel.tilesetDefs {
+.window.panel.editTilesetDefs {
 	.content{
 		display: grid;
 		height: 100%;
@@ -5794,7 +5794,7 @@ $patternSize : 32px;
 	}
 }
 
-.window.panel.tilesetDefs {
+.window.panel.editTilesetDefs {
 	.mainList ul:empty::before {
 		content: "No tileset";
 	}
@@ -5846,6 +5846,17 @@ $patternSize : 32px;
 					overflow: hidden;
 					width: 120px;
 					white-space: nowrap;
+					border-left: 4px solid black;
+					&.none {
+						color: $bgLight;
+					}
+					&.active {
+						color: white;
+						outline: 2px solid white;
+						outline-offset: -2px;
+						background-color: inherit;
+						border-radius: 3px;
+					}
 				}
 			}
 		}
