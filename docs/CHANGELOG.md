@@ -5,6 +5,7 @@
   - Fixed "Create group" button in Auto-layer Rules panel
   - Fixed a crash when adding a single entity point
   - Fixed Enum value renaming in Level fields
+  - Fixed Enum value renaming in Entity fields
 
 # 0.8.1
 
