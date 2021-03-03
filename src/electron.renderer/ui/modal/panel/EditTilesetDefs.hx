@@ -11,7 +11,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		loadTemplate( "editTilesetDefs", "defEditor tilesetDefs" );
 		jList = jModalAndMask.find(".mainList ul");
-		jForm = jModalAndMask.find("ul.form");
+		jForm = jModalAndMask.find("dl.form");
 		linkToButton("button.editTilesets");
 
 		// Create tileset
