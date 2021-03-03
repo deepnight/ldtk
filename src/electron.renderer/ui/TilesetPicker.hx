@@ -41,6 +41,7 @@ class TilesetPicker {
 		jPicker.appendTo(target);
 		switch mode {
 			case ToolPicker:
+			case PaintId(_): jPicker.addClass("PaintIdMode");
 			case MultiTiles: jPicker.addClass("multiTilesMode");
 			case RectOnly: jPicker.addClass("rectangle");
 			case SingleTile: jPicker.addClass("singleTileMode");
@@ -149,7 +150,7 @@ class TilesetPicker {
 			case MultiTiles, SingleTile, RectOnly:
 				_internalSelectedIds;
 
-			case ViewOnly:
+			case ViewOnly, PaintId(_):
 				[];
 		}
 	}
@@ -162,7 +163,7 @@ class TilesetPicker {
 			case MultiTiles, SingleTile, RectOnly:
 				_internalSelectedIds = tileIds;
 
-			case ViewOnly:
+			case ViewOnly, PaintId(_):
 				throw "unexpected";
 		}
 		renderSelection();
@@ -226,7 +227,7 @@ class TilesetPicker {
 				if( getSelectedTileIds().length>0 )
 					jSelection.append( createCursor({ mode:Stamp, ids:getSelectedTileIds() },"selection") );
 
-			case ViewOnly:
+			case ViewOnly, PaintId(_):
 		}
 	}
 
@@ -302,12 +303,30 @@ class TilesetPicker {
 	}
 
 
+	function isRectangleOnly() {
+		return switch mode {
+			case ToolPicker, MultiTiles: false;
+			case ViewOnly: false;
+			case SingleTile, RectOnly, PaintId(_): true;
+		}
+	}
+
 
 	var _lastRect = null;
 	function updateCursor(pageX:Float, pageY:Float, force=false) {
 		if( mode==ViewOnly || isScrolling() || App.ME.isKeyDown(K.SPACE) || !mouseOver ) {
 			jCursor.hide();
 			return;
+		}
+
+		switch mode {
+			case PaintId(valueGetter, _):
+				if( valueGetter()==null && ( dragStart==null || dragStart.bt==0 ) ) {
+					jCursor.hide();
+					return;
+				}
+
+			case _:
 		}
 
 		var r = getCursorRect(pageX, pageY);
@@ -331,7 +350,7 @@ class TilesetPicker {
 			if( saved==null || dragStart!=null ) {
 				var c = createCursor(
 					{
-						mode: mode==ToolPicker ? tool.getMode() : mode==RectOnly ? Stamp : Random,
+						mode: mode==ToolPicker ? tool.getMode() : isRectangleOnly() ? Stamp : Random,
 						ids:[tileId]
 					},
 					dragStart!=null && dragStart.bt==2?"remove":defaultClass,
@@ -380,7 +399,7 @@ class TilesetPicker {
 			if( r.wid==1 && r.hei==1 ) {
 				if( App.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
 					addToSelection = false;
-				applySelection([ tilesetDef.getTileId(r.cx,r.cy) ], addToSelection);
+				runOn([ tilesetDef.getTileId(r.cx,r.cy) ], addToSelection);
 			}
 			else {
 				if( App.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
@@ -390,7 +409,7 @@ class TilesetPicker {
 				for(cx in r.cx...r.cx+r.wid)
 				for(cy in r.cy...r.cy+r.hei)
 					tileIds.push( tilesetDef.getTileId(cx,cy) );
-				applySelection(tileIds, addToSelection);
+				runOn(tileIds, addToSelection);
 			}
 		}
 
@@ -409,7 +428,7 @@ class TilesetPicker {
 		return false;
 	}
 
-	function applySelection(selIds:Array<Int>, add:Bool) {
+	function runOn(selIds:Array<Int>, add:Bool) {
 		// Auto-pick saved selection
 		if( mode==ToolPicker && selIds.length==1 && tilesetDef.hasSavedSelectionFor(selIds[0]) && !App.ME.isCtrlDown() ) {
 			// Check if the saved selection isn't already picked. If so, just pick the sub-tile
@@ -420,53 +439,61 @@ class TilesetPicker {
 			}
 		}
 
-		if( mode==SingleTile )
-			onSingleTileSelect( selIds[0] );
-		else if( mode!=ViewOnly ) {
-			if( add ) {
-				if( mode==RectOnly || !App.ME.isShiftDown() && !App.ME.isCtrlDown() ) {
-					// Replace active selection with this one
-					if( mode==ToolPicker ) {
-						tool.flipX = tool.flipY = false;
-						tool.selectValue({ mode:tool.getMode(), ids:selIds });
+		switch mode {
+			case SingleTile:
+				onSingleTileSelect( selIds[0] );
+
+			case ToolPicker, MultiTiles, RectOnly:
+				if( add ) {
+					if( isRectangleOnly() || !App.ME.isShiftDown() && !App.ME.isCtrlDown() ) {
+						// Replace active selection with this one
+						if( mode==ToolPicker ) {
+							tool.flipX = tool.flipY = false;
+							tool.selectValue({ mode:tool.getMode(), ids:selIds });
+						}
+						else
+							setSelectedTileIds(selIds);
 					}
-					else
-						setSelectedTileIds(selIds);
+					else {
+						// Add selection (OR)
+						var curSelIds = getSelectedTileIds();
+						var idMap = new Map();
+						for(tid in curSelIds)
+							idMap.set(tid,true);
+						for(tid in selIds)
+							idMap.set(tid,true);
+
+						var arr = [];
+						for(tid in idMap.keys())
+							arr.push(tid);
+
+						if( mode==ToolPicker )
+							tool.selectValue({ mode:tool.getMode(), ids:arr });
+						else
+							setSelectedTileIds(arr);
+					}
 				}
-				else {
-					// Add selection (OR)
+				else if( !isRectangleOnly() ) {
+					// Substract selection
 					var curSelIds = getSelectedTileIds();
-					var idMap = new Map();
-					for(tid in curSelIds)
-						idMap.set(tid,true);
+					var remMap = new Map();
 					for(tid in selIds)
-						idMap.set(tid,true);
+						remMap.set(tid, true);
 
-					var arr = [];
-					for(tid in idMap.keys())
-						arr.push(tid);
-
-					if( mode==ToolPicker )
-						tool.selectValue({ mode:tool.getMode(), ids:arr });
-					else
-						setSelectedTileIds(arr);
+					var i = 0;
+					while( i<curSelIds.length && curSelIds.length>1 )
+						if( remMap.exists(curSelIds[i]) )
+							curSelIds.splice(i,1);
+						else
+							i++;
 				}
-			}
-			else if( mode!=RectOnly ) {
-				// Substract selection
-				var curSelIds = getSelectedTileIds();
-				var remMap = new Map();
-				for(tid in selIds)
-					remMap.set(tid, true);
+				Editor.ME.ge.emit(ToolOptionChanged);
 
-				var i = 0;
-				while( i<curSelIds.length && curSelIds.length>1 )
-					if( remMap.exists(curSelIds[i]) )
-						curSelIds.splice(i,1);
-					else
-						i++;
-			}
-			Editor.ME.ge.emit(ToolOptionChanged);
+			case PaintId( valueGetter, paint ):
+				for(tid in selIds)
+					paint(tid, valueGetter(), add);
+
+			case ViewOnly:
 		}
 
 		renderSelection();

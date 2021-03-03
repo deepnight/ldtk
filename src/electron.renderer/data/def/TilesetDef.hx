@@ -13,7 +13,9 @@ class TilesetDef {
 	public var padding : Int = 0; // px dist to atlas borders
 	public var spacing : Int = 0; // px space between consecutive tiles
 	public var savedSelections : Array<TilesetSelection> = [];
+
 	public var metaDataEnumUid : Null<Int>;
+	public var metaDataEnumValues : Map< String, Map<Int,Bool> > = new Map();
 
 	var opaqueTiles : Null< haxe.ds.Vector<Bool> >;
 	var averageColorsCache : Null< Map<Int,Int> >; // ARGB Int
@@ -67,10 +69,6 @@ class TilesetDef {
 		savedSelections = [];
 	}
 
-	public function getMetaDataEnumDef() : Null<EnumDef> {
-		return metaDataEnumUid==null ? null : _project.defs.getEnumDef(metaDataEnumUid);
-	}
-
 	public function toJson() : ldtk.Json.TilesetDefJson {
 		return {
 			__cWid: cWid,
@@ -84,7 +82,25 @@ class TilesetDef {
 			spacing: spacing,
 			padding: padding,
 			metaDataEnumUid: metaDataEnumUid,
-			metaDataCsv: [], // TODO
+			metaDataEnumValues: {
+				if( metaDataEnumUid==null )
+					[];
+				else {
+					var meta = [];
+					for(ev in getMetaDataEnumDef().values) {
+						var tileIds = [];
+						if( metaDataEnumValues.exists(ev.id) )
+							for(tid in metaDataEnumValues.get(ev.id).keys())
+								tileIds.push(tid);
+
+						meta.push({
+							enumValueId: ev.id,
+							tileIds: tileIds,
+						});
+					}
+					meta;
+				}
+			},
 
 			savedSelections: savedSelections.map( function(sel) {
 				return { ids:sel.ids, mode:JsonTools.writeEnum(sel.mode, false) }
@@ -121,8 +137,13 @@ class TilesetDef {
 		td.pxHei = JsonTools.readInt( json.pxHei );
 		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
+
 		td.metaDataEnumUid = JsonTools.readNullableInt(json.metaDataEnumUid);
-		// TODO metaDataCsv
+		if( json.metaDataEnumValues!=null ) {
+			for(mv in json.metaDataEnumValues)
+			for(tid in mv.tileIds)
+				td.setMetaDataInt(tid, mv.enumValueId, true);
+		}
 
 		if( json.cachedPixelData!=null ) {
 			var size = td.cWid*td.cHei;
@@ -525,6 +546,44 @@ class TilesetDef {
 				op.cb();
 
 		return true;
+	}
+
+	/* META DATA ******************************************/
+
+	public function getMetaDataEnumDef() : Null<EnumDef> {
+		return metaDataEnumUid==null ? null : _project.defs.getEnumDef(metaDataEnumUid);
+	}
+
+	public function setMetaDataInt(tileId:Int, enumValueId:String, active:Bool) {
+		if( tileId<0 || tileId>=cWid*cHei )
+			return;
+
+		if( !metaDataEnumValues.exists(enumValueId) )
+			metaDataEnumValues.set(enumValueId, new Map());
+
+		if( active )
+			metaDataEnumValues.get(enumValueId).set(tileId, true);
+		else
+			metaDataEnumValues.get(enumValueId).remove(tileId);
+	}
+
+	public inline function hasMetaDataEnumAt(enumId:String, tileId:Int) {
+		return metaDataEnumValues.exists(enumId) && metaDataEnumValues.get(enumId).get(tileId)==true;
+	}
+
+	// public function isMetaDataValueUsed(enumId:String) {
+	// 	if( !metaDataEnumValues.exists(enumId) )
+	// 		return false;
+	// 	else {
+	// 		for(tid in metaDataCsv.get(enumId))
+	// 			return true;
+	// 		return false;
+	// 	}
+	// }
+
+	public function removeAllMetaDataAt(tileId:Int) {
+		for( mv in metaDataEnumValues )
+			mv.remove(tileId);
 	}
 
 

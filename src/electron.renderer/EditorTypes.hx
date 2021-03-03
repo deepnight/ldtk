@@ -163,6 +163,7 @@ enum TilePickerMode {
 	SingleTile;
 	ViewOnly;
 	RectOnly;
+	PaintId( valueGetter:Void->Null<String>, paintValue:(tileId:Int, value:Null<String>, active:Bool)->Void );
 }
 
 enum TilePickerDisplayMode {

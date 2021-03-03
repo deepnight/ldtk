@@ -83,6 +83,16 @@ class EnumDef {
 		return null;
 	}
 
+	public function getValueIndex(id:String) : Int {
+		var idx = 0;
+		for(ev in values)
+			if( ev.id==id )
+				return idx;
+			else
+				idx++;
+		return -1;
+	}
+
 	public function isValueIdentifierValidAndUnique(v:String, ?exclude:String) {
 		return Project.isValidIdentifier(v) && !hasValue(v) || exclude!=null && v==exclude;
 	}

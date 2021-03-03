@@ -87,9 +87,20 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var jPicker = jPickerWrapper.find(".picker");
 		jPicker.empty();
 		if( curTd.isAtlasLoaded() ) {
-			var picker = new TilesetPicker(jPicker, curTd, ViewOnly);
+			var picker = new TilesetPicker(
+				jPicker,
+				curTd,
+				PaintId(
+					()->curEnumValue==null ? null : curEnumValue.id,
+					(tid:Int, valueId:Null<String>, active:Bool)->{
+						if( valueId!=null )
+							curTd.setMetaDataInt(tid, valueId, active);
+						else if( !active )
+							curTd.removeAllMetaDataAt(tid);
+					}
+				)
+			);
 			picker.renderGrid();
-			picker.resetScroll();
 		}
 
 		// Enum values
@@ -113,6 +124,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 			for(ev in ed.values) {
 				var jVal = new J('<li value="${ev.id}">${ev.id}</li>');
+				if( ev.tileId!=null )
+					jVal.prepend( JsTools.createTile(curTd, ev.tileId, 16) );
 				jVal.appendTo(jValues);
 				jVal.click( _->_selectEnumValue(ev) );
 			}
@@ -202,7 +215,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			updateTilesetPreview();
 			editor.ge.emit( TilesetDefChanged(curTd) );
 		});
-		jImg.insertAfter( jForm.find("li.img>label:first") );
+		jImg.appendTo( jForm.find("dd.img") );
 
 
 		// Fields
