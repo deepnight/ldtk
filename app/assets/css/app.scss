@@ -5796,6 +5796,7 @@ $patternSize : 32px;
 	}
 
 	.content {
+		width: 860px;
 		grid-template-rows: min-content min-content min-content auto;
 		.mainList {
 			grid-row: 2/5;
@@ -5815,6 +5816,7 @@ $patternSize : 32px;
 			width: 100%;
 			image-rendering: pixelated;
 		}
+
 		.pickerWrapper {
 			display: grid;
 			overflow: hidden;
@@ -5834,6 +5836,13 @@ $patternSize : 32px;
 				margin: 0;
 				overflow-x: hidden;
 				overflow-y: auto;
+				li {
+					display: grid;
+					grid-template-columns: min-content auto;
+					overflow: hidden;
+					width: 120px;
+					white-space: nowrap;
+				}
 			}
 		}
 	}
