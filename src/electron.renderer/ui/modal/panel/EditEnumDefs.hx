@@ -311,15 +311,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			var i = new form.input.StringInput(li.find(".name"),
 				function() return eValue.id,
 				function(newV) {
-					var oldV = eValue.id;
-					if( curEnum.renameValue(project, oldV, newV) ) {
-						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-							for(i in 0...fi.getArrayLength())
-								if( fi.getEnumValue(i)==oldV )
-									fi.parseValue(i, newV);
-						});
-					}
-					else
+					if( !curEnum.renameValue(project, eValue.id, newV) )
 						N.invalidIdentifier(newV);
 				}
 			);

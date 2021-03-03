@@ -126,9 +126,20 @@ class EnumDef {
 
 	public function renameValue(project:Project, from:String, to:String) {
 		to = project.makeUniqueIdStr(to, id->isValueIdentifierValidAndUnique(id,from));
+
 		for(i in 0...values.length)
 			if( values[i].id==from ) {
 				values[i].id = to;
+
+				// Fix existing fields
+				project.iterateAllFieldInstances( F_Enum(uid), function(fi) {
+					for(i in 0...fi.getArrayLength())
+						if( fi.getEnumValue(i)==from ) {
+							App.LOG.add("tidy", "Renaming enum instance in "+fi+"["+i+"]");
+							fi.parseValue(i, to);
+						}
+				});
+
 				return true;
 			}
 

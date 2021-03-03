@@ -788,7 +788,6 @@ class Project {
 			ed.externalRelPath = _remapRelativePath( ed.externalRelPath );
 	}
 
-	#if editor
 	public function iterateAllFieldInstances(?searchType:data.DataTypes.FieldType, run:data.inst.FieldInstance->Void) {
 		for(l in levels)
 		for(fi in l.fieldInstances)
@@ -802,6 +801,4 @@ class Project {
 			if( searchType==null || fi.def.type.equals(searchType) )
 				run(fi);
 	}
-	#end
-
 }
