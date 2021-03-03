@@ -296,6 +296,8 @@ class Editor extends Page {
 				if( reloadTileset(td, true) )
 					tilesetChanged = true;
 
+		project.tidy(); // Needed to fix enum value colors
+
 		ge.emit(ProjectSelected);
 
 		// Tileset image hot-reloading
@@ -1430,7 +1432,9 @@ class Editor extends Page {
 				updateGuide();
 
 			case TilesetSelectionSaved(td):
+
 			case TilesetDefPixelDataCacheRebuilt(td):
+				project.tidy();
 
 			case TilesetDefAdded(td):
 

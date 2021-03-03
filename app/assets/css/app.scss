@@ -4624,13 +4624,17 @@ dl.form.fieldInstanceEditor {
 				li {
 					display: grid;
 					gap: 3px;
-					grid-template-columns: min-content 32px auto 32px;
+					grid-template-columns: min-content 32px 32px auto 32px;
 					grid-auto-flow: column;
-					grid-auto-columns: min-content;
 					margin-bottom: 4px;
 
 					input[type=color] {
-						height: 24px;
+						width: auto;
+						height: 32px;
+						border: 1px solid $orange;
+						&:hover {
+							border-color: white;
+						}
 					}
 					input[type=text] {
 						padding: 3px;

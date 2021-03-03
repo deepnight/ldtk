@@ -35,6 +35,7 @@ class EnumDef {
 			ed.values.push({
 				id: v.id,
 				tileId: JsonTools.readNullableInt(v.tileId),
+				color: v.color==null ? (v.tileId!=null ? -1 : 0) : v.color, // -1 means "to be set later based on tile"
 			});
 		}
 
@@ -52,6 +53,7 @@ class EnumDef {
 			values: values.map( function(v) return { // breaks memory refs
 				id: v.id,
 				tileId: v.tileId,
+				color: v.color,
 				__tileSrcRect: v.tileId==null ? null : {
 					var td = p.defs.getTilesetDef(iconTilesetUid);
 					if( td==null )
@@ -105,6 +107,7 @@ class EnumDef {
 		values.push({
 			id: v,
 			tileId: null,
+			color: 0x0,
 		});
 		return true;
 	}
@@ -145,5 +148,18 @@ class EnumDef {
 			iconTilesetUid = null;
 			clearAllTileIds();
 		}
+
+		// Fix value colors
+		for(ev in values)
+			if( ev.color==-1 ) {
+				var td = p.defs.getTilesetDef(iconTilesetUid);
+				if( td!=null && td.hasValidPixelData() ) {
+					App.LOG.add("tidy", "Init enum value color: "+identifier+"."+ev.id);
+					ev.color = ev.tileId!=null
+						? C.removeAlpha( td.getAverageTileColor(ev.tileId) )
+						: 0x0;
+				}
+			}
+
 	}
 }
