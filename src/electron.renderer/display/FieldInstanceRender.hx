@@ -149,7 +149,7 @@ class FieldInstanceRender {
 
 			case EntityTile:
 
-			case PointStar, PointPath, PointPathLoop:
+			case Points, PointStar, PointPath, PointPathLoop:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
 						var fx = ei.getPointOriginX(ld) - ei.x;
@@ -165,7 +165,9 @@ class FieldInstanceRender {
 
 							var tx = M.round( (pt.cx+0.5)*ld.gridSize - ei.x );
 							var ty = M.round( (pt.cy+0.5)*ld.gridSize - ei.y );
-							renderDashedLine(g, fx,fy, tx,ty, 3);
+							if( fd.editorDisplayMode!=Points ) {
+								renderDashedLine(g, fx,fy, tx,ty, 3);
+							}
 							g.drawRect( tx-2, ty-2, 4, 4 );
 
 							if( fd.editorDisplayMode==PointPath || fd.editorDisplayMode==PointPathLoop ) {

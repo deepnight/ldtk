@@ -479,6 +479,7 @@ class Level {
 
 					case Hidden:
 					case EntityTile:
+					case Points:
 					case PointStar:
 					case PointPath, PointPathLoop:
 					case RadiusPx:

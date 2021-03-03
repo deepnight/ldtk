@@ -608,12 +608,13 @@
 					]
 				},
 				"editorDisplayMode": {
-					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`",
+					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`",
 					"enum": [
 						"Hidden",
 						"ValueOnly",
 						"NameAndValue",
 						"EntityTile",
+						"Points",
 						"PointStar",
 						"PointPath",
 						"PointPathLoop",

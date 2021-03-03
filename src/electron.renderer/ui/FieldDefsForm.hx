@@ -334,6 +334,7 @@ class FieldDefsForm {
 						curField.isArray
 						? L.t._('Show "::name::=[...values...]"', { name:curField.identifier })
 						: L.t._('Show "::name::=..."', { name:curField.identifier });
+					case Points: curField.isArray ? L.t._("Show points") : L.t._("Show point");
 					case PointStar: curField.isArray ? L.t._("Show star of points") : L.t._("Show point");
 					case PointPath: L.t._("Show path of points");
 					case PointPathLoop: L.t._("Show path of points (looping)");
@@ -352,7 +353,7 @@ class FieldDefsForm {
 					case EntityTile:
 						curField.isEnum() && fieldParent==FP_Entity;
 
-					case PointStar:
+					case Points, PointStar:
 						curField.type==F_Point && fieldParent==FP_Entity;
 
 					case PointPath, PointPathLoop:
@@ -385,7 +386,7 @@ class FieldDefsForm {
 			case ValueOnly, NameAndValue:
 				i.setEnabled(true);
 
-			case Hidden, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile:
+			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile:
 				i.setEnabled(false);
 		}
 		i.onChange = onFieldChange;
