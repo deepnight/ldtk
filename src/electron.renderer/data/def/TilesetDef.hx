@@ -70,6 +70,8 @@ class TilesetDef {
 
 	public function toJson() : ldtk.Json.TilesetDefJson {
 		return {
+			__cWid: cWid,
+			__cHei: cHei,
 			identifier: identifier,
 			uid: uid,
 			relPath: JsonTools.writePath(relPath),
@@ -79,6 +81,7 @@ class TilesetDef {
 			spacing: spacing,
 			padding: padding,
 			metaDataEnumUid: metaDataEnumUid,
+			metaDataCsv: [], // TODO
 
 			savedSelections: savedSelections.map( function(sel) {
 				return { ids:sel.ids, mode:JsonTools.writeEnum(sel.mode, false) }
@@ -116,6 +119,7 @@ class TilesetDef {
 		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
 		td.metaDataEnumUid = JsonTools.readNullableInt(json.metaDataEnumUid);
+		// TODO metaDataCsv
 
 		if( json.cachedPixelData!=null ) {
 			var size = td.cWid*td.cHei;
