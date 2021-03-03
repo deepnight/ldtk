@@ -53,10 +53,15 @@ class Tip extends dn.Process {
 			left: x,
 			top: y,
 		});
+
+		if( Editor.exists() )
+			Editor.ME.requestFps();
 	}
 
 	public static function clear() {
 		App.ME.jBody.find(".tip").not("xml .tip").remove();
+		if( Editor.exists() )
+			Editor.ME.requestFps();
 	}
 
 
@@ -68,7 +73,7 @@ class Tip extends dn.Process {
 		target
 			.off(".tip")
 			.on( "mouseenter.tip", function(ev) {
-				if( cur==null && !target.hasClass("disableTip") )
+				if( cur==null && !target.hasClass("disableTip") && App.ME.focused )
 					cur = new Tip(target, str, keys, className, forceBelow);
 			})
 			.on( "mouseleave.tip", function(ev) {
