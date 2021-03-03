@@ -1285,6 +1285,7 @@
 			"title": "Enum value definition",
 			"required": [
 				"__tileSrcRect",
+				"color",
 				"id"
 			],
 			"additionalProperties": false,
@@ -1294,6 +1295,12 @@
 					"type": [
 						"integer",
 						"null"
+					]
+				},
+				"color": {
+					"description": "Optional color",
+					"type": [
+						"integer"
 					]
 				},
 				"id": {
