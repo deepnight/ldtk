@@ -97,9 +97,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 					()->curEnumValue==null ? null : curEnumValue.id,
 					(tid:Int, valueId:Null<String>, active:Bool)->{
 						if( valueId!=null )
-							curTd.setMetaDataInt(tid, valueId, active);
+							curTd.setTag(tid, valueId, active);
 						else if( !active )
-							curTd.removeAllMetaDataAt(tid);
+							curTd.removeAllTagsAt(tid);
 						editor.ge.emitAtTheEndOfFrame( TilesetMetaDataChanged(curTd) );
 					}
 				)
@@ -108,12 +108,12 @@ class EditTilesetDefs extends ui.modal.Panel {
 			// Meta-data render
 			if( curTd.tagsSourceEnumUid!=null ) {
 				var n = 0;
-				var ed = curTd.getMetaDataEnumDef();
+				var ed = curTd.getTagsEnumDef();
 				var thick = M.fmax( 2, 1+Std.int( curTd.tileGridSize / 16 ) );
 				picker.onMouseMoveCustom = (event, tid:Int)->{
 					// Picker tooltip
-					if( curTd.hasAnyMetaDataEnumAt(tid) )
-						ui.Tip.simpleTip(event.pageX, event.pageY, curTd.getAllMetaDataAt(tid).join(", "));
+					if( curTd.hasAnyTag(tid) )
+						ui.Tip.simpleTip(event.pageX, event.pageY, curTd.getAllTagsAt(tid).join(", "));
 					else
 						ui.Tip.clear();
 				}
@@ -126,7 +126,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 					n = 0;
 					var iconTd = ed.iconTilesetUid==null ? null : project.defs.getTilesetDef(ed.iconTilesetUid);
 					for(ev in ed.values)
-						if( curTd.hasMetaDataEnumAt(ev.id, tid) && ( curEnumValue==null || curEnumValue==ev ) ) {
+						if( curTd.hasTag(ev.id, tid) && ( curEnumValue==null || curEnumValue==ev ) ) {
 							if( ev.tileId!=null && iconTd!=null ) {
 								// Tile
 								iconTd.drawTileTo2dContext(ctx, ev.tileId, x-n*2, y-n*4);
@@ -172,7 +172,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		// Enum values
 		var jValues = jPickerWrapper.find(".values");
 		jValues.empty();
-		var ed = curTd.getMetaDataEnumDef();
+		var ed = curTd.getTagsEnumDef();
 		if( ed==null )
 			jValues.hide();
 		else {

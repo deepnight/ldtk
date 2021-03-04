@@ -89,7 +89,7 @@ class TilesetDef {
 					[];
 				else {
 					var tags = [];
-					for(ev in getMetaDataEnumDef().values) {
+					for(ev in getTagsEnumDef().values) {
 						var tileIds = [];
 						if( enumTags.exists(ev.id) )
 							for(tid in enumTags.get(ev.id).keys())
@@ -146,7 +146,7 @@ class TilesetDef {
 		if( json.enumTags!=null ) {
 			for(mv in json.enumTags)
 			for(tid in mv.tileIds)
-				td.setMetaDataInt(tid, mv.enumValueId, true);
+				td.setTag(tid, mv.enumValueId, true);
 		}
 
 		if( json.cachedPixelData!=null ) {
@@ -554,11 +554,11 @@ class TilesetDef {
 
 	/* META DATA ******************************************/
 
-	public function getMetaDataEnumDef() : Null<EnumDef> {
+	public function getTagsEnumDef() : Null<EnumDef> {
 		return tagsSourceEnumUid==null ? null : _project.defs.getEnumDef(tagsSourceEnumUid);
 	}
 
-	public function setMetaDataInt(tileId:Int, enumValueId:String, active:Bool) {
+	public function setTag(tileId:Int, enumValueId:String, active:Bool) {
 		if( tileId<0 || tileId>=cWid*cHei )
 			return;
 
@@ -571,18 +571,18 @@ class TilesetDef {
 			enumTags.get(enumValueId).remove(tileId);
 	}
 
-	public inline function hasMetaDataEnumAt(enumId:String, tileId:Int) {
+	public inline function hasTag(enumId:String, tileId:Int) {
 		return enumTags.exists(enumId) && enumTags.get(enumId).get(tileId)==true;
 	}
 
-	public function hasAnyMetaDataEnumAt(tileId:Int) {
+	public function hasAnyTag(tileId:Int) {
 		for(m in enumTags)
 			if( m.exists(tileId) )
 				return true;
 		return false;
 	}
 
-	public function getAllMetaDataAt(tileId:Int) : Array<String> {
+	public function getAllTagsAt(tileId:Int) : Array<String> {
 		var all = [];
 		for(ek in enumTags.keys())
 			if( enumTags.get(ek).exists(tileId) )
@@ -591,17 +591,7 @@ class TilesetDef {
 		return all;
 	}
 
-	// public function isMetaDataValueUsed(enumId:String) {
-	// 	if( !enumTags.exists(enumId) )
-	// 		return false;
-	// 	else {
-	// 		for(tid in metaDataCsv.get(enumId))
-	// 			return true;
-	// 		return false;
-	// 	}
-	// }
-
-	public function removeAllMetaDataAt(tileId:Int) {
+	public function removeAllTagsAt(tileId:Int) {
 		for( mv in enumTags )
 			mv.remove(tileId);
 	}
