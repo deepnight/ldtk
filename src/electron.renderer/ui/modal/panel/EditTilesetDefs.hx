@@ -152,8 +152,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 								ctx.rect(
 									x+thickness*0.5 + n*offX,
 									y+thickness*0.5 + n*offY,
-									curTd.tileGridSize-thickness-1,
-									curTd.tileGridSize-thickness-1
+									curTd.tileGridSize-thickness - (isSmallGrid?0:1),
+									curTd.tileGridSize-thickness - (isSmallGrid?0:1)
 								);
 								ctx.strokeStyle = C.intToHex( ev.color );
 								ctx.lineWidth = thickness;
