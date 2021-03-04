@@ -302,6 +302,16 @@ button {
 			background: black;
 		}
 	}
+
+	&.pending {
+		color: $orange;
+		background-color: $bgMed;
+		outline: none;
+		border: 1px solid $orange;
+		border-radius: 3px;
+		box-shadow: none;
+		cursor: crosshair;
+	}
 }
 
 
@@ -5845,29 +5855,45 @@ $patternSize : 32px;
 
 			}
 
-			ul.values {
-				margin: 0;
+			.tools {
+				display: grid;
+				grid-template-rows: min-content auto;
 				overflow-x: hidden;
 				overflow-y: auto;
-				li {
-					display: grid;
-					grid-template-columns: min-content auto;
-					overflow: hidden;
-					width: 120px;
-					white-space: nowrap;
-					border-left: 4px solid black;
-					&.none {
-						color: $bgLight;
+				width: 130px;
+				gap: 8px;
+
+				button {
+					margin: 0;
+				}
+
+				ul.values {
+					margin: 0;
+					li {
+						display: grid;
+						grid-template-columns: min-content auto;
+						overflow: hidden;
+						white-space: nowrap;
+						border-left: 4px solid black;
+						&.none {
+							color: $bgLight;
+						}
+						&.active {
+							color: white;
+							outline: 2px solid white;
+							outline-offset: -2px;
+							background-color: inherit;
+							border-radius: 3px;
+						}
 					}
-					&.active {
-						color: white;
-						outline: 2px solid white;
-						outline-offset: -2px;
-						background-color: inherit;
-						border-radius: 3px;
+
+					&.faded li {
+						opacity : 0.5;
+						color: $bgLighter;
 					}
 				}
 			}
+
 		}
 	}
 }

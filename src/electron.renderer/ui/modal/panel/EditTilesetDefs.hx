@@ -6,6 +6,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 	public var curTd : Null<data.def.TilesetDef>;
 
 	var curEnumValue : Null<data.DataTypes.EnumDefValue>;
+	var jsonMode = false;
 
 
 	public function new(?selectedDef:data.def.TilesetDef) {
@@ -75,14 +76,18 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 
 	function updateTilesetPreview() {
+		ui.Tip.clear();
+
 		var jPickerWrapper = jContent.find(".pickerWrapper");
 
+		// No atlas
 		if( curTd==null ) {
 			jPickerWrapper.hide();
 			jContent.find(".tilesDemo").hide();
 			return;
 		}
 
+		jPickerWrapper.off().find("*").off();
 		jContent.find(".tilesDemo").show();
 
 		// Main tileset view
@@ -90,6 +95,32 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var jPicker = jPickerWrapper.find(".picker");
 		jPicker.empty();
 		if( curTd.isAtlasLoaded() ) {
+
+			// Enum/JSON methods
+			var jValues = jPickerWrapper.find(".values");
+			var jJson = jPickerWrapper.find(".json");
+			function _selectEnumValue(?ev:data.DataTypes.EnumDefValue) {
+				curEnumValue = ev;
+				jValues.find(".active").removeClass("active");
+				jValues.find('[value=${ev==null?null:ev.id}]').addClass("active");
+				updateTilesetPreview();
+			}
+
+			function _setJsonMode(v:Bool) {
+				jsonMode = v;
+				if( jsonMode ) {
+					jJson.html("&lt; Select tile");
+					jJson.addClass("pending");
+					jValues.addClass("faded");
+				}
+				else {
+					jJson.html("Add/edit JSON");
+					jJson.removeClass("pending");
+					jValues.removeClass("faded");
+				}
+			}
+
+			// Init picker
 			var picker = new TilesetPicker(
 				jPicker,
 				curTd,
@@ -105,18 +136,52 @@ class EditTilesetDefs extends ui.modal.Panel {
 				)
 			);
 
-			// Meta-data render
-			if( curTd.tagsSourceEnumUid!=null ) {
-				// Picker tooltip
-				picker.onMouseMoveCustom = (event, tid:Int)->{
-					if( curTd.hasAnyTag(tid) )
-						ui.Tip.simpleTip(event.pageX, event.pageY, curTd.getAllTagsAt(tid).join(", "));
-					else
-						ui.Tip.clear();
+			// Json editing
+			picker.onMouseDownCustom = (ev,tid)->{
+				if( jsonMode && ev.button==0 ) {
+					_setJsonMode(false);
+					var te = new ui.modal.dialog.TextEditor("", LangJson, (str)->{
+						N.debug(str);
+					});
+					return true;
 				}
-				picker.onMouseLeaveCustom = (_)->ui.Tip.clear();
+				else
+					return false;
+			}
 
-				// Custom picker grid rendering
+			// Picker tooltip
+			picker.onMouseLeaveCustom = (_)->ui.Tip.clear();
+			picker.onMouseMoveCustom = (event, tid:Int)->{
+				if( curTd.tagsSourceEnumUid==null || jsonMode )
+					return;
+
+				if( curTd.hasAnyTag(tid) )
+					ui.Tip.simpleTip(event.pageX, event.pageY, curTd.getAllTagsAt(tid).join(", "));
+				else
+					ui.Tip.clear();
+			}
+
+			// Picker cursor
+			picker.updateCursorCustom = (pageX,pageY,isDragging)->{
+				if( jsonMode ) {
+					picker.setCursorCss("pick");
+					return true;
+				}
+				else if( curEnumValue==null ) {
+					if( !isDragging )
+						picker.setCursorCss("pan");
+					else
+						picker.setCursorCss("forbidden");
+					return true;
+				}
+				else {
+					picker.setCursorCss("paint");
+					return false;
+				}
+			}
+
+			// Custom picker grid rendering
+			if( curTd.tagsSourceEnumUid!=null ) {
 				var n = 0;
 				var ed = curTd.getTagsEnumDef();
 				var isSmallGrid = curTd.tileGridSize<16;
@@ -174,45 +239,50 @@ class EditTilesetDefs extends ui.modal.Panel {
 				}
 			}
 			picker.renderGrid();
-		}
 
-		// Enum values
-		var jValues = jPickerWrapper.find(".values");
-		jValues.empty();
-		var ed = curTd.getTagsEnumDef();
-		if( ed==null )
-			jValues.hide();
-		else {
-			jValues.show();
 
-			function _selectEnumValue(?ev:data.DataTypes.EnumDefValue) {
-				curEnumValue = ev;
-				jValues.find(".active").removeClass("active");
-				jValues.find('[value=${ev==null?null:ev.id}]').addClass("active");
-				updateTilesetPreview();
-			}
+			// Enum values
+			jValues.off().empty();
+			var ed = curTd.getTagsEnumDef();
+			if( ed==null )
+				jValues.hide();
+			else {
+				jValues.show();
 
-			var jVal = new J('<li value="null" class="none">-- Show all --</li>');
-			jVal.appendTo(jValues);
-			jVal.click( ev->_selectEnumValue(null) );
-
-			for(ev in ed.values) {
-				var jVal = new J('<li value="${ev.id}">${ev.id}</li>');
-				if( ev.tileId!=null ) {
-					var iconTd = project.defs.getTilesetDef(ed.iconTilesetUid);
-					if( iconTd!=null )
-						jVal.prepend( JsTools.createTile(iconTd, ev.tileId, 16) );
-				}
+				var jVal = new J('<li value="none" class="none">-- Show all --</li>');
 				jVal.appendTo(jValues);
-				jVal.css({
-					borderColor: C.intToHex(ev.color),
-					backgroundColor: C.intToHex( C.toBlack(ev.color,0.4) ),
+				jVal.click( ev->{
+					_selectEnumValue(null);
+					_setJsonMode(false);
 				});
-				jVal.click( _->_selectEnumValue(ev) );
-			}
-			jValues.find('[value=${curEnumValue==null ? null : curEnumValue.id}]').addClass("active");
 
+				for(ev in ed.values) {
+					var jVal = new J('<li value="${ev.id}">${ev.id}</li>');
+					if( ev.tileId!=null ) {
+						var iconTd = project.defs.getTilesetDef(ed.iconTilesetUid);
+						if( iconTd!=null )
+							jVal.prepend( JsTools.createTile(iconTd, ev.tileId, 16) );
+					}
+					jVal.appendTo(jValues);
+					jVal.css({
+						borderColor: C.intToHex(ev.color),
+						backgroundColor: C.intToHex( C.toBlack(ev.color,0.4) ),
+					});
+					jVal.click( _->{
+						_selectEnumValue(ev);
+						_setJsonMode(false);
+					});
+				}
+				jValues.find('[value=${curEnumValue==null ? "none" : curEnumValue.id}]').addClass("active");
+			}
+
+			// Json mode button
+			jJson.off().click( _->{
+				_setJsonMode(!jsonMode);
+				_selectEnumValue(null);
+			});
 		}
+
 
 		// Demo tiles
 		var padding = 8;
@@ -235,6 +305,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 			renderDemoTile(0,3);
 			renderDemoTile(0,4);
 		}
+
+		JsTools.parseComponents(jPickerWrapper);
 	}
 
 
