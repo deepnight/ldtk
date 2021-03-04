@@ -333,10 +333,19 @@ class TilesetPicker {
 	}
 
 
+	inline function setCursorCss(?cursorId:String) {
+		if( cursorId==null && jPicker.attr("cursor")!=null )
+			jPicker.removeAttr("cursor");
+		else if( cursorId!=null && jPicker.attr("cursor")!=cursorId )
+			jPicker.attr("cursor", cursorId);
+	}
+
+
 	var _lastRect = null;
 	function updateCursor(pageX:Float, pageY:Float, force=false) {
 		if( mode==ViewOnly || isScrolling() || App.ME.isKeyDown(K.SPACE) || !mouseOver ) {
 			jCursor.hide();
+			setCursorCss("pan");
 			return;
 		}
 
@@ -344,10 +353,17 @@ class TilesetPicker {
 			case PaintId(valueGetter, _):
 				if( valueGetter()==null ) {
 					jCursor.hide();
+					if( dragStart==null )
+						setCursorCss("pan");
+					else
+						setCursorCss("forbidden");
 					return;
 				}
+				else
+					setCursorCss("paint");
 
 			case _:
+				setCursorCss("pick");
 		}
 
 		var r = getCursorRect(pageX, pageY);
