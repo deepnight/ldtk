@@ -133,22 +133,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 								iconTd.drawTileTo2dContext(ctx, ev.tileId, x-n*offX, y-n*offY);
 							}
 							else {
-								// if( isSmallGrid ) {
-								// 	// Drop shadow
-								// 	ctx.beginPath();
-								// 	ctx.rect(
-								// 		x+thickness*0.5 + n*offX,
-								// 		y+thickness*0.5 + n*offY+1,
-								// 		curTd.tileGridSize-thickness,
-								// 		curTd.tileGridSize-thickness
-								// 	);
-								// 	ctx.strokeStyle = C.intToHex( C.getLuminosity(ev.color)>=0.2 ? C.toBlack(ev.color,0.35) : C.setLuminosityInt(ev.color,0.3) );
-								// 	ctx.lineWidth = thickness;
-								// 	ctx.stroke();
-								// }
-								// else {
+								// Contrast outline
 								if( !isSmallGrid ) {
-									// Contrast outline
 									ctx.beginPath();
 									ctx.rect(
 										x+thickness*0.5 + n*offX,
@@ -160,6 +146,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 									ctx.lineWidth = thickness+2;
 									ctx.stroke();
 								}
+
 								// Color rect
 								ctx.beginPath();
 								ctx.rect(
