@@ -167,7 +167,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 						// No meta
 						ctx.beginPath();
 						ctx.rect(x, y, curTd.tileGridSize, curTd.tileGridSize );
-						ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(0x0, 0.5) );
+						ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(0x0, 0.66) );
 						ctx.fill();
 					}
 					return true;
@@ -198,8 +198,11 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 			for(ev in ed.values) {
 				var jVal = new J('<li value="${ev.id}">${ev.id}</li>');
-				if( ev.tileId!=null )
-					jVal.prepend( JsTools.createTile(curTd, ev.tileId, 16) );
+				if( ev.tileId!=null ) {
+					var iconTd = project.defs.getTilesetDef(ed.iconTilesetUid);
+					if( iconTd!=null )
+						jVal.prepend( JsTools.createTile(iconTd, ev.tileId, 16) );
+				}
 				jVal.appendTo(jValues);
 				jVal.css({
 					borderColor: C.intToHex(ev.color),
