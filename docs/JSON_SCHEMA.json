@@ -1167,8 +1167,8 @@
 			"required": [
 				"__cHei",
 				"__cWid",
+				"enumTags",
 				"identifier",
-				"metaDataEnumValues",
 				"padding",
 				"pxHei",
 				"pxWid",
@@ -1199,15 +1199,11 @@
 						"integer"
 					]
 				},
-				"metaDataEnumValues": {
-					"description": "Tileset Enum meta-data. The array contains 1 element per Enum value, with a list of all Tile IDs that have the enum value applied to.",
-					"items": {
-						"type": [
-							"object"
-						]
-					},
+				"tagsSourceEnumUid": {
+					"description": "Optional Enum definition UID used for this tileset meta-data",
 					"type": [
-						"array"
+						"integer",
+						"null"
 					]
 				},
 				"uid": {
@@ -1220,6 +1216,17 @@
 					"description": "Distance in pixels from image borders",
 					"type": [
 						"integer"
+					]
+				},
+				"enumTags": {
+					"description": "Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1 element per Enum value, which contains an array of all Tile IDs that are tagged with it.",
+					"items": {
+						"type": [
+							"object"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"pxWid": {
@@ -1255,13 +1262,6 @@
 					},
 					"type": [
 						"array"
-					]
-				},
-				"metaDataEnumUid": {
-					"description": "Optional Enum definition UID used for this tileset meta-data",
-					"type": [
-						"integer",
-						"null"
 					]
 				},
 				"relPath": {

@@ -265,14 +265,14 @@ Value | Type | Description
 -- | -- | --
 `__cHei`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Int | Grid-based height
 `__cWid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Int | Grid-based width
+`enumTags`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Array&nbsp;of&nbsp;Object | Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1 element per Enum value, which contains an array of all Tile IDs that are tagged with it.<br/> This object contains the following fields:<br/> <ul><li>**`enumValueId`** **(String**)</li><li>**`tileIds`** **(Array of Int**)</li></ul>
 `identifier` | String | Unique String identifier
-`metaDataEnumUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Enum definition UID used for this tileset meta-data
-`metaDataEnumValues`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Array&nbsp;of&nbsp;Object | Tileset Enum meta-data. The array contains 1 element per Enum value, with a list of all Tile IDs that have the enum value applied to.<br/> This object contains the following fields:<br/> <ul><li>**`enumValueId`** **(String**)</li><li>**`tileIds`** **(Array of Int**)</li></ul>
 `padding` | Int | Distance in pixels from image borders
 `pxHei` | Int | Image height in pixels
 `pxWid` | Int | Image width in pixels
 `relPath` | String | Path to the source file, relative to the current project JSON file
 `spacing` | Int | Space in pixels between all tiles
+`tagsSourceEnumUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Enum definition UID used for this tileset meta-data
 `tileGridSize` | Int | 
 `uid` | Int | Unique Intidentifier
 `cachedPixelData`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | The following data is used internally for various optimizations. It's always synced with source image changes.<br/> This object contains the following fields:<br/> <ul><li>**`averageColors`** **(String *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  : *Average color codes for each tileset tile (ARGB format)*</li><li>**`opaqueTiles`** **(String**)  ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-gray.svg)  : *An array of 0/1 bytes, encoded in Base64, that tells if a specific TileID is fully opaque (1) or not (0)*</li></ul>
