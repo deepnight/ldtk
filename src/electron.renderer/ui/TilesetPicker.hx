@@ -579,10 +579,12 @@ class TilesetPicker {
 	}
 
 	public dynamic function onMouseMoveCustom(event:js.jquery.Event, tileId:Int) {}
+	public dynamic function onMouseLeaveCustom(event:js.jquery.Event) {}
 
 	function onPickerMouseLeave(ev:js.jquery.Event) {
 		mouseOver = false;
 		updateCursor(ev.pageX, ev.pageY);
+		onMouseLeaveCustom(ev);
 	}
 
 	function getCursorRect(pageX:Float, pageY:Float) {

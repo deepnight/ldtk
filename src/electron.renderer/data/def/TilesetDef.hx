@@ -571,6 +571,22 @@ class TilesetDef {
 		return metaDataEnumValues.exists(enumId) && metaDataEnumValues.get(enumId).get(tileId)==true;
 	}
 
+	public function hasAnyMetaDataEnumAt(tileId:Int) {
+		for(m in metaDataEnumValues)
+			if( m.exists(tileId) )
+				return true;
+		return false;
+	}
+
+	public function getAllMetaDataAt(tileId:Int) : Array<String> {
+		var all = [];
+		for(ek in metaDataEnumValues.keys())
+			if( metaDataEnumValues.get(ek).exists(tileId) )
+				all.push(ek);
+
+		return all;
+	}
+
 	// public function isMetaDataValueUsed(enumId:String) {
 	// 	if( !metaDataEnumValues.exists(enumId) )
 	// 		return false;

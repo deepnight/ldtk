@@ -4,15 +4,20 @@ class Tip extends dn.Process {
 	static var CURRENT : Tip = null;
 
 	var jTip : js.jquery.JQuery;
+	var text(default,null) : String;
 
-	private function new(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, forceBelowPos=false) {
+	private function new(?target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, forceBelowPos=false) {
 		super(Editor.ME);
 
 		clear();
 		CURRENT = this;
+		text = str;
 		jTip = new J("xml#tip").clone().children().first();
 		jTip.appendTo(App.ME.jBody);
-		jTip.css("min-width", target.outerWidth()+"px");
+
+		if( target!=null )
+			jTip.css("min-width", target.outerWidth()+"px");
+
 		if( className!=null )
 			jTip.addClass(className);
 
@@ -43,20 +48,22 @@ class Tip extends dn.Process {
 				jKeys.append( JsTools.createKey(kid) );
 		}
 
-		// Position
-		var tOff = target.offset();
-		var x = tOff.left;
-		if( x>=js.Browser.window.innerWidth*0.7 )
-			 x = tOff.left + target.innerWidth() - jTip.outerWidth();
+		// Position near target
+		if( target!=null ) {
+			var tOff = target.offset();
+			var x = tOff.left;
+			if( x>=js.Browser.window.innerWidth*0.7 )
+				 x = tOff.left + target.innerWidth() - jTip.outerWidth();
 
-		var y = tOff.top + target.outerHeight() + 4;
-		if( target.outerHeight()<=32 && !forceBelowPos && tOff.top>=40 || y>=js.Browser.window.innerHeight-50 )
-			y = tOff.top - jTip.outerHeight() - 4;
+			var y = tOff.top + target.outerHeight() + 4;
+			if( target.outerHeight()<=32 && !forceBelowPos && tOff.top>=40 || y>=js.Browser.window.innerHeight-50 )
+				y = tOff.top - jTip.outerHeight() - 4;
 
-		jTip.offset({
-			left: x,
-			top: y,
-		});
+			jTip.offset({
+				left: x,
+				top: y,
+			});
+		}
 
 		if( Editor.exists() )
 			Editor.ME.requestFps();
@@ -72,7 +79,16 @@ class Tip extends dn.Process {
 	}
 
 
-	// public static function attachQuick
+	public static function simpleTip(pageX:Float, pageY:Float, str:String) {
+		if( CURRENT==null || CURRENT.destroyed || CURRENT.text!=str )
+			new Tip(str);
+
+		CURRENT.jTip.offset({
+			left: pageX - 16,
+			top: pageY + ( pageY>100 ? -32 : 32 ),
+		});
+	}
+
 
 	public static function attach(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, ?forceBelow:Bool) {
 		var cur : Tip = null;

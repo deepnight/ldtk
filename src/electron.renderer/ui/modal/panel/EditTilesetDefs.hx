@@ -110,7 +110,19 @@ class EditTilesetDefs extends ui.modal.Panel {
 				var n = 0;
 				var ed = curTd.getMetaDataEnumDef();
 				var thick = M.fmax( 2, 1+Std.int( curTd.tileGridSize / 16 ) );
+				picker.onMouseMoveCustom = (event, tid:Int)->{
+					// Picker tooltip
+					if( curTd.hasAnyMetaDataEnumAt(tid) )
+						ui.Tip.simpleTip(event.pageX, event.pageY, curTd.getAllMetaDataAt(tid).join(", "));
+					else
+						ui.Tip.clear();
+				}
+				picker.onMouseLeaveCustom = (_)->{
+					ui.Tip.clear();
+				}
+
 				picker.customTileRender = (ctx,x,y,tid)->{
+					// Custom picker grid rendering
 					n = 0;
 					var iconTd = ed.iconTilesetUid==null ? null : project.defs.getTilesetDef(ed.iconTilesetUid);
 					for(ev in ed.values)
@@ -131,8 +143,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 								// Fill
 								ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(ev.color, 0) );
 								ctx.fill();
-								// Black outline
-								ctx.strokeStyle = C.intToHex( 0x0 );
+								// Contrast outline
+								ctx.strokeStyle = C.intToHex( C.getLuminosity(ev.color)>=0.2 ? 0x0 : C.setLuminosityInt(ev.color,0.3) );
 								ctx.lineWidth = thick+2;
 								ctx.stroke();
 								// Outline
