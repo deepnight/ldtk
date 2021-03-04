@@ -1,11 +1,15 @@
 package ui;
 
 class Tip extends dn.Process {
+	static var CURRENT : Tip = null;
+
 	var jTip : js.jquery.JQuery;
 
 	private function new(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, forceBelowPos=false) {
 		super(Editor.ME);
 
+		clear();
+		CURRENT = this;
 		jTip = new J("xml#tip").clone().children().first();
 		jTip.appendTo(App.ME.jBody);
 		jTip.css("min-width", target.outerWidth()+"px");
@@ -59,11 +63,16 @@ class Tip extends dn.Process {
 	}
 
 	public static function clear() {
-		App.ME.jBody.find(".tip").not("xml .tip").remove();
-		if( Editor.exists() )
-			Editor.ME.requestFps();
+		if( CURRENT!=null ) {
+			CURRENT.destroy();
+			CURRENT = null;
+			if( Editor.exists() )
+				Editor.ME.requestFps();
+		}
 	}
 
+
+	// public static function attachQuick
 
 	public static function attach(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, ?forceBelow:Bool) {
 		var cur : Tip = null;
@@ -95,5 +104,8 @@ class Tip extends dn.Process {
 
 		jTip.remove();
 		jTip = null;
+
+		if( CURRENT==this )
+			CURRENT = null;
 	}
 }
