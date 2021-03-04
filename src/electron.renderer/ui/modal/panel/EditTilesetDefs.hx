@@ -107,49 +107,69 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 			// Meta-data render
 			if( curTd.tagsSourceEnumUid!=null ) {
-				var n = 0;
-				var ed = curTd.getTagsEnumDef();
-				var thick = M.fmax( 2, 1+Std.int( curTd.tileGridSize / 16 ) );
+				// Picker tooltip
 				picker.onMouseMoveCustom = (event, tid:Int)->{
-					// Picker tooltip
 					if( curTd.hasAnyTag(tid) )
 						ui.Tip.simpleTip(event.pageX, event.pageY, curTd.getAllTagsAt(tid).join(", "));
 					else
 						ui.Tip.clear();
 				}
-				picker.onMouseLeaveCustom = (_)->{
-					ui.Tip.clear();
-				}
+				picker.onMouseLeaveCustom = (_)->ui.Tip.clear();
 
+				// Custom picker grid rendering
+				var n = 0;
+				var ed = curTd.getTagsEnumDef();
+				var isSmallGrid = curTd.tileGridSize<16;
+				var thickness = M.imax(1, Std.int( curTd.tileGridSize / 16 ) );
+				var offX = isSmallGrid ? -1 : -thickness*2;
+				var offY = isSmallGrid ? -1 : -thickness*2;
 				picker.customTileRender = (ctx,x,y,tid)->{
-					// Custom picker grid rendering
 					n = 0;
 					var iconTd = ed.iconTilesetUid==null ? null : project.defs.getTilesetDef(ed.iconTilesetUid);
 					for(ev in ed.values)
 						if( curTd.hasTag(ev.id, tid) && ( curEnumValue==null || curEnumValue==ev ) ) {
 							if( ev.tileId!=null && iconTd!=null ) {
 								// Tile
-								iconTd.drawTileTo2dContext(ctx, ev.tileId, x-n*2, y-n*4);
+								iconTd.drawTileTo2dContext(ctx, ev.tileId, x-n*offX, y-n*offY);
 							}
 							else {
-								// Color
+								// if( isSmallGrid ) {
+								// 	// Drop shadow
+								// 	ctx.beginPath();
+								// 	ctx.rect(
+								// 		x+thickness*0.5 + n*offX,
+								// 		y+thickness*0.5 + n*offY+1,
+								// 		curTd.tileGridSize-thickness,
+								// 		curTd.tileGridSize-thickness
+								// 	);
+								// 	ctx.strokeStyle = C.intToHex( C.getLuminosity(ev.color)>=0.2 ? C.toBlack(ev.color,0.35) : C.setLuminosityInt(ev.color,0.3) );
+								// 	ctx.lineWidth = thickness;
+								// 	ctx.stroke();
+								// }
+								// else {
+								if( !isSmallGrid ) {
+									// Contrast outline
+									ctx.beginPath();
+									ctx.rect(
+										x+thickness*0.5 + n*offX,
+										y+thickness*0.5 + n*offY,
+										curTd.tileGridSize-thickness-1,
+										curTd.tileGridSize-thickness-1
+									);
+									ctx.strokeStyle = C.intToHex( C.getLuminosity(ev.color)>=0.2 ? 0x0 : C.setLuminosityInt(ev.color,0.3) );
+									ctx.lineWidth = thickness+2;
+									ctx.stroke();
+								}
+								// Color rect
 								ctx.beginPath();
 								ctx.rect(
-									x+thick*0.5 - n*2,
-									y+thick*0.5 - n*4,
-									curTd.tileGridSize-thick,
-									curTd.tileGridSize-thick
+									x+thickness*0.5 + n*offX,
+									y+thickness*0.5 + n*offY,
+									curTd.tileGridSize-thickness-1,
+									curTd.tileGridSize-thickness-1
 								);
-								// Fill
-								ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(ev.color, 0) );
-								ctx.fill();
-								// Contrast outline
-								ctx.strokeStyle = C.intToHex( C.getLuminosity(ev.color)>=0.2 ? 0x0 : C.setLuminosityInt(ev.color,0.3) );
-								ctx.lineWidth = thick+2;
-								ctx.stroke();
-								// Outline
 								ctx.strokeStyle = C.intToHex( ev.color );
-								ctx.lineWidth = thick;
+								ctx.lineWidth = thickness;
 								ctx.stroke();
 							}
 
