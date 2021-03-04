@@ -1,5 +1,8 @@
 # 0.8.2
 
+  - TODO: tilset tags
+  - TODO: isolated points for Entities
+  - TODO: enum value colors
   - Array of Points in Entities can now be displayed as "**looping paths**".
   - Reduced tile flickering while zooming in/out (this reduction can be disabled from the app settings)
   - Fixed "Create group" button in Auto-layer Rules panel
