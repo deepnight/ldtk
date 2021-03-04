@@ -106,7 +106,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			);
 
 			// Meta-data render
-			if( curTd.metaDataEnumUid!=null ) {
+			if( curTd.tagsSourceEnumUid!=null ) {
 				var n = 0;
 				var ed = curTd.getMetaDataEnumDef();
 				var thick = M.fmax( 2, 1+Std.int( curTd.tileGridSize / 16 ) );
@@ -307,7 +307,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		i.setBounds(0, curTd.getMaxTileGridSize());
 
 		// Metadata Enum selector
-		var jSelect = jForm.find("#metaDataEnumUid");
+		var jSelect = jForm.find("#tagsSourceEnumUid");
 		jSelect.empty();
 		var jOpt = new J('<option value="">-- None --</option>');
 		jOpt.appendTo(jSelect);
@@ -319,11 +319,11 @@ class EditTilesetDefs extends ui.modal.Panel {
 			var uid = Std.parseInt( jSelect.val() );
 			if( !M.isValidNumber(uid) )
 				uid = null;
-			curTd.metaDataEnumUid = uid;
+			curTd.tagsSourceEnumUid = uid;
 			editor.ge.emit( TilesetDefChanged(curTd) );
 		});
-		if( curTd.metaDataEnumUid!=null )
-			jSelect.val(curTd.metaDataEnumUid);
+		if( curTd.tagsSourceEnumUid!=null )
+			jSelect.val(curTd.tagsSourceEnumUid);
 	}
 
 

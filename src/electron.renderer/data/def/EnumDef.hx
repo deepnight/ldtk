@@ -145,9 +145,9 @@ class EnumDef {
 
 				// Fix tileset meta-data
 				for(td in project.defs.tilesets)
-					if( td.metaDataEnumUid==uid && td.metaDataEnumValues.exists(from) ) {
-						td.metaDataEnumValues.set(to, td.metaDataEnumValues.get(from));
-						td.metaDataEnumValues.remove(from);
+					if( td.tagsSourceEnumUid==uid && td.enumTags.exists(from) ) {
+						td.enumTags.set(to, td.enumTags.get(from));
+						td.enumTags.remove(from);
 					}
 
 				return true;

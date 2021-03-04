@@ -1276,7 +1276,80 @@
 			"spacing": 0,
 			"padding": 0,
 			"metaDataEnumUid": 137,
-			"metaDataEnumValues": [ { "enumValueId": "Solid", "tileIds": [0,2,4,6,46,48,50,52,92,94,96,98,142,144] }, { "enumValueId": "Ladder", "tileIds": [213] }, { "enumValueId": "OneWay", "tileIds": [8,9,53,55,99,100] }, { "enumValueId": "Water", "tileIds": [250,273] } ],
+			"metaDataEnumValues": [
+				{
+					"enumValueId": "Plain_block",
+					"tileIds": [
+						0,
+						2,
+						4,
+						6,
+						10,
+						35,
+						36,
+						38,
+						39,
+						41,
+						42,
+						44,
+						45,
+						46,
+						48,
+						50,
+						52,
+						56,
+						92,
+						94,
+						96,
+						98,
+						105,
+						107,
+						111,
+						113,
+						142,
+						144,
+						152,
+						154,
+						156,
+						198,
+						200,
+						202,
+						208,
+						210,
+						244,
+						246,
+						248,
+						282,
+						284,
+						286,
+						288,
+						313,
+						315,
+						317,
+						323,
+						325,
+						346,
+						348,
+						369,
+						371,
+						391,
+						392,
+						394,
+						395,
+						437,
+						439,
+						440,
+						462,
+						463
+					]
+				},
+				{ "enumValueId": "SlopeLeft", "tileIds": [0,2,4,12,13,18,19,46,48,50,82,88,92,94,96] },
+				{ "enumValueId": "SlopeRight", "tileIds": [15,16,21,22,84,90] },
+				{ "enumValueId": "Ladder", "tileIds": [213] },
+				{ "enumValueId": "OneWay", "tileIds": [8,9,53,55,99,100,146,148,216,217] },
+				{ "enumValueId": "Water", "tileIds": [250,273] },
+				{ "enumValueId": "Black_test", "tileIds": [2,10,46,48,50,56,96] }
+			],
 			"savedSelections": [
 				{ "ids": [358,381,404,359,382,405], "mode": "Stamp" },
 				{ "ids": [284,307,330], "mode": "Stamp" },
@@ -1321,45 +1394,48 @@
 			}
 		}
 	], "enums": [
+		{ "identifier": "CollisionType", "uid": 137, "values": [
+			{ "id": "Plain_block", "tileId": null, "color": 8947848, "__tileSrcRect": null },
+			{ "id": "SlopeLeft", "tileId": null, "color": 65306, "__tileSrcRect": null },
+			{ "id": "SlopeRight", "tileId": null, "color": 16766720, "__tileSrcRect": null },
+			{ "id": "Ladder", "tileId": null, "color": 11030831, "__tileSrcRect": null },
+			{ "id": "OneWay", "tileId": null, "color": 7842508, "__tileSrcRect": null },
+			{ "id": "Water", "tileId": null, "color": 255, "__tileSrcRect": null },
+			{ "id": "Black_test", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null },
 		{ "identifier": "Item_type", "uid": 49, "values": [
-			{ "id": "Knife", "tileId": 1563, "__tileSrcRect": [176,1552,16,16] },
-			{ "id": "Sword", "tileId": 1721, "__tileSrcRect": [144,1712,16,16] },
-			{ "id": "LeatherArmor", "tileId": 60, "__tileSrcRect": [192,48,16,16] },
-			{ "id": "PlateArmor", "tileId": 73, "__tileSrcRect": [144,64,16,16] },
-			{ "id": "Healing", "tileId": 660, "__tileSrcRect": [64,656,16,16] },
-			{ "id": "Banana_for_scale", "tileId": 270, "__tileSrcRect": [224,256,16,16] },
-			{ "id": "Water", "tileId": 288, "__tileSrcRect": [0,288,16,16] },
-			{ "id": "Gem", "tileId": 478, "__tileSrcRect": [224,464,16,16] },
-			{ "id": "Key", "tileId": 512, "__tileSrcRect": [0,512,16,16] }
+			{ "id": "Knife", "tileId": 1563, "color": 10061960, "__tileSrcRect": [176,1552,16,16] },
+			{ "id": "Sword", "tileId": 1721, "color": 12298905, "__tileSrcRect": [144,1712,16,16] },
+			{ "id": "LeatherArmor", "tileId": 60, "color": 8934724, "__tileSrcRect": [192,48,16,16] },
+			{ "id": "PlateArmor", "tileId": 73, "color": 6710886, "__tileSrcRect": [144,64,16,16] },
+			{ "id": "Healing", "tileId": 660, "color": 11180441, "__tileSrcRect": [64,656,16,16] },
+			{ "id": "Banana_for_scale", "tileId": 270, "color": 12294485, "__tileSrcRect": [224,256,16,16] },
+			{ "id": "Water", "tileId": 288, "color": 7824998, "__tileSrcRect": [0,288,16,16] },
+			{ "id": "Gem", "tileId": 478, "color": 13404347, "__tileSrcRect": [224,464,16,16] },
+			{ "id": "Key", "tileId": 512, "color": 10066312, "__tileSrcRect": [0,512,16,16] }
 		], "iconTilesetUid": 91, "externalRelPath": null, "externalFileChecksum": null },
 		{ "identifier": "Monster_type", "uid": 99, "values": [
-			{ "id": "Gobelin", "tileId": 1576, "__tileSrcRect": [128,1568,16,16] },
-			{ "id": "Cave_troll", "tileId": 1620, "__tileSrcRect": [64,1616,16,16] },
-			{ "id": "Dark_mage", "tileId": 1682, "__tileSrcRect": [32,1680,16,16] }
+			{ "id": "Gobelin", "tileId": 1576, "color": 7833685, "__tileSrcRect": [128,1568,16,16] },
+			{ "id": "Cave_troll", "tileId": 1620, "color": 11171669, "__tileSrcRect": [64,1616,16,16] },
+			{ "id": "Dark_mage", "tileId": 1682, "color": 6697813, "__tileSrcRect": [32,1680,16,16] }
 		], "iconTilesetUid": 91, "externalRelPath": null, "externalFileChecksum": null },
-		{ "identifier": "CollisionType", "uid": 137, "values": [
-			{ "id": "Solid", "tileId": null, "__tileSrcRect": null },
-			{ "id": "Ladder", "tileId": null, "__tileSrcRect": null },
-			{ "id": "OneWay", "tileId": null, "__tileSrcRect": null },
-			{ "id": "Water", "tileId": null, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null },
 		{ "identifier": "Music", "uid": 97, "values": [
-			{ "id": "Default_level_ambiant", "tileId": null, "__tileSrcRect": null },
-			{ "id": "Treasure_room", "tileId": null, "__tileSrcRect": null },
-			{ "id": "Oppressive_ambiant", "tileId": null, "__tileSrcRect": null }
+			{ "id": "Default_level_ambiant", "tileId": null, "color": 2143901, "__tileSrcRect": null },
+			{ "id": "Treasure_room", "tileId": null, "color": 16635917, "__tileSrcRect": null },
+			{ "id": "Oppressive_ambiant", "tileId": null, "color": 16125454, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null }
 	], "externalEnums": [
 		{ "identifier": "A", "uid": 134, "values": [
-			{ "id": "A0", "tileId": null, "__tileSrcRect": null },
-			{ "id": "A1", "tileId": null, "__tileSrcRect": null },
-			{ "id": "A2", "tileId": null, "__tileSrcRect": null },
-			{ "id": "A3", "tileId": null, "__tileSrcRect": null }
+			{ "id": "A0", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "A1", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "A2", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "A3", "tileId": null, "color": 0, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" },
-		{ "identifier": "B", "uid": 135, "values": [{ "id": "B0", "tileId": null, "__tileSrcRect": null }], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" },
+		{ "identifier": "B", "uid": 135, "values": [{ "id": "B0", "tileId": null, "color": 0, "__tileSrcRect": null }], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" },
 		{ "identifier": "C", "uid": 136, "values": [
-			{ "id": "C0", "tileId": null, "__tileSrcRect": null },
-			{ "id": "C1", "tileId": null, "__tileSrcRect": null },
-			{ "id": "C2", "tileId": null, "__tileSrcRect": null }
+			{ "id": "C0", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "C1", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "C2", "tileId": null, "color": 0, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" }
 	], "levelFields": [
 		{

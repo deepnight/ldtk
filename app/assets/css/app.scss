@@ -5810,8 +5810,12 @@ $patternSize : 32px;
 		.mainList {
 			grid-row: 2/5;
 		}
-		ul.form {
+		dl.form {
 			grid-row: 2/3;
+			dt {
+				max-width: none;
+				white-space: nowrap;
+			}
 		}
 		.tilesDemo {
 			grid-row: 3/4;

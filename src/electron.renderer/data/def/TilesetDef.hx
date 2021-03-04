@@ -14,8 +14,9 @@ class TilesetDef {
 	public var spacing : Int = 0; // px space between consecutive tiles
 	public var savedSelections : Array<TilesetSelection> = [];
 
-	public var metaDataEnumUid : Null<Int>;
-	public var metaDataEnumValues : Map< String, Map<Int,Bool> > = new Map();
+	public var tagsSourceEnumUid : Null<Int>;
+	/** Map< EnumValueId, Map< TileId, Bool > > **/
+	public var enumTags: Map< String, Map<Int,Bool> > = new Map();
 
 	var opaqueTiles : Null< haxe.ds.Vector<Bool> >;
 	var averageColorsCache : Null< Map<Int,Int> >; // ARGB Int
@@ -81,24 +82,25 @@ class TilesetDef {
 			tileGridSize: tileGridSize,
 			spacing: spacing,
 			padding: padding,
-			metaDataEnumUid: metaDataEnumUid,
-			metaDataEnumValues: {
-				if( metaDataEnumUid==null )
+
+			tagsSourceEnumUid: tagsSourceEnumUid,
+			enumTags: {
+				if( tagsSourceEnumUid==null )
 					[];
 				else {
-					var meta = [];
+					var tags = [];
 					for(ev in getMetaDataEnumDef().values) {
 						var tileIds = [];
-						if( metaDataEnumValues.exists(ev.id) )
-							for(tid in metaDataEnumValues.get(ev.id).keys())
+						if( enumTags.exists(ev.id) )
+							for(tid in enumTags.get(ev.id).keys())
 								tileIds.push(tid);
 
-						meta.push({
+						tags.push({
 							enumValueId: ev.id,
 							tileIds: tileIds,
 						});
 					}
-					meta;
+					tags;
 				}
 			},
 
@@ -138,9 +140,11 @@ class TilesetDef {
 		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
 
-		td.metaDataEnumUid = JsonTools.readNullableInt(json.metaDataEnumUid);
-		if( json.metaDataEnumValues!=null ) {
-			for(mv in json.metaDataEnumValues)
+		if( (cast json).metaDataEnumUid!=null ) json.tagsSourceEnumUid = (cast json).metaDataEnumUid;
+		td.tagsSourceEnumUid = JsonTools.readNullableInt(json.tagsSourceEnumUid);
+		if( (cast json).metaDataEnumValues!=null ) json.enumTags = (cast json).metaDataEnumValues;
+		if( json.enumTags!=null ) {
+			for(mv in json.enumTags)
 			for(tid in mv.tileIds)
 				td.setMetaDataInt(tid, mv.enumValueId, true);
 		}
@@ -551,28 +555,28 @@ class TilesetDef {
 	/* META DATA ******************************************/
 
 	public function getMetaDataEnumDef() : Null<EnumDef> {
-		return metaDataEnumUid==null ? null : _project.defs.getEnumDef(metaDataEnumUid);
+		return tagsSourceEnumUid==null ? null : _project.defs.getEnumDef(tagsSourceEnumUid);
 	}
 
 	public function setMetaDataInt(tileId:Int, enumValueId:String, active:Bool) {
 		if( tileId<0 || tileId>=cWid*cHei )
 			return;
 
-		if( !metaDataEnumValues.exists(enumValueId) )
-			metaDataEnumValues.set(enumValueId, new Map());
+		if( !enumTags.exists(enumValueId) )
+			enumTags.set(enumValueId, new Map());
 
 		if( active )
-			metaDataEnumValues.get(enumValueId).set(tileId, true);
+			enumTags.get(enumValueId).set(tileId, true);
 		else
-			metaDataEnumValues.get(enumValueId).remove(tileId);
+			enumTags.get(enumValueId).remove(tileId);
 	}
 
 	public inline function hasMetaDataEnumAt(enumId:String, tileId:Int) {
-		return metaDataEnumValues.exists(enumId) && metaDataEnumValues.get(enumId).get(tileId)==true;
+		return enumTags.exists(enumId) && enumTags.get(enumId).get(tileId)==true;
 	}
 
 	public function hasAnyMetaDataEnumAt(tileId:Int) {
-		for(m in metaDataEnumValues)
+		for(m in enumTags)
 			if( m.exists(tileId) )
 				return true;
 		return false;
@@ -580,15 +584,15 @@ class TilesetDef {
 
 	public function getAllMetaDataAt(tileId:Int) : Array<String> {
 		var all = [];
-		for(ek in metaDataEnumValues.keys())
-			if( metaDataEnumValues.get(ek).exists(tileId) )
+		for(ek in enumTags.keys())
+			if( enumTags.get(ek).exists(tileId) )
 				all.push(ek);
 
 		return all;
 	}
 
 	// public function isMetaDataValueUsed(enumId:String) {
-	// 	if( !metaDataEnumValues.exists(enumId) )
+	// 	if( !enumTags.exists(enumId) )
 	// 		return false;
 	// 	else {
 	// 		for(tid in metaDataCsv.get(enumId))
@@ -598,7 +602,7 @@ class TilesetDef {
 	// }
 
 	public function removeAllMetaDataAt(tileId:Int) {
-		for( mv in metaDataEnumValues )
+		for( mv in enumTags )
 			mv.remove(tileId);
 	}
 
