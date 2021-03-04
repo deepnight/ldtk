@@ -575,9 +575,11 @@ class TilesetDef {
 		return enumTags.exists(enumId) && enumTags.get(enumId).get(tileId)==true;
 	}
 
-	public function hasAnyTag(tileId:Int) {
+	public function hasAnyTag(?tileId:Int) {
 		for(m in enumTags)
-			if( m.exists(tileId) )
+			if( tileId==null )
+				return true;
+			else if( m.exists(tileId) )
 				return true;
 		return false;
 	}
@@ -674,5 +676,27 @@ class TilesetDef {
 
 	public function tidy(p:data.Project) {
 		_project = p;
+
+		// Lost source enum
+		if( tagsSourceEnumUid!=null && getTagsEnumDef()==null ) {
+			App.LOG.add("tidy", "Cleared lost tag enum in "+this);
+			tagsSourceEnumUid = null;
+		}
+
+		// Clear tags if source is null
+		if( tagsSourceEnumUid==null && hasAnyTag() ) {
+			App.LOG.add("tidy", "Cleared lost tags in "+this);
+			enumTags = new Map();
+		}
+
+		// Lost tag values
+		if( tagsSourceEnumUid!=null ) {
+			var ed = getTagsEnumDef();
+			for(k in enumTags.keys())
+				if( !ed.hasValue(k) ) {
+					App.LOG.add("tidy", "Cleared lost tag value in "+this);
+					enumTags.remove(k);
+				}
+		}
 	}
 }
