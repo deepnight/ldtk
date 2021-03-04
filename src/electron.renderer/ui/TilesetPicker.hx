@@ -214,9 +214,24 @@ class TilesetPicker {
 		return v;
 	}
 
-	inline function pageXtoLocal(v:Float) return M.round( ( v - jPicker.offset().left ) / zoom + scrollX );
-	inline function pageYtoLocal(v:Float) return M.round( ( v - jPicker.offset().top ) / zoom + scrollY );
+	inline function pageToLocalX(v:Float) return M.round( ( v - jPicker.offset().left ) / zoom + scrollX );
+	inline function pageToLocalY(v:Float) return M.round( ( v - jPicker.offset().top ) / zoom + scrollY );
 
+	inline function pageToCx(v:Float) : Int {
+		return M.iclamp(
+			Std.int( (pageToLocalX(v)-tilesetDef.padding) / ( tilesetDef.tileGridSize+tilesetDef.spacing ) ),
+			0,
+			tilesetDef.cWid-1
+		);
+	}
+
+	inline function pageToCy(v:Float) : Int {
+		return M.iclamp(
+			Std.int( (pageToLocalY(v)-tilesetDef.padding) / ( tilesetDef.tileGridSize+tilesetDef.spacing ) ),
+			0,
+			tilesetDef.cHei-1
+		);
+	}
 
 	function renderSelection() {
 		jSelection.empty();
@@ -513,13 +528,13 @@ class TilesetPicker {
 	function onPickerMouseWheel(ev:js.html.WheelEvent) {
 		if( ev.deltaY!=0 ) {
 			ev.preventDefault();
-			var oldLocalX = pageXtoLocal(ev.pageX);
-			var oldLocalY = pageYtoLocal(ev.pageY);
+			var oldLocalX = pageToLocalX(ev.pageX);
+			var oldLocalY = pageToLocalY(ev.pageY);
 
 			zoom += -ev.deltaY*0.001 * zoom;
 
-			var newLocalX = pageXtoLocal(ev.pageX);
-			var newLocalY = pageYtoLocal(ev.pageY);
+			var newLocalX = pageToLocalX(ev.pageX);
+			var newLocalY = pageToLocalY(ev.pageY);
 			scrollX += ( oldLocalX - newLocalX );
 			scrollY += ( oldLocalY - newLocalY );
 
@@ -558,7 +573,12 @@ class TilesetPicker {
 	function onPickerMouseMove(ev:js.jquery.Event) {
 		mouseOver = true;
 		updateCursor(ev.pageX, ev.pageY);
+		var cx = pageToCx(ev.pageX);
+		var cy = pageToCy(ev.pageY);
+		onMouseMoveCustom( ev, tilesetDef.getTileId(cx,cy) );
 	}
+
+	public dynamic function onMouseMoveCustom(event:js.jquery.Event, tileId:Int) {}
 
 	function onPickerMouseLeave(ev:js.jquery.Event) {
 		mouseOver = false;
@@ -566,14 +586,10 @@ class TilesetPicker {
 	}
 
 	function getCursorRect(pageX:Float, pageY:Float) {
-		var localX = pageXtoLocal(pageX);
-		var localY = pageYtoLocal(pageY);
-
-		var grid = tilesetDef.tileGridSize;
-		var spacing = tilesetDef.spacing;
-		var padding = tilesetDef.padding;
-		var cx = M.iclamp( Std.int( (localX-padding) / ( grid+spacing ) ), 0, tilesetDef.cWid-1 );
-		var cy = M.iclamp( Std.int( (localY-padding) / ( grid+spacing ) ), 0, tilesetDef.cHei-1 );
+		var localX = pageToLocalX(pageX);
+		var localY = pageToLocalY(pageY);
+		var cx = pageToCx(pageX);
+		var cy = pageToCy(pageY);
 
 		if( dragStart==null || mode==SingleTile )
 			return {
@@ -583,8 +599,8 @@ class TilesetPicker {
 				hei: 1,
 			}
 		else {
-			var startCx = M.iclamp( Std.int( (pageXtoLocal(dragStart.pageX)-padding) / ( grid+spacing ) ), 0, tilesetDef.cWid-1 );
-			var startCy = M.iclamp( Std.int( (pageYtoLocal(dragStart.pageY)-padding) / ( grid+spacing ) ), 0, tilesetDef.cHei-1 );
+			var startCx = pageToCx(dragStart.pageX);
+			var startCy = pageToCy(dragStart.pageY);
 			return {
 				cx: M.imin(cx,startCx),
 				cy: M.imin(cy,startCy),
