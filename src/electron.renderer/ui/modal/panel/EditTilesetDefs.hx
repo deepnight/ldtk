@@ -313,7 +313,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		i.linkEvent( TilesetDefChanged(curTd) );
 		i.setBounds(0, curTd.getMaxTileGridSize());
 
-		// Metadata Enum selector
+		// Tags source Enum selector
 		var jSelect = jForm.find("#tagsSourceEnumUid");
 		jSelect.empty();
 		var jOpt = new J('<option value="">-- None --</option>');
@@ -322,12 +322,30 @@ class EditTilesetDefs extends ui.modal.Panel {
 			var jOpt = new J('<option value="${ed.uid}">${ed.identifier}</option>');
 			jOpt.appendTo(jSelect);
 		}
+		var oldUid = curTd.tagsSourceEnumUid;
 		jSelect.change( ev->{
+			// Change enum
 			var uid = Std.parseInt( jSelect.val() );
 			if( !M.isValidNumber(uid) )
 				uid = null;
-			curTd.tagsSourceEnumUid = uid;
-			editor.ge.emit( TilesetDefChanged(curTd) );
+
+			function _apply() {
+				curTd.tagsSourceEnumUid = uid;
+				editor.ge.emit( TilesetDefChanged(curTd) );
+			}
+			if( oldUid!=null && oldUid!=uid && curTd.hasAnyTag() )
+				new ui.modal.dialog.Confirm(
+					jSelect,
+					L.t._("Be careful: you have tags in this tileset. You will LOSE them by changing the source Enum!"),
+					true,
+					()->{
+						new LastChance(L.t._("Tileset tags removed"), project);
+						_apply();
+					},
+					()->jSelect.val(Std.string(oldUid))
+				);
+			else
+				_apply();
 		});
 		if( curTd.tagsSourceEnumUid!=null )
 			jSelect.val(curTd.tagsSourceEnumUid);
