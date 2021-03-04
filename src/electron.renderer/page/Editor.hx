@@ -188,10 +188,10 @@ class Editor extends Page {
 
 		jMainPanel.find("button.editEnums").click( function(_) {
 			if( isPaused() ) return;
-			if( ui.Modal.isOpen(ui.modal.panel.EditEnums) )
+			if( ui.Modal.isOpen(ui.modal.panel.EditEnumDefs) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.panel.EditEnums();
+				new ui.modal.panel.EditEnumDefs();
 		});
 
 
@@ -295,6 +295,8 @@ class Editor extends Page {
 			for(td in project.defs.tilesets)
 				if( reloadTileset(td, true) )
 					tilesetChanged = true;
+
+		project.tidy(); // Needed to fix enum value colors
 
 		ge.emit(ProjectSelected);
 
@@ -1275,6 +1277,7 @@ class Editor extends Page {
 				case TilesetDefChanged(td): extra = td.uid;
 				case TilesetDefAdded(td): extra = td.uid;
 				case TilesetDefRemoved(td): extra = td.uid;
+				case TilesetMetaDataChanged(td): extra = td.uid;
 				case TilesetSelectionSaved(td): extra = td.uid;
 				case TilesetDefPixelDataCacheRebuilt(td): extra = td.uid;
 				case EntityInstanceAdded(ei): extra = ei.defUid;
@@ -1429,8 +1432,12 @@ class Editor extends Page {
 				updateTool();
 				updateGuide();
 
+			case TilesetMetaDataChanged(td):
+				
 			case TilesetSelectionSaved(td):
+
 			case TilesetDefPixelDataCacheRebuilt(td):
+				project.tidy();
 
 			case TilesetDefAdded(td):
 

@@ -127,6 +127,9 @@ class WorldRender extends dn.Process {
 			case ProjectSelected:
 				renderAll();
 
+			case EnumDefChanged, EnumDefAdded, EnumDefRemoved, EnumDefValueRemoved:
+				invalidateAllLevelFields();
+
 			case FieldInstanceChanged(fi):
 				var l = project.getLevelUsingFieldInst(fi);
 				if( l!=null )

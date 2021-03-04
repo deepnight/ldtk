@@ -175,11 +175,6 @@ class JsTools {
 							var s = M.fmin(scale * ed.width / td.tileGridSize, scale * ed.height / td.tileGridSize);
 							scaleX = s;
 							scaleY = s;
-
-						// case Crop:
-						// 	scaleX = scaleY = scale;
-						// 	x = Std.int(ed.width*ed.pivotX*scale - td.tileGridSize*ed.pivotX*scale);
-						// 	y = Std.int(ed.height*ed.pivotY*scale - td.tileGridSize*ed.pivotY*scale);
 					}
 					td.drawTileToCanvas( jCanvas, ed.tileId, x, y, scaleX, scaleY );
 				}

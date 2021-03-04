@@ -46,6 +46,7 @@ enum GlobalEvent {
 	TilesetDefChanged(td:data.def.TilesetDef);
 	TilesetDefAdded(td:data.def.TilesetDef);
 	TilesetDefRemoved(td:data.def.TilesetDef);
+	TilesetMetaDataChanged(td:data.def.TilesetDef);
 	TilesetSelectionSaved(td:data.def.TilesetDef);
 	TilesetDefPixelDataCacheRebuilt(td:data.def.TilesetDef);
 
@@ -163,6 +164,12 @@ enum TilePickerMode {
 	SingleTile;
 	ViewOnly;
 	RectOnly;
+	PaintId( valueGetter:Void->Null<String>, paintValue:(tileId:Int, value:Null<String>, active:Bool)->Void );
+}
+
+enum TilePickerDisplayMode {
+	ShowOpaques;
+	ShowPixelData;
 }
 
 typedef FileSavingData = {

@@ -5,11 +5,13 @@ class EditTilesetDefs extends ui.modal.Panel {
 	var jForm : js.jquery.JQuery;
 	public var curTd : Null<data.def.TilesetDef>;
 
+	var curEnumValue : Null<data.DataTypes.EnumDefValue>;
+
 
 	public function new(?selectedDef:data.def.TilesetDef) {
 		super();
 
-		loadTemplate( "editTilesetDefs", "defEditor tilesetDefs" );
+		loadTemplate( "editTilesetDefs", "defEditor editTilesetDefs" );
 		jList = jModalAndMask.find(".mainList ul");
 		jForm = jModalAndMask.find("dl.form");
 		linkToButton("button.editTilesets");
@@ -51,6 +53,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 				if( td==curTd )
 					rebuildPixelData();
 
+			case TilesetMetaDataChanged(td):
+				updateTilesetPreview();
+
 			case TilesetDefPixelDataCacheRebuilt(td):
 				if( td==curTd )
 					updateTilesetPreview();
@@ -61,6 +66,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 	function selectTileset(td:data.def.TilesetDef) {
 		curTd = td;
+		curEnumValue = null;
 		updateList();
 		updateForm();
 		updateTilesetPreview();
@@ -80,11 +86,132 @@ class EditTilesetDefs extends ui.modal.Panel {
 		jContent.find(".tilesDemo").show();
 
 		// Main tileset view
-		jPickerWrapper.show().empty();
+		jPickerWrapper.show();
+		var jPicker = jPickerWrapper.find(".picker");
+		jPicker.empty();
 		if( curTd.isAtlasLoaded() ) {
-			var picker = new TilesetPicker(jPickerWrapper, curTd, ViewOnly);
+			var picker = new TilesetPicker(
+				jPicker,
+				curTd,
+				PaintId(
+					()->curEnumValue==null ? null : curEnumValue.id,
+					(tid:Int, valueId:Null<String>, active:Bool)->{
+						if( valueId!=null )
+							curTd.setTag(tid, valueId, active);
+						else if( !active )
+							curTd.removeAllTagsAt(tid);
+						editor.ge.emitAtTheEndOfFrame( TilesetMetaDataChanged(curTd) );
+					}
+				)
+			);
+
+			// Meta-data render
+			if( curTd.tagsSourceEnumUid!=null ) {
+				// Picker tooltip
+				picker.onMouseMoveCustom = (event, tid:Int)->{
+					if( curTd.hasAnyTag(tid) )
+						ui.Tip.simpleTip(event.pageX, event.pageY, curTd.getAllTagsAt(tid).join(", "));
+					else
+						ui.Tip.clear();
+				}
+				picker.onMouseLeaveCustom = (_)->ui.Tip.clear();
+
+				// Custom picker grid rendering
+				var n = 0;
+				var ed = curTd.getTagsEnumDef();
+				var isSmallGrid = curTd.tileGridSize<16;
+				var thickness = M.imax(1, Std.int( curTd.tileGridSize / 16 ) );
+				var offX = isSmallGrid ? -1 : -thickness*2;
+				var offY = isSmallGrid ? -1 : -thickness*2;
+				picker.customTileRender = (ctx,x,y,tid)->{
+					n = 0;
+					var iconTd = ed.iconTilesetUid==null ? null : project.defs.getTilesetDef(ed.iconTilesetUid);
+					for(ev in ed.values)
+						if( curTd.hasTag(ev.id, tid) && ( curEnumValue==null || curEnumValue==ev ) ) {
+							if( ev.tileId!=null && iconTd!=null ) {
+								// Tile
+								iconTd.drawTileTo2dContext(ctx, ev.tileId, x-n*offX, y-n*offY);
+							}
+							else {
+								// Contrast outline
+								if( !isSmallGrid ) {
+									ctx.beginPath();
+									ctx.rect(
+										x+thickness*0.5 + n*offX,
+										y+thickness*0.5 + n*offY,
+										curTd.tileGridSize-thickness-1,
+										curTd.tileGridSize-thickness-1
+									);
+									ctx.strokeStyle = C.intToHex( C.getLuminosity(ev.color)>=0.2 ? 0x0 : C.setLuminosityInt(ev.color,0.3) );
+									ctx.lineWidth = thickness+2;
+									ctx.stroke();
+								}
+
+								// Color rect
+								ctx.beginPath();
+								ctx.rect(
+									x+thickness*0.5 + n*offX,
+									y+thickness*0.5 + n*offY,
+									curTd.tileGridSize-thickness - (isSmallGrid?0:1),
+									curTd.tileGridSize-thickness - (isSmallGrid?0:1)
+								);
+								ctx.strokeStyle = C.intToHex( ev.color );
+								ctx.lineWidth = thickness;
+								ctx.stroke();
+							}
+
+							n++;
+						}
+
+					if( n==0 && curEnumValue!=null ) {
+						// No meta
+						ctx.beginPath();
+						ctx.rect(x, y, curTd.tileGridSize, curTd.tileGridSize );
+						ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(0x0, 0.66) );
+						ctx.fill();
+					}
+					return true;
+				}
+			}
 			picker.renderGrid();
-			picker.resetScroll();
+		}
+
+		// Enum values
+		var jValues = jPickerWrapper.find(".values");
+		jValues.empty();
+		var ed = curTd.getTagsEnumDef();
+		if( ed==null )
+			jValues.hide();
+		else {
+			jValues.show();
+
+			function _selectEnumValue(?ev:data.DataTypes.EnumDefValue) {
+				curEnumValue = ev;
+				jValues.find(".active").removeClass("active");
+				jValues.find('[value=${ev==null?null:ev.id}]').addClass("active");
+				updateTilesetPreview();
+			}
+
+			var jVal = new J('<li value="null" class="none">-- Show all --</li>');
+			jVal.appendTo(jValues);
+			jVal.click( ev->_selectEnumValue(null) );
+
+			for(ev in ed.values) {
+				var jVal = new J('<li value="${ev.id}">${ev.id}</li>');
+				if( ev.tileId!=null ) {
+					var iconTd = project.defs.getTilesetDef(ed.iconTilesetUid);
+					if( iconTd!=null )
+						jVal.prepend( JsTools.createTile(iconTd, ev.tileId, 16) );
+				}
+				jVal.appendTo(jValues);
+				jVal.css({
+					borderColor: C.intToHex(ev.color),
+					backgroundColor: C.intToHex( C.toBlack(ev.color,0.4) ),
+				});
+				jVal.click( _->_selectEnumValue(ev) );
+			}
+			jValues.find('[value=${curEnumValue==null ? null : curEnumValue.id}]').addClass("active");
+
 		}
 
 		// Demo tiles
@@ -169,7 +296,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			updateTilesetPreview();
 			editor.ge.emit( TilesetDefChanged(curTd) );
 		});
-		jImg.insertAfter( jForm.find("li.img>label:first") );
+		jImg.appendTo( jForm.find("dd.img") );
 
 
 		// Fields
@@ -188,6 +315,43 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( curTd.padding, jForm.find("input[name=padding]") );
 		i.linkEvent( TilesetDefChanged(curTd) );
 		i.setBounds(0, curTd.getMaxTileGridSize());
+
+		// Tags source Enum selector
+		var jSelect = jForm.find("#tagsSourceEnumUid");
+		jSelect.empty();
+		var jOpt = new J('<option value="">-- None --</option>');
+		jOpt.appendTo(jSelect);
+		for( ed in project.defs.getAllEnumsSorted() ) {
+			var jOpt = new J('<option value="${ed.uid}">${ed.identifier}</option>');
+			jOpt.appendTo(jSelect);
+		}
+		var oldUid = curTd.tagsSourceEnumUid;
+		jSelect.change( ev->{
+			// Change enum
+			var uid = Std.parseInt( jSelect.val() );
+			if( !M.isValidNumber(uid) )
+				uid = null;
+
+			function _apply() {
+				curTd.tagsSourceEnumUid = uid;
+				editor.ge.emit( TilesetDefChanged(curTd) );
+			}
+			if( oldUid!=null && oldUid!=uid && curTd.hasAnyTag() )
+				new ui.modal.dialog.Confirm(
+					jSelect,
+					L.t._("Be careful: you have tags in this tileset. You will LOSE them by changing the source Enum!"),
+					true,
+					()->{
+						new LastChance(L.t._("Tileset tags removed"), project);
+						_apply();
+					},
+					()->jSelect.val(Std.string(oldUid))
+				);
+			else
+				_apply();
+		});
+		if( curTd.tagsSourceEnumUid!=null )
+			jSelect.val(curTd.tagsSourceEnumUid);
 	}
 
 

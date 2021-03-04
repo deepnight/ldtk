@@ -35,6 +35,7 @@ class EnumDef {
 			ed.values.push({
 				id: v.id,
 				tileId: JsonTools.readNullableInt(v.tileId),
+				color: v.color==null ? (v.tileId!=null ? -1 : 0) : v.color, // -1 means "to be set later based on tile"
 			});
 		}
 
@@ -52,6 +53,7 @@ class EnumDef {
 			values: values.map( function(v) return { // breaks memory refs
 				id: v.id,
 				tileId: v.tileId,
+				color: v.color,
 				__tileSrcRect: v.tileId==null ? null : {
 					var td = p.defs.getTilesetDef(iconTilesetUid);
 					if( td==null )
@@ -83,6 +85,16 @@ class EnumDef {
 		return null;
 	}
 
+	public function getValueIndex(id:String) : Int {
+		var idx = 0;
+		for(ev in values)
+			if( ev.id==id )
+				return idx;
+			else
+				idx++;
+		return -1;
+	}
+
 	public function isValueIdentifierValidAndUnique(v:String, ?exclude:String) {
 		return Project.isValidIdentifier(v) && !hasValue(v) || exclude!=null && v==exclude;
 	}
@@ -95,6 +107,7 @@ class EnumDef {
 		values.push({
 			id: v,
 			tileId: null,
+			color: 0x0,
 		});
 		return true;
 	}
@@ -112,10 +125,31 @@ class EnumDef {
 	}
 
 	public function renameValue(project:Project, from:String, to:String) {
+		if( to=="" || to==null )
+			return false;
+
 		to = project.makeUniqueIdStr(to, id->isValueIdentifierValidAndUnique(id,from));
+
 		for(i in 0...values.length)
 			if( values[i].id==from ) {
 				values[i].id = to;
+
+				// Fix existing fields
+				project.iterateAllFieldInstances( F_Enum(uid), function(fi) {
+					for(i in 0...fi.getArrayLength())
+						if( fi.getEnumValue(i)==from ) {
+							App.LOG.add("tidy", "Renaming enum instance in "+fi+"["+i+"]");
+							fi.parseValue(i, to);
+						}
+				});
+
+				// Fix tileset meta-data
+				for(td in project.defs.tilesets)
+					if( td.tagsSourceEnumUid==uid && td.enumTags.exists(from) ) {
+						td.enumTags.set(to, td.enumTags.get(from));
+						td.enumTags.remove(from);
+					}
+
 				return true;
 			}
 
@@ -135,5 +169,18 @@ class EnumDef {
 			iconTilesetUid = null;
 			clearAllTileIds();
 		}
+
+		// Fix value colors
+		for(ev in values)
+			if( ev.color==-1 ) {
+				var td = p.defs.getTilesetDef(iconTilesetUid);
+				if( td!=null && td.hasValidPixelData() ) {
+					App.LOG.add("tidy", "Init enum value color: "+identifier+"."+ev.id);
+					ev.color = ev.tileId!=null
+						? C.removeAlpha( td.getAverageTileColor(ev.tileId) )
+						: 0x0;
+				}
+			}
+
 	}
 }

@@ -3942,6 +3942,11 @@ canvas#webgl {
 	width: 100%;
 	height: 100%;
 
+	&[cursor=pan]		{ cursor: grab; }
+	&[cursor=pick]		{ cursor: pointer; }
+	&[cursor=forbidden]	{ cursor: not-allowed; }
+	&[cursor=paint]		{ cursor: crosshair; }
+
 	canvas {
 		image-rendering: pixelated;
 		// box-shadow: 0px 0px 32px black;
@@ -4479,8 +4484,8 @@ dl.form.fieldInstanceEditor {
 	}
 }
 
-.window.panel.layerDefs,
-.window.panel.tilesetDefs {
+.window.panel.editLayerDefs,
+.window.panel.editTilesetDefs {
 	.content{
 		display: grid;
 		height: 100%;
@@ -4590,7 +4595,7 @@ dl.form.fieldInstanceEditor {
 }
 
 
-.window.panel.editEnums {
+.window.panel.editEnumDefs {
 	.content {
 		display: grid;
 		grid-template-columns: 200px auto;
@@ -4624,13 +4629,17 @@ dl.form.fieldInstanceEditor {
 				li {
 					display: grid;
 					gap: 3px;
-					grid-template-columns: min-content 32px auto 32px;
+					grid-template-columns: min-content 32px 32px auto 32px;
 					grid-auto-flow: column;
-					grid-auto-columns: min-content;
 					margin-bottom: 4px;
 
 					input[type=color] {
-						height: 24px;
+						width: auto;
+						height: 32px;
+						border: 1px solid $orange;
+						&:hover {
+							border-color: white;
+						}
 					}
 					input[type=text] {
 						padding: 3px;
@@ -4673,7 +4682,7 @@ dl.form.fieldInstanceEditor {
 }
 
 
-.window.panel.layerDefs {
+.window.panel.editLayerDefs {
 	.mainList {
 		grid-row: 2/4;
 		ul li {
@@ -5790,18 +5799,23 @@ $patternSize : 32px;
 	}
 }
 
-.window.panel.tilesetDefs {
+.window.panel.editTilesetDefs {
 	.mainList ul:empty::before {
 		content: "No tileset";
 	}
 
 	.content {
+		width: 860px;
 		grid-template-rows: min-content min-content min-content auto;
 		.mainList {
 			grid-row: 2/5;
 		}
-		ul.form {
+		dl.form {
 			grid-row: 2/3;
+			dt {
+				max-width: none;
+				white-space: nowrap;
+			}
 		}
 		.tilesDemo {
 			grid-row: 3/4;
@@ -5815,11 +5829,45 @@ $patternSize : 32px;
 			width: 100%;
 			image-rendering: pixelated;
 		}
+
 		.pickerWrapper {
+			display: grid;
 			overflow: hidden;
-			outline: 1px solid white;
-			box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
-			background-color: rgba(0, 0, 0, 0.4);
+			gap: 8px;
+			grid-template-columns: auto min-content;
+
+			&>.picker {
+				overflow: hidden;
+				outline: 1px solid white;
+				outline-offset: -1px;
+				box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
+				background-color: rgba(0, 0, 0, 0.4);
+
+			}
+
+			ul.values {
+				margin: 0;
+				overflow-x: hidden;
+				overflow-y: auto;
+				li {
+					display: grid;
+					grid-template-columns: min-content auto;
+					overflow: hidden;
+					width: 120px;
+					white-space: nowrap;
+					border-left: 4px solid black;
+					&.none {
+						color: $bgLight;
+					}
+					&.active {
+						color: white;
+						outline: 2px solid white;
+						outline-offset: -2px;
+						background-color: inherit;
+						border-radius: 3px;
+					}
+				}
+			}
 		}
 	}
 }

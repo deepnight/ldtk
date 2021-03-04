@@ -98,10 +98,8 @@ class Cursor {
 				}
 		}
 
-		if( needRender ) {
-			// N.debug("[!] render needed: old="+type+" new="+c);
+		if( needRender )
 			invalidateRender();
-		}
 		type = c;
 
 

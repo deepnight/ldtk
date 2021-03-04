@@ -75,7 +75,7 @@ class FieldDefsForm {
 						new ui.modal.dialog.Choice(
 							L.t._("This project contains no Enum yet. You first need to create one from the Enum panel."),
 							[
-								{ label:L.t._("Open enum panel"), cb:()->new ui.modal.panel.EditEnums() }
+								{ label:L.t._("Open enum panel"), cb:()->new ui.modal.panel.EditEnumDefs() }
 							]
 						);
 						return;
@@ -426,12 +426,6 @@ class FieldDefsForm {
 						}
 					);
 				});
-				// defInput.change( function(ev) {
-				// 	curField.setDefault( defInput.val() );
-				// 	N.debug( defInput.val() );
-				// 	onFieldChange();
-				// 	defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
-				// });
 
 
 			case F_Int, F_Float, F_String, F_Point:

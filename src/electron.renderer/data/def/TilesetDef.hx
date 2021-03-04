@@ -14,6 +14,10 @@ class TilesetDef {
 	public var spacing : Int = 0; // px space between consecutive tiles
 	public var savedSelections : Array<TilesetSelection> = [];
 
+	public var tagsSourceEnumUid : Null<Int>;
+	/** Map< EnumValueId, Map< TileId, Bool > > **/
+	public var enumTags: Map< String, Map<Int,Bool> > = new Map();
+
 	var opaqueTiles : Null< haxe.ds.Vector<Bool> >;
 	var averageColorsCache : Null< Map<Int,Int> >; // ARGB Int
 
@@ -66,9 +70,10 @@ class TilesetDef {
 		savedSelections = [];
 	}
 
-
 	public function toJson() : ldtk.Json.TilesetDefJson {
 		return {
+			__cWid: cWid,
+			__cHei: cHei,
 			identifier: identifier,
 			uid: uid,
 			relPath: JsonTools.writePath(relPath),
@@ -77,6 +82,27 @@ class TilesetDef {
 			tileGridSize: tileGridSize,
 			spacing: spacing,
 			padding: padding,
+
+			tagsSourceEnumUid: tagsSourceEnumUid,
+			enumTags: {
+				if( tagsSourceEnumUid==null )
+					[];
+				else {
+					var tags = [];
+					for(ev in getTagsEnumDef().values) {
+						var tileIds = [];
+						if( enumTags.exists(ev.id) )
+							for(tid in enumTags.get(ev.id).keys())
+								tileIds.push(tid);
+
+						tags.push({
+							enumValueId: ev.id,
+							tileIds: tileIds,
+						});
+					}
+					tags;
+				}
+			},
 
 			savedSelections: savedSelections.map( function(sel) {
 				return { ids:sel.ids, mode:JsonTools.writeEnum(sel.mode, false) }
@@ -113,6 +139,15 @@ class TilesetDef {
 		td.pxHei = JsonTools.readInt( json.pxHei );
 		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
+
+		if( (cast json).metaDataEnumUid!=null ) json.tagsSourceEnumUid = (cast json).metaDataEnumUid;
+		td.tagsSourceEnumUid = JsonTools.readNullableInt(json.tagsSourceEnumUid);
+		if( (cast json).metaDataEnumValues!=null ) json.enumTags = (cast json).metaDataEnumValues;
+		if( json.enumTags!=null ) {
+			for(mv in json.enumTags)
+			for(tid in mv.tileIds)
+				td.setTag(tid, mv.enumValueId, true);
+		}
 
 		if( json.cachedPixelData!=null ) {
 			var size = td.cWid*td.cHei;
@@ -517,6 +552,52 @@ class TilesetDef {
 		return true;
 	}
 
+	/* META DATA ******************************************/
+
+	public function getTagsEnumDef() : Null<EnumDef> {
+		return tagsSourceEnumUid==null ? null : _project.defs.getEnumDef(tagsSourceEnumUid);
+	}
+
+	public function setTag(tileId:Int, enumValueId:String, active:Bool) {
+		if( tileId<0 || tileId>=cWid*cHei )
+			return;
+
+		if( !enumTags.exists(enumValueId) )
+			enumTags.set(enumValueId, new Map());
+
+		if( active )
+			enumTags.get(enumValueId).set(tileId, true);
+		else
+			enumTags.get(enumValueId).remove(tileId);
+	}
+
+	public inline function hasTag(enumId:String, tileId:Int) {
+		return enumTags.exists(enumId) && enumTags.get(enumId).get(tileId)==true;
+	}
+
+	public function hasAnyTag(?tileId:Int) {
+		for(m in enumTags)
+			if( tileId==null )
+				return true;
+			else if( m.exists(tileId) )
+				return true;
+		return false;
+	}
+
+	public function getAllTagsAt(tileId:Int) : Array<String> {
+		var all = [];
+		for(ek in enumTags.keys())
+			if( enumTags.get(ek).exists(tileId) )
+				all.push(ek);
+
+		return all;
+	}
+
+	public function removeAllTagsAt(tileId:Int) {
+		for( mv in enumTags )
+			mv.remove(tileId);
+	}
+
 
 
 	/*** JS API *********************************/
@@ -562,20 +643,25 @@ class TilesetDef {
 		ctx.putImageData(imgData,0,0);
 	}
 
-	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
-		if( !isAtlasLoaded() )
-			return;
 
+	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
 		if( !jCanvas.is("canvas") )
 			throw "Not a canvas";
+
+		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
+		drawTileTo2dContext( canvas.getContext2d(), tileId, toX, toY, scaleX, scaleY );
+	}
+
+
+	public function drawTileTo2dContext(ctx:js.html.CanvasRenderingContext2D, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
+		if( !isAtlasLoaded() )
+			return;
 
 		if( getTileSourceX(tileId)+tileGridSize>pxWid || getTileSourceY(tileId)+tileGridSize>pxHei )
 			return; // out of bounds
 
 		var imgData = _project.getOrLoadImage(relPath);
 		var subPixels = imgData.pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
-		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
-		var ctx = canvas.getContext2d();
 		ctx.imageSmoothingEnabled = false;
 		var img = new js.html.Image(subPixels.width, subPixels.height);
 		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
@@ -590,5 +676,27 @@ class TilesetDef {
 
 	public function tidy(p:data.Project) {
 		_project = p;
+
+		// Lost source enum
+		if( tagsSourceEnumUid!=null && getTagsEnumDef()==null ) {
+			App.LOG.add("tidy", "Cleared lost tag enum in "+this);
+			tagsSourceEnumUid = null;
+		}
+
+		// Clear tags if source is null
+		if( tagsSourceEnumUid==null && hasAnyTag() ) {
+			App.LOG.add("tidy", "Cleared lost tags in "+this);
+			enumTags = new Map();
+		}
+
+		// Lost tag values
+		if( tagsSourceEnumUid!=null ) {
+			var ed = getTagsEnumDef();
+			for(k in enumTags.keys())
+				if( !ed.hasValue(k) ) {
+					App.LOG.add("tidy", "Cleared lost tag value in "+this);
+					enumTags.remove(k);
+				}
+		}
 	}
 }

@@ -7,7 +7,6 @@ json_doc.xml
 *.zip
 
 backups/
-quicktype/
 dump/
 res/.tmp
 .vscode/settings.json

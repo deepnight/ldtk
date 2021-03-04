@@ -1,12 +1,12 @@
 package ui.modal.panel;
 
-class EditEnums extends ui.modal.Panel {
+class EditEnumDefs extends ui.modal.Panel {
 	var curEnum : Null<data.def.EnumDef>;
 
 	public function new() {
 		super();
 
-		loadTemplate( "editEnums", "editEnums" );
+		loadTemplate("editEnumDefs");
 		linkToButton("button.editEnums");
 
 		// Add enum
@@ -258,51 +258,49 @@ class EditEnums extends ui.modal.Panel {
 
 		// Tilesets
 		var jSelect = jForm.find("select#icons");
-		// if( !curEnum.isExternal() ) {
-			jSelect.show();
-			jSelect.empty();
-			if( curEnum.iconTilesetUid==null )
-				jSelect.addClass("gray");
-			else
-				jSelect.removeClass("gray");
+		jSelect.show();
+		jSelect.empty();
+		if( curEnum.iconTilesetUid==null )
+			jSelect.addClass("gray");
+		else
+			jSelect.removeClass("gray");
 
-			var opt = new J('<option value="-1">-- Select a tileset --</option>');
+		var opt = new J('<option value="-1">-- Select a tileset --</option>');
+		opt.appendTo(jSelect);
+
+		for(td in project.defs.tilesets) {
+			var opt = new J('<option value="${td.uid}"/>');
 			opt.appendTo(jSelect);
+			opt.text( td.identifier );
+		}
 
-			for(td in project.defs.tilesets) {
-				var opt = new J('<option value="${td.uid}"/>');
-				opt.appendTo(jSelect);
-				opt.text( td.identifier );
-			}
+		jSelect.val( curEnum.iconTilesetUid==null ? "-1" : Std.string(curEnum.iconTilesetUid) );
+		jSelect.change( function(ev) {
+			var tid = Std.parseInt( jSelect.val() );
+			if( tid==curEnum.iconTilesetUid )
+				return;
 
-			jSelect.val( curEnum.iconTilesetUid==null ? "-1" : Std.string(curEnum.iconTilesetUid) );
-			jSelect.change( function(ev) {
-				var tid = Std.parseInt( jSelect.val() );
-				if( tid==curEnum.iconTilesetUid )
-					return;
+			// Check if this change will break something
+			if( curEnum.iconTilesetUid!=null )
+				for( v in curEnum.values )
+					if( v.tileId!=null ) {
+						new LastChance(Lang.t._("Enum icons changed"), project);
+						break;
+					}
 
-				// Check if this change will break something
-				if( curEnum.iconTilesetUid!=null )
-					for( v in curEnum.values )
-						if( v.tileId!=null ) {
-							new LastChance(Lang.t._("Enum icons changed"), project);
-							break;
-						}
-
-				// Update tileset link
-				if( tid<0 )
-					curEnum.iconTilesetUid = null;
-				else
-					curEnum.iconTilesetUid = tid;
-				curEnum.clearAllTileIds();
-				editor.ge.emit(EnumDefChanged);
-			});
-		// }
+			// Update tileset link
+			if( tid<0 )
+				curEnum.iconTilesetUid = null;
+			else
+				curEnum.iconTilesetUid = tid;
+			curEnum.clearAllTileIds();
+			editor.ge.emit(EnumDefChanged);
+		});
 
 
 		// Values
 		var jList = jForm.find("ul.enumValues");
-		jList.empty();
+		jList.empty().off();
 		var xml = jForm.find("xml.enum").children();
 		for(eValue in curEnum.values) {
 			var li = new J("<li/>");
@@ -313,36 +311,42 @@ class EditEnums extends ui.modal.Panel {
 			var i = new form.input.StringInput(li.find(".name"),
 				function() return eValue.id,
 				function(newV) {
-					var oldV = eValue.id;
-					if( curEnum.renameValue(project, oldV, newV) ) {
-						project.iterateAllFieldInstances(F_Enum(curEnum.uid), function(fi) {
-							for(i in 0...fi.getArrayLength())
-								if( fi.getEnumValue(i)==oldV )
-									fi.parseValue(i, newV);
-						});
-					}
-					else
+					if( !curEnum.renameValue(project, eValue.id, newV) )
 						N.invalidIdentifier(newV);
 				}
 			);
 			i.linkEvent(EnumDefChanged);
+			if( eValue.color!=null )
+				i.jInput.css({
+					color: C.intToHex( C.toWhite(eValue.color,0.7) ),
+					borderColor: C.intToHex( eValue.color ),
+					backgroundColor: C.intToHex( C.toBlack(eValue.color,0.5) ),
+				});
 
 			if( curEnum.isExternal() )
 				li.find(".sortHandle").hide();
 
+			// Color
+			var jColor = li.find("[type=color]");
+			jColor.change( ev->{
+				eValue.color = C.hexToInt( jColor.val() );
+				editor.ge.emit(EnumDefChanged);
+			});
+			jColor.val( C.intToHex(eValue.color) );
+
 			// Tile preview
-			// if( !curEnum.isExternal() ) {
-				var jPicker = JsTools.createTilePicker(
-					curEnum.iconTilesetUid,
-					SingleTile,
-					eValue.tileId==null ? [] : [eValue.tileId],
-					(tileIds)->{
-						eValue.tileId = tileIds[0];
-						editor.ge.emit(EnumDefChanged);
-					}
-				);
-				jPicker.insertAfter( li.find(".sortHandle") );
-			// }
+			var jPicker = JsTools.createTilePicker(
+				curEnum.iconTilesetUid,
+				SingleTile,
+				eValue.tileId==null ? [] : [eValue.tileId],
+				(tileIds)->{
+					eValue.tileId = tileIds[0];
+					eValue.color = -1;
+					curEnum.tidy(project);
+					editor.ge.emit(EnumDefChanged);
+				}
+			);
+			jPicker.appendTo( li.find(".pickerWrapper") );
 
 			// Remove value button
 			if( !curEnum.isExternal() ) {
@@ -363,6 +367,7 @@ class EditEnums extends ui.modal.Panel {
 				});
 			}
 		}
+		JsTools.parseComponents(jList);
 
 		jForm.find(".createEnumValue").click( function(_) {
 			var uid = 0;

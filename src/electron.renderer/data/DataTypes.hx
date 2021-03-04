@@ -32,6 +32,7 @@ enum TileEditMode {
 typedef EnumDefValue = {
 	var id : String;
 	var tileId : Null<Int>;
+	var color: Int;
 }
 
 typedef AutoLayerRuleGroup = {

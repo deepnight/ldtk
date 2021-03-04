@@ -16,8 +16,10 @@
 </div>
 
 <dl class="form">
-	<dd class="img">
+	<dt>
 		<label>Tileset image</label>
+	</dt>
+	<dd class="img">
 	</dd>
 
 	<dt>
@@ -29,27 +31,22 @@
 	</dd>
 
 	<dt>
-		<label for="tilesetGridSize">Tile size</label>
+		<label for="tilesetGridSize">Layout</label>
 	</dt>
 	<dd>
 		<input type="text" id="tilesetGridSize" name="tilesetGridSize"/>
+		<span>px tiles, spaced by</span>
+		<input type="text" id="spacing" name="spacing" title="This is the distance between each tile."/>
+		<span>px, with an atlas padding of </span>
+		<input type="text" id="padding" name="padding" title="This is the empty space surrounding the WHOLE image."/>
 		<span>px</span>
 	</dd>
 
 	<dt>
-		<label for="tilesetGridSize">Tile spacing</label>
+		<label for="tagsSourceEnumUid">Enum used for tags</label>
 	</dt>
 	<dd>
-		<input type="text" id="spacing" name="spacing"/>
-		<span>px</span>
-	</dd>
-
-	<dt>
-		<label for="tilesetGridSize">Atlas image padding</label>
-	</dt>
-	<dd>
-		<input type="text" id="padding" name="padding"/>
-		<span>px</span>
+		<select id="tagsSourceEnumUid" title="By linking an Enum to this tileset, you will be able to tag tiles using values from this Enum. For example, you could mark tiles as Water, SlopeLeft, MetallicSound etc."></select>
 	</dd>
 </dl>
 
@@ -58,4 +55,7 @@
 	<canvas class="demo" width="512" height="16"></canvas>
 </div>
 
-<div class="pickerWrapper"></div>
+<div class="pickerWrapper">
+	<div class="picker"></div>
+	<ul class="values niceList"></ul>
+</div>
