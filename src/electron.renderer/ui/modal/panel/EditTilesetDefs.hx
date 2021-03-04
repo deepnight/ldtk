@@ -167,7 +167,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 						// No meta
 						ctx.beginPath();
 						ctx.rect(x, y, curTd.tileGridSize, curTd.tileGridSize );
-						ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(0x0, 0.66) );
+						ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(0x0, 0.45) );
 						ctx.fill();
 					}
 					return true;
