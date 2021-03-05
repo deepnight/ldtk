@@ -3952,12 +3952,12 @@ canvas#webgl {
 .tileset {
 	width: 100%;
 	height: 100%;
+	padding: 1px;
 	position: relative;
 	overflow: hidden;
 	box-sizing: border-box;
 
 	.tilesetWrapper {
-		padding: 1px;
 		width: 100%;
 		height: 100%;
 
@@ -4033,7 +4033,25 @@ canvas#webgl {
 
 		}
 	}
+
+
+	&.tileTagger {
+		display: grid;
+		grid-template-columns: auto 130px;
+
+		.tools {
+			display: grid;
+			overflow: hidden;
+			grid-template-rows: min-content auto;
+
+			ul.values {
+				overflow-y: auto;
+			}
+		}
+	}
 }
+
+
 
 .window.singleTilePicker {
 	z-index: 99;

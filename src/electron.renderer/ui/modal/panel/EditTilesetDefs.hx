@@ -150,95 +150,35 @@ class EditTilesetDefs extends ui.modal.Panel {
 			}
 
 			// Picker tooltip
-			picker.onMouseLeaveCustom = (_)->ui.Tip.clear();
-			picker.onMouseMoveCustom = (event, tid:Int)->{
-				if( curTd.tagsSourceEnumUid==null || jsonMode )
-					return;
+			// picker.onMouseLeaveCustom = (_)->ui.Tip.clear();
+			// picker.onMouseMoveCustom = (event, tid:Int)->{
+			// 	if( curTd.tagsSourceEnumUid==null || jsonMode )
+			// 		return;
 
-				if( curTd.hasAnyTag(tid) )
-					ui.Tip.simpleTip(event.pageX, event.pageY, curTd.getAllTagsAt(tid).join(", "));
-				else
-					ui.Tip.clear();
-			}
+			// 	if( curTd.hasAnyTag(tid) )
+			// 		ui.Tip.simpleTip(event.pageX, event.pageY, curTd.getAllTagsAt(tid).join(", "));
+			// 	else
+			// 		ui.Tip.clear();
+			// }
 
 			// Picker cursor
-			picker.updateCursorCustom = (pageX,pageY,isDragging)->{
-				if( jsonMode ) {
-					picker.setCursorCss("pick");
-					return true;
-				}
-				else if( curEnumValue==null ) {
-					if( !isDragging )
-						picker.setCursorCss("pan");
-					else
-						picker.setCursorCss("forbidden");
-					return true;
-				}
-				else {
-					picker.setCursorCss("paint");
-					return false;
-				}
-			}
-
-			// Custom picker grid rendering
-			if( curTd.tagsSourceEnumUid!=null ) {
-				var n = 0;
-				var ed = curTd.getTagsEnumDef();
-				var isSmallGrid = curTd.tileGridSize<16;
-				var thickness = M.imax(1, Std.int( curTd.tileGridSize / 16 ) );
-				var offX = isSmallGrid ? -1 : -thickness*2;
-				var offY = isSmallGrid ? -1 : -thickness*2;
-				picker.customTileRender = (ctx,x,y,tid)->{
-					n = 0;
-					var iconTd = ed.iconTilesetUid==null ? null : project.defs.getTilesetDef(ed.iconTilesetUid);
-					for(ev in ed.values)
-						if( curTd.hasTag(ev.id, tid) && ( curEnumValue==null || curEnumValue==ev ) ) {
-							if( ev.tileId!=null && iconTd!=null ) {
-								// Tile
-								iconTd.drawTileTo2dContext(ctx, ev.tileId, x-n*offX, y-n*offY);
-							}
-							else {
-								// Contrast outline
-								if( !isSmallGrid ) {
-									ctx.beginPath();
-									ctx.rect(
-										x+thickness*0.5 + n*offX,
-										y+thickness*0.5 + n*offY,
-										curTd.tileGridSize-thickness-1,
-										curTd.tileGridSize-thickness-1
-									);
-									ctx.strokeStyle = C.intToHex( C.getLuminosity(ev.color)>=0.2 ? 0x0 : C.setLuminosityInt(ev.color,0.3) );
-									ctx.lineWidth = thickness+2;
-									ctx.stroke();
-								}
-
-								// Color rect
-								ctx.beginPath();
-								ctx.rect(
-									x+thickness*0.5 + n*offX,
-									y+thickness*0.5 + n*offY,
-									curTd.tileGridSize-thickness - (isSmallGrid?0:1),
-									curTd.tileGridSize-thickness - (isSmallGrid?0:1)
-								);
-								ctx.strokeStyle = C.intToHex( ev.color );
-								ctx.lineWidth = thickness;
-								ctx.stroke();
-							}
-
-							n++;
-						}
-
-					if( n==0 && curEnumValue!=null ) {
-						// No meta
-						ctx.beginPath();
-						ctx.rect(x, y, curTd.tileGridSize, curTd.tileGridSize );
-						ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(0x0, 0.45) );
-						ctx.fill();
-					}
-					return true;
-				}
-			}
-			picker.renderGrid();
+			// picker.updateCursorCustom = (pageX,pageY,isDragging)->{
+			// 	if( jsonMode ) {
+			// 		picker.setCursorCss("pick");
+			// 		return true;
+			// 	}
+			// 	else if( curEnumValue==null ) {
+			// 		if( !isDragging )
+			// 			picker.setCursorCss("pan");
+			// 		else
+			// 			picker.setCursorCss("forbidden");
+			// 		return true;
+			// 	}
+			// 	else {
+			// 		picker.setCursorCss("paint");
+			// 		return false;
+			// 	}
+			// }
 
 
 			// Enum values

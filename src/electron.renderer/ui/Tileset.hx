@@ -90,13 +90,11 @@ class Tileset {
 		tilesetDef.drawAtlasToCanvas(jCanvas);
 	}
 
-	public dynamic function customTileRender(ctx:js.html.CanvasRenderingContext2D, x:Int, y:Int, tileId:Int) {
+	function customTileRender(ctx:js.html.CanvasRenderingContext2D, x:Int, y:Int, tileId:Int) {
 		return false;
 	}
 
 	public function renderGrid() {
-		jWrapper.remove(".grid");
-
 		var ctx = canvas.getContext2d();
 		ctx.lineWidth = M.fmax( 1, Std.int( tilesetDef.tileGridSize / 16 ) );
 		var strokeOffset = ctx.lineWidth*0.5; // draw in the middle of the pixel to avoid blur
@@ -104,40 +102,38 @@ class Tileset {
 		for(tileId in 0...tilesetDef.cWid*tilesetDef.cHei) {
 			var x = tilesetDef.getTileSourceX(tileId);
 			var y = tilesetDef.getTileSourceY(tileId);
-			if( !customTileRender(ctx, x,y, tileId) ) {
-				switch displayMode {
-					case ShowOpaques:
+			switch displayMode {
+				case ShowOpaques:
 
-					case ShowPixelData:
-						// Fill
-						ctx.beginPath();
-						ctx.rect(
-							x, y,
-							tilesetDef.tileGridSize, tilesetDef.tileGridSize
-						);
-						ctx.fillStyle = "black";
-						ctx.fill();
-						ctx.fillStyle = C.intToHexRGBA( tilesetDef.getAverageTileColor(tileId) );
-						ctx.fill();
-				}
-
-				// Outline
-				ctx.beginPath();
-				ctx.rect(
-					x + strokeOffset,
-					y + strokeOffset,
-					tilesetDef.tileGridSize - strokeOffset*2,
-					tilesetDef.tileGridSize - strokeOffset*2
-				);
-
-				// Outline color
-				var c = tilesetDef.getAverageTileColor(tileId);
-				var a = C.getA(c)>0 ? 1 : 0;
-				ctx.strokeStyle =
-					C.intToHexRGBA( C.toWhite( C.replaceAlphaF( tilesetDef.getAverageTileColor(tileId), a ), 0.2 ) );
-
-				ctx.stroke();
+				case ShowPixelData:
+					// Fill
+					ctx.beginPath();
+					ctx.rect(
+						x, y,
+						tilesetDef.tileGridSize, tilesetDef.tileGridSize
+					);
+					ctx.fillStyle = "black";
+					ctx.fill();
+					ctx.fillStyle = C.intToHexRGBA( tilesetDef.getAverageTileColor(tileId) );
+					ctx.fill();
 			}
+
+			// Outline
+			ctx.beginPath();
+			ctx.rect(
+				x + strokeOffset,
+				y + strokeOffset,
+				tilesetDef.tileGridSize - strokeOffset*2,
+				tilesetDef.tileGridSize - strokeOffset*2
+			);
+
+			// Outline color
+			var c = tilesetDef.getAverageTileColor(tileId);
+			var a = C.getA(c)>0 ? 1 : 0;
+			ctx.strokeStyle =
+				C.intToHexRGBA( C.toWhite( C.replaceAlphaF( tilesetDef.getAverageTileColor(tileId), a ), 0.2 ) );
+
+			ctx.stroke();
 		}
 	}
 
@@ -152,14 +148,14 @@ class Tileset {
 	public function getSelectedTileIds() {
 		return switch selectMode {
 			case None: [];
-			case PickAndClose, Free, RectOnly: _internalSelectedIds;
+			case PickAndClose, Free, RectOnly, Single: _internalSelectedIds;
 		}
 	}
 
 	public function setSelectedTileIds(tileIds:Array<Int>) {
 		switch selectMode {
 			case None: throw "unexpected";
-			case PickAndClose, Free, RectOnly: _internalSelectedIds = tileIds;
+			case PickAndClose, Free, RectOnly, Single: _internalSelectedIds = tileIds;
 		}
 		renderSelection();
 	}
@@ -230,7 +226,7 @@ class Tileset {
 				if( getSelectedTileIds().length>0 )
 					jSelection.append( createCursor({ mode:Random, ids:getSelectedTileIds() },"selection") );
 
-			case RectOnly:
+			case RectOnly, Single:
 				if( getSelectedTileIds().length>0 )
 					jSelection.append( createCursor({ mode:Stamp, ids:getSelectedTileIds() },"selection") );
 
@@ -315,7 +311,7 @@ class Tileset {
 			// case ToolPicker: false;
 			case None: false;
 			case Free: false;
-			case PickAndClose, RectOnly: true;
+			case PickAndClose, RectOnly, Single: true;
 		}
 	}
 
@@ -446,7 +442,7 @@ class Tileset {
 			case PickAndClose:
 				onSingleTileSelect( selIds[0] );
 
-			case Free, RectOnly:
+			case Free, RectOnly, Single:
 				if( add ) {
 					if( isRectangleOnly() || !App.ME.isShiftDown() && !App.ME.isCtrlDown() ) {
 						// Replace active selection with this one
@@ -573,7 +569,7 @@ class Tileset {
 		var cx = pageToCx(pageX);
 		var cy = pageToCy(pageY);
 
-		if( dragStart==null || selectMode==PickAndClose )
+		if( dragStart==null || selectMode==PickAndClose || selectMode==Single )
 			return {
 				cx: cx,
 				cy: cy,

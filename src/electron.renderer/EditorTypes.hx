@@ -161,6 +161,7 @@ enum AtlasLoadingResult {
 enum TilesetSelectionMode {
 	None;
 	PickAndClose;
+	Single;
 	Free;
 	RectOnly;
 }
