@@ -51,8 +51,8 @@ class LayerRender {
 
 			if( li.def.isAutoLayer() && renderAutoLayers && td!=null && td.isAtlasLoaded() ) {
 				// Auto-layer tiles
-				var pixelGrid = !fixFlickering ? null : new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
-				if( fixFlickering ) {
+				var pixelGrid = !fixFlickering || li.def.gridSize>td.tileGridSize ? null : new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
+				if( pixelGrid!=null ) {
 					pixelGrid.x = li.pxTotalOffsetX;
 					pixelGrid.y = li.pxTotalOffsetY;
 				}
@@ -68,7 +68,7 @@ class LayerRender {
 						for(coordId in li.autoTilesCache.get( r.uid ).keys())
 						for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
 							// Paint a full pixel behind to avoid flickering revealing background
-							if( fixFlickering && td.isTileOpaque(tileInfos.tid) && tileInfos.x%grid==0 && tileInfos.y%grid==0 )
+							if( pixelGrid!=null && td.isTileOpaque(tileInfos.tid) && tileInfos.x%grid==0 && tileInfos.y%grid==0 )
 								pixelGrid.setPixel(
 									Std.int(tileInfos.x/grid),
 									Std.int(tileInfos.y/grid),
@@ -110,8 +110,8 @@ class LayerRender {
 			// Classic tiles layer
 			var td = li.getTiledsetDef();
 			if( td!=null && td.isAtlasLoaded() ) {
-				var pixelGrid = !fixFlickering ? null : new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
-				if( fixFlickering ) {
+				var pixelGrid = !fixFlickering || li.def.gridSize>td.tileGridSize ? null : new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
+				if( pixelGrid!=null ) {
 					pixelGrid.x = li.pxTotalOffsetX;
 					pixelGrid.y = li.pxTotalOffsetY;
 				}
@@ -125,7 +125,7 @@ class LayerRender {
 
 					for( tileInf in li.getGridTileStack(cx,cy) ) {
 						// Paint a full pixel behind to avoid flickering revealing background
-						if( fixFlickering && td.isTileOpaque(tileInf.tileId) )
+						if( pixelGrid!=null && td.isTileOpaque(tileInf.tileId) )
 							pixelGrid.setPixel( cx,cy, td.getAverageTileColor(tileInf.tileId) );
 
 						// Tile
