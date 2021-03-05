@@ -72,7 +72,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 		add({
 			label: L.untranslated("Flush log to disk"),
 			cb: ()->{
-				App.LOG.general( "\n"+dn.Process.rprintAll() );
 				App.LOG.flushToFile();
 				N.success("Flushed.");
 			}
