@@ -2,7 +2,7 @@ import electron.renderer.IpcRenderer;
 
 class App extends dn.Process {
 	public static var ME : App;
-	public static var LOG : dn.Log = new dn.Log( #if debug 1000 #else 500 #end );
+	public static var LOG : dn.Log = new dn.Log(5000);
 	public static var APP_RESOURCE_DIR = "./"; // with trailing slash
 	public static var APP_ASSETS_DIR(get,never) : String;
 		static inline function get_APP_ASSETS_DIR() return APP_RESOURCE_DIR+"assets/";
