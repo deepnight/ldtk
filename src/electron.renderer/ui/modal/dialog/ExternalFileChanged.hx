@@ -4,7 +4,7 @@ class ExternalFileChanged extends ui.modal.Dialog {
 	public function new(filePath:String, onFix:Void->Void) {
 		super("fileChanged");
 
-		addTitle( Lang.t._("File was modified") );
+		addTitle( Lang.t._("File was modified"), true );
 		addParagraph(Lang.t._("The following file has been modified externally and should be updated:") );
 
 		jContent.append( JsTools.makePath(filePath) );

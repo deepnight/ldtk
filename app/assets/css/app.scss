@@ -178,6 +178,12 @@ button {
 		// }
 	}
 
+	&.strong {
+		padding-top: 24px;
+		padding-bottom: 24px;
+		font-size: 13pt;
+	}
+
 	&[href] {
 		display: flex;
 		justify-content: center;
@@ -1867,6 +1873,7 @@ textarea {
 
 			color: white;
 			font-size: 15pt;
+			white-space: nowrap;
 
 			border: 0;
 			background-color: $bgLight;
@@ -2265,7 +2272,6 @@ textarea {
 		max-width: 400px;
 	}
 }
-
 
 .window.sync {
 	.wrapper .content {
@@ -5852,7 +5858,6 @@ $patternSize : 32px;
 				outline-offset: -1px;
 				box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
 				background-color: rgba(0, 0, 0, 0.4);
-
 			}
 
 			.tools {

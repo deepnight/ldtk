@@ -95,19 +95,20 @@ class Editor extends Page {
 		selectProject(p);
 
 		// Suggest backups
-		if( !project.isBackup() && !App.ME.isInAppDir(project.filePath.full,true) && project.levels.length>=10 && !project.backupOnSave && !project.hasFlag(IgnoreBackupSuggest) ) {
+		if( !project.isBackup() && !App.ME.isInAppDir(project.filePath.full,true) && project.levels.length>=8 && !project.backupOnSave && !project.hasFlag(IgnoreBackupSuggest) ) {
 			var w = new ui.modal.dialog.Choice(
-				L.t._("As your project is growing bigger, it is recommended to enable Backups, to secure your work a little bit more."),
+				L.t._("As your project is growing bigger, it is STRONGLY recommended to enable Backups, to secure your work a little bit more."),
 				[
 					{
 						label:L.t._("Enable backups when saving"),
+						className: "strong",
 						cb: ()->{
 							project.backupOnSave = true;
 							ge.emit(ProjectSettingsChanged);
-						}
+						},
 					},
 					{
-						label:L.t._("No, I'm fine."),
+						label:L.t._("No, and I understand the risk."),
 						className: "gray",
 						cb: ()->{
 							project.setFlag(IgnoreBackupSuggest, true);
@@ -115,6 +116,7 @@ class Editor extends Page {
 						},
 					}
 				],
+				L.t._("Enable backups"),
 				false
 			);
 		}
@@ -1433,7 +1435,7 @@ class Editor extends Page {
 				updateGuide();
 
 			case TilesetMetaDataChanged(td):
-				
+
 			case TilesetSelectionSaved(td):
 
 			case TilesetDefPixelDataCacheRebuilt(td):

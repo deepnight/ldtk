@@ -13,7 +13,7 @@ class LostFile extends ui.modal.Dialog {
 		var lostName = fp.fileName;
 		var lostExt = fp.extension;
 
-		addTitle( Lang.t._("File not found!") );
+		addTitle( Lang.t._("File not found!"), true );
 		addParagraph(Lang.t._("The following file cannot be found anymore:") );
 
 		jContent.append( JsTools.makePath(lostPath) );
