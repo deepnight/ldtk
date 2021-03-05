@@ -97,7 +97,7 @@ class Editor extends Page {
 		// Suggest backups
 		if( !project.isBackup() && !App.ME.isInAppDir(project.filePath.full,true) && project.levels.length>=8 && !project.backupOnSave && !project.hasFlag(IgnoreBackupSuggest) ) {
 			var w = new ui.modal.dialog.Choice(
-				L.t._("As your project is growing bigger, it is STRONGLY recommended to enable Backups, to secure your work a little bit more."),
+				L.t._("As your project is growing bigger, it is STRONGLY advised to enable BACKUPS, to secure your work."),
 				[
 					{
 						label:L.t._("Enable backups when saving"),
