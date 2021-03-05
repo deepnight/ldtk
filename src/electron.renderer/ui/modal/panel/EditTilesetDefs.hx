@@ -121,19 +121,19 @@ class EditTilesetDefs extends ui.modal.Panel {
 			}
 
 			// Init picker
-			var picker = new TilesetPicker(
+			var picker = new ui.ts.TileTagger(
 				jPicker,
-				curTd,
-				PaintId(
-					()->curEnumValue==null ? null : curEnumValue.id,
-					(tid:Int, valueId:Null<String>, active:Bool)->{
-						if( valueId!=null )
-							curTd.setTag(tid, valueId, active);
-						else if( !active )
-							curTd.removeAllTagsAt(tid);
-						editor.ge.emitAtTheEndOfFrame( TilesetMetaDataChanged(curTd) );
-					}
-				)
+				curTd
+				// PaintId(
+				// 	()->curEnumValue==null ? null : curEnumValue.id,
+				// 	(tid:Int, valueId:Null<String>, active:Bool)->{
+				// 		if( valueId!=null )
+				// 			curTd.setTag(tid, valueId, active);
+				// 		else if( !active )
+				// 			curTd.removeAllTagsAt(tid);
+				// 		editor.ge.emitAtTheEndOfFrame( TilesetMetaDataChanged(curTd) );
+				// 	}
+				// )
 			);
 
 			// Json editing

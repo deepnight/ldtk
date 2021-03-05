@@ -1670,7 +1670,7 @@ class Editor extends Page {
 		App.ME.jCanvas.hide();
 		Boot.ME.s2d.removeEventListener(onHeapsEvent);
 		Tool.clearSelectionMemory();
-		ui.TilesetPicker.clearScrollMemory();
+		ui.Tileset.clearScrollMemory();
 
 		App.ME.jBody.off(".client");
 

@@ -158,13 +158,11 @@ enum AtlasLoadingResult {
 	RemapSuccessful;
 }
 
-enum TilePickerMode {
-	ToolPicker;
-	MultiTiles;
-	SingleTile;
-	ViewOnly;
+enum TilesetSelectionMode {
+	None;
+	PickAndClose;
+	Free;
 	RectOnly;
-	PaintId( valueGetter:Void->Null<String>, paintValue:(tileId:Int, value:Null<String>, active:Bool)->Void );
 }
 
 enum TilePickerDisplayMode {

@@ -738,7 +738,7 @@ class JsTools {
 
 	public static function createTilePicker(
 		tilesetId: Null<Int>,
-		mode: TilePickerMode=MultiTiles,
+		selectMode: TilesetSelectionMode=Free,
 		tileIds: Array<Int>,
 		onPick: (tileIds:Array<Int>)->Void
 	) {
@@ -752,13 +752,13 @@ class JsTools {
 				// No tile selected
 				jTileCanvas.addClass("empty");
 			}
-			else if( mode!=RectOnly ) {
+			else if( selectMode!=RectOnly ) {
 				// Single/random tiles
 				jTileCanvas.removeClass("empty");
 				jTileCanvas.attr("width", td.tileGridSize);
 				jTileCanvas.attr("height", td.tileGridSize);
 				td.drawTileToCanvas(jTileCanvas, tileIds[0]);
-				if( tileIds.length>1 && mode!=RectOnly ) {
+				if( tileIds.length>1 && selectMode!=RectOnly ) {
 					// Cycling animation among multiple tiles
 					jTileCanvas.addClass("multi");
 					var idx = 0;
@@ -803,9 +803,9 @@ class JsTools {
 				var m = new ui.Modal();
 				m.addClass("singleTilePicker");
 
-				var tp = new ui.TilesetPicker(m.jContent, td, mode);
+				var tp = new ui.Tileset(m.jContent, td, selectMode);
 				tp.setSelectedTileIds(tileIds);
-				if( mode==SingleTile )
+				if( selectMode==PickAndClose )
 					tp.onSingleTileSelect = function(tileId) {
 						m.close();
 						onPick([tileId]);

@@ -337,7 +337,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			// Tile preview
 			var jPicker = JsTools.createTilePicker(
 				curEnum.iconTilesetUid,
-				SingleTile,
+				PickAndClose,
 				eValue.tileId==null ? [] : [eValue.tileId],
 				(tileIds)->{
 					eValue.tileId = tileIds[0];
