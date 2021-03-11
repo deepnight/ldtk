@@ -27,7 +27,6 @@ class Tileset {
 
 	var selectMode : TilesetSelectionMode;
 	var _internalSelectedIds : Array<Int> = [];
-	var displayMode : TilePickerDisplayMode = ShowOpaques;
 
 
 	public function new(target:js.jquery.JQuery, td:data.def.TilesetDef, mode:TilesetSelectionMode=None) {
@@ -102,21 +101,6 @@ class Tileset {
 		for(tileId in 0...tilesetDef.cWid*tilesetDef.cHei) {
 			var x = tilesetDef.getTileSourceX(tileId);
 			var y = tilesetDef.getTileSourceY(tileId);
-			switch displayMode {
-				case ShowOpaques:
-
-				case ShowPixelData:
-					// Fill
-					ctx.beginPath();
-					ctx.rect(
-						x, y,
-						tilesetDef.tileGridSize, tilesetDef.tileGridSize
-					);
-					ctx.fillStyle = "black";
-					ctx.fill();
-					ctx.fillStyle = C.intToHexRGBA( tilesetDef.getAverageTileColor(tileId) );
-					ctx.fill();
-			}
 
 			// Outline
 			ctx.beginPath();
@@ -533,13 +517,6 @@ class Tileset {
 			bt: ev.button,
 			pageX: ev.pageX,
 			pageY: ev.pageY,
-		}
-
-		// Toggle grid render mode
-		if( selectMode==None && ev.button==2 ) {
-			displayMode = displayMode==ShowOpaques ? ShowPixelData : ShowOpaques;
-			renderAtlas();
-			renderGrid();
 		}
 
 		tx = ty = null;

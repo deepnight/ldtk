@@ -146,7 +146,7 @@ class TileTagger extends ui.Tileset {
 				// Darken tile if there's no tag
 				ctx.beginPath();
 				ctx.rect(x, y, tilesetDef.tileGridSize, tilesetDef.tileGridSize );
-				ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(0x0, 0.45) );
+				ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(0x0, 0.3) );
 				ctx.fill();
 			}
 
