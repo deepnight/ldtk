@@ -1243,12 +1243,12 @@
 			}
 		}
 	], "enums": [{ "identifier": "Item", "uid": 49, "values": [
-		{ "id": "Knife", "tileId": 1563, "color": -1, "__tileSrcRect": [176,1552,16,16] },
-		{ "id": "Healing_Plant", "tileId": 322, "color": -1, "__tileSrcRect": [32,320,16,16] },
-		{ "id": "Meat", "tileId": 293, "color": -1, "__tileSrcRect": [80,288,16,16] },
-		{ "id": "Boots", "tileId": 167, "color": -1, "__tileSrcRect": [112,160,16,16] },
-		{ "id": "Water", "tileId": 288, "color": -1, "__tileSrcRect": [0,288,16,16] },
-		{ "id": "Gem", "tileId": 478, "color": -1, "__tileSrcRect": [224,464,16,16] }
+		{ "id": "Knife", "tileId": 1563, "color": 10061960, "__tileSrcRect": [176,1552,16,16] },
+		{ "id": "Healing_Plant", "tileId": 322, "color": 6723874, "__tileSrcRect": [32,320,16,16] },
+		{ "id": "Meat", "tileId": 293, "color": 10053205, "__tileSrcRect": [80,288,16,16] },
+		{ "id": "Boots", "tileId": 167, "color": 8934724, "__tileSrcRect": [112,160,16,16] },
+		{ "id": "Water", "tileId": 288, "color": 7824998, "__tileSrcRect": [0,288,16,16] },
+		{ "id": "Gem", "tileId": 478, "color": 13404347, "__tileSrcRect": [224,464,16,16] }
 	], "iconTilesetUid": 91, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [
 		{
 			"identifier": "tutorial",
@@ -1396,13 +1396,13 @@
 						},
 						{
 							"__identifier": "Mob",
-							"__grid": [23,9],
+							"__grid": [20,9],
 							"__pivot": [0.5,1],
 							"__tile": { "tilesetUid": 91, "srcRect": [176,1328,16,16] },
 							"width": 20,
 							"height": 20,
 							"defUid": 54,
-							"px": [376,160],
+							"px": [328,160],
 							"fieldInstances": [
 								{
 									"__identifier": "patrol",
@@ -1428,13 +1428,13 @@
 						},
 						{
 							"__identifier": "Mob",
-							"__grid": [17,17],
+							"__grid": [16,17],
 							"__pivot": [0.5,1],
 							"__tile": { "tilesetUid": 91, "srcRect": [176,1328,16,16] },
 							"width": 20,
 							"height": 20,
 							"defUid": 54,
-							"px": [280,288],
+							"px": [264,288],
 							"fieldInstances": [
 								{
 									"__identifier": "patrol",
