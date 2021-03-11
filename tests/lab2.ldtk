@@ -440,8 +440,8 @@
 				{ "enumValueId": "Water", "tileIds": [250,251,252,253,275,276,277,278] },
 				{ "enumValueId": "Lava", "tileIds": [254,279] },
 				{ "enumValueId": "Grass_surface", "tileIds": [25,26,27,50,51,75,76] },
-				{ "enumValueId": "Wood_surface", "tileIds": [8,9,10,11,31,32,33,34,35,56,131,156,208,209,233,234,258,259,283,284,285,286,308,309,310,311] },
-				{ "enumValueId": "Dirt_surface", "tileIds": [103,104,105,128,153,154] },
+				{ "enumValueId": "Wood_surface", "tileIds": [8,9,10,11,31,32,33,34,35,56,131,156,208,209,233,258,259,283,284,285,286,308,309,310,311] },
+				{ "enumValueId": "Dirt_surface", "tileIds": [103,104,105,128,153,154,230,231] },
 				{ "enumValueId": "Stone_surface", "tileIds": [0,1,2,3,4,5,6,7,28,29,53,54,78,79,100,101,102,125,127,132,152,157,333,334] }
 			],
 			"savedSelections": [
@@ -478,7 +478,7 @@
 				{ "enumValueId": "Lava", "tileIds": [] },
 				{ "enumValueId": "Grass_surface", "tileIds": [0,3] },
 				{ "enumValueId": "Wood_surface", "tileIds": [4,10,15] },
-				{ "enumValueId": "Dirt_surface", "tileIds": [2,7,8,9] },
+				{ "enumValueId": "Dirt_surface", "tileIds": [2,3,7,8,9] },
 				{ "enumValueId": "Stone_surface", "tileIds": [1,5,6,7,9,11,12,13,14,16,17,18,19,20,21,22,23] }
 			],
 			"savedSelections": [],
