@@ -202,7 +202,7 @@ class RuleEditor extends ui.modal.Dialog {
 			var jOpt = new J('<option value="$v"/>');
 			jOpt.appendTo(jOutOfBounds);
 			switch v {
-				case null: jOpt.text("This rule should not apply near layer borders");
+				case null: jOpt.text("This rule should not apply when reading cells outside of layer bounds (default)");
 				case 0: jOpt.text("Empty cells");
 				case _:
 					var iv = layerDef.getIntGridValueDef(v);
@@ -213,6 +213,7 @@ class RuleEditor extends ui.modal.Dialog {
 					});
 			}
 		}
+		jOutOfBounds.click(_->Tip.clear());
 		jOutOfBounds.change( _->{
 			var v = jOutOfBounds.val()=="null" ? null : Std.parseInt(jOutOfBounds.val());
 			rule.outOfBoundsValue = v;
