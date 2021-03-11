@@ -37,12 +37,18 @@ class TextEditor extends ui.modal.Dialog {
 			cm.setOption("autoCloseBrackets", true);
 		}
 
-		addClose();
 		onCloseCb = ()->{
 			 var out = cm.getValue();
 			 if( anyChange && str!=out )
 				onChange(out);
 		}
+
+		addClose();
+
+		addIconButton("delete", "red small", ()->{
+			cm.setValue("");
+			close();
+		} );
 	}
 
 	inline function requireMode(mode:ldtk.Json.TextLanguageMode) : Dynamic {

@@ -420,7 +420,7 @@ button {
 		display: none;
 	}
 	button.small {
-		flex: 0.2 1 0;
+		flex: 0 1 0;
 	}
 }
 
@@ -2265,8 +2265,10 @@ textarea {
 			flex-wrap: wrap;
 
 			button {
-				flex: 1 1 0;
 				margin: 1px;
+				&:not(.small) {
+					flex: 1 1 0;
+				}
 			}
 
 			button.confirm {
@@ -4044,18 +4046,27 @@ canvas#webgl {
 
 	&.tileTagger {
 		display: grid;
-		grid-template-columns: auto 130px;
+		grid-template-columns: auto;
+		grid-auto-flow: column;
+		grid-auto-columns: min-content;
 
 		.tools {
 			display: grid;
 			overflow: hidden;
-			grid-template-rows: min-content auto;
+			grid-template-rows: auto;
+			width: 130px;
 
 			ul.values {
 				overflow-y: auto;
 				li {
+					overflow: hidden;
+					grid-template-columns: min-content;
+					grid-auto-flow: column;
+					grid-auto-columns: auto;
+					text-overflow: ellipsis;
 					border: none;
 					border-left: 5px solid white;
+
 					&.active {
 						color: inherit;
 						outline: 2px solid white;

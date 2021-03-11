@@ -1,7 +1,7 @@
 package ui.ts;
 
 class TileTagger extends ui.Tileset {
-	var ed : data.def.EnumDef;
+	var ed : Null<data.def.EnumDef>;
 	var jTools : js.jquery.JQuery;
 	var jValues : js.jquery.JQuery;
 
@@ -25,7 +25,7 @@ class TileTagger extends ui.Tileset {
 
 		// Add Enum values
 		jValues.off().empty();
-		var ed = tilesetDef.getTagsEnumDef();
+		ed = tilesetDef.getTagsEnumDef();
 		if( ed!=null ) {
 			var jVal = new J('<li value="none" class="none">Custom data</li>');
 			jVal.appendTo(jValues);
@@ -92,8 +92,13 @@ class TileTagger extends ui.Tileset {
 		// Clear
 		renderAtlas();
 
+		if( tilesetDef.tagsSourceEnumUid!=null )
+			jTools.show();
+		else
+			jTools.hide();
+
 		// No tags
-		if( tilesetDef.tagsSourceEnumUid==null ) {
+		if( tilesetDef.tagsSourceEnumUid==null && !tilesetDef.hasAnyTileCustomData() ) {
 			renderGrid();
 			return;
 		}
@@ -102,7 +107,7 @@ class TileTagger extends ui.Tileset {
 		var thickness = M.imax(1, Std.int( tilesetDef.tileGridSize / 16 ) );
 		var offX = isSmallGrid ? -1 : -thickness*2;
 		var offY = isSmallGrid ? -1 : -thickness*2;
-		var iconTd = ed.iconTilesetUid==null ? null : Editor.ME.project.defs.getTilesetDef(ed.iconTilesetUid);
+		var iconTd = tilesetDef.tagsSourceEnumUid==null || ed.iconTilesetUid==null ? null : Editor.ME.project.defs.getTilesetDef(ed.iconTilesetUid);
 
 		for(tileId in 0...tilesetDef.cWid*tilesetDef.cHei) {
 			var x = tilesetDef.getTileSourceX(tileId);
@@ -110,53 +115,56 @@ class TileTagger extends ui.Tileset {
 			var n = 0;
 
 			// Enum tags
-			for(ev in ed.values)
-				if( tilesetDef.hasTag(ev.id, tileId) && ( curEnumValue==null || curEnumValue==ev.id ) ) {
-					if( ev.tileId!=null && iconTd!=null ) {
-						// Render icon tile
-						iconTd.drawTileTo2dContext(ctx, ev.tileId, x-n*offX, y-n*offY);
-					}
-					else {
-						// Contrast outline
-						if( !isSmallGrid ) {
+			if( tilesetDef.tagsSourceEnumUid!=null ) {
+				for(ev in ed.values)
+					if( tilesetDef.hasTag(ev.id, tileId) && ( curEnumValue==null || curEnumValue==ev.id ) ) {
+						if( ev.tileId!=null && iconTd!=null ) {
+							// Render icon tile
+							var s = tilesetDef.tileGridSize / iconTd.tileGridSize;
+							iconTd.drawTileTo2dContext(ctx, ev.tileId, x-n*offX, y-n*offY, s,s);
+						}
+						// else {
+							// Contrast outline
+							if( !isSmallGrid ) {
+								ctx.beginPath();
+								ctx.rect(
+									x+thickness*0.5 + n*offX,
+									y+thickness*0.5 + n*offY,
+									tilesetDef.tileGridSize-thickness-1,
+									tilesetDef.tileGridSize-thickness-1
+								);
+								ctx.strokeStyle = C.intToHex( C.getLuminosity(ev.color)>=0.2 ? 0x0 : C.setLuminosityInt(ev.color,0.3) );
+								ctx.lineWidth = thickness+2;
+								ctx.stroke();
+							}
+
+							// Color rect
 							ctx.beginPath();
 							ctx.rect(
 								x+thickness*0.5 + n*offX,
 								y+thickness*0.5 + n*offY,
-								tilesetDef.tileGridSize-thickness-1,
-								tilesetDef.tileGridSize-thickness-1
+								tilesetDef.tileGridSize-thickness - (isSmallGrid?0:1),
+								tilesetDef.tileGridSize-thickness - (isSmallGrid?0:1)
 							);
-							ctx.strokeStyle = C.intToHex( C.getLuminosity(ev.color)>=0.2 ? 0x0 : C.setLuminosityInt(ev.color,0.3) );
-							ctx.lineWidth = thickness+2;
+							ctx.strokeStyle = C.intToHex( ev.color );
+							ctx.lineWidth = thickness;
 							ctx.stroke();
-						}
+						// }
 
-						// Color rect
-						ctx.beginPath();
-						ctx.rect(
-							x+thickness*0.5 + n*offX,
-							y+thickness*0.5 + n*offY,
-							tilesetDef.tileGridSize-thickness - (isSmallGrid?0:1),
-							tilesetDef.tileGridSize-thickness - (isSmallGrid?0:1)
-						);
-						ctx.strokeStyle = C.intToHex( ev.color );
-						ctx.lineWidth = thickness;
-						ctx.stroke();
+						n++;
+
 					}
 
-					n++;
-
-				}
-
-			if( n==0 && curEnumValue!=null ) {
 				// Darken tile if there's no tag
-				ctx.beginPath();
-				ctx.rect(x, y, tilesetDef.tileGridSize, tilesetDef.tileGridSize );
-				ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(0x0, 0.3) );
-				ctx.fill();
+				if( n==0 && curEnumValue!=null ) {
+					ctx.beginPath();
+					ctx.rect(x, y, tilesetDef.tileGridSize, tilesetDef.tileGridSize );
+					ctx.fillStyle = C.intToHexRGBA( C.addAlphaF(0x0, 0.3) );
+					ctx.fill();
+				}
 			}
 
-			// Custom data markers
+			// Custom data icons
 			if( tilesetDef.hasTileCustomData(tileId) ) {
 				var img = tilesetDef.tileGridSize<16 ? dataTinyImg : dataImg;
 				var scale = M.imax(1, M.floor(tilesetDef.tileGridSize/32) );
@@ -218,7 +226,6 @@ class TileTagger extends ui.Tileset {
 			// Set/unset enum tags
 			for(tid in tileIds)
 				tilesetDef.setTag(tid, curEnumValue, added);
-			setSelectedTileIds([]);
 			refresh();
 		}
 		else {
@@ -242,11 +249,17 @@ class TileTagger extends ui.Tileset {
 			}
 			else {
 				// Remove
-				tilesetDef.setTileCustomData(tid);
+				new ui.modal.dialog.Confirm(
+					L.t._("Clear custom data for tile ::tid::?", { tid:tid }),
+					true,
+					()->{
+						tilesetDef.setTileCustomData(tid);
+						refresh();
+					}
+				);
 			}
 
-			setSelectedTileIds([]);
-			refresh();
 		}
+		setSelectedTileIds([]);
 	}
 }

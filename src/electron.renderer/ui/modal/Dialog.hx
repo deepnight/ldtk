@@ -60,6 +60,19 @@ class Dialog extends ui.Modal {
 		return b;
 	}
 
+	public function addIconButton(iconId:String, ?className:String, cb:Void->Void) : js.jquery.JQuery {
+		var b = new J("<button/>");
+		jButtons.show().append(b);
+		b.attr("type","button");
+		b.append('<span class="icon $iconId"></span>');
+		if( className!=null )
+			b.addClass(className);
+		b.click( function(ev) {
+			cb();
+		});
+		return b;
+	}
+
 	public function addConfirm(cb:Void->Void) {
 		var b = addButton("Confirm", "confirm", function() {
 			cb();

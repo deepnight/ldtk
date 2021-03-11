@@ -633,6 +633,11 @@ class TilesetDef {
 			mv.remove(tileId);
 	}
 
+	public function hasAnyTileCustomData() : Bool {
+		for(c in customData)
+			return true;
+		return false;
+	}
 	public inline function hasTileCustomData(tileId:Int) : Bool {
 		return getTileCustomData(tileId)!=null;
 	}
