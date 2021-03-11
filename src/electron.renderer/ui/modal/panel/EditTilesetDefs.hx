@@ -5,9 +5,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 	var jForm : js.jquery.JQuery;
 	public var curTd : Null<data.def.TilesetDef>;
 
-	var curEnumValue : Null<data.DataTypes.EnumDefValue>;
-	var jsonMode = false;
-
 
 	public function new(?selectedDef:data.def.TilesetDef) {
 		super();
@@ -67,7 +64,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 	function selectTileset(td:data.def.TilesetDef) {
 		curTd = td;
-		curEnumValue = null;
 		updateList();
 		updateForm();
 		updateTilesetPreview();
@@ -83,44 +79,39 @@ class EditTilesetDefs extends ui.modal.Panel {
 		// No atlas
 		if( curTd==null ) {
 			jPickerWrapper.hide();
-			jContent.find(".tilesDemo").hide();
+			// jContent.find(".tilesDemo").hide();
 			return;
 		}
 
-		jPickerWrapper.off().find("*").off();
-		jContent.find(".tilesDemo").show();
+		jPickerWrapper.off().empty();
+		// jContent.find(".tilesDemo").show();
 
-		// Main tileset view
+		// Picker / tagger
 		jPickerWrapper.show();
-		var jPicker = jPickerWrapper.find(".picker");
-		jPicker.empty();
-		if( curTd.isAtlasLoaded() ) {
-			// Picker / tagger
-			var picker = new ui.ts.TileTagger(jPicker, curTd);
-		}
+		if( curTd.isAtlasLoaded() )
+			new ui.ts.TileTagger(jPickerWrapper, curTd);
 
+		// // Demo tiles
+		// var padding = 8;
+		// var jDemo = jContent.find(".tilesDemo canvas");
+		// JsTools.clearCanvas(jDemo);
 
-		// Demo tiles
-		var padding = 8;
-		var jDemo = jContent.find(".tilesDemo canvas");
-		JsTools.clearCanvas(jDemo);
+		// if( curTd!=null && curTd.isAtlasLoaded() ) {
+		// 	jDemo.attr("width", curTd.tileGridSize*8 + padding*7);
+		// 	jDemo.attr("height", curTd.tileGridSize);
 
-		if( curTd!=null && curTd.isAtlasLoaded() ) {
-			jDemo.attr("width", curTd.tileGridSize*8 + padding*7);
-			jDemo.attr("height", curTd.tileGridSize);
-
-			var idx = 0;
-			function renderDemoTile(tcx,tcy) {
-				curTd.drawTileToCanvas(jDemo, curTd.getTileId(tcx,tcy), (idx++)*(curTd.tileGridSize+padding), 0);
-			}
-			renderDemoTile(0,0);
-			renderDemoTile(1,0);
-			renderDemoTile(2,0);
-			renderDemoTile(0,1);
-			renderDemoTile(0,2);
-			renderDemoTile(0,3);
-			renderDemoTile(0,4);
-		}
+		// 	var idx = 0;
+		// 	function renderDemoTile(tcx,tcy) {
+		// 		curTd.drawTileToCanvas(jDemo, curTd.getTileId(tcx,tcy), (idx++)*(curTd.tileGridSize+padding), 0);
+		// 	}
+		// 	renderDemoTile(0,0);
+		// 	renderDemoTile(1,0);
+		// 	renderDemoTile(2,0);
+		// 	renderDemoTile(0,1);
+		// 	renderDemoTile(0,2);
+		// 	renderDemoTile(0,3);
+		// 	renderDemoTile(0,4);
+		// }
 
 		JsTools.parseComponents(jPickerWrapper);
 	}

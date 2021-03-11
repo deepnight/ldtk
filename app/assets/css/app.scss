@@ -4046,6 +4046,22 @@ canvas#webgl {
 
 			ul.values {
 				overflow-y: auto;
+				li {
+					border: none;
+					border-left: 5px solid white;
+					&.active {
+						color: inherit;
+						outline: 2px solid white;
+						outline-offset: -2px;
+						box-shadow: none;
+					}
+					&.none {
+						border: none;
+						background-color: $bgMed;
+						color: $bgLighter;
+					}
+				}
+
 			}
 		}
 	}
@@ -5842,7 +5858,7 @@ $patternSize : 32px;
 	}
 
 	.content {
-		width: 860px;
+		width: 890px;
 		grid-template-rows: min-content min-content min-content auto;
 		.mainList {
 			grid-row: 2/5;
@@ -5869,14 +5885,10 @@ $patternSize : 32px;
 
 		.pickerWrapper {
 			overflow: hidden;
-
-			&>.picker {
-				overflow: hidden;
-				outline: 1px solid white;
-				outline-offset: -1px;
-				box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
-				background-color: rgba(0, 0, 0, 0.4);
-			}
+			outline: 1px solid white;
+			outline-offset: -1px;
+			box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
+			background-color: rgba(0, 0, 0, 0.4);
 		}
 	}
 }
