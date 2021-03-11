@@ -26,6 +26,8 @@ class Tip extends dn.Process {
 		// Multilines
 		if( str.indexOf("\\n")>=0 )
 			str = "<p>" + str.split("\\n").join("</p><p>") + "</p>";
+		else if( str.indexOf("\n")>=0 )
+			str = "<p>" + str.split("\n").join("</p><p>") + "</p>";
 
 		// Bold
 		var parts = str.split("**");
@@ -89,9 +91,9 @@ class Tip extends dn.Process {
 	}
 
 
-	public static function simpleTip(pageX:Float, pageY:Float, str:String) {
+	public static function simpleTip(pageX:Float, pageY:Float, str:String, forceBelow=false) {
 		if( CURRENT==null || CURRENT.destroyed || CURRENT.text!=str )
-			new Tip(str);
+			new Tip(str, forceBelow);
 
 		CURRENT.jTip.offset({
 			left: pageX - 16,
