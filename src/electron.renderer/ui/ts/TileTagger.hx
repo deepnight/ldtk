@@ -3,28 +3,22 @@ package ui.ts;
 class TileTagger extends ui.Tileset {
 	var ed : data.def.EnumDef;
 	var jTools : js.jquery.JQuery;
-	var jCustomBt : js.jquery.JQuery;
 	var jValues : js.jquery.JQuery;
 
 	var dataImg : js.html.Image;
 	var dataTinyImg : js.html.Image;
 
 	var curEnumValue : Null<String>;
-	var pendingCustom = false;
-
 
 	public function new(target, td) {
 		super(target, td, None);
 		this.ed = td.getTagsEnumDef();
+		useSavedSelections = false;
 
 		jWrapper.addClass("tileTagger");
 
 		jTools = new J('<div class="tools"/>');
 		jTools.appendTo(jWrapper);
-
-		jCustomBt = new J('<button></button>');
-		jCustomBt.appendTo(jTools);
-		jCustomBt.click(_->setPendingCustom(!pendingCustom) );
 
 		jValues = new J('<ul class="values niceList"/>');
 		jValues.appendTo(jTools);
@@ -33,11 +27,10 @@ class TileTagger extends ui.Tileset {
 		jValues.off().empty();
 		var ed = tilesetDef.getTagsEnumDef();
 		if( ed!=null ) {
-			var jVal = new J('<li value="none" class="none">-- Show all --</li>');
+			var jVal = new J('<li value="none" class="none">Custom data</li>');
 			jVal.appendTo(jValues);
 			jVal.click( ev->{
 				selectEnumValue(null);
-				setPendingCustom(false);
 			});
 
 			for(ev in ed.values) {
@@ -54,7 +47,6 @@ class TileTagger extends ui.Tileset {
 				});
 				jVal.click( _->{
 					selectEnumValue(ev.id);
-					setPendingCustom(false);
 				});
 			}
 			jValues.find('[value=${curEnumValue==null ? "none" : curEnumValue}]').addClass("active");
@@ -74,7 +66,6 @@ class TileTagger extends ui.Tileset {
 		dataTinyImg.src = 'data:image/png;base64,$b64';
 
 		selectEnumValue();
-		setPendingCustom(false);
 	}
 
 
@@ -83,12 +74,11 @@ class TileTagger extends ui.Tileset {
 		curEnumValue = id;
 
 		if( id!=null ) {
-			setPendingCustom(false);
 			setSelectionMode(RectOnly);
 			jValues.find('[value=$id]').addClass("active");
 		}
 		else {
-			setSelectionMode(None);
+			setSelectionMode(PickSingle);
 			jValues.find('[value=none]').addClass("active");
 		}
 
@@ -179,24 +169,6 @@ class TileTagger extends ui.Tileset {
 	}
 
 
-	function setPendingCustom(v:Bool) {
-		pendingCustom = v;
-
-		if( pendingCustom ) {
-			selectEnumValue(null);
-			jCustomBt.html("&lt; Pick tile");
-			jCustomBt.addClass("pending");
-			jValues.addClass("faded");
-			setSelectionMode(PickSingle);
-		}
-		else {
-			jCustomBt.text("Custom data");
-			jCustomBt.removeClass("pending");
-			jValues.removeClass("faded");
-		}
-	}
-
-
 	override function onPickerMouseLeave(ev:js.jquery.Event) {
 		super.onPickerMouseLeave(ev);
 		ui.Tip.clear();
@@ -205,8 +177,8 @@ class TileTagger extends ui.Tileset {
 	override function onPickerMouseMove(ev:js.jquery.Event) {
 		super.onPickerMouseMove(ev);
 
-		if( tilesetDef.tagsSourceEnumUid==null || pendingCustom )
-			return;
+		// if( tilesetDef.tagsSourceEnumUid==null )
+		// 	return;
 
 		var cx = pageToCx(ev.pageX,false);
 		var cy = pageToCy(ev.pageY,false);
@@ -233,9 +205,9 @@ class TileTagger extends ui.Tileset {
 	override function updateCursor(pageX:Float, pageY:Float, force:Bool = false) {
 		super.updateCursor(pageX, pageY, force);
 
-		if( pendingCustom )
+		if( curEnumValue==null )
 			setCursorCss("pick");
-		else if( curEnumValue!=null )
+		else
 			setCursorCss("paint");
 	}
 
@@ -249,7 +221,7 @@ class TileTagger extends ui.Tileset {
 			setSelectedTileIds([]);
 			refresh();
 		}
-		else if( pendingCustom ) {
+		else {
 			// Custom data
 			var tid = tileIds[0];
 			if( added ) {
@@ -267,7 +239,6 @@ class TileTagger extends ui.Tileset {
 						refresh();
 					}
 				);
-				setPendingCustom(false);
 			}
 			else {
 				// Remove

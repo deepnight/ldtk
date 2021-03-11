@@ -24,6 +24,7 @@ class Tileset {
 	var tx : Null<Float>;
 	var ty : Null<Float>;
 	var mouseOver = false;
+	var useSavedSelections = true;
 
 	var selectMode : TilesetSelectionMode;
 	var _internalSelectedIds : Array<Int> = [];
@@ -333,7 +334,7 @@ class Tileset {
 			c.appendTo(jCursor);
 		}
 		else {
-			var saved = tilesetDef.getSavedSelectionFor(tileId);
+			var saved = useSavedSelections ? tilesetDef.getSavedSelectionFor(tileId) : null;
 			if( saved!=null && dragStart==null ) {
 				// Saved-selection rollover
 				jCursor.append( createCursor(saved) );
