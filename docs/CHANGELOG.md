@@ -1,14 +1,18 @@
 # 0.8.2
 
-  - TODO: tilset tags
-  - TODO: isolated points for Entities
+  - TODO: tileset tags
+  - TODO: isolated points for Entities (from Stuart Adams)
   - TODO: enum value colors
   - Array of Points in Entities can now be displayed as "**looping paths**".
+  - Added a one-time "enable backup" recommendation popup for medium/large projects.
   - Reduced tile flickering while zooming in/out (this reduction can be disabled from the app settings)
+  - Extended app logging limit (from 500 to 5000 lines)
   - Fixed "Create group" button in Auto-layer Rules panel
   - Fixed a crash when adding a single entity point
   - Fixed Enum value renaming in Level fields
   - Fixed Enum value renaming in Entity fields
+  - Fixed Save or Update operations going super slow while the app wasn't focused
+  - Fixed email address on contact links
 
 # 0.8.1
 
