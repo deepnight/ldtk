@@ -140,4 +140,13 @@ class TextEditor extends ui.modal.Dialog {
 		);
 		return true;
 	}
+
+	override function onKeyPress(keyCode:Int) {
+		super.onKeyPress(keyCode);
+
+		switch keyCode {
+			case K.ESCAPE: close();
+			case _:
+		}
+	}
 }
