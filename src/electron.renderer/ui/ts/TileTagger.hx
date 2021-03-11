@@ -192,15 +192,15 @@ class TileTagger extends ui.Tileset {
 		var cy = pageToCy(ev.pageY,false);
 		if( cx>=0 && cx<tilesetDef.cWid && cy>=0 && cy<tilesetDef.cHei ) {
 			var tid = tilesetDef.getTileId( cx, cy );
-			var tipTxt = 'Tile $tid';
+			var tipTxt = '**Tile $tid**';
 			var tipCol : Null<Int> = null;
 			if( tilesetDef.hasAnyTag(tid) ) {
-				tipTxt += " - "+tilesetDef.getAllTagsAt(tid).join(", ");
+				tipTxt += tilesetDef.getAllTagsAt(tid).join(" + ");
 				var tag = tilesetDef.getAllTagsAt(tid)[0];
 				tipCol = tilesetDef.getTagsEnumDef().getValue(tag).color;
 			}
 			if( tilesetDef.hasTileCustomData(tid) )
-				tipTxt+="\n"+tilesetDef.getTileCustomData(tid);
+				tipTxt+="\n\""+tilesetDef.getTileCustomData(tid)+"\"";
 
 			var tip = ui.Tip.simpleTip(ev.pageX, ev.pageY, tipTxt);
 			if( tipCol!=null )

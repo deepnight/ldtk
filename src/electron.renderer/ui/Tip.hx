@@ -98,7 +98,7 @@ class Tip extends dn.Process {
 		var docHei = App.ME.jDoc.innerHeight();
 		CURRENT.jTip.offset({
 			left: pageX - 16,
-			top: pageY>=docHei-150 ? docHei-150 : pageY+16,
+			top: pageY>=docHei-150 ? docHei-150 : pageY+24,
 		});
 		return CURRENT;
 	}

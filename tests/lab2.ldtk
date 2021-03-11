@@ -296,7 +296,7 @@
 			"identifier": "Platform",
 			"uid": 46,
 			"tags": [],
-			"width": 16,
+			"width": 24,
 			"height": 8,
 			"resizableX": true,
 			"resizableY": false,
@@ -708,18 +708,18 @@
 							"px": [140,176],
 							"fieldInstances": [{
 								"__identifier": "path",
-								"__value": [ { "cx": 11, "cy": 21 }, { "cx": 11, "cy": 14 }, { "cx": 22, "cy": 14 } ],
+								"__value": [ { "cx": 10, "cy": 21 }, { "cx": 10, "cy": 14 }, { "cx": 25, "cy": 14 } ],
 								"__type": "Array<Point>",
 								"defUid": 47,
 								"realEditorValues": [ {
 									"id": "V_String",
-									"params": ["11,21"]
+									"params": ["10,21"]
 								}, {
 									"id": "V_String",
-									"params": ["11,14"]
+									"params": ["10,14"]
 								}, {
 									"id": "V_String",
-									"params": ["22,14"]
+									"params": ["25,14"]
 								} ]
 							}]
 						}
