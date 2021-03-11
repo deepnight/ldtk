@@ -233,7 +233,7 @@ class TileTagger extends ui.Tileset {
 			var tid = tileIds[0];
 			if( added ) {
 				// Add
-				new ui.modal.dialog.TextEditor(
+				var te = new ui.modal.dialog.TextEditor(
 					tilesetDef.hasTileCustomData(tid) ? tilesetDef.getTileCustomData(tid) : "",
 					'Tile $tid custom data',
 					LangJson,
@@ -246,6 +246,7 @@ class TileTagger extends ui.Tileset {
 						refresh();
 					}
 				);
+				te.jHeader.append( tilesetDef.createTileHtmlImage(tid, 64) );
 			}
 			else {
 				// Remove

@@ -656,8 +656,6 @@ class TilesetDef {
 
 
 	/*** JS API *********************************/
-	#if js
-
 	public function createAtlasHtmlImage() : js.html.Image {
 		var img = new js.html.Image();
 		if( isAtlasLoaded() ) {
@@ -667,7 +665,6 @@ class TilesetDef {
 		return img;
 	}
 
-	#if editor
 	public function drawAtlasToCanvas(jCanvas:js.jquery.JQuery, scale=1.0) {
 		if( !jCanvas.is("canvas") )
 			throw "Not a canvas";
@@ -698,6 +695,29 @@ class TilesetDef {
 		ctx.putImageData(imgData,0,0);
 	}
 
+	public function createTileHtmlImage(tid:Int, ?imgWid:Int, ?imgHei:Int) : js.jquery.JQuery {
+		var jImg =
+			if( isAtlasLoaded() ) {
+				var imgData = _project.getOrLoadImage(relPath);
+				var subPixels = imgData.pixels.sub(getTileSourceX(tid), getTileSourceY(tid), tileGridSize, tileGridSize);
+				var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+				var img = new js.html.Image(subPixels.width, subPixels.height);
+				img.src = 'data:image/png;base64,$b64';
+				new J(img);
+			}
+			else
+				new J( new js.html.Image() );
+
+			if( imgWid!=null ) {
+				jImg.css({
+					width:imgWid+"px",
+					height:(imgHei!=null?imgHei:imgWid)+"px",
+					imageRendering: "pixelated",
+				});
+			}
+
+		return jImg;
+	}
 
 	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
 		if( !jCanvas.is("canvas") )
@@ -725,9 +745,8 @@ class TilesetDef {
 			ctx.drawImage(img, toX, toY, subPixels.width*scaleX, subPixels.height*scaleY);
 		}
 	}
-	#end
 
-	#end
+
 
 	public function tidy(p:data.Project) {
 		_project = p;

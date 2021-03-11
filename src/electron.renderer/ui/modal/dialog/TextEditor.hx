@@ -4,14 +4,17 @@ package ui.modal.dialog;
 import codemirror.CodeMirror;
 
 class TextEditor extends ui.modal.Dialog {
+	public var jHeader : js.jquery.JQuery;
 
-	public function new(str:String, ?title:String, ?mode:ldtk.Json.TextLanguageMode, onChange:(str:String)->Void) {
+	public function new(str:String, title:String, ?mode:ldtk.Json.TextLanguageMode, onChange:(str:String)->Void) {
 		super("textEditor");
 
 		var anyChange = false;
 
-		if( title!=null )
-			new J('<h2>$title</h2>').appendTo(jContent);
+		new J('<h2>$title</h2>').appendTo(jContent);
+
+		jHeader = new J('<div class="header"/>');
+		jHeader.appendTo(jContent);
 
 		var jTextArea = new J('<textarea/>');
 		jTextArea.appendTo(jContent);

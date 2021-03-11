@@ -2010,12 +2010,24 @@ textarea {
 
 .window.textEditor {
 	.wrapper .content {
+		display: grid;
+		grid-template-rows: min-content min-content auto;
+		width: 80vw;
+		height: 70vh;
+
 		h2 {
 			margin-bottom: 8px;
 		}
+
+		.header {
+			&:not(:empty) {
+				padding-top: 8px;
+				padding-bottom: 8px;
+			}
+		}
 		.CodeMirror {
-			width: 80vw;
-			height: 70vh;
+			width: 100%;
+			height: 100%;
 		}
 	}
 }
