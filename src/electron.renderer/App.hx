@@ -388,7 +388,7 @@ class App extends dn.Process {
 		keyDowns = new Map();
 		if( hasPage() )
 			curPageProcess.onAppBlur();
-		hxd.System.fpsLimit = 4;
+		// Note: FPS limit is done during update
 	}
 
 	function onAppResize(ev:js.html.Event) {
@@ -650,6 +650,10 @@ class App extends dn.Process {
 
 	override function update() {
 		super.update();
+
+		// FPS limit while app isn't focused
+		if( !focused && !ui.modal.Progress.hasAny() && ( !Editor.exists() || !Editor.ME.camera.isAnimated() ) )
+			hxd.System.fpsLimit = 4;
 
 		// Process profiling
 		if( dn.Process.PROFILING && !cd.hasSetS("profiler",2) ) {
