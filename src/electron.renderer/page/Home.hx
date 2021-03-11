@@ -477,6 +477,12 @@ class Home extends Page {
 			fp.extension = "ldtk";
 
 			var p = data.Project.createEmpty(fp.full);
+			if( !JsTools.fileExists(fp.full) ) {
+				N.error("Couldn't create this project file! Maybe try to check that you have the right to write files here.");
+				return;
+			}
+
+
 			var data = ui.ProjectSaving.prepareProjectSavingData(p);
 			new ui.ProjectSaving(this, p, (success)->{
 				if( success ) {
