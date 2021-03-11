@@ -971,6 +971,11 @@ ul.log {
 	background-repeat: no-repeat;
 	background-size: contain;
 }
+.icon.left				{ background-image: url("../icons/arrow_left.svg"); }
+.icon.right				{ background-image: url("../icons/arrow_right.svg"); }
+.icon.up				{ background-image: url("../icons/arrow_up.svg"); }
+.icon.down				{ background-image: url("../icons/arrow_down.svg"); }
+
 .icon.active			{ background-image: url("../icons/active.png"); }
 .icon.add				{ background-image: url("../icons/add.svg"); }
 .icon.autoLayer			{ background-image: url("../icons/autoLayer.png") }
@@ -4878,6 +4883,18 @@ body.sorting ul.collapsedSortTarget {
 			grid-template-rows: min-content auto;
 		}
 
+		button:not(.running) span.running {
+			display: none;
+		}
+		button.running {
+			outline: 1px solid $orange;
+			box-shadow: 0px 0px 16px $red;
+			opacity: 0.5;
+			span.ready {
+				display: none;
+			}
+		}
+
 		ul.form .GridVania,
 		ul.form .LinearHorizontal,
 		ul.form .LinearVertical,
@@ -5024,18 +5041,6 @@ body.sorting ul.collapsedSortTarget {
 
 		button {
 			white-space: nowrap;
-		}
-
-		button:not(.running) span.running {
-			display: none;
-		}
-		button.running {
-			outline: 1px solid $orange;
-			box-shadow: 0px 0px 16px $red;
-			opacity: 0.5;
-			span.ready {
-				display: none;
-			}
 		}
 	}
 }

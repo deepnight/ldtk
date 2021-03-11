@@ -34,19 +34,6 @@ class LevelInstancePanel extends ui.modal.Panel {
 			);
 		});
 
-		// Create button
-		jContent.find("button.create").click( (ev:js.jquery.Event)->{
-			if( editor.worldTool.isInAddMode() ) {
-				editor.worldTool.stopAddMode();
-				ev.getThis().removeClass("running");
-			}
-			else {
-				editor.worldTool.startAddMode();
-				ev.getThis().addClass("running");
-				N.msg(L.t._("Select a spot on the world map..."));
-			}
-		});
-
 		// Duplicate button
 		jContent.find("button.duplicate").click( (_)->{
 			var copy = project.duplicateLevel(level);
@@ -279,17 +266,5 @@ class LevelInstancePanel extends ui.modal.Panel {
 
 	function updateFieldsForm() {
 		fieldsForm.use( Level(level), project.defs.levelFields, (fd)->level.getFieldInstance(fd) );
-	}
-
-
-
-	override function update() {
-		super.update();
-
-		// if( !editor.worldMode )
-			// close();
-
-		if( !editor.worldTool.isInAddMode() && jContent.find("button.create.running").length>0 )
-			jContent.find("button.create").removeClass("running");
 	}
 }
