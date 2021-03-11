@@ -91,13 +91,14 @@ class Tip extends dn.Process {
 	}
 
 
-	public static function simpleTip(pageX:Float, pageY:Float, str:String, forceBelow=false) {
+	public static function simpleTip(pageX:Float, pageY:Float, str:String) {
 		if( CURRENT==null || CURRENT.destroyed || CURRENT.text!=str )
-			new Tip(str, forceBelow);
+			new Tip(str);
 
+		var docHei = App.ME.jDoc.innerHeight();
 		CURRENT.jTip.offset({
 			left: pageX - 16,
-			top: pageY + ( pageY>100 ? -32 : 32 ),
+			top: pageY>=docHei-150 ? docHei-150 : pageY+16,
 		});
 		return CURRENT;
 	}
