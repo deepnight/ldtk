@@ -1,6 +1,8 @@
 # 0.8.2
 
   - TODO: tileset tags
+  - TODO: tileset custom data
+  - TODO: Shift-R shortcut
   - TODO: isolated points for Entities (from Stuart Adams)
   - TODO: enum value colors
   - Array of Points in Entities can now be displayed as "**looping paths**".
