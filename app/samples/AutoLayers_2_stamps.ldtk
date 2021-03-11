@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.8.1",
+		"appVersion": "0.8.2",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.8.1",
+	"jsonVersion": "0.8.2",
 	"nextUid": 39,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -65,6 +65,7 @@
 							"tileMode": "Stamp",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 3897482,
 							"perlinScale": 0.2,
@@ -94,6 +95,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 7959157,
 							"perlinScale": 0.2,
@@ -109,6 +111,8 @@
 		}
 	], "entities": [], "tilesets": [
 		{
+			"__cWid": 20,
+			"__cHei": 14,
 			"identifier": "Inca_front_by_Kronbits",
 			"uid": 1,
 			"relPath": "atlas/Inca_front_by_Kronbits-extended.png",
@@ -117,6 +121,9 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
+			"tagsSourceEnumUid": null,
+			"enumTags": [],
+			"customData": [],
 			"savedSelections": [],
 			"cachedPixelData": {
 				"opaqueTiles": "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",

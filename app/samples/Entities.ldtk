@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.8.1",
+		"appVersion": "0.8.2",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.8.1",
+	"jsonVersion": "0.8.2",
 	"nextUid": 91,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -84,6 +84,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 591296,
 							"perlinScale": 0.2,
@@ -105,6 +106,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 806153,
 							"perlinScale": 0.2,
@@ -126,6 +128,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 8590402,
 							"perlinScale": 0.2,
@@ -147,6 +150,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 6355421,
 							"perlinScale": 0.2,
@@ -168,6 +172,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 6367511,
 							"perlinScale": 0.2,
@@ -189,6 +194,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 6990943,
 							"perlinScale": 0.2,
@@ -210,6 +216,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 2033063,
 							"perlinScale": 0.2,
@@ -231,6 +238,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 2740772,
 							"perlinScale": 0.2,
@@ -260,6 +268,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 5288007,
 							"perlinScale": 0.2,
@@ -281,6 +290,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 5886468,
 							"perlinScale": 0.2,
@@ -302,6 +312,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 7787745,
 							"perlinScale": 0.2,
@@ -323,6 +334,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": true,
 							"perlinSeed": 2144877,
 							"perlinScale": 0.2,
@@ -344,6 +356,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": true,
 							"perlinSeed": 3363096,
 							"perlinScale": 0.2,
@@ -365,6 +378,7 @@
 							"tileMode": "Single",
 							"pivotX": 0,
 							"pivotY": 0,
+							"outOfBoundsValue": null,
 							"perlinActive": false,
 							"perlinSeed": 1403559,
 							"perlinScale": 0.2,
@@ -926,6 +940,8 @@
 		}
 	], "tilesets": [
 		{
+			"__cWid": 20,
+			"__cHei": 20,
 			"identifier": "Monsters_and_Minions_by_Beowulf",
 			"uid": 47,
 			"relPath": "atlas/Monsters_and_Minions_by_Beowulf.png",
@@ -934,6 +950,9 @@
 			"tileGridSize": 32,
 			"spacing": 0,
 			"padding": 0,
+			"tagsSourceEnumUid": null,
+			"enumTags": [],
+			"customData": [],
 			"savedSelections": [],
 			"cachedPixelData": {
 				"opaqueTiles": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
@@ -941,6 +960,8 @@
 			}
 		},
 		{
+			"__cWid": 16,
+			"__cHei": 128,
 			"identifier": "RPG_Graphics_Icons_by_7Soul_s",
 			"uid": 59,
 			"relPath": "atlas/RPG Graphics Icons by 7Soul's.png",
@@ -949,6 +970,9 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
+			"tagsSourceEnumUid": null,
+			"enumTags": [],
+			"customData": [],
 			"savedSelections": [],
 			"cachedPixelData": {
 				"opaqueTiles": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000100000000100000000000000000000111000000001111101100001100110000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000100000000100000000000000000000111000000001111101100001100110000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
@@ -956,6 +980,8 @@
 			}
 		},
 		{
+			"__cWid": 11,
+			"__cHei": 11,
 			"identifier": "TopDown_by_deepnight",
 			"uid": 60,
 			"relPath": "atlas/TopDown_by_deepnight.png",
@@ -964,6 +990,9 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
+			"tagsSourceEnumUid": null,
+			"enumTags": [],
+			"customData": [],
 			"savedSelections": [],
 			"cachedPixelData": {
 				"opaqueTiles": "0000010000001000100000010000000000000001000000000000000000000000001111111110000000000000000000000000000000000000000000000",
@@ -972,27 +1001,27 @@
 		}
 	], "enums": [
 		{ "identifier": "ItemType", "uid": 5, "values": [
-			{ "id": "Gold", "tileId": 447, "__tileSrcRect": [240,432,16,16] },
-			{ "id": "Trout", "tileId": 300, "__tileSrcRect": [192,288,16,16] },
-			{ "id": "Sword", "tileId": 1563, "__tileSrcRect": [176,1552,16,16] },
-			{ "id": "Heavy_sword", "tileId": 1736, "__tileSrcRect": [128,1728,16,16] },
-			{ "id": "Bow", "tileId": 1493, "__tileSrcRect": [80,1488,16,16] },
-			{ "id": "Arrow", "tileId": 1447, "__tileSrcRect": [112,1440,16,16] },
-			{ "id": "Staff", "tileId": 1672, "__tileSrcRect": [128,1664,16,16] },
-			{ "id": "Magic_ring", "tileId": 1122, "__tileSrcRect": [32,1120,16,16] },
-			{ "id": "Healing_potion", "tileId": 590, "__tileSrcRect": [224,576,16,16] },
-			{ "id": "Mana_potion", "tileId": 720, "__tileSrcRect": [0,720,16,16] }
+			{ "id": "Gold", "tileId": 447, "color": -1, "__tileSrcRect": [240,432,16,16] },
+			{ "id": "Trout", "tileId": 300, "color": -1, "__tileSrcRect": [192,288,16,16] },
+			{ "id": "Sword", "tileId": 1563, "color": -1, "__tileSrcRect": [176,1552,16,16] },
+			{ "id": "Heavy_sword", "tileId": 1736, "color": -1, "__tileSrcRect": [128,1728,16,16] },
+			{ "id": "Bow", "tileId": 1493, "color": -1, "__tileSrcRect": [80,1488,16,16] },
+			{ "id": "Arrow", "tileId": 1447, "color": -1, "__tileSrcRect": [112,1440,16,16] },
+			{ "id": "Staff", "tileId": 1672, "color": -1, "__tileSrcRect": [128,1664,16,16] },
+			{ "id": "Magic_ring", "tileId": 1122, "color": -1, "__tileSrcRect": [32,1120,16,16] },
+			{ "id": "Healing_potion", "tileId": 590, "color": -1, "__tileSrcRect": [224,576,16,16] },
+			{ "id": "Mana_potion", "tileId": 720, "color": -1, "__tileSrcRect": [0,720,16,16] }
 		], "iconTilesetUid": 59, "externalRelPath": null, "externalFileChecksum": null },
 		{ "identifier": "MonsterType", "uid": 48, "values": [
-			{ "id": "Fighter", "tileId": 204, "__tileSrcRect": [128,320,32,32] },
-			{ "id": "Rat", "tileId": 75, "__tileSrcRect": [480,96,32,32] },
-			{ "id": "Snek", "tileId": 46, "__tileSrcRect": [192,64,32,32] },
-			{ "id": "Beholder", "tileId": 146, "__tileSrcRect": [192,224,32,32] }
+			{ "id": "Fighter", "tileId": 204, "color": -1, "__tileSrcRect": [128,320,32,32] },
+			{ "id": "Rat", "tileId": 75, "color": -1, "__tileSrcRect": [480,96,32,32] },
+			{ "id": "Snek", "tileId": 46, "color": -1, "__tileSrcRect": [192,64,32,32] },
+			{ "id": "Beholder", "tileId": 146, "color": -1, "__tileSrcRect": [192,224,32,32] }
 		], "iconTilesetUid": 47, "externalRelPath": null, "externalFileChecksum": null },
 		{ "identifier": "TriggerCondition", "uid": 84, "values": [
-			{ "id": "OnPlayerEnter", "tileId": null, "__tileSrcRect": null },
-			{ "id": "OnPlayerAttack", "tileId": null, "__tileSrcRect": null },
-			{ "id": "OnMobEnter", "tileId": null, "__tileSrcRect": null }
+			{ "id": "OnPlayerEnter", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "OnPlayerAttack", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "OnMobEnter", "tileId": null, "color": 0, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null }
 	], "externalEnums": [], "levelFields": [
 		{
