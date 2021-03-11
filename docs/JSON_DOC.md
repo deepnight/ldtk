@@ -295,7 +295,7 @@ Value | Type | Description
 ## 3.4.1. Enum value definition   
 Value | Type | Description
 -- | -- | --
-`__tileSrcRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Array&nbsp;of&nbsp;Int | An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`
+`__tileSrcRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Array&nbsp;of&nbsp;Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`
 `color`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Int | Optional color
 `id` | String | Enum value
 `tileId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | The optional ID of the tile

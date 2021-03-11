@@ -1303,7 +1303,6 @@
 		"EnumDefValues": {
 			"title": "Enum value definition",
 			"required": [
-				"__tileSrcRect",
 				"color",
 				"id"
 			],
@@ -1336,7 +1335,8 @@
 						]
 					},
 					"type": [
-						"array"
+						"array",
+						"null"
 					]
 				}
 			},
