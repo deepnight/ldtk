@@ -169,7 +169,7 @@ class App extends dn.Process {
 
 				if( Editor.ME!=null && Editor.ME.needSaving )
 					new ui.modal.dialog.UnsavedChanges(applyUpdate, ()->bt.show());
-				else
+				else if( !ui.modal.Progress.hasAny() )
 					applyUpdate();
 			});
 		}
