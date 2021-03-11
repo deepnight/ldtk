@@ -5868,10 +5868,7 @@ $patternSize : 32px;
 		}
 
 		.pickerWrapper {
-			display: grid;
 			overflow: hidden;
-			gap: 8px;
-			grid-template-columns: auto min-content;
 
 			&>.picker {
 				overflow: hidden;
@@ -5880,46 +5877,6 @@ $patternSize : 32px;
 				box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
 				background-color: rgba(0, 0, 0, 0.4);
 			}
-
-			.tools {
-				display: grid;
-				grid-template-rows: min-content auto;
-				overflow-x: hidden;
-				overflow-y: auto;
-				width: 130px;
-				gap: 8px;
-
-				button {
-					margin: 0;
-				}
-
-				ul.values {
-					margin: 0;
-					li {
-						display: grid;
-						grid-template-columns: min-content auto;
-						overflow: hidden;
-						white-space: nowrap;
-						border-left: 4px solid black;
-						&.none {
-							color: $bgLight;
-						}
-						&.active {
-							color: white;
-							outline: 2px solid white;
-							outline-offset: -2px;
-							background-color: inherit;
-							border-radius: 3px;
-						}
-					}
-
-					&.faded li {
-						opacity : 0.5;
-						color: $bgLighter;
-					}
-				}
-			}
-
 		}
 	}
 }

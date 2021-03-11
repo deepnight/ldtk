@@ -487,7 +487,10 @@ class Tileset {
 		}
 
 		renderSelection();
+		onSelect(selIds, add);
 	}
+
+	function onSelect(tileIds:Array<Int>, added:Bool) {}
 
 
 	function onPickerMouseWheel(ev:js.html.WheelEvent) {
@@ -519,8 +522,11 @@ class Tileset {
 		if( onMouseDownCustom(ev,tid) )
 			return;
 
-		if( ev.button==2 && ( selectMode==PickAndClose || selectMode==RectOnly ) )
+		if( ev.button==2 && selectMode==PickAndClose )
 			return;
+
+		if( ev.button==2 && selectMode==RectOnly )
+			setSelectedTileIds([]);
 
 		// Start dragging
 		dragStart = {

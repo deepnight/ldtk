@@ -198,4 +198,14 @@ class TileTagger extends ui.Tileset {
 		else if( curEnumValue!=null )
 			setCursorCss("paint");
 	}
+
+	override function onSelect(tileIds:Array<Int>, added:Bool) {
+		super.onSelect(tileIds, added);
+		if( curEnumValue!=null ) {
+			for(tid in tileIds)
+				tilesetDef.setTag(tid, curEnumValue, added);
+			setSelectedTileIds([]);
+			refresh();
+		}
+	}
 }

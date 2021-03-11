@@ -433,7 +433,7 @@ class Home extends Page {
 	public function onLoad(?openPath:String) {
 		if( openPath==null )
 			openPath = App.ME.getDefaultDialogDir();
-		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION,".json"], openPath, function(filePath) {
+		dn.js.ElectronDialogs.open(["."+Const.FILE_EXTENSION,".json"], openPath, function(filePath) {
 			App.ME.loadProject(filePath);
 		});
 	}
@@ -446,7 +446,7 @@ class Home extends Page {
 		dir = "C:/projects/LDtk/tests/ogmo"; // HACK remove this hard-coded path
 		#end
 
-		dn.electron.Dialogs.open([".ogmo"], dir, function(filePath) {
+		dn.js.ElectronDialogs.open([".ogmo"], dir, function(filePath) {
 			var i = new importer.OgmoProject(filePath);
 			new ui.modal.dialog.LockMessage(L.t._("Importing OGMO 3 project..."), ()->{
 				var p = i.load();
@@ -466,13 +466,13 @@ class Home extends Page {
 	}
 
 	public function onLoadSamples() {
-		dn.electron.Dialogs.open(["."+Const.FILE_EXTENSION], JsTools.getSamplesDir(), function(filePath) {
+		dn.js.ElectronDialogs.open(["."+Const.FILE_EXTENSION], JsTools.getSamplesDir(), function(filePath) {
 			App.ME.loadProject(filePath);
 		});
 	}
 
 	public function onNew() {
-		dn.electron.Dialogs.saveAs(["."+Const.FILE_EXTENSION], App.ME.getDefaultDialogDir(), function(filePath) {
+		dn.js.ElectronDialogs.saveAs(["."+Const.FILE_EXTENSION], App.ME.getDefaultDialogDir(), function(filePath) {
 			var fp = dn.FilePath.fromFile(filePath);
 			fp.extension = "ldtk";
 

@@ -23,7 +23,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			ctx.add({
 				label:L.t._("Haxe source code"),
 				cb: ()->{
-					dn.electron.Dialogs.open([".hx"], project.getProjectDir(), function(absPath:String) {
+					dn.js.ElectronDialogs.open([".hx"], project.getProjectDir(), function(absPath:String) {
 						absPath = StringTools.replace(absPath,"\\","/");
 						if( dn.FilePath.extractExtension(absPath)!="hx" )
 							N.error("The file must have the HX extension.");
