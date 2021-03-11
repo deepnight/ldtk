@@ -13,6 +13,7 @@ class TilesetDef {
 	public var padding : Int = 0; // px dist to atlas borders
 	public var spacing : Int = 0; // px space between consecutive tiles
 	public var savedSelections : Array<TilesetSelection> = [];
+	var customData : Map<Int, String> = new Map();
 
 	public var tagsSourceEnumUid : Null<Int>;
 	/** Map< EnumValueId, Map< TileId, Bool > > **/
@@ -104,6 +105,13 @@ class TilesetDef {
 				}
 			},
 
+			customData: {
+				var all = [];
+				for(d in customData.keyValueIterator())
+					all.push({ tileId:d.key, data:JsonTools.escapeString(d.value) });
+				all;
+			},
+
 			savedSelections: savedSelections.map( function(sel) {
 				return { ids:sel.ids, mode:JsonTools.writeEnum(sel.mode, false) }
 			}),
@@ -140,6 +148,7 @@ class TilesetDef {
 		td.relPath = json.relPath;
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
 
+		// Enum tags
 		if( (cast json).metaDataEnumUid!=null ) json.tagsSourceEnumUid = (cast json).metaDataEnumUid;
 		td.tagsSourceEnumUid = JsonTools.readNullableInt(json.tagsSourceEnumUid);
 		if( (cast json).metaDataEnumValues!=null ) json.enumTags = (cast json).metaDataEnumValues;
@@ -147,6 +156,12 @@ class TilesetDef {
 			for(mv in json.enumTags)
 			for(tid in mv.tileIds)
 				td.setTag(tid, mv.enumValueId, true);
+		}
+
+		// Custom data
+		if( json.customData!=null ) {
+			for( d in json.customData )
+				td.customData.set(d.tileId, JsonTools.unescapeString(d.data));
 		}
 
 		if( json.cachedPixelData!=null ) {
@@ -596,6 +611,21 @@ class TilesetDef {
 	public function removeAllTagsAt(tileId:Int) {
 		for( mv in enumTags )
 			mv.remove(tileId);
+	}
+
+	public inline function hasTileCustomData(tileId:Int) : Bool {
+		return getTileCustomData(tileId)!=null;
+	}
+
+	public function getTileCustomData(tileId:Int) : Null<String> {
+		return customData.exists(tileId) ? customData.get(tileId) : null;
+	}
+
+	public function setTileCustomData(tileId:Int, ?str:String) {
+		if( str==null )
+			customData.remove(tileId);
+		else
+			customData.set(tileId, str);
 	}
 
 

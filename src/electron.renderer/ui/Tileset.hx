@@ -132,14 +132,14 @@ class Tileset {
 	public function getSelectedTileIds() {
 		return switch selectMode {
 			case None: [];
-			case PickAndClose, Free, RectOnly, Single: _internalSelectedIds;
+			case PickAndClose, Free, RectOnly, PickSingle: _internalSelectedIds;
 		}
 	}
 
 	public function setSelectedTileIds(tileIds:Array<Int>) {
 		switch selectMode {
 			case None: throw "unexpected";
-			case PickAndClose, Free, RectOnly, Single: _internalSelectedIds = tileIds;
+			case PickAndClose, Free, RectOnly, PickSingle: _internalSelectedIds = tileIds;
 		}
 		renderSelection();
 	}
@@ -186,20 +186,14 @@ class Tileset {
 	inline function pageToLocalX(v:Float) return M.round( ( v - jWrapper.offset().left ) / zoom + scrollX );
 	inline function pageToLocalY(v:Float) return M.round( ( v - jWrapper.offset().top ) / zoom + scrollY );
 
-	inline function pageToCx(v:Float) : Int {
-		return M.iclamp(
-			Std.int( (pageToLocalX(v)-tilesetDef.padding) / ( tilesetDef.tileGridSize+tilesetDef.spacing ) ),
-			0,
-			tilesetDef.cWid-1
-		);
+	inline function pageToCx(v:Float, clamp=true) : Int {
+		var v = M.floor( (pageToLocalX(v)-tilesetDef.padding) / ( tilesetDef.tileGridSize+tilesetDef.spacing ) );
+		return clamp ? M.iclamp(v,0,tilesetDef.cWid-1) : v;
 	}
 
-	inline function pageToCy(v:Float) : Int {
-		return M.iclamp(
-			Std.int( (pageToLocalY(v)-tilesetDef.padding) / ( tilesetDef.tileGridSize+tilesetDef.spacing ) ),
-			0,
-			tilesetDef.cHei-1
-		);
+	inline function pageToCy(v:Float, clamp=true) : Int {
+		var v = M.floor( (pageToLocalY(v)-tilesetDef.padding) / ( tilesetDef.tileGridSize+tilesetDef.spacing ) );
+		return clamp ? M.iclamp(v,0,tilesetDef.cHei-1) : v;
 	}
 
 	function renderSelection() {
@@ -210,7 +204,7 @@ class Tileset {
 				if( getSelectedTileIds().length>0 )
 					jSelection.append( createCursor({ mode:Random, ids:getSelectedTileIds() },"selection") );
 
-			case RectOnly, Single:
+			case RectOnly, PickSingle:
 				if( getSelectedTileIds().length>0 )
 					jSelection.append( createCursor({ mode:Stamp, ids:getSelectedTileIds() },"selection") );
 
@@ -295,7 +289,7 @@ class Tileset {
 			// case ToolPicker: false;
 			case None: false;
 			case Free: false;
-			case PickAndClose, RectOnly, Single: true;
+			case PickAndClose, RectOnly, PickSingle: true;
 		}
 	}
 
@@ -426,7 +420,7 @@ class Tileset {
 			case PickAndClose:
 				onSingleTileSelect( selIds[0] );
 
-			case Free, RectOnly, Single:
+			case Free, RectOnly, PickSingle:
 				if( add ) {
 					if( isRectangleOnly() || !App.ME.isShiftDown() && !App.ME.isCtrlDown() ) {
 						// Replace active selection with this one
@@ -552,7 +546,7 @@ class Tileset {
 		var cx = pageToCx(pageX);
 		var cy = pageToCy(pageY);
 
-		if( dragStart==null || selectMode==PickAndClose || selectMode==Single )
+		if( dragStart==null || selectMode==PickAndClose || selectMode==PickSingle )
 			return {
 				cx: cx,
 				cy: cy,

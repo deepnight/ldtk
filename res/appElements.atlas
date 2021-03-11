@@ -4,6 +4,20 @@ size: 236,256
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
+dataIcon
+  rotate: false
+  xy: 45, 237
+  size: 6, 7
+  orig: 6, 7
+  offset: 0, 0
+  index: -1
+dataIconTiny
+  rotate: false
+  xy: 45, 246
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
 fieldBg
   rotate: false
   xy: 24, 237

@@ -1617,6 +1617,13 @@ textarea {
 		.key {
 			color: white;
 		}
+
+		p {
+			margin: 0;
+			&+p {
+				margin-top: 4px;
+			}
+		}
 	}
 
 	&.infoTip .content {

@@ -6,6 +6,9 @@ class TileTagger extends ui.Tileset {
 	var jCustomBt : js.jquery.JQuery;
 	var jValues : js.jquery.JQuery;
 
+	var dataImg : js.html.Image;
+	var dataTinyImg : js.html.Image;
+
 	var curEnumValue : Null<String>;
 	var pendingCustom = false;
 
@@ -57,6 +60,18 @@ class TileTagger extends ui.Tileset {
 			jValues.find('[value=${curEnumValue==null ? "none" : curEnumValue}]').addClass("active");
 		}
 
+		// Init "data" icons
+		var t = Assets.elements.getTile("dataIcon");
+		var pixels = Assets.elementsPixels.sub( Std.int(t.x), Std.int(t.y), Std.int(t.width), Std.int(t.height));
+		var b64 = haxe.crypto.Base64.encode( pixels.toPNG() );
+		dataImg = new js.html.Image(pixels.width, pixels.height);
+		dataImg.src = 'data:image/png;base64,$b64';
+
+		var t = Assets.elements.getTile("dataIconTiny");
+		var pixels = Assets.elementsPixels.sub( Std.int(t.x), Std.int(t.y), Std.int(t.width), Std.int(t.height));
+		var b64 = haxe.crypto.Base64.encode( pixels.toPNG() );
+		dataTinyImg = new js.html.Image(pixels.width, pixels.height);
+		dataTinyImg.src = 'data:image/png;base64,$b64';
 
 		selectEnumValue();
 		setPendingCustom(false);
@@ -104,6 +119,7 @@ class TileTagger extends ui.Tileset {
 			var y = tilesetDef.getTileSourceY(tileId);
 			var n = 0;
 
+			// Enum tags
 			for(ev in ed.values)
 				if( tilesetDef.hasTag(ev.id, tileId) && ( curEnumValue==null || curEnumValue==ev.id ) ) {
 					if( ev.tileId!=null && iconTd!=null ) {
@@ -150,6 +166,15 @@ class TileTagger extends ui.Tileset {
 				ctx.fill();
 			}
 
+			// Custom data markers
+			if( tilesetDef.hasTileCustomData(tileId) ) {
+				var img = tilesetDef.tileGridSize<16 ? dataTinyImg : dataImg;
+				var scale = M.imax(1, M.floor(tilesetDef.tileGridSize/32) );
+				if( img.complete )
+					ctx.drawImage(img, x, y, img.width*scale, img.height*scale);
+				else
+					img.onload = ()->ctx.drawImage(img, x, y, img.width*scale, img.height*scale);
+			}
 		}
 	}
 
@@ -162,7 +187,7 @@ class TileTagger extends ui.Tileset {
 			jCustomBt.html("&lt; Pick tile");
 			jCustomBt.addClass("pending");
 			jValues.addClass("faded");
-			setSelectionMode(None);
+			setSelectionMode(PickSingle);
 		}
 		else {
 			jCustomBt.text("Custom data");
@@ -183,9 +208,24 @@ class TileTagger extends ui.Tileset {
 		if( tilesetDef.tagsSourceEnumUid==null || pendingCustom )
 			return;
 
-		var tid = tilesetDef.getTileId( pageToCx(ev.pageX), pageToCx(ev.pageY) );
-		if( tilesetDef.hasAnyTag(tid) )
-			ui.Tip.simpleTip(ev.pageX, ev.pageY, tilesetDef.getAllTagsAt(tid).join(", "));
+		var cx = pageToCx(ev.pageX,false);
+		var cy = pageToCy(ev.pageY,false);
+		if( cx>=0 && cx<tilesetDef.cWid && cy>=0 && cy<tilesetDef.cHei ) {
+			var tid = tilesetDef.getTileId( cx, cy );
+			var tipTxt = 'Tile $tid';
+			var tipCol : Null<Int> = null;
+			if( tilesetDef.hasAnyTag(tid) ) {
+				tipTxt += " - "+tilesetDef.getAllTagsAt(tid).join(", ");
+				var tag = tilesetDef.getAllTagsAt(tid)[0];
+				tipCol = tilesetDef.getTagsEnumDef().getValue(tag).color;
+			}
+			if( tilesetDef.hasTileCustomData(tid) )
+				tipTxt+="\n"+tilesetDef.getTileCustomData(tid);
+
+			var tip = ui.Tip.simpleTip(ev.pageX, ev.pageY, tipTxt);
+			if( tipCol!=null )
+				tip.setColor(tipCol);
+		}
 		else
 			ui.Tip.clear();
 	}
@@ -201,9 +241,39 @@ class TileTagger extends ui.Tileset {
 
 	override function onSelect(tileIds:Array<Int>, added:Bool) {
 		super.onSelect(tileIds, added);
+
 		if( curEnumValue!=null ) {
+			// Set/unset enum tags
 			for(tid in tileIds)
 				tilesetDef.setTag(tid, curEnumValue, added);
+			setSelectedTileIds([]);
+			refresh();
+		}
+		else if( pendingCustom ) {
+			// Custom data
+			var tid = tileIds[0];
+			if( added ) {
+				// Add
+				new ui.modal.dialog.TextEditor(
+					tilesetDef.hasTileCustomData(tid) ? tilesetDef.getTileCustomData(tid) : "",
+					'Tile $tid custom data',
+					LangJson,
+					(str)->{
+						str = StringTools.trim(str);
+						if( str.length==0 )
+							tilesetDef.setTileCustomData(tid);
+						else
+							tilesetDef.setTileCustomData(tid, str);
+						refresh();
+					}
+				);
+				setPendingCustom(false);
+			}
+			else {
+				// Remove
+				tilesetDef.setTileCustomData(tid);
+			}
+
 			setSelectedTileIds([]);
 			refresh();
 		}
