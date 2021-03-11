@@ -1174,6 +1174,7 @@
 			"required": [
 				"__cHei",
 				"__cWid",
+				"customData",
 				"enumTags",
 				"identifier",
 				"padding",
@@ -1204,6 +1205,17 @@
 					"description": "Image height in pixels",
 					"type": [
 						"integer"
+					]
+				},
+				"customData": {
+					"description": "An array of custom tile metadata",
+					"items": {
+						"type": [
+							"object"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"tagsSourceEnumUid": {

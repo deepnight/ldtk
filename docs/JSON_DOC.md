@@ -266,6 +266,7 @@ Value | Type | Description
 -- | -- | --
 `__cHei`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Int | Grid-based height
 `__cWid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Int | Grid-based width
+`customData`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Array&nbsp;of&nbsp;Object | An array of custom tile metadata<br/> This object contains the following fields:<br/> <ul><li>**`data`** **(String**)</li><li>**`tileId`** **(Int**)</li></ul>
 `enumTags`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Array&nbsp;of&nbsp;Object | Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1 element per Enum value, which contains an array of all Tile IDs that are tagged with it.<br/> This object contains the following fields:<br/> <ul><li>**`enumValueId`** **(String**)</li><li>**`tileIds`** **(Array of Int**)</li></ul>
 `identifier` | String | Unique String identifier
 `padding` | Int | Distance in pixels from image borders
