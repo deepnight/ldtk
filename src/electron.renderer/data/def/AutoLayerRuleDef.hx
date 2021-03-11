@@ -244,6 +244,8 @@ class AutoLayerRuleDef {
 			return false;
 
 		// Rule check
+		// var isOutOfBounds = false;
+		var value : Null<Int> = 0;
 		var radius = Std.int( size/2 );
 		for(px in 0...size)
 		for(py in 0...size) {
@@ -251,23 +253,30 @@ class AutoLayerRuleDef {
 			if( pattern[coordId]==0 )
 				continue;
 
-			if( !source.isValid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+			// isOutOfBounds = !source.isValid( cx+dirX*(px-radius), cy+dirY*(py-radius) );
+			value = source.isValid( cx+dirX*(px-radius), cy+dirY*(py-radius) )
+				? source.getIntGrid( cx+dirX*(px-radius), cy+dirY*(py-radius) )
+				: outOfBoundsValue;
+
+			if( value==null )
 				return false;
+			// if( !source.isValid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+			// 	return false;
 
 			if( dn.M.iabs( pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
 				// "Anything" checks
-				if( pattern[coordId]>0 && !source.hasIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+				if( pattern[coordId]>0 && value==0 )
 					return false;
 
-				if( pattern[coordId]<0 && source.hasIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+				if( pattern[coordId]<0 && value!=0 )
 					return false;
 			}
 			else {
 				// Specific value checks
-				if( pattern[coordId]>0 && source.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) != pattern[coordId] )
+				if( pattern[coordId]>0 && value != pattern[coordId] )
 					return false;
 
-				if( pattern[coordId]<0 && source.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) == -pattern[coordId] )
+				if( pattern[coordId]<0 && value == -pattern[coordId] )
 					return false;
 			}
 		}

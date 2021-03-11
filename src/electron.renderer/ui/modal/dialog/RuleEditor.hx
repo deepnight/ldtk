@@ -193,10 +193,48 @@ class RuleEditor extends ui.modal.Dialog {
 		});
 		jSizes.val(rule.size);
 
+		// Out-of-bounds policy
+		var jOutOfBounds = jContent.find("#outOfBoundsValue");
+		jOutOfBounds.empty();
+		var idx = 1;
+		var values = [null, 0].concat( layerDef.getAllIntGridValues().map( iv->idx++ ) );
+		for(v in values) {
+			var jOpt = new J('<option value="$v"/>');
+			jOpt.appendTo(jOutOfBounds);
+			switch v {
+				case null: jOpt.text("This rule should not apply near layer borders");
+				case 0: jOpt.text("Empty cells");
+				case _:
+					var iv = layerDef.getIntGridValueDef(v);
+					jOpt.text( Std.string(v) + (iv.identifier!=null ? ' - ${iv.identifier}' : "") );
+					jOpt.css({
+						backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
+						borderColor: C.intToHex( iv.color ),
+					});
+			}
+		}
+		jOutOfBounds.change( _->{
+			var v = jOutOfBounds.val()=="null" ? null : Std.parseInt(jOutOfBounds.val());
+			rule.outOfBoundsValue = v;
+			editor.ge.emit( LayerRuleChanged(rule) );
+			renderAll();
+		});
+		jOutOfBounds.val( rule.outOfBoundsValue==null ? "null" : Std.string(rule.outOfBoundsValue) );
+		if( rule.outOfBoundsValue!=null && rule.outOfBoundsValue>0 ) {
+			var iv = layerDef.getIntGridValueDef(rule.outOfBoundsValue);
+			jOutOfBounds.addClass("hasValue").css({
+				backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
+				borderColor: C.intToHex( iv.color ),
+			});
+		}
+		jOutOfBounds.removeClass("disableTip");
+
 		// Finalize
 		updateValuePicker();
 		if( guidedMode )
 			enableGuidedMode();
+
+		JsTools.parseComponents(jContent);
 	}
 
 }

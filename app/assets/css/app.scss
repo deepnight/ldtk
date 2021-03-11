@@ -5678,7 +5678,7 @@ $patternSize : 32px;
 	>.wrapper .content {
 		display: grid;
 		gap: $gutter;
-		grid-template-rows: repeat(3, min-content);
+		grid-template-rows: repeat(4, min-content);
 		padding: 4px;
 		width: min-content;
 		min-width: 300px;
@@ -5697,6 +5697,7 @@ $patternSize : 32px;
 		}
 
 		.explain,
+		.outOfBounds,
 		.tileSettings,
 		.pattern .editor,
 		.pattern .values {
@@ -5733,6 +5734,22 @@ $patternSize : 32px;
 			p {
 				margin: 0;
 				padding: 0;
+			}
+		}
+
+		.outOfBounds {
+			display: grid;
+			grid-template-columns: min-content auto;
+			gap: 8px;
+			align-items: center;
+
+			select.hasValue {
+				border-left: 5px solid $bgLight;
+			}
+			label {
+				color: $bgLighter;
+				font-size: 9pt;
+				white-space: nowrap;
 			}
 		}
 
