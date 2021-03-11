@@ -493,7 +493,7 @@ class Editor extends Page {
 					new ui.modal.dialog.EditAppSettings();
 				}
 
-			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			case K.R if( !hasInputFocus() && App.ME.isShiftDown() ):
 				var state = levelRender.toggleAutoLayerRendering();
 				N.quick( "Auto-layers rendering: "+L.onOff(state));
 
