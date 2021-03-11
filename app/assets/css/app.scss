@@ -5881,9 +5881,9 @@ $patternSize : 32px;
 
 	.content {
 		width: 890px;
-		grid-template-rows: min-content min-content min-content auto;
+		grid-template-rows: min-content min-content auto;
 		.mainList {
-			grid-row: 2/5;
+			grid-row: 2/4;
 		}
 		dl.form {
 			grid-row: 2/3;
@@ -5892,11 +5892,8 @@ $patternSize : 32px;
 				white-space: nowrap;
 			}
 		}
-		.tilesDemo {
-			grid-row: 3/4;
-		}
 		.pickerWrapper {
-			grid-row: 4/5;
+			grid-row: 3/4;
 		}
 
 		.tilesDemo canvas {
