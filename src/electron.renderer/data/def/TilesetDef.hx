@@ -310,7 +310,27 @@ class TilesetDef {
 					r.tileIds[i] = remapTileId(oldCwid, r.tileIds[i]);
 			}
 
+		// Enum tags remapping
+		for(enumTag in enumTags.keys()) {
+			var remap = new Map();
+			for( t in enumTags.get(enumTag).keyValueIterator() ) {
+				var newTileId = remapTileId(oldCwid, t.key);
+				if( newTileId!=null )
+					remap.set(newTileId, t.value);
+			}
+			enumTags.set(enumTag, remap);
+		}
 
+		// Custom tile data remapping
+		var remap = new Map();
+		for(cd in customData.keyValueIterator()) {
+			var newTileId = remapTileId(oldCwid, cd.key);
+			if( newTileId!=null )
+				remap.set(newTileId, cd.value);
+		}
+		customData = remap;
+
+		// Results
 		if( pxWid<oldPxWid || pxHei<oldPxHei ) {
 			App.LOG.general(' > loss');
 			return RemapLoss;
