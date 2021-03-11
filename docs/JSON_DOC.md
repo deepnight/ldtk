@@ -190,6 +190,7 @@ Value | Type | Description
 `checker`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Checker mode<br/> Possible values: `None`, `Horizontal`, `Vertical`
 `flipX`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, allow rule to be matched by flipping its pattern horizontally
 `flipY`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, allow rule to be matched by flipping its pattern vertically
+`outOfBoundsValue`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.2-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Default IntGrid value when checking cells outside of level bounds
 `pattern`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Int | Rule pattern (size x size)
 `perlinActive`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, enable Perlin filtering to only apply rule on specific random area
 `perlinOctaves`<br/><sup class="internal">*Internal editor data*</sup> | Float | 

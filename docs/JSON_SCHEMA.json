@@ -444,6 +444,13 @@
 						"number"
 					]
 				},
+				"outOfBoundsValue": {
+					"description": "Default IntGrid value when checking cells outside of level bounds",
+					"type": [
+						"integer",
+						"null"
+					]
+				},
 				"pattern": {
 					"description": "Rule pattern (size x size)",
 					"items": {
