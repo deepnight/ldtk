@@ -4071,6 +4071,7 @@ canvas#webgl {
 					text-overflow: ellipsis;
 					border: none;
 					border-left: 5px solid white;
+					white-space: nowrap;
 
 					&.active {
 						color: inherit;
