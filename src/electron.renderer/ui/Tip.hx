@@ -78,6 +78,16 @@ class Tip extends dn.Process {
 		}
 	}
 
+	public function setColor(c:Int) {
+		jTip.css({
+			backgroundColor: C.intToHex( C.toBlack(c,0.4) ),
+		});
+
+		jTip.find(".text").css({
+			color: C.intToHex( C.toWhite(c,0.7) ),
+		});
+	}
+
 
 	public static function simpleTip(pageX:Float, pageY:Float, str:String) {
 		if( CURRENT==null || CURRENT.destroyed || CURRENT.text!=str )
@@ -87,6 +97,7 @@ class Tip extends dn.Process {
 			left: pageX - 16,
 			top: pageY + ( pageY>100 ? -32 : 32 ),
 		});
+		return CURRENT;
 	}
 
 
