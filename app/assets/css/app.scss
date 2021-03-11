@@ -5743,8 +5743,13 @@ $patternSize : 32px;
 			gap: 8px;
 			align-items: center;
 
-			select.hasValue {
-				border-left: 5px solid $bgLight;
+			select {
+				max-width: 250px;
+				text-overflow: ellipsis;
+
+				&.hasValue {
+					border-left: 5px solid $bgLight;
+				}
 			}
 			label {
 				color: $bgLighter;
