@@ -229,8 +229,12 @@ class EditTilesetDefs extends ui.modal.Panel {
 			else
 				_apply();
 		});
-		if( curTd.tagsSourceEnumUid!=null )
+		if( curTd.tagsSourceEnumUid!=null ) {
+			jSelect.removeClass("noValue");
 			jSelect.val(curTd.tagsSourceEnumUid);
+		}
+		else
+			jSelect.addClass("noValue");
 	}
 
 
