@@ -63,9 +63,12 @@ class GenericLevelElementGroup {
 	public inline function getElement(idx:Int) return elements[idx];
 
 	public function add(ge:GenericLevelElement) {
+		// Already in selection?
 		for(e in elements)
 			if( ge.equals(e) )
 				return false;
+
+		// Add
 		elements.push(ge);
 		invalidateBounds();
 		invalidateSelectRender();
