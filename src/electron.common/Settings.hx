@@ -54,7 +54,7 @@ class Settings {
 			smartCpuThrottling: true,
 			startFullScreen: false,
 			fixTileFlickering: true,
-			
+
 			autoWorldModeSwitch: ZoomInAndOut,
 			appUiScale: 1.0,
 			editorUiScale: 1.0,
@@ -78,7 +78,7 @@ class Settings {
 			? IpcRenderer.sendSync("getScreenHeight")
 			: electron.main.Screen.getPrimaryDisplay().size.height;
 
-		return v.appUiScale * dn.M.fmax(0, dn.M.fmin( w/1350, h/1024 ) );
+		return v.appUiScale * dn.M.fmax(1, dn.M.fmin( w/1350, h/1024 ) );
 	}
 
 
@@ -98,5 +98,4 @@ class Settings {
 	public function save() {
 		dn.LocalStorage.writeObject("settings", true, v);
 	}
-
 }
