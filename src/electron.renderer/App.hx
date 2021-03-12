@@ -40,6 +40,7 @@ class App extends dn.Process {
 		LOG.add("BOOT","ExePath: "+JsTools.getExeDir());
 		LOG.add("BOOT","Resources: "+JsTools.getAppResourceDir());
 		LOG.add("BOOT","SamplesPath: "+JsTools.getSamplesDir());
+		LOG.add("BOOT","Display: "+IpcRenderer.sendSync("getScreenWidth")+"x"+IpcRenderer.sendSync("getScreenHeight"));
 
 		loadingLog = new dn.Log();
 		loadingLog.onAdd = (l)->LOG.addLogEntry(l);
@@ -94,6 +95,7 @@ class App extends dn.Process {
 		// Restore settings
 		loadSettings();
 		settings.save();
+		LOG.add("BOOT","AppZoomFactor: "+settings.getAppZoomFactor());
 
 		// Auto updater
 		initAutoUpdater();
