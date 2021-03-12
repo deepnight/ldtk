@@ -128,7 +128,6 @@ class ElectronMain {
 			backgroundColor: '#1e2229'
 		});
 		mainWindow.once("ready-to-show", ev->{
-			var disp = electron.main.Screen.getPrimaryDisplay();
 			mainWindow.webContents.setZoomFactor( settings.getAppZoomFactor() );
 		});
 
