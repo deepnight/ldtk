@@ -129,24 +129,24 @@ class App extends dn.Process {
 
 	function initAutoUpdater() {
 		// Init
-		dn.electron.ElectronUpdater.initRenderer();
-		dn.electron.ElectronUpdater.onUpdateCheckStart = function() {
+		dn.js.ElectronUpdater.initRenderer();
+		dn.js.ElectronUpdater.onUpdateCheckStart = function() {
 			miniNotif("Looking for update...");
 			LOG.network("Looking for update");
 		}
-		dn.electron.ElectronUpdater.onUpdateFound = function(info) {
+		dn.js.ElectronUpdater.onUpdateFound = function(info) {
 			LOG.network("Found update: "+info.version+" ("+info.releaseDate+")");
 			miniNotif('Downloading ${info.version}...', true);
 		}
-		dn.electron.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
-		dn.electron.ElectronUpdater.onError = function(err) {
+		dn.js.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
+		dn.js.ElectronUpdater.onError = function(err) {
 			var errStr = err==null ? null : Std.string(err);
 			LOG.warning("Couldn't check for updates: "+errStr);
 			if( errStr.length>40 )
 				errStr = errStr.substr(0,40) + "[...]";
 			checkManualUpdate();
 		}
-		dn.electron.ElectronUpdater.onUpdateDownloaded = function(info) {
+		dn.js.ElectronUpdater.onUpdateDownloaded = function(info) {
 			LOG.network("Update ready: "+info.version);
 			miniNotif('Update ${info.version} ready!');
 
@@ -178,7 +178,7 @@ class App extends dn.Process {
 		if( App.isWindows() ) {
 			// Windows
 			miniNotif("Checking for update...", true);
-			dn.electron.ElectronUpdater.checkNow();
+			dn.js.ElectronUpdater.checkNow();
 		}
 		else {
 			// Mac & Linux
@@ -189,7 +189,7 @@ class App extends dn.Process {
 	function checkManualUpdate() {
 		miniNotif("Checking for update (GitHub)...", true);
 		LOG.network("Fetching latest version from GitHub...");
-		dn.electron.ElectronUpdater.fetchLatestGitHubReleaseVersion("deepnight","ldtk", (latest)->{
+		dn.js.ElectronUpdater.fetchLatestGitHubReleaseVersion("deepnight","ldtk", (latest)->{
 			if( latest!=null )
 				LOG.network("Found "+latest.full);
 

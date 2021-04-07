@@ -377,7 +377,7 @@ class FieldInstancesForm {
 					input.blur();
 				});
 				input.click( ev->{
-					dn.electron.Dialogs.open(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
+					dn.js.ElectronDialogs.openFile(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
 						var fp = dn.FilePath.fromFile(absPath);
 						fp.useSlashes();
 						var relPath = project.makeRelativeFilePath(fp.full);
