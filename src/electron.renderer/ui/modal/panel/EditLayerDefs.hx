@@ -98,6 +98,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		newLd.tilesetDefUid = ld.autoTilesetDefUid;
 
 		// Update layer instances
+		var td = project.defs.getTilesetDef(newLd.tilesetDefUid);
 		var ops : Array<ui.modal.Progress.ProgressOp> = [];
 		for(l in project.levels) {
 			var sourceLi = l.getLayerInstance(ld);
@@ -113,7 +114,8 @@ class EditLayerDefs extends ui.modal.Panel {
 									Std.int(tileInfos.x/ld.gridSize),
 									Std.int(tileInfos.y/ld.gridSize),
 									tileInfos.tid,
-									tileInfos.flips
+									tileInfos.flips,
+									!td.isTileOpaque(tileInfos.tid)
 								);
 							}
 						}
