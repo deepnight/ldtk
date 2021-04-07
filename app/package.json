@@ -72,7 +72,7 @@
 		],
 		"nsis": {
 			"oneClick": true,
-			"shortcutName": "LDtk - 2D level editor"
+			"shortcutName": "LDtk"
 		},
 		"win": {
 			"target": "nsis",
