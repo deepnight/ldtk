@@ -1,7 +1,7 @@
 # 0.8.2
 
-  - TODO: tileset tags
-  - TODO: tileset custom data
+  - **Tile tags**: you can now associate an Enum to a Tileset, then "paint" values from this Enum freely on each tiles in the tileset. This could be useful to mark collisions, water tiles, surface sounds or whatever tag you could think of.
+  - **Tile custom data**: you can add totally custom text values to each tile in any tileset. This could be plain text, JSON, XML, etc.
   - Added "Isolated points" as new display option for points in Entities (thanks to *Stuart Adams*)
   - Each **enum value** can now be associated with a custom color for easier reading in the UI.
   - Double click on Entities to automatically select all their connected Points.
