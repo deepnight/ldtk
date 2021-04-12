@@ -18,6 +18,7 @@
   - Fixed Enum value renaming in Entity fields
   - Fixed Save or Update operations going super slow while the app wasn't focused
   - Fixed email address on contact links
+  - Fixed auto-layers baking giving different results if they contained any stacked tiles.
 
 # 0.8.1
 
