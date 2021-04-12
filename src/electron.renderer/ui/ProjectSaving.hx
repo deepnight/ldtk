@@ -379,7 +379,7 @@ class ProjectSaving extends dn.Process {
 			return [];
 
 		var all = [];
-		for( f in JsTools.readDir(dir.full) ) {
+		for( f in NT.readDir(dir.full) ) {
 			if( dn.FilePath.extractExtension(f) != Const.FILE_EXTENSION )
 				continue;
 

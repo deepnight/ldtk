@@ -491,14 +491,6 @@ class JsTools {
 		}
 	}
 
-	public static function readDir(path:String) : Array<String> {
-		if( !NT.fileExists(path) )
-			return [];
-
-		js.node.Require.require("fs");
-		return js.node.Fs.readdirSync(path);
-	}
-
 	public static function findFilesRec(dirPath:String, ?ext:String) : Array<dn.FilePath> {
 		if( !NT.fileExists(dirPath) )
 			return [];
@@ -507,7 +499,7 @@ class JsTools {
 		var pendings = [dirPath];
 		while( pendings.length>0 ) {
 			var dir = pendings.shift();
-			for(f in readDir(dir)) {
+			for(f in NT.readDir(dir)) {
 				var fp = dn.FilePath.fromFile(dir+"/"+f);
 				if( js.node.Fs.lstatSync(fp.full).isFile() ) {
 					if( ext==null || fp.extension==ext )
