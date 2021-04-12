@@ -26,7 +26,7 @@ class Page extends dn.Process {
 		App.LOG.fileOp("Loading page template: "+id+" from "+path);
 		var raw = JsTools.readFileString(path);
 		if( raw==null )
-			throw "Page not found: "+id+" in "+path+"( cwd="+JsTools.getAppResourceDir()+")";
+			throw "Page not found: "+id+" in "+path+"( cwd="+ET.getAppResourceDir()+")";
 
 		if( vars!=null ) {
 			for(k in Reflect.fields(vars))

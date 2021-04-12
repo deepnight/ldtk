@@ -650,7 +650,7 @@ class JsTools {
 		#if !debug
 		var path = ET.getExeDir();
 		#else
-		var path = getAppResourceDir()+"/foo.exe";
+		var path = ET.getAppResourceDir()+"/foo.exe";
 		#end
 		return dn.FilePath.fromFile( path ).useSlashes().directory;
 	}
@@ -658,11 +658,6 @@ class JsTools {
 	public static function getSamplesDir() {
 		var raw = getExeDir() + ( App.isMac() ? "/../samples" : "/samples" );
 		return dn.FilePath.fromDir( raw ).directory;
-	}
-
-	public static function getAppResourceDir() {
-		var path = electron.renderer.IpcRenderer.sendSync("getAppResourceDir");
-		return dn.FilePath.fromDir( path ).useSlashes().directory;
 	}
 
 	public static function exploreToFile(path:String, isFile:Bool) {

@@ -78,7 +78,7 @@ class Settings {
 
 	public static function getDir() {
 		var path = isRenderer()
-			?	#if debug	Std.string( IpcRenderer.sendSync("getAppResourceDir") )
+			?	#if debug	dn.js.ElectronTools.getAppResourceDir()
 				#else		dn.js.ElectronTools.getUserDataDir() #end
 			:	#if debug	electron.main.App.getAppPath();
 				#else		electron.main.App.getPath("userData"); #end

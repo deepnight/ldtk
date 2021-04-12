@@ -38,7 +38,7 @@ class App extends dn.Process {
 		LOG.add("BOOT","App started");
 		LOG.add("BOOT","Version: "+Const.getAppVersion());
 		LOG.add("BOOT","ExePath: "+JsTools.getExeDir());
-		LOG.add("BOOT","Resources: "+JsTools.getAppResourceDir());
+		LOG.add("BOOT","Resources: "+ET.getAppResourceDir());
 		LOG.add("BOOT","SamplesPath: "+JsTools.getSamplesDir());
 		LOG.add("BOOT","Display: "+ET.getScreenWidth()+"x"+ET.getScreenHeight());
 
@@ -86,7 +86,7 @@ class App extends dn.Process {
 		Boot.ME.s2d.addEventListener(onHeapsEvent);
 
 		// Init dirs
-		var fp = dn.FilePath.fromDir( JsTools.getAppResourceDir() );
+		var fp = dn.FilePath.fromDir( ET.getAppResourceDir() );
 		fp.useSlashes();
 		APP_RESOURCE_DIR = fp.directoryWithSlash;
 
@@ -309,7 +309,7 @@ class App extends dn.Process {
 
 			// Fullscreen
 			case K.F11 if( !hasAnyToggleKeyDown() && !hasInputFocus() ):
-				var isFullScreen: Bool = IpcRenderer.sendSync("isFullScreen")==true;
+				var isFullScreen = ET.isFullScreen();
 				if( !isFullScreen )
 					N.success("Press F11 to leave fullscreen");
 				ET.setFullScreen(!isFullScreen);
@@ -594,7 +594,7 @@ class App extends dn.Process {
 
 	public function getDefaultDialogDir() {
 		if( settings.v.recentProjects.length==0 )
-			return #if debug JsTools.getAppResourceDir() #else JsTools.getExeDir() #end;
+			return #if debug ET.getAppResourceDir() #else JsTools.getExeDir() #end;
 
 		var last = settings.v.recentProjects[settings.v.recentProjects.length-1];
 		return dn.FilePath.fromFile(last).directory;
