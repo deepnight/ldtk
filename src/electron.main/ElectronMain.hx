@@ -44,24 +44,8 @@ class ElectronMain {
 			});
 		});
 
-		IpcMain.handle("reload", function(event) {
-			mainWindow.reload();
-		});
-
-		IpcMain.handle("setWinTitle", function(event,args) {
-			mainWindow.title = args;
-		});
-
 
 		// *** sendSync/on *****************************************************
-
-		IpcMain.on("getScreenWidth", function(event) {
-			event.returnValue = electron.main.Screen.getPrimaryDisplay().size.width;
-		});
-
-		IpcMain.on("getScreenHeight", function(event) {
-			event.returnValue = electron.main.Screen.getPrimaryDisplay().size.height;
-		});
 
 		IpcMain.on("getCwd", function(event) {
 			event.returnValue = process.cwd();

@@ -70,14 +70,8 @@ class Settings {
 	}
 
 	public function getAppZoomFactor() : Float {
-		var w : Float = isRenderer()
-			? IpcRenderer.sendSync("getScreenWidth")
-			: electron.main.Screen.getPrimaryDisplay().size.width;
-
-		var h : Float = isRenderer()
-			? IpcRenderer.sendSync("getScreenHeight")
-			: electron.main.Screen.getPrimaryDisplay().size.height;
-
+		var w = dn.js.ElectronTools.getScreenWidth();
+		var h = dn.js.ElectronTools.getScreenHeight();
 		return v.appUiScale * dn.M.fmax(1, dn.M.fmin( w/1350, h/1024 ) );
 	}
 

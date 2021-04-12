@@ -10,7 +10,7 @@ class Updating extends Page {
 		App.ME.setWindowTitle();
 
 		#if debug
-		delayer.addS(App.ME.reload, 0.6);
+		delayer.addS(ET.reloadWindow, 0.6);
 		#end
 	}
 }

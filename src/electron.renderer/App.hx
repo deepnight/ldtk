@@ -40,7 +40,7 @@ class App extends dn.Process {
 		LOG.add("BOOT","ExePath: "+JsTools.getExeDir());
 		LOG.add("BOOT","Resources: "+JsTools.getAppResourceDir());
 		LOG.add("BOOT","SamplesPath: "+JsTools.getSamplesDir());
-		LOG.add("BOOT","Display: "+IpcRenderer.sendSync("getScreenWidth")+"x"+IpcRenderer.sendSync("getScreenHeight"));
+		LOG.add("BOOT","Display: "+ET.getScreenWidth()+"x"+ET.getScreenHeight());
 
 		loadingLog = new dn.Log();
 		loadingLog.onAdd = (l)->LOG.addLogEntry(l);
@@ -609,7 +609,7 @@ class App extends dn.Process {
 		else
 			str = str + "    --    "+base;
 
-		IpcRenderer.invoke("setWinTitle", str);
+		ET.setWindowTitle(str);
 	}
 
 	public inline function hasPage() {
@@ -639,12 +639,6 @@ class App extends dn.Process {
 	public inline function getElectronZoomFactor() {
 		return electron.renderer.WebFrame.getZoomFactor();
 	}
-
-	#if debug
-	public function reload() {
-		IpcRenderer.invoke("reload");
-	}
-	#end
 
 	override function update() {
 		super.update();
