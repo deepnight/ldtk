@@ -648,7 +648,7 @@ class JsTools {
 
 	public static function getExeDir() {
 		#if !debug
-		var path = electron.renderer.IpcRenderer.sendSync("getExeDir");
+		var path = ET.getExeDir();
 		#else
 		var path = getAppResourceDir()+"/foo.exe";
 		#end

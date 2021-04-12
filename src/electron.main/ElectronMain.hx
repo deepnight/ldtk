@@ -47,21 +47,10 @@ class ElectronMain {
 
 		// *** sendSync/on *****************************************************
 
-		IpcMain.on("getArgs", function(event) {
-			event.returnValue = process.argv;
-		});
-
 		IpcMain.on("getAppResourceDir", function(event) {
 			event.returnValue = App.getAppPath();
 		});
 
-		IpcMain.on("getExeDir", function(event) {
-			event.returnValue = App.getPath("exe");
-		});
-
-		IpcMain.on("getUserDataDir", function(event) {
-			event.returnValue = App.getPath("userData");
-		});
 		IpcMain.on("isFullScreen", function(event) {
 			event.returnValue = mainWindow.isFullScreen();
 		});

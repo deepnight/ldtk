@@ -46,9 +46,7 @@ class App extends dn.Process {
 		loadingLog.onAdd = (l)->LOG.addLogEntry(l);
 
 		// App arguments
-		var electronArgs : Array<String> = try electron.renderer.IpcRenderer.sendSync("getArgs") catch(_) [];
-		electronArgs.shift();
-		args = new dn.Args( electronArgs.join(" ") );
+		args = ET.getArgs();
 		LOG.add("BOOT", args.toString());
 
 		// Init
