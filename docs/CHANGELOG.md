@@ -2,14 +2,14 @@
 
   - TODO: tileset tags
   - TODO: tileset custom data
-  - TODO: Shift-R shortcut
+  - Added "Isolated points" as new display option for points in Entities (thanks to *Stuart Adams*)
+  - Each **enum value** can now be associated with a custom color for easier reading in the UI.
   - Double click on Entities to automatically select all their connected Points.
-  - TODO: isolated points for Entities (from Stuart Adams)
-  - TODO: enum value colors
   - Array of Points in Entities can now be displayed as "**looping paths**".
   - Added a one-time "enable backup" recommendation popup for medium/large projects.
   - Added a "Create level" button in world panel.
   - Added an error message when trying to create a new project in an invalid folder.
+  - The keyboard shortcut to toggle auto-layers rendering is now `SHIFT-R`.
   - Reduced tile flickering while zooming in/out (this reduction can be disabled from the app settings)
   - Extended app logging limit (from 500 to 5000 lines)
   - Fixed "Create group" button in Auto-layer Rules panel
@@ -19,6 +19,7 @@
   - Fixed Save or Update operations going super slow while the app wasn't focused
   - Fixed email address on contact links
   - Fixed auto-layers baking giving different results if they contained any stacked tiles.
+  - Updated various internal libs
 
 # 0.8.1
 
