@@ -67,7 +67,7 @@ class Exporter {
 	function writeFiles() {
 		for(f in outputFiles) {
 			log.fileOp('  ${f.path}...');
-			JsTools.writeFileBytes(f.path, f.bytes);
+			NT.writeFileBytes(f.path, f.bytes);
 		}
 	}
 

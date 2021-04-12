@@ -264,7 +264,7 @@ class Editor extends Page {
 				}
 				else {
 					// Verify checksum
-					var f = JsTools.readFileString( project.makeAbsoluteFilePath(relPath) );
+					var f = NT.readFileString( project.makeAbsoluteFilePath(relPath) );
 					var checksum = haxe.crypto.Md5.encode(f);
 					for(ed in project.defs.getAllExternalEnumsFrom(relPath) )
 						if( ed.externalFileChecksum!=checksum ) {

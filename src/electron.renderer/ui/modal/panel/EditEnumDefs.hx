@@ -163,7 +163,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				e.append('<div class="error">File not found!</div>');
 			}
 			else {
-				var checksum = haxe.crypto.Md5.encode( JsTools.readFileString(fullPath) );
+				var checksum = haxe.crypto.Md5.encode( NT.readFileString(fullPath) );
 				for( ed in group.value )
 					if( ed.externalFileChecksum!=checksum ) {
 						e.append('<div class="error">File was modified, please use sync.</div>');

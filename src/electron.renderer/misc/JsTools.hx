@@ -235,7 +235,7 @@ class JsTools {
 			if( !NT.fileExists(path.full) )
 				throw "File not found "+path.full;
 
-			_fileCache.set( name, readFileString(path.full) );
+			_fileCache.set( name, NT.readFileString(path.full) );
 		}
 		else
 			App.LOG.fileOp("Reading HTML template "+name+" from cache");
@@ -470,30 +470,6 @@ class JsTools {
 
 
 	// *** File API (node) **************************************
-
-	public static function readFileString(path:String) : Null<String> {
-		if( !NT.fileExists(path) )
-			return null;
-		else
-			return js.node.Fs.readFileSync(path).toString();
-	}
-
-	public static function writeFileString(path:String, str:String) {
-		js.node.Require.require("fs");
-		js.node.Fs.writeFileSync( path, str );
-	}
-
-	public static function readFileBytes(path:String) : Null<haxe.io.Bytes> {
-		if( !NT.fileExists(path) )
-			return null;
-		else
-			return js.node.Fs.readFileSync(path).hxToBytes();
-	}
-
-	public static function writeFileBytes(path:String, bytes:haxe.io.Bytes) {
-		js.node.Require.require("fs");
-		js.node.Fs.writeFileSync( path, js.node.Buffer.hxFromBytes(bytes) );
-	}
 
 	public static function createDirs(path:String) {
 		if( NT.fileExists(path) )

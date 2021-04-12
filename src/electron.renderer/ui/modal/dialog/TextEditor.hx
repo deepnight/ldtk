@@ -95,7 +95,7 @@ class TextEditor extends ui.modal.Dialog {
 		}
 
 		// Read file
-		var bytes = JsTools.readFileBytes(fp.full);
+		var bytes = NT.readFileBytes(fp.full);
 		if( bytes==null ) {
 			N.error(L.t._("Could not read file content."));
 			return false;
@@ -143,7 +143,7 @@ class TextEditor extends ui.modal.Dialog {
 			fp.fileWithExt,
 			mode,
 			(str)->{
-				JsTools.writeFileString(fp.full, str);
+				NT.writeFileString(fp.full, str);
 				N.success( L.t._('File "::name::" saved.', { name:fp.fileWithExt }) );
 			}
 		);

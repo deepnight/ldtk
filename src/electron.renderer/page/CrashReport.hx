@@ -95,7 +95,7 @@ class CrashReport extends Page {
 
 					// Save
 					var data = ui.ProjectSaving.prepareProjectSavingData(unsavedProject, true);
-					JsTools.writeFileString(fp.full, data.projectJson);
+					NT.writeFileString(fp.full, data.projectJson);
 					jBackup.html("But don't worry, your work was saved in a backup file! ");
 
 					// Register in recents

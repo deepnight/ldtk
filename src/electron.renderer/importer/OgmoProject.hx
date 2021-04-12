@@ -16,7 +16,7 @@ class OgmoProject {
 
 	public function load() : Null<data.Project> {
 		// Read file
-		var raw = JsTools.readFileString(fp.full);
+		var raw = NT.readFileString(fp.full);
 		if( raw==null ) {
 			log.error("Could not open file");
 			return null;
@@ -269,7 +269,7 @@ class OgmoProject {
 				log.indentMore();
 
 				// Read level file
-				var raw = try JsTools.readFileString(fp.full)
+				var raw = try NT.readFileString(fp.full)
 					catch(e:Dynamic) {
 						log.error("Could not open level file: "+fp.full);
 						continue;

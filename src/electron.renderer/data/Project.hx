@@ -442,7 +442,7 @@ class Project {
 				// Load it from the disk
 				App.LOG.add("cache", 'Caching image $relPath...');
 				var absPath = makeAbsoluteFilePath(relPath);
-				var bytes = misc.JsTools.readFileBytes(absPath);
+				var bytes = NT.readFileBytes(absPath);
 				var base64 = haxe.crypto.Base64.encode(bytes);
 				var pixels = dn.ImageDecoder.decodePixels(bytes);
 				var texture = h3d.mat.Texture.fromPixels(pixels);

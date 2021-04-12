@@ -79,7 +79,7 @@ class ProjectSaving extends dn.Process {
 
 					// Save a duplicate in backups folder
 					var savingData = prepareProjectSavingData(project, true);
-					JsTools.writeFileString(fp.full, savingData.projectJson);
+					NT.writeFileString(fp.full, savingData.projectJson);
 
 					// Delete extra backup files
 					var all = listBackupFiles(project.filePath.full);
@@ -100,7 +100,7 @@ class ProjectSaving extends dn.Process {
 				savingData = ui.ProjectSaving.prepareProjectSavingData(project);
 
 				log('  Writing ${project.filePath.full}...');
-				JsTools.writeFileString(project.filePath.full, savingData.projectJson);
+				NT.writeFileString(project.filePath.full, savingData.projectJson);
 
 				beginState(SavingExternLevels);
 
@@ -118,7 +118,7 @@ class ProjectSaving extends dn.Process {
 						ops.push({
 							label: "Level "+l.id,
 							cb: ()->{
-								JsTools.writeFileString(fp.full, l.json);
+								NT.writeFileString(fp.full, l.json);
 							}
 						});
 					}
@@ -164,7 +164,7 @@ class ProjectSaving extends dn.Process {
 										var fp = dn.FilePath.fromDir(pngDir);
 										fp.fileName = project.getPngFileName(level, li.def, i.suffix);
 										fp.extension = "png";
-										JsTools.writeFileBytes(fp.full, i.bytes);
+										NT.writeFileBytes(fp.full, i.bytes);
 										count++;
 									}
 								}
