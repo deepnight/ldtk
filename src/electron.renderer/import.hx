@@ -8,6 +8,7 @@ import hxd.Key as K;
 import Lang as L;
 import dn.data.GetText;
 import dn.js.ElectronTools as ET;
+import dn.js.NodeTools as NT;
 
 // Misc
 import page.Editor;

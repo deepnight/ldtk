@@ -13,7 +13,7 @@ class ProjectLoader {
 	public static function load(filePath:String, onComplete:(?p:data.Project, ?err:LoadingError)->Void) {
 		log.clear();
 
-		if( !JsTools.fileExists(filePath) ) {
+		if( !NT.fileExists(filePath) ) {
 			onComplete(NotFound);
 			return;
 		}
@@ -51,7 +51,7 @@ class ProjectLoader {
 			var idx = 0;
 			for(l in p.levels) {
 				var path = p.makeAbsoluteFilePath(l.externalRelPath);
-				if( !JsTools.fileExists(path) ) {
+				if( !NT.fileExists(path) ) {
 					// TODO better lost level management
 					log.error("Level file not found "+l.externalRelPath);
 					p.levels.splice(idx,1);

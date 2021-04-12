@@ -232,7 +232,7 @@ class JsTools {
 			var path = dn.FilePath.fromFile(App.APP_ASSETS_DIR + "tpl/" + name);
 			path.extension = "html";
 
-			if( !fileExists(path.full) )
+			if( !NT.fileExists(path.full) )
 				throw "File not found "+path.full;
 
 			_fileCache.set( name, readFileString(path.full) );
@@ -471,17 +471,8 @@ class JsTools {
 
 	// *** File API (node) **************************************
 
-	public static function fileExists(path:String) {
-		if( path==null )
-			return false;
-		else {
-			js.node.Require.require("fs");
-			return js.node.Fs.existsSync(path);
-		}
-	}
-
 	public static function renameFile(oldPath:String, newPath:String) {
-		if( !fileExists(oldPath) || fileExists(newPath) )
+		if( !NT.fileExists(oldPath) || NT.fileExists(newPath) )
 			return false;
 		else {
 			js.node.Require.require("fs");
@@ -493,7 +484,7 @@ class JsTools {
 	}
 
 	public static function removeFile(path:String) {
-		if( !fileExists(path) )
+		if( !NT.fileExists(path) )
 			return false;
 		else {
 			js.node.Require.require("fs");
@@ -505,7 +496,7 @@ class JsTools {
 	}
 
 	public static function readFileString(path:String) : Null<String> {
-		if( !fileExists(path) )
+		if( !NT.fileExists(path) )
 			return null;
 		else
 			return js.node.Fs.readFileSync(path).toString();
@@ -517,7 +508,7 @@ class JsTools {
 	}
 
 	public static function readFileBytes(path:String) : Null<haxe.io.Bytes> {
-		if( !fileExists(path) )
+		if( !NT.fileExists(path) )
 			return null;
 		else
 			return js.node.Fs.readFileSync(path).hxToBytes();
@@ -529,7 +520,7 @@ class JsTools {
 	}
 
 	public static function createDirs(path:String) {
-		if( fileExists(path) )
+		if( NT.fileExists(path) )
 			return;
 
 
@@ -537,14 +528,14 @@ class JsTools {
 		js.node.Require.require("fs");
 		var subDirs = dn.FilePath.fromDir(path).getSubDirectories(true);
 		for(subPath in subDirs)
-			if( !fileExists(subPath) ) {
+			if( !NT.fileExists(subPath) ) {
 				App.LOG.fileOp("Creating dir "+subPath+"...");
 				js.node.Fs.mkdirSync(subPath);
 			}
 	}
 
 	public static function copyFile(from:String, to:String) {
-		if( !fileExists(from) )
+		if( !NT.fileExists(from) )
 			return;
 		App.LOG.fileOp('Copying $from -> $to...');
 		js.node.Require.require("fs");
@@ -552,7 +543,7 @@ class JsTools {
 	}
 
 	public static function removeDir(path:String) {
-		if( !fileExists(path) )
+		if( !NT.fileExists(path) )
 			return;
 
 		App.LOG.fileOp("Removing dir "+path+"...");
@@ -564,7 +555,7 @@ class JsTools {
 
 	/** Check if dir is empty. Return FALSE even if it only contains empty sub dirs. **/
 	public static function isDirEmpty(path:String) {
-		if( !fileExists(path) )
+		if( !NT.fileExists(path) )
 			return true;
 
 		for( f in js.node.Fs.readdirSync(path) )
@@ -575,7 +566,7 @@ class JsTools {
 
 	/** Check if dir is empty, or if it only contains empty dirs **/
 	public static function isDirEmptyRec(path:String) {
-		if( !fileExists(path) )
+		if( !NT.fileExists(path) )
 			return true;
 
 		var pendings = [ path ];
@@ -594,7 +585,7 @@ class JsTools {
 	}
 
 	public static function emptyDir(path:String, ?onlyExts:Array<String>) {
-		if( !fileExists(path) )
+		if( !NT.fileExists(path) )
 			return;
 
 		var extMap = new Map();
@@ -614,7 +605,7 @@ class JsTools {
 	}
 
 	public static function readDir(path:String) : Array<String> {
-		if( !fileExists(path) )
+		if( !NT.fileExists(path) )
 			return [];
 
 		js.node.Require.require("fs");
@@ -622,7 +613,7 @@ class JsTools {
 	}
 
 	public static function findFilesRec(dirPath:String, ?ext:String) : Array<dn.FilePath> {
-		if( !fileExists(dirPath) )
+		if( !NT.fileExists(dirPath) )
 			return [];
 
 		var all = [];
@@ -668,7 +659,7 @@ class JsTools {
 			if( filePath==null )
 				N.error("No file");
 			else {
-				if( !JsTools.fileExists(filePath) )
+				if( !NT.fileExists(filePath) )
 					N.error("Sorry, but this file couldn't be found.");
 				else {
 					ev.preventDefault();
@@ -857,7 +848,7 @@ class JsTools {
 		if( curRelPath!=null ) {
 			var abs = Editor.ME.project.makeAbsoluteFilePath(curRelPath);
 			ui.Tip.attach(jPick, abs);
-			if( !JsTools.fileExists(abs) ) {
+			if( !NT.fileExists(abs) ) {
 				jWrapper.addClass("error");
 				jPick.text(L.t._("File not found!"));
 			}

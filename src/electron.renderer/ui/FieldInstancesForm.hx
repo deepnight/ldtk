@@ -431,7 +431,7 @@ class FieldInstancesForm {
 				}
 
 				// Error
-				if( !fi.valueIsNull(arrayIdx) && !JsTools.fileExists( project.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) ) )
+				if( !fi.valueIsNull(arrayIdx) && !NT.fileExists( project.makeAbsoluteFilePath(fi.getFilePath(arrayIdx)) ) )
 					input.addClass("fileNotFound");
 
 				hideInputIfDefault(arrayIdx, input, fi, isRequired);

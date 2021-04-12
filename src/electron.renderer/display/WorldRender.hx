@@ -693,7 +693,7 @@ class WorldRender extends dn.Process {
 
 		var waitTileset = false;
 		for(td in project.defs.tilesets)
-			if( td.hasAtlasPath() && !td.hasValidPixelData() && JsTools.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
+			if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
 				waitTileset = true;
 				break;
 			}

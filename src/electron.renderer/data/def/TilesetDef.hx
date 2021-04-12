@@ -201,7 +201,7 @@ class TilesetDef {
 			return LoadingFailed("No file path");
 		}
 
-		if( !JsTools.fileExists(_project.makeAbsoluteFilePath(relFilePath)) )
+		if( !NT.fileExists(_project.makeAbsoluteFilePath(relFilePath)) )
 			return FileNotFound;
 
 		// Optional previous image infos

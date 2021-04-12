@@ -157,7 +157,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			e.html('<span>$name</span>');
 
 			// Check file
-			var fileExists = JsTools.fileExists(fullPath);
+			var fileExists = NT.fileExists(fullPath);
 			if( !fileExists ) {
 				e.addClass("missing");
 				e.append('<div class="error">File not found!</div>');

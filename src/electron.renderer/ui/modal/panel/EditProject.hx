@@ -61,7 +61,7 @@ class EditProject extends ui.modal.Panel {
 			var old = project.filePath.full;
 			var fp = project.filePath.clone();
 			fp.extension = v ? Const.FILE_EXTENSION : "json";
-			if( JsTools.fileExists(old) && JsTools.renameFile(old, fp.full) ) {
+			if( NT.fileExists(old) && JsTools.renameFile(old, fp.full) ) {
 				App.ME.renameRecentProject(old, fp.full);
 				project.filePath.parseFilePath(fp.full);
 				N.success(L.t._("Changed file extension to ::ext::", { ext:fp.extWithDot }));

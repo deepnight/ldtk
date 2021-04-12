@@ -126,7 +126,7 @@ class ProjectSaving extends dn.Process {
 				}
 				else {
 					// Remove previous external lmevels
-					if( JsTools.fileExists(levelDir) )
+					if( NT.fileExists(levelDir) )
 						JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
 
 					beginState(SavingLayerImages);
@@ -178,7 +178,7 @@ class ProjectSaving extends dn.Process {
 				}
 				else {
 					// Delete previous PNG dir
-					if( JsTools.fileExists(pngDir) )
+					if( NT.fileExists(pngDir) )
 						JsTools.removeDir(pngDir);
 					beginState(ExportingTiled);
 				}
@@ -198,7 +198,7 @@ class ProjectSaving extends dn.Process {
 				else {
 					// Remove previous tiled dir
 					var dir = project.getAbsExternalFilesDir() + "/tiled";
-					if( JsTools.fileExists(dir) )
+					if( NT.fileExists(dir) )
 						JsTools.removeDir(dir);
 				}
 
@@ -208,7 +208,7 @@ class ProjectSaving extends dn.Process {
 			case Done:
 				// Delete empty project dir
 				var dir = project.getAbsExternalFilesDir();
-				if( JsTools.fileExists(dir) && JsTools.isDirEmptyRec(dir) ) {
+				if( NT.fileExists(dir) && JsTools.isDirEmptyRec(dir) ) {
 					log('Removing empty dir: $dir');
 					JsTools.removeDir(dir);
 				}
@@ -223,7 +223,7 @@ class ProjectSaving extends dn.Process {
 
 
 	function initDir(dirPath:String, ?removeFileExt:String) {
-		if( !JsTools.fileExists(dirPath) )
+		if( !NT.fileExists(dirPath) )
 			JsTools.createDirs(dirPath);
 		else if( removeFileExt!=null )
 			JsTools.emptyDir(dirPath, [removeFileExt]);
@@ -369,13 +369,13 @@ class ProjectSaving extends dn.Process {
 		fp.appendDirectory("backups");
 		fp.fileName = null;
 		fp.extension = null;
-		return JsTools.fileExists(fp.full) && !JsTools.isDirEmpty(fp.full);
+		return NT.fileExists(fp.full) && !JsTools.isDirEmpty(fp.full);
 	}
 
 	public static function listBackupFiles(projectFilePath:String) {
 		var fp = dn.FilePath.fromFile(projectFilePath);
 		var dir = dn.FilePath.fromDir( fp.directory+"/"+fp.fileName+"/backups" );
-		if( !JsTools.fileExists(dir.full) )
+		if( !NT.fileExists(dir.full) )
 			return [];
 
 		var all = [];

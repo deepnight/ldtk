@@ -252,7 +252,7 @@ class Editor extends Page {
 		// Check external enums
 		if( !project.isBackup() )
 			for( relPath in project.defs.getExternalEnumPaths() ) {
-				if( !JsTools.fileExists( project.makeAbsoluteFilePath(relPath) ) ) {
+				if( !NT.fileExists( project.makeAbsoluteFilePath(relPath) ) ) {
 					// File not found
 					new ui.modal.dialog.LostFile(relPath, function(newAbsPath) {
 						var newRel = project.makeRelativeFilePath(newAbsPath);
@@ -1152,7 +1152,7 @@ class Editor extends Page {
 		}
 
 		// Check missing file
-		if( !bypasses.exists("missing") && !JsTools.fileExists(project.filePath.full) ) {
+		if( !bypasses.exists("missing") && !NT.fileExists(project.filePath.full) ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
 				null,
@@ -1193,7 +1193,7 @@ class Editor extends Page {
 			Lang.t._("Do you want to want to RESTORE this backup?"),
 			()->{
 				var original = ui.ProjectSaving.makeOriginalPathFromBackup(project.filePath.full);
-				if( !JsTools.fileExists(original.full) ) {
+				if( !NT.fileExists(original.full) ) {
 					// Project not found
 					new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the corresponding project file."));
 				}

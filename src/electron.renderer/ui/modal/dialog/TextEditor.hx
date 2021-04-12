@@ -89,7 +89,7 @@ class TextEditor extends ui.modal.Dialog {
 	/** Open an external text file and edit it **/
 	public static function editExternalFile(filePath:String) {
 		var fp = dn.FilePath.fromFile(filePath);
-		if( !JsTools.fileExists(fp.full) ) {
+		if( !NT.fileExists(fp.full) ) {
 			N.error(L.t._("File not found."));
 			return false;
 		}

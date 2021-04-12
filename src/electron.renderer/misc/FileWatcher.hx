@@ -9,7 +9,7 @@ class FileWatcher extends dn.Process {
 	}
 
 	public function watch(absFilePath:String, onChange:Void->Void) {
-		if( !JsTools.fileExists(absFilePath) )
+		if( !NT.fileExists(absFilePath) )
 			return;
 
 		stopWatchingAbs(absFilePath);
