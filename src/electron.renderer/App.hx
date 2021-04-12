@@ -634,10 +634,6 @@ class App extends dn.Process {
 		}
 	}
 
-	public inline function getElectronZoomFactor() {
-		return electron.renderer.WebFrame.getZoomFactor();
-	}
-
 	override function update() {
 		super.update();
 
@@ -658,7 +654,7 @@ class App extends dn.Process {
 			clearDebug();
 			debug("-- Misc ----------------------------------------");
 			debugPre('FPS limit=${hxd.System.fpsLimit<=0 ? "none":Std.string(hxd.System.fpsLimit)}');
-			debugPre("electronZoom="+M.pretty(getElectronZoomFactor(),2));
+			debugPre("electronZoom="+M.pretty(ET.getZoom(),2));
 			if( Editor.ME!=null ) {
 				debugPre("mouse="+Editor.ME.getMouse());
 				var cam = Editor.ME.camera;

@@ -910,7 +910,7 @@ class Editor extends Page {
 		var m = getMouse();
 		requestFps(0.85);
 
-		var speed = App.ME.getElectronZoomFactor() * settings.v.mouseWheelSpeed;
+		var speed = ET.getZoom() * settings.v.mouseWheelSpeed;
 		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta * 0.13 * speed );
 		camera.cancelAllAutoMovements();
 
