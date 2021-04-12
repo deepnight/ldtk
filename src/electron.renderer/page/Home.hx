@@ -295,7 +295,7 @@ class Home extends Page {
 					{
 						label: L.t._("Locate file"),
 						cond: null,
-						cb: JsTools.exploreToFile.bind(filePath, true),
+						cb: ET.locate.bind(filePath, true),
 					},
 					{
 						label: L.t._("Remove from history"),
@@ -397,7 +397,7 @@ class Home extends Page {
 					{
 						label: L.t._("Locate folder"),
 						cond: null,
-						cb: JsTools.exploreToFile.bind(fp.directory, false),
+						cb: ET.locate.bind(fp.directory, false),
 					},
 					{
 						label: L.t._("Remove from history"),

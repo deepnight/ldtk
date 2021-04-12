@@ -26,7 +26,7 @@ class EditProject extends ui.modal.Panel {
 			jSaveAs.hide();
 
 		jContent.find("button.locate").click( function(ev) {
-			JsTools.exploreToFile(project.filePath.full, true);
+			ET.locate( project.filePath.full, true );
 		});
 
 		if( !project.isBackup() )

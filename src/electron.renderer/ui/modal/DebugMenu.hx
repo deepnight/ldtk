@@ -47,11 +47,11 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 		add({
 			label: L.untranslated("Open settings dir"),
-			cb: ()->JsTools.exploreToFile(Settings.getDir(), false)
+			cb: ()->ET.locate(Settings.getDir(), false)
 		});
 		add({
 			label: L.untranslated("Locate log file"),
-			cb: ()->JsTools.exploreToFile(JsTools.getLogPath(), true)
+			cb: ()->ET.locate(JsTools.getLogPath(), true)
 		});
 
 		#if debug

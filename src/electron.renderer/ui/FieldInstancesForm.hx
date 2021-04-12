@@ -415,7 +415,7 @@ class FieldInstancesForm {
 					jLocate.click( (_)->{
 						if( !fi.valueIsNull(arrayIdx) ) {
 							var path = project.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
-							JsTools.exploreToFile(path, true);
+							ET.locate(path, true);
 						}
 					});
 				}

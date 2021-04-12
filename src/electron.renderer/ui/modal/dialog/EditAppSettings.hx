@@ -18,7 +18,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		jForm.off().find("*").off();
 
 		// Log button
-		jContent.find( "button.log").click( (_)->JsTools.exploreToFile( JsTools.getLogPath(), true ) );
+		jContent.find( "button.log").click( (_)->ET.locate( JsTools.getLogPath(), true ) );
 		jContent.find(".logPath").text( JsTools.getLogPath() );
 
 		// World mode using mousewheel

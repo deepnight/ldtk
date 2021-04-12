@@ -660,21 +660,6 @@ class JsTools {
 		return dn.FilePath.fromDir( raw ).directory;
 	}
 
-	public static function exploreToFile(path:String, isFile:Bool) {
-		var fp = isFile ? dn.FilePath.fromFile(path) : dn.FilePath.fromDir(path);
-
-		if( isWindows() )
-			fp.useBackslashes();
-
-		if( !fileExists(fp.full) )
-			fp.fileWithExt = null;
-
-		if( fp.fileWithExt==null )
-			electron.Shell.openPath(fp.full);
-		else
-			electron.Shell.showItemInFolder(fp.full);
-	}
-
 	public static function makeExploreLink(filePath:Null<String>, isFile:Bool) {
 		var a = new J('<a class="exploreTo"/>');
 		a.append('<span class="icon"/>');
@@ -688,7 +673,7 @@ class JsTools {
 				else {
 					ev.preventDefault();
 					ev.stopPropagation();
-					exploreToFile(filePath, isFile);
+					ET.locate(filePath, isFile);
 				}
 			}
 		});
