@@ -47,10 +47,6 @@ class ElectronMain {
 
 		// *** sendSync/on *****************************************************
 
-		IpcMain.on("getCwd", function(event) {
-			event.returnValue = process.cwd();
-		});
-
 		IpcMain.on("getArgs", function(event) {
 			event.returnValue = process.argv;
 		});

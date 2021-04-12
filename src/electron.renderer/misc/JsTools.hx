@@ -665,11 +665,6 @@ class JsTools {
 		return dn.FilePath.fromDir( path ).useSlashes().directory;
 	}
 
-	public static function getCwd() {
-		var path = electron.renderer.IpcRenderer.sendSync("getCwd");
-		return dn.FilePath.fromDir( path ).useSlashes().directory;
-	}
-
 	public static function exploreToFile(path:String, isFile:Bool) {
 		var fp = isFile ? dn.FilePath.fromFile(path) : dn.FilePath.fromDir(path);
 
