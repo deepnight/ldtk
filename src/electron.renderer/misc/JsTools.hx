@@ -471,18 +471,6 @@ class JsTools {
 
 	// *** File API (node) **************************************
 
-	public static function renameFile(oldPath:String, newPath:String) {
-		if( !NT.fileExists(oldPath) || NT.fileExists(newPath) )
-			return false;
-		else {
-			js.node.Require.require("fs");
-			App.LOG.fileOp('Renaming $oldPath -> $newPath...');
-			return
-				try { js.node.Fs.renameSync(oldPath,newPath); true; }
-				catch(e:Dynamic) false;
-		}
-	}
-
 	public static function removeFile(path:String) {
 		if( !NT.fileExists(path) )
 			return false;
