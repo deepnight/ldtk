@@ -276,7 +276,7 @@ class Home extends Page {
 											true,
 											()->{
 												for(fp in crashBackups)
-													JsTools.removeFile(fp.full);
+													NT.removeFile(fp.full);
 												updateRecents();
 											}
 										);
@@ -309,7 +309,7 @@ class Home extends Page {
 						label: L.t._("Delete this BACKUP file"),
 						cond: ()->isBackupFile,
 						cb: ()->{
-							JsTools.removeFile(filePath);
+							NT.removeFile(filePath);
 							App.ME.unregisterRecentProject(filePath);
 							updateRecents();
 						}

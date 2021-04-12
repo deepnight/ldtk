@@ -1214,7 +1214,7 @@ class Editor extends Page {
 
 							// Delete crash backup
 							if( crashFile!=null )
-								JsTools.removeFile(crashFile);
+								NT.removeFile(crashFile);
 						}
 					);
 				}

@@ -86,7 +86,7 @@ class ProjectSaving extends dn.Process {
 					if( all.length>project.backupLimit ) {
 						for(i in project.backupLimit...all.length ) {
 							log("Discarded backup: "+all[i].backup.full);
-							JsTools.removeFile( all[i].backup.full );
+							NT.removeFile( all[i].backup.full );
 						}
 					}
 				}

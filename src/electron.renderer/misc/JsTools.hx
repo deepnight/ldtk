@@ -471,18 +471,6 @@ class JsTools {
 
 	// *** File API (node) **************************************
 
-	public static function removeFile(path:String) {
-		if( !NT.fileExists(path) )
-			return false;
-		else {
-			js.node.Require.require("fs");
-			App.LOG.fileOp('Deleting file $path...');
-			return
-				try { js.node.Fs.unlinkSync(path); true; }
-				catch(e:Dynamic) false;
-		}
-	}
-
 	public static function readFileString(path:String) : Null<String> {
 		if( !NT.fileExists(path) )
 			return null;
