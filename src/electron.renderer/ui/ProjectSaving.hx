@@ -179,7 +179,7 @@ class ProjectSaving extends dn.Process {
 				else {
 					// Delete previous PNG dir
 					if( NT.fileExists(pngDir) )
-						JsTools.removeDir(pngDir);
+						NT.removeDir(pngDir);
 					beginState(ExportingTiled);
 				}
 
@@ -199,7 +199,7 @@ class ProjectSaving extends dn.Process {
 					// Remove previous tiled dir
 					var dir = project.getAbsExternalFilesDir() + "/tiled";
 					if( NT.fileExists(dir) )
-						JsTools.removeDir(dir);
+						NT.removeDir(dir);
 				}
 
 				beginState(Done);
@@ -208,9 +208,9 @@ class ProjectSaving extends dn.Process {
 			case Done:
 				// Delete empty project dir
 				var dir = project.getAbsExternalFilesDir();
-				if( NT.fileExists(dir) && JsTools.isDirEmptyRec(dir) ) {
+				if( NT.fileExists(dir) && !NT.dirContainsAnyFile(dir) ) {
 					log('Removing empty dir: $dir');
-					JsTools.removeDir(dir);
+					NT.removeDir(dir);
 				}
 
 				// Finalize
@@ -224,7 +224,7 @@ class ProjectSaving extends dn.Process {
 
 	function initDir(dirPath:String, ?removeFileExt:String) {
 		if( !NT.fileExists(dirPath) )
-			JsTools.createDirs(dirPath);
+			NT.createDirs(dirPath);
 		else if( removeFileExt!=null )
 			JsTools.emptyDir(dirPath, [removeFileExt]);
 	}
@@ -369,7 +369,7 @@ class ProjectSaving extends dn.Process {
 		fp.appendDirectory("backups");
 		fp.fileName = null;
 		fp.extension = null;
-		return NT.fileExists(fp.full) && !JsTools.isDirEmpty(fp.full);
+		return NT.fileExists(fp.full) && NT.dirContainsAnyFile(fp.full);
 	}
 
 	public static function listBackupFiles(projectFilePath:String) {

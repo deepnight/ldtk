@@ -91,7 +91,7 @@ class CrashReport extends Page {
 
 					// Init dirs
 					if( !NT.fileExists(fp.directory) )
-						JsTools.createDirs(fp.directory);
+						NT.createDirs(fp.directory);
 
 					// Save
 					var data = ui.ProjectSaving.prepareProjectSavingData(unsavedProject, true);
