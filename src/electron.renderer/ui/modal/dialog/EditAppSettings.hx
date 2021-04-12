@@ -55,7 +55,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		// Fullscreen
 		var i = Input.linkToHtmlInput(settings.v.startFullScreen, jForm.find("#startFullScreen"));
 		i.onValueChange = (v)->{
-			App.ME.setFullScreen(v);
+			ET.setFullScreen(v);
 			onSettingChanged();
 		}
 

@@ -44,16 +44,8 @@ class ElectronMain {
 			});
 		});
 
-		IpcMain.handle("exitApp", function(event) {
-			App.exit();
-		});
-
 		IpcMain.handle("reload", function(event) {
 			mainWindow.reload();
-		});
-
-		IpcMain.handle("setFullScreen", function(event,flag) {
-			mainWindow.setFullScreen(flag);
 		});
 
 		IpcMain.handle("setWinTitle", function(event,args) {
@@ -130,6 +122,7 @@ class ElectronMain {
 		mainWindow.once("ready-to-show", ev->{
 			mainWindow.webContents.setZoomFactor( settings.getAppZoomFactor() );
 		});
+		dn.js.ElectronTools.initMain(mainWindow);
 
 		// Window menu
 		#if debug
