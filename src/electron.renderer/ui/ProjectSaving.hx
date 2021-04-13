@@ -2,6 +2,7 @@ package ui;
 
 private enum SavingState {
 	InQueue;
+	PreChecks;
 	BeforeSavingActions;
 	AutoLayers;
 	Backup;
@@ -47,11 +48,46 @@ class ProjectSaving extends dn.Process {
 	inline function log(str:String) App.LOG.add("save", '[${project.filePath.fileName}] $str');
 	inline function logState() log('=> $state...');
 
+	function fail(str:LocaleString) {
+		var fp = project.filePath.clone();
+
+		var m = new ui.modal.dialog.Message(str);
+		m.addClass("error");
+		m.addParagraph(L.t._("The project was NOT saved properly!"));
+
+		m.removeButtons();
+		m.addButton( L.t._("Retry"), ()->{
+			Editor.ME.onSave();
+			m.close();
+		} );
+		m.addButton( L.t._("Save as..."), ()->{
+			Editor.ME.onSave(true);
+			m.close();
+		} );
+		m.addButton( L.t._("Open project folder"), "gray small", ()->{
+			ET.locate(fp.full, true);
+			m.close();
+		 } );
+		m.addCancel();
+		destroy();
+	}
+
 	function beginState(s:SavingState) {
 		state = s;
 
 		switch s {
 			case InQueue:
+
+			case PreChecks:
+				logState();
+				var dir = project.getAbsExternalFilesDir();
+				if( NT.fileExists(dir) && !NT.isDirectory(dir) ) {
+					var f = project.filePath.fileName;
+					fail( L.t._('I need to create a folder named "::name::", but there is a file with the exact same name there.', {name:f} ) );
+					return;
+				}
+				else
+					beginState(BeforeSavingActions);
 
 			case BeforeSavingActions:
 				if( hasEditor() ) {
@@ -125,7 +161,7 @@ class ProjectSaving extends dn.Process {
 					new ui.modal.Progress(Lang.t._("Saving levels"), 3, ops);
 				}
 				else {
-					// Remove previous external lmevels
+					// Remove previous external levels
 					if( NT.fileExists(levelDir) )
 						JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
 
@@ -241,7 +277,9 @@ class ProjectSaving extends dn.Process {
 		switch state {
 			case InQueue:
 				if( QUEUE[0]==this && !ui.modal.Progress.hasAny() )
-					beginState(BeforeSavingActions);
+					beginState(PreChecks);
+
+			case PreChecks:
 
 			case BeforeSavingActions:
 				if( !ui.modal.Progress.hasAny() )

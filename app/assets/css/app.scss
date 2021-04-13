@@ -2253,8 +2253,22 @@ textarea {
 	}
 
 	&.warning .wrapper {
+		max-width: 400px;
 		background-color: $darkRed;
 		border-color: $red;
+	}
+
+	&.error .wrapper {
+		max-width: 450px;
+		background-color: $darkRed;
+		border-color: $red;
+
+		h2:first-of-type {
+			background-color: $red;
+		}
+		button {
+			white-space: nowrap;
+		}
 	}
 
 	&.choice .wrapper {
