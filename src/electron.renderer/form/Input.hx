@@ -30,10 +30,21 @@ class Input<T> {
 
 		jInput.on("focus.input", function(ev) {
 			jInput.select();
+			checkGuide();
+		});
+		jInput.on("blur.input", function(ev) {
+			checkGuide();
 		});
 		jInput.on("change.input", function(_) {
 			onInputChange();
 		});
+	}
+
+	function checkGuide() {
+		if( jInput.is(":focus") )
+			jInput.siblings(".guide").show();
+		else
+			jInput.siblings(".guide").hide();
 	}
 
 	function getter() {
