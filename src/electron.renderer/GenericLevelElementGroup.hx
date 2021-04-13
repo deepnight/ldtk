@@ -257,7 +257,7 @@ class GenericLevelElementGroup {
 								ghost.endFill();
 
 							case Tiles:
-								var td = li.getTiledsetDef();
+								var td = li.getTilesetDef();
 								for( t in li.getGridTileStack(cx,cy) ) {
 									var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
 									bmp.x = li.pxTotalOffsetX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.gridSize - bounds.left;

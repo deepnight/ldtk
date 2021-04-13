@@ -75,7 +75,7 @@ class RuleEditor extends ui.modal.Dialog {
 
 		// Tile(s)
 		var jTilePicker = JsTools.createTilePicker(
-			layerDef.autoTilesetDefUid,
+			Editor.ME.curLayerInstance.getTilesetUid(),
 			rule.tileMode==Single?Free:RectOnly,
 			rule.tileIds,
 			function(tids) {

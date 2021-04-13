@@ -1275,6 +1275,7 @@ class Editor extends Page {
 				case LayerInstanceChanged:
 				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
 				case LayerInstanceRestoredFromHistory(li): extra = li.layerDefUid;
+				case LayerInstanceTilesetChanged(li): extra = li.layerDefUid;
 				case AutoLayerRenderingChanged:
 				case TilesetDefChanged(td): extra = td.uid;
 				case TilesetDefAdded(td): extra = td.uid;
@@ -1428,6 +1429,8 @@ class Editor extends Page {
 				updateLayerList();
 				updateGuide();
 				updateTool();
+
+			case LayerInstanceTilesetChanged(li):
 
 			case TilesetDefRemoved(_):
 				updateLayerList(); // for rule-based layers

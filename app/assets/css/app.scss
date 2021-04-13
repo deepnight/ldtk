@@ -1440,6 +1440,10 @@ select {
 		color: $orange;
 		background-color: $bgMed;
 		cursor: pointer;
+		&:disabled {
+			color: $bgLight;
+			font-style: italic;
+		}
 	}
 
 	&:empty {
@@ -5121,12 +5125,14 @@ body.sorting ul.collapsedSortTarget {
 			display: flex;
 			width: 100%;
 			align-items: stretch;
+			flex-wrap: wrap;
 
 			>*+* {
-				margin-left: 4px;
+				margin: 1px;
 			}
 
 			button {
+				flex: 1 1 0px;
 				white-space: nowrap;
 				font-size: 9pt;
 			}
@@ -5152,6 +5158,10 @@ body.sorting ul.collapsedSortTarget {
 					color: black;
 					background-color: $orange;
 				}
+			}
+
+			select {
+				width: 100%;
 			}
 		}
 

@@ -93,7 +93,7 @@ class RulePatternEditor {
 						var previewWid = 32;
 						var previewHei = 32;
 						if( rule.tileIds.length>1 ) {
-							var td = Editor.ME.project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
+							var td = Editor.ME.curLayerInstance.getTilesetDef();
 							if( td!=null ) {
 								var bounds = td.getTileGroupBounds(rule.tileIds);
 								if( bounds.wid>1 )
@@ -110,7 +110,7 @@ class RulePatternEditor {
 
 				// Render actual Tile in context
 				if( previewMode ) {
-					var td = Editor.ME.project.defs.getTilesetDef( layerDef.autoTilesetDefUid );
+					var td = Editor.ME.curLayerInstance.getTilesetDef();
 					if( td!=null ) {
 						var jTile = JsTools.createTile(td, rule.tileIds[0], 32);
 						jCell.append(jTile);

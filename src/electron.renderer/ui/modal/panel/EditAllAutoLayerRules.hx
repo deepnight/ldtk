@@ -76,6 +76,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			case LayerRuleSorted:
 				updatePanel();
 
+			case LayerInstanceTilesetChanged(_):
+				updatePanel();
+
 			case _:
 		}
 	}
@@ -269,6 +272,41 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		chk.prop("checked", editor.levelRender.isAutoLayerRenderingEnabled() );
 		chk.change( function(ev) {
 			editor.levelRender.setAutoLayerRendering( chk.prop("checked") );
+		});
+
+		// Change tileset per instance
+		var curTd = li.getTilesetDef();
+		var jSelect = jContent.find("#autoLayerTileset");
+		jSelect.empty().off();
+		function _tilesetCompatible(td:data.def.TilesetDef) {
+			return td.cWid==curTd.cWid && td.cHei==curTd.cHei && td.tileGridSize==curTd.tileGridSize;
+		}
+		var all = project.defs.tilesets.copy();
+		all.sort( (a,b)->{
+			var compA = _tilesetCompatible(a);
+			var compB = _tilesetCompatible(b);
+			if( compA==compB )
+				return Reflect.compare(a.uid,b.uid);
+			else if( compA )
+				return -1;
+			else
+				return 1;
+		});
+		for(td in all) {
+			var jOpt = new J('<option value="${td.uid}">${td.identifier}</option>');
+			jOpt.appendTo(jSelect);
+			if( !_tilesetCompatible(td) ) {
+				jOpt.prop("disabled",true);
+				jOpt.append(' (INCOMPATIBLE SIZE)');
+			}
+			if( td.uid==ld.autoTilesetDefUid )
+				jOpt.append(' (DEFAULT)');
+		}
+		jSelect.val( curTd.uid );
+		jSelect.change( (_)->{
+			li.setOverrideTileset( Std.parseInt(jSelect.val()) );
+			editor.levelRender.invalidateAll();
+			editor.ge.emit( LayerInstanceTilesetChanged(li) );
 		});
 
 

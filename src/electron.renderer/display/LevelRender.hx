@@ -127,6 +127,9 @@ class LevelRender extends dn.Process {
 					if( li.def.isAutoLayer() )
 						invalidateLayer(li);
 
+			case LayerInstanceTilesetChanged(cli):
+				invalidateLayer(cli);
+
 			case LayerInstanceSelected:
 				applyAllLayersVisibility();
 				invalidateUi();

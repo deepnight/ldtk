@@ -586,7 +586,7 @@ class WorldRender extends dn.Process {
 
 			if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
 				// Auto layer
-				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
+				var td = li.getTilesetDef();
 				if( td!=null && td.isAtlasLoaded() ) {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 					pixelGrid.x = li.pxTotalOffsetX;
@@ -626,7 +626,7 @@ class WorldRender extends dn.Process {
 			}
 			else if( li.def.type==Tiles ) {
 				// Classic tiles
-				var td = li.getTiledsetDef();
+				var td = li.getTilesetDef();
 				if( td!=null && td.isAtlasLoaded() ) {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 					pixelGrid.x = li.pxTotalOffsetX;

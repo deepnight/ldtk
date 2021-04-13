@@ -91,6 +91,7 @@ class LevelHistory {
 			case AutoLayerRenderingChanged:
 
 			case LayerInstanceRestoredFromHistory(_):
+			case LayerInstanceTilesetChanged(li):
 			case LevelRestoredFromHistory(l):
 			case ToolOptionChanged:
 			case GridChanged(active):

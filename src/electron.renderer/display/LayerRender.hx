@@ -47,7 +47,7 @@ class LayerRender {
 
 		switch li.def.type {
 		case IntGrid, AutoLayer:
-			var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
+			var td = li.getTilesetDef();
 
 			if( li.def.isAutoLayer() && renderAutoLayers && td!=null && td.isAtlasLoaded() ) {
 				// Auto-layer tiles
@@ -108,7 +108,7 @@ class LayerRender {
 
 		case Tiles:
 			// Classic tiles layer
-			var td = li.getTiledsetDef();
+			var td = li.getTilesetDef();
 			if( td!=null && td.isAtlasLoaded() ) {
 				var pixelGrid = !fixFlickering || li.def.gridSize>td.tileGridSize ? null : new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
 				if( pixelGrid!=null ) {

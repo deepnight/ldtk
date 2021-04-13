@@ -86,13 +86,13 @@ class LayerInstance {
 	}
 
 
-	public function getTiledsetDef() : Null<data.def.TilesetDef> {
+	public function getTilesetDef() : Null<data.def.TilesetDef> {
 		var tdUid = getTilesetUid();
 		return tdUid==null ? null : _project.defs.getTilesetDef(tdUid);
 	}
 
 	public function toJson() : ldtk.Json.LayerInstanceJson {
-		var td = getTiledsetDef();
+		var td = getTilesetDef();
 
 		var json : ldtk.Json.LayerInstanceJson = {
 			// Fields preceded by "__" are only exported to facilitate parsing
@@ -137,7 +137,7 @@ class LayerInstance {
 				var arr = [];
 
 				if( autoTilesCache!=null ) {
-					var td = _project.defs.getTilesetDef(def.autoTilesetDefUid);
+					var td = getTilesetDef();
 					def.iterateActiveRulesInDisplayOrder( (r)->{
 						if( autoTilesCache.exists( r.uid ) ) {
 							for( allTiles in autoTilesCache.get( r.uid ).keyValueIterator() )
@@ -637,7 +637,7 @@ class LayerInstance {
 
 	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
 		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds;
-		var td = _project.defs.getTilesetDef( def.autoTilesetDefUid );
+		var td = getTilesetDef();
 		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
 		autoTilesCache.get(r.uid).set( coordId(cx,cy), tileIds.map( (tid)->{
 			return {
@@ -700,7 +700,7 @@ class LayerInstance {
 	public function applyBreakOnMatches() {
 		var coordLocks = new Map();
 
-		var td = _project.defs.getTilesetDef( def.autoTilesetDefUid );
+		var td = getTilesetDef();
 		for( cy in 0...cHei )
 		for( cx in 0...cWid ) {
 			def.iterateActiveRulesInEvalOrder( (r)->{
