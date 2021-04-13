@@ -27,6 +27,7 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
+	"levelNamePattern": "Level_%x_%y",
 	"flags": ["DiscardPreCsvIntGrid"],
 	"defs": { "layers": [
 		{
