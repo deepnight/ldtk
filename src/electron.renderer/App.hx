@@ -58,6 +58,7 @@ class App extends dn.Process {
 
 		// Init window
 		IpcRenderer.on("winClose", onWindowCloseButton);
+		IpcRenderer.on("settingsApplied", ()->updateBodyClasses());
 
 		var win = js.Browser.window;
 		win.onblur = onAppBlur;
