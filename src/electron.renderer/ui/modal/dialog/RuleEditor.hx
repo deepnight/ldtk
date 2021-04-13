@@ -12,6 +12,7 @@ class RuleEditor extends ui.modal.Dialog {
 	public function new(layerDef:data.def.LayerDef, rule:data.def.AutoLayerRuleDef) {
 		super("ruleEditor");
 
+		setTransparentMask();
 		this.layerDef = layerDef;
 		this.rule = rule;
 		sourceDef = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef( layerDef.autoSourceLayerDefUid );
