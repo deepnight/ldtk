@@ -641,6 +641,7 @@ class GenericLevelElementGroup {
 		}
 
 		// Prepare movement effects
+		var outOfBoundsRemovals : Array<String> = [];
 		var moveGrid = getSmartSnapGrid();
 		for( i in 0...elements.length ) {
 			var ge = elements[i];
@@ -663,6 +664,7 @@ class GenericLevelElementGroup {
 					// Out of bounds
 					if( ei.x<li.pxTotalOffsetX || ei.x>li.pxTotalOffsetX+li.cWid*li.def.gridSize
 					|| ei.y<li.pxTotalOffsetY || ei.y>li.pxTotalOffsetY+li.cHei*li.def.gridSize ) {
+						outOfBoundsRemovals.push(ei.def.identifier);
 						li.removeEntityInstance(ei);
 						elements[i] = null;
 
@@ -749,6 +751,7 @@ class GenericLevelElementGroup {
 							fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
 						else {
 							// Out of bounds
+							outOfBoundsRemovals.push(fi.def.identifier);
 							fi.removeArrayValue(arrayIdx);
 							decrementAllFieldArrayIdxAbove(fi, arrayIdx);
 							elements[i] = null;
@@ -758,6 +761,10 @@ class GenericLevelElementGroup {
 						changedLayers.set(li,li);
 					}
 			}
+		}
+
+		if( outOfBoundsRemovals.length>0 ) {
+			N.warning( L.t._("Out-of-bounds entity removed: ::names::", {names:outOfBoundsRemovals.join(", ")}) );
 		}
 
 		// Execute move
