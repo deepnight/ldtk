@@ -74,6 +74,10 @@ class Home extends Page {
 			new ui.modal.dialog.EditAppSettings();
 		});
 
+		jPage.find("button.exit").click( function(ev) {
+			App.ME.exit();
+		});
+
 		updateRecents();
 	}
 

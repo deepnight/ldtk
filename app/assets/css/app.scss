@@ -3396,6 +3396,15 @@ canvas#webgl {
 				&.settings {
 					flex: 0 1 0px;
 				}
+
+				&.exit {
+					display: none;
+					flex: 0 1 0px;
+				}
+
+				@at-root body.fullscreen .buttons .exit {
+					display: inherit !important;
+				}
 			}
 		}
 
@@ -3541,9 +3550,6 @@ canvas#webgl {
 
 			.buttons {
 				margin: 0;
-				.exit {
-					flex: 0.3 1 0;
-				}
 			}
 		}
 
