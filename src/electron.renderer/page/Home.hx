@@ -125,7 +125,7 @@ class Home extends Page {
 	}
 
 
-	function updateRecents() {
+	function updateRecents() : Void {
 		ui.Tip.clear();
 		var uniqueColorMix = 0x6066d3;
 
