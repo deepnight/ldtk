@@ -636,7 +636,7 @@
 					]
 				},
 				"uid": {
-					"description": "Unique Intidentifier",
+					"description": "Unique Int identifier",
 					"type": [
 						"integer"
 					]
