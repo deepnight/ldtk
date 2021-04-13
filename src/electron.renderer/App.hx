@@ -120,10 +120,8 @@ class App extends dn.Process {
 				loadPage( ()->new page.Home() );
 		}, 0.2);
 
-		if( settings.v.startFullScreen )
-			ET.setFullScreen(true);
-
 		IpcRenderer.invoke("appReady");
+		updateBodyClasses();
 	}
 
 
@@ -226,6 +224,18 @@ class App extends dn.Process {
 		});
 	}
 
+
+	inline function setBodyClassIf(className:String, cond:Void->Bool) {
+		if( cond() )
+			jBody.addClass(className);
+		else
+			jBody.removeClass(className);
+	}
+
+	public function updateBodyClasses() {
+		setBodyClassIf("fullscreen", ET.isFullScreen);
+	}
+
 	function getArgPath() : Null<dn.FilePath> {
 		if( args.getLastSoloValue()==null )
 			return null;
@@ -313,6 +323,7 @@ class App extends dn.Process {
 				if( !isFullScreen )
 					N.success("Press F11 to leave fullscreen");
 				ET.setFullScreen(!isFullScreen);
+				updateBodyClasses();
 
 			case _:
 		}

@@ -57,6 +57,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		i.onValueChange = (v)->{
 			ET.setFullScreen(v);
 			onSettingChanged();
+			App.ME.updateBodyClasses();
 		}
 
 		// Tile flickering fix

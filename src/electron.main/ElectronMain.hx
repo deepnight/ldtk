@@ -82,6 +82,8 @@ class ElectronMain {
 		});
 		mainWindow.once("ready-to-show", ev->{
 			mainWindow.webContents.setZoomFactor( settings.getAppZoomFactor() );
+			if( settings.v.startFullScreen )
+				dn.js.ElectronTools.setFullScreen(true);
 		});
 		dn.js.ElectronTools.initMain(mainWindow);
 
