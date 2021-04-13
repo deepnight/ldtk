@@ -9,6 +9,8 @@
   - Added a one-time "enable backup" recommendation popup for medium/large projects.
   - Added a "Create level" button in world panel.
   - Added an error message when trying to create a new project in an invalid folder.
+  - Added a warning notification when moving an Entity or a Point out of level bounds
+  - Increased max width/height for Entities
   - The keyboard shortcut to toggle auto-layers rendering is now `SHIFT-R`.
   - Reduced tile flickering while zooming in/out (this reduction can be disabled from the app settings)
   - Extended app logging limit (from 500 to 5000 lines)
