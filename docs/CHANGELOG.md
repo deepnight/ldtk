@@ -10,12 +10,14 @@
   - Added a "Create level" button in world panel.
   - Added an error message when trying to create a new project in an invalid folder.
   - Added a warning notification when moving an Entity or a Point out of level bounds
+  - Added a "close" button on Home screen, when in fullscreen mode
   - Increased max width/height for Entities
   - The keyboard shortcut to toggle auto-layers rendering is now `SHIFT-R`.
   - Reduced tile flickering while zooming in/out (this reduction can be disabled from the app settings)
   - Disabled level dimming while editing an auto-layer Rule.
   - Extended app logging limit (from 500 to 5000 lines)
   - Fixed default "smart" color of entities. It uses the first color value found among fields, in order of appearance, otherwise it defaults to entity main color.
+  - Fixed fullscreen not applying at startup on Debian (not tested, hope it'll work!)
   - Fixed entity handles not disappearing when movin a resizable entity out of level bounds
   - Fixed "Create group" button in Auto-layer Rules panel
   - Fixed a crash when adding a single entity point
