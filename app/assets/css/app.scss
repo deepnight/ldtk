@@ -434,6 +434,7 @@ button {
 	&.guide {
 		position: absolute;
 		z-index: 2;
+		display: none;
 		background-color: $helpDark;
 		top: 34px;
 		right: 0;
@@ -1192,7 +1193,8 @@ ul.form {
 		}
 
 		&.full {
-			max-width: none;
+			width: auto !important;
+			max-width: none !important;
 			grid-column: 1/3;
 		}
 	}
@@ -4643,8 +4645,13 @@ dl.form.fieldInstanceEditor {
 		gap: 16px;
 		height: 100%;
 
-		ul.form>li>label:first-of-type {
-			flex: 0 0 250px;
+		dl.form>dt {
+			max-width: none;
+			width: 250px;
+
+			&>label:first-of-type {
+				max-width: none;
+			}
 		}
 
 		ul.advanced {
@@ -4662,7 +4669,7 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
-		li.advancedWarning {
+		dd.advancedWarning {
 			display: block;
 			color: $lightRed;
 			a {
@@ -4673,7 +4680,7 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
-		li.pngPattern {
+		dd.pngPattern {
 			position: relative;
 			.example {
 				flex: 1 0 100%;

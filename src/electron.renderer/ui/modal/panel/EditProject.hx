@@ -50,7 +50,7 @@ class EditProject extends ui.modal.Panel {
 
 	function updateProjectForm() {
 		ui.Tip.clear();
-		var jForm = jContent.find("ul.form:first");
+		var jForm = jContent.find("dl.form:first");
 		jForm.off().find("*").off();
 
 		// File extension
