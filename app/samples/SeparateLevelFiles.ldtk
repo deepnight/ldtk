@@ -27,6 +27,7 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
+	"levelNamePattern": "Level_%idx",
 	"flags": ["DiscardPreCsvIntGrid"],
 	"defs": { "layers": [
 		{
@@ -92,7 +93,7 @@
 	] },
 	"levels": [
 		{
-			"identifier": "Level_A",
+			"identifier": "Level_0",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 0,
@@ -100,12 +101,13 @@
 			"pxHei": 224,
 			"__bgColor": "#398666",
 			"bgColor": "#398666",
+			"useAutoIdentifier": true,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
 			"__bgPos": null,
-			"externalRelPath": "SeparateLevelFiles/0000-Level_A.ldtkl",
+			"externalRelPath": "SeparateLevelFiles/0000-Level_0.ldtkl",
 			"fieldInstances": [
 				{
 					"__identifier": "tutorial",
@@ -125,7 +127,7 @@
 			"__neighbours": [{ "levelUid": 2, "dir": "s" }]
 		},
 		{
-			"identifier": "Level_B",
+			"identifier": "Level_1",
 			"uid": 2,
 			"worldX": 0,
 			"worldY": 256,
@@ -133,12 +135,13 @@
 			"pxHei": 240,
 			"__bgColor": "#4A4C7F",
 			"bgColor": "#4A4C7F",
+			"useAutoIdentifier": true,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
 			"__bgPos": null,
-			"externalRelPath": "SeparateLevelFiles/0001-Level_B.ldtkl",
+			"externalRelPath": "SeparateLevelFiles/0001-Level_1.ldtkl",
 			"fieldInstances": [
 				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] },
 				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 9, "realEditorValues": [] }
@@ -147,7 +150,7 @@
 			"__neighbours": [ { "levelUid": 3, "dir": "s" }, { "levelUid": 0, "dir": "n" } ]
 		},
 		{
-			"identifier": "Level_C",
+			"identifier": "Level_2",
 			"uid": 3,
 			"worldX": 0,
 			"worldY": 528,
@@ -155,12 +158,13 @@
 			"pxHei": 240,
 			"__bgColor": "#955268",
 			"bgColor": "#955268",
+			"useAutoIdentifier": true,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
 			"__bgPos": null,
-			"externalRelPath": "SeparateLevelFiles/0002-Level_C.ldtkl",
+			"externalRelPath": "SeparateLevelFiles/0002-Level_2.ldtkl",
 			"fieldInstances": [
 				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] },
 				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 9, "realEditorValues": [] }

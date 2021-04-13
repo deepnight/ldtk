@@ -27,6 +27,7 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
+	"levelNamePattern": "Level_%idx",
 	"flags": ["DiscardPreCsvIntGrid"],
 	"defs": { "layers": [
 		{
@@ -828,10 +829,10 @@
 			}
 		}
 	], "enums": [{ "identifier": "SomeEnum", "uid": 21, "values": [
-		{ "id": "A", "tileId": 60, "color": -1, "__tileSrcRect": [192,48,16,16] },
-		{ "id": "B", "tileId": 1145, "color": -1, "__tileSrcRect": [144,1136,16,16] },
-		{ "id": "C", "tileId": 678, "color": -1, "__tileSrcRect": [96,672,16,16] },
-		{ "id": "D", "tileId": 1723, "color": -1, "__tileSrcRect": [176,1712,16,16] }
+		{ "id": "A", "tileId": 60, "color": 8934724, "__tileSrcRect": [192,48,16,16] },
+		{ "id": "B", "tileId": 1145, "color": 13408614, "__tileSrcRect": [144,1136,16,16] },
+		{ "id": "C", "tileId": 678, "color": 13417386, "__tileSrcRect": [96,672,16,16] },
+		{ "id": "D", "tileId": 1723, "color": 11189179, "__tileSrcRect": [176,1712,16,16] }
 	], "iconTilesetUid": 31, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [
 		{
 			"identifier": "desc",
@@ -856,7 +857,7 @@
 	] },
 	"levels": [
 		{
-			"identifier": "Level1",
+			"identifier": "Level_0",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 0,
@@ -864,6 +865,7 @@
 			"pxHei": 568,
 			"__bgColor": "#6E6F8B",
 			"bgColor": null,
+			"useAutoIdentifier": true,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
@@ -1765,7 +1767,7 @@
 			"__neighbours": [{ "levelUid": 32, "dir": "s" }]
 		},
 		{
-			"identifier": "Level2",
+			"identifier": "Level_1",
 			"uid": 32,
 			"worldX": 0,
 			"worldY": 600,
@@ -1773,6 +1775,7 @@
 			"pxHei": 256,
 			"__bgColor": "#6E6F8B",
 			"bgColor": null,
+			"useAutoIdentifier": true,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
@@ -2256,7 +2259,7 @@
 			"__neighbours": [ { "levelUid": 33, "dir": "s" }, { "levelUid": 0, "dir": "n" } ]
 		},
 		{
-			"identifier": "Level3",
+			"identifier": "Level_2",
 			"uid": 33,
 			"worldX": 0,
 			"worldY": 888,
@@ -2264,6 +2267,7 @@
 			"pxHei": 160,
 			"__bgColor": "#6E6F8B",
 			"bgColor": null,
+			"useAutoIdentifier": true,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
@@ -2516,7 +2520,7 @@
 			"__neighbours": [ { "levelUid": 36, "dir": "s" }, { "levelUid": 32, "dir": "n" } ]
 		},
 		{
-			"identifier": "Level4",
+			"identifier": "Level_3",
 			"uid": 36,
 			"worldX": 0,
 			"worldY": 1080,
@@ -2524,6 +2528,7 @@
 			"pxHei": 192,
 			"__bgColor": "#6E6F8B",
 			"bgColor": null,
+			"useAutoIdentifier": true,
 			"bgRelPath": "atlas/Beach by deepnight.png",
 			"bgPos": "Cover",
 			"bgPivotX": 0.5,
