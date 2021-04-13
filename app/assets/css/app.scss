@@ -3289,7 +3289,7 @@ canvas#webgl {
 
 	&>.wrapper {
 		display: grid;
-		grid-template-columns: auto;
+		grid-template-columns: 100%;
 		grid-template-rows: min-content 50vh min-content;
 		box-sizing: border-box;
 		width: 80vw;
@@ -3357,7 +3357,7 @@ canvas#webgl {
 
 		.main {
 			display: grid;
-			width: 70vw;
+			width: 100%;
 			grid-template-columns: auto 250px;
 			box-sizing: border-box;
 			padding-top: 30px;
