@@ -245,6 +245,14 @@ class ResizeTool extends Tool<Int> {
 		}
 	}
 
+	public function isOnEntity(targetEi:data.inst.EntityInstance) {
+		return switch ge {
+			case GridCell(li, cx, cy): false;
+			case Entity(li, ei): ei==targetEi;
+			case PointField(li, ei, fi, arrayIdx): ei==targetEi;
+		}
+	}
+
 	public inline function invalidate() {
 		invalidated = true;
 	}

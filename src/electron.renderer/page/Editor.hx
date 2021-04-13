@@ -1339,7 +1339,11 @@ class Editor extends Page {
 			case FieldInstanceChanged(fi):
 
 			case EntityInstanceAdded(ei):
+
 			case EntityInstanceRemoved(ei):
+				if( resizeTool!=null && resizeTool.isOnEntity(ei) )
+					clearResizeTool();
+
 			case EntityInstanceChanged(ei):
 
 			case ToolOptionChanged:
