@@ -1458,7 +1458,7 @@
 					]
 				},
 				"tilesetDefUid": {
-					"description": "Reference to the Tileset UID being used by this Tile layer",
+					"description": "Reference to the Tileset UID being used by this Tile layer. WARNING: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value from layer instances.",
 					"type": [
 						"integer",
 						"null"
@@ -1472,7 +1472,7 @@
 					]
 				},
 				"autoTilesetDefUid": {
-					"description": "Reference to the Tileset UID being used by this auto-layer rules",
+					"description": "Reference to the Tileset UID being used by this auto-layer rules. WARNING: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value from layer instances.",
 					"type": [
 						"integer",
 						"null"

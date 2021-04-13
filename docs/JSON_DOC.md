@@ -164,14 +164,14 @@ Value | Type | Description
 -- | -- | --
 `__type` | String | Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)
 `autoSourceLayerDefUid`<br/><sup class="only">Only *Auto-layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
-`autoTilesetDefUid`<br/><sup class="only">Only *Auto-layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Reference to the Tileset UID being used by this auto-layer rules
+`autoTilesetDefUid`<br/><sup class="only">Only *Auto-layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Reference to the Tileset UID being used by this auto-layer rules. WARNING: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value from layer instances.
 `displayOpacity` | Float | Opacity of the layer (0 to 1.0)
 `gridSize` | Int | Width and height of the grid in pixels
 `identifier` | String | Unique String identifier
 `intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup> | Array&nbsp;of&nbsp;Object | An array that defines extra optional info for each IntGrid value. The array is sorted using value (ascending).<br/> This object contains the following fields:<br/> <ul><li>**`color`** **(String**) <small class="color"> *Hex color "#rrggbb"* </small></li><li>**`identifier`** **(String *(can be `null`)***) : *Unique String identifier*</li><li>**`value`** **(Int**)  ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  : *The IntGrid value itself*</li></ul>
 `pxOffsetX`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Int | X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
 `pxOffsetY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Int | Y offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
-`tilesetDefUid`<br/><sup class="only">Only *Tile layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Reference to the Tileset UID being used by this Tile layer
+`tilesetDefUid`<br/><sup class="only">Only *Tile layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Reference to the Tileset UID being used by this Tile layer. WARNING: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value from layer instances.
 `uid` | Int | Unique Int identifier
 `autoRuleGroups`<br/><sup class="only">Only *Auto-layers*</sup><br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Object | Contains all the auto-layer rule definitions.<br/> This object contains the following fields:<br/> <ul><li>**`active`** **(Bool**)</li><li>**`collapsed`** **(Bool**)</li><li>**`name`** **(String**)</li><li>**`rules`** **(Array of [Auto-layer rule definition](#ldtk-AutoRuleDef)**)</li><li>**`uid`** **(Int**)</li></ul>
 `excludedTags`<br/><sup class="only">Only *Entity layer*</sup><br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Array&nbsp;of&nbsp;String | An array of tags to forbid some Entities in this layer
