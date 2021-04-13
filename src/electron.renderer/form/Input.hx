@@ -41,6 +41,9 @@ class Input<T> {
 	}
 
 	function checkGuide() {
+		if( jInput.is("[type=checkbox], [type=radio]") )
+			return;
+
 		if( jInput.is(":focus") )
 			jInput.siblings(".guide").show();
 		else
