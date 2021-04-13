@@ -14,6 +14,7 @@
   - The keyboard shortcut to toggle auto-layers rendering is now `SHIFT-R`.
   - Reduced tile flickering while zooming in/out (this reduction can be disabled from the app settings)
   - Extended app logging limit (from 500 to 5000 lines)
+  - Fixed default "smart" color of entities. It uses the first color value found among fields, in order of appearance, otherwise it defaults to entity main color.
   - Fixed entity handles not disappearing when movin a resizable entity out of level bounds
   - Fixed "Create group" button in Auto-layer Rules panel
   - Fixed a crash when adding a single entity point
