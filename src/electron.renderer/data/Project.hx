@@ -775,19 +775,20 @@ class Project {
 				l.identifier = "#"+(uniq++);
 
 		var idx = 0;
+		var b = getWorldBounds();
 		for(l in levels) {
 			if( l.useAutoIdentifier ) {
 				var id = levelNamePattern;
 				id = StringTools.replace(id, "%idx", Std.string(idx) );
-				id = StringTools.replace(id, "%x", Std.string( switch worldLayout {
-					case Free: l.worldX;
-					case GridVania: Std.int(l.worldX / worldGridWidth);
+				id = StringTools.replace(id, "%gx", Std.string( switch worldLayout {
+					case Free: "NA";
+					case GridVania: Std.int((l.worldX-b.left) / worldGridWidth);
 					case LinearHorizontal: idx;
 					case LinearVertical: 0;
 				}) );
-				id = StringTools.replace(id, "%y", Std.string( switch worldLayout {
-					case Free: l.worldY;
-					case GridVania: Std.int(l.worldY / worldGridHeight);
+				id = StringTools.replace(id, "%gy", Std.string( switch worldLayout {
+					case Free: "NA";
+					case GridVania: Std.int((l.worldY-b.top) / worldGridHeight);
 					case LinearHorizontal: 0;
 					case LinearVertical: idx;
 				}) );
