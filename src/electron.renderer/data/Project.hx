@@ -4,6 +4,7 @@ class Project {
 	public static var DEFAULT_WORKSPACE_BG = dn.Color.hexToInt("#40465B");
 	public static var DEFAULT_LEVEL_BG = dn.Color.hexToInt("#696a79");
 	public static var DEFAULT_GRID_SIZE = 16; // px
+	public static var DEFAULT_LEVEL_NAME_PATTERN = "Level_%idx";
 
 	public var filePath : dn.FilePath; // not stored in JSON
 
@@ -29,6 +30,7 @@ class Project {
 	public var exportPng = false;
 	public var pngFilePattern : Null<String>;
 	var flags: Map<ldtk.Json.ProjectFlag, Bool>;
+	public var levelNamePattern : String;
 
 	public var backupOnSave = false;
 	public var backupLimit = 10;
@@ -48,6 +50,7 @@ class Project {
 		worldGridHeight = defaultLevelHeight;
 		filePath = new dn.FilePath();
 		flags = new Map();
+		levelNamePattern = DEFAULT_LEVEL_NAME_PATTERN;
 
 		defs = new Definitions(this);
 	}
@@ -215,6 +218,7 @@ class Project {
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
 		p.exportPng = JsonTools.readBool( json.exportPng, false );
 		p.pngFilePattern = json.pngFilePattern;
+		p.levelNamePattern = JsonTools.readString(json.levelNamePattern, Project.DEFAULT_LEVEL_NAME_PATTERN );
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
@@ -287,6 +291,7 @@ class Project {
 			pngFilePattern: pngFilePattern,
 			backupOnSave: backupOnSave,
 			backupLimit: backupLimit,
+			levelNamePattern: levelNamePattern,
 
 			flags: {
 				var all = [];
@@ -391,6 +396,8 @@ class Project {
 
 			case GridVania:
 		}
+
+		applyAutoLevelIdentifiers();
 	}
 
 	public function tidy() {
@@ -403,6 +410,7 @@ class Project {
 		reorganizeWorld();
 		for(level in levels)
 			level.tidy(this);
+		applyAutoLevelIdentifiers();
 	}
 
 
@@ -759,6 +767,35 @@ class Project {
 			return null;
 	}
 
+
+	public function applyAutoLevelIdentifiers() {
+		var uniq = 0;
+		for(l in levels)
+			if( l.useAutoIdentifier )
+				l.identifier = "#"+(uniq++);
+
+		var idx = 0;
+		for(l in levels) {
+			if( l.useAutoIdentifier ) {
+				var id = levelNamePattern;
+				id = StringTools.replace(id, "%idx", Std.string(idx) );
+				id = StringTools.replace(id, "%x", Std.string( switch worldLayout {
+					case Free: l.worldX;
+					case GridVania: Std.int(l.worldX / worldGridWidth);
+					case LinearHorizontal: idx;
+					case LinearVertical: 0;
+				}) );
+				id = StringTools.replace(id, "%y", Std.string( switch worldLayout {
+					case Free: l.worldY;
+					case GridVania: Std.int(l.worldY / worldGridHeight);
+					case LinearHorizontal: 0;
+					case LinearVertical: idx;
+				}) );
+				l.identifier = makeUniqueIdStr(id, true, id->isLevelIdentifierUnique(id));
+			}
+			idx++;
+		}
+	}
 
 	public function remapExternEnums(oldHxRelPath:String, newHxRelPath:String) {
 		var any = false;

@@ -150,6 +150,17 @@ class LevelInstancePanel extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( level.identifier, jForm.find("#identifier"));
 		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.isLevelIdentifierUnique(id, level));
 		i.onChange = ()->onFieldChange();
+		if( level.useAutoIdentifier )
+			i.disable();
+		else
+			i.enable();
+
+		// Auto level identifier
+		var i = Input.linkToHtmlInput( level.useAutoIdentifier, jForm.find("#useAutoIdentifier") );
+		i.onChange = ()->{
+			project.applyAutoLevelIdentifiers();
+			onFieldChange();
+		}
 
 		// Coords
 		var i = Input.linkToHtmlInput( level.worldX, jForm.find("#worldX"));

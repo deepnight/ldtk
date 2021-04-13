@@ -84,6 +84,24 @@
 	</dd>
 
 	<dt>
+		<label for="levelName">Default level identifiers</label>
+	</dt>
+	<dd>
+		<input type="text" class="levelNamePattern"/>
+		<div class="info">
+			You can customize the default naming convention for all level identifiers. Note that level identifiers must be UNIQUE and as such, an extra auto-increment might be added to levels sharing getting the same name, to avoid collisions. Also, remember the identifiers should only contain letters, numbers, "-" and "_".
+		</div>
+		<div class="help guide">
+			<dl>
+				<dt>%idx</dt> <dd>Level index in array, starting at 0</dd>
+				<dt>%x</dt> <dd>World grid X in GridVania world layout, pixel X otherwise</dd>
+				<dt>%y</dt> <dd>World grid Y in GridVania world layout, pixel Y otherwise</dd>
+			</dl>
+		</div>
+
+	</dd>
+
+	<dt>
 		<label for="bgColor">Workspace background color</label>
 	</dt>
 	<dd>
@@ -108,15 +126,12 @@
 
 	<dt class="full"> <h3>Advanced export settings</h3> </dt>
 
-	<dt>
-		<label>Advanced</label>
-	</dt>
-	<dd class="advancedWarning">
+	<dt class="full advancedWarning">
 		Advanced options are not recommended for most users as they might break compatibility with older game APIs. Please make sure you know what you're doing before using any of them!
 		<a>[ Show advanced settings ]</a>
 
 		<ul class="advanced"></ul>
-	</dd>
+	</dt>
 
 
 </dl>

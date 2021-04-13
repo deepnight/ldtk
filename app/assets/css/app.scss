@@ -436,7 +436,6 @@ button {
 		z-index: 2;
 		display: none;
 		background-color: $helpDark;
-		top: 34px;
 		right: 0;
 
 		dl {
@@ -4669,7 +4668,7 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
-		dd.advancedWarning {
+		.advancedWarning {
 			display: block;
 			color: $lightRed;
 			a {
