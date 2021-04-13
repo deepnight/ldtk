@@ -475,6 +475,9 @@ class JsTools {
 		if( !NT.fileExists(path) )
 			return;
 
+		if( !NT.isDirectory(path) )
+			return;
+
 		var extMap = new Map();
 		if( onlyExts!=null )
 			for(e in onlyExts)
