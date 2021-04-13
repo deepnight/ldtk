@@ -27,6 +27,7 @@
 			"exportPng",
 			"exportTiled",
 			"flags",
+			"levelNamePattern",
 			"minifyJson",
 			"nextUid"
 		],
@@ -104,6 +105,12 @@
 				},
 				"type": [
 					"array"
+				]
+			},
+			"levelNamePattern": {
+				"description": "The default naming convention for level identifiers.",
+				"type": [
+					"string"
 				]
 			},
 			"exportPng": {
@@ -1619,7 +1626,8 @@
 				"worldX",
 				"worldY",
 				"bgPivotX",
-				"bgPivotY"
+				"bgPivotY",
+				"useAutoIdentifier"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1649,6 +1657,12 @@
 					"type": [
 						"string",
 						"null"
+					]
+				},
+				"useAutoIdentifier": {
+					"description": "If TRUE, the level identifier will always automatically use the naming pattern as defined in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by user.",
+					"type": [
+						"boolean"
 					]
 				},
 				"bgColor": {
