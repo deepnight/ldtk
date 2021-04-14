@@ -5,6 +5,11 @@ import sortablejs.Sortable;
 import js.node.Fs;
 
 class JsTools {
+
+	/**
+		Use SortableJS to make some list sortable
+		See: https://github.com/SortableJS/Sortable
+	**/
 	public static function makeSortable(jSortable:js.jquery.JQuery, ?jScrollRoot:js.jquery.JQuery, ?group:String, anim=true, onSort:(event:SortableDragEvent)->Void) {
 		if( jSortable.length!=1 )
 			throw "Used sortable on a set of "+jSortable.length+" element(s)";
@@ -713,7 +718,7 @@ class JsTools {
 		// Existing image assets
 		var allImages = Editor.ME.project.getAllCachedImages();
 		if( allImages.length>0 ) {
-			var jRecall = new J('<button class="recall"> <span class="icon expand"/> </button>');
+			var jRecall = new J('<button class="recall"> <span class="icon expandMore"/> </button>');
 			jRecall.appendTo(jWrapper);
 			jRecall.click( (ev:js.jquery.Event)->{
 				var ctx = new ui.modal.ContextMenu();

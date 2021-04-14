@@ -1021,7 +1021,8 @@ ul.log {
 .icon.entity			{ background-image: url("../icons/entity.png"); }
 .icon.enum				{ background-image: url("../icons/enum.png"); }
 .icon.exit				{ background-image: url("../icons/exit.svg"); }
-.icon.expand			{ background-image: url("../icons/expand.svg"); }
+.icon.expandMore		{ background-image: url("../icons/expandMore.svg"); }
+.icon.expandLess		{ background-image: url("../icons/expandLess.svg"); }
 .icon.folder			{ background-image: url("../icons/folder.svg"); }
 .icon.fullscreen		{ background-image: url("../icons/fullscreen.svg"); }
 .icon.fullscreen_exit	{ background-image: url("../icons/fullscreen_exit.svg"); }
@@ -5201,11 +5202,38 @@ body.sorting ul.collapsedSortTarget {
 
 			>li { // Group
 				position: relative;
+				display: grid;
+				grid-template-columns: 28px auto;
 				border: 1px solid $bgLight;
 				padding: 4px;
-				margin-bottom: 16px;
 				box-shadow: 0px 2px 4px black;
 				background-color: $bgMed;
+
+				&:not(:first-child) {
+					margin-top: 8px;
+				}
+
+				&:not(:last-child) {
+					margin-bottom: 8px;
+				}
+
+				.sortHandle {
+					grid-column: 1/2;
+				}
+				header {
+					grid-column: 2/3;
+				}
+				ul.ruleGroup {
+					grid-column: 1/3;
+				}
+
+				>.sortHandle {
+					background-color: $bgLight;
+					opacity: 1;
+					&:hover {
+						background-color: $orange;
+					}
+				}
 
 				&.highlight header {
 					outline: 1px solid #ff00ff;
@@ -5225,11 +5253,12 @@ body.sorting ul.collapsedSortTarget {
 				}
 
 				&.collapsed {
-					border-style: dashed;
+					margin-top: 0;
+					margin-bottom: 1px;
+					padding: 0;
 					opacity: 0.66;
 					box-shadow: none;
-					margin-bottom: 4px;
-					padding-bottom: 0;
+					border: 0;
 
 					header .name {
 						cursor: cell;
@@ -5261,28 +5290,32 @@ body.sorting ul.collapsedSortTarget {
 
 				header {
 					display: grid;
-					grid-template-columns: auto repeat(4, min-content);
+					grid-template-columns: auto;
+					grid-auto-flow: column;
+					grid-auto-columns: min-content;
 					align-items: stretch;
-					width: calc( 100% + 6px );
+					width: 100%;
 					height: 32px;
-					margin: -3px;
-					border-bottom: 2px solid $bgDark;
-
 					background-color: $bgLight;
 
 					div.name {
 						display: grid;
+						grid-template-columns: 20px auto;
 						align-content: center;
+						width: 100%;
 						height: 100%;
-						padding-left: 8px;
 
 						font-weight: bold;
 
 						overflow-x: hidden;
 						white-space: nowrap;
-						max-width: 150px;
 
 						cursor: zoom-out;
+
+						.text {
+							overflow: hidden;
+							text-overflow: ellipsis;
+						}
 
 						&:hover {
 							background-color: $orange;
@@ -5290,7 +5323,7 @@ body.sorting ul.collapsedSortTarget {
 					}
 					input.name {
 						display: none;
-						width: 110px;
+						width: 90%;
 					}
 
 					button {
@@ -5318,8 +5351,6 @@ body.sorting ul.collapsedSortTarget {
 					grid-template-columns: auto;
 					grid-auto-rows: min-content;
 					gap: 2px;
-
-					margin-top: 16px;
 
 					&:empty {
 						background-image: url("../img/stripes.png");
