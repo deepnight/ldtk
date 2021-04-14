@@ -18,6 +18,7 @@
 
 ## Other
 
+  - Added a new "Optional rules" sample map.
   - Double click on Entities to automatically select all their connected Points.
   - Added a one-time "enable backup" recommendation popup for medium/large projects.
   - Added a "Create level" button in world panel.
