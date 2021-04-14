@@ -1904,7 +1904,7 @@ textarea {
 		box-shadow: 0px 0px 32px black, 0px 8px 32px rgba(0, 0, 0, 0.3);
 
 
-		h2:first-of-type {
+		>.content>h2:first-of-type {
 			display: grid;
 			grid-template-columns: min-content auto;
 			grid-auto-flow: column;
@@ -4632,7 +4632,7 @@ dl.form.fieldInstanceEditor {
 		height: 100%;
 		justify-content: stretch;
 		gap: 16px;
-		grid-template-rows: min-content auto;
+		grid-template-rows: min-content min-content auto;
 		grid-template-columns: 200px auto;
 
 		.path {
@@ -4640,7 +4640,10 @@ dl.form.fieldInstanceEditor {
 			box-sizing: border-box;
 		}
 
-		> .header {
+		>h2:first-of-type {
+			grid-column: 1/3;
+		}
+		>.header {
 			grid-column: 1/3;
 		}
 
@@ -4723,10 +4726,14 @@ dl.form.fieldInstanceEditor {
 .window.panel.editEnumDefs {
 	.content {
 		display: grid;
+		grid-template-rows: min-content min-content auto;
 		grid-template-columns: 200px auto;
-		grid-template-rows: min-content auto;
 		gap: 16px;
 		height: 100%;
+
+		>h2:first-of-type {
+			grid-column: 1/3;
+		}
 
 		.header {
 			grid-column: 1/3;
@@ -4809,7 +4816,7 @@ dl.form.fieldInstanceEditor {
 
 .window.panel.editLayerDefs {
 	.mainList {
-		grid-row: 2/4;
+		grid-row: 3/5;
 		ul li {
 			grid-template-columns: min-content auto min-content;
 
@@ -6009,17 +6016,17 @@ $patternSize : 32px;
 		width: 890px;
 		grid-template-rows: min-content min-content auto;
 		.mainList {
-			grid-row: 2/4;
+			grid-row: 3/5;
 		}
 		dl.form {
-			grid-row: 2/3;
+			grid-row: 3/4;
 			dt {
 				max-width: none;
 				white-space: nowrap;
 			}
 		}
 		.pickerWrapper {
-			grid-row: 3/4;
+			grid-row: 4/5;
 		}
 
 		.tilesDemo canvas {
@@ -6045,10 +6052,13 @@ $patternSize : 32px;
 		height: 100%;
 		justify-content: stretch;
 		gap: 16px;
+		grid-template-rows: min-content min-content auto;
 		grid-template-columns: 200px auto;
-		grid-template-rows: min-content auto;
 		// overflow: hidden;
 
+		>h2:first-of-type {
+			grid-column: 1/3;
+		}
 		>.header {
 			grid-column: 1/3;
 		}
