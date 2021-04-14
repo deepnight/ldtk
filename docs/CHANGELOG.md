@@ -1,13 +1,19 @@
 # 0.8.2
 
+## Major changes
+
   - **Tile tags**: you can now associate an Enum to a Tileset, then "paint" values from this Enum freely on each tiles in the tileset. This could be useful to mark collisions, water tiles, surface sounds or whatever tag you could think of.
   - **Tile custom data**: you can add totally custom text values to each tile in any tileset. This could be plain text, JSON, XML, etc.
   - **Auto level naming**: you can let LDtk name your level identifiers automatically using a **custom pattern**, as defined from the Project settings panel. For example, with the pattern `MyLevel_%gx_%gy`, each level will be named using the world grid X/Y coordinates (only applies to GridVania world layouts).
   - **Auto-layers tileset switching**: in each level and for each layer, you can now switch the tileset on-the-fly.
   - Added "Isolated points" as new display option for points in Entities (thanks to *Stuart Adams*)
   - Each **enum value** can now be associated with a custom color for easier reading in the UI.
-  - Double click on Entities to automatically select all their connected Points.
+  - Re-worked the **Rules panel** to have less buttons and lost space. Some actions where moved to the context menu (eg. renaming a group of rules)
   - Array of Points in Entities can now be displayed as "**looping paths**".
+
+## Other
+
+  - Double click on Entities to automatically select all their connected Points.
   - Added a one-time "enable backup" recommendation popup for medium/large projects.
   - Added a "Create level" button in world panel.
   - Added an error message when trying to create a new project in an invalid folder.
