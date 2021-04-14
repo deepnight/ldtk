@@ -2223,6 +2223,7 @@ textarea {
 					text-transform: none;
 					color: $bgLighter;
 					font-size: 9pt;
+					max-width: 300px;
 				}
 
 				&.crash:not(:hover) {
@@ -5231,7 +5232,7 @@ body.sorting ul.collapsedSortTarget {
 					background-color: $bgLight;
 					opacity: 1;
 					&:hover {
-						background-color: $orange;
+						background-color: $orange !important;
 					}
 				}
 
@@ -5243,6 +5244,9 @@ body.sorting ul.collapsedSortTarget {
 				&.inactive {
 					background-image: url("../img/stripes.png");
 					background-color: $darkRed;
+					>.sortHandle {
+						background-color: $darkRed;
+					}
 					header {
 						background-color: $darkRed;
 						background-image: url("../img/stripes.png");
@@ -5324,6 +5328,21 @@ body.sorting ul.collapsedSortTarget {
 					input.name {
 						display: none;
 						width: 90%;
+					}
+
+					.optional {
+						align-self: center;
+						display: flex;
+						align-items: center;
+						padding: 1px 4px;
+						color: white;
+						font-size: 8pt;
+						height: 1.3em;
+						border-radius: 3px;
+						border: 1px solid #00f1ff;
+						background-color: #1e94c5;
+						box-shadow: 0px 0px 16px #00f1ff;
+						cursor: help;
 					}
 
 					button {

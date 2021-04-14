@@ -93,11 +93,16 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		invalidatedRules.set(r.uid, r.uid);
 	}
 
+	function invalidateRuleGroup(rg:AutoLayerRuleGroup) {
+		if( rg.rules.length>0 )
+			invalidateRuleAndOnesBelow(rg.rules[0]);
+	}
+
 	function invalidateRuleAndOnesBelow(r:data.def.AutoLayerRuleDef) {
 		invalidateRule(r);
 
 		var isAfter = false;
-		li.def.iterateActiveRulesInEvalOrder( (or)->{
+		li.def.iterateActiveRulesInEvalOrder( li, (or)->{
 			if( or.uid==r.uid )
 				isAfter = true;
 			else if( isAfter )
@@ -297,7 +302,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jContent.find("button.seed").click( function(ev) {
 			li.seed = Std.random(9999999);
 			editor.ge.emit(LayerRuleSeedChanged);
-			ld.iterateActiveRulesInEvalOrder( r->{
+			ld.iterateActiveRulesInEvalOrder( li, r->{
 				if( r.chance<1 || r.hasPerlin() )
 					invalidateRuleAndOnesBelow(r);
 			});
@@ -353,7 +358,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
 			jGroup.appendTo( jRuleGroupList );
-			jGroup.addClass(rg.active ? "active" : "inactive");
+			jGroup.addClass(li.isRuleGroupActiveHere(rg) ? "active" : "inactive");
+
 
 			var jGroupList = jGroup.find(">ul");
 			jGroupList.attr("groupUid", rg.uid);
@@ -387,6 +393,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jGroupHeader.mouseleave( (_)->editor.levelRender.clearTemp() );
 
 
+			jGroupHeader.find(".optional").hide();
+			if( !rg.isGlobal )
+				jGroupHeader.find(".optional").show();
+
 			// Edit group
 			// jGroupHeader.find(".edit").click( function(_) {
 			// 	onRenameGroup(jGroupHeader, rg);
@@ -395,8 +405,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			// Enable/disable group
 			jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {
 				if( rg.rules.length>0 )
-					invalidateRuleAndOnesBelow( rg.rules[0] );
-				rg.active = !rg.active;
+					invalidateRuleGroup(rg);
+				if( rg.isGlobal )
+					rg.active = !rg.active;
+				else
+					li.toggleRuleGroupHere(rg);
 				editor.ge.emit( LayerRuleGroupChangedActiveState(rg) );
 			});
 
@@ -410,6 +423,33 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				{
 					label: L.t._("Rename"),
 					cb: ()->onRenameGroup(jGroupHeader, rg),
+				},
+				{
+					label: L.t._("Turn into an OPTIONAL group"),
+					cb: ()->{
+						invalidateRuleGroup(rg);
+						rg.isGlobal = false;
+						rg.active = true; // just some cleanup
+						editor.ge.emit( LayerRuleGroupChanged(rg) );
+					},
+					sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+					cond: ()->rg.isGlobal,
+				},
+				{
+					label: L.t._("Disable OPTIONAL state"),
+					cb: ()->{
+						new ui.modal.dialog.Confirm(
+							L.t._("Warning: by removing the OPTIONAL status of this group, you will lose the on/off state of this group in all levels. The group of rules will become a 'global' one, applied to every levels."),
+							true,
+							()->{
+								rg.isGlobal = true;
+								invalidateRuleGroup(rg);
+								project.tidy();
+								editor.ge.emit( LayerRuleGroupChanged(rg) );
+							}
+						);
+					},
+					cond: ()->!rg.isGlobal,
 				},
 				{
 					label: L.t._("Duplicate group"),
@@ -448,7 +488,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					allActive = false;
 			}
 
-			jGroupHeader.find(".active .icon").addClass( rg.active ? ( allActive ? "active" : "partial" ) : "inactive" );
+			jGroupHeader.find(".active .icon")
+				.addClass( rg.isGlobal
+					? li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
+					: li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
+				);
 
 
 			// Make individual rules sortable
@@ -702,6 +746,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			for(r in rg.rules)
 				invalidateRuleAndOnesBelow(r);
 			ld.removeRuleGroup(rg);
+			project.tidy();
 			editor.ge.emit( LayerRuleGroupRemoved(rg) );
 		});
 	}
@@ -726,7 +771,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		// List corresponding rules when overing a layer cell
 		var coordId = li.coordId(m.cx, m.cy);
 		var activeRules = new Map();
-		li.def.iterateActiveRulesInEvalOrder((r)->{
+		li.def.iterateActiveRulesInEvalOrder( li, (r)->{
 			if( li.autoTilesCache.exists(r.uid) && li.autoTilesCache.get(r.uid).exists(coordId) )
 				activeRules.set(r.uid, true);
 		});

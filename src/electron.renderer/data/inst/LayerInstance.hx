@@ -20,6 +20,7 @@ class LayerInstance {
 	public var pxTotalOffsetX(get,never) : Int; inline function get_pxTotalOffsetX() return pxOffsetX + def.pxOffsetX;
 	public var pxTotalOffsetY(get,never) : Int; inline function get_pxTotalOffsetY() return pxOffsetY + def.pxOffsetY;
 	public var seed : Int;
+	public var optionalRules : Map<Int,Bool> = new Map();
 
 	// Layer content
 	var intGrid : Map<Int,Int> = new Map(); // <coordId, value>
@@ -112,6 +113,12 @@ class LayerInstance {
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
 			visible: visible,
+			optionalRules: {
+				var arr = [];
+				for(k in optionalRules.keys())
+					arr.push(k);
+				arr;
+			},
 
 			intGrid: { // old IntGrid format
 				var arr = [];
@@ -138,7 +145,7 @@ class LayerInstance {
 
 				if( autoTilesCache!=null ) {
 					var td = getTilesetDef();
-					def.iterateActiveRulesInDisplayOrder( (r)->{
+					def.iterateActiveRulesInDisplayOrder( this, (r)->{
 						if( autoTilesCache.exists( r.uid ) ) {
 							for( allTiles in autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value )
@@ -277,9 +284,16 @@ class LayerInstance {
 		}
 		li.overrideTilesetUid = JsonTools.readNullableInt(json.overrideTilesetUid);
 
+		// Optional rules
+		if( json.optionalRules!=null )
+			for(uid in json.optionalRules)
+				li.optionalRules.set(uid, true);
+
+		// Entities
 		for( entityJson in json.entityInstances )
 			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
 
+		// Auto-layer tiles
 		if( json.autoLayerTiles!=null ) {
 			try {
 				var jsonAutoLayerTiles : Array<ldtk.Json.Tile> = JsonTools.readArray(json.autoLayerTiles);
@@ -354,6 +368,17 @@ class LayerInstance {
 
 	public function tidy(p:Project) {
 		_project = p;
+
+		// Remove lost optional rule group UIDs
+		var keep = false;
+		for(optGroupUid in optionalRules.keys()) {
+			var rg = def.getRuleGroup(optGroupUid);
+			if( rg==null || rg.isGlobal ) {
+				App.LOG.add("tidy", 'Removed lost optional rule group #$optGroupUid in $this');
+				optionalRules.remove(optGroupUid);
+			}
+		}
+
 
 		switch def.type {
 			case IntGrid, AutoLayer:
@@ -697,13 +722,33 @@ class LayerInstance {
 	}
 
 
+
+	public inline function isRuleGroupActiveHere(rg:AutoLayerRuleGroup) {
+		return rg.active && rg.isGlobal || optionalRules.exists(rg.uid);
+	}
+
+	public function enableRuleGroupHere(rg:AutoLayerRuleGroup) {
+		optionalRules.set(rg.uid, true);
+	}
+	public function disableRuleGroupHere(rg:AutoLayerRuleGroup) {
+		optionalRules.remove(rg.uid);
+	}
+	public function toggleRuleGroupHere(rg:AutoLayerRuleGroup) {
+		if( optionalRules.exists(rg.uid) )
+			disableRuleGroupHere(rg);
+		else
+			enableRuleGroupHere(rg);
+	}
+
+
+
 	public function applyBreakOnMatches() {
 		var coordLocks = new Map();
 
 		var td = getTilesetDef();
 		for( cy in 0...cHei )
 		for( cx in 0...cWid ) {
-			def.iterateActiveRulesInEvalOrder( (r)->{
+			def.iterateActiveRulesInEvalOrder( this, (r)->{
 				if( autoTilesCache.exists(r.uid) && autoTilesCache.get(r.uid).exists(coordId(cx,cy)) ) {
 					if( coordLocks.exists( coordId(cx,cy) ) ) {
 						// Tiles below locks are discarded
@@ -750,7 +795,7 @@ class LayerInstance {
 		if( source==null )
 			return;
 
-		def.iterateActiveRulesInEvalOrder( (r)->{
+		def.iterateActiveRulesInEvalOrder( this, (r)->{
 			for(cx in left...right+1)
 			for(cy in top...bottom+1)
 				runAutoLayerRuleAt(source, r,cx,cy);
@@ -774,7 +819,7 @@ class LayerInstance {
 			return;
 
 		// Clear tiles if rule is disabled
-		if( !r.active || !def.getRuleGroup(r).active ) {
+		if( !r.active || !def.getParentRuleGroup(r).active ) {
 			autoTilesCache.remove(r.uid);
 			return;
 		}

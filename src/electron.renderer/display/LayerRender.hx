@@ -62,7 +62,7 @@ class LayerRender {
 				if( li.autoTilesCache==null )
 					li.applyAllAutoLayerRules();
 
-				li.def.iterateActiveRulesInDisplayOrder( (r)-> {
+				li.def.iterateActiveRulesInDisplayOrder( li, (r)-> {
 					if( li.autoTilesCache.exists( r.uid ) ) {
 						var grid = li.def.gridSize;
 						for(coordId in li.autoTilesCache.get( r.uid ).keys())

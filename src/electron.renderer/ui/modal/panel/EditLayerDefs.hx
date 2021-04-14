@@ -106,7 +106,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			ops.push({
 				label: l.identifier,
 				cb: ()->{
-					ld.iterateActiveRulesInDisplayOrder( (r)->{
+					ld.iterateActiveRulesInDisplayOrder( newLi, (r)->{ // TODO not sure which "li" should be used here
 						if( sourceLi.autoTilesCache.exists( r.uid ) ) {
 							for( allTiles in sourceLi.autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value ) {

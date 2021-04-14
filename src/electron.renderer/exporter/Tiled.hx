@@ -376,7 +376,7 @@ class Tiled extends Exporter {
 				var csvLayers : Array<Csv> = [];
 				var hasIncompatibleTiles = false;
 
-				ld.iterateActiveRulesInDisplayOrder( (r)->{
+				ld.iterateActiveRulesInDisplayOrder( li, (r)->{
 					if( !li.autoTilesCache.exists(r.uid) )
 						return;
 

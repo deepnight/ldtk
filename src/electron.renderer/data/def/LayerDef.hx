@@ -127,6 +127,7 @@ class LayerDef {
 			name: rg.name,
 			active: rg.active,
 			collapsed: rg.collapsed,
+			isGlobal: rg.isGlobal,
 			rules: rg.rules.map( function(r) return r.toJson() ),
 		}
 	}
@@ -138,6 +139,7 @@ class LayerDef {
 		);
 		rg.active = JsonTools.readBool( ruleGroupJson.active, true );
 		rg.collapsed = JsonTools.readBool( ruleGroupJson.collapsed, false );
+		rg.isGlobal = JsonTools.readBool( ruleGroupJson.isGlobal, true );
 		rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
 			return AutoLayerRuleDef.fromJson(jsonVersion, ruleJson);
 		});
@@ -265,7 +267,14 @@ class LayerDef {
 		return null;
 	}
 
-	public function getRuleGroup(r:AutoLayerRuleDef) : Null<AutoLayerRuleGroup> {
+	public function getRuleGroup(rgUid:Int) : Null<AutoLayerRuleGroup> {
+		for( rg in autoRuleGroups )
+			if( rg.uid==rgUid )
+				return rg;
+		return null;
+	}
+
+	public function getParentRuleGroup(r:AutoLayerRuleDef) : Null<AutoLayerRuleGroup> {
 		for( rg in autoRuleGroups )
 		for( rr in rg.rules )
 			if( rr.uid==r.uid )
@@ -288,6 +297,7 @@ class LayerDef {
 			name: name,
 			active: true,
 			collapsed: false,
+			isGlobal: true,
 			rules: [],
 		}
 		if( index!=null )
@@ -317,11 +327,11 @@ class LayerDef {
 		return copy;
 	}
 
-	public inline function iterateActiveRulesInDisplayOrder( cbEachRule:(r:AutoLayerRuleDef)->Void ) {
+	public inline function iterateActiveRulesInDisplayOrder( li:data.inst.LayerInstance, cbEachRule:(r:AutoLayerRuleDef)->Void ) {
 		var ruleGroupIdx = autoRuleGroups.length-1;
 		while( ruleGroupIdx>=0 ) {
 			// Groups
-			if( autoRuleGroups[ruleGroupIdx].active ) {
+			if( li.isRuleGroupActiveHere(autoRuleGroups[ruleGroupIdx]) ) {
 				var rg = autoRuleGroups[ruleGroupIdx];
 				var ruleIdx = rg.rules.length-1;
 				while( ruleIdx>=0 ) {
@@ -336,9 +346,9 @@ class LayerDef {
 		}
 	}
 
-	public inline function iterateActiveRulesInEvalOrder( cbEachRule:(r:AutoLayerRuleDef)->Void ) {
+	public inline function iterateActiveRulesInEvalOrder( li:data.inst.LayerInstance, cbEachRule:(r:AutoLayerRuleDef)->Void ) {
 		for(rg in autoRuleGroups)
-			if( rg.active )
+			if( li.isRuleGroupActiveHere(rg) )
 				for(r in rg.rules)
 					if( r.active)
 						cbEachRule(r);

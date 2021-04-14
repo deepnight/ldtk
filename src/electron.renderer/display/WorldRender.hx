@@ -594,7 +594,7 @@ class WorldRender extends dn.Process {
 					var c = 0x0;
 					var cx = 0;
 					var cy = 0;
-					li.def.iterateActiveRulesInDisplayOrder( (r)->{
+					li.def.iterateActiveRulesInDisplayOrder( li, (r)->{
 						if( li.autoTilesCache.exists( r.uid ) ) {
 							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value ) {
