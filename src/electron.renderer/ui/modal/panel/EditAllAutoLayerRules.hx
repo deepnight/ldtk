@@ -394,7 +394,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 			jGroupHeader.find(".optional").hide();
-			if( !rg.isGlobal )
+			if( rg.isOptional )
 				jGroupHeader.find(".optional").show();
 
 			// Edit group
@@ -406,10 +406,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {
 				if( rg.rules.length>0 )
 					invalidateRuleGroup(rg);
-				if( rg.isGlobal )
-					rg.active = !rg.active;
-				else
+				if( rg.isOptional )
 					li.toggleRuleGroupHere(rg);
+				else
+					rg.active = !rg.active;
 				editor.ge.emit( LayerRuleGroupChangedActiveState(rg) );
 			});
 
@@ -428,12 +428,12 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					label: L.t._("Turn into an OPTIONAL group"),
 					cb: ()->{
 						invalidateRuleGroup(rg);
-						rg.isGlobal = false;
+						rg.isOptional = true;
 						rg.active = true; // just some cleanup
 						editor.ge.emit( LayerRuleGroupChanged(rg) );
 					},
 					sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
-					cond: ()->rg.isGlobal,
+					cond: ()->!rg.isOptional,
 				},
 				{
 					label: L.t._("Disable OPTIONAL state"),
@@ -442,14 +442,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 							L.t._("Warning: by removing the OPTIONAL status of this group, you will lose the on/off state of this group in all levels. The group of rules will become a 'global' one, applied to every levels."),
 							true,
 							()->{
-								rg.isGlobal = true;
+								rg.isOptional = false;
 								invalidateRuleGroup(rg);
 								project.tidy();
 								editor.ge.emit( LayerRuleGroupChanged(rg) );
 							}
 						);
 					},
-					cond: ()->!rg.isGlobal,
+					cond: ()->rg.isOptional,
 				},
 				{
 					label: L.t._("Duplicate group"),
@@ -489,9 +489,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			}
 
 			jGroupHeader.find(".active .icon")
-				.addClass( rg.isGlobal
-					? li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
-					: li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
+				.addClass( rg.isOptional
+					? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
+					: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
 				);
 
 

@@ -373,7 +373,7 @@ class LayerInstance {
 		var keep = false;
 		for(optGroupUid in optionalRules.keys()) {
 			var rg = def.getRuleGroup(optGroupUid);
-			if( rg==null || rg.isGlobal ) {
+			if( rg==null || !rg.isOptional ) {
 				App.LOG.add("tidy", 'Removed lost optional rule group #$optGroupUid in $this');
 				optionalRules.remove(optGroupUid);
 			}
@@ -724,7 +724,7 @@ class LayerInstance {
 
 
 	public inline function isRuleGroupActiveHere(rg:AutoLayerRuleGroup) {
-		return rg.active && rg.isGlobal || optionalRules.exists(rg.uid);
+		return rg.active && !rg.isOptional || optionalRules.exists(rg.uid);
 	}
 
 	public function enableRuleGroupHere(rg:AutoLayerRuleGroup) {

@@ -127,7 +127,7 @@ class LayerDef {
 			name: rg.name,
 			active: rg.active,
 			collapsed: rg.collapsed,
-			isGlobal: rg.isGlobal,
+			isOptional: rg.isOptional,
 			rules: rg.rules.map( function(r) return r.toJson() ),
 		}
 	}
@@ -139,7 +139,7 @@ class LayerDef {
 		);
 		rg.active = JsonTools.readBool( ruleGroupJson.active, true );
 		rg.collapsed = JsonTools.readBool( ruleGroupJson.collapsed, false );
-		rg.isGlobal = JsonTools.readBool( ruleGroupJson.isGlobal, true );
+		rg.isOptional = JsonTools.readBool( ruleGroupJson.isOptional, false );
 		rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
 			return AutoLayerRuleDef.fromJson(jsonVersion, ruleJson);
 		});
@@ -297,7 +297,7 @@ class LayerDef {
 			name: name,
 			active: true,
 			collapsed: false,
-			isGlobal: true,
+			isOptional: false,
 			rules: [],
 		}
 		if( index!=null )

@@ -41,7 +41,7 @@ typedef AutoLayerRuleGroup = {
 	var active : Bool;
 	var collapsed : Bool;
 	var rules : Array<data.def.AutoLayerRuleDef>;
-	var isGlobal : Bool;
+	var isOptional : Bool;
 }
 
 typedef GridTileInfos = {
