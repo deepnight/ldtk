@@ -121,7 +121,7 @@ class LayerDef {
 		}
 	}
 
-	function toJsonRuleGroup(rg:AutoLayerRuleGroup) {
+	function toJsonRuleGroup(rg:AutoLayerRuleGroup) : ldtk.Json.AutoLayerRuleGroupJson {
 		return {
 			uid: rg.uid,
 			name: rg.name,

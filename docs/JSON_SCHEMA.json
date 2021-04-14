@@ -911,6 +911,55 @@
 				"object"
 			]
 		},
+		"AutoLayerRuleGroup": {
+			"title": "Auto-layer rule group",
+			"required": [
+				"active",
+				"collapsed",
+				"name",
+				"rules",
+				"uid"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"name": {
+					"description": "",
+					"type": [
+						"string"
+					]
+				},
+				"collapsed": {
+					"description": "",
+					"type": [
+						"boolean"
+					]
+				},
+				"uid": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"active": {
+					"description": "",
+					"type": [
+						"boolean"
+					]
+				},
+				"rules": {
+					"description": "",
+					"items": {
+						"$ref": "#/otherTypes/AutoRuleDef"
+					},
+					"type": [
+						"array"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"EntityInstanceTile": {
 			"description": "Tile data in an Entity instance",
 			"title": "Entity instance tile",
@@ -1507,9 +1556,7 @@
 				"autoRuleGroups": {
 					"description": "Contains all the auto-layer rule definitions.",
 					"items": {
-						"type": [
-							"object"
-						]
+						"$ref": "#/otherTypes/AutoLayerRuleGroup"
 					},
 					"type": [
 						"array"
