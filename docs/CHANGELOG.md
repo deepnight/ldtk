@@ -1,4 +1,4 @@
-# 0.8.2
+# 0.9.0
 
 ## Major changes
 
@@ -11,6 +11,10 @@
   - Each **enum value** can now be associated with a custom color for easier reading in the UI.
   - Re-worked the **Rules panel** to have less buttons and lost space. Some actions where moved to the context menu (eg. renaming a group of rules)
   - Array of Points in Entities can now be displayed as "**looping paths**".
+
+## JSON format
+ - Added tileset tags: `enumTags` array in `Tileset definition JSON`
+ - **WARNING**: last call before the removal of the deprecated value `intGrid` in `Layer instances`! If not done yet, please switch to the `intGridCsv` value. The old value will be removed on 0.9.1 update.
 
 ## Other
 
