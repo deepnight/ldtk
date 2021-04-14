@@ -131,7 +131,7 @@ class LayerDef {
 		}
 	}
 
-	public function parseJsonRuleGroup(jsonVersion:String, ruleGroupJson:Dynamic) : AutoLayerRuleGroup {
+	public function parseJsonRuleGroup(jsonVersion:String, ruleGroupJson:ldtk.Json.AutoLayerRuleGroupJson) : AutoLayerRuleGroup {
 		var rg = createRuleGroup(
 			JsonTools.readInt(ruleGroupJson.uid,-1),
 			JsonTools.readString(ruleGroupJson.name, "default")
