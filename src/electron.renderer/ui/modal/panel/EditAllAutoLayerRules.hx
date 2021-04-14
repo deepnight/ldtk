@@ -374,7 +374,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					editor.ge.emit(LayerRuleGroupCollapseChanged);
 				})
 				.find(".text").text(rg.name).parent()
-				.find(".icon").removeClass().addClass("icon").addClass(rg.collapsed ? "expandMore" : "expandLess");
+				.find(".icon").removeClass().addClass("icon").addClass(rg.collapsed ? "folderClose" : "folderOpen");
 
 			if( rg.collapsed ) {
 				jGroup.addClass("collapsed");
