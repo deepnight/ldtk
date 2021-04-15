@@ -18,6 +18,7 @@
 
 ## Other
 
+  - Tilesets can now be manually sorted in Tilesets panel
   - Added a new "Optional rules" sample map.
   - Double click on Entities to automatically select all their connected Points.
   - Added a one-time "enable backup" recommendation popup for medium/large projects.
