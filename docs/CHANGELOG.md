@@ -18,6 +18,7 @@
 
 ## Other
 
+  - Completely reworked the way the "Auto-layer rules" panel was updated. This should reduce UI flickering and slow-downs while editing rules.
   - Tilesets can now be manually sorted in Tilesets panel
   - Added a new "Optional rules" sample map.
   - Double click on Entities to automatically select all their connected Points.
