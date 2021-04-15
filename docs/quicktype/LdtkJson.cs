@@ -119,6 +119,12 @@ namespace ldtk
         public string JsonVersion { get; set; }
 
         /// <summary>
+        /// The default naming convention for level identifiers.
+        /// </summary>
+        [JsonProperty("levelNamePattern")]
+        public string LevelNamePattern { get; set; }
+
+        /// <summary>
         /// All levels. The order of this array is only relevant in `LinearHorizontal` and
         /// `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to
         /// the `worldX`,`worldY` coordinates of each Level.
@@ -392,8 +398,8 @@ namespace ldtk
         public bool EditorCutLongValues { get; set; }
 
         /// <summary>
-        /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`,
-        /// `PointPath`, `RadiusPx`, `RadiusGrid`
+        /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
+        /// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`
         /// </summary>
         [JsonProperty("editorDisplayMode")]
         public EditorDisplayMode EditorDisplayMode { get; set; }
@@ -449,7 +455,7 @@ namespace ldtk
         public dynamic FieldDefinitionType { get; set; }
 
         /// <summary>
-        /// Unique Intidentifier
+        /// Unique Int identifier
         /// </summary>
         [JsonProperty("uid")]
         public long Uid { get; set; }
@@ -501,6 +507,12 @@ namespace ldtk
         public long[] TileSrcRect { get; set; }
 
         /// <summary>
+        /// Optional color
+        /// </summary>
+        [JsonProperty("color")]
+        public long Color { get; set; }
+
+        /// <summary>
         /// Enum value
         /// </summary>
         [JsonProperty("id")]
@@ -525,13 +537,15 @@ namespace ldtk
         /// Contains all the auto-layer rule definitions.
         /// </summary>
         [JsonProperty("autoRuleGroups")]
-        public Dictionary<string, dynamic>[] AutoRuleGroups { get; set; }
+        public AutoLayerRuleGroup[] AutoRuleGroups { get; set; }
 
         [JsonProperty("autoSourceLayerDefUid")]
         public long? AutoSourceLayerDefUid { get; set; }
 
         /// <summary>
-        /// Reference to the Tileset UID being used by this auto-layer rules
+        /// Reference to the Tileset UID being used by this auto-layer rules. WARNING: some layer
+        /// *instances* might use a different tileset. So most of the time, you should probably use
+        /// the `__tilesetDefUid` value from layer instances.
         /// </summary>
         [JsonProperty("autoTilesetDefUid")]
         public long? AutoTilesetDefUid { get; set; }
@@ -602,7 +616,9 @@ namespace ldtk
         public double TilePivotY { get; set; }
 
         /// <summary>
-        /// Reference to the Tileset UID being used by this Tile layer
+        /// Reference to the Tileset UID being used by this Tile layer. WARNING: some layer
+        /// *instances* might use a different tileset. So most of the time, you should probably use
+        /// the `__tilesetDefUid` value from layer instances.
         /// </summary>
         [JsonProperty("tilesetDefUid")]
         public long? TilesetDefUid { get; set; }
@@ -619,6 +635,147 @@ namespace ldtk
         /// </summary>
         [JsonProperty("uid")]
         public long Uid { get; set; }
+    }
+
+    public partial class AutoLayerRuleGroup
+    {
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        [JsonProperty("collapsed")]
+        public bool Collapsed { get; set; }
+
+        [JsonProperty("isOptional")]
+        public bool IsOptional { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("rules")]
+        public AutoLayerRuleDefinition[] Rules { get; set; }
+
+        [JsonProperty("uid")]
+        public long Uid { get; set; }
+    }
+
+    /// <summary>
+    /// This complex section isn't meant to be used by game devs at all, as these rules are
+    /// completely resolved internally by the editor before any saving. You should just ignore
+    /// this part.
+    /// </summary>
+    public partial class AutoLayerRuleDefinition
+    {
+        /// <summary>
+        /// If FALSE, the rule effect isn't applied, and no tiles are generated.
+        /// </summary>
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
+        /// <summary>
+        /// When TRUE, the rule will prevent other rules to be applied in the same cell if it matches
+        /// (TRUE by default).
+        /// </summary>
+        [JsonProperty("breakOnMatch")]
+        public bool BreakOnMatch { get; set; }
+
+        /// <summary>
+        /// Chances for this rule to be applied (0 to 1)
+        /// </summary>
+        [JsonProperty("chance")]
+        public double Chance { get; set; }
+
+        /// <summary>
+        /// Checker mode Possible values: `None`, `Horizontal`, `Vertical`
+        /// </summary>
+        [JsonProperty("checker")]
+        public Checker Checker { get; set; }
+
+        /// <summary>
+        /// If TRUE, allow rule to be matched by flipping its pattern horizontally
+        /// </summary>
+        [JsonProperty("flipX")]
+        public bool FlipX { get; set; }
+
+        /// <summary>
+        /// If TRUE, allow rule to be matched by flipping its pattern vertically
+        /// </summary>
+        [JsonProperty("flipY")]
+        public bool FlipY { get; set; }
+
+        /// <summary>
+        /// Default IntGrid value when checking cells outside of level bounds
+        /// </summary>
+        [JsonProperty("outOfBoundsValue")]
+        public long? OutOfBoundsValue { get; set; }
+
+        /// <summary>
+        /// Rule pattern (size x size)
+        /// </summary>
+        [JsonProperty("pattern")]
+        public long[] Pattern { get; set; }
+
+        /// <summary>
+        /// If TRUE, enable Perlin filtering to only apply rule on specific random area
+        /// </summary>
+        [JsonProperty("perlinActive")]
+        public bool PerlinActive { get; set; }
+
+        [JsonProperty("perlinOctaves")]
+        public double PerlinOctaves { get; set; }
+
+        [JsonProperty("perlinScale")]
+        public double PerlinScale { get; set; }
+
+        [JsonProperty("perlinSeed")]
+        public double PerlinSeed { get; set; }
+
+        /// <summary>
+        /// X pivot of a tile stamp (0-1)
+        /// </summary>
+        [JsonProperty("pivotX")]
+        public double PivotX { get; set; }
+
+        /// <summary>
+        /// Y pivot of a tile stamp (0-1)
+        /// </summary>
+        [JsonProperty("pivotY")]
+        public double PivotY { get; set; }
+
+        /// <summary>
+        /// Pattern width & height. Should only be 1,3,5 or 7.
+        /// </summary>
+        [JsonProperty("size")]
+        public long Size { get; set; }
+
+        /// <summary>
+        /// Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
+        /// </summary>
+        [JsonProperty("tileIds")]
+        public long[] TileIds { get; set; }
+
+        /// <summary>
+        /// Defines how tileIds array is used Possible values: `Single`, `Stamp`
+        /// </summary>
+        [JsonProperty("tileMode")]
+        public TileMode TileMode { get; set; }
+
+        /// <summary>
+        /// Unique Int identifier
+        /// </summary>
+        [JsonProperty("uid")]
+        public long Uid { get; set; }
+
+        /// <summary>
+        /// X cell coord modulo
+        /// </summary>
+        [JsonProperty("xModulo")]
+        public long XModulo { get; set; }
+
+        /// <summary>
+        /// Y cell coord modulo
+        /// </summary>
+        [JsonProperty("yModulo")]
+        public long YModulo { get; set; }
     }
 
     /// <summary>
@@ -650,11 +807,36 @@ namespace ldtk
     public partial class TilesetDefinition
     {
         /// <summary>
+        /// Grid-based height
+        /// </summary>
+        [JsonProperty("__cHei")]
+        public long CHei { get; set; }
+
+        /// <summary>
+        /// Grid-based width
+        /// </summary>
+        [JsonProperty("__cWid")]
+        public long CWid { get; set; }
+
+        /// <summary>
         /// The following data is used internally for various optimizations. It's always synced with
         /// source image changes.
         /// </summary>
         [JsonProperty("cachedPixelData")]
         public Dictionary<string, dynamic> CachedPixelData { get; set; }
+
+        /// <summary>
+        /// An array of custom tile metadata
+        /// </summary>
+        [JsonProperty("customData")]
+        public Dictionary<string, dynamic>[] CustomData { get; set; }
+
+        /// <summary>
+        /// Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1
+        /// element per Enum value, which contains an array of all Tile IDs that are tagged with it.
+        /// </summary>
+        [JsonProperty("enumTags")]
+        public Dictionary<string, dynamic>[] EnumTags { get; set; }
 
         /// <summary>
         /// Unique String identifier
@@ -697,6 +879,12 @@ namespace ldtk
         /// </summary>
         [JsonProperty("spacing")]
         public long Spacing { get; set; }
+
+        /// <summary>
+        /// Optional Enum definition UID used for this tileset meta-data
+        /// </summary>
+        [JsonProperty("tagsSourceEnumUid")]
+        public long? TagsSourceEnumUid { get; set; }
 
         [JsonProperty("tileGridSize")]
         public long TileGridSize { get; set; }
@@ -818,6 +1006,14 @@ namespace ldtk
         /// </summary>
         [JsonProperty("uid")]
         public long Uid { get; set; }
+
+        /// <summary>
+        /// If TRUE, the level identifier will always automatically use the naming pattern as defined
+        /// in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by
+        /// user.
+        /// </summary>
+        [JsonProperty("useAutoIdentifier")]
+        public bool UseAutoIdentifier { get; set; }
 
         /// <summary>
         /// World X coordinate in pixels
@@ -972,7 +1168,7 @@ namespace ldtk
         public TileInstance[] GridTiles { get; set; }
 
         /// <summary>
-        /// **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+
+        /// **WARNING**: this deprecated value will be *removed* completely on version 0.9.1+
         /// Replaced by: `intGridCsv`
         /// </summary>
         [JsonProperty("intGrid", NullValueHandling = NullValueHandling.Ignore)]
@@ -997,6 +1193,13 @@ namespace ldtk
         /// </summary>
         [JsonProperty("levelId")]
         public long LevelId { get; set; }
+
+        /// <summary>
+        /// An Array containing the UIDs of optional rules that were enabled in this specific layer
+        /// instance.
+        /// </summary>
+        [JsonProperty("optionalRules")]
+        public long[] OptionalRules { get; set; }
 
         /// <summary>
         /// This layer can use another tileset by overriding the tileset UID here.
@@ -1186,10 +1389,10 @@ namespace ldtk
     }
 
     /// <summary>
-    /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`,
-    /// `PointPath`, `RadiusPx`, `RadiusGrid`
+    /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
+    /// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`
     /// </summary>
-    public enum EditorDisplayMode { EntityTile, Hidden, NameAndValue, PointPath, PointStar, RadiusGrid, RadiusPx, ValueOnly };
+    public enum EditorDisplayMode { EntityTile, Hidden, NameAndValue, PointPath, PointPathLoop, PointStar, Points, RadiusGrid, RadiusPx, ValueOnly };
 
     /// <summary>
     /// Possible values: `Above`, `Center`, `Beneath`
@@ -1218,6 +1421,16 @@ namespace ldtk
     /// Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`
     /// </summary>
     public enum TileRenderMode { Cover, FitInside, Repeat, Stretch };
+
+    /// <summary>
+    /// Checker mode Possible values: `None`, `Horizontal`, `Vertical`
+    /// </summary>
+    public enum Checker { Horizontal, None, Vertical };
+
+    /// <summary>
+    /// Defines how tileIds array is used Possible values: `Single`, `Stamp`
+    /// </summary>
+    public enum TileMode { Single, Stamp };
 
     /// <summary>
     /// Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
@@ -1260,6 +1473,8 @@ namespace ldtk
                 LimitScopeConverter.Singleton,
                 RenderModeConverter.Singleton,
                 TileRenderModeConverter.Singleton,
+                CheckerConverter.Singleton,
+                TileModeConverter.Singleton,
                 TypeEnumConverter.Singleton,
                 FlagConverter.Singleton,
                 BgPosConverter.Singleton,
@@ -1287,8 +1502,12 @@ namespace ldtk
                     return EditorDisplayMode.NameAndValue;
                 case "PointPath":
                     return EditorDisplayMode.PointPath;
+                case "PointPathLoop":
+                    return EditorDisplayMode.PointPathLoop;
                 case "PointStar":
                     return EditorDisplayMode.PointStar;
+                case "Points":
+                    return EditorDisplayMode.Points;
                 case "RadiusGrid":
                     return EditorDisplayMode.RadiusGrid;
                 case "RadiusPx":
@@ -1321,8 +1540,14 @@ namespace ldtk
                 case EditorDisplayMode.PointPath:
                     serializer.Serialize(writer, "PointPath");
                     return;
+                case EditorDisplayMode.PointPathLoop:
+                    serializer.Serialize(writer, "PointPathLoop");
+                    return;
                 case EditorDisplayMode.PointStar:
                     serializer.Serialize(writer, "PointStar");
+                    return;
+                case EditorDisplayMode.Points:
+                    serializer.Serialize(writer, "Points");
                     return;
                 case EditorDisplayMode.RadiusGrid:
                     serializer.Serialize(writer, "RadiusGrid");
@@ -1654,6 +1879,93 @@ namespace ldtk
         }
 
         public static readonly TileRenderModeConverter Singleton = new TileRenderModeConverter();
+    }
+
+    internal class CheckerConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(Checker) || t == typeof(Checker?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            switch (value)
+            {
+                case "Horizontal":
+                    return Checker.Horizontal;
+                case "None":
+                    return Checker.None;
+                case "Vertical":
+                    return Checker.Vertical;
+            }
+            throw new Exception("Cannot unmarshal type Checker");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (Checker)untypedValue;
+            switch (value)
+            {
+                case Checker.Horizontal:
+                    serializer.Serialize(writer, "Horizontal");
+                    return;
+                case Checker.None:
+                    serializer.Serialize(writer, "None");
+                    return;
+                case Checker.Vertical:
+                    serializer.Serialize(writer, "Vertical");
+                    return;
+            }
+            throw new Exception("Cannot marshal type Checker");
+        }
+
+        public static readonly CheckerConverter Singleton = new CheckerConverter();
+    }
+
+    internal class TileModeConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(TileMode) || t == typeof(TileMode?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            switch (value)
+            {
+                case "Single":
+                    return TileMode.Single;
+                case "Stamp":
+                    return TileMode.Stamp;
+            }
+            throw new Exception("Cannot unmarshal type TileMode");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (TileMode)untypedValue;
+            switch (value)
+            {
+                case TileMode.Single:
+                    serializer.Serialize(writer, "Single");
+                    return;
+                case TileMode.Stamp:
+                    serializer.Serialize(writer, "Stamp");
+                    return;
+            }
+            throw new Exception("Cannot marshal type TileMode");
+        }
+
+        public static readonly TileModeConverter Singleton = new TileModeConverter();
     }
 
     internal class TypeEnumConverter : JsonConverter

@@ -59,10 +59,10 @@ namespace quicktype {
     }
 
     /**
-     * Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`,
-     * `PointPath`, `RadiusPx`, `RadiusGrid`
+     * Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
+     * `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`
      */
-    enum class EditorDisplayMode : int { ENTITY_TILE, HIDDEN, NAME_AND_VALUE, POINT_PATH, POINT_STAR, RADIUS_GRID, RADIUS_PX, VALUE_ONLY };
+    enum class EditorDisplayMode : int { ENTITY_TILE, HIDDEN, NAME_AND_VALUE, POINTS, POINT_PATH, POINT_PATH_LOOP, POINT_STAR, RADIUS_GRID, RADIUS_PX, VALUE_ONLY };
 
     /**
      * Possible values: `Above`, `Center`, `Beneath`
@@ -152,8 +152,8 @@ namespace quicktype {
         void set_editor_cut_long_values(const bool & value) { this->editor_cut_long_values = value; }
 
         /**
-         * Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`,
-         * `PointPath`, `RadiusPx`, `RadiusGrid`
+         * Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
+         * `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`
          */
         const EditorDisplayMode & get_editor_display_mode() const { return editor_display_mode; }
         EditorDisplayMode & get_mutable_editor_display_mode() { return editor_display_mode; }
@@ -214,7 +214,7 @@ namespace quicktype {
         void set_field_definition_type(const nlohmann::json & value) { this->field_definition_type = value; }
 
         /**
-         * Unique Intidentifier
+         * Unique Int identifier
          */
         const int64_t & get_uid() const { return uid; }
         int64_t & get_mutable_uid() { return uid; }
@@ -432,7 +432,8 @@ namespace quicktype {
         virtual ~EnumValueDefinition() = default;
 
         private:
-        std::vector<int64_t> tile_src_rect;
+        std::shared_ptr<std::vector<int64_t>> tile_src_rect;
+        int64_t color;
         std::string id;
         std::shared_ptr<int64_t> tile_id;
 
@@ -441,9 +442,15 @@ namespace quicktype {
          * An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width,
          * height ]`
          */
-        const std::vector<int64_t> & get_tile_src_rect() const { return tile_src_rect; }
-        std::vector<int64_t> & get_mutable_tile_src_rect() { return tile_src_rect; }
-        void set_tile_src_rect(const std::vector<int64_t> & value) { this->tile_src_rect = value; }
+        std::shared_ptr<std::vector<int64_t>> get_tile_src_rect() const { return tile_src_rect; }
+        void set_tile_src_rect(std::shared_ptr<std::vector<int64_t>> value) { this->tile_src_rect = value; }
+
+        /**
+         * Optional color
+         */
+        const int64_t & get_color() const { return color; }
+        int64_t & get_mutable_color() { return color; }
+        void set_color(const int64_t & value) { this->color = value; }
 
         /**
          * Enum value
@@ -511,6 +518,220 @@ namespace quicktype {
     };
 
     /**
+     * Checker mode Possible values: `None`, `Horizontal`, `Vertical`
+     */
+    enum class Checker : int { HORIZONTAL, NONE, VERTICAL };
+
+    /**
+     * Defines how tileIds array is used Possible values: `Single`, `Stamp`
+     */
+    enum class TileMode : int { SINGLE, STAMP };
+
+    /**
+     * This complex section isn't meant to be used by game devs at all, as these rules are
+     * completely resolved internally by the editor before any saving. You should just ignore
+     * this part.
+     */
+    class AutoLayerRuleDefinition {
+        public:
+        AutoLayerRuleDefinition() = default;
+        virtual ~AutoLayerRuleDefinition() = default;
+
+        private:
+        bool active;
+        bool break_on_match;
+        double chance;
+        Checker checker;
+        bool flip_x;
+        bool flip_y;
+        std::shared_ptr<int64_t> out_of_bounds_value;
+        std::vector<int64_t> pattern;
+        bool perlin_active;
+        double perlin_octaves;
+        double perlin_scale;
+        double perlin_seed;
+        double pivot_x;
+        double pivot_y;
+        int64_t size;
+        std::vector<int64_t> tile_ids;
+        TileMode tile_mode;
+        int64_t uid;
+        int64_t x_modulo;
+        int64_t y_modulo;
+
+        public:
+        /**
+         * If FALSE, the rule effect isn't applied, and no tiles are generated.
+         */
+        const bool & get_active() const { return active; }
+        bool & get_mutable_active() { return active; }
+        void set_active(const bool & value) { this->active = value; }
+
+        /**
+         * When TRUE, the rule will prevent other rules to be applied in the same cell if it matches
+         * (TRUE by default).
+         */
+        const bool & get_break_on_match() const { return break_on_match; }
+        bool & get_mutable_break_on_match() { return break_on_match; }
+        void set_break_on_match(const bool & value) { this->break_on_match = value; }
+
+        /**
+         * Chances for this rule to be applied (0 to 1)
+         */
+        const double & get_chance() const { return chance; }
+        double & get_mutable_chance() { return chance; }
+        void set_chance(const double & value) { this->chance = value; }
+
+        /**
+         * Checker mode Possible values: `None`, `Horizontal`, `Vertical`
+         */
+        const Checker & get_checker() const { return checker; }
+        Checker & get_mutable_checker() { return checker; }
+        void set_checker(const Checker & value) { this->checker = value; }
+
+        /**
+         * If TRUE, allow rule to be matched by flipping its pattern horizontally
+         */
+        const bool & get_flip_x() const { return flip_x; }
+        bool & get_mutable_flip_x() { return flip_x; }
+        void set_flip_x(const bool & value) { this->flip_x = value; }
+
+        /**
+         * If TRUE, allow rule to be matched by flipping its pattern vertically
+         */
+        const bool & get_flip_y() const { return flip_y; }
+        bool & get_mutable_flip_y() { return flip_y; }
+        void set_flip_y(const bool & value) { this->flip_y = value; }
+
+        /**
+         * Default IntGrid value when checking cells outside of level bounds
+         */
+        std::shared_ptr<int64_t> get_out_of_bounds_value() const { return out_of_bounds_value; }
+        void set_out_of_bounds_value(std::shared_ptr<int64_t> value) { this->out_of_bounds_value = value; }
+
+        /**
+         * Rule pattern (size x size)
+         */
+        const std::vector<int64_t> & get_pattern() const { return pattern; }
+        std::vector<int64_t> & get_mutable_pattern() { return pattern; }
+        void set_pattern(const std::vector<int64_t> & value) { this->pattern = value; }
+
+        /**
+         * If TRUE, enable Perlin filtering to only apply rule on specific random area
+         */
+        const bool & get_perlin_active() const { return perlin_active; }
+        bool & get_mutable_perlin_active() { return perlin_active; }
+        void set_perlin_active(const bool & value) { this->perlin_active = value; }
+
+        const double & get_perlin_octaves() const { return perlin_octaves; }
+        double & get_mutable_perlin_octaves() { return perlin_octaves; }
+        void set_perlin_octaves(const double & value) { this->perlin_octaves = value; }
+
+        const double & get_perlin_scale() const { return perlin_scale; }
+        double & get_mutable_perlin_scale() { return perlin_scale; }
+        void set_perlin_scale(const double & value) { this->perlin_scale = value; }
+
+        const double & get_perlin_seed() const { return perlin_seed; }
+        double & get_mutable_perlin_seed() { return perlin_seed; }
+        void set_perlin_seed(const double & value) { this->perlin_seed = value; }
+
+        /**
+         * X pivot of a tile stamp (0-1)
+         */
+        const double & get_pivot_x() const { return pivot_x; }
+        double & get_mutable_pivot_x() { return pivot_x; }
+        void set_pivot_x(const double & value) { this->pivot_x = value; }
+
+        /**
+         * Y pivot of a tile stamp (0-1)
+         */
+        const double & get_pivot_y() const { return pivot_y; }
+        double & get_mutable_pivot_y() { return pivot_y; }
+        void set_pivot_y(const double & value) { this->pivot_y = value; }
+
+        /**
+         * Pattern width & height. Should only be 1,3,5 or 7.
+         */
+        const int64_t & get_size() const { return size; }
+        int64_t & get_mutable_size() { return size; }
+        void set_size(const int64_t & value) { this->size = value; }
+
+        /**
+         * Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
+         */
+        const std::vector<int64_t> & get_tile_ids() const { return tile_ids; }
+        std::vector<int64_t> & get_mutable_tile_ids() { return tile_ids; }
+        void set_tile_ids(const std::vector<int64_t> & value) { this->tile_ids = value; }
+
+        /**
+         * Defines how tileIds array is used Possible values: `Single`, `Stamp`
+         */
+        const TileMode & get_tile_mode() const { return tile_mode; }
+        TileMode & get_mutable_tile_mode() { return tile_mode; }
+        void set_tile_mode(const TileMode & value) { this->tile_mode = value; }
+
+        /**
+         * Unique Int identifier
+         */
+        const int64_t & get_uid() const { return uid; }
+        int64_t & get_mutable_uid() { return uid; }
+        void set_uid(const int64_t & value) { this->uid = value; }
+
+        /**
+         * X cell coord modulo
+         */
+        const int64_t & get_x_modulo() const { return x_modulo; }
+        int64_t & get_mutable_x_modulo() { return x_modulo; }
+        void set_x_modulo(const int64_t & value) { this->x_modulo = value; }
+
+        /**
+         * Y cell coord modulo
+         */
+        const int64_t & get_y_modulo() const { return y_modulo; }
+        int64_t & get_mutable_y_modulo() { return y_modulo; }
+        void set_y_modulo(const int64_t & value) { this->y_modulo = value; }
+    };
+
+    class AutoLayerRuleGroup {
+        public:
+        AutoLayerRuleGroup() = default;
+        virtual ~AutoLayerRuleGroup() = default;
+
+        private:
+        bool active;
+        bool collapsed;
+        bool is_optional;
+        std::string name;
+        std::vector<AutoLayerRuleDefinition> rules;
+        int64_t uid;
+
+        public:
+        const bool & get_active() const { return active; }
+        bool & get_mutable_active() { return active; }
+        void set_active(const bool & value) { this->active = value; }
+
+        const bool & get_collapsed() const { return collapsed; }
+        bool & get_mutable_collapsed() { return collapsed; }
+        void set_collapsed(const bool & value) { this->collapsed = value; }
+
+        const bool & get_is_optional() const { return is_optional; }
+        bool & get_mutable_is_optional() { return is_optional; }
+        void set_is_optional(const bool & value) { this->is_optional = value; }
+
+        const std::string & get_name() const { return name; }
+        std::string & get_mutable_name() { return name; }
+        void set_name(const std::string & value) { this->name = value; }
+
+        const std::vector<AutoLayerRuleDefinition> & get_rules() const { return rules; }
+        std::vector<AutoLayerRuleDefinition> & get_mutable_rules() { return rules; }
+        void set_rules(const std::vector<AutoLayerRuleDefinition> & value) { this->rules = value; }
+
+        const int64_t & get_uid() const { return uid; }
+        int64_t & get_mutable_uid() { return uid; }
+        void set_uid(const int64_t & value) { this->uid = value; }
+    };
+
+    /**
      * IntGrid value definition
      */
     class IntGridValueDefinition {
@@ -555,7 +776,7 @@ namespace quicktype {
 
         private:
         std::string type;
-        std::vector<std::map<std::string, nlohmann::json>> auto_rule_groups;
+        std::vector<AutoLayerRuleGroup> auto_rule_groups;
         std::shared_ptr<int64_t> auto_source_layer_def_uid;
         std::shared_ptr<int64_t> auto_tileset_def_uid;
         double display_opacity;
@@ -583,15 +804,17 @@ namespace quicktype {
         /**
          * Contains all the auto-layer rule definitions.
          */
-        const std::vector<std::map<std::string, nlohmann::json>> & get_auto_rule_groups() const { return auto_rule_groups; }
-        std::vector<std::map<std::string, nlohmann::json>> & get_mutable_auto_rule_groups() { return auto_rule_groups; }
-        void set_auto_rule_groups(const std::vector<std::map<std::string, nlohmann::json>> & value) { this->auto_rule_groups = value; }
+        const std::vector<AutoLayerRuleGroup> & get_auto_rule_groups() const { return auto_rule_groups; }
+        std::vector<AutoLayerRuleGroup> & get_mutable_auto_rule_groups() { return auto_rule_groups; }
+        void set_auto_rule_groups(const std::vector<AutoLayerRuleGroup> & value) { this->auto_rule_groups = value; }
 
         std::shared_ptr<int64_t> get_auto_source_layer_def_uid() const { return auto_source_layer_def_uid; }
         void set_auto_source_layer_def_uid(std::shared_ptr<int64_t> value) { this->auto_source_layer_def_uid = value; }
 
         /**
-         * Reference to the Tileset UID being used by this auto-layer rules
+         * Reference to the Tileset UID being used by this auto-layer rules. WARNING: some layer
+         * *instances* might use a different tileset. So most of the time, you should probably use
+         * the `__tilesetDefUid` value from layer instances.
          */
         std::shared_ptr<int64_t> get_auto_tileset_def_uid() const { return auto_tileset_def_uid; }
         void set_auto_tileset_def_uid(std::shared_ptr<int64_t> value) { this->auto_tileset_def_uid = value; }
@@ -672,7 +895,9 @@ namespace quicktype {
         void set_tile_pivot_y(const double & value) { this->tile_pivot_y = value; }
 
         /**
-         * Reference to the Tileset UID being used by this Tile layer
+         * Reference to the Tileset UID being used by this Tile layer. WARNING: some layer
+         * *instances* might use a different tileset. So most of the time, you should probably use
+         * the `__tilesetDefUid` value from layer instances.
          */
         std::shared_ptr<int64_t> get_tileset_def_uid() const { return tileset_def_uid; }
         void set_tileset_def_uid(std::shared_ptr<int64_t> value) { this->tileset_def_uid = value; }
@@ -704,7 +929,11 @@ namespace quicktype {
         virtual ~TilesetDefinition() = default;
 
         private:
+        int64_t c_hei;
+        int64_t c_wid;
         std::shared_ptr<std::map<std::string, nlohmann::json>> cached_pixel_data;
+        std::vector<std::map<std::string, nlohmann::json>> custom_data;
+        std::vector<std::map<std::string, nlohmann::json>> enum_tags;
         std::string identifier;
         int64_t padding;
         int64_t px_hei;
@@ -712,16 +941,46 @@ namespace quicktype {
         std::string rel_path;
         std::vector<std::map<std::string, nlohmann::json>> saved_selections;
         int64_t spacing;
+        std::shared_ptr<int64_t> tags_source_enum_uid;
         int64_t tile_grid_size;
         int64_t uid;
 
         public:
+        /**
+         * Grid-based height
+         */
+        const int64_t & get_c_hei() const { return c_hei; }
+        int64_t & get_mutable_c_hei() { return c_hei; }
+        void set_c_hei(const int64_t & value) { this->c_hei = value; }
+
+        /**
+         * Grid-based width
+         */
+        const int64_t & get_c_wid() const { return c_wid; }
+        int64_t & get_mutable_c_wid() { return c_wid; }
+        void set_c_wid(const int64_t & value) { this->c_wid = value; }
+
         /**
          * The following data is used internally for various optimizations. It's always synced with
          * source image changes.
          */
         std::shared_ptr<std::map<std::string, nlohmann::json>> get_cached_pixel_data() const { return cached_pixel_data; }
         void set_cached_pixel_data(std::shared_ptr<std::map<std::string, nlohmann::json>> value) { this->cached_pixel_data = value; }
+
+        /**
+         * An array of custom tile metadata
+         */
+        const std::vector<std::map<std::string, nlohmann::json>> & get_custom_data() const { return custom_data; }
+        std::vector<std::map<std::string, nlohmann::json>> & get_mutable_custom_data() { return custom_data; }
+        void set_custom_data(const std::vector<std::map<std::string, nlohmann::json>> & value) { this->custom_data = value; }
+
+        /**
+         * Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1
+         * element per Enum value, which contains an array of all Tile IDs that are tagged with it.
+         */
+        const std::vector<std::map<std::string, nlohmann::json>> & get_enum_tags() const { return enum_tags; }
+        std::vector<std::map<std::string, nlohmann::json>> & get_mutable_enum_tags() { return enum_tags; }
+        void set_enum_tags(const std::vector<std::map<std::string, nlohmann::json>> & value) { this->enum_tags = value; }
 
         /**
          * Unique String identifier
@@ -771,6 +1030,12 @@ namespace quicktype {
         const int64_t & get_spacing() const { return spacing; }
         int64_t & get_mutable_spacing() { return spacing; }
         void set_spacing(const int64_t & value) { this->spacing = value; }
+
+        /**
+         * Optional Enum definition UID used for this tileset meta-data
+         */
+        std::shared_ptr<int64_t> get_tags_source_enum_uid() const { return tags_source_enum_uid; }
+        void set_tags_source_enum_uid(std::shared_ptr<int64_t> value) { this->tags_source_enum_uid = value; }
 
         const int64_t & get_tile_grid_size() const { return tile_grid_size; }
         int64_t & get_mutable_tile_grid_size() { return tile_grid_size; }
@@ -1155,6 +1420,7 @@ namespace quicktype {
         std::vector<int64_t> int_grid_csv;
         int64_t layer_def_uid;
         int64_t level_id;
+        std::vector<int64_t> optional_rules;
         std::shared_ptr<int64_t> override_tileset_uid;
         int64_t px_offset_x;
         int64_t px_offset_y;
@@ -1249,7 +1515,7 @@ namespace quicktype {
         void set_grid_tiles(const std::vector<TileInstance> & value) { this->grid_tiles = value; }
 
         /**
-         * **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+
+         * **WARNING**: this deprecated value will be *removed* completely on version 0.9.1+
          * Replaced by: `intGridCsv`
          */
         std::shared_ptr<std::vector<IntGridValueInstance>> get_int_grid() const { return int_grid; }
@@ -1277,6 +1543,14 @@ namespace quicktype {
         const int64_t & get_level_id() const { return level_id; }
         int64_t & get_mutable_level_id() { return level_id; }
         void set_level_id(const int64_t & value) { this->level_id = value; }
+
+        /**
+         * An Array containing the UIDs of optional rules that were enabled in this specific layer
+         * instance.
+         */
+        const std::vector<int64_t> & get_optional_rules() const { return optional_rules; }
+        std::vector<int64_t> & get_mutable_optional_rules() { return optional_rules; }
+        void set_optional_rules(const std::vector<int64_t> & value) { this->optional_rules = value; }
 
         /**
          * This layer can use another tileset by overriding the tileset UID here.
@@ -1374,6 +1648,7 @@ namespace quicktype {
         int64_t px_hei;
         int64_t px_wid;
         int64_t uid;
+        bool use_auto_identifier;
         int64_t world_x;
         int64_t world_y;
 
@@ -1487,6 +1762,15 @@ namespace quicktype {
         void set_uid(const int64_t & value) { this->uid = value; }
 
         /**
+         * If TRUE, the level identifier will always automatically use the naming pattern as defined
+         * in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by
+         * user.
+         */
+        const bool & get_use_auto_identifier() const { return use_auto_identifier; }
+        bool & get_mutable_use_auto_identifier() { return use_auto_identifier; }
+        void set_use_auto_identifier(const bool & value) { this->use_auto_identifier = value; }
+
+        /**
          * World X coordinate in pixels
          */
         const int64_t & get_world_x() const { return world_x; }
@@ -1535,6 +1819,7 @@ namespace quicktype {
         bool external_levels;
         std::vector<Flag> flags;
         std::string json_version;
+        std::string level_name_pattern;
         std::vector<Level> levels;
         bool minify_json;
         int64_t next_uid;
@@ -1654,6 +1939,13 @@ namespace quicktype {
         void set_json_version(const std::string & value) { this->json_version = value; }
 
         /**
+         * The default naming convention for level identifiers.
+         */
+        const std::string & get_level_name_pattern() const { return level_name_pattern; }
+        std::string & get_mutable_level_name_pattern() { return level_name_pattern; }
+        void set_level_name_pattern(const std::string & value) { this->level_name_pattern = value; }
+
+        /**
          * All levels. The order of this array is only relevant in `LinearHorizontal` and
          * `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to
          * the `worldX`,`worldY` coordinates of each Level.
@@ -1720,6 +2012,12 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::EnumDefinition & x);
     void to_json(json & j, const quicktype::EnumDefinition & x);
 
+    void from_json(const json & j, quicktype::AutoLayerRuleDefinition & x);
+    void to_json(json & j, const quicktype::AutoLayerRuleDefinition & x);
+
+    void from_json(const json & j, quicktype::AutoLayerRuleGroup & x);
+    void to_json(json & j, const quicktype::AutoLayerRuleGroup & x);
+
     void from_json(const json & j, quicktype::IntGridValueDefinition & x);
     void to_json(json & j, const quicktype::IntGridValueDefinition & x);
 
@@ -1782,6 +2080,12 @@ namespace nlohmann {
 
     void from_json(const json & j, quicktype::TileRenderMode & x);
     void to_json(json & j, const quicktype::TileRenderMode & x);
+
+    void from_json(const json & j, quicktype::Checker & x);
+    void to_json(json & j, const quicktype::Checker & x);
+
+    void from_json(const json & j, quicktype::TileMode & x);
+    void to_json(json & j, const quicktype::TileMode & x);
 
     void from_json(const json & j, quicktype::Type & x);
     void to_json(json & j, const quicktype::Type & x);
@@ -1892,7 +2196,8 @@ namespace nlohmann {
     }
 
     inline void from_json(const json & j, quicktype::EnumValueDefinition& x) {
-        x.set_tile_src_rect(j.at("__tileSrcRect").get<std::vector<int64_t>>());
+        x.set_tile_src_rect(quicktype::get_optional<std::vector<int64_t>>(j, "__tileSrcRect"));
+        x.set_color(j.at("color").get<int64_t>());
         x.set_id(j.at("id").get<std::string>());
         x.set_tile_id(quicktype::get_optional<int64_t>(j, "tileId"));
     }
@@ -1900,6 +2205,7 @@ namespace nlohmann {
     inline void to_json(json & j, const quicktype::EnumValueDefinition & x) {
         j = json::object();
         j["__tileSrcRect"] = x.get_tile_src_rect();
+        j["color"] = x.get_color();
         j["id"] = x.get_id();
         j["tileId"] = x.get_tile_id();
     }
@@ -1923,6 +2229,72 @@ namespace nlohmann {
         j["values"] = x.get_values();
     }
 
+    inline void from_json(const json & j, quicktype::AutoLayerRuleDefinition& x) {
+        x.set_active(j.at("active").get<bool>());
+        x.set_break_on_match(j.at("breakOnMatch").get<bool>());
+        x.set_chance(j.at("chance").get<double>());
+        x.set_checker(j.at("checker").get<quicktype::Checker>());
+        x.set_flip_x(j.at("flipX").get<bool>());
+        x.set_flip_y(j.at("flipY").get<bool>());
+        x.set_out_of_bounds_value(quicktype::get_optional<int64_t>(j, "outOfBoundsValue"));
+        x.set_pattern(j.at("pattern").get<std::vector<int64_t>>());
+        x.set_perlin_active(j.at("perlinActive").get<bool>());
+        x.set_perlin_octaves(j.at("perlinOctaves").get<double>());
+        x.set_perlin_scale(j.at("perlinScale").get<double>());
+        x.set_perlin_seed(j.at("perlinSeed").get<double>());
+        x.set_pivot_x(j.at("pivotX").get<double>());
+        x.set_pivot_y(j.at("pivotY").get<double>());
+        x.set_size(j.at("size").get<int64_t>());
+        x.set_tile_ids(j.at("tileIds").get<std::vector<int64_t>>());
+        x.set_tile_mode(j.at("tileMode").get<quicktype::TileMode>());
+        x.set_uid(j.at("uid").get<int64_t>());
+        x.set_x_modulo(j.at("xModulo").get<int64_t>());
+        x.set_y_modulo(j.at("yModulo").get<int64_t>());
+    }
+
+    inline void to_json(json & j, const quicktype::AutoLayerRuleDefinition & x) {
+        j = json::object();
+        j["active"] = x.get_active();
+        j["breakOnMatch"] = x.get_break_on_match();
+        j["chance"] = x.get_chance();
+        j["checker"] = x.get_checker();
+        j["flipX"] = x.get_flip_x();
+        j["flipY"] = x.get_flip_y();
+        j["outOfBoundsValue"] = x.get_out_of_bounds_value();
+        j["pattern"] = x.get_pattern();
+        j["perlinActive"] = x.get_perlin_active();
+        j["perlinOctaves"] = x.get_perlin_octaves();
+        j["perlinScale"] = x.get_perlin_scale();
+        j["perlinSeed"] = x.get_perlin_seed();
+        j["pivotX"] = x.get_pivot_x();
+        j["pivotY"] = x.get_pivot_y();
+        j["size"] = x.get_size();
+        j["tileIds"] = x.get_tile_ids();
+        j["tileMode"] = x.get_tile_mode();
+        j["uid"] = x.get_uid();
+        j["xModulo"] = x.get_x_modulo();
+        j["yModulo"] = x.get_y_modulo();
+    }
+
+    inline void from_json(const json & j, quicktype::AutoLayerRuleGroup& x) {
+        x.set_active(j.at("active").get<bool>());
+        x.set_collapsed(j.at("collapsed").get<bool>());
+        x.set_is_optional(j.at("isOptional").get<bool>());
+        x.set_name(j.at("name").get<std::string>());
+        x.set_rules(j.at("rules").get<std::vector<quicktype::AutoLayerRuleDefinition>>());
+        x.set_uid(j.at("uid").get<int64_t>());
+    }
+
+    inline void to_json(json & j, const quicktype::AutoLayerRuleGroup & x) {
+        j = json::object();
+        j["active"] = x.get_active();
+        j["collapsed"] = x.get_collapsed();
+        j["isOptional"] = x.get_is_optional();
+        j["name"] = x.get_name();
+        j["rules"] = x.get_rules();
+        j["uid"] = x.get_uid();
+    }
+
     inline void from_json(const json & j, quicktype::IntGridValueDefinition& x) {
         x.set_color(j.at("color").get<std::string>());
         x.set_identifier(quicktype::get_optional<std::string>(j, "identifier"));
@@ -1938,7 +2310,7 @@ namespace nlohmann {
 
     inline void from_json(const json & j, quicktype::LayerDefinition& x) {
         x.set_type(j.at("__type").get<std::string>());
-        x.set_auto_rule_groups(j.at("autoRuleGroups").get<std::vector<std::map<std::string, json>>>());
+        x.set_auto_rule_groups(j.at("autoRuleGroups").get<std::vector<quicktype::AutoLayerRuleGroup>>());
         x.set_auto_source_layer_def_uid(quicktype::get_optional<int64_t>(j, "autoSourceLayerDefUid"));
         x.set_auto_tileset_def_uid(quicktype::get_optional<int64_t>(j, "autoTilesetDefUid"));
         x.set_display_opacity(j.at("displayOpacity").get<double>());
@@ -1978,7 +2350,11 @@ namespace nlohmann {
     }
 
     inline void from_json(const json & j, quicktype::TilesetDefinition& x) {
+        x.set_c_hei(j.at("__cHei").get<int64_t>());
+        x.set_c_wid(j.at("__cWid").get<int64_t>());
         x.set_cached_pixel_data(quicktype::get_optional<std::map<std::string, json>>(j, "cachedPixelData"));
+        x.set_custom_data(j.at("customData").get<std::vector<std::map<std::string, json>>>());
+        x.set_enum_tags(j.at("enumTags").get<std::vector<std::map<std::string, json>>>());
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_padding(j.at("padding").get<int64_t>());
         x.set_px_hei(j.at("pxHei").get<int64_t>());
@@ -1986,13 +2362,18 @@ namespace nlohmann {
         x.set_rel_path(j.at("relPath").get<std::string>());
         x.set_saved_selections(j.at("savedSelections").get<std::vector<std::map<std::string, json>>>());
         x.set_spacing(j.at("spacing").get<int64_t>());
+        x.set_tags_source_enum_uid(quicktype::get_optional<int64_t>(j, "tagsSourceEnumUid"));
         x.set_tile_grid_size(j.at("tileGridSize").get<int64_t>());
         x.set_uid(j.at("uid").get<int64_t>());
     }
 
     inline void to_json(json & j, const quicktype::TilesetDefinition & x) {
         j = json::object();
+        j["__cHei"] = x.get_c_hei();
+        j["__cWid"] = x.get_c_wid();
         j["cachedPixelData"] = x.get_cached_pixel_data();
+        j["customData"] = x.get_custom_data();
+        j["enumTags"] = x.get_enum_tags();
         j["identifier"] = x.get_identifier();
         j["padding"] = x.get_padding();
         j["pxHei"] = x.get_px_hei();
@@ -2000,6 +2381,7 @@ namespace nlohmann {
         j["relPath"] = x.get_rel_path();
         j["savedSelections"] = x.get_saved_selections();
         j["spacing"] = x.get_spacing();
+        j["tagsSourceEnumUid"] = x.get_tags_source_enum_uid();
         j["tileGridSize"] = x.get_tile_grid_size();
         j["uid"] = x.get_uid();
     }
@@ -2135,6 +2517,7 @@ namespace nlohmann {
         x.set_int_grid_csv(j.at("intGridCsv").get<std::vector<int64_t>>());
         x.set_layer_def_uid(j.at("layerDefUid").get<int64_t>());
         x.set_level_id(j.at("levelId").get<int64_t>());
+        x.set_optional_rules(j.at("optionalRules").get<std::vector<int64_t>>());
         x.set_override_tileset_uid(quicktype::get_optional<int64_t>(j, "overrideTilesetUid"));
         x.set_px_offset_x(j.at("pxOffsetX").get<int64_t>());
         x.set_px_offset_y(j.at("pxOffsetY").get<int64_t>());
@@ -2161,6 +2544,7 @@ namespace nlohmann {
         j["intGridCsv"] = x.get_int_grid_csv();
         j["layerDefUid"] = x.get_layer_def_uid();
         j["levelId"] = x.get_level_id();
+        j["optionalRules"] = x.get_optional_rules();
         j["overrideTilesetUid"] = x.get_override_tileset_uid();
         j["pxOffsetX"] = x.get_px_offset_x();
         j["pxOffsetY"] = x.get_px_offset_y();
@@ -2195,6 +2579,7 @@ namespace nlohmann {
         x.set_px_hei(j.at("pxHei").get<int64_t>());
         x.set_px_wid(j.at("pxWid").get<int64_t>());
         x.set_uid(j.at("uid").get<int64_t>());
+        x.set_use_auto_identifier(j.at("useAutoIdentifier").get<bool>());
         x.set_world_x(j.at("worldX").get<int64_t>());
         x.set_world_y(j.at("worldY").get<int64_t>());
     }
@@ -2216,6 +2601,7 @@ namespace nlohmann {
         j["pxHei"] = x.get_px_hei();
         j["pxWid"] = x.get_px_wid();
         j["uid"] = x.get_uid();
+        j["useAutoIdentifier"] = x.get_use_auto_identifier();
         j["worldX"] = x.get_world_x();
         j["worldY"] = x.get_world_y();
     }
@@ -2236,6 +2622,7 @@ namespace nlohmann {
         x.set_external_levels(j.at("externalLevels").get<bool>());
         x.set_flags(j.at("flags").get<std::vector<quicktype::Flag>>());
         x.set_json_version(j.at("jsonVersion").get<std::string>());
+        x.set_level_name_pattern(j.at("levelNamePattern").get<std::string>());
         x.set_levels(j.at("levels").get<std::vector<quicktype::Level>>());
         x.set_minify_json(j.at("minifyJson").get<bool>());
         x.set_next_uid(j.at("nextUid").get<int64_t>());
@@ -2262,6 +2649,7 @@ namespace nlohmann {
         j["externalLevels"] = x.get_external_levels();
         j["flags"] = x.get_flags();
         j["jsonVersion"] = x.get_json_version();
+        j["levelNamePattern"] = x.get_level_name_pattern();
         j["levels"] = x.get_levels();
         j["minifyJson"] = x.get_minify_json();
         j["nextUid"] = x.get_next_uid();
@@ -2275,7 +2663,9 @@ namespace nlohmann {
         if (j == "EntityTile") x = quicktype::EditorDisplayMode::ENTITY_TILE;
         else if (j == "Hidden") x = quicktype::EditorDisplayMode::HIDDEN;
         else if (j == "NameAndValue") x = quicktype::EditorDisplayMode::NAME_AND_VALUE;
+        else if (j == "Points") x = quicktype::EditorDisplayMode::POINTS;
         else if (j == "PointPath") x = quicktype::EditorDisplayMode::POINT_PATH;
+        else if (j == "PointPathLoop") x = quicktype::EditorDisplayMode::POINT_PATH_LOOP;
         else if (j == "PointStar") x = quicktype::EditorDisplayMode::POINT_STAR;
         else if (j == "RadiusGrid") x = quicktype::EditorDisplayMode::RADIUS_GRID;
         else if (j == "RadiusPx") x = quicktype::EditorDisplayMode::RADIUS_PX;
@@ -2288,7 +2678,9 @@ namespace nlohmann {
             case quicktype::EditorDisplayMode::ENTITY_TILE: j = "EntityTile"; break;
             case quicktype::EditorDisplayMode::HIDDEN: j = "Hidden"; break;
             case quicktype::EditorDisplayMode::NAME_AND_VALUE: j = "NameAndValue"; break;
+            case quicktype::EditorDisplayMode::POINTS: j = "Points"; break;
             case quicktype::EditorDisplayMode::POINT_PATH: j = "PointPath"; break;
+            case quicktype::EditorDisplayMode::POINT_PATH_LOOP: j = "PointPathLoop"; break;
             case quicktype::EditorDisplayMode::POINT_STAR: j = "PointStar"; break;
             case quicktype::EditorDisplayMode::RADIUS_GRID: j = "RadiusGrid"; break;
             case quicktype::EditorDisplayMode::RADIUS_PX: j = "RadiusPx"; break;
@@ -2405,6 +2797,36 @@ namespace nlohmann {
             case quicktype::TileRenderMode::FIT_INSIDE: j = "FitInside"; break;
             case quicktype::TileRenderMode::REPEAT: j = "Repeat"; break;
             case quicktype::TileRenderMode::STRETCH: j = "Stretch"; break;
+            default: throw "This should not happen";
+        }
+    }
+
+    inline void from_json(const json & j, quicktype::Checker & x) {
+        if (j == "Horizontal") x = quicktype::Checker::HORIZONTAL;
+        else if (j == "None") x = quicktype::Checker::NONE;
+        else if (j == "Vertical") x = quicktype::Checker::VERTICAL;
+        else throw "Input JSON does not conform to schema";
+    }
+
+    inline void to_json(json & j, const quicktype::Checker & x) {
+        switch (x) {
+            case quicktype::Checker::HORIZONTAL: j = "Horizontal"; break;
+            case quicktype::Checker::NONE: j = "None"; break;
+            case quicktype::Checker::VERTICAL: j = "Vertical"; break;
+            default: throw "This should not happen";
+        }
+    }
+
+    inline void from_json(const json & j, quicktype::TileMode & x) {
+        if (j == "Single") x = quicktype::TileMode::SINGLE;
+        else if (j == "Stamp") x = quicktype::TileMode::STAMP;
+        else throw "Input JSON does not conform to schema";
+    }
+
+    inline void to_json(json & j, const quicktype::TileMode & x) {
+        switch (x) {
+            case quicktype::TileMode::SINGLE: j = "Single"; break;
+            case quicktype::TileMode::STAMP: j = "Stamp"; break;
             default: throw "This should not happen";
         }
     }

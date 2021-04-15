@@ -85,6 +85,10 @@ pub struct LdtkJson {
     #[serde(rename = "jsonVersion")]
     json_version: String,
 
+    /// The default naming convention for level identifiers.
+    #[serde(rename = "levelNamePattern")]
+    level_name_pattern: String,
+
     /// All levels. The order of this array is only relevant in `LinearHorizontal` and
     /// `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to
     /// the `worldX`,`worldY` coordinates of each Level.
@@ -282,8 +286,8 @@ pub struct FieldDefinition {
     #[serde(rename = "editorCutLongValues")]
     editor_cut_long_values: bool,
 
-    /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`,
-    /// `PointPath`, `RadiusPx`, `RadiusGrid`
+    /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
+    /// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`
     #[serde(rename = "editorDisplayMode")]
     editor_display_mode: EditorDisplayMode,
 
@@ -321,7 +325,7 @@ pub struct FieldDefinition {
     #[serde(rename = "type")]
     purple_type: Option<serde_json::Value>,
 
-    /// Unique Intidentifier
+    /// Unique Int identifier
     #[serde(rename = "uid")]
     uid: i64,
 }
@@ -357,7 +361,11 @@ pub struct EnumValueDefinition {
     /// An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width,
     /// height ]`
     #[serde(rename = "__tileSrcRect")]
-    tile_src_rect: Vec<i64>,
+    tile_src_rect: Option<Vec<i64>>,
+
+    /// Optional color
+    #[serde(rename = "color")]
+    color: i64,
 
     /// Enum value
     #[serde(rename = "id")]
@@ -376,12 +384,14 @@ pub struct LayerDefinition {
 
     /// Contains all the auto-layer rule definitions.
     #[serde(rename = "autoRuleGroups")]
-    auto_rule_groups: Vec<HashMap<String, Option<serde_json::Value>>>,
+    auto_rule_groups: Vec<AutoLayerRuleGroup>,
 
     #[serde(rename = "autoSourceLayerDefUid")]
     auto_source_layer_def_uid: Option<i64>,
 
-    /// Reference to the Tileset UID being used by this auto-layer rules
+    /// Reference to the Tileset UID being used by this auto-layer rules. WARNING: some layer
+    /// *instances* might use a different tileset. So most of the time, you should probably use
+    /// the `__tilesetDefUid` value from layer instances.
     #[serde(rename = "autoTilesetDefUid")]
     auto_tileset_def_uid: Option<i64>,
 
@@ -430,7 +440,9 @@ pub struct LayerDefinition {
     #[serde(rename = "tilePivotY")]
     tile_pivot_y: f64,
 
-    /// Reference to the Tileset UID being used by this Tile layer
+    /// Reference to the Tileset UID being used by this Tile layer. WARNING: some layer
+    /// *instances* might use a different tileset. So most of the time, you should probably use
+    /// the `__tilesetDefUid` value from layer instances.
     #[serde(rename = "tilesetDefUid")]
     tileset_def_uid: Option<i64>,
 
@@ -442,6 +454,111 @@ pub struct LayerDefinition {
     /// Unique Int identifier
     #[serde(rename = "uid")]
     uid: i64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct AutoLayerRuleGroup {
+    #[serde(rename = "active")]
+    active: bool,
+
+    #[serde(rename = "collapsed")]
+    collapsed: bool,
+
+    #[serde(rename = "isOptional")]
+    is_optional: bool,
+
+    #[serde(rename = "name")]
+    name: String,
+
+    #[serde(rename = "rules")]
+    rules: Vec<AutoLayerRuleDefinition>,
+
+    #[serde(rename = "uid")]
+    uid: i64,
+}
+
+/// This complex section isn't meant to be used by game devs at all, as these rules are
+/// completely resolved internally by the editor before any saving. You should just ignore
+/// this part.
+#[derive(Serialize, Deserialize)]
+pub struct AutoLayerRuleDefinition {
+    /// If FALSE, the rule effect isn't applied, and no tiles are generated.
+    #[serde(rename = "active")]
+    active: bool,
+
+    /// When TRUE, the rule will prevent other rules to be applied in the same cell if it matches
+    /// (TRUE by default).
+    #[serde(rename = "breakOnMatch")]
+    break_on_match: bool,
+
+    /// Chances for this rule to be applied (0 to 1)
+    #[serde(rename = "chance")]
+    chance: f64,
+
+    /// Checker mode Possible values: `None`, `Horizontal`, `Vertical`
+    #[serde(rename = "checker")]
+    checker: Checker,
+
+    /// If TRUE, allow rule to be matched by flipping its pattern horizontally
+    #[serde(rename = "flipX")]
+    flip_x: bool,
+
+    /// If TRUE, allow rule to be matched by flipping its pattern vertically
+    #[serde(rename = "flipY")]
+    flip_y: bool,
+
+    /// Default IntGrid value when checking cells outside of level bounds
+    #[serde(rename = "outOfBoundsValue")]
+    out_of_bounds_value: Option<i64>,
+
+    /// Rule pattern (size x size)
+    #[serde(rename = "pattern")]
+    pattern: Vec<i64>,
+
+    /// If TRUE, enable Perlin filtering to only apply rule on specific random area
+    #[serde(rename = "perlinActive")]
+    perlin_active: bool,
+
+    #[serde(rename = "perlinOctaves")]
+    perlin_octaves: f64,
+
+    #[serde(rename = "perlinScale")]
+    perlin_scale: f64,
+
+    #[serde(rename = "perlinSeed")]
+    perlin_seed: f64,
+
+    /// X pivot of a tile stamp (0-1)
+    #[serde(rename = "pivotX")]
+    pivot_x: f64,
+
+    /// Y pivot of a tile stamp (0-1)
+    #[serde(rename = "pivotY")]
+    pivot_y: f64,
+
+    /// Pattern width & height. Should only be 1,3,5 or 7.
+    #[serde(rename = "size")]
+    size: i64,
+
+    /// Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
+    #[serde(rename = "tileIds")]
+    tile_ids: Vec<i64>,
+
+    /// Defines how tileIds array is used Possible values: `Single`, `Stamp`
+    #[serde(rename = "tileMode")]
+    tile_mode: TileMode,
+
+    /// Unique Int identifier
+    #[serde(rename = "uid")]
+    uid: i64,
+
+    /// X cell coord modulo
+    #[serde(rename = "xModulo")]
+    x_modulo: i64,
+
+    /// Y cell coord modulo
+    #[serde(rename = "yModulo")]
+    y_modulo: i64,
 }
 
 /// IntGrid value definition
@@ -464,10 +581,27 @@ pub struct IntGridValueDefinition {
 /// one definition section, that would be the one.
 #[derive(Serialize, Deserialize)]
 pub struct TilesetDefinition {
+    /// Grid-based height
+    #[serde(rename = "__cHei")]
+    c_hei: i64,
+
+    /// Grid-based width
+    #[serde(rename = "__cWid")]
+    c_wid: i64,
+
     /// The following data is used internally for various optimizations. It's always synced with
     /// source image changes.
     #[serde(rename = "cachedPixelData")]
     cached_pixel_data: Option<HashMap<String, Option<serde_json::Value>>>,
+
+    /// An array of custom tile metadata
+    #[serde(rename = "customData")]
+    custom_data: Vec<HashMap<String, Option<serde_json::Value>>>,
+
+    /// Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1
+    /// element per Enum value, which contains an array of all Tile IDs that are tagged with it.
+    #[serde(rename = "enumTags")]
+    enum_tags: Vec<HashMap<String, Option<serde_json::Value>>>,
 
     /// Unique String identifier
     #[serde(rename = "identifier")]
@@ -496,6 +630,10 @@ pub struct TilesetDefinition {
     /// Space in pixels between all tiles
     #[serde(rename = "spacing")]
     spacing: i64,
+
+    /// Optional Enum definition UID used for this tileset meta-data
+    #[serde(rename = "tagsSourceEnumUid")]
+    tags_source_enum_uid: Option<i64>,
 
     #[serde(rename = "tileGridSize")]
     tile_grid_size: i64,
@@ -583,6 +721,12 @@ pub struct Level {
     /// Unique Int identifier
     #[serde(rename = "uid")]
     uid: i64,
+
+    /// If TRUE, the level identifier will always automatically use the naming pattern as defined
+    /// in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by
+    /// user.
+    #[serde(rename = "useAutoIdentifier")]
+    use_auto_identifier: bool,
 
     /// World X coordinate in pixels
     #[serde(rename = "worldX")]
@@ -692,7 +836,7 @@ pub struct LayerInstance {
     #[serde(rename = "gridTiles")]
     grid_tiles: Vec<TileInstance>,
 
-    /// **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+
+    /// **WARNING**: this deprecated value will be *removed* completely on version 0.9.1+
     /// Replaced by: `intGridCsv`
     #[serde(rename = "intGrid")]
     int_grid: Option<Vec<IntGridValueInstance>>,
@@ -710,6 +854,11 @@ pub struct LayerInstance {
     /// Reference to the UID of the level containing this layer instance
     #[serde(rename = "levelId")]
     level_id: i64,
+
+    /// An Array containing the UIDs of optional rules that were enabled in this specific layer
+    /// instance.
+    #[serde(rename = "optionalRules")]
+    optional_rules: Vec<i64>,
 
     /// This layer can use another tileset by overriding the tileset UID here.
     #[serde(rename = "overrideTilesetUid")]
@@ -842,8 +991,8 @@ pub struct NeighbourLevel {
     level_uid: i64,
 }
 
-/// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`,
-/// `PointPath`, `RadiusPx`, `RadiusGrid`
+/// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
+/// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`
 #[derive(Serialize, Deserialize)]
 pub enum EditorDisplayMode {
     #[serde(rename = "EntityTile")]
@@ -858,8 +1007,14 @@ pub enum EditorDisplayMode {
     #[serde(rename = "PointPath")]
     PointPath,
 
+    #[serde(rename = "PointPathLoop")]
+    PointPathLoop,
+
     #[serde(rename = "PointStar")]
     PointStar,
+
+    #[serde(rename = "Points")]
+    Points,
 
     #[serde(rename = "RadiusGrid")]
     RadiusGrid,
@@ -971,6 +1126,29 @@ pub enum TileRenderMode {
 
     #[serde(rename = "Stretch")]
     Stretch,
+}
+
+/// Checker mode Possible values: `None`, `Horizontal`, `Vertical`
+#[derive(Serialize, Deserialize)]
+pub enum Checker {
+    #[serde(rename = "Horizontal")]
+    Horizontal,
+
+    #[serde(rename = "None")]
+    None,
+
+    #[serde(rename = "Vertical")]
+    Vertical,
+}
+
+/// Defines how tileIds array is used Possible values: `Single`, `Stamp`
+#[derive(Serialize, Deserialize)]
+pub enum TileMode {
+    #[serde(rename = "Single")]
+    Single,
+
+    #[serde(rename = "Stamp")]
+    Stamp,
 }
 
 /// Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
