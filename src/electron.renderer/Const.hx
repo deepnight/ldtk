@@ -138,8 +138,6 @@ class Const {
 		var appCL = new dn.Changelog(raw);
 		var relNotes = [
 			"# " + appCL.latest.version.full + ( appCL.latest.title!=null ? " -- *"+appCL.latest.title+"*" : "" ),
-			"",
-			"## App changes",
 		].concat( appCL.latest.allNoteLines );
 
 		// Json corresponding changelog
