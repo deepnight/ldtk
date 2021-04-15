@@ -163,7 +163,7 @@ class ElectronMain {
 		});
 
 		// Misc bindings
-		dn.js.Dialogs.initMain(mainWindow);
+		dn.js.ElectronDialogs.initMain(mainWindow);
 		dn.js.ElectronUpdater.initMain(mainWindow);
 	}
 
