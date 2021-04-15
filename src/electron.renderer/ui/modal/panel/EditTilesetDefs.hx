@@ -202,6 +202,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 		jOpt.appendTo(jSelect);
 		for( ed in project.defs.getAllEnumsSorted() ) {
 			var jOpt = new J('<option value="${ed.uid}">${ed.identifier}</option>');
+			if( ed.isExternal() ) {
+				jOpt.prop("disabled",true);
+				jOpt.append(' (unsupported external enum)');
+			}
 			jOpt.appendTo(jSelect);
 		}
 		var oldUid = curTd.tagsSourceEnumUid;
