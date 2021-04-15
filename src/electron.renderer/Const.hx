@@ -73,7 +73,6 @@ class Const {
 	public static var APP_CHANGELOG_MD = getAppChangelogMarkdown();
 	public static function getChangeLog() return new dn.Changelog(APP_CHANGELOG_MD);
 
-	public static var JSON_CHANGELOG_MD = getJsonChangelogMarkdown();
 	public static var JSON_FORMAT_MD = getJsonFormatMarkdown();
 
 	public static var FPS = 60;
@@ -122,11 +121,6 @@ class Const {
 		return macro $v{ sys.io.File.getContent("docs/CHANGELOG.md") };
 	}
 
-	static macro function getJsonChangelogMarkdown() {
-		haxe.macro.Context.registerModuleDependency("Const","docs/JSON_CHANGELOG.md");
-		return macro $v{ sys.io.File.getContent("docs/JSON_CHANGELOG.md") };
-	}
-
 	static macro function getJsonFormatMarkdown() {
 		haxe.macro.Context.registerModuleDependency("Const","docs/JSON_DOC.md");
 		return macro $v{ sys.io.File.getContent("docs/JSON_DOC.md") };
@@ -139,16 +133,6 @@ class Const {
 		var relNotes = [
 			"# " + appCL.latest.version.full + ( appCL.latest.title!=null ? " -- *"+appCL.latest.title+"*" : "" ),
 		].concat( appCL.latest.allNoteLines );
-
-		// Json corresponding changelog
-		var raw = sys.io.File.getContent("docs/JSON_CHANGELOG.md");
-		var jsonCL = new dn.Changelog(raw);
-		if( jsonCL.latest.version.isEqual(appCL.latest.version) ) {
-			relNotes.push('## Json format changes');
-			relNotes = relNotes.concat( jsonCL.latest.allNoteLines.map( function(str) {
-				return StringTools.replace(str, "## ", "### "); // Reduce title levels
-			}) );
-		}
 
 		// Save file
 		if( !sys.FileSystem.exists("./app/buildAssets") )
