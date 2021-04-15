@@ -239,7 +239,7 @@ class FieldInstanceRender {
 							tf.maxWidth = 400;
 
 						case LevelCtx(l):
-							tf.maxWidth = 700;
+							tf.maxWidth = 800;
 					}
 					var v = fi.getForDisplay(idx);
 					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
