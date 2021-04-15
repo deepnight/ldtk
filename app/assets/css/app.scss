@@ -2718,17 +2718,24 @@ div.sortHandle {
 	max-width: 40vw;
 	pointer-events: none;
 
+	p, pre {
+		white-space: pre-wrap;
+		word-wrap: break-word;
+	}
+
 	p {
 		@include resetMargin();
 		margin: 0;
 	}
+
+	pre {
+		margin: 0;
+		padding: 0;
+		font-family: Roboto;
+	}
+
 	p+p {
 		margin-top: 3px;
-		pre {
-			margin: 0;
-			padding: 0;
-			font-family: Roboto;
-		}
 	}
 }
 

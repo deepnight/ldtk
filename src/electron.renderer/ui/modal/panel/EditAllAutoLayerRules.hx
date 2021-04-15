@@ -43,15 +43,19 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			case BeforeProjectSaving:
 				applyInvalidatedRulesInAllLevels();
 
-			case LayerRuleChanged(r), LayerRuleAdded(r):
+			case LayerRuleChanged(r):
 				invalidateRuleAndOnesBelow(r);
-				updateRuleGroups();
+				updateRule(r);
+
+			case LayerRuleAdded(r):
+				invalidateRuleAndOnesBelow(r);
+				updateRuleGroup(r);
 
 			case LayerRuleRemoved(r): // invalidation is done before removal
-				updateRuleGroups();
+				updateRuleGroup(r);
 
 			case LayerRuleGroupRemoved(rg): // invalidation is done before removal
-				updateRuleGroups();
+				updateAllRuleGroups();
 
 			case LayerRuleGroupSorted:
 				// WARNING: enable invalidation if breakOnMatch finally exists
@@ -60,24 +64,27 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				for(r in rg.rules)
 					invalidateRule(r);
 
-				updateRuleGroups();
+				updateAllRuleGroups();
 
 			case LayerRuleGroupCollapseChanged:
-				updateRuleGroups();
+				updateAllRuleGroups(); // TODO optimize
 
 			case LayerRuleGroupChangedActiveState(rg):
 				for(r in rg.rules)
 					invalidateRuleAndOnesBelow(r);
-				updateRuleGroups();
+				updateRuleGroup(rg);
 
-			case LayerRuleGroupAdded, LayerRuleGroupChanged(_):
-				updateRuleGroups();
+			case LayerRuleGroupAdded:
+				updateAllRuleGroups();
+
+			case LayerRuleGroupChanged(rg):
+				updateRuleGroup(rg);
 
 			case LayerRuleSorted:
-				updateRuleGroups();
+				updateAllRuleGroups();
 
 			case LayerInstanceTilesetChanged(_):
-				updateRuleGroups();
+				updateAllRuleGroups();
 
 			case _:
 		}
@@ -274,7 +281,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			var rg = ld.createRuleGroup(project.makeUniqueIdInt(), "New group", insertIdx);
 			editor.ge.emit(LayerRuleGroupAdded);
 
-			var jNewGroup = jContent.find("[groupUid="+rg.uid+"]");
+			var jNewGroup = jContent.find("ul[groupUid="+rg.uid+"]");
 			jNewGroup.siblings("header").find(".edit").click();
 		});
 
@@ -336,14 +343,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			});
 		}
 
-		updateRuleGroups();
+		updateAllRuleGroups();
 
 		JsTools.parseComponents(jContent);
 	}
 
 
 
-	function updateRuleGroups() {
+	function updateAllRuleGroups() {
 		var jRuleGroupList = jContent.find("ul.ruleGroups");
 
 		// Cleanup
@@ -372,167 +379,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		// Rule groups
 		var groupIdx = 0;
 		for( rg in ld.autoRuleGroups) {
-			var groupIdx = groupIdx++; // prevent memory pointer issues
-
-			var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
-			jGroup.appendTo( jRuleGroupList );
-			jGroup.addClass(li.isRuleGroupActiveHere(rg) ? "active" : "inactive");
-
-
-			var jGroupList = jGroup.find(">ul");
-			jGroupList.attr("groupUid", rg.uid);
-			jGroupList.attr("groupIdx", groupIdx);
-
-			var jGroupHeader = jGroup.find("header");
-
-			// Collapsing
-			jGroupHeader.find("div.name")
-				.click( function(_) {
-					rg.collapsed = !rg.collapsed;
-					editor.ge.emit(LayerRuleGroupCollapseChanged);
-				})
-				.find(".text").text(rg.name).parent()
-				.find(".icon").removeClass().addClass("icon").addClass(rg.collapsed ? "folderClose" : "folderOpen");
-
-			if( rg.collapsed ) {
-				jGroup.addClass("collapsed");
-				var jDropTarget = new J('<ul class="collapsedSortTarget"/>');
-				jDropTarget.attr("groupIdx",groupIdx);
-				jDropTarget.attr("groupUid",rg.uid);
-				jGroup.append(jDropTarget);
-			}
-
-			// Show cells affected by this whole group
-			jGroupHeader.mouseenter( (ev)->{
-				editor.levelRender.clearTemp();
-				for(r in rg.rules)
-					showAffectedCells(r);
-			});
-			jGroupHeader.mouseleave( (_)->editor.levelRender.clearTemp() );
-
-
-			jGroupHeader.find(".optional").hide();
-			if( rg.isOptional )
-				jGroupHeader.find(".optional").show();
-
-			// Enable/disable group
-			jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {
-				if( rg.rules.length>0 )
-					invalidateRuleGroup(rg);
-				if( rg.isOptional )
-					li.toggleRuleGroupHere(rg);
-				else
-					rg.active = !rg.active;
-				editor.ge.emit( LayerRuleGroupChangedActiveState(rg) );
-			});
-
-			// Add rule
-			jGroupHeader.find(".addRule").click( function(ev:js.jquery.Event) {
-				onCreateRule(rg, 0);
-			});
-
-			// Group context menu
-			ContextMenu.addTo(jGroup, jGroupHeader, [
-				{
-					label: L.t._("Rename"),
-					cb: ()->onRenameGroup(jGroupHeader, rg),
-				},
-				{
-					label: L.t._("Turn into an OPTIONAL group"),
-					cb: ()->{
-						invalidateRuleGroup(rg);
-						rg.isOptional = true;
-						rg.active = true; // just some cleanup
-						editor.ge.emit( LayerRuleGroupChanged(rg) );
-					},
-					sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
-					cond: ()->!rg.isOptional,
-				},
-				{
-					label: L.t._("Disable OPTIONAL state"),
-					cb: ()->{
-						new ui.modal.dialog.Confirm(
-							L.t._("Warning: by removing the OPTIONAL status of this group, you will lose the on/off state of this group in all levels. The group of rules will become a 'global' one, applied to every levels."),
-							true,
-							()->{
-								rg.isOptional = false;
-								invalidateRuleGroup(rg);
-								project.tidy();
-								editor.ge.emit( LayerRuleGroupChanged(rg) );
-							}
-						);
-					},
-					cond: ()->rg.isOptional,
-				},
-				{
-					label: L.t._("Duplicate group"),
-					cb: ()->{
-						var copy = ld.duplicateRuleGroup(project, rg);
-						lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
-						editor.ge.emit( LayerRuleGroupAdded );
-						for(r in copy.rules)
-							invalidateRuleAndOnesBelow(r);
-					},
-				},
-				{
-					label: L.t._("Delete group"),
-					cb: deleteRuleGroup.bind(rg),
-				},
-			]);
-
-			// Rules
-			var ruleIdx = 0;
-			var allActive = true;
-			for( r in rg.rules) {
-				// Create rule in DOM
-				var jRule = createRuleBlock(rg, r, ruleIdx++);
-				jGroupList.append(jRule);
-
-				// Last edited highlight
-				jRule.mousedown( function(ev) {
-					jRuleGroupList.find("li").removeClass("last");
-					jRule.addClass("last");
-					lastRule = r;
-				});
-				if( r==lastRule )
-					jRule.addClass("last");
-
-				if( !r.active )
-					allActive = false;
-			}
-
-			jGroupHeader.find(".active .icon")
-				.addClass( rg.isOptional
-					? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
-					: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
-				);
-
-
-			// Make individual rules sortable
-			JsTools.makeSortable(jGroupList, jRuleGroupList, "allRules", false, function(ev) {
-				var fromUid = Std.parseInt( ev.from.getAttribute("groupUid") );
-				if( fromUid!=rg.uid )
-					return; // Prevent double "onSort" call (one for From, one for To)
-
-				var fromGroupIdx = Std.parseInt( ev.from.getAttribute("groupIdx") );
-				var toGroupIdx = Std.parseInt( ev.to.getAttribute("groupIdx") );
-
-				var ruleUid = Std.parseInt( ev.item.getAttribute("ruleUid") );
-
-				if( ev.newIndex>ev.oldIndex || toGroupIdx>fromGroupIdx)
-					invalidateRuleAndOnesBelow( ld.getRule(ruleUid) );
-
-				project.defs.sortLayerAutoRules(ld, fromGroupIdx, toGroupIdx, ev.oldIndex, ev.newIndex);
-
-				if( ev.newIndex<ev.oldIndex || toGroupIdx<fromGroupIdx )
-					invalidateRuleAndOnesBelow( ld.getRule(ruleUid) );
-
-				editor.ge.emit(LayerRuleSorted);
-			});
-
-			// Turn the fake UL in collapsed groups into a sorting drop-target
-			if( rg.collapsed )
-				JsTools.makeSortable( jGroup.find(".collapsedSortTarget"), "allRules", false, function(_) {} );
+			var jGroup = createRuleGroupBlock(rg, groupIdx);
+			jRuleGroupList.append(jGroup);
+			groupIdx++;
 		}
 
 		// Make groups sortable
@@ -542,6 +391,211 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 	}
 
+
+	function updateRuleGroup(?rg:AutoLayerRuleGroup, ?r:data.def.AutoLayerRuleDef) {
+		if( rg==null && r==null )
+			throw "Need 1 parameter";
+
+		if( rg==null )
+			rg = ld.getParentRuleGroup(r);
+
+		editor.levelRender.clearTemp();
+
+		var jPrevList = jContent.find('ul[groupUid=${rg.uid}]');
+		var jPrevWrapper = jPrevList.parent();
+		if( jPrevWrapper.length==0 ) {
+			N.error("ERROR: ruleGroup not found in DOM");
+			updateAllRuleGroups();
+			return;
+		}
+
+		var jGroup = createRuleGroupBlock(rg, Std.parseInt(jPrevList.attr("groupIdx")) );
+		jPrevWrapper.replaceWith(jGroup);
+	}
+
+
+	function createRuleGroupBlock(rg:AutoLayerRuleGroup, groupIdx:Int) {
+		var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
+		jGroup.addClass(li.isRuleGroupActiveHere(rg) ? "active" : "inactive");
+
+
+		var jGroupList = jGroup.find(">ul");
+		jGroupList.attr("groupUid", rg.uid);
+		jGroupList.attr("groupIdx", groupIdx); // TODO move to parent
+
+		var jGroupHeader = jGroup.find("header");
+
+		// Collapsing
+		jGroupHeader.find("div.name")
+			.click( function(_) {
+				rg.collapsed = !rg.collapsed;
+				editor.ge.emit(LayerRuleGroupCollapseChanged);
+			})
+			.find(".text").text(rg.name).parent()
+			.find(".icon").removeClass().addClass("icon").addClass(rg.collapsed ? "folderClose" : "folderOpen");
+
+		if( rg.collapsed ) {
+			jGroup.addClass("collapsed");
+			var jDropTarget = new J('<ul class="collapsedSortTarget"/>');
+			jDropTarget.attr("groupIdx",groupIdx);
+			jDropTarget.attr("groupUid",rg.uid);
+			jGroup.append(jDropTarget);
+		}
+
+		// Show cells affected by this whole group
+		jGroupHeader.mouseenter( (ev)->{
+			editor.levelRender.clearTemp();
+			if( li.isRuleGroupActiveHere(rg) )
+				for(r in rg.rules)
+					showAffectedCells(r);
+		});
+		jGroupHeader.mouseleave( (_)->editor.levelRender.clearTemp() );
+
+
+		jGroupHeader.find(".optional").hide();
+		if( rg.isOptional )
+			jGroupHeader.find(".optional").show();
+
+		// Enable/disable group
+		jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {
+			if( rg.rules.length>0 )
+				invalidateRuleGroup(rg);
+			if( rg.isOptional )
+				li.toggleRuleGroupHere(rg);
+			else
+				rg.active = !rg.active;
+			editor.ge.emit( LayerRuleGroupChangedActiveState(rg) );
+		});
+
+		// Add rule
+		jGroupHeader.find(".addRule").click( function(ev:js.jquery.Event) {
+			onCreateRule(rg, 0);
+		});
+
+		// Group context menu
+		ContextMenu.addTo(jGroup, jGroupHeader, [
+			{
+				label: L.t._("Rename"),
+				cb: ()->onRenameGroup(jGroupHeader, rg),
+			},
+			{
+				label: L.t._("Turn into an OPTIONAL group"),
+				cb: ()->{
+					invalidateRuleGroup(rg);
+					rg.isOptional = true;
+					rg.active = true; // just some cleanup
+					editor.ge.emit( LayerRuleGroupChanged(rg) );
+				},
+				sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+				cond: ()->!rg.isOptional,
+			},
+			{
+				label: L.t._("Disable OPTIONAL state"),
+				cb: ()->{
+					new ui.modal.dialog.Confirm(
+						L.t._("Warning: by removing the OPTIONAL status of this group, you will lose the on/off state of this group in all levels. The group of rules will become a 'global' one, applied to every levels."),
+						true,
+						()->{
+							rg.isOptional = false;
+							invalidateRuleGroup(rg);
+							project.tidy();
+							editor.ge.emit( LayerRuleGroupChanged(rg) );
+						}
+					);
+				},
+				cond: ()->rg.isOptional,
+			},
+			{
+				label: L.t._("Duplicate group"),
+				cb: ()->{
+					var copy = ld.duplicateRuleGroup(project, rg);
+					lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
+					editor.ge.emit( LayerRuleGroupAdded );
+					for(r in copy.rules)
+						invalidateRuleAndOnesBelow(r);
+				},
+			},
+			{
+				label: L.t._("Delete group"),
+				cb: deleteRuleGroup.bind(rg),
+			},
+		]);
+
+		// Rules
+		var ruleIdx = 0;
+		var allActive = true;
+		for( r in rg.rules) {
+			// Create rule in DOM
+			var jRule = createRuleBlock(rg, r, ruleIdx++);
+			jGroupList.append(jRule);
+
+			// Last edited highlight
+			jRule.mousedown( function(ev) {
+				jContent.find("li.last").removeClass("last");
+				jRule.addClass("last");
+				lastRule = r;
+			});
+			if( r==lastRule )
+				jRule.addClass("last");
+
+			if( !r.active )
+				allActive = false;
+		}
+
+		jGroupHeader.find(".active .icon")
+			.addClass( rg.isOptional
+				? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
+				: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
+			);
+
+
+		// Make individual rules sortable
+		JsTools.makeSortable(jGroupList, jContent.find("ul.ruleGroups"), "allRules", false, function(ev) {
+			var fromUid = Std.parseInt( ev.from.getAttribute("groupUid") );
+			if( fromUid!=rg.uid )
+				return; // Prevent double "onSort" call (one for From, one for To)
+
+			var fromGroupIdx = Std.parseInt( ev.from.getAttribute("groupIdx") );
+			var toGroupIdx = Std.parseInt( ev.to.getAttribute("groupIdx") );
+
+			var ruleUid = Std.parseInt( ev.item.getAttribute("ruleUid") );
+
+			if( ev.newIndex>ev.oldIndex || toGroupIdx>fromGroupIdx)
+				invalidateRuleAndOnesBelow( ld.getRule(ruleUid) );
+
+			project.defs.sortLayerAutoRules(ld, fromGroupIdx, toGroupIdx, ev.oldIndex, ev.newIndex);
+
+			if( ev.newIndex<ev.oldIndex || toGroupIdx<fromGroupIdx )
+				invalidateRuleAndOnesBelow( ld.getRule(ruleUid) );
+
+			editor.ge.emit(LayerRuleSorted);
+		});
+
+		// Turn the fake UL in collapsed groups into a sorting drop-target
+		if( rg.collapsed )
+			JsTools.makeSortable( jGroup.find(".collapsedSortTarget"), "allRules", false, function(_) {} );
+
+		return jGroup;
+	}
+
+
+	function updateRule(r:data.def.AutoLayerRuleDef) {
+		editor.levelRender.clearTemp();
+
+		var jPrev = jContent.find('li[ruleUid=${r.uid}]');
+		if( jPrev.length==0 ) {
+			N.error("ERROR: rule not found in DOM");
+			updateAllRuleGroups();
+			return;
+		}
+
+		var rg = ld.getParentRuleGroup(r);
+		var jRule = createRuleBlock( rg, r, Std.parseInt(jPrev.attr("ruleIdx")) );
+		jPrev.replaceWith(jRule);
+
+		if( lastRule==r )
+			jRule.addClass("last");
+	}
 
 
 	function createRuleBlock(rg:AutoLayerRuleGroup, r:data.def.AutoLayerRuleDef, ruleIdx:Int) : js.jquery.JQuery {
