@@ -231,18 +231,18 @@ class EntityRender extends dn.Process {
 		var color = ei.getSmartColor(true);
 		var ctx : display.FieldInstanceRender.FieldRenderContext = EntityCtx(fieldGraphics, ei, ld);
 		FieldInstanceRender.renderFields(
-			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Beneath ).map( fd->ei.getFieldInstance(fd) ),
-			color, ctx, beneath
+			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Above ).map( fd->ei.getFieldInstance(fd) ),
+			color, ctx, above
 		);
 		FieldInstanceRender.renderFields(
 			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Center ).map( fd->ei.getFieldInstance(fd) ),
 			color, ctx, center
 		);
-
 		FieldInstanceRender.renderFields(
-			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Above ).map( fd->ei.getFieldInstance(fd) ),
-			color, ctx, above
+			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Beneath ).map( fd->ei.getFieldInstance(fd) ),
+			color, ctx, beneath
 		);
+
 
 		// Identifier label
 		if( ei.def.showName ) {
