@@ -5188,8 +5188,13 @@ body.sorting ul.collapsedSortTarget {
 			}
 
 			li.placeholder {
+				grid-template-columns: auto min-content;
 				display: grid;
+				overflow: hidden;
+				word-wrap: nowrap;
 				cursor: not-allowed;
+				background-image: url("../img/stripes.png");
+
 				strong {
 					font-weight: bold;
 				}
@@ -5199,7 +5204,8 @@ body.sorting ul.collapsedSortTarget {
 			}
 
 			li div.warning {
-				max-width: 300px;
+				grid-column: 1/99;
+				margin: 0;
 			}
 
 			&:empty {
