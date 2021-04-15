@@ -1,4 +1,4 @@
-# 0.9.0
+# 0.9.0 - Biomes and tags
 
 ## Major changes
 
