@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.9.0",
-	"nextUid": 120,
+	"nextUid": 123,
 	"worldLayout": "GridVania",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -1395,7 +1395,20 @@
 			{ "id": "Shield", "tileId": 1138, "color": 11176055, "__tileSrcRect": [32,1136,16,16] },
 			{ "id": "Flask", "tileId": 679, "color": 10075050, "__tileSrcRect": [112,672,16,16] }
 		], "iconTilesetUid": 44, "externalRelPath": null, "externalFileChecksum": null }
-	], "externalEnums": [], "levelFields": [
+	], "externalEnums": [
+		{ "identifier": "A", "uid": 120, "values": [
+			{ "id": "A0", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "A1", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "A2", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "A3", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" },
+		{ "identifier": "B", "uid": 121, "values": [{ "id": "B0", "tileId": null, "color": 0, "__tileSrcRect": null }], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" },
+		{ "identifier": "C", "uid": 122, "values": [
+			{ "id": "C0", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "C1", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "C2", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70" }
+	], "levelFields": [
 		{
 			"identifier": "text",
 			"__type": "String",
