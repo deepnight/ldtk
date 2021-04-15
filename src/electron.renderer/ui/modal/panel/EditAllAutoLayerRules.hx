@@ -17,7 +17,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jMask.hide();
 
 		loadTemplate("editAllAutoLayerRules");
-		updatePanel();
+		updateFullPanel();
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
@@ -30,7 +30,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		switch e {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged(_):
-				updatePanel();
+				updateFullPanel();
 
 			case LevelSelected(l):
 				close();
@@ -38,20 +38,20 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			case LayerInstanceRestoredFromHistory(li):
 				if( li.layerDefUid==this.li.layerDefUid )
 					this.li = li;
-				updatePanel();
+				updateFullPanel();
 
 			case BeforeProjectSaving:
 				applyInvalidatedRulesInAllLevels();
 
 			case LayerRuleChanged(r), LayerRuleAdded(r):
 				invalidateRuleAndOnesBelow(r);
-				updatePanel();
+				updateRuleGroups();
 
 			case LayerRuleRemoved(r): // invalidation is done before removal
-				updatePanel();
+				updateRuleGroups();
 
 			case LayerRuleGroupRemoved(rg): // invalidation is done before removal
-				updatePanel();
+				updateRuleGroups();
 
 			case LayerRuleGroupSorted:
 				// WARNING: enable invalidation if breakOnMatch finally exists
@@ -60,24 +60,24 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				for(r in rg.rules)
 					invalidateRule(r);
 
-				updatePanel();
+				updateRuleGroups();
 
 			case LayerRuleGroupCollapseChanged:
-				updatePanel();
+				updateRuleGroups();
 
 			case LayerRuleGroupChangedActiveState(rg):
 				for(r in rg.rules)
 					invalidateRuleAndOnesBelow(r);
-				updatePanel();
+				updateRuleGroups();
 
 			case LayerRuleGroupAdded, LayerRuleGroupChanged(_):
-				updatePanel();
+				updateRuleGroups();
 
 			case LayerRuleSorted:
-				updatePanel();
+				updateRuleGroups();
 
 			case LayerInstanceTilesetChanged(_):
-				updatePanel();
+				updateRuleGroups();
 
 			case _:
 		}
@@ -256,30 +256,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function updatePanel() {
-		jContent.find("header *, ul.ruleGroups *").off();
+	function updateFullPanel() {
+		// Cleanup
+		jContent.find(">header, >header *").off();
 		ui.Tip.clear();
 		editor.levelRender.clearTemp();
-
-		var jRuleGroupList = jContent.find("ul.ruleGroups").empty();
-
-		if( !ld.autoLayerRulesCanBeUsed() ) {
-			var jError = new J('<li> <div class="warning"/> </li>');
-			jError.appendTo(jRuleGroupList);
-			jError.find("div").append( L.t._("This layer settings prevent its rules to work. Please check the layer settings.") );
-			var jButton = new J('<button>Edit settings</button>');
-			jButton.click( ev->new EditLayerDefs() );
-			jError.find("div").append(jButton);
-
-			for(rg in ld.autoRuleGroups) {
-				var jLi = new J('<li class="placeholder"/>');
-				jLi.appendTo(jRuleGroupList);
-				jLi.append('<strong>"${rg.name}"</strong>');
-				jLi.append('<em>${rg.rules.length} rule(s)</em>');
-			}
-			return;
-		}
-
 
 		// Add group
 		jContent.find("button.createGroup").click( function(ev) {
@@ -315,40 +296,77 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			editor.levelRender.setAutoLayerRendering( chk.prop("checked") );
 		});
 
-		// Change tileset per instance
+		// Tileset selection per instance
 		var curTd = li.getTilesetDef();
 		var jSelect = jContent.find("#autoLayerTileset");
 		jSelect.empty().off();
-		function _tilesetCompatible(td:data.def.TilesetDef) {
-			return td.cWid==curTd.cWid && td.cHei==curTd.cHei && td.tileGridSize==curTd.tileGridSize;
-		}
-		var all = project.defs.tilesets.copy();
-		all.sort( (a,b)->{
-			var compA = _tilesetCompatible(a);
-			var compB = _tilesetCompatible(b);
-			if( compA==compB )
-				return Reflect.compare(a.uid,b.uid);
-			else if( compA )
-				return -1;
-			else
-				return 1;
-		});
-		for(td in all) {
-			var jOpt = new J('<option value="${td.uid}">${td.identifier}</option>');
-			jOpt.appendTo(jSelect);
-			if( !_tilesetCompatible(td) ) {
-				jOpt.prop("disabled",true);
-				jOpt.append(' (INCOMPATIBLE SIZE)');
+		if( !ld.autoLayerRulesCanBeUsed() )
+			jSelect.prop("disabled",true);
+		else {
+			jSelect.prop("disabled",false);
+			function _tilesetCompatible(td:data.def.TilesetDef) {
+				return td.cWid==curTd.cWid && td.cHei==curTd.cHei && td.tileGridSize==curTd.tileGridSize;
 			}
-			if( td.uid==ld.autoTilesetDefUid )
-				jOpt.append(' (DEFAULT)');
+			var all = project.defs.tilesets.copy();
+			all.sort( (a,b)->{
+				var compA = _tilesetCompatible(a);
+				var compB = _tilesetCompatible(b);
+				if( compA==compB )
+					return Reflect.compare(a.uid,b.uid);
+				else if( compA )
+					return -1;
+				else
+					return 1;
+			});
+			for(td in all) {
+				var jOpt = new J('<option value="${td.uid}">${td.identifier}</option>');
+				jOpt.appendTo(jSelect);
+				if( !_tilesetCompatible(td) ) {
+					jOpt.prop("disabled",true);
+					jOpt.append(' (INCOMPATIBLE SIZE)');
+				}
+				if( td.uid==ld.autoTilesetDefUid )
+					jOpt.append(' (DEFAULT)');
+			}
+			jSelect.val( curTd.uid );
+			jSelect.change( (_)->{
+				li.setOverrideTileset( Std.parseInt(jSelect.val()) );
+				editor.levelRender.invalidateAll();
+				editor.ge.emit( LayerInstanceTilesetChanged(li) );
+			});
 		}
-		jSelect.val( curTd.uid );
-		jSelect.change( (_)->{
-			li.setOverrideTileset( Std.parseInt(jSelect.val()) );
-			editor.levelRender.invalidateAll();
-			editor.ge.emit( LayerInstanceTilesetChanged(li) );
-		});
+
+		updateRuleGroups();
+
+		JsTools.parseComponents(jContent);
+	}
+
+
+
+	function updateRuleGroups() {
+		var jRuleGroupList = jContent.find("ul.ruleGroups");
+
+		// Cleanup
+		jContent.find(">ul, >ul *").off();
+		jRuleGroupList.off().empty();
+
+		// Error in layer settings
+		if( !ld.autoLayerRulesCanBeUsed() ) {
+			var jError = new J('<li> <div class="warning"/> </li>');
+			jError.appendTo(jRuleGroupList);
+			jError.find("div").append( L.t._("The current layer settings prevent its rules to work.") );
+			var jButton = new J('<button>Open layer settings</button>');
+			jButton.click( ev->new EditLayerDefs() );
+			jError.find("div").append(jButton);
+
+			for(rg in ld.autoRuleGroups) {
+				var jLi = new J('<li class="placeholder"/>');
+				jLi.appendTo(jRuleGroupList);
+				jLi.append('<strong>"${rg.name}"</strong>');
+				jLi.append('<em>${rg.rules.length} rule(s)</em>');
+			}
+			return;
+		}
 
 
 		// Rule groups
@@ -396,11 +414,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jGroupHeader.find(".optional").hide();
 			if( rg.isOptional )
 				jGroupHeader.find(".optional").show();
-
-			// Edit group
-			// jGroupHeader.find(".edit").click( function(_) {
-			// 	onRenameGroup(jGroupHeader, rg);
-			// });
 
 			// Enable/disable group
 			jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {
@@ -527,8 +540,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			project.defs.sortLayerAutoGroup(ld, ev.oldIndex, ev.newIndex);
 			editor.ge.emit(LayerRuleGroupSorted);
 		});
-
-		JsTools.parseComponents(jContent);
 	}
 
 
@@ -536,6 +547,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	function createRuleBlock(rg:AutoLayerRuleGroup, r:data.def.AutoLayerRuleDef, ruleIdx:Int) : js.jquery.JQuery {
 		var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
 		jRule.attr("ruleUid", r.uid);
+		jRule.attr("ruleIdx", ruleIdx);
 		jRule.addClass(r.active ? "active" : "inactive");
 
 		// Show affect level cells
