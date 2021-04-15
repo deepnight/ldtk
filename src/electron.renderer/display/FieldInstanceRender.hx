@@ -124,10 +124,10 @@ class FieldInstanceRender {
 				tf.text = fd.identifier;
 
 				// Value
-				valueFlow.addChild( FieldInstanceRender.renderValue(fi, C.toWhite(baseColor, 0.8)) );
+				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.8)) );
 
 			case ValueOnly:
-				valueFlow.addChild( FieldInstanceRender.renderValue(fi, C.toWhite(baseColor, 0.8)) );
+				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.8)) );
 
 			case RadiusPx:
 				switch ctx {
@@ -193,7 +193,7 @@ class FieldInstanceRender {
 
 
 
-	static function renderValue(fi:data.inst.FieldInstance, textColor:Int) : h2d.Flow {
+	static function renderValue(ctx:FieldRenderContext, fi:data.inst.FieldInstance, textColor:Int) : h2d.Flow {
 		var valuesFlow = new h2d.Flow();
 		valuesFlow.layout = Horizontal;
 		valuesFlow.verticalAlign = Middle;
@@ -234,7 +234,13 @@ class FieldInstanceRender {
 					// Text render
 					var tf = new h2d.Text(getDefaultFont(), valuesFlow);
 					tf.textColor = textColor;
-					tf.maxWidth = 400 * ( 0.5 + 0.5*settings.v.editorUiScale );
+					switch ctx {
+						case EntityCtx(g, ei, ld):
+							tf.maxWidth = 400;
+
+						case LevelCtx(l):
+							tf.maxWidth = 700;
+					}
 					var v = fi.getForDisplay(idx);
 					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
 						tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';
